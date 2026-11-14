@@ -299,7 +299,7 @@ for f, dx in ((528, 0.06), (540, 0.06), (575, -0.04), (610, 0.05), (645, -0.05),
     q = (stub_mid - S).to_track_quat('Y', 'Z')
     key_loc(SCN, f, S); SCN.rotation_quaternion = q; SCN.keyframe_insert("rotation_quaternion", frame=f)
     G = S + q @ Vector((0, -0.02, -0.11))
-    grip_key(VB, "R", f, G, q @ Vector((-1, 0, 0)), q @ Vector((0, 1, 0)), pole=G + Vector((0.35, 0.35, -0.25)), reach=0.06, palm=0.035)
+    grip_key(VB, "R", f, G, q @ Vector((-1, 0, 0)), q @ Vector((0, 1, 0)), pole=G + Vector((-0.3, 0.3, -0.35)), reach=0.06, palm=0.035)
     VB.key_hand("L", f, Vector((7.38, 0.18, TZ + 0.02)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.0)))
 VB.key_hand("R", 696, Vector((6.86, 0.12, TZ + 0.46)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=Vector((7.2, 0.9, 1.2)))
 VB.key_hand("R", 712, Vector((6.62, 0.22, TZ + 0.2)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=Vector((6.3, 0.9, 1.2)))
@@ -320,13 +320,13 @@ def pro_grip_pt(f):
     ev(f); return PRO.matrix_world @ (LB_base + (LB_tip - LB_base) * 0.5 + Vector((0, 0, 0.012)))
 for f in list(range(1508, 1693, 6)):
     pw = pro_grip_pt(f)
-    grip_key(VB, "R", f, pw, PRO_D, PRO_N, pole=pw + Vector((0.35, 0.35, -0.15)), reach=0.05, palm=0.016)
+    grip_key(VB, "R", f, pw, PRO_D, PRO_N, pole=pw + Vector((-0.3, 0.3, -0.3)), reach=0.05, palm=0.016)
 # glue syringe (left hand) 1704-1800, tweezers + pin (right) 1810-1950
 SYR, TWZ, PIN = OB["Glue_syringe"], OB["Tweezers"], OB["Pin"]
 seam = bw(LB_base + (LB_tip - LB_base) * 0.42 + Vector((0, 0.012, 0.02)))
 _pw = pro_grip_pt(1692)
-grip_key(VB, "R", 1693, _pw, PRO_D, PRO_N, pole=_pw + Vector((0.35, 0.35, -0.15)), reach=0.05, palm=0.016)
-VB.key_hand("R", 1702, _pw + Vector((0.14, 0.04, 0.22)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=_pw + Vector((0.3, 0.5, 0.0)))
+grip_key(VB, "R", 1693, _pw, PRO_D, PRO_N, pole=_pw + Vector((-0.3, 0.3, -0.3)), reach=0.05, palm=0.016)
+VB.key_hand("R", 1702, _pw + Vector((0.14, 0.04, 0.22)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=_pw + Vector((-0.3, 0.4, -0.2)))
 VB.key_hand("L", 1712, Vector((7.38, 0.18, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.0)))
 SYR.rotation_mode = 'QUATERNION'
 SYR_AX = Vector((0, -1, -0.02)).normalized(); SYR_C = Vector((7.36, 0.18, TZ + 0.0095))
@@ -348,11 +348,11 @@ for f in (1810, 1950):
 pin_in = bw(LB_base + (LB_tip - LB_base) * 0.36 + Vector((0, 0.0, 0.03)))
 PIN_REST = Vector((6.52, 0.3, TZ + 0.006))
 def twz_grip(f, p_):
-    grip_key(VB, "R", f, p_ + Vector((0, 0.075, 0.006)), Vector((0, -1, -0.15)), Vector((0, 0, -1)), pole=p_ + Vector((0.3, 0.4, -0.2)), reach=0.055, palm=0.022)
+    grip_key(VB, "R", f, p_ + Vector((0, 0.075, 0.006)), Vector((0, -1, -0.15)), Vector((0, 0, -1)), pole=p_ + Vector((-0.3, 0.35, -0.3)), reach=0.055, palm=0.022)
 twz_grip(1807, PIN_REST)                           # picks up the tweezers (pin held in the tips)
 for f, d_ in ((1810, 0.08), (1850, 0.02), (1880, 0.008), (1910, 0.0), (1945, 0.0)):
     p_ = pin_in + Vector((0, d_, 0.01 + d_ * 0.5))
-    grip_key(VB, "R", f, p_ + Vector((0, 0.075, 0.006)), Vector((0, -1, -0.15)), Vector((0, 0, -1)), pole=p_ + Vector((0.3, 0.4, -0.2)), reach=0.055, palm=0.022)
+    grip_key(VB, "R", f, p_ + Vector((0, 0.075, 0.006)), Vector((0, -1, -0.15)), Vector((0, 0, -1)), pole=p_ + Vector((-0.3, 0.35, -0.3)), reach=0.055, palm=0.022)
 key_vis(PIN, [(1, False), (528, True), (1976, False)]); key_vis(TWZ, [(1, False), (528, True), (1976, False)])
 VB.key_hand("R", 1950, pin_in + Vector((-0.14, 0.05, 0.16)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=pin_in + Vector((0.3, 0.5, 0.0)))
 twz_grip(1962, PIN_REST)                           # tweezers back on the table
@@ -564,7 +564,7 @@ for f in list(range(1508, 1540, 2)) + list(range(1540, 1693, 6)) + [1693]:
         ev(f); n = deep_count(GB, OB["VetB"], "R", tri_tree(PRO), depth=0.006)
         if n == 0: break
         palm += 0.004
-        grip_key(VB, "R", f, pw, PRO_D, PRO_N, pole=pw + Vector((0.35, 0.35, -0.15)), reach=0.05, palm=palm)
+        grip_key(VB, "R", f, pw, PRO_D, PRO_N, pole=pw + Vector((-0.3, 0.3, -0.3)), reach=0.05, palm=palm)
     if f % 30 == 3: print("SETTLE VetB prosthetic", f, "palm", round(palm, 3), "overlaps", n)
 
 # ---- tools ride on the hand that holds them (after all hand keys are final)
@@ -784,9 +784,9 @@ gpose(1); gpose(1080); gpose(1110, -6, -4); gpose(1150, -34, -22, -14); gpose(11
 gpose(1240, -42, -28, -16); gpose(1262, -10, -6, -4); gpose(1290, 6, 3, 2); gpose(1320, 0, 0, 0)
 for f, a in ((1, 0), (1150, 0), (1170, 7), (1190, -4), (1210, 2), (1240, 0)):
     gperch.rotation_euler = (R_(a), 0, 0); gperch.keyframe_insert("rotation_euler", frame=f)
-for o in (gbody, glow, gperch): key_vis(o, [(1, False), (1050, True), (1350, False)])
-key_vis(gheavy, [(1, False), (1050, True), (1250, False)]); key_vis(glight, [(1, False), (1250, True), (1350, False)])
-key_vis(gr, [(1, False), (1050, True), (1350, False)])
+for o in (gbody, glow, gperch): key_vis(o, [(1, False), (1032, True), (1350, False)])
+key_vis(gheavy, [(1, False), (1032, True), (1250, False)]); key_vis(glight, [(1, False), (1250, True), (1350, False)])
+key_vis(gr, [(1, False), (1032, True), (1350, False)])
 # ---- hollow printed beak cutaway (beat 8): gyroid lattice inside a thin shell, half cut away
 M_pla = bpy.data.materials.new("PLA_print"); M_pla.use_nodes = True; pl = M_pla.node_tree.nodes["Principled BSDF"]
 pl.inputs["Base Color"].default_value = (0.7, 0.66, 0.56, 1); pl.inputs["Roughness"].default_value = 0.45; pl.inputs["Subsurface Weight"].default_value = 0.0
@@ -844,8 +844,8 @@ bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.x > 0.0], context='VERTS'
 so_ = hollow.modifiers.new("wall", 'SOLIDIFY'); so_.thickness = 0.0012; so_.offset = -1
 M_shell = UP.data.materials[0].copy(); M_shell.name = "Printed_shell_paint"
 hollow.data.materials.clear(); hollow.data.materials.append(M_pla)
-key_vis(lat, [(1, False), (1330, True), (1530, False)])
-key_vis(hollow, [(1, False), (1330, True), (1530, False)])
+key_vis(lat, [(1, False), (1318, True), (1530, False)])
+key_vis(hollow, [(1, False), (1318, True), (1530, False)])
 # printer + printing beak + nozzle (beat 8 end)
 prn = OB["printer"]; prn_v = bpy.data.objects.new("Printer_void", prn.data); C_ANIM.objects.link(prn_v)
 prn_v.location = P3; prn_v.scale = (3.2, 3.2, 3.2); prn_v.rotation_euler = (0, 0, R_(-60))
@@ -921,24 +921,28 @@ K = [  # frame, position, target, lens, focus target(None = target)
  (905, V1 + Vector((0.3, -1.45, 0.5)), V1 + Vector((0.1, 0, 0)), 34),
  (965, V1 + Vector((1.25, -0.9, 0.2)), V1 + Vector((0.2, 0.05, -0.05)), 38),
  (1025, V1 + Vector((1.1, -0.3, 0.05)), V1 + Vector((0.3, 0.3, -0.12)), 40),
+ (1042, V2 + Vector((-2.7, -0.9, 1.5)), V2 + Vector((0, 0.3, 0.9)), 32),   # v005: reach the ghost bird fast (no empty sky)
  (1075, V2 + Vector((-2.6, -0.6, 1.4)), V2 + Vector((0, 0.3, 0.9)), 30),
  (1130, V2 + Vector((-2.2, 0.0, 1.1)), V2 + Vector((0, 0.4, 0.85)), 30),
  (1185, V2 + Vector((-1.9, 0.9, 0.35)), V2 + Vector((0, 0.6, 0.6)), 28),
  (1245, V2 + Vector((-1.9, 0.5, 1.9)), V2 + Vector((0, 0.5, 0.8)), 30),
  (1300, V2 + Vector((-2.3, -0.6, 1.3)), V2 + Vector((0, 0.4, 0.9)), 30),
+ (1325, V3 + Vector((1.6, 1.3, 0.6)), V3, 30),   # v005: reach the cutaway fast (no empty sky)
  (1360, V3 + Vector((1.05, 0.75, 0.4)), V3, 30),
  (1410, V3 + Vector((0.62, -0.05, 0.12)), V3 + Vector((0.0, 0.1, -0.03)), 36),
- (1460, P3 + Vector((-1.0, 0.9, 1.45)), Vector((P3.x, P3.y, bed_z + 0.2)), 34),
- (1492, P3 + Vector((-1.2, 1.3, 1.4)), Vector((P3.x, P3.y, bed_z + 0.25)), 30),
- (1500, SCREEN + Vector((0.95, -0.05, 0.05)), SCREEN, 30),
- (1530, SCREEN + Vector((0.45, 0, 0.0)), SCREEN + Vector((-1, 0, 0)), 30),
+ (1432, P3 + Vector((0.5, 2.1, 1.1)), Vector((P3.x, P3.y, bed_z + 0.2)), 32),   # v005: reach the printer fast (no empty sky)
+ (1460, P3 + Vector((0.25, 1.75, 1.0)), Vector((P3.x, P3.y, bed_z + 0.2)), 34),   # v005: outside the printer frame (an upright filled the lens)
+ (1492, P3 + Vector((-0.1, 1.9, 1.05)), Vector((P3.x, P3.y, bed_z + 0.25)), 30),
+ (1500, SCREEN + Vector((0.95, 0.0, 0.0)), SCREEN, 30),
+ (1516, SCREEN + Vector((0.2, -0.12, 0.0)), SCREEN + Vector((-1, -0.12, 0)), 30),     # v005: quick, centred pass through the screen (no black bezel panels)
+ (1532, SCREEN + Vector((-0.45, -0.25, 0.12)), SCREEN + Vector((-1.5, -0.45, -0.05)), 28),   # clear of the assistant's arm at the mouse
  (1552, SCREEN + Vector((-0.5, -0.1, 0.05)), BEAKC, 30),
  (1575, Vector((7.25, 0.05, 1.78)), SEAM, 36),
- (1600, BEAKC + Vector((-0.3, -0.22, 0.16)), SEAM, 42),
- (1650, BEAKC + Vector((-0.26, 0.02, 0.05)), SEAM, 55),
- (1700, BEAKC + Vector((-0.18, -0.2, 0.12)), SEAM, 52),
- (1750, SEAM + Vector((-0.1, -0.1, 0.08)), SEAM, 62),
- (1800, SEAM + Vector((-0.26, -0.16, 0.18)), SEAM + Vector((0, 0.04, 0.01)), 45),
+ (1600, BEAKC + Vector((-0.55, -0.25, 0.3)), SEAM, 32),     # v005: medium shots of the seating (the fist filled the lens)
+ (1650, BEAKC + Vector((-0.45, -0.38, 0.1)), SEAM, 36),
+ (1700, BEAKC + Vector((-0.45, -0.22, 0.25)), SEAM, 38),
+ (1750, SEAM + Vector((-0.42, -0.28, 0.22)), SEAM, 38),
+ (1800, SEAM + Vector((-0.36, -0.24, 0.24)), SEAM + Vector((0, 0.04, 0.01)), 40),   # v005: hand no longer fills the frame
  (1836, SEAM + Vector((-0.34, -0.3, 0.24)), SEAM + Vector((0, 0.04, 0.0)), 40),
  (1870, BC + Vector((-0.95, -0.25, 0.62)), BC + Vector((0, 0.1, 0.35)), 28),
  (1925, Vector((4.9, -0.25, 1.5)), BC + Vector((0, 0, 0.3)), 24),

@@ -64,7 +64,17 @@ for n in m.node_tree.nodes:
 OB["Enclosure_sky"].data.energy *= 1.5
 # ---- toucan: clean plumage, glossy bill
 b = bsdf(bpy.data.materials["Toucan_feathers"]); b.inputs["Roughness"].default_value = 0.42
-# ---- camera: deep focus except true macros (anim_look sets >=5.6); macros 1580-1830 stay at 5.6
+# ---- v005 (LESSONS_LEARNED rule 12): f/5.6 macros read as blur in motion; deep focus everywhere
+OB["Camera"].data.dof.aperture_fstop = 11.0
+# ---- v005 (rule 13): no see-through versions of solid things. Ghost demo bird and reference beak become solid matte models
+gm2 = bpy.data.materials["Ghost"]; nt2 = gm2.node_tree
+for n in list(nt2.nodes):
+    if n.type != 'OUTPUT_MATERIAL': nt2.nodes.remove(n)
+pb2 = nt2.nodes.new("ShaderNodeBsdfPrincipled"); pb2.inputs["Base Color"].default_value = (0.32, 0.62, 0.9, 1)
+pb2.inputs["Roughness"].default_value = 0.55; pb2.inputs["Coat Weight"].default_value = 0.2
+nt2.links.new(pb2.outputs[0], next(n for n in nt2.nodes if n.type == 'OUTPUT_MATERIAL').inputs[0])
+gm2.blend_method = 'OPAQUE' if hasattr(gm2, "blend_method") else None
+b = bsdf(bpy.data.materials["Ref_holo"]); b.inputs["Alpha"].default_value = 1.0; b.inputs["Emission Strength"].default_value = 0.15
 sc["look"] = "animated_cg_v1"
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=False)
 print("LOOK_DONE", out)

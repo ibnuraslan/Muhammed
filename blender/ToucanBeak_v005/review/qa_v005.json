@@ -1,0 +1,4378 @@
+{
+ "frames": {
+  "1": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "7": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "13": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "19": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "25": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "31": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "37": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "43": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "49": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "55": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "61": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "67": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "73": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "79": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "85": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "91": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "97": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "103": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "109": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "115": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 1.1 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 1.3 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 1.0 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_3 moves 0.7 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 1.1 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_5 moves 1.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 0.9 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_7 moves 1.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 0.9 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 0.7 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "121": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 1.0 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 1.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 1.0 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_3 moves 0.8 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 1.0 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_5 moves 1.4 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 0.7 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_7 moves 1.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 0.9 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 0.6 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "127": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 0.9 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 1.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 1.0 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_3 moves 0.9 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 1.0 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_5 moves 1.4 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 0.6 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_7 moves 1.3 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 1.0 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 0.6 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "133": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 0.9 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 1.1 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 1.1 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_3 moves 1.0 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 1.0 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_5 moves 1.3 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 0.6 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_7 moves 1.4 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 1.1 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 0.6 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "139": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 0.9 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 1.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 1.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_3 moves 1.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 1.1 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_5 moves 1.3 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 0.6 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_7 moves 1.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 1.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 0.7 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "145": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 1.0 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 1.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 1.4 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_3 moves 1.3 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 1.1 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_5 moves 1.3 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 0.6 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_7 moves 1.6 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 1.4 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 0.8 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "151": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 1.1 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 1.3 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 1.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_3 moves 1.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 1.3 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 0.7 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_7 moves 1.8 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 1.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 0.9 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "157": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 1.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 1.4 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 1.7 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 1.4 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 0.9 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_7 moves 1.9 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 1.7 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 1.1 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "163": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 1.4 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 1.8 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 1.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_7 moves 2.1 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 1.8 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 1.3 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "169": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 1.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 2.0 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 1.7 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_5 moves 1.6 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_7 moves 2.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 2.0 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "175": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 1.7 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 1.8 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 2.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 1.8 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_5 moves 1.7 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_7 moves 2.4 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 2.2 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "181": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 1.8 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 1.9 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 2.3 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 2.0 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 1.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_7 moves 2.6 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 2.4 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 1.8 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "187": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 2.0 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 2.1 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 2.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 2.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 1.7 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_7 moves 2.8 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 2.6 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 2.0 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "193": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 2.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 2.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 2.7 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 2.3 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 1.9 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 2.7 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 2.2 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "199": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 2.3 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 2.4 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 2.9 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 2.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 2.1 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 2.9 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 2.4 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "205": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 2.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 2.6 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 3.0 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_3 moves 3.1 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 2.7 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 2.3 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 3.1 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 2.6 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "211": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 2.7 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 2.7 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 3.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_3 moves 3.3 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 2.9 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 2.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_7 moves 3.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 3.3 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 2.7 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "217": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 2.9 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 2.9 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 3.4 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_3 moves 3.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 3.0 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 2.6 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 3.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 2.9 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "223": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 3.1 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 3.1 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 3.6 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_3 moves 3.7 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 3.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 2.8 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 3.6 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 3.1 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "229": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_0 moves 4.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_1 moves 4.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_2 moves 5.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_4 moves 4.7 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 4.2 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_8 moves 5.3 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 4.6 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "235": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_shard_6 moves 12.8 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Beak_tip_piece moves 13.9 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "241": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "247": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "253": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "259": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "265": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "271": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "277": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "283": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "289": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "295": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "301": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "307": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "313": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "319": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "325": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "331": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "337": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "343": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "349": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "355": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "361": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "367": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "373": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "379": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "385": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "391": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "397": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "403": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_fall moves 13.2 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "409": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_fall moves 22.9 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "415": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "421": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "427": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "433": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "439": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "445": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "451": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "457": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "463": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "469": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "475": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "481": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "487": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "493": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "499": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "505": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "511": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Mote_emitter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "517": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Mote_emitter"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Mote_emitter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "523": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Mote_emitter"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Mote_emitter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "529": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "565": [
+   [
+    "CLAW",
+    "VetB.R curl 71"
+   ],
+   [
+    "FAN",
+    "VetB.R fingers fanned 36 deg (index vs little)"
+   ]
+  ],
+  "571": [
+   [
+    "CLAW",
+    "VetB.R curl 74"
+   ],
+   [
+    "FAN",
+    "VetB.R fingers fanned 37 deg (index vs little)"
+   ]
+  ],
+  "577": [
+   [
+    "CLAW",
+    "VetB.R curl 74"
+   ],
+   [
+    "FAN",
+    "VetB.R fingers fanned 37 deg (index vs little)"
+   ]
+  ],
+  "589": [
+   [
+    "CLAW",
+    "VetB.R curl 72"
+   ],
+   [
+    "FAN",
+    "VetB.R fingers fanned 33 deg (index vs little)"
+   ]
+  ],
+  "595": [
+   [
+    "CLAW",
+    "VetB.R curl 72"
+   ]
+  ],
+  "613": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "619": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "625": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "631": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "637": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "643": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "649": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "655": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "661": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "667": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "673": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "679": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "685": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "697": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "703": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "709": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "715": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "721": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "727": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "733": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "739": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "745": [
+   [
+    "FILL",
+    "Monitor_back"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Monitor_back in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "751": [
+   [
+    "FILL",
+    "Monitor_back"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Monitor_back in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "757": [
+   [
+    "FILL",
+    "Wall_patch"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Wall_patch in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "763": [
+   [
+    "FILL",
+    "Wall_patch"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Wall_patch in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "769": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Void_front"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Void_front in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "775": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "781": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "787": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "793": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "799": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "805": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "811": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "817": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "823": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "829": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "835": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "841": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "847": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "853": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "859": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "865": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "871": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "877": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "883": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "889": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "895": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "901": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "907": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "913": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "919": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "925": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "931": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "937": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "943": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "949": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "955": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "961": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "967": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "973": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "979": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "985": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "991": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "997": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1003": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1009": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1015": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1021": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1027": [
+   [
+    "FILL",
+    "Extrude_cutter"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1033": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Extrude_cutter"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1039": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1045": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1051": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1057": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1063": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1069": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1075": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1081": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1087": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1093": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1099": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1105": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1111": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1117": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1123": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Extrude_cutter"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1129": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Extrude_cutter"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1135": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Extrude_cutter"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1141": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Extrude_cutter"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1147": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Extrude_cutter"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1153": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1159": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1165": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1171": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1177": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1183": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1189": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1195": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1201": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1207": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1213": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1219": [
+   [
+    "EMPTY",
+    "only Void_box in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1225": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1231": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1237": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1243": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1249": [
+   [
+    "EMPTY",
+    "only Void_box in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1255": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1261": [
+   [
+    "EMPTY",
+    "only Void_box in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1267": [
+   [
+    "EMPTY",
+    "only Void_box in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1273": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1279": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1285": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1291": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1297": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1303": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Extrude_cutter"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Extrude_cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1309": [
+   [
+    "EMPTY",
+    "only Void_box in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1315": [
+   [
+    "EMPTY",
+    "only Void_box in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1321": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1327": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1333": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1339": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1345": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1351": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1357": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1363": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1369": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1375": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1381": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1387": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1393": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1399": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1405": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1411": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1417": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1423": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1429": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Nozzle moves 20.8 cm with no hand on it (nearest finger 711 cm)"
+   ]
+  ],
+  "1435": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Nozzle moves 17.4 cm with no hand on it (nearest finger 723 cm)"
+   ]
+  ],
+  "1441": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Nozzle moves 20.8 cm with no hand on it (nearest finger 703 cm)"
+   ]
+  ],
+  "1447": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Nozzle moves 28.3 cm with no hand on it (nearest finger 717 cm)"
+   ]
+  ],
+  "1453": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Nozzle moves 41.8 cm with no hand on it (nearest finger 710 cm)"
+   ]
+  ],
+  "1459": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Nozzle moves 44.5 cm with no hand on it (nearest finger 720 cm)"
+   ]
+  ],
+  "1465": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Nozzle moves 39.0 cm with no hand on it (nearest finger 697 cm)"
+   ]
+  ],
+  "1471": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Nozzle moves 33.9 cm with no hand on it (nearest finger 727 cm)"
+   ]
+  ],
+  "1477": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1483": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1489": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Nozzle moves 25.2 cm with no hand on it (nearest finger 727 cm)"
+   ]
+  ],
+  "1495": [
+   [
+    "EMPTY",
+    "only Void_box in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1501": [
+   [
+    "FILL",
+    "Void_front"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Void_front in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1507": [
+   [
+    "FILL",
+    "Monitor_back"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Monitor_back in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1513": [
+   [
+    "FILL",
+    "Monitor_back"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Monitor_back in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1531": [
+   [
+    "CLAW",
+    "VetB.R curl 38"
+   ]
+  ],
+  "1555": [
+   [
+    "CLAW",
+    "VetB.R curl 30"
+   ]
+  ],
+  "1561": [
+   [
+    "CLAW",
+    "VetB.R curl 29"
+   ]
+  ],
+  "1567": [
+   [
+    "CLAW",
+    "VetB.R curl 29"
+   ]
+  ],
+  "1573": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "CLAW",
+    "VetB.R curl 28"
+   ]
+  ],
+  "1579": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ],
+   [
+    "CLAW",
+    "VetB.R curl 27"
+   ]
+  ],
+  "1585": [
+   [
+    "CLAW",
+    "VetB.R curl 29"
+   ]
+  ],
+  "1711": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1717": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "FAN",
+    "VetB.L fingers fanned 50 deg (index vs little)"
+   ]
+  ],
+  "1903": [
+   [
+    "CLAW",
+    "VetB.R curl 35"
+   ],
+   [
+    "FAN",
+    "VetB.R fingers fanned 45 deg (index vs little)"
+   ]
+  ],
+  "1909": [
+   [
+    "CLAW",
+    "VetB.R curl 35"
+   ],
+   [
+    "FAN",
+    "VetB.R fingers fanned 45 deg (index vs little)"
+   ]
+  ],
+  "1915": [
+   [
+    "CLAW",
+    "VetB.R curl 35"
+   ],
+   [
+    "FAN",
+    "VetB.R fingers fanned 44 deg (index vs little)"
+   ]
+  ],
+  "1921": [
+   [
+    "CLAW",
+    "VetB.R curl 35"
+   ],
+   [
+    "FAN",
+    "VetB.R fingers fanned 44 deg (index vs little)"
+   ]
+  ],
+  "1927": [
+   [
+    "CLAW",
+    "VetB.R curl 35"
+   ],
+   [
+    "FAN",
+    "VetB.R fingers fanned 44 deg (index vs little)"
+   ]
+  ],
+  "1933": [
+   [
+    "CLAW",
+    "VetB.R curl 35"
+   ],
+   [
+    "FAN",
+    "VetB.R fingers fanned 44 deg (index vs little)"
+   ]
+  ],
+  "1939": [
+   [
+    "CLAW",
+    "VetB.R curl 35"
+   ],
+   [
+    "FAN",
+    "VetB.R fingers fanned 44 deg (index vs little)"
+   ]
+  ],
+  "1969": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1975": [
+   [
+    "FILL",
+    "Mote_emitter"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Mote_emitter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1981": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Mote_emitter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1987": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Mote_emitter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1993": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Mote_emitter"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Mote_emitter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1999": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2005": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2011": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2017": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2023": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2029": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2035": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_enclosure moves 1.2 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "2041": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_enclosure moves 1.6 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "2047": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_enclosure moves 5.3 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "2053": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_enclosure moves 7.7 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "2059": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_enclosure moves 8.4 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "2065": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_enclosure moves 6.3 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "2071": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_enclosure moves 3.4 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "2077": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_enclosure moves 2.3 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "2083": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_enclosure moves 4.2 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "2089": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_enclosure moves 12.3 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "2095": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_enclosure moves 2.6 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "2101": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_enclosure moves 8.3 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "2107": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_enclosure moves 11.0 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "2113": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_enclosure moves 0.7 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "2119": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_enclosure moves 1.2 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "2125": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_enclosure moves 1.6 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "2131": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Fig_enclosure moves 1.5 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "2137": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2143": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2149": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2155": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2161": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2167": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2173": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2179": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2185": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2191": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2197": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2203": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2209": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2215": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2221": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2227": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2233": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2239": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2245": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1747": [
+   [
+    "PROPMOVE",
+    "Glue_bead moves 0.7 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "1849": [
+   [
+    "PROPMOVE",
+    "Pin moves 1.2 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "FAN",
+    "VetB.R fingers fanned 50 deg (index vs little)"
+   ]
+  ],
+  "1951": [
+   [
+    "PROPMOVE",
+    "Tweezers moves 31.1 cm with no hand on it (nearest finger 3 cm)"
+   ]
+  ],
+  "559": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 29 deg (index vs little)"
+   ]
+  ],
+  "583": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 36 deg (index vs little)"
+   ]
+  ],
+  "1525": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 28 deg (index vs little)"
+   ]
+  ],
+  "1543": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 36 deg (index vs little)"
+   ]
+  ],
+  "1627": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 46 deg (index vs little)"
+   ]
+  ],
+  "1651": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 56 deg (index vs little)"
+   ]
+  ],
+  "1657": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 56 deg (index vs little)"
+   ]
+  ],
+  "1663": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 50 deg (index vs little)"
+   ]
+  ],
+  "1669": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 45 deg (index vs little)"
+   ]
+  ],
+  "1675": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 56 deg (index vs little)"
+   ]
+  ],
+  "1681": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 56 deg (index vs little)"
+   ]
+  ],
+  "1687": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 56 deg (index vs little)"
+   ]
+  ],
+  "1693": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 56 deg (index vs little)"
+   ]
+  ],
+  "1699": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 36 deg (index vs little)"
+   ]
+  ],
+  "1723": [
+   [
+    "FAN",
+    "VetB.L fingers fanned 37 deg (index vs little)"
+   ]
+  ],
+  "1795": [
+   [
+    "FAN",
+    "VetB.L fingers fanned 32 deg (index vs little)"
+   ]
+  ],
+  "1801": [
+   [
+    "FAN",
+    "VetB.L fingers fanned 29 deg (index vs little)"
+   ]
+  ],
+  "1813": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 50 deg (index vs little)"
+   ]
+  ],
+  "1819": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 50 deg (index vs little)"
+   ]
+  ],
+  "1825": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 50 deg (index vs little)"
+   ]
+  ],
+  "1831": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 50 deg (index vs little)"
+   ]
+  ],
+  "1837": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 50 deg (index vs little)"
+   ]
+  ],
+  "1843": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 50 deg (index vs little)"
+   ]
+  ],
+  "1855": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 50 deg (index vs little)"
+   ]
+  ],
+  "1861": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 50 deg (index vs little)"
+   ]
+  ],
+  "1867": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 50 deg (index vs little)"
+   ]
+  ],
+  "1873": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 50 deg (index vs little)"
+   ]
+  ],
+  "1879": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 50 deg (index vs little)"
+   ]
+  ],
+  "1885": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 50 deg (index vs little)"
+   ]
+  ],
+  "1891": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1897": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 47 deg (index vs little)"
+   ]
+  ],
+  "1945": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 47 deg (index vs little)"
+   ]
+  ],
+  "1957": [
+   [
+    "FAN",
+    "VetB.R fingers fanned 38 deg (index vs little)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 577,
+  "INSIDE": 57,
+  "FILL": 22,
+  "CLAW": 19,
+  "PROPMOVE": 199,
+  "FAN": 46
+ }
+}
