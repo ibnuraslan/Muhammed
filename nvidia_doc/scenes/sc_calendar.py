@@ -83,7 +83,7 @@ def build(variant=None):
     # the window: warm low sun through a 4-pane frame off-screen left (soft bar shadows over the wall)
     sun_ = bpy.data.lights.new("Morning", 'SUN'); sun_.energy = 4.0; sun_.color = (1.0, 0.8, 0.58); sun_.angle = math.radians(7.0)
     so = bpy.data.objects.new("Morning", sun_); bpy.context.collection.objects.link(so)
-    so.location = (-3.0, -3.2, 2.4); point_at(so, (0.2, WALL_Y, 1.3))
+    so.location = (-3.0, -3.2, 2.4); point_at(so, (0.2, WALL_Y, 1.3)); c["sun"] = so
     fr = pbr("Frame", (0.1, 0.1, 0.1), 0.6)
     for x in (-3.0, -2.2, -1.4):
         box("WinBar", (x, -1.6, 1.6), (0.08, 0.08, 3.0), fr).visible_camera = False
@@ -101,6 +101,15 @@ def build(variant=None):
     dd = v.outputs[0].driver_add("default_value").driver; dd.type = 'SCRIPTED'; dd.expression = "4.0 * min(1, max(0, (frame - 150) / 6))"
     l_.new(v.outputs[0], em.inputs['Strength']); l_.new(em.outputs[0], o_.inputs['Surface'])
     box("PhoneScreen", (0.32, -0.27, 1.2095), (0.068, 0.145, 0.001), pm, rot=(0, 0, 0.25))
+    nm = bpy.data.materials.new("Notif"); nm.use_nodes = True                  # a stack of notification cards (blurred, unreadable)
+    nn = nm.node_tree.nodes; nl = nm.node_tree.links; nn.clear(); no = nn.new("ShaderNodeOutputMaterial"); ne = nn.new("ShaderNodeEmission")
+    ne.inputs['Color'].default_value = (1.0, 1.0, 1.0, 1); nv = nn.new("ShaderNodeValue")
+    nd = nv.outputs[0].driver_add("default_value").driver; nd.type = 'SCRIPTED'; nd.expression = "7.0 * min(1, max(0, (frame - 156) / 6))"
+    nl.new(nv.outputs[0], ne.inputs['Strength']); nl.new(ne.outputs[0], no.inputs['Surface'])
+    import mathutils
+    for k in range(4):
+        off = mathutils.Matrix.Rotation(0.25, 3, 'Z') @ mathutils.Vector((0, 0.045 - k * 0.026, 0))
+        box("Notif", (0.32 + off.x, -0.27 + off.y, 1.2102), (0.06, 0.02, 0.0005), nm, rot=(0, 0, 0.25))
     cyl("Mug", (-0.2, -0.45, 0.8), 0.04, 0.1, pbr("Mug", (0.6, 0.6, 0.6), 0.3), verts=24)
     c["cal"] = CAL_C
     return c
@@ -108,6 +117,8 @@ def build(variant=None):
 
 def anim(c, t):
     f = 1 + t * (FRAMES["calendar"] - 1)
+    so = c["sun"]                                           # the morning light slides across the wall
+    so.location = (-3.0 + 0.9 * t, -3.2, 2.4 + 0.35 * t); point_at(so, (0.2, WALL_Y, 1.3))
     for k, (s, L_) in enumerate(c["strokes"]):
         day, stroke = k // 2, k % 2
         t0 = 18 + day * 30 + stroke * 8                     # each day: two strokes, 8 frames apart; days 30 frames apart

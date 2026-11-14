@@ -105,6 +105,10 @@ def build(variant=None):
     office_chair((0.0, 0.47, 0), math.pi, fabric("ChairFab", (0.08, 0.09, 0.1), 0.85, 0.3, 300), pbr("Leg", (0.05, 0.05, 0.05), 0.4, 0.8))
     hs = box("Handset", (0, 0, 0), (0.05, 0.035, 0.2), pbr("Handset", (0.03, 0.03, 0.033), 0.35), bevel=0.012)
     box("DeskPhone", (0.55, 1.05, 0.79), (0.22, 0.2, 0.05), pbr("Handset", (0.03, 0.03, 0.033), 0.35), bevel=0.01)
+    paper = pbr("NotePaper", (0.85, 0.84, 0.8), 0.8)
+    box("Notebook", (-0.25, 0.95, 0.765), (0.21, 0.28, 0.012), paper, rot=(0, 0, 0.15))
+    box("NotebookCover", (-0.25, 0.95, 0.758), (0.215, 0.285, 0.004), pbr("NoteCover", (0.08, 0.1, 0.18), 0.6), rot=(0, 0, 0.15))
+    box("Pen", (-0.12, 0.9, 0.775), (0.008, 0.14, 0.008), pbr("Pen", (0.05, 0.05, 0.05), 0.3), rot=(0, 0, 0.4))
     # the other hand rests on the desk
     bpy.context.view_layer.update()
     reach(r, "R", Vector((-0.15, 1.0, 0.8)), Vector((-0.6, -0.2, -0.7)), Vector((0, 1, -0.2)))
