@@ -91,4 +91,6 @@ I watched v004 as a moving preview (`pipeline/preview.py`, every 5th frame, all 
 | 1760–1900 | The tripod legs and winch box blur past the lens during the emergence, ResA's arm crosses the lens, and the legs fill the crane-up. | The camera is 0.7–1 m further out round the tripod. |
 | 1099, 1141 | clip_scan: hands near another rescuer as the camera moved. | ResB's spot is moved 0.3 m, and the teen's walk is routed 0.3 m wider. |
 
-Preview note: the 24 dust and exhaust volumes cost about 48 s per frame of Cycles volume setup. The preview hides them for speed; the package renders them.
+Render cost: the 24 dust and exhaust puffs were volumes that scale down to 0.001 when inactive. Cycles still built all 24 volumes on every frame, about 48 s of setup per frame. Each puff now exists (hide_render and hide_viewport keys) only during its own 40–90 frames, so at most 3 are live on any frame.
+- Measured at 270×480, 4 samples: 5–7 s per frame with the dust visible (frames 20, 205, 610, 700, 880, 1400), down from about 53 s.
+- The preview includes all the dust: what's in the preview is what the client renders.

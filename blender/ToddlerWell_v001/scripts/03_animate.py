@@ -748,6 +748,11 @@ def puff(name, loc, f0, r0, r1, dur):
     o.scale = (r0,) * 3; o.keyframe_insert("scale", frame=f0)
     o.scale = (r1,) * 3; o.location = V(loc) + V((0, 0, r1 * 0.4)); o.keyframe_insert("scale", frame=f0 + dur); o.keyframe_insert("location", frame=f0 + dur)
     o.scale = (0.001,) * 3; o.keyframe_insert("scale", frame=f0 + dur + 1)
+    # only exists while it is visible: an invisible (scaled-down) volume still costs Cycles a volume build every frame
+    for fr_, h_ in ((1, True), (f0 - 2, True), (f0 - 1, False), (f0 + dur + 1, False), (f0 + dur + 2, True)):
+        if fr_ < 1: continue
+        o.hide_render = h_; o.hide_viewport = h_
+        o.keyframe_insert("hide_render", frame=fr_); o.keyframe_insert("hide_viewport", frame=fr_)
     return o
 puff("DustLand", (0, 0, FLOOR_Z + 0.1), 199, 0.08, 0.26, 50)
 for ci, (f0, p) in enumerate(cyc[::2]):
