@@ -285,9 +285,10 @@ hand(pa, "R", 525, V((-0.65, BY + 0.30, 1.0)), (1, 0.4, 0), (0, 0, -1), grip=0.8
 hand(pa, "L", 525, V((-0.80, BY + 0.10, 0.9)), (1, 0.2, 0), (0, 0, -1), grip=0.8)
 # kneels in the aisle by the bomber's left side, both hands on his shoulder blades
 for f in (585, 654, 720, 768):
-    pa.key_root(f, V((-0.05, BY + 0.05, 0.58)), yaw=FWD + 20, flex=10)
+    dx = 0.0 if f < 640 else -0.23     # v006d: kneels a little to the left after the pin (out of the aisle cameras' line)
+    pa.key_root(f, V((-0.05 + dx, BY + 0.05, 0.58)), yaw=FWD + 20, flex=10)
     pa.key_spine(f, flex=60 if f < 720 else 45, twist=5, head=(20, 0) if f < 720 else (10, 20))
-    pa.key_foot("L", f, V((-0.25, BY - 0.35)), FWD + 20, 0.02, -65); pa.key_foot("R", f, V((0.12, BY - 0.40)), FWD + 20, 0.02, -65)
+    pa.key_foot("L", f, V((-0.25 + dx, BY - 0.35)), FWD + 20, 0.02, -65); pa.key_foot("R", f, V((0.12 + dx, BY - 0.40)), FWD + 20, 0.02, -65)
     hand(pa, "L", f, V((-0.10, BY + 1.05, 0.55)), (0.1, 1, -0.4), (0, 0, -1), grip=0.25)
     hand(pa, "R", f, V((0.12, BY + 1.0, 0.55)), (-0.1, 1, -0.4), (0, 0, -1), grip=0.25)
 
