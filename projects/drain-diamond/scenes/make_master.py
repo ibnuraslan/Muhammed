@@ -31,7 +31,7 @@ CHAPTERS = {
             ("boutique2_after", "After A  'The insurer offers a million-dollar reward'"), ("boutique_chair", "Chair B  'Who knew the shop well enough'")],
     "ch3": [("unit_pin", "Unit A  'The case lands with the Paris police unit'"), ("unit_read", "Unit B  'Investigators are also looking at one of the guards'"),
             ("gym_bag", "Gym A  'A link between the two men runs through a gym.'"), ("gym_lockers", "Gym B  'Chiniah puts them in touch.'"),
-            ("car_mic", "Car A  'Detectives put microphones in Yahiaoui's car.'"), ("car_envelope", "Car B  'envelopes change hands through car windows'"),
+            ("car_mic", "Car A  'Detectives put microphones in Yahiaoui's car.'"), ("car_mic_dash", "Car insert  (gloved hand plants the mic under the dash)"), ("car_envelope", "Car B  'envelopes change hands through car windows'"),
             ("raid_arrive", "Raid A  'In June 2009, police move in'"), ("raid_stairs", "Raid B  'a hidden compartment beneath a staircase'"),
             ("drain_yard", "House A  'It's Yahiaoui's house.'"), ("unit_listen", "House B  'the big stone that keeps coming up on the recordings'"),
             ("drain_gate", "Drain A  'They keep coming back to the house.'"), ("drain_torch", "Drain B  'the lighter patch in the drain'"),

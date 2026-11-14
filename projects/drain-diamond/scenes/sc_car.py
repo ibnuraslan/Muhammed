@@ -14,8 +14,8 @@ from human import reach, pose_sit, reset_pose, fingers_curl
 from sc_boutique import haussmann
 
 EXPOSURE = 0.6
-DUR = {"mic": 9.0, "envelope": 9.0, "reels": 9.0}
-VARIANT_FOR = {"mic": "mic_out", "envelope": "street", "reels": "interior_day"}
+DUR = {"mic": 9.0, "mic_dash": 4.0, "envelope": 9.0, "reels": 9.0}
+VARIANT_FOR = {"mic": "mic_out", "mic_dash": "dash", "envelope": "street", "reels": "interior_day"}
 
 
 def interior(c, day=False):
@@ -65,7 +65,33 @@ def interior(c, day=False):
 def build(variant=None):
     c = {}
     v = variant or "interior"
-    if v in ("interior", "interior_day"):
+    if v == "dash":
+        # tight insert under the dashboard: wiring loom, a fuse cover, the steering column; a gloved hand (black nitrile)
+        # presses a small microphone capsule up into place under a torch beam
+        interior(c)
+        plastic = pbr("DashUnder", (0.035, 0.035, 0.04), 0.7)
+        U = dd.Builder("DashUnder")
+        U.box((1.15, 0.0, 0.54), (0.42, 1.4, 0.03), plastic)                # the under-dash closing panel
+        U.box((1.1, -0.05, 0.505), (0.12, 0.2, 0.04), pbr("FuseCover", (0.06, 0.06, 0.065), 0.5))
+        for k in range(5):                                                  # the wiring loom along the bulkhead
+            U.cyl((1.25, 0.1 + 0.012 * k, 0.5 - 0.008 * k), 0.006, 0.9, pbr(f"Wire{k}", ((0.05, 0.05, 0.05), (0.35, 0.05, 0.03), (0.04, 0.12, 0.3), (0.5, 0.45, 0.1), (0.06, 0.06, 0.06))[k], 0.5), verts=8, rot=(math.radians(90), 0, 0))
+        U.box((1.25, 0.12, 0.49), (0.04, 0.08, 0.03), pbr("LoomTape", (0.02, 0.02, 0.02), 0.8))
+        U.box((1.0, 0.38, 0.2), (0.25, 0.08, 0.02), pbr("Pedal", (0.15, 0.15, 0.16), 0.4, 0.8), rot=(0, math.radians(-30), 0))
+        U.done()
+        mic = dd.Builder("BugMic"); mm = pbr("MicBody", (0.2, 0.2, 0.21), 0.3, 0.6)
+        mic.cyl((0, 0, 0), 0.011, 0.034, mm, verts=16, rot=(0, math.radians(90), 0)).cyl((0.018, 0, 0), 0.008, 0.004, pbr("MicGrille", (0.6, 0.6, 0.62), 0.3, 1.0), verts=16, rot=(0, math.radians(90), 0))
+        mic.cyl((-0.06, 0, 0), 0.0012, 0.1, pbr("MicWire", (0.02, 0.02, 0.02), 0.5), verts=6, rot=(0, math.radians(90), 0))
+        c["mic"] = mic.done((0, 0, -10))
+        h = person("Tech", 1.0, 36, "male_casualsuit05", "short02", cval=1.1); c["tech"] = h
+        glove = pbr("Nitrile", (0.012, 0.012, 0.014), 0.35, 0.0, **{"Coat Weight": 0.3})
+        h.body.data.materials[0] = glove                                    # only the forearm and hand are ever in frame
+        for o in bpy.data.objects:
+            if o is not h.body and ("hair" in o.name.lower() or "short02" in o.name.lower() or "eyebrow" in o.name.lower()):
+                o.hide_render = True
+        tl = bpy.data.lights.new("TechTorch", 'SPOT'); tl.energy = 9; tl.spot_size = math.radians(30); tl.spot_blend = 0.5
+        tl.color = (1.0, 0.95, 0.86); tl.shadow_soft_size = 0.015
+        to = bpy.data.objects.new("TechTorch", tl); bpy.context.collection.objects.link(to); c["torch"] = to
+    elif v in ("interior", "interior_day"):
         interior(c, day=(v == "interior_day"))
         if v == "interior":
             h = person("Tech", 1.0, 36, "male_casualsuit05", "short02", cval=1.1)
@@ -88,18 +114,39 @@ def build(variant=None):
         box("Pave", (0, 3.6, 0.05), (80, 2.4, 0.12), dd.wet(dd.tex_mat("concrete_floor_02", 0.5, tint=(0.5, 0.5, 0.5), name="NightPave", sat=0.3), 0.8, 0.4))
         for k, (a, b) in enumerate(((-40, -10), (-10, 20), (20, 50))):
             haussmann(a, b, seed=90 + k, origin=(0, 4.8, 0), lit_frac=0.3)
-        car_ = dd.sedan("BugCar", (0.1, 0.11, 0.13), lights=False); car_.location = (0, 1.1, 0)
-        # the open driver's door (left side = +Y): a door-coloured panel swung out on its front hinge
-        door = dd.Builder("OpenDoor"); dm = pbr("DoorPaint", (0.1, 0.11, 0.13), 0.25, 0.7, **{'Coat Weight': 1.0, 'Coat Roughness': 0.04})
-        door.box((-0.5, 0.0, 0.75), (1.0, 0.06, 0.62), dm).box((-0.55, 0.0, 1.2), (0.85, 0.04, 0.32), pbr("DoorGlassD", (0.02, 0.025, 0.03), 0.05, 0.0, **{'Coat Weight': 1.0}))
-        door.box((-0.5, -0.04, 0.75), (0.95, 0.02, 0.55), pbr("DoorTrim", (0.06, 0.06, 0.065), 0.6))
-        dobj = door.done((0.55, 2.0, 0.0)); dobj.rotation_euler = (0, 0, math.radians(-60))
-        lamp = dd.model_h("street_lamp_02", (-3.0, 3.3, 0.1), 5.0)
-        sl = bpy.data.lights.new("StreetLamp", 'POINT'); sl.energy = 900; sl.color = (1.0, 0.68, 0.38); sl.shadow_soft_size = 0.2
-        so = bpy.data.objects.new("StreetLamp", sl); bpy.context.collection.objects.link(so); so.location = (-3.0, 3.0, 4.7)
+        car_ = dd.sedan("BugCar", (0.05, 0.08, 0.16), lights=False); car_.location = (0, 1.1, 0)   # dark metallic blue
+        # cut the real front-door opening out of the body shell (kit seams: x 0.90 .. -0.49, sill 0.37 .. roof 1.40, +Y side)
+        cut = box("DoorCut", (0.205, 1.1 + 0.95, 0.89), (1.36, 0.9, 1.03))
+        cut.hide_render = True; cut.display_type = 'WIRE'; cut.visible_camera = False
+        md = car_.modifiers.new("DoorOpening", 'BOOLEAN'); md.operation = 'DIFFERENCE'; md.object = cut; md.solver = 'FLOAT'
+
+        # the open FRONT driver's door (left side = +Y), a real door with depth: outer skin, inner trim panel with an
+        # armrest and pull, the window frame; hinged at its front edge and swung out 62 degrees
+        paint = pbr("DoorPaint", (0.05, 0.08, 0.16), 0.22, 0.6, **{'Coat Weight': 1.0, 'Coat Roughness': 0.04})
+        trim = pbr("DoorTrim", (0.05, 0.05, 0.055), 0.65)
+        D = dd.Builder("OpenDoor")
+        D.box((-0.69, 0.0, 0.65), (1.36, 0.05, 0.56), paint)               # outer skin, the size of the opening
+        D.box((-0.69, -0.06, 0.65), (1.3, 0.07, 0.52), trim)               # inner trim panel (door thickness ~0.12)
+        D.box((-0.85, -0.11, 0.74), (0.5, 0.06, 0.05), trim)               # armrest
+        D.box((-0.4, -0.1, 0.85), (0.12, 0.04, 0.03), pbr("Pull", (0.5, 0.5, 0.52), 0.3, 1.0))
+        for (cx, cz, sx, sz) in ((-0.82, 1.38, 1.1, 0.04), (-1.36, 1.16, 0.04, 0.44), (-0.03, 1.1, 0.05, 0.34)):
+            D.box((cx, -0.02, cz), (sx, 0.05, sz), paint)                  # window frame: top rail, B-pillar edge, A edge
+        D.box((-0.75, -0.02, 1.15), (1.2, 0.01, 0.42), pbr("DoorGlassD", (0.02, 0.025, 0.03), 0.04, 0.0, **{'Coat Weight': 1.0}))
+        dobj = D.done((0.9, 2.0, 0.0)); dobj.rotation_euler = (0, 0, math.radians(-62))
+        for x in (-3.0, 6.0):
+            dd.model_h("street_lamp_02", (x, 3.3, 0.1), 5.0)
+            sl = bpy.data.lights.new("StreetLamp", 'POINT'); sl.energy = 900; sl.color = (1.0, 0.68, 0.38); sl.shadow_soft_size = 0.2
+            so = bpy.data.objects.new("StreetLamp", sl); bpy.context.collection.objects.link(so); so.location = (x, 3.0, 4.7)
         h = person("Tech", 1.0, 36, "male_casualsuit05", "short02", cval=1.1); c["tech"] = h
-        tl = bpy.data.lights.new("TechTorch", 'POINT'); tl.energy = 15; tl.color = (1.0, 0.95, 0.85); tl.shadow_soft_size = 0.03
-        to = bpy.data.objects.new("TechTorch", tl); bpy.context.collection.objects.link(to); to.location = (0.3, 1.3, 0.55)
+        tl = bpy.data.lights.new("TechTorch", 'SPOT'); tl.energy = 18; tl.spot_size = math.radians(35); tl.spot_blend = 0.5
+        tl.color = (1.0, 0.95, 0.85); tl.shadow_soft_size = 0.02
+        to = bpy.data.objects.new("TechTorch", tl); bpy.context.collection.objects.link(to); c["torch"] = to
+        # the lookout: a detective at the rear of the car, watching the street, torch held low and off the car
+        lk = dd.officer("Lookout", 44, seed=1, band=False); c["lookout"] = lk
+        ll = bpy.data.lights.new("LookoutTorch", 'SPOT'); ll.energy = 30; ll.spot_size = math.radians(28); ll.spot_blend = 0.4
+        ll.color = (1.0, 0.95, 0.88); ll.shadow_soft_size = 0.02
+        lo = bpy.data.objects.new("LookoutTorch", ll); bpy.context.collection.objects.link(lo); c["lk_torch"] = lo
+        c["lk_torch_body"] = cyl("LkTorch", (0, 0, -20), 0.016, 0.16, pbr("TorchBody", (0.03, 0.03, 0.035), 0.4, 0.6), verts=12)
         c["rain_ys"] = (4.5, 6.0)
         rain(c, 0, c["rain_ys"], width=30, height=8, strength=1.2, density=0.985)
     else:
@@ -130,20 +177,42 @@ def build(variant=None):
 
 
 def anim_mic_out(c, t):
+    """Kneeling on the wet road at the open front door, leaning into the footwell, both hands up under the dash;
+    the torch in his left hand lights the work. The lookout watches the street, torch low."""
     sec = t * DUR["mic"]
     rain_fall(c, sec)
-    h = c["tech"]; zero(h); from human import pose_walk
-    pose_walk(h, 0.0, stride=0.0, arm_swing=0.0)
-    for b, a in (("spine01", 18), ("spine02", 18), ("spine03", 16), ("spine04", 12), ("neck01", 10)):
-        h.rot(b, (1, 0, 0), a)                                 # bent forward into the car
-    for sd in ("L", "R"):
-        h.rot(f"upperleg01.{sd}", (1, 0, 0), -14)
-        h.rot(f"lowerleg01.{sd}", (1, 0, 0), 20)
-    place(h, (0.25, 2.25 + 0.01 * math.sin(sec * 1.2), 0.06), math.radians(180), z=0.06)    # facing +Y? no: facing the car (-Y)
-    h.arm.rotation_euler.z = 0.0; dd.ground(h, 0.06)
-    from human import reach
-    reach(h, "R", Vector((0.35, 1.45, 0.55 + 0.03 * math.sin(sec * 1.5))), Vector((0, -1, -0.5)))
-    reach(h, "L", Vector((0.15, 1.5, 0.6)), Vector((0, -1, -0.5)))
+    from dd import pose_kneel, arms_relaxed
+    h = c["tech"]; pose_kneel(h, lean=38)
+    sp = Vector((0.3, 2.45, 0.0)); place(h, sp, 0.0)                       # facing -Y: into the car through the opening
+    dd.ground(h, 0.0)
+    under = Vector((0.85, 1.62, 0.6))
+    reach(h, "R", under + Vector((0.0, 0.0, 0.02 * math.sin(sec * 1.8))), Vector((0.3, 0.6, -0.8)))      # working the mic
+    reach(h, "L", under + Vector((-0.2, 0.22, -0.05)), Vector((-0.4, 0.6, -0.8)))
+    fingers_curl(h, 35)
+    c["torch"].location = h.bone_tail("wrist.L") + Vector((0, -0.03, 0.0)); point_at(c["torch"], under)
+    lk = c["lookout"]; zero(lk); from human import pose_walk
+    pose_walk(lk, 0.0, stride=0.0, arm_swing=0.0)
+    lp = Vector((3.4, 2.75, 0.12)); place(lk, lp, math.radians(100), z=0.12); arms_relaxed(lk)    # ahead of the car, watching the street
+    lk.rot("head", (0, 0, 1), 18 * ease(min(1.0, max(0.0, (sec - 4.0) / 1.5))))     # a car passes at the end of the street: he looks
+    tb = lk.bone_tail("wrist.R") if "wrist.R" in lk.arm.pose.bones else lk.bone_tail("lowerarm02.R")
+    c["lk_torch_body"].location = tb + Vector((0, 0, -0.04)); c["lk_torch_body"].rotation_euler = (math.radians(70), 0, lk.arm.rotation_euler.z)
+    c["lk_torch"].location = tb + Vector((0, 0, -0.06)); point_at(c["lk_torch"], lp + Vector((2.5, -0.6, 0.0)))
+
+
+def anim_mic_dash(c, t):
+    """The gloved right hand brings the capsule up and presses it into the corner by the loom, then holds it there."""
+    sec = t * DUR["mic_dash"]
+    from dd import pose_kneel
+    h = c["tech"]; pose_kneel(h, lean=80)                                   # bent right down into the footwell
+    place(h, Vector((1.02, 0.82, 0.0)), 0.0); dd.ground(h, 0.0)            # kneeling at the open door sill
+    spot = Vector((1.2, 0.2, 0.522))
+    u = ease(min(1.0, max(0.0, (sec - 0.4) / 1.6)))
+    tgt = spot + Vector((-0.1 * (1 - u), 0.12 * (1 - u), -0.09 * (1 - u)))
+    reach(h, "R", tgt + Vector((-0.02, 0.05, -0.03)), Vector((0.2, 0.6, -0.8)))
+    fingers_curl(h, 45)
+    hand = h.bone_tail("wrist.R") if "wrist.R" in h.arm.pose.bones else h.bone_tail("lowerarm02.R")
+    c["mic"].location = tgt + Vector((-0.035, -0.02, 0.0)); c["mic"].rotation_euler = (0, 0, math.radians(25))   # at his fingertips, toward the lens
+    c["torch"].location = Vector((0.75, 0.55, 0.32)); point_at(c["torch"], spot)
 
 
 def anim_mic(c, t):
@@ -179,9 +248,12 @@ def anim_reels(c, t):
 
 
 MOVES = {
-    "mic": dict(kind="anim", dof=4.0, anim=anim_mic_out,
-                cam=lambda c, t: (Vector((-3.4, 4.3, 1.45)).lerp(Vector((-3.0, 4.1, 1.4)), ease(t)), Vector((0.3, 1.7, 0.8)), 30),
-                focus=lambda c, t: Vector((0.25, 2.0, 0.9))),
+    "mic": dict(kind="anim", dof=5.6, anim=anim_mic_out,
+                cam=lambda c, t: (Vector((-2.9, 4.3, 1.9)).lerp(Vector((-2.5, 4.1, 1.8)), ease(t)), Vector((0.55, 2.1, 0.6)), 32),
+                focus=lambda c, t: Vector((0.55, 2.3, 0.7))),
+    "mic_dash": dict(kind="anim", dof=2.0, anim=anim_mic_dash,
+                     cam=lambda c, t: (Vector((0.74, 0.36, 0.26)).lerp(Vector((0.8, 0.33, 0.27)), ease(t)), Vector((1.18, 0.24, 0.56)), 30),
+                     focus=lambda c, t: Vector((1.2, 0.2, 0.52))),
     "mic_old": dict(kind="anim", dof=2.8, anim=anim_mic,
                 cam=lambda c, t: (Vector((-0.85, -0.1, 1.28)).lerp(Vector((-0.75, -0.05, 1.26)), ease(t)), Vector((0.95, 0.35, 0.62)), 20),
                 focus=lambda c, t: Vector((0.8, 0.35, 0.8))),
