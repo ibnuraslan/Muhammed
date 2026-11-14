@@ -312,13 +312,13 @@ def manb_clinic():
     sit(manb, f(30.4), BEDP, 180, 0.83, hands=ph, flex=8, head=(16, 4), knee=0.30, foot_lift=0.28)
     face(MBR, f(30.6), brow=0.2, smile=0.4)
     tap = {"R": ((-0.06, -0.43, 1.04), (0, -1, 0.15), (0, 0.25, 1)), "L": ((0.16, -0.28, 0.98), (0, -1, -0.4), (0, 0, -1))}
-    for k, t in enumerate((31.0, 31.4, 31.8, 32.2, 33.0)):
+    for k, t in enumerate((31.0, 31.4, 31.8, 32.2, 32.6, 33.0, 33.4, 33.8)):
         sit(manb, f(t), BEDP, 180, 0.83, hands=tap if k % 2 else ph, flex=8, head=(18, 2), knee=0.30, foot_lift=0.28)
 manb_clinic()
 
 # ================================================================== DOCTOR, NURSE
 doc = Actor("Doctor"); DR = doc.o
-DOCP = Vector((-29.2, -2.4, 0.0))
+DOCP = Vector((-29.32, -2.4, 0.0))   # v006: 12 cm further back so her coat stays clear of his back
 def doc_anim():
     f = F
     # gloves: hand faces get a nitrile material (the MPFB hand mesh)
@@ -335,25 +335,25 @@ def doc_anim():
             if g.weight > 0.3 and (nm.startswith("finger") or nm.startswith("wrist") or nm.startswith("metacarpal")): hand_v.add(v.index)
     for p_ in body.data.polygons:
         if all(i in hand_v for i in p_.vertices): p_.material_index = gi
-    scope = {"R": ((-0.11, -0.58, 1.44), (0.1, -0.6, 0.5), (0, -0.6, -0.2)), "L": ((0.06, -0.52, 1.39), (0, -1, -0.2), (0, 0, -1))}   # left hand flat on his shoulder
+    scope = {"R": ((-0.11, -0.70, 1.44), (0.1, -0.6, 0.5), (0, -0.6, -0.2)), "L": ((0.06, -0.64, 1.39), (0, -1, -0.2), (0, 0, -1))}   # left hand flat on his shoulder
     rest = None
     doc.set_plant(DOCP + Vector((0.04, 0, 0)), 90)
     doc.pose(f(20.0), DOCP, 90, flex=10, head=(16, 0))
-    doc.pose(f(22.6), DOCP, 90, flex=24, head=(26, -10), hands=scope)
+    doc.pose(f(22.6), DOCP, 90, flex=17, head=(26, -10), hands=scope)
     face(DR, f(22.6), brow=-0.2, frown=0.6, squint=0.6)
-    doc.pose(f(23.8), DOCP + Vector((0.05, 0, 0)), 95, flex=24, head=(20, -6), hands=scope)
-    doc.pose(f(24.8), DOCP + Vector((0.08, 0, 0)), 95, flex=24, head=(20, -4), hands=scope)
+    doc.pose(f(23.8), DOCP + Vector((0.05, 0, 0)), 95, flex=17, head=(20, -6), hands=scope)
+    doc.pose(f(24.8), DOCP + Vector((0.08, 0, 0)), 95, flex=17, head=(20, -4), hands=scope)
     face(DR, f(25.2), brow=0.4, frown=1.0, smile=-0.4)                         # serious
     doc.pose(f(25.45), DOCP + Vector((0.04, 0, 0)), 88, flex=12, head=(14, 12), hands={"R": ((-0.21, -0.03, 0.92), (0, -0.1, -1), (1, 0, 0))})   # scope into her coat pocket
     doc.pose(f(25.6), DOCP, 80, flex=10, head=(4, 26))                         # turns to him, explains
     face(DR, f(25.8), brow=0.3, frown=0.5, jaw=8); face(DR, f(26.0), jaw=2, frown=0.5)
     doc.pose(f(26.0), DOCP, 85, flex=8, head=(4, 20), hands={"R": ((-0.21, -0.03, 0.92), (0, -0.1, -1), (1, 0, 0))})   # forceps from the pocket
-    cut = {"R": ((-0.12, -0.60, 1.43), (0.1, -0.7, 0.2), (0, -0.5, -0.8)), "L": ((-0.02, -0.60, 1.36), (0, -0.7, 0.2), (0, -0.5, -0.8))}
+    cut = {"R": ((-0.12, -0.72, 1.43), (0.1, -0.7, 0.2), (0, -0.5, -0.8)), "L": ((-0.02, -0.72, 1.36), (0, -0.7, 0.2), (0, -0.5, -0.8))}
     for i, t in enumerate((26.4, 27.0, 27.6, 28.2)):
-        doc.pose(f(t), DOCP + Vector((0.08, 0, 0)), 95, flex=26, head=(18, -2), hands={k: ((v[0][0], v[0][1] - 0.01 * (i % 2), v[0][2]), v[1], v[2]) for k, v in cut.items()})
+        doc.pose(f(t), DOCP + Vector((0.08, 0, 0)), 95, flex=19, head=(18, -2), hands={k: ((v[0][0], v[0][1] - 0.01 * (i % 2), v[0][2]), v[1], v[2]) for k, v in cut.items()})
     face(DR, f(26.6), brow=-0.3, frown=0.8, squint=0.7)
     _c = dict(cut); _c["L"] = ((0.21, -0.03, 0.92), (0, -0.1, -1), (-1, 0, 0))
-    doc.pose(f(27.85), DOCP + Vector((0.06, 0, 0)), 93, flex=22, head=(14, -2), hands=_c)            # left hand fetches the bandage
+    doc.pose(f(27.85), DOCP + Vector((0.06, 0, 0)), 93, flex=17, head=(14, -2), hands=_c)            # left hand fetches the bandage
     doc.pose(f(28.7), DOCP + Vector((0.04, 0, 0)), 90, flex=14, head=(16, 4), hands={"R": ((-0.21, -0.03, 0.92), (0, -0.1, -1), (1, 0, 0))})   # forceps back to the pocket
     doc.pose(f(29.2), DOCP, 80, flex=4, head=(0, 20))
     doc.plant = None
@@ -768,7 +768,7 @@ for i_, r in enumerate(riders):
 # windows light up one by one (beats 10-11)
 for i_, w_ in enumerate(bpy.data.collections["CITY"].objects):
     if not w_.name.startswith("Win_"): continue
-    t = 31.6 + random.uniform(0, 3.8)
+    t = 33.9 + random.uniform(0, 1.6)
     w_.scale = (0.001,) * 3; w_.keyframe_insert("scale", frame=F(t) - 1); w_.scale = (1, 1, 1); w_.keyframe_insert("scale", frame=F(t))
 # TV flicker + curtain sway in the home
 tv = bpy.data.lights["TVFlicker"]

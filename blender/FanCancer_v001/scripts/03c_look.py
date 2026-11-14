@@ -42,7 +42,7 @@ nt = sc.world.node_tree; nt.nodes["WMIX2"].inputs['B'].default_value = (0.20, 0.
 L = bpy.data.lights.new("CityMoon", 'SUN'); L.energy = 5.0; L.color = (0.6, 0.7, 1.0)
 lo = bpy.data.objects.new("CityMoon", L); lo.rotation_euler = (math.radians(55), 0, math.radians(200)); bpy.data.collections["CITY"].objects.link(lo)
 # NOTE: a sun lights every set; keyed on only while the camera is in the city
-for f, e in ((1, 0.0), (F(31.8), 5.0), (F(35.9), 0.0)):
+for f, e in ((1, 0.0), (F(34.0), 5.0), (F(35.9), 0.0)):
     L.energy = e; L.keyframe_insert("energy", frame=f)
 for fc in _fcurves(L.animation_data.action):
     for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
@@ -61,7 +61,7 @@ cam = sc.camera
 L = bpy.data.lights.new("CamFill", 'AREA'); L.energy = 25; L.size = 1.5; L.color = (1.0, 0.97, 0.94)
 lo = bpy.data.objects.new("CamFill", L); lo.parent = cam; lo.location = (0.3, 0.4, 0.0); sc.collection.objects.link(lo)
 L.cycles.max_bounces = 2
-for f, e in ((1, 25), (F(5.0), 0), (F(8.6), 25), (F(31.8), 40)):
+for f, e in ((1, 25), (F(5.0), 0), (F(8.6), 25), (F(34.0), 40)):
     L.energy = e; L.keyframe_insert("energy", frame=f)
 for fc in _fcurves(L.animation_data.action):
     for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
@@ -107,7 +107,7 @@ for i in range(5):
     L = bpy.data.lights.new(f"FacadeWash{i}", 'AREA'); L.energy = 0; L.size = 12; L.color = (1.0, 0.85, 0.65)
     lo = bpy.data.objects.new(L.name, L); lo.location = CT + Vector((-40 + i * 20, -6, 2)); lo.rotation_euler = (math.radians(75), 0, 0)
     bpy.data.collections["CITY"].objects.link(lo)
-    for f, e in ((1, 0), (F(31.8), 60000), (F(35.9), 0)):
+    for f, e in ((1, 0), (F(34.0), 60000), (F(35.9), 0)):
         L.energy = e; L.keyframe_insert("energy", frame=f)
 
 # ceiling light panels: prismatic diffuser grid (detail while it fills the lens)

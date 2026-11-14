@@ -232,6 +232,9 @@ for side, y0, ry in ((1, 0, 0.0), (-1, -32.0, math.pi)):
 # seats: the source model is a row; scale it to a 0.55 m seat pitch row and instance per row
 sm = seats.dimensions
 seats.data.transform(Matrix.Scale(0.9 / sm.z, 4))
+if seats.data.has_custom_normals:   # v006: the glb's custom normals break under the scale -> seat backs rendered as black silhouettes
+    with bpy.context.temp_override(object=seats, active_object=seats, selected_objects=[seats]):
+        bpy.ops.mesh.customdata_custom_splitnormals_clear()
 sm = seats.dimensions
 seats.hide_render = True; seats.hide_viewport = True
 for side, y0, ry in ((1, 0, math.pi), (-1, -32.0, 0.0)):
@@ -241,6 +244,15 @@ for side, y0, ry in ((1, 0, math.pi), (-1, -32.0, 0.0)):
         while xx < 15.0:
             o = seats.copy(); o.hide_render = o.hide_viewport = False; o.location = (xx + sm.x / 2, y, z); o.rotation_euler.z = ry
             C_RINK.objects.link(o); xx += sm.x
+# v006: the dark-red / charcoal seat backs read as black human silhouettes behind the crowd -> light team-blue and pale grey seats
+for _sl in seats.material_slots:
+    _m = _sl.material
+    if _m is None or not _m.use_nodes: continue
+    for _n in _m.node_tree.nodes:
+        if _n.type == 'BSDF_PRINCIPLED':
+            for _l in list(_n.inputs['Base Color'].links): _m.node_tree.links.remove(_l)
+            _n.inputs['Base Color'].default_value = (0.20, 0.42, 0.80, 1) if 'Red' in _m.name else (0.62, 0.64, 0.68, 1)
+            _n.inputs['Roughness'].default_value = 0.55
 box("BackWall", (40, 0.3, 12), (0, 8.2, 6), M_conc, C_RINK, bevel=0)
 box("FarBackWall", (40, 0.3, 12), (0, -40.2, 6), M_conc, C_RINK, bevel=0)
 box("EndWallL", (0.3, 60, 12), (16.5, -16, 6), M_conc, C_RINK, bevel=0)
