@@ -962,11 +962,11 @@ def build(variant=None):                      # noqa: F811
         look.forest(mood="mist", azim={"lowsun": 5, "mist": 110, "grey": 200}[light], area=((-5, 0), (110, 70)), canopy=16.0,
                     exposure={"lowsun": 0.9, "mist": 0.55, "grey": 1.0}[light])
     elif light in ("dusk", "bluehour"):
-        look.forest(mood="dusk", azim=290, area=((-5, 0), (110, 70)), canopy=16.0)
-    else:                                   # night: a moonlit version of the dusk look (readable deep blue) + torches
-        look.forest(mood="dusk", azim=200, area=((-5, -5), (110, 70)), canopy=16.0, exposure=1.0)
+        look.forest(mood="dusk_real", azim=290, area=((-5, 0), (110, 70)), canopy=16.0)
+    else:                                   # night: a moonlit version of the dusk look in real colours + torches
+        look.forest(mood="dusk_real", azim=200, area=((-5, -5), (110, 70)), canopy=16.0, exposure=1.0)
     rj.sink_haze()
-    if "lift" in extras:                    # readable night: figures, beams and the red bike must read (keeps the blue mood)
+    if "lift" in extras:                    # readable night: figures, beams and the red bike must read (neutral, no blue cast)
         bpy.context.scene.view_settings.exposure += 0.8 + (0.45 if light == "bluehour" else 0.0)
         for o in bpy.data.objects:
             if o.type == 'LIGHT' and o.data.type == 'SPOT':
