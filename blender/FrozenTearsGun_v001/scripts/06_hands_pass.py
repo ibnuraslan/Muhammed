@@ -3,8 +3,8 @@ blender -b in.blend --python 06_hands_pass.py -- out.blend"""
 import sys, math, bpy
 out = sys.argv[sys.argv.index("--") + 1]
 R_ = math.radians
-def limit(pb, x=None, y=None, z=None, name="HandLimit"):
-    c = pb.constraints.get(name) or pb.constraints.new('LIMIT_ROTATION'); c.name = name
+def limit(pb, x=None, y=None, z=None, name="HandLimit", order='AUTO'):
+    c = pb.constraints.get(name) or pb.constraints.new('LIMIT_ROTATION'); c.name = name; c.euler_order = order
     c.owner_space = 'LOCAL'; c.use_transform_limit = True
     for ax, rng in (("x", x), ("y", y), ("z", z)):
         on = rng is not None
@@ -30,6 +30,6 @@ for rig in ("Inventor", "Mentor"):
             limit(pb, x=(-30, 45), y=(-30, 30), z=(-40, 40)); n += 1   # = pipeline/hand_poses.py LIMITS['thumb']
         # wrist (after the IK copy-rotation): flex +-60, side +-25, twist +-45
         pb = o.pose.bones["wrist." + s]
-        limit(pb, x=(-70, 70), y=(-90, 90), z=(-30, 30)); n += 1   # y = pronation proxy (forearm twist is locked in the IK)
+        limit(pb, x=(-70, 70), y=(-90, 90), z=(-35, 35), order='YXZ'); n += 1   # LESSONS 2.6: clamp in YXZ (twist first) to avoid single-frame hand pops   # y = pronation proxy (forearm twist is locked in the IK)
 print("HANDLIMITS", n)
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)
