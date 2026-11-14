@@ -119,7 +119,7 @@ def stand_feet(x, y, yaw, lift=0.0, pitch=0.0, spread=1.0):
     return out
 # --- beat 1 (1-150): on tiptoe reaching into the chute, the other hand on the sill
 TIP_PITCH = float(os.environ.get("TIP_PITCH", "40"))
-SILL = Vector((-0.34, FY - 0.05, sc["chute_z"][0] + 0.045))      # palm rests ON the sill bar, not in it
+SILL = Vector((-0.34, FY - 0.05, sc["chute_z"][0] + 0.065))      # palm rests ON the sill bar, not in it
 def reach(f, depth, tip, wob=0.0):
     y = -1.02 + 0.06 * depth
     WO.pose(f, (0.0, y, RH - 0.02 + 0.07 * tip), yaw=180, flex=18 + 14 * depth, sp=(10 + 10 * depth, 6 * wob, 0), head=(-8, 10 * wob),
@@ -241,6 +241,8 @@ curled(1920, 62, 90, 1.0, 1.0, (30, 0)); curled(1945, 62, 84, 0.9, 0.9, (-5, -25
 curled(2010, 62, 70, 0.7, 0.7, (-10, -30))
 seated(2070, look=(-5, 20), lean=25, dy=0.05); seated(2088, look=(-5, 10), lean=20, dy=0.0)
 # --- beat 11 (2095-2490): crouches out through the cut opening, steps down, walks off wrapped in a blanket
+WO.pose(2100, (0.02, -0.08, PZ(0.02, -0.08) + 0.30), yaw=0, flex=70, sp=(20, 0, 0), head=(-30, 0),        # gets down low inside before moving to the opening
+        hands={"L": ("r", (0, -0.25, 0.1)), "R": ("r", (0, -0.25, 0.1))}, feet=stand_feet(0.02, 0.05, 0))
 PANEL_DOWN = True
 WO.pose(2110, (0.0, -0.30, PZ(0.0, -0.30) + 0.30), yaw=0, flex=80, sp=(20, 0, 0), head=(-35, 0),        # crouched low: head under the flap
         hands={"L": ("r", (0, -0.25, 0.1)), "R": ("r", (0, -0.25, 0.1))}, feet=stand_feet(0.0, -0.20, 0))
@@ -363,7 +365,7 @@ FL = bpy.data.objects["Flap"]; FL.rotation_mode = 'XYZ'
 def flap(f, deg):
     FL.rotation_euler.x = R_(deg); FL.keyframe_insert("rotation_euler", index=0, frame=f)
 for f, d in ((1, 30), (40, 45), (80, 52), (150, 55), (180, 95), (215, 105), (250, 100), (290, 60), (318, 18), (330, -1.5), (335, 6), (341, -0.8), (347, 2), (353, 0),
-             (575, 0), (605, 72), (640, 70), (668, 10), (676, -1.5), (682, 4), (690, 0),
+             (575, 0), (690, 0),
              (790, 0), (805, -1.6), (812, 0.5), (835, -1.6), (842, 0.3), (850, 0),
              (2000, 0), (2400, 0)):
     flap(f, d)
