@@ -72,3 +72,34 @@
    - In cell 4 (device, front view) the near hands are on the casing.
    - Cell 5 (side view) shows the near hand behind the body.
 6. **hand_poses.py is used: checked.**
+
+## Round 3: motion preview pass (v005, Nov 14)
+**Method.**
+- I rendered moving previews of every 5th frame with `pipeline/preview.py` (270×480, 4 samples) and watched every page from `watch_pages.sh`.
+- The volume effects (fire, smoke, steam, fissures, dust) are **hidden in the preview only**, because each volume costs about 30 s per frame on this CPU. The package keeps all of them.
+- Beat frames are unchanged and there is no voiceover.
+
+| # | Frames | Fault seen in motion | v005 fix |
+|---|---|---|---|
+| 18 | 36–51 | Empty sand fills the frame as the camera drops into the bore. | New 22 and 30 keys hold on the device at the collar, then drop through the ground skin in about 8 frames. |
+| 19 | beat 7 | The crane hook block floated above the cable end. | The hook and the cable now attach to the jib trolley tip each frame. |
+| 20 | beat 8 | A thin sliver of the cement plug showed in the shaft before it was poured. | The plug is hidden (keyed) while it has no height. |
+| 21 | 380–535 (rewind) | The framing was too wide and empty. | The rewind keys are tighter on the wellhead. |
+| 22 | 26–36, 516, 1511–1521, 1641 | Blurred or split frames where the camera crosses the ground skin slowly. | The crossings are now steep and short (new keys at 30, 505, 1508 and 1648). |
+| 23 | 911–996 | The camera passed close to the wellhead and then the compressor, the water arc crossed the lens, and from 951 the hose crew was out of frame. | New route (912, 935, 990): 10 m clear of the wellhead, a three-quarter front view of the hose holder's face from outside the arcs, then a view from behind the crew with the crew, the arcs and the wellhead in one frame. |
+| 24 | 1061, 1121 | The camera passed through the crane mast and the cap. | The 1095 key routes south of the mast. |
+| 25 | 1641–1671 (beat 9) | The surface heave was framed from 65 m, showing empty ground. | The camera is closer to the wellhead and crane, so the ground jolt reads. |
+| 26 | 1936–1976 | The cap filled the frame, then the crane cab and a parked fire truck passed close to the lens. | New 1942, 1958 and 1985 keys: 9 m clear of the cap, and east of the parked fire truck. |
+| 27 | 1976–1996 | Empty desert, with the bunker crew out of frame. | The camera heads straight for the bunker crew and frames them from about 1975 on. |
+| 28 | 2046–2160 | A swing around the bunker put sandbags and then a soldier's head against the lens; the final key sat inside the crane mast. | The ending is now a steady crane-up in front of the cheering crew, ending high and 7 m clear of the mast. |
+| 29 | whole film | Collapsed (zero-height) volumes were still renderable and very slow. | The fissure, fire and smoke volumes are hidden (keyed) while collapsed. |
+| 30 | close-ups | The eyes rendered black (the cornea used refractive glass). | `scripts/eye_fix.py` gives the cornea a transparent mix. |
+
+I also checked every camera key numerically with `scripts/cam_check.py`: distance from the lens to the cap, wellhead, crane cab and mast, trucks, compressor, crew and sandbag wall, plus slow ground-skin crossings.
+
+**Still visible (minor):**
+- One soft frame at each ground-skin crossing (f26, f1641, f1671). The crossings are by design.
+- f1941–1946: the crane base passes the right edge of the frame.
+- f1961–1971: a parked fire truck passes the left edge, more than 5 m away.
+
+The moving preview is `review/preview.mp4`: every 5th frame, 12 fps, 36 s.

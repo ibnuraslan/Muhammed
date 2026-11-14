@@ -118,8 +118,8 @@ for f in range(1, END + 1, 2):
     CR.rotation_euler = (0, 0, yaw); CR.keyframe_insert("rotation_euler", index=2, frame=f)
     TROL.location = (0, -r, 32.9); TROL.keyframe_insert("location", frame=f)
     tip = CB + Matrix.Rotation(yaw, 3, 'Z') @ Vector((0, -r, 0))
-    HOOK.location = (tip.x, tip.y, hook_z + 0.6); HOOK.keyframe_insert("location", frame=f)
-    CABLE.location = (tip.x, tip.y, hook_z + 1.2); CABLE.scale = (1, 1, max(0.1, 32.4 - (hook_z + 1.2)))
+    HOOK.location = (tip.x, tip.y, hook_z + 0.15); HOOK.keyframe_insert("location", frame=f)   # hook block sits on the shackle
+    CABLE.location = (tip.x, tip.y, hook_z + 0.5); CABLE.scale = (1, 1, max(0.1, 32.4 - (hook_z + 0.5)))
     CABLE.keyframe_insert("location", frame=f); CABLE.keyframe_insert("scale", frame=f)
     swing = 0.0
     if f > BEAT[8] - 130 and f < 1460: swing = 0.2 * math.sin(f * 0.07) * (1 - smooth((f - 1370) / 22.0))
@@ -167,6 +167,7 @@ for f in range(1, RW1 + 2, 2):
     s = story(f); frac, plug = pour_state(s)
     cu.bevel_factor_end = max(0.0, frac); cu.keyframe_insert("bevel_factor_end", frame=f)
     PLUG.scale = (1, 1, max(0.001, plug)); PLUG.location = (SHAFT.x, SHAFT.y + 0.45, -57.4); PLUG.keyframe_insert("scale", frame=f); PLUG.keyframe_insert("location", frame=f)
+    PLUG.hide_render = PLUG.hide_viewport = plug < 0.05; PLUG.keyframe_insert("hide_render", frame=f); PLUG.keyframe_insert("hide_viewport", frame=f)
     DRUM.rotation_euler = (0, R_(-76), -s * 0.09); DRUM.keyframe_insert("rotation_euler", frame=f)
 for f, h in ((1, False), (RW1, True), (BEAT[9] - 30, False)):
     ARC.hide_render = h; ARC.keyframe_insert("hide_render", frame=f)
@@ -175,6 +176,7 @@ cu.bevel_factor_end = 0.0; cu.keyframe_insert("bevel_factor_end", frame=RW1 + 2)
 for f in range(BEAT[9] - 30, BEAT[9] + 2, 2):
     t = smooth((f - (BEAT[9] - 30)) / 28.0)
     PLUG.scale = (1, 1, max(0.001, 22 * t)); PLUG.keyframe_insert("scale", frame=f)
+    PLUG.hide_render = PLUG.hide_viewport = 22 * t < 0.05; PLUG.keyframe_insert("hide_render", frame=f); PLUG.keyframe_insert("hide_viewport", frame=f)
     cu.bevel_factor_end = t * 0.6 + 0.0; cu.keyframe_insert("bevel_factor_end", frame=f)
 for f, v in ((BEAT[9] + 4, 0.0),): cu.bevel_factor_end = v; cu.keyframe_insert("bevel_factor_end", frame=f)
 for f, h in ((BEAT[9] + 4, True),): ARC.hide_render = h; ARC.keyframe_insert("hide_render", frame=f)
@@ -223,6 +225,12 @@ for f in range(1, END + 1, 2):
         hh = fis_h(f - i * 3); ww = 1.0 + 0.08 * math.sin(f * 0.3 + i)
         o.scale = (max(0.02, ww * min(1, hh + 0.2) if hh > 0 else 0.02), max(0.02, ww * min(1, hh + 0.2) if hh > 0 else 0.02), max(0.001, hh))
         o.keyframe_insert("scale", frame=f)
+        o.hide_render = o.hide_viewport = hh < 0.02           # collapsed volumes cost a fortune to ray-march: hide them
+        o.keyframe_insert("hide_render", frame=f); o.keyframe_insert("hide_viewport", frame=f)
+    FIRE.hide_render = FIRE.hide_viewport = h < 0.01
+    FIRE.keyframe_insert("hide_render", frame=f); FIRE.keyframe_insert("hide_viewport", frame=f)
+    SMOKE.hide_render = SMOKE.hide_viewport = h < 0.01
+    SMOKE.keyframe_insert("hide_render", frame=f); SMOKE.keyframe_insert("hide_viewport", frame=f)
     for i, o in enumerate(CRK):
         s_ = crack_s(f - i * 2); o.scale = (max(0.001, s_),) * 3; o.keyframe_insert("scale", frame=f)
 fm = bpy.data.materials["M_Fire"].node_tree.nodes
@@ -679,17 +687,18 @@ for nm in CREW:
 # ================================================================== camera: one continuous Catmull-Rom spline through ~1 s framings
 CAMK = [  # frame, camera, target, lens
     (1,    (-11.0, -7.8, 3.4),  (-14.0, -2.7, 2.0), 30),
-    (50,   (-10.5, -9.5, 1.4), (-14.0, -2.7, -2.5), 30),
+    (22,   (-11.0, -8.4, 2.6), (-14.0, -2.7, 1.4), 30),
+    (30,   (-11.0, -9.2, -1.8), (-14.0, -2.7, -3.0), 30),   # fast pass through the ground skin: no frames of near sand
     (100,  (-11.0, -9.0, -24.0), (-14.0, -2.7, -28.0), 32),
     (150,  (-10.5, -9.5, -47.0), (-14.0, -2.7, -51.5), 32),
     (193,  (-12.0, -10.0, -58.0), (-14.0, -2.7, -60.5), 32),
     (240,  (-20.0, -16.0, -50.0), (-14.0, -2.7, -52.0), 28),
     (290,  (-21.0, -26.0, -22.0), (-14.0, -2.7, -16.0), 26),
     (335,  (-29.0, -15.0, 3.2), (-18.5, 2.5, 1.5), 28),
-    (380,  (-52.0, -70.0, 40.0), (-8.0, 8.0, 8.0), 24),
-    (430,  (-30.0, -170.0, 100.0), (-2.0, 10.0, 12.0), 24),
-    (470,  (0.0, -190.0, 105.0), (0.0, 10.0, 15.0), 26),
-    (505,  (12.0, -85.0, 22.0), (0.0, 0.0, 0.0), 26),
+    (380,  (-36.0, -50.0, 22.0), (-8.0, 6.0, 6.0), 26),
+    (430,  (-22.0, -82.0, 36.0), (-2.0, 8.0, 10.0), 26),
+    (470,  (4.0, -88.0, 34.0), (0.0, 8.0, 10.0), 26),
+    (505,  (11.0, -62.0, 5.0), (0.0, 0.0, -12.0), 26),
     (541,  (9.0, -45.0, -35.0), (0.0, -1.6, -62.0), 26),
     (575,  (7.0, -36.0, -16.0), (0.0, -1.6, -20.0), 26),
     (605,  (6.0, -42.0, 7.0), (0.0, 0.0, 14.0), 24),
@@ -698,10 +707,11 @@ CAMK = [  # frame, camera, target, lens
     (770,  (46.0, -14.0, 2.0), (12.0, 0.0, 22.0), 24),
     (830,  (-8.0, -62.0, 2.6), (0.0, 10.0, 32.0), 22),
     (885,  (-30.0, -48.0, 20.0), (0.0, 20.0, 18.0), 24),
-    (935,  (15.0, 11.8, 1.7), (16.6, 20.0, 1.5), 30),
-    (990,  (20.0, 15.0, 5.0), (3.0, 2.0, 8.0), 24),
+    (912,  (-10.0, 0.0, 7.0), (8.0, 16.0, 3.0), 26),       # 10 m clear of the wellhead, outside the water arcs
+    (935,  (10.5, 17.8, 1.8), (15.5, 18.5, 1.5), 30),      # three-quarter front of the hose holder's face, clear of the compressor
+    (990,  (12.0, 34.0, 5.0), (8.0, 4.0, 4.0), 20),         # behind the hose crew (west of them): crew, arcs and wellhead in one frame          # behind the hose crew: crew, arcs and wellhead in one line
     (1045, (6.0, 26.0, 9.0), (-3.0, 4.0, 10.0), 24),
-    (1095, (-30.0, 12.0, 9.0), (-6.0, 14.0, 6.0), 24),
+    (1095, (-20.0, -6.0, 9.0), (-4.0, 12.0, 6.0), 24),
     (1140, (17.0, -26.0, 9.0), (0.0, -1.6, 9.0), 36),
     (1180, (13.0, -19.0, 5.0), (0.0, -1.6, 3.4), 40),
     (1240, (13.0, -24.0, 14.0), (2.0, 10.0, 1.0), 26),
@@ -710,22 +720,25 @@ CAMK = [  # frame, camera, target, lens
     (1400, (-9.0, -9.2, 2.4), (-14.0, -2.6, 1.7), 26),
     (1450, (-18.5, -8.0, 2.0), (-14.0, -2.6, 1.6), 26),
     (1500, (-18.8, -3.8, 1.5), (-14.0, -2.7, 0.9), 28),
+    (1508, (-18.4, -6.8, -1.6), (-14.0, -2.7, -7.0), 27),       # fast pass through the ground skin (no near-sand frames)
     (1545, (-17.0, -12.5, -7.0), (-14.0, -2.7, -18.0), 26),
     (1592, (-4.0, -52.0, -40.0), (-14.0, -2.7, -56.0), 24),
     (1632, (-8.0, -72.0, -6.0), (-14.0, 0.0, -20.0), 22),
-    (1665, (-21.0, -62.0, 10.0), (-14.0, 5.0, 2.0), 22),
+    (1648, (-12.0, -46.0, 4.0), (-14.0, 0.0, 1.5), 22),       # beat 9 surface: the heave at the wellhead and crane, closer
+    (1665, (-16.0, -36.0, 6.0), (-14.0, 2.0, 1.5), 22),
     (1705, (-6.0, -46.0, -40.0), (-7.0, 0.0, -55.0), 26),
     (1760, (-3.0, -30.0, -57.0), (-3.0, -1.6, -59.0), 30),
     (1830, (5.0, -46.0, -50.0), (-5.0, 0.0, -54.0), 28),
     (1880, (6.0, -70.0, -42.0), (-4.0, 0.0, -42.0), 26),
     (1925, (4.0, -30.0, 4.0), (-6.0, 0.0, 4.0), 26),
-    (1958, (12.0, 10.0, 6.0), (0.0, -1.6, 4.0), 26),
-    (1988, (12.0, 36.0, 5.0), (-22.0, 60.0, 1.8), 26),
-    (2008, (-15.0, 44.0, 3.0), (-25.0, 62.0, 1.6), 28),
-    (2030, (-21.0, 53.0, 2.0), (-25.0, 62.3, 1.6), 30),
-    (2065, (-21.0, 67.5, 2.6), (-18.0, 48.0, 1.8), 28),
-    (2100, (-28.0, 76.0, 11.0), (-8.0, 0.0, 6.0), 26),
-    (2160, (-32.0, 98.0, 30.0), (-6.0, 0.0, 4.0), 26),
+    (1942, (-9.0, 2.0, 8.0), (-20.0, 50.0, 3.0), 26),         # 9 m clear of the cap
+    (1958, (-17.0, 18.0, 7.0), (-24.0, 62.0, 2.0), 26),       # west of the shaft, the mixer and the crane cab, straight toward the bunker crew
+    (1985, (-12.0, 42.0, 4.5), (-24.0, 62.0, 1.6), 26),       # east of the parked fire truck
+    (2008, (-14.0, 48.0, 3.0), (-25.0, 62.0, 1.6), 28),
+    (2030, (-19.0, 53.5, 2.0), (-25.0, 62.3, 1.6), 30),
+    (2065, (-16.0, 46.0, 7.0), (-24.0, 62.0, 1.8), 28),       # steady crane-up on the cheering crew (no swing over the wall)
+    (2100, (-18.0, 38.0, 16.0), (-23.0, 58.0, 2.0), 26),
+    (2160, (-16.0, 28.0, 30.0), (-21.0, 54.0, 2.0), 26),      # end high and clear of the crane mast
 ]
 CAM = O["CAM_Film"]; TG = O["CAM_Target"]
 cpos = catmull([(k[0], Vector(k[1])) for k in CAMK]); ctg = catmull([(k[0], Vector(k[2])) for k in CAMK]); clens = pchip([(k[0], float(k[3])) for k in CAMK])
