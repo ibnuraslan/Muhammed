@@ -113,11 +113,11 @@ _app = (_ctr - _cp); _app.z = 0; _app.normalize()
 print("HAT_GRIP", grip_object(CH["Man"], "L", 302, hatR, _cp, _app, grip="pinch"))
 apply_pose(CH["Man"], "L", "pinch", 302)     # same pinch shape held through the carry (no in-between claw)
 attach_seq(hatR, [(1, bike, None, seat_pose, 296), (302, CH["Man"], "wrist.L", snap_W(hatR, seat_pose, CH["Man"], "L", 302, want=0.004)),
-                  (318, CH["Man"], "head", head_frame(CH["Man"], 318))])
+                  (318, CH["Man"], "head", head_frame(CH["Man"], 318, sink=0.10))])     # brim 2.4 cm higher: eyes read
 desk_o = ob("Office_Desk")
 hat_desk = Matrix.Translation(Vector((DESK.x - 0.82, DESK.y + 0.22, 0.795))) @ Matrix.Rotation(R_(35), 4, "Z")
-attach_seq(hatW, [(1, CH["ManW"], "head", head_frame(CH["ManW"], 320), 320), (548, desk_o, None, hat_desk, 548),
-                  (1380, CH["ManW"], "head", head_frame(CH["ManW"], 1390), 1390)])
+attach_seq(hatW, [(1, CH["ManW"], "head", head_frame(CH["ManW"], 320, sink=0.10), 320), (548, desk_o, None, hat_desk, 548),
+                  (1380, CH["ManW"], "head", head_frame(CH["ManW"], 1390, sink=0.10), 1390)])
 for nm, cp in CAPS.items():
     fe_ = 1 if nm == "OfficerA" else 1200
     attach_seq(cp, [(1, CH[nm], "head", head_frame(CH[nm], fe_, 0.07, 0.0, sink=0.005), fe_)])
@@ -593,9 +593,9 @@ CAMK = [
     (960, V(23.4, 43.0, 1.3), V(21.8, 43.2, 1.35), 24),
     (995, V(24.05, 42.85, 1.14), V(21.7, 42.85, 1.2), 26),
     (1008, V(24.0, 42.8, 1.18), V(21.65, 42.78, 1.25), 26),
-    (1016, V(23.97, 42.6, 1.28), V(24.9, 43.3, 1.45), 28),
-    (1025, V(23.95, 42.5, 1.35), V(24.7, 43.3, 1.3), 28),
-    (1050, V(25.6, 42.4, 1.6), V(25.05, 43.3, 1.45), 26),
+    (1016, V(24.9, 41.85, 1.5), V(24.95, 43.3, 1.45), 26),
+    (1025, V(25.0, 41.85, 1.5), V(25.0, 43.3, 1.42), 26),
+    (1050, V(25.45, 41.95, 1.55), V(25.1, 43.3, 1.42), 26),
     (1075, V(24.35, 42.25, 1.45), V(25.0, 43.3, 1.38), 28),
     (1100, V(24.0, 42.0, 1.6), V(25.0, 43.2, 1.35), 28),
     (1128, V(21.5, 39.3, 1.6), V(22.5, 42.5, 1.3), 24),
@@ -613,11 +613,12 @@ CAMK = [
     (1299, V(-9.6, 55.9, 1.48), V(-11.9, 58.0, 1.5), 28),
     (1306, V(-10.0, 56.5, 1.45), V(-12.1, 57.8, 1.95), 28),
     (1324, V(-11.2, 57.1, 1.6), V(-14.3, 56.4, 1.45), 30),
-    (1334, V(-11.0, 57.0, 1.7), V(-15.8, 58.3, 1.45), 20),
-    (1344, V(-14.4, 59.3, 1.7), V(-17.3, 62.2, 1.45), 30),
-    (1354, V(-14.8, 59.0, 1.78), V(-17.3, 62.2, 1.5), 32),
-    (1370, V(-13.6, 59.2, 1.8), V(-17.15, 62.1, 1.5), 26),
-    (1381, V(-13.0, 59.0, 1.7), V(-16.6, 61.6, 1.55), 24),
+    (1334, V(-14.2, 59.0, 1.65), V(-17.15, 62.1, 1.5), 32),
+    (1344, V(-15.6, 60.6, 1.65), V(-17.15, 62.1, 1.5), 30),
+    (1354, V(-15.8, 60.9, 1.62), V(-17.15, 62.1, 1.52), 30),
+    (1370, V(-15.4, 60.4, 1.7), V(-17.15, 62.1, 1.5), 28),
+    (1381, V(-15.0, 60.0, 1.7), V(-16.9, 61.9, 1.5), 26),
+    (1401, V(-14.6, 59.8, 1.68), V(-17.0, 62.0, 1.5), 26),
     (1406, V(-10.1, 59.1, 1.55), V(-11.35, 60.5, 1.12), 30),
     (1416, V(-9.6, 58.95, 1.53), V(-11.3, 60.5, 1.12), 30),
     (1424, V(-9.0, 58.0, 1.55), V(-3.6, 54.1, 1.5), 36),
@@ -667,6 +668,36 @@ for _nm in ("OfficerA", "OfficerB", "OfficerC", "OfficerD", "OfficerE"):
         for _fc in fcurves(_o):
             if _fc.data_path == "hide_render":
                 for _k in [k for k in _fc.keyframe_points if 1140 < k.co.x < 1216]: _fc.keyframe_points.remove(_k)
+# --- v009: readable faces
+# black-hole eyes (LESSONS_LEARNED s3): the cornea's refractive transmission becomes a plain transparent mix, so the iris lights
+for g in [g for g in bpy.data.node_groups if g.name.startswith("EnhancedEye")]:
+    P_ = next(n for n in g.nodes if n.type == "BSDF_PRINCIPLED"); O_ = next(n for n in g.nodes if n.type == "GROUP_OUTPUT")
+    tl_ = [l for l in g.links if l.to_node == P_ and l.to_socket.name == "Transmission Weight"]; src_ = tl_[0].from_socket if tl_ else None
+    for l in tl_: g.links.remove(l)
+    P_.inputs["Transmission Weight"].default_value = 0.0
+    ol_ = [l for l in g.links if l.from_node == P_ and l.to_node == O_]
+    if not ol_: continue
+    os_ = ol_[0].to_socket; g.links.remove(ol_[0])
+    tr_ = g.nodes.new("ShaderNodeBsdfTransparent"); mx_ = g.nodes.new("ShaderNodeMixShader"); mx_.name = "CorneaTransparentMix"
+    if src_: g.links.new(src_, mx_.inputs[0])
+    else: mx_.inputs[0].default_value = 0.0
+    g.links.new(P_.outputs[0], mx_.inputs[1]); g.links.new(tr_.outputs[0], mx_.inputs[2]); g.links.new(mx_.outputs[0], os_)
+    print("EYEFIX", g.name)
+# a soft key light riding with the camera, on in the face shots, so eyes, nose and mouth read
+kd_ = bpy.data.lights.new("CamFaceKey", "AREA"); kd_.size = 0.7; kd_.color = (1.0, 0.95, 0.88); kd_.shadow_soft_size = 0.35
+ko_ = bpy.data.objects.new("CamFaceKey", kd_); sc.collection.objects.link(ko_); ko_.parent = cam; ko_.location = (0.3, 0.35, 0.05)
+for f_, e_ in ((1, 0), (472, 0), (490, 45), (540, 45), (548, 0), (590, 0), (602, 35), (1004, 35), (1012, 45), (1105, 45), (1125, 0),
+               (1244, 0), (1252, 30), (1408, 30), (1424, 0), (1436, 0), (1450, 60), (1560, 60)):
+    kd_.energy = e_; kd_.keyframe_insert("energy", frame=f_)
+# laptop: the baked keyboard dirt read as a brown smear; wash the base colour toward clean beige
+for m_ in [bpy.data.materials.get("classic_laptop")]:
+    if not m_: continue
+    nt_ = m_.node_tree; bs_ = next(n for n in nt_.nodes if n.type == "BSDF_PRINCIPLED"); l_ = [l for l in nt_.links if l.to_socket == bs_.inputs["Base Color"]]
+    if l_:
+        srcc = l_[0].from_socket; nt_.links.remove(l_[0])
+        mix = nt_.nodes.new("ShaderNodeMix"); mix.data_type = "RGBA"; mix.inputs["Factor"].default_value = 0.8
+        mix.inputs["B"].default_value = (0.78, 0.75, 0.68, 1.0)
+        nt_.links.new(srcc, mix.inputs["A"]); nt_.links.new(mix.outputs["Result"], bs_.inputs["Base Color"])
 _dh = bpy.data.objects.get("DustHaze")
 if _dh: _dh.hide_viewport = True     # still renders (hide_render stays False); a volume fog is not an occluder
 sc.frame_set(1)

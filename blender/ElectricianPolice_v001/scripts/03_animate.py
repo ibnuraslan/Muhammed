@@ -573,7 +573,7 @@ for f, ln, arm in ((905, 26, 0.0), (925, -6, 1.0), (950, -12, 1.0), (980, -8, 0.
     seated(f, lean=ln, head=(-10 if arm else 0, 0), jaw=8 * arm, dz=-0.01); W.smile(f, 1.6)
     for s, sx in (("L", 1), ("R", -1)):
         if arm:
-            W.hand_b(s, f, sx * 0.5, -0.02, 1.72 + 0.04 * math.sin(f / 7), d=(sx * 0.3, 0, 1), n=(0, 1, 0))     # hands up above the head, face clear; W.fingers(s, f, 20, 12)
+            W.hand_b(s, f, sx * 0.13, -0.12, 1.32 + 0.01 * math.sin(f / 7), d=(-sx, 0.1, 0.25), n=(0, 1, 0), pole=W.pt(f, sx * 0.65, 0.05, 1.35)); W.fingers(s, f, 0, pose="relaxed")     # leans back, hands behind his head, elbows out
         else:
             W.hand(s, f, KB + Vector((-sx * 0.14, -0.1, 0.03)), Vector((0, 1, -0.25)), Vector((0, 0, -1)))
 # cabinet: stands facing +X, right glove on the lever handle, throws it down (lever keyed in 03b)
@@ -617,7 +617,7 @@ for f in range(1380, 1561, 10):
     ph = (f - 1380) / 135 * 2 * math.pi * 2.3 if f <= 1515 else 0.0
     for s, sx in (("L", 1), ("R", -1)):
         W.hang(s, f, swing=0.2 * math.sin(ph + (0 if s == "L" else math.pi)) * (1.0 if f <= 1515 else 0.0), out=0.05)
-for f, hd, sm in ((1515, (-4, 4), 0.5), (1535, (-8, 12), 1.4), (1560, (-9, 14), 1.6)):
+for f, hd, sm in ((1515, (-4, 4), 0.5), (1535, (-8, 12), 1.4), (1544, (6, 12), 1.6), (1552, (-6, 13), 1.7), (1560, (-9, 14), 1.7)):     # smug nod at the end
     W.body(f, SB, yaw=195, spine=(-4, 6, 0), head=hd); W.stand_feet(f); W.smile(f, sm, smirk=0.6)
 # teleports between segments are constant (keys exist at both ends)
 teleport_constant(W.o, [1379])
