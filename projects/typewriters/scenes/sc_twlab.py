@@ -263,11 +263,11 @@ def animate(c, sec, shot):
     lift = 1.0                                                              # the cover is already up
     c["hood"].rotation_euler = (math.radians(-50) * lift, 0, 0)
     t_ = P["tech"]
-    twp.stand(t_, (-0.88, -1.05, 0), -0.88)                                 # facing us, the machine at his right hand, the visitors on his left
-    hp = c["hood"].matrix_world @ Vector((0, -0.42, -0.05))
-    base = tty.matrix_world @ Vector((0.28, -0.22, 0.2))                        # one hand flat on the machine's casing,
-    twp.work(t_, {"R": base}, head=0)                                          # the other at his side;
-    t_.rot("neck01", (0, 0, 1), 18); t_.rot("head", (0, 0, 1), 26 + 4 * math.sin(sec * 0.6))     # he turns to the visitors
+    twp.stand(t_, (-1.12, -1.2, 0), math.atan2(-0.94, -0.35))               # in front of the machine, 3/4 to us and to it
+    bpy.context.view_layer.update()
+    point = tty.matrix_world @ Vector((0.05 + 0.03 * math.sin(sec * 0.7), -0.32, 0.32))   # his hand over the opened works,
+    twp.work(t_, {"R": point}, head=0)                                         # in front of his body, showing them; other arm relaxed
+    t_.rot("head", (0, 0, 1), -14 + 6 * math.sin(sec * 0.6))                   # glances between the machine and the visitors
     a, b = P["usA"], P["usB"]
     twp.stand(a, (-0.25, -1.38, 0), -2.18); twp.stand(b, (0.28, -1.88, 0), -2.24)  # the two Americans beside him, watching
     for h, nod in ((a, 8), (b, 6 + 4 * lift)):                               # nod down toward the machine, about their own side
