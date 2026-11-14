@@ -38,3 +38,13 @@ This is v006c (approved, 6cbe5e6) after a full moving-preview watch (`pipeline/p
 - `preview.mp4`: the moving preview, every 5th frame at 12 fps (real speed), 1080×1920 scaled to 270×480 with 8 samples.
 - `pages/p01–p09.jpg`: contact pages of every preview frame.
 - `qa_check_v007.json`, `clip_scan_v007.json` and `limb_check_v007.json`.
+
+## QA results (on the packaged file)
+- `qa_check`:
+  - CAMJUMP 0.
+  - BACKHEAD 4 and INSIDE 3 (3 and 3 in v006c).
+  - EMPTY 224 and PROPMOVE 224 come mostly from dust puffs and clods waiting under the ground (see v006c). The stick is never flagged in the air.
+- `clip_scan`:
+  - No owner–goat or clothes clipping.
+  - "Self" hits at f1195–1417 are the owner's own mesh: his left palm pressed on his stomach and his crouched thighs folding as he staggers and climbs. Close-ups at f1195 and f1249 show nothing visible.
+- `limb_check`: ARMBODY hits are 2–6 points at the shoulders, below the 15-point level that shows on screen. ARMBACK 4.

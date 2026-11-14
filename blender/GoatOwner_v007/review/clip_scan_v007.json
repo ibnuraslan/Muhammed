@@ -1,0 +1,131 @@
+{
+ "frames": {
+  "181": {
+   "Owner": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1195": {
+   "Owner": {
+    "self": 769,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1207": {
+   "Owner": {
+    "self": 265,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1213": {
+   "Owner": {
+    "self": 231,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1237": {
+   "Owner": {
+    "self": 189,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1249": {
+   "Owner": {
+    "self": 649,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1267": {
+   "Owner": {
+    "self": 628,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1279": {
+   "Owner": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1285": {
+   "Owner": {
+    "self": 58,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1315": {
+   "Owner": {
+    "self": 21,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1357": {
+   "Owner": {
+    "self": 17,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1381": {
+   "Owner": {
+    "self": 459,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1393": {
+   "Owner": {
+    "self": 724,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1417": {
+   "Owner": {
+    "self": 53,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   1195,
+   1213
+  ],
+  [
+   1237,
+   1249
+  ],
+  [
+   1267,
+   1267
+  ],
+  [
+   1285,
+   1285
+  ],
+  [
+   1381,
+   1393
+  ],
+  [
+   1417,
+   1417
+  ]
+ ],
+ "fps": 60
+}

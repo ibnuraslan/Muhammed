@@ -1,0 +1,6084 @@
+{
+ "frames": {
+  "19": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "21": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "23": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "25": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "27": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "29": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "31": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "33": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "35": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "37": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "39": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "41": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "43": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "45": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "47": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "49": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "51": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "53": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "55": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "57": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "59": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "61": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "63": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "65": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "67": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "69": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "71": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "73": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "75": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "77": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "79": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "81": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "83": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "85": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "87": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "89": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "91": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "93": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "95": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "97": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "99": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "101": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "103": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "105": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "107": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "109": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "111": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "113": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "115": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "117": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "119": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "121": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "123": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "125": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "127": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "129": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "131": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "133": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "183": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "185": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "187": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "189": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "191": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "193": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "195": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "197": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "199": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "201": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "203": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "205": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "207": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "209": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "211": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "213": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "215": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "217": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "219": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "221": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "223": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "225": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "227": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "229": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "231": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "233": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "235": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "237": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "239": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "241": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "243": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "245": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "247": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "249": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "251": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "253": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "255": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "257": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "259": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "261": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "289": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "291": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "293": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "295": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "297": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "299": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "301": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "303": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "305": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "307": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "309": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "311": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "313": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "315": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "317": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "319": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "321": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "323": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "325": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "327": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "329": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "331": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "333": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "335": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "337": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "339": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "341": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "343": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "345": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "347": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "349": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "351": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "353": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "355": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "357": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "359": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "361": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "363": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "365": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "367": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "369": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "371": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "373": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "375": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "377": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "379": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "381": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "383": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "385": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "387": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "389": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "391": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "393": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "395": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "397": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "399": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "401": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "403": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "405": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "407": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "409": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "411": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "413": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "415": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "417": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "419": [
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "429": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "431": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "433": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "435": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "447": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "449": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "451": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "453": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "455": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "715": [
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "717": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "719": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "721": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "723": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "725": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "727": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "729": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "731": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "733": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "735": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "737": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "739": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "741": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "797": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "815": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "817": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "819": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "821": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "823": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "825": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "827": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "829": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "831": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "839": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "841": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "843": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "845": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "847": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "849": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "851": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "853": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "855": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "857": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "859": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "861": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "863": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "865": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "867": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "869": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "871": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "873": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "875": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "877": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "879": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "881": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "883": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "885": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "887": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "889": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "891": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "893": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "895": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "897": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "899": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "901": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "903": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "905": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "907": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "909": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "911": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "913": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "915": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "917": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "919": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "921": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "923": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "925": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "927": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "929": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "931": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBACK",
+    "Owner arm.R reaches 16 cm behind the body"
+   ]
+  ],
+  "933": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBACK",
+    "Owner arm.R reaches 17 cm behind the body"
+   ]
+  ],
+  "935": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBACK",
+    "Owner arm.R reaches 17 cm behind the body"
+   ]
+  ],
+  "937": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBACK",
+    "Owner arm.R reaches 15 cm behind the body"
+   ]
+  ],
+  "939": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "941": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "943": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "945": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "947": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "949": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "951": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "953": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "955": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "957": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "959": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "961": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "963": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "965": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "967": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "969": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1019": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1021": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1023": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1025": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1027": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1029": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1031": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1033": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1035": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1037": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1039": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1041": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1043": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1045": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1047": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1049": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1051": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1053": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1055": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1057": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1059": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1061": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1063": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1065": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1067": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1069": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1071": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1073": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1075": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1077": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1079": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1081": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1083": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1085": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1087": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1089": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1091": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1093": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1095": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1097": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1181": [
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1183": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1185": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1187": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1189": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1191": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1193": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1195": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1197": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1199": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1201": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Passer arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1203": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1205": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1207": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1209": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1211": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1213": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1215": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1217": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1219": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1221": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1223": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1225": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1227": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1229": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1231": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1233": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1235": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1237": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1239": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1241": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1243": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1245": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1247": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1249": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1251": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1253": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1255": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1257": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1259": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1261": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1263": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1265": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1267": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1269": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1271": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1273": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1275": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1277": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1279": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1281": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1283": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1285": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1287": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1289": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1291": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1293": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1295": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1297": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1299": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1301": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1303": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1305": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1307": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1309": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1311": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1313": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1315": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1317": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1319": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1321": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1323": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1325": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1327": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1329": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1331": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1333": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1335": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1337": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1343": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1345": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1347": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1349": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1351": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1353": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1355": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1357": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1359": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1361": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1363": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1365": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1367": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1369": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1371": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1373": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1375": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1377": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1379": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1381": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1383": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1385": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1387": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1389": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1391": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1393": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1395": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1397": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1399": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1401": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1403": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1405": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1407": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1409": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1411": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1413": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1415": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1417": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1419": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1421": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1423": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1425": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1429": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1431": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1433": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1435": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1443": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1445": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1447": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1449": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1451": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1453": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1455": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1457": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1459": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1461": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1463": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1465": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1467": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1469": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1471": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1473": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1475": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1477": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1479": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1497": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1499": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1501": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1503": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1505": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1507": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1509": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1511": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1513": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1515": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1517": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1519": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1521": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1523": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1525": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1527": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1529": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1531": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1533": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1535": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1537": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1539": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1541": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1543": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1545": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1547": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1549": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1551": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1553": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1555": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1557": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1559": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1561": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1563": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1565": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1567": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1569": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1571": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1573": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1575": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1577": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1579": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1581": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1583": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1585": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1587": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1589": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1591": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1593": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1595": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1597": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1599": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1601": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1603": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1605": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1607": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1609": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1611": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1613": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1615": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1617": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1619": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1621": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1623": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1625": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1627": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1629": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1631": [
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1633": [
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1635": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1637": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1639": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1641": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1643": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1645": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1647": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1649": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1651": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1653": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1655": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1657": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1659": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1661": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1663": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1665": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1667": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1669": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1671": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1673": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1675": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1677": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1679": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1681": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1683": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1685": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1687": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1689": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1691": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1693": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1695": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1697": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1699": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1701": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1703": [
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1705": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1707": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1709": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1711": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1713": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1715": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1717": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1719": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1721": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1723": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1725": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1727": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1729": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1731": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1733": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1735": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1737": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1739": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1741": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1743": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1745": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1747": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1749": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1751": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1753": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1755": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1757": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1759": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1761": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1763": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1765": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1767": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1769": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1771": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1773": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1775": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1777": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1779": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1781": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1783": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1785": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1787": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1789": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1791": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1793": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1795": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1797": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1799": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1801": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1803": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1805": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1807": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1809": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1811": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1813": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1815": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1817": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1819": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1821": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1823": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1825": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1827": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1829": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1831": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1833": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1835": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1837": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1839": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1841": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1843": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1845": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1847": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1849": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1851": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1853": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1855": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1857": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1859": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1861": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1863": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1899": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1901": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1903": [
+   [
+    "ARMBODY",
+    "OffA arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffA arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "OffB arm.R inside own torso (2 pts)"
+   ]
+  ]
+ },
+ "counts": {
+  "ARMBODY": 1198,
+  "ARMBACK": 4
+ }
+}
