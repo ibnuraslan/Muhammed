@@ -217,23 +217,23 @@ DV.P(523, SIT, yaw=180, pitch=-8, spine=(30, 0, 0), head=(-10, 0, 0), legs=legs(
 for k, f in enumerate(range(535, 610, 15)):
     up = k / 5.0
     DV.P(f, (SIT[0], SIT[1] - 0.15 * up, SIT[2] + 0.75 * up), yaw=180, pitch=-28 * up - 8, spine=(-8, 0, 0), head=(-35, 0, 0),
-         legs=legs((60 - 30 * up, 6, 4, -74)), arms=arms(fwd=175 if k % 2 == 0 else 95, out=8 if k % 2 == 0 else 80), jaw=10, curl={"L": (25, 12), "R": (25, 12)})
+         legs=legs((60 - 30 * up, 6, 4, -74)), arms=arms(l=dict(fwd=165 if k % 2 == 0 else 125, out=18 if k % 2 == 0 else 34, L=DV.ARM * (0.84 if k % 2 == 0 else 0.6)), r=dict(fwd=128 if k % 2 == 0 else 160, out=32 if k % 2 == 0 else 20, L=DV.ARM * (0.6 if k % 2 == 0 else 0.82))), jaw=10, curl={"L": (25, 12), "R": (25, 12)})
 for k, f in enumerate(range(620, 661, 10)):
     dn = (k + 1) / 4.0
     DV.P(f, (SIT[0], SIT[1] - 0.15 + 0.12 * dn, SIT[2] + 0.75 * (1 - dn)), yaw=180, pitch=-36 + 26 * dn, spine=(-5 + 20 * dn, 0, 0), head=(-40 + 20 * dn, 0, 0),
-         legs=legs((40 + 46 * dn, 6, 6, -72)), arms=arms(fwd=150 - 60 * dn, out=40 + 20 * dn), jaw=8)
+         legs=legs((40 + 46 * dn, 6, 6, -72)), arms=arms(l=dict(fwd=150 - 60 * dn, out=28 + 8 * dn, L=DV.ARM * (0.66 + 0.1 * (k % 2))), r=dict(fwd=140 - 60 * dn, out=24 + 8 * dn, L=DV.ARM * (0.74 - 0.1 * (k % 2)))), jaw=8)
 # --- beat 5: drowning — head back toward the light, chest heaving, last bubbles
 for k, f in enumerate(range(672, 775, 17)):
     j = k % 2
     DV.P(f, (SIT[0], SIT[1] - 0.03, SIT[2] + 0.02 * j), yaw=180, pitch=-14 - 4 * j, spine=(-6 + 10 * j, 0, 0), head=(-20 + 6 * j, 8 * (j - 0.5), 0),
-         legs=legs((84, 8, 12, -70), (84, 9, 18, -70)), arms=arms(l=dict(fwd=110 + 30 * j, out=70), r=dict(fwd=50 + 40 * j, out=75)), jaw=12 - 6 * j)
+         legs=legs((84, 8, 12, -70), (84, 9, 18, -70)), arms=arms(l=dict(fwd=120 + 30 * j, out=32, L=DV.ARM * (0.62 + 0.12 * j)), r=dict(fwd=95 + 40 * (1 - j), out=36, L=DV.ARM * (0.74 - 0.12 * j))), jaw=12 - 6 * j)
 # --- beats 6–8: weakening, drifting up off the tiles, limp (legs trail forward-down)
 FLOAT = lambda f, t: (SIT[0], SIT[1] - 0.05 - 0.15 * t, SIT[2] + 0.95 * t)
 for k, f in enumerate(range(790, 1380, 30)):
     t = min(1.0, (f - 790) / 520.0)
     DV.P(f, FLOAT(f, t), yaw=180 + 8 * math.sin(k * 0.5), pitch=-14 + 30 * t, roll=4 * math.sin(k * 0.7), spine=(-4 + 14 * t, 0, 3 * math.sin(k)),
          head=(-30 + 50 * t, 6 * math.sin(k * 0.6), 0), legs=legs((84 - 30 * t, 8, 12 + 20 * t, -60), (84 - 50 * t, 10, 18 + 72 * t, -40)),
-         arms=arms(l=dict(fwd=70 + 20 * math.sin(k), out=55 + 15 * t), r=dict(fwd=60 + 20 * math.cos(k), out=60 + 10 * t)), jaw=6,
+         arms=arms(l=dict(fwd=45 + 25 * math.sin(k), out=26 + 10 * math.sin(k * 0.7), L=DV.ARM * (0.7 + 0.06 * math.sin(k * 1.3))), r=dict(fwd=38 + 25 * math.cos(k), out=28 + 10 * math.cos(k * 0.7), L=DV.ARM * (0.7 + 0.06 * math.cos(k * 1.3)))), jaw=6,
          curl={"L": (30, 20), "R": (30, 20)})
 # --- beats 9–11: held by the ankle (right knee bent, shin across the mouth), pushed up, breaks the surface
 RISE = [(1380, FLOAT(0, 1.0)[2]), (1440, FLOAT(0, 1.0)[2] + 0.05), (1500, 1.6), (1600, 2.6), (1699, 3.4), (1800, 4.6), (1884, 5.0), (1915, 5.33), (1950, 5.42), (1990, 5.3)]
@@ -243,9 +243,10 @@ for k, f in enumerate(range(1380, 2000, 20)):
     t = smooth((f - 1380) / 560.0)
     xy = XY0.lerp(XY1, t)
     limp = 1.0 if f < 1915 else max(0.0, 1 - (f - 1915) / 40.0)
-    DV.P(f, (xy.x, xy.y, RZF(f)), yaw=180 + 10 * math.sin(k * 0.3), pitch=6 + 10 * limp, roll=6 * math.sin(k * 0.4), spine=(10 * limp - 12 * (1 - limp), 0, 0),
+    drift = Vector((0.12 * math.sin(k * 0.55), 0.08 * math.sin(k * 0.4 + 1.0), 0.04 * math.sin(k * 0.9)))
+    DV.P(f, (xy.x + drift.x, xy.y + drift.y, RZF(f) + drift.z), yaw=180 + 16 * math.sin(k * 0.45), pitch=6 + 10 * limp + 5 * math.sin(k * 0.7), roll=10 * math.sin(k * 0.5), spine=(10 * limp - 12 * (1 - limp), 0, 8 * math.sin(k * 0.6)),
          head=(25 * limp - 30 * (1 - limp), 0, 0), legs=legs((62 + 8 * math.sin(k * 0.8), 9, 100 + 10 * math.sin(k * 0.8), -40), (35, 14, 95, -20)),
-         arms=arms(l=dict(fwd=18 + 14 * math.sin(k * 0.9) + 110 * (1 - limp), out=55 + 10 * math.sin(k * 0.7)), r=dict(fwd=16 + 14 * math.cos(k * 0.9) + 100 * (1 - limp), out=58 + 10 * math.cos(k * 0.7))), curl={"L": (30, 14), "R": (30, 14)},
+         arms=arms(l=dict(fwd=30 + 22 * math.sin(k * 0.9) + 100 * (1 - limp), out=30 + 10 * math.sin(k * 0.7), L=DV.ARM * (0.68 + 0.08 * math.sin(k * 1.1))), r=dict(fwd=26 + 22 * math.cos(k * 0.9) + 95 * (1 - limp), out=32 + 10 * math.cos(k * 0.7), L=DV.ARM * (0.68 + 0.08 * math.cos(k * 1.1)))), curl={"L": (30, 14), "R": (30, 14)},
          jaw=4 if limp > 0.5 else 22)
 # --- beat 12: gasps, swims to the coping, clings with both hands
 COP_Z = DECK_Z + 0.06; COP_Y = EDGE_Y + 0.0
@@ -255,7 +256,7 @@ for k, f in enumerate(range(2000, 2191, 15)):
     gasp = k % 2
     DV.P(f, (XY1.x, y, 5.52 + 0.16 * smooth(t) - 0.03 * gasp + 0.1 * (1 - t)), yaw=180, pitch=-4 - 14 * t, spine=(4 + 10 * t + 6 * gasp, 0, 0), head=(-18 + 12 * gasp, 6 * math.sin(k), 0),
          legs=legs((25 + 15 * math.sin(k), 8, 40 + 20 * math.sin(k), -40), (30 - 15 * math.sin(k), 8, 45 - 20 * math.sin(k), -40)),
-         arms=({"L": ("coping", dict(s="L")), "R": ("coping", dict(s="R"))} if t >= 1.0 else arms(fwd=110 - 40 * gasp, out=40)),
+         arms=({"L": ("coping", dict(s="L")), "R": ("coping", dict(s="R"))} if t >= 1.0 else arms(l=dict(fwd=95 - 30 * gasp, out=30 + 8 * gasp, L=DV.ARM * (0.62 + 0.1 * gasp)), r=dict(fwd=70 + 30 * gasp, out=34 - 8 * gasp, L=DV.ARM * (0.72 - 0.1 * gasp)))),
          jaw=26 if gasp else 12, curl={"L": (35, 25), "R": (35, 25)} if t >= 1.0 else {})
 # resolve special arm kinds after body keys exist
 _key_hands_base = DV.key_hands
@@ -268,7 +269,7 @@ def diver_hands(f, p):
             c = k0.lerp(k1, prm["t"])
             sx = 1 if s == "L" else -1
             out = (k1 - k0).cross(Vector((0, 0, 1))).normalized() * sx
-            W = c + out * 0.2 + Vector((0, 0, 0.14))
+            W = c + out * 0.06 + Vector((0, 0, 0.085))      # palm on the calf (was hovering ~8 cm above)
             a[s] = ("world", dict(W=W, d=(k1 - k0).normalized() * 0.85 + Vector((0, 0, -1)) * 0.15, n=-out * 0.6 + Vector((0, 0, -0.8)), pole=W + Vector((sx * 0.3, 0, 0.5))))
         elif kind == "lift":     # hand held up clear above the right knee
             ev(f)
@@ -356,7 +357,7 @@ JSIGN = 1 if _jaw_tip_z(1) < _jaw_tip_z(-1) else -1
 def jaw(f, v):
     b = BR.pose.bones["jaw"]; b.rotation_euler = (JSIGN * R_(17) * v, 0, 0); b.keyframe_insert("rotation_euler", frame=f)
 L_W = 4.3
-SOCK_LOCAL = Vector((0, -L_W * 0.42 + 0.035 * L_W * 0.94, -0.075))      # in rig rest space (mouth front, on the slit)
+SOCK_LOCAL = Vector((0, -L_W * 0.42 + 0.012 * L_W * 0.94, -0.075))      # just behind the snout tip, where the head is narrow      # in rig rest space (mouth front, on the slit)
 def whale_matrix(pos, yaw, climb, roll):
     return Matrix.Translation(pos) @ Matrix.Rotation(R_(yaw), 4, 'Z') @ Matrix.Rotation(R_(-climb), 4, 'X') @ Matrix.Rotation(R_(roll), 4, 'Y')
 PHASE = {"p": 0.0, "f": 1}
@@ -507,6 +508,18 @@ for f in range(F_GRAB0, F_REL + 1, 2):
         u = smooth(min(1.0, (f - F_GRAB0) / 20.0))
         loc = M0.translation.lerp(M.translation, u); q = M0.to_quaternion().slerp(M.to_quaternion(), u)
         M = Matrix.Translation(loc) @ q.to_matrix().to_4x4()
+    if f >= F_GRAB:          # nudge the whale off any of her leg/body points still inside it (max 8 cm), mouth stays at the ankle
+        pts_, _a = diver_pts(f); tot = Vector((0, 0, 0))
+        for _it in range(5):
+            Mi = M.inverted(); acc = Vector((0, 0, 0)); nin = 0
+            for p in pts_:
+                q = Mi @ p; loc, n, i, d = WLOC.find_nearest(q, 0.4)
+                if loc is not None and (q - loc).dot(n) < -0.003: acc += n * ((q - loc).dot(n)); nin += 1
+            if nin == 0: break
+            mv_ = M.to_3x3() @ (acc / nin) * 1.3
+            if (tot + mv_).length > 0.08: mv_ = mv_.normalized() * max(0.0, 0.08 - tot.length)
+            if mv_.length < 1e-4: break
+            tot += mv_; M = Matrix.Translation(mv_) @ M
     BR.matrix_world = M
     BR.keyframe_insert("location", frame=f); BR.keyframe_insert("rotation_quaternion", frame=f)
     push = 2.0 if 1460 < f < 1930 else 1.0

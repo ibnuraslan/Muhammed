@@ -98,8 +98,8 @@ K(255, V(X0 + 1.5, -0.1, 0.32), PEL(255) + V(0, 0, 0.2), 24)
 K(292, V(X0 + 1.9, 1.05, 0.22), calf(292), 30)
 K(322, calf(322) + V(1.1, 0.4, 0.75), calf(322), 38)      # over her other leg, not through it
 K(350, calf(350) + V(0.85, 0.2, 0.3), calf(350), 45)
-K(405, calf(405) + V(0.35, 0.8, 0.4), calf(405), 50)
-K(458, calf(458) + V(0.7, 0.45, 0.65), calf(458), 48)
+K(405, calf(405) + V(0.55, 1.15, 0.6), calf(405).lerp(dv("lowerleg01.R", 405), 0.4), 34)
+K(458, calf(458) + V(0.9, 0.7, 0.8), calf(458).lerp(dv("lowerleg01.R", 458), 0.4), 34)
 K(515, V(X0 + 1.7, 0.1, 0.9), CH(515), 32)
 # beat 4 — crane up looking down at her reaching, down with her
 K(562, V(X0 + 1.0, -0.65, 2.6), CH(562), 26)
@@ -114,19 +114,65 @@ def behind_face(f, wf):
 K(792, H_(792) + V(0.85, 0.75, 0.2), H_(792), 40)
 K(835, H_(835) + V(1.5, 0.8, 0.45), H_(835).lerp(wh(835), 0.3), 28)
 K(853, H_(853).lerp(wh(853), 0.5) + V(1.8, -0.6, 0.6), H_(853).lerp(wh(853), 0.5), 24)      # her and the arriving whale both in shot (no empty ice)
-K(872, wh(872) + V(1.4, -1.1, 0.4), wh(872), 32)
-K(910, wh(910) + V(0.6, -2.4, 0.7), wh(910), 26)
 # beat 7 — beside the whale to the window, ring play, keeper nod, whip pan back
-K(962, V(2.2, 1.4, 3.3), wh(962), 28)
-K(1010, RG(1010) + V(2.8, 1.8, 0.7), RG(1010), 26)
-K(1065, wbody(1065) + V(2.6, 2.4, 0.9), wbody(1065), 24)
-K(1120, V(0.2, -1.4, 2.1), V(-2.6, -4.3, 1.6), 26)
-K(1170, V(-0.4, -2.2, 1.9), V(-2.6, -5.85, 1.55), 30)
-K(1200, eye(1200) + V(0.8, 2.6, 0.5), eye(1200), 34)
 # beat 8 — eye macro, head turns, surge
-K(1230, eye(1230) + V(0.4, 2.4, 0.4), eye(1230), 40)
-K(1268, eye(1268) + V(0.6, 3.2, 0.9), eye(1268).lerp(H_(1268), 0.5), 24)
-K(1305, wbody(1305) + V(2.2, 1.0, 0.7), wh(1305), 26)
+# beats 6–8: two-shots computed per key — her (face toward camera) AND the whale in frame, nothing between, inside the pool
+from bpy_extras.object_utils import world_to_camera_view
+_tc = bpy.data.objects.new("_TwoShotCam", cam_d.copy()); sc.collection.objects.link(_tc)
+def _face_dir(f):
+    ev(f); hb = D.pose.bones["head"]
+    rot = hb.matrix.to_3x3() @ hb.bone.matrix_local.to_3x3().inverted()
+    return (D.matrix_world.to_3x3() @ rot @ Vector((0, -1, 0))).normalized()
+_SKIP = ("Water", "Bubble", "Particul", "Caustic", "Shaft", "Explainer", "_TwoShot", "CAM_")
+def _clear_to(f, c, p, ok_prefix):
+    dg = bpy.context.evaluated_depsgraph_get(); d = p - c; L = d.length; o = c.copy()
+    for _ in range(6):
+        rem = L - (o - c).length - 0.05
+        if rem <= 0: return True
+        hit, loc, n, i, ob, _m = sc.ray_cast(dg, o, d.normalized(), distance=rem)
+        if not hit: return True
+        if ob.name.startswith(ok_prefix): return True
+        if ob.name.startswith(_SKIP): o = loc + d.normalized() * 0.003; continue
+        return False
+    return True
+_prev = [None]
+def two_shot(f, lens=24, mix=0.45):
+    from mathutils.bvhtree import BVHTree as _BT
+    _wb = []      # the whale's whole body over +-30 frames: the camera must stay clear of it
+    for g in range(f - 30, f + 31, 10):
+        ev(g); _dg = bpy.context.evaluated_depsgraph_get(); _o = bpy.data.objects["Beluga"]
+        _wb.append((_BT.FromObject(_o, _dg), _o.matrix_world.inverted(), _o.matrix_world.to_3x3()))
+    def _whale_clear(c):
+        for t_, Mi_, R_3 in _wb:
+            loc, n, i, d = t_.find_nearest(Mi_ @ c, 2.0)
+            if loc is not None and (R_3 @ (Mi_ @ c - loc)).length < 1.2: return False
+        return True
+    ev(f); Hh = H_(f); Wh = wh(f); M_ = Hh.lerp(Wh, mix); fd = _face_dir(f); best = None
+    _tc.data.lens = lens
+    for az in range(0, 360, 15):
+        for el in (-10, 5, 20, 35):
+            for dist in (2.4, 3.0, 3.6, 4.3):
+                dvec = Vector((math.cos(math.radians(az)) * math.cos(math.radians(el)), math.sin(math.radians(az)) * math.cos(math.radians(el)), math.sin(math.radians(el))))
+                c = M_ + dvec * dist
+                if not (-5.3 < c.x < 5.3 and -4.1 < c.y < 4.4 and 0.35 < c.z < 5.6): continue
+                if (c - Hh).length < 1.1 or (c - Wh).length < 1.3: continue
+                if not _whale_clear(c): continue
+                _tc.location = c; _tc.rotation_euler = (M_ - c).to_track_quat('-Z', 'Y').to_euler()
+                bpy.context.view_layer.update()
+                ph = world_to_camera_view(sc, _tc, Hh); pw = world_to_camera_view(sc, _tc, Wh)
+                if not (0.12 < ph.x < 0.88 and 0.1 < ph.y < 0.9 and 0.1 < pw.x < 0.9 and 0.08 < pw.y < 0.92): continue
+                face = fd.dot((c - Hh).normalized())
+                if face < 0.15: continue
+                if not _clear_to(f, c, Hh, "Diver") or not _clear_to(f, c, Wh, "Beluga"): continue
+                cost = -2.0 * face + 0.25 * abs(dist - 3.0) + (0.0 if _prev[0] is None else 0.35 * (c - _prev[0]).length)
+                if best is None or cost < best[0]: best = (cost, c, M_)
+    if best is None:
+        print("TWO_SHOT none at", f); c = Hh + Vector((0, 2.6, 0.8)); best = (0, c, Hh)
+    _prev[0] = best[1]; print("TWO_SHOT", f, tuple(round(x, 2) for x in best[1]))
+    K(f, best[1], best[2], lens)
+for _f in (885, 925, 965, 1005, 1045, 1085, 1125, 1165, 1213, 1250, 1290):
+    two_shot(_f)
+bpy.data.objects.remove(_tc)
 K(1350, wh(1350) + V(1.3, 1.2, 0.3), CH(1350), 28)
 # beat 9 — mouth on the ankle, beneath looking up, spiral up
 K(1420, dv("foot.R", 1420) + V(0.3, 1.8, 0.5), dv("foot.R", 1420).lerp(CH(1420), 0.5), 26)      # side-on: her and the whale side by side (whale no longer between camera and her)
@@ -140,12 +186,13 @@ K(1775, H_(1775) + V(1.3, 1.0, 0.0), H_(1775), 32)
 K(1840, H_(1840) + V(1.4, 0.7, -0.3), H_(1840) + V(0, 0, 0.3), 26)
 # beat 11 — below the surface looking up, burst out, circle the splash
 K(1893, V(X0 + 1.2, -3.1, 5.55), H_(1893) + V(0, 0, 0.3), 24)
-K(1925, V(X0 + 1.4, -2.7, 6.45), H_(1925), 32)
-K(1965, V(X0 + 1.7, -2.0, 6.9), H_(1965), 36)
-K(2010, V(X0 + 0.6, -1.9, 7.0), H_(2010), 38)
+K(1925, V(X0 - 0.8, -2.6, 6.45), H_(1925), 32)
+K(1965, V(X0 - 1.0, -2.0, 6.9), H_(1965), 36)
+K(2010, H_(2010) + V(-0.2, 1.35, 1.9), H_(2010) + V(0, 0.6, -0.25), 32)      # steep top-down: no deck people cut by the frame
 # beat 12 — face at the edge, rise and pull back to reveal everything
-K(2075, H_(2075) + V(0.7, 0.85, 0.25), H_(2075), 40)
-K(2130, H_(2130) + V(1.4, 2.6, 1.6), H_(2130) + V(0, -0.5, 0.2), 30)
+K(2075, H_(2075) + V(-0.2, 1.3, 1.8), H_(2075) + V(0, 0.55, -0.2), 32)
+K(2100, H_(2100) + V(1.2, 3.0, 2.5), H_(2100) + V(0, -0.9, 0.7), 26)      # wide and high early: deck people in full, never cut at the waist
+K(2130, H_(2130) + V(1.4, 3.0, 2.4), H_(2130) + V(0, -0.9, 0.7), 26)
 K(END, H_(END) + V(2.0, 4.3, 2.8), H_(END) + V(-0.4, -1.0, 0.3), 26)
 FR.sort(key=lambda x: x[0])
 fc = catmull([(f, c) for f, c, a, l in FR]); fa = catmull([(f, a) for f, c, a, l in FR]); fl = catmull([(f, l) for f, c, a, l in FR])
@@ -199,7 +246,8 @@ for f in list(range(1, END + 1, 2)) + [END]:
     for g in fr_:
         if abs(g - f) <= 30:
             w_ = math.exp(-((g - f) / 14.0) ** 2); acc += env[g] * w_; wsum += w_
-    cam.location = fc(f) + acc / max(wsum, 1e-6); cam.keyframe_insert("location", frame=f)
+    _p = fc(f) + acc / max(wsum, 1e-6); _p.z = max(_p.z, 0.3)      # never below the tiles
+    cam.location = _p; cam.keyframe_insert("location", frame=f)
 print("CAMERA clearance corrected frames:", sum(1 for v in corr.values() if v.length > 1e-4))
 # out-of-breath blur: open the aperture wide
 for f, st in ((1, 6.0), (330, 6.0), (360, 4.0), (480, 4.0), (510, 6.0), (1700, 6.0), (1740, 2.0), (1800, 2.0), (1870, 6.0), (END, 6.0)):   # shallow only on the calf macro and her blurring vision
