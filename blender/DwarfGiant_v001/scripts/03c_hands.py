@@ -121,8 +121,8 @@ POSES_PLAN = [("Hero", "L", [(680, "relaxed"), (696, "flat_palm"), (880, "flat_p
               ("Officer1", "L", [(188, "relaxed")]),
               ("Clerk", "L", [(1, "flat_palm")]), ("Clerk", "R", [(1, "flat_palm")]),
               ("Surgeon1", "R", [(1565, "relaxed"), (1575, "flat_palm"), (1712, "flat_palm"), (1725, "relaxed")]),
-              ("Nurse", "L", [(1681, "relaxed"), (1690, "flat_palm"), (1857, "flat_palm"), (1866, "relaxed")]),
-              ("Nurse", "R", [(1681, "relaxed"), (1690, "flat_palm"), (1857, "flat_palm"), (1866, "relaxed")])]
+              ("Nurse", "L", [(1681, "relaxed")]),
+              ("Nurse", "R", [(1681, "relaxed")])]
 for ch, s_, keys in POSES_PLAN:
     for f, pose in keys: apply_pose(OBR["RIG_" + ch], s_, pose, f)
 # clerk: palms resting ON the desk top (surface found by ray cast), small writing strokes with the right hand

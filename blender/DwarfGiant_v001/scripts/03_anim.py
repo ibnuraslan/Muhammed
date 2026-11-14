@@ -351,7 +351,7 @@ def sterile(h, f, lean=18):
 for nm in ("Surgeon1", "Surgeon2", "Nurse"):
     h = HU[nm]; ph = {"Surgeon1": 0.0, "Surgeon2": 1.1, "Nurse": 2.3}[nm]
     for f in range(1, 2341, 30):
-        if not (nm == "Surgeon1" and 1560 <= f <= 1712) and not (nm == "Nurse" and 1700 <= f <= 1857): sterile(h, f)
+        if not (nm == "Surgeon1" and 1560 <= f <= 1712): sterile(h, f)   # vNEXT: nurse keeps the sterile pose (her blanket tuck hovered)
         h.key_spine(f, flex=(20 if f < 1712 else 8) + 2 * math.sin(f * 0.05 + ph), twist=4 * math.sin(f * 0.03 + ph), head=(24 if f < 1712 else 8, 8 * math.sin(f * 0.02 + ph)))
     breathe(h, 1, 2340, sway=0.008, ph=ph)
 # Surgeon1 lays his right hand on the drape at the patient's shoulder (contact, palm down)
@@ -363,7 +363,7 @@ for f in (1575, 1600, 1650, 1700, 1712):
     if f >= 1575: hand_w(S1, "L", f, V(6.32, 1.25, 1.12), V(0.6, -0.6, 0.3), V(0.3, 0.3, -1), V(6.0, 1.2, 0.8))
 # Nurse tucks the blanket over his shins with both hands (beat 10)
 NU = HU["Nurse"]
-for i, f in enumerate([1690] + list(range(1700, 1858, 18)) + [1857]):
+for i, f in enumerate([]):   # vNEXT: tuck removed (hands hovered over the blanket)
     sc.frame_set(f)
     for s_, ln, dx in (("L", "lowerleg01.L", 0.0), ("R", "lowerleg01.R", 0.0)):
         lw = HRIG.matrix_world @ HRIG.pose.bones[ln].head
