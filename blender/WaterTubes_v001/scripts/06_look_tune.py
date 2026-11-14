@@ -112,7 +112,10 @@ for n in nt.nodes:
     if n.type == "MIX" and n.data_type == "RGBA" and not n.inputs["A"].links:
         n.inputs["A"].default_value = (0.2, 0.125, 0.06, 1); n.inputs["B"].default_value = (0.42, 0.3, 0.17, 1)
     if n.type == "BUMP": n.inputs["Strength"].default_value = 0.08
-b = next(n for n in nt.nodes if n.type == "BSDF_PRINCIPLED"); b.inputs["Coat Weight"].default_value = 0.6; b.inputs["Coat Roughness"].default_value = 0.05
+b = next(n for n in nt.nodes if n.type == "BSDF_PRINCIPLED"); b.inputs["Coat Weight"].default_value = 0.3; b.inputs["Coat Roughness"].default_value = 0.2
+for n in nt.nodes:
+    if n.type == "MAP_RANGE" and abs(n.inputs["To Min"].default_value - 0.05) < 1e-4: n.inputs["To Min"].default_value = 0.3   # rougher water: no sun-glint discs
+b.inputs["Specular IOR Level"].default_value = 0.3
 fg = bpy.data.node_groups["FloodSurface"]
 scale_keys(fg, 'nodes["Chop"]', 0.7)
 msec = bpy.data.materials["FloodSection"]; bb = next(n for n in msec.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
