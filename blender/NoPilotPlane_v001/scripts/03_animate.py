@@ -604,7 +604,7 @@ POSW = (0.04, 0.88, STAND_Z)
 body(F(16.3), POSW, flex=4, sflex=4, head=(0, 0)); feet(F(16.3), (-0.06, 0.92), (0.16, 0.92))
 # beat 6: look at FO
 body(F(16.8), POSW, flex=4, sflex=8, twist=-25, head=(15, -35))
-body(F(17.8), (0.10, 0.92, STAND_Z - 0.03), flex=10, sflex=18, twist=-30, sside=10, head=(15, -35))
+body(F(17.8), (0.0, 0.90, STAND_Z - 0.03), flex=10, sflex=14, twist=-30, sside=0, head=(15, -35))
 hand("R", F(17.8), (0.30, 1.18, 1.22), d=(0, 1, -0.2), n=(0, 0, -1), curl=50)                         # on FO seat back
 body(F(18.8), POSW, flex=8, sflex=14, twist=-10, head=(20, -10))
 # beat 7: grab the radio handset
@@ -634,9 +634,9 @@ hand("R", F(25.6), (0.14, 1.52, 0.88), d=(0, 0.3, 1), n=(-0.6, -1, 0), curl=78)
 grip_handset(F(26.3))
 hand("R", F(26.6), GRIP, d=(0, 1, -0.3), n=(0, 0, -1), curl=10)
 # beat 9: haul the FO out
-body(F(26.9), (0.04, 0.84, STAND_Z), flex=10, sflex=10, twist=-25, head=(15, -20))
+body(F(26.9), (-0.06, 0.84, STAND_Z), flex=10, sflex=10, twist=-25, head=(15, -20))
 feet(F(27.2), (-0.08, 0.95), (0.14, 0.98))
-body(F(27.8), (0.02, 0.85, STAND_Z - 0.03), flex=6, sflex=6, twist=-15, head=(20, -15))
+body(F(27.8), (-0.05, 0.84, STAND_Z - 0.03), flex=6, sflex=6, twist=-15, head=(20, -15))
 feet(F(27.8), (-0.08, 0.98), (0.14, 1.02))
 def fo_shoulders(f, s):
     sc.frame_set(f); nm = "upperarm01." + s
@@ -655,10 +655,10 @@ def jacket_pt(f, guess):
     if nrm.dot(loc - (FO.matrix_world @ FO.pose.bones["spine03"].head)) < 0: nrm = -nrm
     return loc, nrm
 for f in list(range(F(27.9), F(31.0), 8)) + list(range(F(31.0), F(32.3), 4)):          # left hand on the collar, right hand on his near shoulder seam, outside the jacket
-    wl = fo_point(f, "neck01", (-0.04, -0.15, 0.05))
+    wl = fo_point(f, "upperarm01.L", (-0.06, -0.06, -0.14))          # v008b: under his near arm (harness height), not his collar at eye level
     hand("L", f, wl, d=(0.3, 1, -0.4), n=(0, -0.5, 1), curl=72, pole=wl + Vector((-0.45, -0.30, -0.25)))     # elbows out, not under the eye
-    p_, n_ = jacket_pt(f, fo_point(f, "neck01", (-0.02, -0.10, 0.0)))
-    place_hand(YOU, "L", f, p_, -n_, (0.2, 1, -0.5))                                  # palm on the jacket collar surface
+    p_, n_ = jacket_pt(f, fo_point(f, "upperarm01.L", (-0.04, -0.04, -0.14)))
+    place_hand(YOU, "L", f, p_, -n_, (0.3, 1, 0.4))                                   # palm on his side under the arm, elbow out
     wr_ = fo_point(f, "upperarm01.L", (-0.10, -0.12, 0.06))
     hand("R", f, wr_, d=(0.3, 1, -0.6), n=(-0.3, -0.3, 1), curl=72, pole=wr_ + Vector((0.45, -0.30, -0.25)))
     p_, n_ = jacket_pt(f, fo_point(f, "upperarm01.L", (-0.05, -0.08, 0.12)))
@@ -666,24 +666,24 @@ for f in list(range(F(27.9), F(31.0), 8)) + list(range(F(31.0), F(32.3), 4)):   
 for s_, sx in (("L", -1), ("R", 1)):          # he is on the floor, out of reach: let go, hands back at the sides
     hand(s_, F(32.6), (sx * 0.22, 0.66, 0.86), d=(0, 0.3, -1), n=(-sx, 0, 0), curl=30)
     hand(s_, F(33.3), (sx * 0.22 + 0.02, 0.66, 0.86), d=(0, 0.3, -1), n=(-sx, 0, 0), curl=30)
-body(F(28.8), (-0.04, 0.76, STAND_Z - 0.08), flex=12, sflex=6, twist=-15, head=(10, -10))
+body(F(28.8), (-0.06, 0.74, STAND_Z - 0.02), flex=12, sflex=6, twist=-15, head=(10, -10))
 feet(F(29.2), (-0.14, 0.72), (0.10, 0.80)); H.key_foot("L", F(29.0), Vector((-0.05, 0.76)), 180, 0.05)
-body(F(29.8), (-0.10, 0.64, STAND_Z - 0.10), flex=10, sflex=8, twist=-10, head=(10, -10))
+body(F(29.8), (-0.12, 0.62, STAND_Z - 0.04), flex=10, sflex=8, twist=-10, head=(10, -10))
 feet(F(30.4), (-0.24, 0.64), (0.0, 0.68)); H.key_foot("R", F(30.1), Vector((0.05, 0.74)), 180, 0.06)
-body(F(30.6), (-0.12, 0.64, STAND_Z - 0.12), flex=8, sflex=8, twist=-5, head=(15, 0))
-body(F(31.4), (-0.10, 0.64, STAND_Z - 0.16), flex=10, sflex=10, twist=-5, head=(20, 0))
+body(F(30.6), (-0.13, 0.62, STAND_Z - 0.06), flex=8, sflex=8, twist=-5, head=(15, 0))
+body(F(31.4), (-0.12, 0.63, STAND_Z - 0.09), flex=10, sflex=10, twist=-5, head=(20, 0))
 body(F(31.9), (-0.16, 0.62, STAND_Z - 0.04), flex=2, sflex=4, twist=-15, head=(20, -20))
 body(F(32.4), (-0.17, 0.60, STAND_Z), flex=2, sflex=4, twist=-20, head=(20, -25))       # upright, back from the seat, looking right down at him on the floor
 feet(F(32.4), (-0.25, 0.60), (-0.05, 0.64))
 body(F(33.2), (-0.15, 0.60, STAND_Z), flex=2, sflex=4, twist=-25, head=(20, -25))
 # beat 10-11: alarms, jolt, stagger forward to the windscreen
-body(F(33.7), (0.18, 0.76, STAND_Z - 0.12), flex=20, sflex=0, twist=-5, head=(-10, 0))
+body(F(33.7), (0.06, 0.76, STAND_Z - 0.12), flex=20, sflex=0, twist=-5, head=(-10, 0))
 hand("L", F(33.9), (-0.30, 0.98, 1.40), d=(0, 1, 0), n=(0, 0, -1), curl=55)
 hand("R", F(33.9), (0.35, 1.10, 1.40), d=(0, 1, 0), n=(0, 0, -1), curl=55)
 feet(F(34.2), (0.08, 0.74), (0.30, 0.80))
 body(F(34.6), (0.16, 0.80, STAND_Z - 0.08), flex=14, sflex=0, side=6, head=(0, 5))
 feet(F(35.1), (0.02, 0.90), (0.26, 0.82)); H.key_foot("L", F(34.85), Vector((0.05, 0.82)), 180, 0.07)
-body(F(35.5), (0.12, 0.92, STAND_Z - 0.06), flex=18, sflex=6, side=-8, head=(-5, -5))
+body(F(35.5), (0.03, 0.92, STAND_Z - 0.06), flex=18, sflex=6, side=-8, head=(-5, -5))
 hand("L", F(35.5), (-0.10, 1.28, 1.0), d=(0, 1, -0.5), n=(0, 0, 1), curl=40)                        # braces on the pedestal
 hand("R", F(35.5), (0.30, 1.12, 1.42), d=(0, 1, 0), n=(0, 0, -1), curl=60)
 body(F(36.5), (0.14, 0.98, STAND_Z - 0.10), flex=26, sflex=14, side=6, head=(0, 0))
@@ -703,9 +703,16 @@ feet(F(39.3), *FSEAT)
 def grip(f, s):
     sc.frame_set(f); M = YR.matrix_world
     return M @ Vector(((-0.16 if s == "L" else 0.16), -0.20, 0.79))
-def grip_yoke(f, s, W):
-    """v007e: fingers wrap the vertical horn, palm toward it from outboard-behind, thumb opposing (grip_object)"""
-    grip_object(YOU, s, f, OB["YOKE_R"], W, ((0.5 if s == "L" else -0.5), 0.8, 0.0))
+def grip_yoke(f, s, W=None):
+    """v008b: hammer grip round the horn shaft. Horn axis/centre measured from the YOKE_R mesh (local ctr (+-0.157, -0.201, 0.79),
+    axis (+-0.217, 0, 0.976)); the palm meets the shaft surface from outboard, fingers wrap round the axis, thumb opposes."""
+    sx = -1 if s == "L" else 1
+    sc.frame_set(f); M = YR.matrix_world; R3 = M.to_3x3().normalized()
+    ctr = M @ Vector((0.157 * sx, -0.201, 0.80)); ax = (R3 @ Vector((0.217 * sx, -0.003, 0.976))).normalized()
+    out = (R3 @ Vector((sx, 0, 0))).normalized(); out = (out - ax * out.dot(ax)).normalized()
+    ok, loc, n_, i_ = YR.closest_point_on_mesh(M.inverted() @ (ctr + out * 0.08)); C = M @ loc
+    appr = ctr - C; appr = (appr - ax * appr.dot(ax)).normalized()
+    grip_object(YOU, s, f, YR, C, appr, finger_dir=ax.cross(appr) * (-sx))
 def hands_on_yoke(f, curl=65, jitter=0.0):
     for s in "LR":
         W = grip(f, s) + Vector((random.uniform(-jitter, jitter), random.uniform(-jitter, jitter), random.uniform(-jitter, jitter)))
@@ -825,7 +832,7 @@ LOOK = [(0.0, 0, -48), (0.6, 4, -38), (1.2, 0, -8), (2.3, -65, -10), (3.4, 53, -
         (22.8, 4, -30), (23.9, -6, -26), (25.2, 0, -52), (26.0, 4, -48), (26.9, -48, -20), (28.0, -32, -28), (29.0, -28, -24),
         (30.5, -16, -30), (31.8, -30, -38), (32.1, -74, -44), (32.5, -80, -45), (33.2, -85, -42), (33.5, -12, -12), (33.7, -8, -8), (34.6, -4, -4), (35.5, 6, -2), (36.5, 0, -10), (37.6, -10, -22),
         (38.8, 0, -28), (39.8, 0, -48), (40.8, 22, -34), (41.8, 0, -8), (42.5, 0, -5), (43.6, 0, -34), (44.7, 0, -6), (45.8, 4, -4),
-        (47.1, -14, -26), (48.0, -16, -30), (48.8, -4, -6), (49.6, 0, -48), (50.4, -38, -14), (51.2, -34, -16), (52.0, -10, -8), (52.9, 36, -24), (53.5, 0, -12), (54.1, -22, -10), (54.8, 14, -20), (55.5, -4, -26), (56.1, 6, -10),
+        (47.1, -14, -26), (48.0, -16, -30), (48.8, -4, -6), (49.6, 0, -48), (50.4, -38, -6), (51.2, -34, -6), (52.0, -10, -8), (52.9, 36, -24), (53.5, 0, -12), (54.1, -22, -10), (54.8, 14, -20), (55.5, -4, -26), (56.1, 6, -10),
         (56.8, 48, -30), (57.4, 30, -14), (58.0, 0, -8), (58.6, -12, 2), (59.2, 48, -33), (60.4, 5, -44), (61.5, 0, 4), (62.0, 8, -4), (62.6, 72, -12), (63.6, 45, -30),
         (64.6, 100, -12), (65.8, 150, -40), (66.9, 168, -8), (67.9, 110, -14), (68.9, 30, -8), (69.6, -14, -6), (70.3, 12, -16), (70.9, -4, -4), (71.4, 0, -8)]
 ROLL = {33.7: 0, 35.5: -6, 36.5: 8, 37.6: -10, 38.8: 6, 40.8: -4, 42.5: 0}
