@@ -504,7 +504,7 @@ BR9 = obj_w(1690, BRO, (0, 0, 0.05)); TU9 = obj_w(1690, TUMO)
 LH = c9
 c11, f11, s11, u11, _, _ = head_frame(1900)
 DYN = [(1275, eye8a + f8a * 0.10, OFFS, 28), (1335, eye8b + f8b * 0.12 + u8b * 0.02, OFFS, 30),
-       (1385, ear8c + s8c * 0.5 + f8c * 0.3 + u8c * 0.05, ear8c - u8c * 0.04, 32), (1445, ear8d + s8d * 0.6 + f8d * 0.4 + u8d * 0.08, ear8d - u8d * 0.06 + f8d * 0.05, 30),
+       (1385, c8c + f8c * 0.7 + s8c * 0.28 + u8c * 0.04, c8c + s8c * 0.03, 32), (1445, c8d + f8d * 0.8 + s8d * 0.32 + u8d * 0.06, c8d + s8d * 0.03, 30),
        (1640, c9 + f9 * 0.42 + s9 * 0.12 - u9 * 0.05, c9 + f9 * 0.06, 30), (1654, c9b + (f9b + u9b * 0.42).normalized() * 0.26, c9b, 32), (1660, c9b + (f9b + u9b * 0.42).normalized() * 0.16, c9b, 40), (1666, c9b + (f9b + u9b * 0.3).normalized() * 0.14 + s9b * 0.04, c9b, 38), (1676, c9b + f9b * 0.14 + s9b * 0.1, c9b, 36),
        (1690, BR9 + s9b * 0.16 + f9b * 0.06, TU9, 40), (1708, BR9 + s9b * 0.12 - u9b * 0.05 + f9b * 0.08, TU9, 45), (1718, c9 + f9 * 0.45 + u9 * 0.15 + s9 * 0.1, c9, 30)]
 sc.frame_set(1)
@@ -543,11 +543,11 @@ foc = bpy.data.objects.new("CAM_Focus", None); sc.collection.objects.link(foc); 
 cam_d.dof.focus_object = foc
 for f in list(range(1, 2341, 4)) + [2340]:
     p_ = fa_(f)
-    w = smooth((f - 1268) / 22) * (1 - smooth((f - 1352) / 28))
+    w = smooth((f - 1296) / 8) * (1 - smooth((f - 1314) / 8))   # vNEXT: blurred-vision POV held ~0.25 s (was ~1.1 s)
     if w > 0:
         cpos = fc_(f); near = cpos + (p_ - cpos).normalized() * 0.25; p_ = p_.lerp(near, w)
     foc.location = p_; foc.keyframe_insert("location", frame=f)
-for f, fs in ((1, 8.0), (160, 8.0), (166, 64.0), (205, 64.0), (215, 22.0), (478, 22.0), (479, 8.0), (1262, 8.0), (1292, 1.4), (1335, 1.4), (1365, 8.0), (1657, 8.0), (1658, 22.0), (1712, 22.0), (1713, 8.0)):
+for f, fs in ((1, 8.0), (160, 8.0), (166, 64.0), (205, 64.0), (215, 22.0), (478, 22.0), (479, 8.0), (1262, 8.0), (1294, 8.0), (1302, 2.0), (1314, 2.0), (1322, 8.0), (1657, 8.0), (1658, 22.0), (1712, 22.0), (1713, 8.0)):
     cam_d.dof.aperture_fstop = fs; cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
 
 # camera-attached cutaway card (teal->navy gradient), alpha keyed
