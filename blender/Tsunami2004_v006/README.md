@@ -55,8 +55,9 @@ Bright animated-CG look per `blender/STYLE_ANIMATED.md` (client, 22:45 UTC): `pi
 - Textures were downsized to 512–1024 px and re-encoded as JPEG to keep the file under 95 MB.
 
 ## v006 changes (moving-preview review, Nov 14)
-Made from v005 after watching the moving preview (`blender/pipeline/preview.py`, every 5th frame). The beat frames are unchanged and `beats.json` is identical. `review/preview.mp4` is the moving preview of this exact packed file.
+Made from v005 after watching the moving preview (`blender/pipeline/preview.py`, every 5th frame). The beat frames are unchanged and `beats.json` is identical. `review/preview.mp4` is the moving preview (every 5th frame, 12 fps, 270×480) of this packed file. There were three v006 builds, and only the fixed section differs between them. The builds are seeded, so every other frame is identical. The preview frames come from: frames 1051–1291 from the final build; 886–960 and 1292–2400 from the second; the rest from the first. One check frame (451) was re-rendered from the final file and compared to confirm.
 - Stranded fish now lie on the sand. They used to hover 5–9 cm above it, and their flapping hops are now 3–7 cm high.
 - The wet sand is rougher and less shiny, so the low sun no longer blows out into a beige blur (around 11.0–12.2 s and 17.8–18.1 s).
 - Earthquake cross-section: the camera holds the level cross-section view from 15.0 s. At 15.6 s (beat 7) it goes in one frame to the beach, at the moment the wave appears; the cross-section and the hero wave now switch on that same frame. This removes the tilted box in a grey void (15.17–15.5 s), the dark frame under the sea floor (15.58 s) and a wave popping in after the cut.
-- Checks on the packed file: clip_scan 0 bad ranges. qa_check shows EMPTY 295 and INSIDE 11, both intended (see ACTING_notes.md). Nothing is unpacked, there is one camera and output is PNG. The file is 85 MB.
+- A runner (LocalM) passed right in front of the lens at 18.15 s. He is now hidden from 13 s, while off screen.
+- Checks on the packed file: clip_scan 0 bad ranges. qa_check shows EMPTY 298 and INSIDE 11, both intended (see ACTING_notes.md). Nothing is unpacked, there is one camera and output is PNG. The file is 85 MB.

@@ -250,6 +250,8 @@ for n, pts in RUN.items():
     q.go(pts, T(START[n]), T(21.4), run=True, kid=kid)
     q.key_arms(T(12.85), T(21.4), lambda f, s=START[n]: "run" if f > T(s) else "hang")
     q.hide_after(T(21.45))
+    if n == "LocalM":   # vNEXT: his escape path crossed the camera at 18.15 s (filled the lens); he stays hidden from 13 s (motion kept so the crowd layout is unchanged)
+        q.hide_after(T(13.0))
 # Fisher fish: rests on the sand, follows the right hand from the grasp until he drops it
 q = P["Fisher"]
 for f in range(T(6.9), T(9.05), 2):

@@ -52,3 +52,8 @@ Story-beat frames (beats.json) are unchanged in v005.
 | 660–735, 1066–1086 | Blown-out beige glare from the sun on the wet sand reads as a blur | Wet roughness 0.55, specular 0.3 |
 | 911–934 | Cross-section diorama seen from outside as a tilted box in a grey void | Camera holds the level cross-section view from 15.0 s (frame 901) |
 | 936 | Dark frame: camera under the sea floor | At 15.6 s (frame 937, beat 7) the camera goes to the beach in one frame; the diorama hides and the hero wave appears on that same frame (first v006 build showed the wave popping in 0.4 s after the cut, fixed) |
+| 1091 (18.15 s) | Runner LocalM ran straight past the lens and filled the frame | LocalM is hidden from 13 s, while off screen; his motion is kept so the crowd layout is unchanged. Seven people still run inland |
+
+Watched on the v006 moving preview and kept as they are:
+- 25.5–26.1 s (frames 1531–1566): a tower passes on the right during the flood flyover. It is sharp, never fills the frame and sits next to beat 10, so it stays.
+- Sun glints on the flood water (22.5–28 s): real reflections, never covering a subject.

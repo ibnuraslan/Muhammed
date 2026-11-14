@@ -15,7 +15,7 @@ $B -b "$OUT"/Tsunami2004_v006_60fps.blend --python ../pipeline/qa_check.py -- $P
 echo PACKED
 # preview: frames 1-895 and 961-1061 were rendered from the first v006 build (seeded, identical outside the 15.15-15.6 s change);
 # re-render 896-960 and the rest from this package
-for r in "886 960" "1086 2400"; do set -- $r
+for r in "1051 1291"; do set -- $r
   $B -b "$OUT"/Tsunami2004_v006_60fps.blend --python-expr "import bpy;s=bpy.context.scene;s.frame_start=$1;s.frame_end=$2" --python ../pipeline/preview.py -- /tmp/claude-0/P6 5 >> /tmp/claude-0/p6.log 2>&1
 done
 echo PREVIEWED
