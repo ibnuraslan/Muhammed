@@ -89,3 +89,22 @@ Still visible in the preview: beat 6 (871) shows him at the door from behind and
 - 1376–1440: the camera holds on the north side and only pans as he goes to the door and turns the key. The lock close-up is gone; the hand is seen from a distance.
 - 1736: the crane stays on him one key longer, then pans across the sky to the government building.
 - Closest approach of the camera to any head or torso: at least 0.50 m everywhere except 187 (a stationary close-up of the press, 0.36 m) and 1460–1461 (following him out through the doorway, 0.32 m; unchanged).
+
+## v007e: director review of v007d (14 items). Simplify rule: steady framings and hard cuts instead of risky moves.
+1-2. Wax press (f76-330): one steady 3/4 shot of his face and both hands. Only the right hand presses the key; the left rests flat on the table (the second press at 1122 is the same).
+3. 511-541: watches the visitor reach the gate from inside the yard, then cuts into the shop. No gate crosses the lens.
+4. Mould top: wider, steady shot; the ally stands closer so his elbows bend.
+5. Cake: his free hand hangs at his side; no hovering claw.
+6. The cake and lid shot is wider, from the front and right, so his face shows under the hat.
+7. The whip is replaced by a hard cut (853) from the hand-off into the night cell, lock side, his face.
+8. Jam: steady medium from the lock side; no hand fills the frame.
+9. The lean is now a hand on the wall with the head bowed about 11 cm off it. His head stops at x 1.80; the wall is at x 2.0.
+10. 1040-1080: the camera arcs behind him on the south and west sides, never past him, and ends on his face at the table.
+11. Window lift and stool wait are now steady medium shots. No candle macro, no empty wall.
+12-13. Knife and key-out are framed from the table side. At 1463 a cut goes from the door to ahead of him in the corridor.
+14. At 1646 a cut goes to a fixed camera in the yard, off his path, which then cranes up as he crosses. No door edge, no tilted empty walls.
+Cuts at 541, 853, 1463 and 1646 are hard cuts. No smoothing across them; constant keys before each cut.
+Checks:
+- Camera audit: 0 bad frames.
+- Camera is at least 0.49 m from every head and torso on every frame.
+- Moving preview watched frame by frame (review/preview_v007e_every5th.mp4).

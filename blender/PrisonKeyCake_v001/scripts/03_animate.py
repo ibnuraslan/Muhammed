@@ -57,9 +57,10 @@ P.hand_fn["R"].append((1, 380, lambda f: hand_on_key(km_path(f), press=110 <= f 
 def lhand_press(f):
     M = km_path(f); z = (M.to_3x3() @ V(0, 0, 1)).normalized(); x = (M.to_3x3() @ V(1, 0, 0)).normalized()
     return grip_hand(M @ V(0.105, -0.012, 0) + z * 0.012, -x + V(0, 0, -0.3), -z)
-P.hand_fn["L"].append((150, 252, lhand_press))
 TABLE_EDGE_L = V(0.66, 1.31, TABLE_Z + 0.045)
 LH_TABLE = grip_hand(TABLE_EDGE_L + V(0, 0.05, 0), V(0.1, 1, -0.1), V(0, 0, -1))
+P.k(146, hL=LH_TABLE, cL=12)   # the free hand rests on the table while the right hand presses the key
+P.k(252, hL=LH_TABLE, cL=12)
 P.k(1, root=STA, yaw=180, flex=8, sp_flex=14, h_pitch=18, h_yaw=0, sp_twist=0, cL=20, cR=55, hL=LH_TABLE)
 P.k(30, sp_twist=-10, h_yaw=-45, h_pitch=5, flex=6)                       # glance at the door
 P.k(62, sp_twist=-4, h_yaw=-12, h_pitch=22)
@@ -112,14 +113,14 @@ P.k(920, sp_twist=-6, side=3, h_yaw=-28)
 P.k(934, sp_twist=-10, side=5, h_pitch=30, flex=8)
 P.k(940, h_yaw=-38, h_pitch=8, sp_twist=-4)          # a light passes outside: freezes, eyes to the gap under the door
 P.k(950, h_yaw=-32, h_pitch=12)
-P.k(958, sp_twist=4, side=-3, h_yaw=-24, h_pitch=26)
-P.k(972, sp_twist=-12, side=6, flex=10, h_pitch=34, hL=grip_hand(V(1.948, 1.22, 1.46), V(0, 0.2, 1), V(1, 0, 0)))                  # strain
+P.k(958, root=DOOR_ST + V(-0.08, 0.02, -0.01), sp_twist=4, side=-3, h_yaw=-24, h_pitch=26)
+P.k(972, root=DOOR_ST + V(-0.08, 0.02, -0.01), sp_twist=-12, side=6, flex=8, h_pitch=34, hL=grip_hand(V(1.948, 1.22, 1.46), V(0, 0.2, 1), V(1, 0, 0)))                  # strain
 P.k(982, hL=grip_hand(V(1.74, 1.26, 1.48), V(0, 0.2, 1), V(1, 0, 0)), sp_twist=6, h_pitch=10, h_yaw=10)  # wind up
 P.k(992, hL=grip_hand(V(1.948, 1.24, 1.50), V(0, 0.2, 1), V(1, 0, 0)), sp_twist=-4, flex=12)            # slap
-P.k(998, root=DOOR_ST + V(-0.02, 0.04, -0.03), flex=14)
+P.k(998, root=DOOR_ST + V(-0.10, 0.04, -0.03), flex=12)
 P.k(1006, hL=grip_hand(V(1.948, 1.24, 1.42), V(0, 0.15, 1), V(1, 0, 0)))   # the hand slides down the wall as he sags
-P.k(1018, root=DOOR_ST + V(-0.06, 0.07, -0.06), flex=14, sp_flex=16, h_pitch=35, h_yaw=0, sp_twist=0, side=0, hL=HANG["L"], cL=15)   # forehead to the door
-P.k(1034, root=DOOR_ST + V(-0.06, 0.06, -0.05))
+P.k(1018, root=DOOR_ST + V(-0.12, 0.07, -0.05), flex=12, sp_flex=14, h_pitch=30, h_yaw=0, sp_twist=0, side=0, hL=grip_hand(V(1.948, 1.22, 1.42), V(0, 0.2, 1), V(1, 0, 0)), cL=10)   # hand on the wall, head bowed, clear of it to the door
+P.k(1034, root=DOOR_ST + V(-0.12, 0.06, -0.05))
 P.k(1046, root=DOOR_ST, flex=6, sp_flex=10, h_pitch=12, hL=HANG["L"], hR=HANG["R"], cR=20)
 # ---- beat 7: second impression + wait (1057-1302)
 pth, yfn = P.walk(1046, 1100, [(1.5, 0.9), (1.2, 0.95), (0.92, 0.97)], stride=0.6, yaw_override=lambda f: lerp(90, 180, ss(f, 1046, 1094)))
@@ -143,7 +144,7 @@ def km_b7(f):
 bake_obj(KM, 1098, 1180, km_b7)
 key_hide(KM, [(1, False), (382, True), (1098, False), (1182, True)])
 P.hand_fn["R"].append((1098, 1180, lambda f: hand_on_key(km_b7(f), press=1112 <= f <= 1158)))
-P.hand_fn["L"].append((1122, 1156, lambda f: (lambda M: grip_hand(M @ V(0.105, -0.012, 0) + M.to_3x3() @ V(0, 0, 0.012), -(M.to_3x3() @ V(1, 0, 0)) + V(0, 0, -0.3), -(M.to_3x3() @ V(0, 0, 1))))(km_b7(f))))
+P.k(1122, hL=LH_TABLE, cL=12)
 P.k(1122, root=STA + V(0, 0.07, -0.08), flex=20, sp_flex=36, h_pitch=45, cR=10, cL=8)
 P.k(1156, root=STA + V(0, 0.07, -0.09), flex=21, sp_flex=38, hL=LH_TABLE)
 P.k(1168, root=STA + V(0, 0.03, -0.03), flex=10, sp_flex=16, h_pitch=35)   # straightens to look at the new mould
@@ -440,8 +441,8 @@ def mtop(f):
 bake_obj(MT, 655, 694, mtop)
 A.hand_fn["L"].append((656, 692, lambda f: grip_hand(mtop(f) @ V(-0.17, 0, 0.03), V(0.3, 0.8, -0.5), V(1, 0, 0))))
 A.hand_fn["R"].append((656, 692, lambda f: grip_hand(mtop(f) @ V(0.17, 0, 0.03), V(-0.3, 0.8, -0.5), V(-1, 0, 0))))
-A.k(655, root=AST + V(0.12, -0.03, -0.04), flex=10, sp_flex=16, h_pitch=32, cL=45, cR=45)
-A.k(692, root=AST + V(0.05, -0.04, -0.03), flex=8, sp_flex=14)
+A.k(655, root=AST + V(0.12, 0.03, -0.04), flex=10, sp_flex=16, h_pitch=32, cL=45, cR=45)
+A.k(692, root=AST + V(0.05, 0.02, -0.03), flex=8, sp_flex=14)
 # casting cools: emission keyed down, swapped for the real copy (Key_Copy1)
 CAST = OB["Key_Casting"]; mm = bpy.data.materials.new("M_CastCool"); mm.use_nodes = True
 bsd = mm.node_tree.nodes["Principled BSDF"]; bsd.inputs['Base Color'].default_value = (0.12, 0.11, 0.1, 1); bsd.inputs['Metallic'].default_value = 0.8
@@ -464,7 +465,7 @@ def k1_cake(f):
 bake_obj(K1, 728, 772, k1_cake)
 key_hide(K1, [(1, True), (730, False), (775, True), (845, False), (1044, True)])
 A.hand_fn["R"].append((728, 772, lambda f: grip_hand(k1_cake(f) @ V(-0.05, 0, 0), k1_cake(f).to_3x3() @ V(1, 0, 0), k1_cake(f).to_3x3() @ V(0, 1, 0))))
-A.k(726, root=AST2 - V(0.25, 0.02, 0.04), flex=10, sp_flex=16, h_pitch=30, hL=grip_hand(CAKE1_P + V(-0.138, 0, 0.065), V(1, 0.3, -0.4), V(1, 0, 0)), cL=30, cR=55)
+A.k(726, root=AST2 - V(0.25, 0.02, 0.04), flex=10, sp_flex=16, h_pitch=30, hL=AH["L"], cL=15, cR=55)   # free hand hangs (no hand hovering at the cake)
 A.k(772, root=AST2 - V(0.2, 0.03, 0.04), flex=10, sp_flex=16)
 # cake into the box (776-798), lid (800-812), lift (814-828), turn to the guard and hand over (828-852)
 CK = OB["Cake1"]; CK0 = CK.matrix_world.copy(); PB = OB["ParcelBox"]; PB0 = PB.matrix_world.copy(); LID = OB["ParcelBox_Lid"]; LID0 = LID.matrix_world.copy()
