@@ -2,7 +2,7 @@
 - Worn gear and carried props that followed a bone through a Child Of constraint (head torches, dive masks, tanks,
   tow harness, the boy's full-face mask) are re-attached as true bone children. The world motion is baked frame by
   frame where the constraint's influence is animated, so nothing moves differently; the prop now IS parented to the bone.
-- Masks sit ON the skin: a shrinkwrap (6 mm above the surface) to the wearer's body. On the boy's full-face mask it
+- Masks sit ON the skin: a shrinkwrap (2 mm above the surface, LESSONS 2.5) to the wearer's body. On the boy's full-face mask it
   switches on once the fitting is done (2366); during the fitting the mask is in DiverB's hands.
 blender -b in.blend --python 13_props.py -- out.blend"""
 import bpy, sys
@@ -69,7 +69,7 @@ for o in bpy.data.objects:
     if nm.endswith("_Mask") or nm == "Prop_FullFaceMask":
         b = body_of(o.parent)
         if not b: continue
-        m = o.modifiers.new("OnSkin", 'SHRINKWRAP'); m.target = b; m.wrap_method = 'NEAREST_SURFACEPOINT'; m.wrap_mode = 'OUTSIDE_SURFACE'; m.offset = 0.006
+        m = o.modifiers.new("OnSkin", 'SHRINKWRAP'); m.target = b; m.wrap_method = 'NEAREST_SURFACEPOINT'; m.wrap_mode = 'OUTSIDE_SURFACE'; m.offset = 0.002
         if nm == "Prop_FullFaceMask":
             for f, on in ((1, False), (2365, False), (2366, True)):
                 m.show_render = on; m.show_viewport = on
