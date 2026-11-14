@@ -1010,7 +1010,7 @@ def _():
             lab = [text_obj("Chalk8", "8 in", (hx, hy + HATCH_L / 2 + 0.09, z - 0.001), 0.065, chalk, rot=(math.pi, 0, math.pi), extrude=0.0, font_path="/usr/share/fonts/truetype/freefont/FreeSerifItalic.ttf"),
                    text_obj("Chalk15", "15 in", (hx + HATCH_W / 2 + 0.17, hy, z - 0.001), 0.065, chalk, rot=(math.pi, 0, math.pi), extrude=0.0, font_path="/usr/share/fonts/truetype/freefont/FreeSerifItalic.ttf")]
             c["hm"] = (lines, lab)
-            c["hm_torch"] = H.flashlight("MeasureTorch"); c["hm_torch"].data.energy = 110
+            c["hm_torch"] = H.flashlight("MeasureTorch"); c["hm_torch"].data.energy = 28; c["hm_torch"].data.spot_size = math.radians(55); c["hm_torch"].data.spot_blend = 0.8
             c["dust"] = H.leaf_cloud(30, HATCH, (0.3, 0.4), C2 - 0.05, col=(0.75, 0.7, 0.6), seed=9)
             for o in c["dust"]:
                 o.scale = (0.008, 0.008, 1)
@@ -1027,11 +1027,11 @@ def _():
         # the torch beam searches, then settles on the opening
         a = 2.2 * math.exp(-0.45 * sec)
         tgt = Vector((hx + 0.35 * a * math.sin(1.6 * sec), hy + 0.25 * a * math.cos(1.3 * sec), C2))
-        H.aim_obj(c["hm_torch"], Vector((-1.3, -1.55, F2 + 1.45)), tgt)
+        H.aim_obj(c["hm_torch"], Vector((-1.4, -1.08, F2 + 1.3)), tgt)
         H.fall_leaves(c["dust"], sec * 0.2, ground=F2, drift=(0.01, 0.0))
     def cam(c, t):
         e = ease(t)
-        return (Vector((-1.2, -1.1, F2 + 1.25)).lerp(Vector((-1.12, -0.98, F2 + 1.5)), e), Vector((hx + 0.05, hy - 0.1, C2)), 20, (0, 1, 0))
+        return (Vector((-1.36, -1.12, F2 + 1.45)).lerp(Vector((-1.3, -1.04, F2 + 1.62)), e), Vector((hx + 0.04, hy + 0.06, C2)), 22, (0, 1, 0))
     return cam, anim
 
 

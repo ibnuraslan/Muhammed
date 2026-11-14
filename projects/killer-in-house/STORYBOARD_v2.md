@@ -101,7 +101,7 @@ Rhythm: inserts of 2–4 s around each long take. Final cut points come from the
 ## Deliverables
 
 - `review/storyboard_v2_before_after.jpg`: before/after per changed shot.
-- `review/storyboard_v2_previews/`, low-res motion previews (~480p, 8 samples, 8–12 fps rendered, motion-interpolated to 24 fps):
+- `review/storyboard_v2_previews/`, low-res motion previews (~480p, 8 samples, 6–12 fps rendered, motion-interpolated to 24 fps):
 
 | Preview | Content |
 |---|---|

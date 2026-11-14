@@ -523,9 +523,18 @@ def _b_cutaway(c):
     c["canopies"] = []
     for (x, y) in ((-0.85, -0.45), (0.8, -0.5)):
         cyl("Trunk", (x, y, Z + 0.15), 0.012, 0.28, pbr("Bark", (0.12, 0.08, 0.05), 0.9), 8)
-        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=0.13, location=(x, y, Z + 0.36))
-        cp = bpy.context.active_object; cp.data.materials.append(pbr("Canopy%d" % len(c["canopies"]), (0.5, 0.22, 0.05), 0.85))
-        cp.modifiers.new("d", 'DISPLACE').strength = 0.03
+        # foliage as a lumpy cluster (model-railway style clump foliage): several noisy blobs, leaf-scale bump
+        tx = bpy.data.textures.get("FoliageClouds") or bpy.data.textures.new("FoliageClouds", 'CLOUDS')
+        tx.noise_scale = 0.025; tx.noise_depth = 2
+        mt = foliage_mat("Canopy%d" % len(c["canopies"]))
+        rng2 = np.random.default_rng(len(c["canopies"]) + 11); blobs = []
+        for k in range(7):
+            off = Vector(((rng2.random() - 0.5) * 0.16, (rng2.random() - 0.5) * 0.16, (rng2.random() - 0.3) * 0.14))
+            bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=4, radius=0.06 + 0.03 * rng2.random(), location=Vector((x, y, Z + 0.34)) + off)
+            bl = bpy.context.active_object; d_ = bl.modifiers.new("d", 'DISPLACE'); d_.texture = tx; d_.strength = 0.035
+            bpy.ops.object.modifier_apply(modifier="d"); blobs.append(bl)
+        cp = join(blobs, "Canopy"); cp.data.materials.append(mt)
+        bpy.context.scene.cursor.location = (x, y, Z + 0.3); bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
         c["canopies"].append(cp)
     rng = np.random.default_rng(4); snow_m = pbr("Snow", (0.9, 0.9, 0.92), 0.7)
     bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=0.005, location=(0, 0, -5)); s0 = bpy.context.active_object; s0.data.materials.append(snow_m)
@@ -545,6 +554,20 @@ def _b_cutaway(c):
     c["key"] = spot((-2.0, -2.2, 3.0), (0, 0, 1.0), 900, 40, 0.5, radius=0.2)
     rim = spot((1.5, 2.5, 2.2), (0, 0, 1.0), 300, 40, 0.5, col=(0.8, 0.86, 1.0), radius=0.3)
     c["sky"] = box("Sky", (0, 3.2, 1.6), (8, 0.05, 4), emissive("SkyCard", (0.2, 0.25, 0.35), 0.15))
+
+
+def foliage_mat(name):
+    """Clump foliage: fine noise bump, colour varied per clump, a little translucency."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 400; nz.inputs['Detail'].default_value = 6
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.8; L.new(nz.outputs['Fac'], bp.inputs['Height']); L.new(bp.outputs['Normal'], p.inputs['Normal'])
+    p.inputs['Roughness'].default_value = 0.9
+    try:
+        p.inputs['Subsurface Weight'].default_value = 0.15
+    except Exception:
+        pass
+    return m
 
 
 def model_brick():
