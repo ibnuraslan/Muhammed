@@ -1,15 +1,5 @@
 {
- "frames": {
-  "123": {
-   "near": "Surgeon.short02",
-   "cm": 9.0
-  }
- },
+ "frames": {},
  "min_cm": 10.0,
- "bad_ranges": [
-  [
-   123,
-   123
-  ]
- ]
+ "bad_ranges": []
 }

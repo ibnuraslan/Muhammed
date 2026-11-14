@@ -27,20 +27,6 @@
     "clothes": 0,
     "other": 2
    }
-  },
-  "1369": {
-   "Patient": {
-    "self": 0,
-    "clothes": 0,
-    "other": 1
-   }
-  },
-  "1387": {
-   "Surgeon": {
-    "self": 0,
-    "clothes": 0,
-    "other": 2
-   }
   }
  },
  "step": 6,

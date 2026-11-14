@@ -12,6 +12,28 @@
 3. **End (1741–1770): no ear touch (director's simplify rule).** I made two attempts at the touch, and neither was clean. The old world-space keys swept his hand across his face at f1749, and keys placed from the ear put it at his throat. So his left hand stays relaxed out of the shot from 1715, and the last beat plays on his smile with the new ear in view. The story beat and its frames are unchanged.
 - **Clip-scan false hit at the ear site (1402–1416):** the patient's original ear is a shape-key stub, and its folded back faces faced inward, so a fingertip 7 cm outside the head counted as "inside". The stub is now sunk 2–3 mm under the scalp. It is covered by the dressing early on and by the new ear from 1404.
 
+- **Tray, after carving (471–535):** the old keys laid the left hand over the carved ear. It now stays beside the ear until the pinch at 536, so the ear is uncovered (the "hands lift away to reveal the ear" beat).
+- **Opening (118–132):** the camera now rounds the surgeon (it passed 9 cm from his hair). He still crosses the lens as a quick foreground wipe at about 120–128, at least 44 cm from the camera. QA marks f127 BACKHEAD for it.
+
+## Director's rules 1–4: watched the full preview (every 6th frame on contact sheets, 270×480; doubtful spots re-rendered at 540×960)
+1. **Hand/prop actions are clean, or the risk is removed.** Tray hand: placed. End ear touch: removed after two failed tries. The ear's trip to the head: kept off-frame, with the camera tight on the face.
+2. **No arm crosses another person's body or face on screen.** The closest frame is 1405: his glove holds the forceps at the ear site, beside the patient's jaw line, as in v009e.
+3. **No camera move passes through or brushes a body, arm, cap or wall.** cam_clear at 10 cm: 0 frames. At 25 cm, the only hits are the macro holds on the forearm (693–1159, 11–21 cm from the arm or glove, holding, not passing) and nothing else.
+4. **Every hand on screen is connected to its arm**, or the arm goes off the frame edge (the macros, the forceps entering at 1364–1396).
+
+## Checks (v009f, packed)
+- clip_scan (40c131b): 0.
+- qa (e7b25f7): CLAW, HOVER, FACEPRESS, INSIDE, CAMJUMP, ROLL and ATTACH are all 0.
+  - BACKHEAD 2: f1, f127 (the wipe above).
+  - EMPTY 3: 625–637.
+  - FILL 5: hair at the frame edge at 85, 121, 649–661.
+  - PROPMOVE 131.
+- cam_clear: 0.
+- limb_check (the director's, 9a0a692), step 2: ARMBODY 759, PROPHEAD 184.
+  - Every ARMBODY line for 1300–1350 is in `armbody_1300-1350.txt`: 58 lines, all "inside own torso", 2–5 points each.
+  - Re-run with point labels: all of these are upperarm01 points from the shoulder joint to mid-shaft (4–8 cm under the clavicle/shoulder-weighted skin where the arm meets the body), plus the patient's right upperarm02 head. There are no forearm or wrist points, and none inside another person.
+- limb_scan: residual ranges as before (shoulder-root hits).
+
 ---
 
 # EarInArm v009e
