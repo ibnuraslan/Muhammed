@@ -1143,11 +1143,30 @@ def arms_relaxed(h, swing=0.0, phase=0.0):
     fingers_curl(h, 25)
 
 
+TIME = None          # seconds into the current move; set by the sets' move decorators, drives idle()
+
+
+def idle(h, sec, amount=1.0):
+    """Living stillness for a standing figure: slow weight shift from hip to hip, breathing in the chest,
+    a small drifting head turn. Per-person phase, so a group never moves in sync. Arms untouched (hand QA holds)."""
+    ph = (sum(map(ord, h.arm.name)) % 97) / 15.0
+    sway = math.sin(2 * math.pi * 0.11 * sec + ph) * amount
+    breathe = math.sin(2 * math.pi * 0.24 * sec + 1.3 * ph) * amount
+    drift = (math.sin(2 * math.pi * 0.07 * sec + 2.1 * ph) + 0.4 * math.sin(2 * math.pi * 0.19 * sec + ph)) * amount
+    rotl(h, "spine05", (0, 1, 0), 1.6 * sway); rotl(h, "spine03", (0, 1, 0), -1.1 * sway)
+    rotl(h, "spine03", (1, 0, 0), 0.7 * breathe)
+    rotl(h, "neck01", (0, 0, 1), 2.5 * drift); rotl(h, "head", (0, 0, 1), 2.0 * drift)
+    rotl(h, "head", (1, 0, 0), 1.2 * math.sin(2 * math.pi * 0.09 * sec + ph))
+
+
 def stand_at(h, loc, face_z, z=None):
-    """Standing, arms relaxed; face_z rotation (0 faces -Y). z = floor height (default loc[2])."""
+    """Standing, arms relaxed; face_z rotation (0 faces -Y). z = floor height (default loc[2]).
+    While a move is playing (TIME set) the figure idles: weight shift, breathing, head drift."""
     reset_pose(h); h.arm.location = (loc[0], loc[1], 0); pose_walk(h, 0.0, stride=0.0, arm_swing=0.0)
     h.arm.rotation_euler = (0, 0, face_z); h.arm.location = (loc[0], loc[1], 0); bpy.context.view_layer.update()
     arms_relaxed(h)
+    if TIME is not None:
+        idle(h, TIME)
     ground_to(h, loc[2] if z is None else z)
 
 

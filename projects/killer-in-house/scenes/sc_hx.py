@@ -21,7 +21,10 @@ WALK_Y = ROAD_Y + 5.0          # near sidewalk (house side)
 
 def move(name, variant, dur, cast=(), dof=None, title=None, extra=()):
     def deco(fn):
-        cam, anim = fn()
+        cam, anim0 = fn()
+        def anim(c, t, _a=anim0):
+            H.TIME = t * dur          # idle motion clock for standing figures (house.idle)
+            return _a(c, t)
         DUR[name] = dur; VARIANT_FOR[name] = (variant, tuple(cast), tuple(extra), name)
         MOVES[name] = dict(kind="anim", dof=dof, far=60, cam=cam, anim=anim, **({"title": title} if title else {}))
         return fn

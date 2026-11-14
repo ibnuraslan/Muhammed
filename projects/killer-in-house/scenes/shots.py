@@ -1,4 +1,5 @@
-"""The film's shot list, per chapter, in order: (set, move, still t, label). Drives preview sheets, bakes and masters.
+"""STORYBOARD v2 (Nov 14): changed shots are tagged [v2: ...]; see STORYBOARD_v2.md for old idea -> new idea.
+The film's shot list, per chapter, in order: (set, move, still t, label). Drives preview sheets, bakes and masters.
 Seconds come from each set's DUR until the voiceovers arrive (then from edit/align word times)."""
 
 CHAPTERS = {
@@ -36,8 +37,8 @@ CH1 = [
     ("hint", "aftermath_push", 0.5, "7A  ...in a front bedroom"),
     ("hint", "tool_floor", 0.5, "7B  (the iron stove tool)"),
     ("hint", "kitchen_latch", 0.5, "8A  no obvious sign of forced entry"),
-    ("hint", "kitchen_glide", 0.5, "8B  an iron tool used to shake ash loose in a stove"),
-    ("hint", "flash_hall", 0.3, "9A  signs of a struggle in more than one room"),
+    ("evid", "tool_black", 0.6, "8B  an iron tool used to shake ash loose in a stove   [v2: exhibit on black]"),
+    ("evid", "board", 0.9, "9A  LONG TAKE · a struggle in more than one room... search... Philip's past   [v2: the board, ends on the empty SUSPECT card]"),
     ("hint", "tilt_ceiling", 0.8, "9B  They still have no one they can charge"),
     ("hint", "helen_return", 0.6, "10A  Helen goes back to the house"),
     ("hint", "tea_table", 0.5, "10B  A friend moves in to help her"),
@@ -69,9 +70,9 @@ CH2 = [
     ("hint", "gaunt_bed", 0.5, "7A  He's severely thin"),
     ("hint", "gaunt_orbit", 0.5, "7B  long hair, clothes in tatters"),
     ("station", "interview", 0.5, "8A  He gives police a name"),
-    ("station", "photo", 0.4, "8B  the captain identifies Theodore Coneys"),
+    ("evid", "file_card", 0.9, "8B  the captain identifies Theodore Coneys   [v2: faceless print + typed name]"),
     ("hint", "officer_hatch", 0.7, "9A  Fred Zarnow up through the opening"),
-    ("hint", "attic_torch", 0.5, "9B  about eight inches by fifteen"),
+    ("hint", "hatch_measure", 0.9, "9B  about eight inches by fifteen   [v2: chalked 8 in / 15 in on the real hatch]"),
     ("hint", "attic_track", 0.5, "10A  the roof slopes down on both sides"),
     ("hint", "attic_finds", 0.6, "10B  a hot plate and a radio... an outlet"),
     ("hint", "recoil", 0.6, "11A  keeping his waste up there"),
@@ -79,7 +80,7 @@ CH2 = [
     ("hint", "eyes_hatch", 0.8, "12A  where the man went"),
     ("station", "talk", 0.5, "12B  how long he's been using it"),
     ("hint", "hotplate_glow", 0.5, "13A  moved in about five weeks"),
-    ("hint", "joist_drift", 0.4, "13B  before Philip was killed"),
+    ("evid", "calendar", 0.8, "13B  before Philip was killed   [v2: Oct 17 flips back, five weeks ticked off]"),
 ]
 
 CH3 = [
@@ -94,22 +95,18 @@ CH3 = [
     ("hint", "icebox_crouch", 0.5, "5A  at the icebox, tearing at a roast"),
     ("hint", "philip_doorway", 0.7, "5B  what Philip catches him doing"),
     ("hint", "walk_kitchen", 0.6, "6A  walk them through the attack"),
-    ("hint", "walk_track", 0.6, "6B  kitchen, front door, front bedroom"),
+    ("evid", "plan_route", 0.6, "6B  kitchen, front door, front bedroom   [v2: red pencil route on the floor plan]"),
     ("hint", "doorway_stop", 0.6, "7A  that's where the struggle ends"),
-    ("hint", "door_closing", 0.6, "7B  the heavy iron stove tool"),
+    ("evid", "tool_swing", 0.3, "7B  the heavy iron stove tool   [v2: callback, the exhibit under a swinging bulb]"),
     ("hint", "hatch_shut", 0.6, "8A  climbed back into the crawl space"),
     ("hint", "search_below", 0.7, "8B  the investigation begins below him"),
     ("hint", "dust_sheets", 0.6, "9A  Helen comes home, then moves away"),
-    ("hx", "seasons_push", 0.5, "9B  Coneys stays"),
-    ("hint", "jar_track", 0.8, "10A  jars of preserves"),
-    ("hint", "candle_steps", 0.4, "10B  food from the cellar"),
-    ("hx", "attic_vent", 0.5, "11A  through the winter"),
-    ("hx", "summer_still", 0.5, "11B  nine months since the killing"),
+    ("evid", "cutaway", 0.3, "9B-11B  HERO LONG TAKE · Coneys stays... preserves... winter into summer... nine months   [v2: cut-away house model, seasons pass, day counter]"),
     ("press42", "presses", 0.5, "12A  Newspapers call him"),
     ("hx", "newsboy", 0.5, "12B  the Denver Spider Man"),
     ("court42", "prosecutor", 0.5, "13A  the death penalty"),
     ("court42", "stand", 0.5, "13B  Coneys takes the stand"),
-    ("court42", "jury_in", 0.8, "14A  less than two hours... guilty"),
+    ("evid", "clock", 0.8, "14A  less than two hours... guilty   [v2: the courtroom clock]"),
     ("court42", "gavel", 0.5, "14B  life in prison"),
     ("pen", "gate", 0.6, "15A  the state penitentiary in Cañon City"),
     ("pen", "wall", 0.5, "15B  where he dies in 1967"),

@@ -20,7 +20,10 @@ _CAST = {}
 def move(name, variant, dur, cast=(), dof=None, title=None, rooms=None, haze=None):
     """Register a move: decorator for (cam_fn, anim_fn) pairs defined below."""
     def deco(fn):
-        cam, anim = fn()
+        cam, anim0 = fn()
+        def anim(c, t, _a=anim0):
+            H.TIME = t * dur          # idle motion clock for standing figures (house.idle)
+            return _a(c, t)
         DUR[name] = dur; VARIANT_FOR[name] = (variant, tuple(cast), rooms, haze, name)
         MOVES[name] = dict(kind="anim", dof=dof, far=30, cam=cam, anim=anim, **({"title": title} if title else {}))
         return fn
@@ -981,6 +984,59 @@ def _():
         e = ease(t)
         return (Vector((-1.25, -1.1, F2 + 0.35)).lerp(Vector((-1.25, -1.0, F2 + 0.5)), e), Vector((HATCH[0], HATCH[1], C2)), 20, (0, 1, 0))
     return cam, anim
+
+
+@move("hatch_measure", "night", 5.0, rooms=("upstairs", "attic"), dof=4.0, haze=((-1.6, -1.2, F2), (-0.6, -0.2, C2)))
+def _():
+    """STORYBOARD v2, 2-9B: the real opening, measured. A torch finds the hatch; chalk lines are drawn on the ceiling
+    plaster along both edges and the sizes chalked beside them: 8 in, 15 in."""
+    from house import HATCH_W, HATCH_L
+    hx, hy = HATCH; z = C2 - 0.004
+    def anim(c, t):
+        sec = t * DUR["hatch_measure"]
+        if "hm" not in c:
+            chalk = pbr("Chalk", (0.86, 0.84, 0.78), 0.95)
+            A = [((hx - HATCH_W / 2, hy + HATCH_L / 2 + 0.05, z), (hx + HATCH_W / 2, hy + HATCH_L / 2 + 0.05, z), 'x'),
+                 ((hx + HATCH_W / 2 + 0.05, hy - HATCH_L / 2, z), (hx + HATCH_W / 2 + 0.05, hy + HATCH_L / 2, z), 'y')]
+            lines = []
+            for a, b, ax in A:
+                a = Vector(a); b = Vector(b); L_ = (b - a).length
+                piv = bpy.data.objects.new("ChalkPiv", None); bpy.context.collection.objects.link(piv); piv.location = a
+                ln = box("ChalkLine", ((L_ / 2, 0, 0) if ax == 'x' else (0, L_ / 2, 0)), ((L_, 0.011, 0.002) if ax == 'x' else (0.011, L_, 0.002)), chalk)
+                ln.parent = piv
+                ticks = [box("ChalkTick", p_, ((0.008, 0.05, 0.002) if ax == 'x' else (0.05, 0.008, 0.002)), chalk) for p_ in (a, b)]
+                lines.append((piv, ax, ticks))
+            # chalked sizes, readable from below (camera up = +Y)
+            lab = [text_obj("Chalk8", "8 in", (hx, hy + HATCH_L / 2 + 0.09, z - 0.001), 0.065, chalk, rot=(math.pi, 0, math.pi), extrude=0.0, font_path="/usr/share/fonts/truetype/freefont/FreeSerifItalic.ttf"),
+                   text_obj("Chalk15", "15 in", (hx + HATCH_W / 2 + 0.17, hy, z - 0.001), 0.065, chalk, rot=(math.pi, 0, math.pi), extrude=0.0, font_path="/usr/share/fonts/truetype/freefont/FreeSerifItalic.ttf")]
+            c["hm"] = (lines, lab)
+            c["hm_torch"] = H.flashlight("MeasureTorch"); c["hm_torch"].data.energy = 110
+            c["dust"] = H.leaf_cloud(30, HATCH, (0.3, 0.4), C2 - 0.05, col=(0.75, 0.7, 0.6), seed=9)
+            for o in c["dust"]:
+                o.scale = (0.008, 0.008, 1)
+        lines, lab = c["hm"]
+        c["closet_door"].rotation_euler = (0, 0, math.radians(-105))
+        c["hatch"].location = c["hatch_home"] + Vector((0.34, 0, 0.02))          # already slid aside: the dark slot
+        for k, (piv, ax, ticks) in enumerate(lines):
+            g = smooth01((sec - 1.0 - 1.4 * k) / 1.1)
+            piv.scale = (max(g, 0.001), 1, 1) if ax == 'x' else (1, max(g, 0.001), 1)
+            for tk in ticks:
+                tk.scale = (1, 1, 1) if g > 0.02 else (0.001, 0.001, 0.001)
+            sc = smooth01((sec - 2.0 - 1.4 * k) / 0.5)
+            lab[k].scale = (max(sc, 0.001),) * 3
+        # the torch beam searches, then settles on the opening
+        a = 2.2 * math.exp(-0.45 * sec)
+        tgt = Vector((hx + 0.35 * a * math.sin(1.6 * sec), hy + 0.25 * a * math.cos(1.3 * sec), C2))
+        H.aim_obj(c["hm_torch"], Vector((-1.3, -1.55, F2 + 1.45)), tgt)
+        H.fall_leaves(c["dust"], sec * 0.2, ground=F2, drift=(0.01, 0.0))
+    def cam(c, t):
+        e = ease(t)
+        return (Vector((-1.2, -1.1, F2 + 1.25)).lerp(Vector((-1.12, -0.98, F2 + 1.5)), e), Vector((hx + 0.05, hy - 0.1, C2)), 20, (0, 1, 0))
+    return cam, anim
+
+
+def smooth01(x):
+    return ease(min(1.0, max(0.0, x)))
 
 
 @move("closet_crack", "night", 4.5, cast=("y:thin",), rooms=("upstairs", "attic"))
