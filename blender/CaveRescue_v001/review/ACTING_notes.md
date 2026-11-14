@@ -125,3 +125,24 @@ Seen and kept, with reasons:
 - The coach still wades with his elbows bent out (446–526): bent, not straight, balancing in the flood water.
 - The medic's injecting arm reaches down past the boy's knees to his upper arm (2201–2296). The arm is outside the boy's body (clip_scan 0), but it crosses in front of him on screen.
 - 2391–2401: the divers' heads bow over the boy while the mask straps go on (the same in the approved v006d).
+- 2391–2401: the medic holds his bowed injection kneel while DiverB pulls the straps behind the boy's head, so the divers' heads are close over the boy for about 0.2 s.
+
+### Checks on v007
+The checks ran on the file before `19_v007_bubbles.py`. That pass only changes when the bubbles are shown.
+- **clip_scan (40c131b):** 0 bad ranges.
+- **qa_check (e7b25f7):**
+  - ROLL 0.
+  - CAMJUMP 4: the covered rock wipes at 583, 1009, 2566 and 2727.
+  - ATTACH 6: the boy's full-face mask, visor and regulator at 2329 and 2353, still in DiverB's hands mid-fit.
+  - FILL 3: the wipe entries and the water-line crossing, as in v006.
+  - PROPMOVE: only the bubbles and the cutaway route dots. The syringe flag is gone.
+- **limb_check (e0c925f, upperarm01 points 0–2 skipped):** `limb_v007.json`, run with `scripts/limb_check_noshoulder.py`, LESSONS 4.
+  - PROPHEAD 83: the regulator bubbles rising through heads at 2371–2407. Fixed by `19_v007_bubbles.py`, which shows the bubbles only underwater (2425–2580).
+  - ARMBACK 130: the back stretcher carrier holding the poles behind him (2927–3089), a natural carry pose. Also the towing diver's trailing left arm (2431–2525).
+  - ARMBODY 612: mostly upper-arm axis points of DiverB against his own torso while he kneels and carries (2209–3089), plus a few frames on the coach and the runners. clip_scan (hand and finger skin) is 0, and no arm crossing is visible on the preview pages. Not restaged in this round.
+- **body_prop_cross:** not run in this round.
+
+### Preview
+- `review/preview.mp4`: every 5th frame at real speed, 618 frames.
+- `review/preview_pages_v007/`: 13 contact pages.
+- Base frames come from the first v007 build. Every range changed afterwards was re-rendered from the file with that change: 281–586, 1691–1741, 2146–2296, 2341–2561, 506–526, 2146–2416, 2511–2561 and 2371–2421, the last from the delivered file.

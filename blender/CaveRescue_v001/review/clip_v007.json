@@ -1,0 +1,85 @@
+{
+ "frames": {
+  "373": {
+   "Boy2": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "379": {
+   "Boy1": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "385": {
+   "Boy4": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "433": {
+   "Boy1": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "481": {
+   "Boy1": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "493": {
+   "Boy2": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "541": {
+   "Boy4": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2191": {
+   "DiverA": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2203": {
+   "DiverA": {
+    "self": 20,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2299": {
+   "DiverA": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2443": {
+   "DiverB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}
