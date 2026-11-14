@@ -45,7 +45,14 @@ def build(variant=None):
     stage()
     if variant == "macro":
         # a burlap seam, a row of staples, a magnifier sliding over one of them
-        hes = MC.burlap_material()
+        hes = MC.burlap_material().copy(); hes.name = "BurlapMacro"          # same cloth, threads at macro scale (~2.5 mm)
+        for n in hes.node_tree.nodes:
+            if n.type == 'TEX_WAVE':
+                n.inputs['Scale'].default_value = 320
+            elif n.type == 'TEX_NOISE':
+                n.inputs['Scale'].default_value = 24
+            elif n.type == 'BUMP':
+                n.inputs['Distance'].default_value = 0.0006
         box("Burlap", (0, 0, 0.0), (0.4, 0.3, 0.01), hes)
         steel = pbr("StapleSteel", (0.62, 0.62, 0.64), 0.28, 1.0)
         # the engraved code: fine bumps along the staple crown (a coded line of ticks)
@@ -64,9 +71,9 @@ def build(variant=None):
         c["staples"] = []
         for k in range(5):
             x = -0.12 + k * 0.06
-            crown = box(f"StapleCrown{k}", (x, 0.0, 0.0065), (0.012, 0.0014, 0.0008), eng if k == 2 else steel)
-            for dx in (-0.006, 0.006):
-                box(f"StapleLeg{k}", (x + dx, 0.0, 0.004), (0.0008, 0.0014, 0.005), steel)
+            crown = box(f"StapleCrown{k}", (x, 0.0, 0.0056), (0.012, 0.0014, 0.0008), eng if k == 2 else steel)   # pressed down into the weave
+            for dx in (-0.0056, 0.0056):
+                box(f"StapleLeg{k}", (x + dx, 0.0, 0.0035), (0.0008, 0.0014, 0.0042), steel)
             c["staples"].append(crown)
         # magnifier: a glass disc in a dark ring, held just above the seam
         lens = bpy.data.materials.new("Lens"); lens.use_nodes = True
@@ -82,8 +89,8 @@ def build(variant=None):
         c["mag"] = rig
         for o in (g, ring, handle):
             o.hide_render = True                    # the lens read as a white blur in frame: the macro alone carries it
-        spot((0.05, -0.08, 0.5), (0, 0, 0), 60, size=0.3)
-        spot((-0.3, 0.25, 0.2), (0, 0, 0), 6, size=0.4, color=(0.8, 0.85, 1.0))
+        spot((0.12, -0.1, 0.35), (0, 0, 0), 2.5, size=0.15)                              # low raking key: the marks catch it
+        spot((-0.3, 0.25, 0.2), (0, 0, 0), 1.2, size=0.4, color=(0.8, 0.85, 1.0))
     else:
         # the stage: copier, terminal and cipher machine, each in its own pool of light along a line
         c["copier"] = MC.copier("InsCopier", (-1.6, 0.0, 0.0), 0.35)
@@ -124,13 +131,13 @@ def cam_cipher(c, t):
 
 def cam_staple(c, t):
     e = ease(t)
-    return (Vector((0.012, -0.075 + 0.01 * e, 0.06 - 0.01 * e)), Vector((0.0, 0.0, 0.0065)), 90)
+    return (Vector((0.012, -0.075 + 0.01 * e, 0.06 - 0.01 * e)), Vector((0.0, 0.0, 0.0056)), 90)
 
 
 MOVES = {
     "copier": dict(kind="anim", dof=4.0, cam=cam_copier, focus=lambda c, t: Vector((-1.55 + 1.55 * ease(t), 0.0, 0.55)), anim=anim("copier")),
     "cipher": dict(kind="anim", dof=4.0, cam=cam_cipher, focus=lambda c, t: Vector((1.6, 0.0, 0.32)), anim=anim("cipher")),
-    "staple": dict(kind="anim", dof=8.0, cam=cam_staple, focus=lambda c, t: Vector((0.0, 0.0, 0.0065)), anim=anim("staple")),
+    "staple": dict(kind="anim", dof=8.0, cam=cam_staple, focus=lambda c, t: Vector((0.0, 0.0, 0.0056)), anim=anim("staple")),
 }
 for k in MOVES:
     MOVES[k]["dur"] = DUR[k]

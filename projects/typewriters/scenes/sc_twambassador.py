@@ -285,20 +285,24 @@ def animate(c, sec, shot):
         fingers_curl(amb, 45, thumb=20)
         amb.rot("head", (1, 0, 0), 16)
         aide = c["aide"]; fo = c["folder"]
-        twp.stand(aide, (d.x + 0.95, d.y - 0.35, 0), math.radians(135) if shot == "folder" else math.radians(120))
+        twp.hide(twp.person_objs(aide), shot == "sign")                    # nobody between the lens and the desk
+        if shot == "folder":                                               # stands at the case, facing it (unhidden first:
+                                                                           # a hidden rig is not evaluated, so IK would read stale bones)
+            cl0 = c["case"].location
+            twp.stand(aide, (cl0.x + 0.27, cl0.y - 0.21, 0), math.atan2(-0.27, -0.21))
+        else:
+            twp.stand(aide, (d.x + 0.95, d.y - 0.35, 0), math.radians(120))
         if shot == "folder":
             k = ease(min(1.0, max(0.0, (sec - 0.6) / 2.4)))
             cl = c["case"].location
             start = cl + Vector((0.05, -0.42, 0.11)); end = cl + Vector((0.0, -0.01, 0.1))
             fo.location = start.lerp(end, k); fo.rotation_euler = (0, 0, math.radians(4 * (1 - k)))      # flat, label up, sliding in
             c["case_lid"].rotation_euler = (math.radians(-100 + 92 * ease(max(0.0, (sec - 3.4) / 1.0))), 0, 0)
-            reach(aide, "R", fo.location + Vector((0.08, -0.08, 0.1)), Vector((0.5, -0.4, -0.7)), Vector((-0.6, 0.6, -0.4)))
-            reach(aide, "L", fo.location + Vector((-0.1, -0.12, 0.05)), Vector((-0.5, -0.4, -0.7)), Vector((0.6, 0.6, -0.4)))
+            twp.work(aide, {"R": fo.location + Vector((0.09, -0.07, 0.03)), "L": fo.location + Vector((-0.09, -0.1, 0.03))}, head=24)
         else:
             fo.location = aide.bone_head("spine03") + Vector((-0.1, -0.2, -0.15)); fo.rotation_euler = (math.radians(85), 0, math.radians(135))
             reach(aide, "L", fo.location + Vector((0.05, 0.1, 0.12)), Vector((-0.5, 0.4, -0.7)))
         fingers_curl(aide, 45, thumb=20)
-        twp.hide(twp.person_objs(aide), shot == "sign")                    # nobody between the lens and the desk
         twp.hide(twp.person_objs(amb), shot == "folder")
         bpy.context.view_layer.update()
         return
@@ -367,7 +371,7 @@ def cam_sign(c, t):
 def cam_folder(c, t):
     e = ease(t); d = OVAL_DESK
     cl = c["case"].location
-    return (Vector((-1.75, 0.55, 1.5)).lerp(Vector((-1.6, 0.68, 1.47)), e), Vector((-0.55, 1.85, 1.08)), 35)     # medium: the aide, his arms and the case
+    return (Vector((-2.6, 0.95, 1.65)).lerp(Vector((-2.45, 1.05, 1.62)), e), Vector((-0.65, 1.8, 1.27)), 30)     # medium: the aide, his arms and the case
 
 
 def cam_talks_wide(c, t):
