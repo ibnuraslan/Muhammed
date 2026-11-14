@@ -43,6 +43,11 @@ MOODS = {
                      sun=1.4, haze=(0.5, 0.6, 0.82), exposure=2.0,
                      horizon=(0.17, 0.16, 0.22), zenith=(0.03, 0.055, 0.12), ground=(0.025, 0.027, 0.035),
                      cine=dict(contrast=1.15, sat=0.9, black=(0.0004, 0.0002, 0.0), warm=(0.97, 1.0, 1.07), lift=(0.992, 1.0, 1.014))),
+    # dusk in real colours (no blue cast): the person rejects teal/blue nights; mood from darkness and contrast only
+    "dusk_real": dict(key=(1.0, 0.66, 0.46), gain=1.0, sky=2.0, tint=(1.0, 1.0, 1.0), elev=2.5, angle=2.0,
+                     sun=1.4, haze=(0.70, 0.69, 0.68), exposure=2.0,
+                     horizon=(0.19, 0.175, 0.17), zenith=(0.05, 0.052, 0.058), ground=(0.028, 0.027, 0.026),
+                     cine=dict(contrast=1.2, sat=0.92, black=(0.0003, 0.0002, 0.0001), warm=(1.01, 1.0, 0.99), lift=(1.0, 1.0, 1.0))),
     "low_sun":  dict(key=(1.0, 0.76, 0.56), gain=1.35, sky=0.14, tint=(0.85, 0.88, 0.95), elev=7, angle=1.2,
                      sun=4.2, haze=(1.0, 0.80, 0.62), exposure=-0.6),
 }
@@ -329,7 +334,7 @@ def forest(scene=None, mood="mist", azim=160, elev=None, area=((0, 0), (80, 80))
     sky(mood, azim, elev)
     k = sun_key(mood, azim, elev, sun_energy)
     (cx, cy), (sx, sy) = area
-    dens = density if density is not None else {"mist": 0.010, "dusk": 0.007}.get(mood, 0.006)
+    dens = density if density is not None else {"mist": 0.010, "dusk": 0.007, "dusk_real": 0.007}.get(mood, 0.006)
     hz = haze((cx, cy, canopy / 2), (sx, sy, canopy), mood, dens)
     darken_surfaces(cap=0.25, tex_scale=darken, objects=[o for o in bpy.data.objects if o.type == 'MESH'])  # incl. instanced
     s.view_settings.exposure = MOODS[mood]["exposure"] if exposure is None else exposure

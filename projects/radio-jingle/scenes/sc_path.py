@@ -318,7 +318,7 @@ def lighting(c):
         rj.sky("bluehour")
     elif L == "night":
         rj.sky("night")
-        mo = bpy.data.lights.new("Moon", 'SUN'); mo.energy = 0.035; mo.color = (0.55, 0.65, 1.0); mo.angle = math.radians(1)
+        mo = bpy.data.lights.new("Moon", 'SUN'); mo.energy = 0.035; mo.color = (0.88, 0.89, 0.93); mo.angle = math.radians(1)
         o = bpy.data.objects.new("Moon", mo); bpy.context.collection.objects.link(o); o.rotation_euler = (math.radians(55), 0, math.radians(200))
     elif L == "mist":
         rj.sky("mist", rot=0)
@@ -972,7 +972,7 @@ def build(variant=None):                      # noqa: F811
             if o.type == 'LIGHT' and o.data.type == 'SPOT':
                 o.data.energy *= 2.0
         if light == "night":                # a low cool moon fill skimming the scene
-            ml = bpy.data.lights.new("MoonFill", 'SUN'); ml.energy = 0.08; ml.color = (0.55, 0.65, 1.0); ml.angle = math.radians(3)
+            ml = bpy.data.lights.new("MoonFill", 'SUN'); ml.energy = 0.08; ml.color = (0.88, 0.89, 0.93); ml.angle = math.radians(3)
             mo = bpy.data.objects.new("MoonFill", ml); bpy.context.collection.objects.link(mo)
             mo.rotation_euler = (math.radians(62), 0, math.radians(150))
     return c

@@ -329,11 +329,11 @@ def lighting(c):
         sun(5, -62, 5.0, (1.0, 0.5, 0.22), 1.5)
     elif L == "dusk":
         rj.sky("dusk")
-        b = area_light((0.0, -6.0, 1.6), (0, 0, 0), 1.6, 90, (0.45, 0.55, 0.95)); point_at(b, (0.4, -1.4, 1.2)); b.visible_camera = False
-        b2 = area_light((-9, 0, 1.6), (0, 0, 0), 3.0, 120, (0.45, 0.55, 0.95)); point_at(b2, (-4, 1.5, 0.5)); b2.visible_camera = False
+        b = area_light((0.0, -6.0, 1.6), (0, 0, 0), 1.6, 90, (0.80, 0.82, 0.88)); point_at(b, (0.4, -1.4, 1.2)); b.visible_camera = False
+        b2 = area_light((-9, 0, 1.6), (0, 0, 0), 3.0, 120, (0.80, 0.82, 0.88)); point_at(b2, (-4, 1.5, 0.5)); b2.visible_camera = False
     else:                                            # night: practical lamps only, a little moonlight outside
         rj.sky("night")
-        mo = area_light((-10, 4, 6), (0, 0, 0), 6.0, 60, (0.4, 0.5, 0.9)); point_at(mo, (-4, 0, 0)); mo.visible_camera = False
+        mo = area_light((-10, 4, 6), (0, 0, 0), 6.0, 60, (0.80, 0.82, 0.88)); point_at(mo, (-4, 0, 0)); mo.visible_camera = False
     if lamps_on or L == "night":
         st.inputs['Emission Strength'].default_value = 0.35         # the shade glows as fabric, never pure white
         hl = bpy.data.lights.new("HallLampL", 'POINT'); hl.energy = 45; hl.color = (1.0, 0.62, 0.32); hl.shadow_soft_size = 0.06
@@ -353,7 +353,7 @@ def lighting(c):
         b1 = area_light(c["hall_lamp"].location + Vector((-0.5, 0, 1.6)), (0, 0, 0), 1.2, 22, (1.0, 0.66, 0.4)); b1.visible_camera = False
         b2 = area_light(c["piano_lamp"].location + Vector((0, -1.2, 1.1)), (0, 0, 0), 1.4, 18, (1.0, 0.66, 0.4)); b2.visible_camera = False
         # cool moonlight through the front door glass and the hall window, rim on the figures
-        m1 = area_light((0.2, -5.2, 1.8), (0, 0, 0), 1.0, 60, (0.45, 0.55, 0.95)); point_at(m1, (0.3, -1.4, 1.2)); m1.visible_camera = False
+        m1 = area_light((0.2, -5.2, 1.8), (0, 0, 0), 1.0, 60, (0.80, 0.82, 0.88)); point_at(m1, (0.3, -1.4, 1.2)); m1.visible_camera = False
         # the kitchen beyond: a faint warm spill through the doorway
         ks.inputs['Emission Strength'].default_value = 1.2
         kl = bpy.data.lights.new("KitL", 'POINT'); kl.energy = 25; kl.color = (1.0, 0.6, 0.3)

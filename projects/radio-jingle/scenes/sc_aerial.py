@@ -322,13 +322,13 @@ def light(c, kind):
         rj.sky("bluehour")
     elif kind == "night":
         rj.sky("night")
-        mo = bpy.data.lights.new("Moon", 'SUN'); mo.energy = 0.06; mo.color = (0.55, 0.65, 1.0); mo.angle = math.radians(1)
+        mo = bpy.data.lights.new("Moon", 'SUN'); mo.energy = 0.06; mo.color = (0.88, 0.89, 0.93); mo.angle = math.radians(1)
         o = bpy.data.objects.new("Moon", mo); bpy.context.collection.objects.link(o); o.rotation_euler = (math.radians(50), 0, math.radians(200))
     else:
         rj.sky("mist", rot=0)
     # low ground mist over the wood and the shore (thicker in grey/blue hour)
     dens = {"golden": 0.00025, "bluehour": 0.0012, "night": 0.0030, "grey": 0.0015}[kind]
-    col = {"golden": (1.0, 0.86, 0.7), "bluehour": (0.7, 0.78, 0.95), "night": (0.6, 0.68, 0.9), "grey": (0.82, 0.84, 0.86)}[kind]
+    col = {"golden": (1.0, 0.86, 0.7), "bluehour": (0.82, 0.83, 0.85), "night": (0.78, 0.79, 0.82), "grey": (0.82, 0.84, 0.86)}[kind]
     haze((0, -60, 9), (620, 420, 18), density=dens, color=col, anis=0.5)
 
 

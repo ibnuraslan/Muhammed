@@ -154,9 +154,9 @@ def lighting(c):
     if L in ("grey", "dusk"):
         pass                                             # look.forest() (end of build) lights the woods
     else:
-        mo = bpy.data.lights.new("Moon", 'SUN'); mo.energy = 0.04; mo.color = (0.55, 0.65, 1.0); mo.angle = math.radians(1)
+        mo = bpy.data.lights.new("Moon", 'SUN'); mo.energy = 0.04; mo.color = (0.88, 0.89, 0.93); mo.angle = math.radians(1)
         o = bpy.data.objects.new("Moon", mo); bpy.context.collection.objects.link(o); o.rotation_euler = (math.radians(50), 0, math.radians(30))
-        haze((0, 0, 3.0), (70, 70, 6.0), density=0.008, color=(0.7, 0.75, 0.9), anis=0.5)
+        haze((0, 0, 3.0), (70, 70, 6.0), density=0.008, color=(0.80, 0.81, 0.84), anis=0.5)
 
 
 def probe_rod(name="Rod"):
@@ -442,8 +442,9 @@ def anim_lid(c, t, shot, dur):
 
 def cam_lid(c, t):
     e = ease(t)
-    a = BOX + Vector((-0.75, -0.75, 0.42)); b = BOX + Vector((0.75, -0.85, 0.45))
-    return (a.lerp(b, e), BOX + Vector((-0.1 + 0.2 * e, 0.0, 0.0)), 35)
+    # the lid laid bare in the dug-out square, two officers standing over it looking down (whole figures in frame)
+    a = BOX + Vector((3.9, -1.2, 1.75)); b = BOX + Vector((3.4, -0.7, 1.6))
+    return (a.lerp(b, e), BOX + Vector((-0.2, 0.0, 0.75)), 26)
 
 
 def cam_bolt(c, t):
@@ -652,7 +653,7 @@ G5 = "officer,officer2,officer3,officer4,officer5"
 VARIANT_FOR = {"line": "grey|" + G5, "tape": "grey|officer,officer2,officer3,officer4+tape", "rods": "grey|" + "officer,officer2,officer3,officer4+rods",
                "rods_dog": "grey|officer,officer2,officer3,officer4,officer5+rods+dog", "hit": "grey|officer,officer2,officer3,officer4+rods",
                "converge": "grey|officer,officer2,officer3,officer4,officer5+rods", "dig": "grey|officer,officer2,officer3+cover+tools",
-               "sweep": "grey|officer,officer2+cover+tools", "lid": "grey+lid", "bolt": "grey|officer,officer2,officer3+lid+crowbar",
+               "sweep": "grey|officer,officer2+cover+tools", "lid": "grey|officer2,officer3+lid", "bolt": "grey|officer,officer2,officer3+lid+crowbar",
                "lift": "grey|officer,officer2,officer3+open", "cap": "grey|officer,officer2,officer3+open",
                "spr_orbit": "dusk+spruces+lift", "spr_low": "dusk+spruces", "torch_far": "night+spruces+torch", "dark": "night+spruces+torch", "night_long": "night|stranger+spruces+torch",
                "pull": "grey+spruces"}
@@ -676,9 +677,9 @@ def build(variant=None):                      # noqa: F811
     if L == "grey":
         look.forest(mood="mist", azim=150, area=((0, 0), (70, 70)), canopy=16.0)
     elif L == "dusk":
-        look.forest(mood="dusk", azim=250, area=((0, 0), (70, 70)), canopy=16.0, exposure=2.8)
+        look.forest(mood="dusk_real", azim=250, area=((0, 0), (70, 70)), canopy=16.0, exposure=2.8)
     else:
-        look.forest(mood="dusk", azim=200, area=((0, 0), (70, 70)), canopy=16.0, exposure=1.2)
+        look.forest(mood="dusk_real", azim=200, area=((0, 0), (70, 70)), canopy=16.0, exposure=1.2)
     rj.sink_haze()
     if "+lift" in (variant or ""):                     # dusk that reads: the five spruces and the capped tube clear
         bpy.context.scene.view_settings.exposure += 1.0
