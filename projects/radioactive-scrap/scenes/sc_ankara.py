@@ -301,7 +301,7 @@ def c4_8a(c, t):           # he turns the supplier's page, puts a finger on the 
     c["focus"] = b.bone_head("head")
 
 
-def c4_8b(c, t):           # insert: his two fingertips on the same entry in both ledgers - "returned" against "not received"
+def c4_8b(c, t):           # over his shoulder: his fingers on the same entry in both ledgers - "returned" against "not received"
     sec = t * dur("ch4_8b"); a, b = investigators(c, sec)
     ledgers_close(c)
     c["leafB"].rotation_euler = (0, 0, 0); c["leafA"].rotation_euler = (0, -math.pi, 0)
@@ -317,7 +317,7 @@ def c4_8b(c, t):           # insert: his two fingertips on the same entry in bot
 
 SHOTS = {
     "ch2_12a": ("office", c2_12a, C(OFF + Vector((2.3, 1.9, 1.65)), OFF + Vector((2.1, 1.75, 1.65)), OFF + Vector((-0.2, -0.6, 1.1)), 26), 2.8),
-    "ch4_8b": ("office", c4_8b, C(REC + Vector((0.12, -0.95, 1.5)), REC + Vector((0.1, -0.82, 1.38)), REC + Vector((0.02, -0.38, 0.79)), 40), 4.0),
+    "ch4_8b": ("office", c4_8b, C(REC + Vector((1.05, -1.55, 1.62)), REC + Vector((0.92, -1.4, 1.56)), REC + Vector((0.05, -0.42, 0.86)), 35), 4.0),
     "ch2_12b": ("full", c2_12b, C(STO + Vector((0.6, -6.2, 1.6)), STO + Vector((0.8, 0.0, 1.4)), STO + Vector((1.0, 4.8, 0.7)), 30), 4.0),
     "ch4_9a": ("empty", c4_9a, C(STO + Vector((2.0, -3.2, 1.5)), STO + Vector((1.9, -2.6, 1.5)), STO + Vector((0.4, 2.4, 1.3)), 32), 4.0),
     "ch4_9b": ("empty", c4_9b, C(STO + Vector((2.3, 0.6, 0.9)), STO + Vector((2.2, 1.0, 0.95)), STO + Vector((1.0, 4.0, 1.8)), 28), None),
