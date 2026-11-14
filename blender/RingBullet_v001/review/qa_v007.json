@@ -1,0 +1,1000 @@
+{
+ "frames": {
+  "1": [
+   [
+    "BACKHEAD",
+    "Robber"
+   ]
+  ],
+  "31": [
+   [
+    "PROPMOVE",
+    "MuzzleSmoke moves 0.5 cm with no hand on it (nearest finger 18 cm)"
+   ]
+  ],
+  "37": [
+   [
+    "PROPMOVE",
+    "Bullet moves 3.9 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MuzzleSmoke moves 0.9 cm with no hand on it (nearest finger 20 cm)"
+   ]
+  ],
+  "43": [
+   [
+    "PROPMOVE",
+    "Bullet moves 6.8 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MuzzleSmoke moves 1.0 cm with no hand on it (nearest finger 20 cm)"
+   ]
+  ],
+  "49": [
+   [
+    "PROPMOVE",
+    "Bullet moves 6.1 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MuzzleSmoke moves 0.9 cm with no hand on it (nearest finger 19 cm)"
+   ]
+  ],
+  "55": [
+   [
+    "PROPMOVE",
+    "Bullet moves 3.5 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MuzzleSmoke moves 0.6 cm with no hand on it (nearest finger 19 cm)"
+   ]
+  ],
+  "61": [
+   [
+    "PROPMOVE",
+    "Bullet moves 3.0 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MuzzleSmoke moves 0.6 cm with no hand on it (nearest finger 19 cm)"
+   ]
+  ],
+  "67": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.6 cm with no hand on it (nearest finger 44 cm)"
+   ]
+  ],
+  "73": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.4 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "79": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.3 cm with no hand on it (nearest finger 48 cm)"
+   ]
+  ],
+  "85": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.2 cm with no hand on it (nearest finger 50 cm)"
+   ]
+  ],
+  "91": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.3 cm with no hand on it (nearest finger 52 cm)"
+   ]
+  ],
+  "97": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.4 cm with no hand on it (nearest finger 54 cm)"
+   ]
+  ],
+  "103": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.3 cm with no hand on it (nearest finger 57 cm)"
+   ]
+  ],
+  "109": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.3 cm with no hand on it (nearest finger 59 cm)"
+   ]
+  ],
+  "115": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.3 cm with no hand on it (nearest finger 61 cm)"
+   ]
+  ],
+  "121": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.3 cm with no hand on it (nearest finger 63 cm)"
+   ]
+  ],
+  "127": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.2 cm with no hand on it (nearest finger 65 cm)"
+   ]
+  ],
+  "133": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.2 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "139": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.2 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "145": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.1 cm with no hand on it (nearest finger 65 cm)"
+   ]
+  ],
+  "151": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.1 cm with no hand on it (nearest finger 64 cm)"
+   ]
+  ],
+  "157": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.1 cm with no hand on it (nearest finger 62 cm)"
+   ]
+  ],
+  "163": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.0 cm with no hand on it (nearest finger 61 cm)"
+   ]
+  ],
+  "169": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.0 cm with no hand on it (nearest finger 59 cm)"
+   ]
+  ],
+  "175": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.0 cm with no hand on it (nearest finger 57 cm)"
+   ]
+  ],
+  "181": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.9 cm with no hand on it (nearest finger 55 cm)"
+   ]
+  ],
+  "187": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.9 cm with no hand on it (nearest finger 53 cm)"
+   ]
+  ],
+  "193": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.9 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "199": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.9 cm with no hand on it (nearest finger 49 cm)"
+   ]
+  ],
+  "379": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.3 cm with no hand on it (nearest finger 27 cm)"
+   ]
+  ],
+  "385": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.3 cm with no hand on it (nearest finger 26 cm)"
+   ]
+  ],
+  "391": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.2 cm with no hand on it (nearest finger 25 cm)"
+   ]
+  ],
+  "397": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.2 cm with no hand on it (nearest finger 24 cm)"
+   ]
+  ],
+  "403": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.2 cm with no hand on it (nearest finger 23 cm)"
+   ]
+  ],
+  "409": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.1 cm with no hand on it (nearest finger 22 cm)"
+   ]
+  ],
+  "415": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.1 cm with no hand on it (nearest finger 21 cm)"
+   ]
+  ],
+  "421": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.2 cm with no hand on it (nearest finger 19 cm)"
+   ]
+  ],
+  "427": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.2 cm with no hand on it (nearest finger 18 cm)"
+   ]
+  ],
+  "433": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.2 cm with no hand on it (nearest finger 17 cm)"
+   ]
+  ],
+  "439": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.3 cm with no hand on it (nearest finger 16 cm)"
+   ]
+  ],
+  "445": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.3 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "451": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.3 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "457": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.2 cm with no hand on it (nearest finger 12 cm)"
+   ]
+  ],
+  "463": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.2 cm with no hand on it (nearest finger 11 cm)"
+   ]
+  ],
+  "469": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.2 cm with no hand on it (nearest finger 10 cm)"
+   ]
+  ],
+  "475": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.1 cm with no hand on it (nearest finger 9 cm)"
+   ]
+  ],
+  "481": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.1 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "487": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.0 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "493": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.0 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "499": [
+   [
+    "PROPMOVE",
+    "Bullet moves 0.9 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "505": [
+   [
+    "PROPMOVE",
+    "Bullet moves 0.8 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "511": [
+   [
+    "PROPMOVE",
+    "Bullet moves 0.7 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "517": [
+   [
+    "PROPMOVE",
+    "Bullet moves 0.6 cm with no hand on it (nearest finger 3 cm)"
+   ]
+  ],
+  "601": [
+   [
+    "PROPMOVE",
+    "Spark08 moves 0.5 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark21 moves 0.5 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "607": [
+   [
+    "PROPMOVE",
+    "Spark08 moves 0.5 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark21 moves 0.5 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "613": [
+   [
+    "PROPMOVE",
+    "Spark08 moves 0.5 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark21 moves 0.6 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "619": [
+   [
+    "PROPMOVE",
+    "Spark08 moves 0.5 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark21 moves 0.6 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "625": [
+   [
+    "PROPMOVE",
+    "Spark08 moves 0.5 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark21 moves 0.6 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "631": [
+   [
+    "PROPMOVE",
+    "Spark08 moves 0.6 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark21 moves 0.6 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "637": [
+   [
+    "PROPMOVE",
+    "Spark08 moves 0.6 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark15 moves 0.5 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark21 moves 0.6 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "643": [
+   [
+    "PROPMOVE",
+    "Spark08 moves 0.6 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark15 moves 0.5 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark21 moves 0.7 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "649": [
+   [
+    "PROPMOVE",
+    "Spark08 moves 0.6 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark21 moves 0.7 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "655": [
+   [
+    "PROPMOVE",
+    "Spark08 moves 0.6 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "661": [
+   [
+    "PROPMOVE",
+    "Spark08 moves 0.6 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "667": [
+   [
+    "PROPMOVE",
+    "Spark08 moves 0.6 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark23 moves 0.5 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark24 moves 0.5 cm with no hand on it (nearest finger 10 cm)"
+   ]
+  ],
+  "673": [
+   [
+    "PROPMOVE",
+    "Spark08 moves 0.7 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark23 moves 0.5 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "679": [
+   [
+    "PROPMOVE",
+    "Spark08 moves 0.7 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark19 moves 0.5 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "685": [
+   [
+    "PROPMOVE",
+    "Spark19 moves 0.5 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "709": [
+   [
+    "PROPMOVE",
+    "FragmentA moves 1.0 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "715": [
+   [
+    "PROPMOVE",
+    "FragmentA moves 1.0 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark36 moves 0.5 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "721": [
+   [
+    "PROPMOVE",
+    "FragmentA moves 1.0 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark36 moves 0.5 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "727": [
+   [
+    "PROPMOVE",
+    "FragmentA moves 1.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark30 moves 0.5 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark36 moves 0.6 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "733": [
+   [
+    "PROPMOVE",
+    "FragmentA moves 1.0 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark30 moves 0.5 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark36 moves 0.6 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "739": [
+   [
+    "PROPMOVE",
+    "Spark30 moves 0.5 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark36 moves 0.6 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "745": [
+   [
+    "PROPMOVE",
+    "Spark30 moves 0.6 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark36 moves 0.6 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "751": [
+   [
+    "PROPMOVE",
+    "Spark30 moves 0.6 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark36 moves 0.7 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "757": [
+   [
+    "PROPMOVE",
+    "Spark30 moves 0.6 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark36 moves 0.7 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "763": [
+   [
+    "PROPMOVE",
+    "Spark30 moves 0.6 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark36 moves 0.7 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "769": [
+   [
+    "PROPMOVE",
+    "Spark30 moves 0.7 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark39 moves 0.5 cm with no hand on it (nearest finger 9 cm)"
+   ]
+  ],
+  "775": [
+   [
+    "PROPMOVE",
+    "Spark30 moves 0.7 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark39 moves 0.6 cm with no hand on it (nearest finger 9 cm)"
+   ]
+  ],
+  "781": [
+   [
+    "PROPMOVE",
+    "Spark30 moves 0.8 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark39 moves 0.6 cm with no hand on it (nearest finger 10 cm)"
+   ]
+  ],
+  "787": [
+   [
+    "PROPMOVE",
+    "Spark30 moves 0.8 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark39 moves 0.7 cm with no hand on it (nearest finger 10 cm)"
+   ]
+  ],
+  "793": [
+   [
+    "PROPMOVE",
+    "Spark30 moves 0.8 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark39 moves 0.7 cm with no hand on it (nearest finger 10 cm)"
+   ]
+  ],
+  "799": [
+   [
+    "PROPMOVE",
+    "Spark39 moves 0.8 cm with no hand on it (nearest finger 11 cm)"
+   ]
+  ],
+  "805": [
+   [
+    "PROPMOVE",
+    "Spark32 moves 0.5 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "907": [
+   [
+    "PROPMOVE",
+    "FragmentA moves 12.7 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "925": [
+   [
+    "PROPMOVE",
+    "FragmentB moves 0.5 cm with no hand on it (nearest finger 10 cm)"
+   ]
+  ],
+  "931": [
+   [
+    "PROPMOVE",
+    "FragmentB moves 0.6 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "937": [
+   [
+    "PROPMOVE",
+    "FragmentB moves 0.7 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "943": [
+   [
+    "PROPMOVE",
+    "FragmentB moves 0.8 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "949": [
+   [
+    "PROPMOVE",
+    "FragmentB moves 1.2 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "955": [
+   [
+    "PROPMOVE",
+    "FragmentB moves 2.4 cm with no hand on it (nearest finger 9 cm)"
+   ]
+  ],
+  "961": [
+   [
+    "PROPMOVE",
+    "FragmentB moves 3.3 cm with no hand on it (nearest finger 11 cm)"
+   ]
+  ],
+  "967": [
+   [
+    "PROPMOVE",
+    "FragmentB moves 4.0 cm with no hand on it (nearest finger 14 cm)"
+   ]
+  ],
+  "973": [
+   [
+    "PROPMOVE",
+    "FragmentB moves 4.3 cm with no hand on it (nearest finger 17 cm)"
+   ]
+  ],
+  "979": [
+   [
+    "PROPMOVE",
+    "FragmentB moves 4.3 cm with no hand on it (nearest finger 21 cm)"
+   ]
+  ],
+  "985": [
+   [
+    "PROPMOVE",
+    "FragmentB moves 4.1 cm with no hand on it (nearest finger 24 cm)"
+   ]
+  ],
+  "991": [
+   [
+    "PROPMOVE",
+    "FragmentB moves 3.5 cm with no hand on it (nearest finger 28 cm)"
+   ]
+  ],
+  "997": [
+   [
+    "PROPMOVE",
+    "FragmentB moves 4.4 cm with no hand on it (nearest finger 29 cm)"
+   ]
+  ],
+  "1003": [
+   [
+    "PROPMOVE",
+    "FragmentB moves 2.2 cm with no hand on it (nearest finger 30 cm)"
+   ]
+  ],
+  "1009": [
+   [
+    "PROPMOVE",
+    "FragmentB moves 116.2 cm with no hand on it (nearest finger 131 cm)"
+   ]
+  ],
+  "1021": [
+   [
+    "PROPMOVE",
+    "WallChip00 moves 16.6 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip01 moves 13.5 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip03 moves 12.6 cm with no hand on it (nearest finger 148 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip04 moves 9.6 cm with no hand on it (nearest finger 154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip05 moves 9.0 cm with no hand on it (nearest finger 152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip06 moves 8.8 cm with no hand on it (nearest finger 156 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip07 moves 10.9 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip08 moves 20.7 cm with no hand on it (nearest finger 139 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip09 moves 15.8 cm with no hand on it (nearest finger 155 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip10 moves 14.2 cm with no hand on it (nearest finger 150 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip11 moves 15.5 cm with no hand on it (nearest finger 157 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip12 moves 11.6 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip13 moves 11.4 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallDustPuff moves 4.0 cm with no hand on it (nearest finger 146 cm)"
+   ]
+  ],
+  "1027": [
+   [
+    "PROPMOVE",
+    "WallChip00 moves 19.8 cm with no hand on it (nearest finger 134 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip01 moves 20.2 cm with no hand on it (nearest finger 143 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip03 moves 17.0 cm with no hand on it (nearest finger 137 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip04 moves 17.4 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip05 moves 16.2 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip06 moves 16.6 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip07 moves 18.9 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip08 moves 27.2 cm with no hand on it (nearest finger 124 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip09 moves 22.9 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip10 moves 18.4 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip12 moves 13.3 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip13 moves 17.3 cm with no hand on it (nearest finger 142 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallDustPuff moves 1.2 cm with no hand on it (nearest finger 143 cm)"
+   ]
+  ],
+  "1033": [
+   [
+    "PROPMOVE",
+    "WallChip01 moves 28.7 cm with no hand on it (nearest finger 137 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip03 moves 24.7 cm with no hand on it (nearest finger 125 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip04 moves 26.6 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip05 moves 25.2 cm with no hand on it (nearest finger 135 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip06 moves 25.8 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip07 moves 28.1 cm with no hand on it (nearest finger 157 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip12 moves 20.3 cm with no hand on it (nearest finger 135 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip13 moves 25.7 cm with no hand on it (nearest finger 133 cm)"
+   ]
+  ],
+  "1039": [
+   [
+    "PROPMOVE",
+    "WallChip01 moves 37.8 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip03 moves 33.5 cm with no hand on it (nearest finger 119 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip04 moves 36.1 cm with no hand on it (nearest finger 143 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip05 moves 34.6 cm with no hand on it (nearest finger 134 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip06 moves 35.3 cm with no hand on it (nearest finger 148 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip07 moves 37.6 cm with no hand on it (nearest finger 165 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip12 moves 28.9 cm with no hand on it (nearest finger 127 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip13 moves 34.8 cm with no hand on it (nearest finger 131 cm)"
+   ]
+  ],
+  "1045": [
+   [
+    "PROPMOVE",
+    "WallChip01 moves 47.2 cm with no hand on it (nearest finger 157 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip03 moves 42.8 cm with no hand on it (nearest finger 127 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip04 moves 45.7 cm with no hand on it (nearest finger 159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip05 moves 44.2 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip06 moves 44.9 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip07 moves 47.2 cm with no hand on it (nearest finger 185 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip10 moves 43.6 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip12 moves 38.1 cm with no hand on it (nearest finger 129 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "WallChip13 moves 44.2 cm with no hand on it (nearest finger 143 cm)"
+   ]
+  ],
+  "1051": [
+   [
+    "PROPMOVE",
+    "WallChip12 moves 47.6 cm with no hand on it (nearest finger 144 cm)"
+   ]
+  ],
+  "1069": [
+   [
+    "PROPMOVE",
+    "WallChip02 moves 22.1 cm with no hand on it (nearest finger 285 cm)"
+   ]
+  ],
+  "1075": [
+   [
+    "PROPMOVE",
+    "WallChip02 moves 11.1 cm with no hand on it (nearest finger 297 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "BACKHEAD": 1,
+  "PROPMOVE": 192
+ }
+}

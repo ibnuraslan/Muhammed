@@ -73,3 +73,25 @@ No CLAW, FACEPRESS, INSIDE or EMPTY flags.
 - Hand audit: 1 frame (f1271). A single triangle pair touches as the walk begins: a fingertip of the far-side hand brushing the jacket hem. It isn't visible and is under the 2 cm clip_scan threshold.
 - Final fix before submitting: the right hand now comes off the neck straight down to his side (keys f1078 and f1092, fingers leading out and down). It no longer rises toward his mouth under the library's ±25° wrist limit. `clip_scan`: 0.
 - After sheet: cells 33–39 (16.5–19.5 s) were re-rendered from the final build. The other cells are unchanged by the final key edits.
+
+# v007: director VO-sync notes (Nov 14)
+Beat frames are unchanged (`beats.json` is identical to v006). The simplify rule applied: the bullet-ride orbit (`ride()`) is gone, and one `chase()` framing now drives both the bullet flight and the ring approach.
+
+| # | Note (v006 frames) | Fix in v007 |
+|---|---|---|
+| 1 | 67–137: whole frame soft, giant bullet in front of his belly | The camera chases about 42 cm behind and beside the bullet, slightly below it. The bullet is small and crisp, flying at his head height, and he is sharp. In the animated look the f-stop is now f/22 everywhere (was f/8 and f/11 macro). |
+| 2 | 324–466: long blurred macro of the ring hand with a big bullet blob | F(5.7) is a medium shot of his face and the raised ring hand. A single, roughly 1 s chase lock (F(6.6)–F(7.4)) sits about 24 cm behind the bullet: the ring hand is in the foreground and his face is behind it, all sharp. |
+| 3 | 471–487: near-black frames | The dark side-profile key at F(8.2) is replaced by a front-lit three-quarter view of the ring and face. |
+| 4 | 658–689: blurred palm and fingers | F(11.0) pulls back to 40 cm and aims between the ring and the face, so the hand and face read together. |
+| 5 | 1108–1142: outstretched, stiff, flat arm; body cut off | The left hand comes up with the elbow bent: the wrist is closer to him, the fingers point up and in, and the hand is relaxed (curl 16–18°, thumb 8°). The F(18.9) camera aims between the ring and the face from 60 cm, so his face is in frame as he looks at the dented ring. |
+| 6 | Neck piece must be seen hitting the neck | Fragment B now drifts near the ring in slow motion, then visibly crosses in front of his chin and reaches the side of his neck at GRAZE (f1003). It is 1.6× larger with a warm hot-metal glint (emission) so it reads on screen. Only after the hit does he flinch: a head jerk at f1008 and a wince at f1007, and his right hand goes from the chest (held until f1003) to the neck (f1010–1016, the approved v006 neck poses). Before, the hand reached the neck at f1004, ahead of the hit. No blood: only the existing small cut. |
+
+Also fixed, found by the newer director checks:
+- **Officer:** in the walk-out (f1273–1405) the newer `clip_scan` flagged the officer's resting hands inside his own hips (approved v006 has the same flag). Both hands now hang relaxed at his sides, clear of the hips.
+- **Owner's lowered right hand (f1092–1240):** it hangs about 5 cm wider, so the hand audit is 0 again. The updated `hand_poses.py` from the director branch had put the fingertips into the trouser leg.
+
+## Checks on v007 (`*_v007.*` in this folder)
+- `clip_scan` (director, latest): **0 bad ranges**
+- `qa_check` (director, latest): **BACKHEAD Robber at f1 only** (intended, see the table above). Every PROPMOVE line is a flying FX object, listed here as intended per the qa_check rule: Bullet, Spark*, FragmentA/B, MuzzleSmoke, WallChip*, WallDustPuff. No FILL (the v006 bullet-ride FILL is gone), no FACEPRESS, CLAW, HOVER, CAMJUMP or ROLL.
+- `limb_check` (director): ARMBODY only. Every flag is the 2 shoulder-end points of `upperarm01` (head and ¼), which sit inside the clavicle-weighted shoulder skin of every MPFB character in any pose, including the Robber's and Officer's rest stance. A variant of the script that skips only those 2 shoulder-joint points reports **0** (see "limb_check note" below). No ARMBACK, no PROPHEAD.
+- Hand audit: **0**. Contact audit: **0**.
