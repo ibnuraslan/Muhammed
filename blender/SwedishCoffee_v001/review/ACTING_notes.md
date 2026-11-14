@@ -105,3 +105,32 @@ Not changed (checked, plausible): soldier smashing the pot (both hands on it, sh
   - Cell 3.0 s (silver pot): the red servant's fist is closed over the small handle on top of the tilted pot. The hand is now visible, not behind the pot.
   - Cell 4.0 s (porcelain teapot): the green servant's fingers go through the handle loop. They are only lightly curled; the thumb is on top.
 - `qa_check.py` at 771d2da, unchanged → `v009_qa_check_director.json`: BACKHEAD 2, EMPTY 24, INSIDE 1, FILL 2 (identical to v008). CAMJUMP 0, ROLL 0, HOVER 0, CLAW 0, FACEPRESS 0.
+
+
+## v010 (moving-preview review of v008, director's LESSONS_LEARNED section 1)
+Built on v008, plus the v009 pot-handle grip: pots in hands (lessons rule 2: no prop parented to the wrist with an offset).
+Beat frames are unchanged and there is no VO.
+v008 was previewed with `pipeline/preview.py` (e0c925f): every 5th frame, 534 frames. I read every 50-frame page.
+Faults are listed below with v008 film frames.
+
+| v008 frames | Fault | Fix in v010 |
+|---|---|---|
+| 661–671 | A soldier's back fills the lens, then a **fully black frame at f666**: the camera passes through the soldier. The keys near the f705 whip are filtered out, so the path ran straight from f655 through him. | Street keys rerouted: 652 at the soldier's side, 676 above the protesters' heads (one protester moved 0.5 m aside). The path stays more than 1 m from every body. |
+| 381–546 | The cup's steam column sat on the camera's line to the king, so he read foggy and half see-through for about 3 s. | The cup's steam is a thin wisp (radius 0.06, density 1.2, was 0.12 / 3.5). The steam skull, the beat itself, is unchanged. |
+| 856–1001, 1101–1196 | A dark coffee rod and an orange tea rod stood on the table between pours: the pour streams were shown by the chamber's set-show key at f705. | The streams are re-keyed hidden at f706 and appear only during each pour. |
+| 906–936, 1151–1171 | Cup macros 0.55 m from the twins: faces cut off, the cup filling the frame. | Keys 920 and 1160 pulled back to 1.4 m: head and cup in frame together. |
+| 226–236 | The guard running out of the throne hall ran into the lens. | He exits to the side of the hall, away from the camera path. |
+| 91–146 | The twins' shackled hands rested at the crotch. | Hands and shackles raised to the belt, in front of the belly. |
+| 106–121 | The camera squeezed between the twins (a shoulder filling a third of the frame). | Key 110 pulled back 0.6 m. |
+| 1631–1700 | Churchyard: the procession and coffins tiny in the snow at beat 9. | Long-lens keys at 1676 and 1705 frame the procession from the start of the set. |
+| 1776–1796 | The camera stood in the procession's path; a bearer and coffin filled the frame. | Camera moved 1.4 m to the side of the procession. |
+| 1816–1826 | Bare cathedral wall before the whip. | Key 1828 holds on the old twins until the whip. |
+| 1896, 1941 | Ballroom: the king's shoulder, then the masked man's leg, filled the lens (the path ran through them). | Keys 1890 and 1960 rerouted; the camera stays more than 1.2 m from both. |
+| 2061–2196 | The dying twin was under a blanket up to the shoulders, so his hands on the blanket had no visible arms. | Blanket shortened to the waist: chest and arms visible, connected to the hands. |
+| 2456–2476 | Old twin's head cut off; the frame shows the side table (keys 2470/2472 fell inside the 20-frame transition filter). | Key 2466 holds on the twin until the window whip. |
+
+Checked and kept as they are:
+- Eyes have whites and irises (full-res crop at f111). The dark band is the thick eyebrows.
+- The white floor patch at f161 is a glossy floor highlight.
+- The pans at f1246 and f1461 are empty for under 0.25 s.
+- The square, the king's collapse and the doctors are clean.

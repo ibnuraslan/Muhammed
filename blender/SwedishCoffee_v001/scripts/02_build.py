@@ -241,9 +241,9 @@ for k, (b, x) in enumerate((("TwinA", -0.45), ("TwinB", 0.45))):
         A.stand(f, pos=(x, 0.2), yaw=8 * (1 if k else -1), flex=10 + 3 * u, head=(12 + 4 * u, 6 * u))
         for s in "LR":
             sx = 1 if s == "L" else -1
-            A.hand(f, s, (0.075 * sx, -0.22, 1.0), d=(-0.1 * sx, -1, 0.0), n=(-sx, 0, 0), pole=(0.4 * sx, 0.3, 1.0)); grip(A.R, f, s, pose="relaxed")
+            A.hand(f, s, (0.075 * sx, -0.27, 1.13), d=(-0.1 * sx, -1, 0.0), n=(-sx, 0, 0), pole=(0.4 * sx, 0.3, 1.0)); grip(A.R, f, s, pose="relaxed")
         A.face(f, brow=2.2, lids=-0.3, jaw=6 + 4 * u, frown=0.6)
-    sh = inst(A_["shackles"], c, A.W((0, -0.22, 1.0)), rz=0, name="shackle_" + b); sh.rotation_euler.x = R_(90)
+    sh = inst(A_["shackles"], c, A.W((0, -0.27, 1.13)), rz=0, name="shackle_" + b); sh.rotation_euler.x = R_(90)
     attach(sh, A.a, "wrist.R", 1, local=True)
 for k, x in enumerate((-1.3, 1.3)):
     A = human("Guard", "Guard_S1_%d" % k, c); A.z = PZ; GZ[0] = PZ
@@ -264,7 +264,7 @@ light(c, 'SUN', (0, 0, 20), 3.0, (1.0, 0.93, 0.82), rot=(50, 0, 30), name="sun")
 walker("Townsman", "Walk_S1_0", c, (-9, -2, 0), (-5, -9, 0), 1, 175); walker("Woman", "Walk_S1_1", c, (8, -10, 0), (6, -2, 0), 1, 175, 0.6)
 cam(1, (-2.0, -15.0, 5.5), (0, 0, 2.6), 28)
 cam(60, (-0.8, -9.5, 3.6), (0, 0.2, 2.8), 30)
-cam(110, (0.25, -2.1, 2.85), (0, 0.2, 2.72), 40)
+cam(110, (0.2, -2.7, 2.95), (0, 0.2, 2.72), 36)
 cam(140, (1.0, -1.5, 4.2), (2.0, 4.0, 5.0), 30)
 cam(162, (2.3, 4.5, 5.6), (3.0, 12.0, 6.0), 26)
 finish_set(0)
@@ -282,8 +282,8 @@ st = inst(A_["table"], c, (-1.15, 5.1, 0.4), rz=90); st.scale = (0.5, 0.3, 0.54)
 cupK = inst(A_["cup"], c, (-1.0, 5.0, 0.4 + 0.42), name="KingCup")
 bpy.ops.mesh.primitive_cylinder_add(radius=0.038, depth=0.002, location=(-1.0, 5.0, 0.4 + 0.42 + 0.064)); cf = bpy.context.active_object; link(cf, c); setmat(cf, M["coffee"])
 # steam + skull (volume)
-bpy.ops.mesh.primitive_cylinder_add(radius=0.12, depth=0.6, location=(-1.0, 5.0, 1.15)); stm = bpy.context.active_object; stm.name = "steamK"; link(stm, c)
-setmat(stm, steam_mat("m_steamK", 3.5))
+bpy.ops.mesh.primitive_cylinder_add(radius=0.06, depth=0.45, location=(-1.0, 5.0, 1.08)); stm = bpy.context.active_object; stm.name = "steamK"; link(stm, c)
+setmat(stm, steam_mat("m_steamK", 1.2))
 sk = inst(A_["skull"], c, (-1.0, 5.0, 1.16), rz=180, name="SteamSkull"); sk.scale = (0.9, 0.9, 0.9)
 skm = steam_mat("m_skull", 0.0, (0.95, 0.95, 0.97)); setmat(sk, skm)
 dn = skm.node_tree.nodes["Dens"]
@@ -304,11 +304,11 @@ GZ[0] = 0.0
 G = human("Guard", "Guard_S2", c); hat(G.a, A_["tricorn"], c)
 G.stand(175, pos=(1.8, 4.2), yaw=200); G.arms_down(175); G.face(175, brow=1.5)
 G.stand(200, pos=(1.8, 4.2), yaw=200, flex=10); G.arms_down(200)
-G.H.walk(lambda f: V((1.8, 4.2, 0)).lerp(V((-3.5, -7.5, 0)), smooth((f - 205) / 90)), lambda f: 160, 205, 295, stride=1.5, duty=0.42, lift=0.14, lean=14)
+G.H.walk(lambda f: V((1.8, 4.2, 0)).lerp(V((-4.5, -2.0, 0)), smooth((f - 205) / 90)), lambda f: 135, 205, 295, stride=1.5, duty=0.42, lift=0.14, lean=14)
 G.arms_down(205)
 for f_ in range(220, 296, 15):   # hands follow the running body
-    u_ = smooth((f_ - 205) / 90); G.pos = V((1.8, 4.2)).lerp(V((-3.5, -7.5)), u_); G.yaw = 160; G.arms_down(f_, sway=0.05 * math.sin(f_ / 4))
-G.pos = V((-3.5, -7.5)); G.arms_down(295); G.stand(296, pos=(-3.5, -7.5), yaw=160); G.stand(590, pos=(-3.5, -7.5), yaw=160); G.arms_down(590)
+    u_ = smooth((f_ - 205) / 90); G.pos = V((1.8, 4.2)).lerp(V((-4.5, -2.0)), u_); G.yaw = 135; G.arms_down(f_, sway=0.05 * math.sin(f_ / 4))
+G.pos = V((-4.5, -2.0)); G.arms_down(295); G.stand(296, pos=(-4.5, -2.0), yaw=135); G.stand(590, pos=(-4.5, -2.0), yaw=135); G.arms_down(590)
 for x in (-3.5, 3.5):
     W_ = human("Guard", "Guard_S2b_%d" % (x > 0), c); hat(W_.a, A_["tricorn"], c)
     crowd_idle(W_, 175, 590, (x, 1.0), 90 if x > 0 else -90, "watch", seed=int(x))
@@ -395,7 +395,7 @@ attach(sk2, S2_.a, "wrist.R", 588, local=True)
 # beans: particle emitter (falls under gravity, collides with street)
 mouth = S2_.W((0.0, -0.95, 0.72))
 em = gn_fall("BeanEmitter", c, [mouth + V((random.uniform(-0.05, 0.05), random.uniform(-0.05, 0.05), random.uniform(-0.03, 0.03))) for _ in range(1600)], A_["bean"], "pour", 592, 712)
-for k, (x, y) in enumerate(((-2.0, 2.0), (-2.8, 3.4), (-1.6, 4.4), (-3.2, 0.6), (-2.4, 5.6))):
+for k, (x, y) in enumerate(((-2.0, 2.0), (-2.8, 3.4), (-2.2, 4.7), (-3.2, 0.6), (-2.4, 5.6))):
     b = ("Townsman", "Townswoman", "Woman", "Townsman", "Townswoman")[k]
     A = human(b, "Protest_S3_%d" % k, c)
     crowd_idle(A, 588, 725, (x, y), -70 + random.uniform(-20, 20), "jeer", seed=10 + k, phase=random.random())
@@ -403,8 +403,8 @@ light(c, 'SUN', (0, 0, 20), 3.0, (1.0, 0.92, 0.8), rot=(45, 0, -30), name="sun")
 walker("Townswoman", "Walk_S3_0", c, (-1, 16, 0), (0.5, 8, 0), 588, 725, 0.6); walker("Townsman", "Walk_S3_1", c, (4.5, 14, 0), (5.0, 5, 0), 588, 725)
 cam(588, (0, -8.7, 3.0), (1.2, 2.0, 1.2), 28)
 cam(625, (1.6, -3.0, 1.4), (1.2, 1.5, 0.8), 30)
-cam(655, (1.6, -0.6, 0.9), (2.0, 3.6, 0.9), 26)
-cam(690, (-1.0, 2.5, 1.7), (-3.0, 3.5, 1.6), 28)
+cam(652, (2.6, -0.9, 1.6), (1.0, 1.0, 0.7), 28)
+cam(676, (-0.3, 0.5, 1.85), (-2.4, 3.6, 1.4), 28)
 cam(722, (-5.3, 6.0, 2.5), (-9.0, 6.0, 2.5), 28)
 finish_set(2)
 
@@ -537,7 +537,7 @@ for k, (TA, ts, pours, tmpl, b, spos, syaw, liq) in POURS.items():
     for p_ in pours:   # liquid stream from the spout into the cup during each pour
         bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=0.006, depth=0.2, location=tuple(cup_rest + V((0, 0, 0.17))))
         st_ = bpy.context.active_object; st_.name = "pourStream%d_%d" % (k, p_); link(st_, c); setmat(st_, liq)
-        for ff, h in ((1, True), (p_ - 2, False), (p_ + 12, True)):
+        for ff, h in ((1, True), (706, True), (p_ - 2, False), (p_ + 12, True)):   # 706: the set's show key at 705 must not reveal the stream early
             REKEY.append((st_, ff, h))
 for k, x in enumerate((-1.4, 1.4)):
     A = human("Guard", "Guard_S4_%d" % k, c); hat(A.a, A_["tricorn"], c)
@@ -575,11 +575,11 @@ for nm, A in TW.items():
 cam(725, (0, -4.9, 2.0), (0, 1.5, 1.2), 28)
 cam(790, (-1.2, -2.0, 1.5), (0, 1.6, 1.15), 30)
 cam(860, (-1.6, -0.4, 1.3), (-0.6, 1.55, 1.2), 38)
-cam(920, (-0.95, 0.55, 1.02), (-0.62, 1.1, 0.95), 45)
+cam(920, (-1.3, -0.25, 1.28), (-0.6, 1.35, 1.12), 40)
 cam(980, (-2.2, 0.0, 1.5), (-0.6, 1.6, 1.2), 35)
 cam(1040, (-1.1, -0.3, 1.25), (-0.6, 1.7, 1.25), 42)
 cam(1099, (0.3, -1.0, 1.35), (0.6, 1.6, 1.2), 38)
-cam(1160, (0.85, 0.5, 1.0), (0.6, 1.05, 0.9), 50)
+cam(1160, (1.2, -0.3, 1.28), (0.6, 1.35, 1.12), 40)
 cam(1230, (1.7, 0.2, 1.4), (0.6, 1.7, 1.25), 38)
 cam(1250, (1.9, 0.1, 1.55), (1.45, -0.6, 1.3), 32)
 cam(1275, (1.8, -0.3, 1.6), (2.6, -2.6, 1.15), 32)
@@ -679,9 +679,11 @@ aim(light(c, 'AREA', (0, 2, 4), 12000, (1.0, 0.85, 0.7), 14, name="facadeFill"),
 for x_ in (-10, 0, 10):   # warm interior glow: the model's roof has open gaps that otherwise show a black interior
     light(c, 'POINT', (x_, 22, 12), 60000, (1.0, 0.8, 0.6), 3.0, name="churchInterior")
 cam(1650, (0, -15.5, 2.5), (0, 4.0, 1.6), 26)
-cam(1700, (-3.0, -8.0, 2.2), (-0.5, 2.0, 1.4), 30)
-cam(1760, (-3.2, -2.5, 1.6), (0.0, 0.5, 1.4), 32)
-cam(1810, (-2.6, -1.0, 1.75), (-0.5, 2.0, 1.65), 40)
+cam(1676, (-1.5, -8.0, 2.4), (-0.2, 7.0, 1.5), 50)   # long lens: the procession reads from the start (v008: tiny figures in snow)
+cam(1705, (-2.6, -3.5, 2.2), (-0.3, 5.0, 1.4), 40)
+cam(1760, (-4.6, -3.2, 1.9), (-0.8, 0.8, 1.3), 32)
+cam(1810, (-4.0, -1.6, 1.9), (-0.5, 1.8, 1.5), 36)
+cam(1828, (-2.8, -1.2, 1.9), (-0.2, 1.2, 1.5), 36)
 cam(1845, (0, 1.0, 4.5), (0, 8.0, 7.0), 28)
 cam(1870, (0, 7.3, 7.0), (0, 14.0, 7.0), 28)
 finish_set(4)
@@ -787,10 +789,10 @@ light(c, 'AREA', (4, -4, 7), 1400, (1, 0.8, 0.6), 6, rot=(35, 0, 40), name="key"
 light(c, 'AREA', (-5, 6, 4), 400, (0.8, 0.85, 1.0), 4, rot=(70, 0, -140), name="rim")
 light(c, 'AREA', (0, 0, 7.8), 3000, (1.0, 0.93, 0.85), 10, rot=(0, 0, 0), name="ceilSoft")
 cam(1872, (0, -9.8, 5.2), (0, 2.0, 3.0), 28)
-cam(1890, (0.3, -1.4, 2.0), (0.6, 2.8, 1.5), 32)
+cam(1890, (2.6, 0.6, 2.0), (0.6, 2.8, 1.5), 32)
 cam(1905, (2.2, 6.0, 1.75), (0.5, 2.4, 1.5), 32)
 cam(1930, (2.6, 4.8, 1.1), (0.5, 2.6, 0.7), 30)
-cam(1960, (-1.7, 4.4, 0.9), (0.5, 2.9, 0.3), 28)
+cam(1960, (2.4, 3.2, 1.6), (0.4, 3.0, 0.3), 30)
 cam(1985, (-5.5, 1.5, 1.6), (-9.0, 0.0, 1.8), 28)
 cam(2002, (-8.0, 0.0, 1.8), (-11.0, 0.0, 1.8), 28)
 finish_set(5)
@@ -818,7 +820,8 @@ for f in (2004, 2120, 2240):
     B.H.key_hand("L", f, V((0.33, 0.06, 0.95)), V((0, 0.05, -1)).normalized(), V((-1, 0, 0)), pole=V((0.4, 0.6, 1.1)))
     B.H.key_hand("R", f, V((-0.40, -0.22, 1.02)), V((0.15, 0, -1)).normalized(), V((0, 1, 0)), pole=V((-0.45, 0.2, 1.25)))
     grip(B.R, f, "R", 0.35); grip(B.R, f, "L", 0.3)
-blanket = box("blanket", c, (1.15, 1.45, 0.18), (0, 2.2, BZ + 0.2), pbr("m_blanket", "velour_velvet", 3.0, coord="Object", tint=(0.35, 0.05, 0.06), bump=0.8))
+blanket = box("blanket", c, (1.15, 1.2, 0.18), (0, 1.95, BZ + 0.2),   # v010: ends at the waist so the dying twin's chest and arms show (v008: hands on the blanket had no visible arms)
+    pbr("m_blanket", "velour_velvet", 3.0, coord="Object", tint=(0.35, 0.05, 0.06), bump=0.8))
 bl = blanket.modifiers.new("sub", 'SUBSURF'); bl.levels = bl.render_levels = 2
 dsp = blanket.modifiers.new("dsp", 'DISPLACE'); tx = bpy.data.textures.new("folds", 'CLOUDS'); tx.noise_scale = 0.3; dsp.texture = tx; dsp.strength = 0.05
 OA = human("TwinA_old", "TwinA_bed_S7", c); OA.pos = V((-1.22, 2.45)); OA.yaw = -90 + 180
@@ -881,8 +884,7 @@ cam(2250, (1.6, 0.6, 1.4), (3.3, -1.6, 1.1), 32)
 cam(2320, (2.3, -0.4, 1.35), (3.25, -1.55, 1.15), 45)
 cam(2400, (2.0, -2.4, 1.3), (3.2, -1.5, 1.15), 40)
 cam(2448, (2.4, -0.2, 1.65), (3.3, -1.6, 1.15), 34)
-cam(2472, (3.7, -0.5, 1.6), (3.3, -1.6, 1.15), 32)
-cam(2470, (2.6, -0.4, 1.5), (3.25, -1.6, 1.15), 34)
+cam(2466, (3.2, -0.15, 1.62), (3.3, -1.6, 1.15), 32)   # 2470/2472 fell inside the 20-frame transition filter, so the target swung to the table early
 cam(2506, (4.65, -1.0, 1.7), (8.0, -1.0, 1.7), 28)
 finish_set(6)
 
