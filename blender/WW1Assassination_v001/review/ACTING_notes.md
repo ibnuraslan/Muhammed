@@ -87,3 +87,22 @@ Sheets: `ACTING_v004_sheet_0-18s.jpg` and `ACTING_v004_sheet_18-36s.jpg` (before
 - **The fix:** `scripts/10_camjump.py` bakes the camera rotation per frame and eases each snap into a 6-frame smoothstep whip, between the same start and end framings.
 - **The result:** the largest turn in the film is now 54.8° per frame. `qa_v005b.json` shows CAMJUMP 0, and every other count is the same as v005.
 - **Check frames:** `v005b_camjump_frames.jpg`.
+
+## v006: faults found by watching the moving preview of v005b, and their fixes
+Preview: `preview.py`, every 5th frame, all 9 pages watched. Frames are film frames.
+
+| Frames | Fault | Fix |
+|---|---|---|
+| 201–216 | The driver's cap filled the lower frame as the camera crossed the front seat. | The crossing is raised to 3.3 m, so the camera passes over the couple. |
+| 321–396 | The back of the gunman's head filled the foreground. | The camera is ahead of the car: the Archduke faces the camera, and the gunman is seen from the side. |
+| 426–446 | Rewind start: a rolled, top-down view, then a café corner filling the frame. | The camera rises to 4.2 m looking down the street at the horizon. |
+| 611–621 | A shop wall with a conspirator cut off at the frame edge. | A wider lens and the camera set back. |
+| 666–736 | A waving extra and an empty pilaster close to the lens. | A hold on the conspirators to 11.6 s, then a whip at 2.6 m height, above the extras' heads, to the bomber. |
+| 626–661 | The would-be assassin's flat cap read as a box. | The cap is removed, and he goes bareheaded. |
+| 851 | A large car fender. | The camera is raised and set back. |
+| 1351–1386 | The car bonnet and windscreen swept across the lens. | The 22.4 s camera key is raised above the car (3 m). |
+| 1416–1489 | A blurred pistol macro, then empty blurred frames against the wall. | The gunman is framed in profile from the street at 1.6 m: step, draw and aim all read. The macro is removed. |
+| 1566–1571 | The Archduke's helmet plume filled the lens. | The camera passes high in front of the car. The slump is framed from the front. |
+| all | Risk of black-hole eyes (MPFB EnhancedEye cornea). | `scripts/11_eye_fix.py` (from LegoInNose a44130b). |
+
+The largest camera turn is now 41° per frame (`10_camjump.py`). Beat frames are unchanged.
