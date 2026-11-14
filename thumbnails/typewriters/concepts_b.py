@@ -111,3 +111,143 @@ CONCEPTS = {
     "tw_b": dict(scene="twoffice", variant="night", cam=cam, shift=(0.0, 0.15), focus=lambda c: _w(c, (0, -0.06, 0.08)),
                  fstop=2.8, setup=setup, exposure=-1.2, mask=machine),
 }
+
+
+# ---------------------------------------------------------------- layout D: the two sides, the typewriter between them
+import os
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+def flag_images():
+    """A Soviet flag (red, gold star + hammer and sickle) and a US flag (13 stripes, 50 stars), drawn flat."""
+    from PIL import Image, ImageDraw
+    out = os.path.join(HERE, "plates"); os.makedirs(out, exist_ok=True)
+    W_, H_ = 1500, 750
+    def star(d, cx, cy, r, fill, outline=False):
+        pts = []
+        for k in range(10):
+            a = -math.pi / 2 + k * math.pi / 5; rr = r if k % 2 == 0 else r * 0.382
+            pts.append((cx + rr * math.cos(a), cy + rr * math.sin(a)))
+        d.polygon(pts, fill=None if outline else fill, outline=fill, width=max(2, int(r * 0.12)) if outline else 1)
+    su = Image.new("RGB", (W_, H_), (204, 0, 0)); d = ImageDraw.Draw(su); g = (255, 216, 0)
+    star(d, 250, 95, 45, g, outline=True)
+    # sickle: a thick crescent; hammer: a handle and a head across it
+    d.pieslice([140, 150, 360, 370], 200, 470, fill=g); d.pieslice([170, 165, 345, 340], 190, 480, fill=(204, 0, 0))
+    d.polygon([(150, 330), (175, 355), (205, 325), (180, 300)], fill=g)
+    d.line([(190, 345), (325, 210)], fill=g, width=22)
+    d.polygon([(285, 170), (345, 230), (370, 205), (310, 145)], fill=g)
+    us = Image.new("RGB", (W_, H_), (255, 255, 255)); d = ImageDraw.Draw(us)
+    sh = H_ / 13
+    for k in range(13):
+        if k % 2 == 0:
+            d.rectangle([0, k * sh, W_, (k + 1) * sh], fill=(178, 34, 52))
+    cw, chh = W_ * 0.4, sh * 7
+    d.rectangle([0, 0, cw, chh], fill=(60, 59, 110))
+    for r in range(9):
+        n = 6 if r % 2 == 0 else 5
+        for k in range(n):
+            x = cw / 12 * (2 * k + 1 + (r % 2)); y = chh / 10 * (r + 1)
+            star(d, x, y, chh / 22, (255, 255, 255))
+    a, b = os.path.join(out, "flag_su.png"), os.path.join(out, "flag_us.png")
+    su.save(a); us.save(b)
+    return a, b
+
+
+def flag(name, img, loc, rot_z, size=(1.5, 1.0)):
+    bpy.ops.mesh.primitive_grid_add(x_subdivisions=90, y_subdivisions=60, size=1, location=loc)
+    o = bpy.context.active_object; o.name = name
+    o.scale = (size[0], size[1], 1); o.rotation_euler = (math.pi / 2, 0, rot_z)
+    tx = bpy.data.textures.new(name + "Folds", 'WOOD'); tx.wood_type = 'BANDNOISE'; tx.noise_scale = 0.35; tx.turbulence = 4
+    tx.noise_basis_2 = 'SIN'
+    m_ = o.modifiers.new("folds", 'DISPLACE'); m_.texture = tx; m_.strength = 0.035; m_.texture_coords = 'LOCAL'
+    o.modifiers.new("sub", 'SUBSURF').levels = 1
+    bpy.ops.object.shade_smooth()
+    m = bpy.data.materials.new(name + "Mat"); m.use_nodes = True
+    N = m.node_tree.nodes; pb = N["Principled BSDF"]
+    t = N.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(img); t.extension = 'EXTEND'
+    m.node_tree.links.new(t.outputs[0], pb.inputs['Base Color'])
+    pb.inputs['Roughness'].default_value = 0.75; pb.inputs['Sheen Weight'].default_value = 0.5
+    o.data.materials.append(m)
+    return o
+
+
+def leader(name, loc, rot, turn, desk_z):
+    from mathutils import Matrix
+    from human import Human, add_asset, reach, fingers_curl, _world_verts
+    import numpy as np
+    h = Human(name, gender=1.0, years=68, muscle=0.45, weight=0.6, height=0.45,
+              skin="old_lightskinned_male_diffuse.png", eyebrows="eyebrow002", eyelashes="eyelashes01")
+    add_asset(h, "clothes", "male_elegantsuit01", sat=0.1, val=0.1, rough=0.55, sheen=0.3)
+    add_asset(h, "clothes", "shoes02", val=0.15, rough=0.3)
+    add_asset(h, "hair", "short02", sat=0.0, val=0.8, rough=0.8)
+    for o in h.parts:
+        for m in (o.data.materials if o.data else []):
+            if m and "short02" in m.name:
+                m.node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value = 0.85
+    h.rot("neck01", (0, 0, 1), turn * 0.4); h.rot("head", (0, 0, 1), turn * 0.6)
+    h.arm.location = loc; h.arm.rotation_euler = (0, 0, rot)
+    bpy.context.view_layer.update()
+    w = np.concatenate([_world_verts(o) for o in h.parts if o.type == 'MESH'])
+    h.arm.location.z += 0.0 - w[:, 2].min(); bpy.context.view_layer.update()
+    R = Matrix.Rotation(rot, 3, 'Z'); f = R @ Vector((0, -1, 0)); ax = tuple(Vector((0, 0, 1)).cross(f))
+    for b, d in (("spine03", 7), ("spine02", 8), ("spine01", 6)):     # leaning in over the desk
+        h.rot(b, ax, d)
+    h.rot("neck01", ax, 6); h.rot("head", ax, 12)
+    bpy.context.view_layer.update()
+    base = Vector(loc); base.z = desk_z
+    for sd, sg in (("L", 1), ("R", -1)):                    # both palms flat on the desk
+        tgt = base + R @ Vector((0.21 * sg, -0.33, 0.035))
+        reach(h, sd, tgt, tuple(R @ Vector((0.8 * sg, 0.3, -0.2))), hand_dir=tuple(R @ Vector((0.15 * sg, -1.0, -0.25))))
+    fingers_curl(h, 8, thumb=10)
+    return h
+
+
+def setup_leaders(c):
+    setup(c)
+    rz = c["tw"]["root"].rotation_euler.z
+    fsu, fus = flag_images()
+    for o in bpy.data.objects:                              # clear the back of the room behind the two men
+        n = o.name.lower()
+        if o.type == 'MESH' and ("chair" in n or "plant" in n or "clock" in n or "lamp" in n or "notepad" in n or "stationery" in n):
+            o.hide_render = True
+        if o.name.startswith(("TW1", "TW2", "TWside")):
+            o.hide_render = True
+        if "desk" in n and o.type == 'MESH' and (o.matrix_world.translation - _w(c, (0, 0, 0))).length > 1.0:
+            o.hide_render = True
+    for m in bpy.data.materials:                            # thinner haze: no purple fog over the wall
+        if m.node_tree:
+            for n in m.node_tree.nodes:
+                if n.type in ('PRINCIPLED_VOLUME', 'VOLUME_SCATTER') and 'Density' in n.inputs:
+                    n.inputs['Density'].default_value *= 0.2
+    from kit import pbr
+    dark = pbr("DarkWall", (0.035, 0.034, 0.033), 0.85)
+    for o in bpy.data.objects:                              # the long lens sits back past the wall behind the camera
+        if o.name.startswith(("WallBack", "Window", "Blind", "Venetian")):
+            o.hide_render = True
+        if o.name.startswith(("WallL", "WallR", "WallFront", "Floor")) and o.type == 'MESH':
+            o.data.materials.clear(); o.data.materials.append(dark)
+    for o in bpy.data.objects:                              # loose sheets left on the hidden back desks
+        if o.type == 'MESH' and o.name.startswith("Plane") and (o.matrix_world.translation - _w(c, (0, 0, 0))).length > 1.0:
+            o.hide_render = True
+    for sd, img, col, x in ((-1, fsu, (1.0, 0.12, 0.08), -0.62), (1, fus, (0.25, 0.45, 1.0), 0.62)):
+        h = leader("Leader" + ("SU" if sd < 0 else "US"), _w(c, (x, 0.66, 0)) - Vector((0, 0, _w(c, (0, 0, 0)).z)), rz - sd * 0.5, sd * -22, _w(c, (0, 0, 0)).z)
+        flag("Flag" + ("SU" if sd < 0 else "US"), img, _w(c, (x + sd * 0.15, 1.6, 0.85)), rz + math.pi - sd * 0.25)
+        hd = h.bone_head("head")
+        rim = area_light(hd + (_w(c, (sd * 0.9, 1.0, 0.25)) - _w(c, (0, 0, 0))), (0, 0, 0), 0.5, 140, col); point_at(rim, hd)
+        rim.visible_camera = False
+        wash = _spot("Wash" + str(sd), _w(c, (x, 0.6, 1.6)) , _w(c, (x + sd * 0.25, 1.75, 0.2)), 30, col, 45, 0.8, 0.2)
+        fill = area_light(hd + (_w(c, (-sd * 0.2, -1.2, 0.0)) - _w(c, (0, 0, 0))), (0, 0, 0), 0.8, 1.2, (1.0, 0.9, 0.8)); point_at(fill, hd)
+        fill.visible_camera = False
+        c.setdefault("leaders", []).append(h)
+
+
+def cam_leaders(c):
+    return (_w(c, (0.0, -2.55, 0.66)), _w(c, (0.0, 0.3, 0.42)), 52)
+
+
+def machine_and_men(c):
+    return machine(c) + [o for h in c.get("leaders", []) for o in h.parts if o.type == 'MESH']
+
+
+CONCEPTS["tw_leaders"] = dict(scene="twoffice", variant="night", cam=cam_leaders, shift=(0.0, 0.0), focus=lambda c: _w(c, (0, -0.06, 0.08)),
+                              fstop=4.0, setup=setup_leaders, exposure=-1.2, mask=machine)
