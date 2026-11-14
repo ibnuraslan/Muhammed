@@ -183,9 +183,9 @@ def pat_world(f, local):
     ev_at(f); return pr.matrix_world @ Vector(local)
 
 # arm board: put the board directly under the reclined forearm
-ev_at(400)
+ev_at(600)   # v009e: from the reclined pose (f400 was mid-move: the arm hung off the board)
 el = pr.matrix_world @ PAT.R.PB["lowerarm01.L"].head; wr = pr.matrix_world @ PAT.R.PB["wrist.L"].head
-ab = OB["ArmBoard"]; mid = (el + wr) / 2
+ab = OB["ArmBoard"]; mid = el.lerp(wr, 0.68)   # under forearm and hand
 tilt_inv = tilt.matrix_world.inverted()
 ab_local = tilt_inv @ (mid + Vector((0, 0, -0.05)))
 ab.matrix_parent_inverse = Matrix.Identity(4); ab.location = ab_local; ab.rotation_euler = (0, 0, math.atan2((wr - el).y, (wr - el).x))
@@ -244,7 +244,8 @@ def walk(P, a, b, f0, f1, yaw0, yaw1, stride=0.55):
 SA_ = Vector((0.45, -0.58)); yA = yaw_to(Vector((0.05, -0.1)) - SA_)
 ST = Vector((1.05, -0.32)); yT = 0.0   # v009d: 8 cm further from the tray (his forearms folded into his belly)
 SB_ = Vector((INC.x - 0.02, INC.y + 0.42)); yB = 0.0
-SC_ = Vector((EAR_W.x + 0.42, EAR_W.y + 0.3));   # v009d: beside the head on the ear side (was behind the skull: hand hidden, cap into the head)
+SC_ = Vector((EAR_W.x + 0.5, EAR_W.y + 0.06));   # v009e: right beside the head on the ear side (his arm passed the headrest)
+_old_SC = Vector((EAR_W.x + 0.42, EAR_W.y + 0.3));   # v009d: beside the head on the ear side (was behind the skull: hand hidden, cap into the head)
 _unused = Vector((EAR_W.x + 0.22, EAR_W.y + 0.5)); yC = yaw_to(EAR_W.to_2d() - Vector((EAR_W.x + 0.22, EAR_W.y + 0.5)))
 stand(SUR, 1, SA_, yA, head=(10, 0, 0)); stand(SUR, 60, SA_, yA, spine=(6, 0, 0), head=(14, 0, 0)); stand(SUR, 128, SA_, yA, spine=(14, 0, 4), head=(18, 0, 0), crouch=0.03)
 stand(SUR, 160, SA_, yA, spine=(8, 0, 0))
@@ -260,7 +261,7 @@ walk(SUR, SA2_, ST, 299, 338, hdgT, yT_W, stride=0.4)          # then walk forwa
 stand(SUR, 340, ST, yT, spine=(18, 0, 0), head=(28, 0, 0), crouch=0.02)
 for f in range(343, 565, 40):
     stand(SUR, f, ST, yT, spine=(22 + 3 * math.sin(f), 2 * math.sin(f * 0.3), 3 * math.sin(f * 0.2)), head=(34, 4 * math.sin(f * 0.1), 0), crouch=0.04)
-stand(SUR, 566, ST, yT, spine=(18, 0, 0)); P1_ = Vector((1.0, 0.75)); h1_ = unwrap(yT, yaw_to(P1_ - ST)); h2_ = unwrap(h1_, yaw_to(SB_ - P1_)); yB_W = unwrap(h2_, yB)
+stand(SUR, 566, ST, yT, spine=(18, 0, 0)); P1_ = Vector((1.36, 0.7)); h1_ = unwrap(yT, yaw_to(P1_ - ST)); h2_ = unwrap(h1_, yaw_to(SB_ - P1_)); yB_W = unwrap(h2_, yB)   # v009e: P1_ wider of the patient's hand on the arm board
 walk(SUR, ST, P1_, 567, 625, yT, h1_, stride=0.45); walk(SUR, P1_, SB_, 626, 660, h1_, yB_W, stride=0.4)   # v009d: faces where he walks
 for f in range(662, 1309, 60):
     _up = smoothstep(770, 800, f) * (1 - smoothstep(1040, 1070, f))   # v009d: stands up while the ear grows (his cap was in the x-ray camera)
@@ -318,26 +319,27 @@ def carry_key(f, s, off, d_local=(0, -1, -0.6), n_local=None):
     d = (right * d_local[0] + fwd * (-d_local[1]) + Vector((0, 0, d_local[2]))).normalized()
     n = Vector((0, 0, 1)) if s == "R" else Vector((0, 0, 1))
     SUR.key_hand(s, f, W, d, n)
-CARRY_R = (0.10, 0.30, -0.12); CARRY_L = (-0.20, 0.24, -0.22)   # v009d: L clear of his hip
+CARRY_R = (0.10, 0.30, -0.12); CARRY_L = (-0.26, 0.12, -0.32)   # v009e: L at his side (it reached toward the patient's knee)   # v009d: L clear of his hip
 for f in range(276, 330, 4):
     carry_key(f, "R", CARRY_R); carry_key(f, "L", CARRY_L, (0.0, -1, -1.5))
 for f in range(572, 652, 4):
     carry_key(f, "R", CARRY_R); carry_key(f, "L", CARRY_L, (0.0, -1, -1.5))
-for f in range(1300, 1376, 4):   # v009d: ear carried in front of the chest from the arm to the head
-    carry_key(f, "R", (0.08, 0.32, -0.08)); carry_key(f, "L", CARRY_L, (0.0, -1, -1.5))
+for f in range(1300, 1360, 4):   # v009d: ear carried in front of the chest from the arm to the head (ends before he faces the head)
+    carry_key(f, "R", (0.1, 0.26, 0.0)); carry_key(f, "L", CARRY_L, (0.0, -1, -1.5))
 # beat 3: carving at the tray. L holds the block, R draws the scalpel over it in strokes
 for f in range(343, 565, 6):
     k = (f - 343) / 37.0
-    away = Vector((0, 0.03, 0.14)) * (1 - smoothstep(345, 372, f)) + Vector((0, 0.06, 0.03)) * smoothstep(462, 488, f)   # hands come in after the camera leaves the block, lift off to reveal the ear
+    away = Vector((0, 0.03, 0.14)) * (1 - smoothstep(345, 372, f)) + Vector((0, 0.06, 0.03)) * smoothstep(462, 488, f)
+    apartL = Vector((0.05, 0, 0)) * (1 - smoothstep(345, 380, f)); apartR = Vector((-0.07, 0, 0)) * (1 - smoothstep(345, 380, f))   # v009e: hands never stacked   # hands come in after the camera leaves the block, lift off to reveal the ear
     shL = Vector((ST.x + 0.18, ST.y - 0.08, 1.38)); gripL = BLK + Vector((0.028, -0.005, 0.01))
     dL = (gripL - shL).normalized()
-    sh(f, "L", gripL - dL * 0.075 + Vector((0, 0, -0.065)) + away, dL, (0.0, 0.2, 1.0), pole=Vector((ST.x + 0.55, ST.y + 0.35, 0.95)))
+    sh(f, "L", gripL - dL * 0.075 + Vector((0, 0, -0.065)) + away + apartL, dL, (0.0, 0.2, 1.0), pole=Vector((ST.x + 0.55, ST.y + 0.35, 0.95)))
     ph = (k % 1.0)
     tgt = BLK + Vector((-0.02 + 0.04 * ph, 0.012 * math.sin(k * 2.3), 0.018 + 0.006 * math.sin(math.pi * ph)))
     shR = Vector((ST.x - 0.18, ST.y - 0.08, 1.38)); dR = (tgt - shR).normalized()
     wR = tgt - dR * (0.13 + 0.03 * (1 if f < 350 else 0)) + Vector((0, 0, -0.06)) + away
     asideR = BLK + Vector((-0.2, 0.06, 0.02)); u_ = smoothstep(456, 476, f)   # v009d: R leaves the block so the hands never overlap
-    sh(f, "R", wR.lerp(asideR, u_), dR, (-0.2, -0.3, 1.0), pole=Vector((ST.x - 0.55, ST.y + 0.35, 0.95)))
+    sh(f, "R", wR.lerp(asideR, u_) + apartR, dR, (-0.2, -0.3, 1.0), pole=Vector((ST.x - 0.55, ST.y + 0.35, 0.95)))
 HP(SUR, "L", "pinch", 343)   # L: thumb-index pinch on the cartilage, R: scalpel held like a pen
 HP(SUR, "L", "pinch", 470); HP(SUR, "L", "relaxed", 500)
 HP(SUR, "R", "pinch", 566); HP(SUR, "L", "pinch", 566)   # forceps pinch / skin-edge pinch
@@ -364,7 +366,8 @@ def at_ear(off_out, off_fwd, off_up):
     # surgeon reaches from behind the head (+Y); off_out pushes away from the skull, off_fwd along -Y
     back = Vector((0, 1, 0))
     return EAR_W + side * (off_out * 0.35) + back * (off_out * 0.9) - back * off_fwd + Vector((0, 0, 1)) * off_up
-sh(1390, "R", at_ear(0.22, -0.02, 0.12) + Vector((0, 0, 0.02)), (-0.3, -1, -0.4), (0, 0, 1))
+sh(1380, "R", at_ear(0.32, 0.0, 0.16), (-0.3, -1, -0.4), (0, 0, 1))   # v009e: over and outside the head, never through it
+sh(1390, "R", at_ear(0.16, 0.0, 0.05), (-0.3, -1, -0.4), (0, 0, 1))   # v009e: the ear comes in from the side, close to the head
 sh(1440, "R", at_ear(0.14, 0.0, 0.07) + Vector((0, 0, 0.02)) + side * 0.012, (-0.3, -1, -0.5), (0, 0, 1))
 sh(1470, "R", at_ear(0.26, 0.0, 0.16) + Vector((0, 0, 0.02)), (-0.3, -1, -0.5), (0, 0, 1))   # v009d: lifts off the scalp
 sh(1500, "R", at_ear(0.16, 0.0, 0.1) + Vector((0, 0, 0.02)), (-0.3, -1, -0.4), (0, 0, 1))
@@ -381,7 +384,6 @@ for i in range(STITCH_N):
     dd = (-side * 0.75 - Vector((0, 0, 1)) * 0.5 - Vector((0, 1, 0)) * 0.2).normalized()   # v009d: hand comes in from outside/above the ear, in view (was behind the skull)
     pt = pw - dd * 0.135
     sh(f, "R", pt + Vector((0, 0.004, 0.006)) + side * 0.012, dd, (0, 0, 1)); sh(f + 8, "R", pt + Vector((0.006, 0.025, 0.035)) + side * 0.012, dd, (0, 0, 1))
-sh(B["b9"] + 5, "L", at_ear(0.18, -0.12, 0.05), (0.2, -1, -0.4), (0, 0, 1))
 for s in "LR":
     ev_at(B["b9"] + 70)
     sh(B["b9"] + 70, s, SUR.wpos("spine04") + Vector((0.0, 0, -0.05)) + (Matrix.Rotation(R_(yCC), 3, 'Z') @ Vector(((0.12 if s == "R" else -0.12), -0.22, -0.12))),
@@ -423,7 +425,7 @@ for it in range(3):
                 pp_ = pinch_pt(SUR, "R"); act = pp_ + (pp_ - SUR.wpos("upperarm01.R")).normalized() * 0.108
         else:
             act = SUR.o.matrix_world @ SUR.R.PB["finger2-3.L"].tail
-        tgt_ = tip + (Vector((0, 0, 0.05)) if 650 <= f <= 1300 else (Vector((0, 0, 0.05)) + side * 0.06 + Vector((0, 0.03, 0)) if 1300 < f <= 1500 else Vector())); err = tgt_ - act; worst = max(worst, err.length)
+        tgt_ = tip + (Vector((0, 0, 0.05)) if 650 <= f <= 1300 else (side * 0.04 if 1300 < f <= 1500 else Vector())); err = tgt_ - act; worst = max(worst, err.length)
         if err.length > 0.004:
             rec[3] = W + err * 0.9; SUR.key_hand(s_, f, rec[3], d, n)
     print("TIP_FIX iter", it, "worst", round(worst, 3))

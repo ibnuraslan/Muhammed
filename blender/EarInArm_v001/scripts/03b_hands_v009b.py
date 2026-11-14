@@ -45,7 +45,7 @@ def wrist_follow(s, f0, f1, ramp=8):
     c = SUR.pose.bones["wrist." + s].constraints[0]
     for f, v in ((f0 - ramp, 0.0), (f0, 1.0), (f1, 1.0), (f1 + ramp, 0.0)):
         c.influence = v; c.keyframe_insert("influence", frame=f)
-wrist_follow("L", 158, 278); wrist_follow("L", 534, 562); wrist_follow("R", 534, 560); wrist_follow("L", 1390, 1650)
+wrist_follow("L", 136, 278); wrist_follow("L", 534, 562); wrist_follow("R", 534, 560); 
 
 # ---------------------------------------------------------------- tool hand: surgeon R pinches the forceps shafts (grip_object)
 def grip_forceps(f):
@@ -62,8 +62,8 @@ for f in FORC_F:
     elif f >= 1300: apply_pose(SUR, "R", "pinch", f, amount=0.8)
 
 # ---------------------------------------------------------------- 1. chest x-ray: L flat on the chest beside the forceps
-for f in (146, 290): lock(SUR, "L", f)
-for f in range(158, 280, 12):
+for f in (130, 290): lock(SUR, "L", f)
+for f in range(136, 280, 12):
     sc.frame_set(f); tip = FORC.matrix_world @ Vector((0, 0.13, 0))
     p, n = surf(TEE, tip + Vector((0.17, -0.01, 0.11)))   # v009d: further onto his upper-left chest, clear of the forceps hand
     place_hand(SUR, "L", f, p, -n, Vector((0, 0, 1)) - n * n.z, skin=0.014); apply_pose(SUR, "L", "flat_palm", f)
@@ -81,14 +81,8 @@ for f in range(536, 566, 6):
     apply_pose(SUR, "R", "flat_palm", f)
 apply_pose(SUR, "L", "relaxed", 576)
 
-# ---------------------------------------------------------------- 5. ear placement: L flat on the scalp above the ear
-lock(SUR, "L", 1380); lock(SUR, "L", 1662)
-for f in range(1392, 1652, 12):
-    sc.frame_set(f); H = PAT.matrix_world @ PAT.pose.bones["head"].matrix
-    up = (H.to_3x3() @ Vector((0, 1, 0))).normalized(); c = PAT.matrix_world @ PAT.pose.bones["head"].tail
-    p, n = surf(BODY[PAT], c + up * 0.02 + (wrist(SUR, "L") - c).normalized() * 0.05)
-    place_hand(SUR, "L", f, p, -n, up - n * up.dot(n), skin=0.013); apply_pose(SUR, "L", "flat_palm", f)
-
+# ---------------------------------------------------------------- 5. ear placement: v009e the free left hand waits relaxed at his side
+# (standing beside the chair, reaching the top of the head made his forearm cross his own body)
 # ---------------------------------------------------------------- v009d: during the growing beat the surgeon's free left hand
 # hangs relaxed at his side (it floated palm-up by the arm for ~5 s, and later filled the x-ray macro)
 lock(SUR, "L", 784); lock(SUR, "L", 1062); lock(SUR, "R", 784); lock(SUR, "R", 1062)
@@ -101,6 +95,8 @@ def hang(s_, f, side_sign):
     pb.location = pb.location + SUR.data.bones["IK_hand." + s_].matrix_local.to_3x3().inverted() @ d_
     pb.keyframe_insert("location", frame=f, group=pb.name)
 for f in range(796, 1052, 32): hang("R", f, 1.0)   # the forceps hand waits at his side too (it rose into the x-ray camera)
+lock(SUR, "L", 1376); lock(SUR, "L", 1672)
+for f in range(1388, 1664, 24): hang("L", f, -1.0)   # v009e: free hand at his side while he works at the head
 for f in range(796, 1052, 32):
     sc.frame_set(f); shL = SUR.matrix_world @ SUR.pose.bones["upperarm01.L"].head; shR = SUR.matrix_world @ SUR.pose.bones["upperarm01.R"].head
     right = shR - shL; right.z = 0; right.normalize(); fwd = Vector((0, 0, 1)).cross(right)
@@ -141,6 +137,7 @@ def clear_fingers(rig):
 # EarInArm-local pose variants in the hand_poses table: the three back fingers tucked evenly under a pinch, and an even relaxed
 # curl, so the gloved fingers lie together instead of pointing in different directions
 POSES["pinch_tuck"] = dict(curl={2: (40, 45, 25), 3: (45, 55, 30), 4: (52, 62, 36), 5: (58, 68, 40)}, spread=0.0, thumb=("index_tip", 0.004))
+POSES["pinch_light"] = dict(curl={2: (38, 42, 22), 3: (24, 30, 15), 4: (26, 32, 16), 5: (28, 34, 18)}, spread=0.0, thumb=("index_tip", 0.004))   # v009e: holding the cartilage (pinch_tuck read as a ring)
 POSES["relaxed_even"] = dict(curl={2: (24, 30, 16), 3: (26, 32, 17), 4: (28, 34, 18), 5: (30, 36, 19)}, spread=0.0, thumb=("beside_index", 0.012))
 # v009c-2: the "starfish" gloves were the GloveThin displace (hand surface pulled in 3.2 mm along its normals): on the subdivided
 # glove it thinned every finger and opened gaps between them. Removed; the bones and skinning were correct.
@@ -149,8 +146,8 @@ for rig in (SUR,):
     if gm: BODY[rig].modifiers.remove(gm)
 SCHED = {(SUR, "R"): [(1, "pinch_tuck"), (339, "pinch_tuck"), (343, "cup_hold"), (464, "cup_hold"), (472, "relaxed_even"), (560, "relaxed_even"), (566, "pinch_tuck"),
                       (1500, "pinch_tuck"), (1502, "pinch_tuck"), (1685, "pinch_tuck"), (1715, "relaxed_even"), (1770, "relaxed_even")],
-         (SUR, "L"): [(1, "relaxed_even"), (96, "relaxed_even"), (106, "flat_palm"), (278, "flat_palm"), (290, "relaxed_even"), (337, "relaxed_even"), (343, "pinch_tuck"),
-                      (464, "pinch_tuck"), (476, "relaxed_even"), (1385, "relaxed_even"), (1392, "flat_palm"), (1498, "flat_palm"), (1508, "relaxed_even"), (1770, "relaxed_even")],
+         (SUR, "L"): [(1, "relaxed_even"), (128, "relaxed_even"), (136, "flat_palm"), (278, "flat_palm"), (290, "relaxed_even"), (337, "relaxed_even"), (343, "pinch_light"),
+                      (464, "pinch_light"), (476, "relaxed_even"), (1770, "relaxed_even")],
          (NUR, "L"): [(1, "relaxed_even"), (1770, "relaxed_even")], (NUR, "R"): [(1, "relaxed_even"), (1770, "relaxed_even")]}
 for rig in (SUR, NUR): clear_fingers(rig)
 for (rig, s_), sch in SCHED.items():
@@ -166,6 +163,7 @@ for f in range(1, 46, 4):
 # (the patient's own hand path is unchanged)
 # v009d: the patient's hand on the new ear is relaxed (cup_hold read as a claw)
 for f in (1715, 1745, 1770): apply_pose(PAT, "L", "relaxed_even", f, spread=0)
+for f in (470, 800, 1100, 1400, 1640): apply_pose(PAT, "L", "relaxed_even", f, spread=0)   # v009e: relaxed on the arm board (read as a claw)
 lock(PAT, "L", 1); lock(PAT, "L", 42)
 for f, w in ((5, 0.5), (11, 1.0), (18, 1.0), (24, 1.0), (30, 1.0), (36, 0.5)):
     sc.frame_set(f); pb = PAT.pose.bones["IK_hand.L"]; off = Vector((0, 0, 0))
@@ -220,7 +218,8 @@ def unclip(rig, s, f, targets, margin=0.01, it=6, cap=0.2):
         pb.location = pb.location + d_; pb.keyframe_insert("location", frame=f, group=pb.name); moved += push.length
     return moved
 def others(rig): return [lambda o=o: bvh(o) for o in (SUR, PAT, NUR) if o is not rig for o in (BODY[o],)]
-JOBS = [(PAT, "L", range(120, 200, 4), lambda: [lambda: self_bvh(PAT)], 0.08), (PAT, "R", range(120, 200, 4), lambda: [lambda: self_bvh(PAT)], 0.08),
+JOBS = [(SUR, "L", range(268, 306, 3), lambda: [lambda: bvh(BODY[PAT])], 0.08), (SUR, "R", range(268, 306, 3), lambda: [lambda: bvh(BODY[PAT])], 0.08),
+        (PAT, "L", range(120, 200, 4), lambda: [lambda: self_bvh(PAT)], 0.08), (PAT, "R", range(120, 200, 4), lambda: [lambda: self_bvh(PAT)], 0.08),
         (SUR, "L", range(268, 340, 3), lambda: [lambda: self_bvh(SUR)], 0.06), (SUR, "R", range(268, 340, 3), lambda: [lambda: self_bvh(SUR)], 0.06),
         (SUR, "L", range(566, 664, 3), lambda: [lambda: self_bvh(SUR)], 0.06), (SUR, "R", range(566, 664, 3), lambda: [lambda: self_bvh(SUR)], 0.06),
         (SUR, "L", range(478, 520, 3), lambda: [lambda: self_bvh(SUR)]), (SUR, "R", range(478, 520, 3), lambda: [lambda: self_bvh(SUR)]),
