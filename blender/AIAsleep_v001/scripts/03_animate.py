@@ -246,14 +246,14 @@ SHOTS = [  # frame, camera position, aim point, focal length
  (958,  V((-0.26, -0.47, 1.25)), SCR, 30),
  (990,  V((-0.29, -0.49, 1.24)), SCR, 32),
  (1030, V((-0.36, -0.53, 1.24)), SCR, 32),
- (1055, V((-0.50, -0.52, 1.24)), FACE, 36),
- (1080, V((-0.50, -0.60, 1.22)), FACE, 42),
+ (1055, V((-0.44, -0.40, 1.15)), FACE, 34),
+ (1080, V((-0.40, -0.46, 1.14)), FACE, 40),
  (1140, V((-0.30, -0.34, 1.19)), FACE, 36),
  (1175, V((-0.40, -0.20, 1.22)), FACE, 32),
  (1220, V((-0.46, -0.30, 1.22)), V((-0.08, -0.40, 1.10)), 22),
  (1302, V((-0.42, -0.18, 1.32)), V((0, -0.3, 0.9)), 20),
  (1318, V((-1.10, -0.15, 1.22)), FACE, 20),
- (1340, V((-1.70, 0.40, 2.10)), CAR, 20),
+ (1340, V((-1.95, 0.05, 1.32)), CAR, 20),
  (1400, V((-1.6, 9.5, 4.2)), CAR, 24),
  (1432, V((4.2, 2.5, 3.2)), CAR, 26),
  (1464, V((3.6, -7.8, 1.9)), CAR, 28),
@@ -338,12 +338,16 @@ for m_ in list(fm.modifiers):
 vg = next((g.name for g in body.vertex_groups if g.name == "head"), None)
 if vg: mk = fm.modifiers.new("mask", "MASK"); mk.vertex_group = vg
 dp = fm.modifiers.new("disp", "DISPLACE"); dp.strength = 0.0025; dp.mid_level = 0.0
+if fm.vertex_groups.get("inside_eye"):
+    for _m in list(fm.modifiers):
+        if _m.name == "hide_inside_eye": fm.modifiers.remove(_m)
+    mke = fm.modifiers.new("hide_inside_eye_fm", "MASK"); mke.vertex_group = "inside_eye"; mke.invert_vertex_group = True
 wf = fm.modifiers.new("wire", "WIREFRAME"); wf.thickness = 0.0005; wf.use_replace = True
 M_fm, fm_vis, _ = emis("FaceMeshMat", (0.2, 0.95, 1.0), 1.2); fm.data = fm.data  # shares mesh: use material override via slot link
 fm.material_slots[0].link = "OBJECT"; fm.material_slots[0].material = M_fm
 for o_ in fm.material_slots[1:]: o_.link = "OBJECT"; o_.material = M_fm
 def vis(sock, f, v): sock.default_value = v; sock.keyframe_insert("default_value", frame=f)
-for f, v in ((1, 0), (40, 0), (55, 0.45), (75, 0.1), (100, 0.4), (130, 0.05), (160, 0.4), (225, 0.2), (236, 0), (1540, 0), (1556, 0.22), (1720, 0.15), (1740, 0)):
+for f, v in ((1, 0), (40, 0), (55, 0.45), (75, 0.1), (100, 0.4), (130, 0.05), (160, 0.4), (225, 0.2), (236, 0), (1540, 0), (1556, 0.22), (1625, 0.15), (1645, 0.0), (1720, 0.0), (1740, 0)):
     vis(fm_vis, f, v)
 # tracking box + iris circle, bone-parented to the head so they ride with him
 sc.frame_set(1); bpy.context.view_layer.update()
