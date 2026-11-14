@@ -115,9 +115,21 @@ def xray(name, parent, r0, r1, keys, objs, static=None):
             mx2 = nt_.nodes.new("ShaderNodeMixShader"); mx2.inputs[0].default_value = 0.2; nt_.links.new(tr_.outputs[0], mx2.inputs[1]); nt_.links.new(ad_.outputs[0], mx2.inputs[2])
             mx_ = nt_.nodes.new("ShaderNodeMixShader"); nt_.links.new(amt.outputs[0], mx_.inputs[0]); nt_.links.new(src, mx_.inputs[1]); nt_.links.new(mx2.outputs[0], mx_.inputs[2])
             nt_.links.new(mx_.outputs[0], outn.inputs["Surface"])
-xray("Xray_Center", OB["Arm_Pocket"], 0.03, 0.055, ((1, 0.0), (790, 0.0), (815, 0.95), (1040, 0.95), (1066, 0.0)), [OB["Patient.body"]])
+xray("Xray_Center", OB["Arm_Pocket"], 0.025, 0.05, ((1, 0.0), (790, 0.0), (815, 0.6), (1040, 0.6), (1066, 0.0)), [OB["Patient.body"]])   # v009d: gentler, no hollow crater
 # chest x-ray (beat 2): body and tee go glassy over the rib cage while the cartilage is harvested
-xray("Xray_Chest", OB["Chest_Thorax"], 5.0, 6.0, ((1, 0.0), (140, 0.0), (165, 0.92), (322, 0.92), (346, 0.0)), [OB["Patient.male_casualsuit06"]])   # the whole tee turns x-ray glass
+xray("Xray_Chest", OB["Chest_Thorax"], 0.2, 0.25, ((1, 0.0), (140, 0.0), (165, 0.92), (322, 0.92), (346, 0.0)), [OB["Patient.male_casualsuit06"]], static=V(0.0, -0.038, 1.013))   # v009d: only the tee over the chest (world centre: he sits still 140-346), jeans stay opaque   # the whole tee turns x-ray glass
+# v009d: the body under the tee was deleted by the clothes mask, so the glass tee showed an empty box with the head on top
+# and a ball-jointed arm beside it. During the x-ray the real torso skin is kept and goes glassy around the rib cage.
+_pm = OB["Patient.body"].modifiers["Delete.male_casualsuit06"]
+# legs stay masked under the jeans all the time (a second, legs-only mask); only the torso skin comes back for the x-ray
+_pb = OB["Patient.body"]; _g = _pb.vertex_groups["Delete.male_casualsuit06"]; _pz = OB["Patient"].data.bones["spine05"].head_local.z + 0.04
+_gl = _pb.vertex_groups.get("Delete.legs") or _pb.vertex_groups.new(name="Delete.legs")
+_gl.add([v.index for v in _pb.data.vertices if v.co.z < _pz and any(x.group == _g.index and x.weight > 0.5 for x in v.groups)], 1.0, 'REPLACE')
+_ml = _pb.modifiers.new("Delete.legs", 'MASK'); _ml.vertex_group = "Delete.legs"; _ml.invert_vertex_group = _pm.invert_vertex_group
+while _pb.modifiers.find("Delete.legs") > _pb.modifiers.find("Delete.male_casualsuit06") + 1: _pb.modifiers.move(_pb.modifiers.find("Delete.legs"), _pb.modifiers.find("Delete.legs") - 1)
+for f_, v_ in ((1, True), (138, True), (139, False), (348, False), (349, True)):
+    _pm.show_render = v_; _pm.keyframe_insert("show_render", frame=f_)   # render only: the checks switch masks off in the viewport
+xray("Xray_ChestSkin", OB["Chest_Thorax"], 0.15, 0.22, ((1, 0.0), (140, 0.0), (165, 0.9), (322, 0.9), (346, 0.0)), [OB["Patient.body"]])
 # heartbeat pulse of the glow on the patch
 # ================================================================== world + OR lights + render settings
 w = bpy.data.worlds.get("World") or bpy.data.worlds.new("World"); sc.world = w; w.use_nodes = True
@@ -166,8 +178,11 @@ def PB(pos, tgt, d):   # v009c: pull the camera back d metres along its view lin
 
 SEGS = [
   [  # OR, one continuous move: beat 1 shock -> x-ray of the chest (beat 2) -> follow the cartilage to the tray -> carving ...
-    (1, V(1.55, -0.2, 1.45), FACE1 + V(0, 0, -0.1), 26), (30, V(1.25, -0.12, 1.5), FACE1, 32), (60, V(0.2, -0.95, 1.4), FACE1, 40),
-    (90, V(0.75, -0.12, 1.45), EAR1, 45), (118, V(0.6, 0.05, 1.4), EAR1, 48), (145, V(0.15, -0.75, 1.25), PC + V(0, 0, 0.06), 38),
+    # v009d: the opening move goes round the FRONT of the surgeon and over his head (it used to pass through it at f43-81),
+    # the dressing is seen from the front-left (face profile + bandage, not the back of the head), then wide on the chest
+    (1, V(1.55, -0.2, 1.45), FACE1 + V(0, 0, -0.1), 26), (30, V(0.6, -1.3, 1.5), FACE1, 32), (60, V(0.02, -0.92, 1.42), FACE1, 40),
+    (76, V(0.3, -0.85, 1.95), FACE1.lerp(EAR1, 0.5), 38), (92, V(0.78, -0.42, 1.55), EAR1 + V(-0.03, -0.04, 0), 42), (118, V(0.66, -0.36, 1.45), EAR1 + V(-0.03, -0.04, 0), 45),
+    (132, V(-0.3, -1.05, 1.6), PC + V(0.1, 0, 0.1), 28), (145, V(0.05, -1.08, 1.45), PC + V(0, 0, 0.06), 32),
     (175, PB(V(-0.05, -0.62, 1.12), PC, 0.25), PC + V(0, 0, 0.02), 42), (205, PB(V(-0.22, -0.5, 1.08), PC, 0.25), PC, 45), (235, PB(V(-0.18, -0.5, 1.2), PC, 0.25), PC, 50),
     (262, PB(V(-0.12, -0.62, 1.28), PC, 0.25), PC + V(0.02, -0.03, 0.03), 44), (292, V(-0.05, -1.05, 1.5), PC.lerp(BLK, 0.4) + V(0, 0, 0.1), 34),
     (322, V(0.65, -1.4, 1.45), BLK + V(0, 0, 0.02), 38),
@@ -175,17 +190,19 @@ SEGS = [
     (400, BLK + V(-0.3, -0.28, 0.28), BLK + V(0, 0.03, 0.03), 34), (440, BLK + V(-0.34, -0.3, 0.3), BLK + V(0, 0.03, 0.03), 34),
     (480, BLK + V(0.02, -0.42, 0.36), BLK + V(0, 0.02, 0.0), 38), (525, BLK + V(0.12, -0.4, 0.32), BLK + V(0, 0.0, 0.0), 40),
     (565, BLK + V(0.2, -0.45, 0.42), BLK + V(-0.02, 0.02, 0.03), 36), (605, V(1.05, -0.45, 1.85), V(0.9, 0.1, 1.15), 34),
-    (645, INC + V(0.3, -0.36, 0.26), INC, 34), (685, INC + V(0.17, -0.22, 0.37), INC, 40), (725, INC + V(0.07, -0.16, 0.33), INC, 48),
-    (760, INC + V(0.05, -0.14, 0.32), INC, 50), (795, INC + V(0.02, -0.1, 0.24), INC, 58),
+    (645, INC + V(0.3, -0.36, 0.26), INC, 34), (685, INC + V(0.17, -0.32, 0.37), INC, 40), (725, INC + V(0.09, -0.27, 0.33), INC, 44),
+    (760, INC + V(0.07, -0.25, 0.32), INC, 46), (795, INC + V(0.04, -0.2, 0.26), INC, 54),
     # x-ray: the skin turns glassy and the camera orbits the ear growing inside the forearm
     (830, INC + V(0.07, -0.11, 0.1), INC + V(0, 0, -0.006), 70), (870, PB(INC + V(0.16, -0.06, 0.09), INC, 0.2), INC + V(0, 0, -0.006), 70),
     (910, PB(INC + V(0.13, 0.0, 0.16), INC, 0.2), INC + V(0, 0, -0.006), 65), (950, PB(INC + V(0.0, -0.03, 0.19), INC, 0.2), INC + V(0, 0, -0.006), 65),
     (990, PB(INC + V(-0.1, -0.07, 0.3), INC, 0.2), INC + V(0, 0, -0.006), 65), (1030, PB(INC + V(-0.05, -0.12, 0.33), INC, 0.2), INC + V(0, 0, -0.006), 65),
-    (1071, INC + V(0.04, -0.1, 0.36), INC, 48), (1130, INC + V(0.14, -0.24, 0.4), INC, 40),
+    (1071, INC + V(0.1, -0.24, 0.38), INC, 44), (1130, INC + V(0.14, -0.24, 0.4), INC, 40),
     (1180, V(0.98, 0.12, 1.42), INC + V(0, 0, 0.06), 36), (1240, V(0.92, 0.3, 1.5), INC + V(0, 0, 0.18), 36), (1300, V(0.88, 0.22, 1.6), FT, 34),
     (1345, EO(0.6, -0.2, 0.3), EO(0.1, 0, 0.05), 32), (1385, EO(0.4, -0.15, 0.17), EAR_W, 38), (1425, EO(0.26, -0.09, 0.08), EAR_W, 45),
-    (1465, EO(0.17, -0.03, 0.03), EAR_W + V(0, 0, -0.005), 75), (1505, EO(0.16, 0.03, 0.04), EAR_W, 75), (1545, EO(0.16, -0.04, 0.0), EAR_W, 75),
-    (1585, EO(0.16, 0.0, -0.03), EAR_W, 75), (1625, EO(0.16, 0.04, 0.02), EAR_W, 70), (1650, EO(0.18, 0.02, 0.06), EAR_W, 45),
+    # v009d: stitching framed wide enough to show the needle holder, the hand and the thread (they were outside the macro)
+    (1465, EAR_W + V(0.36, -0.3, 0.3), EAR_W + V(0.03, 0.04, 0.03), 38), (1505, EAR_W + V(0.38, -0.32, 0.32), EAR_W + V(0.04, 0.03, 0.03), 34),
+    (1545, EAR_W + V(0.38, -0.34, 0.3), EAR_W + V(0.04, 0.03, 0.03), 34), (1585, EAR_W + V(0.37, -0.33, 0.28), EAR_W + V(0.04, 0.03, 0.02), 34),
+    (1625, EAR_W + V(0.36, -0.32, 0.3), EAR_W + V(0.04, 0.03, 0.03), 34), (1650, EAR_W + V(0.34, -0.3, 0.3), EAR_W + V(0.03, 0.02, 0.02), 36),
     (1685, V(0.75, 0.15, 1.5), V(0.05, 0.1, 1.3), 34), (1715, V(0.85, -0.45, 1.46), FACE9, 36), (1745, V(0.5, -0.88, 1.43), FACE9 + V(0.02, 0, -0.02), 40),
     (1770, V(0.4, -0.95, 1.42), FACE9 + V(0.02, 0, -0.02), 41)],
 ]

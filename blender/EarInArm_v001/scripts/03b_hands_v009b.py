@@ -45,14 +45,14 @@ def wrist_follow(s, f0, f1, ramp=8):
     c = SUR.pose.bones["wrist." + s].constraints[0]
     for f, v in ((f0 - ramp, 0.0), (f0, 1.0), (f1, 1.0), (f1 + ramp, 0.0)):
         c.influence = v; c.keyframe_insert("influence", frame=f)
-wrist_follow("L", 158, 278); wrist_follow("L", 534, 562); wrist_follow("R", 534, 560); wrist_follow("L", 1390, 1498)
+wrist_follow("L", 158, 278); wrist_follow("L", 534, 562); wrist_follow("R", 534, 560); wrist_follow("L", 1390, 1650)
 
 # ---------------------------------------------------------------- tool hand: surgeon R pinches the forceps shafts (grip_object)
 def grip_forceps(f):
     sc.frame_set(f); C = FORC.matrix_world @ Vector((0, 0.04, 0))
     rep = grip_object(SUR, "R", f, FORC, C, (C - wrist(SUR, "R")).normalized(), grip="pinch")
     LOG.append(("forceps", f, rep))
-FORC_F = sorted(set(list(range(100, 337, 12)) + [336] + list(range(572, 1500, 12)) + [1498]))
+FORC_F = sorted(set(list(range(100, 337, 12)) + [336] + [f for f in range(572, 1500, 12) if not 784 <= f <= 1062] + [1498]))   # v009d: not while he waits with the hand at his side
 lock(SUR, "R", 90)
 for f in FORC_F: grip_forceps(f)
 # grip_object places the hand on the shafts; in the chest and head beats the fingers are then set to the full pinch
@@ -65,7 +65,7 @@ for f in FORC_F:
 for f in (146, 290): lock(SUR, "L", f)
 for f in range(158, 280, 12):
     sc.frame_set(f); tip = FORC.matrix_world @ Vector((0, 0.13, 0))
-    p, n = surf(TEE, tip + Vector((0.11, -0.02, 0.07)))
+    p, n = surf(TEE, tip + Vector((0.17, -0.01, 0.11)))   # v009d: further onto his upper-left chest, clear of the forceps hand
     place_hand(SUR, "L", f, p, -n, Vector((0, 0, 1)) - n * n.z, skin=0.014); apply_pose(SUR, "L", "flat_palm", f)
 apply_pose(SUR, "L", "relaxed", 290)
 
@@ -82,13 +82,32 @@ for f in range(536, 566, 6):
 apply_pose(SUR, "L", "relaxed", 576)
 
 # ---------------------------------------------------------------- 5. ear placement: L flat on the scalp above the ear
-lock(SUR, "L", 1380); lock(SUR, "L", 1506)
-for f in range(1392, 1500, 12):
+lock(SUR, "L", 1380); lock(SUR, "L", 1662)
+for f in range(1392, 1652, 12):
     sc.frame_set(f); H = PAT.matrix_world @ PAT.pose.bones["head"].matrix
     up = (H.to_3x3() @ Vector((0, 1, 0))).normalized(); c = PAT.matrix_world @ PAT.pose.bones["head"].tail
     p, n = surf(BODY[PAT], c + up * 0.02 + (wrist(SUR, "L") - c).normalized() * 0.05)
     place_hand(SUR, "L", f, p, -n, up - n * up.dot(n), skin=0.013); apply_pose(SUR, "L", "flat_palm", f)
 
+# ---------------------------------------------------------------- v009d: during the growing beat the surgeon's free left hand
+# hangs relaxed at his side (it floated palm-up by the arm for ~5 s, and later filled the x-ray macro)
+lock(SUR, "L", 784); lock(SUR, "L", 1062); lock(SUR, "R", 784); lock(SUR, "R", 1062)
+def hang(s_, f, side_sign):
+    sc.frame_set(f); shL = SUR.matrix_world @ SUR.pose.bones["upperarm01.L"].head; shR = SUR.matrix_world @ SUR.pose.bones["upperarm01.R"].head
+    right = shR - shL; right.z = 0; right.normalize(); fwd = Vector((0, 0, 1)).cross(right)
+    sh_ = shR if s_ == "R" else shL
+    W = sh_ + right * (0.06 * side_sign) + fwd * 0.1 + Vector((0, 0, -0.56))
+    pb = SUR.pose.bones["IK_hand." + s_]; d_ = SUR.matrix_world.inverted() @ W - (SUR.matrix_world.inverted() @ (SUR.matrix_world @ pb.head))
+    pb.location = pb.location + SUR.data.bones["IK_hand." + s_].matrix_local.to_3x3().inverted() @ d_
+    pb.keyframe_insert("location", frame=f, group=pb.name)
+for f in range(796, 1052, 32): hang("R", f, 1.0)   # the forceps hand waits at his side too (it rose into the x-ray camera)
+for f in range(796, 1052, 32):
+    sc.frame_set(f); shL = SUR.matrix_world @ SUR.pose.bones["upperarm01.L"].head; shR = SUR.matrix_world @ SUR.pose.bones["upperarm01.R"].head
+    right = shR - shL; right.z = 0; right.normalize(); fwd = Vector((0, 0, 1)).cross(right)
+    W = shL - right * 0.06 + fwd * 0.08 + Vector((0, 0, -0.58))
+    pb = SUR.pose.bones["IK_hand.L"]; d_ = SUR.matrix_world.inverted() @ W - (SUR.matrix_world.inverted() @ (SUR.matrix_world @ pb.head))
+    pb.location = pb.location + SUR.data.bones["IK_hand.L"].matrix_local.to_3x3().inverted() @ d_
+    pb.keyframe_insert("location", frame=f, group=pb.name)
 # ---------------------------------------------------------------- 6. patient's free (right) hand relaxed on the armrest while reclined
 lock(PAT, "R", 468)
 for f in list(range(480, 1640, 40)) + [1640]:
@@ -129,7 +148,7 @@ for rig in (SUR,):
     gm = BODY[rig].modifiers.get("GloveThin")
     if gm: BODY[rig].modifiers.remove(gm)
 SCHED = {(SUR, "R"): [(1, "pinch_tuck"), (339, "pinch_tuck"), (343, "cup_hold"), (464, "cup_hold"), (472, "relaxed_even"), (560, "relaxed_even"), (566, "pinch_tuck"),
-                      (1500, "pinch_tuck"), (1502, "tripod"), (1685, "tripod"), (1715, "relaxed_even"), (1770, "relaxed_even")],
+                      (1500, "pinch_tuck"), (1502, "pinch_tuck"), (1685, "pinch_tuck"), (1715, "relaxed_even"), (1770, "relaxed_even")],
          (SUR, "L"): [(1, "relaxed_even"), (96, "relaxed_even"), (106, "flat_palm"), (278, "flat_palm"), (290, "relaxed_even"), (337, "relaxed_even"), (343, "pinch_tuck"),
                       (464, "pinch_tuck"), (476, "relaxed_even"), (1385, "relaxed_even"), (1392, "flat_palm"), (1498, "flat_palm"), (1508, "relaxed_even"), (1770, "relaxed_even")],
          (NUR, "L"): [(1, "relaxed_even"), (1770, "relaxed_even")], (NUR, "R"): [(1, "relaxed_even"), (1770, "relaxed_even")]}
@@ -145,6 +164,8 @@ for f in range(1, 46, 4):
     sc.frame_set(f); rb.location = rb.location + SUR.data.bones["root"].matrix_local.to_3x3().inverted() @ (SUR.matrix_world.inverted().to_3x3() @ (Vector((0.63, -0.78, 0)).normalized() * 0.10))
     rb.keyframe_insert("location", frame=f, group="root")
 # (the patient's own hand path is unchanged)
+# v009d: the patient's hand on the new ear is relaxed (cup_hold read as a claw)
+for f in (1715, 1745, 1770): apply_pose(PAT, "L", "relaxed_even", f, spread=0)
 lock(PAT, "L", 1); lock(PAT, "L", 42)
 for f, w in ((5, 0.5), (11, 1.0), (18, 1.0), (24, 1.0), (30, 1.0), (36, 0.5)):
     sc.frame_set(f); pb = PAT.pose.bones["IK_hand.L"]; off = Vector((0, 0, 0))
@@ -199,7 +220,10 @@ def unclip(rig, s, f, targets, margin=0.01, it=6, cap=0.2):
         pb.location = pb.location + d_; pb.keyframe_insert("location", frame=f, group=pb.name); moved += push.length
     return moved
 def others(rig): return [lambda o=o: bvh(o) for o in (SUR, PAT, NUR) if o is not rig for o in (BODY[o],)]
-JOBS = [(SUR, "L", range(478, 520, 3), lambda: [lambda: self_bvh(SUR)]), (SUR, "R", range(478, 520, 3), lambda: [lambda: self_bvh(SUR)]),
+JOBS = [(PAT, "L", range(120, 200, 4), lambda: [lambda: self_bvh(PAT)], 0.08), (PAT, "R", range(120, 200, 4), lambda: [lambda: self_bvh(PAT)], 0.08),
+        (SUR, "L", range(268, 340, 3), lambda: [lambda: self_bvh(SUR)], 0.06), (SUR, "R", range(268, 340, 3), lambda: [lambda: self_bvh(SUR)], 0.06),
+        (SUR, "L", range(566, 664, 3), lambda: [lambda: self_bvh(SUR)], 0.06), (SUR, "R", range(566, 664, 3), lambda: [lambda: self_bvh(SUR)], 0.06),
+        (SUR, "L", range(478, 520, 3), lambda: [lambda: self_bvh(SUR)]), (SUR, "R", range(478, 520, 3), lambda: [lambda: self_bvh(SUR)]),
         (PAT, "R", range(13, 44, 6), lambda: others(PAT) + [lambda: self_bvh(PAT)], 0.03), (SUR, "L", range(1, 50, 3), lambda: [lambda: bvh(BODY[PAT])], 0.06), (SUR, "R", range(1, 50, 3), lambda: [lambda: bvh(BODY[PAT])], 0.06),
         (SUR, "L", range(265, 300, 3), lambda: [lambda: self_bvh(SUR)]), (SUR, "R", range(265, 300, 3), lambda: [lambda: self_bvh(SUR)], 0.04),
         (SUR, "L", range(637, 664, 3), lambda: others(SUR)), (SUR, "R", range(637, 664, 3), lambda: others(SUR), 0.04),
@@ -213,6 +237,30 @@ for job in JOBS:
     rig, s, frs, tg = job[:4]; cap = job[4] if len(job) > 4 else 0.2
     for f in frs:
         m = unclip(rig, s, f, tg(), cap=cap); LOG.append(("unclip", rig.name, s, f, round(m, 3)))
+# v009d: stitching, solved on the final pose: at every stitch key the pinch sits 10.8 cm back from the stitch along his reach,
+# so the needle holder (re-baked below along shoulder -> pinch) puts its needle on the stitch; between stitches it lifts 3 cm
+NH = OB["NeedleHolder"]
+def sh_pt(): return SUR.matrix_world @ SUR.pose.bones["upperarm01.R"].head
+def stitch_w(i):   # hidden objects are not evaluated: build the world point from the head bone (bone parent, identity inverse)
+    o = OB["Stitch%d" % i]; hb = PAT.pose.bones["head"]
+    return (PAT.matrix_world @ hb.matrix @ Matrix.Translation((0, hb.length, 0)) @ o.matrix_basis).translation
+for i in range(9):
+    for f, lift in ((1505 + i * 15, 0.0), (1513 + i * 15, 0.03)):
+        for _ in range(14):
+            sc.frame_set(f - 1); sc.frame_set(f); st = stitch_w(i) + Vector((0, 0, lift))
+            dsp = (st - sh_pt()).normalized(); want = st - dsp * 0.108; err = want - pinch_pt(SUR, "R")
+            if err.length < 0.003: break
+            pb = SUR.pose.bones["IK_hand.R"]
+            pb.location = pb.location + SUR.data.bones["IK_hand.R"].matrix_local.to_3x3().inverted() @ (SUR.matrix_world.inverted().to_3x3() @ (err * 0.5))   # damped: the pinch swings with the forearm
+            pb.keyframe_insert("location", frame=f, group=pb.name); sc.frame_set(f - 1); sc.frame_set(f); bpy.context.view_layer.update()
+        LOG.append(("stitch", i, f, round(err.length, 3)))
+def nh_held():
+    pp_ = pinch_pt(SUR, "R"); dsp = (pp_ - sh_pt()).normalized()
+    Y = -dsp; X = Y.cross(Vector((0, 0, 1))); X = X.normalized() if X.length > 1e-4 else Vector((1, 0, 0)); Z = X.cross(Y)
+    M = Matrix((X, Y, Z)).transposed().to_4x4(); M.translation = pp_ + dsp * 0.03
+    return M
+for f in range(1501, 1687, 2):   # same (odd) frames as the bake in 03_animate.py, so the keys replace it
+    sc.frame_set(f); NH.matrix_world = nh_held(); NH.keyframe_insert("location", frame=f); NH.keyframe_insert("rotation_euler", frame=f)
 # re-bake the forceps (and what rides in it) from the final hand, so the closed pinch stays on the shafts
 from mathutils import Matrix
 def R_(d): return math.radians(d)
@@ -222,7 +270,7 @@ def keymat(o, f, M):
 for f in [f for f in range(1, 1501, 2) if f <= 331 or 566 <= f <= 1500]:
     sc.frame_set(f)
     Rw = (SUR.matrix_world @ SUR.pose.bones["wrist.R"].matrix).to_3x3().normalized().to_4x4(); PP = Matrix.Translation(pinch_pt(SUR, "R"))
-    keymat(FORC, f, PP @ Rw @ Matrix.Translation((0, -0.04, 0)))
+    keymat(FORC, f, PP @ Rw @ Matrix.Rotation(math.radians(FORC.get("tilt_deg", 0.0)), 4, 'X') @ Matrix.Translation((0, -0.04, 0)))
     tip = FORC.matrix_world @ Vector((0, 0.13, 0)); Rf = FORC.matrix_world.to_quaternion().to_matrix().to_4x4()
     if CARRY and 255 <= f <= 335:
         sc_ = CARRY.matrix_world.to_scale()[0]; keymat(CARRY, f, Matrix.Translation(tip) @ FORC.matrix_world.to_3x3().normalized().to_4x4() @ Matrix.Scale(sc_, 4))
