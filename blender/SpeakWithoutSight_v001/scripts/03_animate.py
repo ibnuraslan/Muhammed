@@ -435,6 +435,7 @@ for f, dx, dz in LIP_KEYS:
         tip = tp.lerp(mp + ff * 0.02, u) + ff * 0.085 * math.sin(math.pi * u)
         g_hand_on("R", f, tip, fdir(T_YAW).lerp(ff, u).normalized(), (UP * 0.55 + rdir(T_YAW) * 0.85).lerp(-ff.cross(UP) + UP * 0.25, u), curl=12)
         t_rest(f, "R")   # v005: no wrist grip on the way to the lips
+        apply_pose(G.o, "R", "shield", f)   # v005: thumb tucked beside the index (it poked into her own body here)
     else:
         lip_key(f, dx, dz)
 for f in (445, 462, 480):   # v005: no wrist grip; her right hand hangs relaxed at her side while the girl's hand leaves her lap
