@@ -111,7 +111,7 @@ plan = {}
 for f in range(601, 776, 3):
     ev(f); up, right, fwd = axes(PT)
     sp = Wb(PT, "spine03"); thigh = Wb(PT, "upperleg01.L").lerp(Wb(PT, "lowerleg01.L"), 0.70)
-    if f <= 684:                                                                       # v008f: no mug; arm hangs relaxed
+    if f <= 684 or f >= 756:                                                           # v008f: no mug; arm hangs relaxed
         c_ = (Wb(PT, "upperarm01.L") + Wb(PT, "upperarm01.R")) / 2          # mirror her hanging right hand onto the left
         if f <= 643:                                                   # both arms still hang here
             pr = Wb(PT, "finger3-1.R").lerp(Wb(PT, "wrist.R"), 0.4)
@@ -124,7 +124,9 @@ for f in range(601, 776, 3):
         front = (fwd - tax * fwd.dot(tax)).normalized()                                   # the thigh's own front
         L = (thigh + front * 0.05 - right * 0.085, (right * 0.7 - front * 0.3).normalized(), tax)   # palm on the OUTSIDE of her left thigh
     R = None
-    if f >= 662:
+    if f >= 756:                                                                     # both arms hang as she turns away
+        R = (c_ - right * HANG[0] + up * HANG[1] + fwd * HANG[2], -right, -up)
+    elif f >= 662:
         R = (sp + right * 0.15 + fwd * 0.04 + up * 0.04, -right, (fwd * 0.7 - up * 0.3))  # palm pressed on her right side
     plan[f] = (L, R)
 ik_clear(PT, "L", 601, 775); ik_clear(PT, "R", 662, 775)
@@ -136,6 +138,11 @@ for f, (L, R) in sorted(plan.items()):
     pbp.location = bn_.matrix_local.to_3x3().inverted() @ (PT.matrix_world.inverted() @ pole_w - bn_.head_local)
     pbp.keyframe_insert("location", frame=f, group=pn)
     if R: place_hand(PT, "R", f, R[0], R[1], R[2])
+    if f >= 756:
+        pn = "Pole_elbow.R"; pbp = PT.pose.bones[pn]; bn_ = PT.data.bones[pn]
+        pole_w = Wb(PT, "upperarm01.R") - up_ * 0.55 + right_ * 0.12 - fwd_ * 0.10
+        pbp.location = bn_.matrix_local.to_3x3().inverted() @ (PT.matrix_world.inverted() @ pole_w - bn_.head_local)
+        pbp.keyframe_insert("location", frame=f, group=pn)
 # v008f: the mug is removed (it read as an object at her groin); her left hand is relaxed until it goes to the thigh
 MUG.animation_data_clear(); MUG.hide_render = True; MUG.hide_viewport = True
 for f in range(600, 686, 6):
@@ -148,6 +155,19 @@ for f in (1022, 1030, 1038, 1046):
     place_hand(S2_, "L", f, Vector((-0.14, 0.27, 1.20)), Vector((0, 0, -1)), Vector((0.1, -1, 0)))
     place_hand(S2_, "R", f, Vector((-0.46, 0.27, 1.20)), Vector((0, 0, -1)), Vector((-0.1, -1, 0)))
     apply_pose(S2_, "L", "flat_palm", f); apply_pose(S2_, "R", "flat_palm", f)
+# 5a3. the glowing x-ray liver sits INSIDE her torso: right upper abdomen under the ribs, 60% size, riding spine03
+XL = bpy.data.objects["XRayLiver_Home"]
+if XL.animation_data and XL.animation_data.action:
+    for Lr in XL.animation_data.action.layers:
+        for st in Lr.strips:
+            for cb in st.channelbags:
+                for fcu in list(cb.fcurves):
+                    if fcu.data_path in ("location", "scale", "rotation_euler"): cb.fcurves.remove(fcu)
+ev(700); up, right, fwd = axes(PT)
+XL.scale = XL.scale * 0.6; bpy.context.view_layer.update()
+bb = [XL.matrix_world @ Vector(c) for c in XL.bound_box]; B = sum(bb, Vector()) / 8
+C = Wb(PT, "spine03") + right * 0.06 + fwd * 0.15 + up * 0.06      # on her right belly, inside her silhouette
+XL.matrix_world = Matrix.Translation(C - B) @ XL.matrix_world
 # 5b. the judge: from the pick-up on, the gavel's handle grip point sits in his evaluated palm on every frame (the designed
 #     raise / strike rotation is kept), so it never floats free of his fist
 PA = bpy.data.objects["PanelA"]; GAV = bpy.data.objects["Gavel"]
