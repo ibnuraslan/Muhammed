@@ -70,7 +70,37 @@ def tex_card(lines, name, w=900, h=540, seed=1, ruled=True):
     return _save(im, name)
 
 
-def tex_plan():
+def rough_marks(size, strokes, words=(), col=RED, seed=3, width=7, grain=0.55):
+    """Hand-made marks as an RGBA layer: each stroke is several jittered passes of uneven width; the alpha is then
+    broken up by paper-tooth grain and pressure changes, so it reads as real pencil / chalk, never a clean tube.
+    strokes: list of point lists (px); words: (text, (x, y), font_path, size, angle)."""
+    w, h = size; rng = np.random.default_rng(seed)
+    lay = Image.new("L", (w, h), 0); d = ImageDraw.Draw(lay)
+    for pts in strokes:
+        for k in range(4):
+            jit = [(x + rng.normal(0, width * 0.18), y + rng.normal(0, width * 0.18)) for x, y in pts]
+            # resample so pressure can vary along the stroke
+            for (x0, y0), (x1, y1) in zip(jit, jit[1:]):
+                n = max(2, int(math.hypot(x1 - x0, y1 - y0) / 6))
+                for i in range(n):
+                    a = i / n; b = (i + 1) / n
+                    wv = max(1, int(width * (0.45 + 0.35 * rng.random()) * (0.8 + 0.2 * math.sin(7 * a + k))))
+                    d.line([(x0 + (x1 - x0) * a, y0 + (y1 - y0) * a), (x0 + (x1 - x0) * b, y0 + (y1 - y0) * b)], fill=int(150 + 100 * rng.random()), width=wv)
+    for txt, (x, y), fp, sz, ang in words:
+        tl = Image.new("L", (int(sz * len(txt) * 0.8) + 40, int(sz * 1.6)), 0); ImageDraw.Draw(tl).text((20, 10), txt, font=F(fp, sz), fill=235)
+        tl = tl.rotate(ang, expand=True, resample=Image.BICUBIC)
+        lay.paste(Image.fromarray(np.maximum(np.array(lay.crop((x, y, x + tl.size[0], y + tl.size[1]))), np.array(tl))), (x, y))
+    a = np.array(lay).astype(float) / 255.0
+    tooth = rng.random((h, w)); tooth = np.clip((tooth - (1 - grain)) / grain, 0, 1)            # paper tooth: grain skips
+    from PIL import ImageFilter
+    blot = np.array(Image.fromarray((rng.random((h // 16 + 1, w // 16 + 1)) * 255).astype(np.uint8)).resize((w, h), Image.BICUBIC)) / 255.0
+    a = np.clip(1.5 * a * (0.55 + 0.45 * tooth) * (0.75 + 0.35 * blot), 0, 1)
+    a = np.array(Image.fromarray((np.clip(a, 0, 1) * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(0.6))) / 255.0
+    out = np.zeros((h, w, 4), np.uint8); out[..., :3] = col; out[..., 3] = (np.clip(a, 0, 1) * 255).astype(np.uint8)
+    return Image.fromarray(out, "RGBA")
+
+
+def tex_plan(route=False):
     """Ground-floor plan of the house, drafting ink on cream paper (top of the sheet = back of the house)."""
     w, h = 2000, 1400
     im = paper_img(w, h, 7, (232, 224, 200)); d = ImageDraw.Draw(im)
@@ -104,13 +134,20 @@ def tex_plan():
     d.rectangle([1560, 420, 1700, 520], outline=INK, width=4); d.rectangle([1100, 170, 1200, 250], outline=INK, width=4)
     PLAN_PX.update(dict(w=w, h=h, kitchen=(1350, 470), hall_k=(mx + 70, 450), hall=(mx - 140, 610), front=(1210, 1120),
                         door_in=(mx + 60, 890), bed=(620, 1030), bed_door=(mx - 280, 1000)))
+    if route:      # his route in the detectives' red pencil, drawn on the sheet (it is already there when we arrive)
+        P = PLAN_PX; pts = [P[k] for k in ("kitchen", "hall_k", "hall", "door_in", "front", "door_in", "bed_door", "bed")]
+        ex, ey = P["bed"]
+        mk = rough_marks((w, h), [pts, [(ex - 40, ey - 40), (ex + 40, ey + 40)], [(ex + 40, ey - 40), (ex - 40, ey + 40)]],
+                         words=(("his route, 10-17", (1060, 560), HAND, 58, 8),), seed=5, width=13)
+        im = Image.alpha_composite(im.convert("RGBA"), mk).convert("RGB")
+        return _save(im, "plan_route.png")
     return _save(im, "plan_ground.png")
 
 
 PLAN_PX = {}
 
 
-def tex_calendar(year, month, name, circle=None):
+def tex_calendar(year, month, name, circle=None, ticks=()):
     import calendar
     w, h = 1000, 1300
     im = paper_img(w, h, month, (238, 232, 216)); d = ImageDraw.Draw(im)
@@ -129,6 +166,14 @@ def tex_calendar(year, month, name, circle=None):
             if day:
                 d.text((cx + 14, cy + 8), str(day), font=F(SERIFB, 52), fill=(150, 30, 26) if i == 0 else INK)
                 cells[day] = ((cx + cw / 2) / w, (cy + rh / 2) / h, cw / w, rh / h)
+    if ticks:          # red pencil slashes through each day, and "five weeks" written under the grid
+        strokes = []
+        for day in ticks:
+            u, v, cu, cv = cells[day]
+            cx, cy = u * w, v * h
+            strokes.append([(cx - 0.3 * cu * w, cy + 0.3 * cv * h), (cx + 0.3 * cu * w, cy - 0.3 * cv * h)])
+        mk = rough_marks((w, h), strokes, words=(("five weeks", (470, 1120), HAND, 84, 3),), seed=month, width=11)
+        im = Image.alpha_composite(im.convert("RGBA"), mk).convert("RGB"); d = ImageDraw.Draw(im)
     if circle in cells:
         u, v, cu, cv = cells[circle]
         cx, cy = u * w, v * h
@@ -304,10 +349,15 @@ def _b_board(c):
     wall = box("Wall", (0, 0.03, 1.2), (5, 0.04, 3), pbr("OfficeWall", (0.12, 0.13, 0.11), 0.85))
     cork_m = bpy.data.materials.new("Cork"); cork_m.use_nodes = True
     N = cork_m.node_tree.nodes; L = cork_m.node_tree.links; p = N["Principled BSDF"]
-    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 300; nz.inputs['Detail'].default_value = 8
-    cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.18, 0.1, 0.05, 1); cr.color_ramp.elements[1].color = (0.42, 0.27, 0.14, 1)
-    L.new(nz.outputs['Fac'], cr.inputs[0]); L.new(cr.outputs[0], p.inputs['Base Color']); p.inputs['Roughness'].default_value = 0.9
-    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.4; L.new(nz.outputs['Fac'], bp.inputs['Height']); L.new(bp.outputs['Normal'], p.inputs['Normal'])
+    # real cork: granules (voronoi cells) of mixed tone, dark pits, fine grain
+    nz = N.new("ShaderNodeTexVoronoi"); nz.inputs['Scale'].default_value = 260
+    nz2 = N.new("ShaderNodeTexNoise"); nz2.inputs['Scale'].default_value = 60; nz2.inputs['Detail'].default_value = 4
+    mx_ = N.new("ShaderNodeMix"); mx_.data_type = 'FLOAT'; mx_.inputs['Factor'].default_value = 0.35
+    L.new(nz.outputs['Distance'], mx_.inputs[2]); L.new(nz2.outputs['Fac'], mx_.inputs[3])
+    cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.05, 0.028, 0.014, 1); cr.color_ramp.elements[1].color = (0.42, 0.27, 0.13, 1)
+    cr.color_ramp.elements.new(0.55).color = (0.27, 0.16, 0.08, 1)
+    L.new(mx_.outputs[0], cr.inputs[0]); L.new(cr.outputs[0], p.inputs['Base Color']); p.inputs['Roughness'].default_value = 0.95
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.7; L.new(nz.outputs['Distance'], bp.inputs['Height']); L.new(bp.outputs['Normal'], p.inputs['Normal'])
     box("Cork", (0, 0, 1.45), (1.5, 0.02, 0.95), cork_m)
     box("Frame", (0, 0.008, 1.45), (1.58, 0.015, 1.03), H.mat("oak"))
     R90 = (math.radians(90), 0, 0); y = -0.012
@@ -368,7 +418,7 @@ def _b_calendar(c):
     wp = H.wallpaper("CalWall", (0.62, 0.55, 0.42), (0.55, 0.2, 0.18), (0.3, 0.38, 0.22), seed=4, scale=6.0)
     box("Wall", (0, 0.02, 1.5), (3, 0.04, 3), wp)
     box("Wainscot", (0, 0.0, 0.5), (3, 0.03, 1.0), H.mat("oak"))
-    sep, sep_cells = tex_calendar(1941, 9, "cal_sep.png")
+    sep, sep_cells = tex_calendar(1941, 9, "cal_sep.png", ticks=range(12, 31))
     octp, _ = tex_calendar(1941, 10, "cal_oct.png", circle=17)
     head = paper_img(1000, 520, 9, (225, 205, 170)); d = ImageDraw.Draw(head)
     d.rectangle([30, 30, 970, 490], outline=(120, 40, 30), width=8)
@@ -387,17 +437,8 @@ def _b_calendar(c):
     bd = pg.modifiers.new("bend", 'SIMPLE_DEFORM'); bd.deform_method = 'BEND'; bd.deform_axis = 'X'; bd.angle = 0.0
     c["hinge"], c["oct"], c["bend"] = hinge, pg, bd
     cyl("Nail", (0, -0.01, top + 0.17), 0.004, 0.02, H.mat("chrome"), 8, rot=R90)
-    # red pencil ticks, one per day from Sept 12 to Sept 30 (five weeks before October 17)
-    red = pbr("RedPencil", (0.5, 0.04, 0.03), 0.7)
-    c["ticks"] = []
-    for day in range(12, 31):
-        u, v, cu, cv = sep_cells[day]
-        p = Vector(((u - 0.5) * W, -0.0045, top - v * Hh))
-        o = box("Tick%d" % day, p, (cu * W * 0.75, 0.0006, 0.0025), red, rot=(0, math.radians(-38), 0))
-        o.scale = (0.0, 1, 1); c["ticks"].append(o)
-    u, v, cu, cv = sep_cells[12]
-    c["mark"] = text_obj("FiveWeeks", "five weeks", (0.075, -0.0047, top - 0.88 * Hh), 0.028, red, rot=R90, extrude=0.0, font_path=HAND)
-    c["mark"].scale = (0, 0, 0)
+    # October has been folded back over the top (someone counted back from the 17th): static, the marks are on September
+    hinge.rotation_euler = (math.radians(-168), 0, 0); bd.angle = math.radians(-35)
     # raking late light from a window at left, through mullions (gobo bars) + a soft fill
     spot((-1.6, -0.9, 1.9), (0.0, 0.0, 1.35), 900, 22, 0.15, col=(1.0, 0.8, 0.58), radius=0.02)
     for k in range(2):
@@ -411,25 +452,17 @@ def _b_calendar(c):
 def _b_plan_route(c):
     world_flat((0.0, 0.0, 0.0), 0.0)
     desk((2.0, 1.4))
-    plan = tex_plan(); pw, ph_ = 0.62, 0.434
+    plan = tex_plan(route=True); pw, ph_ = 0.62, 0.434
     sheet("Plan", plan, pw, ph_, (0, 0, 0.002), (0, 0, math.radians(4)), curl=0.003)
     rz = math.radians(4)
     def P2(key):
         px, py = PLAN_PX[key]; v = Vector(((px / PLAN_PX["w"] - 0.5) * pw, (0.5 - py / PLAN_PX["h"]) * ph_, 0.0058)); v.rotate(bpy.context.scene.objects["Plan"].rotation_euler); return v
     route = [P2(k) for k in ("kitchen", "hall_k", "hall", "door_in", "front", "door_in", "bed_door", "bed")]
     c["route_pts"] = route
-    red = pbr("RedPencil", (0.5, 0.035, 0.025), 0.75)
-    ln = polyline("Route", route, 0.0012, red); ln.data.bevel_factor_mapping_end = 'SPLINE'; ln.data.bevel_factor_end = 0.0
-    c["route"] = ln
-    # an X where it ends
-    end = route[-1]
-    c["x"] = [box("X%d" % k, end, (0.03, 0.002, 0.0012), red, rot=(0, 0, math.radians(45 + 90 * k))) for k in range(2)]
-    for o in c["x"]:
-        o.scale = (0, 1, 1)
-    # the red pencil itself, riding the line tip (no hand)
+    # the red pencil that drew it, put down on the desk beside the sheet
     pen = join([cyl("PencilBody", (0, 0, 0.09), 0.0045, 0.16, pbr("PencilRed", (0.55, 0.05, 0.03), 0.5), 6),
                 cyl("PencilWood", (0, 0, 0.005), 0.0035, 0.012, pbr("PencilWood", (0.75, 0.55, 0.35), 0.7), 12)], "Pencil")
-    c["pencil"] = pen
+    c["pencil"] = pen; pen.rotation_euler = (math.radians(90), 0, math.radians(-25)); pen.location = (0.38, -0.12, 0.0045)
     # props at the edge of frame: the iron tool (recurring), a pair of reading glasses (detective), a cup
     tool = flat_tool("StoveToolDesk"); tool.location = (0.18, -0.36, 0.0); tool.rotation_euler = (0, 0, math.radians(8))
     cyl("Cup", (-0.42, 0.24, 0.045), 0.04, 0.09, pbr("CupEnamel", (0.75, 0.73, 0.68), 0.3), 24)
@@ -548,8 +581,8 @@ def _b_cutaway(c):
     paper_m = pbr("CardPaper", (0.85, 0.82, 0.74), 0.8)
     box("DateCard", (0.0, -0.81, 0.45), (0.62, 0.006, 0.2), paper_m)
     ink = pbr("CardInk", (0.03, 0.025, 0.02), 0.6)
-    c["month"] = text_obj("Month", "OCTOBER 1941", (0.0, -0.815, 0.48), 0.06, ink, font_path=SERIFB)
-    c["days"] = text_obj("Days", "day 1", (0.0, -0.815, 0.39), 0.04, pbr("CardRed", (0.5, 0.05, 0.03), 0.6), font_path=SERIF)
+    text_obj("Month", "OCTOBER 1941  -  JULY 1942", (0.0, -0.815, 0.48), 0.05, ink, font_path=SERIFB)
+    text_obj("Days", "286 days in the crawl space", (0.0, -0.815, 0.39), 0.04, pbr("CardRed", (0.5, 0.05, 0.03), 0.6), font_path=SERIF)
     # light: a key from high front-left whose colour and angle follow the season, + a cool rim behind
     c["key"] = spot((-2.0, -2.2, 3.0), (0, 0, 1.0), 900, 40, 0.5, radius=0.2)
     rim = spot((1.5, 2.5, 2.2), (0, 0, 1.0), 300, 40, 0.5, col=(0.8, 0.86, 1.0), radius=0.3)
@@ -610,10 +643,13 @@ def anim_tool_swing(c, t):
 def anim_board(c, t):
     sec = t * DUR["board"]
     # the last print was just pinned: it still sways on its pin, settling
-    o = c["prints"][2]; o.rotation_euler.y = math.radians(4 + 3.5 * math.exp(-0.7 * sec) * math.sin(4.2 * sec))
+    return          # static: the push and the focus pull lead the eye
 
 
 def anim_file(c, t):
+    c["photo"].location = (0.1, 0.0, 0.0085); c["photo"].rotation_euler = (0, 0, math.radians(4))
+    c["name"].data.body = "THEODORE CONEYS"
+    return          # static: a focus pull from the faceless print to the typed name
     sec = t * DUR["file_card"]
     u = smooth(0.0, 1.6, sec)
     c["photo"].location = Vector((0.55, 0.06, 0.008)).lerp(Vector((0.1, 0.0, 0.0085)), u)
@@ -625,19 +661,12 @@ def anim_file(c, t):
 
 def anim_calendar(c, t):
     sec = t * DUR["calendar"]
-    u = smooth(1.0, 2.6, sec)
-    c["hinge"].rotation_euler = (math.radians(-172 * u), 0, 0)
-    c["bend"].angle = math.radians(-50) * math.sin(math.pi * u)
-    if "motes" in c:
+    if "motes" in c:            # dust in the window light: the only thing that moves
         drift_motes(c["motes"], sec)
-    nt = len(c["ticks"])
-    for k, o in enumerate(c["ticks"]):
-        a = 2.8 + k * (2.4 / nt)
-        o.scale = (smooth(a, a + 0.15, sec), 1, 1)
-    s_ = smooth(5.2, 5.8, sec); c["mark"].scale = (s_, s_, s_)
 
 
 def anim_plan(c, t):
+    return          # static: the route is already on the sheet; the camera and the lamp do the work
     sec = t * DUR["plan_route"]
     u = smooth(0.4, 4.8, sec)
     c["route"].data.bevel_factor_end = max(0.001, u)
@@ -657,10 +686,6 @@ def anim_plan(c, t):
 def anim_cutaway(c, t):
     sec = t * DUR["cutaway"]
     m, w_win, w_sum = season(t)
-    name, yr = MONTHS[m]
-    c["month"].data.body = f"{name} {yr}"
-    day = 1 + int(t * 286)
-    c["days"].data.body = f"day {day}" if day < 286 else "day 286  ·  more than nine months"
     # ground and trees through the seasons
     aut, win, sumr = Vector((0.3, 0.19, 0.07)), Vector((0.8, 0.8, 0.82)), Vector((0.12, 0.22, 0.06))
     g = aut.lerp(win, w_win).lerp(sumr, w_sum)
@@ -722,7 +747,7 @@ def _cam_file(c, t):
 
 def _cam_calendar(c, t):
     e = ease(t)
-    return (Vector((-0.2, -1.2, 1.45)).lerp(Vector((-0.06, -0.78, 1.38)), e), Vector((0.0, 0.0, 1.38)).lerp(Vector((0.0, 0.0, 1.33)), e), 45)
+    return (Vector((-0.2, -1.2, 1.42)).lerp(Vector((-0.06, -0.88, 1.33)), e), Vector((0.0, 0.0, 1.36)).lerp(Vector((0.0, 0.0, 1.29)), e), 45)
 
 
 def _cam_plan(c, t):
@@ -750,7 +775,7 @@ MOVES = {
     "tool_swing": dict(kind="anim", dof=None, far=10, anim=anim_tool_swing, cam=_cam_tool_swing),
     "board": dict(kind="anim", dof=2.0, far=10, anim=anim_board, cam=_cam_board,
                   focus=lambda c, t: Vector((0.0, 0.0, 1.45)).lerp(Vector((0.27, 0.0, 1.07)), smooth(0.45, 0.85, t))),
-    "file_card": dict(kind="anim", dof=2.8, far=10, anim=anim_file, cam=_cam_file, focus=lambda c, t: Vector((-0.15, 0.0, 0.0))),
+    "file_card": dict(kind="anim", dof=1.8, far=10, anim=anim_file, cam=_cam_file, focus=lambda c, t: Vector((0.1, 0.0, 0.0)).lerp(Vector((-0.2, -0.02, 0.0)), smooth(0.35, 0.75, t))),
     "calendar": dict(kind="anim", dof=2.8, far=10, anim=anim_calendar, cam=_cam_calendar, focus=lambda c, t: Vector((0, 0, 1.35))),
     "plan_route": dict(kind="anim", dof=2.8, far=10, anim=anim_plan, cam=_cam_plan, focus=lambda c, t: Vector((0, 0, 0))),
     "cutaway": dict(kind="anim", dof=4.0, far=20, anim=anim_cutaway, cam=_cam_cutaway, focus=lambda c, t: Vector((0, 0, 1.1)).lerp(Vector((-0.2, 0.1, 1.35)), smooth(0.72, 1.0, t))),

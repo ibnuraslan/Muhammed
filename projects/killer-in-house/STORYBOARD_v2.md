@@ -16,6 +16,26 @@
 - Before/after sheet: `review/storyboard_v2_before_after.jpg`.
 - Motion previews: `review/storyboard_v2_previews/*.mp4` (~480p, 8 samples).
 
+## Hub hard rules (Nov 14) applied
+- **R1, nothing moves on its own:**
+  - The pencil no longer draws itself: the route is already on the plan and the pencil lies beside it.
+  - The calendar no longer flips: October is already folded back and September is already marked.
+  - The file print no longer slides and the name no longer types itself: the shot is a focus pull.
+  - The board print no longer sways.
+  - The cutaway's changing day counter is gone: the card is static.
+  - Still moving are real mechanisms and events only: the clock hands, the swinging bulb, the torch, snow, dust, seasons and light.
+- **R2, real-looking marks:**
+  - Every mark is an image texture with paper-tooth grain, pressure changes and jittered passes: red pencil on the plan and calendar, police chalk on the hatch plaster.
+  - The clean tube lines are gone.
+- **R3, real props:**
+  - The cork has a real granule texture.
+  - The plan, cards, calendar and record are all legible.
+- **R4:** no rings or ripples are used anywhere.
+- **R5:** `house.idle` no longer drifts heads; it keeps only breathing and a slight weight shift.
+- **R6:** no clipping was seen on the sheets.
+
+Some rows in the table below still describe the earlier animated versions. Where a row conflicts with the R1–R6 list above, the list is current.
+
 ## Changed shots
 
 | Shot | Old idea (v1) | New idea (v2) | Why it's stronger |

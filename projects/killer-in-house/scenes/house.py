@@ -1148,15 +1148,14 @@ TIME = None          # seconds into the current move; set by the sets' move deco
 
 def idle(h, sec, amount=1.0):
     """Living stillness for a standing figure: slow weight shift from hip to hip, breathing in the chest,
-    a small drifting head turn. Per-person phase, so a group never moves in sync. Arms untouched (hand QA holds)."""
+    no head moves (those are scripted per shot). Per-person phase, so a group never moves in sync. Arms untouched (hand QA holds)."""
     ph = (sum(map(ord, h.arm.name)) % 97) / 15.0
     sway = math.sin(2 * math.pi * 0.11 * sec + ph) * amount
     breathe = math.sin(2 * math.pi * 0.24 * sec + 1.3 * ph) * amount
     drift = (math.sin(2 * math.pi * 0.07 * sec + 2.1 * ph) + 0.4 * math.sin(2 * math.pi * 0.19 * sec + ph)) * amount
     rotl(h, "spine05", (0, 1, 0), 1.6 * sway); rotl(h, "spine03", (0, 1, 0), -1.1 * sway)
     rotl(h, "spine03", (1, 0, 0), 0.7 * breathe)
-    rotl(h, "neck01", (0, 0, 1), 2.5 * drift); rotl(h, "head", (0, 0, 1), 2.0 * drift)
-    rotl(h, "head", (1, 0, 0), 1.2 * math.sin(2 * math.pi * 0.09 * sec + ph))
+    # no head drift: every head move must be motivated by the shot (hub rule, Nov 14)
 
 
 def stand_at(h, loc, face_z, z=None):

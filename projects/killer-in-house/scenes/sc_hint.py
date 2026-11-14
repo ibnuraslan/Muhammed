@@ -988,42 +988,20 @@ def _():
 
 @move("hatch_measure", "night", 5.0, rooms=("upstairs", "attic"), dof=4.0, haze=((-1.6, -1.2, F2), (-0.6, -0.2, C2)))
 def _():
-    """STORYBOARD v2, 2-9B: the real opening, measured. A torch finds the hatch; chalk lines are drawn on the ceiling
-    plaster along both edges and the sizes chalked beside them: 8 in, 15 in."""
+    """STORYBOARD v2, 2-9B: the real opening, measured. A torch searches and settles on the hatch; the police chalk marks
+    are already on the plaster (rough, uneven chalk: lines along both edges, "8 in" and "15 in"). Nothing draws itself."""
     from house import HATCH_W, HATCH_L
-    hx, hy = HATCH; z = C2 - 0.004
+    hx, hy = HATCH; z = C2 - 0.0012
     def anim(c, t):
         sec = t * DUR["hatch_measure"]
         if "hm" not in c:
-            chalk = pbr("Chalk", (0.86, 0.84, 0.78), 0.95)
-            A = [((hx - HATCH_W / 2, hy + HATCH_L / 2 + 0.05, z), (hx + HATCH_W / 2, hy + HATCH_L / 2 + 0.05, z), 'x'),
-                 ((hx + HATCH_W / 2 + 0.05, hy - HATCH_L / 2, z), (hx + HATCH_W / 2 + 0.05, hy + HATCH_L / 2, z), 'y')]
-            lines = []
-            for a, b, ax in A:
-                a = Vector(a); b = Vector(b); L_ = (b - a).length
-                piv = bpy.data.objects.new("ChalkPiv", None); bpy.context.collection.objects.link(piv); piv.location = a
-                ln = box("ChalkLine", ((L_ / 2, 0, 0) if ax == 'x' else (0, L_ / 2, 0)), ((L_, 0.011, 0.002) if ax == 'x' else (0.011, L_, 0.002)), chalk)
-                ln.parent = piv
-                ticks = [box("ChalkTick", p_, ((0.008, 0.05, 0.002) if ax == 'x' else (0.05, 0.008, 0.002)), chalk) for p_ in (a, b)]
-                lines.append((piv, ax, ticks))
-            # chalked sizes, readable from below (camera up = +Y)
-            lab = [text_obj("Chalk8", "8 in", (hx, hy + HATCH_L / 2 + 0.09, z - 0.001), 0.065, chalk, rot=(math.pi, 0, math.pi), extrude=0.0, font_path="/usr/share/fonts/truetype/freefont/FreeSerifItalic.ttf"),
-                   text_obj("Chalk15", "15 in", (hx + HATCH_W / 2 + 0.17, hy, z - 0.001), 0.065, chalk, rot=(math.pi, 0, math.pi), extrude=0.0, font_path="/usr/share/fonts/truetype/freefont/FreeSerifItalic.ttf")]
-            c["hm"] = (lines, lab)
+            c["hm"] = chalk_decal(hx, hy, z, HATCH_W, HATCH_L)
             c["hm_torch"] = H.flashlight("MeasureTorch"); c["hm_torch"].data.energy = 28; c["hm_torch"].data.spot_size = math.radians(55); c["hm_torch"].data.spot_blend = 0.8
             c["dust"] = H.leaf_cloud(30, HATCH, (0.3, 0.4), C2 - 0.05, col=(0.75, 0.7, 0.6), seed=9)
             for o in c["dust"]:
                 o.scale = (0.008, 0.008, 1)
-        lines, lab = c["hm"]
         c["closet_door"].rotation_euler = (0, 0, math.radians(-105))
         c["hatch"].location = c["hatch_home"] + Vector((0.34, 0, 0.02))          # already slid aside: the dark slot
-        for k, (piv, ax, ticks) in enumerate(lines):
-            g = smooth01((sec - 1.0 - 1.4 * k) / 1.1)
-            piv.scale = (max(g, 0.001), 1, 1) if ax == 'x' else (1, max(g, 0.001), 1)
-            for tk in ticks:
-                tk.scale = (1, 1, 1) if g > 0.02 else (0.001, 0.001, 0.001)
-            sc = smooth01((sec - 2.0 - 1.4 * k) / 0.5)
-            lab[k].scale = (max(sc, 0.001),) * 3
         # the torch beam searches, then settles on the opening
         a = 2.2 * math.exp(-0.45 * sec)
         tgt = Vector((hx + 0.35 * a * math.sin(1.6 * sec), hy + 0.25 * a * math.cos(1.3 * sec), C2))
@@ -1033,6 +1011,31 @@ def _():
         e = ease(t)
         return (Vector((-1.36, -1.12, F2 + 1.45)).lerp(Vector((-1.3, -1.04, F2 + 1.62)), e), Vector((hx + 0.04, hy + 0.06, C2)), 22, (0, 1, 0))
     return cam, anim
+
+
+def chalk_decal(hx, hy, z, hw, hl, size=0.9, ppm=1000):
+    """Police chalk on the ceiling plaster around the hatch: an RGBA decal plane (rough_marks), seen from below."""
+    import sc_evid as EV
+    from PIL import ImageOps
+    n = int(size * ppm)
+    P = lambda x, y: ((x / size + 0.5) * n, (0.5 - y / size) * n)
+    yA = hl / 2 + 0.05; xB = hw / 2 + 0.05
+    strokes = [[P(-hw / 2, yA), P(hw / 2, yA)], [P(-hw / 2, yA - 0.025), P(-hw / 2, yA + 0.025)], [P(hw / 2, yA - 0.025), P(hw / 2, yA + 0.025)],
+               [P(xB, -hl / 2), P(xB, hl / 2)], [P(xB - 0.025, -hl / 2), P(xB + 0.025, -hl / 2)], [P(xB - 0.025, hl / 2), P(xB + 0.025, hl / 2)]]
+    x8, y8 = P(-0.05, yA + 0.085); x15, y15 = P(xB + 0.03, 0.03)
+    img = EV.rough_marks((n, n), strokes, words=(("8 in", (int(x8), int(y8)), EV.HAND, 54, 2), ("15 in", (int(x15), int(y15)), EV.HAND, 54, -3)),
+                         col=(232, 228, 214), seed=11, width=12, grain=0.5)
+    img = ImageOps.mirror(img)                    # seen from below: screen right is world -X
+    path = EV._save(img, "hatch_chalk.png")
+    m = bpy.data.materials.new("ChalkDecal"); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; out = N["Material Output"]; pb = N["Principled BSDF"]
+    tx = N.new("ShaderNodeTexImage"); tx.image = bpy.data.images.load(path); tx.extension = 'CLIP'
+    L.new(tx.outputs['Color'], pb.inputs['Base Color']); pb.inputs['Roughness'].default_value = 1.0
+    tr = N.new("ShaderNodeBsdfTransparent"); mix = N.new("ShaderNodeMixShader")
+    L.new(tx.outputs['Alpha'], mix.inputs[0]); L.new(tr.outputs[0], mix.inputs[1]); L.new(pb.outputs[0], mix.inputs[2]); L.new(mix.outputs[0], out.inputs[0])
+    bpy.ops.mesh.primitive_plane_add(size=size, location=(hx, hy, z))
+    o = bpy.context.active_object; o.name = "ChalkDecal"; o.data.materials.append(m)
+    return o
 
 
 def smooth01(x):
