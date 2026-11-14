@@ -258,7 +258,7 @@ P.k(1312, root=STB + V(0, 0.02, -0.03), flex=9, sp_flex=16, h_pitch=50, cR=60, h
 P.k(1330, root=STB + V(0, 0.03, -0.04), flex=11, sp_flex=18)
 P.k(1352, hL=grip_hand(slice_m(1352) @ V(-0.125, 0, 0.06), V(0.35, 0, -1), V(1, 0, 0)))   # continuity with the slice grip
 P.k(1356, hL=HANG["L"], h_pitch=48)
-P.k(1354, root=STB + V(0, 0.08, -0.08), flex=22, sp_flex=32)
+P.k(1354, root=STB + V(0, 0.08, -0.06), flex=14, sp_flex=18)
 P.k(1360, root=STB + V(0, 0.02, 0), flex=8, sp_flex=12, h_pitch=20, hL=HANG["L"], cR=55)
 # steps to the door (1370-1400)
 for i, s in enumerate("RL"):

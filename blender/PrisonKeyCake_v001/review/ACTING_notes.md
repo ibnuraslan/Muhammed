@@ -134,3 +134,8 @@ Checks:
 - camera audit 0;
 - camera at least 0.49 m from every head and torso;
 - qa: INSIDE, FILL, HOVER, CLAW and FACEPRESS all 0.
+
+## v007h: director's last 3 spots on v007g
+1. Ally at the cake (756-801): side framing, his face and the cake, then the static wide.
+2. Getting up from the stool: a hard cut at 1291 to the knife framing.
+3. Digging out the key (1346-1362): the camera is 30 cm lower and he bends less, so his face reads as the key comes out.
