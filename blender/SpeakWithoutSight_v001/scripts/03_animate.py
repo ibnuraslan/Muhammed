@@ -473,14 +473,14 @@ for f in (1843, 1858):
     lip_key(f)
 # girl's right hand comes down to the teacher's shoulder for the hug
 for f in (1872, 1915):
-    W, d, n, pole = lap("R", f); G.hand("R", f, W, d, n, pole); G.fingers("R", f, 25, 12)
+    W, d, n, pole = lap("R", f); G.hand("R", f, W, d, n, pole); apply_pose(G.o, "R", "relaxed", f)   # v005: hand_poses preset (no OK-claw in between)
 for f in (1955, END):
-    W, d, n, pole = lap("R", f); G.hand("R", f, W, d, n, pole); G.fingers("R", f, 25, 12)
+    W, d, n, pole = lap("R", f); G.hand("R", f, W, d, n, pole); apply_pose(G.o, "R", "relaxed", f)   # v005: hand_poses preset (no OK-claw in between)
 # teacher gasp: both hands to her mouth (no contact), 1866-1905
 for f in (1866, 1885, 1905):
     mp, ff = t_mouth(f); side = ff.cross(UP).normalized()
     for s, sx in (("L", 1), ("R", -1)):
-        tip = mp + ff * 0.045 + side * sx * 0.03 + UP * 0.01
+        tip = mp + ff * 0.09 + side * sx * 0.045 - UP * 0.06   # v005: hands in front of the chin, clear of the nose and mouth
         along = (UP * 0.8 + side * -sx * 0.3).normalized()
         T.hand(s, f, tip - along * T_HL * 0.95 + ff * 0.01, along, ff, T_KNEEL + T_R * -sx * 0.4 + UP * 0.2)
 # the teacher's skirt only wraps her legs once she kneels (a straight column while she walks in)
@@ -757,6 +757,8 @@ def deintersect(P, sd, f0, f1, targets, allow=0.008, iters=5, away=None):
             if worst[0] <= allow: break
             dirv = away(f, pts) if away else worst[1]            # escape direction known per contact (nearest-normal fails when deep)
             step_ = worst[0] - allow + 0.004
+            if total_.get(f, 0.0) + step_ > 0.04: break           # v005: never shove a hand more than 4 cm (uncapped pushes sent hands overhead)
+            total_[f] = total_.get(f, 0.0) + step_
             push = dirv.normalized() * step_
             M = P.o.pose.bones["IK_hand." + sd].matrix.copy()
             P.r.key_world("IK_hand." + sd, f, Matrix.Translation(push) @ M); fixed += 1
