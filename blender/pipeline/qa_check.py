@@ -18,6 +18,7 @@ Per sampled frame it reports:
              The film is ONE continuous camera; only a fully covered wipe may hide a jump.
   PROPMOVE   a hand-sized prop moves with no hand within 10 cm (a prop moving by itself: floating pen, tool)
   ATTACH     a worn item (mask, cap, hat, glasses) drifts more than 2 cm off the head it sits on
+  FAN        a visible hand's index and little fingers fan more than 28 deg apart (starfish hand)
   ROLL       the horizon is tilted more than ~20 deg (upside-down / sideways frame from an aim constraint).
 A clean film reports 0 for every category except intended, listed exceptions.
 Hidden (hide_render / not visible) and see-through props are ignored; HOVER tests the nearest visible prop only;
@@ -280,6 +281,20 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
         ds = sorted((bvh.find_nearest(ow @ v.co, 0.5)[3] or 0.5) for v in mwm.vertices); ew.to_mesh_clear()
         lim = 0.04 if _tokens(o.name) & {"cap", "hat", "helmet"} else 0.015   # caps and hats sit on hair, not skin
         if ds and ds[len(ds) // 2] > lim: flag(f, "ATTACH", "%s is %.1f cm off %s's skin (median)" % (o.name, ds[len(ds) // 2] * 100, r.name))
+
+# FAN: "starfish" hands. On every visible hand, the angle between the index and little finger base phalanges
+# (finger2-1 vs finger5-1, world space) must stay under 28 deg; real relaxed or gripping hands sit at 5-20 deg.
+# An alarm or open hand that is meant to be spread must be listed in ACTING_notes.md.
+def _dir(r, b):
+    pb = r.pose.bones[b]; return (r.matrix_world @ pb.tail - r.matrix_world @ pb.head).normalized()
+for f in range(sc.frame_start, sc.frame_end + 1, STEP):
+    sc.frame_set(f)
+    for r in [q for q in RIGS if not hidden(q)]:
+        for sd in ("L", "R"):
+            a, b = "finger2-1." + sd, "finger5-1." + sd
+            if a not in r.pose.bones or b not in r.pose.bones or not visible(wpos(r, "wrist." + sd), 0.0): continue
+            ang = math.degrees(_dir(r, a).angle(_dir(r, b)))
+            if ang > 28: flag(f, "FAN", "%s.%s fingers fanned %.0f deg (index vs little)" % (r.name, sd, ang))
 
 json.dump(res, open(OUT, "w"), indent=1)
 print("QA_COUNTS", res["counts"])

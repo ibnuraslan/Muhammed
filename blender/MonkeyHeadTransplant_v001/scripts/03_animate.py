@@ -331,8 +331,8 @@ def hand(H, s, f, W, d, n, elbow_out=0.35, yaw=0.0):
 def hang(H, s, f, pos, yaw, fwd=0.0):
     sx = 1 if s == "L" else -1
     Rz = Matrix.Rotation(math.radians(yaw), 3, "Z")
-    W = V(pos.x, pos.y, 0) + Rz @ V(sx * 0.27, -fwd - 0.05, 0) + V(0, 0, H.root_head.z * 0.9)
-    hand(H, s, f, W, V(0, 0, -1) + Rz @ V(0, -0.15, 0), Rz @ V(-sx, 0, 0), 0.3, yaw)
+    W = V(pos.x, pos.y, 0) + Rz @ V(sx * 0.31, -fwd - 0.05, 0) + V(0, 0, H.root_head.z * 0.9)
+    hand(H, s, f, W, V(0, 0, -1) + Rz @ V(0, -0.15, 0), Rz @ V(-sx, 0, 0), 0.45, yaw)
 
 # Surgeon: S0 in front of table 1 / S1 in front of table 2
 S0 = V(-0.28, -0.6, 0); S1 = V(0.45, -0.62, 0)
@@ -519,8 +519,11 @@ for f in list(range(1190, 1771, 3)):
         face_w = M_CHAIR @ EYEMID
         wv = math.sin((f - 1230) / 7.0) if 1225 < f < 1310 else 0.0
         Rz = Matrix.Rotation(math.radians(Y3), 3, "Z")
-        hand(SURG, "R", f, face_w + (S3 - face_w).normalized() * 0.16 + V(0, 0, 0.05) + Rz @ V(0.06 * wv, 0, 0), V(0, 0, 1), Rz @ V(0, 1, 0), 0.35, Y3)
-        _key(SURG.r.o, "R", _pose_rots(SURG.r.o, "R", "relaxed", spread=5.0), f, 1.0)
+        tw = face_w - S3; tw.z = 0; tw.normalize()
+        up_k = smooth((f - 1205) / 20.0) * (1 - smooth((f - 1315) / 20.0))
+        rest_w = V(S3.x, S3.y, 0) + Rz @ V(-0.31, -0.05, 0) + V(0, 0, SURG.root_head.z * 0.9)
+        wave_w = V(S3.x, S3.y, 0) + tw * 0.48 + Rz @ V(-0.12 + 0.07 * wv, 0, 0) + V(0, 0, 1.06)
+        hang(SURG, "R", f, S3, Y3, 0.05); pose_hand(SURG, "R", f, "relaxed")      # v008f: no wave (read as a stiff mannequin arm); he stands and watches
         if True:
             hang(SURG, "L", f, S3, Y3, 0.05)
         else:   # lifts the clipboard up before stepping to the monitor
@@ -564,12 +567,12 @@ for o in tro:
         for fc_ in []: pass
     o.location = o.location  # keep
 bpy.context.scene.frame_set(150); bpy.context.view_layer.update()
-_TW = _trol.matrix_world.copy()
+_TW = _trol.matrix_world.copy(); TRO_W = {}
 for o in tro:
     if o is _trol: continue
     if o.animation_data: o.animation_data_clear()
     bpy.context.scene.frame_set(150); bpy.context.view_layer.update()
-    _w = o.matrix_world.copy(); o.parent = _trol; o.matrix_parent_inverse = _TW.inverted(); o.matrix_basis = _w   # world = trolley(f) @ inv(trolley_150) @ w
+    _w = o.matrix_world.copy(); TRO_W[o.name] = _w.copy(); o.parent = _trol; o.matrix_parent_inverse = _TW.inverted(); o.matrix_basis = _w   # world = trolley(f) @ inv(trolley_150) @ w
 for f in list(range(1, 161, 4)) + [160]:
     p = NP0.lerp(NP1, smooth((f - 1) / 150.0))
     bpy.context.scene.frame_set(f); bpy.context.view_layer.update()
@@ -644,6 +647,18 @@ for f in list(range(200, 918, 6)) + [917]:
     rim = bowl.location + Rz_ @ V(0.0, 0.075, 0) + V(0, 0, 0.018)
     _bb = [bowl.matrix_world @ V(*c) for c in bowl.bound_box]; _bz = min(q.z for q in _bb)
     place_hand(D["Nurse"], "L", f, V(bowl.matrix_world.translation.x, bowl.matrix_world.translation.y, _bz), V(0, 0, 1), Rz_ @ V(0, -1, 0)); pose_hand(NURSE, "L", f, "hold_flat_object")   # carried on the flat palm
+# v008f: the bowl sits on the tray (riding the trolley) until the nurse lifts it off at 184-200 on her flat palm
+sc.frame_set(200); _b200 = bowl.location.copy(); _bt = TRO_W["Bowl"].to_translation()
+for f in (1, 184):
+    bowl.location = _bt; bowl.keyframe_insert("location", frame=f)
+for f in range(185, 200):
+    k_ = smooth((f - 184) / 16.0)
+    bowl.location = _bt.lerp(_b200, k_) + V(0, 0, 0.06 * math.sin(math.pi * k_)); bowl.keyframe_insert("location", frame=f)
+    bpy.context.view_layer.update()
+    _bb = [bowl.matrix_world @ V(*c) for c in bowl.bound_box]; _bz = min(q.z for q in _bb)
+    _p, _y = nurse_at(f) if f >= 166 else (NP1, ny); _y = _y if _y is not None else ny2
+    place_hand(D["Nurse"], "L", f, V(bowl.matrix_world.translation.x, bowl.matrix_world.translation.y, _bz), V(0, 0, 1), Matrix.Rotation(math.radians(_y), 3, "Z") @ V(0, -1, 0)); pose_hand(NURSE, "L", f, "hold_flat_object")
+sc.frame_set(917)
 p0 = bowl.location.copy()
 for df, dz, dx in ((0, 0, 0), (10, -0.35, 0.05), (22, -(p0.z - 0.02), 0.1), (28, -(p0.z - 0.02) + 0.09, 0.14), (34, -(p0.z - 0.02), 0.17), (38, -(p0.z - 0.02) + 0.03, 0.18), (42, -(p0.z - 0.02), 0.19)):
     bowl.location = p0 + V(dx, -dx * 0.5, dz); bowl.keyframe_insert("location", frame=918 + df)
@@ -747,9 +762,9 @@ UPW = V(0, 0, 1)
 K = [
  (1,    V(0.35, 0.95, 1.72), V(-0.3, -0.35, 1.2), 24, UPW, "W"),
  (61,   V(0.45, 0.25, 1.38), NA + V(-0.05, -0.15, 0.05), 28, UPW, "W"),
- (121,  V(0.48, -0.3, 1.55), NA, 38, UPW, "W"),
- (181,  NA + V(0.26, -0.04, 0.17), NA, 50, UPW, "W"),
- (241,  V(0.42, -0.18, 1.74), V(-0.18, -0.05, 1.02), 28, UPW, "W"),
+ (121,  V(0.42, 0.42, 1.62), NA + V(-0.05, -0.12, 0.08), 32, UPW, "W"),
+ (181,  NA + V(0.36, 0.34, 0.44), NA + V(-0.04, -0.06, 0.0), 32, UPW, "W"),
+ (241,  V(0.28, 0.62, 1.82), V(-0.18, -0.18, 1.08), 26, UPW, "W"),
  (290,  V(0.0, 1.05, 1.56), V(-0.05, -0.05, 1.12), 32, UPW, "W"),
  (330,  V(0.3, 1.0, 1.54), V(0.25, -0.05, 1.12), 32, UPW, "W"),
  (365,  V(0.95, 0.15, 1.45), NBp, 30, UPW, "W"),
@@ -775,8 +790,9 @@ K = [
  (1380, V(2.85, -0.42, 1.08), V(2.95, 0.7, 0.95), 30, UPW, "W"),
  (1440, SCR + V(-0.06, -0.42, 0.05), SCR, 45, UPW, "W"),
  (1500, SCR + V(0.06, -0.36, 0.05), SCR, 55, UPW, "W"),
- (1530, V(2.55, -0.42, 1.45), M_CHAIR @ EYEMID + V(-0.15, 0, 0), 40, UPW, "W"),
- (1560, V(1.98, 0.22, 1.32), M_CHAIR @ EYEMID, 36, UPW, "W"),
+ (1515, SCR + V(0.32, -0.80, 0.15), SCR + V(-0.15, 0, -0.02), 36, UPW, "W"),
+ (1530, V(2.75, -0.95, 1.5), V(2.6, 0.85, 1.0), 26, UPW, "W"),
+ (1560, V(2.2, -0.35, 1.38), M_CHAIR @ EYEMID, 34, UPW, "W"),
  (1620, V(2.0, -0.55, 1.55), V(2.5, 0.9, 0.75), 30, UPW, "W"),
  (1700, V(1.8, -2.1, 1.8), V(2.3, 0.9, 0.9), 24, UPW, "W"),
  (1770, V(1.6, -2.5, 1.95), V(2.2, 0.85, 0.9), 24, UPW, "W"),
@@ -851,6 +867,29 @@ for f in range(TOOL_V0, TOOL_V1 + 1):
 for m_, vis in _mods: m_.show_viewport = vis
 for t_ in (nh, fcp): hide_keys(t_, [(1, True), (TOOL_V0, False), (TOOL_V1 + 1, True)])   # re-key visibility (animation_data_clear removed it)
 print("TOOLBAKE pinch gap L (cm) max", max(g[0] for g in TOOL_GAP.values()), "thumb-ring R (cm) min/max", min(g[1] for g in TOOL_GAP.values()), max(g[1] for g in TOOL_GAP.values()))
+for nm_ in ("Surgeon", "Nurse", "Anaes"):
+    g_ = D.get(nm_ + "_Gown")
+    if g_ and "OffBody" not in g_.modifiers:
+        dm_ = g_.modifiers.new("OffBody", "DISPLACE"); dm_.direction = "NORMAL"; dm_.strength = 0.012; dm_.mid_level = 0.0
+        g_.modifiers.move(len(g_.modifiers) - 1, 1)
+def push_elbows(H, sides, frames, out=0.8, down=0.0):
+    for f in frames:
+        ev(f)
+        for s_ in sides:
+            pb = H.r.PB; sh = pb["upperarm01." + s_].head; wr = pb["wrist." + s_].head
+            o_ = sh - pb["upperarm01." + ("R" if s_ == "L" else "L")].head; o_.z = 0
+            if o_.length < 1e-4: continue
+            pole = (sh + wr) / 2 + o_.normalized() * out + V(0, 0, -down)
+            nme = "Pole_elbow." + s_; pbn = H.r.PB[nme]
+            pbn.location = H.r.rest(nme).to_3x3().inverted() @ (pole - H.r.BN[nme].head_local); pbn.keyframe_insert("location", frame=f, group=nme)
+# limb_check (>= 3 axis points in the own torso) runs, keyed on EVERY frame so no hand-key pole sits between
+ELBOW_RUNS = {("Nurse", "L"): [(1, 151), (235, 247), (619, 625), (835, 901)], ("Nurse", "R"): [(1, 157), (217, 271), (853, 907), (1369, 1417)],
+              ("Surgeon", "R"): [(210, 330), (1190, 1380), (1633, 1765)], ("Anaes", "R"): [(631, 781)],
+              ("Surgeon", "L"): [(1190, 1380), (1615, 1765)]}
+_HH = {"Nurse": NURSE, "Surgeon": SURG, "Anaes": ANA}
+for (nm_, s_), rr in ELBOW_RUNS.items():
+    for a_, b_ in rr:
+        push_elbows(_HH[nm_], s_, range(max(1, a_ - 8), min(1770, b_ + 8) + 1))
 for f in (641, 651, 661): pose_hand(ANA, "R", f, "cup_hold")      # bag squeeze: closed wrap, no claw between grip keys
 # table-2 group is transparent after the void and never seen again: hide it for good (QA: no invisible fill)
 for o in D:
