@@ -303,7 +303,7 @@ DESK_HIT = _h[1].z if _h[0] else DESK_TOP
 print("DESK top at A's hand", DESK_HIT, _h[4].name if _h[0] else None)
 for f in range(1180, 1345, 10):
     t = (f - 1180) / 60; k = smooth((f - 1190) / 70)
-    ea.pose(f, AP, 180.0, flex=6 + 8 * k, spine=(8 + 12 * k + 1.0 * math.sin(t * 2.1), -6, 0), head=(8 + 6 * k, -12 + 4 * k), feet=afeet, crouch=0.02 + 0.04 * k)
+    ea.pose(f, AP, 180.0, flex=6 + 8 * k, spine=(8 + 12 * k + 1.0 * math.sin(t * 2.1), -6, 0), head=(1 + 2 * k, -12 + 4 * k), feet=afeet, crouch=0.02 + 0.04 * k)
     mc = Vector((7.98 + 0.03 * k, Y0 + 4.4 + 0.1 * k, 2.08 + 0.06 * k)) + Vector((0.008 * math.sin(t * 4), 0, 0))
     mag.location = mc - Vector((0, 0, 0.235)); mag.rotation_euler = (R_(-6), 0, R_(4)); mag.keyframe_insert("location", frame=f); mag.keyframe_insert("rotation_euler", frame=f)
     hd = mc + Vector((0, 0, -0.16))     # handle grip below the lens
@@ -369,7 +369,7 @@ CK = [  # frame, camera position, look target, lens, f-stop
     (350,  Vector((-14, -30, 2.4)),      Vector((-9, Y0, 1.6)),     28, 5.6),
     (410,  Vector((-15, Y0 - 17, 4.5)),  Vector((-4, Y0, 3.0)),     30, 5.6),
     (470,  Vector((-6, Y0 - 11, 3.0)),   Vector((0, Y0, 1.8)),      32, 5.6),
-    (530,  Vector((1.5, Y0 - 4.2, 2.2)), Vector((3.2, Y0, 1.6)),    35, 5.6),
+    (530,  Vector((1.5, Y0 - 7.0, 2.6)), Vector((3.2, Y0, 1.6)),    32, 8.0),
     (580,  Vector((6, Y0 - 7.5, 2.4)),   Vector((7.5, Y0, 1.6)),    32, 5.6),
     (625,  Vector((10, Y0 - 12.0, 4.5)), Vector((6, Y0, 2.0)),      30, 5.6),
     (680,  Vector((8, Y0 - 16, 10)),     Vector((0, Y0 + 2, 6)),    26, 8.0),
@@ -387,6 +387,7 @@ CK = [  # frame, camera position, look target, lens, f-stop
     (1177, Vector((2.55, Y0 + 5.0, 2.4)), Vector((6.5, Y0 + 4.45, 2.1)), 26, 5.6),
     (1185, Vector((3.4, Y0 + 4.0, 2.35)), Vector((6.5, Y0 + 4.4, 2.0)), 24, 5.6),
     (1200, Vector((6.0, Y0 + 5.5, 2.45)), Vector((7.72, Y0 + 3.95, 2.4)), 24, 5.6),
+    (1232, Vector((7.55, Y0 + 5.35, 2.7)), Vector((7.8, Y0 + 4.0, 2.3)), 26, 8.0),
     (1265, Vector((9.4, Y0 + 3.9, 2.45)), Vector((8.0, Y0 + 4.4, 2.3)), 26, 5.6),
     (1310, Vector((8.27, Y0 + 3.55, 2.4)), Vector((8.22, Y0 + 4.86, 2.05)), 30, 5.6),
     (1328, Vector((8.24, Y0 + 4.82, 2.0)), Vector((8.0, Y0 + 9, 2.6)), 30, 5.6),
@@ -422,7 +423,7 @@ for f in range(0, END + 1, 2):
     cam.location = p; cam.rotation_mode = 'QUATERNION'; cam.rotation_quaternion = q
     cam.keyframe_insert("location", frame=f); cam.keyframe_insert("rotation_quaternion", frame=f)
     cam.data.lens = flen(f); cam.data.keyframe_insert("lens", frame=f)
-    cam.data.dof.aperture_fstop = max(fst(f), 4.0 if (500 <= f <= 560 or 1130 <= f <= 1165) else 5.6); cam.data.dof.keyframe_insert("aperture_fstop", frame=f)
+    cam.data.dof.aperture_fstop = max(fst(f), 8.0); cam.data.dof.keyframe_insert("aperture_fstop", frame=f)   # lessons: macros f/8+, no blur
     fd = (t - p).length
     if f < 175: fd = (p - (STW(f, (0, 0.3, 1.5)) if f < 150 else Vector((0, Y0, 10)))).length if f < 150 else fd   # rack focus lens -> berg
     cam.data.dof.focus_distance = max(0.1, fd); cam.data.dof.keyframe_insert("focus_distance", frame=f)
@@ -553,23 +554,49 @@ for f in range(1060, 1216, 6):
     sc.frame_set(f); P_ = tech.o.pose.bones; M_ = tech.o.matrix_world
     pinch = (M_ @ P_["finger1-3.R"].tail + M_ @ P_["finger2-3.R"].tail) / 2
     tongs.location = pinch + Vector((0, 0.095, -0.012)); tongs.keyframe_insert("location", frame=f)
+# the office print sits between Expert B's two thumb-index pinches (it is held, it never floats)
+for f in range(1176, 1346, 5):
+    sc.frame_set(f); P_ = eb.o.pose.bones; M_ = eb.o.matrix_world
+    pL = (M_ @ P_["finger1-3.L"].tail + M_ @ P_["finger2-3.L"].tail) / 2
+    pR = (M_ @ P_["finger1-3.R"].tail + M_ @ P_["finger2-3.R"].tail) / 2
+    mid = (pL + pR) / 2
+    PR.location = mid - Vector((0, 0, 0.115)); PR.keyframe_insert("location", frame=f)   # pinches sit 1.5-2 cm in from the top edge
 # the camera rests on the steward's right palm (armature space, the camera is parented to the rig)
 for f in range(0, 366, 6):
     sc.frame_set(f); pp, n, d = palm_frame(st.o, "R", space="arm")
     up = n if n.z > 0 else -n
     bc.location = pp + up * 0.026; bc.keyframe_insert("location", frame=f)
 set_interp(mag, 'BEZIER')
-# steward's left hand: palm flat on the camera's real left side, fingers wrapping forward over the front standard
+# v005: the camera is IN his hands -> Child Of the right hand bone (resting on the palm, no gap), not keyed beside it
+sc.frame_set(100); bpy.context.view_layer.update()
+W100 = bc.matrix_world.copy()
+bc.animation_data_clear(); bc.parent = None; bc.matrix_world = W100
+co_ = bc.constraints.new('CHILD_OF'); co_.name = "InRightHand"; co_.target = st.o; co_.subtarget = "wrist.R"
+co_.inverse_matrix = (st.o.matrix_world @ st.R.PB["wrist.R"].matrix).inverted()
+# left palm also under the camera (both palms carry it, palm-up stays inside the wrist limits)
 for f in range(0, 366, 12):
-    sc.frame_set(f); mn, mx = _bb_world(bc); c = (mn + mx) / 2
+    sc.frame_set(f); bpy.context.view_layer.update(); mn, mx = _bb_world(bc); c = (mn + mx) / 2
+    fwd = (bc.matrix_world.to_3x3() @ Vector((0, -1, 0))).normalized()          # camera lens direction (model lens = -Y)
     shL = st.o.matrix_world @ st.R.PB["upperarm01.L"].head
-    sx = 1.0 if shL.x > c.x else -1.0
-    side = Vector((mx.x if sx > 0 else mn.x, c.y + 0.2 * (mx.y - mn.y), c.z + 0.05 * (mx.z - mn.z)))
-    HP["place_hand"](st.o, "L", f, side, Vector((-sx, 0, 0)), Vector((0, 1, -0.15)), skin=0.022)
+    side = Vector((shL.x - c.x, shL.y - c.y, 0)); side = side - fwd * side.dot(fwd); side.normalize()
+    under = Vector((c.x, c.y, mn.z)) + side * 0.07 + fwd * 0.03             # left palm under the camera's near-left corner
+    HP["place_hand"](st.o, "L", f, under, Vector((0, 0, 1)), Vector((fwd.x, fwd.y, 0)), skin=0.012)
     HP["apply_pose"](st.o, "L", "cup_hold", f)
 
 for L_ in [o for o in O if o.type == "LIGHT"]: L_.visible_camera = False
 O["Darkroom_DoorCut"].hide_render = True
+# the ghost liner is done after the night scrape: off the render entirely (it showed as a faint hull at the berg at 1760+)
+for f_, v_ in ((0, False), (1100, True)):
+    liner.hide_render = v_; liner.keyframe_insert("hide_render", frame=f_)
+set_interp(liner, 'CONSTANT', lambda p_: p_ == "hide_render")
+# hidden objects must not block camera rays: mirror every hide_render key onto hide_viewport (after all evaluation passes)
+for ob in O:
+    for fc in all_fcurves(ob):
+        if fc.data_path == "hide_render":
+            for k in fc.keyframe_points:
+                ob.hide_viewport = bool(k.co.y); ob.keyframe_insert("hide_viewport", frame=int(k.co.x))
+            set_interp(ob, 'CONSTANT', lambda p_: p_ == "hide_viewport")
+            break
 sc.frame_set(0)
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("ANIM DONE")

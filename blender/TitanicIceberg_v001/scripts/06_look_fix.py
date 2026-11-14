@@ -23,6 +23,10 @@ for ob in bpy.data.objects:
                     for l in list(n.inputs['Base Color'].links): m.node_tree.links.remove(l)
                     n.inputs['Base Color'].default_value = (0.09, 0.16, 0.36, 1); n.inputs['Roughness'].default_value = 0.85
             print("PATCHED print-free", ob.name, m.name)
+# black-hole eyes: MPFB EnhancedEye cornea -> transparent mix (director recipe, eye_fix.py from connect03 a44130b)
+import os
+_NO_SAVE = True
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)) if "__file__" in dir() else ".", "eye_fix.py")).read(), {"bpy": bpy, "sys": sys, "_NO_SAVE": True, "__name__": "eye_fix"})
 bpy.context.scene.render.use_motion_blur = False
 bpy.ops.wm.save_as_mainfile(filepath=out)
 print("LOOKFIX done")
