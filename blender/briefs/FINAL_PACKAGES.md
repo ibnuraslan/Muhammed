@@ -31,7 +31,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 15 | GameBoxBullet | `claude/beautiful-ptolemy-c5vrcq` | `blender/GameBoxBullet_v010/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1311)** |
 | 16 | DrunkTrain | `claude/connect16-drunk-train` | `blender/DrunkTrain_v005/` **acting fixed, approved, final commit 66c7cc0 (VO sync when your voiceover arrives)** |
 | 17 | ToddlerWell | `claude/connect17-toddler-well` | `blender/ToddlerWell_v004/` **acting fixed, approved, final commit f3b113a (VO sync when your voiceover arrives)** |
-| 18 | NukedWell | `claude/connect18-nuked-well` | `blender/NukedWell_v004/` **acting fixed, approved, final commit 284559b (VO sync when your voiceover arrives)** |
+| 18 | NukedWell | `claude/beautiful-ptolemy-c5vrcq` | `blender/NukedWell_v008/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1541)** |
 | 19 | SpeakWithoutSight | `claude/connect19-speak-without-sight` | `blender/SpeakWithoutSight_v004b/` **acting fixed, approved, final commit 57e65af (VO sync when your voiceover arrives)** |
 | 20 | HeadsetBullet | `claude/beautiful-ptolemy-c5vrcq` | `blender/HeadsetBullet_v008/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1203)** |
 | 21 | RingBullet | `claude/beautiful-ptolemy-c5vrcq` | `blender/RingBullet_v008/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1395)** |
