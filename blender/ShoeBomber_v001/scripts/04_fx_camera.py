@@ -145,6 +145,12 @@ for s_ in "LR":
     for f, h in ((1, True), (877, True), (878, False)):
         fo.hide_render = h; fo.keyframe_insert("hide_render", frame=f)
     constant_at(fo, set(range(0, END + 1)))
+# v006d: the fuselage shell's bottom sat ~0.18 m above the carpet and hid shins and feet; flatten it onto the carpet
+cs_ = O["CabinShell"]; n_ = 0
+for v in cs_.data.vertices:
+    w_ = cs_.matrix_world @ v.co
+    if w_.z < 0.32: v.co = cs_.matrix_world.inverted() @ V((w_.x, w_.y, -0.004)); n_ += 1
+cs_.data.update(); print("SHELL_FLOOR_FLATTENED", n_)
 # feet hidden inside the shoes (mask the foot/toe verts while the shoe is on)
 def foot_mask(rig_name, s_, on_until):
     body = O[rig_name + ".body"]
@@ -240,7 +246,7 @@ constant_at(sy, set(range(0, END + 1)), "hide_render")
 
 # ------------------------------------------------------------------ tray table drop + cup tumble (beat 4 impact)
 tt = O["TrayTable"]; cup = O["Cup"]
-for f, r, z in ((1, 0, 0.72), (520, 0, 0.72), (528, -35, 0.69), (536, -28, 0.70), (545, -32, 0.695)):
+for f, r, z in ((1, 0, 0.72), (1068, 0, 0.72)):   # v006d: tray stays stowed (it cut through a head in the tackle)
     tt.rotation_euler = (math.radians(r), 0, 0); tt.location.z = z
     tt.keyframe_insert("rotation_euler", frame=f); tt.keyframe_insert("location", frame=f)
 c0 = cup.location.copy()

@@ -196,8 +196,9 @@ def swing(h, path, f0, f1, facing_y=-1, step=10, amp=0.11, period=36):
     for f in range(f0, f1 + 1, step):
         p = path(f); ph = math.sin((f - f0) / period * 2 * math.pi)
         for s_, sg in (("L", 1), ("R", -1)):
-            side = sg * (1 if facing_y < 0 else -1) * 0.24
-            hand(h, s_, f, V((p.x + side, p.y + facing_y * sg * ph * amp, 0.86)), (0, facing_y * 0.2, -1), (-side, 0, 0), grip=0.3)
+            side = sg * (1 if facing_y < 0 else -1) * 0.19     # v006d: arms hang close to the thighs (no "mannequin" arms)
+            hand(h, s_, f, V((p.x + side, p.y + facing_y * (0.03 + sg * ph * amp), 0.80)), (0, facing_y * 0.15, -1), (-side, 0, 0),
+                 pole=(p.x + side * 1.6, p.y - facing_y * 0.6, 1.05), grip=0.3)    # elbows point back
 TROLLEY = bpy.data.objects["Trolley"]
 TROLLEY.location = V((0, 8.55, 0.52)); TROLLEY.keyframe_insert("location", frame=1)      # parked in the forward galley
 swing(att, apath, 170, 318)
@@ -223,8 +224,8 @@ for f in (430, 470):
 ev(495); wr = wpos(bom, "wrist.R", 495)
 hand(att, "R", 492, wr + V((0.03, 0, 0.07)), (-1, 0, -0.2), (0, 0, -1), grip=0.6)
 hand(att, "L", 492, wr + V((0.10, 0.04, 0.06)), (-1, 0.2, 0), (0, 0, -1), grip=0.6)
-stand(att, 492, V((0.12, 0.55, 0)), -90, spine=(25, 0, 0), head=(10, 0), crouch=0.1, stance=0.18)
-stand(att, 525, V((0.12, 0.75, 0)), -60, spine=(30, 15, 0), head=(15, 0), crouch=0.15, stance=0.2)
+stand(att, 492, V((0.20, 0.55, 0)), -90, spine=(12, 0, 0), head=(5, 0), crouch=0.1, stance=0.18)     # v006d: less lean, her head clear of his and PaxA's
+stand(att, 525, V((0.20, 0.75, 0)), -60, spine=(14, 10, 0), head=(8, 0), crouch=0.15, stance=0.2)
 for f in range(500, 541, 10):
     ev(f); w_ = wpos(bom, "wrist.R", f)
     hand(att, "R", f, w_ + V((0.04, -0.03, 0.10)), (-0.5, 0.5, -0.4), (0, 0, -1), grip=0.5)
@@ -402,7 +403,7 @@ print("PAX_DONE")
 TP = AX + V((-1.2, -0.75, 0))
 for f in range(1, 1380, 60):
     stand(trav, f, TP, FWD, spine=(5, 0, 0))
-for f, flex, sp, crouch, hd in ((1393, 0, 10, 0.0, (25, 0)), (1420, 0, 18, 0.03, (35, 5)), (1440, 0, 20, 0.04, (35, 0)), (1455, 5, 30, 0.15, (30, 0)),
+for f, flex, sp, crouch, hd in ((1393, 0, 10, 0.0, (25, 0)), (1420, 0, 18, 0.03, (35, 5)), (1440, 0, 12, 0.04, (15, 0)), (1455, 5, 18, 0.15, (5, 0)),
                                (1468, 15, 46, 0.50, (-35, 0)), (1480, 15, 48, 0.52, (-38, 5)), (1500, 5, 20, 0.12, (20, 0))):
     trav.key_root(f, V((TP.x, TP.y + (0.05 if f >= 1455 else 0), trav.root_head.z - 0.02 - crouch)), yaw=FWD, flex=flex)
     trav.key_spine(f, flex=sp, head=hd)
