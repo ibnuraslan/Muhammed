@@ -146,6 +146,16 @@ _nt = M_SEA.node_tree; _ue = next(n for n in _nt.nodes if n.type == 'EMISSION' a
 _tr = _nt.nodes.new("ShaderNodeBsdfTransparent")
 for l_ in list(_ue.outputs[0].links): _nt.links.new(_tr.outputs[0], l_.to_socket)   # from below the drained sea is see-through (camera exits through the sea floor)
 M_WAVE = water_mat("M_Wave")
+# vNEXT flood relief: two bump scales; the pattern flows inland (-y) via a keyed mapping (03_anim)
+_nt = M_WAVE.node_tree; _nz = _nt.nodes["NZ"]; _tc = next(n for n in _nt.nodes if n.type == 'TEX_COORD')
+_mp = _nt.nodes.new("ShaderNodeMapping"); _mp.name = "FLOW"; _nt.links.new(_tc.outputs["Object"], _mp.inputs["Vector"]); _nt.links.new(_mp.outputs["Vector"], _nz.inputs["Vector"])
+_fn = _nt.nodes["FN"]; _fmp = _fn.inputs["Vector"].links[0].from_node; _nt.links.new(_mp.outputs["Vector"], _fmp.inputs["Vector"])
+_nz2 = _nt.nodes.new("ShaderNodeTexNoise"); _nz2.inputs["Scale"].default_value = 2.2; _nz2.inputs["Detail"].default_value = 6; _nz2.noise_dimensions = '4D'; _nz2.name = "NZ2"
+_nt.links.new(_mp.outputs["Vector"], _nz2.inputs["Vector"])
+_bp = next(n for n in _nt.nodes if n.type == 'BUMP'); _bp.inputs["Strength"].default_value = 0.55
+_bp2 = _nt.nodes.new("ShaderNodeBump"); _bp2.inputs["Strength"].default_value = 0.25; _bp2.inputs["Distance"].default_value = 0.1
+_nt.links.new(_nz2.outputs["Fac"], _bp2.inputs["Height"]); _nt.links.new(_bp.outputs["Normal"], _bp2.inputs["Normal"])
+_bsdf = _nt.nodes["Principled BSDF"]; _nt.links.new(_bp2.outputs["Normal"], _bsdf.inputs["Normal"])
 
 sea = mesh_obj("SeaPlane", [(-3000, -10, 0), (3000, -10, 0), (3000, 7000, 0), (-3000, 7000, 0)], [(0, 1, 2, 3)], C_W, [M_SEA])
 ssd = sea.modifiers.new("sub", 'SUBSURF'); ssd.subdivision_type = 'SIMPLE'; ssd.levels = ssd.render_levels = 6
@@ -267,6 +277,20 @@ fw_.inputs["Emission Color"].default_value = (1, 1, 1, 1); fw_.inputs["Emission 
 mxs = NN.new("ShaderNodeMixShader"); LL.new(fmx.outputs[0], mxs.inputs["Fac"]); LL.new(b_.outputs[0], mxs.inputs[1]); LL.new(fw_.outputs[0], mxs.inputs[2])
 LL.new(mxs.outputs[0], NN["Material Output"].inputs["Surface"])
 bpn = NN.new("ShaderNodeBump"); bpn.inputs["Strength"].default_value = 0.3; LL.new(fz.outputs["Fac"], bpn.inputs["Height"]); LL.new(bpn.outputs["Normal"], b_.inputs["Normal"])
+# vNEXT: the wave face reads as water, not a striped curtain: blotchy (not vertical) foam, dark deep base -> lighter
+# teal toward the lip, churning white water where the base meets the sand
+mpz.inputs["Scale"].default_value = (0.7, 0.7, 0.85)
+zc_ = NN.new("ShaderNodeMapRange"); zc_.inputs["From Min"].default_value = 0.0; zc_.inputs["From Max"].default_value = 9.0; LL.new(sp_.outputs["Z"], zc_.inputs["Value"])
+cr_ = NN.new("ShaderNodeMix"); cr_.data_type = 'RGBA'; LL.new(zc_.outputs["Result"], cr_.inputs["Factor"])
+cr_.inputs["A"].default_value = (0.008, 0.05, 0.055, 1); cr_.inputs["B"].default_value = (0.03, 0.3, 0.36, 1); LL.new(cr_.outputs["Result"], b_.inputs["Base Color"])
+em_ = NN.new("ShaderNodeMath"); em_.operation = 'MULTIPLY'; em_.inputs[1].default_value = 0.4; LL.new(zc_.outputs["Result"], em_.inputs[0]); LL.new(em_.outputs[0], b_.inputs["Emission Strength"])
+zb_ = NN.new("ShaderNodeMapRange"); zb_.inputs["From Min"].default_value = 1.6; zb_.inputs["From Max"].default_value = 0.2; LL.new(sp_.outputs["Z"], zb_.inputs["Value"])
+bn_ = NN.new("ShaderNodeTexNoise"); bn_.inputs["Scale"].default_value = 1.4; bn_.inputs["Detail"].default_value = 10; bn_.noise_dimensions = '4D'; bn_.name = "HN2"
+LL.new(tc_.outputs["Object"], bn_.inputs["Vector"])
+bnr_ = NN.new("ShaderNodeMapRange"); bnr_.inputs["From Min"].default_value = 0.35; bnr_.inputs["From Max"].default_value = 0.55; LL.new(bn_.outputs["Fac"], bnr_.inputs["Value"])
+bm_ = NN.new("ShaderNodeMath"); bm_.operation = 'MULTIPLY'; bm_.use_clamp = True; LL.new(zb_.outputs["Result"], bm_.inputs[0]); LL.new(bnr_.outputs["Result"], bm_.inputs[1])
+fmx2_ = NN.new("ShaderNodeMath"); fmx2_.operation = 'MAXIMUM'; LL.new(fmx.outputs[0], fmx2_.inputs[0]); LL.new(bm_.outputs[0], fmx2_.inputs[1])
+LL.new(fmx2_.outputs[0], mxs.inputs["Fac"])
 hero = mesh_obj("HeroWave", hv, hf, C_W, [hm])
 for p_ in hero.data.polygons: p_.use_smooth = True
 htx = bpy.data.textures.new("HeroNoise", 'CLOUDS'); htx.noise_scale = 3.0; htx.noise_depth = 2

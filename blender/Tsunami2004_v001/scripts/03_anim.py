@@ -58,6 +58,9 @@ if not SKIP_PEOPLE:
             if ch.animation_data and ch.animation_data.action:
                 c2.animation_data.action = shifted(ch.animation_data.action, df)
             key_hide(c2, [(F(21.40), True)])   # every clone has left frame before the impact beat
+            for fc in _fcurves(c2.animation_data.action):   # vNEXT: clones never come back (the survivors at the end are the main cast)
+                if fc.data_path in ("hide_render", "hide_viewport"):
+                    for kp in [k for k in fc.keyframe_points if k.co.x > F(21.40) + 0.5][::-1]: fc.keyframe_points.remove(kp)
     # grasp: fisher's right hand wraps the fish tail (shared hand_poses library)
     fo = bpy.data.objects["Fisher"]
     apply_pose(fo, "R", "relaxed", T(6.5)); apply_pose(fo, "R", "wrap_grip", T(6.75)); apply_pose(fo, "R", "wrap_grip", T(9.0)); apply_pose(fo, "R", "relaxed", T(9.2))
@@ -120,11 +123,11 @@ for fc in _fcurves(wn.animation_data.action):
 # water colour turns muddy once it is over land, foam churn on the flood
 for mname in ("M_Wave",):
     nt = bpy.data.materials[mname].node_tree; b = nt.nodes["Principled BSDF"]; fv = nt.nodes["FOAM_BASE"]; nz = nt.nodes["NZ"]
-    for t, colr, foam in ((0, (0.02, 0.2, 0.28), 0.0), (20.6, (0.02, 0.2, 0.28), 0.15), (22.0, (0.07, 0.05, 0.028), 0.38),
-                          (30.0, (0.065, 0.048, 0.028), 0.32), (31.6, (0.12, 0.2, 0.2), 0.08), (40, (0.12, 0.22, 0.24), 0.05)):
+    for t, colr, foam in ((0, (0.02, 0.2, 0.28), 0.0), (20.6, (0.02, 0.2, 0.28), 0.15), (22.0, (0.10, 0.068, 0.031), 0.07),
+                          (30.0, (0.10, 0.068, 0.031), 0.06), (31.6, (0.085, 0.06, 0.03), 0.0), (40, (0.085, 0.06, 0.03), 0.0)):
         b.inputs["Base Color"].default_value = (*colr, 1); b.inputs["Base Color"].keyframe_insert("default_value", frame=F(t))
         fv.outputs[0].default_value = foam; fv.outputs[0].keyframe_insert("default_value", frame=F(t))
-    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.5), (31.0, 0.5), (32.0, 0.12)):   # vNEXT: rough muddy water, no sun-glare blobs
+    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.2), (31.0, 0.2), (32.0, 0.12)):   # vNEXT: rough muddy water, no sun-glare blobs
         b.inputs["Roughness"].default_value = rg; b.inputs["Roughness"].keyframe_insert("default_value", frame=F(t))
     for t, wv in ((0, 0), (40, 6)):
         nz.inputs["W"].default_value = wv; nz.inputs["W"].keyframe_insert("default_value", frame=F(t))
@@ -309,6 +312,7 @@ for o in bpy.data.objects:
     if o.name.startswith("Rubble_"):
         t0 = T_front(o.location.y) + 1.8
         z_end = terrain_h(o.location.x, o.location.y) - 0.15
+        t0 = max(t0, 30.6)   # vNEXT: rubble surfaces as the water drains (no rocks lying on the water)
         key_tr(o, F(min(t0, 39)), loc=tuple(o.location))
         o.location.z = z_end; key_tr(o, F(min(t0 + 1.0, 39.5)), loc=tuple(o.location))
     elif o.name.startswith(("Debris_", "Sheet_")):
@@ -322,7 +326,7 @@ for o in bpy.data.objects:
         while tt < 30.0:
             u = 1 - math.exp(-(tt - t0) / 2.5)
             xx, yy = x + 0.15 * drift * math.sin(u * 3 + x), y - drift * u
-            key_tr(o, F(tt), loc=(xx, yy, flood_z(tt, yy) - 0.05 + 0.12 * math.sin(tt * 3 + x)),
+            key_tr(o, F(tt), loc=(xx, yy, flood_z(tt, yy) - 0.45 + 0.15 * math.sin(tt * 3 + x)),   # vNEXT: half-submerged, bobbing
                    rot=(r0.x + 0.15 * math.sin(tt * 2 + y), r0.y + 0.15 * math.cos(tt * 2.3 + x), r0.z + spin * u))
             tt += 0.7; i += 1
         key_tr(o, F(31.6), loc=(o.location.x, o.location.y, terrain_h(o.location.x, o.location.y) + 0.05), rot=(r0.x * 0.3, r0.y * 0.3, o.rotation_euler.z))
@@ -337,6 +341,13 @@ for i in survivors:
                 key_tr(ch, F(t0 + 1.5), loc=(ch.location.x, ch.location.y - 12, ch.location.z - 5), rot=(0.8, 0.3, 0.5))
                 key_hide(ch, [(1, False), (F(t0 + 1.6), True)])
 
+# vNEXT: the flood relief flows inland
+_fl = bpy.data.materials["M_Wave"].node_tree.nodes["FLOW"].inputs["Location"]
+for t, yv in ((0, 0.0), (40, 160.0)):
+    _fl.default_value = (0, yv, 0); _fl.keyframe_insert("default_value", frame=F(t))
+for fc in _fcurves(bpy.data.materials["M_Wave"].node_tree.animation_data.action):
+    if "Location" in fc.data_path or "inputs[1]" in fc.data_path:
+        for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
 # ---------------------------------------------------------------- diorama: tension, slip, uplift, bulge splits
 tip = bpy.data.objects["D_Tip"]; wtop = bpy.data.objects["D_WaterTop"]; fault = bpy.data.objects["D_Fault"]
 key_tr(tip, F(13.0), rot=(0, 0, 0)); key_tr(tip, F(14.2), rot=(math.radians(-4), 0, 0))    # dragged down
@@ -348,7 +359,8 @@ for t, tr in ((13.0, 0), (14.3, 0), (14.5, 1.0), (15.0, 0.6), (15.6, 0.3)):
     kbw["Trough"].value = tr; kbw["Trough"].keyframe_insert("value", frame=F(t))
 op_ = bpy.data.objects["D_OceanPlate"]; os_ = bpy.data.objects["D_OceanSed"]
 for o_ in (op_, os_):
-    l_ = o_.location.copy(); key_tr(o_, F(14.35), loc=tuple(l_)); key_tr(o_, F(14.55), loc=(l_.x, l_.y + 0.4, l_.z - 0.35)); key_tr(o_, F(15.6), loc=(l_.x, l_.y + 0.45, l_.z - 0.35))
+    l_ = o_.location.copy(); key_tr(o_, F(13.1), loc=(l_.x, l_.y - 1.0, l_.z + 0.85)); key_tr(o_, F(14.35), loc=tuple(l_));   # vNEXT: visible creep before the slip
+    key_tr(o_, F(14.55), loc=(l_.x, l_.y + 0.4, l_.z - 0.35)); key_tr(o_, F(15.6), loc=(l_.x, l_.y + 0.45, l_.z - 0.35))
 for nm_ in ("D_PulseSea", "D_PulseShore"):
     key_hide(bpy.data.objects[nm_], [(1, True), (F(14.55), False), (F(15.6), True)])
 for t, bu, sa in ((13.0, 0, 0), (14.3, 0, 0), (14.6, 1, 0), (15.0, 0.6, 0.4), (15.6, 0.0, 1.0)):
