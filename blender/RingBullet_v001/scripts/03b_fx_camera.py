@@ -265,10 +265,10 @@ r = ringp(IMPACT); k_(IMPACT, r + Vector((0.085, -0.06, 0.012)), P_IMP, 60, P_IM
 r = ringp(F(10.0)); k_(F(10.0), r + Vector((0.17, -0.25, 0.04)), r, 55)
 def fmid(f): return (pa(min(f, LODGE)) + pb_(min(f, GRAZE))) / 2
 r = ringp(F(11.0)); k_(F(11.0), r + Vector((0.14, -0.38, 0.1)), r.lerp(face(F(11.0)), 0.45), 45, r)   # v007: pulled back, face + hand
-f = F(12.0); m = fmid(f).lerp(ringp(f), 0.3); k_(f, m + Vector((0.03, -0.15, -0.05)), m, 55)
-f = F(13.0); m = fmid(f).lerp(ringp(f), 0.2); k_(f, m + Vector((-0.1, -0.15, 0.03)), m, 55)
-f = F(13.9); m = fmid(f); k_(f, m + Vector((-0.04, -0.3, 0.06)), m, 50)
-n_ = nickp(F(14.4)); k_(F(14.4), n_ + Vector((0.1, -0.2, 0.05)), n_, 55)
+# v007: after the split the camera stays back (face + both hands + the flying pieces), no hand-filled frames
+for t_ in (12.0, 13.0, 13.9):
+    f = F(t_); m_ = fmid(f).lerp(face(f), 0.5); k_(f, m_ + Vector((0.12, -0.5, 0.06)), m_, 42, fmid(f))
+n_ = nickp(F(14.4)); k_(F(14.4), n_ + Vector((0.14, -0.34, 0.08)), n_.lerp(face(F(14.4)), 0.35), 45, n_)
 n_ = nickp(F(15.0)); k_(F(15.0), Vector((0.26, -0.86, 1.5)), n_.lerp(face(F(15.0)), 0.5), 42)
 k_(F(15.6), (0.2, -0.72, 1.72), face(F(15.6)), 45)
 nk = neckp(F(16.55)); k_(F(16.55), (-0.3, -0.56, 1.55), nk.lerp(face(F(16.55)), 0.25), 42, nk)   # v007: wider, fragment B seen arriving

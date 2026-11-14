@@ -86,6 +86,11 @@ Beat frames are unchanged (`beats.json` is identical to v006). The simplify rule
 | 5 | 1108–1142: outstretched, stiff, flat arm; body cut off | The left hand comes up with the elbow bent: the wrist is closer to him, the fingers point up and in, and the hand is relaxed (curl 16–18°, thumb 8°). The F(18.9) camera aims between the ring and the face from 60 cm, so his face is in frame as he looks at the dented ring. |
 | 6 | Neck piece must be seen hitting the neck | Fragment B now drifts near the ring in slow motion, then visibly crosses in front of his chin and reaches the side of his neck at GRAZE (f1003). It is 1.6× larger with a warm hot-metal glint (emission) so it reads on screen. Only after the hit does he flinch: a head jerk at f1008 and a wince at f1007, and his right hand goes from the chest (held until f1003) to the neck (f1010–1016, the approved v006 neck poses). Before, the hand reached the neck at f1004, ahead of the hit. No blood: only the existing small cut. |
 
+Found while watching the full v007 preview, and fixed:
+- **f706–846:** after the split, the F(12.0)–F(13.9) keys sat about 15 cm from the fragments, so a hand filled the frame (the same fault as note 4). These keys now aim between the fragments and his face from about 50 cm, at 42 mm, so the face, both hands and the flying pieces read together. F(14.4) (beat 6) is a little wider.
+- **f1061–1071:** coming off the neck, the hand rose to his temple. The f1072 up-arc key is removed, so the hand goes straight from the neck down to his side.
+- **Neck hand:** I tried placing it lower and closer to the neck (3 cm and 6 cm lower, 2–6 cm closer). Every variant cut into the shirt collar (`clip_scan` and the hand audit), so it keeps the approved v006 neck poses, now arriving after the hit.
+
 Also fixed, found by the newer director checks:
 - **Officer:** in the walk-out (f1273–1405) the newer `clip_scan` flagged the officer's resting hands inside his own hips (approved v006 has the same flag). Both hands now hang relaxed at his sides, clear of the hips.
 - **Owner's lowered right hand (f1092–1240):** it hangs about 5 cm wider, so the hand audit is 0 again. The updated `hand_poses.py` from the director branch had put the fingertips into the trouser leg.
