@@ -6,8 +6,9 @@ Run it again (or in a loop) until it prints DONE. A frame is written to a temp n
 so a chunk killed mid-frame never leaves a broken PNG behind."""
 import os, sys, time, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, ".."))
-sid = sys.argv[1]
-arg = lambda k, d: type(d)(sys.argv[sys.argv.index(k) + 1]) if k in sys.argv else d
+A = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:]     # works with python or blender -b -P
+sid = A[0]
+arg = lambda k, d: type(d)(A[A.index(k) + 1]) if k in A else d
 BUDGET = arg("--budget", 1500.0)
 PATCH = os.path.join(ROOT, "out", "deliver", "ch45_redo", f"{sid}_patch.blend")
 OUT = os.path.join(ROOT, "out", "ch45_redo_render", sid); os.makedirs(OUT, exist_ok=True)

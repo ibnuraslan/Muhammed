@@ -1,0 +1,12 @@
+{
+ "id": "c4_14",
+ "file": "out/deliver/ch45_redo/c4_14_patch.blend",
+ "scene": "PATCH_C4_14",
+ "frames": 188,
+ "master_in": 2785,
+ "master_out": 2972,
+ "replaces": "c4_14_boardroom_dossier",
+ "mb": 0.54,
+ "sha256": "8801605af4dd09f903efdf3b8e2f2476415511375c5562cb05d484c2d61d49fa",
+ "libraries": 0
+}

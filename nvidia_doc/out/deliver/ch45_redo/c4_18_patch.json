@@ -1,0 +1,12 @@
+{
+ "id": "c4_18",
+ "file": "out/deliver/ch45_redo/c4_18_patch.blend",
+ "scene": "PATCH_C4_18",
+ "frames": 199,
+ "master_in": 3571,
+ "master_out": 3769,
+ "replaces": "c4_18_hq_watch_clear",
+ "mb": 0.24,
+ "sha256": "bf0cbdbdaaaa2b8dc1b57f0aa9bd71a363f77d5769698b3f44d7528a7a8a22d4",
+ "libraries": 0
+}

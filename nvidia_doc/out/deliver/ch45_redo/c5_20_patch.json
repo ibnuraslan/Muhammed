@@ -1,0 +1,12 @@
+{
+ "id": "c5_20",
+ "file": "out/deliver/ch45_redo/c5_20_patch.blend",
+ "scene": "PATCH_C5_20",
+ "frames": 227,
+ "master_in": 8375,
+ "master_out": 8601,
+ "replaces": "c5_20_port_xray_gate",
+ "mb": 0.56,
+ "sha256": "f2bacfb9a34bd3491d5ae44f85e8a05bdf4ad9c4df34a48a3b38428f91e9aaed",
+ "libraries": 0
+}

@@ -1,0 +1,12 @@
+{
+ "id": "c5_11",
+ "file": "out/deliver/ch45_redo/c5_11_patch.blend",
+ "scene": "PATCH_C5_11",
+ "frames": 197,
+ "master_in": 6392,
+ "master_out": 6588,
+ "replaces": "c5_11_port_container_push",
+ "mb": 0.5,
+ "sha256": "4cf34f044cfa0cac5f9dcbf6dc761a811bb98ea1603c558cd360506fa1112bbc",
+ "libraries": 0
+}

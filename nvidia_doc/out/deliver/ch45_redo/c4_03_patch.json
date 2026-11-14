@@ -1,0 +1,12 @@
+{
+ "id": "c4_03",
+ "file": "out/deliver/ch45_redo/c4_03_patch.blend",
+ "scene": "PATCH_C4_03",
+ "frames": 288,
+ "master_in": 443,
+ "master_out": 730,
+ "replaces": "c4_03_corp_lobby_busy",
+ "mb": 164.61,
+ "sha256": "19bf55b03f96240956325988f23e19c6dad21c8180e6a82738386d2bad508631",
+ "libraries": 0
+}

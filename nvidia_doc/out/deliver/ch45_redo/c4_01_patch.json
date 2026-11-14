@@ -1,0 +1,12 @@
+{
+ "id": "c4_01",
+ "file": "out/deliver/ch45_redo/c4_01_patch.blend",
+ "scene": "PATCH_C4_01",
+ "frames": 249,
+ "master_in": 1,
+ "master_out": 249,
+ "replaces": "c4_01_hq_dusk_push",
+ "mb": 50.63,
+ "sha256": "d13d6b43c54f4886b0c1dba38d2b7a60905190cf9ad41638ea8b3acd2df69038",
+ "libraries": 0
+}

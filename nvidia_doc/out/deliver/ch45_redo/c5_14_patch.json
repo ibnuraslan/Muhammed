@@ -1,0 +1,12 @@
+{
+ "id": "c5_14",
+ "file": "out/deliver/ch45_redo/c5_14_patch.blend",
+ "scene": "PATCH_C5_14",
+ "frames": 252,
+ "master_in": 6984,
+ "master_out": 7235,
+ "replaces": "c5_14_dchall_half_empty",
+ "mb": 0.26,
+ "sha256": "69986aa0f49eb6216349d9d3ff4e5376daccb6f482d7461d125f9547be50632a",
+ "libraries": 0
+}

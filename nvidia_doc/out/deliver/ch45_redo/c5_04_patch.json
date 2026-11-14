@@ -1,0 +1,12 @@
+{
+ "id": "c5_04",
+ "file": "out/deliver/ch45_redo/c5_04_patch.blend",
+ "scene": "PATCH_C5_04",
+ "frames": 155,
+ "master_in": 4775,
+ "master_out": 4929,
+ "replaces": "c5_04_interview_question",
+ "mb": 0.18,
+ "sha256": "6b5fc027e9560677096344e01d7e068398dee0ce009fbd1a80be04c5dd614097",
+ "libraries": 0
+}

@@ -1,0 +1,12 @@
+{
+ "id": "c5_01",
+ "file": "out/deliver/ch45_redo/c5_01_patch.blend",
+ "scene": "PATCH_C5_01",
+ "frames": 215,
+ "master_in": 4103,
+ "master_out": 4317,
+ "replaces": "c5_01_interview_passport_slide",
+ "mb": 0.46,
+ "sha256": "06a3d28f8902fd7ca89ffdf4dbb670b617ba3df3809f4056518d59cf4d7c4d1a",
+ "libraries": 0
+}

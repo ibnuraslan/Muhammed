@@ -1,0 +1,12 @@
+{
+ "id": "c4_12",
+ "file": "out/deliver/ch45_redo/c4_12_patch.blend",
+ "scene": "PATCH_C4_12",
+ "frames": 196,
+ "master_in": 2398,
+ "master_out": 2593,
+ "replaces": "c4_12_hq_night_lit",
+ "mb": 33.11,
+ "sha256": "4e0efc1870f15c986647ffb9ecd126a356e3f0912acc89fc4df232322a0cd30d",
+ "libraries": 0
+}

@@ -1,0 +1,12 @@
+{
+ "id": "c5_09",
+ "file": "out/deliver/ch45_redo/c5_09_patch.blend",
+ "scene": "PATCH_C5_09",
+ "frames": 136,
+ "master_in": 5994,
+ "master_out": 6129,
+ "replaces": "c5_09_interview_passport_back",
+ "mb": 0.18,
+ "sha256": "bb33915432ac91fcb1fa0d586a9f100a910c15adb9834780a61c18e4fb341236",
+ "libraries": 0
+}

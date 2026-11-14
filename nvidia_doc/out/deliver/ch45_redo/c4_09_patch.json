@@ -1,0 +1,12 @@
+{
+ "id": "c4_09",
+ "file": "out/deliver/ch45_redo/c4_09_patch.blend",
+ "scene": "PATCH_C4_09",
+ "frames": 297,
+ "master_in": 1519,
+ "master_out": 1815,
+ "replaces": "c4_09_memo_desk_memo_close2",
+ "mb": 0.19,
+ "sha256": "3f0079a0b2b41aa3495ff4afe299971c278b03bf2ca5a8f75a71821038e6698c",
+ "libraries": 0
+}
