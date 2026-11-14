@@ -64,10 +64,10 @@ P.k(252, hL=LH_TABLE, cL=12)
 P.k(1, root=STA, yaw=180, flex=8, sp_flex=14, h_pitch=18, h_yaw=0, sp_twist=0, cL=20, cR=55, hL=LH_TABLE)
 P.k(30, sp_twist=-10, h_yaw=-45, h_pitch=5, flex=6)                       # glance at the door
 P.k(62, sp_twist=-4, h_yaw=-12, h_pitch=22)
-P.k(100, sp_twist=0, h_yaw=0, h_pitch=40, sp_flex=26, flex=14, root=STA + V(0, 0.04, -0.03))
+P.k(100, sp_twist=0, h_yaw=0, h_pitch=32, sp_flex=18, flex=12, root=STA + V(0, 0.04, -0.03))
 P.k(130, hL=LH_TABLE, cL=25)
 P.k(150, cL=8, cR=10)
-P.k(190, root=STA + V(0, 0.07, -0.08), flex=20, sp_flex=36, h_pitch=45, side=2)     # bear down
+P.k(190, root=STA + V(0, 0.07, -0.06), flex=16, sp_flex=22, h_pitch=34, side=2)     # bear down
 P.k(232, root=STA + V(0, 0.07, -0.09), flex=21, sp_flex=38, side=-2)
 P.k(252, hL=LH_TABLE, cL=20)
 P.k(258, cR=30)
@@ -113,11 +113,11 @@ P.k(920, sp_twist=-6, side=3, h_yaw=-28)
 P.k(934, sp_twist=-10, side=5, h_pitch=30, flex=8)
 P.k(940, h_yaw=-38, h_pitch=8, sp_twist=-4)          # a light passes outside: freezes, eyes to the gap under the door
 P.k(950, h_yaw=-32, h_pitch=12)
-P.k(958, root=DOOR_ST + V(-0.08, 0.02, -0.01), sp_twist=4, side=-3, h_yaw=-24, h_pitch=26)
-P.k(972, root=DOOR_ST + V(-0.08, 0.02, -0.01), sp_twist=-12, side=6, flex=8, h_pitch=34, hL=grip_hand(V(1.948, 1.22, 1.46), V(0, 0.2, 1), V(1, 0, 0)))                  # strain
-P.k(982, hL=grip_hand(V(1.74, 1.26, 1.48), V(0, 0.2, 1), V(1, 0, 0)), sp_twist=6, h_pitch=10, h_yaw=10)  # wind up
-P.k(992, hL=grip_hand(V(1.948, 1.24, 1.50), V(0, 0.2, 1), V(1, 0, 0)), sp_twist=-4, flex=12)            # slap
-P.k(998, root=DOOR_ST + V(-0.12, 0.04, -0.03), flex=10)
+P.k(958, root=DOOR_ST + V(-0.08, 0.02, -0.01), sp_twist=4, side=-3, h_yaw=-24, h_pitch=20)
+P.k(972, root=DOOR_ST + V(-0.16, 0.04, -0.02), sp_twist=-6, side=3, flex=6, h_pitch=18, h_yaw=-28, hL=grip_hand(V(1.948, 1.30, 1.36), V(0, 0.2, 1), V(1, 0, 0)))                  # strain
+P.k(982, sp_twist=2, h_pitch=14, h_yaw=-26)  # wind up
+P.k(992, sp_twist=-2, flex=8)            # slap
+P.k(998, root=DOOR_ST + V(-0.16, 0.04, -0.03), flex=8)
 P.k(1006, root=DOOR_ST + V(-0.16, 0.05, -0.03), h_yaw=-24, h_pitch=16, hL=grip_hand(V(1.948, 1.30, 1.36), V(0, 0.15, 1), V(1, 0, 0)))   # the hand slides down the wall as he sags
 P.k(1018, root=DOOR_ST + V(-0.20, 0.07, -0.03), flex=8, sp_flex=8, h_pitch=18, h_yaw=-30, sp_twist=0, side=0, hL=grip_hand(V(1.948, 1.32, 1.34), V(0, 0.2, 1), V(1, 0, 0)), cL=8)   # palm flat on the wall at shoulder height, head back, face turned to us to the door
 P.k(1034, root=DOOR_ST + V(-0.20, 0.06, -0.03))
@@ -265,7 +265,7 @@ for i, s in enumerate("RL"):
     P.plant(s, 1368 + i * 12, 1386 + i * 12, P.h.foot_xy(s, DOOR_ST, 90), 90, 0.08)
 P.k(1372, root=STB + V(0.1, -0.05, 0), yaw=160)
 P.k(1384, hL=B((0.31, -0.08, 0.0), (0.2, -0.3, -1), (-1, 0, 0)), cL=18)
-P.k(1398, root=DOOR_ST, yaw=90, flex=6, sp_flex=12, h_pitch=22, h_yaw=-26, hL=LH_DOOR, cL=10)
+P.k(1398, root=DOOR_ST + V(-0.08, -0.02, 0), yaw=90, flex=6, sp_flex=12, h_pitch=22, h_yaw=-26, hL=LH_DOOR, cL=10)
 P.k(1418, sp_twist=-8, side=3, h_pitch=26)
 P.k(1428, sp_twist=2, side=0, h_pitch=12, h_yaw=-10)
 # door: bolt slides, door swings out (pushed with the left hand)
