@@ -286,7 +286,7 @@ eb = Actor("ExpertB", RZ0); ea = Actor("ExpertA", RZ0)
 PR = O["Print_Office"]; PRC = Vector((8.2, Y0 + 4.86, 2.0)); PR.location = PRC; PR.rotation_euler = (R_(-8), 0, 0)
 BP = Vector((8.25, Y0 + 5.25))
 bfeet = {"L": (Vector((BP.x + 0.14, BP.y - 0.02)), -5), "R": (Vector((BP.x - 0.16, BP.y + 0.02)), 5)}
-for f in range(1180, 1345, 10):
+for f in range(1180, 1665, 10):
     t = (f - 1180) / 60; sway = math.sin(t * 2)
     look = smooth((f - 1250) / 20) * (1 - smooth((f - 1290) / 15))
     eb.pose(f, BP, 0.0 + 3 * sway, flex=4, spine=(6 + 1.0 * math.sin(t * 2.3), 2 * sway, 0), head=(4 + 12 * look, -14 + 10 * look), feet=bfeet, crouch=0.01)
@@ -301,7 +301,7 @@ _dg = bpy.context.evaluated_depsgraph_get()
 _h = sc.ray_cast(_dg, Vector((7.55, Y0 + 4.3, 3.5)), Vector((0, 0, -1)))
 DESK_HIT = _h[1].z if _h[0] else DESK_TOP
 print("DESK top at A's hand", DESK_HIT, _h[4].name if _h[0] else None)
-for f in range(1180, 1345, 10):
+for f in range(1180, 1665, 10):
     t = (f - 1180) / 60; k = smooth((f - 1190) / 70)
     ea.pose(f, AP, 180.0, flex=6 + 8 * k, spine=(8 + 12 * k + 1.0 * math.sin(t * 2.1), -6, 0), head=(1 + 2 * k, -12 + 4 * k), feet=afeet, crouch=0.02 + 0.04 * k)
     mc = Vector((7.98 + 0.03 * k, Y0 + 4.4 + 0.1 * k, 2.08 + 0.06 * k)) + Vector((0.008 * math.sin(t * 4), 0, 0))
@@ -309,8 +309,8 @@ for f in range(1180, 1345, 10):
     hd = mc + Vector((0, 0, -0.16))     # handle grip below the lens
     ea.hand("R", f, hd + Vector((0.068, -0.025, -0.05)), (-0.1, 0.1, 1), (-1, 0, 0), pole=hd + Vector((0.4, -0.5, -0.5)), curl=58, thumb=35)
     ea.hand("L", f, Vector((7.5, Y0 + 4.52, DESK_TOP + 0.03)), (0.15, 1, -0.1), (0, 0, -1), pole=Vector((7.1, Y0 + 3.9, 1.9)), curl=8, thumb=12)
-for R, ks in ((ea.R, ((1180, dict(brow=0.3, lids=-0.5, frown=0.3)), (1260, dict(brow=0.8, lids=0.5, jaw=3)), (1300, dict(brow=1.4, lids=1.2, jaw=12)))),
-              (eb.R, ((1180, dict(brow=0.5, lids=0.2)), (1270, dict(brow=1.2, lids=1.0, jaw=8)), (1320, dict(brow=1.4, lids=1.0, jaw=12, smile=0.3))))):
+for R, ks in ((ea.R, ((1180, dict(brow=0.3, lids=-0.5, frown=0.3)), (1260, dict(brow=0.8, lids=0.5, jaw=3)), (1300, dict(brow=1.4, lids=1.2, jaw=12)), (1420, dict(brow=1.1, lids=0.9, jaw=7)), (1560, dict(brow=1.3, lids=1.0, jaw=10)))),
+              (eb.R, ((1180, dict(brow=0.5, lids=0.2)), (1270, dict(brow=1.2, lids=1.0, jaw=8)), (1320, dict(brow=1.4, lids=1.0, jaw=12, smile=0.3)), (1450, dict(brow=1.0, lids=0.8, jaw=5)), (1580, dict(brow=1.3, lids=1.0, jaw=9))))):
     for f, kw in ks: face(R, f, **kw)
 
 # ---------------------------------------------------------------- explainer: ghost hull slides in beside the giant print, band lights up
@@ -366,50 +366,47 @@ CK = [  # frame, camera position, look target, lens, f-stop
     (180,  STW(180, (0.1, 0.9, 2.0)),    Vector((0, Y0, 14)),       30, 8.0),
     (240,  Vector((-12, -78, 6)),        Vector((-4, -30, 11)),     45, 8.0),
     (300,  Vector((-14, -58, 5)),        Vector((-4, -30, 7)),      26, 8.0),
-    (350,  Vector((-14, -30, 2.4)),      Vector((-9, Y0, 1.6)),     28, 5.6),
-    (410,  Vector((-15, Y0 - 17, 4.5)),  Vector((-4, Y0, 3.0)),     30, 5.6),
-    (470,  Vector((-6, Y0 - 11, 3.0)),   Vector((0, Y0, 1.8)),      32, 5.6),
-    (530,  Vector((1.5, Y0 - 7.0, 2.6)), Vector((3.2, Y0, 1.6)),    32, 8.0),
-    (580,  Vector((6, Y0 - 7.5, 2.4)),   Vector((7.5, Y0, 1.6)),    32, 5.6),
-    (625,  Vector((10, Y0 - 12.0, 4.5)), Vector((6, Y0, 2.0)),      30, 5.6),
-    (680,  Vector((8, Y0 - 16, 10)),     Vector((0, Y0 + 2, 6)),    26, 8.0),
-    (740,  Vector((-2, -36, 30)),        Vector((-6, -62, 0)),      24, 8.0),
-    (800,  Vector((-8, -62, 38)),        Vector((-14, -84, 0)),     24, 8.0),
-    (860,  Vector((-42, -90, 20)),       ship_pos(860) + Vector((0, 4, 6)), 26, 8.0),
+    (350,  Vector((-15, -45, 5.0)),     Vector((-11, Y0, 5.0)),    28, 8.0),   # v006 beat 3: readable mid shot of the berg + smear
+    (520,  Vector((5, -45, 6.0)),        Vector((8, Y0, 5.0)),      28, 8.0),
+    (590,  Vector((2, -50, 20)),         Vector((0, -36, 0)),       24, 8.0),   # crane up, tilt over the debris (~1 s)
+    (640,  Vector((0, -52, 34)),         Vector((-3, -66, 0)),      22, 8.0),
+    (700,  Vector((-2, -48, 40)),        Vector((-10, -104, 6)),    20, 8.0),   # beat 4: ship sailing past the debris field
+    (850,  Vector((-10, -50, 38)),       Vector((2, -108, 8)),      20, 8.0),
+    (885,  Vector((-22, -54, 34)),       Vector((-22, -46, 0)),     22, 8.0),
     (915,  Vector((-34, -44, 12)),       Vector((0, Y0, 8)),        26, 8.0),
     (965,  Vector((-28, Y0 - 7, 3.2)),   Vector((10, Y0 - 3, 3.0)), 24, 5.6),
-    (1015, Vector((-10, Y0 - 4.2, 2.4)), Vector((6, Y0 - 1, 2.0)),  26, 5.6),
-    (1055, Vector((-3.0, Y0 - 7.0, 3.4)), Vector((2, Y0, 2.6)),     24, 5.6),
+    (1015, Vector((-10, Y0 - 6.5, 2.6)), Vector((6, Y0 - 1, 2.0)),  26, 5.6),
+    (1055, Vector((-1.0, Y0 - 9.0, 3.0)), Vector((2, Y0, 2.5)),     24, 5.6),
+    (1065, Vector((1.6, Y0 - 3.0, 2.3)), Vector((2, Y0 + 5, 2.3)),  26, 5.6),   # v006: fast punch through the skin (no white frames)
     (1072, Vector((2.0, Y0 - 0.7, 1.95)), Vector((2.0, Y0 + 5, 2.5)), 30, 5.6),
-    (1092, Vector((2.05, Y0 + 5.7, 2.5)), Vector((1.2, Y0 + 4.85, 2.25)), 26, 5.6),
-    (1130, Vector((1.8, Y0 + 5.8, 2.35)), Vector((1.2, Y0 + 4.85, 2.2)), 28, 5.6),
-    (1166, Vector((2.0, Y0 + 5.65, 2.4)), Vector((1.2, Y0 + 4.82, 2.35)), 30, 5.6),
+    (1092, Vector((2.05, Y0 + 5.75, 2.6)), Vector((1.25, Y0 + 5.0, 1.95)), 24, 5.6),   # v006: tray, tongs in his hand and face in one frame
+    (1130, Vector((1.85, Y0 + 5.8, 2.6)), Vector((1.22, Y0 + 5.0, 1.95)), 24, 5.6),
+    (1166, Vector((2.0, Y0 + 5.75, 2.6)), Vector((1.22, Y0 + 4.95, 2.0)), 26, 5.6),
     (1177, Vector((2.55, Y0 + 5.0, 2.4)), Vector((6.5, Y0 + 4.45, 2.1)), 26, 5.6),
     (1185, Vector((3.4, Y0 + 4.0, 2.35)), Vector((6.5, Y0 + 4.4, 2.0)), 24, 5.6),
     (1200, Vector((6.0, Y0 + 5.5, 2.45)), Vector((7.72, Y0 + 3.95, 2.4)), 24, 5.6),
     (1232, Vector((7.55, Y0 + 5.35, 2.7)), Vector((7.8, Y0 + 4.0, 2.3)), 26, 8.0),
     (1265, Vector((9.4, Y0 + 3.9, 2.45)), Vector((8.0, Y0 + 4.4, 2.3)), 26, 5.6),
     (1310, Vector((8.27, Y0 + 3.55, 2.4)), Vector((8.22, Y0 + 4.86, 2.05)), 30, 5.6),
-    (1328, Vector((8.24, Y0 + 4.82, 2.0)), Vector((8.0, Y0 + 9, 2.6)), 30, 5.6),
-    (1350, Vector((7.8, Y0 + 9.6, 2.6)), Vector((6.5, Y0 + 18.7, 3.3)), 24, 8.0),
-    (1405, Vector((10.0, Y0 + 11.0, 2.7)), Vector((9.2, Y0 + 18.4, 2.6)), 22, 8.0),
-    (1465, Vector((9.6, Y0 + 14.2, 2.5)), Vector((9.3, Y0 + 18.5, 2.45)), 26, 5.6),
-    (1520, Vector((7.0, Y0 + 14.3, 2.9)), Vector((6.5, Y0 + 18.7, 3.0)), 26, 8.0),
-    (1555, Vector((6.6, Y0 + 20.5, 3.3)), Vector((7.5, Y0 + 32, 3.8)), 26, 8.0),
-    (1572, Vector((9, 36, 7)),           Vector((24, 74, 3)),       24, 8.0),
-    (1581, Vector((14, 41, 8.5)),        Vector((46, 44, 5)),       24, 8.0),
-    (1590, Vector((20, 44, 10)),         Vector((4, 4, 10)),        24, 8.0),
-    (1640, Vector((32, 44, 12)),         Vector((4, 4, 10)),        24, 8.0),
-    (1700, Vector((58, 30, 12)),         Vector((0, 0, 11)),        24, 8.0),
-    (1770, Vector((66, -28, 9)),         Vector((0, 0, 11)),        26, 8.0),
-    (END,  Vector((42, -72, 7)),         Vector((0, 0, 12)),        28, 8.0),
+    (1360, Vector((8.28, Y0 + 3.62, 2.3)), Vector((8.2, Y0 + 4.86, 2.0)), 30, 8.0),   # v006: slow push into the print IN Expert B's hands
+    (1450, Vector((8.3, Y0 + 3.78, 2.2)), Vector((8.2, Y0 + 4.86, 1.97)), 33, 8.0),
+    (1560, Vector((8.32, Y0 + 3.9, 2.12)), Vector((8.2, Y0 + 4.86, 1.96)), 37, 8.0),
+    (1610, Vector((8.32, Y0 + 3.98, 2.08)), Vector((8.2, Y0 + 4.86, 1.96)), 40, 8.0),
+    (1630, Vector((8.25, Y0 + 4.55, 2.02)), Vector((8.2, Y0 + 9, 1.98)), 36, 8.0),
+    (1640, Vector((8.3, Y0 + 6.5, 2.3)),  Vector((9, 36, 4)),       30, 8.0),
+    (1650, Vector((8.6, Y0 + 20, 3.5)),   Vector((9, 40, 4)),       26, 8.0),
+    (1660, Vector((9, 22, 6)),            Vector((24, 74, 3)),      24, 8.0),
+    (1670, Vector((13, 38, 8)),           Vector((46, 44, 5)),      24, 8.0),
+    (1682, Vector((20, 44, 10)),          Vector((4, 4, 10)),       24, 8.0),
+    (1750, Vector((36, 44, 12)),         Vector((4, 4, 10)),        24, 8.0),
+    (END,  Vector((56, 30, 11)),         Vector((0, 0, 11)),        26, 8.0),
 ]
 # real ice surface on the dive line (the facet displacement moves it off the Y0 plane)
 dg = bpy.context.evaluated_depsgraph_get(); bev = O["Iceberg"].evaluated_get(dg)
 hit_, loc_, _, _ = bev.ray_cast(Vector((2.0, Y0 - 12, 2.5)), Vector((0, 1, 0)))
 YS_ICE = loc_.y if hit_ else Y0
 print("ICE SURFACE", YS_ICE)
-CK = [k if k[0] != 1072 else (1072, Vector((2.0, YS_ICE - 0.45, 2.5)), k[2], k[3], k[4]) for k in CK]
+CK = [k if k[0] != 1072 else (1072, Vector((2.0, YS_ICE + 0.8, 2.35)), k[2], k[3], k[4]) for k in CK]
 fpos = catmull([(k[0], k[1]) for k in CK])
 _tg = [pchip([(k[0], k[2][c]) for k in CK]) for c in range(3)]
 ftgt = lambda f: Vector((_tg[0](f), _tg[1](f), _tg[2](f)))   # monotone: no overshoot when the target jumps far
@@ -445,30 +442,27 @@ vis(["liner"], cross_skin, 1700)
 vis(["Darkroom_WallFront"], cross_skin, cross_skin + 10)   # back on once the camera is inside (v004: it showed the sea behind the tech)
 bb = [O["Iceberg"].matrix_world @ Vector(c) for c in O["Iceberg"].bound_box]
 BERG_MAXY = max(v.y for v in bb)
-back_on = next(f for f in range(1561, 1700) if fpos(f).y > BERG_MAXY + 1.0)
+cross_print = next(f for f in range(1560, 1700) if fpos(f).y > Y0 + 4.9)
+back_on = next(f for f in range(cross_print + 1, 1760) if fpos(f).y > BERG_MAXY + 1.0)
 print("BERG back on", back_on, BERG_MAXY)
 for n in ("Iceberg", "Mist_Bank"):
     ob = O[n]; ob.hide_render = False; ob.keyframe_insert("hide_render", frame=0)
     ob.hide_render = True; ob.keyframe_insert("hide_render", frame=cross_skin)
     ob.hide_render = False; ob.keyframe_insert("hide_render", frame=back_on)
     set_interp(ob, 'CONSTANT', lambda p_: p_ == "hide_render")
-cross_print = next(f for f in range(1310, 1345) if fpos(f).y > Y0 + 4.86)
 vis(["Print_Office", "ExpertB", "Office_WallBack", "Darkroom_WallRight", "Office_WallLeft"], cross_print)
-cross_giant = next(f for f in range(1530, 1600) if fpos(f).y > GP.y - 0.02)
-vis(["Print_Giant", "Liner_Explainer", "Explainer_Stage", "Match_Line"], cross_giant)
-print("CROSS", cross_skin, cross_print, cross_giant)
+cross_giant = cross_print
+print("CROSS", cross_skin, cross_print)
 # rooms never render outside their beats (safety: they're inside the berg anyway)
 for o in list(D.collections["Rooms_In_Berg"].objects) + [O[n] for n in ("Tech", "ExpertA", "ExpertB")]:
     if "DoorCut" in o.name: continue
     for ob in [o] + list(o.children):
         ob.hide_render = True; ob.keyframe_insert("hide_render", frame=0)
         ob.hide_render = False; ob.keyframe_insert("hide_render", frame=cross_skin - 2)
-        ob.hide_render = True; ob.keyframe_insert("hide_render", frame=cross_print + 30)
+        ob.hide_render = True; ob.keyframe_insert("hide_render", frame=cross_print + 2)
         set_interp(ob, 'CONSTANT', lambda p_: p_ == "hide_render")
 for o in list(D.collections["Explainer_Cyc"].objects):
-    o.hide_render = True; o.keyframe_insert("hide_render", frame=0)
-    o.hide_render = False; o.keyframe_insert("hide_render", frame=cross_print - 4)
-    o.hide_render = True; o.keyframe_insert("hide_render", frame=cross_giant + 1)
+    o.hide_render = True; o.keyframe_insert("hide_render", frame=0)     # v006: the explainer void is cut (photo stays in the office, in his hands)
     set_interp(o, 'CONSTANT', lambda p_: p_ == "hide_render")
 sc["CROSS"] = [cross_skin, cross_print, cross_giant]
 # ---------------------------------------------------------------- hands: Limit Rotation on every finger, thumb and wrist (no backward bends)
@@ -524,7 +518,7 @@ for f in range(1060, 1215, 6):
     t0 = O["Tray_0"]; tmn, tmx = _bb_world(t0)   # left hand holds the near rim of the tray beside it
     _log("tech_L_tray", f, HP["grip_object"](tech.o, "L", f, t0, Vector(((tmn.x + tmx.x) / 2 + 0.1, tmn.y + 0.004, tmx.z - 0.004)), Vector((0, 0, -1))))
 # office: A wraps the magnifier handle, other palm flat on the desk; B pinches the print's top corners
-for f in range(1180, 1345, 10):
+for f in range(1180, 1665, 10):
     sc.frame_set(f); mn, mx = _bb_world(mag)
     handle = Vector(((mn.x + mx.x) / 2, (mn.y + mx.y) / 2, mn.z + 0.07))
     wr_ = ea.o.matrix_world @ ea.R.PB["wrist.R"].head
@@ -545,7 +539,7 @@ def palm_frame(rig, s_, space="world"):
     d = (f3 - wr).normalized(); a_ = (f2 - f5).normalized(); n = d.cross(a_) if s_ == "L" else a_.cross(d)
     return wr.lerp(f3, 0.75), n.normalized(), d
 # magnifier handle sits in Expert A's right palm
-for f in range(1176, 1346, 6):
+for f in range(1176, 1666, 6):
     sc.frame_set(f); pp, n, d = palm_frame(ea.o, "R")
     off = mag.location - (mag.matrix_world.translation)          # zero for an unparented object
     mag.location = pp + n * 0.024 - Vector((0, 0, 0.07)); mag.keyframe_insert("location", frame=f)
@@ -555,7 +549,7 @@ for f in range(1060, 1216, 6):
     pinch = (M_ @ P_["finger1-3.R"].tail + M_ @ P_["finger2-3.R"].tail) / 2
     tongs.location = pinch + Vector((0, 0.095, -0.012)); tongs.keyframe_insert("location", frame=f)
 # the office print sits between Expert B's two thumb-index pinches (it is held, it never floats)
-for f in range(1176, 1346, 5):
+for f in range(1176, 1666, 5):
     sc.frame_set(f); P_ = eb.o.pose.bones; M_ = eb.o.matrix_world
     pL = (M_ @ P_["finger1-3.L"].tail + M_ @ P_["finger2-3.L"].tail) / 2
     pR = (M_ @ P_["finger1-3.R"].tail + M_ @ P_["finger2-3.R"].tail) / 2
