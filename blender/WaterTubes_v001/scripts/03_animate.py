@@ -65,7 +65,7 @@ L.new(mu.outputs[0], add_node.inputs[1])
 def flood(name, keys):
     s = FN[name].outputs[0]
     for f, v in keys: ksock(s, f, v)
-FRONT = [(1, 140), (F(8.3), 62), (F(9.3), 34), (F(10.3), 12), (F(11.3), -14), (F(13.0), -60), (F(15), -100)]
+FRONT = [(1, 140), (F(8.3), 44), (F(9.3), 22), (F(10.3), 6), (F(11.3), -14), (F(13.0), -60), (F(15), -100)]
 flood("FrontX", FRONT)
 flood("SpreadY", [(1, 4.4), (F(10.0), 4.6), (F(12.0), 5.0), (F(20.8), 5.2), (F(21.3), 6.6), (F(21.6), 7.9), (F(22.4), 12), (F(23.4), 40)])
 flood("Boost", [(1, 0), (F(10.6), 0), (F(12.4), 16), (F(23.4), 0)])
@@ -73,7 +73,7 @@ flood("Level", [(1, 0.3), (F(9.5), 0.4), (F(12.5), 0.5), (F(21.0), 0.55), (F(21.
 flood("Lip", [(1, 0.6), (F(11.0), 0.55), (F(12.4), 0.4), (F(20.8), 0.3), (F(21.5), 0.45), (F(22.8), 0.35), (F(24.5), 0.05)])
 flood("Chop", [(1, 0.07), (F(21.4), 0.1), (F(24.5), 0.05), (F(27.0), 0.02)])
 fl = bpy.data.objects["Flood"]
-khide(fl, [(1, F(15.0)), (F(20.62), 2011)])          # hidden while inside the cutaway shell
+khide(fl, [(1, F(14.75)), (F(17.45), 2011)])          # hidden while inside the cutaway shell
 # mud after the flood
 gm = bpy.data.materials["GroundMix"].node_tree.nodes["MudAmount"].outputs[0]
 ksock(gm, F(24.5), 0.0); ksock(gm, F(26.0), 1.0)
@@ -88,40 +88,36 @@ def front_at(f):
     sc.frame_set(f); return FN["FrontX"].outputs[0].default_value
 
 # ------------------------------------------------------------------ cutaway swap + shell + explainer
+# v005: the cutaway is short (about 2.7 s) and in place, with no backdrop shell, so his lawn and house stay behind it
 sh_mix = bpy.data.materials["CutBackdrop"].node_tree.nodes["ShellFade"].inputs["Fac"]
-for f, v in ((1, 0), (F(14.6) - 6, 0), (F(14.6) + 8, 1), (F(20.52), 1), (F(20.62), 0)): ksock(sh_mix, f, v)
-CUT_IN, CUT_OUT = F(14.6), F(20.62)
-khide(bpy.data.objects["CutShell"], [(F(14.6) - 8, F(20.62))])
+ksock(sh_mix, 1, 0)
+CUT_IN, CUT_OUT = F(14.75), F(17.45)
+khide(bpy.data.objects["CutShell"], [])
 for n in ("Tube_0", "Valve_0"):
     khide(bpy.data.objects[n], [(1, CUT_IN), (CUT_OUT, 2011)])
 for n in ["CutTube", "CutWater", "CutKey", "CutRim"] + [o.name for o in bpy.data.objects if o.name.startswith("Bubble_")]:
     khide(bpy.data.objects[n], [(CUT_IN, CUT_OUT)])
-# the hose is removed once the tube is full (he unscrews it and coils it at the reel) -> keep it only in beats 1-2
 khide(bpy.data.objects["Hose"], [(1, F(8.4))]); khide(bpy.data.objects["Nozzle"], [(1, F(8.4))])
-# water in the section sags and settles (weight)
 cw, ct = bpy.data.objects["CutWater"], bpy.data.objects["CutTube"]
-# scale about the tube axis: parent both to an empty at the tube centre line
 piv = bpy.data.objects.new("CutPivot", None); sc.collection.objects.link(piv); piv.location = (0, -9.0, 0.0); bpy.context.view_layer.update()
 for ob in (cw, ct):
     ob.parent = piv; ob.matrix_parent_inverse = piv.matrix_world.inverted()
-for f, sz, sy in ((CUT_IN, 1.0, 1.0), (F(15.6), 0.955, 1.03), (F(16.2), 0.975, 1.012), (F(17.0), 0.96, 1.025), (F(19.4), 0.93, 1.045), (F(20.0), 0.95, 1.03)):
+# the tube section fills (water rises), then sags a little under its own weight
+for f, sz, sy in ((CUT_IN, 0.35, 1.25), (F(15.6), 1.0, 1.0), (F(16.1), 0.955, 1.03), (F(16.5), 0.975, 1.012), (F(17.0), 0.95, 1.035)):
     piv.scale = (1, sy, sz); piv.keyframe_insert("scale", frame=f)
-# flood wall pushes in, arrows grow and strain, the weight arrow presses down and wins
+# the flood section pushes on the street side, the force arrows strain and shrink: the tube holds (no floating weight arrow)
 fw = bpy.data.objects["FloodWall"]
-khide(fw, [(F(17.0), F(20.3))])
-for o in [o for o in bpy.data.objects if o.name.startswith("Silt_")]: khide(o, [(F(17.0), F(20.3))])
-for f, y in ((F(17.0), -12.6), (F(17.9), -11.05), (F(18.6), -11.15), (F(19.0), -11.0), (F(20.6), -11.05)):
+khide(fw, [(F(15.9), F(17.3))])
+for o in [o for o in bpy.data.objects if o.name.startswith("Silt_")]: khide(o, [(F(15.9), F(17.3))])
+for f, y in ((F(15.9), -12.6), (F(16.3), -11.05), (F(16.7), -11.15), (F(17.0), -11.0)):
     fw.location.y = y; fw.keyframe_insert("location", index=1, frame=f)
 for i in range(3):
-    ar = bpy.data.objects[f"FloodArrow_{i}"]; khide(ar, [(F(17.3) + 6 * i, F(20.3))])
+    ar = bpy.data.objects[f"FloodArrow_{i}"]; khide(ar, [(F(16.0) + 4 * i, F(17.3))])
     base = ar.location.copy()
-    for f, s_, dy in ((F(17.3) + 6 * i, 0.05, -0.4), (F(17.9) + 6 * i, 1.0, 0.0), (F(18.5), 1.08, 0.06), (F(18.8), 1.0, 0.0), (F(19.3), 0.95, -0.05),
-                      (F(19.8), 0.7, -0.25), (F(20.4), 0.55, -0.35)):
+    for f, s_, dy in ((F(16.0) + 4 * i, 0.05, -0.4), (F(16.35) + 4 * i, 1.0, 0.0), (F(16.7), 1.06, 0.05), (F(16.9), 0.9, -0.1), (F(17.25), 0.6, -0.3)):
         ar.scale = (s_, s_, s_); ar.keyframe_insert("scale", frame=f)
         ar.location = base + Vector((0, dy, 0)); ar.keyframe_insert("location", frame=f)
-wa = bpy.data.objects["WeightArrow"]; khide(wa, [(F(18.6), F(20.3))]); wb = wa.location.copy()
-for f, s_, dz in ((F(18.6), 0.05, 0.5), (F(19.1), 1.0, 0.0), (F(19.35), 1.2, -0.08), (F(19.6), 1.1, -0.03), (F(20.4), 1.15, -0.05)):
-    wa.scale = (s_, s_, s_); wa.keyframe_insert("scale", frame=f); wa.location = wb + Vector((0, 0, dz)); wa.keyframe_insert("location", frame=f)
+khide(bpy.data.objects["WeightArrow"], [])
 
 # ------------------------------------------------------------------ people
 with bpy.data.libraries.load(PEOPLE) as (src, dst): dst.objects = src.objects
@@ -448,20 +444,20 @@ CAM = [  # (t seconds, position, look-at, lens)
     (9.5, V((12.5, -14.0, 1.7)), V((34.0, -16.0, 0.4)), 22),
     (10.5, V((6.0, -10.8, 3.4)), V((26.0, -16.0, 0.8)), 22),
     (11.5, V((-6.0, -13.6, 3.2)), V((6.0, -16.0, 0.6)), 22),
-    (12.3, V((-13.5, -12.6, 2.3)), V((-21.5, -3.6, 0.9)), 24),
+    (12.3, V((-12.5, -15.2, 2.9)), V((-21.5, -3.6, 0.9)), 24),
     (13.3, V((-15.0, -10.6, 1.3)), V((-11.0, -6.0, 0.6)), 26),
     (14.0, V((-6.5, -14.0, 2.2)), V((1.5, -9.0, 0.4)), 24),
     (14.6, V((3.4, -10.9, 0.75)), V((2.0, -9.0, 0.45)), 30),
     (15.0, V((3.0, -9.95, 0.55)), V((2.0, -9.0, 0.45)), 30),
-    (15.5, V((4.3, -9.55, 0.6)), V((1.8, -9.0, 0.4)), 28),
-    (16.4, V((3.9, -10.4, 0.95)), V((2.0, -9.0, 0.4)), 30),
-    (17.2, V((3.7, -10.0, 0.25)), V((2.0, -9.0, 0.28)), 30),
-    (18.2, V((4.8, -9.3, 0.7)), V((2.0, -9.6, 0.5)), 24),
-    (19.2, V((4.3, -11.0, 0.75)), V((2.0, -9.4, 0.6)), 24),
-    (20.2, V((3.9, -10.4, 0.9)), V((2.1, -9.0, 0.6)), 22),
-    (21.0, V((3.4, -6.0, 3.0)), V((2.8, -14.0, 0.2)), 22),
+    (15.6, V((4.3, -9.6, 0.75)), V((1.8, -9.0, 0.45)), 28),
+    (16.4, V((4.4, -10.6, 1.0)), V((2.0, -9.3, 0.45)), 26),
+    (17.2, V((4.6, -11.4, 1.4)), V((2.0, -9.0, 0.5)), 24),
+    (18.0, V((6.0, -14.0, 2.6)), V((1.5, -7.0, 0.9)), 22),
+    (19.2, V((1.0, -15.0, 2.8)), V((1.5, -6.0, 1.2)), 22),
+    (20.2, V((-1.0, -12.5, 4.2)), V((2.5, -6.0, 1.0)), 22),
+    (21.0, V((3.4, -6.0, 3.6)), V((2.8, -14.0, 0.2)), 22),
     (21.4, V((3.0, -5.6, 2.9)), V((3.0, -16.0, 0.2)), 22),
-    (22.4, V((8.5, -5.5, 3.3)), V((12.5, -14.0, 0.2)), 22),
+    (22.4, V((8.5, -5.5, 3.6)), V((8.0, -10.5, 0.4)), 22),
     (23.5, V((14.0, -18.5, 9.0)), V((0.0, 0.0, 0.0)), 20),
     (24.5, V((-4.0, -24.0, 6.0)), V((-3.0, -16.0, 0.0)), 22),
     (25.6, V((-12.5, -15.5, 1.0)), V((-18.0, -12.5, 0.2)), 24),

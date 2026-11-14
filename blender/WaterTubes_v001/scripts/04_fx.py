@@ -88,7 +88,7 @@ L.new(rl.outputs[0], g.go.inputs[0])
 rain = bpy.data.objects.new("Rain", bpy.data.meshes.new("RainBase")); C.objects.link(rain); C.objects.link(streak); streak.hide_render = True; streak.hide_viewport = True
 rain.modifiers.new("Rain", "NODES").node_group = g.g
 a = amt.outputs[0]
-for f, v in ((1, 0.25), (F(3.5), 0.5), (F(8.3), 1.0), (F(14.4), 1.0), (F(14.7), 0.0), (F(20.9), 0.0), (F(21.2), 0.9), (F(24.0), 0.6), (F(25.3), 0.0)):
+for f, v in ((1, 0.25), (F(3.5), 0.5), (F(8.3), 1.0), (F(14.6), 1.0), (F(14.85), 0.0), (F(17.4), 0.0), (F(17.6), 0.9), (F(24.0), 0.6), (F(25.3), 0.0)):
     a.default_value = v; a.keyframe_insert("default_value", frame=f)
 
 # ------------------------------------------------------------------ spray strips: points on a strip mesh with an outward direction attribute
