@@ -1,9 +1,9 @@
-# SurgeonBrandsLivers v008f: the director's 2 notes on v008e (9df6d99)
+# SurgeonBrandsLivers v008g: the director's last note on v008f (b4535c5)
 
-1. **Mug at her groin, then the sideways drop (f 641–661):** the mug is removed. Her left arm hangs relaxed: it mirrors her hanging right arm, with the elbow pole keyed down. From 685 her left palm rests on the OUTSIDE of her left thigh; nothing is near the groin.
-2. **Surgeon2 arms spread wide (f 1021–1031):** elbows bent, both hands flat on the drape edge in front of him (hand_poses place_hand + flat_palm) until he works at the window.
+- **X-ray liver (f 656–771):** scaled to 60% and placed on her right upper abdomen, under the ribs. It sits fully inside her torso silhouette from the camera and rides her spine as she bends. It no longer sticks out past her side.
+- **Arms at f 761–771:** both arms now hang as she turns away (mirrored hanging pose, elbow poles keyed down).
 
-Nothing else changed. clip_scan: 0 bad ranges. qa_check and limb_check flags are as in v008e (see below). Preview `v008f_preview_every5th_270x480.mp4`: 342 frames, all watched. Director rules 1–4 hold on every frame.
+Nothing else changed. clip_scan: 0 bad ranges. qa_check and limb_check are as in v008f. Preview `v008g_preview_every5th_270x480.mp4`: 342 frames, all watched.
 
 ## Checks on the packed file
 - clip_scan: **0 bad ranges.**
@@ -14,4 +14,4 @@ Nothing else changed. clip_scan: 0 bad ranges. qa_check and limb_check flags are
   - PROPMOVE 42: the burn sparks (effects) and the dropped mug falling.
   - EMPTY 40: the liver-alone studio shots.
   - ATTACH 37: masks sit about 2 cm off the skin, as fitted since v002.
-- Preview: `v008f_preview_every5th_270x480.mp4`, every 5th frame, 270×480, Cycles 4 samples + denoise, 342 frames, all watched.
+- Preview: `v008g_preview_every5th_270x480.mp4`, every 5th frame, 270×480, Cycles 4 samples + denoise, 342 frames, all watched.
