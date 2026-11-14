@@ -17,6 +17,7 @@ from kit import *
 from common import area_light, world_flat
 
 EXPOSURE = 0.0
+VARIANT_FOR = {"question": "lift", "warning": "lift", "passport_back": "lift"}   # c5_01 (title) unchanged
 TH = 0.75
 NEAR_Y, FAR_Y = -0.85, 0.85
 
@@ -114,10 +115,16 @@ def build(variant=None):
     sm = sh.modifiers.new("s", 'SOLIDIFY'); sm.thickness = 0.004; sh.visible_shadow = False
     cyl("Cord", (0, 0, 2.35), 0.006, 0.9, pbr("Cord", (0.02, 0.02, 0.02), 0.5), verts=8)
     cyl("Bulb", (0, 0, 1.82), 0.04, 0.05, emissive("Bulb", (1.0, 0.85, 0.65), 25), verts=16)
-    lamp = bpy.data.lights.new("Lamp", 'SPOT'); lamp.energy = 260; lamp.spot_size = math.radians(70); lamp.spot_blend = 0.6
+    lift = variant == "lift"                       # c5_04/07/09: about +0.5 stop, a touch of fill on chair and mirror
+    lamp = bpy.data.lights.new("Lamp", 'SPOT'); lamp.energy = 370 if lift else 260; lamp.spot_size = math.radians(70); lamp.spot_blend = 0.6
     lamp.color = (1.0, 0.86, 0.68); lamp.shadow_soft_size = 0.05
     lo = bpy.data.objects.new("Lamp", lamp); bpy.context.collection.objects.link(lo); lo.location = (0, 0, 1.8); point_at(lo, (0, 0, 0))
-    area_light((1.6, -1.8, 2.6), (0, 0, 0), 2.0, 55, (0.6, 0.72, 0.9)).visible_camera = False
+    area_light((1.6, -1.8, 2.6), (0, 0, 0), 2.0, 80 if lift else 55, (0.6, 0.72, 0.9)).visible_camera = False
+    if lift:
+        cf = area_light((1.1, -1.9, 1.3), (0, 0, 0), 0.8, 22, (0.85, 0.88, 0.95)); point_at(cf, (0, NEAR_Y, 0.7))
+        cf.visible_camera = False; cf.visible_glossy = False
+        mf = area_light((-1.2, 0.0, 2.6), (0, 0, 0), 1.2, 30, (0.6, 0.7, 0.85)); point_at(mf, (-2.36, 0, 1.6))
+        mf.visible_camera = False; mf.visible_glossy = False
     box("ExitLamp", (1.55, 2.2, 2.35), (0.3, 0.04, 0.1), emissive("ExitLamp", (0.4, 1.0, 0.55), 3.0))
     l2 = area_light((1.55, 2.0, 2.3), (math.radians(30), 0, 0), 0.4, 6, (0.4, 1.0, 0.55)); l2.visible_camera = False
     haze((0, 0, 1.4), (4.6, 4.6, 2.8), density=0.02, color=(1.0, 0.95, 0.9), anis=0.5)

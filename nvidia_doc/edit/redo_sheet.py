@@ -36,7 +36,8 @@ def overlay(img, F_):
     return Image.fromarray((np.clip(base * (1 - a) + ov[..., :3] * a, 0, 1) * 255 + .5).astype(np.uint8))
 
 
-rows = table()
+only = [a for a in sys.argv[1:] if not a.startswith("-")]
+rows = [r for r in table() if not only or r["id"] in only]
 cols = 5
 img = Image.new("RGB", (pad + cols * (TW + pad), 54 + len(rows) * (TH + 46)), (18, 18, 22)); d = ImageDraw.Draw(img)
 d.text((pad, 14), "NVIDIA CH4-5 REDO · before / after  (OLD = delivered master, mid-cut · NEW at t 0 / 0.5 / 1 · same brightness path)",
@@ -67,5 +68,5 @@ for r in rows:
         img.paste(im.resize((TW, TH), Image.LANCZOS), (x, y + 22))
         d.text((x + 4, y + 26), lab, fill=(255, 255, 255) if k else (255, 150, 120), font=f2)
     y += TH + 46
-out = os.path.join(ROOT, "out", "ch45_preview", "ch45_redo_before_after.jpg")
+out = os.path.join(ROOT, "out", "ch45_preview", "ch45_redo_before_after.jpg" if not only else "ch45_redo_fixes_" + "_".join(only) + ".jpg")
 img.save(out, quality=90); print("wrote", out, img.size)
