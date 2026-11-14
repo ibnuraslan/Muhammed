@@ -110,7 +110,7 @@ for n in nt.nodes:
 mw = bpy.data.materials["FloodWater"]; nt = mw.node_tree
 for n in nt.nodes:
     if n.type == "MIX" and n.data_type == "RGBA" and not n.inputs["A"].links:
-        n.inputs["A"].default_value = (0.2, 0.125, 0.06, 1); n.inputs["B"].default_value = (0.6, 0.48, 0.33, 1)
+        n.inputs["A"].default_value = (0.2, 0.125, 0.06, 1); n.inputs["B"].default_value = (0.42, 0.3, 0.17, 1)
     if n.type == "BUMP": n.inputs["Strength"].default_value = 0.08
 b = next(n for n in nt.nodes if n.type == "BSDF_PRINCIPLED"); b.inputs["Coat Weight"].default_value = 0.6; b.inputs["Coat Roughness"].default_value = 0.05
 fg = bpy.data.node_groups["FloodSurface"]
@@ -150,6 +150,16 @@ for nm, col in (("ArrowFlood", (1.0, 0.33, 0.02)), ("ArrowWeight", (0.15, 0.75, 
     ab = bpy.data.materials[nm].node_tree.nodes["Principled BSDF"]
     ab.inputs["Base Color"].default_value = (*col, 1); ab.inputs["Emission Color"].default_value = (*col, 1); ab.inputs["Emission Strength"].default_value = 1.2
     ab.inputs["Roughness"].default_value = 0.3; ab.inputs["Coat Weight"].default_value = 0.15
+# the hero_house model's siding renders black on some walls (SketchUp import): use the clean siding the other houses use
+good = bpy.data.materials.new("SidingClean"); good.use_nodes = True; gb = good.node_tree.nodes["Principled BSDF"]
+gb.inputs["Base Color"].default_value = (0.78, 0.8, 0.8, 1); gb.inputs["Roughness"].default_value = 0.6
+gt = good.node_tree; tcx = gt.nodes.new("ShaderNodeTexCoord"); wvx = gt.nodes.new("ShaderNodeTexWave"); wvx.bands_direction = "Z"; wvx.inputs["Scale"].default_value = 3.6
+gt.links.new(tcx.outputs["Object"], wvx.inputs["Vector"]); bpx = gt.nodes.new("ShaderNodeBump"); bpx.inputs["Strength"].default_value = 0.25
+gt.links.new(wvx.outputs["Fac"], bpx.inputs["Height"]); gt.links.new(bpx.outputs[0], gb.inputs["Normal"])
+for o in bpy.data.objects:
+    if o.type == "MESH" and o.name.startswith(("hero_house", "house_b")):
+        for i, m in enumerate(o.data.materials):
+            if m and ("Siding" in m.name or m.name.startswith(("material", "edge_color"))): o.data.materials[i] = good
 # DOF: >= 5.6 everywhere (anim_look), keep f/4 only on the cutaway macro
 cam = sc.camera
 cam.data.dof.aperture_fstop = 6.0

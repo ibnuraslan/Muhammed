@@ -1,0 +1,6 @@
+HIT f371 NeighbourB handL-torso/head
+HIT f373 NeighbourB handL-torso/head
+HIT f375 NeighbourB handL-torso/head
+HIT f375 NeighbourB handL-shirt
+HIT f375 NeighbourB handR-torso/head
+HAND_AUDIT total hits: 5 (frames 1-2010 step 2)

@@ -208,8 +208,8 @@ for sgn, yk, ys in ((1, -12.1, -11.0), (-1, -19.9, -21.0)):
         box(f"Sidewalk_{sgn}_{i}", i * 2.0 + 1.0, ys, -0.02, 1.97, 1.9, 0.08, mconc, C_SET)
     box(f"Kerb_{sgn}", 0, yk, -0.07, 180, 0.25, 0.18, mconc, C_SET)
 # driveways (concrete) for each lot
-LOTS_N = [(-22, 0, "house_e", 0), (22, 0, "house_c", 0), (44, 0, "house_d", 0), (-44, 0, "house_b", 0)]
-LOTS_S = [(-22, -36, "hero_house", 180), (0, -36, "house_e", 180), (22, -36, "house_d", 180), (44, -36, "house_c", 180), (-44, -36, "house_b", 180)]
+LOTS_N = [(-22, 0, "house_e", 0), (22, 0, "house_c", 0), (44, 0, "house_d", 0), (-44, 0, "house_d", 0)]
+LOTS_S = [(-22, -36, "house_e", 180), (0, -36, "house_e", 180), (22, -36, "house_d", 180), (44, -36, "house_c", 180), (-44, -36, "house_d", 180)]
 for (x, y, n, r) in LOTS_N + [(0, 0, "house_a", 0)]:
     for k in range(5):
         box(f"Drive_{x}_{k}", x + 7.5 if x != 0 else 6.5, -9.5 + k * 0 + 0, -0.03, 3.2, 3.0, 0.06, mconc, C_SET) if k == 0 else None
@@ -292,9 +292,9 @@ for m in hero.data.materials: grime(m, False)
 for (x, y, n, r) in LOTS_N + LOTS_S:
     place(n, x, y + (0 if y == 0 else 0), r, C_HOUSE, True, copy_mats=True)
 
-for (x, y, n, r) in [(-66, 0, "house_d", 0), (66, 0, "house_e", 0), (-66, -36, "house_c", 180), (66, -36, "house_b", 180)] + \
-        [(x, 30, n, 180) for x, n in zip(range(-66, 67, 22), ["house_b", "house_c", "house_d", "house_e", "hero_house", "house_c", "house_d"])] + \
-        [(x, -66, n, 0) for x, n in zip(range(-66, 67, 22), ["house_e", "house_d", "house_c", "hero_house", "house_b", "house_e", "house_c"])]:
+for (x, y, n, r) in [(-66, 0, "house_d", 0), (66, 0, "house_e", 0), (-66, -36, "house_c", 180), (66, -36, "house_d", 180)] + \
+        [(x, 30, n, 180) for x, n in zip(range(-66, 67, 22), ["house_d", "house_c", "house_d", "house_e", "house_c", "house_c", "house_d"])] + \
+        [(x, -66, n, 0) for x, n in zip(range(-66, 67, 22), ["house_e", "house_d", "house_c", "house_c", "house_d", "house_e", "house_c"])]:
     place(n, x, y, r, C_HOUSE, False)
 # ------------------------------------------------------------------ vegetation (Poly Haven CC0)
 def ph_objs(asset, names):
@@ -437,7 +437,7 @@ def profile(t, full, u, length, seed):
     else:
         x = 0.92 * ct; z = 0.012 + 0.012 * st
         z += max(0, 0.03 * noise.noise(Vector((u * 1.5, x * 2, seed)))) + 0.01 * noise.noise(Vector((u * 6, x * 6, seed + 1)))
-        z = max(0.004, z)
+        z = max(0.004, z) + 0.055          # the empty ribbon lies on top of the lawn (never under it)
     # rounded welded ends
     e = min(u, length - u)
     if e < 0.45:
@@ -495,7 +495,8 @@ TUBES = []
 # fill schedule: segment 0 = beat 1 (frames 20-215), then 1..5 during beat 2 (223-499)
 FILL = [(20, 215), (232, 330), (280, 380), (330, 430), (370, 470), (410, 495)]
 for k, seg in enumerate(SEG):
-    seg = seg[3:-3] if k else seg[:-3]
+    # overlap neighbours by 0.6 m so the rounded ends press together: no gaps in the barrier (Tube_0 keeps its start for the valve staging)
+    seg = (SEG[k - 1][-7:-1] if k > 0 else []) + seg + SEG[(k + 1) % len(SEG)][1:7]
     ob, md, ln = build_tube(f"Tube_{k}", seg, 10 + k)
     f0, f1 = FILL[k]
     fo = md.node_group.nodes["Front"].outputs[0]
