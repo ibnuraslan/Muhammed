@@ -20,3 +20,10 @@ Checks on the packed v004 file:
 - `clip_scan.py`: 0 bad ranges.
 - `hand_audit`: 5 hits, Neighbour B at f371–375, off camera.
 - `qa_check.py`: see `qa_v004.json`. The remaining EMPTY and INSIDE flags are the intended no-character shots and the tube-normal false positives explained in `../WaterTubes_v003/review/ACTING_notes.md`.
+
+## Second watch: the v004 preview (`preview.mp4`, made from this exact packed file)
+- The ring is closed in every aerial. No black houses, no lamp sweep, no haze at the cutaway exit. The hose is in his hands (nozzle in his fist, then carried round the ring), and his feet are on the lawn and the porch.
+- Left as they are, with reasons:
+  - The surge wave fills the lower frame for about 0.6 s at 10.4–11 s. It is the subject of the "floodwater began rushing" beat and is in focus.
+  - The camera drops out of the cutaway past the tube section at 20.3–20.5 s (3 preview frames, about 0.25 s).
+  - The tube passes under the lens on the rise behind him at 30.9–31.2 s (about 0.3 s).
