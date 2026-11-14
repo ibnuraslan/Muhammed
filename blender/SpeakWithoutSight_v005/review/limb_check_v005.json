@@ -1,0 +1,2948 @@
+{
+ "frames": {
+  "1": [
+   [
+    "ARMBODY",
+    "Father arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Father arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "7": [
+   [
+    "ARMBODY",
+    "Father arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Father arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "13": [
+   [
+    "ARMBODY",
+    "Father arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Father arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "19": [
+   [
+    "ARMBODY",
+    "Father arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Father arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "25": [
+   [
+    "ARMBODY",
+    "Father arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Father arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "31": [
+   [
+    "ARMBODY",
+    "Father arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Father arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "37": [
+   [
+    "ARMBODY",
+    "Father arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Father arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "43": [
+   [
+    "ARMBODY",
+    "Father arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Father arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "49": [
+   [
+    "ARMBODY",
+    "Father arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Father arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "55": [
+   [
+    "ARMBODY",
+    "Father arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Father arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "61": [
+   [
+    "ARMBODY",
+    "Father arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Father arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "67": [
+   [
+    "ARMBODY",
+    "Father arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Father arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "73": [
+   [
+    "ARMBODY",
+    "Father arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Father arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "79": [
+   [
+    "ARMBODY",
+    "Father arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Father arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "85": [
+   [
+    "ARMBODY",
+    "Father arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Father arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "91": [
+   [
+    "ARMBODY",
+    "Father arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Father arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "97": [
+   [
+    "ARMBODY",
+    "Father arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "121": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "127": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "133": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "139": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "373": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "379": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "385": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "391": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "397": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "403": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "409": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "415": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "421": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "433": [
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "439": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "445": [
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "451": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "457": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "463": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "469": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "475": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "481": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "523": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "529": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "535": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "541": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "547": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "685": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "691": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "697": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "703": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "709": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_00 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_01 inside Teacher's head/face (23 pts)"
+   ]
+  ],
+  "715": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (145 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_00 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "721": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (149 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "727": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (149 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Teacher's head/face (18 pts)"
+   ]
+  ],
+  "733": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (151 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "739": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (151 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Teacher's head/face (8 pts)"
+   ]
+  ],
+  "745": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (151 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "751": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (151 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "757": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (151 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "763": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (149 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "769": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (145 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_10 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Teacher's head/face (44 pts)"
+   ]
+  ],
+  "775": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (149 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_10 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "781": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (151 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_09 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_10 inside Teacher's head/face (31 pts)"
+   ]
+  ],
+  "787": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (151 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_09 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "793": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (151 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_08 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "799": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (151 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_02 inside Girl's head/face (5 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_07 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_08 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "805": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (151 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_07 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "811": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (151 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_01 inside Girl's head/face (19 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_06 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_07 inside Teacher's head/face (51 pts)"
+   ]
+  ],
+  "817": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (150 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_06 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "823": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (146 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_00 inside Girl's head/face (26 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_05 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "829": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (148 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_05 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "835": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (149 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_04 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Girl's head/face (23 pts)"
+   ]
+  ],
+  "841": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (150 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_03 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_04 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Girl's head/face (14 pts)"
+   ]
+  ],
+  "847": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (150 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_03 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Girl's head/face (21 pts)"
+   ]
+  ],
+  "853": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (151 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_02 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Girl's head/face (21 pts)"
+   ]
+  ],
+  "859": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (151 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_02 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Girl's head/face (21 pts)"
+   ]
+  ],
+  "865": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (151 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_01 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_02 inside Teacher's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Girl's head/face (22 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Girl's head/face (17 pts)"
+   ]
+  ],
+  "871": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (151 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_01 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Girl's head/face (20 pts)"
+   ]
+  ],
+  "877": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (148 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_00 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Girl's head/face (20 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Girl's head/face (15 pts)"
+   ]
+  ],
+  "883": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (148 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_00 inside Teacher's head/face (31 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Girl's head/face (15 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "889": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (150 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_10 inside Girl's head/face (17 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Girl's head/face (10 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Girl's head/face (26 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "895": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (140 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_02 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Girl's head/face (21 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Girl's head/face (19 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Girl's head/face (10 pts)"
+   ]
+  ],
+  "901": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (141 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_01 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_02 inside Teacher's head/face (10 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Girl's head/face (21 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Girl's head/face (20 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Girl's head/face (12 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Girl's head/face (39 pts)"
+   ]
+  ],
+  "907": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (142 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_00 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_01 inside Teacher's head/face (34 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Girl's head/face (21 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Girl's head/face (21 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Girl's head/face (8 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Girl's head/face (39 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "913": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (141 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_00 inside Teacher's head/face (10 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_10 inside Girl's head/face (20 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Girl's head/face (20 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Girl's head/face (8 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Girl's head/face (39 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "919": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (140 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_09 inside Girl's head/face (13 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_10 inside Girl's head/face (19 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Girl's head/face (8 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Girl's head/face (39 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Teacher's head/face (15 pts)"
+   ]
+  ],
+  "925": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (142 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_08 inside Girl's head/face (19 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_09 inside Girl's head/face (19 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_10 inside Girl's head/face (8 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Girl's head/face (39 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Teacher's head/face (30 pts)"
+   ]
+  ],
+  "931": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (149 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_07 inside Girl's head/face (9 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_08 inside Girl's head/face (19 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_09 inside Girl's head/face (8 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_10 inside Girl's head/face (41 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Teacher's head/face (49 pts)"
+   ]
+  ],
+  "937": [
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (142 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_07 inside Girl's head/face (19 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_08 inside Girl's head/face (8 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_09 inside Girl's head/face (46 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_10 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Teacher's head/face (23 pts)"
+   ]
+  ],
+  "943": [
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (141 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_05 inside Girl's head/face (11 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_06 inside Girl's head/face (18 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_07 inside Girl's head/face (7 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_08 inside Girl's head/face (46 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_09 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Teacher's head/face (38 pts)"
+   ]
+  ],
+  "949": [
+   [
+    "PROPHEAD",
+    "PulseDot_05 inside Girl's head/face (18 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_06 inside Girl's head/face (6 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_07 inside Girl's head/face (47 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_08 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_10 inside Teacher's head/face (51 pts)"
+   ]
+  ],
+  "955": [
+   [
+    "PROPHEAD",
+    "PulseDot_04 inside Girl's head/face (19 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_05 inside Girl's head/face (7 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_06 inside Girl's head/face (50 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_07 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "961": [
+   [
+    "PROPHEAD",
+    "PulseDot_02 inside Girl's head/face (7 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_03 inside Girl's head/face (21 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_04 inside Girl's head/face (6 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_05 inside Girl's head/face (48 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_06 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_07 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "967": [
+   [
+    "PROPHEAD",
+    "PulseDot_02 inside Girl's head/face (21 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_03 inside Girl's head/face (10 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_04 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_05 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_06 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "973": [
+   [
+    "PROPHEAD",
+    "PulseDot_01 inside Girl's head/face (21 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_02 inside Girl's head/face (7 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_03 inside Girl's head/face (47 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_04 inside Girl's head/face (51 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_05 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "979": [
+   [
+    "PROPHEAD",
+    "PulseDot_00 inside Girl's head/face (21 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_01 inside Girl's head/face (12 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_02 inside Girl's head/face (48 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_03 inside Girl's head/face (46 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_04 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_05 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "985": [
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (150 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_00 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_01 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Girl's head/face (21 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Girl's head/face (14 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Girl's head/face (50 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "991": [
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (150 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_01 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Girl's head/face (19 pts)"
+   ]
+  ],
+  "997": [
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (150 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_00 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_01 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "1003": [
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (150 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_00 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "1009": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (150 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_00 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "1015": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (150 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "1021": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (150 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "1027": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (150 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "1033": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (150 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "1039": [
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (150 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "1045": [
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (150 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "1051": [
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (148 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Teacher's head/face (7 pts)"
+   ]
+  ],
+  "1057": [
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (147 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Teacher's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Teacher's head/face (52 pts)"
+   ]
+  ],
+  "1063": [
+   [
+    "PROPHEAD",
+    "Model_Larynx inside Teacher's head/face (146 pts)"
+   ]
+  ],
+  "1069": [
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Teacher's head/face (15 pts)"
+   ]
+  ],
+  "1411": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1417": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1423": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1429": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1435": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1441": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1447": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1453": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1459": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1465": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1471": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1477": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1483": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1489": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1495": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1501": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1507": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1513": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1519": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1621": [
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1627": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1633": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1639": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1645": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1651": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1657": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1663": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1669": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1675": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1681": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1687": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1693": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1699": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1705": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1711": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1717": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1723": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1729": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1735": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1741": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1747": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1753": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mother arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1759": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1765": [
+   [
+    "ARMBODY",
+    "Mother arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1771": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1777": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1783": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1789": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1795": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1801": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1807": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1813": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1819": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1825": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teacher arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1855": [
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Girl's head/face (28 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "1861": [
+   [
+    "PROPHEAD",
+    "PulseDot_10 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Girl's head/face (50 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "1867": [
+   [
+    "PROPHEAD",
+    "PulseDot_09 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_10 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "1873": [
+   [
+    "PROPHEAD",
+    "PulseDot_08 inside Girl's head/face (24 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_09 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "1879": [
+   [
+    "PROPHEAD",
+    "PulseDot_08 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_09 inside Girl's head/face (19 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "1885": [
+   [
+    "PROPHEAD",
+    "PulseDot_07 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_08 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_10 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "1891": [
+   [
+    "PROPHEAD",
+    "PulseDot_06 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_07 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_09 inside Girl's head/face (10 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_10 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "1897": [
+   [
+    "PROPHEAD",
+    "PulseDot_05 inside Girl's head/face (36 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_06 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_09 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "1903": [
+   [
+    "PROPHEAD",
+    "PulseDot_05 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_06 inside Girl's head/face (9 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_08 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_09 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "1909": [
+   [
+    "PROPHEAD",
+    "PulseDot_04 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_05 inside Girl's head/face (46 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_07 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_08 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_09 inside Girl's head/face (31 pts)"
+   ]
+  ],
+  "1915": [
+   [
+    "PROPHEAD",
+    "PulseDot_03 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_04 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_06 inside Girl's head/face (26 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_07 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_08 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "1921": [
+   [
+    "PROPHEAD",
+    "PulseDot_02 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_03 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_06 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "1927": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_01 inside Girl's head/face (14 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_02 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_05 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_06 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "1933": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_01 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_02 inside Girl's head/face (31 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_04 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_05 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_06 inside Girl's head/face (7 pts)"
+   ]
+  ],
+  "1939": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_00 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_01 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_03 inside Girl's head/face (46 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_04 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_05 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "1945": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_00 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_03 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_04 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "1951": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_02 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Girl's head/face (26 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Girl's head/face (52 pts)"
+   ]
+  ],
+  "1957": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_01 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_02 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_03 inside Girl's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Girl's head/face (19 pts)"
+   ]
+  ],
+  "1963": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_00 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_01 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_02 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_14 inside Girl's head/face (50 pts)"
+   ]
+  ],
+  "1969": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_00 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_01 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_13 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Girl's head/face (14 pts)"
+   ]
+  ],
+  "1975": [
+   [
+    "ARMBODY",
+    "Teacher arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_11 inside Girl's head/face (48 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_12 inside Girl's head/face (52 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PulseDot_15 inside Girl's head/face (52 pts)"
+   ]
+  ]
+ },
+ "counts": {
+  "ARMBODY": 329,
+  "PROPHEAD": 314
+ }
+}
