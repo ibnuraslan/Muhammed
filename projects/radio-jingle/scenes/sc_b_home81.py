@@ -289,7 +289,7 @@ def anim(c, t, move):
             c["h_min"].rotation_euler = (0, 0, -math.radians(mins % 60 * 6))
             c["h_hour"].rotation_euler = (0, 0, -math.radians((mins / 60) % 12 * 30))
             rng_ = np.random.default_rng(7)
-            nstep = int(sec * 4.5)                                  # pieces hop territory to territory in jumps
+            nstep = 0                                               # hub rule: pieces never move without a hand (static)
             pos = [Vector(p) for p in c["piece_home"]]
             for st in range(nstep):
                 k_ = int(rng_.integers(0, len(pos))); pos[k_] = Vector((rng_.uniform(-0.32, 0.32), rng_.uniform(-0.22, 0.22), pos[k_].z))
@@ -297,7 +297,7 @@ def anim(c, t, move):
                 pc.location = p
         # dice: thrown at 1.0 s from the near edge, tumble across the board, settle
         for k, d in enumerate(c["dice"]):
-            u = min(1.0, max(0.0, (sec - 1.0 - 0.05 * k) / 1.1))
+            u = 1.0                                                 # dice already thrown (no hand in frame)
             p0 = Vector((-0.28 + 0.03 * k, -0.3, top + 0.12)); p1 = Vector((0.05 + 0.06 * k, 0.02 - 0.04 * k, top + 0.013))
             p = p0.lerp(p1, ease(u)); p.z += 0.06 * abs(math.sin(u * math.pi * 2.5)) * (1 - u)
             d.location = p if sec > 0.9 else Vector((0, 0, -30))
@@ -330,7 +330,7 @@ def cam(a, b, tgt, lens):
 
 
 MOVES = {
-    "game": dict(kind="anim", dof=None, cam=cam((0.08, -0.18, 1.75), (0.06, -0.14, 1.62), (0.06, -0.02, 0.38), 32),
+    "game": dict(kind="anim", dof=2.0, cam=cam((0.3, -0.85, 1.35), (0.2, -0.62, 1.15), (0.08, -0.02, 0.38), 32),
                  anim=lambda c, t: anim(c, t, "game"), focus=lambda c, t: Vector((0.05, 0.0, 0.4))),
     "search": dict(kind="anim", dof=4.0, cam=cam((-2.4, -2.1, 1.65), (-2.1, -1.7, 1.6), (0.6, 1.0, 0.8), 28),
                    anim=lambda c, t: anim(c, t, "search"), focus=lambda c, t: c["d1"].bone_head("spine03")),
