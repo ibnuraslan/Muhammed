@@ -833,7 +833,7 @@ def c1_7a(c, t):
     # highlight the way cinema does: soft warm bands on the ground around the containers, and focus that moves
     # from the children to the containers as the track settles
     if c.get("ripple") is None:
-        c["ripple"] = ripple("YardRipple", (C1 + C2) / 2, radius=3.2)
+        c["ripple"] = ripple("YardRipple", (C1 + C2) / 2, radius=4.4, opacity=0.95, strength=2.2, z=0.04, bands=4.0, falloff=0.45, edge0=0.72, seam=0.7, rim_pow=0.3)
     c["ripple"].hide_render = False
     kid = c["people"]["kid1"].arm.location + Vector((0, 0, 0.8)); tgt = (C1 + C2) / 2 + Vector((0, 0, 0.7))
     c["focus"] = kid.lerp(tgt, ease(min(1.0, max(0.0, (sec - 0.8) / 2.0))))

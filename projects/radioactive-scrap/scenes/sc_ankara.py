@@ -78,9 +78,41 @@ def ledger(name, loc, rot_z, entries=None, entry_side=1):
                 text_obj(name + "Sn", sn, (px - 0.175, y, 0.0225), 0.017, ink, rot=(0, 0, 0), extrude=0.0, align='LEFT').parent = base
                 text_obj(name + "St", st, (px - 0.005, y, 0.0225), 0.017, ink, rot=(0, 0, 0), extrude=0.0, align='LEFT').parent = base
     hinge = bpy.data.objects.new(name + "Leaf", None); bpy.context.collection.objects.link(hinge); hinge.parent = base; hinge.location = (0, 0, 0.024)
-    bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 0, 0))
+    bpy.ops.mesh.primitive_grid_add(x_subdivisions=24, y_subdivisions=6, size=1, location=(0, 0, 0))
     lf = bpy.context.active_object; lf.scale = (0.4, 0.3, 1); lf.data.materials.append(ledger_material(name + "Leaf", seed=7)); lf.parent = hinge; lf.location = (0.2, 0, 0)
+    # a real paper leaf bends while it turns: shape key "curl" (outer part trails in an arc, the held near corner leads),
+    # driven live by the hinge angle so it is flat on the table at 0 and at 180 degrees and most curved upright
+    lf.shape_key_add(name="Basis"); sk = lf.shape_key_add(name="curl", from_mix=False)
+    for v in sk.data:
+        dx, dz = leaf_curl(v.co.x, v.co.y); v.co.x += dx; v.co.z += dz
+    d = sk.driver_add("value").driver; d.type = 'SCRIPTED'
+    var = d.variables.new(); var.name = "r"; var.type = 'TRANSFORMS'
+    var.targets[0].id = hinge; var.targets[0].transform_type = 'ROT_Y'; var.targets[0].transform_space = 'LOCAL_SPACE'
+    d.expression = "abs(sin(r))"
+    lf["curl_obj"] = 1
     return base, hinge
+
+
+def leaf_curl(x, y):
+    """Mesh-space offset of the curled leaf at full curl (x, y in -0.5..0.5; scale 0.4 x 0.3 m). The leaf bends into a
+    true arc of constant length (about 85 degrees end to end): the outer part trails behind; the near corner, where the
+    fingers hold it, bends a little less, so the leaf twists slightly like real paper."""
+    import math as _m
+    u = x + 0.5
+    near = 0.5 - y
+    B = 1.5 * (1.0 - 0.3 * near) + 1e-4
+    nx = -0.5 + _m.sin(B * u) / B
+    nz = -(1.0 - _m.cos(B * u)) / B * 0.4                  # z is not scaled, x is: arc length stays 0.4 m
+    return nx - x, nz
+
+
+def leaf_point(leaf_hinge, x, y):
+    """World point on the (curled) leaf, x, y in mesh space, matching the driven shape key."""
+    import math as _m
+    s = abs(_m.sin(leaf_hinge.rotation_euler.y)); lf = leaf_hinge.children[0]
+    dx, dz = leaf_curl(x, y)
+    bpy.context.view_layer.update()
+    return lf.matrix_world @ Vector((x + dx * s, y, dz * s))
 
 
 def build(variant=None):
@@ -258,12 +290,20 @@ def c4_7b(c, t):           # the older investigator turns a page of the company 
     ledgers_close(c)
     c["leafA"].rotation_euler = (0, -math.pi * k, 0); c["leafB"].rotation_euler = (0, 0, 0)
     bpy.context.view_layer.update()
-    edge = c["leafA"].matrix_world @ Vector((0.34, -0.08, 0.0))            # his fingers at the page's outer corner
+    edge = leaf_point(c["leafA"], 0.38, -0.42)                              # his fingers hold the page's near outer corner
     sa = forward(a).cross(Vector((0, 0, 1))).normalized()
     pre = ease(min(1.0, sec / 0.3))
     rest = a.bone_head("spine02") + forward(a) * 0.35; rest.z = 0.82
     reach_full(a, "R", rest.lerp(edge + Vector((0, -0.04, 0.03)), pre), Vector((sa.x, sa.y, -1.0)), forward(a) + Vector((0, 0, -0.3)))
     fingers_curl(a, 55, side=("R",), thumb=45)
+    ra = a.bone_head("spine02") + forward(a) * 0.42; ra.z = 0.8              # his left hand rests flat on the table
+    reach(a, "L", ra - sa * 0.14, Vector((-sa.x, -sa.y, -1.0)), forward(a) * 0.4 + sa * 0.9)
+    fingers_curl(a, 20, side=("L",), thumb=15)
+    sb = forward(b).cross(Vector((0, 0, 1))).normalized()                   # his colleague: hands folded on the table
+    rb = b.bone_head("spine02") + forward(b) * 0.42; rb.z = 0.8
+    reach(b, "R", rb + sb * 0.06, Vector((sb.x, sb.y, -1.0)), forward(b) * 0.4 - sb * 0.9)
+    reach(b, "L", rb - sb * 0.06, Vector((-sb.x, -sb.y, -1.0)), forward(b) * 0.4 + sb * 0.9)
+    fingers_curl(b, 65, thumb=35)
     b.rot("head", Vector((0, 0, 1)), 14)                                     # his colleague looks across at the page
     c["focus"] = edge
 

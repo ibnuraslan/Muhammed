@@ -230,6 +230,166 @@ T_IST = (28.95, 41.02); T_ANK = (32.85, 39.93); T_SMELT = (29.95, 40.82)
 
 
 # ------------------------------------------------------------------------------------------------ build
+def _apply(o):
+    """Bake an object's modifiers into its mesh (so it can be joined and cut again)."""
+    dg = bpy.context.evaluated_depsgraph_get()
+    me = bpy.data.meshes.new_from_object(o.evaluated_get(dg)); o.modifiers.clear(); o.data = me
+    return o
+
+
+def _cut(o, cutter_mat, name):
+    """Section an object with the quarter-wedge cutter (x > 0, y < 0); the new faces get the cutter's material."""
+    cu = box(name + "Cutter", (0.35, -0.35, 0.6), (0.7, 0.7, 1.4), cutter_mat); cu.hide_render = True; cu.hide_viewport = True
+    bo = o.modifiers.new("Section", 'BOOLEAN'); bo.object = cu; bo.operation = 'DIFFERENCE'
+    try:
+        bo.material_mode = 'TRANSFER'
+    except Exception:
+        pass
+    return _apply(o)
+
+
+def chipped_paint(name, paint=(0.2, 0.225, 0.21), under=(0.11, 0.065, 0.04)):
+    """Old industrial paint: chipped to rusty steel at random spots and on edges of wear, streaks and grime from the
+    poly-haven rust texture, darker towards the ground, a little bump where the paint is chipped."""
+    m = pbr(name, paint, 0.55, 0.0)
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord")
+    ch = N.new("ShaderNodeTexNoise"); ch.inputs['Scale'].default_value = 14; ch.inputs['Detail'].default_value = 14; ch.inputs['Roughness'].default_value = 0.7
+    L.new(tc.outputs['Object'], ch.inputs['Vector'])
+    cr = N.new("ShaderNodeMapRange"); cr.inputs['From Min'].default_value = 0.56; cr.inputs['From Max'].default_value = 0.59
+    L.new(ch.outputs['Fac'], cr.inputs['Value'])                                  # 1 where the paint is gone
+    col = N.new("ShaderNodeMix"); col.data_type = 'RGBA'; L.new(cr.outputs[0], col.inputs['Factor'])
+    col.inputs[6].default_value = (*paint, 1); col.inputs[7].default_value = (*under, 1)
+    try:
+        import ph
+        d = ph.ROOT + "/rusty_painted_metal/rusty_painted_metal_diff_2k.jpg"
+        t = N.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(d, check_existing=True); t.projection = 'BOX'; t.projection_blend = 0.3
+        mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (0.9, 0.9, 0.9); L.new(tc.outputs['Object'], mp.inputs['Vector']); L.new(mp.outputs[0], t.inputs['Vector'])
+        bw = N.new("ShaderNodeRGBToBW"); L.new(t.outputs['Color'], bw.inputs[0])
+        gm = N.new("ShaderNodeMapRange"); gm.inputs['From Min'].default_value = 0.05; gm.inputs['From Max'].default_value = 0.35
+        gm.inputs['To Min'].default_value = 0.35; L.new(bw.outputs[0], gm.inputs['Value'])
+        streak = N.new("ShaderNodeMix"); streak.data_type = 'RGBA'; streak.blend_type = 'MULTIPLY'; streak.inputs['Factor'].default_value = 0.85
+        L.new(col.outputs[2], streak.inputs[6]); L.new(gm.outputs[0], streak.inputs[7]); last = streak.outputs[2]
+    except Exception as e:
+        print("[evidence] no rust texture", e); last = col.outputs[2]
+    sz = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Object'], sz.inputs[0])       # grime towards the floor
+    gz = N.new("ShaderNodeMapRange"); gz.inputs['From Min'].default_value = 0.0; gz.inputs['From Max'].default_value = 0.45
+    gz.inputs['To Min'].default_value = 0.55; L.new(sz.outputs['Z'], gz.inputs['Value'])
+    gr = N.new("ShaderNodeMix"); gr.data_type = 'RGBA'; gr.blend_type = 'MULTIPLY'; gr.inputs['Factor'].default_value = 1.0
+    L.new(last, gr.inputs[6]); L.new(gz.outputs[0], gr.inputs[7])
+    L.new(gr.outputs[2], p.inputs['Base Color'])
+    rr = N.new("ShaderNodeMapRange"); rr.inputs['To Min'].default_value = 0.5; rr.inputs['To Max'].default_value = 0.85
+    L.new(cr.outputs[0], rr.inputs['Value']); L.new(rr.outputs[0], p.inputs['Roughness'])
+    sc = N.new("ShaderNodeTexNoise"); sc.inputs['Scale'].default_value = 3.0; sc.inputs['Detail'].default_value = 4   # long fine scratches
+    ms = N.new("ShaderNodeMapping"); ms.inputs['Scale'].default_value = (220, 220, 4); L.new(tc.outputs['Object'], ms.inputs['Vector']); L.new(ms.outputs[0], sc.inputs['Vector'])
+    sr = N.new("ShaderNodeMapRange"); sr.inputs['From Min'].default_value = 0.68; sr.inputs['From Max'].default_value = 0.72; L.new(sc.outputs['Fac'], sr.inputs['Value'])
+    hb = N.new("ShaderNodeMath"); hb.operation = 'ADD'; L.new(cr.outputs[0], hb.inputs[0]); L.new(sr.outputs[0], hb.inputs[1])
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.35; bp.invert = True; L.new(hb.outputs[0], bp.inputs['Height'])
+    L.new(bp.outputs['Normal'], p.inputs['Normal'])
+    return m
+
+
+def weld_mat(name):
+    m = pbr(name, (0.16, 0.15, 0.14), 0.6, 0.6)
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); w = N.new("ShaderNodeTexWave"); w.inputs['Scale'].default_value = 140; w.inputs['Distortion'].default_value = 4
+    L.new(tc.outputs['Object'], w.inputs['Vector'])
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.8; L.new(w.outputs['Fac'], bp.inputs['Height']); L.new(bp.outputs['Normal'], p.inputs['Normal'])
+    return m
+
+
+def wrap_text(name, s, r, ang0, z, size, mat, font="Inter-ExtraBold.otf"):
+    """Stencilled text painted on the drum: the text mesh wrapped onto the cylinder of radius r, centred at angle ang0."""
+    o = text_obj(name, s, (0, 0, 0), size, mat, rot=(math.radians(90), 0, 0), extrude=0.0, font_path="/usr/share/fonts/opentype/inter/" + font)
+    bpy.context.view_layer.update()
+    me = bpy.data.meshes.new_from_object(o.evaluated_get(bpy.context.evaluated_depsgraph_get()))
+    mw = o.matrix_world.copy(); bpy.data.objects.remove(o)
+    ob = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(ob)
+    for v in me.vertices:
+        w = mw @ v.co; a = ang0 + w.x / r
+        v.co = Vector((r * math.cos(a), r * math.sin(a), z + w.z))
+    if not me.materials:
+        me.materials.append(mat)
+    return ob
+
+
+def source_cutaway():
+    """The film's transport container (ribbed drum in a steel frame on skids), as a heavy worn industrial object,
+    sectioned by a quarter wedge: painted steel shell 2.5 cm, lead body, the source well with the steel capsule.
+    Weld beads at the ribs and a vertical seam, a bolted lid, lifting lugs, stencilled warning text and the trefoil
+    on the uncut side. Origin on the floor at the drum axis. Returns the root empty."""
+    paint = chipped_paint("SrcPaint"); frame = chipped_paint("SrcFrame", (0.12, 0.13, 0.13), (0.09, 0.05, 0.03))
+    weld = weld_mat("SrcWeld"); bolt = pbr("SrcBolt", (0.2, 0.19, 0.18), 0.45, 0.85)
+    leadm = noisy("SrcLead", (0.25, 0.255, 0.27), 0.5, 0.6, dirt=0.35, scale=9)
+    cut_steel = pbr("SrcCutSteel", (0.62, 0.62, 0.63), 0.28, 1.0)
+    cut_lead = noisy("SrcCutLead", (0.1, 0.104, 0.112), 0.62, 0.15, dirt=0.5, scale=40, dark=0.7)
+    _n = cut_lead.node_tree.nodes; _l = cut_lead.node_tree.links                 # fine saw marks across the cut
+    _w = _n.new("ShaderNodeTexWave"); _w.inputs['Scale'].default_value = 60; _w.inputs['Distortion'].default_value = 1.5
+    _w.bands_direction = 'Z'; _l.new(_n["Texture Coordinate"].outputs['Object'], _w.inputs['Vector'])
+    _bp = _n.new("ShaderNodeBump"); _bp.inputs['Strength'].default_value = 0.15; _l.new(_w.outputs['Fac'], _bp.inputs['Height'])
+    _l.new(_bp.outputs['Normal'], _n["Principled BSDF"].inputs['Normal'])
+    skid = noisy("SrcSkid", (0.2, 0.13, 0.07), 0.85, dirt=0.7, scale=5)
+    R = 0.38
+    # steel: drum shell (hollow), ribs, lid, plug, lugs, frame, skids
+    drum = cyl("SrcDrum", (0, 0, 0.55), R, 0.82, paint, verts=96)
+    hol = cyl("SrcHollow", (0, 0, 0.55), R - 0.025, 0.77, None, verts=96); hol.hide_render = True; hol.hide_viewport = True
+    bh = drum.modifiers.new("Hollow", 'BOOLEAN'); bh.object = hol; bh.operation = 'DIFFERENCE'; _apply(drum)
+    steel = [drum]
+    for z in (0.24, 0.55, 0.86):
+        steel.append(cyl("SrcRib", (0, 0, z), R + 0.018, 0.045, frame, verts=96))
+        for dz in (-0.024, 0.024):
+            bpy.ops.mesh.primitive_torus_add(major_radius=R + 0.002, minor_radius=0.006, major_segments=96, minor_segments=8, location=(0, 0, z + dz))
+            tb = bpy.context.active_object; tb.data.materials.append(weld); steel.append(tb)
+    steel.append(box("SrcSeam", (math.cos(math.radians(150)) * (R + 0.003), math.sin(math.radians(150)) * (R + 0.003), 0.55), (0.012, 0.012, 0.8), weld, rot=(0, 0, math.radians(150))))
+    steel.append(cyl("SrcLid", (0, 0, 0.985), 0.33, 0.05, paint, verts=96))
+    steel.append(cyl("SrcPlug", (0, 0, 1.03), 0.12, 0.05, frame, verts=48))
+    for k in range(16):                                                         # the bolted lid flange
+        a = k / 16 * 2 * math.pi
+        steel.append(cyl("SrcNut", (0.29 * math.cos(a), 0.29 * math.sin(a), 1.02), 0.016, 0.022, bolt, verts=6, rot=(0, 0, a)))
+        steel.append(cyl("SrcStud", (0.29 * math.cos(a), 0.29 * math.sin(a), 1.035), 0.007, 0.02, bolt, verts=10))
+    for a in (math.radians(100), math.radians(280)):
+        steel.append(box("SrcLug", (0.35 * math.cos(a), 0.35 * math.sin(a), 1.0), (0.12, 0.035, 0.12), frame, rot=(0, 0, a + math.pi / 2)))
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            steel.append(box("SrcPost", (sx * 0.47, sy * 0.47, 0.52), (0.06, 0.06, 1.04), frame, bevel=0.004))
+    for z in (0.12, 1.0):
+        for sx in (-1, 1):
+            steel.append(box("SrcRailX", (0, sx * 0.47, z), (1.0, 0.05, 0.05), frame, bevel=0.003))
+            steel.append(box("SrcRailY", (sx * 0.47, 0, z), (0.05, 1.0, 0.05), frame, bevel=0.003))
+    for sy in (-1, 1):
+        steel.append(box("SrcSkid", (0, sy * 0.3, 0.04), (1.04, 0.1, 0.08), skid))
+    body = []
+    for o_ in steel:                                                             # section every part the wedge touches
+        bpy.context.view_layer.update()
+        bb_ = [o_.matrix_world @ Vector(v) for v in o_.bound_box]
+        if max(v.x for v in bb_) > 0.0 and min(v.y for v in bb_) < 0.0:
+            o_ = _cut(o_, cut_steel, o_.name)
+        body.append(o_)
+    # lead body with the well bore, and the capsule in the well
+    lead = cyl("SrcLeadCore", (0, 0, 0.55), R - 0.025, 0.77, leadm, verts=96)
+    bore = cyl("SrcBore", (0, 0, 0.66), 0.035, 0.56, None, verts=32); bore.hide_render = True; bore.hide_viewport = True
+    bb = lead.modifiers.new("Bore", 'BOOLEAN'); bb.object = bore; bb.operation = 'DIFFERENCE'; _apply(lead)
+    lead = _cut(lead, cut_lead, "SrcLead")
+    liner = cyl("SrcLiner", (0, 0, 0.66), 0.036, 0.56, pbr("SrcLinerM", (0.12, 0.12, 0.125), 0.5, 1.0), verts=32)
+    lh = cyl("SrcLinerIn", (0, 0, 0.67), 0.031, 0.56, None, verts=32); lh.hide_render = True; lh.hide_viewport = True
+    bl = liner.modifiers.new("In", 'BOOLEAN'); bl.object = lh; bl.operation = 'DIFFERENCE'; _apply(liner)
+    liner = _cut(liner, cut_steel, "SrcLiner")
+    cap = cyl("SrcCapsule", (0, 0, 0.6), 0.012, 0.05, pbr("SrcCapsuleM", (0.72, 0.72, 0.74), 0.22, 1.0), verts=24)
+    # painted marks on the uncut side: trefoil and stencilled words (no company names)
+    sten = noisy("SrcStencil", (0.78, 0.7, 0.42), 0.7, dirt=0.6, scale=30, dark=0.45)
+    marks = [wrap_text("SrcTxt1", "RADIOACTIVE", R + 0.0015, math.radians(28), 0.41, 0.05, sten),
+             wrap_text("SrcTxt2", "DO NOT OPEN", R + 0.0015, math.radians(28), 0.34, 0.034, sten),
+             wrap_text("SrcTxt3", "Co-60", R + 0.0015, math.radians(-112), 0.68, 0.06, sten)]
+    a = math.radians(35)
+    bpy.ops.mesh.primitive_plane_add(size=0.2, location=((R + 0.002) * math.cos(a), (R + 0.002) * math.sin(a), 0.7), rotation=(math.radians(90), 0, a + math.pi / 2))
+    tre = bpy.context.active_object; tre.name = "SrcTrefoil"; tre.data.materials.append(trefoil_material("SrcTrefoilM"))
+    root = bpy.data.objects.new("Cutaway", None); bpy.context.collection.objects.link(root)
+    for o_ in body + [lead, liner, cap, tre] + marks:
+        o_.parent = root
+    return root
+
+
+
 def build(variant=None):
     v = variant or "void"
     c = {"v": v}
@@ -298,30 +458,14 @@ def build(variant=None):
         area((6.4, -0.6, 3.0), (6.4, 0, 0.3), 260, 1.4, (1.0, 0.97, 0.92), "TopKey2")
         area((7.6, -1.6, 1.2), (7.05, -0.25, 0.4), 40, 0.6, (1.0, 0.95, 0.88), "MeterLight")
         area((-2.5, 2.0, 1.6), (0, 0, 0.6), 120, 1.0, (0.85, 0.9, 1.0), "Rim")
-        # (1) the container, cut open: steel shell, lead lining, the source well with the capsule
-        steel = painted_steel("CutSteel", (0.34, 0.35, 0.35), 0.5, 0.35); lead = pbr("CutLead", (0.27, 0.28, 0.3), 0.55, 0.2)
-        cutm = pbr("CutFace", (0.5, 0.5, 0.52), 0.35, 0.6)
-        shell = cyl("Shell", (0, 0, 0.55), 0.38, 0.82, steel, verts=64)
-        core = cyl("Lead", (0, 0, 0.55), 0.355, 0.78, lead, verts=64)
-        well = cyl("Well", (0, 0, 0.6), 0.035, 0.5, pbr("WellM", (0.03, 0.03, 0.03), 0.6), verts=24)
-        for o_ in (shell, core):
-            bo = o_.modifiers.new("Cut", 'BOOLEAN'); cutter = box(o_.name + "Cutter", (0.3, -0.3, 0.6), (0.6, 0.6, 1.2)); cutter.hide_render = True
-            cutter.hide_viewport = True; bo.object = cutter; bo.operation = 'DIFFERENCE'
-        bh = shell.modifiers.new("Hollow", 'BOOLEAN'); hc = cyl("ShellHollow", (0, 0, 0.55), 0.358, 0.79, None, verts=64)
-        hc.hide_render = True; hc.hide_viewport = True; bh.object = hc; bh.operation = 'DIFFERENCE'
-        bw = core.modifiers.new("WellBore", 'BOOLEAN'); wc = cyl("WellBore", (0, 0, 0.62), 0.036, 0.52, None, verts=24)
-        wc.hide_render = True; wc.hide_viewport = True; bw.object = wc; bw.operation = 'DIFFERENCE'
-        cap = cyl("Capsule", (0, 0, 0.6), 0.012, 0.05, pbr("CapsuleM", (0.72, 0.72, 0.74), 0.22, 1.0), verts=24)
-        grp = bpy.data.objects.new("Cutaway", None); bpy.context.collection.objects.link(grp)
-        for o_ in (shell, core, well, cap):
-            o_.parent = grp
-        well.hide_render = True
-        lab = pbr("LabelInk", (0.85, 0.84, 0.8), 0.6)
-        c["lab_lead"] = wall_text("LabLead", "LEAD", (0.62, -0.38, 0.74), 0.06, lab, align='LEFT')
-        c["lab_src"] = wall_text("LabSrc", "SOURCE", (0.62, -0.38, 0.6), 0.04, lab, align='LEFT')
-        c["lead_line"] = poly_curve("LeadLine", [(0.6, -0.36, 0.76), (0.25, -0.12, 0.76)], 0.0025, lab, reveal=(1, 2))
-        c["src_line"] = poly_curve("SrcLine", [(0.6, -0.36, 0.615), (0.02, -0.02, 0.6)], 0.0018, lab, reveal=(1, 2))
-        c["cut"] = grp
+        # (1) the container, cut open: a heavy, worn industrial source container sectioned to show the lead and the well
+        fl.data.materials[0] = ph_mat("concrete_floor_damaged_01", 0.6, (0.3, 0.3, 0.28), name="VoidConcrete")
+        key.data.energy = 0.0
+        sp = bpy.data.lights.new("HardTop", 'SPOT'); sp.energy = 700; sp.spot_size = math.radians(48); sp.spot_blend = 0.45
+        sp.shadow_soft_size = 0.06; sp.color = (1.0, 0.95, 0.87)
+        so = bpy.data.objects.new("HardTop", sp); bpy.context.collection.objects.link(so); so.location = (0.35, -0.45, 3.4)
+        so.rotation_euler = (Vector((0, 0, 0.45)) - so.location).to_track_quat('-Z', 'Y').to_euler()
+        c["cut"] = source_cutaway()
         # (2) the pile as plates over the capsule, with a meter (placed 6 m to the side)
         P = Vector((6.0, 0, 0)); c["P"] = P
         cap2 = cyl("Capsule2", P + Vector((0, 0, 0.03)), 0.012, 0.05, pbr("CapsuleM2", (0.72, 0.72, 0.74), 0.22, 1.0), verts=24)
@@ -595,8 +739,6 @@ def s_ch4_5a(c, t):         # the route retraced: pins drop at Istanbul and the 
 def s_ch2_4a(c, t):         # the container cut open on black; the camera pushes in and focus pulls from the steel to the well
     sec = S("ch2_4a", t); D = dur("ch2_4a")
     c["cut"].rotation_euler = (0, 0, math.radians(-18))
-    for nm in ("lab_lead", "lab_src", "lead_line", "src_line"):
-        c[nm].hide_render = True
     c["focus"] = Vector((0.3, -0.25, 0.75)).lerp(Vector((0.0, 0.0, 0.6)), ease((sec - 0.6) / (D * 0.6)))
 
 
@@ -643,29 +785,46 @@ def s_ch3_14a(c, t):        # chalk tally on the shield wall: nine strokes there
     c["focus"] = Vector((0, 0, 0.93))
 
 
-def s_ch4_1b(c, t):         # nine red magnets on the bed board; a nurse puts up the tenth, then steps back
+def s_ch4_1b(c, t):         # nine red magnets on the bed board; a nurse steps in, presses the tenth on, steps back
     sec = S("ch4_1b", t); D = dur("ch4_1b")
     from human import reset_pose
+    from rs_kit import _reach_raw
     h = c["nurse"]; mags = c["magnets"]; last = mags[-1]
     if "mag_home" not in c:
         c["mag_home"] = last.location.copy()
     home = c["mag_home"]
-    stand = Vector((home.x + 0.42, -0.62, 0)); reset_pose(h); stand_pose(h)
-    place(h, stand, face_angle(stand, Vector((home.x + 0.1, 0.0, 0))))
+    ph_in = ease(min(1.0, max(0.0, (sec - 0.2) / 1.0)))                       # she steps in to the board
+    k = ease(min(1.0, max(0.0, (sec - 0.7) / (D * 0.3))))                    # the hand travels up to the card
+    back = ease(min(1.0, max(0.0, (sec - D * 0.66) / (D * 0.22))))          # the hand withdraws, she steps back a little
+    stand = Vector((home.x + 0.24, -0.66 + 0.32 * ph_in - 0.12 * back, 0))
+    reset_pose(h); stand_pose(h)
+    place(h, stand, face_angle(stand, Vector((home.x + 0.05, 0.0, 0))))
     fw = forward(h); sd = fw.cross(Vector((0, 0, 1))).normalized()
-    k = ease(min(1.0, max(0.0, (sec - 0.4) / (D * 0.4))))             # hand travels from her side to the card
-    back = ease(min(1.0, max(0.0, (sec - D * 0.62) / (D * 0.3))))      # then drops back down
-    side_pt = h.bone_head("upperarm01.R") + fw * 0.2 + Vector((0, 0, -0.45))
-    at_card = home + Vector((0.0, -0.035, -0.01))
-    tgt = side_pt.lerp(at_card, k).lerp(side_pt, back)
-    reach(h, "R", tgt, Vector((sd.x, sd.y, -1.0)), Vector((0, 0.9, 0.35)))
-    fingers_curl(h, 60, side=("R",), thumb=45)
+    pole = sd * 0.6 + Vector((0, 0, -1.0)) - fw * 0.2                          # elbow down and out: a bent, relaxed arm
+    hand_dir = Vector((0, 1, 0.15)).normalized()                            # fingers toward the board
+    side_pt = h.bone_head("upperarm01.R") + fw * 0.12 + sd * 0.05 + Vector((0, 0, -0.5))
+    press = home + Vector((0.0, -0.012, 0.0))                                 # fingertips on the magnet's face
+    tip_goal = side_pt.lerp(press, k).lerp(side_pt, back)
+    w = tip_goal - hand_dir * 0.15
+    for _ in range(3):                                                         # aim the fingertips, not the wrist
+        _reach_raw(h, "R", w, pole, hand_dir)
+        fingers_curl(h, 22, side=("R",), thumb=25)
+        bpy.context.view_layer.update()
+        tip = (h.bone_tail("finger2-3.R") + h.bone_tail("finger3-3.R")) / 2
+        w = w + (tip_goal - tip)
     bpy.context.view_layer.update()
-    if back <= 0.0 and k < 0.999:                                     # carried between finger and thumb
-        last.location = tgt + Vector((0, 0.03, 0.01))
+    tip = (h.bone_tail("finger2-3.R") + h.bone_tail("finger3-3.R")) / 2
+    if k < 0.999 and back <= 0.0:                                              # carried under her fingertips
+        last.location = tip + Vector((0, 0.012, 0))
     else:
         last.location = home
-    h.rot("head", sd, -4)
+    # her head and eyes follow the magnet
+    look = last.location - h.bone_head("head")
+    yaw = math.degrees(math.atan2(fw.cross(look).z, fw.to_2d().dot(look.to_2d())))
+    pitch = math.degrees(math.atan2(look.z, look.to_2d().length))
+    h.rot("head", Vector((0, 0, 1)), max(-35, min(35, yaw)) * 0.7)
+    h.rot("neck01", Vector((0, 0, 1)), max(-35, min(35, yaw)) * 0.3)
+    h.rot("head", sd, max(-25, min(15, pitch)))
     c["focus"] = home
 
 

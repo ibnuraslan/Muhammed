@@ -1034,7 +1034,7 @@ def fingers_curl(h, deg=35, side=("L", "R"), thumb=15):
 _human.fingers_curl = fingers_curl
 
 
-def ripple(name, centre, radius=2.5, color=(0.81, 0.17, 0.012), opacity=0.55, period=96.0, z=0.03):
+def ripple(name, centre, radius=2.5, color=(0.81, 0.17, 0.012), opacity=0.55, period=96.0, z=0.03, strength=2.2, bands=5.0, falloff=0.63, edge0=0.75, seam=0.37, rim_pow=0.6):
     """Soft highlight on the ground around a target: FILLED concentric bands (never thin rings), a solid warm core,
     each band lighter (~100/63/40/25/15 %), soft edges, fading to nothing at the rim; the bands drift outward and
     loop slowly (frame driver: plays in any render). Casts no shadow; hidden by default (show it per shot)."""
@@ -1043,7 +1043,7 @@ def ripple(name, centre, radius=2.5, color=(0.81, 0.17, 0.012), opacity=0.55, pe
     m = bpy.data.materials.new(name + "M"); m.use_nodes = True; m.blend_method = 'BLEND' if hasattr(m, "blend_method") else None
     N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
     out = N.new("ShaderNodeOutputMaterial"); mix = N.new("ShaderNodeMixShader")
-    tr = N.new("ShaderNodeBsdfTransparent"); em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (*color, 1); em.inputs['Strength'].default_value = 2.2
+    tr = N.new("ShaderNodeBsdfTransparent"); em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (*color, 1); em.inputs['Strength'].default_value = strength
     tc = N.new("ShaderNodeTexCoord"); ln = N.new("ShaderNodeVectorMath"); ln.operation = 'LENGTH'; L.new(tc.outputs['Object'], ln.inputs[0])
 
     def op(kind, a, b=None, val=None):
@@ -1057,16 +1057,16 @@ def ripple(name, centre, radius=2.5, color=(0.81, 0.17, 0.012), opacity=0.55, pe
                 L.new(x, n.inputs[i])
         return n.outputs[0]
     vt = N.new("ShaderNodeValue"); dr = vt.outputs[0].driver_add("default_value").driver; dr.type = 'SCRIPTED'; dr.expression = f"frame / {period:.1f}"
-    shift = op('MULTIPLY', op('FRACT', vt.outputs[0]), 0.2)
+    shift = op('MULTIPLY', op('FRACT', vt.outputs[0]), 1.0 / bands)
     d = ln.outputs['Value']
-    e = op('MULTIPLY', op('SUBTRACT', d, shift), 5.0)
+    e = op('MULTIPLY', op('SUBTRACT', d, shift), bands)
     bi = op('MAXIMUM', op('FLOOR', e), 0.0); bf = op('FRACT', e)
-    a1 = op('POWER', 0.63, bi)
-    mr = N.new("ShaderNodeMapRange"); mr.interpolation_type = 'SMOOTHSTEP'; mr.inputs['From Min'].default_value = 0.75; mr.inputs['From Max'].default_value = 1.0
+    a1 = op('POWER', falloff, bi)
+    mr = N.new("ShaderNodeMapRange"); mr.interpolation_type = 'SMOOTHSTEP'; mr.inputs['From Min'].default_value = edge0; mr.inputs['From Max'].default_value = 1.0
     L.new(bf, mr.inputs['Value'])
-    soft = op('MULTIPLY', a1, op('SUBTRACT', 1.0, op('MULTIPLY', mr.outputs[0], 0.37)))
+    soft = op('MULTIPLY', a1, op('SUBTRACT', 1.0, op('MULTIPLY', mr.outputs[0], seam)))       # soft dip at each band's edge
     rim = op('MAXIMUM', op('SUBTRACT', 1.0, d), 0.0)                       # fades to nothing at the edge
-    alpha = op('MULTIPLY', op('MULTIPLY', soft, op('POWER', rim, 0.6)), opacity)
+    alpha = op('MULTIPLY', op('MULTIPLY', soft, op('POWER', rim, rim_pow)), opacity)
     L.new(alpha, mix.inputs['Fac']); L.new(tr.outputs[0], mix.inputs[1]); L.new(em.outputs[0], mix.inputs[2]); L.new(mix.outputs[0], out.inputs['Surface'])
     o.data.materials.append(m); o.visible_shadow = False; o.visible_glossy = False; o.hide_render = True
     return o
