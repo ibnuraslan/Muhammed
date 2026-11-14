@@ -149,8 +149,8 @@ def lids(f, o):    # o: 0 closed .. 1 open
         up, lo = LIDS[s]
         up.rotation_euler.x = math.radians(4.0 - 79 * o); up.keyframe_insert("rotation_euler", frame=f, index=0)
         lo.rotation_euler.x = math.radians(1.0 + 40 * o); lo.keyframe_insert("rotation_euler", frame=f, index=0)
-for f, o in ((1, 0.0), (700, 0.0), (706, 0.25), (712, 0.05), (724, 0.4), (730, 0.1), (745, 0.6), (765, 1.0), (812, 1.0), (816, 0.0), (822, 1.0),
-             (858, 1.0), (862, 0.0), (868, 1.0), (960, 1.0), (964, 0.0), (970, 1.0),
+for f, o in ((1, 0.0), (700, 0.0), (706, 0.25), (712, 0.05), (724, 0.4), (730, 0.1), (745, 0.6), (765, 1.0), (812, 1.0), (822, 1.0),
+             (858, 1.0), (868, 1.0), (960, 1.0), (964, 0.0), (970, 1.0),
              (1240, 1.0), (1244, 0.05), (1250, 1.0), (1330, 1.0), (1334, 0.05), (1340, 1.0),
              (1470, 1.0), (1560, 0.85), (1640, 0.55), (1700, 0.25), (1770, 0.2)):
     lids(f, o)
@@ -890,7 +890,12 @@ _HH = {"Nurse": NURSE, "Surgeon": SURG, "Anaes": ANA}
 for (nm_, s_), rr in ELBOW_RUNS.items():
     for a_, b_ in rr:
         push_elbows(_HH[nm_], s_, range(max(1, a_ - 8), min(1770, b_ + 8) + 1))
-for f in (641, 651, 661): pose_hand(ANA, "R", f, "cup_hold")      # bag squeeze: closed wrap, no claw between grip keys
+for f in (641, 651, 661): pose_hand(ANA, "R", f, "cup_hold")
+# v008g: body B never pokes through its drape (only drape vertices that are inside the body move, to 8 mm outside it)
+for dn_, bn_ in (("T2_BodyDrape", "MK_BodyB"), ("T1_BodyDrape", "MK_BodyA")):
+    if dn_ in D and bn_ in D and "KeepOut" not in D[dn_].modifiers:
+        sw_ = D[dn_].modifiers.new("KeepOut", "SHRINKWRAP"); sw_.target = D[bn_]; sw_.wrap_method = "NEAREST_SURFACEPOINT"; sw_.wrap_mode = "OUTSIDE"; sw_.offset = 0.008
+        print("KEEPOUT", dn_, [m.type for m in D[dn_].modifiers])      # bag squeeze: closed wrap, no claw between grip keys
 # table-2 group is transparent after the void and never seen again: hide it for good (QA: no invisible fill)
 for o in D:
     if o.type in ("MESH", "CURVE") and any(sl.material and "Fade_T2" in sl.material.node_tree.nodes for sl in o.material_slots if sl.material and sl.material.use_nodes):
