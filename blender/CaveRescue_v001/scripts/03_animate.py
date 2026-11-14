@@ -617,7 +617,9 @@ for f in (2329, 2345, 2365, 2385, 2406):
 # =============================================================== BEAT 12: tow through the flooded passage (2407-2570)
 # DiverB swims, Boy2 lies face-up in the harness beside him (head first), the mask stays on the boy's head
 # hold seated / kneeling until the camera dives through the water surface (2421), then the tow is under way
-kneel("DiverB", 2415, P2.x - 0.45, P2.y - 0.45, 135, lean=30, head=(25, 0))
+kneel("DiverB", 2415, P2.x - 0.45, P2.y - 0.45, 135, lean=14, head=(6, 0))
+for f_ in (2200, 2280, 2329, 2370):     # v007: DiverB kneels more upright with his head up while he waits and fits the mask (his face stays off the boy's)
+    HUM["DiverB"].key_spine(f_, flex=14 if f_ >= 2329 else 16, head=(6, 0))
 seated("Boy2", 2415, P2.x, P2.y, -10, lean=14, head=(28, 20), hug=False)
 TOW0, TOW1 = 2421, 2570
 # tow harness: a webbing handle on the boy's chest (Child Of spine02), the diver grips it
