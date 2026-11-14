@@ -9,7 +9,7 @@
   "85": [
    [
     "FILL",
-    "hair / top of head 42%"
+    "hair / top of head 28%"
    ]
   ],
   "121": [
@@ -59,7 +59,7 @@
    ],
    [
     "PROPMOVE",
-    "Ear_New moves 1.7 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_New moves 7.7 cm with no hand on it (nearest finger 7 cm)"
    ]
   ],
   "1435": [
@@ -69,7 +69,7 @@
    ],
    [
     "PROPMOVE",
-    "Ear_New moves 1.9 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_New moves 5.3 cm with no hand on it (nearest finger 10 cm)"
    ]
   ],
   "1441": [
@@ -79,7 +79,7 @@
    ],
    [
     "PROPMOVE",
-    "Ear_New moves 23.5 cm with no hand on it (nearest finger 11 cm)"
+    "Ear_New moves 1.5 cm with no hand on it (nearest finger 11 cm)"
    ]
   ],
   "1447": [
@@ -704,28 +704,10 @@
     "Ear_New moves 8.9 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
-  "1405": [
-   [
-    "PROPMOVE",
-    "Ear_New moves 3.4 cm with no hand on it (nearest finger 6 cm)"
-   ]
-  ],
-  "1411": [
-   [
-    "PROPMOVE",
-    "Ear_New moves 3.9 cm with no hand on it (nearest finger 6 cm)"
-   ]
-  ],
-  "1417": [
-   [
-    "PROPMOVE",
-    "Ear_New moves 3.1 cm with no hand on it (nearest finger 5 cm)"
-   ]
-  ],
   "1423": [
    [
     "PROPMOVE",
-    "Ear_New moves 2.4 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_New moves 8.7 cm with no hand on it (nearest finger 3 cm)"
    ]
   ],
   "1663": [
@@ -811,6 +793,6 @@
   "BACKHEAD": 1,
   "FILL": 22,
   "EMPTY": 2,
-  "PROPMOVE": 123
+  "PROPMOVE": 120
  }
 }

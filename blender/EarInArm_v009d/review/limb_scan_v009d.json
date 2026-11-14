@@ -323,7 +323,7 @@
     "bone": "upperarm02",
     "into": "Surgeon",
     "depth_cm": 6.9,
-    "visible": false
+    "visible": true
    }
   },
   "85": {

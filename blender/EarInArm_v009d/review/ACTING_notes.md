@@ -39,7 +39,7 @@ The client's frame numbers are in the synced v010 timeline (1–1572). I mapped 
   - BACKHEAD 1: f1, the wide opener with the surgeon's back to the camera.
   - EMPTY 2: 625/631, the high shot that follows the forceps to the arm. The arm, the glove and the ear are in frame.
   - FILL 22: the push-ins at 85 and 121; the surgeon's cap at the frame edge at 877/883 and 1327; the head close-ups at 1429–1501 and 1633–1651, where the ear is placed and the stitching ends.
-  - PROPMOVE 123: items in the forceps tips, the grafted ear and the shavings, as accepted in v009c. The hand tools themselves are 0.
+  - PROPMOVE 120: items in the forceps tips, the grafted ear and the shavings, as accepted in v009c. The hand tools themselves are 0.
 - **limb_scan (new, `pipeline/limb_scan.py`):** the upper-arm, forearm and hand bone axes of every character are tested against every body's skin, including their own torso, head and legs. Visible hits that remain:
   - **Patient.L upper arm, 569–1717, 8.3 cm, constant:** the arm lies out on the arm board, and the sample by the armpit is under the chest skin. It does not show in renders.
   - **Surgeon upper arm against his side, up to 7 cm:** during the hand-to-chest moves (77–289) and the walks (293–613).
@@ -52,4 +52,5 @@ The client's frame numbers are in the synced v010 timeline (1–1572). I mapped 
 - f19 and f79–91: the surgeon's back or cap filled the frame. The opening now stays on the patient's side, then arcs over the surgeon to the front.
 - f367–391: the carving hands were too close; the camera now pulls back.
 - f1393–1441: the camera sat on the skull; the ear placement is now framed like the stitching.
+- Second pass: at f85 the surgeon's head blocked the move to the profile, so a high key at f84 now gives an over-the-shoulder two-shot. At f1440 the ear snapped about 15 cm from the forceps onto the head; it is now lowered onto the head over 1404–1440.
 - The black forearm in the first preview was a preview-only artefact (too few light bounces for the skin's subsurface scattering). The full-quality render was checked at f661.

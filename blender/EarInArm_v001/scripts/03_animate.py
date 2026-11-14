@@ -700,7 +700,11 @@ for f in list(range(1, B["end"] + 1, 2)) + [B["end"]]:
     else:
         keymat(ear_arm, f, pocket)
     if 1150 <= f < 1440:
-        keymat(ear_new, f, Matrix.Translation(tip) @ Rf @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(-90), 4, 'X') @ Matrix.Scale(1.0, 4))
+        Mt_ = Matrix.Translation(tip) @ Rf @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(-90), 4, 'X') @ Matrix.Scale(1.0, 4)
+        if f >= 1404:   # v009d: the ear is lowered from the forceps onto the head (it used to snap 15 cm at 1440)
+            Hm_ = pr.matrix_world @ PAT.R.PB["head"].matrix @ HEAD_REST.inverted(); Mh_ = Hm_ @ EAR_ON_HEAD_REST; u_ = smoothstep(1404, 1440, f)
+            Mt_ = Matrix.Translation(Mt_.translation.lerp(Mh_.translation, u_)) @ Mt_.to_quaternion().slerp(Mh_.to_quaternion(), u_).to_matrix().to_4x4()
+        keymat(ear_new, f, Mt_)
     elif f >= 1440:
         Hm = pr.matrix_world @ PAT.R.PB["head"].matrix @ HEAD_REST.inverted()
         keymat(ear_new, f, Hm @ EAR_ON_HEAD_REST)

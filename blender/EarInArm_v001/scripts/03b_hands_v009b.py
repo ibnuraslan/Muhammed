@@ -276,7 +276,7 @@ for f in [f for f in range(1, 1501, 2) if f <= 331 or 566 <= f <= 1500]:
         sc_ = CARRY.matrix_world.to_scale()[0]; keymat(CARRY, f, Matrix.Translation(tip) @ FORC.matrix_world.to_3x3().normalized().to_4x4() @ Matrix.Scale(sc_, 4))
     if 566 <= f < 712:
         keymat(EAR_ARM, f, Matrix.Translation(tip) @ Rf @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(-90), 4, 'X') @ Matrix.Scale(0.85, 4))
-    if 1150 <= f < 1440:
+    if 1150 <= f < 1404:   # from 1404 the ear is lowered onto the head (keys from 03_animate.py are kept)
         keymat(EAR_NEW, f, Matrix.Translation(tip) @ Rf @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(-90), 4, 'X') @ Matrix.Scale(1.0, 4))
 for m, v in FAST: m.show_viewport = v
 for l in LOG: print("HANDS", l)
