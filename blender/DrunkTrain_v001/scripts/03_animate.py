@@ -477,14 +477,15 @@ for f in list(range(f_crawl0, f_crawl1 + 1, 2)) + [f_crawl1]:
         # hand under the shoulder (world: down), knee under the hip: hands planted with palms flat
         Wh = Bm @ (LB.sh[s] + V(sx * 0.04, -0.06 - fwd * 0.4, -0.0))
         Wh = V(Wh.x, Wh.y, ground_z(Wh.x, Wh.y) + 0.15 + lift)      # v005: palm on top of the stones, not sunk into them
-        if abs(Wh.x - 0.72) < 0.3: Wh.z = max(Wh.z, 0.172 + 0.1)       # v006: a hand that lands on the rail rests ON its top
         shx = (Bm @ LB.sh[s]).x
-        if (shx - 0.72) * (Wh.x - 0.72) < 0: Wh = V(0.72, Wh.y, 0.172 + 0.1)      # v006: rail between shoulder and hand -> the hand goes on the rail, the arm never cuts through it
+        if abs(Wh.x - 0.72) < 0.25 or (shx - 0.72) * (Wh.x - 0.72) < 0:      # v006: a crawl hand is planted on the ballast on the shoulder's side, never on or across the rail
+            hx = 0.72 + math.copysign(0.25, shx - 0.72); Wh = V(hx, Wh.y, ground_z(hx, Wh.y) + 0.15 + lift)
+        if abs(shx - 0.72) < 0.16: Wh = V(Wh.x, Wh.y, 0.172 + 0.2)      # v006: that hand is lifted over the rail while the shoulder passes above it
         LAD.key_hand(s, f, Wh, Bm.to_3x3() @ V(0, -1, 0), V(0, 0, -1))
         hw = Bm @ LB.hip[s]; fwd_ = V(math.sin(R_(yaw_c)), -math.cos(R_(yaw_c)), 0)
         kq = (ph + 0.5 * k + 0.5) % 1.0; kf = 0.25 * (kq if kq <= 0.6 else 0.6 - (kq - 0.6) * 1.5); klift = 0.06 * math.sin(math.pi * kq) if kq > 0.6 else 0.0
         Wa = hw - fwd_ * (0.44 - kf) ; Wa = V(Wa.x, Wa.y, ground_z(Wa.x, Wa.y) + 0.085 + klift)
-        if abs(Wa.x - 0.72) < 0.3: Wa.z = max(Wa.z, 0.172 + 0.09)        # v006: knee lifted over the rail
+        if abs(Wa.x - 0.72) < 0.3 or abs(Wa.x + 0.42 * fwd_.x - 0.72) < 0.28: Wa.z = max(Wa.z, 0.172 + 0.13)        # v006: shin lifted while the ankle OR the knee is over the rail
         LB.foot_world(s, f, Wa, yaw_c, pitch=165, pole_dir=V(0, -0.9, -0.6))
 # stand up: push back onto the feet, rise, wobble
 for f, z_k, pi, fl in ((f_up0, 0.55, 75, -8), (f_up0 + 10, 0.65, 45, 30), (f_up0 + 20, RH.z - 0.35, 25, 35), (f_up0 + 32, RH.z - 0.06, 6, 10), (f_up1, RH.z - 0.03, -4, 6)):
