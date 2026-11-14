@@ -28,7 +28,7 @@ K = [  # frame, location, target, lens
  (252,  (0.06, -0.08, -10.0), (0.3, 0.3, -9.2), 16),     # fast rise up the shaft, looking at the wall
  (264,  (0.04, -0.06, -1.6), (0.15, 0.5, 0.6), 18),
  (271,  (0.25, -0.35, 1.5), (-0.9, 5.6, 1.2), 30),     # out of the shaft: the mother and crowd at the tape
- (290,  (-0.3, -1.0, 1.9), (-0.7, 4.8, 1.1), 30),     # clear of the tripod leg
+ (290,  (0.0, -1.8, 2.4), (-0.5, 3.0, 1.0), 24),     # back and up: clear of the tripod leg and of ResA at the rope
  (318,  (-1.3, -3.0, 2.5), (-0.3, 0.4, 0.9), 22),
  (350,  (-1.6, -1.6, 1.6), (-0.3, 0.25, 1.0), 30),
  (378,  (-1.05, -0.55, 1.3), (-0.24, 0.18, 0.95), 36),
@@ -39,8 +39,8 @@ K = [  # frame, location, target, lens
  # beat 3: through the wall into the cross-section, rise, break the surface on the excavator
  (468,  (0.05, -0.9, -13.4), (0.0, 0.0, -13.65), 18),
  (495,  (0.4, -5.2, -11.0), (0.1, 0.0, -11.6), 18),
- (525,  (1.2, -7.4, -4.8), (0.9, 0.0, -5.2), 17),     # level, not looking up through the see-through ground at "floating" people
- (552,  (2.2, -7.6, 0.45), (4.2, 0.6, 0.9), 20),
+ (525,  (1.2, -7.4, -6.5), (0.9, 0.0, -6.8), 22),     # stays deep, then breaks the surface fast: nobody seen from below the ground     # level, not looking up through the see-through ground at "floating" people
+ (552,  (2.2, -7.6, 1.2), (4.2, 0.6, 0.9), 20),
  (585,  (5.0, -2.6, 0.5), (7.0, 1.0, 0.6), 24),
  (610,  (1.2, -0.9, 0.6), (2.2, 0.6, 0.15), 28),
  (638,  (4.4, -3.6, 2.8), (7.7, 0.6, 1.9), 30),     # back from the boom
@@ -63,7 +63,7 @@ K = [  # frame, location, target, lens
  (1045, (0.3, 0.9, 1.55), (-1.12, 2.0, 1.55), 32),     # two-shot from the side: ResA out of the lens
  (1090, (0.25, 1.05, 1.55), (-1.12, 2.0, 1.55), 36),
  (1125, (0.2, -0.4, 1.4), (-1.2, 1.4, 1.2), 30),
- (1142, (-1.0, -1.3, 1.5), (-1.3, 1.1, 1.2), 28),     # round the tripod leg
+ (1142, (-2.4, -0.9, 1.5), (-1.3, 1.1, 1.2), 28),     # outside the tripod leg, not behind it
  # beat 6: knot
  (1160, (-2.8, 0.0, 1.4), (-1.36, 1.12, 1.2), 28),
  (1200, (-2.44, 0.4, 1.3), (-1.4, 1.15, 1.3), 30),

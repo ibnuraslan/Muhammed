@@ -91,6 +91,18 @@ I watched v004 as a moving preview (`pipeline/preview.py`, every 5th frame, all 
 | 1760–1900 | The tripod legs and winch box blur past the lens during the emergence, ResA's arm crosses the lens, and the legs fill the crane-up. | The camera is 0.7–1 m further out round the tripod. |
 | 1099, 1141 | clip_scan: hands near another rescuer as the camera moved. | ResB's spot is moved 0.3 m, and the teen's walk is routed 0.3 m wider. |
 
+Second watch of the v005 preview (with the dust), more faults fixed:
+
+| Frames | Fault | Fix |
+|---|---|---|
+| 276–291 | ResA's head and hard hat close in the lens on the way out of the shaft. | The camera goes back and up (0, −1.8, 2.4) with a 24 mm lens. |
+| 521–546 | Rescuers still read as floating, seen from below the ground. | The rise stays deep, then breaks the surface fast. |
+| 1011–1016 | Blank frame: the camera passed through ResB. | ResB's spot is moved to (0.9, 2.3), off the camera path. |
+| 1031–1106 | ResA's gesturing arm sweeps across the lens. | Smaller, lower gestures. |
+| 1131–1141 | A tripod leg fills the foreground. | The camera goes round the outside of the leg. |
+| 1759–1810 | `body_prop_cross.py`: ResA walks through tripod leg 1 and stands on the collar to guide the teen; the teen's feet scrape the casing lip, then his head and legs reach the tripod legs and winch during the swing. | Simplified: ResA stays on the haul line (no hip guide). The teen swings out over the pipe, between the legs, at a moderate height, then steps to the side. 0 visible crossings on 1740–1840. |
+| 1821 | ResA walks past the lens. | His route to the cheering spot goes behind the well. |
+
 Render cost: the 24 dust and exhaust puffs were volumes that scale down to 0.001 when inactive. Cycles still built all 24 volumes on every frame, about 48 s of setup per frame. Each puff now exists (hide_render and hide_viewport keys) only during its own 40–90 frames, so at most 3 are live on any frame.
 - Measured at 270×480, 4 samples: 5–7 s per frame with the dust visible (frames 20, 205, 610, 700, 880, 1400), down from about 53 s.
 - The preview includes all the dust: what's in the preview is what the client renders.

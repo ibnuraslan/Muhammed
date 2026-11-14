@@ -296,8 +296,8 @@ for i, f in enumerate(range(920, 1140, 14)):
     ph = i * 0.9
     tgt = V((-1.0, 2.0)) if f > 1000 else V((-2.2, 4.8))
     RA.key(f, V((-0.9, 0.9)), yaw_to((-0.9, 0.9), tgt), head=(0, 8 * math.sin(ph)), twist=6 * math.sin(ph),
-           hands={"R": ("rel", (0.25, 0.35, -0.05 * RA.arm + 0.08 * math.sin(ph * 2))) if i % 3 else HANG(RA), "L": ("rel", (0.12, 0.25, -0.35 * RA.arm))})
-    RB.key(f, V((0.35, 2.05)), yaw_to((0.35, 2.05), tgt), head=(5, 0),
+           hands={"R": ("rel", (0.14, 0.22, -0.3 * RA.arm + 0.06 * math.sin(ph * 2))) if i % 3 else HANG(RA), "L": ("rel", (0.12, 0.18, -0.45 * RA.arm))})     # small gestures: his arm stays out of the lens
+    RB.key(f, V((0.9, 2.3)), yaw_to((0.9, 2.3), tgt), head=(5, 0),
            hands={"L": ("rel", (0.3, 0.55 * RB.arm, -0.3 * RB.arm)) if (i % 4) < 2 else HANG(RB)})
     RC.key(f, V((-1.9, 0.2)), yaw_to((-1.9, 0.2), tgt), hands={"L": ("rel", (0.02, 0.15, -0.1 * RC.arm)), "R": ("rel", (0.02, 0.18, -0.1 * RC.arm))}, flex=-3)
 
@@ -474,7 +474,7 @@ for c in (RA, RB, RC):
         p = HAUL[c]; ph = (f - 1420) / 10
         c.key(f, p, 0, flex=-8, head=(10, 0), feet={"L": ("xy", p + V((0.15, -0.25)), -10), "R": ("xy", p + V((-0.15, 0.15)), 10)},
               hands={"L": ("w", on_line(p.y - 0.55 + 0.04 * math.sin(ph))), "R": ("w", on_line(p.y - 0.36 + 0.04 * math.sin(ph)))})
-    for k, f in enumerate(range(1630, 1770 if c is not RA else 1740, 8)):     # haul: lean back, hand over hand
+    for k, f in enumerate(range(1630, 1770, 8)):     # haul: lean back, hand over hand
         p = HAUL[c]; a = (k % 2)
         hl = on_line(p.y - 0.56 + 0.15 * a); hr = on_line(p.y - 0.36 - 0.15 * a)
         c.key(f, p + V((0, 0.08 * math.sin(k * math.pi / 2))), 0, flex=-18 + 6 * a, crouch=0.12, head=(15, 0),
@@ -490,8 +490,8 @@ for f in range(1772, 1812, 4):
     k = ease((f - 1772) / 40)
     # pulled out legs first and swung down sideways onto his feet: a single rotation about Y (no root spin),
     # head-down (Rx 180) -> upright facing the crowd (Rz 180)
-    zr = lerp(rise_z[RISE1], TE.root.z, k)
-    xy = V((0, 0)).lerp(OUTP, k)
+    zr = lerp(rise_z[RISE1], TE.root.z, k) - 0.12 * math.sin(math.pi * min(1.0, k / 0.85))     # swung low, where the tripod legs are furthest out
+    xy = V((0, 0)).lerp(OUTP, max(0.0, (k - 0.55) / 0.45))     # swings out over the pipe (between the tripod legs), then steps to the side
     rp = V((xy.x, xy.y, zr)); Rb = Rx(180) @ Matrix.Rotation(R_(-180 * k), 3, "Y")
     if k < 0.85:
         feet = {s: teen_foot(rp, Rb, s, 180 * (1 - k)) for s in "LR"}
@@ -500,11 +500,7 @@ for f in range(1772, 1812, 4):
     gl = rp + Rb @ V((0.28, -0.45, 0.55 - 0.35 * k)); gr = rp + Rb @ V((-0.28, -0.45, 0.55 - 0.35 * k))
     TE.key(f, xy, 0, root_world=rp if k < 0.85 else None, flex=180, side=-180 * k, head=(-20, 0), feet=feet,
            hands={"L": ("wg", gl), "R": ("wg", gr)})
-    # ResA, behind him on the +y side, grips his hips and guides him out and down onto his feet
-    RAP = V((-0.6, -0.15))      # behind-left of him: clear of his swinging head, legs and the toddler in front
-    d_ = (RAP - xy).normalized().to_3d(); pp_ = V((-d_.y, d_.x, 0))     # toward ResA, and across
-    RA.key(f, RAP, yaw_to(RAP, xy), flex=22, crouch=0.06, head=(15, 0),
-           hands={"L": ("wg", rp + V((0.02, -0.21, 0.08))), "R": ("wg", rp + V((-0.1, -0.19, -0.06)))})
+    # (simplified for v005: ResA stays on the haul line; running him round to the hips crossed the tripod leg and the collar)
     tr = (gl + gr) / 2 + V((0, 0, -0.52))
     T.key(f, V((0, 0)), yb + 160 * k, root_world=tr, flex=0, head=(-25, 0),
           feet={s: ("w", tr + V((0.05 if s == "L" else -0.05, 0, -T.root.z + T.ankle[s].z + 0.04)), Rz(yb)) for s in "LR"},
@@ -560,9 +556,9 @@ def clear_keys(c, f0, f1):
 MOVES = [
  (RA, 470, 520, [RA_P, (-0.9, 0.75), (-1.12, 0.92)]), (RA, 674, 690, [(-1.12, 0.92), (-1.1, 1.5)]), (RA, 905, 925, [(-1.1, 1.5), (-0.9, 0.9)]),
  (RA, 1140, 1188, [(-0.9, 0.9), (-0.15, 0.72), (0.55, 0.1), (0.75, -0.3)]), (RA, 1290, 1312, [(0.75, -0.3), (0.95, 0.3), (0.55, 0.45)]),
- (RA, 1430, 1500, [(0.55, 0.45), (0.85, -0.2), (0.0, -0.6), (-0.3, -0.5), (-0.8, -0.2), (-0.85, 0.9), (-0.24, 1.6)]), (RA, 1742, 1766, [(-0.24, 1.6), (-0.95, 0.9), (-0.9, -0.1), (-0.6, -0.15)]), (RA, 1812, 1836, [(-0.6, -0.15), (0.4, -0.7), (1.2, 0.2), (0.95, 1.75)]),
+ (RA, 1430, 1500, [(0.55, 0.45), (0.85, -0.2), (0.0, -0.6), (-0.3, -0.5), (-0.8, -0.2), (-0.85, 0.9), (-0.24, 1.6)]), (RA, 1800, 1830, [(-0.24, 1.6), (0.5, 2.3), (0.95, 1.75)]),
  (RB, 470, 525, [RB_P, (1.0, -0.6), (1.6, -2.2)]), (RB, 674, 702, [(1.6, -2.2), (0.2, -0.6), (-0.45, 0.6), (-0.2, 1.8), (0.4, 2.6)]),
- (RB, 905, 925, [(0.4, 2.6), (0.35, 2.05)]), (RB, 1130, 1162, [(0.35, 2.05), (-0.3, 0.55), tuple(RBT)]),
+ (RB, 905, 925, [(0.4, 2.6), (0.9, 2.3)]), (RB, 1130, 1162, [(0.9, 2.3), (-0.3, 0.55), tuple(RBT)]),
  (RB, 1262, 1288, [tuple(RBT), (-0.95, 0.9), (-0.55, 0.45)]), (RB, 1430, 1490, [(-0.55, 0.45), (-0.85, 0.5), (-0.45, 1.6), (-0.21, 2.6)]),
  (RB, 1770, 1830, [(-0.21, 2.6), (-1.2, 2.4), (-2.1, 1.7), (-1.75, 1.3)]),
  (RC, 463, 560, [RC_P, (-1.4, -0.9), (0.3, -2.4), (1.9, -2.8)]), (RC, 674, 702, [(1.9, -2.8), (0.5, -2.4), (-1.7, -1.2), (-2.4, 1.2)]),
@@ -800,7 +796,7 @@ for k, (dx, dy, rz, toff) in enumerate(SPOTS):
                     if base: slot.link = "OBJECT"; slot.material = tinted(base, COLS[(k + j) % len(COLS)])
 # ================================================================== HANDS: shared pose library (pipeline/hand_poses.py)
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../pipeline/hand_poses.py")).read())
-GRIPS = {"ResA": [(241, 470, "wrap_grip"), (1190, 1290, "wrap_grip"), (1314, 1420, "cup_hold"), (1502, 1740, "wrap_grip"), (1776, 1812, "wrap_grip")],
+GRIPS = {"ResA": [(241, 470, "wrap_grip"), (1190, 1290, "wrap_grip"), (1314, 1420, "cup_hold"), (1502, 1770, "wrap_grip")],
          "ResB": [(1164, 1262, "wrap_grip"), (1314, 1420, "cup_hold"), (1492, 1770, "wrap_grip")],
          "ResC": [(1324, 1770, "wrap_grip")], "Teen": [(1530, 1772, "wrap_grip"), (1784, 1872, "cup_hold")], "Toddler": [(1530, 1812, "cup_hold")],
          "Mother": [(1872, END + 10, "cup_hold")], "Crowd1": [(470, 1760, "flat_palm")], "Operator": [(1, END + 10, "wrap_grip")]}
