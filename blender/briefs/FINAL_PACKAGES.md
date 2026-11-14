@@ -28,7 +28,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 12 | NoPilotPlane | `claude/connect12-no-pilot-plane` | `blender/NoPilotPlane_v007/` **acting fixed, approved, final commit 800e346 (VO sync when your voiceover arrives)** |
 | 13 | FrozenTearsGun | `claude/connect13-frozen-tears-gun` | `blender/FrozenTearsGun_v006/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 14 | ElectricianPolice | `claude/connect14-electrician-police` | `blender/ElectricianPolice_v007/` **acting fixed, approved, final commit 91f7a3d (VO sync when your voiceover arrives)** |
-| 15 | GameBoxBullet | `claude/connect15-game-box-bullet` | `blender/GameBoxBullet_v008/` **acting fixed, approved (VO sync when your voiceover arrives)** |
+| 15 | GameBoxBullet | `claude/beautiful-ptolemy-c5vrcq` | `blender/GameBoxBullet_v010/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1311)** |
 | 16 | DrunkTrain | `claude/connect16-drunk-train` | `blender/DrunkTrain_v005/` **acting fixed, approved, final commit 66c7cc0 (VO sync when your voiceover arrives)** |
 | 17 | ToddlerWell | `claude/connect17-toddler-well` | `blender/ToddlerWell_v004/` **acting fixed, approved, final commit f3b113a (VO sync when your voiceover arrives)** |
 | 18 | NukedWell | `claude/connect18-nuked-well` | `blender/NukedWell_v004/` **acting fixed, approved, final commit 284559b (VO sync when your voiceover arrives)** |
