@@ -419,7 +419,7 @@ def _():
         H.rotl(h, "spine03", (1, 0, 0), 14); H.look(h, -6 if sec > 2.4 else 0, 22)
     def cam(c, t):
         e = ease(t)
-        return (Vector((0.45, 2.45, 1.45)).lerp(Vector((0.35, 2.65, 1.43)), e), Vector((-0.8, 4.05, 0.7)), 26)
+        return (Vector((1.3, 2.0, 1.65)).lerp(Vector((1.15, 2.2, 1.62)), e), Vector((-0.55, 3.9, 1.1)), 24)   # rule 7: her head and arm in frame
     return cam, anim
 
 
@@ -690,7 +690,7 @@ def _():
         H.stand_at(P(c, "d1"), (-2.3, -4.0, F2), math.radians(-60), z=F2); H.look(P(c, "d1"), 0, 18)
     def cam(c, t):
         e = ease(t)
-        return (Vector((-1.5, -1.6, F2 + 1.6)).lerp(Vector((-1.7, -1.9, F2 + 1.55)), e), Vector((-3.0, -3.7, F2 + 0.8)), 30)
+        return (Vector((-0.9, -1.2, F2 + 1.75)).lerp(Vector((-1.05, -1.4, F2 + 1.72)), e), Vector((-2.8, -3.75, F2 + 1.1)), 26)   # rule 7: the detective's head in frame
     return cam, anim
 
 
@@ -1258,7 +1258,7 @@ def _():
             reach(h, sd, c["flying"].location + Vector((-0.6, 0.35 * (1 if sd == "L" else -1), 0.0)), Vector((0, 0, -1)), Vector((1, -1, -0.5)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((0.95, -4.35, 1.8)).lerp(Vector((1.1, -4.2, 1.78)), e), Vector((2.7, -2.4, 0.7)), 22)
+        return (Vector((0.6, -4.6, 1.85)).lerp(Vector((0.75, -4.45, 1.83)), e), Vector((2.6, -2.2, 1.05)), 22)   # rule 7: the son's head in frame
     return cam, anim
 
 

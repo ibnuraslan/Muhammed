@@ -147,7 +147,7 @@ def _():
         H.look(h, 6, -4)
     def cam(c, t):
         e = ease(t); y = ROAD_Y - 8.0
-        return (Vector((-7.2, y - 1.95, G + 1.9)).lerp(Vector((-7.1, y - 1.7, G + 1.88)), e), Vector((-6.4, y, G + 1.75)), 28)
+        return (Vector((-8.25, y - 2.65, G + 2.05)).lerp(Vector((-8.05, y - 2.4, G + 2.0)), e), Vector((-6.45, y - 0.2, G + 1.5)), 26)   # rule 7: over the shoulder, head+arm in frame
     return cam, anim
 
 
