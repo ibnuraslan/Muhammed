@@ -559,8 +559,8 @@ _rp = next(n for n in cm.node_tree.nodes if n.type == "VALTORGB"); _rp.color_ram
 cm.node_tree.nodes["Map Range"].inputs[1].default_value = -0.5; cm.node_tree.nodes["Map Range"].inputs[2].default_value = 0.5
 sep_ = cm.node_tree.nodes["Separate XYZ"]; cm.node_tree.links.new(sep_.outputs[1], cm.node_tree.nodes["Map Range"].inputs[0])
 cc.visible_shadow = False
-CARD = [(180, 0.0, 0.6), (181, 1.0, 0.6), (186, 1.0, 0.55), (360, 1.0, 0.5), (380, 1.0, 0.5), (420, 1.0, 1.15), (462, 1.0, 1.62), (470, 1.0, 1.62), (478, 0.0, 1.62),
-        (1074, 0.0, 1.85), (1090, 1.0, 1.85), (1232, 1.0, 1.85), (1240, 0.0, 1.85), (1657, 0.0, 0.22), (1658, 1.0, 0.22), (1700, 1.0, 0.24), (1712, 0.0, 0.3)]
+CARD = [(180, 0.0, 0.6), (181, 1.0, 0.6), (186, 1.0, 0.55), (360, 1.0, 0.5), (380, 1.0, 0.5), (420, 1.0, 1.15), (462, 1.0, 2.3), (470, 1.0, 2.3), (478, 0.0, 2.3),
+        (1074, 0.0, 2.2), (1090, 1.0, 2.2), (1232, 1.0, 2.2), (1240, 0.0, 2.2), (1657, 0.0, 0.22), (1658, 1.0, 0.22), (1700, 1.0, 0.24), (1712, 0.0, 0.3)]
 mixn = cm.node_tree.nodes["FADE"]
 for f, al, dist in CARD:
     mixn.inputs[0].default_value = al; mixn.inputs[0].keyframe_insert("default_value", frame=f)
