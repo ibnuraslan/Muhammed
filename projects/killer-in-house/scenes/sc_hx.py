@@ -118,7 +118,7 @@ def _():
             y = ROAD_Y - 8.0; pl = H.mat("plaster")
             pl = H.mat("paper2")
             H.wall_x("NWin", -9.5, -3.5, y, G, G + 2.8, 0.2, pl, [(-7.2, -5.8, G + 0.9, G + 2.3)])
-            H.wall_y("NSide", y - 4.0, y, -9.5, G, G + 2.8, 0.2, pl); box("NCeil", (-6.5, y - 2.0, G + 2.85), (6, 4, 0.1), H.mat("plaster"))
+            H.wall_y("NSide", y - 4.0, y, -9.5, G, G + 2.8, 0.2, pl); H.wall_y("NSideR", y - 4.0, y, -3.5, G, G + 2.8, 0.2, pl); box("NCeil", (-6.5, y - 2.0, G + 2.85), (6, 4, 0.1), H.mat("plaster"))
             import ph
             ph.model("ArmChair_01", loc=(-8.6, y - 1.2, G), rot_z=math.radians(140))
             ph.model("side_table_01", loc=(-8.9, y - 0.45, G))
