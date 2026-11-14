@@ -48,7 +48,7 @@ def build(variant=None):
         m = bpy.data.materials.new(f"BufLED{k}"); m.use_nodes = True
         pb = m.node_tree.nodes["Principled BSDF"]; pb.inputs['Base Color'].default_value = (0.25, 0.04, 0.02, 1)
         pb.inputs['Emission Color'].default_value = (1.0, 0.25, 0.08, 1); pb.inputs['Emission Strength'].default_value = 0.0
-        o = cyl(f"BufLED{k}", (-0.13 + k * 0.012, T.BAR_Y - 0.005, T.BAR_Z - 0.0008), 0.0016, 0.0016, m, verts=12)
+        o = cyl(f"BufLED{k}", (-0.13 + k * 0.012, T.BAR_Y - 0.005, T.BAR_Z + 0.0087), 0.0016, 0.0016, m, verts=12)   # on the bar's top face, under the lid
         o.parent = tw["root"]; o.hide_render = True; c["leds"].append((o, pb))
     # the X-ray fade (only the shots that call for it switch it on via their expression)
     c["fade_expr"] = {"sink": "1", "coil": "1", "buffer": "1", "journey": "min(1, max(0, (frame - 120) / 96))", "xray": "min(1, max(0, (frame - 24) / 72))", "arms": "0.93", "magnets": "1"}
@@ -157,8 +157,8 @@ def cam_journey(c, t):
     pts = [(W(c, (0.24, -0.44, 0.27)), ball(c), 50),
            (W(c, (0.15, -0.36, 0.15)), W(c, (0.0, -0.12, 0.06)), 45),
            (W(c, (0.08, -0.25, 0.07)), W(c, (0.0, -0.085, 0.04)), 45),
-           (W(c, (0.02, T.BAR_Y - 0.12, T.BAR_Z + 0.06)), W(c, (-0.03, T.BAR_Y, T.BAR_Z)), 55),
-           (W(c, (-0.07, T.BAR_Y - 0.07, T.BAR_Z + 0.045)), W(c, (-0.09, T.BAR_Y, T.BAR_Z)), 70)]
+           (W(c, (0.0, T.BAR_Y - 0.1, T.BAR_Z + 0.12)), W(c, (-0.04, T.BAR_Y, T.BAR_Z)), 50),      # up over the X-rayed housing
+           (W(c, (-0.08, T.BAR_Y - 0.05, T.BAR_Z + 0.12)), W(c, (-0.088, T.BAR_Y - 0.004, T.BAR_Z + 0.008)), 45)]  # (ray-cast: only the ghost shell between)
     n = len(pts) - 1; x = min(max(t, 0.0), 0.9999) * n; i = int(x); f = ease(x - i)
     (a0, b0, l0), (a1, b1, l1) = pts[i], pts[i + 1]
     return (a0.lerp(a1, f), b0.lerp(b1, f), l0 + (l1 - l0) * f)

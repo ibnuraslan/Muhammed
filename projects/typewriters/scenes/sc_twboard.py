@@ -2,7 +2,7 @@
 
 Ch4 8B  board  "The full list ... is beyond what investigators can reconstruct." - a cork board under a raking desk
                lamp: printed photos of earlier scenes (the evidence hall, customs, the attache's office, the TV tower,
-               the X-ray film), red string drawing itself between pins, and the string running on to three empty pins
+               the X-ray film), red string already up between the pins (nothing moves by itself), running on to three empty pins
                with torn paper corners. The camera drifts along the string and settles on the empty pins.
 """
 import math, os, shutil
@@ -78,7 +78,7 @@ def build(variant=None):
     so.data.materials.append(pbr("RedString", (0.6, 0.04, 0.03), 0.6))
     c["string"] = cu
     # a desk lamp low and to the side: raking light across the cork, the far end falls into shadow
-    l = bpy.data.lights.new("BoardLamp", 'SPOT'); l.energy = 260; l.spot_size = math.radians(70); l.spot_blend = 0.6; l.color = (1.0, 0.8, 0.55)
+    l = bpy.data.lights.new("BoardLamp", 'SPOT'); l.energy = 260; l.spot_size = math.radians(70); l.spot_blend = 0.6; l.color = (1.0, 0.8, 0.55); l.shadow_soft_size = 0.3   # soft string shadows
     lo = bpy.data.objects.new("BoardLamp", l); bpy.context.collection.objects.link(lo); lo.location = (-1.6, -1.0, 1.0); point_at(lo, (0.0, 0.0, 1.45))
     f = area_light((1.5, -2.0, 2.2), (0, 0, 0), 1.5, 8, (0.85, 0.88, 0.95)); point_at(f, (0, 0, 1.4)); f.visible_camera = False
     animate(c, 0.0, "board")
@@ -96,8 +96,8 @@ def anim(shot):
 
 def cam_board(c, t):
     e = ease(t)                           # drifts along the string, ends on the empty pins
-    x = -0.55 + 1.3 * e
-    return (Vector((x * 0.6 - 0.2, -2.6 + 0.4 * e, 1.5)), Vector((x * 0.6, 0.0, 1.42)), 35)
+    x = -0.3 + 0.75 * e                   # ends with the empty pins (x ~0.8-0.95) on the right third
+    return (Vector((x - 0.15, -2.15 + 0.25 * e, 1.48)), Vector((x, 0.0, 1.43)), 38)
 
 
-MOVES = {"board": dict(kind="anim", dof=3.0, cam=cam_board, focus=lambda c, t: Vector((-0.55 + 1.3 * ease(t), -0.04, 1.42)), anim=anim("board"), dur=DUR["board"])}
+MOVES = {"board": dict(kind="anim", dof=3.0, cam=cam_board, focus=lambda c, t: Vector((-0.3 + 0.75 * ease(t), -0.04, 1.4)), anim=anim("board"), dur=DUR["board"])}

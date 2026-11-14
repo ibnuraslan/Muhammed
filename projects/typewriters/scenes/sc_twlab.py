@@ -270,7 +270,8 @@ def animate(c, sec, shot):
     t_.rot("neck01", (0, 0, 1), 18); t_.rot("head", (0, 0, 1), 26 + 4 * math.sin(sec * 0.6))     # he turns to the visitors
     a, b = P["usA"], P["usB"]
     twp.stand(a, (-0.25, -1.38, 0), -2.18); twp.stand(b, (0.28, -1.88, 0), -2.24)  # the two Americans beside him, watching
-    a.rot("head", (1, 0, 0), 8); b.rot("head", (1, 0, 0), 6 + 4 * lift)
+    for h, nod in ((a, 8), (b, 6 + 4 * lift)):                               # nod down toward the machine, about their own side
+        h.rot("head", twp.forward(h).cross(Vector((0, 0, 1))).normalized(), -nod)   # (+ about the side tips back)
     for h in (a, b):
         h.rot("head", (0, 0, 1), 3 * math.sin(sec * 0.6))
     bpy.context.view_layer.update()

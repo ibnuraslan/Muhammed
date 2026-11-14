@@ -3,8 +3,8 @@
 Intro 5A  copier   "Copiers. Computers." - the camera slides along a dark stage from a copier to a terminal, each in its
                    own pool of light, cut on the words
 Intro 5B  cipher   "Encryption machines." - a cipher machine alone in the light, its lamps blinking, a slow push in
-Ch1 6B    staple   "The staples and seals carry microscopic markings" - macro: a staple in the burlap seam under a
-                   magnifier; the lens slides over it and the engraved marks swim into view
+Ch1 6B    staple   "The staples and seals carry microscopic markings" - macro: a staple pressed into the burlap seam;
+                   the camera creeps in under a low raking light until the engraved marks resolve
 """
 import math
 import bpy

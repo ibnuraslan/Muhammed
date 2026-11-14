@@ -3,7 +3,7 @@
 Ch1 4B  count    "roughly two hundred and fifty typewriters" - top-down on one machine, the camera rises straight up and
                  the frame fills with 250 of them in rows under work lights
 Ch2 2B  cleared  "For weeks, they come up empty." - the floor of the test hall seen from above: checked equipment
-                 (copiers, terminals, cipher boxes, teletypes) appears row by row, each with a pale cleared tag
+                 (copiers, terminals, cipher boxes, teletypes) laid out in rows, each with a pale cleared tag; the camera drifts across
 """
 import math
 import numpy as np
@@ -89,7 +89,8 @@ def anim(shot):
 def cam_count(c, t):
     e = ease(t) ** 1.4                    # straight up from one machine until all 250 fill the frame
     z = 0.9 + 14.0 * e
-    return (Vector((0.0, -0.05, z)), Vector((0.0, 0.0, 0.0)), 35, (0, 1, 0))
+    y0 = 0.5 * DY                         # centre of the row nearest the middle (10 rows: none sits on y = 0)
+    return (Vector((0.0, y0 - 0.05, z)), Vector((0.0, y0, 0.0)), 35, (0, 1, 0))
 
 
 def cam_cleared(c, t):
