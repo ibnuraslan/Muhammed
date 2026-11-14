@@ -184,24 +184,24 @@ K(1350, wh(1350) + V(1.3, 1.2, 0.3), CH(1350), 28)
 # beat 9 — mouth on the ankle, beneath looking up, spiral up
 K(1420, dv("foot.R", 1420) + V(0.3, 1.8, 0.5), dv("foot.R", 1420).lerp(CH(1420), 0.5), 26)      # side-on: her and the whale side by side (whale no longer between camera and her)
 K(1480, dv("foot.R", 1480) + V(0.5, 2.0, 0.3), dv("foot.R", 1480).lerp(CH(1480), 0.5), 26)
-K(1545, PEL(1545) + V(1.6, 0.9, -1.7), PEL(1545), 22)
+K(1545, PEL(1545) + V(2.4, 1.6, -0.9), PEL(1545).lerp(wh(1545), 0.3), 22)      # back far enough that the whale reads whole
 K(1605, PEL(1605) + V(-0.6, 1.9, -1.2), PEL(1605), 24)
 K(1660, PEL(1660) + V(-1.8, 0.3, -0.6), CH(1660), 26)
 # beat 10 — her face, racing alongside, up into the light
-K(1720, H_(1720) + V(0.5, 0.8, -0.5), H_(1720), 38)
-K(1775, H_(1775) + V(1.3, 1.0, 0.0), H_(1775), 32)
-K(1840, H_(1775) + V(1.5, 0.9, 0.9), H_(1840) + V(0, 0, 0.1), 26)      # camera holds while she rises past it (no frozen hang)
+K(1720, H_(1720) + V(0.45, 1.0, -0.15), H_(1720), 40)
+K(1775, H_(1775) + V(0.6, 1.2, -0.1), H_(1775), 40)      # face, tight: deck out of frame
+K(1835, H_(1835) + V(0.7, 1.3, 0.0), H_(1835) + V(0, 0, -0.05), 38)      # camera holds while she rises past it (no frozen hang)
 # beat 11 — below the surface looking up, burst out, circle the splash
 K(1868, H_(1868) + V(1.2, 1.2, -0.2), H_(1868) + V(0, 0, 0.15), 26)      # slow push in as she rises
 K(1893, H_(1893) + V(0.85, 0.95, -0.3), H_(1893) + V(0, 0, 0.2), 28)      # in front of her, below head height (no top of head)
 K(1925, H_(1925) + V(-0.2, 1.5, 1.6), H_(1925) + V(0, 0.6, -0.25), 30)      # top-down like the coping shots: no deck people cut by the frame
-K(1965, H_(1965) + V(-0.2, 1.4, 1.8), H_(1965) + V(0, 0.6, -0.25), 32)
+K(1960, H_(1960) + V(1.7, 0.4, 0.9), H_(1960).lerp(dv("foot.R", 1960), 0.45), 26)      # side-on: snout at her ankle
 K(2010, H_(2010) + V(-0.2, 1.35, 1.9), H_(2010) + V(0, 0.6, -0.25), 32)      # steep top-down: no deck people cut by the frame
 # beat 12 — face at the edge, rise and pull back to reveal everything
-K(2080, H_(2080) + V(-0.2, 1.5, 1.7), H_(2080) + V(0, 0.85, -0.45), 32)      # deck out of frame until the crane-up
-K(2084, H_(2084) + V(0.4, 2.0, 2.9), H_(2084) + V(0, -0.9, 1.3), 24)      # crane up: deck people come in whole (aim above her)
-K(2092, H_(2092) + V(1.2, 3.0, 2.5), H_(2092) + V(0, -0.9, 0.7), 26)      # wide and high early: deck people in full, never cut at the waist
-K(2130, H_(2130) + V(1.4, 3.0, 2.4), H_(2130) + V(0, -0.9, 0.7), 26)
+K(2080, H_(2080) + V(-0.2, 1.5, 1.7), H_(2080) + V(0, 0.55, -0.3), 32)      # deck out of frame until the crane-up
+K(2086, H_(2086) + V(0.4, 1.8, 2.4), H_(2086) + V(0, -0.6, 0.9), 26)      # crane up: deck people come in whole (aim above her)
+K(2096, H_(2096) + V(1.0, 2.6, 2.0), H_(2096) + V(0, -0.85, 0.75), 26)      # wide and high early: deck people in full, never cut at the waist
+K(2140, H_(2140) + V(0.9, 2.5, 2.0), H_(2140) + V(0, -0.9, 0.85), 26)      # closer end: her face, keeper and nurse beside her
 K(END, H_(END) + V(2.0, 4.3, 2.8), H_(END) + V(-0.4, -1.0, 0.3), 26)
 FR.sort(key=lambda x: x[0])
 fc = catmull([(f, c) for f, c, a, l in FR]); fa = catmull([(f, a) for f, c, a, l in FR]); fl = catmull([(f, l) for f, c, a, l in FR])
@@ -230,7 +230,7 @@ corr = {}
 for f in range(1, END + 1, 2):
     sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
     p = fc(f); off = Vector((0, 0, 0))
-    for o, need in ((BEL, 0.7), (DBODY, 0.3)):
+    for o, need in ((BEL, 1.4), (DBODY, 0.3)):
         t = WB(o, dg)
         for _ in range(6):
             loc, nrm, idx, dist = t.find_nearest(p + off, 3.0)
@@ -244,7 +244,7 @@ for f in range(1, END + 1, 2):
         loc, nrm, idx, dist = t.find_nearest(p + off, 2.5)
         if loc is not None and ((p + off - loc).dot(nrm) < 0 or dist < 0.4):
             off += nrm.normalized() * (0.42 + (dist if (p + off - loc).dot(nrm) < 0 else -dist))
-    if off.length > 1.2: off = off.normalized() * 1.2
+    if off.length > 1.8: off = off.normalized() * 1.8
     if (p + off).z < 0.15: off.z += 0.15 - (p + off).z
     corr[f] = off
 fr_ = sorted(corr)
@@ -592,12 +592,27 @@ for o_md in [m for m in hair.modifiers if m.name.startswith("Drift")]:
 # helpers never render
 for o in bpy.data.objects:
     if o.type == 'EMPTY': o.hide_render = True
-# water surface IOR 1.33 -> 1.05: keeps the wave distortion but no total internal reflection seen from below
-# (her mirror image hanging under the surface, hard white deck panels)
-for _n in bpy.data.objects["Water_Surface"].data.materials[0].node_tree.nodes:
-    if _n.type == "BSDF_PRINCIPLED":
-        for _f, _v in ((1, 1.05), (1790, 1.05), (1810, 1.0), (1910, 1.0), (1930, 1.05)):
-            _n.inputs["IOR"].default_value = _v; _n.inputs["IOR"].keyframe_insert("default_value", frame=_f)
+# underside of the water surface: a soft bright rippled ceiling (seen from below there is no hard-edged sky/deck window)
+_m = bpy.data.objects["Water_Surface"].data.materials[0]; _nt = _m.node_tree
+_out = next(n for n in _nt.nodes if n.type == "OUTPUT_MATERIAL"); _front = _out.inputs["Surface"].links[0].from_socket
+_geo = _nt.nodes.new("ShaderNodeNewGeometry"); _tc_ = _nt.nodes.new("ShaderNodeTexCoord")
+_nz = _nt.nodes.new("ShaderNodeTexNoise"); _nz.inputs["Scale"].default_value = 1.6; _nz.inputs["Detail"].default_value = 3.0
+_nt.links.new(_tc_.outputs["Object"], _nz.inputs["Vector"])
+_ramp = _nt.nodes.new("ShaderNodeValToRGB"); _ramp.color_ramp.elements[0].color = (0.55, 0.85, 0.92, 1); _ramp.color_ramp.elements[1].color = (0.92, 0.98, 1.0, 1)
+_nt.links.new(_nz.outputs["Fac"], _ramp.inputs["Fac"])
+_em = _nt.nodes.new("ShaderNodeEmission"); _em.inputs["Strength"].default_value = 1.1; _nt.links.new(_ramp.outputs["Color"], _em.inputs["Color"])
+_tr = _nt.nodes.new("ShaderNodeBsdfTransparent"); _mixb = _nt.nodes.new("ShaderNodeMixShader"); _mixb.inputs["Fac"].default_value = 0.25
+_nt.links.new(_em.outputs[0], _mixb.inputs[1]); _nt.links.new(_tr.outputs[0], _mixb.inputs[2])
+_mix = _nt.nodes.new("ShaderNodeMixShader")
+_nt.links.new(_geo.outputs["Backfacing"], _mix.inputs["Fac"]); _nt.links.new(_front, _mix.inputs[1]); _nt.links.new(_mixb.outputs[0], _mix.inputs[2])
+_nt.links.new(_mix.outputs[0], _out.inputs["Surface"])
+# no hand-shaped shadow on the floor under her during the dive (read as a ghost hand at ~131)
+_db = bpy.data.objects["Diver.body"]
+for _f, _v in ((1, True), (95, True), (100, False), (170, False), (176, True)):
+    _db.visible_shadow = _v; _db.keyframe_insert("visible_shadow", frame=_f)
+# 2: tank floor matte enough that no mirror images (ghost hand) show in it
+for _n in bpy.data.objects["TankFloor"].data.materials[0].node_tree.nodes:
+    if _n.type == "BSDF_PRINCIPLED" and not _n.inputs["Roughness"].is_linked: _n.inputs["Roughness"].default_value = max(_n.inputs["Roughness"].default_value, 0.65)
 # the water volume has no surface shader (a clear boundary in Cycles); make that explicit with a white Transparent BSDF
 # so ray-based checks treat the boundary as see-through. Render-neutral.
 for _m in bpy.data.objects["Water_Volume"].data.materials:

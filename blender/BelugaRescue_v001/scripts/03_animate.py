@@ -232,8 +232,8 @@ FLOAT = lambda f, t: (SIT[0], SIT[1] - 0.05 - 0.15 * t, SIT[2] + 0.95 * t)
 for k, f in enumerate(range(790, 1380, 30)):
     t = min(1.0, (f - 790) / 520.0)
     DV.P(f, FLOAT(f, t), yaw=180 + 8 * math.sin(k * 0.5), pitch=-14 + 30 * t, roll=4 * math.sin(k * 0.7), spine=(-4 + 14 * t, 0, 3 * math.sin(k)),
-         head=(-30 + 50 * t, 6 * math.sin(k * 0.6), 0), legs=legs((84 - 30 * t, 8, 12 + 20 * t, -60), (84 - 50 * t, 10, 18 + 72 * t, -40)),
-         arms=arms(l=dict(fwd=45 + 25 * math.sin(k), out=26 + 10 * math.sin(k * 0.7), L=DV.ARM * (0.7 + 0.06 * math.sin(k * 1.3))), r=dict(fwd=38 + 25 * math.cos(k), out=28 + 10 * math.cos(k * 0.7), L=DV.ARM * (0.7 + 0.06 * math.cos(k * 1.3)))), jaw=6,
+         head=(-30 + 40 * t, 6 * math.sin(k * 0.6), -25 * math.sin(k * 0.35)), legs=legs((84 - 30 * t + 10 * math.sin(k * 0.9), 6, 30 + 20 * t + 15 * math.sin(k * 0.7), -55), (84 - 45 * t - 10 * math.sin(k * 0.8), 7, 35 + 50 * t + 15 * math.cos(k * 0.6), -40)),
+         arms=arms(l=dict(fwd=55 + 30 * math.sin(k * 1.4), out=14 + 12 * math.sin(k * 1.1), L=DV.ARM * (0.6 + 0.08 * math.sin(k * 1.7))), r=dict(fwd=50 + 30 * math.cos(k * 1.4), out=16 + 12 * math.cos(k * 1.1), L=DV.ARM * (0.6 + 0.08 * math.cos(k * 1.7)))), jaw=6,
          curl={"L": (30, 20), "R": (30, 20)})
 # --- beats 9–11: held by the ankle (right knee bent, shin across the mouth), pushed up, breaks the surface
 RISE = [(1380, FLOAT(0, 1.0)[2]), (1440, FLOAT(0, 1.0)[2] + 0.05), (1500, 1.6), (1600, 2.6), (1699, 3.4), (1800, 4.6), (1884, 5.0), (1915, 5.33), (1950, 5.42), (1990, 5.3)]
@@ -245,8 +245,8 @@ for k, f in enumerate(range(1380, 2000, 20)):
     limp = 1.0 if f < 1915 else max(0.0, 1 - (f - 1915) / 40.0)
     drift = Vector((0.12 * math.sin(k * 0.55), 0.08 * math.sin(k * 0.4 + 1.0), 0.04 * math.sin(k * 0.9)))
     DV.P(f, (xy.x + drift.x, xy.y + drift.y, RZF(f) + drift.z), yaw=180 + 16 * math.sin(k * 0.45), pitch=6 + 10 * limp + 5 * math.sin(k * 0.7), roll=10 * math.sin(k * 0.5), spine=(10 * limp - 12 * (1 - limp), 0, 8 * math.sin(k * 0.6)),
-         head=(25 * limp - 30 * (1 - limp), 0, 22 * math.sin(k * 0.55)), legs=legs((62 + 8 * math.sin(k * 0.8), 9, 100 + 10 * math.sin(k * 0.8), -40), (35, 14, 95, -20)),
-         arms=arms(l=dict(fwd=28 + 24 * math.sin(k * 0.9) + 95 * (1 - limp), out=30 + 10 * math.sin(k * 0.7), L=DV.ARM * (0.68 + 0.08 * math.sin(k * 1.1))), r=dict(fwd=24 + 24 * math.cos(k * 0.9) + 90 * (1 - limp), out=32 + 10 * math.cos(k * 0.7), L=DV.ARM * (0.68 + 0.08 * math.cos(k * 1.1)))), curl={"L": (30, 14), "R": (30, 14)},
+         head=(5 * limp - 30 * (1 - limp), 0, 22 * math.sin(k * 0.55)), legs=legs((62 + 8 * math.sin(k * 0.8) - 35 * max(0.0, 1 - (f - 1380) / 140.0), 9, 100 + 10 * math.sin(k * 0.8) - 55 * max(0.0, 1 - (f - 1380) / 140.0), -40), (35, 14, 95, -20)),
+         arms=arms(l=dict(fwd=28 + 24 * math.sin(k * 0.9) + 95 * (1 - limp) + (95 + 25 * math.sin(k * 1.3)) * max(0.0, 1 - (f - 1380) / 140.0), out=30 + 10 * math.sin(k * 0.7), L=DV.ARM * (0.68 + 0.08 * math.sin(k * 1.1))), r=dict(fwd=24 + 24 * math.cos(k * 0.9) + 90 * (1 - limp) + (85 + 25 * math.cos(k * 1.3)) * max(0.0, 1 - (f - 1380) / 140.0), out=32 + 10 * math.cos(k * 0.7), L=DV.ARM * (0.68 + 0.08 * math.cos(k * 1.1)))), curl={"L": (30, 14), "R": (30, 14)},
          jaw=4 if limp > 0.5 else 22)
 # --- beat 12: gasps, swims to the coping, clings with both hands
 COP_Z = DECK_Z + 0.06; COP_Y = EDGE_Y + 0.0
