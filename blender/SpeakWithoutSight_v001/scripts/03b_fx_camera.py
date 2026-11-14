@@ -17,8 +17,8 @@ BASE["L_StudioKey"], BASE["L_StudioRim"] = 220.0, 160.0
 BASE["L_Fill"] *= 2.6; BASE["L_Ceil"] *= 3.0; BASE["L_Window"] *= 1.5; BASE["L_Sun"] *= 1.2; BASE["L_Lamp"] *= 1.5
 bg = sc.world.node_tree.nodes["Background"].inputs["Strength"]
 # room level: 1 = normal, ~0.12 = the dark of beat 2, ~0.25 under the explainer dome
-ROOM = [(1, 1.0), (175, 1.0), (250, 0.32), (395, 0.32), (450, 1.0), (700, 1.0), (735, 0.5), (1060, 0.5), (1100, 1.0), (END, 1.0)]
-STUDIO = [(1, 0.0), (700, 0.0), (735, 1.0), (1060, 1.0), (1100, 0.0), (END, 0.0)]
+ROOM = [(1, 1.0), (175, 1.0), (250, 0.32), (395, 0.32), (450, 1.0), (END, 1.0)]   # v005b: parlour at normal light through the x-ray beat
+STUDIO = [(1, 0.0), (END, 0.0)]
 room = pchip(ROOM); stud = pchip(STUDIO)
 TL0, TL1 = 1723, 1843   # time-lapse window
 def season(f):
@@ -98,7 +98,7 @@ _cr.elements[0].position = 0.15; _cr.elements[0].color = (0.80, 0.93, 1.0, 1); _
 next(n for n in bpy.data.materials['M_ExplainerDome'].node_tree.nodes if n.type == 'EMISSION').inputs['Strength'].default_value = 1.5
 keyseq(dome_mix, [(1, 0.0), (700, 0.0), (740, 1.0), (1058, 1.0), (1100, 0.0), (END, 0.0)])
 dome = bpy.data.objects["ExplainerDome"]
-keyattr(dome, "hide_render", [(1, True), (698, False), (1102, True)]); keyattr(dome, "hide_viewport", [(1, True), (698, False), (1102, True)])
+keyattr(dome, "hide_render", [(1, True)]); keyattr(dome, "hide_viewport", [(1, True)])   # v005b: no blue void, the parlour stays behind them
 ev(800); mid = (G.bone_world("head") + T.bone_world("head")) / 2
 dome.location = V(mid.x, mid.y, 0.9); dome.scale = (0.56, 0.56, 0.56)   # 1.7 m: every wall stays outside, no visible edge
 # ---------------------------------------------- x-ray portholes: teacher's throat, girl's hand and forearm
