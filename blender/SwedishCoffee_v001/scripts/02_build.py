@@ -581,7 +581,7 @@ cam(1040, (-1.1, -0.3, 1.25), (-0.6, 1.7, 1.25), 42)
 cam(1099, (0.3, -1.0, 1.35), (0.6, 1.6, 1.2), 38)
 cam(1160, (1.2, -0.3, 1.28), (0.6, 1.35, 1.12), 40)
 cam(1230, (1.7, 0.2, 1.4), (0.6, 1.7, 1.25), 38)
-cam(1240, (1.9, 0.1, 1.55), (2.5, -2.5, 1.2), 32)
+cam(1243, (1.9, 0.1, 1.55), (3.3, -5.9, 1.1), 32)   # distant target: no >60 deg/frame turn (qa CAMJUMP)
 cam(1275, (1.8, -0.3, 1.6), (2.6, -2.6, 1.15), 32)
 cam(1297, (1.6, -0.9, 1.6), (3.0, -2.7, 1.2), 32)
 cam(1360, (1.6, -1.6, 1.9), (3.0, -2.8, 1.0), 32)
@@ -718,15 +718,15 @@ for f, ph in ((1872, 0), (1900, 0), (1909, 1), (1916, 2), (1928, 3), (1940, 4), 
         K.stand(f, flex=3, head=(0, -10)); K.arms_down(f); K.face(f, smile=0.6 if ph == 0 else 0, brow=2.5 if ph else 0, jaw=14 if ph else 0)
     elif ph == 2:   # hand to the chest, knees start to give
         K.stand(f, crouch=0.15, flex=14, side=4, lean=6, head=(12, 0)); K.face(f, brow=2.5, lids=0.3, jaw=16)
-        K.hand(f, "R", (-0.06, -0.24, 1.22), d=(0.6, 0.1, 0.4), n=(0, 1, 0), g=0.6); K.hand(f, "L", (0.3, -0.16, 0.8), d=(0.1, -0.2, -1), g=0.4)
+        K.hand(f, "R", (-0.06, -0.28, 1.08), d=(0.6, 0.1, 0.2), n=(0, 1, 0), g=0.6); K.hand(f, "L", (0.3, -0.16, 0.8), d=(0.1, -0.2, -1), g=0.4)
     elif ph == 3:   # on both knees, hand still on the chest, other hand on the thigh
         K.stand(f, rootz=0.55, flex=18, side=4, lean=6, head=(18, 0), feet=False); K.face(f, brow=2.2, lids=0.5, jaw=12)
         for s_, sx_ in (("L", 1), ("R", -1)): K.H.key_foot(s_, f, K.W((0.13 * sx_, 0.42, 0)).to_2d(), K.yaw, lift=0.02, pitch=-75)   # kneeling: shins on the floor, toes behind
-        K.hand(f, "R", (-0.06, -0.24, 0.98), d=(0.6, 0.1, 0.4), n=(0, 1, 0), g=0.6); K.hand(f, "L", (0.2, -0.3, 0.5), d=(0, -1, -0.3), n=(0, 0, -1), g=0.4)
+        K.hand(f, "R", (-0.06, -0.28, 0.84), d=(0.6, 0.1, 0.2), n=(0, 1, 0), g=0.6); K.hand(f, "L", (0.2, -0.3, 0.5), d=(0, -1, -0.3), n=(0, 0, -1), g=0.4)
     else:           # slumped forward on his knees, left hand on the floor beside the knee, head down
         K.stand(f, rootz=0.45, flex=38, side=12, lean=18, head=(30, 10), feet=False); K.face(f, brow=1.0, lids=0.9, jaw=6)
         for s_, sx_ in (("L", 1), ("R", -1)): K.H.key_foot(s_, f, K.W((0.13 * sx_, 0.42, 0)).to_2d(), K.yaw, lift=0.02, pitch=-75)
-        K.hand(f, "R", (-0.06, -0.26, 0.8), d=(0.6, 0.1, 0.3), n=(0, 1, 0), g=0.6); K.hand(f, "L", (0.3, -0.42, 0.06), d=(0.1, -0.4, -1), n=(0, 0, -1), g=0.25)
+        K.hand(f, "R", (-0.06, -0.3, 0.7), d=(0.6, 0.1, 0.2), n=(0, 1, 0), g=0.6); K.hand(f, "L", (0.3, -0.42, 0.06), d=(0.1, -0.4, -1), n=(0, 0, -1), g=0.25)
         grip(K.R, f, "L", pose="flat_palm")
 MF.pos = V((1.2, 4.2)); MF.yaw = 180 + 15
 for f, ph in ((1872, 0), (1895, 1), (1905, 1), (1925, 0), (2004, 0)):
