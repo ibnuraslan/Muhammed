@@ -28,11 +28,11 @@ These values were read back from `FrozenTearsGun_v010_60fps.blend`, opened in fa
 - The volumes (gas and frost puffs) are hidden outside the frames where they are used, because they cost render time even at zero density.
 
 ## Test frames before approving the whole job
-- **300** (5.0 s): glass chamber macro on the cyan explainer backdrop, with refraction-heavy glass and water
-- **560** (9.3 s): CO2 gas volume inside the glass. This is the slowest frame type. If it is noisy, raise the samples to 96 for frames 450–760 only.
-- **930** (15.5 s): muzzle frost puff with the pellets and motion blur
-- **1420** (23.7 s): office, with her hands over her face
-- **1990** (33.2 s): impact puff on the mentor's shirt
+- **210**: glass chamber macro on the cyan explainer backdrop, with refraction-heavy glass and water
+- **454**: CO2 gas volume inside the glass. This is the slowest frame type. If it is noisy, raise the samples to 96 for frames 355–616 only.
+- **733**: muzzle frost puff with the pellets and motion blur
+- **1064**: office, with her hands over her face
+- **1538**: impact puff on the mentor's shirt
 
 ## Do not
 - Do not render other cameras. `CAM_Film` is the only camera.

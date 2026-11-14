@@ -24,12 +24,12 @@ These values were read back from `ElectricianPolice_v010_60fps.blend`, opened in
 | Add-ons | None needed. MPFB2 was only used to build the humans. |
 
 ## Test frames before approving the whole job
-- **60**: bike chase. Motion blur on the wheels, the rickshaw and the stalls.
-- **760**: laptop close-up. The emissive screen UI and the red glow on his face.
-- **1065**: the lever arc flash and sparks. This is the brightest frame, so check for clipping.
-- **760**: the cream-painted office with the grin (check the warm walls).
-- **1306**: station interior at dusk, with an officer tapping the dead fan. This is the darkest frame; if it is noisy, raise samples to 96 for frames 1231–1381 only.
-- **1550**: the final smirk at dusk, with the street lamps on.
+- **55**: bike chase. Motion blur on the wheels, the rickshaw and the stalls.
+- **744**: laptop close-up. The emissive screen UI and the red glow on his face.
+- **975**: the lever arc flash and sparks. This is the brightest frame, so check for clipping.
+- **744**: the cream-painted office with the grin (check the warm walls).
+- **1222**: station interior at dusk, with an officer tapping the dead fan. This is the darkest frame; if it is noisy, raise samples to 96 for frames 1153–1291 only.
+- **1437**: the final smirk at dusk, with the street lamps on.
 
 ## Do not
 - Do not render any camera other than `CAM_Film`; it is the only one.

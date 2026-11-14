@@ -100,6 +100,7 @@ camera, bright animated-but-close-to-real CGI (`STYLE_ANIMATED.md`), timed to th
 
   Then pack with sounds and the render path set, and **update the frame range in SETTINGS.md**. Several packages shipped with a stale range.
   For a new film where the VO already exists, **build to the VO timing from the start** so no retime is needed.
+- **Retime vs. Scene Time:** a VO retime warps keyframes and markers, but Geometry Nodes that read the *Scene Time* node (spray windows such as `Seconds > 21.3`, emitters, rain) keep the raw clock, so their events fire at the wrong moment. After every retime, run `pipeline/fix_scene_time.py -- anchors.json`. It keys those clocks to the original timeline and lists other raw-clock sources (frame drivers, particle start/end, Build/Wave modifiers) to check by hand. Better: drive one-off events from keyed values, not Scene Time thresholds.
 - **Packages:** `<Film>_vNNN/` holding:
   - `<Film>_vNNN_60fps.blend` (all textures packed, under 95 MB, plain git, factory-startup check)
   - `<Film>_vNNN_VO.mp3`

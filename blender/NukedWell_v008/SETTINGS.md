@@ -24,12 +24,12 @@ These values are read back from `NukedWell_v008_60fps.blend`, opened in factory-
 | Add-ons | None needed. MPFB2 only built the characters. |
 
 ## Test frames before the full job
-- **700**: fire column by day, with the surface fire, smoke and embers
-- **780**: the fire column behind hose crew A
-- **960**: hose crew with water arcs and steam
-- **1594**: detonation flash underground, with the blast sphere and point light
-- **1760**: the squeezed strata and pinched casing
-- **2030**: the crew cheering, a close framing with MPFB skin SSS
+- **586**: fire column by day, with the surface fire, smoke and embers
+- **664**: the fire column behind hose crew A
+- **806**: hose crew with water arcs and steam
+- **1138**: detonation flash underground, with the blast sphere and point light
+- **1253**: the squeezed strata and pinched casing
+- **1442**: the crew cheering, a close framing with MPFB skin SSS
 
 **Cost estimate:** f700 takes 12.3 s and f1640 takes 20.0 s at 270×480 with 48 samples on a 4-core CPU, including about 4 s of scene sync per frame. Scaled to 1080×1920, that is roughly **2.3–4.3 min per frame on 4 CPU cores**. This is an extrapolation; no full-resolution frame was rendered. A many-core farm node or a GPU should be several times faster. The volume version cost about 30 s per frame even at 270×480 with 4 samples.
 
