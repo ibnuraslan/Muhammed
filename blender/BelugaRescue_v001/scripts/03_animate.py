@@ -386,8 +386,8 @@ WP = [(1, V(-3.5, 3.2, 3.2), 0, 0.8, 0.6, 0, (0, 0), (0, 0)),
       (1170, V(-2.5, -2.75, 1.65), 0, 0.6, 0.5, 0, (-8, 0), (-10, 0)),
       (1213, V(-2.2, -2.6, 1.7), 0, 0.7, 0.5, 0, (6, 0), (8, 0)),
       (1260, V(-1.6, -2.6, 1.5), 0, 0.8, 0.6, 20, (0, 25), (0, 25)),        # eye macro, head snaps toward her
-      (1330, V(-0.6, -0.6, 0.9), 0, 2.2, 1.4, 0, (0, 0), (0, 0)),           # surges
-      (1375, V(-0.2, -0.3, 0.8), 0, 1.6, 1.0, 0, (0, 0), (0, 0))]
+      (1330, V(0.6, -2.7, 3.0), 0, 2.2, 1.4, 0, (0, 0), (0, 0)),           # surges
+      (1375, V(2.5, -1.6, 2.9), 0, 1.6, 1.0, 0, (0, 0), (0, 0))]
 fp = catmull([(w[0], w[1]) for w in WP])
 froll = pchip([(w[0], float(w[2])) for w in WP])
 def wp_at(f, idx):
@@ -423,7 +423,7 @@ def solve_whale(f, blend_from=None, tb=0.0):
     X = shin; Yl = -fwd; Z = X.cross(Yl).normalized(); X = Yl.cross(Z).normalized()
     Rm = Matrix((X, Yl, Z)).transposed().to_4x4()
     return Matrix.Translation(an) @ Rm @ Matrix.Translation(-SOCK_LOCAL)
-jaw(1, 0.18); jaw(1380, 0.18); jaw(1405, 1.0); jaw(1436, 0.6); jaw(F_REL - 10, 0.6); jaw(F_REL + 10, 1.0); jaw(F_REL + 40, 0.18)
+jaw(1, 0.18); jaw(1380, 0.18); jaw(1405, 1.0); jaw(1436, 1.0); jaw(F_REL - 10, 1.0); jaw(F_REL + 10, 1.0); jaw(F_REL + 40, 0.18)
 for f, v in ((1000, 0.18), (1012, 0.45), (1030, 0.18)):
     jaw(f, v)
 from mathutils.bvhtree import BVHTree
@@ -480,7 +480,7 @@ for f in range(F_GRAB, F_REL + 1, 8):
         a, ph = c; Mc = rot_about_sock(M, a, ph)
         down = (Mc.to_3x3() @ Vector((0, 1, 0))).z
         fb = floor_bad(Mc)
-        return (round(fb, 2), 0 if down < -0.25 else 1, pen(Mc, pts), abs(((a - prev[0] + 180) % 360) - 180) + abs(ph - prev[1]))
+        return (round(fb, 2), pen(Mc, pts), 0 if down < -0.25 else 1, abs(((a - prev[0] + 180) % 360) - 180) + abs(ph - prev[1]))
     best = min([(a, ph) for a in ANG for ph in PHI], key=cost)
     prev = best; SOL.append((f, best[0])); SOLP.append((f, float(best[1])))
 # unwrap (no 340-degree spins), then smooth the chosen roll angle about the shin and key the hold
@@ -529,9 +529,13 @@ for k, f in enumerate(range(F_REL + 2, END + 1, 2)):
     tang = Vector((-math.sin(a) * 1.6, math.cos(a) * 1.4, 0)).normalized()
     yaw = math.degrees(math.atan2(tang.x, -tang.y))
     Mc = whale_matrix(p, yaw, 0, -12)
-    if t < 0.25:
-        u = smooth(t / 0.25)
-        Mc = Matrix.Translation(M_rel.translation.lerp(Mc.translation, u)) @ M_rel.to_quaternion().slerp(Mc.to_quaternion(), u).to_matrix().to_4x4()
+    BACK = (M_rel.to_3x3() @ Vector((0, 1, 0))).normalized() * 0.9 + Vector((0, 0, -0.5))     # backs off along its body, down and away from her legs
+    M_back = Matrix.Translation(BACK) @ M_rel
+    if f - F_REL <= 30:
+        u = smooth((f - F_REL) / 30.0); Mc = Matrix.Translation(BACK * u) @ M_rel
+    elif f - F_REL <= 80:
+        u = smooth((f - F_REL - 30) / 50.0)
+        Mc = Matrix.Translation(M_back.translation.lerp(Mc.translation, u)) @ M_back.to_quaternion().slerp(Mc.to_quaternion(), u).to_matrix().to_4x4()
     BR.matrix_world = Mc
     BR.keyframe_insert("location", frame=f); BR.keyframe_insert("rotation_quaternion", frame=f)
     tail_wave(f, 0.9, 0.7, 25, (0, 0), (-6, 10))

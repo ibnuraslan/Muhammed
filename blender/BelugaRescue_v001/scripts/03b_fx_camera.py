@@ -90,11 +90,13 @@ K(84, V(X0 + 1.3, -3.0, 6.12), CH(84), 22)
 K(104, V(X0 + 1.1, -2.6, 5.05), CH(104), 22)
 K(138, V(X0 + 0.5, -3.3, 5.0), H_(138), 24)
 # beat 2 — under her, then down to floor level
+K(158, V(X0 + 2.2, -2.1, 3.5), H_(158), 22)      # stays wide of her as she dives (no hand/hair across the lens)
 K(178, V(X0 + 1.2, -0.6, 1.5), CH(178), 20)
 K(218, V(X0 + 1.7, -0.5, 0.85), PEL(218), 22)
 K(255, V(X0 + 1.5, -0.1, 0.32), PEL(255) + V(0, 0, 0.2), 24)
 # beat 3 — skim to the legs, macro calf (X-ray), orbit, out
 K(292, V(X0 + 1.9, 1.05, 0.22), calf(292), 30)
+K(322, calf(322) + V(1.1, 0.4, 0.75), calf(322), 38)      # over her other leg, not through it
 K(350, calf(350) + V(0.85, 0.2, 0.3), calf(350), 45)
 K(405, calf(405) + V(0.35, 0.8, 0.4), calf(405), 50)
 K(458, calf(458) + V(0.7, 0.45, 0.65), calf(458), 48)

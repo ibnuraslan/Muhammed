@@ -1,0 +1,356 @@
+{
+ "frames": {
+  "175": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "181": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "187": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "193": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "205": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "271": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "277": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "283": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "301": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "853": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "925": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "931": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1147": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1153": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1159": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1165": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1171": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1177": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1225": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "1255": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1441": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1447": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1453": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1459": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1465": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1471": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1477": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1573": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1579": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1585": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1609": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1627": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1633": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1651": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1657": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1663": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1669": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1681": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1693": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1705": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1783": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1789": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1795": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1801": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1807": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1813": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1819": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1825": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1831": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1837": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1843": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1849": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1855": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1861": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1867": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1879": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1897": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1909": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ]
+ },
+ "counts": {
+  "INSIDE": 39,
+  "EMPTY": 19
+ }
+}
