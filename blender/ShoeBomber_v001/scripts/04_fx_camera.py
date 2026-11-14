@@ -448,7 +448,7 @@ CAB = [[
     (446, P(-0.817, 1.19, 1.077), bp("Attendant", "head", 446, (0, 0, -0.1)), 28),
     (455, P(-0.817, 1.19, 1.077), bp("Attendant", "head", 455, (0, 0, -0.1)), 28),
     # beat 4: up over the seat backs and down into the aisle on PaxA as he lunges (reached by 481)
-    (468, V((-0.20, 0.95, 1.85)), bp("PaxA", "head", 468), 24),   # v006d rule 3: high and clear of PaxA's head
+    (468, V((-0.55, 1.05, 1.85)), bp("PaxA", "head", 468), 24),   # v006d rule 3: high and clear of PaxA's head
     (481, P(0.154, -0.254, 1.057), bp("PaxA", "head", 481), 28),
     (508, P(0.154, -0.254, 1.057), bp("PaxA", "head", 508), 28),
     (521, V((-0.37, 0.39, 1.68)), bp("Attendant", "head", 521, (0, 0, -0.1)), 28),
@@ -457,9 +457,7 @@ CAB = [[
     (556, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 556, (0, 0, -0.1)), 28),
     (566, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 566, (0, 0, -0.1)), 28),
     (580, V((-0.80, 1.30, 1.65)), bp("Bomber", "spine01", 580, (0, 0.3, 0)), 24),   # v006d rule 3: over the seat backs, clear of her head
-    (594, V((-0.75, 2.95, 1.65)), bp("Bomber", "spine01", 594, (0, 0.3, 0)), 22),   # 0.5 m off the steward's walk, above his head
-    (606, V((-0.75, 2.95, 1.65)), bp("Bomber", "spine01", 606, (0, 0.3, 0)), 22),
-    (625, V((0.05, 2.25, 1.95)), bp("Bomber", "spine01", 625, (0, 0.2, 0)), 22),   # v006c: off vertical (no track-to flip)
+    (610, V((-0.80, 1.30, 1.65)), bp("Bomber", "spine01", 610, (0, 0.3, 0)), 22),   # v006d: holds the side view of the pin (no pass behind her)
     # beat 5: down to the steward's face as he injects (reached by 655), push to the arm, two-shot on "finally sedated"
     (640, V((-0.55, 1.20, 1.75)), (bp("Steward", "head", 640) + bp("Bomber", "spine01", 640)) / 2, 22),   # v006c: down beside the steward, never over the aim
     (655, V((-0.80, 1.25, 1.60)), bp("Steward", "head", 655), 28),

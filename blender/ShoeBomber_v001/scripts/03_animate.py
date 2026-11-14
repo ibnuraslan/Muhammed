@@ -310,13 +310,13 @@ for f in (590, 654, 720, 768):     # kneels on his legs side, holds the twisted 
     hand(pb, "R", f, V((0.12, BY - 0.12, 0.49)), (0, 1, -0.5), (0, 0, -1), grip=0.3)
 
 stand(pa, 790, V((-0.12, BY + 0.12, 0)), 70, spine=(30, 0, 0), head=(20, -20), crouch=0.4)
-pap = catmull([(796, V((-0.14, BY + 0.14, 0))), (825, V((-0.58, BY + 0.38, 0)))])
-pa.walk(pap, lambda f: 70.0, 796, 825, stride=0.4, lift=0.05, lean=6)
-for f in (850, 950, 1068):
-    stand(pa, f, V((-0.58, BY + 0.38, 0)), 70, spine=(12, 5, 0), head=(18, -10 + 10 * math.sin(f)), crouch=0.25)
-for f in (826, 1068):
-    hand(pa, "R", f, V((-0.62, BY + 0.64, 1.14)), (0.3, 0, -1), (0, 1, 0), grip=0.6)   # hand on the seat-back top (row 4)
-    hand(pa, "L", f, V((-0.80, BY + 0.10, 0.88)), (0, 0, -1), (1, 0, 0), grip=0.3)
+pap = catmull([(796, V((-0.14, BY + 0.14, 0))), (822, V((-0.46, BY + 0.32, 0)))])
+pa.walk(pap, lambda f: 70.0, 796, 822, stride=0.4, lift=0.05, lean=6)
+stand(pa, 830, V((-0.46, BY + 0.32, 0)), FWD, spine=(10, 0, 0), head=(10, -20), crouch=0.2)     # v006d: turns at his seat...
+for f in (848, 950, 1068):                                                                         # ...and sits back down (out of the camera's way)
+    sit(pa, f, SX["C"], BY, flex=4, spine=(4, -15, 0), head=(8, -25))
+for f in (848, 1068):
+    for s_ in "LR": rest_arm(pa, s_, f, V((SX["C"], BY, 0.56)), grip=0.25)
 # v006d (director rule: simplify): PaxB stays kneeling at his feet and is the one who pulls the shoes off (no one walks past the camera)
 for f in (800, 840, 866):
     pb.key_root(f, V((0.10, BY - 0.80, 0.55)), yaw=FWD, flex=8)
