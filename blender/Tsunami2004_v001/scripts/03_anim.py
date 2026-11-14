@@ -120,11 +120,11 @@ for fc in _fcurves(wn.animation_data.action):
 # water colour turns muddy once it is over land, foam churn on the flood
 for mname in ("M_Wave",):
     nt = bpy.data.materials[mname].node_tree; b = nt.nodes["Principled BSDF"]; fv = nt.nodes["FOAM_BASE"]; nz = nt.nodes["NZ"]
-    for t, colr, foam in ((0, (0.02, 0.2, 0.28), 0.0), (20.6, (0.02, 0.2, 0.28), 0.15), (22.0, (0.11, 0.085, 0.05), 0.55),
-                          (30.0, (0.10, 0.08, 0.05), 0.48), (31.6, (0.12, 0.2, 0.2), 0.08), (40, (0.12, 0.22, 0.24), 0.05)):
+    for t, colr, foam in ((0, (0.02, 0.2, 0.28), 0.0), (20.6, (0.02, 0.2, 0.28), 0.15), (22.0, (0.07, 0.05, 0.028), 0.38),
+                          (30.0, (0.065, 0.048, 0.028), 0.32), (31.6, (0.12, 0.2, 0.2), 0.08), (40, (0.12, 0.22, 0.24), 0.05)):
         b.inputs["Base Color"].default_value = (*colr, 1); b.inputs["Base Color"].keyframe_insert("default_value", frame=F(t))
         fv.outputs[0].default_value = foam; fv.outputs[0].keyframe_insert("default_value", frame=F(t))
-    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.3), (31.0, 0.3), (32.0, 0.12)):   # vNEXT: rough muddy water, no sun-glare blobs
+    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.5), (31.0, 0.5), (32.0, 0.12)):   # vNEXT: rough muddy water, no sun-glare blobs
         b.inputs["Roughness"].default_value = rg; b.inputs["Roughness"].keyframe_insert("default_value", frame=F(t))
     for t, wv in ((0, 0), (40, 6)):
         nz.inputs["W"].default_value = wv; nz.inputs["W"].keyframe_insert("default_value", frame=F(t))
@@ -273,11 +273,19 @@ for o in bpy.data.objects:
         key_tr(o, F(t0 + 0.4), loc=(l.x, l.y - 1.5, l.z + 1.5), scale=(1.8, 2.2, 2.0))
         key_tr(o, F(t0 + 1.4), loc=(l.x, l.y - 5, l.z + 3), scale=(2.4, 3.0, 2.6))
 CT = bpy.data.collections["Town"]
-for i in range(72):   # vNEXT: more floating debris along the camera path
+for i in range(30):
     lib = [bpy.data.objects[n] for n in ("LIB_car", "LIB_car2", "LIB_umbrella", "LIB_rowboat", "LIB_longtail", "LIB_umbrella2")][i % 6]
-    x = random.uniform(18, 50); y = random.uniform(-40, -235)
+    x = random.uniform(24, 44); y = random.uniform(-70, -235)
     o = bpy.data.objects.new("Debris_S%02d" % i, lib.data); CT.objects.link(o)
     o.location = (x, y, terrain_h(x, y) - 4.0); o.rotation_euler = (random.uniform(-0.6, 0.6), random.uniform(-0.6, 0.6), random.uniform(0, 6.28))
+# vNEXT: 42 more floating pieces along the camera path, on their own random stream (the main stream, which drives the
+# collapsing houses, poles and wires, stays exactly as in the previewed v006 layout)
+_rx = random.Random(77)
+for i in range(30, 72):
+    lib = [bpy.data.objects[n] for n in ("LIB_car", "LIB_car2", "LIB_umbrella", "LIB_rowboat", "LIB_longtail", "LIB_umbrella2")][i % 6]
+    x = _rx.uniform(18, 50); y = _rx.uniform(-40, -235)
+    o = bpy.data.objects.new("Debris_S%02d" % i, lib.data); CT.objects.link(o)
+    o.location = (x, y, terrain_h(x, y) - 4.0); o.rotation_euler = (_rx.uniform(-0.6, 0.6), _rx.uniform(-0.6, 0.6), _rx.uniform(0, 6.28))
 # ---------------------------------------------------------------- town: houses come apart, tilt and slide into the flood; rubble remains
 houses = [o for o in bpy.data.objects if o.name.startswith("House_") and "_" not in o.name[6:]]
 survivors = set(random.sample(range(len(houses)), 8))
@@ -307,7 +315,8 @@ for o in bpy.data.objects:
         # rides the flood: surfaces in the churn at the front, drifts inland, settles when the water drains
         x, y = o.location.x, o.location.y; z_hide = o.location.z; t0 = T_front(y)
         if t0 > 30: continue
-        r0 = o.rotation_euler.copy(); drift = random.uniform(12, 45); spin = random.uniform(-2.5, 2.5)
+        _r = _rx if (o.name.startswith("Debris_S") and int(o.name[8:10]) >= 30) else random
+        r0 = o.rotation_euler.copy(); drift = _r.uniform(12, 45); spin = _r.uniform(-2.5, 2.5)
         key_tr(o, F(t0 - 0.05), loc=(x, y, z_hide), rot=tuple(r0))
         tt = t0 + 0.15; i = 0
         while tt < 30.0:

@@ -861,10 +861,6 @@
   "1603": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
     "no character in view"
    ]
   ],
@@ -1039,14 +1035,14 @@
   "1777": [
    [
     "EMPTY",
-    "only Wave in view"
-   ],
-   [
-    "EMPTY",
     "no character in view"
    ]
   ],
   "1783": [
+   [
+    "EMPTY",
+    "only Wave in view"
+   ],
    [
     "EMPTY",
     "no character in view"
@@ -1666,6 +1662,6 @@
   ]
  },
  "counts": {
-  "EMPTY": 278
+  "EMPTY": 277
  }
 }

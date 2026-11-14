@@ -13,6 +13,7 @@ rm -f /home/user/Muhammed/blender/Tsunami2004_v007/Tsunami2004_v007_60fps.blend1
 $B -b --factory-startup "$OUT"/Tsunami2004_v007_60fps.blend --python-expr "import bpy;print('UNPACKED',[i.name for i in bpy.data.images if i.source=='FILE' and not i.packed_file]);print('CAMS',[o.name for o in bpy.data.objects if o.type=='CAMERA']);print('FMT',bpy.context.scene.render.image_settings.file_format)" > /tmp/claude-0/vf7.log 2>&1
 $B -b "$OUT"/Tsunami2004_v007_60fps.blend --python ../pipeline/qa_check.py -- $PWD/review/qa_v007.json 6 "$OUT"/beats.json > /tmp/claude-0/qa7.log 2>&1
 echo PACKED
-rm -rf /tmp/claude-0/P7 && mkdir -p /tmp/claude-0/P7 && $B -b "$OUT"/Tsunami2004_v007_60fps.blend --python ../pipeline/preview.py -- /tmp/claude-0/P7 5 > /tmp/claude-0/p7.log 2>&1
+# frames 1-1235 were rendered from the first v007 build: only flood-time things (t > 20.6 s) changed since; re-render from 1236
+$B -b "$OUT"/Tsunami2004_v007_60fps.blend --python-expr "import bpy;s=bpy.context.scene;s.frame_start=1236" --python ../pipeline/preview.py -- /tmp/claude-0/P7 5 > /tmp/claude-0/p7.log 2>&1
 bash ../pipeline/watch_pages.sh /tmp/claude-0/P7 5
 echo V007_DONE
