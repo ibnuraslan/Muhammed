@@ -573,7 +573,10 @@ for f, ln, arm in ((905, 26, 0.0), (925, -6, 1.0), (950, -12, 1.0), (980, -8, 0.
     seated(f, lean=ln, head=(-10 if arm else 0, 0), jaw=8 * arm, dz=-0.01); W.smile(f, 1.6)
     for s, sx in (("L", 1), ("R", -1)):
         if arm:
-            W.hand_b(s, f, sx * 0.13, -0.12, 1.32 + 0.01 * math.sin(f / 7), d=(-sx, 0.1, 0.25), n=(0, 1, 0), pole=W.pt(f, sx * 0.65, 0.05, 1.35)); W.fingers(s, f, 0, pose="relaxed")     # leans back, hands behind his head, elbows out
+            if s == "R":     # fist pump: elbow bent and down, fist at shoulder height, pumping
+                W.hand_b(s, f, -0.34, 0.2, 1.3 + 0.08 * math.sin(f / 4.0), d=(0.05, 0.15, 1), n=(1, 0, 0), pole=W.pt(f, -0.5, 0.1, 0.85)); W.fingers(s, f, 0, pose="power_fist")
+            else:            # the other hand rests on his thigh
+                W.hand_b(s, f, 0.18, 0.3, 0.7, d=(0, 1, -0.2), n=(0, 0, -1)); W.fingers(s, f, 0, pose="relaxed")
         else:
             W.hand(s, f, KB + Vector((-sx * 0.14, -0.1, 0.03)), Vector((0, 1, -0.25)), Vector((0, 0, -1)))
 # cabinet: stands facing +X, right glove on the lever handle, throws it down (lever keyed in 03b)
