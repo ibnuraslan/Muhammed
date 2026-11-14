@@ -20,7 +20,7 @@ BEATS = [(1, 1, "A stray bullet was fired toward his house"), (2, 151, "tore str
          (9, 1231, "the bullet had stopped, buried deep inside"), (10, 1351, "saving his life")]
 F_WALL = 158      # nose meets the siding
 F_HIT = 396       # nose meets the box cover
-F_STOP = 1230
+F_STOP = 812
 
 BOX_C = V((0.0, 2.97, 1.42))
 broot = bpy.data.objects["BoxRoot"]
@@ -91,6 +91,7 @@ def man_state(f):
         v = (f - F_HIT) / 60.0; k = 1 - math.exp(-v * 2.2)
         dy += shove(f); dz -= 0.02 * k; flex -= 7 * k; hp -= 6 * k * math.exp(-v * 0.3); side += 2 * math.sin(v * 1.3) * math.exp(-v * 0.5)
         hp += 18 * smooth((f - 600) / 300.0)   # stares down at the box as it cracks
+        g = smooth((f - 930) / 70.0) - smooth((f - 1130) / 70.0); hp -= 22 * g; hy -= 10 * g   # looks up at the hole in the wall, then back to the box
     # beat 10: looks down at the hole, breath, then up to the camera
     w = smooth((f - 1360) / 60.0); hp += 12 * w; flex += 6 * w; dz -= 0.02 * w
     z = smooth((f - 1415) / 50.0)
@@ -142,14 +143,14 @@ def blink_keys():
                 pb.rotation_quaternion = q; pb.keyframe_insert("rotation_quaternion", frame=ff)
             pb.rotation_quaternion = Quaternion(V((1, 0, 0)), R_(22 * LID)); pb.keyframe_insert("rotation_quaternion", frame=fb)
 # hands grip the box sides (wrist targets ride with the box)
-GX = float(os.environ.get("GX", "0.135")); GZ = float(os.environ.get("GZ", "-0.215")); GY = float(os.environ.get("GY", "-0.004"))
+GX = float(os.environ.get("GX", "0.135")); GZ = float(os.environ.get("GZ", "-0.215")); GY = float(os.environ.get("GY", "0.020"))
 GRIP_L = V((GX, GY, GZ)); GRIP_R = V((-GX, GY, GZ))
 HAND_SIGN = float(os.environ.get("HAND_SIGN", "1"))
 def key_hands(f):
     M = box_M(f); Rb = M.to_3x3()
     for s, g, sx in (("L", GRIP_L, 1), ("R", GRIP_R, -1)):
         W = M @ g
-        d = Rb @ V((-sx * float(os.environ.get("DIN", "0.10")), -1.0, float(os.environ.get("DUP", "0.0")))).normalized()   # fingers forward under the box
+        d = Rb @ V((-sx * float(os.environ.get("DIN", "-0.20")), -1.0, float(os.environ.get("DUP", "0.0")))).normalized()   # fingers forward under the box
         n = Rb @ V((0.0, 0.0, HAND_SIGN))                 # palm flat under the bottom, taking the weight
         pole = M @ V((sx * 0.30, 0.50, -0.45))            # elbows bent, down and close to the body
         H.key_hand(s, f, W, d, n, pole)
@@ -158,7 +159,7 @@ for f in list(range(1, F_END + 1, 2)) + [F_END]:
 blink_keys()
 # finger curl around the front edge, thumbs over the top edge
 CURL = float(os.environ.get("CURL", "1"))
-F1 = float(os.environ.get("F1", "70")); F2 = float(os.environ.get("F2", "10")); F3 = float(os.environ.get("F3", "5"))
+F1 = float(os.environ.get("F1", "58")); F2 = float(os.environ.get("F2", "10")); F3 = float(os.environ.get("F3", "4"))
 for f in (1, F_END):
     for s in "LR":
         for k in range(2, 6):
@@ -176,9 +177,7 @@ bpy.ops.object.mode_set(mode='OBJECT')
 # world y of the nose before the hit; after the hit, depth inside the box (local y of the nose)
 pre = pchip([(1, -30.0), (60, -19.8), (120, -9.2), (145, -3.2), (F_WALL, -0.03), (172, 0.10), (195, 0.30),
              (241, 0.80), (300, 1.55), (350, 2.22), (F_HIT, 2.90 - 0.0)])
-depth = pchip([(F_HIT, -0.070), (430, -0.0675), (560, -0.0655), (661, -0.0640), (751, -0.0620), (790, -0.0565), (815, -0.0505),
-               (845, -0.0460), (900, -0.0405), (1000, -0.0210), (1030, -0.0165), (1060, -0.0125), (1081, -0.0060),
-               (1150, -0.0012), (F_STOP, 0.0)])
+depth = pchip([(F_HIT, -0.070), (430, -0.0675), (560, -0.0655), (661, -0.0640), (700, -0.0625), (718, -0.0565), (730, -0.0505), (742, -0.046), (756, -0.036), (768, -0.0165), (780, -0.009), (795, -0.002), (F_STOP, 0.0)])
 def nose_world(f):
     if f <= F_HIT:
         return V((0.0, pre(f), 1.47))
@@ -203,15 +202,15 @@ trail = bpy.data.objects["Bullet_trail"]; trail.hide_render = True
 
 # ------------------------------------------------------------------ cutaway value (local x above which the box is see-through)
 cutnode = bpy.data.node_groups["CutAway"].nodes["cut"]
-for f, v in ((1, 1.0), (752, 1.0), (800, 0.0), (1352, 0.0), (1392, 1.0)):
+for f, v in ((1, 1.0), (700, 1.0), (716, 0.0), (812, 0.0), (845, 1.0)):
     cutnode.outputs[0].default_value = v; cutnode.outputs[0].keyframe_insert("default_value", frame=f)
 for o2 in [o for o in bpy.data.objects if o.get("xp_of")]:
     o1 = bpy.data.objects[o2["xp_of"]]; full = bpy.data.objects[o1.name + "_full"]
-    for ob_, vis in ((full, [(1, False), (752, True), (1393, False)]), (o1, [(1, True), (752, False), (1393, True)]), (o2, [(1, True), (752, False), (801, True), (1352, False), (1393, True)])):
+    for ob_, vis in ((full, [(1, False), (700, True), (846, False)]), (o1, [(1, True), (700, False), (846, True)]), (o2, [(1, True), (700, False), (717, True), (812, False), (846, True)])):
         for f, hidden in vis:
             ob_.hide_render = hidden; kf(ob_, "hide_render", f)
     if o1.name.startswith("Disc_"):
-        full.hide_render = True; kf(full, "hide_render", 1393)
+        full.hide_render = True; kf(full, "hide_render", 846)
 hon = bpy.data.materials["M_box_cover"].node_tree.nodes["hole_on"]
 for f, v in ((1, 0.0), (F_HIT + 8, 0.0), (F_HIT + 30, 1.0)):
     hon.outputs[0].default_value = v; hon.outputs[0].keyframe_insert("default_value", frame=f)
@@ -231,13 +230,14 @@ nt_.links.new(cr_.outputs[0], df_.inputs[0]); nt_.links.new(df_.outputs[0], mx_.
 bpy.ops.mesh.primitive_plane_add(size=1.0); bd_ = bpy.context.active_object; bd_.name = "Cutaway_backdrop"
 for c_ in list(bd_.users_collection): c_.objects.unlink(bd_)
 bpy.data.collections["FX"].objects.link(bd_); bd_.data.materials.append(mbd)
-bd_.parent = broot; bd_.location = (-0.42, 0.0, 0.02); bd_.rotation_euler = (0, R_(90), 0); bd_.scale = (1.4, 1.4, 1)
-for f, v in ((1, 1.0), (770, 1.0), (820, 0.0), (1340, 0.0), (1385, 1.0)):
+bd_.parent = broot; bd_.location = (-0.70, 0.0, 0.02); bd_.rotation_euler = (0, R_(90), 0); bd_.scale = (2.2, 2.2, 1)
+for f, v in ((1, 1.0), (706, 1.0), (722, 0.0), (812, 0.0), (840, 1.0)):
     mx_.inputs[0].default_value = v; mx_.inputs[0].keyframe_insert("default_value", frame=f)
-bd_.hide_render = True; kf(bd_, "hide_render", 1); bd_.hide_render = False; kf(bd_, "hide_render", 769); bd_.hide_render = True; kf(bd_, "hide_render", 1386)
+bd_.hide_render = True; kf(bd_, "hide_render", 1); bd_.hide_render = False; kf(bd_, "hide_render", 705); bd_.hide_render = True; kf(bd_, "hide_render", 841)
 
 # ------------------------------------------------------------------ shards (discs split when the nose reaches them)
-DISC_HIT = {"Disc_1": 790, "Disc_2": 815, "Disc_3": 1030}
+def cross(y): return min(f for f in range(F_HIT, F_STOP + 1) if depth(f) >= y)
+DISC_HIT = {"Disc_1": cross(-0.0565), "Disc_2": cross(-0.0505), "Disc_3": cross(-0.0165)}
 for dn, fh in DISC_HIT.items():
     d = bpy.data.objects[dn]
     hitp = V((0.0, d.location.y, 0.05))
@@ -277,7 +277,7 @@ kl = bpy.data.lights.new("L_cutaway_key", "AREA"); kl.size = 0.3; kl.color = (0.
 klo = bpy.data.objects.new("L_cutaway_key", kl); bpy.data.collections["FX"].objects.link(klo)
 klo.parent = broot; klo.location = (0.30, -0.12, 0.30); klo.rotation_euler = (0, R_(60), R_(30))
 klo.rotation_mode = "QUATERNION"; klo.rotation_quaternion = (V((0, 0, 0.0)) - V((0.30, -0.12, 0.30))).to_track_quat('-Z', 'Y')
-for f, e in ((1, 0.0), (750, 0.0), (800, 5.0), (1350, 5.0), (1395, 0.0)):
+for f, e in ((1, 0.0), (700, 0.0), (716, 5.0), (812, 5.0), (840, 0.0)):
     kl.energy = e; kl.keyframe_insert("energy", frame=f)
 
 # ------------------------------------------------------------------ energy rings (each layer contact)
@@ -289,8 +289,8 @@ mul = nt.nodes.new("ShaderNodeMath"); mul.operation = "MULTIPLY"; mul.inputs[1].
 nt.links.new(oi.outputs["Color"], em.inputs["Color"]); nt.links.new(oi.outputs["Alpha"], mul.inputs[0]); nt.links.new(mul.outputs[0], em.inputs["Strength"])
 nt.links.new(em.outputs[0], ad.inputs[0]); nt.links.new(tr.outputs[0], ad.inputs[1]); nt.links.new(ad.outputs[0], mo.inputs[0])
 C_FX = bpy.data.collections["FX"]
-RING_F = [(F_HIT + 2, (1.0, 0.55, 0.15)), (790, (0.3, 0.8, 1.0)), (815, (0.3, 0.8, 1.0)), (845, (1.0, 0.7, 0.3)), (905, (1.0, 0.85, 0.5)),
-          (940, (1.0, 0.85, 0.5)), (975, (1.0, 0.85, 0.5)), (1030, (0.3, 0.8, 1.0)), (1062, (1.0, 0.7, 0.3)), (1110, (1.0, 0.5, 0.2))]
+RING_F = [(F_HIT + 2, (1.0, 0.55, 0.15))] + [(cross(y), c) for y, c in ((-0.0565, (0.3, 0.8, 1.0)), (-0.0505, (0.3, 0.8, 1.0)), (-0.046, (1.0, 0.7, 0.3)),
+          (-0.038, (1.0, 0.85, 0.5)), (-0.0165, (0.3, 0.8, 1.0)), (-0.0125, (1.0, 0.7, 0.3)), (-0.004, (1.0, 0.5, 0.2)))]
 for i, (fr, col) in enumerate(RING_F):
     bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=0.035, major_segments=64, minor_segments=8)
     o = bpy.context.active_object; o.name = "EnergyRing_%02d" % i
@@ -548,37 +548,36 @@ CK = [  # frame, camera position, aim point, lens
     (178,  behind(178, 0.24, 0.0, 0.0),    V((0.0, 0.9, 1.470)), 34),
     (186,  V((0.0, -0.045, 1.470)),         V((0.0, 1.0, 1.470)), 34),
     (192,  V((0.0, 0.20, 1.470)),           V((0.0, 1.2, 1.480)), 32),
-    (206,  V((0.01, 0.31, 1.480)),          V((0.0, 1.5, 1.490)), 30),
-    (228,  V((0.06, 0.45, 1.530)),       V((0.0, 2.0, 1.520)), 30),
+    (206,  V((0.22, 0.30, 1.600)),          V((0.0, 1.3, 1.500)), 30),
+    (228,  V((0.40, 0.45, 1.700)),       V((0.0, 2.0, 1.520)), 30),
     (270,  V((0.62, 0.62, 1.790)),       V((0.0, 2.2, 1.550)), 26),
     (330,  V((1.25, 1.55, 1.650)),       V((0.0, 2.55, 1.530)), 28),
     (378,  V((0.50, 2.40, 1.720)),       V((0.0, 2.95, 1.620)), 32),
 ]
 for f, c, a, l in [
-    (420,  V((0.32, 2.38, 1.750)),       V((0.0, 2.95, 1.630)), 32),
-    (480,  V((-0.05, 2.18, 1.730)),      V((0.0, 2.97, 1.620)), 34),
-    (540,  V((-0.62, 2.32, 1.530)),      V((0.0, 2.95, 1.550)), 34),
-    (600,  V((-0.55, 2.45, 1.550)),      V((0.0, 2.95, 1.620)), 30),
+    (420,  V((0.32, 2.38, 1.750)),       V((0.0, 2.95, 1.660)), 36),
+    (480,  V((-0.05, 2.25, 1.760)),      V((0.0, 2.97, 1.690)), 38),
+    (540,  V((-0.42, 2.28, 1.600)),      V((0.0, 2.95, 1.580)), 32),
+    (600,  V((-0.40, 2.35, 1.600)),      V((0.0, 2.95, 1.620)), 30),
     (650,  V((-0.13, 2.70, 1.460)),      V((0.0, 2.90, 1.480)), 40),
-    (695,  V((-0.045, 2.795, 1.505)),   V((0.0, 2.92, 1.470)), 50),
-    (735,  V((0.06, 2.805, 1.440)),      V((0.0, 2.92, 1.480)), 55),
-    (772,  V((0.11, 2.80, 1.530)),       V((0.0, 2.92, 1.480)), 50),
-    (805,  V((0.17, 2.835, 1.515)),     V((0.0, 2.925, 1.470)), 50)]:
+    (680,  V((-0.045, 2.80, 1.505)),    V((0.0, 2.92, 1.470)), 50),
+    (706,  V((0.10, 2.80, 1.530)),       V((0.0, 2.92, 1.480)), 50)]:
     CK.append((f, SH(f, c), SH(f, a), l))
 def nose_cam(f, dx, dz, dy=-0.016, ady=-0.012):
     p = B(f); return (p + V((dx, dy, dz)), p + V((0, ady, 0)))
-for f, dx, dz, lens in ((850, 0.22, 0.07, 50), (900, 0.19, 0.09, 55), (960, 0.18, 0.05, 60), (1020, 0.19, 0.09, 62), (1075, 0.20, 0.07, 62)):
+for f, dx, dz, lens in ((724, 0.30, 0.09, 40), (748, 0.28, 0.10, 40), (770, 0.30, 0.08, 40)):   # (b) discs shatter around the slowing bullet
     c, a = nose_cam(f, dx, dz); CK.append((f, c, a, lens))
-for f, c, a, l in [(1140, V((0.50, 2.90, 1.690)), V((0.0, 2.975, 1.440)), 46), (1200, V((0.50, 2.86, 1.630)), V((0.0, 2.975, 1.440)), 50)]:
+for f, c, a, l in [(792, V((0.42, 2.92, 1.620)), V((0.0, 2.975, 1.470)), 42), (812, V((0.44, 2.88, 1.640)), V((0.0, 2.975, 1.470)), 42),   # (c) stopped halfway
+                   (860, V((0.45, 2.20, 1.780)), V((0.0, 2.97, 1.720)), 40), (960, V((0.22, 2.10, 1.800)), V((0.0, 2.97, 1.720)), 40),    # back to his face: held reaction
+                   (1060, V((-0.18, 2.10, 1.790)), V((0.0, 2.97, 1.720)), 40), (1160, V((-0.32, 2.18, 1.760)), V((0.0, 2.97, 1.720)), 40),
+                   (1260, V((-0.10, 2.10, 1.780)), V((0.0, 2.97, 1.720)), 40), (1340, V((0.32, 2.15, 1.760)), V((0.0, 2.97, 1.720)), 40)]:
     CK.append((f, SH(f, c), SH(f, a), l))
-for f, a, h, r, lens in ((1245, -35, 0.06, 0.20, 55), (1290, 0, 0.09, 0.19, 55), (1335, 22, 0.12, 0.20, 50)):
-    c0 = B(f); c = c0 + V((r * math.cos(R_(a)), r * math.sin(R_(a)), h)); CK.append((f, c, c0 + V((0, -0.01, 0.0)), lens))
 for f, c, a, l in [(1395, V((0.75, 2.25, 1.670)), V((0.0, 2.95, 1.470)), 35), (1445, V((0.55, 2.35, 1.750)), V((0.0, 3.0, 1.570)), 34),
                    (1500, V((0.45, 2.42, 1.770)), V((0.0, 3.05, 1.620)), 36)]:
     CK.append((f, SH(f, c), SH(f, a), l))
 fc = catmull([(f, c) for f, c, a, l in CK]); fa = catmull([(f, a) for f, c, a, l in CK]); fl = catmull([(f, float(l)) for f, c, a, l in CK])
 cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 8.0
-for f_, v_ in ((1, 8.0), (172, 8.0), (184, 22.0), (232, 22.0), (250, 8.0)):
+for f_, v_ in ((1, 8.0), (172, 8.0), (184, 16.0), (232, 16.0), (250, 8.0), (700, 8.0), (712, 11.0), (815, 11.0), (830, 8.0)):
     cam_d.dof.aperture_fstop = v_; cam_d.dof.keyframe_insert("aperture_fstop", frame=f_)
 CAMLOG = []
 for f in range(1, F_END + 1):
@@ -587,7 +586,7 @@ for f in range(1, F_END + 1):
     d = (a - c).normalized()
     cam.rotation_mode = "QUATERNION"
     q = d.to_track_quat('-Z', 'Y'); cam.rotation_quaternion = q
-    cam_d.lens = fl(f); cam_d.dof.focus_distance = max(0.03, (B(f) - c).length if 150 < f < 1350 else (a - c).length)
+    cam_d.lens = fl(f); cam_d.dof.focus_distance = max(0.03, (B(f) - c).length if 150 < f < F_STOP else (a - c).length)
     kf(cam, "location", f); kf(cam, "rotation_quaternion", f); cam_d.keyframe_insert("lens", frame=f); cam_d.dof.keyframe_insert("focus_distance", frame=f)
     CAMLOG.append((f, tuple(round(x, 4) for x in c), tuple(round(x, 4) for x in a), round(fl(f), 1)))
 json.dump(CAMLOG[::10], open(os.path.join(ROOT, "camera_path.json"), "w"))
