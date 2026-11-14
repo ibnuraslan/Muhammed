@@ -761,9 +761,9 @@ UPW = V(0, 0, 1)
 # (frame, pos, aim, lens, up, space)   space 'W' world, 'B' monkey-B model space
 K = [
  (1,    V(0.35, 0.95, 1.72), V(-0.3, -0.35, 1.2), 24, UPW, "W"),
- (61,   V(0.45, 0.25, 1.38), NA + V(-0.05, -0.15, 0.05), 28, UPW, "W"),
+ (61,   V(0.45, 0.30, 1.62), NA + V(-0.05, -0.15, 0.05), 28, UPW, "W"),
  (121,  V(0.42, 0.42, 1.62), NA + V(-0.05, -0.12, 0.08), 32, UPW, "W"),
- (181,  NA + V(0.36, 0.34, 0.44), NA + V(-0.04, -0.06, 0.0), 32, UPW, "W"),
+ (181,  NA + V(0.30, 0.30, 0.78), NA + V(-0.04, -0.06, 0.0), 32, UPW, "W"),
  (241,  V(0.28, 0.62, 1.82), V(-0.18, -0.18, 1.08), 26, UPW, "W"),
  (290,  V(0.0, 0.85, 2.12), V(-0.05, -0.1, 1.0), 28, UPW, "W"),
  (330,  V(0.3, 0.8, 2.12), V(0.25, -0.1, 1.0), 28, UPW, "W"),
@@ -788,8 +788,8 @@ K = [
  (1250, CH + V(-0.6, -1.35, 0.62), CH + V(0, 0.25, 0.62), 24, UPW, "W"),
  (1320, CH + V(0.35, -1.45, 0.85), CH + V(0.05, 0.2, 0.66), 26, UPW, "W"),
  (1380, V(2.85, -0.42, 1.08), V(2.95, 0.7, 0.95), 30, UPW, "W"),
- (1440, SCR + V(-0.06, -0.42, 0.05), SCR, 45, UPW, "W"),
- (1500, SCR + V(0.06, -0.36, 0.05), SCR, 55, UPW, "W"),
+ (1440, SCR + V(0.20, -0.42, 0.05), SCR, 45, UPW, "W"),
+ (1500, SCR + V(0.16, -0.36, 0.05), SCR, 55, UPW, "W"),
  (1515, SCR + V(0.32, -0.80, 0.15), SCR + V(0.12, 0, -0.02), 36, UPW, "W"),
  (1530, V(2.75, -0.95, 1.5), V(2.6, 0.85, 1.0), 26, UPW, "W"),
  (1560, V(1.72, -0.05, 1.38), M_CHAIR @ EYEMID, 42, UPW, "W"),
@@ -891,6 +891,17 @@ for (nm_, s_), rr in ELBOW_RUNS.items():
     for a_, b_ in rr:
         push_elbows(_HH[nm_], s_, range(max(1, a_ - 8), min(1770, b_ + 8) + 1))
 for f in (641, 651, 661): pose_hand(ANA, "R", f, "cup_hold")
+# v008g: body B's hand sticks out past the side edge of its drape at (0.15, 0.35, 1.22) in the wide/overhead shots (1-340):
+# mask those vertices while the body lies on table 2 (it is never seen there in a close-up; the mask is off from 381)
+_bB = D["MK_BodyB"]; sc.frame_set(301); bpy.context.view_layer.update()
+_pl = _bB.matrix_world.inverted() @ V(0.15, 0.35, 1.22)
+_vg = _bB.vertex_groups.get("DrapeHide") or _bB.vertex_groups.new(name="DrapeHide")
+_vg.add([v.index for v in _bB.data.vertices if (v.co - _pl).length < 0.09], 1.0, "REPLACE")
+_mk = _bB.modifiers.new("DrapeHide", "MASK"); _mk.vertex_group = "DrapeHide"; _mk.invert_vertex_group = True
+for f_, on_ in ((1, True), (380, True), (381, False)):
+    _mk.show_render = on_; _mk.show_viewport = on_
+    _mk.keyframe_insert("show_render", frame=f_); _mk.keyframe_insert("show_viewport", frame=f_)
+print("DRAPEHIDE verts", len([v for v in _bB.data.vertices if (v.co - _pl).length < 0.09]))
 # v008g: body B never pokes through its drape (only drape vertices that are inside the body move, to 8 mm outside it)
 for dn_, bn_ in (("T2_BodyDrape", "MK_BodyB"), ("T1_BodyDrape", "MK_BodyA")):
     if dn_ in D and bn_ in D and "KeepOut" not in D[dn_].modifiers:
