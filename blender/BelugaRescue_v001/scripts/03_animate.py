@@ -217,11 +217,11 @@ DV.P(523, SIT, yaw=180, pitch=-8, spine=(30, 0, 0), head=(-10, 0, 0), legs=legs(
 for k, f in enumerate(range(535, 610, 15)):
     up = k / 5.0
     DV.P(f, (SIT[0], SIT[1] - 0.15 * up, SIT[2] + 0.75 * up), yaw=180, pitch=-28 * up - 8, spine=(-8, 0, 0), head=(-35, 0, 0),
-         legs=legs((60 - 30 * up, 6, 4, -74)), arms=arms(l=dict(fwd=165 if k % 2 == 0 else 125, out=36 if k % 2 == 0 else 50, L=DV.ARM * (0.84 if k % 2 == 0 else 0.7)), r=dict(fwd=125 if k % 2 == 0 else 160, out=50 if k % 2 == 0 else 36, L=DV.ARM * (0.7 if k % 2 == 0 else 0.82))), jaw=10, curl={"L": (25, 12), "R": (25, 12)})
+         legs=legs((60 - 30 * up, 6, 4, -74)), arms=arms(l=dict(fwd=140 if k % 2 == 0 else 105, out=24 if k % 2 == 0 else 30, L=DV.ARM * (0.72 if k % 2 == 0 else 0.62)), r=dict(fwd=105 if k % 2 == 0 else 140, out=30 if k % 2 == 0 else 24, L=DV.ARM * (0.62 if k % 2 == 0 else 0.72))), jaw=10, curl={"L": (25, 12), "R": (25, 12)})
 for k, f in enumerate(range(620, 661, 10)):
     dn = (k + 1) / 4.0
     DV.P(f, (SIT[0], SIT[1] - 0.15 + 0.12 * dn, SIT[2] + 0.75 * (1 - dn)), yaw=180, pitch=-36 + 26 * dn, spine=(-5 + 20 * dn, 0, 0), head=(-40 + 20 * dn, 0, 0),
-         legs=legs((40 + 46 * dn, 6, 6, -72)), arms=arms(l=dict(fwd=150 - 60 * dn, out=28 + 8 * dn, L=DV.ARM * (0.66 + 0.1 * (k % 2))), r=dict(fwd=140 - 60 * dn, out=24 + 8 * dn, L=DV.ARM * (0.74 - 0.1 * (k % 2)))), jaw=8)
+         legs=legs((40 + 46 * dn, 6, 6, -72)), arms=arms(l=dict(fwd=120 - 50 * dn, out=22 + 6 * dn, L=DV.ARM * (0.66 + 0.1 * (k % 2))), r=dict(fwd=110 - 50 * dn, out=20 + 6 * dn, L=DV.ARM * (0.74 - 0.1 * (k % 2)))), jaw=8)
 # --- beat 5: drowning — head back toward the light, chest heaving, last bubbles
 for k, f in enumerate(range(672, 775, 17)):
     j = k % 2
@@ -245,7 +245,7 @@ for k, f in enumerate(range(1380, 2000, 20)):
     limp = 1.0 if f < 1915 else max(0.0, 1 - (f - 1915) / 40.0)
     drift = Vector((0.12 * math.sin(k * 0.55), 0.08 * math.sin(k * 0.4 + 1.0), 0.04 * math.sin(k * 0.9)))
     DV.P(f, (xy.x + drift.x, xy.y + drift.y, RZF(f) + drift.z), yaw=180 + 16 * math.sin(k * 0.45), pitch=6 + 10 * limp + 5 * math.sin(k * 0.7), roll=10 * math.sin(k * 0.5), spine=(10 * limp - 12 * (1 - limp), 0, 8 * math.sin(k * 0.6)),
-         head=(25 * limp - 30 * (1 - limp), 0, 0), legs=legs((62 + 8 * math.sin(k * 0.8), 9, 100 + 10 * math.sin(k * 0.8), -40), (35, 14, 95, -20)),
+         head=(25 * limp - 30 * (1 - limp), 0, 22 * math.sin(k * 0.55)), legs=legs((62 + 8 * math.sin(k * 0.8), 9, 100 + 10 * math.sin(k * 0.8), -40), (35, 14, 95, -20)),
          arms=arms(l=dict(fwd=28 + 24 * math.sin(k * 0.9) + 95 * (1 - limp), out=30 + 10 * math.sin(k * 0.7), L=DV.ARM * (0.68 + 0.08 * math.sin(k * 1.1))), r=dict(fwd=24 + 24 * math.cos(k * 0.9) + 90 * (1 - limp), out=32 + 10 * math.cos(k * 0.7), L=DV.ARM * (0.68 + 0.08 * math.cos(k * 1.1)))), curl={"L": (30, 14), "R": (30, 14)},
          jaw=4 if limp > 0.5 else 22)
 # --- beat 12: gasps, swims to the coping, clings with both hands
@@ -269,7 +269,7 @@ def diver_hands(f, p):
             c = k0.lerp(k1, prm["t"])
             sx = 1 if s == "L" else -1
             out = (k1 - k0).cross(Vector((0, 0, 1))).normalized() * sx
-            W = c + (out * 0.08 + Vector((0, 0, 0.1)) if f < 448 else out * 0.2 + Vector((0, 0, 0.14)))      # palms on the calf; lifted as the knee draws in (no hands into the leg)      # palm on the calf (was hovering ~8 cm above)
+            W = c + (out * 0.05 + Vector((0, 0, 0.065)) if f < 440 else out * 0.2 + Vector((0, 0, 0.14)))      # palms on the calf; lifted as the knee draws in (no hands into the leg)      # palm on the calf (was hovering ~8 cm above)
             a[s] = ("world", dict(W=W, d=(k1 - k0).normalized() * 0.85 + Vector((0, 0, -1)) * 0.15, n=-out * 0.6 + Vector((0, 0, -0.8)), pole=W + Vector((sx * 0.3, 0, 0.5))))
         elif kind == "lift":     # hand held up clear above the right knee
             ev(f)

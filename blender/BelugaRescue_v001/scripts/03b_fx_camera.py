@@ -136,13 +136,18 @@ def _clear_to(f, c, p, ok_prefix):
         return False
     return True
 _prev = [None]
-def two_shot(f, lens=24, mix=0.45):
+def two_shot(f, lens=24, mix=0.45, centre=False):
     from mathutils.bvhtree import BVHTree as _BT
     _wb = []      # the whale's whole body over +-30 frames: the camera must stay clear of it
     for g in range(f - 30, f + 31, 10):
         ev(g); _dg = bpy.context.evaluated_depsgraph_get(); _o = bpy.data.objects["Beluga"]
         _wb.append((_BT.FromObject(_o, _dg), _o.matrix_world.inverted(), _o.matrix_world.to_3x3()))
+    _rocks = [o for o in bpy.data.objects if o.type == 'MESH' and o.name.startswith("IceBoulder")]
     def _whale_clear(c):
+        if c.z < 0.9: return False
+        for o in _rocks:      # boulders: keep 0.8 m from their bounding sphere
+            r_ = max(o.dimensions) * 0.5
+            if (c - o.matrix_world.translation).length < r_ + 0.8: return False
         for t_, Mi_, R_3 in _wb:
             loc, n, i, d = t_.find_nearest(Mi_ @ c, 2.0)
             if loc is not None and (R_3 @ (Mi_ @ c - loc)).length < 1.2: return False
@@ -160,6 +165,7 @@ def two_shot(f, lens=24, mix=0.45):
                 _tc.location = c; _tc.rotation_euler = (M_ - c).to_track_quat('-Z', 'Y').to_euler()
                 bpy.context.view_layer.update()
                 ph = world_to_camera_view(sc, _tc, Hh); pw = world_to_camera_view(sc, _tc, Wh)
+                if centre and not (0.3 < ph.x < 0.7 and 0.3 < ph.y < 0.75): continue
                 if not (0.12 < ph.x < 0.88 and 0.1 < ph.y < 0.9 and 0.1 < pw.x < 0.9 and 0.08 < pw.y < 0.92): continue
                 face = fd.dot((c - Hh).normalized())
                 if face < 0.15: continue
@@ -170,7 +176,8 @@ def two_shot(f, lens=24, mix=0.45):
         print("TWO_SHOT none at", f); c = Hh + Vector((0, 2.6, 0.8)); best = (0, c, Hh)
     _prev[0] = best[1]; print("TWO_SHOT", f, tuple(round(x, 2) for x in best[1]))
     K(f, best[1], best[2], lens)
-for _f in (868, 885, 925, 965, 1005, 1045, 1085, 1125, 1165, 1213, 1250, 1290):
+two_shot(1028, mix=0.25, centre=True)
+for _f in (868, 885, 925, 965, 1005, 1050, 1085, 1125, 1165, 1213, 1250, 1290):
     two_shot(_f)
 bpy.data.objects.remove(_tc)
 K(1350, wh(1350) + V(1.3, 1.2, 0.3), CH(1350), 28)
@@ -185,12 +192,14 @@ K(1720, H_(1720) + V(0.5, 0.8, -0.5), H_(1720), 38)
 K(1775, H_(1775) + V(1.3, 1.0, 0.0), H_(1775), 32)
 K(1840, H_(1775) + V(1.5, 0.9, 0.9), H_(1840) + V(0, 0, 0.1), 26)      # camera holds while she rises past it (no frozen hang)
 # beat 11 — below the surface looking up, burst out, circle the splash
-K(1893, H_(1893) + V(1.3, 1.4, -0.35), H_(1893) + V(0, 0, 0.2), 24)      # in front of her, below head height (no top of head)
+K(1868, H_(1868) + V(1.2, 1.2, -0.2), H_(1868) + V(0, 0, 0.15), 26)      # slow push in as she rises
+K(1893, H_(1893) + V(0.85, 0.95, -0.3), H_(1893) + V(0, 0, 0.2), 28)      # in front of her, below head height (no top of head)
 K(1925, H_(1925) + V(-0.2, 1.5, 1.6), H_(1925) + V(0, 0.6, -0.25), 30)      # top-down like the coping shots: no deck people cut by the frame
 K(1965, H_(1965) + V(-0.2, 1.4, 1.8), H_(1965) + V(0, 0.6, -0.25), 32)
 K(2010, H_(2010) + V(-0.2, 1.35, 1.9), H_(2010) + V(0, 0.6, -0.25), 32)      # steep top-down: no deck people cut by the frame
 # beat 12 — face at the edge, rise and pull back to reveal everything
-K(2080, H_(2080) + V(-0.2, 1.3, 1.8), H_(2080) + V(0, 0.55, -0.2), 32)
+K(2080, H_(2080) + V(-0.2, 1.5, 1.7), H_(2080) + V(0, 0.85, -0.45), 32)      # deck out of frame until the crane-up
+K(2084, H_(2084) + V(0.4, 2.0, 2.9), H_(2084) + V(0, -0.9, 1.3), 24)      # crane up: deck people come in whole (aim above her)
 K(2092, H_(2092) + V(1.2, 3.0, 2.5), H_(2092) + V(0, -0.9, 0.7), 26)      # wide and high early: deck people in full, never cut at the waist
 K(2130, H_(2130) + V(1.4, 3.0, 2.4), H_(2130) + V(0, -0.9, 0.7), 26)
 K(END, H_(END) + V(2.0, 4.3, 2.8), H_(END) + V(-0.4, -1.0, 0.3), 26)
@@ -226,15 +235,16 @@ for f in range(1, END + 1, 2):
         for _ in range(6):
             loc, nrm, idx, dist = t.find_nearest(p + off, 3.0)
             if loc is None: break
-            inside = (p + off - loc).dot(nrm) < 0
+            inside = (p + off - loc).dot(nrm) < 0 and dist < 0.6      # far 'back faces' of the body are not inside
             if inside or dist < need:
                 push = (need + (dist if inside else -dist)) * 1.05
                 off += nrm.normalized() * push
             else: break
     for t in ST:
-        loc, nrm, idx, dist = t.find_nearest(p + off, 0.5)
+        loc, nrm, idx, dist = t.find_nearest(p + off, 2.5)
         if loc is not None and ((p + off - loc).dot(nrm) < 0 or dist < 0.4):
             off += nrm.normalized() * (0.42 + (dist if (p + off - loc).dot(nrm) < 0 else -dist))
+    if off.length > 1.2: off = off.normalized() * 1.2
     if (p + off).z < 0.15: off.z += 0.15 - (p + off).z
     corr[f] = off
 fr_ = sorted(corr)
@@ -585,7 +595,9 @@ for o in bpy.data.objects:
 # water surface IOR 1.33 -> 1.05: keeps the wave distortion but no total internal reflection seen from below
 # (her mirror image hanging under the surface, hard white deck panels)
 for _n in bpy.data.objects["Water_Surface"].data.materials[0].node_tree.nodes:
-    if _n.type == "BSDF_PRINCIPLED": _n.inputs["IOR"].default_value = 1.05
+    if _n.type == "BSDF_PRINCIPLED":
+        for _f, _v in ((1, 1.05), (1790, 1.05), (1810, 1.0), (1910, 1.0), (1930, 1.05)):
+            _n.inputs["IOR"].default_value = _v; _n.inputs["IOR"].keyframe_insert("default_value", frame=_f)
 # the water volume has no surface shader (a clear boundary in Cycles); make that explicit with a white Transparent BSDF
 # so ray-based checks treat the boundary as see-through. Render-neutral.
 for _m in bpy.data.objects["Water_Volume"].data.materials:
