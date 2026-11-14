@@ -69,7 +69,7 @@ K = [  # frame, camera position, aim point, lens (mm)
     (586, V(0.10, 1.46, 1.58), V(2.23, -0.66, 1.45), 30),
     (608, V(0.14, 1.40, 1.57), V(2.30, -0.70, 1.46), 32),
     (631, V(0.18, 1.34, 1.56), V(2.40, -0.75, 1.47), 34),
-    (637, V(3.40, -0.85, 1.55), CAL + V(2.5, 0.4, -0.2), 34),
+    (637, V(4.15, -0.55, 1.25), V(5.95, -0.3, 1.0), 26),       # v008e: clean cut from the calendar to her (no wall pass)
     # 4 - home: she buckles, mug drops, x-ray glow on her side
     (648, V(4.15, -0.55, 1.25), V(5.95, -0.3, 1.0), 26),
     (672, V(4.5, -1.2, 0.7), V(5.95, -0.3, 1.0), 26),
@@ -78,7 +78,7 @@ K = [  # frame, camera position, aim point, lens (mm)
     (756, V(5.0, -0.75, 1.15), V(5.95, -0.3, 0.85), 30),
     (768, V(5.1, -0.45, 1.20), V(5.9, -0.3, 1.0), 28),         # v007b: stay on her, then one fast pass through the wall
     (772, V(4.6, -0.1, 1.28), V(5.9, -0.3, 1.0), 28),          # v008d: still on her, then the pass
-    (776, V(3.40, 0.6, 1.35), V(2.0, 1.6, 1.2), 26),      # v008d: already in the OR on 776 (no black frame)
+    (776, V(3.0, 0.6, 1.35), V(1.7, 3.6, 1.1), 22),       # v008e: clean cut from her to the OR doors (no wall pass)
     # 5 - back through the wall into the OR: bed bursts through the doors, surgeon 2 steps in
     (784, V(3.0, 0.6, 1.35), V(1.7, 3.6, 1.1), 22),
     (830, V(3.05, 0.55, 1.35), V(1.75, 3.4, 0.9), 24),
@@ -108,8 +108,7 @@ K = [  # frame, camera position, aim point, lens (mm)
     # 7 - whip-pan through the west wall into the hearing room: anatomy wall, orbit to the confessing surgeon
     (1231, V(-0.31, 0.06, 1.62), S2H(1231) + V(-0.04, 0, 0), 48),     # v007b: still on him at the beat, then whip
     (1235, V(-0.5, -0.25, 1.75), V(-1.3, 0.5, 1.55), 30),       # v008d: the whip passes the anaesthetist, then the wall
-    (1238, V(-2.6, -0.1, 1.75), V(-8.0, 0.0, 1.6), 30),
-    (1241, V(-4.0, 0.0, 1.75), V(-8.0, 0.0, 1.6), 30),          # v007b: one fast pass through the wall
+    (1238, V(-4.2, -0.2, 1.73), V(-7.5, 0.0, 1.5), 28),         # v008e: clean cut into the hearing room (no wall pass)
     (1254, V(-4.4, -0.6, 1.7), V(-7.5, 0.0, 1.5), 28),
     # v007b: the surgeon stays in frame; swing round in front of him so the anatomy wall reads behind him
     (1270, V(-5.0, -1.55, 1.70), V(-6.9, -0.1, 1.5), 28),
@@ -148,7 +147,7 @@ def blend(keys):
     p_ = pvec(keys); c_ = catmull(keys)
     return lambda t: (p_(t) + c_(t)) * 0.5
 # v008d: hard cuts at the studio dives (no membrane / skin fill frames): the path is splined per section
-CUTS = (133, 275, 1057, 1175)
+CUTS = (133, 275, 637, 776, 1057, 1175, 1238)
 _SEC = [[]]
 for _k in K:
     if _k[0] in CUTS and _SEC[-1]: _SEC.append([])
