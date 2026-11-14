@@ -39,17 +39,22 @@ T_IMP = F(9.0)          # impact frame (beat 4)
 V0 = 14.0               # m/s at impact (stops with a wheelset gap over him)
 T_STOP = F(15.9)        # halts (beat 6 runs 14.5-17)
 DEC = V0 / ((T_STOP - T_IMP) / FPS)
+# v006: the train brakes over 9.6 m more (same impact and halt frames, speed falls monotonically), so it halts
+# with the loco/wagon coupling gap over him: he can crawl out sideways without passing through the train
+BR_DT = (T_STOP - T_IMP) / FPS; BR_EXTRA = 10.4
+BR_B = -2 * BR_EXTRA / BR_DT ** 3; BR_A = (-V0 - 3 * BR_B * BR_DT ** 2) / (2 * BR_DT)
 HEAD_Y = 0.0
 def train_front(f):
     t = (f - T_IMP) / FPS
     if t <= 0:
         return HEAD_Y - V0 * t          # constant speed approach from +Y
     t = min(t, (T_STOP - T_IMP) / FPS)
-    return HEAD_Y - (V0 * t - 0.5 * DEC * t * t)
+    return HEAD_Y - (V0 * t + BR_A * t * t + BR_B * t ** 3)
 def train_speed(f):
     t = (f - T_IMP) / FPS
     if t <= 0: return V0
-    return max(0.0, V0 - DEC * t)
+    t = min(t, (T_STOP - T_IMP) / FPS)
+    return max(0.0, V0 + 2 * BR_A * t + 3 * BR_B * t * t)
 sc["train_stop_front"] = train_front(T_STOP)
 TR = bpy.data.objects["TrainRig"]
 plough_off = sc["plough_tip"]           # plough tip y in rig space
@@ -185,6 +190,9 @@ def gait(H, path, yaw_fn, f0, f1, stride=0.75, duty=0.62, lift=0.08, bob=0.022, 
                 xy = a_[0].lerp(b_[0], smooth(u)); yw = a_[1] + (b_[1] - a_[1]) * smooth(u)
                 gz_a, gz_b = ground_z(*a_[0]), ground_z(*b_[0])
                 lf = lift * math.sin(math.pi * u) + (gz_b - gz_a) * smooth(u) * 0 ; pt = 25 * math.sin(math.pi * u) - 10
+                # v006: a swing that crosses a rail steps OVER it (rail top + toe clearance), never through it
+                if any((a_[0].x - rx) * (b_[0].x - rx) < 0 for rx in RAIL_XS):
+                    lf = max(lf, 0.24 * math.sin(math.pi * u) ** 0.6); pt = 35 * math.sin(math.pi * u) - 5
             H.key_foot(s, f, xy, yw, lf, pt)
     for i, f in enumerate(frames):
         if (i % step) and i != len(frames) - 1: continue
@@ -313,8 +321,8 @@ for f in list(range(f_lie0, f_lie1 + 1, 3)) + [f_lie1]:
     trem = 0.0 if f < F(7.0) else (f - F(7.0)) / (f_lie1 - F(7.0))
     LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
     tw = lambda c: math.exp(-((f - c) / 7.0) ** 2)                 # sleepy twitch pulses
-    LAD.key_spine(f, flex=6 - 1.5 * br, side=0, twist=3 * math.sin(f / 53.0),
-                  head=(5.5 + 0.8 * br + 1.0 * trem * math.sin(f * 2.7), 25 + 9 * math.sin(f / 41.0) + 3 * trem * math.sin(f * 3.1)))
+    LAD.key_spine(f, flex=11 - 1.5 * br, side=0, twist=3 * math.sin(f / 53.0),      # v006: neck curled a little so the skull rests ON the rail top, not in it
+                  head=(13 + 0.8 * br + 1.0 * trem * math.sin(f * 2.7), 25 + 9 * math.sin(f / 41.0) + 3 * trem * math.sin(f * 3.1)))
     for s in "LR":
         sx = 1 if s == "L" else -1
         kick = 0.06 * tw(F(6.2)) if s == "R" else 0.05 * tw(F(7.5))
@@ -339,7 +347,8 @@ def drag_state(f):
         rel = -0.35 + 3.2 * smooth(u)                    # in front of the plough -> pulled under the front bogie side
         y = tf + rel
         x = LIE_X + (0.0 - LIE_X) * smooth(min(1.0, u / 0.35))
-        z = 0.14 + (0.3 * math.sin(math.pi * u / 0.2) if u < 0.2 else 0.02 * abs(math.sin(u * 9)))     # thrown up at the hit, then low under the plough
+        z = 0.14 + (0.15 * math.sin(math.pi * u / 0.2) if u < 0.2 else 0.02 * abs(math.sin(u * 9)))
+        z = max(z, 0.14 + 0.2 * max(0.0, 1 - abs(x - 0.72) / 0.35))      # v006: swept OVER the rail, never through it     # thrown up at the hit, then low under the plough
         yaw = 90 + 450 * (1 - (1 - min(1.0, u / 0.6)) ** 2)   # spins around (ends heading -Y before the first wheelset)
         roll = 300 * u + 40 * math.sin(u * 7)
         pitch = -90 + 18 * math.sin(u * 6.5) * (1 - u)
@@ -369,10 +378,10 @@ def above_ground(origin, d_w, L, floor=0.07, ceil=None):
         if e.z < floor:
             d_w.z += (floor - e.z) / L
         if ceil is not None:
-            if abs(e.x) > 0.3:
-                d_w.x -= (e.x - math.copysign(0.3, e.x)) / L
-            if e.z > ceil - 0.12:
-                d_w.z -= (e.z - (ceil - 0.12)) / L
+            if abs(e.x) > 0.22:
+                d_w.x -= (e.x - math.copysign(0.22, e.x)) / L
+            if e.z > ceil - 0.2:
+                d_w.z -= (e.z - (ceil - 0.2)) / L
         d_w.normalize()
     return d_w
 HIST = {}
@@ -455,6 +464,7 @@ for f in list(range(f_crawl0, f_crawl1 + 1, 2)) + [f_crawl1]:
     u = (f - f_crawl0) / (f_crawl1 - f_crawl0)
     c = crawl_root(f); yaw_c = 0 + 90 * smooth(min(1, u * 2.5))           # turns from heading -Y to facing +X
     cz = 0.4 + 0.15 * smooth((c.x - 1.4) / 0.4)           # low commando crawl until he clears the loco side
+    cz = max(cz, 0.47 + 0.08 * max(0.0, 1 - abs(c.x - 0.72) / 0.5))      # v006: torso carried over the rail (he crawls out in the coupling gap)
     Bm = LB.B(V(c.x, c.y, cz + 0.03 * math.sin(u * 12)), Rbody(yaw=yaw_c, pitch=84, side=6 * math.sin(u * 12)))
     LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
     LAD.key_spine(f, flex=-8, twist=8 * math.sin(u * 12), head=(-60, 10 * math.sin(u * 7)))     # head up, looking where he crawls
@@ -466,10 +476,12 @@ for f in list(range(f_crawl0, f_crawl1 + 1, 2)) + [f_crawl1]:
         # hand under the shoulder (world: down), knee under the hip: hands planted with palms flat
         Wh = Bm @ (LB.sh[s] + V(sx * 0.04, -0.06 - fwd * 0.4, -0.0))
         Wh = V(Wh.x, Wh.y, ground_z(Wh.x, Wh.y) + 0.15 + lift)      # v005: palm on top of the stones, not sunk into them
+        if abs(Wh.x - 0.72) < 0.14: Wh.z = max(Wh.z, 0.172 + 0.1)       # v006: a hand that lands on the rail rests ON its top
         LAD.key_hand(s, f, Wh, Bm.to_3x3() @ V(0, -1, 0), V(0, 0, -1))
         hw = Bm @ LB.hip[s]; fwd_ = V(math.sin(R_(yaw_c)), -math.cos(R_(yaw_c)), 0)
         kq = (ph + 0.5 * k + 0.5) % 1.0; kf = 0.25 * (kq if kq <= 0.6 else 0.6 - (kq - 0.6) * 1.5); klift = 0.06 * math.sin(math.pi * kq) if kq > 0.6 else 0.0
         Wa = hw - fwd_ * (0.44 - kf) ; Wa = V(Wa.x, Wa.y, ground_z(Wa.x, Wa.y) + 0.085 + klift)
+        if abs(Wa.x - 0.72) < 0.2: Wa.z = max(Wa.z, 0.172 + 0.09)        # v006: knee lifted over the rail
         LB.foot_world(s, f, Wa, yaw_c, pitch=165, pole_dir=V(0, -0.9, -0.6))
 # stand up: push back onto the feet, rise, wobble
 for f, z_k, pi, fl in ((f_up0, 0.55, 75, -8), (f_up0 + 10, 0.65, 45, 30), (f_up0 + 20, RH.z - 0.35, 25, 35), (f_up0 + 32, RH.z - 0.06, 6, 10), (f_up1, RH.z - 0.03, -4, 6)):
