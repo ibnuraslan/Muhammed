@@ -89,7 +89,7 @@ Beat frames are unchanged (`beats.json` is identical to v006). The simplify rule
 Found while watching the full v007 preview, and fixed:
 - **f706–846:** after the split, the F(12.0)–F(13.9) keys sat about 15 cm from the fragments, so a hand filled the frame (the same fault as note 4). These keys now aim between the fragments and his face from about 50 cm, at 42 mm, so the face, both hands and the flying pieces read together. F(14.4) (beat 6) is a little wider.
 - **f1061–1071:** coming off the neck, the hand rose to his temple. The f1072 up-arc key is removed, so the hand goes straight from the neck down to his side.
-- **Neck hand:** I tried placing it lower and closer to the neck (3 cm and 6 cm lower, 2–6 cm closer). Every variant cut into the shirt collar (`clip_scan` and the hand audit), so it keeps the approved v006 neck poses, now arriving after the hit.
+- **Neck hand:** I tried placing it lower and closer to the neck (3 cm and 6 cm lower, 2–6 cm closer). Every variant cut into the shirt collar (`clip_scan` and the hand audit), so it keeps the approved v006 neck poses, now arriving after the hit. **Known, flagged to the director:** from the f1011–1071 camera angle the hand's fingers rise beside his ear, so it reads as more of a grab beside the ear and neck than a palm flat on the neck. That needs either a different hand pose with collar-aware placement, or a camera change at F(16.55)–F(17.9).
 
 Also fixed, found by the newer director checks:
 - **Officer:** in the walk-out (f1273–1405) the newer `clip_scan` flagged the officer's resting hands inside his own hips (approved v006 has the same flag). Both hands now hang relaxed at his sides, clear of the hips.
