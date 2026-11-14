@@ -1,4 +1,4 @@
-# ToddlerWell: acting review (v003 → v004 → v005)
+# ToddlerWell: acting review (v003 → v004 → v005 → v006)
 
 Method:
 - I rendered a half-second sheet of the approved v003: 270×480, 8 samples, every 30 frames from frame 1. It's in `ACTING_v003_before_0.5s.jpg`.
@@ -120,3 +120,15 @@ Known small items left, judged acceptable:
 - One-frame dark or ground frames where the camera enters or leaves the shaft (136–141, 406, 781, 1366, 1736). Each is under 0.1 s.
 - A thin, sharp tripod leg crosses the knot approach (1131–1146).
 - ResA's arm enters from the frame edge, attached to his body, while he talks with the teen (1051–1106).
+
+## v006: director's review of v005 (Nov 14, 22:26)
+| # | Frames | Director's note | Fix in v006 |
+|---|---|---|---|
+| 1 | 1496–1620 | The teen's fists sit on the toddler's head and face. | The toddler raises his arms in a V. The teen's hands close round his wrists above and wide of his head (wrist targets ±0.15 m, 0.69 m above the toddler's pelvis; the teen stops 25 cm higher). The fingertips clear the top of the toddler's head by about 7 cm. |
+| 2 | 1736–1800 | During the haul-up the toddler dangles separately, up to 1 m from the teen's hands. | His wrists stay in the teen's hands the whole way out: the toddler's hand targets are fixed to the teen's grip, and he hangs straight below it. The teen's grip narrows mid-swing so both hands stay near level. After the swing the teen lifts him into his arms, against his chest (1816–1864). The camera is on the side he faces, so this reads. The hand-off to the mother starts from the chest hold. |
+| 3 | 136–260 | Nearly black frames looking down the shaft. | The shaft fills sit off-axis, against the wall (0.22, 0.22), with a 70 W warm fill during the fall, so the shaft walls and the toddler read without blow-out. |
+| 4 | 401–416 | Black and brown blur as the camera enters the shaft. | The shaft is lit while the camera goes down: the fills are off-axis and on from 300. A route through the cut-away earth was tried and rejected: it showed the void below the ground block. |
+| 5 | 1366–1371 | Empty pipe interior. | The camera goes down outside the casing (key at 1365), never inside the empty pipe. |
+| 6 | 1036–1081 | A disembodied arm (ResA) sweeps across the lens. | The camera sits further out on the teen (0.8, 1.5, 1.55) at 38–40 mm. ResA and his gesturing arm are outside the frame. |
+| 7 | 1201–1311 | The volunteer's arm is raised straight up, stiff, for about 2 s. | His arms are held out at chest height with a little movement while he is tied, then lowered from 1250. |
+| – | 1820–1870 | (follow-on) | ResA walks away to (−1.3, 2.4) to cheer, so he stays out of the new front camera. From 1846 the camera goes round the outside of the tripod feet. |

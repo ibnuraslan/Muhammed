@@ -60,8 +60,8 @@ K = [  # frame, location, target, lens
  (940,  (-0.4, 4.2, 1.45), (-2.4, 6.0, 1.35), 34),     # beside his path, not on it
  (968,  (0.1, 3.4, 1.35), (-2.0, 4.4, 1.2), 32),
  (1000, (0.35, 2.7, 1.4), (-1.35, 2.5, 1.35), 30),
- (1045, (0.3, 0.9, 1.55), (-1.12, 2.0, 1.55), 32),     # two-shot from the side: ResA out of the lens
- (1090, (0.25, 1.05, 1.55), (-1.12, 2.0, 1.55), 36),
+ (1045, (0.8, 1.5, 1.55), (-1.12, 2.0, 1.55), 38),     # on the teen; ResA and his arm out of the lens
+ (1090, (0.75, 1.6, 1.55), (-1.12, 2.0, 1.55), 40),
  (1125, (0.2, -0.4, 1.4), (-1.2, 1.4, 1.2), 30),
  (1142, (-1.0, -1.5, 1.6), (-1.3, 1.1, 1.25), 30),     # beat 6: on the teen walking to the knot; ResC (back to camera) out of frame
  # beat 6: knot
@@ -76,6 +76,7 @@ K = [  # frame, location, target, lens
  (1342, (0.35, -1.1, 0.9), (0.0, 0.0, 0.2), 24),
  # beat 8: inside, torch
  (1358, (-0.5, -0.6, 1.5), (-0.1, 0.35, 0.8), 24),     # beat 8: ResB's face as they feed his legs in
+ (1365, (0.3, -1.3, 0.1), (0.0, 0.05, -0.6), 22),     # down outside the casing (never the empty pipe)
  (1372, (0.3, -1.15, -1.3), (0.0, 0.05, teen_head_z(1372) - 0.2), 22),
  (1400, (0.3, -0.85, teen_head_z(1400) + 0.1), (0.0, 0.05, teen_head_z(1400) + 0.2), 24),     # beside his face, not the empty wall below
  (1440, (-0.3, -0.85, teen_head_z(1440) + 0.1), (0.0, 0.05, teen_head_z(1440) + 0.2), 24),
@@ -94,8 +95,9 @@ K = [  # frame, location, target, lens
  # beat 11: emerge, lift, mother, crane up
  (1785, (1.6, 3.0, 1.2), (-0.2, 0.6, 1.1), 28),     # well outside the tripod: no leg blurring past the lens
  (1805, (2.6, 0.6, 1.4), (-0.3, 0.8, 1.4), 28),     # back round the outside, clear of the tripod and winch
- (1825, (1.6, -1.4, 1.3), (-0.3, 0.85, 1.75), 26),
- (1868, (1.9, -2.4, 1.7), (-0.5, 1.5, 1.25), 26),
+ (1825, (0.4, 2.9, 1.5), (-0.3, 1.0, 1.2), 26),     # in front of him: the toddler held against his chest
+ (1846, (2.8, 1.0, 1.8), (-0.3, 1.0, 1.3), 26),     # round the outside of the tripod feet
+ (1868, (2.5, -2.3, 2.0), (-0.5, 1.5, 1.25), 26),
  (1910, (1.6, -3.6, 4.0), (0.0, 2.2, 0.9), 22),
  (1950, (1.7, -4.6, 5.8), (0.0, 2.6, 0.8), 22),
 ]

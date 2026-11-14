@@ -655,8 +655,8 @@ ld = bpy.data.lights.new("XsecFill", "AREA"); ld.shape = "RECTANGLE"; ld.size = 
 XL = bpy.data.objects.new("XsecFill", ld); C_SET.objects.link(XL); XL.location = (0, -9, -8.5); XL.rotation_euler = (R_(90), 0, 0)
 XL.visible_camera = False; XL.visible_glossy = False
 ld = bpy.data.lights.new("ShaftFill", "POINT"); ld.energy = 0.0; ld.shadow_soft_size = 0.1; ld.color = (1.0, 0.85, 0.65)
-SF = bpy.data.objects.new("ShaftFill", ld); C_SET.objects.link(SF); SF.location = (0, 0, -DEPTH + 2.6); SF.visible_camera = False
-SF2 = bpy.data.objects.new("ShaftFillMid", ld); C_SET.objects.link(SF2); SF2.location = (0.05, 0.05, -6.0); SF2.visible_camera = False
+SF = bpy.data.objects.new("ShaftFill", ld); C_SET.objects.link(SF); SF.location = (0.22, 0.22, -DEPTH + 2.6); SF.visible_camera = False
+SF2 = bpy.data.objects.new("ShaftFillMid", ld); C_SET.objects.link(SF2); SF2.location = (0.22, 0.22, -6.0); SF2.visible_camera = False
 # clouds
 bpy.ops.mesh.primitive_plane_add(size=6000, location=(0, 0, 900)); CL = link(bpy.context.object, C_SET); CL.name = "Clouds"
 m, nt, out = new_mat("M_Clouds"); tc = nt.nodes.new("ShaderNodeTexCoord"); mp = nt.nodes.new("ShaderNodeMapping"); mp.name = "CloudMap"
