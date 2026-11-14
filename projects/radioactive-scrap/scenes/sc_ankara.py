@@ -251,10 +251,21 @@ def c4_7a(c, t):           # two investigators lay the two ledgers side by side 
     a.rot("head", forward(a).cross(Vector((0, 0, 1))), 8); b.rot("head", sd, 6)        # heads up: faces, not crowns
 
 
-def c4_7b(c, t):           # the ledger pages lift in a draught from the window
-    sec = t * dur("ch4_7b"); investigators(c, sec)
-    for k, lf in enumerate((c["leafA"], c["leafB"])):
-        lf.rotation_euler = (0, -math.radians(max(0.0, 35 * math.sin(sec * 1.2 + k * 1.3) ** 2)), 0)
+def c4_7b(c, t):           # the older investigator turns a page of the company ledger by hand; his colleague watches
+    sec = t * dur("ch4_7b"); D = dur("ch4_7b"); a, b = investigators(c, sec)
+    from rs_kit import _reach_raw as reach_full
+    k = ease(min(1.0, max(0.0, (sec - 0.3) / (D * 0.6))))
+    ledgers_close(c)
+    c["leafA"].rotation_euler = (0, -math.pi * k, 0); c["leafB"].rotation_euler = (0, 0, 0)
+    bpy.context.view_layer.update()
+    edge = c["leafA"].matrix_world @ Vector((0.34, -0.08, 0.0))            # his fingers at the page's outer corner
+    sa = forward(a).cross(Vector((0, 0, 1))).normalized()
+    pre = ease(min(1.0, sec / 0.3))
+    rest = a.bone_head("spine02") + forward(a) * 0.35; rest.z = 0.82
+    reach_full(a, "R", rest.lerp(edge + Vector((0, -0.04, 0.03)), pre), Vector((sa.x, sa.y, -1.0)), forward(a) + Vector((0, 0, -0.3)))
+    fingers_curl(a, 55, side=("R",), thumb=45)
+    b.rot("head", Vector((0, 0, 1)), 14)                                     # his colleague looks across at the page
+    c["focus"] = edge
 
 
 def row_point(c, led, r=MISMATCH_ROW):
