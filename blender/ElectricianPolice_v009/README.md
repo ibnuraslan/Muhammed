@@ -5,12 +5,21 @@ v009 is v008 with the director's notes on the moving preview fixed. The beat fra
 | Note | Fix |
 |---|---|
 | 1. Blank faces | **Eye fix:** the LESSONS_LEARNED s3 fix is applied to all 7 EnhancedEye node groups (cornea: transparent mix instead of refractive transmission). **Key light:** `CamFaceKey`, a 0.7 m soft area light riding with the camera, is keyed on for his face shots (gate 490–540, office 602–1105, final stroll 1450–1560) and at a lower level for the station officers (1252–1408). **Helmets:** both sit 2.4 cm higher, so the brim no longer covers his eyes. **Ending:** a smug nod (1544–1552) with the smirk. |
-| 2. Stiff arms raised at 930–1010 | He leans back with his hands behind his head, elbows out and bent, and his fingers relaxed. |
+| 2. Stiff arms raised at 930–1010 | A fist pump: right elbow bent and down, the fist pumping at shoulder height, the left hand resting on his thigh. A hands-behind-head version clipped his head, so it was dropped. |
 | 3. His back fills the frame at 1011–1061 | The camera is at his right side, 1.4 m away: his profile, gloved hand and the lever are in frame. |
 | 4. Dark police room at 1326–1401, and the paper across the lens | The camera is 2.2–3 m from the sweating officer, so he is mid-frame, and it now stays clear of the fanning paper. The turn to the slumped officer is a 5-frame whip (1401–1406). |
 | 5. Keyboard smear | The baked dirt in the laptop's base colour is washed 80 % toward clean beige. |
 
 The preview is `../ElectricianPolice_v001/review/preview.mp4` (also saved as `preview_v009.mp4`), with its contact pages in `../ElectricianPolice_v001/review/preview_v009_pages/`.
+
+**Checks on this package:**
+- `qa_check.py` (fc62c27): CAMJUMP, BACKHEAD, CLAW, HOVER and FACEPRESS are all 0. EMPTY is 26, all listed exceptions.
+- Both clip scans: 0 bad ranges.
+- Hand audit: 3 hits, the intended brow wipe.
+
+**Noticed, not changed:**
+- The sweating officer's hair fringe reads as a dark band over his eyes.
+- The dusk road in the final close-up looks mottled at preview quality (4 samples).
 
 ---
 
