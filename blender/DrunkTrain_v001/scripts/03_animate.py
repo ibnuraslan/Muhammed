@@ -268,8 +268,8 @@ for (f, p, yw, pi, sd, fl, hd, aL, aR) in TRIP_FIX:
     LB.arm_dir("L", f, Bm, aL, reach=0.93); LB.arm_dir("R", f, Bm, aR, reach=0.93)
 # trip feet: R toe snagged against the rail side, L lunges, R frees, small staggers, then both plant for the sit
 ft = f_trip
-foot_w("R", ft, (0.55, 0.95), 95, 0.0, -10); foot_w("R", ft + 10, (0.6, 0.95), 95, 0.03, -25)      # toe under the railhead lip
-foot_w("L", ft, (0.25, 1.18), 98, 0.0); foot_w("L", ft + 6, (0.6, 1.12), 96, 0.22, 20); foot_w("L", ft + 14, (1.18, 1.06), 92, 0.0)
+foot_w("R", ft, (0.47, 0.95), 95, 0.0, -10); foot_w("R", ft + 10, (0.49, 0.95), 95, 0.03, -25)      # v006: toe snags AGAINST the rail side (touching, not inside it)
+foot_w("L", ft, (0.25, 1.18), 98, 0.0); foot_w("L", ft + 6, (0.6, 1.12), 96, 0.3, 20); foot_w("L", ft + 14, (1.18, 1.06), 92, 0.0)
 foot_w("R", ft + 16, (0.95, 0.96), 92, 0.26, 25); foot_w("R", ft + 24, (1.62, 0.84), 90, 0.0)
 foot_w("L", ft + 26, (1.42, 1.0), 90, 0.18, 20); foot_w("L", ft + 34, (2.05, 0.82), 80, 0.0)          # big recovery step
 foot_w("R", ft + 40, (1.95, 0.6), 70, 0.15); foot_w("R", ft + 48, (1.72, 0.48), 60, 0.0)                # staggers back
@@ -346,10 +346,10 @@ def drag_state(f):
         u = (f - T_IMP) / 120.0
         rel = -0.35 + 3.2 * smooth(u)                    # in front of the plough -> pulled under the front bogie side
         y = tf + rel
-        x = LIE_X + (0.0 - LIE_X) * smooth(min(1.0, u / 0.35))
+        x = LIE_X + (0.0 - LIE_X) * smooth(min(1.0, u / 0.12))      # v006: swept to the track centre while still ahead of the pilot tip
         z = 0.14 + (0.15 * math.sin(math.pi * u / 0.2) if u < 0.2 else 0.02 * abs(math.sin(u * 9)))
-        z = max(z, 0.14 + 0.2 * (1.0 - smooth(min(1.0, max(0.0, (u - 0.4) / 0.15)))))      # v006: carried on the plough above the rail tops until he lies along the track     # thrown up at the hit, then low under the plough
-        yaw = 90 + 90 * (1 - (1 - min(1.0, u / 0.6)) ** 2)    # v006: a quarter turn only (ends heading along the track); a full spin swept his legs through the rails
+        z = max(z, 0.14 + 0.2 * (1.0 - smooth(min(1.0, max(0.0, (u - 0.1) / 0.1)))))      # v006: above the rail tops while swept in, then flat under the centre (0.6 m clearance)     # thrown up at the hit, then low under the plough
+        yaw = 90 + 90 * (1 - (1 - min(1.0, u / 0.15)) ** 2)   # v006: a quarter turn, done before the pilot reaches him (legs never sweep the rails or the blades)
         roll = 300 * u + 40 * math.sin(u * 7)
         pitch = -90 + 18 * math.sin(u * 6.5) * (1 - u)
     else:
@@ -465,6 +465,7 @@ for f in list(range(f_crawl0, f_crawl1 + 1, 2)) + [f_crawl1]:
     c = crawl_root(f); yaw_c = 0 + 90 * smooth(min(1, u * 2.5))           # turns from heading -Y to facing +X
     cz = 0.4 + 0.15 * smooth((c.x - 1.4) / 0.4)           # low commando crawl until he clears the loco side
     cz = max(cz, 0.47 + 0.08 * max(0.0, 1 - abs(c.x - 0.72) / 0.5))      # v006: torso carried over the rail (he crawls out in the coupling gap)
+    cz = max(cz, 0.47 + 0.34 * smooth(max(0.0, 1 - abs(c.x - 0.72) / 0.36)))      # v006: hips up so the knees go ON the rail top, not through it
     Bm = LB.B(V(c.x, c.y, cz + 0.03 * math.sin(u * 12)), Rbody(yaw=yaw_c, pitch=84, side=6 * math.sin(u * 12)))
     LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
     LAD.key_spine(f, flex=-8, twist=8 * math.sin(u * 12), head=(-60, 10 * math.sin(u * 7)))     # head up, looking where he crawls
