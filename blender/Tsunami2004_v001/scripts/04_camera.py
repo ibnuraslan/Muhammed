@@ -10,7 +10,7 @@ K = [
     (0.0, (12.0, 13.0, g(12, 13) + 0.9), (4.5, 10.0, 0.7), 32),
     (1.0, (6.0, 28, g(6, 28) + 0.8), (4, 18, 0.6), 40),
     (2.0, (7.5, 50, g(7.5, 50) + 0.8), (5, 40, 0.3), 38),
-    (3.0, (0.3, 88.0, g(0.3, 88) + 0.42), (-1.4, 90.3, g(-1.5, 90) + 0.08), 32),
+    (3.0, (0.3, 86.0, g(0.3, 86) + 0.75), (-1.2, 120.0, 0.4), 30),   # vNEXT: fish in the foreground, receding sea on the horizon
     (4.0, (9, 50, g(9, 50) + 1.4), (7, 40, 0.5), 32),
     (5.3, (11, 66, g(11, 66) + 2.6), (3, 42, 0.8), 30),
     (6.3, (8.5, 58, g(8.5, 58) + 1.0), (4.6, 55.3, 0.0), 32),
@@ -18,9 +18,9 @@ K = [
     (8.2, (2.5, 37.5, g(2.5, 37.5) + 2.0), (0, 1600, 1.0), 70),
     (9.2, (4.2, 51.6, g(4.2, 51.6) + 1.55), (4.6, 54.3, 0.7), 40),
     (10.0, (6.0, 44, g(6, 44) + 2.4), (4.5, 55, 0.2), 26),
-    (10.8, (7.0, 58, 14), (4, 38, 0), 24),
-    (11.8, (3.0, 32, g(3, 32) + 1.6), (0, 900, 9), 40),
-    (12.4, (1.5, 36, g(1.5, 36) + 1.8), (0, 900, 7), 55),
+    (10.8, (12.0, 47, g(12, 47) + 2.4), (4.5, 53, 1.1), 26),   # vNEXT: low three-quarter view, the fisher's face as he waves inland
+    (11.8, (12.0, 60, g(12, 60) + 2.2), (2, 48, 1.3), 30),   # camera path along x=12, clear of the group
+    (12.4, (3.0, 62, g(3, 62) + 1.8), (1, 40, 1.2), 32),
     (12.8, (1.0, 70, 6.0), (0, 400, 2), 26),
     (13.0, (0.7, 88, 2.4), (0, 600, 2), 26),
     (13.12, (0.5, 95, 0.0), (0, 101, -10), 24),
@@ -37,10 +37,10 @@ K = [
     (20.3, (17.0, -15, 1.8), (5, 12, 17), 16),
     (21.5, (85, -55, 16), (0, -26, 6), 30),
     (22.5, (34, -10, 13), (5, -30, 4), 24),
-    (23.5, (48, -45, 14), (32, -70, 3), 24),
-    (24.6, (34, -95, 8.0), (34, -132, 2), 24),
-    (25.7, (33, -138, 8.5), (33, -178, 1.5), 22),
-    (26.8, (31, -172, 9.0), (28, -212, 1), 22),
+    (23.5, (48, -45, 14), (32, -70, 7), 24),
+    (24.6, (34, -95, 8.0), (34, -132, 6), 24),
+    (25.7, (33, -138, 8.5), (33, -178, 6), 22),
+    (26.8, (31, -172, 9.0), (28, -212, 5), 22),
     (28.0, (26, -200, 22), (5, -250, 0), 24),
     (29.0, (-30, -192, 30), (-5, -245, 0), 24),
     (30.4, (-18, -185, 22), (-42, -160, 4), 24),
@@ -68,14 +68,19 @@ for f in range(1, 2401):
     tt_ = (f - 1) / 60.0
     if not (12.9 < tt_ < 15.7):
         p = Vector((p.x, p.y, max(p.z, g(p.x, p.y) + 0.7)))
-    # vNEXT: hold the level cross-section view from 15.0 s, then leave it in one frame at 15.6 s (beat 7) straight to the beach,
-    # together with the hero wave appearing (no tilted box in a grey void, no frame under the sea floor)
-    if F(15.0) <= f < F(15.6):
-        p = posf(F(15.0)); d = dirf(F(15.0)).normalized()
+    # vNEXT cross-section: hold the horizon view 12.95-13.1 s, clean cut in at beat 6 (13.1 s) to a tight level view of the
+    # cross-section (no backdrop edges), slow push-in, clean cut out at 15.6 s (beat 7) to the beach with the wave
+    lens_ov = None
+    if F(12.95) <= f < F(13.1):
+        p = posf(F(12.95)); d = dirf(F(12.95)).normalized()
+    elif F(13.1) <= f < F(15.6):
+        u = (f - F(13.1)) / (F(15.6) - F(13.1)); u = u * u * (3 - 2 * u)
+        p = Vector((-21.0, 100.0, -36.3)).lerp(Vector((-15.5, 99.8, -36.5)), u)
+        d = (Vector((0, 100, -37.6)) - p).normalized(); lens_ov = 33.0
     q = d.to_track_quat('-Z', 'Y'); e = q.to_euler()
     if prev is not None: e.make_compatible(prev)
     prev = e
-    cam.location = p; cam.rotation_euler = e; cd.lens = lensf(f)
+    cam.location = p; cam.rotation_euler = e; cd.lens = lens_ov or lensf(f)
     cam.keyframe_insert("location", frame=f); cam.keyframe_insert("rotation_euler", frame=f); cd.keyframe_insert("lens", frame=f)
 for fc in _fcurves(cam.animation_data.action) + _fcurves(cd.animation_data.action):
     for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
