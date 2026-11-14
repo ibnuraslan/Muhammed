@@ -54,10 +54,9 @@ K = [
     # whip back across the night yard and in through the cell window
     (858,  V(1.00, 3.00, 2.20), V(1.50, 0.80, 1.45), 24, 5.6),
     (864,  V(0.80, 2.10, 1.95), V(1.45, 0.90, 1.55), 24, 4.0),   # in through the window gap
-    (874,  V(1.65, 1.65, 1.85), V(1.62, 0.85, 1.45), 24, 4.0),
-    (888,  V(1.84, 1.30, 1.95), V(1.90, 0.65, 1.15), 28, 4.0),
+    (872,  V(1.72, 0.32, 1.62), V(1.70, 0.92, 1.50), 26, 4.0),   # beat 6 from the lock side: his face
+    (888,  V(1.85, 0.36, 1.40), V(1.92, 0.70, 1.20), 30, 4.0),
     # beat 6  (f871) it didn't fit
-    (900,  V(1.84, 0.82, 2.05), V(1.95, 0.62, 1.10), 30, 4.0),   # over him, eyes on the lock
     (912,  V(1.95, 0.36, 1.10), V(1.98, 0.62, 1.07), 40, 2.8),
     (936,  V(1.95, 0.30, 1.55), V(1.85, 0.88, 1.52), 30, 4.0),
     (962,  V(1.88, 0.40, 1.08), V(1.98, 0.62, 1.07), 40, 2.8),
@@ -78,11 +77,10 @@ K = [
     # beat 8  (f1303) this time the key worked
     (1322, V(0.92, 1.85, 1.22), V(1.18, 1.42, 0.86), 32, 4.0),
     (1360, V(1.58, 1.80, 1.25), V(1.15, 1.30, 1.05), 30, 4.0),
-    (1380, V(1.70, 1.76, 1.95), V(1.35, 1.00, 1.40), 24, 4.0),   # ahead of him at the door: face and key
-    (1394, V(1.62, 0.28, 1.62), V(1.70, 0.75, 1.20), 28, 4.0),
-    (1404, V(1.30, 0.30, 1.75), V(1.90, 0.60, 1.15), 28, 4.0),
-    (1416, V(1.95, 0.36, 1.10), V(1.98, 0.62, 1.07), 40, 2.8),
-    (1432, V(1.95, 0.30, 1.55), V(1.85, 0.88, 1.55), 30, 4.0),
+    (1376, V(1.68, 1.74, 1.92), V(1.30, 0.95, 1.40), 26, 4.0),   # holds on this side and pans: no move past him
+    (1398, V(1.70, 1.72, 1.92), V(1.62, 0.88, 1.40), 28, 4.0),
+    (1420, V(1.70, 1.70, 1.92), V(1.85, 0.72, 1.28), 30, 4.0),
+    (1438, V(1.68, 1.66, 1.90), V(1.95, 0.50, 1.35), 26, 4.0),
     # beat 9  (f1429) through every gate, out of the prison
     (1450, V(1.20, 0.95, 1.55), V(2.30, 0.20, 1.25), 22, 5.6),
     (1478, V(2.90, 0.18, 1.80), V(1.90, 0.50, 1.50), 24, 5.6),
@@ -97,7 +95,7 @@ K = [
     (1692, V(8.30, 3.95, 2.40), V(7.85, 2.45, 1.55), 24, 5.6),
     (1712, V(8.60, 4.70, 3.10), V(8.20, 3.05, 1.50), 24, 5.6),
     (1732, V(8.20, 5.60, 3.40), V(9.00, 4.40, 1.40), 26, 5.6),
-    (1741, V(7.30, 6.10, 5.80), V(6.50, 11.0, 5.00), 24, 5.6),
+    (1741, V(7.30, 6.10, 5.80), V(9.10, 4.60, 1.40), 24, 5.6),
     (1748, V(4.00, 8.00, 9.00), V(2.00, 20.0, 12.0), 22, 5.6),
     (1785, V(2.60, 13.6, 7.60), V(0.00, 22.0, 2.50), 24, 5.6),
     (1812, V(2.20, 16.0, 6.20), V(0.00, 22.4, 2.80), 26, 5.6),
@@ -112,12 +110,13 @@ def _seg(f, idx):
             u = (f - f0) / float(f1 - f0); u = u * u * (3 - 2 * u)
             p0, p1 = (c0, c1) if idx == 0 else (a0, a1)
             if idx == 0 and f0 == 852:   # out through the tunnel (under its roof), then across the yard to the cell window
-                pts = [p0, Vector((11.6, 6.0, 2.0)), Vector((10.0, 6.0, 2.2)), p1]
+                pts = [p0, Vector((13.0, 6.0, 1.6)), Vector((10.2, 6.0, 1.6)), p1]
                 L = [(b - a_).length for a_, b in zip(pts, pts[1:])]; d = u * sum(L)
                 for (a_, b), l in zip(zip(pts, pts[1:]), L):
                     if d <= l: return a_.lerp(b, d / l)
                     d -= l
                 return p1
+            if idx == 1 and f0 == 852: return p0.lerp(p1, min(1.0, 3 * u))   # the view turns to the yard first
             q = p0.lerp(p1, u)   # arcs up over the yard walls
             return q
 def fc(f): return _seg(f, 0) if WHIP[0][0] <= f <= WHIP[-1][0] else fc0(f)
@@ -203,5 +202,8 @@ BEATS = [(1, 1, "He got hold of the prison's master key"), (2, 259, "making a pe
          (10, 1681, "Years later, he became president")]
 json.dump([{"beat": b, "frame": f, "first_words": w} for b, f, w in BEATS], open(os.path.join(HERE, "..", "beats.json"), "w"), indent=1)
 sc.frame_set(1)
+if "L_TunnelFill" not in bpy.data.objects:   # the tunnel reads as a lit passage during the whip
+    tl = bpy.data.lights.new("L_TunnelFill", 'POINT'); tl.energy = 160; tl.color = (1.0, 0.92, 0.82); tl.shadow_soft_size = 0.5
+    to = bpy.data.objects.new("L_TunnelFill", tl); sc.collection.objects.link(to); to.location = (11.7, 6.0, 2.6)
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("CAM saved", OUT)

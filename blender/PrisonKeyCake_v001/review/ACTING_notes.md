@@ -82,3 +82,10 @@ Synced times are mapped back to v007 frames through the camera keys of v009.
    - Flags with 2 points are the shoulder joint itself: the same 2 points flag in the rest pose (tested).
 Moving preview: review/preview_v007c_every5th.mp4 (every 5th frame, 270x480, Cycles 4 samples and denoise), watched frame by frame.
 Still visible in the preview: beat 6 (871) shows him at the door from behind and the right. The whip into the cell passes one dark tunnel frame (856). The crane has one empty-yard frame (1736).
+
+## v007d: rule 3 (camera never passes or brushes a body or a wall). Camera only; animation unchanged from v007c.
+- 853–858: the whip runs down the centre of the tunnel (the only way out of the shop), with the view turned to the bright yard first. A fill light (L_TunnelFill) lights the passage. Then a straight move across the open yard to the cell window.
+- 864–946: the camera comes in through the window gap and goes straight to the lock side. Beat 6 (871) shows his face. No pass over his head; the camera stays on the lock side through the jam.
+- 1376–1440: the camera holds on the north side and only pans as he goes to the door and turns the key. The lock close-up is gone; the hand is seen from a distance.
+- 1736: the crane stays on him one key longer, then pans across the sky to the government building.
+- Closest approach of the camera to any head or torso: at least 0.50 m everywhere except 187 (a stationary close-up of the press, 0.36 m) and 1460–1461 (following him out through the doorway, 0.32 m; unchanged).
