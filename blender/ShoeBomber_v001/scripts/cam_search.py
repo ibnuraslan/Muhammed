@@ -67,6 +67,11 @@ for spec in sys.argv[sys.argv.index("--") + 1:]:
             charf, facing, fill, ins, seen = metrics(dg)
             near = [sc.ray_cast(dg, c, dd, distance=0.08)[0] for dd in (Vector((1,0,0)),Vector((-1,0,0)),Vector((0,1,0)),Vector((0,-1,0)),Vector((0,0,1)),Vector((0,0,-1)))]
             if ins or fill or not seen or facing < 0.1 or charf < 0.18 or (c - head).length < 0.6 or any(near): score[i] = None; continue
+            # v006d: nothing big right in front of the lens, and the subject's face is the first thing on the centre ray
+            hits = ray_grid(dg)
+            if sum(1 for h in hits if h[1] < 0.40) / len(hits) > 0.15: score[i] = None; continue
+            okc, locc, nc, ic, obc, _ = sc.ray_cast(dg, c, (head - c).normalized(), distance=(head - c).length + 0.15)
+            if okc and not (obc.parent == rig or (obc.parent and obc.parent.parent == rig)) and (locc - head).length > 0.12: score[i] = None; continue
             score[i].append(charf + 0.6 * facing)
     ok = [(min(v) - 0.05 * (cands[i][0] - head0).length, i) for i, v in score.items() if v]
     ok.sort(reverse=True)

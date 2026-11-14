@@ -234,7 +234,7 @@ for f in range(500, 541, 10):
 apath3 = catmull([(540, V((0.12, 0.78, 0))), (562, V((0.0, 1.45, 0))), (582, V((-0.16, 2.0, 0)))])
 att.walk(apath3, lambda f: -60 + 40 * smooth((f - 540) / 42.0), 540, 582, stride=0.45, lift=0.05, lean=18)
 swing(att, apath3, 548, 580, facing_y=1, step=8, amp=0.08, period=26)   # lets go of his wrist as he drops and steps up to his head
-stand(att, 597, V((-0.17, 2.02, 0)), -20, spine=(45, 10, 0), head=(15, 10), crouch=0.35)
+stand(att, 597, V((-0.10, 2.02, 0)), -20, spine=(30, 10, 0), head=(12, 10), crouch=0.35)   # v006d: head clear of headrest 05C
 # kneel at his head (y ~ BY+2.0), facing -Y, holding his outstretched right forearm
 for f in (612, 654, 720, 760):
     att.key_root(f, V((-0.18, BY + 2.0, 0.47)), yaw=-20, flex=15)
@@ -278,7 +278,8 @@ sit(pa, 470, SX["C"], BY, flex=4, spine=(12, -30, 0), head=(5, -35))
 hand(pa, "R", 470, V((SX["C"] - 0.50, BY + 0.20, 1.04)), (-1, 0, 0), (0, 0, -1), grip=0.5)    # grabs the top of the bomber's shoulder
 hand(pa, "L", 470, V((SX["C"] - 0.42, BY + 0.05, 0.86)), (-1, 0, -0.2), (0, 0, -1), grip=0.5)
 # stands half up, pushes him into the aisle (follows the bomber's back)
-stand(pa, 525, V((-0.25, BY + 0.30, 0)), FWD - 40, flex=10, spine=(35, -10, 0), head=(20, -10), crouch=0.35)
+sit(pa, 500, SX["C"], BY, flex=2, spine=(4, -25, 0), head=(-12, -30))      # v006d: head up and back as he grabs (his face was in the bomber's shoulder)
+stand(pa, 525, V((-0.25, BY + 0.30, 0)), FWD - 40, flex=10, spine=(25, -10, 0), head=(5, -10), crouch=0.35)
 hand(pa, "R", 525, V((-0.65, BY + 0.30, 1.0)), (1, 0.4, 0), (0, 0, -1), grip=0.8)
 hand(pa, "L", 525, V((-0.80, BY + 0.10, 0.9)), (1, 0.2, 0), (0, 0, -1), grip=0.8)
 # kneels in the aisle by the bomber's left side, both hands on his shoulder blades
@@ -341,10 +342,10 @@ for f in range(1, 441, 40):
         hand(stw, s_, f, V((0.05 + sg * 0.24, 8.0, 0.86)), (0, -0.2, -1), (-sg, 0, 0), grip=0.3)
 stand(stw, 624, V((0.68, 1.45, 0)), -90, spine=(25, 0, 0), head=(20, 0), crouch=0.3, stance=0.14)   # stops beside his arm and lowers to a kneel
 # kneels at the bomber's right side by his upper arm (beat 5) and injects
-SK = V((0.68, BY + 1.28, 0))
+SK = V((0.68, BY + 1.22, 0))   # v006d: 6 cm back from the row-5 seat screen
 for f in (640, 700, 768, 900, 1068):
     stw.key_root(f, V((SK.x, SK.y, 0.56)), yaw=-90, flex=10)
-    stw.key_spine(f, flex=55, twist=0, head=(15, 0))
+    stw.key_spine(f, flex=38, twist=0, head=(10, 0))   # v006d: less lean (his head was in SeatScreen_05D)
     stw.key_foot("L", f, V((SK.x + 0.38, SK.y + 0.14)), -90, 0.02, -65); stw.key_foot("R", f, V((SK.x + 0.40, SK.y - 0.16)), -90, 0.02, -65)
 # "finally sedated": he sits back on his heels and looks up across at the attendant (relief)
 for f in (730, 768):
@@ -368,8 +369,10 @@ for f in range(1, 1069, 20):
         sit(pc, f, SX["D"], BY, spine=(0, 25, 3), head=(0, 30))            # turns to look across
     elif f < 770:
         sit(pc, f, SX["D"], BY, z=0.58, spine=(25, 35, 0), head=(20, 25 + 5 * math.sin(f * 0.1)))   # leans out to watch
-    else:
+    elif f < 940:
         sit(pc, f, SX["D"], BY, spine=(4, 20, 0), head=(12, 30 + 5 * math.sin(f * 0.05)))          # sits back, still watching
+    else:
+        sit(pc, f, SX["D"], BY, spine=(-2, -8, 0), head=(8, 12))          # v006d: settles back against her seat (clear of the raised shoe)
 for f in (1, 380):
     for s in "LR": rest_arm(pc, s, f, V((SX["D"], BY, 0.56)), grip=0.3)
 hand(pc, "R", 470, V((SX["D"] - 0.15, BY + 0.6, 0.95)), (0, 0, 1), (0, -1, 0), grip=0.9)   # hand over her mouth-ish reaction
@@ -404,8 +407,8 @@ TP = AX + V((-1.2, -0.75, 0))
 for f in range(1, 1380, 60):
     stand(trav, f, TP, FWD, spine=(5, 0, 0))
 for f, flex, sp, crouch, hd in ((1393, 0, 10, 0.0, (25, 0)), (1420, 0, 18, 0.03, (35, 5)), (1440, 0, 12, 0.04, (15, 0)), (1455, 5, 18, 0.15, (5, 0)),
-                               (1468, 15, 46, 0.50, (-35, 0)), (1480, 15, 48, 0.52, (-38, 5)), (1500, 5, 20, 0.12, (20, 0))):
-    trav.key_root(f, V((TP.x, TP.y + (0.05 if f >= 1455 else 0), trav.root_head.z - 0.02 - crouch)), yaw=FWD, flex=flex)
+                               (1468, 15, 32, 0.50, (-30, 0)), (1480, 15, 34, 0.52, (-32, 5)), (1500, 5, 20, 0.12, (20, 0))):
+    trav.key_root(f, V((TP.x, TP.y + (-0.22 if 1460 <= f <= 1485 else 0.05 if f >= 1455 else 0), trav.root_head.z - 0.02 - crouch)), yaw=FWD, flex=flex)   # v006d: hips back in the squat (his face was in the tray)
     trav.key_spine(f, flex=sp, head=hd)
     trav.key_foot("L", f, trav.foot_xy("L", TP, FWD), FWD)
 # right foot: steps back out of the sneaker (1425-1445; the sneaker stays on the floor), then plants beside it
