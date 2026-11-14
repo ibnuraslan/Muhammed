@@ -59,14 +59,14 @@ def key_dome(f, s_, chest):
     DOME.keyframe_insert("scale", frame=f); DOME.keyframe_insert("location", frame=f)
 for k in range(0, 23, 2):
     u = k / 22.0; key_dome(f_x0 - 16 + k, 0.003 + 0.997 * u ** 3, CHEST_IN)
-for f_, s_ in ((f_r1 - 20, 1.0), (f_r1 - 12, 0.45), (f_r1 - 6, 0.18), (f_r1 - 3, 0.09), (f_r1, 0.035), (f_r1 + 2, 0.014), (f_r1 + 4, 0.002)):
+for f_, s_ in ((f_r1 - 9, 1.0), (f_r1 - 6, 0.45), (f_r1 - 4, 0.18), (f_r1 - 2, 0.09), (f_r1, 0.035), (f_r1 + 2, 0.014), (f_r1 + 4, 0.002)):      # v006: fast collapse, no empty studio frames
     key_dome(f_, s_, CHEST_OUT)
 # Lad: clothes/hair/eyes off in the x-ray (the body goes translucent)
 XRAY = (f_x0, f_r1)
 for o in LADO.children:
     if o.type == 'MESH' and not o.name.endswith(".body"):
         hide_in(o, [XRAY])
-hide_in(bpy.data.objects["Lad.body"], [(f_r1 - 18, f_r1)])     # the replay body leaves while the bubble shrinks; he reappears standing inside it
+hide_in(bpy.data.objects["Lad.body"], [(f_r1 - 5, f_r1)])      # v006: body gone for 5 frames only (was 18: 0.3 s of empty studio)     # the replay body leaves while the bubble shrinks; he reappears standing inside it
 
 # ------------------------------------------------------------------ helpers: bone attach + bake to a bone
 def bone_world(rig, bn):
@@ -629,7 +629,7 @@ CAM = [  # frame, camera, aim, lens
     (1876, V(3.0, -43.2, 1.6), V(2.4, -41.0, 1.5), 28),
     (1920, V(3.2, -44.0, 1.55), V(2.45, -41.8, 1.45), 28),
     (1985, V(2.95, -44.6, 1.45), V(2.45, -42.85, 1.35), 28),
-    (2020, V(2.78, -43.6, 1.5), V(2.5, -43.1, 1.42), 40),
+    (2020, V(3.0, -44.25, 1.55), V(2.5, -43.1, 1.42), 40),      # v006: further back, his palm never fills the lens
     (2070, V(2.64, -43.8, 1.62), V(2.45, -42.9, 1.63), 40)]
 fc_ = catmull([(f, c) for f, c, a, l in CAM]); fa_ = catmull([(f, a) for f, c, a, l in CAM]); fl_ = catmull([(f, float(l)) for f, c, a, l in CAM])
 for f in list(range(1, sc.frame_end + 1, 2)) + [sc.frame_end]:
