@@ -102,4 +102,14 @@ I also checked every camera key numerically with `scripts/cam_check.py`: distanc
 - f1941–1946: the crane base passes the right edge of the frame.
 - f1961–1971: a parked fire truck passes the left edge, more than 5 m away.
 
-The moving preview is `review/preview.mp4`: every 5th frame, 12 fps, 36 s.
+The round-3 preview was every 5th frame with the volumes hidden. Since round 4, `review/preview.mp4` shows every effect (every 10th frame, 6 fps, 36 s).
+
+## Round 4: director review of v005 (Nov 14, 21:07)
+| # | Note | v006 fix |
+|---|---|---|
+| 31 | The preview hid the fire, smoke, steam and dust; the volumes cost about 30 s per frame. | The volumes are replaced by cheap surface shaders (`scripts/03c_cheap_fx.py`): the same animated objects and node names, with the depth faked by the view-facing factor. The flame column is narrowed to a 2 m base so it is rooted on the wellhead. The preview now shows every effect at about 7 s per frame (270×480, 4 samples). |
+| 32 | f31–250: about 3.5 s riding down the shaft with no people. | The ride is now 30–100 (about 1.2 s). Then the camera pulls up into a stacked frame, with the mixer pouring and the crew above ground and the shaft and plug below (beat 2 at 193). |
+| 33 | f400–1000: the crane alone on an empty desert. | The rewind is framed at 30 m on the crew and the wellhead. Beat 5 is shot from behind the engineers, then behind hose crew A, with the fire beyond them. Beat 6 is unchanged (the face of the hose holder, then crew, arcs and fire in one frame). The route is checked clear of the derrick, the compressor, the trucks and the crew (`scripts/cam_check.py`). |
+| 34 | f1301–1340: the sky pops from night to day. | The fast-forward (1300–1362) no longer sweeps the sun through a night. It stays day. |
+
+Beat frames are unchanged and there is no VO.

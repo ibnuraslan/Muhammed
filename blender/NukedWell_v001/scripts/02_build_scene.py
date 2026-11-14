@@ -625,7 +625,7 @@ def fire_obj(name, base, r0, r1, h, mat):
     o = bpy.data.objects.new(name, me); o.location = base; link(o, C_FX); me.materials.append(mat)
     o.visible_shadow = True
     return o
-FIRE = fire_obj("FireColumn", (0, -1.6, 3.4), 5.0, 30.0, 125.0, fire_material("M_Fire", 3.0))
+FIRE = fire_obj("FireColumn", (0, -1.6, 3.4), 2.0, 30.0, 125.0, fire_material("M_Fire", 3.0))
 SMOKE = fire_obj("SmokePlume", (4, 8, 70), 20.0, 80.0, 190.0, fire_material("M_Smoke", 0.22, smoke=True))
 # heat shimmer: a camera-only refractive sleeve around the column (IOR barely above 1, animated noise normal)
 bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=False, segments=48, radius1=13.0, radius2=34.0, depth=95.0, matrix=Matrix.Translation((0, 0, 47.5)))

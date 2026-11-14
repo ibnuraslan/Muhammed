@@ -1,6 +1,7 @@
 """Camera-path clearance check. Run from blender/: python3 NukedWell_v001/scripts/cam_check.py [a-b ...]
 Rebuilds the CAMK Catmull-Rom path. It reports frames where the lens is within 6 m of a solid prop or the crew, or crosses the ground skin slowly while looking down."""
 import re,ast,numpy as np
+import re,ast,numpy as np
 s=open('NukedWell_v001/scripts/03_animate.py').read()
 blk=s[s.index('CAMK = ['):]; blk=blk[blk.index('['):blk.index('\n]')+2]
 K=ast.literal_eval(re.sub(r'#.*','',blk))
@@ -17,7 +18,7 @@ def catmull(keys):
     return f
 cp=catmull([(k[0],k[1]) for k in K]); ct=catmull([(k[0],k[2]) for k in K])
 BOX={"cap":((-3,-4.6,0),(3,1.4,5)),"cab":((-9,22,0),(-4,27,4.5)),"mast":((-9,20,0),(-5,24,34)),"mixer":((-28,0,0),(-22,5,4)),
-     "crewbunker":((-31,60,0),(-18,65,2)),"hoseA":((14,17,0),(19,24,2)),"hoseB":((-20,16,0),(-15,23,2)),"eng":((33,1,0),(38,7,2)),"collar":((-16,-4.7,0),(-12,-0.7,3)),"FT1":((18,36,0),(26,44,3.5)),"FT2":((-30,40,0),(-22,48,3.5)),"comp":((16.5,12.5,0),(19.5,15.5,1.5)),"cargo":((-44,26,0),(-36,34,3.5)),"wall":((-34,59,0),(-14,60.5,1.2))}
+     "crewbunker":((-31,60,0),(-18,65,2)),"hoseA":((14,17,0),(19,24,2)),"hoseB":((-20,16,0),(-15,23,2)),"eng":((33,1,0),(38,7,2)),"collar":((-16,-4.7,0),(-12,-0.7,3)),"FT1":((18,36,0),(26,44,3.5)),"FT2":((-30,40,0),(-22,48,3.5)),"comp":((16.5,12.5,0),(19.5,15.5,1.5)),"cargo":((-44,26,0),(-36,34,3.5)),"engs":((38,-10,0),(43,-4,2)),"engs2":((33,1,0),(38,7,2)),"solAB":((14,17,0),(19,23,2)),"solCD":((-20,16,0),(-15,23,2)),"fire":((-6,-7.6,0),(6,4.4,60)),"crane_mast":((-9,20,0),(-5,24,34)),"derrick":((34,28,0),(46,40,38)),"wall":((-34,59,0),(-14,60.5,1.2))}
 def dbox(p,b):
     lo,hi=np.array(b[0]),np.array(b[1]); return np.linalg.norm(np.maximum(0,np.maximum(lo-p,p-hi)))
 import sys
