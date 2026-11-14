@@ -22,6 +22,11 @@ No VO was supplied. The film is built to the target beat times in `beats.json` (
 2. Write the anchors (old frame from `beats.json` → second of each beat's first word).
 3. Run `pipeline/retime_to_vo.py`. It warps every keyframe, including the camera and the exposure flashes, and lays the VO strip at frame 1.
 
+## v009b (director's v009 review)
+- **Tear-wipe.** Her fingertips touch her cheek under the eye for about 0.4 s (24.0–24.4 s), then her hand drops to her lap. Her face stays visible.
+- **Swing into the photo.** It is now a quick whip straight from her to the photo; no lamp, toolbox or door frames.
+- Nothing else changed. `review/clip_scan_v009.json` has no bad ranges.
+
 ## Changes in v009 (director's v008 review)
 - **The workshop stays behind her.** The blue explainer backdrop card (4.2–15.9 s) is switched off, so the brick and pegboard workshop is behind her in every shot.
 - **Her arms read as attached.** The workshop medium shots are pulled back about 30 % so her elbows and forearms are in frame.

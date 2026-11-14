@@ -174,7 +174,7 @@ def sob(f, rate=3.6):
 OF_FLEX = track([(F(18.7), 14), (F(21), 22), (F(22.4), 24), (F(23.0), 26), (F(25.3), 25), (F(26.0), 14), (F(28.3), 12)])
 OF_HEADP = track([(F(18.7), 12), (F(19.6), 4), (F(20.3), 16), (F(20.95), 18), (F(21.1), -4), (F(21.7), -2), (F(22.2), 14), (F(22.4), 16), (F(23.0), 10), (F(25.3), 10), (F(26.0), -6), (F(28.3), -4)])
 OF_SOB = track([(F(18.7), 0.15), (F(22.4), 0.2), (F(22.8), 1.4), (F(25.3), 1.2), (F(26.0), 0.3), (F(28.3), 0.2)])
-OF_FACE = track([(F(18.7), 0.0), (F(23.5), 0.0), (F(23.95), 1.0), (F(24.75), 1.0), (F(25.2), 0.0)])   # 0 lap, 1 fingertips wipe a tear from her cheek (v008: no hand over the face)
+OF_FACE = track([(F(18.7), 0.0), (F(23.7), 0.0), (F(24.0), 1.0), (F(24.4), 1.0), (F(24.75), 0.0)])   # 0 lap, 1 fingertips wipe a tear from her cheek (v008: no hand over the face)
 # workshop C (time-lapse + finale)
 def inv_pose(f):
     t = (f - 1) / FPS
@@ -283,9 +283,9 @@ for f in inv_f:
             Dh = hm @ W.R.rest("head").inverted(); Dh3 = Dh.to_3x3()
             hz = W.R.BN["head"].head_local.z
             # wrist below the cheek, fingers up over the eyes, palm towards the face (rest-body coords mapped by the head delta)
-            w = smooth((t - 24.0) / 0.6)                                          # the fingertips slide down and out along the cheek
-            tip = Vector((sx * (0.052 + 0.018 * w), -0.112, hz + 0.065 - 0.035 * w))
-            wr = Vector((sx * 0.085, -0.17, hz - 0.075 - 0.03 * w))
+            w = smooth((t - 24.0) / 0.4)                                          # the fingertips slide down and out along the cheek
+            tip = Vector((sx * (0.048 + 0.015 * w), -0.115, hz - 0.005 - 0.03 * w))   # v009b: on the cheek under the eye
+            wr = Vector((sx * 0.085, -0.17, hz - 0.145 - 0.03 * w))
             d_ = (tip - wr).normalized()
             fc = (Dh @ wr, Dh3 @ d_, Dh3 @ Vector((-sx * 0.25, 1.0, 0.1)))
             g = lerp_grip(lap, fc, fs if s == "R" else 0.0)   # right hand only; the left stays on her lap
@@ -794,7 +794,7 @@ MS(14.4, -0.45, -0.52, 0.04, 36)
 MS(15.0, -0.50, -0.50, 0.05, 34, k=0.6)               # v008: she fires, her face and the gun in one shot
 MS(16.3, -0.62, -0.62, 0.06, 36)                      # v008: she watches the frozen tears fly off (camera clear of their path)
 MS(17.2, -0.64, -0.66, 0.08, 36, k=0.35)
-MS(18.35, -0.66, -0.70, 0.08, 36, k=0.35)               # she watches them go; the camera swings to the photo only for the last half second
+MS(18.5, -0.66, -0.70, 0.08, 36, k=0.35)   # v009b: a quick whip from her straight into the photo               # she watches them go; the camera swings to the photo only for the last half second
 wp(18.58, FRAME_PHOTO + Vector((0.03, 0.95, 0.04)), FRAME_PHOTO, 32, 11)
 wp(18.85, FRAME_PHOTO + Vector((0, 0.6, 0.02)), FRAME_PHOTO + Vector((0, -1, 0)), 30, 11)
 wp(19.05, OF(0.3, -2.4, 1.45), OF(0.3, 0.5, 1.3), 28, 2.0)
