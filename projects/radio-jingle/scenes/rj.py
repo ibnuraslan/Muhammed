@@ -329,6 +329,8 @@ ROLES = {
     "postman":    (1.0, 52, "male_casualsuit05", "short02", 0.45, 0.60, 0.22, 0.30, 0.5, 0.5),
     "expert":     (1.0, 55, "male_elegantsuit01", "short02", 0.55, 0.58, 0.08, 0.30, 0.5, 0.5),
     "expert2":    (0.0, 47, "female_elegantsuit01", "bob02", 0.30, 0.58, 0.10, 0.40, 0.48, 0.45),
+    # the unknown man the court infers went back to the box: only ever a dark silhouette at night, never a face
+    "stranger":   (1.0, 40, "male_casualsuit05", "short02", 0.12, 0.08, 0.10, 0.10, 0.55, 0.5),
 }
 
 # outfits: top colour above, bottom below a split (fraction of the person's height); plain period fabrics
@@ -351,6 +353,7 @@ OUTFITS = {
     "brother": ((0.05, 0.07, 0.15), (0.10, 0.12, 0.18), 0.53),          # navy knit jumper, jeans
     "uncle": ((0.15, 0.13, 0.09), (0.12, 0.11, 0.10), 0.50),
     "tech": ((0.40, 0.45, 0.52), (0.10, 0.10, 0.11), 0.53),
+    "stranger": ((0.025, 0.025, 0.028), (0.03, 0.03, 0.032), 0.50),
 }
 
 

@@ -707,6 +707,84 @@ def cam_brush_ring(c, t):
     return (a.lerp(b, e), BRUSH + Vector((0, 0, 0.3)), 30)
 
 
+# 9-10 LONG TAKE (storyboard v2, Ch1 hero shot, one unbroken move ~22 s): behind the handler as the dog pulls him off
+# the path into the dark wood; his torch sweeps, slows and stops on the red bicycle lying in the ferns; the camera goes on
+# past his shoulder to the bicycle; the other torches come through the trees and close round it; the camera cranes up.
+LONG_DUR = 22.0
+
+
+def _catmull(pts, f):
+    """Smooth point along a list of key positions (uniform), f in 0..1."""
+    n = len(pts) - 1; x = max(0.0, min(0.9999, f)) * n; i = int(x); u = x - i
+    p0 = pts[max(i - 1, 0)]; p1 = pts[i]; p2 = pts[min(i + 1, n)]; p3 = pts[min(i + 2, n)]
+    return 0.5 * ((2 * p1) + (-p0 + p2) * u + (2 * p0 - 5 * p1 + 4 * p2 - p3) * u * u + (-p0 + 3 * p1 - 3 * p2 + p3) * u * u * u)
+
+
+LONG_A = Vector((-13.4, 4.8)); LONG_B = Vector((-11.0, -13.6))           # the handler's line: path edge -> 3.5 m short of the bike
+
+
+def anim_brush_long(c, t, shot, dur):
+    sec = t * dur
+    bk = c["bike"]
+    bk["root"].location = BRUSH + Vector((0, 0, ground_z(c, BRUSH.x, BRUSH.y) + 0.13)); bk["root"].rotation_euler = (math.radians(84), 0, math.radians(35))
+    h = c["P"]["officer"]; dg = c.get("dog")
+    walk_t = 10.5                                                    # he walks for 10.5 s, slowing at the end
+    d = LONG_B - LONG_A; u = d.normalized()
+    s_ = d.length * ease(min(1.0, sec / walk_t)) if sec < walk_t else d.length
+    p_now = LONG_A + u * s_
+    walker(c, h, LONG_A, p_now if sec < walk_t else LONG_B, min(sec, walk_t), speed=d.length / walk_t * 1.15, stride=28)
+    fwd = forward(h)
+    # torch: sweeping ahead while walking, then it slows and settles on the bicycle
+    find = ease(min(1.0, max(0.0, (sec - 8.0) / 3.0)))
+    sweep = _sweep_dir(fwd, sec, 0.45 * (1 - find), 0.5, 0.35)
+    hit = (BRUSH + Vector((0, 0, 0.3)) - h.bone_head("upperarm01.R")).normalized()
+    hold_torch(h, c["torches"]["officer"], sweep.lerp(hit, find).normalized())
+    if dg:                                                           # the dog: a dark shape pulling ahead, then nosing the ferns
+        dpos = p_now + u * 1.7 if sec < walk_t else BRUSH + Vector((0.9, 1.3, 0))
+        dg["root"].location = (dpos.x, dpos.y, ground_z(c, dpos.x, dpos.y))
+        dg["root"].rotation_euler.z = math.atan2(u.y, u.x) if sec < walk_t else math.radians(-120)
+        rj.dog_walk(dg, s_ if sec < walk_t else 0.2 * sec, pull=1.0 if sec < walk_t else 0.0, sniff=0.7, sec=sec)
+        right = fwd.cross(Vector((0, 0, 1))).normalized()
+        lh = rj.rjp.chest_point(h, 0.4, 0.45) - right * 0.15
+        reach(h, "L", lh, Vector((0, 0, -1)) - right * 0.5, fwd)
+        collar = Vector((dpos.x, dpos.y, ground_z(c, dpos.x, dpos.y) + 0.5))
+        w = h.bone_tail("wrist.L"); dv = collar - w
+        lz = c["leash"]; lz.matrix_world = Matrix.Translation((w + collar) / 2) @ dv.to_track_quat('Z', 'Y').to_matrix().to_4x4()
+        lz.scale = (1.0, 1.0, dv.length)
+    # the others come through the trees from the path from 12 s and stop round the bicycle
+    others = [r for r in ("officer2", "officer3", "uncle") if r in c["P"]]
+    for k, r in enumerate(others):
+        hh = c["P"][r]; ang = 1.2 + k * 1.5
+        start = Vector((-8.0 + 3.0 * k, 2.0 - 1.5 * k)); end = BRUSH.to_2d() + Vector((math.cos(ang), math.sin(ang))) * 2.6
+        t0 = 11.0 + 1.2 * k
+        if sec < t0:
+            hh.arm.location = (0, 0, -80); continue
+        walker(c, hh, start, end, sec - t0, speed=1.7, stride=28)
+        aim = (BRUSH + Vector((0, 0, 0.2)) - hh.bone_head("upperarm01.R")).normalized()
+        f_ = ease(min(1.0, (sec - t0) / 6.0))
+        hold_torch(hh, c["torches"][r], _sweep_dir(forward(hh), sec, 0.3, 0.6, 0.3, k).lerp(aim, f_).normalized())
+    _ambient(c, sec)
+
+
+def cam_brush_long(c, t):
+    sec = t * LONG_DUR
+    h = c["P"]["officer"]
+    keys = [Vector((-14.9, 8.4, 1.6)), Vector((-14.4, 3.6, 1.65)), Vector((-13.7, -1.6, 1.65)), Vector((-12.6, -7.5, 1.55)),
+            Vector((-12.3, -10.6, 1.5)), Vector((-11.6, -13.4, 1.25)), Vector((-11.0, -15.0, 1.1)), Vector((-12.5, -12.5, 3.2)),
+            Vector((-14.0, -10.5, 5.6))]
+    loc = _catmull(keys, t)
+    look_h = h.bone_head("spine05") + forward(h) * 3.0 + Vector((0, 0, -0.5))
+    look_b = BRUSH + Vector((0.0, 0.2, 0.25))
+    w = ease(min(1.0, max(0.0, (sec - 9.0) / 4.0)))
+    return (loc, look_h.lerp(look_b, w), 30 + 6 * w * (1 - ease(min(1.0, max(0.0, (sec - 16.5) / 5.0)))))
+
+
+def _f_long(c, t):
+    sec = t * LONG_DUR
+    w = ease(min(1.0, max(0.0, (sec - 9.0) / 4.0)))
+    return c["P"]["officer"].bone_head("spine05").lerp(BRUSH, w)
+
+
 # 11A: the brother runs down the night path toward the torches ; 11B: he joins the line of searchers
 def anim_bro(c, t, shot, dur):
     sec = t * dur
@@ -817,6 +895,7 @@ MOVES = {
     "dog_front": _mk("dog_front", 4.0, cam_dog_front, anim_dog, _fp("officer", "spine05"), 2.8),
     "brush_find": _mk("brush_find", 4.5, cam_brush_find, anim_brush, lambda c, t: BRUSH, 2.8),
     "brush_ring": _mk("brush_ring", 4.5, cam_brush_ring, anim_brush, lambda c, t: BRUSH, 4.0),
+    "brush_long": _mk("brush_long", LONG_DUR, cam_brush_long, anim_brush_long, _f_long, 4.0),
     "bro_run": _mk("bro_run", 4.0, cam_bro_run, anim_bro, _fp("brother", "spine05"), 4.0),
     "bro_line": _mk("bro_line", 4.0, cam_bro_line, anim_bro, _fp("brother"), 4.0),
     "heli": _mk("heli", 5.0, cam_heli, anim_heli),
@@ -829,7 +908,7 @@ VARIANT_FOR = {"ride_track": "lowsun|sister", "ride_reeds": "lowsun|sister", "be
                "father_walk": "dusk|father", "uncle_torch": "dusk|uncle", "meet_wide": "bluehour|father,uncle+lift",
                "father_call": "bluehour|father,uncle", "night_line": NIGHT_LINE + "+car", "night_fire": "night|firefighter,firefighter2",
                "dog_low": "night|officer+dog", "dog_front": "night|officer+dog", "brush_find": "night|officer+dog+lift",
-               "brush_ring": "night|officer,officer2,officer3,neighbour,uncle", "bro_run": "night|brother,officer,officer2,neighbour",
+               "brush_ring": "night|officer,officer2,officer3,neighbour,uncle", "brush_long": "night|officer,officer2,officer3,uncle+dog+lift", "bro_run": "night|brother,officer,officer2,neighbour",
                "bro_line": "night|brother,officer,officer2,neighbour,officer3", "heli": "mist+heli", "divers": "mist|diver,diver2+boat",
                "bend_long": "grey", "view": "mist"}
 

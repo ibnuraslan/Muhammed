@@ -871,6 +871,41 @@ def cam_hangup(c, t):
     return (a.lerp(b, e), Vector((0.95, -0.85, 1.55)), 32)
 
 
+# --- 4C (storyboard v2): "The ride takes about ten minutes ... half an hour later": the hall clock in time-lapse
+#     from 7:20 to 7:50, the pendulum a blur, the sunset patch climbing the wall and fading; the phone silent below
+def anim_lapse(c, t, shot, dur):
+    mins = 7 * 60 + 20 + 30 * ease(min(1.0, max(0.0, (t - 0.05) / 0.9)))
+    h = c["clock_hands"]
+    h["m"].parent.rotation_euler.z = -math.pi / 2                # face into the hall (the model faces -Y)
+    h["m"].rotation_euler.y = math.radians((mins % 60) * 6); h["h"].rotation_euler.y = math.radians((mins / 60.0 % 12) * 30)
+    c["pendulum"].rotation_euler.y = math.radians(7) * math.sin(t * dur * math.pi * 9.0)    # time-lapse: nine swings a second
+    if "lapse_sun" not in c:
+        # the last sun through the door's glass: a hard warm spot whose cone is cut by a small window-frame mask
+        # (opening with a cross mullion, never seen by the camera) so it lands on the wall as a window-shaped patch
+        l = bpy.data.lights.new("LapseSun", "SPOT"); l.energy = 900.0; l.color = (1.0, 0.55, 0.26)
+        l.spot_size = math.radians(70); l.spot_blend = 0.0; l.shadow_soft_size = 0.004
+        o = bpy.data.objects.new("LapseSun", l); bpy.context.collection.objects.link(o); c["lapse_sun"] = o
+        blk = pbr("LapseMask", (0, 0, 0), 1.0)
+        ow, oh, d = 0.032, 0.05, 0.25                          # opening (half sizes) at distance d in front of the spot
+        parts = [box("LM1", (0, oh + 0.3, -d), (1.4, 0.6, 0.004), blk), box("LM2", (0, -oh - 0.3, -d), (1.4, 0.6, 0.004), blk),
+                 box("LM3", (ow + 0.3, 0, -d), (0.6, 2 * oh, 0.004), blk), box("LM4", (-ow - 0.3, 0, -d), (0.6, 2 * oh, 0.004), blk),
+                 box("LM5", (0, 0, -d), (0.003, 2 * oh, 0.004), blk), box("LM6", (0, 0.01, -d), (2 * ow, 0.003, 0.004), blk)]
+        mk = join(parts, "LapseMask"); mk.parent = o; mk.location = (0, 0, 0)
+        mk.visible_camera = False; mk.visible_glossy = False
+    o = c["lapse_sun"]
+    o.location = Vector((-0.95, -2.9, 0.62))
+    aim = Vector((1.1, -0.75, 1.05 + 1.6 * t))                 # the patch slides up the wall over the clock and off it
+    o.rotation_euler = (aim - o.location).to_track_quat('-Z', 'Y').to_euler()
+    handset_rest(c)
+
+
+def cam_lapse(c, t):
+    e = ease(t)
+    ck = Vector((1.0, -0.55, 1.95))
+    a = Vector((-0.55, -1.55, 1.55)); b = Vector((0.15, -0.85, 1.9))
+    return (a.lerp(b, e), ck.lerp(Vector((0.85, -1.0, 1.4)), 0.35 * (1 - e)), 40 + 10 * e)
+
+
 # --- 12A/B: night, the empty piano bench ; torches flicker outside past the piano
 def anim_empty_piano(c, t, shot, dur):
     sec = t * dur
@@ -1143,14 +1178,15 @@ def anim_suit(c, t, shot, dur):
 
 def cam_suitcase(c, t):
     e = ease(t)
-    a = Vector((KTABLE.x - 1.1, KTABLE.y - 0.9, 1.55)); b = Vector((KTABLE.x - 0.9, KTABLE.y - 0.75, 1.45))
-    return (a.lerp(b, e), Vector((KTABLE.x + 0.15, KTABLE.y, c["ktable_top"] + 0.1)), 40)
+    # Rule 7: the detective packing the notes is in frame (head, shoulders, both arms) with the open suitcase
+    a = Vector((KTABLE.x - 1.75, KTABLE.y - 1.35, 1.6)); b = Vector((KTABLE.x - 1.5, KTABLE.y - 1.15, 1.55))
+    return (a.lerp(b, e), Vector((KTABLE.x + 0.35, KTABLE.y - 0.1, c["ktable_top"] + 0.45)), 32)
 
 
 def cam_latch(c, t):
     e = ease(t)
-    a = Vector((KTABLE.x + 2.3, KTABLE.y + 0.4, 1.35)); b = Vector((KTABLE.x + 2.1, KTABLE.y + 0.2, 1.3))
-    return (a.lerp(b, e), Vector((KTABLE.x - 0.1, KTABLE.y - 0.3, 0.95)), 32)
+    a = Vector((KTABLE.x + 2.6, KTABLE.y + 0.5, 1.4)); b = Vector((KTABLE.x + 2.4, KTABLE.y + 0.3, 1.35))
+    return (a.lerp(b, e), Vector((KTABLE.x - 0.1, KTABLE.y - 0.3, 1.12)), 30)
 
 
 MOVES = {
@@ -1168,6 +1204,7 @@ MOVES = {
     "p_page": _mk("p_page", 5.0, cam_p_page, anim_piano, _f_bench, 4.0),
     "dial": _mk("dial", 5.0, cam_dial, anim_dial, _f_mother, 2.8),
     "hangup": _mk("hangup", 4.5, cam_hangup, anim_dial, lambda c, t: Vector((1.0, -0.6, 1.7)), 4.0),
+    "lapse": _mk("lapse", 6.0, cam_lapse, anim_lapse, lambda c, t: Vector((1.0, -0.55, 1.95)), 3.2),
     "bench": _mk("bench", 5.0, cam_bench, anim_empty_piano, _f_bench, 2.8),
     "pwin": _mk("pwin", 4.5, cam_pwin, anim_empty_piano),
     "k_radio": _mk("k_radio", 5.5, cam_kradio, anim_kitchen, lambda c, t: c["kradio"].location + Vector((0, 0, 0.1)), 2.0),
@@ -1191,7 +1228,7 @@ NP = "night+police|mother,officer"
 VARIANT_FOR = {"debug": "morning@hall+police|mother,officer", "debug_liv": "morning|brother,sister", "co_push": NP, "co_profile": NP, "co_officer": NP, "co_tape": NP, "co_top": NP, "co_meter": NP,
                "co_brother": "night|brother", "co_brother_side": "night|brother",
                "p_title": "morning@piano|brother,sister", "p_page": "morning@piano|brother,sister",
-               "dial": "sunset@hall|mother", "hangup": "sunset@hall|mother", "bench": "night", "pwin": "night+torches",
+               "dial": "sunset@hall|mother", "hangup": "sunset@hall|mother", "lapse": "sunset@hall", "bench": "night", "pwin": "night+torches",
                "k_radio": "morning@kitchen|mother,father", "k_window": "morning@kitchen|mother,father", "ring": "morning@hall|mother", "listen": "morning@hall|mother",
                "letter": "morning@kitchen+letter|father,detective", "read": "morning@kitchen+letter|father,detective",
                "thread": "morning@hall+police|tech", "door": "morning@hall+police|officer", "call_left": NP, "toys": NP,

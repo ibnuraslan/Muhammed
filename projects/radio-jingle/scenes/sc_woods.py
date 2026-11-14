@@ -530,6 +530,67 @@ def anim_spruce(c, t, shot, dur):
     rj.sway(c["trees"], sec, 0.006, 0.18)
 
 
+# 13 LONG TAKE (storyboard v2, Ch2 hero shot, one unbroken ~20 s move, labelled "Court reconstruction"): night over
+# the five little spruces. Far off between the trunks a dark figure with a torch comes toward the clearing, stops at its
+# edge with the beam on the spruces, the torch goes out; in the dark the figure turns away; the spruces stir.
+NIGHT_DUR = 20.0
+STR_A = Vector((-15.0, 13.0)); STR_B = Vector((-7.6, 5.4))
+
+
+def _torch_switch(c):
+    """Torch light + lens driven by a control empty's x (1 on, 0 off): a transform, so it bakes and survives retiming."""
+    if "torch_sw" in c:
+        return c["torch_sw"]
+    import rj_case as K
+    sw = K.ctrl_empty("TorchSwitch"); sw.location.x = 1.0
+    tr = c["torch"]; ld = bpy.data.objects.get(tr.get("light", ""))
+    def drive(idb, path, scale):
+        fc = idb.driver_add(path); d = fc.driver; d.type = 'SCRIPTED'
+        v = d.variables.new(); v.name = "s"; v.type = 'TRANSFORMS'
+        v.targets[0].id = sw; v.targets[0].transform_type = 'LOC_X'; v.targets[0].transform_space = 'WORLD_SPACE'
+        d.expression = f"{scale} * s"
+    if ld is not None:
+        drive(ld.data, "energy", ld.data.energy)
+    for ch in tr.children:
+        if ch.name.startswith("TLens"):
+            drive(ch.data.materials[0].node_tree.nodes["Principled BSDF"].inputs['Emission Strength'], "default_value", 30.0)
+    c["torch_sw"] = sw
+    return sw
+
+
+def anim_night_long(c, t, shot, dur):
+    sec = t * dur
+    rj.label(c, "Court reconstruction")
+    for k, s in enumerate(c.get("saplings", [])):
+        s.rotation_euler.x = 0.05 * math.sin(sec * 1.6 + k); s.rotation_euler.y = 0.04 * math.sin(sec * 1.2 + k * 1.3)
+    sw = _torch_switch(c)
+    h = c["P"]["stranger"]; tr = c["torch"]
+    walk_t = 10.0
+    if sec < 15.0:
+        walk(h, STR_A, STR_B, min(sec, walk_t), speed=(STR_B - STR_A).length / walk_t, stride=24)
+    else:                                                  # in the dark he turns and goes back the way he came
+        walk(h, STR_B, STR_A, sec - 15.0, speed=0.9, stride=22)
+    h.arm.location.z += ground_z(c, h.arm.location.x, h.arm.location.y)
+    import sc_path as SP
+    fwd = forward(h)
+    aim_box = (BOX + Vector((0, 0, 0.2)) - h.bone_head("upperarm01.R")).normalized()
+    f_ = ease(min(1.0, max(0.0, (sec - 7.0) / 3.0)))
+    SP.hold_torch(h, tr, SP._sweep_dir(fwd, sec, 0.35, 0.45, 0.35).lerp(aim_box, f_).normalized())
+    sw.location.x = 1.0 if sec < 13.5 else 0.0
+    rj.sway(c["trees"], sec, 0.006, 0.18)
+
+
+def cam_night_long(c, t):
+    e = ease(t)
+    d = (STR_B - BOX.to_2d()).normalized()                # from the spruces toward where he comes from
+    side = Vector((-d.y, d.x))
+    p = BOX.to_2d() - d * (3.2 - 0.6 * e) + side * (0.9 - 1.6 * e)
+    loc = Vector((p.x, p.y, ground_z(c, p.x, p.y) + 1.25 + 0.1 * e))
+    h = c["P"]["stranger"]
+    look = BOX.lerp(h.bone_head("spine05"), 0.62) + Vector((0, 0, 0.2))
+    return (loc, look, 35)
+
+
 def cam_spr_orbit(c, t):
     a = math.radians(200 + 40 * ease(t)); r = 2.4
     return (BOX + Vector((r * math.cos(a), r * math.sin(a), 1.0)), BOX + Vector((0, 0, 0.15)), 35)
@@ -584,6 +645,7 @@ MOVES = {
     "spr_low": _mk("spr_low", 4.5, cam_spr_low, anim_spruce, lambda c, t: BOX + Vector((0.12, -0.05, 0.12)), 1.8),
     "torch_far": _mk("torch_far", 5.0, cam_torch_far, anim_spruce),
     "dark": _mk("dark", 5.0, cam_dark, anim_spruce),
+    "night_long": _mk("night_long", NIGHT_DUR, cam_night_long, anim_night_long, lambda c, t: c["P"]["stranger"].bone_head("spine05"), 5.6),
     "pull": _mk("pull", 5.5, cam_pull, anim_spruce),
 }
 G5 = "officer,officer2,officer3,officer4,officer5"
@@ -592,7 +654,7 @@ VARIANT_FOR = {"line": "grey|" + G5, "tape": "grey|officer,officer2,officer3,off
                "converge": "grey|officer,officer2,officer3,officer4,officer5+rods", "dig": "grey|officer,officer2,officer3+cover+tools",
                "sweep": "grey|officer,officer2+cover+tools", "lid": "grey+lid", "bolt": "grey|officer,officer2,officer3+lid+crowbar",
                "lift": "grey|officer,officer2,officer3+open", "cap": "grey|officer,officer2,officer3+open",
-               "spr_orbit": "dusk+spruces+lift", "spr_low": "dusk+spruces", "torch_far": "night+spruces+torch", "dark": "night+spruces+torch",
+               "spr_orbit": "dusk+spruces+lift", "spr_low": "dusk+spruces", "torch_far": "night+spruces+torch", "dark": "night+spruces+torch", "night_long": "night|stranger+spruces+torch",
                "pull": "grey+spruces"}
 
 _build = build
