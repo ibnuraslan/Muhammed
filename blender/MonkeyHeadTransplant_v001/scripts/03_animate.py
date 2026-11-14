@@ -747,7 +747,7 @@ print("TOOLGRIPS", len(TOOL_LOG))
 # ------------------------------------------------------------------ camera: one spline (keys in world, or in monkey-B space during the void)
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.lens = 28; cam_d.sensor_fit = "AUTO"; cam_d.clip_start = 0.01
 cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 5.6
-for f_, fs_ in ((1, 5.6), (380, 5.6), (400, 11.0), (660, 11.0), (690, 5.6)):
+for f_, fs_ in ((1, 8.0), (380, 8.0), (400, 11.0), (660, 11.0), (690, 11.0), (1030, 11.0), (1200, 8.0)):   # v008g: f/8 wide, f/11 on every macro (LESSONS 2.12)
     cam_d.dof.aperture_fstop = fs_; cam_d.dof.keyframe_insert("aperture_fstop", frame=f_)
 cam = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(cam); sc.camera = cam
 void = D["XR_Void"]; void.parent = cam; void.matrix_parent_inverse = Matrix.Identity(4); void.location = (0, 0, 0)
@@ -919,6 +919,7 @@ for o in D:
     set_const(o)
     if o.type == "LIGHT": o.visible_camera = False; o.visible_glossy = False
 sc.frame_set(1)
+_NO_SAVE = True; exec(open(os.path.join(HERE, "eye_fix.py")).read())   # v008g: MPFB black-hole eyes fix (LESSONS 3)
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("ANIM_SAVED", OUT)
 
