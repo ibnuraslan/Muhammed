@@ -299,8 +299,8 @@ for f in inv_f:
             key_shape(W, s, f, sh)
     elif p["set"] == "tl":
         ph = p["phase"]
-        PTS = {0: {"R": (Vector((0.10, 0.19, BT + 0.075)), Vector((0.15, -1, -0.55)), Vector((0.75, 0, -0.65))),   # writing hand on its side
-                   "L": (Vector((-0.12, 0.15, BT + 0.03)), Vector((0.4, -1, -0.3)), Vector((0, 0, -1)))},
+        PTS = {0: {"R": (Vector((-0.11, 0.19, BT + 0.075)), Vector((-0.15, -1, -0.55)), Vector((-0.75, 0, -0.65))),   # v009: writing hand on its own side, no crossed forearms
+                   "L": (Vector((0.14, 0.15, BT + 0.03)), Vector((-0.4, -1, -0.3)), Vector((0, 0, -1)))},
                1: {"R": (Vector((-0.50, 0.07, BT + 0.28)), Vector((0.95, -0.25, -0.15)), Vector((0, -0.3, -0.95))),     # wraps the handle
                    "L": (Vector((-0.19, 0.06, BT + 0.29)), Vector((-0.2, -1, -0.15)), Vector((0, 0, -1)))},             # flat on the tip
                2: {"R": (Vector((-0.09, 0.18, BT + 0.07)), Vector((0.3, -1, -0.4)), Vector((0.5, 0, -1))),
@@ -406,13 +406,13 @@ for f in men_f:
         shieldL = (D @ Vector((0.21, -0.30, 1.22)), D3m @ Vector((-0.1, -0.25, 1.0)), D3m @ Vector((-0.05, -1, 0.2)))
         slap = (Vector((POS_MO.x + 0.12, desk_y - 0.02, DT + 0.03 + 0.12 * (1 - min(1, SLAP(f) * 1.6)))), Vector((-0.1, 1, -0.1)), Vector((0, 0, -1)))
         g = lerp_grip(g, slap, SLAP(f))
-        g = lerp_grip(g, shieldR, pelt)
+        g = lerp_grip(g, hangR, pelt)   # v009: no raised hands, they stay relaxed at his sides
         M.key_hand("R", f, g[0], g[1], g[2], pole=g[0] + Vector((-0.45, -0.25, -0.2)))
-        gl = lerp_grip(hangL, shieldL, pelt)
+        gl = hangL
         M.key_hand("L", f, gl[0], gl[1], gl[2], pole=gl[0] + Vector((0.45, -0.25, -0.2)))
-        key_shape(M, "L", f, mix_shape("relaxed", "open_alarm", 0.6 * pelt))
+        key_shape(M, "L", f, mix_shape("relaxed", "relaxed", 0.0))
         pointing = jab * (1 - awk) * (1 - pelt)
-        sh = mix_shape("relaxed", "point", pointing); sh = mix_shape(sh, "flat", min(1.0, SLAP(f) * 1.5)); sh = mix_shape(sh, "open_alarm", 0.6 * pelt)
+        sh = mix_shape("relaxed", "point", pointing); sh = mix_shape(sh, "flat", min(1.0, SLAP(f) * 1.5)); sh = mix_shape(sh, "relaxed", pelt)
         key_shape(M, "R", f, sh)
     else:
         arms = smooth((t - 31.3) / 0.6); hit = math.sin(math.pi * min(1, max(0, (t - 32.9) / 0.45))) if t >= 32.9 else 0.0
@@ -683,7 +683,7 @@ for i in range(3):
 
 # ------------------------------------------------------------------ time-lapse props + grinder sparks (beat 12)
 tl = {n: bpy.data.objects[n] for n in ("TL_Sketch", "TL_Pencil", "TL_File")}
-key_obj(tl["TL_Sketch"], 1, Vector((0, 0, -50))); key_obj(tl["TL_Sketch"], F(28.3), Vector((0.1, -0.05, BT + 0.001)))
+key_obj(tl["TL_Sketch"], 1, Vector((0, 0, -50))); key_obj(tl["TL_Sketch"], F(28.3), Vector((-0.12, -0.05, BT + 0.001)))
 tl["TL_Sketch"].rotation_euler = (0, 0, R_(8))
 def bone_w(name, tail=False):
     pb = WR.PB[name]; return WR.o.matrix_world @ (pb.tail if tail else pb.head)
@@ -780,22 +780,22 @@ MS(2.6, 0.24, -0.78, 0.03, 42)
 MS(3.5, 0.20, -0.80, 0.0, 40)
 wp(4.35, G(F(4.35), (0.12, -0.42, 0.26)), G(F(4.35), (0, -0.095, 0.10)), 45, 16)   # gun close shot 1: the tears drop into the chamber
 wp(5.0, G(F(5.0), (0.10, -0.36, 0.20)), G(F(5.0), (0, -0.095, 0.085)), 50, 16)
-MS(5.7, 0.38, -0.80, 0.10, 40, k=0.3)
+MS(5.7, 0.49, -1.04, 0.14, 40, k=0.3)
 wp(6.4, G(F(6.4), (0.40, -0.36, 0.20)), G(F(6.4), (0.06, -0.09, 0.07)), 40, 16)   # gun close shot 2: her hand turns the valve
-MS(7.3, 0.36, -0.85, 0.10, 40, k=0.3)
-MS(8.3, 0.18, -0.88, 0.08, 40, k=0.4)
-MS(9.3, 0.0, -0.85, 0.06, 40)
-MS(10.1, 0.08, -0.62, 0.06, 45, k=0.55)              # the tears freeze: closer medium, her face still in frame
-MS(10.9, -0.08, -0.62, 0.06, 45, k=0.55)
-MS(11.8, -0.20, -0.82, 0.05, 40)
-MS(12.8, -0.30, -0.78, 0.08, 40)
+MS(7.3, 0.47, -1.10, 0.14, 40, k=0.3)
+MS(8.3, 0.23, -1.14, 0.12, 40, k=0.4)
+MS(9.3, 0.00, -1.10, 0.10, 40)
+MS(10.1, 0.12, -0.96, 0.10, 45, k=0.55)              # the tears freeze: closer medium, her face still in frame
+MS(10.9, -0.12, -0.96, 0.10, 45, k=0.55)
+MS(11.8, -0.26, -1.07, 0.09, 40)
+MS(12.8, -0.39, -1.01, 0.12, 40)
 MS(13.7, -0.40, -0.66, 0.05, 38)
 MS(14.4, -0.45, -0.52, 0.04, 36)
 MS(15.0, -0.50, -0.50, 0.05, 34, k=0.6)               # v008: she fires, her face and the gun in one shot
 MS(16.3, -0.62, -0.62, 0.06, 36)                      # v008: she watches the frozen tears fly off (camera clear of their path)
-MS(17.2, -0.70, -0.30, 0.10, 34, k=0.3)
-MS(18.2, -0.75, -0.25, 0.10, 34, k=0.3)               # she watches them go; the camera swings to the photo only for the last half second
-wp(18.6, FRAME_PHOTO + Vector((0.05, 1.35, 0.05)), FRAME_PHOTO, 32, 11)
+MS(17.2, -0.64, -0.66, 0.08, 36, k=0.35)
+MS(18.35, -0.66, -0.70, 0.08, 36, k=0.35)               # she watches them go; the camera swings to the photo only for the last half second
+wp(18.58, FRAME_PHOTO + Vector((0.03, 0.95, 0.04)), FRAME_PHOTO, 32, 11)
 wp(18.85, FRAME_PHOTO + Vector((0, 0.6, 0.02)), FRAME_PHOTO + Vector((0, -1, 0)), 30, 11)
 wp(19.05, OF(0.3, -2.4, 1.45), OF(0.3, 0.5, 1.3), 28, 2.0)
 wp(19.4, OF(0.62, -1.15, 1.28), HEAD(M, F(19.4)), 32, 4.0)
@@ -812,6 +812,7 @@ wp(26.25, OF(0.98, -0.12, 1.35), HEAD(W, F(26.25)), 30, 5.6)   # orbit round her
 wp(26.6, OF(0.72, -0.72, 1.45), HEAD(M, F(26.6)), 32, 5.6)   # over her shoulder: he flinches
 wp(27.4, OF(0.35, 0.35, 1.7), HEAD(M, F(27.4)), 30, 4.0)
 wp(28.15, OF(0.65, -0.05, 1.6), HEAD(M, F(28.15)) + Vector((0, 0, -0.05)), 28, 4.0)
+wp(28.3, OF(0.65, -0.05, 1.6), HEAD(M, F(28.3)) + Vector((0, 0, -0.05)), 28, 4.0)   # v009: hold on him; the jump to the workshop happens inside the flash
 wp(28.45, Vector((0.05, -3.4, 1.45)), Vector((0, 0.2, 1.0)), 28, 2.0)
 wp(28.8, Vector((0.7, -0.75, 1.45)), Vector((0.0, 0.35, BT + 0.25)), 32, 5.6)
 wp(29.7, Vector((0.05, -0.6, 1.65)), Vector((-0.2, 0.35, BT + 0.3)), 32, 5.6)
@@ -822,14 +823,14 @@ wp(32.1, Vector((-0.85, 0.15, 1.30)), Vector((0.0, 0.26, 1.30)), 26, 8.0)   # pr
 wp(32.8, Vector((-0.12, 0.05, 1.32)), HEAD(M, F(32.8)) + Vector((0, 0, -0.35)), 35, 4.0)
 wp(33.5, Vector((0.05, -1.05, 1.42)), HEAD(M, F(33.5)) + Vector((0, 0, -0.25)), 40, 4.0)
 wp(33.95, Vector((1.05, -1.55, 1.55)), HEAD(M, F(33.95)) + Vector((0, 0, -0.2)), 30, 4.0)
-wp(34.5, Vector((0.64, -3.42, 1.8)), HEAD(W, F(34.5)), 66, 5.6)   # v008: end on her face over his shoulder
-wp(35.0, Vector((0.62, -3.42, 1.8)), HEAD(W, F(35.0)), 74, 5.6)
+wp(34.5, Vector((0.72, -3.42, 1.8)), HEAD(W, F(34.5)), 85, 5.6)   # v008: end on her face over his shoulder
+wp(35.0, Vector((0.72, -3.42, 1.8)), HEAD(W, F(35.0)), 90, 5.6)
 cpos = catmull([(w[0], w[1]) for w in WP]); ctgt = catmull([(w[0], w[2]) for w in WP])
 clen = pchip([(w[0], w[3]) for w in WP]); cfs = pchip([(w[0], w[4]) for w in WP])
 card = bpy.data.objects["ExplainerCard"]; card.parent = cam; card.location = (0, 0, -1); card.rotation_euler = (0, 0, 0)
 con = node_val("M_ExplainerGradient", "CardOn")
-for f, v in ((1, 0.0), (F(4.35), 0.0), (F(4.8), 1.0), (F(15.0), 1.0), (F(15.7), 0.0)):
-    key_node(con, f, v)
+for f, v in ((1, 0.0),):
+    key_node(con, f, v)   # v009: no backdrop card, the workshop stays behind her
 for f in range(1, 2101):
     p = cpos(f); tg = ctgt(f)
     cam.location = p; cam.rotation_euler = (tg - p).to_track_quat('-Z', 'Y').to_euler()
@@ -853,7 +854,7 @@ for o in [bpy.data.objects["Gas_%d" % i] for i in range(6)]:
 key_hide(bpy.data.objects["MuzzlePuff"], [(1, True), (F(14.95), False), (F(16.1), True), (F(32.35), False), (F(33.5), True)])
 key_hide(bpy.data.objects["ImpactPuff"], [(1, True), (F(32.85), False), (F(34.9), True)])
 # park FX geometry out of the scene while it isn't used (it would otherwise sit beside her hands)
-key_hide(card, [(1, True), (F(4.2), False), (F(15.9), True)])   # hidden from render and from ray casts outside the cutaway
+key_hide(card, [(1, True)])   # v009: card never shown   # hidden from render and from ray casts outside the cutaway
 for fr_ in (1, F(4.2) - 1, F(15.9) + 1, 2100):      # outside the cutaway the (see-through) card sits far ahead, away from the hands
     card.location = (0, 0, -80); card.keyframe_insert("location", frame=fr_)
 def park(o, ranges):
@@ -878,7 +879,7 @@ for i in range(6):
         o.location = (0, 0, -50); o.keyframe_insert("location", frame=fr_)
 # exposure: white flashes for the memory in / out, office a touch brighter
 vs = sc.view_settings
-for t, e in ((0, 0.0), (18.62, 0.0), (18.92, 5.5), (19.05, 5.5), (19.35, -0.4), (28.05, -0.4), (28.32, 5.5), (28.45, 5.5), (28.8, 0.0)):
+for t, e in ((0, 0.0), (18.62, 0.0), (18.92, 5.5), (19.05, 5.5), (19.35, -0.4), (28.12, -0.4), (28.22, 5.5), (28.45, 5.5), (28.8, 0.0)):
     vs.exposure = e; vs.keyframe_insert("exposure", frame=F(t))
 sc.frame_set(1)
 # v008: the office desk lamp and window blinds read as a floating lamp and diagonal stripes in the quick office pans -> removed
