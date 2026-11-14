@@ -251,8 +251,8 @@ for f in (790, 900, 1000, 1068):
     hand(att, "L", f, V((0.21, BY + 1.36, 0.46)), (0, -1, -0.4), (0, 0, -1), grip=0.5)
 KN = V((0.10, BY - 0.80, 0))          # PaxB kneeling behind his feet, facing +Y
 for f in (874, 880, 940, 1000, 1068):
-    pb.key_root(f, V((KN.x, KN.y, 0.55 if f < 900 else 0.64)), yaw=FWD, flex=12 if f < 900 else 5)
-    pb.key_spine(f, flex=35 if f < 900 else 5, twist=0, head=(-20, 0) if f < 900 else (5, 0))   # v006d: face up while her hands work at his feet
+    pb.key_root(f, V((KN.x, KN.y, 0.55)), yaw=FWD, flex=12 if f < 940 else 6)
+    pb.key_spine(f, flex=35 if f < 940 else 15, twist=0, head=(-20, 0) if f < 940 else (5, 0))   # v006d: face up while his hands work at the feet
     pb.key_foot("L", f, V((KN.x - 0.12, KN.y - 0.35)), FWD, 0.02, -65); pb.key_foot("R", f, V((KN.x + 0.14, KN.y - 0.33)), FWD, 0.02, -65)
 # grasp the heels (870), pull off (880-900), lift up together (900-960), turn the soles to the light (960-1068)
 ev(876); hl = wpos(bom, "foot.L", 876); hr = wpos(bom, "foot.R", 876)
@@ -260,9 +260,13 @@ hand(pb, "L", 876, hl + V((-0.06, -0.05, 0.10)), (0.2, 1, -0.3), (1, 0, 0), grip
 hand(pb, "R", 876, hr + V((0.06, -0.05, 0.10)), (-0.2, 1, -0.3), (-1, 0, 0), grip=0.7)
 hand(pb, "L", 900, V((KN.x - 0.2, KN.y + 0.45, 0.35)), (0, 1, 0.2), (1, 0, 0), grip=0.75)
 hand(pb, "R", 900, V((KN.x + 0.2, KN.y + 0.45, 0.35)), (0, 1, 0.2), (-1, 0, 0), grip=0.75)
-for f, z, rot in ((950, 1.05, 0), (1000, 1.15, 25), (1068, 1.2, 35)):
-    hand(pb, "L", f, V((KN.x - 0.22, KN.y + 0.32, z)), (0.3, 0.5, 0.8), (1, 0, 0), grip=0.75)
-    hand(pb, "R", f, V((KN.x + 0.22, KN.y + 0.32, z)), (-0.3, 0.5, 0.8), (-1, 0, 0), grip=0.75)
+# v006d (director rule 1: remove the risk): he sets the shoes down on the carpet in front of him (released at 930), then rests his hands
+for f, z in ((915, 0.22), (927, 0.14)):
+    hand(pb, "L", f, V((KN.x - 0.16, KN.y + 0.34, z)), (0, 1, -0.6), (1, 0, 0), grip=0.75)
+    hand(pb, "R", f, V((KN.x + 0.16, KN.y + 0.34, z)), (0, 1, -0.6), (-1, 0, 0), grip=0.75)
+for f in (945, 1068):
+    hand(pb, "L", f, V((KN.x - 0.14, KN.y + 0.12, 0.52)), (0, 1, -0.4), (0, 0, -1), grip=0.25)
+    hand(pb, "R", f, V((KN.x + 0.14, KN.y + 0.12, 0.52)), (0, 1, -0.4), (0, 0, -1), grip=0.25)
 print("ATTENDANT_DONE")
 
 # ---------------------------------------------------------------- PAX A (asleep next to him in 3B, wakes, grabs him, helps pin his shoulders)

@@ -107,7 +107,12 @@ for s, hs in (("L", "L"), ("R", "R")):
     cr = Carry(shoe)
     cr.hold(bom, "foot." + s, 1, attach_rest(shoe, bom, "foot." + s, 1, offs))
     cr.hold(RIG["PaxB"], "wrist." + hs, 878)    # v006d: PaxB grasps the heel; the shoe leaves the foot with his hand
+    cr.free(930)                                # set down on the carpet: released, then settles the last few cm (no pop)
     cr.done()
+    park = bpy.data.objects["Park_%s_930" % shoe.name]; sc.frame_set(929)
+    Mw = shoe.matrix_world.copy(); zmin = min((Mw @ V(c)).z for c in shoe.bound_box)
+    park.keyframe_insert("location", frame=930)
+    park.location = park.location - V((0, 0, max(0.0, zmin - 0.003))); park.keyframe_insert("location", frame=938)
     # traveller's pair
     ts = O["Shoe_%s_Trav" % s]
     ct = Carry(ts)
@@ -451,29 +456,30 @@ CAB = [[
     (540, P(-0.892, 1.042, 1.143), bp("Attendant", "head", 540, (0, 0, -0.1)), 28),
     (556, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 556, (0, 0, -0.1)), 28),
     (566, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 566, (0, 0, -0.1)), 28),
-    (580, V((-0.62, 1.40, 1.80)), bp("Bomber", "spine01", 580, (0, 0.3, 0)), 24),   # v006d rule 3: over the seat backs, clear of her head
-    (594, V((-0.40, 2.95, 1.90)), bp("Bomber", "spine01", 594, (0, 0.3, 0)), 22),   # 0.5 m off the steward's walk, above his head
-    (606, V((-0.40, 2.95, 1.90)), bp("Bomber", "spine01", 606, (0, 0.3, 0)), 22),
+    (580, V((-0.80, 1.30, 1.65)), bp("Bomber", "spine01", 580, (0, 0.3, 0)), 24),   # v006d rule 3: over the seat backs, clear of her head
+    (594, V((-0.75, 2.95, 1.65)), bp("Bomber", "spine01", 594, (0, 0.3, 0)), 22),   # 0.5 m off the steward's walk, above his head
+    (606, V((-0.75, 2.95, 1.65)), bp("Bomber", "spine01", 606, (0, 0.3, 0)), 22),
     (625, V((0.05, 2.25, 1.95)), bp("Bomber", "spine01", 625, (0, 0.2, 0)), 22),   # v006c: off vertical (no track-to flip)
     # beat 5: down to the steward's face as he injects (reached by 655), push to the arm, two-shot on "finally sedated"
-    (640, V((-0.30, 1.60, 1.55)), (bp("Steward", "head", 640) + bp("Bomber", "spine01", 640)) / 2, 22),   # v006c: down beside the steward, never over the aim
-    (655, P(-0.143, -0.447, 1.186), bp("Steward", "head", 655), 28),
+    (640, V((-0.55, 1.20, 1.75)), (bp("Steward", "head", 640) + bp("Bomber", "spine01", 640)) / 2, 22),   # v006c: down beside the steward, never over the aim
+    (655, V((-0.20, -0.50, 1.45)), bp("Steward", "head", 655), 28),
     # v006d: a steady shot on the steward's face while he injects (the arm macro filled the frame with sleeves)
-    (680, P(-0.143, -0.447, 1.186), bp("Steward", "head", 680), 28),
-    (722, P(-0.143, -0.447, 1.186), bp("Steward", "head", 722), 28),
-    (736, V((0.02, 0.70, 1.30)), (bp("Steward", "head", 736) + bp("Attendant", "head", 736)) / 2 + V((0, 0, -0.05)), 20),
+    (680, V((-0.20, -0.50, 1.45)), bp("Steward", "head", 680), 28),
+    (722, V((-0.20, -0.50, 1.45)), bp("Steward", "head", 722), 28),
+    (736, V((0.02, 0.70, 1.50)), (bp("Steward", "head", 736) + bp("Attendant", "head", 736)) / 2 + V((0, 0, -0.05)), 20),
     (752, V((-0.02, 0.85, 1.15)), (bp("Steward", "head", 752) + bp("Attendant", "head", 752)) / 2 + V((0, 0, -0.08)), 20),
-    (769, P(0.168, 0.702, 1.191), bp("Attendant", "head", 769, (0, 0, -0.1)), 28),
-    (776, P(0.168, 0.702, 1.191), bp("Attendant", "head", 776, (0, 0, -0.1)), 28),
+    (769, V((0.168, 0.702, 1.45)), bp("Attendant", "head", 769, (0, 0, -0.1)), 28),
+    (776, V((0.168, 0.702, 1.45)), bp("Attendant", "head", 776, (0, 0, -0.1)), 28),
     # beat 6: rise to his feet -> kneeling level -> with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
-    (830, P(0.20, 0.70, 1.28), bp("PaxB", "head", 830, (0, 0, -0.1)), 24),   # v006d: nobody walks the aisle now; a slow pan to PaxB at his feet
+    (830, V((0.20, 0.70, 1.45)), bp("PaxB", "head", 830, (0, 0, -0.1)), 24),   # v006d: nobody walks the aisle now; a slow pan to PaxB at his feet
     # v006d: her face while she pulls the shoes off (the old framing looked down on the top of her head)
     (866, P(0.223, 0.702, 1.347), bp("PaxB", "head", 866, (0, 0, -0.1)), 22),
     (890, P(0.223, 0.702, 1.347), bp("PaxB", "head", 890, (0, 0, -0.1)), 22),
     (902, P(0.05, 1.089, 1.202), bp("PaxB", "head", 902, (0, 0, -0.1)), 22),
     (920, P(0.05, 1.089, 1.202), bp("PaxB", "head", 920, (0, 0, -0.1)), 22),
-    (965, V((0.14, 0.40, 1.38)), (fuse_tip("L", 965) * 0.5 + bp("PaxB", "head", 965) * 0.5), 28),
-    (1015, V((0.16, 0.40, 1.40)), (fuse_tip("R", 1015) * 0.5 + bp("PaxB", "head", 1015) * 0.5), 30),
+    # the shoes on the carpet: fuse 1, rack to fuse 2 (PaxB's face behind them), then into the sole
+    (965, V((0.10, 0.05, 0.75)), (fuse_tip("L", 965) * 0.6 + bp("PaxB", "head", 965) * 0.4), 28),
+    (1015, V((0.18, 0.05, 0.75)), (fuse_tip("R", 1015) * 0.6 + bp("PaxB", "head", 1015) * 0.4), 30),
     (1062, fuse_tip("L", 1062) + V((0, 0.03, 0.03)), op("Shoe_L", 1062, (0, 0, 0.05)), 40),
     (1068, fuse_tip("L", 1068) + V((0, 0.025, 0.025)), op("Shoe_L", 1068, (0, 0, 0.05)), 40),
   ]]
