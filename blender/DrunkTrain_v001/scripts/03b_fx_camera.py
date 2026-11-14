@@ -602,7 +602,8 @@ CAM = [  # frame, camera, aim, lens
     (1113, V(1.8, -40.4, 1.45), V(4.0, -38.4, 1.3), 18),
     (1138, V(1.85, -40.1, 0.95), V(2.62, -41.6, 0.8), 24),
     (1155, V(1.95, -41.9, 0.32), V(0.6, -40.6, 0.5), 22),
-    (1168, V(0.55, -41.6, 0.3), V(0.48, -40.67, 0.6), 22),      # v005: low inside the gauge, in front of him: his face reads at the beat 8 start
+    (1168, V(0.55, -41.6, 0.36), V(0.48, -40.67, 0.6), 22),
+    (1185, V(1.55, -41.75, 0.62), V(1.0, -40.3, 0.55), 22),      # v006: crosses the rail high, so the rail never sweeps the lens      # v005: low inside the gauge, in front of him: his face reads at the beat 8 start
     (1200, V(2.95, -41.0, 0.5), V(1.3, -40.0, 0.45), 24),
     (1230, V(3.45, -40.95, 0.9), V(2.2, -40.1, 1.05), 26),
     (1250, V(3.95, -40.6, 1.45), V(2.4, -40.1, 1.45), 28),
