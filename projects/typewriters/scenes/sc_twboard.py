@@ -86,7 +86,7 @@ def build(variant=None):
 
 
 def animate(c, sec, shot):
-    c["string"].bevel_factor_end = min(1.0, 0.15 + sec / 5.0)
+    c["string"].bevel_factor_end = 1.0              # the string is already up: nothing on the board moves by itself
     bpy.context.view_layer.update()
 
 

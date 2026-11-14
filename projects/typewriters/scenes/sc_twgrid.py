@@ -77,9 +77,8 @@ def build(variant=None):
 
 def animate(c, sec, shot):
     if shot == "cleared":
-        shown = int(2 + sec / DUR["cleared"] * 7)                       # row after row, the checked gear piles up
-        for j, i, e in c["items"]:
-            e.hide_render = j > shown or (j == shown and i > (sec * 9) % 12)
+        for j, i, e in c["items"]:                                      # everything already laid out: only the camera moves
+            e.hide_render = False
     bpy.context.view_layer.update()
 
 
