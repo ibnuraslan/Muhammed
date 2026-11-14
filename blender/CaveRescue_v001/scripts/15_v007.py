@@ -14,7 +14,7 @@ sc = bpy.context.scene; cam = sc.camera
 _NO_SAVE = True; exec(open(os.path.join(HERE, "14_eye_fix.py")).read())
 cam.data.dof.aperture_fstop = 11.0
 # (start, end, clearance m, include env walls)   ranges from preview pv1 (film frames)
-RANGES = [(120, 152, 1.4, False), (498, 526, 1.4, False), (280, 300, 0.9, False), (386, 406, 0.9, False), (496, 556, 0.9, False),
+RANGES = [(120, 152, 1.4, False), (280, 300, 0.9, False), (386, 406, 0.9, False), (496, 556, 0.9, True),
           (1712, 1740, 0.45, True), (1996, 2020, 0.75, False), (2098, 2122, 0.9, False), (2528, 2544, 0.8, False), (2848, 2862, 0.8, False)]
 ENV = ("S5_Passage", "S2_Tunnel", "S4_Cavern")
 SKIP = ("FX_", "Rain", "Water", "Flood", "S3_", "CAM_", "Murk", "Silt", "Dome", "Sky", "Ground", "Floor", "Terrain")
