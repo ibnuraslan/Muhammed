@@ -106,7 +106,7 @@ for s, hs in (("L", "L"), ("R", "R")):
     offs = shoe_on_foot(bom, s)
     cr = Carry(shoe)
     cr.hold(bom, "foot." + s, 1, attach_rest(shoe, bom, "foot." + s, 1, offs))
-    cr.hold(att, "wrist." + hs, 878)            # grasped at the heel; leaves the foot with her hand
+    cr.hold(RIG["PaxB"], "wrist." + hs, 878)    # v006d: PaxB grasps the heel; the shoe leaves the foot with his hand
     cr.done()
     # traveller's pair
     ts = O["Shoe_%s_Trav" % s]
@@ -443,7 +443,7 @@ CAB = [[
     (446, P(-0.817, 1.19, 1.077), bp("Attendant", "head", 446, (0, 0, -0.1)), 28),
     (455, P(-0.817, 1.19, 1.077), bp("Attendant", "head", 455, (0, 0, -0.1)), 28),
     # beat 4: up over the seat backs and down into the aisle on PaxA as he lunges (reached by 481)
-    (468, V((-0.33, 0.47, 1.68)), bp("PaxA", "head", 468), 26),
+    (468, V((-0.20, 0.95, 1.85)), bp("PaxA", "head", 468), 24),   # v006d rule 3: high and clear of PaxA's head
     (481, P(0.154, -0.254, 1.057), bp("PaxA", "head", 481), 28),
     (508, P(0.154, -0.254, 1.057), bp("PaxA", "head", 508), 28),
     (521, V((-0.37, 0.39, 1.68)), bp("Attendant", "head", 521, (0, 0, -0.1)), 28),
@@ -451,12 +451,12 @@ CAB = [[
     (540, P(-0.892, 1.042, 1.143), bp("Attendant", "head", 540, (0, 0, -0.1)), 28),
     (556, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 556, (0, 0, -0.1)), 28),
     (566, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 566, (0, 0, -0.1)), 28),
-    (580, V((-0.30, 1.45, 1.65)), bp("Bomber", "spine01", 580, (0, 0.3, 0)), 24),
-    (594, V((-0.05, 2.65, 1.75)), bp("Bomber", "spine01", 594, (0, 0.3, 0)), 22),
-    (606, V((-0.05, 2.65, 1.75)), bp("Bomber", "spine01", 606, (0, 0.3, 0)), 22),
+    (580, V((-0.62, 1.40, 1.80)), bp("Bomber", "spine01", 580, (0, 0.3, 0)), 24),   # v006d rule 3: over the seat backs, clear of her head
+    (594, V((-0.40, 2.95, 1.90)), bp("Bomber", "spine01", 594, (0, 0.3, 0)), 22),   # 0.5 m off the steward's walk, above his head
+    (606, V((-0.40, 2.95, 1.90)), bp("Bomber", "spine01", 606, (0, 0.3, 0)), 22),
     (625, V((0.05, 2.25, 1.95)), bp("Bomber", "spine01", 625, (0, 0.2, 0)), 22),   # v006c: off vertical (no track-to flip)
     # beat 5: down to the steward's face as he injects (reached by 655), push to the arm, two-shot on "finally sedated"
-    (640, V((-0.30, 1.60, 1.55)), bp("Steward", "head", 640), 26),   # v006c: down beside the steward, never over the aim
+    (640, V((-0.30, 1.60, 1.55)), (bp("Steward", "head", 640) + bp("Bomber", "spine01", 640)) / 2, 22),   # v006c: down beside the steward, never over the aim
     (655, P(-0.143, -0.447, 1.186), bp("Steward", "head", 655), 28),
     # v006d: a steady shot on the steward's face while he injects (the arm macro filled the frame with sleeves)
     (680, P(-0.143, -0.447, 1.186), bp("Steward", "head", 680), 28),
@@ -466,14 +466,14 @@ CAB = [[
     (769, P(0.168, 0.702, 1.191), bp("Attendant", "head", 769, (0, 0, -0.1)), 28),
     (776, P(0.168, 0.702, 1.191), bp("Attendant", "head", 776, (0, 0, -0.1)), 28),
     # beat 6: rise to his feet -> kneeling level -> with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
-    (800, V((0.52, 1.20, 1.60)), bp("Bomber", "foot.L", 800), 26),
+    (830, P(0.20, 0.70, 1.28), bp("PaxB", "head", 830, (0, 0, -0.1)), 24),   # v006d: nobody walks the aisle now; a slow pan to PaxB at his feet
     # v006d: her face while she pulls the shoes off (the old framing looked down on the top of her head)
-    (866, P(0.223, 0.702, 1.347), bp("Attendant", "head", 866, (0, 0, -0.1)), 22),
-    (890, P(0.223, 0.702, 1.347), bp("Attendant", "head", 890, (0, 0, -0.1)), 22),
-    (902, P(0.05, 1.089, 1.202), bp("Attendant", "head", 902, (0, 0, -0.1)), 22),
-    (920, P(0.05, 1.089, 1.202), bp("Attendant", "head", 920, (0, 0, -0.1)), 22),
-    (965, V((0.14, 0.40, 1.38)), (fuse_tip("L", 965) * 0.5 + bp("Attendant", "head", 965) * 0.5), 28),
-    (1015, V((0.16, 0.40, 1.40)), (fuse_tip("R", 1015) * 0.5 + bp("Attendant", "head", 1015) * 0.5), 30),
+    (866, P(0.223, 0.702, 1.347), bp("PaxB", "head", 866, (0, 0, -0.1)), 22),
+    (890, P(0.223, 0.702, 1.347), bp("PaxB", "head", 890, (0, 0, -0.1)), 22),
+    (902, P(0.05, 1.089, 1.202), bp("PaxB", "head", 902, (0, 0, -0.1)), 22),
+    (920, P(0.05, 1.089, 1.202), bp("PaxB", "head", 920, (0, 0, -0.1)), 22),
+    (965, V((0.14, 0.40, 1.38)), (fuse_tip("L", 965) * 0.5 + bp("PaxB", "head", 965) * 0.5), 28),
+    (1015, V((0.16, 0.40, 1.40)), (fuse_tip("R", 1015) * 0.5 + bp("PaxB", "head", 1015) * 0.5), 30),
     (1062, fuse_tip("L", 1062) + V((0, 0.03, 0.03)), op("Shoe_L", 1062, (0, 0, 0.05)), 40),
     (1068, fuse_tip("L", 1068) + V((0, 0.025, 0.025)), op("Shoe_L", 1068, (0, 0, 0.05)), 40),
   ]]

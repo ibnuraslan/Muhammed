@@ -242,30 +242,27 @@ for f in (612, 654, 720, 760):
     att.key_foot("L", f, V((-0.02, BY + 2.38)), -20, 0.02, -65); att.key_foot("R", f, V((-0.30, BY + 2.30)), -20, 0.02, -65)
     hand(att, "R", f, V((0.15, BY + 1.58, 0.47)), (0, -1, -0.4), (0, 0, -1), grip=0.5)
     hand(att, "L", f, V((0.21, BY + 1.36, 0.46)), (0, -1, -0.4), (0, 0, -1), grip=0.5)
-# beat 6 (769-1068): goes to his feet, kneels, pulls both sneakers off and lifts them under the reading light
-stand(att, 785, V((-0.1, BY + 2.05, 0)), 0, spine=(20, 0, 0), head=(15, 0), crouch=0.05)
-awp = catmull([(790, V((0.18, BY + 2.0, 0))), (812, V((0.21, BY + 1.0, 0))), (835, V((0.19, BY - 0.45, 0))), (848, V((0.14, BY - 1.02, 0)))])
-att.walk(awp, lambda f: 0.0, 790, 848, stride=0.6, lift=0.07, lean=10)
-swing(att, awp, 790, 845, step=11)
-stand(att, 856, V((0.12, BY - 1.0, 0)), 90, spine=(10, 0, 0), head=(20, 20), stance=0.08)            # turns round at his feet
-stand(att, 864, V((0.08, BY - 0.96, 0)), 170, spine=(30, 0, 0), head=(25, 0), crouch=0.22, stance=0.1)
-for s_, sg in (("L", -1), ("R", 1)):
-    hand(att, s_, 856, V((0.12 + sg * 0.25, BY - 1.0, 0.88)), (0, 0, -1), (-sg, 0, 0), grip=0.3)
-    hand(att, s_, 866, V((0.08 + sg * 0.18, BY - 0.72, 0.62)), (0, 1, -0.6), (0, 0, -1), grip=0.3)
-KN = V((0.05, BY - 0.62, 0))          # kneeling spot behind his feet, facing +Y
+# beat 6 (v006d): she stays at his head, sits up and watches PaxB check the shoes
+for f in (790, 900, 1000, 1068):
+    att.key_root(f, V((-0.18, BY + 2.0, 0.50)), yaw=-20, flex=5)
+    att.key_spine(f, flex=18, twist=20, head=(-2, 25))
+    att.key_foot("L", f, V((-0.02, BY + 2.38)), -20, 0.02, -65); att.key_foot("R", f, V((-0.30, BY + 2.30)), -20, 0.02, -65)
+    hand(att, "R", f, V((0.15, BY + 1.58, 0.47)), (0, -1, -0.4), (0, 0, -1), grip=0.5)
+    hand(att, "L", f, V((0.21, BY + 1.36, 0.46)), (0, -1, -0.4), (0, 0, -1), grip=0.5)
+KN = V((0.10, BY - 0.80, 0))          # PaxB kneeling behind his feet, facing +Y
 for f in (874, 880, 940, 1000, 1068):
-    att.key_root(f, V((KN.x, KN.y, 0.47 if f < 900 else 0.58)), yaw=FWD, flex=15 if f < 900 else 5)
-    att.key_spine(f, flex=35 if f < 900 else 5, twist=0, head=(-20, 0) if f < 900 else (5, 0))   # v006d: face up while her hands work at his feet
-    att.key_foot("L", f, V((KN.x - 0.12, KN.y - 0.35)), FWD, 0.02, -65); att.key_foot("R", f, V((KN.x + 0.14, KN.y - 0.33)), FWD, 0.02, -65)
+    pb.key_root(f, V((KN.x, KN.y, 0.55 if f < 900 else 0.64)), yaw=FWD, flex=12 if f < 900 else 5)
+    pb.key_spine(f, flex=35 if f < 900 else 5, twist=0, head=(-20, 0) if f < 900 else (5, 0))   # v006d: face up while her hands work at his feet
+    pb.key_foot("L", f, V((KN.x - 0.12, KN.y - 0.35)), FWD, 0.02, -65); pb.key_foot("R", f, V((KN.x + 0.14, KN.y - 0.33)), FWD, 0.02, -65)
 # grasp the heels (870), pull off (880-900), lift up together (900-960), turn the soles to the light (960-1068)
 ev(876); hl = wpos(bom, "foot.L", 876); hr = wpos(bom, "foot.R", 876)
-hand(att, "L", 876, hl + V((-0.06, -0.05, 0.10)), (0.2, 1, -0.3), (1, 0, 0), grip=0.7)
-hand(att, "R", 876, hr + V((0.06, -0.05, 0.10)), (-0.2, 1, -0.3), (-1, 0, 0), grip=0.7)
-hand(att, "L", 900, V((KN.x - 0.2, KN.y + 0.45, 0.35)), (0, 1, 0.2), (1, 0, 0), grip=0.75)
-hand(att, "R", 900, V((KN.x + 0.2, KN.y + 0.45, 0.35)), (0, 1, 0.2), (-1, 0, 0), grip=0.75)
+hand(pb, "L", 876, hl + V((-0.06, -0.05, 0.10)), (0.2, 1, -0.3), (1, 0, 0), grip=0.7)
+hand(pb, "R", 876, hr + V((0.06, -0.05, 0.10)), (-0.2, 1, -0.3), (-1, 0, 0), grip=0.7)
+hand(pb, "L", 900, V((KN.x - 0.2, KN.y + 0.45, 0.35)), (0, 1, 0.2), (1, 0, 0), grip=0.75)
+hand(pb, "R", 900, V((KN.x + 0.2, KN.y + 0.45, 0.35)), (0, 1, 0.2), (-1, 0, 0), grip=0.75)
 for f, z, rot in ((950, 1.05, 0), (1000, 1.15, 25), (1068, 1.2, 35)):
-    hand(att, "L", f, V((KN.x - 0.22, KN.y + 0.32, z)), (0.3, 0.5, 0.8), (1, 0, 0), grip=0.75)
-    hand(att, "R", f, V((KN.x + 0.22, KN.y + 0.32, z)), (-0.3, 0.5, 0.8), (-1, 0, 0), grip=0.75)
+    hand(pb, "L", f, V((KN.x - 0.22, KN.y + 0.32, z)), (0.3, 0.5, 0.8), (1, 0, 0), grip=0.75)
+    hand(pb, "R", f, V((KN.x + 0.22, KN.y + 0.32, z)), (-0.3, 0.5, 0.8), (-1, 0, 0), grip=0.75)
 print("ATTENDANT_DONE")
 
 # ---------------------------------------------------------------- PAX A (asleep next to him in 3B, wakes, grabs him, helps pin his shoulders)
@@ -315,15 +312,13 @@ for f in (850, 950, 1068):
 for f in (826, 1068):
     hand(pa, "R", f, V((-0.62, BY + 0.64, 1.14)), (0.3, 0, -1), (0, 1, 0), grip=0.6)   # hand on the seat-back top (row 4)
     hand(pa, "L", f, V((-0.80, BY + 0.10, 0.88)), (0, 0, -1), (1, 0, 0), grip=0.3)
-stand(pb, 790, V((0.08, BY - 1.0, 0)), FWD, spine=(15, 0, 0), head=(20, 0), crouch=0.1)
-pbp = catmull([(795, V((0.08, BY - 1.0, 0))), (860, V((0.05, BY - 2.6, 0)))])
-pb.walk(pbp, lambda f: FWD, 795, 860, stride=0.5, lean=-4)
-for f in (900, 1068):
-    stand(pb, f, V((0.05, BY - 2.6, 0)), FWD, spine=(5, 0, 0), head=(10, 5))
-for f in (800, 860, 1068):
-    for s_ in "LR":
-        sg = -1 if s_ == "L" else 1
-        hand(pb, s_, f, V((sg * 0.27, (BY - 1.0) if f == 800 else (BY - 2.6), 0.98)), (0, 0, -1), (-sg, 0, 0), grip=0.3)
+# v006d (director rule: simplify): PaxB stays kneeling at his feet and is the one who pulls the shoes off (no one walks past the camera)
+for f in (800, 840, 866):
+    pb.key_root(f, V((0.10, BY - 0.80, 0.55)), yaw=FWD, flex=8)
+    pb.key_spine(f, flex=30, twist=-4, head=(-5, -10))
+    pb.key_foot("L", f, V((-0.02, BY - 1.18)), FWD, 0.02, -65); pb.key_foot("R", f, V((0.22, BY - 1.18)), FWD, 0.02, -65)
+    hand(pb, "L", f, V((-0.08, BY - 0.10, 0.49)), (0, 1, -0.5), (0, 0, -1), grip=0.3)
+    hand(pb, "R", f, V((0.12, BY - 0.12, 0.49)), (0, 1, -0.5), (0, 0, -1), grip=0.3)
 # ---------------------------------------------------------------- STEWARD (runs up the aisle from the aft galley, pins, injects)
 spath = catmull([(440, V((0.05, 8.0, 0))), (480, V((0.05, 5.4, 0))), (520, V((0.08, 3.0, 0))), (532, V((0.10, 2.80, 0)))])
 stw.walk(spath, lambda f: 0.0, 440, 532, stride=0.95, lift=0.1, lean=14, bob=0.035)
