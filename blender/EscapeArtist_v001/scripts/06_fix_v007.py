@@ -135,11 +135,15 @@ def pose_fingers(rig, s, name, frames, amount=1.0):
 
 # ------------------------------------------------------------------ 1. camera: no DOF blur anywhere; no floating key overlay
 cam = sc.camera
-cam.data.dof.use_dof = False
+# DOF stays on at f/11 (director): no visible blur at these distances, but not the flat all-sharp look
+for fc in fcurves_of(cam.data):
+    if "aperture_fstop" in fc.data_path:
+        for k in list(fc.keyframe_points)[::-1]: fc.keyframe_points.remove(k)
+cam.data.dof.use_dof = True; cam.data.dof.aperture_fstop = 11.0
 kg = O["KeyGlow"]
 if kg.animation_data: kg.animation_data_clear()
 kg.hide_render = True; kg.hide_viewport = True; kg.location = (0, 0, -100)
-log("dof off, KeyGlow removed")
+log("dof f/11, KeyGlow removed")
 
 # ------------------------------------------------------------------ 2. camera path edits (re-built from the 03_animate key list)
 src = open(HERE + "EscapeArtist_v001/scripts/03_animate.py").read()

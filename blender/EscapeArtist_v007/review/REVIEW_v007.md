@@ -5,7 +5,7 @@ Source: v006b. I watched it as a moving preview (`pipeline/preview.py`, every 5t
 ## Faults found in v006b and how v007 fixes them
 | Frames | Fault (v006b) | v007 fix |
 |---|---|---|
-| everywhere | DOF at f/4–5.6: blurred macros, blurred bars and props across the lens | DOF off on the camera |
+| everywhere | DOF at f/4–5.6: blurred macros, blurred bars and props across the lens | DOF kept on at **f/11** (director, 21:37): no visible blur at these distances. The preview was rendered with DOF off; f/11 was set in the package afterwards, as the director asked. |
 | 150–300 | white "KeyGlow" memory overlay floating by his eyes, a giant blurred shape in the lens | removed |
 | 30–145 | the guard's back fills the frame for about 2 s | camera keys 45 and 95 moved to a high corner (lens 22–24) |
 | 265–285, 520–540 | near-empty wall and arm frames | camera keys 276 and 535 aim at him |
