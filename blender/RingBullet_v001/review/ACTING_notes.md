@@ -94,4 +94,7 @@ Also fixed, found by the newer director checks:
 - `clip_scan` (director, latest): **0 bad ranges**
 - `qa_check` (director, latest): **BACKHEAD Robber at f1 only** (intended, see the table above). Every PROPMOVE line is a flying FX object, listed here as intended per the qa_check rule: Bullet, Spark*, FragmentA/B, MuzzleSmoke, WallChip*, WallDustPuff. No FILL (the v006 bullet-ride FILL is gone), no FACEPRESS, CLAW, HOVER, CAMJUMP or ROLL.
 - `limb_check` (director): ARMBODY only. Every flag is the 2 shoulder-end points of `upperarm01` (head and ¼), which sit inside the clavicle-weighted shoulder skin of every MPFB character in any pose, including the Robber's and Officer's rest stance. A variant of the script that skips only those 2 shoulder-joint points reports **0** (see "limb_check note" below). No ARMBACK, no PROPHEAD.
-- Hand audit: **0**. Contact audit: **0**.
+- Hand audit: **1 frame (f1271)**, the same single fingertip brush on the jacket hem as v006, not visible. Contact audit: **0**.
+
+### limb_check note
+`limb_check_v007_no_shoulder_joint.json` is the same script with one change: it skips the first two of the five points on `upperarm01` (the joint end that sits inside the shoulder). It reports **0** across the film at step 2. Every ARMBODY flag in `limb_check_v007.json` therefore comes from the shoulder joint. The 3-point flags at f1315–1317 are the officer raising his arm to beckon.
