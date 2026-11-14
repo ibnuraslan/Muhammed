@@ -88,6 +88,7 @@ camera, bright animated-but-close-to-real CGI (`STYLE_ANIMATED.md`), timed to th
 
 ## 3. Technical recipes
 - **Black-hole eyes (MPFB EnhancedEye):** the cornea uses refractive transmission. With caustics off, almost no light reaches the iris. Fix: set Principled transmission to 0 and mix in a Transparent BSDF driven by the old transmission value. The script is `blender/LegoInNose_v001/scripts/eye_fix.py` on branch `claude/connect03-lego-in-nose`, commit a44130b. Apply it to every MPFB character.
+- **Black hairline, brows or lashes:** if a packaging or texture-shrink step re-saves images with `save_render`, alpha is dropped and hair, brow and lash cards render as black bands. Re-save with `Image.save()` (keeps alpha). Found by Connect20 (HeadsetBullet), commit c3af015.
 - **MPFB vertex groups:** bodies also carry `Left/Right/Mid`, `HelperGeometry` and `JointCubes` groups. Pick the dominant group from **bone groups only**. Exclude helper and joint vertices from collision targets (`clip_scan.py` does this).
 - **Glove material:** a real MPFB hand with a latex material and posed fingers, never inflated "sausage" gloves.
 - **The cloud has no GPU.** Workbench fails (no libEGL). Preview with Cycles at 4 samples + OIDN (`pipeline/preview.py`).
