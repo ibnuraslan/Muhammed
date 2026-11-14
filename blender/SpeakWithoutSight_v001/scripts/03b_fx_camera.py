@@ -324,7 +324,7 @@ SHOTS = [  # frame, camera position fn/vec, aim fn/vec, lens
     (895, lambda f: pair(f) + V(0.25, -0.95, 0.15), lambda f: tthroat(f).lerp(gtip(f), 0.5), 28),
     (960, lambda f: gface(f) + V(0.42, -0.5, 0.02), gface, 35), (1020, lambda f: tthroat(f) + TRw * 0.5 - TFw * 0.15 + V(0.0, 0, 0.0), lambda f: tthroat(f).lerp(gtip(f), 0.5), 40),
     (1063, lambda f: tmouth(f) + TRw * 0.46 - TFw * 0.1 + V(0, 0, 0.02), tmouth, 35),
-    (1125, lambda f: tmouth(f) + TRw * 0.36 - TFw * 0.04 + V(0, 0, 0.04), tmouth, 55),
+    (1125, lambda f: tmouth(f) + TRw * 0.38 - TFw * 0.17 + V(0, 0, 0.0), tmouth, 45),   # v005: the side framing where the fingertips read on the lips
     (1190, lambda f: tmouth(f) + TRw * 0.32 + TFw * 0.06 + V(0, 0, 0.1), tmouth, 55),
     (1261, lambda f: tmouth(f) + TRw * 0.3 - TFw * 0.02 + V(0, 0, 0.02), tmouth, 60),
     (1320, lambda f: tmouth(f) + TRw * 0.38 - TFw * 0.17 + V(0, 0, 0.0), tmouth, 45),   # v004b: pulled back ~9 cm, fingertip + eyes both sharp

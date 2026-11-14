@@ -427,7 +427,8 @@ def lip_key(f, dx=0.0, dz=0.0, press=0.0):
         if hit: mp = hit - UP * dz
     side = ff.cross(UP).normalized()
     # Tadoma hold: fingers upright across the mouth, middle fingertip on the upper lip by the nose, palm on the face
-    g_hand_on("R", f, mp + side * dx * 0.5 - UP * 0.004 + ff * 0.001, ff, UP * 0.92 - side * 0.38, press=press, curl=4, pad=0.004)   # v005: fingertips on the lips (never up at the nostrils)
+    deep = 0.035 if f < 1185 else 0.0   # v005: 1110-1180 the hand fell ~3-4 cm short of the lips; aim deeper so the pad lands on them
+    g_hand_on("R", f, mp + side * dx * 0.5 - UP * 0.004 + ff * 0.001 - ff * deep, ff, UP * 0.92 - side * 0.38, press=press, curl=4, pad=0.004)   # v005: fingertips on the lips (never up at the nostrils)
 LIP_KEYS = [(1063, None, None), (1085, None, None)]
 for f in range(1110, 1723, 6):
     nose = 0.0          # v005: no slide up to the nose (read as fingers in the nostrils)
@@ -799,7 +800,8 @@ deintersect(TEACH, "R", 430, 530, ["Teacher.body", "Teacher.long_skirt"], away=l
 deintersect(TEACH, "L", 430, 530, ["Teacher.body", "Teacher.long_skirt"], away=lambda f, pts: (sum(pts, Vector()) / len(pts) - T.bone_world("spine03")))
 deintersect(GIRL, "R", 400, 529, TCL, away=_away_from_teacher)
 deintersect(GIRL, "R", 530, 1066, ["Teacher.body"], allow=0.012, away=_away_from_teacher)   # throat pad: skin only
-deintersect(GIRL, "R", 1066, END, TCL, away=_away_from_teacher)
+deintersect(GIRL, "R", 1066, 1099, ["Teacher.body"], allow=0.012, away=_away_from_teacher)   # v005: skin only
+deintersect(GIRL, "R", 1200, END, ["Teacher.body"], allow=0.012, away=_away_from_teacher)   # (1100-1199: fingertips on the lips, not pushed down under the chin)
 deintersect(GIRL, "L", 400, 520, TCL, away=_away_from_teacher)
 deintersect(TEACH, "R", 425, END, GCL, away=_up, iters=8)
 deintersect(TEACH, "L", 425, END, GCL, away=_up)
