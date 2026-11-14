@@ -96,3 +96,32 @@ Checked and fine: beats 1, 3–4 (cross-section), 7 (lone light), 10–11 (hands
   - `FX_Bubble_00–15` (2377–2575): exhaled bubbles rising from the regulator, a particle-style effect.
   - `S3_Dot_00–04` (2599–2713): the glowing route dots travelling along the line in the mountain cutaway map.
 - The other categories are as in v006c (BACKHEAD 4, EMPTY 264, INSIDE 125, FILL 3, CLAW 101).
+
+## Round 5 (director: watch the MOVING preview, fix every fault, LESSONS_LEARNED section 1) → v007
+Watched the v006d preview (pipeline/preview.py e0c925f, every 5th frame) page by page, then the v007 preview the same way.
+Faults found by watching, in film frames, and what fixed them:
+
+| Frames | Fault seen moving | Fix |
+|---|---|---|
+| all | black-hole eyes (coach close-up 1861–1996, all boys) | LegoInNose `eye_fix.py` a44130b on every MPFB character (`14_eye_fix.py`, run inside `15_v007.py`) |
+| all | macro / close shots soft (f/5.6) | DOF f/11 |
+| 126–146, 501–521 | blurred rock filling the lower frame | camera clearance (`15_v007.py`), kept inside the tunnel walls |
+| 286–296 | camera crossing the tunnel-mouth rock (tree trunk / rock filling the frame) | rock wipe at 290 (`16_v007_simplify.py`), at most 4 black frames |
+| 393–400, 536–551, 2001–2016, 2101–2116 | a boy's shirt / the coach's head / the divers' heads filling the lens | camera clearance from the character bones, smoothed and eased |
+| 441–571 | runners' arms held out straight ("mannequin arms") | real running pump: elbows ~90°, hands near the chest (`03_animate.py`), hands kept off the bodies (`12_depenetrate.py` on the clip_scan ranges) |
+| 1716–1734 | guide rope filling the lens, then the camera inside the rock between tunnel and passage | camera lifted 25 cm off the rope, rock wipe at 1726 (`16_v007_simplify.py`) |
+| 2151–2296 | medic's head pressed onto the boy's head | medic kneels more upright (lean 52° → 36°) and 5 cm back: the boy's face reads |
+| 2351–2406 | mask diver's face pressed onto the boy's face | DiverB kneels upright with his head up while he waits and fits the mask |
+| 2386–2401 | medic shuffling into the mask diver after the injection | medic holds his kneel until the camera dives (`17_v007_fix2.py`) |
+| 2411–2428 | 0.3 s of dark blur diving through the water into the passage | quicker dive key (2421 → 2415) and a rock wipe at 2418 |
+| 2526–2541 | towing diver's hand and the boy filling the lens | camera dolly back 0.3 m (0.6 m reached the passage wall) |
+| 2275–2281 | syringe not in the medic's fingers after the hand pass (PROPMOVE) | syringe is a bone child of the medic's right wrist (`18_v007_syringe.py`, LESSONS 2.2) |
+| masks | LESSONS 2.5: 2 mm | shrinkwrap offset 6 mm → 2 mm |
+
+Seen and kept, with reasons:
+- 1316–1396: the lone diver fades into the murk. This is the death beat (light fades out, no body), by design.
+- 2721: about 5 plain frames on the cutaway wall entering the rock wipe at 2726.
+- 1216–1226 and 1776–1788: crossing the water surface, under 0.25 s each.
+- The coach still wades with his elbows bent out (446–526): bent, not straight, balancing in the flood water.
+- The medic's injecting arm reaches down past the boy's knees to his upper arm (2201–2296). The arm is outside the boy's body (clip_scan 0), but it crosses in front of him on screen.
+- 2391–2401: the divers' heads bow over the boy while the mask straps go on (the same in the approved v006d).
