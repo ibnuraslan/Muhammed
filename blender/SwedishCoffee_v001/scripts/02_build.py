@@ -287,12 +287,12 @@ setmat(stm, steam_mat("m_steamK", 1.2))
 sk = inst(A_["skull"], c, (-1.0, 5.0, 1.16), rz=180, name="SteamSkull"); sk.scale = (0.9, 0.9, 0.9)
 skm = steam_mat("m_skull", 0.0, (0.95, 0.95, 0.97)); setmat(sk, skm)
 dn = skm.node_tree.nodes["Dens"]
-for f, v in ((470, 0.0), (500, 30.0), (560, 40.0), (588, 16.0)):
+for f, v in ((505, 0.0), (515, 24.0), (530, 24.0), (542, 0.0)):
     dn.outputs[0].default_value = v; dn.outputs[0].keyframe_insert("default_value", frame=f)
 for f, z in ((470, 1.08), (588, 1.26)):
     sk.location.z = z; sk.keyframe_insert("location", index=2, frame=f)
 K = human("King", "King_S2", c); K.z = 0.4; GZ[0] = 0.4; K.pos = V((0, 6.45)); K.yaw = 0
-for f, hand_up, lean, br in ((175, 0, 0, -0.5), (185, 0.5, 4, -1.5), (200, 1, 8, -2.5), (240, 1, 6, -2.5), (285, 0.3, 2, -2), (300, 0, 14, -2.5), (360, 0, 20, -2.8), (420, 0, 22, -3), (590, 0, 22, -3)):
+for f, hand_up, lean, br in ((175, 0, 0, -0.5), (185, 0.5, 4, -1.5), (200, 1, 8, -2.5), (222, 1, 6, -2.5), (245, 0.3, 2, -2), (258, 0, 14, -2.5), (360, 0, 20, -2.8), (420, 0, 22, -3), (590, 0, 22, -3)):
     K.sit(f, seat_z=0.48, flex=lean, twist=-18 if f >= 300 else 0, head=(10 if f >= 300 else -5, -25 if f >= 300 else 0))
     if hand_up:
         K.hand(f, "R", (-0.35, -0.35, 1.0 + 0.75 * hand_up), d=(0, -0.3, 1), n=(0, -1, 0), pole=(-0.7, 0.2, 1.2)); grip(K.R, f, "R", pose="relaxed")
@@ -581,14 +581,14 @@ cam(1040, (-1.1, -0.3, 1.25), (-0.6, 1.7, 1.25), 42)
 cam(1099, (0.3, -1.0, 1.35), (0.6, 1.6, 1.2), 38)
 cam(1160, (1.2, -0.3, 1.28), (0.6, 1.35, 1.12), 40)
 cam(1230, (1.7, 0.2, 1.4), (0.6, 1.7, 1.25), 38)
-cam(1250, (1.9, 0.1, 1.55), (1.45, -0.6, 1.3), 32)
+cam(1240, (1.9, 0.1, 1.55), (2.5, -2.5, 1.2), 32)
 cam(1275, (1.8, -0.3, 1.6), (2.6, -2.6, 1.15), 32)
 cam(1297, (1.6, -0.9, 1.6), (3.0, -2.7, 1.2), 32)
 cam(1360, (1.6, -1.6, 1.9), (3.0, -2.8, 1.0), 32)
 cam(1420, (3.0, -0.7, 1.7), (3.0, -2.7, 1.25), 34)
 cam(1440, (3.4, -0.9, 1.7), (3.0, -2.8, 1.2), 32)
 cam(1462, (3.8, -1.3, 1.7), (2.4, -2.2, 1.25), 30)
-cam(1480, (4.2, -1.8, 1.8), (2.5, 0.2, 1.2), 28)
+cam(1471, (4.2, -1.8, 1.8), (0.6, 1.3, 1.2), 28)
 cam(1545, (2.6, 0.2, 1.5), (0.0, 1.6, 1.2), 30)
 cam(1590, (2.9, 0.1, 1.6), (0.3, 1.6, 1.2), 30)
 cam(1612, (3.9, -0.7, 1.8), (0.3, 1.6, 1.2), 30)
@@ -712,33 +712,20 @@ K = human("King", "King_S6", c)
 MF = human("Doctor1", "Masked_S6", c)
 mk = hat(MF.a, A_["mask"], c, dz=-0.05, dy=-0.1)
 K.pos = V((0.5, 2.5)); K.yaw = 10
-for f, ph in ((1872, 0), (1900, 0), (1909, 1), (1916, 1.5), (1925, 2), (1936, 2.5), (1948, 3), (2004, 3)):
-    if ph == 1.5:   # knees give way
-        K.stand(f, crouch=0.18, flex=14, side=6, lean=8, head=(10, 5)); K.face(f, brow=2.5, lids=0.3, jaw=16)
-        K.hand(f, "R", (-0.1, -0.38, 1.28), d=(0.5, 0.1, 0.3), n=(0, 1, 0), g=0.6); K.hand(f, "L", (0.36, -0.12, 0.85), d=(0.15, -0.1, -1), g=0.4)
-    elif ph == 2.5:  # on one knee, folding sideways
-        K.stand(f, crouch=0.62, flex=40, side=25, lean=35, head=(25, 15)); K.face(f, brow=2.0, lids=0.7, jaw=10)
-        K.hand(f, "R", (-0.45, -0.3, 0.25), d=(-0.2, -0.4, -1), n=(0, 0, -1), g=0.25); K.hand(f, "L", (0.45, -0.15, 0.22), d=(0.2, -0.3, -1), n=(0, 0, -1), g=0.25)
-    elif ph < 2:
+for f, ph in ((1872, 0), (1900, 0), (1909, 1), (1916, 2), (1928, 3), (1940, 4), (2004, 4)):
+    # v011 (director): clutches his chest, sinks to his knees, slumps forward onto one hand; no lying pose, no splayed limbs
+    if ph < 2:
         K.stand(f, flex=3, head=(0, -10)); K.arms_down(f); K.face(f, smile=0.6 if ph == 0 else 0, brow=2.5 if ph else 0, jaw=14 if ph else 0)
-    elif ph == 2:
-        K.stand(f, crouch=0.45, flex=35, side=15, lean=20, head=(20, 10)); K.face(f, brow=2.5, lids=0.5, jaw=16)
-        K.hand(f, "R", (-0.42, -0.28, 0.5), d=(-0.2, -0.4, -1), n=(0, 0, -1), g=0.25); K.hand(f, "L", (0.42, -0.24, 0.45), d=(0.2, -0.4, -1), n=(0, 0, -1), g=0.25)   # reaching out to break the fall
-    else:   # collapsed: lying on the floor on his side
-        K.H.key_root(f, V((0.5, 2.5 + 0.6, 0.17)), yaw=10, flex=-85, side=10)
-        K.H.key_spine(f, flex=-6, head=(-10, 20))
-        for s in "LR":
-            sx = 1 if s == "L" else -1
-            K.H.key_foot(s, f, K.W((0.15 * sx, 1.0 + 0.6, 0)).to_2d(), 10, lift=-0.02, pitch=-80)
-        sc.frame_set(f); bpy.context.view_layer.update()
-        shR, shL = K.a.pose.bones["upperarm01.R"].head.copy(), K.a.pose.bones["upperarm01.L"].head.copy()
-        ax = (K.a.pose.bones["head"].head - K.a.pose.bones["root"].head); ax.z = 0; ax.normalize()
-        lat = (shR - shL); lat.z = 0; lat.normalize()
-        for s_, sh, sg in (("R", shR, 1), ("L", shL, -1)):   # palms flat on the floor beside the shoulders, arms out from the body
-            hp = V((sh.x, sh.y, 0.05)) + lat * sg * 0.42 - ax * 0.15
-            K.H.key_hand(s_, f, hp, (lat * sg - ax * 0.3).normalized(), V((0, 0, -1)), pole=V((sh.x, sh.y, 0.6)) + lat * sg * 0.3)
-            grip(K.R, f, s_, pose="flat_palm")
-        K.face(f, lids=1.0, jaw=6)
+    elif ph == 2:   # hand to the chest, knees start to give
+        K.stand(f, crouch=0.15, flex=14, side=4, lean=6, head=(12, 0)); K.face(f, brow=2.5, lids=0.3, jaw=16)
+        K.hand(f, "R", (-0.06, -0.24, 1.22), d=(0.6, 0.1, 0.4), n=(0, 1, 0), g=0.6); K.hand(f, "L", (0.3, -0.16, 0.8), d=(0.1, -0.2, -1), g=0.4)
+    elif ph == 3:   # on both knees, hand still on the chest, other hand on the thigh
+        K.stand(f, crouch=0.5, flex=18, side=4, lean=6, head=(18, 0)); K.face(f, brow=2.2, lids=0.5, jaw=12)
+        K.hand(f, "R", (-0.06, -0.24, 0.98), d=(0.6, 0.1, 0.4), n=(0, 1, 0), g=0.6); K.hand(f, "L", (0.2, -0.3, 0.5), d=(0, -1, -0.3), n=(0, 0, -1), g=0.4)
+    else:           # slumped forward on his knees, left hand on the floor beside the knee, head down
+        K.stand(f, crouch=0.58, flex=38, side=12, lean=14, head=(30, 10)); K.face(f, brow=1.0, lids=0.9, jaw=6)
+        K.hand(f, "R", (-0.06, -0.26, 0.8), d=(0.6, 0.1, 0.3), n=(0, 1, 0), g=0.6); K.hand(f, "L", (0.3, -0.42, 0.06), d=(0.1, -0.4, -1), n=(0, 0, -1), g=0.25)
+        grip(K.R, f, "L", pose="flat_palm")
 MF.pos = V((1.2, 4.2)); MF.yaw = 180 + 15
 for f, ph in ((1872, 0), (1895, 1), (1905, 1), (1925, 0), (2004, 0)):
     MF.stand(f, flex=4 if ph else 0)
@@ -782,7 +769,8 @@ for pi, (cx, cy0) in enumerate(((-1.5, -3.2), (1.7, -2.6), (-1.6, 0.6))):
                 A.hand(f, os_, (0.18 * -sxh, -0.18, 1.05), d=(0.3 * sxh, -1, 0.1), n=(0, 0, -1), g=0.4)
                 A.face(f, smile=0.9, brow=0.5)
             else:
-                A.hand(f, "R", (-0.22, -0.25, 1.45), d=(0, -0.2, 1), n=(0, -1, 0), g=0.4); A.hand(f, "L", (0.22, -0.25, 1.4), d=(0, -0.2, 1), n=(0, -1, 0), g=0.4)
+                mz = 1.42 if "oman" in b else 1.52
+                A.hand(f, "R", (-0.03, -0.2, mz), d=(0.3, 0, 1), n=(0, 1, 0), g=0.45); A.hand(f, "L", (0.3, -0.12, 0.9), d=(0.1, -0.1, -1), g=0.32)
                 A.face(f, brow=2.5, jaw=16, lids=-0.3)
         hat(A.a, A_["mask"], c, dz=-0.05, dy=-0.1)
 light(c, 'AREA', (4, -4, 7), 1400, (1, 0.8, 0.6), 6, rot=(35, 0, 40), name="key")
@@ -790,8 +778,8 @@ light(c, 'AREA', (-5, 6, 4), 400, (0.8, 0.85, 1.0), 4, rot=(70, 0, -140), name="
 light(c, 'AREA', (0, 0, 7.8), 3000, (1.0, 0.93, 0.85), 10, rot=(0, 0, 0), name="ceilSoft")
 cam(1872, (0, -9.8, 5.2), (0, 2.0, 3.0), 28)
 cam(1890, (2.6, 0.6, 2.0), (0.6, 2.8, 1.5), 32)
-cam(1905, (2.2, 6.0, 1.75), (0.5, 2.4, 1.5), 32)
-cam(1930, (2.6, 4.8, 1.1), (0.5, 2.6, 0.7), 30)
+cam(1905, (3.4, 6.2, 1.8), (0.6, 2.5, 1.3), 34)
+cam(1930, (3.3, 4.0, 1.4), (0.5, 2.6, 0.7), 32)
 cam(1960, (2.4, 3.2, 1.6), (0.4, 3.0, 0.3), 30)
 cam(1985, (-5.5, 1.5, 1.6), (-9.0, 0.0, 1.8), 28)
 cam(2002, (-8.0, 0.0, 1.8), (-11.0, 0.0, 1.8), 28)
