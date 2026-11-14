@@ -238,14 +238,14 @@ stand(att, 597, V((-0.10, 2.02, 0)), -20, spine=(30, 10, 0), head=(12, 10), crou
 # kneel at his head (y ~ BY+2.0), facing -Y, holding his outstretched right forearm
 for f in (612, 654, 720, 760):
     att.key_root(f, V((-0.18, BY + 2.0, 0.47)), yaw=-20, flex=15)
-    att.key_spine(f, flex=62 if f < 720 else 28, twist=10 if f < 720 else 25, head=(12, 10) if f < 720 else (-8, 30))
+    att.key_spine(f, flex=62 if f < 720 else 28, twist=10 if f < 720 else -20, head=(12, 10) if f < 720 else (-8, -28))   # v006d: sits up turned to the window side
     att.key_foot("L", f, V((-0.02, BY + 2.38)), -20, 0.02, -65); att.key_foot("R", f, V((-0.30, BY + 2.30)), -20, 0.02, -65)
     hand(att, "R", f, V((0.15, BY + 1.58, 0.47)), (0, -1, -0.4), (0, 0, -1), grip=0.5)
     hand(att, "L", f, V((0.21, BY + 1.36, 0.46)), (0, -1, -0.4), (0, 0, -1), grip=0.5)
 # beat 6 (v006d): she stays at his head, sits up and watches PaxB check the shoes
 for f in (790, 900, 1000, 1068):
     att.key_root(f, V((-0.18, BY + 2.0, 0.50)), yaw=-20, flex=5)
-    att.key_spine(f, flex=18, twist=20, head=(-2, 25))
+    att.key_spine(f, flex=18, twist=-20, head=(-2, -25))
     att.key_foot("L", f, V((-0.02, BY + 2.38)), -20, 0.02, -65); att.key_foot("R", f, V((-0.30, BY + 2.30)), -20, 0.02, -65)
     hand(att, "R", f, V((0.15, BY + 1.58, 0.47)), (0, -1, -0.4), (0, 0, -1), grip=0.5)
     hand(att, "L", f, V((0.21, BY + 1.36, 0.46)), (0, -1, -0.4), (0, 0, -1), grip=0.5)
@@ -287,7 +287,7 @@ hand(pa, "L", 525, V((-0.80, BY + 0.10, 0.9)), (1, 0.2, 0), (0, 0, -1), grip=0.8
 for f in (585, 654, 720, 768):
     dx = 0.0 if f < 640 else -0.15     # v006d: kneels a little to the left after the pin (out of the aisle cameras' line)
     pa.key_root(f, V((-0.05 + dx, BY + 0.05, 0.58)), yaw=FWD + 20, flex=10)
-    pa.key_spine(f, flex=60 if f < 720 else 45, twist=5, head=(20, 0) if f < 720 else (10, 20))
+    pa.key_spine(f, flex=60 if f < 720 else 45, twist=5, head=(-15, 0) if 640 <= f < 720 else (20, 0) if f < 720 else (10, 20))   # v006d: head up at the 655 beat
     pa.key_foot("L", f, V((-0.25 + dx, BY - 0.35)), FWD + 20, 0.02, -65); pa.key_foot("R", f, V((0.12 + dx, BY - 0.40)), FWD + 20, 0.02, -65)
     hand(pa, "L", f, V((-0.10, BY + 1.05, 0.55)), (0.1, 1, -0.4), (0, 0, -1), grip=0.25)
     hand(pa, "R", f, V((0.12, BY + 1.0, 0.55)), (-0.1, 1, -0.4), (0, 0, -1), grip=0.25)
@@ -345,7 +345,7 @@ stand(stw, 624, V((0.68, 1.45, 0)), -90, spine=(25, 0, 0), head=(20, 0), crouch=
 SK = V((0.68, BY + 1.22, 0))   # v006d: 6 cm back from the row-5 seat screen
 for f in (640, 700, 768, 900, 1068):
     stw.key_root(f, V((SK.x, SK.y, 0.56)), yaw=-90, flex=10)
-    stw.key_spine(f, flex=38, twist=0, head=(10, 0))   # v006d: less lean (his head was in SeatScreen_05D)
+    stw.key_spine(f, flex=38, twist=0, head=(-12, 0))   # v006d: less lean (his head was in SeatScreen_05D); head up so his face reads
     stw.key_foot("L", f, V((SK.x + 0.38, SK.y + 0.14)), -90, 0.02, -65); stw.key_foot("R", f, V((SK.x + 0.40, SK.y - 0.16)), -90, 0.02, -65)
 # "finally sedated": he sits back on his heels and looks up across at the attendant (relief)
 for f in (730, 768):
