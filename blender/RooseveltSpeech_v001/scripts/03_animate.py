@@ -57,14 +57,14 @@ def foot_R(f):
     return FOOT["R"], 0.0
 
 # root/spine channels: (frame, value) keys on world-time for the street, plain frames for the hall
-rx = pk([(1, 0.0), (60, 0.02), (120, -0.01), (F_IMPACT, 0.0), (F_IMPACT + 8, -0.03), (200, -0.06), (230, 0.03), (260, -0.01), (300, 0.0), (1190, 0.0), (1300, 0.02), (1400, -0.02), (1500, 0.0)])
-ry = pk([(1, 0.0), (F_IMPACT, 0.0), (F_IMPACT + 6, 0.09), (200, 0.06), (240, 0.02), (300, 0.0), (1190, 0.0), (1300, -0.03), (1500, -0.02)])
-rz = pk([(1, 0.0), (60, -0.01), (120, 0.0), (F_IMPACT, 0.0), (F_IMPACT + 10, -0.05), (205, -0.07), (250, -0.02), (300, 0.0), (1190, 0.0), (1290, -0.02), (1330, 0.0), (1380, -0.03), (1420, 0.0), (1500, -0.01)])
-ryaw = pk([(1, 10.0), (60, -12.0), (120, 8.0), (F_IMPACT, 5.0), (190, -8.0), (260, 4.0), (330, 0.0), (1190, 0.0), (1300, 12.0), (1380, -14.0), (1450, 6.0), (1500, 0.0)])
-rflex = pk([(1, 0.0), (F_IMPACT, 0.0), (F_IMPACT + 6, -12.0), (205, 6.0), (250, -2.0), (300, -4.0), (1190, 0.0), (1290, 6.0), (1330, 10.0), (1380, 4.0), (1420, 12.0), (1500, 4.0)])
+rx = pk([(1, 0.0), (60, 0.02), (120, -0.01), (F_IMPACT, 0.0), (F_IMPACT + 8, -0.03), (200, -0.06), (230, 0.03), (260, -0.01), (300, 0.0), (1190, 0.0), (1300, 0.01), (1400, -0.01), (1500, 0.0)])   # v010: calm, upright behind the podium
+ry = pk([(1, 0.0), (F_IMPACT, 0.0), (F_IMPACT + 6, 0.09), (200, 0.06), (240, 0.02), (300, 0.0), (1190, 0.0), (1300, 0.0), (1500, 0.0)])
+rz = pk([(1, 0.0), (60, -0.01), (120, 0.0), (F_IMPACT, 0.0), (F_IMPACT + 10, -0.05), (205, -0.07), (250, -0.02), (300, 0.0), (1190, 0.0), (1290, -0.005), (1330, 0.0), (1380, -0.008), (1420, 0.0), (1500, 0.0)])
+ryaw = pk([(1, 10.0), (60, -12.0), (120, 8.0), (F_IMPACT, 5.0), (190, -8.0), (260, 4.0), (330, 0.0), (1190, 0.0), (1300, 6.0), (1380, -6.0), (1450, 3.0), (1500, 0.0)])
+rflex = pk([(1, 0.0), (F_IMPACT, 0.0), (F_IMPACT + 6, -12.0), (205, 6.0), (250, -2.0), (300, -4.0), (1190, 0.0), (1290, 2.0), (1330, 3.0), (1380, 1.0), (1420, 3.0), (1500, 1.0)])
 rside = pk([(1, 0.0), (F_IMPACT, 0.0), (190, -5.0), (215, 6.0), (245, -2.0), (300, 0.0), (1500, 0.0)])
-sflex = pk([(1, 2.0), (F_IMPACT, 2.0), (F_IMPACT + 5, -18.0), (200, 10.0), (240, -6.0), (300, -8.0), (1190, -4.0), (1260, -10.0), (1300, 8.0), (1340, 14.0), (1380, 4.0), (1420, 16.0), (1500, 6.0)])
-stw = pk([(1, -8.0), (60, 12.0), (120, -6.0), (F_IMPACT, -4.0), (F_IMPACT + 6, -14.0), (210, 6.0), (300, 0.0), (1190, 0.0), (1260, -10.0), (1320, 14.0), (1380, -12.0), (1440, 10.0), (1500, 0.0)])
+sflex = pk([(1, 2.0), (F_IMPACT, 2.0), (F_IMPACT + 5, -18.0), (200, 10.0), (240, -6.0), (300, -8.0), (1190, -4.0), (1260, -6.0), (1300, 4.0), (1340, 7.0), (1380, 2.0), (1420, 8.0), (1500, 4.0)])
+stw = pk([(1, -8.0), (60, 12.0), (120, -6.0), (F_IMPACT, -4.0), (F_IMPACT + 6, -14.0), (210, 6.0), (300, 0.0), (1190, 0.0), (1260, -6.0), (1320, 7.0), (1380, -6.0), (1440, 5.0), (1500, 0.0)])
 hpitch = pk([(1, -4.0), (F_IMPACT, -2.0), (F_IMPACT + 5, -14.0), (205, 10.0), (260, 2.0), (300, 4.0), (1190, 0.0), (1230, -14.0), (1290, 4.0), (1340, -8.0), (1400, 6.0), (1450, -10.0), (1500, -4.0)])
 hyaw = pk([(1, -10.0), (60, 18.0), (120, -16.0), (F_IMPACT, -20.0), (200, 10.0), (260, -6.0), (300, 0.0), (1190, 0.0), (1250, 10.0), (1320, -16.0), (1380, 18.0), (1440, -10.0), (1500, 0.0)])
 
@@ -91,7 +91,7 @@ POCKET_REACH = Vector((-0.06, -0.30, 1.24))
 hR_keys = [(1, wave_R(1)), (F_IMPACT, wave_R(F_IMPACT)), (F_IMPACT + 6, Vector((-0.42, -0.18, 1.5))), (195, Vector((-0.40, -0.12, 1.0))),
            (240, Vector((-0.34, -0.24, 1.0))), (300, Vector((-0.33, -0.27, 1.02))), (700, Vector((-0.32, -0.28, 1.03))), (1150, Vector((-0.32, -0.27, 1.02))),   # elbow bent, hand forward at the waist
            (1238, Vector((-0.30, -0.42, 1.45))), (1262, Vector((-0.30, -0.30, 1.98))), (1285, Vector((-0.30, -0.30, 2.0))),
-           (1310, Vector((-0.26, -0.45, 1.35))), (1360, Vector((-0.22, -0.44, 1.22))), (1420, Vector((-0.30, -0.42, 1.40))), (1500, Vector((-0.24, -0.44, 1.25)))]
+           (1310, Vector((-0.26, -0.45, 1.35))), (1360, Vector((-0.22, -0.44, 1.22))), (1395, Vector((-0.28, -0.40, 1.40))), (1440, Vector((-0.32, -0.32, 1.92))), (1500, Vector((-0.32, -0.30, 1.98)))]   # v010: ends raising the speech
 hL_keys = [(1, RAIL), (60, RAIL), (100, RAIL), (F_IMPACT, RAIL),   # steadies himself on the rail while he waves
            (F_IMPACT + 7, Vector((0.48, -0.10, 1.25))), (188, RAIL + Vector((0, 0, 0.06))), (196, RAIL), (1150, RAIL), (1180, Vector((0.32, -0.25, 1.05))),
            (1192, Vector((0.24, -0.33, 1.18))), (1285, Vector((0.24, -0.33, 1.18))), (1300, Vector((0.36, -0.30, 1.75))), (1318, Vector((0.38, -0.28, 1.88))),
@@ -104,7 +104,7 @@ def hand_R(f):
 def hand_frame_R(f):  # (dir to fingers, palm normal)
     if f < F_IMPACT + 4: return Vector((0, 0.2, 1)), Vector((0.3, -1, 0))        # hand up, palm forward
     if 1195 <= f <= 1225: return Vector((0.3, 0.6, -0.3)), Vector((1, 0, 0))     # slipping into the coat
-    if f > 1225: return Vector((0.1, -0.2, 1)), Vector((-0.2, -1, 0)) if f < 1300 else Vector((0.4, 0.2, -1))
+    if f > 1225: return (Vector((0.1, -0.2, 1)), Vector((-0.2, -1, 0))) if (f < 1300 or f > 1415) else (Vector((0.4, 0.2, -1)), Vector((1, 0, 0)))
     return Vector((0, -0.2, -1)), Vector((1, 0, 0))
 def hand_frame_L(f):
     if 190 <= f <= 1170 or f <= F_IMPACT + 1: return Vector((0.2, -1, -0.6)), Vector((0, 0, -1))       # gripping the rail, palm down
@@ -120,6 +120,7 @@ for f in range(1, END + 1, 2):
     pos = Vector((rx(w), ry(w), HB["root"].head_local.z + rz(w)))
     HU.key_root(f, pos, yaw=ryaw(w) * 0.25, flex=rflex(w) * 0.5, side=rside(w))
     breath = 1.5 * math.sin(2 * math.pi * w / 200.0)
+    if B[3] <= f < 1190: breath += 1.5 * math.sin(2 * math.pi * f / 170.0) + 4.0 * (math.sin(math.pi * (f - 1095) / 90) if 1095 <= f <= 1185 else 0.0)   # v010: breathing in real time while his face is in frame
     HU.key_spine(f, flex=sflex(w) + breath, twist=stw(w) * 0.6, side=rside(w) * 0.5, head=(hpitch(w), hyaw(w)))
     pr = Vector((-0.55, 0.45, 1.0)); pl = Vector((0.55, 0.45, 1.0))
     for s_, W_, (d_, n_), pol in (("R", hand_R(w), hand_frame_R(w), pr), ("L", hL(w), hand_frame_L(w), pl)):
@@ -129,7 +130,14 @@ for f in range(1, END + 1, 2):
         j = 0.0
         if f > 1240: j = 7 * max(0.0, math.sin(2 * math.pi * f / 11.0)) * (0.6 + 0.4 * math.sin(f / 23.0))
         elif F_IMPACT < w < F_IMPACT + 30: j = 9 * math.sin(math.pi * (w - F_IMPACT) / 30)
+        # v010: life in the face while it is in frame: a wince and a gasp as the shock lands, slow breaths, blinks
+        wince = math.sin(math.pi * (f - 1095) / 90) if 1095 <= f <= 1185 else 0.0
+        j += 5 * wince
         R.key_rot("jaw", f, [("X", j)])
+    blink = max([math.sin(math.pi * (f - bf) / 8) for bf in (469, 611, 759, 1063, 1215, 1351, 1441) if bf <= f <= bf + 8] + [0.0])
+    wince = math.sin(math.pi * (f - 1095) / 90) if 1095 <= f <= 1185 else 0.0
+    for s_ in "LR":
+        if "orbicularis03." + s_ in R.PB: R.key_rot("orbicularis03." + s_, f, [("X", -13 * wince - 25 * blink)])
 # finger poses from the shared library (pipeline/hand_poses.py); right-hand pinch on the manuscript is keyed in the pull block
 for f_, pose in ((1, "pinch"), (F_IMPACT + 3, "pinch"), (F_IMPACT + 10, "relaxed"), (1150, "relaxed")):   # hat held by the brim
     apply_pose(H, "R", pose, f_)

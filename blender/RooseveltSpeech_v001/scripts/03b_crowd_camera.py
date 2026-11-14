@@ -212,28 +212,26 @@ K = [  # frame, position, target, lens
  (B[2], Vector((0.15, -1.05, 1.45)), Vector((-0.05, -0.15, 1.38)), 35),
  (395,  Vector((-0.85, -0.85, 1.4)), P((0, 0, 0.02)), 35),              # orbit to the coat breast
  (B[3], P((-0.32, -0.78, 0.13)), P((0, 0, 0.12)), 30),   # pocket and his eyes both in frame
- (480, P((-0.06, -0.30, 0.03)), P((0, 0.03, -0.01)), 30),              # through the cloth
- (540, P((0.21, -0.4, 0.145)), P((-0.015, 0.05, -0.02)), 28),
- (600, P((0.25, -0.26, 0.19)), P((-0.015, 0.05, -0.02)), 30),
- (660, P((0.05, -0.26, 0.2)), P((-0.015, 0.05, -0.01)), 30),          # over the fold edge
- (B[4], P((-0.371, -0.278, 0.194)), P((-0.005, 0.06, -0.02)), 30),
- (750, P((0.05, -0.52, 0.14)), P((0.0, 0.05, -0.03)), 32),     # v009: pulled back so the paper never fills the frame
- (780, P((0.47, -0.184, 0.013)), P((0.02, 0.051, -0.03)), 32),     # lateral to the steel case
- (840, P((0.2, -0.32, -0.2)), P((0.035, 0.031, -0.03)), 32),     # low over the hinge
- (858, P((-0.08, -0.52, -0.06)), P((0.02, 0.01, -0.03)), 34),  # v009: pulled back over the hinge-to-bullet swing
+ (500,  Vector((-0.30, -1.00, 1.52)), Vector((-0.05, -0.15, 1.42)), 32),   # v010: medium: his face and the open cut together
+ (620,  Vector((-0.12, -1.05, 1.55)), Vector((-0.05, -0.15, 1.43)), 32),
+ (B[4], Vector((0.22, -1.00, 1.50)),  Vector((-0.05, -0.15, 1.42)), 32),   # "glasses case": still on his face
+ (800,  Vector((0.24, -0.82, 1.43)),  Vector((-0.07, -0.17, 1.36)), 32),
+ (845,  P((0.05, -0.45, 0.05)), P((0.0, 0.03, -0.02)), 32),               # close-up window (~4 s): the bullet tears through and slows
  (B[5], P((-0.34, -0.28, 0.04)), P((0.01, -0.01, -0.02)), 35),      # alongside the bullet
  (940, P((-0.2, -0.2, 0.06)), P((0.015, 0.025, -0.02)), 35),
  (B[6], P((-0.2, -0.22, -0.03)), P((0.02, 0.05, -0.02)), 35),       # push to the dent
- (1060, P((-0.3, -0.2, -0.05)), P((0.0, 0.08, -0.04)), 30),        # past the ribs: bullet short of the lung
- (1120, P((-0.442, -0.134, 0.055)), P((0.0, 0.07, -0.03)), 28),
- (B[7], Vector((-0.55, -1.35, 1.4)), Vector((-0.05, -0.2, 1.35)), 30),  # pull out: podium
+ (1045, P((-0.3, -0.2, -0.05)), P((0.0, 0.08, -0.04)), 30),        # past the ribs: bullet short of the lung
+ (1095, Vector((0.25, -0.95, 1.48)), Vector((-0.05, -0.15, 1.42)), 32),   # v010: back on his face as the cut closes (he winces)
+ (1150, Vector((0.32, -1.15, 1.47)), Vector((-0.05, -0.18, 1.42)), 30),   # on his left, clear of the right hand reaching for the pocket
+ (B[7], Vector((0.30, -1.40, 1.42)), Vector((-0.02, -0.2, 1.35)), 30),  # pull out: podium
  (1245, Vector((0.35, -2.5, 1.55)),  Vector((-0.05, -0.2, 1.55)), 30),
  (B[8], Vector((1.3, -2.7, 1.7)),    Vector((0.0, -0.2, 1.5)), 30),
- (1312, Vector((2.3, -0.6, 2.4)),    Vector((0.0, -0.4, 1.6)), 28),   # swing round high, keeping him in frame
+ (1312, Vector((2.2, -1.6, 2.4)),    Vector((0.0, -0.45, 1.45)), 30),   # v010: high in front, the podium hides his legs
  (1340, Vector((1.4, 1.5, 2.1)),     Vector((0.0, -3.0, 0.9)), 26),     # behind him, the packed hall
- (1400, Vector((-0.6, 2.2, 3.2)),    Vector((0.0, -5.0, 0.4)), 26),
- (1455, Vector((-1.4, 1.4, 6.0)),    Vector((0.0, -4.5, 0.0)), 24),     # crane up
- (END,  Vector((-1.5, 1.2, 6.4)),    Vector((0.0, -4.5, 0.0)), 24),
+ (1385, Vector((2.6, 0.6, 2.8)),     Vector((0.0, -3.5, 0.8)), 26),     # v010: round the side, high, the cheering hall
+ (1425, Vector((3.0, -1.6, 2.4)),    Vector((0.0, -0.6, 1.3)), 28),
+ (1465, Vector((1.9, -4.0, 1.5)),    Vector((0.0, -0.5, 1.15)), 30),   # front three-quarter over the crowd
+ (END,  Vector((1.4, -4.3, 1.3)),    Vector((0.0, -0.6, 1.05)), 30),    # ends on his face, raising the speech
 ]
 cp = catmull([(k[0], k[1]) for k in K]); ct = catmull([(k[0], k[2]) for k in K]); cl = pchip([(k[0], float(k[3])) for k in K])
 cam.rotation_mode = "QUATERNION"
