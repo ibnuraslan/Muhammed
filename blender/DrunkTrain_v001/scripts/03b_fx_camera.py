@@ -45,12 +45,12 @@ FLASH = (f_fb0, f_fb1 - 1)
 for o in list(bpy.data.collections["Set"].all_objects) + [bpy.data.objects["Sun"]]:
     hide_in(o, [STUDIO])
 for o in list(bpy.data.collections["Train"].all_objects):
-    hide_in(o, [(f_fb0, f_r1)])
+    hide_in(o, [FLASH])      # v006c: hidden only in the swig flashback; beat 10 is in the real scene with the train
 for o in list(bpy.data.collections["Studio"].all_objects):
     vis(o, [BUBBLE])
 for nm in ("WitA", "WitB", "Worker"):
     for o in [bpy.data.objects[nm]] + list(bpy.data.objects[nm].children):
-        hide_in(o, [(f_fb0, f_r1)])
+        hide_in(o, [FLASH])      # v006c: hidden only in the swig flashback; beat 10 is in the real scene with the train
 DOME = bpy.data.objects["StudioCyc"]
 CHEST_IN = V(2.45, -40.1, 1.3); CHEST_OUT = V(2.45, -40.35, 0.95)
 def key_dome(f, s_, chest):
