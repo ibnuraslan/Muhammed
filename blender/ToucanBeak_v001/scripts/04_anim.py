@@ -1318,6 +1318,32 @@ _camkeys(1159, 1368, lambda f: _hb + Vector((0, 0, _dz)) + Vector((0.0, 0.62, 0.
          lambda f: _hb + Vector((0, 0, _dz - 0.04 + 0.025 * (f - 1159) / 209)), lambda f: 38.0)
 _hb2 = _hb + Vector((0, 0, _dz)); _clear([cam_, cam_.data, foc_], 1369, 1393)
 _camkeys(1369, 1393, lambda f: _hb2 + Vector((-0.02, 0.42, 0.13)).lerp(Vector((0.02, 0.38, 0.12)), (f - 1369) / 24), lambda f: _hb2, lambda f: 44.0 + 2.0 * (f - 1369) / 24)
+# ================================================================== v008c (director, Nov 15 07:27)
+# 1) one printer: the original clinic printer stood on the same bench under the real-size one (second, tilted bed plate);
+#    the separate nozzle block floated beside the print - hide it, the printer's own head stays overhead
+bpy.data.objects.remove(OB["printer"], do_unlink=True)   # (shares its mesh with Printer_void)
+for o_ in (noz, blk): key_vis(o_, [(1159, False), (1369, False)])
+# 2) the cut into the lab started behind a shelf (505-520): start the move already past it
+_samp = {}
+for f_ in range(521, 546):
+    ev(f_); _samp[f_] = (cam_.location.copy(), cam_.rotation_quaternion.copy(), cam_.data.lens, foc_.location.copy())
+_clear([cam_, cam_.data, foc_], 505, 545)
+for f_ in range(505, 546):
+    t_ = 521 + (f_ - 505) * 24 / 40; a_, b_ = int(t_), min(int(t_) + 1, 545); w_ = t_ - a_
+    L0, Q0, l0, F0 = _samp[a_]; L1, Q1, l1, F1 = _samp[b_]
+    cam_.location = L0.lerp(L1, w_); cam_.rotation_quaternion = Q0.slerp(Q1, w_); cam_.data.lens = l0 + (l1 - l0) * w_; foc_.location = F0.lerp(F1, w_)
+    cam_.keyframe_insert("location", frame=f_); cam_.keyframe_insert("rotation_quaternion", frame=f_)
+    cam_.data.keyframe_insert("lens", frame=f_); foc_.keyframe_insert("location", frame=f_)
+# 3) minor: the syringe sits in VetB's left-hand pinch while he glues (1513-1586)
+_rgB = VB.r.o; _pins = {}
+for f_ in range(1513, 1587, 2):
+    ev(f_); _pb = _rgB.pose.bones
+    _pp = _rgB.matrix_world @ ((_pb["finger1-3.L"].tail + _pb["finger2-3.L"].tail) / 2)
+    _pins[f_] = SYR.matrix_world.translation + (_pp - SYR.matrix_world.translation) + (SYR.location - SYR.matrix_world.translation)
+_clear([SYR], 1513, 1586)
+for f_, L_ in _pins.items():
+    SYR.location = L_; SYR.keyframe_insert("location", frame=f_)
+
 sc.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=out)
 print("ANIM_DONE", out)

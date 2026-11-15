@@ -85,8 +85,9 @@ for o in bpy.data.objects:
         bm_ = __import__("bmesh").new(); bm_.from_mesh(o.data)
         __import__("bmesh").ops.triangulate(bm_, faces=bm_.faces[:]); bm_.to_mesh(o.data); bm_.free()
         d = o.modifiers.new("dec", 'DECIMATE'); d.ratio = r_
+        _hv = o.hide_viewport; o.hide_viewport = False; bpy.context.view_layer.update()   # hidden objects are not evaluated (no decimation)
         dg = bpy.context.evaluated_depsgraph_get(); me2 = bpy.data.meshes.new_from_object(o.evaluated_get(dg))
-        o.modifiers.remove(d); old = o.data
+        o.modifiers.remove(d); o.hide_viewport = _hv; old = o.data
         for u in [x for x in bpy.data.objects if x.data == old]: u.data = me2
         done.add(me2); print("DECIMATED", o.name, n0, "->", len(me2.vertices))
 bpy.ops.outliner.orphans_purge(do_local_ids=True, do_linked_ids=True, do_recursive=True)
