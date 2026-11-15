@@ -433,8 +433,8 @@ SHOTS = [
     (CUT_PROOF, Vector((8.45, Y0 + 3.9, 2.22)), Vector((8.24, Y0 + 4.9, 2.16)), 32)]),
   # G: the proof on the desk - the hull model's red band lines up with the photo's streak; push in
   (CUT_PROOF, CUT_BACK, [
-    (CUT_PROOF, Vector((8.56, -13.55, D0 + 0.17)), Vector((8.56, -12.45, D0 + 0.11)), 36),
-    (CUT_BACK, Vector((8.45, -13.2, D0 + 0.12)), Vector((8.43, -12.45, D0 + 0.08)), 42)]),
+    (CUT_PROOF, Vector((8.4, -13.55, D0 + 0.17)), Vector((8.4, -12.45, D0 + 0.12)), 34),
+    (CUT_BACK, Vector((8.38, -13.15, D0 + 0.12)), Vector((8.38, -12.45, D0 + 0.08)), 40)]),
   # H1: A's face reacts (beat 9)
   (CUT_BACK, CUT_B2, [
     (CUT_BACK, Vector((7.32, Y0 + 4.8, 2.42)), Vector((7.8, Y0 + 4.05, 2.42)), 34),
@@ -521,9 +521,10 @@ for ob in (PH, lx):
     ob.hide_render = False; ob.keyframe_insert("hide_render", frame=CUT_PROOF)
     ob.hide_render = True; ob.keyframe_insert("hide_render", frame=CUT_BACK)
     set_interp(ob, 'CONSTANT', lambda p_: p_ == "hide_render")
-for f_, v_ in ((CUT_PROOF, True), (CUT_BACK, False)):    # one photo on screen in the proof shot (B's copy is out of shot)
-    PR.hide_render = v_; PR.keyframe_insert("hide_render", frame=f_)
-set_interp(PR, 'CONSTANT', lambda p_: p_ == "hide_render")
+for ob in [PR, eb.o] + list(eb.o.children):     # the proof shot is the desk alone: one photo, no hand pointing at nothing
+    for f_, v_ in ((CUT_PROOF, True), (CUT_BACK, False)):
+        ob.hide_render = v_; ob.keyframe_insert("hide_render", frame=f_)
+    set_interp(ob, 'CONSTANT', lambda p_: p_ == "hide_render")
 # ---------------------------------------------------------------- hands: Limit Rotation on every finger, thumb and wrist (no backward bends)
 import re
 def limit_hands(rig, probe_frames):

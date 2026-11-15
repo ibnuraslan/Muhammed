@@ -1,6 +1,6 @@
 # TitanicIceberg_v009: farm package
 
-**v009: director review of v008 (b265f92).** Beat frames, beat order and frame_end 1830 are unchanged, and no VO is added. The preview `review/preview.mp4` was rendered from this exact package file.
+**v009: director review of v008 (b265f92).** Beat frames, beat order and frame_end 1830 are unchanged, and no VO is added. The preview `review/preview.mp4` was rendered from this exact package file. Frames 1435–1530 were re-rendered from the final package after the proof-shot fix.
 
 | Frames | Shot |
 |---|---|
@@ -14,7 +14,7 @@
 | 1170–1259 | Medium: B holds the print up, face clear (push-in). |
 | 1260–1339 | Medium: A leans in with the magnifier, face toward camera (push-in). |
 | 1340–1437 | Medium: B points at the red streak (push-in). |
-| 1438–1529 | The proof on the office desk. The photo is propped beside a hull model whose red band's top edge sits at the streak's height, and the camera pushes in. B's held copy is out of shot. |
+| 1438–1529 | The proof on the office desk. The photo is propped beside a hull model whose red band's top edge sits at the streak's height, and the camera pushes in. B and his copy are out of shot, so there is one photo and no hand pointing at nothing. |
 | 1530–1614 | A's face reacts. |
 | 1615–1699 | B's face with the print. |
 | 1700–1830 | Closer (2.2 s): a fast push-in on the lone berg, with the steamer beyond it. |
