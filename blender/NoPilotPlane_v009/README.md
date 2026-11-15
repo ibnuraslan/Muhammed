@@ -33,6 +33,18 @@ The ending close-up of his face (55.72–58.0 s) is kept as it was.
 | 8 | 3071–3146: 1.3 s static top-down on the FO | 0.7 s. |
 | – | Flat green patch | `scripts/09_field.py`: grass with mowing bands, and a 2.9 km × 160 m runway strip with a dashed centreline and edge lines, riding with the terrain. |
 
+## v009i: the director's hand review of v009h (camera re-stage, no new poses)
+
+| # | Note on v009h | Fix |
+|---|---|---|
+| 1 | 931–986: back view, arms raised like a shrug | A low close-up of his face at the panel (15.5–16.5 s). His hands are below the frame. |
+| 2 | 1156–1221: arms bent out wide, hands floating | A head-and-shoulders close-up from the front at eye level (19.2–20.4 s, 85 mm). |
+| 3 | 1561–1641: stiff right forearm, claw hand, crossing left arm | His face as the alarms start (25.82–26.6 s), then the panel with the warning lamps flashing, with no person (26.6–27.4 s). |
+| 4 | 2961–3016: left arm missing in the high shot | Close on his face (49.3–50.3 s). Extending the 2906 side shot instead would bring back the stub: in that framing his left arm points at the lens from about 2961 (seen in v009g). |
+| 5 | 546–621: hands splayed, arms out while walking in | Head and shoulders as he walks in (9.08–10.33 s, 100 mm); his arms are below the frame. |
+
+The side-yoke shots are unchanged. Camera only: `08_camera.py` on the v009h package.
+
 ## v009h: the client's notes (via the director), patched onto the v009g package
 
 | # | Note | Fix |

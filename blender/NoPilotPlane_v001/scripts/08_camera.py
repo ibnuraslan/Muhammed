@@ -17,6 +17,8 @@ def fixed(p): return lambda f: Vector(p)
 def mid(a, b, w=0.5): return lambda f: a(f).lerp(b(f), w)
 YH = bone_pt(YOU, "head", (0, 0.04, 0.05))          # face centre
 YC = bone_pt(YOU, "spine02", (0, 0, 0.10))          # chest
+YF = bone_pt(YOU, "head", (0, 0.06, 0.0))            # v009i: face, for the tight close-ups
+YE = bone_pt(YOU, "head", (0, 0.04, 0.10))           # v009i: face framed low (shoulders at the bottom edge)
 CH = bone_pt(CA, "head"); FH = bone_pt(FO, "head"); FS = bone_pt(FO, "spine03")
 COCK_FRONT = ((0.45, 3.18, 1.55), (0.44, 3.15, 1.54))          # outside the windscreen, looking back at his face
 COCK_SIDE = ((-1.02, 1.76, 1.60), (-1.01, 1.72, 1.59))         # front-left, inside the windscreen pillar: face, arms and yoke
@@ -41,14 +43,16 @@ SHOTS = [
     # beat 3-5 (v009c): from the cockpit, through the door: he comes up the aisle toward us (the follow shot from behind
     # showed arms coming up from the frame corners), then crouches beside the captain in the doorway
     (8.20, 8.60, "follow", (0.08, -1.60, 1.00), YH, 60),           # tight on his head and shoulders as he reaches the door
-    (8.60, 10.93, CENTRE[0], CENTRE[1], mid(YH, fixed((0.0, -0.60, 1.20)), 0.5), 26),
+    (8.60, 9.08, CENTRE[0], CENTRE[1], mid(YH, fixed((0.0, -0.60, 1.20)), 0.5), 26),
+    (9.08, 10.33, (-0.02, 1.08, 1.55), (-0.02, 1.08, 1.55), YE, 100),     # v009i: head and shoulders as he walks in (arms below the frame)
+    (10.33, 10.93, CENTRE[0], CENTRE[1], mid(YH, fixed((0.0, -0.60, 1.20)), 0.5), 26),
     (10.93, 13.22, INFRONT[0], INFRONT[1], mid(YH, CH, 0.2), 24),     # crouched beside the captain, then steps over him
     # beat 6-8: the first officer, the radio
     (13.22, 15.50, (-0.90, 2.20, 1.55), (-0.89, 2.17, 1.55), mid(YH, FH, 0.3), 24),
-    (15.50, 16.50, REAR[0], REAR[1], mid(YH, fixed((0.10, 1.40, 0.90)), 0.4), 30),     # v009c: from the doorway (inside-front had the FO's sleeve in the lens)
+    (15.50, 16.50, (0.0, 2.25, 1.12), (0.0, 2.25, 1.12), YF, 60),     # v009i: low close-up of his face at the panel (the back view read as a shrug)
     (16.50, 17.60, (-0.90, 2.20, 1.55), (-0.89, 2.18, 1.55), YH, 30),     # v009g: his face at the panel (the back view held 2.1 s)
     (17.60, 19.20, (-1.00, 2.15, 1.45), (-0.99, 2.12, 1.45), mid(YH, fixed((0.00, 1.50, 0.85)), 0.7), 45),
-    (19.20, 20.40, INFRONT[0], INFRONT[1], YH, 35),
+    (19.20, 20.40, (-0.15, 2.40, 1.50), (-0.15, 2.40, 1.50), YF, 85),     # v009i: head-and-shoulders close-up, hands below the frame
     (20.40, 21.24, (-1.00, 2.15, 1.45), (-0.99, 2.12, 1.45), YH, 35),
     # beat 9: the haul (v009c: from behind while he reaches in, his arms hidden by his body; then high from the front)
     (21.24, 23.30, OTS[0], OTS[1], mid(YH, FH, 0.5), 26),            # behind-left: his reaching arms stay behind his body
@@ -59,7 +63,8 @@ SHOTS = [
     (24.80, 25.30, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, -0.6)), 24),
     (25.30, 25.82, HAUL_HI[0], HAUL_HI[1], mid(YH, FH, 0.6), 22),
     # beat 10-11: alarms, the dive
-    (25.82, 27.40, INFRONT[0], INFRONT[1], YH, 26),
+    (25.82, 26.60, (0.0, 2.0, 1.10), (0.0, 2.0, 1.10), YF, 70),     # v009i: his face as the alarms start
+    (26.60, 27.40, (-0.40, 1.75, 1.35), (-0.40, 1.75, 1.35), fixed((0.10, 2.30, 1.05)), 35),     # v009i: the panel, warning lamps flashing (no person)
     (27.40, 28.40, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, -0.6)), 24),
     (28.40, 29.20, REAR[0], REAR[1], mid(YH, fixed((0.4, 2.4, 1.1)), 0.4), 22),
     (29.20, 30.32, (-0.90, 2.20, 1.55), (-0.89, 2.18, 1.55), YH, 40),     # v009g: his face as he lunges for the seat (the doorway wide held 1.8 s)
@@ -79,7 +84,7 @@ SHOTS = [
     (46.00, 47.00, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.3)), 24),
     (47.00, 48.40, OTS2[0], OTS2[1], fixed((0.55, 2.20, 1.00)), 24),
     (48.40, 49.30, COCK_SIDE[0], COCK_SIDE[1], YC, 28),            # v009g: both arms to the hands (the tight side shot read as a missing arm)
-    (49.30, 50.30, OTS2[0], OTS2[1], fixed((0.55, 2.20, 1.00)), 24),   # v009h: from 49.3 s his left arm points at the side camera (a stub); from above both arms read
+    (49.30, 50.30, (-0.98, 1.95, 1.30), (-0.98, 1.95, 1.30), YF, 85),     # v009i: close on his face (from 49.3 s the side shot shows his left arm as a stub, and the high shot did too)
     (50.30, 51.10, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.3)), 24),
     (51.10, 51.80, (1.00, 0.90, 1.90), (0.99, 0.88, 1.89), mid(FH, FS, 0.4), 22),   # the first officer on his back, face up (0.7 s)
     (51.80, 53.00, COCK_SIDE[0], COCK_SIDE[1], YC, 28),
