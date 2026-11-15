@@ -227,7 +227,7 @@ SEGS = [
     (1601, EAR_W + V(-0.22, -0.92, 0.28), EAR_W + V(0.16, 0.12, 0.06), 30), (1650, EAR_W + V(-0.24, -0.95, 0.27), EAR_W + V(0.12, 0.1, 0.05), 30),
     (1665, V(-0.05, -0.62, 1.66), V(0.02, 0.3, 1.28), 32), (1690, V(0.55, -0.85, 1.52), FACE9, 32),
     # v009i: end on a medium shot with the NEW ear to camera, his fingertips on it, the nurse beside him at his left shoulder
-    (1720, EAR9 + V(0.6, -0.88, 0.06), EAR9.lerp(FACE9, 0.3) + V(0.08, 0.1, -0.02), 30), (1770, EAR9 + V(0.56, -0.82, 0.06), EAR9.lerp(FACE9, 0.3) + V(0.08, 0.1, -0.02), 32)],
+    (1720, EAR9 + V(0.72, -0.95, 0.06), EAR9.lerp(FACE9, 0.3) + V(0.2, 0.14, -0.04), 28), (1770, EAR9 + V(0.68, -0.9, 0.06), EAR9.lerp(FACE9, 0.3) + V(0.2, 0.14, -0.04), 29)],
 ]
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.lens = 30; cam_d.sensor_fit = 'AUTO'; cam_d.clip_start = 0.004; cam_d.clip_end = 60
 cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 4.0
