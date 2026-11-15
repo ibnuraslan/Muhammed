@@ -1,0 +1,65 @@
+{
+ "chevy": {
+  "uid": "54926ff096ac4b5686211685e834d908",
+  "title": "1991 Chevy Silverado Crew Cab",
+  "author": "David_Holiday",
+  "author_profile": "https://sketchfab.com/David_Holiday",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/54926ff096ac4b5686211685e834d908",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "wheel": {
+  "uid": "01e3c476a3cd4d1db9dc8ded131a6d13",
+  "title": "Leyland Steering Wheel",
+  "author": "Fishboe",
+  "author_profile": "https://sketchfab.com/ministephen",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/01e3c476a3cd4d1db9dc8ded131a6d13",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "medcab": {
+  "uid": "3c200586e8604d8e974915b19f5f0b02",
+  "title": "Dm6-001-13",
+  "author": "foxart3d",
+  "author_profile": "https://sketchfab.com/foxart3d",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/3c200586e8604d8e974915b19f5f0b02",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "steth": {
+  "uid": "9dcd003806bf4761a02feeb4f02b108a",
+  "title": "Stethoscope from Poly by Google",
+  "author": "IronEqual",
+  "author_profile": "https://sketchfab.com/ie-niels",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/9dcd003806bf4761a02feeb4f02b108a",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "clip": {
+  "uid": "f26829100fcc45de99e2b99385ef9bc9",
+  "title": "Clipboard (SCP Containment Breach)",
+  "author": "SCP Games",
+  "author_profile": "https://sketchfab.com/SCPGames",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/f26829100fcc45de99e2b99385ef9bc9",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "shelf": {
+  "uid": "d7cc67be8b474cc5bfe0a60c8afab13b",
+  "title": "Industrial Wood and Metal Shelf",
+  "author": "beeclark",
+  "author_profile": "https://sketchfab.com/beeclark",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/d7cc67be8b474cc5bfe0a60c8afab13b",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "mcab": {
+  "uid": "4d49691a269745cabe0e1d5c1c3bef9b",
+  "title": "Metal Storage Cabinet",
+  "author": "jimbogies",
+  "author_profile": "https://sketchfab.com/jimbogies",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/4d49691a269745cabe0e1d5c1c3bef9b",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
