@@ -189,7 +189,7 @@ SEGS = [
   [  # v009i: insert - the harvested rib cartilage already on the tray (the see-through x-ray chest is gone, client)
     (156, BLK + V(0.05, -0.3, 0.3), BLK + V(0, 0, 0.0), 44), (215, BLK + V(0.03, -0.16, 0.15), BLK + V(0, 0, 0.0), 50)],
   [  # v009j: clean cut - the two of them while the surgeon finishes at the chest (insert cut to 1 s)
-    (216, V(0.05, -1.5, 1.62), PC + V(0.04, 0, 0.42), 28), (295, V(0.12, -1.45, 1.62), PC + V(0.06, 0, 0.42), 28)],
+    (216, FACE1 + V(0.02, -0.68, 0.02), FACE1 + V(0, 0, -0.04), 42), (295, FACE1 + V(0.0, -0.6, 0.02), FACE1 + V(0, 0, -0.04), 46)],   # v009k: his worried face (the two-shot showed the surgeon's knee between his legs)
   [ (296, V(1.32, -1.28, 1.62), PC.lerp(BLK, 0.5) + V(0, 0, 0.32), 28), (306, V(1.3, -1.25, 1.62), PC.lerp(BLK, 0.6) + V(0, 0, 0.3), 28),
     (322, V(0.85, -1.45, 1.58), BLK + V(0, 0, 0.22), 32),
     # v009i: tray at chest height from his front: his masked face in the top third, looking down at his hands (no headless torso)
@@ -216,11 +216,13 @@ SEGS = [
     (1180, INC + V(0.32, -0.82, 0.46), INC + V(-0.02, 0.12, 0.2), 34), (1240, INC + V(0.25, -0.75, 0.18), INC + V(-0.02, 0.1, 0.3), 32), (1266, V(0.6, -0.8, 1.32), V(0.4, 0.42, 1.3), 26), (1300, V(0.6, -0.78, 1.5), V(0.4, 0.45, 1.24), 26),
     (1330, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.2), 26), (1340, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.2), 26), (1345, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.22), 26)],
   [  # v009i: clean cut - medium profile of his head with the new ear to camera; the surgeon's glove and forceps at the ear, his face at right
-    (1346, EAR_W + V(0.46, -0.66, 0.16), EAR_W + V(0.11, 0.09, 0.04), 32), (1440, EAR_W + V(0.42, -0.6, 0.15), EAR_W + V(0.1, 0.08, 0.04), 34)],
+    (1346, EAR_W + V(-0.22, -0.92, 0.28), EAR_W + V(0.16, 0.12, 0.06), 30), (1379, EAR_W + V(-0.21, -0.9, 0.28), EAR_W + V(0.16, 0.12, 0.06), 30)],
+  [  # v009k: one sharp medium profile (1.5 s) while the ear is set in place, the camera further back (no glove near the lens)
+    (1380, EAR_W + V(0.66, -0.9, 0.2), EAR_W + V(0.1, 0.08, 0.04), 44), (1470, EAR_W + V(0.62, -0.86, 0.2), EAR_W + V(0.1, 0.08, 0.04), 46)],
   [  # v009i: clean cut - the two faces while the join glows
-    (1441, EAR_W + V(-0.22, -0.92, 0.28), EAR_W + V(0.16, 0.12, 0.06), 30), (1500, EAR_W + V(-0.2, -0.88, 0.27), EAR_W + V(0.16, 0.12, 0.06), 30)],
+    (1471, EAR_W + V(-0.22, -0.92, 0.28), EAR_W + V(0.16, 0.12, 0.06), 30), (1500, EAR_W + V(-0.2, -0.88, 0.27), EAR_W + V(0.16, 0.12, 0.06), 30)],
   [  # v009i: clean cut - the stitching on the ear in profile
-    (1501, EAR_W + V(0.42, -0.6, 0.15), EAR_W + V(0.1, 0.08, 0.04), 34), (1600, EAR_W + V(0.4, -0.58, 0.15), EAR_W + V(0.1, 0.08, 0.04), 35)],
+    (1501, EAR_W + V(0.62, -0.86, 0.2), EAR_W + V(0.1, 0.08, 0.04), 46), (1600, EAR_W + V(0.6, -0.84, 0.2), EAR_W + V(0.1, 0.08, 0.04), 47)],
   [  # v009i: clean cut - faces as he finishes and steps back; then the chair rises
     (1601, EAR_W + V(-0.22, -0.92, 0.28), EAR_W + V(0.16, 0.12, 0.06), 30), (1650, EAR_W + V(-0.24, -0.95, 0.27), EAR_W + V(0.12, 0.1, 0.05), 30),
     (1665, V(-0.05, -0.62, 1.66), V(0.02, 0.3, 1.28), 32), (1690, V(0.55, -0.85, 1.52), FACE9, 32),
@@ -257,6 +259,9 @@ for f in range(1, sc.frame_end + 1, 4):
 for f in range(840, 1252, 4):   # v009g: x-ray macro at f/16 or more (it was soft at f/11); the lift-out at f/8 or more
     ev_at(f); dist = (cam.matrix_world.translation - aim.matrix_world.translation).length
     cam_d.dof.aperture_fstop = max(16.0 if f < 1063 else 8.0, min(22.0, 2.8 * 0.9 / max(dist, 0.02))); cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
+for f in range(1346, 1652, 4):   # v009k: the head and ear shots sharp (f/8 or more)
+    ev_at(f); dist = (cam.matrix_world.translation - aim.matrix_world.translation).length
+    cam_d.dof.aperture_fstop = max(8.0, min(22.0, 2.8 * 0.9 / max(dist, 0.02))); cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
 for idb in (cam, aim, cam_d): stepped(idb, set(JUMPS))
 # surgical spot follows the working area
 for f, tgt in ((1, V(0.05, -0.1, 1.3)), (330, BLK), (600, INC), (1300, INC), (1400, EAR_W), (1640, EAR_W), (1720, FACE9)):

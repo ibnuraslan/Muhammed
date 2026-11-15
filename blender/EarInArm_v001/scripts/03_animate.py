@@ -134,7 +134,7 @@ def pat_rec(f, head=(8, -18, 4), breath=0.0):   # v009d: less head turn (client:
 ARM_R = ((-0.32, -0.12, 0.77), (0, -1, -0.15), (0, 0, -1))
 ARM_L_REST = ((0.32, -0.12, 0.77), (0, -1, -0.15), (0, 0, -1))
 EARHAND_W = EAR_C + Vector((0.055, 0.035, -0.304 - 0.115))   # seated: head is 0.304 lower than rest
-ARM_L_BOARD = ((0.74, -0.04, 1.03), (1, -0.15, 0.0), (0, 0, 1))   # palm up on the arm board (tilt frame)
+ARM_L_BOARD = ((0.68, -0.11, 1.01), (0.92, -0.38, -0.03), (0, 0, 1))   # v009k: elbow slightly bent, palm up (straight arm read as a T-pose)   # palm up on the arm board (tilt frame)
 # beat 1: shock. Head jolts back, hand flies up toward the dressing, then settles
 pat_up(1, head=(0, -8, 0)); pat_up(18, head=(-6, -12, 3), spine=(2, 0, 0)); pat_up(40, head=(-10, -18, 4), spine=(-2, 2, 0))
 pat_up(80, head=(-4, -22, 6), spine=(4, 3, 4)); pat_up(126, head=(-2, -16, 4), spine=(6, 2, 2)); pat_up(165, head=(0, -4, 0))
@@ -155,8 +155,8 @@ HP(PAT, "R", "relaxed", 1); HP(PAT, "R", "open_alarm", 38); HP(PAT, "R", "open_a
 N0 = FACE_NEUTRAL()
 PAT.face(1, **dict(N0, eye_left_opened_up=0.4, eye_right_opened_up=0.4))
 SHOCK = dict(N0, eye_left_opened_up=1, eye_right_opened_up=1, eyebrows_left_up=1, eyebrows_right_up=1, eyebrows_left_inner_up=0.8,
-             eyebrows_right_inner_up=0.8, mouth_open=0.75)
-PAT.face(14, **SHOCK); PAT.face(100, **dict(SHOCK, mouth_open=0.45, mouth_depression=0.4)); PAT.face(160, **dict(N0, eyebrows_left_inner_up=0.5, eyebrows_right_inner_up=0.5))
+             eyebrows_right_inner_up=0.8, mouth_open=0.18)   # v009k: lips slightly parted (wide open read as a scream mask)
+PAT.face(14, **SHOCK); PAT.face(100, **dict(SHOCK, mouth_open=0.1, mouth_depression=0.3)); PAT.face(160, **dict(N0, eyebrows_left_inner_up=0.5, eyebrows_right_inner_up=0.5))
 SLEEP = dict(N0, eye_left_closure=1, eye_right_closure=1)
 PAT.face(340, **dict(N0, eye_left_slit=0.3, eye_right_slit=0.3)); PAT.face(430, **SLEEP); PAT.face(B["b9"] + 20, **SLEEP)
 SMILE = dict(N0, mouth_corner_puller=1.0, mouth_upward_retraction=0.5, eye_left_slit=0.35, eye_right_slit=0.35, eyebrows_left_up=0.3, eyebrows_right_up=0.3)
@@ -442,10 +442,10 @@ for m in _fast: m.show_viewport = True
 # ================================================================== nurse
 NH = Human(NUR.R)
 for s in "LR": NUR.ik(s, 1, False)
-def nurse_arms(f, swing=0.0, fwd=0.0):
+def nurse_arms(f, swing=0.0, fwd=0.0, clasp=0.0):
     for s in "LR":
         sx = 1 if s == "L" else -1
-        NUR.R.key_rot("upperarm01." + s, f, [("Y", sx * 56), ("X", -(fwd + swing * sx))])   # v009d: 6 deg wider, forearms clear her hips
+        NUR.R.key_rot("upperarm01." + s, f, [("Y", sx * (56 - 30 * clasp)), ("X", -(fwd + swing * sx))])   # v009d: 6 deg wider, forearms clear her hips
         NUR.R.key_rot("lowerarm01." + s, f, [("X", -(20 + fwd * 0.6))])
 N_A, N_B, N_C, N_D = Vector((-1.9, 1.75)), Vector((1.72, -0.15)), Vector((1.25, -0.35)), Vector((-0.75, -1.15))
 walk(NUR, N_A, Vector((1.0, 1.6)), 1, 120, -90, -90, stride=0.6)
@@ -453,7 +453,7 @@ for f in range(1, 121, 18): nurse_arms(f, swing=12 * math.sin(f * 0.21))
 walk(NUR, Vector((1.0, 1.6)), N_B, 121, 300, -90, -100, stride=0.6)
 for f in range(121, 300, 18): nurse_arms(f, swing=12 * math.sin(f * 0.21))
 for f in range(310, 565, 50):
-    stand(NUR, f, N_B, -100, spine=(10, 0, 0), head=(16, 0, 0)); nurse_arms(f, fwd=45 + 10 * math.sin(f * 0.05))
+    stand(NUR, f, N_B, -100, spine=(2, 0, 0), head=(6, 0, 0)); nurse_arms(f, fwd=30, clasp=1.0)   # v009k: upright, hands clasped (sterile pose)
 walk(NUR, N_B, N_C, 605, 660, -100, -150, stride=0.3)   # v009c: starts after the surgeon has crossed her path
 for f in (572, 600): nurse_arms(f, fwd=4)   # arms down while the surgeon passes her
 for f in range(605, 660, 18): nurse_arms(f, swing=10 * math.sin(f * 0.21))
@@ -469,10 +469,10 @@ N_E1, N_E2, N_E = Vector((0.95, -1.25)), Vector((1.15, -0.05)), Vector((0.53, 0.
 _y0 = -213; _y1 = unwrap(_y0, yaw_to(N_E1 - (N_D + Vector((0.06, 0.08))))); _y2 = unwrap(_y1, yaw_to(N_E2 - N_E1)); _y3 = unwrap(_y2, yaw_to(N_E - N_E2))
 _yE = unwrap(_y3, yaw_to(Vector((0.02, -0.05)) - N_E))
 walk(NUR, N_D + Vector((0.06, 0.08)), N_E1, 1560, 1610, _y0, _y1, stride=0.55); walk(NUR, N_E1, N_E2, 1611, 1655, _y1, _y2, stride=0.55)
-walk(NUR, N_E2, N_E, 1656, 1695, _y2, _yE, stride=0.5)
+walk(NUR, N_E2, N_E + Vector((0.03, 0.08)), 1656, 1695, _y2, _yE, stride=0.5)
 for f in range(1560, 1696, 18): nurse_arms(f, swing=10 * math.sin(f * 0.21))
 for f in (1696, 1730, B["end"]):
-    stand(NUR, f, N_E, _yE, spine=(4, 0, 0), head=(8, 0, 0)); nurse_arms(f, fwd=0)
+    stand(NUR, f, N_E + Vector((0.03, 0.08)), _yE, spine=(0, 0, 0), head=(-2, 0, 0)); nurse_arms(f, fwd=6, clasp=0.6)   # v009k: upright, a step behind, hands clasped
 for s_ in "LR": HP(NUR, s_, "relaxed", 1, spread=0); HP(NUR, s_, "relaxed", 1309, spread=0)
 NUR.face(1, **N0); NUR.face(B["b9"] + 50, **N0); NUR.face(B["b9"] + 80, **SMILE)
 
