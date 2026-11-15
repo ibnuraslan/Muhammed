@@ -231,7 +231,7 @@ for k, f in enumerate(range(672, 775, 17)):
 FLOAT = lambda f, t: (SIT[0], SIT[1] - 0.05 - 0.15 * t, SIT[2] + 0.95 * t)
 for k, f in enumerate(range(790, 1380, 30)):
     t = min(1.0, (f - 790) / 520.0)
-    DV.P(f, FLOAT(f, t), yaw=180 + 8 * math.sin(k * 0.5), pitch=-14 + 30 * t, roll=4 * math.sin(k * 0.7), spine=(-4 + 14 * t, 0, 3 * math.sin(k)),
+    DV.P(f, FLOAT(f, t), yaw=180 + 8 * math.sin(k * 0.5), pitch=-14 + 30 * t + 38 * smooth(max(0.0, min(1.0, (f - 1130) / 90.0))), roll=4 * math.sin(k * 0.7), spine=(-4 + 14 * t, 0, 3 * math.sin(k)),
          head=(-30 + 40 * t, 6 * math.sin(k * 0.6), -25 * math.sin(k * 0.35)), legs=legs((84 - 30 * t + 10 * math.sin(k * 0.9) + 25 * t, -2, 30 + 35 * t + 15 * math.sin(k * 0.7), -55), (84 - 45 * t - 10 * math.sin(k * 0.8) + 30 * t, -3, 35 + 60 * t + 15 * math.cos(k * 0.6), -40)),
          arms=arms(l=dict(fwd=(55 + 30 * math.sin(k * 1.4)) * (1 - t) + (22 + 18 * math.sin(k * 2.1)) * t, out=14 + 10 * math.sin(k * 1.1), L=DV.ARM * (0.6 + 0.12 * t + 0.06 * math.sin(k * 1.7))), r=dict(fwd=(50 + 30 * math.cos(k * 1.4)) * (1 - t) + (20 + 18 * math.cos(k * 2.1)) * t, out=16 + 10 * math.cos(k * 1.1), L=DV.ARM * (0.6 + 0.12 * t + 0.06 * math.cos(k * 1.7)))), jaw=6,
          curl={"L": (30, 20), "R": (30, 20)})

@@ -636,5 +636,43 @@ for _m in bpy.data.objects["Water_Volume"].data.materials:
     if not _out.inputs["Surface"].is_linked:
         _tb = _nt.nodes.new("ShaderNodeBsdfTransparent"); _tb.inputs["Color"].default_value = (1, 1, 1, 1)
         _nt.links.new(_tb.outputs[0], _out.inputs["Surface"])
+
+# ---------------------------------------------------------------- hard-cut shots (override the spline; CONSTANT keys at the cut)
+def _fcs(idb):
+    return [fc for fc in all_fcurves(idb)]
+def cut_shot(f0, f1, pos_fn, aim_fn, lens, fstop=None):
+    for f in range(f0, f1 + 1):
+        p_, a_ = pos_fn(f), aim_fn(f)
+        cam.location = p_; cam.keyframe_insert("location", frame=f)
+        aim.location = a_; aim.keyframe_insert("location", frame=f)
+        cam_d.lens = lens; cam_d.keyframe_insert("lens", frame=f)
+        if fstop: cam_d.dof.aperture_fstop = fstop; cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
+    for idb in (cam, aim, cam_d):
+        for fc in _fcs(idb):
+            for kp in fc.keyframe_points:
+                if f0 - 2 <= kp.co.x < f0 or f1 <= kp.co.x < f1 + 1: kp.interpolation = 'CONSTANT'
+    # delete spline keys that fall between f1 and the next frame so the cut back is clean
+    print("CUT", f0, f1)
+def _mid(f): return H_(f).lerp(dv("foot.R", f), 0.5)
+# minor: the dive — hold above the water until she is in, then cut to the underwater shot
+_p66 = V(X0 + 1.9, -3.4, 6.9)
+cut_shot(66, 76, lambda f: _p66, lambda f: CH(f), 24)
+cut_shot(77, 112, lambda f: V(X0 + 1.7, -2.3, 4.5), lambda f: CH(f), 24, fstop=8.0)      # straight to a clear underwater shot
+# 1: ascent — one sharp side shot, level with her, 3 m, f/11; whale head under her ankle, nothing white in the foreground
+_best = None
+for _a in range(0, 360, 30):
+    _d = V(math.cos(math.radians(_a)), math.sin(math.radians(_a)), 0)
+    _c = _mid(1950) + _d * 3.0; _c.z = min(_c.z, 5.3)
+    if not (-5.2 < _c.x < 5.2 and -4.3 < _c.y < 4.3): continue
+    _seg = _mid(1950) - _c; _wb = wbody(1950); _wh = wh(1950)
+    _t = max(0.0, min(1.0, (_wb - _c).dot(_seg) / _seg.length_squared)); _dl = (_c + _seg * _t - _wb).length
+    _cost = -_dl - 0.5 * (_c - _wb).length + (5.0 if (_c - _wh).length < 2.2 else 0.0)
+    if _best is None or _cost < _best[0]: _best = (_cost, _d)
+_D = _best[1]; print("ASCENT side dir", tuple(round(x, 2) for x in _D))
+cut_shot(1855, 1925, lambda f: V(*((_mid(f) + _D * 3.4)[:2]), min(_mid(f).z - 0.25, 5.2)), lambda f: _mid(f).lerp(H_(f), 0.2), 30, fstop=11.0)
+# surface shot: just above the water, in front of her face, she gasps and moves to the edge
+cut_shot(1926, 2080, lambda f: H_(f) + V(0.3, 1.6, 0.3), lambda f: H_(f) + V(0, 0, 0.05), 30, fstop=8.0)
+# 2: ending — on the deck at kneeling height, 1.5 m in front of her face; keeper kneeling beside her
+cut_shot(2081, END, lambda f: H_(f) + V(-0.35, 1.5, 0.35), lambda f: H_(f) + V(0.25, -0.35, 0.35), 26, fstop=8.0)      # face on, keeper kneeling behind/beside her on the deck
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("FX_CAM_DONE", OUT)
