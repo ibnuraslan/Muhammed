@@ -32,8 +32,8 @@ def setup(c):
     # a faint cold light down the tunnel so the bricks and wet floor just read; rim on the rats
     # no back light (it lit a pale square behind the stack); a soft cold fill grazing the walls from each side
     for sx in (-1, 1):
-        sd = area_light(t + Vector((0.7 * sx, -0.5, 0.6)), (0, 0, 0), 0.6, 2.5, (0.6, 0.72, 0.9))
-        point_at(sd, t + Vector((-0.3 * sx, 0.6, -0.2))); sd.visible_volume_scatter = False; sd.visible_camera = False
+        sd = area_light(t + Vector((0.7 * sx, -0.5, 0.6)), (0, 0, 0), 0.6, 1.0, (0.6, 0.72, 0.9))
+        point_at(sd, t + Vector((-0.1 * sx, 0.2, -0.2))); sd.visible_volume_scatter = False; sd.visible_camera = False
     # dim cold fill from behind and above (hidden from the camera, so no glowing square)
     bk = area_light(t + Vector((0.0, 2.2, 0.9)), (0, 0, 0), 1.5, 4.0, (0.55, 0.68, 0.88)); point_at(bk, t + Vector((0, 0, -0.2)))
     bk.visible_camera = False
@@ -49,7 +49,7 @@ def setup(c):
             if m.type == 'MESH':
                 col.objects.link(m)
         away = (cen - t); away.z = 0; away.normalize()
-        l = bpy.data.lights.new(f"RatRim{k}", 'AREA'); l.energy = 9; l.size = 0.25; l.color = (0.65, 0.78, 0.95)
+        l = bpy.data.lights.new(f"RatRim{k}", 'AREA'); l.energy = 14; l.size = 0.25; l.color = (0.65, 0.78, 0.95)
         o = bpy.data.objects.new(f"RatRim{k}", l); bpy.context.collection.objects.link(o)
         o.location = cen + away * 0.35 + Vector((0, 0.25, 0.3)); point_at(o, cen)
         o.visible_volume_scatter = False; o.light_linking.receiver_collection = col

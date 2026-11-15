@@ -83,8 +83,8 @@ def build(variant=None):
     bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 0.8, 0)); f = bpy.context.active_object; f.scale = (4, 4, 1); f.data.materials.append(floor)
     wall = ph.texture("brick_wall_02", scale=1.6, tint=(0.22, 0.19, 0.17))
     pw = wall.node_tree.nodes["Principled BSDF"]; pw.inputs['Coat Weight'].default_value = 0.5; pw.inputs['Coat Roughness'].default_value = 0.15
-    bpy.ops.mesh.primitive_cylinder_add(vertices=64, radius=1.15, depth=6, location=(0, 1.0, 0.75), rotation=(math.pi / 2, 0, 0))
-    t = bpy.context.active_object; t.name = "Tunnel"; t.data.materials.append(wall)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=64, radius=1.15, depth=12, location=(0, 4.0, 0.75), rotation=(math.pi / 2, 0, 0))
+    t = bpy.context.active_object; t.name = "Tunnel"; t.data.materials.append(wall); t.data.shade_smooth()
     bm = bmesh.new(); bm.from_mesh(t.data)
     bmesh.ops.delete(bm, geom=[f_ for f_ in bm.faces if abs(f_.normal.y) > 0.9], context='FACES')       # open ends
     bmesh.ops.reverse_faces(bm, faces=bm.faces); bm.to_mesh(t.data); bm.free()
@@ -98,7 +98,7 @@ def build(variant=None):
     brick("B1", (0.012, -0.006, h * 1.5 + 0.001), (0, 0, -0.12), mats[1])
     brick("B2", (-0.006, 0.004, h * 2.5 + 0.002), (0, 0, 0.21), mats[2])
     lean = brick("B3", (0.19, 0.02, 0.085), (0, math.radians(-52), 0.35), mats[3])
-    brick("B4", (-0.36, -0.16, h / 2), (0, 0, -0.18), mats[1])           # a loose one front-left
+    brick("B4", (-0.34, 0.12, h / 2), (0, 0, -0.18), mats[1])           # a loose one front-left
     brick("B5", (-0.55, 0.9, h / 2), (0, 0, 0.7), mats[0])               # and one far back in the dark
     TOP = Vector((-0.006, 0.004, h * 3 + 0.003))
     d = diamond("Diamond", 0.045); d.location = TOP + Vector((0, 0, 0.045 * 0.86 - 0.004)); d.rotation_euler = (0, 0, 0.2)
@@ -107,7 +107,7 @@ def build(variant=None):
     c["diamond"] = d; c["top"] = TOP
     # rats, in the dark around it
     rats = []
-    for k, (loc, rz, s) in enumerate((((-0.5, -0.42, 0), 0.9, 1.8), ((0.43, -0.36, 0), -2.2, 1.7), ((0.25, 0.75, 0), 2.7, 1.5))):
+    for k, (loc, rz, s) in enumerate((((-0.3, -0.3, 0), 0.9, 1.8), ((0.33, -0.27, 0), -2.2, 1.7), ((0.25, 0.75, 0), 2.7, 1.5))):
         try:
             r, ms = ph.model("street_rat", loc=loc, rot_z=rz, scale=s)
             rats.append((r, ms))
