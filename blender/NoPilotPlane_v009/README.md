@@ -4,7 +4,7 @@ The director rejected v008b and asked for a simpler re-stage rather than more pa
 
 - `NoPilotPlane_v009_60fps.blend`: packed, plain git file (no LFS), one camera `CAM_Film`, frames 1–3481 (58.0 s at 60 fps).
 - `beats.json`: the director's 19 VO beat seconds; beat N starts at frame 1 + round(s × 60). No VO is added.
-- `review/preview.mp4` and `review/pages/`: the full preview (every 5th frame, 270×480, 12 fps = real speed). Ranges changed in v009c–v009f were re-rendered from this exact package and spliced in. The close-up (3346–3481) is rendered at 32 samples, everything else at 4. The unchanged ranges were rendered before the last flag change (eye/lash self-shadow off), which only affects the eyes.
+- `review/preview.mp4` and `review/pages/`: the full preview (every 5th frame, 270×480, 12 fps = real speed). Ranges changed in v009c–v009g were re-rendered from this exact package and spliced in. The close-up (3346–3481) is rendered at 32 samples, everything else at 4. The unchanged ranges were rendered before the last flag change (eye/lash self-shadow off), which only affects the eyes.
 
 ## The director's list
 
@@ -33,6 +33,20 @@ The ending close-up of his face (55.72–58.0 s) is kept as it was.
 | 8 | 3071–3146: 1.3 s static top-down on the FO | 0.7 s. |
 | – | Flat green patch | `scripts/09_field.py`: grass with mowing bands, and a 2.9 km × 160 m runway strip with a dashed centreline and edge lines, riding with the terrain. |
 
+## v009g: the director's review of v009f (9 items)
+
+| # | Note on v009f | Fix |
+|---|---|---|
+| 1 | 2976–3066: his left arm reads as missing (a stub) | The side shot ends at 49.3 s (frame 2959). From there his left arm points at the side camera, so 49.3–50.3 s is shot high between the seats, where both arms read. |
+| 2 | 2066–2151, 2326–2406, 2821–2901: a seat back blocks the lens | The over-the-shoulder camera moved up between the seats (`OTS2`), so only the edge of a seat back is in frame. |
+| 3 | 661–701: an arm enters from the left edge | The follow shot through the door ends at 656. The crouch and step-over play from the inside-front camera. |
+| 4 | Mannequin arms at 561–601 (through the door) and 721–791 (in the cockpit) | After the door push both arms hang relaxed with a slight bend. At the step-over he no longer holds the seat backs with his arms out; his hands come down beside his hips. In the crouch his left hand rests on his knee (on the door frame the arm went straight up). On the handset his free arm hangs at his side. |
+| 5 | 1491–1511: the FO's legs and shoes in the lens | The high front shot starts at 1516. |
+| 6 | 521–531: an extra arm at the bottom-left | The follow shot is cut at 517. |
+| 7 | 931–1056: back view frozen 2.1 s | 1.0 s of the back view, then a side shot of his face at the panel. |
+| 8 | 1341–1436, 1706–1816: static doorway wides | Each doorway wide is 0.8 s. The haul continues from a side view of his face (24.1–25.25 s). |
+| 9 | 1571–1641: stiff horizontal right forearm | Both palms rest on the throttle pedestal top (the hand targets were 0.2 m above it, so the forearms floated). |
+
 ## Build chain
 `03_animate.py` → `pipeline/anim_look.py` → `05_look_tune.py` → `06_pov_split.py` (the head split now runs only with `pov`; v009 does not use it) → `04_package.py` → `08_camera.py` (cut list, re-keys `CAM_Film` on the packaged file) → `09_field.py` (landing field and runway).
 
@@ -47,14 +61,15 @@ The ending close-up of his face (55.72–58.0 s) is kept as it was.
   - The FO-on-floor shot runs from 51.1 to 52.48 s.
   - The cut list is now 36 shots.
 
-## Checks on the packaged file (v009f, md5 f63df03e)
-- `cam_dist_check` (`review/camdist_v009.json`): every shot is 2.5 s or shorter. The director asked for cameras inside the cockpit (item 4), and the cockpit is about 2.2 m wide, so many cockpit shots are 1.1–1.5 m from YOU (closest 1.07 m, 17.6–22.3 s) and 1.28–1.30 m from the FO (13.2–15.5 s, 24.8–25.1 s). The 1.5 m target is not met in those shots. In the preview no limb fills the frame. Inside the cockpit, a bigger distance would mean going back outside the windscreen, which item 4 rejected.
-- `clip_scan` (`review/clip_scan_v009.json`): two short ranges during the haul, 1429–1441 and 1471–1477 (23.8–24.6 s), where his hands are on the FO's jacket.
-- `limb_check` (`review/limb_v009.json`): 217 ARMBODY flags, mostly the known false positive (the check counts the shoulder groups as torso), and 38 PROPHEAD flags (the hanging oxygen drops touching seated passengers' heads).
+## Checks on the packaged file (v009g, md5 5176a019)
+- `cam_dist_check` (`review/camdist_v009.json`): 46 shots, every one 2.5 s or shorter. The director asked for cameras inside the cockpit, and the cockpit is about 2.2 m wide, so many cockpit shots are 1.1–1.5 m from YOU, and the FO is 1.3 m away at 13.3–23.3 s. The 1.5 m target is not met in those shots. In the preview no limb fills the frame.
+- `clip_scan` (`review/clip_scan_v009.json`): single frames 679 and 1741, and two short ranges during the haul, 1429–1441 and 1471–1477, where his hands are on the FO's jacket.
+- `limb_check` (`review/limb_v009.json`): 257 ARMBODY flags, mostly the known false positive (the check counts the shoulder groups as torso), and 38 PROPHEAD flags (the hanging oxygen drops touching seated passengers' heads).
 - `qa_check` was not re-run in this round (the director said not to wait for it).
+- Preview: the ranges changed in v009g (491–1061, 1271–1821, 2061–2156, 2321–2411, 2816–3071) were re-rendered from this package and spliced in.
 
 ## Open
 - No conscious passenger kneels beside the FO. The FO is shown face up at medium distance (51.1–51.8 s); the crouch-and-check beat is played by YOU beside the captain.
 - The eyes in the close-up read correctly at 32 samples. At the 4-sample preview level they still darken, so the final render needs normal samples.
-- The FO's shoe comes close to the high front camera for about 0.3 s at 24.8 s.
+- About 0.4 s at 8.7 s (frames 521–541): the closed cockpit door fills the frame just before he opens it.
 - Cockpit camera distances: see above.
