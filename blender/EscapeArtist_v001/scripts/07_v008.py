@@ -206,7 +206,7 @@ for f in range(1128, 1422, 4):
     sc.frame_set(f)
     hd = bw(SMr, "head"); hR = bw(SMr, "upperleg01.R"); hL = bw(SMr, "upperleg01.L"); side = (hR - hL).normalized()
     fw = Vector((0, 0, 1)).cross(hR - hL).normalized()
-    W = hd + side * 0.13 + fw * 0.02 + Vector((0, 0, -0.1))
+    W = hd + side * 0.16 + fw * 0.03 + Vector((0, 0, -0.02))
     SM_.key_hand("R", f, W, Vector((0, 0, 1)), -side, hd + side * 0.35 + Vector((0, 0, -0.45)) - fw * 0.2)
 pose_fingers(SMr, "R", "wrap_grip", range(1128, 1422, 8))
 bake_in_fist(mob, SMr, "R", 1128, 1421, step=4, grip_frac=0.35)
@@ -247,8 +247,8 @@ for nm in ("PoliceRed", "PoliceBlue"):
     Ld = O[nm].data
     for fc in fcurves_of(Ld):
         if fc.data_path == "energy":
-            for k in [k for k in fc.keyframe_points if k.co.x >= 1422][::-1]: fc.keyframe_points.remove(k)
-    Ld.energy = 0; Ld.keyframe_insert("energy", frame=1422)
+            for k in [k for k in fc.keyframe_points if k.co.x >= 1380][::-1]: fc.keyframe_points.remove(k)
+    Ld.energy = 0; Ld.keyframe_insert("energy", frame=1380)
     for fc in fcurves_of(Ld):
         for k in fc.keyframe_points: k.interpolation = "CONSTANT"
 # boy at the workbench: elbows bent, hands on the coins
@@ -295,18 +295,22 @@ clear_tf(tube, 2694, 2898)
 bake_in_fist(tube, PR, "R", 2694, 2898, grip_frac=0.3)
 # ending: the old man stands at the cell-front bars, both hands on the bars, face in a gap between bars
 POr = O["PrisonerOld"]; PO_ = H["PrisonerOld"]
-clear_keys(POr, 3676, 3750)
+clear_keys(POr, 3612, 3750)
 GAPX = 0.4025; ER = Vector((GAPX, -0.48, PO_.root_head.z))
-for f in range(3676, 3751, 4):
-    b = 0.006 * math.sin(f / 12)
+for f in range(3612, 3751, 4):
+    b = 0.004 * math.sin(f / 12)
     dd, nn_ = hand_dirs(180, (0, 0.3, 1), (0, 1, 0))
     pose(PO_, f, ER + Vector((0, 0, b)), yaw=180, spine=(3, 0, 0), head=(-2, 2 * math.sin(f / 30)),
-         hands={"L": (Vector((0.23, -0.07, 1.24)), dd, nn_, ER + Vector((-0.5, 0.0, -0.3))), "R": (Vector((0.575, -0.07, 1.24)), dd, nn_, ER + Vector((0.5, 0.0, -0.3)))},
+         hands={"L": (Vector((0.23, -0.07, 1.3)), dd, nn_, ER + Vector((-0.5, 0.0, -0.3))), "R": (Vector((0.575, -0.07, 1.3)), dd, nn_, ER + Vector((0.5, 0.0, -0.3)))},
          fingers={"L": 0.85, "R": 0.85})
     face(PO_, f, brow=0.3, lid=0.15)
-    if (f - 3676) % 8 == 0:
-        for s_, bx in (("L", 0.23), ("R", 0.575)):
-            gripo(PO_, s_, f, O["CellFront_0"], (bx, -0.017, 1.24), (0, 1, 0), finger_dir=(0, 0, -1))
+for s_, bx, fd in (("L", 0.23, (1, 0, 0)), ("R", 0.575, (-1, 0, 0))):
+    for fc in fcurves_of(POr):
+        if ('"IK_hand.%s"' % s_) in fc.data_path or ('finger' in fc.data_path and fc.data_path.endswith('rotation_quaternion') and ('.%s"' % s_) in fc.data_path):
+            for k in [k for k in fc.keyframe_points if 3612 < k.co.x < 3750][::-1]: fc.keyframe_points.remove(k)
+    for f in (3612, 3750):           # one wrapped grip, palm on the bar, identical at both ends: held still for the whole shot
+        place_hand(POr, s_, f, Vector((bx, -0.03, 1.3)), Vector((0, 1, 0)), Vector(fd), skin=0.012)
+        apply_pose(POr, s_, "wrap_grip", f)
 gav = O["Gavel"]; clear_tf(gav, 1380, 1547)
 gax2, gctr2, gext2 = obj_local_axis(gav); GL = max(gext2)
 sc.frame_set(0)
@@ -321,6 +325,18 @@ for f in list(range(1380, 1548, 2)):
     sc.frame_set(f); c = fist_point(JUr, "R")
     R = align(hdir, Hd, gside, Vector((1, 0, 0)))
     key_matrix(gav, f, Matrix.Translation(c) @ R @ GSm @ Matrix.Translation(-(hend + (headend - hend) * 0.12)))
+filev = O["File_Blade"]
+fax, fctr, fext = obj_local_axis(filev)
+pbR = PR.pose.bones["IK_hand.R"]
+for f in range(316, 534, 2):
+    sc.frame_set(f)
+    st = math.sin((f - 300) * 2 * math.pi / 22)
+    along = (filev.matrix_world.to_3x3() @ fax).normalized()
+    Mw = PR.matrix_world @ pbR.matrix
+    pbR.matrix = PR.matrix_world.inverted() @ (Matrix.Translation(along * 0.035 * st) @ Mw)
+    pbR.keyframe_insert("location", frame=f, group=pbR.name)
+clear_tf(filev, 314, 541)
+bake_in_fist(filev, PR, "R", 314, 541, grip_frac=0.18)
 L("v009 re-stages")
 # ================================================================== H. camera: short shots with clean cuts, following the acting face
 cam = sc.camera
@@ -342,6 +358,7 @@ S = [
     (200, "Prisoner", "head", None, None, 50, 50, 0.0, ((0.4025, 0.2, 1.66), None)),
     (236, "Prisoner", "head", (1.6, 0.5, 0.3), (1.5, 0.5, 0.3), 24, 24, -0.2, None),
     (300, "Prisoner", "spine03", (0.95, -0.4, 0.3), (0.9, -0.4, 0.3), 34, 34, 0.08, None),
+    (420, "Prisoner", "head", (1.2, 0.55, 0.05), (1.15, 0.55, 0.05), 30, 30, -0.3, None),
     (541, "Prisoner", "head", (1.5, 0.3, 0.2), (1.5, 0.3, 0.2), 26, 26, -0.15, None),
     (600, None, None, None, None, 30, 32, 0.0, ((0.45, 0.85, 1.3), (-0.12, -0.12, 1.15))),
     (626, "Prisoner", "head", (1.4, 0.9, 0.25), (1.6, 0.8, 0.3), 26, 26, -0.2, None),       # the door swings toward the lock camera: cut
@@ -352,9 +369,10 @@ S = [
     (942, "Father", "head", (2.4, 0.9, 0.35), (2.2, 0.9, 0.3), 26, 26, -0.5, None),
     (1046, "Boy", "head", (1.3, 0.5, 0.15), (1.2, 0.5, 0.15), 30, 30, -0.2, None),
     (1115, "Stepmother", "head", (1.45, -0.5, 0.05), (1.3, -0.45, 0.05), 34, 36, -0.12, None),
-    (1218, "Boy", "head", (1.2, 0.4, 0.05), (1.1, 0.4, 0.05), 32, 32, -0.15, None),
-    (1340, "Boy", "head", (1.6, -0.6, 0.2), (1.5, -0.6, 0.2), 28, 28, -0.2, None),
-    (1422, "Judge", "head", (1.7, 0.35, 0.0), (1.6, 0.35, 0.0), 44, 44, -0.32, None),
+    (1175, "Boy", "head", (1.2, 0.4, 0.05), (1.1, 0.4, 0.05), 32, 32, -0.15, None),
+    (1265, "Stepmother", "head", (1.0, -0.65, 0.02), (0.95, -0.6, 0.02), 40, 40, -0.1, None),
+    (1325, "Boy", "head", (0.9, -0.55, 0.15), (0.85, -0.55, 0.15), 34, 34, -0.2, None),
+    (1380, "Judge", "head", (1.7, 0.35, 0.0), (1.6, 0.35, 0.0), 44, 44, -0.32, None),
     (1472, "Guard", "head", None, None, 30, 32, -0.35, ((4.3, 1.25, 1.8), None)),
     (1548, "Prisoner", "head", (1.8, 1.5, 0.4), (1.6, 1.4, 0.4), 28, 28, -0.2, None),
     (1588, "Prisoner", "head", (2.0, -0.6, 0.1), (2.0, -0.6, 0.1), 34, 34, -0.25, None),      # outside the fence, his face through the wire
@@ -381,8 +399,7 @@ S = [
     (3446, "PrisonerOld", "head", None, None, 26, 26, -0.2, ((-0.85, -1.4, 1.75), None)),
     (3498, "PrisonerOld", "head", None, None, 28, 28, -0.1, ((0.9, -2.35, 1.75), None)),
     (3530, "Protester1", "head", (3.0, -0.9, 0.2), (2.8, -0.9, 0.2), 28, 28, -0.25, None),
-    (3618, "Protester2", "head", (1.6, -0.5, 0.05), (1.5, -0.5, 0.05), 32, 32, -0.15, None),
-    (3680, None, None, None, None, 24, 26, 0.0, ((0.4025, 0.55, 1.56), (0.4025, -0.6, 1.4), (0.4025, 0.3, 1.6))),
+    (3618, None, None, None, None, 24, 26, 0.0, ((0.4025, 0.62, 1.56), (0.4025, -0.6, 1.42), (0.4025, 0.3, 1.6))),
     (3751, None, None, None, None, 0, 0, 0, None),
 ]
 SKIP = tuple(CAST) + ("WinBar", "CellFront", "Hacksaw", "hacksaw", "Toolbox", "Gavel", "Phone", "Mobile", "Nail", "Tube", "ScrapKey", "File_", "Placard", "Candle", "Blanket", "Spark", "Filing", "KeyRing", "GuardKey", "Crumpled", "Object_8", "Razor")
