@@ -132,8 +132,9 @@ def S02(t, L):
     begin(ALL, t); park(t, keep=(can,)); show(can, t); show(tail, t)
     base_man(man, t, MAN_XY); man.spine(t, flex=14, pitch=22)       # leaning over, out of focus behind
     man.spine(t + L, flex=16, pitch=24)
-    key_matrix(can, t, Matrix.Translation(CAN_TABLE) @ Matrix.Rotation(R(200), 4, 'Z'))
-    c = cam("CAM_S02", 70, 11); top = CAN_TABLE + Vector((0, 0, 0.122))
+    CT2 = CAN_TABLE + Vector((0, -0.40, 0))      # macro of the can at the front of the table: no hands behind it in the lens
+    key_matrix(can, t, Matrix.Translation(CT2) @ Matrix.Rotation(R(200), 4, 'Z'))
+    c = cam("CAM_S02", 70, 11); top = CT2 + Vector((0, 0, 0.122))
     # the opening sits on the can's +Y side, rotated 200 deg -> faces the camera side
     look(c, t, top + Vector((0.05, -0.16, 0.27)), top + Vector((0.0, -0.004, 0.0)))
     look(c, t + L, top + Vector((0.03, -0.09, 0.16)), top + Vector((0.0, -0.006, 0.0)))
@@ -250,7 +251,10 @@ def S07(t, L):
         sci.jaw(f, 2.5 * max(0, math.sin(u * 9)))
         sc.frame_set(f); sh = sci.r.PB["upperarm01.R"].head
         W = Vector((sh.x + 0.06 * p, sh.y - 0.06 - 0.20 * p, sh.z - 0.53 + 0.25 * p))
-        sci.hand("R", f, W, Vector((0.05, -0.25 * (1 - p), 1)), Vector((1, 0, 0)), pole=Vector((sh.x - 0.40, sh.y + 0.30, sh.z - 0.45)))
+        if p <= 0.0:
+            sci.hang("R", f); return
+        d = Vector((0.0, -0.15, -1)).lerp(Vector((0.05, -0.25, 1)), p)
+        sci.hand("R", f, W, d, Vector((1, 0, 0)), pole=Vector((sh.x - 0.40, sh.y + 0.30, sh.z - 0.45)))
     track(t, L, 6, fr)
     apply_pose(sci.o, "R", "relaxed", t); apply_pose(sci.o, "R", "point", t + int(0.3 * L))
     c = cam("CAM_S07", 42, 8)
@@ -374,33 +378,19 @@ def S10(t, L):
     mark("S10", c)
 
 def S11(t, L):
-    """scientist tips the beaker; the jelly lump slides out onto the steel tray"""
-    begin(ALL, t); park(t, keep=(beaker, can, tray, jel)); lab_base(t, liquid=0.0, jelly=True)
-    base_sci(t); sci.spine(t, flex=12, pitch=16)
-    B0 = Matrix.Translation(BEAK_P) ; key_matrix(beaker, t, B0); sc.frame_set(t)
-    grip(sci.o, "R", t, beaker, BEAK_P + Vector((0, 0.083, 0.09)), (0, -1, 0), extra=0.012)   # from behind: forearm never crosses the glass
-    H = Held(beaker, sci, "R"); H.grab(t)
-    over = TRAY_P + Vector((-0.12, -0.04, 0.14))
-    def BM(k):
-        piv = BEAK_P.lerp(over, k)
-        return Matrix.Translation(piv) @ Matrix.Rotation(R(-80 * ease(max(0, (k - 0.3) / 0.7))), 4, 'Y')
-    def fr(f, u):
-        k = ease(min(1, u / 0.55))
-        Bw = BM(k)
-        sh = sci.r.PB["upperarm01.R"].head
-        hand_target(sci, "R", f, H.wrist_for(Bw), pole=Vector((sh.x - 0.45, sh.y + 0.4, sh.z - 0.4)))
-        sci.spine(f, flex=12 + 4 * k, pitch=16 + 4 * k, turn=8 * k)
-        sl = ease(max(0, min(1, (u - 0.42) / 0.35)))
-        inside = Bw @ Vector((0, 0, 0.03))
-        land = TRAY_P + Vector((0.0, 0.0, 0.004 + 0.02))
-        pos = inside.lerp(land, sl)
-        wob = 1 + 0.18 * math.sin(max(0, u - 0.75) * 40) * math.exp(-max(0, u - 0.75) * 9) if u > 0.75 else 1.0
-        key_obj(jel, f, loc=pos, rot=(0, 0, 0.3), scale=(0.75 * (2 - wob) * (1 + 0.25 * sl), 0.75 * (1 + 0.25 * sl), 0.85 * wob))
-    track(t, L, 3, fr)
-    c = cam("CAM_S11", 40, 8)
-    look(c, t, Vector((LX + 0.62, -1.30, 1.45)), Vector((LX + 0.10, 0.10, 1.20)))
-    look(c, t + L, Vector((LX + 0.55, -1.18, 1.42)), Vector((LX + 0.14, 0.05, 1.18)))
-    catch(c, energy=2.0)
+    """no hands: the jelly lump has just landed on the steel tray and settles with a decaying wobble; low orbit"""
+    begin(ALL, t); park(t, keep=(can, tray, jel)); lab_base(t, liquid=0.0, jelly=True)
+    key_obj(beaker, t, loc=(0, -20, -5)); vis(beaker, t, False)
+    vis(sci.o, t, False)
+    key_matrix(can, t, Matrix.Translation(TRAY_P + Vector((-0.20, 0.06, 0.0))) @ Matrix.Rotation(R(160), 4, 'Z')); show(can, t)
+    for j in range(0, L + 1, 2):
+        u = j / L; e = math.exp(-u * 4.0)
+        wob = 1 + 0.22 * math.sin(u * 30) * e
+        key_obj(jel, t + j, loc=TRAY_P + Vector((0, 0, 0.024)), rot=(0, 0, 0.3), scale=(0.94 * (2 - wob), 0.94 * (1 + 0.04 * math.sin(u * 30 + 1) * e), 0.85 * wob))
+    c = cam("CAM_S11", 50, 11); p = TRAY_P + Vector((0, 0, 0.03))
+    look(c, t, p + Vector((-0.32, -0.36, 0.12)), p)
+    look(c, t + L // 2, p + Vector((-0.06, -0.46, 0.13)), p)
+    look(c, t + L, p + Vector((0.22, -0.36, 0.12)), p)
     mark("S11", c)
 
 def S12(t, L):
@@ -413,8 +403,8 @@ def S12(t, L):
         u = j / L; wob = 1 + 0.07 * math.sin(u * 18) * math.exp(-u * 1.5)
         key_obj(jel, t + j, loc=TRAY_P + Vector((0, 0, 0.024)), rot=(0, 0, 0.3), scale=(0.94 * (2 - wob), 0.94, 0.85 * wob))
     c = cam("CAM_S12", 60, 11); p = TRAY_P + Vector((-0.06, 0.02, 0.03))
-    look(c, t, p + Vector((0.20, -0.30, 0.36)), p)
-    look(c, t + L, p + Vector((0.12, -0.20, 0.24)), p + Vector((0.02, 0, -0.005)))
+    look(c, t, p + Vector((0.16, -0.22, 0.44)), p)
+    look(c, t + L, p + Vector((0.10, -0.15, 0.30)), p + Vector((0.02, 0, -0.005)))
     mark("S12", c)
 
 # ===================================================================== back in the kitchen: consumers worry
@@ -448,24 +438,32 @@ def S14(t, L):
     grip(man.o, "R", t, can, C0.translation + Vector((-0.033, 0.0, 0.055)), (1, 0, 0), finger_dir=Vector((0, -1, 0)))
     H = Held(can, man, "R"); H.grab(t)
     down = Vector((-0.16, 0.02, TZ)); away = Vector((-0.16, -0.30, TZ))
-    rel_f = None
+    UR = 0.62                                    # release point (fraction of the clip)
+    Wrel = H.wrist_for(Matrix.Translation(away))
     def fr(f, u):
-        a = ease(min(1, u / 0.3)); b = ease(max(0, min(1, (u - 0.3) / 0.35)))
-        P = Vector((-0.16, 0.02, 1.02)).lerp(down, a).lerp(away, b)
         sh = man.r.PB["upperarm01.R"].head
-        hand_target(man, "R", f, H.wrist_for(Matrix.Translation(P)), pole=Vector((sh.x - 0.35, sh.y + 0.5, sh.z - 0.4)))
-        man.spine(f, flex=10 + 10 * b, pitch=16 - 6 * b, turn=0)
-        man.stand(f, MAN_XY, flex=6 * b)
+        if u <= UR:
+            a = ease(min(1, u / 0.28)); b = ease(max(0, min(1, (u - 0.28) / (UR - 0.28))))
+            P = Vector((-0.16, 0.02, 1.02)).lerp(down, a).lerp(away, b)
+            hand_target(man, "R", f, H.wrist_for(Matrix.Translation(P)), pole=Vector((sh.x - 0.35, sh.y + 0.5, sh.z - 0.4)))
+            man.spine(f, flex=10 + 10 * b, pitch=16 - 6 * b)
+            man.stand(f, MAN_XY, flex=6 * b)
+        else:
+            r = ease((u - UR) / (1 - UR))
+            up = ease(min(1, (u - UR) / 0.14))         # straight up clear of the can top first ...
+            back = ease(max(0, (u - UR - 0.14) / (1 - UR - 0.14)))   # ... then back toward himself
+            Wm = Matrix.Translation(Vector((0, 0.10 * back, 0.17 * up))) @ Wrel
+            hand_target(man, "R", f, Wm, pole=Vector((sh.x - 0.35, sh.y + 0.5, sh.z - 0.4)))
+            man.spine(f, flex=20 - 14 * r, pitch=10 - 2 * r)
+            man.stand(f, (MAN_XY[0], MAN_XY[1] + 0.05 * r), flex=6 - 6 * r)
     track(t, L, 3, fr)
-    # release when it has slid away; the hand then comes back to the side
-    fr_rel = t + int(0.68 * L)
+    fr_rel = t + int(UR * L) + 1
+    # fingers hold the grip until the release, then open while the hand rises
+    for bn in [b for b in man.o.pose.bones if b.name.startswith("finger") and b.name.endswith(".R")]:
+        sc.frame_set(t); bn.keyframe_insert("rotation_quaternion", frame=fr_rel, group=bn.name)
     H.release(fr_rel)
-    sc.frame_set(fr_rel)
-    for j in range(int(0.68 * L) + 3, L + 1, 6):
-        u = j / L; r = ease((u - 0.68) / 0.32)
-        man.spine(t + j, flex=20 - 18 * r, pitch=10 - 4 * r)
-        man.stand(t + j, (MAN_XY[0], MAN_XY[1] + 0.06 * r), flex=6 - 6 * r)
-        man.hang("R", t + j) if r > 0.95 else None
+    apply_pose(man.o, "R", "shield", fr_rel + 6)
+    apply_pose(man.o, "R", "open_alarm", t + L - 6)
     apply_pose(man.o, "R", "relaxed", t + L)
     c = cam("CAM_S14", 38, 8)
     look(c, t, Vector((-0.80, -1.25, 1.42)), Vector((-0.10, 0.15, 1.12)))
