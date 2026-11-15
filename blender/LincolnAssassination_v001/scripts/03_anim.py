@@ -28,6 +28,10 @@ _kf0 = Human.key_foot
 def _kf(self, s, f, xy, yaw, lift=0.0, pitch=0.0):     # MPFB shoe soles dip ~2 cm below the ankle-derived floor line
     _kf0(self, s, f, xy, yaw, lift + 0.035 / CUR_S[0], pitch)
 Human.key_foot = _kf
+_kr0 = Human.key_root
+def _kr(self, f, pos, yaw=0.0, flex=0.0, side=0.0):    # hips rise with the lifted feet (no knee bend from the lift)
+    _kr0(self, f, Vector((pos.x, pos.y, pos.z + 0.035 / CUR_S[0])), yaw=yaw, flex=flex, side=side)
+Human.key_root = _kr
 
 def yaw_to(d):
     return math.degrees(math.atan2(d.x, -d.y))
@@ -266,7 +270,7 @@ GPOS = CHP + Rc @ V(0.25, 1.70, 0) ; GPOS.z = BZ
 G_YAW = yaw_to(fwd_c)
 sc.frame_set(ST["S01"])
 for f in list(range(TH0, ST["S06"], 6)) + [ST["S06"] + 32]:
-    G.stand(f, (GPOS.x, GPOS.y), G_YAW, flex=6, head=(4 if f > ST["S01"] + 80 else 0, 0), twist=-6)
+    G.stand(f, (GPOS.x, GPOS.y), G_YAW, crouch=-0.015, flex=4, head=(4 if f > ST["S01"] + 80 else 0, 0), twist=-6)
     if f >= ST["S04"] and f < ST["S05"] + 30:
         G.H.key_spine(f, flex=9, twist=-8, head=(6, 0))
 # left arm hangs relaxed all through the box
@@ -603,20 +607,20 @@ apply_pose(G.o, "L", "relaxed", BA0); apply_pose(G.o, "R", "relaxed", BA0)
 apply_pose(G.o, "L", "relaxed", HANDS0); apply_pose(G.o, "R", "relaxed", HANDS0)
 apply_pose(G.o, "L", "open_alarm", HANDS1); apply_pose(G.o, "R", "open_alarm", HANDS1)
 # soldiers at the door with torches, stepping in (they keep their torches from S13)
-for i, (c, x) in enumerate(zip(SOL, (X1 - 1.1, X1 + 0.2, X1 + 1.4))):
-    p0 = V(x, -8.6 - 0.3 * (i == 1), 0); p1 = V(x * 0.85 + X1 * 0.15, -5.6 + 0.4 * (i == 1), 0)
+for i, (c, x) in enumerate(zip(SOL, (X1 - 1.5, X1 - 0.35, X1 + 2.5))):
+    p0 = V(x, -7.4 - 0.3 * (i == 1), 0); p1 = V(x * 0.85 + X1 * 0.15, -5.6 + 0.4 * (i == 1), 0)
     W0 = ST["S14"] + 20 + 10 * i; W1 = W0 + 90
     pth = lambda f, p0=p0, p1=p1, W0=W0, W1=W1: p0.lerp(p1, min(1, max(0, (f - W0) / (W1 - W0))))
     yaw = yaw_to(V(X1 + 1.25, 2.3, 0) - p1)
-    c.use(); c.stand(BA0, p0, 0.0)
-    c.H.walk(lambda f, pth=pth, c=c: c.a(pth(f)), lambda f, yaw=yaw: yaw * min(1, max(0, (f - BA0) / 40)), W0, W1, stride=0.7 / c.s, lift=0.08)
+    c.use(); c.stand(BA0, p0, yaw)
+    c.H.walk(lambda f, pth=pth, c=c: c.a(pth(f)), lambda f, yaw=yaw: yaw, W0, W1, stride=0.7 / c.s, lift=0.08)
     for f in (W1 + 2, BA1): c.stand(f, p1, yaw)
     # simple: reuse the S13 relative hand matrix (hand in front of the chest), keyed per frame
     sc.frame_set(M0); Hs = c.o.pose.bones["IK_hand.R"].matrix.copy()
     sc.frame_set(M0); ch0 = c.world_bone("spine01").translation; p_ = c.o.matrix_world.inverted() @ ch0
     for f in range(BA0, BA1 + 1, 3):
         sc.frame_set(f); ch = c.world_bone("spine01").translation
-        yw = yaw * min(1, max(0, (f - BA0) / 40))
+        yw = yaw
         Mrel = Matrix.Translation(c.a(ch)) @ Matrix.Rotation(R_(yw), 4, 'Z') @ Matrix.Translation(-p_)
         c.R.key_world("IK_hand.R", f, Mrel @ Hs)
         key_pole(c, "R", f, V(pth(f).x, pth(f).y, 0) + Matrix.Rotation(R_(yw), 3, 'Z') @ V(-0.7, 0.3, 0.9))
@@ -652,7 +656,7 @@ for i in range(16):
     pts.append(bm.verts.new((r * math.cos(a), 0, r * math.sin(a))))
 bm.faces.new(pts)
 flash = mesh_obj("MuzzleFlash", bm, [flat("FlashMat", (1, 0.9, 0.5), emit=(1, 0.85, 0.4), emit_str=25.0)], CP); flash.visible_shadow = False
-smoke_m = flat("SmokeMat", (0.85, 0.85, 0.88), rough=0.9, alpha=0.55)
+smoke_m = flat("SmokeMat", (0.88, 0.88, 0.9), rough=0.9, alpha=0.3)
 puffs = []
 for k in range(3):
     bm = bmesh.new(); bmesh.ops.create_icosphere(bm, subdivisions=2, radius=0.03)
@@ -666,9 +670,9 @@ fwdg = (G_AIM.to_3x3() @ V(0, -1, 0)).normalized()
 for k, o in enumerate(puffs):
     p0 = Mm.translation + fwdg * (0.02 + 0.05 * k); rnd = random.Random(k)
     p1 = p0 + fwdg * (0.15 + 0.08 * k) + V(rnd.uniform(-0.08, 0.08), rnd.uniform(-0.08, 0.08), 0.12 + 0.05 * k)
-    for f, s_, p in ((F_FIRE + 1, 0.3, p0), (F_FIRE + 10, 1.0 + 0.2 * k, p0.lerp(p1, 0.5)), (SE("S06"), 1.8 + 0.3 * k, p1)):
+    for f, s_, p in ((F_FIRE + 1, 0.2, p0), (F_FIRE + 10, 0.55 + 0.1 * k, p0.lerp(p1, 0.5)), (F_FIRE + 30, 0.9 + 0.1 * k, p1)):
         o.location = p; o.scale = (s_,) * 3; o.keyframe_insert("location", frame=f); o.keyframe_insert("scale", frame=f)
-    key_vis(o, 1, False); key_vis(o, F_FIRE + 1, True); key_vis(o, SE("S06") + 1, False)
+    key_vis(o, 1, False); key_vis(o, F_FIRE + 1, True); key_vis(o, F_FIRE + 31, False)
 
 # =========================================================================== cameras (one per shot, hard cuts)
 CAMS = coll("Cameras")
@@ -704,7 +708,7 @@ gM = G_AIM.translation; gHead = G.world_bone("head", ST["S02"] + 20).translation
 fw = fwd_c; side = Rc @ V(1, 0, 0)
 shG = G.world_bone("upperarm01.R", ST["S01"] + 120).translation
 camera("S01", [(0, shG - fw * 0.50 - side * 0.42 + V(0, 0, 0.14), hP + fw * 2.5 + V(0, 0, -0.55)),
-               (-1, shG - fw * 0.32 - side * 0.24 + V(0, 0, 0.10), hP + fw * 2.5 + V(0, 0, -0.50))], lens=24)
+               (-1, shG - fw * 0.62 - side * 0.40 + V(0, 0, 0.26), hP + fw * 2.5 + V(0, 0, -0.55))], lens=24)
 camera("S02", [(0, gHead + side * -2.0 + fw * 0.9 + V(0, 0, -0.1), gHead + fw * 0.55 + V(0, 0, -0.3)),
                (-1, gHead + side * -1.85 + fw * 0.85 + V(0, 0, -0.08), gHead + fw * 0.6 + V(0, 0, -0.28))], lens=20)
 shL = G.world_bone("upperarm01.L", ST["S03"]).translation
@@ -738,10 +742,17 @@ for fc in fcurves_of(fl9.animation_data.action):
 fwj = Rj @ V(0, -1, 0)
 camera("S10", [(0, LAND_P + fwj * 2.6 + V(0, 0, 1.25), LAND_P + V(0, 0, 0.9)), (-1, LAND_P + fwj * 3.9 + V(0.3, 0, 1.35), limp_end + V(0, 0, 1.1))], lens=28)
 camera("S11", [(0, V(100.9, 6.0, 0.9), p11(ST["S11"]) + V(0, 0, 1.5)), (100, V(100.9, -4.5, 0.85), p11(ST["S11"] + 100) + V(0, 0, 1.6)),
-               (-1, V(101.0, -12.0, 0.8), p11(SE("S11")) + V(0, 0, 1.6))], lens=30)
+               (-1, V(101.2, -16.0, 0.9), p11(SE("S11")) + V(0, 0, 1.5))], lens=26)
+rimL = bpy.data.lights.new("HorseRim", 'AREA'); rimL.size = 3.0; rimL.color = (0.7, 0.8, 1.0)
+rimO = bpy.data.objects.new("HorseRim", rimL); CAMS.objects.link(rimO); rimO.location = V(96.5, -14.0, 4.0)
+rimO.rotation_euler = (V(99.2, -6.0, 1.4) - rimO.location).to_track_quat('-Z', 'Y').to_euler()
+for f, e in ((1, 0.0), (ST["S11"], 900.0), (ST["S12"], 0.0)):
+    rimL.energy = e; rimL.keyframe_insert("energy", frame=f)
+for fc in fcurves_of(rimL.animation_data.action):
+    for k in fc.keyframe_points: k.interpolation = 'CONSTANT'
 camera("S12", [(0, V(95.0, 2.5, 1.55), V(104.0, 14.0, 1.9)), (-1, V(95.2, 0.5, 1.55), V(104.0, -3.0, 1.9))], lens=26)
 camera("S13", [(0, V(100.4, 3.0, 0.75), V(100.6, 13.0, 1.5)), (-1, V(100.4, -0.5, 0.85), V(100.5, 8.0, 1.5))], lens=24)
-camera("S14", [(0, V(X1 + 2.4, 4.6, 1.45), V(X1 + 0.3, -6.5, 1.0)), (-1, V(X1 + 2.2, 4.2, 1.55), V(X1 + 0.2, -6.5, 1.3))], lens=22)
+camera("S14", [(0, V(X1 + 0.5, -9.6, 1.7), V(X1 + 1.2, 2.5, 0.9)), (-1, V(X1 + 0.5, -8.8, 1.65), V(X1 + 1.2, 2.5, 1.2))], lens=36)
 camera("S15", [(0, V(X1 + 0.6, 0.55, 1.15), V(X1 + 1.25, 2.3, 1.55)), (-1, V(X1 + 0.55, 0.75, 1.2), V(X1 + 1.25, 2.3, 1.75))], lens=30)
 sc.camera = bpy.data.objects["CAM_S01"]
 
