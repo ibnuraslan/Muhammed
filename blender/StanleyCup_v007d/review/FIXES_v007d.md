@@ -24,3 +24,9 @@ The 1530-frame timeline and the story-beat frames are unchanged (1, 139, 271, 39
 - qa_check (step 6): EMPTY 39, FILL 0, INSIDE 0, BACKHEAD 0, HOVER/CLAW/FACEPRESS 0 (v007: EMPTY 148, FILL 32, INSIDE 15).
 - clip_scan: 0. hand_audit: 0. audit: feet, seat, bullet and camera all 0; fingers 9 mm at most.
 - limb_check: ARMBODY 465. All are points within 4 cm of the shoulder joint centre (`review/limb_points_v007d.json`).
+
+## Update: the director's review of v007c (three trims)
+1. Floor: already about 1 s in v007d. The bullet goes over the edge, a 0.2 s close-up of it landing, then her face, then from f1351 the two-shot of them.
+2. Outside: already short in v007d. The wide house shot, then about 0.6 s on the siding through the hit, then the cut inside at f150.
+3. f851–1031, cup and forearm close-up: from f880 a clean cut goes to the two-shot from her side wall, with both faces and the cup between them. It holds until the impact medium shot at f945 (cup sharp, her face behind it).
+Rules check, qa_check and clip_scan on f780–1020: 0 / no flags / 0. The full-film qa_check is unchanged (EMPTY 39). The preview MP4 and the package are rebuilt.

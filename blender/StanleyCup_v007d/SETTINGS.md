@@ -10,7 +10,7 @@ Values read back from `StanleyCup_v007d_60fps.blend` opened in factory-startup B
 | Resolution | 1080 × 1920 at 100 % |
 | Frame rate | 60 fps (fps_base 1.0) |
 | Frame range | **1–1530**, step 1 (25.5 s) |
-| Camera | One camera, `CAM_Film`. Ten hard cuts are baked into its keys (at f150, 266, 455, 541, 790, 945, 1011, 1304, 1317, 1351: consecutive frames jump position); no camera markers. Lens and f-stop are animated (16–70 mm, f/5.6–11; f/4 only on the impact and condensation macros); DOF on, focus object `CAM_Film_Aim`. Clip start 2 mm (the camera flies through a bullet hole). |
+| Camera | One camera, `CAM_Film`. Eleven hard cuts are baked into its keys (at f150, 266, 455, 541, 790, 880, 945, 1011, 1304, 1317, 1351: consecutive frames jump position); no camera markers. Lens and f-stop are animated (16–70 mm, f/5.6–11; f/4 only on the impact and condensation macros); DOF on, focus object `CAM_Film_Aim`. Clip start 2 mm (the camera flies through a bullet hole). |
 | Samples | 48, adaptive, noise threshold 0.05 |
 | Denoising | On (OpenImageDenoise) |
 | Light paths | Max 8, diffuse 3, glossy 3, transmission 8, transparent 8. Caustics off. Persistent data on. |

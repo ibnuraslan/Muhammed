@@ -63,9 +63,10 @@ CAM = [  # frame, camera, aim, lens, fstop
     (790, HH815 + Vector((-0.28, 0.58, 0.05)), HH815 + Vector((0.02, 0.04, -0.14)), 30, 5.6),
     (815, HH815 + Vector((-0.28, 0.58, 0.05)), HH815 + Vector((0.02, 0.04, -0.14)), 30, 5.6),
     (842, HH842 + Vector((-0.30, 0.60, 0.05)), HH842 + Vector((0.04, 0.08, -0.16)), 28, 5.6),
-    (885, Vector((3.92, -0.12, 1.42)), Vector((4.38, -0.55, 1.15)), 30, 5.6),       # from his left: his face, his reach and the cup; she stays out of frame
-    (920, P(920) - D * 0.45 + SV * 0.30 + Z(0.26), C3 + Z(0.02), 40, 8),
-    (944, P(944) - D * 0.45 + SV * 0.30 + Z(0.26), C3 + Z(0.02), 40, 8),
+    (879, HH842 + Vector((-0.30, 0.61, 0.05)), HH842 + Vector((0.04, 0.08, -0.16)), 28, 5.6),
+    # CUT (f880): both faces, the cup between them, until the impact shot
+    (880, Vector((3.62, 0.80, 1.45)), TWO + Vector((0.04, 0.0, 0.22)), 23, 5.6),
+    (944, Vector((3.66, 0.84, 1.45)), TWO + Vector((0.04, 0.0, 0.20)), 24, 5.6),
     # CUT (f945): the impact, one medium shot: the cup sharp at f/11, her face behind it
     (945, C3 - DXY * 0.85 + SV * 0.28 + Z(0.20), C3 + DXY * 0.25 + Z(0.12), 38, 11),
     (1010, C3 - DXY * 0.78 + SV * 0.26 + Z(0.20), C3 + DXY * 0.25 + Z(0.12), 40, 11),
@@ -97,7 +98,7 @@ CUT = 150
 def _seg(keys):
     return (vpchip([(f, c) for f, c, a, l, s in keys]), vpchip([(f, Vector(a)) for f, c, a, l, s in keys]),
             catmull([(f, float(l)) for f, c, a, l, s in keys]), catmull([(f, float(s)) for f, c, a, l, s in keys]))
-CUTS = [1, CUT, 266, 455, 541, 790, 945, 1011, 1304, 1317, 1351, END + 1]   # hard cuts (clean, no camera moves through walls, bodies or props)
+CUTS = [1, CUT, 266, 455, 541, 790, 880, 945, 1011, 1304, 1317, 1351, END + 1]   # hard cuts (clean, no camera moves through walls, bodies or props)
 SEGS = [(lo, hi, _seg([k for k in CAM if lo <= k[0] < hi])) for lo, hi in zip(CUTS[:-1], CUTS[1:])]
 for f in range(1, END + 1):
     fc, fa, fl_, fs_ = next(sg for lo, hi, sg in SEGS if lo <= f < hi)
