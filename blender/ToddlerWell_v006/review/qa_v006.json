@@ -2292,12 +2292,6 @@
     "wall/prop fills the frame, character only 0%"
    ]
   ],
-  "1369": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ]
-  ],
   "1375": [
    [
     "INSIDE",
@@ -2305,7 +2299,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 1%"
+    "wall/prop fills the frame, character only 5%"
    ]
   ],
   "1381": [
@@ -2315,7 +2309,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
+    "wall/prop fills the frame, character only 1%"
    ]
   ],
   "1387": [
@@ -2377,7 +2371,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 1%"
+    "wall/prop fills the frame, character only 0%"
    ]
   ],
   "1417": [
@@ -2571,7 +2565,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
+    "wall/prop fills the frame, character only 1%"
    ]
   ],
   "1519": [
@@ -2631,7 +2625,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
+    "wall/prop fills the frame, character only 2%"
    ]
   ],
   "1555": [
@@ -2687,7 +2681,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 7%"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "1579": [
@@ -2715,15 +2709,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only ShaftDust in view"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 5%"
    ]
   ],
   "1591": [
@@ -2737,7 +2723,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 1%"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "1597": [
@@ -2747,15 +2733,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only ShaftDust in view"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 5%"
    ]
   ],
   "1603": [
@@ -2765,7 +2743,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
+    "wall/prop fills the frame, character only 3%"
    ]
   ],
   "1609": [
@@ -2775,7 +2753,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 3%"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "1615": [
@@ -2806,10 +2784,6 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 2%"
-   ],
-   [
-    "BACKHEAD",
-    "Teen"
    ]
   ],
   "1633": [
@@ -2829,7 +2803,11 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 1%"
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "1651": [
@@ -2874,6 +2852,10 @@
    [
     "INSIDE",
     "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "1675": [
@@ -2896,10 +2878,6 @@
    [
     "INSIDE",
     "camera inside geometry"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
    ]
   ],
   "1693": [
@@ -2916,6 +2894,10 @@
    [
     "INSIDE",
     "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "1705": [
@@ -2932,10 +2914,6 @@
    [
     "INSIDE",
     "camera inside geometry"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
    ]
   ],
   "1717": [
@@ -2978,14 +2956,22 @@
     "camera inside geometry"
    ]
   ],
-  "1819": [
+  "1372": [
    [
-    "FACEPRESS",
-    "Toddler.L hand on face"
-   ],
+    "CAMJUMP",
+    "cut: 2.84 m, 54 deg in one frame (neighbours 0.03 m, 0 deg)"
+   ]
+  ],
+  "1768": [
    [
-    "FACEPRESS",
-    "Toddler.R hand on face"
+    "CAMJUMP",
+    "cut: 3.88 m, 108 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "1832": [
+   [
+    "CAMJUMP",
+    "cut: 0.80 m, 142 deg in one frame (neighbours 0.19 m, 4 deg)"
    ]
   ],
   "625": [
@@ -3820,11 +3806,10 @@
   ]
  },
  "counts": {
-  "EMPTY": 154,
+  "EMPTY": 150,
   "FILL": 18,
   "INSIDE": 116,
-  "BACKHEAD": 1,
-  "FACEPRESS": 2,
+  "CAMJUMP": 3,
   "PROPMOVE": 591
  }
 }

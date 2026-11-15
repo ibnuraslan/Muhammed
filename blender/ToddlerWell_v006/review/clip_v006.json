@@ -49,46 +49,6 @@
     "other": 1
    }
   },
-  "1111": {
-   "ResA": {
-    "self": 0,
-    "clothes": 0,
-    "other": 12
-   }
-  },
-  "1117": {
-   "ResA": {
-    "self": 0,
-    "clothes": 0,
-    "other": 7
-   }
-  },
-  "1123": {
-   "ResA": {
-    "self": 0,
-    "clothes": 0,
-    "other": 5
-   },
-   "Teen": {
-    "self": 0,
-    "clothes": 0,
-    "other": 8
-   }
-  },
-  "1309": {
-   "Teen": {
-    "self": 0,
-    "clothes": 0,
-    "other": 3
-   }
-  },
-  "1315": {
-   "Teen": {
-    "self": 0,
-    "clothes": 0,
-    "other": 16
-   }
-  },
   "1327": {
    "Crowd1_dup2": {
     "self": 0,
@@ -134,6 +94,20 @@
     "other": 3
    }
   },
+  "1363": {
+   "ResB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "1369": {
+   "ResB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
   "1387": {
    "Mother": {
     "self": 0,
@@ -146,13 +120,6 @@
     "self": 0,
     "clothes": 0,
     "other": 6
-   }
-  },
-  "1783": {
-   "Toddler": {
-    "self": 0,
-    "clothes": 0,
-    "other": 14
    }
   },
   "1873": {
