@@ -40,6 +40,10 @@ _m2 = _g.nodes.new("ShaderNodeMixShader"); _g.links.new(_fr.outputs[0], _m2.inpu
 _g.links.new(_tr.outputs[0], _m2.inputs[1]); _g.links.new(_gl.outputs[0], _m2.inputs[2]); _g.links.new(_m2.outputs[0], _mx.inputs[2])
 print("EYE catch-light added")
 bpy.data.objects['Key_Sun'].visible_glossy = False   # v008: no sun-glint discs/sheen on the water
+# v010: the developing print reads under the safelight (its own image glows faintly as it comes up)
+_pd = bpy.data.materials["M_Print_Dev"].node_tree; _pb = _pd.nodes["Principled BSDF"]
+_src = _pb.inputs['Base Color'].links[0].from_socket
+_pd.links.new(_src, _pb.inputs['Emission Color']); _pb.inputs['Emission Strength'].default_value = 0.9
 bpy.context.scene.render.use_motion_blur = False
 bpy.ops.wm.save_as_mainfile(filepath=out)
 print("LOOKFIX done")

@@ -381,7 +381,7 @@ def SW(f, v):   # ship-local -> world at frame f
 STW = lambda f, d: SW(f, SP + Vector(d))
 L_SHIP = lambda f, d: ("ship", d)          # marker: ship-local key, evaluated per frame (the ship moves)
 GP_ = O["Print_Giant"].location.copy()
-CUT_BERG, CUT_STEW, CUT_SHIP, CUT_DECK2, CUT_NIGHT, CUT_DARK, CUT_OFFICE = 121, 432, 606, 730, 906, 1070, 1170
+CUT_BERG, CUT_STEW, CUT_SHIP, CUT_DECK2, CUT_NIGHT, CUT_DARK, CUT_OFFICE = 121, 432, 606, 816, 906, 1070, 1170
 CUT_A, CUT_PT, CUT_PROOF, CUT_BACK, CUT_B2, CUT_END = 1260, 1340, 1438, 1530, 1615, 1700
 D0 = DESK_TOP
 SHOTS = [
@@ -406,11 +406,11 @@ SHOTS = [
   # C1: his steamship sailing past the debris, the berg beyond - visible push-in (2 s)
   (CUT_SHIP, CUT_DECK2, [
     (CUT_SHIP, Vector((14, -186, 40)),   Vector((-6, -92, 4)),      20),
-    (CUT_DECK2, Vector((2, -150, 22)),   Vector((-8, -100, 6)),     22)]),
+    (CUT_DECK2, Vector((-4, -140, 16)),  Vector((-10, -102, 6)),    24)]),
   # C2: on his deck, over his shoulder: the photographer watching the berg and the debris (beat 4)
   (CUT_DECK2, CUT_NIGHT, [
-    (CUT_DECK2, ("ship", (-0.38, -1.35, 1.88)), ("ship", (0.45, 8.0, 1.0)), 24),
-    (CUT_NIGHT, ("ship", (-0.32, -1.05, 1.86)), ("ship", (0.45, 8.0, 1.0)), 26)]),
+    (CUT_DECK2, ("ship", (-1.15, 0.75, 1.72)), ("ship", (0.25, 0.0, 1.62)), 28),
+    (CUT_NIGHT, ("ship", (-1.0, 0.85, 1.70)), ("ship", (0.2, 0.05, 1.62)), 31)]),
   # D: night - the solid dark liner scrapes past; the red paint on the ice is revealed behind its stern (safe distance)
   (CUT_NIGHT, CUT_DARK, [
     (CUT_NIGHT, Vector((60, Y0 - 66, 13)), Vector((8, Y0, 6)),      26),
@@ -470,9 +470,11 @@ for f in range(0, END + 1):          # baked on every frame: a cut is two adjace
     cam.location = p; cam.rotation_mode = 'QUATERNION'; cam.rotation_quaternion = q
     cam.keyframe_insert("location", frame=f); cam.keyframe_insert("rotation_quaternion", frame=f)
     cam.data.lens = ln; cam.data.keyframe_insert("lens", frame=f)
-    cam.data.dof.aperture_fstop = 8.0; cam.data.dof.keyframe_insert("aperture_fstop", frame=f)
+    cam.data.dof.aperture_fstop = 11.0 if (CUT_DARK <= f < CUT_OFFICE or CUT_PROOF <= f < CUT_BACK) else 8.0; cam.data.dof.keyframe_insert("aperture_fstop", frame=f)
     fd = (t - p).length
     if f < CUT_BERG: fd = (p - STW(f, (0, 0.3, 1.5))).length
+    if CUT_PROOF <= f < CUT_BACK: fd = (p - Vector((8.2, -12.45, DESK_TOP + 0.12))).length      # focus on the photo
+    if CUT_DARK <= f < CUT_OFFICE: fd = (p - Vector((1.22, Y0 + 5.2, 1.9))).length * 0.9      # between the tray and his face
     cam.data.dof.focus_distance = max(0.1, fd); cam.data.dof.keyframe_insert("focus_distance", frame=f)
 set_interp(cam, 'LINEAR'); set_interp(cam.data, 'LINEAR')
 # ---------------------------------------------------------------- visibility per shot
@@ -512,7 +514,20 @@ sc["CROSS"] = [cross_skin, cross_print, cross_giant]
 PH = PR.copy(); PH.data = PR.data; PH.animation_data_clear(); PH.name = "Print_Desk"; D.collections["Rooms_In_Berg"].objects.link(PH)
 PH_H = PR.dimensions.z
 PH.rotation_euler = (0, 0, 0); PH.location = (8.2, -12.45, DESK_TOP + PH_H / 2 + 0.002)
-SK = 0.26 * PH_H / 13.5                         # streak at 26 % of the photo height = top of the hull's red band (model z 3), keel on the desk
+SK = 0.30 * PH_H / 13.5                         # streak at 26 % of the photo height = top of the hull's red band (model z 3), keel on the desk
+SM = D.materials.new("M_Streak"); SM.use_nodes = True; _sb = SM.node_tree.nodes["Principled BSDF"]
+_sb.inputs['Base Color'].default_value = (0.62, 0.03, 0.02, 1); _sb.inputs['Roughness'].default_value = 0.6
+_sb.inputs['Emission Color'].default_value = (0.62, 0.03, 0.02, 1); _sb.inputs['Emission Strength'].default_value = 0.25
+for host in (PR, PH):
+    bpy.ops.mesh.primitive_plane_add(size=1.0); st_ = bpy.context.object; st_.name = "Streak_" + host.name
+    for c_ in list(st_.users_collection): c_.objects.unlink(st_)
+    D.collections["Rooms_In_Berg"].objects.link(st_)
+    st_.data.materials.append(SM); st_.parent = host; st_.matrix_parent_inverse = Matrix.Identity(4)
+    st_.rotation_euler = (R_(90), 0, 0); st_.scale = (0.19, 0.0085, 1)
+    st_.location = (-0.035, -0.0035, -PH_H / 2 + 0.30 * PH_H)
+    for f_, v_ in ((0, True), (CUT_OFFICE, False), (CUT_PROOF, True), (CUT_BACK, False), (CUT_END, True)) if host is PR else ((0, True), (CUT_PROOF, False), (CUT_BACK, True)):
+        st_.hide_render = v_; st_.keyframe_insert("hide_render", frame=f_)
+    set_interp(st_, 'CONSTANT', lambda p_: p_ == "hide_render")
 lx.animation_data_clear(); lx.scale = (SK, SK, SK); lx.rotation_euler = (0, 0, 0 if BOW_SIGN < 0 else math.pi)
 lx.location = (8.2 + 0.36 / 2 + 0.05 - LMINX * SK, -12.45 + 0.02, DESK_TOP + 10.5 * SK)
 for ob in (PH, lx):
@@ -641,10 +656,48 @@ for f in range(0, 366, 12):
 # v008: shot B - he frames the shot again (same performance as 0-180, offset to 420-600: look down into the finder, shutter, look up)
 for fc in all_fcurves(st.o):
     pts = [(k.co.x, k.co.y) for k in fc.keyframe_points if k.co.x <= 180]
-    for x, y in pts: fc.keyframe_points.insert(x + 420, y)
     for x, y in [(k.co.x, k.co.y) for k in fc.keyframe_points if 180 <= k.co.x <= 360]: fc.keyframe_points.insert(x + 560, y)
     fc.update()
+# v010 shot B: both hands on the camera - it rises to eye level, he clicks, then lowers it (camera rides the rig, hands placed on it)
+co_rig = bc.constraints.new('CHILD_OF'); co_rig.name = "InRig"; co_rig.target = st.o
+co_rig.inverse_matrix = Matrix.Identity(4)
+for f_, a_, b_ in ((0, 1.0, 0.0), (431, 1.0, 0.0), (432, 0.0, 1.0)):
+    co_.influence = a_; co_.keyframe_insert("influence", frame=f_)
+    co_rig.influence = b_; co_rig.keyframe_insert("influence", frame=f_)
+bc.rotation_mode = 'QUATERNION'
+_l0, _q0, _s0 = bc.matrix_basis.decompose()
+bc.location = _l0; bc.rotation_quaternion = _q0; bc.keyframe_insert("location", frame=431); bc.keyframe_insert("rotation_quaternion", frame=431)
+CAMB = [(432, 0.33, 1.12, -8), (466, 0.33, 1.12, -6), (498, 0.28, 1.36, -2), (548, 0.28, 1.36, -2), (580, 0.33, 1.12, -6), (606, 0.33, 1.12, -6)]
+for f_, dy, dz, pit in CAMB:
+    M_ = Matrix.Translation(Vector((SP.x - 0.01, SP.y + dy, DK.z + dz))) @ Matrix.Rotation(R_(180), 4, 'Z') @ Matrix.Rotation(R_(pit), 4, 'X')
+    l_, q_, _ = M_.decompose(); bc.location = l_; bc.rotation_quaternion = q_
+    bc.keyframe_insert("location", frame=f_); bc.keyframe_insert("rotation_quaternion", frame=f_)
+for fc in all_fcurves(bc):
+    for k in fc.keyframe_points:
+        if k.co.x <= 431: k.interpolation = 'CONSTANT'
+for idb in (bc,):
+    for fc in all_fcurves(idb):
+        if fc.data_path.startswith("constraints"):
+            for k in fc.keyframe_points: k.interpolation = 'CONSTANT'
+# his body: head level with the camera, a breath, a small lean in at the click; face focused, then pleased
+for f_ in range(432, 612, 12):
+    up = smooth((f_ - 470) / 25) * (1 - smooth((f_ - 552) / 25))
+    st.pose(f_, (SP.x, SP.y), YAW, flex=1.5, spine=(3 + 2 * up + 1.0 * math.sin(f_ / 60 * 2.2), 0, 0), head=(6 - 8 * up, 0), feet=FEET, crouch=0.0)
+for f_, kw in ((432, dict(brow=0.4, lids=0.2)), (500, dict(brow=-0.2, lids=-0.6, jaw=1)), (526, dict(brow=0.3, lids=-0.2)), (575, dict(brow=1.0, lids=0.8, jaw=4, smile=0.4))):
+    face(st.R, f_, **kw)
+for f_ in range(432, 612, 6):
+    sc.frame_set(f_); bpy.context.view_layer.update(); mn, mx = _bb_world(bc); c = (mn + mx) / 2
+    fwd = (bc.matrix_world.to_3x3() @ Vector((0, -1, 0))).normalized()
+    shL = st.o.matrix_world @ st.R.PB["upperarm01.L"].head; shR = st.o.matrix_world @ st.R.PB["upperarm01.R"].head
+    sideR = Vector((shR.x - shL.x, shR.y - shL.y, 0)).normalized()
+    halfw = abs((mx - mn).dot(sideR)) / 2
+    HP["place_hand"](st.o, "L", f_, Vector((c.x, c.y, mn.z)) - sideR * 0.03, Vector((0, 0, 1)), Vector((fwd.x, fwd.y, 0)), skin=0.004)
+    HP["apply_pose"](st.o, "L", "cup_hold", f_)
+    HP["place_hand"](st.o, "R", f_, c + sideR * halfw + Vector((0, 0, 0.02)), -sideR, Vector((fwd.x, fwd.y, 0.35)).normalized(), skin=0.004)
+    HP["apply_pose"](st.o, "R", "point" if 520 <= f_ <= 530 else "wrap_grip", f_, amount=0.6)
 
+for ob in [dh.o] + list(dh.o.children): ob.hide_render = True     # v010: the blue deckhand was only ever a cropped body at the frame edge
+for ob in [o for o in O if o.name.startswith("Tray_Liquid")]: ob.hide_render = True   # v010: the refractive developer blurred the print
 for L_ in [o for o in O if o.type == "LIGHT"]: L_.visible_camera = False
 O["Darkroom_DoorCut"].hide_render = True
 # the ghost liner is done after the night scrape: off the render entirely (it showed as a faint hull at the berg at 1760+)

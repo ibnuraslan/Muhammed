@@ -15,7 +15,7 @@ tgt = Vector((0.0, -5.0, 7.0))
 pc.location = p + (tgt - p).normalized() * 0.4
 pc.rotation_euler = (tgt - p).to_track_quat('-Z', 'Y').to_euler(); pc.data.lens = 42; pc.data.sensor_width = 36
 main = sc.camera; sc.camera = pc
-hidden = [o for o in O if o.name.startswith(("Steward", "bcamera", "Rail_", "Deck_", "Porthole", "Deckhand", "deckchair", "lifebuoy", "crate", "Rope"))]
+hidden = [o for o in O if o.name.startswith(("Steward", "bcamera", "Rail_", "Deck_", "Porthole", "Deckhand", "deckchair", "lifebuoy", "crate", "Rope")) and not o.hide_render]   # v010: restore only what was visible (keeps the deckhand hidden)
 for o in hidden: o.hide_render = True
 rx, ry = sc.render.resolution_x, sc.render.resolution_y
 sc.render.resolution_x, sc.render.resolution_y = 720, 540
