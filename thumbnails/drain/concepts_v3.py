@@ -38,7 +38,7 @@ def gem_fire(d, n=14, strength=90, seed=4):
 # ---------------------------------------------------------------- (3) left half: the jeweller's display
 def setup_velvet(c):
     d = c["diamond"]; t = d.location.copy(); gem_fire(d)
-    _spot("Key", t + Vector((0.0, -0.6, 1.6)), t, 900, (1.0, 0.98, 0.95), 16, 0.4, 0.02)
+    _spot("Key", t + Vector((0.0, -0.6, 1.6)), t, 500, (1.0, 0.98, 0.95), 16, 0.4, 0.02)
     _spot("RimL", t + Vector((-0.9, 0.7, 0.6)), t, 300, (0.75, 0.85, 1.0), 20, 0.4, 0.05)
     _spot("RimR", t + Vector((0.9, 0.7, 0.6)), t, 300, (0.75, 0.85, 1.0), 20, 0.4, 0.05)
     _spot("Pool", t + Vector((0.0, 1.0, 1.2)), Vector((0, 1.4, 0.35)), 400, (0.45, 0.55, 1.0), 35, 0.9, 0.2)   # glow on the backdrop
@@ -57,10 +57,10 @@ def setup_grate(c):
     d = c["diamond"]; t = d.location.copy(); gem_fire(d, strength=60)
     s = bpy.context.scene; s.cycles.volume_bounces = 0
     # the flashlight: from just behind the camera, down through the bars; its bar shadows fall across the water and stone
-    _spot("Torch", Vector((0.12, -0.55, 0.95)), t, 450, (1.0, 0.95, 0.85), 18, 0.35, 0.012)
+    _spot("Torch", Vector((0.08, -0.22, 1.15)), t, 700, (1.0, 0.95, 0.85), 16, 0.35, 0.012)
     # the street: a sodium lamp, wet asphalt sheen, a cold sky bounce
     _spot("Sodium", Vector((-2.2, 1.8, 3.2)), Vector((0, 0, 0)), 6000, (1.0, 0.62, 0.28), 45, 0.8, 0.3)
-    sky = area_light(Vector((1.5, 2.5, 2.5)), (0, 0, 0), 3.0, 40, (0.45, 0.55, 0.85)); point_at(sky, Vector((0, 0, 0))); sky.visible_camera = False
+    sky = area_light(Vector((1.5, 2.5, 2.5)), (0, 0, 0), 3.0, 8, (0.45, 0.55, 0.85)); point_at(sky, Vector((0, 0, 0))); sky.visible_camera = False
     haze(Vector((0, 0.2, -G.DEPTH / 2)), (G.GW + 0.5, G.GL + 0.9, G.DEPTH), density=0.25, color=(0.9, 0.92, 1.0), anis=0.5)
     # rats: rim from inside the shaft
     import ph
@@ -76,7 +76,7 @@ def setup_grate(c):
 
 
 def cam_grate(c):
-    return ((0.0, -0.62, 1.05), (0.0, 0.1, -0.55), 30)
+    return ((0.0, -0.42, 0.88), (0.0, 0.1, -0.62), 28)
 
 
 CONCEPTS = {

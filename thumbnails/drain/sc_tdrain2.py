@@ -25,9 +25,9 @@ def _rounded(name, loc, size, mat, bevel):
 
 def velvet():
     _black_world(); c = {}
-    vel = ph.texture("velour_velvet", scale=6, tint=(0.05, 0.07, 0.22))
-    p = vel.node_tree.nodes["Principled BSDF"]; p.inputs['Sheen Weight'].default_value = 1.0; p.inputs['Sheen Roughness'].default_value = 0.35
-    p.inputs['Sheen Tint'].default_value = (0.45, 0.55, 1.0, 1)
+    vel = ph.texture("velour_velvet", scale=6, tint=(0.012, 0.018, 0.09))
+    p = vel.node_tree.nodes["Principled BSDF"]; p.inputs['Sheen Weight'].default_value = 0.7; p.inputs['Sheen Roughness'].default_value = 0.35
+    p.inputs['Sheen Tint'].default_value = (0.25, 0.35, 1.0, 1)
     # plinth, cushion on it, a curved backdrop
     _rounded("Plinth", (0, 0, 0.09), (0.5, 0.42, 0.18), vel, 0.012)
     cu = _rounded("Cushion", (0, 0, 0.18 + 0.03), (0.26, 0.24, 0.07), vel, 0.03)
@@ -47,7 +47,7 @@ def _rusty_iron(name):
     tc = N.new("ShaderNodeTexCoord"); n = N.new("ShaderNodeTexNoise"); n.inputs['Scale'].default_value = 30; n.inputs['Detail'].default_value = 10
     L.new(tc.outputs['Object'], n.inputs['Vector'])
     r = N.new("ShaderNodeValToRGB"); e = r.color_ramp.elements
-    e[0].position = 0.45; e[0].color = (0.025, 0.022, 0.02, 1); e[1].position = 0.7; e[1].color = (0.16, 0.06, 0.02, 1)
+    e[0].position = 0.5; e[0].color = (0.018, 0.016, 0.015, 1); e[1].position = 0.75; e[1].color = (0.09, 0.035, 0.015, 1)
     L.new(n.outputs['Fac'], r.inputs[0]); L.new(r.outputs[0], p.inputs['Base Color'])
     mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.45; mr.inputs['From Max'].default_value = 0.7
     mr.inputs['To Min'].default_value = 0.7; mr.inputs['To Max'].default_value = 0.0
@@ -62,7 +62,7 @@ DEPTH = 0.75
 
 def grate():
     _black_world(); c = {}
-    road = ph.texture("asphalt_02", scale=1.4, tint=(0.55, 0.55, 0.57))
+    road = ph.texture("asphalt_02", scale=1.4, tint=(0.16, 0.16, 0.17))
     p = road.node_tree.nodes["Principled BSDF"]; p.inputs['Coat Weight'].default_value = 0.85; p.inputs['Coat Roughness'].default_value = 0.06
     # the road around the opening: four slabs
     for nm, (x0, x1, y0, y1) in {"RoadL": (-3, -GW / 2, -3, 3), "RoadR": (GW / 2, 3, -3, 3),
@@ -82,8 +82,8 @@ def grate():
     wall = ph.texture("brick_wall_02", scale=2.2, tint=(0.3, 0.26, 0.23))
     pw = wall.node_tree.nodes["Principled BSDF"]; pw.inputs['Coat Weight'].default_value = 0.7; pw.inputs['Coat Roughness'].default_value = 0.12
     sw, sl = GW + 0.5, GL + 0.9
-    for nm, loc, size in (("WallL", (-sw / 2, 0.2, -DEPTH / 2), (0.05, sl, DEPTH + 0.1)), ("WallR", (sw / 2, 0.2, -DEPTH / 2), (0.05, sl, DEPTH + 0.1)),
-                          ("WallB", (0, 0.2 + sl / 2, -DEPTH / 2), (sw, 0.05, DEPTH + 0.1)), ("WallF", (0, 0.2 - sl / 2, -DEPTH / 2), (sw, 0.05, DEPTH + 0.1))):
+    for nm, loc, size in (("WallL", (-sw / 2, 0.2, -DEPTH / 2 - 0.03), (0.05, sl, DEPTH)), ("WallR", (sw / 2, 0.2, -DEPTH / 2 - 0.03), (0.05, sl, DEPTH)),
+                          ("WallB", (0, 0.2 + sl / 2, -DEPTH / 2 - 0.03), (sw, 0.05, DEPTH)), ("WallF", (0, 0.2 - sl / 2, -DEPTH / 2 - 0.03), (sw, 0.05, DEPTH))):
         box(nm, loc, size, wall)
     box("Ceiling", (0, 0.2, -0.1), (sw, sl, 0.02), pbr("Under", (0.01, 0.01, 0.01), 0.9)).hide_render = True
     water = pbr("Water", (0.003, 0.004, 0.004), 0.04); water.node_tree.nodes["Principled BSDF"].inputs['Coat Weight'].default_value = 1.0
@@ -93,7 +93,7 @@ def grate():
     D.brick("R1", (-0.2, 0.2, -DEPTH + 0.01), (0, 0.4, 1.2), mats[1])
     D.brick("R2", (0.22, 0.3, -DEPTH + 0.015), (0.3, 0, -0.5), mats[2])
     top = Vector((0.02, 0.06, -DEPTH + 0.02 + 0.04))
-    d = D.diamond("Diamond", 0.075); d.location = top + Vector((0, 0, 0.075 * 0.86 - 0.01)); d.rotation_euler = (math.radians(-28), math.radians(8), 0.3)
+    d = D.diamond("Diamond", 0.09); d.location = top + Vector((0, 0, 0.09 * 0.86 - 0.012)); d.rotation_euler = (math.radians(-28), math.radians(8), 0.3)
     c["diamond"] = d
     rats = []
     for loc, rz, s in (((-0.3, 0.42, -DEPTH), -0.6, 1.8), ((0.33, -0.05, -DEPTH), 2.4, 1.7)):
