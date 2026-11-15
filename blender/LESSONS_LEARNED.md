@@ -153,3 +153,56 @@ camera, bright animated-but-close-to-real CGI (`STYLE_ANIMATED.md`), timed to th
 - When the client has rendered a version, their list is the truth. Check it against the render and add your own findings to it.
 - Never ship a version that's still in review. If the client is rendering an older faulty version, tell them immediately and name the clean replacement.
 - Ask before any long local render or paid job. Never submit paid renders. Never ask for secrets in chat.
+
+## 8. Final rounds (Nov 15): what still failed, and the blueprint for the next batch
+The last 10 films needed 3–10 review rounds each. Almost every fault below passed the chats' own checks
+and was caught only by watching. New films start from `pipeline/CONNECT_BRIEF_v2.md`.
+
+### Faults found in the final rounds (add them to section 1)
+- **Props above or off the body:** a phone held flat above the head like a plate, a placard floating behind a head, a diving mask flying onto a face with no hands on it, a 3D-printer nozzle floating beside the print. A held prop sits **in the fingers, below the hair line**, with its arm visible.
+- **Hands from the frame edge:** a surgeon's hand touching a forehead with no body in frame; passengers' hands reaching in toward someone's back.
+- **Bodies through set pieces:** legs through a bed's foot rail, a stretcher end through the carrier's torso, an arm through a seat back while hauling someone.
+- **Lens blockers:**
+  - windscreen frames and pillars, glass panes, sun visors
+  - shelves at the start of a move
+  - reed blades, a rock slab at a cave mouth, a gear bag
+  - the tarp at the edge of a close-up
+  - a mirror frame
+  - a shoulder filling the bottom half of the frame
+  - a man's face pushed into the lens
+
+  Check the first and last frame of every shot, and every camera move through a set.
+- **Faces:**
+  - black-hole eyes on new rigs (add a small camera catchlight and check the eye material)
+  - a bleached white face from a fill light at 25 W
+  - teeth bared in a "smile" that reads as a grimace
+  - a fringe covering one eye in every close-up
+  - a background head merging with the hero's head
+- **Mannequin arms on rigs whose rest pose is bent:** the MPFB rest elbow is about 46°. With an IK limit of min 0°, the arm can never straighten, so hand passes pushed the arms out sideways into an A-pose. Open the elbow limit per character, and check every walk, run and standing idle.
+- **Skin-coloured clothes:** a flat-tinted tight suit read as a naked figure in the background. Check every crowd and background person in colour.
+- **Render faults:**
+  - blown-out white ballast with black holes (a fill light left on)
+  - a black notch on shorts (a clothes delete-group that removed thigh skin)
+  - a sleeve stretched into a skin sheet when the wrist aimed at the wrong place
+  - a bright sky sheet on flood water at grazing angles (specular above 0.05)
+- **Empty, black or blurred frames:** fades to black, murky water, empty sky between shots, empty windscreen views (about 7 s in one film), an empty pink plane at the end of a cross-section push, a ghosted double-exposure frame at a cut. Every frame shows a readable subject. Use hard cuts, never blends.
+- **Static holds:** the client now rejects any hold over about 2 s with no movement: a frozen close-up, a static wide, a frozen boy holding a box. Give every shot an action (head turn, breath, push-in), or cut.
+
+### Process lessons
+- **Build to the VO from the start.** Put the beat frames at `1 + round(seconds × 60)` of the VO words, with `frame_end` just past the last word. Films built to the VO (28, 23) needed no retime. Retimed films played parts at 0.5–2.9× speed.
+  - **Never time-stretch character animation.** Extend it at 1× instead: a longer swim path or walk, or a second angle.
+  - Only camera-only shots (diagrams, cross-sections) may stretch.
+- **Particles, Wave and Build modifiers and Scene Time do not follow a retime.** Remap particle `frame_start` and `frame_end` through the anchors (34: sparks, filings) and run `fix_scene_time.py`.
+- **Preview economy:**
+  - One full preview when the chat believes the film is clean.
+  - After that, re-render only the changed ranges from the exact package and splice them in. Most chats got this right and cut a round from about 80 min to about 15 min.
+  - The director diffs the new preview against the last one (`compare -metric RMSE` per frame) to confirm only those ranges changed.
+- **No micro-tweak pushes.** One chat pushed hourly one-line script changes with no preview, and nothing could be reviewed. Batch every fix into one rebuild and push it with its preview.
+- **Simplest re-stage wins.**
+  - A shot that fails twice gets cut or replaced: drop the phone, cut the placard close-up, swap the windscreen shots for side shots, use a side medium instead of a foot-of-bed wide.
+  - The VO carries the meaning; the picture only has to be clean.
+- **Disk:**
+  - Fetch chat branches only when reviewing, and prune them right after approval.
+  - For one file, use a blobless bare clone (`git clone --filter=blob:none --bare`) plus `git show <commit>:<path>`, never a full fetch of a 10 GB branch.
+  - Never `find -name "*.blend*" -delete`: it also deleted the `*.blend.anchors.json` sync records.
+- **Keep the sync record of every delivered film** (`blender/briefs/sync/NN.anchors.json`), so previews and retimes can be rebuilt later.
