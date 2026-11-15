@@ -93,7 +93,7 @@ K = [
     (21.6, V((-0.6, -0.95, 2.35)), V((-4.0, -1.0, 1.2)), 30, False),   # v008: high, clear of the bench players
     (22.18, V((-1.4, -0.95, 2.35)), V((-5.5, -1.0, 1.2)), 30, False),
     (22.2, V((-26.1, -0.85, 1.80)), V((-28.6, -2.2, 1.20)), 30, True),   # v008: clean cut to the clinic (beat 8)
-    (23.6, V((-26.3, -0.75, 1.70)), V((-28.6, -2.2, 1.25)), 30, False),
+    (23.6, V((-26.9, -1.05, 1.70)), V((-28.6, -2.2, 1.25)), 36, False),   # v010b: slow push into the room
     (24.3, V((-29.55, -0.95, 1.85)), moleB, 34, False),   # v006: from his left front, the doctor stands clear beside him
     (25.0, V((-29.75, -1.00, 1.80)), moleB + V((0, 0.12, -0.08)), 38, False),
     (25.45, V((-28.30, -0.75, 1.90)), docH, 45, False),   # v008: her face over his shoulder from 1.25 m
@@ -104,7 +104,8 @@ K = [
     (29.2, V((-27.6, -0.90, 1.55)), manBH, 45, False),                # relief
     (30.79, V((-27.75, -0.85, 1.50)), manBH, 45, False),
     (30.8, V((-28.40, -0.70, 1.35)), V((-28.49, -1.95, 1.20)), 38, True),   # v008: beat 10, he types the post, face lit by the screen
-    (33.38, V((-28.62, -0.76, 1.32)), V((-28.49, -1.95, 1.18)), 44, False),
+    (32.1, V((-28.52, -0.73, 1.34)), V((-28.49, -1.95, 1.24)), 46, False),
+    (33.38, V((-28.62, -0.76, 1.32)), V((-28.49, -1.95, 1.32)), 52, False),   # v010b: a visible push in on his face and the phone
     (33.4, INS + V((0, -1.0, 0)), INS, 33, True),                  # insert: the post with her photo, share icons pulsing
     (34.58, INS + V((0, -0.93, 0)), INS, 33, False),
     (34.6, HMv + V((0.95, 0.25, 1.2)), fanH12, 35, True),          # her at the laptop
@@ -113,16 +114,16 @@ K = [
     (37.2, HMv + V((-0.45, 0.55, 1.05)), fanH12, 50, False),
     (37.5, HMv + V((0.60, 0.70, 1.15)), fanH12, 34, False),   # her face as she stares at the call   # her laptop, the call on screen
     (37.98, HMv + V((0.55, 0.75, 1.15)), fanH12, 34, False),   # v006: hold on her at the laptop
-    (38.0, FIN + V((-0.38, -1.62, 1.78)), FIN + V((-0.33, 0, 1.12)), 38, True),   # v009: 1.6 m at chest height, knees up, slow push
-    (39.7, FIN + V((-0.35, -1.50, 1.76)), FIN + V((-0.33, 0, 1.13)), 38, False),
-    (41.5, FIN + V((-0.33, -1.40, 1.74)), FIN + V((-0.33, 0, 1.14)), 39, False),
+    (38.0, FIN + V((-0.30, -1.70, 1.78)), FIN + V((-0.30, 0, 1.30)), 33, True),   # v010b: from above, cheque as the lower band, both clappers' faces in frame
+    (39.7, FIN + V((-0.30, -1.60, 1.76)), FIN + V((-0.30, 0, 1.30)), 33, False),
+    (41.5, FIN + V((-0.30, -1.50, 1.74)), FIN + V((-0.30, 0, 1.30)), 33, False),
 ]
 cqo = bpy.data.objects["Cheque"]
 for f in range(F(38.0), 2641, 4):
     sc.frame_set(f)
     wl = FR.matrix_world @ FR.pose.bones["wrist.L"].head; wr = FR.matrix_world @ FR.pose.bones["wrist.R"].head
     xa = (wl - wr); xa.z = 0; xa.normalize(); mid = (wl + wr) / 2
-    cqo.location = mid + Vector((0, 0, -0.02)); cqo.rotation_euler = (0, 0, math.atan2(xa.y, xa.x))
+    cqo.location = mid + Vector((0, -0.04, -0.17)); cqo.rotation_euler = (0, 0, math.atan2(xa.y, xa.x))
     cqo.keyframe_insert("location", frame=f); cqo.keyframe_insert("rotation_euler", frame=f)
 segs = [[]]
 for k in K:

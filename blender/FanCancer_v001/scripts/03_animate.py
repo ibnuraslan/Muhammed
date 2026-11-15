@@ -205,12 +205,12 @@ def fan_home():
 FIN = Vector((0.0, -12.0, 0.0))
 def fan_finale():
     f = F; p = FIN + Vector((-0.35, 0, 0))
-    ch = {"L": ((0.42, -0.36, 0.84), (0, 0, 1), (0, 1, 0)), "R": ((-0.42, -0.36, 0.84), (0, 0, 1), (0, 1, 0))}   # v008: waist height, face and shoulders clear
-    for i, t in enumerate((38.0, 39.0, 40.0, 41.0, 42.0, 43.0, 44.0)):  # faces -Y: the camera and the home crowd
-        up = 0.04 * (i % 2)
-        hd = {k: ((v[0][0], v[0][1], v[0][2] + up), v[1], v[2]) for k, v in ch.items()}
-        fan.pose(f(t), p, 12 * math.sin(i), flex=-4, head=(-6, 8 * math.sin(i * 1.3)), hands=hd, hip=up * 0.5)
-        face(FR, f(t), brow=0.3, lid=0.3, smile=1.0, jaw=5 + 1 * (i % 2))   # v010: happy smile, teeth showing, eyes narrowed
+    ch = {"L": ((0.24, -0.30, 1.02), (0, -0.5, 1), (0, -1, 0)), "R": ((-0.24, -0.30, 1.02), (0, -0.5, 1), (0, -1, 0))}   # v010b: both hands on the top edge, elbows bent, in front of her chest
+    for i in range(14):   # faces -Y: the camera and the home crowd; a small happy bounce and head tilt
+        t = 38.0 + 0.3 * i; up = 0.025 * (i % 2)
+        hd = {k: ((v[0][0], v[0][1], v[0][2] + up * 0.6), v[1], v[2]) for k, v in ch.items()}
+        fan.pose(f(t), p, 6 * math.sin(i * 0.7), flex=-2, side=3 * math.sin(i * 0.9), head=(-4, 9 * math.sin(i * 0.8)), hands=hd, hip=up)
+        if i % 2 == 0: face(FR, f(t), brow=0.3, lid=0.3, squint=0.5, smile=1.0, jaw=5)   # happy smile, cheeks up
 fan_home(); fan_finale()
 # teleports: hold before the jump, one-frame jump
 def hold_until(A, f_hold, f_jump):
@@ -283,7 +283,7 @@ def man_rink():
     face(MR, f(21.4), brow=0.2, frown=0.5)
 man_rink()
 def man_finale():
-    f = F; p = FIN + Vector((0.16, 0.25, 0))   # v009: close beside her
+    f = F; p = FIN + Vector((0.08, 0.28, 0))   # v010b: close beside her
     clap_o = {"L": ((0.145, -0.40, 1.18), (0, -0.3, 1), (-1, 0, 0)), "R": ((0.095, -0.40, 1.18), (0, -0.3, 1), (1, 0, 0))}
     clap_c = {"L": ((0.24, -0.40, 1.15), (0, -0.3, 1), (-1, 0, 0)), "R": ((0.00, -0.40, 1.15), (0, -0.3, 1), (1, 0, 0))}
     for i in range(24):
@@ -314,7 +314,8 @@ def manb_clinic():
     face(MBR, f(30.6), brow=0.2, smile=0.4)
     tap = {"R": ((-0.06, -0.37, 1.21), (0, -0.3, 1), (0, 0.9, 0.3)), "L": ((0.10, -0.30, 1.12), (0, -1, -0.2), (0, 0, -1))}
     for k, t in enumerate((30.8, 31.05, 31.3, 31.55, 31.8, 32.05, 32.3, 32.55, 32.8, 33.05, 33.3, 33.6)):
-        sit(manb, f(t), BEDP, 180, 0.83, hands=tap if k % 2 else ph, flex=10, head=(24 + 2 * (k % 2), 2 - k % 3), knee=0.30, foot_lift=0.28)
+        _hl = (6, 10) if k in (5, 6) else (24 + 2 * (k % 2), 2 - k % 3)   # v010b: he lifts his head once, then back to the phone
+        sit(manb, f(t), BEDP, 180, 0.83, hands=tap if k % 2 else ph, flex=10 + 3 * math.sin(k * 0.8), head=_hl, knee=0.30, foot_lift=0.28)
 manb_clinic()
 
 # ================================================================== DOCTOR, NURSE
@@ -490,7 +491,7 @@ for i in range(6):
     face(r, 1, frown=0.4, brow=-0.2); face(r, F(38.3), smile=1.0, brow=0.6, jaw=12)
 # v009: one player close beside her at the finale, clapping (IK hands meet in front of the chest); under the ice before the cut
 _fp = dup_rig("Player1", "FinPlayer", C_CHAR); finp = Actor(_fp.name)
-_pp = FIN + Vector((-0.82, 0.25, 0))
+_pp = FIN + Vector((-0.68, 0.30, 0))
 for _t in (0.0, 37.95):
     finp.pose(F(_t) if _t else 1, _pp + Vector((0, 0, -50)), -18)
 _co = {"L": ((0.145, -0.40, 1.22), (0, -0.3, 1), (-1, 0, 0)), "R": ((0.095, -0.40, 1.22), (0, -0.3, 1), (1, 0, 0))}
