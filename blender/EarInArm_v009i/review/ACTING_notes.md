@@ -26,6 +26,26 @@
     - His left hand comes up at his side, with the elbow pole keyed down and out. His fingertips rest on the back half of the ear, so the ear stays visible, and he smiles.
     - The nurse walks round the chair (1560–1695) and stands beside him.
 
+- **Lift-out (1071–1250):** framed with his face, the hands with the forceps and ear low over the arm.
+  - The tip-fix is skipped there; it pulled his hand up to his face.
+  - A name clash (`_b`) had silently broken the animation pass in one build; the build script now stops when that pass fails.
+
+## Checks (v009i, packed)
+- clip_scan: 2 single frames.
+  - 1657: the surgeon's hand brushes his own side for one frame as he steps back.
+  - 1753: the patient's fingertip on his new ear.
+- qa: CLAW, HOVER, FACEPRESS, INSIDE and ROLL are 0.
+  - CAMJUMP 11: the intended clean cuts (156, 296, 580, 607, 633, 796, 881, 1346, 1441, 1501, 1601).
+  - EMPTY 36: the two inserts (the cartilage on the tray 156–295, and the arm bump 796–880), which have no head or hand by design.
+  - BACKHEAD 2, FILL 4, PROPMOVE 139.
+- cam_clear: 0.
+- limb_check: ARMBODY 1240, PROPHEAD 161. These are the shoulder-root residuals plus the new two-shots, where both shoulders are seen.
+- **Watched** the full preview (every 6th film frame) for items 1, 3, 7 and 8:
+  - every shot shows a face, except the two inserts;
+  - every glove runs to its arm and body or off the frame edge, and the forceps are always in a hand;
+  - the new ear reads in profile during the attach and the stitching;
+  - no white triangle (the cabinet doors keep thin soft highlights).
+
 ---
 
 # EarInArm v009h
