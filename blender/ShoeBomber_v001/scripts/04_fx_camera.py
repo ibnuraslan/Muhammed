@@ -121,10 +121,11 @@ for s, hs in (("L", "L"), ("R", "R")):
     if s == "R":
         ct.free(1441)                          # he steps out of it: it stays on the floor
         sc.frame_set(1477); Mpick = ts.matrix_world.copy()
-        cpk = ct.hold(trav, "wrist.R", 1478)   # picked up by the heel
-        # v006e: follow the hand's position only (the wrist's IK twist swung the sneaker round his head); it hangs from the hand
+        cpk = ct.hold(trav, "finger3-3.R", 1478)   # picked up by the collar
+        # v006e: follow the fingertips' position only (the wrist's IK twist swung the sneaker round his head); it hangs from the fingers
         cpk.use_rotation_x = cpk.use_rotation_y = cpk.use_rotation_z = False
-        cpk.inverse_matrix = Matrix.Translation(-bone_w(trav, "wrist.R", 1478).translation) @ Mpick
+        cpk.inverse_matrix = Matrix.Translation(-bone_w(trav, "finger3-3.R", 1478).translation) @ Mpick
+        print("PICK_GAP", (bone_w(trav, "finger3-3.R", 1478).translation - Mpick.translation))
         tray = O["Tray_1"]
         ct.hold_tray = True
         # into the tray at 1520: then rides with the tray (tray is an object: use a park-at-tray Child Of)
