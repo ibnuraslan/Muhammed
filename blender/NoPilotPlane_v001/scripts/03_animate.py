@@ -597,6 +597,9 @@ for f in (F(11.74), F(11.82), F(11.9), F(11.98)):
     W = door_pt(f, (-0.45, -0.07, 1.12)); hand("R", f, W, d=(0, 0.3, 1), n=(0, -1, 0), curl=5)
 hand("L", F(11.9), (-0.44, -0.62, 1.25), d=(0, 0, 1), n=(1, 0, 0), curl=40)                          # left hand on the frame
 body(F(12.5), (-0.04, -0.80, STAND_Z - 0.02), flex=12, sflex=8, head=(10, 0)); feet(F(12.5), (-0.14, -0.92), (0.06, -0.66))
+# v009g (director, LESSONS 7): after the push both arms hang relaxed with a slight bend (they were held out stiff to the frame)
+hand("L", F(12.25), (-0.27, -0.92, 0.88), d=(0.1, 0.3, -1), n=(-1, 0, 0), curl=30); hand("R", F(12.25), (0.17, -0.90, 0.88), d=(-0.1, 0.3, -1), n=(1, 0, 0), curl=30)
+hand("L", F(12.8), (-0.27, -0.68, 0.86), d=(0.1, 0.3, -1), n=(-1, 0, 0), curl=30); hand("R", F(12.8), (0.17, -0.64, 0.86), d=(-0.1, 0.3, -1), n=(1, 0, 0), curl=30)
 H.key_foot("R", F(12.2), Vector((0.04, -0.77)), 180, 0.06)
 # beat 5 (v009): step into the doorway, crouch beside the captain to check him (director: a passenger kneeling
 # beside him, face visible), rise and step over him
@@ -622,6 +625,10 @@ hand("L", F(15.6), (-0.40, 1.12, 1.15), d=(0, 0.3, 1), n=(1, 0, 0), curl=50)    
 hand("R", F(15.9), (0.40, 1.12, 1.15), d=(0, 0.3, 1), n=(-1, 0, 0), curl=50)
 POSW = (0.04, 0.88, STAND_Z)
 body(F(16.3), POSW, flex=4, sflex=4, head=(0, 0)); feet(F(16.3), (-0.06, 0.92), (0.16, 0.92))
+# v009g (director): once over him he lets go of the seat backs; arms hang relaxed (they were held out sideways, frozen)
+hand("L", F(16.4), (-0.19, 0.94, 0.88), d=(0.1, 0.3, -1), n=(-1, 0, 0), curl=30); hand("R", F(16.6), (0.27, 0.94, 0.88), d=(-0.1, 0.3, -1), n=(1, 0, 0), curl=30)
+hand("R", F(17.2), (0.26, 0.96, 0.89), d=(-0.1, 0.3, -1), n=(1, 0, 0), curl=30)
+hand("L", F(19.3), (-0.18, 0.98, 0.88), d=(0.1, 0.3, -1), n=(-1, 0, 0), curl=30)
 # beat 6: look at FO
 body(F(16.8), (-0.02, 0.88, STAND_Z), flex=4, sflex=8, twist=-8, head=(15, -35))       # v008b: turn with the head, keep the eye off the FO seat
 body(F(17.8), (-0.04, 0.90, STAND_Z - 0.03), flex=10, sflex=14, twist=-10, sside=0, head=(15, -35))
@@ -718,7 +725,8 @@ body(F(34.6), (0.16, 0.80, STAND_Z - 0.08), flex=14, sflex=0, side=6, head=(0, 5
 feet(F(35.1), (0.02, 0.90), (0.26, 0.82)); H.key_foot("L", F(34.85), Vector((0.05, 0.82)), 180, 0.07)
 body(F(35.5), (0.03, 0.92, STAND_Z - 0.06), flex=18, sflex=6, side=-8, head=(-5, -5))
 hand("L", F(35.5), (-0.10, 1.28, 1.0), d=(0, 1, -0.5), n=(0, 0, 1), curl=40)                        # braces on the pedestal
-hand("R", F(35.5), (0.40, 1.14, 1.16), d=(0, 0.3, 1), n=(-1, 0, 0), curl=60)
+hand("R", F(34.6), (0.14, 1.30, 1.02), d=(0, 1, -0.5), n=(0, 0, 1), curl=40)                        # v009g: braces on the pedestal beside the left hand (was stretched flat to the far seat)
+hand("R", F(35.5), (0.12, 1.32, 1.02), d=(0, 1, -0.5), n=(0, 0, 1), curl=40)
 body(F(36.5), (0.14, 0.98, STAND_Z - 0.10), flex=26, sflex=14, side=6, head=(0, 0))
 hand("L", F(36.5), (-0.08, 1.30, 1.02), d=(0, 1, -0.5), n=(0, 0, 1), curl=40)                        # stays on the pedestal
 hand("L", F(37.6), (0.10, 1.40, 1.12), d=(0, 1, -0.3), n=(0, 0, 1), curl=30)                         # over his legs, not through them
