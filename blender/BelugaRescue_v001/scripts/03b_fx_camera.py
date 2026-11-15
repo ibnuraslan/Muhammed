@@ -624,7 +624,7 @@ for _o in ("Beluga", "Beluga_Jaw"):
 # 4: the loose fin she pulled off stays on the floor until the cramp beat is over, then is hidden (no lone fin later)
 _lf = bpy.data.objects.get("Diver.FinBlade_R_loose")
 if _lf:
-    for _f, _v in ((1, False), (700, False), (701, True)):
+    for _f, _v in ((1, True), (485, True), (486, False), (700, False), (701, True)):      # only from her pull-off (486) to the end of the cramp beat
         _lf.hide_render = _v; _lf.keyframe_insert("hide_render", frame=_f); _lf.hide_viewport = _v; _lf.keyframe_insert("hide_viewport", frame=_f)
 # 2: tank floor matte enough that no mirror images (ghost hand) show in it
 for _n in bpy.data.objects["TankFloor"].data.materials[0].node_tree.nodes:
