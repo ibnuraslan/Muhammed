@@ -499,21 +499,25 @@ gpos = lambda f: Vector(gp9(f).to_2d())
 gh = lambda f: yaw_to(gp9(f - 3), gp9(f + 3))
 def _cl(p):
     p.y = min(p.y, RAMP[0] - 0.4); return p
-pa = lambda f: _cl(gpos(f) + Matrix.Rotation(R_(gh(f)), 2) @ Vector((-1.0, -1.55)))        # ahead-left of the goat, pole length
-pb_ = lambda f: _cl(gpos(f) + Matrix.Rotation(R_(gh(f)), 2) @ Vector((1.0, 0.5)))           # beside its flank
+def pa(f):                                                                                    # ahead-left of the goat, pole length;
+    old = _cl(gpos(f) + Matrix.Rotation(R_(gh(f)), 2) @ Vector((-1.0, -1.55)))
+    g_ = gpos(f); new = Vector((-3.0, min(g_.y - 0.2, RAMP[1] + 0.5)))                         # then walks up beside the ramp, outside the truck's left side
+    w = min(1.0, max(0.0, (f - 1775) / 40.0)); w = w * w * (3 - 2 * w)
+    return old.lerp(new, w)
+pb_ = lambda f: _cl(gpos(f) + Matrix.Rotation(R_(gh(f)), 2) @ Vector((1.6, 0.9)))           # walks wide beside it (it used to pass through him)
 OFF_PATH = {}
 for h_, fn in ((OA, pa), (OB_, pb_)):
     st_ = V(-3.5, 11.0, 0) if h_ is OA else V(-2.3, 11.8, 0)
-    path = catmull([(1600, st_), (1700, V(*fn(1700), 0))] + [(f, V(*fn(f), 0)) for f in range(1735, 1906, 20)])
+    path = catmull([(1600, st_), (1700, V(*fn(1700), 0))] + [(f, V(*fn(f), 0)) for f in range(1735, 1906, 10)])
     h_.h.walk(path, lambda f, path=path: yaw_to(path(f - 4), path(f + 4)), 1600, 1905, stride=0.72)
     OFF_PATH[h_.o.name] = path
     h_.vis(1, False); h_.vis(1600, True); h_.vis(1910, False)
 for f in range(1600, 1906, 10):
     for h_, fn in ((OA, pa), (OB_, pb_)):
         pth = OFF_PATH[h_.o.name]; p_ = pth(f); M_ = h_.M(Vector((p_.x, p_.y, h_.RH.z)), yaw_to(pth(f - 4), pth(f + 4))); sw = 14 * math.sin(f / 20.0)
-        if f < 1700 or (h_ is OB_ and (f < 1735 or f >= 1830)):
+        if f < 1700 or h_ is OB_:
             h_.arm("R", f, M_, fwd=10 + sw, out=24, L=0.5)
-        h_.arm("L", f, M_, fwd=10 - sw, out=24, L=0.5)      # OffA holds the catch pole one-handed
+        if h_ is OB_ or f < 1700: h_.arm("L", f, M_, fwd=10 - sw, out=24, L=0.5)
         h_.fingers("L", f, 20, 15); h_.fingers("R", f, 20, 15)
     ev(f)
     # OffA holds the catch pole in both hands, loop end at the goat's neck
@@ -524,11 +528,11 @@ for f in range(1600, 1906, 10):
         OA.h.key_hand("R", f, gripR, dirp.cross(Vector((0, 0, 1))), Vector((0, 0, -1)), MA @ Vector((-0.5, 0.4, 1.1)))
         q = dirp.to_track_quat('X', 'Z'); key_obj(pole, f, Matrix.Translation(gripR + dirp * 0.62) @ q.to_matrix().to_4x4())
         OA.fingers("R", f, 75, 40)
+        OA.h.key_hand("L", f, gripR + dirp * 0.32, dirp.cross(Vector((0, 0, 1))), Vector((0, 0, -1)), MA @ Vector((0.5, 0.4, 1.1)))   # both hands on the pole
+        OA.fingers("L", f, 75, 40)
     OA.face(f, jaw=3, brow=-1)
     pB = OFF_PATH['OffB'](f).to_2d(); MB = OB_.M(Vector((pB.x, pB.y, OB_.RH.z)), yaw_to(OFF_PATH['OffB'](f - 4), OFF_PATH['OffB'](f + 4)))
     back = G.o.matrix_world @ G.PB["spine2"].head + Vector((0, 0, 0.12))
-    if 1735 <= f < 1830:
-        OB_.h.key_hand("R", f, back, Vector((0, 0, -1)).cross(Vector((1, 0, 0))), Vector((0, 0, -1)), MB @ Vector((0.5, 0.4, 1.1)))
     OB_.face(f, jaw=2, brow=2, smile=-1)
 pole.hide_render = True; pole.keyframe_insert("hide_render", frame=1); pole.hide_render = False; pole.keyframe_insert("hide_render", frame=1700)
 pole.hide_render = True; pole.keyframe_insert("hide_render", frame=1910)
@@ -692,6 +696,7 @@ def TR(name):
     if name == "oh": return OW.o.matrix_world @ OW.R.PB["head"].head
     if name == "ps": return PS.o.matrix_world @ PS.R.PB["spine03"].head
     if name == "mid": return (TR("gh") + TR("oc")) / 2
+    if name == "ga": return (TR("gb") + OA.o.matrix_world @ OA.R.PB["spine03"].head) / 2   # goat and the pole officer
     if name == "go": return TR("gh").lerp(TR("oh"), 0.3)      # goat in front, the owner on the porch behind it
     if name == "gp": return TR("gh") * 0.6 + TR("ps") * 0.4
     if name == "fm": return TR("gh") * 0.45 + TR("oh") * 0.55 + Vector((0, 0, -0.1))
@@ -723,9 +728,9 @@ CAMK = [
  (500,  (1.6, 1.6, 1.4), ("gb",), 28),      # round the east side of the goat (the straight path went through it)
  (540,  (0.4, 3.9, 1.3), ("gb",), 26),
  (630,  ("gb", (1.9, -2.1, 0.5), "g"), ("gb", (0, 0, 0.1)), 30),   # whole goat centred (was cut at the edge)
- (690,  ("gh", (1.0, -0.55, 0.3), "g"), ("gh", (0, 0, 0.05)), 38),    # eye macro
- (740,  ("gh", (0.8, -0.9, 0.15), "g"), ("gh",), 34),    # horns
- (790,  ("gf", (0.9, -0.9, 0.4), "g"), ("gh", (0, 0, -0.25)), 30),   # stamping hoof, head in frame
+ (690,  (-2.2, -0.1, 1.0), ("go",), 30),     # whole goat, the owner coming back down the steps behind it
+ (740,  (-2.1, -0.7, 0.95), ("go",), 27),
+ (790,  (0.9, -0.6, 0.7), ("gh", (0, 0, -0.25)), 30),     # stamping hoof, head in frame (absolute: the path no longer crosses the goat)
  (803,  (1.3, 1.1, 0.8), ("gh",), 30),                    # swing wide round its head (the path passed 0.35 m from it)
  (816,  (OC.x - 1.7, OC.y - 1.7, 0.85), ("mid",), 28),
  (880,  (OC.x - 1.0, OC.y - 2.1, 0.55), ("mid",), 26),    # skimming beside the charge, him and the goat both in frame
@@ -749,12 +754,12 @@ CAMK = [
  (1690, (5.0, -5.0, 6.5), (4.0, 3.5, 0.4), 22),
  (1735, (0.6, 1.0, 4.0), ("gb",), 24),
  (1800, (1.8, 5.6, 1.5), ("gb",), 28),
- (1860, (1.8, 8.0, 1.9), ("gb",), 28),                     # beside the ramp, clear of the officials
- (1880, (1.8, 8.4, 2.0), ("gb",), 28),                     # hold beside the ramp (the spline dipped back behind the shed)
- (1895, (1.4, 8.6, 2.6), ("gb",), 26),
- (1905, (1.4, 8.6, 3.4), ("gb",), 24),                     # rise clear of the truck before the fly-over
- (1916, (2.0, 52.5, 2.4), (2.0, 62.1, 0.6), 28),       # the fly-over arrives on the goat and rescuer
- (1928, (2.2, 56.0, 2.0), (2.0, 62.1, 0.55), 28),           # fast fly-over the tree line onto the goat at the sanctuary
+ (1860, (2.6, 8.2, 1.6), ("ga",), 24),                     # the ramp, the goat and the officer with the pole all in frame
+ (1880, (2.7, 8.6, 1.7), ("ga",), 24),
+ (1895, (2.6, 9.0, 2.1), ("ga",), 24),
+ (1905, (2.4, 9.2, 3.0), ("gb",), 24),                     # rise before the fly-over
+ (1911, (2.4, 57.0, 2.1), (1.7, 62.1, 0.6), 30),       # 5-frame fly-over lands straight on the rescuer and the goat (no empty frames)
+ (1928, (2.6, 57.6, 1.9), (1.8, 62.1, 0.58), 30),
  (1970, (3.2, 58.8, 1.3), (1.9, 62.2, 0.55), 30),
  (2020, (4.6, 58.6, 2.2), (1.9, 62.3, 0.5), 28),           # down into the pasture
  (2080, (2.6, 59.6, 1.3), (1.6, 62.2, 0.55), 32),
