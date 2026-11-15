@@ -1,0 +1,550 @@
+{
+"visible_frames": [
+445,
+448,
+451,
+454,
+457,
+460,
+463,
+466,
+484,
+487,
+490,
+499,
+505,
+670,
+709,
+712,
+715,
+718,
+721,
+724,
+727,
+730,
+733,
+736,
+739,
+742,
+745,
+748,
+751,
+754,
+757,
+760,
+763,
+766,
+769,
+772,
+775,
+778,
+781,
+784,
+787,
+790,
+793,
+796,
+799,
+802,
+805,
+808,
+811,
+814,
+817,
+820,
+823,
+826,
+829,
+832,
+835,
+838,
+841,
+844,
+847,
+850,
+853,
+856,
+859,
+862,
+865,
+868,
+871,
+874,
+877,
+880,
+883,
+886,
+889,
+892,
+895,
+898,
+901,
+904,
+907,
+910,
+913,
+916,
+919,
+922,
+925,
+928,
+931,
+934,
+937,
+940,
+943,
+946,
+976
+],
+"frames": {
+"445": {
+"finger2-2.R|Bat|VIS": 16,
+"finger2-1.R|Bat|VIS": 19,
+"finger3-2.R|Bat|VIS": 30,
+"finger3-1.R|Bat|VIS": 26,
+"finger4-2.R|Bat|VIS": 17,
+"finger4-3.R|Bat|VIS": 25,
+"finger5-3.R|Bat|VIS": 23,
+"finger1-3.R|Bat|VIS": 12,
+"finger4-1.R|Bat|VIS": 9
+},
+"448": {
+"finger3-1.R|Bat|VIS": 14,
+"finger4-1.R|Bat|VIS": 33,
+"finger4-2.R|Bat|VIS": 3,
+"finger5-2.R|Bat|VIS": 11,
+"finger5-1.R|Bat|VIS": 34,
+"metacarpal3.R|Bat|VIS": 3,
+"metacarpal4.R|Bat|VIS": 5
+},
+"451": {
+"finger4-1.R|Bat|VIS": 6,
+"finger5-2.R|Bat|VIS": 30,
+"finger3-2.R|Bat|VIS": 7,
+"finger4-2.R|Bat|VIS": 6,
+"finger5-1.R|Bat|VIS": 20
+},
+"454": {
+"finger4-1.R|Bat|VIS": 8,
+"finger4-3.R|Bat|VIS": 12,
+"finger4-2.R|Bat|VIS": 13,
+"finger5-1.R|Bat|VIS": 13,
+"finger5-3.R|Bat|VIS": 7,
+"finger5-2.R|Bat|VIS": 18
+},
+"457": {
+"finger4-1.R|Bat|VIS": 7,
+"finger4-3.R|Bat|VIS": 6,
+"finger4-2.R|Bat|VIS": 10,
+"finger5-1.R|Bat|VIS": 11,
+"finger5-2.R|Bat|VIS": 21
+},
+"460": {
+"finger4-1.R|Bat|VIS": 8,
+"finger4-3.R|Bat|VIS": 6,
+"finger4-2.R|Bat|VIS": 13,
+"finger5-1.R|Bat|VIS": 13,
+"finger5-2.R|Bat|VIS": 21
+},
+"463": {
+"finger4-1.R|Bat|VIS": 10,
+"finger4-3.R|Bat|VIS": 5,
+"finger4-2.R|Bat|VIS": 9,
+"finger5-1.R|Bat|VIS": 19,
+"finger5-2.R|Bat|VIS": 23
+},
+"466": {
+"finger5-2.R|Bat|VIS": 16,
+"finger5-1.R|Bat|VIS": 8
+},
+"484": {
+"lowerarm01.R|Bat|VIS": 5,
+"upperleg02.R|Bat|VIS": 6
+},
+"487": {
+"lowerarm01.R|Bat|VIS": 25
+},
+"490": {
+"lowerarm01.R|Bat|VIS": 3
+},
+"499": {
+"lowerarm01.R|Bat|VIS": 1
+},
+"505": {
+"lowerarm01.R|Bat|VIS": 1
+},
+"637": {
+"finger1-3.R|Bat|off": 9
+},
+"640": {
+"finger1-3.R|Bat|off": 11
+},
+"643": {
+"finger1-3.R|Bat|off": 12
+},
+"667": {
+"finger5-2.R|Bat|off": 5
+},
+"670": {
+"finger3-2.R|Bat|off": 11,
+"finger4-1.R|Bat|off": 11,
+"finger4-2.R|Bat|off": 21,
+"finger5-1.R|Bat|off": 36,
+"finger5-2.R|Bat|off": 33,
+"finger5-3.R|Bat|off": 3,
+"finger1-3.R|Bat|off": 10,
+"finger1-3.R|Bat|VIS": 2
+},
+"673": {
+"finger2-2.R|Bat|off": 25,
+"finger2-3.R|Bat|off": 19,
+"finger2-1.R|Bat|off": 6,
+"finger3-3.R|Bat|off": 26,
+"finger3-1.R|Bat|off": 21,
+"finger4-1.R|Bat|off": 25,
+"finger4-2.R|Bat|off": 19,
+"finger4-3.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 12,
+"finger1-2.R|Bat|off": 8
+},
+"676": {
+"finger2-1.R|Bat|off": 9,
+"finger2-2.R|Bat|off": 9
+},
+"685": {
+"finger2-1.R|Bat|off": 11,
+"finger2-2.R|Bat|off": 13
+},
+"709": {
+"oris03.L|Bat|VIS": 11
+},
+"712": {
+"oris03.L|Bat|VIS": 11
+},
+"715": {
+"oris03.L|Bat|VIS": 11
+},
+"718": {
+"oris03.L|Bat|VIS": 11
+},
+"721": {
+"oris03.L|Bat|VIS": 11
+},
+"724": {
+"oris03.L|Bat|VIS": 11
+},
+"727": {
+"oris03.L|Bat|VIS": 11
+},
+"730": {
+"oris03.L|Bat|VIS": 11
+},
+"733": {
+"oris03.L|Bat|VIS": 12
+},
+"736": {
+"finger2-1.R|Bat|off": 9,
+"finger2-2.R|Bat|off": 2,
+"oris03.R|Bat|VIS": 4,
+"oris03.L|Bat|VIS": 12,
+"finger2-1.R|Bat|VIS": 3
+},
+"739": {
+"finger2-1.R|Bat|off": 13,
+"finger2-2.R|Bat|off": 7,
+"oris03.L|Bat|VIS": 8,
+"oris03.R|Bat|VIS": 5
+},
+"742": {
+"finger2-1.R|Bat|off": 14,
+"finger2-2.R|Bat|off": 10,
+"oris03.L|Bat|VIS": 8,
+"oris03.R|Bat|VIS": 5
+},
+"745": {
+"finger2-1.R|Bat|off": 15,
+"finger2-2.R|Bat|off": 13,
+"oris03.L|Bat|VIS": 6,
+"oris03.R|Bat|VIS": 4
+},
+"748": {
+"finger2-2.R|Bat|off": 13,
+"finger2-1.R|Bat|off": 13,
+"oris03.L|Bat|VIS": 9,
+"oris03.R|Bat|VIS": 4
+},
+"751": {
+"finger2-1.R|Bat|off": 15,
+"finger2-2.R|Bat|off": 13,
+"oris03.L|Bat|VIS": 9,
+"oris03.R|Bat|VIS": 4
+},
+"754": {
+"finger2-1.R|Bat|off": 13,
+"finger2-2.R|Bat|off": 13,
+"oris03.L|Bat|VIS": 9,
+"oris03.R|Bat|VIS": 4
+},
+"757": {
+"finger2-1.R|Bat|off": 14,
+"finger2-2.R|Bat|off": 10,
+"oris03.L|Bat|VIS": 8,
+"oris03.R|Bat|VIS": 4
+},
+"760": {
+"finger2-1.R|Bat|off": 15,
+"finger2-2.R|Bat|off": 7,
+"oris03.L|Bat|VIS": 8,
+"oris03.R|Bat|VIS": 4
+},
+"763": {
+"finger2-1.R|Bat|off": 12,
+"finger2-2.R|Bat|off": 4,
+"oris03.R|Bat|VIS": 4,
+"oris03.L|Bat|VIS": 12
+},
+"766": {
+"oris03.L|Bat|VIS": 11
+},
+"769": {
+"oris03.L|Bat|VIS": 11
+},
+"772": {
+"oris03.L|Bat|VIS": 11
+},
+"775": {
+"oris05|Bat|VIS": 1,
+"oris03.L|Bat|VIS": 11
+},
+"778": {
+"oris05|Bat|VIS": 1,
+"oris03.L|Bat|VIS": 11
+},
+"781": {
+"oris05|Bat|VIS": 1,
+"oris03.L|Bat|VIS": 11
+},
+"784": {
+"oris03.L|Bat|VIS": 11
+},
+"787": {
+"oris03.L|Bat|VIS": 11
+},
+"790": {
+"oris03.L|Bat|VIS": 11
+},
+"793": {
+"oris03.L|Bat|VIS": 11
+},
+"796": {
+"oris03.L|Bat|VIS": 11
+},
+"799": {
+"oris03.L|Bat|VIS": 11
+},
+"802": {
+"oris03.L|Bat|VIS": 11
+},
+"805": {
+"oris03.R|Bat|VIS": 4,
+"oris03.L|Bat|VIS": 12
+},
+"808": {
+"finger2-1.R|Bat|off": 6,
+"oris03.L|Bat|VIS": 11,
+"finger2-2.R|Bat|off": 2,
+"oris03.R|Bat|VIS": 4
+},
+"811": {
+"finger2-1.R|Bat|off": 10,
+"oris03.L|Bat|VIS": 9,
+"finger2-2.R|Bat|off": 4,
+"oris03.R|Bat|VIS": 4
+},
+"814": {
+"finger2-1.R|Bat|off": 10,
+"finger2-2.R|Bat|off": 6,
+"oris03.L|Bat|VIS": 8,
+"oris03.R|Bat|VIS": 4
+},
+"817": {
+"finger2-2.R|Bat|off": 7,
+"oris03.L|Bat|VIS": 9,
+"oris03.R|Bat|VIS": 4,
+"finger2-1.R|Bat|off": 11
+},
+"820": {
+"finger2-2.R|Bat|off": 8,
+"oris03.L|Bat|VIS": 9,
+"oris03.R|Bat|VIS": 4,
+"finger2-1.R|Bat|off": 9
+},
+"823": {
+"finger2-2.R|Bat|off": 7,
+"oris03.L|Bat|VIS": 9,
+"oris03.R|Bat|VIS": 4,
+"finger2-1.R|Bat|off": 11
+},
+"826": {
+"finger2-1.R|Bat|off": 10,
+"oris03.L|Bat|VIS": 8,
+"finger2-2.R|Bat|off": 6,
+"oris03.R|Bat|VIS": 5
+},
+"829": {
+"oris03.R|Bat|VIS": 6,
+"finger2-1.R|Bat|off": 7,
+"finger2-2.R|Bat|off": 5,
+"oris03.L|Bat|VIS": 9,
+"oris05|Bat|VIS": 4
+},
+"832": {
+"oris03.R|Bat|VIS": 5,
+"oris03.L|Bat|VIS": 12,
+"oris05|Bat|VIS": 4
+},
+"835": {
+"oris03.R|Bat|VIS": 4,
+"oris03.L|Bat|VIS": 12
+},
+"838": {
+"oris03.L|Bat|VIS": 11
+},
+"841": {
+"oris03.L|Bat|VIS": 11
+},
+"844": {
+"oris03.L|Bat|VIS": 11
+},
+"847": {
+"oris03.L|Bat|VIS": 11
+},
+"850": {
+"oris03.L|Bat|VIS": 11
+},
+"853": {
+"oris03.L|Bat|VIS": 11
+},
+"856": {
+"oris03.L|Bat|VIS": 11
+},
+"859": {
+"oris03.L|Bat|VIS": 12
+},
+"862": {
+"oris05|Bat|VIS": 8,
+"oris03.R|Bat|VIS": 7,
+"oris03.L|Bat|VIS": 12
+},
+"865": {
+"oris03.R|Bat|VIS": 10,
+"oris05|Bat|VIS": 12,
+"oris03.L|Bat|VIS": 12
+},
+"868": {
+"oris03.R|Bat|VIS": 12,
+"oris03.L|Bat|VIS": 8,
+"oris05|Bat|VIS": 10
+},
+"871": {
+"finger2-1.R|Bat|VIS": 10,
+"oris03.L|Bat|VIS": 8,
+"finger2-2.R|Bat|VIS": 2,
+"oris03.R|Bat|VIS": 8,
+"oris05|Bat|VIS": 6
+},
+"874": {
+"finger2-1.R|Bat|VIS": 10,
+"finger2-2.R|Bat|VIS": 2,
+"oris03.L|Bat|VIS": 11,
+"oris03.R|Bat|VIS": 1
+},
+"877": {
+"finger2-1.R|Bat|VIS": 2,
+"oris03.L|Bat|VIS": 11
+},
+"880": {
+"oris03.L|Bat|VIS": 11
+},
+"883": {
+"oris03.L|Bat|VIS": 11
+},
+"886": {
+"oris03.L|Bat|VIS": 12
+},
+"889": {
+"oris03.L|Bat|VIS": 11
+},
+"892": {
+"oris03.L|Bat|VIS": 11
+},
+"895": {
+"oris03.L|Bat|VIS": 11,
+"oris05|Bat|VIS": 4
+},
+"898": {
+"oris03.L|Bat|VIS": 11,
+"oris05|Bat|VIS": 4
+},
+"901": {
+"oris03.L|Bat|VIS": 11,
+"oris05|Bat|VIS": 4
+},
+"904": {
+"oris03.L|Bat|VIS": 11,
+"oris05|Bat|VIS": 4
+},
+"907": {
+"oris03.L|Bat|VIS": 12
+},
+"910": {
+"oris03.L|Bat|VIS": 11
+},
+"913": {
+"oris03.L|Bat|VIS": 11
+},
+"916": {
+"oris03.L|Bat|VIS": 11
+},
+"919": {
+"oris03.L|Bat|VIS": 11
+},
+"922": {
+"oris03.L|Bat|VIS": 11
+},
+"925": {
+"oris03.L|Bat|VIS": 11
+},
+"928": {
+"oris03.L|Bat|VIS": 11
+},
+"931": {
+"oris03.L|Bat|VIS": 12
+},
+"934": {
+"oris03.L|Bat|VIS": 12
+},
+"937": {
+"oris03.L|Bat|VIS": 12,
+"oris05|Bat|VIS": 5
+},
+"940": {
+"oris05|Bat|VIS": 8,
+"oris03.L|Bat|VIS": 13
+},
+"943": {
+"oris03.L|Bat|VIS": 11,
+"oris05|Bat|VIS": 5
+},
+"946": {
+"oris03.L|Bat|VIS": 11
+},
+"976": {
+"finger2-1.R|Bat|VIS": 34,
+"finger2-3.R|Bat|VIS": 25,
+"finger3-2.R|Bat|VIS": 11,
+"finger3-1.R|Bat|VIS": 13,
+"finger2-2.R|Bat|VIS": 25
+}
+}
+}

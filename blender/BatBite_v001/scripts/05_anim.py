@@ -135,28 +135,32 @@ def sing_pose(f, bob=0.0, head=(0.0, 0.0), lpump=0.0):
         apply_pose(D[S], "L", "power_fist", f)
     else:
         key_hand(S, "L", f, W, d, nn, P=P, Rb=Rb); apply_pose(D[S], "L", "relaxed", f)
+    key_relaxed(S, f, P, Rb, sides="R")       # right hand hangs relaxed: no contact with the stand (simplest safe staging)
     return P, Rb
 for i, f in enumerate(range(1, 171, 12)):
     bob = math.sin(i * 1.3) * 0.5 + 0.5
     sing_pose(f, bob=bob, head=(0, 6 * math.sin(i * 0.9)), lpump=(1.0 if i % 2 == 0 else 0.3) if 20 < f < 150 else 0.0)
 # grip the stand shaft with the right hand (frame 1, held to 300)
-sc.frame_set(1)
-gr = grip_object(D[S], "R", 1, MIC, SHAFT, V((0.15, -1, 0.1)).normalized())
-print("GRIP stand", gr)
-IKR_STAND = D[S].pose.bones["IK_hand.R"].matrix.copy()
-def key_ikhand_matrix(n, s, f, M):
+ARM_L = {}
+def key_ikhand_matrix(n, s, f, M, clamp=True):
+    """key IK_hand to M (armature space); the target is pulled in to 92% of the arm's reach so the IK always arrives
+    (a held prop is baked to this target, so an unreachable target would leave the prop floating off the hand)"""
+    if clamp:
+        if (n, s) not in ARM_L: ARM_L[n, s] = (RIG[n].BN["upperarm01." + s].head_local - RIG[n].BN["wrist." + s].head_local).length
+        sc.frame_set(int(f)); sh = D[n].pose.bones["upperarm01." + s].head
+        v = M.translation - sh
+        if v.length > 0.92 * ARM_L[n, s]:
+            M = M.copy(); M.translation = sh + v.normalized() * 0.92 * ARM_L[n, s]
     pb = D[n].pose.bones["IK_hand." + s]; Rr = RIG[n].rest("IK_hand." + s)
     loc, q, _ = (Rr.inverted() @ M).decompose()
     if pb.rotation_quaternion.dot(q) < 0: q = -q
     pb.location = loc; pb.rotation_quaternion = q
     pb.keyframe_insert("location", frame=f, group=pb.name); pb.keyframe_insert("rotation_quaternion", frame=f, group=pb.name)
-for f in range(1, 301, 30):
-    key_ikhand_matrix(S, "R", f, IKR_STAND)
 # notices the bat: head turns down to his right front
 sing_pose(171, bob=0.3)
 for f, hd in ((200, (20, -14)), (240, (26, -18)), (275, (24, -12)), (300, (25, -16))):
-    P, Rb = stand(S, f, 0.0, 0.0, flex=6, spine=10, head=hd, hands=False)
-    W, d, nn = relaxed_hand(S, P, Rb, "L"); key_hand(S, "L", f, W, d, nn, P=P, Rb=Rb); apply_pose(D[S], "L", "relaxed", f)
+    P, Rb = stand(S, f, 0.0, 0.03 * (f - 171) / 129, flex=4, spine=6, head=hd, hands=False)
+    key_relaxed(S, f, P, Rb)
 jaw(S, 1, 0); jaw(S, 60, 6); jaw(S, 90, 1); jaw(S, 120, 7); jaw(S, 150, 0); jaw(S, 200, 4); jaw(S, 300, 3)
 
 # fans: in front of the stage, facing it, arms up cheering (fists), bobbing
@@ -186,7 +190,7 @@ def crouch(f, amt, head=(-10, 0)):
 crouch(450, 1.0); stand_feet(S, 450, STEP.x, STEP.y, YAW); sc.frame_set(450)
 _sh = bone_world(S, "upperarm01.R").to_translation()
 _arm = (RIG[S].BN["upperarm01.R"].head_local - RIG[S].BN["wrist.R"].head_local).length
-_dir = (Rz(YAW - 12) @ V((0, -1, 0)))
+_dir = (Rz(YAW + 22) @ V((0, -1, 0)))
 _best = None
 for k in range(80):
     q = V((_sh.x, _sh.y, 0)) + _dir * (0.05 + k * 0.01); q.z = 0.0
@@ -215,16 +219,16 @@ for f in range(T0, T1 + 1, 4):    # floppy rubber-like flutter in the air
 # land + tiny bounce, then rest
 bat_key(T1 + 4, Mloc(LAND + V((0.0, 0.0, 0.05)), BAT_LIE)); bat_key(T1 + 9, Mloc(LAND + V((0.02, 0.01, 0.026)), BAT_LIE))
 wings(T1 + 4, up=-10); wings(T1 + 9, up=-14); wings(T1 + 14, up=-15)
+HOLD_FOLD = float(os.environ.get("BAT_HOLD_FOLD", "-60")); HOLD_UP = float(os.environ.get("BAT_HOLD_UP", "25"))
+wings(446, up=-15); wings(1296, up=-15)
+BR.key_rot("legs", 446, [("X", 0)]); BR.key_rot("legs", 470, [("X", -55)]); BR.key_rot("legs", 675, [("X", -55)]); BR.key_rot("legs", 695, [("X", 0)]); BR.key_rot("legs", 960, [("X", 0)]); BR.key_rot("legs", 985, [("X", -55)]); BR.key_rot("legs", 1296, [("X", -55)])   # legs hang free at the bite (curled legs read as a blob in the close-ups); BR.key_rot("legs", 1320, [("X", 0)])   # wings stay relaxed/drooping while held (a fold test swung them across his face)
 BAT_REST = Mloc(LAND + V((0.02, 0.01, 0.026)), BAT_LIE)
 bat_key(300, BAT_REST)
 
 # ================================================================= B: pick it up (300-620)
 # release the stand (hand back to relaxed), small step toward the bat, crouch, grip, rise, look at it
-P, Rb = stand(S, 300, 0.0, 0.0, flex=6, spine=10, head=(25, -16), hands=False)
-key_ikhand_matrix(S, "R", 300, IKR_STAND); apply_pose(D[S], "R", "wrap_grip", 300) if False else None
-W, d, nn = relaxed_hand(S, P, Rb, "R"); key_hand(S, "R", 335, W, d, nn, P=P, Rb=Rb); apply_pose(D[S], "R", "relaxed", 335)
-P, Rb = stand(S, 335, 0.0, 0.0, flex=6, spine=12, head=(26, -12), hands=False)
-W, d, nn = relaxed_hand(S, P, Rb, "L"); key_hand(S, "L", 335, W, d, nn, P=P, Rb=Rb)
+P, Rb = stand(S, 300, 0.0, 0.03, flex=4, spine=6, head=(25, -16), hands=False); key_relaxed(S, 300, P, Rb)
+P, Rb = stand(S, 335, 0.0, 0.06, flex=2, spine=4, head=(16, -12), hands=False); key_relaxed(S, 335, P, Rb)
 # step: shift to stand at (0.25, -0.15) turned slightly right (yaw -15) -> right foot moves first
 def steps(f0):
     H = HUM[S]
@@ -238,8 +242,8 @@ def steps(f0):
         key_foot_free(S, s, fb + 1, B0, Rz(YAW))
 steps(345)
 for f, u in ((345, 0.0), (365, 0.5), (387, 1.0)):
-    p = V((0, 0)).lerp(STEP, smooth(u))
-    P, Rb = stand(S, f, p.x, p.y, yaw=YAW * u, flex=8, spine=12, head=(28, -8 * (1 - u)), hands=False, feet=False,
+    p = V((0, 0.06)).lerp(STEP, smooth(u)); p.y += 0.06 * math.sin(math.pi * u)   # steps right and slightly back, clear of the mic
+    P, Rb = stand(S, f, p.x, p.y, yaw=YAW * u, flex=2 + 6 * u, spine=4 + 8 * u, head=(16 + 12 * u, -8 * (1 - u)), hands=False, feet=False,
                   dz=-0.02 * math.sin(math.pi * u))
     key_relaxed(S, f, P, Rb)
 # crouch: deep knee bend, torso forward, right hand down to the bat
@@ -257,10 +261,11 @@ bat_set(BAT_REST); bpy.context.view_layer.update()
 bat_body = BAT_REST @ V((0, 0.0, -0.075))        # lower body / legs: keeps the hand well clear of his face at the bite
 up_dir = (BAT_REST.to_3x3() @ V((0, -1, 0)))     # local -Y (face) is down when lying, so the back faces +Z
 fd = (BAT_REST.to_3x3() @ V((1, 0, 0))).normalized()
-gr = grip_object(D[S], "R", 450, D["Bat"], bat_body + V((0, 0, 0.03)), V((0, 0, -1)), finger_dir=fd)
+gr = grip_object(D[S], "R", 450, D["Bat"], bat_body + V((0, 0, 0.045)), V((0, 0, -1)), finger_dir=fd)
 print("GRIP bat", gr)
+apply_pose(D[S], "R", "shield", 450); apply_pose(D[S], "R", "wrap_grip", 455, amount=0.85)     # fingers close once the hand is there round the bat's lower body (open-hand contact report above)
 P, Rb = crouch(450, 1.0); key_relaxed(S, 450, P, Rb, sides="L")
-apply_pose(D[S], "R", "shield", 432)      # open hand on the way down
+apply_pose(D[S], "R", "shield", 432); apply_pose(D[S], "R", "shield", 446)      # open hand on the way down
 sc.frame_set(450)
 IKR_GRAB = D[S].pose.bones["IK_hand.R"].matrix.copy()
 print("REACH err at grab (m):", round((bone_world(S, "wrist.R").to_translation() - (D[S].matrix_world @ IKR_GRAB).to_translation()).length, 4))
@@ -272,7 +277,9 @@ def hand_for_bat(Mbat):
 for f, a in ((480, 0.6), (505, 0.15), (520, 0.0)):
     P, Rb = crouch(f, a, head=(20 - 30 * a, -8)); key_relaxed(S, f, P, Rb, sides="L")
 # chest-height look: bat upright-ish (head up), held 0.35 m in front of the chest, face toward him
-def bat_front(f, P, Rb, fwd=0.34, up=-0.06, yaw=0.0, tilt=0.0, side=-0.05):
+TILT = float(os.environ.get('BAT_TILT', '-60')); FWD = float(os.environ.get('BAT_FWD', '0.42'))
+def bat_front(f, P, Rb, fwd=None, up=-0.06, yaw=0.0, tilt=0.0, side=-0.05):
+    fwd = FWD if fwd is None else fwd; tilt = tilt + TILT
     chest = bw(S, P, Rb, rest_head(S, "spine01")) + Rb @ V((side, -fwd, up))
     R3 = Rb @ Rz(180 + yaw) @ Rx(tilt)          # bat face (-Y local) turned toward the singer
     Mb = Mloc(chest, R3); key_ikhand_matrix(S, "R", f, hand_for_bat(Mb)); return Mb
@@ -280,9 +287,9 @@ for f, a, yw, hd in ((520, 0.0, 0.0, (28, -10)), (560, 0.0, 20.0, (26, -6)), (60
     P, Rb = stand(S, f, STEP.x, STEP.y, yaw=YAW, flex=4, spine=8, head=hd, hands=False, feet=False)
     key_relaxed(S, f, P, Rb, sides="L"); bat_front(f, P, Rb, yaw=yw)
 # low-to-chest path while rising (480, 505)
-for f, a in ((480, 0.6), (505, 0.15)):
-    P, Rb = crouch(f, a, head=(20 - 30 * a, -8))
-    bat_front(f, P, Rb, fwd=0.30 + 0.15 * a, up=-0.06 - 0.75 * a)
+# lift straight up out in front first (clear of his thighs), then in to the chest
+P, Rb = crouch(472, 0.85, head=(20 - 30 * 0.85, -8)); M = IKR_GRAB.copy(); M.translation += V((0, 0, 0.20)) + Rz(YAW) @ V((0, -0.08, 0)); key_ikhand_matrix(S, "R", 472, M)
+P, Rb = crouch(495, 0.4, head=(20 - 30 * 0.4, -8)); bat_front(495, P, Rb, fwd=0.58, up=-0.40)
 # feet planted at the step position for the rest of the stage action
 for f in (390, 450, 620, 960, 1280, 1600):
     stand_feet(S, f, STEP.x, STEP.y, YAW)
@@ -306,15 +313,15 @@ def bat_at_mouth(f, depth=0.0, roll=0.0, pitch=-14.0):
 # raise toward the mouth (620-700), jaw opens 680-700, bite 700-712, playful shake, hold
 for f, hd in ((640, (8, 0)), (665, (4, 0))):
     P, Rb = head_frame(f, hd)
-    bat_front(f, P, Rb, fwd=0.30 - 0.06 * (f - 620) / 45, up=-0.02 + 0.18 * (f - 620) / 45, yaw=0, tilt=-60 * (f - 620) / 45)
+    u = (f - 620) / 45; bat_front(f, P, Rb, fwd=0.46 - 0.04 * u, up=0.08 + 0.14 * u, yaw=0, tilt=-10 - 30 * u)
 jaw(S, 620, 2); jaw(S, 680, 3); jaw(S, 700, 16); jaw(S, 712, 9); jaw(S, 960, 9)
-P, Rb = head_frame(690, (2, 0)); bat_at_mouth(690, depth=-0.045)
-P, Rb = head_frame(700, (0, 0)); bat_at_mouth(700, depth=-0.012)
-P, Rb = head_frame(712, (3, 0)); bat_at_mouth(712, depth=0.012)
+P, Rb = head_frame(690, (2, 0)); bat_at_mouth(690, depth=-0.07)
+P, Rb = head_frame(700, (0, 0)); bat_at_mouth(700, depth=-0.010)
+P, Rb = head_frame(712, (3, 0)); bat_at_mouth(712, depth=0.008)
 for i, f in enumerate(range(730, 961, 18)):
     sh = 7 * math.sin(i * 1.6) if f < 880 else 0
     P, Rb = head_frame(f, (3 + 2 * math.sin(i), sh), side=2 * math.sin(i * 1.6))
-    bat_at_mouth(f, depth=0.012, roll=sh * 0.6)
+    bat_at_mouth(f, depth=0.008, roll=sh * 0.6)
 
 # ================================================================= D: pulls it away, shock (960-1280)
 P, Rb = head_frame(972, (6, 0), flex=2, spine=4); bat_at_mouth(972, depth=-0.06)
@@ -324,7 +331,7 @@ for f, hd, yw in ((985, (16, -6), 0), (1010, (24, -8), 5), (1060, (27, -12), -8)
     # left hand comes up, open, in shock (not touching the face)
     sh = bw(S, P, Rb, rest_head(S, "upperarm01.L"))
     if f >= 1010:
-        W = sh + Rb @ V((0.02, -0.30, -0.22)); key_hand(S, "L", f, W, (Rb @ V((-0.2, -0.3, 1))).normalized(), (Rb @ V((-0.3, -1, 0))).normalized(),
+        W = sh + Rb @ V((0.13, -0.27, -0.06)); key_hand(S, "L", f, W, (Rb @ V((-0.2, -0.3, 1))).normalized(), (Rb @ V((-0.3, -1, 0))).normalized(),
                                                        pole=sh + Rb @ V((0.4, 0.2, -0.4)))
         apply_pose(D[S], "L", "open_alarm", f)
     else:
@@ -372,8 +379,9 @@ P, Rb = stand(S, 1290, STEP.x, STEP.y, yaw=YAW, flex=-2, spine=-4, head=(18, 0),
 Mb = bat_front(1290, P, Rb, fwd=0.38, up=0.0, yaw=0, tilt=-20)
 apply_pose(D[S], "R", "wrap_grip", 1290) if False else None
 # release at 1296: fingers open, the bat falls to the deck by his feet
+apply_pose(D[S], "R", "wrap_grip", 1296, amount=0.85)   # fingers stay closed on the bat until the release
 apply_pose(D[S], "R", "open_alarm", 1300)
-DROP = V((STEP.x - 0.05, STEP.y - 0.42, 0.026))
+DROP = V((STEP.x, STEP.y, 0.026)) + Rz(YAW) @ V((0.12, -0.66, 0))   # in front of his feet, clear of both shoes and the stand base
 def bake_held(f0, f1):
     for f in range(f0, f1 + 1):
         sc.frame_set(f)
@@ -426,7 +434,7 @@ _hit, _loc, _n, _i, _ob, _M = sc.ray_cast(_dg, V((HX, 0.6, 1.5)), V((0, 0, -1)))
 MATT_Z = _loc.z if _hit and _ob.name == "Bed" else 0.62
 print("MATT_Z", round(MATT_Z, 3), _ob.name if _hit else None)
 # reclined on a wedge pillow: hips on the mattress, back at ~50 deg, legs straight under the blanket
-HIP = V((HX, 0.85, MATT_Z + 0.10))
+HIP = V((HX, 0.85, MATT_Z + 0.16))
 RECL = -32
 def recline(f, br=0.0, head=(0.0, 0.0)):
     H = HUM[S]
@@ -434,7 +442,9 @@ def recline(f, br=0.0, head=(0.0, 0.0)):
     Rb = body_R(0, RECL)
     for s in "LR":
         a = H.ankle[s]; sx = 1 if s == "L" else -1
-        W = V((HX + a.x * 0.9, HIP.y - 0.93, MATT_Z + 0.075))
+        W = V((HX + a.x * 0.9, HIP.y - 0.86, 0))
+        _h = sc.ray_cast(bpy.context.evaluated_depsgraph_get(), V((W.x, W.y - 0.08, 1.5)), V((0, 0, -1)))
+        W.z = max(MATT_Z, _h[1].z if _h[0] and _h[4].name == "Bed" else MATT_Z) + 0.17   # heel clear of the mattress at the foot end
         key_foot_free(S, s, f, W, Rx(-80), pole=W + V((0, 0.3, 0.8)))
         # forearms resting on the blanket over the belly/thighs
         sh = bw(S, HIP, Rb, rest_head(S, "upperarm01." + s))
@@ -466,20 +476,22 @@ wedge()
 def blanket():
     """sheet draped over the posed legs: ray cast down onto the singer at the cut frame, 2 cm over the body, falling to the mattress"""
     sc.frame_set(CUT); bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
-    me = bpy.data.meshes.new("Blanket"); bm = bmesh.new(); nx, ny = 30, 34
-    x0, x1, y0, y1 = HX - 0.48, HX + 0.48, HIP.y - 1.05, HIP.y + 0.02
+    me = bpy.data.meshes.new("Blanket"); bm = bmesh.new(); nx, ny = 48, 60
+    x0, x1, y0, y1 = HX - 0.48, HX + 0.48, HIP.y - 1.18, HIP.y - 0.30   # legs only: the hands rest on his belly above it
     H = {}
     for i in range(nx + 1):
         for j in range(ny + 1):
             x = x0 + (x1 - x0) * i / nx; y = y0 + (y1 - y0) * j / ny; z = MATT_Z + 0.012
             o_ = V((x, y, 2.0))
-            for _ in range(4):
+            for _ in range(16):
                 hit, loc, nrm, idx, ob, M = sc.ray_cast(dg, o_, V((0, 0, -1)))
                 if not hit: break
                 if ob.name.startswith(S + ".") or ob.name == S:
-                    z = max(z, loc.z + 0.022); break
+                    z = max(z, loc.z + 0.035); break
                 o_ = loc - V((0, 0, 0.001))
             H[i, j] = z
+    for _ in range(2):     # dilate: cover what lies between the samples (toes, shoe tips)
+        H = {(i, j): max([H[k] for k in ((i, j), (i - 1, j), (i + 1, j), (i, j - 1), (i, j + 1)) if k in H]) for (i, j) in H}
     for _ in range(6):     # relax into soft folds
         H2 = dict(H)
         for (i, j), z in H.items():
@@ -503,27 +515,41 @@ print('BLANKET', D['Blanket'].location, len(D['Blanket'].data.vertices))
 def oxygen_mask():
     """cup built from the singer's own face (nose + mouth region), pushed out into a dome: fits the face exactly"""
     body = D[S + ".body"]; C = V((0.0, -0.150, 1.625))
-    D[S].data.pose_position = 'REST'; bpy.context.view_layer.update()
+    # built on the face AS POSED in the hospital (the lower face follows the neck/jaw, not only the head bone),
+    # then expressed in the head bone's rest frame so a Child Of (identity at rest) carries it exactly
+    sc.frame_set(CUT); bpy.context.view_layer.update()
     ev = body.evaluated_get(bpy.context.evaluated_depsgraph_get()); me0 = ev.to_mesh().copy()
-    D[S].data.pose_position = 'POSE'; bpy.context.view_layer.update()
-    MW = body.matrix_world; MN = MW.to_3x3().inverted().transposed()
+    MW = (D[S].matrix_world @ RIG[S].rest("head")) @ (D[S].matrix_world @ D[S].pose.bones["head"].matrix).inverted() @ body.matrix_world
+    MN = MW.to_3x3().inverted().transposed()
+    from mathutils.bvhtree import BVHTree
+    _bm = bmesh.new(); _bm.from_mesh(me0); _bm.transform(MW); _bvh = BVHTree.FromBMesh(_bm); _bm.free()
     WC = {v.index: MW @ v.co for v in me0.vertices}; WN = {v.index: (MN @ v.normal).normalized() for v in me0.vertices}
-    sel = {}
-    for v in me0.vertices:
-        d = WC[v.index] - C; r2 = (d.x / 0.046) ** 2 + (d.z / 0.050) ** 2
-        if r2 < 1.0 and WC[v.index].y < C.y + 0.05 and WN[v.index].y < -0.25: sel[v.index] = r2
-    bm = bmesh.new(); vmap = {}
-    for i, r2 in sel.items():
-        v = me0.vertices[i]; off = 0.006 + 0.020 * (1 - r2) ** 0.7
-        vmap[i] = bm.verts.new(WC[i] + WN[i] * off + V((0, -0.006, 0)) * (1 - r2))
-    for p in me0.polygons:
-        if all(i in vmap for i in p.vertices): bm.faces.new([vmap[i] for i in p.vertices])
+    # clean grid cap (no filled holes): directions from Ce inside an elliptical cone; radius = smooth ellipsoid,
+    # but always 6 mm (rim) .. 18 mm (centre) outside the widest skin in that direction
+    Ce = V((0.0, -0.095, 1.622)); bm = bmesh.new(); G = {}; N_ = 36
+    for i in range(N_ + 1):
+        for j in range(N_ + 1):
+            a_ = -1 + 2 * i / N_; b_ = -1 + 2 * j / N_; r2 = a_ * a_ + b_ * b_
+            if r2 > 1.0: continue
+            dirv = V((0.58 * a_, -1.0, 0.62 * b_ - 0.02)).normalized()
+            k = 1.0 / math.sqrt((dirv.x / 0.060) ** 2 + (dirv.y / 0.100) ** 2 + (dirv.z / 0.064) ** 2)
+            r_skin = 0.0
+            for jx in (-0.006, 0.0, 0.006):
+                for jz in (-0.006, 0.0, 0.006):
+                    dj = (dirv + V((jx, 0, jz)) / 0.12).normalized(); hit = _bvh.ray_cast(Ce + dj * 0.4, -dj, 0.4)
+                    if hit[0] is not None: r_skin = max(r_skin, (hit[0] - Ce).length)
+            G[i, j] = bm.verts.new(Ce + dirv * max(k * (1 - 0.15 * r2), r_skin + 0.006 + 0.012 * (1 - r2)))
+    for i in range(N_):
+        for j in range(N_):
+            q = [(i, j), (i + 1, j), (i + 1, j + 1), (i, j + 1)]
+            if all(k_ in G for k_ in q): bm.faces.new([G[k_] for k_ in q])
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    vmap = G
     me = bpy.data.meshes.new("OxygenMask"); bm.to_mesh(me)
     o = bpy.data.objects.new("OxygenMask", me); sc.collection.objects.link(o)
-    o.modifiers.new("Sm", 'SMOOTH').iterations = 6
     so = o.modifiers.new("Sol", 'SOLIDIFY'); so.thickness = 0.0025; so.offset = 1
     o.modifiers.new("Sub", 'SUBSURF').levels = 1
-    m = soft_mat("M_OxyMask", (0.80, 0.93, 0.88), rough=0.25)
+    m = soft_mat("M_OxyMask", (0.72, 0.92, 0.84), rough=0.25)
     Pn = m.node_tree.nodes["Principled BSDF"]; Pn.inputs["Alpha"].default_value = 0.82
     me.materials.append(m)
     for p in me.polygons: p.use_smooth = True
@@ -539,10 +565,10 @@ def oxygen_mask():
         s2.bezier_points.add(len(q) - 1)
         for bp, p in zip(s2.bezier_points, q): bp.co = p; bp.handle_left_type = bp.handle_right_type = 'AUTO'
     st = bpy.data.objects.new("OxyStrap", cs); sc.collection.objects.link(st); cs.materials.append(soft_mat("M_Strap", (0.9, 0.95, 0.95), 0.5))
-    for ob in (o, t, st):
-        ob.parent = D[S]; ob.parent_type = 'BONE'; ob.parent_bone = "head"
-        hb = D[S].pose.bones["head"]
-        ob.matrix_parent_inverse = (D[S].matrix_world @ RIG[S].rest("head") @ Matrix.Translation(V((0, hb.length, 0)))).inverted()
+    bpy.data.objects.remove(st, do_unlink=True)   # strap hidden by the hair in reality; a free-floating strand read as a rod
+    for ob in (o, t):     # Child Of the head bone (a prop, not a rig child), identity at rest
+        c = ob.constraints.new('CHILD_OF'); c.target = D[S]; c.subtarget = "head"
+        c.inverse_matrix = (D[S].matrix_world @ RIG[S].rest("head")).inverted()
         for f, hid in ((1, True), (CUT, False)):
             ob.hide_render = ob.hide_viewport = hid; ob.keyframe_insert("hide_render", frame=f); ob.keyframe_insert("hide_viewport", frame=f)
     print("MASK verts", len(vmap)); bpy.data.meshes.remove(me0)

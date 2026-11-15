@@ -33,11 +33,11 @@ for name, f0, f1, c0, c1, t0, t1, lens, cu in SH:
     cam = bpy.data.objects.new(name, cd); c.objects.link(cam); cam.rotation_mode = 'XYZ'
     keys = [(f0, V(c0), t0), (f1, V(c1), t1)]
     for f, p, t in keys:
-        tgt = head_at(f) if t == "HEAD" else V(t)
+        tgt = head_at(f) if t == "HEAD" else (head_at(f) + V((0, 0, 0.05)) if t == "HEAD+" else V(t))
         cam.location = p; cam.rotation_euler = (tgt - p).to_track_quat('-Z', 'Y').to_euler()
         cam.keyframe_insert("location", frame=f); cam.keyframe_insert("rotation_euler", frame=f)
     if cu:   # mid key keeps the head framed while it moves
-        fm = (f0 + f1) // 2; tgt = head_at(fm); p = V(c0).lerp(V(c1), 0.5)
+        fm = (f0 + f1) // 2; tgt = head_at(fm) + V((0, 0, 0.05 if t0 == "HEAD+" else 0)); p = V(c0).lerp(V(c1), 0.5)
         cam.location = p; cam.rotation_euler = (tgt - p).to_track_quat('-Z', 'Y').to_euler()
         cam.keyframe_insert("location", frame=fm); cam.keyframe_insert("rotation_euler", frame=fm)
         L = bpy.data.objects.new(name + "_catch", bpy.data.lights.new(name + "_catch", 'POINT')); L.data.energy = 4.0; L.data.shadow_soft_size = 0.03

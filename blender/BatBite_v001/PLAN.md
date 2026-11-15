@@ -14,8 +14,8 @@ VO beat, so Phase 2 can shift and trim blocks to the VO frames without stretchin
 | | | **S02** 80–150 bat lands | bat drops onto the deck right-front of the singer, small bounce, lies belly-down, wings flat | low front-left over the stage edge, drum kit (bass-drum **logo**) behind |
 | | | **S03** 150–300 notices | singer finishes the line, head turns down to the bat | medium front-right, slow push |
 | 2. He picks it up and bites it, thinking it's a toy | 300–620 | **S04** 300–410 | lets go of the stand, two steps toward it, starts to crouch | 3/4 front-right medium-wide |
-| | | **S05** 410–470 grabs | deep crouch, right hand closes on the bat's lower body (`grip_object`, wrap; the bat is baked to the IK hand every frame from here on) | low front-right, face visible |
-| | | **S06** 470–620 rises | stands up holding it at chest height, looks down at it, turns it | medium front-right, push-in |
+| | | **S05** 410–470 grabs | deep crouch, right hand reaches the bat's lower body and closes (`grip_object` + wrap_grip; the bat is baked to the IK hand every frame from here on). **Edit plan:** use 410–444 (the reach) and cut to S06 at 506, so the finger-contact frames 445–505 are not shown. | low front-right, face visible |
+| | | **S06** 470–620 (used from 506) rises | stands up holding it at chest height, looks down at it, turns it | medium front-right, push-in |
 | | 620–960 | **S07** 620–700 to the mouth | lifts it to his face, jaw opens | close-up 3/4 left |
 | | | **S08** 700–860 bite | bat's head between his lips, jaw closes on it, playful head shakes; hand holds the bat from below (lower body), fingers clear of the face | close-up front, slightly left |
 | | | **S09** 860–960 bite front | same bite, straight-on (reference frames 9–12) | close-up front |
@@ -31,14 +31,25 @@ hung from the top truss (≥15% of frame width in S01, flat to camera, f-stop ir
 
 ## Risky shots and the simplest safe staging used
 - **Generic singer, no likeness:** MPFB generic male, long dark-blond hair, black tee + black jeans + black shoes. No tattoos, no costume details of the real person.
-- **Bat in the fingers:** one grip only (right hand, wrap round the bat's lower body, solved by `grip_object`), reach error at the grab 0.0 mm; the bat is baked to the IK hand every frame while held, so it can't float. The landing spot is computed from the crouch pose so the hand really reaches it.
+- **Bat in the fingers:** one grip only (right hand, wrap round the bat's lower body, solved by `grip_object`); every hand target is clamped to the arm's reach and IK error is 0 mm on every held frame; the bat is baked to the IK hand every frame while held, so it can't float. The landing spot is computed from the crouch pose so the hand really reaches it.
 - **Bite at the mouth, not into the face:** the bat's head goes 8–12 mm between the lips along the face direction; the hand holds the bat from below by its lower body (~10 cm from the face) so no finger touches the face.
 - **Blood light:** one thin red streak from the right lip corner (3 mm wide, 3 cm long), carried by the jaw, shrink-wrapped to the skin. No drips, no spray, no puddle (the reference's floor blood is dropped).
-- **Oxygen-mask fit:** the mask cup is built from the singer's own face mesh (nose + mouth region pushed out into a dome, 6–26 mm off the skin) and carried by the head bone, so it can't slide off; tube and strap carried by the head too. Jaw closed in the hospital.
-- **Hospital hands:** syringe on a tray instead of in the doctor's hand (the grip didn't read cleanly; simplify rule).
+- **Oxygen-mask fit:** a smooth cup computed from the singer's posed face (6 mm off the skin at the rim, 18 mm at the centre, from ray casts), Child Of the head bone so it can't slide; tube carried the same way; no strap (hidden by the hair; a free strap read as a rod). Head and jaw held still in the hospital (breathing in the spine only).
+- **Hospital hands:** syringe and vial on a steel tray cart instead of in the doctor's hand (simplify rule); the patient's hands rest on his belly above the blanket.
+
+## Contact checks (director rule, Nov 15)
+- First, middle and last frame of every shot at 540×960, Cycles 8: `review/P1_stills_3perShot_540x960.jpg` (45 frames, 9 per row = 3 shots per row).
+- `body_prop_cross.py` (step 3, every frame range, props Bat, MicStand, OxygenMask, OxyTube, Blanket, Wedge, Bed; all 5 rigs):
+  `review/P1_body_prop_cross.json` + `review/P1_body_prop_cross_summary.txt`.
+  - **0** visible crossings: mic stand, oxygen mask + tube, blanket, wedge pillow, bed (whole film), doctor, fans.
+  - **Bat, still listed:**
+    - 445–466 ring/little fingers + 484–505 forearm/thigh while the hand closes and rises → **cut out in the edit** (S05 410–444, S06 from 506).
+    - 709–901 lips (oris) on the bat's head = the bite itself (head 8 mm between the lips). Intended contact.
+    - single frames 670, 736, 871–877, 976: index/thumb root a few mm into the bat's fur in the fist.
+- Fixes made because of these checks: no hand on the mic stand (thumb crossed the shaft); he steps back and sideways before turning (his head passed through the mic, 322–361); every IK hand target is clamped to the arm's reach (the bat floated up to 22 cm off the hand at 480–495); the rise lifts the bat straight up first (it passed through his thighs); the raise to the mouth stays 40+ cm out (it passed through his chest/shoulder 640–670); bat legs curl while held; fingers stay closed until the release; bat lands/drops clear of the stand base and his shoes; blanket covers the legs only, draped from ray hits with a dilation pass; legs/heels raised clear of the mattress; oxygen mask rebuilt as a clean grid cap 6–18 mm off the posed face, Child Of the head bone (the hole-filled version cut through the lips).
 
 ## Built so far (Phase 1)
-- `scripts/01_chars.py` … `06_cams.py`, `build_all.sh` (see below for the asset note), still sheet `review/P1_stills_540x960.jpg` (one mid frame per shot, Cycles 8 samples, after `anim_look.py`).
+- `scripts/01_chars.py` … `06_cams.py`, `build_all.sh` (see below for the asset note); 3-frame still sheet (see above).
 - Characters: eye fix applied to every EnhancedEye group; elbow IK limit opened to −40° per character; `add_hand_limits`; relaxed hands via `hand_poses` presets; all clothes non-skin colours.
 - Checked first and last frame of every shot at 270×480: no lens blockers within 1 m, heads in frame, eyes readable.
 

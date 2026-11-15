@@ -10,7 +10,7 @@ for k in ("date","time","render_time","camera","lens","scene","filename","memory
 mk = sorted(sc.timeline_markers, key=lambda m: m.frame)
 for i, m in enumerate(mk):
     f0 = m.frame; f1 = (mk[i+1].frame - 1) if i + 1 < len(mk) else sc.frame_end
-    frames = [(f0 + f1) // 2] if MODE == "mid" else [f0, f1]
+    frames = [(f0 + f1) // 2] if MODE == "mid" else ([f0, (f0 + f1) // 2, f1] if MODE == "three" else [f0, f1])
     for f in frames:
         sc.frame_set(f); sc.camera = m.camera
         sc.render.filepath = os.path.join(OUT, "%s_%04d.jpg" % (m.name, f)); bpy.ops.render.render(write_still=True)
