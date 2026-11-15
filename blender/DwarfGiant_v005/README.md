@@ -1,8 +1,8 @@
-# DwarfGiant_v004: fixes from watching the moving preview
+# DwarfGiant_v005: restaged with clean cuts (director review of v004)
 
 This is the same film, timeline and story-beat frames as v002 (`beats.json` is unchanged), with the client's acting notes of Nov 12 applied. Nothing else was changed: same look, same package rules.
 
-- `DwarfGiant_v004_60fps.blend`: 92.6 MB, packed and compressed, a normal git file. Settings are in SETTINGS.md.
+- `DwarfGiant_v005_60fps.blend`: 92.6 MB, packed and compressed, a normal git file. Settings are in SETTINGS.md.
 - Review files are in `../DwarfGiant_v001/review/`:
   - `ACT_before_v002_0p5s.jpg` and `ACT_after_v003_0p5s.jpg`: half-second sheets.
   - `ACTING_notes.md`: every problem found, with its frames and fix.
@@ -21,6 +21,19 @@ This is the same film, timeline and story-beat frames as v002 (`beats.json` is u
 - **Surgeons:** they hold a sterile hand pose, and Surgeon 1 lays a hand on the drape at the patient's shoulder. The nurse tucks the blanket with both hands.
 - **Young and old selves:** they breathe and look at each other.
 - **Camera:** it no longer goes inside the desk, the x-ray head, the lying head (now entered through the forehead), an officer's body or the bed rail. There are no wall-filled, shoe-filled or tile-only frames; the wall fly-through opens just before the camera reaches it.
+
+## v005 changes (director review of v004)
+Story-beat frames are unchanged and no VO is added. The film is now a series of shots joined by **clean cuts**, so the camera no longer flies into heads, walls or windows. The preview is `review/preview.mp4`, rendered from this exact file.
+
+Shots: office 1–150 | brain inset 151–240 | office, growth 241–812 | mirror 813–874 | office, second beat 875–1240 | his-eyes POV 1241–1365 | ear-cup medium shot 1366–1481 | theatre 1482–1640 | surgeons at the head of the bed 1641–1716 | patient and nurse 1717–1940 | cemetery and ending 1941–2340.
+
+- **x-ray:** no see-through body in either beat. The real man is shown, and the spine and hormone stream are gone.
+- **Brain:** one 1.5 s brain inset on a neutral card (151–240, f/22, sharp). There is no surgical brain macro and no tweezers without a hand.
+- **Ear cup:** a medium shot with his hand at his own ear.
+- **Growth:** full-body framing with his face (690–812), instead of leg and arm macros.
+- **Arms:** the hero's hanging arms are closer to his sides (no 30° A-pose).
+- **POV:** no blurred-vision POV.
+- **Cuts instead of pans:** the empty ceiling and wall pans (1366, 1461–1491), the theatre lamp and window crane (1941–1996) and the fly into the patient's head (1621–1646) are all replaced by cuts.
 
 ## v004 changes (moving preview of v003b, watched page by page)
 Story-beat frames are unchanged and no VO is added. The preview is `review/preview.mp4` (every 5th frame, 12 fps, real speed), rendered from this exact file.
