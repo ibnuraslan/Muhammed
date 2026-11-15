@@ -21,8 +21,28 @@ The ending close-up of his face (55.72–58.0 s) is kept as it was.
 ## Build chain
 `03_animate.py` → `pipeline/anim_look.py` → `05_look_tune.py` → `06_pov_split.py` (the head split now runs only with `pov`; v009 does not use it) → `04_package.py` → `08_camera.py` (cut list, re-keys `CAM_Film` on the packaged file).
 
+## Fixes after the first v009 build (v009b)
+- Handset: it went into the jaw. The wrist target now sits in front of the mouth.
+- Hands at the step-over, the radio and the alarm beat: they hung in mid-air at the headrests. They now hold the sides of the seat backs.
+- Haul and post-haul hands: they went into the body. The targets are now in front of or beside the torso.
+- Captain's elbows and the seated grips: elbows sank into the sides. The arms are opened and the grips widened.
+- Camera:
+  - The step-over shot is aimed higher.
+  - The rear shot at 23.5 s is split, with a new high front shot from 24.9 to 25.82 s.
+  - The FO-on-floor shot runs from 51.1 to 52.48 s.
+  - The cut list is now 36 shots.
+
 ## Checks on the packaged file
-(pending: running on this package)
+All checks were run on the pushed package, md5 0118f628.
+- `cam_dist_check` (`review/camdist_v009.json`): 36 shots, none longer than 2.5 s. The closest flags are YOU at 2086 (11.77 s and the 55.72 s close-up, where the face fills the frame by design) and the FO at 174 (13.27–23.47 s, lying on the floor at the doorway).
+- `clip_scan` (`review/clip_scan_v009.json`): one bad range, frames 1429–1435 (about 23.8 s).
+- `limb_check` (`review/limb_v009.json`): 232 ARMBODY and 38 PROPHEAD flags. Most ARMBODY flags come from the check counting shoulder and clavicle groups as torso, so the upper-arm root always reads as "in the body". PROPHEAD is the hanging oxygen drops touching seated passengers' heads (2–8 points).
+- Self-clip probe at the fixed frames 757, 1033, 1063, 1147, 1219 and 1279: clean.
+- `qa_check`: still running on this package at the time of this commit.
 
 ## Open
-(pending)
+- At 25.5 s (frame 1531), YOU's right hand touches his hip, about 4.7 cm.
+- No conscious passenger kneels beside the FO. The FO is shown face up at medium distance, but the crouch-and-check beat is played by YOU beside the captain.
+- In the window view at 46–48 s, a flat green terrain patch is visible below the horizon.
+- In the face shot at 47.8–49.56 s, YOU's forearms read as crossed over the panel.
+- The dark eyes in the final close-up are preview noise at 270×480.
