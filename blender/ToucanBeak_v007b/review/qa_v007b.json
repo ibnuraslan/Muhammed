@@ -2775,13 +2775,19 @@
   "986": [
    [
     "CAMJUMP",
-    "cut: 1.94 m, 76 deg in one frame (neighbours 0.00 m, 0 deg)"
+    "cut: 1.94 m, 76 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "1061": [
+   [
+    "CAMJUMP",
+    "cut: 0.91 m, 74 deg in one frame (neighbours 0.01 m, 0 deg)"
    ]
   ],
   "1086": [
    [
     "CAMJUMP",
-    "cut: 3.54 m, 26 deg in one frame (neighbours 0.01 m, 0 deg)"
+    "cut: 4.36 m, 105 deg in one frame (neighbours 0.01 m, 0 deg)"
    ]
   ],
   "1522": [
@@ -2867,7 +2873,7 @@
   "EMPTY": 338,
   "INSIDE": 33,
   "FILL": 5,
-  "CAMJUMP": 8,
+  "CAMJUMP": 9,
   "PROPMOVE": 236
  }
 }

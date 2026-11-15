@@ -1080,6 +1080,19 @@ for n_ in range(670, 1100):
 # the void display is not used during the screen close-up: park it far away
 for n_ in range(736, 846):
     VROOT.location = (0, 0, -200); VROOT.keyframe_insert("location", frame=n_)
+# ---- v007b+: the printer shot ends on the printed beak shown hollow (cutaway shell + lattice on the bed), 1061-1085
+ev(1060); _pr = OB["Printing_beak"]; _gl, _gq, _gs = _pr.parent.matrix_world.decompose()
+_Mp = Matrix.LocRotScale(_gl, _gq, Vector((_gs.x, _gs.y, _gs.x))) @ _pr.matrix_parent_inverse @ _pr.matrix_basis   # full-height print
+HOLLOW_ON_BED = []
+for nm_ in ("Hollow_beak", "Hollow_lattice"):
+    o_ = OB[nm_].copy(); o_.name = nm_ + "_bed"; C_ANIM.objects.link(o_); o_.animation_data_clear(); o_.parent = None
+    o_.matrix_world = _Mp                     # same UP-local mesh space as the printed beak
+    key_vis(o_, [(1, False), (1061, True), (1086, False)]); HOLLOW_ON_BED.append(o_)
+key_vis(_pr, [(1, False), (986, True), (1061, False)])
+for o_ in (noz, blk): key_vis(o_, [(1, False), (528, True), (1061, False), (1086, True), (1536, False)])   # head out of the finished-print close-up
+bpy.context.view_layer.update()
+_hb = sum((OB["Hollow_beak_bed"].matrix_world @ Vector(c) for c in OB["Hollow_beak_bed"].bound_box), Vector()) / 8
+print("HOLLOW_ON_BED at", [round(x, 3) for x in _hb])
 # ---- v007 camera: old keys re-timed, the re-staged sections replaced (NEW frame numbers)
 FACEB_SEAM = Vector((6.92, 0.2, 1.32)); AS_FACE = Vector((9.25, 1.8, 1.3))
 drop = lambda k: (120 < k[0] < 190 or 490 < k[0] < 528 or 600 < k[0] <= 1840 or 1950 <= k[0] <= 1965 or k[0] > 2190)
@@ -1098,7 +1111,9 @@ K2 = [(g(k[0]),) + tuple(k[1:]) for k in K if not drop(k)] + [
  (896, Vector((6.55, -0.5, 1.55)), Vector((6.92, 0.2, 1.3)), 40),               # gag: weighing a solid beak, frowning
  (985, Vector((6.57, -0.47, 1.55)), Vector((6.92, 0.2, 1.3)), 41),
  (986, BENCH_PT + Vector((-1.3, 0.3, 0.55)), BENCH_PT + Vector((0, 0, 0.22)), 30),   # printer: push-in while the beak builds up
- (1085, BENCH_PT + Vector((-0.85, 0.2, 0.45)), BENCH_PT + Vector((0, 0, 0.2)), 36),
+ (1060, BENCH_PT + Vector((-0.88, 0.2, 0.46)), BENCH_PT + Vector((0, 0, 0.2)), 36),
+ (1061, _hb + Vector((-0.02, 0.42, 0.13)), _hb, 44),                            # cut-in: the print is hollow (shell + lattice)
+ (1085, _hb + Vector((0.02, 0.38, 0.12)), _hb, 46),
  (1086, Vector((5.4, -0.35, 1.6)), Vector((7.0, 0.0, 1.25)), 24),                 # back on the two vets
  (1160, BEAKC + Vector((-1.0, -0.6, 0.5)), SEAM + Vector((0, 0.15, 0.1)), 28),     # pulled back: hands attached to people, hand-size
  (1210, BEAKC + Vector((-0.95, -0.7, 0.42)), SEAM + Vector((0, 0.2, 0.1)), 28),
@@ -1110,7 +1125,7 @@ K2 = [(g(k[0]),) + tuple(k[1:]) for k in K if not drop(k)] + [
  (1522, Vector((2.45, -0.52, 1.5)), HEADE + Vector((0, 0, 0.1)), 24),
  (1750, ENC + Vector((0.86, 0.45, 0.27)), HEADE, 36)]
 K2.sort(key=lambda k: k[0])
-CUTS = [1, 528, 676, 736, 846, 896, 986, 1086, 1522, END + 1]
+CUTS = [1, 528, 676, 736, 846, 896, 986, 1061, 1086, 1522, END + 1]
 _seg = []
 for a_, b_ in zip(CUTS[:-1], CUTS[1:]):
     kk = [k for k in K2 if a_ <= k[0] < b_]
