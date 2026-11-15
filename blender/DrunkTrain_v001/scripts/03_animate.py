@@ -522,10 +522,11 @@ for f in list(range(f_up1 + 2, f_fb1 + 1, 3)) + [f_fb1]:
         # right hand brings the bottle to the mouth
         mouth = LB.head + V(0, -0.11, 0.02)
         rest_p = LB.sh["R"] + V(-0.22, -0.2, -0.45)
-        up_p = mouth + V(-0.05, -0.15, -0.09)      # v006e: wrist in front of the mouth (at the mouth the elbow went up and back and tore the sleeve)
+        up_p = mouth + V(-0.04, -0.03, -0.04)      # v006e: neck tip at the REAL mouth (wrist ~22 cm out along the bottle); wrist ~12 cm in front of / below the REAL mouth (the head tips back 44 deg, so the mouth sits 17 cm behind its rest spot); elbow kept low so the sleeve does not tear
         W = rest_p.lerp(up_p, tilt)
-        d = V(0.1, -0.35, 1.0).lerp(V(0.35, 0.25, 1.0), tilt).normalized()      # bottle neck tips back to the mouth
-        LB.hand("R", f, Bm, W, d, V(1, 0, 0), pole_local=LB.el["R"] + V(-0.2, -0.45, -0.35))      # elbow low, in front of the chest
+        d = V(0.1, -0.35, 1.0).lerp(V(1.0, 0.0, 0.05), tilt).normalized()      # v006e: fingers across, toward his left
+        nn_ = V(1, 0, 0).lerp(V(0.0, 0.85, 0.53), tilt).normalized(); nn_ = (nn_ - d * nn_.dot(d)).normalized()      # v006e: the bottle neck runs along the palm normal (measured), so it points at the real mouth
+        LB.hand("R", f, Bm, W, d, nn_, pole_local=LB.el["R"] + V(-0.2, -0.45, -0.35))      # elbow low, in front of the chest
     else:
         LB.arm_dir("R", f, Bm, V(-0.35, -0.1 * sw, -0.9), 0.95)
     if f % 9 == 0:
