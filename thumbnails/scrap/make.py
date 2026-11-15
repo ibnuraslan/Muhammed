@@ -94,7 +94,7 @@ def detector(yard_path, mask_path, text=True):
     src = np.asarray(Image.open(yard_path).convert("RGB").resize((W, H), Image.LANCZOS)).astype(np.float32) / 255
     lum = src @ np.array([0.3, 0.59, 0.11], np.float32)
     lum = np.clip((lum - 0.12) / 0.75, 0, 1) ** 1.35
-    g = np.stack([lum * 0.25, lum * 1.0, lum * 0.42], -1) * 0.9 + np.array([0.0, 0.035, 0.015])  # green night-vision ramp
+    g = np.stack([lum * 0.95, lum * 0.86, lum * 0.62], -1) * 0.62 + np.array([0.022, 0.019, 0.012])  # near-black, a touch warm
     yy_, xx_ = np.mgrid[0:H, 0:W]
     m = np.asarray(Image.open(mask_path).split()[-1].resize((W, H), Image.LANCZOS)).astype(np.float32) / 255
     heat = np.asarray(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(90))).astype(np.float32) / 255
@@ -113,12 +113,12 @@ def detector(yard_path, mask_path, text=True):
     field = field / max(field.max(), 1e-6)
     hits = rng.random((H, W)) < (0.00004 + 0.0028 * field ** 2.2)
     sp = np.asarray(Image.fromarray((hits * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(3)).filter(ImageFilter.GaussianBlur(0.7))).astype(np.float32) / 255
-    img = np.clip(img + sp[..., None] * np.array([0.85, 1.0, 0.9]) * 0.9, 0, 1)
+    img = np.clip(img + sp[..., None] * np.array([1.0, 0.96, 0.85]) * 0.9, 0, 1)
     # scanlines + a faint vignette
     sl = 1 - 0.06 * (np.arange(H) % 4 < 2)[:, None, None]
     yy, xx = np.mgrid[0:H, 0:W]; vg = np.clip(1.15 - 0.75 * np.sqrt(((xx - W / 2) / W) ** 2 + ((yy - H / 2) / H) ** 2), 0, 1)[..., None]
     out = Image.fromarray((np.clip(img * sl * vg, 0, 1) * 255).astype(np.uint8)).convert("RGBA")
-    d = ImageDraw.Draw(out); hg = (150, 255, 170, 255); fm = ImageFont.truetype(MONO, 34); fs = ImageFont.truetype(MONO, 26)
+    d = ImageDraw.Draw(out); hg = (236, 222, 180, 255); fm = ImageFont.truetype(MONO, 34); fs = ImageFont.truetype(MONO, 26)
     # frame corners
     L_, T = 40, 40
     for (x, y, sx, sy) in ((L_, T, 1, 1), (W - L_, T, -1, 1), (L_, H - T, 1, -1)):
@@ -136,7 +136,7 @@ def detector(yard_path, mask_path, text=True):
     bx, by = W - 440, 70
     d.text((bx, by), "DOSE RATE", font=fs, fill=hg)
     for k in range(14):
-        cc = (150, 255, 170, 255) if k < 6 else ((255, 210, 60, 255) if k < 10 else (255, 50, 40, 255))
+        cc = (236, 222, 180, 255) if k < 6 else ((255, 210, 60, 255) if k < 10 else (255, 50, 40, 255))
         d.rectangle([bx + k * 27, by + 38, bx + k * 27 + 21, by + 74], fill=cc)
     d.text((bx, by + 84), "OFF SCALE", font=fs, fill=(255, 70, 60, 255))
     if not text:
