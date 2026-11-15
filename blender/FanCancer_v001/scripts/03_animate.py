@@ -199,7 +199,7 @@ def fan_home():
     face(FR, f(36.4), brow=1.0, lid=-0.4, jaw=14)
     both = {"R": ((-0.10, -0.17, 0.93), (0.15, 0, 1), (0, 1, 0)), "L": ((0.10, -0.17, 0.93), (-0.15, 0, 1), (0, 1, 0))}   # v007: both palms on her chest, apart
     sit(fan, f(37.2), p, 0, 0.45, hands=mouthR, flex=-8, head=(-4, 6))
-    face(FR, f(37.2), brow=1.0, lid=-0.3, jaw=10, smile=0.5)
+    face(FR, f(37.3), brow=0.3, lid=0.3, jaw=5, smile=1.0)   # v010: the stunned look relaxes into a happy smile
     sit(fan, f(37.8), p, 0, 0.45, hands=mouthR, flex=-4, head=(0, -4))
 # FINALE on the ice, holding the cheque
 FIN = Vector((0.0, -12.0, 0.0))
@@ -210,7 +210,7 @@ def fan_finale():
         up = 0.04 * (i % 2)
         hd = {k: ((v[0][0], v[0][1], v[0][2] + up), v[1], v[2]) for k, v in ch.items()}
         fan.pose(f(t), p, 12 * math.sin(i), flex=-4, head=(-6, 8 * math.sin(i * 1.3)), hands=hd, hip=up * 0.5)
-        face(FR, f(t), brow=0.8, smile=1.0, jaw=12 + 6 * (i % 2))
+        face(FR, f(t), brow=0.3, lid=0.3, smile=1.0, jaw=5 + 1 * (i % 2))   # v010: happy smile, teeth showing, eyes narrowed
 fan_home(); fan_finale()
 # teleports: hold before the jump, one-frame jump
 def hold_until(A, f_hold, f_jump):
