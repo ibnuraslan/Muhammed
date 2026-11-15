@@ -137,9 +137,9 @@ def fire_material():
     m = bpy.data.materials.new("FireBlob"); n, l = nodes_of(m); n.clear()
     out = n.new('ShaderNodeOutputMaterial'); at = n.new('ShaderNodeAttribute'); at.attribute_type = 'INSTANCER'; at.attribute_name = "heat"
     ramp = n.new('ShaderNodeValToRGB'); el = ramp.color_ramp.elements
-    el[0].position = 0.0; el[0].color = (1.0, 0.92, 0.55, 1); el[1].position = 1.0; el[1].color = (0.85, 0.12, 0.02, 1)
-    mid = el.new(0.35); mid.color = (1.0, 0.5, 0.08, 1)
-    em = n.new('ShaderNodeEmission'); em.inputs['Strength'].default_value = 5.0
+    el[0].position = 0.0; el[0].color = (1.0, 0.72, 0.18, 1); el[1].position = 1.0; el[1].color = (0.55, 0.04, 0.01, 1)
+    mid = el.new(0.3); mid.color = (1.0, 0.38, 0.04, 1)
+    em = n.new('ShaderNodeEmission'); em.inputs['Strength'].default_value = 2.2
     tr = n.new('ShaderNodeBsdfTransparent'); mx = n.new('ShaderNodeMixShader')
     pw = n.new('ShaderNodeMath'); pw.operation = 'POWER'; pw.inputs[1].default_value = 2.0
     l.new(at.outputs['Fac'], ramp.inputs[0]); l.new(ramp.outputs[0], em.inputs['Color'])
@@ -553,7 +553,7 @@ for i, (c, x0, delay) in enumerate(zip(SOL, (98.6, 100.8, 102.6), (0, 8, 14))):
         p = path(f); base = V(p.x, p.y, ch.translation.z)
         return base + V(-0.20, -0.36, -0.10)
     Wt = rhand(FT)
-    for f in range(M0, M1 + 1, 2):
+    for f in list(range(M0, M1 + 1, 2)) + [M1]:
         p = path(f); key_pole(c, "R", f, V(p.x - 0.7, p.y + 0.3, 0.9))
     t.matrix_world = Matrix.Translation(Wt) @ Matrix.Rotation(R_(16), 4, 'X') @ Matrix.Translation(V(0, 0, -0.22))
     bpy.context.view_layer.update()
@@ -566,7 +566,7 @@ for i, (c, x0, delay) in enumerate(zip(SOL, (98.6, 100.8, 102.6), (0, 8, 14))):
     for n, q in fr.items():
         pb = c.o.pose.bones[n]
         for ff in (M0, M1): pb.rotation_quaternion = q; pb.keyframe_insert("rotation_quaternion", frame=ff, group=n)
-    for f in range(M0, M1 + 1, 2):
+    for f in list(range(M0, M1 + 1, 2)) + [M1]:
         Wf = rhand(f); D = Matrix.Translation(Wf - Wt)
         c.R.key_world("IK_hand.R", f, c.o.matrix_world.inverted() @ D @ c.o.matrix_world @ H0t)
         p = path(f); cyc = math.sin((p.y - y0) / 1.25 * math.pi)
@@ -636,9 +636,9 @@ for t in torches:
 for o in [o for o in bpy.data.objects if o.name.startswith(("FlameBack", "FlameL", "FlameRoof"))]:
     bpy.data.objects.remove(o, do_unlink=True)
 BF = bpy.data.collections["BarnFire"]
-fire_emitter("BarnFireBack", V(X1, 6.55, 0.0), 8.2, 0.5, 2.7, 520, 0.24, 1.1, coll_=BF)
-fire_emitter("BarnFireLeft", V(X1 - 4.05, 2.0, 0.0), 0.5, 8.5, 2.1, 420, 0.22, 1.0, coll_=BF)
-fire_emitter("BarnFireRoof", V(X1 - 2.3, 2.5, 3.35), 0.6, 8.0, 1.0, 160, 0.15, 0.8, coll_=BF)
+fire_emitter("BarnFireBack", V(X1, 6.55, 0.0), 8.2, 0.5, 2.7, 700, 0.15, 1.4, coll_=BF)
+fire_emitter("BarnFireLeft", V(X1 - 4.05, 2.0, 0.0), 0.5, 8.5, 2.1, 560, 0.14, 1.3, coll_=BF)
+fire_emitter("BarnFireRoof", V(X1 - 2.3, 2.5, 3.35), 0.6, 8.0, 1.0, 220, 0.11, 1.0, coll_=BF)
 for ng in FIRE_T:
     T = ng.nodes["T"]
     for f in (1, END_FRAME):
@@ -656,7 +656,9 @@ for i in range(16):
     pts.append(bm.verts.new((r * math.cos(a), 0, r * math.sin(a))))
 bm.faces.new(pts)
 flash = mesh_obj("MuzzleFlash", bm, [flat("FlashMat", (1, 0.9, 0.5), emit=(1, 0.85, 0.4), emit_str=25.0)], CP); flash.visible_shadow = False
-smoke_m = flat("SmokeMat", (0.88, 0.88, 0.9), rough=0.9, alpha=0.3)
+smoke_m = bpy.data.materials.new("SmokeVol"); _n, _l = nodes_of(smoke_m); _n.clear()
+_vo = _n.new('ShaderNodeOutputMaterial'); _pv = _n.new('ShaderNodeVolumePrincipled'); _pv.inputs['Density'].default_value = 4.0
+_pv.inputs['Color'].default_value = (0.9, 0.9, 0.92, 1); _l.new(_pv.outputs[0], _vo.inputs['Volume'])
 puffs = []
 for k in range(3):
     bm = bmesh.new(); bmesh.ops.create_icosphere(bm, subdivisions=2, radius=0.03)
@@ -708,7 +710,7 @@ gM = G_AIM.translation; gHead = G.world_bone("head", ST["S02"] + 20).translation
 fw = fwd_c; side = Rc @ V(1, 0, 0)
 shG = G.world_bone("upperarm01.R", ST["S01"] + 120).translation
 camera("S01", [(0, shG - fw * 0.50 - side * 0.42 + V(0, 0, 0.14), hP + fw * 2.5 + V(0, 0, -0.55)),
-               (-1, shG - fw * 0.62 - side * 0.40 + V(0, 0, 0.26), hP + fw * 2.5 + V(0, 0, -0.55))], lens=24)
+               (-1, gM - fw * 0.85 - side * 0.50 + V(0, 0, 0.30), hP * 0.42 + gM * 0.58 + V(0, 0, 0.04))], lens=24)
 camera("S02", [(0, gHead + side * -2.0 + fw * 0.9 + V(0, 0, -0.1), gHead + fw * 0.55 + V(0, 0, -0.3)),
                (-1, gHead + side * -1.85 + fw * 0.85 + V(0, 0, -0.08), gHead + fw * 0.6 + V(0, 0, -0.28))], lens=20)
 shL = G.world_bone("upperarm01.L", ST["S03"]).translation
@@ -721,8 +723,8 @@ gH4 = G.world_bone("head", ST["S04"] + 30).translation
 camera("S04", [(0, gH4 + fw * 0.85 + side * 0.65 + V(0, 0, -0.05), gH4 + V(0, 0, -0.02)),
                (-1, gH4 + fw * 0.72 + side * 0.55 + V(0, 0, -0.04), gH4 + V(0, 0, -0.02))], lens=40)
 mid5 = gM * 0.55 + hP * 0.45
-_t5 = gM * 0.4 + hP * 0.6 + V(0, 0, -0.05)
-camera("S05", [(0, gM - fw * 0.60 - side * 0.30 + V(0, 0, 0.20), _t5), (-1, gM - fw * 0.52 - side * 0.27 + V(0, 0, 0.18), _t5)], lens=30)
+_t5 = hP * 0.42 + gM * 0.58 + V(0, 0, 0.04)
+camera("S05", [(0, gM - fw * 0.88 - side * 0.50 + V(0, 0, 0.30), _t5), (-1, gM - fw * 0.82 - side * 0.50 + V(0, 0, 0.29), _t5)], lens=38)
 camera("S06", [(0, V(BX0 + 0.45, BY0 + 0.35, BZ + 1.55), V(GPOS.x, GPOS.y, BZ + 1.15)), (-1, V(BX0 + 0.55, BY0 + 0.35, BZ + 1.55), V(ledge_stand.x, ledge_stand.y, BZ + 1.15))], lens=30)
 camera("S07", [(0, V(BX0 - 3.6, -0.6, 1.3), V(BX0, -1.6, BZ + 1.6)), (-1, V(BX0 - 3.7, -0.7, 1.2), V(BX0 - 0.7, -1.7, BZ + 0.4))], lens=26)
 camera("S08", [(0, LAND_P + V(-3.0, -1.6, 1.0), LAND_P + V(0, 0, 0.9)), (-1, LAND_P + V(-2.6, -1.5, 0.75), LAND_P + V(0, 0, 0.6))], lens=26)
