@@ -169,13 +169,13 @@ for f, hr_, hl_ in ((495, (BX + 0.62, BY + 0.38, 1.02), (BX + 0.05, BY + 0.58, 0
 # 580: hits the floor (impact, slight bounce at 590), pinned at 600+
 for f, z, fl in ((578, 0.27, 92), (586, 0.31, 90), (596, 0.27, 91), (654, 0.27, 91), (700, 0.265, 91), (768, 0.265, 91)):
     bom.key_root(f, V((0.0, BY + 0.75, z)), yaw=FWD, flex=fl, side=0)
-    bom.key_spine(f, flex=-2, twist=-5, head=(-6, -34) if f < 700 else ((-6, -36) if f == 700 else (-6, -38)))   # v006e: face turned sideways toward the window side, not into the carpet
+    bom.key_spine(f, flex=-2, twist=-5, head=(-6, 34) if f < 700 else ((-6, 36) if f == 700 else (-6, 38)))   # v006f: face turned sideways toward the left-side camera, not into the carpet
     bom.key_foot("L", f, V((-0.11, BY - 0.25)), FWD, 0.03, -75); bom.key_foot("R", f, V((0.11, BY - 0.27)), FWD, 0.03, -75)
 # struggle wiggle while pinned (beat 4 end, beat 5 start), then limp (sedated ~ 720)
 for f in range(600, 721, 12):
     w = 1.0 if f < 690 else max(0.0, (720 - f) / 30)
     bom.key_root(f, V((0.0 + 0.03 * w * math.sin(f), BY + 0.75, 0.27 + 0.02 * w * abs(math.sin(f * 0.7)))), yaw=FWD + 4 * w * math.sin(f * 0.5), flex=91, side=6 * w * math.sin(f * 0.9))
-    bom.key_spine(f, flex=-2 + 4 * w * math.sin(f * 0.3), twist=-5 + 8 * w * math.sin(f * 0.6), head=(-6, -34 - 4 * (1 - w)))
+    bom.key_spine(f, flex=-2 + 4 * w * math.sin(f * 0.3), twist=-5 + 8 * w * math.sin(f * 0.6), head=(-6, 34 + 4 * (1 - w)))
 # arms when pinned: left arm twisted behind his back (held by PaxB), right arm out forward on the floor (held by attendant / injected)
 for f in (582, 654, 720, 768, 830, 1068):
     hand(bom, "L", f, V((-0.30, BY + 0.55, 0.08)), (0, -1, 0), (0, 0, -1), pole=(-0.6, BY + 0.9, 0.4), grip=0.3)
@@ -183,7 +183,7 @@ for f in (582, 654, 720, 768, 830, 1068):
 # after sedation he lies still; tiny breathing
 for f in range(780, 1069, 30):
     bom.key_root(f, V((0.0, BY + 0.75, 0.265 + 0.004 * math.sin(f * 0.1))), yaw=FWD, flex=91, side=0)
-    bom.key_spine(f, flex=-2, twist=-5, head=(-6, -38))
+    bom.key_spine(f, flex=-2, twist=-5, head=(-6, 38))
     bom.key_foot("L", f, V((-0.11, BY - 0.25)), FWD, 0.03, -75); bom.key_foot("R", f, V((0.11, BY - 0.27)), FWD, 0.03, -75)
 print("BOMBER_DONE")
 
@@ -413,14 +413,10 @@ for f, flex, sp, crouch, hd in ((1393, 0, 10, 0.0, (25, 0)), (1420, 0, 18, 0.03,
     trav.key_root(f, V((TP.x, TP.y + (-0.35 if 1460 <= f <= 1485 else 0.05 if f >= 1455 else 0), trav.root_head.z - 0.02 - crouch)), yaw=FWD, flex=flex)   # v006d: hips back in the squat (his face was in the tray)
     trav.key_spine(f, flex=sp, head=hd)
     trav.key_foot("L", f, trav.foot_xy("L", TP, FWD), FWD)
-# v006e (director): he KNEELS on the floor beside the belt -- both knees down, shins back, the sneaker beside his right knee,
-# picks it up and reaches into the tray; nothing of him passes the belt (knees stop ~27 cm short of it)
-TK = V((TP.x - 0.22, TP.y - 0.05, 0))
-for f, sp, tw, sd, rz, hd in ((1468, 30, 0, 0, 0.55, (-25, 0)), (1478, 72, -12, 18, 0.46, (-15, 0)), (1484, 64, -8, 12, 0.48, (-10, 0)),
-                              (1494, 22, 15, 0, 0.55, (0, 10)), (1508, 16, 18, 0, 0.55, (5, 12)), (1518, 12, 12, 0, 0.55, (8, 8))):
-    trav.key_root(f, V((TK.x, TK.y, rz)), yaw=FWD, flex=12)
-    trav.key_spine(f, flex=sp, twist=-tw, side=sd, head=hd)   # 1478: bends forward and to his right so the hand reaches the heel on the floor
-    trav.key_foot("L", f, V((TK.x - 0.12, TK.y - 0.35)), FWD, 0.02, -65); trav.key_foot("R", f, V((TK.x + 0.13, TK.y - 0.33)), FWD, 0.02, -65)
+# v006f (director): no kneel and no hand carry -- after he steps out of the sneaker the film cuts to the tray
+# (both sneakers in it) riding toward the X-ray, then back to him standing in his socks
+for f in (1468, 1500, 1527):
+    stand(trav, f, TP, FWD, spine=(8, 0, 0), head=(20, 0), feet=False)
 # right foot: steps back out of the sneaker (1425-1445; the sneaker stays on the floor), then plants beside it
 RF0 = trav.foot_xy("R", TP, FWD)
 for f, dy, lift, pitch in ((1393, 0, 0, 0), (1425, 0, 0, 0), (1435, -0.10, 0.04, 20), (1445, -0.22, 0.0, 0), (1455, -0.22, 0.0, 0), (1535, -0.22, 0.0, 0)):
@@ -440,14 +436,9 @@ SHOE_PICK = V((trf.x + 0.02, trf.y - 0.04, 0.19))
 hand(trav, "R", 1393, TP + V((0.29, 0.10, 0.95)), (0, 0.3, -1), (-1, 0, 0), grip=0.3)
 hand(trav, "L", 1393, TP + V((-0.29, 0.10, 0.95)), (0, 0.3, -1), (1, 0, 0), grip=0.3)
 hand(trav, "L", 1440, TP + V((-0.12, 0.42, 0.82)), (0, 1, -0.5), (0, 0, -1), grip=0.3)          # steadies on the belt edge
-hand(trav, "L", 1480, V((TK.x - 0.10, TK.y + 0.25, 0.62)), (0, 1, -0.5), (0, 0, -1), grip=0.3)     # on his thigh in the kneel
-hand(trav, "L", 1518, V((TK.x - 0.10, TK.y + 0.25, 0.62)), (0, 1, -0.5), (0, 0, -1), grip=0.3)
-hand(trav, "R", 1455, SHOE_PICK + V((0, 0, 0.18)), (0, 0.3, -1), (-1, 0, 0), grip=0.3)
-hand(trav, "R", 1478, SHOE_PICK, (0, 0.3, -1), (-1, 0, 0), grip=0.8)
-hand(trav, "R", 1491, V((TP.x + 0.22, TP.y + 0.10, 0.92)), (0, 0.3, -1), (-1, 0, 0), grip=0.8)   # v006e: straight up first, clear of the belt side
-hand(trav, "R", 1500, V((TP.x + 0.25, TP.y + 0.42, 1.04)), (0, 0.6, -0.8), (-1, 0, 0), grip=0.8)
-hand(trav, "R", 1515, V((TP.x + 0.35, TP.y + 0.70, 1.07)), (0, 0.6, -0.8), (-1, 0, 0), grip=0.8)
-hand(trav, "R", 1520, V((TP.x + 0.36, TP.y + 0.72, 1.06)), (0, 0.6, -0.8), (-1, 0, 0), grip=0.2)
+for f in (1460, 1535):
+    hand(trav, "R", f, TP + V((0.29, 0.10, 0.95)), (0, 0.2, -1), (-1, 0, 0), grip=0.3)
+    hand(trav, "L", f, TP + V((-0.29, 0.10, 0.95)), (0, 0.2, -1), (1, 0, 0), grip=0.3)
 print("SHOE_PICK", SHOE_PICK)
 # straightens in socks, watches the tray roll into the X-ray, small shrug (1560-1620)
 for f, sp, hd in ((1560, 5, (5, 10)), (1590, 0, (0, 30)), (1620, -2, (-3, 35))):
@@ -455,7 +446,7 @@ for f, sp, hd in ((1560, 5, (5, 10)), (1590, 0, (0, 30)), (1620, -2, (-3, 35))):
     hand(trav, "R", f, TP + V((0.29, 0.10, 0.95)), (0, 0.2, -1), (-1, 0, 0), grip=0.3)
     hand(trav, "L", f, TP + V((-0.29, 0.10, 0.95)), (0, 0.2, -1), (1, 0, 0), grip=0.3)
 # tray rides the belt into the tunnel
-for f, x in ((1, -0.85), (1500, -0.85), (1530, -0.85), (1620, 1.4)):
+for f, x in ((1, -0.85), (1462, -0.85), (1620, 1.4)):   # v006f: rides from the cut at 1462
     TRAY.location = AX + V((x, 0.0, 0.80)); TRAY.keyframe_insert("location", frame=f)
 for o in bpy.data.objects:
     if o.name.startswith("Tray_") and o.name != "Tray_1":

@@ -120,30 +120,23 @@ for s, hs in (("L", "L"), ("R", "R")):
     ct.hold(trav, "foot." + s, 1, attach_rest(ts, trav, "foot." + s, 1, offs_t))
     if s == "R":
         ct.free(1441)                          # he steps out of it: it stays on the floor
-        sc.frame_set(1477); Mpick = ts.matrix_world.copy()
-        cpk = ct.hold(trav, "finger3-3.R", 1478)   # picked up by the collar
-        # v006e: follow the fingertips' position only (the wrist's IK twist swung the sneaker round his head); it hangs from the fingers
-        cpk.use_rotation_x = cpk.use_rotation_y = cpk.use_rotation_z = False
-        cpk.inverse_matrix = Matrix.Translation(-bone_w(trav, "finger3-3.R", 1478).translation) @ Mpick
-        print("PICK_GAP", (bone_w(trav, "finger3-3.R", 1478).translation - Mpick.translation))
         tray = O["Tray_1"]
         ct.hold_tray = True
-        # into the tray at 1520: then rides with the tray (tray is an object: use a park-at-tray Child Of)
-        Mt = None
-        sc.frame_set(1519); M = ts.matrix_world.copy()
-        sc.frame_set(1521); Mtr = tray.matrix_world.copy()
+        # v006f (director): no hand carry. From the cut at 1462 the sneaker is already in the tray beside the other one,
+        # riding the belt toward the X-ray (tray is an object: a park-at-tray Child Of)
+        sc.frame_set(1462); Mtr = tray.matrix_world.copy()
         c = ts.constraints.new('CHILD_OF'); c.target = tray
-        Mdrop = Matrix.Translation(Mtr.translation + V((0.08, 0.0, 0.02))) @ Matrix.Rotation(math.radians(90), 4, 'Z')
+        Mdrop = Matrix.Translation(Mtr.translation + V((0.0, 0.075, 0.02))) @ Matrix.Rotation(math.radians(90), 4, 'Z')
         c.inverse_matrix = Mtr.inverted() @ Mdrop
         o_ = ct.cons[-1]
-        o_.influence = 1.0; o_.keyframe_insert("influence", frame=1520); o_.influence = 0.0; o_.keyframe_insert("influence", frame=1521)
-        c.influence = 0.0; c.keyframe_insert("influence", frame=1520); c.influence = 1.0; c.keyframe_insert("influence", frame=1521)
+        o_.influence = 1.0; o_.keyframe_insert("influence", frame=1461); o_.influence = 0.0; o_.keyframe_insert("influence", frame=1462)
+        c.influence = 0.0; c.keyframe_insert("influence", frame=1461); c.influence = 1.0; c.keyframe_insert("influence", frame=1462)
         ct.cons.append(c)
     else:
         # left shoe: already off, sitting in the tray from the start of beat 9
         sc.frame_set(1393); tray = O["Tray_1"]; Mtr = tray.matrix_world.copy()
         c = ts.constraints.new('CHILD_OF'); c.target = tray
-        c.inverse_matrix = Mtr.inverted() @ (Matrix.Translation(Mtr.translation + V((-0.1, 0.0, 0.02))) @ Matrix.Rotation(math.radians(90), 4, 'Z'))
+        c.inverse_matrix = Mtr.inverted() @ (Matrix.Translation(Mtr.translation + V((0.0, -0.075, 0.02))) @ Matrix.Rotation(math.radians(90), 4, 'Z'))
         for o_ in ct.cons:
             o_.influence = 0.0; o_.keyframe_insert("influence", frame=1)
         c.influence = 1.0; c.keyframe_insert("influence", frame=1)
@@ -420,10 +413,10 @@ for f, ex in ((1, 0.3), (1158, 0.3), (1249, 0.0), (1392, 0.0), (1393, -1.0), (EN
     sc.view_settings.exposure = ex; sc.view_settings.keyframe_insert("exposure", frame=f)
 constant_at(sc, {1158, 1248, 1392})
 
-# v006e: the pin is shot at aisle height from the window side; the four empty seats behind that lens are struck for the cut (580-602)
+# v006f: the pin and sedation are shot at seated eye height from the left; the four empty seats behind that lens are struck for the cut (580-776)
 for o in bpy.data.objects:
-    if any(o.name.endswith(k) for k in ("_04D", "_04E", "_05D", "_05E")) or o.name == "TrayTable":
-        for f, h in ((1, False), (579, False), (580, True), (602, True), (603, False)):
+    if any(o.name.endswith(k) for k in ("_04B", "_04C", "_05B", "_05C")):
+        for f, h in ((1, False), (579, False), (580, True), (776, True), (777, False)):
             o.hide_render = h; o.keyframe_insert("hide_render", frame=f)
         constant_at(o, set(range(0, END + 1)))
 # ------------------------------------------------------------------ ONE camera
@@ -483,39 +476,28 @@ CAB = [[
     (540, P(-0.892, 1.042, 1.143), bp("Attendant", "head", 540, (0, 0, -0.1)), 28),
     (556, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 556, (0, 0, -0.1)), 28),
     (566, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 566, (0, 0, -0.1)), 28),
-    # v006e: the pin from the side at aisle height (faces of the attendant, PaxA and PaxB in profile; his face sideways toward us)
+    # v006f (director): the pin and the sedation at SEATED EYE HEIGHT from the aisle side. The four empty seats 04B/C, 05B/C
+    # behind the lens are struck for this shot (580-776). Faces: the attendant at his head, PaxA over his back, the steward
+    # kneeling opposite and facing us; the bomber's face turned sideways toward us on the carpet.
 ], [
-    # v006e-2: cut across to the window side at aisle height: the attendant and PaxA face us across his back, his face turned toward us
-    (580, V((1.10, 1.20, 1.00)), V((0.0, 1.22, 0.58)), 18),
-    (602, V((1.10, 1.20, 1.00)), V((0.0, 1.22, 0.58)), 18),
+    (580, V((-0.95, 1.30, 1.10)), V((0.25, 1.25, 0.45)), 22),
+    (680, V((-0.92, 1.30, 1.10)), V((0.25, 1.25, 0.48)), 22),
+    (776, V((-0.85, 1.32, 1.12)), V((0.22, 1.28, 0.52)), 24),
 ], [
-    # cut back before the steward walks into that side; he arrives and kneels seen from the aisle side
-    (604, V((-0.55, 1.20, 1.75)), (bp("Steward", "head", 604) + bp("Bomber", "spine01", 604)) / 2, 22),
-    (640, V((-0.55, 1.20, 1.75)), (bp("Steward", "head", 640) + bp("Bomber", "spine01", 640)) / 2, 22),   # v006c: down beside the steward, never over the aim
-    (655, V((-0.80, 1.25, 1.60)), bp("Steward", "head", 655), 28),
-    # v006d: a steady shot on the steward's face while he injects (the arm macro filled the frame with sleeves)
-    (680, V((-0.80, 1.25, 1.60)), bp("Steward", "head", 680), 28),
-    (722, V((-0.80, 1.25, 1.60)), bp("Steward", "head", 722), 28),
-    (736, V((-0.80, 1.25, 1.60)), (bp("Steward", "head", 736) + bp("Attendant", "head", 736)) / 2 + V((0, 0, -0.05)), 20),
-    (752, V((-0.80, 1.25, 1.60)), (bp("Steward", "head", 752) + bp("Attendant", "head", 752)) / 2 + V((0, 0, -0.08)), 20),
-    (769, V((-0.80, 1.25, 1.60)), bp("Attendant", "head", 769, (0, 0, -0.1)), 28),
-    (776, V((-0.80, 1.25, 1.60)), bp("Attendant", "head", 776, (0, 0, -0.1)), 28),
-    # beat 6: rise to his feet -> kneeling level -> with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
-    (852, V((-0.80, 1.25, 1.60)), bp("PaxB", "head", 852, (0, 0, -0.1)), 24),   # v006d: hold until PaxA has finished his few steps
-    (872, V((0.20, 0.70, 1.45)), bp("PaxB", "head", 872, (0, 0, -0.1)), 24),   # v006d: nobody walks the aisle now; a slow pan to PaxB at his feet
-    # v006d: her face while she pulls the shoes off (the old framing looked down on the top of her head)
-    (880, P(0.223, 0.702, 1.347), bp("PaxB", "head", 880, (0, 0, -0.1)), 22),
-    (890, P(0.223, 0.702, 1.347), bp("PaxB", "head", 890, (0, 0, -0.1)), 22),
-    (902, P(0.05, 1.089, 1.202), bp("PaxB", "head", 902, (0, 0, -0.1)), 22),
-    (920, P(0.05, 1.089, 1.202), bp("PaxB", "head", 920, (0, 0, -0.1)), 22),
-    # v006e: PaxB kneeling, face visible, the two shoes on the carpet in front of him (no leg close-ups, no dive into the sole)
-    (960, P(0.223, 0.702, 1.347), (bp("PaxB", "head", 960) * 0.6 + op("Shoe_L", 960) * 0.4), 24),
-    (1068, P(0.223, 0.702, 1.347), (bp("PaxB", "head", 1068) * 0.6 + op("Shoe_L", 1068) * 0.4), 24),
+    # beat 6: PaxA steps back to his seat (seen across the rows)
+    (778, V((-0.80, 1.25, 1.60)), bp("PaxB", "head", 852, (0, 0, -0.1)), 24),
+    (862, V((-0.80, 1.25, 1.60)), bp("PaxB", "head", 852, (0, 0, -0.1)), 24),
+], [
+    # v006f (director): PaxB from the front at kneeling-eye height in the aisle, his face as he pulls the shoes off
+    (866, V((0.15, 0.45, 0.95)), V((0.10, -0.75, 0.55)), 26),
+    (1068, V((0.14, 0.38, 0.93)), V((0.10, -0.75, 0.57)), 28),
   ]]
 # studio: out of the black, pulling back from shoe L; orbit as they split; low 3/4; pull back into the cloud wipe
 SEG2 = [   # v006e: beat 7 -- ONE cut-open shoe resting on the cabin aisle floor, slow push to the charge in the sole (1.5 s)
-    (1069, V((0.02, -2.12, 0.66)), op("Slab_Shoe_L", 1069, (0.0, -0.01, 0.0)), 34),
-    (1158, V((0.02, -2.27, 0.44)), op("Slab_Shoe_L", 1158, (0.0, 0.03, 0.0)), 40),
+    # v006f (director): on the cabin carpet with the seat legs and the aisle around it, push in to the cut sole and the cord (~1.2 s)
+    (1069, V((0.0, -1.55, 0.55)), op("Slab_Shoe_L", 1069, (0.0, 0.0, 0.0)), 30),
+    (1140, V((0.02, -2.18, 0.34)), op("Slab_Shoe_L", 1140, (0.0, 0.03, 0.0)), 40),
+    (1158, V((0.02, -2.19, 0.335)), op("Slab_Shoe_L", 1158, (0.0, 0.03, 0.0)), 40),
 ]
 # sky: from the cloud next to a cabin window, back along the wing, huge pull-out, tilt down into the deck
 SEG3 = [
@@ -531,9 +513,9 @@ SEG4 = [
     (1440, AX + V((-0.95, 0.40, 1.55)), bp("Traveller", "head", 1440, (0, 0, -0.35)), 26),
     (1459, AX + V((-0.631, 0.306, 1.315)), bp("Traveller", "head", 1459), 28),
 ], [
-    # v006e (director): the kneel, side-on at belt height from his right: knees on the floor beside the belt, sneaker by his knee, hand into the tray
-    (1462, AX + V((-0.15, -0.85, 1.0)), AX + V((-1.2, -0.40, 0.55)), 24),
-    (1527, AX + V((-0.15, -0.85, 1.0)), AX + V((-1.2, -0.40, 0.55)), 24),
+    # v006f (director): both sneakers already in the tray, riding the belt toward the X-ray (no hands)
+    (1462, AX + V((-0.95, -0.85, 1.30)), op("Tray_1", 1462, (0.0, 0.0, 0.05)), 30),
+    (1527, AX + V((-0.10, -0.85, 1.30)), op("Tray_1", 1527, (0.0, 0.0, 0.05)), 30),
 ], [
     (1529, AX + V((-1.219, 0.39, 1.492)), bp("Traveller", "head", 1529), 28),
     (1537, AX + V((-1.219, 0.39, 1.492)), bp("Traveller", "head", 1537), 28),
