@@ -1,60 +1,6 @@
 {
  "frames": {
-  "151": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "157": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "163": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "169": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "175": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "181": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "187": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "193": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "199": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "205": [
+  "247": [
    [
     "EMPTY",
     "no character in view"
@@ -1318,6 +1264,6 @@
   ]
  },
  "counts": {
-  "EMPTY": 220
+  "EMPTY": 211
  }
 }
