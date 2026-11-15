@@ -29,9 +29,11 @@ Build everything that does not depend on exact timing:
    - clothes in non-skin colours
 3. **Animate each beat's action at 1× as its own clip**, about 30% longer than you expect the beat to be, so it can be trimmed to the VO later without stretching.
 4. **Cameras for every shot.** Check the first and last frame of each one: nothing in the lens, the face readable, eyes clear.
-5. **Checkpoint P1:** push, then send the director one message with:
+5. **Before P1, check every contact:** run `pipeline/body_prop_cross.py` with every held or touched prop (glasses, cans, tools, rods, rails, seats). Look at the **first, middle and last frame of every shot** at 540×960. Nothing may cross anything: no hand through glass, no rod through a hand, no body through a wall or seat. If a contact is risky, frame the hand out or drop the prop (LESSONS §2.15).
+6. **Checkpoint P1:** push, then send the director one message with:
    - `PLAN.md`
-   - a still sheet with one 540×960 frame per shot, Cycles 8 samples
+   - a still sheet with **3 frames per shot (first, middle, last)** at 540×960, Cycles 8 samples
+   - the `body_prop_cross` result
    - anything you're unsure about
 
    Then **stop and wait for the VO**. Fix any director notes that arrive meanwhile.
