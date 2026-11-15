@@ -29,7 +29,7 @@ All checks ran on the packed file.
   - BACKHEAD at 541 (beat 4): the train hits his head as he lies across the rail.
   - BACKHEAD at 871 (beat 6): he lies face down under the halted train.
   - INSIDE at 817: a single frame under the moving train during the drag.
-- **`body_prop_cross.py`** (rails, loco, both wagons, all four wheelsets; Lad), `review/body_prop_cross_v006c.json`: BPC_RESULT
+- **`body_prop_cross.py`** (rails, loco, both wagons, all four wheelsets; Lad), `review/body_prop_cross_v006c.json`: **9 visible frames**, the same as v006b. Eight are glancing contacts with the loco underframe while he is dragged (649, 685, 688, 700, 718, 721, 724, 754). One is a toe on the rail head as he climbs over it (1192).
 - Factory-startup check: `CAM_Film`, frames 1–2070, 60 fps, f/11, 0 unpacked images.
 
 ## Known issues
