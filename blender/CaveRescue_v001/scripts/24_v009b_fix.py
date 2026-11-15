@@ -143,9 +143,12 @@ for o in bpy.data.objects:          # no bubble right in front of the lens in th
         for f, h in ((1967, False), (1968, True), (2026, True), (2027, False)):
             o.hide_render = h; o.hide_viewport = h; o.keyframe_insert("hide_render", frame=f); o.keyframe_insert("hide_viewport", frame=f)
 # v009c: DiverB hidden in the injection close-up (his leg filled the lens); +1 stop and a stronger lamp in the shot from ahead
-for o in [x for x in db.children_recursive if x.type == 'MESH']:
-    for f, h in ((1654, False), (1655, True), (1703, True), (1704, False)):
-        o.hide_render = h; o.keyframe_insert("hide_render", frame=f)
+for o in set([x for x in db.children_recursive if x.type == 'MESH'] + [x for x in bpy.data.objects if x.name.startswith("DiverB_") and x.type in ('MESH', 'CURVE')]):
+    hr, hv = o.hide_render, o.hide_viewport      # v009e: also his hoses/regulator (not parented to the rig): a grey hose crossed the medic's face
+    for f, h in ((1650, None), (1651, True), (1706, True), (1707, None)):
+        o.hide_render = hr if h is None else h; o.hide_viewport = hv if h is None else h
+        o.keyframe_insert("hide_render", frame=f); o.keyframe_insert("hide_viewport", frame=f)
+    o.hide_render, o.hide_viewport = hr, hv
 sc.view_settings.exposure = 2.2; sc.view_settings.keyframe_insert("exposure", frame=1977)
 sc.view_settings.exposure = 3.2; sc.view_settings.keyframe_insert("exposure", frame=1978); sc.view_settings.keyframe_insert("exposure", frame=2034)
 sc.view_settings.exposure = 2.2; sc.view_settings.keyframe_insert("exposure", frame=2035)

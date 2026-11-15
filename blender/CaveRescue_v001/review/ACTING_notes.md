@@ -231,3 +231,7 @@ These changes are added to `scripts/24_v009b_fix.py` and run on the v009 package
 - **Injection, 1655–1703:** the camera pulls back to 1.0 m and drops 18 cm. The aim takes the medic's head into account, so his whole head and face are in frame with the boy's face and the hand with the syringe.
 - **Headlamp:** the boy's lamp (lens and light) is off for this shot only, so there's no hotspot over his eye.
 - **Preview:** 1651–1706 re-rendered from the exact v009d package. Everything else is unchanged from v009c.
+
+## Round 11 (director review of v009d) → v009e
+- **Injection, 1651–1706:** the grey rod sweeping across the medic's face was DiverB's air hose (`DiverB_Hose`, a curve object not parented to his rig, so it stayed visible when his body was hidden). Every `DiverB_*` mesh and curve is now hidden (render and viewport) for 1651–1706.
+- **Preview:** 1651–1706 re-rendered from the exact v009e package.
