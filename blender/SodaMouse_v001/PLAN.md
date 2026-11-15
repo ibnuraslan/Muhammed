@@ -33,9 +33,8 @@ Both have:
 | S06 | …the parent company | Kitchen | CU: dead mouse on its side in the green puddle on the white plate. | High ¾ macro push-in, 60 mm f/11 | 117 |
 | S07 | [Company] argued… | Lab | Scientist behind the steel table raises his right index finger beside his shoulder as he speaks; beaker and can on the table. | MCU front ¾ push, 42 mm | 117 |
 | S08 | …that [soda]'s highly acidic formula… | Lab | Scientist pours the can (right hand) into the beaker; green stream; the level rises; bubbles. | Medium (face in frame), push, 35 mm | 156 |
-| S09 | …would actually… | Lab | Scientist tilts a steel spatula over the beaker; the mouse slides off the blade and drops into the soda. | Medium from his right, push, 35 mm | 117 |
 | S10 | …dissolve a mouse body into a… | Lab | Side macro of the beaker: the mouse sinks among fizz, shrinks and turns into a green jelly lump. No gore. | Macro push, 70 mm f/11 | 156 |
-| S11 | …"jelly-like" substance… | Lab | Scientist tips the beaker; the jelly lump slides out onto the steel tray and wobbles. | Medium ¾, push, 40 mm | 156 |
+| S11 | …"jelly-like" substance… | Lab | No hands: the jelly lump on the steel tray settles with a decaying wobble, can beside it. | Low orbit, 50 mm f/11 | 156 |
 | S12 | …before anyone could notice it in the can | Lab | CU: jelly lump wobbling on the tray, can beside it. | Low ¾ macro push, 60 mm f/11 | 156 |
 | S13 | This odd defense left consumers worrying… | Kitchen | Man holds the can at chest height, turns it and studies it, worried (head tilt, eyes on the can). | MCU push, 55 mm | 156 |
 | S14 | …what the soda really does… | Kitchen | Man sets the can down and slides it away from himself, lets go, straightens up. | Side ¾ medium, 38 mm | 117 |
@@ -57,6 +56,14 @@ Both have:
 | Mouse dissolving | Clean, non-gory: it shrinks, darkens into the green and becomes a smooth jelly lump. |
 | Grips | Can, spatula and beaker are Child Of the wrist bone from the grip frame (`grip_object`, no gap). Every hand has its arm and body in frame. |
 | Brands | Generic green can with a zig-zag graphic, no text. No real company named or shown. |
+
+## P1c/P1d changes (client and director review: no hand, prop or body through glass)
+- **S08:** the beaker stands alone, untouched. The scientist grips the can (wrap grip, 2 cm palm stand-off, thumb laid along the can) and pours by tilting it about a point 11 cm above the rim; the hand stays at least 6 cm above the rim. His left hand rests flat on the table 24 cm from the glass.
+- **S09 (spatula):** dropped. Its beat is covered by S10 (3.0 s).
+- **S10:** a wider 2 L beaker. A per-frame check keeps every mouse vertex at least 6 mm inside the liquid volume, at full size.
+- **S11:** no hands. The jelly lump has just landed on the steel tray and settles with a decaying wobble; low camera orbit.
+- **S14:** the can is released, then the hand lifts straight up clear of the can top, opens and moves back.
+- **Check:** `body_prop_cross` (props: Beaker, SodaCan, Spatula, Plate), step 1 over all 2145 frames: **0 crossings**.
 
 ## Director P1 notes (fixed in P1b)
 1. Can: opaque printed aluminium (solid green print, diagonal white zig-zags). No band that reads as a liquid level.
