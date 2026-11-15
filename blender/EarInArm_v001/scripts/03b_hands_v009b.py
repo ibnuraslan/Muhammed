@@ -185,8 +185,8 @@ apply_pose(PAT, "L", "relaxed_even", 1715, spread=0)
 def thigh_pt(s, f):
     sc.frame_set(f); a_ = PAT.matrix_world @ PAT.pose.bones["upperleg01." + s].head; k_ = PAT.matrix_world @ PAT.pose.bones["lowerleg01." + s].head
     p = a_.lerp(k_, 0.58); d = (k_ - a_); d.z = 0; d.normalize()
-    side = Vector((0, 0, 1)).cross(d) * (0.03 if s == "L" else -0.03)
-    return p + Vector((0, 0, 0.085)) + side, d
+    side = Vector((0, 0, 1)).cross(d) * (0.03 if s == "L" else 0.0)   # v009i: R on top of the thigh, not its outer side
+    return p + Vector((0, 0, 0.12)) + side, d
 for s_ in "LR":
     pb_ = PAT.pose.bones["IK_hand." + s_]
     for f in range(1661, 1771):
@@ -210,7 +210,7 @@ def ear_pose(f):
     return e, out, upv
 _pp = PAT.pose.bones["Pole_elbow.L"]; _pbn = PAT.data.bones["Pole_elbow.L"]
 sc.frame_set(1725); _pp.keyframe_insert("location", frame=1725, group=_pp.name)
-for f, back, low in ((1738, 0.1, 0.16), (1750, 0.05, 0.06), (1760, 0.048, 0.06), (1770, 0.05, 0.058)):
+for f, back, low in ((1738, 0.11, 0.16), (1750, 0.075, 0.06), (1760, 0.073, 0.06), (1770, 0.075, 0.058)):
     e, out, upv = ear_pose(f)
     bk = Vector((-out.y, out.x, 0)) if Vector((-out.y, out.x, 0)).dot(Vector((0, 1, 0))) > 0 else Vector((out.y, -out.x, 0))   # toward the back of his head
     place_hand(PAT, "L", f, e + out * back - upv * low + bk * 0.045, -out, upv, skin=0.0)   # fingertips on the ear's back half: the ear stays visible
@@ -275,7 +275,9 @@ def unclip(rig, s, f, targets, margin=0.01, it=6, cap=0.2):
         pb.location = pb.location + d_; pb.keyframe_insert("location", frame=f, group=pb.name); moved += push.length
     return moved
 def others(rig): return [lambda o=o: bvh(o) for o in (SUR, PAT, NUR) if o is not rig for o in (BODY[o],)]
-JOBS = [(SUR, "L", range(990, 1068, 3), lambda: [lambda: bvh(BODY[PAT])], 0.08), (SUR, "R", range(990, 1068, 3), lambda: [lambda: bvh(BODY[PAT])], 0.08),   # v009g: hanging hands off the patient's arm (now in the wider x-ray framing)
+JOBS = [(SUR, "L", range(120, 150, 2), lambda: [lambda: bvh(BODY[PAT])], 0.15), (SUR, "R", range(120, 150, 2), lambda: [lambda: bvh(BODY[PAT])], 0.15),   # v009i
+        (SUR, "L", range(1640, 1690, 2), lambda: [lambda: self_bvh(SUR)], 0.1), (SUR, "R", range(1640, 1690, 2), lambda: [lambda: self_bvh(SUR)], 0.1),   # v009i: stepping back from the head
+        (SUR, "L", range(990, 1068, 3), lambda: [lambda: bvh(BODY[PAT])], 0.08), (SUR, "R", range(990, 1068, 3), lambda: [lambda: bvh(BODY[PAT])], 0.08),   # v009g: hanging hands off the patient's arm (now in the wider x-ray framing)
         (SUR, "R", range(1256, 1302, 2), lambda: [lambda: self_bvh(SUR)], 0.08),   # v009f: the low ear hand stays off his own belly
         (SUR, "L", range(1268, 1300, 2), lambda: [lambda: bvh(BODY[PAT])], 0.08), (SUR, "R", range(1268, 1300, 2), lambda: [lambda: bvh(BODY[PAT])], 0.08),
         (SUR, "R", range(1336, 1378, 2), lambda: [lambda: bvh(BODY[PAT])], 0.08), (SUR, "R", range(1340, 1372, 2), lambda: [lambda: self_bvh(SUR)], 0.08),   # v009f: the ear hand stays outside the patient on its way to the head
@@ -293,11 +295,14 @@ JOBS = [(SUR, "L", range(990, 1068, 3), lambda: [lambda: bvh(BODY[PAT])], 0.08),
         (SUR, "L", range(1405, 1494, 6), lambda: others(SUR)), (SUR, "R", range(1405, 1494, 3), lambda: others(SUR), 0.035),
         (SUR, "R", range(1398, 1422, 2), lambda: others(SUR), 0.12),   # v009f: f1406 forceps hand set the ear 2 cm into the scalp
         (SUR, "L", range(139, 284, 6), lambda: others(SUR)), (SUR, "R", range(139, 284, 6), lambda: others(SUR), 0.04),
-        (PAT, "L", range(1678, 1738, 4), lambda: [lambda: self_bvh(PAT)]), (PAT, "R", range(1676, 1771, 4), lambda: [lambda: self_bvh(PAT)])]
+        (PAT, "L", range(1678, 1738, 4), lambda: [lambda: self_bvh(PAT)]), (PAT, "R", range(1676, 1771, 2), lambda: [lambda: self_bvh(PAT)])]
 for job in JOBS:
     rig, s, frs, tg = job[:4]; cap = job[4] if len(job) > 4 else 0.2
     for f in frs:
         m = unclip(rig, s, f, tg(), cap=cap); LOG.append(("unclip", rig.name, s, f, round(m, 3)))
+for s_ in "LR":   # v009i: f133, the hand on its way to the chest kept off his side with a wider margin
+    for f in range(126, 142, 2): unclip(SUR, s_, f, [bvh(BODY[PAT])], margin=0.03, cap=0.15)
+for f in range(1672, 1712, 1): unclip(PAT, "R", f, [self_bvh(PAT)], margin=0.025, cap=0.12)   # v009i: his right hand on top of the thigh
 # v009d: stitching, solved on the final pose: at every stitch key the pinch sits 10.8 cm back from the stitch along his reach,
 # so the needle holder (re-baked below along shoulder -> pinch) puts its needle on the stitch; between stitches it lifts 3 cm
 NH = OB["NeedleHolder"]

@@ -95,7 +95,8 @@ EAR_IDS = [i for i, m in enumerate(mix) if i not in HELP and m.x > 0.068 and 1.5
 for i in EAR_IDS:
     m = mix[i]; k_ = min(1.0, max(0.0, (m.x - 0.068) / 0.008))   # 0 at the scalp, 1 on the ear proper
     c_ = Vector((0.0797, -0.03, 1.665))
-    t = Vector((0.068 - 0.003 * k_ + (m.x - 0.068) * 0.03, c_.y + (m.y - c_.y) * (1 - 0.75 * k_), c_.z + (m.z - c_.z) * (1 - 0.75 * k_)))
+    _front = body.data.vertices[i].normal.x > 0.0   # v009i: front layer flat at the scalp, back layer buried 8 mm under it: every face a probe can reach faces out
+    t = Vector((0.068 - (0.001 if _front else 0.009) * k_, c_.y + (m.y - c_.y) * (1 - 0.85 * k_), c_.z + (m.z - c_.z) * (1 - 0.85 * k_)))   # v009i: a tiny stub (its folded faces read as "inside the head")
     eg.data[i].co = kb[0].data[i].co + (t - m)
 eg.value = 1.0
 EAR_C = Vector((0.0797, -0.0457, 1.6741))   # rest armature space centre of the old ear
