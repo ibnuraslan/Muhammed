@@ -221,11 +221,10 @@ ch_cl = CL.copy(); ch_cl.data = CL.data.copy(); ch_cl.animation_data_clear(); ch
 attach_bone(ch_cl, PAT, "spine02", Matrix.Translation(PIECE_REST) @ Matrix.Scale(CH_S, 4))
 for f, v in ((1, 0.0), (185, 0.0), (238, 1.0)):
     ch_cl.data.bevel_factor_end = v; ch_cl.data.keyframe_insert("bevel_factor_end", frame=f)
-for o in (ch_th, ch_pc, ch_cl): key_vis(o, 1, False); key_vis(o, 140, True)
-key_vis(ch_th, 345, False); key_vis(ch_pc, 255, False); key_vis(ch_cl, 260, False)
+for o in (ch_th, ch_pc, ch_cl): key_vis(o, 1, False)   # v009i: no x-ray chest, the inside is never shown
 ev_at(200); CHEST_PIECE_W = ch_pc.matrix_world.translation.copy(); print("CHEST_PIECE_W", CHEST_PIECE_W)
 carry = bpy.data.objects.new("Chest_Piece_Carry", CP.data); C_PROP.objects.link(carry); carry.rotation_mode = 'XYZ'
-key_vis(carry, 1, False); key_vis(carry, 255, True); key_vis(carry, 335, False)
+key_vis(carry, 1, False)   # v009i: the piece is already on the tray (insert at 156)
 for o in list(bpy.data.collections["Studio_Ribs"].objects) + list(bpy.data.collections["Studio_Tissue"].objects):
     o.hide_render = True; o.hide_viewport = True
 
@@ -248,7 +247,7 @@ def walk(P, a, b, f0, f1, yaw0, yaw1, stride=0.55):
 SA_ = Vector((0.45, -0.58)); yA = yaw_to(Vector((0.05, -0.1)) - SA_)
 ST = Vector((1.05, -0.32)); yT = 0.0   # v009d: 8 cm further from the tray (his forearms folded into his belly)
 SB_ = Vector((INC.x - 0.02, INC.y + 0.42)); yB = 0.0
-SC_ = Vector((EAR_W.x + 0.5, EAR_W.y + 0.06));   # v009e: right beside the head on the ear side (his arm passed the headrest)
+SC_ = Vector((EAR_W.x + 0.46, EAR_W.y + 0.22));   # v009i: 16 cm further back so a front-outer camera sees the ear   # v009e: right beside the head on the ear side (his arm passed the headrest)
 _old_SC = Vector((EAR_W.x + 0.42, EAR_W.y + 0.3));   # v009d: beside the head on the ear side (was behind the skull: hand hidden, cap into the head)
 _unused = Vector((EAR_W.x + 0.22, EAR_W.y + 0.5)); yC = yaw_to(EAR_W.to_2d() - Vector((EAR_W.x + 0.22, EAR_W.y + 0.5)))
 stand(SUR, 1, SA_, yA, head=(10, 0, 0)); stand(SUR, 60, SA_, yA, spine=(6, 0, 0), head=(14, 0, 0)); stand(SUR, 128, SA_, yA, spine=(14, 0, 4), head=(18, 0, 0), crouch=0.03)
@@ -352,8 +351,8 @@ ev_at(640)
 sh(566, "R", BLK + Vector((0.05, -0.04, 0.08)), (-0.6, 0.4, -0.5), (-0.2, -0.4, 1.0))
 sh(650, "R", INC + Vector((-0.07, 0.16, 0.07)), (0.2, -1, -0.5), (-0, -0.4, 1))
 sh(700, "R", INC + Vector((-0.04, 0.13, 0.05)), (0.3, -1, -0.6), (-0, -0.4, 1))
-sh(740, "R", INC + Vector((-0.06, 0.15, 0.07)), (0.3, -1, -0.6), (-0, -0.4, 1))
-sh(775, "R", INC + Vector((-0.12, 0.2, 0.12)), (0.2, -1, -0.4), (-0, -0.4, 1))
+sh(740, "R", INC + Vector((-0.04, 0.16, 0.03)), (0.3, -1, -0.6), (-0, -0.4, 1))   # v009i: stays low by the arm (the forceps came up to his face)
+sh(775, "R", INC + Vector((-0.1, 0.24, 0.0)), (0.2, -1, -0.5), (-0, -0.4, 1))
 sh(700, "L", INC + Vector((0.1, 0.11, 0.05)), (-0.4, -1, -0.6), (-0, -0.4, 1))
 sh(775, "L", INC + Vector((0.12, 0.16, 0.1)), (-0.4, -1, -0.4), (-0, -0.4, 1))
 # beat 6: reopen and lift the ear out
@@ -459,10 +458,17 @@ for f in [661] + list(range(700, 1309, 60)):
 walk(NUR, N_C, Vector((1.3, -1.35)), 1312, 1380, -150, 0, stride=0.55); walk(NUR, Vector((1.3, -1.35)), N_D, 1381, 1460, 0, -90, stride=0.55)
 for f in range(1312, 1460, 18): nurse_arms(f, swing=10 * math.sin(f * 0.21))
 stand(NUR, 1461, N_D, -90); walk(NUR, N_D, N_D + Vector((0.06, 0.08)), 1462, 1505, -90, -213, stride=0.3)
-for f in [1506] + list(range(1530, B["end"] + 1, 60)):
-    stand(NUR, f, N_D + Vector((0.06, 0.08)), -213, spine=(6, 0, 0), head=(12, 0, 0)); nurse_arms(f, fwd=40 if f < B["b9"] else 70)
-for f in range(B["b9"] + 60, B["end"], 12):   # little clap
-    nurse_arms(f, fwd=70 + (6 if (f // 12) % 2 else -2))
+for f in (1506, 1530, 1559):
+    stand(NUR, f, N_D + Vector((0.06, 0.08)), -213, spine=(6, 0, 0), head=(12, 0, 0)); nurse_arms(f, fwd=40)
+# v009i: for the ending she walks round the chair to stand at his left shoulder, beside the new ear (client: the nurse was absent)
+N_E1, N_E2, N_E = Vector((0.95, -1.25)), Vector((1.15, -0.05)), Vector((0.53, 0.04))
+_y0 = -213; _y1 = unwrap(_y0, yaw_to(N_E1 - (N_D + Vector((0.06, 0.08))))); _y2 = unwrap(_y1, yaw_to(N_E2 - N_E1)); _y3 = unwrap(_y2, yaw_to(N_E - N_E2))
+_yE = unwrap(_y3, yaw_to(Vector((0.02, -0.05)) - N_E))
+walk(NUR, N_D + Vector((0.06, 0.08)), N_E1, 1560, 1610, _y0, _y1, stride=0.55); walk(NUR, N_E1, N_E2, 1611, 1655, _y1, _y2, stride=0.55)
+walk(NUR, N_E2, N_E, 1656, 1695, _y2, _yE, stride=0.5)
+for f in range(1560, 1696, 18): nurse_arms(f, swing=10 * math.sin(f * 0.21))
+for f in (1696, 1730, B["end"]):
+    stand(NUR, f, N_E, _yE, spine=(4, 0, 0), head=(8, 0, 0)); nurse_arms(f, fwd=0)
 for s_ in "LR": HP(NUR, s_, "relaxed", 1, spread=0); HP(NUR, s_, "relaxed", 1309, spread=0)
 NUR.face(1, **N0); NUR.face(B["b9"] + 50, **N0); NUR.face(B["b9"] + 80, **SMILE)
 
@@ -534,7 +540,7 @@ TRAY_TOP = TRAY.z + 0.006
 blk.location = Vector((BLK.x, BLK.y, TRAY_TOP)); blk.rotation_euler = (0, 0, R_(90))
 for f, s_ in ((343, (1, 1, 1)), (390, (0.95, 0.95, 0.7)), (430, (0.9, 0.9, 0.42)), (468, (0.85, 0.85, 0.15))):
     blk.scale = s_; blk.keyframe_insert("scale", frame=f)
-key_vis(blk, 1, False); key_vis(blk, 335, True); key_vis(blk, 472, False)
+key_vis(blk, 1, False); key_vis(blk, 156, True); key_vis(blk, 472, False)
 key_vis(ear_real, 1, False); key_vis(ear_real, 370, True)
 ear_real.scale = (0.85, 0.85, 0.3); ear_real.keyframe_insert("scale", frame=370)
 ear_real.scale = (1, 1, 1); ear_real.keyframe_insert("scale", frame=468)
@@ -579,7 +585,7 @@ vg = patch.vertex_groups.new(name="bump")
 for v in patch.data.vertices:
     r = math.sqrt((v.co.x / 0.04) ** 2 + (v.co.y / 0.026) ** 2)
     if r < 1: vg.add([v.index], (1 - r * r) ** 1.5, 'REPLACE')
-sw = patch.modifiers.new("wrap", 'SHRINKWRAP'); sw.target = PAT.body; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.offset = 0.0012
+sw = patch.modifiers.new("wrap", 'SHRINKWRAP'); sw.target = PAT.body; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.offset = 0.0005   # v009i: smaller ledge (its edge read as a rectangle)
 dp = patch.modifiers.new("bump", 'DISPLACE'); dp.vertex_group = "bump"; dp.mid_level = 0.0; dp.direction = 'NORMAL'
 dp.strength = 0.0
 attach_m = (pr.matrix_world.inverted())  # placeholder
@@ -593,7 +599,7 @@ patch.parent = pr; patch.parent_type = 'BONE'; patch.parent_bone = "lowerarm01.L
 patch.matrix_parent_inverse = Matrix.Identity(4)
 patch.matrix_world = Mp
 patch.matrix_parent_inverse = (pr.matrix_world @ LA.matrix @ Matrix.Translation((0, LA.length, 0))).inverted() @ Mp @ patch.matrix_basis.inverted() if False else patch.matrix_parent_inverse
-key_vis(patch, 1, False); key_vis(patch, 300, True); key_vis(patch, 796, False); key_vis(patch, 1046, True)
+key_vis(patch, 1, False); key_vis(patch, 300, True)   # v009i: the bump stays (no x-ray)
 # copy the forearm's skin UVs onto the patch (nearest body vertex at the reclined pose) so it samples the skin right under it
 from mathutils.kdtree import KDTree as _KD
 ev_at(600); _dg = bpy.context.evaluated_depsgraph_get(); _pe = PAT.body.evaluated_get(_dg); _pm_ = _pe.to_mesh(); _mw = PAT.body.matrix_world
@@ -610,7 +616,7 @@ for _poly in patch.data.polygons:
         _co, _i, _d = _kd.find(_pmw @ patch.data.vertices[patch.data.loops[_li].vertex_index].co)
         _puv[_li].uv = _bm_uv.get(_i, _puv[_li].uv)
 _pe.to_mesh_clear()   # v009d: no ghost disc during the x-ray; stays to the end
-for f, s_ in ((1, 0.0), (700, 0.0), (760, 0.010), (1063, 0.010), (1110, 0.012), (1200, 0.002), (1250, 0.0)):
+for f, s_ in ((1, 0.0), (700, 0.0), (760, 0.008), (900, 0.022), (1063, 0.022), (1110, 0.018), (1200, 0.002), (1250, 0.0)):   # v009i: the ear grows into a clear bump
     dp.strength = s_; dp.keyframe_insert("strength", frame=f)
 # incision: a dark-pink slit that opens and closes
 M_SLIT = newmat("Incision", (0.45, 0.08, 0.1), 0.35, sss=0.3)

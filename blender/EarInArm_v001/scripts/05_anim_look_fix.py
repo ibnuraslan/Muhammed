@@ -46,5 +46,10 @@ if m:
     b.inputs["Base Color"].default_value = (0.82, 0.9, 0.95, 1)
     for l in list(b.inputs["Roughness"].links): m.node_tree.links.remove(l)
     b.inputs["Roughness"].default_value = 0.6
+# v009i: the cabinet glass mirrored a hard white triangle (a light) top-left in many shots: matte dark panels instead
+_cg = bpy.data.materials.new("CabGlass_Matte"); _cg.use_nodes = True; _cb = _cg.node_tree.nodes["Principled BSDF"]
+_cb.inputs["Base Color"].default_value = (0.03, 0.035, 0.04, 1); _cb.inputs["Roughness"].default_value = 0.55
+for _o in [o for o in bpy.data.objects if o.name.startswith("OR_CabGlass")]:
+    for _i in range(len(_o.data.materials)): _o.data.materials[_i] = _cg
 print("ANIMFIX_DONE")
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)

@@ -197,9 +197,28 @@ lock(PAT, "L", 1660); lock(PAT, "R", 1660)
 sc.frame_set(1664); _w = wrist(PAT, "L"); _pbP = PAT.pose.bones["IK_hand.L"]
 _d = PAT.matrix_world.inverted().to_3x3() @ Vector((-0.08, -0.04, 0.12))   # lifts off the board first
 _pbP.location = _pbP.location + PAT.data.bones["IK_hand.L"].matrix_local.to_3x3().inverted() @ _d; _pbP.keyframe_insert("location", frame=1664, group=_pbP.name)
-for s_, frames in (("L", list(range(1678, 1771, 6)) + [1770]), ("R", list(range(1676, 1771, 6)) + [1770])):
+for s_, frames in (("L", list(range(1678, 1726, 6))), ("R", list(range(1676, 1771, 6)) + [1770])):
     for f in frames:
         p, d = thigh_pt(s_, f); place_hand(PAT, s_, f, p, Vector((0, 0, -1)), d, skin=0.0)
+# v009i ending: he touches the new ear lightly with his fingertips (director). The palm sits below and outside the ear, facing
+# the head, fingers up, so the index and middle tips rest on the ear's lower half; the ear point and its outward direction come
+# from the new ear object and the head bone at each key.
+def ear_pose(f):
+    sc.frame_set(f); hb = PAT.pose.bones["head"]; hc = PAT.matrix_world @ ((hb.head + hb.tail) / 2)
+    e = EAR_NEW.matrix_world.translation.copy(); out = e - hc; out.z = 0; out.normalize()
+    upv = (PAT.matrix_world.to_3x3() @ (hb.tail - hb.head)).normalized()
+    return e, out, upv
+_pp = PAT.pose.bones["Pole_elbow.L"]; _pbn = PAT.data.bones["Pole_elbow.L"]
+sc.frame_set(1725); _pp.keyframe_insert("location", frame=1725, group=_pp.name)
+for f, back, low in ((1738, 0.1, 0.16), (1750, 0.05, 0.06), (1760, 0.048, 0.06), (1770, 0.05, 0.058)):
+    e, out, upv = ear_pose(f)
+    bk = Vector((-out.y, out.x, 0)) if Vector((-out.y, out.x, 0)).dot(Vector((0, 1, 0))) > 0 else Vector((out.y, -out.x, 0))   # toward the back of his head
+    place_hand(PAT, "L", f, e + out * back - upv * low + bk * 0.045, -out, upv, skin=0.0)   # fingertips on the ear's back half: the ear stays visible
+    shw = PAT.matrix_world @ PAT.pose.bones["upperarm01.L"].head   # elbow out and down at his side, so the forearm rises beside him
+    pole_a = PAT.matrix_world.inverted() @ (shw + out * 0.35 - upv * 0.3 + Vector((0, -0.1, 0)))
+    _pp.location = _pbn.matrix_local.to_3x3().inverted() @ (pole_a - _pbn.head_local); _pp.keyframe_insert("location", frame=f, group=_pp.name)
+apply_pose(PAT, "L", "relaxed_even", 1730, spread=0)
+for f in (1752, 1770): apply_pose(PAT, "L", "ear_touch", f, spread=0)
 apply_pose(PAT, "L", "relaxed_even", 1684, spread=0); apply_pose(PAT, "R", "relaxed_even", 1690, spread=0)
 for f in (470, 800, 1100, 1400, 1640): apply_pose(PAT, "L", "relaxed_even", f, spread=0)   # v009e: relaxed on the arm board (read as a claw)
 lock(PAT, "L", 1); lock(PAT, "L", 42)
@@ -274,7 +293,7 @@ JOBS = [(SUR, "L", range(990, 1068, 3), lambda: [lambda: bvh(BODY[PAT])], 0.08),
         (SUR, "L", range(1405, 1494, 6), lambda: others(SUR)), (SUR, "R", range(1405, 1494, 3), lambda: others(SUR), 0.035),
         (SUR, "R", range(1398, 1422, 2), lambda: others(SUR), 0.12),   # v009f: f1406 forceps hand set the ear 2 cm into the scalp
         (SUR, "L", range(139, 284, 6), lambda: others(SUR)), (SUR, "R", range(139, 284, 6), lambda: others(SUR), 0.04),
-        (PAT, "L", range(1678, 1771, 4), lambda: [lambda: self_bvh(PAT)]), (PAT, "R", range(1676, 1771, 4), lambda: [lambda: self_bvh(PAT)])]
+        (PAT, "L", range(1678, 1738, 4), lambda: [lambda: self_bvh(PAT)]), (PAT, "R", range(1676, 1771, 4), lambda: [lambda: self_bvh(PAT)])]
 for job in JOBS:
     rig, s, frs, tg = job[:4]; cap = job[4] if len(job) > 4 else 0.2
     for f in frs:
