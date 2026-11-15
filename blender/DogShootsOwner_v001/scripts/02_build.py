@@ -135,13 +135,14 @@ rbox("BenchBase", (1.5, 0.5, BZ - 0.14), (0, 0.75, (BZ - 0.14) / 2), trim, CT, 0
 rbox("RearWall", (1.7, 0.06, 1.6), (0, 1.17, 0.8), trim, CT, 0.01)
 # front seats (real model, faces +Y in the library; turn it to face -Y)
 for nm, x in (("SeatDriver", DRV.x), ("SeatPass", -DRV.x)):
-    s = dup(SEAT, nm, (x, DRV.y, 0.0), (0, 0, R_(180)), (0.84, 0.95, 0.95), CT, linked=False)
+    s = dup(SEAT, nm, (x, DRV.y + 0.06, 0.0), (0, 0, R_(180)), (0.84, 0.80, 0.95), CT, linked=False)
     s.data.materials.clear(); s.data.materials.append(beige)
 SDRV = bpy.data.objects["SeatDriver"]; bpy.context.view_layer.update()
 _sp = [SDRV.matrix_world @ v.co for v in SDRV.data.vertices]
 CUSH_Z = max(p.z for p in _sp if abs(p.x - DRV.x) < 0.1 and DRV.y - 0.25 < p.y < DRV.y + 0.05 and p.z < 0.7)
 BACK_FRONT_Y = min(p.y for p in _sp if abs(p.x - DRV.x) < 0.12 and 0.85 < p.z < 0.95)
 print("BUILD seat cushion z", round(CUSH_Z, 3), "back front y", round(BACK_FRONT_Y, 3), "zmax", round(max(p.z for p in _sp), 3), "ymin/max", round(min(p.y for p in _sp), 3), round(max(p.y for p in _sp), 3))
+SEAT_TOP = Vector((DRV.x, BACK_FRONT_Y - 0.26, CUSH_Z + 0.10))
 # side doors with window openings (lower panel + pillars, no glass in the opening)
 for sx in (-1, 1):
     rbox(f"DoorLow{sx}", (0.06, 2.4, 0.82), (0.85 * sx, -0.2, 0.41), trim, CT, 0.02)
@@ -372,8 +373,7 @@ BD = dup(BED, "HospBed", HX + Vector((0, 0.3, 0)), (0, 0, R_(180)), 1.0, CH, lin
 bpts = [BD.matrix_world @ v.co for v in BD.data.vertices]
 print("BUILD bed bbox", [round(min(p[i] for p in bpts), 2) for i in range(3)], [round(max(p[i] for p in bpts), 2) for i in range(3)])
 MAT_Z = 0.62    # mattress top (checked in stills)
-rbox("BedBlanket", (0.58, 1.25, 0.26), HX + Vector((-0.17, -0.12, MAT_Z + 0.12)), blanket, CH, 0.11)
-rbox("BedPillow", (0.62, 0.35, 0.14), HX + Vector((-0.1, 1.12, MAT_Z + 0.40)), pillow, CH, 0.06, rot=(R_(-58), 0, 0))
+rbox("BedPillow", (0.62, 0.35, 0.12), HX + Vector((-0.1, 1.24, MAT_Z + 0.44)), pillow, CH, 0.05, rot=(R_(-58), 0, 0))
 cyl("IVPole", 0.015, 1.9, HX + Vector((0.75, 1.0, 0.95)), steel, CH)
 cyl("IVBase", 0.22, 0.04, HX + Vector((0.75, 1.0, 0.02)), steel, CH)
 rbox("IVBag", (0.12, 0.04, 0.2), HX + Vector((0.75, 1.0, 1.75)), mat("IVBag", (0.9, 0.95, 1.0), 0.2, alpha=0.6), CH, 0.02)
@@ -431,7 +431,7 @@ def stand(H, rig, f, pos, yaw=0.0, head=(0, 0), flex=0.0, twist=0.0, hands=True,
 def feet_at(H, f, pos, yaw, z):
     pass
 
-def seated(H, rig, f, pos, yaw=0.0, lean=-8.0, flex=6.0, head=(0, 0), twist=0.0, knee_fwd=0.48, foot_z=0.0, legs_out=False):
+def seated(H, rig, f, pos, yaw=0.0, lean=-8.0, flex=6.0, head=(0, 0), twist=0.0, knee_fwd=0.58, foot_z=0.0, legs_out=False):
     """pos = seat-cushion top centre under the hips (world)."""
     c = Matrix.Rotation(R_(yaw), 3, 'Z')
     H.key_root(f, Vector((pos.x, pos.y, pos.z + 0.10)), yaw=yaw, flex=lean)
@@ -530,11 +530,11 @@ PRESENT = {}   # sid -> set of chars present (others are parked)
 
 # ================================================================== shots
 def shot_truck_common(f0, f1, man_head=(0, 0), man_twist=0.0, flex=6.0, wheel=True):
-    seat_top = Vector((DRV.x, BACK_FRONT_Y - 0.16, CUSH_Z + 0.03))
+    seat_top = SEAT_TOP.copy()
     seated(HOWN, OWNER, f0, seat_top, yaw=0, lean=-8, flex=flex, head=man_head, twist=man_twist)
     if wheel:
         for s, sx in (("L", 1), ("R", -1)):
-            place_hand(OWNER, s, f0, (DRV.x + 0.15 * sx, -0.98, 1.0 + 0.04), (0, -0.7, 0.4), (-sx * 0.35, 0, 1)); apply_pose(OWNER, s, "wrap_grip", f0)
+            place_hand(OWNER, s, f0, (DRV.x + 0.15 * sx, -0.950, 1.0 + 0.04), (0, -0.7, 0.4), (-sx * 0.35, 0, 1)); apply_pose(OWNER, s, "relaxed", f0)
     return seat_top
 
 def S01(f0, f1):
@@ -595,14 +595,17 @@ def S05(f0, f1):
     PRESENT["05"] = {"own", "dog"}
     fh = f0 + 30
     shot_truck_common(f0, f1)
-    seat_top = Vector((DRV.x, BACK_FRONT_Y - 0.16, CUSH_Z + 0.03))
+    seat_top = SEAT_TOP.copy()
     seated(HOWN, OWNER, fh, seat_top, lean=-8, flex=6)
     seated(HOWN, OWNER, fh + 6, seat_top, lean=-2, flex=-4, head=(-10, 0))            # jolt
     seated(HOWN, OWNER, fh + 30, seat_top, lean=-5, flex=10, head=(-6, -35), twist=-25)   # turns to look back over his left shoulder
     seated(HOWN, OWNER, f1, seat_top, lean=-5, flex=8, head=(-8, -45), twist=-32)
     for fr in (fh, fh + 6, fh + 30, f1):
-        for s, sx in (("L", 1), ("R", -1)):
-            place_hand(OWNER, s, fr, (DRV.x + 0.15 * sx, -0.98, 1.04), (0, -0.7, 0.4), (-sx * 0.35, 0, 1)); apply_pose(OWNER, s, "wrap_grip", fr)
+        place_hand(OWNER, "R", fr, (DRV.x - 0.15, -0.950, 1.04), (0, -0.7, 0.4), (0.35, 0, 1)); apply_pose(OWNER, "R", "relaxed", fr)
+    place_hand(OWNER, "L", fh, (DRV.x + 0.15, -0.950, 1.04), (0, -0.7, 0.4), (-0.35, 0, 1)); apply_pose(OWNER, "L", "relaxed", fh)
+    for fr in (fh + 18, fh + 30, f1):      # left hand goes to the hurt side (flank), palm on the jumper
+        sc.frame_set(fr)
+        place_hand(OWNER, "L", fr, SEAT_TOP + Vector((0.20, 0.02, 0.32)), (-1, 0.2, 0), (0, 0.1, -1)); apply_pose(OWNER, "L", "relaxed", fr)
     D0 = Vector((0.13 - 0.17 - 0.03, 0.70, BZ))
     for k in (0, fh - f0, fh - f0 + 8, f1 - f0):
         dog_key(f0 + k, D0, 90, dog_pose_stand(head=(-10 if k < 30 else 10, 0, -10 if k < 30 else 20), tail=10))
@@ -619,8 +622,10 @@ def S05(f0, f1):
 
 def S06(f0, f1):
     PRESENT["06"] = {"own", "dog"}
-    seat_top = Vector((DRV.x, BACK_FRONT_Y - 0.16, CUSH_Z + 0.03))
+    seat_top = SEAT_TOP.copy()
     seated(HOWN, OWNER, f0, seat_top, lean=-5, flex=8, head=(-8, -45), twist=-32)
+    place_hand(OWNER, "L", f0, SEAT_TOP + Vector((0.20, 0.02, 0.32)), (-1, 0.2, 0), (0, 0.1, -1)); apply_pose(OWNER, "L", "relaxed", f0)
+    place_hand(OWNER, "R", f0, (DRV.x - 0.15, -0.950, 1.04), (0, -0.7, 0.4), (0.35, 0, 1)); apply_pose(OWNER, "R", "relaxed", f0)
     D0 = Vector((0.13 - 0.17 - 0.03, 0.70, BZ))
     dog_key(f0, D0, 90, dog_pose_stand(head=(10, 0, 20), tail=10)); dog_key(f1, D0, 90, dog_pose_stand(head=(14, 0, 25), tail=15))
     for i, s_ in enumerate(smokes):
@@ -679,14 +684,16 @@ def S07c(f0, f1):
     c = camera("07c", 50)
     cam_key(c, f0, hitp + Vector((0.20, 0.42, 0.10)), hitp); cam_key(c, f1, hitp + Vector((0.12, 0.28, 0.06)), hitp)
 
+PHONE_CURL = float(os.environ.get('DSO_CURL', '0.6'))
 def phone_pose(f, raise_=0.0, look=(22, 0), mouth=0):
-    seat_top = Vector((DRV.x, BACK_FRONT_Y - 0.16, CUSH_Z + 0.03))
+    seat_top = SEAT_TOP.copy()
     seated(HOWN, OWNER, f, seat_top, lean=-4, flex=10, head=look)
     hp = Vector((DRV.x - 0.06, DRV.y - 0.33, seat_top.z + 0.55 + raise_))
-    place_hand(OWNER, "R", f, hp, (0.25, 0.85, -0.35), (0.25, -0.25, 0.95)); apply_pose(OWNER, "R", "cup_hold", f)
+    place_hand(OWNER, "R", f, hp, (0.25, 0.85, -0.35), (0.25, -0.25, 0.95)); apply_pose(OWNER, "R", "cup_hold", f, amount=PHONE_CURL)
     place_hand(OWNER, "L", f, seat_top + Vector((0.12, -0.27, 0.17)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "L", "relaxed", f)
     return hp
 PH = dup(PHONE, "PhoneHeld", (0, 0, 0), (0, 0, 0), 1.0, CT, linked=False)
+PH.data.transform(Matrix.Diagonal((1.0, 0.82, 1.0, 1.0)))
 scr = mat("PhoneScreen", (0.05, 0.15, 0.12), 0.2, emit=(0.25, 0.75, 0.55), ew=1.2)
 def attach_phone(f):
     sc.frame_set(f)
@@ -697,7 +704,7 @@ def attach_phone(f):
     n = d.cross(acr).normalized()
     face = (Mw @ OWNER.pose.bones["head"].head) - wh
     if n.dot(face) < 0: n = -n                      # phone on the palm side that faces his face
-    ctr = wh + d * 0.085 + n * 0.022
+    ctr = wh + d * 0.090 + n * float(os.environ.get('DSO_OFF', '0.034')) + n.cross(d).normalized() * float(os.environ.get('DSO_LAT', '0.0'))
     y_ = n.cross(d).normalized()
     R3 = Matrix((n, y_, d)).transposed()
     PH.matrix_world = Matrix.Translation(ctr) @ R3.to_4x4()
@@ -722,6 +729,8 @@ def attach_to_hand(prop, rig, side, f, along=0.085, off=0.022, toward=None, axes
     ctr = wh + d * along + n * off
     if axes == "x":
         R3 = Matrix((n, n.cross(d).normalized(), d)).transposed()
+    elif axes == "zx":
+        R3 = Matrix((d, n.cross(d).normalized(), n)).transposed()
     else:
         R3 = Matrix((d.cross(n).normalized(), d, n)).transposed()
     c = prop.constraints.new('CHILD_OF'); c.target = rig; c.subtarget = "wrist." + side
@@ -729,32 +738,95 @@ def attach_to_hand(prop, rig, side, f, along=0.085, off=0.022, toward=None, axes
     prop.matrix_basis = (Mw @ pbw.matrix).inverted() @ Matrix.Translation(ctr) @ R3.to_4x4()
     print("BUILD attach", prop.name, tuple(round(v, 3) for v in ctr))
 
+def phone_grip_shot(keys):
+    """phone fixed in front of his chest (screen toward his face); grip_object closes the right hand on it at every key,
+    then the phone is bound to the wrist (Child Of, world kept)."""
+    seat_top = SEAT_TOP.copy()
+    for fr, lk in keys:
+        seated(HOWN, OWNER, fr, seat_top, lean=-4, flex=10, head=lk)
+        place_hand(OWNER, "L", fr, seat_top + Vector((0.12, -0.27, 0.17)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "L", "relaxed", fr)
+    sc.frame_set(keys[0][0])
+    C = Vector((DRV.x - 0.08, seat_top.y - 0.34, seat_top.z + 0.47))
+    face = OWNER.matrix_world @ OWNER.pose.bones["head"].head
+    n = (face - C).normalized(); up = Vector((0, 0, 1)); L = (up - n * up.dot(n)).normalized(); y_ = L.cross(n).normalized()
+    PH.constraints.clear(); PH.matrix_world = Matrix.Translation(C) @ Matrix((n, y_, L)).transposed().to_4x4()
+    bpy.context.view_layer.update()
+    for fr, lk in keys:
+        rep_ = grip_object(OWNER, "R", fr, PH, C - n * 0.0045, n, grip="wrap")
+        print("BUILD phone grip", fr, rep_)
+    sc.frame_set(keys[0][0])
+    Mw = OWNER.matrix_world; pbw = OWNER.pose.bones["wrist.R"]
+    world = PH.matrix_world.copy()
+    c_ = PH.constraints.new('CHILD_OF'); c_.target = OWNER; c_.subtarget = "wrist.R"
+    c_.inverse_matrix = (Mw @ pbw.matrix).inverted(); PH.matrix_basis = world
+
+# phone in a dash mount by the centre vent, screen toward the driver; he taps it with his index finger
+MOUNT_C = Vector((0.16, -1.02, 1.00))
+def mount_phone():
+    face = Vector((DRV.x, SEAT_TOP.y - 0.05, SEAT_TOP.z + 0.78))
+    n = (face - MOUNT_C); n.z = 0; n.normalize()           # screen normal, horizontal toward him
+    up = Vector((0, 0, 1)); y_ = up.cross(n).normalized()
+    PH.constraints.clear(); PH.matrix_world = Matrix.Translation(MOUNT_C) @ Matrix((n, y_, up)).transposed().to_4x4()
+    # phone local X is its thin axis -> make sure the lit screen faces him: X along n
+    rbox("PhoneCradle", (0.012, 0.080, 0.120), MOUNT_C - n * 0.010, blackp_m, CT, 0.004).rotation_euler = (0, 0, math.atan2(n.y, n.x))
+    for k in (-1, 1):
+        cl = rbox(f"PhoneClamp{k}", (0.018, 0.008, 0.050), MOUNT_C + y_ * (0.037 * k) - n * 0.002, blackp_m, CT, 0.002)
+        cl.rotation_euler = (0, 0, math.atan2(n.y, n.x))
+    rbox("PhoneMountArm", (0.015, 0.015, 0.07), MOUNT_C - n * 0.02 + Vector((0, 0, -0.08)), blackp_m, CT, 0.004)
+    return n
+blackp_m = mat("MountBlack", (0.04, 0.04, 0.045), 0.45)
+def tap_pose(f, reach, look=(18, -20)):
+    """reach 0 = right hand on his thigh, 1 = index fingertip 4 mm off the screen"""
+    seat_top = SEAT_TOP.copy()
+    seated(HOWN, OWNER, f, seat_top, lean=-4, flex=10 + 6 * reach, head=look)
+    place_hand(OWNER, "L", f, seat_top + Vector((0.12, -0.27, 0.17)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "L", "relaxed", f)
+    if reach <= 0:
+        place_hand(OWNER, "R", f, seat_top + Vector((-0.12, -0.27, 0.17)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "R", "relaxed", f)
+        return
+    tip = MOUNT_C + PH_N * 0.010 + Vector((0, 0, -0.015))
+    fdir = (tip - (seat_top + Vector((-0.10, -0.2, 0.45)))).normalized()
+    palm = tip - fdir * 0.095
+    rest = seat_top + Vector((-0.12, -0.27, 0.17))
+    p_ = rest.lerp(palm, reach)
+    place_hand(OWNER, "R", f, p_, (0, 0, -1), fdir); apply_pose(OWNER, "R", "point", f)
+    if reach >= 0.99:          # correct so the measured index tip sits 4 mm in front of the screen
+        for _ in range(3):
+            sc.frame_set(f); tipw = OWNER.matrix_world @ OWNER.pose.bones["finger2-3.R"].tail
+            p_ = p_ + (tip - tipw)
+            place_hand(OWNER, "R", f, p_, (0, 0, -1), fdir); apply_pose(OWNER, "R", "point", f)
+        sc.frame_set(f); print("BUILD tap tip err mm", round(((OWNER.matrix_world @ OWNER.pose.bones["finger2-3.R"].tail) - tip).length * 1000, 1))
+
+PH_N = None
 def S08a(f0, f1):
     PRESENT["08a"] = {"own"}
-    for fr, rz in ((f0, 0.0), (f0 + 40, 0.02), (f1, 0.03)):
-        phone_pose(fr, rz)
-    attach_phone(f0)
-    c = camera("08a", 40)
-    tgt = Vector((DRV.x - 0.04, DRV.y - 0.28, 1.12))
-    cam_key(c, f0, tgt + Vector((-0.62, -0.55, 0.08)), tgt); cam_key(c, f1, tgt + Vector((-0.52, -0.45, 0.06)), tgt)
+    global PH_N
+    PH_N = mount_phone()
+    for fr, r_ in ((f0, 0.0), (f0 + 25, 0.6), (f0 + 45, 1.0), (f0 + 75, 1.0), (f1, 0.75)):
+        tap_pose(fr, r_)
+    c = camera("08a", 45)
+    sc.frame_set(f0); Hh = OWNER.matrix_world @ OWNER.pose.bones["head"].head
+    cp = Vector((-0.30, -1.15, 1.20)); d1 = (MOUNT_C - cp).normalized(); d2 = (Hh - cp).normalized()
+    tgt = cp + (d1 + d2).normalized()
+    cam_key(c, f0, cp, tgt, lens=22); cam_key(c, f1, cp + Vector((0.03, 0.03, 0)), tgt, lens=22)
 def S08b(f0, f1):
     PRESENT["08b"] = {"own"}
-    for fr, rz, lk in ((f0, 0.03, (22, 0)), (f0 + 35, 0.06, (10, 0)), (f1, 0.07, (8, 4))):
-        phone_pose(fr, rz, lk)
+    for fr, r_, lk in ((f0, 0.75, (14, -18)), (f0 + 35, 0.3, (6, -10)), (f1, 0.0, (4, -6))):
+        tap_pose(fr, r_, lk)
     c = camera("08b", 50)
-    tgt = Vector((DRV.x - 0.03, DRV.y - 0.18, 1.12))
-    cam_key(c, f0, tgt + Vector((-0.45, -0.62, -0.02)), tgt); cam_key(c, f1, tgt + Vector((-0.38, -0.52, -0.02)), tgt)
+    sc.frame_set(f0); hz = (OWNER.matrix_world @ OWNER.pose.bones["head"].head)
+    tgt = hz + Vector((0, 0, 0.04))
+    cam_key(c, f0, tgt + Vector((-0.42, -0.62, 0.06)), tgt, lens=50); cam_key(c, f1, tgt + Vector((-0.36, -0.54, 0.05)), tgt, lens=50)
 
 CLIP = dup(bpy.data.objects["Clipboard"], "ClipHeld", (0, 0, 0), (0, 0, 0), 1.0, CI, linked=False)
 bpy.ops.mesh.primitive_cube_add(size=1); GAUZE = bpy.context.active_object; GAUZE.name = "GauzePad"
-GAUZE.scale = (0.08, 0.09, 0.008); bpy.ops.object.transform_apply(scale=True)
+GAUZE.scale = (0.07, 0.07, 0.008); bpy.ops.object.transform_apply(scale=True)
 _gb = GAUZE.modifiers.new("bev", 'BEVEL'); _gb.width = 0.003; _gb.segments = 2
 GAUZE.data.materials.append(mat("Gauze", (0.97, 0.97, 0.96), 0.8)); move_to(GAUZE, CI)
 def S09(f0, f1):
     PRESENT["09"] = {"own", "ma"}
-    st = IX + Vector((0.30, 0.15, STR_Z))
-    seated(HOWN, OWNER, f0, st, yaw=90, lean=-6, flex=8, head=(10, 15), knee_fwd=0.45, foot_z=0.0)
-    seated(HOWN, OWNER, f1, st, yaw=90, lean=-6, flex=9, head=(12, 25), knee_fwd=0.45, foot_z=0.0)
+    st = IX + Vector((0.40, 0.15, STR_Z + 0.13))
+    seated(HOWN, OWNER, f0, st, yaw=90, lean=-6, flex=8, head=(10, 15), knee_fwd=0.58, foot_z=0.30)
+    seated(HOWN, OWNER, f1, st, yaw=90, lean=-6, flex=9, head=(12, 25), knee_fwd=0.58, foot_z=0.30)
     hands_lap(OWNER, f0, st, yaw=90); hands_lap(OWNER, f1, st, yaw=90)
     # medic A stands behind him (he faces +X), left hand flat on his upper back, right arm bent, hand at his own waist
     pa = IX + Vector((-0.30, 0.22, 0))
@@ -762,16 +834,16 @@ def S09(f0, f1):
         stand(HMA, MEDA, fr, pa, yaw=90, head=hd, flex=14, hands=False)
         place_hand(MEDA, "L", fr, IX + Vector((0.155, 0.27, STR_Z + 0.50 + dz)), (1, 0, 0), (0, 0.15, 1)); apply_pose(MEDA, "L", "flat_palm", fr)
         place_hand(MEDA, "R", fr, pa + Vector((0.10, -0.24, 1.02)), (0, 1, 0), (1, 0.3, -0.4)); apply_pose(MEDA, "R", "relaxed", fr)
-    attach_to_hand(GAUZE, MEDA, "L", f0, along=0.075, off=0.010, toward=IX + Vector((0.4, 0.27, STR_Z + 0.5)), axes="z")
+    attach_to_hand(GAUZE, MEDA, "L", f0, along=0.095, off=0.036, toward=IX + Vector((0.4, 0.27, STR_Z + 0.5)), axes="z")
     c = camera("09", 24)
     cam_key(c, f0, IX + Vector((0.55, -1.55, 1.55)), IX + Vector((0.0, 0.2, 1.0))); cam_key(c, f1, IX + Vector((0.45, -1.35, 1.52)), IX + Vector((0.0, 0.25, 1.0)))
 
 def S10(f0, f1):
     PRESENT["10"] = {"own", "mb"}
-    st = IX + Vector((0.30, -0.25, STR_Z))
-    seated(HOWN, OWNER, f0, st, yaw=180, lean=-6, flex=8, head=(10, 0), knee_fwd=0.45)
-    seated(HOWN, OWNER, f1, st, yaw=180, lean=-6, flex=8, head=(8, 8), knee_fwd=0.45)
-    hands_lap(OWNER, f0, st, yaw=180); hands_lap(OWNER, f1, st, yaw=180)
+    st = IX + Vector((0.30, -0.25, STR_Z + 0.06))
+    seated(HOWN, OWNER, f0, st, yaw=180, lean=-6, flex=8, head=(10, 0), legs_out=True)
+    seated(HOWN, OWNER, f1, st, yaw=180, lean=-6, flex=8, head=(8, 8), legs_out=True)
+    hands_lap(OWNER, f0, st, yaw=180, legs_out=True); hands_lap(OWNER, f1, st, yaw=180, legs_out=True)
     RZ = STR_Z + 0.10
     for H_, rg, x, yaw_, rx, hd in ():
         for fr, h2, dy in ((f0, hd, 0.0), (f1, (hd[0] + 4, -8 if x < 0 else 8), 0.02)):
@@ -786,9 +858,9 @@ def S10(f0, f1):
     for fr, hd in ((f0, (30, 0)), (f1, (32, -6))):
         stand(HMB, MEDB, fr, pb_, yaw=160, head=hd, flex=6, hands=False)
         c3 = Matrix.Rotation(R_(160), 3, 'Z')
-        place_hand(MEDB, "L", fr, pb_ + c3 @ Vector((0.06, -0.30, 1.10)), c3 @ Vector((0, 0.45, -1)), c3 @ Vector((-1, 0, 0.1))); apply_pose(MEDB, "L", "hold_flat_object", fr)
-        place_hand(MEDB, "R", fr, pb_ + c3 @ Vector((-0.18, -0.30, 1.12)), c3 @ Vector((1, 0, 0)), c3 @ Vector((0, -0.4, 0.9))); apply_pose(MEDB, "R", "relaxed", fr)
-    attach_to_hand(CLIP, MEDB, "L", f0, along=0.07, off=0.02, axes="z")
+        place_hand(MEDB, "L", fr, pb_ + c3 @ Vector((0.06, -0.40, 1.10)), c3 @ Vector((0, 0.45, -1)), c3 @ Vector((-1, 0, 0.1))); apply_pose(MEDB, "L", "hold_flat_object", fr)
+        place_hand(MEDB, "R", fr, pb_ + c3 @ Vector((-0.22, -0.36, 1.05)), c3 @ Vector((1, 0, 0)), c3 @ Vector((0, -0.4, 0.9))); apply_pose(MEDB, "R", "relaxed", fr)
+    attach_to_hand(CLIP, MEDB, "L", f0, along=0.15, off=0.035, axes="zx")
     c = camera("10", 24)
     cam_key(c, f0, IX + Vector((0.25, 3.9, 1.15)), IX + Vector((0.3, 0.4, 0.95))); cam_key(c, f1, IX + Vector((0.25, 3.6, 1.15)), IX + Vector((0.3, 0.4, 0.95)))
 
