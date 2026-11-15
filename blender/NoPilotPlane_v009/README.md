@@ -33,6 +33,15 @@ The ending close-up of his face (55.72–58.0 s) is kept as it was.
 | 8 | 3071–3146: 1.3 s static top-down on the FO | 0.7 s. |
 | – | Flat green patch | `scripts/09_field.py`: grass with mowing bands, and a 2.9 km × 160 m runway strip with a dashed centreline and edge lines, riding with the terrain. |
 
+## v009j: the director's review of v009i (eyes and top-of-head framings)
+
+| # | Note on v009i | Fix |
+|---|---|---|
+| 1 | 1551–1596: his eyes render as black holes | The MPFB EnhancedEye cornea used refractive transmission, so with caustics off almost no light reached the iris. The cornea is now a Transparent BSDF mixed in by the same transmission value (Principled transmission 0). This is the LegoInNose eye fix (`blender/LegoInNose_v001/scripts/eye_fix.py`, commit a44130b), applied to every EnhancedEye group. A small, weak catchlight (`L_catch`, 1.5 W, invisible to the camera) rides just above the lens. |
+| 2 | 586–616, 956–986, 1156–1221, 2991–3016: mostly the crown of his head | In these face shots his head lifts toward the windscreen (or toward the cockpit as he walks in), so both eyes read. This is a keyed Damped Track on the head (0.8) and neck02 (0.35), ramped in and out over 10 frames. |
+
+Applied by `scripts/12_v009j_eyes_head.py` to the v009i package. Package md5 112586f2. The face ranges were rendered from it at 540×960, every 5th frame, and spliced into the preview: 56–241, 541–621, 951–991, 1151–1226, 1546–1596, 2956–3021 and 3346–3481. The eye fix applies to the whole film; frames outside these ranges in the preview are from earlier renders.
+
 ## v009i: the director's hand review of v009h (camera re-stage, no new poses)
 
 | # | Note on v009h | Fix |
