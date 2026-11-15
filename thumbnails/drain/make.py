@@ -33,11 +33,11 @@ def sparkle(img, cx, cy, R=150):
         for s in (1, -1):
             x2, y2 = cx + s * rr * math.cos(a), cy + s * rr * math.sin(a)
             d.polygon([(cx - wd * math.sin(a), cy + wd * math.cos(a)), (x2, y2), (cx + wd * math.sin(a), cy - wd * math.cos(a))], fill=255)
-    d.ellipse([cx - 16, cy - 16, cx + 16, cy + 16], fill=255)
+    d.ellipse([cx - 9, cy - 9, cx + 9, cy + 9], fill=255)
     core = L.filter(ImageFilter.GaussianBlur(1.5)); glow = L.filter(ImageFilter.GaussianBlur(22))
     m = np.clip(np.asarray(core).astype(np.float32) / 255 + np.asarray(glow).astype(np.float32) / 255 * 0.9, 0, 1)
     halo = np.asarray(Image.new("L", (W, H), 0)).astype(np.float32)
-    yy, xx = np.mgrid[0:H, 0:W]; halo = np.clip(1 - np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2) / (R * 1.3), 0, 1) ** 2 * 0.45
+    yy, xx = np.mgrid[0:H, 0:W]; halo = np.clip(1 - np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2) / (R * 1.1), 0, 1) ** 2 * 0.25
     m = np.clip(m + halo, 0, 1)[..., None]
     a = np.asarray(img.convert("RGB")).astype(np.float32)
     a = a * (1 - m) + np.array([255, 252, 242]) * m
@@ -53,10 +53,11 @@ def line(d, parts, y, size, cx=W / 2):
 
 def compose(plate, mask, text=True):
     img = grade(Image.open(plate))
-    m = np.asarray(Image.open(mask).split()[-1].resize((W, H), Image.LANCZOS)) > 60
-    ys, xs = np.nonzero(m)
-    if len(xs):
-        img = sparkle(img, xs.mean(), ys.mean() - 4, 165)
+    # the stone: the densest blob in the matte (the marker numbers render into it too, as text objects)
+    mm = Image.open(mask).split()[-1].resize((W, H), Image.LANCZOS)
+    b = np.asarray(mm.filter(ImageFilter.GaussianBlur(12))).astype(np.float32)
+    cy, cx = np.unravel_index(np.argmax(b), b.shape)
+    img = sparkle(img, cx + 30, cy - 30, 115)
     if not text:
         return img.convert("RGB")
     T = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(T)
