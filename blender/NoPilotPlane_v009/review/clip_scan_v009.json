@@ -1,0 +1,132 @@
+{
+ "frames": {
+  "73": {
+   "PC_06L0": {
+    "self": 0,
+    "clothes": 0,
+    "other": 6
+   }
+  },
+  "79": {
+   "PC_06L0": {
+    "self": 0,
+    "clothes": 0,
+    "other": 7
+   }
+  },
+  "91": {
+   "PC_06L0": {
+    "self": 0,
+    "clothes": 0,
+    "other": 6
+   }
+  },
+  "97": {
+   "PC_06L0": {
+    "self": 0,
+    "clothes": 0,
+    "other": 6
+   }
+  },
+  "103": {
+   "PC_06L0": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "109": {
+   "PC_06L0": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "127": {
+   "PC_06L0": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "187": {
+   "YOU": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "193": {
+   "YOU": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "199": {
+   "YOU": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "205": {
+   "YOU": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "331": {
+   "PC_06L0": {
+    "self": 0,
+    "clothes": 0,
+    "other": 5
+   }
+  },
+  "343": {
+   "PC_06L0": {
+    "self": 0,
+    "clothes": 0,
+    "other": 5
+   }
+  },
+  "349": {
+   "PC_06L0": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "367": {
+   "PC_06L0": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1429": {
+   "YOU": {
+    "self": 0,
+    "clothes": 0,
+    "other": 34
+   }
+  },
+  "1435": {
+   "YOU": {
+    "self": 0,
+    "clothes": 0,
+    "other": 74
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   1429,
+   1435
+  ]
+ ],
+ "fps": 60
+}
