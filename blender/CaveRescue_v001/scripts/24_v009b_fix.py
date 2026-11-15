@@ -5,7 +5,7 @@
    1821 a tight close-up of the boy's face with the mask on (the diver's hands are not on the mask in this animation,
    so they are kept out of frame). The coach, the boy and DiverB hold still to the cut at 1885.
 4. 1941-2104 tow: the camera keeps the 1940 side offset in the pair's travel frame (no drift into the rock), with a
-   hard cut to a shot from ahead on their path, looking back at them, through the squeeze (1984-2026); a follow light, exposure held.
+   hard cut to a shot from ahead on their path, looking back at them, through the squeeze (1978-2034); a follow light, exposure held.
 5. 1065-1070: the blurred rock frame takes the 1071 framing.
 6. 1591-1647 and 1704-1820 edge-boy reactions: a slow push-in (no still hold).
 8. 2100-2140: the flood-front mesh in the lens at the cave mouth is hidden (it is not in shot otherwise).
@@ -31,7 +31,10 @@ def apply(vals):
     lo, hi = min(vals) - 0.5, max(vals) + 0.5
     for F in (CL, AL, LF):          # drop old keys in the range first (the time warps left fractional-frame keys)
         for fc in F:
-            for kp in [k for k in fc.keyframe_points if lo <= k.co.x <= hi]: fc.keyframe_points.remove(kp)
+            while True:            # remove one at a time (keyframe references shift after each removal)
+                ks = [k for k in fc.keyframe_points if lo <= k.co.x <= hi]
+                if not ks: break
+                fc.keyframe_points.remove(ks[0])
     for f, (c, t, l) in sorted(vals.items()):
         setk(CL, f, c); setk(AL, f, t); setk(LF, f, [l])
     for F in (CL, AL, LF):
@@ -92,7 +95,7 @@ for f in range(1941, 2105):
     c = p + fw * dc[0] * 0.8 + sd * dc[1] * 0.8 + up * dc[2]; t = p + fw * dt[0] + sd * dt[1] + up * dt[2]
     e = min(1.0, (f - 1940) / 12.0)
     tw[f] = (ev(CL, 1940).lerp(c, e), t, rl)
-    if 1984 <= f <= 2026:      # the passage squeezes: hard cut to a camera on their own path 0.75 s ahead (inside the tube)
+    if 1978 <= f <= 2034:      # the passage squeezes: hard cut to a camera on their own path 0.75 s ahead (inside the tube)
         tw[f] = (PP[min(2114, f + 45)] + V((0, 0, 0.25)), p + V((0, 0, 0.1)), 26)    # ahead on their path, looking back at them
 apply(tw)
 # exposure holds (1, 4)
@@ -136,8 +139,11 @@ for o in bpy.data.objects:          # no bubble right in front of the lens in th
     if o.name.startswith("FX_Bubble_"):
         for f, h in ((1967, False), (1968, True), (2026, True), (2027, False)):
             o.hide_render = h; o.hide_viewport = h; o.keyframe_insert("hide_render", frame=f); o.keyframe_insert("hide_viewport", frame=f)
-for nm in ("DiverB_TorchLight", "Boy2_TorchLight"):     # underwater the torch beam lit the murk into a white blob in front of the lens
+for nm in ("DiverB_TorchLight", "Boy2_TorchLight"):     # in the shot from ahead the torches hit the passage roof close to the lens (a white blob)
     o = bpy.data.objects.get(nm)
-    if o: o.visible_volume_scatter = False
+    if not o: continue
+    sc.frame_set(1970); e0 = o.data.energy
+    for f, e in ((1977, e0), (1978, e0 * 0.08), (2034, e0 * 0.08), (2035, e0)):
+        o.data.energy = e; o.data.keyframe_insert("energy", frame=f)
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("V009B_OK")
