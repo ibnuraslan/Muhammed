@@ -14,7 +14,7 @@ for r in rigs:
                     for fc in [fc for fc in cb.fcurves if '"finger' in fc.data_path]: cb.fcurves.remove(fc)
 FPLAN = {
   "Fan": {"R": [(0.0, "flat_palm"), (12.6, "flat_palm"), (12.75, "relaxed"), (12.85, "hold_flat_object"), (15.85, "hold_flat_object"), (16.1, "flat_palm"), (17.5, "flat_palm"), (19.6, "flat_palm"), (20.4, "hold_flat_object"), (23.0, "hold_flat_object"), (34.0, "relaxed"),
-                (36.4, "relaxed"), (37.8, "relaxed"), (38.0, "hold_flat_object"), (44.0, "hold_flat_object")],
+                (36.0, "relaxed"), (36.4, "shield"), (37.8, "shield"), (38.0, "hold_flat_object"), (44.0, "hold_flat_object")],
           "L": [(0.0, "flat_palm"), (9.9, "flat_palm"), (10.3, "relaxed"), (10.9, "relaxed"), (11.2, "flat_palm"), (13.0, "flat_palm"), (13.4, "hold_flat_object"),
                 (15.6, "hold_flat_object"), (16.1, "relaxed"), (16.4, "power_fist"), (17.0, "power_fist"), (17.5, "relaxed"), (34.0, "relaxed"),
                 (37.0, "relaxed"), (38.0, "hold_flat_object"), (44.0, "hold_flat_object")]},

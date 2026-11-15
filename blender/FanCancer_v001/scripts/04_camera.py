@@ -55,7 +55,7 @@ K = [
     (0.0, V((4.0, -9.0, 3.6)), V((0.0, 2.5, 2.0)), 22, False),
     (1.0, V((2.2, -3.6, 2.6)), V((0.0, 0.6, 1.4)), 28, False),
     (1.7, V((1.2, -1.45, 1.9)), fanH1 + V((0, 0, -0.05)), 38, False),
-    (1.95, V((0.30, -1.65, 2.45)), fanH1, 42, False),   # v007: above him as he walks by
+    (1.95, V((0.30, -2.15, 2.55)), fanH1, 42, False),   # v009: 0.5 m further from him as he walks by
     (2.2, V((-0.6, -0.75, 1.62)), fanH1, 45, False),
     (2.55, V((-0.80, -0.95, 2.95)), mole3, 36, False),
     (2.85, V((-0.40, 0.35, 2.80)), mole3, 40, False),                 # rises over the glass
@@ -113,9 +113,9 @@ K = [
     (37.2, HMv + V((-0.45, 0.55, 1.05)), fanH12, 50, False),
     (37.5, HMv + V((0.60, 0.70, 1.15)), fanH12, 34, False),   # her face as she stares at the call   # her laptop, the call on screen
     (37.98, HMv + V((0.55, 0.75, 1.15)), fanH12, 34, False),   # v006: hold on her at the laptop
-    (38.0, FIN + V((-0.40, -2.75, 1.75)), FIN + V((-0.30, 0, 1.15)), 32, True),   # v008: higher, slow push-in on her, cheque at her waist
-    (39.7, FIN + V((-0.36, -2.40, 1.72)), FIN + V((-0.30, 0, 1.15)), 33, False),
-    (41.5, FIN + V((-0.33, -2.05, 1.68)), FIN + V((-0.30, 0, 1.15)), 34, False),
+    (38.0, FIN + V((-0.38, -1.62, 1.38)), FIN + V((-0.33, 0, 1.20)), 32, True),   # v009: 1.6 m at chest height, knees up, slow push
+    (39.7, FIN + V((-0.35, -1.50, 1.37)), FIN + V((-0.33, 0, 1.20)), 32, False),
+    (41.5, FIN + V((-0.33, -1.40, 1.36)), FIN + V((-0.33, 0, 1.20)), 33, False),
 ]
 cqo = bpy.data.objects["Cheque"]
 for f in range(F(38.0), 2641, 4):

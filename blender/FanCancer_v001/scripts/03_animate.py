@@ -194,12 +194,13 @@ def fan_home():
     sit(fan, f(35.4), p, 0, 0.45, hands=lap, flex=14, head=(16, 0))
     face(FR, f(35.4), brow=0.0, smile=0.0)
     mouth = {"R": ((-0.03, -0.29, 1.10), (0.2, 0.3, 1), (0, 1, 0)), "L": ((0.10, -0.25, 0.80), (0, -0.2, 1), (-1, 0, 0))}
-    sit(fan, f(36.4), p, 0, 0.45, hands={"R": ((-0.10, -0.20, 0.90), (0.15, 0, 1), (0, 1, 0)), "L": ((0.10, -0.20, 0.90), (-0.15, 0, 1), (0, 1, 0))}, flex=-6, head=(-6, 0))   # v008: both hands rise together
+    mouthR = {"R": ((0.04, -0.19, 0.95), (0.35, 0, 1), (0, 1, 0)), "L": lap["L"]}   # v009: right palm flat over her heart, fingers together; left hand on her lap
+    sit(fan, f(36.4), p, 0, 0.45, hands=mouthR, flex=-6, head=(-6, 0))
     face(FR, f(36.4), brow=1.0, lid=-0.4, jaw=14)
     both = {"R": ((-0.10, -0.17, 0.93), (0.15, 0, 1), (0, 1, 0)), "L": ((0.10, -0.17, 0.93), (-0.15, 0, 1), (0, 1, 0))}   # v007: both palms on her chest, apart
-    sit(fan, f(37.2), p, 0, 0.45, hands=both, flex=-8, head=(-4, 6))
+    sit(fan, f(37.2), p, 0, 0.45, hands=mouthR, flex=-8, head=(-4, 6))
     face(FR, f(37.2), brow=1.0, lid=-0.3, jaw=10, smile=0.5)
-    sit(fan, f(37.8), p, 0, 0.45, hands=both, flex=-4, head=(0, -4))
+    sit(fan, f(37.8), p, 0, 0.45, hands=mouthR, flex=-4, head=(0, -4))
 # FINALE on the ice, holding the cheque
 FIN = Vector((0.0, -12.0, 0.0))
 def fan_finale():
@@ -282,7 +283,7 @@ def man_rink():
     face(MR, f(21.4), brow=0.2, frown=0.5)
 man_rink()
 def man_finale():
-    f = F; p = FIN + Vector((0.45, 0.05, 0))
+    f = F; p = FIN + Vector((0.16, 0.25, 0))   # v009: close beside her
     clap_o = {"L": ((0.145, -0.40, 1.18), (0, -0.3, 1), (-1, 0, 0)), "R": ((0.095, -0.40, 1.18), (0, -0.3, 1), (1, 0, 0))}
     clap_c = {"L": ((0.24, -0.40, 1.15), (0, -0.3, 1), (-1, 0, 0)), "R": ((0.00, -0.40, 1.15), (0, -0.3, 1), (1, 0, 0))}
     for i in range(24):
@@ -455,7 +456,8 @@ for i in range(6):
     for f in range(1, 2641, 4):
         t = f / 60.0
         if t > 37.9:      # finale: lined up behind her, sticks up
-            pos = FIN + Vector(((-2.5, -1.55, 1.15, 1.95, 2.75, -3.3)[i], 1.0 + 0.35 * (i % 2), 0))   # v008: nobody right behind her
+            # v009: one player close beside her clapping (the man claps on her other side); the rest well back
+            pos = FIN + (Vector(((-2.3, -3.2, -1.5, 1.6, 2.6, -4.2)[i], 4.5 + 0.4 * (i % 2), 0)))
             kind = i % 3
             yw = 30 * math.sin(t * 1.4 + i) if kind == 2 else 10 * math.sin(t * 0.8 + i)
             standing_fk(r, f, pos, yw, cheer=0.0, sway=math.sin(t * 2 + i), head=(-4, 15 * math.sin(t * 1.1 + i)))
@@ -486,6 +488,17 @@ for i in range(6):
         Rg.key_rot("upperarm01.L", f, [("X", -45)]); Rg.key_rot("upperarm01.R", f, [("X", -55)])
         Rg.key_rot("lowerarm01.L", f, [("X", -40)]); Rg.key_rot("lowerarm01.R", f, [("X", -30)])
     face(r, 1, frown=0.4, brow=-0.2); face(r, F(38.3), smile=1.0, brow=0.6, jaw=12)
+# v009: one player close beside her at the finale, clapping (IK hands meet in front of the chest); under the ice before the cut
+_fp = dup_rig("Player1", "FinPlayer", C_CHAR); finp = Actor(_fp.name)
+_pp = FIN + Vector((-0.82, 0.25, 0))
+for _t in (0.0, 37.95):
+    finp.pose(F(_t) if _t else 1, _pp + Vector((0, 0, -50)), -18)
+_co = {"L": ((0.145, -0.40, 1.22), (0, -0.3, 1), (-1, 0, 0)), "R": ((0.095, -0.40, 1.22), (0, -0.3, 1), (1, 0, 0))}
+_cc = {"L": ((0.24, -0.40, 1.19), (0, -0.3, 1), (-1, 0, 0)), "R": ((0.00, -0.40, 1.19), (0, -0.3, 1), (1, 0, 0))}
+for _i in range(16):
+    _t = 38.0 + _i * 0.25
+    finp.pose(F(_t), _pp, -18 + 3 * math.sin(_i), flex=2, head=(-4, 14), hands=_co if _i % 2 else _cc)
+face(_fp, F(38.0), smile=1.0, brow=0.6, jaw=10)
 for n in ("Crowd0", "Crowd1", "Crowd2", "Crowd3", "Crowd4", "Crowd5", "Player0", "Player1"):
     o = bpy.data.objects[n]; o.location = (0, 0, -50)
     for ch in o.children: ch.hide_render = True
