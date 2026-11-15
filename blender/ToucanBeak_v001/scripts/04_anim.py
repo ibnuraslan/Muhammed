@@ -1234,30 +1234,90 @@ for o_, mn in ((OB["Glue_bead"], "grow"), (OB.get("CAD_wire"), "draw"), (OB.get(
         md.frame_start = m8(f0) or f0; md.frame_duration = max(1, (m8(f1) or f1) - md.frame_start)
 sc.frame_end = 1932
 print("V008_REMAP keys", _n8)
-# ---- beat 7 continued (v008 1002-1158): back on the monitor, the heavy-beak demo bird: its head is dragged down
-key_vis(HBK, [(913, True), (1002, False)])
-for o_ in (gbody, glow, gperch, gr, gheavy): key_vis(o_, [(1002, True), (1159, False)])
-key_vis(glight, [(1002, False)])
-for f_, a_ in ((1002, (0, 0, 0)), (1030, (-6, -4, 0)), (1075, (-34, -22, -14)), (1100, (-44, -30, -18)), (1125, (-40, -28, -16)), (1158, (-42, -28, -16))):
-    gpose(f_, *a_)
-for f_, a_ in ((1002, 0), (1075, 0), (1092, 7), (1110, -4), (1130, 2), (1158, 0)):
-    gperch.rotation_euler = (R_(a_), 0, 0); gperch.keyframe_insert("rotation_euler", frame=f_)
+# ================================================================== v008b (director, Nov 15 06:25): beats 7-8 not static
+cam_ = sc.camera; foc_ = OB["Cam_focus"]
+def _clear(objs, f0, f1):
+    for o_ in objs:
+        ad = o_.animation_data
+        if not (ad and ad.action): continue
+        for lay in ad.action.layers:
+            for st in lay.strips:
+                for cb in st.channelbags:
+                    for fc in cb.fcurves:
+                        idx = [i for i, kp in enumerate(fc.keyframe_points) if f0 <= kp.co.x <= f1]
+                        for i in reversed(idx): fc.keyframe_points.remove(fc.keyframe_points[i], fast=True)
+                        fc.update()
+_clear([cam_, cam_.data, foc_], 1002, 1368)
+def _camkeys(f0, f1, fp_, ft_, fl_):
+    pq = None
+    for f_ in range(f0, f1 + 1):
+        pp, tt = fp_(f_), ft_(f_); qq = (tt - pp).to_track_quat('-Z', 'Y')
+        if pq is not None and pq.dot(qq) < 0: qq = -qq
+        pq = qq; cam_.location = pp; cam_.rotation_quaternion = qq
+        cam_.keyframe_insert("location", frame=f_); cam_.keyframe_insert("rotation_quaternion", frame=f_)
+        cam_.data.lens = fl_(f_); cam_.data.keyframe_insert("lens", frame=f_); foc_.location = tt; foc_.keyframe_insert("location", frame=f_)
+# ---- beat 7a: the weighing gag runs on to 1040 (two more bounces), same framing
+for f_, dz in ((1010, -0.03), (1022, 0.0), (1032, -0.025), (1040, 0.0)):
+    HP.place_hand(VB.r.o, "R", f_, Vector((6.86, 0.1, 1.3 + dz)), Vector((0.2, -0.35, 1.0)).normalized(), Vector((-0.45, -1.0, 0.15)).normalized())
+HP.apply_pose(VB.r.o, "R", "hold_flat_object", 1040, spread=0.0)
+for f_, h_ in ((1015, (30, 6)), (1035, (28, -6))): stand(VB, f_, B_POS, 0, flex=8, head=h_, spine_flex=10)
+follow(HBK, VB.r.o, "R", 1001, 1040)
+key_vis(HBK, [(913, True), (1041, False)])
+_camkeys(1002, 1040, lambda f: Vector((6.57, -0.47, 1.55)), lambda f: Vector((6.92, 0.2, 1.3)), lambda f: 41.0)
+# ---- beat 7b (1041-1158): the screen fills the frame - a toucan silhouette in profile with a solid beak; the beak drags the head down
+for o_ in (gbody, glow, gperch, gr, gheavy, glight): key_vis(o_, [(1002, False)])
 for n_ in range(1002, 1159):
-    old = 1110; po = fpo(old); qo = (fto(old) - po).to_track_quat('-Z', 'Y')     # one steady side view of the whole demo bird
-    R = M_EYE @ Matrix.Translation((0.02, 0.07, -1.9)) @ Matrix.Scale(2.0, 4) @ Matrix.LocRotScale(po, qo, None).inverted()
-    lo, qq, ss = R.decompose(); VROOT.location = lo; VROOT.rotation_quaternion = qq; VROOT.scale = ss
-    VROOT.keyframe_insert("location", frame=n_); VROOT.keyframe_insert("rotation_quaternion", frame=n_); VROOT.keyframe_insert("scale", frame=n_)
-cam_ = sc.camera; foc_ = OB["Cam_focus"]; _fp = catmull([(1002, SCREEN + Vector((-1.0, 0.0, 0.0))), (1158, SCREEN + Vector((-0.9, 0.0, 0.0)))])   # the screen fills the frame
-_ft = catmull([(1002, SCREEN), (1158, SCREEN)])
-_fl = pchip([(1002, 30.0), (1158, 31.0)])
-_pq = None
-for f_ in range(1002, 1159):
-    pp, tt = _fp(f_), _ft(f_); qq = (tt - pp).to_track_quat('-Z', 'Y')
-    if _pq is not None and _pq.dot(qq) < 0: qq = -qq
-    _pq = qq; cam_.location = pp; cam_.rotation_quaternion = qq
-    cam_.keyframe_insert("location", frame=f_); cam_.keyframe_insert("rotation_quaternion", frame=f_)
-    cam_.data.lens = _fl(f_); cam_.data.keyframe_insert("lens", frame=f_); foc_.location = tt; foc_.keyframe_insert("location", frame=f_)
-
+    VROOT.location = (0, 0, -200); VROOT.keyframe_insert("location", frame=n_)
+ev(1); _tb = OB["Toucan_body"]; _dm = _tb.modifiers.new("sil_dec", 'DECIMATE'); _dm.ratio = 0.05
+_dg = bpy.context.evaluated_depsgraph_get(); _sm = bpy.data.meshes.new_from_object(_tb.evaluated_get(_dg)); _tb.modifiers.remove(_dm)
+_Wb = _tb.matrix_world.copy(); _Wk = UP.matrix_world.copy()
+_vb = [_Wb @ v.co for v in _sm.vertices]; _vk = [_Wk @ v.co for v in UP.data.vertices]
+_cb = sum(_vb, Vector()) / len(_vb); _tip = max(_vk, key=lambda v: (v - _cb).length)
+_fw = (_tip - _cb); _fw.z = 0; _fw.normalize(); _upv = Vector((0, 0, 1)); _sd = _fw.cross(_upv).normalized()
+_Rs = Matrix((_sd, -_fw, _upv))
+_all = [(_Rs @ (v - _cb)) for v in _vb + _vk]
+_ymin, _ymax = min(v.y for v in _all), max(v.y for v in _all); _zmin, _zmax = min(v.z for v in _all), max(v.z for v in _all)
+_ss = min(0.42 / (_ymax - _ymin), 0.27 / (_zmax - _zmin))
+_ctr = Vector((0, (_ymin + _ymax) / 2, (_zmin + _zmax) / 2))
+SILP = bpy.data.objects.new("Sil_pivot", None); C_ANIM.objects.link(SILP); SILP.location = SC_C + Vector((0, 0.06, -0.02))
+_Msil = Matrix.Scale(_ss, 4) @ Matrix.Translation(-_ctr - Vector((0, 0.06 / _ss, -0.02 / _ss))) @ _Rs.to_4x4() @ Matrix.Translation(-_cb)
+silb = bpy.data.objects.new("Sil_body", _sm); C_ANIM.objects.link(silb); silb.data.materials.clear(); silb.data.materials.append(_emis("Sil_white", (0.55, 0.75, 0.95), 0.9))
+silk = bpy.data.objects.new("Sil_beak", UP.data); C_ANIM.objects.link(silk)
+for sl in silk.material_slots: sl.link = 'OBJECT'; sl.material = _emis("Sil_steel", (0.95, 0.42, 0.06), 1.6)
+for o_, W_ in ((silb, _Wb), (silk, _Wk)):
+    o_.parent = SILP; o_.matrix_parent_inverse = Matrix(); o_.matrix_basis = _Msil @ W_; o_.visible_shadow = False
+    key_vis(o_, [(1, False), (1041, True), (1159, False)])
+key_vis(bg, [(1041, True), (1159, False)])
+SILP.rotation_mode = 'XYZ'
+for f_, a_ in ((1041, 0), (1062, 0), (1100, 25), (1112, 22), (1124, 26), (1158, 25)):
+    SILP.rotation_euler = (R_(a_), 0, 0); SILP.keyframe_insert("rotation_euler", frame=f_)
+_camkeys(1041, 1158, lambda f: SCREEN + Vector((-1.0 + 0.0006 * (f - 1041), 0.0, 0.0)), lambda f: SCREEN, lambda f: 30.0)
+# ---- beat 8 (1159-1368): at the printer bed, a slow push-in while the beak builds up layer by layer, the head moving above it
+# the print sat ~4 cm inside the bed (bed height after the printer was scaled to real size): lift it onto the bed top
+ev(1300); _pr = OB["Printing_beak"]; _bb = [_pr.matrix_world @ Vector(c) for c in _pr.bound_box]
+_pc = sum(_bb, Vector()) / 8; _pz0 = min(v.z for v in _bb)
+_hide = {"Printing_beak", "Nozzle", "Nozzle_block", "Hollow_beak_bed", "Hollow_lattice_bed", "Mote_emitter"}
+_q = Vector((_pc.x + 0.05, _pc.y, max(v.z for v in _bb) + 0.02)); _bedz = None
+for _i in range(10):
+    _h = sc.ray_cast(bpy.context.evaluated_depsgraph_get(), _q, Vector((0, 0, -1)), distance=2)
+    if not _h[0]: break
+    if _h[4].name in _hide: _q = _h[1] + Vector((0, 0, -0.001)); continue
+    _bedz = _h[1].z; break
+_dz = (_bedz - _pz0 + 0.0005) if _bedz is not None else 0.0
+print("PRINT_LIFT bed", _bedz, "print bottom", round(_pz0, 4), "dz", round(_dz, 4), "hit", _h[4].name if _h[0] else None)
+grw.location.z += _dz / PRN_ROOT.scale.z
+for o_ in HOLLOW_ON_BED: o_.location.z += _dz
+zmin += _dz; zmax += _dz
+_clear([grw, noz], 1159, 1368)
+for f_ in range(1159, 1369, 3):
+    h_ = 0.18 + 0.82 * (f_ - 1159) / 209
+    grw.scale = (1, 1, h_); grw.keyframe_insert("scale", frame=f_)
+    a_ = f_ * 0.9
+    noz.location = Vector((cx + 0.1 * math.cos(a_), cy + 0.22 * math.sin(a_ * 1.3), zmin + (zmax - zmin) * h_ + 0.035)); noz.keyframe_insert("location", frame=f_)
+_camkeys(1159, 1368, lambda f: _hb + Vector((0, 0, _dz)) + Vector((0.0, 0.62, 0.3)).lerp(Vector((0.0, 0.46, 0.2)), (f - 1159) / 209),
+         lambda f: _hb + Vector((0, 0, _dz - 0.04 + 0.025 * (f - 1159) / 209)), lambda f: 38.0)
+_hb2 = _hb + Vector((0, 0, _dz)); _clear([cam_, cam_.data, foc_], 1369, 1393)
+_camkeys(1369, 1393, lambda f: _hb2 + Vector((-0.02, 0.42, 0.13)).lerp(Vector((0.02, 0.38, 0.12)), (f - 1369) / 24), lambda f: _hb2, lambda f: 44.0 + 2.0 * (f - 1369) / 24)
 sc.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=out)
 print("ANIM_DONE", out)
