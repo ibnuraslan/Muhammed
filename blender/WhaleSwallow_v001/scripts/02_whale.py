@@ -179,8 +179,8 @@ for p in pts:
     if any((p - q).length < 0.045 for q in placed): continue
     placed.append(p)
     inward = Vector((0, -math.copysign(1, p.y), 0)) if abs(p.y) > 0.05 else Vector((0, 0, 0))
-    top = p + inward * 0.10 + Vector((0, 0, 0.12)); h = 0.45 + 0.25 * sstep(-8.0, -5.6, p.x)
-    w = 0.30; t = 0.012
+    top = p + inward * 0.06 + Vector((0, 0, 0.12)); h = 0.22 + 0.12 * sstep(-8.0, -5.6, p.x)
+    w = 0.15; t = 0.012
     d = inward * w
     vs = [bm.verts.new(top + Vector((dx, 0, 0)) + dd + Vector((0, 0, dz)))
           for dx, dd, dz in [(-t, Vector(), 0), (t, Vector(), 0), (t, d, 0), (-t, d, 0),

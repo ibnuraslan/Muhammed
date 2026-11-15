@@ -263,16 +263,16 @@ def recline_pose(fr, M, n_, ev_, Mi, t, push=True):
         if fr == F["1a"][0]: print("JAW push dist", s, round(dist, 3))
 sid = "1a"; whale_breach(sid, 0.0, 1.0, -6.0, -2.6, 42, 38, tilt=8)
 for fr in frames(sid, 4):
-    t = T(sid, fr); M, n_, ev_, Mi = jaw_recline(fr, 0.0, t); recline_pose(fr, M, n_, ev_, Mi, t)
+    t = T(sid, fr); M, n_, ev_, Mi = jaw_recline(fr, -0.25, t); recline_pose(fr, M, n_, ev_, Mi, t)
 for s in "LR": D.hand_pose(s, F[sid][0], "flat_palm")
 key_fx(SPL, F[sid][0], OCEAN + Vector((-1, 0, -0.5)), (4, 4, 2.5)); key_fx(SPL, F[sid][1], OCEAN + Vector((-1, 0, -0.5)), (7, 7, 4.5))
 key_fx(RING, F[sid][0], OCEAN + Vector((-1, 0, 0.05)), (3.5, 3.5, 1)); key_fx(RING, F[sid][1], OCEAN + Vector((-1, 0, 0.05)), (6, 6, 1))
 camera(sid, [(0, OCEAN + Vector((-4, -16, 1.4)), OCEAN + Vector((0, 0, 2.5))), (1, OCEAN + Vector((-3, -14, 1.8)), OCEAN + Vector((0, 0, 4.0)))], lens=30)
 
 # 1b: jaws close, the diver drops below the lip line (cut before they meet)
-sid = "1b"; whale_breach(sid, 0.0, 1.0, -2.6, -2.0, 38, 6, tilt=10, sw0=0.4)
+sid = "1b"; whale_breach(sid, 0.0, 1.0, -2.6, -2.0, 38, 26, tilt=10, sw0=0.4)
 for fr in frames(sid, 4):
-    t = T(sid, fr); M, n_, ev_, Mi = jaw_recline(fr, 0.0, t); recline_pose(fr, M, n_, ev_, Mi, t)
+    t = T(sid, fr); M, n_, ev_, Mi = jaw_recline(fr, -0.25, t); recline_pose(fr, M, n_, ev_, Mi, t, push=False)
 key_fx(SPL, F[sid][0], OCEAN + Vector((-1, 0, -0.5)), (7, 7, 4)); key_fx(SPL, F[sid][1], OCEAN + Vector((-1, 0, -0.5)), (9, 9, 3))
 key_fx(RING, F[sid][0], OCEAN + Vector((-1, 0, 0.05)), (6, 6, 1)); key_fx(RING, F[sid][1], OCEAN + Vector((-1, 0, 0.05)), (8, 8, 1))
 camera(sid, [(0, OCEAN + Vector((6, -9, 3.0)), OCEAN + Vector((0, -0.5, 4.2))), (1, OCEAN + Vector((5, -8, 3.2)), OCEAN + Vector((0, -0.5, 4.0)))], lens=30)
@@ -316,6 +316,13 @@ D.park(F[sid][0])
 
 # 3b/3c: the diver inside the open shark jaw (imagined): standing small in the mouth, hands up
 SB = bpy.data.objects["Shark_body"]
+def shark_floor(ev_, Mw, Mi, x, y, z0):
+    zs = []
+    for dx in (-0.25, 0.0, 0.25):
+        for dy in (-0.15, 0.0, 0.15):
+            h, l, n, _ = ev_.ray_cast(Mi @ Vector((x + dx, y + dy, z0 + 1.0)), Mi.to_3x3() @ Vector((0, 0, -1)))
+            if h: zs.append((Mw @ l).z)
+    return max(zs) if zs else z0
 def shark_mouth_world(fr):
     """midline profile of the open mouth (stacked up-rays from below): lower-jaw floor (up-facing) and palate (down-facing).
     Stand point = the y nearest the lips where the floor-to-palate gap fits him with bent elbows overhead (1.95-2.15 m)."""
@@ -333,6 +340,7 @@ def shark_mouth_world(fr):
             if hits[j][1] and not hits[j + 1][1]:
                 gap = hits[j + 1][0] - hits[j][0]
                 if 2.1 <= gap <= 4.5: best = (Vector((cx, y + 0.45, hits[j][0])), gap)
+                if best: best = (Vector((cx, y + 0.45, shark_floor(ev_, Mw, Mi, cx, y + 0.45, hits[j][0]) + 0.02)), gap)
                 break
         if best: break
     if fr == F["3b"][0]: print("SHARK stand", best)
@@ -371,7 +379,7 @@ camera(sid, [(0, UNDER + Vector((-9, -13, 1.0)), UNDER + Vector((-2.5, 0, 0.6)))
 # 5a/5b/5c: inside the mouth, he gets up and pushes at the baleen wall
 def foot_on_tongue(s, fr, M, p_loc, knee_dir):
     pw = M @ p_loc; a_ = D.h.ankle[s]
-    pw.z = MOUTH.z + tongue_z(pw.x - MOUTH.x, pw.y - MOUTH.y) + a_.z + 0.015
+    pw.z = MOUTH.z + max(tongue_z(pw.x - MOUTH.x + dx_, pw.y - MOUTH.y + dy_) for dx_ in (-0.06, 0, 0.06) for dy_ in (-0.12, 0, 0.12)) + a_.z + 0.035
     D.key_foot(s, fr, M, M.inverted() @ pw, knee_dir=knee_dir)
 def stand_in_mouth(fr, x, y, yaw, crouch, lean):
     z = tongue_z(x, y) + D.root_head.z - crouch
@@ -390,7 +398,7 @@ for fr in frames(sid, 3):
         foot_on_tongue(s, fr, M, Vector((a_.x + sx * 0.10, a_.y + (0.10 if s == "L" else -0.08), a_.z + 0.16)), Vector((sx * 0.2, -1, 0)))
     Minv = M.inverted()
     pz = 1.30 + 0.06 * math.sin(t * 4)
-    pw = Vector((MOUTH.x - (baleen_edge(pz + 0.10) - 0.03), MOUTH.y + 0.35 + 0.12 * math.sin(t * 3), MOUTH.z + pz))
+    pw = Vector((MOUTH.x - (baleen_edge(pz + 0.10) - 0.06), MOUTH.y + 0.35 + 0.12 * math.sin(t * 3), MOUTH.z + pz))
     D.key_hand("R", fr, M, Minv @ pw, Minv.to_3x3() @ BAL_N(-1), Minv.to_3x3() @ BAL_U(-1), D.shoulder("R") + Vector((-0.4, 0.15, -0.3)))
     shL = D.shoulder("L")
     D.key_hand("L", fr, M, shL + Vector((0.14, -0.16, -0.46)), Vector((-1, 0.2, 0)), Vector((0.1, -0.5, -1)), shL + Vector((0.3, 0.35, -0.3)))
@@ -411,7 +419,7 @@ for sid, side in (("5b", 1), ("5c", -1)):
         for s in "LR":
             sx = 1 if s == "L" else -1
             pz = 1.30 + 0.03 * push
-            pw = Vector((MOUTH.x + side * (baleen_edge(pz + 0.10) - 0.03), MOUTH.y + sx * 0.28 * side, MOUTH.z + pz))
+            pw = Vector((MOUTH.x + side * (baleen_edge(pz + 0.10) - 0.06), MOUTH.y + sx * 0.28 * side, MOUTH.z + pz))
             pl = Minv @ pw
             D.key_hand(s, fr, M, pl, Minv.to_3x3() @ BAL_N(side), Minv.to_3x3() @ BAL_U(side), D.shoulder(s) + Vector((sx * 0.35, 0.1, -0.35)))
     for s in "LR": D.hand_pose(s, F[sid][0], "flat_palm")

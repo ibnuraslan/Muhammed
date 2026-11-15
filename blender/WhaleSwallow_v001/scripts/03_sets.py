@@ -330,6 +330,11 @@ dt.vert_mapping = 'POLYINTERP_NEAREST'; dt.layers_vgroup_select_src = 'ALL'; dt.
 bpy.ops.object.datalayout_transfer(modifier="DT"); bpy.ops.object.modifier_apply(modifier="DT")
 for g in list(vest.vertex_groups):
     if g.name not in BN: vest.vertex_groups.remove(g)
+# crop the vest at the waist so its lower flap never cuts into the lap when he sits
+_cut = BN["spine02"].head_local.z + 0.02
+_bm = bmesh.new(); _bm.from_mesh(vest.data)
+bmesh.ops.bisect_plane(_bm, geom=_bm.verts[:] + _bm.edges[:] + _bm.faces[:], plane_co=Vector((0, 0, _cut - vest.location.z)), plane_no=Vector((0, 0, 1)), clear_inner=True)
+_bm.to_mesh(vest.data); _bm.free()
 am = vest.modifiers.new("Armature", 'ARMATURE'); am.object = diver
 sw = vest.modifiers.new("KeepOut", 'SHRINKWRAP'); sw.target = dbody; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.wrap_mode = 'OUTSIDE'; sw.offset = 0.022
 vest.hide_render = vest.hide_viewport = True   # keyed visible only in the hospital shots (04_anim)
