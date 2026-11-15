@@ -165,8 +165,8 @@ wrig = bpy.data.objects["WhaleRig"]; wrig.location = UNDER + Vector((0, 0, 300))
 C = col("SET_MOUTH")
 pink = mat("Mouth_tongue", (0.86, 0.38, 0.45), rough=0.32, coat=0.5)
 palate = mat("Mouth_palate", (0.78, 0.30, 0.38), rough=0.35, coat=0.4)
-bale = mat("Mouth_baleen", (0.22, 0.20, 0.19), rough=0.5)
-fringe = mat("Mouth_fringe", (0.62, 0.57, 0.5), rough=0.6)
+bale = mat("Mouth_baleen", (0.09, 0.085, 0.08), rough=0.55)
+fringe = mat("Mouth_fringe", (0.30, 0.27, 0.24), rough=0.7)
 # tongue floor: 7 x 9 m, domed, soft noise
 bpy.ops.mesh.primitive_grid_add(x_subdivisions=70, y_subdivisions=90, size=1, location=(0, 0, 0)); tg = bpy.context.object; tg.name = "Mouth_tongue"
 tg.scale = (7, 9, 1); bpy.ops.object.transform_apply(scale=True)

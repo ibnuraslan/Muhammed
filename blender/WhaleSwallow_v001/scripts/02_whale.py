@@ -170,7 +170,7 @@ for e in eyes:
 
 # ---- baleen plates along the upper lip, hanging inside the mouth -----------------------------------------------------
 bal_mat = bpy.data.materials.new("Baleen"); bal_mat.use_nodes = True
-bp = bal_mat.node_tree.nodes["Principled BSDF"]; bp.inputs['Base Color'].default_value = (0.16, 0.15, 0.14, 1)
+bp = bal_mat.node_tree.nodes["Principled BSDF"]; bp.inputs['Base Color'].default_value = (0.045, 0.042, 0.04, 1)   # dark baleen plates, not tooth-white
 bp.inputs['Roughness'].default_value = 0.55
 pts = sorted([p for p in upper_lip if p.x < CORNER_X - 0.25], key=lambda p: p.x)
 bm = bmesh.new(); placed = []

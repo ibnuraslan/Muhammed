@@ -158,12 +158,16 @@ def fx_material(name, rgb, strength=0.6):
 def make_splash(name):
     """a spray crown: droplets thrown up and out in a cone, uniform size (scaled uniformly by key_fx)"""
     bm = bmesh.new()
-    for i in range(1100):
+    for i in range(1800):
         ang = random.uniform(0, 2 * math.pi); h = random.random() ** 0.7; r = 0.35 + 0.65 * h * random.uniform(0.6, 1.0)
         c0 = Vector((math.cos(ang) * r, math.sin(ang) * r, h * random.uniform(0.5, 1.0)))
-        bmesh.ops.create_icosphere(bm, subdivisions=1, radius=random.uniform(0.003, 0.008) * (1.3 - 0.7 * h), matrix=Matrix.Translation(c0))
+        bmesh.ops.create_icosphere(bm, subdivisions=1, radius=random.uniform(0.002, 0.005) * (1.3 - 0.7 * h), matrix=Matrix.Translation(c0))
     me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free(); o = bpy.data.objects.new(name, me); sc.collection.objects.link(o)
-    me.materials.append(fx_material(name + "_m", (0.92, 0.97, 1.0), 0.4)); o.visible_shadow = False
+    m = bpy.data.materials.new(name + "_m"); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
+    gl = N.new('ShaderNodeBsdfGlass'); gl.inputs['Color'].default_value = (0.9, 0.97, 1.0, 1); gl.inputs['Roughness'].default_value = 0.05
+    tr = N.new('ShaderNodeBsdfTransparent'); mx = N.new('ShaderNodeMixShader'); mx.inputs[0].default_value = 0.55
+    out = N.new('ShaderNodeOutputMaterial'); L.new(tr.outputs[0], mx.inputs[1]); L.new(gl.outputs[0], mx.inputs[2]); L.new(mx.outputs[0], out.inputs[0])
+    me.materials.append(m); o.visible_shadow = False      # fine translucent spray (director, Nov 15)
     return o
 def make_ring(name):
     """flat foam patch on the water: a disc with a soft procedural foam pattern and alpha"""
