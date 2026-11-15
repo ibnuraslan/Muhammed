@@ -596,10 +596,11 @@ WK_Y = catmull([(f_w0, 4.0), (f_w0 + 40, -6.0), (f_w0 + 80, 6.0), (f_w1, 0.0)])
 def lad_side2(f, cyc): return 7 * math.sin(2 * math.pi * cyc) + 4 * math.sin(f / 10.0)
 def lad_spine2(f, cyc):
     LAD.key_spine(f, flex=8, twist=-8 * math.sin(2 * math.pi * cyc), side=6 * math.sin(f / 14.0), head=(-4 + 5 * math.sin(f / 9.0), 8 * math.sin(f / 15.0)))
+def PEL(s_): return LB.el[s_] + V((1 if s_ == "L" else -1) * 0.04, 0.6, -0.1)      # v006d: elbow pole straight back (no flared elbows)
 def lad_arms2(f, cyc, p, yw, sd):
     Bm = LB.B(p, Rbody(yaw=yw, pitch=4, side=sd))
-    LB.arm_dir("L", f, Bm, V(0.15, 0.1 - 0.35 * math.sin(2 * math.pi * cyc), -1.0), 0.95)      # v006d: arms at his sides
-    LB.arm_dir("R", f, Bm, V(-0.15, 0.1 + 0.35 * math.sin(2 * math.pi * cyc), -1.0), 0.95)
+    LB.arm_dir("L", f, Bm, V(0.24, 0.05 - 0.3 * math.sin(2 * math.pi * cyc), -1.0), 0.99, pole_local=PEL("L"))      # v006d: arms hang at his sides, elbows back, hands clear of the thighs
+    LB.arm_dir("R", f, Bm, V(-0.24, 0.05 + 0.3 * math.sin(2 * math.pi * cyc), -1.0), 0.99, pole_local=PEL("R"))
 # v006c: dazed acting after the limp sway (1681-1857): hand to his head, a stagger step while he turns to the camera, a look back at the train
 P_H = WK_P(f_w0); Y_H = WK_Y(f_w0); Y0 = 90.0
 def tw_(a_, b_, f_): return smooth(max(0.0, min(1.0, (f_ - a_) / float(b_ - a_))))
@@ -613,14 +614,14 @@ for f in list(range(f_r1 + 1, f_w0, 3)) + [f_w0 - 1]:
     LAD.key_spine(f, flex=8 + 4 * stag, twist=-14 * look, side=3 * math.sin(f / 13.0), head=(10 - 8 * look + 4 * math.sin(f / 21.0), -38 * look + 6 * math.sin(f / 29.0)))
     hand = tw_(f_r1 + 6, f_r1 + 22, f) * (1 - tw_(f_r1 + 56, f_r1 + 72, f))      # right hand up to his head, then down for the stagger
     if hand > 0.02:
-        tgt = LB.head + V(-0.15, -0.03, 0.06)
+        tgt = LB.head + V(-0.13, -0.01, 0.05) + V(0, 0.018 * math.sin(f / 3.0), 0.012 * math.cos(f / 3.0)) * min(1.0, hand * 1.5)      # v006d: palm on the side/top of his head, rubbing
         rest = LB.sh["R"] + V(-0.12, 0.0, -0.55)
         side = LB.sh["R"] + V(-0.38, -0.12, -0.05)      # v006c: the hand goes up and down OUTSIDE the shoulder (a straight path cut through his chest)
         W_ = rest * (1 - hand) ** 2 + side * (2 * hand * (1 - hand)) + tgt * hand ** 2
-        LB.hand("R", f, Bm, W_, V(0.25, -0.2, 1.0).normalized(), V(-1, 0, 0.2).normalized())
+        LB.hand("R", f, Bm, W_, V(0.75, -0.1, 0.62).normalized(), V(0.62, 0.0, -0.78).normalized(), pole_local=LB.el["R"] + V(-0.55, -0.15, 0.35))      # v006d: palm faces his head (was facing out = a wave), elbow out to the side
     else:
-        LB.arm_dir("R", f, Bm, V(-0.17 - 0.12 * stag, 0.14, -1.0), 0.95)      # v006d: hangs at his side with a slight bend (no A-pose)
-    LB.arm_dir("L", f, Bm, V(0.17 + 0.15 * stag, 0.14 - 0.08 * stag, -1.0), 0.95)
+        LB.arm_dir("R", f, Bm, V(-0.24 - 0.12 * stag, 0.05, -1.0), 0.99, pole_local=PEL("R"))      # v006d: hangs at his side with a slight bend (no A-pose)
+    LB.arm_dir("L", f, Bm, V(0.24 + 0.15 * stag, 0.05 - 0.08 * stag, -1.0), 0.99, pole_local=PEL("L"))
 # feet: planted, a step during the turn, the stagger step, then the walk stance
 F_STEPS = [(f_r1 + 1, Y0, V(STAND_XY.x, STAND_XY.y, 0), None),
            (f_r1 + 35, Y0 + (Y_H - Y0) * 0.5, V(STAND_XY.x, STAND_XY.y, 0).lerp(V(P_H.x, P_H.y, 0), 0.5), "L"),

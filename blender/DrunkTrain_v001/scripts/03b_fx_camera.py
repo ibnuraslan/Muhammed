@@ -154,6 +154,16 @@ for rg in RIGS4:
     for pb in rg.pose.bones: pb.rotation_mode = 'QUATERNION'
     add_hand_limits(rg)
     for s_ in "LR": apply_pose(rg, s_, "relaxed", 1)
+# v006d: the MPFB rest elbow is bent 46.5 deg and the library limit (ik_min_x = 0) stops the arm straightening past it,
+# so hanging arms read bent / elbows out. Lad only, from the dazed section (1681) on: allow the elbow to open to ~12 deg.
+F_ARMS = {"L": 1681, "R": 1681 + 72}      # right elbow opens only once his hand is down from his head (else the IK lifts it into a wave)
+for s_ in "LR":
+    lo_ = LADO.pose.bones["lowerarm01." + s_]
+    for f_, v_ in ((F_ARMS[s_] - 1, 0.0), (F_ARMS[s_], math.radians(-34))):
+        lo_.ik_min_x = v_; lo_.keyframe_insert("ik_min_x", frame=f_)
+    fc_ = LADO.animation_data.action.fcurves.find('pose.bones["lowerarm01.%s"].ik_min_x' % s_) if hasattr(LADO.animation_data.action, "fcurves") else None
+    if fc_:
+        for k_ in fc_.keyframe_points: k_.interpolation = 'CONSTANT'
 def poses(rg, s_, keys):
     for f_, nm in keys: apply_pose(rg, s_, nm, int(f_))
 # Lad right hand: bottle wrap while staggering and in the swig; open on the ballast while crawling
