@@ -38,6 +38,7 @@ ls_n = (ls.matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized()
 if ls_n.y < 0: ls_n = -ls_n      # approach from her side
 ls.location = ls.location + ls_n * 0.012; LAPSCR = ls.location.copy()      # in front of the laptop's own screen glass
 SK = Vector((200, 0, 0)); CT = Vector((-300, 0, 0)); HMv = Vector((-300, 200, 0))
+INS = Vector((-300.0, -200.0, 1.0))   # v008: phone-screen insert set (built in 03e)
 win = min((o for o in bpy.data.objects if o.name.startswith("Win_") and o.location.y > CT.y and abs(o.location.x - CT.x) < 20 and 3 < o.location.z < 6),
           key=lambda o: abs(o.location.x - CT.x), default=None)
 _dgw = bpy.context.evaluated_depsgraph_get()
@@ -88,39 +89,33 @@ K = [
     (19.4, V((-0.40, -0.20, 1.50)), manH, 40, False),                 # his puzzled face
     (19.8, V((-0.95, -1.60, 1.85)), manH, 36, False),   # back out the way it came, behind him
     (20.2, V((1.10, -1.60, 1.60)), manH + V((0, 0, -0.2)), 30, False),
-    (21.0, V((1.20, -1.35, 1.70)), V((-1.0, -0.8, 1.2)), 32, False),
-    (21.6, V((-0.6, -1.55, 1.95)), V((-4.0, -1.0, 1.2)), 30, False),
-    (22.2, V((-7.0, -1.05, 2.10)), V((-20.0, -1.0, 1.3)), 30, False),
-    (22.7, V((-17.0, -1.05, 1.95)), V((-25.0, -0.6, 1.2)), 30, False),
-    (23.1, V((-24.7, -0.60, 1.50)), V((-28.5, -2.2, 1.2)), 30, False),  # through the door
+    (21.0, V((1.20, -0.95, 2.20)), V((-1.0, -0.8, 1.2)), 32, False),
+    (21.6, V((-0.6, -0.95, 2.35)), V((-4.0, -1.0, 1.2)), 30, False),   # v008: high, clear of the bench players
+    (22.18, V((-1.4, -0.95, 2.35)), V((-5.5, -1.0, 1.2)), 30, False),
+    (22.2, V((-26.1, -0.85, 1.80)), V((-28.6, -2.2, 1.20)), 30, True),   # v008: clean cut to the clinic (beat 8)
     (23.6, V((-26.3, -0.75, 1.70)), V((-28.6, -2.2, 1.25)), 30, False),
     (24.3, V((-29.55, -0.95, 1.85)), moleB, 34, False),   # v006: from his left front, the doctor stands clear beside him
-    (25.0, V((-29.35, -1.35, 1.80)), moleB + V((0, 0.12, -0.08)), 34, False),   # front-left, wide: the doctor's scope at his neck and his face               # the dermatoscope on the mole
-    (25.45, V((-28.05, -1.95, 2.05)), docH, 36, False),
-    (25.8, V((-28.15, -2.65, 1.85)), docH, 36, False),                 # doctor's serious face
-    (26.6, V((-27.8, -2.75, 2.2)), moleB, 40, False),               # overhead on the hands
-    (27.0, V((-27.55, -1.35, 1.90)), moleB, 36, False),   # v006: around the front, not over his head
+    (25.0, V((-29.75, -1.00, 1.80)), moleB + V((0, 0.12, -0.08)), 38, False),
+    (25.45, V((-28.30, -0.75, 1.90)), docH, 45, False),   # v008: her face over his shoulder from 1.25 m
+    (25.8, V((-28.60, -0.70, 1.90)), docH, 45, False),
+    (26.6, V((-30.3, -1.20, 2.0)), moleB, 45, False),
     (27.4, V((-29.55, -1.0, 1.85)), moleB, 30, False),   # v007: she is seen whole beside him
     (28.3, V((-29.50, -1.10, 1.65)), (moleB + manBH) / 2, 30, False),               # front-left: the bandage pressed on
-    (29.2, V((-27.9, -1.50, 1.40)), manBH, 40, False),                # relief
-    (30.0, V((-29.10, -0.62, 1.32)), V((-28.49, -2.0, 0.98)), 30, False),   # v007: head to knees while he posts
-    (31.0, V((-29.15, -0.60, 1.30)), V((-28.49, -2.0, 0.98)), 30, False),
-    (32.2, V((-29.05, -0.62, 1.28)), V((-28.49, -2.0, 0.98)), 30, False),
-    (33.4, V((-28.90, -0.65, 1.26)), V((-28.49, -2.0, 0.98)), 30, False),
-    (34.6, V((-28.95, -0.70, 1.24)), V((-28.49, -2.0, 0.98)), 31, False),
-    (35.88, V((-28.85, -0.80, 1.24)), V((-28.49, -2.0, 0.98)), 32, False),
-    (35.9, HMv + V((0.95, 0.25, 1.2)), fanH12, 35, True),   # straight cut: his phone post -> her at the laptop
+    (29.2, V((-27.6, -0.90, 1.55)), manBH, 45, False),                # relief
+    (30.79, V((-27.75, -0.85, 1.50)), manBH, 45, False),
+    (30.8, V((-28.40, -0.70, 1.35)), V((-28.49, -1.95, 1.20)), 38, True),   # v008: beat 10, he types the post, face lit by the screen
+    (33.38, V((-28.62, -0.76, 1.32)), V((-28.49, -1.95, 1.18)), 44, False),
+    (33.4, INS + V((0, -1.0, 0)), INS, 33, True),                  # insert: the post with her photo, share icons pulsing
+    (34.58, INS + V((0, -0.93, 0)), INS, 33, False),
+    (34.6, HMv + V((0.95, 0.25, 1.2)), fanH12, 35, True),          # her at the laptop
+    (35.5, HMv + V((0.95, 0.18, 1.17)), fanH12, 35, False),
     (36.5, HMv + V((0.95, 0.15, 1.15)), fanH12, 35, False),
     (37.2, HMv + V((-0.45, 0.55, 1.05)), fanH12, 50, False),
     (37.5, HMv + V((0.60, 0.70, 1.15)), fanH12, 34, False),   # her face as she stares at the call   # her laptop, the call on screen
     (37.98, HMv + V((0.55, 0.75, 1.15)), fanH12, 34, False),   # v006: hold on her at the laptop
-    (38.0, FIN + V((-0.95, -2.3, 1.45)), FIN + V((-0.2, 0, 1.2)), 32, True),   # v007: medium on her with the cheque, the man beside her
-    (39.0, FIN + V((-0.35, -2.1, 1.38)), FIN + V((-0.2, 0, 1.2)), 32, False),
-    (40.0, FIN + V((0.35, -2.2, 1.42)), FIN + V((-0.2, 0, 1.2)), 32, False),
-    (41.0, FIN + V((0.05, -2.0, 1.36)), FIN + V((-0.2, 0, 1.2)), 32, False),
-    (42.0, FIN + V((-0.45, -2.1, 1.40)), FIN + V((-0.2, 0, 1.2)), 32, False),
-    (43.0, FIN + V((-0.25, -1.95, 1.38)), FIN + V((-0.2, 0, 1.2)), 33, False),
-    (44.0, FIN + V((-0.2, -1.9, 1.37)), FIN + V((-0.2, 0, 1.2)), 33, False),
+    (38.0, FIN + V((-0.40, -2.75, 1.75)), FIN + V((-0.30, 0, 1.15)), 32, True),   # v008: higher, slow push-in on her, cheque at her waist
+    (39.7, FIN + V((-0.36, -2.40, 1.72)), FIN + V((-0.30, 0, 1.15)), 33, False),
+    (41.5, FIN + V((-0.33, -2.05, 1.68)), FIN + V((-0.30, 0, 1.15)), 34, False),
 ]
 cqo = bpy.data.objects["Cheque"]
 for f in range(F(38.0), 2641, 4):
@@ -139,7 +134,7 @@ cd.dof.use_dof = True
 cam.rotation_mode = 'QUATERNION'
 spans = []
 for si, sg in enumerate(segs):
-    f0 = F(sg[0][0]); f1 = F(segs[si + 1][0][0]) - 1 if si + 1 < len(segs) else 2640
+    f0 = F(sg[0][0]); f1 = F(segs[si + 1][0][0]) - 1 if si + 1 < len(segs) else sc.frame_end
     pos = catmull([(F(t), p) for t, p, _, _, _ in sg]); tgt = catmull([(F(t), q) for t, _, q, _, _ in sg])
     lens = catmull([(F(t), float(l)) for t, _, _, l, _ in sg])
     spans.append((f0, f1, pos, tgt, lens))
@@ -174,7 +169,7 @@ for idb in (cam, cd):
         for kp in fc.keyframe_points:
             if int(round(kp.co.x)) in JUMPS: kp.interpolation = 'CONSTANT'
 # world per set
-for f, v in ((1, (0, 0, 0)), (F(23.1), (1, 0, 0)), (F(35.9), (1, 1, 1)), (F(38.0), (0, 0, 0))):
+for f, v in ((1, (0, 0, 0)), (F(22.2), (1, 0, 0)), (F(34.6), (1, 1, 1)), (F(38.0), (0, 0, 0))):
     wkey(f, *v)
 for fc in _fcurves(sc.world.node_tree.animation_data.action):
     for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'

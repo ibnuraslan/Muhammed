@@ -61,7 +61,7 @@ cam = sc.camera
 L = bpy.data.lights.new("CamFill", 'AREA'); L.energy = 25; L.size = 1.5; L.color = (1.0, 0.97, 0.94)
 lo = bpy.data.objects.new("CamFill", L); lo.parent = cam; lo.location = (0.3, 0.4, 0.0); sc.collection.objects.link(lo)
 L.cycles.max_bounces = 2
-for f, e in ((1, 25), (F(5.0), 0), (F(8.6), 25), (F(35.9), 40)):
+for f, e in ((1, 25), (F(5.0), 0), (F(8.6), 25), (F(34.6), 40)):
     L.energy = e; L.keyframe_insert("energy", frame=f)
 for fc in _fcurves(L.animation_data.action):
     for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'

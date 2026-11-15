@@ -7,7 +7,7 @@ from mathutils import Vector, Matrix
 
 A = os.environ["FC_ASSETS"]; PH = A + "/ph"; OB = A + "/objv"
 sc = bpy.context.scene
-FPS, END = 60, 2640
+FPS, END = 60, 2490   # v008: the finale is cut to 3.5 s
 random.seed(30)
 
 sc.render.fps, sc.render.fps_base = FPS, 1.0

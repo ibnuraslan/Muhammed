@@ -30,7 +30,7 @@ for _ in range(3): bpy.data.orphans_purge(do_recursive=True)
 # farm settings
 r, cy = sc.render, sc.cycles
 r.resolution_x, r.resolution_y, r.resolution_percentage = 1080, 1920, 100
-r.fps, r.fps_base = 60, 1.0; sc.frame_start, sc.frame_end = 1, 2640
+r.fps, r.fps_base = 60, 1.0; sc.frame_start, sc.frame_end = 1, 2490
 r.engine = 'CYCLES'; cy.device = 'CPU'; cy.samples = 48; cy.use_adaptive_sampling = True; cy.adaptive_threshold = 0.05
 cy.use_denoising = True; cy.denoiser = 'OPENIMAGEDENOISE'; cy.texture_limit_render = 'OFF'
 r.use_motion_blur = False

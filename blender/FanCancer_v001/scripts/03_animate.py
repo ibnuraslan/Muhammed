@@ -194,7 +194,7 @@ def fan_home():
     sit(fan, f(35.4), p, 0, 0.45, hands=lap, flex=14, head=(16, 0))
     face(FR, f(35.4), brow=0.0, smile=0.0)
     mouth = {"R": ((-0.03, -0.29, 1.10), (0.2, 0.3, 1), (0, 1, 0)), "L": ((0.10, -0.25, 0.80), (0, -0.2, 1), (-1, 0, 0))}
-    sit(fan, f(36.4), p, 0, 0.45, hands=mouth, flex=-6, head=(-6, 0))
+    sit(fan, f(36.4), p, 0, 0.45, hands={"R": ((-0.10, -0.20, 0.90), (0.15, 0, 1), (0, 1, 0)), "L": ((0.10, -0.20, 0.90), (-0.15, 0, 1), (0, 1, 0))}, flex=-6, head=(-6, 0))   # v008: both hands rise together
     face(FR, f(36.4), brow=1.0, lid=-0.4, jaw=14)
     both = {"R": ((-0.10, -0.17, 0.93), (0.15, 0, 1), (0, 1, 0)), "L": ((0.10, -0.17, 0.93), (-0.15, 0, 1), (0, 1, 0))}   # v007: both palms on her chest, apart
     sit(fan, f(37.2), p, 0, 0.45, hands=both, flex=-8, head=(-4, 6))
@@ -204,7 +204,7 @@ def fan_home():
 FIN = Vector((0.0, -12.0, 0.0))
 def fan_finale():
     f = F; p = FIN + Vector((-0.35, 0, 0))
-    ch = {"L": ((0.42, -0.38, 1.02), (0, 0, 1), (0, 1, 0)), "R": ((-0.42, -0.38, 1.02), (0, 0, 1), (0, 1, 0))}
+    ch = {"L": ((0.42, -0.36, 0.84), (0, 0, 1), (0, 1, 0)), "R": ((-0.42, -0.36, 0.84), (0, 0, 1), (0, 1, 0))}   # v008: waist height, face and shoulders clear
     for i, t in enumerate((38.0, 39.0, 40.0, 41.0, 42.0, 43.0, 44.0)):  # faces -Y: the camera and the home crowd
         up = 0.04 * (i % 2)
         hd = {k: ((v[0][0], v[0][1], v[0][2] + up), v[1], v[2]) for k, v in ch.items()}
@@ -308,12 +308,12 @@ def manb_clinic():
     sit(manb, f(29.0), BEDP, 180, 0.83, hands=knees, flex=6, head=(4, 0), knee=0.30, foot_lift=0.28)                 # relief: sits up, exhale
     face(MBR, f(29.4), brow=0.5, smile=0.8, lid=0.4, jaw=4)
     sit(manb, f(29.95), BEDP, 180, 0.83, hands={"R": ((-0.20, -0.12, 0.95), (0, -0.2, -1), (1, 0, 0)), "L": knees["L"]}, flex=6, head=(8, -10), knee=0.30, foot_lift=0.28)   # pocket
-    ph = {"R": ((-0.06, -0.42, 1.02), (0, -1, 0.15), (0, 0.25, 1)), "L": ((0.16, -0.28, 0.98), (0, -1, -0.4), (0, 0, -1))}
+    ph = {"R": ((-0.06, -0.36, 1.20), (0, -0.3, 1), (0, 0.9, 0.3)), "L": ((0.10, -0.30, 1.12), (0, -1, -0.2), (0, 0, -1))}   # v008: phone up at his chest
     sit(manb, f(30.4), BEDP, 180, 0.83, hands=ph, flex=8, head=(16, 4), knee=0.30, foot_lift=0.28)
     face(MBR, f(30.6), brow=0.2, smile=0.4)
-    tap = {"R": ((-0.06, -0.43, 1.04), (0, -1, 0.15), (0, 0.25, 1)), "L": ((0.16, -0.28, 0.98), (0, -1, -0.4), (0, 0, -1))}
-    for k, t in enumerate((31.0, 31.4, 31.8, 32.2, 32.6, 33.0, 33.4, 33.8, 34.2, 34.6, 35.0, 35.4, 35.8)):
-        sit(manb, f(t), BEDP, 180, 0.83, hands=tap if k % 2 else ph, flex=8, head=(18, 2), knee=0.30, foot_lift=0.28)
+    tap = {"R": ((-0.06, -0.37, 1.21), (0, -0.3, 1), (0, 0.9, 0.3)), "L": ((0.10, -0.30, 1.12), (0, -1, -0.2), (0, 0, -1))}
+    for k, t in enumerate((30.8, 31.05, 31.3, 31.55, 31.8, 32.05, 32.3, 32.55, 32.8, 33.05, 33.3, 33.6)):
+        sit(manb, f(t), BEDP, 180, 0.83, hands=tap if k % 2 else ph, flex=10, head=(24 + 2 * (k % 2), 2 - k % 3), knee=0.30, foot_lift=0.28)
 manb_clinic()
 
 # ================================================================== DOCTOR, NURSE
@@ -359,18 +359,12 @@ def doc_anim():
     doc.pose(f(29.2), DOCP, 80, flex=4, head=(0, 20), hands=_pk)
     doc.plant = None
     face(DR, f(29.4), brow=0.5, smile=0.9)
-    dpts = [(F(29.4), DOCP + Vector((0.0, 0.0, 0))), (F(30.4), DOCP + Vector((0.5, 1.0, 0))), (F(31.6), DOCP + Vector((1.5, 2.6, 0))), (F(32.4), DOCP + Vector((2.2, 3.1, 0)))]
-    dpath = catmull(dpts)
-    def dyaw(fr):
-        a_ = dpath(fr); b_ = dpath(min(fr + 6, F(32.4))); d_ = b_ - a_
-        return math.degrees(math.atan2(d_.x, -d_.y)) if d_.length > 1e-3 else 180
-    doc.H.walk(dpath, dyaw, F(29.6), F(32.4), stride=0.6, lift=0.06)
-    arm_swing(doc, dpath, dyaw, F(29.6), F(32.4), 0.6)
+    for _t, _h in ((30.4, (2, 16)), (31.6, (6, 10)), (33.0, (4, 14))):   # v008: she stays beside the bed (no walk across the lens)
+        doc.pose(f(_t), DOCP, 80, flex=4, head=_h, hands=_pk)
 doc_anim()
 nur = Actor("Nurse"); NR = nur.o
 def nurse_anim():
-    pts = [(F(20.0), Vector((-26.6, 0.6, 0))), (F(23.0), Vector((-26.8, 0.6, 0))), (F(25.0), Vector((-27.6, -0.4, 0))),
-           (F(27.0), Vector((-27.4, 0.5, 0))), (F(29.0), Vector((-26.5, 0.7, 0))), (F(33.0), Vector((-27.0, 0.0, 0)))]
+    pts = [(F(20.0), Vector((-26.3, 0.9, 0))), (F(24.0), Vector((-26.0, 0.6, 0))), (F(28.0), Vector((-26.4, 0.95, 0))), (F(33.0), Vector((-26.1, 0.7, 0)))]   # v008: far corner, clear of the camera
     path = catmull(pts)
     def yaw_fn(fr):
         a = path(fr); b = path(fr + 6); d = b - a
@@ -461,7 +455,7 @@ for i in range(6):
     for f in range(1, 2641, 4):
         t = f / 60.0
         if t > 37.9:      # finale: lined up behind her, sticks up
-            pos = FIN + Vector((-2.3 + i * 0.95 + (0.5 if i >= 3 else 0), 1.0 + 0.35 * (i % 2), 0))
+            pos = FIN + Vector(((-2.5, -1.55, 1.15, 1.95, 2.75, -3.3)[i], 1.0 + 0.35 * (i % 2), 0))   # v008: nobody right behind her
             kind = i % 3
             yw = 30 * math.sin(t * 1.4 + i) if kind == 2 else 10 * math.sin(t * 0.8 + i)
             standing_fk(r, f, pos, yw, cheer=0.0, sway=math.sin(t * 2 + i), head=(-4, 15 * math.sin(t * 1.1 + i)))
@@ -716,7 +710,7 @@ for r in SKATE:
 # the cheque: blank, big, paper on foam board, held at its edges by her hands (finale)
 M_paper = mat("ChequePaper", (0.93, 0.92, 0.88), 0.7, noise=0.15, nscale=300)
 cq = box("Cheque", (0.95, 0.012, 0.45), (0, 0, 0), M_paper, C_CHAR, bevel=0.003)
-cq.location = FIN + Vector((-0.35, -0.42, 1.02)); cq.rotation_euler.z = 0
+cq.location = FIN + Vector((-0.35, -0.42, 0.84)); cq.rotation_euler.z = 0
 # follow the fan's body yaw: parent to the fan's root bone at rest
 cq.scale = (0.001,) * 3; cq.keyframe_insert("scale", frame=F(37.95)); cq.scale = (1, 1, 1); cq.keyframe_insert("scale", frame=F(38.0))
 # blue border stripe (no text)
