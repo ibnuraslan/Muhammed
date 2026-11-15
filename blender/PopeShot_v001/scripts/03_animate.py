@@ -324,12 +324,37 @@ rail.location = (Mrot @ RL) + Vector((0, -12.0 + REAR, FLOOR)); rail.rotation_eu
 # Pope: waving with the right hand, left hand on the rail; slow-motion from 255 to 330 (the bullet ride)
 def tw(f):
     """story time warp for the square: slow motion 255..500 (x-ray), returns 'acting' frame"""
-    if f < 255: return f
-    if f < 500: return 255 + (f - 255) * 0.12
-    return 284 + (f - 500)
+    return f      # v007: real time (the Pope reacts to the hit on screen)
+def belly_targets(f, push=0.06):
+    """wrist targets (Pope-local) that put both palms on the front of his suit at the stomach (ray cast on the suit)"""
+    ev(f)
+    suit = O["Pope.male_elegantsuit01"]; es = suit.evaluated_get(bpy.context.evaluated_depsgraph_get())
+    c3 = bone_w(pope, "spine03") + Vector((0, 0, 0.03)); fw = pope.matrix_world.to_3x3() @ Vector((0, -1, 0)); si = suit.matrix_world.inverted()
+    out = []
+    for dx in (0.0, -0.11):
+        o_ = c3 + fw * 0.6 + (pope.matrix_world.to_3x3() @ Vector((dx, 0, 0))) + Vector((0, 0, -0.03 - 0.1 * (dx != 0)))
+        ok, hl, hn, _ = es.ray_cast(si @ o_, (si.to_3x3() @ -fw).normalized())
+        bw = (suit.matrix_world @ hl) if ok else c3 + fw * 0.2
+        out.append(pope.matrix_world.inverted() @ (bw + fw * push + Vector((0, 0, 0.03))))
+    return out
+HIT = 258
 for f in list(range(1, 505, 3)) + [505]:
     t = tw(f)
     wave = math.sin(t * 0.16)
+    if f >= HIT:      # v007: the hit read on screen -- flinch, right hand clutches the stomach, the wounded left hand jerks back
+        h_ = smooth((f - HIT) / 8.0); s2 = smooth((f - 300) / 200.0)
+        stand(P, f, flex=4 + 16 * h_ + 8 * s2, twist=-6 * h_, head=(-4 + 22 * h_ + 6 * s2, 0.0))
+        Wl_, Wr_ = belly_targets(f)
+        w0 = math.sin(HIT * 0.16)
+        r0 = Vector((-0.32 + 0.07 * w0, -0.12, 1.72 + 0.03 * math.cos(HIT * 0.16)))
+        jr = smooth((f - HIT - 2) / 14.0)
+        hand_at(P, "R", f, tuple(r0.lerp(Wr_, jr)), d=tuple(Vector((0, 0, 1)).lerp(Vector((0.9, -0.15, -0.1)), jr)),
+                n=tuple(Vector((0, -1, 0.2)).lerp(Vector((0, 1, 0)), jr)), pole=(-0.75, -0.1, 0.95))
+        kick = math.exp(-max(0, f - HIT) / 5.0) * h_
+        lp = Vector((0.33, -0.28, 1.56)).lerp(Vector((0.15, -0.3, 1.24)), smooth((f - HIT - 4) / 26.0)) + Vector((0.06, 0.12, 0.1)) * kick
+        hand_at(P, "L", f, tuple(lp), d=(0, -0.5, 0.6), n=(-0.3, -1, 0), pole=(0.7, 0.2, 1.0))
+        face(pope, f, brow=-0.85 * h_, lids=0.35 * h_, jaw=12 * h_ * (1 - 0.4 * s2))
+        continue
     stand(P, f, flex=4 + 2 * math.sin(t * 0.03), twist=8 * math.sin(t * 0.02), head=(-4 + 3 * math.sin(t * 0.05), 10 * math.sin(t * 0.025)))
     hand_at(P, "R", f, (-0.32 + 0.07 * wave, -0.12, 1.72 + 0.03 * math.cos(t * 0.16)), d=(0, 0, 1), n=(0, -1, 0.2), pole=(-0.6, 0.3, 1.2))
     if f < 200:
@@ -696,7 +721,7 @@ def bullet_pos(f):
 BD = (ENTRY - MUZZLE).normalized()
 for f in range(254, 332, 2):
     key_obj(bul, f, loc=bullet_pos(f), rot=Vector((0, 0, 1)).rotation_difference(BD).to_euler())
-key_vis(bul, ((1, False), (255, True), (331, False)))
+key_vis(bul, ((1, False),))
 # shimmer streak behind the bullet
 smat, se = emis("Streak", (1.0, 0.9, 0.75), 3.0)
 bpy.ops.mesh.primitive_cone_add(vertices=16, radius1=0.004, radius2=0.0, depth=0.35); stk = bpy.context.object; stk.name = "BulletStreak"; stk.data.materials.append(smat)
@@ -904,9 +929,10 @@ key_obj(O["AideB"], 700, loc=O["AideB"].location.copy() + Vector((0, 0, -60)), i
 pris = O["Prisoner"]; PR = HUM["Prisoner"]
 SEAT = 0.47
 key_obj(pope, 1015, loc=Vector((-0.55, 40.45, 7.0)), rot=(0, 0, R_(90 + 180) - R_(180) + R_(-90) + R_(180)), interp='CONSTANT')
-key_obj(pope, 1015, loc=Vector((-0.3, 40.4, 7.0)), rot=(0, 0, R_(90)), interp='CONSTANT')   # faces +X
-key_obj(pris, 1, loc=Vector((0.18, 40.92, 7.0)), rot=(0, 0, R_(-90)), interp='CONSTANT')          # faces -X
-O["ChairPope"].location = (-0.3 - 0.12, 40.4, 7.0); O["ChairPrisoner"].location = (0.18 + 0.12, 40.92, 7.0)
+key_obj(pope, 1015, loc=Vector((-0.48, 40.66, 7.0)), rot=(0, 0, R_(120)), interp='CONSTANT')   # faces +X; v007: prisoner sits to his right -> right hand to the near shoulder, nothing crosses a body
+key_obj(pris, 1, loc=Vector((0.48, 40.66, 7.0)), rot=(0, 0, R_(-120)), interp='CONSTANT')          # faces -X
+O["ChairPope"].location = (-0.48 - 0.104, 40.66 - 0.06, 7.0); O["ChairPrisoner"].location = (0.48 + 0.104, 40.66 - 0.06, 7.0)
+O["ChairPope"].rotation_euler.z += R_(30); O["ChairPrisoner"].rotation_euler.z -= R_(30)
 def sit(h, f, flex=8.0, head=(0, 0), twist=0.0, knee_out=0.0):
     rh = h.root_head
     h.key_root(f, Vector((rh.x, rh.y + 0.12, SEAT + 0.12)), flex=-4)
@@ -915,7 +941,7 @@ def sit(h, f, flex=8.0, head=(0, 0), twist=0.0, knee_out=0.0):
         h.key_foot(s, f, Vector((h.ankle[s].x * (0.95 + knee_out), h.ankle[s].y - 0.42)), 0.0)
 for f in range(1015, 1160, 3):
     reach = smooth((f - 1035) / 30)
-    sit(P, f, flex=12 + 12 * reach + 2 * math.sin(f * 0.03), head=(8, 6 * math.sin(f * 0.04)), twist=-8 * reach)
+    sit(P, f, flex=12 + 12 * reach + 2 * math.sin(f * 0.03), head=(8, 6 * math.sin(f * 0.04)), twist=8 * reach)
     # the prisoner first (his pose drives the shoulder the Pope's hand rests on)
     look = 0.5 + 0.5 * math.sin((f - 1015) * 0.045)
     nod = 4 * max(0, math.sin(f * 0.35)) * (1 if (f // 50) % 2 else 0)
@@ -926,14 +952,14 @@ for f in range(1015, 1160, 3):
     shirt = O["Prisoner.male_casualsuit03"]; esh = shirt.evaluated_get(bpy.context.evaluated_depsgraph_get()); si = shirt.matrix_world.inverted()
     ok, hl, hn, _ = esh.ray_cast(si @ (Sh + Vector((0, 0, 0.4))), (si.to_3x3() @ Vector((0, 0, -1))).normalized())
     top = (shirt.matrix_world @ hl) if ok else Sh + Vector((0, 0, 0.09))
-    dd = Vector((1.0, 0.25, -0.28)).normalized()                  # fingers lie over the shoulder toward his back
+    dd = Vector((0.99, -0.28, -0.28)).normalized()                # fingers lie over the shoulder toward his back
     tipW = top + Vector((0, 0, 0.018)); wristW = tipW - dd * 0.1 + Vector((0, 0, 0.015))
-    rest = Vector((0.14, -0.36, 0.73)); Minv_ = pope.matrix_world.inverted()
+    rest = Vector((-0.14, -0.36, 0.73)); Minv_ = pope.matrix_world.inverted()
     W = rest.lerp(Minv_ @ wristW, reach) + Vector((0, -0.08, 0.2)) * math.sin(math.pi * reach)   # arcs up and over his arm
-    hand_at(P, "L", f, tuple(W), d=tuple((Minv_.to_3x3() @ dd).lerp(Vector((0.2, -1, -0.25)).normalized(), 1 - reach)), n=tuple(Minv_.to_3x3() @ Vector((0, 0, -1))), pole=(0.8, 0.2, 0.9))
-    hand_at(P, "R", f, (-0.14, -0.34, 0.73), d=(0.2, -1, -0.25), n=(0, 0, -1))
+    hand_at(P, "R", f, tuple(W), d=tuple((Minv_.to_3x3() @ dd).lerp(Vector((-0.2, -1, -0.25)).normalized(), 1 - reach)), n=tuple(Minv_.to_3x3() @ Vector((0, 0, -1))), pole=(-0.8, 0.2, 0.9))
+    hand_at(P, "L", f, (0.14, -0.34, 0.73), d=(-0.2, -1, -0.25), n=(0, 0, -1))
     face(pope, f, brow=0.3 * math.sin(f * 0.05), jaw=7 * max(0, math.sin(f * 0.3)), smile=0.15)
-    face(pris, f, brow=-0.5 + 0.6 * look, lids=0.35 - 0.25 * look)
+    face(pris, f, brow=-0.8 + 0.25 * look, lids=0.45 - 0.15 * look, jaw=3 * max(0.0, math.sin(f * 0.4)))   # moved: sorrow, trembling lip
 for f in range(1, 1015, 40):
     sit(PR, f, flex=8, head=(15, 0))
     hand_at(PR, "R", f, (-0.12, -0.32, 0.73), d=(0.1, -1, -0.25), n=(0, 0, -1)); hand_at(PR, "L", f, (0.12, -0.32, 0.73), d=(-0.1, -1, -0.25), n=(0, 0, -1))
@@ -958,8 +984,8 @@ print("MARY head", hz, top)
 tv = max((mary.matrix_world @ v.co for v in mary.data.vertices), key=lambda v: v.z)
 crown.location = (tv.x, tv.y - 0.02, tv.z - 0.06)
 KNEEL = Vector((0.0, 50.4, 7.0))
-key_obj(pope, 1153, loc=KNEEL, rot=(0, 0, R_(180)), interp='CONSTANT')     # faces +Y toward the statue
-for f in range(1153, 1621, 4):
+key_obj(pope, 1358, loc=KNEEL, rot=(0, 0, R_(180)), interp='CONSTANT')     # faces +Y toward the statue (after he has set the bullet)
+for f in range(1358, 1621, 4):
     # standing in prayer before the statue: head bowed, hands folded, slow breathing sway
     stand(P, f, flex=9 + 2 * math.sin(f * 0.03), head=(18 + 4 * math.sin(f * 0.02), 3 * math.sin(f * 0.013)), sway=0.01)
     hand_at(P, "L", f, (0.06, -0.28, 1.27 + 0.01 * math.sin(f * 0.03)), d=(0, -0.25, 1), n=(-1, 0, 0), pole=(0.5, 0.2, 0.9))
@@ -980,29 +1006,43 @@ for i, (w_, h_) in enumerate(((0.62, 0.3), (0.62, 0.6))):
         lg.data.materials.append(bpy.data.materials["Wood"])
         for c in list(lg.users_collection): c.objects.unlink(lg)
         bpy.data.collections["Shrine"].objects.link(lg)
-key_obj(cl_, 1100, loc=STOOL + Vector((0, 0.05, 0.6)), rot=(0, 0, R_(180 + 35)), interp='CONSTANT')
+key_obj(cl_, 1100, loc=STOOL + Vector((0, 0.05, 0.6)), rot=(0, 0, R_(180 + 35)), interp='CONSTANT')   # the cleric on the step-stool
+POPE_HO = Vector((1.3, 53.0, 7.0))
+key_obj(pope, 1153, loc=POPE_HO, rot=(0, 0, R_(-105)), interp='CONSTANT')   # v007: the Pope stands beside the stool and hands the bullet up
 ev(1200)
 CROWN_W = Vector(crown.location) + Vector((0.0, -0.095, 0.035))
+HP = Vector((1.06, 53.24, 8.74))          # handover point: both hands meet here at 1236
+HO = 1236
 for f in range(1100, 1621, 3):
-    stand(CL, f, flex=4, head=(-18, 0))
-    u = smooth((f - 1200) / 70); v2 = smooth((f - 1300) / 30); back = smooth((f - 1340) / 40)
-    Wl = cl_.matrix_world.inverted() @ CROWN_W
-    start = Vector((-0.2, -0.35, 1.05))
-    Wt = start.lerp(Wl + Vector((0, 0.1, -0.04)), u) .lerp(start, back)
-    hand_at(CL, "R", f, tuple(Wt), d=(0, -0.6, 0.8), n=(-1, 0, 0), pole=(-0.6, 0.3, 1.1))
+    stand(CL, f, flex=4 + 10 * smooth((f - 1195) / 30) * (1 - smooth((f - 1240) / 25)), head=(-18 + 30 * smooth((f - 1195) / 30) * (1 - smooth((f - 1240) / 25)), 0))
+    Mi = cl_.matrix_world.inverted()
+    side_ = Vector((0.3, -0.12, 0.98)); hp_l = Mi @ HP; cr_l = Mi @ CROWN_W
+    a_ = smooth((f - 1200) / 30); b_ = smooth((f - 1244) / 60); back = smooth((f - 1332) / 30)
+    Wt = side_.lerp(hp_l + Vector((0, 0.02, 0.02)), a_).lerp(cr_l + Vector((0, 0.1, -0.04)), b_).lerp(side_, back)
+    hand_at(CL, "R", f, tuple(Wt), d=(0, -0.6, 0.8 if b_ > 0.5 else -0.2), n=(-1, 0, 0), pole=(-0.6, 0.3, 1.1))
     hand_at(CL, "L", f, (0.36, -0.06, 0.97), d=(0, 0, -1), n=(1, 0, 0))
     face(cl_, f, brow=0.3, lids=0.2)
-# the relic bullet: held in the cleric's fingers, then seated in the crown at 1320
+for f in range(1153, 1358, 3):
+    up = smooth((f - 1196) / 34) * (1 - smooth((f - 1242) / 28)); pray = smooth((f - 1262) / 25)
+    stand(P, f, flex=4 + 6 * pray, head=(-22 * up + 10 * pray, 0))
+    Mi = pope.matrix_world.inverted()
+    chest = Vector((-0.12, -0.3, 1.16))
+    Wr = chest.lerp(Mi @ HP + Vector((0, 0.02, -0.03)), up).lerp(Vector((-0.06, -0.28, 1.27)), pray)
+    hand_at(P, "R", f, tuple(Wr), d=tuple(Vector((0, -0.4, 1)).lerp(Vector((0, -0.25, 1)), pray)), n=tuple(Vector((-1, 0, 0.3)).lerp(Vector((1, 0, 0)), pray)), pole=(-0.6, 0.3, 1.0))
+    hand_at(P, "L", f, tuple(Vector((0.12, -0.3, 1.1)).lerp(Vector((0.06, -0.28, 1.27)), pray)), d=(0, -0.25, 1), n=(-1, 0, 0), pole=(0.5, 0.2, 0.9))
+    face(pope, f, brow=0.35, lids=0.2 + 0.4 * pray, smile=0.2 * (1 - pray))
+# the relic bullet: in the Pope's fingers, handed to the cleric at 1236, seated in the crown at 1320
 rb = bul.copy(); rb.data = bul.data; rb.name = "RelicBullet"; bpy.data.collections["Shrine"].objects.link(rb); rb.animation_data_clear()
-rb.scale = (2.4, 2.4, 2.4)
-ch = rb.constraints.new('CHILD_OF'); ch.target = cl_; ch.subtarget = "finger2-3.R"
-ev(1250); ch.inverse_matrix = (cl_.matrix_world @ cl_.pose.bones["finger2-3.R"].matrix).inverted()
-rb.location = cl_.matrix_world @ cl_.pose.bones["finger2-3.R"].tail
-for f, v in ((1, 1.0), (1318, 1.0), (1320, 0.0)):
-    ch.influence = v; ch.keyframe_insert("influence", frame=f)
-ev(1320); seat = Vector(CROWN_W)
+rb.scale = (3.2, 3.2, 3.2)
+ev(HO); rb.location = HP
+c1 = rb.constraints.new('CHILD_OF'); c1.target = pope; c1.subtarget = "finger2-3.R"; c1.inverse_matrix = (pope.matrix_world @ pope.pose.bones["finger2-3.R"].matrix).inverted()
+c2 = rb.constraints.new('CHILD_OF'); c2.target = cl_; c2.subtarget = "finger2-3.R"; c2.inverse_matrix = (cl_.matrix_world @ cl_.pose.bones["finger2-3.R"].matrix).inverted()
+for f, v1, v2_ in ((1, 1.0, 0.0), (HO - 1, 1.0, 0.0), (HO, 0.0, 1.0), (1318, 0.0, 1.0), (1320, 0.0, 0.0)):
+    c1.influence = v1; c1.keyframe_insert("influence", frame=f); c2.influence = v2_; c2.keyframe_insert("influence", frame=f)
+for fc in fcurves(rb.animation_data.action):
+    for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
 rb.keyframe_insert("location", frame=1318)
-rb.location = seat; rb.keyframe_insert("location", frame=1320)
+rb.location = Vector(CROWN_W); rb.keyframe_insert("location", frame=1320)
 set_interp(rb, 1320, 'CONSTANT')
 key_vis(rb, ((1, False), (1153, True)))
 # candles: flickering point lights over the racks + incense haze
@@ -1028,19 +1068,19 @@ print("STAGE sets done")
 # ------------------------------------------------------------------ HANDS: finger curls for every grasp / gesture
 def curl_keys(rig, s, keys):
     for f, a_, th in keys: curl(rig, s, f, a_, th)
-curl_keys(pope, "R", [(1, 8, 5), (505, 8, 5), (520, 35, 25), (640, 20, 15), (763, 6, 4), (1015, 25, 20), (1153, 5, 5)])
-curl_keys(pope, "L", [(1, 15, 10), (505, 15, 10), (520, 40, 25), (640, 20, 15), (763, 45, 30), (1015, 32, 20), (1153, 5, 5)])
+curl_keys(pope, "R", [(1, 8, 5), (258, 8, 5), (272, 35, 25), (505, 35, 25), (520, 35, 25), (640, 20, 15), (763, 6, 4), (1015, 25, 20), (1153, 12, 10), (1240, 10, 8), (1262, 5, 5)])
+curl_keys(pope, "L", [(1, 15, 10), (258, 15, 10), (268, 45, 30), (505, 40, 25), (520, 40, 25), (640, 20, 15), (763, 45, 30), (1015, 32, 20), (1153, 20, 12), (1262, 5, 5)])
 for f in range(780, 1015, 30):          # blessing: two fingers up, ring + little curled
     for fi, a_ in ((4, 75), (5, 80), (1, 30), (2, 2), (3, 2)):
         for seg in (1, 2, 3):
             b = pope.pose.bones["finger%d-%d.R" % (fi, seg)]; b.rotation_quaternion = Quaternion((1, 0, 0), R_(CURL_SIGN * a_)); b.keyframe_insert("rotation_quaternion", frame=f)
 for nm in ("AideA", "AideB"):
     for s_ in "LR": curl_keys(O[nm], s_, [(1, 20, 10), (512, 20, 10), (528, 60, 40), (700, 25, 15)])
-curl_keys(O["AideB"], "R", [(1153, 12, 10), (1328, 10, 8)])
-for f in (1190, 1320):      # pinch: index meets thumb, middle/ring/little relaxed
+curl_keys(O["AideB"], "R", [(1328, 10, 8)])
+for rig_, f in ((pope, 1160), (pope, 1234), (O["AideB"], 1238), (O["AideB"], 1318)):      # pinch: index meets thumb
     for fi, a_ in ((1, 38), (2, 42), (3, 18), (4, 14), (5, 12)):
         for seg in (1, 2, 3):
-            b = O["AideB"].pose.bones["finger%d-%d.R" % (fi, seg)]; b.rotation_quaternion = Quaternion((1, 0, 0), R_(CURL_SIGN * a_ * (0.7 if seg == 1 else 1.0))); b.keyframe_insert("rotation_quaternion", frame=f)
+            b = rig_.pose.bones["finger%d-%d.R" % (fi, seg)]; b.rotation_quaternion = Quaternion((1, 0, 0), R_(CURL_SIGN * a_ * (0.7 if seg == 1 else 1.0))); b.keyframe_insert("rotation_quaternion", frame=f)
 curl_keys(shooter, "R", [(1, 75, 50)]); curl_keys(shooter, "L", [(1, 25, 15)])
 for nm in ("SurgA", "SurgB", "SurgC", "Nurse"):
     for s_ in "LR": curl_keys(O[nm], s_, [(600, 25, 15), (680, 35, 25), (740, 22, 15)])
@@ -1096,104 +1136,79 @@ ev(960); HANDW = bone_w(pope, "wrist.R")
 ev(1130); SHW = bone_w(pris, "shoulder01.L")
 SDIR = Vector((0.55, -0.83, 0)).normalized(); SRIGHT = Vector((SDIR.y, -SDIR.x, 0))
 SHOT = Vector((SHOOTER.x, SHOOTER.y, 1.75)) - SDIR * 0.95 + SRIGHT * 0.38     # over his right shoulder, gun hand in frame
-K = [
- (1,    SHOT,                                  Vector((SHOOTER.x, SHOOTER.y, 1.35)) + SDIR * 4.0, 32),
- (60,   SHOT + Vector((0, 0, 0.25)) - SDIR * 0.2,   Vector((SHOOTER.x, SHOOTER.y, 1.45)) + SDIR * 5.0, 32),   # stays over his shoulder while the gun comes up
- (115,  popehead(115) + FD * 1.9 + Vector((0, 0, 0.2)), popehead(115) + Vector((0, 0, -0.1)), 35),
- (165,  popechest(165) + PERP * 2.4 + FD * 0.8 + Vector((0, 0, 0.9)), popechest(165), 24),
- (210,  Vector((2.8, -4.5, 5.6)),               Vector((-2.0, -1.5, 1.2)), 22),
- (226,  Vector((SHOOTER.x, SHOOTER.y, 0)) - SDIR * 1.6 + SRIGHT * 0.6 + Vector((0, 0, 3.0)), popechest(226), 30),   # over the crowd, not through it
- (240,  Vector((SHOOTER.x, SHOOTER.y, 0)) - SDIR * 0.95 + SRIGHT * 0.38 + Vector((0, 0, 2.3)), MUZZLE + SDIR * 2.2, 34),
+ev(60); SHEAD = bone_w(shooter, "head")
+SPROF = SHEAD + SRIGHT * 1.25 + SDIR * 0.45 + Vector((0, 0, -0.05))       # the shooter's face in profile, gun arm toward frame right
+# v007 (director): clean cuts between shots; each shot is its own smooth spline. (start, end, [(frame, pos, target, lens)])
+SHOTS = [
+ (1, 74,    [(1, SPROF + Vector((0, 0, -0.12)), SHEAD + SDIR * 0.15 + Vector((0, 0, -0.3)), 28),
+             (74, SPROF + SRIGHT * 0.1, SHEAD + SDIR * 0.22 + Vector((0, 0, -0.02)), 30)]),                     # A: he raises the gun
+ (75, 237,  [(75, popehead(75) + FD * 2.8 + PERP * 0.7 + Vector((0, 0, 0.1)), popehead(75) + Vector((0, 0, -0.25)), 30),
+             (115, popehead(115) + FD * 1.9 + Vector((0, 0, 0.2)), popehead(115) + Vector((0, 0, -0.1)), 35),
+             (165, popechest(165) + PERP * 2.4 + FD * 0.8 + Vector((0, 0, 0.9)), popechest(165), 24),
+             (237, popechest(237) + FD * 2.6 + PERP * 1.0 + Vector((0, 0, 0.5)), popechest(237), 28)]),        # B: the Pope waves from the jeep
+ (238, 261, [(238, SPROF + SRIGHT * 0.45 + Vector((0, 0, 0.02)), SHEAD + SDIR * 0.3, 30),
+             (261, SPROF + SRIGHT * 0.35 + Vector((0, 0, 0.02)), SHEAD + SDIR * 0.3, 32)]),                   # C: he fires (flash at 255)
+ (262, 467, [(262, popechest(262) + FD * 2.3 + PERP * 0.5 + Vector((0, 0, 0.3)), popechest(262) + Vector((0, 0, 0.05)), 30),
+             (360, popechest(360) + FD * 2.1 + PERP * 0.35 + Vector((0, 0, 0.25)), popechest(360), 31),
+             (467, popechest(467) + FD * 2.0 + PERP * 0.2 + Vector((0, 0, 0.2)), popechest(467) + Vector((0, 0, -0.05)), 32)]),  # D: hit, clutch
+ (468, 630, [(468, popechest(505) + FD * 3.4 + PERP * 1.0 + Vector((0, 0, 1.4)), popechest(505) + Vector((0, 0, -0.4)), 30),
+             (630, popechest(505) + FD * 3.1 + PERP * 0.9 + Vector((0, 0, 1.3)), popechest(505) + Vector((0, 0, -0.5)), 30)]),   # E: caught, lowered
+ (631, 762, [(631, Vector((-9.05, 41.3, 8.8)), Vector((-8.0, 40.95, 8.2)), 28),
+             (762, Vector((-8.95, 41.2, 8.7)), Vector((-8.0, 40.95, 8.18)), 30)]),                            # F: surgery from the foot end
+ (763, 1014, [(763, Vector((-7.4, 33.9, 9.75)), Vector((-3.0, 22.0, 3.0)), 24),
+             (805, Vector((-7.0, 32.5, 10.2)), Vector((-1.0, 22.0, 3.0)), 22),
+             (845, Vector((-3.6, 23.5, 11.2)), Vector((0.0, 34.0, 8.2)), 24),
+             (900, Vector((-1.4, 30.2, 8.7)), Vector((0.0, 33.9, 8.5)), 32),
+             (950, Vector((-0.9, 31.3, 8.75)), Vector((0.0, 33.95, 8.6)), 34),
+             (1014, Vector((-0.6, 31.7, 8.7)), Vector((0.0, 33.95, 8.55)), 36)]),                               # G: balcony (held front view)
+ (1015, 1152, [(1015, Vector((0.0, 42.2, 8.5)), Vector((0.0, 40.62, 8.22)), 24),
+              (1152, Vector((0.0, 42.05, 8.48)), Vector((0.0, 40.62, 8.24)), 26)]),                         # H: side two-shot in the cell
+ (1153, 1321, [(1153, Vector((-0.4, 50.9, 9.3)), Vector((0.65, 53.3, 9.0)), 24),
+              (1321, Vector((-0.5, 51.0, 9.45)), Vector((0.6, 53.4, 9.3)), 24)]),                          # I: he hands the bullet up to the cleric
+ (1322, 1360, [(1322, CROWN_W + Vector((-0.27, -0.62, 0.03)), CROWN_W + Vector((0, 0, -0.01)), 35),
+              (1360, CROWN_W + Vector((-0.24, -0.58, 0.03)), CROWN_W, 36)]),                                  # J: crown close-up, bullet set
+ (1361, 1545, [(1361, POPEHEAD8 + Vector((-0.75, 0.62, 0.0)), POPEHEAD8 + Vector((0, 0, -0.08)), 38),
+              (1545, POPEHEAD8 + Vector((-0.6, 0.55, 0.02)), POPEHEAD8 + Vector((0, 0, -0.06)), 42)]),         # K: 3/4 front, praying
+ (1546, 1620, [(1546, POPEHEAD8 + Vector((-0.9, -1.6, 0.45)), CROWN_W + Vector((0, 0, -0.3)), 30),
+              (1585, POPEHEAD8 + Vector((-0.45, -0.55, 0.3)), CROWN_W + Vector((0, 0, -0.1)), 34),
+              (1604, CROWN_W + Vector((-0.42, -1.05, -0.02)), CROWN_W + Vector((0, 0, -0.01)), 42),
+              (1620, CROWN_W + Vector((-0.3, -0.72, 0.02)), CROWN_W + Vector((0, 0, -0.01)), 45)]),          # L: push-in to the crown
 ]
-for f in range(256, 307, 10):
-    side = 0.16 * (1 - (f - 256) / 70.0) + 0.05
-    K.append((f, bullet_pos(f) - BD * 0.24 + SRIGHT * side + Vector((0, 0, 0.05)), bullet_pos(f) + BD * 0.9, 45))
-# the chase camera brakes 0.7 m short of the robe and lets the bullet fly on into the porthole (never enters the body)
-K.append((320, ENTRY - BD * 1.15 + SRIGHT * 0.1 + Vector((0, 0, 0.18)), ENTRY + Vector((0, 0, 0.2)), 36))
-K += [
- (334,  ENTRY - BD * 1.9 + Vector((0, 0, 0.3)), XCW + Vector((0, 0, 0.3)), 30),
- (378,  XCW + (Matrix.Rotation(R_(-50), 3, 'Z') @ (-BD)) * 2.0 + Vector((0, 0, 0.3)), XCW + Vector((0, 0, 0.3)), 30),
- (418,  (XHW + popehead(418)) / 2 + (Matrix.Rotation(R_(-15), 3, 'Z') @ FD) * 2.2 + Vector((0, 0, -0.05)), (XHW + popehead(418)) / 2, 32),
- (465,  (XHW + popehead(465)) / 2 + (Matrix.Rotation(R_(25), 3, 'Z') @ FD) * 2.1 + Vector((0, 0, 0.05)), (XHW + popehead(465)) / 2 + Vector((0, 0, -0.05)), 30),
- (505,  popechest(505) + FD * 2.1 + PERP * 0.5 + Vector((0, 0, 0.3)), popechest(505) + Vector((0, 0, -0.1)), 30),
- (555,  popechest(505) + FD * 2.2 - PERP * 1.8 + Vector((0, 0, -0.3)), popechest(505) + Vector((0, 0, -0.35)), 24),
- (598,  popechest(505) + FD * 1.7 - PERP * 3.0 + Vector((0, 0, 0.8)), popechest(505) + Vector((0, 0, -0.3)), 22),
- (622,  Vector((-1.8, -6.2, 3.4)),              Vector((-3.0, 8.0, 2.4)), 22),    # jeep + Pope in the foreground, facade far
- (631,  Vector((-2.3, -5.2, 3.7)),              Vector((-3.4, 10.0, 2.6)), 22),
- (641,  Vector((-7.7, 31.5, 9.0)),              Vector((-8.0, 36.0, 9.3)), 22),
- (650,  Vector((-8.0, 35.3, 9.35)),             Vector((-8.0, 40.0, 8.6)), 22),
- (668,  Vector((-8.1, 38.0, 10.3)),             Vector((-8.0, 40.3, 8.1)), 24),
- (700,  Vector((-6.6, 39.0, 9.6)),             Vector((-8.0, 40.4, 8.2)), 26),
- (738,  Vector((-7.05, 39.95, 9.25)),            Vector((-7.9, 40.7, 8.3)), 30),
- (760,  Vector((-6.3, 38.9, 9.0)),              Vector((-8.0, 40.5, 8.1)), 28),      # pull back to the whole team before the cut at 763
- (782,  Vector((-7.6, 34.4, 9.7)),              Vector((-3.0, 22.0, 3.0)), 24),
- (805,  Vector((-7.0, 32.5, 10.2)),             Vector((-1.0, 22.0, 3.0)), 22),
- (845,  Vector((-3.6, 23.5, 11.2)),             Vector((0.0, 34.0, 8.2)), 24),
- (900,  Vector((-1.4, 30.2, 8.7)),              Vector((0.0, 33.9, 8.5)), 32),
- (950,  HANDW + Vector((0.9, -1.5, -0.1)),       HANDW, 40),
- (990,  Vector((0.75, 34.2, 8.85)),             Vector((0.0, 37.0, 8.6)), 30),
- (1013, Vector((0.0, 36.3, 8.75)),              Vector((0.0, 39.5, 8.3)), 26),
- (1032, Vector((0.0, 38.65, 8.55)),             Vector((0.0, 40.65, 7.95)), 26),
- (1062, Vector((-0.95, 39.85, 8.32)),           Vector((0.18, 40.92, 8.12)), 32),
- (1077, Vector((-0.9, 40.95, 8.45)),            Vector((0.1, 40.75, 8.05)), 30),
- (1092, Vector((-0.05, 41.95, 8.2)),             Vector((-0.05, 40.66, 8.05)), 30),
- (1118, Vector((-0.45, 41.65, 8.3)),             Vector((0.18, 40.92, 8.12)), 38),
- (1132, Vector((0.1, 41.95, 8.45)),               SHW + Vector((0, 0, 0.1)), 36),   # simplified: hold the two-shot (faces) instead of a close dive past the prisoner
- (1143, Vector((0.3, 41.3, 8.7)),              Vector((0.0, 43.2, 9.0)), 26),
- (1158, Vector((0.0, 42.45, 8.98)),             Vector((0.0, 44.5, 9.0)), 26),
- (1172, Vector((0.0, 43.6, 9.0)),               Vector((0.0, 53.6, 9.2)), 24),
- (1205, Vector((0.6, 46.3, 8.5)),               Vector((0.0, 52.0, 8.8)), 24),
- (1245, Vector((-1.3, 50.6, 9.0)),              Vector((0.0, 53.6, 9.4)), 28),
- (1285, Vector((-0.95, 52.3, 10.1)),            CROWN_W, 35),
- (1318, CROWN_W + Vector((-0.42, -0.32, 0.02)), CROWN_W, 55),
- (1345, CROWN_W + Vector((-0.55, -1.05, -0.25)), CROWN_W + Vector((0, 0, -0.45)), 35),
- (1382, CROWN_W + Vector((-0.85, -0.95, -0.55)), POPEHEAD8, 32),
- (1405, XCW8 + Vector((1.3, 0.4, 0.45)),         XCW8 + Vector((0, 0, 0.3)), 34),   # at his right side, clear of the altar candles
- (1440, XCW8 + Vector((1.25, 0.15, 0.35)),        XCW8 + Vector((0, 0, 0.3)), 32),
- (1480, XCW8 + Vector((1.2, -0.2, 0.35)),         XCW8 + Vector((0, 0, 0.3)), 32),
- (1520, XCW8 + Vector((1.0, -0.8, 0.5)),          XCW8 + Vector((0, 0, 0.3)), 30),
- (1555, Vector((-1.4, 47.6, 8.3)),              Vector((0.0, 52.6, 8.9)), 26),
- (1585, POPEHEAD8 + Vector((-0.45, -0.55, 0.3)), CROWN_W + Vector((0, 0, -0.1)), 34),   # over his shoulder as he prays, pushing in to the crown (no turns)   # his face as he prays
- (1604, CROWN_W + Vector((-0.42, -1.05, -0.02)), CROWN_W + Vector((0, 0, -0.01)), 42),
- (1620, CROWN_W + Vector((-0.3, -0.72, 0.02)),   CROWN_W + Vector((0, 0, -0.01)), 45),             # end on the crown with the bullet
-]
-K.sort(key=lambda k: k[0])
-cpos = catmull([(k[0], k[1]) for k in K]); ctgt = catmull([(k[0], k[2]) for k in K]); clen = pchip([(k[0], float(k[3])) for k in K])
 cam = bpy.data.objects.new("CAM", bpy.data.cameras.new("CAM")); sc.collection.objects.link(cam); sc.camera = cam
 cam.data.sensor_width = 36; cam.data.clip_start = 0.01; cam.data.dof.use_dof = True; cam.data.dof.aperture_fstop = 8.0
 foc = bpy.data.objects.new("CamFocus", None); sc.collection.objects.link(foc); cam.data.dof.focus_object = foc
-# orientations first; then ease any one-frame snap (> 20 deg/frame) into a short whip with the same end framings
-CUTS = ((763, 777, 790), (1129, 1143, 1160))   # (output cut frame, source frame after the cut, rejoin frame): clean cuts replace the two whip pans
-def src(f):
-    for c_, s_, e_ in CUTS:
-        if c_ <= f < e_: return s_ + (f - c_) * (e_ - s_) / (e_ - c_)
-    return f
-CUTF = [c_ for c_, _, _ in CUTS]
-QS = {f: (ctgt(src(f)) - cpos(src(f))).to_track_quat('-Z', 'Y') for f in range(1, 1621)}
 def ang(a_, b_): return math.degrees(2 * math.acos(min(1.0, abs(a_.dot(b_)))))
-for f in range(2, 1621):                      # keep consecutive quaternions in one hemisphere (slerp takes the short way)
-    if QS[f].dot(QS[f - 1]) < 0: QS[f] = -QS[f]
-for it in range(40):
-    jumps = [f for f in range(2, 1621) if ang(QS[f - 1], QS[f]) > 18.0 and f not in CUTF]
-    if not jumps: break
-    for j in jumps:
-        tot = ang(QS[max(1, j - 1)], QS[j]); half = max(4, int(math.ceil(tot / 16.0)) + 2)
-        a0, b0 = max(1, j - half), min(1620, j + half)
-        for c_ in CUTF:              # never ease across a cut
-            if a0 < c_ <= j: a0 = c_
-            if j < c_ <= b0: b0 = c_ - 1
-        qa, qb = QS[a0].copy(), QS[b0].copy()
-        for f in range(a0 + 1, b0):
-            u = smooth((f - a0) / (b0 - a0)); QS[f] = qa.slerp(qb, u)
+CPOS, CTGT, CLEN, QS = {}, {}, {}, {}
+CUTF = [s0 for s0, _, _ in SHOTS[1:]]
+for s0, s1, ks in SHOTS:
+    cp_ = catmull([(k[0], k[1]) for k in ks]); ct_ = catmull([(k[0], k[2]) for k in ks]); cl_ = pchip([(k[0], float(k[3])) for k in ks])
+    for f in range(s0, s1 + 1):
+        CPOS[f], CTGT[f], CLEN[f] = cp_(f), ct_(f), cl_(f)
+        QS[f] = (CTGT[f] - CPOS[f]).to_track_quat('-Z', 'Y')
+        if f > s0 and QS[f].dot(QS[f - 1]) < 0: QS[f] = -QS[f]
+    for it in range(40):                      # ease any snap inside the shot
+        jumps = [f for f in range(s0 + 1, s1 + 1) if ang(QS[f - 1], QS[f]) > 18.0]
+        if not jumps: break
+        for j in jumps:
+            tot = ang(QS[j - 1], QS[j]); half = max(4, int(math.ceil(tot / 16.0)) + 2)
+            a0, b0 = max(s0, j - half), min(s1, j + half)
+            qa, qb = QS[a0].copy(), QS[b0].copy()
+            for f in range(a0 + 1, b0):
+                QS[f] = qa.slerp(qb, smooth((f - a0) / (b0 - a0)))
 print("CAMJUMP max deg/frame (cuts excluded)", round(max(ang(QS[f - 1], QS[f]) for f in range(2, 1621) if f not in CUTF), 1))
-print("CAMJUMP over 18:", [(f, round(ang(QS[f - 1], QS[f]), 1)) for f in range(2, 1621) if f not in CUTF and ang(QS[f - 1], QS[f]) > 18.0])
+print("CUTS at", CUTF)
+def src(f): return f
 prev = None
 for f in range(1, 1621):
-    p = cpos(src(f)); t = ctgt(src(f))
     q = QS[f]; e = q.to_euler('XYZ', prev) if prev else q.to_euler('XYZ'); prev = e
-    cam.location = p; cam.rotation_euler = e; cam.data.lens = clen(src(f))
+    cam.location = CPOS[f]; cam.rotation_euler = e; cam.data.lens = CLEN[f]
     cam.keyframe_insert("location", frame=f); cam.keyframe_insert("rotation_euler", frame=f); cam.data.keyframe_insert("lens", frame=f)
-    foc.location = t; foc.keyframe_insert("location", frame=f)
+    foc.location = CTGT[f]; foc.keyframe_insert("location", frame=f)
+for fc in fcurves(cam.animation_data.action) + fcurves(foc.animation_data.action) + fcurves(cam.data.animation_data.action):
+    for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'    # baked per frame: no blending across cuts
+for f_, n_ in ((1, 8.0), (1322, 11.0), (1361, 8.0), (1600, 11.0)):      # crown close-ups: f/11 so the whole crown and the bullet are sharp
+    cam.data.dof.aperture_fstop = n_; cam.data.dof.keyframe_insert("aperture_fstop", frame=f_)
+cpos = lambda f: CPOS[int(round(f))]; ctgt = lambda f: CTGT[int(round(f))]; clen = lambda f: CLEN[int(round(f))]
 # ------------------------------------------------------------------ INSET DIAGRAM (replaces the x-ray; director v005 review)
 # The robe stays solid. A small round side-view cut-away sits in the upper-right corner: torso outline, spine, aorta, stomach,
 # intestines, and the bullet path drawing itself between them (missing the aorta and spine). Camera-only, no text.
@@ -1222,25 +1237,34 @@ def ell(name, cx, cy, rx, ry, z, mat, segs=64, rot=0.0):
     o = bpy.data.objects.new(name, me); sc.collection.objects.link(o); o.parent = INSET; INS_PARTS.append(o); return o
 ell("InsetRing", 0, 0, 1.06, 1.06, -0.004, flat("InsetNavy", (0.03, 0.08, 0.2), 1.0))
 ell("InsetDisc", 0, 0, 1.0, 1.0, 0.0, flat("InsetPaper", (0.88, 0.94, 1.0), 0.9))
-ell("InsetTorso", 0.0, 0.0, 0.44, 0.8, 0.004, flat("InsetBody", (0.55, 0.74, 0.9), 0.9))
-ell("InsetGut", -0.06, -0.33, 0.27, 0.2, 0.008, flat("InsetGutM", (0.92, 0.66, 0.58), 1.0), rot=0.2)
-ell("InsetStomach", -0.12, 0.2, 0.18, 0.12, 0.009, flat("InsetStomachM", (0.93, 0.45, 0.52), 1.0), rot=-0.35)
-ell("InsetAorta", 0.14, 0.0, 0.032, 0.62, 0.01, flat("InsetAortaM", (0.82, 0.07, 0.08), 1.0), segs=24)
+TS, TX, TY = 0.74, 0.2, 0.08                     # torso group: right part of the circle
+def ellT(name, cx, cy, rx, ry, z, mat, segs=64, rot=0.0): return ell(name, TX + TS * cx, TY + TS * cy, TS * rx, TS * ry, z, mat, segs, rot)
+ellT("InsetTorso", 0.0, 0.0, 0.44, 0.8, 0.004, flat("InsetBody", (0.55, 0.74, 0.9), 0.9))
+ellT("InsetGut", -0.06, -0.33, 0.27, 0.2, 0.008, flat("InsetGutM", (0.92, 0.66, 0.58), 1.0), rot=0.2)
+ellT("InsetStomach", -0.12, 0.2, 0.2, 0.14, 0.009, flat("InsetStomachM", (0.93, 0.4, 0.48), 1.1), rot=-0.35)
+ellT("InsetAorta", 0.14, 0.0, 0.035, 0.62, 0.01, flat("InsetAortaM", (0.82, 0.07, 0.08), 1.0), segs=24)
 spm = flat("InsetSpineM", (0.98, 0.95, 0.86), 1.1)
 for i in range(9):
-    ell("InsetVert%d" % i, 0.28, -0.64 + i * 0.16, 0.06, 0.06, 0.01, spm, segs=6)
+    ellT("InsetVert%d" % i, 0.28, -0.64 + i * 0.16, 0.06, 0.06, 0.01, spm, segs=6)
+# the wounded hand (left index finger), lower left of the circle
+skin = flat("InsetSkin", (0.95, 0.76, 0.62), 1.0); HX, HY = -0.55, -0.32
+ell("InsetPalm", HX, HY, 0.13, 0.15, 0.006, skin)
+for k_, dx_ in enumerate((-0.09, -0.03, 0.03, 0.09)):
+    ell("InsetFinger%d" % k_, HX + dx_, HY + 0.22 - 0.02 * abs(k_ - 1.5), 0.03, 0.1, 0.006, skin, segs=24)
+ell("InsetThumb", HX - 0.16, HY + 0.02, 0.03, 0.09, 0.006, skin, segs=24, rot=0.7)
+ell("InsetWound", HX - 0.09, HY + 0.24, 0.07, 0.018, 0.012, flat("InsetWoundM", (1.0, 0.5, 0.08), 3.0), segs=24, rot=0.35)
 cu = bpy.data.curves.new("InsetPath", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.022; cu.bevel_resolution = 2
-sp_ = cu.splines.new('NURBS'); PTS = ((-0.7, 0.03), (-0.3, 0.0), (0.0, -0.03), (0.2, -0.09), (0.45, -0.14), (0.72, -0.18))
+sp_ = cu.splines.new('NURBS'); PTS = tuple((TX + TS * x_, TY + TS * y_) for x_, y_ in ((-0.7, 0.03), (-0.3, 0.0), (0.0, -0.03), (0.2, -0.09), (0.45, -0.14), (0.72, -0.18)))
 sp_.points.add(len(PTS) - 1)
 for pt, (x_, y_) in zip(sp_.points, PTS): pt.co = (x_, y_, 0.014, 1)
 sp_.use_endpoint_u = True; sp_.order_u = 3; cu.materials.append(flat("InsetPathM", (1.0, 0.5, 0.08), 3.0))
 pth = bpy.data.objects.new("InsetPath", cu); sc.collection.objects.link(pth); pth.parent = INSET; INS_PARTS.append(pth)
 for o_ in INS_PARTS:
     for k_ in ("visible_shadow", "visible_diffuse", "visible_glossy", "visible_transmission", "visible_volume_scatter"): setattr(o_, k_, False)
-INSET_W = ((340, 488), (1414, 1515))
+INSET_W = ((300, 392),)
 cu.bevel_factor_end = 0.0; cu.keyframe_insert("bevel_factor_end", frame=1)
 for a_, b_ in INSET_W:
-    for f_, v_ in ((a_ + 8, 0.0), (a_ + 50, 1.0), (b_, 1.0), (b_ + 1, 0.0)):
+    for f_, v_ in ((a_ + 6, 0.0), (a_ + 36, 1.0), (b_, 1.0), (b_ + 1, 0.0)):
         cu.bevel_factor_end = v_; cu.keyframe_insert("bevel_factor_end", frame=f_)
 for f in range(1, 1621):
     w_ = [(a_, b_) for a_, b_ in INSET_W if a_ - 1 <= f <= b_ + 1]
@@ -1251,11 +1275,61 @@ for f in range(1, 1621):
         g_ = 0.0
     D = max(0.4, (ctgt(src(f)) - cpos(src(f))).length * 0.7)      # in front of the subject, near the focus plane (sharp at f/8)
     hh = D * 18.0 / clen(src(f)); hw = hh * 1080 / 1920
-    r_ = 0.4 * hw
-    INSET.location = (hw * 0.97 - r_, hh * 0.80 - r_, -D); INSET.scale = (r_ * max(g_, 0.001),) * 3
+    r_ = 0.46 * hw
+    INSET.location = (hw * 0.97 - r_, hh * 0.86 - r_, -D); INSET.scale = (r_ * max(g_, 0.001),) * 3
     INSET.keyframe_insert("location", frame=f); INSET.keyframe_insert("scale", frame=f)
 for o_ in INS_PARTS:
-    key_vis(o_, ((1, False), (INSET_W[0][0], True), (INSET_W[0][1] + 1, False), (INSET_W[1][0], True), (INSET_W[1][1] + 1, False)))
+    key_vis(o_, ((1, False), (INSET_W[0][0], True), (INSET_W[0][1] + 1, False)))
+# ------------------------------------------------------------------ v007: oxygen mask on the patient (surgery 631..762)
+ev(700)
+hh_ = bone_w(pope, "head"); ht_ = bone_w(pope, "head", "tail"); ax_ = (ht_ - hh_).normalized()
+MOUTH = hh_ + ax_ * 0.05 + Vector((0, 0, 0.1))
+mm = bpy.data.materials.new("OxyMask"); mm.use_nodes = True; bsm = mm.node_tree.nodes["Principled BSDF"]
+bsm.inputs['Base Color'].default_value = (0.75, 0.92, 0.85, 1); bsm.inputs['Roughness'].default_value = 0.25
+bsm.inputs['Transmission Weight'].default_value = 0.55; bsm.inputs['Alpha'].default_value = 0.9
+bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1.0, location=MOUTH); om = bpy.context.object; om.name = "OxygenMask"
+om.scale = (0.045, 0.055, 0.03); om.data.materials.append(mm)
+for p_ in om.data.polygons: p_.use_smooth = True
+tc_ = bpy.data.curves.new("OxyTube", 'CURVE'); tc_.dimensions = '3D'; tc_.bevel_depth = 0.008; tc_.bevel_resolution = 2
+spt = tc_.splines.new('NURBS'); TP = (MOUTH + Vector((0, 0, 0.02)), MOUTH + Vector((0.12, 0.04, 0.05)), MOUTH + Vector((0.3, 0.08, -0.02)), MOUTH + Vector((0.42, 0.1, -0.3)))
+spt.points.add(len(TP) - 1)
+for pt, c_ in zip(spt.points, TP): pt.co = (c_.x, c_.y, c_.z, 1)
+spt.use_endpoint_u = True; spt.order_u = 3
+tm = bpy.data.materials.new("OxyTubeM"); tm.use_nodes = True; tm.node_tree.nodes["Principled BSDF"].inputs['Base Color'].default_value = (0.7, 0.85, 0.9, 1)
+tc_.materials.append(tm); otb = bpy.data.objects.new("OxyTube", tc_); sc.collection.objects.link(otb)
+for o_ in (om, otb):
+    key_vis(o_, ((1, False), (631, True), (763, False)))
+# ------------------------------------------------------------------ v007: cloth shader on the robe, paint shader on the jeep (no flat clay white)
+def cloth(mname, tint):
+    m = bpy.data.materials.get(mname)
+    if not m or not m.node_tree: return
+    nt = m.node_tree; n, l = nt.nodes, nt.links
+    bs = next((x for x in n if x.type == 'BSDF_PRINCIPLED'), None)
+    if not bs: return
+    if bs.inputs['Base Color'].links:
+        src_ = bs.inputs['Base Color'].links[0].from_socket
+        mx = n.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
+        mx.inputs[7].default_value = tint + (1,); l.new(src_, mx.inputs[6]); l.new(mx.outputs[2], bs.inputs['Base Color'])
+    else:
+        bs.inputs['Base Color'].default_value = tint + (1,)
+    wv = n.new('ShaderNodeTexWave'); wv.inputs['Scale'].default_value = 420; wv.inputs['Distortion'].default_value = 1.5
+    nz = n.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 60
+    mxh = n.new('ShaderNodeMath'); mxh.operation = 'ADD'; l.new(wv.outputs['Fac'], mxh.inputs[0]); l.new(nz.outputs['Fac'], mxh.inputs[1])
+    bp = n.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.12; l.new(mxh.outputs[0], bp.inputs['Height'])
+    if bs.inputs['Normal'].links: l.new(bs.inputs['Normal'].links[0].from_socket, bp.inputs['Normal'])
+    l.new(bp.outputs['Normal'], bs.inputs['Normal'])
+    bs.inputs['Roughness'].default_value = 0.78
+    bs.inputs['Sheen Weight'].default_value = 0.5; bs.inputs['Sheen Roughness'].default_value = 0.4
+for mn_ in ("CassockWhite", "Pope_male_elegantsuit01", "PopeWool"):
+    cloth(mn_, (0.93, 0.9, 0.84))
+jm = bpy.data.materials.get("jeep.001")
+if jm and jm.node_tree:
+    bs = next((x for x in jm.node_tree.nodes if x.type == 'BSDF_PRINCIPLED'), None)
+    if bs:
+        if not bs.inputs['Base Color'].links: bs.inputs['Base Color'].default_value = (0.8, 0.82, 0.84, 1)
+        bs.inputs['Roughness'].default_value = 0.35; bs.inputs['Metallic'].default_value = 0.15
+        bs.inputs['Coat Weight'].default_value = 0.9; bs.inputs['Coat Roughness'].default_value = 0.04
+print("V007 shaders + mask done")
 sc.frame_set(1)
 import json
 beats = [(1, "He fired straight at the Pope"), (265, "Two bullets tore through"), (505, "He collapsed, badly wounded"), (631, "but survived after emergency surgery"),
