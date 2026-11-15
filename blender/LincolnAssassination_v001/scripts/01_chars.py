@@ -137,6 +137,7 @@ for o in hs:
 hs[0].name = "Horse"; hs[1].name = "Horse_body"
 for pb in hs[0].pose.bones: pb.location = (0, 0, 0); pb.rotation_quaternion = (1, 0, 0, 0); pb.scale = (1, 1, 1)
 hs[0].location = (14, 0, 0)
+hb = hs[1]; hb.data.transform(Matrix.Diagonal((0.84, 1.0, 1.0, 1.0)))   # 16% narrower barrel so a rider's legs stay outside the body
 
 for o in bpy.data.objects:
     if o.type == 'ARMATURE':

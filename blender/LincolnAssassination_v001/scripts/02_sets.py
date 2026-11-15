@@ -173,10 +173,10 @@ box("BoxValanceRod", (BX0 - 0.2, BY0, BZ + 3.25), (BX0 - 0.1, BY1, BZ + 3.33), M
 for i, y in enumerate((BY0 + 0.25, BY1 - 0.25)):
     d = cur.copy(); d.data = cur.data; T.objects.link(d); d.name = "BoxDrape%d" % i
     d.location = (BX0 + 0.12, y, BZ); d.rotation_euler = (0, 0, 0); d.scale = (0.5, 0.07, 0.38)
-chair = glb_asset("armchair", T, target_size=1.05, axis=2)
+chair = glb_asset("armchair", T, target_size=1.25, axis=2)
 recolor(chair, (0.55, 0.3, 0.75))
 chair.name = "BoxChair"
-CHAIR_POS = Vector((9.95, -1.2, BZ)); CHAIR_YAW = math.degrees(math.atan2(-10.2, -5.0))
+CHAIR_POS = Vector((10.3, -1.2, BZ)); CHAIR_YAW = math.degrees(math.atan2(-10.2, -5.0))
 place(chair, CHAIR_POS, yaw=CHAIR_YAW)
 chair2 = chair.copy(); chair2.data = chair.data; T.objects.link(chair2); chair2.name = "BoxChair2"
 place(chair2, (10.6, 0.0, BZ), yaw=CHAIR_YAW + 10)

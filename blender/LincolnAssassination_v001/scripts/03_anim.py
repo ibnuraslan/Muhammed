@@ -24,6 +24,11 @@ def ground_w(x, y):
 def ground_z(x, y):            # anim_lib calls this with armature-space xy of the character being keyed
     s = CUR_S[0]; return ground_w(x * s, y * s) / s
 
+_kf0 = Human.key_foot
+def _kf(self, s, f, xy, yaw, lift=0.0, pitch=0.0):     # MPFB shoe soles dip ~2 cm below the ankle-derived floor line
+    _kf0(self, s, f, xy, yaw, lift + 0.025 / CUR_S[0], pitch)
+Human.key_foot = _kf
+
 def yaw_to(d):
     return math.degrees(math.atan2(d.x, -d.y))
 
@@ -219,7 +224,7 @@ F_FIRE = ST["S05"] + 40
 
 # ---- president: seated in the armchair, watching; a laugh with the audience before the shot
 def pres_seated(f, laugh=0.0, breath=0.0):
-    c = P.use(); seat = CHP + Rc @ V(0, -0.02, 0.31)
+    c = P.use(); seat = CHP + Rc @ V(0, -0.15, 0.45)
     hip_w = seat + V(0, 0, 0.09 * c.s)
     pa = c.a(hip_w)
     c.H.key_root(f, pa, yaw=CHY, flex=-6 - 4 * laugh)
@@ -294,7 +299,7 @@ _pb.location = G.R.rest("Pole_elbow.R").to_3x3().inverted() @ (G.a(V(GPOS.x, GPO
 _pb.keyframe_insert("location", frame=FG, group="Pole_elbow.R")
 apply_pose(G.o, "R", "relaxed", FG)
 rep = grip_object(G.o, "R", FG, pistol, pistol.matrix_world @ V(0.0, 0.0, -0.005), (pistol.matrix_world.to_3x3() @ V(-1, 0, 0)).normalized(),
-                  finger_dir=(pistol.matrix_world.to_3x3() @ V(0, -0.3, -1)).normalized())
+                  finger_dir=(pistol.matrix_world.to_3x3() @ V(0, -0.3, -1)).normalized(), finger_radius=0.021)
 print("GRIP", rep)
 def curl_free(rig, sd, rep, f):
     pr = _pose_rots(rig, sd, "power_fist")
@@ -503,7 +508,7 @@ quad_gallop(HR, p12, H_S12[0], H_S12[1], stride=3.0)
 for f in (1, H_S11[0] - 1): quad_hold(HR, f, V(150, 30, 0), 0.0)
 for f in (H_S12[1] + 1, END_FRAME): quad_hold(HR, f, V(150, 30, 0), 0.0)
 # rider: pelvis on the saddle seat, legs outside the barrel, feet at the stirrups, hands at the reins over the withers
-SEAT = V(0, 0.22, 1.62)                         # horse rest space (saddle seat)
+SEAT = V(0, 0.22, 1.68)                         # horse rest space (saddle seat)
 def rider(f, lean=12.0):
     sc.frame_set(f)
     Mt = horse.matrix_world @ horse.pose.bones["torso"].matrix @ HR.rest("torso").inverted()   # rest -> posed
@@ -513,10 +518,10 @@ def rider(f, lean=12.0):
     G.use(); G.H.key_root(f, G.a(root), yaw=hd, flex=-lean * 0.4, side=0)
     G.H.key_spine(f, flex=lean, head=(-lean * 0.8, 0))
     for sd, sx in (("L", 1), ("R", -1)):
-        st = Mt @ V(sx * 0.40, 0.10, 0.92)
+        st = Mt @ V(sx * 0.56, 0.02, 1.02)
         a = G.a(st); G.H.key_foot(sd, f, a.to_2d(), hd, lift=(st.z - G.H.ankle[sd].z * G.s) / G.s, pitch=0)
         pb = G.o.pose.bones["Pole_knee." + sd]; n = "Pole_knee." + sd
-        pole = G.a(Mt @ V(sx * 0.55, -0.6, 1.25)); pb.location = G.R.rest(n).to_3x3().inverted() @ (pole - G.R.BN[n].head_local)
+        pole = G.a(Mt @ V(sx * 1.2, -0.8, 1.35)); pb.location = G.R.rest(n).to_3x3().inverted() @ (pole - G.R.BN[n].head_local)
         pb.keyframe_insert("location", frame=f, group=n)
         W = Mt @ V(sx * 0.11, -0.38, 1.74)
         G.hand_w(sd, f, W, Mt.to_3x3() @ V(-sx * 0.3, -1, -0.3), Mt.to_3x3() @ V(-sx, 0, -0.4), Mt @ V(sx * 0.55, 0.1, 1.6))
@@ -546,10 +551,10 @@ for i, (c, x0, delay) in enumerate(zip(SOL, (98.6, 100.8, 102.6), (0, 8, 14))):
     Wt = rhand(FT)
     for f in range(M0, M1 + 1, 2):
         p = path(f); key_pole(c, "R", f, V(p.x - 0.7, p.y + 0.3, 0.9))
-    t.matrix_world = Matrix.Translation(Wt + V(0, 0, -0.30)) @ Matrix.Rotation(R_(-12), 4, 'X')
+    t.matrix_world = Matrix.Translation(Wt) @ Matrix.Rotation(R_(16), 4, 'X') @ Matrix.Translation(V(0, 0, -0.22))
     bpy.context.view_layer.update()
-    Cax = t.matrix_world @ V(0, 0, 0.30)
-    rep = grip_object(c.o, "R", FT, t, Cax + V(-0.026, 0, 0), V(1, 0, 0), finger_dir=V(0, -1, 0))
+    Cax = t.matrix_world @ V(0, 0, 0.22)
+    rep = grip_object(c.o, "R", FT, t, Cax + V(-0.026, 0, 0), V(1, 0, 0), finger_dir=V(0, -1, 0), finger_radius=0.017)
     print("TORCH GRIP", c.o.name, rep)
     curl_free(c.o, "R", rep, FT)
     sc.frame_set(FT); H0t = c.o.pose.bones["IK_hand.R"].matrix.copy(); T0 = t.matrix_world.copy()
