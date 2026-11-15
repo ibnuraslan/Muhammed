@@ -20,6 +20,10 @@ The fly-over to the sanctuary is shortened from 11 frames to 5 (f1906–1910). I
 ## 4. Goat head near the lens, f661–786
 The eye-macro and horn keys (f690 and f740) now frame the whole goat in front, with the owner coming back down the porch steps behind it (tracker `go`). The f790 key is now an absolute position, so the path to it no longer passes through the goat.
 
+## Also fixed after watching the first v008b preview
+- **f636–646 were black.** The goat-relative f630 camera key put the camera inside the shed. It is now an absolute position (−2.2, 4.4), and the path stays at x ≥ −2.36, clear of the shed wall at x −2.8.
+- **f1915–1924: the camera flew through the goat.** After the 48 m fly-over jump, the camera spline overshot to y 62.3, the goat's position, then swung back. Settle keys at f1910 and f1916 stop the overshoot, and a hold key at f1903 limits the dip before the jump to one frame.
+
 `GoatOwner_v008b_60fps.blend` is 69 MB: packed, compressed, and a plain git file. Packaging reported no problems.
 
 ## Files in `review/`

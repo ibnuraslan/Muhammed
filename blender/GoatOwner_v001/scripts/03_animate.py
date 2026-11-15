@@ -727,7 +727,7 @@ CAMK = [
  (462,  (-1.0, -0.6, 1.1), ("gh",), 32),    # tense goat, whole head and neck in frame
  (500,  (1.6, 1.6, 1.4), ("gb",), 28),      # round the east side of the goat (the straight path went through it)
  (540,  (0.4, 3.9, 1.3), ("gb",), 26),
- (630,  ("gb", (1.9, -2.1, 0.5), "g"), ("gb", (0, 0, 0.1)), 30),   # whole goat centred (was cut at the edge)
+ (630,  (-2.2, 4.4, 1.1), ("gb", (0, 0, 0.1)), 30),       # whole goat centred; absolute and clear of the shed (the goat-local key put it inside)
  (690,  (-2.2, -0.1, 1.0), ("go",), 30),     # whole goat, the owner coming back down the steps behind it
  (740,  (-2.1, -0.7, 0.95), ("go",), 27),
  (790,  (0.9, -0.6, 0.7), ("gh", (0, 0, -0.25)), 30),     # stamping hoof, head in frame (absolute: the path no longer crosses the goat)
@@ -757,8 +757,11 @@ CAMK = [
  (1860, (2.6, 8.2, 1.6), ("ga",), 24),                     # the ramp, the goat and the officer with the pole all in frame
  (1880, (2.7, 8.6, 1.7), ("ga",), 24),
  (1895, (2.6, 9.0, 2.1), ("ga",), 24),
+ (1903, (2.45, 9.15, 2.8), ("gb",), 24),                   # hold (stops the spline dipping back before the jump)
  (1905, (2.4, 9.2, 3.0), ("gb",), 24),                     # rise before the fly-over
+ (1910, (2.4, 56.4, 2.15), (1.7, 62.1, 0.6), 30),
  (1911, (2.4, 57.0, 2.1), (1.7, 62.1, 0.6), 30),       # 5-frame fly-over lands straight on the rescuer and the goat (no empty frames)
+ (1916, (2.45, 57.25, 2.03), (1.75, 62.1, 0.6), 30),     # settle (stops the spline overshooting through the goat)
  (1928, (2.6, 57.6, 1.9), (1.8, 62.1, 0.58), 30),
  (1970, (3.2, 58.8, 1.3), (1.9, 62.2, 0.55), 30),
  (2020, (4.6, 58.6, 2.2), (1.9, 62.3, 0.5), 28),           # down into the pasture
