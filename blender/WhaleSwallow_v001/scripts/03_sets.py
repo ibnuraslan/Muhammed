@@ -86,7 +86,7 @@ for i in range(14):
         cl = bpy.context.object; cl.name = "Cloud"; cl.scale = (1.6, 1.0, 0.55); cl.data.materials.append(cloud_m); link(cl, C)
         cl.visible_shadow = False
 sun = bpy.data.objects.new("Sun", bpy.data.lights.new("Sun", 'SUN')); sun.data.energy = 4.0; sun.data.angle = math.radians(3)
-sun.rotation_euler = (math.radians(40), 0, math.radians(200)); C.objects.link(sun)
+sun.rotation_euler = (math.radians(40), 0, math.radians(200)); C.objects.link(sun); sun.visible_glossy = False   # no sun flare on the water
 
 # ---------------------------------------------------------------- UNDER: dome with vertical gradient, surface, specks
 C = col("SET_UNDER")
@@ -163,8 +163,23 @@ wrig = bpy.data.objects["WhaleRig"]; wrig.location = UNDER + Vector((0, 0, 300))
 
 # ---------------------------------------------------------------- MOUTH interior (y forward = toward the lip gap at -Y)
 C = col("SET_MOUTH")
-pink = mat("Mouth_tongue", (0.86, 0.38, 0.45), rough=0.32, coat=0.5)
-palate = mat("Mouth_palate", (0.78, 0.30, 0.38), rough=0.35, coat=0.4)
+pink = mat("Mouth_tongue", (0.80, 0.30, 0.38), rough=0.22, coat=0.9)
+_N = pink.node_tree.nodes; _P = _N["Principled BSDF"]; _P.inputs['Coat Roughness'].default_value = 0.06
+_wv = _N.new('ShaderNodeTexWave'); _wv.inputs['Scale'].default_value = 2.2; _wv.inputs['Distortion'].default_value = 6; _wv.inputs['Detail'].default_value = 3
+_nz = _N.new('ShaderNodeTexNoise'); _nz.inputs['Scale'].default_value = 9
+_ad = _N.new('ShaderNodeMath'); _ad.operation = 'ADD'; _bp = _N.new('ShaderNodeBump'); _bp.inputs['Strength'].default_value = 0.45
+pink.node_tree.links.new(_wv.outputs['Fac'], _ad.inputs[0]); pink.node_tree.links.new(_nz.outputs['Fac'], _ad.inputs[1])
+pink.node_tree.links.new(_ad.outputs[0], _bp.inputs['Height']); pink.node_tree.links.new(_bp.outputs['Normal'], _P.inputs['Normal'])
+_cr = _N.new('ShaderNodeValToRGB'); _cr.color_ramp.elements[0].color = (0.62, 0.18, 0.26, 1); _cr.color_ramp.elements[1].color = (0.88, 0.40, 0.46, 1)
+pink.node_tree.links.new(_wv.outputs['Fac'], _cr.inputs[0]); pink.node_tree.links.new(_cr.outputs[0], _P.inputs['Base Color'])
+palate = mat("Mouth_palate", (0.78, 0.30, 0.38), rough=0.25, coat=0.7)
+_N = palate.node_tree.nodes; _P = _N["Principled BSDF"]
+_tc = _N.new('ShaderNodeTexCoord'); _sx = _N.new('ShaderNodeSeparateXYZ'); _mr = _N.new('ShaderNodeMapRange')
+_mr.inputs['From Min'].default_value = -4.5; _mr.inputs['From Max'].default_value = 4.5
+_cr = _N.new('ShaderNodeValToRGB'); _cr.color_ramp.elements[0].color = (0.82, 0.34, 0.42, 1); _cr.color_ramp.elements[1].position = 1.0
+_cr.color_ramp.elements[1].color = (0.30, 0.05, 0.09, 1)
+palate.node_tree.links.new(_tc.outputs['Object'], _sx.inputs[0]); palate.node_tree.links.new(_sx.outputs['Y'], _mr.inputs[0])
+palate.node_tree.links.new(_mr.outputs[0], _cr.inputs[0]); palate.node_tree.links.new(_cr.outputs[0], _P.inputs['Base Color'])
 bale = mat("Mouth_baleen", (0.09, 0.085, 0.08), rough=0.55)
 fringe = mat("Mouth_fringe", (0.30, 0.27, 0.24), rough=0.7)
 # tongue floor: 7 x 9 m, domed, soft noise
@@ -193,7 +208,7 @@ pal = bpy.data.objects.new("Mouth_palate", pmesh); C.objects.link(pal); pmesh.ma
 for p in pal.data.polygons: p.use_smooth = True
 # back of the throat: a closing wall at +Y with a darker red ring (lit, never black)
 bpy.ops.mesh.primitive_circle_add(vertices=48, radius=3.4, fill_type='TRIFAN', location=MOUTH + Vector((0, 4.5, 0.4)), rotation=(math.radians(90), 0, 0))
-th = bpy.context.object; th.name = "Mouth_throat"; th.scale = (1, 0.82, 1); th.data.materials.append(mat("Mouth_throat", (0.55, 0.16, 0.22), rough=0.4)); link(th, C)
+th = bpy.context.object; th.name = "Mouth_throat"; th.scale = (1, 0.82, 1); th.data.materials.append(mat("Mouth_throat", (0.22, 0.03, 0.06), rough=0.3, coat=0.6)); link(th, C)
 # baleen walls: plates hanging from the palate edge on both sides, from y=-4.2 to +3.8
 bm = bmesh.new(); bmf = bmesh.new()
 for side in (-1, 1):
@@ -220,6 +235,14 @@ sp = bpy.data.objects.new("Mouth_gap_spot", bpy.data.lights.new("Mouth_gap_spot"
 sp.data.shape = 'RECTANGLE'; sp.data.color = (0.7, 0.92, 1.0); sp.location = MOUTH + Vector((0, -4.2, 1.15)); sp.rotation_euler = (math.radians(-80), 0, 0); C.objects.link(sp)
 fill = bpy.data.objects.new("Mouth_fill", bpy.data.lights.new("Mouth_fill", 'AREA')); fill.data.energy = 500; fill.data.size = 4
 fill.data.color = (1.0, 0.78, 0.8); fill.location = MOUTH + Vector((0, 0.5, 2.9)); C.objects.link(fill)
+# shallow sea water pooled along the sides of the tongue
+bpy.ops.mesh.primitive_grid_add(x_subdivisions=60, y_subdivisions=70, size=1, location=(0, 0, 0)); wt = bpy.context.object; wt.name = "Mouth_water"
+wt.scale = (6.8, 8.8, 1); bpy.ops.object.transform_apply(scale=True); wt.location = MOUTH + Vector((0, 0, 0.30))
+_dt = bpy.data.textures.new("MouthRipple", 'CLOUDS'); _dt.noise_scale = 0.35; _dm = wt.modifiers.new("Ripple", 'DISPLACE'); _dm.texture = _dt; _dm.strength = 0.02
+wtm = mat("Mouth_water", (0.75, 0.90, 0.95), rough=0.03); _P = wtm.node_tree.nodes["Principled BSDF"]
+_P.inputs['Transmission Weight'].default_value = 1.0; _P.inputs['IOR'].default_value = 1.33
+wt.data.materials.append(wtm); link(wt, C); bpy.ops.object.shade_smooth()
+
 # ---------------------------------------------------------------- HOSPITAL room
 C = col("SET_HOSP")
 O = HOSP
@@ -284,8 +307,9 @@ for m in vest.data.materials:
         src = bl.from_socket; m.node_tree.links.remove(bl)
         bw = m.node_tree.nodes.new('ShaderNodeRGBToBW'); m.node_tree.links.new(src, bw.inputs[0])
         rmp = m.node_tree.nodes.new('ShaderNodeValToRGB')
-        rmp.color_ramp.elements[0].position = 0.06; rmp.color_ramp.elements[0].color = (0.04, 0.04, 0.045, 1)
-        rmp.color_ramp.elements[1].position = 0.18; rmp.color_ramp.elements[1].color = (0.95, 0.30, 0.03, 1)
+        rmp.color_ramp.interpolation = 'CONSTANT'
+        rmp.color_ramp.elements[0].position = 0.0; rmp.color_ramp.elements[0].color = (0.22, 0.23, 0.25, 1)
+        rmp.color_ramp.elements[1].position = 0.035; rmp.color_ramp.elements[1].color = (0.95, 0.32, 0.04, 1)
         m.node_tree.links.new(bw.outputs[0], rmp.inputs[0]); m.node_tree.links.new(rmp.outputs[0], P.inputs['Base Color'])
     for l in list(m.node_tree.links):
         if l.to_socket in (P.inputs['Roughness'], P.inputs['Metallic']): m.node_tree.links.remove(l)
