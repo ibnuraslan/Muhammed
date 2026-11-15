@@ -472,8 +472,20 @@ _stk.data.transform(Matrix.Diagonal((0.4, 0.4, 1.0, 1.0))); _stk.data.update(); 
 _Po = _G + _upo * 0.2
 _ok, _lc, _nr, _ix = _stk.closest_point_on_mesh(_stk.matrix_world.inverted() @ _Po); _C = _stk.matrix_world @ _lc
 print("STICK_GRIP", HP.grip_object(_H, "R", 102, _stk, _C, (_C - _Po).normalized(), finger_dir=_side))
-for o_ in HOLD_PARTS: key_vis(o_, [(1, False), (93, True), (131, False)])
-key_vis(OB["Strike_stick"], [(1, False), (93, True), (300, False)])   # no stick hanging in the sky before the swing
+for o_ in HOLD_PARTS: key_vis(o_, [(1, False)])   # v007d (director option A): no hand at all
+key_vis(OB["Strike_stick"], [(1, False), (93, True), (116, False)])   # v007d: a fast whoosh into the strike only (~0.4 s)
+# ... then the stick lies on the ground below the perch
+_dg = bpy.context.evaluated_depsgraph_get(); _o = BIRD_J + Vector((0.35, -0.25, -0.3))
+_q = _o.copy(); _gz = 0.0
+for _i in range(12):      # skip non-rendering helpers (dust-mote volume) and plants: find the ground
+    _hit = sc.ray_cast(_dg, _q, Vector((0, 0, -1)), distance=10)
+    if not _hit[0]: break
+    if _hit[4].name.startswith(("Mote", "Plant", "Leaf", "Fern")) or _hit[4].hide_render: _q = _hit[1] + Vector((0, 0, -0.002)); continue
+    _gz = _hit[1].z; break
+SG = bpy.data.objects.new("Stick_ground", _stk.data); C_ANIM.objects.link(SG)
+SG.matrix_world = Matrix.Translation(Vector((_o.x, _o.y, _gz + 0.03))) @ Matrix.Rotation(R_(-35), 4, 'Z') @ Matrix.Rotation(R_(88), 4, 'X') @ Matrix.Translation((0, 0, -0.8))
+key_vis(SG, [(1, False), (116, True), (676, False)])
+print("STICK_GROUND z", round(_gz, 3), "hit", _hit[4].name if _hit[0] else None)
 
 # relaxed arms while walking / standing idle: hands hang at the thighs with a small counter-swing (no IK target left at the origin)
 def arms_relaxed(H, f0, f1, step=4, swing=0.07, period=48.0):
