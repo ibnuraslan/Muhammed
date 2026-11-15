@@ -131,7 +131,7 @@ BODYM = {}
 def hand_rest(h, s, f, out=0.08, fwd=-0.02, up=0.0):
     B = h.r.BN; sx = 1 if s == "L" else -1
     out = 0.085 + (out - 0.07) * 0.3; fwd = min(fwd, -0.05); up = up + 0.035     # v003: arms hang relaxed, elbows soft; curled fingers clear the thigh
-    if h.r.o.name == "RIG_Hero": out += 0.04; fwd -= 0.015                            # his enlarged hands would brush his thighs
+    if h.r.o.name == "RIG_Hero": out += 0.01; fwd -= 0.035                            # v005: arms close to his sides (was a 30-degree A-pose); hands a little forward of the thighs
     sh = B["upperarm01." + s].head_local
     W = Vector((sh.x + sx * out, sh.y + fwd, sh.z - 0.43 * (sh.z / 1.031) * 1.0 + up))
     P = Vector((sh.x + sx * 0.2, sh.y + 0.5, sh.z - 0.3)); d = Vector((0, 0, -1)); n = Vector((-sx, 0, 0))
@@ -384,7 +384,7 @@ Yg.key_root(1, PY + V(0, 0, Yg.root_head.z - 0.01), yaw=yY)
 Yg.key_foot("L", 1, Yg.foot_xy("L", PY, yY), yY); Yg.key_foot("R", 1, Yg.foot_xy("R", PY, yY), yY)
 for f in range(1, 2341, 40): arms_idle(Yg, f, 0.07, -0.03); Yg.key_spine(f, flex=-2, head=(-10 if f > 2150 else -4, -24 if f > 2150 else -4))
 breathe(Yg, 1, 2340, base=PY + V(0, 0, Yg.root_head.z - 0.01), yaw=yY, ph=2.2)
-for nm, rng in (("Officer1", [(1, 371), (470, 1476)]),   # off during the x-ray beat (he would straddle the cutaway card)
+for nm, rng in (("Officer1", [(1, 1476)]),   # off during the x-ray beat (he would straddle the cutaway card)
                 ("Officer2", [(1, 1476)]), ("Clerk", [(1, 1476)]), ("Recruit1", [(1, 1476)]), ("Recruit2", [(1, 1476)]),
                 ("Surgeon1", [(1477, 1857)]), ("Surgeon2", [(1477, 1857)]), ("Nurse", [(1477, 1857)]), ("Normal", [(1858, 1999)]), ("Young", [(2000, 2340)])):
     for m_ in meshes_of(RIGS[nm]): vis(m_, rng)
@@ -402,10 +402,10 @@ tr = nt.nodes.new("ShaderNodeBsdfTransparent"); ad_ = nt.nodes.new("ShaderNodeAd
 nt.links.new(tr.outputs[0], ad_.inputs[0]); nt.links.new(em.outputs[0], ad_.inputs[1]); nt.links.new(ad_.outputs[0], o_.inputs[0])
 xr.data.materials.clear(); xr.data.materials.append(xm)
 for md in [m for m in xr.modifiers if m.type == "MASK" and m.name.startswith("Delete")]: xr.modifiers.remove(md)
-XRAY = [(372, 470), (1074, 1240)]   # v003b: x-ray ends with the 8-frame card fade (was a blank fade to 1262)
+XRAY = []   # v005: no see-through body (client rejects x-ray versions of solid things)   # v003b: x-ray ends with the 8-frame card fade (was a blank fade to 1262)
 vis(xr, XRAY)
 for m_ in hero_meshes:
-    hide_ranges(m_, [(181, 470), (1080, 1240), (1658, 1712)])
+    hide_ranges(m_, [(151, 240)])   # v005: hidden only for the brain inset
 BR = OB["Brain"]; BR.parent = HRIG; BR.parent_type = "BONE"; BR.parent_bone = "head"
 hb = HR.r.BN["head"]; BRAIN_LOCAL = V(0.0, -0.035, 0.085)        # in head-bone space (y along bone)
 BR.matrix_parent_inverse = Matrix.Identity(4)
@@ -413,11 +413,11 @@ BR.location = V(0, -0.148, 0.0); BR.scale = (0.84,) * 3
 BR.rotation_euler = (R_(-90), 0, 0)
 brain_objs = [BR] + list(BR.children_recursive)
 for o in brain_objs:
-    if o.type == "MESH": vis(o, [(181, 470), (1658, 1712)])
+    if o.type == "MESH": vis(o, [(151, 240)])
 PIT = OB["Pituitary"]; TUM = OB["Tumour"]
 for o, off in ((PIT, V(0, -0.014, 0.036)), (TUM, V(0, -0.017, 0.033))):
     o.parent = BR; o.location = off; o.rotation_euler = (R_(90), 0, 0)
-    vis(o, [(181, 470), (1658, 1712)])
+    vis(o, [(151, 240)])
 tb = TUM.data.materials[0].node_tree.nodes["Principled BSDF"]
 for f, s, e in ((181, 0.25, 0.0), (250, 0.5, 0.5), (300, 0.9, 1.5), (360, 1.3, 3.0), (420, 1.4, 4.0), (500, 1.4, 3.0), (1658, 1.4, 4.0), (1690, 1.4, 2.0)):
     TUM.scale = (s,) * 3; TUM.keyframe_insert("scale", frame=f)
@@ -443,14 +443,14 @@ for i, sx in enumerate((1, -1)):
     b.inputs["Metallic"].default_value = 1.0; b.inputs["Roughness"].default_value = 0.22; b.inputs["Base Color"].default_value = (0.75, 0.75, 0.76, 1)
     me.materials.append(mm); sub = fo.modifiers.new("s", "SUBSURF"); sub.levels = 1; sub.render_levels = 2
     fo.parent = TUM; fo.location = (sx * 0.003, 0, 0.002); fo.rotation_euler = (0, 0, 0)
-    vis(fo, [(1658, 1712)]); FORC.append(fo)
+    vis(fo, []); FORC.append(fo)   # v005: no tweezers without a hand
 TUM.keyframe_insert("location", frame=1680)
 TUM.location = TUM.location + V(0, 0.0, -0.06); TUM.keyframe_insert("location", frame=1708)
 # spine inside the x-ray torso, bends (scoliosis)
 SP = OB["Spine"]; SP.parent = HRIG; SP.location = (0, 0.035, 0.6); SP.rotation_euler = (0, 0, 0); SP.scale = (0.95,) * 3
 spm = [o for o in SP.children_recursive if o.type == "MESH"]
 for o in spm:
-    vis(o, [(1074, 1240), (372, 470)])
+    vis(o, [])   # v005: spine only lived in the x-ray
     md = o.modifiers.new("bend", "SIMPLE_DEFORM"); md.deform_method = "BEND"; md.deform_axis = "Y"; md.origin = SP
     md.angle = 0.0; md.keyframe_insert("angle", frame=1090); md.angle = R_(55); md.keyframe_insert("angle", frame=1220)
 # hormone stream: glowing particles from the pituitary down vessels (in hero armature space)
@@ -475,7 +475,7 @@ for k in range(110):
     rt = ROUTES[k % 4]; t0 = 372 + random.randint(0, 50); dur = random.randint(50, 80); jit = V(random.gauss(0, 0.012), random.gauss(0, 0.01), random.gauss(0, 0.01))
     for f in range(t0, min(t0 + dur, 470) + 1, 4):
         o.location = route_pt(rt, (f - t0) / dur) + jit; o.keyframe_insert("location", frame=f)
-    vis(o, [(t0, min(t0 + dur, 470))])
+    vis(o, [])   # v005: hormone stream only lived in the x-ray
 
 # ------------------------------------------------------------------ camera
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.sensor_fit = "AUTO"; cam_d.clip_start = 0.004; cam_d.clip_end = 200
@@ -508,46 +508,63 @@ DYN = [(1275, eye8a + f8a * 0.10, OFFS, 28), (1335, eye8b + f8b * 0.12 + u8b * 0
        (1640, c9 + f9 * 0.42 + s9 * 0.12 - u9 * 0.05, c9 + f9 * 0.06, 30), (1654, c9b + (f9b + u9b * 0.42).normalized() * 0.26, c9b, 32), (1660, c9b + (f9b + u9b * 0.42).normalized() * 0.16, c9b, 40), (1666, c9b + (f9b + u9b * 0.3).normalized() * 0.14 + s9b * 0.04, c9b, 38), (1676, c9b + f9b * 0.14 + s9b * 0.1, c9b, 36),
        (1690, BR9 + s9b * 0.16 + f9b * 0.06, TU9, 40), (1708, BR9 + s9b * 0.12 - u9b * 0.05 + f9b * 0.08, TU9, 45), (1718, c9 + f9 * 0.45 - u9 * 0.3 + s9 * 0.1, c9, 30)]
 sc.frame_set(1)
-KEYS = [  # frame, cam, aim, lens
-    (1, V(0.35, 0.5, 2.05), V(-0.3, 2.3, 1.15), 26), (45, V(0.55, 0.35, 1.95), V(-0.3, 2.4, 1.05), 28),
-    (95, V(-0.05, 1.1, 1.25), V(-0.3, 2.45, 1.22), 32), (140, V(-0.35, 1.72, 1.3), V(-0.3, 2.4, 1.25), 38),
-    (170, V(-0.56, 2.28, 1.21), V(-0.3, 2.37, 1.205), 45), (180, V(-0.392, 2.352, 1.205), V(-0.3, 2.375, 1.205), 45),
-    (190, V(-0.395, 2.355, 1.22), V(-0.3, 2.385, 1.23), 32), (240, V(-0.5, 2.25, 1.33), HEAD0, 35),
-    (300, V(-0.36, 2.16, 1.17), PITW, 45), (355, V(-0.29, 2.22, 1.19), PITW, 55),
-    (380, V(-0.22, 2.08, 1.2), PITW + V(0, 0, -0.01), 40), (420, V(-0.05, 1.55, 1.05), V(-0.3, 2.45, 0.9), 28),
-    (462, V(-0.15, 1.0, 0.95), V(-0.3, 2.45, 0.62), 24), (510, V(0.55, 0.55, 0.95), V(-0.75, 2.5, 1.0), 22),
-    (565, V(0.85, 0.25, 1.25), V(-0.85, 2.5, 1.2), 22), (625, V(0.35, 0.15, 1.6), V(-0.6, 2.5, 1.45), 24),
-    (690, V(0.05, 1.05, 1.4), V(0.1, 2.25, 0.95), 30), (740, V(-0.02, 1.72, 1.24), V(0.12, 2.36, 0.96), 40),
-    (790, V(-0.18, 1.6, 0.45), V(-0.25, 2.42, 0.12), 32), (815, V(-0.42, 1.72, 1.35), V(0.2, 2.6, 1.4), 30), (830, V(-0.68, 2.15, 1.75), V(1.4, 2.8, 1.55), 32), (845, V(-0.22, 2.64, 1.97), V(2.8, 2.98, 1.72), 38),
-    (880, V(-0.2, 1.0, 1.3), V(-0.35, 2.2, 1.5), 26), (920, V(1.5, -0.1, 0.45), V(-0.3, 2.0, 1.5), 22),
-    (975, V(0.35, -0.85, 0.42), V(-0.35, 2.0, 1.6), 22), (1030, V(-1.45, -0.45, 0.5), V(-0.3, 2.1, 1.6), 22),
-    (1075, V(-0.75, 0.75, 1.45), V(-0.3, 2.35, 1.4), 26), (1120, V(-0.95, 0.95, 1.3), V(-0.3, 2.45, 1.15), 28),
-    (1175, V(-0.45, 1.2, 1.25), V(-0.3, 2.45, 1.1), 30), (1235, V(0.15, 1.35, 1.55), V(-0.3, 2.45, 1.3), 28),
-            (1466, V(0.75, 1.95, 2.0), V(1.6, 3.1, 1.85), 28), (1488, V(2.45, 1.62, 2.13), V(5.0, 1.2, 1.6), 26), (1494, V(3.44, 1.44, 2.2), V(6.0, 1.0, 1.4), 24),
-    (1498, V(3.95, 1.36, 2.26), V(6.5, 0.9, 1.3), 24), (1540, V(4.55, 1.25, 2.4), V(6.9, 0.6, 0.9), 24),
-    (1595, V(5.8, -0.65, 2.6), V(6.9, 0.6, 0.85), 26),         (1740, V(6.0, 0.55, 1.8), V(6.9, 0.6, 0.72), 28),
-    (1790, V(6.1, 0.5, 1.45), V(6.9, -0.05, 0.7), 26), (1845, V(5.7, -1.25, 1.55), V(6.9, -0.45, 0.6), 26),
-    (1868, V(6.0, -1.25, 1.45), V(9.45, -1.0, 1.4), 22), (1930, V(6.2, -0.5, 0.8), V(9.45, -1.0, 1.55), 22),
-    (1950, V(7.2, -0.1, 1.75), V(7.2, 3.1, 1.95), 24), (1972, V(7.4, 1.3, 2.2), V(7.1, 3.1, 2.0), 24), (1998, V(7.1, 3.0, 2.45), V(7.3, 6.0, 1.8), 26),
-    (2035, V(8.3, 5.2, 3.2), V(8.6, 7.0, 0.1), 28), (2100, V(8.9, 6.1, 2.2), V(10.2, 11.5, 1.2), 30),
-    (2180, V(8.0, 10.6, 1.8), V(10.1, 11.8, 1.5), 32), (2260, V(8.0, 12.85, 1.75), V(10.1, 11.8, 1.55), 32),
-    (2340, V(8.1, 13.05, 1.9), V(10.1, 11.8, 1.6), 32)]   # vNEXT: arc to a front three-quarter so both faces read at the end (was backs only)
-KEYS = sorted(KEYS + DYN, key=lambda k: k[0])
-fc_ = catmull([(f, c) for f, c, a_, l in KEYS]); fa_ = catmull([(f, a_) for f, c, a_, l in KEYS]); fl_ = catmull([(f, float(l)) for f, c, a_, l in KEYS])
-for f in list(range(1, 2341, 2)) + [2340]:
-    cam.location = fc_(f); cam.keyframe_insert("location", frame=f)
-    aim.location = fa_(f); aim.keyframe_insert("location", frame=f)
-    cam_d.lens = fl_(f); cam_d.keyframe_insert("lens", frame=f)
+# v005: the film is cut into SHOTS joined by clean cuts (director: no fly-throughs into heads, walls or windows).
+# Each shot is its own smooth spline; the camera is keyed on every frame so a cut lands exactly on its frame.
+PH = c9 + V(0, 0, -0.02)                       # patient's head at f1640
+SHOTS = [
+  (1, 150, [(1, V(0.35, 0.5, 2.05), V(-0.3, 2.3, 1.15), 26), (45, V(0.55, 0.35, 1.95), V(-0.3, 2.4, 1.05), 28),
+            (95, V(-0.05, 1.1, 1.25), V(-0.3, 2.45, 1.22), 32), (150, V(-0.3, 1.6, 1.32), V(-0.3, 2.42, 1.22), 36)]),
+  (151, 240, [(151, V(-0.5, 2.25, 1.33), HEAD0, 35), (240, V(-0.4, 2.18, 1.2), PITW, 42)]),            # brain inset on the card, 1.5 s
+  (241, 812, [(241, V(0.25, 0.85, 1.45), V(-0.3, 2.45, 1.15), 30), (372, V(0.4, 0.6, 1.5), V(-0.3, 2.45, 1.1), 28),
+              (470, V(0.5, 0.45, 1.35), V(-0.5, 2.5, 1.05), 24), (510, V(0.55, 0.55, 0.95), V(-0.75, 2.5, 1.0), 22),
+              (565, V(0.85, 0.25, 1.25), V(-0.85, 2.5, 1.2), 22), (625, V(0.35, 0.15, 1.6), V(-0.6, 2.5, 1.45), 24),
+              (690, V(0.45, 0.2, 1.6), V(-0.3, 2.4, 1.2), 24), (760, V(0.3, 0.1, 1.75), V(-0.25, 2.4, 1.3), 24), (812, V(0.1, 0.35, 1.75), V(-0.2, 2.45, 1.4), 25)]),
+  (813, 1240, [(815, V(-0.42, 1.72, 1.35), V(0.2, 2.6, 1.4), 30), (830, V(-0.68, 2.15, 1.75), V(1.4, 2.8, 1.55), 32), (845, V(-0.55, 2.45, 2.0), V(2.8, 2.98, 1.72), 38),
+               (880, V(-0.2, 1.0, 1.3), V(-0.35, 2.2, 1.5), 26), (920, V(1.5, -0.1, 0.45), V(-0.3, 2.0, 1.5), 22),
+               (975, V(0.35, -0.85, 0.42), V(-0.35, 2.0, 1.6), 22), (1030, V(-1.45, -0.45, 0.5), V(-0.3, 2.1, 1.6), 22),
+               (1075, V(-0.6, 0.7, 1.45), V(-0.3, 2.35, 1.4), 26), (1120, V(-0.55, 0.8, 1.35), V(-0.3, 2.45, 1.15), 28),
+               (1175, V(-0.45, 1.2, 1.25), V(-0.3, 2.45, 1.1), 30), (1240, V(0.15, 1.35, 1.55), V(-0.3, 2.45, 1.3), 28)]),
+  (1241, 1365, [(1241, eye8a + f8a * 0.10, OFFS, 28), (1365, eye8b + f8b * 0.12 + u8b * 0.02, OFFS, 30)]),          # his eyes looking down at the officers
+  (1366, 1481, [(1366, c8c + f8c * 1.5 + s8c * 0.5 + u8c * 0.1, c8c - u8c * 0.15, 30), (1481, c8d + f8d * 1.6 + s8d * 0.55 + u8d * 0.1, c8d - u8d * 0.15, 30)]),  # medium shot, hand at his own ear
+  (1482, 1640, [(1482, V(3.95, 1.36, 2.26), V(6.5, 0.9, 1.3), 24), (1540, V(4.55, 1.25, 2.4), V(6.9, 0.6, 0.9), 24),
+                (1595, V(5.8, -0.65, 2.6), V(6.9, 0.6, 0.85), 26), (1640, V(5.95, -0.55, 2.4), V(6.9, 0.6, 0.85), 26)]),
+  (1641, 1716, [(1641, PH + V(-0.9, -1.0, 0.8), PH, 30), (1716, PH + V(-0.75, -0.85, 0.7), PH, 32)]),               # surgeons at the head of the bed
+  (1717, 1940, [(1717, c9 + f9 * 0.45 - u9 * 0.3 + s9 * 0.1, c9, 30), (1740, V(6.0, 0.55, 1.8), V(6.9, 0.6, 0.72), 28),
+                (1790, V(6.1, 0.5, 1.45), V(6.9, -0.05, 0.7), 26), (1845, V(5.7, -1.25, 1.55), V(6.9, -0.45, 0.6), 26),
+                (1868, V(6.0, -1.25, 1.45), V(9.45, -1.0, 1.4), 22), (1940, V(6.2, -0.5, 0.8), V(9.45, -1.0, 1.55), 22)]),
+  (1941, 2340, [(1941, V(7.8, 4.0, 2.6), V(8.6, 7.0, 0.2), 28), (2035, V(8.3, 5.2, 3.2), V(8.6, 7.0, 0.1), 28), (2100, V(8.9, 6.1, 2.2), V(10.2, 11.5, 1.2), 30),
+                (2180, V(8.0, 10.6, 1.8), V(10.1, 11.8, 1.5), 32), (2260, V(8.0, 12.85, 1.75), V(10.1, 11.8, 1.55), 32), (2340, V(8.1, 13.05, 1.9), V(10.1, 11.8, 1.6), 32)])]
+CUTS = [a for a, b, k in SHOTS[1:]]
+def shot_eval(ks, f):
+    if len(ks) == 1: return ks[0][1], ks[0][2], ks[0][3]
+    kk = ks if len(ks) > 2 else [ks[0], (0.5 * (ks[0][0] + ks[1][0]), ks[0][1].lerp(ks[1][1], 0.5), ks[0][2].lerp(ks[1][2], 0.5), 0.5 * (ks[0][3] + ks[1][3])), ks[1]]
+    fc = catmull([(k[0], k[1]) for k in kk]); fa = catmull([(k[0], k[2]) for k in kk]); fl = catmull([(k[0], float(k[3])) for k in kk])
+    g = min(max(f, kk[0][0]), kk[-1][0]); return fc(g), fa(g), fl(g)
+for a0, b0, ks in SHOTS:
+    for f in range(a0, b0 + 1):
+        c_, a_, l_ = shot_eval(ks, f)
+        cam.location = c_; cam.keyframe_insert("location", frame=f)
+        aim.location = a_; aim.keyframe_insert("location", frame=f)
+        cam_d.lens = l_; cam_d.keyframe_insert("lens", frame=f)
+fa_ = lambda f: shot_eval(next(k for a0, b0, k in SHOTS if a0 <= f <= b0), f)[1]
+fc_ = lambda f: shot_eval(next(k for a0, b0, k in SHOTS if a0 <= f <= b0), f)[0]
+for o_ in (cam, aim, cam_d):
+    ad = o_.animation_data
+    for l in ad.action.layers:
+        for st in l.strips:
+            for cb in st.channelbags:
+                for fc in cb.fcurves:
+                    for kp in fc.keyframe_points: kp.interpolation = "LINEAR"
 # POV blur (beat 8): focus empty follows the aim, but sits 0.25 m in front of the lens during the POV
 foc = bpy.data.objects.new("CAM_Focus", None); sc.collection.objects.link(foc); foc.hide_render = True
 cam_d.dof.focus_object = foc
 for f in list(range(1, 2341, 4)) + [2340]:
     p_ = fa_(f)
-    w = smooth((f - 1296) / 8) * (1 - smooth((f - 1314) / 8))   # vNEXT: blurred-vision POV held ~0.25 s (was ~1.1 s)
+    w = 0.0   # v005: no blurred POV
     if w > 0:
         cpos = fc_(f); near = cpos + (p_ - cpos).normalized() * 0.25; p_ = p_.lerp(near, w)
     foc.location = p_; foc.keyframe_insert("location", frame=f)
-for f, fs in ((1, 8.0), (160, 8.0), (166, 64.0), (205, 64.0), (215, 22.0), (478, 22.0), (479, 8.0), (1262, 8.0), (1294, 8.0), (1302, 2.0), (1314, 2.0), (1322, 8.0), (1645, 8.0), (1650, 64.0), (1712, 64.0), (1716, 8.0)):
+for f, fs in ((1, 8.0), (150, 8.0), (151, 22.0), (240, 22.0), (241, 8.0), (2340, 8.0)):
     cam_d.dof.aperture_fstop = fs; cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
 
 # camera-attached cutaway card (teal->navy gradient), alpha keyed
@@ -559,13 +576,12 @@ _rp = next(n for n in cm.node_tree.nodes if n.type == "VALTORGB"); _rp.color_ram
 cm.node_tree.nodes["Map Range"].inputs[1].default_value = -0.5; cm.node_tree.nodes["Map Range"].inputs[2].default_value = 0.5
 sep_ = cm.node_tree.nodes["Separate XYZ"]; cm.node_tree.links.new(sep_.outputs[1], cm.node_tree.nodes["Map Range"].inputs[0])
 cc.visible_shadow = False
-CARD = [(180, 0.0, 0.6), (181, 1.0, 0.6), (186, 1.0, 0.55), (360, 1.0, 0.5), (380, 1.0, 0.5), (420, 1.0, 1.15), (462, 1.0, 2.3), (470, 1.0, 2.3), (478, 0.0, 2.3),
-        (1074, 0.0, 2.2), (1090, 1.0, 2.2), (1232, 1.0, 2.2), (1240, 0.0, 2.2), (1657, 0.0, 0.22), (1658, 1.0, 0.22), (1700, 1.0, 0.24), (1712, 0.0, 0.3)]
+CARD = [(150, 0.0, 0.6), (151, 1.0, 0.6), (240, 1.0, 0.55), (241, 0.0, 0.55)]
 mixn = cm.node_tree.nodes["FADE"]
 for f, al, dist in CARD:
     mixn.inputs[0].default_value = al; mixn.inputs[0].keyframe_insert("default_value", frame=f)
     cc.location = (0, 0, -dist); cc.scale = (dist * 1.3, dist * 2.2, 1); cc.keyframe_insert("location", frame=f); cc.keyframe_insert("scale", frame=f)
-vis(cc, [(181, 478), (1074, 1240), (1658, 1712)])
+vis(cc, [(151, 240)])
 bpy.data.objects.remove(XB, do_unlink=True)
 for o in [o for o in OB if "stash" in o.name.lower()]: bpy.data.objects.remove(o, do_unlink=True)
 # light for the cutaway (studio key/rim parented to camera)
@@ -574,7 +590,7 @@ for nm, loc, e, colr in (("Cut_Key", (0.4, 0.5, 0.2), 6.0, (1.0, 0.92, 0.85)), (
     lo = bpy.data.objects.new(nm, l); sc.collection.objects.link(lo); lo.parent = cam; lo.location = loc
     tc = lo.constraints.new("TRACK_TO"); tc.target = aim; tc.track_axis = "TRACK_NEGATIVE_Z"; tc.up_axis = "UP_Y"
     l.energy = 0.0; l.keyframe_insert("energy", frame=1)
-    for f0, f1 in ((181, 478), (1074, 1240), (1658, 1712)):
+    for f0, f1 in ((151, 240),):
         l.energy = 0.0; l.keyframe_insert("energy", frame=f0 - 1); l.energy = e; l.keyframe_insert("energy", frame=f0)
         l.keyframe_insert("energy", frame=f1); l.energy = 0.0; l.keyframe_insert("energy", frame=f1 + 1)
 

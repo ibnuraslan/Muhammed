@@ -5,7 +5,7 @@ The room comes back at 1232 for the 8-frame fade-out (card 1232->1240, normal he
 import bpy, sys
 out = sys.argv[sys.argv.index("--") + 1]
 OB = bpy.data.objects; sc = bpy.context.scene
-RANGES = [(182, 469), (1091, 1231)]   # both x-ray cutaways, while the card is opaque
+RANGES = [(151, 240)]   # v005: only the brain inset is on the card
 keep = {"Hero_Xray", "Brain"} | {o.name for o in OB["Brain"].children_recursive} | {o.name for o in OB["Spine"].children_recursive} | {o.name for o in sc.camera.children_recursive}
 def fcs(o):
     ad = o.animation_data
@@ -19,7 +19,10 @@ for o in OB:
         after = bool(fc[0].evaluate(F1 + 1)) if fc else o.hide_render
         before = bool(fc[0].evaluate(1)) if fc else o.hide_render
         if fc:
-            for kp in [k for k in fc[0].keyframe_points if F0 <= k.co.x <= F1 + 1]: fc[0].keyframe_points.remove(kp)
+            while True:
+                idx = [i for i, k in enumerate(fc[0].keyframe_points) if F0 <= k.co.x <= F1 + 1]
+                if not idx: break
+                fc[0].keyframe_points.remove(fc[0].keyframe_points[idx[0]])
         else:
             o.hide_render = before; o.keyframe_insert("hide_render", frame=1)
         o.hide_render = True; o.keyframe_insert("hide_render", frame=F0)
