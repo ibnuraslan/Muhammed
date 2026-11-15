@@ -19,4 +19,4 @@ This is the same film as v007c, frames 1–1750 at 60 fps. `beats.json` is uncha
 - **qa_check:**
   - 0 for CLAW, FAN, HOVER, FACEPRESS, BACKHEAD and ROLL.
   - CAMJUMP 9, all of them the intended cuts.
-  - PROPMOVE flags the stick's whoosh at 93–115. This is intended: it is the strike the director asked for.
+  - PROPMOVE: the same intended moves as v007c (beak shards, the falling fig, the fig in the bird's beak, the printer nozzle, the glue bead). It does not flag the stick.
