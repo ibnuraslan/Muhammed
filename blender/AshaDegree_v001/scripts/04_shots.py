@@ -156,6 +156,31 @@ def hand_frame(rig, s):
     if (tip - m3).dot(n) < 0 and (tip - m3).length > 0.001 and (tip - m3).normalized().dot(d) < 0.95: n = -n
     return wr, d, a, n, wr.lerp(m3, 0.55)
 
+def radius_at(obj, axis_local, centre_local, slab=0.03):
+    """radial size of a prop around its local axis near a point on the axis (local units)"""
+    ax = Vector(axis_local).normalized(); c = Vector(centre_local); rs = []
+    for v in obj.data.vertices:
+        d = v.co - c; t = d.dot(ax)
+        if abs(t) < slab: rs.append((d - ax * t).length)
+    return sorted(rs)[len(rs) // 2] if rs else 0.015
+
+def grip_prop(obj, rig, s, f, axis_world, grip_local, r):
+    """put the prop's grip point (local) in the fist at frame f: axis through the palm, fingers solved to touch it"""
+    sc.frame_set(f); bpy.context.view_layer.update()
+    wr, d, a, n, palm = hand_frame(rig, s)
+    q = obj.rotation_quaternion
+    gp_world_offset = q @ Vector(grip_local)
+    C = palm + n * 0.012
+    obj.location = C + n * (r + 0.013) - gp_world_offset
+    bpy.context.view_layer.update()
+    rep = grip_object(rig, s, f, obj, C, n, finger_dir=d)
+    for j in (1, 2, 3):   # thumb eased 35% open so its skin clears the surface
+        pb = rig.pose.bones["finger1-%d.%s" % (j, s)]; q = pb.rotation_quaternion.copy()
+        pb.rotation_quaternion = q.slerp(Quaternion((1, 0, 0, 0)) if j > 1 else q, 0.35); pb.keyframe_insert("rotation_quaternion", frame=f)
+    print("GRIP", obj.name, rig.name, f, "r=%.3f" % r, rep)
+    bpy.context.view_layer.update(); attach(obj, rig, "wrist." + s)
+    return rep
+
 def hold_in_hand(obj, rig, s, f, axis_local=Vector((0, 0, 1)), along="a", depth=0.028, shift=0.0):
     """place a cylinder-like prop through the fist at frame f (its local axis along the thumb-side axis), then Child Of the wrist"""
     sc.frame_set(f); bpy.context.view_layer.update()
@@ -198,9 +223,9 @@ def make_backpack(name):
             v_.co = Vector((v_.co.x * dims[0], v_.co.y * dims[1], v_.co.z * dims[2])) + Vector(loc)
         for f_ in bm.faces:
             if all(v_ in r['verts'] for v_ in f_.verts): f_.material_index = mi
-    rbox((0.30, 0.13, 0.36), (0, 0, 0.18), 0)            # body
+    rbox((0.27, 0.13, 0.36), (0, 0, 0.18), 0)            # body
     rbox((0.24, 0.05, 0.16), (0, -0.075, 0.11), 0)       # front pocket
-    rbox((0.30, 0.012, 0.012), (0, -0.066, 0.25), 1)     # zip piping
+    rbox((0.27, 0.012, 0.012), (0, -0.066, 0.25), 1)     # zip piping
     rbox((0.22, 0.012, 0.012), (0, -0.101, 0.185), 1)
     me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new(name, me); sc.collection.objects.link(o)
@@ -260,7 +285,7 @@ def wear_bag(rig, name, f, yaw, material=None):
     s3 = rig.matrix_world @ rig.pose.bones["spine03"].head; s5 = rig.matrix_world @ rig.pose.bones["spine05"].head
     back = Rz(yaw) @ Vector((0, 1, 0))
     b.rotation_mode = 'XYZ'; b.rotation_euler = (0, 0, R_(180 + yaw))
-    b.location = s3.lerp(s5, 0.3) + back * 0.165 + Vector((0, 0, -0.21))
+    b.location = s3.lerp(s5, 0.3) + back * 0.165 + Vector((0, 0, -0.17))
     if material:
         for o in [b] + list(b.children):
             o.data = o.data.copy(); o.data.materials.clear(); o.data.materials.append(material)
@@ -298,7 +323,7 @@ elif thin == 0: bag_floor.rotation_euler = (0, 0, R_(90))
 else: bag_floor.rotation_euler = (R_(90), 0, 0)
 bpy.context.view_layer.update()
 bz = -min((bag_floor.matrix_world @ Vector(c)).z for c in bag_floor.bound_box)
-bag_floor.location = (0.0, -0.12, bz + 0.004)
+bag_floor.location = (0.0, -0.30, bz + 0.004)
 bpy.context.view_layer.update()
 bag_top = max((bag_floor.matrix_world @ Vector(c)).z for c in bag_floor.bound_box)
 print("BAG top", round(bag_top, 3))
@@ -323,21 +348,28 @@ def kneel(H, f, pos, yaw, lean=14.0, head=(0.0, 0.0), sit=0.0, hands_on=None, tw
     return p
 
 # hands on the bag top: R zips across, L steadies
-top_c = W2A(G, (0.0, -0.12, bag_top + 0.012))
+top_c = W2A(G, (0.0, -0.30, bag_top + 0.012))
 def bag_hands(f, zx):
     def h(p):
-        for s, x in (("L", 0.07), ("R", -0.05 + zx)):
+        for s, x in (("L", 0.095), ("R", -0.11 + zx * 0.4)):
             sx = 1 if s == "L" else -1
             Wp = top_c + Vector((x, 0.0, 0.0)) / G.scale.x
             H.key_hand(s, f, Wp + Vector((0.0, 0.07, 0.03)) / G.scale.x, Vector((0.0, -1.0, -0.5)), Vector((0, 0.15, -1.0)),
                        pole=p + Vector((0.5 * sx, 0.2, -0.1)))
+            wtop = G.matrix_world @ (top_c + Vector((x, 0.035, 0.0)) / G.scale.x)
+            place_hand(G, s, f, wtop + Vector((0, 0, 0.004)), Vector((0, 0.0, -1.0)), Vector((0, -1.0, 0.0)), skin=0.024)
     return h
 yaw0 = -10.0
 for f, zx, head in ((1, 0.0, (22, 0)), (40, 0.06, (24, -4)), (80, 0.12, (20, 4)), (120, 0.04, (16, 0)),
                     (150, 0.0, (-2, 6)), (185, 0.02, (-6, 10)), (210, 0.02, (-6, 10))):
-    kneel(H, f, K, yaw0, lean=16 if f < 140 else 8, head=head, hands_on=bag_hands(f, zx))
+    def _hang(p, f=f):
+        for s_ in "LR":
+            sx_ = 1 if s_ == "L" else -1
+            body_hand(H, s_, f, p, yaw0, (H.sh[s_].x + 0.05 * sx_ - H.root_head.x, H.sh[s_].y - H.root_head.y - 0.10, H.sh[s_].z - H.root_head.z - H.arm * 0.9),
+                      (0, -0.2, -1), (-sx_, 0, 0), pole_off=(0.4 * sx_, 0.4, -0.2))
+    kneel(H, f, K, yaw0, lean=8 if f < 140 else 4, head=head, hands_on=_hang)
 for s in "LR":
-    apply_pose(G, s, "flat_palm", 1); apply_pose(G, s, "flat_palm", 210)
+    apply_pose(G, s, "relaxed", 1); apply_pose(G, s, "relaxed", 210)
 # S03 211..: standing (bag on back), small settle, then turns and walks to the open door
 yaw_s = -10.0
 for f in (211, 230, 255):
@@ -371,7 +403,7 @@ bpy.data.objects["DoorLeafR"].rotation_euler = (0, 0, R_(-95))
 
 cam_shot("S01", [(1, (0.78, -1.62, 0.55)), (130, (0.62, -1.3, 0.5))], lens=32,
          target_keys=[(1, (0.0, 0.05, 0.5)), (130, (0.0, 0.1, 0.55))])
-cam_shot("S02", [(121, (-0.85, -0.75, 0.78)), (220, (-0.7, -0.55, 0.74))], lens=45,
+cam_shot("S02", [(121, (0.9, -0.8, 0.76)), (220, (0.75, -0.6, 0.74))], lens=45,
          target_keys=[(121, (0.0, 0.2, 0.72)), (220, (0.0, 0.22, 0.74))])
 cam_shot("S03", [(211, (0.25, -2.3, 0.95)), (340, (0.5, -1.7, 1.0))], lens=30,
          target_keys=[(211, (0.05, 0.4, 0.8)), (300, (0.4, 0.9, 0.85)), (340, (0.6, 1.3, 0.9))])
@@ -388,8 +420,8 @@ walk_with_arms(H, road_path, lambda f: 180.0, 400, 905, stride=1.0 / G.scale.x)
 # umbrella in the right hand: forearm up, fist in front of the shoulder
 def umb_arm(f, p, yaw, look=(0, 0)):
     s = "R"; sx = -1
-    body_hand(H, s, f, p, yaw, (H.sh[s].x - 0.02 - H.root_head.x, H.sh[s].y - H.root_head.y - 0.20, H.sh[s].z - H.root_head.z - 0.17),
-              (0.0, -1.0, 0.15), (1.0, 0.0, 0.0), pole_off=(-0.45, 0.1, -0.35))
+    body_hand(H, s, f, p, yaw, (H.sh[s].x + 0.07 - H.root_head.x, H.sh[s].y - H.root_head.y - 0.32, H.sh[s].z - H.root_head.z - 0.20),
+              (0.35, -1.0, 0.0), (1.0, 0.35, 0.0), pole_off=(-0.35, 0.0, -0.5))
 for f in range(400, 906, 2):
     p = road_path(f); p = Vector((p.x, p.y, H.root_head.z))
     umb_arm(f, p, 180.0)
@@ -422,10 +454,12 @@ sc.frame_set(420); bpy.context.view_layer.update()
 wr, d, a, n, palm = hand_frame(G, "R")
 ax = a.normalized()
 if ax.z < 0: ax = -ax
-umb_road.rotation_mode = 'QUATERNION'; umb_road.rotation_quaternion = Vector((0, 0, 1)).rotation_difference(ax)
-umb_road.rotation_quaternion = Vector((0, 0, 1)).rotation_difference(Vector((0, 0, 1)))
-umb_road.location = palm + n * 0.022 + Vector((0, 0, UMB_GRIP))
-attach(umb_road, G, "wrist.R"); apply_pose(G, "R", "wrap_grip", 400)
+umb_road.rotation_mode = 'QUATERNION'; umb_road.rotation_quaternion = (1, 0, 0, 0)
+_low = [v.co for v in umb.data.vertices if v.co.z < -0.38 * 0.85]
+_h = Vector((sum(c.x for c in _low), sum(c.y for c in _low), 0)).normalized() if _low else Vector((1, 0, 0))
+umb_road.rotation_quaternion = _h.rotation_difference(Vector((1, 0, 0)))
+UMB_GL = Vector((0, 0, -UMB_GRIP)); UMB_R = radius_at(umb, (0, 0, 1), UMB_GL, 0.04)
+grip_prop(umb_road, G, "R", 400, Vector((0, 0, 1)), UMB_GL, UMB_R)
 for s in "L": apply_pose(G, s, "relaxed", 400)
 wear_bag(G, "BagRoad", 420, 180.0)
 # the motorist's car: passes from behind (S07), stops ahead (S08), holds with brake/head lights (S09-S10)
@@ -476,10 +510,8 @@ umb_g.data = umb.data.copy(); umb_g.data.materials.clear(); umb_g.data.materials
 sc.frame_set(2300); bpy.context.view_layer.update()
 wr, d, a, n, palm = hand_frame(GG, "R"); ax = a.normalized()
 if ax.z < 0: ax = -ax
-umb_g.rotation_mode = 'QUATERNION'; umb_g.rotation_quaternion = Vector((0, 0, 1)).rotation_difference(ax)
-umb_g.rotation_quaternion = Vector((0, 0, 1)).rotation_difference(Vector((0, 0, 1)))
-umb_g.location = palm + n * 0.022 + Vector((0, 0, UMB_GRIP))
-attach(umb_g, GG, "wrist.R"); apply_pose(GG, "R", "wrap_grip", 2250); apply_pose(GG, "L", "relaxed", 2250)
+umb_g.rotation_mode = 'QUATERNION'; umb_g.rotation_quaternion = umb_road.rotation_quaternion.copy()
+grip_prop(umb_g, GG, "R", 2250, Vector((0, 0, 1)), UMB_GL, UMB_R); apply_pose(GG, "L", "relaxed", 2250)
 wear_bag(GG, "BagGhost", 2260, 180.0, material=ghost_m)
 cam_shot("S21", [(2281, (XR + 0.6, gy(2281) - 3.2, 0.9)), (2390, (XR + 0.8, gy(2390) - 2.6, 0.95))], lens=32,
          target_keys=[(2281, (XR + 1.6, gy(2281), 1.0)), (2390, (XR + 1.6, gy(2390), 1.05))])
@@ -549,8 +581,8 @@ def torch_for(rig, f0):
     t.rotation_mode = 'QUATERNION'
     # torch axis (its local x) along the thumb side so it points forward out of the fist
     t.rotation_quaternion = Vector((1, 0, 0)).rotation_difference(a)
-    t.location = palm + n * 0.026 + a * 0.03
-    bpy.context.view_layer.update(); attach(t, rig, "wrist.R"); apply_pose(rig, "R", "wrap_grip", f0)
+    TGL = Vector((-0.04, 0, 0)); TR = radius_at(torch_src, (1, 0, 0), TGL, 0.02)
+    grip_prop(t, rig, "R", f0, a, TGL, TR)
     l = bpy.data.lights.new("TorchBeam_" + rig.name, 'SPOT'); l.energy = 700; l.spot_size = R_(30); l.spot_blend = 0.35; l.color = (1.0, 0.95, 0.85); l.shadow_soft_size = 0.02
     lo = bpy.data.objects.new("TorchBeam_" + rig.name, l); sc.collection.objects.link(lo)
     lo.parent = t; lo.location = (0.1, 0, 0); lo.rotation_mode = 'XYZ'; lo.rotation_euler = (0, R_(90), 0)   # spot looks down its -Z -> along +x
@@ -580,13 +612,17 @@ c_pos = Vector((CL.x - 0.2, CL.y - 2.4)); c_yaw = 160.0
 for f, hd in ((1480, (18, 0)), (1560, (22, 15)), (1640, (16, -15)), (1720, (20, 5)), (1830, (18, 0))):
     def ch(p, f=f):
         HC = HS["SearchC"]
-        body_hand(HC, "R", f, p, c_yaw, (HC.sh["R"].x - HC.root_head.x - 0.05, -0.42, -0.18 + 0.0), (0.0, -1.0, -0.35), (0.0, 0.0, -1.0), pole_off=(-0.5, 0.1, -0.3))
+        body_hand(HC, "R", f, p, c_yaw, (HC.sh["R"].x - HC.root_head.x - 0.08, -0.52, -0.02), (0.0, -1.0, -0.35), (0.0, 0.0, -1.0), pole_off=(-0.5, 0.1, -0.3))
         body_hand(HC, "L", f, p, c_yaw, (HC.ankle["L"].x * 1.3, -0.30, HC.root_head.z * 0.53 - p.z + 0.05), (0, -1.0, -0.6), (-0.3, 0, -1.0), pole_off=(0.5, 0.2, 0.0))
     squat(H, f, Vector((c_pos.x, c_pos.y, 0)), c_yaw, depth=0.45, flex=24, head=hd, hands=ch)
 for r in (SB2, SA2, SC):
-    torches.append(torch_for(r, 1500))
+    torches.append(torch_for(r, 1480))
     apply_pose(r, "L", "relaxed", 1480)
 for r in (SB2, SA2, SC): vis_char(r, [(1480, 1830)])
+for _g in ('SearchA2.gloves',):
+    _o = bpy.data.objects.get(_g)
+    if _o:
+        _o.animation_data_clear(); _o.hide_render = True; _o.hide_viewport = True
 for r in (SA, SB): vis_char(r, [(1240, 1530)])
 vis_char(girls["woods"], [(1060, 1290)]); vis_char(girls["ghost"], [(2250, 2500)])
 cam_shot("S15", [(1501, (CL.x - 1.5, CL.y - 9.0, 2.0)), (1660, (CL.x - 0.5, CL.y - 8.0, 1.9))], lens=26,
@@ -605,40 +641,45 @@ bpy.context.view_layer.update()
 bz = -min((bag_site.matrix_world @ Vector(c)).z for c in bag_site.bound_box)
 bag_site.location = (XT + 0.15, 0.3, bz + 0.005)
 # clear plastic wrap: a loose, crinkled shell around the bag (cloudy, not x-ray clear)
-wrap = bag_site.copy(); wrap.data = bag_site.data.copy(); wrap.name = "BagWrap"; bag_site.users_collection[0].objects.link(wrap)
-wrap.scale = (1.12, 1.18, 1.14)
-sb_ = wrap.modifiers.new('sub', 'SUBSURF'); sb_.levels = 2; sb_.render_levels = 2
-wrap.modifiers.move(wrap.modifiers.find('sub'), 0) if wrap.modifiers.find('sub') > 0 else None
-dsp = wrap.modifiers.new("crinkle", 'DISPLACE'); tx = bpy.data.textures.new("Crinkle", 'VORONOI'); tx.noise_scale = 0.025; dsp.texture = tx; dsp.strength = 0.028
+bpy.context.view_layer.update()
+_bb = [bag_site.matrix_world @ Vector(c) for c in bag_site.bound_box]
+_mn = Vector([min(q[i] for q in _bb) for i in range(3)]); _mx = Vector([max(q[i] for q in _bb) for i in range(3)])
+bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=5, radius=1.0, location=(_mn + _mx) / 2)
+wrap = bpy.context.object; wrap.name = "BagWrap"; wrap.scale = (_mx - _mn) * 0.75
+for uc in list(wrap.users_collection): uc.objects.unlink(wrap)
+bag_site.users_collection[0].objects.link(wrap)
+shw = wrap.modifiers.new("shrink", 'SHRINKWRAP'); shw.target = bag_site; shw.wrap_method = 'NEAREST_SURFACEPOINT'; shw.offset = 0.012
+dsp = wrap.modifiers.new("crinkle", 'DISPLACE'); tx = bpy.data.textures.new("Crinkle", 'VORONOI'); tx.noise_scale = 0.03; dsp.texture = tx; dsp.strength = 0.012
 pm = bpy.data.materials.new("PlasticWrap"); pm.use_nodes = True; Pn = pm.node_tree.nodes["Principled BSDF"]
-Pn.inputs["Base Color"].default_value = (0.9, 0.92, 0.95, 1); Pn.inputs["Roughness"].default_value = 0.25; Pn.inputs["Alpha"].default_value = 0.55
+Pn.inputs["Base Color"].default_value = (0.9, 0.92, 0.95, 1); Pn.inputs["Roughness"].default_value = 0.2; Pn.inputs["Alpha"].default_value = 0.45
 Pn.inputs["Coat Weight"].default_value = 0.6
 if hasattr(pm, "blend_method"): pm.blend_method = 'HASHED'
 wrap.data.materials.clear(); wrap.data.materials.append(pm)
 bpy.context.view_layer.update()
 SITE_TOP = max((bag_site.matrix_world @ Vector(c)).z for c in bag_site.bound_box)
 H = HS["Worker"]
-w_pos = Vector((XT + 0.62, 0.38)); w_yaw = -90.0 + 0.0   # faces -x toward the bag
+w_pos = Vector((XT + 0.72, 0.38)); w_yaw = -90.0 + 0.0   # faces -x toward the bag
 bag_c = Vector(bag_site.location) + Vector((0, 0, 0.0))
 def reach(f, amt):
     def hh(p):
         Hw = HS["Worker"]
-        tgt = Vector((w_pos.x - 0.40, w_pos.y - 0.04, SITE_TOP + 0.02))
+        tgt = Vector((w_pos.x - 0.46, w_pos.y - 0.04, SITE_TOP + 0.05))
         rest = Vector(p) + Rz(w_yaw) @ Vector((-0.15, -0.28, -0.25))
         pt = rest.lerp(tgt, amt)
-        Hw.key_hand("R", f, pt + Vector((0.07, 0, 0.0)) * (1 - amt) + Vector((0.06, 0.0, 0.035)) * amt, Vector((-1.0, 0.0, -0.45)), Vector((-0.2, 0.0, -1.0)),
+        Hw.key_hand("R", f, pt + Vector((0.07, 0, 0.0)) * (1 - amt) + Vector((0.06, 0.0, 0.10)) * amt, Vector((-1.0, 0.0, -0.05)), Vector((0.0, 0.0, -1.0)),
                     pole=p + Rz(w_yaw) @ Vector((-0.5, 0.3, -0.2)))
         body_hand(Hw, "L", f, p, w_yaw, (Hw.ankle["L"].x * 1.3, -0.30, Hw.root_head.z * 0.53 - p.z + 0.05), (0, -1.0, -0.6), (-0.3, 0, -1.0), pole_off=(0.5, 0.2, 0.0))
     return hh
 for f, amt, hd in ((1780, 0.0, (20, 0)), (1900, 0.0, (26, 0)), (1960, 0.7, (30, 0)), (2000, 1.0, (30, 0)), (2120, 1.0, (28, 4)), (2200, 1.0, (24, -4)), (2310, 1.0, (20, 0))):
-    squat(H, f, Vector((w_pos.x, w_pos.y, 0)), w_yaw, depth=0.5, flex=40, head=hd, hands=reach(f, amt))
+    squat(H, f, Vector((w_pos.x, w_pos.y, 0)), w_yaw, depth=0.5, flex=46, head=hd, hands=reach(f, amt))
+_site_loc0 = bag_site.location.copy()
 sc.frame_set(2000); bpy.context.view_layer.update()
 _wr, _d, _a, _n, _palm = hand_frame(WK, "R")
 _top = max((bag_site.matrix_world @ Vector(c)).z for c in bag_site.bound_box)
 _dz = 0.0
-for _o in (bag_site, wrap): _o.location = Vector((_palm.x - 0.02, _palm.y, _o.location.z + _dz)) if _o is bag_site else _o.location
+for _o in (bag_site, wrap): _o.location = Vector((_palm.x - 0.09, _palm.y, _o.location.z + _dz)) if _o is bag_site else _o.location
 bpy.context.view_layer.update()
-wrap.location = bag_site.location
+wrap.location = wrap.location + (bag_site.location - _site_loc0)
 if bag_site.location.z < bz - 0.01: print("WARN bag below ground", bag_site.location.z)
 print("SITEBAG", tuple(round(x, 3) for x in bag_site.location), "palm", tuple(round(x, 3) for x in _palm))
 apply_pose(WK, "R", "flat_palm", 1990); apply_pose(WK, "R", "relaxed", 1780); apply_pose(WK, "R", "flat_palm", 2000); apply_pose(WK, "L", "relaxed", 1780)

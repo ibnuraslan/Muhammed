@@ -34,14 +34,14 @@ def hang_off(H, s, fwd=0.0, swing=0.0, bend=0.03):
     sh = H.sh[s] - H.root_head
     sx = 1 if s == "L" else -1
     z = sh.z - H.arm * 0.965 + abs(swing) * 0.2
-    return (sh.x + 0.03 * sx, sh.y - bend - fwd - swing, z)
+    return (sh.x + (0.03 + 0.05 * max(0.0, -swing) / 0.08) * sx, sh.y - bend - fwd - swing, z)
 
 def key_hang(H, f, pos, yaw, swingL=0.0, swingR=0.0, fwd=0.0):
     for s, sw in (("L", swingL), ("R", swingR)):
         sx = 1 if s == "L" else -1
         body_hand(H, s, f, pos, yaw, hang_off(H, s, fwd, sw), (0.0, -0.15, -1.0), (-sx, 0.0, 0.0))
 
-def walk_with_arms(H, path, yaw_fn, f0, f1, stride=1.0, amp=0.11, step=2, **kw):
+def walk_with_arms(H, path, yaw_fn, f0, f1, stride=1.0, amp=0.08, step=2, **kw):
     """anim_lib Human.walk plus opposite arm swing keyed in the body frame"""
     kw.setdefault("crouch", 0.0); kw.setdefault("lean", 3.0); kw.setdefault("bob", 0.015)
     H.walk(path, yaw_fn, f0, f1, stride=stride, step=step, **kw)

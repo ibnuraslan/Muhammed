@@ -281,7 +281,7 @@ for pos_, col_ in ((0.0, (0.95, 0.9, 0.8)), (0.2, (0.9, 0.4, 0.3)), (0.4, (0.95,
 nt.links.new(cr.outputs[0], P.inputs["Base Color"]); P.inputs["Roughness"].default_value = 0.95; P.inputs["Sheen Weight"].default_value = 0.5
 r_ = plane("Room_Rug", (2.6, 1.9), (0.1, 0.1, 0.004), rug, C)
 tower(C, (-0.75, -0.55, 0.004), 14, 0.3, "TowerA"); tower(C, (0.95, -0.25, 0.004), 10, -0.2, "TowerB")
-tower(C, (-0.45, 0.95, 0.004), 12, 0.6, "TowerC"); tower(C, (1.25, 0.85, 0.004), 8, 0.1, "TowerD")
+tower(C, (-0.45, 0.95, 0.004), 12, 0.6, "TowerC") if False else tower(C, (-0.15, 1.25, 0.004), 12, 0.6, "TowerC"); tower(C, (1.25, 0.85, 0.004), 8, 0.1, "TowerD")
 for i in range(18):   # loose bricks on the rug
     o = bpy.data.objects.new("LooseBrick%02d" % i, brick_mesh()); C.objects.link(o)
     o.location = (random.uniform(-1.0, 1.3), random.uniform(-0.9, 0.9), 0.004); o.rotation_euler = (0, 0, random.uniform(0, 6.3))
@@ -292,7 +292,7 @@ for i, col in enumerate(book_cols):   # a stack of plain school books beside her
     box("Room_Book%d" % i, (0.21, 0.28, 0.025), (0.5, 0.45, 0.004 + 0.0125 + 0.026 * i), mat("Book%d" % i, col, 0.5), C, bevel=0.003, rot=(0, 0, R_(8 * i - 10)))
 # cardboard toy box with our logo (neutral opening moment, never in the sad beats)
 cb = mat("Cardboard", (0.72, 0.52, 0.32), 0.85)
-tb = box("Room_ToyBox", (0.55, 0.4, 0.38), (-1.85, 1.6, 0.19), cb, C, bevel=0.01, rot=(0, 0, R_(18)))
+tb = box("Room_ToyBox", (0.55, 0.4, 0.38), (-1.05, 1.75, 0.19), cb, C, bevel=0.01, rot=(0, 0, R_(28)))
 logo = bpy.data.images.load(HERE + "../assets/brand/DaKrasFilms_logo_dark.png", check_existing=True)
 lm = bpy.data.materials.new("LogoDecal_Box"); lm.use_nodes = True; nt = lm.node_tree; P = nt.nodes["Principled BSDF"]
 ti = nt.nodes.new("ShaderNodeTexImage"); ti.image = logo; nt.links.new(ti.outputs["Color"], P.inputs["Base Color"]); nt.links.new(ti.outputs["Alpha"], P.inputs["Alpha"])
@@ -301,7 +301,7 @@ if hasattr(lm, "blend_method"): lm.blend_method = 'HASHED'
 bpy.ops.mesh.primitive_plane_add(size=1); dec = bpy.context.object; dec.name = "Room_ToyBoxLogo"
 dec.scale = (0.46, 0.46 * 414 / 967, 1); bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
 dec.data.materials.append(lm); link(dec, C)
-dec.rotation_euler = (R_(90), 0, R_(18)); dec.location = Vector(tb.location) + Matrix.Rotation(R_(18), 3, 'Z') @ Vector((0, -0.203, 0.02))
+dec.rotation_euler = (R_(90), 0, R_(28)); dec.location = Vector(tb.location) + Matrix.Rotation(R_(28), 3, 'Z') @ Vector((0, -0.203, 0.02))
 bpy.context.view_layer.update(); dec.parent = tb; dec.matrix_parent_inverse = tb.matrix_world.inverted()
 # light the room: warm key from the lamp side, soft fill from the camera side (faces <= 10 W fill rule is for face fills)
 area("Room_Key", C, (2.2, -1.2, 2.6), (R_(50), 0, R_(55)), 260, 2.5, col=(1.0, 0.88, 0.75))
