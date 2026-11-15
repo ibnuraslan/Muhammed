@@ -1,0 +1,135 @@
+# EarInArm_v009k — farm package
+
+29.5 s vertical short (1080×1920, 60 fps, frames 1–1770): growing a replacement ear in the forearm. Ready for RenderStreet. No render has been submitted.
+
+- `EarInArm_v009k_60fps.blend`: the self-contained scene, 65 MB compressed, with every texture packed. Stored as plain git (no LFS).
+  - It opens and renders in factory-startup Blender 5.2.2 with no add-ons.
+  - One camera, `CAM_Film`, in one continuous move. There are no cuts, jumps or markers.
+- `beats.json`: beat start frames (unchanged: 1, 127, 343, 565, 775, 1063, 1309, 1501, 1645; end 1770).
+- `SETTINGS.md`: render settings and suggested test frames.
+- `CREDITS.md`: the CC-BY block for the video description.
+- `review/`: the acting-fix review material (see below).
+- **Voiceover: none.** Retime later with `pipeline/retime_to_vo.py` using `beats.json`.
+
+## Source and build
+The source scripts are in `../EarInArm_v001/scripts/`. Build order: `01_build_humans.py` (MPFB2), `02_build_sets.py`, `03_animate.py` (uses `pipeline/hand_poses.py`), `03b_hands_v009b.py` (hand pass), `03c_dress_v009d.py` (scrubs, nurse dress), `04_camera_fx.py`, `pipeline/anim_look.py`, `05_anim_look_fix.py`, then `pipeline/package_for_farm.py`. The helper `../EarInArm_v001/work/build_v009b.sh` runs steps 3–5.
+
+## Review (`review/`)
+- `preview_v009k_270x480_every2nd.mp4`: the moving preview, every 2nd frame at 30 fps (real time), with the frame number in the corner.
+- `qa_v009k.json`: `pipeline/qa_check.py` (e7b25f7), step 6, with `beats.json`.
+- `clip_scan_v009k.json`: `pipeline/clip_scan.py` (40c131b), step 6.
+- `limb_scan_v009k.json`: `pipeline/limb_scan.py`, which tests arm bone axes against every body, including the character's own.
+- `cam_clear_v009k.json`: `pipeline/cam_clear.py`, which flags the camera within 10 cm of any character.
+- `ACTING_notes.md`: every item from the v010 rejection and the v009d review, with its fix, and every remaining flag.
+
+## Beats (start frame, first words)
+| # | Frame | Line | On screen |
+|---|---|---|---|
+| 1 | 1 | Lose an ear in an accident… | Bald patient, side profile, shocked (both hands up, open, in front of his chest), clean gauze dressing on the left ear. The camera pushes to the dressing. |
+| 2 | 127 | A surgeon takes some cartilage… | The surgeon's gloved hand on the patient's lower ribs (his face in frame), then a cut to the harvested cartilage on the tray. |
+| 3 | 343 | and carves it into the shape of an ear | The chair reclines and the patient sleeps. The surgeon carves, shavings fly and land on the tray, and the hands lift away to reveal the ear. |
+| 4 | 565 | Then it's slipped into a pocket… | The ear is carried in forceps to the arm. The incision opens, the ear goes in, and the skin closes into a bump. |
+| 5 | 775 | Inside your arm, it grows… | A clear bump grows under the forearm skin (push-in), then the patient asleep with the surgeon beside him. |
+| 6 | 1063 | Once it's fully developed… | The x-ray fades. The incision reopens and the pink ear is lifted out with forceps. |
+| 7 | 1309 | The blood vessels are connected… | He walks to the head; in profile, the ear comes in the forceps and is set on the head. |
+| 8 | 1501 | and the skin is carefully stitched… | In profile, the needle holder at the new ear; cut to the two faces. |
+| 9 | 1645 | giving you a brand new ear | The chair rises; medium shot with the new ear to camera, his fingertips on it, he smiles, the nurse beside him. |
+
+## v009k vs v009j (director review of v009j: 5 items)
+1. **216–295:** a close shot of the patient's worried face replaces the two-shot, where the surgeon's bent knee read between the patient's legs.
+2. **Patient's mouth:** the shock face has the lips slightly parted (mouth_open 0.18, then 0.1) instead of wide open.
+3. **Ear attach:** the two faces at 1346–1379, then one sharp medium profile at 1380–1470 (1.5 s) while the ear is set in place. The camera is further back (no glove near the lens) at f/8 or more, and the two faces follow at 1471–1500.
+4. **Nurse:** upright with hands clasped at the tray (310–565) and at the ending (a step behind and beside him, hands low).
+5. **Patient's arm on the board:** the elbow is slightly bent with the palm up; it was straight out sideways.
+
+## v009j vs v009i (director review of v009i: 6 items)
+1. **Masks:** the surgeon's and nurse's masks are now cut from their own face skin (nose to chin), with the body's shape keys, vertex groups and armature. They sit 2.5 mm off the face and deform with the jaw and head. The old rigid shells hung onto the chin and read as a white beard.
+2. **Carving (343–455):** the scalpel is held in a pinch, with three strokes over the cartilage and shavings landing. Then a clean cut to the carved ear on the tray with a push-in (456–520), and back to his face as he picks it up (521).
+3. **Bump (881–958, 1.3 s):** seen from the hand end of the arm board, with him beside the board, his fingers on the patient's forearm. Then a cut to the patient asleep with a slow push-in (959–1062).
+4. **Cartilage insert:** 156–215 (1 s) with a push-in, then a two-shot of the surgeon and patient (216–295).
+5. **Opening 77–131:** a clean cut to a side two-shot; the camera no longer goes round behind his cap.
+6. **At the arm (649–720):** the forceps hand goes straight down to the arm (the tip-fix that lifted it is skipped there).
+
+## v009i vs v009h (director review of v009h: re-stage the weak sections simpler)
+The film is now a sequence of clean cuts (each a short camera move); the beat frames are unchanged.
+- **Beat 2 (127–343):** no see-through x-ray chest.
+  - The surgeon's gloved hand is on the patient's lower ribs, with the patient's face in frame.
+  - Then a clean cut (156) to the harvested cartilage already lying on the tray, with a gentle push-in.
+  - Cut back (296) to the surgeon walking to the tray, seen from his front.
+- **Tray (343–579):** chest-height camera from his front: his masked face and eyes in the top third, looking down at his hands.
+- **Walk to the arm (580–632):** a clean cut to a shot from ahead of him; he walks toward the camera.
+- **At the arm (633–795):** a two-shot: the patient's head at left, the arm on the board attached to him, the surgeon's face at right. No gloves in the lens, and the forceps hand stays low by the arm (it came up to his face).
+- **Ear growing (796–880, 1.4 s):** a clean cut to a clear bump under the skin (grows to 2.2 cm) with a gentle push-in. No glassy skin.
+- **Time passes (881–1062):** a two-shot of the patient asleep and the surgeon beside him.
+- **Ear attach (1346–1440) and stitching (1501–1600):** a medium profile of his head with the new ear to camera.
+  - The surgeon's glove with the forceps or needle holder is at the ear, his face at right.
+  - He stands 16 cm further back to make room.
+  - Intercut with the two faces (1441–1500, 1601–1650).
+- **Ending (1690–1770):** a medium shot with the NEW ear to camera.
+  - His fingertips rest on its back edge, so the ear stays visible, and he smiles.
+  - The nurse walks round to stand beside him.
+- **No see-through x-ray anywhere**, and the cabinet glass is matte (it mirrored a hard white triangle).
+
+## v009h vs v009g (director review of the v009g preview: two framing items)
+1. **X-ray macro (793–950):** the skin-filling close macro now lasts about 0.6 s (about 820–855). From 870 the shot is wide: the forearm, the drape and the surgeon read together.
+2. **Ear attach and stitching (1441–1651):** the camera is 20 cm to camera-left (`EAR_W + (0.14, -0.62, 0.44)`, was `(0.33, -0.55, 0.44)`). The surgeon's cap is out of frame. His glove, the forceps or needle holder, and the patient's head show, and his arm leaves the right edge.
+
+## v009g vs v009f (director review of the v009f preview: blur and fill)
+1. **X-ray macro (841–1013):** f/16 or more at the macro focus distance (it was f/11). The close hold now runs about 1.4 s (841–925). From 950 the camera pulls back so the arm, the drape and the patient's hand read.
+2. **Lift-out (1081–1201):** the camera is about 1.8× further back, at f/8 or more, so both hands, the forceps and the ear are sharp and in frame (giant blurred gloves filled the frame).
+3. **Walk to the tray (285–385):** the camera stays on the patient's side while the surgeon faces the patient (his profile shows), then swings out to his front as he walks to the tray. His back only shows for a few frames as he turns (about 286–290), in a medium shot. Before, it filled the frame for about 1.5 s.
+4. **1266–1340:** the camera is lowered to about face height (it was 1.85 m, looking down on the top of his cap). His face and mask show.
+5. **End (1657–1690):** as the chair rises, both of the patient's hands go to his lap, placed on his own thighs every few frames with the elbows bent. The left lifts off the arm board at 1664 and is in his lap by 1678. Before, the keys stayed world-fixed while the chair moved, so the board arm stuck straight out sideways.
+
+## v009f vs v009e (director review of the v009e preview)
+1. **Tray (361–457):** the left hand rests on the tray beside the cartilage with relaxed, even fingers, the fingertips at its edge, and the wrist in line with the forearm (`place_hand`). The scalpel hand stays 3 cm clear of it. Checked at 540×960 at f373, 397, 421 and 445.
+2. **His arm never crosses her body on screen:** a wide front shot while he carries the ear (1300–1340), then tight on the patient's face while the ear comes to the head (1358–1396). The lift-out (1141–1243) is seen from the patient's foot side, and the camera no longer passes his cap (1250–1267, 1633–1651). Details are in `review/ACTING_notes.md`.
+3. **End (1741–1770): no ear touch (director's simplify rule).** I made two attempts at the touch, and neither was clean. The old world-space keys swept his hand across his face at f1749, and keys placed from the ear put it at his throat. So his left hand stays relaxed out of the shot from 1715, and the last beat plays on his smile with the new ear in view. The story beat and its frames are unchanged.
+
+## v009e vs v009d (director review of the v009d preview)
+1. **Tray (351–443):** the hands start apart (no stacking). The left hand holds the cartilage in a light pinch (`pinch_light`: the index and thumb pinch, the other fingers lightly curled; `pinch_tuck` read as a ring). The right hand holds the scalpel and then lies flat on the tray.
+2. **Patient's arm:** the arm board is placed from the reclined forearm (f600, not mid-move at f400) and runs under the forearm and hand. His hand is relaxed on it the whole time (`relaxed_even`).
+3. **X-ray macro (840–1110):** f/11 or more (it was soft at f/5.6 with about 2 cm depth of field).
+4. **Ear to the head:** the ear comes in from the side, close to the head, in the forceps tips (3 cm from the tip, its edge), then is lowered onto the head over 1404–1440.
+5. **Surgeon at the head:** he stands right beside the head on the ear side, and the camera is in front of him at the front-outer side, so his shoulder and body read. No arm passes the headrest: his arm axes were tested against the Chair_Headrest and Chair_Back meshes over 1300–1700, with 0 hits. His free left hand waits relaxed at his side.
+6. **Stray gloves:** at f7 the opening is wider, so the surgeon's body is in frame with his hands. At f157 the free hand is flat on the chest from 136, with no hovering. At f277 his carried left hand is at his side.
+
+## v009d vs v009c: the client's rejection of v010 (23 items)
+All 23 items are listed with their cause and fix in `review/ACTING_notes.md`. The new scripts are `EarInArm_v001/scripts/03c_dress_v009d.py` (scrubs under the clothes, nurse dress) and the two new checks `pipeline/limb_scan.py` and `pipeline/cam_clear.py`. `review/preview_v009k_270x480_every2nd.mp4` is the moving preview.
+
+## v009c vs v009b: no starfish gloves (director reviews of v009b and v009c)
+- **Cause of the starfish gloves:** the `GloveThin` Displace modifier (added in v003) pulled the hand surface in 3.2 mm along its normals. On the subdivided glove it thinned every finger and opened gaps between them, so the long, separate fingers read as splayed.
+  - The bones and the skinning were correct: the evaluated finger curls match the keys, finger vertices sit within about 1 cm of their bones, and the weights sum to 1. A test render changes when the finger bones change.
+  - `GloveThin` is removed in `03b_hands_v009b.py`.
+- **Poses:** the forceps pinch now tucks the middle, ring and little fingers in a gentle gradient under the index (`pinch_tuck`), and relaxed hands use an even curl (`relaxed_even`). Both are added to the `hand_poses` table with spread 0.
+- **Spread 0 everywhere:** every surgeon and nurse finger key is rebuilt from a clean `hand_poses` schedule with `spread=0`. The finger `HandLimit` side range is reset to ±10° (`LIMITS`).
+  - Forceps hand: `pinch`. Thumb and index meet on the shafts; the middle, ring and little fingers curl under them.
+  - Tray hands: `relaxed`.
+  - Chest and scalp hands: `flat_palm`, fingers together.
+  - Scalpel: `cup_hold`. Needle holder: `tripod`.
+- **Nurse:** her arms hang at her sides from 9.5 s; she no longer carries the dish, which stays on the counter. She stands 12 cm further from the tray and lowers her arms while the surgeon passes her (9.5–10 s).
+- **Camera:** pulled back 25 cm along its view line at 2.9–4.4 s (chest) and 20 cm at 14.5–17.2 s (x-ray). The 10 s key is raised above head height so the nurse no longer walks into the lens.
+- **Released tools:** the forceps (331) and the scalpel (464) lie flat on the tray where the hand lets go. Before, they glided 22 cm back to a rest spot (qa PROPMOVE).
+- **f1–45:** the surgeon stands 10 cm further from the patient's knee, so the patient's resting left hand no longer touches his hip.
+
+## v009b vs v009: hands closed on what they hold (director review of v009)
+`EarInArm_v001/scripts/03b_hands_v009b.py` runs after `03_animate.py`. Every contact uses `pipeline/hand_poses.py`:
+- **Forceps hand (R, 1.7–5.6 s and 9.5–25 s):** `grip_object` (pinch) on the forceps shafts every 12 frames. The forceps and whatever rides in it (the chest piece, the ear) are then re-baked to the final pinch point, so thumb and index stay closed on the shafts.
+- **Chest x-ray (2.6–4.6 s):** the free left hand is `place_hand` + `flat_palm` on the tee beside the forceps. The wrist follows the placed orientation only inside this window.
+- **Tray (8.9–9.4 s):** the left hand pinches the carved ear (`grip_object`, pinch), and the right hand is flat on the tray (`place_hand`).
+- **Ear placement (23.2–25 s):** the left hand is flat on the scalp above the ear (`place_hand` on the skin surface).
+- **Patient's free (right) hand, reclined (8–27 s):** relaxed on the armrest (`place_hand`).
+- **Nurse:** relaxed hands (v009e: arms at her sides, no dish).
+- **Unclip pass:** a hand vertex inside or within 1 cm of a nearby body is pushed out along the surface normal at f13–49, 139–283, 562–599, 637–715, 1357–1396 and 1405–1465.
+- **Camera:** starts beside the surgeon (no back-of-head fill at 0.5 s). The tray shot (8.7–10 s) is seen from across the tray. The arm shots (11.5–13.5 s and 16.5–18.8 s) are raised about 25–30 cm, so the hands and the arm with the ear read over the gown.
+
+## v009 vs v007: acting fix (client stopped the render: "very weird actions")
+Full list in `review/ACTING_notes.md`. In short:
+- Every hand pose goes through `pipeline/hand_poses.py` (`add_hand_limits`, `apply_pose`). No finger angles are set by hand.
+- No hand touches a face during the shock beat; both hands come up open.
+- Beat 2 is restaged in the room as a chest x-ray, so both camera jumps and the rib studio (with its cloned surgeon) are gone.
+- Tools sit at the thumb–index pinch point, and a 3-pass solve puts each tool tip on its target.
+- Macros are pulled back to at least 15 cm with longer lenses.
+- QA (v007 → v009): CLAW 104 → 0, FACEPRESS 20 → 0, CAMJUMP 2 → 0, EMPTY 29 → 0, INSIDE 1 → 0, ROLL 0 → 0, HOVER 1 → 1 (listed), FILL 70 → 15.
+
+Earlier history (v002–v007) is in `../EarInArm_v007/README.md`.
