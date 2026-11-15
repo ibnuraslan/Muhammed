@@ -1,8 +1,8 @@
-# DwarfGiant_v005: restaged with clean cuts (director review of v004)
+# DwarfGiant_v006: restaged growth, actions and theatre (director review of v005)
 
 This is the same film, timeline and story-beat frames as v002 (`beats.json` is unchanged), with the client's acting notes of Nov 12 applied. Nothing else was changed: same look, same package rules.
 
-- `DwarfGiant_v005_60fps.blend`: 92.6 MB, packed and compressed, a normal git file. Settings are in SETTINGS.md.
+- `DwarfGiant_v006_60fps.blend`: 92.6 MB, packed and compressed, a normal git file. Settings are in SETTINGS.md.
 - Review files are in `../DwarfGiant_v001/review/`:
   - `ACT_before_v002_0p5s.jpg` and `ACT_after_v003_0p5s.jpg`: half-second sheets.
   - `ACTING_notes.md`: every problem found, with its frames and fix.
@@ -21,6 +21,40 @@ This is the same film, timeline and story-beat frames as v002 (`beats.json` is u
 - **Surgeons:** they hold a sterile hand pose, and Surgeon 1 lays a hand on the drape at the patient's shoulder. The nurse tucks the blanket with both hands.
 - **Young and old selves:** they breathe and look at each other.
 - **Camera:** it no longer goes inside the desk, the x-ray head, the lying head (now entered through the forehead), an officer's body or the bed rail. There are no wall-filled, shoe-filled or tile-only frames; the wall fly-through opens just before the camera reaches it.
+
+## v006 changes (director review of v005)
+Story-beat frames are unchanged and no VO is added. The preview is `review/preview.mp4`, rendered from this exact file.
+
+Shots, joined by 18 clean cuts:
+
+| Frames | Shot |
+|---|---|
+| 1–150 | Office |
+| 151–240 | Brain inset |
+| 241–371 | The officer and the boy, faces |
+| 372–440 | His face |
+| 441–600 | Locked shot by the height rod as he shoots up |
+| 601–695 | His surprised face |
+| 696–812 | Full body at the desk |
+| 813–874 | The mirror |
+| 875–1150 | Second beat: he lifts his hands and looks at them |
+| 1151–1240 | The officers look up at him |
+| 1241–1365 | His-eyes POV |
+| 1366–1481 | Ear cup |
+| 1482–1600 | Theatre, wide |
+| 1601–1716 | Side medium: patient and surgeons |
+| 1717–1857 | Patient's face, blanket and surgeon |
+| 1858–1899 | The normal man's face |
+| 1900–1940 | The tall man's face |
+| 1941–1999 | Headstones |
+| 2000–2340 | The two figures at sunset |
+
+- **Growth:** he shoots up between 500 and 600 in one locked shot by the height rod, past the officer. The shot is framed by his face before and after.
+- **Second beat:** he lifts his hands and looks at them, then the camera cuts to the officers reacting.
+- **Brain inset:** centred and whole, with a slow push. The pituitary glows warm orange.
+- **Dust specks:** off.
+- **Opening:** the clerk's hand no longer shows; it was a floating hand at the frame edge.
+- **Mirror:** his head is out of frame.
 
 ## v005 changes (director review of v004)
 Story-beat frames are unchanged and no VO is added. The film is now a series of shots joined by **clean cuts**, so the camera no longer flies into heads, walls or windows. The preview is `review/preview.mp4`, rendered from this exact file.
