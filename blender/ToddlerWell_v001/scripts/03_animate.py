@@ -394,9 +394,9 @@ for f, zr, flex, xy_ in LOWER:
 # beat 9: at the bottom: reach, grip the toddler's upper arms (toddler arms up)
 BOT = LOWER[-1][1]
 TD_ROOT = V((0, 0, FZ + T.root.z))
-grip_pts = {"L": TD_ROOT + V((0.15, -0.03, 0.69)), "R": TD_ROOT + V((-0.15, -0.03, 0.69))}     # the teen's hands round the toddler's raised wrists, above and wide of his head
+grip_pts = {"L": TD_ROOT + V((0.14, -0.02, 0.47)), "R": TD_ROOT + V((-0.14, -0.02, 0.47))}     # the teen's hands round the toddler's raised wrists, above and wide of his head
 for f, k in ((1504, 0.0), (1520, 0.5), (1536, 1.0), (1552, 1.0), (1580, 1.0), (1610, 1.0), (1626, 1.0)):
-    zr = BOT - 0.02 * ease(k)
+    zr = BOT - 0.24 * ease(k)
     rp = V((0, 0, zr)); Rb = Rx(180)
     hl = (rp + Rb @ V((0.12, 0.05, 0.75))).lerp(grip_pts["L"] + V((0, 0, 0.02)), ease(k))
     hr = (rp + Rb @ V((-0.12, 0.05, 0.75))).lerp(grip_pts["R"] + V((0, 0, 0.02)), ease(k))
@@ -408,17 +408,17 @@ for f in range(1500, 1628, 8):
     k = ease((f - 1500) / 40)
     jaw(T, f, JAW)
     T.key(f, V((0, 0)), yb, z=FZ, flex=-12, head=(LOOK, 0),
-          hands={"L": ("w", (TD_ROOT + V((0.1, -0.02, 0.38))).lerp(TD_ROOT + V((0.12, 0.03, 0.58)), k)),
-                 "R": ("w", (TD_ROOT + V((-0.1, -0.02, 0.38))).lerp(TD_ROOT + V((-0.12, 0.03, 0.58)), k))})     # arms up in a V: wrists in the teen's hands, head clear
+          hands={"L": ("w", (TD_ROOT + V((-0.1, -0.02, 0.38))).lerp(TD_ROOT + V((-0.12, 0.02, 0.35)), k)),
+                 "R": ("w", (TD_ROOT + V((0.1, -0.02, 0.38))).lerp(TD_ROOT + V((0.12, 0.02, 0.35)), k))})     # facing ~164 deg: his left hand is on the -x side     # arms up in a V: wrists in the teen's hands, head clear
 # beat 10 (1627-1764): rise together; the toddler hangs from the teen's grip
 RISE0, RISE1 = 1630, 1772
 rise_z = {}
 for f in range(RISE0, RISE1 + 1, 2):
     u = (f - RISE0) / (RISE1 - RISE0)
-    rise_z[f] = (BOT - 0.02) + ((0.5 + TE.root.z * 0.0 + 1.0) - (BOT - 0.02)) * (0.15 * u + 0.85 * ease(u))
+    rise_z[f] = (BOT - 0.24) + ((0.5 + TE.root.z * 0.0 + 1.0) - (BOT - 0.24)) * (0.15 * u + 0.85 * ease(u))
 for f in range(RISE0, RISE1 + 1, 4):
     zr = rise_z[f]; rp = V((0, 0, zr)); Rb = Rx(180)
-    dz = zr - (BOT - 0.02)
+    dz = zr - (BOT - 0.24)
     gl = grip_pts["L"] + V((0, 0, 0.02 + dz)); gr = grip_pts["R"] + V((0, 0, 0.02 + dz))
     TE.key(f, V((0, 0)), 0, root_world=rp, flex=180, head=(-35, 0), side=3 * math.sin(f * 0.2),
            feet={s: teen_foot(rp, Rb, s) for s in "LR"},
@@ -427,7 +427,7 @@ for f in range(RISE0, RISE1 + 1, 4):
     tr = TD_ROOT + V((0, 0, dz))
     T.key(f, V((0, 0)), yb, root_world=tr, flex=-4, head=(-35, 10 * math.sin(f * 0.1)),
           feet={s: ("w", tr + V((0.05 if s == "L" else -0.05, -0.02, -T.root.z + T.ankle[s].z + 0.03 * math.sin(f * 0.2 + (s == "L") * 3))), Rz(yb)) for s in "LR"},
-          hands={"L": ("w", gl + V((-0.03, 0.06, -0.11))), "R": ("w", gr + V((0.03, 0.06, -0.11)))})   # his wrists stay in the teen's hands
+          hands={"L": ("w", gr + V((0.03, 0.04, -0.12))), "R": ("w", gl + V((-0.03, 0.04, -0.12)))})   # his wrists stay in the teen's hands
 RA.key(1135, V((-0.9, 0.9)), yaw_to((-0.9, 0.9), (-0.15, 0.72)), hands={"L": HANG(RA), "R": HANG(RA)})     # turns to go with his arms down
 HOLD = {RB: V((-0.55, 0.45)), RA: V((0.55, 0.45))}     # beside the rim, close enough to reach his shins
 # rescuers: hold his legs while he goes in (1312-1400), then haul line; haul hand over hand in beat 10
@@ -503,8 +503,9 @@ for f in range(1772, 1812, 4):
     TE.key(f, xy, 0, root_world=rp if k < 0.85 else None, flex=180, side=-180 * k, head=(-20, 0), feet=feet,
            hands={"L": ("wg", gl), "R": ("wg", gr)})
     # (simplified for v005: ResA stays on the haul line; running him round to the hips crossed the tripod leg and the collar)
-    th_l = gl + V((-0.03, 0.06, -0.11)); th_r = gr + V((0.03, 0.06, -0.11))     # his wrists stay in the teen's hands
-    tr = (th_l + th_r) / 2 + V((0, 0, -0.58))
+    mid_ = (gl + gr) / 2; lat_ = Rz(yb + 160 * k) @ V((1, 0, 0))     # his own shoulder line
+    th_l = mid_ + lat_ * 0.09 + V((0, 0.05, -0.16)); th_r = mid_ - lat_ * 0.09 + V((0, 0.05, -0.16))     # arms straight up at shoulder width, round the teen's grip (his wrists stay in the teen's hands)
+    tr = (th_l + th_r) / 2 + V((0, 0, -0.35))     # within his arm reach (wrists 0.40 above the pelvis)
     T.key(f, V((0, 0)), yb + 160 * k, root_world=tr, flex=0, head=(-25, 0),
           feet={s: ("w", tr + V((0.05 if s == "L" else -0.05, 0, -T.root.z + T.ankle[s].z + 0.04)), Rz(yb)) for s in "LR"},
           hands={"L": ("w", th_l), "R": ("w", th_r)})
@@ -515,17 +516,19 @@ for i, f in enumerate(range(1816, 1872, 8)):
     k = ease((f - 1816) / 30)
     yawT = 180 - 30 * k
     rp = V((OUTP.x, OUTP.y, TE.root.z))
-    # lifts him from the hang into his arms, against his chest
-    tr = (rp + Rz(yawT) @ V((0, -0.45, 0.2 - 0.69))).lerp(rp + Rz(yawT) @ V((0, -0.24, 0.2)), k)
-    gl = tr + Rz(yawT) @ V((0.15, 0.0, 0.28)); gr = tr + Rz(yawT) @ V((-0.15, 0.0, 0.28))     # under his arms
+    # lifts him from the hang into his arms, against his chest; the grip moves from his wrists to under him over the first half
+    kk = ease(min(1.0, k / 0.5))
+    tr = (rp + Rz(yawT) @ V((0, -0.5, -0.31))).lerp(rp + Rz(yawT) @ V((0, -0.34, 0.2)), k)
+    grip_l = rp + Rz(yawT) @ V((0.15, -0.45, 0.2)); grip_r = rp + Rz(yawT) @ V((-0.15, -0.45, 0.2))     # where the swing left his hands
+    gl = grip_l.lerp(tr + Rz(yawT) @ V((0.14, 0.02, -0.04)), kk); gr = grip_r.lerp(tr + Rz(yawT) @ V((-0.06, -0.14, 0.24)), kk)     # then one hand under his bottom, one across his back
     TE.key(f, OUTP, yawT, flex=-4 * k, head=(-15 * k, 0), hands={"L": ("wg", gl), "R": ("wg", gr)})
     T.key(f, V((0, 0)), yawT + 180, root_world=tr, flex=5, head=(-5, 8 * math.sin(i)),
           feet={s: ("w", tr + Rz(yawT) @ V((0.05 if s == "L" else -0.05, 0.04, -T.root.z + T.ankle[s].z + 0.04)), Rz(yawT + 180)) for s in "LR"},
-          hands={"L": ("wg", (tr + V((0, 0, 0.45))).lerp(rp + Rz(yawT) @ V((-0.17, -0.02, 0.5)), k)), "R": ("wg", (tr + V((0, 0, 0.45))).lerp(rp + Rz(yawT) @ V((0.17, -0.02, 0.5)), k))})     # arms round his neck
+          hands={"L": ("w", (grip_r + Rz(yawT) @ V((0.07, -0.05, -0.16))).lerp(rp + Rz(yawT) @ V((-0.27, -0.12, 0.3)), kk)), "R": ("w", (grip_l + Rz(yawT) @ V((-0.07, -0.05, -0.16))).lerp(rp + Rz(yawT) @ V((0.27, -0.12, 0.3)), kk))})     # from his wrists to the outside of his arms
 # mother: ducks the tape, runs in, takes him in a hug
 MO.walk([V(CROWD_POS["Mother"]), V((-1.0, 5.2)), V((-0.8, 3.2)), V((-0.6, 1.9))], 1800, 1866, stride=1.0, lift=0.11, arm_swing=0.3, lean=10)
 MP = V((-0.6, 1.9)); myaw = yaw_to(MP, OUTP)
-HELD0 = OUTP.to_3d() + V((0, 0, TE.root.z + 0.2 + 0.1)) + Rz(150) @ V((0, -0.24, 0))     # where the hold-up left him: against the teen's chest
+HELD0 = OUTP.to_3d() + V((0, 0, TE.root.z + 0.2 + 0.1)) + Rz(150) @ V((0, -0.34, 0))     # where the hold-up left him: against the teen's chest
 for i, f in enumerate(range(1872, END + 10, 4)):
     k = ease((f - 1872) / 34)
     cr_ = 0.42 * MO.root.z * ease((f - 1896) / 34)
@@ -535,13 +538,13 @@ for i, f in enumerate(range(1872, END + 10, 4)):
     MO.key(f, MP, myaw + 4 * math.sin(i * 0.7), flex=8 + 10 * (cr_ > 0.05), crouch=cr_, head=(10, 0), twist=10 * math.sin(i * 0.5),
            feet={"L": ("xy", MP + (Rz(myaw) @ V((0.12, 0.12, 0))).to_2d(), myaw), "R": ("xy", MP + (Rz(myaw) @ V((-0.12, -0.05, 0))).to_2d(), myaw, 0.0, 0.0)},
            hands={"L": ("w", held + Rz(lerp(330, myaw + 180, k) - 180) @ V((0.27, 0.1, -0.02))), "R": ("w", held + Rz(lerp(330, myaw + 180, k) - 180) @ V((-0.23, 0.05, 0.02)))} if k >= 0.3 else
-                 {"L": ("rel", (0.1, 0.45, 0.3 * MO.arm)), "R": ("rel", (0.1, 0.45, 0.3 * MO.arm))})   # reaching up for him until he is in reach   # both arms: under him and across his back
+                 {"L": ("rel", (0.12, 0.3, 0.2 * MO.arm)), "R": ("rel", (0.12, 0.3, 0.2 * MO.arm))})   # reaching up for him until he is in reach   # both arms: under him and across his back
     T.key(f, V((0, 0)), lerp(330, myaw + 180, k), root_world=held + V((0, 0, -0.1)), flex=10, head=(5 + 10 * k, 25 * k),
-          feet={s: ("w", held + V((0.05 if s == "L" else -0.05, 0, -0.1 - T.root.z + T.ankle[s].z + 0.05)), Rz(myaw + 180)) for s in "LR"},
+          feet={s: ("w", held + Rz(lerp(330, myaw + 180, k) - 180) @ V((0.05 if s == "L" else -0.05, 0.04, -0.1 - T.root.z + T.ankle[s].z + 0.04)), Rz(lerp(330, myaw + 180, k))) for s in "LR"},     # continues the hold: no leg jump
           hands={"L": ("wg", held + Rz(myaw) @ V((0.17, 0.2, 0.34))), "R": ("wg", held + Rz(myaw) @ V((-0.17, 0.2, 0.34)))} if k >= 0.5 else
-                {"L": ("wg", OUTP.to_3d() + V((0, 0, TE.root.z + 0.5)) + Rz(150 - 20 * k) @ V((-0.17, -0.02, 0))), "R": ("wg", OUTP.to_3d() + V((0, 0, TE.root.z + 0.5)) + Rz(150 - 20 * k) @ V((0.17, -0.02, 0)))})     # on the teen's shoulders, then the mother's
+                {"L": ("w", held + Rz(myaw) @ V((0.14, 0.22, 0.22))), "R": ("w", held + Rz(myaw) @ V((-0.14, 0.22, 0.22)))})     # reaching for his mother     # on the teen's shoulders, then the mother's
     TE.key(f, OUTP, 150 - 20 * k, flex=-5, head=(-15, 0),
-           hands={"L": UP(TE, 0.25, 0.1), "R": UP(TE, 0.25, 0.1)} if k > 0.55 else {"L": ("wg", held + Rz(lerp(330, myaw + 180, k) - 180) @ V((0.15, 0.0, 0.18))), "R": ("wg", held + Rz(lerp(330, myaw + 180, k) - 180) @ V((-0.15, 0.0, 0.18)))})
+           hands={"L": UP(TE, 0.25, 0.1), "R": UP(TE, 0.25, 0.1)} if k > 0.55 else {"L": ("wg", held + Rz(lerp(330, myaw + 180, k) - 180) @ V((0.14, 0.02, -0.14))), "R": ("wg", held + Rz(lerp(330, myaw + 180, k) - 180) @ V((-0.06, -0.14, 0.14)))})
 for c, p in ((RA, V((-1.3, 2.4))), (RB, V((-1.75, 1.3))), (RC, V((1.0, 3.3)))):
     for i, f in enumerate(range(1836, END + 10, 10)):
         ph = i * 1.4
