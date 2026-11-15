@@ -127,9 +127,9 @@ for mname in ("M_Wave",):
                           (30.0, (0.10, 0.068, 0.031), 0.06), (31.6, (0.085, 0.06, 0.03), 0.0), (40, (0.085, 0.06, 0.03), 0.0)):
         b.inputs["Base Color"].default_value = (*colr, 1); b.inputs["Base Color"].keyframe_insert("default_value", frame=F(t))
         fv.outputs[0].default_value = foam; fv.outputs[0].keyframe_insert("default_value", frame=F(t))
-    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.15), (31.0, 0.15), (32.0, 0.12)):   # vNEXT: rough muddy water, no sun-glare blobs
+    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.35), (31.0, 0.35), (32.0, 0.15)):   # vNEXT: rough muddy water, no sun-glare blobs
         b.inputs["Roughness"].default_value = rg; b.inputs["Roughness"].keyframe_insert("default_value", frame=F(t))
-    for t, sl in ((0, 0.6), (20.8, 0.6), (22.0, 0.35), (31.0, 0.35), (32.0, 0.5)):   # vNEXT: softer specular on the flood
+    for t, sl in ((0, 0.6), (20.8, 0.6), (22.0, 0.22), (31.0, 0.22), (32.0, 0.5)):   # vNEXT: softer specular on the flood
         b.inputs["Specular IOR Level"].default_value = sl; b.inputs["Specular IOR Level"].keyframe_insert("default_value", frame=F(t))
     for t, wv in ((0, 0), (40, 6)):
         nz.inputs["W"].default_value = wv; nz.inputs["W"].keyframe_insert("default_value", frame=F(t))
@@ -363,7 +363,7 @@ for fc in _fcurves(bpy.data.materials["M_Wave"].node_tree.animation_data.action)
         for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
 # ---------------------------------------------------------------- diorama: tension, slip, uplift, bulge splits
 tip = bpy.data.objects["D_Tip"]; wtop = bpy.data.objects["D_WaterTop"]; fault = bpy.data.objects["D_Fault"]
-key_tr(tip, F(13.0), rot=(0, 0, 0)); key_tr(tip, F(14.2), rot=(math.radians(-4), 0, 0))    # dragged down
+key_tr(tip, F(13.1), rot=(0, 0, 0)); key_tr(tip, F(14.2), rot=(math.radians(-7), 0, 0))    # dragged down (vNEXT: visibly)
 key_tr(tip, F(14.4), rot=(math.radians(5), 0, 0)); key_tr(tip, F(14.7), rot=(math.radians(3.5), 0, 0))   # snaps up
 l0 = tip.location.copy()
 key_tr(tip, F(14.2), loc=tuple(l0)); key_tr(tip, F(14.4), loc=(l0.x, l0.y, l0.z + 0.9)); key_tr(tip, F(14.8), loc=(l0.x, l0.y, l0.z + 0.75))
