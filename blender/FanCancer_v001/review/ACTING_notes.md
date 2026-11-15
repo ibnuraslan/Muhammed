@@ -120,3 +120,10 @@ The beat frames are unchanged, and there is no on-screen text.
 | 1 | The ending was a static wide, her face unreadable, with mannequin players. | The camera is at about 1.6 m and chest height, with a slow push to 1.4 m. She is framed from the waist up over the cheque, which she holds at her waist; her face is clear and smiling. Two people stand close beside her and clap with IK hands meeting in front of the chest: a new player `FinPlayer` on her right (kept under the ice before the cut) and the man on her left. The other players stand well back (≥ 4.5 m), off to the sides. |
 | 2 | Clawed hands on her collarbones. | Her right palm is open with the fingers together (`shield`), raised at her chest in surprise, and her left hand stays on her lap. No claw and no crossing. |
 | 3 | His head passed close to the lens (f121–131). | The 1.95 s key is 0.5 m further back and higher. |
+
+## v010 (director review of v009). The preview `review/preview.mp4` (498 frames) is rendered from the final v010 package, with pages in `review/preview_pages_v010/`
+| Item | Fault | Fix |
+|---|---|---|
+| 1 | The cheque filled the bottom half as a white slab. | The camera is about 0.4 m higher (z 1.74–1.78), tilted down onto her at lens 38. The cheque reads as a band across the lower third, with its blue border and signature line visible, and the slow push is kept. |
+| 2 | Her expression read as shocked or screaming. | The finale and the end of the laptop shot use a happy smile: smile 1.0, lips slightly parted (jaw 5), and eyes narrowed. The stunned open mouth stays only at 36.4–37.2 s, at the first moment at the laptop. |
+| 3 | His head near the lens at 121–136. | The 1.95 s and 2.2 s keys are higher (2.65–2.75 m) and further back. He now passes mid-frame below the camera. |
