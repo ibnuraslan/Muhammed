@@ -108,20 +108,20 @@ K = [  # frame, location, target, lens
  (1705, (0.8, -4.3, -2.2), (0.0, 0.2, -1.9), 18),
  # hard cut at 1706: the haulers' last pulls; they let go and cheer (his upside-down exit stays off screen)
  (1706, (1.8, 3.4, 1.3), (-0.2, 2.3, 1.1), 34),
- (1765, (1.7, 3.3, 1.35), (-0.2, 2.3, 1.1), 34),
- # hard cut at 1766: him standing with the toddler, lifted to his chest
- (1766, (0.5, 2.9, 1.5), (-0.3, 1.0, 1.2), 26),
+ (1781, (1.65, 3.25, 1.38), (-0.2, 2.3, 1.1), 34),
+ # hard cut at 1782: him standing with the toddler held against his chest
+ (1782, (0.5, 2.9, 1.5), (-0.3, 1.0, 1.25), 26),
  (1800, (0.7, 2.8, 1.5), (-0.4, 1.3, 1.25), 28),     # the mother runs in
  (1830, (0.9, 2.9, 1.55), (-0.5, 1.6, 1.3), 30),     # she takes him from the teen, in frame
  (1855, (0.95, 2.95, 1.55), (-0.5, 1.7, 1.3), 31),
  # hard cut at 1856
- (1856, (1.1, 1.3, 1.45), (-0.6, 1.9, 1.25), 36),     # the hug, from her side: both faces in profile
- (1915, (1.05, 1.35, 1.3), (-0.6, 1.9, 1.05), 40),
+ (1856, (1.0, 1.4, 1.55), (-0.6, 1.9, 1.45), 44),     # the hug, from her side: both faces in profile
+ (1915, (0.95, 1.45, 1.52), (-0.6, 1.9, 1.42), 48),
  # hard cut at 1916: the wide (about 0.6 s)
  (1916, (2.4, -2.6, 2.6), (-0.3, 1.6, 1.0), 24),
  (1950, (2.6, -3.4, 3.6), (-0.3, 1.8, 0.9), 24),
 ]
-CUTS = [197, 248, 428, 1031, 1111, 1288, 1372, 1706, 1766, 1856, 1916]     # hard cuts: separate splines either side, constant step between
+CUTS = [197, 248, 428, 1031, 1111, 1288, 1372, 1706, 1782, 1856, 1916]     # hard cuts: separate splines either side, constant step between
 cam = bpy.data.objects["Cam"]; tg = bpy.data.objects["CamTarget"]
 bounds = [1] + CUTS + [1951]
 for a_, b_ in zip(bounds[:-1], bounds[1:]):
