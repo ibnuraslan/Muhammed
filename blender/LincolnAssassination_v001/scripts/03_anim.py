@@ -120,6 +120,69 @@ MUZ = muzzle.copy()
 print("PISTOL handle", tuple(handle), "muzzle(local)", tuple(MUZ))
 pistol.name = "Pistol"
 
+
+# ---------------------------------------------------------------- emissive fire particles (Geometry Nodes, keyed clock T, no cache)
+def fire_material():
+    m = bpy.data.materials.get("FireBlob")
+    if m: return m
+    m = bpy.data.materials.new("FireBlob"); n, l = nodes_of(m); n.clear()
+    out = n.new('ShaderNodeOutputMaterial'); at = n.new('ShaderNodeAttribute'); at.attribute_type = 'INSTANCER'; at.attribute_name = "heat"
+    ramp = n.new('ShaderNodeValToRGB'); el = ramp.color_ramp.elements
+    el[0].position = 0.0; el[0].color = (1.0, 0.92, 0.55, 1); el[1].position = 1.0; el[1].color = (0.85, 0.12, 0.02, 1)
+    mid = el.new(0.35); mid.color = (1.0, 0.5, 0.08, 1)
+    em = n.new('ShaderNodeEmission'); em.inputs['Strength'].default_value = 5.0
+    tr = n.new('ShaderNodeBsdfTransparent'); mx = n.new('ShaderNodeMixShader')
+    pw = n.new('ShaderNodeMath'); pw.operation = 'POWER'; pw.inputs[1].default_value = 2.0
+    l.new(at.outputs['Fac'], ramp.inputs[0]); l.new(ramp.outputs[0], em.inputs['Color'])
+    l.new(at.outputs['Fac'], pw.inputs[0]); l.new(pw.outputs[0], mx.inputs[0])
+    l.new(em.outputs[0], mx.inputs[1]); l.new(tr.outputs[0], mx.inputs[2]); l.new(mx.outputs[0], out.inputs[0])
+    try: m.blend_method = 'HASHED'
+    except Exception: pass
+    return m
+FIRE_T = []
+def fire_tree(name, Wd, Dp, H, N, rad, speed):
+    ng = bpy.data.node_groups.new(name, 'GeometryNodeTree')
+    ng.interface.new_socket('Geometry', in_out='INPUT', socket_type='NodeSocketGeometry')
+    ng.interface.new_socket('Geometry', in_out='OUTPUT', socket_type='NodeSocketGeometry')
+    nd = ng.nodes; lk = ng.links
+    gout = nd.new('NodeGroupOutput'); nd.new('NodeGroupInput')
+    T = nd.new('ShaderNodeValue'); T.name = "T"; FIRE_T.append(ng)
+    pts = nd.new('GeometryNodePoints'); pts.inputs['Count'].default_value = N
+    def rnd(lo, hi, seed):
+        r = nd.new('FunctionNodeRandomValue'); r.data_type = 'FLOAT'
+        mn = [s for s in r.inputs if s.name == 'Min' and s.type == 'VALUE'][0]; mx_ = [s for s in r.inputs if s.name == 'Max' and s.type == 'VALUE'][0]
+        mn.default_value = lo; mx_.default_value = hi; r.inputs['Seed'].default_value = seed
+        return [s for s in r.outputs if s.type == 'VALUE'][0]
+    def M(op, a, b=None, c=None):
+        m = nd.new('ShaderNodeMath'); m.operation = op
+        for i, v in enumerate((a, b, c)):
+            if v is None: continue
+            if isinstance(v, (int, float)): m.inputs[i].default_value = v
+            else: lk.new(v, m.inputs[i])
+        return m.outputs[0]
+    x = rnd(-Wd / 2, Wd / 2, 1); y = rnd(-Dp / 2, Dp / 2, 2); ph = rnd(0, 1, 3); sp = rnd(0.7, 1.3, 4); sz = rnd(0.6, 1.3, 5)
+    u = M('FRACT', M('ADD', ph, M('MULTIPLY', M('MULTIPLY', T.outputs[0], speed / H), sp)))
+    shrink = M('SUBTRACT', 1.0, M('MULTIPLY', u, 0.6))
+    xs = M('ADD', M('MULTIPLY', x, shrink), M('MULTIPLY', M('SINE', M('ADD', M('MULTIPLY', u, 7.0), M('MULTIPLY', ph, 40.0))), 0.05 * max(Wd, 0.3)))
+    ys = M('MULTIPLY', y, shrink); z = M('MULTIPLY', u, H)
+    cb = nd.new('ShaderNodeCombineXYZ'); lk.new(xs, cb.inputs[0]); lk.new(ys, cb.inputs[1]); lk.new(z, cb.inputs[2])
+    lk.new(cb.outputs[0], pts.inputs['Position'])
+    st = nd.new('GeometryNodeStoreNamedAttribute'); st.data_type = 'FLOAT'; st.domain = 'POINT'; st.inputs['Name'].default_value = "heat"
+    lk.new(pts.outputs[0], st.inputs['Geometry']); lk.new(u, [s for s in st.inputs if s.name == 'Value'][0])
+    ico = nd.new('GeometryNodeMeshIcoSphere'); ico.inputs['Radius'].default_value = 1.0; ico.inputs['Subdivisions'].default_value = 1
+    sm = nd.new('GeometryNodeSetMaterial'); sm.inputs['Material'].default_value = fire_material(); lk.new(ico.outputs[0], sm.inputs['Geometry'])
+    iop = nd.new('GeometryNodeInstanceOnPoints'); lk.new(st.outputs[0], iop.inputs['Points']); lk.new(sm.outputs[0], iop.inputs['Instance'])
+    scl = M('MULTIPLY', M('MULTIPLY', M('POWER', M('SUBTRACT', 1.0, u), 0.6), sz), rad)
+    lk.new(scl, iop.inputs['Scale'])
+    lk.new(iop.outputs[0], gout.inputs[0])
+    return ng
+def fire_emitter(name, loc, Wd, Dp, H, N, rad, speed, parent=None, coll_=None):
+    me = bpy.data.meshes.new(name); o = bpy.data.objects.new(name, me); (coll_ or CP).objects.link(o)
+    md = o.modifiers.new("Fire", 'NODES'); md.node_group = fire_tree(name + "_GN", Wd, Dp, H, N, rad, speed)
+    o.location = loc; o.visible_shadow = False
+    if parent: o.parent = parent
+    return o
+
 def torch_obj(name):
     bm = bmesh.new()
     bmesh.ops.create_cone(bm, cap_ends=True, segments=10, radius1=0.022, radius2=0.03, depth=0.62)
@@ -128,13 +191,7 @@ def torch_obj(name):
     bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=True, segments=12, radius1=0.045, radius2=0.05, depth=0.14)
     bmesh.ops.translate(bm, verts=bm.verts, vec=(0, 0, 0.66))
     w = mesh_obj(name + "_Wrap", bm, [flat("TorchWrap", (0.25, 0.16, 0.08), rough=0.9)], CP); w.parent = o; shade_smooth(w)
-    fl = bpy.data.materials["FlameMat"]
-    for k, yaw in enumerate((0, 60, 120)):
-        bm = bmesh.new(); uv = bm.loops.layers.uv.new()
-        q = [bm.verts.new((x, 0, z)) for x, z in ((-0.13, 0.66), (0.13, 0.66), (0.13, 1.02), (-0.13, 1.02))]
-        f_ = bm.faces.new(q)
-        for lp, co in zip(f_.loops, ((0, 0), (1, 0), (1, 1), (0, 1))): lp[uv].uv = co
-        c = mesh_obj(name + "_Flame%d" % k, bm, [fl], CP); c.parent = o; c.rotation_euler = (0, 0, R_(yaw)); c.visible_shadow = False
+    fire_emitter(name + "_Fire", (0, 0, 0.70), 0.07, 0.07, 0.34, 45, 0.05, 0.9, parent=o)
     L = bpy.data.lights.new(name + "_Light", 'POINT'); L.energy = 60; L.color = (1.0, 0.55, 0.2); L.shadow_soft_size = 0.2
     lo = bpy.data.objects.new(name + "_Light", L); CP.objects.link(lo); lo.parent = o; lo.location = (0, 0, 0.85)
     return o
@@ -203,7 +260,7 @@ for c in (AA, AB): park(c, TH1 + 1); park(c, END_FRAME)
 GPOS = CHP + Rc @ V(0.25, 1.70, 0) ; GPOS.z = BZ
 G_YAW = yaw_to(fwd_c)
 sc.frame_set(ST["S01"])
-for f in range(TH0, ST["S06"] + 30, 6):
+for f in list(range(TH0, ST["S06"], 6)) + [ST["S06"] + 32]:
     G.stand(f, (GPOS.x, GPOS.y), G_YAW, flex=6, head=(4 if f > ST["S01"] + 80 else 0, 0), twist=-6)
     if f >= ST["S04"] and f < ST["S05"] + 30:
         G.H.key_spine(f, flex=9, twist=-8, head=(6, 0))
@@ -279,6 +336,9 @@ for n, q in fing.items():
 pistol.matrix_world = G_AIM
 child_of_now(pistol, G.o, "wrist.R", FG)
 key_vis(pistol, 1, False); key_vis(pistol, TH0, True); key_vis(pistol, ST["S07"], False)
+# S06: lowers the gun, glances back over his shoulder at the door, then snaps his head to the ledge
+for off, hd, fl in ((0, (6, 0), 9), (14, (-4, 30), 6), (26, (-2, 34), 6), (34, (0, -25), 10)):
+    G.H.key_spine(ST["S06"] + off, flex=fl, twist=-6, head=hd)
 # turn and two steps to the ledge (S06 end)
 STEP0 = ST["S06"] + 35
 ledge_stand = GPOS + (V(BX0 + 0.55, GPOS.y + 0.2, BZ) - GPOS).normalized() * 0.45
@@ -386,8 +446,8 @@ crack.visible_shadow = False
 FC = ST["S09"] + 15
 sc.frame_set(FC)
 _ll = G.o.pose.bones["lowerleg01.L"]; _mid = G.o.matrix_world @ ((_ll.head + _ll.tail) / 2)
-crack.location = _mid + Rj @ V(0, 0, 0) + V(0, -0.075, 0.02); crack.rotation_euler = (0, 0, 0)
-for f, s_ in ((1, 0.0), (FC - 1, 0.0), (FC + 3, 1.3), (FC + 10, 1.0), (FC + 40, 0.9), (FC + 60, 0.0)):
+crack.location = _mid + V(0, 0.075, 0.02); crack.rotation_euler = (0, 0, math.pi)
+for f, s_ in ((1, 0.0), (FC - 1, 0.0), (FC + 3, 2.6), (FC + 10, 2.1), (FC + 40, 1.9), (FC + 60, 0.0)):
     crack.scale = (s_,) * 3; crack.keyframe_insert("scale", frame=f)
 key_vis(crack, 1, False); key_vis(crack, FC - 1, True); key_vis(crack, FC + 61, False)
 
@@ -436,7 +496,7 @@ def quad_gallop(rig, path, f0, f1, stride=3.0, lift=0.32, bob=0.07):
         if "neck1" in rig.PB: rig.key_rot("neck1", f, [("X", -6 * math.sin(2 * math.pi * cyc + 0.6))])
 CUR_S[0] = 1.0
 H_S11 = (ST["S11"], SE("S11")); H_S12 = (ST["S12"], SE("S12"))
-p11 = lambda f: V(99.2, 26.0 - 10.5 * (f - H_S11[0]) / 60.0, 0)
+p11 = lambda f: V(99.2, 20.0 - 10.5 * (f - H_S11[0]) / 60.0, 0)
 p12 = lambda f: V(102.0, 18.0 - 8.0 * (f - H_S12[0]) / 60.0, 0)
 quad_gallop(HR, p11, H_S11[0], H_S11[1], stride=3.4)
 quad_gallop(HR, p12, H_S12[0], H_S12[1], stride=3.0)
@@ -563,11 +623,19 @@ for t in torches:
     key_vis(t, 1, False); key_vis(t, M0, True)
     for ch in t.children: key_vis(ch, 1, False); key_vis(ch, M0, True)
 
-# fire flicker: keyed noise W and light energy (no Scene Time)
-fm = bpy.data.materials["FlameMat"]; nz = fm.node_tree.nodes["FlameNoise"]; mp = fm.node_tree.nodes["FlameScroll"]
-for f in (1, END_FRAME):
-    nz.inputs["W"].default_value = f / 25.0; nz.inputs["W"].keyframe_insert("default_value", frame=f)
-    mp.inputs["Location"].default_value = (0, -f / 40.0, 0); mp.inputs["Location"].keyframe_insert("default_value", frame=f)
+# barn fire: emissive particle emitters replace the flat cards; one keyed clock per tree (linear, no Scene Time)
+for o in [o for o in bpy.data.objects if o.name.startswith(("FlameBack", "FlameL", "FlameRoof"))]:
+    bpy.data.objects.remove(o, do_unlink=True)
+BF = bpy.data.collections["BarnFire"]
+fire_emitter("BarnFireBack", V(X1, 6.55, 0.0), 8.2, 0.5, 2.7, 520, 0.24, 1.1, coll_=BF)
+fire_emitter("BarnFireLeft", V(X1 - 4.05, 2.0, 0.0), 0.5, 8.5, 2.1, 420, 0.22, 1.0, coll_=BF)
+fire_emitter("BarnFireRoof", V(X1 - 2.3, 2.5, 3.35), 0.6, 8.0, 1.0, 160, 0.15, 0.8, coll_=BF)
+for ng in FIRE_T:
+    T = ng.nodes["T"]
+    for f in (1, END_FRAME):
+        T.outputs[0].default_value = f / 60.0; T.outputs[0].keyframe_insert("default_value", frame=f)
+    for fc in fcurves_of(ng.animation_data.action):
+        for k in fc.keyframe_points: k.interpolation = 'LINEAR'
 for L in [o for o in bpy.data.objects if o.name.startswith("FireLight")]:
     e0 = L.data.energy
     for f in range(1, END_FRAME + 1, 6):
@@ -651,10 +719,23 @@ print("S05 cam", tuple(round(x, 2) for x in _c0))
 camera("S06", [(0, V(BX0 + 0.45, BY0 + 0.35, BZ + 1.55), V(GPOS.x, GPOS.y, BZ + 1.15)), (-1, V(BX0 + 0.55, BY0 + 0.35, BZ + 1.55), V(ledge_stand.x, ledge_stand.y, BZ + 1.15))], lens=30)
 camera("S07", [(0, V(BX0 - 3.6, -0.6, 1.3), V(BX0, -1.6, BZ + 1.6)), (-1, V(BX0 - 3.7, -0.7, 1.2), V(BX0 - 0.7, -1.7, BZ + 0.4))], lens=26)
 camera("S08", [(0, LAND_P + V(-3.0, -1.6, 1.0), LAND_P + V(0, 0, 0.9)), (-1, LAND_P + V(-2.6, -1.5, 0.75), LAND_P + V(0, 0, 0.6))], lens=26)
-camera("S09", [(0, crack.location + V(-0.25, -0.85, 0.30), crack.location), (-1, crack.location + V(-0.2, -0.72, 0.26), crack.location)], lens=35)
+sc.frame_set(ST["S09"] + 20)
+_kn = G.world_bone("lowerleg01.L").translation; _ft = G.world_bone("foot.L").translation; _hd = G.world_bone("wrist.L").translation
+_pts9 = [_kn + V(0, 0, 0.12), _ft, _hd, crack.location, G.world_bone("lowerleg01.R").translation, G.world_bone("head").translation + V(0, 0, 0.18)]
+_c0, _t0 = frame_pts(_pts9, V(0.15, -1.0, -0.35), 30, fill=0.6)
+_c1, _t1 = frame_pts(_pts9, V(0.15, -1.0, -0.35), 30, fill=0.6, push=0.12)
+camera("S09", [(0, _c0, _t0), (-1, _c1, _t1)], lens=30)
+fl9 = bpy.data.lights.new("S09Fill", 'AREA'); fl9.size = 1.2; fl9.color = (1.0, 0.92, 0.85)
+fo9 = bpy.data.objects.new("S09Fill", fl9); CAMS.objects.link(fo9); fo9.location = _c0 + V(0.4, 0.0, 0.6)
+fo9.rotation_euler = (_kn - fo9.location).to_track_quat('-Z', 'Y').to_euler()
+for f, e in ((1, 0.0), (ST["S09"], 60.0), (SE("S09") + 1, 0.0)):
+    fl9.energy = e; fl9.keyframe_insert("energy", frame=f)
+for fc in fcurves_of(fl9.animation_data.action):
+    for k in fc.keyframe_points: k.interpolation = 'CONSTANT'
 fwj = Rj @ V(0, -1, 0)
 camera("S10", [(0, LAND_P + fwj * 2.6 + V(0, 0, 1.25), LAND_P + V(0, 0, 0.9)), (-1, LAND_P + fwj * 3.9 + V(0.3, 0, 1.35), limp_end + V(0, 0, 1.1))], lens=28)
-camera("S11", [(0, V(101.4, -10.0, 0.6), V(99.4, 20.0, 1.6)), (-1, V(101.5, -10.4, 0.6), V(99.0, -7.0, 1.7))], lens=24)
+camera("S11", [(0, V(100.9, 6.0, 0.9), p11(ST["S11"]) + V(0, 0, 1.5)), (100, V(100.9, -4.5, 0.85), p11(ST["S11"] + 100) + V(0, 0, 1.6)),
+               (-1, V(101.0, -12.0, 0.8), p11(SE("S11")) + V(0, 0, 1.6))], lens=30)
 camera("S12", [(0, V(95.0, 2.5, 1.55), V(104.0, 14.0, 1.9)), (-1, V(95.2, 0.5, 1.55), V(104.0, -3.0, 1.9))], lens=26)
 camera("S13", [(0, V(100.4, 3.0, 0.75), V(100.6, 13.0, 1.5)), (-1, V(100.4, -0.5, 0.85), V(100.5, 8.0, 1.5))], lens=24)
 camera("S14", [(0, V(X1 + 2.4, 4.6, 1.45), V(X1 + 0.3, -6.5, 1.0)), (-1, V(X1 + 2.2, 4.2, 1.55), V(X1 + 0.2, -6.5, 1.3))], lens=22)
