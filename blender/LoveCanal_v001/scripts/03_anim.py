@@ -19,7 +19,8 @@ F = {k: 1 + round(v * FPS) for k, v in T.items()}
 def f0(s): return F[s]
 def f1(s): i = ORDER.index(s); return (F[ORDER[i + 1]] if i + 1 < len(ORDER) else F["END"]) - 1
 def dur(s): return f1(s) - f0(s) + 1
-def fx(s, extra=1.3): return f0(s) + int(dur(s) * extra)       # action end (30% longer than planned)
+CONT = {"S1", "S2", "S4", "S7", "S9", "S11", "S12", "S19"}     # the next shot reuses this shot's characters/props: no overrun into it
+def fx(s, extra=1.3): return f1(s) + 1 if s in CONT else f0(s) + int(dur(s) * extra)       # action end (30% longer than planned)
 sc.frame_start = 1; sc.frame_end = F["END"]
 OB = bpy.data.objects
 ev(1)

@@ -78,10 +78,10 @@ for bi, b in enumerate(BEDS):            # wave 1: drums standing in each bed (v
             x = bmn.x + 0.45 + ix * 0.62; y = bmn.y + 0.7 + iy * 0.75
             d = copy_obj(L_dr, "Drum_b%d_%d%d" % (bi, ix, iy), (x, y, bmn.z + 0.32 + 0.002), c=DCOLL); d.rotation_euler = (0, 0, random.random() * 6)
             rb(d, 'ACTIVE', 'CYLINDER'); drums.append(d)
-N2 = 420
+N2 = 560
 for i in range(N2):                      # wave 2: drums keep coming over the rim from the truck side (spawned out of frame)
     rel = SIM0 + 70 + int((SIM1 - SIM0 - 220) * (i / N2) ** 0.85)
-    x = DX.x + random.uniform(-5.0, 5.0); y = 10.0 + random.uniform(0, 2.0); z = 0.9 + random.uniform(0, 1.2)
+    x = DX.x + random.uniform(-3.5, 3.5); y = 8.5 + random.uniform(0, 1.8); z = 1.2 + random.uniform(0, 1.2)
     d = copy_obj(L_dr, "Drum_w%03d" % i, (x, y, z), c=DCOLL)
     d.rotation_euler = (R_(random.choice((0, 0, 0, 90))), 0, random.random() * 6)
     r = rb(d, 'ACTIVE', 'CYLINDER', kin=True)
@@ -128,7 +128,7 @@ fa = f0("S14"); fe = fx("S14")
 DOZ = OB["Dozer"]; DOZ.rotation_mode = 'XYZ'
 DOZ_RZ = 180.0                       # the model's blade faces -X
 M_dirt = bpy.data.materials["Dirt"]
-FILL = plane("DirtFill", (1, 30), (0, 0, 0), M_dirt, OB["DumpGround"].users_collection[0], subdiv=0)
+FILL = box("DirtFill", (1, 30, 4.0), (0, 0, -2.0), M_dirt, OB["DumpGround"].users_collection[0])
 FILL.data.transform(Matrix.Translation((0.5, 0, 0))); FILL.location = DX + Vector((-16, 0, 0.12))
 x0 = DX.x - 15.0; v = 2.4
 for f in range(fa - 1, fe + 2, 2):
@@ -136,7 +136,7 @@ for f in range(fa - 1, fe + 2, 2):
     key_prop(DOZ, f, (x, 0.0, 0.12), (0, 0, DOZ_RZ))
     FILL.scale = (max(0.01, x - 1.0 - FILL.location.x), 1, 1); FILL.keyframe_insert("scale", frame=f)
 bpy.ops.mesh.primitive_uv_sphere_add(radius=1, segments=24, ring_count=12); MOUND = bpy.context.active_object; MOUND.name = "DirtWave"
-MOUND.scale = (0.9, 2.6, 0.75); MOUND.data.materials.append(mat('DirtWave', (0.42, 0.28, 0.16), 0.95)); link(MOUND, OB["DumpGround"].users_collection[0])
+MOUND.scale = (0.9, 2.6, 0.75); MOUND.data.materials.append(pbr('DirtWave', 'brown_mud', 0.5, tint=(0.75, 0.55, 0.4), coords='Object')); link(MOUND, OB["DumpGround"].users_collection[0])
 txm = bpy.data.textures.new("mound", 'CLOUDS'); txm.noise_scale = 0.35; dm = MOUND.modifiers.new("lumps", 'DISPLACE'); dm.texture = txm; dm.strength = 0.25
 for f in range(fa - 1, fe + 2, 2):
     x = x0 + v * max(0, (f - fa)) / FPS

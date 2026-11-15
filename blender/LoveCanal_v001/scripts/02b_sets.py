@@ -94,13 +94,18 @@ def soil_block(name, origin, c, pocket=True):
     if pocket:
         bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=6, radius=1, location=origin + Vector((0, -7.2, -5.6)))
         cut = bpy.context.active_object; cut.name = name + "_pocketcutter"; cut.scale = (11, 6.5, 2.7); link(cut, LIB)
-        tx = bpy.data.textures.new(name + "_ptex", 'CLOUDS'); tx.noise_scale = 2.2; tx.noise_depth = 1
+        tx = bpy.data.textures.new(name + "_ptex", 'CLOUDS'); tx.noise_scale = 3.0; tx.noise_depth = 0
         d = cut.modifiers.new("disp", 'DISPLACE'); d.texture = tx; d.strength = 0.9; d.texture_coords = 'GLOBAL'
         bpy.ops.object.shade_smooth()
         b = o.modifiers.new("pocket", 'BOOLEAN'); b.object = cut; b.operation = 'DIFFERENCE'; b.solver = 'EXACT'
         bpy.context.view_layer.objects.active = o
         o.data.materials.append(M_rock)     # carved surface gets the cave rock colour
         b.material_mode = 'TRANSFER'; cut.data.materials.append(M_rock)
+        bpy.context.view_layer.update()
+        with bpy.context.temp_override(object=o, active_object=o, selected_objects=[o], selected_editable_objects=[o]):
+            bpy.ops.object.modifier_apply(modifier="pocket")
+        ri = list(o.data.materials).index(M_rock)
+        for p_ in o.data.polygons: p_.use_smooth = (p_.material_index == ri)
         sl = plane(name + "_sludge", (19, 6.0), origin + Vector((0, -4.0, -7.2)), M_tox, c, subdiv=40)
         tx2 = bpy.data.textures.new(name + "_stex", 'CLOUDS'); tx2.noise_scale = 1.2
         d2 = sl.modifiers.new("ripple", 'DISPLACE'); d2.texture = tx2; d2.strength = 0.15; d2.texture_coords = 'GLOBAL'
@@ -176,7 +181,7 @@ for i, (x, y) in enumerate(((-8, 1.5), (7.5, 1.0))):
 DX = Vector((900, 0, 0)); DMP = coll("SET_dump")
 bm = bmesh.new(); bmesh.ops.create_grid(bm, x_segments=150, y_segments=150, size=60)
 for v in bm.verts:
-    r = math.hypot(v.co.x, v.co.y); pit = 2.6 * (1 - smooth((r - 6.0) / 7.0))
+    r = math.hypot(v.co.x, v.co.y); pit = 3.4 * (1 - smooth((r - 3.5) / 6.5))
     v.co.z = -pit + 0.08 * math.sin(v.co.x * 0.9) * math.cos(v.co.y * 0.7)
 me = bpy.data.meshes.new("DumpGround"); bm.to_mesh(me); bm.free()
 G = bpy.data.objects.new("DumpGround", me); DMP.objects.link(G); G.location = DX; G.data.materials.append(M_mud)

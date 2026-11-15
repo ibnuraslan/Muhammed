@@ -73,7 +73,7 @@ for f in range(fa + 54, fx("S2") + 1, 6):
     ev(f)
     nose = world(NB, posed(NB, NOSE)); fwd = (NB.r.o.matrix_world.to_3x3() @ Vector((0, -1, 0))).normalized()
     up = Vector((0, 0, 1)); left = (NB.r.o.matrix_world.to_3x3() @ Vector((1, 0, 0))).normalized()
-    place_hand(NB.r.o, "R", f, nose + fwd * 0.035 + up * -0.01, -fwd, (up * 0.75 + left * 0.45).normalized())
+    place_hand(NB.r.o, "R", f, nose + fwd * 0.065 + up * -0.015, -fwd, (up * 0.75 + left * 0.45).normalized())
     pb = NB.r.PB["Pole_elbow.R"]
 ev(fa + 42); _M = NB.r.o.matrix_world; _ch = _M @ NB.r.PB["spine02"].head; _fw = (_M.to_3x3() @ Vector((0, -1, 0))).normalized(); _lf = (_M.to_3x3() @ Vector((1, 0, 0))).normalized()
 place_hand(NB.r.o, "R", fa + 42, _ch + _fw * 0.3 - _lf * 0.08 + Vector((0, 0, 0.08)), -_fw, Vector((0, 0, 1)))

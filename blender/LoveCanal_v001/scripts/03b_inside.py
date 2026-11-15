@@ -120,11 +120,11 @@ for j in range(ny + 1):
         row.append(z)
     zs.append(row)
 raw = [r[:] for r in zs]
-for _ in range(3):
+for _ in range(6):
     zs = [[(zs[j][i] * 2 + sum(zs[jj][ii] for jj, ii in ((j - 1, i), (j + 1, i), (j, i - 1), (j, i + 1)) if 0 <= jj <= ny and 0 <= ii <= nx) /
             max(1, sum(1 for jj, ii in ((j - 1, i), (j + 1, i), (j, i - 1), (j, i + 1)) if 0 <= jj <= ny and 0 <= ii <= nx)) * 2) / 4
            for i in range(nx + 1)] for j in range(ny + 1)]
-zs = [[max(zs[j][i], raw[j][i]) + 0.012 for i in range(nx + 1)] for j in range(ny + 1)]
+zs = [[max(zs[j][i], raw[j][i]) + 0.03 for i in range(nx + 1)] for j in range(ny + 1)]
 bm = bmesh.new(); vv = {}
 for j in range(ny + 1):
     for i in range(nx + 1):
@@ -134,7 +134,7 @@ for j in range(ny):
 me = bpy.data.meshes.new("Blanket"); bm.to_mesh(me); bm.free()
 BL = bpy.data.objects.new("Blanket", me); HBED.users_collection[0].objects.link(BL)
 for p_ in me.polygons: p_.use_smooth = True
-so = BL.modifiers.new("thick", 'SOLIDIFY'); so.thickness = 0.03; so.offset = 1
+so = BL.modifiers.new("thick", 'SOLIDIFY'); so.thickness = 0.04; so.offset = 1
 BL.modifiers.new("sub", 'SUBSURF').levels = 1
 BL.data.materials.append(mat("BlanketBlue", (0.35, 0.45, 0.62), 0.85))
 # the near arm rests on top of the blanket, hand by the hip
