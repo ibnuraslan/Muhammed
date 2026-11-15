@@ -373,7 +373,7 @@ for c in list(bench.users_collection): c.objects.unlink(bench)
 bpy.data.collections["Square"].objects.link(bench)
 bench.matrix_world = Matrix.Translation(pope_root_obj(505) + Mrot.to_3x3() @ Vector((0, SEAT_Y, SEAT_TOP / 2))) @ Mrot
 cbn = bench.constraints.new('CHILD_OF'); cbn.target = jeep; cbn.inverse_matrix = jeep.matrix_world.inverted()
-for f in range(505, 640, 3):
+for f in range(505, 631, 3):
     u = smooth((f - 500) / 20); v = smooth((f - 522) / 62)
     rh = P.root_head
     p = Vector((rh.x, rh.y + (SEAT_Y + 0.02) * v, rh.z - (rh.z - SEAT_TOP - 0.12) * v - 0.05 * u * (1 - v)))
@@ -784,7 +784,7 @@ print("TABLE top", tz)
 key_obj(pope, 630, loc=pope.location.copy() if False else pope_root_obj(505), rot=(0, 0, POPE_YAW), interp='CONSTANT')
 LIE = Vector((-8.0, 40.5 - 0.9, tz + 0.12))
 key_obj(pope, 631, loc=LIE, rot=(R_(-90), 0, 0), interp='CONSTANT')
-for f in range(631, 763, 6):
+for f in list(range(631, 763, 6)) + [762]:
     stand(P, f, flex=0, head=(-8, 6 * math.sin(f * 0.02)))
     arms_down(P, f)
     face(pope, f, lids=1.0, jaw=2)
@@ -813,7 +813,7 @@ for v in drape.vertices:
     hb = band_h(w.y)
     if hb is not None:
         dx = abs(w.x - dro.location.x); prof = max(0.0, 1 - (dx / 0.36) ** 4) ** 0.5
-        v.co.z = max(v.co.z, (hb - dro.location.z + 0.035) * prof)
+        v.co.z = max(v.co.z, min(0.22, hb - dro.location.z + 0.035) * prof)   # v009: capped (knees no longer tent it)
 def drape_z(x, y):
     best = None
     for v in drape.vertices:
@@ -1298,11 +1298,17 @@ for o_ in INS_PARTS:
 ev(700)
 hh_ = bone_w(pope, "head"); ht_ = bone_w(pope, "head", "tail"); ax_ = (ht_ - hh_).normalized()
 MOUTH = hh_ + ax_ * 0.05 + Vector((0, 0, 0.1))
+bd_ = body_of(pope); dgm = bpy.context.evaluated_depsgraph_get(); em_ = bd_.evaluated_get(dgm).to_mesh()
+near_ = [bd_.matrix_world @ v.co for v in em_.vertices if ((bd_.matrix_world @ v.co) - (hh_ + ax_ * 0.08)).length < 0.16]
+bd_.evaluated_get(dgm).to_mesh_clear()
+if near_:
+    nose_ = max(near_, key=lambda v: v.z); MOUTH = nose_ + Vector((0, 0, -0.04)) + ax_ * 0.015     # over nose and mouth (face up)
+print("OXY MASK at", MOUTH)
 mm = bpy.data.materials.new("OxyMask"); mm.use_nodes = True; bsm = mm.node_tree.nodes["Principled BSDF"]
 bsm.inputs['Base Color'].default_value = (0.75, 0.92, 0.85, 1); bsm.inputs['Roughness'].default_value = 0.25
-bsm.inputs['Transmission Weight'].default_value = 0.55; bsm.inputs['Alpha'].default_value = 0.9
+bsm.inputs['Transmission Weight'].default_value = 0.1
 bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1.0, location=MOUTH); om = bpy.context.object; om.name = "OxygenMask"
-om.scale = (0.045, 0.055, 0.03); om.data.materials.append(mm)
+om.scale = (0.055, 0.065, 0.04); om.data.materials.append(mm)
 for p_ in om.data.polygons: p_.use_smooth = True
 tc_ = bpy.data.curves.new("OxyTube", 'CURVE'); tc_.dimensions = '3D'; tc_.bevel_depth = 0.008; tc_.bevel_resolution = 2
 spt = tc_.splines.new('NURBS'); TP = (MOUTH + Vector((0, 0, 0.02)), MOUTH + Vector((0.12, 0.04, 0.05)), MOUTH + Vector((0.3, 0.08, -0.02)), MOUTH + Vector((0.42, 0.1, -0.3)))

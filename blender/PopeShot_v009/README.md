@@ -6,7 +6,7 @@ Beat frames are unchanged (`beats.json`) and no VO was added.
 
 | # | v008 note | v009 |
 |---|---|---|
-| 1 | Surgery: tent drape, gloves on his face, tilted camera | **Level** low side view (631–762). The drape lies **flat** on the body (3.5 cm over it). All three surgeons stand at the sides of the abdomen and legs, and **nobody is at the head end**. Their hands rest on the drape over the **abdomen** only. His **face with the oxygen mask** is nearest the camera and reads clearly. |
+| 1 | Surgery: tent drape, gloves on his face, tilted camera | **Level** low side view (631–762). The drape lies **flat** on the body (3.5 cm over it). All three surgeons stand at the sides of the abdomen and legs, and **nobody is at the head end**. Their hands rest on the drape over the **abdomen** only. His **face with the oxygen mask** (placed on his nose and mouth) is nearest the camera and reads clearly. The collapse pose no longer bleeds into this shot, and the balcony pose no longer bleeds into its end. |
 | 2 | A-pose guards; T/A-pose crowd; frozen top-down tableau | **Guards:** hands clasped in front while walking. On the hit (262) they turn and **lunge in** toward the Pope (0.55 m) and reach for him. **Crowd:** only wave and cheer poses (both bent arms). The idle and clap poses that read as A or T are removed from every extra. **Collapse (468–630):** the camera is lowered from top-down to a high three-quarter view. |
 | 3 | Empty square aerial and rotated wall | The cut at 763 goes **straight to the balcony** front view. |
 | 4 | Cell: bodies cut at the chest, hand in the lap, white blur | Medium **two-shot from heads to waists**, with the camera raised and level. The pair sit closer, so his bent arm rests on the prisoner's **shoulder**. The balcony shot (to 1014) is a held front view, with no blur. |
@@ -14,6 +14,8 @@ Beat frames are unchanged (`beats.json`) and no VO was added.
 | 6 | Shrine wide without the Pope | The final shot (1546–1620) **starts on his praying face** and arcs to his profile. It then **pushes past his shoulder** to the statue and ends close on the crown and the bullet (f/16). |
 
 Camera: every turn inside a shot is at most 9.9° per frame. There are clean cuts between shots.
+
+Preview: frames 616–766 were re-rendered from the final build after a surgery-only fix (drape, mask, pose keys) and spliced in; every frame matches the package.
 
 Files:
 - `PopeShot_v009_60fps.blend`: packed, 86 MB, plain git, farm check: no problems.
