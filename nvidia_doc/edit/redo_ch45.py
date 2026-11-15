@@ -24,7 +24,13 @@ REDO = [
 ]
 
 
-def table():
+# v2 rebuilds of a shot: same slot (frames, master in/out) as the base id, new content
+REDO_V2 = [
+    ("c4_08_v2", "c4_08", "4B v2 Over the shoulder: an investigator highlights the clause in the binder", [("binder_ots", "ots", "full")]),
+]
+
+
+def table(v2=False):
     """id -> dict(old_name, frames, master_in, master_out, label, parts)."""
     tim = json.load(open(os.path.join(HERE, "..", "vo", "ch45_timing.json")))
     pos, f = {}, 1
@@ -35,6 +41,10 @@ def table():
     for sid, label, parts in REDO:
         old, n, a, b = pos[sid]
         out.append(dict(id=sid, old_name=old, frames=n, master_in=a, master_out=b, label=label, parts=parts))
+    if v2:
+        for sid, base, label, parts in REDO_V2:
+            old, n, a, b = pos[base]
+            out.append(dict(id=sid, old_name=old, frames=n, master_in=a, master_out=b, label=label, parts=parts, v2=True))
     return out
 
 

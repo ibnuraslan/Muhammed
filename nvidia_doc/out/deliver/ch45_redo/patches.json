@@ -166,5 +166,17 @@
   "mb": 0.56,
   "sha256": "f2bacfb9a34bd3491d5ae44f85e8a05bdf4ad9c4df34a48a3b38428f91e9aaed",
   "libraries": 0
+ },
+ "c4_08_v2": {
+  "id": "c4_08_v2",
+  "file": "out/deliver/ch45_redo/c4_08_v2_patch.blend",
+  "scene": "PATCH_C4_08_V2",
+  "frames": 114,
+  "master_in": 1405,
+  "master_out": 1518,
+  "replaces": "c4_08_memo_desk_memo_close",
+  "mb": 14.56,
+  "sha256": "09508c84e37b2c6a1b875c0aa5ecbb8827fc43f318be5860615008999227ba99",
+  "libraries": 0
  }
 }

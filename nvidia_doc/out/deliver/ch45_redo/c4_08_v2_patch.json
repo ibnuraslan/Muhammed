@@ -1,0 +1,12 @@
+{
+ "id": "c4_08_v2",
+ "file": "out/deliver/ch45_redo/c4_08_v2_patch.blend",
+ "scene": "PATCH_C4_08_V2",
+ "frames": 114,
+ "master_in": 1405,
+ "master_out": 1518,
+ "replaces": "c4_08_memo_desk_memo_close",
+ "mb": 14.56,
+ "sha256": "09508c84e37b2c6a1b875c0aa5ecbb8827fc43f318be5860615008999227ba99",
+ "libraries": 0
+}

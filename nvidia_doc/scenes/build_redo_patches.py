@@ -14,7 +14,7 @@ OUT = os.path.join(ROOT, "out", "deliver", "ch45_redo"); os.makedirs(OUT, exist_
 only = [a for a in sys.argv[1:] if not a.startswith("--")]
 rebake = "--rebake" in sys.argv
 
-rows = [r for r in table() if not only or r["id"] in only]
+rows = [r for r in table(v2=True) if (not only and not r.get("v2")) or r["id"] in only]   # v2 shots only by name
 for r in rows:                                   # 1. bake every part (one process each: clean scene, no stale caches)
     for st, mv, role in r["parts"]:
         name = f"{r['id']}_{st}_{mv}"
