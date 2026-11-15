@@ -26,12 +26,12 @@ CAM = [  # frame, camera, aim, lens, fstop
     (110, P(110) - D * 0.07 + SV * 0.025 + Z(0.012), P(110) + D * 0.3, 28, 5.6),
     # beat 2: macro on the impact, then follows it through the hole into the wall cavity and out of the drywall
     (139, Vector((WALL_OUT - 0.40, HOLE.y + 0.14, HOLE.z + 0.06)), HOLE, 35, 16),
-    (190, Vector((WALL_OUT - 0.34, HOLE.y + 0.08, HOLE.z + 0.04)), HOLE, 40, 16),
-    (253, Vector((WALL_OUT - 0.30, HOLE.y + 0.04, HOLE.z + 0.03)), HOLE, 42, 16),
-    # CUT (f254): inside the room, 8 frames before the bullet bursts out of the drywall
-    (254, Vector((0.97, HOLE.y + 0.53, HOLE.z + 0.12)), Vector((0.0, HOLE.y, HOLE.z)), 28, 11),
-    (262, Vector((0.95, HOLE.y + 0.50, HOLE.z + 0.13)), P(262), 28, 11),
-    (268, Vector((1.05, 0.40, 1.15)), COUPLE + Z(0.05), 30, 5.6),     # whip-pan across the empty room to the couple
+    (149, Vector((WALL_OUT - 0.37, HOLE.y + 0.11, HOLE.z + 0.05)), HOLE, 37, 16),
+    # CUT (f150): inside, behind the couple: the bullet bursts out of the wall behind them (f262)
+    (150, Vector((6.00, 0.30, 1.45)), Vector((2.0, -1.35, 1.05)), 24, 8),
+    (265, Vector((5.95, 0.28, 1.45)), Vector((2.0, -1.35, 1.05)), 25, 8),
+    # CUT (f266): reverse onto their faces
+    (266, Vector((1.20, 0.55, 1.18)), COUPLE + Z(0.05), 32, 5.6),
     (305, Vector((1.30, 0.50, 1.20)), COUPLE + Z(0.05), 34, 5.6),
     (330, Vector((2.30, 0.70, 1.20)), COUPLE + Z(0.05), 36, 5.6),
     (365, Vector((3.30, 0.62, 1.22)), COUPLE + Z(0.08), 32, 5.6),
@@ -44,6 +44,9 @@ CAM = [  # frame, camera, aim, lens, fstop
     (455, Vector((3.97, -0.42, 1.48)), HIS_HEAD + Vector((0.0, 0.06, -0.12)), 34, 5.6),
     (500, Vector((3.95, -0.40, 1.48)), HIS_HEAD + Vector((0.0, 0.08, -0.14)), 34, 5.6),
     (528, Vector((3.92, -0.30, 1.44)), HIS_HEAD + Vector((0.05, 0.12, -0.18)), 32, 5.6),
+    (540, Vector((3.92, -0.29, 1.44)), HIS_HEAD + Vector((0.05, 0.12, -0.18)), 32, 5.6),
+    # CUT (f541): the wide bullet-level view
+    (541, P(541) - D * 0.45 + SV * 0.24 + Z(0.26), P(541) + D * 1.0 + Z(0.05), 32, 5.6),
     (555, P(555) - D * 0.45 + SV * 0.24 + Z(0.26), P(555) + D * 1.0 + Z(0.05), 32, 5.6),
     (606, P(606) - D * 0.40 + SV * 0.22 + Z(0.24), P(606) + D * 0.6, 40, 8),
     # beat 5: rack focus to the tumbler, orbit + condensation macro, top-down into the lid, reflection, alignment, contact point
@@ -62,26 +65,26 @@ CAM = [  # frame, camera, aim, lens, fstop
     (842, HH842 + Vector((-0.30, 0.60, 0.05)), HH842 + Vector((0.04, 0.08, -0.16)), 28, 5.6),
     (885, Vector((3.92, -0.12, 1.42)), Vector((4.38, -0.55, 1.15)), 30, 5.6),       # from his left: his face, his reach and the cup; she stays out of frame
     (920, P(920) - D * 0.45 + SV * 0.30 + Z(0.26), C3 + Z(0.02), 40, 8),
-    (958, IMP + SV * 0.30 - D * 0.10 + Z(0.03), IMP, 50, 11),
-    # beat 6: macro impact, orbit through the sparks, dive into the x-ray cup to see the ripples, out again, wider on their reaction
-    (1000, IMP + SV * 0.28 - D * 0.14 + Z(0.04), IMP, 48, 11),
-    (1040, IMP - DXY * 0.45 + SV * 0.14 + Z(0.10), IMP, 40, 8),               # the dent from outside
-    (1100, IMP - DXY * 0.34 + SV * 0.06 + Z(0.08), IMP + Z(0.02), 48, 8),
+    (944, P(944) - D * 0.45 + SV * 0.30 + Z(0.26), C3 + Z(0.02), 40, 8),
+    # CUT (f945): the impact, one medium shot: the cup sharp at f/11, her face behind it
+    (945, C3 - DXY * 0.85 + SV * 0.28 + Z(0.20), C3 + DXY * 0.25 + Z(0.12), 38, 11),
+    (1010, C3 - DXY * 0.78 + SV * 0.26 + Z(0.20), C3 + DXY * 0.25 + Z(0.12), 40, 11),
+    # CUT (f1011): both reactions
+    (1011, Vector((3.72, 0.86, 1.40)), Vector((4.58, -0.45, 1.12)), 22, 5.6),
     (1160, Vector((3.72, 0.86, 1.40)), Vector((4.58, -0.45, 1.12)), 22, 5.6),      # two-shot from her side wall: both reactions
     (1220, Vector((3.68, 0.90, 1.42)), Vector((4.56, -0.45, 1.14)), 22, 4),
     (1270, Vector((3.55, 0.72, 1.18)), P(1270), 34, 5.6),
     # beat 7: follow it over the edge and down, floor-level skim on the bounces, settle close-up
     (1285, Vector((3.50, 0.62, 1.12)), P(1285), 32, 5.6),
-    (1291, Vector((3.50, 0.62, 1.12)), P(1291), 32, 5.6),
-    # CUT (f1292): floor level, the bullet lands and bounces
-    (1292, P(1300) + Vector((-0.25, -0.40, 0.25)), P(1300) + Vector((0.20, 0.10, 0.12)), 30, 5.6),
-    (1310, P(1310) + Vector((-0.25, -0.40, 0.25)), P(1310) + Vector((0.20, 0.10, 0.12)), 30, 5.6),
-    (1345, P(1345) + Vector((-0.20, -0.32, 0.15)), P(1345) + Vector((0.20, 0.10, 0.12)), 28, 5.6),
-    (1400, FL + Vector((-0.16, -0.24, 0.15)), FL + Vector((0.16, 0.08, 0.09)), 28, 5.6),
-    # beat 8: crane up beside the table edge, then over the table end to her, shaken, holding the dented tumbler
-    # two-shot across the table from her side wall: her in three-quarter, him facing camera as he half-rises and takes the cup
-    # CUT (f1401): from the bullet at rest on the floor to the two-shot from her side wall
-    (1401, Vector((3.48, 0.76, 1.40)), TWO + Vector((0.04, 0.0, 0.20)), 23, 5.6),
+    (1303, Vector((3.50, 0.62, 1.12)), P(1285), 32, 5.6),
+    # CUT (f1304): low and close on the floor where the bullet lands and bounces (sharp, f/11)
+    (1304, LAND + Vector((-0.24, -0.21, 0.105)), LAND + Vector((0.0, 0.0, 0.05)), 55, 16),
+    (1316, LAND + Vector((-0.25, -0.20, 0.105)), LAND + Vector((-0.02, 0.0, 0.04)), 55, 16),
+    # CUT (f1317): her face, looking down at it
+    (1317, Vector((4.30, 0.50, 1.15)), Vector((4.84, 0.0, 1.15)), 50, 5.6),
+    (1350, Vector((4.30, 0.50, 1.16)), Vector((4.84, 0.0, 1.14)), 50, 5.6),
+    # CUT (f1351): two-shot from her side wall
+    (1351, Vector((3.48, 0.76, 1.40)), TWO + Vector((0.04, 0.0, 0.20)), 23, 5.6),
     (1417, Vector((3.50, 0.78, 1.42)), TWO + Vector((0.04, 0.0, 0.22)), 23, 5.6),
     (1450, Vector((3.70, 0.92, 1.45)), TWO + Vector((0.04, 0.0, 0.22)), 21, 5.6),
     (1485, Vector((3.78, 1.04, 1.45)), TWO + Vector((0.04, 0.0, 0.22)), 22, 5.6),
@@ -90,11 +93,11 @@ def vpchip(keys):
     """monotone cubic per axis: C1-continuous, never overshoots past a framing (the bullet's speed ramp made Catmull-Rom overshoot)"""
     fx = [pchip([(f, v[i]) for f, v in keys]) for i in range(3)]
     return lambda t: Vector((fx[0](t), fx[1](t), fx[2](t)))
-CUT = 254
+CUT = 150
 def _seg(keys):
     return (vpchip([(f, c) for f, c, a, l, s in keys]), vpchip([(f, Vector(a)) for f, c, a, l, s in keys]),
             catmull([(f, float(l)) for f, c, a, l, s in keys]), catmull([(f, float(s)) for f, c, a, l, s in keys]))
-CUTS = [1, CUT, 455, 790, 1292, 1401, END + 1]   # hard cuts: f250 outside->inside, f455 her->him, f790 her->him, f1292 table->floor, f1401 floor->two-shot
+CUTS = [1, CUT, 266, 455, 541, 790, 945, 1011, 1304, 1317, 1351, END + 1]   # hard cuts (clean, no camera moves through walls, bodies or props)
 SEGS = [(lo, hi, _seg([k for k in CAM if lo <= k[0] < hi])) for lo, hi in zip(CUTS[:-1], CUTS[1:])]
 for f in range(1, END + 1):
     fc, fa, fl_, fs_ = next(sg for lo, hi, sg in SEGS if lo <= f < hi)
