@@ -1,4 +1,4 @@
-# StanleyCup_v006: credits
+# StanleyCup_v007: credits
 
 ## Required attribution (CC BY 4.0)
 Paste this block into the video description:
