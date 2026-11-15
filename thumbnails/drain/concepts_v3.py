@@ -43,6 +43,10 @@ def setup_velvet(c):
     _spot("RimR", t + Vector((0.9, 0.7, 0.6)), t, 300, (0.75, 0.85, 1.0), 20, 0.4, 0.05)
     _spot("Pool", t + Vector((0.0, 1.1, 1.5)), Vector((0, 1.4, 0.3)), 700, (0.55, 0.65, 1.0), 38, 0.9, 0.05)   # grazes the bricks   # glow on the backdrop
     f = area_light(t + Vector((0, -1.2, 0.3)), (0, 0, 0), 1.0, 6, (0.8, 0.85, 1.0)); point_at(f, t); f.visible_camera = False
+    # dust in the air so the key reads as a beam
+    from kit import haze
+    haze(t + Vector((0, 0.2, 0.6)), (1.6, 1.4, 1.4), density=0.05, color=(0.92, 0.94, 1.0), anis=0.5)
+    _spot("Edge", t + Vector((0.0, 0.5, 0.25)), t + Vector((0, 0, -0.08)), 120, (1.0, 0.35, 0.25), 25, 0.6, 0.05)   # a red kiss on the cushion's back edge
 
 
 def cam_velvet(c):

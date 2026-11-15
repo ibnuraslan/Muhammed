@@ -110,7 +110,7 @@ def diamond(name, r=0.024):
     g = N.new("ShaderNodeBsdfGlass"); g.inputs['IOR'].default_value = 2.42; g.inputs['Roughness'].default_value = 0.0
     g.inputs['Color'].default_value = (1, 1, 1, 1)
     if 'Dispersion' in g.inputs:
-        g.inputs['Dispersion'].default_value = 0.06
+        g.inputs['Dispersion'].default_value = 0.11
     L.new(g.outputs[0], next(n_ for n_ in N if n_.type == 'OUTPUT_MATERIAL').inputs['Surface'])
     me.materials.append(m)
     return o
