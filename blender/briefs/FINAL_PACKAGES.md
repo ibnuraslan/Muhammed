@@ -35,7 +35,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 19 | SpeakWithoutSight | `claude/beautiful-ptolemy-c5vrcq` | `blender/SpeakWithoutSight_v006/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1645)** |
 | 20 | HeadsetBullet | `claude/beautiful-ptolemy-c5vrcq` | `blender/HeadsetBullet_v008/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1203)** |
 | 21 | RingBullet | `claude/beautiful-ptolemy-c5vrcq` | `blender/RingBullet_v008/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1395)** |
-| 22 | BelugaRescue | `claude/connect22-beluga-rescue` | `blender/BelugaRescue_v005/` **acting fixed, approved (VO sync when your voiceover arrives)** |
+| 22 | BelugaRescue | `claude/beautiful-ptolemy-c5vrcq` | `blender/BelugaRescue_v008/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1736)** |
 | 23 | CaveRescue | `claude/connect23-cave-rescue` | `blender/CaveRescue_v006/` **acting fixed, approved, final commit ee86ff4 (VO sync when your voiceover arrives)** |
 | 24 | RooseveltSpeech | `claude/beautiful-ptolemy-c5vrcq` | `blender/RooseveltSpeech_v011/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1307)** |
 | 25 | Tsunami2004 | `claude/connect25-tsunami-2004` | `blender/Tsunami2004_v005/` **acting fixed, approved (VO sync when your voiceover arrives)** |
