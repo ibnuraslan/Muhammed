@@ -250,8 +250,22 @@ key_vis(FE, [(1, False), (1976, True), (2136, False)])
 
 # ================================================================== PEOPLE (clinic)
 def ground_z(x, y): return 0.0
+# v007c: a generic person (copy of the Assist body, plain jacket) holds the stick: only the forearm + hand are ever seen
+_src = OB["Assist"]; HOLD = _src.copy(); HOLD.data = _src.data.copy(); HOLD.name = "Holder"; HOLD.animation_data_clear()
+_src.users_collection[0].objects.link(HOLD)
+M_jacket = bpy.data.materials.new("Holder_jacket"); M_jacket.use_nodes = True
+_bj = M_jacket.node_tree.nodes["Principled BSDF"]; _bj.inputs["Base Color"].default_value = (0.16, 0.13, 0.09, 1); _bj.inputs["Roughness"].default_value = 0.8
+HOLD_PARTS = [HOLD]
+for ch in list(_src.children):
+    c2 = ch.copy(); c2.animation_data_clear(); _src.users_collection[0].objects.link(c2); c2.parent = HOLD; HOLD_PARTS.append(c2)
+    for m in c2.modifiers:
+        if m.type == 'ARMATURE': m.object = HOLD
+    for sl in c2.material_slots:
+        if sl.material and "scrubs" in sl.material.name.lower(): sl.link = 'OBJECT'; sl.material = M_jacket
+    if any(sl.material and "scrubs" in sl.material.name.lower() for sl in ch.material_slots):
+        _dm = c2.modifiers.new("loose", 'DISPLACE'); _dm.strength = 0.012; _dm.mid_level = 0.0   # sleeve sits off the skin (no poke-through)
 people = {}
-for nm in ("VetA", "VetB", "Assist"):
+for nm in ("VetA", "VetB", "Assist", "Holder"):
     r = make_human_ctrl(OB[nm]); people[nm] = Human(r)
 VA, VB, AS = people["VetA"], people["VetB"], people["Assist"]
 # hands rule: joint limits (local space) on fingers / thumbs / wrists; wrist copy-rotation softened (full influence twisted
@@ -443,6 +457,23 @@ hpose(VB, "R", (1712, 1800), "relaxed")
 hpose(VB, "L", (1715, 1805), "tripod")                # pre-shape before pick-up / after put-down of the syringe
 hpose(AS, "L", (560, 1960), "relaxed"); hpose(AS, "R", (560, 1960), "relaxed")
 hpose(AS, "R", (676, 1505), "cup_hold")              # hand over the mouse
+# ---- v007c: the stick is held. Body placed so its right shoulder is 0.5 m up the stick from the hand, then parented to the
+# stick's pivot (rigid swing); hand: grip_object wrap on the stick, 1.28 m from the pivot (inside the frame at the impact)
+_H = people["Holder"].r.o; ev(102); _pv = OB["Stick_pivot"]; _d = (_pv.matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized()
+_G = _pv.matrix_world.translation + _d * 1.28
+_up = Vector((0, 0, 1)); _side = _d.cross(_up).normalized(); _upo = _side.cross(_d).normalized()
+_fwd = _d.copy(); _R = Matrix((_side, -_fwd, _upo)).transposed()      # rig local: +X side, -Y forward, +Z up
+_sh = _H.data.bones["upperarm01.R"].head_local
+_S = _G - _d * 0.3 + _side * 0.05 + _upo * 0.14
+_H.matrix_world = Matrix.Translation(_S) @ _R.to_4x4() @ Matrix.Translation(-_sh)
+bpy.context.view_layer.update(); _mw = _H.matrix_world.copy(); _H.parent = _pv; _H.matrix_parent_inverse = _pv.matrix_world.inverted(); _H.matrix_world = _mw
+_stk = OB["Strike_stick"]
+_stk.data.transform(Matrix.Diagonal((0.4, 0.4, 1.0, 1.0))); _stk.data.update(); bpy.context.view_layer.update()   # hand-held thickness (~4-6 cm)
+_Po = _G + _upo * 0.2
+_ok, _lc, _nr, _ix = _stk.closest_point_on_mesh(_stk.matrix_world.inverted() @ _Po); _C = _stk.matrix_world @ _lc
+print("STICK_GRIP", HP.grip_object(_H, "R", 102, _stk, _C, (_C - _Po).normalized(), finger_dir=_side))
+for o_ in HOLD_PARTS: key_vis(o_, [(1, False), (93, True), (131, False)])
+key_vis(OB["Strike_stick"], [(1, False), (93, True), (300, False)])   # no stick hanging in the sky before the swing
 
 # relaxed arms while walking / standing idle: hands hang at the thighs with a small counter-swing (no IK target left at the origin)
 def arms_relaxed(H, f0, f1, step=4, swing=0.07, period=48.0):
