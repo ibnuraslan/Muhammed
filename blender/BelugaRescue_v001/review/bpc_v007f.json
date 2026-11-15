@@ -1,0 +1,812 @@
+{
+"visible_frames": [
+1434,
+1438,
+1442,
+1446,
+1450,
+1454,
+1458,
+1462,
+1466,
+1470,
+1474,
+1478,
+1482,
+1486,
+1490,
+1494,
+1498,
+1502,
+1506,
+1510,
+1514,
+1518,
+1522,
+1526,
+1530,
+1534,
+1538,
+1542,
+1546,
+1550,
+1554,
+1558,
+1562,
+1566,
+1570,
+1574,
+1578,
+1582,
+1586,
+1590,
+1594,
+1598,
+1602,
+1606,
+1610,
+1614,
+1618,
+1622,
+1626,
+1630,
+1634,
+1638,
+1642,
+1646,
+1650,
+1654,
+1658,
+1662,
+1666,
+1670,
+1674,
+1678,
+1682,
+1858,
+1862,
+1866,
+1870,
+1874,
+1878,
+1882,
+1886,
+1890,
+1894,
+1898,
+1902,
+1906,
+1910,
+1914,
+1918,
+1922
+],
+"frames": {
+"1434": {
+"foot.R|Beluga|VIS": 45,
+"lowerleg02.R|Beluga|VIS": 7,
+"Diver.FootPocket_R|Beluga|VIS": 26
+},
+"1438": {
+"foot.R|Beluga|VIS": 76,
+"lowerleg02.R|Beluga|VIS": 22,
+"Diver.FootPocket_R|Beluga|VIS": 44
+},
+"1442": {
+"foot.R|Beluga|VIS": 68,
+"lowerleg02.R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|VIS": 45
+},
+"1446": {
+"foot.R|Beluga|VIS": 68,
+"lowerleg02.R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|VIS": 45
+},
+"1450": {
+"foot.R|Beluga|VIS": 68,
+"lowerleg02.R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|VIS": 45
+},
+"1454": {
+"foot.R|Beluga|VIS": 68,
+"lowerleg02.R|Beluga|VIS": 23,
+"Diver.FootPocket_R|Beluga|VIS": 45
+},
+"1458": {
+"foot.R|Beluga|VIS": 69,
+"lowerleg02.R|Beluga|VIS": 23,
+"Diver.FootPocket_R|Beluga|VIS": 46
+},
+"1462": {
+"foot.R|Beluga|VIS": 69,
+"lowerleg02.R|Beluga|VIS": 23,
+"Diver.FootPocket_R|Beluga|VIS": 46
+},
+"1466": {
+"foot.R|Beluga|VIS": 82,
+"lowerleg02.R|Beluga|VIS": 22,
+"Diver.FootPocket_R|Beluga|VIS": 49
+},
+"1470": {
+"foot.R|Beluga|VIS": 82,
+"lowerleg02.R|Beluga|VIS": 22,
+"Diver.FootPocket_R|Beluga|VIS": 49
+},
+"1474": {
+"foot.R|Beluga|VIS": 82,
+"lowerleg02.R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|VIS": 49
+},
+"1478": {
+"foot.R|Beluga|VIS": 78,
+"lowerleg02.R|Beluga|VIS": 26,
+"Diver.FootPocket_R|Beluga|VIS": 49
+},
+"1482": {
+"foot.R|Beluga|VIS": 75,
+"lowerleg02.R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|VIS": 47
+},
+"1486": {
+"foot.R|Beluga|VIS": 75,
+"lowerleg02.R|Beluga|VIS": 29,
+"Diver.FootPocket_R|Beluga|VIS": 47
+},
+"1490": {
+"foot.R|Beluga|VIS": 72,
+"lowerleg02.R|Beluga|VIS": 26,
+"Diver.FootPocket_R|Beluga|VIS": 45
+},
+"1494": {
+"lowerleg01.R|Beluga|VIS": 3,
+"foot.R|Beluga|VIS": 62,
+"lowerleg02.R|Beluga|VIS": 26,
+"Diver.FootPocket_R|Beluga|VIS": 37
+},
+"1498": {
+"lowerleg01.R|Beluga|VIS": 2,
+"foot.R|Beluga|VIS": 62,
+"lowerleg02.R|Beluga|VIS": 30,
+"Diver.FootPocket_R|Beluga|VIS": 40
+},
+"1502": {
+"lowerleg01.R|Beluga|VIS": 2,
+"foot.R|Beluga|VIS": 62,
+"lowerleg02.R|Beluga|VIS": 30,
+"Diver.FootPocket_R|Beluga|VIS": 40
+},
+"1506": {
+"lowerleg01.R|Beluga|VIS": 2,
+"foot.R|Beluga|VIS": 61,
+"lowerleg02.R|Beluga|VIS": 32,
+"Diver.FootPocket_R|Beluga|VIS": 34
+},
+"1510": {
+"lowerleg01.R|Beluga|VIS": 2,
+"foot.R|Beluga|VIS": 61,
+"lowerleg02.R|Beluga|VIS": 32,
+"Diver.FootPocket_R|Beluga|VIS": 34
+},
+"1514": {
+"lowerleg01.R|Beluga|VIS": 2,
+"foot.R|Beluga|VIS": 61,
+"lowerleg02.R|Beluga|VIS": 32,
+"Diver.FootPocket_R|Beluga|VIS": 34
+},
+"1518": {
+"lowerleg01.R|Beluga|VIS": 2,
+"foot.R|Beluga|VIS": 61,
+"lowerleg02.R|Beluga|VIS": 32,
+"Diver.FootPocket_R|Beluga|VIS": 34
+},
+"1522": {
+"lowerleg01.R|Beluga|VIS": 2,
+"foot.R|Beluga|VIS": 62,
+"lowerleg02.R|Beluga|VIS": 32,
+"Diver.FootPocket_R|Beluga|VIS": 35
+},
+"1526": {
+"lowerleg01.R|Beluga|VIS": 2,
+"foot.R|Beluga|VIS": 62,
+"lowerleg02.R|Beluga|VIS": 32,
+"Diver.FootPocket_R|Beluga|VIS": 35
+},
+"1530": {
+"lowerleg01.R|Beluga|VIS": 2,
+"foot.R|Beluga|VIS": 62,
+"lowerleg02.R|Beluga|VIS": 32,
+"Diver.FootPocket_R|Beluga|VIS": 35
+},
+"1534": {
+"lowerleg01.R|Beluga|VIS": 2,
+"foot.R|Beluga|VIS": 62,
+"lowerleg02.R|Beluga|VIS": 32,
+"Diver.FootPocket_R|Beluga|VIS": 35
+},
+"1538": {
+"lowerleg01.R|Beluga|VIS": 2,
+"foot.R|Beluga|VIS": 62,
+"lowerleg02.R|Beluga|VIS": 32,
+"Diver.FootPocket_R|Beluga|VIS": 35
+},
+"1542": {
+"lowerleg01.R|Beluga|VIS": 2,
+"foot.R|Beluga|VIS": 62,
+"lowerleg02.R|Beluga|VIS": 32,
+"Diver.FootPocket_R|Beluga|VIS": 35
+},
+"1546": {
+"lowerleg01.R|Beluga|VIS": 2,
+"foot.R|Beluga|VIS": 62,
+"lowerleg02.R|Beluga|VIS": 32,
+"Diver.FootPocket_R|Beluga|VIS": 35
+},
+"1550": {
+"lowerleg01.R|Beluga|VIS": 2,
+"foot.R|Beluga|VIS": 62,
+"lowerleg02.R|Beluga|VIS": 32,
+"Diver.FootPocket_R|Beluga|VIS": 35
+},
+"1554": {
+"lowerleg01.R|Beluga|VIS": 2,
+"foot.R|Beluga|VIS": 60,
+"lowerleg02.R|Beluga|VIS": 25,
+"Diver.FootPocket_R|Beluga|VIS": 35
+},
+"1558": {
+"foot.R|Beluga|VIS": 71,
+"lowerleg02.R|Beluga|VIS": 30,
+"Diver.FootPocket_R|Beluga|VIS": 45
+},
+"1562": {
+"foot.R|Beluga|VIS": 74,
+"lowerleg02.R|Beluga|VIS": 29,
+"Diver.FootPocket_R|Beluga|VIS": 46
+},
+"1566": {
+"foot.R|Beluga|VIS": 74,
+"lowerleg02.R|Beluga|VIS": 28,
+"Diver.FootPocket_R|Beluga|VIS": 47
+},
+"1570": {
+"foot.R|Beluga|VIS": 75,
+"lowerleg02.R|Beluga|VIS": 25,
+"Diver.FootPocket_R|Beluga|VIS": 46
+},
+"1574": {
+"foot.R|Beluga|VIS": 76,
+"lowerleg02.R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|VIS": 46
+},
+"1578": {
+"foot.R|Beluga|VIS": 76,
+"lowerleg02.R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|VIS": 47
+},
+"1582": {
+"foot.R|Beluga|VIS": 76,
+"lowerleg02.R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|VIS": 47
+},
+"1586": {
+"foot.R|Beluga|VIS": 75,
+"lowerleg02.R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|VIS": 47
+},
+"1590": {
+"foot.R|Beluga|VIS": 75,
+"lowerleg02.R|Beluga|VIS": 26,
+"Diver.FootPocket_R|Beluga|VIS": 47
+},
+"1594": {
+"foot.R|Beluga|VIS": 78,
+"lowerleg02.R|Beluga|VIS": 26,
+"Diver.FootPocket_R|Beluga|VIS": 49
+},
+"1598": {
+"foot.R|Beluga|VIS": 80,
+"lowerleg02.R|Beluga|VIS": 26,
+"Diver.FootPocket_R|Beluga|VIS": 49
+},
+"1602": {
+"foot.R|Beluga|VIS": 82,
+"lowerleg02.R|Beluga|VIS": 22,
+"Diver.FootPocket_R|Beluga|VIS": 49
+},
+"1606": {
+"foot.R|Beluga|VIS": 69,
+"lowerleg02.R|Beluga|VIS": 23,
+"Diver.FootPocket_R|Beluga|VIS": 46
+},
+"1610": {
+"foot.R|Beluga|VIS": 67,
+"lowerleg02.R|Beluga|VIS": 25,
+"Diver.FootPocket_R|Beluga|VIS": 41
+},
+"1614": {
+"foot.R|Beluga|VIS": 67,
+"lowerleg02.R|Beluga|VIS": 26,
+"Diver.FootPocket_R|Beluga|VIS": 41
+},
+"1618": {
+"foot.R|Beluga|VIS": 68,
+"lowerleg02.R|Beluga|VIS": 26,
+"Diver.FootPocket_R|Beluga|VIS": 42
+},
+"1622": {
+"foot.R|Beluga|VIS": 68,
+"lowerleg02.R|Beluga|VIS": 25,
+"Diver.FootPocket_R|Beluga|VIS": 41
+},
+"1626": {
+"foot.R|Beluga|VIS": 72,
+"lowerleg02.R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|VIS": 45
+},
+"1630": {
+"foot.R|Beluga|VIS": 71,
+"lowerleg02.R|Beluga|VIS": 25,
+"Diver.FootPocket_R|Beluga|VIS": 43
+},
+"1634": {
+"foot.R|Beluga|VIS": 68,
+"lowerleg02.R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|VIS": 42
+},
+"1638": {
+"lowerleg02.R|Beluga|VIS": 25,
+"foot.R|Beluga|VIS": 64,
+"Diver.FootPocket_R|Beluga|VIS": 41
+},
+"1642": {
+"lowerleg02.R|Beluga|VIS": 23,
+"foot.R|Beluga|VIS": 66,
+"Diver.FootPocket_R|Beluga|VIS": 41
+},
+"1646": {
+"lowerleg02.R|Beluga|VIS": 25,
+"foot.R|Beluga|VIS": 66,
+"Diver.FootPocket_R|Beluga|VIS": 41
+},
+"1650": {
+"lowerleg02.R|Beluga|VIS": 20,
+"foot.R|Beluga|VIS": 64,
+"Diver.FootPocket_R|Beluga|VIS": 40
+},
+"1654": {
+"lowerleg02.R|Beluga|VIS": 24,
+"foot.R|Beluga|VIS": 42,
+"Diver.FootPocket_R|Beluga|VIS": 25
+},
+"1658": {
+"lowerleg02.R|Beluga|VIS": 25,
+"foot.R|Beluga|VIS": 44,
+"lowerleg01.R|Beluga|VIS": 2,
+"Diver.FootPocket_R|Beluga|VIS": 27
+},
+"1662": {
+"lowerleg02.R|Beluga|VIS": 23,
+"foot.R|Beluga|VIS": 44,
+"lowerleg01.R|Beluga|VIS": 2,
+"Diver.FootPocket_R|Beluga|VIS": 26
+},
+"1666": {
+"lowerleg02.R|Beluga|VIS": 22,
+"foot.R|Beluga|VIS": 44,
+"lowerleg01.R|Beluga|VIS": 2,
+"Diver.FootPocket_R|Beluga|VIS": 26
+},
+"1670": {
+"lowerleg02.R|Beluga|VIS": 22,
+"foot.R|Beluga|VIS": 44,
+"lowerleg01.R|Beluga|VIS": 2,
+"Diver.FootPocket_R|Beluga|VIS": 26
+},
+"1674": {
+"foot.R|Beluga|VIS": 48,
+"lowerleg02.R|Beluga|VIS": 23,
+"lowerleg01.R|Beluga|VIS": 1,
+"Diver.FootPocket_R|Beluga|VIS": 30
+},
+"1678": {
+"foot.R|Beluga|VIS": 46,
+"lowerleg02.R|Beluga|VIS": 25,
+"lowerleg01.R|Beluga|VIS": 1,
+"Diver.FootPocket_R|Beluga|VIS": 32
+},
+"1682": {
+"foot.R|Beluga|VIS": 47,
+"lowerleg02.R|Beluga|VIS": 25,
+"lowerleg01.R|Beluga|VIS": 1,
+"Diver.FootPocket_R|Beluga|VIS": 32
+},
+"1686": {
+"foot.R|Beluga|off": 42,
+"lowerleg02.R|Beluga|off": 23,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 28
+},
+"1690": {
+"foot.R|Beluga|off": 41,
+"lowerleg02.R|Beluga|off": 22,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 26
+},
+"1694": {
+"foot.R|Beluga|off": 43,
+"lowerleg02.R|Beluga|off": 23,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 26
+},
+"1698": {
+"foot.R|Beluga|off": 40,
+"lowerleg02.R|Beluga|off": 21,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 24
+},
+"1702": {
+"foot.R|Beluga|off": 39,
+"lowerleg02.R|Beluga|off": 22,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 21
+},
+"1706": {
+"foot.R|Beluga|off": 39,
+"lowerleg02.R|Beluga|off": 22,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 21
+},
+"1710": {
+"foot.R|Beluga|off": 41,
+"lowerleg02.R|Beluga|off": 22,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 23
+},
+"1714": {
+"foot.R|Beluga|off": 41,
+"lowerleg02.R|Beluga|off": 22,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 21
+},
+"1718": {
+"foot.R|Beluga|off": 41,
+"lowerleg02.R|Beluga|off": 22,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 21
+},
+"1722": {
+"foot.R|Beluga|off": 41,
+"lowerleg02.R|Beluga|off": 22,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 21
+},
+"1726": {
+"lowerleg02.R|Beluga|off": 22,
+"foot.R|Beluga|off": 41,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 21
+},
+"1730": {
+"lowerleg02.R|Beluga|off": 22,
+"foot.R|Beluga|off": 39,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 19
+},
+"1734": {
+"lowerleg02.R|Beluga|off": 22,
+"foot.R|Beluga|off": 39,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 19
+},
+"1738": {
+"lowerleg02.R|Beluga|off": 22,
+"foot.R|Beluga|off": 39,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 19
+},
+"1742": {
+"lowerleg02.R|Beluga|off": 22,
+"foot.R|Beluga|off": 38,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 18
+},
+"1746": {
+"lowerleg02.R|Beluga|off": 22,
+"foot.R|Beluga|off": 38,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 18
+},
+"1750": {
+"lowerleg02.R|Beluga|off": 22,
+"foot.R|Beluga|off": 38,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 18
+},
+"1754": {
+"lowerleg02.R|Beluga|off": 22,
+"foot.R|Beluga|off": 38,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 18
+},
+"1758": {
+"lowerleg02.R|Beluga|off": 21,
+"foot.R|Beluga|off": 38,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 15
+},
+"1762": {
+"lowerleg02.R|Beluga|off": 21,
+"foot.R|Beluga|off": 38,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 15
+},
+"1766": {
+"lowerleg02.R|Beluga|off": 21,
+"foot.R|Beluga|off": 38,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 15
+},
+"1770": {
+"lowerleg02.R|Beluga|off": 21,
+"foot.R|Beluga|off": 37,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 14
+},
+"1774": {
+"foot.R|Beluga|off": 42,
+"lowerleg02.R|Beluga|off": 22,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 27
+},
+"1778": {
+"foot.R|Beluga|off": 42,
+"lowerleg02.R|Beluga|off": 22,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 27
+},
+"1782": {
+"foot.R|Beluga|off": 42,
+"lowerleg02.R|Beluga|off": 22,
+"lowerleg01.R|Beluga|off": 1,
+"Diver.FootPocket_R|Beluga|off": 27
+},
+"1786": {
+"foot.R|Beluga|off": 42,
+"lowerleg02.R|Beluga|off": 35,
+"Diver.FootPocket_R|Beluga|off": 41
+},
+"1790": {
+"foot.R|Beluga|off": 44,
+"lowerleg02.R|Beluga|off": 33,
+"Diver.FootPocket_R|Beluga|off": 40
+},
+"1794": {
+"foot.R|Beluga|off": 44,
+"lowerleg02.R|Beluga|off": 32,
+"Diver.FootPocket_R|Beluga|off": 38
+},
+"1798": {
+"foot.R|Beluga|off": 44,
+"lowerleg02.R|Beluga|off": 31,
+"Diver.FootPocket_R|Beluga|off": 36
+},
+"1802": {
+"foot.R|Beluga|off": 44,
+"lowerleg02.R|Beluga|off": 31,
+"Diver.FootPocket_R|Beluga|off": 36
+},
+"1806": {
+"foot.R|Beluga|off": 44,
+"lowerleg02.R|Beluga|off": 31,
+"Diver.FootPocket_R|Beluga|off": 36
+},
+"1810": {
+"foot.R|Beluga|off": 44,
+"lowerleg02.R|Beluga|off": 29,
+"Diver.FootPocket_R|Beluga|off": 35
+},
+"1814": {
+"foot.R|Beluga|off": 43,
+"lowerleg02.R|Beluga|off": 25,
+"Diver.FootPocket_R|Beluga|off": 32
+},
+"1818": {
+"foot.R|Beluga|off": 42,
+"lowerleg02.R|Beluga|off": 24,
+"Diver.FootPocket_R|Beluga|off": 30
+},
+"1822": {
+"foot.R|Beluga|off": 42,
+"lowerleg02.R|Beluga|off": 24,
+"Diver.FootPocket_R|Beluga|off": 30
+},
+"1826": {
+"foot.R|Beluga|off": 40,
+"lowerleg02.R|Beluga|off": 24,
+"Diver.FootPocket_R|Beluga|off": 28
+},
+"1830": {
+"foot.R|Beluga|off": 40,
+"lowerleg02.R|Beluga|off": 24,
+"Diver.FootPocket_R|Beluga|off": 28
+},
+"1834": {
+"foot.R|Beluga|off": 40,
+"lowerleg02.R|Beluga|off": 24,
+"Diver.FootPocket_R|Beluga|off": 28
+},
+"1838": {
+"foot.R|Beluga|off": 42,
+"lowerleg02.R|Beluga|off": 24,
+"Diver.FootPocket_R|Beluga|off": 30
+},
+"1842": {
+"foot.R|Beluga|off": 38,
+"lowerleg02.R|Beluga|off": 23,
+"Diver.FootPocket_R|Beluga|off": 26
+},
+"1846": {
+"lowerleg02.R|Beluga|off": 21,
+"foot.R|Beluga|off": 41,
+"Diver.FootPocket_R|Beluga|off": 27
+},
+"1850": {
+"lowerleg02.R|Beluga|off": 22,
+"foot.R|Beluga|off": 48,
+"Diver.FootPocket_R|Beluga|off": 35
+},
+"1854": {
+"lowerleg02.R|Beluga|off": 18,
+"foot.R|Beluga|off": 70,
+"Diver.FootPocket_R|Beluga|off": 42
+},
+"1858": {
+"foot.R|Beluga|VIS": 68,
+"lowerleg02.R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|VIS": 42
+},
+"1862": {
+"lowerleg02.R|Beluga|VIS": 25,
+"foot.R|Beluga|VIS": 64,
+"Diver.FootPocket_R|Beluga|VIS": 41
+},
+"1866": {
+"lowerleg02.R|Beluga|VIS": 24,
+"foot.R|Beluga|VIS": 65,
+"Diver.FootPocket_R|Beluga|VIS": 41
+},
+"1870": {
+"foot.R|Beluga|VIS": 67,
+"lowerleg02.R|Beluga|VIS": 26,
+"Diver.FootPocket_R|Beluga|VIS": 41
+},
+"1874": {
+"foot.R|Beluga|VIS": 67,
+"lowerleg02.R|Beluga|VIS": 26,
+"Diver.FootPocket_R|Beluga|VIS": 41
+},
+"1878": {
+"foot.R|Beluga|VIS": 68,
+"lowerleg02.R|Beluga|VIS": 25,
+"Diver.FootPocket_R|Beluga|VIS": 41
+},
+"1882": {
+"foot.R|Beluga|VIS": 71,
+"lowerleg02.R|Beluga|VIS": 25,
+"Diver.FootPocket_R|Beluga|VIS": 43
+},
+"1886": {
+"lowerleg02.R|Beluga|VIS": 26,
+"foot.R|Beluga|VIS": 65,
+"Diver.FootPocket_R|Beluga|VIS": 41
+},
+"1890": {
+"lowerleg02.R|Beluga|VIS": 24,
+"foot.R|Beluga|VIS": 67,
+"Diver.FootPocket_R|Beluga|VIS": 41
+},
+"1894": {
+"foot.R|Beluga|VIS": 72,
+"lowerleg02.R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|VIS": 45
+},
+"1898": {
+"lowerleg02.R|Beluga|VIS": 20,
+"foot.R|Beluga|VIS": 50,
+"Diver.FootPocket_R|Beluga|VIS": 32
+},
+"1902": {
+"foot.R|Beluga|VIS": 51,
+"lowerleg02.R|Beluga|VIS": 21,
+"Diver.FootPocket_R|Beluga|VIS": 39
+},
+"1906": {
+"Diver.FinBlade_L|Beluga_Jaw|VIS": 14
+},
+"1910": {
+"foot.R|Beluga|VIS": 73,
+"lowerleg02.R|Beluga|VIS": 31,
+"Diver.FootPocket_R|Beluga|VIS": 44
+},
+"1914": {
+"lowerleg02.R|Beluga|VIS": 30,
+"foot.R|Beluga|VIS": 69,
+"Diver.FootPocket_R|Beluga|VIS": 41
+},
+"1918": {
+"lowerleg02.R|Beluga|VIS": 30,
+"foot.R|Beluga|VIS": 69,
+"Diver.FootPocket_R|Beluga|VIS": 41
+},
+"1922": {
+"foot.R|Beluga|VIS": 68,
+"lowerleg02.R|Beluga|VIS": 30,
+"Diver.FootPocket_R|Beluga|VIS": 40
+},
+"1926": {
+"foot.R|Beluga|off": 67,
+"lowerleg02.R|Beluga|off": 30,
+"Diver.FootPocket_R|Beluga|off": 40
+},
+"1930": {
+"foot.R|Beluga|off": 68,
+"lowerleg02.R|Beluga|off": 29,
+"Diver.FootPocket_R|Beluga|off": 40
+},
+"1934": {
+"foot.R|Beluga|off": 67,
+"lowerleg02.R|Beluga|off": 29,
+"Diver.FootPocket_R|Beluga|off": 40
+},
+"1938": {
+"foot.R|Beluga|off": 67,
+"lowerleg02.R|Beluga|off": 29,
+"Diver.FootPocket_R|Beluga|off": 40
+},
+"1942": {
+"foot.R|Beluga|off": 67,
+"lowerleg02.R|Beluga|off": 29,
+"Diver.FootPocket_R|Beluga|off": 40
+},
+"1946": {
+"foot.R|Beluga|off": 67,
+"lowerleg02.R|Beluga|off": 29,
+"Diver.FootPocket_R|Beluga|off": 40
+},
+"1950": {
+"foot.R|Beluga|off": 67,
+"lowerleg02.R|Beluga|off": 29,
+"Diver.FootPocket_R|Beluga|off": 40
+},
+"1954": {
+"foot.R|Beluga|off": 67,
+"lowerleg02.R|Beluga|off": 29,
+"Diver.FootPocket_R|Beluga|off": 40
+},
+"1958": {
+"foot.R|Beluga|off": 67,
+"lowerleg02.R|Beluga|off": 29,
+"Diver.FootPocket_R|Beluga|off": 40
+},
+"1962": {
+"foot.R|Beluga|off": 67,
+"lowerleg02.R|Beluga|off": 29,
+"Diver.FootPocket_R|Beluga|off": 40
+},
+"1966": {
+"foot.R|Beluga|off": 68,
+"lowerleg02.R|Beluga|off": 29,
+"Diver.FootPocket_R|Beluga|off": 40
+},
+"1970": {
+"foot.R|Beluga|off": 68,
+"lowerleg02.R|Beluga|off": 30,
+"Diver.FootPocket_R|Beluga|off": 40
+},
+"1974": {
+"lowerleg02.R|Beluga|off": 30,
+"foot.R|Beluga|off": 69,
+"Diver.FootPocket_R|Beluga|off": 41
+}
+}
+}
