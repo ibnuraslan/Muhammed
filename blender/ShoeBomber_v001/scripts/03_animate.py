@@ -416,9 +416,10 @@ for f, flex, sp, crouch, hd in ((1393, 0, 10, 0.0, (25, 0)), (1420, 0, 18, 0.03,
 # v006e (director): he KNEELS on the floor beside the belt -- both knees down, shins back, the sneaker beside his right knee,
 # picks it up and reaches into the tray; nothing of him passes the belt (knees stop ~27 cm short of it)
 TK = V((TP.x - 0.22, TP.y - 0.05, 0))
-for f, sp, tw, hd in ((1468, 22, 0, (-25, 0)), (1480, 24, 8, (-15, 5)), (1492, 18, 15, (0, 10)), (1508, 16, 18, (5, 12)), (1518, 12, 12, (8, 8))):
-    trav.key_root(f, V((TK.x, TK.y, 0.55)), yaw=FWD, flex=12)
-    trav.key_spine(f, flex=sp, twist=-tw, head=hd)
+for f, sp, tw, sd, rz, hd in ((1468, 30, 0, 0, 0.55, (-25, 0)), (1478, 58, -12, 14, 0.50, (-15, 0)), (1484, 52, -8, 10, 0.51, (-10, 0)),
+                              (1494, 22, 15, 0, 0.55, (0, 10)), (1508, 16, 18, 0, 0.55, (5, 12)), (1518, 12, 12, 0, 0.55, (8, 8))):
+    trav.key_root(f, V((TK.x, TK.y, rz)), yaw=FWD, flex=12)
+    trav.key_spine(f, flex=sp, twist=-tw, side=sd, head=hd)   # 1478: bends forward and to his right so the hand reaches the heel on the floor
     trav.key_foot("L", f, V((TK.x - 0.12, TK.y - 0.35)), FWD, 0.02, -65); trav.key_foot("R", f, V((TK.x + 0.13, TK.y - 0.33)), FWD, 0.02, -65)
 # right foot: steps back out of the sneaker (1425-1445; the sneaker stays on the floor), then plants beside it
 RF0 = trav.foot_xy("R", TP, FWD)
