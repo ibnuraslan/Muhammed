@@ -958,11 +958,46 @@ HBK.rotation_mode = 'QUATERNION'
 HBK.matrix_world = Matrix.Translation(_palm + Vector((0, 0, 0.06))) @ Matrix.Rotation(R_(90), 4, 'Z') @ Matrix.Translation(-_mc)
 follow(HBK, _rg, "R", 892, 986)
 key_vis(HBK, [(1, False), (896, True), (986, False)])
+# ---- v007b: a dark CAD display INSIDE the monitor for the screen close-up (736-845): orange scanned stump, the missing half
+# draws in as a thick bright-cyan wireframe, then fills solid. Emission-only, on #101820.
+def _emis(name, rgb, k):
+    m = bpy.data.materials.new(name); m.use_nodes = True; nt_ = m.node_tree
+    for n in list(nt_.nodes):
+        if n.type != 'OUTPUT_MATERIAL': nt_.nodes.remove(n)
+    e = nt_.nodes.new("ShaderNodeEmission"); e.inputs[0].default_value = rgb + (1,); e.inputs[1].default_value = k
+    nt_.links.new(e.outputs[0], next(n for n in nt_.nodes if n.type == 'OUTPUT_MATERIAL').inputs[0]); return m
+GL_X = 9.752; SC_C = Vector((GL_X + 0.05, 1.244, 1.043))
+bgm = bpy.data.meshes.new("CAD_screen_bg"); xb = GL_X + 0.1
+bgm.from_pydata([(xb, 0.92, 0.86), (xb, 1.57, 0.86), (xb, 1.57, 1.23), (xb, 0.92, 1.23)], [], [(0, 3, 2, 1)])
+bg = bpy.data.objects.new("CAD_screen_bg", bgm); C_ANIM.objects.link(bg); bgm.materials.append(_emis("CAD_bg", (0.0056, 0.0091, 0.0137), 1.0))
+bg.visible_shadow = False
+# side view from the beak's own principal axes (UP and UPB share coordinates): long axis -> screen Y, thin axis -> depth X
+_P = np.array([v.co[:] for v in UP.data.vertices]); _c = _P.mean(0); _u, _sv, _vt = np.linalg.svd(_P - _c, full_matrices=False)
+_long, _mid, _thin = [Vector(_vt[k]) for k in range(3)]
+if _long.dot(LB_tip - LB_base) < 0: _long = -_long
+if _mid.z < 0: _mid = -_mid
+_thin = _long.cross(_mid)
+_Rm = Matrix((_thin, _long, _mid))                      # rows: local -> (X depth, Y along screen, Z up)
+_ext = (_P - _c) @ np.array(_long[:]); _s = 0.41 / float(_ext.max() - _ext.min())   # beak = ~70% of the screen width
+_c = _c + np.array(_long[:]) * float(_ext.max() + _ext.min()) / 2   # centre the beak's length on the screen
+_M = Matrix.Translation(SC_C) @ Matrix.Scale(_s, 4) @ _Rm.to_4x4() @ Matrix.Translation(-Vector(_c))
+def _cad(name, data, mat, dx=0.0):
+    o = bpy.data.objects.new(name, data); C_ANIM.objects.link(o)        # shares the beak mesh (package size); material per object
+    for sl in o.material_slots: sl.link = 'OBJECT'; sl.material = mat
+    o.matrix_world = Matrix.Translation((dx, 0, 0)) @ _M; o.visible_shadow = False; return o
+cst = _cad("CAD_stump", UPB.data, _emis("CAD_orange", (1.0, 0.42, 0.05), 1.6), -0.004)
+cwr = _cad("CAD_wire", UP.data, _emis("CAD_cyan", (0.05, 0.85, 1.0), 5.0))
+b_ = cwr.modifiers.new("draw", 'BUILD'); b_.frame_start = 750; b_.frame_duration = 50
+dc_ = cwr.modifiers.new("dec", 'DECIMATE'); dc_.ratio = 0.06   # clean CAD triangles (scan slivers made spikes)
+w_ = cwr.modifiers.new("wire", 'WIREFRAME'); w_.thickness = 0.0035 / _s; w_.use_replace = True; w_.use_even_offset = False
+cfl = _cad("CAD_fill", UP.data, _emis("CAD_fill", (0.25, 0.8, 1.0), 1.3), 0.004)
+b2 = cfl.modifiers.new("fill", 'BUILD'); b2.frame_start = 805; b2.frame_duration = 25
+for o_ in (bg, cst, cwr, cfl): key_vis(o_, [(1, False), (736, True), (846, False)])
 K = [  # frame, position, target, lens, focus target(None = target)
  (1, BIRD_J + Vector((0.85, 1.25, -0.55)), HEADJ + Vector((0, 0, -0.08)), 24),
  (34, BIRD_J + Vector((0.75, 0.85, 0.05)), HEADJ, 28),
  (64, STK(-48) + Vector((0.45, 0.2, 0.28)), STK(-48) * 0.3 + BEAKJ * 0.7, 28),
- (90, STK(-14) + Vector((0.38, 0.22, 0.12)), BEAKJ, 32),
+ (90, BIRD_J + Vector((0.5, -0.55, 0.35)), BEAKJ, 32),   # v007b: line of sight clear of the hero trunk
  (104, BEAKJ + Vector((0.46, 0.2, 0.12)), BEAKJ, 34),
  (135, BEAKJ + Vector((0.12, 0.34, 0.08)), BEAKJ + Vector((0, 0.1, 0.02)), 45),
  (175, BEAKJ + Vector((-0.16, 0.30, 0.02)), BEAKJ + Vector((0, 0.18, -0.04)), 52),
@@ -1042,6 +1077,9 @@ for n_ in range(670, 1100):
     R = M_EYE @ Matrix.Translation((0, 0, -1.0)) @ Matrix.Scale(2.0, 4) @ Matrix.LocRotScale(po, qo, None).inverted()
     lo, qq, ss = R.decompose(); VROOT.location = lo; VROOT.rotation_quaternion = qq; VROOT.scale = ss
     VROOT.keyframe_insert("location", frame=n_); VROOT.keyframe_insert("rotation_quaternion", frame=n_); VROOT.keyframe_insert("scale", frame=n_)
+# the void display is not used during the screen close-up: park it far away
+for n_ in range(736, 846):
+    VROOT.location = (0, 0, -200); VROOT.keyframe_insert("location", frame=n_)
 # ---- v007 camera: old keys re-timed, the re-staged sections replaced (NEW frame numbers)
 FACEB_SEAM = Vector((6.92, 0.2, 1.32)); AS_FACE = Vector((9.25, 1.8, 1.3))
 drop = lambda k: (120 < k[0] < 190 or 490 < k[0] < 528 or 600 < k[0] <= 1840 or 1950 <= k[0] <= 1965 or k[0] > 2190)
@@ -1053,8 +1091,8 @@ K2 = [(g(k[0]),) + tuple(k[1:]) for k in K if not drop(k)] + [
  (675, Vector((6.45, -0.42, 1.6)), Vector((6.92, 0.2, 1.35)), 28),
  (676, Vector((9.62, 0.82, 1.42)), AS_FACE, 35),                                  # (a) the vet at the monitor, face visible
  (735, Vector((9.6, 0.86, 1.41)), AS_FACE, 36),
- (736, E_B + Vector((-0.04, 0.0, 0.01)), SCREEN, 30),                             # (b) the screen: scan, mirrored half, wireframe
- (845, E_B, SCREEN, 30),
+ (736, SCREEN + Vector((-1.0, 0.0, 0.0)), SCREEN, 30),                           # (b) the monitor fills ~80% of the frame width
+ (845, SCREEN + Vector((-0.94, 0.0, 0.0)), SCREEN, 30),
  (846, Vector((8.75, 0.55, 1.5)), AS_FACE + Vector((0, 0, -0.05)), 32),           # (c) he turns to the printer
  (895, Vector((8.72, 0.52, 1.5)), AS_FACE + Vector((0, 0, -0.05)), 32),
  (896, Vector((6.55, -0.5, 1.55)), Vector((6.92, 0.2, 1.3)), 40),               # gag: weighing a solid beak, frowning
