@@ -167,18 +167,18 @@ def fan_rink():
     fan.pose(f(14.4), (0.0, 0.63, 0), 0, flex=6, head=(22, 4), hands=phone_hold(0.01))
     fan.pose(f(15.4), (0.0, 0.63, 0), 0, flex=6, head=(21, -3), hands=phone_hold(0.02))
     # beat 6: slap phone on the glass, knock with the left
-    glassR = {"R": ((-0.05, -0.329, 1.12), (0, 0, 1), (0, -1, 0))}   # forearm near vertical: palm flat on the glass within the wrist limits
+    glassR = {"R": ((-0.05, -0.345, 1.12), (0, 0, 1), (0, -1, 0))}   # forearm near vertical: palm flat on the glass within the wrist limits
     fan.pose(f(15.9), (0.0, 0.58, 0), 0, flex=10, head=(4, 0), hands={"R": ((-0.08, -0.38, 1.30), (0, -0.4, 1), (0, -1, 0.3)),
                                                                      "L": ((0.06, -0.29, 1.07), (-0.2, -0.3, 1), (-0.4, 0.5, 0.8))})
-    fan.pose(f(16.15), (0.0, 0.42, 0), 0, flex=12, head=(0, 0), hands={**glassR, "L": ((0.20, -0.30, 1.2), (0, -0.4, 1), (0, -1, 0))})
+    fan.pose(f(16.15), (0.0, 0.50, 0), 0, flex=6, head=(0, 0), hands={**glassR, "L": ((0.20, -0.30, 1.2), (0, -0.4, 1), (0, -1, 0))})
     face(FR, f(16.1), brow=0.6, jaw=6, frown=0.3)
-    knock = ((0.28, -0.345, 1.20), (0, -0.2, 1), (0, -1, 0))   # v007: below her face
+    knock = ((0.28, -0.425, 1.20), (0, -0.2, 1), (0, -1, 0))   # v007: below her face
     for k, t in enumerate((16.5, 16.65, 16.8, 16.95)):
-        L = knock if k % 2 else ((0.28, -0.27, 1.20), (0, -0.2, 1), (1, 0, 0))
-        fan.pose(f(t), (0.0, 0.42, 0), 0, flex=12, head=(0, 2), hands={**glassR, "L": L})
-    fan.pose(f(17.5), (0.0, 0.42, 0), 0, flex=12, head=(4, 0), hands={**glassR, "L": ((0.20, -0.30, 1.2), (0, -0.4, 1), (0, -1, 0))})
+        L = knock if k % 2 else ((0.28, -0.35, 1.20), (0, -0.2, 1), (1, 0, 0))
+        fan.pose(f(t), (0.0, 0.50, 0), 0, flex=6, head=(0, 2), hands={**glassR, "L": L})
+    fan.pose(f(17.5), (0.0, 0.50, 0), 0, flex=6, head=(4, 0), hands={**glassR, "L": ((0.20, -0.30, 1.2), (0, -0.4, 1), (0, -1, 0))})
     face(FR, f(17.6), brow=0.8, smile=0.2, jaw=4)
-    fan.pose(f(19.6), (0.0, 0.42, 0), 0, flex=12, head=(10, 0), hands={**glassR, "L": ((0.20, -0.30, 1.2), (0, -0.4, 1), (0, -1, 0))})
+    fan.pose(f(19.6), (0.0, 0.50, 0), 0, flex=6, head=(10, 0), hands={**glassR, "L": ((0.20, -0.30, 1.2), (0, -0.4, 1), (0, -1, 0))})
     face(FR, f(20.4), brow=0.9, frown=0.5, jaw=8)     # he walks away
     fan.pose(f(20.6), (0.0, 0.56, 0), 0, flex=6, head=(6, 28), twist=14, hands={"R": ((-0.16, -0.46, 1.25), (0, -0.4, 1), (0, -1, 0.3))})
     fan.pose(f(23.0), (0.0, 0.6, 0), 0, flex=4, head=(4, 34), twist=16)
@@ -576,7 +576,7 @@ for t in (34.0,):
     ph1.keyframe_insert("scale", frame=F(t) - 1); ph1.scale = (0.001,) * 3; ph1.keyframe_insert("scale", frame=F(t))
 # during the slap the phone lies flat ON the glass (screen to the glass), her palm pressed behind it
 _pg = bpy.data.objects.new("PhoneOnGlass", None); C_CHAR.objects.link(_pg)
-_pg.matrix_world = Matrix(((0, -1, 0, -0.05), (1, 0, 0, 0.0135), (0, 0, 1, 1.17), (0, 0, 0, 1)))   # v007: chest height, her face above it
+_pg.matrix_world = Matrix(((0, -1, 0, 0.0), (1, 0, 0, 0.0135), (0, 0, 1, 1.15), (0, 0, 0, 1)))   # v007: chest height, her face above it
 _ct = ph1.constraints.new('COPY_TRANSFORMS'); _ct.target = _pg
 for _f, _v in ((F(16.0), 0.0), (F(16.12), 1.0), (F(20.3), 1.0), (F(20.5), 0.0)):
     _ct.influence = _v; _ct.keyframe_insert("influence", frame=_f)
