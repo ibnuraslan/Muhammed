@@ -1,5 +1,10 @@
 # BelugaRescue_v007d — farm package (director notes on v006)
 
+
+v007d (director notes on v007c): face at eye level 1701–1835; whale speculars and water glare reduced; real float 1191–1286
+(knees bent, legs closer, hands sculling at hip height); loose fin shown only from her pull-off (486–700); nurse moved 1 m off the
+diver at the start; 856–906 wide two-shot (whale never across the lens); clean top-down wall shot before the deck cut; medium ending
+(her face up at the edge, keeper kneeling with his face visible, nurse beside them). Preview pages: `../BelugaRescue_v001/review/preview_pages_v007d/`.
 Moving preview of this exact file: `../BelugaRescue_v001/review/preview.mp4` (every 5th frame, frame numbers burned in);
 contact pages `../BelugaRescue_v001/review/preview_pages_v007d/`. Beat frames unchanged; no VO added.
 - Whale beats 6–8 (800–1300): computed two-shots — her face and the whale in frame together, camera kept 1.2 m off the whale.
