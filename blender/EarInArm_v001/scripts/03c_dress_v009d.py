@@ -80,15 +80,19 @@ def face_mask(rig, body, old_name, new_name):
     nose = min(cand, key=lambda i: mix[i].y); N = mix[nose]
     keep = {i for i in cand if N.z - 0.085 < mix[i].z < N.z - 0.008 - 0.3 * abs(mix[i].x) and mix[i].y < N.y + 0.05 and abs(mix[i].x) < 0.062
             and body.data.vertices[i].normal.y < 0.15}
-    o = body.copy(); o.data = body.data.copy(); o.name = new_name
+    # v009j: a standalone mesh in rest-armature space, bound to the head bone, shrinkwrapped onto the (deforming) face
+    idx = sorted(keep); remap = {i: k for k, i in enumerate(idx)}
+    faces = [[remap[v] for v in p.vertices] for p in body.data.polygons if all(v in keep for v in p.vertices)]
+    me = bpy.data.meshes.new(new_name); me.from_pydata([mix[i] for i in idx], [], faces); me.update()
+    o = bpy.data.objects.new(new_name, me)
     for c in body.users_collection: c.objects.link(o)
-    for md in list(o.modifiers):
-        if md.type != 'ARMATURE': o.modifiers.remove(md)
-    bm = bmesh.new(); bm.from_mesh(o.data); bm.verts.ensure_lookup_table()
-    bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.index not in keep], context='VERTS'); bm.to_mesh(o.data); bm.free()
-    o.data.materials.clear(); o.data.materials.append(mat)
-    for poly in o.data.polygons: poly.material_index = 0
-    smo = o.modifiers.new("sheet", 'SMOOTH'); smo.factor = 1.0; smo.iterations = 25   # a cloth sheet over nose and lips, not a skin cast
+    hb = rig.data.bones["head"]
+    o.parent = rig; o.parent_type = 'BONE'; o.parent_bone = "head"
+    o.matrix_parent_inverse = (hb.matrix_local @ Matrix.Translation((0, hb.length, 0))).inverted()
+    o.matrix_basis = Matrix.Identity(4)
+    o.data.materials.append(mat)
+    sw = o.modifiers.new("onface", 'SHRINKWRAP'); sw.target = body; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.offset = 0.002
+    smo = o.modifiers.new("sheet", 'SMOOTH'); smo.factor = 1.0; smo.iterations = 25   # a cloth sheet over nose and lips
     dp = o.modifiers.new("lift", 'DISPLACE'); dp.strength = 0.004; dp.mid_level = 0.0; dp.direction = 'NORMAL'
     so = o.modifiers.new("thick", 'SOLIDIFY'); so.thickness = 0.0012; so.offset = 1.0
     sm = o.modifiers.new("smooth", 'SUBSURF'); sm.levels = 1; sm.render_levels = 1

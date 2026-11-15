@@ -286,7 +286,8 @@ def unclip(rig, s, f, targets, margin=0.01, it=6, cap=0.2):
         pb.location = pb.location + d_; pb.keyframe_insert("location", frame=f, group=pb.name); moved += push.length
     return moved
 def others(rig): return [lambda o=o: bvh(o) for o in (SUR, PAT, NUR) if o is not rig for o in (BODY[o],)]
-JOBS = [(SUR, "L", range(120, 150, 2), lambda: [lambda: bvh(BODY[PAT])], 0.15), (SUR, "R", range(120, 150, 2), lambda: [lambda: bvh(BODY[PAT])], 0.15),   # v009i
+JOBS = [(SUR, "L", range(640, 798, 3), lambda: [lambda: self_bvh(SUR)], 0.1), (SUR, "R", range(640, 798, 3), lambda: [lambda: self_bvh(SUR)], 0.1),   # v009j: hands off his belly at the arm
+        (SUR, "L", range(120, 150, 2), lambda: [lambda: bvh(BODY[PAT])], 0.15), (SUR, "R", range(120, 150, 2), lambda: [lambda: bvh(BODY[PAT])], 0.15),   # v009i
         (SUR, "L", range(1640, 1690, 2), lambda: [lambda: self_bvh(SUR)], 0.1), (SUR, "R", range(1640, 1690, 2), lambda: [lambda: self_bvh(SUR)], 0.1),   # v009i: stepping back from the head
         (SUR, "L", range(990, 1068, 3), lambda: [lambda: bvh(BODY[PAT])], 0.08), (SUR, "R", range(990, 1068, 3), lambda: [lambda: bvh(BODY[PAT])], 0.08),   # v009g: hanging hands off the patient's arm (now in the wider x-ray framing)
         (SUR, "R", range(1256, 1302, 2), lambda: [lambda: self_bvh(SUR)], 0.08),   # v009f: the low ear hand stays off his own belly
