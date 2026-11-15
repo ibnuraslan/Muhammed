@@ -667,7 +667,7 @@ for f_, a_, b_ in ((0, 1.0, 0.0), (431, 1.0, 0.0), (432, 0.0, 1.0)):
 bc.rotation_mode = 'QUATERNION'
 _l0, _q0, _s0 = bc.matrix_basis.decompose()
 bc.location = _l0; bc.rotation_quaternion = _q0; bc.keyframe_insert("location", frame=431); bc.keyframe_insert("rotation_quaternion", frame=431)
-CAMB = [(432, 0.33, 1.12, -8), (466, 0.33, 1.12, -6), (498, 0.28, 1.36, -2), (548, 0.28, 1.36, -2), (580, 0.33, 1.12, -6), (606, 0.33, 1.12, -6)]
+CAMB = [(432, 0.33, 1.12, -8), (466, 0.33, 1.12, -6), (498, 0.31, 1.22, -3), (548, 0.31, 1.22, -3), (580, 0.33, 1.12, -6), (606, 0.33, 1.12, -6)]   # v011: chest height, never over his chin
 for f_, dy, dz, pit in CAMB:
     M_ = Matrix.Translation(Vector((SP.x - 0.01, SP.y + dy, DK.z + dz))) @ Matrix.Rotation(R_(180), 4, 'Z') @ Matrix.Rotation(R_(pit), 4, 'X')
     l_, q_, _ = M_.decompose(); bc.location = l_; bc.rotation_quaternion = q_
@@ -691,13 +691,28 @@ for f_ in list(range(432, 612, 6)) + list(range(744, 916, 6)):   # also the rail
     shL = st.o.matrix_world @ st.R.PB["upperarm01.L"].head; shR = st.o.matrix_world @ st.R.PB["upperarm01.R"].head
     sideR = Vector((shR.x - shL.x, shR.y - shL.y, 0)).normalized()
     halfw = abs((mx - mn).dot(sideR)) / 2
-    HP["place_hand"](st.o, "L", f_, Vector((c.x, c.y, mn.z)) - sideR * 0.03, Vector((0, 0, 1)), Vector((fwd.x, fwd.y, 0)), skin=0.004)
-    HP["apply_pose"](st.o, "L", "cup_hold", f_)
-    HP["place_hand"](st.o, "R", f_, c + sideR * halfw + Vector((0, 0, 0.02)), -sideR, Vector((fwd.x, fwd.y, 0.35)).normalized(), skin=0.004)
-    HP["apply_pose"](st.o, "R", "point" if 520 <= f_ <= 530 else "wrap_grip", f_, amount=0.6)
+    # v011: one-handed - right palm under the base; left arm relaxed at his side, hand visible by the thigh
+    HP["place_hand"](st.o, "R", f_, Vector((c.x, c.y, mn.z)) + sideR * 0.02, Vector((0, 0, 1)), Vector((fwd.x, fwd.y, 0)), skin=0.004)
+    HP["apply_pose"](st.o, "R", "cup_hold", f_)
+    hip = shL + Vector((0, 0, -0.66)) - sideR * 0.07 + Vector((fwd.x, fwd.y, 0)) * 0.04
+    HP["place_hand"](st.o, "L", f_, hip, sideR, Vector((0, 0, -1)), skin=0.03)
+    HP["apply_pose"](st.o, "L", "relaxed", f_)
 
 for ob in [dh.o] + list(dh.o.children): ob.hide_render = True     # v010: the blue deckhand was only ever a cropped body at the frame edge
 for ob in [o for o in O if o.name.startswith("Tray_Liquid")]: ob.hide_render = True   # v010: the refractive developer blurred the print
+# v011 darkroom: no reach across the body - he leans on the bench with both palms by his sides and watches the print come up; the tongs rest in the tray
+for f_ in range(1060, 1216, 6):
+    sc.frame_set(f_); bpy.context.view_layer.update()
+    for sd in ("L", "R"):          # arms hang relaxed at his sides (below the bench edge, out of frame)
+        sh_ = tech.o.matrix_world @ tech.R.PB["upperarm01." + sd].head
+        out = Vector((sh_.x - TP.x, 0, 0)).normalized()
+        HP["place_hand"](tech.o, sd, f_, sh_ + Vector((0, 0.06, -0.62)) + out * 0.05, -out, Vector((0, 0, -1)), skin=0.03)
+        HP["apply_pose"](tech.o, sd, "relaxed", f_)
+tongs.animation_data_clear(); tongs.location = (1.45, Y0 + 5.45, BENCH_TOP + 0.075); tongs.rotation_euler = (0, R_(3), R_(70))
+tongs.hide_render = True; tongs.keyframe_insert("hide_render", frame=0)
+tongs.hide_render = False; tongs.keyframe_insert("hide_render", frame=CUT_DARK - 2)
+tongs.hide_render = True; tongs.keyframe_insert("hide_render", frame=CUT_OFFICE)
+set_interp(tongs, 'CONSTANT', lambda p_: p_ == "hide_render")
 for L_ in [o for o in O if o.type == "LIGHT"]: L_.visible_camera = False
 O["Darkroom_DoorCut"].hide_render = True
 # the ghost liner is done after the night scrape: off the render entirely (it showed as a faint hull at the berg at 1760+)

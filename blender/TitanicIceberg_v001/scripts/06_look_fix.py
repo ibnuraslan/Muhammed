@@ -44,6 +44,19 @@ bpy.data.objects['Key_Sun'].visible_glossy = False   # v008: no sun-glint discs/
 _pd = bpy.data.materials["M_Print_Dev"].node_tree; _pb = _pd.nodes["Principled BSDF"]
 _src = _pb.inputs['Base Color'].links[0].from_socket
 _pd.links.new(_src, _pb.inputs['Emission Color']); _pb.inputs['Emission Strength'].default_value = 0.9
+# v011: the tech's shirt is real cloth (dark charcoal with a weave), not lilac clay
+for ob in bpy.data.objects:
+    if ob.type == 'MESH' and ob.name.startswith("Tech.") and "casualsuit" in ob.name:
+        for m in ob.data.materials:
+            if not m or not m.use_nodes: continue
+            nt = m.node_tree; pb = next((n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED'), None)
+            if not pb: continue
+            for l in list(pb.inputs['Base Color'].links): nt.links.remove(l)
+            pb.inputs["Base Color"].default_value = (0.012, 0.014, 0.018, 1); pb.inputs["Roughness"].default_value = 0.8
+            if 'Sheen Weight' in pb.inputs: pb.inputs["Sheen Weight"].default_value = 0.15
+            wv = nt.nodes.new('ShaderNodeTexWave'); wv.inputs['Scale'].default_value = 180; bm = nt.nodes.new('ShaderNodeBump'); bm.inputs['Strength'].default_value = 0.25
+            nt.links.new(wv.outputs['Fac'], bm.inputs['Height']); nt.links.new(bm.outputs['Normal'], pb.inputs['Normal'])
+            print("TECH SHIRT", m.name)
 bpy.context.scene.render.use_motion_blur = False
 bpy.ops.wm.save_as_mainfile(filepath=out)
 print("LOOKFIX done")
