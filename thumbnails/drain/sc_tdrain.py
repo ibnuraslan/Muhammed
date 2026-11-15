@@ -107,7 +107,7 @@ def build(variant=None):
     c["diamond"] = d; c["top"] = TOP
     # rats, in the dark around it
     rats = []
-    for k, (loc, rz, s) in enumerate((((-0.3, -0.3, 0), 0.9, 1.8), ((0.33, -0.27, 0), -2.2, 1.7), ((0.25, 0.75, 0), 2.7, 1.5))):
+    for k, (loc, rz, s) in enumerate((((-0.26, -0.1, 0), 0.6, 1.7), ((0.37, -0.06, 0), -2.0, 1.6), ((-0.12, 0.5, 0), 2.4, 1.4))):
         try:
             r, ms = ph.model("street_rat", loc=loc, rot_z=rz, scale=s)
             rats.append((r, ms))

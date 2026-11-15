@@ -49,7 +49,7 @@ def setup(c):
             if m.type == 'MESH':
                 col.objects.link(m)
         away = (cen - t); away.z = 0; away.normalize()
-        l = bpy.data.lights.new(f"RatRim{k}", 'AREA'); l.energy = 14; l.size = 0.25; l.color = (0.65, 0.78, 0.95)
+        l = bpy.data.lights.new(f"RatRim{k}", 'AREA'); l.energy = 5; l.size = 0.25; l.color = (0.65, 0.78, 0.95)
         o = bpy.data.objects.new(f"RatRim{k}", l); bpy.context.collection.objects.link(o)
         o.location = cen + away * 0.35 + Vector((0, 0.25, 0.3)); point_at(o, cen)
         o.visible_volume_scatter = False; o.light_linking.receiver_collection = col
