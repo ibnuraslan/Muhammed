@@ -162,19 +162,7 @@
     "other": 4
    }
   },
-  "1819": {
-   "Mother": {
-    "self": 0,
-    "clothes": 0,
-    "other": 23
-   }
-  },
   "1825": {
-   "Mother": {
-    "self": 0,
-    "clothes": 0,
-    "other": 1
-   },
    "Teen": {
     "self": 0,
     "clothes": 0,
@@ -189,11 +177,6 @@
    }
   },
   "1837": {
-   "Mother": {
-    "self": 0,
-    "clothes": 0,
-    "other": 1
-   },
    "Teen": {
     "self": 0,
     "clothes": 0,
@@ -216,7 +199,7 @@
   },
   "1855": {
    "Mother": {
-    "self": 107,
+    "self": 111,
     "clothes": 0,
     "other": 0
    },
@@ -228,7 +211,7 @@
   },
   "1861": {
    "Mother": {
-    "self": 64,
+    "self": 63,
     "clothes": 0,
     "other": 0
    },
