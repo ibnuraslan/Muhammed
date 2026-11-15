@@ -1,6 +1,6 @@
 # AIAsleep v006: director review of v005b (Nov 15 00:01 UTC)
 
-Status: preview being watched (`review/preview.mp4` is added once watched).
+Status: watched start to finish on this exact file (`review/preview.mp4`, every 5th frame). Ready for director review.
 
 Beat frames unchanged; no VO.
 1. **Eye close-ups at most about 1 s per beat.** Beats 8–11 re-staged:
@@ -14,3 +14,8 @@ Beat frames unchanged; no VO.
 5. The opening face-mesh scan is one 1 s sweep (60–135).
 6. The green HUD hold is cut to about 0.8 s (946–993), then a whip back to his face.
 7. Ending: no pass through the back seat or rear window; it ends on his face with the red alarm.
+
+Known short transitions:
+- single blurred whip frames at 1001, 2431 and 2471–2476
+- about 3 near-blank frames entering and leaving the skin around the cross-section (1786–1791, 1926–1931)
+- beat 10 macro with the ring flipping is about 1.5 s (2271–2366)
