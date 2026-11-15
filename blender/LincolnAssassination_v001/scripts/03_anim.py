@@ -26,7 +26,7 @@ def ground_z(x, y):            # anim_lib calls this with armature-space xy of t
 
 _kf0 = Human.key_foot
 def _kf(self, s, f, xy, yaw, lift=0.0, pitch=0.0):     # MPFB shoe soles dip ~2 cm below the ankle-derived floor line
-    _kf0(self, s, f, xy, yaw, lift + 0.025 / CUR_S[0], pitch)
+    _kf0(self, s, f, xy, yaw, lift + 0.035 / CUR_S[0], pitch)
 Human.key_foot = _kf
 
 def yaw_to(d):
@@ -355,7 +355,7 @@ for f in range(STEP0, SE("S06") + 1, 6):
 apply_pose(G.o, "R", "relaxed", ST["S06"] + 70)
 
 # ---- S07/S08: on the ledge, crouch, spring, fall 4.6 m to the stage, land, knee buckles
-LEDGE = V(BX0, -1.6, BZ + 0.83)
+LEDGE = V(BX0 - 0.06, -1.6, BZ + 0.83)
 JYAW = yaw_to(V(-1, -0.05, 0))
 LAUNCH = ST["S07"] + 100; LAND = LAUNCH + 50
 LAND_P = V(BX0 - 1.45, -1.75, 0.0)
@@ -575,7 +575,7 @@ for i, (c, x0, delay) in enumerate(zip(SOL, (98.6, 100.8, 102.6), (0, 8, 14))):
 # =========================================================================== BARN
 BA0, BA1 = ST["S14"], SE("S15")
 X1 = 200.0
-GB = V(X1 + 1.25, 2.3, 0)                 # behind the bales (door is at -y)
+GB = V(X1 + 1.25, 2.5, 0)                 # behind the bales (door is at -y)
 BYAW = yaw_to(V(-0.15, -1, 0))
 RISE_B0, RISE_B1 = ST["S14"] + 60, ST["S14"] + 120
 HANDS0, HANDS1 = ST["S15"] + 30, ST["S15"] + 75
