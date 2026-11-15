@@ -26,14 +26,14 @@ The source scripts are in `../EarInArm_v001/scripts/`. Build order: `01_build_hu
 | # | Frame | Line | On screen |
 |---|---|---|---|
 | 1 | 1 | Lose an ear in an accident… | Bald patient, side profile, shocked (both hands up, open, in front of his chest), clean gauze dressing on the left ear. The camera pushes to the dressing. |
-| 2 | 127 | A surgeon takes some cartilage… | The surgeon presses his gloved hand on the chest. The tee turns x-ray glass and the rib cage shows inside. A glowing cut line circles the cartilage, the forceps lift the piece out, and he carries it to the tray. |
+| 2 | 127 | A surgeon takes some cartilage… | The surgeon's gloved hand on the patient's lower ribs (his face in frame), then a cut to the harvested cartilage on the tray. |
 | 3 | 343 | and carves it into the shape of an ear | The chair reclines and the patient sleeps. The surgeon carves, shavings fly and land on the tray, and the hands lift away to reveal the ear. |
 | 4 | 565 | Then it's slipped into a pocket… | The ear is carried in forceps to the arm. The incision opens, the ear goes in, and the skin closes into a bump. |
-| 5 | 775 | Inside your arm, it grows… | X-ray: the forearm skin turns glassy around the pocket and the camera orbits the ear inside the real arm. Tapered, branching vessels grow over it and pink skin creeps across it. |
+| 5 | 775 | Inside your arm, it grows… | A clear bump grows under the forearm skin (push-in), then the patient asleep with the surgeon beside him. |
 | 6 | 1063 | Once it's fully developed… | The x-ray fades. The incision reopens and the pink ear is lifted out with forceps. |
-| 7 | 1309 | The blood vessels are connected… | Fly to the head. The ear is lowered into place, vessels reach in from both sides, and the join glows. |
-| 8 | 1501 | and the skin is carefully stitched… | Macro: the needle holder travels along the front edge, and nine stitches appear in turn. |
-| 9 | 1645 | giving you a brand new ear | The chair rises and the camera pulls out and orbits to the front. He smiles with the new ear in view; the nurse smiles. |
+| 7 | 1309 | The blood vessels are connected… | He walks to the head; in profile, the ear comes in the forceps and is set on the head. |
+| 8 | 1501 | and the skin is carefully stitched… | In profile, the needle holder at the new ear; cut to the two faces. |
+| 9 | 1645 | giving you a brand new ear | The chair rises; medium shot with the new ear to camera, his fingertips on it, he smiles, the nurse beside him. |
 
 ## v009i vs v009h (director review of v009h: re-stage the weak sections simpler)
 The film is now a sequence of clean cuts (each a short camera move); the beat frames are unchanged.
