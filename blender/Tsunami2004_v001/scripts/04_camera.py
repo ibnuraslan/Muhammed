@@ -130,7 +130,7 @@ for f in range(1, 2401):
         p = lp.lerp(p, u); d = ld.lerp(d, u).normalized(); lens_ov = 28.0 + (lensf(f) - 28.0) * u
     if f >= F(34.2):
         p, d = follow_pose(f); lens_ov = 38.0
-        if f >= 2250:   # vNEXT: cut to a front three-quarter on their faces, the mosque behind the camera's shoulder
+        if False and f >= 2250:   # (optional face cut tried; poses read stiff from the front, dropped) to a front three-quarter on their faces, the mosque behind the camera's shoulder
             u2 = min(1.0, max(0.0, (f - F(34.2)) / (F(40.0) - F(34.2)))); c2 = _S0.lerp(_S1, u2); perp = Vector((-_SD.y, _SD.x, 0))
             p = c2 + _SD * 4.2 + perp * 2.2; p.z = g(p.x, p.y) + 1.45
             tg = c2 + Vector((0, 0, g(c2.x, c2.y) + 1.35)); d = (tg - p).normalized(); lens_ov = 40.0

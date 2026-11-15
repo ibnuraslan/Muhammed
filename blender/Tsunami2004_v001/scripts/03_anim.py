@@ -123,13 +123,13 @@ for fc in _fcurves(wn.animation_data.action):
 # water colour turns muddy once it is over land, foam churn on the flood
 for mname in ("M_Wave",):
     nt = bpy.data.materials[mname].node_tree; b = nt.nodes["Principled BSDF"]; fv = nt.nodes["FOAM_BASE"]; nz = nt.nodes["NZ"]
-    for t, colr, foam in ((0, (0.02, 0.2, 0.28), 0.0), (20.6, (0.02, 0.2, 0.28), 0.05), (22.0, (0.030, 0.022, 0.012), 0.035),
-                          (30.0, (0.030, 0.022, 0.012), 0.03), (31.6, (0.04, 0.03, 0.016), 0.0), (40, (0.04, 0.03, 0.016), 0.0)):
+    for t, colr, foam in ((0, (0.02, 0.2, 0.28), 0.0), (20.6, (0.02, 0.2, 0.28), 0.05), (22.0, (0.04, 0.03, 0.016), 0.035),
+                          (30.0, (0.04, 0.03, 0.016), 0.03), (31.6, (0.04, 0.03, 0.016), 0.0), (40, (0.04, 0.03, 0.016), 0.0)):
         b.inputs["Base Color"].default_value = (*colr, 1); b.inputs["Base Color"].keyframe_insert("default_value", frame=F(t))
         fv.outputs[0].default_value = foam; fv.outputs[0].keyframe_insert("default_value", frame=F(t))
-    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.32), (31.0, 0.32), (32.0, 0.1)):   # vNEXT: rough muddy water, no sun-glare blobs
+    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.12), (31.0, 0.12), (32.0, 0.1)):   # vNEXT: rough muddy water, no sun-glare blobs
         b.inputs["Roughness"].default_value = rg; b.inputs["Roughness"].keyframe_insert("default_value", frame=F(t))
-    for t, sl in ((0, 0.6), (20.8, 0.6), (22.0, 0.22), (31.0, 0.22), (32.0, 0.5)):   # vNEXT: specular on the flood
+    for t, sl in ((0, 0.6), (20.8, 0.6), (22.0, 0.012), (31.0, 0.012), (32.0, 0.5)):   # vNEXT: specular (tested: >0.05 gives a white sky sheet) on the flood
         b.inputs["Specular IOR Level"].default_value = sl; b.inputs["Specular IOR Level"].keyframe_insert("default_value", frame=F(t))
     for t, wv in ((0, 0), (40, 6)):
         nz.inputs["W"].default_value = wv; nz.inputs["W"].keyframe_insert("default_value", frame=F(t))
