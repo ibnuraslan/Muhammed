@@ -29,11 +29,11 @@ def setup(c):
     from kit import box, pbr
     gm = pbr("GrateIron", (0.02, 0.018, 0.016), 0.6)
     gz = t.z + 1.05; f_ = (gz - t.z) / (S_.z - t.z); P = t + (S_ - t) * f_
-    for k in range(-6, 7):
-        b_ = box(f"GrateBar{k}", (P.x, P.y + 0.032 + k * 0.064, gz), (0.9, 0.022, 0.03), gm); b_.visible_camera = False
+    for k in range(-6, 7):       # slots run front-to-back, so the stripes fall across the top brick either side of the stone
+        b_ = box(f"GrateBar{k}", (P.x + 0.026 + k * 0.052, P.y, gz), (0.02, 0.9, 0.03), gm); b_.visible_camera = False
     for k in range(-2, 3):
-        b_ = box(f"GrateRib{k}", (P.x + 0.09 + k * 0.18, P.y, gz + 0.02), (0.03, 0.9, 0.012), gm); b_.visible_camera = False
-    haze(Vector((P.x, P.y, (gz + 0.0) / 2 + 0.02)), (0.9, 0.9, gz), density=0.035, color=(0.95, 0.95, 1.0), anis=0.55)
+        b_ = box(f"GrateRib{k}", (P.x, P.y + 0.09 + k * 0.18, gz + 0.02), (0.9, 0.03, 0.012), gm); b_.visible_camera = False
+    haze(Vector((P.x, P.y, (gz + 0.0) / 2 + 0.02)), (0.9, 0.9, gz), density=0.12, color=(0.95, 0.95, 1.0), anis=0.55)
     # tiny hard glint sources around the stone for fire in the facets
     for k, (dx, dy, dz, e) in enumerate(((-0.35, -0.5, 0.35, 6), (0.4, -0.45, 0.25, 5), (0.0, -0.7, 0.1, 4), (0.25, 0.3, 0.45, 5))):
         l = bpy.data.lights.new(f"Glint{k}", 'AREA'); l.energy = e * 4; l.size = 0.05
@@ -86,7 +86,7 @@ def setup(c):
 
 def cam(c):
     t = c["diamond"].location
-    return (t + Vector((0.04, -1.0, 0.0)), t + Vector((0.0, 0.3, -0.06)), 50)
+    return (t + Vector((0.04, -1.05, 0.05)), t + Vector((0.0, 0.3, -0.11)), 42)
 
 
 def stone(c):
