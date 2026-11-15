@@ -102,8 +102,12 @@ def compose_rats(plate, mask, text=True):
     b = np.asarray(mm.filter(ImageFilter.GaussianBlur(10))).astype(np.float32)
     ys, xs = np.nonzero(np.asarray(mm) > 60)
     if len(xs):
-        img = sparkle(img, xs.min() + (xs.max() - xs.min()) * 0.3, ys.min() + 4, 95)
-        img = sparkle(img, xs.min() + (xs.max() - xs.min()) * 0.78, ys.min() + (ys.max() - ys.min()) * 0.35, 60)
+        # no cartoon stars: only a soft bloom off the stone's own highlights
+        a = np.asarray(img.convert("RGB")).astype(np.float32) / 255
+        hot = np.clip((a.max(-1) - 0.7) / 0.3, 0, 1) * (b[..., None][..., 0] / 255)
+        bl = np.asarray(Image.fromarray((hot * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(18))).astype(np.float32) / 255
+        a = 1 - (1 - a) * (1 - 0.55 * bl[..., None] * np.array([1.0, 0.97, 0.92]))
+        img = Image.fromarray((np.clip(a, 0, 1) * 255).astype(np.uint8)).convert("RGBA")
     if not text:
         return img.convert("RGB")
     T = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(T)

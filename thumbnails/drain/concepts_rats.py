@@ -30,9 +30,11 @@ def setup(c):
         o = bpy.data.objects.new(f"Glint{k}", l); bpy.context.collection.objects.link(o); o.location = t + Vector((dx, dy, dz)); point_at(o, t)
         o.visible_camera = False; o.visible_volume_scatter = False; only_gem(o)
     # a faint cold light down the tunnel so the bricks and wet floor just read; rim on the rats
-    back = area_light(t + Vector((0.0, 2.6, 0.9)), (0, 0, 0), 1.2, 1.5, (0.55, 0.7, 0.85)); point_at(back, t)
-    side = area_light(t + Vector((-1.0, -0.4, 0.5)), (0, 0, 0), 0.5, 0.5, (0.7, 0.8, 0.9)); point_at(side, t)
-    haze(t + Vector((0, 0.8, 0.5)), (3.0, 5.0, 2.0), density=0.012, color=(0.85, 0.9, 1.0), anis=0.6)
+    # no back light (it lit a pale square behind the stack); a soft cold fill grazing the walls from each side
+    for sx in (-1, 1):
+        sd = area_light(t + Vector((0.55 * sx, -0.6, 0.55)), (0, 0, 0), 0.35, 0.35, (0.6, 0.72, 0.9))
+        point_at(sd, t + Vector((-0.9 * sx, 1.4, 0.1))); sd.visible_volume_scatter = False
+    haze(t + Vector((0, 0.8, 0.5)), (3.0, 5.0, 2.0), density=0.006, color=(0.85, 0.9, 1.0), anis=0.6)
     # rats: a cold rim from behind each one (linked to that rat only) so the silhouettes read in the dark
     import ph
     for k, (r, ms) in enumerate(c.get("rats", [])):
@@ -47,7 +49,10 @@ def setup(c):
         o.location = cen + away * 0.35 + Vector((0, 0.25, 0.3)); point_at(o, cen)
         o.visible_volume_scatter = False; o.light_linking.receiver_collection = col
     # a faint cold glow far down the tunnel, for depth
-    far = area_light(t + Vector((0.0, 3.2, 0.6)), (0, 0, 0), 1.5, 2.5, (0.5, 0.65, 0.85)); point_at(far, t + Vector((0, 1.5, 0)))
+    # tiny dim lamps far down the tunnel: soft out-of-focus blobs for depth, no big glow
+    for k, (x, y, z, e) in enumerate(((-0.25, 3.4, 0.55, 0.6), (0.3, 3.6, 0.6, 0.5), (0.0, 4.6, 0.45, 0.4))):
+        l = bpy.data.lights.new(f"Far{k}", 'POINT'); l.energy = e; l.shadow_soft_size = 0.03; l.color = (0.75, 0.82, 0.95)
+        o = bpy.data.objects.new(f"Far{k}", l); bpy.context.collection.objects.link(o); o.location = t + Vector((x, y, z))
     # little white softboxes around the stone, seen only in its reflections/refractions, so the facets blaze
     em = bpy.data.materials.new("Softbox"); em.use_nodes = True
     N = em.node_tree.nodes; [N.remove(n) for n in list(N) if n.type != 'OUTPUT_MATERIAL']
@@ -66,7 +71,7 @@ def setup(c):
 
 def cam(c):
     t = c["diamond"].location
-    return (t + Vector((0.06, -1.1, 0.12)), t + Vector((0.0, 0.3, -0.13)), 42)
+    return (t + Vector((0.05, -1.2, 0.1)), t + Vector((0.0, 0.3, -0.12)), 38)
 
 
 def stone(c):

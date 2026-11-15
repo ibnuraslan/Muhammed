@@ -89,7 +89,7 @@ def build(variant=None):
     bmesh.ops.delete(bm, geom=[f_ for f_ in bm.faces if abs(f_.normal.y) > 0.9], context='FACES')       # open ends
     bmesh.ops.reverse_faces(bm, faces=bm.faces); bm.to_mesh(t.data); bm.free()
     # a shallow water channel down the middle, glossy black
-    water = pbr("Water", (0.01, 0.012, 0.012), 0.03); water.node_tree.nodes["Principled BSDF"].inputs['Coat Weight'].default_value = 1.0
+    water = pbr("Water", (0.004, 0.005, 0.005), 0.12); water.node_tree.nodes["Principled BSDF"].inputs['Coat Weight'].default_value = 0.3
     bpy.ops.mesh.primitive_plane_add(size=1, location=(0.0, 1.2, 0.004)); wa = bpy.context.active_object; wa.scale = (0.7, 5, 1); wa.data.materials.append(water)
     # the stack: three bricks, a fourth leaning on it
     mats = [brick_mat(f"Brick{k}", (0.11 + 0.015 * k, 0.04 + 0.005 * k, 0.026), k) for k in range(4)]
@@ -98,7 +98,8 @@ def build(variant=None):
     brick("B1", (0.012, -0.006, h * 1.5 + 0.001), (0, 0, -0.12), mats[1])
     brick("B2", (-0.006, 0.004, h * 2.5 + 0.002), (0, 0, 0.21), mats[2])
     lean = brick("B3", (0.19, 0.02, 0.085), (0, math.radians(-52), 0.35), mats[3])
-    brick("B4", (-0.3, 0.12, h / 2), (0, 0, 1.1), mats[1])                # a stray one behind
+    brick("B4", (-0.36, -0.16, h / 2), (0, 0, -0.18), mats[1])           # a loose one front-left
+    brick("B5", (-0.55, 0.9, h / 2), (0, 0, 0.7), mats[0])               # and one far back in the dark
     TOP = Vector((-0.006, 0.004, h * 3 + 0.003))
     d = diamond("Diamond", 0.045); d.location = TOP + Vector((0, 0, 0.045 * 0.86 - 0.004)); d.rotation_euler = (0, 0, 0.2)
     # tipped onto a pavilion facet slightly so the table faces the camera a little
@@ -106,7 +107,7 @@ def build(variant=None):
     c["diamond"] = d; c["top"] = TOP
     # rats, in the dark around it
     rats = []
-    for k, (loc, rz, s) in enumerate((((-0.27, -0.12, 0), 0.75, 1.8), ((0.33, -0.02, 0), -2.3, 1.65), ((-0.1, 0.7, 0), 2.7, 1.6))):
+    for k, (loc, rz, s) in enumerate((((-0.5, -0.42, 0), 0.9, 1.8), ((0.43, -0.36, 0), -2.2, 1.7), ((0.25, 0.75, 0), 2.7, 1.5))):
         try:
             r, ms = ph.model("street_rat", loc=loc, rot_z=rz, scale=s)
             rats.append((r, ms))
