@@ -134,7 +134,7 @@ def mouth_rest(man):
     vs = [v.co for v in t.data.vertices]; ymin = min(v.y for v in vs)
     front = [v for v in vs if v.y < ymin + 0.004]
     c = sum(front, Vector()) / len(front)
-    return c + Vector((0, -0.012, -0.004))   # just in front of the lower lip
+    return c + Vector((0, -0.042, -0.004))   # rim rests just in front of the lower lip (no lip penetration)
 
 def head_point(man, p_rest):
     """world position of an armature-rest point carried by the head bone (current frame)"""

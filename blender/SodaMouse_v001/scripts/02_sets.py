@@ -209,10 +209,11 @@ for v in pud.data.vertices:
 pud.scale = (0.075, 0.075, 1); put(pud, P); pud.data.materials.append(soda)
 
 # --- beaker (lab, 1 L, wide mouth so the mouse fits): glass shell + liquid
-bk = [(0.0, 0.0), (0.05, 0.0), (0.054, 0.003), (0.055, 0.17), (0.058, 0.176), (0.0545, 0.176), (0.0515, 0.17), (0.0515, 0.004), (0.0, 0.004)]
+# 2 L beaker (inner radius 79.5 mm, height 190 mm) so the whole mouse fits inside the liquid
+bk = [(0.0, 0.0), (0.079, 0.0), (0.0825, 0.003), (0.083, 0.184), (0.086, 0.19), (0.0825, 0.19), (0.0795, 0.184), (0.0795, 0.004), (0.0, 0.004)]
 beaker = lathe("Beaker", bk, seg=64)
 beaker.data.materials.append(mat("LabGlass", (0.95, 0.98, 1.0), 0.02, trans=1.0, ior=1.45)); put(beaker, P)
-liq = lathe("BeakerLiquid", [(0.0, 0.0045), (0.0508, 0.0045), (0.0508, 0.11), (0.0, 0.11)], seg=48, cap_top=False)
+liq = lathe("BeakerLiquid", [(0.0, 0.0045), (0.0788, 0.0045), (0.0788, 0.11), (0.0, 0.11)], seg=48, cap_top=False)
 bmh = bmesh.new(); bmh.from_mesh(liq.data); bmesh.ops.contextual_create(bmh, geom=[v for v in bmh.verts if abs(v.co.z - 0.11) < 1e-5]); bmh.to_mesh(liq.data); bmh.free()
 liq.data.materials.append(mat("SodaLiquid", (0.62, 0.95, 0.35), 0.05, trans=0.92, ior=1.33)); put(liq, P); liq.parent = beaker
 
@@ -246,7 +247,7 @@ bub = mat("Bubble", (0.9, 1.0, 0.85), 0.02, trans=1.0, ior=1.1)
 for i in range(14):
     bpy.ops.mesh.primitive_uv_sphere_add(segments=10, ring_count=6, radius=0.0022 + 0.0016 * random.random())
     b = bpy.context.active_object; b.name = "Bubble.%02d" % i; put(b, P); b.parent = beaker
-    b.location = (random.uniform(-0.035, 0.035), random.uniform(-0.035, 0.035), random.uniform(0.01, 0.1)); b.data.materials.append(bub)
+    b.location = (random.uniform(-0.055, 0.055), random.uniform(-0.055, 0.055), random.uniform(0.01, 0.1)); b.data.materials.append(bub)
 
 # --- pour stream (can -> beaker): bezier with bevel, grows with bevel_factor_end
 cu = bpy.data.curves.new("PourStream", 'CURVE'); cu.dimensions = '3D'; sp = cu.splines.new('BEZIER'); sp.bezier_points.add(2)

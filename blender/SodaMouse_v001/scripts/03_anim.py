@@ -14,7 +14,7 @@ if cams.name not in sc.collection.children: sc.collection.children.link(cams)
 
 # ------------------------------------------------------------------ shot table: (id, expected beat seconds)
 SHOTS = [("S01", 2.0), ("S02", 1.5), ("S03", 1.5), ("S04", 1.5), ("S05", 1.5), ("S06", 1.5), ("S07", 1.5), ("S08", 2.0),
-         ("S09", 1.5), ("S10", 2.0), ("S11", 2.0), ("S12", 2.0), ("S13", 2.0), ("S14", 1.5), ("S15", 2.0), ("S16", 2.0)]
+         ("S10", 3.0), ("S11", 2.0), ("S12", 2.0), ("S13", 2.0), ("S14", 1.5), ("S15", 2.0), ("S16", 2.0)]
 CLIP = {k: int(round(1.3 * s * 60)) for k, s in SHOTS}
 argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 if argv:
@@ -37,7 +37,10 @@ def begin(objs, t):
     for o in objs:
         for fc in all_fcurves(o):
             v = fc.evaluate(t - 1)
-            for k in [k for k in fc.keyframe_points if k.co.x >= t - 1 - 1e-3]: fc.keyframe_points.remove(k, fast=True)
+            while True:
+                ks = [k for k in fc.keyframe_points if k.co.x >= t - 1 - 1e-3]
+                if not ks: break
+                fc.keyframe_points.remove(ks[-1])
             fc.update(); kp = fc.keyframe_points.insert(t - 1, v); kp.interpolation = 'CONSTANT'
     for o in objs:
         for c in o.constraints:
@@ -56,6 +59,16 @@ def park(t, keep=()):
         vis(o, t, False)
 
 def show(o, t): vis(o, t, True)
+
+def grip(rig, side, t, obj, contact, approach, extra=0.020, **kw):
+    """grip_object with the palm stood off an extra `extra` m from the surface (no palm/thumb inside the prop)"""
+    a = Vector(approach).normalized()
+    return grip_object(rig, side, t, obj, Vector(contact) - a * extra, a, **kw)
+
+def thumb_rest(rig, s, t):
+    """thumb laid along the prop (relaxed pose values) instead of opposing through it"""
+    rot = _pose_rots(rig, s, "cup_hold")
+    _key(rig, s, {k: v for k, v in rot.items() if k.startswith("finger1-")}, t, 1.0)
 
 def lip_now(m):
     return head_point(m, mouth_rest(m))
@@ -92,7 +105,7 @@ def S01(t, L):
     C0 = can_frame((0, 0.35, 0.94), lip + Vector((0, -0.08, -0.13)))
     key_matrix(can, t, C0); sc.frame_set(t)
     a = C0.to_3x3() @ Vector((0, 0, 1)); org = C0.translation
-    grip_object(man.o, "R", t, can, org + a * 0.05 + Vector((-0.033, 0, 0)), (1, 0, 0), finger_dir=Vector((0, -1, 0.15)))
+    grip(man.o, "R", t, can, org + a * 0.05 + Vector((-0.033, 0, 0)), (1, 0, 0), finger_dir=Vector((0, -1, 0.15)))
     H = Held(can, man, "R"); H.grab(t)
     def fr(f, u):
         k = ease(min(1, u / 0.25))                   # 0..1 lift to the lips in the first quarter
@@ -101,7 +114,7 @@ def S01(t, L):
         man.stand(f, MAN_XY, side=0.0, flex=-2 * d)
         sc.frame_set(f); lip = lip_now(man)
         a = Vector((0, 0.35 + 0.35 * k + 0.25 * d, 0.94 - 0.30 * k - 0.25 * d))
-        off = Vector((0, -0.08, -0.13)) * (1 - k)
+        off = Vector((0, -0.08, -0.13)) * (1 - k) + Vector((0, -0.075, -0.02)) * math.sin(math.pi * k)   # bow forward: rim never brushes the chin
         Wm = H.wrist_for(can_frame(a, lip + off))
         sh = man.r.PB["upperarm01.R"].head
         hand_target(man, "R", f, Wm, pole=Vector((sh.x - 0.55, sh.y + 0.25, sh.z - 0.35)))
@@ -132,7 +145,7 @@ def S03(t, L):
     key_matrix(can, t, Matrix.Translation(CAN_TABLE) @ Matrix.Rotation(R(20), 4, 'Z'))
     man.stand(t, MAN_XY); man.spine(t, flex=8, pitch=22); man.jaw(t, 0); man.eyes(t, pitch=12)
     man.spine(t + L, flex=10, pitch=26, turn=-6)
-    for s in "LR": man.hang(s, t); man.hang(s, t + L)
+    for s in "LR": man.hang(s, t, lift=0.05, fwd=0.03); man.hang(s, t + L, lift=0.05, fwd=0.03)
     c = cam("CAM_S03", 30, 8)
     look(c, t, Vector((0.02, -0.72, 0.90)), Vector((-0.08, 0.3, 1.22)))
     look(c, t + L, Vector((-0.10, -0.62, 0.89)), Vector((-0.08, 0.3, 1.24)))
@@ -151,7 +164,7 @@ def S04(t, L):
     sc.frame_set(t)
     C0 = Matrix.Translation(Vector((-0.30, 0.02, 1.08))) @ Matrix.Rotation(R(-10), 4, 'X')
     key_matrix(can, t, C0); sc.frame_set(t)
-    grip_object(man.o, "R", t, can, C0.translation + Vector((-0.033, 0, 0.055)), (1, 0, 0), finger_dir=Vector((0, -1, 0)))
+    grip(man.o, "R", t, can, C0.translation + Vector((-0.033, 0, 0.055)), (1, 0, 0), finger_dir=Vector((0, -1, 0)))
     H = Held(can, man, "R"); H.grab(t)
     def fr(f, u):
         r = ease(min(1, max(0, (u - 0.25) / 0.3)))   # recoil after a short look
@@ -214,6 +227,7 @@ def S06(t, L):
     mark("S06", c)
 
 # ===================================================================== LAB
+BH = 0.19; BRI = 0.0795; LIQ_TOP = 0.158
 BEAK_P = Vector((LX + 0.06, -0.12, LZ)); CANL_P = Vector((LX - 0.30, -0.18, LZ)); TRAY_P = Vector((LX + 0.32, -0.22, LZ))
 def lab_base(t, liquid=0.11, with_can=True, jelly=False):
     key_obj(beaker, t, loc=BEAK_P, rot=(0, 0, 0)); show(beaker, t)
@@ -250,26 +264,30 @@ def S08(t, L):
     begin(ALL, t); park(t, keep=(beaker, liq, can, tray, stream) + tuple(bubbles)); lab_base(t, liquid=0.02, with_can=False)
     base_sci(t); sci.spine(t, flex=12, pitch=14)
     show(can, t); show(stream, t)
-    rim = BEAK_P + Vector((-0.035, 0.0, 0.176 + 0.045))
-    C0 = can_frame((-0.6, 0.0, 0.8), rim + Vector((-0.04, 0, 0.03)))
-    key_matrix(can, t, C0); sc.frame_set(t)
-    a = C0.to_3x3() @ Vector((0, 0, 1)); org = C0.translation
-    side = C0.to_3x3() @ Vector((1, 0, 0))
-    grip_object(sci.o, "R", t, can, org + a * 0.055 + Vector((0, 0.033, 0)), (0, -1, 0))
+    # grip the upright can from his side (same grip as the man's, 2 cm palm stand-off), then pour by tilting it
+    # about the grip point, which stays above the beaker's near side: hand >= 6 cm above the rim, never near the glass
+    PG = BEAK_P + Vector((-0.095, 0.0, BH + 0.11))
+    def canM(th):
+        # opening turned to face +X, so it is the lowest point of the lid once tipped
+        return Matrix.Translation(PG) @ Matrix.Rotation(R(th), 4, 'Y') @ Matrix.Translation(Vector((0, 0, -0.06))) @ Matrix.Rotation(R(-90), 4, 'Z')
+    for ff in (t, t + L):                                      # left hand flat on the table, ~24 cm from the glass
+        place_hand(sci.o, "L", ff, (BEAK_P.x + 0.27, 0.0, LZ), (0, 0, -1), (0.1, -1, 0))
+    apply_pose(sci.o, "L", "flat_palm", t)
+    C0 = canM(0); key_matrix(can, t, C0); sc.frame_set(t)
+    grip(sci.o, "R", t, can, PG + Vector((-0.033, 0, 0)), (1, 0, 0), finger_dir=Vector((0, -1, 0)))
+    thumb_rest(sci.o, "R", t)
     H = Held(can, sci, "R"); H.grab(t)
     def fr(f, u):
         k = ease(min(1, u / 0.3))
-        a = Vector((-0.6 - 0.3 * k, 0.0, 0.8 - 1.1 * k))
-        lipp = rim + Vector((-0.04 * (1 - k), 0, 0.03 * (1 - k)))
-        Cw = can_frame(a, lipp)
+        Cw = canM(112 * k)
         sh = sci.r.PB["upperarm01.R"].head
         hand_target(sci, "R", f, H.wrist_for(Cw), pole=Vector((sh.x - 0.4, sh.y + 0.45, sh.z - 0.35)))
         sci.spine(f, flex=12 + 2 * k, pitch=14 + 4 * k, turn=-4 * k)
-        lvl = 0.02 + 0.08 * ease(max(0, (u - 0.25) / 0.75))
+        lvl = 0.02 + (LIQ_TOP - 0.02) * ease(max(0, (u - 0.25) / 0.75))
         liq.scale = (1, 1, lvl / 0.11); liq.keyframe_insert("scale", frame=f)
         # stream: from the can lip down to the liquid surface, grows once the can is tipped
         cu = stream.data; sp = cu.splines[0]; bp = sp.bezier_points
-        top = Cw @ Vector((0, 0.026, 0.122)); bot = BEAK_P + Vector((-0.005, 0, lvl + 0.004))
+        top = Cw @ Vector((0, 0.0145, 0.121)); bot = Vector((top.x + 0.01, top.y, BEAK_P.z + lvl + 0.004))
         if f == t:
             key_obj(stream, f, loc=(0, 0, 0))
         pts = [top, top.lerp(bot, 0.5) + Vector((0.006, 0, 0)), bot]
@@ -292,7 +310,7 @@ def S09(t, L):
     def spat_M(tilt):
         return Matrix.Translation(tipP) @ Matrix.Rotation(R(-tilt), 4, 'Y') @ Matrix.Translation(Vector((-0.11, 0, 0)))
     S0 = spat_M(5); key_matrix(spat, t, S0); sc.frame_set(t)
-    grip_object(sci.o, "R", t, spat, S0 @ Vector((-0.15, 0, 0)), (0, 0, -1), grip="wrap")
+    grip(sci.o, "R", t, spat, S0 @ Vector((-0.15, 0, 0)), (0, 0, -1), grip="wrap")
     H = Held(spat, sci, "R"); H.grab(t)
     msl = Matrix.Rotation(R(90), 4, 'Z')        # mouse lies along the blade
     def fr(f, u):
@@ -319,23 +337,36 @@ def S09(t, L):
 
 def S10(t, L):
     """macro: the mouse sinks, fizzes, shrinks and turns into a green jelly lump"""
-    begin(ALL, t); park(t, keep=(beaker, liq, can, tray, mouse, jel) + tuple(bubbles)); lab_base(t, liquid=0.10)
+    begin(ALL, t); park(t, keep=(beaker, liq, can, tray, mouse, jel) + tuple(bubbles)); lab_base(t, liquid=LIQ_TOP)
     show(mouse, t); show(jel, t)
     base_sci(t); sci.spine(t, flex=10, pitch=18)
     random.seed(7)
     for i, b in enumerate(bubbles):
         ph = random.random(); x, y = b.location.x, b.location.y
         for j in range(0, L + 1, 6):
-            z = 0.012 + ((j / L * 2.2 + ph) % 1.0) * 0.085
+            z = 0.012 + ((j / L * 2.2 + ph) % 1.0) * (LIQ_TOP - 0.02)
             b.location = (x, y, z); b.keyframe_insert("location", frame=t + j)
+    MV = [v.co.copy() for v in list(mouse.data.vertices)[::7]]
+    def inside(M):
+        for p in MV:
+            w = M @ p; d = w - BEAK_P
+            if d.to_2d().length > BRI - 0.006 or d.z < 0.012 or d.z > LIQ_TOP - 0.006: return False
+        return True
+    worst = [1.0]
     def fr(f, u):
-        s = 1.0 - 0.85 * ease(u)
-        pos = BEAK_P + Vector((0.0, 0.0, 0.07 - 0.04 * ease(min(1, u * 2))))
-        M = Matrix.Translation(pos) @ Matrix.Rotation(R(-35 - 40 * u), 4, 'Y') @ Matrix.Rotation(R(90), 4, 'Z') @ Matrix.Scale(max(0.08, s), 4)
+        s = 1.0 - 0.85 * ease(max(0, (u - 0.25) / 0.75))
+        pos = BEAK_P + Vector((0.0, 0.0, 0.088 - 0.025 * ease(min(1, u * 2))))
+        for _ in range(40):
+            M = Matrix.Translation(pos) @ Matrix.Rotation(R(-30 - 25 * u), 4, 'Y') @ Matrix.Rotation(R(90), 4, 'Z') @ Matrix.Scale(max(0.08, s), 4)
+            if inside(M): break
+            s *= 0.97
+        assert inside(M), f
+        worst[0] = min(worst[0], s / max(1e-3, 1.0 - 0.85 * ease(max(0, (u - 0.25) / 0.75))))
         key_matrix(mouse, f, M)
         j = ease(max(0, (u - 0.15) / 0.85))
         key_obj(jel, f, loc=BEAK_P + Vector((0, 0, 0.012 + 0.02 * j)), rot=(0, 0, u * 2), scale=(0.75 * j + 0.001, 0.75 * j + 0.001, (0.9 + 0.1 * math.sin(u * 20)) * j + 0.001))
-    track(t, L, 3, fr)
+    track(t, L, 1, fr)
+    print("S10 mouse fit factor", round(worst[0], 3))
     vis(mouse, t + int(L * 0.92), False)
     c = cam("CAM_S10", 70, 11); p = BEAK_P + Vector((0, 0, 0.06))
     look(c, t, p + Vector((0.10, -0.40, 0.03)), p)
@@ -347,12 +378,12 @@ def S11(t, L):
     begin(ALL, t); park(t, keep=(beaker, can, tray, jel)); lab_base(t, liquid=0.0, jelly=True)
     base_sci(t); sci.spine(t, flex=12, pitch=16)
     B0 = Matrix.Translation(BEAK_P) ; key_matrix(beaker, t, B0); sc.frame_set(t)
-    grip_object(sci.o, "R", t, beaker, BEAK_P + Vector((-0.055, 0, 0.09)), (1, 0, 0), finger_dir=Vector((0, -1, 0)))
+    grip(sci.o, "R", t, beaker, BEAK_P + Vector((0, 0.083, 0.09)), (0, -1, 0), extra=0.012)   # from behind: forearm never crosses the glass
     H = Held(beaker, sci, "R"); H.grab(t)
-    over = TRAY_P + Vector((-0.10, 0.0, 0.16))
+    over = TRAY_P + Vector((-0.12, -0.04, 0.14))
     def BM(k):
         piv = BEAK_P.lerp(over, k)
-        return Matrix.Translation(piv) @ Matrix.Rotation(R(-105 * ease(max(0, (k - 0.3) / 0.7))), 4, 'Y')
+        return Matrix.Translation(piv) @ Matrix.Rotation(R(-80 * ease(max(0, (k - 0.3) / 0.7))), 4, 'Y')
     def fr(f, u):
         k = ease(min(1, u / 0.55))
         Bw = BM(k)
@@ -393,7 +424,7 @@ def S13(t, L):
     base_man(man, t, MAN_XY); man.spine(t, flex=6, pitch=16, turn=-6); man.eyes(t, pitch=14)
     C0 = Matrix.Translation(Vector((-0.10, 0.06, 1.14))) @ Matrix.Rotation(R(30), 4, 'Z')
     key_matrix(can, t, C0); sc.frame_set(t)
-    grip_object(man.o, "R", t, can, C0.translation + Vector((-0.033, 0.0, 0.055)), (1, 0, 0), finger_dir=Vector((0, -1, 0)))
+    grip(man.o, "R", t, can, C0.translation + Vector((-0.033, 0.0, 0.055)), (1, 0, 0), finger_dir=Vector((0, -1, 0)))
     H = Held(can, man, "R"); H.grab(t)
     def fr(f, u):
         rot = 30 + 60 * ease(u)
@@ -414,7 +445,7 @@ def S14(t, L):
     base_man(man, t, MAN_XY); man.spine(t, flex=10, pitch=16); man.eyes(t, pitch=10)
     C0 = Matrix.Translation(Vector((-0.16, 0.02, 1.02)))
     key_matrix(can, t, C0); sc.frame_set(t)
-    grip_object(man.o, "R", t, can, C0.translation + Vector((-0.033, 0.0, 0.055)), (1, 0, 0), finger_dir=Vector((0, -1, 0)))
+    grip(man.o, "R", t, can, C0.translation + Vector((-0.033, 0.0, 0.055)), (1, 0, 0), finger_dir=Vector((0, -1, 0)))
     H = Held(can, man, "R"); H.grab(t)
     down = Vector((-0.16, 0.02, TZ)); away = Vector((-0.16, -0.30, TZ))
     rel_f = None
