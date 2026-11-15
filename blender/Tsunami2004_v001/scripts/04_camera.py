@@ -123,10 +123,10 @@ for f in range(1, 2401):
     if F(28.05) <= f < F(30.4):
         u = (f - F(28.05)) / (F(30.4) - F(28.05)); d0 = dirf(F(30.4)).normalized(); p0 = posf(F(30.4))
         p = p0 - d0 * 26.0 * (1 - u); d = d0   # a clearly visible push
-    if f < F(4.6):
+    if f < F(3.3):   # vNEXT: lead both kids until they split up at 3.4 s, then blend to the side view of them
         p, d = lead_pose(f); lens_ov = 28.0
-    elif f < F(5.3):
-        u = (f - F(4.6)) / (F(5.3) - F(4.6)); u = u * u * (3 - 2 * u); lp, ld = lead_pose(f)
+    elif f < F(4.1):
+        u = (f - F(3.3)) / (F(4.1) - F(3.3)); u = u * u * (3 - 2 * u); lp, ld = lead_pose(f)
         p = lp.lerp(p, u); d = ld.lerp(d, u).normalized(); lens_ov = 28.0 + (lensf(f) - 28.0) * u
     if f >= F(34.2):
         p, d = follow_pose(f); lens_ov = 38.0
