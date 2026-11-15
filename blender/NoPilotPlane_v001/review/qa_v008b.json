@@ -1,0 +1,1988 @@
+{
+ "frames": {
+  "43": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "49": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "55": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "61": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "67": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "73": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "79": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "85": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "91": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "97": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "103": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "109": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "115": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "121": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "133": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "139": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "151": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "157": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "163": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "169": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "175": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "529": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "535": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "541": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "BACKHEAD",
+    "PC_03L0"
+   ]
+  ],
+  "547": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "553": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "559": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "565": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "571": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "577": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "583": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "589": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "595": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "601": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "607": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "613": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "619": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "625": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "631": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "637": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "643": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "655": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "661": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "667": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "673": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "679": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "685": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "691": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "697": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "715": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "721": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "727": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "733": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "739": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "745": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "757": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "763": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "769": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "775": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "781": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "793": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "799": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "805": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "823": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "829": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "835": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "841": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "847": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "853": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "859": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "865": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "871": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "925": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "931": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "937": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1483": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1495": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1519": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1525": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1531": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1537": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1543": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1549": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1555": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1561": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1567": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1579": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1885": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_L moves 1.9 cm with no hand on it (nearest finger 101 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_R moves 1.9 cm with no hand on it (nearest finger 56 cm)"
+   ]
+  ],
+  "1891": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_L moves 0.7 cm with no hand on it (nearest finger 101 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_R moves 0.7 cm with no hand on it (nearest finger 63 cm)"
+   ]
+  ],
+  "1897": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1903": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1909": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1915": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1999": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2011": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2017": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2023": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2029": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2035": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2041": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2047": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2053": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2059": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2065": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2071": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2077": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2083": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2089": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2095": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2101": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2107": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2113": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2119": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2125": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2131": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2137": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2143": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2149": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2155": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2161": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2167": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2173": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2179": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2185": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2191": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2197": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2203": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2209": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2215": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2221": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2227": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2233": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2239": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2245": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2251": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2263": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "2269": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2275": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2281": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2287": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2293": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2299": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2431": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "2479": [
+   [
+    "CLAW",
+    "YOU.L curl 72"
+   ]
+  ],
+  "2503": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2509": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2521": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2527": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2533": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2539": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2545": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2587": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2593": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2635": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "2659": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2665": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2671": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2677": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2683": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2689": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2695": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2701": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2707": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2713": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2719": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2725": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2731": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2737": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2743": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2749": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2755": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2761": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2767": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2773": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2785": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2791": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2905": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2911": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2917": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2923": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2929": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2935": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2947": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "2953": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "3025": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3031": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3037": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3043": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3049": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3055": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3061": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3067": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3073": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3085": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3091": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3103": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3121": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3187": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "3193": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "3199": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "3205": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3211": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3217": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3223": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3229": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3235": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3241": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3247": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3253": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3259": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3265": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3271": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3277": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3283": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3295": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3361": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3367": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3373": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3391": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3397": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3481": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3487": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3493": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3499": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3505": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3511": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3517": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3523": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3529": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3535": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3559": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "3571": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "3577": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "3583": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "3601": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "CLAW",
+    "YOU.L curl 32"
+   ]
+  ],
+  "3607": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ],
+   [
+    "CLAW",
+    "YOU.L curl 31"
+   ]
+  ],
+  "3637": [
+   [
+    "CLAW",
+    "YOU.L curl 26"
+   ]
+  ],
+  "3643": [
+   [
+    "CLAW",
+    "YOU.L curl 26"
+   ]
+  ],
+  "3685": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3691": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3697": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3703": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3745": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3751": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3757": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3763": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3769": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3775": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3787": [
+   [
+    "CLAW",
+    "YOU.L curl 36"
+   ]
+  ],
+  "3793": [
+   [
+    "CLAW",
+    "YOU.L curl 35"
+   ]
+  ],
+  "3799": [
+   [
+    "CLAW",
+    "YOU.L curl 34"
+   ]
+  ],
+  "3853": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3859": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3865": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3871": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3877": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3895": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "3901": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "3907": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "3913": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "3919": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "3925": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "3931": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "3937": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "3943": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "3949": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "3955": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "3961": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "3967": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "3973": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "3979": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "3985": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "3991": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "3997": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "4003": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "4009": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "4015": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "4021": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "4027": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "4033": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "4039": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "4045": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "4051": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "4057": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "4063": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "4093": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4099": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4105": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4111": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4141": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4153": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4159": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4171": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4177": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4183": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4237": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4249": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4267": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4273": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4303": [
+   [
+    "CLAW",
+    "YOU.L curl 27"
+   ]
+  ],
+  "193": [
+   [
+    "PROPMOVE",
+    "CUP moves 0.6 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "199": [
+   [
+    "PROPMOVE",
+    "CUP moves 1.1 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "205": [
+   [
+    "PROPMOVE",
+    "CUP moves 2.6 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "211": [
+   [
+    "PROPMOVE",
+    "CUP moves 3.0 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "217": [
+   [
+    "PROPMOVE",
+    "CUP moves 0.6 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "229": [
+   [
+    "PROPMOVE",
+    "CUP moves 1.0 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "241": [
+   [
+    "PROPMOVE",
+    "DRIP_0 moves 5.0 cm with no hand on it (nearest finger 16 cm)"
+   ]
+  ],
+  "247": [
+   [
+    "PROPMOVE",
+    "DRIP_0 moves 13.9 cm with no hand on it (nearest finger 25 cm)"
+   ]
+  ],
+  "259": [
+   [
+    "PROPMOVE",
+    "DRIP_1 moves 1.3 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "265": [
+   [
+    "PROPMOVE",
+    "DRIP_1 moves 9.3 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "1855": [
+   [
+    "PROPMOVE",
+    "YOKE_L moves 0.6 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_R moves 0.6 cm with no hand on it (nearest finger 24 cm)"
+   ]
+  ],
+  "1861": [
+   [
+    "PROPMOVE",
+    "YOKE_L moves 1.7 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_R moves 1.7 cm with no hand on it (nearest finger 29 cm)"
+   ]
+  ],
+  "1867": [
+   [
+    "PROPMOVE",
+    "YOKE_L moves 2.4 cm with no hand on it (nearest finger 72 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_R moves 2.4 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "1873": [
+   [
+    "PROPMOVE",
+    "YOKE_L moves 2.7 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_R moves 2.7 cm with no hand on it (nearest finger 41 cm)"
+   ]
+  ],
+  "1879": [
+   [
+    "PROPMOVE",
+    "YOKE_L moves 2.5 cm with no hand on it (nearest finger 94 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_R moves 2.5 cm with no hand on it (nearest finger 49 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 303,
+  "BACKHEAD": 1,
+  "CLAW": 9,
+  "PROPMOVE": 24
+ }
+}

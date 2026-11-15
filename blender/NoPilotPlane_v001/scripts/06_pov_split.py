@@ -11,7 +11,7 @@ def F(t): return 1 + round(t * FPS)
 REVEAL = F(71.4)
 Y = bpy.data.objects["YOU"]; B = Y.data.bones
 HEAD = {b.name for b in B["neck01"].children_recursive} | {"neck01"}
-HEAD |= {b.name for b in B if b.name.startswith(("shoulder", "clavicle", "breast", "pectoral", "spine01", "upperarm01"))}
+HEAD |= {b.name for b in B if b.name.startswith(("shoulder", "clavicle", "upperarm01"))}   # v008b: not the chest (holes in the shirt when looking down)
 print("HEADSET bones", len(HEAD))
 
 def key_cam(o):
@@ -43,7 +43,22 @@ def split(ob):
     print("SPLIT", ob.name, "head verts", len(inset), "->", hd.name, len(hd.data.vertices), "| body keeps", len(me.vertices))
     return hd
 
+# v008b: keep unsplit copies for the face reveal (split seams show at the shoulders); they render only from REVEAL on,
+# the split pieces only before it
+def key_render(o, before_hidden):
+    for f_, h in ((1, before_hidden), (REVEAL - 1, before_hidden), (REVEAL, not before_hidden)):
+        o.hide_render = h; o.keyframe_insert("hide_render", frame=f_)
+origs = []
+for nm in ("YOU.body", "YOU.male_casualsuit04"):
+    src = bpy.data.objects[nm]; cp = src.copy(); cp.data = src.data.copy(); cp.name = nm + ".reveal"
+    for c in src.users_collection: c.objects.link(cp)
+    cp.parent = src.parent; cp.matrix_parent_inverse = src.matrix_parent_inverse.copy()
+    for m in cp.modifiers:
+        if m.type == 'ARMATURE': m.object = Y
+    origs.append(cp)
 parts = [split(bpy.data.objects["YOU.body"]), split(bpy.data.objects["YOU.male_casualsuit04"])]
+for o in origs: key_render(o, True)
+for nm in ("YOU.body", "YOU.male_casualsuit04", "YOU.body.headpart", "YOU.male_casualsuit04.headpart"): key_render(bpy.data.objects[nm], False)
 for nm in ("YOU.high-poly", "YOU.teeth_base", "YOU.tongue01"):
     parts.append(bpy.data.objects[nm])
 for o in parts: key_cam(o)
@@ -60,7 +75,7 @@ for o in parts:
 # make backfaces transparent to camera rays on all of YOU's materials, so a clipped limb shows the cockpit behind it
 done = set()
 for o in bpy.data.objects:
-    if o.type != 'MESH' or not o.name.startswith("YOU."): continue
+    if o.type != 'MESH' or not o.name.startswith("YOU.") or not any(k in o.name for k in ("body", "casualsuit", "shoes")): continue
     for sl in o.material_slots:
         m = sl.material
         if not m or m.name in done or not m.use_nodes: continue
