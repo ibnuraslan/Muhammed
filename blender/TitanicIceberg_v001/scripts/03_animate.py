@@ -82,7 +82,7 @@ for idb in (W, fogm, mm, D.materials["M_Smoke"]): set_interp(idb.node_tree if ha
 
 # ---------------------------------------------------------------- smear: present (photo era) except while the replay paints it
 icem = D.materials["M_Ice"]
-for f, v in ((0, SMX[0] - 6), (918, SMX[0] - 6), (919, SMX[1] + 6)):
+for f, v in ((0, SMX[0] - 6),):   # v008: the paint is on the ice; the night shot reveals it behind the liner's stern
     node_key(icem, "SmearSweep", f, v)
 
 # ---------------------------------------------------------------- ghost liner
@@ -103,22 +103,31 @@ for f in range(110, 352, 8):
     liner_at(f, 40 - (f - 150) * 0.6, -46)
 # beat 5: scraping along the scrape face; starboard side touching Y0
 YS = Y0 - BEAM / 2 + 1.2
+LLEN = LMAXX - LMINX
+def stern_at(f): return 64 - (f - 912) * 0.5        # v008: the stern clears the smear (x 16 -> -14) during the shot
 for f in range(900, 1100, 6):
-    bow = 60 - (f - 912) * 0.5
-    liner_at(f, bow, YS, yaw=R_(-1.5))
+    liner_at(f, stern_at(f) - LLEN, YS, yaw=0.0)
 set_interp(liner, 'LINEAR')
 for f, v in ((0, 0.0), (140, 0.0), (185, 2.0), (300, 2.0), (345, 0.0), (918, 0.0), (945, 0.9), (1045, 0.9), (1086, 0.0)):
     node_key(gm, "GhostAlpha", f, v)
 liner.hide_render = False
+HM = D.materials.new("M_Liner_Hull"); HM.use_nodes = True; _hn = HM.node_tree.nodes; _hl = HM.node_tree.links
+_bs = _hn["Principled BSDF"]; _bs.inputs['Roughness'].default_value = 0.45
+_tc = _hn.new('ShaderNodeTexCoord'); _sx = _hn.new('ShaderNodeSeparateXYZ'); _hl.new(_tc.outputs['Object'], _sx.inputs[0])
+_lt = _hn.new('ShaderNodeMath'); _lt.operation = 'LESS_THAN'; _lt.inputs[1].default_value = 3.0; _hl.new(_sx.outputs['Z'], _lt.inputs[0])
+_hi = _hn.new('ShaderNodeMath'); _hi.operation = 'GREATER_THAN'; _hi.inputs[1].default_value = 19.0; _hl.new(_sx.outputs['Z'], _hi.inputs[0])
+_m1 = _hn.new('ShaderNodeMix'); _m1.data_type = 'RGBA'; _m1.inputs['A'].default_value = (0.012, 0.012, 0.014, 1); _m1.inputs['B'].default_value = (0.45, 0.03, 0.02, 1)
+_hl.new(_lt.outputs[0], _m1.inputs['Factor'])
+_m2 = _hn.new('ShaderNodeMix'); _m2.data_type = 'RGBA'; _m2.inputs['B'].default_value = (0.55, 0.52, 0.46, 1)
+_hl.new(_m1.outputs['Result'], _m2.inputs['A']); _hl.new(_hi.outputs[0], _m2.inputs['Factor']); _hl.new(_m2.outputs['Result'], _bs.inputs['Base Color'])
+for _ob in (liner, O["Liner_Explainer"]):
+    for _sl in _ob.material_slots: _sl.link = 'OBJECT'; _sl.material = HM
+O["Funnel_Smoke"].hide_render = True     # v008: the smoke smudged the sky near the lens
 # smear sweep follows the contact (bow passes the face from +X to -X)
-for f in range(920, 1092, 6):
-    bow = 60 - (f - 912) * 0.5
-    node_key(icem, "SmearSweep", f, max(SMX[0] - 6, min(SMX[1] + 6, bow + 8)))
 # sparks emitter rides the contact point
 spk = O["Spark_Emitter"]
 for f in range(920, 1092, 6):
-    bow = 60 - (f - 912) * 0.5
-    x = max(SMX[0], min(SMX[1], bow + 8))
+    x = max(SMX[0], min(SMX[1] + 10, stern_at(f) - 3))
     spk.location = (x, Y0 - 0.4, 1.3); spk.rotation_euler = (R_(90), 0, 0); spk.keyframe_insert("location", frame=f)
 spk.location = (0, 0, -400); spk.keyframe_insert("location", frame=1095); spk.keyframe_insert("location", frame=0)
 spk.location = (SMX[1], Y0 - 0.4, 1.3); spk.keyframe_insert("location", frame=919)
@@ -251,7 +260,7 @@ for f, kw in ((0, dict(brow=0.6, lids=0.5, jaw=3)), (50, dict(brow=0.1, lids=-0.
 dh = Actor("Deckhand", DK.z + 0.025); dh.o.parent = ship_root; dh.o.matrix_parent_inverse = Matrix.Identity(4); dh.o.location = (0, 0, 0)
 DP = DK + Vector((1.5, -1.0 + 0.78, 0))  # beside the coil, facing it (-Y)
 dfeet = {"L": (Vector((DP.x + 0.22, DP.y + 0.08)), 10), "R": (Vector((DP.x - 0.24, DP.y + 0.02)), -12)}
-for f in range(0, 400, 20):
+for f in range(0, 620, 20):
     a = f / 60 * 3.5
     up = max(0.0, 1 - abs(f - 170) / 50)
     dh.pose(f, (DP.x, DP.y), 0.0, flex=34, spine=(55 - 12 * up, 8 * math.sin(a), 0), head=(5 - 40 * up, 5 * math.sin(a) + 25 * up), feet=dfeet, crouch=0.36)
@@ -269,13 +278,18 @@ for f in range(1060, 1215, 6):
     t = (f - 1060) / 60; rock = math.sin(t * 5.0)
     lean = smooth((f - 1095) / 20) * (1 - smooth((f - 1125) / 12)); lift = smooth((f - 1125) / 12) * (1 - smooth((f - 1180) / 18))
     tech.pose(f, TP, 180.0, flex=10 + 2 * lean, spine=(26 + 3 * lean - 10 * lift + 1.0 * math.sin(t * 2.4), 3 * rock, 0), head=(26 + 4 * lean - 24 * lift, 2 + 3 * lift), feet=tfeet, crouch=0.04)
-    tip = Vector((1.25 + 0.05 * rock, Y0 + 5.35, BENCH_TOP + 0.06 + 0.012 * rock))
+    tip = Vector((1.25 + 0.085 * rock, Y0 + 5.35 + 0.03 * math.sin(t * 2.5), BENCH_TOP + 0.06 + 0.022 * rock))   # v008: livelier agitation
     tongs.location = tip + Vector((0, -0.12, 0.04)); tongs.rotation_euler = (R_(-20), 0, R_(90)); tongs.keyframe_insert("location", frame=f); tongs.keyframe_insert("rotation_euler", frame=f)
     tech.hand("R", f, tip + Vector((0, -0.245, 0.11)), (0, 1, -0.35), (0, 0, -1), pole=tip + Vector((-0.6, -0.6, 0)), curl=62, thumb=40)
     # left hand tilts the tray edge
     tech.hand("L", f, Vector((0.62, Y0 + 5.27, BENCH_TOP + 0.014)), (0.2, 1, 0), (0, 0, -1), pole=Vector((0.1, Y0 + 4.6, 1.6)), curl=10, thumb=15)
 for f, kw in ((1060, dict(brow=-0.2, lids=-0.4, frown=0.3)), (1130, dict(brow=0.4, lids=0.2, jaw=2)), (1160, dict(brow=1.4, lids=1.1, jaw=11)), (1190, dict(brow=1.0, lids=0.8, jaw=6, smile=0.3))):
     face(tech.R, f, **kw)
+# v008: safelight fill on his face and a lamp over the tray so the image visibly comes up
+for _nm, _loc, _rot, _e, _sz in (("Safelight_Fill", (1.95, Y0 + 5.7, 2.75), (R_(-55), 0, R_(200)), 140.0, 1.2),
+                                  ("Tray_Lamp", (1.35, Y0 + 5.35, 2.55), (0, 0, 0), 45.0, 0.5)):
+    _ld = D.lights.new(_nm, 'AREA'); _ld.energy = _e; _ld.size = _sz; _ld.color = (1.0, 0.42, 0.28)
+    _lo = D.objects.new(_nm, _ld); _lo.location = _loc; _lo.rotation_euler = _rot; D.collections["Rooms_In_Berg"].objects.link(_lo)
 pd = D.materials["M_Print_Dev"]
 for f, v in ((0, 0.0), (1092, 0.0), (1145, 1.0)): node_key(pd, "Develop", f, v)
 for i in range(5):
@@ -288,13 +302,18 @@ eb = Actor("ExpertB", RZ0); ea = Actor("ExpertA", RZ0)
 PR = O["Print_Office"]; PRC = Vector((8.2, Y0 + 4.86, 2.0)); PR.location = PRC; PR.rotation_euler = (R_(-8), 0, 0)
 BP = Vector((8.25, Y0 + 5.25))
 bfeet = {"L": (Vector((BP.x + 0.14, BP.y - 0.02)), -5), "R": (Vector((BP.x - 0.16, BP.y + 0.02)), 5)}
+POINT_K = lambda f: smooth((f - 1335) / 15) * (1 - smooth((f - 1490) / 20))
 for f in range(1180, 1665, 10):
     t = (f - 1180) / 60; sway = math.sin(t * 2)
     look = smooth((f - 1250) / 20) * (1 - smooth((f - 1290) / 15))
-    eb.pose(f, BP, 0.0 + 3 * sway, flex=4, spine=(6 + 1.0 * math.sin(t * 2.3), 2 * sway, 0), head=(4 + 12 * look, -14 + 10 * look), feet=bfeet, crouch=0.01)
+    eb.pose(f, BP, 0.0 + 3 * sway, flex=4, spine=(6 + 1.0 * math.sin(t * 2.3), 2 * sway, 0), head=(4 + 12 * look + 14 * POINT_K(f), -14 + 10 * look + 8 * POINT_K(f)), feet=bfeet, crouch=0.01)
     pc = PRC + Vector((0.01 * sway, 0, 0.01 * math.sin(t * 3)))
     PR.location = pc; PR.keyframe_insert("location", frame=f)
-    eb.hand("L", f, pc + Vector((0.16, 0.045, 0.06)), (-0.25, 0, 1), (0, -1, 0), pole=pc + Vector((0.55, 0.2, -0.6)), curl=50, thumb=35)
+    kk = POINT_K(f)       # v008: B lets go with his left hand and points at the red streak (the proof), then takes the corner again
+    tipP = pc + Vector((0.10 + 0.008 * math.sin(t * 6), -0.014, -0.05)); dP = Vector((-0.45, 0.77, -0.39)).normalized()
+    W_ = (pc + Vector((0.16, 0.045, 0.06))).lerp(tipP - dP * 0.17, kk)
+    d_ = Vector((-0.25, 0, 1)).lerp(dP, kk); n_ = Vector((0, -1, 0)).lerp(Vector((0, 0, -1)), kk)
+    eb.hand("L", f, W_, d_, n_, pole=(pc + Vector((0.55, 0.2, -0.6))).lerp(pc + Vector((0.6, 0.35, -0.4)), kk), curl=50, thumb=35)
     eb.hand("R", f, pc + Vector((-0.165, 0.052, 0.06)), (0.25, 0, 1), (0, -1, 0), pole=pc + Vector((-0.55, 0.2, -0.6)), curl=50, thumb=35)
 AP = Vector((7.72, Y0 + 3.9))
 afeet = {"L": (Vector((AP.x - 0.14, AP.y + 0.02)), 172), "R": (Vector((AP.x + 0.15, AP.y - 0.06)), 190)}
@@ -305,7 +324,7 @@ DESK_HIT = _h[1].z if _h[0] else DESK_TOP
 print("DESK top at A's hand", DESK_HIT, _h[4].name if _h[0] else None)
 for f in range(1180, 1665, 10):
     t = (f - 1180) / 60; k = smooth((f - 1190) / 70)
-    ea.pose(f, AP, 180.0, flex=6 + 8 * k, spine=(8 + 12 * k + 1.0 * math.sin(t * 2.1), -6, 0), head=(1 + 2 * k, -12 + 4 * k), feet=afeet, crouch=0.02 + 0.04 * k)
+    ea.pose(f, AP, 180.0, flex=5 + 4 * k, spine=(6 + 6 * k + 1.0 * math.sin(t * 2.1), -6, 0), head=(-2 + 2 * k, -10 + 4 * k), feet=afeet, crouch=0.02 + 0.02 * k)
     mc = Vector((7.98 + 0.03 * k, Y0 + 4.4 + 0.1 * k, 2.08 + 0.06 * k)) + Vector((0.008 * math.sin(t * 4), 0, 0))
     mag.location = mc - Vector((0, 0, 0.235)); mag.rotation_euler = (R_(-6), 0, R_(4)); mag.keyframe_insert("location", frame=f); mag.keyframe_insert("rotation_euler", frame=f)
     hd = mc + Vector((0, 0, -0.16))     # handle grip below the lens
@@ -353,81 +372,94 @@ for f, sx_, cx in ((0, 0.01, GP.x - 2.7), (1455, 0.01, GP.x - 2.7), (1500, 9.0, 
 cyc_m = D.materials["M_CycGradient"]
 for f, v in ((0, 1.0), (1560, 1.0), (1590, 0.0)): node_key(cyc_m, "CycFade", f, v)
 
-# ---------------------------------------------------------------- camera: one continuous spline
+# ---------------------------------------------------------------- camera: v008 shot list (director asked for clean cuts)
 cam = D.objects.new("Camera_Main", D.cameras.new("Camera_Main")); sc.collection.objects.link(cam); sc.camera = cam
 cam.data.sensor_width = 36; cam.data.clip_start = 0.02; cam.data.clip_end = 3000
 cam.data.dof.use_dof = True
 def SW(f, v):   # ship-local -> world at frame f
     return ship_mat(f) @ Vector(v)
 STW = lambda f, d: SW(f, SP + Vector(d))
-CK = [  # frame, camera position, look target, lens, f-stop
-    (0,    STW(0, (-1.3, 0.55, 0.45)),   STW(0, (0.0, 0.0, 1.35)),  22, 4.0),
-    (60,   STW(60, (-0.85, 0.45, 1.55)),   STW(60, (0.0, 0.05, 1.6)), 28, 2.8),
-    (90,   STW(90, (-0.8, -0.15, 1.7)), STW(90, (0.0, 0.35, 1.55)), 28, 2.8),
-    (118,  STW(118, (-0.75, 0.55, 1.72)), STW(118, (0.0, 0.15, 1.45)), 28, 5.6),
-    (180,  STW(180, (0.1, 0.9, 2.0)),    Vector((0, Y0, 14)),       30, 8.0),
-    (240,  Vector((-12, -78, 6)),        Vector((-4, -30, 11)),     45, 8.0),
-    (300,  Vector((-14, -58, 5)),        Vector((-4, -30, 7)),      26, 8.0),
-    (350,  Vector((-15, -45, 5.0)),     Vector((-11, Y0, 5.0)),    28, 8.0),   # v006 beat 3: readable mid shot of the berg + smear
-    (520,  Vector((5, -45, 6.0)),        Vector((8, Y0, 5.0)),      28, 8.0),
-    (580,  Vector((28, -70, 16)),        Vector((5, -25, 4)),       26, 8.0),   # v007: swing round the bow, berg + debris always in frame (no top-down)
-    (640,  Vector((62, -122, 30)),       Vector((0, -40, 2)),       22, 8.0),
-    (700,  Vector((0, -178, 36)),       Vector((-5, -60, 2)),      20, 8.0),   # beat 4: the ship in the foreground, debris, the berg behind
-    (830,  Vector((-22, -178, 34)),      Vector((0, -62, 2)),       20, 8.0),
-    (870,  Vector((-95, -112, 28)),      Vector((-10, -30, 6)),     22, 8.0),   # round the stern to the berg
-    (915,  Vector((-34, -44, 12)),       Vector((0, Y0, 8)),        26, 8.0),
-    (965,  Vector((-28, Y0 - 7, 3.2)),   Vector((10, Y0 - 3, 3.0)), 24, 5.6),
-    (1015, Vector((-10, Y0 - 6.5, 2.6)), Vector((6, Y0 - 1, 2.0)),  26, 5.6),
-    (1055, Vector((-1.0, Y0 - 9.0, 3.0)), Vector((2, Y0, 2.5)),     24, 5.6),
-    (1065, Vector((1.6, Y0 - 3.0, 2.3)), Vector((2, Y0 + 5, 2.3)),  26, 5.6),   # v006: fast punch through the skin (no white frames)
-    (1072, Vector((2.0, Y0 - 0.7, 1.95)), Vector((2.0, Y0 + 5, 2.5)), 30, 5.6),
-    (1092, Vector((2.05, Y0 + 5.75, 2.6)), Vector((1.25, Y0 + 5.0, 1.95)), 24, 5.6),   # v006: tray, tongs in his hand and face in one frame
-    (1130, Vector((1.85, Y0 + 5.8, 2.6)), Vector((1.22, Y0 + 5.0, 1.95)), 24, 5.6),
-    (1166, Vector((2.0, Y0 + 5.75, 2.6)), Vector((1.22, Y0 + 4.95, 2.0)), 26, 5.6),
-    (1177, Vector((2.55, Y0 + 5.0, 2.4)), Vector((6.5, Y0 + 4.45, 2.1)), 26, 5.6),
-    (1185, Vector((3.4, Y0 + 4.0, 2.35)), Vector((6.5, Y0 + 4.4, 2.0)), 24, 5.6),
-    (1200, Vector((6.0, Y0 + 5.5, 2.45)), Vector((7.72, Y0 + 3.95, 2.4)), 24, 5.6),
-    (1232, Vector((7.55, Y0 + 5.35, 2.7)), Vector((7.8, Y0 + 4.0, 2.3)), 26, 8.0),
-    (1265, Vector((9.4, Y0 + 3.9, 2.45)), Vector((8.0, Y0 + 4.4, 2.3)), 26, 5.6),
-    (1310, Vector((8.27, Y0 + 3.55, 2.4)), Vector((8.22, Y0 + 4.86, 2.05)), 30, 5.6),
-    (1360, Vector((8.28, Y0 + 3.62, 2.3)), Vector((8.2, Y0 + 4.86, 2.1)), 30, 8.0),   # v007: face + print in his hands (no headless push)
-    (1450, Vector((8.3, Y0 + 3.68, 2.3)), Vector((8.2, Y0 + 4.86, 2.15)), 31, 8.0),
-    (1560, Vector((8.32, Y0 + 3.72, 2.3)), Vector((8.2, Y0 + 4.86, 2.15)), 32, 8.0),
-    (1612, Vector((8.3, Y0 + 3.74, 2.28)), Vector((8.2, Y0 + 4.86, 2.15)), 32, 8.0),
-    (1617, Vector((8.29, Y0 + 3.95, 2.26)), Vector((8.2, Y0 + 6, 2.15)), 31, 8.0),
-    (1624, Vector((8.25, Y0 + 6.5, 2.2)), Vector((9, 36, 4)),       28, 8.0),   # fast through the print: a clean cut to the sea
-    (1634, Vector((8.6, Y0 + 16, 3.5)),   Vector((9, 40, 4)),       26, 8.0),
-    (1645, Vector((9, 22, 6)),            Vector((24, 74, 3)),      24, 8.0),
-    (1655, Vector((13, 38, 8)),           Vector((46, 44, 5)),      24, 8.0),
-    (1667, Vector((20, 44, 10)),          Vector((4, 4, 10)),       24, 8.0),
-    (1750, Vector((36, 44, 12)),         Vector((4, 4, 10)),        24, 8.0),
-    (END,  Vector((56, 30, 11)),         Vector((0, 0, 11)),        26, 8.0),
+L_SHIP = lambda f, d: ("ship", d)          # marker: ship-local key, evaluated per frame (the ship moves)
+GP_ = O["Print_Giant"].location.copy()
+CUT_STEW, CUT_SHIP, CUT_NIGHT, CUT_DARK, CUT_OFFICE, CUT_PROOF, CUT_BACK, CUT_END = 406, 606, 906, 1070, 1170, 1438, 1530, 1614
+SHOTS = [
+  # A: steward with his camera -> over the shoulder to the berg -> clear push-in to the red smear (beats 1-3)
+  (0, CUT_STEW, [
+    (0,    STW(0, (-1.3, 0.55, 0.45)),   STW(0, (0.0, 0.0, 1.35)),  22),
+    (60,   STW(60, (-0.85, 0.45, 1.55)), STW(60, (0.0, 0.05, 1.6)), 28),
+    (90,   STW(90, (-0.8, -0.15, 1.7)),  STW(90, (0.0, 0.35, 1.55)), 28),
+    (118,  STW(118, (-0.75, 0.55, 1.72)), STW(118, (0.0, 0.15, 1.45)), 28),
+    (180,  STW(180, (0.1, 0.9, 2.0)),    Vector((0, Y0, 14)),       30),
+    (240,  Vector((-12, -70, 6)),        Vector((-4, -30, 9)),      40),
+    (300,  Vector((-10, -50, 4.5)),      Vector((-6, Y0, 3.5)),     30),
+    (360,  Vector((-6, -37, 3.0)),       Vector((-4, Y0, 2.3)),     34),
+    (CUT_STEW, Vector((-5, -34.5, 2.8)), Vector((-3.5, Y0, 2.2)),   38)]),
+  # B: the photographer on deck framing the shot, face visible (ship-local)
+  (CUT_STEW, CUT_SHIP, [
+    (CUT_STEW, ("ship", (-0.62, 1.1, 1.42)), ("ship", (0.0, 0.12, 1.42)), 30),
+    (500,      ("ship", (-0.5, 1.12, 1.38)), ("ship", (0.0, 0.12, 1.40)), 31),
+    (CUT_SHIP, ("ship", (-0.38, 1.12, 1.40)), ("ship", (0.0, 0.12, 1.45)), 32)]),
+  # C: beat 4 - the steamship in the foreground, the debris field, the berg beyond (no top-down, no sun discs)
+  (CUT_SHIP, CUT_NIGHT, [
+    (CUT_SHIP, Vector((12, -182, 38)),   Vector((-5, -60, 2)),      20),
+    (700,  Vector((0, -178, 36)),        Vector((-5, -60, 2)),      20),
+    (830,  Vector((-22, -178, 34)),      Vector((0, -62, 2)),       20),
+    (CUT_NIGHT, Vector((-34, -176, 32)), Vector((0, -62, 2)),       20)]),
+  # D: night - the solid dark liner scrapes past; the red paint on the ice is revealed behind its stern (safe distance)
+  (CUT_NIGHT, CUT_DARK, [
+    (CUT_NIGHT, Vector((60, Y0 - 66, 13)), Vector((8, Y0, 6)),      26),
+    (CUT_DARK, Vector((32, Y0 - 44, 7)),  Vector((2, Y0, 3.0)),    28)]),
+  # E: darkroom - over the bench, his face, the tongs and the image appearing in the tray
+  (CUT_DARK, CUT_OFFICE, [
+    (CUT_DARK, Vector((2.05, Y0 + 5.75, 2.5)), Vector((1.25, Y0 + 5.0, 1.98)), 24),
+    (1120, Vector((1.9, Y0 + 5.78, 2.45)), Vector((1.22, Y0 + 5.0, 2.0)), 25),
+    (CUT_OFFICE, Vector((1.95, Y0 + 5.72, 2.45)), Vector((1.22, Y0 + 4.95, 2.05)), 26)]),
+  # F: office two-shot - both faces, the print between them, B points at the red streak
+  (CUT_OFFICE, CUT_PROOF, [
+    (CUT_OFFICE, Vector((9.85, Y0 + 3.6, 2.45)), Vector((7.98, Y0 + 4.6, 2.25)), 24),
+    (1300, Vector((9.7, Y0 + 3.75, 2.42)), Vector((7.98, Y0 + 4.6, 2.22)), 25),
+    (CUT_PROOF, Vector((9.5, Y0 + 3.85, 2.35)), Vector((8.0, Y0 + 4.7, 2.15)), 27)]),
+  # G: the proof - the hull's red band slides in beside the photo's streak, same height (1.5 s)
+  (CUT_PROOF, CUT_BACK, [
+    (CUT_PROOF, Vector((GP_.x + 2.2, GP_.y - 9.0, GP_.z - 0.3)), Vector((GP_.x + 2.2, GP_.y, GP_.z - 0.5)), 30),
+    (CUT_BACK, Vector((GP_.x + 2.0, GP_.y - 8.0, GP_.z - 0.35)), Vector((GP_.x + 2.0, GP_.y, GP_.z - 0.55)), 30)]),
+  # H: back in the office - both faces react (beat 9)
+  (CUT_BACK, CUT_END, [
+    (CUT_BACK, Vector((9.45, Y0 + 3.9, 2.4)), Vector((7.98, Y0 + 4.6, 2.25)), 26),
+    (CUT_END, Vector((9.3, Y0 + 4.0, 2.38)), Vector((7.98, Y0 + 4.6, 2.25)), 27)]),
+  # I: closer - slow visible push-in on the lone berg, the steamer passing beyond it
+  (CUT_END, END + 1, [
+    (CUT_END, Vector((112, 122, 16)),   Vector((0, -10, 9)),       22),
+    (END,  Vector((82, 86, 11)),         Vector((4, -22, 8)),       24)]),
 ]
-# real ice surface on the dive line (the facet displacement moves it off the Y0 plane)
-dg = bpy.context.evaluated_depsgraph_get(); bev = O["Iceberg"].evaluated_get(dg)
-hit_, loc_, _, _ = bev.ray_cast(Vector((2.0, Y0 - 12, 2.5)), Vector((0, 1, 0)))
-YS_ICE = loc_.y if hit_ else Y0
-print("ICE SURFACE", YS_ICE)
-CK = [k if k[0] != 1072 else (1072, Vector((2.0, YS_ICE + 0.8, 2.35)), k[2], k[3], k[4]) for k in CK]
-fpos = catmull([(k[0], k[1]) for k in CK])
-_tg = [pchip([(k[0], k[2][c]) for k in CK]) for c in range(3)]
-ftgt = lambda f: Vector((_tg[0](f), _tg[1](f), _tg[2](f)))   # monotone: no overshoot when the target jumps far
-flen = pchip([(k[0], float(k[3])) for k in CK]); fst = pchip([(k[0], float(k[4])) for k in CK])
+def _ev(f, v):
+    return STW(f, v[1]) if isinstance(v, tuple) and v and v[0] == "ship" else v
+SHOT_F = []
+for s0, s1, ks in SHOTS:
+    SHOT_F.append((s0, s1, ks))
+def cam_at(f):
+    for s0, s1, ks in SHOT_F:
+        if s0 <= f < s1:
+            if len(ks) == 1: k = ks[0]; return _ev(f, k[1]), _ev(f, k[2]), k[3]
+            pos = catmull([(k[0], _ev(f, k[1])) for k in ks])(f)
+            _tg = [pchip([(k[0], _ev(f, k[2])[c]) for k in ks]) for c in range(3)]
+            return pos, Vector((_tg[0](f), _tg[1](f), _tg[2](f))), pchip([(k[0], float(k[3])) for k in ks])(f)
+    k = SHOT_F[-1][2][-1]; return _ev(f, k[1]), _ev(f, k[2]), k[3]
 prevq = None
-for f in range(0, END + 1, 2):
-    p = fpos(f); t = ftgt(f)
+for f in range(0, END + 1):          # baked on every frame: a cut is two adjacent keys
+    p, t, ln = cam_at(f)
     q = (t - p).to_track_quat('-Z', 'Y')
     if prevq is not None and prevq.dot(q) < 0: q = -q
     prevq = q
     cam.location = p; cam.rotation_mode = 'QUATERNION'; cam.rotation_quaternion = q
     cam.keyframe_insert("location", frame=f); cam.keyframe_insert("rotation_quaternion", frame=f)
-    cam.data.lens = flen(f); cam.data.keyframe_insert("lens", frame=f)
-    cam.data.dof.aperture_fstop = max(fst(f), 8.0); cam.data.dof.keyframe_insert("aperture_fstop", frame=f)   # lessons: macros f/8+, no blur
+    cam.data.lens = ln; cam.data.keyframe_insert("lens", frame=f)
+    cam.data.dof.aperture_fstop = 8.0; cam.data.dof.keyframe_insert("aperture_fstop", frame=f)
     fd = (t - p).length
-    if f < 175: fd = (p - (STW(f, (0, 0.3, 1.5)) if f < 150 else Vector((0, Y0, 10)))).length if f < 150 else fd   # rack focus lens -> berg
+    if f < 150: fd = (p - STW(f, (0, 0.3, 1.5))).length
     cam.data.dof.focus_distance = max(0.1, fd); cam.data.dof.keyframe_insert("focus_distance", frame=f)
-
-# ---------------------------------------------------------------- fly-through visibility (camera passes through surfaces)
+set_interp(cam, 'LINEAR'); set_interp(cam.data, 'LINEAR')
+# ---------------------------------------------------------------- visibility per shot
 def vis(names, f_off, f_on=None):
     for n in names:
         o = O.get(n)
@@ -439,23 +471,15 @@ def vis(names, f_off, f_on=None):
             if f_on is not None:
                 ob.visible_camera = True; ob.keyframe_insert("visible_camera", frame=f_on)
             set_interp(ob, 'CONSTANT', lambda p_: p_ == "visible_camera")
-cross_skin = next(f for f in range(1055, 1100) if fpos(f).y > YS_ICE - 0.15)
-vis(["liner"], cross_skin, 1700)
-vis(["Darkroom_WallFront"], cross_skin, cross_skin + 10)   # back on once the camera is inside (v004: it showed the sea behind the tech)
-bb = [O["Iceberg"].matrix_world @ Vector(c) for c in O["Iceberg"].bound_box]
-BERG_MAXY = max(v.y for v in bb)
-cross_print = 1614   # v007: clean cut - the office (people, print, desk, walls) drops away in one frame, the camera then rushes out over the sea
-back_on = next(f for f in range(cross_print + 1, 1760) if fpos(f).y > BERG_MAXY + 1.0)
-print("BERG back on", back_on, BERG_MAXY)
+cross_skin, cross_print, back_on = CUT_DARK, CUT_END, CUT_END
 for n in ("Iceberg", "Mist_Bank"):
     ob = O[n]; ob.hide_render = False; ob.keyframe_insert("hide_render", frame=0)
     ob.hide_render = True; ob.keyframe_insert("hide_render", frame=cross_skin)
     ob.hide_render = False; ob.keyframe_insert("hide_render", frame=back_on)
     set_interp(ob, 'CONSTANT', lambda p_: p_ == "hide_render")
-vis(["Print_Office", "ExpertB", "Office_WallBack", "Darkroom_WallRight", "Office_WallLeft"], cross_print)
-cross_giant = cross_print
+cross_giant = CUT_BACK
 print("CROSS", cross_skin, cross_print)
-# rooms never render outside their beats (safety: they're inside the berg anyway)
+# rooms render only in their shots
 for o in list(D.collections["Rooms_In_Berg"].objects) + [O[n] for n in ("Tech", "ExpertA", "ExpertB", "magnifier", "Print_Office", "Tongs") if n in O and O[n] not in list(D.collections["Rooms_In_Berg"].objects)]:
     if "DoorCut" in o.name: continue
     for ob in [o] + list(o.children):
@@ -463,8 +487,12 @@ for o in list(D.collections["Rooms_In_Berg"].objects) + [O[n] for n in ("Tech", 
         ob.hide_render = False; ob.keyframe_insert("hide_render", frame=cross_skin - 2)
         ob.hide_render = True; ob.keyframe_insert("hide_render", frame=cross_print)
         set_interp(ob, 'CONSTANT', lambda p_: p_ == "hide_render")
+# the proof stage renders only for its 1.5 s insert; no match line
 for o in list(D.collections["Explainer_Cyc"].objects):
-    o.hide_render = True; o.keyframe_insert("hide_render", frame=0)     # v006: the explainer void is cut (photo stays in the office, in his hands)
+    o.hide_render = True; o.keyframe_insert("hide_render", frame=0)
+    if o.name != "Match_Line":
+        o.hide_render = False; o.keyframe_insert("hide_render", frame=CUT_PROOF)
+        o.hide_render = True; o.keyframe_insert("hide_render", frame=CUT_BACK)
     set_interp(o, 'CONSTANT', lambda p_: p_ == "hide_render")
 sc["CROSS"] = [cross_skin, cross_print, cross_giant]
 # ---------------------------------------------------------------- hands: Limit Rotation on every finger, thumb and wrist (no backward bends)
@@ -511,7 +539,7 @@ for f in sorted(CAMP):
     HP["apply_pose"](st.o, "L", "wrap_grip", f, amount=0.75)
     HP["apply_pose"](st.o, "R", "cup_hold", f)
 # deckhand: right hand wraps the rope at the coil (preset; the coil is a curve), left hand holds the rope end loosely
-for f in range(0, 400, 20):
+for f in range(0, 620, 20):
     HP["apply_pose"](dh.o, "R", "wrap_grip", f); HP["apply_pose"](dh.o, "L", "cup_hold", f)
 # tech: right hand pinches the bamboo tongs, left palm flat on the bench
 for f in range(1060, 1215, 6):
@@ -531,7 +559,7 @@ for f in range(1180, 1665, 10):
     for sd, x in (("L", pmx.x - 0.03), ("R", pmn.x + 0.03)):
         sh_ = eb.o.matrix_world @ eb.R.PB["upperarm01." + sd].head      # corner on the same side as that arm's shoulder
         x = pmx.x - 0.03 if sh_.x > (pmn.x + pmx.x) / 2 else pmn.x + 0.03
-        HP["apply_pose"](eb.o, sd, "pinch", f)        # acting-pass IK placement at the top corners (no arm crossing), library pinch
+        HP["apply_pose"](eb.o, sd, "point" if (sd == "L" and POINT_K(f) > 0.5) else "pinch", f)        # acting-pass IK placement at the top corners (no arm crossing), library pinch
 for t_, f_, r_ in GRIP_LOG[::8]: print("GRIP", t_, f_, r_)
 # props held in a hand follow that hand's real (limit-clamped) palm, so contact holds whatever the wrist limits do
 def palm_frame(rig, s_, space="world"):
@@ -556,6 +584,8 @@ for f in range(1176, 1666, 5):
     pL = (M_ @ P_["finger1-3.L"].tail + M_ @ P_["finger2-3.L"].tail) / 2
     pR = (M_ @ P_["finger1-3.R"].tail + M_ @ P_["finger2-3.R"].tail) / 2
     mid = (pL + pR) / 2
+    if f <= 1330: OFF_R = mid - pR                      # while he points, the print hangs from his right pinch alone
+    mid = mid.lerp(pR + OFF_R, POINT_K(f))
     PR.location = mid - Vector((0, 0, 0.115)); PR.keyframe_insert("location", frame=f)   # pinches sit 1.5-2 cm in from the top edge
 # the camera rests on the steward's right palm (armature space, the camera is parented to the rig)
 for f in range(0, 366, 6):
@@ -578,6 +608,11 @@ for f in range(0, 366, 12):
     under = Vector((c.x, c.y, mn.z)) + side * 0.07 + fwd * 0.03             # left palm under the camera's near-left corner
     HP["place_hand"](st.o, "L", f, under, Vector((0, 0, 1)), Vector((fwd.x, fwd.y, 0)), skin=0.012)
     HP["apply_pose"](st.o, "L", "cup_hold", f)
+# v008: shot B - he frames the shot again (same performance as 0-180, offset to 420-600: look down into the finder, shutter, look up)
+for fc in all_fcurves(st.o):
+    pts = [(k.co.x, k.co.y) for k in fc.keyframe_points if k.co.x <= 180]
+    for x, y in pts: fc.keyframe_points.insert(x + 420, y)
+    fc.update()
 
 for L_ in [o for o in O if o.type == "LIGHT"]: L_.visible_camera = False
 O["Darkroom_DoorCut"].hide_render = True
