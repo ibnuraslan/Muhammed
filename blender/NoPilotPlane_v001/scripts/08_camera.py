@@ -49,7 +49,8 @@ SHOTS = [
     (10.93, 13.22, INFRONT[0], INFRONT[1], mid(YH, CH, 0.2), 24),     # crouched beside the captain, then steps over him
     # beat 6-8: the first officer, the radio
     (13.22, 15.50, (-0.90, 2.20, 1.55), (-0.89, 2.17, 1.55), mid(YH, FH, 0.3), 24),
-    (15.50, 16.50, (0.0, 2.25, 1.12), (0.0, 2.25, 1.12), YF, 60),     # v009i: low close-up of his face at the panel (the back view read as a shrug)
+    (15.50, 15.85, (-0.40, 1.75, 1.35), (-0.40, 1.75, 1.35), fixed((0.10, 2.30, 1.05)), 35),     # v009i: the panel (no person)
+    (15.85, 16.50, (0.0, 2.25, 1.12), (0.0, 2.25, 1.12), YE, 60),     # v009i: low close-up of his face at the panel (the back view read as a shrug)
     (16.50, 17.60, (-0.90, 2.20, 1.55), (-0.89, 2.18, 1.55), YH, 30),     # v009g: his face at the panel (the back view held 2.1 s)
     (17.60, 19.20, (-1.00, 2.15, 1.45), (-0.99, 2.12, 1.45), mid(YH, fixed((0.00, 1.50, 0.85)), 0.7), 45),
     (19.20, 20.40, (-0.15, 2.40, 1.50), (-0.15, 2.40, 1.50), YF, 85),     # v009i: head-and-shoulders close-up, hands below the frame
@@ -84,7 +85,7 @@ SHOTS = [
     (46.00, 47.00, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.3)), 24),
     (47.00, 48.40, OTS2[0], OTS2[1], fixed((0.55, 2.20, 1.00)), 24),
     (48.40, 49.30, COCK_SIDE[0], COCK_SIDE[1], YC, 28),            # v009g: both arms to the hands (the tight side shot read as a missing arm)
-    (49.30, 50.30, (-0.98, 1.95, 1.30), (-0.98, 1.95, 1.30), YF, 85),     # v009i: close on his face (from 49.3 s the side shot shows his left arm as a stub, and the high shot did too)
+    (49.30, 50.30, (-0.98, 1.95, 1.30), (-0.98, 1.95, 1.30), YE, 95),     # v009i: close on his face (from 49.3 s the side shot shows his left arm as a stub, and the high shot did too)
     (50.30, 51.10, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.3)), 24),
     (51.10, 51.80, (1.00, 0.90, 1.90), (0.99, 0.88, 1.89), mid(FH, FS, 0.4), 22),   # the first officer on his back, face up (0.7 s)
     (51.80, 53.00, COCK_SIDE[0], COCK_SIDE[1], YC, 28),
