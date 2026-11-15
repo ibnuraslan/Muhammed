@@ -1,0 +1,64 @@
+{
+ "frames": {
+  "787": {
+   "Lad": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "955": {
+   "WitB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 16
+   }
+  },
+  "961": {
+   "WitA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 10
+   }
+  },
+  "1087": {
+   "WitB": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1093": {
+   "WitB": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1099": {
+   "WitB": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1105": {
+   "WitB": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1111": {
+   "WitB": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}
