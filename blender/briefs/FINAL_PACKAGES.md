@@ -22,7 +22,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 06 | PrisonKeyCake | `claude/beautiful-ptolemy-c5vrcq` | `blender/PrisonKeyCake_v010/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1836)** |
 | 07 | ShoeBomber | `claude/beautiful-ptolemy-c5vrcq` | `blender/ShoeBomber_v008/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1469)** — replaces v007 |
 | 08 | BeethovenDeaf | `claude/beautiful-ptolemy-c5vrcq` | `blender/BeethovenDeaf_v010/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1435)** |
-| 09 | DonationBin | `claude/beautiful-ptolemy-c5vrcq` | `blender/DonationBin_v008/` **ON HOLD: DO NOT RENDER (moving-preview review found body/hand/face faults; fix in progress)** |
+| 09 | DonationBin | `claude/beautiful-ptolemy-c5vrcq` | `blender/DonationBin_v009/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–2388)** — replaces v008 |
 | 10 | BellyFat | `claude/beautiful-ptolemy-c5vrcq` | `blender/BellyFat_v010/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1273)** |
 | 11 | WW1Assassination | `claude/beautiful-ptolemy-c5vrcq` | `blender/WW1Assassination_v007/` **checked moving + synced to your voiceover: READY TO RENDER (frames 1–1826)** |
 | 12 | NoPilotPlane | `claude/connect12-no-pilot-plane` | `blender/NoPilotPlane_v007/` **acting fixed, approved, final commit 800e346 (VO sync when your voiceover arrives)** |
