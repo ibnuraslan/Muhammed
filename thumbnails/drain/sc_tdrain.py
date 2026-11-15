@@ -51,7 +51,21 @@ def real_brick_mat(name, tint=(1, 1, 1), seed=0):
         L.new(mp.outputs[0], t.inputs['Vector']); return t
     d = img("brick_Diffuse.png", True)
     mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
-    L.new(d.outputs['Color'], mx.inputs[6]); mx.inputs[7].default_value = (*tint, 1); L.new(mx.outputs[2], p.inputs['Base Color'])
+    L.new(d.outputs['Color'], mx.inputs[6]); mx.inputs[7].default_value = (*tint, 1)
+    # grime blotches and crusts of old mortar
+    def noise(scale, detail=6):
+        n = N.new("ShaderNodeTexNoise"); n.noise_dimensions = '4D'; n.inputs['W'].default_value = seed * 5.1 + scale
+        n.inputs['Scale'].default_value = scale; n.inputs['Detail'].default_value = detail; n.inputs['Roughness'].default_value = 0.6
+        L.new(tc.outputs['Object'], n.inputs['Vector']); return n
+    def ramp(src, a, b, ca, cb):
+        r = N.new("ShaderNodeValToRGB"); e = r.color_ramp.elements
+        e[0].position = a; e[0].color = (*ca, 1); e[1].position = b; e[1].color = (*cb, 1); L.new(src.outputs['Fac'], r.inputs[0]); return r
+    gr = ramp(noise(9), 0.35, 0.7, (0.35, 0.33, 0.32), (1, 1, 1))
+    m2 = N.new("ShaderNodeMix"); m2.data_type = 'RGBA'; m2.blend_type = 'MULTIPLY'; m2.inputs['Factor'].default_value = 1.0
+    L.new(mx.outputs[2], m2.inputs[6]); L.new(gr.outputs[0], m2.inputs[7])
+    mort = ramp(noise(22, 10), 0.6, 0.66, (0, 0, 0), (1, 1, 1))
+    m3 = N.new("ShaderNodeMix"); m3.data_type = 'RGBA'; m3.inputs[7].default_value = (0.26, 0.25, 0.23, 1)
+    L.new(mort.outputs[0], m3.inputs['Factor']); L.new(m2.outputs[2], m3.inputs[6]); L.new(m3.outputs[2], p.inputs['Base Color'])
     L.new(img("brick_Rough.png", False).outputs['Color'], p.inputs['Roughness'])
     nm = N.new("ShaderNodeNormalMap"); nm.inputs['Strength'].default_value = 2.2
     L.new(img("brick_nor_gl.png", False).outputs['Color'], nm.inputs['Color']); L.new(nm.outputs[0], p.inputs['Normal'])
@@ -61,7 +75,11 @@ def real_brick_mat(name, tint=(1, 1, 1), seed=0):
 
 def brick(name, loc, rot, mat):
     o = box(name, loc, (0.215, 0.102, 0.065), mat, bevel=0.006, rot=rot)
-    o.modifiers["bevel"].segments = 4
+    o.modifiers["bevel"].segments = 3
+    sub = o.modifiers.new("sub", 'SUBSURF'); sub.subdivision_type = 'SIMPLE'; sub.levels = 4; sub.render_levels = 5
+    tx = bpy.data.textures.new(name + "Chip", 'CLOUDS'); tx.noise_scale = 0.018; tx.noise_depth = 4; tx.noise_type = 'HARD_NOISE'
+    dp = o.modifiers.new("chip", 'DISPLACE'); dp.texture = tx; dp.strength = -0.005; dp.mid_level = 0.6; dp.texture_coords = 'OBJECT'
+    bpy.ops.object.shade_smooth()
     return o
 
 
@@ -141,7 +159,7 @@ def build(variant=None):
             print("rat failed", e)
     c["rats"] = rats
     # sewer junk in the dark
-    for aid, loc, rz, sc in (("can_rusted", (0.48, 0.42, 0), 0.4, 1.0), ("trashbag", (-0.85, 2.0, 0), 1.2, 0.8),):
+    for aid, loc, rz, sc in ():
         try:
             ph.model(aid, loc=loc, rot_z=rz, scale=sc)
         except Exception as e:
