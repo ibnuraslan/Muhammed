@@ -78,4 +78,13 @@ for o in bpy.data.objects:
         else:
             o.data.energy *= 0.35
 print("POST spark lights softened")
+
+# v006e: the shirt's body-delete group reached below his hips, so a patch of thigh skin above the short02 hem was deleted
+# and the camera saw into the inside of the shorts (a black notch on the right thigh). Legs keep their skin.
+_b = bpy.data.objects["Lad.body"]; _rig = bpy.data.objects["Lad"]
+_m = _b.modifiers["Delete.male_casualsuit06"]; _vg = _b.vertex_groups[_m.vertex_group]
+_hipz = _rig.data.bones["upperleg01.L"].head_local.z
+_legs = [v.index for v in _b.data.vertices if v.co.z < _hipz and any(g.group == _vg.index for g in v.groups)]
+_vg.remove(_legs)
+print("POST thigh skin restored under the shirt delete group:", len(_legs), "verts")
 bpy.ops.wm.save_as_mainfile(filepath=sys.argv[sys.argv.index("--") + 1], compress=True)

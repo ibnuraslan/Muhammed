@@ -503,6 +503,7 @@ for s in "LR":
     for f in (f_up0, f_up1):
         foot_w(s, f, (STAND_XY.x - 0.05, STAND_XY.y + sx * 0.16), 90 + sx * 8)
 
+def PEL(s_): return LB.el[s_] + V((1 if s_ == "L" else -1) * 0.04, 0.6, -0.1)      # v006d: elbow pole straight back (no flared elbows)
 # --- beat 9 (21.0-23.5): flash-back swig from the bottle, standing, swaying
 f_fb0, f_fb1 = F(21.0), F(23.5)
 SWIG_UP, SWIG_HOLD, SWIG_DOWN = f_fb0 + 22, f_fb0 + 60, f_fb0 + 100
@@ -521,10 +522,10 @@ for f in list(range(f_up1 + 2, f_fb1 + 1, 3)) + [f_fb1]:
         # right hand brings the bottle to the mouth
         mouth = LB.head + V(0, -0.11, 0.02)
         rest_p = LB.sh["R"] + V(-0.22, -0.2, -0.45)
-        up_p = mouth + V(-0.03, -0.02, -0.04)
+        up_p = mouth + V(-0.05, -0.15, -0.09)      # v006e: wrist in front of the mouth (at the mouth the elbow went up and back and tore the sleeve)
         W = rest_p.lerp(up_p, tilt)
-        d = V(0.1, -0.35, 1.0).lerp(V(0.3, -0.2, 1.0), tilt).normalized()
-        LB.hand("R", f, Bm, W, d, V(1, 0, 0))
+        d = V(0.1, -0.35, 1.0).lerp(V(0.35, 0.25, 1.0), tilt).normalized()      # bottle neck tips back to the mouth
+        LB.hand("R", f, Bm, W, d, V(1, 0, 0), pole_local=LB.el["R"] + V(-0.2, -0.45, -0.35))      # elbow low, in front of the chest
     else:
         LB.arm_dir("R", f, Bm, V(-0.35, -0.1 * sw, -0.9), 0.95)
     if f % 9 == 0:
@@ -542,8 +543,8 @@ for f in list(range(f_x0 + 3, f_x1 + 1, 2)) + [f_x1]:
     LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
     LAD.key_spine(f, flex=10 + 4 * math.sin(t * 1.7), twist=14 * math.sin(t * 2.2 - 0.6), side=9 * sw, head=(12 + 8 * math.sin(t * 2.2 - 1.2), 16 * math.sin(t * 1.1 - 0.8)))
     # pendulum arms lagging the body sway (loose)
-    LB.arm_dir("L", f, Bm, V(0.42 + 0.16 * math.sin(t * 2.2 - 1.4), -0.15 + 0.4 * math.sin(t * 2.2 - 1.9), -1.0), 0.95)
-    LB.arm_dir("R", f, Bm, V(-0.42 + 0.16 * math.sin(t * 2.2 - 1.4), -0.15 - 0.4 * math.sin(t * 2.2 - 2.1), -1.0), 0.95)
+    LB.arm_dir("L", f, Bm, V(0.22 + 0.07 * math.sin(t * 2.2 - 1.4), -0.05 + 0.28 * math.sin(t * 2.2 - 1.9), -1.0), 0.985, pole_local=PEL("L"))      # v006e: loose at his sides (was ~40 deg out: an A-pose)
+    LB.arm_dir("R", f, Bm, V(-0.22 + 0.07 * math.sin(t * 2.2 - 1.4), -0.05 - 0.28 * math.sin(t * 2.2 - 2.1), -1.0), 0.985, pole_local=PEL("R"))
     foot_w("L", f, (STAND_XY.x - 0.05, STAND_XY.y + 0.16), 98)
     if t > 1.3:
         sh = min(1.0, (t - 1.3) / 0.3) * max(0.0, 1 - max(0.0, (t - 2.7) / 0.3))      # v006c: clamped (past 3 s it went negative into a big kick)
@@ -596,7 +597,6 @@ WK_Y = catmull([(f_w0, 4.0), (f_w0 + 40, -6.0), (f_w0 + 80, 6.0), (f_w1, 0.0)])
 def lad_side2(f, cyc): return 7 * math.sin(2 * math.pi * cyc) + 4 * math.sin(f / 10.0)
 def lad_spine2(f, cyc):
     LAD.key_spine(f, flex=8, twist=-8 * math.sin(2 * math.pi * cyc), side=6 * math.sin(f / 14.0), head=(-4 + 5 * math.sin(f / 9.0), 8 * math.sin(f / 15.0)))
-def PEL(s_): return LB.el[s_] + V((1 if s_ == "L" else -1) * 0.04, 0.6, -0.1)      # v006d: elbow pole straight back (no flared elbows)
 def lad_arms2(f, cyc, p, yw, sd):
     Bm = LB.B(p, Rbody(yaw=yw, pitch=4, side=sd))
     LB.arm_dir("L", f, Bm, V(0.24, 0.05 - 0.3 * math.sin(2 * math.pi * cyc), -1.0), 0.99, pole_local=PEL("L"))      # v006d: arms hang at his sides, elbows back, hands clear of the thighs

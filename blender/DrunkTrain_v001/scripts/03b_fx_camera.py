@@ -156,10 +156,12 @@ for rg in RIGS4:
     for s_ in "LR": apply_pose(rg, s_, "relaxed", 1)
 # v006d: the MPFB rest elbow is bent 46.5 deg and the library limit (ik_min_x = 0) stops the arm straightening past it,
 # so hanging arms read bent / elbows out. Lad only, from the dazed section (1681) on: allow the elbow to open to ~12 deg.
-F_ARMS = {"L": 1681, "R": 1681 + 72}      # right elbow opens only once his hand is down from his head (else the IK lifts it into a wave)
+OPEN_ = math.radians(-34)
+F_ARMS = {"L": [(1410, 0.0), (1411, OPEN_)],      # v006e: open from beat 10 (1411) too, the limp sway had A-pose arms
+          "R": [(1410, 0.0), (1411, OPEN_), (1680, OPEN_), (1681, 0.0), (1752, 0.0), (1753, OPEN_)]}      # right: closed while the hand is on his head (else the IK lifts it into a wave)
 for s_ in "LR":
     lo_ = LADO.pose.bones["lowerarm01." + s_]
-    for f_, v_ in ((F_ARMS[s_] - 1, 0.0), (F_ARMS[s_], math.radians(-34))):
+    for f_, v_ in F_ARMS[s_]:
         lo_.ik_min_x = v_; lo_.keyframe_insert("ik_min_x", frame=f_)
     fc_ = LADO.animation_data.action.fcurves.find('pose.bones["lowerarm01.%s"].ik_min_x' % s_) if hasattr(LADO.animation_data.action, "fcurves") else None
     if fc_:
@@ -556,7 +558,8 @@ def key_light(f, col, en, wb, ex):
 day = ((1.0, 0.97, 0.92), 4.2, 1.3)
 key_light(1, *day, 0.0)
 key_light(F(11.3), *day, 0.0); key_light(F(11.7), *day, 1.2); key_light(F(14.0), *day, 1.2); key_light(F(14.6), *day, 0.0)  # under the train
-key_light(sc['f_stir'] - 20, *day, 0.0); key_light(sc['f_stir'] + 10, *day, 0.7); key_light(f_fb0 - 8, *day, 0.7); key_light(f_fb0 - 3, *day, 0.0); key_light(f_fb0 + 3, (1.0, 0.62, 0.32), 4.5, 0.55, 0.25)       # flash-back: warm, low gold sun
+key_light(sc['f_stir'] - 20, *day, 0.0); key_light(sc['f_stir'] + 10, *day, 0.15); key_light(f_fb0 - 8, *day, 0.15);      # v006e: was +0.7 (ballast blew out white)
+key_light(f_fb0 - 3, *day, 0.0); key_light(f_fb0 + 3, (1.0, 0.62, 0.32), 4.5, 0.55, 0.25)       # flash-back: warm, low gold sun
 key_light(f_fb1 - 2, (1.0, 0.62, 0.32), 4.5, 0.55, 0.25); key_light(f_fb1, *day, 0.0)
 key_light(f_r1, *day, 0.0); key_light(F(33.0), *day, 0.0); key_light(F(33.6), *day, 0.55); key_light(sc.frame_end, *day, 0.55)
 for f, sat in ((f_fb0 - 3, 1.0), (f_fb0 + 3, 0.4), (f_fb1 - 2, 0.4), (f_fb1, 1.0)):
@@ -618,7 +621,8 @@ CAM = [  # frame, camera, aim, lens
     (1146, V(1.85, -40.1, 0.95), V(2.62, -41.6, 0.8), 24),
     (1147, V(1.95, -40.95, 0.34), V(0.6, -40.4, 0.5), 22),      # v006d: CUT into the gap (the move swept a loco wheel across the lens)
     (1155, V(1.95, -40.95, 0.34), V(0.6, -40.4, 0.5), 22),      # v006: in the open coupling gap (the loco end is at y -41.1 now)
-    (1168, V(0.55, -40.98, 0.36), V(0.48, -40.4, 0.6), 22),
+    (1170, V(1.95, -40.95, 0.34), V(0.6, -40.4, 0.5), 22),
+    (1171, V(0.55, -40.98, 0.36), V(0.48, -40.4, 0.6), 22),      # v006e: CUT straight to the face framing at 1171 (the move passed his shoulder at the lens)
     (1185, V(1.55, -40.95, 0.62), V(1.0, -40.2, 0.55), 22),      # v006: crosses the rail high, so the rail never sweeps the lens      # v005: low inside the gauge, in front of him: his face reads at the beat 8 start
     (1200, V(2.95, -41.0, 0.5), V(1.3, -40.0, 0.45), 24),
     (1230, V(3.6, -41.2, 1.1), V(2.45, -40.1, 1.15), 20),      # v006c: wider, his head stays in frame as he rises
@@ -638,7 +642,7 @@ CAM = [  # frame, camera, aim, lens
     (1985, V(2.95, -44.6, 1.5), V(2.45, -42.6, 1.3), 38),
     (2020, V(3.0, -44.25, 1.55), V(2.5, -43.1, 1.42), 40),      # v006: further back, his palm never fills the lens
     (2070, V(2.64, -43.8, 1.62), V(2.45, -42.9, 1.63), 40)]
-CUTS = [906, 1033, 1147]      # v006b: clean cuts (requested by the director); the spline is built per segment so it never swings across a cut
+CUTS = [906, 1033, 1147, 1171]      # v006b: clean cuts (requested by the director); the spline is built per segment so it never swings across a cut
 def seg_spline(idx):
     segs = []; bounds = [1] + CUTS + [10 ** 6]
     for a_, b_ in zip(bounds, bounds[1:]):
@@ -695,7 +699,9 @@ for f in list(range(F(10.6), F(16.4), 4)) + list(range(sc["f_stir"] - 30, F(21.0
     p_ = lad_p(min(f, f_rest)) if f < F(15) else V(*eval(sc["lad_rest"]))
     if f >= F(15) and f > sc["f_stir"] + 12: p_ = V(min(2.0, 0.2 + 1.8 * (f - sc["f_stir"] - 12) / (F(20.4) - sc["f_stir"] - 12)), p_.y, 0)
     fl_o.location = V(p_.x + 1.2, p_.y - 0.6, 0.45); fl_o.keyframe_insert("location", frame=f)
-    fl_d.energy = 170.0 if F(13.8) <= f < F(16.4) else 60.0; fl_d.keyframe_insert("energy", frame=f)      # v006d: brighter under the halted train so he reads
+    fl_d.energy = 170.0 if F(13.8) <= f < F(16.4) else 60.0      # v006d: brighter under the halted train so he reads
+    if f >= sc["f_stir"] - 30: fl_d.energy = 60.0 * max(0.0, min(1.0, (1150 - f) / 12.0))      # v006e: off before the cut to the gap (1147); he crawls out into the sun (a 0.45 m point light blew the ballast white with black gaps)
+    fl_d.keyframe_insert("energy", frame=f)
 for f in (F(10.5), F(16.5), sc["f_stir"] - 34, F(21.05)):
     fl_d.energy = 0.0; fl_d.keyframe_insert("energy", frame=f)
 # stylised impact flash: a bright star burst at the plough at the hit, gone in 8 frames
