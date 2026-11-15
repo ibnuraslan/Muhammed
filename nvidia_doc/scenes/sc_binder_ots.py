@@ -66,12 +66,67 @@ def highlighter():
     return pen
 
 
+def _bump(m, scale, strength, distance, stretch=(1, 1, 1), detail=8):
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = stretch
+    L.new(tc.outputs['Object'], mp.inputs['Vector'])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = scale; nz.inputs['Detail'].default_value = detail
+    L.new(mp.outputs['Vector'], nz.inputs['Vector'])
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = strength; bp.inputs['Distance'].default_value = distance
+    L.new(nz.outputs['Fac'], bp.inputs['Height'])
+    nm = p.inputs['Normal'].links[0].from_node if p.inputs['Normal'].is_linked else None
+    if nm is not None:
+        L.new(nm.outputs['Normal'], bp.inputs['Normal'])
+    L.new(bp.outputs['Normal'], p.inputs['Normal'])
+
+
+def wool(m):
+    """Matte dark suit wool: no sheen, low specular, a fine weave in the normal."""
+    p = m.node_tree.nodes["Principled BSDF"]
+    p.inputs['Roughness'].default_value = 0.82; p.inputs['Sheen Weight'].default_value = 0.0
+    p.inputs['Specular IOR Level'].default_value = 0.25; p.inputs['Coat Weight'].default_value = 0.0
+    _bump(m, 900, 0.25, 0.0004, stretch=(1, 1, 3))
+
+
+def hair_strands(m):
+    """Short hair: rougher, slightly darker, with fine strand detail (noise stretched along the head's up axis)."""
+    p = m.node_tree.nodes["Principled BSDF"]
+    p.inputs['Roughness'].default_value = 0.62; p.inputs['Specular IOR Level'].default_value = 0.35
+    _bump(m, 140, 0.55, 0.0012, stretch=(14, 14, 1.5), detail=6)
+
+
+def shirt_cuff(h, sd, mat):
+    """A white shirt cuff showing past the jacket sleeve, bone-parented to the forearm so it follows every pose."""
+    bpy.context.view_layer.update()
+    a = h.bone_head(f"lowerarm02.{sd}"); b = h.bone_tail(f"lowerarm02.{sd}"); ax = (b - a); Lb = ax.length; ax.normalize()
+    ws = _world_verts(h.suit); A = np.array(a); X = np.array(ax)
+    tt = (ws - A) @ X; rr = np.linalg.norm((ws - A) - np.outer(tt, X), axis=1)
+    sleeve = (rr < 0.07) & (tt > -0.05) & (tt < Lb + 0.08)
+    t_end = float(tt[sleeve].max())                                   # where the jacket sleeve ends along the forearm
+    ring = sleeve & (tt > t_end - 0.012)                              # the sleeve opening: cuff sits just inside it
+    r = min(0.032, max(0.024, float(np.median(rr[ring])) - 0.003)) if ring.any() else 0.028
+    print(f"[cuff] {sd} sleeve end {t_end:.3f} of {Lb:.3f}, radius {r:.4f}", flush=True)
+    ctr = a + ax * (t_end - 0.006)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=r, depth=0.024, location=ctr, end_fill_type='NOTHING')
+    o = bpy.context.active_object; o.name = f"Cuff.{sd}"
+    o.rotation_mode = 'QUATERNION'; o.rotation_quaternion = ax.to_track_quat('Z', 'Y')
+    sol = o.modifiers.new("t", 'SOLIDIFY'); sol.thickness = 0.0015; sub = o.modifiers.new("s", 'SUBSURF'); sub.levels = 1; sub.render_levels = 2
+    o.data.materials.append(mat); bpy.ops.object.shade_smooth()
+    bpy.context.view_layer.update(); mw = o.matrix_world.copy()
+    o.parent = h.arm; o.parent_type = 'BONE'; o.parent_bone = f"lowerarm02.{sd}"
+    bpy.context.view_layer.update(); o.matrix_world = mw
+    return o
+
+
 def investigator():
     h = Human("Investigator", gender=1.0, years=46, muscle=0.5, weight=0.5, height=0.5, eyelashes="eyelashes01",
               skin="middleage_lightskinned_male_diffuse.png")
-    add_asset(h, "clothes", "male_elegantsuit01", val=0.14, rough=0.55)
+    suit = add_asset(h, "clothes", "male_elegantsuit01", val=0.14, rough=0.82)
+    wool(suit.data.materials[0])
     add_asset(h, "clothes", "shoes02", val=0.15)
-    add_asset(h, "hair", "short02", sat=0.3, val=0.32, rough=0.45)
+    hair = add_asset(h, "hair", "short02", sat=0.3, val=0.24, rough=0.62)
+    hair_strands(hair.data.materials[0])
+    h.suit = suit
     sk = h.skin_mat.node_tree.nodes["Principled BSDF"]
     sk.inputs['Subsurface Weight'].default_value = 0.1; sk.inputs['Subsurface Radius'].default_value = (0.5, 0.25, 0.15)
     return h
@@ -97,6 +152,9 @@ def build(variant=None):
     w = np.concatenate([_world_verts(o) for o in h.parts if o.type == 'MESH'])
     h.arm.location.z -= w[:, 2].min(); bpy.context.view_layer.update()
     c["h"] = h
+    cotton = pbr("ShirtCotton", (0.78, 0.78, 0.76), 0.75); _bump(cotton, 700, 0.15, 0.0003)
+    for sd in ("R", "L"):
+        shirt_cuff(h, sd, cotton)
     chair_m = pbr("ChairLeather", (0.03, 0.02, 0.015), 0.4, 0.0, **{'Coat Weight': 0.4})
     hip = h.bone_head("pelvis") if "pelvis" in h.arm.pose.bones else h.bone_head("spine05")
     box("ChairSeat", (SEAT_X, hip.y - 0.05, hip.z - 0.12), (0.52, 0.5, 0.08), chair_m, bevel=0.03)
@@ -186,8 +244,8 @@ def orient_hand(h, f_want, n_want, sd="R"):
 # cumulative flexion (degrees toward the palm) of each phalanx, and its sideways lean toward the thumb side
 GRIP = {"finger2": ((38, 0.10), (72, 0.08), (64, 0.05)),          # index: on top of the barrel, last joint pressing
         "finger3": ((46, -0.02), (100, -0.05), (118, -0.05)),     # middle: barrel rests on the side of its last joint
-        "finger4": ((52, -0.08), (112, -0.10), (138, -0.10)),     # ring: tucked
-        "finger5": ((58, -0.15), (118, -0.15), (142, -0.15))}     # little finger: tucked, resting on the page
+        "finger4": ((40, -0.08), (84, -0.10), (104, -0.10)),      # ring: relaxed curl, not a fist
+        "finger5": ((44, -0.15), (90, -0.15), (110, -0.15))}      # little finger: relaxed, resting on the page
 
 
 def _dir(f, k, n, deg, lean):
@@ -259,22 +317,22 @@ def anim(c, t):
     pen = c["pen"]; pen.location = tip; pen.rotation_quaternion = axis.to_track_quat('Z', 'Y')
     c["tip_err"] = (tgt - tip).length; c["clear"] = clearance(h, tip, axis)
     # left hand flat on the left page, holding the binder open (fingers relaxed, resting on the paper)
-    if "lh_dz" not in c:
-        c["lh_dz"] = 0.0
-        pose_left(h, ry, 0.0); c["lh_dz"] = 0.0015 - page_clearance(h, "L")
-    pose_left(h, ry, c["lh_dz"])
+    dz = c.get("lh_dz", 0.0)                       # contact solve every frame: the lean moves his shoulder,
+    for _ in range(2):                             # so the hand is re-seated on the page (changes are < 4 mm)
+        pose_left(h, ry, dz); dz += 0.0015 - page_clearance(h, "L")
+    pose_left(h, ry, dz); c["lh_dz"] = dz
     bpy.context.view_layer.update()
 
 
-LH_F = Vector((0.30, 0.94, -0.07)).normalized()
+LH_F = Vector((0.45, 0.89, -0.07)).normalized()
 LH_N = Vector((0.08, 0.0, -1.0))
 LH_TN = -0.05                                                       # thumb lies alongside, not pressed down
 LH_SEGS = ((8, 16, 22), (9, 17, 23), (10, 18, 24), (12, 21, 28))     # cumulative flexion per phalanx, index..little
 
 
 def pose_left(h, ry, dz):
-    lw = Vector((-0.20, ry - 0.07, DZ + 0.06 + dz))
-    reach(h, "L", lw, Vector((-0.7, -0.3, -0.6)))
+    lw = Vector((-0.24, ry - 0.06, DZ + 0.06 + dz))
+    reach(h, "L", lw, Vector((-1.0, -0.15, -0.35)))          # elbow out to the side: the forearm reads along its length
     orient_hand(h, LH_F, LH_N, "L")
     _reset_fingers(h, "L")
     f, k, n = _palm(h, "L")

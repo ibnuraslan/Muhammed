@@ -6,7 +6,7 @@
  "master_in": 1405,
  "master_out": 1518,
  "replaces": "c4_08_memo_desk_memo_close",
- "mb": 14.56,
- "sha256": "09508c84e37b2c6a1b875c0aa5ecbb8827fc43f318be5860615008999227ba99",
+ "mb": 14.58,
+ "sha256": "f30adf00933d3bee07c2b92110e7898bc571a4e35982d34bab9213d36d866a1a",
  "libraries": 0
 }
