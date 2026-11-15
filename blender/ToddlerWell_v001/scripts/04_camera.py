@@ -112,8 +112,8 @@ K = [  # frame, location, target, lens
  (1706, (1.8, 3.4, 1.3), (-0.2, 2.3, 1.1), 34),
  (1781, (1.65, 3.25, 1.38), (-0.2, 2.3, 1.1), 34),
  # hard cut at 1782: him standing with the toddler held against his chest
- (1782, (0.5, 2.9, 1.5), (-0.3, 1.0, 1.25), 26),
- (1849, (0.55, 2.85, 1.5), (-0.3, 1.0, 1.27), 27),     # hold on him with the toddler at his chest (the mother stays out of frame)
+ (1782, (0.5, 2.9, 1.5), (-0.12, 1.0, 1.25), 26),
+ (1849, (0.55, 2.85, 1.5), (-0.12, 1.02, 1.27), 27),     # hold on him with the toddler at his chest (the mother stays out of frame)
  # hard cut at 1850: the mother already hugging him (no hand-off in frame)
  (1850, (-1.31, 0.34, 1.55), (-0.65, 2.12, 1.5), 44),     # front-right of her: her face, and his turned out over her right shoulder     # the hug, from her side: both faces in profile
  (1915, (-1.27, 0.4, 1.52), (-0.65, 2.12, 1.47), 48),
