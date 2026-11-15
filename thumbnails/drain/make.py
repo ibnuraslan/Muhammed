@@ -11,6 +11,7 @@ P = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "plates")
 OUT = sys.argv[2] if len(sys.argv) > 2 else HERE
 YEL = (255, 206, 0); WHITE = (248, 246, 240)
 STENCIL = os.path.join(FONTS, "BigShouldersStencilDisplay-Black.ttf")
+ANTON = os.path.join(FONTS, "Anton-Regular.ttf")
 
 
 def grade(img):
@@ -44,8 +45,8 @@ def sparkle(img, cx, cy, R=150):
     return Image.fromarray(a.astype(np.uint8)).convert("RGBA")
 
 
-def line(d, parts, y, size, cx=W / 2):
-    f = ImageFont.truetype(STENCIL, size); sp = d.textlength(" ", font=f) * 0.9
+def line(d, parts, y, size, cx=W / 2, font=STENCIL):
+    f = ImageFont.truetype(font, size); sp = d.textlength(" ", font=f) * 0.9
     ws = [d.textlength(t, font=f) for t, _ in parts]; x = cx - (sum(ws) + sp * (len(parts) - 1)) / 2
     for (t, col), w in zip(parts, ws):
         d.text((x, y), t, font=f, fill=col + (255,)); x += w + sp
@@ -77,6 +78,8 @@ def save(img, stem, D):
     img.save(os.path.join(D, stem + ".png")); img.save(os.path.join(D, stem + "_youtube.jpg"), quality=95, subsampling=0)
 
 
+if __name__ == "__main__" and "rats" in sys.argv:
+    os.makedirs(OUT, exist_ok=True); main_rats(P, OUT, "pack" in sys.argv); print("done"); sys.exit(0)
 if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)
     pl, mk = os.path.join(P, "dd_evidence.png"), os.path.join(P, "dd_evidence_mask.png")
@@ -85,3 +88,38 @@ if __name__ == "__main__":
         D = os.path.join(OUT, "download"); os.makedirs(D, exist_ok=True)
         save(t, "drain_thumbnail_DRAIN", D); save(compose(pl, mk, text=False), "drain_thumbnail_notext", D)
     print("done")
+
+
+def grade_dark(img):
+    a = np.asarray(img.convert("RGB").resize((W, H), Image.LANCZOS)).astype(np.float32) / 255
+    s_ = a * a * (3 - 2 * a); a = 0.7 * a + 0.3 * s_
+    yy, xx = np.mgrid[0:H, 0:W]
+    v = np.clip(1.1 - 0.7 * np.sqrt(((xx - W / 2) / W) ** 2 + ((yy - H * 0.55) / H) ** 2), 0.4, 1.0)[..., None]
+    return Image.fromarray((np.clip(a * v, 0, 1) * 255).astype(np.uint8)).convert("RGBA")
+
+
+def compose_rats(plate, mask, text=True):
+    img = grade_dark(Image.open(plate))
+    mm = Image.open(mask).split()[-1].resize((W, H), Image.LANCZOS)
+    b = np.asarray(mm.filter(ImageFilter.GaussianBlur(10))).astype(np.float32)
+    ys, xs = np.nonzero(np.asarray(mm) > 60)
+    if len(xs):
+        img = sparkle(img, xs.min() + (xs.max() - xs.min()) * 0.3, ys.min() + 4, 95)
+        img = sparkle(img, xs.min() + (xs.max() - xs.min()) * 0.78, ys.min() + (ys.max() - ys.min()) * 0.35, 60)
+    if not text:
+        return img.convert("RGB")
+    T = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(T)
+    line(d, [("THEY", WHITE), ("HID", WHITE), ("$25M", YEL)], 36, 210, font=ANTON)
+    line(d, [("IN", WHITE), ("A", WHITE), ("DRAIN!", WHITE)], 300, 150, font=ANTON)
+    sh = T.split()[-1].filter(ImageFilter.GaussianBlur(14)).point(lambda v: int(v * 0.85))
+    blk = Image.new("RGBA", (W, H), (0, 0, 0, 0)); blk.putalpha(sh)
+    img.alpha_composite(blk); img.alpha_composite(T)
+    return img.convert("RGB")
+
+
+def main_rats(P, OUT, pack=False):
+    pl, mk = os.path.join(P, "dd_rats.png"), os.path.join(P, "dd_rats_mask.png")
+    t = compose_rats(pl, mk); t.save(os.path.join(OUT, "drain_final.jpg"), quality=96, subsampling=0)
+    if pack:
+        D = os.path.join(OUT, "download"); os.makedirs(D, exist_ok=True)
+        save(t, "drain_thumbnail_DRAIN", D); save(compose_rats(pl, mk, text=False), "drain_thumbnail_notext", D)

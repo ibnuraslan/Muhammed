@@ -1,0 +1,79 @@
+"""$25M Drain thumbnail v2: the diamond on a stack of bricks in a black drain, rats in the shadows."""
+import math
+import bpy
+from mathutils import Vector
+from common import area_light, point_at
+
+
+def _spot(name, loc, tgt, energy, color, deg=10, blend=0.3, soft=0.01):
+    l = bpy.data.lights.new(name, 'SPOT'); l.energy = energy; l.color = color
+    l.spot_size = math.radians(deg); l.spot_blend = blend; l.shadow_soft_size = soft
+    o = bpy.data.objects.new(name, l); bpy.context.collection.objects.link(o); o.location = loc; point_at(o, tgt)
+    return o
+
+
+def setup(c):
+    from kit import haze
+    import sc_tdrain as S
+    t = c["diamond"].location.copy()
+    gem = bpy.data.collections.new("GemOnly"); bpy.context.scene.collection.children.link(gem)
+    gem.objects.link(c["diamond"]); gem.hide_render = False
+    def only_gem(o):                                  # light linking: these lights and softboxes touch the stone only
+        o.light_linking.receiver_collection = gem
+    s = bpy.context.scene; s.cycles.max_bounces = 16; s.cycles.transmission_bounces = 16; s.cycles.glossy_bounces = 12
+    s.cycles.caustics_refractive = True; s.cycles.caustics_reflective = True
+    # one narrow hard beam straight down through a gap above, onto the stone and the top brick
+    _spot("Beam", t + Vector((0.05, 0.25, 2.2)), t, 2200, (1.0, 0.97, 0.92), 5.5, 0.25, 0.004)
+    # tiny hard glint sources around the stone for fire in the facets
+    for k, (dx, dy, dz, e) in enumerate(((-0.35, -0.5, 0.35, 6), (0.4, -0.45, 0.25, 5), (0.0, -0.7, 0.1, 4), (0.25, 0.3, 0.45, 5))):
+        l = bpy.data.lights.new(f"Glint{k}", 'AREA'); l.energy = e * 4; l.size = 0.05
+        o = bpy.data.objects.new(f"Glint{k}", l); bpy.context.collection.objects.link(o); o.location = t + Vector((dx, dy, dz)); point_at(o, t)
+        o.visible_camera = False; o.visible_volume_scatter = False; only_gem(o)
+    # a faint cold light down the tunnel so the bricks and wet floor just read; rim on the rats
+    back = area_light(t + Vector((0.0, 2.6, 0.9)), (0, 0, 0), 1.2, 1.5, (0.55, 0.7, 0.85)); point_at(back, t)
+    side = area_light(t + Vector((-1.0, -0.4, 0.5)), (0, 0, 0), 0.5, 0.5, (0.7, 0.8, 0.9)); point_at(side, t)
+    haze(t + Vector((0, 0.8, 0.5)), (3.0, 5.0, 2.0), density=0.012, color=(0.85, 0.9, 1.0), anis=0.6)
+    # rats: a cold rim from behind each one (linked to that rat only) so the silhouettes read in the dark
+    import ph
+    for k, (r, ms) in enumerate(c.get("rats", [])):
+        lo, hi = ph.bounds(ms); cen = (lo + hi) / 2
+        col = bpy.data.collections.new(f"Rat{k}"); bpy.context.scene.collection.children.link(col)
+        for m in ms:
+            if m.type == 'MESH':
+                col.objects.link(m)
+        away = (cen - t); away.z = 0; away.normalize()
+        l = bpy.data.lights.new(f"RatRim{k}", 'AREA'); l.energy = 9; l.size = 0.25; l.color = (0.65, 0.78, 0.95)
+        o = bpy.data.objects.new(f"RatRim{k}", l); bpy.context.collection.objects.link(o)
+        o.location = cen + away * 0.35 + Vector((0, 0.25, 0.3)); point_at(o, cen)
+        o.visible_volume_scatter = False; o.light_linking.receiver_collection = col
+    # a faint cold glow far down the tunnel, for depth
+    far = area_light(t + Vector((0.0, 3.2, 0.6)), (0, 0, 0), 1.5, 2.5, (0.5, 0.65, 0.85)); point_at(far, t + Vector((0, 1.5, 0)))
+    # little white softboxes around the stone, seen only in its reflections/refractions, so the facets blaze
+    em = bpy.data.materials.new("Softbox"); em.use_nodes = True
+    N = em.node_tree.nodes; [N.remove(n) for n in list(N) if n.type != 'OUTPUT_MATERIAL']
+    e_ = N.new("ShaderNodeEmission"); e_.inputs['Strength'].default_value = 90
+    em.node_tree.links.new(e_.outputs[0], next(n for n in N if n.type == 'OUTPUT_MATERIAL').inputs['Surface'])
+    import random
+    rnd = random.Random(4)
+    for k in range(14):
+        th = rnd.uniform(0, 2 * math.pi); ph_ = rnd.uniform(0.15, 1.2); r = rnd.uniform(0.12, 0.22)
+        p = t + Vector((r * math.cos(th) * math.cos(ph_), r * math.sin(th) * math.cos(ph_), r * math.sin(ph_)))
+        bpy.ops.mesh.primitive_plane_add(size=rnd.uniform(0.012, 0.03), location=p); pl = bpy.context.active_object
+        point_at(pl, t); pl.rotation_euler.rotate_axis('X', math.pi); pl.data.materials.append(em)
+        pl.visible_camera = False; pl.visible_volume_scatter = False; pl.visible_shadow = False; only_gem(pl)
+    s.view_settings.exposure = 0.0
+
+
+def cam(c):
+    t = c["diamond"].location
+    return (t + Vector((0.06, -1.1, 0.12)), t + Vector((0.0, 0.3, -0.13)), 42)
+
+
+def stone(c):
+    return [c["diamond"]]
+
+
+CONCEPTS = {
+    "dd_rats": dict(scene="tdrain", cam=cam, focus=lambda c: c["diamond"].location, fstop=2.8, setup=setup, exposure=0.0,
+                    shift=(0.0, 0.1), mask=stone),
+}
