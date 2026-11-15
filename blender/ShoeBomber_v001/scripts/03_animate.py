@@ -416,7 +416,7 @@ for f, flex, sp, crouch, hd in ((1393, 0, 10, 0.0, (25, 0)), (1420, 0, 18, 0.03,
 # v006e (director): he KNEELS on the floor beside the belt -- both knees down, shins back, the sneaker beside his right knee,
 # picks it up and reaches into the tray; nothing of him passes the belt (knees stop ~27 cm short of it)
 TK = V((TP.x - 0.22, TP.y - 0.05, 0))
-for f, sp, tw, sd, rz, hd in ((1468, 30, 0, 0, 0.55, (-25, 0)), (1478, 58, -12, 14, 0.50, (-15, 0)), (1484, 52, -8, 10, 0.51, (-10, 0)),
+for f, sp, tw, sd, rz, hd in ((1468, 30, 0, 0, 0.55, (-25, 0)), (1478, 72, -12, 18, 0.46, (-15, 0)), (1484, 64, -8, 12, 0.48, (-10, 0)),
                               (1494, 22, 15, 0, 0.55, (0, 10)), (1508, 16, 18, 0, 0.55, (5, 12)), (1518, 12, 12, 0, 0.55, (8, 8))):
     trav.key_root(f, V((TK.x, TK.y, rz)), yaw=FWD, flex=12)
     trav.key_spine(f, flex=sp, twist=-tw, side=sd, head=hd)   # 1478: bends forward and to his right so the hand reaches the heel on the floor
