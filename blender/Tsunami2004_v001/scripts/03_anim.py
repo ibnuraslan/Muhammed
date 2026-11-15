@@ -123,13 +123,13 @@ for fc in _fcurves(wn.animation_data.action):
 # water colour turns muddy once it is over land, foam churn on the flood
 for mname in ("M_Wave",):
     nt = bpy.data.materials[mname].node_tree; b = nt.nodes["Principled BSDF"]; fv = nt.nodes["FOAM_BASE"]; nz = nt.nodes["NZ"]
-    for t, colr, foam in ((0, (0.02, 0.2, 0.28), 0.0), (20.6, (0.02, 0.2, 0.28), 0.15), (22.0, (0.10, 0.068, 0.031), 0.07),
-                          (30.0, (0.10, 0.068, 0.031), 0.06), (31.6, (0.085, 0.06, 0.03), 0.0), (40, (0.085, 0.06, 0.03), 0.0)):
+    for t, colr, foam in ((0, (0.02, 0.2, 0.28), 0.0), (20.6, (0.02, 0.2, 0.28), 0.15), (22.0, (0.030, 0.022, 0.012), 0.16),
+                          (30.0, (0.030, 0.022, 0.012), 0.14), (31.6, (0.04, 0.03, 0.016), 0.0), (40, (0.04, 0.03, 0.016), 0.0)):
         b.inputs["Base Color"].default_value = (*colr, 1); b.inputs["Base Color"].keyframe_insert("default_value", frame=F(t))
         fv.outputs[0].default_value = foam; fv.outputs[0].keyframe_insert("default_value", frame=F(t))
-    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.35), (31.0, 0.35), (32.0, 0.15)):   # vNEXT: rough muddy water, no sun-glare blobs
+    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.06), (31.0, 0.06), (32.0, 0.1)):   # vNEXT: rough muddy water, no sun-glare blobs
         b.inputs["Roughness"].default_value = rg; b.inputs["Roughness"].keyframe_insert("default_value", frame=F(t))
-    for t, sl in ((0, 0.6), (20.8, 0.6), (22.0, 0.22), (31.0, 0.22), (32.0, 0.5)):   # vNEXT: softer specular on the flood
+    for t, sl in ((0, 0.6), (20.8, 0.6), (22.0, 0.5), (31.0, 0.5), (32.0, 0.5)):   # vNEXT: specular on the flood
         b.inputs["Specular IOR Level"].default_value = sl; b.inputs["Specular IOR Level"].keyframe_insert("default_value", frame=F(t))
     for t, wv in ((0, 0), (40, 6)):
         nz.inputs["W"].default_value = wv; nz.inputs["W"].keyframe_insert("default_value", frame=F(t))
@@ -374,8 +374,8 @@ op_ = bpy.data.objects["D_OceanPlate"]; os_ = bpy.data.objects["D_OceanSed"]
 for o_ in (op_, os_):
     l_ = o_.location.copy(); key_tr(o_, F(14.35), loc=tuple(l_));
     key_tr(o_, F(14.55), loc=(l_.x, l_.y + 0.4, l_.z - 0.35)); key_tr(o_, F(15.6), loc=(l_.x, l_.y + 0.45, l_.z - 0.35))
-for nm_ in ("D_PulseSea", "D_PulseShore"):
-    key_hide(bpy.data.objects[nm_], [(1, True), (F(14.55), False), (F(15.6), True)])
+for nm_ in ("D_PulseSea", "D_PulseShore"):   # vNEXT: removed (they read as cream bars flickering across the top of the frame)
+    key_hide(bpy.data.objects[nm_], [(1, True)])
 for t, bu, sa in ((13.0, 0, 0), (14.3, 0, 0), (14.6, 1, 0), (15.0, 0.6, 0.4), (15.6, 0.0, 1.0)):
     kbw["Bulge"].value = bu; kbw["Bulge"].keyframe_insert("value", frame=F(t))
     for k in ("SplitA", "SplitB"):
@@ -451,5 +451,12 @@ for o in bpy.data.objects:   # clear the camera's path through the beach furnitu
     if o.name.startswith(("Umbrella_", "Lounger_")) and abs(o.location.x - 15) < 2.5:
         bpy.data.objects.remove(o, do_unlink=True)
 sc.frame_set(1)
+# vNEXT: dark glossy flood water reflects the town and sky; the sun's own glossy highlight is switched off during the
+# flood so it never becomes a white glare patch
+_sun = bpy.data.objects["Sun"]
+for t, v in ((0, True), (21.4, True), (21.5, False), (31.9, False), (32.0, True)):
+    _sun.visible_glossy = v; _sun.keyframe_insert("visible_glossy", frame=F(t))
+
 bpy.ops.wm.save_as_mainfile(filepath=out)
 print("ANIM_DONE")
+

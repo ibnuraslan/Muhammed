@@ -58,6 +58,36 @@ dirf = catmull([(f, (Vector(k[2]) - Vector(k[1])).normalized()) for f, k in zip(
 lensf = pchip([(f, float(k[3])) for f, k in zip(ts, K)])
 cd = bpy.data.cameras.new("CAM_Film"); cam = bpy.data.objects.new("CAM_Film", cd); sc.collection.objects.link(cam); sc.camera = cam
 cd.clip_start = 0.05; cd.clip_end = 9000; cd.sensor_fit = 'AUTO'; cd.sensor_width = 36
+# vNEXT opening (0 - 4.6 s): the camera leads the two kids as they run out onto the exposed seabed, faces to camera,
+# fish flopping around them; then blends into the path for beat 3 (5.3 s)
+def _kid_head(n):
+    r = bpy.data.objects[n]; return r.matrix_world @ r.pose.bones["head"].head
+_KID = {}
+for f in range(1, F(5.3) + 1):
+    sc.frame_set(f); _KID[f] = (_kid_head("KidA") + _kid_head("KidB")) * 0.5
+def _smooth(f, w=18):
+    fs = [k for k in range(f - w, f + w + 1) if k in _KID]; return sum((_KID[k] for k in fs), Vector()) / len(fs)
+def lead_pose(f):
+    c = _smooth(f); p = Vector((c.x + 2.2, c.y + 8.5, g(c.x + 2.2, c.y + 8.5) + 1.25)); return p, (c + Vector((0, 0, -0.15)) - p).normalized()
+# vNEXT ending (34.2 - 40 s): hard cut to eye level, 7 m behind the three survivors walking to the mosque, 45 mm
+_S0 = (Vector((-25.6, -178.4, 0)) + Vector((-23.5, -174.5, 0)) + Vector((-27.5, -182.5, 0))) / 3
+_S1 = (Vector((-31.2, -172.8, 0)) + Vector((-29.5, -169.5, 0)) + Vector((-33.0, -176.5, 0))) / 3
+_SD = (_S1 - _S0).normalized()
+def follow_pose(f):
+    u = min(1.0, max(0.0, (f - F(34.2)) / (F(40.0) - F(34.2)))); c = _S0.lerp(_S1, u)
+    p = c - _SD * 7.0 + Vector((1.2, -0.6, 0)); p.z = g(p.x, p.y) + 1.6
+    tgt = c + _SD * 14.0; tgt.z = g(tgt.x, tgt.y) + 4.0
+    return p, (tgt - p).normalized()
+# clear rubble / debris out of the ending shot (it filled the foreground)
+_A, _B = _S0 - _SD * 7.0, _S1 + _SD * 2.0
+for o in bpy.data.objects:
+    if o.name.startswith(("Rubble_", "Debris_", "Sheet_")):
+        q = Vector((o.location.x, o.location.y, 0)); ab = _B - _A; t_ = max(0, min(1, (q - _A).dot(ab) / ab.length_squared))
+        if (q - (_A + ab * t_)).length < 7.0:
+            sc.frame_set(F(33.85)); hr, hv = o.hide_render, o.hide_viewport
+            o.keyframe_insert("hide_render", frame=F(33.85)); o.keyframe_insert("hide_viewport", frame=F(33.85))
+            o.hide_render = True; o.keyframe_insert("hide_render", frame=F(33.9)); o.hide_viewport = True; o.keyframe_insert("hide_viewport", frame=F(33.9))
+            print("CLEARED", o.name)
 prev = None
 for f in range(1, 2401):
     p = posf(f); d = dirf(f).normalized()
@@ -81,6 +111,13 @@ for f in range(1, 2401):
     if F(28.05) <= f < F(30.4):
         u = (f - F(28.05)) / (F(30.4) - F(28.05)); d0 = dirf(F(30.4)).normalized(); p0 = posf(F(30.4))
         p = p0 - d0 * 26.0 * (1 - u); d = d0   # a clearly visible push
+    if f < F(4.6):
+        p, d = lead_pose(f); lens_ov = 40.0
+    elif f < F(5.3):
+        u = (f - F(4.6)) / (F(5.3) - F(4.6)); u = u * u * (3 - 2 * u); lp, ld = lead_pose(f)
+        p = lp.lerp(p, u); d = ld.lerp(d, u).normalized(); lens_ov = 40.0 + (lensf(f) - 40.0) * u
+    if f >= F(34.2):
+        p, d = follow_pose(f); lens_ov = 45.0
     q = d.to_track_quat('-Z', 'Y'); e = q.to_euler()
     if prev is not None: e.make_compatible(prev)
     prev = e
