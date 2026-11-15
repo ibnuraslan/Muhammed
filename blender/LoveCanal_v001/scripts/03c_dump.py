@@ -147,7 +147,7 @@ DOZ_RZ = 180.0                       # the model's blade faces -X
 M_dirt = bpy.data.materials["Dirt"]
 FILL = box("DirtFill", (1, 30, 4.0), (0, 0, -2.0), M_dirt, OB["DumpGround"].users_collection[0])
 FILL.data.transform(Matrix.Translation((0.5, 0, 0))); FILL.location = DX + Vector((-16, 0, 0.12))
-x0 = DX.x - 15.0; v = 2.4
+x0 = HC.x - 12.0; v = 2.2
 for f in range(fa - 1, fe + 2, 2):
     x = x0 + v * max(0, (f - fa)) / FPS
     key_prop(DOZ, f, (x, 0.0, 0.12), (0, 0, DOZ_RZ))
@@ -159,7 +159,12 @@ for f in range(fa - 1, fe + 2, 2):
     x = x0 + v * max(0, (f - fa)) / FPS
     key_prop(MOUND, f, (x + DOZ.get("blade", 3.6), 0.0, 0.25), (0, 0, 0))
 key_vis(MOUND, [(0, False), (fa, True)]); key_vis(FILL, [(0, False), (fa, True)])
-camshot("S14", [(0.0, (DX.x - 7.0, -13.0, 3.3), (DX.x - 13.0, 0.0, 0.9), 32), (1.0, (DX.x - 6.6, -12.2, 3.1), (DX.x - 11.5, 0.0, 0.9), 32)])
+camshot("S14", [(0.0, HC + Vector((-4.5, -13.5, 3.6)), HC + Vector((-7.0, 0.0, 0.6)), 30), (1.0, HC + Vector((-3.6, -12.6, 3.4)), HC + Vector((-5.5, 0.0, 0.6)), 30)])
+for d in drums:                           # buried as the dirt wave in front of the blade reaches them
+    ev(f1("S13")); px = d.matrix_world.translation.x
+    tb = (px - (x0 + DOZ.get("blade", 3.6) + 0.6)) / v
+    if tb < 0: key_vis(d, [(f0("S14"), False)])
+    elif fa + tb * FPS < fe + 60: key_vis(d, [(int(fa + tb * FPS), False)])
 
 # ================================================================== S15: houses are framed on top of the cut-away while the green pockets glow underneath
 fa = f0("S15"); fe = fx("S15")
