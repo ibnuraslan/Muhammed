@@ -613,11 +613,13 @@ for f in list(range(f_r1 + 1, f_w0, 3)) + [f_w0 - 1]:
     LAD.key_spine(f, flex=8 + 4 * stag, twist=-14 * look, side=3 * math.sin(f / 13.0), head=(10 - 8 * look + 4 * math.sin(f / 21.0), -38 * look + 6 * math.sin(f / 29.0)))
     hand = tw_(f_r1 + 8, f_r1 + 26, f) * (1 - tw_(f_r1 + 88, f_r1 + 104, f))      # right hand up to his head, then down for the stagger
     if hand > 0.02:
-        tgt = LB.head + V(-0.12, -0.04, 0.06)
-        rest = LB.sh["R"] + V(-0.05, 0.0, -0.55)
-        LB.hand("R", f, Bm, rest.lerp(tgt, hand), V(0.25, -0.2, 1.0).normalized(), V(-1, 0, 0.2).normalized())
+        tgt = LB.head + V(-0.15, -0.03, 0.06)
+        rest = LB.sh["R"] + V(-0.12, 0.0, -0.55)
+        side = LB.sh["R"] + V(-0.38, -0.12, -0.05)      # v006c: the hand goes up and down OUTSIDE the shoulder (a straight path cut through his chest)
+        W_ = rest * (1 - hand) ** 2 + side * (2 * hand * (1 - hand)) + tgt * hand ** 2
+        LB.hand("R", f, Bm, W_, V(0.25, -0.2, 1.0).normalized(), V(-1, 0, 0.2).normalized())
     else:
-        LB.arm_dir("R", f, Bm, V(-0.2 - 0.25 * stag, 0.05, -1.0), 0.94)
+        LB.arm_dir("R", f, Bm, V(-0.32 - 0.25 * stag, 0.08, -1.0), 0.94)      # v006c: hangs clear of his thigh
     LB.arm_dir("L", f, Bm, V(0.2 + 0.3 * stag, 0.05 - 0.1 * stag, -1.0), 0.94)
 # feet: planted, a step during the turn, the stagger step, then the walk stance
 F_STEPS = [(f_r1 + 1, Y0, V(STAND_XY.x, STAND_XY.y, 0), None),
