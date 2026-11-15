@@ -75,25 +75,6 @@
     "other": 1
    }
   },
-  "1249": {
-   "Mother": {
-    "self": 0,
-    "clothes": 0,
-    "other": 17
-   }
-  },
-  "1255": {
-   "Crowd1_dup2": {
-    "self": 0,
-    "clothes": 0,
-    "other": 1
-   },
-   "Mother": {
-    "self": 0,
-    "clothes": 0,
-    "other": 109
-   }
-  },
   "1285": {
    "Crowd4_dup1": {
     "self": 0,
@@ -181,135 +162,231 @@
     "other": 4
    }
   },
-  "1771": {
-   "ResA": {
-    "self": 1389,
-    "clothes": 0,
-    "other": 0
-   }
-  },
   "1819": {
    "Mother": {
     "self": 0,
     "clothes": 0,
     "other": 23
-   },
-   "Teen": {
-    "self": 0,
-    "clothes": 0,
-    "other": 1
-   }
-  },
-  "1825": {
-   "Teen": {
-    "self": 0,
-    "clothes": 0,
-    "other": 2
    }
   },
   "1831": {
-   "Teen": {
+   "Mother": {
     "self": 0,
     "clothes": 0,
-    "other": 3
+    "other": 2
    }
   },
   "1837": {
    "Teen": {
     "self": 0,
     "clothes": 0,
-    "other": 9
+    "other": 20
    }
   },
   "1843": {
    "Mother": {
     "self": 0,
     "clothes": 0,
-    "other": 15
+    "other": 4
+   }
+  },
+  "1849": {
+   "Mother": {
+    "self": 40,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1855": {
+   "Mother": {
+    "self": 172,
+    "clothes": 0,
+    "other": 0
+   },
+   "Toddler": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1861": {
+   "Mother": {
+    "self": 83,
+    "clothes": 0,
+    "other": 0
+   },
+   "Toddler": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
    }
   },
   "1867": {
    "Mother": {
-    "self": 0,
+    "self": 70,
     "clothes": 0,
-    "other": 3
+    "other": 0
+   },
+   "Toddler": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
    }
   },
   "1873": {
    "Mother": {
-    "self": 0,
+    "self": 79,
     "clothes": 0,
-    "other": 20
+    "other": 0
+   },
+   "Toddler": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
    }
   },
   "1879": {
    "Mother": {
-    "self": 0,
+    "self": 139,
     "clothes": 0,
-    "other": 21
+    "other": 0
+   },
+   "Toddler": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
    }
   },
   "1885": {
    "Mother": {
-    "self": 0,
+    "self": 185,
     "clothes": 0,
-    "other": 19
+    "other": 0
+   },
+   "Toddler": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
    }
   },
   "1891": {
    "Mother": {
-    "self": 0,
+    "self": 134,
     "clothes": 0,
-    "other": 17
+    "other": 0
+   },
+   "Toddler": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
    }
   },
   "1897": {
    "Mother": {
-    "self": 0,
+    "self": 76,
     "clothes": 0,
-    "other": 12
+    "other": 0
+   },
+   "Toddler": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
    }
   },
   "1903": {
    "Mother": {
-    "self": 0,
+    "self": 62,
     "clothes": 0,
-    "other": 7
+    "other": 0
+   },
+   "Toddler": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1909": {
+   "Mother": {
+    "self": 96,
+    "clothes": 0,
+    "other": 0
+   },
+   "Toddler": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1915": {
+   "Mother": {
+    "self": 199,
+    "clothes": 0,
+    "other": 0
+   },
+   "Toddler": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
    }
   },
   "1921": {
    "Mother": {
-    "self": 54,
+    "self": 234,
     "clothes": 0,
-    "other": 12
+    "other": 0
+   },
+   "Toddler": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
    }
   },
   "1927": {
    "Mother": {
-    "self": 0,
+    "self": 138,
     "clothes": 0,
-    "other": 20
+    "other": 0
+   },
+   "Toddler": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
    }
   },
   "1933": {
    "Mother": {
-    "self": 0,
+    "self": 57,
     "clothes": 0,
-    "other": 35
+    "other": 24
+   },
+   "Toddler": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
    }
   },
   "1939": {
    "Mother": {
-    "self": 0,
+    "self": 40,
     "clothes": 0,
     "other": 44
+   },
+   "Toddler": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
    }
   },
   "1945": {
    "Mother": {
-    "self": 0,
+    "self": 75,
     "clothes": 0,
-    "other": 23
+    "other": 0
+   },
+   "Toddler": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
    }
   }
  },
@@ -317,16 +394,8 @@
  "depth_cm": 2.0,
  "bad_ranges": [
   [
-   1255,
-   1255
-  ],
-  [
-   1771,
-   1771
-  ],
-  [
-   1921,
-   1939
+   1849,
+   1945
   ]
  ],
  "fps": 60

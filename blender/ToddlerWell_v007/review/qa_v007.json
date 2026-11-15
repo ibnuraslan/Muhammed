@@ -2294,28 +2294,6 @@
     "wall/prop fills the frame, character only 0%"
    ]
   ],
-  "1261": [
-   [
-    "FILL",
-    "TripodLeg1"
-   ],
-   [
-    "FILL",
-    "surface <12 cm"
-   ],
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only TripodLeg1 in view"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
   "1345": [
    [
     "EMPTY",
@@ -3010,6 +2988,12 @@
     "cut: 3.35 m, 135 deg in one frame (neighbours 0.00 m, 0 deg)"
    ]
   ],
+  "1258": [
+   [
+    "CAMJUMP",
+    "cut: 2.27 m, 77 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
   "1288": [
    [
     "CAMJUMP",
@@ -3037,13 +3021,13 @@
   "1856": [
    [
     "CAMJUMP",
-    "cut: 1.35 m, 59 deg in one frame (neighbours 0.00 m, 0 deg)"
+    "cut: 3.45 m, 151 deg in one frame (neighbours 0.00 m, 0 deg)"
    ]
   ],
   "1916": [
    [
     "CAMJUMP",
-    "cut: 4.63 m, 43 deg in one frame (neighbours 0.01 m, 0 deg)"
+    "cut: 4.86 m, 55 deg in one frame (neighbours 0.01 m, 0 deg)"
    ]
   ],
   "625": [
@@ -3882,12 +3866,12 @@
   ]
  },
  "counts": {
-  "EMPTY": 165,
-  "FILL": 20,
+  "EMPTY": 162,
+  "FILL": 18,
   "INSIDE": 97,
   "FACEPRESS": 6,
   "BACKHEAD": 1,
-  "CAMJUMP": 11,
+  "CAMJUMP": 12,
   "PROPMOVE": 592
  }
 }
