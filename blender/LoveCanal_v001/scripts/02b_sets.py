@@ -181,7 +181,7 @@ for i, (x, y) in enumerate(((-8, 1.5), (7.5, 1.0))):
 DX = Vector((900, 0, 0)); DMP = coll("SET_dump")
 bm = bmesh.new(); bmesh.ops.create_grid(bm, x_segments=150, y_segments=150, size=60)
 for v in bm.verts:
-    r = math.hypot(v.co.x, v.co.y); pit = 3.4 * (1 - smooth((r - 3.5) / 6.5))
+    r = math.hypot(v.co.x, v.co.y); pit = 1.6 * (1 - smooth((r - 3.0) / 5.5))
     v.co.z = -pit + 0.08 * math.sin(v.co.x * 0.9) * math.cos(v.co.y * 0.7)
 me = bpy.data.meshes.new("DumpGround"); bm.to_mesh(me); bm.free()
 G = bpy.data.objects.new("DumpGround", me); DMP.objects.link(G); G.location = DX; G.data.materials.append(M_mud)

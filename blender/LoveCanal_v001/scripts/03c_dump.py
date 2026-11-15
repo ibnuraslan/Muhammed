@@ -2,7 +2,7 @@
 UX = Vector((600, 0, 0)); UX2 = Vector((600, 60, 0)); DX = Vector((900, 0, 0))
 key_vis(OB["Backdrop_under"], [(0, False)] + [x for s_ in ("S7", "S8", "S15") for x in ((f0(s_), True), (f1(s_) + 1, False))])
 camshot("S7", [(0.0, (600.0, -42.0, 4.0), (600.0, 0.0, 1.5), 32), (1.0, (600.0, -39.0, 2.2), (600.0, 0.0, -4.0), 32)])
-camshot("S8", [(0.0, (597.5, -15.5, -5.6), (600.0, -4.0, -6.4), 30), (1.0, (598.8, -12.0, -5.7), (600.5, -3.0, -6.5), 30)])
+camshot("S8", [(0.0, (597.5, -15.0, -5.7), (600.0, -4.0, -5.9), 30), (1.0, (598.8, -11.8, -5.75), (600.5, -3.0, -6.0), 30)])
 SL = OB["Under_sludge"]; SL2 = OB["Under2_sludge"]
 for o in (SL, SL2):             # slow flow: the ripple texture drifts (keyed, not Scene Time)
     tx = o.modifiers["ripple"].texture; tcoord = bpy.data.objects.new(o.name + "_flow", None); o.users_collection[0].objects.link(tcoord)
@@ -48,80 +48,97 @@ walk_arms(WK, fa, fe, pth); face(WK, fa, -0.002, -8)
 for f in range(fa, fe + 1, 20): WK.key_spine(f, flex=4, head=(2, 0))
 camshot("S10", [(0.0, (DX.x + 1.8, 7.5, 1.75), (DX.x - 0.3, 17.0, 1.4), 24), (1.0, (DX.x + 1.5, 8.6, 1.7), (DX.x - 0.3, 17.0, 1.4), 24)])
 
-# ================================================================== S11-S13: drums tip out of the truck beds and pile up in the pit (rigid bodies baked to keys)
-SIM0 = f0("S11") - 1; SIM1 = fx("S13") + 90
-DCOLL = coll("SET_drums")
+# ================================================================== S11-S13: drums tip out of the truck beds and heap up in the pit
+# A throwaway rigid-body drop settles a dense heap in the pit (slots). Each drum is then KEYED: it flies in on an arc from the
+# truck side (off-frame) into its slot, lowest slots first, so nothing passes through the heap and nothing nears a lens.
+DCOLL = coll("SET_drums"); L_dr = OB["LIB_drum"]; random.seed(11)
+HS0, HS1 = 1, 360
 bpy.ops.rigidbody.world_add(); rbw = sc.rigidbody_world
 rbw.substeps_per_frame = 8; rbw.solver_iterations = 20
-rbw.point_cache.frame_start = SIM0; rbw.point_cache.frame_end = SIM1
+rbw.point_cache.frame_start = HS0; rbw.point_cache.frame_end = HS1
 if not rbw.collection: rbw.collection = bpy.data.collections.new("RigidBodyWorld")
-def rb(o, typ, shape, kin=False, mass=180.0, fr=0.55, rest=0.05):
+def rb(o, typ, shape, mass=180.0, fr=0.8, rest=0.02):
     with bpy.context.temp_override(object=o, active_object=o, selected_objects=[o]):
         bpy.ops.rigidbody.object_add()
-    r = o.rigid_body; r.type = typ; r.collision_shape = shape; r.kinematic = kin; r.mass = mass; r.friction = fr; r.restitution = rest
-    r.collision_margin = 0.01; r.use_deactivation = False; r.linear_damping = 0.35; r.angular_damping = 0.75
+    r = o.rigid_body; r.type = typ; r.collision_shape = shape; r.mass = mass; r.friction = fr; r.restitution = rest
+    r.collision_margin = 0.01; r.use_deactivation = False; r.linear_damping = 0.4; r.angular_damping = 0.8
     return r
 rb(OB["DumpGround"], 'PASSIVE', 'MESH', fr=0.95)
+for g in [o for o in OB if o.name.startswith(("DumpTruck", "Worker", "PushDrum"))]: pass
+heap = []
+for layer in range(11):
+    for gx in range(-6, 7):
+        for gy in range(-6, 7):
+            x = gx * 0.98 + random.uniform(-0.1, 0.1) + (0.49 if layer % 2 else 0); y = gy * 0.98 + random.uniform(-0.1, 0.1)
+            if math.hypot(x, y) > 4.8 - 0.22 * layer: continue
+            d = copy_obj(L_dr, "Drum_h%d_%d_%d" % (layer, gx + 6, gy + 6), DX + Vector((x, y, -1.0 + 1.0 * layer)), c=DCOLL)
+            d.rotation_euler = (R_(random.choice((random.uniform(-20, 20), random.uniform(70, 110)))), R_(random.uniform(-20, 20)), random.random() * 6)
+            rb(d, 'ACTIVE', 'CYLINDER'); heap.append(d)
+for f in range(HS0, HS1 + 1): sc.frame_set(f)
+final = {d.name: d.matrix_world.copy() for d in heap}
+for d in heap:
+    with bpy.context.temp_override(object=d, active_object=d, selected_objects=[d]): bpy.ops.rigidbody.object_remove()
+with bpy.context.temp_override(object=OB["DumpGround"], active_object=OB["DumpGround"], selected_objects=[OB["DumpGround"]]):
+    bpy.ops.rigidbody.object_remove()
+with bpy.context.temp_override(scene=sc): bpy.ops.rigidbody.world_remove()
+slots = []
+for d in heap:
+    M = final[d.name]; r = (M.translation.to_2d() - DX.to_2d()).length
+    if r < 7.0 and M.translation.z > -3.6: slots.append((M.translation.z, d, M))
+    else: bpy.data.objects.remove(d, do_unlink=True)
+slots.sort(key=lambda t: t[0])
+print("HEAP slots", len(slots), "of", len(heap), "top z", round(slots[-1][0], 2))
+HC = sum((t[2].translation for t in slots), Vector()) / len(slots); HC.z = 0.0
+sc.frame_set(1)
+# truck beds tip (keyed hinge rotation)
 BEDS = [OB["DumpTruck%d_bed" % i] for i in range(2)]
+TIP0, TIP1 = f0("S11") + 10, f0("S11") + 100
 for b in BEDS:
-    rb(b, 'PASSIVE', 'MESH', kin=True); b.rigid_body.collision_margin = 0.02
     b.rotation_mode = 'XYZ'
-    b.rotation_euler = (0, 0, 0); b.keyframe_insert("rotation_euler", frame=0); b.keyframe_insert("rotation_euler", frame=SIM0 + 10)
-    b.rotation_euler = (R_(-52), 0, 0); b.keyframe_insert("rotation_euler", frame=SIM0 + 100); b.keyframe_insert("rotation_euler", frame=SIM1)
-L_dr = OB["LIB_drum"]; drums = []
-random.seed(11)
-ev(1)
-for bi, b in enumerate(BEDS):            # wave 1: drums standing in each bed (visible in S10)
+    b.rotation_euler = (0, 0, 0); b.keyframe_insert("rotation_euler", frame=0); b.keyframe_insert("rotation_euler", frame=TIP0)
+    b.rotation_euler = (R_(-52), 0, 0); b.keyframe_insert("rotation_euler", frame=TIP1)
+def fly(d, fs, fe_, P0, M1, q0, spin):
+    """keyed arc from P0 (with orientation q0) into slot matrix M1, landing at fe_"""
+    P1, q1, _ = M1.decompose(); d.rotation_mode = 'QUATERNION'
+    apex = max(P0.z, P1.z) + 1.6
+    for f in list(range(fs, fe_ + 1, 2)) + [fe_]:
+        u = (f - fs) / max(1, fe_ - fs); w = u * u * (3 - 2 * u) * 0.35 + u * 0.65
+        p = P0.lerp(P1, w); p.z = (1 - w) ** 2 * P0.z + 2 * (1 - w) * w * apex + w * w * P1.z
+        q = q0.slerp(q1, smooth(u)) @ Quaternion((1, 0, 0), spin * (1 - smooth(u)))
+        d.location = p; d.rotation_quaternion = q
+        d.keyframe_insert("location", frame=f); d.keyframe_insert("rotation_quaternion", frame=f)
+drums = []
+ev(1); k = 0
+for bi, b in enumerate(BEDS):            # wave 1: drums standing in each bed (seen in S10) ride the bed, then slide into the lowest slots
     bmn, bmx = bbox([b])
     for ix in range(3):
         for iy in range(5):
             x = bmn.x + 0.45 + ix * 0.62; y = bmn.y + 0.7 + iy * 0.75
-            d = copy_obj(L_dr, "Drum_b%d_%d%d" % (bi, ix, iy), (x, y, bmn.z + 0.32 + 0.002), c=DCOLL); d.rotation_euler = (0, 0, random.random() * 6)
-            rb(d, 'ACTIVE', 'CYLINDER'); drums.append(d)
-N2 = 560
-for i in range(N2):                      # wave 2: drums keep coming over the rim from the truck side (spawned out of frame)
-    rel = SIM0 + 70 + int((SIM1 - SIM0 - 220) * (i / N2) ** 0.85)
-    x = DX.x + random.uniform(-3.5, 3.5); y = 8.5 + random.uniform(0, 1.8); z = 1.2 + random.uniform(0, 1.2)
-    d = copy_obj(L_dr, "Drum_w%03d" % i, (x, y, z), c=DCOLL)
-    d.rotation_euler = (R_(random.choice((0, 0, 0, 90))), 0, random.random() * 6)
-    r = rb(d, 'ACTIVE', 'CYLINDER', kin=True)
-    d.keyframe_insert("location", frame=rel - 6); r.keyframe_insert("kinematic", frame=rel - 1)
-    d.location = (x - (x - DX.x) * 0.04, y - 0.45, z - 0.05); d.keyframe_insert("location", frame=rel)
-    r.kinematic = False; r.keyframe_insert("kinematic", frame=rel)
-    key_vis(d, [(0, False), (rel - 6, True)])
-    drums.append(d)
-for o in rbw.collection.objects: pass
-print("SIM drums", len(drums), SIM0, SIM1)
-rec = {d.name: [] for d in drums}
-for f in range(SIM0, SIM1 + 1):
-    sc.frame_set(f)
-    if (f - SIM0) % 2 and f != SIM1: continue
-    for d in drums: rec[d.name].append((f, d.matrix_world.copy()))
-for d in drums:
-    with bpy.context.temp_override(object=d, active_object=d, selected_objects=[d]):
-        bpy.ops.rigidbody.object_remove()
-    ad = d.animation_data
-    if ad and ad.action:
-        for fc in list(fcurves_of(ad.action)):
-            if fc.data_path in ("location", "rotation_euler", "rotation_quaternion"): fc.keyframe_points.clear()
-    d.rotation_mode = 'QUATERNION'; prev = None
-    for f, M in rec[d.name]:
-        l_, q_, _ = M.decompose()
-        if prev is not None and prev.dot(q_) < 0: q_ = -q_
-        prev = q_; d.location = l_; d.rotation_quaternion = q_
-        d.keyframe_insert("location", frame=f); d.keyframe_insert("rotation_quaternion", frame=f)
-for o in (OB["DumpGround"], *BEDS):
-    with bpy.context.temp_override(object=o, active_object=o, selected_objects=[o]):
-        bpy.ops.rigidbody.object_remove()
-with bpy.context.temp_override(scene=sc):
-    bpy.ops.rigidbody.world_remove()
-for d in drums:                          # drums that rolled out onto the flat would sit in front of the S13/S14 lenses: gone after the cut
-    fz, Mz = rec[d.name][-1]
-    if (Mz.translation.to_2d() - DX.to_2d()).length > 10.0 or Mz.translation.y < -6.5:
-        key_vis(d, [(f0("S13"), False)])
+            d = copy_obj(L_dr, "Drum_b%d_%d%d" % (bi, ix, iy), (x, y, bmn.z + 0.32 + 0.002), c=DCOLL); d.rotation_mode = 'QUATERNION'
+            d.rotation_quaternion = Quaternion((0, 0, 1), random.random() * 6)
+            REL = TIP0 + 50 + (4 - iy) * 6 + ix * 2
+            ev(TIP0); OFF = b.matrix_world.inverted() @ d.matrix_world
+            for f in range(TIP0, REL + 1, 2):
+                ev(f); l_, q_, _ = (b.matrix_world @ OFF).decompose(); d.location = l_; d.rotation_quaternion = q_
+                d.keyframe_insert("location", frame=f); d.keyframe_insert("rotation_quaternion", frame=f)
+            ev(REL); P0, q0, _ = d.matrix_world.decompose()
+            z_, src, M1 = slots[k]; k += 1
+            fly(d, REL, REL + 46, P0, M1, q0, R_(160))
+            drums.append(d)
+ARR0, ARR1 = TIP0 + 120, f1("S13") - 25
+rest = slots[k:]
+for i, (z_, src, M1) in enumerate(rest):   # wave 2: one after another from the truck side, lowest slots first
+    land = ARR0 + int((ARR1 - ARR0) * i / max(1, len(rest) - 1)); st = land - 44
+    P1 = M1.translation
+    P0 = Vector((P1.x * 0.7 + DX.x * 0.3 + random.uniform(-0.6, 0.6), DX.y + 12.8, 1.4 + random.uniform(0, 0.6)))
+    src.rotation_mode = 'QUATERNION'
+    fly(src, st, land, P0, M1, Quaternion((0, 0, 1), random.random() * 6) @ Quaternion((1, 0, 0), R_(80)), R_(random.choice((-200, 200))))
+    key_vis(src, [(0, False), (st, True)])
+    drums.append(src)
+print("DRUMS keyed", len(drums), "landing", ARR0, ARR1)
 camshot("S11", [(0.0, (DX.x + 0.01, 10.5, 18.0), (DX.x, 10.51, 0.0), 26), (1.0, (DX.x + 0.01, 9.0, 21.0), (DX.x, 9.01, 0.0), 26)])
-camshot("S12", [(0.0, (DX.x + 0.01, 0.0, 15.0), (DX.x, 0.01, 0.0), 24), (1.0, (DX.x + 0.01, 0.0, 17.5), (DX.x, 0.01, 0.0), 24)])
-camshot("S13", [(0.0, (DX.x - 11.0, -10.0, 3.6), (DX.x, 0.0, -1.2), 28), (1.0, (DX.x - 7.8, -12.6, 3.8), (DX.x, 0.0, -1.2), 28)])
+camshot("S12", [(0.0, HC + Vector((0.01, 0.6, 14.0)), HC + Vector((0, 0.61, 0)), 24), (1.0, HC + Vector((0.01, 0.6, 16.5)), HC + Vector((0, 0.61, 0)), 24)])
+camshot("S13", [(0.0, HC + Vector((-11.0, -10.0, 3.8)), HC + Vector((0, 0, 0.2)), 28), (1.0, HC + Vector((-7.8, -12.6, 4.0)), HC + Vector((0, 0, 0.2)), 28)])
 
 # ================================================================== S14: the bulldozer pushes a wave of dirt over the drums
 fa = f0("S14"); fe = fx("S14")

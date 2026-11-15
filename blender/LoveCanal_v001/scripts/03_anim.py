@@ -68,6 +68,9 @@ def arms_hang(H, f, sway=0.0):
         apply_pose(H.r.o, s, "relaxed", f)
 
 def face(H, f, brow=0.0, lid=-6, jaw=0.0):
+    """tested limits: oculi offsets below -0.002 bare the eye whites; lids past -12 read as closed (blinks use -55)"""
+    if lid > -50: lid = max(lid, -12.0)
+    brow = min(max(brow, -0.002), 0.003)
     PB_ = H.r.PB
     for s_ in "LR":
         for b_ in ("oculi01.", "oculi02."):

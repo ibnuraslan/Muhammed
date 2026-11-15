@@ -35,12 +35,12 @@ apply_pose(FA.r.o, "R", "wrap_grip", fa)
 NECK = (FA.r.BN["neck01"].head_local + FA.r.BN["neck02"].head_local) / 2
 for f in range(fa + 110, fe + 1, 4):
     ev(f); M = FA.r.o.matrix_world
-    n_ = M @ (posed(FA, CHIN, "head") + Vector((0, 0.05, -0.115))); fw = (M.to_3x3() @ Vector((0, -1, 0))).normalized()
+    n_ = M @ (FA.r.PB["spine01"].head + Vector((0.04, -0.13, -0.03))); fw = (M.to_3x3() @ Vector((0, -1, 0))).normalized()
     u = smooth((f - fa - 110) / 24)
     sh = M @ FA.r.PB["upperarm01.L"].head
     tgt = (sh + Vector((0, 0, -0.5)) + fw * 0.15).lerp(n_ + fw * 0.03, u)
     place_hand(FA.r.o, "L", f, tgt, -fw, (M.to_3x3() @ Vector((-1, 0, 0.4))).normalized())
-apply_pose(FA.r.o, "L", "relaxed", fa + 110); apply_pose(FA.r.o, "L", "cup_hold", fa + 134)
+apply_pose(FA.r.o, "L", "relaxed", fa + 110); apply_pose(FA.r.o, "L", "shield", fa + 134)
 camshot("S4", [(0.0, (300.08, -0.05, 1.58), (300.0, 1.2, 1.42), 40), (1.0, (300.06, 0.15, 1.57), (300.0, 1.2, 1.44), 40)])
 
 # ================================================================== S5: kitchen wide: glass on the counter, Father bends, hand over his mouth; Mother and Boy look on
