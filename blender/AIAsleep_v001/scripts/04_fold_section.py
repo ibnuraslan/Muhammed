@@ -187,8 +187,8 @@ KEYS = [(1737, CUTC + V((0.055, -0.035, 0.006)), CUTC, 30),          # clean cut
         (1916, EYE + V((-0.006, -0.074, 0.006)), EYE + V((0.004, 0, 0.001)), 40),   # clean cut out to the sharp fold macro
         (1975, EYE + V((-0.004, -0.072, 0.006)), EYE + V((0.004, 0, 0.001)), 40),
         (2010, EYE + V((-0.07, -0.30, 0.02)), FACEP, 32),                   # out to his face, then a slow push to the inner-corner fold
-        (2100, EYE + V((-0.035, -0.22, 0.012)), INNERP, 38),
-        (2185, EYE + V((-0.014, -0.15, 0.006)), INNERP, 44)]
+        (2100, EYE + V((-0.05, -0.27, 0.014)), INNERP, 36),
+        (2185, EYE + V((-0.028, -0.20, 0.010)), INNERP, 40)]
 for f, p, a, l in KEYS:
     cam.location = p; cam.keyframe_insert("location", frame=f); aim.location = a; aim.keyframe_insert("location", frame=f); camd.lens = l; camd.keyframe_insert("lens", frame=f)
 for idb in (cam, aim, camd):
