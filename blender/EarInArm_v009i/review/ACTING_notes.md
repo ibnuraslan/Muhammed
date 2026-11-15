@@ -32,7 +32,7 @@
 
 ## Checks (v009i, packed)
 - clip_scan: 2 single frames.
-  - 1657: the surgeon's hand brushes his own side for one frame as he steps back.
+  - 1657: as the surgeon steps back, his hand brushes the patient's shoulder for one frame.
   - 1753: the patient's fingertip on his new ear.
 - qa: CLAW, HOVER, FACEPRESS, INSIDE and ROLL are 0.
   - CAMJUMP 11: the intended clean cuts (156, 296, 580, 607, 633, 796, 881, 1346, 1441, 1501, 1601).
