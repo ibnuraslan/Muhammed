@@ -4,7 +4,7 @@ The director rejected v008b and asked for a simpler re-stage rather than more pa
 
 - `NoPilotPlane_v009_60fps.blend`: packed, plain git file (no LFS), one camera `CAM_Film`, frames 1–3481 (58.0 s at 60 fps).
 - `beats.json`: the director's 19 VO beat seconds; beat N starts at frame 1 + round(s × 60). No VO is added.
-- `review/preview.mp4` and `review/pages/`: the full preview (every 5th frame, 270×480, 12 fps = real speed). Ranges changed in v009c/v009d were re-rendered from this exact package and spliced in. The close-up (3346–3481) is rendered at 32 samples, everything else at 4. The unchanged ranges were rendered before the last flag change (eye/lash self-shadow off), which only affects the eyes.
+- `review/preview.mp4` and `review/pages/`: the full preview (every 5th frame, 270×480, 12 fps = real speed). Ranges changed in v009c–v009f were re-rendered from this exact package and spliced in. The close-up (3346–3481) is rendered at 32 samples, everything else at 4. The unchanged ranges were rendered before the last flag change (eye/lash self-shadow off), which only affects the eyes.
 
 ## The director's list
 
@@ -47,17 +47,14 @@ The ending close-up of his face (55.72–58.0 s) is kept as it was.
   - The FO-on-floor shot runs from 51.1 to 52.48 s.
   - The cut list is now 36 shots.
 
-## Checks on the packaged file
-All checks were run on the pushed package, md5 0118f628.
-- `cam_dist_check` (`review/camdist_v009.json`): 36 shots, none longer than 2.5 s. The closest flags are YOU at 2086 (11.77 s and the 55.72 s close-up, where the face fills the frame by design) and the FO at 174 (13.27–23.47 s, lying on the floor at the doorway).
-- `clip_scan` (`review/clip_scan_v009.json`): one bad range, frames 1429–1435 (about 23.8 s).
-- `limb_check` (`review/limb_v009.json`): 232 ARMBODY and 38 PROPHEAD flags. Most ARMBODY flags come from the check counting shoulder and clavicle groups as torso, so the upper-arm root always reads as "in the body". PROPHEAD is the hanging oxygen drops touching seated passengers' heads (2–8 points).
-- Self-clip probe at the fixed frames 757, 1033, 1063, 1147, 1219 and 1279: clean.
-- `qa_check`: still running on this package at the time of this commit.
+## Checks on the packaged file (v009f, md5 f63df03e)
+- `cam_dist_check` (`review/camdist_v009.json`): every shot is 2.5 s or shorter. The director asked for cameras inside the cockpit (item 4), and the cockpit is about 2.2 m wide, so many cockpit shots are 1.1–1.5 m from YOU (closest 1.07 m, 17.6–22.3 s) and 1.28–1.30 m from the FO (13.2–15.5 s, 24.8–25.1 s). The 1.5 m target is not met in those shots. In the preview no limb fills the frame. Inside the cockpit, a bigger distance would mean going back outside the windscreen, which item 4 rejected.
+- `clip_scan` (`review/clip_scan_v009.json`): two short ranges during the haul, 1429–1441 and 1471–1477 (23.8–24.6 s), where his hands are on the FO's jacket.
+- `limb_check` (`review/limb_v009.json`): 217 ARMBODY flags, mostly the known false positive (the check counts the shoulder groups as torso), and 38 PROPHEAD flags (the hanging oxygen drops touching seated passengers' heads).
+- `qa_check` was not re-run in this round (the director said not to wait for it).
 
 ## Open
-- At 25.5 s (frame 1531), YOU's right hand touches his hip, about 4.7 cm.
-- No conscious passenger kneels beside the FO. The FO is shown face up at medium distance, but the crouch-and-check beat is played by YOU beside the captain.
-- In the window view at 46–48 s, a flat green terrain patch is visible below the horizon.
-- In the face shot at 47.8–49.56 s, YOU's forearms read as crossed over the panel.
-- The dark eyes in the final close-up are preview noise at 270×480.
+- No conscious passenger kneels beside the FO. The FO is shown face up at medium distance (51.1–51.8 s); the crouch-and-check beat is played by YOU beside the captain.
+- The eyes in the close-up read correctly at 32 samples. At the 4-sample preview level they still darken, so the final render needs normal samples.
+- The FO's shoe comes close to the high front camera for about 0.3 s at 24.8 s.
+- Cockpit camera distances: see above.

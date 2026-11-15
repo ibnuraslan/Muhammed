@@ -109,14 +109,42 @@
    "YOU": {
     "self": 0,
     "clothes": 0,
-    "other": 34
+    "other": 50
    }
   },
   "1435": {
    "YOU": {
     "self": 0,
     "clothes": 0,
-    "other": 74
+    "other": 251
+   }
+  },
+  "1441": {
+   "YOU": {
+    "self": 0,
+    "clothes": 0,
+    "other": 233
+   }
+  },
+  "1471": {
+   "FO": {
+    "self": 0,
+    "clothes": 0,
+    "other": 780
+   }
+  },
+  "1477": {
+   "FO": {
+    "self": 0,
+    "clothes": 0,
+    "other": 535
+   }
+  },
+  "1483": {
+   "FO": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
    }
   }
  },
@@ -125,7 +153,11 @@
  "bad_ranges": [
   [
    1429,
-   1435
+   1441
+  ],
+  [
+   1471,
+   1477
   ]
  ],
  "fps": 60
