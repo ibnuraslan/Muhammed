@@ -75,7 +75,8 @@ SHOTS = [
     (44.20, 46.00, COCK_SIDE[0], COCK_SIDE[1], YC, 26),
     (46.00, 47.00, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.3)), 24),
     (47.00, 48.40, OTS2[0], OTS2[1], fixed((0.55, 2.20, 1.00)), 24),
-    (48.40, 50.30, COCK_SIDE[0], COCK_SIDE[1], YC, 28),            # v009g: both arms to the hands (the tight side shot read as a missing arm)
+    (48.40, 49.30, COCK_SIDE[0], COCK_SIDE[1], YC, 28),            # v009g: both arms to the hands (the tight side shot read as a missing arm)
+    (49.30, 50.30, OTS2[0], OTS2[1], fixed((0.55, 2.20, 1.00)), 24),   # v009h: from 49.3 s his left arm points at the side camera (a stub); from above both arms read
     (50.30, 51.10, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.3)), 24),
     (51.10, 51.80, (1.00, 0.90, 1.90), (0.99, 0.88, 1.89), mid(FH, FS, 0.4), 22),   # the first officer on his back, face up (0.7 s)
     (51.80, 53.00, COCK_SIDE[0], COCK_SIDE[1], YC, 28),
