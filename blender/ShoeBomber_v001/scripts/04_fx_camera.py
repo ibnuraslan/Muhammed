@@ -427,8 +427,8 @@ CAB = [[
     (1,   V((-0.94, 1.00, 1.35)), bp("Bomber", "head", 1, (0, 0, -0.15)), 30),
     (88,  V((-0.94, 1.00, 1.35)), bp("Bomber", "head", 88, (0, 0, -0.15)), 30),
     # <= 1 s closer on the match and his face (f/8)
-    (108, V((-0.96, 0.52, 1.25)), (op("Match_Flame", 108) * 0.4 + bp("Bomber", "head", 108) * 0.6), 32),
-    (150, V((-0.96, 0.52, 1.25)), (op("Match_Flame", 150) * 0.4 + bp("Bomber", "head", 150) * 0.6), 32),
+    (108, V((-0.96, 0.55, 1.36)), (op("Match_Flame", 108) * 0.25 + bp("Bomber", "head", 108, (0, 0, 0.04)) * 0.75), 32),
+    (150, V((-0.96, 0.55, 1.36)), (op("Match_Flame", 150) * 0.25 + bp("Bomber", "head", 150, (0, 0, 0.04)) * 0.75), 32),
     (182, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 182, (0, 0.2, -0.3)), 26),
     (199, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 199, (0, 0.2, -0.3)), 26),
     # beat 2: travel up the aisle above head height to the attendant walking down it, dolly back ahead of her, push to her eyes

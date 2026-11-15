@@ -419,9 +419,13 @@ for f, dy, lift, pitch in ((1393, 0, 0, 0), (1425, 0, 0, 0), (1435, -0.10, 0.04,
     trav.key_foot("R", f, RF0 + V((0.06 if f >= 1445 else 0, dy)), FWD, lift, pitch)
 # right hand: down to the sneaker heel on the floor (1478), lifts it over the tray (1500-1515), lets go (1520)
 # v006e: the conveyor models ran ACROSS the lane (he stood inside the belt); turn each one to run along the lane
+from mathutils import Matrix as _Mx
 for o in bpy.data.objects:
-    if o.name.startswith("Conveyor_") and not getattr(o, "_turned", False):
-        o.rotation_euler.z += math.radians(90)
+    if o.name.startswith("Conveyor_") and o.parent is None:
+        loc = o.matrix_world.translation.copy()
+        o.matrix_world = _Mx.Translation(loc) @ _Mx.Rotation(math.radians(90), 4, 'Z') @ _Mx.Translation(-loc) @ o.matrix_world
+bpy.context.view_layer.update()
+print("CONVEYORS", [(o.name, tuple(round(v, 2) for v in o.dimensions)) for o in bpy.data.objects if o.name.startswith("Conveyor_")][:2])
 TRAY = bpy.data.objects["Tray_1"]
 ev(1430); trf = wpos(trav, "foot.R", 1430)
 SHOE_PICK = V((trf.x + 0.02, trf.y - 0.04, 0.19))
