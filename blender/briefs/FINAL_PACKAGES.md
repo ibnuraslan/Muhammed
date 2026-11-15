@@ -43,7 +43,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 27 | SwedishCoffee | `claude/beautiful-ptolemy-c5vrcq` | `blender/SwedishCoffee_v012/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1995)** |
 | 28 | ToucanBeak | `claude/beautiful-ptolemy-c5vrcq` | `blender/ToucanBeak_v009/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1932)** |
 | 29 | AIAsleep | `claude/beautiful-ptolemy-c5vrcq` | `blender/AIAsleep_v007/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–2046)** |
-| 30 | FanCancer | `claude/connect30-fan-cancer` | `blender/FanCancer_v004/` **acting fixed, approved, final commit a270af3 (VO sync when your voiceover arrives)** |
+| 30 | FanCancer | `claude/beautiful-ptolemy-c5vrcq` | `blender/FanCancer_v011/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–2120)** |
 | 31 | PopeShot | `claude/beautiful-ptolemy-c5vrcq` | `blender/PopeShot_v012/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1475)** |
 | 32 | GoatOwner | `claude/beautiful-ptolemy-c5vrcq` | `blender/GoatOwner_v009/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1793)** |
 | 33 | WaterTubes | `claude/beautiful-ptolemy-c5vrcq` | `blender/WaterTubes_v006/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1769)** |
