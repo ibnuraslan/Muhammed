@@ -200,11 +200,24 @@ bpy.ops.mesh.primitive_circle_add(vertices=24, radius=0.028, fill_type='NGON', l
 HOLE = bpy.context.active_object; HOLE.name = "SeatHole"; HOLE.data.materials.append(hm); move_to(HOLE, CT)
 for i, v in enumerate(HOLE.data.vertices):
     if v.co.length > 0.001: v.co *= 1.0 + 0.25 * math.sin(i * 2.7)
-bpy.ops.mesh.primitive_torus_add(major_radius=0.032, minor_radius=0.005, major_segments=24, location=(0, 0, 0))
-LIP = bpy.context.active_object; LIP.name = "SeatHoleLip"; LIP.data.materials.append(lip); move_to(LIP, CT)
-LIP.scale = (1, 1, 0.35); bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
-for i, v in enumerate(LIP.data.vertices):
-    a_ = math.atan2(v.co.y, v.co.x); v.co.x *= 1.0 + 0.18 * math.sin(a_ * 5); v.co.y *= 1.0 + 0.18 * math.sin(a_ * 5)
+foam_m = mat("SeatFoam", (0.95, 0.85, 0.55), 0.85)
+bmL = bmesh.new()
+rnd = random.Random(11)
+for i in range(22):
+    a_ = i / 22 * 2 * math.pi + rnd.uniform(-0.1, 0.1); r_ = 0.031 + rnd.uniform(-0.004, 0.006)
+    m_ = Matrix.Translation((math.cos(a_) * r_, math.sin(a_) * r_, -0.002 - rnd.uniform(0, 0.004)))
+    g_ = bmesh.ops.create_icosphere(bmL, subdivisions=1, radius=rnd.uniform(0.004, 0.008), matrix=m_)
+for i in range(7):               # torn fabric flaps curling outward
+    a_ = i / 7 * 2 * math.pi + 0.3
+    c_, s_ = math.cos(a_), math.sin(a_)
+    v1 = bmL.verts.new((c_ * 0.026 - s_ * 0.010, s_ * 0.026 + c_ * 0.010, 0.0))
+    v2 = bmL.verts.new((c_ * 0.026 + s_ * 0.010, s_ * 0.026 - c_ * 0.010, 0.0))
+    v3 = bmL.verts.new((c_ * 0.050, s_ * 0.050, -0.010))
+    f_ = bmL.faces.new((v1, v2, v3)); f_.material_index = 1
+me_ = bpy.data.meshes.new("SeatHoleLip"); bmL.to_mesh(me_); bmL.free()
+LIP = bpy.data.objects.new("SeatHoleLip", me_); CT.objects.link(LIP)
+LIP.data.materials.append(foam_m); LIP.data.materials.append(beige)
+sol_ = LIP.modifiers.new("solid", 'SOLIDIFY'); sol_.thickness = 0.002
 for o in (HOLE, LIP):
     o.rotation_euler = (R_(90), 0, 0); o.location = HOLE_P; o.scale = (0.001, 0.001, 0.001)
 SMOKE_M = mat("Smoke", (0.85, 0.85, 0.85), 0.9, alpha=0.35)
@@ -464,9 +477,16 @@ def dog_side(f, loc, yaw, head=(0, 0, 0), tail=0.0, breath=0.0, roll_sign=1):
             "IK_hoof.HL": ((0, 0.05, 0.07), None), "IK_hoof.HR": ((0, 0.02, 0.05), None),
             "neck1": (None, (8 + head[0], head[1], head[2])), "head": (None, (-6, 0, 0)), "tail1": (None, (-35 + tail, 0, 0)),
             "spine1": (None, (breath, 0, 0))}
+    pose.update({"spine1": (None, (breath, 0, 5)), "spine2": (None, (0, 0, 4)), "neck1": (None, (8 + head[0], head[1], 10 + head[2])),
+                 "head": (None, (-2, 0, 5)), "tail1": (None, (-30, 0, -20)), "tail2": (None, (0, 0, -25))})
+    CURL = {"IK_hoof.FL": (0.03, 0.13, 0.16), "IK_hoof.FR": (0.0, 0.10, 0.13), "IK_hoof.HL": (0.03, -0.16, 0.14), "IK_hoof.HR": (0.0, -0.13, 0.11)}
     for pb in DOG.pose.bones:
         l_, r_ = pose.get(pb.name, (None, None))
-        pb.location = Vector(l_) if l_ else Vector(); pb.rotation_mode = 'QUATERNION'
+        if pb.name in CURL:
+            pb.location = DOG.data.bones[pb.name].matrix_local.to_3x3().inverted() @ Vector(CURL[pb.name])
+        else:
+            pb.location = Vector(l_) if l_ else Vector()
+        pb.rotation_mode = 'QUATERNION'
         pb.rotation_quaternion = Euler(tuple(R_(v) for v in r_)).to_quaternion() if r_ else Quaternion()
         pb.keyframe_insert("location", frame=f); pb.keyframe_insert("rotation_quaternion", frame=f)
 
@@ -606,8 +626,9 @@ def S06(f0, f1):
     for i, s_ in enumerate(smokes):
         keyobj(s_, f0, loc=HOLE_P + Vector((0.01 * i - 0.02, -0.03, 0.02)), scale=1.2)
         keyobj(s_, f1, loc=HOLE_P + Vector((0.03 * i - 0.06, -0.12 - 0.02 * i, 0.14 + 0.03 * i)), scale=2.8 + i * 0.4)
-    c = camera("06", 40)
-    cam_key(c, f0, HOLE_P + Vector((-0.12, 0.42, 0.04)), HOLE_P); cam_key(c, f1, HOLE_P + Vector((-0.08, 0.30, 0.03)), HOLE_P)
+    c = camera("06", 20)
+    cam_key(c, f0, Vector((0.62, 0.40, 0.72)), Vector((HOLE_P.x - 0.02, SEATBACK_Y, 0.82)), lens=18)
+    cam_key(c, f1, Vector((0.60, 0.36, 0.70)), Vector((HOLE_P.x - 0.02, SEATBACK_Y, 0.80)), lens=18)
 
 # anatomy: bullet path from behind (+Y side is the man's back after the skeleton is turned)
 def anat_points():
@@ -725,8 +746,12 @@ def S08b(f0, f1):
     cam_key(c, f0, tgt + Vector((-0.45, -0.62, -0.02)), tgt); cam_key(c, f1, tgt + Vector((-0.38, -0.52, -0.02)), tgt)
 
 CLIP = dup(bpy.data.objects["Clipboard"], "ClipHeld", (0, 0, 0), (0, 0, 0), 1.0, CI, linked=False)
+bpy.ops.mesh.primitive_cube_add(size=1); GAUZE = bpy.context.active_object; GAUZE.name = "GauzePad"
+GAUZE.scale = (0.08, 0.09, 0.008); bpy.ops.object.transform_apply(scale=True)
+_gb = GAUZE.modifiers.new("bev", 'BEVEL'); _gb.width = 0.003; _gb.segments = 2
+GAUZE.data.materials.append(mat("Gauze", (0.97, 0.97, 0.96), 0.8)); move_to(GAUZE, CI)
 def S09(f0, f1):
-    PRESENT["09"] = {"own", "ma", "mb"}
+    PRESENT["09"] = {"own", "ma"}
     st = IX + Vector((0.30, 0.15, STR_Z))
     seated(HOWN, OWNER, f0, st, yaw=90, lean=-6, flex=8, head=(10, 15), knee_fwd=0.45, foot_z=0.0)
     seated(HOWN, OWNER, f1, st, yaw=90, lean=-6, flex=9, head=(12, 25), knee_fwd=0.45, foot_z=0.0)
@@ -735,34 +760,37 @@ def S09(f0, f1):
     pa = IX + Vector((-0.30, 0.22, 0))
     for fr, hd, dz in ((f0, (22, 0), 0.0), ((f0 + f1) // 2, (25, 5), -0.03), (f1, (24, 2), -0.05)):
         stand(HMA, MEDA, fr, pa, yaw=90, head=hd, flex=14, hands=False)
-        place_hand(MEDA, "L", fr, IX + Vector((0.17, 0.27, STR_Z + 0.50 + dz)), (1, 0, 0), (0, 0.15, 1)); apply_pose(MEDA, "L", "flat_palm", fr)
+        place_hand(MEDA, "L", fr, IX + Vector((0.155, 0.27, STR_Z + 0.50 + dz)), (1, 0, 0), (0, 0.15, 1)); apply_pose(MEDA, "L", "flat_palm", fr)
         place_hand(MEDA, "R", fr, pa + Vector((0.10, -0.24, 1.02)), (0, 1, 0), (1, 0.3, -0.4)); apply_pose(MEDA, "R", "relaxed", fr)
-    # medic B by the cabinets, reading a clipboard held on his left palm, right hand at its edge
-    pb_ = IX + Vector((-0.50, -0.80, 0))
-    for fr, hd in ((f0, (28, 0)), (f1, (30, -6))):
-        stand(HMB, MEDB, fr, pb_, yaw=-150, head=hd, flex=6, hands=False)
-        c3 = Matrix.Rotation(R_(-150), 3, 'Z')
-        place_hand(MEDB, "L", fr, pb_ + c3 @ Vector((0.06, -0.30, 1.10)), c3 @ Vector((0, 0.45, -1)), c3 @ Vector((-1, 0, 0.1))); apply_pose(MEDB, "L", "hold_flat_object", fr)
-        place_hand(MEDB, "R", fr, pb_ + c3 @ Vector((-0.18, -0.30, 1.12)), c3 @ Vector((1, 0, 0)), c3 @ Vector((0, -0.4, 0.9))); apply_pose(MEDB, "R", "relaxed", fr)
-    attach_to_hand(CLIP, MEDB, "L", f0, along=0.07, off=0.02, axes="z")
+    attach_to_hand(GAUZE, MEDA, "L", f0, along=0.075, off=0.010, toward=IX + Vector((0.4, 0.27, STR_Z + 0.5)), axes="z")
     c = camera("09", 24)
     cam_key(c, f0, IX + Vector((0.55, -1.55, 1.55)), IX + Vector((0.0, 0.2, 1.0))); cam_key(c, f1, IX + Vector((0.45, -1.35, 1.52)), IX + Vector((0.0, 0.25, 1.0)))
 
 def S10(f0, f1):
-    PRESENT["10"] = {"own", "ma", "mb"}
-    st = IX + Vector((0.30, 0.0, STR_Z))
+    PRESENT["10"] = {"own", "mb"}
+    st = IX + Vector((0.30, -0.25, STR_Z))
     seated(HOWN, OWNER, f0, st, yaw=180, lean=-6, flex=8, head=(10, 0), knee_fwd=0.45)
     seated(HOWN, OWNER, f1, st, yaw=180, lean=-6, flex=8, head=(8, 8), knee_fwd=0.45)
     hands_lap(OWNER, f0, st, yaw=180); hands_lap(OWNER, f1, st, yaw=180)
-    for H_, rg, x, hd in ((HMA, MEDA, -0.55, (5, 10)), (HMB, MEDB, 0.62, (5, -8))):
-        for fr, h2 in ((f0, hd), (f1, (hd[0] + 3, hd[1] * 1.5))):
-            pos = IX + Vector((x, 1.40, 0)); c3 = Matrix.Rotation(R_(180), 3, 'Z')
-            stand(H_, rg, fr, pos, yaw=180, head=h2, flex=3, hands=False)
-            # hands loosely clasped in front at the waist, elbows bent
-            place_hand(rg, "L", fr, pos + c3 @ Vector((0.05, -0.20, 0.98)), c3 @ Vector((-1, 0, 0)), c3 @ Vector((-0.4, -0.3, -0.85))); apply_pose(rg, "L", "relaxed", fr)
-            place_hand(rg, "R", fr, pos + c3 @ Vector((-0.07, -0.21, 0.96)), c3 @ Vector((1, 0, 0)), c3 @ Vector((0.4, -0.3, -0.85))); apply_pose(rg, "R", "relaxed", fr)
+    RZ = STR_Z + 0.10
+    for H_, rg, x, yaw_, rx, hd in ():
+        for fr, h2, dy in ((f0, hd, 0.0), (f1, (hd[0] + 4, -8 if x < 0 else 8), 0.02)):
+            pos = IX + Vector((x, 0.62, 0))
+            stand(H_, rg, fr, pos, yaw=yaw_, head=h2, flex=18, hands=False)
+            # both hands on the stretcher's side rail, palms down, elbows bent
+            for s, sy in (("L", 1), ("R", -1)):
+                sgn = 1 if yaw_ < 0 else -1
+                place_hand(rg, s, fr, IX + Vector((rx, 0.62 + sy * sgn * 0.17 + dy, RZ + 0.012)), (0, 0, -1), (sgn * 1, 0, -0.25))
+                apply_pose(rg, s, "wrap_grip", fr, amount=0.6)
+    pb_ = IX + Vector((-0.50, 1.30, 0))
+    for fr, hd in ((f0, (30, 0)), (f1, (32, -6))):
+        stand(HMB, MEDB, fr, pb_, yaw=160, head=hd, flex=6, hands=False)
+        c3 = Matrix.Rotation(R_(160), 3, 'Z')
+        place_hand(MEDB, "L", fr, pb_ + c3 @ Vector((0.06, -0.30, 1.10)), c3 @ Vector((0, 0.45, -1)), c3 @ Vector((-1, 0, 0.1))); apply_pose(MEDB, "L", "hold_flat_object", fr)
+        place_hand(MEDB, "R", fr, pb_ + c3 @ Vector((-0.18, -0.30, 1.12)), c3 @ Vector((1, 0, 0)), c3 @ Vector((0, -0.4, 0.9))); apply_pose(MEDB, "R", "relaxed", fr)
+    attach_to_hand(CLIP, MEDB, "L", f0, along=0.07, off=0.02, axes="z")
     c = camera("10", 24)
-    cam_key(c, f0, IX + Vector((0.0, 4.1, 0.75)), IX + Vector((0, 1.0, 1.05))); cam_key(c, f1, IX + Vector((0.0, 3.8, 0.78)), IX + Vector((0, 1.0, 1.05)))
+    cam_key(c, f0, IX + Vector((0.25, 3.9, 1.15)), IX + Vector((0.3, 0.4, 0.95))); cam_key(c, f1, IX + Vector((0.25, 3.6, 1.15)), IX + Vector((0.3, 0.4, 0.95)))
 
 def amb_lights(f0, f1):
     for k, f in enumerate(range(f0, f1 + 1, 8)):
@@ -825,8 +853,8 @@ def S14b(f0, f1):
     cam_key(c, f0, tgt + Vector((1.05, -0.25, 0.12)), tgt, lens=32); cam_key(c, f1, tgt + Vector((0.90, -0.22, 0.10)), tgt, lens=32)
 
 DOGSPOT = CLR + Vector((0.2, -0.4, 0)); MANSPOT = CLR + Vector((0.4, 0.75, 0))
-def clear_man(f, head=(30, 0), breath=0.0):
-    stand(HOWN, OWNER, f, MANSPOT, yaw=8, head=head, flex=6, breath=breath)
+def clear_man(f, head=(30, 0), breath=0.0, back=0.0):
+    stand(HOWN, OWNER, f, MANSPOT + Vector((0, back, 0)), yaw=8, head=head, flex=6, breath=breath)
 def clear_dog(f, breath=0.0):
     dog_side(f, DOGSPOT, 260, head=(0, 0, 0), tail=0, roll_sign=1)
 def S15a(f0, f1):
@@ -834,11 +862,11 @@ def S15a(f0, f1):
     for fr, hd in ((f0, (20, 5)), ((f0 + f1) // 2, (30, 0)), (f1, (34, -3))):
         clear_man(fr, head=hd); clear_dog(fr)
     c = camera("15a", 28)
-    tgt = MANSPOT + Vector((0, 0, 1.0))
-    cam_key(c, f0, MANSPOT + Vector((1.6, -4.2, 0.45)), tgt); cam_key(c, f1, MANSPOT + Vector((1.4, -3.8, 0.50)), tgt)
+    tgt = MANSPOT.lerp(DOGSPOT, 0.5) + Vector((0, 0, 0.75))
+    cam_key(c, f0, tgt + Vector((0.6, -4.6, 0.0)), tgt, lens=26); cam_key(c, f1, tgt + Vector((0.5, -4.2, 0.05)), tgt, lens=26)
 def S15b(f0, f1):
     PRESENT["15b"] = {"own", "dog"}
-    for fr in (f0, f1): clear_man(fr, head=(34, -3)); clear_dog(fr)
+    for fr in (f0, f1): clear_man(fr, head=(34, -3), back=1.4); clear_dog(fr)
     c = camera("15b", 35)
     sc.frame_set(f0); Mw = DOG.matrix_world
     Hd = Mw @ DOG.pose.bones["head"].head; Bd = Mw @ DOG.pose.bones["spine1"].head; Lg = Mw @ DOG.pose.bones["hoof.FL"].head
@@ -846,7 +874,7 @@ def S15b(f0, f1):
     if pp.dot(Lg - Bd) > 0: pp = -pp
     tgt = Bd.lerp(Hd, 0.55); tgt.z = DOGSPOT.z + 0.18
     print("BUILD 15b head", tuple(round(x, 2) for x in Hd), "body", tuple(round(x, 2) for x in Bd))
-    cam_key(c, f0, tgt + v * 0.45 + pp * 0.95 + Vector((0, 0, 1.05)), tgt, lens=30); cam_key(c, f1, tgt + v * 0.38 + pp * 0.80 + Vector((0, 0, 0.92)), tgt, lens=30)
+    cam_key(c, f0, tgt + v * 0.15 + pp * 0.85 + Vector((0, 0, 1.35)), tgt, lens=30); cam_key(c, f1, tgt + v * 0.12 + pp * 0.74 + Vector((0, 0, 1.20)), tgt, lens=30)
 def S15c(f0, f1):
     PRESENT["15c"] = {"own", "dog"}
     for fr, hd, br in ((f0, (34, -3), 0), ((f0 + f1) // 2, (38, -4), 3), (f1, (36, -2), 0)):
@@ -904,8 +932,10 @@ f08 = SH["08a"][1]; f08e = SH["08b"][2]
 for fr, hid in ((1, True), (f08 - 1, True), (f08, False), (f08e, False), (f08e + 1, True)):
     PH.hide_render = PH.hide_viewport = hid; PH.keyframe_insert("hide_render", frame=fr); PH.keyframe_insert("hide_viewport", frame=fr)
 f9, f9e = SH["09"][1], SH["09"][2]
-for fr, hid in ((1, True), (f9 - 1, True), (f9, False), (f9e, False), (f9e + 1, True)):
-    CLIP.hide_render = CLIP.hide_viewport = hid; CLIP.keyframe_insert("hide_render", frame=fr); CLIP.keyframe_insert("hide_viewport", frame=fr)
+f10, f10e = SH["10"][1], SH["10"][2]
+for ob_, (a_, b_) in ((CLIP, (f10, f10e)), (GAUZE, (f9, f9e))):
+    for fr, hid in ((1, True), (a_ - 1, True), (a_, False), (b_, False), (b_ + 1, True)):
+        ob_.hide_render = ob_.hide_viewport = hid; ob_.keyframe_insert("hide_render", frame=fr); ob_.keyframe_insert("hide_viewport", frame=fr)
 # hard cuts: boundary keys get vector handles, the last key of every shot is constant (no inbetween across a cut)
 BOUND = set()
 for sid, st, f0, f1 in lay: BOUND |= {f0, f1}
