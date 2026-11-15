@@ -325,7 +325,7 @@ WAIST = TPOS.to_3d() + V((0, 0, TE.root.z + 0.08))
 for i, f in enumerate(range(1166, 1300, 8)):
     ph = i * 0.9
     TE.key(f, TPOS, TYAW, head=(25 if f < 1240 else -5, 0), flex=-3,
-           hands={"L": ("rel", (0.2, -0.03, -0.82 * TE.arm + 0.02 * math.sin(ph))), "R": ("rel", (0.2, -0.03, -0.82 * TE.arm + 0.02 * math.cos(ph)))} if f < 1250 else     # arms lowered, held a little out to the sides, clear of the knot
+           hands={"L": ("rel", (0.24, -0.2, -0.7 * TE.arm + 0.02 * math.sin(ph))), "R": ("rel", (0.24, -0.2, -0.7 * TE.arm + 0.02 * math.cos(ph)))} if f < 1250 else     # arms lowered, held a little out to the sides, clear of the knot
                  {"L": ("rel", (0.22, 0.04, -0.7 * TE.arm)), "R": ("rel", (0.22, 0.04, -0.7 * TE.arm))})
 # ResB in front of the teen, knotting at the waist
 RBT = TPOS + (Rz(TYAW) @ V((0, -0.74, 0))).to_2d()
@@ -349,7 +349,7 @@ for i, f in enumerate(range(1140, 1300, 10)):
 # ================================================================== HEAD-FIRST LOWERING (1297-1500), GRAB (1501-1626), RISE (1627-1764)
 # teen stands at the rim on the +y side facing -y (yaw 0) then pitches forward into the pipe; ResA/ResB hold his legs.
 RIM = V((0.0, 0.55))
-TE.walk([TPOS, V((0.0, 1.25)), RIM], 1290, 1312, stride=0.6)     # straight in between the two holders
+TE.walk([TPOS, V((0.0, 1.25)), RIM], 1290, 1312, stride=0.6, arm_swing=0.04)     # straight in between the two holders
 TOP_Y = 0.0
 def teen_ank(rp, Rb, s, flex=180.0):
     """ankle target for the head-down teen: feet together, toes pointed up the pipe (narrow, like a dive)"""
