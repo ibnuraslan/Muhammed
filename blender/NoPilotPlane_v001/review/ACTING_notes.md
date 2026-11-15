@@ -69,3 +69,9 @@ Build: `hand_poses.py` is now in the packaged file. Every finger pose goes throu
 - **Handset, 21.8–25.6 s:** it is held low and forward, shouting down into it. It leaves the lower frame instead of reaching the eye.
   - Distance from the camera to the handset surface, frames 1290–1570: minimum 22.5 cm (it was 0.3 cm).
 - **Strip:** `review/v007d_black_cells_strip.jpg` (23.0, 23.5, 24.0, 24.5, 25.5 and 29.0 s). No black shapes.
+
+## v008b: intended prop motion (qa_check PROPMOVE)
+These props move with no hand on them on purpose:
+- **CUP, DRIP_0, DRIP_1, 3.2–4.4 s:** the turbulence jolt shakes the drink and its drips on the neighbour's tray.
+- **YOKE_L, YOKE_R, 30.9–31.5 s and 43 s (whenever YOU's hands are off them):** the autopilot is still flying, so the control columns move by themselves.
+- **OXYDROP_* (renamed from MASK_*):** the deployed oxygen masks hang on their tubes from a fixed ceiling mount (`OXYDROP_CEILING_MOUNT`). Nobody wears them, so the worn-mask ATTACH check does not apply.

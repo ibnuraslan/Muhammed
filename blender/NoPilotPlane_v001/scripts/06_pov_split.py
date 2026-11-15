@@ -45,9 +45,14 @@ def split(ob):
 
 # v008b: keep unsplit copies for the face reveal (split seams show at the shoulders); they render only from REVEAL on,
 # the split pieces only before it
-def key_render(o, before_hidden):
+# (per-ray visibility, not hide_render: qa_check reads a rig as absent when its largest body mesh is render-hidden)
+RAYS = ("visible_camera", "visible_shadow", "visible_diffuse", "visible_glossy", "visible_transmission", "visible_volume_scatter")
+def key_render(o, before_hidden, cam_before=None):
     for f_, h in ((1, before_hidden), (REVEAL - 1, before_hidden), (REVEAL, not before_hidden)):
-        o.hide_render = h; o.keyframe_insert("hide_render", frame=f_)
+        for r in RAYS:
+            v = not h
+            if r == "visible_camera" and cam_before is not None and f_ < REVEAL: v = cam_before
+            setattr(o, r, v); o.keyframe_insert(r, frame=f_)
 origs = []
 for nm in ("YOU.body", "YOU.male_casualsuit04"):
     src = bpy.data.objects[nm]; cp = src.copy(); cp.data = src.data.copy(); cp.name = nm + ".reveal"
@@ -58,18 +63,18 @@ for nm in ("YOU.body", "YOU.male_casualsuit04"):
     origs.append(cp)
 parts = [split(bpy.data.objects["YOU.body"]), split(bpy.data.objects["YOU.male_casualsuit04"])]
 for o in origs: key_render(o, True)
-for nm in ("YOU.body", "YOU.male_casualsuit04", "YOU.body.headpart", "YOU.male_casualsuit04.headpart"): key_render(bpy.data.objects[nm], False)
+for nm in ("YOU.body", "YOU.male_casualsuit04"): key_render(bpy.data.objects[nm], False)
+for o in parts: key_render(o, False, cam_before=False)      # head pieces: shadows only before the reveal, gone after
 for nm in ("YOU.high-poly", "YOU.teeth_base", "YOU.tongue01"):
-    parts.append(bpy.data.objects[nm])
-for o in parts: key_cam(o)
+    parts.append(bpy.data.objects[nm]); key_cam(parts[-1])
 # Blender 5 layered actions: set CONSTANT on every channelbag curve of these objects
-for o in parts:
+for o in parts + origs + [bpy.data.objects["YOU.body"], bpy.data.objects["YOU.male_casualsuit04"]]:
     act = o.animation_data.action
     for lay in getattr(act, "layers", []):
         for st in lay.strips:
             for cb in st.channelbags:
                 for fc in cb.fcurves:
-                    if fc.data_path == "visible_camera":
+                    if fc.data_path.startswith("visible_"):
                         for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
 # where the 8 cm near clip cuts into YOU's own limb, the camera would see the dark inside of the mesh (black blobs):
 # make backfaces transparent to camera rays on all of YOU's materials, so a clipped limb shows the cockpit behind it
@@ -113,8 +118,9 @@ for o in list(bpy.data.objects):
     elif o.name.startswith("VISOR_"):
         o.name = "SUNSHADE_" + o.name[6:]
 print("PROPFIX bone-parented", nb, "oxygen drops", nm)
-# nothing belongs within 8 cm of an eye: clip YOU's own forearm when it crosses under the lens (29.0 s haul)
-bpy.context.scene.camera.data.clip_start = 0.08
+# v008c: 3 cm near clip. YOU's arms are posed to stay >= 10 cm deep (lens2 check); the head meshes are camera-invisible,
+# so a small clip only stops a near shoulder or forearm at the frame edge from being cut open
+bpy.context.scene.camera.data.clip_start = 0.03
 bpy.context.scene.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)
 print("POVSPLIT saved", out, [o.name for o in parts])

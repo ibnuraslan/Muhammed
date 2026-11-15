@@ -655,13 +655,15 @@ def jacket_pt(f, guess):
     if nrm.dot(loc - (FO.matrix_world @ FO.pose.bones["spine03"].head)) < 0: nrm = -nrm
     return loc, nrm
 for f in list(range(F(27.9), F(31.0), 8)) + list(range(F(31.0), F(32.3), 4)):          # left hand on the collar, right hand on his near shoulder seam, outside the jacket
-    wl = fo_point(f, "upperarm01.L", (-0.12, -0.12, 0.14))          # v008b: both hands on his near shoulder (the left one inboard of the right)
-    hand("L", f, wl, d=(0.3, 1, -0.4), n=(0, -0.5, 1), curl=72, pole=wl + Vector((-0.45, -0.30, -0.25)))     # elbows out, not under the eye
-    p_, n_ = jacket_pt(f, fo_point(f, "upperarm01.L", (-0.12, -0.12, 0.14)))
-    place_hand(YOU, "L", f, p_, -n_, (0.2, 1, -0.6))                                  # palm on top of his shoulder, elbow out
-    wr_ = fo_point(f, "upperarm01.L", (-0.10, -0.12, 0.06))
-    hand("R", f, wr_, d=(0.3, 1, -0.6), n=(-0.3, -0.3, 1), curl=72, pole=wr_ + Vector((0.45, -0.30, -0.25)))
-    p_, n_ = jacket_pt(f, fo_point(f, "upperarm01.L", (-0.05, -0.08, 0.12)))
+    # v008c: grip LOW (his near upper arm / harness side, ~20 cm under the eye line) so YOU's forearms pass under the lens,
+    # never across it (the high shoulder grip put the left forearm 0-5 cm in front of the eye, cut by the near clip)
+    wl = fo_point(f, "upperarm02.L", (-0.07, -0.05, 0.0))
+    hand("L", f, wl, d=(0.4, 1, -0.2), n=(-0.6, -0.4, 0.2), curl=72, pole=wl + Vector((-0.30, -0.25, -0.50)))     # elbow down and out
+    p_, n_ = jacket_pt(f, wl)
+    place_hand(YOU, "L", f, p_, -n_, (0.3, 1, -0.3))                                  # palm on the outside of his near upper arm
+    wr_ = fo_point(f, "upperarm01.L", (-0.06, -0.10, 0.0))
+    hand("R", f, wr_, d=(0.3, 1, -0.6), n=(-0.3, -0.3, 1), curl=72, pole=wr_ + Vector((0.40, -0.25, -0.45)))
+    p_, n_ = jacket_pt(f, fo_point(f, "upperarm01.L", (-0.05, -0.09, 0.03)))
     place_hand(YOU, "R", f, p_, -n_, (0.2, 1, -0.6))                                  # palm on top of his near shoulder          # top of his near shoulder, outside the jacket
 for s_, sx in (("L", -1), ("R", 1)):          # he is on the floor, out of reach: let go, hands back at the sides
     hand(s_, F(32.6), (sx * 0.20, 0.62, 0.78), d=(0, 0.3, -1), n=(-sx, 0, 0), curl=30)
