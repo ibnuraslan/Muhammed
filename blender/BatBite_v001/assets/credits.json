@@ -1,0 +1,92 @@
+{
+ "bat": {
+  "uid": "01a0487f34fd4c6598159d2c55259dca",
+  "title": "Bat | Kelelawar",
+  "author": "denys4624",
+  "author_profile": "https://sketchfab.com/denys4624",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/01a0487f34fd4c6598159d2c55259dca",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "drums": {
+  "uid": "99218427e7a2424ea8afc9b8c668a5c7",
+  "title": "Drum Kit",
+  "author": "Serg.Morgun",
+  "author_profile": "https://sketchfab.com/Serg.Morgun",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/99218427e7a2424ea8afc9b8c668a5c7",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "micstand": {
+  "uid": "3e497c38e19148779ad39deef0e0bc2f",
+  "title": "Basic Wireless Microphone with Stand",
+  "author": "Cartawampus",
+  "author_profile": "https://sketchfab.com/Cartawampus",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/3e497c38e19148779ad39deef0e0bc2f",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "bed": {
+  "uid": "60651eac7e96454c8cf5c43a91412336",
+  "title": "Simple Hospital Bed",
+  "author": "Yvo Pors",
+  "author_profile": "https://sketchfab.com/yvopors14",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/60651eac7e96454c8cf5c43a91412336",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "truss": {
+  "uid": "f43719b6267645a587a9d3959b5f2d2b",
+  "title": "Square Truss Straight Segment 21",
+  "author": "akerStudio",
+  "author_profile": "https://sketchfab.com/akerStudio",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/f43719b6267645a587a9d3959b5f2d2b",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "pa": {
+  "uid": "071eb97ed2bf429c821a8ebfcf3554d4",
+  "title": "PA Speakers Low-Poly",
+  "author": "TheGiwi",
+  "author_profile": "https://sketchfab.com/TheGiwi",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/071eb97ed2bf429c821a8ebfcf3554d4",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "amp": {
+  "uid": "2f2c3113cb0840f493b5e46d36628642",
+  "title": "Guitar Amp",
+  "author": "AleksandarStankovic",
+  "author_profile": "https://sketchfab.com/AleksandarSt",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/2f2c3113cb0840f493b5e46d36628642",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "bridge": {
+  "uid": "c7125bf6af4b4d36aec88255462a28f9",
+  "title": "McClintic Marshall Products Co., Tender D",
+  "author": "statelibrarynsw",
+  "author_profile": "https://sketchfab.com/statelibrarynsw",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/c7125bf6af4b4d36aec88255462a28f9",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "ivstand": {
+  "uid": "a93a8e70ecd2459c99e7812c6e09b88c",
+  "title": "IV Stand and Bag",
+  "author": "Somar52",
+  "author_profile": "https://sketchfab.com/Somar52",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/a93a8e70ecd2459c99e7812c6e09b88c",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "vitals": {
+  "uid": "295ed50eeaa249e8bbeed7b305d3da71",
+  "title": "Bed Curtain and Vital Signs Monitor",
+  "author": "Ethan Cragun",
+  "author_profile": "https://sketchfab.com/EDIIIC",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/295ed50eeaa249e8bbeed7b305d3da71",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
