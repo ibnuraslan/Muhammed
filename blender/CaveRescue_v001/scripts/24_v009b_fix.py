@@ -55,15 +55,16 @@ hold(871, 890, 871); hold(1065, 1070, 1071)
 push(1591, 1654, 1600); push(1704, 1820, 1720)
 # 2: injection close-up
 inj = {}
-for f in range(1655, 1704):      # the medic's forearm crosses the lens before 1655 and after 1703
-    sc.frame_set(f); sp = syr.matrix_world.translation.copy()
-    inj[f] = (sp + V((0.15, -0.55, 0.05)) + V((0, 0.06, 0)) * (f - 1655) / 48, sp, 35)
+D2 = V((-0.2, -1, 0)).normalized()
+for f in range(1655, 1704):      # v009c: the boy's front-right at his face height; his face, the medic beside him and the hand with the syringe
+    p = face(f); sp = syr.matrix_world.translation.copy()
+    inj[f] = (p + D2 * (0.85 - 0.05 * (f - 1655) / 48) + V((0, 0, -0.12)), p * 0.55 + sp * 0.45, 30)
 apply(inj)
 # 7: mask on the boy's face (from 1811, after it is on): tight, long lens from the low front-right so only face and mask fill the frame
 DIR = V((-0.28, -1.57, -0.01)).normalized(); mk = {}
 for f in range(1821, 1885):
     p = face(f)
-    mk[f] = (p + DIR * (1.5 - 0.12 * (f - 1821) / 63) + V((0, 0, 0.12)), p - V((0, 0, 0.04)), 62)
+    mk[f] = (p + V((-0.25, -0.75 + 0.05 * (f - 1821) / 63, -0.3)), p + V((0, 0, 0.03)), 28)    # v009c: low in front, looking up at the mask on his face
 apply(mk)
 # hold the coach, the boy and DiverB still until the cut at 1885 (their next keys are the jump to the tow / parking;
 # interpolating toward them made the coach fly off in the reaction shot and the boy slide out of the mask close-up)
@@ -98,6 +99,7 @@ for f in range(1941, 2105):
     if 1978 <= f <= 2034:      # the passage squeezes: hard cut to a camera on their own path 0.75 s ahead (inside the tube)
         tw[f] = (PP[min(2114, f + 45)] + V((0, 0, 0.25)), p + V((0, 0, 0.1)), 26)    # ahead on their path, looking back at them
 apply(tw)
+hold(2092, 2105, 2091)          # v009c: the pair pass right by the lens at the end; hold the 2091 framing to the cut
 # exposure holds (1, 4)
 def exp_hold(f0, f1):
     sc.frame_set(f0); v = sc.view_settings.exposure
@@ -139,6 +141,15 @@ for o in bpy.data.objects:          # no bubble right in front of the lens in th
     if o.name.startswith("FX_Bubble_"):
         for f, h in ((1967, False), (1968, True), (2026, True), (2027, False)):
             o.hide_render = h; o.hide_viewport = h; o.keyframe_insert("hide_render", frame=f); o.keyframe_insert("hide_viewport", frame=f)
+# v009c: DiverB hidden in the injection close-up (his leg filled the lens); +1 stop and a stronger lamp in the shot from ahead
+for o in [x for x in db.children_recursive if x.type == 'MESH']:
+    for f, h in ((1654, False), (1655, True), (1703, True), (1704, False)):
+        o.hide_render = h; o.keyframe_insert("hide_render", frame=f)
+sc.view_settings.exposure = 2.2; sc.view_settings.keyframe_insert("exposure", frame=1977)
+sc.view_settings.exposure = 3.2; sc.view_settings.keyframe_insert("exposure", frame=1978); sc.view_settings.keyframe_insert("exposure", frame=2034)
+sc.view_settings.exposure = 2.2; sc.view_settings.keyframe_insert("exposure", frame=2035)
+for f, e in ((1977, 450), (1978, 1200), (2034, 1200), (2035, 450)):
+    L.data.energy = e; L.data.keyframe_insert("energy", frame=f)
 for nm in ("DiverB_TorchLight", "Boy2_TorchLight"):     # in the shot from ahead the torches hit the passage roof close to the lens (a white blob)
     o = bpy.data.objects.get(nm)
     if not o: continue

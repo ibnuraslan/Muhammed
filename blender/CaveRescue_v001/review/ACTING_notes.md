@@ -218,3 +218,11 @@ Everything is on the VO timeline (1–2436). Beats are unchanged (`CaveRescue_v0
 | — | A stray old camera frame at 1761 | The time warps had left fractional-frame camera keys; they are now removed in each re-framed range |
 
 Preview: `review/preview.mp4` and `review/preview_pages_v009b/`. Frames 476–571, 871–891, 1061–1071 and 1591–2301 were re-rendered from the exact v009b package; the rest are from v009, where the file is unchanged.
+
+## Round 9 (director review of v009b) → v009c
+These changes are added to `scripts/24_v009b_fix.py` and run on the v009 package. Camera, exposure, lights and visibility only.
+- **A. Injection, 1655–1703:** the camera is at the boy's front-right at face height, about 0.85 m away. It shows his face, the medic beside him and the medic's hand at his upper arm. DiverB's meshes are hidden for the shot (his leg filled the lens).
+- **B. Mask, 1821–1884:** the camera is low in front of the boy, looking up. It shows the mask on his face, with the diver's face beside him.
+- **C. 2092–2105:** holds the 2091 framing to the cut, so the pair no longer pass across the lens.
+- **D. Shot from ahead, 1978–2034:** one stop brighter (exposure 3.2), and the follow lamp goes from 450 to 1200 W.
+- **Preview:** frames 1651–1886 and 1971–2106 were re-rendered from the exact v009c package. Every other range is unchanged from v009b.
