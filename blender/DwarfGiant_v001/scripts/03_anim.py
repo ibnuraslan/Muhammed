@@ -77,7 +77,7 @@ def uniform_mat(obj, wool):
 uniform_mat(OB["Officer1.male_elegantsuit01"], (0.30, 0.31, 0.19))
 uniform_mat(OB["Officer2.male_elegantsuit01"], (0.27, 0.29, 0.24))
 for nm in ("Surgeon1", "Surgeon2"):
-    tint_mat(OB[f"{nm}.male_worksuit01"], (0.62, 0.72, 0.66))
+    tint_mat(OB[f"{nm}.male_worksuit01"], (0.13, 0.36, 0.3))   # v007: surgical green scrubs (pale suits read as featureless mannequins)
 tint_mat(OB["Nurse.female_elegantsuit01"], (0.9, 0.9, 0.88))
 # hero keeps the worksuit's own clear colours: white shirt + blue dungarees (reads as clothed at thumbnail size)
 tint_mat(OB["Clerk.male_elegantsuit01"], (0.18, 0.17, 0.16))
@@ -358,9 +358,15 @@ def sterile(h, f, lean=18):
 for nm in ("Surgeon1", "Surgeon2", "Nurse"):
     h = HU[nm]; ph = {"Surgeon1": 0.0, "Surgeon2": 1.1, "Nurse": 2.3}[nm]
     for f in range(1, 2341, 30):
-        if not (nm == "Surgeon1" and 1560 <= f <= 1712): sterile(h, f)   # vNEXT: nurse keeps the sterile pose (her blanket tuck hovered)
+        if not (nm == "Surgeon1" and 1560 <= f <= 1712) and not (nm == "Surgeon2" and 1700 <= f <= 1800): sterile(h, f)   # vNEXT: nurse keeps the sterile pose (her blanket tuck hovered)
         h.key_spine(f, flex=(20 if f < 1712 else 8) + 2 * math.sin(f * 0.05 + ph), twist=4 * math.sin(f * 0.03 + ph), head=(24 if f < 1712 else 8, 8 * math.sin(f * 0.02 + ph)))
     breathe(h, 1, 2340, sway=0.008, ph=ph)
+S2 = HU["Surgeon2"]; B2 = S2.r.BN
+for i, f in enumerate(range(1700, 1801, 10)):     # v007: hands working: small alternating reaches at chest height
+    for s_, sx in (("L", 1), ("R", -1)):
+        sh = B2["upperarm01." + s_].head_local; ph2 = i * 1.3 + (0 if s_ == "L" else 1.6)
+        W = V(sx * (0.1 + 0.03 * math.sin(ph2)), sh.y - 0.33 - 0.04 * math.sin(ph2 + 0.7), sh.z - 0.22 + 0.04 * math.cos(ph2))
+        S2.key_hand(s_, f, W, V(0, -0.6, 0.6), V(-sx * 0.4, 0, -0.9), pole=V(sh.x + sx * 0.3, sh.y + 0.05, sh.z - 0.45))
 # Surgeon1 lays his right hand on the drape at the patient's shoulder (contact, palm down)
 S1 = HU["Surgeon1"]
 for f in (1575, 1600, 1650, 1700, 1712):
@@ -521,7 +527,14 @@ sc.frame_set(1)
 PH = c9 + V(0, 0, -0.02)                       # patient's head at f1640
 c4, f4, s4, u4, _, _ = head_frame(400); c4b, f4b, s4b, u4b, _, _ = head_frame(440)
 c5, f5, s5, u5, _, _ = head_frame(640); c5b, f5b, s5b, u5b, _, _ = head_frame(690)
-BD = (HEAD0 - V(-0.5, 2.25, 1.33)).normalized() * -1      # brain inset: from where the old inset looked, centred on the brain
+BD = (HEAD0 - V(-0.5, 2.25, 1.33)).normalized() * -1
+def rig_head(nm, f):
+    sc.frame_set(f); R_ = RIGS[nm]; return R_.matrix_world @ R_.pose.bones["head"].head
+c12, f12, s12, u12, _, _ = head_frame(1225)
+O1H = rig_head("Officer1", 1180); O1D = (c12 - O1H); O1D.z = 0; O1D.normalize()
+cP1, fP1, sP1, uP1, _, _ = head_frame(1515); cP2, fP2, sP2, uP2, _, _ = head_frame(1825)
+S1H = rig_head("Surgeon1", 1570); S1D = (PAT - V(6.1, 1.45, 0)); S1D.z = 0; S1D.normalize()
+S2H = rig_head("Surgeon2", 1750); S2D = (PAT - V(7.72, 1.45, 0)); S2D.z = 0; S2D.normalize()      # brain inset: from where the old inset looked, centred on the brain
 sc.frame_set(1600); PHm = HRIG.matrix_world @ HRIG.pose.bones["head"].head
 sc.frame_set(1900); NMH = RIGS["Normal"].matrix_world @ RIGS["Normal"].pose.bones["head"].head
 MID = (c11 + NMH) * 0.5; AX = (NMH - c11); AX.z = 0; AX.normalize(); PERP = V(-AX.y, AX.x, 0)
@@ -532,8 +545,8 @@ SHOTS = [
   (1, 150, [(1, V(0.35, 0.5, 2.05), V(-0.5, 2.3, 1.15), 26), (45, V(0.55, 0.35, 1.95), V(-0.5, 2.4, 1.05), 28),
             (95, V(-0.05, 1.1, 1.25), V(-0.3, 2.45, 1.22), 32), (150, V(-0.3, 1.6, 1.32), V(-0.3, 2.42, 1.22), 36)]),
   (151, 240, [(151, HEAD0 + BD * 0.42, HEAD0, 38), (240, HEAD0 + BD * 0.32, HEAD0, 38)]),                  # brain inset, centred, slow push
-  (241, 371, [(241, V(0.2, 1.15, 1.5), V(-0.42, 2.6, 1.5), 34), (371, V(0.12, 1.3, 1.5), V(-0.42, 2.6, 1.5), 36)]),   # officer and boy, faces
-  (372, 440, [(372, c4 + f4 * 0.75 + s4 * 0.15, c4, 38), (440, c4b + f4b * 0.7 + s4b * 0.15, c4b, 40)]),     # his face (beat 3)
+  (241, 312, [(241, V(0.2, 1.15, 1.5), V(-0.42, 2.6, 1.5), 34), (312, V(0.15, 1.25, 1.5), V(-0.42, 2.6, 1.5), 35)]),   # officer and boy, 1.2 s
+  (313, 440, [(313, c4 + f4 * 0.8 + s4 * 0.15, c4, 37), (440, c4b + f4b * 0.7 + s4b * 0.15, c4b, 40)]),     # his face (beat 3)
   (441, 600, [(441, V(0.2, 0.2, 1.45), V(-0.35, 2.55, 1.35), 26), (600, V(0.2, 0.2, 1.5), V(-0.35, 2.55, 1.45), 26)]),   # locked wide by the height rod: he shoots up
   (601, 695, [(601, c5 + f5 * 0.8 + s5 * 0.12 + u5 * 0.04, c5, 34), (695, c5b + f5b * 0.75 + s5b * 0.12 + u5b * 0.04, c5b, 36)]),  # his face, surprised
   (696, 812, [(696, V(0.45, 0.2, 1.6), V(-0.3, 2.4, 1.2), 24), (760, V(0.3, 0.1, 1.75), V(-0.25, 2.4, 1.3), 24), (812, V(0.1, 0.35, 1.75), V(-0.2, 2.45, 1.4), 25)]),
@@ -541,12 +554,15 @@ SHOTS = [
   (875, 1150, [(880, V(-0.2, 1.0, 1.3), V(-0.35, 2.2, 1.5), 26), (920, V(1.5, -0.1, 0.45), V(-0.3, 2.0, 1.5), 22),
                (975, V(0.35, -0.85, 0.42), V(-0.35, 2.0, 1.6), 22), (1030, V(-1.45, -0.45, 0.5), V(-0.3, 2.1, 1.6), 22),
                (1075, V(-0.6, 0.55, 1.6), V(-0.3, 2.45, 1.7), 24), (1150, V(-0.4, 0.5, 1.8), V(-0.3, 2.4, 1.75), 26)]),
-  (1151, 1240, [(1151, V(-0.55, -0.25, 1.65), V(-1.55, 0.95, 1.62), 32), (1240, V(-0.6, -0.15, 1.65), V(-1.55, 0.95, 1.65), 34)]),   # the officers react
+  (1151, 1210, [(1151, O1H + O1D * 0.8 + V(0, 0, -0.12), O1H, 36), (1210, O1H + O1D * 0.72 + V(0, 0, -0.12), O1H, 38)]),   # officer's face looking up, 1 s
+  (1211, 1240, [(1211, c12 + f12 * 0.8 + s12 * 0.1 + V(0, 0, -0.25), c12, 34), (1240, c12 + f12 * 0.75 + s12 * 0.1 + V(0, 0, -0.25), c12, 35)]),   # his face looking down
   (1241, 1365, [(1241, eye8a + f8a * 0.10, OFFS, 28), (1365, eye8b + f8b * 0.12 + u8b * 0.02, OFFS, 30)]),
   (1366, 1481, [(1366, c8c + f8c * 1.5 + s8c * 0.5 + u8c * 0.1, c8c - u8c * 0.15, 30), (1481, c8d + f8d * 1.6 + s8d * 0.55 + u8d * 0.1, c8d - u8d * 0.15, 30)]),
-  (1482, 1600, [(1482, V(3.95, 1.36, 2.26), V(6.5, 0.9, 1.3), 24), (1540, V(4.55, 1.25, 2.4), V(6.9, 0.6, 0.9), 24), (1600, V(5.0, 0.2, 2.45), V(6.9, 0.6, 0.9), 24)]),
+  (1482, 1545, [(1482, cP1 + fP1 * 0.85 - uP1 * 0.45 + sP1 * 0.1, cP1, 34), (1545, cP1 + fP1 * 0.8 - uP1 * 0.42 + sP1 * 0.1, cP1, 35)]),   # patient's face on the bed
+  (1546, 1600, [(1546, S1H + S1D * 1.05 + V(0, 0, -0.2), S1H + V(0, 0, -0.22), 30), (1600, S1H + S1D * 0.95 + V(0, 0, -0.2), S1H + V(0, 0, -0.22), 31)]),   # surgeon, eyes over the mask, hands
   (1601, 1716, [(1601, PHm + V(-1.2, -1.1, 0.75), PHm + V(0.4, 0.3, 0.15), 26), (1716, PHm + V(-1.05, -1.0, 0.7), PHm + V(0.4, 0.3, 0.15), 27)]),  # side medium: patient and surgeons
-  (1717, 1857, [(1717, PHm + V(-1.55, -0.85, 1.05), PHm + V(0.1, -0.3, -0.05), 24), (1857, PHm + V(-1.55, -1.0, 1.05), PHm + V(0.1, -0.4, -0.05), 24)]),   # v006: medium side shot, patient and nurse (no slide along his legs)
+  (1717, 1790, [(1717, S2H + S2D * 1.05 + V(0, 0, -0.2), S2H + V(0, 0, -0.24), 30), (1790, S2H + S2D * 0.95 + V(0, 0, -0.2), S2H + V(0, 0, -0.24), 31)]),   # second surgeon working
+  (1791, 1857, [(1791, cP2 + fP2 * 0.85 - uP2 * 0.45 + sP2 * 0.1, cP2, 34), (1857, cP2 + fP2 * 0.8 - uP2 * 0.42 + sP2 * 0.1, cP2, 35)]),   # patient's face   # v006: medium side shot, patient and nurse (no slide along his legs)
   (1858, 1899, [(1858, NMH + NF * 0.95 + V(0, 0, 0.05), NMH, 32), (1899, NMH + NF * 0.85 + V(0, 0, 0.05), NMH, 34)]),   # the normal man looks up
   (1900, 1940, [(1900, c11 + f11 * 1.05 + s11 * 0.15 + V(0, 0, -0.3), c11, 32), (1940, c11 + f11 * 0.95 + s11 * 0.15 + V(0, 0, -0.28), c11, 34)]),   # the tall man looks down at him
   (1941, 1999, [(1941, V(8.3, 5.0, 1.6), V(8.6, 7.0, 0.6), 30), (1999, V(8.35, 5.15, 1.65), V(8.6, 7.0, 0.65), 31)]),
@@ -590,7 +606,7 @@ XB = OB["XBack"]; card = XB
 me = bpy.data.meshes.new("CutCard"); bm = bmesh.new(); bmesh.ops.create_grid(bm, x_segments=1, y_segments=1, size=1.0); bm.to_mesh(me); bm.free()
 cc = bpy.data.objects.new("CutCard", me); XB.users_collection[0].objects.link(cc); cc.parent = cam
 cm = XB.data.materials[0].copy(); me.materials.append(cm)
-_rp = next(n for n in cm.node_tree.nodes if n.type == "VALTORGB"); _rp.color_ramp.elements[0].color = (0.80, 0.93, 1.0, 1); _rp.color_ramp.elements[1].color = (0.08, 0.55, 0.93, 1); _rp.color_ramp.elements[1].position = 1.0
+_rp = next(n for n in cm.node_tree.nodes if n.type == "VALTORGB"); _rp.color_ramp.elements[0].color = (0.2, 0.25, 0.31, 1); _rp.color_ramp.elements[1].color = (0.03, 0.04, 0.06, 1)   # v007: dark slate; _rp.color_ramp.elements[1].position = 1.0
 cm.node_tree.nodes["Map Range"].inputs[1].default_value = -0.5; cm.node_tree.nodes["Map Range"].inputs[2].default_value = 0.5
 sep_ = cm.node_tree.nodes["Separate XYZ"]; cm.node_tree.links.new(sep_.outputs[1], cm.node_tree.nodes["Map Range"].inputs[0])
 cc.visible_shadow = False
