@@ -32,7 +32,7 @@ The camera has four hard cuts, at **906**, **1033**, **1147** and **1171**. Ever
 All checks ran on the packed file.
 - **`clip_scan.py`** (step 6, whole film), `review/clip_scan_v006e.json`: **0 bad ranges.**
 - **`qa_check.py`** (step 6), `review/qa_v006e.json`: EMPTY 110 (the wide outdoor and under-train shots; v006d had 109), BACKHEAD 2, INSIDE 0. The two BACKHEAD frames are the same as in v006d: 541 (the train hits his head as he lies across the rail) and 871 (he lies face down under the halted train).
-- **`body_prop_cross.py`** (rails, loco, both wagons, all four wheelsets; Lad), `review/body_prop_cross_v006e.json`: **9 visible frames**, the same 9 as v006d (649, 685, 688, 700, 718, 721, 724, 754, 1192): eight glancing contacts with the loco underframe while he is dragged, and a toe on the rail head at 1192. None are in the changed ranges' new poses.
+- **`body_prop_cross.py`** (rails, loco, both wagons, all four wheelsets; Lad), `review/body_prop_cross_v006e.json`: **9 visible frames**, the same 9 as v006d (649, 685, 688, 700, 718, 721, 724, 754, 1192): eight glancing contacts with the loco underframe while he is dragged, and a toe on the rail head at 1192. 1192 is inside the re-rendered 1140–1240 range, but it is the same toe contact as in v006d; the swig and beat 10 poses add no new crossings.
 - Factory-startup check: `CAM_Film`, frames 1–2070, 60 fps, f/11, 0 unpacked images.
 
 ## Known issues
