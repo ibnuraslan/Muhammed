@@ -50,7 +50,7 @@ SHOTS = [
     (19.20, 20.40, INFRONT[0], INFRONT[1], YH, 35),
     (20.40, 21.24, (-1.00, 2.15, 1.45), (-0.99, 2.12, 1.45), YH, 35),
     # beat 9: the haul (v009c: from behind while he reaches in, his arms hidden by his body; then high from the front)
-    (21.24, 22.30, (-0.90, 2.20, 1.55), (-0.89, 2.18, 1.55), mid(YH, FH, 0.5), 24),
+    (21.24, 22.30, OTS[0], OTS[1], mid(YH, FH, 0.5), 26),            # behind-left: his reaching arms stay behind his body
     (22.30, 24.80, REAR[0], REAR[1], mid(YH, FH, 0.5), 22),
     (24.80, 25.82, HAUL_HI[0], HAUL_HI[1], mid(YH, FH, 0.6), 22),     # from 24.8 s (earlier, the FO's legs swing up at this lens)
     # beat 10-11: alarms, the dive
