@@ -525,17 +525,20 @@ SEG4 = [
     (1393, AX + V((-1.15, 1.25, 2.55)), bp("Traveller", "head", 1393, (0, 0, -0.3)), 24),
     (1440, AX + V((-0.95, 0.40, 1.55)), bp("Traveller", "head", 1440, (0, 0, -0.35)), 26),
     (1459, AX + V((-0.631, 0.306, 1.315)), bp("Traveller", "head", 1459), 28),
-    (1477, AX + V((-0.631, 0.306, 1.315)), bp("Traveller", "head", 1477), 28),
-    (1490, AX + V((-1.30, 0.35, 1.10)), bp("Traveller", "head", 1490, (0, 0, -0.1)), 28),
-    (1508, AX + V((-1.60, 0.45, 1.45)), bp("Traveller", "head", 1508, (0, 0, -0.2)), 28),
-    (1525, AX + V((-1.219, 0.39, 1.492)), bp("Traveller", "head", 1525), 28),
+], [
+    # v006e (director): the kneel, side-on at belt height from his right: knees on the floor beside the belt, sneaker by his knee, hand into the tray
+    (1462, AX + V((-0.15, -0.85, 1.0)), AX + V((-1.2, -0.40, 0.55)), 24),
+    (1527, AX + V((-0.15, -0.85, 1.0)), AX + V((-1.2, -0.40, 0.55)), 24),
+], [
+    (1529, AX + V((-1.219, 0.39, 1.492)), bp("Traveller", "head", 1529), 28),
     (1537, AX + V((-1.219, 0.39, 1.492)), bp("Traveller", "head", 1537), 28),
     (1562, AX + V((-1.9, 0.10, 1.45)), bp("Traveller", "head", 1562, (0, 0, -0.3)), 30),
     (1585, AX + V((-1.5, 0.15, 1.55)), bp("Traveller", "head", 1580, (0, 0, -0.25)), 32),
     (END, AX + V((-1.35, 0.05, 1.50)), bp("Traveller", "head", END, (0, 0, -0.15)), 40),
 ]
 CUTS = {seg[-1][0] for seg in CAB}
-for seg in CAB + [SEG2, SEG3, SEG4]:
+SEG4S = list(SEG4)      # v006e: the airport is three shots joined by cuts
+for seg in CAB + [SEG2, SEG3] + SEG4S:
     fc = catmull([(f, c) for f, c, a, l in seg]); fa = catmull([(f, a) for f, c, a, l in seg]); fl_ = catmull([(f, float(l)) for f, c, a, l in seg])
     f0, f1 = seg[0][0], seg[-1][0]
     for f in list(range(f0, f1 + 1, 2)) + [f1]:
@@ -543,6 +546,7 @@ for seg in CAB + [SEG2, SEG3, SEG4]:
         aim.location = fa(f); aim.keyframe_insert("location", frame=f)
         cam_d.lens = fl_(f); cam_d.keyframe_insert("lens", frame=f)
 CUTS |= {1068, 1158, 1248, 1392}
+CUTS |= {seg[-1][0] for seg in SEG4S[:-1]}
 constant_at(cam, CUTS); constant_at(aim, CUTS); constant_at(cam_d, CUTS)
 
 # wipes: a card in front of the lens (black into the shoe; white cloud out of the studio, white cloud dive into the airport)
