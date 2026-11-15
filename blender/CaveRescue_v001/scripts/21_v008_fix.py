@@ -21,7 +21,7 @@ if wad and wad.action:
             for cb in st.channelbags:
                 for fc in list(cb.fcurves):
                     if fc.data_path == 'nodes["Background"].inputs[1].default_value': cb.fcurves.remove(fc)
-for f, v in ((1, s0), (712, s0), (713, 0.0), (1908, 0.0), (1909, s0)):
+for f, v in ((1, s0), (712, s0), (713, 0.0), (2119, 0.0), (2120, s0)):   # v009 timeline (v008 + longer death beat and tow)
     bg.default_value = v; bg.keyframe_insert("default_value", frame=f)
 fcb = sc.world.node_tree.animation_data.action
 for lay in fcb.layers:
@@ -58,18 +58,18 @@ def override(f0, f1, cpts, apts, lpts):
 dc = bpy.data.objects["DiverC"]
 def spine(f):
     sc.frame_set(f); return dc.matrix_world @ dc.pose.bones["spine03"].head
-P = {f: spine(f) for f in (994, 1050, 1105)}
-override(994, 1105,
-         [(994, P[994] + V((0.5, 1.75, 0.6))), (1050, P[1050] + V((0.5, 1.6, 0.55))), (1105, P[1105] + V((0.45, 1.5, 0.5)))],
-         [(994, P[994]), (1050, P[1050]), (1105, P[1105])],
-         [(994, V((28, 0, 0))), (1050, V((28, 0, 0))), (1105, V((29, 0, 0)))])
+P = {f: spine(f) for f in (1014, 1094, 1175)}
+override(1014, 1175,
+         [(1014, P[1014] + V((0.5, 1.75, 0.6))), (1094, P[1094] + V((0.5, 1.6, 0.55))), (1175, P[1175] + V((0.45, 1.45, 0.5)))],
+         [(1014, P[1014]), (1094, P[1094]), (1175, P[1175])],
+         [(1014, V((28, 0, 0))), (1094, V((28, 0, 0))), (1175, V((29, 0, 0)))])
 # ending: from the stretcher shot round the outside of the group (never over bare ground, never through people) onto the coach and the boys
-c61 = V([fc.evaluate(2061) for fc in CL]); a61 = V([fc.evaluate(2061) for fc in AL]); l61 = LF[0].evaluate(2061)
-c40 = V([fc.evaluate(2040) for fc in CL]); a40 = V([fc.evaluate(2040) for fc in AL])
-override(2062, 2268,
-         [(2040, c40), (2061, c61), (2100, V((3.4, -12.0, 1.9))), (2140, V((4.3, -16.0, 1.7))), (2190, V((2.2, -18.4, 1.5))), (2268, V((1.4, -18.6, 1.45)))],
-         [(2040, a40), (2061, a61), (2100, V((1.2, -14.6, 1.3))), (2140, V((1.2, -15.2, 1.2))), (2190, V((1.3, -15.3, 1.15))), (2268, V((1.2, -15.3, 1.15)))],
-         [(2040, V((l61, 0, 0))), (2061, V((l61, 0, 0))), (2140, V((27, 0, 0))), (2268, V((26, 0, 0)))])
+c61 = V([fc.evaluate(2272) for fc in CL]); a61 = V([fc.evaluate(2272) for fc in AL]); l61 = LF[0].evaluate(2272)
+c40 = V([fc.evaluate(2251) for fc in CL]); a40 = V([fc.evaluate(2251) for fc in AL])
+override(2273, 2479,
+         [(2251, c40), (2272, c61), (2311, V((3.4, -12.0, 1.9))), (2351, V((4.3, -16.0, 1.7))), (2401, V((2.4, -18.6, 1.55))), (2479, V((1.0, -19.0, 1.5)))],
+         [(2251, a40), (2272, a61), (2311, V((1.0, -14.6, 1.3))), (2351, V((0.9, -15.2, 1.25))), (2401, V((0.9, -15.3, 1.2))), (2479, V((0.8, -15.3, 1.2)))],
+         [(2251, V((l61, 0, 0))), (2272, V((l61, 0, 0))), (2351, V((26, 0, 0))), (2479, V((25, 0, 0)))])
 # 6. the "white ball": the divers' rim lights (point lights, 15 cm radius) seen through the water. Light only, never seen.
 for o in bpy.data.objects:
     if o.type == 'LIGHT' and o.name.endswith("_Rim"):

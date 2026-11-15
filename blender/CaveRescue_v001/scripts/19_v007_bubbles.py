@@ -13,7 +13,7 @@ for o in bpy.data.objects:
                 for cb in st.channelbags:
                     for fc in list(cb.fcurves):
                         if fc.data_path in ("hide_render", "hide_viewport"): cb.fcurves.remove(fc)
-    for f, h in ((1, True), (2424, True), (2425, False), (2580, True)):
+    for f, h in ((1, True), (2424, True), (2425, False), (2705, True)):
         o.hide_render = h; o.hide_viewport = h
         o.keyframe_insert("hide_render", frame=f); o.keyframe_insert("hide_viewport", frame=f)
     n += 1

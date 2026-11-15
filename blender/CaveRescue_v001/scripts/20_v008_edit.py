@@ -10,7 +10,7 @@ blender -b in.blend --python 20_v008_edit.py -- out.blend beats_in.json beats_ou
 import bpy, sys, json
 a = sys.argv[sys.argv.index("--") + 1:]; OUT, BIN, BOUT = a[0], a[1], a[2]
 sc = bpy.context.scene
-KEEP = [(1, 283, None), (297, 574, None), (600, 999, 150), (1020, 1300, None), (1489, 1600, None), (1736, 2406, None), (2428, 2559, None), (2731, 3090, None)]
+KEEP = [(1, 283, None), (297, 574, None), (600, 999, 150), (1020, 1320, None), (1489, 1650, None), (1736, 2406, None), (2428, 2700, None), (2731, 3090, None)]   # v009: more divers on the line, a longer death beat and the long tow, all at 1x
 AN = []; n = 1
 for o0, o1, L in KEEP:
     n0 = n if not AN else AN[-1][1] + 1

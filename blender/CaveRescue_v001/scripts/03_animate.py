@@ -627,16 +627,16 @@ kneel("DiverB", 2415, P2.x - 0.45, P2.y - 0.45, 135, lean=14, head=(6, 0))
 for f_ in (2200, 2280, 2329, 2370):     # v007: DiverB kneels more upright with his head up while he waits and fits the mask (his face stays off the boy's)
     HUM["DiverB"].key_spine(f_, flex=14 if f_ >= 2329 else 16, head=(6, 0))
 seated("Boy2", 2415, P2.x, P2.y, -10, lean=14, head=(28, 20), hug=False)
-TOW0, TOW1 = 2421, 2570
+TOW0, TOW1 = 2421, 2700   # v009: the tow runs on (same speed) through the old second cross-section so beat 12 plays at 1x
 # tow harness: a webbing handle on the boy's chest (Child Of spine02), the diver grips it
 bpy.ops.mesh.primitive_torus_add(major_radius=0.045, minor_radius=0.011, major_segments=24, minor_segments=8, rotation=(R_(90), 0, 0))
 harness = bpy.context.active_object; harness.name = "Prop_TowHarness"; harness.data.materials.append(m_strap_h)
 harness.location = rest_head("Boy2", "spine02") + V((0, -0.16, 0.0))
 rest_attach(harness, "Boy2", "spine02")
-for f_, h_ in ((1, True), (2415, True), (2416, False), (2575, True)):
+for f_, h_ in ((1, True), (2415, True), (2416, False), (2705, True)):
     harness.hide_render = h_; harness.keyframe_insert("hide_render", frame=f_)
 for f in range(TOW0, TOW1 + 1, 10):
-    u = (f - TOW0) / (TOW1 - TOW0); y = -1.6 - 10.3 * u      # starts behind the diving camera, swims into frame
+    y = -1.6 - 10.3 * (f - TOW0) / 149.0      # starts behind the diving camera, swims into frame (same speed as v008)
     sq = math.exp(-((y + 13.0) ** 2) / 4.0)
     P = pas_mid(y, 0.85 - 0.2 * sq, 0.3)
     swim("DiverB", f, P, 0.0, phase=f * 0.25, kick=0.9)
@@ -665,12 +665,12 @@ for i in range(16):
     bpy.ops.mesh.primitive_uv_sphere_add(radius=0.006 + 0.008 * random.random(), segments=10, ring_count=6)
     b = bpy.context.active_object; b.name = "FX_Bubble_%02d" % i; b.data.materials.append(m_bub)
     ph = random.random()
-    for f in range(2370, 2580, 8):
+    for f in range(2370, 2710, 8):
         ev(f); base = rg.matrix_world.translation
         a = ((f - 2370) / 70.0 + ph) % 1.0
         b.location = base + V((0.03 * math.sin(i + f * 0.2), 0.03 * math.cos(i * 2 + f * 0.17), 0.05 + 0.6 * a))
         b.keyframe_insert("location", frame=f)
-    for f, h in ((1, True), (2370, False), (2580, True)):
+    for f, h in ((1, True), (2370, False), (2705, True)):
         b.hide_render = h; b.keyframe_insert("hide_render", frame=f)
 
 # =============================================================== BEAT 13: out of the mouth into daylight (2725-2928)
@@ -766,9 +766,9 @@ for nm in ("M_BeaconRed", "M_BeaconBlue"):
 # =============================================================== parking (everyone not on set is far away), stepped jumps
 USED = {}
 def on_set(n, f0, f1): USED.setdefault(n, []).append((f0, f1))
-SPANS = {"Coach": [(1, 590), (990, 2406), (2725, 3090)], "Boy1": [(1, 590), (990, 2406), (2725, 3090)], "Boy2": [(1, 590), (990, 2570)],
+SPANS = {"Coach": [(1, 590), (990, 2406), (2725, 3090)], "Boy1": [(1, 590), (990, 2406), (2725, 3090)], "Boy2": [(1, 590), (990, 2705)],
          "Boy3": [(1, 590), (990, 2406)], "Boy4": [(1, 590), (990, 2406), (2725, 3090)], "Boy5": [(1, 590), (990, 2406), (2725, 3090)],
-         "DiverA": [(990, 2406), (2725, 3090)], "DiverB": [(1212, 1488), (1714, 2570), (2725, 3090)], "DiverC": [(1212, 1711)]}
+         "DiverA": [(990, 2406), (2725, 3090)], "DiverB": [(1212, 1488), (1714, 2705), (2725, 3090)], "DiverC": [(1212, 1711)]}
 for n in HB: SPANS[n] = [(990, 2406)]
 for n in CROWD: SPANS[n] = [(2725, 3090)]
 for n, spans in SPANS.items():
@@ -812,8 +812,8 @@ for i, y in enumerate((-4.0, -11.0, -18.0, -26.0)):
 # chamber fill
 f4 = bpy.data.objects["S4_Fill"]; f4.data.energy = 90; f4.visible_volume_scatter = False; f4.data.color = (0.85, 0.9, 1.0)
 EXPO = [(1, 0.0), (290, 0.0), (330, 0.8), (580, 0.8), (583, 0.0), (1008, 0.0), (1009, 1.0), (1212, 1.0), (1240, 1.0), (1700, 1.0), (1840, 1.0),
-        (2430, 1.0), (2470, 1.0), (2565, 1.0), (2566, 0.0), (2726, 0.0), (2727, 0.6), (2800, 0.0), (3090, 0.0)]
-for f, e in ((1, 150), (1212, 150), (1218, 0), (1878, 0), (1886, 150), (2430, 150), (2438, 0), (2565, 0)):
+        (2430, 1.0), (2470, 1.0), (2700, 1.0), (2701, 0.0), (2726, 0.0), (2727, 0.6), (2800, 0.0), (3090, 0.0)]
+for f, e in ((1, 150), (1212, 150), (1218, 0), (1878, 0), (1886, 150), (2430, 150), (2438, 0), (2700, 0)):
     f4.data.energy = e; f4.data.keyframe_insert("energy", frame=f)
 for f, v in EXPO:
     sc.view_settings.exposure = v; sc.view_settings.keyframe_insert("exposure", frame=f)
