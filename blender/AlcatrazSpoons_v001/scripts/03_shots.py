@@ -251,12 +251,11 @@ def shot_1a(f0, n):
             relaxed_arm(nm, "L", f, yw); relaxed_arm(nm, "R", f, yw)
     # P1's right hand: the spoon is gripped low (pinch, Child Of the wrist), then the HAND is keyed up to chest height
     sp = prop_copy("Spoon_P1", "Spoon_1a", f0, f0 + n - 1)
-    sp.location = V((st.x - 0.1, st.y - 0.33, 0.72)); sp.rotation_euler = (R_(-15), 0, R_(200))
+    sp.location = V((st.x - 0.1, st.y - 0.36, 0.82)); sp.rotation_euler = (R_(-15), 0, R_(200))
     sh = wpos("P1", "upperarm01.R", f0); elbow("P1", "R", f0, sh + V((-0.3, 0.3, -0.3)))
     Mw = sp.matrix_world
     sc.frame_set(f0); bpy.context.view_layer.update()
-    grip_object(bpy.data.objects["P1"], "R", f0, sp, Mw @ V((0, 0.025, 0.005)), Mw.to_3x3() @ V((0, 0, -1)), finger_dir=Mw.to_3x3() @ V((0, -1, 0)), grip="pinch")
-    sp.location = sp.location + sp.matrix_world.to_3x3() @ V((0, 0, -0.007)); bpy.context.view_layer.update()
+    grip_object(bpy.data.objects["P1"], "R", f0, sp, Mw @ V((0, 0.05, 0.004)), Mw.to_3x3() @ V((-1, 0, 0)), finger_dir=Mw.to_3x3() @ V((0, 0, 1)), grip="wrap")
     M0 = ik_mat("P1", "R", f0); child_of(sp, "P1", "wrist.R", f0)
     piv = V(sp.location)
     for f, up, fw, tilt in ((f0 + 45, 0.2, -0.04, 25), (f0 + 100, 0.23, -0.05, 35), (f0 + n - 1, 0.22, -0.04, 28)):
@@ -358,14 +357,15 @@ def shot_3a(f0, n):
     c = sh + fwd(yw) * 0.34 + V((0, 0, -0.24))
     orient(d, c, rgt(yw) * -1)        # motor axis across the body
     sc.frame_set(f0); bpy.context.view_layer.update(); Mw = d.matrix_world
-    hand("P3", "R", f0, Mw @ V((-0.092, 0, 0)), Mw.to_3x3() @ V((1, 0, 0)), Mw.to_3x3() @ V((0, 0, 1)), pose="cup_hold")
+    shR = wpos("P3", "upperarm01.R", f0); ex = -1 if (Mw @ V((-0.092, 0, 0)) - shR).length < (Mw @ V((0.092, 0, 0)) - shR).length else 1
+    hand("P3", "R", f0, Mw @ V((0.095 * ex, 0, 0)), Mw.to_3x3() @ V((-ex, 0, 0)), Mw.to_3x3() @ V((0, 0, 1)), pose="cup_hold")
     M0 = ik_mat("P3", "R", f0); child_of(d, "P3", "wrist.R", f0)
     for k, f in enumerate(range(f0 + 30, f1 + 1, 45)):
         key_ik("P3", "R", f, rigid(c, Rz(25 * math.sin(k * 1.3)) @ Rx(15 * math.cos(k)), (0, 0, 0.03 * (k % 2))) @ M0)
     for f in sorted(set(list(range(f0, f1 + 1, 15)) + [f1])):
         sc.frame_set(f); Mw = d.matrix_world
-        hand("P3", "L", f, Mw @ V((0.092, 0, 0)), Mw.to_3x3() @ V((-1, 0, 0)), Mw.to_3x3() @ V((0, 0, 1)),
-             pole=wpos("P3", "upperarm01.L", f) - rgt(yw) * -0.5 + V((0, 0, -0.3)), pose="cup_hold")
+        kq = V((kp.x, kp.y, 0.0)) + fwd(yw) * 0.05 - rgt(yw) * 0.13 + V((0, 0, 0.32))
+        hand("P3", "L", f, kq, -fwd(yw) + V((0, 0, -0.6)), V((0, 0, -1)), pole=wpos("P3", "upperarm01.L", f) - rgt(yw) * 0.4 - fwd(yw) * 0.2, pose="relaxed")
         elbow("P3", "R", f, wpos("P3", "upperarm01.R", f) + rgt(yw) * 0.4 + V((0, 0, -0.3)))
     camera("3a", f0, n, [(0, (0.2, -0.95, 1.0), (0.6, 0.1, 0.72), 26), (1, (0.3, -0.88, 0.98), (0.6, 0.1, 0.72), 26)])
     return use
@@ -394,8 +394,8 @@ def shot_3c(f0, n):
         key_ik("P3", "R", f, rigid(tip, Rz(1.5 * (1 if k % 2 else -1)), ax * (0.004 * (k % 2)) + V((0, 0, 0.01 * math.sin(k * 0.4)))) @ M0)
     for f in sorted(set(list(range(f0, f1 + 1, 10)) + [f1])):
         sc.frame_set(f); Mw = d.matrix_world
-        hand("P3", "L", f, Mw @ V((0.03, 0, -0.088)), Mw.to_3x3() @ V((0, 0, 1)), Mw.to_3x3() @ V((1, 0, 0)),
-             pole=wpos("P3", "upperarm01.L", f) - rgt(yw) * 0.45 + V((0, 0, -0.3)), pose="flat_palm")
+        kq = V((kp.x, kp.y, 0.0)) + fwd(yw) * 0.05 - rgt(yw) * 0.13 + V((0, 0, 0.32))
+        hand("P3", "L", f, kq, -fwd(yw) + V((0, 0, -0.6)), V((0, 0, -1)), pole=wpos("P3", "upperarm01.L", f) - rgt(yw) * 0.4 - fwd(yw) * 0.2, pose="relaxed")
         elbow("P3", "R", f, wpos("P3", "upperarm01.R", f) + rgt(yw) * 0.45 + V((0, 0, -0.3)))
     # dust puffs at the bit (small grey spheres, keyed scale, no Scene Time)
     for i in range(10):
@@ -496,8 +496,8 @@ def shot_5b(f0, n):
     # the hands are flat on the grille's back while it is pushed (contact keyed on both), then the grille falls on its own weight
     for f, dy in ((f0, 0.0), (f0 + 20, 0.05), (push_end, 0.14)):
         g.location = gpos + V((0, dy, 0)); g.rotation_euler = (0, 0, R_(180)); g.keyframe_insert("location", frame=f); g.keyframe_insert("rotation_euler", frame=f)
-        for s, dx in (("L", -0.08), ("R", 0.08)):
-            hand("P1", s, f, gpos + V((dx * 1.4, dy - 0.055, 0.06)), V((0, 1, 0)), V((0, 0, 1)), pole=wpos("P1", "upperarm01." + s, f) + V((dx * 4, -0.1, -0.35)), pose="flat_palm")
+        for s, dx in (("L", -1.0), ("R", 1.0)):
+            hand("P1", s, f, gpos + V((dx * 0.335, dy - 0.01, 0.0)), V((-dx, 0, 0)), V((0, 1, 0)), pole=wpos("P1", "upperarm01." + s, f) + V((dx * 0.4, -0.2, -0.3)), pose="relaxed")
     for f, loc, rx in ((push_end + 8, gpos + V((0.15, 0.24, -0.05)), 25), (push_end + 16, gpos + V((0.4, 0.38, -0.2)), 80), (push_end + 20, V((X2 + 0.6, gpos.y + 0.45, FZ2 + 0.012)), 90), (push_end + 24, V((X2 + 0.62, gpos.y + 0.47, FZ2 + 0.03)), 85), (push_end + 28, V((X2 + 0.63, gpos.y + 0.48, FZ2 + 0.012)), 90)):
         g.location = loc; g.rotation_euler = (R_(rx), 0, R_(180)); g.keyframe_insert("location", frame=f); g.keyframe_insert("rotation_euler", frame=f)
     for f in (push_end + 20, f1):     # hands back on the duct floor, ready to crawl
@@ -520,8 +520,8 @@ def shot_5c(f0, n):
     for f in (f0, f1): g.keyframe_insert("location", frame=f); g.keyframe_insert("rotation_euler", frame=f)
     stride = 0.32; dist = 0.3
     for f in range(f0, f1 + 1, 6):
-        u = (f - f0) / (n - 1); y = 0.62 + dist * ss(u)
-        crawl_pose("P1", f, (X2 - 0.2, y), yw - 10 * ss(u), (y - 0.62) / stride, FZ2, head=(-30 - 10 * math.sin(u * 3), 35 * math.sin(u * 5)))
+        u = (f - f0) / (n - 1); y = 0.74 + dist * ss(u)
+        crawl_pose("P1", f, (X2 - 0.2, y), yw - 10 * ss(u), (y - 0.74) / stride, FZ2, head=(-30 - 10 * math.sin(u * 3), 35 * math.sin(u * 5)))
     camera("5c", f0, n, [(0, (X2 + 1.25, 1.75, 0.6), (X2 - 0.15, 0.55, 0.55), 24), (1, (X2 + 1.2, 1.85, 0.65), (X2 - 0.2, 0.75, 0.6), 24)], fstop=6.0)
     return use
 
@@ -570,8 +570,8 @@ def climb(n, f0, f1, z_start, rate, lad_x, lad_y, yaw=180.0, phase=0.0):
             top = z + 0.45
             zh = min(top, rung_z(kh) + 4 * RUNG) if uh < 0.6 else min(top, rung_z(kh) + 4 * RUNG + RUNG * ss((uh - 0.6) / 0.4))
             zh = rung_z(round((zh - 0.30) / RUNG)) if uh < 0.6 else zh
-            hand(n, s, f, V((lad_x - sx * 0.09, lad_y - 0.035, zh + 0.055)), V((0, 0.3, -1)), V((0, 1, 0.2)),
-                 pole=V((lad_x - sx * 0.3, lad_y - 0.65, zh - 0.35)), pose="relaxed")
+            hand(n, s, f, V((lad_x - sx * 0.06, lad_y - 0.035, zh + 0.06)), V((0, 0.2, -1)), V((0, 1, 0.1)),
+                 pole=V((lad_x - sx * 0.3, lad_y - 0.65, zh - 0.35)), pose="flat_palm")
 
 def shot_6a(f0, n):
     """P1 and P2 climb the fixed steel ladder up the utility shaft (seen from below, faces turning up)"""
@@ -597,7 +597,7 @@ def shot_6b(f0, n):
         if on_pipe:
             for s in "LR":
                 sx = 1 if s == "L" else -1
-                ank = V((px - sx * 0.14, py - 0.18, z - 0.78)); foot("P1", s, f, ank, 180 + sx * 35, pitch=-10, knee=ank + V((-sx * 0.35, -0.35, 0.35)))
+                ank = V((px - sx * 0.18, py - 0.21, z - 0.78)); foot("P1", s, f, ank, 180 + sx * 35, pitch=-10, knee=ank + V((-sx * 0.35, -0.35, 0.35)))
             for s, dz in (("L", 0.42), ("R", 0.28)):
                 sx = 1 if s == "L" else -1
                 hp = V((px - sx * 0.015, py - 0.095, z + dz)); hand("P1", s, f, hp, V((0, 1, 0)), V((-sx, 0, 0.3)), pole=hp + V((-sx * 0.5, -0.3, -0.25)), pose="relaxed")
