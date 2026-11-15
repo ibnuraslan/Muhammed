@@ -161,3 +161,20 @@ Frames below are on the **new v008 timeline** (2268 frames, 37.8 s). `CaveRescue
 | 7 | Static high overhead ending | The camera rises over the stretcher and the group, then pushes in on the coach and the boys outside in daylight, faces to camera (2062–2268). |
 
 Scripts: `03_animate.py` / `03b_camera.py` (lone diver, headlamps, mask hand, ending), `20_v008_edit.py` (wipes, cuts, wetsuits, beats), `21_v008_fix.py` (cave background, death-beat and ending cameras), `12_depenetrate.py` on the v008 clip_scan ranges.
+
+### Fixes after watching the v008 preview
+- **White ball:** still in the chamber pool (776–806) after the sky fix. It was DiverA's rim light, a point light with a 15 cm radius, seen through the water. The `_Rim` lights are now invisible to camera, glossy and transmission rays.
+- **Divers bloated:** in the first v008 wetsuit pass they looked more bloated than before. Switching off every mask on the body had exposed MPFB's helper proxy shells. Only the coverall mask is off now, so the divers are slim, human-shaped neoprene.
+- **Death beat:** the front view of the face-down diver read like a face with two big eyes. It is now shot from behind and above, so the tanks, back and fins read as a diver slumping still while his lamp fades.
+- **Ending:** the camera passed over about 0.5 s of bare ground. It now circles outside the group onto the coach and the boys. A first try also turned the outdoor sky black, because the script read the sky strength back from an animated socket; the sky strength is now fixed at 1.0.
+- **Kept:**
+  - The boys' arms are raised toward the sky at the end (relief), 2131–2268.
+  - About 0.2 s of ground at 2076–2086 as the camera turns off the stretcher.
+  - The surfacing blur at 1151–1156, under 0.25 s.
+
+### Checks on v008
+- **clip_scan (40c131b):** one single-frame hit at 1813 (`clip_v008.json`), not fixed in this push: a diver's hand against the boy during the tow, under water and murk at preview size. Everything else is 0.
+- **qa_check and limb_check:** they follow in a separate push.
+- **Preview:** `review/preview.mp4`, every 5th frame of the exact v008 package, plus `review/preview_pages_v008/`.
+  - All 454 frames come from the delivered file or from earlier renders of frames the last fixes did not touch: 1–281 in the first pass, 286–2268 after the wetsuit and hand fix, and 716–1101 and 2061–2268 after the last fix.
+  - Frames 1–281 were rendered before the wetsuit fix. No diver appears in them.

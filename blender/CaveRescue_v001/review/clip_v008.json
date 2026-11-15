@@ -1,0 +1,139 @@
+{
+ "frames": {
+  "331": {
+   "Boy2": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "355": {
+   "Boy4": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "361": {
+   "Boy3": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "499": {
+   "Boy1": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "529": {
+   "Boy2": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1231": {
+   "Coach": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1237": {
+   "Coach": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1243": {
+   "Coach": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1249": {
+   "Coach": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1255": {
+   "Coach": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1261": {
+   "Coach": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1267": {
+   "Coach": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1561": {
+   "DiverA": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1669": {
+   "DiverA": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1675": {
+   "DiverA": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1771": {
+   "Coach": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1813": {
+   "DiverB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 547
+   }
+  },
+  "1819": {
+   "DiverB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   1813,
+   1813
+  ]
+ ],
+ "fps": 60
+}
