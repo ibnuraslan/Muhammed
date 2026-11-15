@@ -78,3 +78,8 @@ Cup (white ceramic, built), trolley case (CC-BY The Motion Tree, recoloured dark
   pipe runs + joint, floor drain, toilet; all 11 cast rigs, every 3rd frame) = **0 visible crossings**; statue rig vs its cross = 0.
   clip_scan: one range 1039–1045 (S08, CrowdM4 reaching in past the statue's leg, no prop crossing). limb_check: remaining ARMBODY hits are the
   known shoulder-root false positives (2–3 pts at upperarm01), statue ARMBACK = arms along the crossbar (intended).
+
+## P1 PASSED (director, cbb664b). Phase 2 notes
+- S13 (f1779, f1872 in the phase-1 timeline): the trickle still reads as a white strip against the pale tiles. Lower its whiteness/raise
+  the contrast behind it so it reads as clear water like S14.
+- S18 walk: 10 sampled frames with a 3-pt arm-in-torso flag during the left arm swing; check in the moving preview.
