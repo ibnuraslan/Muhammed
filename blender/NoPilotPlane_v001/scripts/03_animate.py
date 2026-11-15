@@ -197,8 +197,8 @@ SEATED_FO = (0.52, 1.57, -0.23)
 # side < 0 leans toward character's -X = world +X (window) since he faces +Y
 fo_pose(1, SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30, armR=(55, 25, 45, 18))        # face turned toward the cabin, readable
 fo_pose(F(28.0), SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30, armL=(60, 10, 20, 28), armR=(55, 25, 45, 18))
-fo_pose(F(28.8), (0.47, 1.50, -0.18), flex=-5, side=-10, hflex=-15, hside=-20, armL=(58, -10, 40, 30), armR=(58, 20, 30, 30))   # hauled up/back; limp arms hang (not locked out to the pedestal)
-fo_pose(F(29.8), (0.45, 1.36, -0.14), rz=200, flex=-10, side=8, hflex=-30, hside=10, armL=(55, -10, 45, 35), armR=(55, 10, 25, 50))
+fo_pose(F(28.8), (0.47, 1.50, -0.18), flex=-5, side=-10, hflex=-15, hside=-20, armL=(58, -10, 40, 48), armR=(58, 20, 30, 30))   # hauled up/back; limp arms hang (not locked out to the pedestal)
+fo_pose(F(29.8), (0.45, 1.36, -0.14), rz=200, flex=-10, side=8, hflex=-30, hside=10, armL=(55, -10, 45, 50), armR=(55, 10, 25, 50))
 fo_pose(F(30.6), (0.43, 1.27, -0.16), rz=205, flex=-8, side=12, hflex=-35, hside=15, armL=(55, -5, 40, 40), armR=(55, 5, 25, 55))
 fo_pose(F(31.4), (0.56, 1.18, -0.25), rz=210, rx=-15, flex=-5, side=10, hflex=-30, hside=15, armL=(55, 0, 25, 60), armR=(55, 0, 25, 60))
 fo_pose(F(32.4), (0.76, 0.98, -0.48), rz=215, rx=-30, flex=-15, hflex=-30, hside=25, legs=(70, 40), armL=(55, 0, 25, 60), armR=(55, 0, 25, 60))
@@ -731,7 +731,7 @@ for f in range(F(45.0), F(56.6), 10):
     hands_on_yoke(f, 60, 0.004)
 # beat 14-15
 SEATB(F(47.1), sflex=16, head=(15, -5)); SEATB(F(48.4), sflex=26, head=(18, -8), dy=0.08)
-SEATB(F(49.6), sflex=2, head=(0, 0)); SEATB(F(51.0), sflex=8, twist=-12, head=(0, -50)); SEATB(F(52.3), sflex=2, head=(0, 0))
+SEATB(F(49.6), sflex=2, head=(0, 0)); SEATB(F(51.0), sflex=8, twist=-3, head=(0, -50))       # v008b: glance with the head; the right hand stays on the horn; SEATB(F(52.3), sflex=2, head=(0, 0))
 SEATB(F(53.5), sflex=16, head=(0, 0), dy=0.1); SEATB(F(54.6), sflex=20, head=(5, 0), dy=0.12); SEATB(F(55.7), sflex=10, head=(5, 0), dy=0.05)
 # beat 16: hand to throttle, indecision
 THR = lambda: (OB["THROTTLE_1"].matrix_world @ Vector((0, 0, 0.19)))
