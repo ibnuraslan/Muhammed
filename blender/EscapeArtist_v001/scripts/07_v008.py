@@ -25,7 +25,7 @@ SAWX = 0.026                            # blade plane just right of bar 2 (radiu
 for f in range(2186, 2441, 1):
     sc.frame_set(f)
     st = math.sin((f - 2186) * 2 * math.pi / 30)
-    hp = Vector((SAWX, -3.0 + 0.03 * st, SZ))           # handle end point (cell side of the bars)
+    hp = Vector((SAWX, -3.0 + 0.055 * st, SZ))           # handle end point (cell side of the bars)
     R = align(sax, Vector((0, 1, 0)), side_ax, Vector((0, 0, 1)))      # the handle is the +axis end: toward the cell
     hend_local = sctr + sax * max(sext) * 0.5
     key_matrix(saw, f, Matrix.Translation(hp) @ R @ Ssc @ Matrix.Translation(-hend_local + sax * 0.03))
@@ -38,7 +38,7 @@ pose_fingers(PR, "R", "wrap_grip", range(2186, 2441, 6))
 SWR2 = Vector((0.05, -2.47, ZP + 0.03))
 for f in range(2186, 2441, 1):
     st = math.sin((f - 2186) * 2 * math.pi / 30)
-    root = SWR2 + Vector((0.0, 0.03 * st, 0))      # the body rocks with the stroke: the arm keeps one stable shape
+    root = SWR2 + Vector((0.0, 0.055 * st, 0))      # the body rocks with the stroke: the arm keeps one stable shape
     P_.key_root(f, root, yaw=0, flex=6)
     for s_ in "LR": P_.key_foot(s_, f, P_.foot_xy(s_, SWR2, 0), 0)
 for f in range(2186, 2441, 1):
@@ -48,9 +48,8 @@ for f in range(2186, 2441, 1):
         pb.keyframe_insert("location", frame=f, group=nme)
 for f in range(2186, 2441, 1):
     st = math.sin((f - 2186) * 2 * math.pi / 30)
-    snap_hand(PR, "R", f, Vector((SAWX - 0.005, -2.97 + 0.03 * st, SZ + 0.005)), fist_point, iters=2)
-for f in range(2186, 2441, 12):
-    gripo(P_, "L", f, O["WinBar_0_2"], Vector((0.0, -3.21 + 0.012, 1.72)), (0, -1, 0), finger_dir=(1, 0, 0))
+    snap_hand(PR, "R", f, Vector((SAWX - 0.005, -2.97 + 0.055 * st, SZ + 0.005)), fist_point, iters=2)
+pose_fingers(PR, "L", "wrap_grip", range(2186, 2441, 12))      # wrapped round the bar (grip_object gave a claw)
 for f in range(2186, 2441, 10):
     P_.key_spine(f, flex=4, head=(8, 0 if not 2330 < f < 2380 else 60))
 key_obj(saw, 2898, loc=saw.location.copy(), rot=saw.rotation_euler.copy())
@@ -238,6 +237,91 @@ _gh = O["Guard.short03"]
 for fc in [f for f in fcurves_of(_gh) if f.data_path in ("hide_render", "hide_viewport")]:
     for k in list(fc.keyframe_points)[::-1]: fc.keyframe_points.remove(k)
 _gh.hide_render = True; _gh.hide_viewport = True
+# ================================================================== V9. director's v008 review
+# blanket hidden once he is over (it read as a floating block above the fence)
+vis_key([O["Blanket"]], [(1548, 1760)])
+# soft slot light (its hard edge drew a pale "mask" patch across the face)
+_sl = O["SlotLight"].data; _sl.spot_blend = 1.0; _sl.shadow_soft_size = 0.35
+# no police strobe in the courtroom: steady light from 1422
+for nm in ("PoliceRed", "PoliceBlue"):
+    Ld = O[nm].data
+    for fc in fcurves_of(Ld):
+        if fc.data_path == "energy":
+            for k in [k for k in fc.keyframe_points if k.co.x >= 1422][::-1]: fc.keyframe_points.remove(k)
+    Ld.energy = 0; Ld.keyframe_insert("energy", frame=1422)
+    for fc in fcurves_of(Ld):
+        for k in fc.keyframe_points: k.interpolation = "CONSTANT"
+# boy at the workbench: elbows bent, hands on the coins
+BOr = O["Boy"]; BO_ = H["Boy"]; BR = Vector((0.45, 8.05, BO_.root_head.z))
+clear_hand(BOr, "L", 680, 941); clear_hand(BOr, "R", 680, 941)
+for f in range(680, 942, 6):
+    t = (f - 680) / 60.0; jit = 0.012 * math.sin(t * 9); jit2 = 0.01 * math.cos(t * 7)
+    dL, nL = hand_dirs(180, (0.3, 1, -0.6), (0.2, 0, -1)); dR, nR = hand_dirs(180, (-0.3, 1, -0.6), (-0.2, 0, -1))
+    BO_.key_hand("L", f, Vector((0.33 + jit, 8.4, 0.75)), dL, nL, Vector((0.05, 8.05, 0.45)))
+    BO_.key_hand("R", f, Vector((0.57, 8.39 + jit2, 0.76 + abs(jit))), dR, nR, Vector((0.85, 8.05, 0.45)))
+pose_fingers(BOr, "L", "pinch", range(680, 942, 30)); pose_fingers(BOr, "R", "pinch", range(680, 942, 30))
+# boy reacting to the stepmother (no frozen hold): looks down at the box, flinches when she shouts, looks up at her
+for bn in ('bones["spine', 'bones["neck', 'bones["head"]'):
+    clear_keys(BOr, 1136, 1421, bn)
+for f, fl, hd in ((1136, 4, (22, 0)), (1180, 6, (28, 12)), (1222, 4, (20, 8)), (1230, -10, (-8, 28)), (1250, -4, (0, 30)),
+                  (1295, 4, (18, -12)), (1340, 2, (6, 18)), (1380, 6, (24, 4)), (1421, 4, (16, 0))):
+    BO_.key_spine(f, flex=fl, head=hd)
+# judge: bent-elbow strike onto the block, other hand flat on the desk
+JUr = O["Judge"]; JU_ = H["Judge"]
+clear_hand(JUr, "R", 1380, 1547); clear_hand(JUr, "L", 1380, 1547)
+strike = [(1380, 0.0), (1415, -0.9), (1432, -1.1), (1440, 0.03), (1446, -0.12), (1452, 0.0), (1470, -0.7), (1478, 0.02), (1500, 0.0)]
+SPk = catmull([(f, a) for f, a in strike])
+for f in range(1380, 1548, 2):
+    a = max(0.0, -SPk(f))
+    W = Vector((10.1, 7.52 + 0.03 * a, 1.17 + 0.2 * a))
+    dR, nR = hand_dirs(0, (0, -1, -0.2 + 0.6 * a), (1, 0, 0))
+    JU_.key_hand("R", f, W, dR, nR, Vector((9.85, 8.0, 0.95)))
+    dL, nL = hand_dirs(0, (0, -1, 0), (0, 0, -1))
+    JU_.key_hand("L", f, Vector((10.58, 7.6, 1.15)), dL, nL, Vector((10.95, 8.0, 0.95)))
+pose_fingers(JUr, "R", "wrap_grip", range(1380, 1548, 8)); pose_fingers(JUr, "L", "flat_palm", range(1380, 1548, 24))
+# corridor run: arms bent and pumping (no A-pose), tube stays in the right fist
+tube = O["ToothpasteTube"]
+clear_hand(PR, "L", 2696, 2898); clear_hand(PR, "R", 2696, 2898)
+for f in range(2696, 2899, 2):
+    sc.frame_set(f); r = bw(PR, "root"); yw = 90
+    ph = (f - 2696) * 2 * math.pi / 25.0
+    for s_, sg in (("L", -1), ("R", 1)):
+        sw = math.sin(ph + (0 if s_ == "L" else math.pi))
+        W = rel(r, yw, (sg * 0.2, 0.26 * sw, 0.12 + 0.12 * max(0.0, sw)))
+        d_, n_ = hand_dirs(yw, (0, 0.6, 0.8), (-sg, 0, 0))
+        P_.key_hand(s_, f, W, d_, n_, rel(r, yw, (sg * 0.35, -0.45, -0.05)))
+pose_fingers(PR, "L", "wrap_grip", range(2696, 2899, 12)); pose_fingers(PR, "R", "wrap_grip", range(2696, 2899, 12))
+clear_tf(tube, 2694, 2898)
+bake_in_fist(tube, PR, "R", 2694, 2898, grip_frac=0.3)
+# ending: the old man stands at the cell-front bars, both hands on the bars, face in a gap between bars
+POr = O["PrisonerOld"]; PO_ = H["PrisonerOld"]
+clear_keys(POr, 3676, 3750)
+GAPX = 0.4025; ER = Vector((GAPX, -0.48, PO_.root_head.z))
+for f in range(3676, 3751, 4):
+    b = 0.006 * math.sin(f / 12)
+    dd, nn_ = hand_dirs(180, (0, 0.3, 1), (0, 1, 0))
+    pose(PO_, f, ER + Vector((0, 0, b)), yaw=180, spine=(3, 0, 0), head=(-2, 2 * math.sin(f / 30)),
+         hands={"L": (Vector((0.23, -0.07, 1.24)), dd, nn_, ER + Vector((-0.5, 0.0, -0.3))), "R": (Vector((0.575, -0.07, 1.24)), dd, nn_, ER + Vector((0.5, 0.0, -0.3)))},
+         fingers={"L": 0.85, "R": 0.85})
+    face(PO_, f, brow=0.3, lid=0.15)
+    if (f - 3676) % 8 == 0:
+        for s_, bx in (("L", 0.23), ("R", 0.575)):
+            gripo(PO_, s_, f, O["CellFront_0"], (bx, -0.017, 1.24), (0, 1, 0), finger_dir=(0, 0, -1))
+gav = O["Gavel"]; clear_tf(gav, 1380, 1547)
+gax2, gctr2, gext2 = obj_local_axis(gav); GL = max(gext2)
+sc.frame_set(0)
+e0 = gctr2 - gax2 * GL * 0.5; e1 = gctr2 + gax2 * GL * 0.5
+gp0 = Vector((10.2, 7.48, 1.2))
+hend, headend = (e0, e1) if (gav.matrix_world @ e0 - gp0).length < (gav.matrix_world @ e1 - gp0).length else (e1, e0)
+hdir = (headend - hend).normalized(); gside = Vector((1, 0, 0)) if abs(hdir.x) < 0.7 else Vector((0, 1, 0))
+GSm = Matrix.Diagonal(gav.matrix_world.to_scale()).to_4x4()
+for f in list(range(1380, 1548, 2)):
+    a = max(0.0, -SPk(f)); th = 0.6 - a
+    Hd = Vector((0, -math.cos(th), -math.sin(th)))
+    sc.frame_set(f); c = fist_point(JUr, "R")
+    R = align(hdir, Hd, gside, Vector((1, 0, 0)))
+    key_matrix(gav, f, Matrix.Translation(c) @ R @ GSm @ Matrix.Translation(-(hend + (headend - hend) * 0.12)))
+L("v009 re-stages")
 # ================================================================== H. camera: short shots with clean cuts, following the acting face
 cam = sc.camera
 for c in list(cam.constraints): cam.constraints.remove(c)
@@ -255,37 +339,39 @@ S = [
     (0, "Guard", "head", (2.4, 0.7, 0.3), (2.0, 0.6, 0.25), 26, 28, -0.45, None),
     (60, "Guard", "upperleg01.R", (1.7, 0.55, 0.35), (1.55, 0.5, 0.33), 30, 32, 0.15, None),     # the key ring on his hip
     (100, "Prisoner", "head", (1.1, -0.2, 0.0), (0.8, -0.1, 0.0), 32, 40, 0.0, None),
-    (200, "Prisoner", "head", (0.58, 0.0, 0.02), (0.52, 0.0, 0.02), 50, 52, 0.0, None),
+    (200, "Prisoner", "head", None, None, 50, 50, 0.0, ((0.4025, 0.2, 1.66), None)),
     (236, "Prisoner", "head", (1.6, 0.5, 0.3), (1.5, 0.5, 0.3), 24, 24, -0.2, None),
-    (300, "Prisoner", "spine03", (1.3, 0.5, 0.45), (1.25, 0.45, 0.45), 30, 30, 0.12, None),
-    (420, "Prisoner", "spine03", (0.95, -0.4, 0.3), (0.9, -0.4, 0.3), 34, 34, 0.08, None),
+    (300, "Prisoner", "spine03", (0.95, -0.4, 0.3), (0.9, -0.4, 0.3), 34, 34, 0.08, None),
     (541, "Prisoner", "head", (1.5, 0.3, 0.2), (1.5, 0.3, 0.2), 26, 26, -0.15, None),
     (600, None, None, None, None, 30, 32, 0.0, ((0.45, 0.85, 1.3), (-0.12, -0.12, 1.15))),
     (626, "Prisoner", "head", (1.4, 0.9, 0.25), (1.6, 0.8, 0.3), 26, 26, -0.2, None),       # the door swings toward the lock camera: cut
-    (652, "Prisoner", "head", (2.2, 0.4, 0.3), (2.0, 0.4, 0.3), 26, 26, -0.2, None),
-    (678, "Boy", "head", (0.4, 0.95, 0.3), (0.35, 0.9, 0.3), 30, 32, -0.12, None),
+    (652, "Prisoner", "head", None, None, 30, 30, -0.15, ((0.95, 1.35, 1.65), None)),     # corridor, on the side away from the open door (the door panel stays behind him)
+    (678, "Boy", "head", (0.45, -0.75, 0.12), (0.42, -0.72, 0.12), 40, 42, -0.2, None),
     (790, "Father", "head", (1.6, 0.2, 0.05), (1.5, 0.2, 0.05), 32, 32, -0.1, None),
-    (860, "Boy", "head", (0.55, 0.8, 0.22), (0.5, 0.75, 0.22), 34, 36, -0.1, None),
+    (860, "Boy", "head", (0.5, -0.75, 0.15), (0.48, -0.72, 0.15), 40, 42, -0.2, None),
     (942, "Father", "head", (2.4, 0.9, 0.35), (2.2, 0.9, 0.3), 26, 26, -0.5, None),
     (1046, "Boy", "head", (1.3, 0.5, 0.15), (1.2, 0.5, 0.15), 30, 30, -0.2, None),
-    (1128, "Stepmother", "head", (1.45, -0.5, 0.05), (1.3, -0.45, 0.05), 34, 36, -0.12, None),
+    (1115, "Stepmother", "head", (1.45, -0.5, 0.05), (1.3, -0.45, 0.05), 34, 36, -0.12, None),
     (1218, "Boy", "head", (1.2, 0.4, 0.05), (1.1, 0.4, 0.05), 32, 32, -0.15, None),
     (1340, "Boy", "head", (1.6, -0.6, 0.2), (1.5, -0.6, 0.2), 28, 28, -0.2, None),
     (1422, "Judge", "head", (1.7, 0.35, 0.0), (1.6, 0.35, 0.0), 44, 44, -0.32, None),
     (1472, "Guard", "head", None, None, 30, 32, -0.35, ((4.3, 1.25, 1.8), None)),
     (1548, "Prisoner", "head", (1.8, 1.5, 0.4), (1.6, 1.4, 0.4), 28, 28, -0.2, None),
-    (1588, "Prisoner", "head", (0.35, -1.7, 0.1), (0.35, -1.7, 0.1), 28, 28, -0.25, None),
-    (1678, "Prisoner", "head", None, None, 26, 26, -0.3, ((8.9, -12.4, 3.2), None)),
+    (1588, "Prisoner", "head", (2.0, -0.6, 0.1), (2.0, -0.6, 0.1), 34, 34, -0.25, None),      # outside the fence, his face through the wire
+    (1712, "Prisoner", "head", None, None, 26, 26, -0.3, ((8.2, -15.5, 3.1), None)),
     (1756, "Prisoner", "head", (2.6, 0.5, -0.1), (2.6, 0.5, 0.0), 26, 26, -0.2, None),
     (1860, None, None, None, None, 24, 24, 0.0, ((0.95, -2.6, 1.75), (-0.3, -0.5, 1.45))),     # the solitary door as he is brought in
     (1866, "Prisoner", "head", None, None, 24, 24, -0.2, ((0.95, -2.6, 1.75), None)),
     (1946, "Prisoner", "head", (1.1, 0.35, -0.25), (1.05, 0.35, -0.25), 32, 32, 0.0, None),
+    (2040, "Prisoner", "head", None, None, 30, 30, -0.15, ((-0.6, -1.45, 1.45), None)),
     (2140, "Prisoner", "head", None, None, 26, 26, -0.2, ((-0.95, -0.9, 1.75), None)),
     (2186, None, None, None, None, 28, 28, 0.0, ((-0.75, -2.5, 1.95), (-0.02, -3.03, 1.56))),   # his fist on the saw handle, blade through the gap, left hand on the bar
+    (2310, "Prisoner", "head", None, None, 26, 26, -0.15, ((0.85, -2.8, 1.72), None)),
     (2440, "Prisoner", "head", (1.5, 0.4, 0.3), (1.5, 0.4, 0.3), 26, 26, -0.2, None),
     (2508, "Prisoner", "head", None, None, 26, 26, -0.25, ((1.2, 1.35, 1.7), None)),
     (2590, "Prisoner", "head", (0.6, 1.0, 0.25), (0.6, 1.0, 0.25), 24, 24, -0.25, None),
-    (2700, "Prisoner", "head", (3.0, 0.4, 0.35), (2.8, 0.4, 0.35), 28, 28, -0.25, None),
+    (2700, "Prisoner", "head", None, None, 28, 30, -0.25, ((8.6, 1.6, 1.75), None)),
+    (2790, "Prisoner", "head", (1.2, -1.15, 0.2), (1.2, -1.15, 0.2), 26, 26, -0.2, None),
     (2898, "Prisoner", "head", (1.2, 0.95, 0.1), (1.15, 0.9, 0.1), 26, 26, -0.05, None),
     (2992, "Prisoner", "head", None, None, 26, 26, -0.2, ((1.1, -1.0, 1.7), None)),
     (3052, "Prisoner", "head", (1.1, 0.35, -0.2), (1.05, 0.35, -0.2), 32, 32, 0.0, None),     # seated: face, not his back
@@ -293,13 +379,13 @@ S = [
     (3228, "PrisonerOld", "head", (1.4, -0.5, -0.1), (1.35, -0.5, -0.1), 30, 30, -0.1, None),
     (3360, "PrisonerOld", "head", (0.9, 0.3, -0.15), (0.85, 0.3, -0.12), 40, 40, 0.0, None),
     (3446, "PrisonerOld", "head", None, None, 26, 26, -0.2, ((-0.85, -1.4, 1.75), None)),
-    (3498, "PrisonerOld", "head", (1.2, 0.0, 0.05), (1.1, 0.0, 0.05), 35, 35, 0.0, None),
+    (3498, "PrisonerOld", "head", None, None, 28, 28, -0.1, ((0.9, -2.35, 1.75), None)),
     (3530, "Protester1", "head", (3.0, -0.9, 0.2), (2.8, -0.9, 0.2), 28, 28, -0.25, None),
     (3618, "Protester2", "head", (1.6, -0.5, 0.05), (1.5, -0.5, 0.05), 32, 32, -0.15, None),
-    (3680, "PrisonerOld", "head", (1.0, 0.0, 0.02), (0.62, 0.0, 0.02), 40, 50, 0.0, None),
+    (3680, None, None, None, None, 24, 26, 0.0, ((0.4025, 0.55, 1.56), (0.4025, -0.6, 1.4), (0.4025, 0.3, 1.6))),
     (3751, None, None, None, None, 0, 0, 0, None),
 ]
-SKIP = tuple(CAST) + ("WinBar", "CellFront", "Hacksaw", "hacksaw", "Toolbox", "Gavel", "Phone", "Mobile", "Nail", "Tube", "ScrapKey", "File_", "Placard", "Candle", "Blanket", "Spark", "Filing", "KeyRing", "GuardKey", "Crumpled")
+SKIP = tuple(CAST) + ("WinBar", "CellFront", "Hacksaw", "hacksaw", "Toolbox", "Gavel", "Phone", "Mobile", "Nail", "Tube", "ScrapKey", "File_", "Placard", "Candle", "Blanket", "Spark", "Filing", "KeyRing", "GuardKey", "Crumpled", "Object_8", "Razor")
 def cast_free(dg, a, b):
     """from target a toward camera b: return the first blocking point (ignoring characters, props, bars), or None"""
     d = b - a; dist = d.length; d.normalize(); p = a.copy(); travelled = 0.0
@@ -321,6 +407,7 @@ for si in range(len(S) - 1):
     cuts.append(f0)
     if fixed is not None and fixed != "SAW":
         cp0 = Vector(fixed[0]); tp0 = Vector(fixed[1]) if fixed[1] is not None else None
+        cp1 = Vector(fixed[2]) if len(fixed) > 2 else cp0
     if sub:
         rig = O[sub]
         tr = {}; fa = Vector()
@@ -342,7 +429,7 @@ for si in range(len(S) - 1):
             if fixed == "SAW":
                 T_ = T_.lerp(Vector((0.03, -3.12, 1.58)), 0.75)
         else:
-            C, T_ = cp0, tp0
+            C, T_ = cp0.lerp(cp1, u), tp0
         sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
         blk = cast_free(dg, T_, C) if (fixed is None or fixed == "SAW") else None     # fixed cameras were placed clear: never pulled in
         k = 1.0
