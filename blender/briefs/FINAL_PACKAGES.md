@@ -45,7 +45,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 29 | AIAsleep | `claude/beautiful-ptolemy-c5vrcq` | `blender/AIAsleep_v007/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–2046)** |
 | 30 | FanCancer | `claude/connect30-fan-cancer` | `blender/FanCancer_v004/` **acting fixed, approved, final commit a270af3 (VO sync when your voiceover arrives)** |
 | 31 | PopeShot | `claude/connect31-pope-shot` | `blender/PopeShot_v004b/` **acting fixed, approved, final commit d77ad0f (VO sync when your voiceover arrives)** |
-| 32 | GoatOwner | `claude/connect32-goat-owner` | `blender/GoatOwner_v006c/` **acting fixed, approved, final commit 6cbe5e6 (VO sync when your voiceover arrives)** |
+| 32 | GoatOwner | `claude/beautiful-ptolemy-c5vrcq` | `blender/GoatOwner_v009/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1793)** |
 | 33 | WaterTubes | `claude/beautiful-ptolemy-c5vrcq` | `blender/WaterTubes_v006/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1769)** |
 | 34 | EscapeArtist | `claude/connect34-escape-artist` | `blender/EscapeArtist_v006b/` **acting fixed, approved, final commit 031e503 (VO sync when your voiceover arrives)** |
 | 35 | TitanicIceberg | `claude/beautiful-ptolemy-c5vrcq` | `blender/TitanicIceberg_v014/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1464)** |
