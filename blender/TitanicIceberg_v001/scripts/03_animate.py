@@ -399,18 +399,22 @@ SHOTS = [
     (360,  Vector((-6, -37, 3.0)),       Vector((-4, Y0, 2.3)),     34),
     (CUT_STEW, Vector((-5, -34.0, 2.8)), Vector((-3.5, Y0, 2.2)),   38)]),
   # B: the photographer on deck framing the shot, face visible (ship-local)
-  (CUT_STEW, CUT_SHIP, [
-    (CUT_STEW, ("ship", (-0.62, 1.1, 1.42)), ("ship", (0.0, 0.12, 1.42)), 30),
-    (500,      ("ship", (-0.5, 1.12, 1.38)), ("ship", (0.0, 0.12, 1.40)), 31),
-    (CUT_SHIP, ("ship", (-0.38, 1.12, 1.40)), ("ship", (0.0, 0.12, 1.45)), 32)]),
+  # B1 (v012): the camera on its tripod at the rail, aimed at the berg - shutter clicks (no hands)
+  (CUT_STEW, 520, [
+    (CUT_STEW, ("ship", (1.25, 0.05, 1.42)), ("ship", (0.5, 0.45, 1.2)), 30),
+    (520,      ("ship", (1.12, 0.12, 1.38)), ("ship", (0.5, 0.45, 1.2)), 36)]),
+  # B2 (v012): his face, looking out at the berg - pleased (head and shoulders, no hands)
+  (520, CUT_SHIP, [
+    (520,      ("ship", (-0.5, 0.85, 1.66)), ("ship", (0.0, 0.05, 1.62)), 40),
+    (CUT_SHIP, ("ship", (-0.42, 0.85, 1.65)), ("ship", (0.0, 0.05, 1.62)), 44)]),
   # C1: his steamship sailing past the debris, the berg beyond - visible push-in (2 s)
   (CUT_SHIP, CUT_DECK2, [
     (CUT_SHIP, Vector((14, -186, 40)),   Vector((-6, -92, 4)),      20),
     (CUT_DECK2, Vector((-4, -140, 16)),  Vector((-10, -102, 6)),    24)]),
   # C2: on his deck, over his shoulder: the photographer watching the berg and the debris (beat 4)
   (CUT_DECK2, CUT_NIGHT, [
-    (CUT_DECK2, ("ship", (-1.15, 0.75, 1.72)), ("ship", (0.25, 0.0, 1.62)), 28),
-    (CUT_NIGHT, ("ship", (-1.0, 0.85, 1.70)), ("ship", (0.2, 0.05, 1.62)), 31)]),
+    (CUT_DECK2, ("ship", (-0.35, 1.25, 1.62)), ("ship", (0.25, 0.15, 1.45)), 30),
+    (CUT_NIGHT, ("ship", (-0.3, 1.15, 1.62)), ("ship", (0.25, 0.15, 1.45)), 33)]),     # v012: his face + the tripod camera beside him, no hands
   # D: night - the solid dark liner scrapes past; the red paint on the ice is revealed behind its stern (safe distance)
   (CUT_NIGHT, CUT_DARK, [
     (CUT_NIGHT, Vector((60, Y0 - 66, 13)), Vector((8, Y0, 6)),      26),
@@ -655,6 +659,7 @@ for f in range(0, 366, 12):
     HP["apply_pose"](st.o, "L", "cup_hold", f)
 # v008: shot B - he frames the shot again (same performance as 0-180, offset to 420-600: look down into the finder, shutter, look up)
 for fc in all_fcurves(st.o):
+    if any(k_ in fc.data_path for k_ in ("IK_hand", "finger", "wrist", "Pole_elbow")): continue   # v012: hands are re-keyed below, never copied
     pts = [(k.co.x, k.co.y) for k in fc.keyframe_points if k.co.x <= 180]
     for x, y in [(k.co.x, k.co.y) for k in fc.keyframe_points if 180 <= k.co.x <= 360]: fc.keyframe_points.insert(x + 560, y)
     fc.update()
@@ -667,9 +672,9 @@ for f_, a_, b_ in ((0, 1.0, 0.0), (431, 1.0, 0.0), (432, 0.0, 1.0)):
 bc.rotation_mode = 'QUATERNION'
 _l0, _q0, _s0 = bc.matrix_basis.decompose()
 bc.location = _l0; bc.rotation_quaternion = _q0; bc.keyframe_insert("location", frame=431); bc.keyframe_insert("rotation_quaternion", frame=431)
-CAMB = [(432, 0.33, 1.12, -8), (466, 0.33, 1.12, -6), (498, 0.31, 1.22, -3), (548, 0.31, 1.22, -3), (580, 0.33, 1.12, -6), (606, 0.33, 1.12, -6)]   # v011: chest height, never over his chin
+CAMB = [(432, 0.38, 1.22, 2), (920, 0.38, 1.22, 2)]   # v012: on a tripod at the rail beside him (x offset below)
 for f_, dy, dz, pit in CAMB:
-    M_ = Matrix.Translation(Vector((SP.x - 0.01, SP.y + dy, DK.z + dz))) @ Matrix.Rotation(R_(180), 4, 'Z') @ Matrix.Rotation(R_(pit), 4, 'X')
+    M_ = Matrix.Translation(Vector((SP.x + 0.55, SP.y + dy, DK.z + dz))) @ Matrix.Rotation(R_(180), 4, 'Z') @ Matrix.Rotation(R_(pit), 4, 'X')
     l_, q_, _ = M_.decompose(); bc.location = l_; bc.rotation_quaternion = q_
     bc.keyframe_insert("location", frame=f_); bc.keyframe_insert("rotation_quaternion", frame=f_)
 for fc in all_fcurves(bc):
@@ -682,22 +687,37 @@ for idb in (bc,):
 # his body: head level with the camera, a breath, a small lean in at the click; face focused, then pleased
 for f_ in range(432, 612, 12):
     up = smooth((f_ - 470) / 25) * (1 - smooth((f_ - 552) / 25))
-    st.pose(f_, (SP.x, SP.y), YAW, flex=1.5, spine=(3 + 2 * up + 1.0 * math.sin(f_ / 60 * 2.2), 0, 0), head=(6 - 8 * up, 0), feet=FEET, crouch=0.0)
+    st.pose(f_, (SP.x, SP.y), YAW, flex=1.0, spine=(1 + 1.0 * math.sin(f_ / 60 * 2.2), 0, 0), head=(-6 + 3 * up, 4), feet=FEET, crouch=0.0)   # v012: head up, looking out at the berg
 for f_, kw in ((432, dict(brow=0.4, lids=0.2)), (500, dict(brow=-0.2, lids=-0.6, jaw=1)), (526, dict(brow=0.3, lids=-0.2)), (575, dict(brow=1.0, lids=0.8, jaw=4, smile=0.4))):
     face(st.R, f_, **kw)
-for f_ in list(range(432, 612, 6)) + list(range(744, 916, 6)):   # also the rail shot: hands stay on the camera
-    sc.frame_set(f_); bpy.context.view_layer.update(); mn, mx = _bb_world(bc); c = (mn + mx) / 2
-    fwd = (bc.matrix_world.to_3x3() @ Vector((0, -1, 0))).normalized()
+for f_ in range(432, 924, 12):   # v012: hands off the camera - arms relaxed at his sides (out of the head-and-shoulders frames)
+    sc.frame_set(f_); bpy.context.view_layer.update()
     shL = st.o.matrix_world @ st.R.PB["upperarm01.L"].head; shR = st.o.matrix_world @ st.R.PB["upperarm01.R"].head
     sideR = Vector((shR.x - shL.x, shR.y - shL.y, 0)).normalized()
-    halfw = abs((mx - mn).dot(sideR)) / 2
-    # v011: one-handed - right palm under the base; left arm relaxed at his side, hand visible by the thigh
-    HP["place_hand"](st.o, "R", f_, Vector((c.x, c.y, mn.z)) + sideR * 0.02, Vector((0, 0, 1)), Vector((fwd.x, fwd.y, 0)), skin=0.004)
-    HP["apply_pose"](st.o, "R", "cup_hold", f_)
-    hip = shL + Vector((0, 0, -0.66)) - sideR * 0.07 + Vector((fwd.x, fwd.y, 0)) * 0.04
-    HP["place_hand"](st.o, "L", f_, hip, sideR, Vector((0, 0, -1)), skin=0.03)
-    HP["apply_pose"](st.o, "L", "relaxed", f_)
-
+    for sd, sh_, sg in (("L", shL, -1), ("R", shR, 1)):
+        HP["place_hand"](st.o, sd, f_, sh_ + Vector((0, 0, -0.66)) + sideR * sg * 0.07, -sideR * sg, Vector((0, 0, -1)), skin=0.03)
+        HP["apply_pose"](st.o, sd, "relaxed", f_)
+# the tripod: three wooden legs and a head under the camera (ship-local, parented to the rig like the camera)
+TPC = Vector((SP.x + 0.55, SP.y + 0.38, DK.z + 1.22 - 0.09))
+wood = D.materials.new("M_TripodWood"); wood.use_nodes = True; wood.node_tree.nodes["Principled BSDF"].inputs['Base Color'].default_value = (0.25, 0.13, 0.06, 1)
+wood.node_tree.nodes["Principled BSDF"].inputs['Roughness'].default_value = 0.6
+TRI = []
+for k in range(3):
+    a_ = R_(90 + 120 * k); foot = Vector((TPC.x + 0.38 * math.cos(a_), TPC.y + 0.38 * math.sin(a_), DK.z + 0.01))
+    v = TPC - foot; mid = (TPC + foot) / 2
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.014, depth=v.length, location=(0, 0, 0)); lg = bpy.context.object; lg.name = "Tripod_Leg_%d" % k
+    lg.rotation_mode = 'QUATERNION'; lg.rotation_quaternion = v.to_track_quat('Z', 'Y'); lg.location = mid; TRI.append(lg)
+bpy.ops.mesh.primitive_cylinder_add(radius=0.05, depth=0.04, location=TPC + Vector((0, 0, 0.0))); hd_ = bpy.context.object; hd_.name = "Tripod_Head"; TRI.append(hd_)
+for ob in TRI:
+    for c_ in list(ob.users_collection): c_.objects.unlink(ob)
+    D.collections["Steamship"].objects.link(ob); ob.data.materials.append(wood)
+    Mw = ob.matrix_basis.copy(); ob.parent = st.o; ob.matrix_parent_inverse = Matrix.Identity(4); ob.matrix_basis = Mw
+    for f_, v_ in ((0, True), (432, False)):
+        ob.hide_render = v_; ob.keyframe_insert("hide_render", frame=f_)
+    set_interp(ob, 'CONSTANT', lambda p_: p_ == "hide_render")
+# the click: the lens-board shutter kicks once (tiny camera jolt) at 476
+for f_, dz_ in ((470, 0.0), (476, -0.006), (482, 0.0)):
+    bc.location = Vector((SP.x + 0.55, SP.y + 0.38, DK.z + 1.22 + dz_)); bc.keyframe_insert("location", frame=f_)
 for ob in [dh.o] + list(dh.o.children): ob.hide_render = True     # v010: the blue deckhand was only ever a cropped body at the frame edge
 for ob in [o for o in O if o.name.startswith("Tray_Liquid")]: ob.hide_render = True   # v010: the refractive developer blurred the print
 # v011 darkroom: no reach across the body - he leans on the bench with both palms by his sides and watches the print come up; the tongs rest in the tray
