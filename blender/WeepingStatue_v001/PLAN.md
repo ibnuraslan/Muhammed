@@ -21,7 +21,7 @@ Cast: **Woman** (devotee, green saree-coloured dress + dark hair), **Investigato
 | 2 | "Now no one knew where the water was coming from" | S04 5.2–7.4 crowd wide | 10–12 people gather at the wall, look up, two point at the feet, heads turn | High over the crowd's shoulders toward the cross, slow push | Pointing arms kept outside other bodies; crowd spaced ≥0.6 m |
 | 2 | "and assumed" | S05 7.4–9.2 crowd 3/4 | Crowd murmurs, some cross arms, one woman lifts hands to chest | 3/4 side, crowd faces visible, statue top of frame | Hands-to-chest: palms 2 cm off clothes |
 | 2 | "it was a miracle" | S06 9.2–11.4 Woman CU | Woman looks up at the statue, small smile, head tilt, breath | Low-ish CU, sky + cross pillar behind, f/8 | Eye fix + catchlight; fringe parted |
-| 3 | "Crowds gathered the water" | S07 11.4–13.2 cup | Woman holds a white cup under the dripping feet; a drop lands in it | Medium-close over her shoulder side, cup + hand + face | Cup = `grip_object` wrap_grip, Child Of hand, ≤2 cm gap; cup stays below hair line |
+| 3 | "Crowds gathered the water" | S07 11.4–13.2 cup | A white cup stands on the plinth under the feet; drops fall into it and it fills (no hand: two grip attempts failed the contact check) | Low 3/4 on the plinth, feet at the top of frame | No hand contact |
 | 3 | "and touching the weeping statue" | S08 13.2–15.4 touch | A man reaches up and lays his fingertips on the statue's foot; others watch / one reaches but stops short | From behind/side of crowd toward the cross, as ref | Fingertips ON the surface (place_hand, 1 cm skin), never through; only one hand contact |
 | 4 | "But a man discovered" | S09 15.4–17.2 bathroom wide | Investigator (blue blazer) and Caretaker stand in a small tiled bathroom beside the toilet; damp stain on the wall | Wide from the door, both full-body, faces 3/4 | Arms relaxed, feet planted |
 | 4 | "from the bathroom" | S10 17.2–18.6 point | Investigator turns and points at the pipe on the wall; Caretaker turns his head | Medium side | `point` preset; arm clear of Caretaker |
@@ -69,3 +69,12 @@ Cup (white ceramic, built), trolley case (CC-BY The Motion Tree, recoloured dark
 ## Known to check in Phase 2
 - S18 first frames: his left arm swings near a crowd member at the edge; check with clip_scan / limb_check.
 - Drops (S01/S02/S12) are small: verify they read in the moving preview.
+
+## P1b (director notes, Nov 15)
+- Statue: shoulder-length marble hair + short sculpted beard (no likeness, no damage).
+- Contacts: S07 re-staged without a hand (cup on the plinth fills from the drips). S08 palm on the flat wet stone of the cross under the feet.
+  Idle arms hang wider (women +4 cm, CrowdM4 +6 cm); S18 trailing hand further out.
+- Checks on the final file (`review/`): body_prop_cross (13 props: cross beam/bar, plinth, wall, statue body + loincloth, cup, trolley,
+  pipe runs + joint, floor drain, toilet; all 11 cast rigs, every 3rd frame) = **0 visible crossings**; statue rig vs its cross = 0.
+  clip_scan: one range 1039–1045 (S08, CrowdM4 reaching in past the statue's leg, no prop crossing). limb_check: remaining ARMBODY hits are the
+  known shoulder-root false positives (2–3 pts at upperarm01), statue ARMBACK = arms along the crossbar (intended).

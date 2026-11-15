@@ -1,0 +1,27 @@
+{
+ "frames": {
+  "1039": {
+   "CrowdM4": {
+    "self": 414,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1045": {
+   "CrowdM4": {
+    "self": 151,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   1039,
+   1045
+  ]
+ ],
+ "fps": 60
+}

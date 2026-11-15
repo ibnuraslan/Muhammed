@@ -310,40 +310,18 @@ def S06():     # the Woman in close-up, looking up at the statue, small smile/br
     face = V((x, y, rest_head(n, "head").z + 0.08))
     cam_keys(s, [(0, face + V((-0.30, 0.62, 0.05)), face + V((0, 0, 0.02)), 50), (1, face + V((-0.22, 0.52, 0.03)), face + V((0, 0, 0.03)), 55)], fstop=8)
 CUP = bpy.data.objects["PR_Cup"]; CUPW = bpy.data.objects["PR_CupWater"]
-def S07():     # the Woman holds a cup of the water at her chest, looks into it, lifts it a little
-    s = "S07"; f0, f1 = F0[s], F1[s]
-    crowd_idle(f0, f1, skip=("Woman",))
-    n = "Woman"; x, y = CROWD[n]; yaw = facing(x, y, *LOOK); on_stage(n, f0, f1)
-    H = HUM[n]; P = V((x, y, H.root_head.z - 0.01)); Rb = body_R(yaw)
-    fw = Rz(yaw) @ V((0, -1, 0)); sd = Rz(yaw) @ V((1, 0, 0))
-    cup_c = V((x, y, 0)) + fw * 0.38 + sd * (-0.10) + V((0, 0, rest_head(n, "spine03").z + 0.02))
-    stand(n, f0, x, y, yaw, head=(-8.0, -6.0), fingers="relaxed")
-    # place the cup, grip it with the right hand at f0, then Child Of the hand
-    CUP.location = cup_c - V((0, 0, 0.046)); CUP.rotation_euler = (0, 0, 0); CUP.keyframe_insert("location", frame=f0)
-    ev(f0)
-    # the cup rests on her open right palm (no wrap grip: the thumb went through the cup wall)
-    fd_ = (fw - sd * 0.25).normalized()
-    place_hand(RIG[n].o, "R", f0, cup_c - V((0, 0, 0.046)) - fd_ * 0.022 + sd * 0.014, V((0, 0, 1)), fd_, skin=0.026)
-    apply_pose(RIG[n].o, "R", "relaxed", f0)
-    ev(f0)
-    pbw = RIG[n].o.pose.bones["wrist.R"]
-    c_ = CUP.constraints.new('CHILD_OF'); c_.name = "HoldCup"; c_.target = RIG[n].o; c_.subtarget = "wrist.R"
-    c_.inverse_matrix = (RIG[n].o.matrix_world @ pbw.matrix).inverted()
-    c_.influence = 1.0
-    # later keys: copy the gripped IK target and lift it a little (cup follows the hand)
-    pb = RIG[n].PB["IK_hand.R"]; L0 = pb.location.copy(); Q0 = pb.rotation_quaternion.copy()
-    restR = RIG[n].BN["IK_hand.R"].matrix_local.to_3x3().inverted()
-    for f, dz, hd in ((f0 + 50, 0.0, (-10.0, -4.0)), (f0 + 95, 0.06, (12.0, 0.0)), (f1, 0.07, (18.0, 2.0))):
-        stand(n, f, x, y, yaw, head=hd, fingers=None, hands={"L": None})
-        pb.location = L0 + restR @ V((0, 0, dz)); pb.rotation_quaternion = Q0
-        pb.keyframe_insert("location", frame=f, group="IK_hand.R"); pb.keyframe_insert("rotation_quaternion", frame=f, group="IK_hand.R")
-        pe = RIG[n].PB["Pole_elbow.R"]; pe.keyframe_insert("location", frame=f, group="Pole_elbow.R")
-    CUPW.location = (0, 0, 0.055); CUPW.keyframe_insert("location", frame=f0)
+def S07():     # the water is collected: a cup stands on the plinth under the feet, drops fall into it and it fills
+    s = "S07"; f0, f1 = F0[s], F1[s]          # no people on stage (the camera stands where the crowd stood)
     drops_idle(f0, f1)
-    face = V((x, y, rest_head(n, "head").z + 0.02))
-    cam_keys(s, [(0, cup_c + fw * 0.75 + sd * 0.30 + V((0, 0, 0.15)), cup_c.lerp(face, 0.45), 40),
-                 (1, cup_c + fw * 0.62 + sd * 0.24 + V((0, 0, 0.12)), cup_c.lerp(face, 0.5), 42)], fstop=8)
-    return c_
+    base = V((TOE.x, TOE.y, 0.32))
+    CUP.location = base; CUP.rotation_euler = (0, 0, 0); CUP.keyframe_insert("location", frame=f0)
+    top = TOE + V((0, 0, -0.004))
+    for i, (g, fl) in enumerate(((0, 20), (30, 62), (70, 102), (108, 136))):
+        if f0 + fl < f1 - 10: drop_cycle(DROPS[i], f0 + g, f0 + fl, f1, top, 0.32 + 0.06 + 0.02 * i / 3, f0, f1)
+    for f, z in ((f0, 0.030), (f0 + 50, 0.040), (f0 + 105, 0.050), (f1, 0.058)):
+        CUPW.location = (0, 0, z); CUPW.keyframe_insert("location", frame=f)
+    cam_keys(s, [(0, V((0.35, -1.75, 0.95)), V((0.0, -0.48, 0.92)), 30), (1, V((0.30, -1.55, 0.90)), V((0.0, -0.48, 0.90)), 32)], fstop=11)
+    return None
 def S08():     # a man lays his fingertips on the statue's foot; the others watch
     s = "S08"; f0, f1 = F0[s], F1[s]
     crowd_idle(f0, f1, skip=("CrowdM4", "Woman"))
@@ -582,9 +560,6 @@ CUP_SHOTS = [("S07",)]
 for f, loc in ((1, V((0, 0, -50))), (F0["S07"] - 1, V((0, 0, -50)))):
     pass
 # cup: only visible in S07 (constraint influence 1 there, parked otherwise)
-c_ = CUP.constraints.get("HoldCup")
-for f, inf in ((1, 0.0), (F0["S07"] - 1, 0.0), (F0["S07"], 1.0), (F1["S07"], 1.0), (F1["S07"] + 1, 0.0)):
-    c_.influence = inf; c_.keyframe_insert("influence", frame=f)
 _cl = CUP.location.copy()
 for f, loc in ((1, V((0, 0, -50))), (F0["S07"] - 1, V((0, 0, -50))), (F1["S07"], _cl), (F1["S07"] + 1, V((0, 0, -50)))):
     CUP.location = loc; CUP.keyframe_insert("location", frame=f)
