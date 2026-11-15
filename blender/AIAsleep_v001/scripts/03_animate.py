@@ -277,12 +277,12 @@ SHOTS = [  # frame, camera position, aim point, focal length
  (1620, V((-0.04, -0.44, 1.26)), FACE, 40),
  (1680, EYE + V((-0.004, -0.16, 0.0)), EYE, 45),
  (1715, EYE + V((0.006, -0.10, 0.002)), EYE, 50),
- (1745, EYE + V((0.02, -0.30, 0.0)), FACE, 40),
- (1772, EYE + V((0.004, -0.10, 0.004)), INNER, 40),
- (2260, EYE + V((-0.006, -0.13, 0.003)), EYE, 45),
- (2290, EYE + V((-0.006, -0.08, 0.003)), EYE, 45),
- (2350, EYE + V((-0.004, -0.078, 0.002)), EYE, 45),
- (2390, V((-0.12, -0.46, 1.24)), FACE, 35),
+ (1736, EYE + V((0.004, -0.10, 0.002)), EYE, 50),
+ (2215, EYE + V((-0.006, -0.16, 0.003)), EYE, 45),
+ (2245, EYE + V((-0.006, -0.085, 0.003)), EYE, 45),
+ (2300, EYE + V((-0.004, -0.08, 0.002)), EYE, 45),
+ (2330, V((-0.12, -0.46, 1.24)), FACE, 35),
+ (2390, V((-0.13, -0.46, 1.24)), FACE, 35),
  (2425, V((-0.12, -0.46, 1.24)), FACE, 35),
  (2436, V((-0.26, -0.47, 1.25)), SCR, 30),
  (2466, V((-0.27, -0.47, 1.25)), SCR, 30),
@@ -310,7 +310,7 @@ for idb in (cam, aim, camd):
 for fc in fcs(mover):
     for kp in fc.keyframe_points: kp.interpolation = "LINEAR"
 camd.dof.use_dof = True; camd.dof.focus_object = aim; camd.dof.aperture_fstop = 4.0
-for f, v in ((1, 4.0), (840, 4.0), (870, 9.0), (960, 9.0), (990, 4.0), (1640, 5.6), (1690, 14.0), (1716, 16.0), (1740, 8.0), (1765, 16.0), (2000, 16.0), (2025, 5.6), (2255, 5.6), (2285, 16.0), (2355, 16.0), (2385, 5.6)): K(camd.dof, "aperture_fstop", f, v)
+for f, v in ((1, 4.0), (840, 4.0), (870, 9.0), (960, 9.0), (990, 4.0), (1640, 5.6), (1690, 14.0), (1716, 16.0), (1736, 16.0), (1916, 16.0), (1976, 16.0), (2010, 8.0), (2215, 8.0), (2245, 16.0), (2300, 16.0), (2328, 5.6)): K(camd.dof, "aperture_fstop", f, v)
 sc.render.use_motion_blur = True; sc.render.motion_blur_shutter = 0.5
 # ---------------- look fixes: dark brown irises, black hair, warmer skin
 eg = next(n for n in bpy.data.materials["Driver.high-poly"].node_tree.nodes if n.type == "GROUP")
@@ -377,8 +377,8 @@ ci = curve_obj("IrisCircle", [(c0.x + 0.0062 * math.cos(a), c0.y - 0.001, c0.z +
 M_box, box_vis, _ = emis("TrackBoxMat", (0.25, 1.0, 0.5), 5.0); bx.data.materials.append(M_box)
 M_ci, ci_vis, ci_col = emis("IrisCircleMat", (0.25, 1.0, 0.5), 6.0); ci.data.materials.append(M_ci)
 for o_ in (bx, ci): parent_head(o_)
-for f, v in ((1, 0), (1580, 0), (1595, 1), (1730, 1), (1740, 0), (2270, 0), (2285, 1), (2360, 1), (2372, 0)): vis(box_vis, f, v)
-for f, v in ((1, 0), (1590, 0), (1600, 1), (1730, 1), (1740, 0), (2270, 0), (2280, 1), (2360, 1), (2372, 0)): vis(ci_vis, f, v)
+for f, v in ((1, 0), (1580, 0), (1595, 1), (1730, 1), (1740, 0), (2240, 0), (2250, 1), (2300, 1), (2310, 0)): vis(box_vis, f, v)
+for f, v in ((1, 0), (1590, 0), (1600, 1), (1730, 1), (1740, 0), (2240, 0), (2250, 1), (2300, 1), (2310, 0)): vis(ci_vis, f, v)
 GREEN, RED = (0.25, 1.0, 0.5, 1), (1.0, 0.08, 0.05, 1)
 def ccol(f, c): ci_col.default_value = c; ci_col.keyframe_insert("default_value", frame=f)
 ccol(1, GREEN); ccol(1600, GREEN)
@@ -386,8 +386,9 @@ fl = 1610
 while fl < 1700:   # beat 8: it beeps whenever it can't see the iris
     ccol(fl, RED); ccol(fl + 5, RED); ccol(fl + 6, GREEN); ccol(fl + 8, GREEN); ccol(fl + 9, RED); fl += 23
 ccol(1705, RED)
-fl = 2290
-while fl < 2355:   # beat 10: detection fails and flickers
+ccol(2245, GREEN)
+fl = 2265
+while fl < 2290:   # beat 10: green, then it flips to red
     ccol(fl, RED); ccol(fl + 5, RED); ccol(fl + 6, GREEN); ccol(fl + 8, GREEN); ccol(fl + 9, RED); fl += 23
 for fc in fcs(M_ci.node_tree):
     for kp in fc.keyframe_points: kp.interpolation = "CONSTANT"

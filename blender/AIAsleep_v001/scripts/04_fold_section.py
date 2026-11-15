@@ -147,7 +147,7 @@ for nm, off, e, col in (("Sec_Key", (0.06, -0.05, 0.05), 0.4, (1.0, 0.93, 0.85))
     l = bpy.data.lights.new(nm, "AREA"); l.size = 0.08; l.color = col; lo = O.new(nm, l); secc.objects.link(lo)
     lo.location = EYE + Vector(off); lo.rotation_euler = (EYE - lo.location).to_track_quat("-Z", "Y").to_euler(); lights.append((l, e))
 # visibility timeline: dive in at 1806, back out at 2210
-D0, D1 = 1793, 1926
+D0, D1 = 1737, 1916
 def vis(o, f, show):
     o.hide_render = not show; o.keyframe_insert("hide_render", frame=f)
 for o in secc.objects:
@@ -175,26 +175,27 @@ def fcurves(idb):
     except AttributeError: return [fc for ly in act.layers for s in ly.strips for cb in s.channelbags for fc in cb.fcurves]
 for idb in (cam, aim, camd):
     for fc in fcurves(idb):
-        for kp in [k for k in fc.keyframe_points if 1789 < k.co.x < 2215][::-1]: fc.keyframe_points.remove(kp)
+        for kp in [k for k in fc.keyframe_points if 1736 < k.co.x < 2215][::-1]: fc.keyframe_points.remove(kp)
 CUTC = Vector((CUT_X, EYE.y - 0.004, EYE.z + 0.002))
 V = Vector
 FACEP = Vector((0, -0.06, 1.28)) + (EYE - Vector((-0.0295, -0.031, 1.31)))
-KEYS = [(1791, EYE + V((0.006, -0.026, 0.004)), EYE + V((0.009, -0.01, 0.003)), 40),     # into the skin at the inner corner (<=6 frames)
-        (1802, CUTC + V((0.055, -0.035, 0.006)), CUTC, 30),
-        (1850, CUTC + V((0.058, -0.024, 0.012)), CUTC, 30),
-        (1880, CUTC + V((0.050, -0.030, 0.026)), CUTC + V((0, -0.006, 0.004)), 32),
+INNERP = EYE + V((0.012, 0.0, 0.0))
+KEYS = [(1737, CUTC + V((0.055, -0.035, 0.006)), CUTC, 30),          # clean cut in from the eye close-up
+        (1790, CUTC + V((0.058, -0.024, 0.012)), CUTC, 30),
+        (1850, CUTC + V((0.050, -0.030, 0.026)), CUTC + V((0, -0.006, 0.004)), 32),
         (1915, CUTC + V((0.052, -0.036, 0.010)), CUTC, 30),
-        (1926, EYE + V((0.006, -0.026, 0.004)), EYE + V((0.009, -0.01, 0.003)), 40),   # back out through the skin at the inner corner
-        (1945, EYE + V((0.004, -0.075, 0.005)), EYE + V((0.004, 0, 0.001)), 40),
-        (1985, EYE + V((-0.006, -0.074, 0.006)), EYE + V((0.004, 0, 0.001)), 40),      # ~1 s real-skin macro of the inner-corner fold
-        (2030, V((-0.24, -0.44, 1.20)) + (EYE - V((-0.0295, -0.031, 1.31))), FACEP, 32),   # pull out to his face
-        (2110, V((-0.46, -0.36, 1.16)) + (EYE - V((-0.0295, -0.031, 1.31))), FACEP, 28),
-        (2200, V((-0.12, -0.46, 1.24)) + (EYE - V((-0.0295, -0.031, 1.31))), FACEP, 35)]
+        (1916, EYE + V((-0.006, -0.074, 0.006)), EYE + V((0.004, 0, 0.001)), 40),   # clean cut out to the sharp fold macro
+        (1975, EYE + V((-0.004, -0.072, 0.006)), EYE + V((0.004, 0, 0.001)), 40),
+        (2010, EYE + V((-0.07, -0.30, 0.02)), FACEP, 32),                   # out to his face, then a slow push to the inner-corner fold
+        (2100, EYE + V((-0.035, -0.22, 0.012)), INNERP, 38),
+        (2185, EYE + V((-0.014, -0.15, 0.006)), INNERP, 44)]
 for f, p, a, l in KEYS:
     cam.location = p; cam.keyframe_insert("location", frame=f); aim.location = a; aim.keyframe_insert("location", frame=f); camd.lens = l; camd.keyframe_insert("lens", frame=f)
 for idb in (cam, aim, camd):
     for fc in fcurves(idb):
         for kp in fc.keyframe_points: kp.handle_left_type = kp.handle_right_type = "AUTO_CLAMPED"
+        for kp in fc.keyframe_points:
+            if int(round(kp.co.x)) in (1736, 1915): kp.interpolation = "CONSTANT"   # hard cuts in/out of the cross-section
         fc.update()
 for fc in fcurves(camd):
     if "fstop" in fc.data_path:
