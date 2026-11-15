@@ -452,8 +452,8 @@ walk(NUR, N_A, Vector((1.0, 1.6)), 1, 120, -90, -90, stride=0.6)
 for f in range(1, 121, 18): nurse_arms(f, swing=12 * math.sin(f * 0.21))
 walk(NUR, Vector((1.0, 1.6)), N_B, 121, 300, -90, -100, stride=0.6)
 for f in range(121, 300, 18): nurse_arms(f, swing=12 * math.sin(f * 0.21))
-for f in range(310, 565, 50):
-    stand(NUR, f, N_B, -100, spine=(2, 0, 0), head=(6, 0, 0)); nurse_arms(f, fwd=30, clasp=1.0)   # v009k: upright, hands clasped (sterile pose)
+for f in [310, 330] + list(range(340, 565, 50)) + [564]:
+    stand(NUR, f, N_B, -100, spine=(2, 0, 0), head=(6, 0, 0)); nurse_arms(f, fwd=30 if f >= 340 else 4, clasp=1.0 if f >= 340 else 0.0)   # v009k: upright, hands clasped once he has passed her (sterile pose)
 walk(NUR, N_B, N_C, 605, 660, -100, -150, stride=0.3)   # v009c: starts after the surgeon has crossed her path
 for f in (572, 600): nurse_arms(f, fwd=4)   # arms down while the surgeon passes her
 for f in range(605, 660, 18): nurse_arms(f, swing=10 * math.sin(f * 0.21))
@@ -469,10 +469,10 @@ N_E1, N_E2, N_E = Vector((0.95, -1.25)), Vector((1.15, -0.05)), Vector((0.53, 0.
 _y0 = -213; _y1 = unwrap(_y0, yaw_to(N_E1 - (N_D + Vector((0.06, 0.08))))); _y2 = unwrap(_y1, yaw_to(N_E2 - N_E1)); _y3 = unwrap(_y2, yaw_to(N_E - N_E2))
 _yE = unwrap(_y3, yaw_to(Vector((0.02, -0.05)) - N_E))
 walk(NUR, N_D + Vector((0.06, 0.08)), N_E1, 1560, 1610, _y0, _y1, stride=0.55); walk(NUR, N_E1, N_E2, 1611, 1655, _y1, _y2, stride=0.55)
-walk(NUR, N_E2, N_E + Vector((0.03, 0.08)), 1656, 1695, _y2, _yE, stride=0.5)
+walk(NUR, N_E2, N_E + Vector((0.09, 0.12)), 1656, 1695, _y2, _yE, stride=0.5)
 for f in range(1560, 1696, 18): nurse_arms(f, swing=10 * math.sin(f * 0.21))
 for f in (1696, 1730, B["end"]):
-    stand(NUR, f, N_E + Vector((0.03, 0.08)), _yE, spine=(0, 0, 0), head=(-2, 0, 0)); nurse_arms(f, fwd=6, clasp=0.6)   # v009k: upright, a step behind, hands clasped
+    stand(NUR, f, N_E + Vector((0.09, 0.12)), _yE, spine=(0, 0, 0), head=(-2, 0, 0)); nurse_arms(f, fwd=6, clasp=0.6)   # v009k: upright, a step behind, hands clasped
 for s_ in "LR": HP(NUR, s_, "relaxed", 1, spread=0); HP(NUR, s_, "relaxed", 1309, spread=0)
 NUR.face(1, **N0); NUR.face(B["b9"] + 50, **N0); NUR.face(B["b9"] + 80, **SMILE)
 
