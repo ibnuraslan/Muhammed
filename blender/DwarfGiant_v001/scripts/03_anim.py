@@ -156,8 +156,8 @@ def arms_idle(h, f, out=0.08, fwd=-0.02):
 
 # ------------------------------------------------------------------ HERO timeline
 HPOS = V(-0.3, 2.45, 0.0)
-SCALE = [(1, 1.0), (500, 1.0), (560, 1.07), (640, 1.18), (696, 1.26), (800, 1.34), (882, 1.38), (960, 1.47), (1040, 1.56), (1074, 1.6),
-         (1476, 1.62), (1700, 1.64), (1860, 1.72), (2340, 1.72)]
+SCALE = [(1, 1.0), (500, 1.0), (530, 1.08), (565, 1.2), (600, 1.3), (696, 1.36), (800, 1.42), (882, 1.46), (960, 1.52), (1040, 1.57), (1074, 1.6),
+         (1476, 1.62), (1700, 1.64), (1860, 1.72), (2340, 1.72)]   # v006: he shoots up 500-600, in one locked shot
 for f, s in SCALE:
     HRIG.scale = (s,) * 3; HRIG.keyframe_insert("scale", frame=f)
 place("Hero", 1, HPOS, 0); place("Hero", 1481, HPOS, 0, const=True)
@@ -195,7 +195,7 @@ def hand_on_desk(f, s_):
     sc_ = s_; Wa = V((W.x - HPOS.x) / sc_, (W.y - HPOS.y) / sc_, W.z / sc_)
     HR.key_hand("L", f, Wa - V(0, 0, 0.03 / sc_), V(0.35, -0.94, 0), V(0, 0, -1), pole=V(0.6, 0.4, 0.9))
 for f in (696, 740, 790, 840):
-    s_ = dict(SCALE).get(f) or (1.26 + (f - 696) / 186 * 0.12)
+    s_ = next(a1 + (b1 - a1) * (f - f0) / (f1 - f0) for (f0, a1), (f1, b1) in zip(SCALE, SCALE[1:]) if f0 <= f <= f1)
     hand_on_desk(f, s_); hand_rest(HR, "R", f, 0.08, -0.02)
 for f, kw in ((696, dict(flex=22, side=-10, head=(20, 18), frown=12)), (760, dict(flex=24, side=-10, head=(25, 10), frown=14, jaw_deg=4)),
               (820, dict(flex=10, twist=20, head=(5, 35), up=8, jaw_deg=12)), (870, dict(flex=8, twist=20, head=(3, 30), up=10, jaw_deg=14))):
@@ -216,7 +216,14 @@ for f, kw in ((882, dict(flex=4, head=(16, 10), up=4)), (960, dict(flex=6, head=
 for f, kw in ((1074, dict(flex=8, head=(10, 0))), (1150, dict(flex=24, side=12, head=(12, 0), frown=16, jaw_deg=4)),
               (1240, dict(flex=32, side=16, head=(8, 0), frown=20, jaw_deg=6))):
     hero_pose(f, **kw)
-for f in (1074, 1150, 1240): arms_idle(HR, f, 0.1, -0.08)
+for f in (1074, 1170, 1240): arms_idle(HR, f, 0.1, -0.08)
+def look_hands(f):   # v006: he lifts his hands in front of his chest, palms up, and looks at them
+    B_ = HR.r.BN
+    for s__, sx in (("L", 1), ("R", -1)):
+        sh = B_["upperarm01." + s__].head_local
+        HR.key_hand(s__, f, V(sh.x - sx * 0.06, sh.y - 0.3, sh.z - 0.3), V(0, -1, 0.15), V(0, 0, 1), pole=V(sh.x + sx * 0.35, sh.y + 0.1, sh.z - 0.45))
+for f in (1100, 1140): look_hands(f)
+hero_pose(1110, flex=14, head=(32, 0), frown=10, jaw_deg=3)
 # beat 8: squints, then cups left hand to left ear
 for f, kw in ((1250, dict(flex=26, side=12, head=(14, 0), frown=16, squint=12)), (1330, dict(flex=26, side=10, head=(4, 6), frown=18, squint=22)),
               (1400, dict(flex=24, side=10, head=(4, -18), frown=18, jaw_deg=4)), (1470, dict(flex=24, side=10, head=(2, -22), frown=20))):
@@ -419,7 +426,8 @@ for o, off in ((PIT, V(0, -0.014, 0.036)), (TUM, V(0, -0.017, 0.033))):
     o.parent = BR; o.location = off; o.rotation_euler = (R_(90), 0, 0)
     vis(o, [(151, 240)])
 tb = TUM.data.materials[0].node_tree.nodes["Principled BSDF"]
-for f, s, e in ((181, 0.25, 0.0), (250, 0.5, 0.5), (300, 0.9, 1.5), (360, 1.3, 3.0), (420, 1.4, 4.0), (500, 1.4, 3.0), (1658, 1.4, 4.0), (1690, 1.4, 2.0)):
+tb.inputs["Emission Color"].default_value = (1.0, 0.5, 0.12, 1)   # v006: the pituitary glows warm orange in the inset
+for f, s, e in ((151, 1.2, 3.0), (240, 1.35, 4.5), (1658, 1.4, 4.0), (1690, 1.4, 2.0)):
     TUM.scale = (s,) * 3; TUM.keyframe_insert("scale", frame=f)
     tb.inputs["Emission Strength"].default_value = e; tb.inputs["Emission Strength"].keyframe_insert("default_value", frame=f)
 for f in range(260, 500, 14):  # pulse
@@ -511,28 +519,38 @@ sc.frame_set(1)
 # v005: the film is cut into SHOTS joined by clean cuts (director: no fly-throughs into heads, walls or windows).
 # Each shot is its own smooth spline; the camera is keyed on every frame so a cut lands exactly on its frame.
 PH = c9 + V(0, 0, -0.02)                       # patient's head at f1640
+c4, f4, s4, u4, _, _ = head_frame(400); c4b, f4b, s4b, u4b, _, _ = head_frame(440)
+c5, f5, s5, u5, _, _ = head_frame(640); c5b, f5b, s5b, u5b, _, _ = head_frame(690)
+BD = (HEAD0 - V(-0.5, 2.25, 1.33)).normalized() * -1      # brain inset: from where the old inset looked, centred on the brain
+sc.frame_set(1600); PHm = HRIG.matrix_world @ HRIG.pose.bones["head"].head
+sc.frame_set(1900); NMH = RIGS["Normal"].matrix_world @ RIGS["Normal"].pose.bones["head"].head
+MID = (c11 + NMH) * 0.5; AX = (NMH - c11); AX.z = 0; AX.normalize(); PERP = V(-AX.y, AX.x, 0)
+if PERP.x > 0: PERP = -PERP
+NF = V(8.0 - NMH.x, -1.4 - NMH.y, 0).normalized()          # the normal man faces (8.0, -1.4)
+HN = V(NMH.x - c11.x, NMH.y - c11.y, 0).normalized()      # from the tall man toward him
 SHOTS = [
-  (1, 150, [(1, V(0.35, 0.5, 2.05), V(-0.3, 2.3, 1.15), 26), (45, V(0.55, 0.35, 1.95), V(-0.3, 2.4, 1.05), 28),
+  (1, 150, [(1, V(0.35, 0.5, 2.05), V(-0.5, 2.3, 1.15), 26), (45, V(0.55, 0.35, 1.95), V(-0.5, 2.4, 1.05), 28),
             (95, V(-0.05, 1.1, 1.25), V(-0.3, 2.45, 1.22), 32), (150, V(-0.3, 1.6, 1.32), V(-0.3, 2.42, 1.22), 36)]),
-  (151, 240, [(151, V(-0.5, 2.25, 1.33), HEAD0, 35), (240, V(-0.4, 2.18, 1.2), PITW, 42)]),            # brain inset on the card, 1.5 s
-  (241, 812, [(241, V(0.25, 0.85, 1.45), V(-0.3, 2.45, 1.15), 30), (372, V(0.4, 0.6, 1.5), V(-0.3, 2.45, 1.1), 28),
-              (470, V(0.5, 0.45, 1.35), V(-0.5, 2.5, 1.05), 24), (510, V(0.55, 0.55, 0.95), V(-0.75, 2.5, 1.0), 22),
-              (565, V(0.85, 0.25, 1.25), V(-0.85, 2.5, 1.2), 22), (625, V(0.35, 0.15, 1.6), V(-0.6, 2.5, 1.45), 24),
-              (690, V(0.45, 0.2, 1.6), V(-0.3, 2.4, 1.2), 24), (760, V(0.3, 0.1, 1.75), V(-0.25, 2.4, 1.3), 24), (812, V(0.1, 0.35, 1.75), V(-0.2, 2.45, 1.4), 25)]),
-  (813, 874, [(813, V(-0.72, 2.0, 1.95), V(2.8, 2.98, 1.72), 36), (874, V(-0.66, 2.08, 2.0), V(2.8, 2.98, 1.72), 38)]),   # v005: the mirror, from clear of his head
-  (875, 1240, [(880, V(-0.2, 1.0, 1.3), V(-0.35, 2.2, 1.5), 26), (920, V(1.5, -0.1, 0.45), V(-0.3, 2.0, 1.5), 22),
+  (151, 240, [(151, HEAD0 + BD * 0.42, HEAD0, 38), (240, HEAD0 + BD * 0.32, HEAD0, 38)]),                  # brain inset, centred, slow push
+  (241, 371, [(241, V(0.2, 1.15, 1.5), V(-0.42, 2.6, 1.5), 34), (371, V(0.12, 1.3, 1.5), V(-0.42, 2.6, 1.5), 36)]),   # officer and boy, faces
+  (372, 440, [(372, c4 + f4 * 0.75 + s4 * 0.15, c4, 38), (440, c4b + f4b * 0.7 + s4b * 0.15, c4b, 40)]),     # his face (beat 3)
+  (441, 600, [(441, V(0.2, 0.2, 1.45), V(-0.35, 2.55, 1.35), 26), (600, V(0.2, 0.2, 1.5), V(-0.35, 2.55, 1.45), 26)]),   # locked wide by the height rod: he shoots up
+  (601, 695, [(601, c5 + f5 * 0.8 + s5 * 0.12 + u5 * 0.04, c5, 34), (695, c5b + f5b * 0.75 + s5b * 0.12 + u5b * 0.04, c5b, 36)]),  # his face, surprised
+  (696, 812, [(696, V(0.45, 0.2, 1.6), V(-0.3, 2.4, 1.2), 24), (760, V(0.3, 0.1, 1.75), V(-0.25, 2.4, 1.3), 24), (812, V(0.1, 0.35, 1.75), V(-0.2, 2.45, 1.4), 25)]),
+  (813, 874, [(813, V(-0.3, 1.75, 2.05), V(2.8, 2.98, 1.72), 36), (874, V(-0.25, 1.8, 2.1), V(2.8, 2.98, 1.72), 38)]),   # the mirror, his head out of frame
+  (875, 1150, [(880, V(-0.2, 1.0, 1.3), V(-0.35, 2.2, 1.5), 26), (920, V(1.5, -0.1, 0.45), V(-0.3, 2.0, 1.5), 22),
                (975, V(0.35, -0.85, 0.42), V(-0.35, 2.0, 1.6), 22), (1030, V(-1.45, -0.45, 0.5), V(-0.3, 2.1, 1.6), 22),
-               (1075, V(-0.6, 0.55, 1.6), V(-0.3, 2.45, 1.7), 24), (1120, V(-0.5, 0.45, 1.7), V(-0.3, 2.45, 1.8), 24),
-               (1175, V(-0.2, 0.4, 1.75), V(-0.3, 2.45, 1.85), 24), (1240, V(0.1, 0.5, 1.8), V(-0.3, 2.45, 1.9), 25)]),   # v005: whole man with his face (was framed for the x-ray torso)
-  (1241, 1365, [(1241, eye8a + f8a * 0.10, OFFS, 28), (1365, eye8b + f8b * 0.12 + u8b * 0.02, OFFS, 30)]),          # his eyes looking down at the officers
-  (1366, 1481, [(1366, c8c + f8c * 1.5 + s8c * 0.5 + u8c * 0.1, c8c - u8c * 0.15, 30), (1481, c8d + f8d * 1.6 + s8d * 0.55 + u8d * 0.1, c8d - u8d * 0.15, 30)]),  # medium shot, hand at his own ear
-  (1482, 1640, [(1482, V(3.95, 1.36, 2.26), V(6.5, 0.9, 1.3), 24), (1540, V(4.55, 1.25, 2.4), V(6.9, 0.6, 0.9), 24),
-                (1595, V(5.8, -0.65, 2.6), V(6.9, 0.6, 0.85), 26), (1640, V(5.95, -0.55, 2.4), V(6.9, 0.6, 0.85), 26)]),
-  (1641, 1716, [(1641, PH + V(-0.9, -1.0, 0.8), PH, 30), (1716, PH + V(-0.75, -0.85, 0.7), PH, 32)]),               # surgeons at the head of the bed
-  (1717, 1940, [(1717, c9 + f9 * 0.45 - u9 * 0.3 + s9 * 0.1, c9, 30), (1740, V(6.0, 0.55, 1.8), V(6.9, 0.6, 0.72), 28),
-                (1790, V(6.1, 0.5, 1.45), V(6.9, -0.05, 0.7), 26), (1845, V(5.7, -1.25, 1.55), V(6.9, -0.45, 0.6), 26),
-                (1868, V(6.0, -1.25, 1.45), V(9.45, -1.0, 1.4), 22), (1940, V(6.2, -0.5, 0.8), V(9.45, -1.0, 1.55), 22)]),
-  (1941, 1999, [(1941, V(8.3, 5.0, 1.6), V(8.6, 7.0, 0.6), 30), (1999, V(8.35, 5.15, 1.65), V(8.6, 7.0, 0.65), 31)]),   # v005: the headstones
+               (1075, V(-0.6, 0.55, 1.6), V(-0.3, 2.45, 1.7), 24), (1150, V(-0.4, 0.5, 1.8), V(-0.3, 2.4, 1.75), 26)]),
+  (1151, 1240, [(1151, V(-0.55, -0.25, 1.65), V(-1.55, 0.95, 1.62), 32), (1240, V(-0.6, -0.15, 1.65), V(-1.55, 0.95, 1.65), 34)]),   # the officers react
+  (1241, 1365, [(1241, eye8a + f8a * 0.10, OFFS, 28), (1365, eye8b + f8b * 0.12 + u8b * 0.02, OFFS, 30)]),
+  (1366, 1481, [(1366, c8c + f8c * 1.5 + s8c * 0.5 + u8c * 0.1, c8c - u8c * 0.15, 30), (1481, c8d + f8d * 1.6 + s8d * 0.55 + u8d * 0.1, c8d - u8d * 0.15, 30)]),
+  (1482, 1600, [(1482, V(3.95, 1.36, 2.26), V(6.5, 0.9, 1.3), 24), (1540, V(4.55, 1.25, 2.4), V(6.9, 0.6, 0.9), 24), (1600, V(5.0, 0.2, 2.45), V(6.9, 0.6, 0.9), 24)]),
+  (1601, 1716, [(1601, PHm + V(-1.2, -1.1, 0.75), PHm + V(0.4, 0.3, 0.15), 26), (1716, PHm + V(-1.05, -1.0, 0.7), PHm + V(0.4, 0.3, 0.15), 27)]),  # side medium: patient and surgeons
+  (1717, 1857, [(1717, c9 + f9 * 0.45 - u9 * 0.3 + s9 * 0.1, c9, 30), (1740, V(6.0, 0.55, 1.8), V(6.9, 0.6, 0.72), 28),
+                (1790, V(6.1, 0.5, 1.45), V(6.9, -0.05, 0.7), 26), (1845, V(5.7, -1.25, 1.55), V(6.9, -0.45, 0.6), 26)]),
+  (1858, 1899, [(1858, NMH + NF * 0.95 + V(0, 0, 0.05), NMH, 32), (1899, NMH + NF * 0.85 + V(0, 0, 0.05), NMH, 34)]),   # the normal man looks up
+  (1900, 1940, [(1900, c11 + f11 * 1.05 + s11 * 0.15 + V(0, 0, -0.3), c11, 32), (1940, c11 + f11 * 0.95 + s11 * 0.15 + V(0, 0, -0.28), c11, 34)]),   # the tall man looks down at him
+  (1941, 1999, [(1941, V(8.3, 5.0, 1.6), V(8.6, 7.0, 0.6), 30), (1999, V(8.35, 5.15, 1.65), V(8.6, 7.0, 0.65), 31)]),
   (2000, 2340, [(2000, V(8.7, 5.6, 2.4), V(9.9, 10.5, 0.9), 28), (2035, V(8.8, 5.85, 2.3), V(10.1, 11.2, 1.1), 29), (2100, V(8.9, 6.1, 2.2), V(10.2, 11.5, 1.2), 30),
                 (2180, V(8.0, 10.6, 1.8), V(10.1, 11.8, 1.5), 32), (2260, V(8.0, 12.85, 1.75), V(10.1, 11.8, 1.55), 32), (2340, V(8.1, 13.05, 1.9), V(10.1, 11.8, 1.6), 32)])]
 CUTS = [a for a, b, k in SHOTS[1:]]
@@ -565,7 +583,7 @@ for f in list(range(1, 2341, 4)) + [2340]:
     if w > 0:
         cpos = fc_(f); near = cpos + (p_ - cpos).normalized() * 0.25; p_ = p_.lerp(near, w)
     foc.location = p_; foc.keyframe_insert("location", frame=f)
-for f, fs in ((1, 8.0), (150, 8.0), (151, 22.0), (240, 22.0), (241, 8.0), (812, 8.0), (813, 22.0), (874, 22.0), (875, 8.0), (2340, 8.0)):
+for f, fs in ((1, 8.0), (150, 8.0), (151, 22.0), (240, 22.0), (241, 8.0), (2340, 8.0)):
     cam_d.dof.aperture_fstop = fs; cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
 
 # camera-attached cutaway card (teal->navy gradient), alpha keyed
