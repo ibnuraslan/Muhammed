@@ -36,3 +36,8 @@ The whip turn's path passed 0.35 m from the goat's head. A new key at f803 swing
 - `pages/p01–p09.jpg`: contact pages of every preview frame.
 - `ending_2000_2120_2189.jpg`: the ending at 540×960.
 - `face_2150.jpg`: a close-up of her smile.
+
+## QA (qa_check on the packaged file)
+- CAMJUMP 0. BACKHEAD 4 and INSIDE 3 are the same as v007.
+- EMPTY fell from 224 to 207.
+- PROPMOVE 228 is dust puffs and clods waiting under the ground (see v006c). The stick is never flagged in the air.
