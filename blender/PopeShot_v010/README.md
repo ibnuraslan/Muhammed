@@ -16,5 +16,5 @@ Known: about 4 frames near 1578, mid-swing, show the statue with his head just o
 Camera: every turn inside a shot is at most 10° per frame.
 
 Files:
-- `PopeShot_v010_60fps.blend`: packed, plain git, farm check: no problems.
+- `PopeShot_v010_60fps.blend`: packed, 86 MB, plain git, farm check: no problems.
 - Source: `../PopeShot_v001/scripts/03_animate.py` and `04_prepare_package.py`.
