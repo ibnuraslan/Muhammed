@@ -306,14 +306,30 @@ for k, s in enumerate(("L", "R")):
     up = split(base, 0.05)
     CUT[s] = (base, up)
     if s == "L":   # v006e: resting on the cabin aisle floor, upper lifted to show the sole's insides
-        base.rotation_euler = (0, 0, math.radians(-25)); base.location = V((0.05, -1.80, 0.0)); bpy.context.view_layer.update()
+        # v006e-2: the sole lies open on the aisle carpet, well behind PaxB; the cut-off upper rests beside it on the carpet
+        base.rotation_euler = (0, 0, math.radians(-20)); base.location = V((0.0, -2.50, 0.0)); bpy.context.view_layer.update()
         zmin = min((base.matrix_world @ V(c)).z for c in base.bound_box); base.location.z -= zmin - 0.003
-        up.location = (0, 0.02, 0.15); up.rotation_euler = (math.radians(-25), 0, 0)
-        sl = O["Slab_Shoe_" + s]; sl.parent = base; sl.location = (0, 0.0, 0.062)
+        up.location = (0.13, -0.02, -0.047); up.rotation_euler = (0, 0, math.radians(12))
+        sl = O["Slab_Shoe_" + s]; sl.parent = base; sl.matrix_parent_inverse = Matrix.Identity(4); sl.location = (0, 0.0, 0.058)
+        # the cut face of the sole: light rubber, so the section reads as a section
+        mc = bpy.data.materials.new("SoleCut"); mc.use_nodes = True
+        mc.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.42, 0.40, 0.37, 1)
+        mc.node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value = 0.8
+        for ob_ in (base, up):
+            ob_.data.materials.append(mc); mi = len(ob_.data.materials) - 1
+            for pl in ob_.data.polygons:
+                if abs(pl.normal.z) > 0.9 and abs(pl.center.z - 0.05) < 0.004: pl.material_index = mi
+        # a plain cord from the end of the slab, lying on the cut face (prop only, no detail)
+        cu = bpy.data.curves.new("Fuse_Studio_L", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0028; cu.bevel_resolution = 2
+        spn = cu.splines.new('BEZIER'); spn.bezier_points.add(2)
+        for bp_, co in zip(spn.bezier_points, ((0.0, 0.080, 0.066), (0.012, 0.105, 0.064), (0.020, 0.128, 0.060))):
+            bp_.co = co; bp_.handle_left_type = bp_.handle_right_type = 'AUTO'
+        fz = bpy.data.objects.new("Fuse_Studio_L", cu); base.users_collection[0].objects.link(fz); fz.parent = base
+        cu.materials.append(bpy.data.materials["FuseCord"])
         for f, h in ((1, True), (1068, True), (1069, False), (1158, False), (1159, True)):
-            for ob_ in (base, up, sl):
+            for ob_ in (base, up, sl, fz):
                 ob_.hide_render = h; ob_.keyframe_insert("hide_render", frame=f)
-        for ob_ in (base, up, sl): constant_at(ob_, set(range(0, END + 1)))
+        for ob_ in (base, up, sl, fz): constant_at(ob_, set(range(0, END + 1)))
     else:
         base.location = SXS + V((0.12, 0.0, 1.15))
 rim = O["StudioCyanRim"].data
@@ -401,7 +417,7 @@ constant_at(sc, {1158, 1248, 1392})
 
 # ------------------------------------------------------------------ ONE camera
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.sensor_fit = 'AUTO'; cam_d.clip_start = 0.01; cam_d.clip_end = 6000
-cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 2.8
+cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 8.0   # v006e: f/8 (director)
 cam = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(cam); sc.camera = cam
 aim = bpy.data.objects.new("CAM_Film_Aim", None); sc.collection.objects.link(aim)
 tt_ = cam.constraints.new('TRACK_TO'); tt_.target = aim; tt_.track_axis = 'TRACK_NEGATIVE_Z'; tt_.up_axis = 'UP_Y'
@@ -482,8 +498,8 @@ CAB = [[
   ]]
 # studio: out of the black, pulling back from shoe L; orbit as they split; low 3/4; pull back into the cloud wipe
 SEG2 = [   # v006e: beat 7 -- ONE cut-open shoe resting on the cabin aisle floor, slow push to the charge in the sole (1.5 s)
-    (1069, V((0.12, -2.45, 0.42)), op("Slab_Shoe_L", 1069), 30),
-    (1158, V((0.10, -2.12, 0.26)), op("Slab_Shoe_L", 1158), 40),
+    (1069, V((0.02, -2.12, 0.66)), op("Slab_Shoe_L", 1069, (0.0, -0.01, 0.0)), 34),
+    (1158, V((0.02, -2.27, 0.44)), op("Slab_Shoe_L", 1158, (0.0, 0.03, 0.0)), 40),
 ]
 # sky: from the cloud next to a cabin window, back along the wing, huge pull-out, tilt down into the deck
 SEG3 = [

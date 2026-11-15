@@ -18,7 +18,7 @@ nt.nodes["Principled BSDF"].inputs["Emission Strength"].default_value = 0.55
 O["StudioCyanRim"].data.color = (0.75, 0.95, 1.0)
 # putty: clean, smooth, stylised mid grey
 pm = M["Putty"]; b = pm.node_tree.nodes["Principled BSDF"]
-b.inputs["Base Color"].default_value = (0.28, 0.29, 0.31, 1); b.inputs["Roughness"].default_value = 0.5
+b.inputs["Base Color"].default_value = (0.62, 0.58, 0.50, 1); b.inputs["Roughness"].default_value = 0.6   # v006e: light clay, reads against the cut sole
 for n in pm.node_tree.nodes:
     if n.type == 'BUMP': n.inputs["Strength"].default_value = 0.05
 for o in O:
