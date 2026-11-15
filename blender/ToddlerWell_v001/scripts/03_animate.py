@@ -530,24 +530,26 @@ for i, f in enumerate(range(1766, 1822, 8)):
 MO.walk([V(CROWD_POS["Mother"]), V((-1.0, 5.2)), V((-0.85, 3.3)), V((-0.65, 2.12))], 1750, 1816, stride=1.0, lift=0.11, arm_swing=0.3, lean=10)
 MP = V((-0.65, 2.12)); myaw = yaw_to(MP, OUTP)     # v007: stops a step back from the teen, then takes him
 HELD0 = OUTP.to_3d() + V((0, 0, TE.root.z + 0.2 + 0.1)) + Rz(150) @ V((0, -0.34, 0))     # where the hold-up left him: against the teen's chest
+HUG_TURN = 60.0     # his face turned out toward the camera, not into her
 MTURN = 0.0     # (a turn in the hug pushed her into him; the camera goes to her side instead)
 for i, f in enumerate(range(1822, END + 10, 4)):
     my_ = myaw + MTURN * ease((f - 1856) / 30)     # once he is hers she turns toward the camera: both faces in the hug
     k = ease((f - 1822) / 34)
     cr_ = 0.1 * MO.root.z * ease((f - 1846) / 34)     # v007: she stays nearly upright in the hug: faces level
-    hug = MP.to_3d() + V((0, 0, MO.root.z + 0.44 - cr_)) + Rz(my_) @ V((0, -0.3, 0))
+    hug = MP.to_3d() + V((0, 0, MO.root.z + 0.27 - cr_)) + Rz(my_) @ V((-0.2, -0.28, 0))     # on her right shoulder: her face clear
     held = HELD0.lerp(hug, k)
     jaw(T, f, JAW * max(0.0, 1 - ease((f - 1840) / 40)))
     MO.key(f, MP, my_ + 4 * math.sin(i * 0.7), flex=8 + 10 * (cr_ > 0.05), crouch=cr_, head=(10, 0), twist=10 * math.sin(i * 0.5),
            feet={"L": ("xy", MP + (Rz(my_) @ V((0.12, 0.12, 0))).to_2d(), my_), "R": ("xy", MP + (Rz(my_) @ V((-0.12, -0.05, 0))).to_2d(), my_, 0.0, 0.0)},
-           hands={"L": ("w", held + Rz(lerp(330, my_ + 180, k) - 180) @ V((0.27 + 0.06 * (1 - k), 0.1, -0.02))), "R": ("w", held + Rz(lerp(330, my_ + 180, k) - 180) @ V((-0.23 - 0.16 * (1 - k), 0.05, 0.02 - 0.08 * (1 - k))))} if k >= 0.3 else
+           hands={"L": ("w", held + Rz(lerp(330, my_ + 180, k) - 180) @ V((0.17 + 0.16 * (1 - k), 0.12, -0.06))), "R": ("w", held + Rz(lerp(330, my_ + 180, k) - 180) @ V((-0.15 - 0.24 * (1 - k), 0.08, 0.04 - 0.1 * (1 - k))))} if k >= 0.3 else
                  {"L": ("rel", (0.12, 0.3, 0.2 * MO.arm)), "R": ("rel", (0.12, 0.3, 0.2 * MO.arm))})   # reaching up for him until he is in reach   # both arms: under him and across his back
-    T.key(f, V((0, 0)), lerp(330, my_ + 180, k), root_world=held + V((0, 0, -0.1)), flex=10, head=(5 + 10 * k, 25 * k),
+    T.key(f, V((0, 0)), lerp(330, my_ + 180, k), root_world=held + V((0, 0, -0.1)), flex=10, head=(5 + 5 * k, HUG_TURN * k),
           feet={s: ("w", held + Rz(lerp(330, my_ + 180, k) - 180) @ V((0.05 if s == "L" else -0.05, 0.04, -0.1 - T.root.z + T.ankle[s].z + 0.04)), Rz(lerp(330, my_ + 180, k))) for s in "LR"},     # continues the hold: no leg jump
           hands={"L": ("wg", held + Rz(my_) @ V((0.17, 0.2, 0.34))), "R": ("wg", held + Rz(my_) @ V((-0.17, 0.2, 0.34)))} if k >= 0.5 else
                 {"L": ("w", held + Rz(my_) @ V((0.14, 0.22, 0.22))), "R": ("w", held + Rz(my_) @ V((-0.14, 0.22, 0.22)))})     # reaching for his mother     # on the teen's shoulders, then the mother's
+    # the teen lets go: hands out to the sides, then up
     TE.key(f, OUTP, 150 - 20 * k, flex=-5, head=(-15, 0),
-           hands=({"L": UP(TE, 0.25, 0.1), "R": UP(TE, 0.25, 0.1)} if k > 0.9 else {"L": ("rel", (0.42, -0.08, -0.1 * TE.arm)), "R": ("rel", (0.42, -0.08, -0.1 * TE.arm))}) if k > 0.55 else     # lets go: hands out to the sides, then up {"L": ("wg", held + Rz(lerp(330, my_ + 180, k) - 180) @ V((0.14, 0.02, -0.14))), "R": ("wg", held + Rz(lerp(330, my_ + 180, k) - 180) @ V((-0.06, -0.14, 0.14)))})
+           hands=({"L": UP(TE, 0.25, 0.1), "R": UP(TE, 0.25, 0.1)} if k > 0.9 else {"L": ("rel", (0.42, -0.08, -0.1 * TE.arm)), "R": ("rel", (0.42, -0.08, -0.1 * TE.arm))}) if k > 0.55 else {"L": ("wg", held + Rz(lerp(330, my_ + 180, k) - 180) @ V((0.14, 0.02, -0.14))), "R": ("wg", held + Rz(lerp(330, my_ + 180, k) - 180) @ V((-0.06, -0.14, 0.14)))})
 CHEER_YAW = lambda c, p: yaw_to(p, (-1.75, 6.0)) if c is RA else yaw_to(p, OUTP)     # ResA cheers with the crowd (he walked off that way)
 for c, p in ((RA, V((-1.75, 1.3))), (RB, V((-2.1, 3.0))), (RC, V((1.1, 4.3)))):     # arms go out to the sides first, then up: never through the body
     c.key(1780, p, CHEER_YAW(c, p), head=(-5, 0), hands={"L": ("rel", (0.4, 0.05, -0.15 * c.arm)), "R": ("rel", (0.4, 0.05, -0.15 * c.arm))})
@@ -572,7 +574,7 @@ def clear_keys(c, f0, f1):
 MOVES = [
  (RA, 470, 520, [RA_P, (-0.9, 0.75), (-1.12, 0.92)]), (RA, 674, 690, [(-1.12, 0.92), (-1.1, 1.5)]), (RA, 905, 925, [(-1.1, 1.5), (-0.9, 0.9)]),
  (RA, 1140, 1188, [(-0.9, 0.9), (-0.15, 0.72), (0.55, 0.1), (0.75, -0.3)]), (RA, 1290, 1312, [(0.75, -0.3), (0.95, 0.3), (0.55, 0.45)]),
- (RA, 1430, 1500, [(0.55, 0.45), (0.85, -0.2), (0.0, -0.6), (-0.3, -0.5), (-0.8, -0.2), (-0.85, 0.9), (-0.24, 1.6)]), (RA, 1730, 1765, [(-0.24, 1.6), (-1.0, 1.25), (-1.7, 1.0), (-1.75, 1.3)])     # ends facing the crowd: no spin on the spot,     # away from the teen and toddler, out of the camera's way
+ (RA, 1430, 1500, [(0.55, 0.45), (0.85, -0.2), (0.0, -0.6), (-0.3, -0.5), (-0.8, -0.2), (-0.85, 0.9), (-0.24, 1.6)]), (RA, 1730, 1765, [(-0.24, 1.6), (-1.0, 1.25), (-1.7, 1.0), (-1.75, 1.3)]),     # ends facing the crowd (no spin on the spot); away from the teen and toddler, out of the camera's way
  (RB, 470, 525, [RB_P, (1.0, -0.6), (1.6, -2.2)]), (RB, 674, 702, [(1.6, -2.2), (0.2, -0.6), (-0.45, 0.6), (-0.2, 1.8), (0.4, 2.6)]),
  (RB, 905, 925, [(0.4, 2.6), (0.9, 2.3)]), (RB, 1130, 1162, [(0.9, 2.3), (-0.5, 3.4), (-1.45, 2.85), tuple(RBT)]),
  (RB, 1252, 1290, [tuple(RBT), (-1.15, 2.05), (-0.5, 1.55), (-0.35, 0.95), (-0.55, 0.45)]), (RB, 1430, 1490, [(-0.55, 0.45), (-0.85, 0.5), (-0.45, 1.6), (-0.21, 2.6)]),

@@ -74,7 +74,9 @@ K = [  # frame, location, target, lens
  (1160, (-3.0, 0.1, 1.45), (-1.62, 1.52, 1.2), 30),     # beat 6: side three-quarter at 2 m, ResB tying the knot at his back
  (1200, (-3.1, 0.15, 1.45), (-1.62, 1.52, 1.2), 30),
  (1240, (-3.05, 0.2, 1.45), (-1.6, 1.5, 1.25), 30),
- (1262, (-0.75, 0.0, 1.6), (-1.45, 1.25, 1.6), 40),     # his face as he gets ready: nervous, nodding
+ (1257, (-3.0, 0.22, 1.45), (-1.6, 1.5, 1.27), 30),
+ # hard cut at 1258 (a move from the side would pass through a tripod leg)
+ (1258, (-0.75, 0.0, 1.6), (-1.45, 1.25, 1.6), 40),     # his face as he gets ready: nervous, nodding
  (1287, (-0.7, 0.05, 1.6), (-1.45, 1.25, 1.62), 40),
  # hard cut at 1288
  (1288, (-1.8, -1.6, 1.6), (0.0, 0.4, 1.0), 26),
@@ -115,13 +117,13 @@ K = [  # frame, location, target, lens
  (1830, (0.9, 2.9, 1.55), (-0.5, 1.6, 1.3), 30),     # she takes him from the teen, in frame
  (1855, (0.95, 2.95, 1.55), (-0.5, 1.7, 1.3), 31),
  # hard cut at 1856
- (1856, (0.95, 1.6, 1.55), (-0.65, 2.12, 1.45), 44),     # the hug, from her side: both faces in profile
- (1915, (0.9, 1.65, 1.52), (-0.65, 2.12, 1.42), 48),
+ (1856, (-1.31, 0.34, 1.55), (-0.65, 2.12, 1.5), 44),     # front-right of her: her face, and his turned out over her right shoulder     # the hug, from her side: both faces in profile
+ (1915, (-1.27, 0.4, 1.52), (-0.65, 2.12, 1.47), 48),
  # hard cut at 1916: the wide (about 0.6 s)
  (1916, (2.4, -2.6, 2.6), (-0.3, 1.6, 1.0), 24),
  (1950, (2.6, -3.4, 3.6), (-0.3, 1.8, 0.9), 24),
 ]
-CUTS = [197, 248, 428, 1031, 1111, 1288, 1372, 1706, 1782, 1856, 1916]     # hard cuts: separate splines either side, constant step between
+CUTS = [197, 248, 428, 1031, 1111, 1258, 1288, 1372, 1706, 1782, 1856, 1916]     # hard cuts: separate splines either side, constant step between
 cam = bpy.data.objects["Cam"]; tg = bpy.data.objects["CamTarget"]
 bounds = [1] + CUTS + [1951]
 for a_, b_ in zip(bounds[:-1], bounds[1:]):
