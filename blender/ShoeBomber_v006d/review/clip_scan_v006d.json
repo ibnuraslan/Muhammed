@@ -1,0 +1,67 @@
+{
+ "frames": {
+  "487": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "523": {
+   "Attendant": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "625": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   },
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "673": {
+   "Bomber": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "733": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "745": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 100
+   }
+  },
+  "1021": {
+   "PaxB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   745,
+   745
+  ]
+ ],
+ "fps": 60
+}
