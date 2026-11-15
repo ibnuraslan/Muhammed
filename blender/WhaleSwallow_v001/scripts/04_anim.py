@@ -315,7 +315,7 @@ def shark_mouth_world(fr):
             p = Vector((cx, y, zz))
             h1, l1, n1, _ = ev_.ray_cast(Mi @ p, Mi.to_3x3() @ Vector((0, 0, -1)))
             h2, l2, n2, _ = ev_.ray_cast(Mi @ p, Mi.to_3x3() @ Vector((0, 0, 1)))
-            if h1 and h2:
+            if h1 and h2 and (Mw.to_3x3() @ n1).z > 0.3 and (Mw.to_3x3() @ n2).z < -0.3:
                 fz = (Mw @ l1).z; rz = (Mw @ l2).z
                 if rz - fz > 1.9:
                     best = (Vector((cx, y, fz)), rz - fz); break
@@ -377,7 +377,7 @@ for fr in frames(sid, 3):
     shL = D.shoulder("L")
     D.key_hand("L", fr, M, shL + Vector((0.14, -0.16, -0.46)), Vector((-1, 0.2, 0)), Vector((0.1, -0.5, -1)), shL + Vector((0.3, 0.35, -0.3)))
 D.hand_pose("R", F[sid][0], "flat_palm"); D.hand_pose("L", F[sid][0], "relaxed")
-camera(sid, [(0, MOUTH + Vector((0.4, 2.6, 2.1)), MOUTH + Vector((-1.6, 0.0, 1.05))), (1, MOUTH + Vector((0.2, 2.2, 1.9)), MOUTH + Vector((-1.7, 0.1, 1.1)))], lens=26)
+camera(sid, [(0, MOUTH + Vector((0.5, -2.5, 1.9)), MOUTH + Vector((-1.7, 0.2, 1.15))), (1, MOUTH + Vector((0.3, -2.2, 1.8)), MOUTH + Vector((-1.8, 0.2, 1.2)))], lens=26)
 for sid, side in (("5b", 1), ("5c", -1)):
     wall_x = side * 2.63
     for fr in frames(sid, 3):
@@ -418,7 +418,7 @@ LAND = OCEAN + Vector((-6.0, -2.0, -0.3)); land = LAND; start = start + (land - 
 for fr in frames(sid, 2):
     t = T(sid, fr); u = max(0.0, min(1.0, (t - 0.18) / 0.62))
     p = start.lerp(land, u) + Vector((0, 0, 3.0 * math.sin(math.pi * u) if u < 1 else 0))
-    if u >= 1: p = land + Vector((0, 0, -1.2 * min(1, (t - 0.8) / 0.2)))
+    if u >= 1: p = land + Vector((0, 0, -0.45 * min(1, (t - 0.8) / 0.2)))
     M = M_of(p + Vector((0, 0, 0)), yaw=-90, pitch=-30 - 140 * u, roll=10)
     D.key_body(fr, M); D.key_spine(fr, flex=15, head=(10, 0))
     for s in "LR":

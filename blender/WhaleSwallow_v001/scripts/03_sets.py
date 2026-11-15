@@ -172,7 +172,7 @@ pink.node_tree.links.new(_wv.outputs['Fac'], _ad.inputs[0]); pink.node_tree.link
 pink.node_tree.links.new(_ad.outputs[0], _bp.inputs['Height']); pink.node_tree.links.new(_bp.outputs['Normal'], _P.inputs['Normal'])
 _cr = _N.new('ShaderNodeValToRGB'); _cr.color_ramp.elements[0].color = (0.62, 0.18, 0.26, 1); _cr.color_ramp.elements[1].color = (0.88, 0.40, 0.46, 1)
 pink.node_tree.links.new(_wv.outputs['Fac'], _cr.inputs[0]); pink.node_tree.links.new(_cr.outputs[0], _P.inputs['Base Color'])
-palate = mat("Mouth_palate", (0.78, 0.30, 0.38), rough=0.25, coat=0.7)
+palate = mat("Mouth_palate", (0.78, 0.30, 0.38), rough=0.38, coat=0.15)
 _N = palate.node_tree.nodes; _P = _N["Principled BSDF"]
 _tc = _N.new('ShaderNodeTexCoord'); _sx = _N.new('ShaderNodeSeparateXYZ'); _mr = _N.new('ShaderNodeMapRange')
 _mr.inputs['From Min'].default_value = -4.5; _mr.inputs['From Max'].default_value = 4.5
