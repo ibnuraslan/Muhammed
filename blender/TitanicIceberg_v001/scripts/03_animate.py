@@ -260,7 +260,7 @@ for f, kw in ((0, dict(brow=0.6, lids=0.5, jaw=3)), (50, dict(brow=0.1, lids=-0.
 dh = Actor("Deckhand", DK.z + 0.025); dh.o.parent = ship_root; dh.o.matrix_parent_inverse = Matrix.Identity(4); dh.o.location = (0, 0, 0)
 DP = DK + Vector((1.5, -1.0 + 0.78, 0))  # beside the coil, facing it (-Y)
 dfeet = {"L": (Vector((DP.x + 0.22, DP.y + 0.08)), 10), "R": (Vector((DP.x - 0.24, DP.y + 0.02)), -12)}
-for f in range(0, 620, 20):
+for f in range(0, 940, 20):
     a = f / 60 * 3.5
     up = max(0.0, 1 - abs(f - 170) / 50)
     dh.pose(f, (DP.x, DP.y), 0.0, flex=34, spine=(55 - 12 * up, 8 * math.sin(a), 0), head=(5 - 40 * up, 5 * math.sin(a) + 25 * up), feet=dfeet, crouch=0.36)
@@ -286,7 +286,7 @@ for f in range(1060, 1215, 6):
 for f, kw in ((1060, dict(brow=-0.2, lids=-0.4, frown=0.3)), (1130, dict(brow=0.4, lids=0.2, jaw=2)), (1160, dict(brow=1.4, lids=1.1, jaw=11)), (1190, dict(brow=1.0, lids=0.8, jaw=6, smile=0.3))):
     face(tech.R, f, **kw)
 # v008: safelight fill on his face and a lamp over the tray so the image visibly comes up
-for _nm, _loc, _rot, _e, _sz in (("Safelight_Fill", (1.95, Y0 + 5.7, 2.75), (R_(-55), 0, R_(200)), 140.0, 1.2),
+for _nm, _loc, _rot, _e, _sz in (("Safelight_Fill", (1.3, Y0 + 5.95, 2.45), (R_(-72), 0, 0), 70.0, 0.7),
                                   ("Tray_Lamp", (1.35, Y0 + 5.35, 2.55), (0, 0, 0), 45.0, 0.5)):
     _ld = D.lights.new(_nm, 'AREA'); _ld.energy = _e; _ld.size = _sz; _ld.color = (1.0, 0.42, 0.28)
     _lo = D.objects.new(_nm, _ld); _lo.location = _loc; _lo.rotation_euler = _rot; D.collections["Rooms_In_Berg"].objects.link(_lo)
@@ -303,7 +303,7 @@ PR = O["Print_Office"]; PRC = Vector((8.2, Y0 + 4.86, 2.0)); PR.location = PRC; 
 BP = Vector((8.25, Y0 + 5.25))
 bfeet = {"L": (Vector((BP.x + 0.14, BP.y - 0.02)), -5), "R": (Vector((BP.x - 0.16, BP.y + 0.02)), 5)}
 POINT_K = lambda f: smooth((f - 1335) / 15) * (1 - smooth((f - 1490) / 20))
-for f in range(1180, 1665, 10):
+for f in range(1180, 1710, 10):
     t = (f - 1180) / 60; sway = math.sin(t * 2)
     look = smooth((f - 1250) / 20) * (1 - smooth((f - 1290) / 15))
     eb.pose(f, BP, 0.0 + 3 * sway, flex=4, spine=(6 + 1.0 * math.sin(t * 2.3), 2 * sway, 0), head=(4 + 12 * look + 14 * POINT_K(f), -14 + 10 * look + 8 * POINT_K(f)), feet=bfeet, crouch=0.01)
@@ -322,7 +322,7 @@ _dg = bpy.context.evaluated_depsgraph_get()
 _h = sc.ray_cast(_dg, Vector((7.55, Y0 + 4.3, 3.5)), Vector((0, 0, -1)))
 DESK_HIT = _h[1].z if _h[0] else DESK_TOP
 print("DESK top at A's hand", DESK_HIT, _h[4].name if _h[0] else None)
-for f in range(1180, 1665, 10):
+for f in range(1180, 1710, 10):
     t = (f - 1180) / 60; k = smooth((f - 1190) / 70)
     ea.pose(f, AP, 180.0, flex=5 + 4 * k, spine=(6 + 6 * k + 1.0 * math.sin(t * 2.1), -6, 0), head=(-2 + 2 * k, -10 + 4 * k), feet=afeet, crouch=0.02 + 0.02 * k)
     mc = Vector((7.98 + 0.03 * k, Y0 + 4.4 + 0.1 * k, 2.08 + 0.06 * k)) + Vector((0.008 * math.sin(t * 4), 0, 0))
@@ -381,56 +381,72 @@ def SW(f, v):   # ship-local -> world at frame f
 STW = lambda f, d: SW(f, SP + Vector(d))
 L_SHIP = lambda f, d: ("ship", d)          # marker: ship-local key, evaluated per frame (the ship moves)
 GP_ = O["Print_Giant"].location.copy()
-CUT_STEW, CUT_SHIP, CUT_NIGHT, CUT_DARK, CUT_OFFICE, CUT_PROOF, CUT_BACK, CUT_END = 432, 606, 906, 1070, 1170, 1438, 1530, 1614
+CUT_BERG, CUT_STEW, CUT_SHIP, CUT_DECK2, CUT_NIGHT, CUT_DARK, CUT_OFFICE = 121, 432, 606, 730, 906, 1070, 1170
+CUT_A, CUT_PT, CUT_PROOF, CUT_BACK, CUT_B2, CUT_END = 1260, 1340, 1438, 1530, 1615, 1700
+D0 = DESK_TOP
 SHOTS = [
-  # A: steward with his camera -> over the shoulder to the berg -> clear push-in to the red smear (beats 1-3)
-  (0, CUT_STEW, [
+  # A1: the steward with his camera (beat 1)
+  (0, CUT_BERG, [
     (0,    STW(0, (-1.3, 0.55, 0.45)),   STW(0, (0.0, 0.0, 1.35)),  22),
     (60,   STW(60, (-0.85, 0.45, 1.55)), STW(60, (0.0, 0.05, 1.6)), 28),
     (90,   STW(90, (-0.8, -0.15, 1.7)),  STW(90, (0.0, 0.35, 1.55)), 28),
-    (118,  STW(118, (-0.75, 0.55, 1.72)), STW(118, (0.0, 0.15, 1.45)), 28),
-    (180,  STW(180, (0.1, 0.9, 2.0)),    Vector((0, Y0, 14)),       30),
+    (CUT_BERG, STW(CUT_BERG, (-0.75, 0.55, 1.72)), STW(CUT_BERG, (0.0, 0.15, 1.45)), 28)]),
+  # A2: cut to the berg, then a clear push-in to the red smear (beats 2-3)
+  (CUT_BERG, CUT_STEW, [
+    (CUT_BERG, Vector((-14, -80, 7)),    Vector((-4, Y0, 9)),       36),
     (240,  Vector((-12, -70, 6)),        Vector((-4, -30, 9)),      40),
     (300,  Vector((-10, -50, 4.5)),      Vector((-6, Y0, 3.5)),     30),
     (360,  Vector((-6, -37, 3.0)),       Vector((-4, Y0, 2.3)),     34),
-    (CUT_STEW, Vector((-5, -34.5, 2.8)), Vector((-3.5, Y0, 2.2)),   38)]),
+    (CUT_STEW, Vector((-5, -34.0, 2.8)), Vector((-3.5, Y0, 2.2)),   38)]),
   # B: the photographer on deck framing the shot, face visible (ship-local)
   (CUT_STEW, CUT_SHIP, [
     (CUT_STEW, ("ship", (-0.62, 1.1, 1.42)), ("ship", (0.0, 0.12, 1.42)), 30),
     (500,      ("ship", (-0.5, 1.12, 1.38)), ("ship", (0.0, 0.12, 1.40)), 31),
     (CUT_SHIP, ("ship", (-0.38, 1.12, 1.40)), ("ship", (0.0, 0.12, 1.45)), 32)]),
-  # C: beat 4 - the steamship in the foreground, the debris field, the berg beyond (no top-down, no sun discs)
-  (CUT_SHIP, CUT_NIGHT, [
-    (CUT_SHIP, Vector((12, -182, 38)),   Vector((-5, -60, 2)),      20),
-    (700,  Vector((0, -178, 36)),        Vector((-5, -60, 2)),      20),
-    (830,  Vector((-22, -178, 34)),      Vector((0, -62, 2)),       20),
-    (CUT_NIGHT, Vector((-34, -176, 32)), Vector((0, -62, 2)),       20)]),
+  # C1: his steamship sailing past the debris, the berg beyond - visible push-in (2 s)
+  (CUT_SHIP, CUT_DECK2, [
+    (CUT_SHIP, Vector((14, -186, 40)),   Vector((-6, -92, 4)),      20),
+    (CUT_DECK2, Vector((2, -150, 22)),   Vector((-8, -100, 6)),     22)]),
+  # C2: on his deck, over his shoulder: the photographer watching the berg and the debris (beat 4)
+  (CUT_DECK2, CUT_NIGHT, [
+    (CUT_DECK2, ("ship", (-0.38, -1.35, 1.88)), ("ship", (0.45, 8.0, 1.0)), 24),
+    (CUT_NIGHT, ("ship", (-0.32, -1.05, 1.86)), ("ship", (0.45, 8.0, 1.0)), 26)]),
   # D: night - the solid dark liner scrapes past; the red paint on the ice is revealed behind its stern (safe distance)
   (CUT_NIGHT, CUT_DARK, [
     (CUT_NIGHT, Vector((60, Y0 - 66, 13)), Vector((8, Y0, 6)),      26),
-    (CUT_DARK, Vector((32, Y0 - 44, 7)),  Vector((2, Y0, 3.0)),    28)]),
-  # E: darkroom - over the bench, his face, the tongs and the image appearing in the tray
+    (CUT_DARK, Vector((32, Y0 - 44, 7)),  Vector((2, Y0, 3.0)),     28)]),
+  # E: darkroom - across the tray, facing him: his face in the safelight, the image coming up in the tray in front
   (CUT_DARK, CUT_OFFICE, [
-    (CUT_DARK, Vector((2.05, Y0 + 5.75, 2.5)), Vector((1.25, Y0 + 5.0, 1.98)), 24),
-    (1120, Vector((1.9, Y0 + 5.78, 2.45)), Vector((1.22, Y0 + 5.0, 2.0)), 25),
-    (CUT_OFFICE, Vector((1.95, Y0 + 5.72, 2.45)), Vector((1.22, Y0 + 4.95, 2.05)), 26)]),
-  # F: office two-shot - both faces, the print between them, B points at the red streak
-  (CUT_OFFICE, CUT_PROOF, [
-    (CUT_OFFICE, Vector((9.85, Y0 + 3.6, 2.45)), Vector((7.98, Y0 + 4.6, 2.25)), 24),
-    (1300, Vector((9.7, Y0 + 3.75, 2.42)), Vector((7.98, Y0 + 4.6, 2.22)), 25),
-    (CUT_PROOF, Vector((9.5, Y0 + 3.85, 2.35)), Vector((8.0, Y0 + 4.7, 2.15)), 27)]),
-  # G: the proof - the hull's red band slides in beside the photo's streak, same height (1.5 s)
+    (CUT_DARK, Vector((1.32, Y0 + 5.9, 2.2)), Vector((1.22, Y0 + 5.0, 1.98)), 18),
+    (CUT_OFFICE, Vector((1.3, Y0 + 5.82, 2.18)), Vector((1.22, Y0 + 5.0, 2.02)), 20)]),
+  # F1: B holds the print up, face clear (beat 7)
+  (CUT_OFFICE, CUT_A, [
+    (CUT_OFFICE, Vector((8.42, Y0 + 3.5, 2.32)), Vector((8.22, Y0 + 5.0, 2.28)), 30),
+    (CUT_A, Vector((8.36, Y0 + 3.85, 2.3)), Vector((8.22, Y0 + 5.0, 2.3)), 36)]),
+  # F2: A leans in with the magnifier, his face toward us
+  (CUT_A, CUT_PT, [
+    (CUT_A, Vector((7.28, Y0 + 4.9, 2.42)), Vector((7.78, Y0 + 4.05, 2.4)), 30),
+    (CUT_PT, Vector((7.38, Y0 + 4.72, 2.4)), Vector((7.8, Y0 + 4.05, 2.38)), 36)]),
+  # F3: B points at the red streak (beat 8)
+  (CUT_PT, CUT_PROOF, [
+    (CUT_PT, Vector((8.52, Y0 + 3.7, 2.25)), Vector((8.24, Y0 + 4.9, 2.2)), 28),
+    (CUT_PROOF, Vector((8.45, Y0 + 3.9, 2.22)), Vector((8.24, Y0 + 4.9, 2.16)), 32)]),
+  # G: the proof on the desk - the hull model's red band lines up with the photo's streak; push in
   (CUT_PROOF, CUT_BACK, [
-    (CUT_PROOF, Vector((GP_.x + 1.9, GP_.y - 10.5, GP_.z - 0.2)), Vector((GP_.x + 1.9, GP_.y, GP_.z - 0.4)), 28),
-    (CUT_BACK, Vector((GP_.x + 1.8, GP_.y - 9.6, GP_.z - 0.25)), Vector((GP_.x + 1.8, GP_.y, GP_.z - 0.45)), 28)]),
-  # H: back in the office - both faces react (beat 9)
-  (CUT_BACK, CUT_END, [
-    (CUT_BACK, Vector((9.45, Y0 + 3.9, 2.4)), Vector((7.98, Y0 + 4.6, 2.25)), 26),
-    (CUT_END, Vector((9.3, Y0 + 4.0, 2.38)), Vector((7.98, Y0 + 4.6, 2.25)), 27)]),
-  # I: closer - slow visible push-in on the lone berg, the steamer passing beyond it
+    (CUT_PROOF, Vector((8.56, -13.55, D0 + 0.17)), Vector((8.56, -12.45, D0 + 0.11)), 36),
+    (CUT_BACK, Vector((8.45, -13.2, D0 + 0.12)), Vector((8.43, -12.45, D0 + 0.08)), 42)]),
+  # H1: A's face reacts (beat 9)
+  (CUT_BACK, CUT_B2, [
+    (CUT_BACK, Vector((7.32, Y0 + 4.8, 2.42)), Vector((7.8, Y0 + 4.05, 2.42)), 34),
+    (CUT_B2, Vector((7.4, Y0 + 4.65, 2.42)), Vector((7.8, Y0 + 4.05, 2.42)), 40)]),
+  # H2: B's face with the print
+  (CUT_B2, CUT_END, [
+    (CUT_B2, Vector((8.38, Y0 + 3.75, 2.36)), Vector((8.22, Y0 + 5.05, 2.4)), 36),
+    (CUT_END, Vector((8.33, Y0 + 4.0, 2.38)), Vector((8.22, Y0 + 5.05, 2.45)), 42)]),
+  # I: closer (2.2 s) - fast push-in on the lone berg, the steamer beyond it
   (CUT_END, END + 1, [
-    (CUT_END, Vector((112, 122, 16)),   Vector((0, -10, 9)),       22),
-    (END,  Vector((56, 58, 8.5)),        Vector((2, -18, 8)),       24)]),
+    (CUT_END, Vector((96, 104, 14)),    Vector((-4, -20, 9)),       22),
+    (END,  Vector((44, 44, 7.5)),        Vector((-2, -22, 8)),      24)]),
 ]
 def _ev(f, v):
     return STW(f, v[1]) if isinstance(v, tuple) and v and v[0] == "ship" else v
@@ -456,7 +472,7 @@ for f in range(0, END + 1):          # baked on every frame: a cut is two adjace
     cam.data.lens = ln; cam.data.keyframe_insert("lens", frame=f)
     cam.data.dof.aperture_fstop = 8.0; cam.data.dof.keyframe_insert("aperture_fstop", frame=f)
     fd = (t - p).length
-    if f < 150: fd = (p - STW(f, (0, 0.3, 1.5))).length
+    if f < CUT_BERG: fd = (p - STW(f, (0, 0.3, 1.5))).length
     cam.data.dof.focus_distance = max(0.1, fd); cam.data.dof.keyframe_insert("focus_distance", frame=f)
 set_interp(cam, 'LINEAR'); set_interp(cam.data, 'LINEAR')
 # ---------------------------------------------------------------- visibility per shot
@@ -490,11 +506,24 @@ for o in list(D.collections["Rooms_In_Berg"].objects) + [O[n] for n in ("Tech", 
 # the proof stage renders only for its 1.5 s insert; no match line
 for o in list(D.collections["Explainer_Cyc"].objects):
     o.hide_render = True; o.keyframe_insert("hide_render", frame=0)
-    if o.name != "Match_Line":
-        o.hide_render = False; o.keyframe_insert("hide_render", frame=CUT_PROOF)
-        o.hide_render = True; o.keyframe_insert("hide_render", frame=CUT_BACK)
     set_interp(o, 'CONSTANT', lambda p_: p_ == "hide_render")
 sc["CROSS"] = [cross_skin, cross_print, cross_giant]
+# v009: the proof on the office desk - a copy of the photo propped up, the hull model beside it, its red band at the streak's height
+PH = PR.copy(); PH.data = PR.data; PH.animation_data_clear(); PH.name = "Print_Desk"; D.collections["Rooms_In_Berg"].objects.link(PH)
+PH_H = PR.dimensions.z
+PH.rotation_euler = (0, 0, 0); PH.location = (8.2, -12.45, DESK_TOP + PH_H / 2 + 0.002)
+SK = 0.26 * PH_H / 13.5                         # streak at 26 % of the photo height = top of the hull's red band (model z 3), keel on the desk
+lx.animation_data_clear(); lx.scale = (SK, SK, SK); lx.rotation_euler = (0, 0, 0 if BOW_SIGN < 0 else math.pi)
+lx.location = (8.2 + 0.36 / 2 + 0.05 - LMINX * SK, -12.45 + 0.02, DESK_TOP + 10.5 * SK)
+for ob in (PH, lx):
+    ob.animation_data_clear() if ob is PH else None
+    ob.hide_render = True; ob.keyframe_insert("hide_render", frame=0)
+    ob.hide_render = False; ob.keyframe_insert("hide_render", frame=CUT_PROOF)
+    ob.hide_render = True; ob.keyframe_insert("hide_render", frame=CUT_BACK)
+    set_interp(ob, 'CONSTANT', lambda p_: p_ == "hide_render")
+for f_, v_ in ((CUT_PROOF, True), (CUT_BACK, False)):    # one photo on screen in the proof shot (B's copy is out of shot)
+    PR.hide_render = v_; PR.keyframe_insert("hide_render", frame=f_)
+set_interp(PR, 'CONSTANT', lambda p_: p_ == "hide_render")
 # ---------------------------------------------------------------- hands: Limit Rotation on every finger, thumb and wrist (no backward bends)
 import re
 def limit_hands(rig, probe_frames):
@@ -539,7 +568,7 @@ for f in sorted(CAMP):
     HP["apply_pose"](st.o, "L", "wrap_grip", f, amount=0.75)
     HP["apply_pose"](st.o, "R", "cup_hold", f)
 # deckhand: right hand wraps the rope at the coil (preset; the coil is a curve), left hand holds the rope end loosely
-for f in range(0, 620, 20):
+for f in range(0, 940, 20):
     HP["apply_pose"](dh.o, "R", "wrap_grip", f); HP["apply_pose"](dh.o, "L", "cup_hold", f)
 # tech: right hand pinches the bamboo tongs, left palm flat on the bench
 for f in range(1060, 1215, 6):
@@ -548,7 +577,7 @@ for f in range(1060, 1215, 6):
     t0 = O["Tray_0"]; tmn, tmx = _bb_world(t0)   # left hand holds the near rim of the tray beside it
     _log("tech_L_tray", f, HP["grip_object"](tech.o, "L", f, t0, Vector(((tmn.x + tmx.x) / 2 + 0.1, tmn.y + 0.004, tmx.z - 0.004)), Vector((0, 0, -1))))
 # office: A wraps the magnifier handle, other palm flat on the desk; B pinches the print's top corners
-for f in range(1180, 1665, 10):
+for f in range(1180, 1710, 10):
     sc.frame_set(f); mn, mx = _bb_world(mag)
     handle = Vector(((mn.x + mx.x) / 2, (mn.y + mx.y) / 2, mn.z + 0.07))
     wr_ = ea.o.matrix_world @ ea.R.PB["wrist.R"].head
@@ -569,7 +598,7 @@ def palm_frame(rig, s_, space="world"):
     d = (f3 - wr).normalized(); a_ = (f2 - f5).normalized(); n = d.cross(a_) if s_ == "L" else a_.cross(d)
     return wr.lerp(f3, 0.75), n.normalized(), d
 # magnifier handle sits in Expert A's right palm
-for f in range(1176, 1666, 6):
+for f in range(1176, 1711, 6):
     sc.frame_set(f); pp, n, d = palm_frame(ea.o, "R")
     off = mag.location - (mag.matrix_world.translation)          # zero for an unparented object
     mag.location = pp + n * 0.024 - Vector((0, 0, 0.07)); mag.keyframe_insert("location", frame=f)
@@ -579,7 +608,7 @@ for f in range(1060, 1216, 6):
     pinch = (M_ @ P_["finger1-3.R"].tail + M_ @ P_["finger2-3.R"].tail) / 2
     tongs.location = pinch + Vector((0, 0.095, -0.012)); tongs.keyframe_insert("location", frame=f)
 # the office print sits between Expert B's two thumb-index pinches (it is held, it never floats)
-for f in range(1176, 1666, 5):
+for f in range(1176, 1711, 5):
     sc.frame_set(f); P_ = eb.o.pose.bones; M_ = eb.o.matrix_world
     pL = (M_ @ P_["finger1-3.L"].tail + M_ @ P_["finger2-3.L"].tail) / 2
     pR = (M_ @ P_["finger1-3.R"].tail + M_ @ P_["finger2-3.R"].tail) / 2
@@ -612,6 +641,7 @@ for f in range(0, 366, 12):
 for fc in all_fcurves(st.o):
     pts = [(k.co.x, k.co.y) for k in fc.keyframe_points if k.co.x <= 180]
     for x, y in pts: fc.keyframe_points.insert(x + 420, y)
+    for x, y in [(k.co.x, k.co.y) for k in fc.keyframe_points if 180 <= k.co.x <= 360]: fc.keyframe_points.insert(x + 560, y)
     fc.update()
 
 for L_ in [o for o in O if o.type == "LIGHT"]: L_.visible_camera = False
