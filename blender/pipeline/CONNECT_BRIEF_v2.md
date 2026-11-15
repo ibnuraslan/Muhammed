@@ -12,6 +12,14 @@ This brief replaces `CONNECT_BRIEF.md` where they differ. Read these before you 
 - **Pacing:** short shots with **hard cuts** (no blends or fades), usually 1–2.5 s each. Every shot shows a person or the thing the VO names.
 - **No on-screen text, logos or brand names.** Signs, cheques and screens stay blank or show simple pictures.
 
+## Old-style references
+Some references are in an older look: a podcast set, talking heads, a dark blue background, flat graphics.
+- Take **only the story, the facts and the beat order** from them.
+- Build the film in **our current style** (`STYLE_ANIMATED.md`):
+  - bright, clean 3D animation with real sets and characters acting out each beat
+  - short shots with hard cuts
+- Do **not** copy the old video's set, background colour, layout, shots or pacing. No podcast desk and no dark-blue backdrop.
+
 ## Step 1. Beats from the VO (15 min)
 - Run `pipeline/transcribe.py` on the VO.
 - Beat start frame = `1 + round(word_seconds × 60)`. `frame_end` is about 0.5 s after the last word.
