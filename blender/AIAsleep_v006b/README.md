@@ -1,6 +1,6 @@
 # AIAsleep v006b: director review of v006 (Nov 15 01:03 UTC)
 
-Status: preview being watched.
+Status: watched on this exact file (`review/preview.mp4`, every 5th frame). Ready for director review.
 
 Changes from v006 (beat frames unchanged, no VO):
 1. **Clean cuts in and out of the cross-section**, as the director asked: sharp eye close-up (1736) → cross-section (1737), and cross-section (1915) → sharp inner-corner fold macro (1916). No flesh frames. qa_check CAMJUMP flags these two frames by design.
