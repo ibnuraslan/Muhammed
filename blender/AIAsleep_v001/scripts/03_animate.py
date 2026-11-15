@@ -173,6 +173,15 @@ rampw.color_ramp.elements[1].color = (0.004, 0.006, 0.02, 1); rampw.color_ramp.e
 wn.links.new(sepw.outputs["Z"], rampw.inputs[0]); bgc = WN.new("ShaderNodeBackground"); wn.links.new(rampw.outputs[0], bgc.inputs[0]); bgc.inputs[1].default_value = 1.0
 mixw = WN.new("ShaderNodeMixShader"); wn.links.new(lp.outputs["Is Camera Ray"], mixw.inputs[0])
 outw = next(n for n in WN if n.type == "OUTPUT_WORLD"); wn.links.new(WN["WorldBG"].outputs[0], mixw.inputs[1]); wn.links.new(bgc.outputs[0], mixw.inputs[2]); wn.links.new(mixw.outputs[0], outw.inputs[0])
+for o in list(bpy.data.collections["City"].all_objects) + [O["CityInst"]]:
+    for f, h in ((1, False), (1300, True)):
+        o.hide_render = h; o.keyframe_insert("hide_render", frame=f)
+    _act = o.animation_data.action
+    try: _fl = list(_act.fcurves)
+    except AttributeError: _fl = [fc for ly in _act.layers for st in ly.strips for cb in st.channelbags for fc in cb.fcurves]
+    for fc in _fl:
+        if fc.data_path == "hide_render":
+            for kp in fc.keyframe_points: kp.interpolation = "CONSTANT"
 # world HDRI rotation: slow drift so the city lights slide across the windows
 wr = sc.world.node_tree.nodes["WorldRot"].inputs["Rotation"]
 wr.default_value = (0, 0, 0); wr.keyframe_insert("default_value", frame=1, index=2)
@@ -248,16 +257,14 @@ SHOTS = [  # frame, camera position, aim point, focal length
  (937,  V((-0.22, -0.42, 1.35)), EYE, 40),
  (946,  V((-0.26, -0.47, 1.25)), SCR, 30),
  (958,  V((-0.265, -0.47, 1.25)), SCR, 30),
- (990,  V((-0.29, -0.49, 1.24)), SCR, 32),
- (1030, V((-0.36, -0.53, 1.24)), SCR, 32),
- (1037, V((-0.36, -0.53, 1.24)), SCR, 32),
- (1048, V((-0.44, -0.40, 1.15)), FACE, 34),
- (1055, V((-0.44, -0.405, 1.15)), FACE, 34),
+ (993,  V((-0.29, -0.49, 1.24)), SCR, 32),
+ (1004, V((-0.44, -0.40, 1.15)), FACE, 34),
+ (1014, V((-0.44, -0.405, 1.15)), FACE, 34),
  (1080, V((-0.40, -0.46, 1.14)), FACE, 40),
  (1140, V((-0.30, -0.34, 1.19)), FACE, 36),
  (1175, V((-0.40, -0.20, 1.22)), FACE, 32),
- (1220, V((-0.46, -0.30, 1.22)), V((-0.08, -0.40, 1.10)), 22),
- (1302, V((-0.42, -0.18, 1.32)), V((0, -0.3, 0.9)), 20),
+ (1220, V((-0.66, -0.30, 1.26)), V((-0.04, -0.34, 1.18)), 20),
+ (1302, V((-0.55, -0.10, 1.30)), V((0, -0.32, 1.10)), 20),
  (1318, V((-1.10, -0.15, 1.22)), FACE, 20),
  (1340, V((-2.30, 0.00, 1.40)), CAR, 20),
  (1370, V((-2.80, 3.50, 2.60)), CAR, 22),
@@ -266,26 +273,22 @@ SHOTS = [  # frame, camera position, aim point, focal length
  (1464, V((3.6, -7.8, 1.9)), CAR, 28),
  (1500, V((0.0, -1.75, 1.16)), FACE, 30),
  (1528, V((0.0, -0.86, 1.10)), FACE, 30),
- (1550, V((0.0, -0.70, 1.11)), FACE, 32),
- (1620, V((0.0, -0.36, 1.27)), FACE, 40),
- (1680, EYE + V((-0.004, -0.115, 0.0)), EYE + V((0, 0, 0)), 50),
- (1728, EYE + V((0.008, -0.095, 0.002)), EYE + V((0, 0, 0)), 55),
- (1782, EYE + V((0.002, -0.075, 0.004)), EYE + V((0.004, 0, 0)), 40),
- (1830, EYE + V((0.000, -0.050, 0.002)), INNER, 40),
- (1900, EYE + V((-0.030, -0.060, 0.012)), INNER, 35),
- (1980, EYE + V((-0.012, -0.050, 0.028)), INNER, 35),
- (2060, EYE + V((-0.035, -0.055, -0.010)), INNER, 35),
- (2140, EYE + V((-0.004, -0.048, 0.006)), INNER, 40),
- (2214, EYE + V((-0.018, -0.058, 0.010)), INNER + V((0.004, 0, 0)), 40),
- (2260, EYE + V((-0.006, -0.080, 0.003)), EYE, 40),
- (2350, EYE + V((-0.002, -0.070, 0.000)), EYE, 40),
- (2448, EYE + V((-0.030, -0.075, 0.006)), EYE + V((0.002, 0, 0)), 35),
- (2486, EYE + V((-0.030, -0.075, 0.006)), EYE + V((0.002, 0, 0)), 35),
- (2493, V((-0.12, -0.46, 1.22)), FACE, 35),
- (2535, V((-0.48, -0.42, 1.24)), FACE, 28),
- (2562, V((-0.50, -0.52, 1.22)), FACE, 28),
- (2588, V((-0.40, 0.55, 1.18)), FACE, 24),
- (2610, V((-0.40, 4.5, 1.6)), CAR, 28),
+ (1560, V((0.0, -0.62, 1.18)), FACE, 34),
+ (1620, V((-0.04, -0.44, 1.26)), FACE, 40),
+ (1680, EYE + V((-0.004, -0.16, 0.0)), EYE, 45),
+ (1715, EYE + V((0.006, -0.10, 0.002)), EYE, 50),
+ (1745, EYE + V((0.02, -0.30, 0.0)), FACE, 40),
+ (1772, EYE + V((0.004, -0.10, 0.004)), INNER, 40),
+ (2260, EYE + V((-0.006, -0.13, 0.003)), EYE, 45),
+ (2290, EYE + V((-0.006, -0.08, 0.003)), EYE, 45),
+ (2350, EYE + V((-0.004, -0.078, 0.002)), EYE, 45),
+ (2390, V((-0.12, -0.46, 1.24)), FACE, 35),
+ (2425, V((-0.12, -0.46, 1.24)), FACE, 35),
+ (2436, V((-0.26, -0.47, 1.25)), SCR, 30),
+ (2466, V((-0.27, -0.47, 1.25)), SCR, 30),
+ (2482, V((-0.44, -0.40, 1.18)), FACE, 30),
+ (2540, V((-0.46, -0.42, 1.22)), FACE, 30),
+ (2610, V((-0.38, -0.46, 1.25)), FACE, 34),
 ]
 for f, p, a, l in SHOTS:
     if (a is FACE or a is EYE) and f < 1780: p = p + DLT * 0.8
@@ -297,7 +300,7 @@ def fcs(idb):
     except AttributeError:
         return [fc for l in ad.action.layers for s in l.strips for cb in s.channelbags for fc in cb.fcurves]
 # face -> screen pans (aim swings ~180 deg): route the aim sideways through the passenger side, never under the camera
-for fx in (247, 941, 1041):
+for fx in (247, 941, 997, 2430, 2474):
     sc.frame_set(fx); p_ = cam.matrix_world.translation.copy()
     aim.location = p_ + Vector((-0.30, -0.02, -0.08)); aim.keyframe_insert("location", frame=fx)
     cam.location = p_; cam.keyframe_insert("location", frame=fx)
@@ -307,7 +310,7 @@ for idb in (cam, aim, camd):
 for fc in fcs(mover):
     for kp in fc.keyframe_points: kp.interpolation = "LINEAR"
 camd.dof.use_dof = True; camd.dof.focus_object = aim; camd.dof.aperture_fstop = 4.0
-for f, v in ((1, 4.0), (840, 4.0), (870, 9.0), (960, 9.0), (990, 4.0), (1640, 5.6), (1690, 16.0), (1760, 18.0), (2486, 18.0), (2493, 5.6)): K(camd.dof, "aperture_fstop", f, v)
+for f, v in ((1, 4.0), (840, 4.0), (870, 9.0), (960, 9.0), (990, 4.0), (1640, 5.6), (1690, 14.0), (1716, 16.0), (1740, 8.0), (1765, 16.0), (2000, 16.0), (2025, 5.6), (2255, 5.6), (2285, 16.0), (2355, 16.0), (2385, 5.6)): K(camd.dof, "aperture_fstop", f, v)
 sc.render.use_motion_blur = True; sc.render.motion_blur_shutter = 0.5
 # ---------------- look fixes: dark brown irises, black hair, warmer skin
 eg = next(n for n in bpy.data.materials["Driver.high-poly"].node_tree.nodes if n.type == "GROUP")
@@ -354,7 +357,7 @@ M_fm, fm_vis, _ = emis("FaceMeshMat", (0.2, 0.95, 1.0), 1.2); fm.data = fm.data 
 fm.material_slots[0].link = "OBJECT"; fm.material_slots[0].material = M_fm
 for o_ in fm.material_slots[1:]: o_.link = "OBJECT"; o_.material = M_fm
 def vis(sock, f, v): sock.default_value = v; sock.keyframe_insert("default_value", frame=f)
-for f, v in ((1, 0), (40, 0), (55, 0.45), (75, 0.1), (100, 0.4), (130, 0.05), (160, 0.4), (225, 0.2), (236, 0), (1540, 0), (1556, 0.22), (1625, 0.15), (1645, 0.0), (1720, 0.0), (1740, 0)):
+for f, v in ((1, 0), (60, 0), (70, 0.45), (100, 0.3), (125, 0.45), (135, 0), (1540, 0), (1560, 0.4), (1600, 0.3), (1615, 0), (1740, 0)):
     vis(fm_vis, f, v)
 # tracking box + iris circle, bone-parented to the head so they ride with him
 sc.frame_set(1); bpy.context.view_layer.update()
@@ -374,13 +377,17 @@ ci = curve_obj("IrisCircle", [(c0.x + 0.0062 * math.cos(a), c0.y - 0.001, c0.z +
 M_box, box_vis, _ = emis("TrackBoxMat", (0.25, 1.0, 0.5), 5.0); bx.data.materials.append(M_box)
 M_ci, ci_vis, ci_col = emis("IrisCircleMat", (0.25, 1.0, 0.5), 6.0); ci.data.materials.append(M_ci)
 for o_ in (bx, ci): parent_head(o_)
-for f, v in ((1, 0), (1580, 0), (1600, 1), (1745, 1), (1765, 0), (2270, 0), (2290, 1), (2448, 1), (2470, 0)): vis(box_vis, f, v)
-for f, v in ((1, 0), (1640, 0), (1652, 1), (1745, 1), (1765, 0), (2270, 0), (2280, 1), (2448, 1), (2470, 0)): vis(ci_vis, f, v)
+for f, v in ((1, 0), (1580, 0), (1595, 1), (1730, 1), (1740, 0), (2270, 0), (2285, 1), (2360, 1), (2372, 0)): vis(box_vis, f, v)
+for f, v in ((1, 0), (1590, 0), (1600, 1), (1730, 1), (1740, 0), (2270, 0), (2280, 1), (2360, 1), (2372, 0)): vis(ci_vis, f, v)
 GREEN, RED = (0.25, 1.0, 0.5, 1), (1.0, 0.08, 0.05, 1)
 def ccol(f, c): ci_col.default_value = c; ci_col.keyframe_insert("default_value", frame=f)
-ccol(1, GREEN); ccol(1652, GREEN); ccol(1660, RED); ccol(1668, GREEN)    # blink at 1655 -> red
+ccol(1, GREEN); ccol(1600, GREEN)
+fl = 1610
+while fl < 1700:   # beat 8: it beeps whenever it can't see the iris
+    ccol(fl, RED); ccol(fl + 5, RED); ccol(fl + 6, GREEN); ccol(fl + 8, GREEN); ccol(fl + 9, RED); fl += 23
+ccol(1705, RED)
 fl = 2290
-while fl < 2448:   # beat 10: detection fails and flickers
+while fl < 2355:   # beat 10: detection fails and flickers
     ccol(fl, RED); ccol(fl + 5, RED); ccol(fl + 6, GREEN); ccol(fl + 8, GREEN); ccol(fl + 9, RED); fl += 23
 for fc in fcs(M_ci.node_tree):
     for kp in fc.keyframe_points: kp.interpolation = "CONSTANT"
@@ -400,7 +407,7 @@ try:
         tint.blend_type = "MULTIPLY"; Lk.new(bw.outputs[0], tint.inputs[1]); tint.inputs[2].default_value = (0.75, 1.0, 0.95, 1); tout = tint.outputs[0]
         mixn = N.new("CompositorNodeMixRGB"); Lk.new(rl.outputs["Image"], mixn.inputs[1]); Lk.new(tout, mixn.inputs[2]); fac = mixn.inputs[0]; mout = mixn.outputs[0]
     Lk.new(rl.outputs["Image"], bw.inputs[0]); Lk.new(mout, go.inputs[0])
-    for f, v in ((1, 0), (1532, 0), (1538, 1), (1740, 1), (1752, 0)): fac.default_value = v; fac.keyframe_insert("default_value", frame=f)
+    for f, v in ((1, 0),): fac.default_value = v; fac.keyframe_insert("default_value", frame=f)
     sc.render.use_compositing = True; sc.render.compositor_device = "CPU"
     print("GRADE OK")
 except Exception as ex:
