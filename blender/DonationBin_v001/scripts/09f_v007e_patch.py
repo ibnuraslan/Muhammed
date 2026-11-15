@@ -7,7 +7,7 @@ blender -b DonationBin_v007d_60fps.blend --python 09f_v007e_patch.py -- out.blen
 2. 1561-1860: four shots (~1.5 s) at three-quarter angles (both eyes read), camera rolled with her head, with a head
    turn up to the grate; the camera keeps 28 cm clear of everything (no blurred tarp/bag slabs at the lens).
 3. 1897-1935: the push on the passer-by stops; a steady front-left shot keeps his whole head in frame.
-4. 636-680: she is 20 cm further back from the grate so her face is not pressed into it."""
+4. (dropped) moving her back from the grate."""
 import sys, math
 import bpy
 from mathutils import Vector, Matrix, Quaternion
@@ -60,20 +60,7 @@ cl = bpy.data.lights.new("CamCatch", 'POINT'); cl.energy = 1.5; cl.shadow_soft_s
 clo = bpy.data.objects.new("CamCatch", cl); sc.collection.objects.link(clo)
 clo.parent = cam; clo.location = (0.05, 0.06, 0.0); clo.visible_camera = False
 print("CATCHLIGHT")
-# ---- 4. 636-680: 20 cm back from the grate (+y), eased, whole body rigid
-BN = ["root", "IK_hand.L", "IK_hand.R", "IK_foot.L", "IK_foot.R", "Pole_elbow.L", "Pole_elbow.R", "Pole_knee.L", "Pole_knee.R"]
-for g in (626, 690):
-    sc.frame_set(g)
-    for b in BN: WO.pose.bones[b].keyframe_insert("location", frame=g, group=b)
-for f in range(630, 688, 2):
-    w = min(1.0, (f - 626) / 12.0, (690 - f) / 12.0)
-    sc.frame_set(f)
-    for b in BN:
-        pb = WO.pose.bones[b]; M = pb.matrix.copy()
-        M.translation += WO.matrix_world.inverted().to_3x3() @ Vector((0, 0.20 * w, 0))
-        pb.matrix = M
-    for b in BN: WO.pose.bones[b].keyframe_insert("location", frame=f, group=b)
-print("GRATE_BACK")
+# (4. pulling her back from the grate was dropped: rigid key shifts interleaved with the dense existing keys and made her jitter)
 # ---- 2. head turn up to the grate (1660-1730) on top of the breathing
 for f in (1652, 1738):
     sc.frame_set(f); WO.pose.bones["head"].keyframe_insert("rotation_quaternion", frame=f, group="head")

@@ -17,7 +17,7 @@ _helpers = _src[:_src.index("\nA1 = (0, 20, -20")]
 _helpers = _helpers.replace("OUT = sys.argv[sys.argv.index(\"--\") + 1]", "")
 exec(_helpers)
 
-# 09g: (a) 601-675 re-shot on her new position (20 cm back from the grate), (b) 1741-1860 re-shot with a view-cone check:
+# 09g: 1741-1860 re-shot with a view-cone check:
 # nothing but her may sit within 40 cm of the lens anywhere in the frame (no blurred tarp/bag slabs at the edges)
 def cone_clear(c, t, L=0.40):
     fw = (t - c).normalized(); up = Vector((0, 0, 1)); x = fw.cross(up).normalized(); y = x.cross(fw)
@@ -30,9 +30,7 @@ _sees = sees
 def sees(c, p, own=WMESH): return _sees(c, p, own) and cone_clear(c, p)
 _air = air
 def air(c, r=0.22): return _air(c, r)
-if not face_shot(601, 675, (60, -60, 70, -70, 50, -50, 80, -80, 40, -40, 90, -90), (0.62, 0.56, 0.50, 0.45), ups=(0.0, 0.10, -0.10, 0.20), lens=20, name="stands v2"):
-    _tr = smooth_face(WO, 601, 675)
-    fixed_shot(601, 675, (0.58, 0.42, 1.55), (0, 0, 1), lens=18, track=lambda f: _tr[f] + Vector((0, 0, -0.15)), name="stands side (grate is on the back wall)")
+# (601-675 keeps the v007d shot: she stays where she was)
 for (a_, b_), angs in (((1561, 1650), (35, 30, 40, 25, 45, -35, -30, -40, 0, 15, -15)), ((1651, 1740), (-35, -30, -40, -25, -45, 35, 30, 40, 0, 15, -15)), ((1741, 1800), (-35, -30, -40, -25, -45, 35, 30, 40, 0, 15, -15)), ((1801, 1860), (35, 30, 40, 25, 45, -35, -30, -40, 0, 15, -15))):
     face_shot(a_, b_, angs, (0.62, 0.56, 0.50, 0.45), ups=(0.0, 0.06, 0.12, 0.20, 0.30, -0.04), lens=34, push=0.03, roll=True, aim=Vector(), name="days cone %d" % a_)
 for f, (p, q, ln) in sorted(NEW.items()):
