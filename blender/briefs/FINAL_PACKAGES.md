@@ -39,7 +39,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 23 | CaveRescue | `claude/connect23-cave-rescue` | `blender/CaveRescue_v006/` **acting fixed, approved, final commit ee86ff4 (VO sync when your voiceover arrives)** |
 | 24 | RooseveltSpeech | `claude/beautiful-ptolemy-c5vrcq` | `blender/RooseveltSpeech_v011/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1307)** |
 | 25 | Tsunami2004 | `claude/beautiful-ptolemy-c5vrcq` | `blender/Tsunami2004_v012/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–2066)** |
-| 26 | DwarfGiant | `claude/connect26-dwarf-giant` | `blender/DwarfGiant_v003b/` **acting fixed, approved, final commit d1c0cfc (VO sync when your voiceover arrives)** |
+| 26 | DwarfGiant | `claude/beautiful-ptolemy-c5vrcq` | `blender/DwarfGiant_v008/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–2083)** |
 | 27 | SwedishCoffee | `claude/beautiful-ptolemy-c5vrcq` | `blender/SwedishCoffee_v012/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1995)** |
 | 28 | ToucanBeak | `claude/beautiful-ptolemy-c5vrcq` | `blender/ToucanBeak_v009/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1932)** |
 | 29 | AIAsleep | `claude/beautiful-ptolemy-c5vrcq` | `blender/AIAsleep_v007/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–2046)** |
