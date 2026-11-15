@@ -1,8 +1,8 @@
-# DwarfGiant_v006: restaged growth, actions and theatre (director review of v005)
+# DwarfGiant_v007: theatre and officer re-staged (director review of v006)
 
 This is the same film, timeline and story-beat frames as v002 (`beats.json` is unchanged), with the client's acting notes of Nov 12 applied. Nothing else was changed: same look, same package rules.
 
-- `DwarfGiant_v006_60fps.blend`: 92.6 MB, packed and compressed, a normal git file. Settings are in SETTINGS.md.
+- `DwarfGiant_v007_60fps.blend`: 92.6 MB, packed and compressed, a normal git file. Settings are in SETTINGS.md.
 - Review files are in `../DwarfGiant_v001/review/`:
   - `ACT_before_v002_0p5s.jpg` and `ACT_after_v003_0p5s.jpg`: half-second sheets.
   - `ACTING_notes.md`: every problem found, with its frames and fix.
@@ -21,6 +21,22 @@ This is the same film, timeline and story-beat frames as v002 (`beats.json` is u
 - **Surgeons:** they hold a sterile hand pose, and Surgeon 1 lays a hand on the drape at the patient's shoulder. The nurse tucks the blanket with both hands.
 - **Young and old selves:** they breathe and look at each other.
 - **Camera:** it no longer goes inside the desk, the x-ray head, the lying head (now entered through the forehead), an officer's body or the bed rail. There are no wall-filled, shoe-filled or tile-only frames; the wall fly-through opens just before the camera reaches it.
+
+## v007 changes (director review of v006)
+Story-beat frames are unchanged and no VO is added. The preview is `review/preview.mp4`, from this file: every shot watched, and every first frame after a cut re-rendered and watched after the focus fix.
+- **Theatre (1482–1857):**
+  - 1482–1545: the patient's face on the bed.
+  - 1546–1600: the surgeon in green scrubs, eyes over the mask, laying his hand on the drape.
+  - 1601–1716: side medium of the patient and surgeons.
+  - 1717–1790: the second surgeon working with both hands.
+  - 1791–1857: the patient's face.
+  - It then cuts to the two men's faces.
+- **Office:**
+  - 1151–1210: the officer's face looking up, 1 s.
+  - 1211–1240: the hero's face looking down.
+  - 241–312: the two-shot cut to 1.2 s.
+- **Brain inset:** a dark slate card; the orange pituitary is kept.
+- **Focus:** the camera focus is keyed on every frame. Keys every 4 frames lagged after each cut and blurred the first frame.
 
 ## v006 changes (director review of v005)
 Story-beat frames are unchanged and no VO is added. The preview is `review/preview.mp4`, rendered from this exact file.
