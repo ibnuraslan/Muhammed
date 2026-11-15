@@ -116,7 +116,8 @@ def relaxed_hand(n, P, Rb, s, fwd=0.0, out=0.0, up=0.0):
     sh = rest_head(n, "upperarm01." + s); wr = rest_head(n, "wrist." + s)
     L = (sh - wr).length
     fem = n.startswith(("CrowdW", "Woman"))
-    loc = sh + V((sx * (0.10 + (0.04 if fem else 0.0) + out), -fwd, -L * 0.93 + up))
+    bulk = {"CrowdM4": 0.06, "Investigator": 0.03}.get(n, 0.0)
+    loc = sh + V((sx * (0.10 + (0.04 if fem else 0.0) + bulk + out), -fwd, -L * 0.93 + up))
     W = bw(n, P, Rb, loc)
     d = Rb @ V((0, -0.15 * fwd, -1)).normalized(); nn = Rb @ V((-sx, 0, 0))
     return W, d, nn
@@ -315,14 +316,15 @@ def S07():     # the Woman holds a cup of the water at her chest, looks into it,
     n = "Woman"; x, y = CROWD[n]; yaw = facing(x, y, *LOOK); on_stage(n, f0, f1)
     H = HUM[n]; P = V((x, y, H.root_head.z - 0.01)); Rb = body_R(yaw)
     fw = Rz(yaw) @ V((0, -1, 0)); sd = Rz(yaw) @ V((1, 0, 0))
-    cup_c = V((x, y, 0)) + fw * 0.28 + sd * (-0.08) + V((0, 0, rest_head(n, "spine03").z + 0.02))
+    cup_c = V((x, y, 0)) + fw * 0.38 + sd * (-0.10) + V((0, 0, rest_head(n, "spine03").z + 0.02))
     stand(n, f0, x, y, yaw, head=(-8.0, -6.0), fingers="relaxed")
     # place the cup, grip it with the right hand at f0, then Child Of the hand
     CUP.location = cup_c - V((0, 0, 0.046)); CUP.rotation_euler = (0, 0, 0); CUP.keyframe_insert("location", frame=f0)
     ev(f0)
     # the cup rests on her open right palm (no wrap grip: the thumb went through the cup wall)
-    place_hand(RIG[n].o, "R", f0, cup_c - V((0, 0, 0.046)) - fw * 0.012, V((0, 0, 1)), (fw - sd * 0.25).normalized(), skin=0.004)
-    apply_pose(RIG[n].o, "R", "flat_palm", f0)
+    fd_ = (fw - sd * 0.25).normalized()
+    place_hand(RIG[n].o, "R", f0, cup_c - V((0, 0, 0.046)) - fd_ * 0.022 + sd * 0.014, V((0, 0, 1)), fd_, skin=0.026)
+    apply_pose(RIG[n].o, "R", "relaxed", f0)
     ev(f0)
     pbw = RIG[n].o.pose.bones["wrist.R"]
     c_ = CUP.constraints.new('CHILD_OF'); c_.name = "HoldCup"; c_.target = RIG[n].o; c_.subtarget = "wrist.R"
@@ -352,17 +354,15 @@ def S08():     # a man lays his fingertips on the statue's foot; the others watc
     sh = bw(n, P, Rb, rest_head(n, "upperarm01.R"))
     ev(f0)
     stb = bpy.data.objects["S1_Statue.body"]; dg_ = bpy.context.evaluated_depsgraph_get(); se_ = stb.evaluated_get(dg_)
-    orig = V((TOE.x + 0.035, -1.2, TOE.z + 0.26)); inv_ = se_.matrix_world.inverted()
-    hit_, loc_, nrm_, _ = se_.ray_cast(inv_ @ orig, (inv_.to_3x3() @ V((0, 1, 0))).normalized())
-    contact = se_.matrix_world @ loc_ if hit_ else TOE + V((0, -0.06, 0.26))
-    cn_ = (se_.matrix_world.to_3x3() @ nrm_).normalized() if hit_ else V((0, -1, 0))
+    contact = V((TOE.x + 0.06, sc["CROSS_FRONT_Y"], TOE.z - 0.16))     # flat wet stone of the cross under the feet
+    cn_ = V((0, -1, 0))
     print("S08 contact", tuple(round(t, 3) for t in contact), tuple(round(t, 2) for t in cn_))
     for k, f in enumerate((f0, f0 + 40, f0 + 70, f1)):
         stand(n, f, x, y, yaw, head=(22.0, 0.0), lean=6.0 if k else 0.0, fingers="relaxed" if k == 0 else None)
         if k == 0: continue
     ev(f0 + 70)
-    place_hand(RIG[n].o, "R", f0 + 70, contact, -cn_, V((0, 0.1, 1)).normalized(), skin=0.022)
-    place_hand(RIG[n].o, "R", f1, contact + V((0, 0, -0.01)), -cn_, V((0, 0.1, 1)).normalized(), skin=0.022)
+    place_hand(RIG[n].o, "R", f0 + 70, contact, -cn_, V((-0.15, 0, 1)).normalized(), skin=0.018)
+    place_hand(RIG[n].o, "R", f1, contact + V((0, 0, -0.015)), -cn_, V((-0.15, 0, 1)).normalized(), skin=0.018)
     apply_pose(RIG[n].o, "R", "flat_palm", f0 + 70); apply_pose(RIG[n].o, "R", "flat_palm", f1)
     # reach in (between f0+10 and f0+70): an intermediate key below/in front of the contact
     place_hand(RIG[n].o, "R", f0 + 40, contact + V((0.0, -0.18, -0.20)), V((0, 1, 0.3)).normalized(), V((0, 0.3, 1)).normalized(), skin=0.03)
@@ -570,7 +570,7 @@ def S18():     # he turns and walks away pulling the case (logo side to camera)
         trolley_at(f, base, yaw_w, tilt=math.degrees(th))
         hands = {"R": (top + V((0, 0, 0.035)), (Rb @ V((0, 0.35, -1))).normalized(), right, P + Rb @ V((-0.5, 0.25, -0.1)))}
         sw = math.sin((f - f0) / 60.0 * 2 * math.pi * 0.9)
-        W0, d0, n0 = relaxed_hand(n, P, Rb, "L", fwd=0.10 * sw); hands["L"] = (W0, d0, n0)
+        W0, d0, n0 = relaxed_hand(n, P, Rb, "L", fwd=0.10 * sw, out=0.04); hands["L"] = (W0, d0, n0)
         key_hands(n, f, P, Rb, hands)
     apply_pose(RIG[n].o, "R", "wrap_grip", f0 + 20)
     cam_keys(s, [(0, V((x0 + 2.1, y0 - 1.0, 1.5)), V((x0 - 0.3, y0 - 0.4, 1.05)), 30), (1, V((x0 + 0.9, y0 - 1.2, 1.45)), V((x0 - 2.6, y0 - 1.0, 0.9)), 32)], fstop=8)
