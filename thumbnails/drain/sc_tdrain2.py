@@ -25,15 +25,19 @@ def _rounded(name, loc, size, mat, bevel):
 
 def velvet():
     _black_world(); c = {}
-    vel = ph.texture("velour_velvet", scale=6, tint=(0.012, 0.018, 0.09))
-    p = vel.node_tree.nodes["Principled BSDF"]; p.inputs['Sheen Weight'].default_value = 0.7; p.inputs['Sheen Roughness'].default_value = 0.35
-    p.inputs['Sheen Tint'].default_value = (0.25, 0.35, 1.0, 1)
+    vel = ph.texture("velour_velvet", scale=6, tint=(0.05, 0.07, 0.22))
+    p = vel.node_tree.nodes["Principled BSDF"]; p.inputs['Sheen Weight'].default_value = 1.0; p.inputs['Sheen Roughness'].default_value = 0.35
+    p.inputs['Sheen Tint'].default_value = (0.45, 0.55, 1.0, 1)
     # plinth, cushion on it, a curved backdrop
     _rounded("Plinth", (0, 0, 0.09), (0.5, 0.42, 0.18), vel, 0.012)
     cu = _rounded("Cushion", (0, 0, 0.18 + 0.03), (0.26, 0.24, 0.07), vel, 0.03)
     back = pbr("Backdrop", (0.02, 0.025, 0.06), 0.6)
+    # an old brick wall behind the display, dark, picked out by the light from above
+    bw = ph.texture("red_brick_03", scale=0.85, tint=(0.42, 0.38, 0.38))
+    bwn = [n for n in bw.node_tree.nodes if n.type == 'NORMAL_MAP']
+    if bwn: bwn[0].inputs['Strength'].default_value = 2.0
     bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 1.4, 0.8), rotation=(math.pi / 2, 0, 0)); b = bpy.context.active_object
-    b.scale = (6, 3, 1); b.data.materials.append(back)
+    b.scale = (6, 3, 1); b.data.materials.append(bw)
     bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 0.5, 0.0)); f = bpy.context.active_object; f.scale = (6, 4, 1); f.data.materials.append(back)
     top = Vector((0, 0, 0.18 + 0.065))
     d = D.diamond("Diamond", 0.055); d.location = top + Vector((0, 0, 0.055 * 0.86 - 0.012)); d.rotation_euler = (math.radians(-10), math.radians(4), 0.2)
