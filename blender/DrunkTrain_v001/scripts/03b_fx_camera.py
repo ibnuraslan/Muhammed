@@ -594,11 +594,10 @@ CAM = [  # frame, camera, aim, lens
     (700, V(0.3, y(700) - 2.0, 0.34), lad_p(700), 20),      # v006b: further ahead under the train: his whole body and face read, fewer torso-only frames
     (755, V(-0.2, y(755) - 2.0, 0.33), lad_p(755), 20),
     (815, V(0.3, y(815) - 2.0, 0.36), lad_p(815), 20),
-    (842, V(0.35, y(842) - 1.0, 0.36), lad_p(842), 20),      # v005: stays inside the gauge while the wheels still turn (no camera through a wheelset)
+    (842, V(0.35, y(842) - 1.8, 0.36), lad_p(842), 20),      # v006d: 1.8 m back (at 1.0 m his shoulder and leg filled the lens)      # v005: stays inside the gauge while the wheels still turn (no camera through a wheelset)
 (866, V(0.3, -41.4, 0.32), lad_p(866), 22),      # v006: stays inside the gauge under the train: he lies still as it passes over (no empty train-side frames)
     (905, V(0.32, -41.5, 0.3), lad_p(905), 22),
-    (950, V(0.3, -41.3, 0.34), lad_p(950) + V(0, 0, 0.1), 22),
-    (963, V(5.4, -37.2, 1.6), V(1.2, -40.4, 0.35), 24),      # v006b: CUT from under the train to the side view of the halted train and the gap he lies in
+    (906, V(5.4, -37.2, 1.6), V(1.2, -40.4, 0.35), 24),      # v006d: cut moved up from 963 (the dark under-train hold is about 1 s now)      # v006b: CUT from under the train to the side view of the halted train and the gap he lies in
     (1015, V(7.6, -33.5, 6.4), V(2.2, -42.0, 0.6), 22),
     (1032, V(7.6, -33.6, 6.35), V(2.2, -42.0, 0.6), 22),
     (1033, V(2.0, -40.2, 1.5), V(3.8, -38.9, 1.25), 20),      # v006c: clean CUT to the witnesses (the top-down whip showed slabs)
@@ -606,6 +605,8 @@ CAM = [  # frame, camera, aim, lens
     (1090, V(1.95, -39.2, 1.45), V(3.9, -39.4, 1.2), 20),
     (1113, V(1.8, -40.4, 1.45), V(4.0, -38.4, 1.3), 18),
     (1138, V(1.85, -40.1, 0.95), V(2.62, -41.6, 0.8), 24),
+    (1146, V(1.85, -40.1, 0.95), V(2.62, -41.6, 0.8), 24),
+    (1147, V(1.95, -40.95, 0.34), V(0.6, -40.4, 0.5), 22),      # v006d: CUT into the gap (the move swept a loco wheel across the lens)
     (1155, V(1.95, -40.95, 0.34), V(0.6, -40.4, 0.5), 22),      # v006: in the open coupling gap (the loco end is at y -41.1 now)
     (1168, V(0.55, -40.98, 0.36), V(0.48, -40.4, 0.6), 22),
     (1185, V(1.55, -40.95, 0.62), V(1.0, -40.2, 0.55), 22),      # v006: crosses the rail high, so the rail never sweeps the lens      # v005: low inside the gauge, in front of him: his face reads at the beat 8 start
@@ -621,13 +622,13 @@ CAM = [  # frame, camera, aim, lens
     (1600, V(3.75, -41.25, 1.5), V(2.45, -40.15, 1.33), 30),
     (1680, V(3.55, -41.75, 1.52), V(2.45, -40.2, 1.4), 30),
     (1760, V(3.2, -42.45, 1.55), V(2.42, -40.3, 1.45), 30),
-    (1852, V(3.0, -42.5, 1.55), V(2.45, -40.4, 1.4), 26),      # v005: in front of him, face readable at the beat 12 start
-    (1876, V(3.0, -43.2, 1.6), V(2.4, -41.0, 1.5), 28),
-    (1920, V(3.2, -44.0, 1.55), V(2.45, -41.8, 1.45), 28),
-    (1985, V(2.95, -44.6, 1.45), V(2.45, -42.85, 1.35), 28),
+    (1852, V(3.0, -43.0, 1.55), V(2.45, -40.4, 1.4), 28),      # v005: in front of him, face readable at the beat 12 start
+    (1876, V(2.9, -44.7, 1.45), V(2.45, -40.8, 1.2), 38),      # v006d: the camera settles in front and he walks toward it on a longer lens (it used to back away at his pace, so he looked static and small); the Worker stays out of frame
+    (1920, V(2.9, -44.7, 1.45), V(2.45, -41.6, 1.2), 38),
+    (1985, V(2.95, -44.6, 1.5), V(2.45, -42.6, 1.3), 38),
     (2020, V(3.0, -44.25, 1.55), V(2.5, -43.1, 1.42), 40),      # v006: further back, his palm never fills the lens
     (2070, V(2.64, -43.8, 1.62), V(2.45, -42.9, 1.63), 40)]
-CUTS = [963, 1033]      # v006b: clean cuts (requested by the director); the spline is built per segment so it never swings across a cut
+CUTS = [906, 1033, 1147]      # v006b: clean cuts (requested by the director); the spline is built per segment so it never swings across a cut
 def seg_spline(idx):
     segs = []; bounds = [1] + CUTS + [10 ** 6]
     for a_, b_ in zip(bounds, bounds[1:]):
@@ -684,7 +685,7 @@ for f in list(range(F(10.6), F(16.4), 4)) + list(range(sc["f_stir"] - 30, F(21.0
     p_ = lad_p(min(f, f_rest)) if f < F(15) else V(*eval(sc["lad_rest"]))
     if f >= F(15) and f > sc["f_stir"] + 12: p_ = V(min(2.0, 0.2 + 1.8 * (f - sc["f_stir"] - 12) / (F(20.4) - sc["f_stir"] - 12)), p_.y, 0)
     fl_o.location = V(p_.x + 1.2, p_.y - 0.6, 0.45); fl_o.keyframe_insert("location", frame=f)
-    fl_d.energy = 60.0; fl_d.keyframe_insert("energy", frame=f)
+    fl_d.energy = 170.0 if F(13.8) <= f < F(16.4) else 60.0; fl_d.keyframe_insert("energy", frame=f)      # v006d: brighter under the halted train so he reads
 for f in (F(10.5), F(16.5), sc["f_stir"] - 34, F(21.05)):
     fl_d.energy = 0.0; fl_d.keyframe_insert("energy", frame=f)
 # stylised impact flash: a bright star burst at the plough at the hit, gone in 8 frames
