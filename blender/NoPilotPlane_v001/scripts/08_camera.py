@@ -35,7 +35,8 @@ SHOTS = [
     (8.20, 9.16, "follow", None, fixed((0.0, -0.40, 1.30)), 28),
     # beat 4-5: the door, the captain in the doorway
     (9.16, 10.90, CENTRE[0], CENTRE[1], mid(YH, fixed((0.0, -0.60, 1.20)), 0.5), 26),
-    (10.90, 13.22, CENTRE[0], CENTRE[1], mid(YH, CH, 0.5), 24),
+    (10.90, 12.00, CENTRE[0], CENTRE[1], mid(YH, CH, 0.5), 24),       # crouched beside the captain
+    (12.00, 13.22, CORNER[0], CORNER[1], mid(YH, CH, 0.6), 24),       # steps over him toward the seats
     # beat 6-8: the first officer, the radio
     (13.22, 15.50, (-1.05, 2.00, 1.50), (-1.03, 1.96, 1.50), mid(YH, FH, 0.5), 24),
     (15.50, 17.60, CORNER[0], CORNER[1], mid(YH, fixed((0.10, 1.40, 0.90)), 0.4), 28),
