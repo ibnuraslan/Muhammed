@@ -1,0 +1,4 @@
+assets/
+plates/*_quick*
+plates/*.log
+__pycache__/
