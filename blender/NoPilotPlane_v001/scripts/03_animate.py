@@ -183,7 +183,7 @@ CA.location = (0.42, 0.40, 0.125); CA.rotation_euler = (R_(-90), 0, R_(90))
 # v009: on his back, face up and turned a little toward the cockpit (director: lying on his back, face visible)
 fk_leg(RC, "L", 1, hip=18, knee=30, splay=8); fk_leg(RC, "R", 1, hip=8, knee=14, splay=-6)
 fk_spine(RC, 1, flex=2, side=0, twist=0, hflex=-6, hside=0, htwist=25)
-fk_arm(RC, "L", 1, down=70, fwd=8, elbow=20); fk_arm(RC, "R", 1, down=62, fwd=14, elbow=35)
+fk_arm(RC, "L", 1, down=54, fwd=8, elbow=20); fk_arm(RC, "R", 1, down=50, fwd=14, elbow=35)     # v009b: elbows clear of his sides
 for f in range(40, END + 1, 40):          # breathing
     b = math.sin(2 * math.pi * f / (4.6 * FPS))
     fk_spine(RC, f, flex=2 + 1.8 * b, side=0, twist=0, hflex=-6 + 1.2 * b, hside=0, htwist=25)
@@ -535,13 +535,13 @@ SIT = (sx_, sy_ - 0.10, 0.60)
 FL_ = (sx_ - 0.1, sy_ + 0.42); FR_ = (sx_ + 0.1, sy_ + 0.42)
 # --- beat 1-2: waking in the seat
 body(1, SIT, flex=-14, sflex=18, head=(25, 0)); feet(1, FL_, FR_)
-hand("L", 1, (sx_ - 0.13, sy_ + 0.12, 0.66), d=(0.2, 1, -0.4), n=(0, 0, 1), curl=35)
-hand("R", 1, (sx_ + 0.13, sy_ + 0.12, 0.66), d=(-0.2, 1, -0.4), n=(0, 0, 1), curl=35)
+hand("L", 1, (sx_ - 0.16, sy_ + 0.12, 0.66), d=(0.2, 1, -0.4), n=(0, 0, 1), curl=35)
+hand("R", 1, (sx_ + 0.16, sy_ + 0.12, 0.66), d=(-0.2, 1, -0.4), n=(0, 0, 1), curl=35)
 body(F(0.8), SIT, flex=-10, sflex=10, head=(10, 0))
-hand("L", F(0.8), (sx_ - 0.13, sy_ + 0.16, 0.66), d=(0.2, 1, -0.4), n=(0, 0, 1), curl=45)     # v007e: hands grip own thighs (no floating hands)
-hand("R", F(0.8), (sx_ + 0.13, sy_ + 0.16, 0.66), d=(-0.2, 1, -0.4), n=(0, 0, 1), curl=45)
-hand("L", F(1.6), (sx_ - 0.13, sy_ + 0.18, 0.66), d=(0.2, 1, -0.4), n=(0, 0, 1), curl=45)
-hand("R", F(1.6), (sx_ + 0.13, sy_ + 0.18, 0.66), d=(-0.2, 1, -0.4), n=(0, 0, 1), curl=45)
+hand("L", F(0.8), (sx_ - 0.16, sy_ + 0.16, 0.66), d=(0.2, 1, -0.4), n=(0, 0, 1), curl=45)     # v007e: hands grip own thighs (no floating hands)
+hand("R", F(0.8), (sx_ + 0.16, sy_ + 0.16, 0.66), d=(-0.2, 1, -0.4), n=(0, 0, 1), curl=45)
+hand("L", F(1.6), (sx_ - 0.16, sy_ + 0.18, 0.66), d=(0.2, 1, -0.4), n=(0, 0, 1), curl=45)
+hand("R", F(1.6), (sx_ + 0.16, sy_ + 0.18, 0.66), d=(-0.2, 1, -0.4), n=(0, 0, 1), curl=45)
 body(F(1.6), SIT, flex=-8, sflex=4, head=(0, 0))
 body(F(2.4), SIT, flex=-8, sflex=4, twist=-25, head=(5, -35))
 hand("L", F(2.4), (sx_ - 0.10, sy_ + 0.28, 0.66), d=(0, 1, -0.4), n=(0, 0, 1), curl=45)          # grips own thigh (the shared armrest is the neighbour's)
@@ -618,8 +618,8 @@ H.key_foot("L", F(15.15), Vector((-0.03, 0.45)), 180, 0.42); H.key_foot("L", F(1
 body(F(15.4), (0.05, 0.48, STAND_Z + 0.04), flex=10, sflex=18, head=(40, -5))
 H.key_foot("R", F(15.5), Vector((0.12, 0.02)), 180, 0)
 H.key_foot("R", F(15.8), Vector((0.14, 0.5)), 180, 0.40); H.key_foot("R", F(16.1), Vector((0.16, 0.92)), 180, 0)
-hand("L", F(15.6), (-0.30, 0.95, 1.40), d=(0, 1, 0), n=(0, 0, -1), curl=50)                         # grabs captain seat headrest
-hand("R", F(15.9), (0.30, 0.95, 1.30), d=(0, 1, 0), n=(0, 0, -1), curl=50)
+hand("L", F(15.6), (-0.40, 1.12, 1.15), d=(0, 0.3, 1), n=(1, 0, 0), curl=50)                         # v009b: grips the inner side of the captain seat back (was in mid-air)
+hand("R", F(15.9), (0.40, 1.12, 1.15), d=(0, 0.3, 1), n=(-1, 0, 0), curl=50)
 POSW = (0.04, 0.88, STAND_Z)
 body(F(16.3), POSW, flex=4, sflex=4, head=(0, 0)); feet(F(16.3), (-0.06, 0.92), (0.16, 0.92))
 # beat 6: look at FO
@@ -640,13 +640,13 @@ def grip_handset(f):
     rep_ = grip_object(YOU, "R", f, HS, top, (0, 0.25, -1))
     print("GRIP_HANDSET", f, rep_)
 grip_handset(F(20.9))                                                        # wrapped round it (hand_poses.grip_object)
-hand("L", F(20.0), (-0.36, 1.10, 1.42), d=(0, 1, 0), n=(0, 0, -1), curl=60)
-for t_ in (21.0, 22.2, 23.4, 24.6, 25.8): hand("L", F(t_), (-0.37 + 0.01 * (t_ % 2), 1.11, 1.43), d=(0, 1, 0), n=(0, 0, -1), curl=60)
+hand("L", F(20.0), (-0.40, 1.12, 1.16), d=(0, 0.3, 1), n=(1, 0, 0), curl=60)          # v009b: on the side of the captain seat back, under shoulder height
+for t_ in (21.0, 22.2, 23.4, 24.6, 25.8): hand("L", F(t_), (-0.40 + 0.01 * (t_ % 2), 1.12, 1.16), d=(0, 0.3, 1), n=(1, 0, 0), curl=60)
 body(F(21.8), POSW, flex=6, sflex=6, head=(0, -5))
-hand("R", F(21.8), (0.14, 1.08, 1.47), d=(-0.4, 0.2, 1), n=(-0.6, -1, 0), curl=80, pole=Vector((0.45, 0.95, 1.05)))   # v009: handset at his mouth
+hand("R", F(21.8), (0.10, 1.29, 1.44), d=(-0.4, 0.2, 1), n=(-0.6, -1, 0), curl=80, pole=Vector((0.45, 1.10, 1.08)))   # v009: handset at his mouth
 for i, t in enumerate((22.8, 23.4, 23.9, 24.5, 25.0)):
     j = 0.010 * (1 if i % 2 else -1)
-    hand("R", F(t), (0.14 + j, 1.08, 1.47 + j), d=(-0.4, 0.2, 1), n=(-0.6, -1, 0), curl=80, pole=Vector((0.45, 0.95, 1.05)))
+    hand("R", F(t), (0.10 + j, 1.29, 1.44 + j), d=(-0.4, 0.2, 1), n=(-0.6, -1, 0), curl=80, pole=Vector((0.45, 1.10, 1.08)))   # v009b: in front of the face (was inside the jaw)
     body(F(t), (POSW[0], POSW[1], POSW[2] - 0.01 * (i % 2)), flex=8 + 3 * (i % 2), sflex=10, head=(5 + 4 * (i % 2), -3))
 # beat 8: silence, lower handset, put it back
 body(F(25.6), POSW, flex=14, sflex=20, head=(30, 0))
@@ -663,8 +663,9 @@ def fo_shoulders(f, s):
     return FO.matrix_world @ FO.pose.bones[nm].head
 def fo_point(f, bone, off):
     sc.frame_set(f); return FO.matrix_world @ FO.pose.bones[bone].head + Vector(off)
-hand("L", F(27.3), (-0.04, 1.08, 1.02), d=(0.3, 1, 0), n=(0, 0, 1), curl=40)      # low approach under the eye line
-hand("R", F(27.3), (0.16, 1.10, 1.02), d=(0.3, 1, 0), n=(0, 0, 1), curl=40)
+hand("L", F(26.9), (-0.24, 1.24, 1.22), d=(0.3, 1, 0), n=(0, 0, 1), curl=40)      # v009b: in front of his chest, not through it
+hand("L", F(27.3), (-0.04, 1.27, 1.04), d=(0.3, 1, 0), n=(0, 0, 1), curl=40)      # low approach under the eye line
+hand("R", F(27.3), (0.16, 1.29, 1.04), d=(0.3, 1, 0), n=(0, 0, 1), curl=40)
 from mathutils.bvhtree import BVHTree
 def jacket_pt(f, guess):
     """nearest point + outward normal on the FO jacket surface (evaluated) to a guess point"""
@@ -692,8 +693,8 @@ for f in list(range(F(27.9), F(31.0), 8)) + list(range(F(31.0), F(32.3), 4)):   
     p_, n_ = jacket_pt(f, fo_point(f, "upperarm01.L", (-0.05, -0.09, 0.03)))
     place_hand(YOU, "R", f, p_, -n_, (0.2, 1, -0.6))                                  # palm on top of his near shoulder          # top of his near shoulder, outside the jacket
 for s_, sx in (("L", -1), ("R", 1)):          # he is on the floor, out of reach: let go, hands back at the sides
-    hand(s_, F(32.6), (sx * 0.20, 0.62, 0.78), d=(0, 0.3, -1), n=(-sx, 0, 0), curl=30)
-    hand(s_, F(33.3), (sx * 0.20 + 0.02, 0.62, 0.78), d=(0, 0.3, -1), n=(-sx, 0, 0), curl=30)
+    hand(s_, F(32.6), (-0.16 + sx * 0.25, 0.64, 0.80), d=(0, 0.3, -1), n=(-sx, 0, 0), curl=30)      # v009b: at his sides (he stands at x -0.16)
+    hand(s_, F(33.3), (-0.14 + sx * 0.25, 0.64, 0.80), d=(0, 0.3, -1), n=(-sx, 0, 0), curl=30)
 body(F(28.8), (-0.06, 0.74, STAND_Z - 0.02), flex=12, sflex=6, twist=-15, head=(10, -10))
 feet(F(29.2), (-0.14, 0.72), (0.10, 0.80)); H.key_foot("L", F(29.0), Vector((-0.05, 0.76)), 180, 0.05)
 body(F(29.8), (-0.12, 0.62, STAND_Z - 0.04), flex=10, sflex=8, twist=-10, head=(10, -10))
@@ -706,14 +707,14 @@ feet(F(32.4), (-0.25, 0.60), (-0.05, 0.64))
 body(F(33.2), (-0.15, 0.60, STAND_Z), flex=2, sflex=4, twist=-25, head=(20, -25))
 # beat 10-11: alarms, jolt, stagger forward to the windscreen
 body(F(33.7), (0.06, 0.76, STAND_Z - 0.12), flex=20, sflex=0, twist=-5, head=(-10, 0))
-hand("L", F(33.9), (-0.30, 0.98, 1.40), d=(0, 1, 0), n=(0, 0, -1), curl=55)
-hand("R", F(33.9), (0.35, 1.10, 1.40), d=(0, 1, 0), n=(0, 0, -1), curl=55)
+hand("L", F(33.9), (-0.40, 1.12, 1.16), d=(0, 0.3, 1), n=(1, 0, 0), curl=55)          # v009b: grabs the sides of both seat backs (was in mid-air)
+hand("R", F(33.9), (0.40, 1.12, 1.16), d=(0, 0.3, 1), n=(-1, 0, 0), curl=55)
 feet(F(34.2), (0.08, 0.74), (0.30, 0.80))
 body(F(34.6), (0.16, 0.80, STAND_Z - 0.08), flex=14, sflex=0, side=6, head=(0, 5))
 feet(F(35.1), (0.02, 0.90), (0.26, 0.82)); H.key_foot("L", F(34.85), Vector((0.05, 0.82)), 180, 0.07)
 body(F(35.5), (0.03, 0.92, STAND_Z - 0.06), flex=18, sflex=6, side=-8, head=(-5, -5))
 hand("L", F(35.5), (-0.10, 1.28, 1.0), d=(0, 1, -0.5), n=(0, 0, 1), curl=40)                        # braces on the pedestal
-hand("R", F(35.5), (0.30, 1.12, 1.42), d=(0, 1, 0), n=(0, 0, -1), curl=60)
+hand("R", F(35.5), (0.40, 1.14, 1.16), d=(0, 0.3, 1), n=(-1, 0, 0), curl=60)
 body(F(36.5), (0.14, 0.98, STAND_Z - 0.10), flex=26, sflex=14, side=6, head=(0, 0))
 hand("L", F(36.5), (-0.08, 1.30, 1.02), d=(0, 1, -0.5), n=(0, 0, 1), curl=40)                        # stays on the pedestal
 hand("L", F(37.6), (0.10, 1.40, 1.12), d=(0, 1, -0.3), n=(0, 0, 1), curl=30)                         # over his legs, not through them

@@ -17,7 +17,7 @@ def fixed(p): return lambda f: Vector(p)
 def mid(a, b, w=0.5): return lambda f: a(f).lerp(b(f), w)
 YH = bone_pt(YOU, "head", (0, 0.04, 0.05))          # face centre
 YC = bone_pt(YOU, "spine02", (0, 0, 0.10))          # chest
-CH = bone_pt(CA, "head"); FH = bone_pt(FO, "head")
+CH = bone_pt(CA, "head"); FH = bone_pt(FO, "head"); FS = bone_pt(FO, "spine03")
 COCK_FRONT = ((0.45, 3.18, 1.55), (0.44, 3.15, 1.54))          # outside the windscreen, looking back at his face
 COCK_SIDE = ((-1.02, 1.76, 1.60), (-1.01, 1.72, 1.59))         # front-left, inside the windscreen pillar: face, arms and yoke
 STAND_FRONT = ((0.30, 3.18, 1.78), (0.29, 3.15, 1.77))          # outside the windscreen right of the centre post: his face while standing
@@ -36,7 +36,7 @@ SHOTS = [
     # beat 4-5: the door, the captain in the doorway
     (9.16, 10.90, CENTRE[0], CENTRE[1], mid(YH, fixed((0.0, -0.60, 1.20)), 0.5), 26),
     (10.90, 11.75, CENTRE[0], CENTRE[1], mid(YH, CH, 0.5), 24),       # crouched beside the captain
-    (11.75, 13.22, STAND_FRONT[0], STAND_FRONT[1], mid(YH, CH, 0.6), 24),       # steps over him toward the seats
+    (11.75, 13.22, STAND_FRONT[0], STAND_FRONT[1], mid(YH, CH, 0.2), 24),       # steps over him toward the seats (v009b: aim higher, the centre post stays out of frame)
     # beat 6-8: the first officer, the radio
     (13.22, 15.50, (-1.05, 2.00, 1.50), (-1.03, 1.96, 1.50), mid(YH, FH, 0.5), 24),
     (15.50, 17.60, STAND_FRONT[0], STAND_FRONT[1], mid(YH, fixed((0.10, 1.40, 0.90)), 0.4), 28),
@@ -45,7 +45,8 @@ SHOTS = [
     (20.40, 21.24, REAR[0], REAR[1], YH, 28),
     # beat 9: the haul
     (21.24, 23.50, STAND_FRONT[0], STAND_FRONT[1], mid(YH, FH, 0.5), 24),
-    (23.50, 25.82, REAR[0], REAR[1], mid(YH, FH, 0.5), 22),
+    (23.50, 24.90, REAR[0], REAR[1], mid(YH, FH, 0.5), 22),
+    (24.90, 25.82, (0.22, 2.06, 2.02), (0.21, 2.03, 2.01), mid(YH, FH, 0.6), 20),   # v009b: high from the front, he stands over the FO on the floor (the door filled the REAR view)
     # beat 10-11: alarms, the dive
     (25.82, 27.40, STAND_FRONT[0], STAND_FRONT[1], YH, 26),
     (27.40, 28.66, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, -0.6)), 24),
@@ -63,7 +64,7 @@ SHOTS = [
     (46.00, 47.80, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.3)), 24),
     (47.80, 49.56, COCK_FRONT[0], COCK_FRONT[1], YH, 42),
     (49.56, 51.10, STAND_FRONT[0], STAND_FRONT[1], mid(YH, FH, 0.5), 22),
-    (51.10, 52.48, CENTRE[0], CENTRE[1], FH, 28),                  # the first officer on his back, face up
+    (51.10, 52.48, (1.00, 0.90, 1.90), (0.99, 0.87, 1.89), mid(FH, FS, 0.4), 22),   # v009b: the first officer on his back, face up, from the right side (the door leaf cut the CENTRE view)
     (52.48, 54.00, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.3)), 24),
     (54.00, 55.72, COCK_SIDE[0], COCK_SIDE[1], YC, 30),
     # beat 19: the close-up of his face (kept from v008b by direction)
