@@ -1,0 +1,376 @@
+{
+ "frames": {
+  "151": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "205": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "211": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "217": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "223": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "463": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "517": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "571": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "589": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "595": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "601": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "655": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "673": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "679": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "685": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "697": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "703": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "709": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1069": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only CabinFloor in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1075": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only CabinFloor in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1081": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only CabinFloor in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1087": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only CabinFloor in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1093": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only CabinFloor in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1099": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only CabinFloor in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1105": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only CabinFloor in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1111": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only CabinFloor in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1117": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1123": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1129": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1135": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1141": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1147": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1153": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1159": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1165": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1171": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1177": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1183": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1189": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1195": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1201": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1207": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1213": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1303": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1309": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1315": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ]
+ },
+ "counts": {
+  "FILL": 2,
+  "EMPTY": 67
+ }
+}

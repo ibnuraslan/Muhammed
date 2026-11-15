@@ -1,0 +1,120 @@
+{
+ "frames": {
+  "487": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "523": {
+   "Attendant": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "625": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 76
+   }
+  },
+  "649": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 41
+   }
+  },
+  "661": {
+   "Bomber": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "673": {
+   "PaxA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 327
+   }
+  },
+  "709": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "715": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 58
+   }
+  },
+  "721": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 219
+   }
+  },
+  "739": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 122
+   }
+  },
+  "745": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 248
+   }
+  },
+  "751": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 65
+   }
+  },
+  "763": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   625,
+   625
+  ],
+  [
+   649,
+   649
+  ],
+  [
+   673,
+   673
+  ],
+  [
+   715,
+   721
+  ],
+  [
+   739,
+   751
+  ]
+ ],
+ "fps": 60
+}
