@@ -305,7 +305,7 @@ for k, s in enumerate(("L", "R")):
     CUT[s] = (base, up)
     if s == "L":   # v006e: resting on the cabin aisle floor, upper lifted to show the sole's insides
         # v006e-2: the sole lies open on the aisle carpet, well behind PaxB; the cut-off upper rests beside it on the carpet
-        base.rotation_euler = (0, 0, math.radians(-20)); base.location = V((0.0, -2.50, 0.0)); bpy.context.view_layer.update()
+        base.rotation_euler = (0, 0, math.radians(160)); base.location = V((0.0, 3.60, 0.0))   # v006f: forward aisle, seat rows all round; bpy.context.view_layer.update()
         zmin = min((base.matrix_world @ V(c)).z for c in base.bound_box); base.location.z -= zmin - 0.003
         up.location = (0.13, -0.02, -0.047); up.rotation_euler = (0, 0, math.radians(12))
         sl = O["Slab_Shoe_" + s]; sl.parent = base; sl.matrix_parent_inverse = Matrix.Identity(4); sl.location = (0, 0.0, 0.058)
@@ -495,9 +495,9 @@ CAB = [[
 # studio: out of the black, pulling back from shoe L; orbit as they split; low 3/4; pull back into the cloud wipe
 SEG2 = [   # v006e: beat 7 -- ONE cut-open shoe resting on the cabin aisle floor, slow push to the charge in the sole (1.5 s)
     # v006f (director): on the cabin carpet with the seat legs and the aisle around it, push in to the cut sole and the cord (~1.2 s)
-    (1069, V((0.0, -1.55, 0.55)), op("Slab_Shoe_L", 1069, (0.0, 0.0, 0.0)), 30),
-    (1140, V((0.02, -2.18, 0.34)), op("Slab_Shoe_L", 1140, (0.0, 0.03, 0.0)), 40),
-    (1158, V((0.02, -2.19, 0.335)), op("Slab_Shoe_L", 1158, (0.0, 0.03, 0.0)), 40),
+    (1069, V((0.0, 2.65, 0.55)), op("Slab_Shoe_L", 1069, (0.0, 0.10, 0.10)), 26),
+    (1140, V((-0.02, 3.28, 0.34)), op("Slab_Shoe_L", 1140, (0.0, -0.03, 0.0)), 40),
+    (1158, V((-0.02, 3.29, 0.335)), op("Slab_Shoe_L", 1158, (0.0, -0.03, 0.0)), 40),
 ]
 # sky: from the cloud next to a cabin window, back along the wing, huge pull-out, tilt down into the deck
 SEG3 = [
