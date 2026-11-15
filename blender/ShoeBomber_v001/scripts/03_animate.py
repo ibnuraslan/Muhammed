@@ -414,9 +414,9 @@ for f, flex, sp, crouch, hd in ((1393, 0, 10, 0.0, (25, 0)), (1420, 0, 18, 0.03,
     trav.key_spine(f, flex=sp, head=hd)
     trav.key_foot("L", f, trav.foot_xy("L", TP, FWD), FWD)
 # v006e (director): he KNEELS on the floor beside the belt -- both knees down, shins back, the sneaker beside his right knee,
-# picks it up and reaches into the tray; nothing of him passes the belt (knees stop ~7 cm short of it)
-TK = V((TP.x - 0.22, TP.y + 0.15, 0))
-for f, sp, tw, hd in ((1468, 30, 0, (-25, 0)), (1480, 32, 8, (-20, 5)), (1492, 30, 15, (-8, 10)), (1508, 28, 18, (-5, 12)), (1518, 22, 12, (0, 8))):
+# picks it up and reaches into the tray; nothing of him passes the belt (knees stop ~27 cm short of it)
+TK = V((TP.x - 0.22, TP.y - 0.05, 0))
+for f, sp, tw, hd in ((1468, 22, 0, (-25, 0)), (1480, 24, 8, (-15, 5)), (1492, 18, 15, (0, 10)), (1508, 16, 18, (5, 12)), (1518, 12, 12, (8, 8))):
     trav.key_root(f, V((TK.x, TK.y, 0.55)), yaw=FWD, flex=12)
     trav.key_spine(f, flex=sp, twist=-tw, head=hd)
     trav.key_foot("L", f, V((TK.x - 0.12, TK.y - 0.35)), FWD, 0.02, -65); trav.key_foot("R", f, V((TK.x + 0.13, TK.y - 0.33)), FWD, 0.02, -65)
