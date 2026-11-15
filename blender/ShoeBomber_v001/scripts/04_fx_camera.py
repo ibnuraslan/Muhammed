@@ -415,6 +415,12 @@ for f, ex in ((1, 0.3), (1158, 0.3), (1249, 0.0), (1392, 0.0), (1393, -1.0), (EN
     sc.view_settings.exposure = ex; sc.view_settings.keyframe_insert("exposure", frame=f)
 constant_at(sc, {1158, 1248, 1392})
 
+# v006e: the pin is shot at aisle height from the window side; the four empty seats behind that lens are struck for the cut (580-614)
+for o in bpy.data.objects:
+    if any(o.name.endswith(k) for k in ("_04D", "_04E", "_05D", "_05E")) or o.name == "TrayTable":
+        for f, h in ((1, False), (579, False), (580, True), (614, True), (615, False)):
+            o.hide_render = h; o.keyframe_insert("hide_render", frame=f)
+        constant_at(o, set(range(0, END + 1)))
 # ------------------------------------------------------------------ ONE camera
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.sensor_fit = 'AUTO'; cam_d.clip_start = 0.01; cam_d.clip_end = 6000
 cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 8.0   # v006e: f/8 (director)
@@ -473,8 +479,13 @@ CAB = [[
     (556, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 556, (0, 0, -0.1)), 28),
     (566, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 566, (0, 0, -0.1)), 28),
     # v006e: the pin from the side at aisle height (faces of the attendant, PaxA and PaxB in profile; his face sideways toward us)
-    (580, V((-0.80, 1.00, 1.35)), bp("Bomber", "spine01", 580, (0, 0.3, 0.45)), 24),
-    (630, V((-0.80, 1.00, 1.35)), bp("Bomber", "spine01", 630, (0, 0.3, 0.45)), 24),
+], [
+    # v006e-2: cut across to the window side at aisle height: the attendant and PaxA face us across his back, his face turned toward us
+    (580, V((1.10, 1.20, 1.00)), V((0.0, 1.22, 0.58)), 18),
+    (614, V((1.10, 1.20, 1.00)), V((0.0, 1.22, 0.58)), 18),
+], [
+    # cut back before the steward walks into that side; he arrives and kneels seen from the aisle side
+    (616, V((-0.55, 1.20, 1.75)), (bp("Steward", "head", 616) + bp("Bomber", "spine01", 616)) / 2, 22),
     (640, V((-0.55, 1.20, 1.75)), (bp("Steward", "head", 640) + bp("Bomber", "spine01", 640)) / 2, 22),   # v006c: down beside the steward, never over the aim
     (655, V((-0.80, 1.25, 1.60)), bp("Steward", "head", 655), 28),
     # v006d: a steady shot on the steward's face while he injects (the arm macro filled the frame with sleeves)

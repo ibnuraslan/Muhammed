@@ -169,13 +169,13 @@ for f, hr_, hl_ in ((495, (BX + 0.62, BY + 0.38, 1.02), (BX + 0.05, BY + 0.58, 0
 # 580: hits the floor (impact, slight bounce at 590), pinned at 600+
 for f, z, fl in ((578, 0.27, 92), (586, 0.31, 90), (596, 0.27, 91), (654, 0.27, 91), (700, 0.265, 91), (768, 0.265, 91)):
     bom.key_root(f, V((0.0, BY + 0.75, z)), yaw=FWD, flex=fl, side=0)
-    bom.key_spine(f, flex=-2, twist=-5, head=(-18, 32) if f < 700 else ((-18, 34) if f == 700 else (-15, 38)))
+    bom.key_spine(f, flex=-2, twist=-5, head=(-6, -34) if f < 700 else ((-6, -36) if f == 700 else (-6, -38)))   # v006e: face turned sideways toward the window side, not into the carpet
     bom.key_foot("L", f, V((-0.11, BY - 0.25)), FWD, 0.03, -75); bom.key_foot("R", f, V((0.11, BY - 0.27)), FWD, 0.03, -75)
 # struggle wiggle while pinned (beat 4 end, beat 5 start), then limp (sedated ~ 720)
 for f in range(600, 721, 12):
     w = 1.0 if f < 690 else max(0.0, (720 - f) / 30)
     bom.key_root(f, V((0.0 + 0.03 * w * math.sin(f), BY + 0.75, 0.27 + 0.02 * w * abs(math.sin(f * 0.7)))), yaw=FWD + 4 * w * math.sin(f * 0.5), flex=91, side=6 * w * math.sin(f * 0.9))
-    bom.key_spine(f, flex=-2 + 4 * w * math.sin(f * 0.3), twist=-5 + 8 * w * math.sin(f * 0.6), head=(-18 + 3 * (1 - w), 32 + 6 * (1 - w)))
+    bom.key_spine(f, flex=-2 + 4 * w * math.sin(f * 0.3), twist=-5 + 8 * w * math.sin(f * 0.6), head=(-6, -34 - 4 * (1 - w)))
 # arms when pinned: left arm twisted behind his back (held by PaxB), right arm out forward on the floor (held by attendant / injected)
 for f in (582, 654, 720, 768, 830, 1068):
     hand(bom, "L", f, V((-0.30, BY + 0.55, 0.08)), (0, -1, 0), (0, 0, -1), pole=(-0.6, BY + 0.9, 0.4), grip=0.3)
@@ -183,7 +183,7 @@ for f in (582, 654, 720, 768, 830, 1068):
 # after sedation he lies still; tiny breathing
 for f in range(780, 1069, 30):
     bom.key_root(f, V((0.0, BY + 0.75, 0.265 + 0.004 * math.sin(f * 0.1))), yaw=FWD, flex=91, side=0)
-    bom.key_spine(f, flex=-2, twist=-5, head=(-15, 38))
+    bom.key_spine(f, flex=-2, twist=-5, head=(-6, -38))
     bom.key_foot("L", f, V((-0.11, BY - 0.25)), FWD, 0.03, -75); bom.key_foot("R", f, V((0.11, BY - 0.27)), FWD, 0.03, -75)
 print("BOMBER_DONE")
 
