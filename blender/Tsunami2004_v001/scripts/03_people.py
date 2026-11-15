@@ -253,7 +253,7 @@ for n, pts in RUN.items():
     if n == "LocalM":   # vNEXT: his escape path crossed the camera at 18.15 s (filled the lens); he stays hidden from 13 s (motion kept so the crowd layout is unchanged)
         q.hide_after(T(13.0))
 # vNEXT ending: three survivors walk slowly through the mud toward the mosque (34.2 - 40 s), so the film ends on people
-SURV = {"OldM": [(-25.6, -178.4), (-31.2, -172.8)], "LocalW": [(-23.5, -174.5), (-29.5, -169.5)], "TouristM": [(-27.5, -182.5), (-33.0, -176.5)]}
+SURV = {"OldM": [(-25.5, -178.5), (-31.2, -172.9)], "LocalW": [(-24.3, -178.7), (-30.0, -173.1)], "TouristM": [(-25.9, -179.9), (-31.6, -174.3)]}   # vNEXT: walking together (side by side)
 for n, pts in SURV.items():
     q = P[n]
     for ob in [q.o] + list(q.o.children):

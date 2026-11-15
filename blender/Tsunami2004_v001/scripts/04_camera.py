@@ -67,15 +67,20 @@ for f in range(1, F(5.3) + 1):
     sc.frame_set(f); _KID[f] = (_kid_head("KidA") + _kid_head("KidB")) * 0.5
 def _smooth(f, w=18):
     fs = [k for k in range(f - w, f + w + 1) if k in _KID]; return sum((_KID[k] for k in fs), Vector()) / len(fs)
+_KA = {}
+for f in range(1, F(5.3) + 1):
+    sc.frame_set(f); _KA[f] = _kid_head("KidA")
 def lead_pose(f):
-    c = _smooth(f); p = Vector((c.x + 2.2, c.y + 8.5, g(c.x + 2.2, c.y + 8.5) + 1.25)); return p, (c + Vector((0, 0, -0.15)) - p).normalized()
+    # vNEXT: lead KidA closely (4.5 m ahead, a little above her head): her face fills the upper frame, KidB behind her
+    fs = [k for k in range(f - 14, f + 15) if k in _KA]; c = sum((_KA[k] for k in fs), Vector()) / len(fs)
+    p = Vector((c.x + 0.9, c.y + 4.5, c.z + 0.45)); return p, (c + Vector((0, 0, -0.25)) - p).normalized()
 # vNEXT ending (34.2 - 40 s): hard cut to eye level, 7 m behind the three survivors walking to the mosque, 45 mm
-_S0 = (Vector((-25.6, -178.4, 0)) + Vector((-23.5, -174.5, 0)) + Vector((-27.5, -182.5, 0))) / 3
-_S1 = (Vector((-31.2, -172.8, 0)) + Vector((-29.5, -169.5, 0)) + Vector((-33.0, -176.5, 0))) / 3
+_S0 = (Vector((-25.5, -178.5, 0)) + Vector((-24.3, -178.7, 0)) + Vector((-25.9, -179.9, 0))) / 3
+_S1 = (Vector((-31.2, -172.9, 0)) + Vector((-30.0, -173.1, 0)) + Vector((-31.6, -174.3, 0))) / 3
 _SD = (_S1 - _S0).normalized()
 def follow_pose(f):
     u = min(1.0, max(0.0, (f - F(34.2)) / (F(40.0) - F(34.2)))); c = _S0.lerp(_S1, u)
-    p = c - _SD * 7.0 + Vector((1.2, -0.6, 0)); p.z = g(p.x, p.y) + 1.6
+    p = c - _SD * 8.0; p.z = g(p.x, p.y) + 1.6
     tgt = c + _SD * 14.0; tgt.z = g(tgt.x, tgt.y) + 4.0
     return p, (tgt - p).normalized()
 # clear rubble / debris out of the ending shot (it filled the foreground)
@@ -88,6 +93,12 @@ for o in bpy.data.objects:
             o.keyframe_insert("hide_render", frame=F(33.85)); o.keyframe_insert("hide_viewport", frame=F(33.85))
             o.hide_render = True; o.keyframe_insert("hide_render", frame=F(33.9)); o.hide_viewport = True; o.keyframe_insert("hide_viewport", frame=F(33.9))
             print("CLEARED", o.name)
+for o in bpy.data.objects:
+    if o.name.startswith("Rock_"):
+        for f in range(1, F(4.6), 6):
+            c = _KA[f]
+            if (Vector((o.location.x, o.location.y)) - Vector((c.x + 0.45, c.y + 2.25))).length < 4.5:
+                o.hide_render = o.hide_viewport = True; print("ROCK_HIDDEN", o.name); break
 prev = None
 for f in range(1, 2401):
     p = posf(f); d = dirf(f).normalized()
@@ -112,12 +123,12 @@ for f in range(1, 2401):
         u = (f - F(28.05)) / (F(30.4) - F(28.05)); d0 = dirf(F(30.4)).normalized(); p0 = posf(F(30.4))
         p = p0 - d0 * 26.0 * (1 - u); d = d0   # a clearly visible push
     if f < F(4.6):
-        p, d = lead_pose(f); lens_ov = 40.0
+        p, d = lead_pose(f); lens_ov = 38.0
     elif f < F(5.3):
         u = (f - F(4.6)) / (F(5.3) - F(4.6)); u = u * u * (3 - 2 * u); lp, ld = lead_pose(f)
-        p = lp.lerp(p, u); d = ld.lerp(d, u).normalized(); lens_ov = 40.0 + (lensf(f) - 40.0) * u
+        p = lp.lerp(p, u); d = ld.lerp(d, u).normalized(); lens_ov = 38.0 + (lensf(f) - 38.0) * u
     if f >= F(34.2):
-        p, d = follow_pose(f); lens_ov = 45.0
+        p, d = follow_pose(f); lens_ov = 38.0
     q = d.to_track_quat('-Z', 'Y'); e = q.to_euler()
     if prev is not None: e.make_compatible(prev)
     prev = e
