@@ -53,7 +53,7 @@ Build everything that does not depend on exact timing:
 
 ## Hard limits
 - No full or high-resolution renders, and no paid services.
-- Don't download the reference video. You have its still sheet.
+- Don't download the reference video. Work from its still sheet, and **match its shots closely** (except old-style references).
 - On-screen text: none, except our logo.
 - Characters:
   - Generic characters only, never a real person's likeness.

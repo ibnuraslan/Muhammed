@@ -1,6 +1,6 @@
 # B06 AshaDegree: The Disappearance Of Asha Degree
 
-- **Reference:** `blender/briefs/batch2/B06_AshaDegree_reference_1fps.jpg`. It shows one frame per second of the reference film (48 s). Study its shot order and pacing. Do not copy its narration or its exact shots.
+- **Reference:** `blender/briefs/batch2/B06_AshaDegree_reference_1fps.jpg`. It shows one frame per second of the reference film (48 s). **Match it as closely as you can**: the same shot order, subjects, framing ideas and pacing (client direction, Nov 15). Old-style references are the exception: rebuild those in our current look.
 - **Style:** current. If OLD: take the story only, and build every scene with real sets in our current look.
 
 ## Story beats (in order)
@@ -10,4 +10,4 @@
 Real missing child: a generic girl, respectful, no speculation; umbrella in hand; searchers' torches; no dark empty frames in the rain at night
 
 ## Narration
-Our own script (rewritten facts, never the reference's wording) and the client's VO mp3 will be added here as `B06_AshaDegree_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+The client supplies the script and the VO mp3. They will be added here as `B06_AshaDegree_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
