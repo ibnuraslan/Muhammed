@@ -693,18 +693,22 @@ for f in list(range(F(27.9), F(31.0), 8)) + list(range(F(31.0), F(32.3), 4)):   
     p_, n_ = jacket_pt(f, fo_point(f, "upperarm01.L", (-0.05, -0.09, 0.03)))
     place_hand(YOU, "R", f, p_, -n_, (0.2, 1, -0.6))                                  # palm on top of his near shoulder          # top of his near shoulder, outside the jacket
 for s_, sx in (("L", -1), ("R", 1)):          # he is on the floor, out of reach: let go, hands back at the sides
-    hand(s_, F(32.6), (-0.16 + sx * 0.25, 0.64, 0.80), d=(0, 0.3, -1), n=(-sx, 0, 0), curl=30)      # v009b: at his sides (he stands at x -0.16)
-    hand(s_, F(33.3), (-0.14 + sx * 0.25, 0.64, 0.80), d=(0, 0.3, -1), n=(-sx, 0, 0), curl=30)
+    hand(s_, F(32.6), (0.22 + sx * 0.25, 0.58, 0.80), d=(0, 0.3, -1), n=(-sx, 0, 0), curl=30)      # v009c: at his sides (he stands at x 0.22)
+    hand(s_, F(33.3), (0.12 + sx * 0.25, 0.64, 0.80), d=(0, 0.3, -1), n=(-sx, 0, 0), curl=30)
 body(F(28.8), (-0.06, 0.74, STAND_Z - 0.02), flex=12, sflex=6, twist=-15, head=(10, -10))
 feet(F(29.2), (-0.14, 0.72), (0.10, 0.80)); H.key_foot("L", F(29.0), Vector((-0.05, 0.76)), 180, 0.05)
 body(F(29.8), (-0.12, 0.62, STAND_Z - 0.04), flex=10, sflex=8, twist=-10, head=(10, -10))
 feet(F(30.4), (-0.24, 0.64), (0.0, 0.68)); H.key_foot("R", F(30.1), Vector((0.05, 0.74)), 180, 0.06)
 body(F(30.6), (-0.13, 0.62, STAND_Z - 0.06), flex=8, sflex=8, twist=-5, head=(15, 0))
-body(F(31.4), (-0.12, 0.63, STAND_Z - 0.09), flex=10, sflex=10, twist=-5, head=(20, 0))
-body(F(31.9), (-0.16, 0.62, STAND_Z - 0.04), flex=2, sflex=4, twist=-15, head=(20, -20))
-body(F(32.4), (-0.17, 0.60, STAND_Z), flex=2, sflex=4, twist=-20, head=(20, -25))       # upright, back from the seat, looking right down at him on the floor
-feet(F(32.4), (-0.25, 0.60), (-0.05, 0.64))
-body(F(33.2), (-0.15, 0.60, STAND_Z), flex=2, sflex=4, twist=-25, head=(20, -25))
+# v009c (director): he follows the FO as he slides out to the right, crouching, so the arms stay bent (the arm went
+# straight and through the seat back when the FO moved out of reach)
+body(F(31.4), (0.02, 0.64, STAND_Z - 0.10), flex=14, sflex=10, twist=-25, head=(20, -15))
+feet(F(31.6), (-0.05, 0.62), (0.22, 0.60))
+body(F(31.9), (0.24, 0.58, STAND_Z - 0.12), flex=18, sflex=12, twist=-35, head=(25, -25))
+feet(F(32.1), (0.10, 0.56), (0.36, 0.55))
+body(F(32.4), (0.22, 0.54, STAND_Z - 0.03), flex=6, sflex=6, twist=-35, head=(25, -35))       # upright again, looking down at him on the floor
+feet(F(32.4), (0.10, 0.56), (0.36, 0.55))
+body(F(33.2), (0.12, 0.60, STAND_Z), flex=2, sflex=4, twist=-25, head=(20, -25))
 # beat 10-11: alarms, jolt, stagger forward to the windscreen
 body(F(33.7), (0.06, 0.76, STAND_Z - 0.12), flex=20, sflex=0, twist=-5, head=(-10, 0))
 hand("L", F(33.9), (-0.40, 1.12, 1.16), d=(0, 0.3, 1), n=(1, 0, 0), curl=55)          # v009b: grabs the sides of both seat backs (was in mid-air)
@@ -789,12 +793,12 @@ SEATB(F(66.9), sflex=16, twist=75, head=(5, 80), dy=0.16, dx=-0.18); SEATB(F(67.
 SEATB(F(68.9), sflex=4, twist=-5, head=(0, -5))
 for f in range(F(68.9), F(73.5), 20):
     hands_on_yoke(f, 70, 0.004)
-SEATB(F(70.0), sflex=8, head=(0, 0), dy=0.06); SEATB(F(71.0), sflex=4, head=(-4, 0), dy=0.03); SEATB(F(72.5), sflex=2, head=(-6, 0)); SEATB(F(73.4), sflex=3, head=(-5, 0))
+SEATB(F(70.0), sflex=8, head=(0, 0), dy=0.06); SEATB(F(71.0), sflex=4, head=(-4, 0), dy=0.03); SEATB(F(72.5), sflex=2, head=(-8, 0)); SEATB(F(72.95), sflex=4, head=(-10, 2)); SEATB(F(73.4), sflex=2, head=(-11, 0))   # v009c: breathing, eyes up to the windscreen
 for s in "LR":
     RY.key_rot("orbicularis03." + s, 1, [("X", 25)]); RY.key_rot("orbicularis03." + s, F(0.6), [("X", 10)])
     RY.key_rot("orbicularis03." + s, F(1.2), [("X", 0)]); RY.key_rot("orbicularis03." + s, F(71.9), [("X", 0)])
-    RY.key_rot("orbicularis03." + s, F(72.4), [("X", -8)])                                             # wide-eyed
-RY.key_rot("jaw", 1, [("X", 0)]); RY.key_rot("jaw", F(72.0), [("X", 0)]); RY.key_rot("jaw", F(72.6), [("X", 7)])
+    RY.key_rot("orbicularis03." + s, F(72.4), [("X", -3)])                                             # v009c: open, not staring
+RY.key_rot("jaw", 1, [("X", 0)]); RY.key_rot("jaw", F(72.0), [("X", 0)]); RY.key_rot("jaw", F(72.6), [("X", 2.5)])   # v009c: lips just parted (7 bared the teeth)
 
 def quick_steps():
     """turn slow slides between sparse IK_foot keys into quick lifted steps (hold, then step in the last 14 frames)"""

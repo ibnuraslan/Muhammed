@@ -24,51 +24,61 @@ STAND_FRONT = ((0.30, 3.18, 1.78), (0.29, 3.15, 1.77))          # outside the wi
 CENTRE = ((-0.02, 1.08, 1.76), (0.0, 1.02, 1.75))              # between the pilot seats, looking aft
 WINDOW = ((-0.52, 1.50, 1.32), (-0.52, 1.56, 1.31))            # captain's eye line, out of the windscreen
 REAR = ((-0.32, -0.85, 1.72), (-0.30, -0.80, 1.70))            # doorway, looking forward over the cockpit
+HAUL_HI = ((0.35, 2.35, 1.70), (0.34, 2.33, 1.70))             # v009c: lower than v009b (the overhead panel cut the top of the frame)
+INFRONT = ((-0.25, 2.45, 1.62), (-0.24, 2.43, 1.62))          # v009c: inside the windscreen, left of centre (outside, the frames and the nose filled the lens; right of centre the FO's arm did)
+SIDE_F = ((-0.98, 1.95, 1.56), (-0.97, 1.92, 1.56))           # v009c: front-left, tighter on his face and hands on the yoke
+OTS = ((-0.80, 0.30, 1.75), (-0.78, 0.36, 1.74))               # behind-left, over the seats to the windscreen
 SHOTS = [
-    # beat 1-2: the cabin
-    (0.00, 2.10, (0.05, -3.02, 1.85), (0.05, -3.10, 1.82), YH, 30),
-    (2.10, 4.06, (0.15, -3.30, 1.85), (0.12, -3.35, 1.82), mid(YH, fixed((-0.95, -4.50, 0.80)), 0.5), 28),
+    # beat 1-2: the cabin; by 0.9 s a close shot of his face waking (director: it was unclear who "you" is)
+    (0.00, 0.90, (0.05, -3.02, 1.85), (0.05, -3.04, 1.85), YH, 30),
+    (0.90, 2.80, (0.15, -3.50, 1.75), (0.13, -3.45, 1.74), YH, 55),
+    (2.80, 4.06, (0.15, -3.30, 1.85), (0.12, -3.35, 1.82), mid(YH, fixed((-0.95, -4.50, 0.80)), 0.5), 28),
     (4.06, 5.40, (0.00, -6.60, 1.80), (0.00, -6.50, 1.78), YH, 30),
     (5.40, 6.74, (0.05, -3.00, 1.85), (0.05, -3.05, 1.85), mid(YH, fixed((-1.45, -4.70, 1.25)), 0.35), 26),
     # beat 3: up the aisle
     (6.74, 8.20, (0.00, -1.00, 1.70), (0.00, -1.05, 1.70), YH, 35),
-    (8.20, 9.16, "follow", None, fixed((0.0, -0.40, 1.30)), 28),
+    (8.20, 9.16, "follow", (0.08, -1.60, 1.00), YH, 40),         # v009c: high and tight on his back (the low view showed the aisle passengers' hands)
     # beat 4-5: the door, the captain in the doorway
     (9.16, 10.90, CENTRE[0], CENTRE[1], mid(YH, fixed((0.0, -0.60, 1.20)), 0.5), 26),
     (10.90, 11.75, CENTRE[0], CENTRE[1], mid(YH, CH, 0.5), 24),       # crouched beside the captain
-    (11.75, 13.22, STAND_FRONT[0], STAND_FRONT[1], mid(YH, CH, 0.2), 24),       # steps over him toward the seats (v009b: aim higher, the centre post stays out of frame)
+    (11.75, 13.22, INFRONT[0], INFRONT[1], mid(YH, CH, 0.2), 24),     # steps over him toward the seats
     # beat 6-8: the first officer, the radio
-    (13.22, 15.50, (-1.05, 2.00, 1.50), (-1.03, 1.96, 1.50), mid(YH, FH, 0.5), 24),
-    (15.50, 17.60, STAND_FRONT[0], STAND_FRONT[1], mid(YH, fixed((0.10, 1.40, 0.90)), 0.4), 28),
+    (13.22, 15.50, (-0.90, 2.20, 1.55), (-0.89, 2.17, 1.55), mid(YH, FH, 0.3), 24),
+    (15.50, 17.60, INFRONT[0], INFRONT[1], mid(YH, fixed((0.10, 1.40, 0.90)), 0.4), 26),
     (17.60, 19.20, (-1.00, 2.15, 1.45), (-0.99, 2.12, 1.45), mid(YH, fixed((0.00, 1.50, 0.85)), 0.7), 45),
-    (19.20, 20.40, STAND_FRONT[0], STAND_FRONT[1], YH, 35),
+    (19.20, 20.40, INFRONT[0], INFRONT[1], YH, 35),
     (20.40, 21.24, REAR[0], REAR[1], YH, 28),
     # beat 9: the haul
-    (21.24, 23.50, STAND_FRONT[0], STAND_FRONT[1], mid(YH, FH, 0.5), 24),
+    (21.24, 23.50, (-0.90, 2.20, 1.55), (-0.89, 2.18, 1.55), mid(YH, FH, 0.5), 24),
     (23.50, 24.90, REAR[0], REAR[1], mid(YH, FH, 0.5), 22),
-    (24.90, 25.82, (0.22, 2.06, 2.02), (0.21, 2.03, 2.01), mid(YH, FH, 0.6), 20),   # v009b: high from the front, he stands over the FO on the floor (the door filled the REAR view)
+    (24.90, 25.82, HAUL_HI[0], HAUL_HI[1], mid(YH, FH, 0.6), 22),
     # beat 10-11: alarms, the dive
-    (25.82, 27.40, STAND_FRONT[0], STAND_FRONT[1], YH, 26),
-    (27.40, 28.66, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, -0.6)), 24),
-    (28.66, 30.32, REAR[0], REAR[1], mid(YH, fixed((0.4, 2.4, 1.1)), 0.4), 22),
-    # beat 12-19: flying it; cut between his face, the side, the window
+    (25.82, 27.40, INFRONT[0], INFRONT[1], YH, 26),
+    (27.40, 28.40, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, -0.6)), 24),
+    (28.40, 30.32, REAR[0], REAR[1], mid(YH, fixed((0.4, 2.4, 1.1)), 0.4), 22),
+    # beat 12-19: flying it. v009c: no shots through the windscreen at his front (arms folded behind the glare shield);
+    # side shots with his hands on the yoke, the over-the-shoulder, and window inserts of 1 s at most
     (30.32, 31.90, COCK_SIDE[0], COCK_SIDE[1], YC, 28),
-    (31.90, 33.42, COCK_FRONT[0], COCK_FRONT[1], YH, 40),
-    (33.42, 35.20, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.6)), 24),
-    (35.20, 37.06, COCK_SIDE[0], COCK_SIDE[1], YC, 30),
-    (37.06, 39.00, COCK_FRONT[0], COCK_FRONT[1], YH, 42),
-    (39.00, 41.30, (-0.80, 0.30, 1.75), (-0.78, 0.36, 1.74), fixed((0.55, 2.40, 1.05)), 24),
-    (41.30, 42.90, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.2)), 24),
-    (42.90, 44.20, COCK_FRONT[0], COCK_FRONT[1], YH, 40),
+    (31.90, 33.42, SIDE_F[0], SIDE_F[1], YH, 40),
+    (33.42, 34.40, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.6)), 24),
+    (34.40, 35.90, OTS[0], OTS[1], fixed((0.55, 2.40, 1.05)), 24),
+    (35.90, 37.06, COCK_SIDE[0], COCK_SIDE[1], YC, 30),
+    (37.06, 38.70, SIDE_F[0], SIDE_F[1], YH, 42),
+    (38.70, 40.10, OTS[0], OTS[1], fixed((0.55, 2.40, 1.05)), 26),
+    (40.10, 41.30, COCK_SIDE[0], COCK_SIDE[1], YC, 28),
+    (41.30, 42.30, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.2)), 24),
+    (42.30, 44.20, SIDE_F[0], SIDE_F[1], YH, 40),
     (44.20, 46.00, COCK_SIDE[0], COCK_SIDE[1], YC, 26),
-    (46.00, 47.80, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.3)), 24),
-    (47.80, 49.56, COCK_FRONT[0], COCK_FRONT[1], YH, 42),
-    (49.56, 51.10, STAND_FRONT[0], STAND_FRONT[1], mid(YH, FH, 0.5), 22),
-    (51.10, 52.48, (1.00, 0.90, 1.90), (0.99, 0.87, 1.89), mid(FH, FS, 0.4), 22),   # v009b: the first officer on his back, face up, from the right side (the door leaf cut the CENTRE view)
-    (52.48, 54.00, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.3)), 24),
-    (54.00, 55.72, COCK_SIDE[0], COCK_SIDE[1], YC, 30),
-    # beat 19: the close-up of his face (kept from v008b by direction)
-    (55.72, 58.00, (0.56, 1.93, 1.34), (0.535, 1.86, 1.31), YH, 24),
+    (46.00, 47.00, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.3)), 24),
+    (47.00, 48.40, OTS[0], OTS[1], fixed((0.55, 2.40, 1.05)), 24),
+    (48.40, 49.56, SIDE_F[0], SIDE_F[1], YH, 42),
+    (49.56, 51.10, REAR[0], REAR[1], mid(YH, FH, 0.5), 22),         # v009c: from the doorway (through the windscreen it was washed out)
+    (51.10, 51.80, (1.00, 0.90, 1.90), (0.99, 0.88, 1.89), mid(FH, FS, 0.4), 22),   # the first officer on his back, face up (0.7 s)
+    (51.80, 53.00, COCK_SIDE[0], COCK_SIDE[1], YC, 28),
+    (53.00, 53.90, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.3)), 24),
+    (53.90, 55.72, SIDE_F[0], SIDE_F[1], YH, 40),
+    # beat 19: the close-up of his face, three-quarter from front-left, slow push in
+    (55.72, 58.00, (0.05, 2.50, 1.45), (0.09, 2.42, 1.44), YH, 50),
 ]
 CAM.animation_data_clear()
 if camd.animation_data: camd.animation_data_clear()
@@ -81,7 +91,7 @@ for (t0, t1, p0, p1, aim, lens) in SHOTS:
     for f in range(f0, f1 + 1):
         ws = [raw[g] for g in range(f - 8, f + 9)]; a = sum(ws, Vector()) / len(ws)
         u = smooth((f - f0) / max(1, f1 - f0))
-        p = rp[f] + Vector((0.08, -1.90, 0.70)) if rp else Vector(p0).lerp(Vector(p1), u)
+        p = rp[f] + Vector(p1) if rp else Vector(p0).lerp(Vector(p1), u)
         CAM.matrix_world = Matrix.Translation(p) @ (a - p).to_track_quat('-Z', 'Y').to_matrix().to_4x4()
         CAM.keyframe_insert("location", frame=f); CAM.keyframe_insert("rotation_euler", frame=f)
         camd.lens = lens; camd.keyframe_insert("lens", frame=f)
@@ -92,6 +102,14 @@ for idb in (CAM, camd):
                 for fc in cb.fcurves:
                     for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
 camd.clip_start = 0.05
+for o in bpy.data.objects:          # v009c: the sun visors hung in front of the inside cameras as a dark blurred slab
+    if o.name.startswith("SUNSHADE"): o.visible_camera = False
+# v009c: the close-up was blown out by the face fill (front-on, 25 W); dim it for the last shot
+ff = bpy.data.objects["L_face_fill"].data
+ff.energy = 25; ff.keyframe_insert("energy", frame=FN(55.72) - 1)
+ff.energy = 8; ff.keyframe_insert("energy", frame=FN(55.72))
+for fc in ff.animation_data.action.layers[0].strips[0].channelbags[0].fcurves:
+    for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
 sc.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)
 print("CAMERA shots", len(SHOTS), "saved", out)
