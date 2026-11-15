@@ -245,19 +245,16 @@ for k, f in enumerate(range(1380, 2000, 20)):
     limp = 1.0 if f < 1915 else max(0.0, 1 - (f - 1915) / 40.0)
     drift = Vector((0.12 * math.sin(k * 0.55), 0.08 * math.sin(k * 0.4 + 1.0), 0.04 * math.sin(k * 0.9)))
     DV.P(f, (xy.x + drift.x, xy.y + drift.y, RZF(f) + drift.z), yaw=180 + 16 * math.sin(k * 0.45), pitch=6 + 10 * limp + 5 * math.sin(k * 0.7), roll=10 * math.sin(k * 0.5), spine=(10 * limp - 12 * (1 - limp), 0, 8 * math.sin(k * 0.6)),
-         head=(5 * limp - 30 * (1 - limp), 0, 22 * math.sin(k * 0.55)), legs=legs((62 + 8 * math.sin(k * 0.8) - 35 * max(0.0, 1 - (f - 1380) / 140.0), 9, 100 + 10 * math.sin(k * 0.8) - 55 * max(0.0, 1 - (f - 1380) / 140.0), -40), (35, 14, 95, -20)),
-         arms=arms(l=dict(fwd=28 + 24 * math.sin(k * 0.9) + 95 * (1 - limp) + (95 + 25 * math.sin(k * 1.3)) * max(0.0, 1 - (f - 1380) / 140.0), out=30 + 10 * math.sin(k * 0.7), L=DV.ARM * (0.68 + 0.08 * math.sin(k * 1.1))), r=dict(fwd=24 + 24 * math.cos(k * 0.9) + 90 * (1 - limp) + (85 + 25 * math.cos(k * 1.3)) * max(0.0, 1 - (f - 1380) / 140.0), out=32 + 10 * math.cos(k * 0.7), L=DV.ARM * (0.68 + 0.08 * math.cos(k * 1.1)))), curl={"L": (30, 14), "R": (30, 14)},
+         head=(5 * limp - 30 * (1 - limp), 0, 22 * math.sin(k * 0.55)), legs=legs((62 + 8 * math.sin(k * 0.8) - 35 * max(0.0, 1 - (f - 1380) / 140.0), 9, 100 + 10 * math.sin(k * 0.8) - 55 * max(0.0, 1 - (f - 1380) / 140.0), -40), (35 + 15 * min(1.0, max(0.0, (f - 1820) / 40.0)), 12, 95 - 20 * min(1.0, max(0.0, (f - 1820) / 40.0)), -25)),
+         arms=arms(l=dict(fwd=28 + 24 * math.sin(k * 0.9) + 95 * (1 - limp) + (95 + 25 * math.sin(k * 1.3)) * max(0.0, 1 - (f - 1380) / 140.0) + 90 * min(1.0, max(0.0, (f - 1820) / 40.0)) * limp, out=30 + 10 * math.sin(k * 0.7), L=DV.ARM * (0.68 + 0.08 * math.sin(k * 1.1))), r=dict(fwd=24 + 24 * math.cos(k * 0.9) + 90 * (1 - limp) + (85 + 25 * math.cos(k * 1.3)) * max(0.0, 1 - (f - 1380) / 140.0) + 85 * min(1.0, max(0.0, (f - 1820) / 40.0)) * limp, out=32 + 10 * math.cos(k * 0.7), L=DV.ARM * (0.68 + 0.08 * math.cos(k * 1.1)))), curl={"L": (30, 14), "R": (30, 14)},
          jaw=4 if limp > 0.5 else 22)
 # --- beat 12: gasps, swims to the coping, clings with both hands
 COP_Z = DECK_Z + 0.06; COP_Y = EDGE_Y + 0.0
-for k, f in enumerate(range(2000, 2191, 15)):
-    t = min(1.0, (f - 2000) / 80.0)
-    y = XY1.y - 0.86 * smooth(t)
+for k, f in enumerate(list(range(1981, 2191, 15)) + [2190]):
     gasp = k % 2
-    DV.P(f, (XY1.x, y, 5.52 + 0.16 * smooth(t) - 0.03 * gasp + 0.1 * (1 - t)), yaw=180, pitch=-4 - 14 * t, spine=(4 + 10 * t + 6 * gasp, 0, 0), head=(-18 + 12 * gasp, 6 * math.sin(k), 0),
-         legs=legs((25 + 15 * math.sin(k), 8, 40 + 20 * math.sin(k), -40), (30 - 15 * math.sin(k), 8, 45 - 20 * math.sin(k), -40)),
-         arms=({"L": ("coping", dict(s="L")), "R": ("coping", dict(s="R"))} if t >= 1.0 else arms(l=dict(fwd=95 - 30 * gasp, out=30 + 8 * gasp, L=DV.ARM * (0.62 + 0.1 * gasp)), r=dict(fwd=70 + 30 * gasp, out=34 - 8 * gasp, L=DV.ARM * (0.72 - 0.1 * gasp)))),
-         jaw=26 if gasp else 12, curl={"L": (35, 25), "R": (35, 25)} if t >= 1.0 else {})
+    DV.P(f, (XY1.x, EDGE_Y + 0.36, 5.82 + 0.03 * gasp), yaw=0, pitch=8, spine=(6 + 5 * gasp, 0, 0), head=(-14 + 8 * gasp, 10 * math.sin(k * 0.5), 0),
+         legs=legs((30 + 10 * math.sin(k), 6, 50 + 15 * math.sin(k), -40), (35 - 10 * math.sin(k), 6, 55 - 15 * math.sin(k), -40)),
+         arms={"L": ("coping", dict(s="L")), "R": ("coping", dict(s="R"))}, jaw=22 if gasp else 10, curl={"L": "relaxed", "R": "relaxed"})
 # resolve special arm kinds after body keys exist
 _key_hands_base = DV.key_hands
 def diver_hands(f, p):
@@ -287,8 +284,8 @@ def diver_hands(f, p):
             a[s] = ("world", dict(W=W, d=fwd_, n=-up_, pole=W + Vector((-0.3, 0.2, 0.5))))
         elif kind == "coping":
             sx = 1 if s == "L" else -1
-            W = Vector((XY1.x + sx * 0.24, COP_Y + 0.1, COP_Z + 0.062))
-            a[s] = ("world", dict(W=W, d=Vector((0, -1, -0.15)), n=Vector((0, 0, -1)), pole=W + Vector((sx * 0.6, 0.45, -0.3))))
+            W = Vector((XY1.x + sx * 0.2, COP_Y - 0.17, COP_Z + 0.055))      # forearms on the edge, hands flat on the deck in front of her
+            a[s] = ("world", dict(W=W, d=Vector((-sx * 0.15, -1, 0)).normalized(), n=Vector((0, 0, -1)), pole=W + Vector((sx * 0.45, 0.4, -0.35))))
     _key_hands_base(f, p)
 DV.key_hands = diver_hands
 DV.bake()
@@ -660,7 +657,7 @@ def k2_path(f):
     t = smooth(max(0.0, min(1.0, (f - RUN0) / (RUN1 - RUN0)))); return P0.lerp(P1, t)
 d_ = (P1 - P0); YAW_RUN = math.degrees(math.atan2(d_.x, -d_.y))
 def k2_yaw(f):
-    return YAW_RUN if f < RUN1 else YAW_RUN + (180 - YAW_RUN) * smooth(min(1.0, (f - RUN1) / 25.0))
+    return YAW_RUN if f < RUN1 else YAW_RUN + (255 - YAW_RUN) * smooth(min(1.0, (f - RUN1) / 25.0))      # turned toward her
 for f in (1, 900, RUN0):
     p = k2_path(f)
     K2H.key_root(f, Vector((p.x, p.y, GROUND[0] + K2H.root_head.z - 0.02)), yaw=k2_yaw(f))
@@ -670,7 +667,7 @@ K2H.walk(k2_path, k2_yaw, RUN0, RUN1, stride=1.05, lift=0.1, bob=0.03, crouch=0.
 for f in (RUN1 + 30, RUN1 + 90, END):
     p = k2_path(f)
     K2H.key_root(f, Vector((p.x, p.y, GROUND[0] + K2H.root_head.z - (0.12 if f < RUN1 + 60 else 0.42))), yaw=k2_yaw(f), flex=12)
-    K2H.key_spine(f, flex=34 if f < RUN1 + 60 else 22, head=(25, 0) if f < RUN1 + 60 else (-12, 0))
+    K2H.key_spine(f, flex=34 if f < RUN1 + 60 else 14, head=(25, 0) if f < RUN1 + 60 else (-30, -15))
     for s_ in "LR": K2H.key_foot(s_, f, K2H.foot_xy(s_, p, k2_yaw(f)), k2_yaw(f))
 # the buoy: a real ring life-buoy (orange/white bands), held in both hands
 bpy.ops.mesh.primitive_torus_add(major_radius=0.26, minor_radius=0.055, major_segments=48, minor_segments=16)

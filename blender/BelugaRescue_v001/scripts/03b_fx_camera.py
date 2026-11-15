@@ -671,8 +671,8 @@ for _a in range(0, 360, 30):
 _D = _best[1]; print("ASCENT side dir", tuple(round(x, 2) for x in _D))
 cut_shot(1855, 1925, lambda f: V(*((_mid(f) + _D * 3.4)[:2]), min(_mid(f).z - 0.25, 5.2)), lambda f: _mid(f).lerp(H_(f), 0.2), 30, fstop=11.0)
 # surface shot: just above the water, in front of her face, she gasps and moves to the edge
-cut_shot(1926, 2080, lambda f: H_(f) + V(0.3, 1.6, 0.3), lambda f: H_(f) + V(0, 0, 0.05), 30, fstop=8.0)
+cut_shot(1926, 1979, lambda f: H_(f) + V(0.3, 1.7, 0.35), lambda f: H_(f) + V(0, 0, 0.05), 32, fstop=8.0)
 # 2: ending — on the deck at kneeling height, 1.5 m in front of her face; keeper kneeling beside her
-cut_shot(2081, END, lambda f: H_(f) + V(-0.35, 1.5, 0.35), lambda f: H_(f) + V(0.25, -0.35, 0.35), 26, fstop=8.0)      # face on, keeper kneeling behind/beside her on the deck
+cut_shot(1980, END, lambda f: H_(f) + V(-0.7, -1.25, 0.22), lambda f: H_(f) + V(0.35, 0, 0.22), 26, fstop=8.0)      # on the deck, kneeling height, 3/4 front of her face; keeper beside her
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("FX_CAM_DONE", OUT)
