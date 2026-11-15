@@ -269,7 +269,8 @@ stand(SUR, 566, ST, yT, spine=(18, 0, 0)); P1_ = Vector((1.36, 0.7)); h1_ = unwr
 walk(SUR, ST, P1_, 567, 625, yT, h1_, stride=0.45); walk(SUR, P1_, SB_, 626, 660, h1_, yB_W, stride=0.4)   # v009d: faces where he walks
 for f in range(662, 1309, 60):
     _up = smoothstep(770, 800, f) * (1 - smoothstep(1040, 1070, f))   # v009d: stands up while the ear grows (his cap was in the x-ray camera)
-    stand(SUR, f, SB_, yB, spine=((22 - 16 * _up) + 2 * math.sin(f * 0.05), 0, 2 * math.sin(f * 0.07)), head=(30 - 14 * _up, 0, 0), crouch=0.04 * (1 - _up))
+    _bw = 22 if f < 1100 else 12; _hw = 30 if f < 1100 else 18   # v009i: less bowed for the lift-out (the lifted ear came up to his face)
+    stand(SUR, f, SB_, yB, spine=((_bw - (_bw - 6) * _up) + 2 * math.sin(f * 0.05), 0, 2 * math.sin(f * 0.07)), head=(_hw - (_hw - 16) * _up, 0, 0), crouch=0.04 * (1 - _up))
 walk(SUR, SB_, SC_, 1312, 1370, yB, yC + 360 if False else yC - 0.0 if abs(yB - yC) < 180 else yC + 360, stride=0.3)
 for f in [1371] + list(range(1420, B["b9"], 50)):
     stand(SUR, f, SC_, yC + 360 if abs(yB - (yC + 360)) < abs(yB - yC) else yC, spine=(8, 0, 0), head=(26, 0, 0), crouch=0.0)   # v009d: shoulders above the ear so the needle points down at it
@@ -333,7 +334,7 @@ for f in range(1300, 1360, 4):   # v009d: ear carried in front of the chest from
 # beat 3: carving at the tray. L holds the block, R draws the scalpel over it in strokes
 for f in range(343, 565, 6):
     k = (f - 343) / 37.0
-    away = Vector((0, 0.03, 0.14)) * (1 - smoothstep(345, 372, f)) + Vector((0, 0.06, 0.03)) * smoothstep(462, 488, f)
+    away = Vector((0, 0.03, 0.05)) * (1 - smoothstep(345, 372, f)) + Vector((0, 0.06, 0.03)) * smoothstep(462, 488, f)
     apartL = Vector((0.05, 0, 0)) * (1 - smoothstep(345, 380, f)); apartR = Vector((-0.03, 0, 0)) + Vector((-0.04, 0, 0)) * (1 - smoothstep(345, 380, f))   # v009e: hands never stacked   # hands come in after the camera leaves the block, lift off to reveal the ear
     shL = Vector((ST.x + 0.18, ST.y - 0.08, 1.38)); gripL = BLK + Vector((0.028, -0.005, 0.01))
     dL = (gripL - shL).normalized()
@@ -357,10 +358,11 @@ sh(775, "R", INC + Vector((-0.1, 0.24, 0.0)), (0.2, -1, -0.5), (-0, -0.4, 1))
 sh(700, "L", INC + Vector((0.1, 0.11, 0.05)), (-0.4, -1, -0.6), (-0, -0.4, 1))
 sh(775, "L", INC + Vector((0.12, 0.16, 0.1)), (-0.4, -1, -0.4), (-0, -0.4, 1))
 # beat 6: reopen and lift the ear out
-sh(1063, "R", INC + Vector((-0.12, 0.2, 0.12)), (0.2, -1, -0.4), (-0, -0.4, 1))
-sh(1120, "R", INC + Vector((-0.05, 0.135, 0.055)), (0.3, -1, -0.6), (-0, -0.4, 1))
-sh(1160, "R", INC + Vector((-0.05, 0.135, 0.055)), (0.3, -1, -0.6), (-0, -0.4, 1))
-sh(1240, "R", INC + Vector((-0.06, 0.17, 0.14)), (0.2, -1, -0.3), (-0, -0.3, 1))
+sh(1063, "R", INC + Vector((-0.08, 0.2, 0.03)), (0.2, -1, -0.5), (-0, -0.4, 1))   # v009i: low by the arm (forceps came up to his face)
+sh(1120, "R", INC + Vector((-0.07, 0.12, 0.07)), (0.3, -1, -0.6), (-0, -0.4, 1))   # v009i: low over the arm, well below his face
+sh(1160, "R", INC + Vector((-0.1, 0.1, 0.08)), (0.3, -1, -0.6), (-0, -0.4, 1))
+sh(1200, "R", INC + Vector((-0.1, 0.1, 0.1)), (0.3, -1, -0.6), (-0, -0.4, 1))
+sh(1240, "R", INC + Vector((-0.1, 0.12, 0.1)), (0.2, -1, -0.4), (-0, -0.3, 1))   # v009i: the lifted ear stays below his face
 sh(1252, "R", INC + Vector((0.07, 0.27, -0.04)), (0.2, -1, -0.6), (-0, -0.3, 1))   # v009f: the ear comes straight back to him, low over the arm (not by her chin on screen)
 sh(1063, "L", INC + Vector((0.12, 0.16, 0.1)), (-0.4, -1, -0.4), (-0, -0.4, 1))
 sh(1110, "L", INC + Vector((0.1, 0.11, 0.05)), (-0.4, -1, -0.6), (-0, -0.4, 1))
@@ -371,8 +373,9 @@ def at_ear(off_out, off_fwd, off_up):
     # surgeon reaches from behind the head (+Y); off_out pushes away from the skull, off_fwd along -Y
     back = Vector((0, 1, 0))
     return EAR_W + side * (off_out * 0.35) + back * (off_out * 0.9) - back * off_fwd + Vector((0, 0, 1)) * off_up
-sh(1380, "R", at_ear(0.32, 0.0, 0.16), (-0.3, -1, -0.4), (0, 0, 1))   # v009e (approved): over and outside the head, never through it
-sh(1390, "R", at_ear(0.16, 0.0, 0.05), (-0.3, -1, -0.4), (0, 0, 1))   # v009e: the ear comes in from the side, close to the head
+sh(1380, "R", at_ear(0.24, 0.0, 0.0), (-0.3, -1, -0.4), (0, 0, 1))   # v009i: straight in from his chest, low (the arc over the head put the forceps by his own face)   # v009e (approved): over and outside the head, never through it
+sh(1390, "R", at_ear(0.16, 0.0, 0.05), (-0.3, -1, -0.4), (0, 0, 1))
+carry_key(1647, "R", (0.12, 0.22, 0.12), (0.4, -1, 0.0))   # v009i: after the last stitch the hand comes back to his own chest (it crossed the patient)   # v009e: the ear comes in from the side, close to the head
 sh(1440, "R", at_ear(0.14, 0.0, 0.07) + Vector((0, 0, 0.02)) + side * 0.012, (-0.3, -1, -0.5), (0, 0, 1))
 sh(1470, "R", at_ear(0.26, 0.0, 0.16) + Vector((0, 0, 0.02)), (-0.3, -1, -0.5), (0, 0, 1))   # v009d: lifts off the scalp
 sh(1500, "R", at_ear(0.16, 0.0, 0.1) + Vector((0, 0, 0.02)), (-0.3, -1, -0.4), (0, 0, 1))
@@ -421,7 +424,7 @@ for it in range(3):
     worst = 0.0
     for rec in SUR_TIPS:
         f, s_, tip, W, d, n = rec
-        if f > 1650 or (343 <= f < 566): continue   # stitching / carving: keep the hand above the ear so the macro shows the stitches
+        if f > 1650 or (343 <= f < 566) or (1100 <= f <= 1245): continue   # v009i: lift-out keys are kept low (the tip-fix pulled the hand up to his face)   # stitching / carving: keep the hand above the ear so the macro shows the stitches
         ev_at(f); WM = SUR.o.matrix_world @ SUR.R.PB["wrist." + s_].matrix
         if s_ == "R":
             if f <= 1500:

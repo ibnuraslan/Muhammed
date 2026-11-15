@@ -185,7 +185,7 @@ SEGS = [
     (132, V(-0.25, -1.45, 1.65), PC + V(0.1, 0, 0.45), 28), (145, V(0.05, -1.5, 1.62), PC + V(0.04, 0, 0.42), 28),
     (155, V(0.08, -1.48, 1.62), PC + V(0.04, 0, 0.42), 28)],
   [  # v009i: insert - the harvested rib cartilage already on the tray (the see-through x-ray chest is gone, client)
-    (156, BLK + V(0.05, -0.26, 0.26), BLK + V(0, 0, 0.0), 48), (295, BLK + V(0.04, -0.22, 0.19), BLK + V(0, 0, 0.0), 45)],
+    (156, BLK + V(0.05, -0.28, 0.28), BLK + V(0, 0, 0.0), 46), (295, BLK + V(0.03, -0.15, 0.13), BLK + V(0, 0, 0.0), 50)],
   [ (296, V(1.32, -1.28, 1.62), PC.lerp(BLK, 0.5) + V(0, 0, 0.32), 28), (306, V(1.3, -1.25, 1.62), PC.lerp(BLK, 0.6) + V(0, 0, 0.3), 28),
     (322, V(0.85, -1.45, 1.58), BLK + V(0, 0, 0.22), 32),
     # v009i: tray at chest height from his front: his masked face in the top third, looking down at his hands (no headless torso)
@@ -195,9 +195,9 @@ SEGS = [
     # the patient's head at left, the arm on the board, the surgeon's face at right (no lone arm, no gloves in the lens)
     (579, BLK + V(0.06, -0.85, 0.32), BLK + V(-0.02, 0.24, 0.36), 30)],
   [  # v009i: clean cut - he walks toward the camera from the tray and turns to the arm
-    (580, V(2.1, 1.35, 1.5), V(1.3, 0.05, 1.3), 28), (610, V(2.08, 1.35, 1.5), V(1.35, 0.45, 1.32), 28), (632, V(2.06, 1.31, 1.5), V(1.15, 0.8, 1.3), 28)],
+    (580, V(2.1, 1.35, 1.5), V(1.3, 0.05, 1.3), 28), (606, V(2.08, 1.35, 1.5), V(1.35, 0.42, 1.32), 28)],
   [  # v009i: clean cut - the arm two-shot
-    (633, V(0.45, -0.88, 1.38), V(0.5, 0.5, 1.22), 28),
+    (607, V(0.4, -0.92, 1.4), V(0.4, 0.42, 1.22), 26), (633, V(0.45, -0.88, 1.38), V(0.5, 0.5, 1.22), 28),
     (680, V(0.36, -0.86, 1.35), V(0.3, 0.32, 1.17), 28), (730, V(0.35, -0.8, 1.5), V(0.3, 0.32, 1.17), 30),
     (760, V(0.35, -0.78, 1.52), V(0.3, 0.3, 1.16), 31), (795, V(0.35, -0.78, 1.52), V(0.3, 0.3, 1.16), 31)],
   [  # v009i: clean cut - the ear growing reads as a clear bump under the skin, with a gentle push-in (no glassy x-ray skin)
@@ -205,7 +205,7 @@ SEGS = [
   [  # v009i: clean cut - time passes: the patient asleep, the surgeon waiting beside the arm (faces)
     (881, V(0.38, -0.82, 1.45), V(0.28, 0.3, 1.14), 30), (1062, V(0.33, -0.74, 1.44), V(0.28, 0.3, 1.14), 31)],
   [ (1071, INC + V(0.18, -0.43, 0.68), INC, 44), (1130, INC + V(0.3, -0.62, 0.54), INC + V(0, 0, 0.02), 40),
-    (1180, INC + V(0.32, -0.64, 0.56), INC + V(0, 0.02, 0.03), 38), (1240, INC + V(0.25, -0.72, 0.34), INC + V(-0.02, 0.1, 0.18), 32), (1266, V(0.6, -0.78, 1.46), V(0.4, 0.42, 1.24), 26), (1300, V(0.6, -0.78, 1.5), V(0.4, 0.45, 1.24), 26),
+    (1180, INC + V(0.32, -0.64, 0.56), INC + V(0, 0.02, 0.03), 38), (1240, INC + V(0.25, -0.75, 0.18), INC + V(-0.02, 0.1, 0.3), 32), (1266, V(0.6, -0.8, 1.32), V(0.4, 0.42, 1.3), 26), (1300, V(0.6, -0.78, 1.5), V(0.4, 0.45, 1.24), 26),
     (1330, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.2), 26), (1340, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.2), 26), (1345, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.22), 26)],
   [  # v009i: clean cut - medium profile of his head with the new ear to camera; the surgeon's glove and forceps at the ear, his face at right
     (1346, EAR_W + V(0.46, -0.66, 0.16), EAR_W + V(0.11, 0.09, 0.04), 32), (1440, EAR_W + V(0.42, -0.6, 0.15), EAR_W + V(0.1, 0.08, 0.04), 34)],
