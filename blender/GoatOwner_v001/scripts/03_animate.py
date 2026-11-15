@@ -504,7 +504,10 @@ def pa(f):                                                                      
     g_ = gpos(f); new = Vector((-3.0, min(g_.y - 0.2, RAMP[1] + 0.5)))                         # then walks up beside the ramp, outside the truck's left side
     w = min(1.0, max(0.0, (f - 1775) / 40.0)); w = w * w * (3 - 2 * w)
     return old.lerp(new, w)
-pb_ = lambda f: _cl(gpos(f) + Matrix.Rotation(R_(gh(f)), 2) @ Vector((1.6, 0.9)))           # walks wide beside it (it used to pass through him)
+def pb_(f):                                                                                   # follows behind it on the far side from the camera,
+    p_ = _cl(gpos(min(f, 1760)) + Matrix.Rotation(R_(gh(min(f, 1760))), 2) @ Vector((-1.4, 1.6)))   # stops at 1760 (2 m clear of the goat)
+    w = min(1.0, max(0.0, (f - 1790) / 40.0)); w = w * w * (3 - 2 * w)
+    return p_.lerp(Vector((4.6, 8.8)), w)                                                    # then walks off east, behind the camera
 OFF_PATH = {}
 for h_, fn in ((OA, pa), (OB_, pb_)):
     st_ = V(-3.5, 11.0, 0) if h_ is OA else V(-2.3, 11.8, 0)
@@ -752,8 +755,9 @@ CAMK = [
  (1560, (6.6, -1.4, 2.3), (6.3, 2.4, 0.4), 26),            # pull away, orbit and rise
  (1600, (8.6, -1.6, 3.6), (6.2, 2.6, 0.4), 24),
  (1690, (5.0, -5.0, 6.5), (4.0, 3.5, 0.4), 22),
- (1735, (0.6, 1.0, 4.0), ("gb",), 24),
- (1800, (1.8, 5.6, 1.5), ("gb",), 28),
+ (1735, (1.8, 3.6, 1.0), ("ga",), 26),                     # ground-level side view: the goat walks, hooves on the ground (the high view read as a leap)
+ (1770, (0.6, 3.7, 0.95), ("ga",), 26),
+ (1800, (-0.2, 4.3, 1.0), ("ga",), 26),
  (1860, (2.6, 8.2, 1.6), ("ga",), 24),                     # the ramp, the goat and the officer with the pole all in frame
  (1880, (2.7, 8.6, 1.7), ("ga",), 24),
  (1895, (2.6, 9.0, 2.1), ("ga",), 24),
