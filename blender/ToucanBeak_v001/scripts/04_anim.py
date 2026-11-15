@@ -287,6 +287,7 @@ for f in (530, 900, 1400, 1960):
     stand(VA, f, A_POS, 180, flex=6, head=(14, 0), spine_flex=8)
 for f in (530, 700, 1500, 1960):
     stand(VB, f, B_POS, 0, flex=8, head=(18, 0), spine_flex=10)
+stand(VB, 1720, B_POS, 0, flex=10, head=(32, -6), spine_flex=12); stand(VB, 1850, B_POS, 0, flex=10, head=(30, 6), spine_flex=12)   # v007: looks down at the beak
 # VetA cradles the bird the whole clinic stay
 for f in (530, 1000, 1500, 1960):
     pass
@@ -381,10 +382,11 @@ key_vis(glue, [(1, False), (1736, True), (1976, False)])
 bld = glue.modifiers.new("grow", 'BUILD'); bld.frame_start = 1736; bld.frame_duration = 34
 # assistant: background walk (life)
 # the assistant walks to the desk and works the mouse while the monitor shows the 3D beak (director note, 12 s)
-AS_DESK = Vector((9.0, 1.95, 0))
+AS_DESK = Vector((9.12, 1.85, 0))   # v007: closer to the mouse, the arm bends
 AS.walk(lambda f: Vector((5.0, 2.15, 0)).lerp(AS_DESK, smooth((f - 560) / 100)), lambda f: yaw_of_xy(AS_DESK - Vector((5.0, 2.15, 0))) if f < 655 else 90, 560, 660, stride=0.72)
 # v006: the assistant looks at the monitor (face in profile for the over-shoulder shot)
 stand(AS, 672, (AS_DESK.x, AS_DESK.y), 90, head=(16, -40)); stand(AS, 1505, (AS_DESK.x, AS_DESK.y), 90, head=(16, -40)); stand(AS, 1520, (AS_DESK.x, AS_DESK.y), 90, head=(12, 0))
+stand(AS, 975, (AS_DESK.x, AS_DESK.y), 90, head=(16, -40)); stand(AS, 1045, (AS_DESK.x, AS_DESK.y), 90, head=(8, -75), twist=-30)   # v007 (c): turns to the printer
 stand(AS, 1560, (AS_DESK.x, AS_DESK.y), 90, head=(18, 0))
 _md = OB["desk"]; DESK_TOP = max((_md.matrix_world @ v.co).z for v in _md.data.vertices)
 mouse = bpy.data.objects.new("Mouse", bpy.data.meshes.new("Mouse")); C_ANIM.objects.link(mouse)
@@ -671,6 +673,12 @@ for obj_, s_, f0_, f1_, g_, pz_ in ((SCN, "R", 528, 744, "wrap", "wrap_grip"), (
         HP.grip_object(VB.r.o, s_, f_, obj_, C_, ap_.normalized(), grip=("pinch" if g_ == "pinch" else "wrap"))
         HP.apply_pose(VB.r.o, s_, ("pinch" if g_ == "pinch" else ("cup_hold" if obj_ is PRO else "wrap_grip")), f_, spread=0.0)   # cup the prosthetic (a closed fist read as punching the head)   # v006: closed, even fingers (no fan)
 hpose(VB, "R", (1968, 1975), "relaxed")               # released after setting the tweezers down
+def _steady(side, frames):
+    for f_ in frames:
+        ev(f_); C_ = PRO.matrix_world @ (LB_base + (LB_tip - LB_base) * 0.85 + Vector((0, 0, 0.012)))
+        HP.grip_object(VB.r.o, side, f_, PRO, C_, Vector((0, 0, -1))); HP.apply_pose(VB.r.o, side, "cup_hold", f_, spread=0.0)
+_steady("R", range(1716, 1795, 6))     # v007: R steadies the new beak while L glues
+_steady("L", range(1816, 1941, 6))     # v007: L steadies it while R pins
 hpose(VB, "R", (748,), "relaxed")                     # released after setting the scanner down
 ev(1910); print("PIN at 1910", [round(x, 3) for x in PIN.matrix_world.translation], "target", [round(x, 3) for x in pin_in])
 ev(1768); print("SYR tip region at 1768", [round(x, 3) for x in (SYR.matrix_world @ Vector((0, 0, 0.06)))], "dist", round((SYR.matrix_world @ Vector((0, 0, 0.06)) - seam).length, 3), "seam", [round(x, 3) for x in seam])
@@ -739,9 +747,14 @@ bpy.context.view_layer.update()
 mwn = newhalf.matrix_world.copy(); newhalf.parent = grow; newhalf.matrix_parent_inverse = grow.matrix_world.inverted(); newhalf.matrix_world = mwn
 grow.rotation_mode = 'QUATERNION'; grow.rotation_quaternion = Vector((0, 1, 0)).rotation_difference(ax_w)
 bpy.context.view_layer.update(); mwn = newhalf.matrix_world.copy(); newhalf.matrix_parent_inverse = grow.matrix_world.inverted(); newhalf.matrix_world = mwn
-for f, k_ in ((1, 0.02), (860, 0.02), (1000, 1.0)):
+for f, k_ in ((1, 0.02), (860, 0.02), (905, 1.0)):   # v007: snaps on (screen close-up is short)
     grow.scale = (1.0, k_, 1.0); grow.keyframe_insert("scale", frame=f)
 key_vis(newhalf, [(1, False), (860, True), (1140, False)])
+for o_ in [newhalf] + list(stump):     # v007: the full beak turns to a CAD wireframe at the end of the screen close-up
+    w_ = o_.modifiers.new("wire", 'WIREFRAME'); w_.thickness = 0.0012; w_.use_replace = True
+    w_.show_render = False; o_.keyframe_insert('modifiers["wire"].show_render', frame=1)
+    w_.show_render = True; o_.keyframe_insert('modifiers["wire"].show_render', frame=925)
+    constant(o_)
 for o in stump: key_vis(o, [(1, False), (690, True), (1140, False)])
 for o in ref: key_vis(o, [(1, False), (690, True), (858, False)])
 # ---- ghost demo bird (beat 7): copy rig + meshes, translucent; heavy beak tips the head
@@ -902,6 +915,49 @@ STK = lambda a: PV + (Quaternion(Vector((1, 0, 0)), R_(a)) @ base_q) @ Vector((0
 BC = BIRD_C; HEADC = bw((0, 0.03, 0.25)); BEAKC = bw((LB_base + LB_tip) / 2); SEAM = seam
 SCREEN = Vector(sc["SCREEN"]) + Vector((0.0, 0, 0.06))
 ENC = BIRD_E; HEADE = BIRD_E + Vector((0, 0.03, 0.25))
+# ================================================================== v007 TIME REMAP (director, Nov 14): the rebuild section becomes
+# 3 short shots + a gag + a printer push-in; everything after moves 440 frames earlier; the ending is cut at old 2190.
+SEGS = [(676, 1060, 676, 896), (1060, 1340, 896, 986), (1340, 1546, 986, 1106)]
+def g(f):
+    if f <= 676: return f
+    for a0, a1, b0, b1 in SEGS:
+        if f <= a1: return b0 + (f - a0) * (b1 - b0) / (a1 - a0)
+    return f - 440
+def ginv(n):
+    if n <= 676: return n
+    for a0, a1, b0, b1 in SEGS:
+        if n <= b1: return a0 + (n - b0) * (a1 - a0) / (b1 - b0)
+    return n + 440
+END = 1750
+def _fcurves():
+    for a_ in bpy.data.actions:
+        for lay in a_.layers:
+            for st in lay.strips:
+                for cb in st.channelbags:
+                    for fc in cb.fcurves: yield fc
+_nk = 0
+for fc in _fcurves():
+    for kp in fc.keyframe_points:
+        kp.co.x = g(kp.co.x); kp.handle_left.x = g(kp.handle_left.x); kp.handle_right.x = g(kp.handle_right.x); _nk += 1
+    fc.update()
+glue.modifiers["grow"].frame_start = int(g(1736))
+sc.frame_end = END
+print("TIME_REMAP keys", _nk)
+# ---- v007 beat-7 gag (new frames 896-985): VetB weighs a solid (heavy) beak in his palm, frowning
+HBK = bpy.data.objects.new("Solid_beak", UP.data.copy()); C_ANIM.objects.link(HBK)
+HBK.data.materials.clear(); HBK.data.materials.append(bpy.data.materials["Heavy_beak"])
+for f_, dz in ((892, 0.0), (906, 0.0), (918, -0.035), (930, 0.0), (942, -0.03), (955, 0.0), (986, 0.0)):
+    HP.place_hand(VB.r.o, "R", f_, Vector((6.86, 0.1, 1.3 + dz)), Vector((0.2, -0.35, 1.0)).normalized(), Vector((-0.45, -1.0, 0.15)).normalized())   # palm up-forward, held out at chest height
+for f_ in (892, 986): HP.apply_pose(VB.r.o, "R", "hold_flat_object", f_, spread=0.0)   # open palm, the beak lies on it
+for f_, h_ in ((892, (28, 10)), (918, (30, -8)), (942, (30, 8)), (970, (28, -4)), (986, (26, 0))):
+    stand(VB, f_, B_POS, 0, flex=8, head=h_, spine_flex=10)
+ev(892); _rg = VB.r.o; _pb = _rg.pose.bones
+_palm = _rg.matrix_world @ _pb["wrist.R"].head.lerp(_pb["finger3-1.R"].head, 0.6)
+_mc = sum((v.co for v in HBK.data.vertices), Vector()) / len(HBK.data.vertices)
+HBK.rotation_mode = 'QUATERNION'
+HBK.matrix_world = Matrix.Translation(_palm + Vector((0, 0, 0.06))) @ Matrix.Rotation(R_(90), 4, 'Z') @ Matrix.Translation(-_mc)
+follow(HBK, _rg, "R", 892, 986)
+key_vis(HBK, [(1, False), (896, True), (986, False)])
 K = [  # frame, position, target, lens, focus target(None = target)
  (1, BIRD_J + Vector((0.85, 1.25, -0.55)), HEADJ + Vector((0, 0, -0.08)), 24),
  (34, BIRD_J + Vector((0.75, 0.85, 0.05)), HEADJ, 28),
@@ -965,50 +1021,58 @@ K = [  # frame, position, target, lens, focus target(None = target)
  (2250, ENC + Vector((0.82, 0.55, 0.3)), HEADE, 36),
 ]
 fp, ft, fl = catmull([(k[0], k[1]) for k in K]), catmull([(k[0], k[2]) for k in K]), pchip([(k[0], float(k[3])) for k in K])
-# ---- v006: the "computer rebuild" plays ON the clinic monitor. The void set is moved every frame so the old void camera's
-# view sits behind the screen hole as seen from EYE (over the assistant's shoulder): a live 3D display, no void, no blank frames.
-fpo, fto = fp, ft
-EYE = Vector((8.35, 1.2, 1.4)); AS_HEAD = Vector((9.3, 1.95, 1.31)); AIM = SCREEN * 0.55 + AS_HEAD * 0.45
-M_EYE = Matrix.LocRotScale(EYE, (SCREEN - EYE).to_track_quat('-Z', 'Y'), None)
+# ---- v007: shot (b) is a close-up of the monitor; the void set is moved behind the screen hole as seen from that camera
+fpo, fto = fp, ft            # old (void) camera path, OLD frame numbers
+E_B = SCREEN + Vector((-0.5, 0.0, 0.0))
+M_EYE = Matrix.LocRotScale(E_B, (SCREEN - E_B).to_track_quat('-Z', 'Y'), None)
 VROOT = bpy.data.objects.new("Void_display_root", None); C_ANIM.objects.link(VROOT)
 skip = {"Void_box", "Void_front", "Camera", "Cam_focus", "Void_display_root", "Printer_root"}
 vtops = set()
-for f_ in (700, 760, 900, 1050, 1200, 1350, 1415):
-    ev(f_)
+for f_ in [g(x) for x in (700, 760, 900, 1050, 1200, 1350, 1415)]:
+    ev(int(f_))
     for o in list(C_ANIM.objects) + list(OB.get("Void_box").users_collection[0].objects):
         if o.parent is None and o.name not in skip and not o.name.startswith("Void_light") and o.type != 'CAMERA':
             if o.matrix_world.translation.x > 10.45: vtops.add(o.name)
-for n in sorted(vtops):
-    OB[n].parent = VROOT; OB[n].matrix_parent_inverse = Matrix()
+for n_ in sorted(vtops):
+    OB[n_].parent = VROOT; OB[n_].matrix_parent_inverse = Matrix()
 print("VOID_DISPLAY children", sorted(vtops))
 VROOT.rotation_mode = 'QUATERNION'
-for f in [690] + list(range(700, 1421)):
-    ff = max(f, 700); po = fpo(ff); qo = (fto(ff) - po).to_track_quat('-Z', 'Y')
-    Cv = Matrix.LocRotScale(po, qo, None)
-    R = M_EYE @ Matrix.Translation((0, 0, -1.8)) @ Matrix.Scale(2.0, 4) @ Cv.inverted()
+for n_ in range(670, 1100):
+    old = min(max(ginv(n_), 700), 1420); po = fpo(old); qo = (fto(old) - po).to_track_quat('-Z', 'Y')
+    R = M_EYE @ Matrix.Translation((0, 0, -1.0)) @ Matrix.Scale(2.0, 4) @ Matrix.LocRotScale(po, qo, None).inverted()
     lo, qq, ss = R.decompose(); VROOT.location = lo; VROOT.rotation_quaternion = qq; VROOT.scale = ss
-    VROOT.keyframe_insert("location", frame=f); VROOT.keyframe_insert("rotation_quaternion", frame=f); VROOT.keyframe_insert("scale", frame=f)
-# real camera keys: replace the void flight + the close glove shots + the door fly-through
-FACEB_SEAM = Vector((6.92, 0.2, 1.32))
-K2 = [k for k in K if not (606 <= k[0] <= 1560 or 1745 <= k[0] <= 1840 or 1950 <= k[0] <= 1965)] + [
- (636, Vector((6.5, 0.42, 1.72)), BEAKC + Vector((0.08, -0.25, 0.05)), 30),     # over VetB's shoulder: VetA's face + the bird
- (681, Vector((6.45, -0.42, 1.6)), Vector((6.92, 0.2, 1.35)), 28),             # beat 679: VetB's face + the bird (no back of head)
- (693, Vector((7.5, -0.25, 2.0)), Vector((8.6, 1.2, 1.3)), 26),               # v006: over the table, clear of VetB (the direct path went through him: black frame)
- (706, Vector((7.75, 0.95, 1.75)), Vector((9.2, 1.6, 1.15)), 26),
- (725, EYE + Vector((-0.05, 0.03, 0.02)), AIM, 22),                              # the assistant's profile + the model on screen
- (1000, EYE, AIM, 22),
- (1410, EYE + Vector((0.04, -0.03, -0.01)), AIM, 22),
- (1421, BENCH_PT + Vector((-1.35, 0.35, 0.55)), BENCH_PT + Vector((0, 0, 0.22)), 30),   # cut: the real printer on the bench
- (1490, BENCH_PT + Vector((-1.25, 0.1, 0.5)), BENCH_PT + Vector((0, 0, 0.2)), 32),
- (1545, BENCH_PT + Vector((-1.2, -0.05, 0.48)), BENCH_PT + Vector((0, 0, 0.2)), 32),
- (1546, Vector((5.6, -0.25, 1.6)), Vector((7.0, 0.0, 1.25)), 26),               # cut: start on the two vets
- (1750, Vector((6.45, -0.42, 1.5)), FACEB_SEAM, 30),                            # hand, tool, beak and VetB's face together
- (1800, Vector((6.42, -0.45, 1.52)), FACEB_SEAM, 30),
- (1836, Vector((6.4, -0.5, 1.55)), FACEB_SEAM, 28),
- (1955, Vector((4.55, -0.22, 1.52)), BC + Vector((0, 0, 0.3)), 24),
- (1962, Vector((2.45, -0.52, 1.5)), HEADE + Vector((0, 0, 0.1)), 24)]           # cut: straight to the garden
+    VROOT.keyframe_insert("location", frame=n_); VROOT.keyframe_insert("rotation_quaternion", frame=n_); VROOT.keyframe_insert("scale", frame=n_)
+# ---- v007 camera: old keys re-timed, the re-staged sections replaced (NEW frame numbers)
+FACEB_SEAM = Vector((6.92, 0.2, 1.32)); AS_FACE = Vector((9.25, 1.8, 1.3))
+drop = lambda k: (120 < k[0] < 190 or 490 < k[0] < 528 or 600 < k[0] <= 1840 or 1950 <= k[0] <= 1965 or k[0] > 2190)
+K2 = [(g(k[0]),) + tuple(k[1:]) for k in K if not drop(k)] + [
+ (135, BEAKJ + Vector((0.7, 0.55, 0.25)), BEAKJ + Vector((0, 0.05, -0.12)), 32),   # smash at mid-range, shards fall away from the lens
+ (175, BEAKJ + Vector((0.8, 0.6, 0.2)), HEADJ + Vector((0, 0, -0.1)), 30),
+ (527, BIRD_J + Vector((1.02, 0.27, 0.25)), HEADJ, 34),                           # hold on the bird, clean cut to the clinic at 528
+ (636, Vector((6.5, 0.42, 1.72)), BEAKC + Vector((0.08, -0.25, 0.05)), 30),
+ (675, Vector((6.45, -0.42, 1.6)), Vector((6.92, 0.2, 1.35)), 28),
+ (676, Vector((9.62, 0.82, 1.42)), AS_FACE, 35),                                  # (a) the vet at the monitor, face visible
+ (735, Vector((9.6, 0.86, 1.41)), AS_FACE, 36),
+ (736, E_B + Vector((-0.04, 0.0, 0.01)), SCREEN, 30),                             # (b) the screen: scan, mirrored half, wireframe
+ (845, E_B, SCREEN, 30),
+ (846, Vector((8.75, 0.55, 1.5)), AS_FACE + Vector((0, 0, -0.05)), 32),           # (c) he turns to the printer
+ (895, Vector((8.72, 0.52, 1.5)), AS_FACE + Vector((0, 0, -0.05)), 32),
+ (896, Vector((6.55, -0.5, 1.55)), Vector((6.92, 0.2, 1.3)), 40),               # gag: weighing a solid beak, frowning
+ (985, Vector((6.57, -0.47, 1.55)), Vector((6.92, 0.2, 1.3)), 41),
+ (986, BENCH_PT + Vector((-1.3, 0.3, 0.55)), BENCH_PT + Vector((0, 0, 0.22)), 30),   # printer: push-in while the beak builds up
+ (1085, BENCH_PT + Vector((-0.85, 0.2, 0.45)), BENCH_PT + Vector((0, 0, 0.2)), 36),
+ (1086, Vector((5.4, -0.35, 1.6)), Vector((7.0, 0.0, 1.25)), 24),                 # back on the two vets
+ (1160, BEAKC + Vector((-1.0, -0.6, 0.5)), SEAM + Vector((0, 0.15, 0.1)), 28),     # pulled back: hands attached to people, hand-size
+ (1210, BEAKC + Vector((-0.95, -0.7, 0.42)), SEAM + Vector((0, 0.2, 0.1)), 28),
+ (1260, Vector((6.15, 0.1, 1.62)), FACEB_SEAM, 28),                              # beat 10: VetB nearest, face to camera
+ (1310, Vector((6.35, -0.55, 1.55)), FACEB_SEAM, 28),
+ (1360, Vector((6.33, -0.58, 1.56)), FACEB_SEAM, 28),
+ (1396, Vector((6.3, -0.6, 1.58)), FACEB_SEAM, 27),
+ (1515, Vector((4.55, -0.22, 1.52)), BC + Vector((0, 0, 0.3)), 24),
+ (1522, Vector((2.45, -0.52, 1.5)), HEADE + Vector((0, 0, 0.1)), 24),
+ (1750, ENC + Vector((0.86, 0.45, 0.27)), HEADE, 36)]
 K2.sort(key=lambda k: k[0])
-CUTS = [1, 1421, 1546, 1962, 2251]
+CUTS = [1, 528, 676, 736, 846, 896, 986, 1086, 1522, END + 1]
 _seg = []
 for a_, b_ in zip(CUTS[:-1], CUTS[1:]):
     kk = [k for k in K2 if a_ <= k[0] < b_]
@@ -1018,7 +1082,7 @@ fp = lambda f: _pick(f)[2](f); ft = lambda f: _pick(f)[3](f); fl = lambda f: _pi
 K = K2
 cam.rotation_mode = 'QUATERNION'; prevq = None
 foc = bpy.data.objects.new("Cam_focus", None); C_ANIM.objects.link(foc); cam.data.dof.focus_object = foc
-for f in range(1, 2251):
+for f in range(1, END + 1):
     p = fp(f); t = ft(f); q = (t - p).to_track_quat('-Z', 'Y')
     if False and 660 < f <= 710 and prevq is not None:   # v006: not needed with the new keys (it tilted the horizon)
         # v004b: the up-vector flips near a straight-down view (f677, f695). Parallel-transport the previous orientation
@@ -1034,7 +1098,7 @@ for f in range(1, 2251):
     cam.data.lens = fl(f); cam.data.keyframe_insert("lens", frame=f)
     foc.location = t; foc.keyframe_insert("location", frame=f)
 # void front face: camera-visible only while the camera is well inside the void and looking away from the wall
-inside = [f for f in range(1, 2251) if fp(f).x > 10.45 and f < 1490]
+inside = []
 f_in, f_out = (min(inside), max(inside)) if inside else (800, 1490)
 for f, v in ((1, False),):
     vf_.visible_camera = v; vf_.keyframe_insert("visible_camera", frame=f)

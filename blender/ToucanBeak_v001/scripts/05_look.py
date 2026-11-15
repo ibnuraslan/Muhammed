@@ -75,6 +75,11 @@ pb2.inputs["Roughness"].default_value = 0.55; pb2.inputs["Coat Weight"].default_
 nt2.links.new(pb2.outputs[0], next(n for n in nt2.nodes if n.type == 'OUTPUT_MATERIAL').inputs[0])
 gm2.blend_method = 'OPAQUE' if hasattr(gm2, "blend_method") else None
 b = bsdf(bpy.data.materials["Ref_holo"]); b.inputs["Alpha"].default_value = 1.0; b.inputs["Emission Strength"].default_value = 0.15
+# ---- v007: the assistant (the vet at the computer) wears blue scrubs too, distinct from VetB
+ma = bpy.data.materials.get("Assist_scrubs")
+if ma:
+    for n in ma.node_tree.nodes:
+        if n.type == 'MIX' and n.blend_type == 'MULTIPLY' and not n.inputs[7].is_linked: n.inputs[7].default_value = (0.1, 0.3, 0.42, 1)
 sc["look"] = "animated_cg_v1"
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=False)
 print("LOOK_DONE", out)
