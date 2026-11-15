@@ -1,0 +1,9354 @@
+{
+ "step": 2,
+ "depth_cm": 1.5,
+ "frames": {
+  "1": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.7,
+    "visible": true
+   }
+  },
+  "3": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.4,
+    "visible": true
+   }
+  },
+  "5": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.3,
+    "visible": true
+   }
+  },
+  "7": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.6,
+    "visible": true
+   }
+  },
+  "9": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.2,
+    "visible": false
+   }
+  },
+  "11": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.3,
+    "visible": false
+   }
+  },
+  "13": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.3,
+    "visible": false
+   }
+  },
+  "15": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.0,
+    "visible": false
+   }
+  },
+  "17": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.7,
+    "visible": false
+   }
+  },
+  "19": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": false
+   }
+  },
+  "21": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.4,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.2,
+    "visible": false
+   }
+  },
+  "23": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.0,
+    "visible": false
+   }
+  },
+  "25": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 2.8,
+    "visible": false
+   }
+  },
+  "27": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 2.6,
+    "visible": false
+   }
+  },
+  "29": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.6,
+    "visible": false
+   }
+  },
+  "31": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.7,
+    "visible": false
+   }
+  },
+  "33": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.8,
+    "visible": false
+   }
+  },
+  "35": {
+   "Nurse.R": {
+    "bone": "lowerarm02",
+    "into": "Nurse",
+    "depth_cm": 2.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.8,
+    "visible": false
+   }
+  },
+  "37": {
+   "Nurse.R": {
+    "bone": "lowerarm02",
+    "into": "Nurse",
+    "depth_cm": 2.8,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.8,
+    "visible": false
+   }
+  },
+  "39": {
+   "Nurse.R": {
+    "bone": "lowerarm02",
+    "into": "Nurse",
+    "depth_cm": 2.6,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.8,
+    "visible": false
+   }
+  },
+  "41": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.8,
+    "visible": false
+   }
+  },
+  "43": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": true
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.7,
+    "visible": false
+   }
+  },
+  "45": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 2.9,
+    "visible": false
+   }
+  },
+  "47": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": true
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.1,
+    "visible": false
+   }
+  },
+  "49": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": true
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.4,
+    "visible": false
+   }
+  },
+  "51": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": true
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 7.6,
+    "visible": false
+   }
+  },
+  "53": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 8.2,
+    "visible": false
+   }
+  },
+  "55": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.6,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 8.2,
+    "visible": false
+   }
+  },
+  "57": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.6,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 8.2,
+    "visible": false
+   }
+  },
+  "59": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.4,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 8.1,
+    "visible": false
+   }
+  },
+  "61": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 8.1,
+    "visible": false
+   }
+  },
+  "63": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": true
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 8.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.2,
+    "visible": false
+   }
+  },
+  "65": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 7.9,
+    "visible": false
+   }
+  },
+  "67": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 7.8,
+    "visible": false
+   }
+  },
+  "69": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 7.5,
+    "visible": false
+   }
+  },
+  "71": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": true
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 7.1,
+    "visible": false
+   }
+  },
+  "73": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": true
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 7.1,
+    "visible": false
+   }
+  },
+  "75": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": true
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 7.0,
+    "visible": true
+   }
+  },
+  "77": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.9,
+    "visible": true
+   }
+  },
+  "79": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.9,
+    "visible": true
+   }
+  },
+  "81": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.8,
+    "visible": true
+   }
+  },
+  "83": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.7,
+    "visible": true
+   }
+  },
+  "85": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.7,
+    "visible": true
+   }
+  },
+  "87": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.7,
+    "visible": true
+   }
+  },
+  "89": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.7,
+    "visible": true
+   }
+  },
+  "91": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.7,
+    "visible": true
+   }
+  },
+  "93": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.7,
+    "visible": true
+   }
+  },
+  "95": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.7,
+    "visible": true
+   }
+  },
+  "97": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.7,
+    "visible": true
+   }
+  },
+  "99": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Patient.L": {
+    "bone": "metacarpal4",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.6,
+    "visible": true
+   }
+  },
+  "101": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.6,
+    "visible": true
+   }
+  },
+  "103": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.5,
+    "visible": true
+   }
+  },
+  "105": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.3,
+    "visible": true
+   }
+  },
+  "107": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.0,
+    "visible": true
+   }
+  },
+  "109": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.7,
+    "visible": true
+   }
+  },
+  "111": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.4,
+    "visible": true
+   }
+  },
+  "113": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": true
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.3,
+    "visible": true
+   }
+  },
+  "115": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": true
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.1,
+    "visible": true
+   }
+  },
+  "117": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.0,
+    "visible": true
+   }
+  },
+  "119": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.9,
+    "visible": true
+   }
+  },
+  "121": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": true
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Patient.L": {
+    "bone": "metacarpal2",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.9,
+    "visible": true
+   }
+  },
+  "123": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.8,
+    "visible": true
+   }
+  },
+  "125": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": true
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.9,
+    "visible": true
+   }
+  },
+  "127": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": true
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.8,
+    "visible": true
+   }
+  },
+  "129": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.7,
+    "visible": true
+   }
+  },
+  "131": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.0,
+    "visible": true
+   }
+  },
+  "133": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.9,
+    "visible": true
+   }
+  },
+  "135": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 7.4,
+    "visible": true
+   }
+  },
+  "137": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.4,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 7.4,
+    "visible": true
+   }
+  },
+  "139": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 7.3,
+    "visible": true
+   }
+  },
+  "141": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.4,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.9,
+    "visible": true
+   }
+  },
+  "143": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.6,
+    "visible": true
+   }
+  },
+  "145": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.6,
+    "visible": true
+   }
+  },
+  "147": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.6,
+    "visible": true
+   }
+  },
+  "149": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": true
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.6,
+    "visible": true
+   }
+  },
+  "151": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": true
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.6,
+    "visible": true
+   }
+  },
+  "153": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.6,
+    "visible": true
+   }
+  },
+  "155": {
+   "Nurse.R": {
+    "bone": "lowerarm02",
+    "into": "Nurse",
+    "depth_cm": 2.7,
+    "visible": true
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.3,
+    "visible": true
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.6,
+    "visible": true
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.5,
+    "visible": false
+   }
+  },
+  "157": {
+   "Nurse.R": {
+    "bone": "lowerarm02",
+    "into": "Nurse",
+    "depth_cm": 2.9,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.3,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.6,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.5,
+    "visible": false
+   }
+  },
+  "159": {
+   "Nurse.R": {
+    "bone": "lowerarm02",
+    "into": "Nurse",
+    "depth_cm": 2.8,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.2,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.6,
+    "visible": false
+   }
+  },
+  "161": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.2,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.6,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.5,
+    "visible": false
+   }
+  },
+  "163": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.1,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.5,
+    "visible": false
+   }
+  },
+  "165": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.9,
+    "visible": false
+   }
+  },
+  "167": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.5,
+    "visible": false
+   }
+  },
+  "169": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.4,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.5,
+    "visible": false
+   }
+  },
+  "171": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.6,
+    "visible": false
+   }
+  },
+  "173": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.4,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.0,
+    "visible": false
+   }
+  },
+  "175": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.4,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.9,
+    "visible": false
+   }
+  },
+  "177": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.4,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.0,
+    "visible": false
+   }
+  },
+  "179": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.7,
+    "visible": false
+   }
+  },
+  "181": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "183": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.2,
+    "visible": false
+   }
+  },
+  "185": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.3,
+    "visible": false
+   }
+  },
+  "187": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.4,
+    "visible": false
+   }
+  },
+  "189": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.5,
+    "visible": false
+   }
+  },
+  "191": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.5,
+    "visible": false
+   }
+  },
+  "193": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.5,
+    "visible": false
+   }
+  },
+  "195": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.4,
+    "visible": false
+   }
+  },
+  "197": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.3,
+    "visible": false
+   }
+  },
+  "199": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.2,
+    "visible": false
+   }
+  },
+  "201": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.2,
+    "visible": false
+   }
+  },
+  "203": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.2,
+    "visible": false
+   }
+  },
+  "205": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.2,
+    "visible": false
+   }
+  },
+  "207": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.3,
+    "visible": false
+   }
+  },
+  "209": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.0,
+    "visible": false
+   }
+  },
+  "211": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.0,
+    "visible": false
+   }
+  },
+  "213": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.6,
+    "visible": false
+   }
+  },
+  "215": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.8,
+    "visible": false
+   }
+  },
+  "217": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.4,
+    "visible": false
+   }
+  },
+  "219": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.2,
+    "visible": false
+   }
+  },
+  "221": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.2,
+    "visible": false
+   }
+  },
+  "223": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.1,
+    "visible": false
+   }
+  },
+  "225": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.2,
+    "visible": false
+   }
+  },
+  "227": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.4,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.4,
+    "visible": false
+   }
+  },
+  "229": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.5,
+    "visible": false
+   }
+  },
+  "231": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.3,
+    "visible": false
+   }
+  },
+  "233": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.2,
+    "visible": false
+   }
+  },
+  "235": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.1,
+    "visible": false
+   }
+  },
+  "237": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.2,
+    "visible": false
+   }
+  },
+  "239": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.2,
+    "visible": false
+   }
+  },
+  "241": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.3,
+    "visible": false
+   }
+  },
+  "243": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.3,
+    "visible": false
+   }
+  },
+  "245": {
+   "Nurse.R": {
+    "bone": "lowerarm02",
+    "into": "Nurse",
+    "depth_cm": 2.8,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.3,
+    "visible": false
+   }
+  },
+  "247": {
+   "Nurse.R": {
+    "bone": "lowerarm02",
+    "into": "Nurse",
+    "depth_cm": 3.0,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.2,
+    "visible": false
+   }
+  },
+  "249": {
+   "Nurse.R": {
+    "bone": "lowerarm02",
+    "into": "Nurse",
+    "depth_cm": 2.9,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.3,
+    "visible": false
+   }
+  },
+  "251": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.6,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.5,
+    "visible": false
+   }
+  },
+  "253": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.6,
+    "visible": false
+   }
+  },
+  "255": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.3,
+    "visible": false
+   }
+  },
+  "257": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.2,
+    "visible": false
+   }
+  },
+  "259": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.3,
+    "visible": false
+   }
+  },
+  "261": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.5,
+    "visible": false
+   }
+  },
+  "263": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.6,
+    "visible": false
+   }
+  },
+  "265": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.4,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.2,
+    "visible": false
+   }
+  },
+  "267": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.6,
+    "visible": false
+   }
+  },
+  "269": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.4,
+    "visible": false
+   }
+  },
+  "271": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.4,
+    "visible": false
+   }
+  },
+  "273": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 7.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.0,
+    "visible": false
+   }
+  },
+  "275": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   }
+  },
+  "277": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   }
+  },
+  "279": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   }
+  },
+  "281": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   }
+  },
+  "283": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   }
+  },
+  "285": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   }
+  },
+  "287": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "metacarpal3",
+    "into": "Patient",
+    "depth_cm": 3.0,
+    "visible": false
+   }
+  },
+  "289": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": false
+   }
+  },
+  "291": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 2.8,
+    "visible": false
+   }
+  },
+  "293": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.6,
+    "visible": false
+   }
+  },
+  "295": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.2,
+    "visible": false
+   }
+  },
+  "297": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.0,
+    "visible": true
+   }
+  },
+  "299": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.5,
+    "visible": true
+   }
+  },
+  "301": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "303": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.3,
+    "visible": true
+   }
+  },
+  "305": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "307": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "309": {
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.6,
+    "visible": true
+   }
+  },
+  "311": {
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.6,
+    "visible": true
+   }
+  },
+  "313": {
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.5,
+    "visible": true
+   }
+  },
+  "315": {
+   "Surgeon.L": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.2,
+    "visible": true
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.2,
+    "visible": true
+   }
+  },
+  "317": {
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.1,
+    "visible": true
+   }
+  },
+  "319": {
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 2.8,
+    "visible": true
+   }
+  },
+  "321": {
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 2.2,
+    "visible": true
+   }
+  },
+  "377": {
+   "Surgeon.R": {
+    "bone": "lowerarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.6,
+    "visible": true
+   }
+  },
+  "379": {
+   "Surgeon.R": {
+    "bone": "lowerarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.6,
+    "visible": true
+   }
+  },
+  "395": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.2,
+    "visible": false
+   }
+  },
+  "397": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.2,
+    "visible": false
+   }
+  },
+  "399": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.2,
+    "visible": false
+   }
+  },
+  "401": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.3,
+    "visible": false
+   }
+  },
+  "403": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.3,
+    "visible": false
+   }
+  },
+  "405": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.4,
+    "visible": false
+   }
+  },
+  "407": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.4,
+    "visible": false
+   }
+  },
+  "409": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.5,
+    "visible": false
+   }
+  },
+  "411": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.6,
+    "visible": false
+   }
+  },
+  "413": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.6,
+    "visible": false
+   }
+  },
+  "415": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.7,
+    "visible": false
+   }
+  },
+  "417": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.8,
+    "visible": false
+   }
+  },
+  "419": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.9,
+    "visible": false
+   }
+  },
+  "421": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 6.9,
+    "visible": false
+   }
+  },
+  "423": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 7.0,
+    "visible": false
+   }
+  },
+  "425": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 7.1,
+    "visible": false
+   }
+  },
+  "427": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 7.2,
+    "visible": false
+   }
+  },
+  "429": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 7.3,
+    "visible": false
+   }
+  },
+  "431": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 7.3,
+    "visible": false
+   }
+  },
+  "433": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 7.4,
+    "visible": false
+   }
+  },
+  "435": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 7.5,
+    "visible": false
+   }
+  },
+  "437": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 7.6,
+    "visible": false
+   }
+  },
+  "439": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 7.7,
+    "visible": false
+   }
+  },
+  "441": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 7.8,
+    "visible": false
+   }
+  },
+  "443": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 7.8,
+    "visible": false
+   }
+  },
+  "445": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 7.9,
+    "visible": false
+   }
+  },
+  "447": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 8.0,
+    "visible": false
+   }
+  },
+  "449": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 8.1,
+    "visible": false
+   }
+  },
+  "475": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.7,
+    "visible": false
+   }
+  },
+  "477": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.6,
+    "visible": false
+   }
+  },
+  "479": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.4,
+    "visible": false
+   }
+  },
+  "481": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.4,
+    "visible": false
+   }
+  },
+  "483": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.3,
+    "visible": false
+   }
+  },
+  "485": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.3,
+    "visible": false
+   }
+  },
+  "487": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.2,
+    "visible": false
+   }
+  },
+  "489": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.2,
+    "visible": false
+   }
+  },
+  "491": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.2,
+    "visible": false
+   }
+  },
+  "493": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.2,
+    "visible": false
+   }
+  },
+  "495": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.2,
+    "visible": false
+   }
+  },
+  "497": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "499": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "501": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "503": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "505": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "507": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "509": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "511": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "513": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "515": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "517": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "519": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "521": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "523": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "525": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "527": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "529": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.0,
+    "visible": false
+   }
+  },
+  "531": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.0,
+    "visible": false
+   }
+  },
+  "533": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.0,
+    "visible": false
+   }
+  },
+  "535": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.0,
+    "visible": false
+   }
+  },
+  "537": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.0,
+    "visible": false
+   }
+  },
+  "539": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.9,
+    "visible": false
+   }
+  },
+  "541": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.9,
+    "visible": false
+   }
+  },
+  "543": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.9,
+    "visible": false
+   }
+  },
+  "545": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.9,
+    "visible": false
+   }
+  },
+  "547": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.8,
+    "visible": false
+   }
+  },
+  "549": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.9,
+    "visible": false
+   }
+  },
+  "551": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.0,
+    "visible": false
+   }
+  },
+  "553": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.0,
+    "visible": false
+   }
+  },
+  "555": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.0,
+    "visible": false
+   }
+  },
+  "557": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.9,
+    "visible": false
+   }
+  },
+  "559": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.9,
+    "visible": false
+   }
+  },
+  "561": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.9,
+    "visible": false
+   }
+  },
+  "563": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.8,
+    "visible": false
+   }
+  },
+  "565": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.8,
+    "visible": false
+   }
+  },
+  "567": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.8,
+    "visible": false
+   }
+  },
+  "569": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.7,
+    "visible": false
+   }
+  },
+  "571": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.7,
+    "visible": false
+   }
+  },
+  "573": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.7,
+    "visible": false
+   }
+  },
+  "575": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.6,
+    "visible": false
+   }
+  },
+  "577": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.6,
+    "visible": false
+   }
+  },
+  "579": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.6,
+    "visible": false
+   }
+  },
+  "581": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.5,
+    "visible": false
+   }
+  },
+  "583": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.5,
+    "visible": false
+   }
+  },
+  "585": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.5,
+    "visible": false
+   }
+  },
+  "587": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.4,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.1,
+    "visible": true
+   }
+  },
+  "589": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.4,
+    "visible": false
+   }
+  },
+  "591": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.4,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.0,
+    "visible": true
+   },
+   "Surgeon.R": {
+    "bone": "metacarpal4",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": true
+   }
+  },
+  "593": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.4,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "metacarpal2",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": true
+   }
+  },
+  "595": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.4,
+    "visible": false
+   }
+  },
+  "597": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.3,
+    "visible": false
+   }
+  },
+  "599": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.3,
+    "visible": false
+   }
+  },
+  "601": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.3,
+    "visible": false
+   }
+  },
+  "603": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": true
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.3,
+    "visible": false
+   }
+  },
+  "605": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": true
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.2,
+    "visible": false
+   }
+  },
+  "607": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.2,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 1.6,
+    "visible": false
+   }
+  },
+  "609": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.2,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 2.0,
+    "visible": false
+   }
+  },
+  "611": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.2,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 2.2,
+    "visible": false
+   }
+  },
+  "613": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.2,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 2.3,
+    "visible": false
+   }
+  },
+  "615": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.2,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 2.5,
+    "visible": false
+   }
+  },
+  "617": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.2,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 2.9,
+    "visible": false
+   }
+  },
+  "619": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.1,
+    "visible": false
+   }
+  },
+  "621": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.4,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 2.9,
+    "visible": false
+   }
+  },
+  "623": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.1,
+    "visible": false
+   }
+  },
+  "625": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.4,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.6,
+    "visible": false
+   }
+  },
+  "627": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.5,
+    "visible": false
+   }
+  },
+  "629": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.6,
+    "visible": false
+   }
+  },
+  "631": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.6,
+    "visible": false
+   }
+  },
+  "633": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.5,
+    "visible": false
+   }
+  },
+  "635": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": false
+   }
+  },
+  "637": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "639": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.5,
+    "visible": true
+   }
+  },
+  "641": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.3,
+    "visible": true
+   }
+  },
+  "643": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "645": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.6,
+    "visible": true
+   }
+  },
+  "647": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.5,
+    "visible": true
+   }
+  },
+  "649": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.1,
+    "visible": true
+   }
+  },
+  "651": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.4,
+    "visible": true
+   }
+  },
+  "653": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.7,
+    "visible": true
+   }
+  },
+  "655": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.7,
+    "visible": true
+   }
+  },
+  "657": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.7,
+    "visible": true
+   }
+  },
+  "659": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.6,
+    "visible": true
+   }
+  },
+  "661": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.0,
+    "visible": true
+   }
+  },
+  "663": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.2,
+    "visible": true
+   }
+  },
+  "665": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.2,
+    "visible": true
+   }
+  },
+  "669": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   }
+  },
+  "671": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   }
+  },
+  "673": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   }
+  },
+  "675": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   }
+  },
+  "677": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   }
+  },
+  "679": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   }
+  },
+  "681": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   }
+  },
+  "683": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   }
+  },
+  "685": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   }
+  },
+  "687": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   }
+  },
+  "689": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   }
+  },
+  "691": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   }
+  },
+  "693": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.2,
+    "visible": true
+   }
+  },
+  "695": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.3,
+    "visible": true
+   }
+  },
+  "697": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.3,
+    "visible": true
+   }
+  },
+  "699": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 8.0,
+    "visible": true
+   }
+  },
+  "701": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 8.0,
+    "visible": true
+   }
+  },
+  "703": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.3,
+    "visible": true
+   }
+  },
+  "705": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.2,
+    "visible": true
+   }
+  },
+  "707": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.2,
+    "visible": true
+   }
+  },
+  "733": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.1,
+    "visible": true
+   }
+  },
+  "735": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.1,
+    "visible": true
+   }
+  },
+  "737": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.2,
+    "visible": true
+   }
+  },
+  "739": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.2,
+    "visible": true
+   }
+  },
+  "741": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.1,
+    "visible": true
+   }
+  },
+  "743": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.2,
+    "visible": true
+   }
+  },
+  "745": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.2,
+    "visible": true
+   }
+  },
+  "747": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.1,
+    "visible": true
+   }
+  },
+  "749": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.1,
+    "visible": true
+   }
+  },
+  "751": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.1,
+    "visible": true
+   }
+  },
+  "753": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.7,
+    "visible": true
+   }
+  },
+  "755": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.8,
+    "visible": true
+   }
+  },
+  "757": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.8,
+    "visible": true
+   }
+  },
+  "759": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.7,
+    "visible": true
+   }
+  },
+  "761": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.7,
+    "visible": true
+   }
+  },
+  "763": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.7,
+    "visible": true
+   }
+  },
+  "765": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.7,
+    "visible": true
+   }
+  },
+  "767": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.6,
+    "visible": true
+   }
+  },
+  "769": {
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 9.8,
+    "visible": true
+   }
+  },
+  "771": {
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 9.8,
+    "visible": true
+   }
+  },
+  "773": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.1,
+    "visible": true
+   }
+  },
+  "775": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.0,
+    "visible": true
+   }
+  },
+  "777": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.5,
+    "visible": true
+   }
+  },
+  "779": {
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 9.8,
+    "visible": true
+   }
+  },
+  "781": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.6,
+    "visible": true
+   }
+  },
+  "783": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.7,
+    "visible": true
+   }
+  },
+  "785": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.5,
+    "visible": true
+   }
+  },
+  "787": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.5,
+    "visible": true
+   }
+  },
+  "789": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.1,
+    "visible": true
+   }
+  },
+  "791": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.8,
+    "visible": true
+   }
+  },
+  "793": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.4,
+    "visible": true
+   }
+  },
+  "795": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.2,
+    "visible": true
+   }
+  },
+  "797": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.1,
+    "visible": false
+   }
+  },
+  "799": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.1,
+    "visible": false
+   }
+  },
+  "801": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.1,
+    "visible": false
+   }
+  },
+  "803": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.1,
+    "visible": false
+   }
+  },
+  "805": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.1,
+    "visible": false
+   }
+  },
+  "807": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.1,
+    "visible": false
+   }
+  },
+  "809": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.0,
+    "visible": false
+   }
+  },
+  "811": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.0,
+    "visible": false
+   }
+  },
+  "813": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.0,
+    "visible": false
+   }
+  },
+  "815": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.0,
+    "visible": false
+   }
+  },
+  "817": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.0,
+    "visible": false
+   }
+  },
+  "819": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "821": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "823": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "825": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "827": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "829": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "831": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "833": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "835": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "837": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "839": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "841": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "843": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "845": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "847": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "849": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "851": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "853": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "855": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "857": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "859": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "861": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "863": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "865": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "867": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "869": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "871": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "873": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "875": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "877": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "879": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "881": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": true
+   }
+  },
+  "883": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": true
+   }
+  },
+  "885": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": true
+   }
+  },
+  "887": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": true
+   }
+  },
+  "889": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": true
+   }
+  },
+  "891": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.0,
+    "visible": true
+   }
+  },
+  "893": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.0,
+    "visible": true
+   }
+  },
+  "895": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.0,
+    "visible": true
+   }
+  },
+  "897": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.0,
+    "visible": true
+   }
+  },
+  "899": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": true
+   }
+  },
+  "901": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": true
+   }
+  },
+  "903": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": true
+   }
+  },
+  "905": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": true
+   }
+  },
+  "907": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": true
+   }
+  },
+  "909": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": true
+   }
+  },
+  "911": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": true
+   }
+  },
+  "913": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": true
+   }
+  },
+  "915": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": true
+   }
+  },
+  "917": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": true
+   }
+  },
+  "919": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": true
+   }
+  },
+  "921": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": true
+   }
+  },
+  "923": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.8,
+    "visible": true
+   }
+  },
+  "925": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.8,
+    "visible": true
+   }
+  },
+  "927": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.8,
+    "visible": true
+   }
+  },
+  "929": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.8,
+    "visible": true
+   }
+  },
+  "931": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.8,
+    "visible": true
+   }
+  },
+  "933": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.8,
+    "visible": true
+   }
+  },
+  "935": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.8,
+    "visible": true
+   }
+  },
+  "937": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.8,
+    "visible": true
+   }
+  },
+  "939": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": true
+   }
+  },
+  "941": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": true
+   }
+  },
+  "943": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": true
+   }
+  },
+  "945": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": true
+   }
+  },
+  "947": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": true
+   }
+  },
+  "949": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": true
+   }
+  },
+  "951": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": true
+   }
+  },
+  "953": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": true
+   }
+  },
+  "955": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": true
+   }
+  },
+  "957": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": true
+   }
+  },
+  "959": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": false
+   }
+  },
+  "961": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": false
+   }
+  },
+  "963": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": false
+   }
+  },
+  "965": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": false
+   }
+  },
+  "967": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": false
+   }
+  },
+  "969": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": false
+   }
+  },
+  "971": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": false
+   }
+  },
+  "973": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": false
+   }
+  },
+  "975": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": false
+   }
+  },
+  "977": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": false
+   }
+  },
+  "979": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": false
+   }
+  },
+  "981": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": false
+   }
+  },
+  "983": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": false
+   }
+  },
+  "985": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": false
+   }
+  },
+  "987": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.7,
+    "visible": false
+   }
+  },
+  "989": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.8,
+    "visible": false
+   }
+  },
+  "991": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.8,
+    "visible": false
+   }
+  },
+  "993": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.8,
+    "visible": false
+   }
+  },
+  "995": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.8,
+    "visible": false
+   }
+  },
+  "997": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.8,
+    "visible": false
+   }
+  },
+  "999": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.8,
+    "visible": false
+   }
+  },
+  "1001": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.8,
+    "visible": false
+   }
+  },
+  "1003": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.8,
+    "visible": false
+   }
+  },
+  "1005": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.8,
+    "visible": false
+   }
+  },
+  "1007": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "1009": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "1011": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "1013": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "1015": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "1017": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "1019": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.0,
+    "visible": false
+   }
+  },
+  "1021": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.0,
+    "visible": false
+   }
+  },
+  "1023": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.0,
+    "visible": false
+   }
+  },
+  "1025": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.2,
+    "visible": false
+   }
+  },
+  "1027": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.3,
+    "visible": false
+   }
+  },
+  "1029": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.5,
+    "visible": false
+   }
+  },
+  "1031": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 2.7,
+    "visible": false
+   }
+  },
+  "1033": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.0,
+    "visible": false
+   }
+  },
+  "1035": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.2,
+    "visible": false
+   }
+  },
+  "1037": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.7,
+    "visible": false
+   }
+  },
+  "1039": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": false
+   }
+  },
+  "1041": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.0,
+    "visible": false
+   }
+  },
+  "1043": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.5,
+    "visible": false
+   }
+  },
+  "1045": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.8,
+    "visible": false
+   }
+  },
+  "1047": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.7,
+    "visible": false
+   }
+  },
+  "1049": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.9,
+    "visible": false
+   }
+  },
+  "1051": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.2,
+    "visible": false
+   }
+  },
+  "1053": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.1,
+    "visible": false
+   }
+  },
+  "1117": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.1,
+    "visible": true
+   }
+  },
+  "1119": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.9,
+    "visible": true
+   }
+  },
+  "1121": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.9,
+    "visible": true
+   }
+  },
+  "1201": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 7.2,
+    "visible": true
+   }
+  },
+  "1243": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   }
+  },
+  "1245": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   }
+  },
+  "1247": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   }
+  },
+  "1249": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   }
+  },
+  "1251": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   }
+  },
+  "1253": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   }
+  },
+  "1255": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   }
+  },
+  "1257": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   }
+  },
+  "1275": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.8,
+    "visible": true
+   }
+  },
+  "1277": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.7,
+    "visible": true
+   }
+  },
+  "1279": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.6,
+    "visible": true
+   }
+  },
+  "1281": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.5,
+    "visible": true
+   }
+  },
+  "1283": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.3,
+    "visible": true
+   }
+  },
+  "1285": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.2,
+    "visible": true
+   }
+  },
+  "1287": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.9,
+    "visible": true
+   }
+  },
+  "1289": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.6,
+    "visible": true
+   }
+  },
+  "1291": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.2,
+    "visible": true
+   }
+  },
+  "1293": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.1,
+    "visible": true
+   }
+  },
+  "1295": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.0,
+    "visible": true
+   }
+  },
+  "1297": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.9,
+    "visible": true
+   }
+  },
+  "1299": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.8,
+    "visible": true
+   }
+  },
+  "1301": {
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.8,
+    "visible": true
+   }
+  },
+  "1303": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.7,
+    "visible": true
+   }
+  },
+  "1305": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.7,
+    "visible": true
+   }
+  },
+  "1307": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.8,
+    "visible": true
+   }
+  },
+  "1309": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.8,
+    "visible": true
+   }
+  },
+  "1311": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.8,
+    "visible": true
+   }
+  },
+  "1313": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.8,
+    "visible": true
+   }
+  },
+  "1315": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.7,
+    "visible": true
+   }
+  },
+  "1317": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.7,
+    "visible": true
+   }
+  },
+  "1319": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.7,
+    "visible": true
+   }
+  },
+  "1321": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.7,
+    "visible": true
+   }
+  },
+  "1323": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.7,
+    "visible": true
+   }
+  },
+  "1325": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.6,
+    "visible": true
+   }
+  },
+  "1327": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.5,
+    "visible": true
+   }
+  },
+  "1329": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.5,
+    "visible": true
+   }
+  },
+  "1331": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.4,
+    "visible": true
+   }
+  },
+  "1333": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.3,
+    "visible": true
+   }
+  },
+  "1335": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.2,
+    "visible": true
+   }
+  },
+  "1337": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.1,
+    "visible": true
+   }
+  },
+  "1339": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.0,
+    "visible": true
+   }
+  },
+  "1341": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.0,
+    "visible": true
+   }
+  },
+  "1343": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.9,
+    "visible": true
+   }
+  },
+  "1345": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.8,
+    "visible": true
+   }
+  },
+  "1347": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.7,
+    "visible": true
+   }
+  },
+  "1349": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.6,
+    "visible": true
+   }
+  },
+  "1351": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1353": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1355": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1357": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.3,
+    "visible": true
+   }
+  },
+  "1359": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.3,
+    "visible": true
+   }
+  },
+  "1361": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1363": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1365": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1367": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.6,
+    "visible": true
+   }
+  },
+  "1369": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.7,
+    "visible": true
+   }
+  },
+  "1371": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.8,
+    "visible": true
+   }
+  },
+  "1373": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.8,
+    "visible": true
+   }
+  },
+  "1375": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.8,
+    "visible": true
+   }
+  },
+  "1377": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.8,
+    "visible": true
+   }
+  },
+  "1379": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.8,
+    "visible": true
+   }
+  },
+  "1381": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.4,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "1383": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.2,
+    "visible": true
+   }
+  },
+  "1385": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.9,
+    "visible": true
+   }
+  },
+  "1387": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.4,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.6,
+    "visible": true
+   }
+  },
+  "1389": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 2.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.8,
+    "visible": true
+   }
+  },
+  "1391": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.L": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 2.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.8,
+    "visible": false
+   }
+  },
+  "1393": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.0,
+    "visible": false
+   }
+  },
+  "1395": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.9,
+    "visible": true
+   }
+  },
+  "1397": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.1,
+    "visible": true
+   }
+  },
+  "1399": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.5,
+    "visible": true
+   }
+  },
+  "1401": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.5,
+    "visible": true
+   }
+  },
+  "1403": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.5,
+    "visible": true
+   }
+  },
+  "1405": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.5,
+    "visible": true
+   }
+  },
+  "1407": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.5,
+    "visible": true
+   }
+  },
+  "1409": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "1411": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "1413": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "1415": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "1417": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "1419": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "1421": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "1423": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "1425": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "1427": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "1429": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "1431": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "1433": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "1435": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.3,
+    "visible": true
+   }
+  },
+  "1437": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.4,
+    "visible": true
+   }
+  },
+  "1439": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.7,
+    "visible": false
+   }
+  },
+  "1441": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "lowerarm01",
+    "into": "Surgeon",
+    "depth_cm": 9.2,
+    "visible": false
+   }
+  },
+  "1443": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "lowerarm01",
+    "into": "Surgeon",
+    "depth_cm": 8.8,
+    "visible": false
+   }
+  },
+  "1445": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "lowerarm01",
+    "into": "Surgeon",
+    "depth_cm": 9.3,
+    "visible": false
+   }
+  },
+  "1447": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "lowerarm01",
+    "into": "Surgeon",
+    "depth_cm": 9.1,
+    "visible": false
+   }
+  },
+  "1449": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "lowerarm01",
+    "into": "Surgeon",
+    "depth_cm": 8.8,
+    "visible": false
+   }
+  },
+  "1451": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 9.4,
+    "visible": false
+   }
+  },
+  "1453": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.5,
+    "visible": false
+   }
+  },
+  "1455": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.0,
+    "visible": true
+   }
+  },
+  "1457": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.2,
+    "visible": true
+   }
+  },
+  "1459": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 3.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.8,
+    "visible": true
+   }
+  },
+  "1461": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 3.8,
+    "visible": true
+   }
+  },
+  "1463": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1465": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.9,
+    "visible": false
+   }
+  },
+  "1467": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "lowerarm01",
+    "into": "Surgeon",
+    "depth_cm": 9.1,
+    "visible": false
+   }
+  },
+  "1469": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "lowerarm01",
+    "into": "Surgeon",
+    "depth_cm": 8.9,
+    "visible": false
+   }
+  },
+  "1471": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.6,
+    "visible": true
+   }
+  },
+  "1473": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1475": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.6,
+    "visible": true
+   }
+  },
+  "1477": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.9,
+    "visible": true
+   }
+  },
+  "1479": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.1,
+    "visible": true
+   }
+  },
+  "1481": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.1,
+    "visible": true
+   }
+  },
+  "1483": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 7.1,
+    "visible": true
+   }
+  },
+  "1485": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 7.7,
+    "visible": true
+   }
+  },
+  "1487": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 8.0,
+    "visible": true
+   }
+  },
+  "1489": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 7.9,
+    "visible": true
+   }
+  },
+  "1491": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 7.5,
+    "visible": true
+   }
+  },
+  "1493": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.7,
+    "visible": true
+   }
+  },
+  "1495": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.8,
+    "visible": true
+   }
+  },
+  "1497": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.8,
+    "visible": true
+   }
+  },
+  "1499": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 6.1,
+    "visible": true
+   }
+  },
+  "1501": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 8.9,
+    "visible": false
+   }
+  },
+  "1503": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 5.3,
+    "visible": true
+   }
+  },
+  "1505": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.1,
+    "visible": true
+   }
+  },
+  "1507": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.1,
+    "visible": true
+   }
+  },
+  "1509": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.2,
+    "visible": true
+   }
+  },
+  "1511": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.3,
+    "visible": true
+   }
+  },
+  "1513": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.3,
+    "visible": true
+   }
+  },
+  "1515": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.3,
+    "visible": true
+   }
+  },
+  "1517": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.2,
+    "visible": true
+   }
+  },
+  "1519": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.2,
+    "visible": true
+   }
+  },
+  "1521": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.2,
+    "visible": true
+   }
+  },
+  "1523": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.2,
+    "visible": true
+   }
+  },
+  "1525": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.3,
+    "visible": true
+   }
+  },
+  "1527": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1529": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1531": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.3,
+    "visible": true
+   }
+  },
+  "1533": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.2,
+    "visible": true
+   }
+  },
+  "1535": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.2,
+    "visible": true
+   }
+  },
+  "1537": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.2,
+    "visible": true
+   }
+  },
+  "1539": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.3,
+    "visible": true
+   }
+  },
+  "1541": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1543": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1545": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1547": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.3,
+    "visible": true
+   }
+  },
+  "1549": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.3,
+    "visible": true
+   }
+  },
+  "1551": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.3,
+    "visible": true
+   }
+  },
+  "1553": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.3,
+    "visible": true
+   }
+  },
+  "1555": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1557": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1559": {
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1561": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1563": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.2,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.3,
+    "visible": true
+   }
+  },
+  "1565": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.2,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.3,
+    "visible": true
+   }
+  },
+  "1567": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.2,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.3,
+    "visible": true
+   }
+  },
+  "1569": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.3,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1571": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.3,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1573": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.3,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1575": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.4,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1577": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.4,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.4,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1579": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.4,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1581": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.4,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1583": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.4,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1585": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.5,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1587": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.5,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1589": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.6,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1591": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.6,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1593": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1595": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1597": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1599": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1601": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.6,
+    "visible": true
+   }
+  },
+  "1603": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.6,
+    "visible": true
+   }
+  },
+  "1605": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.6,
+    "visible": true
+   }
+  },
+  "1607": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1609": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1611": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1613": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1615": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1617": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.6,
+    "visible": true
+   }
+  },
+  "1619": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.6,
+    "visible": true
+   }
+  },
+  "1621": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1623": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1625": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1627": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1629": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.5,
+    "visible": true
+   }
+  },
+  "1631": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.6,
+    "visible": true
+   }
+  },
+  "1633": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 4.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.6,
+    "visible": true
+   }
+  },
+  "1635": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.6,
+    "visible": true
+   }
+  },
+  "1637": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.7,
+    "visible": true
+   }
+  },
+  "1639": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.3,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.8,
+    "visible": true
+   }
+  },
+  "1641": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Patient.R": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 5.5,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm02",
+    "into": "Surgeon",
+    "depth_cm": 4.2,
+    "visible": true
+   }
+  },
+  "1643": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.0,
+    "visible": true
+   }
+  },
+  "1645": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.6,
+    "visible": true
+   }
+  },
+  "1647": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.6,
+    "visible": true
+   }
+  },
+  "1649": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.0,
+    "visible": true
+   }
+  },
+  "1651": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.4,
+    "visible": true
+   }
+  },
+  "1653": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.7,
+    "visible": true
+   }
+  },
+  "1655": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.8,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.9,
+    "visible": true
+   }
+  },
+  "1657": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.0,
+    "visible": true
+   }
+  },
+  "1659": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.5,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.1,
+    "visible": true
+   }
+  },
+  "1661": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.4,
+    "visible": true
+   }
+  },
+  "1663": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.4,
+    "visible": true
+   }
+  },
+  "1665": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.4,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.5,
+    "visible": true
+   }
+  },
+  "1667": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.6,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 6.5,
+    "visible": true
+   }
+  },
+  "1669": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.6,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.6,
+    "visible": true
+   }
+  },
+  "1671": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.5,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.5,
+    "visible": true
+   }
+  },
+  "1673": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.4,
+    "visible": false
+   }
+  },
+  "1675": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.6,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.3,
+    "visible": false
+   }
+  },
+  "1677": {
+   "Nurse.L": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.7,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 5.1,
+    "visible": false
+   }
+  },
+  "1679": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 1.9,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.9,
+    "visible": false
+   }
+  },
+  "1681": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.1,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.7,
+    "visible": false
+   }
+  },
+  "1683": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.2,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.7,
+    "visible": false
+   }
+  },
+  "1685": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.3,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 4.7,
+    "visible": false
+   }
+  },
+  "1687": {
+   "Nurse.R": {
+    "bone": "lowerarm01",
+    "into": "Nurse",
+    "depth_cm": 2.0,
+    "visible": false
+   },
+   "Surgeon.R": {
+    "bone": "upperarm01",
+    "into": "Surgeon",
+    "depth_cm": 3.8,
+    "visible": false
+   }
+  },
+  "1719": {
+   "Patient.L": {
+    "bone": "metacarpal4",
+    "into": "Patient",
+    "depth_cm": 5.1,
+    "visible": true
+   }
+  },
+  "1727": {
+   "Patient.L": {
+    "bone": "upperarm01",
+    "into": "Patient",
+    "depth_cm": 7.2,
+    "visible": true
+   }
+  },
+  "1731": {
+   "Patient.L": {
+    "bone": "wrist",
+    "into": "Patient",
+    "depth_cm": 11.7,
+    "visible": true
+   }
+  },
+  "1733": {
+   "Patient.R": {
+    "bone": "lowerarm01",
+    "into": "Patient",
+    "depth_cm": 1.7,
+    "visible": true
+   }
+  },
+  "1735": {
+   "Patient.R": {
+    "bone": "metacarpal4",
+    "into": "Patient",
+    "depth_cm": 1.8,
+    "visible": false
+   }
+  },
+  "1737": {
+   "Patient.L": {
+    "bone": "wrist",
+    "into": "Patient",
+    "depth_cm": 10.9,
+    "visible": true
+   }
+  },
+  "1741": {
+   "Patient.R": {
+    "bone": "metacarpal4",
+    "into": "Patient",
+    "depth_cm": 1.6,
+    "visible": false
+   }
+  },
+  "1745": {
+   "Patient.R": {
+    "bone": "lowerarm01",
+    "into": "Patient",
+    "depth_cm": 1.9,
+    "visible": false
+   }
+  },
+  "1759": {
+   "Patient.L": {
+    "bone": "metacarpal3",
+    "into": "Patient",
+    "depth_cm": 9.3,
+    "visible": true
+   }
+  }
+ },
+ "bad_ranges": [
+  [
+   1,
+   7
+  ],
+  [
+   43,
+   155
+  ],
+  [
+   297,
+   321
+  ],
+  [
+   377,
+   379
+  ],
+  [
+   587,
+   593
+  ],
+  [
+   603,
+   605
+  ],
+  [
+   637,
+   665
+  ],
+  [
+   693,
+   707
+  ],
+  [
+   733,
+   795
+  ],
+  [
+   881,
+   957
+  ],
+  [
+   1117,
+   1121
+  ],
+  [
+   1201,
+   1201
+  ],
+  [
+   1275,
+   1389
+  ],
+  [
+   1395,
+   1437
+  ],
+  [
+   1455,
+   1463
+  ],
+  [
+   1471,
+   1671
+  ],
+  [
+   1719,
+   1719
+  ],
+  [
+   1727,
+   1737
+  ],
+  [
+   1759,
+   1759
+  ]
+ ]
+}

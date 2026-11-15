@@ -10,6 +10,22 @@
    - At the ending she stands upright (spine 0), a step behind and beside him, with her hands low.
 5. **Arm out sideways:** `ARM_L_BOARD` wrist is 6 cm in and 7 cm forward, which gives a slight elbow bend. The arm board, incision and pocket are all placed from the arm, so they follow it.
 
+- **Follow-ups found while watching:**
+  - The nurse clasps her hands only once the surgeon has passed her (340); her clasped hands had touched him at 325.
+  - At the end she stands a step behind and beside the patient, and the camera is widened slightly so she is in frame.
+  - A self-unclip keeps the surgeon's hand off his body at 1111.
+
+## Checks (v009k, packed)
+- clip_scan: 1 frame, 1753: the patient's fingertip on his new ear (the intended touch).
+- qa: CLAW, HOVER, FACEPRESS, INSIDE and ROLL are 0.
+  - CAMJUMP 18: the cuts.
+  - EMPTY 16: the inserts.
+  - BACKHEAD 1, FILL 6, PROPMOVE 134.
+  - ATTACH 8: the mask bounding-box artifact explained in v009j; the mask mesh is on his face.
+- cam_clear: 0.
+- limb_check: ARMBODY 1340, ARMBACK 17, PROPHEAD 164.
+- Watched the full preview (every 6th film frame).
+
 ---
 
 # EarInArm v009j
