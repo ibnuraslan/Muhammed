@@ -157,3 +157,10 @@ Also: the haul rope lies on the ground after the haulers let go, and the line ha
 - qa_check (`qa_v007.json`): 12 CAMJUMP, one for each intended hard cut (197, 248, 428, 1031, 1111, 1258, 1288, 1372, 1706, 1782, 1856, 1916). 6 FACEPRESS and 1 BACKHEAD at 1759–1771: the toddler during the swing upright, which is off screen (the camera is on the haulers 1706–1781). PROPMOVE (clods), EMPTY, INSIDE and FILL are the usual cut-away flags.
 - clip_scan (`clip_v007.json`, full, step 6): only 1849–1945 is flagged, and it is the mother's own forearm against her chest as she wraps the toddler in the hug (about 110–170 points, self contact). Trying to reduce it pushed her arm deeper into her body, so it is left as is.
 - Known small items, each one frame or background: 1144–1146 (ResA and ResC brush past each other), 1174 (ResC's arm against his own body as he turns onto the rope, in the background), 1334 (ResB self contact while lifting the legs, already in v006), 1841 (hand-off contact).
+
+## v007b: director's review of v007 (c9eb53a)
+| Frames | Note | Fix |
+|---|---|---|
+| 1816–1856 | The toddler floats between the teen and the mother during the hand-off. | No hand-off in frame. The camera holds on the teen with the toddler at his chest (1782–1849), turned slightly so the mother, waiting with her arms down, stays out of frame. Hard cut at 1850 to the mother already hugging him: her arms round him, his face on her shoulder. The hand-off happens on the cut frame (1849 to 1850; motion blur is off in the package), so it is never on screen. Then the wide at 1916. |
+
+Checks on the v007b package: `review/preview.mp4` is this exact package (frames 1751–1850 re-rendered after the change, all 8 pages watched). QA is unchanged (12 CAMJUMP, one for each intended cut; the FACEPRESS and BACKHEAD flags are off screen). Full clip_scan flags only the hug self contact, 1855–1945 (her forearm against her own chest).
