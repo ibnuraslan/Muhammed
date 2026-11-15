@@ -33,6 +33,32 @@ def brick_mat(name, base=(0.30, 0.11, 0.065), seed=0):
     return m
 
 
+HERE = __import__("os").path.dirname(__import__("os").path.abspath(__file__))
+
+
+def real_brick_mat(name, tint=(1, 1, 1), seed=0):
+    """Scanned clay brick surface (cropped from Poly Haven red_brick_03, CC0, mirror-tiled so there is no mortar)."""
+    import os, random
+    rnd = random.Random(seed)
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping")
+    mp.inputs['Scale'].default_value = (2.33, 2.33, 2.33); mp.inputs['Location'].default_value = (rnd.random(), rnd.random(), rnd.random())
+    L.new(tc.outputs['Object'], mp.inputs['Vector'])
+    def img(f, color):
+        t = N.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(os.path.join(HERE, f), check_existing=True)
+        t.image.colorspace_settings.name = 'sRGB' if color else 'Non-Color'; t.projection = 'BOX'; t.projection_blend = 0.15
+        L.new(mp.outputs[0], t.inputs['Vector']); return t
+    d = img("brick_Diffuse.png", True)
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
+    L.new(d.outputs['Color'], mx.inputs[6]); mx.inputs[7].default_value = (*tint, 1); L.new(mx.outputs[2], p.inputs['Base Color'])
+    L.new(img("brick_Rough.png", False).outputs['Color'], p.inputs['Roughness'])
+    nm = N.new("ShaderNodeNormalMap"); nm.inputs['Strength'].default_value = 1.6
+    L.new(img("brick_nor_gl.png", False).outputs['Color'], nm.inputs['Color']); L.new(nm.outputs[0], p.inputs['Normal'])
+    p.inputs['Coat Weight'].default_value = 0.25; p.inputs['Coat Roughness'].default_value = 0.2      # damp
+    return m
+
+
 def brick(name, loc, rot, mat):
     o = box(name, loc, (0.215, 0.102, 0.065), mat, bevel=0.006, rot=rot)
     o.modifiers["bevel"].segments = 4
@@ -92,7 +118,7 @@ def build(variant=None):
     water = pbr("Water", (0.004, 0.005, 0.005), 0.12); water.node_tree.nodes["Principled BSDF"].inputs['Coat Weight'].default_value = 0.3
     bpy.ops.mesh.primitive_plane_add(size=1, location=(0.0, 1.2, 0.004)); wa = bpy.context.active_object; wa.scale = (0.7, 5, 1); wa.data.materials.append(water)
     # the stack: three bricks, a fourth leaning on it
-    mats = [brick_mat(f"Brick{k}", (0.11 + 0.015 * k, 0.04 + 0.005 * k, 0.026), k) for k in range(4)]
+    mats = [real_brick_mat(f"Brick{k}", (0.75 + 0.08 * k, 0.72 + 0.05 * k, 0.7), k) for k in range(4)]
     h = 0.065
     brick("B0", (0.0, 0.0, h / 2), (0, 0, 0.08), mats[0])
     brick("B1", (0.012, -0.006, h * 1.5 + 0.001), (0, 0, -0.12), mats[1])
@@ -101,19 +127,26 @@ def build(variant=None):
     brick("B4", (-0.34, 0.12, h / 2), (0, 0, -0.18), mats[1])           # a loose one front-left
     brick("B5", (-0.55, 0.9, h / 2), (0, 0, 0.7), mats[0])               # and one far back in the dark
     TOP = Vector((-0.006, 0.004, h * 3 + 0.003))
-    d = diamond("Diamond", 0.045); d.location = TOP + Vector((0, 0, 0.045 * 0.86 - 0.004)); d.rotation_euler = (0, 0, 0.2)
+    d = diamond("Diamond", 0.055); d.location = TOP + Vector((0, 0, 0.055 * 0.86 - 0.005)); d.rotation_euler = (0, 0, 0.2)
     # tipped onto a pavilion facet slightly so the table faces the camera a little
     d.rotation_euler = (math.radians(-10), math.radians(4), 0.2)
     c["diamond"] = d; c["top"] = TOP
     # rats, in the dark around it
     rats = []
-    for k, (loc, rz, s) in enumerate((((-0.26, -0.1, 0), 0.6, 1.7), ((0.37, -0.06, 0), -2.0, 1.6), ((-0.12, 0.5, 0), 2.4, 1.4))):
+    for k, (loc, rz, s) in enumerate((((-0.22, -0.2, 0), 0.6, 1.7), ((0.3, 0.13, 0), -2.3, 1.6), ((-0.14, 0.5, 0), 2.4, 1.4))):
         try:
             r, ms = ph.model("street_rat", loc=loc, rot_z=rz, scale=s)
             rats.append((r, ms))
         except Exception as e:
             print("rat failed", e)
     c["rats"] = rats
+    # sewer junk in the dark
+    for aid, loc, rz, sc in (("can_rusted", (0.48, 0.42, 0), 0.4, 1.0), ("trashbag", (-0.75, 1.3, 0), 1.2, 0.8),
+                             ("plastic_bottle_gallon", (0.62, 1.4, 0), 2.0, 0.9)):
+        try:
+            ph.model(aid, loc=loc, rot_z=rz, scale=sc)
+        except Exception as e:
+            print("junk failed", aid, e)
     return c
 
 

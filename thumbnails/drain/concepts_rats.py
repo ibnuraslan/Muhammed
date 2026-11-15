@@ -23,7 +23,17 @@ def setup(c):
     s = bpy.context.scene; s.cycles.max_bounces = 16; s.cycles.transmission_bounces = 16; s.cycles.glossy_bounces = 12
     s.cycles.caustics_refractive = True; s.cycles.caustics_reflective = True
     # one narrow hard beam straight down through a gap above, onto the stone and the top brick
-    _spot("Beam", t + Vector((0.05, 0.25, 2.2)), t, 2200, (1.0, 0.97, 0.92), 5.5, 0.25, 0.004)
+    S_ = t + Vector((0.05, 0.25, 2.2))
+    _spot("Beam", S_, t, 2200, (1.0, 0.96, 0.88), 13, 0.12, 0.003)
+    # a street grate above: the beam falls through its slots, striping the stack and floor and making shafts in the haze
+    from kit import box, pbr
+    gm = pbr("GrateIron", (0.02, 0.018, 0.016), 0.6)
+    gz = t.z + 1.05; f_ = (gz - t.z) / (S_.z - t.z); P = t + (S_ - t) * f_
+    for k in range(-6, 7):
+        b_ = box(f"GrateBar{k}", (P.x, P.y + 0.032 + k * 0.064, gz), (0.9, 0.022, 0.03), gm); b_.visible_camera = False
+    for k in range(-2, 3):
+        b_ = box(f"GrateRib{k}", (P.x + 0.09 + k * 0.18, P.y, gz + 0.02), (0.03, 0.9, 0.012), gm); b_.visible_camera = False
+    haze(Vector((P.x, P.y, (gz + 0.0) / 2 + 0.02)), (0.9, 0.9, gz), density=0.035, color=(0.95, 0.95, 1.0), anis=0.55)
     # tiny hard glint sources around the stone for fire in the facets
     for k, (dx, dy, dz, e) in enumerate(((-0.35, -0.5, 0.35, 6), (0.4, -0.45, 0.25, 5), (0.0, -0.7, 0.1, 4), (0.25, 0.3, 0.45, 5))):
         l = bpy.data.lights.new(f"Glint{k}", 'AREA'); l.energy = e * 4; l.size = 0.05
@@ -39,7 +49,7 @@ def setup(c):
     bk.visible_camera = False
     top = area_light(t + Vector((0.0, 0.3, 1.4)), (0, 0, 0), 2.0, 3.0, (0.6, 0.7, 0.85)); point_at(top, t + Vector((0, 0.3, -0.3)))
     top.visible_camera = False
-    haze(t + Vector((0, 0.8, 0.5)), (3.0, 5.0, 2.0), density=0.006, color=(0.85, 0.9, 1.0), anis=0.6)
+    haze(t + Vector((0, 1.8, 0.5)), (3.0, 3.0, 2.0), density=0.005, color=(0.85, 0.9, 1.0), anis=0.6)
     # rats: a cold rim from behind each one (linked to that rat only) so the silhouettes read in the dark
     import ph
     for k, (r, ms) in enumerate(c.get("rats", [])):
@@ -76,7 +86,7 @@ def setup(c):
 
 def cam(c):
     t = c["diamond"].location
-    return (t + Vector((0.05, -1.2, 0.1)), t + Vector((0.0, 0.3, -0.12)), 38)
+    return (t + Vector((0.04, -1.0, 0.0)), t + Vector((0.0, 0.3, -0.06)), 50)
 
 
 def stone(c):
@@ -84,6 +94,6 @@ def stone(c):
 
 
 CONCEPTS = {
-    "dd_rats": dict(scene="tdrain", cam=cam, focus=lambda c: c["diamond"].location, fstop=2.8, setup=setup, exposure=0.0,
+    "dd_rats": dict(scene="tdrain", cam=cam, focus=lambda c: c["diamond"].location, fstop=2.0, setup=setup, exposure=0.0,
                     shift=(0.0, 0.1), mask=stone),
 }
