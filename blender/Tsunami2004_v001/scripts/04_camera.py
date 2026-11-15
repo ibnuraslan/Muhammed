@@ -10,7 +10,7 @@ K = [
     (0.0, (12.0, 13.0, g(12, 13) + 0.9), (4.5, 10.0, 0.7), 32),
     (1.0, (6.0, 28, g(6, 28) + 0.8), (4, 18, 0.6), 40),
     (2.0, (7.5, 50, g(7.5, 50) + 0.8), (5, 40, 0.3), 38),
-    (3.0, (11.0, 47.0, g(11, 47) + 1.0), (2.0, 64.0, 0.5), 30),   # vNEXT: kids running onto the exposed seabed among flopping fish, the drawn-back sea on the horizon
+    (3.0, (9.0, 35.0, g(9, 35) + 1.0), (5.0, 60.0, 0.5), 26),   # vNEXT: kids running onto the exposed seabed among flopping fish, the drawn-back sea on the horizon
     (4.0, (12.5, 46, g(12.5, 46) + 1.4), (6, 48, 0.6), 32),   # vNEXT: kids from the side, >= 3 m from the lens
     (5.3, (12.5, 70, g(12.5, 70) + 2.8), (3, 42, 0.8), 30),
     (6.3, (10.5, 56, g(10.5, 56) + 1.2), (4.6, 55.3, 0.0), 32),   # vNEXT: >= 3 m from the running kid

@@ -370,7 +370,7 @@ for t, tr in ((13.0, 0), (14.3, 0), (14.5, 1.0), (15.0, 0.6), (15.6, 0.3)):
     kbw["Trough"].value = tr; kbw["Trough"].keyframe_insert("value", frame=F(t))
 op_ = bpy.data.objects["D_OceanPlate"]; os_ = bpy.data.objects["D_OceanSed"]
 for o_ in (op_, os_):
-    l_ = o_.location.copy(); key_tr(o_, F(13.1), loc=(l_.x, l_.y - 1.0, l_.z + 0.85)); key_tr(o_, F(14.35), loc=tuple(l_));   # vNEXT: visible creep before the slip
+    l_ = o_.location.copy(); key_tr(o_, F(14.35), loc=tuple(l_));
     key_tr(o_, F(14.55), loc=(l_.x, l_.y + 0.4, l_.z - 0.35)); key_tr(o_, F(15.6), loc=(l_.x, l_.y + 0.45, l_.z - 0.35))
 for nm_ in ("D_PulseSea", "D_PulseShore"):
     key_hide(bpy.data.objects[nm_], [(1, True), (F(14.55), False), (F(15.6), True)])
