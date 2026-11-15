@@ -26,8 +26,8 @@ def _rounded(name, loc, size, mat, bevel):
 def velvet():
     _black_world(); c = {}
     vel = ph.texture("velour_velvet", scale=6, tint=(0.018, 0.02, 0.04))
-    p = vel.node_tree.nodes["Principled BSDF"]; p.inputs['Sheen Weight'].default_value = 1.0; p.inputs['Sheen Roughness'].default_value = 0.35
-    p.inputs['Sheen Tint'].default_value = (0.55, 0.6, 0.8, 1)
+    p = vel.node_tree.nodes["Principled BSDF"]; p.inputs['Sheen Weight'].default_value = 0.45; p.inputs['Sheen Roughness'].default_value = 0.35
+    p.inputs['Sheen Tint'].default_value = (0.35, 0.38, 0.5, 1)
     # plinth, cushion on it, a curved backdrop
     blk = pbr("BlackLacquer", (0.008, 0.008, 0.01), 0.3); bp_ = blk.node_tree.nodes["Principled BSDF"]
     bp_.inputs['Coat Weight'].default_value = 1.0; bp_.inputs['Coat Roughness'].default_value = 0.04

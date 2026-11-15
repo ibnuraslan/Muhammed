@@ -20,7 +20,8 @@ def grade(pl, mk):
     # a faint red glow behind the stone (not on it)
     g = np.exp(-(((xx - cx) / 260) ** 2 + ((yy - cy + 20) / 200) ** 2))[..., None]
     stone = (np.asarray(Image.fromarray(mk).filter(ImageFilter.MaxFilter(9))).astype(np.float32) / 255)[..., None]
-    a = a + g * (1 - stone) * np.array([0.30, 0.02, 0.02])
+    above = np.clip((cy + 30 - yy) / 90.0, 0, 1)[..., None]                               # behind the stone, not on the cushion
+    a = a + g * above * (1 - stone) * np.array([0.30, 0.02, 0.02])
     s = a * a * (3 - 2 * a); a = 0.75 * a + 0.25 * s
     return Image.fromarray((np.clip(a, 0, 1) * 255).astype(np.uint8)).convert("RGBA"), (cx, cy)
 

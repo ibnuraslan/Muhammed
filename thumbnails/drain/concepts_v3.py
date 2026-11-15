@@ -45,7 +45,11 @@ def setup_velvet(c):
     f = area_light(t + Vector((0, -1.2, 0.3)), (0, 0, 0), 1.0, 6, (0.8, 0.85, 1.0)); point_at(f, t); f.visible_camera = False
     # dust in the air so the key reads as a beam
     from kit import haze
-    haze(t + Vector((0, 0.2, 0.6)), (1.6, 1.4, 1.4), density=0.05, color=(0.92, 0.94, 1.0), anis=0.5)
+    hz = haze(t + Vector((0, -0.28, 0.75)), (0.32, 0.32, 1.5), density=0.035, color=(0.92, 0.94, 1.0), anis=0.5)   # only the key's column
+    hz.rotation_euler = (math.atan2(0.6, 1.6), 0, 0)
+    for o in bpy.data.objects:
+        if o.type == 'LIGHT' and o.name != "Key":
+            o.visible_volume_scatter = False
     _spot("Edge", t + Vector((0.0, 0.5, 0.25)), t + Vector((0, 0, -0.08)), 120, (1.0, 0.35, 0.25), 25, 0.6, 0.05)   # a red kiss on the cushion's back edge
 
 
