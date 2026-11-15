@@ -127,7 +127,7 @@ for mname in ("M_Wave",):
                           (30.0, (0.030, 0.022, 0.012), 0.03), (31.6, (0.04, 0.03, 0.016), 0.0), (40, (0.04, 0.03, 0.016), 0.0)):
         b.inputs["Base Color"].default_value = (*colr, 1); b.inputs["Base Color"].keyframe_insert("default_value", frame=F(t))
         fv.outputs[0].default_value = foam; fv.outputs[0].keyframe_insert("default_value", frame=F(t))
-    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.14), (31.0, 0.14), (32.0, 0.1)):   # vNEXT: rough muddy water, no sun-glare blobs
+    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.32), (31.0, 0.32), (32.0, 0.1)):   # vNEXT: rough muddy water, no sun-glare blobs
         b.inputs["Roughness"].default_value = rg; b.inputs["Roughness"].keyframe_insert("default_value", frame=F(t))
     for t, sl in ((0, 0.6), (20.8, 0.6), (22.0, 0.22), (31.0, 0.22), (32.0, 0.5)):   # vNEXT: specular on the flood
         b.inputs["Specular IOR Level"].default_value = sl; b.inputs["Specular IOR Level"].keyframe_insert("default_value", frame=F(t))
@@ -453,6 +453,13 @@ for o in bpy.data.objects:   # clear the camera's path through the beach furnitu
 sc.frame_set(1)
 # vNEXT: dark glossy flood water reflects the town and sky; the sun's own glossy highlight is switched off during the
 # flood so it never becomes a white glare patch
+# vNEXT: no slope foam / glow on the flood surface once the wave has broken (it read as a white glare sheet)
+_ntw = bpy.data.materials["M_Wave"].node_tree
+for t, v in ((0, 1.0), (21.6, 1.0), (22.0, 0.0)):
+    _ntw.nodes["LIP_FOAM"].inputs[1].default_value = v; _ntw.nodes["LIP_FOAM"].inputs[1].keyframe_insert("default_value", frame=F(t))
+    _ntw.nodes["STEEP_EMI"].inputs[1].default_value = 0.35 * v; _ntw.nodes["STEEP_EMI"].inputs[1].keyframe_insert("default_value", frame=F(t))
+# vNEXT: the sea plane is hidden for the first 0.25 s (it clipped the lower-left corner of the opening)
+_sea = bpy.data.objects["SeaPlane"]; key_hide(_sea, [(1, True), (F(0.25), False)])
 _sun = bpy.data.objects["Sun"]
 for t, v in ((0, True), (21.4, True), (21.5, False), (31.9, False), (32.0, True)):
     _sun.visible_glossy = v; _sun.keyframe_insert("visible_glossy", frame=F(t))

@@ -116,7 +116,7 @@ def water_mat(name, foam_steep=True):
     geo = NN.new("ShaderNodeNewGeometry"); sz = NN.new("ShaderNodeSeparateXYZ"); LL.new(geo.outputs["Normal"], sz.inputs["Vector"])
     # steep faces glow a lighter green-teal (light through the thin wall)
     stp = NN.new("ShaderNodeMapRange"); stp.inputs["From Min"].default_value = 0.8; stp.inputs["From Max"].default_value = 0.2; LL.new(sz.outputs["Z"], stp.inputs["Value"])
-    emi = NN.new("ShaderNodeMath"); emi.operation = 'MULTIPLY'; emi.inputs[1].default_value = 0.35 if foam_steep else 0.0
+    emi = NN.new("ShaderNodeMath"); emi.operation = 'MULTIPLY'; emi.inputs[1].default_value = 0.35 if foam_steep else 0.0; emi.name = "STEEP_EMI"
     LL.new(stp.outputs["Result"], emi.inputs[0]); LL.new(emi.outputs[0], b.inputs["Emission Strength"])
     b.inputs["Emission Color"].default_value = (0.05, 0.45, 0.45, 1)
     # foam: lip/overhang (normal pointing down/sideways) + soft streak noise + base patches (flood)
@@ -131,7 +131,7 @@ def water_mat(name, foam_steep=True):
     a2 = NN.new("ShaderNodeMath"); a2.operation = 'ADD'; LL.new(a1.outputs[0], a2.inputs[0]); LL.new(fv.outputs[0], a2.inputs[1])
     a3 = NN.new("ShaderNodeMath"); a3.operation = 'MULTIPLY'; LL.new(a2.outputs[0], a3.inputs[0]); LL.new(fr.outputs["Result"], a3.inputs[1])
     a4 = NN.new("ShaderNodeMath"); a4.operation = 'ADD'; a4.use_clamp = True; LL.new(a3.outputs[0], a4.inputs[0])
-    lw = NN.new("ShaderNodeMath"); lw.operation = 'MULTIPLY'; lw.inputs[1].default_value = 1.0 if foam_steep else 0.0
+    lw = NN.new("ShaderNodeMath"); lw.operation = 'MULTIPLY'; lw.inputs[1].default_value = 1.0 if foam_steep else 0.0; lw.name = "LIP_FOAM"
     LL.new(lipm.outputs["Result"], lw.inputs[0]); LL.new(lw.outputs[0], a4.inputs[1])
     foam = NN.new("ShaderNodeBsdfPrincipled"); foam.inputs["Base Color"].default_value = (0.95, 0.97, 0.98, 1); foam.inputs["Roughness"].default_value = 0.75
     foam.inputs["Subsurface Weight"].default_value = 0.3; foam.inputs["Subsurface Radius"].default_value = (0.5, 0.5, 0.5)

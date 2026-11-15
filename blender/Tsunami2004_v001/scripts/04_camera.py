@@ -122,7 +122,7 @@ for f in range(1, 2401):
     # vNEXT: straight cut from the town flood (beat 11) to a slow push on the flooded mosque, no skim over the water
     if F(28.05) <= f < F(30.4):
         u = (f - F(28.05)) / (F(30.4) - F(28.05)); d0 = dirf(F(30.4)).normalized(); p0 = posf(F(30.4))
-        p = p0 - d0 * 26.0 * (1 - u); d = d0   # a clearly visible push
+        p = p0 - d0 * 60.0 * (1 - u) ** 2; d = d0   # vNEXT: strong push that starts moving at once
     if f < F(3.3):   # vNEXT: lead both kids until they split up at 3.4 s, then blend to the side view of them
         p, d = lead_pose(f); lens_ov = 28.0
     elif f < F(4.1):
@@ -130,6 +130,14 @@ for f in range(1, 2401):
         p = lp.lerp(p, u); d = ld.lerp(d, u).normalized(); lens_ov = 28.0 + (lensf(f) - 28.0) * u
     if f >= F(34.2):
         p, d = follow_pose(f); lens_ov = 38.0
+        if f >= 2250:   # vNEXT: cut to a front three-quarter on their faces, the mosque behind the camera's shoulder
+            u2 = min(1.0, max(0.0, (f - F(34.2)) / (F(40.0) - F(34.2)))); c2 = _S0.lerp(_S1, u2); perp = Vector((-_SD.y, _SD.x, 0))
+            p = c2 + _SD * 4.2 + perp * 2.2; p.z = g(p.x, p.y) + 1.45
+            tg = c2 + Vector((0, 0, g(c2.x, c2.y) + 1.35)); d = (tg - p).normalized(); lens_ov = 40.0
+    # vNEXT holds / hard cuts (director review of v011)
+    for f0, f1, fh in ((386, 421, 421), (461, 476, 476), (1081, 1096, 1096), (1319, 1331, 1331)):
+        if f0 <= f < f1:
+            p = posf(fh); d = dirf(fh).normalized(); lens_ov = lensf(fh)
     q = d.to_track_quat('-Z', 'Y'); e = q.to_euler()
     if prev is not None: e.make_compatible(prev)
     prev = e
