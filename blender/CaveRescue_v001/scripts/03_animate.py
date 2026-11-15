@@ -324,7 +324,7 @@ for n, lane, s0 in WALK:
         hh = {}
         for s in "LR":
             sw = math.sin(ph + (0 if s == "L" else math.pi))
-            W, d, nn = relaxed_hand(n, P, Rb, s, fwd=(0.18 if not run else 0.15) * sw + (0.06 if run else 0.0), up=0.26 if run else 0.0, out=0.0 if run else 0.0)   # v007: running pump, elbows bent ~90 deg close to the body (no arms out)
+            W, d, nn = relaxed_hand(n, P, Rb, s, fwd=(0.18 * sw) if not run else (0.22 + 0.09 * sw), up=0.28 if run else 0.0, out=0.0 if run else 0.0)   # v009: running pump, hands always in front of the hips (never pushed out sideways), elbows bent
             hh[s] = (W, d, nn, elbow_pole(n, P, Rb, s, back=0.6, out=0.05 if run else 0.18, down=-0.25 if run else -0.1))
         key_hands(n, f, P, Rb, hh)
         if run:
@@ -726,10 +726,10 @@ for o in [stre]:
         o.hide_render = h; o.keyframe_insert("hide_render", frame=f)
 # cheering crowd at the clearing edge, boys already out wrapped and waving
 CR = [("Crowd1", -3.2, -11.0, 30), ("Crowd2", -4.4, -12.2, 50), ("Crowd3", 3.6, -11.5, -40), ("Crowd4", 4.8, -13.0, -55),
-      ("Boy1", -2.4, -14.5, 15), ("Boy5", 2.2, -15.0, -20), ("Coach", 1.0, -16.0, 0)]
+      ("Boy1", -0.3, -14.7, 10), ("Boy5", 2.2, -15.0, -20), ("Coach", 1.0, -16.0, 0)]   # v009: Boy1 in the ending shot with the coach and Boy5
 for n, x, y, yaw in CR:
     H = HUM[n]
-    for k, f in enumerate(range(OUT0, OUT1 + 165, 15)):
+    for k, f in enumerate(range(OUT0, OUT1 + 165, 12)):
         g = ground_z(x, y); P = V((x, y + 0.0, g + H.root_head.z - 0.02 - 0.03 * (k % 2))); Rb = body_R(yaw, -4)
         H.key_root(f, P, yaw=yaw, flex=-4); H.key_spine(f, flex=-6, head=(-10, 0))
         for s in "LR":
@@ -745,8 +745,9 @@ for n, x, y, yaw in CR:
                 W = bw(n, P, Rb, rest_head(n, "spine02")) + Rb @ V((gap / 2 * sx, -0.32, 0.12))
                 hh[s] = (W, Rb @ V((-0.2 * sx, -0.3, 1)).normalized(), Rb @ V((-sx, 0, 0)), sh + Rb @ V((0.45 * sx, 0.2, -0.35)))
                 key_fingers(n, s, f, "flat_palm")
-            elif s == "R":                         # rescued boys / coach: an open-palm wave at head height
-                W = sh + Rb @ V((0.34 * sx + 0.06 * (cheer - 0.5), -0.22, 0.22)); hh[s] = (W, Rb @ V((0.15 * sx, 0, 1)).normalized(), Rb @ V((0, -1, 0)), sh + Rb @ V((0.55 * sx, 0.3, -0.25)))   # wave out to the side, well clear of the face
+            elif s == "R":                         # v009: a real wave: hand above the shoulder, elbow bent and low, waving side to side
+                osc = 0.11 if cheer else -0.11
+                W = sh + Rb @ V((0.2 * sx + osc, -0.14, 0.36)); hh[s] = (W, Rb @ V((0.1 * sx + osc, 0, 1)).normalized(), Rb @ V((0, -1, 0)), sh + Rb @ V((0.5 * sx, 0.15, -0.45)))
                 key_fingers(n, s, f, "relaxed")
         key_hands(n, f, P, Rb, hh)
     TELE[n].add(OUT0 - 1)
