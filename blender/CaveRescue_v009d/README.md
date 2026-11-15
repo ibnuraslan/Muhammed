@@ -1,0 +1,43 @@
+# CaveRescue_v009d: farm package
+
+The full 51.5 s film (1080×1920, 60 fps, frames 1–3090), built to the brief's target beat times. No render has been submitted.
+
+## Contents
+- `CaveRescue_v009d_60fps.blend`: self-contained, with every texture packed. 71 MB, a plain git file.
+- `beats.json`: the start frame of each beat, for `pipeline/retime_to_vo.py` when the voiceover arrives (there is no VO yet).
+- `SETTINGS.md`: render settings and test frames.
+- `CREDITS.md`: everything is CC0, plus an optional credit line.
+- `package_check_f2240_lowres.png`: a 25 %, 8-sample frame from the packed file opened in factory Blender. It shows the package works; it is not a quality reference.
+
+## Source and review
+- **Source:** `../CaveRescue_v001/scripts`. Build order:
+  1. `01_build_chars`
+  2. `02_build_scene`
+  3. `03_animate` (runs `03b_camera`)
+  4. v009d = the v007 chain plus `20_v009d_edit` (no wipes, direct cuts, shorter cross-section and diver tunnel, wetsuits, beats remapped), `21_v009d_fix` (no sky in the caves, death-beat and ending cameras), and `12_depenetrate` on the v009d clip_scan ranges. Frame range 1–2268.
+  4. v007 adds, after `10_v004`: `12_depenetrate` (hands off bodies), `13_props` (worn gear bone-parented, masks shrinkwrapped 2 mm), `15_v009d` (eye fix, f/11, camera clearance), then after `08_package` + `11_logo_patch`: `16_v009d_simplify` (passage lift, wipes 290/1726), `12_depenetrate` on the clip_scan ranges, `17_v009d_fix2` (medic hold, wipe 2418, tow dolly).
+  4. `06_finish` (look, cave fill, wetsuits, hand limits, 4-frame wipes), then `09_v003` (director D review: brighter dark beats, banded cutaway, tank detail and hoses, neoprene seams, diver rims), then `10_v004` (saturated, textured cutaway strata with relief, bigger ridge jungle; wider cutaway framing and reframed 10 s, 30 s and 43 s)
+  5. `08_package`
+
+  The checks are `04_audit` (feet, penetration, camera), `05_closeups` (contact close-ups) and `07_hand_audit` (hand BVH).
+- **Review:** `../CaveRescue_v001/review/`: the D 1/s sheet, hand close-ups and audit reports.
+
+## Known open items
+- **Scale changes:** these are rock fly-throughs with a 4-frame black card, not a true continuous scale. The passage → cross-section exit (around frame 2566–2572) can show a few more dark frames while the camera leaves the mountain mesh.
+- **Rendering effects:** rain, flood front and silt are shader effects (no simulations). The water surface is a ripple shader.
+- **Crowd:** 4 distinct adult villagers plus 3 rescued boys and the coach. There are no Thai uniforms or media crews yet.
+- **Dive gear:** procedural, but detailed: twin tanks with domed ends, valve heads, knobs, cam bands and a regulator hose to the mouth (hooked to the tank and the head). The full-face mask is a rubber seal plus a clear visor.
+- **Hand audit:** see the D message and `review/D_hand_audit.txt`. The remaining hits are intended contacts (the diver's hands on the boy's head and mask while strapping it), explained there.
+- **Diver close-up:** the dive mask on the surfacing diver reads as a dark visor in close-up.
+- **Respectful beat:** beat 7 shows only a light fading into the dark water. No body is ever shown.
+
+## v009d: acting pass (Nov 12)
+Every story-beat frame is unchanged (`beats.json`). The full problem list and fixes are in `../CaveRescue_v001/review/ACTING_notes.md`.
+- **Before and after sheets:** `review/ACTING_v004_before_halfsec_a.jpg`/`_b.jpg` and `review/ACTING_v009d_after_halfsec_a.jpg`/`_b.jpg`.
+- **Hand close-ups:** `review/ACTING_v009d_hand_closeups.jpg`.
+- **clip_scan** (director tool, step 6, 2 cm): **0 bad ranges** (`review/ACTING_v009d_clip_scan.json`).
+
+## v009d: director round 2 + QA (Nov 12)
+Beat frames are unchanged. The notes are in `../CaveRescue_v001/review/ACTING_notes.md` (round 2 section).
+- **Sheets and close-ups:** after sheet `review/ACTING_v009d_after_halfsec_a.jpg`/`_b.jpg`, hand close-ups `review/ACTING_v009d_hand_closeups.jpg`.
+- **QA:** `review/qa_v009d.json` (qa_check c6240b2).

@@ -58,7 +58,8 @@ inj = {}
 D2 = V((-0.2, -1, 0)).normalized()
 for f in range(1655, 1704):      # v009c: the boy's front-right at his face height; his face, the medic beside him and the hand with the syringe
     p = face(f); sp = syr.matrix_world.translation.copy()
-    inj[f] = (p + D2 * (0.85 - 0.05 * (f - 1655) / 48) + V((0, 0, -0.12)), p * 0.55 + sp * 0.45, 30)
+    da = bpy.data.objects["DiverA"]; mh = da.matrix_world @ da.pose.bones["head"].tail
+    inj[f] = (p + D2 * (1.0 - 0.05 * (f - 1655) / 48) + V((0, 0, -0.18)), p * 0.45 + sp * 0.25 + mh * 0.30, 28)   # v009d: the medic's whole face in frame
 apply(inj)
 # 7: mask on the boy's face (from 1811, after it is on): tight, long lens from the low front-right so only face and mask fill the frame
 DIR = V((-0.28, -1.57, -0.01)).normalized(); mk = {}
@@ -150,6 +151,10 @@ sc.view_settings.exposure = 3.2; sc.view_settings.keyframe_insert("exposure", fr
 sc.view_settings.exposure = 2.2; sc.view_settings.keyframe_insert("exposure", frame=2035)
 for f, e in ((1977, 450), (1978, 1200), (2034, 1200), (2035, 450)):
     L.data.energy = e; L.data.keyframe_insert("energy", frame=f)
+# v009d: the boy's headlamp off in the injection close-up (it made a hotspot over his eye)
+bl_ = bpy.data.objects["Boy2_TorchLens"]; bt_ = bpy.data.objects["Boy2_TorchLight"]; sc.frame_set(1650); e0_ = bt_.data.energy
+for f, h, e in ((1654, False, e0_), (1655, True, 0.0), (1703, True, 0.0), (1704, False, e0_)):
+    bl_.hide_render = h; bl_.keyframe_insert("hide_render", frame=f); bt_.data.energy = e; bt_.data.keyframe_insert("energy", frame=f)
 for nm in ("DiverB_TorchLight", "Boy2_TorchLight"):     # in the shot from ahead the torches hit the passage roof close to the lens (a white blob)
     o = bpy.data.objects.get(nm)
     if not o: continue

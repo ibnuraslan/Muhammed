@@ -1,0 +1,128 @@
+[
+ {
+  "beat": 1,
+  "frame": 1,
+  "first_words": "In 2018, a group of boys",
+  "frame_v007": 1,
+  "frame_long": 1,
+  "frame_cut": 1,
+  "vo_words": "In 2018"
+ },
+ {
+  "beat": 2,
+  "frame": 341,
+  "first_words": "heavy rain suddenly flooded",
+  "frame_v007": 295,
+  "frame_long": 330,
+  "frame_cut": 330,
+  "vo_words": "Then, heavy rain"
+ },
+ {
+  "beat": 3,
+  "frame": 571,
+  "first_words": "They were more than two miles in",
+  "frame_v007": 577,
+  "frame_long": 561,
+  "frame_cut": 541,
+  "vo_words": "They were over two miles in"
+ },
+ {
+  "beat": 4,
+  "frame": 687,
+  "first_words": "and the narrow passages leading out",
+  "frame_v007": 727,
+  "frame_long": 610,
+  "frame_cut": 589,
+  "vo_words": "and every passage out"
+ },
+ {
+  "beat": 5,
+  "frame": 891,
+  "first_words": "After 10 days, divers finally found them",
+  "frame_v007": 1003,
+  "frame_long": 712,
+  "frame_cut": 691,
+  "vo_words": "After 10 days, divers"
+ },
+ {
+  "beat": 6,
+  "frame": 1065,
+  "first_words": "but the flooded tunnels were so dangerous",
+  "frame_v007": 1213,
+  "frame_long": 906,
+  "frame_cut": 865,
+  "vo_words": "But the tunnels"
+ },
+ {
+  "beat": 7,
+  "frame": 1160,
+  "first_words": "that even a skilled diver died",
+  "frame_v007": 1489,
+  "frame_long": 1014,
+  "frame_cut": 960,
+  "vo_words": "that even a skilled diver died"
+ },
+ {
+  "beat": 8,
+  "frame": 1321,
+  "first_words": "Swimming the boys out themselves",
+  "frame_v007": 1711,
+  "frame_long": 1176,
+  "frame_cut": 1122,
+  "vo_words": "Swimming the boys out"
+ },
+ {
+  "beat": 9,
+  "frame": 1463,
+  "first_words": "So rescuers chose a last resort",
+  "frame_v007": 2017,
+  "frame_long": 1457,
+  "frame_cut": 1263,
+  "vo_words": "So, rescuers tried something crazy"
+ },
+ {
+  "beat": 10,
+  "frame": 1591,
+  "first_words": "They sedated the boys",
+  "frame_v007": 2155,
+  "frame_long": 1595,
+  "frame_cut": 1391,
+  "vo_words": "They knocked the boys out"
+ },
+ {
+  "beat": 11,
+  "frame": 1761,
+  "first_words": "fitted them with full-face diving masks",
+  "frame_v007": 2329,
+  "frame_long": 1769,
+  "frame_cut": 1561,
+  "vo_words": "strapped diving masks"
+ },
+ {
+  "beat": 12,
+  "frame": 1885,
+  "first_words": "and carried their unconscious bodies",
+  "frame_v007": 2407,
+  "frame_long": 1846,
+  "frame_cut": 1638,
+  "vo_words": "and carried them through the flooded tunnels"
+ },
+ {
+  "beat": 13,
+  "frame": 2105,
+  "first_words": "All 12 boys and their coach made it out alive",
+  "frame_v007": 2725,
+  "frame_long": 2120,
+  "frame_cut": 1858,
+  "vo_words": "And after 18 days underground"
+ },
+ {
+  "beat": 14,
+  "frame": 2249,
+  "first_words": "after 18 days underground",
+  "frame_v007": 2929,
+  "frame_long": 2318,
+  "frame_cut": 2003,
+  "vo_words": "all 12 boys and their coach made it out alive"
+ }
+]

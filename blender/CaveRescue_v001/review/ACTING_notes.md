@@ -226,3 +226,8 @@ These changes are added to `scripts/24_v009b_fix.py` and run on the v009 package
 - **C. 2092–2105:** holds the 2091 framing to the cut, so the pair no longer pass across the lens.
 - **D. Shot from ahead, 1978–2034:** one stop brighter (exposure 3.2), and the follow lamp goes from 450 to 1200 W.
 - **Preview:** frames 1651–1886 and 1971–2106 were re-rendered from the exact v009c package. Every other range is unchanged from v009b.
+
+## Round 10 (director review of v009c) → v009d
+- **Injection, 1655–1703:** the camera pulls back to 1.0 m and drops 18 cm. The aim takes the medic's head into account, so his whole head and face are in frame with the boy's face and the hand with the syringe.
+- **Headlamp:** the boy's lamp (lens and light) is off for this shot only, so there's no hotspot over his eye.
+- **Preview:** 1651–1706 re-rendered from the exact v009d package. Everything else is unchanged from v009c.
