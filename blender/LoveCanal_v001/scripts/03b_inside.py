@@ -1,7 +1,7 @@
 # exec'd by 03_anim.py: kitchen S4, S5 and hospital S22
 GLASS = OB["Glass"]; FA = CH["Father"]; MO = CH["Mother"]; BOY = CH["Boy"]
 KX = Vector((300, 0, 0))
-FP = KX + Vector((0, 1.25, 0))
+FP = KX + Vector((0, 1.42, 0))
 GLASS_REST = GLASS.location.copy()
 
 # ================================================================== S4: Father raises the glass, sips (rim below the lips), lowers it, frowns, hand to throat
@@ -28,9 +28,8 @@ for f in range(fa, fe + 1, 2):
     gw = world(FA, p)
     GLASS.rotation_mode = 'XYZ'; GLASS.location = gw - Vector((0, 0, 0.075)); GLASS.rotation_euler = (R_(-tilt), 0, 0)
     GLASS.keyframe_insert("location", frame=f); GLASS.keyframe_insert("rotation_euler", frame=f)
-    side = (FA.r.o.matrix_world.to_3x3() @ Vector((1, 0, 0))).normalized()
-    place_hand(FA.r.o, "R", f, gw - side * 0.034 - Vector((0, 0, 0.01)), side, (FA.r.o.matrix_world.to_3x3() @ Vector((0, -1, 0))).normalized())
-apply_pose(FA.r.o, "R", "wrap_grip", fa)
+ev(fa); _side = (FA.r.o.matrix_world.to_3x3() @ Vector((1, 0, 0))).normalized(); _gc = GLASS.matrix_world @ Vector((0, 0, 0.07))
+print("GLASS grip", grip_follow(FA.r.o, "R", GLASS, fa, list(range(fa, fe + 1, 2)) + [fe], _gc - _side * 0.04, _side))
 # left hand to the collar after the frown
 NECK = (FA.r.BN["neck01"].head_local + FA.r.BN["neck02"].head_local) / 2
 for f in range(fa + 110, fe + 1, 4):
@@ -50,7 +49,7 @@ GL_C = KX + Vector((-0.28, 0.62, 0.905))
 GLASS.location = GL_C; GLASS.rotation_euler = (0, 0, 0); GLASS.keyframe_insert("location", frame=fa); GLASS.keyframe_insert("rotation_euler", frame=fa)
 for i, f in enumerate(range(fa, fe + 1, 15)):
     u = smooth((f - fa) / 50.0)
-    stand(FA, f, flex=4 + 8 * u, spine=6 + 16 * u + 2 * math.sin(i * 1.4), head=(6 + 6 * u, 0), dz=-0.02 * u)
+    stand(FA, f, flex=4 + 6 * u, spine=6 + 10 * u + 2 * math.sin(i * 1.4), head=(6 + 6 * u, 0), dz=-0.02 * u)
 face(FA, fa, -0.010, -20, 2); face(FA, fe, -0.011, -24, 2); blinks(FA, fa, fe, -0.010, -20, every=90)
 for f in range(fa, fe + 1, 4):        # right palm flat on the counter edge, left hand in front of the mouth
     ev(f); M = FA.r.o.matrix_world; fw = (M.to_3x3() @ Vector((0, -1, 0))).normalized()
@@ -59,7 +58,7 @@ for f in range(fa, fe + 1, 4):        # right palm flat on the counter edge, lef
     sh = M @ FA.r.PB["upperarm01.L"].head
     place_hand(FA.r.o, "L", f, (sh + Vector((0, 0, -0.4)) + fw * 0.2).lerp(m + fw * 0.03, u), -fw, (M.to_3x3() @ Vector((-1, 0, 0.25))).normalized())
 apply_pose(FA.r.o, "R", "flat_palm", fa); apply_pose(FA.r.o, "L", "shield", fa)
-MOP = KX + Vector((1.42, 0.4, 0)); BOP = KX + Vector((0.95, -0.42, 0))
+MOP = KX + Vector((1.62, 0.45, 0)); BOP = KX + Vector((1.0, -0.78, 0))
 def yaw_to(p, tgt):
     d = (tgt - p); return math.degrees(math.atan2(d.x, -d.y))
 put("Mother", [("S5", MOP, yaw_to(MOP, FP))])
@@ -120,6 +119,7 @@ for j in range(ny + 1):
         row.append(z)
     zs.append(row)
 raw = [r[:] for r in zs]
+zs = [[z + 0.02 for z in r] for r in zs]
 for _ in range(6):
     zs = [[(zs[j][i] * 2 + sum(zs[jj][ii] for jj, ii in ((j - 1, i), (j + 1, i), (j, i - 1), (j, i + 1)) if 0 <= jj <= ny and 0 <= ii <= nx) /
             max(1, sum(1 for jj, ii in ((j - 1, i), (j + 1, i), (j, i - 1), (j, i + 1)) if 0 <= jj <= ny and 0 <= ii <= nx)) * 2) / 4
@@ -135,7 +135,7 @@ me = bpy.data.meshes.new("Blanket"); bm.to_mesh(me); bm.free()
 BL = bpy.data.objects.new("Blanket", me); HBED.users_collection[0].objects.link(BL)
 for p_ in me.polygons: p_.use_smooth = True
 so = BL.modifiers.new("thick", 'SOLIDIFY'); so.thickness = 0.04; so.offset = 1
-BL.modifiers.new("sub", 'SUBSURF').levels = 1
+
 BL.data.materials.append(mat("BlanketBlue", (0.35, 0.45, 0.62), 0.85))
 # the near arm rests on top of the blanket, hand by the hip
 ev(fa)
@@ -144,7 +144,7 @@ def blanket_z(x, y):
     return hit[1].z if hit[0] else MTOP
 yh = hip_w.y + (-1 if near_side == "R" and Xw.y > 0 else 1) * 0.0
 hand_y = bc.y + CHAIR_SIDE * (W_ / 2 - 0.17)
-HAND_P = Vector((hip_w.x + HEAD_SGN * 0.05, hand_y, 0)); HAND_P.z = blanket_z(HAND_P.x, HAND_P.y) + 0.012
+HAND_P = Vector((hip_w.x + HEAD_SGN * 0.05, hand_y, 0)); HAND_P.z = blanket_z(HAND_P.x, HAND_P.y) + 0.03
 for f in (fa, fe):
     place_hand(FA.r.o, near_side, f, HAND_P, Vector((0, 0, -1)), Vector((-HEAD_SGN, 0, 0)))
 key_vis(BL, [(0, False), (fa, True)])
@@ -164,7 +164,7 @@ BP = Vector(((cmn.x + cmx.x) / 2, (cmn.y + cmx.y) / 2 + 0.06 * -want.y, 0))
 put("Boy", [("S1", (0, 0, 0), 180), ("S5", BOP, yaw_to(BOP, FP)), ("S22", HX + Vector((BP.x - HX.x, BP.y, 0)), 180 if want.y < 0 else 0)])
 ev(fa + 1)
 for i, f in enumerate(range(fa, fe + 1, 30)):
-    BOY.key_root(f, Vector((0, 0.02, SEAT_Z + 0.075 + 0.004 * math.sin(i))), yaw=0, flex=24)
+    BOY.key_root(f, Vector((0, 0.0, SEAT_Z + 0.12 + 0.004 * math.sin(i))), yaw=0, flex=24)
     BOY.key_spine(f, flex=10 + 1.5 * math.sin(i * 1.3), head=(4, 0))
     for s, sx in (("L", 1), ("R", -1)): BOY.key_foot(s, f, Vector((0.1 * sx, -0.33)), 0.0, lift=0.06, pitch=10)
 face(BOY, fa, 0.003, -12); blinks(BOY, fa, fe, 0.003, -12, ofs=55)
@@ -174,7 +174,7 @@ for f in (fa, fe):
 apply_pose(BOY.r.o, "R", "relaxed_even" if "relaxed_even" in POSES else "relaxed", fa)
 ev(fa); M = BOY.r.o.matrix_world
 for f in (fa, fe):
-    lp = M @ (BOY.r.BN["upperleg01.L"].head_local + Vector((0.02, -0.22, 0.06)))     # left hand on his own thigh
+    lp = M @ (BOY.r.BN["upperleg01.L"].head_local + Vector((-0.04, -0.2, 0.17)))     # left hand resting on his own thigh, toward the middle
     place_hand(BOY.r.o, "L", f, lp, Vector((0, 0, -1)), (M.to_3x3() @ Vector((0, -1, 0))).normalized())
 apply_pose(BOY.r.o, "L", "relaxed", fa)
 camshot("S22", [(0.0, (hip_w.x - HEAD_SGN * 1.95, bc.y - 2.05, 1.65), (hip_w.x + HEAD_SGN * 0.35, bc.y + 0.35, 0.82), 28),

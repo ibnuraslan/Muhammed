@@ -43,9 +43,9 @@ for f in range(f0("S1") - 1, fx("S1") + 2):
         a = th + ph
         pw = Mb @ Vector((r_crank * math.cos(a) - 0.03, sy, cz - r_crank * math.sin(a)))     # pedal (model space -> world)
         pl = L180(pw)
-        BOY.key_foot(s, f, (pl + Vector((0, 0.06, 0))).to_2d(), 0.0, lift=pl.z - BOY.ankle[s].z + 0.055, pitch=-8)
+        BOY.key_foot(s, f, (pl + Vector((0, 0.06, 0))).to_2d(), 0.0, lift=pl.z - BOY.ankle[s].z + 0.085, pitch=-8)
     seat = Mb @ (Vector((-0.19, 0, 1.0)) * K)
-    BOY.key_root(f, L180(seat) + Vector((0, 0.04, 0.05 + 0.006 * math.sin(th * 2))), yaw=0, flex=22)
+    BOY.key_root(f, L180(seat) + Vector((0, 0.07, 0.13 + 0.006 * math.sin(th * 2))), yaw=0, flex=22)
     BOY.key_spine(f, flex=14, twist=3 * math.sin(th), head=(-22, 0))
     for s, sy in (("L", 0.27), ("R", -0.27)):
         g = Mb @ (Vector((0.36, sy, 1.16)) * K)
@@ -98,16 +98,16 @@ stand(D2, fa + 20, flex=10, spine=20, head=(22, 0))
 GRIP = fa + 22
 for f in range(fa + 10, GRIP + 1, 4):        # reach: palm comes down onto the handle
     u = smooth((f - fa - 10) / 12)
-    place_hand(D2.r.o, "R", f, HANDLE + Vector((0, -0.12 * (1 - u), 0.02 + 0.18 * (1 - u))), Vector((0, 0.15, -1)), Vector((0, 1, -0.2)))
-apply_pose(D2.r.o, "R", "open_alarm", fa + 10); apply_pose(D2.r.o, "R", "wrap_grip", GRIP)
+    place_hand(D2.r.o, "R", f, HANDLE + Vector((0, -0.12 * (1 - u), 0.05 + 0.18 * (1 - u))), Vector((0, 0.15, -1)), Vector((0, 1, -0.2)))
+apply_pose(D2.r.o, "R", "open_alarm", fa + 10); apply_pose(D2.r.o, "R", "cup_hold", GRIP)
 # lift: torso leans back, lid comes up and toward him, face turns away
 for f in range(GRIP, fe + 1, 2):
     u = smooth((f - GRIP) / 36.0); v = smooth((f - GRIP - 14) / 30.0)
-    stand(D2, f, flex=10 - 14 * v, spine=20 - 24 * v, twist=-12 * v, head=(22 - 30 * v, -38 * v), side=4 * v)
-    p = HANDLE + Vector((0, -0.18 * u, 0.32 * u))
-    place_hand(D2.r.o, "R", f, p, Vector((0, 0.15, -1)), Vector((0, 1, -0.2)))
+    stand(D2, f, flex=10 - 12 * v, spine=20 - 20 * v, twist=-12 * v, head=(22 - 30 * v, -38 * v), side=4 * v, pos=(0, 0.06 * v))
+    p = HANDLE + Vector((0, 0.02 * u, 0.30 * u))
+    place_hand(D2.r.o, "R", f, p + Vector((0, 0, 0.03)), Vector((0, 0.15, -1)), Vector((0, 1, -0.2)))
 face(D2, GRIP + 14, -0.004, -14); face(D2, GRIP + 26, -0.009, -32, 3); face(D2, fe, -0.009, -30, 3)
-follow_bone(LID, D2.r.o, "wrist.R", GRIP, fe, step=1)
+follow_bone(LID, D2.r.o, "wrist.R", GRIP, min(fe, f1("S3")), step=1)
 
 # ================================================================== S6: the family house; Neighbour walks past on the sidewalk
 fa = f0("S6"); fe = fx("S6")
@@ -126,7 +126,7 @@ for f in range(fa, fe + 1, 2):
     ev(f)
     M = D2.r.o.matrix_world; ch = M @ D2.r.PB["spine03"].head
     fwd = (M.to_3x3() @ Vector((0, -1, 0))).normalized(); side = (M.to_3x3() @ Vector((1, 0, 0))).normalized()
-    c = ch + fwd * 0.33 + Vector((0, 0, -0.12))
+    c = ch + fwd * 0.43 + Vector((0, 0, -0.02))
     MBOX.rotation_mode = 'XYZ'; MBOX.location = c - Vector((0, 0, 0.225)); MBOX.rotation_euler = (0, 0, R_(-90)); MBOX.keyframe_insert("location", frame=f); MBOX.keyframe_insert("rotation_euler", frame=f)
     for s, sg in (("L", 1), ("R", -1)):
         place_hand(D2.r.o, s, f, c + side * sg * 0.225, -side * sg, (fwd * 0.9 + Vector((0, 0, -0.3))).normalized())

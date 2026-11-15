@@ -38,9 +38,10 @@ def put(n, s_list):
     marks = []
     for s, pos, yaw in s_list:
         M = yaw if isinstance(yaw, Matrix) else Matrix.Translation(Vector(pos)) @ Matrix.Rotation(R_(yaw), 4, 'Z')
-        marks.append((f0(s), M)); marks.append((f1(s) + 1, PARK))
+        PK = Matrix.Translation((list(CH).index(n) * 40.0, -5000, -500))
+        marks.append((f0(s), M)); marks.append((f1(s) + 1, PK))
     marks.sort(key=lambda m: m[0])
-    o.matrix_world = PARK; o.keyframe_insert("location", frame=0); o.keyframe_insert("rotation_quaternion", frame=0)
+    o.matrix_world = Matrix.Translation((list(CH).index(n) * 40.0, -5000, -500)); o.keyframe_insert("location", frame=0); o.keyframe_insert("rotation_quaternion", frame=0)
     for f, M in marks:
         loc, q, _ = M.decompose(); o.location = loc; o.rotation_quaternion = q
         o.keyframe_insert("location", frame=f); o.keyframe_insert("rotation_quaternion", frame=f)
@@ -108,6 +109,19 @@ def follow_bone(prop, rig, bone, fa, fb, step=1):
         ev(f); M = rig.matrix_world @ rig.pose.bones[bone].matrix @ OFF
         l_, q_, _ = M.decompose(); prop.location = l_; prop.rotation_quaternion = q_
         prop.keyframe_insert("location", frame=f); prop.keyframe_insert("rotation_quaternion", frame=f)
+
+def grip_follow(rig, side, obj, fg, frames, contact, approach):
+    """grip_object once at fg (fingers close until they touch), then the hand rides with the object (same relative IK pose)"""
+    rep = grip_object(rig, side, fg, obj, contact, approach)
+    ev(fg); bn = "IK_hand." + side
+    rel = obj.matrix_world.inverted() @ rig.matrix_world @ rig.pose.bones[bn].matrix
+    for f in frames:
+        ev(f); A = rig.matrix_world.inverted() @ obj.matrix_world @ rel
+        l_, q_, _ = (rig.data.bones[bn].matrix_local.inverted() @ A).decompose(); pb = rig.pose.bones[bn]
+        if pb.rotation_quaternion.dot(q_) < 0: q_ = -q_
+        pb.location = l_; pb.rotation_quaternion = q_
+        pb.keyframe_insert("location", frame=f); pb.keyframe_insert("rotation_quaternion", frame=f)
+    return rep
 
 def key_prop(o, f, loc=None, rot=None):
     o.rotation_mode = 'XYZ'
