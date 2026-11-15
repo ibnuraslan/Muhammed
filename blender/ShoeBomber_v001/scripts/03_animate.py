@@ -409,13 +409,20 @@ TP = AX + V((-1.2, -0.75, 0))
 for f in range(1, 1380, 60):
     stand(trav, f, TP, FWD, spine=(5, 0, 0))
 for f, flex, sp, crouch, hd in ((1393, 0, 10, 0.0, (25, 0)), (1420, 0, 18, 0.03, (35, 5)), (1440, 0, 12, 0.04, (15, 0)), (1455, 5, 18, 0.15, (5, 0)),
-                               (1468, 15, 24, 0.50, (-42, 0)), (1480, 15, 26, 0.52, (-44, 5)), (1500, 5, 20, 0.12, (20, 0))):
+                               (1535, 5, 15, 0.15, (15, 0))):
     trav.key_root(f, V((TP.x, TP.y + (-0.35 if 1460 <= f <= 1485 else 0.05 if f >= 1455 else 0), trav.root_head.z - 0.02 - crouch)), yaw=FWD, flex=flex)   # v006d: hips back in the squat (his face was in the tray)
     trav.key_spine(f, flex=sp, head=hd)
     trav.key_foot("L", f, trav.foot_xy("L", TP, FWD), FWD)
+# v006e (director): he KNEELS on the floor beside the belt -- both knees down, shins back, the sneaker beside his right knee,
+# picks it up and reaches into the tray; nothing of him passes the belt (knees stop ~7 cm short of it)
+TK = V((TP.x - 0.22, TP.y + 0.15, 0))
+for f, sp, tw, hd in ((1468, 30, 0, (-25, 0)), (1480, 32, 8, (-20, 5)), (1492, 30, 15, (-8, 10)), (1508, 28, 18, (-5, 12)), (1518, 22, 12, (0, 8))):
+    trav.key_root(f, V((TK.x, TK.y, 0.55)), yaw=FWD, flex=12)
+    trav.key_spine(f, flex=sp, twist=-tw, head=hd)
+    trav.key_foot("L", f, V((TK.x - 0.12, TK.y - 0.35)), FWD, 0.02, -65); trav.key_foot("R", f, V((TK.x + 0.13, TK.y - 0.33)), FWD, 0.02, -65)
 # right foot: steps back out of the sneaker (1425-1445; the sneaker stays on the floor), then plants beside it
 RF0 = trav.foot_xy("R", TP, FWD)
-for f, dy, lift, pitch in ((1393, 0, 0, 0), (1425, 0, 0, 0), (1435, -0.10, 0.04, 20), (1445, -0.22, 0.0, 0), (1520, -0.22, 0.0, 0)):
+for f, dy, lift, pitch in ((1393, 0, 0, 0), (1425, 0, 0, 0), (1435, -0.10, 0.04, 20), (1445, -0.22, 0.0, 0), (1455, -0.22, 0.0, 0), (1535, -0.22, 0.0, 0)):
     trav.key_foot("R", f, RF0 + V((0.06 if f >= 1445 else 0, dy)), FWD, lift, pitch)
 # right hand: down to the sneaker heel on the floor (1478), lifts it over the tray (1500-1515), lets go (1520)
 # v006e: the conveyor models ran ACROSS the lane (he stood inside the belt); turn each one to run along the lane
@@ -432,12 +439,13 @@ SHOE_PICK = V((trf.x + 0.02, trf.y - 0.04, 0.19))
 hand(trav, "R", 1393, TP + V((0.29, 0.10, 0.95)), (0, 0.3, -1), (-1, 0, 0), grip=0.3)
 hand(trav, "L", 1393, TP + V((-0.29, 0.10, 0.95)), (0, 0.3, -1), (1, 0, 0), grip=0.3)
 hand(trav, "L", 1440, TP + V((-0.12, 0.42, 0.82)), (0, 1, -0.5), (0, 0, -1), grip=0.3)          # steadies on the belt edge
-hand(trav, "L", 1480, TP + V((-0.22, 0.30, 0.55)), (0, 1, -0.5), (0, 0, -1), grip=0.3)         # on his knee in the squat
+hand(trav, "L", 1480, V((TK.x - 0.10, TK.y + 0.25, 0.62)), (0, 1, -0.5), (0, 0, -1), grip=0.3)     # on his thigh in the kneel
+hand(trav, "L", 1518, V((TK.x - 0.10, TK.y + 0.25, 0.62)), (0, 1, -0.5), (0, 0, -1), grip=0.3)
 hand(trav, "R", 1455, SHOE_PICK + V((0, 0, 0.18)), (0, 0.3, -1), (-1, 0, 0), grip=0.3)
 hand(trav, "R", 1478, SHOE_PICK, (0, 0.3, -1), (-1, 0, 0), grip=0.8)
 hand(trav, "R", 1500, V((TP.x + 0.15, TP.y + 0.45, 0.95)), (0, 0.6, -0.8), (-1, 0, 0), grip=0.8)
-hand(trav, "R", 1515, V((TP.x + 0.35, TP.y + 0.70, 0.98)), (0, 0.6, -0.8), (-1, 0, 0), grip=0.8)
-hand(trav, "R", 1520, V((TP.x + 0.36, TP.y + 0.72, 0.99)), (0, 0.6, -0.8), (-1, 0, 0), grip=0.2)
+hand(trav, "R", 1515, V((TP.x + 0.35, TP.y + 0.70, 0.90)), (0, 0.6, -0.8), (-1, 0, 0), grip=0.8)
+hand(trav, "R", 1520, V((TP.x + 0.36, TP.y + 0.72, 0.88)), (0, 0.6, -0.8), (-1, 0, 0), grip=0.2)
 print("SHOE_PICK", SHOE_PICK)
 # straightens in socks, watches the tray roll into the X-ray, small shrug (1560-1620)
 for f, sp, hd in ((1560, 5, (5, 10)), (1590, 0, (0, 30)), (1620, -2, (-3, 35))):
