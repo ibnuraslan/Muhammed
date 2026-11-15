@@ -1,0 +1,170 @@
+[
+ {
+  "shot": "S01",
+  "set": "room",
+  "f0": 1,
+  "f1": 120,
+  "note": "In 2000 - kneeling, packing the book bag"
+ },
+ {
+  "shot": "S02",
+  "set": "room",
+  "f0": 121,
+  "f1": 210,
+  "note": "9-year-old girl - close, looks up"
+ },
+ {
+  "shot": "S03",
+  "set": "room",
+  "f0": 211,
+  "f1": 330,
+  "note": "named Asha / packed a book bag - stands with bag on, turns to the door"
+ },
+ {
+  "shot": "S04",
+  "set": "room",
+  "f0": 331,
+  "f1": 420,
+  "note": "left her house in the rain - walks out through the French door"
+ },
+ {
+  "shot": "S05",
+  "set": "road",
+  "f0": 421,
+  "f1": 540,
+  "note": "really early in the morning - walking away under the umbrella"
+ },
+ {
+  "shot": "S06",
+  "set": "road",
+  "f0": 541,
+  "f1": 660,
+  "note": "front three-quarter, face under the umbrella"
+ },
+ {
+  "shot": "S07",
+  "set": "road",
+  "f0": 661,
+  "f1": 780,
+  "note": "a passing motorist saw her - car passes"
+ },
+ {
+  "shot": "S08",
+  "set": "road",
+  "f0": 781,
+  "f1": 870,
+  "note": "walking along the highway - wide, car stopped ahead"
+ },
+ {
+  "shot": "S09",
+  "set": "road",
+  "f0": 871,
+  "f1": 960,
+  "note": "he circled back / approached - she stops, looks at the car"
+ },
+ {
+  "shot": "S10",
+  "set": "road",
+  "f0": 961,
+  "f1": 1080,
+  "note": "Asha ran into - turns and runs off the road"
+ },
+ {
+  "shot": "S11",
+  "set": "woods",
+  "f0": 1081,
+  "f1": 1170,
+  "note": "the woods - running between trees"
+ },
+ {
+  "shot": "S12",
+  "set": "woods",
+  "f0": 1171,
+  "f1": 1260,
+  "note": "by daylight Asha was gone - wide, small figure disappears"
+ },
+ {
+  "shot": "S13",
+  "set": "shed",
+  "f0": 1261,
+  "f1": 1380,
+  "note": "leaving behind a few belongings - two searchers at the shed"
+ },
+ {
+  "shot": "S14",
+  "set": "shed",
+  "f0": 1381,
+  "f1": 1500,
+  "note": "in a nearby shed - searcher reads his clipboard"
+ },
+ {
+  "shot": "S15",
+  "set": "woods",
+  "f0": 1501,
+  "f1": 1650,
+  "note": "extensive searches - torches sweep the woods"
+ },
+ {
+  "shot": "S16",
+  "set": "woods",
+  "f0": 1651,
+  "f1": 1800,
+  "note": "no trace of her - closer, searcher walks forward"
+ },
+ {
+  "shot": "S17",
+  "set": "site",
+  "f0": 1801,
+  "f1": 1890,
+  "note": "a year later - the wrapped bag, close"
+ },
+ {
+  "shot": "S18",
+  "set": "site",
+  "f0": 1891,
+  "f1": 2040,
+  "note": "her book bag was found at a construction site - worker reaches"
+ },
+ {
+  "shot": "S19",
+  "set": "site",
+  "f0": 2041,
+  "f1": 2190,
+  "note": "covered in a plastic bag - hand on the plastic, close"
+ },
+ {
+  "shot": "S20",
+  "set": "site",
+  "f0": 2191,
+  "f1": 2280,
+  "note": "but it revealed nothing - worker looks at the bag"
+ },
+ {
+  "shot": "S21",
+  "set": "road",
+  "f0": 2281,
+  "f1": 2370,
+  "note": "no one knows why she left - memory figure walks"
+ },
+ {
+  "shot": "S22",
+  "set": "road",
+  "f0": 2371,
+  "f1": 2460,
+  "note": "or where she was going - side"
+ },
+ {
+  "shot": "S23",
+  "set": "wall",
+  "f0": 2461,
+  "f1": 2670,
+  "note": "her disappearance... - the framed portrait"
+ },
+ {
+  "shot": "S24",
+  "set": "wall",
+  "f0": 2671,
+  "f1": 2880,
+  "note": "unsolved cases in the United States - closer"
+ }
+]
