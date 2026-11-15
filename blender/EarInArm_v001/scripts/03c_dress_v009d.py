@@ -78,7 +78,7 @@ def face_mask(rig, body, old_name, new_name):
     hz = rig.data.bones["head"].head_local.z
     cand = [i for i, m in enumerate(mix) if i not in helper and m.z > hz - 0.05 and abs(m.x) < 0.09]
     nose = min(cand, key=lambda i: mix[i].y); N = mix[nose]
-    keep = {i for i in cand if N.z - 0.085 < mix[i].z < N.z + 0.018 and mix[i].y < N.y + 0.05 and abs(mix[i].x) < 0.062
+    keep = {i for i in cand if N.z - 0.085 < mix[i].z < N.z - 0.008 - 0.3 * abs(mix[i].x) and mix[i].y < N.y + 0.05 and abs(mix[i].x) < 0.062
             and body.data.vertices[i].normal.y < 0.15}
     o = body.copy(); o.data = body.data.copy(); o.name = new_name
     for c in body.users_collection: c.objects.link(o)
@@ -88,7 +88,8 @@ def face_mask(rig, body, old_name, new_name):
     bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.index not in keep], context='VERTS'); bm.to_mesh(o.data); bm.free()
     o.data.materials.clear(); o.data.materials.append(mat)
     for poly in o.data.polygons: poly.material_index = 0
-    dp = o.modifiers.new("lift", 'DISPLACE'); dp.strength = 0.0025; dp.mid_level = 0.0; dp.direction = 'NORMAL'
+    smo = o.modifiers.new("sheet", 'SMOOTH'); smo.factor = 1.0; smo.iterations = 25   # a cloth sheet over nose and lips, not a skin cast
+    dp = o.modifiers.new("lift", 'DISPLACE'); dp.strength = 0.004; dp.mid_level = 0.0; dp.direction = 'NORMAL'
     so = o.modifiers.new("thick", 'SOLIDIFY'); so.thickness = 0.0012; so.offset = 1.0
     sm = o.modifiers.new("smooth", 'SUBSURF'); sm.levels = 1; sm.render_levels = 1
     old.hide_render = True; old.hide_viewport = True
