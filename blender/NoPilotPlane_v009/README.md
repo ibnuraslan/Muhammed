@@ -33,6 +33,16 @@ The ending close-up of his face (55.72–58.0 s) is kept as it was.
 | 8 | 3071–3146: 1.3 s static top-down on the FO | 0.7 s. |
 | – | Flat green patch | `scripts/09_field.py`: grass with mowing bands, and a 2.9 km × 160 m runway strip with a dashed centreline and edge lines, riding with the terrain. |
 
+## v009h: the client's notes (via the director), patched onto the v009g package
+
+| # | Note | Fix |
+|---|---|---|
+| 1 | 1036–1221: the handset pressed into his forehead and temple | The handset-to-head action is deleted. The handset stays on its hook for the whole film. From 931 to 1266 he braces with both hands on the tops of the two seat backs, leaning toward the windscreen. Nothing touches his head. Done by `scripts/10_v009h_patch.py` on the packaged file (it deletes his arm and finger keys in that window and re-keys both hands with the `relaxed` finger preset), followed by `08_camera.py`. |
+| 2 | 1451–1511: the FO's body passes through the seat back; the boy's head merges into him | The haul is now a cut. From behind the boy, his hands on the FO's shoulders (23.3–23.8 s, 0.5 s). Then the window (23.8–25.3 s, two angles). Then the FO already on the floor beside the seat, with the boy standing over him (from 25.3 s). |
+| 3 | Twisted hands and wrists while he sits and walks (56–241 and later) | **Not done in v009h.** It needs a pass over every idle-hand key in the film and a 540×960 check of every visible hand, which did not fit the deadline. |
+
+Package md5 2797b9c5. Ranges re-rendered from it and spliced into the preview: 926–1276 and 1391–1556. Only the patch-range stills were checked at 540×960 (960, 1040, 1100, 1160, 1220 and 1260). The cam/clip/limb checks were not re-run on this package.
+
 ## v009g: the director's review of v009f (9 items)
 
 | # | Note on v009f | Fix |

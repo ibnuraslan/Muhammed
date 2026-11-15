@@ -52,9 +52,12 @@ SHOTS = [
     (20.40, 21.24, (-1.00, 2.15, 1.45), (-0.99, 2.12, 1.45), YH, 35),
     # beat 9: the haul (v009c: from behind while he reaches in, his arms hidden by his body; then high from the front)
     (21.24, 23.30, OTS[0], OTS[1], mid(YH, FH, 0.5), 26),            # behind-left: his reaching arms stay behind his body
-    (23.30, 24.10, REAR[0], REAR[1], mid(YH, FH, 0.5), 22),           # the haul from the doorway, 0.8 s
-    (24.10, 25.25, (-0.90, 2.20, 1.55), (-0.89, 2.18, 1.55), mid(YH, FH, 0.5), 24),   # v009h: his face as he hauls (the doorway wide held 1.9 s)
-    (25.25, 25.82, HAUL_HI[0], HAUL_HI[1], mid(YH, FH, 0.6), 22),     # from 25.25 s (earlier, the FO's legs stick up in front of the lens)
+    # v009h (client): the FO passed through the seat back during the haul. Re-staged as a cut: from behind him, both
+    # hands on the FO's shoulders (0.5 s); the window; then the FO already on the floor beside the seat, the boy beside him
+    (23.30, 23.80, REAR[0], REAR[1], mid(YH, FH, 0.5), 22),
+    (23.80, 24.80, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.3)), 24),
+    (24.80, 25.30, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, -0.6)), 24),
+    (25.30, 25.82, HAUL_HI[0], HAUL_HI[1], mid(YH, FH, 0.6), 22),
     # beat 10-11: alarms, the dive
     (25.82, 27.40, INFRONT[0], INFRONT[1], YH, 26),
     (27.40, 28.40, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, -0.6)), 24),
