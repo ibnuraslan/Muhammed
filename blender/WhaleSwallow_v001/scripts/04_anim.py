@@ -234,7 +234,7 @@ def jaw_hinge_world(fr):
     """a point inside the open gap between the jaws, a little above the hinge"""
     sc.frame_set(fr); P = W.pose.bones; Mw = W.matrix_world
     hinge = Mw @ P["jaw"].head; tips = ((Mw @ P["jaw"].tail) + (Mw @ P["head"].tail)) / 2
-    return hinge.lerp(tips, 0.62)
+    return hinge.lerp(tips, 0.80)
 sid = "1a"; whale_breach(sid, 0.0, 1.0, -6.0, -2.6, 42, 38, tilt=8)
 for fr in frames(sid, 4):
     hp = jaw_hinge_world(fr); t = T(sid, fr)
@@ -267,7 +267,7 @@ camera(sid, [(0, OCEAN + Vector((6, -9, 3.0)), OCEAN + Vector((0, -0.5, 4.2))), 
 sid = "1c"
 for fr in frames(sid):
     t = T(sid, fr)
-    key_whale(fr, OCEAN + Vector((2.0 * t, 0, lerp(-2.2, -12.0, ease(t)))), (0, lerp(78, 40, ease(t)), 0), jaw=0, swim=0.8 + 0.5 * t, amp=0.8)
+    key_whale(fr, OCEAN + Vector((2.0 * t, 0, lerp(-2.2, -4.6, ease(t)))), (0, lerp(78, 55, ease(t)), 0), jaw=0, swim=0.8 + 0.5 * t, amp=0.8)
 D.park(F[sid][0])
 key_fx(SPL, F[sid][0], OCEAN + Vector((-2, 0, -0.6)), (9, 9, 3)); key_fx(SPL, F[sid][1], OCEAN + Vector((-2, 0, -0.6)), (12, 12, 1.2))
 key_fx(RING, F[sid][0], OCEAN + Vector((-2, 0, 0.05)), (8, 8, 1)); key_fx(RING, F[sid][1], OCEAN + Vector((-2, 0, 0.05)), (12, 12, 1))
@@ -280,7 +280,7 @@ sid = "2"; whale_park(F[sid][0])
 for fr in frames(sid, 3):
     t = T(sid, fr)
     up = ease(min(1, t * 1.4))
-    pos = MOUTH + Vector((0, -0.4, tongue_z(0, -0.4) + 0.13 + 0.04 * up))
+    pos = MOUTH + Vector((0, -0.4, tongue_z(0, -0.4) + 0.24 + 0.04 * up))
     M = M_of(pos, yaw=0, pitch=-90 + 25 * up)                 # lying on his back, head toward the throat, torso lifting
     D.key_body(fr, M); D.key_spine(fr, flex=8 * up, head=(18 * up + 6 * math.sin(t * 5), 28 * math.sin(t * 3.2)))
     for s in "LR":
@@ -337,6 +337,10 @@ for fr in frames(sid):
 camera(sid, [(0, UNDER + Vector((-9, -13, 1.0)), UNDER + Vector((-2.5, 0, 0.6))), (1, UNDER + Vector((-12, -14, 0.6)), UNDER + Vector((-5.5, 0, 0.6)))], lens=30)
 
 # 5a/5b/5c: inside the mouth, he gets up and pushes at the baleen wall
+def foot_on_tongue(s, fr, M, p_loc, knee_dir):
+    pw = M @ p_loc; a_ = D.h.ankle[s]
+    pw.z = MOUTH.z + tongue_z(pw.x - MOUTH.x, pw.y - MOUTH.y) + a_.z + 0.015
+    D.key_foot(s, fr, M, M.inverted() @ pw, knee_dir=knee_dir)
 def stand_in_mouth(fr, x, y, yaw, crouch, lean):
     z = tongue_z(x, y) + D.root_head.z - crouch
     return M_of(MOUTH + Vector((x, y, z)), yaw=yaw, pitch=lean)
@@ -346,7 +350,7 @@ for fr in frames(sid, 3):
     D.key_body(fr, M); D.key_spine(fr, flex=10, head=(-15 + 10 * math.sin(t * 4), 35 * math.sin(t * 3)))
     for s in "LR":
         sx = 1 if s == "L" else -1; a_ = D.rest_ankle(s)
-        D.key_foot(s, fr, M, Vector((a_.x + sx * 0.12, a_.y + (0.12 if s == "L" else -0.1), a_.z + 0.18 - 0.0)), knee_dir=Vector((sx * 0.3, -1, 0)))
+        foot_on_tongue(s, fr, M, Vector((a_.x + sx * 0.12, a_.y + (0.12 if s == "L" else -0.1), a_.z + 0.18)), Vector((sx * 0.3, -1, 0)))
     arms_hang(D, fr, M, swing=0.05 * math.sin(t * 5), out=0.08)
 for s in "LR": D.hand_pose(s, F[sid][0], "relaxed")
 camera(sid, [(0, MOUTH + Vector((0.6, 3.6, 2.6)), MOUTH + Vector((0, -0.5, 1.0))), (1, MOUTH + Vector((0.4, 2.8, 2.3)), MOUTH + Vector((0.1, -0.2, 1.0)))], lens=24)
@@ -359,12 +363,12 @@ for sid, side in (("5b", 1), ("5c", -1)):
         D.key_body(fr, M); D.key_spine(fr, flex=12 + 6 * push, head=(-8 - (14 * t if sid == "5c" else 0), (-25 * side * t if sid == "5c" else 0)))
         for s in "LR":
             sx = 1 if s == "L" else -1; a_ = D.rest_ankle(s)
-            D.key_foot(s, fr, M, Vector((a_.x + sx * 0.05, a_.y + (0.28 if s == "L" else -0.18), a_.z + 0.22)), knee_dir=Vector((0, -1, 0.2)))
+            foot_on_tongue(s, fr, M, Vector((a_.x + sx * 0.05, a_.y + (0.28 if s == "L" else -0.18), a_.z + 0.22)), Vector((0, -1, 0.2)))
         # palms flat on the baleen plates (world x = wall), at shoulder height
         Minv = M.inverted()
         for s in "LR":
             sx = 1 if s == "L" else -1
-            pw = Vector((MOUTH.x + wall_x, MOUTH.y + sx * 0.28 * side, MOUTH.z + 1.35 + 0.03 * push))
+            pw = Vector((MOUTH.x + wall_x - side * 0.05, MOUTH.y + sx * 0.28 * side, MOUTH.z + 1.35 + 0.03 * push))
             pl = Minv @ pw
             D.key_hand(s, fr, M, pl, Minv.to_3x3() @ Vector((side, 0, 0)), Minv.to_3x3() @ Vector((0, 0, 1)), D.shoulder(s) + Vector((sx * 0.35, 0.1, -0.35)))
     for s in "LR": D.hand_pose(s, F[sid][0], "flat_palm")
@@ -375,7 +379,7 @@ camera("5c", [(0, MOUTH + Vector((0.8, 2.5, 1.3)), MOUTH + Vector((-1.6, 0, 1.4)
 # 6a: the whale's head bursts up through the surface
 sid = "6a"
 for fr in frames(sid):
-    t = T(sid, fr); key_whale(fr, OCEAN + Vector((0, 0, lerp(-9, -3.6, ease(t)))), (0, 55, 90), jaw=0, swim=0.3 * t, amp=0.5)
+    t = T(sid, fr); key_whale(fr, OCEAN + Vector((0, 0, lerp(-6.2, -3.6, ease(t)))), (0, 55, 90), jaw=0, swim=0.3 * t, amp=0.5)
 D.park(F[sid][0])
 key_fx(SPL, F[sid][0], OCEAN + Vector((-1.5, 0, -0.5)), (2, 2, 1)); key_fx(SPL, F[sid][1], OCEAN + Vector((-1.5, 0, -0.5)), (6, 6, 3.5))
 key_fx(RING, F[sid][0], OCEAN + Vector((-1.5, 0, 0.05)), (2.5, 2.5, 1)); key_fx(RING, F[sid][1], OCEAN + Vector((-1.5, 0, 0.05)), (5, 5, 1))
@@ -386,7 +390,7 @@ sid = "6b"
 for fr in frames(sid):
     t = T(sid, fr); key_whale(fr, OCEAN + Vector((0, 0, -3.6 - 1.5 * t)), (0, 55 - 10 * t, 90), jaw=lerp(0, 35, ease(min(1, t * 3))), swim=0.4 + 0.3 * t, amp=0.5)
 sc.frame_set(round(lerp(*F[sid], 0.2))); start = ((W.matrix_world @ W.pose.bones["jaw"].tail) + (W.matrix_world @ W.pose.bones["head"].tail)) / 2
-land = OCEAN + Vector((-9.5, -1.0, -0.3))
+land = OCEAN + Vector((-9.5, -1.0, -0.3)); start = start + (land - start).normalized() * 1.4 + Vector((0, 0, 0.6))
 for fr in frames(sid, 2):
     t = T(sid, fr); u = max(0.0, min(1.0, (t - 0.18) / 0.62))
     p = start.lerp(land, u) + Vector((0, 0, 4.2 * math.sin(math.pi * u) if u < 1 else 0))
@@ -447,7 +451,7 @@ def hosp_arms(fr, M, rib=0.0, thigh_L=0.0, t=0.0):
     for s in "LR":
         sx = 1 if s == "L" else -1; sh = D.shoulder(s)
         # resting hand on the mattress beside the hip
-        bed_pt = Vector((BX - 0.05 + sx * 0.34, sit_y - 0.12, mz + 0.03))
+        bed_pt = Vector((BX - 0.05 + sx * 0.34, sit_y - 0.12, mz + 0.05))
         p = Ml @ bed_pt
         D.key_hand(s, fr, M, p, Ml.to_3x3() @ Vector((0, 0, -1)), Ml.to_3x3() @ Vector((0, -1, 0)), sh + Vector((sx * 0.3, 0.3, -0.3)))
 def thigh_hand(fr, M, s, frac=0.55):
@@ -468,7 +472,7 @@ for sid in ("7a", "7b", "8a", "8b", "9", "10"):
         elif sid in ("8a", "8b"): M = sit(fr, lean=-6 + 1.5 * br, knee_up=0.45 if sid == "8a" else 0.45 - 0.15 * math.sin(t * math.pi), head=(-26, 8))
         else: M = sit(fr, lean=-12 + 1.5 * br, head=(-10, 20 * math.sin(t * 2)))
         hosp_arms(fr, M)
-    for s in "LR": D.hand_pose(s, F[sid][0], "relaxed")
+    for s in "LR": D.hand_pose(s, F[sid][0], "flat_palm")
     if sid in ("8a", "8b"):
         for fr in frames(sid, 3): thigh_hand(fr, sit(fr, lean=-6, knee_up=0.45 if sid == "8a" else 0.45 - 0.15 * math.sin(T(sid, fr) * math.pi), head=(-26, 8)), "L")
 cy = sit_y
@@ -479,7 +483,7 @@ def knee_w(sid):
 k8 = knee_w("8a")
 camera("8a", [(0, k8 + Vector((0.75, -0.55, 0.55)), k8 + Vector((-0.05, 0.12, -0.02))), (1, k8 + Vector((0.65, -0.48, 0.5)), k8 + Vector((-0.05, 0.12, -0.02)))], lens=35)
 k8 = knee_w("8b")
-camera("8b", [(0, k8 + Vector((0.42, -0.36, 0.32)), k8 + Vector((0, 0.02, -0.02))), (1, k8 + Vector((0.38, -0.32, 0.3)), k8 + Vector((0, 0.02, -0.02)))], lens=40)
+camera("8b", [(0, k8 + Vector((0.38, -0.30, 0.48)), k8 + Vector((0, -0.04, 0.02))), (1, k8 + Vector((0.34, -0.27, 0.45)), k8 + Vector((0, -0.04, 0.02)))], lens=40)
 camera("9", [(0, HOSP + Vector((1.2, -3.6, 1.7)), Vector((BX - 0.2, cy - 0.5, 0.9))), (1, HOSP + Vector((0.4, -3.6, 1.7)), Vector((BX - 0.2, cy - 0.5, 0.9)))], lens=26)
 camera("10", [(0, HOSP + Vector((0.0, -2.9, 1.45)), Vector((BX, cy, 1.05))), (1, HOSP + Vector((0.0, -2.5, 1.40)), Vector((BX, cy, 1.05)))], lens=28)
 
