@@ -1,0 +1,757 @@
+{
+ "frames": {
+  "240": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "246": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "600": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 1.30 m, 70 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "630": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 34"
+   ]
+  ],
+  "636": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1422": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 9.07 m, 153 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1440": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1446": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1452": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1458": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1464": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1602": [
+   [
+    "CLAW",
+    "Prisoner.L curl 61"
+   ]
+  ],
+  "1608": [
+   [
+    "CLAW",
+    "Prisoner.L curl 65"
+   ]
+  ],
+  "1614": [
+   [
+    "CLAW",
+    "Prisoner.L curl 63"
+   ]
+  ],
+  "1620": [
+   [
+    "CLAW",
+    "Prisoner.R curl 65"
+   ]
+  ],
+  "1626": [
+   [
+    "CLAW",
+    "Prisoner.R curl 63"
+   ]
+  ],
+  "1632": [
+   [
+    "CLAW",
+    "Prisoner.R curl 61"
+   ]
+  ],
+  "1638": [
+   [
+    "CLAW",
+    "Prisoner.L curl 50"
+   ],
+   [
+    "CLAW",
+    "Prisoner.R curl 53"
+   ]
+  ],
+  "1644": [
+   [
+    "CLAW",
+    "Prisoner.L curl 65"
+   ]
+  ],
+  "1650": [
+   [
+    "CLAW",
+    "Prisoner.L curl 63"
+   ]
+  ],
+  "1656": [
+   [
+    "CLAW",
+    "Prisoner.L curl 61"
+   ]
+  ],
+  "1662": [
+   [
+    "CLAW",
+    "Prisoner.R curl 64"
+   ]
+  ],
+  "1668": [
+   [
+    "CLAW",
+    "Prisoner.R curl 61"
+   ]
+  ],
+  "1674": [
+   [
+    "CLAW",
+    "Prisoner.R curl 65"
+   ]
+  ],
+  "1680": [
+   [
+    "CLAW",
+    "Prisoner.L curl 65"
+   ]
+  ],
+  "1686": [
+   [
+    "CLAW",
+    "Prisoner.L curl 65"
+   ]
+  ],
+  "1698": [
+   [
+    "CLAW",
+    "Prisoner.L curl 39"
+   ],
+   [
+    "CLAW",
+    "Prisoner.R curl 60"
+   ]
+  ],
+  "1704": [
+   [
+    "CLAW",
+    "Prisoner.L curl 56"
+   ]
+  ],
+  "1860": [
+   [
+    "BACKHEAD",
+    "Prisoner"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 18.40 m, 156 deg in one frame (neighbours 0.41 m, 1 deg)"
+   ]
+  ],
+  "1866": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1884": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2142": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2148": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "2154": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2472": [
+   [
+    "FILL",
+    "CellFront_0"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only CellFront_0 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2490": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2496": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "2508": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 32"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 0.58 m, 14 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "2514": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "2520": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "2526": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2538": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "2994": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "3000": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "3450": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "3492": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "3498": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 2.87 m, 151 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "3504": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "3510": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "3516": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "3522": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "3528": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "3534": [
+   [
+    "CLAW",
+    "Protester1.L curl 68"
+   ]
+  ],
+  "3540": [
+   [
+    "CLAW",
+    "Protester1.L curl 64"
+   ]
+  ],
+  "3570": [
+   [
+    "CLAW",
+    "Protester2.L curl 26"
+   ]
+  ],
+  "3576": [
+   [
+    "CLAW",
+    "Protester2.L curl 43"
+   ]
+  ],
+  "3582": [
+   [
+    "CLAW",
+    "Protester1.R curl 75"
+   ],
+   [
+    "CLAW",
+    "Protester2.L curl 42"
+   ],
+   [
+    "CLAW",
+    "Protester2.R curl 48"
+   ]
+  ],
+  "3588": [
+   [
+    "CLAW",
+    "Protester2.L curl 50"
+   ]
+  ],
+  "3594": [
+   [
+    "CLAW",
+    "Protester2.L curl 54"
+   ]
+  ],
+  "3600": [
+   [
+    "CLAW",
+    "Protester2.L curl 53"
+   ],
+   [
+    "CLAW",
+    "Protester2.R curl 27"
+   ]
+  ],
+  "3606": [
+   [
+    "CLAW",
+    "Protester1.L curl 71"
+   ],
+   [
+    "CLAW",
+    "Protester2.L curl 51"
+   ]
+  ],
+  "3612": [
+   [
+    "CLAW",
+    "Protester1.L curl 75"
+   ],
+   [
+    "CLAW",
+    "Protester2.R curl 36"
+   ]
+  ],
+  "3618": [
+   [
+    "CLAW",
+    "Protester2.R curl 45"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 2.26 m, 2 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "3624": [
+   [
+    "CLAW",
+    "Protester2.R curl 48"
+   ]
+  ],
+  "3630": [
+   [
+    "CLAW",
+    "Protester2.R curl 65"
+   ]
+  ],
+  "3642": [
+   [
+    "CLAW",
+    "Protester2.L curl 30"
+   ]
+  ],
+  "3654": [
+   [
+    "CLAW",
+    "Protester2.L curl 48"
+   ]
+  ],
+  "3660": [
+   [
+    "CLAW",
+    "Protester2.L curl 50"
+   ]
+  ],
+  "3666": [
+   [
+    "CLAW",
+    "Protester2.L curl 52"
+   ],
+   [
+    "CLAW",
+    "Protester2.R curl 39"
+   ]
+  ],
+  "3672": [
+   [
+    "CLAW",
+    "Protester2.L curl 54"
+   ],
+   [
+    "CLAW",
+    "Protester2.R curl 38"
+   ]
+  ],
+  "3678": [
+   [
+    "CLAW",
+    "Protester2.L curl 54"
+   ],
+   [
+    "CLAW",
+    "Protester2.R curl 27"
+   ]
+  ],
+  "60": [
+   [
+    "CAMJUMP",
+    "cut: 0.26 m, 5 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "100": [
+   [
+    "CAMJUMP",
+    "cut: 0.93 m, 63 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "236": [
+   [
+    "CAMJUMP",
+    "cut: 2.51 m, 132 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "300": [
+   [
+    "CAMJUMP",
+    "cut: 1.48 m, 65 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "420": [
+   [
+    "CAMJUMP",
+    "cut: 0.92 m, 43 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "541": [
+   [
+    "CAMJUMP",
+    "cut: 1.64 m, 75 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "626": [
+   [
+    "CAMJUMP",
+    "cut: 1.06 m, 48 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "652": [
+   [
+    "CAMJUMP",
+    "cut: 0.46 m, 3 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "678": [
+   [
+    "CAMJUMP",
+    "cut: 7.12 m, 93 deg in one frame (neighbours 0.03 m, 0 deg)"
+   ]
+  ],
+  "790": [
+   [
+    "CAMJUMP",
+    "cut: 1.00 m, 35 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "860": [
+   [
+    "CAMJUMP",
+    "cut: 1.03 m, 21 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "942": [
+   [
+    "CAMJUMP",
+    "cut: 4.29 m, 122 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "1046": [
+   [
+    "CAMJUMP",
+    "cut: 3.44 m, 99 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1128": [
+   [
+    "CAMJUMP",
+    "cut: 4.96 m, 113 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1218": [
+   [
+    "CAMJUMP",
+    "cut: 5.04 m, 117 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1340": [
+   [
+    "CAMJUMP",
+    "cut: 0.81 m, 41 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1472": [
+   [
+    "CAMJUMP",
+    "cut: 6.12 m, 72 deg in one frame (neighbours 0.05 m, 1 deg)"
+   ]
+  ],
+  "1548": [
+   [
+    "CAMJUMP",
+    "cut: 11.01 m, 36 deg in one frame (neighbours 0.06 m, 0 deg)"
+   ]
+  ],
+  "1588": [
+   [
+    "CAMJUMP",
+    "cut: 2.69 m, 116 deg in one frame (neighbours 0.06 m, 0 deg)"
+   ]
+  ],
+  "1678": [
+   [
+    "CAMJUMP",
+    "cut: 1.72 m, 45 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "1756": [
+   [
+    "CAMJUMP",
+    "cut: 5.48 m, 155 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "1871": [
+   [
+    "CAMJUMP",
+    "cut: 0.66 m, 65 deg in one frame (neighbours 0.44 m, 13 deg)"
+   ]
+  ],
+  "1946": [
+   [
+    "CAMJUMP",
+    "cut: 2.27 m, 159 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "2140": [
+   [
+    "CAMJUMP",
+    "cut: 1.07 m, 44 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "2186": [
+   [
+    "CAMJUMP",
+    "cut: 1.54 m, 16 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "2440": [
+   [
+    "CAMJUMP",
+    "cut: 1.65 m, 65 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "2590": [
+   [
+    "CAMJUMP",
+    "cut: 3.37 m, 128 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "2700": [
+   [
+    "CAMJUMP",
+    "cut: 4.46 m, 132 deg in one frame (neighbours 0.03 m, 0 deg)"
+   ]
+  ],
+  "2889": [
+   [
+    "CAMJUMP",
+    "cut: 0.33 m, 0 deg in one frame (neighbours 0.06 m, 0 deg)"
+   ]
+  ],
+  "2898": [
+   [
+    "CAMJUMP",
+    "cut: 15.10 m, 149 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "2992": [
+   [
+    "CAMJUMP",
+    "cut: 2.40 m, 123 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "3052": [
+   [
+    "CAMJUMP",
+    "cut: 2.19 m, 124 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "3166": [
+   [
+    "CAMJUMP",
+    "cut: 0.30 m, 12 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "3228": [
+   [
+    "CAMJUMP",
+    "cut: 0.93 m, 38 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "3360": [
+   [
+    "CAMJUMP",
+    "cut: 0.92 m, 39 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "3446": [
+   [
+    "CAMJUMP",
+    "cut: 0.82 m, 42 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "3530": [
+   [
+    "CAMJUMP",
+    "cut: 10.55 m, 163 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "3680": [
+   [
+    "CAMJUMP",
+    "cut: 12.30 m, 162 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 37,
+  "CLAW": 48,
+  "BACKHEAD": 1,
+  "FILL": 2,
+  "CAMJUMP": 44
+ }
+}

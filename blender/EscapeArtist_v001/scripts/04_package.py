@@ -5,9 +5,16 @@ a = sys.argv[sys.argv.index("--") + 1:]
 OUT, TMP = a[0], a[1]; MAXR = int(a[2]) if len(a) > 2 else 1024
 os.makedirs(TMP, exist_ok=True)
 ALPHA_KEYS = ("hair", "eyebrow", "eyelash", "ponytail", "afro", "bob0", "short0", "braid", "long01", "lashes", "brow")
+# images whose Alpha output drives a material (cut-outs such as the chain-link fence): keep them PNG, or the alpha is lost
+ALPHA_USED = set()
+for _m in bpy.data.materials:
+    if _m.node_tree:
+        for _l in _m.node_tree.links:
+            if _l.from_node.type == "TEX_IMAGE" and _l.from_socket.name == "Alpha" and _l.from_node.image:
+                ALPHA_USED.add(_l.from_node.image.name)
 def needs_alpha(im):
     n = im.name.lower(); fp = (im.filepath or "").lower()
-    return any(k in n or k in fp for k in ALPHA_KEYS)
+    return im.name in ALPHA_USED or any(k in n or k in fp for k in ALPHA_KEYS)
 for i, im in enumerate(list(bpy.data.images)):
     if im.source != "FILE" or im.type != "IMAGE": continue
     if im.name.lower().endswith((".hdr", ".exr")) and "hdri" not in (im.filepath or "").lower() and "golf" not in im.name: pass
