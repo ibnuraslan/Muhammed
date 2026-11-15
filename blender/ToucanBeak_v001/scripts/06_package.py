@@ -91,7 +91,7 @@ for o in bpy.data.objects:
         done.add(me2); print("DECIMATED", o.name, n0, "->", len(me2.vertices))
 bpy.ops.outliner.orphans_purge(do_local_ids=True, do_linked_ids=True, do_recursive=True)
 r = sc.render; r.resolution_x, r.resolution_y, r.resolution_percentage = 1080, 1920, 100
-r.fps = 60; r.fps_base = 1.0; r.engine = 'CYCLES'; sc.frame_start, sc.frame_end = 1, 1750   # v007 timing
+r.fps = 60; r.fps_base = 1.0; r.engine = 'CYCLES'; sc.frame_start, sc.frame_end = 1, 1932   # v008 VO timing
 sc.cycles.samples = 48; sc.cycles.adaptive_threshold = 0.05; sc.cycles.use_denoising = True; sc.cycles.denoiser = 'OPENIMAGEDENOISE'
 sc.cycles.device = 'CPU'; r.image_settings.file_format = 'PNG'
 print("RESIZED", n)

@@ -971,7 +971,7 @@ def ginv(n):
     for a0, a1, b0, b1 in SEGS:
         if n <= b1: return a0 + (n - b0) * (a1 - a0) / (b1 - b0)
     return n + 440
-END = 1750
+END = 1810   # v008: the camera is keyed through the full ending; the film is re-timed at the end of this script
 def _fcurves():
     for a_ in bpy.data.actions:
         for lay in a_.layers:
@@ -1166,7 +1166,8 @@ K2 = [(g(k[0]),) + tuple(k[1:]) for k in K if not drop(k)] + [
  (1396, Vector((6.3, -0.6, 1.58)), FACEB_SEAM, 27),
  (1515, Vector((4.55, -0.22, 1.52)), BC + Vector((0, 0, 0.3)), 24),
  (1522, Vector((2.45, -0.52, 1.5)), HEADE + Vector((0, 0, 0.1)), 24),
- (1750, ENC + Vector((0.86, 0.45, 0.27)), HEADE, 36)]
+ (1750, ENC + Vector((0.86, 0.45, 0.27)), HEADE, 36),
+ (1810, ENC + Vector((0.84, 0.5, 0.28)), HEADE, 36)]
 K2.sort(key=lambda k: k[0])
 CUTS = [1, 528, 676, 736, 846, 896, 986, 1061, 1086, 1522, END + 1]
 _seg = []
@@ -1200,6 +1201,63 @@ for f, v in ((1, False),):
     vf_.visible_camera = v; vf_.keyframe_insert("visible_camera", frame=f)
 constant(vf_); print("VOID_FRONT visible", f_in, f_out)
 json.dump([[k[0], list(k[1]), list(k[2]), k[3]] for k in K], open(os.path.join(HERE, "camera_keys.json"), "w"))
+# ================================================================== v008 RE-TIME TO THE CLIENT VO (director, Nov 15 04:30)
+# edit list: (v007 a0, a1) -> (v008 b0, b1); gaps between kept v007 ranges are cuts; v008 1002-1158 is new action (beat 7)
+EDL = [(1, 103, 1, 114), (103, 283, 114, 266), (283, 528, 266, 505), (528, 535, 505, 512), (535, 676, 512, 623),
+       (676, 678, 623, 625), (678, 735, 625, 718), (735, 736, 718, 719), (736, 774, 719, 780), (774, 846, 780, 858), (846, 896, 858, 912),
+       (896, 897, 912, 913), (897, 985, 913, 1001), (986, 1060, 1159, 1368), (1060, 1085, 1368, 1393),
+       (1086, 1192, 1394, 1500), (1265, 1350, 1501, 1586), (1475, 1521, 1587, 1633), (1522, 1810, 1634, 1932)]
+def m8(f):
+    for a0, a1, b0, b1 in EDL:
+        if a0 <= f <= a1: return b0 + (f - a0) * (b1 - b0) / (a1 - a0)
+    return None
+_bounds = sorted(set([x for e in EDL for x in (e[0], e[1])]))
+_n8 = 0
+for fc in _fcurves():
+    if not fc.keyframe_points: continue
+    const = all(kp.interpolation == 'CONSTANT' for kp in fc.keyframe_points)
+    k0, k1 = fc.keyframe_points[0].co.x, fc.keyframe_points[-1].co.x
+    vals = {b: fc.evaluate(b) for b in _bounds if k0 <= b <= k1}
+    for b, v in vals.items():
+        kp = fc.keyframe_points.insert(b, v, options={'FAST'})
+        if const and kp is not None: kp.interpolation = 'CONSTANT'
+    drop = [i for i, kp in enumerate(fc.keyframe_points) if m8(kp.co.x) is None and kp.co.x >= 1]
+    for i in reversed(drop): fc.keyframe_points.remove(fc.keyframe_points[i], fast=True)
+    for kp in fc.keyframe_points:
+        x = kp.co.x; nx = m8(x) if m8(x) is not None else x
+        dl, dr = kp.handle_left.x - x, kp.handle_right.x - x
+        kp.co.x = nx; kp.handle_left.x = nx + dl; kp.handle_right.x = nx + dr; _n8 += 1
+    fc.update()
+for o_, mn in ((OB["Glue_bead"], "grow"), (OB.get("CAD_wire"), "draw"), (OB.get("CAD_fill"), "fill")):
+    if o_ and mn in o_.modifiers:
+        md = o_.modifiers[mn]; f0 = md.frame_start; f1 = f0 + md.frame_duration
+        md.frame_start = m8(f0) or f0; md.frame_duration = max(1, (m8(f1) or f1) - md.frame_start)
+sc.frame_end = 1932
+print("V008_REMAP keys", _n8)
+# ---- beat 7 continued (v008 1002-1158): back on the monitor, the heavy-beak demo bird: its head is dragged down
+key_vis(HBK, [(913, True), (1002, False)])
+for o_ in (gbody, glow, gperch, gr, gheavy): key_vis(o_, [(1002, True), (1159, False)])
+key_vis(glight, [(1002, False)])
+for f_, a_ in ((1002, (0, 0, 0)), (1030, (-6, -4, 0)), (1075, (-34, -22, -14)), (1100, (-44, -30, -18)), (1125, (-40, -28, -16)), (1158, (-42, -28, -16))):
+    gpose(f_, *a_)
+for f_, a_ in ((1002, 0), (1075, 0), (1092, 7), (1110, -4), (1130, 2), (1158, 0)):
+    gperch.rotation_euler = (R_(a_), 0, 0); gperch.keyframe_insert("rotation_euler", frame=f_)
+for n_ in range(1002, 1159):
+    old = 1110; po = fpo(old); qo = (fto(old) - po).to_track_quat('-Z', 'Y')     # one steady side view of the whole demo bird
+    R = M_EYE @ Matrix.Translation((0.02, 0.07, -1.9)) @ Matrix.Scale(2.0, 4) @ Matrix.LocRotScale(po, qo, None).inverted()
+    lo, qq, ss = R.decompose(); VROOT.location = lo; VROOT.rotation_quaternion = qq; VROOT.scale = ss
+    VROOT.keyframe_insert("location", frame=n_); VROOT.keyframe_insert("rotation_quaternion", frame=n_); VROOT.keyframe_insert("scale", frame=n_)
+cam_ = sc.camera; foc_ = OB["Cam_focus"]; _fp = catmull([(1002, SCREEN + Vector((-1.0, 0.0, 0.0))), (1158, SCREEN + Vector((-0.9, 0.0, 0.0)))])   # the screen fills the frame
+_ft = catmull([(1002, SCREEN), (1158, SCREEN)])
+_fl = pchip([(1002, 30.0), (1158, 31.0)])
+_pq = None
+for f_ in range(1002, 1159):
+    pp, tt = _fp(f_), _ft(f_); qq = (tt - pp).to_track_quat('-Z', 'Y')
+    if _pq is not None and _pq.dot(qq) < 0: qq = -qq
+    _pq = qq; cam_.location = pp; cam_.rotation_quaternion = qq
+    cam_.keyframe_insert("location", frame=f_); cam_.keyframe_insert("rotation_quaternion", frame=f_)
+    cam_.data.lens = _fl(f_); cam_.data.keyframe_insert("lens", frame=f_); foc_.location = tt; foc_.keyframe_insert("location", frame=f_)
+
 sc.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=out)
 print("ANIM_DONE", out)
