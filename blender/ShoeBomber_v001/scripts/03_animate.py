@@ -444,8 +444,8 @@ hand(trav, "L", 1480, V((TK.x - 0.10, TK.y + 0.25, 0.62)), (0, 1, -0.5), (0, 0, 
 hand(trav, "L", 1518, V((TK.x - 0.10, TK.y + 0.25, 0.62)), (0, 1, -0.5), (0, 0, -1), grip=0.3)
 hand(trav, "R", 1455, SHOE_PICK + V((0, 0, 0.18)), (0, 0.3, -1), (-1, 0, 0), grip=0.3)
 hand(trav, "R", 1478, SHOE_PICK, (0, 0.3, -1), (-1, 0, 0), grip=0.8)
-hand(trav, "R", 1491, V((TP.x + 0.10, TP.y + 0.02, 1.00)), (0, 0.3, -1), (-1, 0, 0), grip=0.8)   # v006e: straight up first, clear of the belt side
-hand(trav, "R", 1500, V((TP.x + 0.15, TP.y + 0.45, 1.13)), (0, 0.6, -0.8), (-1, 0, 0), grip=0.8)
+hand(trav, "R", 1491, V((TP.x + 0.22, TP.y + 0.10, 0.92)), (0, 0.3, -1), (-1, 0, 0), grip=0.8)   # v006e: straight up first, clear of the belt side
+hand(trav, "R", 1500, V((TP.x + 0.25, TP.y + 0.42, 1.04)), (0, 0.6, -0.8), (-1, 0, 0), grip=0.8)
 hand(trav, "R", 1515, V((TP.x + 0.35, TP.y + 0.70, 1.07)), (0, 0.6, -0.8), (-1, 0, 0), grip=0.8)
 hand(trav, "R", 1520, V((TP.x + 0.36, TP.y + 0.72, 1.06)), (0, 0.6, -0.8), (-1, 0, 0), grip=0.2)
 print("SHOE_PICK", SHOE_PICK)
