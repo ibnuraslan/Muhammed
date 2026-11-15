@@ -916,6 +916,7 @@ BAL = Vector((0.0, 33.95, 7.03))
 key_obj(pope, 763, loc=BAL, rot=(0, 0, 0), interp='CONSTANT')
 aide = O["AideA"]
 key_obj(aide, 700, loc=Vector((0.85, 34.7, 7.03)), rot=(0, 0, R_(-10)), interp='CONSTANT')
+key_obj(aide, 1015, loc=Vector((0.85, 34.7, -60.0)), rot=(0, 0, R_(-10)), interp='CONSTANT')   # v010: no silhouette behind the cell bars
 for f in range(763, 1020, 3):
     br = smooth((f - 800) / 40)
     stand(P, f, flex=3, twist=10 * math.sin(f * 0.02), head=(-5, 14 * math.sin(f * 0.018)))
@@ -1011,6 +1012,7 @@ for i, (w_, h_) in enumerate(((0.62, 0.3), (0.62, 0.6))):
         for c in list(lg.users_collection): c.objects.unlink(lg)
         bpy.data.collections["Shrine"].objects.link(lg)
 key_obj(cl_, 1100, loc=STOOL + Vector((0, 0.05, 0.6)), rot=(0, 0, R_(180 + 35)), interp='CONSTANT')   # the cleric on the step-stool
+key_obj(cl_, 1361, loc=STOOL + Vector((0, 0.05, -60.0)), rot=(0, 0, R_(180 + 35)), interp='CONSTANT')   # v010: gone for the prayer and the ending
 POPE_HO = Vector((1.3, 53.0, 7.0))
 key_obj(pope, 1153, loc=POPE_HO, rot=(0, 0, R_(0)), interp='CONSTANT')      # v008: first he holds the bullet up to the camera
 
@@ -1163,19 +1165,20 @@ SHOTS = [
              (237, popechest(237) + FD * 2.6 + PERP * 1.0 + Vector((0, 0, 0.5)), popechest(237), 28)]),        # B: the Pope waves from the jeep
  (238, 261, [(238, SPROF + SRIGHT * 0.45 + Vector((0, 0, 0.02)), SHEAD + SDIR * 0.3, 30),
              (261, SPROF + SRIGHT * 0.35 + Vector((0, 0, 0.02)), SHEAD + SDIR * 0.3, 32)]),                   # C: he fires (flash at 255)
- (262, 467, [(262, popechest(262) + FD * 1.9 + PERP * 1.1 + Vector((0, 0, 0.35)), popechest(262) + Vector((0, 0, 0.22)), 32),
+ (262, 545, [(262, popechest(262) + FD * 1.9 + PERP * 1.1 + Vector((0, 0, 0.35)), popechest(262) + Vector((0, 0, 0.22)), 32),
              (360, popechest(360) + FD * 1.8 + PERP * 1.05 + Vector((0, 0, 0.32)), popechest(360) + Vector((0, 0, 0.2)), 33),
-             (467, popechest(467) + FD * 1.75 + PERP * 1.0 + Vector((0, 0, 0.3)), popechest(467) + Vector((0, 0, 0.15)), 34)]),   # 3/4 front on his face  # D: hit, clutch
- (468, 630, [(468, popechest(505) + FD * 3.0 + PERP * 1.0 + Vector((0, 0, 0.9)), popechest(505) + Vector((0, 0, -0.3)), 30),
+             (467, popechest(467) + FD * 1.75 + PERP * 1.0 + Vector((0, 0, 0.3)), popechest(467) + Vector((0, 0, 0.15)), 34),
+             (545, popechest(505) + FD * 2.2 + PERP * 1.1 + Vector((0, 0, 0.0)), popechest(505) + Vector((0, 0, -0.3)), 30)]),   # 3/4 front on his face  # D: hit, clutch
+ (546, 630, [(546, popechest(505) + FD * 3.0 + PERP * 1.0 + Vector((0, 0, 0.9)), popechest(505) + Vector((0, 0, -0.3)), 30),
              (630, popechest(505) + FD * 2.8 + PERP * 0.9 + Vector((0, 0, 0.85)), popechest(505) + Vector((0, 0, -0.4)), 30)]),   # E: caught, lowered
- (631, 762, [(631, Vector((-9.4, 41.3, 8.45)), Vector((-8.0, 40.85, 8.22)), 30),
-             (762, Vector((-9.3, 41.25, 8.43)), Vector((-8.0, 40.85, 8.22)), 32)]),          # level, low side view; his masked face nearest                            # F: surgery from the foot end
+ (631, 762, [(631, Vector((-8.25, 41.95, 8.6)), Vector((-8.0, 40.7, 8.15)), 26),
+             (762, Vector((-8.22, 41.9, 8.58)), Vector((-8.0, 40.7, 8.15)), 28)]),          # v010: head end, his masked face in the foreground          # level, low side view; his masked face nearest                            # F: surgery from the foot end
  (763, 1014, [(763, Vector((-1.7, 29.7, 8.75)), Vector((0.0, 33.9, 8.5)), 30),
              (900, Vector((-1.4, 30.2, 8.7)), Vector((0.0, 33.9, 8.5)), 32),
              (950, Vector((-0.9, 31.3, 8.75)), Vector((0.0, 33.95, 8.6)), 34),
              (1014, Vector((-0.6, 31.7, 8.7)), Vector((0.0, 33.95, 8.55)), 36)]),                               # G: balcony (held front view)
- (1015, 1152, [(1015, Vector((0.0, 42.0, 9.15)), Vector((0.0, 40.66, 8.4)), 30),
-              (1152, Vector((0.0, 41.95, 9.12)), Vector((0.0, 40.66, 8.42)), 31)]),                         # H: side two-shot in the cell
+ (1015, 1152, [(1015, Vector((0.0, 42.66, 8.25)), Vector((0.0, 40.66, 7.95)), 30),
+              (1152, Vector((0.0, 42.6, 8.25)), Vector((0.0, 40.66, 7.97)), 31)]),          # v010: seated eye level, 2 m                         # H: side two-shot in the cell
  (1153, 1321, [(1153, Vector((1.15, 51.95, 8.62)), Vector((1.27, 52.7, 8.5)), 40),
               (1321, Vector((1.18, 52.08, 8.6)), Vector((1.27, 52.7, 8.52)), 46)]),                            # I: the bullet held up to us                          # I: he hands the bullet up to the cleric
  (1322, 1360, [(1322, CROWN_W + Vector((-0.18, -0.52, 0.03)), CROWN_W, 40),
@@ -1183,9 +1186,11 @@ SHOTS = [
  (1361, 1545, [(1361, POPEHEAD8 + Vector((-0.75, 0.62, 0.0)), POPEHEAD8 + Vector((0, 0, -0.08)), 38),
               (1545, POPEHEAD8 + Vector((-0.6, 0.55, 0.02)), POPEHEAD8 + Vector((0, 0, -0.06)), 42)]),         # K: 3/4 front, praying
  (1546, 1620, [(1546, POPEHEAD8 + Vector((-0.6, 0.55, 0.02)), POPEHEAD8 + Vector((0, 0, -0.06)), 40),           # his praying face
-              (1568, POPEHEAD8 + Vector((-0.6, -0.05, 0.08)), POPEHEAD8 + Vector((0.05, 0.12, -0.05)), 38),      # arc to his profile
-              (1588, POPEHEAD8 + Vector((-0.3, -0.12, 0.28)), CROWN_W + Vector((0, 0, -0.3)), 34),              # past his shoulder to the crown
-              (1604, CROWN_W + Vector((-0.3, -0.9, 0.0)), CROWN_W, 40),
+              (1564, POPEHEAD8 + Vector((-0.62, 0.0, 0.1)), POPEHEAD8 + Vector((0.0, 0.0, -0.05)), 36),        # his praying profile (camera stays on him)
+              (1574, POPEHEAD8 + Vector((-0.45, -0.35, 0.12)), POPEHEAD8 + Vector((0.08, 0.3, -0.02)), 33),       # his head stays in frame while it turns
+              (1584, POPEHEAD8 + Vector((-0.1, -0.52, 0.16)), CROWN_W + Vector((0, 0, -0.95)), 30),             # over his shoulder: his head below, statue ahead
+              (1596, POPEHEAD8 + Vector((-0.12, -0.3, 0.3)), CROWN_W + Vector((0, 0, -0.55)), 32),
+              (1608, CROWN_W + Vector((-0.3, -0.9, 0.0)), CROWN_W, 40),
               (1620, CROWN_W + Vector((-0.1, -0.42, 0.01)), CROWN_W, 50)]),                                    # ends on the bullet          # L: push-in to the crown
 ]
 cam = bpy.data.objects.new("CAM", bpy.data.cameras.new("CAM")); sc.collection.objects.link(cam); sc.camera = cam
