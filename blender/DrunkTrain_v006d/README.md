@@ -25,7 +25,7 @@ All checks ran on the packed file.
 - **`qa_check.py`** (step 6), `review/qa_v006d.json`: EMPTY 109 (the wide outdoor and under-train shots), BACKHEAD 2, INSIDE 0 (v006c had 1, at 817).
   - BACKHEAD at 541 (beat 4): the train hits his head as he lies across the rail.
   - BACKHEAD at 871 (beat 6): he lies face down under the halted train.
-- **`body_prop_cross.py`** (rails, loco, both wagons, all four wheelsets; Lad), `review/body_prop_cross_v006d.json`: **still running when this README was committed**; the result will be added here.
+- **`body_prop_cross.py`** (rails, loco, both wagons, all four wheelsets; Lad), `review/body_prop_cross_v006d.json`: **9 visible frames**, the same frames as v006c. Eight are glancing contacts with the loco underframe while he is dragged (649, 685, 688, 700, 718, 721, 724, 754). One is a toe on the rail head as he climbs over it (1192).
 - Factory-startup check: `CAM_Film`, frames 1–2070, 60 fps, f/11, 0 unpacked images.
 
 ## Known issues
