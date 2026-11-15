@@ -39,7 +39,8 @@ SHOTS = [
     (6.74, 8.20, (0.00, -1.00, 1.70), (0.00, -1.05, 1.70), YH, 35),
     # beat 3-5 (v009c): from the cockpit, through the door: he comes up the aisle toward us (the follow shot from behind
     # showed arms coming up from the frame corners), then crouches beside the captain in the doorway
-    (8.20, 10.60, CENTRE[0], CENTRE[1], mid(YH, fixed((0.0, -0.60, 1.20)), 0.5), 26),
+    (8.20, 8.90, "follow", (0.08, -1.60, 1.00), YH, 60),           # tight on his head and shoulders as he reaches the door
+    (8.90, 10.60, CENTRE[0], CENTRE[1], mid(YH, fixed((0.0, -0.60, 1.20)), 0.5), 26),
     (10.60, 11.75, CENTRE[0], CENTRE[1], mid(YH, CH, 0.5), 24),       # crouched beside the captain
     (11.75, 13.22, INFRONT[0], INFRONT[1], mid(YH, CH, 0.2), 24),     # steps over him toward the seats
     # beat 6-8: the first officer, the radio
@@ -49,8 +50,9 @@ SHOTS = [
     (19.20, 20.40, INFRONT[0], INFRONT[1], YH, 35),
     (20.40, 21.24, (-1.00, 2.15, 1.45), (-0.99, 2.12, 1.45), YH, 35),
     # beat 9: the haul (v009c: from behind while he reaches in, his arms hidden by his body; then high from the front)
-    (21.24, 23.50, REAR[0], REAR[1], mid(YH, FH, 0.5), 22),
-    (23.50, 25.82, HAUL_HI[0], HAUL_HI[1], mid(YH, FH, 0.6), 22),
+    (21.24, 22.30, (-0.90, 2.20, 1.55), (-0.89, 2.18, 1.55), mid(YH, FH, 0.5), 24),
+    (22.30, 24.80, REAR[0], REAR[1], mid(YH, FH, 0.5), 22),
+    (24.80, 25.82, HAUL_HI[0], HAUL_HI[1], mid(YH, FH, 0.6), 22),     # from 24.8 s (earlier, the FO's legs swing up at this lens)
     # beat 10-11: alarms, the dive
     (25.82, 27.40, INFRONT[0], INFRONT[1], YH, 26),
     (27.40, 28.40, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, -0.6)), 24),
