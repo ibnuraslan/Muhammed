@@ -418,6 +418,10 @@ RF0 = trav.foot_xy("R", TP, FWD)
 for f, dy, lift, pitch in ((1393, 0, 0, 0), (1425, 0, 0, 0), (1435, -0.10, 0.04, 20), (1445, -0.22, 0.0, 0), (1520, -0.22, 0.0, 0)):
     trav.key_foot("R", f, RF0 + V((0.06 if f >= 1445 else 0, dy)), FWD, lift, pitch)
 # right hand: down to the sneaker heel on the floor (1478), lifts it over the tray (1500-1515), lets go (1520)
+# v006e: the conveyor models ran ACROSS the lane (he stood inside the belt); turn each one to run along the lane
+for o in bpy.data.objects:
+    if o.name.startswith("Conveyor_") and not getattr(o, "_turned", False):
+        o.rotation_euler.z += math.radians(90)
 TRAY = bpy.data.objects["Tray_1"]
 ev(1430); trf = wpos(trav, "foot.R", 1430)
 SHOE_PICK = V((trf.x + 0.02, trf.y - 0.04, 0.19))

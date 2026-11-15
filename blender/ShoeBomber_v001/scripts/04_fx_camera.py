@@ -305,24 +305,22 @@ for k, s in enumerate(("L", "R")):
     for c in list(base.constraints): base.constraints.remove(c)
     up = split(base, 0.05)
     CUT[s] = (base, up)
-    base.location = SXS + V((-0.12 + 0.24 * k, 0.0, 1.15))
-    # float, slow spin; split opens 1110-1150 (upper lifts 0.14 and tilts back), slab glows 1140-1230
-    for f, rz, bob in ((1069, -30 + 60 * k, 0.0), (1130, 10 + 60 * k, 0.02), (1190, 45 + 60 * k, 0.0), (1250, 80 + 60 * k, 0.02)):
-        base.rotation_euler = (math.radians(15), math.radians(-8 + 16 * k), math.radians(rz)); base.location.z = 1.15 + bob
-        base.keyframe_insert("rotation_euler", frame=f); base.keyframe_insert("location", frame=f)
-    for f, dz, rx in ((1069, 0.0, 0), (1105, 0.0, 0), (1140, 0.15, -25), (1160, 0.14, -22), (1250, 0.16, -26)):
-        up.location = (0, 0.02 * (dz > 0), dz); up.rotation_euler = (math.radians(rx), 0, 0)
-        up.keyframe_insert("location", frame=f); up.keyframe_insert("rotation_euler", frame=f)
-    sl = O["Slab_Shoe_" + s]; sl.parent = base; sl.location = (0, 0.0, 0.062)
-    for ob_ in (sl,):
-        for f, h in ((1, True), (1112, True), (1113, False)):
-            ob_.hide_render = h; ob_.keyframe_insert("hide_render", frame=f)
-        constant_at(ob_, set(range(0, END + 1)))
+    if s == "L":   # v006e: resting on the cabin aisle floor, upper lifted to show the sole's insides
+        base.rotation_euler = (0, 0, math.radians(-25)); base.location = V((0.05, -1.80, 0.0)); bpy.context.view_layer.update()
+        zmin = min((base.matrix_world @ V(c)).z for c in base.bound_box); base.location.z -= zmin - 0.003
+        up.location = (0, 0.02, 0.15); up.rotation_euler = (math.radians(-25), 0, 0)
+        sl = O["Slab_Shoe_" + s]; sl.parent = base; sl.location = (0, 0.0, 0.062)
+        for f, h in ((1, True), (1068, True), (1069, False), (1158, False), (1159, True)):
+            for ob_ in (base, up, sl):
+                ob_.hide_render = h; ob_.keyframe_insert("hide_render", frame=f)
+        for ob_ in (base, up, sl): constant_at(ob_, set(range(0, END + 1)))
+    else:
+        base.location = SXS + V((0.12, 0.0, 1.15))
 rim = O["StudioCyanRim"].data
 for f, e in ((1, 200.0), (1130, 200.0), (1150, 550.0), (1240, 550.0)):
     rim.energy = e; rim.keyframe_insert("energy", frame=f)
 
-for nm, on0, on1 in (("SkyCloudEntry", 1240, 1266), ("SkyCloudExit", 1366, 1400), ("StudioCloudBank", 1215, 1252)):
+for nm, on0, on1 in (("SkyCloudEntry", 5000, 5001), ("SkyCloudExit", 5000, 5001), ("StudioCloudBank", 5000, 5001)):   # v006e: never shown
     ob_ = bpy.data.objects[nm]
     for f, h in ((1, True), (on0 - 1, True), (on0, False), (on1, False), (on1 + 1, True)):
         ob_.hide_render = h; ob_.keyframe_insert("hide_render", frame=f)
@@ -397,9 +395,9 @@ constant_at(sun, {1248, 1249, 1392, 1393})
 
 # ------------------------------------------------------------------ grade
 sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Medium High Contrast'
-for f, ex in ((1, 0.3), (1068, 0.3), (1069, -0.2), (1248, -0.2), (1249, 0.0), (1392, 0.0), (1393, -1.0), (END, -1.0)):
+for f, ex in ((1, 0.3), (1158, 0.3), (1249, 0.0), (1392, 0.0), (1393, -1.0), (END, -1.0)):
     sc.view_settings.exposure = ex; sc.view_settings.keyframe_insert("exposure", frame=f)
-constant_at(sc, {1068, 1248, 1392})
+constant_at(sc, {1158, 1248, 1392})
 
 # ------------------------------------------------------------------ ONE camera
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.sensor_fit = 'AUTO'; cam_d.clip_start = 0.01; cam_d.clip_end = 6000
@@ -425,10 +423,12 @@ CAB = [[
     # ONE continuous camera (client spec). The cam_search framings are key poses; holds are repeated keys and
     # moves between them are 20-40 f with Catmull ease, routed over the seat backs (z >= 1.6) where a straight move would cross a row.
     # beat 1: his face over the shoe and the match
-    (1,   V((-0.86, 0.44, 1.32)), (op("Shoe_R", 1, (0, 0, 0.1)) * 0.5 + bp("Bomber", "head", 1) * 0.5), 26),
-    (45,  V((-0.86, 0.44, 1.32)), (op("Match_Flame", 45) * 0.5 + bp("Bomber", "head", 45) * 0.5), 26),
-    (100, V((-0.94, 0.44, 1.18)), (op("Match_Flame", 100) * 0.25 + bp("Bomber", "head", 100) * 0.75), 24),
-    (150, V((-0.98, 0.45, 1.05)), (op("Match_Flame", 150) * 0.25 + bp("Bomber", "head", 150) * 0.75), 24),
+    # v006e: opens on a medium shot of him in his seat, face visible, bent over his shoe (over the row-4 seat back)
+    (1,   V((-0.94, 1.00, 1.35)), bp("Bomber", "head", 1, (0, 0, -0.15)), 30),
+    (88,  V((-0.94, 1.00, 1.35)), bp("Bomber", "head", 88, (0, 0, -0.15)), 30),
+    # <= 1 s closer on the match and his face (f/8)
+    (108, V((-0.96, 0.52, 1.25)), (op("Match_Flame", 108) * 0.4 + bp("Bomber", "head", 108) * 0.6), 32),
+    (150, V((-0.96, 0.52, 1.25)), (op("Match_Flame", 150) * 0.4 + bp("Bomber", "head", 150) * 0.6), 32),
     (182, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 182, (0, 0.2, -0.3)), 26),
     (199, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 199, (0, 0.2, -0.3)), 26),
     # beat 2: travel up the aisle above head height to the attendant walking down it, dolly back ahead of her, push to her eyes
@@ -456,9 +456,9 @@ CAB = [[
     (540, P(-0.892, 1.042, 1.143), bp("Attendant", "head", 540, (0, 0, -0.1)), 28),
     (556, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 556, (0, 0, -0.1)), 28),
     (566, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 566, (0, 0, -0.1)), 28),
-    (580, V((-0.80, 1.30, 1.65)), bp("Bomber", "spine01", 580, (0, 0.3, 0)), 24),   # v006d rule 3: over the seat backs, clear of her head
-    (610, V((-0.80, 1.30, 1.65)), bp("Bomber", "spine01", 610, (0, 0.3, 0)), 22),   # v006d: holds the side view of the pin (no pass behind her)
-    # beat 5: down to the steward's face as he injects (reached by 655), push to the arm, two-shot on "finally sedated"
+    # v006e: the pin from the side at aisle height (faces of the attendant, PaxA and PaxB in profile; his face sideways toward us)
+    (580, V((-0.80, 1.00, 1.35)), bp("Bomber", "spine01", 580, (0, 0.3, 0.45)), 24),
+    (630, V((-0.80, 1.00, 1.35)), bp("Bomber", "spine01", 630, (0, 0.3, 0.45)), 24),
     (640, V((-0.55, 1.20, 1.75)), (bp("Steward", "head", 640) + bp("Bomber", "spine01", 640)) / 2, 22),   # v006c: down beside the steward, never over the aim
     (655, V((-0.80, 1.25, 1.60)), bp("Steward", "head", 655), 28),
     # v006d: a steady shot on the steward's face while he injects (the arm macro filled the frame with sleeves)
@@ -476,22 +476,14 @@ CAB = [[
     (890, P(0.223, 0.702, 1.347), bp("PaxB", "head", 890, (0, 0, -0.1)), 22),
     (902, P(0.05, 1.089, 1.202), bp("PaxB", "head", 902, (0, 0, -0.1)), 22),
     (920, P(0.05, 1.089, 1.202), bp("PaxB", "head", 920, (0, 0, -0.1)), 22),
-    # the shoes on the carpet: fuse 1, rack to fuse 2 (PaxB's face behind them), then into the sole
-    (965, V((0.10, 0.05, 0.75)), (fuse_tip("L", 965) * 0.6 + bp("PaxB", "head", 965) * 0.4), 28),
-    (1015, V((0.18, 0.05, 0.75)), (fuse_tip("R", 1015) * 0.6 + bp("PaxB", "head", 1015) * 0.4), 30),
-    # v006d: straight down onto the shoes on the carpet (never across his legs), into the sole
-    (1040, op("Shoe_L", 1040) + V((0.04, 0.06, 0.42)), op("Shoe_L", 1040), 30),
-    (1062, op("Shoe_L", 1062) + V((0.0, 0.01, 0.07)), op("Shoe_L", 1062), 40),
-    (1068, op("Shoe_L", 1068) + V((0.0, 0.01, 0.05)), op("Shoe_L", 1068), 40),
+    # v006e: PaxB kneeling, face visible, the two shoes on the carpet in front of him (no leg close-ups, no dive into the sole)
+    (960, P(0.223, 0.702, 1.347), (bp("PaxB", "head", 960) * 0.6 + op("Shoe_L", 960) * 0.4), 24),
+    (1068, P(0.223, 0.702, 1.347), (bp("PaxB", "head", 1068) * 0.6 + op("Shoe_L", 1068) * 0.4), 24),
   ]]
 # studio: out of the black, pulling back from shoe L; orbit as they split; low 3/4; pull back into the cloud wipe
-SEG2 = [
-    (1069, SXS + V((-0.12, 0.05, 1.30)), SXS + V((-0.12, 0.0, 1.17)), 30),
-    (1100, SXS + V((-0.25, -0.55, 1.45)), SXS + V((-0.06, 0.0, 1.18)), 35),
-    (1140, SXS + V((0.35, -0.75, 1.40)), SXS + V((0.0, 0.0, 1.2)), 35),
-    (1185, SXS + V((0.55, -0.45, 1.05)), SXS + V((0.0, 0.0, 1.2)), 32),
-    (1225, SXS + V((0.15, -1.6, 1.35)), SXS + V((0.0, 0.0, 1.2)), 28),
-    (1248, SXS + V((0.0, -3.2, 1.45)), SXS + V((0.0, 0.0, 1.25)), 26),
+SEG2 = [   # v006e: beat 7 -- ONE cut-open shoe resting on the cabin aisle floor, slow push to the charge in the sole (1.5 s)
+    (1069, V((0.12, -2.45, 0.42)), op("Slab_Shoe_L", 1069), 30),
+    (1158, V((0.10, -2.12, 0.26)), op("Slab_Shoe_L", 1158), 40),
 ]
 # sky: from the cloud next to a cabin window, back along the wing, huge pull-out, tilt down into the deck
 SEG3 = [
@@ -523,7 +515,7 @@ for seg in CAB + [SEG2, SEG3, SEG4]:
         cam.location = fc(f); cam.keyframe_insert("location", frame=f)
         aim.location = fa(f); aim.keyframe_insert("location", frame=f)
         cam_d.lens = fl_(f); cam_d.keyframe_insert("lens", frame=f)
-CUTS |= {1068, 1248, 1392}
+CUTS |= {1068, 1158, 1248, 1392}
 constant_at(cam, CUTS); constant_at(aim, CUTS); constant_at(cam_d, CUTS)
 
 # wipes: a card in front of the lens (black into the shoe; white cloud out of the studio, white cloud dive into the airport)
@@ -540,12 +532,9 @@ wmat.node_tree.links.new(cl.outputs[0], mx.inputs["Fac"]); wmat.node_tree.links.
 wmat.node_tree.links.new(mx.outputs[0], o_.inputs["Surface"])
 L.set_mat(card, wmat)
 amt = cr.inputs[1]
-for f, a_, col in ((1, -2, (0, 0, 0)), (1061, -2, (0, 0, 0)), (1066, 1.5, (0, 0, 0)), (1069, 1.5, (0, 0, 0)), (1074, -2, (0, 0, 0)),
-                   (1243, -2, (1, 1, 1)), (1247, 1.5, (1, 1, 1)), (1250, 1.5, (1, 1, 1)), (1254, -2, (1, 1, 1)),
-                   (1386, -2, (1, 0.95, 0.92)), (1390, 1.5, (1, 0.95, 0.92)), (1394, 1.5, (1, 1, 1)), (1399, -2, (1, 1, 1))):
+for f, a_, col in ((1, -2, (0, 0, 0)), (END, -2, (0, 0, 0))):   # v006e: no wipe cards (clean cuts)
     amt.default_value = a_; amt.keyframe_insert("default_value", frame=f)
     em.inputs["Color"].default_value = (*col, 1); em.inputs["Color"].keyframe_insert("default_value", frame=f)
-    em.inputs["Strength"].default_value = 1.0 if col[0] == 0 else 2.0; em.inputs["Strength"].keyframe_insert("default_value", frame=f)
 
 # ------------------------------------------------------------------ render baseline
 r = sc.render; cy = sc.cycles
@@ -564,7 +553,7 @@ for o in list(bpy.data.objects):
 import json
 B = {1: (1, "In the middle of a flight"), 2: (199, "But a flight attendant"), 3: (373, "and caught him"), 4: (481, "Passengers and crew tackled him"),
      5: (655, "and he was finally sedated"), 6: (769, "When they checked his shoes"), 7: (1069, "Both shoes were packed"),
-     8: (1249, "to bring down the entire plane"), 9: (1393, "And that's why you have to take your shoes off")}
+     8: (1159, "to bring down the entire plane"), 9: (1219, "And that's why you have to take your shoes off")}   # v006e: after 07_retime.py
 json.dump([{"beat": k, "frame": v[0], "first_words": v[1]} for k, v in B.items()], open(os.path.join(HERE, "..", "beats.json"), "w"), indent=1)
 # strip MPFB helper geometry (always masked out of the render) so it can never act as a collision target
 import bmesh

@@ -53,7 +53,7 @@ for layer in ad.action.layers:
                 if fc.data_path == "view_settings.exposure":
                     for kp in fc.keyframe_points:
                         f = kp.co.x
-                        kp.co.y = 0.9 if f < 1069 else (0.0 if f < 1249 else (0.35 if f < 1393 else -0.4))
+                        kp.co.y = 0.9 if f < 1159 else (0.0 if f < 1249 else (0.35 if f < 1393 else -0.4))
                         kp.handle_left.y = kp.handle_right.y = kp.co.y
                     fc.update()
 # airport: lift the terminal (clean, bright)
