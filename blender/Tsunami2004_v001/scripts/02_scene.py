@@ -150,10 +150,11 @@ M_WAVE = water_mat("M_Wave")
 _nt = M_WAVE.node_tree; _nz = _nt.nodes["NZ"]; _tc = next(n for n in _nt.nodes if n.type == 'TEX_COORD')
 _mp = _nt.nodes.new("ShaderNodeMapping"); _mp.name = "FLOW"; _nt.links.new(_tc.outputs["Object"], _mp.inputs["Vector"]); _nt.links.new(_mp.outputs["Vector"], _nz.inputs["Vector"])
 _fn = _nt.nodes["FN"]; _fmp = _fn.inputs["Vector"].links[0].from_node; _nt.links.new(_mp.outputs["Vector"], _fmp.inputs["Vector"])
-_nz2 = _nt.nodes.new("ShaderNodeTexNoise"); _nz2.inputs["Scale"].default_value = 2.2; _nz2.inputs["Detail"].default_value = 6; _nz2.noise_dimensions = '4D'; _nz2.name = "NZ2"
+_nz2 = _nt.nodes.new("ShaderNodeTexNoise"); _nz2.inputs["Scale"].default_value = 4.5; _nz2.inputs["Detail"].default_value = 6; _nz2.noise_dimensions = '4D'; _nz2.name = "NZ2"
 _nt.links.new(_mp.outputs["Vector"], _nz2.inputs["Vector"])
-_bp = next(n for n in _nt.nodes if n.type == 'BUMP'); _bp.inputs["Strength"].default_value = 0.55
-_bp2 = _nt.nodes.new("ShaderNodeBump"); _bp2.inputs["Strength"].default_value = 0.25; _bp2.inputs["Distance"].default_value = 0.1
+_bp = next(n for n in _nt.nodes if n.type == 'BUMP'); _bp.inputs["Strength"].default_value = 1.0; _bp.inputs["Distance"].default_value = 0.6
+_nz.inputs["Scale"].default_value = 0.8   # ~1 m chop: the sun breaks into glitter instead of one glare blob
+_bp2 = _nt.nodes.new("ShaderNodeBump"); _bp2.inputs["Strength"].default_value = 0.45; _bp2.inputs["Distance"].default_value = 0.15
 _nt.links.new(_nz2.outputs["Fac"], _bp2.inputs["Height"]); _nt.links.new(_bp.outputs["Normal"], _bp2.inputs["Normal"])
 _bsdf = _nt.nodes["Principled BSDF"]; _nt.links.new(_bp2.outputs["Normal"], _bsdf.inputs["Normal"])
 

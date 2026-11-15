@@ -127,8 +127,10 @@ for mname in ("M_Wave",):
                           (30.0, (0.10, 0.068, 0.031), 0.06), (31.6, (0.085, 0.06, 0.03), 0.0), (40, (0.085, 0.06, 0.03), 0.0)):
         b.inputs["Base Color"].default_value = (*colr, 1); b.inputs["Base Color"].keyframe_insert("default_value", frame=F(t))
         fv.outputs[0].default_value = foam; fv.outputs[0].keyframe_insert("default_value", frame=F(t))
-    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.2), (31.0, 0.2), (32.0, 0.12)):   # vNEXT: rough muddy water, no sun-glare blobs
+    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.15), (31.0, 0.15), (32.0, 0.12)):   # vNEXT: rough muddy water, no sun-glare blobs
         b.inputs["Roughness"].default_value = rg; b.inputs["Roughness"].keyframe_insert("default_value", frame=F(t))
+    for t, sl in ((0, 0.6), (20.8, 0.6), (22.0, 0.35), (31.0, 0.35), (32.0, 0.5)):   # vNEXT: softer specular on the flood
+        b.inputs["Specular IOR Level"].default_value = sl; b.inputs["Specular IOR Level"].keyframe_insert("default_value", frame=F(t))
     for t, wv in ((0, 0), (40, 6)):
         nz.inputs["W"].default_value = wv; nz.inputs["W"].keyframe_insert("default_value", frame=F(t))
     for fc in _fcurves(nt.animation_data.action):
