@@ -54,60 +54,6 @@
     "wall/prop fills the frame, character only 2%"
    ]
   ],
-  "229": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 1%"
-   ]
-  ],
-  "235": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 2%"
-   ]
-  ],
-  "241": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 1%"
-   ]
-  ],
-  "247": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 1%"
-   ]
-  ],
-  "253": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 1%"
-   ]
-  ],
-  "259": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ]
-  ],
-  "265": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ]
-  ],
-  "271": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ]
-  ],
-  "277": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ]
-  ],
   "397": [
    [
     "EMPTY",
@@ -1358,6 +1304,6 @@
   ]
  },
  "counts": {
-  "EMPTY": 226
+  "EMPTY": 217
  }
 }
