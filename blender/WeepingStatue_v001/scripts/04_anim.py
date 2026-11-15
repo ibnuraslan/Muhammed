@@ -115,7 +115,8 @@ def relaxed_hand(n, P, Rb, s, fwd=0.0, out=0.0, up=0.0):
     sx = 1 if s == "L" else -1
     sh = rest_head(n, "upperarm01." + s); wr = rest_head(n, "wrist." + s)
     L = (sh - wr).length
-    loc = sh + V((sx * (0.07 + out), -fwd, -L * 0.93 + up))
+    fem = n.startswith(("CrowdW", "Woman"))
+    loc = sh + V((sx * (0.10 + (0.04 if fem else 0.0) + out), -fwd, -L * 0.93 + up))
     W = bw(n, P, Rb, loc)
     d = Rb @ V((0, -0.15 * fwd, -1)).normalized(); nn = Rb @ V((-sx, 0, 0))
     return W, d, nn
@@ -319,9 +320,9 @@ def S07():     # the Woman holds a cup of the water at her chest, looks into it,
     # place the cup, grip it with the right hand at f0, then Child Of the hand
     CUP.location = cup_c - V((0, 0, 0.046)); CUP.rotation_euler = (0, 0, 0); CUP.keyframe_insert("location", frame=f0)
     ev(f0)
-    approach = sd.normalized()             # from the body's right side (-sd) toward the cup
-    rep_ = grip_object(RIG[n].o, "R", f0, CUP, cup_c - sd * 0.040, approach, finger_dir=fw, grip="wrap")
-    print("CUPGRIP", rep_)
+    # the cup rests on her open right palm (no wrap grip: the thumb went through the cup wall)
+    place_hand(RIG[n].o, "R", f0, cup_c - V((0, 0, 0.046)) - fw * 0.012, V((0, 0, 1)), (fw - sd * 0.25).normalized(), skin=0.004)
+    apply_pose(RIG[n].o, "R", "flat_palm", f0)
     ev(f0)
     pbw = RIG[n].o.pose.bones["wrist.R"]
     c_ = CUP.constraints.new('CHILD_OF'); c_.name = "HoldCup"; c_.target = RIG[n].o; c_.subtarget = "wrist.R"
@@ -349,13 +350,19 @@ def S08():     # a man lays his fingertips on the statue's foot; the others watc
     x, y = 0.18, -1.02; yaw = facing(x, y, TOE.x, TOE.y)
     H = HUM[n]; P = V((x, y, H.root_head.z - 0.01)); Rb = body_R(yaw)
     sh = bw(n, P, Rb, rest_head(n, "upperarm01.R"))
-    contact = TOE + V((-0.01, -0.035, 0.11))          # front of the right foot, above the toes
+    ev(f0)
+    stb = bpy.data.objects["S1_Statue.body"]; dg_ = bpy.context.evaluated_depsgraph_get(); se_ = stb.evaluated_get(dg_)
+    orig = V((TOE.x + 0.035, -1.2, TOE.z + 0.26)); inv_ = se_.matrix_world.inverted()
+    hit_, loc_, nrm_, _ = se_.ray_cast(inv_ @ orig, (inv_.to_3x3() @ V((0, 1, 0))).normalized())
+    contact = se_.matrix_world @ loc_ if hit_ else TOE + V((0, -0.06, 0.26))
+    cn_ = (se_.matrix_world.to_3x3() @ nrm_).normalized() if hit_ else V((0, -1, 0))
+    print("S08 contact", tuple(round(t, 3) for t in contact), tuple(round(t, 2) for t in cn_))
     for k, f in enumerate((f0, f0 + 40, f0 + 70, f1)):
         stand(n, f, x, y, yaw, head=(22.0, 0.0), lean=6.0 if k else 0.0, fingers="relaxed" if k == 0 else None)
         if k == 0: continue
     ev(f0 + 70)
-    place_hand(RIG[n].o, "R", f0 + 70, contact, V((0, 1, 0.15)).normalized(), V((0, 0.15, 1)).normalized(), skin=0.012)
-    place_hand(RIG[n].o, "R", f1, contact + V((0, 0, -0.01)), V((0, 1, 0.15)).normalized(), V((0, 0.15, 1)).normalized(), skin=0.012)
+    place_hand(RIG[n].o, "R", f0 + 70, contact, -cn_, V((0, 0.1, 1)).normalized(), skin=0.022)
+    place_hand(RIG[n].o, "R", f1, contact + V((0, 0, -0.01)), -cn_, V((0, 0.1, 1)).normalized(), skin=0.022)
     apply_pose(RIG[n].o, "R", "flat_palm", f0 + 70); apply_pose(RIG[n].o, "R", "flat_palm", f1)
     # reach in (between f0+10 and f0+70): an intermediate key below/in front of the contact
     place_hand(RIG[n].o, "R", f0 + 40, contact + V((0.0, -0.18, -0.20)), V((0, 1, 0.3)).normalized(), V((0, 0.3, 1)).normalized(), skin=0.03)
@@ -558,7 +565,7 @@ def S18():     # he turns and walks away pulling the case (logo side to camera)
         P = V((p.x, p.y, H.root_head.z - 0.03))
         back = Rb @ V((0, 1, 0)); right = Rb @ V((-1, 0, 0))
         u = max(0.0, min(1.0, (f - f0) / 20.0)); th = R_(TILT) * smooth(u)
-        base = V((p.x, p.y, 0)) + right * 0.26 + back * (0.18 + h * math.sin(R_(TILT)))
+        base = V((p.x, p.y, 0)) + right * 0.36 + back * (0.22 + h * math.sin(R_(TILT)))
         top = base - back * (h * math.sin(th)) + V((0, 0, h * math.cos(th)))
         trolley_at(f, base, yaw_w, tilt=math.degrees(th))
         hands = {"R": (top + V((0, 0, 0.035)), (Rb @ V((0, 0.35, -1))).normalized(), right, P + Rb @ V((-0.5, 0.25, -0.1)))}
