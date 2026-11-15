@@ -1,4 +1,4 @@
-# ShoeBomber_v002: credits
+# ShoeBomber_v008: credits
 
 ## Required attribution (CC BY 4.0)
 Paste this block into the video description:
