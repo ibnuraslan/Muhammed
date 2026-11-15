@@ -27,13 +27,13 @@ Dust uses Principled Volume (impact dust, horn exhaust, the stop dust wave). It 
 ## Suggested test frames
 - **560**: the impact, with volume dust and debris
 - **760**: under the train between the rails, with spark light (dark shot, exposure lifted)
-- **1500**: the x-ray studio with the translucent skin and muscles
-- **1700**: the slow-motion replay, with the ghost train and force arrows
+- **1530**: beat 10, standing limp beside the halted train (check the shorts for the dark specks seen in the preview)
+- **1720**: the dazed section, his hand on his head
 - **2050**: the final close-up of his face
 
 ## Measured cost
 The figure below was measured on v002, which had motion blur and denser volumes; v006d should be a little cheaper.
-One full frame (frame 560, the impact with volume dust; 1080×1920, 48 samples, motion blur) took **325 s** wall-clock on this 4-core cloud CPU. About 25 s of that is loading the file and textures. That works out to roughly 170 h for 2070 frames locally, but it is a heavy frame and most frames have no volumes. On farm GPU nodes it should be far faster. Run the test frames below before approving the whole job.
+One full frame (frame 560, the impact with volume dust; 1080×1920, 48 samples, motion blur) took **325 s** wall-clock on this 4-core cloud CPU. About 25 s of that is loading the file and textures. That works out to roughly 170 h for 2070 frames locally, but it is a heavy frame and most frames have no volumes. On farm GPU nodes it should be far faster. Run the suggested test frames above before approving the whole job.
 
 ## Do not
 - Do not render other cameras; `CAM_Film` is the only one.
