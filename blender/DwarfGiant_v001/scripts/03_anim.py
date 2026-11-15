@@ -198,7 +198,7 @@ for f in (696, 740, 790, 840):
     s_ = next(a1 + (b1 - a1) * (f - f0) / (f1 - f0) for (f0, a1), (f1, b1) in zip(SCALE, SCALE[1:]) if f0 <= f <= f1)
     hand_on_desk(f, s_); hand_rest(HR, "R", f, 0.08, -0.02)
 for f, kw in ((696, dict(flex=22, side=-10, head=(20, 18), frown=12)), (760, dict(flex=24, side=-10, head=(25, 10), frown=14, jaw_deg=4)),
-              (820, dict(flex=10, twist=20, head=(5, 35), up=8, jaw_deg=12)), (870, dict(flex=8, twist=20, head=(3, 30), up=10, jaw_deg=14))):
+              (820, dict(flex=10, twist=20, head=(5, 35), up=8, jaw_deg=4)), (870, dict(flex=8, twist=20, head=(3, 30), up=10, jaw_deg=5))):
     hero_pose(f, **kw)
 for p in ("tongue00", "tongue01", "tongue02"):
     HR.r.PB[p].scale = (1, 1, 1); HR.r.PB[p].keyframe_insert("scale", frame=800)
@@ -358,11 +358,11 @@ def sterile(h, f, lean=18):
 for nm in ("Surgeon1", "Surgeon2", "Nurse"):
     h = HU[nm]; ph = {"Surgeon1": 0.0, "Surgeon2": 1.1, "Nurse": 2.3}[nm]
     for f in range(1, 2341, 30):
-        if not (nm == "Surgeon1" and 1560 <= f <= 1712) and not (nm == "Surgeon2" and 1700 <= f <= 1800): sterile(h, f)   # vNEXT: nurse keeps the sterile pose (her blanket tuck hovered)
+        if not (nm == "Surgeon1" and 1560 <= f <= 1712) and not (nm == "Surgeon2" and 1590 <= f <= 1800): sterile(h, f)   # vNEXT: nurse keeps the sterile pose (her blanket tuck hovered)
         h.key_spine(f, flex=(20 if f < 1712 else 8) + 2 * math.sin(f * 0.05 + ph), twist=4 * math.sin(f * 0.03 + ph), head=(24 if f < 1712 else 8, 8 * math.sin(f * 0.02 + ph)))
     breathe(h, 1, 2340, sway=0.008, ph=ph)
 S2 = HU["Surgeon2"]; B2 = S2.r.BN
-for i, f in enumerate(range(1700, 1801, 10)):     # v007: hands working: small alternating reaches at chest height
+for i, f in enumerate(range(1600, 1801, 10)):     # v007: hands working: small alternating reaches at chest height
     for s_, sx in (("L", 1), ("R", -1)):
         sh = B2["upperarm01." + s_].head_local; ph2 = i * 1.3 + (0 if s_ == "L" else 1.6)
         W = V(sx * (0.1 + 0.03 * math.sin(ph2)), sh.y - 0.33 - 0.04 * math.sin(ph2 + 0.7), sh.z - 0.22 + 0.04 * math.cos(ph2))
@@ -385,6 +385,7 @@ for i, f in enumerate([]):   # vNEXT: tuck removed (hands hovered over the blank
         hand_w(NU, s_, f, tgt, V(-1, 0, -0.2), V(0, 0, -1), tgt + V(0.35, 0.0, -0.4))
 breathe(HR, 1, 1470, sway=0.008, ph=0.4); breathe(HR, 1858, 1999, sway=0.008, ph=0.9); breathe(HR, 2000, 2340, sway=0.01, ph=1.7)
 # beat 11 normal man looks up at the hero; beat 12 young self
+for o_ in [o for o in OB if o.parent == RIGS['Normal'] and o.name.split('.')[-1].startswith('short')]: o_.location = (0, 0.02, 0.012)   # v007b: fringe back off his eye
 Nm = HU["Normal"]; PN = V(9.4, -2.55, 0); yN = yaw_to(PN, V(8.0, -1.4, 0)) + 10
 BODYM[Nm] = lambda f: (PN, yN)
 Nm.key_root(1, PN + V(0, 0, Nm.root_head.z - 0.01), yaw=yN)
@@ -398,7 +399,7 @@ Yg.key_foot("L", 1, Yg.foot_xy("L", PY, yY), yY); Yg.key_foot("R", 1, Yg.foot_xy
 for f in range(1, 2341, 40): arms_idle(Yg, f, 0.07, -0.03); Yg.key_spine(f, flex=-2, head=(-10 if f > 2150 else -4, -24 if f > 2150 else -4))
 breathe(Yg, 1, 2340, base=PY + V(0, 0, Yg.root_head.z - 0.01), yaw=yY, ph=2.2)
 for nm, rng in (("Officer1", [(1, 1476)]),   # off during the x-ray beat (he would straddle the cutaway card)
-                ("Officer2", [(1, 1476)]), ("Clerk", [(1, 1476)]), ("Recruit1", [(1, 1476)]), ("Recruit2", [(1, 1476)]),
+                ("Officer2", [(1, 1240), (1301, 1476)]), ("Clerk", [(1, 1476)]), ("Recruit1", [(1, 1240), (1301, 1476)]), ("Recruit2", [(1, 1240), (1301, 1476)]),   # v007b: nobody behind the officer in the POV
                 ("Surgeon1", [(1477, 1857)]), ("Surgeon2", [(1477, 1857)]), ("Nurse", [(1477, 1857)]), ("Normal", [(1858, 1999)]), ("Young", [(2000, 2340)])):
     for m_ in meshes_of(RIGS[nm]): vis(m_, rng)
 
@@ -530,7 +531,7 @@ c5, f5, s5, u5, _, _ = head_frame(640); c5b, f5b, s5b, u5b, _, _ = head_frame(69
 BD = (HEAD0 - V(-0.5, 2.25, 1.33)).normalized() * -1
 def rig_head(nm, f):
     sc.frame_set(f); R_ = RIGS[nm]; return R_.matrix_world @ R_.pose.bones["head"].head
-c12, f12, s12, u12, _, _ = head_frame(1225)
+c12, f12, s12, u12, _, _ = head_frame(1225); cM, fM, sM, uM, _, _ = head_frame(840)
 O1H = rig_head("Officer1", 1180); O1D = (c12 - O1H); O1D.z = 0; O1D.normalize()
 cP1, fP1, sP1, uP1, _, _ = head_frame(1515); cP2, fP2, sP2, uP2, _, _ = head_frame(1825)
 S1H = rig_head("Surgeon1", 1570); S1D = (PAT - V(6.1, 1.45, 0)); S1D.z = 0; S1D.normalize()
@@ -546,21 +547,21 @@ SHOTS = [
             (95, V(-0.05, 1.1, 1.25), V(-0.3, 2.45, 1.22), 32), (150, V(-0.3, 1.6, 1.32), V(-0.3, 2.42, 1.22), 36)]),
   (151, 240, [(151, HEAD0 + BD * 0.42, HEAD0, 38), (240, HEAD0 + BD * 0.32, HEAD0, 38)]),                  # brain inset, centred, slow push
   (241, 312, [(241, V(0.2, 1.15, 1.5), V(-0.42, 2.6, 1.5), 34), (312, V(0.15, 1.25, 1.5), V(-0.42, 2.6, 1.5), 35)]),   # officer and boy, 1.2 s
-  (313, 440, [(313, c4 + f4 * 0.8 + s4 * 0.15, c4, 37), (440, c4b + f4b * 0.7 + s4b * 0.15, c4b, 40)]),     # his face (beat 3)
-  (441, 600, [(441, V(0.2, 0.2, 1.45), V(-0.35, 2.55, 1.35), 26), (600, V(0.2, 0.2, 1.5), V(-0.35, 2.55, 1.45), 26)]),   # locked wide by the height rod: he shoots up
+  (313, 440, [(313, c4 + f4 * 1.05 + s4 * 0.2, c4, 36), (440, c4b + f4b * 0.6 + s4b * 0.1, c4b, 42)]),     # his face (beat 3), slow push
+  (441, 600, [(441, V(0.2, 0.2, 1.45), V(-0.35, 2.55, 1.35), 26), (520, V(0.12, 0.55, 1.6), V(-0.35, 2.55, 1.5), 27), (600, V(0.02, 1.0, 1.8), V(-0.4, 2.5, 1.75), 28)]),   # push in as he shoots up   # locked wide by the height rod: he shoots up
   (601, 695, [(601, c5 + f5 * 0.8 + s5 * 0.12 + u5 * 0.04, c5, 34), (695, c5b + f5b * 0.75 + s5b * 0.12 + u5b * 0.04, c5b, 36)]),  # his face, surprised
-  (696, 812, [(696, V(0.45, 0.2, 1.6), V(-0.3, 2.4, 1.2), 24), (760, V(0.3, 0.1, 1.75), V(-0.25, 2.4, 1.3), 24), (812, V(0.1, 0.35, 1.75), V(-0.2, 2.45, 1.4), 25)]),
-  (813, 874, [(813, V(-0.3, 1.75, 2.05), V(2.8, 2.98, 1.72), 36), (874, V(-0.25, 1.8, 2.1), V(2.8, 2.98, 1.72), 38)]),   # the mirror, his head out of frame
+  (696, 812, [(696, V(0.45, 0.2, 1.6), V(-0.3, 2.4, 1.2), 24), (760, V(0.3, 0.6, 1.75), V(-0.25, 2.4, 1.45), 26), (812, V(0.15, 1.1, 1.9), V(-0.22, 2.4, 1.7), 28)]),   # push in to his face
+  (813, 874, [(813, cM + fM * 0.75 + sM * 0.2, cM, 36), (874, cM + fM * 0.6 + sM * 0.15, cM, 40)]),   # v007b: his face, close (mirror shot cut)
   (875, 1150, [(880, V(-0.2, 1.0, 1.3), V(-0.35, 2.2, 1.5), 26), (920, V(1.5, -0.1, 0.45), V(-0.3, 2.0, 1.5), 22),
                (975, V(0.35, -0.85, 0.42), V(-0.35, 2.0, 1.6), 22), (1030, V(-1.45, -0.45, 0.5), V(-0.3, 2.1, 1.6), 22),
                (1075, V(-0.6, 0.55, 1.6), V(-0.3, 2.45, 1.7), 24), (1150, V(-0.4, 0.5, 1.8), V(-0.3, 2.4, 1.75), 26)]),
   (1151, 1210, [(1151, O1H + O1D * 0.8 + V(0, 0, -0.12), O1H, 36), (1210, O1H + O1D * 0.72 + V(0, 0, -0.12), O1H, 38)]),   # officer's face looking up, 1 s
   (1211, 1240, [(1211, c12 + f12 * 0.8 + s12 * 0.1 + V(0, 0, -0.25), c12, 34), (1240, c12 + f12 * 0.75 + s12 * 0.1 + V(0, 0, -0.25), c12, 35)]),   # his face looking down
-  (1241, 1365, [(1241, eye8a + f8a * 0.10, OFFS, 28), (1365, eye8b + f8b * 0.12 + u8b * 0.02, OFFS, 30)]),
-  (1366, 1481, [(1366, c8c + f8c * 1.5 + s8c * 0.5 + u8c * 0.1, c8c - u8c * 0.15, 30), (1481, c8d + f8d * 1.6 + s8d * 0.55 + u8d * 0.1, c8d - u8d * 0.15, 30)]),
+  (1241, 1300, [(1241, eye8a + f8a * 0.10, OFFS, 28), (1300, eye8a + f8a * 0.11, OFFS, 30)]),   # POV, 1 s
+  (1301, 1481, [(1301, c8c + f8c * 1.55 + s8c * 0.5 + u8c * 0.1, c8c - u8c * 0.15, 30), (1366, c8c + f8c * 1.5 + s8c * 0.5 + u8c * 0.1, c8c - u8c * 0.15, 30), (1481, c8d + f8d * 1.6 + s8d * 0.55 + u8d * 0.1, c8d - u8d * 0.15, 30)]),
   (1482, 1545, [(1482, cP1 + fP1 * 0.85 - uP1 * 0.45 + sP1 * 0.1, cP1, 34), (1545, cP1 + fP1 * 0.8 - uP1 * 0.42 + sP1 * 0.1, cP1, 35)]),   # patient's face on the bed
   (1546, 1600, [(1546, S1H + S1D * 1.05 + V(0, 0, -0.2), S1H + V(0, 0, -0.22), 30), (1600, S1H + S1D * 0.95 + V(0, 0, -0.2), S1H + V(0, 0, -0.22), 31)]),   # surgeon, eyes over the mask, hands
-  (1601, 1716, [(1601, PHm + V(-1.2, -1.1, 0.75), PHm + V(0.4, 0.3, 0.15), 26), (1716, PHm + V(-1.05, -1.0, 0.7), PHm + V(0.4, 0.3, 0.15), 27)]),  # side medium: patient and surgeons
+  (1601, 1716, [(1601, V(6.9, -1.45, 2.35), V(6.9, 1.25, 0.95), 22), (1716, V(6.9, -1.3, 2.3), V(6.9, 1.25, 0.95), 23)]),   # v007b: both surgeons in frame with their arms  # side medium: patient and surgeons
   (1717, 1790, [(1717, S2H + S2D * 1.05 + V(0, 0, -0.2), S2H + V(0, 0, -0.24), 30), (1790, S2H + S2D * 0.95 + V(0, 0, -0.2), S2H + V(0, 0, -0.24), 31)]),   # second surgeon working
   (1791, 1857, [(1791, cP2 + fP2 * 0.85 - uP2 * 0.45 + sP2 * 0.1, cP2, 34), (1857, cP2 + fP2 * 0.8 - uP2 * 0.42 + sP2 * 0.1, cP2, 35)]),   # patient's face   # v006: medium side shot, patient and nurse (no slide along his legs)
   (1858, 1899, [(1858, NMH + NF * 0.95 + V(0, 0, 0.05), NMH, 32), (1899, NMH + NF * 0.85 + V(0, 0, 0.05), NMH, 34)]),   # the normal man looks up
