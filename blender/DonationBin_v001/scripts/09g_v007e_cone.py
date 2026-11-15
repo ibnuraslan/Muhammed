@@ -32,7 +32,7 @@ _air = air
 def air(c, r=0.22): return _air(c, r)
 if not face_shot(601, 675, (60, -60, 70, -70, 50, -50, 80, -80, 40, -40, 90, -90), (0.62, 0.56, 0.50, 0.45), ups=(0.0, 0.10, -0.10, 0.20), lens=20, name="stands v2"):
     _tr = smooth_face(WO, 601, 675)
-    fixed_shot(601, 675, (-0.50, -0.42, 1.50), (0, 0, 1), lens=18, track=lambda f: _tr[f] + Vector((0, 0, -0.15)), name="stands front-left")
+    fixed_shot(601, 675, (0.58, 0.42, 1.55), (0, 0, 1), lens=18, track=lambda f: _tr[f] + Vector((0, 0, -0.15)), name="stands side (grate is on the back wall)")
 for (a_, b_), angs in (((1561, 1650), (35, 30, 40, 25, 45, -35, -30, -40, 0, 15, -15)), ((1651, 1740), (-35, -30, -40, -25, -45, 35, 30, 40, 0, 15, -15)), ((1741, 1800), (-35, -30, -40, -25, -45, 35, 30, 40, 0, 15, -15)), ((1801, 1860), (35, 30, 40, 25, 45, -35, -30, -40, 0, 15, -15))):
     face_shot(a_, b_, angs, (0.62, 0.56, 0.50, 0.45), ups=(0.0, 0.06, 0.12, 0.20, 0.30, -0.04), lens=34, push=0.03, roll=True, aim=Vector(), name="days cone %d" % a_)
 for f, (p, q, ln) in sorted(NEW.items()):
