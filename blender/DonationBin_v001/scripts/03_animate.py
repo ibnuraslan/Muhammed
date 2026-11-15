@@ -308,7 +308,7 @@ P0 = Vector((0.55, -1.08, 0))
 # stops facing along the wall (-x), right ear turned to the bin; knocks with the right hand
 for f, sd, hd, knock in ((1915, 4, (0, -20), 0), (1932, 12, (5, -35), 1), (1940, 12, (5, -35), 0), (1948, 12, (5, -35), 1), (1953, 6, (5, -30), -2), (1960, 6, (0, -15), 0), (1985, 0, (-5, -5), 0)):
     PB_.pose(f, (P0.x, P0.y, RH + 0.1), yaw=270, flex=3, side=0, sp=(6, 0, sd), head=hd,
-             hands={"R": ("w", (0.56, FY - 0.085 - 0.05 * (1 - knock), 1.30), (0, 0, 1), (0, 1, 0)) if f < 1960 else ("r", (0.24, 0.05, -0.18)), "L": ("r", (-0.24, 0.08, -0.18))},
+             hands={"R": ("w", (0.56, FY - 0.085 - 0.05 * (1 - knock), 1.30 if knock >= 0 else 1.12), (0, 0, 1), (0, 1, 0)) if f < 1960 else ("r", (0.24, 0.05, -0.18)), "L": ("r", (-0.24, 0.08, -0.18))},
              feet=stand_feet(P0.x, P0.y, 270), curl={"L": 0.3, "R": 0.9})
 # moves aside for the firefighters (1992-2058), then watches
 pP2 = catmull([(1992, P0), (2030, Vector((1.4, -1.6, 0))), (2060, Vector((1.75, -1.9, 0)))])
