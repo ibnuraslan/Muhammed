@@ -1,0 +1,13 @@
+# B35 BalconyToddler: The Toddler Who Got Stuck On A Balcony
+
+- **Reference:** `blender/briefs/batch2/B35_BalconyToddler_reference_1fps.jpg`. It shows one frame per second of the reference film (32 s). Study its shot order and pacing. Do not copy its narration or its exact shots.
+- **Style:** current. If OLD: take the story only, and build every scene with real sets in our current look.
+
+## Story beats (in order)
+A toddler slips through the bars of a second-floor balcony; his body drops but his head sticks, leaving him hanging → people in the street stack chairs into a tower → a man climbs up and holds the boy's legs to take his weight off his neck → minutes later the grandmother gets in and pulls him up, unharmed
+
+## Shots to stage simply (known risks)
+**Sensitive (a child in danger):** keep it calm, face not distressed, no neck strain shown. **Contact:** head between the bars (contact, not through); the man's hands on the legs (grip, no crossing); chairs stacked with real contacts; grandma's arms under his arms. **Text:** no yellow measurement arrows
+
+## Narration
+Our own script (rewritten facts, never the reference's wording) and the client's VO mp3 will be added here as `B35_BalconyToddler_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
