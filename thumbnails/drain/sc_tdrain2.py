@@ -33,9 +33,10 @@ def velvet():
     cu = _rounded("Cushion", (0, 0, 0.18 + 0.03), (0.26, 0.24, 0.07), vel, 0.03)
     back = pbr("Backdrop", (0.02, 0.025, 0.06), 0.6)
     # an old brick wall behind the display, dark, picked out by the light from above
-    bw = ph.texture("red_brick_03", scale=0.85, tint=(0.42, 0.38, 0.38))
+    bw = ph.texture("red_brick_03", scale=2.6, tint=(0.42, 0.38, 0.38))
     bwn = [n for n in bw.node_tree.nodes if n.type == 'NORMAL_MAP']
     if bwn: bwn[0].inputs['Strength'].default_value = 2.0
+    next(n for n in bw.node_tree.nodes if n.type == 'MAPPING').inputs['Rotation'].default_value = (0, 0, math.pi / 2)   # courses horizontal
     bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 1.4, 0.8), rotation=(math.pi / 2, 0, 0)); b = bpy.context.active_object
     b.scale = (6, 3, 1); b.data.materials.append(bw)
     bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 0.5, 0.0)); f = bpy.context.active_object; f.scale = (6, 4, 1); f.data.materials.append(back)
