@@ -548,12 +548,13 @@ for i, f in enumerate(range(1822, END + 10, 4)):
                 {"L": ("w", held + Rz(my_) @ V((0.14, 0.22, 0.22))), "R": ("w", held + Rz(my_) @ V((-0.14, 0.22, 0.22)))})     # reaching for his mother     # on the teen's shoulders, then the mother's
     TE.key(f, OUTP, 150 - 20 * k, flex=-5, head=(-15, 0),
            hands=({"L": UP(TE, 0.25, 0.1), "R": UP(TE, 0.25, 0.1)} if k > 0.9 else {"L": ("rel", (0.42, -0.08, -0.1 * TE.arm)), "R": ("rel", (0.42, -0.08, -0.1 * TE.arm))}) if k > 0.55 else     # lets go: hands out to the sides, then up {"L": ("wg", held + Rz(lerp(330, my_ + 180, k) - 180) @ V((0.14, 0.02, -0.14))), "R": ("wg", held + Rz(lerp(330, my_ + 180, k) - 180) @ V((-0.06, -0.14, 0.14)))})
+CHEER_YAW = lambda c, p: yaw_to(p, (-1.75, 6.0)) if c is RA else yaw_to(p, OUTP)     # ResA cheers with the crowd (he walked off that way)
 for c, p in ((RA, V((-1.75, 1.3))), (RB, V((-2.1, 3.0))), (RC, V((1.1, 4.3)))):     # arms go out to the sides first, then up: never through the body
-    c.key(1780, p, yaw_to(p, OUTP), head=(-5, 0), hands={"L": ("rel", (0.4, 0.05, -0.15 * c.arm)), "R": ("rel", (0.4, 0.05, -0.15 * c.arm))})
+    c.key(1780, p, CHEER_YAW(c, p), head=(-5, 0), hands={"L": ("rel", (0.4, 0.05, -0.15 * c.arm)), "R": ("rel", (0.4, 0.05, -0.15 * c.arm))})
 for c, p in ((RA, V((-1.75, 1.3))), (RB, V((-2.1, 3.0))), (RC, V((1.1, 4.3)))):
     for i, f in enumerate(range(1786, END + 10, 10)):
         ph = i * 1.4
-        c.key(f, p, yaw_to(p, OUTP), crouch=0.04 * abs(math.sin(ph)), head=(-10, 0),
+        c.key(f, p, CHEER_YAW(c, p), crouch=0.04 * abs(math.sin(ph)), head=(-10, 0),
               hands={"L": UP(c, 0.2 + 0.1 * math.sin(ph * 2), 0.05), "R": UP(c, 0.2 + 0.1 * math.cos(ph * 2), 0.05)} if i % 6 < 4 else
                     {"L": ("rel", (-0.04, 0.35, -0.05 + 0.08 * (i % 2))), "R": ("rel", (-0.04, 0.35, -0.05 + 0.08 * (i % 2)))})
 
@@ -571,7 +572,7 @@ def clear_keys(c, f0, f1):
 MOVES = [
  (RA, 470, 520, [RA_P, (-0.9, 0.75), (-1.12, 0.92)]), (RA, 674, 690, [(-1.12, 0.92), (-1.1, 1.5)]), (RA, 905, 925, [(-1.1, 1.5), (-0.9, 0.9)]),
  (RA, 1140, 1188, [(-0.9, 0.9), (-0.15, 0.72), (0.55, 0.1), (0.75, -0.3)]), (RA, 1290, 1312, [(0.75, -0.3), (0.95, 0.3), (0.55, 0.45)]),
- (RA, 1430, 1500, [(0.55, 0.45), (0.85, -0.2), (0.0, -0.6), (-0.3, -0.5), (-0.8, -0.2), (-0.85, 0.9), (-0.24, 1.6)]), (RA, 1730, 1765, [(-0.24, 1.6), (-1.0, 1.4), (-1.75, 1.3)]),     # away from the teen and toddler, out of the camera's way
+ (RA, 1430, 1500, [(0.55, 0.45), (0.85, -0.2), (0.0, -0.6), (-0.3, -0.5), (-0.8, -0.2), (-0.85, 0.9), (-0.24, 1.6)]), (RA, 1730, 1765, [(-0.24, 1.6), (-1.0, 1.25), (-1.7, 1.0), (-1.75, 1.3)])     # ends facing the crowd: no spin on the spot,     # away from the teen and toddler, out of the camera's way
  (RB, 470, 525, [RB_P, (1.0, -0.6), (1.6, -2.2)]), (RB, 674, 702, [(1.6, -2.2), (0.2, -0.6), (-0.45, 0.6), (-0.2, 1.8), (0.4, 2.6)]),
  (RB, 905, 925, [(0.4, 2.6), (0.9, 2.3)]), (RB, 1130, 1162, [(0.9, 2.3), (-0.5, 3.4), (-1.45, 2.85), tuple(RBT)]),
  (RB, 1252, 1290, [tuple(RBT), (-1.15, 2.05), (-0.5, 1.55), (-0.35, 0.95), (-0.55, 0.45)]), (RB, 1430, 1490, [(-0.55, 0.45), (-0.85, 0.5), (-0.45, 1.6), (-0.21, 2.6)]),
