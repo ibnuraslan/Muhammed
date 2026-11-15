@@ -103,3 +103,13 @@ Beat frames are unchanged and there is no VO.
 | 9 | The beanie popped on at 2276. | It is off for the whole home shot and comes on at the rink cut, f2281. |
 | 10 | The ending was wide, with mannequin players. | A medium shot from about 2 m: her with the cheque, the man clapping beside her, and players around her clapping, fist-pumping and turning with their arms moving. The cheque stays text-free (director confirmed the rule). It reads as a big cheque from its oversized board, a blue band across the top, a signature line and an ink scribble. |
 | 11 | Minor items. | The camera passes higher above him at 1.9 s, and the POV is moved off her beanie at 3.3–3.9 s. |
+
+## v008 (director review of v007): fixes. The film is now **1–2490 (41.5 s)**. The preview `review/preview.mp4` (498 frames) is rendered from the final v008 package, with pages in `review/preview_pages_v008/`
+| Item | Fault | Fix |
+|---|---|---|
+| 1 | The phone posting was a 7 s static shot, and the phone was a dark dot at his knee. | 28.75–30.8 s: relief, with the doctor beside him (she no longer walks across the lens). At **beat 10 (f1849)** a cut to a medium shot: he lifts the phone to his chest and thumb-types, his face lit by a phone glow light (2.6 s). At **f2005**, a 1.2 s insert of the phone screen filling the frame: a blank post layout with a photo of her at the glass, share icons pulsing and a share bar filling. No text. Beat 11 (f2029) falls in the insert. At **f2077**, a cut to her at the laptop. |
+| 2 | The ending: the cheque hid her, a player's head sat on hers, and the shot was static and wide. | She holds the cheque at waist height, so her face and shoulders are clear. Nobody stands directly behind her. The camera is about 0.3 m higher with a slow push-in (2.75 → 2.05 m). The shot is cut to 3.5 s (f2281–2490), so the film ends at f2490. |
+| 3 | Her arms crossed at the laptop. | Both hands rise together from the laptop to her chest, palms flat (the hand-to-mouth swing is removed). |
+| 4 | An empty corridor, sky and door frame. | A clean cut at **beat 8 (f1333)** from him walking at the rink to the clinic. |
+| 5 | Bodies near the lens. | The clinic camera keys are moved to stay at least about 1.2 m from people. The doctor stays put. The nurse stays in the far corner. The rink exit camera is raised above the bench players. |
+The beat frames are unchanged, and there is no on-screen text.
