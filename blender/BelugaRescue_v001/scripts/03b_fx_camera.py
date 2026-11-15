@@ -150,7 +150,7 @@ def two_shot(f, lens=24, mix=0.45, centre=False):
             if (c - o.matrix_world.translation).length < r_ + 0.8: return False
         for t_, Mi_, R_3 in _wb:
             loc, n, i, d = t_.find_nearest(Mi_ @ c, 2.0)
-            if loc is not None and (R_3 @ (Mi_ @ c - loc)).length < 1.2: return False
+            if loc is not None and (R_3 @ (Mi_ @ c - loc)).length < 2.0: return False
         return True
     ev(f); Hh = H_(f); Wh = wh(f); M_ = Hh.lerp(Wh, mix); fd = _face_dir(f); best = None
     _tc.data.lens = lens
@@ -177,7 +177,9 @@ def two_shot(f, lens=24, mix=0.45, centre=False):
     _prev[0] = best[1]; print("TWO_SHOT", f, tuple(round(x, 2) for x in best[1]))
     K(f, best[1], best[2], lens)
 two_shot(1028, mix=0.25, centre=True)
-for _f in (868, 885, 925, 965, 1005, 1050, 1085, 1125, 1165, 1213, 1250, 1290):
+K(872, V(2.6, -3.7, 2.6), H_(872).lerp(wh(872), 0.4), 24)      # wide, behind her: the arriving whale never passes the lens
+K(900, V(2.4, -3.6, 2.7), H_(900).lerp(wh(900), 0.4), 24)
+for _f in (925, 965, 1005, 1050, 1085, 1125, 1165, 1213, 1250, 1290):
     two_shot(_f)
 bpy.data.objects.remove(_tc)
 K(1350, wh(1350) + V(1.3, 1.2, 0.3), CH(1350), 28)
@@ -188,9 +190,9 @@ K(1545, PEL(1545) + V(2.4, 1.6, -0.9), PEL(1545).lerp(wh(1545), 0.3), 22)      #
 K(1605, PEL(1605) + V(-0.6, 1.9, -1.2), PEL(1605), 24)
 K(1660, PEL(1660) + V(-1.8, 0.3, -0.6), CH(1660), 26)
 # beat 10 — her face, racing alongside, up into the light
-K(1720, H_(1720) + V(0.45, 1.0, -0.15), H_(1720), 40)
-K(1775, H_(1775) + V(0.6, 1.2, -0.1), H_(1775), 40)      # face, tight: deck out of frame
-K(1835, H_(1835) + V(0.7, 1.3, 0.0), H_(1835) + V(0, 0, -0.05), 38)      # camera holds while she rises past it (no frozen hang)
+K(1720, H_(1720) + _face_dir(1720) * 1.1 + V(0, 0, -0.02), H_(1720), 40)      # eye level, in front
+K(1775, H_(1775) + _face_dir(1775) * 1.15 + V(0, 0, -0.02), H_(1775), 40)
+K(1835, H_(1835) + _face_dir(1835) * 1.2 + V(0, 0, -0.05), H_(1835) + V(0, 0, -0.05), 38)      # camera holds while she rises past it (no frozen hang)
 # beat 11 — below the surface looking up, burst out, circle the splash
 K(1868, H_(1868) + V(1.2, 1.2, -0.2), H_(1868) + V(0, 0, 0.15), 26)      # slow push in as she rises
 K(1893, H_(1893) + V(0.85, 0.95, -0.3), H_(1893) + V(0, 0, 0.2), 28)      # in front of her, below head height (no top of head)
@@ -198,10 +200,10 @@ K(1925, H_(1925) + V(-0.2, 1.5, 1.6), H_(1925) + V(0, 0.6, -0.25), 30)      # to
 K(1960, H_(1960) + V(1.7, 0.4, 0.9), H_(1960).lerp(dv("foot.R", 1960), 0.45), 26)      # side-on: snout at her ankle
 K(2010, H_(2010) + V(-0.2, 1.35, 1.9), H_(2010) + V(0, 0.6, -0.25), 32)      # steep top-down: no deck people cut by the frame
 # beat 12 — face at the edge, rise and pull back to reveal everything
-K(2080, H_(2080) + V(-0.2, 1.5, 1.7), H_(2080) + V(0, 0.55, -0.3), 32)      # deck out of frame until the crane-up
+K(2080, H_(2080) + V(0.0, 1.35, 0.95), H_(2080) + V(0, 0.05, -0.4), 34)      # down onto her at the wall: deck out of frame until the cut to the deck      # deck out of frame until the crane-up
 K(2086, H_(2086) + V(0.4, 1.8, 2.4), H_(2086) + V(0, -0.6, 0.9), 26)      # crane up: deck people come in whole (aim above her)
 K(2096, H_(2096) + V(1.0, 2.6, 2.0), H_(2096) + V(0, -0.85, 0.75), 26)      # wide and high early: deck people in full, never cut at the waist
-K(2140, H_(2140) + V(0.9, 2.5, 2.0), H_(2140) + V(0, -0.9, 0.85), 26)      # closer end: her face, keeper and nurse beside her
+K(2140, H_(2140) + V(0.6, 2.4, 0.95), H_(2140) + V(-0.2, -0.75, 0.7), 26)      # medium end: her face up, keeper kneeling, nurse beside
 K(END, H_(END) + V(2.0, 4.3, 2.8), H_(END) + V(-0.4, -1.0, 0.3), 26)
 FR.sort(key=lambda x: x[0])
 fc = catmull([(f, c) for f, c, a, l in FR]); fa = catmull([(f, a) for f, c, a, l in FR]); fl = catmull([(f, l) for f, c, a, l in FR])
@@ -610,6 +612,20 @@ _nt.links.new(_mix.outputs[0], _out.inputs["Surface"])
 _db = bpy.data.objects["Diver.body"]
 for _f, _v in ((1, True), (95, True), (100, False), (170, False), (176, True)):
     _db.visible_shadow = _v; _db.keyframe_insert("visible_shadow", frame=_f)
+for _n in bpy.data.objects["Water_Surface"].data.materials[0].node_tree.nodes:
+    if _n.type == "BSDF_PRINCIPLED" and not _n.inputs["Roughness"].is_linked: _n.inputs["Roughness"].default_value = max(_n.inputs["Roughness"].default_value, 0.22)
+for _o in ("Beluga", "Beluga_Jaw"):
+    for _m in bpy.data.objects[_o].data.materials:
+        for _n in _m.node_tree.nodes:
+            if _n.type == "BSDF_PRINCIPLED":
+                if not _n.inputs["Roughness"].is_linked: _n.inputs["Roughness"].default_value = max(_n.inputs["Roughness"].default_value, 0.5)
+                for _k in ("Coat Weight", "Specular IOR Level"):
+                    if _k in _n.inputs and not _n.inputs[_k].is_linked: _n.inputs[_k].default_value = min(_n.inputs[_k].default_value, 0.2)
+# 4: the loose fin she pulled off stays on the floor until the cramp beat is over, then is hidden (no lone fin later)
+_lf = bpy.data.objects.get("Diver.FinBlade_R_loose")
+if _lf:
+    for _f, _v in ((1, False), (700, False), (701, True)):
+        _lf.hide_render = _v; _lf.keyframe_insert("hide_render", frame=_f); _lf.hide_viewport = _v; _lf.keyframe_insert("hide_viewport", frame=_f)
 # 2: tank floor matte enough that no mirror images (ghost hand) show in it
 for _n in bpy.data.objects["TankFloor"].data.materials[0].node_tree.nodes:
     if _n.type == "BSDF_PRINCIPLED" and not _n.inputs["Roughness"].is_linked: _n.inputs["Roughness"].default_value = max(_n.inputs["Roughness"].default_value, 0.65)

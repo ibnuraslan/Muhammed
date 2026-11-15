@@ -232,8 +232,8 @@ FLOAT = lambda f, t: (SIT[0], SIT[1] - 0.05 - 0.15 * t, SIT[2] + 0.95 * t)
 for k, f in enumerate(range(790, 1380, 30)):
     t = min(1.0, (f - 790) / 520.0)
     DV.P(f, FLOAT(f, t), yaw=180 + 8 * math.sin(k * 0.5), pitch=-14 + 30 * t, roll=4 * math.sin(k * 0.7), spine=(-4 + 14 * t, 0, 3 * math.sin(k)),
-         head=(-30 + 40 * t, 6 * math.sin(k * 0.6), -25 * math.sin(k * 0.35)), legs=legs((84 - 30 * t + 10 * math.sin(k * 0.9), 6, 30 + 20 * t + 15 * math.sin(k * 0.7), -55), (84 - 45 * t - 10 * math.sin(k * 0.8), 7, 35 + 50 * t + 15 * math.cos(k * 0.6), -40)),
-         arms=arms(l=dict(fwd=55 + 30 * math.sin(k * 1.4), out=14 + 12 * math.sin(k * 1.1), L=DV.ARM * (0.6 + 0.08 * math.sin(k * 1.7))), r=dict(fwd=50 + 30 * math.cos(k * 1.4), out=16 + 12 * math.cos(k * 1.1), L=DV.ARM * (0.6 + 0.08 * math.cos(k * 1.7)))), jaw=6,
+         head=(-30 + 40 * t, 6 * math.sin(k * 0.6), -25 * math.sin(k * 0.35)), legs=legs((84 - 30 * t + 10 * math.sin(k * 0.9) + 25 * t, -2, 30 + 35 * t + 15 * math.sin(k * 0.7), -55), (84 - 45 * t - 10 * math.sin(k * 0.8) + 30 * t, -3, 35 + 60 * t + 15 * math.cos(k * 0.6), -40)),
+         arms=arms(l=dict(fwd=(55 + 30 * math.sin(k * 1.4)) * (1 - t) + (22 + 18 * math.sin(k * 2.1)) * t, out=14 + 10 * math.sin(k * 1.1), L=DV.ARM * (0.6 + 0.12 * t + 0.06 * math.sin(k * 1.7))), r=dict(fwd=(50 + 30 * math.cos(k * 1.4)) * (1 - t) + (20 + 18 * math.cos(k * 2.1)) * t, out=16 + 10 * math.cos(k * 1.1), L=DV.ARM * (0.6 + 0.12 * t + 0.06 * math.cos(k * 1.7)))), jaw=6,
          curl={"L": (30, 20), "R": (30, 20)})
 # --- beats 9–11: held by the ankle (right knee bent, shin across the mouth), pushed up, breaks the surface
 RISE = [(1380, FLOAT(0, 1.0)[2]), (1440, FLOAT(0, 1.0)[2] + 0.05), (1500, 1.6), (1600, 2.6), (1699, 3.4), (1800, 4.6), (1884, 5.0), (1915, 5.33), (1950, 5.42), (1990, 5.3)]
@@ -585,7 +585,7 @@ def glass_hand(h, s, x, z):
     W = Vector((x, GLASS_Y - 0.035, z))
     return ("world", dict(W=W, d=Vector((0, 0.15, 1)), n=Vector((0, 1, 0)), pole=W + Vector((sx * 0.4, -0.5, -0.5))))
 GAL = [("Keeper", -2.6, -5.85), ("SpecA", 1.4, -5.7), ("SpecB", 2.5, -6.3), ("SpecC", -0.6, -5.75), ("SpecD", -1.5, -6.6)]
-DECK = [("SpecE", -0.5, -6.0), ("SpecG", 0.4, -6.9)]
+DECK = [("SpecE", -1.3, -6.5), ("SpecG", 0.4, -6.9)]      # nurse 1 m further from the diver at the start
 for nm, x, y in GAL + DECK:
     PEOPLE[nm] = H(nm)
 def clap(h, open_):
@@ -667,10 +667,10 @@ for f in (1, 900, RUN0):
     K2H.key_spine(f, flex=6, head=(10, -20 if f < 900 else 0))
     for s_ in "LR": K2H.key_foot(s_, f, K2H.foot_xy(s_, p, k2_yaw(f)), k2_yaw(f))
 K2H.walk(k2_path, k2_yaw, RUN0, RUN1, stride=1.05, lift=0.1, bob=0.03, crouch=0.06, lean=14)
-for f in (RUN1 + 30, END):
+for f in (RUN1 + 30, RUN1 + 90, END):
     p = k2_path(f)
-    K2H.key_root(f, Vector((p.x, p.y, GROUND[0] + K2H.root_head.z - 0.12)), yaw=k2_yaw(f), flex=12)
-    K2H.key_spine(f, flex=34, head=(25, 0))
+    K2H.key_root(f, Vector((p.x, p.y, GROUND[0] + K2H.root_head.z - (0.12 if f < RUN1 + 60 else 0.42))), yaw=k2_yaw(f), flex=12)
+    K2H.key_spine(f, flex=34 if f < RUN1 + 60 else 22, head=(25, 0) if f < RUN1 + 60 else (-12, 0))
     for s_ in "LR": K2H.key_foot(s_, f, K2H.foot_xy(s_, p, k2_yaw(f)), k2_yaw(f))
 # the buoy: a real ring life-buoy (orange/white bands), held in both hands
 bpy.ops.mesh.primitive_torus_add(major_radius=0.26, minor_radius=0.055, major_segments=48, minor_segments=16)
