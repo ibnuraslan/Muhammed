@@ -43,7 +43,14 @@ The ending close-up of his face (55.72–58.0 s) is kept as it was.
 | 4 | 2961–3016: left arm missing in the high shot | Close on his face (49.3–50.3 s). Extending the 2906 side shot instead would bring back the stub: in that framing his left arm points at the lens from about 2961 (seen in v009g). |
 | 5 | 546–621: hands splayed, arms out while walking in | Head and shoulders as he walks in (9.08–10.33 s, 100 mm); his arms are below the frame. |
 
-The side-yoke shots are unchanged. Camera only: `08_camera.py` on the v009h package.
+The side-yoke shots are unchanged. Camera only: `08_camera.py` on the v009h package. Package md5 97bff3b0. The 931 shot opens on the panel for 0.35 s (15.5–15.85 s), because his hand was at the frame edge at the start of the close-up.
+
+Checks on this package:
+- Every frame of the five changed ranges (step 5) was rendered at 540×960 and looked at. No hands are in frame in them. 15.85–16.5 s and 19.2–20.4 s show his face from slightly above while he looks down, so the top of his head dominates.
+- Those 540×960 frames, scaled to 270×480, are spliced into `review/preview.mp4` and `review/pages/`.
+- `clip_scan`: frames 1–7, a self-intersection on YOU (his hands resting on his thighs) in the opening wide shot, where his hands are not visible; and single frame 1741. The two haul ranges from v009g are gone, because the haul is now a cut.
+- `limb_check`: 169 ARMBODY flags, mostly the known shoulder false positive, and 1 PROPHEAD.
+- The 540×960 hand check on every 10th frame of the whole film (v009h) covered 252 of 348 frames before it was stopped for this re-stage. Not covered: about 611–871, 1491–1741, 2391–2611 and 3281–3481.
 
 ## v009h: the client's notes (via the director), patched onto the v009g package
 

@@ -454,70 +454,6 @@
     "YOU arm.R inside own torso (5 pts)"
    ]
   ],
-  "559": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (6 pts)"
-   ],
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (4 pts)"
-   ]
-  ],
-  "565": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (4 pts)"
-   ],
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (5 pts)"
-   ]
-  ],
-  "571": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (4 pts)"
-   ]
-  ],
-  "577": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (4 pts)"
-   ]
-  ],
-  "583": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (5 pts)"
-   ]
-  ],
-  "589": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (4 pts)"
-   ],
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (5 pts)"
-   ]
-  ],
-  "595": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (5 pts)"
-   ],
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (5 pts)"
-   ]
-  ],
-  "601": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ]
-  ],
   "625": [
    [
     "ARMBODY",
@@ -617,10 +553,6 @@
   "823": [
    [
     "ARMBODY",
-    "YOU arm.L inside own torso (2 pts)"
-   ],
-   [
-    "ARMBODY",
     "YOU arm.R inside own torso (5 pts)"
    ]
   ],
@@ -648,10 +580,16 @@
     "YOU arm.L inside own torso (2 pts)"
    ]
   ],
+  "871": [
+   [
+    "ARMBODY",
+    "YOU arm.R inside own torso (2 pts)"
+   ]
+  ],
   "877": [
    [
     "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
+    "YOU arm.R inside own torso (6 pts)"
    ]
   ],
   "883": [
@@ -663,423 +601,43 @@
   "889": [
    [
     "ARMBODY",
-    "YOU arm.R inside own torso (8 pts)"
+    "YOU arm.R inside own torso (7 pts)"
    ]
   ],
   "895": [
    [
     "ARMBODY",
-    "YOU arm.R inside own torso (10 pts)"
+    "YOU arm.R inside own torso (8 pts)"
    ]
   ],
   "901": [
    [
     "ARMBODY",
-    "YOU arm.R inside own torso (10 pts)"
+    "YOU arm.R inside own torso (8 pts)"
    ]
   ],
   "907": [
    [
     "ARMBODY",
-    "YOU arm.R inside own torso (9 pts)"
+    "YOU arm.R inside own torso (10 pts)"
    ]
   ],
   "913": [
    [
     "ARMBODY",
-    "YOU arm.R inside own torso (8 pts)"
+    "YOU arm.R inside own torso (9 pts)"
    ]
   ],
   "919": [
    [
     "ARMBODY",
-    "YOU arm.R inside own torso (7 pts)"
+    "YOU arm.R inside own torso (8 pts)"
    ]
   ],
   "925": [
    [
     "ARMBODY",
     "YOU arm.R inside own torso (6 pts)"
-   ]
-  ],
-  "931": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (6 pts)"
-   ]
-  ],
-  "937": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (8 pts)"
-   ]
-  ],
-  "943": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (9 pts)"
-   ]
-  ],
-  "949": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (10 pts)"
-   ]
-  ],
-  "955": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (8 pts)"
-   ]
-  ],
-  "961": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (7 pts)"
-   ]
-  ],
-  "967": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (6 pts)"
-   ]
-  ],
-  "973": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (5 pts)"
-   ]
-  ],
-  "979": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ]
-  ],
-  "985": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ]
-  ],
-  "1033": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (4 pts)"
-   ]
-  ],
-  "1039": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (35 pts)"
-   ]
-  ],
-  "1045": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (48 pts)"
-   ]
-  ],
-  "1051": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (46 pts)"
-   ]
-  ],
-  "1057": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (48 pts)"
-   ]
-  ],
-  "1063": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (52 pts)"
-   ]
-  ],
-  "1069": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (56 pts)"
-   ]
-  ],
-  "1075": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (57 pts)"
-   ]
-  ],
-  "1081": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (60 pts)"
-   ]
-  ],
-  "1087": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (61 pts)"
-   ]
-  ],
-  "1093": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (60 pts)"
-   ]
-  ],
-  "1099": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (62 pts)"
-   ]
-  ],
-  "1105": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (68 pts)"
-   ]
-  ],
-  "1111": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (75 pts)"
-   ]
-  ],
-  "1117": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (84 pts)"
-   ]
-  ],
-  "1123": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (88 pts)"
-   ]
-  ],
-  "1129": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (4 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (88 pts)"
-   ]
-  ],
-  "1135": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (87 pts)"
-   ]
-  ],
-  "1141": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (82 pts)"
-   ]
-  ],
-  "1147": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (65 pts)"
-   ]
-  ],
-  "1153": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (61 pts)"
-   ]
-  ],
-  "1159": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (62 pts)"
-   ]
-  ],
-  "1165": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (66 pts)"
-   ]
-  ],
-  "1171": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (81 pts)"
-   ]
-  ],
-  "1177": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (86 pts)"
-   ]
-  ],
-  "1183": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (88 pts)"
-   ]
-  ],
-  "1189": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (4 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (88 pts)"
-   ]
-  ],
-  "1195": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (88 pts)"
-   ]
-  ],
-  "1201": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (86 pts)"
-   ]
-  ],
-  "1207": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (83 pts)"
-   ]
-  ],
-  "1213": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (79 pts)"
-   ]
-  ],
-  "1219": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "HANDSET inside YOU's head/face (39 pts)"
    ]
   ],
   "1285": [
@@ -1258,82 +816,6 @@
     "YOU arm.L inside own torso (2 pts)"
    ]
   ],
-  "1447": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (7 pts)"
-   ]
-  ],
-  "1453": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (11 pts)"
-   ]
-  ],
-  "1459": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (10 pts)"
-   ]
-  ],
-  "1465": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (10 pts)"
-   ]
-  ],
-  "1471": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (10 pts)"
-   ]
-  ],
-  "1477": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (10 pts)"
-   ],
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (5 pts)"
-   ]
-  ],
-  "1483": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (9 pts)"
-   ],
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (5 pts)"
-   ]
-  ],
-  "1489": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (9 pts)"
-   ],
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ]
-  ],
-  "1495": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (10 pts)"
-   ],
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ]
-  ],
-  "1501": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (4 pts)"
-   ]
-  ],
   "1537": [
    [
     "ARMBODY",
@@ -1350,98 +832,10 @@
     "YOU arm.R inside own torso (4 pts)"
    ]
   ],
-  "1579": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ]
-  ],
-  "1585": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ]
-  ],
   "1591": [
    [
-    "ARMBODY",
-    "YOU arm.R inside own torso (5 pts)"
-   ],
-   [
     "PROPHEAD",
     "OXYDROP_2_1_1 inside PF_03R1's head/face (8 pts)"
-   ]
-  ],
-  "1597": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ]
-  ],
-  "1603": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ]
-  ],
-  "1609": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (2 pts)"
-   ]
-  ],
-  "1615": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "OXYDROP_2_1_1 inside PF_03R1's head/face (8 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "OXYDROP_3_-1_0 inside PA_04L1's head/face (2 pts)"
-   ]
-  ],
-  "1621": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (3 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "OXYDROP_5_-1_0 inside PD_06L1's head/face (3 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "OXYDROP_6_1_0 inside PC_07R0's head/face (4 pts)"
-   ]
-  ],
-  "1627": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (5 pts)"
-   ],
-   [
-    "PROPHEAD",
-    "OXYDROP_6_1_0 inside PC_07R0's head/face (4 pts)"
-   ]
-  ],
-  "1633": [
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (5 pts)"
-   ]
-  ],
-  "1639": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (4 pts)"
-   ],
-   [
-    "ARMBODY",
-    "YOU arm.R inside own torso (6 pts)"
    ]
   ],
   "1705": [
@@ -1555,58 +949,10 @@
     "ARMBODY",
     "YOU arm.L inside own torso (2 pts)"
    ]
-  ],
-  "2965": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2971": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (3 pts)"
-   ]
-  ],
-  "2983": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (3 pts)"
-   ]
-  ],
-  "2989": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (3 pts)"
-   ]
-  ],
-  "2995": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (5 pts)"
-   ]
-  ],
-  "3001": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (5 pts)"
-   ]
-  ],
-  "3007": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (6 pts)"
-   ]
-  ],
-  "3013": [
-   [
-    "ARMBODY",
-    "YOU arm.L inside own torso (6 pts)"
-   ]
   ]
  },
  "counts": {
-  "ARMBODY": 257,
-  "PROPHEAD": 38
+  "ARMBODY": 169,
+  "PROPHEAD": 1
  }
 }
