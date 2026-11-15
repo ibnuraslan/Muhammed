@@ -76,8 +76,10 @@ K = [  # frame, location, target, lens
  (1342, (0.35, -1.1, 0.9), (0.0, 0.0, 0.2), 24),
  # beat 8: inside, torch
  (1358, (-0.5, -0.6, 1.5), (-0.1, 0.35, 0.8), 24),     # beat 8: ResB's face as they feed his legs in
- (1365, (0.3, -1.3, 0.1), (0.0, 0.05, -0.6), 22),     # down outside the casing (never the empty pipe)
- (1372, (0.3, -1.15, -1.3), (0.0, 0.05, teen_head_z(1372) - 0.2), 22),
+ (1361, (-0.4, -0.7, 1.4), (-0.1, 0.3, 0.6), 24),
+ # hard cut at 1362 (CUTS): straight to beside his face inside the casing, never the empty pipe
+ (1362, (0.3, -0.85, teen_head_z(1362) + 0.1), (0.0, 0.05, teen_head_z(1362) + 0.2), 24),
+ (1380, (0.3, -0.85, teen_head_z(1380) + 0.1), (0.0, 0.05, teen_head_z(1380) + 0.2), 24),
  (1400, (0.3, -0.85, teen_head_z(1400) + 0.1), (0.0, 0.05, teen_head_z(1400) + 0.2), 24),     # beside his face, not the empty wall below
  (1440, (-0.3, -0.85, teen_head_z(1440) + 0.1), (0.0, 0.05, teen_head_z(1440) + 0.2), 24),
  (1475, (0.2, -0.9, teen_head_z(1475)), (0.0, 0.05, teen_head_z(1475)), 24),
@@ -101,11 +103,23 @@ K = [  # frame, location, target, lens
  (1910, (1.6, -3.6, 4.0), (0.0, 2.2, 0.9), 22),
  (1950, (1.7, -4.6, 5.8), (0.0, 2.6, 0.8), 22),
 ]
-loc = catmull([(f, V(l)) for f, l, t, z in K]); tgt = catmull([(f, V(t)) for f, l, t, z in K]); lens = pchip([(f, z) for f, l, t, z in K])
+CUTS = [1362]     # hard cuts: separate splines either side, constant step between
 cam = bpy.data.objects["Cam"]; tg = bpy.data.objects["CamTarget"]
-for f in range(1, 1951, 2):
-    cam.location = loc(f); tg.location = tgt(f); cam.data.lens = lens(f)
-    cam.keyframe_insert("location", frame=f); tg.keyframe_insert("location", frame=f); cam.data.keyframe_insert("lens", frame=f)
+bounds = [1] + CUTS + [1951]
+for a_, b_ in zip(bounds[:-1], bounds[1:]):
+    Ks = [k for k in K if a_ <= k[0] < b_]
+    loc = catmull([(f, V(l)) for f, l, t, z in Ks]); tgt = catmull([(f, V(t)) for f, l, t, z in Ks]); lens = pchip([(f, z) for f, l, t, z in Ks])
+    fr = list(range(a_, b_, 2)) + ([b_ - 1] if (b_ - 1 - a_) % 2 else [])
+    for f in fr:
+        cam.location = loc(f); tg.location = tgt(f); cam.data.lens = lens(f)
+        cam.keyframe_insert("location", frame=f); tg.keyframe_insert("location", frame=f); cam.data.keyframe_insert("lens", frame=f)
+for o in (cam, tg, cam.data):     # step, not blend, across each cut
+    for layer in o.animation_data.action.layers:
+        for strip in layer.strips:
+            for cb in strip.channelbags:
+                for fc in cb.fcurves:
+                    for kp in fc.keyframe_points:
+                        if any(c - 1 <= kp.co.x < c for c in CUTS): kp.interpolation = "CONSTANT"
 # no lens/clip issues inside the shaft
 cam.data.clip_start = 0.01
 bpy.ops.wm.save_as_mainfile(filepath=OUT); print("CAM SAVED", OUT)

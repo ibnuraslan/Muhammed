@@ -296,7 +296,7 @@ for i, f in enumerate(range(920, 1140, 14)):
     ph = i * 0.9
     tgt = V((-1.0, 2.0)) if f > 1000 else V((-2.2, 4.8))
     RA.key(f, V((-0.9, 0.9)), yaw_to((-0.9, 0.9), tgt), head=(0, 8 * math.sin(ph)), twist=6 * math.sin(ph),
-           hands={"R": ("rel", (0.25, 0.35, -0.05 * RA.arm + 0.08 * math.sin(ph * 2))) if i % 3 else HANG(RA), "L": ("rel", (0.12, 0.25, -0.35 * RA.arm))})
+           hands={"R": ("rel", (0.25, 0.35, -0.05 * RA.arm + 0.08 * math.sin(ph * 2))) if (i % 3 and f < 1085) else HANG(RA), "L": ("rel", (0.12, 0.25, -0.35 * RA.arm))})     # arm down before the camera pulls back past him
     RB.key(f, V((0.9, 2.3)), yaw_to((0.9, 2.3), tgt), head=(5, 0),
            hands={"L": ("rel", (0.3, 0.55 * RB.arm, -0.3 * RB.arm)) if (i % 4) < 2 else HANG(RB)})
     RC.key(f, V((-1.9, 0.2)), yaw_to((-1.9, 0.2), tgt), hands={"L": ("rel", (0.02, 0.15, -0.1 * RC.arm)), "R": ("rel", (0.02, 0.18, -0.1 * RC.arm))}, flex=-3)
@@ -325,7 +325,7 @@ WAIST = TPOS.to_3d() + V((0, 0, TE.root.z + 0.08))
 for i, f in enumerate(range(1166, 1300, 8)):
     ph = i * 0.9
     TE.key(f, TPOS, TYAW, head=(25 if f < 1240 else -5, 0), flex=-3,
-           hands={"L": ("rel", (0.32, 0.12, 0.12 * TE.arm + 0.04 * math.sin(ph))), "R": ("rel", (0.32, 0.12, 0.12 * TE.arm + 0.04 * math.cos(ph)))} if f < 1250 else     # arms held out at chest height, not up
+           hands={"L": ("rel", (0.3, 0.08, -0.38 * TE.arm + 0.03 * math.sin(ph))), "R": ("rel", (0.3, 0.08, -0.38 * TE.arm + 0.03 * math.cos(ph)))} if f < 1250 else     # arms lowered, held a little out to the sides, clear of the knot
                  {"L": ("rel", (0.1, 0.25, -0.5 * TE.arm)), "R": ("rel", (0.1, 0.25, -0.5 * TE.arm))})
 # ResB in front of the teen, knotting at the waist
 RBT = TPOS + (Rz(TYAW) @ V((0, -0.74, 0))).to_2d()
@@ -504,7 +504,8 @@ for f in range(1772, 1812, 4):
            hands={"L": ("wg", gl), "R": ("wg", gr)})
     # (simplified for v005: ResA stays on the haul line; running him round to the hips crossed the tripod leg and the collar)
     mid_ = (gl + gr) / 2; lat_ = Rz(yb + 160 * k) @ V((1, 0, 0))     # his own shoulder line
-    th_l = mid_ + lat_ * 0.09 + V((0, 0.05, -0.16)); th_r = mid_ - lat_ * 0.09 + V((0, 0.05, -0.16))     # arms straight up at shoulder width, round the teen's grip (his wrists stay in the teen's hands)
+    dz_ = -0.16 + 0.08 * k     # upright, the teen's fingers wrap up round his wrists: closer, so his hands stay in the teen's
+    th_l = mid_ + lat_ * 0.09 + V((0, 0.04, dz_)); th_r = mid_ - lat_ * 0.09 + V((0, 0.04, dz_))     # arms straight up at shoulder width, round the teen's grip (his wrists stay in the teen's hands)
     tr = (th_l + th_r) / 2 + V((0, 0, -0.35))     # within his arm reach (wrists 0.40 above the pelvis)
     T.key(f, V((0, 0)), yb + 160 * k, root_world=tr, flex=0, head=(-25, 0),
           feet={s: ("w", tr + V((0.05 if s == "L" else -0.05, 0, -T.root.z + T.ankle[s].z + 0.04)), Rz(yb)) for s in "LR"},
@@ -518,13 +519,13 @@ for i, f in enumerate(range(1816, 1872, 8)):
     rp = V((OUTP.x, OUTP.y, TE.root.z))
     # lifts him from the hang into his arms, against his chest; the grip moves from his wrists to under him over the first half
     kk = ease(min(1.0, k / 0.5))
-    tr = (rp + Rz(yawT) @ V((0, -0.5, -0.31))).lerp(rp + Rz(yawT) @ V((0, -0.34, 0.2)), k)
+    tr = (rp + Rz(yawT) @ V((0, -0.5, -0.22))).lerp(rp + Rz(yawT) @ V((0, -0.34, 0.2)), k)
     grip_l = rp + Rz(yawT) @ V((0.15, -0.45, 0.2)); grip_r = rp + Rz(yawT) @ V((-0.15, -0.45, 0.2))     # where the swing left his hands
     gl = grip_l.lerp(tr + Rz(yawT) @ V((0.14, 0.02, -0.04)), kk); gr = grip_r.lerp(tr + Rz(yawT) @ V((-0.06, -0.14, 0.24)), kk)     # then one hand under his bottom, one across his back
     TE.key(f, OUTP, yawT, flex=-4 * k, head=(-15 * k, 0), hands={"L": ("wg", gl), "R": ("wg", gr)})
     T.key(f, V((0, 0)), yawT + 180, root_world=tr, flex=5, head=(-5, 8 * math.sin(i)),
           feet={s: ("w", tr + Rz(yawT) @ V((0.05 if s == "L" else -0.05, 0.04, -T.root.z + T.ankle[s].z + 0.04)), Rz(yawT + 180)) for s in "LR"},
-          hands={"L": ("w", (grip_r + Rz(yawT) @ V((0.07, -0.05, -0.16))).lerp(rp + Rz(yawT) @ V((-0.27, -0.12, 0.3)), kk)), "R": ("w", (grip_l + Rz(yawT) @ V((-0.07, -0.05, -0.16))).lerp(rp + Rz(yawT) @ V((0.27, -0.12, 0.3)), kk))})     # from his wrists to the outside of his arms
+          hands={"L": ("w", (grip_r + Rz(yawT) @ V((0.07, -0.04, -0.08))).lerp(rp + Rz(yawT) @ V((-0.27, -0.12, 0.3)), kk)), "R": ("w", (grip_l + Rz(yawT) @ V((-0.07, -0.04, -0.08))).lerp(rp + Rz(yawT) @ V((0.27, -0.12, 0.3)), kk))})     # from his wrists to the outside of his arms
 # mother: ducks the tape, runs in, takes him in a hug
 MO.walk([V(CROWD_POS["Mother"]), V((-1.0, 5.2)), V((-0.8, 3.2)), V((-0.6, 1.9))], 1800, 1866, stride=1.0, lift=0.11, arm_swing=0.3, lean=10)
 MP = V((-0.6, 1.9)); myaw = yaw_to(MP, OUTP)
@@ -658,6 +659,11 @@ def key_light(l, pts):
 key_light(XL, [(1, 0), (455, 0), (470, 11000), (545, 11000), (560, 0), (770, 0), (785, 11000), (860, 11000), (875, 0), (1342, 0), (1350, 9000), (1745, 11000), (1765, 0)])
 key_light(SFL, [(1, 0), (110, 0), (140, 70), (196, 70), (208, 300), (238, 300), (244, 25), (292, 25), (300, 300),     # low while he falls past it and while the camera rises past it
   (1300, 300), (1340, 40), (1770, 40)])
+# upper-shaft fill: no near-black frames as the camera follows the fall in (136-160), rises out (255-265) and dives back in (402-418)
+_ltd = bpy.data.lights.new("ShaftFillTop", "POINT"); _ltd.shadow_soft_size = 0.1; _ltd.color = (1.0, 0.85, 0.65)
+_lto = bpy.data.objects.new("ShaftFillTop", _ltd); bpy.data.objects["ShaftFill"].users_collection[0].objects.link(_lto)
+_lto.location = (0.22, 0.22, -2.4); _lto.visible_camera = False
+key_light(_ltd, [(1, 0), (128, 0), (134, 60), (160, 60), (172, 0), (248, 0), (254, 60), (268, 60), (274, 0), (398, 0), (403, 60), (420, 60), (428, 0)])
 _sd = bpy.data.materials["M_ShaftDust"].node_tree.nodes["Principled Volume"].inputs["Density"]     # no glowing dust in front of the lens on the rise up the shaft
 for f_, v_ in ((1, 0.06), (250, 0.06), (256, 0.0), (292, 0.0), (298, 0.06)):
     _sd.default_value = v_; _sd.keyframe_insert("default_value", frame=f_)
