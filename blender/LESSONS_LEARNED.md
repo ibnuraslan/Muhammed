@@ -189,6 +189,7 @@ and was caught only by watching. New films start from `pipeline/CONNECT_BRIEF_v2
 - **Static holds:** the client now rejects any hold over about 2 s with no movement: a frozen close-up, a static wide, a frozen boy holding a box. Give every shot an action (head turn, breath, push-in), or cut.
 
 ### Process lessons
+- **Never pass a shot from its middle frame alone** (B10, Nov 15). A hand through a glass and a rod through a hand were visible only at the start and end of the shots. Every review, P1 included, looks at the first, middle and last frame of every shot, zoomed, plus `body_prop_cross` on every held prop.
 - **Build to the VO from the start.** Put the beat frames at `1 + round(seconds × 60)` of the VO words, with `frame_end` just past the last word. Films built to the VO (28, 23) needed no retime. Retimed films played parts at 0.5–2.9× speed.
   - **Never time-stretch character animation.** Extend it at 1× instead: a longer swim path or walk, or a second angle.
   - Only camera-only shots (diagrams, cross-sections) may stretch.
