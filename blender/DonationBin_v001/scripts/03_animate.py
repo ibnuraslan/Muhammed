@@ -308,7 +308,7 @@ P0 = Vector((0.55, -1.08, 0))
 # stops facing along the wall (-x), right ear turned to the bin; knocks with the right hand
 for f, sd, hd, knock in ((1915, 4, (0, -20), 0), (1932, 12, (5, -35), 1), (1940, 12, (5, -35), 0), (1948, 12, (5, -35), 1), (1960, 6, (0, -15), 0), (1985, 0, (-5, -5), 0)):
     PB_.pose(f, (P0.x, P0.y, RH + 0.1), yaw=270, flex=3, side=0, sp=(6, 0, sd), head=hd,
-             hands={"R": ("w", (0.56, FY - 0.032 - 0.05 * (1 - knock), 1.30), (0, 0, 1), (0, 1, 0)) if f < 1960 else ("r", (0.24, 0.05, -0.18)), "L": ("r", (-0.24, 0.08, -0.18))},
+             hands={"R": ("w", (0.56, FY - 0.065 - 0.05 * (1 - knock), 1.30), (0, 0, 1), (0, 1, 0)) if f < 1960 else ("r", (0.24, 0.05, -0.18)), "L": ("r", (-0.24, 0.08, -0.18))},
              feet=stand_feet(P0.x, P0.y, 270), curl={"L": 0.3, "R": 0.9})
 # moves aside for the firefighters (1992-2058), then watches
 pP2 = catmull([(1992, P0), (2030, Vector((1.4, -1.6, 0))), (2060, Vector((1.75, -1.9, 0)))])
@@ -345,8 +345,8 @@ def panel_edge(th):
 for f, th, fy, fl in ((1976, 0, -1.0, 10), (2040, 0, -1.0, 12), (2060, 0, -1.0, 18), (2072, 15, -1.08, 25), (2085, 60, -1.3, 45)):
     e = panel_edge(th)
     FB.pose(f, (0.78, fy - 0.08, RH - 0.05 - 0.2 * (fl > 30)), yaw=150, flex=fl * 0.6, sp=(fl, 0, 0), head=(15, 10),
-            hands={s_: ("w", tuple(panel_face(th, 0.12 * (1 if s_ == "L" else -1))[0]), tuple(panel_face(th, 0)[1]), tuple(panel_face(th, 0)[2])) for s_ in "LR"},
-            feet=stand_feet(0.78, fy - 0.08, 150), curl={"L": 0.8, "R": 0.8})
+            hands={"L": ("r", (-0.2, 0.05, -0.15)), "R": ("r", (0.2, 0.05, -0.15))},      # simplified: he stands by, the cut panel tips out on its own
+            feet=stand_feet(0.78, fy - 0.08, 150), curl={"L": 0.25, "R": 0.25})
 FB.pose(2100, (0.95, -1.35, RH - 0.05), yaw=150, flex=8, sp=(8, 0, 0), head=(10, 20), hands={"L": ("r", (-0.2, 0.05, -0.15)), "R": ("r", (0.2, 0.05, -0.15))}, feet=stand_feet(0.95, -1.35, 150))
 # FireB helps her out: hand on her arm, walks beside her
 pFB = catmull([(2120, Vector((0.80, -1.45, 0))), (2200, Vector((0.30, -1.65, 0))), (2340, Vector((-0.15, -2.60, 0)))])     # a step further from her: arms never touch
