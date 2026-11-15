@@ -3015,13 +3015,13 @@
   "1782": [
    [
     "CAMJUMP",
-    "cut: 1.21 m, 40 deg in one frame (neighbours 0.01 m, 1 deg)"
+    "cut: 1.21 m, 40 deg in one frame (neighbours 0.00 m, 0 deg)"
    ]
   ],
-  "1856": [
+  "1850": [
    [
     "CAMJUMP",
-    "cut: 3.45 m, 151 deg in one frame (neighbours 0.00 m, 0 deg)"
+    "cut: 3.12 m, 176 deg in one frame (neighbours 0.00 m, 0 deg)"
    ]
   ],
   "1916": [

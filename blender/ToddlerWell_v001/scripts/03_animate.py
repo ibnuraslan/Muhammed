@@ -542,7 +542,7 @@ for i, f in enumerate(sorted(set(range(1822, END + 10, 4)) | {1849})):     # v00
     MO.key(f, MP, my_ + 4 * math.sin(i * 0.7), flex=8 + 10 * (cr_ > 0.05), crouch=cr_, head=(10, 0), twist=10 * math.sin(i * 0.5),
            feet={"L": ("xy", MP + (Rz(my_) @ V((0.12, 0.12, 0))).to_2d(), my_), "R": ("xy", MP + (Rz(my_) @ V((-0.12, -0.05, 0))).to_2d(), my_, 0.0, 0.0)},
            hands={"L": ("w", held + Rz(lerp(330, my_ + 180, k) - 180) @ V((0.17 + 0.16 * (1 - k), 0.12, -0.06))), "R": ("w", held + Rz(lerp(330, my_ + 180, k) - 180) @ V((-0.15 - 0.24 * (1 - k), 0.08, 0.04 - 0.1 * (1 - k))))} if k >= 0.3 else
-                 {"L": ("rel", (0.12, 0.3, 0.2 * MO.arm)), "R": ("rel", (0.12, 0.3, 0.2 * MO.arm))})   # reaching up for him until he is in reach   # both arms: under him and across his back
+                 {"L": ("rel", (0.12, 0.1, -0.8 * MO.arm)), "R": ("rel", (0.12, 0.1, -0.8 * MO.arm))})     # waits, arms down, out of the teen's shot until the cut   # reaching up for him until he is in reach   # both arms: under him and across his back
     T.key(f, V((0, 0)), lerp(330, my_ + 180, k), root_world=held + V((0, 0, -0.1)), flex=10, head=(5 + 5 * k, HUG_TURN * k),
           feet={s: ("w", held + Rz(lerp(330, my_ + 180, k) - 180) @ V((0.05 if s == "L" else -0.05, 0.04, -0.1 - T.root.z + T.ankle[s].z + 0.04)), Rz(lerp(330, my_ + 180, k))) for s in "LR"},     # continues the hold: no leg jump
           hands={"L": ("wg", held + Rz(my_) @ V((0.17, 0.2, 0.34))), "R": ("wg", held + Rz(my_) @ V((-0.17, 0.2, 0.34)))} if k >= 0.5 else
