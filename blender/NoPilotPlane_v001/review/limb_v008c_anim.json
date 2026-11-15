@@ -1,19 +1,4 @@
 {
- "frames": {
-  "1741": [
-   [
-    "ARMBODY",
-    "FO arm.L inside own torso (3 pts)"
-   ]
-  ],
-  "1747": [
-   [
-    "ARMBODY",
-    "FO arm.L inside own torso (2 pts)"
-   ]
-  ]
- },
- "counts": {
-  "ARMBODY": 2
- }
+ "frames": {},
+ "counts": {}
 }
