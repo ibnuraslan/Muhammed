@@ -652,7 +652,13 @@ def jacket_pt(f, guess):
     ev = suit.evaluated_get(dg_); me = ev.to_mesh(); mw = suit.matrix_world
     bv = BVHTree.FromPolygons([mw @ v.co for v in me.vertices], [tuple(p.vertices) for p in me.polygons]); ev.to_mesh_clear()
     loc, nrm, _, _ = bv.find_nearest(guess)
-    if nrm.dot(loc - (FO.matrix_world @ FO.pose.bones["spine03"].head)) < 0: nrm = -nrm
+    ctr = FO.matrix_world @ FO.pose.bones["spine03"].head
+    # v008b: average the face normals within 4 cm (a single fold face at 29.5 s tipped the palm into his shoulder)
+    acc = Vector((0, 0, 0))
+    for l_, n_, _, _ in bv.find_nearest_range(loc, 0.04):
+        acc += n_ if n_.dot(l_ - ctr) >= 0 else -n_
+    if acc.length > 1e-6: nrm = acc.normalized()
+    if nrm.dot(loc - ctr) < 0: nrm = -nrm
     return loc, nrm
 for f in list(range(F(27.9), F(31.0), 8)) + list(range(F(31.0), F(32.3), 4)):          # left hand on the collar, right hand on his near shoulder seam, outside the jacket
     # v008c: grip LOW (his near upper arm / harness side, ~20 cm under the eye line) so YOU's forearms pass under the lens,
