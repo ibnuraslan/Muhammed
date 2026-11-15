@@ -532,9 +532,9 @@ MP = V((-0.65, 2.12)); myaw = yaw_to(MP, OUTP)     # v007: stops a step back fro
 HELD0 = OUTP.to_3d() + V((0, 0, TE.root.z + 0.2 + 0.1)) + Rz(150) @ V((0, -0.34, 0))     # where the hold-up left him: against the teen's chest
 HUG_TURN = 60.0     # his face turned out toward the camera, not into her
 MTURN = 0.0     # (a turn in the hug pushed her into him; the camera goes to her side instead)
-for i, f in enumerate(range(1822, END + 10, 4)):
+for i, f in enumerate(sorted(set(range(1822, END + 10, 4)) | {1849})):     # v007b: no hand-off in frame: he is on the teen until the cut, in her arms from it
     my_ = myaw + MTURN * ease((f - 1856) / 30)     # once he is hers she turns toward the camera: both faces in the hug
-    k = ease((f - 1822) / 34)
+    k = 0.0 if f <= 1849 else 1.0
     cr_ = 0.1 * MO.root.z * ease((f - 1846) / 34)     # v007: she stays nearly upright in the hug: faces level
     hug = MP.to_3d() + V((0, 0, MO.root.z + 0.27 - cr_)) + Rz(my_) @ V((-0.2, -0.28, 0))     # on her right shoulder: her face clear
     held = HELD0.lerp(hug, k)
@@ -825,8 +825,8 @@ for k, (dx, dy, rz, toff) in enumerate(SPOTS):
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../pipeline/hand_poses.py")).read())
 GRIPS = {"ResA": [(241, 470, "wrap_grip"), (1190, 1290, "wrap_grip"), (1314, 1420, "cup_hold"), (1502, 1722, "wrap_grip")],
          "ResB": [(1164, 1250, "wrap_grip"), (1314, 1420, "cup_hold"), (1492, 1722, "wrap_grip")],
-         "ResC": [(1324, 1722, "wrap_grip")], "Teen": [(1530, 1722, "wrap_grip"), (1734, 1822, "cup_hold")], "Toddler": [(1530, 1762, "cup_hold")],
-         "Mother": [(1822, END + 10, "cup_hold")], "Crowd1": [(470, 1710, "flat_palm")], "Operator": [(1, END + 10, "wrap_grip")]}
+         "ResC": [(1324, 1722, "wrap_grip")], "Teen": [(1530, 1722, "wrap_grip"), (1734, 1850, "cup_hold")], "Toddler": [(1530, 1762, "cup_hold")],
+         "Mother": [(1850, END + 10, "cup_hold")], "Crowd1": [(470, 1710, "flat_palm")], "Operator": [(1, END + 10, "wrap_grip")]}
 for o in [o for o in bpy.data.objects if o.type == "ARMATURE" and "_dup" not in o.name and (o.name in CH or o.name == "Operator")]:
     add_hand_limits(o)
     for sd in "LR": apply_pose(o, sd, "relaxed", 1)
