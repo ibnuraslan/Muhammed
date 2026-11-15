@@ -55,9 +55,9 @@ def set_interp(idb, kind):
     for fc in fcurves_of(idb):
         for kp in fc.keyframe_points: kp.interpolation = kind
 def vis_char(rig, ranges, extra=()):
-    names = [c.name for c in rig.children]
+    names = [c.name for c in rig.children if not c.hide_render]
     props = [o for o in bpy.data.objects if any(c.type == 'CHILD_OF' and c.target == rig for c in o.constraints)]
-    for o in props: names += [o.name] + [c.name for c in o.children]
+    for o in props: names += [o.name] + [c.name for c in o.children if not c.hide_render]
     key_vis(names + list(extra), ranges)
 
 def A(rig, *v):
@@ -407,7 +407,7 @@ cam_shot("S02", [(121, (0.9, -0.8, 0.76)), (220, (0.75, -0.6, 0.74))], lens=45,
          target_keys=[(121, (0.0, 0.2, 0.72)), (220, (0.0, 0.22, 0.74))])
 cam_shot("S03", [(211, (0.25, -2.3, 0.95)), (340, (0.5, -1.7, 1.0))], lens=30,
          target_keys=[(211, (0.05, 0.4, 0.8)), (300, (0.4, 0.9, 0.85)), (340, (0.6, 1.3, 0.9))])
-cam_shot("S04", [(331, (2.45, 0.6, 1.05)), (440, (2.4, 1.6, 1.1))], lens=28,
+cam_shot("S04", [(331, (2.45, 0.6, 1.05)), (440, (2.25, 1.15, 1.1))], lens=28,
          target_keys=[(331, (0.75, 1.4, 0.85)), (400, (1.15, 2.6, 0.9)), (440, (1.17, 3.5, 0.9))])
 
 # ================================================================== ROAD  (S05-S10, action 400-1100) and ghost (S21-S22)
@@ -480,7 +480,7 @@ print("CAR dims", tuple(round(x, 2) for x in car.dimensions))
 
 cam_shot("S05", [(421, (SX - 0.9, road_y(421) - 3.4, 0.85)), (560, (SX - 0.8, road_y(560) - 2.6, 0.9))], lens=32,
          target_keys=[(421, (SX, road_y(421), 1.25)), (560, (SX, road_y(560), 1.25))])
-cam_shot("S06", [(541, (SX - 1.0, road_y(541) + 3.0, 1.0)), (680, (SX - 0.7, road_y(680) + 2.2, 1.0))], lens=35,
+cam_shot("S06", [(541, (SX - 1.6, road_y(541) + 3.0, 1.0)), (680, (SX - 1.5, road_y(680) + 2.4, 1.0))], lens=35,
          target_keys=[(541, (SX, road_y(541), 1.1)), (680, (SX, road_y(680), 1.12))])
 cam_shot("S07", [(661, (XR + 3.2, road_y(661) - 5.0, 1.1)), (800, (XR + 3.4, road_y(800) - 3.0, 1.15))], lens=28,
          target_keys=[(661, (SX - 0.5, road_y(661) + 2.0, 1.0)), (800, (SX - 0.8, road_y(800) + 4.0, 1.0))])
@@ -705,6 +705,24 @@ cam_shot("S24", [(2671, (XP + 0.5, -1.9, 2.42)), (2880, (XP + 0.25, -1.6, 2.48))
 for nm in ("Umbrella", "Torch", "Clipboard_src"):
     o = bpy.data.objects.get(nm)
     if o: o.hide_render = True; o.hide_viewport = True
+# ---- keep every camera path clear: no vegetation instance within 1.6 m (xy) of any camera position
+cams = [o for o in bpy.data.objects if o.name.startswith("CAM_")]
+pts = []
+for c in cams:
+    for f in range(1, 2881, 10):
+        pass
+for sid, setn, f0, f1, note in SHOTS:
+    c = bpy.data.objects["CAM_" + sid]
+    for f in range(f0, f1 + 1, 6):
+        sc.frame_set(f); pts.append(c.matrix_world.translation.copy())
+removed = 0
+for o in list(bpy.data.objects):
+    if o.name.startswith(("Woods_Under", "Woods_Tree", "Woods_LaneTree", "Road_Shrub", "Shed_Under", "Shed_Tree", "Site_Tree", "Road_Tree")):
+        if any((o.location.xy - p.xy).length < 1.6 for p in pts):
+            bpy.data.objects.remove(o); removed += 1
+print("CLEARED near-lens vegetation", removed)
+bar = bpy.data.objects.get("Site_Barrier")
+if bar: bar.location = (XT - 2.6, 4.6, 0); bar.rotation_euler = (0, 0, R_(20))
 # ================================================================== per-shot world / sun (constant keys at the cuts)
 sun = bpy.data.lights["Sun"]; bg = sc.world.node_tree.nodes["Background"]
 bpy.context.preferences.edit.keyframe_new_interpolation_type = 'CONSTANT'

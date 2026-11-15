@@ -144,6 +144,10 @@ def rain(name, c, center, size=(14, 14, 7), count=7000, speed=9.0):
         o_ = nt.nodes.new("ShaderNodeOutputMaterial"); mx = nt.nodes.new("ShaderNodeMixShader"); em = nt.nodes.new("ShaderNodeEmission"); tr = nt.nodes.new("ShaderNodeBsdfTransparent")
         em.inputs["Color"].default_value = (0.75, 0.85, 1.0, 1); em.inputs["Strength"].default_value = 0.9; mx.inputs[0].default_value = 0.3
         nt.links.new(tr.outputs[0], mx.inputs[1]); nt.links.new(em.outputs[0], mx.inputs[2]); nt.links.new(mx.outputs[0], o_.inputs[0])
+        # streaks closer than ~2 m to the camera fade out (no white sticks across the lens)
+        cd = nt.nodes.new("ShaderNodeCameraData"); mr = nt.nodes.new("ShaderNodeMapRange")
+        mr.inputs[1].default_value = 1.5; mr.inputs[2].default_value = 3.0; mr.inputs[3].default_value = 0.0; mr.inputs[4].default_value = 0.3
+        nt.links.new(cd.outputs["View Z Depth"], mr.inputs[0]); nt.links.new(mr.outputs[0], mx.inputs[0])
         streak.data.materials.append(m)
         streak.hide_render = True; streak.hide_viewport = True; link(streak, coll("Lib"))
     ng = bpy.data.node_groups.get("RainFall")
