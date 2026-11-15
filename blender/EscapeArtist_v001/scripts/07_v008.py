@@ -337,6 +337,24 @@ for f in range(316, 534, 2):
     pbR.keyframe_insert("location", frame=f, group=pbR.name)
 clear_tf(filev, 314, 541)
 bake_in_fist(filev, PR, "R", 314, 541, grip_frac=0.18)
+# v009c: no phone (it read as a plate on her head); her right hand hangs at her side, the pointing hand carries the beat
+mob = O["MobilePhone"]
+for fc in [f for f in fcurves_of(mob)]:
+    for k in list(fc.keyframe_points)[::-1]: fc.keyframe_points.remove(k)
+mob.hide_render = True; mob.hide_viewport = True; mob.location = (0, 0, -100)
+def side_hand(rig, H_, f, s_):
+    sc.frame_set(f)
+    hR = bw(rig, "upperleg01.R"); hL = bw(rig, "upperleg01.L"); sp = bw(rig, "spine03")
+    side = (hR - hL).normalized() * (1 if s_ == "R" else -1)
+    fw = Vector((0, 0, 1)).cross(hR - hL).normalized()
+    if (sp - (hR + hL) * 0.5).dot(fw) < -0.5: fw = -fw
+    W = (hR if s_ == "R" else hL) + side * 0.16 + fw * 0.06 + Vector((0, 0, 0.02))
+    return W, Vector((0, 0, -1)), -side, W + side * 0.25 + Vector((0, 0, 0.35)) - fw * 0.3
+clear_hand(SMr, "R", 1128, 1421)
+for f in range(1128, 1422, 6):
+    W, d, n, pole = side_hand(SMr, SM_, f, "R")
+    SM_.key_hand("R", f, W + Vector((0, 0, 0.03)), d, n, pole)
+pose_fingers(SMr, "R", "relaxed", range(1128, 1422, 24))
 L("v009 re-stages")
 # ================================================================== H. camera: short shots with clean cuts, following the acting face
 cam = sc.camera
