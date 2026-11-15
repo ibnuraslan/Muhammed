@@ -79,11 +79,11 @@ def transfer_weights(dst, body, rig):
 def cassock(rig, mat):
     body = body_of(rig); vs = mixed_coords(body.data)
     H = max(v.z for v in vs); seg = 72
-    zs = [0.07 * H + (0.6 * H - 0.07 * H) * i / 22 for i in range(23)]
+    zs = [0.07 * H + (0.5 * H - 0.07 * H) * i / 22 for i in range(23)]   # top tucked under the jacket hem (no visible waist rim)
     prof = []
     cy = rig.data.bones["root"].head_local.y
     for z in zs:
-        band = [v for v in vs if abs(v.z - z) < 0.02 and abs(v.x) < 0.32]
+        band = [v for v in vs if abs(v.z - z) < 0.02 and abs(v.x) < (0.2 if z > 0.45 * H else 0.32)]   # waist: torso only (not the hanging arms)
         rx = max((abs(v.x) for v in band), default=0.15); ry = max((abs(v.y - cy) for v in band), default=0.12)
         k_ = len(prof); tm = min(1.0, (22 - k_) / 3.0)      # top rings hug the waist (no open rim seen from above)
         prof.append([z, rx + 0.012 + 0.038 * tm, ry + 0.015 + 0.045 * tm])
@@ -99,18 +99,21 @@ def cassock(rig, mat):
         rings.append(ring)
     for r0, r1 in zip(rings, rings[1:]):
         for i in range(seg): bm.faces.new((r0[i], r0[(i + 1) % seg], r1[(i + 1) % seg], r1[i]))
+    bm.faces.new(rings[-1])          # closed top (a waist band seen from above, never an open rim)
     bm.to_mesh(me); o = bpy.data.objects.new(rig.name + "_Cassock", me); me.materials.append(mat)
     for p in me.polygons: p.use_smooth = True
     for c in rig.users_collection: c.objects.link(o)
     transfer_weights(o, body, rig)
     # explicit skinning: hips carry the skirt, thighs pull the lower hem a little (no lift into the torso when he slumps)
     for g in list(o.vertex_groups): o.vertex_groups.remove(g)
-    gR, gL_, gR_ = (o.vertex_groups.new(name=n_) for n_ in ("root", "upperleg01.L", "upperleg01.R"))
+    gR, gL_, gR_, gS = (o.vertex_groups.new(name=n_) for n_ in ("root", "upperleg01.L", "upperleg01.R", "spine05"))
     zt, zb = zs[-1], zs[0]
     for v in me.vertices:
         t = max(0.0, min(1.0, (zt - v.co.z) / (zt - zb))); sl = max(0.0, min(1.0, 0.5 + v.co.x / 0.3))
         wl, wr = 0.35 * t * sl, 0.35 * t * (1 - sl)
-        gR.add([v.index], 1 - wl - wr, 'REPLACE')
+        ws = max(0.0, (v.co.z - (zt - 0.12)) / 0.12) * 0.7          # top 12 cm -> spine05
+        gS.add([v.index], ws, 'REPLACE') if ws > 0.001 else None
+        gR.add([v.index], max(0.0, 1 - wl - wr - ws), 'REPLACE')
         if wl > 0.001: gL_.add([v.index], wl, 'REPLACE')
         if wr > 0.001: gR_.add([v.index], wr, 'REPLACE')
     s = o.modifiers.new("sol", 'SOLIDIFY'); s.thickness = 0.012
@@ -768,20 +771,29 @@ dro.location = (-8.0, 40.5 - 0.25, tz + 0.012); drape.materials.append(bpy.data.
 ev(700); dgd = bpy.context.evaluated_depsgraph_get(); pts = []
 for ch_ in [c for c in pope.children if c.type == 'MESH' and not c.hide_render and not c.name.endswith(("_Cassock",))]:
     me_ = ch_.evaluated_get(dgd).to_mesh(); pts += [ch_.matrix_world @ v.co for v in me_.vertices]; ch_.evaluated_get(dgd).to_mesh_clear()
+BAND = {}
+for p_ in pts:
+    if p_.y < 40.98 and abs(p_.x - dro.location.x) < 0.34:
+        k_ = int(round(p_.y / 0.05)); BAND[k_] = max(BAND.get(k_, -9), p_.z)
+def band_h(y):
+    ks = [BAND.get(int(round(y / 0.05)) + d_, None) for d_ in (-2, -1, 0, 1, 2)]
+    ks = [k for k in ks if k is not None]
+    return (sum(ks) / len(ks)) if ks else None
 for v in drape.vertices:
     w = dro.location + v.co
-    near = [p for p in pts if abs(p.x - w.x) < 0.035 and abs(p.y - w.y) < 0.035 and p.y < 40.98]
-    if near:
-        v.co.z = max(v.co.z, max(p.z for p in near) - dro.location.z + 0.07)
+    hb = band_h(w.y)
+    if hb is not None:
+        dx = abs(w.x - dro.location.x); prof = max(0.0, 1 - (dx / 0.36) ** 4) ** 0.5
+        v.co.z = max(v.co.z, (hb - dro.location.z + 0.07) * prof)
 def drape_z(x, y):
     best = None
     for v in drape.vertices:
         w = dro.location + v.co
         if abs(w.x - x) < 0.03 and abs(w.y - y) < 0.03: best = max(best or -9, w.z)
     return best if best is not None else tz
-sw = dro.modifiers.new("smooth0", 'SMOOTH'); sw.factor = 0.3; sw.iterations = 2
+sw = dro.modifiers.new("smooth0", 'SMOOTH'); sw.factor = 0.9; sw.iterations = 14   # soft cloth over the patient, no blocky ridges
 dro.modifiers.new("sol", 'SOLIDIFY').thickness = 0.006
-dro.modifiers.new("sub", 'SUBSURF').levels = 1
+dro.modifiers.new("sub", 'SUBSURF').levels = 2; dro.modifiers["sub"].render_levels = 2
 key_vis(dro, ((1, False), (631, True), (763, False)))
 key_vis(O["Pope_Cassock"], ((1, True), (631, False), (763, True)))
 # camera leaves the theatre through its wall and the facade: hide them from camera rays for that pass (no blank wall frames)
@@ -796,9 +808,10 @@ for nm_, f0_, f1_ in (("Theatre", 765, 777), ("Facade", 765, 777)):
 cd_ = O["celldoor"]
 for f_, x_ in ((1, 0.0), (1000, 0.0), (1024, 2.9)):
     cd_.location.x = x_; cd_.keyframe_insert("location", index=0, frame=f_)
-TEAM = (("SurgA", Vector((-8.75, 40.4)), 90), ("SurgB", Vector((-7.25, 40.2)), -90), ("SurgC", Vector((-8.0, 41.55)), 0), ("Nurse", Vector((-7.0, 41.3)), -51))
+TEAM = (("SurgA", Vector((-8.72, 40.62)), 90), ("SurgB", Vector((-7.28, 40.58)), -90),   # level with the abdomen they work on
+         ("SurgC", Vector((-8.0, 41.55)), 0), ("Nurse", Vector((-7.0, 41.3)), -51))
 O["InstrumentTray"].location = (-7.32, 40.98, 8.0); O["TrayStand"].location = (-7.32, 40.98, 7.5)
-HANDS_ON = {"SurgA": ((-8.12, 40.22), (-8.14, 40.5)), "SurgB": ((-7.9, 40.12), (-7.88, 40.4)), "SurgC": ((-7.88, 40.7), (-8.12, 40.7))}
+HANDS_ON = {"SurgA": ((-8.13, 40.5), (-8.13, 40.74)), "SurgB": ((-7.87, 40.46), (-7.87, 40.7)), "SurgC": ((-7.88, 40.7), (-8.12, 40.7))}   # abdomen (spine03-05 at y 40.54-40.69)
 for nm, xy, yw in TEAM:
     r = O[nm]; h = HUM[nm]
     key_obj(r, 1, loc=(xy.x, xy.y, 7.0), rot=(0, 0, R_(yw)), interp='CONSTANT')
@@ -807,7 +820,11 @@ for nm, xy, yw in TEAM:
         stand(h, f, flex=22 if nm != "Nurse" else 8, head=(25, 8 * math.sin(f * 0.03 + ph)), crouch=0.02)
         Minv = r.matrix_world.inverted() if f > 600 else None
         if Minv is None: ev(601); Minv = r.matrix_world.inverted()
-        if nm == "Nurse":
+        if nm == "SurgC":    # at the head end: sterile pose, gloved hands raised in front of the chest, touching nothing
+            for s_, dx in (("R", -0.11), ("L", 0.11)):
+                tw_ = Vector((xy.x + dx, xy.y - 0.24, 8.22 + 0.01 * math.sin(f * 0.07)))   # at his own chest, well clear of the patient's head
+                hand_at(h, s_, f, tuple(Minv @ tw_), d=tuple(Minv.to_3x3() @ Vector((0, -0.2, 1))), n=tuple(Minv.to_3x3() @ Vector((0, -1, 0))))
+        elif nm == "Nurse":
             for s_, dx in (("R", -0.13), ("L", 0.13)):
                 tw_ = Vector((-7.32 + dx * 0.6, 40.98 + dx * 0.8, 8.03 + 0.012))
                 hand_at(h, s_, f, tuple(Minv @ tw_), d=tuple(Minv.to_3x3() @ Vector((-0.6, -0.5, -0.4))), n=tuple(Minv.to_3x3() @ Vector((0, 0, -1))))
@@ -1094,10 +1111,10 @@ for f in range(256, 307, 10):
 # the chase camera brakes 0.7 m short of the robe and lets the bullet fly on into the porthole (never enters the body)
 K.append((320, ENTRY - BD * 1.15 + SRIGHT * 0.1 + Vector((0, 0, 0.18)), ENTRY + Vector((0, 0, 0.2)), 36))
 K += [
- (334,  ENTRY - BD * 1.05 + Vector((0, 0, 0.16)), XCW + Vector((0, 0, 0.15)), 32),
- (378,  XCW + (Matrix.Rotation(R_(-50), 3, 'Z') @ (-BD)) * 0.95 + Vector((0, 0, 0.14)), XCW, 30),
- (418,  (XHW + popehead(418)) / 2 + (Matrix.Rotation(R_(-15), 3, 'Z') @ FD) * 1.35 + Vector((0, 0, -0.05)), (XHW + popehead(418)) / 2, 32),
- (465,  (XHW + popehead(465)) / 2 + (Matrix.Rotation(R_(25), 3, 'Z') @ FD) * 1.3 + Vector((0, 0, 0.05)), (XHW + popehead(465)) / 2 + Vector((0, 0, -0.05)), 30),
+ (334,  ENTRY - BD * 1.9 + Vector((0, 0, 0.3)), XCW + Vector((0, 0, 0.3)), 30),
+ (378,  XCW + (Matrix.Rotation(R_(-50), 3, 'Z') @ (-BD)) * 2.0 + Vector((0, 0, 0.3)), XCW + Vector((0, 0, 0.3)), 30),
+ (418,  (XHW + popehead(418)) / 2 + (Matrix.Rotation(R_(-15), 3, 'Z') @ FD) * 2.2 + Vector((0, 0, -0.05)), (XHW + popehead(418)) / 2, 32),
+ (465,  (XHW + popehead(465)) / 2 + (Matrix.Rotation(R_(25), 3, 'Z') @ FD) * 2.1 + Vector((0, 0, 0.05)), (XHW + popehead(465)) / 2 + Vector((0, 0, -0.05)), 30),
  (505,  popechest(505) + FD * 2.1 + PERP * 0.5 + Vector((0, 0, 0.3)), popechest(505) + Vector((0, 0, -0.1)), 30),
  (555,  popechest(505) + FD * 2.2 - PERP * 1.8 + Vector((0, 0, -0.3)), popechest(505) + Vector((0, 0, -0.35)), 24),
  (598,  popechest(505) + FD * 1.7 - PERP * 3.0 + Vector((0, 0, 0.8)), popechest(505) + Vector((0, 0, -0.3)), 22),
@@ -1108,7 +1125,7 @@ K += [
  (668,  Vector((-8.1, 38.0, 10.3)),             Vector((-8.0, 40.3, 8.1)), 24),
  (700,  Vector((-6.6, 39.0, 9.6)),             Vector((-8.0, 40.4, 8.2)), 26),
  (738,  Vector((-7.05, 39.95, 9.25)),            Vector((-7.9, 40.7, 8.3)), 30),
- (760,  Vector((-6.75, 40.05, 9.15)),           Vector((-7.9, 40.95, 8.25)), 30),
+ (760,  Vector((-6.3, 38.9, 9.0)),              Vector((-8.0, 40.5, 8.1)), 28),      # pull back to the whole team before the cut at 763
  (782,  Vector((-7.6, 34.4, 9.7)),              Vector((-3.0, 22.0, 3.0)), 24),
  (805,  Vector((-7.0, 32.5, 10.2)),             Vector((-1.0, 22.0, 3.0)), 22),
  (845,  Vector((-3.6, 23.5, 11.2)),             Vector((0.0, 34.0, 8.2)), 24),
@@ -1131,13 +1148,14 @@ K += [
  (1318, CROWN_W + Vector((-0.42, -0.32, 0.02)), CROWN_W, 55),
  (1345, CROWN_W + Vector((-0.55, -1.05, -0.25)), CROWN_W + Vector((0, 0, -0.45)), 35),
  (1382, CROWN_W + Vector((-0.85, -0.95, -0.55)), POPEHEAD8, 32),
- (1405, XCW8 + Vector((0.7, 0.95, 0.4)),         XCW8 + Vector((0, 0, 0.15)), 34),
- (1440, XCW8 + Vector((0.75, 0.85, 0.15)),        XCW8, 32),
- (1480, XCW8 + Vector((-0.75, 0.85, 0.18)),      XCW8, 32),
- (1520, XCW8 + Vector((-0.95, 1.0, 0.5)),        XCW8 + Vector((0, 0, 0.2)), 30),
+ (1405, XCW8 + Vector((1.3, 0.4, 0.45)),         XCW8 + Vector((0, 0, 0.3)), 34),   # at his right side, clear of the altar candles
+ (1440, XCW8 + Vector((1.25, 0.15, 0.35)),        XCW8 + Vector((0, 0, 0.3)), 32),
+ (1480, XCW8 + Vector((1.2, -0.2, 0.35)),         XCW8 + Vector((0, 0, 0.3)), 32),
+ (1520, XCW8 + Vector((1.0, -0.8, 0.5)),          XCW8 + Vector((0, 0, 0.3)), 30),
  (1555, Vector((-1.4, 47.6, 8.3)),              Vector((0.0, 52.6, 8.9)), 26),
- (1590, Vector((-0.3, 46.4, 8.9)),              Vector((0.0, 53.2, 9.2)), 26),
- (1620, Vector((0.9, 46.0, 9.3)),               Vector((0.0, 53.4, 9.4)), 28),
+ (1585, POPEHEAD8 + Vector((-0.45, -0.55, 0.3)), CROWN_W + Vector((0, 0, -0.1)), 34),   # over his shoulder as he prays, pushing in to the crown (no turns)   # his face as he prays
+ (1604, CROWN_W + Vector((-0.42, -1.05, -0.02)), CROWN_W + Vector((0, 0, -0.01)), 42),
+ (1620, CROWN_W + Vector((-0.3, -0.72, 0.02)),   CROWN_W + Vector((0, 0, -0.01)), 45),             # end on the crown with the bullet
 ]
 K.sort(key=lambda k: k[0])
 cpos = catmull([(k[0], k[1]) for k in K]); ctgt = catmull([(k[0], k[2]) for k in K]); clen = pchip([(k[0], float(k[3])) for k in K])
@@ -1145,27 +1163,99 @@ cam = bpy.data.objects.new("CAM", bpy.data.cameras.new("CAM")); sc.collection.ob
 cam.data.sensor_width = 36; cam.data.clip_start = 0.01; cam.data.dof.use_dof = True; cam.data.dof.aperture_fstop = 8.0
 foc = bpy.data.objects.new("CamFocus", None); sc.collection.objects.link(foc); cam.data.dof.focus_object = foc
 # orientations first; then ease any one-frame snap (> 20 deg/frame) into a short whip with the same end framings
-QS = {f: (ctgt(f) - cpos(f)).to_track_quat('-Z', 'Y') for f in range(1, 1621)}
+CUTS = ((763, 777, 790), (1129, 1143, 1160))   # (output cut frame, source frame after the cut, rejoin frame): clean cuts replace the two whip pans
+def src(f):
+    for c_, s_, e_ in CUTS:
+        if c_ <= f < e_: return s_ + (f - c_) * (e_ - s_) / (e_ - c_)
+    return f
+CUTF = [c_ for c_, _, _ in CUTS]
+QS = {f: (ctgt(src(f)) - cpos(src(f))).to_track_quat('-Z', 'Y') for f in range(1, 1621)}
 def ang(a_, b_): return math.degrees(2 * math.acos(min(1.0, abs(a_.dot(b_)))))
 for f in range(2, 1621):                      # keep consecutive quaternions in one hemisphere (slerp takes the short way)
     if QS[f].dot(QS[f - 1]) < 0: QS[f] = -QS[f]
 for it in range(40):
-    jumps = [f for f in range(2, 1621) if ang(QS[f - 1], QS[f]) > 18.0]
+    jumps = [f for f in range(2, 1621) if ang(QS[f - 1], QS[f]) > 18.0 and f not in CUTF]
     if not jumps: break
     for j in jumps:
         tot = ang(QS[max(1, j - 1)], QS[j]); half = max(4, int(math.ceil(tot / 16.0)) + 2)
         a0, b0 = max(1, j - half), min(1620, j + half)
+        for c_ in CUTF:              # never ease across a cut
+            if a0 < c_ <= j: a0 = c_
+            if j < c_ <= b0: b0 = c_ - 1
         qa, qb = QS[a0].copy(), QS[b0].copy()
         for f in range(a0 + 1, b0):
             u = smooth((f - a0) / (b0 - a0)); QS[f] = qa.slerp(qb, u)
-print("CAMJUMP max deg/frame", round(max(ang(QS[f - 1], QS[f]) for f in range(2, 1621)), 1))
+print("CAMJUMP max deg/frame (cuts excluded)", round(max(ang(QS[f - 1], QS[f]) for f in range(2, 1621) if f not in CUTF), 1))
+print("CAMJUMP over 18:", [(f, round(ang(QS[f - 1], QS[f]), 1)) for f in range(2, 1621) if f not in CUTF and ang(QS[f - 1], QS[f]) > 18.0])
 prev = None
 for f in range(1, 1621):
-    p = cpos(f); t = ctgt(f)
+    p = cpos(src(f)); t = ctgt(src(f))
     q = QS[f]; e = q.to_euler('XYZ', prev) if prev else q.to_euler('XYZ'); prev = e
-    cam.location = p; cam.rotation_euler = e; cam.data.lens = clen(f)
+    cam.location = p; cam.rotation_euler = e; cam.data.lens = clen(src(f))
     cam.keyframe_insert("location", frame=f); cam.keyframe_insert("rotation_euler", frame=f); cam.data.keyframe_insert("lens", frame=f)
     foc.location = t; foc.keyframe_insert("location", frame=f)
+# ------------------------------------------------------------------ INSET DIAGRAM (replaces the x-ray; director v005 review)
+# The robe stays solid. A small round side-view cut-away sits in the upper-right corner: torso outline, spine, aorta, stomach,
+# intestines, and the bullet path drawing itself between them (missing the aorta and spine). Camera-only, no text.
+XRAY_OFF = [o_ for o_ in bpy.data.collections["XRay"].all_objects] + [skel, aorta, guts, hand]
+for o_ in XRAY_OFF:
+    if o_.animation_data: o_.animation_data_clear()
+    o_.hide_render = True; o_.hide_viewport = True
+for m_ in bpy.data.materials:                       # robe masks: x-ray porthole values to 0 (solid robe everywhere)
+    if m_.node_tree:
+        for nd in m_.node_tree.nodes:
+            if nd.type == 'VALUE' and nd.name in ("XRT", "XRH"):
+                if m_.node_tree.animation_data: m_.node_tree.animation_data_clear()
+                nd.outputs[0].default_value = 0.0
+def flat(name, col, strength=1.0):
+    m = bpy.data.materials.new(name); m.use_nodes = True; nt = m.node_tree; n = nt.nodes
+    for x in list(n): n.remove(x)
+    em = n.new('ShaderNodeEmission'); em.inputs['Color'].default_value = tuple(col) + (1,); em.inputs['Strength'].default_value = strength
+    out = n.new('ShaderNodeOutputMaterial'); nt.links.new(em.outputs[0], out.inputs[0]); return m
+INSET = bpy.data.objects.new("Inset", None); sc.collection.objects.link(INSET); INSET.parent = cam
+INS_PARTS = []
+def ell(name, cx, cy, rx, ry, z, mat, segs=64, rot=0.0):
+    me = bpy.data.meshes.new(name); bm = bmesh.new()
+    vs = [bm.verts.new((cx + rx * math.cos(2 * math.pi * i / segs) * math.cos(rot) - ry * math.sin(2 * math.pi * i / segs) * math.sin(rot),
+                        cy + rx * math.cos(2 * math.pi * i / segs) * math.sin(rot) + ry * math.sin(2 * math.pi * i / segs) * math.cos(rot), z)) for i in range(segs)]
+    bm.faces.new(vs); bm.to_mesh(me); bm.free(); me.materials.append(mat)
+    o = bpy.data.objects.new(name, me); sc.collection.objects.link(o); o.parent = INSET; INS_PARTS.append(o); return o
+ell("InsetRing", 0, 0, 1.06, 1.06, -0.004, flat("InsetNavy", (0.03, 0.08, 0.2), 1.0))
+ell("InsetDisc", 0, 0, 1.0, 1.0, 0.0, flat("InsetPaper", (0.88, 0.94, 1.0), 0.9))
+ell("InsetTorso", 0.0, 0.0, 0.44, 0.8, 0.004, flat("InsetBody", (0.55, 0.74, 0.9), 0.9))
+ell("InsetGut", -0.06, -0.33, 0.27, 0.2, 0.008, flat("InsetGutM", (0.92, 0.66, 0.58), 1.0), rot=0.2)
+ell("InsetStomach", -0.12, 0.2, 0.18, 0.12, 0.009, flat("InsetStomachM", (0.93, 0.45, 0.52), 1.0), rot=-0.35)
+ell("InsetAorta", 0.14, 0.0, 0.032, 0.62, 0.01, flat("InsetAortaM", (0.82, 0.07, 0.08), 1.0), segs=24)
+spm = flat("InsetSpineM", (0.98, 0.95, 0.86), 1.1)
+for i in range(9):
+    ell("InsetVert%d" % i, 0.28, -0.64 + i * 0.16, 0.06, 0.06, 0.01, spm, segs=6)
+cu = bpy.data.curves.new("InsetPath", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.022; cu.bevel_resolution = 2
+sp_ = cu.splines.new('NURBS'); PTS = ((-0.7, 0.03), (-0.3, 0.0), (0.0, -0.03), (0.2, -0.09), (0.45, -0.14), (0.72, -0.18))
+sp_.points.add(len(PTS) - 1)
+for pt, (x_, y_) in zip(sp_.points, PTS): pt.co = (x_, y_, 0.014, 1)
+sp_.use_endpoint_u = True; sp_.order_u = 3; cu.materials.append(flat("InsetPathM", (1.0, 0.5, 0.08), 3.0))
+pth = bpy.data.objects.new("InsetPath", cu); sc.collection.objects.link(pth); pth.parent = INSET; INS_PARTS.append(pth)
+for o_ in INS_PARTS:
+    for k_ in ("visible_shadow", "visible_diffuse", "visible_glossy", "visible_transmission", "visible_volume_scatter"): setattr(o_, k_, False)
+INSET_W = ((340, 488), (1414, 1515))
+cu.bevel_factor_end = 0.0; cu.keyframe_insert("bevel_factor_end", frame=1)
+for a_, b_ in INSET_W:
+    for f_, v_ in ((a_ + 8, 0.0), (a_ + 50, 1.0), (b_, 1.0), (b_ + 1, 0.0)):
+        cu.bevel_factor_end = v_; cu.keyframe_insert("bevel_factor_end", frame=f_)
+for f in range(1, 1621):
+    w_ = [(a_, b_) for a_, b_ in INSET_W if a_ - 1 <= f <= b_ + 1]
+    if not w_ and f not in (1,): continue
+    if w_:
+        a_, b_ = w_[0]; g_ = smooth((f - a_) / 8.0) * (1 - smooth((f - (b_ - 8)) / 8.0))
+    else:
+        g_ = 0.0
+    D = max(0.4, (ctgt(src(f)) - cpos(src(f))).length * 0.7)      # in front of the subject, near the focus plane (sharp at f/8)
+    hh = D * 18.0 / clen(src(f)); hw = hh * 1080 / 1920
+    r_ = 0.4 * hw
+    INSET.location = (hw * 0.97 - r_, hh * 0.80 - r_, -D); INSET.scale = (r_ * max(g_, 0.001),) * 3
+    INSET.keyframe_insert("location", frame=f); INSET.keyframe_insert("scale", frame=f)
+for o_ in INS_PARTS:
+    key_vis(o_, ((1, False), (INSET_W[0][0], True), (INSET_W[0][1] + 1, False), (INSET_W[1][0], True), (INSET_W[1][1] + 1, False)))
 sc.frame_set(1)
 import json
 beats = [(1, "He fired straight at the Pope"), (265, "Two bullets tore through"), (505, "He collapsed, badly wounded"), (631, "but survived after emergency surgery"),

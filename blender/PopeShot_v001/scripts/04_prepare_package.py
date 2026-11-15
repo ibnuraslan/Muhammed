@@ -64,6 +64,11 @@ sc.cycles.texture_limit_render = 'OFF'
 r.use_motion_blur = False   # animated look: no motion blur
 r.image_settings.file_format = 'PNG'
 sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Punchy'
+# v006: the x-ray is retired (solid robe + inset diagram). Its anatomy meshes, dome and traces are never visible: drop them.
+xc = bpy.data.collections.get("XRay")
+gone = [o for o in (list(xc.all_objects) if xc else []) + [bpy.data.objects.get(n) for n in ("skeleton", "aorta", "guts", "handbones")] if o and o.hide_render]
+for o in set(gone): bpy.data.objects.remove(o, do_unlink=True)
+print("REMOVED_XRAY", len(set(gone)))
 bpy.data.orphans_purge(do_local_ids=True, do_linked_ids=True, do_recursive=True)
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)
 print("PREPARED", out)
