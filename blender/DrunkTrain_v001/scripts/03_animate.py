@@ -546,7 +546,7 @@ for f in list(range(f_x0 + 3, f_x1 + 1, 2)) + [f_x1]:
     LB.arm_dir("R", f, Bm, V(-0.42 + 0.16 * math.sin(t * 2.2 - 1.4), -0.15 - 0.4 * math.sin(t * 2.2 - 2.1), -1.0), 0.95)
     foot_w("L", f, (STAND_XY.x - 0.05, STAND_XY.y + 0.16), 98)
     if t > 1.3:
-        sh = min(1.0, (t - 1.3) / 0.3) * (1 - max(0.0, (t - 2.7) / 0.3))
+        sh = min(1.0, (t - 1.3) / 0.3) * max(0.0, 1 - max(0.0, (t - 2.7) / 0.3))      # v006c: clamped (past 3 s it went negative into a big kick)
         LB.leg_dir("R", f, Bm, V(-0.15 + 0.25 * math.sin(t * 9) * sh, -0.45 * sh + 0.15 * math.sin(t * 9 + 1) * sh, -1.0), 0.97 - 0.06 * sh, toe_pitch=20 * math.sin(t * 9 - 1) * sh)
     else:
         foot_w("R", f, (STAND_XY.x - 0.05, STAND_XY.y - 0.16), 82)
