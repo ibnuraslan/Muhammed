@@ -1,0 +1,87 @@
+{
+ "frames": {
+  "541": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "703": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 20
+   }
+  },
+  "709": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 205
+   }
+  },
+  "715": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 5
+   }
+  },
+  "721": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 126
+   }
+  },
+  "727": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 13
+   }
+  },
+  "733": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "745": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 17
+   }
+  },
+  "757": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 12
+   }
+  },
+  "763": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 113
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   709,
+   721
+  ],
+  [
+   763,
+   763
+  ]
+ ],
+ "fps": 60
+}
