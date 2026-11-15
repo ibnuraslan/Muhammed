@@ -199,3 +199,22 @@ Seen on the v009 preview and NOT yet fixed:
 - 1966–2101: the tow track runs into the dark passage. About 2 s is near-black or empty rock (1971–2031), then the pair are dim.
 - 1066: one frame of blurred rock at the start of the divers' shot.
 - The edge boy's reaction shots (1591–1635, 1711–1760) hold still for about 0.7 s each.
+
+## Round 8 (director review of v009) → v009b
+Everything is on the VO timeline (1–2436). Beats are unchanged (`CaveRescue_v009b/beats.json`). All fixes are in `scripts/24_v009b_fix.py`: camera, exposure, lights and visibility only.
+
+| # | Fault | Fix |
+|---|---|---|
+| 1 | 541–566: the tunnel went near-black | Exposure ramps 0.41 → 1.7 over 480–570, so the flooding tunnel stays readable to the cut |
+| 2 | 1636–1710: a forearm filled the injection close-up | 1655–1703: low front-left close-up on the boy's face and the medic's hand with the syringe at his upper arm. The coach's reaction shot covers 1591–1654 and 1704–1820. |
+| 3, 7 | Mask: the diver's chin filled the frame, and the mask floated onto the face with no hands | The mask's approach is never shown. From 1821 a tight long-lens close-up shows the mask on the boy's face, with the diver's face beside him. **The diver's hands are not in the shot: in this animation they are not on the mask, so they are kept out of frame rather than shown wrong.** |
+| — | New: the coach slid off toward his parking spot from 1810, inside the reaction shot; the boy and DiverB slid from 1822 | All three hold still until the cut at 1885 (their last key before the jump is set to CONSTANT) |
+| 4 | 1966–2101: the tow went dark | The camera keeps its 1940 side offset in the pair's travel frame. A hard cut to a shot from ahead on their own path (1978–2034) carries it through the squeeze. A follow light (no volume scatter), thinner silt and held exposure throughout; the torches are dimmed for the shot from ahead (they lit the roof into a blob). |
+| 5 | 1066: blurred rock | 1065–1070 takes the 1071 framing |
+| 6 | Static reactions | Slow push-ins |
+| 8 | 2106–2126: a rock slab in the lens | The flood-front mesh (`S2_SurgeFront`) is hidden for 2100–2140 |
+| 9 | 2256–2271: a reed across the lens | `S1_Plant_1095` is hidden for 2240–2300 |
+| 10 | 876–886: an empty pink plane | The cross-section holds its 871 framing to the cut |
+| — | A stray old camera frame at 1761 | The time warps had left fractional-frame camera keys; they are now removed in each re-framed range |
+
+Preview: `review/preview.mp4` and `review/preview_pages_v009b/`. Frames 476–571, 871–891, 1061–1071 and 1591–2301 were re-rendered from the exact v009b package; the rest are from v009, where the file is unchanged.

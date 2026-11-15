@@ -1,13 +1,13 @@
 """v009b (director review of v009), on the VO timeline (1-2436, beats unchanged): camera, exposure and visibility only.
 1. 480-570: the tunnel faded to black (stretched exposure ramp). Exposure held at its 480 value to the cut at 570.
-2. 1648-1703 injection: low front-left close-up on the boy's face and the medic's hand with the syringe at his arm.
+2. 1655-1703 injection: low front-left close-up on the boy's face and the medic's hand with the syringe at his arm.
 3+7. Mask: the edge boy's reaction runs on to 1820 (the mask's approach is never shown, so no floating mask); from
    1821 a tight close-up of the boy's face with the mask on (the diver's hands are not on the mask in this animation,
    so they are kept out of frame). The coach, the boy and DiverB hold still to the cut at 1885.
 4. 1941-2104 tow: the camera keeps the 1940 side offset in the pair's travel frame (no drift into the rock), with a
    hard cut to a shot from ahead on their path, looking back at them, through the squeeze (1978-2034); a follow light, exposure held.
 5. 1065-1070: the blurred rock frame takes the 1071 framing.
-6. 1591-1647 and 1704-1820 edge-boy reactions: a slow push-in (no still hold).
+6. 1591-1654 and 1704-1820 edge-boy reactions: a slow push-in (no still hold).
 8. 2100-2140: the flood-front mesh in the lens at the cave mouth is hidden (it is not in shot otherwise).
 9. 2240-2300: the reed in front of the waving men is hidden.
 10. 871-890: the cross-section push holds its 871 framing (no flat pink plane).
@@ -52,12 +52,12 @@ def face(f):
 # 10, 5
 hold(871, 890, 871); hold(1065, 1070, 1071)
 # 6 + 3: reactions (the second runs on to 1820)
-push(1591, 1647, 1600); push(1704, 1820, 1720)
+push(1591, 1654, 1600); push(1704, 1820, 1720)
 # 2: injection close-up
 inj = {}
-for f in range(1648, 1704):      # the medic's forearm crosses the lens before 1648 and after 1703
+for f in range(1655, 1704):      # the medic's forearm crosses the lens before 1655 and after 1703
     sc.frame_set(f); sp = syr.matrix_world.translation.copy()
-    inj[f] = (sp + V((0.15, -0.55, 0.05)) + V((0, 0.06, 0)) * (f - 1648) / 55, sp, 35)
+    inj[f] = (sp + V((0.15, -0.55, 0.05)) + V((0, 0.06, 0)) * (f - 1655) / 48, sp, 35)
 apply(inj)
 # 7: mask on the boy's face (from 1811, after it is on): tight, long lens from the low front-right so only face and mask fill the frame
 DIR = V((-0.28, -1.57, -0.01)).normalized(); mk = {}
