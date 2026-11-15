@@ -12,6 +12,30 @@ This brief replaces `CONNECT_BRIEF.md` where they differ. Read these before you 
 - **Pacing:** short shots with **hard cuts** (no blends or fades), usually 1–2.5 s each. Every shot shows a person or the thing the VO names.
 - **No on-screen text, logos or brand names.** Signs, cheques and screens stay blank or show simple pictures.
 
+## Our logo: DA KRAS FILMS
+The logo files are in `blender/assets/brand/` (transparent PNGs, 967×414):
+- `DaKrasFilms_logo_dark.png`: dark grey, for light surfaces.
+- `DaKrasFilms_logo_white.png`: white, for dark or coloured surfaces.
+
+Placement:
+- **1–2 placements per film, inside the scene**, on something that would naturally carry a brand:
+  - a truck or van side, an ambulance, a T-shirt, a cap
+  - a cardboard box, a shop sign, a cup, a can, a crate, a poster
+- This is the **only** text or logo allowed on screen. Real brands are still replaced, and our logo can take their place (cups, cans, delivery trucks).
+
+How to apply it:
+- Use an image texture with alpha on the surface's material (Principled base colour plus alpha), or a thin decal plane parented to the object. Never let it float off the surface.
+- Keep it flat-on to the camera (within about 30°), at least about 15% of the frame width, and on screen for at least 1 s.
+- Keep it sharp: f/8 or more.
+- Don't distort or recolour it. Keep its proportions, and use the dark or white version only.
+
+Never:
+- on a face or skin
+- over the action or a story beat's key prop
+- in tragic or sad moments (deaths, victims, funerals, missing children)
+
+There is **no corner watermark** in the render. The client adds that in editing if wanted.
+
 ## Old-style references
 Some references are in an older look: a podcast set, talking heads, a dark blue background, flat graphics.
 - Take **only the story, the facts and the beat order** from them.
