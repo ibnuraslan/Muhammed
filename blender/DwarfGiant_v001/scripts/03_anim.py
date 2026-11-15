@@ -400,7 +400,7 @@ for f in range(1, 2341, 40): arms_idle(Yg, f, 0.07, -0.03); Yg.key_spine(f, flex
 breathe(Yg, 1, 2340, base=PY + V(0, 0, Yg.root_head.z - 0.01), yaw=yY, ph=2.2)
 for nm, rng in (("Officer1", [(1, 1476)]),   # off during the x-ray beat (he would straddle the cutaway card)
                 ("Officer2", [(1, 1240), (1301, 1476)]), ("Clerk", [(1, 1476)]), ("Recruit1", [(1, 1240), (1301, 1476)]), ("Recruit2", [(1, 1240), (1301, 1476)]),   # v007b: nobody behind the officer in the POV
-                ("Surgeon1", [(1477, 1857)]), ("Surgeon2", [(1477, 1857)]), ("Nurse", [(1477, 1857)]), ("Normal", [(1858, 1999)]), ("Young", [(2000, 2340)])):
+                ("Surgeon1", [(1477, 1857)]), ("Surgeon2", [(1477, 1600), (1717, 1857)]), ("Nurse", [(1477, 1600), (1717, 1857)]), ("Normal", [(1858, 1999)]), ("Young", [(2000, 2340)])):
     for m_ in meshes_of(RIGS[nm]): vis(m_, rng)
 
 # ------------------------------------------------------------------ x-ray body, brain, spine, hormone stream
@@ -535,6 +535,7 @@ c12, f12, s12, u12, _, _ = head_frame(1225); cM, fM, sM, uM, _, _ = head_frame(8
 O1H = rig_head("Officer1", 1180); O1D = (c12 - O1H); O1D.z = 0; O1D.normalize()
 cP1, fP1, sP1, uP1, _, _ = head_frame(1515); cP2, fP2, sP2, uP2, _, _ = head_frame(1825)
 S1H = rig_head("Surgeon1", 1570); S1D = (PAT - V(6.1, 1.45, 0)); S1D.z = 0; S1D.normalize()
+cT, fT, sT, uT, _, _ = head_frame(1650); S1C = rig_head("Surgeon1", 1650) + V(0, 0, -0.35); AWY = V(cT.x - S1C.x, cT.y - S1C.y, 0).normalized()
 S2H = rig_head("Surgeon2", 1750); S2D = (PAT - V(7.72, 1.45, 0)); S2D.z = 0; S2D.normalize()      # brain inset: from where the old inset looked, centred on the brain
 sc.frame_set(1600); PHm = HRIG.matrix_world @ HRIG.pose.bones["head"].head
 sc.frame_set(1900); NMH = RIGS["Normal"].matrix_world @ RIGS["Normal"].pose.bones["head"].head
@@ -561,7 +562,7 @@ SHOTS = [
   (1301, 1481, [(1301, c8c + f8c * 1.55 + s8c * 0.5 + u8c * 0.1, c8c - u8c * 0.15, 30), (1366, c8c + f8c * 1.5 + s8c * 0.5 + u8c * 0.1, c8c - u8c * 0.15, 30), (1481, c8d + f8d * 1.6 + s8d * 0.55 + u8d * 0.1, c8d - u8d * 0.15, 30)]),
   (1482, 1545, [(1482, cP1 + fP1 * 0.85 - uP1 * 0.45 + sP1 * 0.1, cP1, 34), (1545, cP1 + fP1 * 0.8 - uP1 * 0.42 + sP1 * 0.1, cP1, 35)]),   # patient's face on the bed
   (1546, 1600, [(1546, S1H + S1D * 1.05 + V(0, 0, -0.2), S1H + V(0, 0, -0.22), 30), (1600, S1H + S1D * 0.95 + V(0, 0, -0.2), S1H + V(0, 0, -0.22), 31)]),   # surgeon, eyes over the mask, hands
-  (1601, 1716, [(1601, V(6.9, -1.45, 2.35), V(6.9, 1.25, 0.95), 22), (1716, V(6.9, -1.3, 2.3), V(6.9, 1.25, 0.95), 23)]),   # v007b: both surgeons in frame with their arms  # side medium: patient and surgeons
+  (1601, 1716, [(1601, cT + AWY * 0.85 - uT * 0.3 + V(0, 0, 0.4), cT.lerp(S1C, 0.4) - uT * 0.1, 26), (1716, cT + AWY * 0.78 - uT * 0.3 + V(0, 0, 0.38), cT.lerp(S1C, 0.4) - uT * 0.1, 27)]),   # v007c: from the head end, his face in front, the surgeon beyond  # side medium: patient and surgeons
   (1717, 1790, [(1717, S2H + S2D * 1.05 + V(0, 0, -0.2), S2H + V(0, 0, -0.24), 30), (1790, S2H + S2D * 0.95 + V(0, 0, -0.2), S2H + V(0, 0, -0.24), 31)]),   # second surgeon working
   (1791, 1857, [(1791, cP2 + fP2 * 0.85 - uP2 * 0.45 + sP2 * 0.1, cP2, 34), (1857, cP2 + fP2 * 0.8 - uP2 * 0.42 + sP2 * 0.1, cP2, 35)]),   # patient's face   # v006: medium side shot, patient and nurse (no slide along his legs)
   (1858, 1899, [(1858, NMH + NF * 0.95 + V(0, 0, 0.05), NMH, 32), (1899, NMH + NF * 0.85 + V(0, 0, 0.05), NMH, 34)]),   # the normal man looks up
