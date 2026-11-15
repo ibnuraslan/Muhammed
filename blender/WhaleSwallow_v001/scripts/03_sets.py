@@ -208,7 +208,7 @@ pal = bpy.data.objects.new("Mouth_palate", pmesh); C.objects.link(pal); pmesh.ma
 for p in pal.data.polygons: p.use_smooth = True
 # back of the throat: a closing wall at +Y with a darker red ring (lit, never black)
 bpy.ops.mesh.primitive_circle_add(vertices=48, radius=3.4, fill_type='TRIFAN', location=MOUTH + Vector((0, 4.5, 0.4)), rotation=(math.radians(90), 0, 0))
-th = bpy.context.object; th.name = "Mouth_throat"; th.scale = (1, 0.82, 1); th.data.materials.append(mat("Mouth_throat", (0.22, 0.03, 0.06), rough=0.3, coat=0.6)); link(th, C)
+th = bpy.context.object; th.name = "Mouth_throat"; th.scale = (1, 0.82, 1); th.data.materials.append(mat("Mouth_throat", (0.22, 0.03, 0.06), rough=0.55, coat=0.0)); link(th, C)
 # baleen walls: plates hanging from the palate edge on both sides, from y=-4.2 to +3.8
 bm = bmesh.new(); bmf = bmesh.new()
 for side in (-1, 1):

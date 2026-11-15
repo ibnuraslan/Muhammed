@@ -418,7 +418,7 @@ LAND = OCEAN + Vector((-6.0, -2.0, -0.3)); land = LAND; start = start + (land - 
 for fr in frames(sid, 2):
     t = T(sid, fr); u = max(0.0, min(1.0, (t - 0.18) / 0.62))
     p = start.lerp(land, u) + Vector((0, 0, 3.0 * math.sin(math.pi * u) if u < 1 else 0))
-    if u >= 1: p = land + Vector((0, 0, -0.45 * min(1, (t - 0.8) / 0.2)))
+    if u >= 1: p = land + Vector((0, 0, 0.04 * min(1, (t - 0.8) / 0.2)))
     M = M_of(p + Vector((0, 0, 0)), yaw=-90, pitch=-30 - 140 * u, roll=10)
     D.key_body(fr, M); D.key_spine(fr, flex=15, head=(10, 0))
     for s in "LR":
