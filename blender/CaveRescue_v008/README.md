@@ -14,7 +14,8 @@ The full 51.5 s film (1080×1920, 60 fps, frames 1–3090), built to the brief's
   1. `01_build_chars`
   2. `02_build_scene`
   3. `03_animate` (runs `03b_camera`)
-  4. v008 adds, after `10_v004`: `12_depenetrate` (hands off bodies), `13_props` (worn gear bone-parented, masks shrinkwrapped 2 mm), `15_v008` (eye fix, f/11, camera clearance), then after `08_package` + `11_logo_patch`: `16_v008_simplify` (passage lift, wipes 290/1726), `12_depenetrate` on the clip_scan ranges, `17_v008_fix2` (medic hold, wipe 2418, tow dolly).
+  4. v008 = the v007 chain plus `20_v008_edit` (no wipes, direct cuts, shorter cross-section and diver tunnel, wetsuits, beats remapped), `21_v008_fix` (no sky in the caves, death-beat and ending cameras), and `12_depenetrate` on the v008 clip_scan ranges. Frame range 1–2268.
+  4. v007 adds, after `10_v004`: `12_depenetrate` (hands off bodies), `13_props` (worn gear bone-parented, masks shrinkwrapped 2 mm), `15_v008` (eye fix, f/11, camera clearance), then after `08_package` + `11_logo_patch`: `16_v008_simplify` (passage lift, wipes 290/1726), `12_depenetrate` on the clip_scan ranges, `17_v008_fix2` (medic hold, wipe 2418, tow dolly).
   4. `06_finish` (look, cave fill, wetsuits, hand limits, 4-frame wipes), then `09_v003` (director D review: brighter dark beats, banded cutaway, tank detail and hoses, neoprene seams, diver rims), then `10_v004` (saturated, textured cutaway strata with relief, bigger ridge jungle; wider cutaway framing and reframed 10 s, 30 s and 43 s)
   5. `08_package`
 

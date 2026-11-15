@@ -146,3 +146,18 @@ The checks ran on the file before `19_v007_bubbles.py`. That pass only changes w
 - `review/preview.mp4`: every 5th frame at real speed, 618 frames.
 - `review/preview_pages_v007/`: 13 contact pages.
 - Base frames come from the first v007 build. Every range changed afterwards was re-rendered from the file with that change: 281–586, 1691–1741, 2146–2296, 2341–2561, 506–526, 2146–2416, 2511–2561 and 2371–2421, the last from the delivered file.
+
+## Round 6 (director review of v007) → v008
+Frames below are on the **new v008 timeline** (2268 frames, 37.8 s). `CaveRescue_v008/beats.json` holds the new beat frames, with the old ones as `frame_v007`. Beat order is unchanged.
+
+| # | Director note | Fix |
+|---|---|---|
+| 1 | Black frames at every rock wipe | All wipe keys are cleared and `CAM_RockWipe` is hidden. Each camera pass through rock is a direct cut: 283/284, 561/562, 712/713, 993/994, 1105/1106, 1776/1777, 1908/1909. |
+| 2 | Cross-section too long | The first (old 600–999) is time-compressed to 150 frames (562–712): flooded passage, then the chamber "2 miles in". The second (old 2571–2721) is removed, so the tow cuts to the stretcher at the tunnel exit. |
+| 3 | Diver tunnel too long; death beat lost in murk | The tunnel is about 4 s. 713–993 is the chamber pool and the divers entering. 994–1105 is the death beat: a medium shot from in front of the lone diver, face down, slowing to a stop as his lamp fades (his face never shown, murk lowered). Then a cut to the passage before surfacing. |
+| 4 | Balloon dive suits; arm across the boy's face | The baggy MPFB coverall is hidden. The MPFB body wears a dark neoprene material from the neck to the wrists and ankles, and the helper mask stays on (no proxy shells). During the mask fit, the far hand holds the strap at the back of the head, never across the face. |
+| 5 | Coach's headlamp over his eye | Every headlamp sits on the forehead above the brow (0.72 up the head bone instead of 0.55). |
+| 6 | Giant white ball in the water | It was the sky-blue world background seen through the open end of the passage tube; the white disc at the end of the diver tunnel was the same thing. Camera rays now see black while the camera is in the caves (713–1908). The medic's torch lens is also hidden underwater. |
+| 7 | Static high overhead ending | The camera rises over the stretcher and the group, then pushes in on the coach and the boys outside in daylight, faces to camera (2062–2268). |
+
+Scripts: `03_animate.py` / `03b_camera.py` (lone diver, headlamps, mask hand, ending), `20_v008_edit.py` (wipes, cuts, wetsuits, beats), `21_v008_fix.py` (cave background, death-beat and ending cameras), `12_depenetrate.py` on the v008 clip_scan ranges.
