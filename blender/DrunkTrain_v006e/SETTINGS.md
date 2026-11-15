@@ -10,7 +10,7 @@ These values were read back from `DrunkTrain_v006e_60fps.blend`, opened in facto
 | Resolution | 1080 × 1920 at 100 % |
 | Frame rate | 60 fps (fps_base 1.0) |
 | Frame range | **1–2070**, step 1 (34.5 s) |
-| Camera | One camera, `CAM_Film`. It moves continuously except for four hard cuts, at frames 906, 1033, 1147 and 1171 (keyframed jumps; there are no camera markers). The lens is animated, sensor fit is Auto, and DOF is on at f/11 (v006e, LESSONS rule 12: no blurred close shots), focused on `CAM_Film_Aim`. |
+| Camera | One camera, `CAM_Film`. It moves continuously except for four hard cuts, at frames 906, 1033, 1147 and 1171 (keyframed jumps; there are no camera markers). The lens is animated, sensor fit is Auto, and DOF is on at f/11 (v006d, LESSONS rule 12: no blurred close shots), focused on `CAM_Film_Aim`. |
 | Samples | 48 with adaptive sampling; noise threshold 0.05 |
 | Denoising | On (OpenImageDenoise) |
 | Light paths | Max 8, diffuse 3, glossy 3, transmission 8, transparent 16. Caustics off. Persistent data on. |
