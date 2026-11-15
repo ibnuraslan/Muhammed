@@ -111,7 +111,7 @@ def park(c, f):
 
 # --------------------------------------------------------------------------- props
 CP = coll("Props")
-pistol = glb_asset("pistol", CP, target_size=0.17, axis=1)
+pistol = glb_asset("pistol", CP, target_size=0.22, axis=1)
 # barrel along +-Y: find the handle (lowest region) and the muzzle (far end of the barrel)
 vs = [v.co for v in pistol.data.vertices]
 zmin = min(v.z for v in vs); zmax = max(v.z for v in vs); ymin = min(v.y for v in vs); ymax = max(v.y for v in vs)
@@ -710,7 +710,7 @@ gM = G_AIM.translation; gHead = G.world_bone("head", ST["S02"] + 20).translation
 fw = fwd_c; side = Rc @ V(1, 0, 0)
 shG = G.world_bone("upperarm01.R", ST["S01"] + 120).translation
 camera("S01", [(0, shG - fw * 0.50 - side * 0.42 + V(0, 0, 0.14), hP + fw * 2.5 + V(0, 0, -0.55)),
-               (-1, gM - fw * 0.85 - side * 0.50 + V(0, 0, 0.30), hP * 0.42 + gM * 0.58 + V(0, 0, 0.04))], lens=24)
+               (-1, gM - fw * 0.60 - side * 0.62 + V(0, 0, 0.20), hP * 0.35 + gM * 0.65 + V(0, 0, 0.02))], lens=24)
 camera("S02", [(0, gHead + side * -2.0 + fw * 0.9 + V(0, 0, -0.1), gHead + fw * 0.55 + V(0, 0, -0.3)),
                (-1, gHead + side * -1.85 + fw * 0.85 + V(0, 0, -0.08), gHead + fw * 0.6 + V(0, 0, -0.28))], lens=20)
 shL = G.world_bone("upperarm01.L", ST["S03"]).translation
@@ -723,8 +723,8 @@ gH4 = G.world_bone("head", ST["S04"] + 30).translation
 camera("S04", [(0, gH4 + fw * 0.85 + side * 0.65 + V(0, 0, -0.05), gH4 + V(0, 0, -0.02)),
                (-1, gH4 + fw * 0.72 + side * 0.55 + V(0, 0, -0.04), gH4 + V(0, 0, -0.02))], lens=40)
 mid5 = gM * 0.55 + hP * 0.45
-_t5 = hP * 0.42 + gM * 0.58 + V(0, 0, 0.04)
-camera("S05", [(0, gM - fw * 0.88 - side * 0.50 + V(0, 0, 0.30), _t5), (-1, gM - fw * 0.82 - side * 0.50 + V(0, 0, 0.29), _t5)], lens=38)
+_t5 = hP * 0.35 + gM * 0.65 + V(0, 0, 0.02)
+camera("S05", [(0, gM - fw * 0.70 - side * 0.70 + V(0, 0, 0.22), _t5), (-1, gM - fw * 0.64 - side * 0.66 + V(0, 0, 0.21), _t5)], lens=34)
 camera("S06", [(0, V(BX0 + 0.45, BY0 + 0.35, BZ + 1.55), V(GPOS.x, GPOS.y, BZ + 1.15)), (-1, V(BX0 + 0.55, BY0 + 0.35, BZ + 1.55), V(ledge_stand.x, ledge_stand.y, BZ + 1.15))], lens=30)
 camera("S07", [(0, V(BX0 - 3.6, -0.6, 1.3), V(BX0, -1.6, BZ + 1.6)), (-1, V(BX0 - 3.7, -0.7, 1.2), V(BX0 - 0.7, -1.7, BZ + 0.4))], lens=26)
 camera("S08", [(0, LAND_P + V(-3.0, -1.6, 1.0), LAND_P + V(0, 0, 0.9)), (-1, LAND_P + V(-2.6, -1.5, 0.75), LAND_P + V(0, 0, 0.6))], lens=26)

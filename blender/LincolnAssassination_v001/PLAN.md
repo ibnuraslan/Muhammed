@@ -63,7 +63,7 @@ at its first and last frame for lens blockers (box rail, chair back, hat brim, h
   1.6 m keeps the actors and stage visible behind the top hat (reference framing) and still reads as a real drop.
 - Actors stand on the president's sight line just left of the hat in S01/S03 (parlour comedy, big gestures, laugh peaks at the shot).
 - President leaves the scene file after S06 (never shown after the shot).
-- Gun: real CC-BY flintlock-style pistol scaled to 17 cm, `grip_object` wrap grip (fingers close 0.15/0.63/0.65/0.6),
+- Gun: real CC-BY flintlock-style pistol scaled to 22 cm, `grip_object` wrap grip (fingers close 0.15/0.63/0.65/0.6),
   Child Of `wrist.R`; the hand is driven from the gun's transform so it never leaves the fingers. Close-ups checked.
 - Torches: own torch, wrap grip (0.55/0.55/0.5/0.3), Child Of `wrist.R`, elbow pole keyed so the wrist limit can't twist it.
 - S03/S05 cameras are solved to fit muzzle, hand and top hat in frame (`frame_pts`).
