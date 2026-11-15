@@ -703,7 +703,7 @@ hP = P.world_bone("head").translation
 gM = G_AIM.translation; gHead = G.world_bone("head", ST["S02"] + 20).translation
 fw = fwd_c; side = Rc @ V(1, 0, 0)
 shG = G.world_bone("upperarm01.R", ST["S01"] + 120).translation
-camera("S01", [(0, shG - fw * 0.55 - side * 0.30 + V(0, 0, 0.12), hP + fw * 2.5 + V(0, 0, -0.55)),
+camera("S01", [(0, shG - fw * 0.50 - side * 0.42 + V(0, 0, 0.14), hP + fw * 2.5 + V(0, 0, -0.55)),
                (-1, shG - fw * 0.32 - side * 0.24 + V(0, 0, 0.10), hP + fw * 2.5 + V(0, 0, -0.50))], lens=24)
 camera("S02", [(0, gHead + side * -2.0 + fw * 0.9 + V(0, 0, -0.1), gHead + fw * 0.55 + V(0, 0, -0.3)),
                (-1, gHead + side * -1.85 + fw * 0.85 + V(0, 0, -0.08), gHead + fw * 0.6 + V(0, 0, -0.28))], lens=20)
@@ -717,10 +717,8 @@ gH4 = G.world_bone("head", ST["S04"] + 30).translation
 camera("S04", [(0, gH4 + fw * 0.85 + side * 0.65 + V(0, 0, -0.05), gH4 + V(0, 0, -0.02)),
                (-1, gH4 + fw * 0.72 + side * 0.55 + V(0, 0, -0.04), gH4 + V(0, 0, -0.02))], lens=40)
 mid5 = gM * 0.55 + hP * 0.45
-_c0, _t0 = frame_pts([G_AIM @ MUZ, _wr, _hat, hP + V(0, 0, -0.25)], side * -1.0 + fw * 0.25, 26, fill=0.85)
-_c1, _t1 = frame_pts([G_AIM @ MUZ, _wr, _hat, hP + V(0, 0, -0.25)], side * -1.0 + fw * 0.25, 26, fill=0.85, push=0.06)
-camera("S05", [(0, _c0 + side * 0.0, _t0), (-1, _c1, _t1)], lens=26)
-print("S05 cam", tuple(round(x, 2) for x in _c0))
+_t5 = gM * 0.4 + hP * 0.6 + V(0, 0, -0.05)
+camera("S05", [(0, gM - fw * 0.60 - side * 0.30 + V(0, 0, 0.20), _t5), (-1, gM - fw * 0.52 - side * 0.27 + V(0, 0, 0.18), _t5)], lens=30)
 camera("S06", [(0, V(BX0 + 0.45, BY0 + 0.35, BZ + 1.55), V(GPOS.x, GPOS.y, BZ + 1.15)), (-1, V(BX0 + 0.55, BY0 + 0.35, BZ + 1.55), V(ledge_stand.x, ledge_stand.y, BZ + 1.15))], lens=30)
 camera("S07", [(0, V(BX0 - 3.6, -0.6, 1.3), V(BX0, -1.6, BZ + 1.6)), (-1, V(BX0 - 3.7, -0.7, 1.2), V(BX0 - 0.7, -1.7, BZ + 0.4))], lens=26)
 camera("S08", [(0, LAND_P + V(-3.0, -1.6, 1.0), LAND_P + V(0, 0, 0.9)), (-1, LAND_P + V(-2.6, -1.5, 0.75), LAND_P + V(0, 0, 0.6))], lens=26)

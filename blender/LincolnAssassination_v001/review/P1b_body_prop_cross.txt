@@ -1,0 +1,29 @@
+body_prop_cross.py, every 6th frame, props: Pistol, BoxLedge, BoxParapet, BoxFloor, BoxChair, StageFloor, Horse_body (incl. saddle/reins), Torch1-3, barn walls, BarnFloor, hay bales
+Mean visible-crossing edges per checked frame, by shot:
+  S01 {'BoxChair': 188, 'Pistol': 107, 'StageFloor': 8, 'BoxFloor': 4}
+  S02 {'Pistol': 153, 'BoxFloor': 4}
+  S03 {'BoxChair': 188, 'Pistol': 153, 'StageFloor': 8, 'BoxFloor': 4}
+  S04 0
+  S05 {'BoxChair': 186, 'Pistol': 153, 'BoxFloor': 4}
+  S06 {'Pistol': 137, 'BoxFloor': 2}
+  S07 {'BoxLedge': 11, 'BoxParapet': 1}
+  S08 {'StageFloor': 2}
+  S09 0
+  S10 {'StageFloor': 1}
+  S11 {'Horse_body': 99}
+  S12 {'Horse_body': 117}
+  S13 {'Torch1': 42, 'Torch2': 42, 'Torch3': 42}
+  S14 {'Torch1': 42, 'Torch2': 42, 'Torch3': 42, 'BarnFloor': 9}
+  S15 0
+Body parts per prop (totals):
+  StageFloor [('root', 480), ('lowerleg02.L', 27), ('foot.L', 12), ('lowerleg01.L', 11), ('lowerleg02.R', 5), ('upperleg02.L', 4)]
+  BoxChair [('upperleg01.L', 3743), ('upperleg01.R', 3183), ('spine05', 2812), ('pelvis.R', 2354), ('pelvis.L', 2154)]
+  BoxFloor [('root', 408)]
+  Pistol [('finger4-2.R', 3217), ('finger3-2.R', 2965), ('finger5-3.R', 2870), ('finger4-3.R', 2476), ('finger3-3.R', 2106), ('finger5-2.R', 1074)]
+  BoxLedge [('foot.R', 121), ('foot.L', 114), ('root', 48)]
+  BoxParapet [('root', 24)]
+  Horse_body [('upperleg02.L', 1270), ('upperleg02.R', 1120), ('lowerleg01.R', 853), ('foot.L', 822), ('lowerleg02.R', 741), ('lowerleg02.L', 688)]
+  Torch1 [('metacarpal1.R', 682), ('metacarpal4.R', 620), ('metacarpal2.R', 434), ('finger1-2.R', 372), ('metacarpal3.R', 248), ('finger1-1.R', 248)]
+  Torch2 [('metacarpal1.R', 682), ('metacarpal4.R', 620), ('metacarpal2.R', 434), ('finger1-2.R', 372), ('metacarpal3.R', 248), ('finger1-1.R', 248)]
+  Torch3 [('metacarpal1.R', 682), ('metacarpal4.R', 620), ('metacarpal2.R', 434), ('finger1-2.R', 372), ('metacarpal3.R', 248), ('finger1-1.R', 248)]
+  BarnFloor [('root', 298)]

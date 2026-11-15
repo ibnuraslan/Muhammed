@@ -5,7 +5,8 @@ editing `scripts/timing.py` to the VO beat frames and rebuilding (no time-stretc
 
 - `PLAN.md`: shots, staging, logo placement, risky-shot staging.
 - `LincolnAssassination_v001_P1_60fps.blend`: the Phase-1 scene (textures packed, compressed, factory-startup clean). 1080×1920, 60 fps, Cycles, frames 1–2214, one camera per shot bound by markers.
-- `review/P1_stills_540x960.jpg`: one 540×960 frame per shot (mid frame), Cycles 8 samples.
+- `review/P1b_stills_3perShot_540x960.jpg`: first / middle / last frame of every shot at 540×960, Cycles 8 samples.
+- `review/P1b_body_prop_cross.txt`: body_prop_cross result (every 6th frame) on every held or touched prop.
 - `review/model_credits.json`: Sketchfab/Objaverse CC-BY credits for the downloaded models.
 
 ## Rebuild
