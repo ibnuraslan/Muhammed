@@ -10,7 +10,7 @@ Values read back from `CaveRescue_v009_60fps.blend` opened in factory-startup Bl
 | Resolution | 1080 × 1920 at 100 % |
 | Frame rate | 60 fps (fps_base 1.0) |
 | Frame range | **1–2436**, step 1 (40.6 s, timed to the client VO: beats.json frames = VO seconds × 60 + 1) |
-| Camera | One camera, `CAM_Film`, on one continuous spline. There are no camera markers. The lens is animated and DOF is at f/11. There are no black frames: the old rock wipes are gone, and the camera's passes through rock are direct cuts (new frames 283/284, 561/562, 712/713, 993/994, 1105/1106, 1776/1777, 1908/1909). `CAM_RockWipe` is hidden. |
+| Camera | One camera, `CAM_Film`, on one continuous spline. There are no camera markers. The lens is animated and DOF is at f/11. There are no black frames: the old rock wipes are gone, and the camera's passes through rock are direct cuts (v009 shot changes are listed in ACTING_notes.md, Round 7). `CAM_RockWipe` is hidden. |
 | Samples | 48 with adaptive sampling; noise threshold 0.05 |
 | Denoising | On (OpenImageDenoise) |
 | Light paths | Max 8, diffuse 3, glossy 3, transmission 8, volume 1. Caustics off. Persistent data on. |

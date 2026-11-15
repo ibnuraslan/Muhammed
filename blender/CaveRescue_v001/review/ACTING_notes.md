@@ -178,3 +178,24 @@ Scripts: `03_animate.py` / `03b_camera.py` (lone diver, headlamps, mask hand, en
 - **Preview:** `review/preview.mp4`, every 5th frame of the exact v008 package, plus `review/preview_pages_v008/`.
   - All 454 frames come from the delivered file or from earlier renders of frames the last fixes did not touch: 1–281 in the first pass, 286–2268 after the wetsuit and hand fix, and 716–1101 and 2061–2268 after the last fix.
   - Frames 1–281 were rendered before the wetsuit fix. No diver appears in them.
+
+## Round 7 (director review of v008) → v009 (timed to the client VO, 1–2436)
+Frames are on the v009 / VO timeline. `CaveRescue_v009/beats.json` holds the director's VO frames.
+
+Measured beat speeds (new length / source length): beats 1, 2 and 5–10, 12 and 13 run at 0.99–1.09× (real-time animation). Beats 3–4, the cross-section (camera only), run at 2.4× and 2.0×. Beat 11, the mask close-up, runs at 1.6×. Beat 14, the waving ending, runs at 1.16×.
+
+Done:
+- Crowd suits are navy and dark red instead of pink and pale green, which read as bare skin.
+- The runners' arms pump in front of the hips with the elbows bent; the hand pass is no longer run on them.
+- The ending is the coach and the boys outside in daylight, waving with bent elbows.
+- The top-down shot, the stretcher end passing through the carrier, the gear bag in the lens and the long dark far shot are all cut.
+- The chamber shot pushes in.
+- The tow is 1×, with longer real animation.
+
+Seen on the v009 preview and NOT yet fixed:
+- 541–566: the tunnel goes dark (almost black) before the cut to the cross-section.
+- 1636–1710: the injection close-up is filled by a diver's grey forearm in front of the lens. The syringe does not read.
+- 1761–1881: in the mask close-up, the top third of the frame is a diver's chin and neck, very close and soft. The mask does go onto the boy's face.
+- 1966–2101: the tow track runs into the dark passage. About 2 s is near-black or empty rock (1971–2031), then the pair are dim.
+- 1066: one frame of blurred rock at the start of the divers' shot.
+- The edge boy's reaction shots (1591–1635, 1711–1760) hold still for about 0.7 s each.
