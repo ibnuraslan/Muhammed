@@ -10,8 +10,8 @@ K = [
     (0.0, (12.0, 13.0, g(12, 13) + 0.9), (4.5, 10.0, 0.7), 32),
     (1.0, (8.0, 24, g(8, 24) + 1.0), (3.8, 15.9, 0.8), 36),   # vNEXT: on the jogging kid (no empty sand)
     (2.0, (7.5, 50, g(7.5, 50) + 0.8), (5, 40, 0.3), 38),
-    (3.0, (7.0, 56.0, g(7, 56) + 1.2), (6.0, 40.0, 0.6), 30),   # vNEXT: ahead of the kids: faces as they run out onto the seabed among the fish   # vNEXT: kids running onto the exposed seabed among flopping fish, the drawn-back sea on the horizon
-    (4.0, (13.0, 60, g(13, 60) + 1.6), (7, 50, 0.6), 30),   # vNEXT: kids stay in frame
+    (3.0, (7.0, 56.0, g(7, 56) + 1.2), (6.0, 40.0, 0.6), 50),   # vNEXT: ahead of the kids: faces as they run out onto the seabed among the fish   # vNEXT: kids running onto the exposed seabed among flopping fish, the drawn-back sea on the horizon
+    (4.0, (13.0, 60, g(13, 60) + 1.6), (7, 50, 0.6), 42),   # vNEXT: kids stay in frame
     (5.3, (12.5, 70, g(12.5, 70) + 2.8), (3, 42, 0.8), 30),
     (6.3, (10.5, 56, g(10.5, 56) + 1.2), (4.6, 55.3, 0.0), 32),   # vNEXT: >= 3 m from the running kid
     (7.2, (3.0, 50.5, g(3, 50.5) + 1.6), (0, 40, 1.4), 34),
@@ -47,10 +47,10 @@ K = [
     (31.4, (-10, -128, 26), (-44, -162, 8), 24),
     (32.6, (-14, -140, 9.0), (-44, -164, 8), 28),
     (33.8, (-22, -190, 10), (-44, -160, 9), 26),
-    (35.5, (-17.0, -192.2, g(-17, -192.2) + 4.5), (-36, -168, 4), 34),   # vNEXT: low and close behind the survivors walking to the mosque, slow orbit
-    (37.5, (-14.0, -189.0, g(-14, -189) + 4.2), (-37, -167, 4), 34),
-    (39.4, (-11.5, -186.5, g(-11.5, -186.5) + 4.0), (-38, -166, 4), 34),
-    (40.0, (-10.9, -185.9, g(-10.9, -185.9) + 4.0), (-38, -166, 4), 34),
+    (35.5, (-17.0, -192.2, g(-17, -192.2) + 4.5), (-33, -171, 2.5), 46),   # vNEXT: low and close behind the survivors walking to the mosque, slow orbit
+    (37.5, (-14.0, -189.0, g(-14, -189) + 4.2), (-34, -170, 2.5), 46),
+    (39.4, (-11.5, -186.5, g(-11.5, -186.5) + 4.0), (-35, -169, 2.5), 46),
+    (40.0, (-10.9, -185.9, g(-10.9, -185.9) + 4.0), (-35, -169, 2.5), 46),
 ]
 ts = [F(k[0]) for k in K]
 posf = catmull([(f, Vector(k[1])) for f, k in zip(ts, K)])
@@ -80,7 +80,7 @@ for f in range(1, 2401):
     # vNEXT: straight cut from the town flood (beat 11) to a slow push on the flooded mosque, no skim over the water
     if F(28.05) <= f < F(30.4):
         u = (f - F(28.05)) / (F(30.4) - F(28.05)); d0 = dirf(F(30.4)).normalized(); p0 = posf(F(30.4))
-        p = p0 - d0 * 9.0 * (1 - u); d = d0
+        p = p0 - d0 * 26.0 * (1 - u); d = d0   # a clearly visible push
     q = d.to_track_quat('-Z', 'Y'); e = q.to_euler()
     if prev is not None: e.make_compatible(prev)
     prev = e
