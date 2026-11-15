@@ -1,9 +1,9 @@
 # TitanicIceberg_v010: farm package
 
-**v010: director review of v009 (52598e8).** Beat frames, beat order and frame_end 1830 are unchanged, and no VO is added. The preview `review/preview.mp4` was rendered from this exact package file.
+**v010: director review of v009 (52598e8).** Beat frames, beat order and frame_end 1830 are unchanged, and no VO is added. The preview `review/preview.mp4` was rendered from this exact package file. Frames 740–915 were re-rendered from the final package after the rail-shot hand fix.
 1. **Photographer, 432–605.** The camera is held in both hands: the left palm under the base, and the right hand on the side, which switches to the index-finger "point" pose to press the shutter at about 520. He lifts it to chin/eye level (498–548), clicks, then lowers it, with a breath and a small lean in. The face goes from concentrated to pleased.
 2. **The blue figure (the deckhand) is gone.** He was only ever a cropped body at the frame edge. `04_make_photo.py` used to un-hide everything it had hidden for the photo render, and now restores only what was visible before.
-3. **Rail shot, 816–905 (1.5 s).** Three-quarter front: his face is visible as he watches toward the berg. The ship push before it is 606–815.
+3. **Rail shot, 816–905 (1.5 s).** Three-quarter front: his face is visible as he watches toward the berg, and both hands stay on the camera. The ship push before it is 606–815.
 4. **Darkroom.** The refractive developer layer is off the render, and the developing print gives off a faint glow of its own image under the safelight. The camera is at f/11, focused between the tray and his face. The berg and the debris come up from blank as he rocks the tray.
 5. **Proof.** A bold red streak is on the photo (both the held copy and the desk copy). The hull model's red band top sits at the streak's height, right next to it. The camera is at f/11, focused on the photo.
 

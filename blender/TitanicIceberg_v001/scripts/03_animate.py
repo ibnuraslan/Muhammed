@@ -685,7 +685,7 @@ for f_ in range(432, 612, 12):
     st.pose(f_, (SP.x, SP.y), YAW, flex=1.5, spine=(3 + 2 * up + 1.0 * math.sin(f_ / 60 * 2.2), 0, 0), head=(6 - 8 * up, 0), feet=FEET, crouch=0.0)
 for f_, kw in ((432, dict(brow=0.4, lids=0.2)), (500, dict(brow=-0.2, lids=-0.6, jaw=1)), (526, dict(brow=0.3, lids=-0.2)), (575, dict(brow=1.0, lids=0.8, jaw=4, smile=0.4))):
     face(st.R, f_, **kw)
-for f_ in range(432, 612, 6):
+for f_ in list(range(432, 612, 6)) + list(range(744, 916, 6)):   # also the rail shot: hands stay on the camera
     sc.frame_set(f_); bpy.context.view_layer.update(); mn, mx = _bb_world(bc); c = (mn + mx) / 2
     fwd = (bc.matrix_world.to_3x3() @ Vector((0, -1, 0))).normalized()
     shL = st.o.matrix_world @ st.R.PB["upperarm01.L"].head; shR = st.o.matrix_world @ st.R.PB["upperarm01.R"].head
