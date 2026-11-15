@@ -1,0 +1,44 @@
+{
+"19": [
+[
+"BRUSH",
+"camera 0.046 m from Bullet"
+]
+],
+"21": [
+[
+"BRUSH",
+"camera 0.046 m from Bullet"
+]
+],
+"23": [
+[
+"BRUSH",
+"camera 0.045 m from Bullet"
+]
+],
+"25": [
+[
+"BRUSH",
+"camera 0.046 m from BulletWake"
+]
+],
+"27": [
+[
+"BRUSH",
+"camera 0.045 m from BulletWake"
+]
+],
+"29": [
+[
+"BRUSH",
+"camera 0.045 m from BulletWake"
+]
+],
+"31": [
+[
+"BRUSH",
+"camera 0.046 m from BulletWake"
+]
+]
+}
