@@ -181,16 +181,22 @@ SEGS = [
     # v009d: the opening move goes round the FRONT of the surgeon and over his head (it used to pass through it at f43-81),
     # the dressing is seen from the front-left (face profile + bandage, not the back of the head), then wide on the chest
     (1, V(1.75, -0.35, 1.5), FACE1 + V(0.2, -0.25, -0.15), 22), (30, V(1.25, -0.12, 1.5), FACE1, 32), (45, V(0.62, -0.62, 2.08), FACE1, 34), (60, V(0.02, -0.92, 1.42), FACE1, 40),
-    (76, V(0.15, -1.15, 1.95), FACE1.lerp(EAR1, 0.5), 38), (84, V(0.5, -0.95, 2.05), EAR1, 40), (92, V(0.78, -0.42, 1.55), EAR1 + V(-0.03, -0.04, 0), 42), (118, V(0.66, -0.36, 1.45), EAR1 + V(-0.03, -0.04, 0), 45), (125, V(0.55, -0.88, 1.6), EAR1.lerp(PC, 0.5), 36),
-    (132, V(-0.25, -1.45, 1.65), PC + V(0.1, 0, 0.45), 28), (145, V(0.05, -1.5, 1.62), PC + V(0.04, 0, 0.42), 28),
+    (76, V(0.15, -1.15, 1.95), FACE1.lerp(EAR1, 0.5), 38)],
+  [  # v009j: clean cut - side two-shot (the camera went round behind his cap)
+    (77, V(-0.75, -1.2, 1.55), V(0.22, -0.3, 1.42), 30), (131, V(-0.7, -1.12, 1.55), V(0.22, -0.3, 1.42), 32)],
+  [     (132, V(-0.25, -1.45, 1.65), PC + V(0.1, 0, 0.45), 28), (145, V(0.05, -1.5, 1.62), PC + V(0.04, 0, 0.42), 28),
     (155, V(0.08, -1.48, 1.62), PC + V(0.04, 0, 0.42), 28)],
   [  # v009i: insert - the harvested rib cartilage already on the tray (the see-through x-ray chest is gone, client)
-    (156, BLK + V(0.05, -0.28, 0.28), BLK + V(0, 0, 0.0), 46), (295, BLK + V(0.03, -0.15, 0.13), BLK + V(0, 0, 0.0), 50)],
+    (156, BLK + V(0.05, -0.3, 0.3), BLK + V(0, 0, 0.0), 44), (215, BLK + V(0.03, -0.16, 0.15), BLK + V(0, 0, 0.0), 50)],
+  [  # v009j: clean cut - the two of them while the surgeon finishes at the chest (insert cut to 1 s)
+    (216, V(0.05, -1.5, 1.62), PC + V(0.04, 0, 0.42), 28), (295, V(0.12, -1.45, 1.62), PC + V(0.06, 0, 0.42), 28)],
   [ (296, V(1.32, -1.28, 1.62), PC.lerp(BLK, 0.5) + V(0, 0, 0.32), 28), (306, V(1.3, -1.25, 1.62), PC.lerp(BLK, 0.6) + V(0, 0, 0.3), 28),
     (322, V(0.85, -1.45, 1.58), BLK + V(0, 0, 0.22), 32),
     # v009i: tray at chest height from his front: his masked face in the top third, looking down at his hands (no headless torso)
-    (362, BLK + V(-0.16, -0.82, 0.3), BLK + V(-0.06, 0.22, 0.32), 32), (440, BLK + V(-0.1, -0.8, 0.3), BLK + V(-0.06, 0.22, 0.32), 32),
-    (525, BLK + V(0.0, -0.8, 0.3), BLK + V(-0.04, 0.22, 0.32), 32), (565, BLK + V(0.05, -0.84, 0.32), BLK + V(-0.02, 0.24, 0.34), 30),
+    (362, BLK + V(-0.12, -0.62, 0.26), BLK + V(-0.04, 0.16, 0.24), 34), (455, BLK + V(-0.08, -0.6, 0.25), BLK + V(-0.04, 0.16, 0.24), 34)],
+  [  # v009j: clean cut - the carved ear on the tray, push-in
+    (456, BLK + V(0.04, -0.26, 0.26), BLK + V(0, 0, 0.0), 46), (520, BLK + V(0.03, -0.17, 0.17), BLK + V(0, 0, 0.0), 50)],
+  [ (521, BLK + V(0.0, -0.8, 0.3), BLK + V(-0.04, 0.22, 0.32), 32), (565, BLK + V(0.05, -0.84, 0.32), BLK + V(-0.02, 0.24, 0.34), 30),
     # v009i: the walk to the arm from his outer side, then from the patient's foot side as he comes to the arm; at the arm a two-shot:
     # the patient's head at left, the arm on the board, the surgeon's face at right (no lone arm, no gloves in the lens)
     (579, BLK + V(0.06, -0.85, 0.32), BLK + V(-0.02, 0.24, 0.36), 30)],
@@ -203,7 +209,9 @@ SEGS = [
   [  # v009i: clean cut - the ear growing reads as a clear bump under the skin, with a gentle push-in (no glassy x-ray skin)
     (796, INC + V(0.08, -0.14, 0.42), INC + V(0, 0, 0.0), 40), (880, INC + V(0.06, -0.1, 0.3), INC + V(0, 0, 0.0), 44)],
   [  # v009i: clean cut - time passes: the patient asleep, the surgeon waiting beside the arm (faces)
-    (881, V(0.38, -0.82, 1.45), V(0.28, 0.3, 1.14), 30), (1062, V(0.33, -0.74, 1.44), V(0.28, 0.3, 1.14), 31)],
+    (881, V(1.35, 0.0, 1.6), V(0.45, 0.45, 1.15), 28), (958, V(1.3, 0.04, 1.58), V(0.45, 0.45, 1.15), 30)],
+  [  # v009j: clean cut - the patient asleep while the ear grows, slow push-in
+    (959, V(0.45, -0.3, 1.45), V(0.0, 0.38, 1.3), 38), (1062, V(0.38, -0.2, 1.42), V(0.0, 0.38, 1.3), 44)],
   [ (1071, INC + V(0.25, -0.8, 0.5), INC + V(-0.02, 0.12, 0.2), 34), (1130, INC + V(0.3, -0.82, 0.48), INC + V(-0.02, 0.12, 0.2), 34),
     (1180, INC + V(0.32, -0.82, 0.46), INC + V(-0.02, 0.12, 0.2), 34), (1240, INC + V(0.25, -0.75, 0.18), INC + V(-0.02, 0.1, 0.3), 32), (1266, V(0.6, -0.8, 1.32), V(0.4, 0.42, 1.3), 26), (1300, V(0.6, -0.78, 1.5), V(0.4, 0.45, 1.24), 26),
     (1330, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.2), 26), (1340, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.2), 26), (1345, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.22), 26)],

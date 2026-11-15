@@ -96,8 +96,18 @@ def hang(s_, f, side_sign):
     pb.keyframe_insert("location", frame=f, group=pb.name)
 for f in range(796, 1052, 32): hang("R", f, 1.0)   # the forceps hand waits at his side too (it rose into the x-ray camera)
 lock(SUR, "L", 1290); lock(SUR, "L", 1672)
-for f in range(1300, 1664, 12): hang("L", f, -1.0)   # v009e: free hand at his side while he works at the head
-for f in range(796, 1052, 32):
+for f in range(1300, 1664, 12): hang("L", f, -1.0)
+# v009j: he feels the bump with two fingers (881-958), then the hand goes back to his side
+lock(SUR, "L", 870); lock(SUR, "L", 968)
+_pa = OB["Arm_Pocket"]
+for f in range(884, 960, 6):
+    sc.frame_set(f); c = _pa.matrix_world.translation.copy()
+    ax = (_pa.matrix_world.to_3x3() @ Vector((1, 0, 0))).normalized()
+    shl = SUR.matrix_world @ SUR.pose.bones["upperarm01.L"].head; fd = c - shl; fd.z = 0; fd.normalize()
+    p, n = surf(BODY[PAT], c + ax * (0.012 * math.sin(f * 0.25)) + Vector((0, 0, 0.03)))
+    place_hand(SUR, "L", f, p + fd * -0.07, -n, fd, skin=0.012)
+for f in (884, 958): apply_pose(SUR, "L", "point", f, spread=0)   # v009e: free hand at his side while he works at the head
+for f in [f_ for f_ in range(796, 1052, 32) if not 860 <= f_ <= 975]:   # v009j: not while he feels the bump
     sc.frame_set(f); shL = SUR.matrix_world @ SUR.pose.bones["upperarm01.L"].head; shR = SUR.matrix_world @ SUR.pose.bones["upperarm01.R"].head
     right = shR - shL; right.z = 0; right.normalize(); fwd = Vector((0, 0, 1)).cross(right)
     W = shL - right * 0.06 + fwd * 0.08 + Vector((0, 0, -0.58))
@@ -160,7 +170,8 @@ POSES["relaxed_even"] = dict(curl={2: (24, 30, 16), 3: (26, 32, 17), 4: (28, 34,
 for rig in (SUR,):
     gm = BODY[rig].modifiers.get("GloveThin")
     if gm: BODY[rig].modifiers.remove(gm)
-SCHED = {(SUR, "R"): [(1, "pinch_tuck"), (339, "pinch_tuck"), (343, "cup_hold"), (464, "cup_hold"), (472, "relaxed_even"), (560, "relaxed_even"), (566, "pinch_tuck"),
+SCHED = {(SUR, "R"): [(1, "pinch_tuck"), (339, "pinch_tuck"), (343, "pinch_tuck"), (464, "pinch_tuck"),   # v009j: the scalpel is held in a pinch (cup_hold read as an empty flat hand)
+                      (472, "relaxed_even"), (560, "relaxed_even"), (566, "pinch_tuck"),
                       (1500, "pinch_tuck"), (1502, "pinch_tuck"), (1685, "pinch_tuck"), (1715, "relaxed_even"), (1770, "relaxed_even")],
          (SUR, "L"): [(1, "relaxed_even"), (128, "relaxed_even"), (136, "flat_palm"), (278, "flat_palm"), (290, "relaxed_even"), (337, "relaxed_even"), (343, "relaxed_even"),
                       (464, "relaxed_even"), (476, "relaxed_even"), (1770, "relaxed_even")],

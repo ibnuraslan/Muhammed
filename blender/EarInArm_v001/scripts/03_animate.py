@@ -351,8 +351,8 @@ HP(SUR, "R", "pinch", 566); HP(SUR, "L", "pinch", 566)   # forceps pinch / skin-
 # beat 4: R forceps carries the ear to the forearm, slides it in; L forceps lifts the skin edge
 ev_at(640)
 sh(566, "R", BLK + Vector((0.05, -0.04, 0.08)), (-0.6, 0.4, -0.5), (-0.2, -0.4, 1.0))
-sh(650, "R", INC + Vector((-0.07, 0.16, 0.07)), (0.2, -1, -0.5), (-0, -0.4, 1))
-sh(700, "R", INC + Vector((-0.04, 0.13, 0.05)), (0.3, -1, -0.6), (-0, -0.4, 1))
+sh(650, "R", INC + Vector((-0.07, 0.16, 0.04)), (0.2, -1, -0.5), (-0, -0.4, 1))
+sh(700, "R", INC + Vector((-0.04, 0.13, 0.03)), (0.3, -1, -0.6), (-0, -0.4, 1))
 sh(740, "R", INC + Vector((-0.04, 0.16, 0.03)), (0.3, -1, -0.6), (-0, -0.4, 1))   # v009i: stays low by the arm (the forceps came up to his face)
 sh(775, "R", INC + Vector((-0.1, 0.24, 0.0)), (0.2, -1, -0.5), (-0, -0.4, 1))
 sh(700, "L", INC + Vector((0.1, 0.11, 0.05)), (-0.4, -1, -0.6), (-0, -0.4, 1))
@@ -424,7 +424,7 @@ for it in range(3):
     worst = 0.0
     for rec in SUR_TIPS:
         f, s_, tip, W, d, n = rec
-        if f > 1650 or (343 <= f < 566) or (1100 <= f <= 1245): continue   # v009i: lift-out keys are kept low (the tip-fix pulled the hand up to his face)   # stitching / carving: keep the hand above the ear so the macro shows the stitches
+        if f > 1650 or (343 <= f < 566) or (1100 <= f <= 1245) or (640 <= f <= 790): continue   # v009i: lift-out keys are kept low (the tip-fix pulled the hand up to his face)   # stitching / carving: keep the hand above the ear so the macro shows the stitches
         ev_at(f); WM = SUR.o.matrix_world @ SUR.R.PB["wrist." + s_].matrix
         if s_ == "R":
             if f <= 1500:

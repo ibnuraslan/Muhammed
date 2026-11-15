@@ -61,7 +61,40 @@ cap = rebind("Surgeon_Cap", "Nurse_Cap", (0, 0.01, 0.12)); mk = rebind("Surgeon_
 for o in [c for c in N.children if c.type == 'MESH' and any(k in c.name.lower() for k in ("bob", "hair", "short0", "long0", "ponytail", "braid", "afro"))]:
     o.hide_render = True; o.hide_viewport = True   # the cap covers her hair
 # masks stand off the face: the nose and lips pushed through the thin shell when the head pitched down (client: "no mask")
-for nm in ("Surgeon_Mask", "Nurse_Mask"):
-    OB[nm].data.transform(Matrix.Scale(1.1, 4))
+# v009j: the rigid mask shells hung below the nose onto the chin and read as a white beard (client). The mask is now the face
+# itself: a copy of the body's nose-to-chin skin (same shape keys, vertex groups and armature modifier, so it deforms with the
+# jaw and head), pushed 2.5 mm out along the normals with a thin solidify, in the old mask's material.
+import bmesh
+def face_mask(rig, body, old_name, new_name):
+    old = OB[old_name]; mat = old.data.materials[0]
+    kb = body.data.shape_keys.key_blocks if body.data.shape_keys else None
+    mix = [Vector(v.co) for v in body.data.vertices]
+    if kb:
+        for k in kb[1:]:
+            if k.value > 0 and not k.mute:
+                for i, (a, c) in enumerate(zip(k.data, kb[0].data)): mix[i] += (a.co - c.co) * k.value
+    gi_h = body.vertex_groups.get("HelperGeometry"); hi = gi_h.index if gi_h else -1
+    helper = {v.index for v in body.data.vertices if any(g.group == hi and g.weight > 0.5 for g in v.groups)}
+    hz = rig.data.bones["head"].head_local.z
+    cand = [i for i, m in enumerate(mix) if i not in helper and m.z > hz - 0.05 and abs(m.x) < 0.09]
+    nose = min(cand, key=lambda i: mix[i].y); N = mix[nose]
+    keep = {i for i in cand if N.z - 0.085 < mix[i].z < N.z + 0.018 and mix[i].y < N.y + 0.05 and abs(mix[i].x) < 0.062
+            and body.data.vertices[i].normal.y < 0.15}
+    o = body.copy(); o.data = body.data.copy(); o.name = new_name
+    for c in body.users_collection: c.objects.link(o)
+    for md in list(o.modifiers):
+        if md.type != 'ARMATURE': o.modifiers.remove(md)
+    bm = bmesh.new(); bm.from_mesh(o.data); bm.verts.ensure_lookup_table()
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.index not in keep], context='VERTS'); bm.to_mesh(o.data); bm.free()
+    o.data.materials.clear(); o.data.materials.append(mat)
+    for poly in o.data.polygons: poly.material_index = 0
+    dp = o.modifiers.new("lift", 'DISPLACE'); dp.strength = 0.0025; dp.mid_level = 0.0; dp.direction = 'NORMAL'
+    so = o.modifiers.new("thick", 'SOLIDIFY'); so.thickness = 0.0012; so.offset = 1.0
+    sm = o.modifiers.new("smooth", 'SUBSURF'); sm.levels = 1; sm.render_levels = 1
+    old.hide_render = True; old.hide_viewport = True
+    print("FACEMASK", new_name, len(o.data.vertices), "nose", tuple(round(x, 3) for x in N))
+    return o
+face_mask(OB["Surgeon"], OB["Surgeon.body"], "Surgeon_Mask", "Surgeon_FaceMask")
+face_mask(N, NB, "Nurse_Mask", "Nurse_FaceMask")
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("DRESS_DONE")
