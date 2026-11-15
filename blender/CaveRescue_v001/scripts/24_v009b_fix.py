@@ -1,13 +1,13 @@
 """v009b (director review of v009), on the VO timeline (1-2436, beats unchanged): camera, exposure and visibility only.
 1. 480-570: the tunnel faded to black (stretched exposure ramp). Exposure held at its 480 value to the cut at 570.
-2. 1636-1710 injection: low front-left close-up on the boy's face and the medic's hand with the syringe at his arm.
-3+7. Mask: the edge boy's reaction runs on to 1810 (the mask's approach is never shown, so no floating mask); from
-   1811 a tight close-up of the boy's face with the mask on (the diver's hands are not on the mask in this animation,
+2. 1648-1703 injection: low front-left close-up on the boy's face and the medic's hand with the syringe at his arm.
+3+7. Mask: the edge boy's reaction runs on to 1820 (the mask's approach is never shown, so no floating mask); from
+   1821 a tight close-up of the boy's face with the mask on (the diver's hands are not on the mask in this animation,
    so they are kept out of frame). The coach, the boy and DiverB hold still to the cut at 1885.
 4. 1941-2104 tow: the camera keeps the 1940 side offset in the pair's travel frame (no drift into the rock), with a
-   hard cut to a shot from ahead on their path, looking back at them, through the squeeze (1968-2026); a follow light, exposure held.
+   hard cut to a shot from ahead on their path, looking back at them, through the squeeze (1984-2026); a follow light, exposure held.
 5. 1065-1070: the blurred rock frame takes the 1071 framing.
-6. 1591-1635 and 1711-1820 edge-boy reactions: a slow push-in (no still hold).
+6. 1591-1647 and 1704-1820 edge-boy reactions: a slow push-in (no still hold).
 8. 2100-2140: the flood-front mesh in the lens at the cave mouth is hidden (it is not in shot otherwise).
 9. 2240-2300: the reed in front of the waving men is hidden.
 10. 871-890: the cross-section push holds its 871 framing (no flat pink plane).
@@ -28,6 +28,10 @@ def setk(F, f, vals, interp='LINEAR'):
         if ks: ks[0].co.y = v; ks[0].handle_left.y = v; ks[0].handle_right.y = v; ks[0].interpolation = interp
         else: fc.keyframe_points.insert(f, v).interpolation = interp
 def apply(vals):
+    lo, hi = min(vals) - 0.5, max(vals) + 0.5
+    for F in (CL, AL, LF):          # drop old keys in the range first (the time warps left fractional-frame keys)
+        for fc in F:
+            for kp in [k for k in fc.keyframe_points if lo <= k.co.x <= hi]: fc.keyframe_points.remove(kp)
     for f, (c, t, l) in sorted(vals.items()):
         setk(CL, f, c); setk(AL, f, t); setk(LF, f, [l])
     for F in (CL, AL, LF):
@@ -45,18 +49,18 @@ def face(f):
 # 10, 5
 hold(871, 890, 871); hold(1065, 1070, 1071)
 # 6 + 3: reactions (the second runs on to 1820)
-push(1591, 1635, 1600); push(1711, 1810, 1720)
+push(1591, 1647, 1600); push(1704, 1820, 1720)
 # 2: injection close-up
 inj = {}
-for f in range(1636, 1711):
+for f in range(1648, 1704):      # the medic's forearm crosses the lens before 1648 and after 1703
     sc.frame_set(f); sp = syr.matrix_world.translation.copy()
-    inj[f] = (sp + V((0.15, -0.55, 0.05)) + V((0, 0.06, 0)) * (f - 1636) / 74, sp, 35)
+    inj[f] = (sp + V((0.15, -0.55, 0.05)) + V((0, 0.06, 0)) * (f - 1648) / 55, sp, 35)
 apply(inj)
 # 7: mask on the boy's face (from 1811, after it is on): tight, long lens from the low front-right so only face and mask fill the frame
 DIR = V((-0.28, -1.57, -0.01)).normalized(); mk = {}
-for f in range(1811, 1885):
+for f in range(1821, 1885):
     p = face(f)
-    mk[f] = (p + DIR * (1.5 - 0.12 * (f - 1811) / 73) + V((0, 0, 0.12)), p - V((0, 0, 0.04)), 62)
+    mk[f] = (p + DIR * (1.5 - 0.12 * (f - 1821) / 63) + V((0, 0, 0.12)), p - V((0, 0, 0.04)), 62)
 apply(mk)
 # hold the coach, the boy and DiverB still until the cut at 1885 (their next keys are the jump to the tow / parking;
 # interpolating toward them made the coach fly off in the reaction shot and the boy slide out of the mask close-up)
@@ -88,7 +92,7 @@ for f in range(1941, 2105):
     c = p + fw * dc[0] * 0.8 + sd * dc[1] * 0.8 + up * dc[2]; t = p + fw * dt[0] + sd * dt[1] + up * dt[2]
     e = min(1.0, (f - 1940) / 12.0)
     tw[f] = (ev(CL, 1940).lerp(c, e), t, rl)
-    if 1968 <= f <= 2026:      # the passage squeezes: hard cut to a camera on their own path 0.75 s ahead (inside the tube)
+    if 1984 <= f <= 2026:      # the passage squeezes: hard cut to a camera on their own path 0.75 s ahead (inside the tube)
         tw[f] = (PP[min(2114, f + 45)] + V((0, 0, 0.25)), p + V((0, 0, 0.1)), 26)    # ahead on their path, looking back at them
 apply(tw)
 # exposure holds (1, 4)
@@ -132,5 +136,8 @@ for o in bpy.data.objects:          # no bubble right in front of the lens in th
     if o.name.startswith("FX_Bubble_"):
         for f, h in ((1967, False), (1968, True), (2026, True), (2027, False)):
             o.hide_render = h; o.hide_viewport = h; o.keyframe_insert("hide_render", frame=f); o.keyframe_insert("hide_viewport", frame=f)
+for nm in ("DiverB_TorchLight", "Boy2_TorchLight"):     # underwater the torch beam lit the murk into a white blob in front of the lens
+    o = bpy.data.objects.get(nm)
+    if o: o.visible_volume_scatter = False
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("V009B_OK")
