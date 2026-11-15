@@ -135,14 +135,14 @@ rbox("BenchBase", (1.5, 0.5, BZ - 0.14), (0, 0.75, (BZ - 0.14) / 2), trim, CT, 0
 rbox("RearWall", (1.7, 0.06, 1.6), (0, 1.17, 0.8), trim, CT, 0.01)
 # front seats (real model, faces +Y in the library; turn it to face -Y)
 for nm, x in (("SeatDriver", DRV.x), ("SeatPass", -DRV.x)):
-    s = dup(SEAT, nm, (x, DRV.y + 0.06, 0.0), (0, 0, R_(180)), (0.84, 0.80, 0.95), CT, linked=False)
+    s = dup(SEAT, nm, (x, DRV.y + 0.06, 0.0), (0, 0, R_(180)), (0.84, 0.80, 0.82), CT, linked=False)
     s.data.materials.clear(); s.data.materials.append(beige)
 SDRV = bpy.data.objects["SeatDriver"]; bpy.context.view_layer.update()
 _sp = [SDRV.matrix_world @ v.co for v in SDRV.data.vertices]
-CUSH_Z = max(p.z for p in _sp if abs(p.x - DRV.x) < 0.1 and DRV.y - 0.25 < p.y < DRV.y + 0.05 and p.z < 0.7)
-BACK_FRONT_Y = min(p.y for p in _sp if abs(p.x - DRV.x) < 0.12 and 0.85 < p.z < 0.95)
+CUSH_Z = max(p.z for p in _sp if abs(p.x - DRV.x) < 0.1 and DRV.y - 0.30 < p.y < DRV.y + 0.05 and p.z < 0.62)
+BACK_FRONT_Y = min(p.y for p in _sp if abs(p.x - DRV.x) < 0.12 and 0.72 < p.z < 0.82)
 print("BUILD seat cushion z", round(CUSH_Z, 3), "back front y", round(BACK_FRONT_Y, 3), "zmax", round(max(p.z for p in _sp), 3), "ymin/max", round(min(p.y for p in _sp), 3), round(max(p.y for p in _sp), 3))
-SEAT_TOP = Vector((DRV.x, BACK_FRONT_Y - 0.26, CUSH_Z + 0.10))
+SEAT_TOP = Vector((DRV.x, BACK_FRONT_Y - 0.33, CUSH_Z + 0.08))
 # side doors with window openings (lower panel + pillars, no glass in the opening)
 for sx in (-1, 1):
     rbox(f"DoorLow{sx}", (0.06, 2.4, 0.82), (0.85 * sx, -0.2, 0.41), trim, CT, 0.02)
@@ -346,13 +346,17 @@ rbox("KTable", (2.0, 0.9, 0.05), KX + Vector((0.2, 0.2, 0.76)), steel, CK, 0.01)
 for xx in (-0.7, 0.7):
     for yy in (-0.2, 0.6):
         cyl(f"KTLeg{xx}{yy}", 0.025, 0.74, KX + Vector((xx, yy, 0.37)), steel, CK)
-CR8 = dup(CRATE, "DogCrate", KX + Vector((0, 0.2, 0.785)), (0, 0, R_(180)), 1.0, CK, linked=False)
+CR8 = dup(CRATE, "DogCrate", KX + Vector((0, 0.25, 0.785)), (0, 0, R_(180)), 1.27, CK, linked=False)
 crate_m = mat("CrateWhite", (0.92, 0.93, 0.93), 0.4)
 CR8.data.materials.clear(); CR8.data.materials.append(crate_m)
 # crate door: a separate barred door that swings (rbox frame + bars), hinged at the crate's -X front edge
 DOOR = bpy.data.objects.new("CrateDoor", None); CK.objects.link(DOOR)
 cpts = [CR8.matrix_world @ v.co for v in CR8.data.vertices]
-cminy = min(p.y for p in cpts); cminx = min(p.x for p in cpts); cmaxx = max(p.x for p in cpts); ctop = max(p.z for p in cpts)
+_inv = CR8.matrix_world.inverted()
+_ok, _loc, _n, _i = CR8.ray_cast(_inv @ Vector((KX.x, 0.25, 1.4)), _inv.to_3x3() @ Vector((0, 0, -1)))
+CRATE_FLOOR = (CR8.matrix_world @ _loc).z if _ok else 0.80
+print("BUILD crate floor", round(CRATE_FLOOR, 3))
+cminy = min(p.y for p in cpts); cmaxy = max(p.y for p in cpts); cminx = min(p.x for p in cpts); cmaxx = max(p.x for p in cpts); ctop = max(p.z for p in cpts)
 print("BUILD crate front y", round(cminy, 3), "x", round(cminx, 3), round(cmaxx, 3), "top", round(ctop, 3))
 # logo plate on the crate top front edge
 box_m = mat("Cardboard", (0.72, 0.52, 0.30), 0.8)
@@ -540,7 +544,7 @@ def shot_truck_common(f0, f1, man_head=(0, 0), man_twist=0.0, flex=6.0, wheel=Tr
 def S01(f0, f1):
     PRESENT["01"] = {"own", "dog"}
     shot_truck_common(f0, f1)
-    D0 = Vector((0.13 - 0.17 - 0.03, 0.70, BZ)); n = f1 - f0
+    D0 = Vector((0.13 - 0.17 - 0.03, 0.70, BZ + 0.008)); n = f1 - f0
     for k in range(0, n + 1, 10):
         t = k / n
         dog_key(f0 + k, D0, 90, dog_pose_stand(head=(8 * math.sin(t * 6), 0, -35 * ease(min(1, t * 1.6))), tail=25 * math.sin(k * 0.45), pant=4 * math.sin(k * 0.9)))
@@ -553,12 +557,13 @@ def S01(f0, f1):
 def S02(f0, f1):
     PRESENT["02"] = {"own", "dog"}
     shot_truck_common(f0, f1)
-    D0 = Vector((0.13 - 0.17 - 0.03, 0.70, BZ)); n = f1 - f0
+    D0 = Vector((0.13 - 0.17 - 0.03, 0.70, BZ + 0.008)); n = f1 - f0
     # front-right paw (nearest the bench edge) lifts at 35% and lands on the grip/trigger area at 65%
     for k in list(range(0, n + 1, 6)) + [n]:
         t = k / n; u = ease(max(0.0, min(1.0, (t - 0.30) / 0.35)))
-        lift = math.sin(math.pi * u) * 0.09
-        ext = {"__FR": ("trig", u, lift), "torso": ((0, 0, -0.01 * u), (0, 3 * u, 0))}
+        uh = ease(min(1.0, u / 0.7))                      # sideways travel done by 70%, then straight down
+        lift = 0.10 * (math.sin(math.pi * min(1.0, u / 0.7) * 0.5) if u < 0.7 else (1.0 - (u - 0.7) / 0.3))
+        ext = {"__FR": ("trig", uh, lift), "torso": ((0, 0, -0.01 * u), (0, 3 * u, 0))}
         dog_key(f0 + k, D0, 90, dog_pose_stand(head=(-14 * u, 0, -10), tail=20 * math.sin(k * 0.4), pant=3 * math.sin(k * 0.9), ext=ext))
     c = camera("02", 40)
     tgt = Vector((TRIG.x - 0.04, TRIG.y + 0.02, TRIG.z + 0.08))
@@ -568,7 +573,7 @@ def S02(f0, f1):
 def S03(f0, f1):
     PRESENT["03"] = {"own", "dog"}
     shot_truck_common(f0, f1)
-    D0 = Vector((0.13 - 0.17 - 0.03, 0.70, BZ))
+    D0 = Vector((0.13 - 0.17 - 0.03, 0.70, BZ + 0.008))
     for k in (0, f1 - f0):
         dog_key(f0 + k, D0, 90, dog_pose_stand(head=(-14, 0, -10), tail=10, ext={"__FR": "trig"}))
     c = camera("03", 30)
@@ -578,7 +583,7 @@ def S03(f0, f1):
 def S04(f0, f1):
     PRESENT["04"] = {"own", "dog"}
     shot_truck_common(f0, f1)
-    D0 = Vector((0.13 - 0.17 - 0.03, 0.70, BZ))
+    D0 = Vector((0.13 - 0.17 - 0.03, 0.70, BZ + 0.008))
     for k in (0, f1 - f0):
         dog_key(f0 + k, D0, 90, dog_pose_stand(head=(-14, 0, -10), tail=10, ext={"__FR": "trig"}))
     fb = f0 + 40
@@ -606,7 +611,7 @@ def S05(f0, f1):
     for fr in (fh + 18, fh + 30, f1):      # left hand goes to the hurt side (flank), palm on the jumper
         sc.frame_set(fr)
         place_hand(OWNER, "L", fr, SEAT_TOP + Vector((0.20, 0.02, 0.32)), (-1, 0.2, 0), (0, 0.1, -1)); apply_pose(OWNER, "L", "relaxed", fr)
-    D0 = Vector((0.13 - 0.17 - 0.03, 0.70, BZ))
+    D0 = Vector((0.13 - 0.17 - 0.03, 0.70, BZ + 0.008))
     for k in (0, fh - f0, fh - f0 + 8, f1 - f0):
         dog_key(f0 + k, D0, 90, dog_pose_stand(head=(-10 if k < 30 else 10, 0, -10 if k < 30 else 20), tail=10))
     keyobj(HOLE, f0, scale=0.001); keyobj(HOLE, fh - 1, scale=0.001); keyobj(HOLE, fh, scale=1.0)
@@ -626,7 +631,7 @@ def S06(f0, f1):
     seated(HOWN, OWNER, f0, seat_top, lean=-5, flex=8, head=(-8, -45), twist=-32)
     place_hand(OWNER, "L", f0, SEAT_TOP + Vector((0.20, 0.02, 0.32)), (-1, 0.2, 0), (0, 0.1, -1)); apply_pose(OWNER, "L", "relaxed", f0)
     place_hand(OWNER, "R", f0, (DRV.x - 0.15, -0.950, 1.04), (0, -0.7, 0.4), (0.35, 0, 1)); apply_pose(OWNER, "R", "relaxed", f0)
-    D0 = Vector((0.13 - 0.17 - 0.03, 0.70, BZ))
+    D0 = Vector((0.13 - 0.17 - 0.03, 0.70, BZ + 0.008))
     dog_key(f0, D0, 90, dog_pose_stand(head=(10, 0, 20), tail=10)); dog_key(f1, D0, 90, dog_pose_stand(head=(14, 0, 25), tail=15))
     for i, s_ in enumerate(smokes):
         keyobj(s_, f0, loc=HOLE_P + Vector((0.01 * i - 0.02, -0.03, 0.02)), scale=1.2)
@@ -881,18 +886,18 @@ def S12(f0, f1):
 
 def S13a(f0, f1):
     PRESENT["13a"] = {"dog"}
-    D0 = Vector((KX.x - 0.10, cminy + 0.45, 0.785)); n = f1 - f0
+    D0 = Vector((KX.x + 0.02, (cminy + cmaxy) / 2 + 0.02, CRATE_FLOOR + 0.005)); n = f1 - f0
     for k in range(0, n + 1, 10):
         t = k / n
-        dog_key(f0 + k, D0, 0, dog_pose_stand(head=(10 * math.sin(t * 4), 0, 25 * math.sin(t * 3.0)), tail=20 * math.sin(k * 0.5), pant=4 * math.sin(k * 0.9)))
+        dog_key(f0 + k, D0, -90, dog_pose_stand(head=(6 * math.sin(t * 4), 0, 32 + 8 * math.sin(t * 3.0)), tail=20 * math.sin(k * 0.5), pant=4 * math.sin(k * 0.9)))
     c = camera("13a", 35)
-    tgt = Vector((KX.x - 0.1, cminy - 0.05, 1.25))
+    sc.frame_set(f0); tgt = DOG.matrix_world @ DOG.pose.bones["head"].head
     cam_key(c, f0, tgt + Vector((0.25, -1.4, 0.05)), tgt); cam_key(c, f1, tgt + Vector((0.18, -1.15, 0.03)), tgt)
 def S13b(f0, f1):
     PRESENT["13b"] = {"dog"}
-    D0 = Vector((KX.x - 0.05, cminy + 0.62, 0.785)); n = f1 - f0
+    D0 = Vector((KX.x + 0.02, (cminy + cmaxy) / 2 + 0.02, CRATE_FLOOR + 0.005)); n = f1 - f0
     for k in range(0, n + 1, 10):
-        dog_key(f0 + k, D0, 0, dog_pose_stand(head=(-5, 0, 15 * math.sin(k * 0.05)), tail=15 * math.sin(k * 0.4), pant=3 * math.sin(k * 0.9)))
+        dog_key(f0 + k, D0, -90, dog_pose_stand(head=(-5, 0, 30 + 8 * math.sin(k * 0.05)), tail=15 * math.sin(k * 0.4), pant=3 * math.sin(k * 0.9)))
     c = camera("13b", 32)
     tgt = Vector((KX.x + 0.25, 0.1, 1.12))
     cam_key(c, f0, tgt + Vector((0.15, -2.4, 0.22)), tgt); cam_key(c, f1, tgt + Vector((0.10, -2.15, 0.18)), tgt)
@@ -908,7 +913,7 @@ def hosp_man(f, smile_head=(18, -20), stroke=0.0):
 def hosp_dog(f, tail=0.0, head=(0, 0, 0)):
     # standing on the mattress beside him, facing the head of the bed, head turned toward his face
     DOG.rotation_mode = 'XYZ'
-    dog_key(f, HX + Vector((0.24, 0.05, MAT_Z - 0.01)), 180, dog_pose_stand(head=(8 + head[0], 0, -28 + head[2]), tail=tail, pant=2))
+    dog_key(f, HX + Vector((0.24, 0.05, MAT_Z + 0.035)), 180, dog_pose_stand(head=(8 + head[0], 0, -28 + head[2]), tail=tail, pant=2))
 def S14a(f0, f1):
     PRESENT["14a"] = {"own", "dog"}
     for fr, t in ((f0, 0.0), ((f0 + f1) // 2, 0.5), (f1, 1.0)):
@@ -975,7 +980,7 @@ def dog_key(f, loc, yaw, pose):
         pb = DOG.pose.bones["IK_hoof.FR"]
         if isinstance(fr, str) or (isinstance(fr, tuple) and fr and fr[0] == "trig"):
             u, lift = (1.0, 0.0) if isinstance(fr, str) else (fr[1], fr[2])
-            tw = TRIG + Vector((0, 0.03, 0.005))
+            tw = TRIG + Vector((0, 0.03, 0.022))
             restw = DOG.matrix_world @ DOG.data.bones["IK_hoof.FR"].head_local
             off_w = (tw - restw) * u + Vector((0, 0, lift)); off_a = DOG.matrix_world.inverted().to_3x3() @ off_w
         else:
