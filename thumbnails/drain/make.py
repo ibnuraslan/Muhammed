@@ -78,9 +78,7 @@ def save(img, stem, D):
     img.save(os.path.join(D, stem + ".png")); img.save(os.path.join(D, stem + "_youtube.jpg"), quality=95, subsampling=0)
 
 
-if __name__ == "__main__" and "rats" in sys.argv:
-    os.makedirs(OUT, exist_ok=True); main_rats(P, OUT, "pack" in sys.argv); print("done"); sys.exit(0)
-if __name__ == "__main__":
+if __name__ == "__main__" and "rats" not in sys.argv:
     os.makedirs(OUT, exist_ok=True)
     pl, mk = os.path.join(P, "dd_evidence.png"), os.path.join(P, "dd_evidence_mask.png")
     t = compose(pl, mk); t.save(os.path.join(OUT, "drain_final.jpg"), quality=96, subsampling=0)
@@ -123,3 +121,7 @@ def main_rats(P, OUT, pack=False):
     if pack:
         D = os.path.join(OUT, "download"); os.makedirs(D, exist_ok=True)
         save(t, "drain_thumbnail_DRAIN", D); save(compose_rats(pl, mk, text=False), "drain_thumbnail_notext", D)
+
+
+if __name__ == "__main__" and "rats" in sys.argv:
+    os.makedirs(OUT, exist_ok=True); main_rats(P, OUT, "pack" in sys.argv); print("done")
