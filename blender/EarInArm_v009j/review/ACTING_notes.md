@@ -15,6 +15,21 @@
 6. **Idle forceps 649–720:** the forceps tip-fix (which lifted the hand 5 cm above the target) is skipped for 640–790, and the keys are lower.
 - **Build:** the hands pass had been failing silently on a pose name used before its definition. The build script now stops if the animation or hands pass fails.
 
+- **Mask (final):** a separate mesh bound to the head bone, with a 2 mm shrinkwrap onto the deforming face, smoothed into a cloth sheet. It covers from mid-nose down to the chin; the eyes are clear.
+- **At the arm (640–795):** a self-unclip keeps both hands off his belly (the lowered forceps hand had pressed into it).
+
+## Checks (v009j, packed)
+- clip_scan: 2 single frames.
+  - 1657: as he steps back, his hand brushes the patient's shoulder.
+  - 1753: the patient's fingertip on the new ear.
+- qa: CLAW, HOVER, FACEPRESS, INSIDE and ROLL are 0.
+  - CAMJUMP 17: the intended cuts.
+  - EMPTY 16: the inserts.
+  - BACKHEAD 1, FILL 6, PROPMOVE 137.
+  - ATTACH 7 (361–553, 1345) are a bounding-box artifact. QA picks the wearer from the mask's evaluated `bound_box`, which Blender reports wrongly for this bone-parented, shrinkwrapped mesh (for example, at f361 the bbox centre is at z 0.93). The mesh itself is centred 4–9 cm from his head bone on every flagged frame, and the renders show it on his face.
+- cam_clear: 0.
+- limb_check: ARMBODY 1446, ARMBACK 17, PROPHEAD 161 (shoulder-root residuals, plus the bump shot's reach).
+
 ---
 
 # EarInArm v009i
