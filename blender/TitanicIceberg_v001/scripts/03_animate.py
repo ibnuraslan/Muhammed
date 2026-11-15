@@ -381,7 +381,7 @@ def SW(f, v):   # ship-local -> world at frame f
 STW = lambda f, d: SW(f, SP + Vector(d))
 L_SHIP = lambda f, d: ("ship", d)          # marker: ship-local key, evaluated per frame (the ship moves)
 GP_ = O["Print_Giant"].location.copy()
-CUT_STEW, CUT_SHIP, CUT_NIGHT, CUT_DARK, CUT_OFFICE, CUT_PROOF, CUT_BACK, CUT_END = 406, 606, 906, 1070, 1170, 1438, 1530, 1614
+CUT_STEW, CUT_SHIP, CUT_NIGHT, CUT_DARK, CUT_OFFICE, CUT_PROOF, CUT_BACK, CUT_END = 432, 606, 906, 1070, 1170, 1438, 1530, 1614
 SHOTS = [
   # A: steward with his camera -> over the shoulder to the berg -> clear push-in to the red smear (beats 1-3)
   (0, CUT_STEW, [
@@ -421,8 +421,8 @@ SHOTS = [
     (CUT_PROOF, Vector((9.5, Y0 + 3.85, 2.35)), Vector((8.0, Y0 + 4.7, 2.15)), 27)]),
   # G: the proof - the hull's red band slides in beside the photo's streak, same height (1.5 s)
   (CUT_PROOF, CUT_BACK, [
-    (CUT_PROOF, Vector((GP_.x + 2.2, GP_.y - 9.0, GP_.z - 0.3)), Vector((GP_.x + 2.2, GP_.y, GP_.z - 0.5)), 30),
-    (CUT_BACK, Vector((GP_.x + 2.0, GP_.y - 8.0, GP_.z - 0.35)), Vector((GP_.x + 2.0, GP_.y, GP_.z - 0.55)), 30)]),
+    (CUT_PROOF, Vector((GP_.x + 1.9, GP_.y - 10.5, GP_.z - 0.2)), Vector((GP_.x + 1.9, GP_.y, GP_.z - 0.4)), 28),
+    (CUT_BACK, Vector((GP_.x + 1.8, GP_.y - 9.6, GP_.z - 0.25)), Vector((GP_.x + 1.8, GP_.y, GP_.z - 0.45)), 28)]),
   # H: back in the office - both faces react (beat 9)
   (CUT_BACK, CUT_END, [
     (CUT_BACK, Vector((9.45, Y0 + 3.9, 2.4)), Vector((7.98, Y0 + 4.6, 2.25)), 26),
@@ -430,7 +430,7 @@ SHOTS = [
   # I: closer - slow visible push-in on the lone berg, the steamer passing beyond it
   (CUT_END, END + 1, [
     (CUT_END, Vector((112, 122, 16)),   Vector((0, -10, 9)),       22),
-    (END,  Vector((82, 86, 11)),         Vector((4, -22, 8)),       24)]),
+    (END,  Vector((56, 58, 8.5)),        Vector((2, -18, 8)),       24)]),
 ]
 def _ev(f, v):
     return STW(f, v[1]) if isinstance(v, tuple) and v and v[0] == "ship" else v
@@ -617,7 +617,7 @@ for fc in all_fcurves(st.o):
 for L_ in [o for o in O if o.type == "LIGHT"]: L_.visible_camera = False
 O["Darkroom_DoorCut"].hide_render = True
 # the ghost liner is done after the night scrape: off the render entirely (it showed as a faint hull at the berg at 1760+)
-for f_, v_ in ((0, True), (905, False), (1100, True)):   # v007: no ghost panes over the berg in beat 2; only the night scrape
+for f_, v_ in ((0, True), (906, False), (1100, True)):   # v007: no ghost panes over the berg in beat 2; only the night scrape
     liner.hide_render = v_; liner.keyframe_insert("hide_render", frame=f_)
 set_interp(liner, 'CONSTANT', lambda p_: p_ == "hide_render")
 # hidden objects must not block camera rays: mirror every hide_render key onto hide_viewport (after all evaluation passes)

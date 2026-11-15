@@ -4,8 +4,8 @@
 
 | Frames | Shot |
 |---|---|
-| 0–405 | The steward with his camera, then over his shoulder to the berg, then a clear push-in to the red smear (the smear fills the waterline by 348). |
-| 406–605 | The photographer on deck framing the shot, face to camera: he looks down into the finder, presses the shutter and looks up. |
+| 0–431 | The steward with his camera, then over his shoulder to the berg, then a clear push-in to the red smear (the smear fills the waterline by 348). |
+| 432–605 | The photographer on deck framing the shot, face to camera: he looks down into the finder, presses the shutter and looks up. |
 | 606–905 | The steamship in the foreground, the debris field, and the berg beyond. The water is matte in this shot (no sun-glint discs), and the funnel smoke is off. |
 | 906–1069 | Night. A solid black liner with a red waterline band scrapes along the berg at a safe distance. The red paint on the ice is revealed behind its stern, with sparks at the contact. No glass ghost, and no flying into ice. |
 | 1070–1169 | Darkroom. Safelight fill and a lamp over the tray, so his face, the tongs in his hand (livelier agitation) and the image coming up in the tray all read. |
@@ -13,6 +13,8 @@
 | 1438–1529 | The proof (1.5 s): the hull's red band slides in beside the photo, at the same height as the streak. |
 | 1530–1613 | Office: both faces react. |
 | 1614–1830 | Closer: a slow, visible push-in on the lone berg, with the steamer passing beyond it. |
+
+The preview `review/preview.mp4` (every 5th frame) was rendered from this exact package file. Frames 400–445, 900–910, 1435–1530 and 1610–1830 were re-rendered after the final package fixes.
 
 Eyes: a wet catch-light (glossy Fresnel layer) is added to the cornea, which read flat and glassy. The glass ghost liner of beat 2 is removed.
 
