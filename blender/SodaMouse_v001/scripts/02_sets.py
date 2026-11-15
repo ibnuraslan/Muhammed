@@ -81,7 +81,7 @@ fl.scale = (8, 9, 1); put(fl, K); fl.data.materials.append(mat("KitchenFloorWood
 for nm, loc, rot, sz in (("KitchenWallL", (-2.0, 0, 1.5), (R(90), 0, R(90)), (9, 3, 1)), ("KitchenWallR", (2.0, 0, 1.5), (R(90), 0, R(90)), (9, 3, 1)),
                          ("KitchenWallBack", (0, -4.2, 1.5), (R(90), 0, 0), (4.2, 3, 1))):
     bpy.ops.mesh.primitive_plane_add(size=1, location=loc, rotation=rot); w = bpy.context.active_object; w.name = nm; w.scale = sz; put(w, K)
-    w.data.materials.append(mat("KitchenWallPaint", (0.93, 0.9, 0.84), 0.8))
+    w.data.materials.append(mat("KitchenWallPaint", (0.62, 0.80, 0.74), 0.8))
 bpy.data.objects["KitchenWallBack"].hide_render = True   # behind the cameras; only for bounce-free safety
 bpy.data.objects["KitchenWallBack"].hide_viewport = True
 
@@ -93,7 +93,7 @@ bpy.ops.mesh.primitive_plane_add(size=1, location=(LX, 0, 0)); fl = bpy.context.
 fl.data.materials.append(mat("LabFloor", (0.78, 0.82, 0.86), 0.35))
 tile = mat("LabTile", (0.92, 0.95, 0.97), 0.3)
 nt = tile.node_tree; br = nt.nodes.new("ShaderNodeTexBrick"); br.inputs["Scale"].default_value = 9.0
-br.inputs["Color1"].default_value = (0.93, 0.96, 0.98, 1); br.inputs["Color2"].default_value = (0.88, 0.93, 0.97, 1)
+br.inputs["Color1"].default_value = (0.70, 0.84, 0.93, 1); br.inputs["Color2"].default_value = (0.64, 0.80, 0.91, 1)
 br.inputs["Mortar"].default_value = (0.75, 0.8, 0.85, 1); br.inputs["Mortar Size"].default_value = 0.012; br.offset = 0.0
 tc = nt.nodes.new("ShaderNodeTexCoord"); nt.links.new(tc.outputs["UV"], br.inputs["Vector"])
 nt.links.new(br.outputs["Color"], nt.nodes["Principled BSDF"].inputs["Base Color"])
@@ -133,9 +133,10 @@ inband = nt.nodes.new("ShaderNodeMath"); inband.operation = 'COMPARE'; inband.in
 nt.links.new(sep.outputs["Y"], inband.inputs[0])
 mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.inputs["A"].default_value = (0.8, 0.82, 0.84, 1)
 nt.links.new(inband.outputs[0], mx.inputs["Factor"]); nt.links.new(ti.outputs["Color"], mx.inputs["B"]); nt.links.new(mx.outputs["Result"], Pn.inputs["Base Color"])
-mr = nt.nodes.new("ShaderNodeMapRange"); mr.inputs[3].default_value = 1.0; mr.inputs[4].default_value = 0.35
+mr = nt.nodes.new("ShaderNodeMapRange"); mr.inputs[3].default_value = 1.0; mr.inputs[4].default_value = 0.55
 nt.links.new(inband.outputs[0], mr.inputs[0]); nt.links.new(mr.outputs[0], Pn.inputs["Metallic"])
-Pn.inputs["Roughness"].default_value = 0.3; Pn.inputs["Coat Weight"].default_value = 0.4
+Pn.inputs["Roughness"].default_value = 0.38; Pn.inputs["Coat Weight"].default_value = 0.25
+Pn.inputs["Transmission Weight"].default_value = 0.0; Pn.inputs["Alpha"].default_value = 1.0
 can.data.materials.append(cm); put(can, P)
 # lid with the drinking opening (opened) and a pull tab
 bm = bmesh.new()
@@ -192,7 +193,10 @@ print("MOUSE dims", [round(d, 3) for d in mouse.dimensions])
 for m_ in mouse.data.materials:
     if m_ and m_.use_nodes:
         Pn = m_.node_tree.nodes.get("Principled BSDF")
-        if Pn: Pn.inputs["Roughness"].default_value = max(0.45, Pn.inputs["Roughness"].default_value)
+        if Pn:
+            Pn.inputs["Roughness"].default_value = max(0.45, Pn.inputs["Roughness"].default_value)
+            Pn.inputs["Subsurface Weight"].default_value = 0.15; Pn.inputs["Subsurface Radius"].default_value = (0.004, 0.003, 0.003)
+            Pn.inputs["Sheen Weight"].default_value = 0.6
 
 # --- plate (kitchen)
 plate = lathe("Plate", [(0.0, 0.0), (0.07, 0.0), (0.075, 0.004), (0.1, 0.012), (0.125, 0.022), (0.128, 0.024), (0.124, 0.025), (0.098, 0.016), (0.07, 0.010), (0.0, 0.010)])
@@ -210,7 +214,7 @@ beaker = lathe("Beaker", bk, seg=64)
 beaker.data.materials.append(mat("LabGlass", (0.95, 0.98, 1.0), 0.02, trans=1.0, ior=1.45)); put(beaker, P)
 liq = lathe("BeakerLiquid", [(0.0, 0.0045), (0.0508, 0.0045), (0.0508, 0.11), (0.0, 0.11)], seg=48, cap_top=False)
 bmh = bmesh.new(); bmh.from_mesh(liq.data); bmesh.ops.contextual_create(bmh, geom=[v for v in bmh.verts if abs(v.co.z - 0.11) < 1e-5]); bmh.to_mesh(liq.data); bmh.free()
-liq.data.materials.append(mat("SodaLiquid", (0.42, 0.88, 0.1), 0.05, trans=0.85, ior=1.33)); put(liq, P); liq.parent = beaker
+liq.data.materials.append(mat("SodaLiquid", (0.62, 0.95, 0.35), 0.05, trans=0.92, ior=1.33)); put(liq, P); liq.parent = beaker
 
 # --- jelly blob (dissolved mouse), soft green, subsurface
 bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=5, radius=1); jel = bpy.context.active_object; jel.name = "Jelly"
@@ -255,3 +259,8 @@ for o in (can, plate, pud, beaker, jel, tray, spat, mouse, st):
 sc["TABLE_Z"] = TABLE_Z; sc["LAB_Z"] = LT_Z; sc["LX"] = LX
 bpy.ops.wm.save_as_mainfile(filepath=BUILD + "/sets.blend")
 print("SETS saved")
+# glass + soda must not block light to what is inside them (caustics are off): no shadow casting
+sb = bpy.data.objects.get
+for o in [sb("Beaker"), sb("BeakerLiquid")] + [o for o in bpy.data.objects if o.name.startswith("Bubble.")]:
+    o.visible_shadow = False
+bpy.ops.wm.save_as_mainfile(filepath=BUILD + "/sets.blend")

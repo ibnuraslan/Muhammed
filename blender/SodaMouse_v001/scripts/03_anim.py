@@ -225,7 +225,7 @@ def lab_base(t, liquid=0.11, with_can=True, jelly=False):
     vis(jel, t, jelly)
 
 def base_sci(t):
-    base_man(sci, t, SCI_XY)
+    vis(sci.o, t, True); base_man(sci, t, SCI_XY)
 
 def S07(t, L):
     begin(ALL, t); park(t, keep=(beaker, liq, can, tray) + tuple(bubbles)); lab_base(t, liquid=0.0)
@@ -235,8 +235,8 @@ def S07(t, L):
         sci.spine(f, flex=4, pitch=-2 + 2 * math.sin(u * 3), turn=-6 * p, side=2 * p)
         sci.jaw(f, 2.5 * max(0, math.sin(u * 9)))
         sc.frame_set(f); sh = sci.r.PB["upperarm01.R"].head
-        W = Vector((sh.x - 0.10 * p, sh.y - 0.06 - 0.26 * p, sh.z - 0.55 + 0.50 * p))
-        sci.hand("R", f, W, Vector((-0.05, -0.3 * (1 - p), 1)), Vector((0.1, -1, 0.0)), pole=Vector((sh.x - 0.45, sh.y + 0.2, sh.z - 0.5)))
+        W = Vector((sh.x + 0.06 * p, sh.y - 0.06 - 0.20 * p, sh.z - 0.53 + 0.25 * p))
+        sci.hand("R", f, W, Vector((0.05, -0.25 * (1 - p), 1)), Vector((1, 0, 0)), pole=Vector((sh.x - 0.40, sh.y + 0.30, sh.z - 0.45)))
     track(t, L, 6, fr)
     apply_pose(sci.o, "R", "relaxed", t); apply_pose(sci.o, "R", "point", t + int(0.3 * L))
     c = cam("CAM_S07", 42, 8)
@@ -375,14 +375,15 @@ def S11(t, L):
 def S12(t, L):
     begin(ALL, t); park(t, keep=(can, tray, jel)); lab_base(t, liquid=0.0, jelly=True)
     key_obj(beaker, t, loc=(0, -20, -5)); vis(beaker, t, False)
+    vis(sci.o, t, False)          # nobody in this close-up: no blurred coat in the lens
     key_matrix(can, t, Matrix.Translation(TRAY_P + Vector((-0.20, 0.06, 0.0))) @ Matrix.Rotation(R(160), 4, 'Z')); show(can, t)
     base_sci(t); sci.spine(t, flex=12, pitch=20)
     for j in range(0, L + 1, 3):
         u = j / L; wob = 1 + 0.07 * math.sin(u * 18) * math.exp(-u * 1.5)
         key_obj(jel, t + j, loc=TRAY_P + Vector((0, 0, 0.024)), rot=(0, 0, 0.3), scale=(0.94 * (2 - wob), 0.94, 0.85 * wob))
-    c = cam("CAM_S12", 60, 11); p = TRAY_P + Vector((-0.06, 0.02, 0.04))
-    look(c, t, p + Vector((0.20, -0.42, 0.14)), p)
-    look(c, t + L, p + Vector((0.10, -0.30, 0.09)), p + Vector((0.02, 0, -0.01)))
+    c = cam("CAM_S12", 60, 11); p = TRAY_P + Vector((-0.06, 0.02, 0.03))
+    look(c, t, p + Vector((0.20, -0.30, 0.36)), p)
+    look(c, t + L, p + Vector((0.12, -0.20, 0.24)), p + Vector((0.02, 0, -0.005)))
     mark("S12", c)
 
 # ===================================================================== back in the kitchen: consumers worry

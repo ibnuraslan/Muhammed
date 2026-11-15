@@ -58,7 +58,16 @@ Both have:
 | Grips | Can, spatula and beaker are Child Of the wrist bone from the grip frame (`grip_object`, no gap). Every hand has its arm and body in frame. |
 | Brands | Generic green can with a zig-zag graphic, no text. No real company named or shown. |
 
-## Unsure / for the director
+## Director P1 notes (fixed in P1b)
+1. Can: opaque printed aluminium (solid green print, diagonal white zig-zags). No band that reads as a liquid level.
+2. S10: glass, soda and bubbles cast no shadows, plus a back light and fur sheen. The grey mouse reads as it sinks.
+3. S12: the scientist is hidden and the camera is more top-down. No blurred white shape; the jelly has form.
+4. Relaxed arms (all characters): elbow bent, hands resting by the front of the thighs.
+5. S07: small finger raise close to the chest, palm side-on.
+6. Key, fill and top lights lowered about 0.5 stop. Kitchen walls pale sage, lab tiles pale blue.
+Answers: no courtroom, one consumer, re-dressed rigs OK.
+
+## Unsure / for the director (P1)
 1. **Courtroom:** the brief mentions a courtroom set, but the reference (which the client now wants matched) has no courtroom; it stays in the kitchen for "So he sued". I can add one courtroom shot (the man standing at the plaintiff's table) if wanted.
 2. **Consumers (plural):** the reference uses the same man. I kept one man. A second worried consumer is possible in S13 if wanted.
 3. **MakeHuman asset server:** it was unreachable (proxy 502), so both characters were re-dressed from MPFB rigs already used in our delivered packages (BellyFat ShopperA, SurgeonBrandsLivers Surgeon1). The faces are generic.

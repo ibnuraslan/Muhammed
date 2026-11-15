@@ -39,9 +39,10 @@ class Man:
         B = self.r.BN; sh = B["upperarm01." + s].head_local
         root = self.r.PB["root"]
         M = self.o.matrix_world.inverted() @ (self.o.matrix_world @ root.matrix) @ self.r.rest("root").inverted()
-        W = M @ Vector((sh.x + sx * (0.10 + out), sh.y + 0.03 - fwd, sh.z - 0.58 + lift))
+        # relaxed: elbow ~15-20 deg bent, hand resting by the front of the thigh
+        W = M @ Vector((sh.x + sx * (0.07 + out), sh.y - 0.10 - fwd, sh.z - 0.49 + lift))
         Rz = M.to_3x3()
-        self.h.key_hand(s, f, W, Rz @ Vector((0.0, -0.08 - fwd, -1)), Rz @ Vector((-sx, 0, 0)),
+        self.h.key_hand(s, f, W, Rz @ Vector((0.0, -0.15 - fwd, -1)), Rz @ Vector((-sx, 0.15, 0)),
                         pole=M @ Vector((sh.x + sx * 0.35, sh.y + 0.6, sh.z - 0.25)))
         apply_pose(self.o, s, pose, f)
     def wrist_world(self, s):
