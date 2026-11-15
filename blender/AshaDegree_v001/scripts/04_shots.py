@@ -171,12 +171,12 @@ def grip_prop(obj, rig, s, f, axis_world, grip_local, r):
     q = obj.rotation_quaternion
     gp_world_offset = q @ Vector(grip_local)
     C = palm + n * 0.012
-    obj.location = C + n * (r + 0.013) - gp_world_offset
+    obj.location = C + n * (r + 0.013 + (0.007 if r < 0.02 else 0.0)) - gp_world_offset
     bpy.context.view_layer.update()
     rep = grip_object(rig, s, f, obj, C, n, finger_dir=d)
     for j in (1, 2, 3):   # thumb eased 35% open so its skin clears the surface
         pb = rig.pose.bones["finger1-%d.%s" % (j, s)]; q = pb.rotation_quaternion.copy()
-        pb.rotation_quaternion = q.slerp(Quaternion((1, 0, 0, 0)) if j > 1 else q, 0.35); pb.keyframe_insert("rotation_quaternion", frame=f)
+        pb.rotation_quaternion = q.slerp(Quaternion((1, 0, 0, 0)) if j > 1 else q, 0.55); pb.keyframe_insert("rotation_quaternion", frame=f)
     print("GRIP", obj.name, rig.name, f, "r=%.3f" % r, rep)
     bpy.context.view_layer.update(); attach(obj, rig, "wrist." + s)
     return rep
