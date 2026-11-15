@@ -127,9 +127,9 @@ for mname in ("M_Wave",):
                           (30.0, (0.030, 0.022, 0.012), 0.03), (31.6, (0.04, 0.03, 0.016), 0.0), (40, (0.04, 0.03, 0.016), 0.0)):
         b.inputs["Base Color"].default_value = (*colr, 1); b.inputs["Base Color"].keyframe_insert("default_value", frame=F(t))
         fv.outputs[0].default_value = foam; fv.outputs[0].keyframe_insert("default_value", frame=F(t))
-    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.06), (31.0, 0.06), (32.0, 0.1)):   # vNEXT: rough muddy water, no sun-glare blobs
+    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.14), (31.0, 0.14), (32.0, 0.1)):   # vNEXT: rough muddy water, no sun-glare blobs
         b.inputs["Roughness"].default_value = rg; b.inputs["Roughness"].keyframe_insert("default_value", frame=F(t))
-    for t, sl in ((0, 0.6), (20.8, 0.6), (22.0, 0.5), (31.0, 0.5), (32.0, 0.5)):   # vNEXT: specular on the flood
+    for t, sl in ((0, 0.6), (20.8, 0.6), (22.0, 0.22), (31.0, 0.22), (32.0, 0.5)):   # vNEXT: specular on the flood
         b.inputs["Specular IOR Level"].default_value = sl; b.inputs["Specular IOR Level"].keyframe_insert("default_value", frame=F(t))
     for t, wv in ((0, 0), (40, 6)):
         nz.inputs["W"].default_value = wv; nz.inputs["W"].keyframe_insert("default_value", frame=F(t))
