@@ -113,3 +113,10 @@ Beat frames are unchanged and there is no VO.
 | 4 | An empty corridor, sky and door frame. | A clean cut at **beat 8 (f1333)** from him walking at the rink to the clinic. |
 | 5 | Bodies near the lens. | The clinic camera keys are moved to stay at least about 1.2 m from people. The doctor stays put. The nurse stays in the far corner. The rink exit camera is raised above the bench players. |
 The beat frames are unchanged, and there is no on-screen text.
+
+## v009 (director review of v008). The preview `review/preview.mp4` (498 frames) is rendered from the final v009 package, with pages in `review/preview_pages_v009/`
+| Item | Fault | Fix |
+|---|---|---|
+| 1 | The ending was a static wide, her face unreadable, with mannequin players. | The camera is at about 1.6 m and chest height, with a slow push to 1.4 m. She is framed from the waist up over the cheque, which she holds at her waist; her face is clear and smiling. Two people stand close beside her and clap with IK hands meeting in front of the chest: a new player `FinPlayer` on her right (kept under the ice before the cut) and the man on her left. The other players stand well back (≥ 4.5 m), off to the sides. |
+| 2 | Clawed hands on her collarbones. | Her right palm is open with the fingers together (`shield`), raised at her chest in surprise, and her left hand stays on her lap. No claw and no crossing. |
+| 3 | His head passed close to the lens (f121–131). | The 1.95 s key is 0.5 m further back and higher. |
