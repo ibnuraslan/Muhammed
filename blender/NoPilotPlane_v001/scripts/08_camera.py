@@ -19,7 +19,7 @@ YH = bone_pt(YOU, "head", (0, 0.04, 0.05))          # face centre
 YC = bone_pt(YOU, "spine02", (0, 0, 0.10))          # chest
 CH = bone_pt(CA, "head"); FH = bone_pt(FO, "head")
 COCK_FRONT = ((0.45, 3.18, 1.55), (0.44, 3.15, 1.54))          # outside the windscreen, looking back at his face
-COCK_SIDE = ((-1.15, 2.02, 1.56), (-1.13, 1.97, 1.55))         # front-left corner: face, arms and yoke in one frame
+COCK_SIDE = ((-1.02, 1.76, 1.60), (-1.01, 1.72, 1.59))         # front-left, inside the windscreen pillar: face, arms and yoke
 STAND_FRONT = ((0.30, 3.18, 1.78), (0.29, 3.15, 1.77))          # outside the windscreen right of the centre post: his face while standing
 CENTRE = ((-0.02, 1.08, 1.76), (0.0, 1.02, 1.75))              # between the pilot seats, looking aft
 WINDOW = ((-0.52, 1.50, 1.32), (-0.52, 1.56, 1.31))            # captain's eye line, out of the windscreen
