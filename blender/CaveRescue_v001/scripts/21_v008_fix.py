@@ -2,7 +2,8 @@
 - 6. The "giant white ball" in the chamber pool (and the white disc at the far end of the tunnel) was the sky-blue world
   background seen through the open end of the passage tube. Camera rays now see black while the camera is in the caves
   (713-1908); the sky stays for the outdoor and tunnel-mouth shots.
-- 3. Death beat (994-1105): medium shot from in front of the lone diver as he slows and goes still, face down, his lamp
+- 6b. The ball itself was DiverA's rim point light seen through the water; rim lights are now invisible to camera, glossy and transmission rays.
+- 3. Death beat (994-1105): medium shot from behind and above the lone diver as he slows and goes still, face down, his lamp
   fading (his face is never shown); the camera glides slowly in.
 - 7. Ending (2062-2268): the camera rises over the stretcher and the people (never through them) and settles on a medium
   push-in on the coach and the boys outside in daylight, faces to camera.
@@ -12,7 +13,14 @@ from mathutils import Vector as V
 OUT = sys.argv[sys.argv.index("--") + 1]
 sc = bpy.context.scene; cam = sc.camera; aim = cam.constraints[0].target
 bg = sc.world.node_tree.nodes["Background"].inputs["Strength"]
-s0 = bg.default_value
+s0 = 1.0      # the sky's own strength (v007); never read it back from an animated socket
+wad = sc.world.node_tree.animation_data
+if wad and wad.action:
+    for lay in wad.action.layers:
+        for st in lay.strips:
+            for cb in st.channelbags:
+                for fc in list(cb.fcurves):
+                    if fc.data_path == 'nodes["Background"].inputs[1].default_value': cb.fcurves.remove(fc)
 for f, v in ((1, s0), (712, s0), (713, 0.0), (1908, 0.0), (1909, s0)):
     bg.default_value = v; bg.keyframe_insert("default_value", frame=f)
 fcb = sc.world.node_tree.animation_data.action
@@ -46,16 +54,25 @@ def override(f0, f1, cpts, apts, lpts):
         setk(CL, f, fc_(f)); setk(AL, f, fa_(f)); setk(LF, f, fl_(f)[0] if hasattr(fl_(f), "__len__") else fl_(f))
     for F in (CL, AL, LF):
         for fc in F: fc.update()
-# death beat
+# death beat: from behind and above the lone diver (tanks, back and fins read; a front view read as a face)
+dc = bpy.data.objects["DiverC"]
+def spine(f):
+    sc.frame_set(f); return dc.matrix_world @ dc.pose.bones["spine03"].head
+P = {f: spine(f) for f in (994, 1050, 1105)}
 override(994, 1105,
-         [(994, V((400.85, -22.2, -3.25))), (1050, V((400.82, -22.1, -3.28))), (1105, V((400.8, -22.0, -3.3)))],
-         [(994, V((400.5, -20.3, -3.4))), (1050, V((400.5, -20.3, -3.45))), (1105, V((400.5, -20.3, -3.5)))],
-         [(994, V((30, 0, 0))), (1050, V((31, 0, 0))), (1105, V((32, 0, 0)))])
-# ending: from the current camera at 2061 up over the group, then onto the coach and the boys
+         [(994, P[994] + V((0.5, 1.75, 0.6))), (1050, P[1050] + V((0.5, 1.6, 0.55))), (1105, P[1105] + V((0.45, 1.5, 0.5)))],
+         [(994, P[994]), (1050, P[1050]), (1105, P[1105])],
+         [(994, V((28, 0, 0))), (1050, V((28, 0, 0))), (1105, V((29, 0, 0)))])
+# ending: from the stretcher shot round the outside of the group (never over bare ground, never through people) onto the coach and the boys
 c61 = V([fc.evaluate(2061) for fc in CL]); a61 = V([fc.evaluate(2061) for fc in AL]); l61 = LF[0].evaluate(2061)
+c40 = V([fc.evaluate(2040) for fc in CL]); a40 = V([fc.evaluate(2040) for fc in AL])
 override(2062, 2268,
-         [(2040, V([fc.evaluate(2040) for fc in CL])), (2061, c61), (2095, V((0.0, -13.0, 3.0))), (2145, V((2.4, -18.0, 2.2))), (2200, V((1.6, -18.3, 1.5))), (2268, V((1.4, -18.6, 1.45)))],
-         [(2040, V([fc.evaluate(2040) for fc in AL])), (2061, a61), (2095, V((0.6, -14.0, 1.0))), (2145, V((1.4, -15.2, 1.1))), (2200, V((1.5, -15.3, 1.15))), (2268, V((1.2, -15.3, 1.15)))],
-         [(2040, V((l61, 0, 0))), (2061, V((l61, 0, 0))), (2145, V((27, 0, 0))), (2268, V((26, 0, 0)))])
+         [(2040, c40), (2061, c61), (2100, V((3.4, -12.0, 1.9))), (2140, V((4.3, -16.0, 1.7))), (2190, V((2.2, -18.4, 1.5))), (2268, V((1.4, -18.6, 1.45)))],
+         [(2040, a40), (2061, a61), (2100, V((1.2, -14.6, 1.3))), (2140, V((1.2, -15.2, 1.2))), (2190, V((1.3, -15.3, 1.15))), (2268, V((1.2, -15.3, 1.15)))],
+         [(2040, V((l61, 0, 0))), (2061, V((l61, 0, 0))), (2140, V((27, 0, 0))), (2268, V((26, 0, 0)))])
+# 6. the "white ball": the divers' rim lights (point lights, 15 cm radius) seen through the water. Light only, never seen.
+for o in bpy.data.objects:
+    if o.type == 'LIGHT' and o.name.endswith("_Rim"):
+        o.visible_camera = False; o.visible_glossy = False; o.visible_transmission = False; o.visible_diffuse = True
 print("V008_FIX_OK")
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
