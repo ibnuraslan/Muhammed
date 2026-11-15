@@ -530,8 +530,8 @@ KEYS = [  # frame, cam, aim, lens
     (1868, V(6.0, -1.25, 1.45), V(9.45, -1.0, 1.4), 22), (1930, V(6.2, -0.5, 0.8), V(9.45, -1.0, 1.55), 22),
     (1950, V(7.2, -0.1, 1.75), V(7.2, 3.1, 1.95), 24), (1972, V(7.4, 1.3, 2.2), V(7.1, 3.1, 2.0), 24), (1998, V(7.1, 3.0, 2.45), V(7.3, 6.0, 1.8), 26),
     (2035, V(8.3, 5.2, 3.2), V(8.6, 7.0, 0.1), 28), (2100, V(8.9, 6.1, 2.2), V(10.2, 11.5, 1.2), 30),
-    (2180, V(8.0, 10.6, 1.8), V(10.1, 11.8, 1.5), 32), (2260, V(8.3, 12.9, 1.75), V(10.1, 11.8, 1.55), 32),
-    (2340, V(8.5, 13.1, 1.9), V(10.1, 11.8, 1.6), 32)]   # vNEXT: arc to a front three-quarter so both faces read at the end (was backs only)
+    (2180, V(8.0, 10.6, 1.8), V(10.1, 11.8, 1.5), 32), (2260, V(8.0, 12.85, 1.75), V(10.1, 11.8, 1.55), 32),
+    (2340, V(8.1, 13.05, 1.9), V(10.1, 11.8, 1.6), 32)]   # vNEXT: arc to a front three-quarter so both faces read at the end (was backs only)
 KEYS = sorted(KEYS + DYN, key=lambda k: k[0])
 fc_ = catmull([(f, c) for f, c, a_, l in KEYS]); fa_ = catmull([(f, a_) for f, c, a_, l in KEYS]); fl_ = catmull([(f, float(l)) for f, c, a_, l in KEYS])
 for f in list(range(1, 2341, 2)) + [2340]:
