@@ -123,8 +123,8 @@ for fc in _fcurves(wn.animation_data.action):
 # water colour turns muddy once it is over land, foam churn on the flood
 for mname in ("M_Wave",):
     nt = bpy.data.materials[mname].node_tree; b = nt.nodes["Principled BSDF"]; fv = nt.nodes["FOAM_BASE"]; nz = nt.nodes["NZ"]
-    for t, colr, foam in ((0, (0.02, 0.2, 0.28), 0.0), (20.6, (0.02, 0.2, 0.28), 0.15), (22.0, (0.030, 0.022, 0.012), 0.16),
-                          (30.0, (0.030, 0.022, 0.012), 0.14), (31.6, (0.04, 0.03, 0.016), 0.0), (40, (0.04, 0.03, 0.016), 0.0)):
+    for t, colr, foam in ((0, (0.02, 0.2, 0.28), 0.0), (20.6, (0.02, 0.2, 0.28), 0.05), (22.0, (0.030, 0.022, 0.012), 0.035),
+                          (30.0, (0.030, 0.022, 0.012), 0.03), (31.6, (0.04, 0.03, 0.016), 0.0), (40, (0.04, 0.03, 0.016), 0.0)):
         b.inputs["Base Color"].default_value = (*colr, 1); b.inputs["Base Color"].keyframe_insert("default_value", frame=F(t))
         fv.outputs[0].default_value = foam; fv.outputs[0].keyframe_insert("default_value", frame=F(t))
     for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.06), (31.0, 0.06), (32.0, 0.1)):   # vNEXT: rough muddy water, no sun-glare blobs

@@ -173,8 +173,8 @@ k.stand(T(10.4), T(12.4), (-3.5, 44.8), 180, head=(-10, 0))
 k.go([(-3.5, 44.8), (-3.7, 42.3)], T(12.4), T(12.95), run=True, kid=True)
 P["KidA"].key_arms(T(0), T(12.8), lambda f: {"R": "point"} if T(10.9) <= f <= T(12.2) else ("swing" if T(8.6) <= f <= T(10.4) else "run"))
 k = P["KidB"]
-k.go([(6.0, 8), (6.5, 28), (7.5, 44)], T(0.1), T(3.6), run=True, kid=True)
-k.go([(7.5, 44), (11, 52), (8, 60), (4, 54)], T(3.6), T(7.4), run=True, kid=True)
+k.go([(5.0, 10.6), (5.8, 30.6), (6.4, 48.4)], T(0), T(3.4), run=True, kid=True)   # vNEXT: KidB runs beside KidA
+k.go([(6.4, 48.4), (11, 52), (8, 60), (4, 54)], T(3.4), T(7.4), run=True, kid=True)
 k.stand(T(7.4), T(8.8), (4, 54), 190, head=(-10, 0))
 k.go([(4, 54), (6, 50), (8.5, 47)], T(8.8), T(10.6), kid=True)
 k.stand(T(10.6), T(12.4), (8.5, 47), 185, head=(-10, 0))
