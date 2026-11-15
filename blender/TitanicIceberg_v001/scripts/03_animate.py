@@ -244,8 +244,8 @@ for f, (cp, pitch) in CAMP.items():
     # hands on the camera body sides, palms in
     st.hand("L", f, cp + Vector((0.165, 0.09, 0.07)), (0, 1, 0.15), (-1, 0, 0), pole=cp + Vector((0.6, -0.4, -0.5)), curl=48, thumb=42)
     st.hand("R", f, cp + Vector((-0.06, 0.02, -0.035)), (0.15, 1, 0.0), (0, 0, 1), pole=cp + Vector((-0.6, -0.4, -0.5)), curl=22, thumb=25)
-STP = [(0, (2, 0, 0), (-2, 6), 0.0), (25, (3, 1, 0), (6, 3), 0.005), (50, (6, 0, 0), (24, 0), 0.01), (80, (7, -1, 0), (28, -2), 0.015),
-       (100, (8, 0, 0), (30, 0), 0.02), (112, (9, 0, 0), (31, 0), 0.025), (125, (6, 0, 0), (12, 0), 0.015), (145, (3, 0, 0), (-4, 2), 0.0),
+STP = [(0, (2, 0, 0), (-2, 6), 0.0), (25, (2, 1, 0), (-3, 8), 0.0), (50, (2, 0, 0), (-4, 9), 0.0), (80, (3, -1, 0), (-3, 7), 0.0),   # v013: no camera in hand - he looks out toward the berg
+       (100, (2, 0, 0), (-4, 6), 0.0), (112, (2, 0, 0), (-4, 6), 0.0), (125, (3, 0, 0), (-4, 5), 0.0), (145, (3, 0, 0), (-4, 2), 0.0),
        (175, (4, 2, 0), (-6, 6), 0.0), (230, (2, 5, 0), (-3, 9), 0.0), (300, (3, 3, 0), (-4, 5), 0.0), (360, (2, 3, 0), (-4, 4), 0.0)]
 for f, sp_, hd, cr in STP:   # breathing + a small weight shift side to side over planted feet
     sh = 0.015 * math.sin(f / 60 * 1.3)
@@ -666,13 +666,12 @@ for fc in all_fcurves(st.o):
 # v010 shot B: both hands on the camera - it rises to eye level, he clicks, then lowers it (camera rides the rig, hands placed on it)
 co_rig = bc.constraints.new('CHILD_OF'); co_rig.name = "InRig"; co_rig.target = st.o
 co_rig.inverse_matrix = Matrix.Identity(4)
-for f_, a_, b_ in ((0, 1.0, 0.0), (431, 1.0, 0.0), (432, 0.0, 1.0)):
+for f_, a_, b_ in ((0, 0.0, 1.0),):   # v013: the camera stands on its tripod for the whole film
     co_.influence = a_; co_.keyframe_insert("influence", frame=f_)
     co_rig.influence = b_; co_rig.keyframe_insert("influence", frame=f_)
 bc.rotation_mode = 'QUATERNION'
 _l0, _q0, _s0 = bc.matrix_basis.decompose()
-bc.location = _l0; bc.rotation_quaternion = _q0; bc.keyframe_insert("location", frame=431); bc.keyframe_insert("rotation_quaternion", frame=431)
-CAMB = [(432, 0.38, 1.22, 2), (920, 0.38, 1.22, 2)]   # v012: on a tripod at the rail beside him (x offset below)
+CAMB = [(0, 0.38, 1.22, 2), (920, 0.38, 1.22, 2)]   # v012: on a tripod at the rail beside him (x offset below)
 for f_, dy, dz, pit in CAMB:
     M_ = Matrix.Translation(Vector((SP.x + 0.55, SP.y + dy, DK.z + dz))) @ Matrix.Rotation(R_(180), 4, 'Z') @ Matrix.Rotation(R_(pit), 4, 'X')
     l_, q_, _ = M_.decompose(); bc.location = l_; bc.rotation_quaternion = q_
@@ -690,7 +689,10 @@ for f_ in range(432, 612, 12):
     st.pose(f_, (SP.x, SP.y), YAW, flex=1.0, spine=(1 + 1.0 * math.sin(f_ / 60 * 2.2), 0, 0), head=(-6 + 3 * up, 4), feet=FEET, crouch=0.0)   # v012: head up, looking out at the berg
 for f_, kw in ((432, dict(brow=0.4, lids=0.2)), (500, dict(brow=-0.2, lids=-0.6, jaw=1)), (526, dict(brow=0.3, lids=-0.2)), (575, dict(brow=1.0, lids=0.8, jaw=4, smile=0.4))):
     face(st.R, f_, **kw)
-for f_ in range(432, 924, 12):   # v012: hands off the camera - arms relaxed at his sides (out of the head-and-shoulders frames)
+for fc in all_fcurves(st.o):           # v013: clear every hand/finger key 0-924, then key relaxed arms
+    if any(k_ in fc.data_path for k_ in ("IK_hand", "finger", "wrist", "Pole_elbow")):
+        for k in [k for k in fc.keyframe_points if k.co.x <= 924][::-1]: fc.keyframe_points.remove(k)
+for f_ in range(0, 924, 12):   # v012: hands off the camera - arms relaxed at his sides (out of the head-and-shoulders frames)
     sc.frame_set(f_); bpy.context.view_layer.update()
     shL = st.o.matrix_world @ st.R.PB["upperarm01.L"].head; shR = st.o.matrix_world @ st.R.PB["upperarm01.R"].head
     sideR = Vector((shR.x - shL.x, shR.y - shL.y, 0)).normalized()
@@ -712,7 +714,7 @@ for ob in TRI:
     for c_ in list(ob.users_collection): c_.objects.unlink(ob)
     D.collections["Steamship"].objects.link(ob); ob.data.materials.append(wood)
     Mw = ob.matrix_basis.copy(); ob.parent = st.o; ob.matrix_parent_inverse = Matrix.Identity(4); ob.matrix_basis = Mw
-    for f_, v_ in ((0, True), (432, False)):
+    for f_, v_ in ((0, False),):
         ob.hide_render = v_; ob.keyframe_insert("hide_render", frame=f_)
     set_interp(ob, 'CONSTANT', lambda p_: p_ == "hide_render")
 # the click: the lens-board shutter kicks once (tiny camera jolt) at 476
