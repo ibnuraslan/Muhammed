@@ -25,7 +25,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 09 | DonationBin | `claude/beautiful-ptolemy-c5vrcq` | `blender/DonationBin_v009/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–2388)** — replaces v008 |
 | 10 | BellyFat | `claude/beautiful-ptolemy-c5vrcq` | `blender/BellyFat_v010/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1273)** |
 | 11 | WW1Assassination | `claude/beautiful-ptolemy-c5vrcq` | `blender/WW1Assassination_v007/` **checked moving + synced to your voiceover: READY TO RENDER (frames 1–1826)** |
-| 12 | NoPilotPlane | `claude/beautiful-ptolemy-c5vrcq` | `blender/NoPilotPlane_v010/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–3481)** |
+| 12 | NoPilotPlane | `claude/beautiful-ptolemy-c5vrcq` | `blender/NoPilotPlane_v010/` **ON HOLD: DO NOT RENDER (client found handset through head, captain through seat, twisted hands; fix in progress)** |
 | 13 | FrozenTearsGun | `claude/beautiful-ptolemy-c5vrcq` | `blender/FrozenTearsGun_v010/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1655)** |
 | 14 | ElectricianPolice | `claude/beautiful-ptolemy-c5vrcq` | `blender/ElectricianPolice_v010/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1446)** |
 | 15 | GameBoxBullet | `claude/beautiful-ptolemy-c5vrcq` | `blender/GameBoxBullet_v010/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1311)** |

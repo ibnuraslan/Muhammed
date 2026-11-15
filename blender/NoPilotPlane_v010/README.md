@@ -1,4 +1,4 @@
-# NoPilotPlane_v010: fixed and built to your voiceover (READY TO RENDER)
+# NoPilotPlane_v010: ON HOLD, DO NOT RENDER (client found faults; replacement coming)
 
 This is Connect12's **NoPilotPlane_v009g** (branch `claude/connect12-no-pilot-plane`, commit 2c7cdd2). It was built straight to your voiceover timing, so each beat starts on its words in `NoPilotPlane_v010_VO.mp3` with no retime.
 
