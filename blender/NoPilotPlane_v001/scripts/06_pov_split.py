@@ -5,7 +5,9 @@ blender -b in.blend --python 06_pov_split.py -- out.blend
   object '<name>.headpart' (same armature + modifiers); the rest stay.
 - the .headpart objects, eyes, teeth and tongue: visible_camera keyed False from frame 1, True from F(71.4) (CONSTANT)."""
 import sys, bpy, bmesh
-out = sys.argv[sys.argv.index("--") + 1]
+A_ = sys.argv[sys.argv.index("--") + 1:]
+out = A_[0]
+POV = "pov" in A_[1:]          # v009: third-person film; the head split only runs for the old head-cam build
 FPS = 60
 def F(t): return 1 + round(t * FPS)
 REVEAL = F(71.4)
@@ -53,48 +55,49 @@ def key_render(o, before_hidden, cam_before=None):
             v = not h
             if r == "visible_camera" and cam_before is not None and f_ < REVEAL: v = cam_before
             setattr(o, r, v); o.keyframe_insert(r, frame=f_)
-origs = []
-for nm in ("YOU.body", "YOU.male_casualsuit04"):
-    src = bpy.data.objects[nm]; cp = src.copy(); cp.data = src.data.copy(); cp.name = nm + ".reveal"
-    for c in src.users_collection: c.objects.link(cp)
-    cp.parent = src.parent; cp.matrix_parent_inverse = src.matrix_parent_inverse.copy()
-    for m in cp.modifiers:
-        if m.type == 'ARMATURE': m.object = Y
-    origs.append(cp)
-parts = [split(bpy.data.objects["YOU.body"]), split(bpy.data.objects["YOU.male_casualsuit04"])]
-for o in origs: key_render(o, True)
-for nm in ("YOU.body", "YOU.male_casualsuit04"): key_render(bpy.data.objects[nm], False)
-for o in parts: key_render(o, False, cam_before=False)      # head pieces: shadows only before the reveal, gone after
-for nm in ("YOU.high-poly", "YOU.teeth_base", "YOU.tongue01"):
-    parts.append(bpy.data.objects[nm]); key_cam(parts[-1])
-# Blender 5 layered actions: set CONSTANT on every channelbag curve of these objects
-for o in parts + origs + [bpy.data.objects["YOU.body"], bpy.data.objects["YOU.male_casualsuit04"]]:
-    act = o.animation_data.action
-    for lay in getattr(act, "layers", []):
-        for st in lay.strips:
-            for cb in st.channelbags:
-                for fc in cb.fcurves:
-                    if fc.data_path.startswith("visible_"):
-                        for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
-# where the 8 cm near clip cuts into YOU's own limb, the camera would see the dark inside of the mesh (black blobs):
-# make backfaces transparent to camera rays on all of YOU's materials, so a clipped limb shows the cockpit behind it
-done = set()
-for o in bpy.data.objects:
-    if o.type != 'MESH' or not o.name.startswith("YOU.") or not any(k in o.name for k in ("body", "casualsuit", "shoes")): continue
-    for sl in o.material_slots:
-        m = sl.material
-        if not m or m.name in done or not m.use_nodes: continue
-        done.add(m.name); nt = m.node_tree
-        outn = [n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL' and n.is_active_output] or [n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL']
-        if not outn or not outn[0].inputs["Surface"].is_linked: continue
-        outn = outn[0]; src = outn.inputs["Surface"].links[0].from_socket
-        geo = nt.nodes.new("ShaderNodeNewGeometry"); lp = nt.nodes.new("ShaderNodeLightPath")
-        mul = nt.nodes.new("ShaderNodeMath"); mul.operation = 'MULTIPLY'
-        nt.links.new(geo.outputs["Backfacing"], mul.inputs[0]); nt.links.new(lp.outputs["Is Camera Ray"], mul.inputs[1])
-        tr = nt.nodes.new("ShaderNodeBsdfTransparent"); mx = nt.nodes.new("ShaderNodeMixShader")
-        nt.links.new(mul.outputs[0], mx.inputs[0]); nt.links.new(src, mx.inputs[1]); nt.links.new(tr.outputs[0], mx.inputs[2])
-        nt.links.new(mx.outputs[0], outn.inputs["Surface"])
-print("BACKFACE_TRANSPARENT", sorted(done))
+parts, origs = [], []
+if POV:
+    for nm in ("YOU.body", "YOU.male_casualsuit04"):
+        src = bpy.data.objects[nm]; cp = src.copy(); cp.data = src.data.copy(); cp.name = nm + ".reveal"
+        for c in src.users_collection: c.objects.link(cp)
+        cp.parent = src.parent; cp.matrix_parent_inverse = src.matrix_parent_inverse.copy()
+        for m in cp.modifiers:
+            if m.type == 'ARMATURE': m.object = Y
+        origs.append(cp)
+    parts = [split(bpy.data.objects["YOU.body"]), split(bpy.data.objects["YOU.male_casualsuit04"])]
+    for o in origs: key_render(o, True)
+    for nm in ("YOU.body", "YOU.male_casualsuit04"): key_render(bpy.data.objects[nm], False)
+    for o in parts: key_render(o, False, cam_before=False)      # head pieces: shadows only before the reveal, gone after
+    for nm in ("YOU.high-poly", "YOU.teeth_base", "YOU.tongue01"):
+        parts.append(bpy.data.objects[nm]); key_cam(parts[-1])
+    # Blender 5 layered actions: set CONSTANT on every channelbag curve of these objects
+    for o in parts + origs + [bpy.data.objects["YOU.body"], bpy.data.objects["YOU.male_casualsuit04"]]:
+        act = o.animation_data.action
+        for lay in getattr(act, "layers", []):
+            for st in lay.strips:
+                for cb in st.channelbags:
+                    for fc in cb.fcurves:
+                        if fc.data_path.startswith("visible_"):
+                            for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
+    # where the 8 cm near clip cuts into YOU's own limb, the camera would see the dark inside of the mesh (black blobs):
+    # make backfaces transparent to camera rays on all of YOU's materials, so a clipped limb shows the cockpit behind it
+    done = set()
+    for o in bpy.data.objects:
+        if o.type != 'MESH' or not o.name.startswith("YOU.") or not any(k in o.name for k in ("body", "casualsuit", "shoes")): continue
+        for sl in o.material_slots:
+            m = sl.material
+            if not m or m.name in done or not m.use_nodes: continue
+            done.add(m.name); nt = m.node_tree
+            outn = [n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL' and n.is_active_output] or [n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL']
+            if not outn or not outn[0].inputs["Surface"].is_linked: continue
+            outn = outn[0]; src = outn.inputs["Surface"].links[0].from_socket
+            geo = nt.nodes.new("ShaderNodeNewGeometry"); lp = nt.nodes.new("ShaderNodeLightPath")
+            mul = nt.nodes.new("ShaderNodeMath"); mul.operation = 'MULTIPLY'
+            nt.links.new(geo.outputs["Backfacing"], mul.inputs[0]); nt.links.new(lp.outputs["Is Camera Ray"], mul.inputs[1])
+            tr = nt.nodes.new("ShaderNodeBsdfTransparent"); mx = nt.nodes.new("ShaderNodeMixShader")
+            nt.links.new(mul.outputs[0], mx.inputs[0]); nt.links.new(src, mx.inputs[1]); nt.links.new(tr.outputs[0], mx.inputs[2])
+            nt.links.new(mx.outputs[0], outn.inputs["Surface"])
+    print("BACKFACE_TRANSPARENT", sorted(done))
 # v008b prop hygiene (qa_check PROPMOVE / ATTACH):
 # - uniform details followed their bones through a CHILD_OF constraint (parent None, so they read as props moving
 #   by themselves): parent them to the bone for real, keeping the frame-1 placement
@@ -120,7 +123,7 @@ for o in list(bpy.data.objects):
 print("PROPFIX bone-parented", nb, "oxygen drops", nm)
 # v008c: 3 cm near clip. YOU's arms are posed to stay >= 10 cm deep (lens2 check); the head meshes are camera-invisible,
 # so a small clip only stops a near shoulder or forearm at the frame edge from being cut open
-bpy.context.scene.camera.data.clip_start = 0.03
+bpy.context.scene.camera.data.clip_start = 0.03 if POV else 0.05
 bpy.context.scene.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)
-print("POVSPLIT saved", out, [o.name for o in parts])
+print("POVSPLIT saved", out, "pov" if POV else "third-person", [o.name for o in parts])

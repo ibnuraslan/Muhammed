@@ -14,7 +14,19 @@ OUT = ARGS[0]; NOBAKE = "nobake" in ARGS
 sc = bpy.context.scene
 random.seed(7)
 FPS = 60
-def F(t): return 1 + round(t * FPS)
+# v009: the film is built to the director's VO beat seconds. Action is authored in the old (v008) beat seconds and
+# mapped piecewise-linearly onto the new ones, so every beat starts exactly on its new frame (1 + round(s * 60)).
+OLD_BEATS = [0.0, 5.8, 9.0, 12.0, 14.1, 16.8, 19.7, 25.2, 26.9, 33.7, 36.5, 38.8, 42.5, 47.1, 53.5, 56.8, 64.6, 68.9, 71.9, 73.5]
+NEW_BEATS = [0.0, 4.06, 6.74, 9.16, 10.90, 13.22, 15.50, 20.40, 21.24, 25.82, 28.66, 30.32, 33.42, 37.06, 41.30, 44.20, 49.56, 52.48, 55.72, 58.0]
+def remap(t):
+    if t <= 0: return 0.0
+    for i in range(len(OLD_BEATS) - 1):
+        a, b = OLD_BEATS[i], OLD_BEATS[i + 1]
+        if t <= b: return NEW_BEATS[i] + (t - a) / (b - a) * (NEW_BEATS[i + 1] - NEW_BEATS[i])
+    return NEW_BEATS[-1] + (t - OLD_BEATS[-1])
+def F(t): return 1 + round(remap(t) * FPS)
+def FN(t): return 1 + round(t * FPS)          # new (film) seconds, used by the camera cut list
+END = FN(58.0)
 ROW0, PITCH = -2.4, 0.81
 cH = coll("HUMANS")
 
@@ -160,7 +172,7 @@ for (arm, row, side, k, x, y) in PASS:
     pose_passenger(arm, row, side, k, x, y, DIVE1 + 30)
     # breathing: slow chest rise/fall and a slight head nod, random phase (unconscious people still breathe)
     SP = dict(arm["SP"]); ph = rnd.uniform(0, 6.28); per = rnd.uniform(4.0, 5.2) * FPS
-    for f in list(range(1, DIVE0 - 40, 40)) + list(range(DIVE1 + 70, 4411, 40)):
+    for f in list(range(1, DIVE0 - 40, 40)) + list(range(DIVE1 + 70, END + 1, 40)):
         b = math.sin(2 * math.pi * f / per + ph)
         fk_spine(R, f, flex=SP["flex"] + 1.6 * b, side=SP["side"], twist=SP["twist"], hflex=SP["hflex"] + 1.2 * b, hside=SP["hside"], htwist=SP["htwist"])
 
@@ -168,12 +180,13 @@ for (arm, row, side, k, x, y) in PASS:
 CA = OB["CAPT"]; RC = Rig(CA)
 # lying on his right side, head toward the captain seat, knees drawn up; back to the left wall
 CA.location = (0.42, 0.40, 0.125); CA.rotation_euler = (R_(-90), 0, R_(90))
-fk_leg(RC, "L", 1, hip=55, knee=75, splay=6); fk_leg(RC, "R", 1, hip=35, knee=60, splay=-4)
-fk_spine(RC, 1, flex=18, side=0, twist=8, hflex=-10, hside=10, htwist=20)
-fk_arm(RC, "L", 1, down=15, fwd=60, elbow=30); fk_arm(RC, "R", 1, down=20, fwd=80, elbow=55)
-for f in range(40, 4411, 40):          # breathing
+# v009: on his back, face up and turned a little toward the cockpit (director: lying on his back, face visible)
+fk_leg(RC, "L", 1, hip=18, knee=30, splay=8); fk_leg(RC, "R", 1, hip=8, knee=14, splay=-6)
+fk_spine(RC, 1, flex=2, side=0, twist=0, hflex=-6, hside=0, htwist=25)
+fk_arm(RC, "L", 1, down=70, fwd=8, elbow=20); fk_arm(RC, "R", 1, down=62, fwd=14, elbow=35)
+for f in range(40, END + 1, 40):          # breathing
     b = math.sin(2 * math.pi * f / (4.6 * FPS))
-    fk_spine(RC, f, flex=18 + 1.8 * b, side=0, twist=8, hflex=-10 + 1.2 * b, hside=10, htwist=20)
+    fk_spine(RC, f, flex=2 + 1.8 * b, side=0, twist=0, hflex=-6 + 1.2 * b, hside=0, htwist=25)
 CA.keyframe_insert("location", frame=F(34.0)); CA.keyframe_insert("rotation_euler", frame=F(34.0))
 for t_, dy, rz in ((36.0, 0.05, 3), (38.5, 0.10, 6), (41.0, 0.08, 4), (44.5, 0.03, 1), (46.0, 0.02, 0)):   # slides and rolls with the dive
     CA.location = (0.42, 0.40 + dy, 0.125); CA.rotation_euler = (R_(-90), R_(rz), R_(90))
@@ -201,11 +214,15 @@ fo_pose(F(28.8), (0.47, 1.50, -0.18), flex=-5, side=-10, hflex=-15, hside=-20, a
 fo_pose(F(29.8), (0.45, 1.36, -0.14), rz=200, flex=-10, side=8, hflex=-30, hside=10, armL=(55, -10, 45, 50), armR=(55, 10, 25, 50))
 fo_pose(F(30.6), (0.43, 1.27, -0.16), rz=205, flex=-8, side=12, hflex=-35, hside=15, armL=(55, -5, 40, 40), armR=(55, 5, 25, 55))
 fo_pose(F(31.4), (0.56, 1.18, -0.25), rz=210, rx=-15, flex=-5, side=10, hflex=-30, hside=15, armL=(55, 0, 25, 60), armR=(55, 0, 25, 60))
-fo_pose(F(32.4), (0.76, 0.98, -0.48), rz=215, rx=-30, flex=-15, hflex=-30, hside=25, legs=(70, 40), armL=(55, 0, 25, 60), armR=(55, 0, 25, 60))
-fo_pose(F(33.4), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=10, side=10, hflex=35, hside=30, legs=(80, 20), armL=(55, 0, 25, 60), armR=(55, 0, 25, 60))
-fo_pose(F(38.0), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=18, side=14, hflex=45, hside=35, legs=(80, 20), armL=(55, 0, 25, 60), armR=(55, 0, 25, 60))
-for f in range(F(38.0) + 40, 4410, 40):
-    fo_pose(f, (0.74, 0.96, -0.55), rz=200, rx=-20, flex=18 + 1.8 * math.sin(2 * math.pi * f / (4.3 * FPS)), side=14, hflex=45 + 1.2 * math.sin(2 * math.pi * f / (4.3 * FPS)), hside=35, legs=(80, 20), armL=(55, 0, 25, 60), armR=(55, 0, 25, 60))
+# v009: he ends on his back on the floor along the right side, head toward the rear wall, face up (director).
+# The rig origin sits by the feet, the head ~1.5 m along the body: origin by his seat, head at y ~ -0.25.
+FLOOR_FO = dict(rx=-90, rz=180, flex=2, side=0, hflex=-8, hside=0, htwist=-20, legs=(14, 22), armL=(68, 8, 20, 30), armR=(64, 12, 30, 30))
+FLOOR_P = (0.85, 1.25, 0.125)
+fo_pose(F(32.4), (0.78, 1.30, 0.40), rx=-50, rz=195, flex=-5, side=0, hflex=-20, hside=0, legs=(50, 40), armL=(55, 0, 25, 60), armR=(55, 0, 25, 60))
+fo_pose(F(33.4), FLOOR_P, **FLOOR_FO)
+for f in range(F(33.4) + 40, END, 40):
+    b = math.sin(2 * math.pi * f / (4.3 * FPS))
+    fo_pose(f, FLOOR_P, **dict(FLOOR_FO, flex=2 + 1.8 * b, hflex=-8 + 1.2 * b))
 
 # ------------------------------------------------------------------ pilot uniform details (bone-attached; director v006)
 M_gold = mat("M_uniform_gold", (0.95, 0.68, 0.18), rough=0.3, metal=1.0)
@@ -351,7 +368,7 @@ kv(WARN, "default_value", 1, 0.0); kv(LA, "energy", 1, 0.0); kv(LAC, "energy", 1
 f = F(33.7); on = True
 while f < F(46.5):
     fade = 1.0 if f < F(43) else max(0.0, 1 - (f - F(43)) / (F(46.5) - F(43)))
-    kv(WARN, "default_value", f, 40.0 * fade if on else 0.5); kv(LA, "energy", f, 70.0 * fade if on else 0.0); kv(LAC, "energy", f, 150.0 * fade if on else 0.0)
+    kv(WARN, "default_value", f, 40.0 * fade if on else 0.5)     # v009: no red point lights (they washed the canopy and sky pink)
     f += 12; on = not on
 kv(WARN, "default_value", F(46.6), 0.5); kv(LA, "energy", F(46.6), 0.0); kv(LAC, "energy", F(46.6), 0.0)
 for idb in (bpy.data.materials["M_warn"].node_tree, LA, LAC):
@@ -369,11 +386,11 @@ FL = [(0.0, 0, 0, 0, 3000, 120), (33.7, 0, 0, 0, 3000, 120), (34.6, 8, 6, 0, 298
 def flk(i): return catmull([(F(r[0]), r[i]) for r in FL])
 P_, R2_, H_, A_, V_ = flk(1), flk(2), flk(3), flk(4), flk(5)
 pos = Vector((0, 0)); POS = {}
-for f in range(1, 4411):
+for f in range(1, END + 1):
     hd = R_(H_(f)); pos += Vector((-math.sin(hd), math.cos(hd))) * V_(f) / FPS * math.cos(R_(P_(f)))
     POS[f] = pos.copy()
 TOWN1 = None
-for f in range(1, 4411, 2):
+for f in range(1, END + 1, 2):
     # plane sees the world rotated by the inverse of its attitude
     att = (Matrix.Rotation(R_(H_(f)), 3, 'Z') @ Matrix.Rotation(R_(-P_(f)), 3, 'X') @ Matrix.Rotation(R_(R2_(f)), 3, 'Y'))
     inv = att.inverted()
@@ -402,7 +419,7 @@ town("TOWN_DIVE", c1.x, c1.y, 1800, 1400, 1.6)
 c2 = at(F(53.5), 2600)                     # town before the field
 town("TOWN_FIELD", c2.x, c2.y, 900, 500)
 hd = R_(H_(F(60)))
-cf = at(4410, 2600)
+cf = at(END, 2600)
 fm = MB("LONG_FIELD")
 fw = Vector((-math.sin(hd), math.cos(hd)))
 fm.box((cf.x, cf.y, 0.4), (320, 4200, 0.8), mat("M_long_field", (0.22, 0.48, 0.06), rough=0.9, noise=0.35, nscale=0.01), rot=(0, 0, H_(F(60))))
@@ -415,7 +432,7 @@ rvo = rv.obj(cT); rvo.parent = EM
 NEED = [o for o in bpy.data.objects if o.name.startswith("NEEDLE_")]
 for o in NEED:
     base = random.uniform(-120, 120)
-    for f in range(1, 4411, 30):
+    for f in range(1, END + 1, 30):
         t = (f - 1) / FPS
         if F(33.7) <= f <= F(44.0):
             a = base + (f - F(33.7)) * random.uniform(4, 11) * random.choice((-1, 1))
@@ -426,11 +443,11 @@ for o in NEED:
         keyrot(o, f, (0, a, 0))
 ALT = OB["NEEDLE_R3"]
 ALT.animation_data_clear()
-for f in range(1, 4411, 10):
+for f in range(1, END + 1, 10):
     keyrot(ALT, f, (0, -A_(f) * 0.36, 0))   # one turn per 1000 m, unwinding as you sink
 ATT = bpy.data.materials["M_attitude"].node_tree.nodes["ATT"]
 TA = bpy.data.materials["M_tape_alt"].node_tree.nodes["SCROLL"]; TS = bpy.data.materials["M_tape_spd"].node_tree.nodes["SCROLL"]
-for f in range(1, 4411, 6):
+for f in range(1, END + 1, 6):
     ATT.inputs["Rotation"].default_value = (0, 0, R_(-R2_(f))); ATT.inputs["Rotation"].keyframe_insert("default_value", frame=f)
     ATT.inputs["Location"].default_value = (-0.5, -0.5 + P_(f) * 0.012, 0); ATT.inputs["Location"].keyframe_insert("default_value", frame=f)
     TA.inputs["Location"].default_value = (0, A_(f) / 900.0, 0); TA.inputs["Location"].keyframe_insert("default_value", frame=f)
@@ -469,7 +486,7 @@ for i in range(9):
             mo.scale = (1, 1, 0.02); mo.keyframe_insert("scale", frame=F(t0))
             mo.scale = (1, 1, 1.08); mo.keyframe_insert("scale", frame=F(t0 + 0.35)); mo.scale = (1, 1, 0.96); mo.keyframe_insert("scale", frame=F(t0 + 0.6))
             mo.scale = (1, 1, 1.0); mo.keyframe_insert("scale", frame=F(t0 + 0.9))
-            for f in range(F(t0 + 1.0), 4411, 50):
+            for f in range(F(t0 + 1.0), END + 1, 50):
                 keyrot(mo, f, (random.uniform(-8, 8) * (2.5 if f < F(44) else 1), random.uniform(-8, 8) * (2.5 if f < F(44) else 1), 0))
 
 # clouds whipping past beside the plane in the descent, and a bird flock ahead
@@ -581,23 +598,26 @@ for f in (F(11.74), F(11.82), F(11.9), F(11.98)):
 hand("L", F(11.9), (-0.44, -0.62, 1.25), d=(0, 0, 1), n=(1, 0, 0), curl=40)                          # left hand on the frame
 body(F(12.5), (-0.04, -0.80, STAND_Z - 0.02), flex=12, sflex=8, head=(10, 0)); feet(F(12.5), (-0.14, -0.92), (0.06, -0.66))
 H.key_foot("R", F(12.2), Vector((0.04, -0.77)), 180, 0.06)
-# beat 5: look down at the captain, step over him
-body(F(14.1), (0.02, -0.66, STAND_Z - 0.02), flex=14, sflex=20, head=(35, 0))
-hand("L", F(14.1), (-0.44, -0.60, 1.25), d=(0, 0, 1), n=(1, 0, 0), curl=50)
-hand("R", F(12.25), (0.20, -0.70, 0.95), d=(0, 0.3, -1), n=(1, 0, 0), curl=30)          # v008b: after the push the hand drops to the side (no open hand in the air)
-hand("R", F(12.6), (0.22, -0.55, 0.92), d=(0, 0.3, -1), n=(1, 0, 0), curl=30)
-hand("R", F(14.4), (0.36, -0.48, 1.25), d=(0, 0, 1), n=(-1, 0, 0), curl=50)
-feet(F(14.1), (-0.1, -0.92), (0.1, -0.62))
-H.key_foot("L", F(14.25), Vector((-0.07, -0.75)), 180, 0.08); H.key_foot("L", F(14.5), Vector((-0.05, -0.40)), 180, 0)
-H.key_foot("R", F(14.5), Vector((0.1, -0.62)), 180, 0)
-H.key_foot("R", F(14.7), Vector((0.1, -0.3)), 180, 0.10); H.key_foot("R", F(14.9), Vector((0.12, 0.02)), 180, 0)
-body(F(14.9), (0.05, -0.22, STAND_Z - 0.04), flex=16, sflex=22, head=(40, -5))
-H.key_foot("L", F(14.9), Vector((-0.05, -0.40)), 180, 0)
+# beat 5 (v009): step into the doorway, crouch beside the captain to check him (director: a passenger kneeling
+# beside him, face visible), rise and step over him
+H.key_foot("R", F(12.95), Vector((0.05, -0.62)), 180, 0.06)
+body(F(13.2), (-0.06, -0.58, STAND_Z - 0.02), flex=10, sflex=10, head=(30, -10)); feet(F(13.2), (-0.16, -0.66), (0.06, -0.50))
+body(F(13.75), (-0.06, -0.55, STAND_Z - 0.44), flex=34, sflex=24, head=(30, -20))
+body(F(14.5), (-0.06, -0.53, STAND_Z - 0.46), flex=36, sflex=26, head=(28, -25))
+feet(F(14.5), (-0.16, -0.66), (0.06, -0.50))
+hand("L", F(13.2), (-0.44, -0.55, 1.10), d=(0, 0, 1), n=(1, 0, 0), curl=40)            # hand slides down the door frame
+hand("L", F(13.75), (-0.42, -0.48, 0.80), d=(0, 0.3, 1), n=(1, 0, 0), curl=40)
+hand("L", F(14.5), (-0.42, -0.48, 0.80), d=(0, 0.3, 1), n=(1, 0, 0), curl=40)
+hand("R", F(13.75), (0.10, -0.24, 0.52), d=(0, 1, -0.3), n=(0, 0, 1), curl=35)           # on his own right knee
+hand("R", F(14.5), (0.10, -0.22, 0.52), d=(0, 1, -0.3), n=(0, 0, 1), curl=35)
+body(F(14.9), (0.02, -0.30, STAND_Z - 0.04), flex=16, sflex=22, head=(40, -5))
+hand("R", F(14.9), (0.36, -0.40, 1.20), d=(0, 0, 1), n=(-1, 0, 0), curl=50)
+H.key_foot("R", F(14.98), Vector((0.10, -0.22)), 180, 0.12); H.key_foot("R", F(15.1), Vector((0.12, 0.02)), 180, 0)
+H.key_foot("L", F(14.9), Vector((-0.10, -0.50)), 180, 0)
 H.key_foot("L", F(15.15), Vector((-0.03, 0.45)), 180, 0.42); H.key_foot("L", F(15.45), Vector((-0.06, 0.92)), 180, 0)
 body(F(15.4), (0.05, 0.48, STAND_Z + 0.04), flex=10, sflex=18, head=(40, -5))
 H.key_foot("R", F(15.5), Vector((0.12, 0.02)), 180, 0)
 H.key_foot("R", F(15.8), Vector((0.14, 0.5)), 180, 0.40); H.key_foot("R", F(16.1), Vector((0.16, 0.92)), 180, 0)
-hand("L", F(15.0), (-0.44, -0.60, 1.25), d=(0, 0, 1), n=(1, 0, 0), curl=50)
 hand("L", F(15.6), (-0.30, 0.95, 1.40), d=(0, 1, 0), n=(0, 0, -1), curl=50)                         # grabs captain seat headrest
 hand("R", F(15.9), (0.30, 0.95, 1.30), d=(0, 1, 0), n=(0, 0, -1), curl=50)
 POSW = (0.04, 0.88, STAND_Z)
@@ -623,10 +643,10 @@ grip_handset(F(20.9))                                                        # w
 hand("L", F(20.0), (-0.36, 1.10, 1.42), d=(0, 1, 0), n=(0, 0, -1), curl=60)
 for t_ in (21.0, 22.2, 23.4, 24.6, 25.8): hand("L", F(t_), (-0.37 + 0.01 * (t_ % 2), 1.11, 1.43), d=(0, 1, 0), n=(0, 0, -1), curl=60)
 body(F(21.8), POSW, flex=6, sflex=6, head=(0, -5))
-hand("R", F(21.8), (0.16, 1.52, 0.98), d=(-0.3, 0.2, 1), n=(-0.6, -1, 0), curl=80)          # v007d: low and forward, handset >= 15 cm from the eye
+hand("R", F(21.8), (0.14, 1.08, 1.47), d=(-0.4, 0.2, 1), n=(-0.6, -1, 0), curl=80, pole=Vector((0.45, 0.95, 1.05)))   # v009: handset at his mouth
 for i, t in enumerate((22.8, 23.4, 23.9, 24.5, 25.0)):
-    j = 0.012 * (1 if i % 2 else -1)
-    hand("R", F(t), (0.15 + j, 1.50, 1.00 + j), d=(-0.3, 0.1, 1), n=(-0.8, -1, 0), curl=80)
+    j = 0.010 * (1 if i % 2 else -1)
+    hand("R", F(t), (0.14 + j, 1.08, 1.47 + j), d=(-0.4, 0.2, 1), n=(-0.6, -1, 0), curl=80, pole=Vector((0.45, 0.95, 1.05)))
     body(F(t), (POSW[0], POSW[1], POSW[2] - 0.01 * (i % 2)), flex=8 + 3 * (i % 2), sflex=10, head=(5 + 4 * (i % 2), -3))
 # beat 8: silence, lower handset, put it back
 body(F(25.6), POSW, flex=14, sflex=20, head=(30, 0))
@@ -856,7 +876,7 @@ LOOK = [(0.0, 0, -48), (0.6, 4, -38), (1.2, 0, -8), (2.3, -65, -10), (3.4, 53, -
         (64.6, 100, -12), (65.8, 150, -40), (66.9, 168, -8), (67.9, 110, -14), (68.9, 30, -8), (69.6, -14, -6), (70.3, 12, -16), (70.9, -4, -4), (71.4, 0, -8)]
 ROLL = {33.7: 0, 35.5: -6, 36.5: 8, 37.6: -10, 38.8: 6, 40.8: -4, 42.5: 0}
 yaw_f = catmull([(F(t), y) for t, y, p in LOOK]); pit_f = catmull([(F(t), p) for t, y, p in LOOK])
-rol_f = catmull([(1, 0.0)] + [(F(t), r) for t, r in sorted(ROLL.items())] + [(4410, 0.0)])
+rol_f = catmull([(1, 0.0)] + [(F(t), r) for t, r in sorted(ROLL.items())] + [(END, 0.0)])
 def shake(f):
     t = f / FPS; a = 0.0
     if F(21.5) <= f <= F(25.4): a = 0.25
@@ -865,7 +885,7 @@ def shake(f):
     br = Vector((0.15 * math.sin(t * 1.9), 0.1 * math.sin(t * 1.3 + 1), 0.08 * math.sin(t * 0.9)))   # breathing sway, never still
     return Vector((math.sin(t * 37.1) * 0.6 + math.sin(t * 23.3), math.sin(t * 29.7) + math.sin(t * 41.9) * 0.5, math.sin(t * 19.1))) * a + br
 FLOAT0, FLOATR, FLOAT1 = F(71.4), F(72.6), F(73.5)
-FREE = [(FLOAT0, None), (F(72.0), Vector((0.66, 1.62, 1.44))), (FLOATR, Vector((0.56, 1.93, 1.34))), (4410, Vector((0.535, 1.86, 1.31)))]
+FREE = [(FLOAT0, None), (F(72.0), Vector((0.66, 1.62, 1.44))), (FLOATR, Vector((0.56, 1.93, 1.34))), (END, Vector((0.535, 1.86, 1.31)))]
 def eye(f):
     M = YOU.matrix_world; pb = YOU.pose.bones
     e = (M @ pb["eye.L"].head + M @ pb["eye.R"].head) / 2
@@ -881,69 +901,116 @@ def head_look():
     c = YOU.pose.bones["head"].constraints.new('DAMPED_TRACK'); c.target = tgt
     c.track_axis = ("TRACK_NEGATIVE_" if neg else "TRACK_") + "XYZ"[ax]
     c.influence = 0.9
-    for f in range(1, 4411, 3):
+    for f in range(1, END + 1, 3):
         sc.frame_set(f)
         base = YOU.matrix_world @ YOU.pose.bones["neck03"].head
         Rm = Euler((R_(90 + pit_f(f)), 0, R_(yaw_f(f))), 'XYZ').to_matrix()
         tgt.location = base + Rm @ Vector((0, 0, -3.0)); tgt.keyframe_insert("location", frame=f)
+# v009 (director): no head-cam. YOU is seen in third person; the film is a cut list of short shots (<= 2.5 s),
+# camera >= 1.5 m from the people in frame, faces in frame. Times are film (new) seconds.
+def bone_pt(rig, bone, off=(0, 0, 0)):
+    def g(f):
+        sc.frame_set(f); return rig.matrix_world @ rig.pose.bones[bone].head + Vector(off)
+    return g
+def fixed(p):
+    return lambda f: Vector(p)
+YH = bone_pt(YOU, "head", (0, 0.04, 0.05))          # face centre
+YC = bone_pt(YOU, "spine02", (0, 0, 0.10))          # chest
+CH = bone_pt(CA, "head")
+FH = bone_pt(FO, "head")
+def mid(a, b, w=0.5):
+    return lambda f: a(f).lerp(b(f), w)
+COCK_FRONT = ((0.45, 3.05, 1.50), (0.43, 3.02, 1.49))          # outside the windscreen, looking back at his face
+COCK_SIDE = ((-0.98, 1.92, 1.50), (-0.96, 1.86, 1.48))         # front-left 3/4: face, arms and yoke
+WINDOW = ((-0.52, 1.50, 1.32), (-0.52, 1.56, 1.31))            # captain's eye line, out of the windscreen
+REAR = ((-0.32, -0.85, 1.72), (-0.30, -0.80, 1.70))            # doorway, looking forward over the cockpit
+SHOTS = [
+    # beat 1-2: the cabin
+    (0.00, 2.10, (0.05, -3.02, 1.85), (0.05, -3.10, 1.82), YH, 30),
+    (2.10, 4.06, (0.15, -3.30, 1.85), (0.12, -3.35, 1.82), mid(YH, fixed((-0.95, -4.50, 0.80)), 0.5), 28),
+    (4.06, 5.40, (0.00, -6.60, 1.80), (0.00, -6.50, 1.78), YH, 30),
+    (5.40, 6.74, (0.05, -3.00, 1.85), (0.05, -3.05, 1.85), mid(YH, fixed((-1.45, -4.70, 1.25)), 0.35), 26),
+    # beat 3: up and down the aisle
+    (6.74, 8.20, (0.00, -1.00, 1.70), (0.00, -1.05, 1.70), YH, 35),
+    (8.20, 9.16, "follow", None, fixed((0.0, -0.40, 1.30)), 28),
+    # beat 4-5: the door, the captain in the doorway
+    (9.16, 10.90, (0.45, 1.35, 1.60), (0.43, 1.30, 1.58), mid(YH, fixed((0.0, -0.60, 1.20)), 0.5), 26),
+    (10.90, 13.22, (-0.95, 1.60, 1.45), (-0.93, 1.55, 1.44), mid(YH, CH, 0.5), 24),
+    # beat 6-8: the first officer, the radio
+    (13.22, 15.50, (-1.05, 2.00, 1.50), (-1.03, 1.96, 1.50), mid(YH, FH, 0.5), 24),
+    (15.50, 17.60, (-0.95, 1.95, 1.50), (-0.93, 1.92, 1.50), mid(YH, fixed((0.10, 1.40, 0.90)), 0.4), 28),
+    (17.60, 19.20, (-0.75, 2.15, 1.40), (-0.74, 2.12, 1.40), mid(YH, fixed((0.00, 1.50, 0.85)), 0.7), 40),
+    (19.20, 20.40, (-0.85, 2.05, 1.55), (-0.84, 2.02, 1.55), YH, 35),
+    (20.40, 21.24, REAR[0], REAR[1], YH, 28),
+    # beat 9: the haul
+    (21.24, 23.50, (-1.05, 2.05, 1.55), (-1.03, 2.00, 1.55), mid(YH, FH, 0.5), 24),
+    (23.50, 25.82, REAR[0], REAR[1], mid(YH, FH, 0.5), 22),
+    # beat 10-11: alarms, the dive
+    (25.82, 27.40, (-1.05, 2.05, 1.55), (-1.03, 2.02, 1.55), YH, 26),
+    (27.40, 28.66, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, -0.6)), 24),
+    (28.66, 30.32, REAR[0], REAR[1], mid(YH, fixed((0.4, 2.4, 1.1)), 0.4), 22),
+    # beat 12-19: flying it; cut between his face, the side, the window, the radio
+    (30.32, 31.90, COCK_SIDE[0], COCK_SIDE[1], YC, 28),
+    (31.90, 33.42, COCK_FRONT[0], COCK_FRONT[1], YH, 35),
+    (33.42, 35.20, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.6)), 24),
+    (35.20, 37.06, COCK_SIDE[0], COCK_SIDE[1], YC, 30),
+    (37.06, 39.00, COCK_FRONT[0], COCK_FRONT[1], YH, 38),
+    (39.00, 41.30, (-0.80, 0.30, 1.75), (-0.78, 0.36, 1.74), fixed((0.55, 2.40, 1.05)), 24),
+    (41.30, 42.90, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.2)), 24),
+    (42.90, 44.20, COCK_FRONT[0], COCK_FRONT[1], YH, 35),
+    (44.20, 46.00, COCK_SIDE[0], COCK_SIDE[1], YC, 26),
+    (46.00, 47.80, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.3)), 24),
+    (47.80, 49.56, COCK_FRONT[0], COCK_FRONT[1], YH, 38),
+    (49.56, 51.10, (-0.95, 2.05, 1.55), (-0.93, 2.02, 1.55), mid(YH, FH, 0.5), 22),
+    (51.10, 52.48, REAR[0], REAR[1], mid(FH, YH, 0.25), 24),
+    (52.48, 54.00, WINDOW[0], WINDOW[1], fixed((-0.52, 9.0, 0.3)), 24),
+    (54.00, 55.72, COCK_SIDE[0], COCK_SIDE[1], YH, 32),
+    # beat 19: the close-up of his face (kept from v008b)
+    (55.72, 58.00, (0.56, 1.93, 1.34), (0.535, 1.86, 1.31), YH, 24),
+]
 def bake():
     head_look()
-    for o in YOU.children:
-        if any(k in o.name for k in ("short02", "eyebrow", "eyelashes")):
-            o.visible_camera = False; o.keyframe_insert("visible_camera", frame=FLOAT0 - 1)
-            o.visible_camera = True; o.keyframe_insert("visible_camera", frame=FLOAT0)
-            o.visible_camera = False
-            o.keyframe_insert("visible_camera", frame=1)
-    hidden = []
-    for c in (bpy.data.collections["PASSENGERS"],):
-        lc = bpy.context.view_layer.layer_collection.children[c.name]; lc.exclude = True; hidden.append(lc)
     E = {}; HSM = {}
     hold0, hold1 = F(20.9), F(26.3)
-    for f in range(1, 4411):
+    for f in range(hold0, hold1 + 1):
         sc.frame_set(f)
-        E[f] = eye(f)
-        if hold0 <= f <= hold1:
-            Mw = YOU.matrix_world @ YOU.pose.bones["wrist.R"].matrix
-            HSM[f] = Mw
-    for lc in hidden: lc.exclude = False
-    # smooth eye position a little (head-cam stabilisation)
-    Es = {}
-    for f in E:
-        acc = Vector(); n = 0
-        for d in range(-4, 5):
-            if f + d in E: acc += E[f + d]; n += 1
-        Es[f] = acc / n
+        HSM[f] = YOU.matrix_world @ YOU.pose.bones["wrist.R"].matrix
     # handset: rigid offset from the wrist at the grasp frame
     off = HSM[hold0].inverted() @ HS0
     HS.matrix_world = HS0; HS.keyframe_insert("location", frame=hold0 - 1); HS.keyframe_insert("rotation_euler", frame=hold0 - 1)
     for f in range(hold0, hold1 + 1):
         HS.matrix_world = HSM[f] @ off; HS.keyframe_insert("location", frame=f); HS.keyframe_insert("rotation_euler", frame=f)
     HS.matrix_world = HS0; HS.keyframe_insert("location", frame=hold1 + 1); HS.keyframe_insert("rotation_euler", frame=hold1 + 1)
-    face = None
-    for f in range(1, 4411):
-        fwd = Vector((0, 0.035, 0))
-        yw, pt, rl = yaw_f(f), pit_f(f), rol_f(f)
-        Rm = Euler((R_(90 + pt), R_(rl), R_(yw)), 'XYZ').to_matrix()
-        d = Rm @ Vector((0, 0, -1))
-        p = Es[f] + d * 0.045 + Vector((0, 0, 0.005 * math.sin((f / FPS) * 1.6)))
-        if f >= FLOAT0:
-            if face is None: face = Es[F(72.0)] if F(72.0) in Es else Es[f]
-            u = smooth((f - FLOAT0) / (FLOATR - FLOAT0))
-            k = catmull([(FREE[0][0], Es[FLOAT0] + d * 0.045)] + FREE[1:])
-            q = k(f); p = p.lerp(q, u)
-            target_free = Es[min(f, 4410)] + Vector((0, 0.02, -0.03))
-            Rf = (target_free - p).to_track_quat('-Z', 'Y').to_matrix()
-            Rm = Rm.to_quaternion().slerp(Rf.to_quaternion(), u).to_matrix()
-        s = shake(f)
-        Rm = Rm @ Euler((R_(s.x), R_(s.z) * 0.5, R_(s.y)), 'XYZ').to_matrix()
-        CAM.matrix_world = Matrix.Translation(p) @ Rm.to_4x4()
-        CAM.keyframe_insert("location", frame=f); CAM.keyframe_insert("rotation_euler", frame=f)
-    camd.lens = 14; camd.keyframe_insert("lens", frame=FLOAT0); camd.lens = 24; camd.keyframe_insert("lens", frame=FLOATR)
+    root = bone_pt(YOU, "spine05")
+    for (t0, t1, p0, p1, aim, lens) in SHOTS:
+        f0, f1 = FN(t0), min(FN(t1) - 1, END)
+        assert t1 - t0 <= 2.5 + 1e-6, (t0, t1)
+        raw = {f: aim(f) for f in range(f0 - 8, f1 + 9)}
+        if p0 == "follow":
+            rp = {f: root(f) for f in range(f0, f1 + 1)}
+        for f in range(f0, f1 + 1):
+            ws = [raw[g] for g in range(f - 8, f + 9)]
+            a = sum(ws, Vector()) / len(ws)
+            u = smooth((f - f0) / max(1, f1 - f0))
+            if p0 == "follow":
+                p = rp[f] + Vector((0.08, -1.90, 0.70))
+            else:
+                p = Vector(p0).lerp(Vector(p1), u)
+            CAM.matrix_world = Matrix.Translation(p) @ (a - p).to_track_quat('-Z', 'Y').to_matrix().to_4x4()
+            CAM.keyframe_insert("location", frame=f); CAM.keyframe_insert("rotation_euler", frame=f)
+            camd.lens = lens; camd.keyframe_insert("lens", frame=f)
+    for idb in (CAM, camd):
+        for lay in idb.animation_data.action.layers:
+            for st in lay.strips:
+                for cb in st.channelbags:
+                    for fc in cb.fcurves:
+                        for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
+    print("SHOTS", len(SHOTS))
 if not NOBAKE:
     bake()
 # render defaults (farm)
 r = sc.render; r.resolution_x, r.resolution_y, r.resolution_percentage = 1080, 1920, 100; r.fps = 60; r.fps_base = 1.0
-sc.frame_start, sc.frame_end = 1, 4410
+sc.frame_start, sc.frame_end = 1, END
 sc.cycles.samples = 48; sc.cycles.adaptive_threshold = 0.05; sc.cycles.use_denoising = True
 r.use_motion_blur = True; r.motion_blur_shutter = 0.5
 c_ = sc.cycles; c_.max_bounces = 12; c_.diffuse_bounces = 4; c_.glossy_bounces = 4; c_.transmission_bounces = 12; c_.transparent_max_bounces = 16   # eyes need the depth
