@@ -95,15 +95,19 @@ K = [  # frame, location, target, lens
  (1742, (1.9, -2.2, 0.9), (0.05, 1.0, 1.0), 22),
  (1765, (2.6, 1.9, 1.2), (0.0, 0.2, 0.9), 28),     # round the outside of the tripod to the +y side: he faces +y head-down
  # beat 11: emerge, lift, mother, crane up
- (1785, (1.6, 3.0, 1.2), (-0.2, 0.6, 1.1), 28),     # well outside the tripod: no leg blurring past the lens
- (1805, (2.6, 0.6, 1.4), (-0.3, 0.8, 1.4), 28),     # back round the outside, clear of the tripod and winch
- (1825, (0.4, 2.9, 1.5), (-0.3, 1.0, 1.2), 26),     # in front of him: the toddler held against his chest
+ (1778, (2.3, 2.3, 1.2), (-0.1, 0.45, 1.0), 28),
+ # hard cut at 1779 (CUTS): the mother at the tape while he is swung upright with the toddler; she ducks under and runs in
+ (1779, (-0.7, 4.0, 1.5), (-1.3, 6.15, 1.35), 40),
+ (1805, (-0.6, 3.5, 1.5), (-1.2, 5.8, 1.3), 36),
+ (1831, (-0.4, 2.9, 1.5), (-0.95, 4.6, 1.25), 32),
+ # hard cut at 1832: back on him, the toddler held against his chest
+ (1832, (0.4, 2.9, 1.5), (-0.3, 1.0, 1.2), 26),
  (1846, (2.8, 1.0, 1.8), (-0.3, 1.0, 1.3), 26),     # round the outside of the tripod feet
  (1868, (2.5, -2.3, 2.0), (-0.5, 1.5, 1.25), 26),
  (1910, (1.6, -3.6, 4.0), (0.0, 2.2, 0.9), 22),
  (1950, (1.7, -4.6, 5.8), (0.0, 2.6, 0.8), 22),
 ]
-CUTS = [1362]     # hard cuts: separate splines either side, constant step between
+CUTS = [1362, 1779, 1832]     # hard cuts: separate splines either side, constant step between
 cam = bpy.data.objects["Cam"]; tg = bpy.data.objects["CamTarget"]
 bounds = [1] + CUTS + [1951]
 for a_, b_ in zip(bounds[:-1], bounds[1:]):
