@@ -32,8 +32,13 @@ def setup(c):
     # a faint cold light down the tunnel so the bricks and wet floor just read; rim on the rats
     # no back light (it lit a pale square behind the stack); a soft cold fill grazing the walls from each side
     for sx in (-1, 1):
-        sd = area_light(t + Vector((0.55 * sx, -0.6, 0.55)), (0, 0, 0), 0.35, 0.35, (0.6, 0.72, 0.9))
-        point_at(sd, t + Vector((-0.9 * sx, 1.4, 0.1))); sd.visible_volume_scatter = False
+        sd = area_light(t + Vector((0.7 * sx, -0.5, 0.6)), (0, 0, 0), 0.6, 2.5, (0.6, 0.72, 0.9))
+        point_at(sd, t + Vector((-0.3 * sx, 0.6, -0.2))); sd.visible_volume_scatter = False; sd.visible_camera = False
+    # dim cold fill from behind and above (hidden from the camera, so no glowing square)
+    bk = area_light(t + Vector((0.0, 2.2, 0.9)), (0, 0, 0), 1.5, 4.0, (0.55, 0.68, 0.88)); point_at(bk, t + Vector((0, 0, -0.2)))
+    bk.visible_camera = False
+    top = area_light(t + Vector((0.0, 0.3, 1.4)), (0, 0, 0), 2.0, 3.0, (0.6, 0.7, 0.85)); point_at(top, t + Vector((0, 0.3, -0.3)))
+    top.visible_camera = False
     haze(t + Vector((0, 0.8, 0.5)), (3.0, 5.0, 2.0), density=0.006, color=(0.85, 0.9, 1.0), anis=0.6)
     # rats: a cold rim from behind each one (linked to that rat only) so the silhouettes read in the dark
     import ph
@@ -50,7 +55,7 @@ def setup(c):
         o.visible_volume_scatter = False; o.light_linking.receiver_collection = col
     # a faint cold glow far down the tunnel, for depth
     # tiny dim lamps far down the tunnel: soft out-of-focus blobs for depth, no big glow
-    for k, (x, y, z, e) in enumerate(((-0.25, 3.4, 0.55, 0.6), (0.3, 3.6, 0.6, 0.5), (0.0, 4.6, 0.45, 0.4))):
+    for k, (x, y, z, e) in enumerate(((-0.45, 3.4, 0.55, 8), (0.45, 3.6, 0.6, 7), (0.0, 4.6, 0.45, 6))):
         l = bpy.data.lights.new(f"Far{k}", 'POINT'); l.energy = e; l.shadow_soft_size = 0.03; l.color = (0.75, 0.82, 0.95)
         o = bpy.data.objects.new(f"Far{k}", l); bpy.context.collection.objects.link(o); o.location = t + Vector((x, y, z))
     # little white softboxes around the stone, seen only in its reflections/refractions, so the facets blaze
