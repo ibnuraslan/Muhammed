@@ -89,3 +89,17 @@ I watched every page of the 270×480 preview (every 5th frame) and fixed these f
 | 1381–1700 | The doctor's coat merged into his back. | She stands 12 cm further back with less lean (hand reach adjusted). The camera at 24.3 s is at his left front so she reads beside him, and the overhead pass goes around the front. |
 | 2516–2640 | The ending pulled back until the people were specks. | It ends on a medium shot of her with the cheque and the players. |
 Beat frames are unchanged and there is no VO.
+
+## v007 (director review of v006): fixes. The preview `review/preview.mp4` is rendered from the final v007 package, with pages in `review/preview_pages_v007/`
+| Item | Fault | Fix |
+|---|---|---|
+| 1 | Headless framing of him posting (1831–2041) and the pink stool blob. | He is framed head to knees from 30.0 to 35.9 s. The stool leaves the clinic after 29.3 s. |
+| 2 | She was a black silhouette at the glass, and the phone covered her face (961–1006). | A fill light on her face and torso (hidden from the camera, reflections and the glass). The phone is pressed on the glass at chest height by her fingertips, and her face shows above it. She stands 8 cm further back with less lean, so her chest never touches the glass. Check: phone y 0.009–0.018, fan body min y ≥ 0.007 (glass face 0.008). |
+| 3, 4 | A floating glove, and the doctor's A-pose. | Camera keys at 27.4 and 28.3 s from his left front show her whole. Her hands rest at her coat pockets (25.6 and 29.2 s). |
+| 5 | Stray orange shapes. | A copy of the home desk lamp sat in the clinic. It is hidden. |
+| 6 | Dark eye holes. | The EnhancedEye cornea fix (LESSONS §3) is now applied to every character (`03e_eyes.py`). |
+| 7 | Empty and in-wall city frames. | The city pass is removed: a straight cut from him posting to her at the laptop at f2155. |
+| 8 | Her forearms crossed. | Both palms go to her chest, apart. |
+| 9 | The beanie popped on at 2276. | It is off for the whole home shot and comes on at the rink cut, f2281. |
+| 10 | The ending was wide, with mannequin players. | A medium shot from about 2 m: her with the cheque, the man clapping beside her, and players around her clapping, fist-pumping and turning with their arms moving. **Not done: text and a logo on the cheque.** CONNECT_TONIGHT forbids on-screen text and logos, so this needs a post overlay or a rule change. |
+| 11 | Minor items. | The camera passes higher above him at 1.9 s, and the POV is moved off her beanie at 3.3–3.9 s. |
