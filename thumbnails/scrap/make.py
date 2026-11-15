@@ -90,7 +90,7 @@ def _at(im, x, y):
     lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); lay.alpha_composite(im, (int(x), int(y))); return lay
 
 
-def detector(yard_path, mask_path):
+def detector(yard_path, mask_path, text=True):
     src = np.asarray(Image.open(yard_path).convert("RGB").resize((W, H), Image.LANCZOS)).astype(np.float32) / 255
     lum = src @ np.array([0.3, 0.59, 0.11], np.float32)
     lum = np.clip((lum - 0.12) / 0.75, 0, 1) ** 1.35
@@ -139,6 +139,8 @@ def detector(yard_path, mask_path):
         cc = (150, 255, 170, 255) if k < 6 else ((255, 210, 60, 255) if k < 10 else (255, 50, 40, 255))
         d.rectangle([bx + k * 27, by + 38, bx + k * 27 + 21, by + 74], fill=cc)
     d.text((bx, by + 84), "OFF SCALE", font=fs, fill=(255, 70, 60, 255))
+    if not text:
+        return out.convert("RGB")
     # headline, bottom left: RADIOACTIVE / SCRAP FOR [$30!]
     f1 = F("Anton-Regular.ttf", 190); f2 = F("Anton-Regular.ttf", 150)
     t1 = text_layer("RADIOACTIVE", f1, WHITE + (255,)); t2 = text_layer("SCRAP FOR", f2, WHITE + (255,))
@@ -158,6 +160,9 @@ def save(img, stem, D):
 
 if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)
-    a = poster(os.path.join(P, "rs_cut.png")); a.save(os.path.join(OUT, "scrap_A_poster.jpg"), quality=96, subsampling=0)
-    c = detector(os.path.join(P, "rs_yard.png"), os.path.join(P, "rs_yard_mask.png")); c.save(os.path.join(OUT, "scrap_C_detector.jpg"), quality=96, subsampling=0)
+    yard, mask = os.path.join(P, "rs_yard.png"), os.path.join(P, "rs_yard_mask.png")
+    c = detector(yard, mask); c.save(os.path.join(OUT, "scrap_final_C.jpg"), quality=96, subsampling=0)
+    if len(sys.argv) > 3 and sys.argv[3] == "pack":
+        D = os.path.join(OUT, "download_c"); os.makedirs(D, exist_ok=True)
+        save(c, "scrap_thumbnail_RADIOACTIVE", D); save(detector(yard, mask, text=False), "scrap_thumbnail_notext", D)
     print("done")
