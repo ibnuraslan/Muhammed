@@ -592,12 +592,10 @@ for o_ in (cam, aim, cam_d):
 # POV blur (beat 8): focus empty follows the aim, but sits 0.25 m in front of the lens during the POV
 foc = bpy.data.objects.new("CAM_Focus", None); sc.collection.objects.link(foc); foc.hide_render = True
 cam_d.dof.focus_object = foc
-for f in list(range(1, 2341, 4)) + [2340]:
-    p_ = fa_(f)
-    w = 0.0   # v005: no blurred POV
-    if w > 0:
-        cpos = fc_(f); near = cpos + (p_ - cpos).normalized() * 0.25; p_ = p_.lerp(near, w)
-    foc.location = p_; foc.keyframe_insert("location", frame=f)
+for f in range(1, 2341):      # v007: focus keyed on every frame (keys every 4 frames lagged after each cut: a blurred first frame)
+    foc.location = fa_(f); foc.keyframe_insert("location", frame=f)
+for fc in [fc for l in foc.animation_data.action.layers for st in l.strips for cb in st.channelbags for fc in cb.fcurves]:
+    for kp in fc.keyframe_points: kp.interpolation = "LINEAR"
 for f, fs in ((1, 8.0), (150, 8.0), (151, 22.0), (240, 22.0), (241, 8.0), (2340, 8.0)):
     cam_d.dof.aperture_fstop = fs; cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
 
