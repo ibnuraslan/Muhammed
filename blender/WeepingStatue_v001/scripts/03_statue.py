@@ -13,7 +13,7 @@ C1 = bpy.data.collections["S1_Courtyard"]
 # drop the scan corpus
 old = bpy.data.objects.get("S1_Statue")
 if old: bpy.data.objects.remove(old, do_unlink=True)
-SRC = bpy.data.objects["CrowdM3"]
+SRC = bpy.data.objects["CrowdM4"]          # broad male build (director: the slim body read as a woman at wide scale)
 rig = SRC.copy(); rig.data = SRC.data.copy(); rig.name = "S1_StatueRig"; rig.data.name = "S1_StatueRig"
 rig.animation_data_clear(); C1.objects.link(rig)
 for c in [c for c in bpy.data.objects if c.parent == SRC]:
@@ -54,7 +54,7 @@ hair.parent = rig; hair.matrix_parent_inverse = Matrix.Identity(4); hair.locatio
 for m in hair.modifiers:
     if m.type == 'ARMATURE': m.object = rig
 Hw = WR.data.bones["head"]; Hs = B["head"]
-k_ = 1.10
+k_ = 1.14
 Mmap = Hs.matrix_local @ Matrix.Scale(k_, 4) @ Hw.matrix_local.inverted()
 hair.data.transform(Mmap)
 # ---- short sculpted beard: a shell over the jaw / lower cheeks / upper lip, pushed out along the normals with a strand texture
@@ -78,27 +78,37 @@ for v in bod.data.vertices:
     cheek = 0.0 <= dz < 0.030 and abs(c.x) > mx_ - 0.002
     moust = 0.010 <= dz < 0.024 and abs(c.x) < mx_ + 0.012
     if chin or cheek or moust: keep.add(v.index)
-beard = bod.copy(); beard.data = bod.data.copy(); beard.name = "S1_Statue.beard"; C1.objects.link(beard)
-for cl in list(beard.users_collection):
-    if cl != C1: cl.objects.unlink(beard)
-for m in list(beard.modifiers):
-    if m.type == 'MASK': beard.modifiers.remove(m)
-bmb = bmesh.new(); bmb.from_mesh(beard.data)
-bmesh.ops.delete(bmb, geom=[v for v in bmb.verts if v.index not in keep], context='VERTS')
-ring = {v.index: (0 if v.is_boundary else 99) for v in bmb.verts}
-for it in range(1, 6):
-    for v in bmb.verts:
-        if ring[v.index] == 99 and any(ring[e.other_vert(v).index] == it - 1 for e in v.link_edges): ring[v.index] = it
-for v in bmb.verts:
-    r_ = min(ring[v.index], 4)
-    v.co += v.normal * (0.0015 + 0.0115 * (r_ / 4.0) ** 0.7)
-bmb.to_mesh(beard.data); bmb.free()
-tx_ = bpy.data.textures.new("BeardStrands", 'CLOUDS'); tx_.noise_scale = 0.0045; tx_.noise_depth = 2
-dsp = beard.modifiers.new("strands", 'DISPLACE'); dsp.texture = tx_; dsp.strength = 0.004; dsp.mid_level = 0.5; dsp.texture_coords = 'LOCAL'
-sol = beard.modifiers.new("thick", 'SOLIDIFY'); sol.thickness = 0.003; sol.offset = -1.0
-sub = beard.modifiers.new("smooth", 'SUBSURF'); sub.levels = sub.render_levels = 1
-for m in [m for m in beard.modifiers if m.type == 'ARMATURE']:
-    beard.modifiers.move(beard.modifiers.find(m.name), len(beard.modifiers) - 1)
+def shell(name, keep, max_off, rings, noise, strength):
+    """sculpted marble shell over selected body verts: offset tapers to 0 at the edge over `rings` edge-rings, strand noise"""
+    o = bod.copy(); o.data = bod.data.copy(); o.name = name; C1.objects.link(o)
+    for cl in list(o.users_collection):
+        if cl != C1: cl.objects.unlink(o)
+    for m in list(o.modifiers):
+        if m.type == 'MASK': o.modifiers.remove(m)
+    bm_ = bmesh.new(); bm_.from_mesh(o.data)
+    bmesh.ops.delete(bm_, geom=[v for v in bm_.verts if v.index not in keep], context='VERTS')
+    ring = {v.index: (0 if v.is_boundary else 99) for v in bm_.verts}
+    for it in range(1, rings + 2):
+        for v in bm_.verts:
+            if ring[v.index] == 99 and any(ring[e.other_vert(v).index] == it - 1 for e in v.link_edges): ring[v.index] = it
+    for v in bm_.verts:
+        r_ = min(ring[v.index], rings)
+        v.co += v.normal * (0.0005 + max_off * (r_ / rings) ** 0.8)
+    bm_.to_mesh(o.data); bm_.free()
+    tx = bpy.data.textures.new(name + "_strands", 'CLOUDS'); tx.noise_scale = noise; tx.noise_depth = 2
+    d = o.modifiers.new("strands", 'DISPLACE'); d.texture = tx; d.strength = strength; d.mid_level = 0.5; d.texture_coords = 'LOCAL'
+    o.modifiers.new("smooth", 'SUBSURF').levels = 1
+    for m in [m for m in o.modifiers if m.type == 'ARMATURE']:
+        o.modifiers.move(o.modifiers.find(m.name), len(o.modifiers) - 1)
+    return o
+beard = shell("S1_Statue.beard", keep, 0.013, 8, 0.005, 0.006)
+brow_z = mz + 0.075
+scalp = set()
+for v in bod.data.vertices:
+    c = v.co
+    if w(v, "head") < 0.5 or w(v, "body") == 0.0 or w(v, "HelperGeometry") > 0: continue
+    if c.z > brow_z + 0.02 or (c.y > headc.y + 0.0 and c.z > mz - 0.02): scalp.add(v.index)
+cap = shell("S1_Statue.scalp", scalp, 0.010, 6, 0.006, 0.005)
 print("BEARD mouth", round(mz, 3), round(my, 3), round(mx_, 3), "head", tuple(round(t, 3) for t in headc), "verts", len(keep), "hair scale", round(k_, 3))
 # ---- marble on everything; hair/brows keep their alpha
 M = bpy.data.materials.get("M_StatueMarble")
@@ -106,6 +116,15 @@ if M is None:
     M = bpy.data.materials.new("M_StatueMarble"); M.use_nodes = True
     M.node_tree.nodes["Principled BSDF"].inputs['Base Color'].default_value = (0.88, 0.87, 0.84, 1)
 P0 = M.node_tree.nodes["Principled BSDF"]; P0.inputs['Roughness'].default_value = 0.38
+if "StatueAO" not in M.node_tree.nodes:
+    nt_ = M.node_tree; ao_ = nt_.nodes.new('ShaderNodeAmbientOcclusion'); ao_.name = "StatueAO"; ao_.inputs['Distance'].default_value = 0.04; ao_.samples = 8
+    src_ = P0.inputs['Base Color'].links[0].from_socket if P0.inputs['Base Color'].links else None
+    mr_ = nt_.nodes.new('ShaderNodeMapRange'); mr_.inputs['To Min'].default_value = 0.42; nt_.links.new(ao_.outputs['AO'], mr_.inputs['Value'])
+    mu_ = nt_.nodes.new('ShaderNodeMix'); mu_.data_type = 'RGBA'; mu_.blend_type = 'MULTIPLY'; mu_.inputs['Factor'].default_value = 1.0
+    if src_: nt_.links.new(src_, mu_.inputs['A'])
+    else: mu_.inputs['A'].default_value = P0.inputs['Base Color'].default_value
+    cc_ = nt_.nodes.new('ShaderNodeCombineColor'); [nt_.links.new(mr_.outputs['Result'], cc_.inputs[k]) for k in range(3)]
+    nt_.links.new(cc_.outputs[0], mu_.inputs['B']); nt_.links.new(mu_.outputs['Result'], P0.inputs['Base Color'])
 def marble_alpha(src_mat):
     """copy of the marble material that keeps src_mat's alpha texture (hair / brow cards)"""
     m = M.copy(); m.name = "M_StatueMarbleCards"; m.blend_method = 'HASHED' if hasattr(m, "blend_method") else None
@@ -150,6 +169,9 @@ for s, sx in (("L", 1), ("R", -1)):
     R.key_world("IK_foot." + s, f, Mf)
     pb = R.PB["Pole_knee." + s]; nm = "Pole_knee." + s
     pb.location = R.rest(nm).to_3x3().inverted() @ (W(V((fx, -1.2, FEET_TOP + 0.55))) - B[nm].head_local); pb.keyframe_insert("location", frame=f, group=nm)
+for bn_, sc_ in (("spine03", (1.10, 1.0, 1.08)), ("spine02", (1.06, 1.0, 1.05))):
+    pb_ = R.PB[bn_]; pb_.scale = sc_; pb_.keyframe_insert("scale", frame=f, group=bn_)
+R.PB["neck01"].bone.inherit_scale = 'NONE'
 exec(open(os.path.join(HERE, "..", "..", "pipeline", "hand_poses.py")).read())
 add_hand_limits(rig)
 apply_pose(rig, "L", "relaxed", f); apply_pose(rig, "R", "relaxed", f)
@@ -167,16 +189,16 @@ cx = sum(p.x for p in band) / len(band); cy = sum(p.y for p in band) / len(band)
 ex = max(abs(p.x - cx) for p in band); ey = max(abs(p.y - cy) for p in band)
 lowb = [p for p in allw if abs(p.z - (hipw.z - 0.30)) < 0.03]
 ex2 = max(abs(p.x - cx) for p in lowb); ey2 = max(abs(p.y - cy) for p in lowb)
-ztop, zbot = hipw.z + 0.07, hipw.z - 0.32
+ztop, zbot = hipw.z + 0.06, hipw.z - 0.24
 bm = bmesh.new(); NA, NZ = 64, 14; rows = []
 for j in range(NZ + 1):
     t = j / NZ; z = ztop + (zbot - ztop) * t
-    ax = (ex + 0.018) * (1 - t) + (ex2 + 0.05) * t; ay = (ey + 0.022) * (1 - t) + (ey2 + 0.06) * t
+    ax = (ex + 0.014) * (1 - t) + (ex2 + 0.022) * t; ay = (ey + 0.016) * (1 - t) + (ey2 + 0.026) * t
     row = []
     for i in range(NA):
         a = 2 * math.pi * i / NA
-        fold = 1.0 + (0.05 + 0.10 * t) * math.sin(7 * a + 0.6) * (0.4 + t)
-        hem = 0.035 * math.sin(3 * a + 1.0) * (t ** 3)
+        fold = 1.0 + 0.045 * math.sin(6 * a + 7.0 * t + 0.6) * (0.3 + t) + 0.02 * math.sin(13 * a - 4 * t)
+        front = max(0.0, -math.sin(a)); hem = (-0.09 * front ** 2 + 0.035 * math.cos(a) + 0.01 * math.sin(5 * a)) * (t ** 2)   # dips in front, rises at the right hip
         row.append(bm.verts.new((cx + ax * fold * math.cos(a), cy + ay * fold * math.sin(a), z + hem)))
     rows.append(row)
 for j in range(NZ):
@@ -189,6 +211,24 @@ for p_ in lme.polygons: p_.use_smooth = True
 s_ = LC.modifiers.new("thick", 'SOLIDIFY'); s_.thickness = 0.01; s_.offset = 1.0
 sd_ = LC.modifiers.new("sub", 'SUBSURF'); sd_.levels = 1; sd_.render_levels = 1
 lme.materials.append(M)
+# knot at the right hip + a hanging tail of cloth
+kx, ky = cx - (ex + 0.02), cy - ey * 0.35
+bpy.ops.mesh.primitive_uv_sphere_add(segments=20, ring_count=12, radius=0.045, location=(kx, ky, hipw.z + 0.0))
+KN = bpy.context.active_object; KN.name = "S1_Statue.knot"; KN.scale = (0.75, 0.9, 1.15); KN.data.materials.append(M)
+for cl in list(KN.users_collection): cl.objects.unlink(KN)
+C1.objects.link(KN); bpy.ops.object.shade_smooth() if False else None
+for p_ in KN.data.polygons: p_.use_smooth = True
+tb = bmesh.new(); prev = None
+for j in range(10):
+    t = j / 9.0; z = hipw.z - 0.02 - 0.30 * t; w = 0.05 + 0.02 * t
+    off = V((kx - 0.01 * t, ky - 0.012 - 0.02 * math.sin(t * 3), z)); tw = 0.25 * math.sin(t * 2.5)
+    a_ = tb.verts.new(off + V((-w * math.cos(tw), -w * math.sin(tw) * 0.4, 0))); b_ = tb.verts.new(off + V((w * math.cos(tw) * 0.2, w * math.sin(tw), 0)))
+    if prev: tb.faces.new((prev[0], prev[1], b_, a_))
+    prev = (a_, b_)
+tme = bpy.data.meshes.new("LoinTail"); tb.to_mesh(tme); tb.free()
+TL = bpy.data.objects.new("S1_Statue.tail", tme); C1.objects.link(TL); tme.materials.append(M)
+for p_ in tme.polygons: p_.use_smooth = True
+st_ = TL.modifiers.new("thick", 'SOLIDIFY'); st_.thickness = 0.008; TL.modifiers.new("sub", 'SUBSURF').levels = 1
 old_lc = bpy.data.objects.get("S1_Statue.loincloth")
 if old_lc: bpy.data.objects.remove(old_lc, do_unlink=True)
 print("PERIZOMA", round(ex, 3), round(ey, 3), round(ex2, 3), round(ey2, 3))

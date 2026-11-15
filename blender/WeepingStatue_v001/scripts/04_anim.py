@@ -116,8 +116,9 @@ def relaxed_hand(n, P, Rb, s, fwd=0.0, out=0.0, up=0.0):
     sh = rest_head(n, "upperarm01." + s); wr = rest_head(n, "wrist." + s)
     L = (sh - wr).length
     fem = n.startswith(("CrowdW", "Woman"))
-    bulk = {"CrowdM4": 0.06, "Investigator": 0.03}.get(n, 0.0)
-    loc = sh + V((sx * (0.10 + (0.04 if fem else 0.0) + bulk + out), -fwd, -L * 0.93 + up))
+    bulk = {"CrowdM4": 0.06, "Investigator": -0.02}.get(n, 0.0)
+    bend = 0.035 if n == "Investigator" else 0.0          # slight elbow bend, forearm a little forward
+    loc = sh + V((sx * (0.10 + (0.04 if fem else 0.0) + bulk + out), -fwd - bend, -L * 0.93 + up + bend))
     W = bw(n, P, Rb, loc)
     d = Rb @ V((0, -0.15 * fwd, -1)).normalized(); nn = Rb @ V((-sx, 0, 0))
     return W, d, nn
@@ -180,6 +181,9 @@ cam_d.dof.focus_object = AIM
 cl_ = bpy.data.objects.new("CAM_Catchlight", bpy.data.lights.new("CAM_Catchlight", 'POINT')); sc.collection.objects.link(cl_)
 cl_.data.energy = 6.0; cl_.data.shadow_soft_size = 0.03; cl_.parent = CAM; cl_.location = (0.08, 0.10, 0.0)
 cl_.visible_diffuse = False; cl_.visible_volume_scatter = False; cl_.visible_transmission = False
+FILL = bpy.data.objects.new("CAM_FaceFill", bpy.data.lights.new("CAM_FaceFill", 'AREA')); sc.collection.objects.link(FILL)
+FILL.data.size = 0.6; FILL.data.color = (1.0, 0.97, 0.93); FILL.parent = CAM; FILL.location = (0.15, 0.25, 0.05)
+FILL.visible_glossy = False; FILL.data.energy = 0.0; FILL.data.keyframe_insert("energy", frame=1)
 def vpchip(keys):
     fs = [pchip([(f, v[i]) for f, v in keys]) for i in range(3)]
     return lambda x: V((fs[0](x), fs[1](x), fs[2](x)))
@@ -381,23 +385,24 @@ DRAIN = V(sc["DRAIN"])
 def S11():     # the floor drain overflows: a pool spreads from the grate
     s = "S11"; f0, f1 = F0[s], F1[s]
     drops_idle(f0, f1)
-    bpy.ops.mesh.primitive_circle_add(vertices=48, radius=1.0, fill_type='NGON', location=DRAIN + V((0, 0, 0.0125)))
+    bpy.ops.mesh.primitive_circle_add(vertices=48, radius=1.0, fill_type='NGON', location=DRAIN + V((0, 0, 0.006)))
     pool = bpy.context.active_object; pool.name = "FX_DrainPool"
     mp_ = bpy.data.materials.new("M_Puddle"); mp_.use_nodes = True; nt = mp_.node_tree; nn_ = nt.nodes; ll_ = nt.links
-    pr_ = nn_["Principled BSDF"]; pr_.inputs['Base Color'].default_value = (0.08, 0.09, 0.09, 1); pr_.inputs['Roughness'].default_value = 0.06
+    pr_ = nn_["Principled BSDF"]; pr_.inputs['Base Color'].default_value = (0.35, 0.4, 0.42, 1); pr_.inputs['Roughness'].default_value = 0.02; pr_.inputs['Specular IOR Level'].default_value = 0.8
     pr_.inputs['Coat Weight'].default_value = 1.0
     tc_ = nn_.new('ShaderNodeTexCoord'); ln_ = nn_.new('ShaderNodeVectorMath'); ln_.operation = 'LENGTH'; ll_.new(tc_.outputs['Object'], ln_.inputs[0])
     nz_ = nn_.new('ShaderNodeTexNoise'); nz_.inputs['Scale'].default_value = 3.0; ll_.new(tc_.outputs['Object'], nz_.inputs['Vector'])
     ad_ = nn_.new('ShaderNodeMath'); ad_.operation = 'MULTIPLY_ADD'; ll_.new(nz_.outputs['Fac'], ad_.inputs[0]); ad_.inputs[1].default_value = 0.5; ad_.inputs[2].default_value = 0.55
     lt_ = nn_.new('ShaderNodeMath'); lt_.operation = 'LESS_THAN'; ll_.new(ln_.outputs['Value'], lt_.inputs[0]); ll_.new(ad_.outputs[0], lt_.inputs[1])
-    ll_.new(lt_.outputs[0], pr_.inputs['Alpha'])
+    am_ = nn_.new('ShaderNodeMath'); am_.operation = 'MULTIPLY'; am_.inputs[1].default_value = 0.55
+    ll_.new(lt_.outputs[0], am_.inputs[0]); ll_.new(am_.outputs[0], pr_.inputs['Alpha'])
     pool.data.materials.append(mp_)
     pool.visible_shadow = False
     for f, r in ((f0, 0.14), (f0 + 40, 0.19), (f1, 0.24)):
         pool.scale = (max(r, 0.001), max(r * 0.85, 0.001), 1); pool.keyframe_insert("scale", frame=f)
-    pool.location = DRAIN + V((0, 0, 0.0125)); pool.keyframe_insert("location", frame=f0)
+    pool.location = DRAIN + V((0, 0, 0.006)); pool.keyframe_insert("location", frame=f0)
     pool.location = DRAIN + V((0, 0, -5)); pool.keyframe_insert("location", frame=f0 - 1); pool.keyframe_insert("location", frame=f1 + 1)
-    pool.location = DRAIN + V((0, 0, 0.0125)); pool.keyframe_insert("location", frame=f1)
+    pool.location = DRAIN + V((0, 0, 0.006)); pool.keyframe_insert("location", frame=f1)
     for fc in fcurves_of(pool):
         if fc.data_path == "location":
             for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
@@ -431,8 +436,10 @@ def trickle():
     bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new("FX_Trickle", me); sc.collection.objects.link(o)
     o.location = (0, sc["BATH"][3] - 0.006, 0)
+    sl_ = o.modifiers.new("thick", 'SOLIDIFY'); sl_.thickness = 0.003; sl_.offset = -1.0
+    o.modifiers.new("sub", 'SUBSURF').levels = 1
     m = bpy.data.materials.new("M_Trickle"); m.use_nodes = True; nt = m.node_tree
-    p = nt.nodes["Principled BSDF"]; p.inputs['Base Color'].default_value = (0.2, 0.24, 0.2, 1); p.inputs['Roughness'].default_value = 0.02
+    p = nt.nodes["Principled BSDF"]; p.inputs['Base Color'].default_value = (0.9, 0.95, 1.0, 1); p.inputs['Roughness'].default_value = 0.01; p.inputs['Transmission Weight'].default_value = 1.0; p.inputs['IOR'].default_value = 1.33
     p.inputs['Coat Weight'].default_value = 1.0
     tc = nt.nodes.new('ShaderNodeTexCoord'); sp = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Generated'], sp.inputs[0])
     val = nt.nodes.new('ShaderNodeValue'); val.name = "Reveal"
@@ -517,11 +524,13 @@ def S17():     # close-up: eyes down, a sigh; his left hand rests on the case ha
     for f in (f0, f1): trolley_at(f, tp, yaw + 90)
     top = tp + V((0, 0, HANDLE_TOP - 0.012))
     for k, f in enumerate((f0, f0 + 45, f0 + 85, f1)):
-        stand(n, f, x, y, yaw, head=(-26.0 + 4 * math.sin(k), 6.0), flex=4.0 + 2.5 * (k % 2), fingers=None, hands={"L": None})
+        stand(n, f, x, y, yaw, head=(-16.0 + 3 * math.sin(k), 6.0), flex=3.0 + 2.5 * (k % 2), fingers=None, hands={"L": None})
         place_hand(RIG[n].o, "L", f, top, V((0, 0, -1)), (fw * 0.3 + sd * -0.0 + fw).normalized(), skin=0.02)
         apply_pose(RIG[n].o, "L", "cup_hold", f); apply_pose(RIG[n].o, "R", "relaxed", f)
         pe = RIG[n].PB["Pole_elbow.L"]; nm = "Pole_elbow.L"
         pe.location = RIG[n].rest(nm).to_3x3().inverted() @ (V((x, y, 1.0)) + sd * 0.7 + fw * -0.3 - RIG[n].BN[nm].head_local); pe.keyframe_insert("location", frame=f, group=nm)
+    for f_, e_ in ((f0 - 1, 0.0), (f0, 10.0), (f1, 10.0), (f1 + 1, 0.0)):
+        FILL.data.energy = e_; FILL.data.keyframe_insert("energy", frame=f_)
     face = V((x, y, rest_head(n, "head").z + 0.06))
     cam_keys(s, [(0, face + fw * 0.95 + sd * 0.25 + V((0, 0, -0.12)), face + V((0, 0, -0.18)), 45), (1, face + fw * 0.82 + sd * 0.2 + V((0, 0, -0.12)), face + V((0, 0, -0.2)), 48)], fstop=8)
 def S18():     # he turns and walks away pulling the case (logo side to camera)
