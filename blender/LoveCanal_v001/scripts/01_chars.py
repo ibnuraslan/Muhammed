@@ -17,7 +17,7 @@ CAST = [
     ("Mother",    "EscapeArtist_v010",  "Stepmother", {"elegantsuit": (0.55, 0.25, 0.62), "shoes": (0.15, 0.1, 0.1)}, []),          # purple
     ("Neighbour", "StanleyCup_v009",    "Woman_rig",  {"elegantsuit": (0.85, 0.82, 0.74), "shoes": (0.3, 0.2, 0.15)}, []),           # cream top, long hair
     ("Dad2",      "EscapeArtist_v010",  "Guard",      {"casualsuit": (0.2, 0.36, 0.7), "shoes": (0.1, 0.08, 0.06)}, []),             # blue shirt
-    ("Worker",    "BellyFat_v010",      "Stocker",    {"worksuit": (0.62, 0.42, 0.18), "shoes": (0.18, 0.12, 0.08)}, []),            # tan coveralls
+    ("Worker",    "BellyFat_v010",      "Stocker",    {"worksuit": (0.22, 0.32, 0.52), "shoes": (0.1, 0.08, 0.06)}, []),             # blue-grey coveralls, dark boots
 ]
 
 LOW = {"Father": (0.16, 0.15, 0.14), "Boy": (0.12, 0.16, 0.3), "Dad2": (0.1, 0.12, 0.2)}   # trousers
@@ -115,6 +115,18 @@ for i, (new, pkg, src, cols, drop) in enumerate(CAST):
     print("CHAR", new, sorted(o.name for o in bpy.data.objects if o.parent == rig))
 
 eye_fix()
+# work gloves for the Worker: dark grey material on the MPFB hand faces (with a clean cuff above the wrist)
+wk = bpy.data.objects["Worker"]; wb = bpy.data.objects["Worker.body"]
+gl = bpy.data.materials.new("WorkGlove"); gl.use_nodes = True; P_ = gl.node_tree.nodes["Principled BSDF"]
+P_.inputs["Base Color"].default_value = (0.08, 0.08, 0.09, 1); P_.inputs["Roughness"].default_value = 0.75
+vg = {g.index: g.name for g in wb.vertex_groups}; hand = set()
+for v in wb.data.vertices:
+    if sum(g.weight for g in v.groups if any(k in vg.get(g.group, "") for k in ("wrist", "finger", "metacarpal", "thumb"))) > 0.5: hand.add(v.index)
+wb.data.materials.append(gl); gi = len(wb.data.materials) - 1
+wr = [wk.data.bones["wrist." + s_].head_local for s_ in "LR"]; n_ = 0
+for p_ in wb.data.polygons:
+    if all(v in hand for v in p_.vertices) or min((p_.center - w_).length for w_ in wr) < 0.06: p_.material_index = gi; n_ += 1
+print("GLOVE faces", n_)
 # hard hat for the worker (CC-BY model), Child Of the head bone
 hh_path = os.path.join(ROOT, "LoveCanal_v001", "assets_src", "hardhat.glb")
 if os.path.exists(hh_path):

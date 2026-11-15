@@ -38,6 +38,7 @@ for f in range(f0("S1") - 1, fx("S1") + 2):
     th = dist / r_wheel / 2.2
     key_prop(CR, f, None, (0, th * 57.2958, 0))
     if (f - f0("S1")) % 2: continue
+    ev(f)
     Mb = Matrix.Translation(pos) @ Matrix.Rotation(R_(90), 4, 'Z')
     for s, sy, ph in (("L", py_, 0.0), ("R", -py_, math.pi)):
         a = th + ph
@@ -97,12 +98,12 @@ stand(D2, fa, flex=8, spine=16, head=(18, 0)); arms_hang(D2, fa); face(D2, fa, 0
 stand(D2, fa + 20, flex=10, spine=20, head=(22, 0))
 GRIP = fa + 22
 for f in range(fa + 10, GRIP + 1, 4):        # reach: palm comes down onto the handle
-    u = smooth((f - fa - 10) / 12)
+    u = smooth((f - fa - 10) / 12); ev(f)
     place_hand(D2.r.o, "R", f, HANDLE + Vector((0, -0.12 * (1 - u), 0.05 + 0.18 * (1 - u))), Vector((0, 0.15, -1)), Vector((0, 1, -0.2)))
 apply_pose(D2.r.o, "R", "open_alarm", fa + 10); apply_pose(D2.r.o, "R", "cup_hold", GRIP)
 # lift: torso leans back, lid comes up and toward him, face turns away
 for f in range(GRIP, fe + 1, 2):
-    u = smooth((f - GRIP) / 36.0); v = smooth((f - GRIP - 14) / 30.0)
+    ev(f); u = smooth((f - GRIP) / 36.0); v = smooth((f - GRIP - 14) / 30.0)
     stand(D2, f, flex=10 - 12 * v, spine=20 - 20 * v, twist=-12 * v, head=(22 - 30 * v, -38 * v), side=4 * v, pos=(0, 0.06 * v))
     p = HANDLE + Vector((0, 0.02 * u, 0.30 * u))
     place_hand(D2.r.o, "R", f, p + Vector((0, 0, 0.03)), Vector((0, 0.15, -1)), Vector((0, 1, -0.2)))

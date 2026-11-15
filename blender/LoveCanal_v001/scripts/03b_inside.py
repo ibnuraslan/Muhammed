@@ -49,7 +49,7 @@ GL_C = KX + Vector((-0.28, 0.62, 0.905))
 GLASS.location = GL_C; GLASS.rotation_euler = (0, 0, 0); GLASS.keyframe_insert("location", frame=fa); GLASS.keyframe_insert("rotation_euler", frame=fa)
 for i, f in enumerate(range(fa, fe + 1, 15)):
     u = smooth((f - fa) / 50.0)
-    stand(FA, f, flex=4 + 6 * u, spine=6 + 10 * u + 2 * math.sin(i * 1.4), head=(6 + 6 * u, 0), dz=-0.02 * u)
+    stand(FA, f, flex=4 + 6 * u, spine=6 + 10 * u + 5 * math.sin(i * 1.9), head=(6 + 6 * u + 4 * math.sin(i * 1.9), 0), dz=-0.02 * u)
 face(FA, fa, -0.010, -20, 2); face(FA, fe, -0.011, -24, 2); blinks(FA, fa, fe, -0.010, -20, every=90)
 for f in range(fa, fe + 1, 4):        # right palm flat on the counter edge, left hand in front of the mouth
     ev(f); M = FA.r.o.matrix_world; fw = (M.to_3x3() @ Vector((0, -1, 0))).normalized()
@@ -58,16 +58,20 @@ for f in range(fa, fe + 1, 4):        # right palm flat on the counter edge, lef
     sh = M @ FA.r.PB["upperarm01.L"].head
     place_hand(FA.r.o, "L", f, (sh + Vector((0, 0, -0.4)) + fw * 0.2).lerp(m + fw * 0.03, u), -fw, (M.to_3x3() @ Vector((-1, 0, 0.25))).normalized())
 apply_pose(FA.r.o, "R", "flat_palm", fa); apply_pose(FA.r.o, "L", "shield", fa)
-MOP = KX + Vector((1.62, 0.45, 0)); BOP = KX + Vector((1.0, -0.78, 0))
+MOP = KX + Vector((-0.78, 1.32, 0)); BOP = KX + Vector((1.38, 0.42, 0))
 def yaw_to(p, tgt):
     d = (tgt - p); return math.degrees(math.atan2(d.x, -d.y))
 put("Mother", [("S5", MOP, yaw_to(MOP, FP))])
 put("Boy", [("S1", (0, 0, 0), 180), ("S5", BOP, yaw_to(BOP, FP)), ("S22", (0, 0, 0), 0)])
-breathe(MO, fa, fe, head=(4, -6), step=30, flex=3); arms_hang(MO, fa)
+breathe(MO, fa, fe, head=(6, -4), step=24, flex=3, amp=2.5); arms_hang(MO, fa)
+ev(fa + 24); _M = MO.r.o.matrix_world; _c = _M @ (MO.r.PB["spine02"].head + Vector((-0.05, -0.15, 0.0)))
+for f in (fa + 24, fe):      # Mother's right hand comes to her own chest (worry)
+    place_hand(MO.r.o, "R", f, _c, (_M.to_3x3() @ Vector((0, 1, 0))).normalized(), (_M.to_3x3() @ Vector((1, 0, 0.3))).normalized())
+apply_pose(MO.r.o, "R", "shield", fa + 24)
 face(MO, fa, 0.004, -6, 1); blinks(MO, fa, fe, 0.004, -6, ofs=40)
-breathe(BOY, fa, fe, head=(-12, 4), step=36, flex=2); arms_hang(BOY, fa)
+breathe(BOY, fa, fe, head=(-10, 8), step=24, flex=2, amp=2.5); arms_hang(BOY, fa)
 face(BOY, fa, 0.003, -4); blinks(BOY, fa, fe, 0.003, -4, ofs=70)
-camshot("S5", [(0.0, (299.55, -2.0, 1.65), (300.55, 0.55, 1.05), 22), (1.0, (299.65, -1.7, 1.64), (300.55, 0.55, 1.05), 22)])
+camshot("S5", [(0.0, (300.95, -1.75, 1.55), (300.72, 0.85, 1.1), 24), (1.0, (300.9, -1.3, 1.52), (300.72, 0.85, 1.1), 24)])
 
 # ================================================================== S22: hospital: Father in bed, Boy beside him, his hand resting on his father's
 HX = Vector((2100, 0, 0)); HBED = OB["HospitalBed"]; HCH = OB["BedsideChair"]
@@ -93,7 +97,8 @@ put("Father", [("S4", FP, 0), ("S5", FP, 0), ("S22", None, MF)])
 ev(fa + 1)
 for i, f in enumerate(range(fa, fe + 1, 30)):
     u = smooth((f - fa - 60) / 60)
-    stand(FA, f, flex=0, spine=10 + 1.2 * math.sin(i * 1.5), head=(14, 30 * u * (1 if Xw.y > 0 else -1) * CHAIR_SIDE))
+    stand(FA, f, flex=0, spine=10 + 1.2 * math.sin(i * 1.5), head=(14, 14 * u * (1 if Xw.y > 0 else -1) * CHAIR_SIDE))
+    for s_ in "LR": FA.key_foot(s_, f, FA.foot_xy(s_, Vector((0, 0)), 0.0) + Vector((0.0, 0.05)), 0.0, lift=-0.05, pitch=-55)   # lying: feet relaxed and pointed
 face(FA, fa, 0.002, -14); face(FA, fe, 0.004, -16, 1); blinks(FA, fa, fe, 0.002, -14, every=120)
 PIL = box("Pillow", (0.42, 0.62, 0.12), (head_end + HEAD_SGN * 0.02, bc.y, MTOP + 0.06), mat("PillowWhite", (0.95, 0.95, 0.97), 0.8), HBED.users_collection[0], bevel=0.05)
 PIL.modifiers.new("sub", 'SUBSURF').levels = 2
@@ -103,32 +108,52 @@ for s in "LR": apply_pose(FA.r.o, s, "relaxed", fa)
 arms_hang(FA, fa)
 near_side = "L" if (MF.to_3x3() @ Vector((1, 0, 0))).y * CHAIR_SIDE > 0 else "R"   # the arm on the boy's side
 far_side = "L" if near_side == "R" else "R"
-FA.key_hand(near_side, fa, Vector((0, -0.8, 2.6)), Vector((0, 0, 1)), Vector((1, 0, 0)))
 ev(fa)
 hip_w = FA.r.o.matrix_world @ FA.r.PB["root"].head; chest_w = FA.r.o.matrix_world @ FA.r.PB["spine03"].head
 x_feet = origin.x - HEAD_SGN * 0.15; x_top = chest_w.x + HEAD_SGN * 0.05
-nx, ny = 46, 22; W_ = (bmx.y - bmn.y) * 0.82
+nx, ny = 46, 34; W_ = (bmx.y - bmn.y) * 0.82
+# height field from the body/clothes vertices (arm and hand vertices left out), not from ray casts
+_mods = [(o, m) for o in OB if o.parent == FA.r.o for m in getattr(o, "modifiers", []) if m.type in ("SUBSURF", "MASK") and m.show_viewport]
+for o, m in _mods: m.show_viewport = False
+bpy.context.view_layer.update(); _dg = bpy.context.evaluated_depsgraph_get(); cell = {}
+gx0 = x_feet; gy0 = bc.y - W_ / 2 - 0.3; dx_ = (x_top - x_feet) / nx; dy_ = (W_ + 0.6) / ny
+for part in [o for o in OB if o.parent == FA.r.o and o.type == 'MESH' and any(k in o.name for k in ("body", "suit", "shoes"))]:
+    gi = {g.index: g.name for g in part.vertex_groups}; ev_ = part.evaluated_get(_dg); me_ = ev_.to_mesh(); mw_ = ev_.matrix_world
+    skip = set()
+    if len(me_.vertices) == len(part.data.vertices):
+        for v in part.data.vertices:
+            if v.groups:
+                gname = gi.get(max(v.groups, key=lambda g: g.weight).group, "")
+                if any(k in gname for k in ("arm", "wrist", "finger", "metacarpal", "hand", "thumb")): skip.add(v.index)
+    for v in me_.vertices:
+        if v.index in skip: continue
+        w = mw_ @ v.co; i = round((w.x - gx0) / dx_); j = round((w.y - gy0) / dy_)
+        for ii in (i - 1, i, i + 1):
+            for jj in (j - 1, j, j + 1):
+                if 0 <= ii <= nx and 0 <= jj <= ny: cell[jj, ii] = max(cell.get((jj, ii), -9), w.z)
+    ev_.to_mesh_clear()
+for o, m in _mods: m.show_viewport = True
+print("BLANKET cells", len(cell))
 zs = []
 for j in range(ny + 1):
     row = []
     for i in range(nx + 1):
-        x = x_feet + (x_top - x_feet) * i / nx; y = bc.y - W_ / 2 - 0.12 + (W_ + 0.24) * j / ny
-        hit = sc.ray_cast(bpy.context.evaluated_depsgraph_get(), Vector((x, y, 2.7)), Vector((0, 0, -1)))
-        z = (hit[1].z + 0.035) if hit[0] and hit[4] and hit[4].name.startswith("Father") else MTOP + 0.035
-        if abs(y - bc.y) > W_ / 2: z = MTOP + 0.035 - 0.9 * (abs(y - bc.y) - W_ / 2)
+        y = gy0 + dy_ * j; z = max(MTOP, cell.get((j, i), -9)) + 0.022
+        off = abs(y - bc.y) - W_ / 2
+        if off > 0: z = max(MTOP - 0.3, MTOP + 0.022 - 1.1 * off)
         row.append(z)
     zs.append(row)
 raw = [r[:] for r in zs]
 zs = [[z + 0.02 for z in r] for r in zs]
-for _ in range(6):
+for _ in range(12):
     zs = [[(zs[j][i] * 2 + sum(zs[jj][ii] for jj, ii in ((j - 1, i), (j + 1, i), (j, i - 1), (j, i + 1)) if 0 <= jj <= ny and 0 <= ii <= nx) /
             max(1, sum(1 for jj, ii in ((j - 1, i), (j + 1, i), (j, i - 1), (j, i + 1)) if 0 <= jj <= ny and 0 <= ii <= nx)) * 2) / 4
            for i in range(nx + 1)] for j in range(ny + 1)]
-zs = [[max(zs[j][i], raw[j][i]) + 0.03 for i in range(nx + 1)] for j in range(ny + 1)]
+zs = [[max(zs[j][i], raw[j][i] + 0.008) + 0.01 for i in range(nx + 1)] for j in range(ny + 1)]
 bm = bmesh.new(); vv = {}
 for j in range(ny + 1):
     for i in range(nx + 1):
-        vv[j, i] = bm.verts.new((x_feet + (x_top - x_feet) * i / nx, bc.y - W_ / 2 - 0.12 + (W_ + 0.24) * j / ny, zs[j][i]))
+        vv[j, i] = bm.verts.new((x_feet + (x_top - x_feet) * i / nx, gy0 + dy_ * j, zs[j][i]))
 for j in range(ny):
     for i in range(nx): bm.faces.new((vv[j, i], vv[j, i + 1], vv[j + 1, i + 1], vv[j + 1, i]))
 me = bpy.data.meshes.new("Blanket"); bm.to_mesh(me); bm.free()
@@ -136,7 +161,14 @@ BL = bpy.data.objects.new("Blanket", me); HBED.users_collection[0].objects.link(
 for p_ in me.polygons: p_.use_smooth = True
 so = BL.modifiers.new("thick", 'SOLIDIFY'); so.thickness = 0.04; so.offset = 1
 
-BL.data.materials.append(mat("BlanketBlue", (0.35, 0.45, 0.62), 0.85))
+mb_ = mat("BlanketBlue", (0.16, 0.3, 0.55), 0.8); BL.data.materials.append(mb_)
+_nt = mb_.node_tree; _P = _nt.nodes["Principled BSDF"]; _tc = _nt.nodes.new("ShaderNodeTexCoord"); _wv = _nt.nodes.new("ShaderNodeTexWave")
+_wv.inputs["Scale"].default_value = 2.5; _wv.inputs["Distortion"].default_value = 6.0; _nt.links.new(_tc.outputs["Object"], _wv.inputs["Vector"])
+_bp = _nt.nodes.new("ShaderNodeBump"); _bp.inputs["Strength"].default_value = 0.35; _nt.links.new(_wv.outputs["Fac"], _bp.inputs["Height"]); _nt.links.new(_bp.outputs["Normal"], _P.inputs["Normal"])
+_P.inputs["Sheen Weight"].default_value = 0.4
+_txb = bpy.data.textures.new("blanket_folds", 'CLOUDS'); _txb.noise_scale = 0.18
+_db = BL.modifiers.new("folds", 'DISPLACE'); _db.texture = _txb; _db.strength = 0.025; _db.texture_coords = 'GLOBAL'
+BL.modifiers.move(len(BL.modifiers) - 1, 0)
 # the near arm rests on top of the blanket, hand by the hip
 ev(fa)
 def blanket_z(x, y):
@@ -177,5 +209,5 @@ for f in (fa, fe):
     lp = M @ (BOY.r.BN["upperleg01.L"].head_local + Vector((-0.04, -0.2, 0.17)))     # left hand resting on his own thigh, toward the middle
     place_hand(BOY.r.o, "L", f, lp, Vector((0, 0, -1)), (M.to_3x3() @ Vector((0, -1, 0))).normalized())
 apply_pose(BOY.r.o, "L", "relaxed", fa)
-camshot("S22", [(0.0, (hip_w.x - HEAD_SGN * 1.95, bc.y - 2.05, 1.65), (hip_w.x + HEAD_SGN * 0.35, bc.y + 0.35, 0.82), 28),
-                (1.0, (hip_w.x - HEAD_SGN * 1.7, bc.y - 1.8, 1.6), (hip_w.x + HEAD_SGN * 0.35, bc.y + 0.35, 0.84), 30)])
+camshot("S22", [(0.0, (hip_w.x - HEAD_SGN * 0.45, bc.y - 1.55, 2.45), (hip_w.x + HEAD_SGN * 0.15, bc.y + 0.3, 0.7), 30),
+                (1.0, (hip_w.x - HEAD_SGN * 0.4, bc.y - 1.35, 2.35), (hip_w.x + HEAD_SGN * 0.15, bc.y + 0.3, 0.72), 30)])

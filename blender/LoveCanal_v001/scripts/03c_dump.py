@@ -25,21 +25,22 @@ WK0 = DX + Vector((-1.6, -18.0, 0)); V_W = 0.9
 put("Worker", [("S9", WK0, 90), ("S10", DX + Vector((0, 18.6, 0)), 0)])
 fa = f0("S9"); fe = fx("S9")
 pth = lambda f: Vector((0, -V_W * (f - fa) / FPS, 0))
-WK.walk(pth, lambda f: 0.0, fa, fe, stride=0.55, lift=0.06, bob=0.012, crouch=0.12, lean=30)
+WK.walk(pth, lambda f: 0.0, fa, fe, stride=0.5, lift=0.05, bob=0.012, crouch=0.2, lean=56)
 DR.rotation_mode = 'XYZ'
 for f in range(fa - 1, fe + 2):
     d = V_W * (f - fa) / FPS
-    c = WK0 + Vector((0.78 + d, 0, r_d))
+    c = WK0 + Vector((0.62 + d, 0, r_d))
     DR.location = c; DR.rotation_euler = (R_(90), d / r_d, 0)      # lying, axis along Y, rolling toward +X
     DR.keyframe_insert("location", frame=f); DR.keyframe_insert("rotation_euler", frame=f)
     if (f - fa) % 2: continue
-    for s, sy in (("L", 0.17), ("R", -0.17)):
-        p = c + Vector((-0.19, sy, 0.21)); n = (c + Vector((0, sy, 0)) - p).normalized()
-        place_hand(WK.r.o, s, f, p, n, Vector((0.55, 0, 0.83)))
-for s in "LR": apply_pose(WK.r.o, s, "flat_palm", fa)
+    ev(f)
+    for s, sy in (("L", 0.16), ("R", -0.16)):
+        p = c + Vector((-0.07, sy, r_d + 0.004)); n = (c + Vector((0, sy, 0)) - p).normalized()
+        place_hand(WK.r.o, s, f, p, n, Vector((1.0, 0, -0.15)))
+for s in "LR": apply_pose(WK.r.o, s, "hold_flat_object", fa)
 face(WK, fa, -0.004, -12); blinks(WK, fa, fe, -0.004, -12)
-for f in range(fa, fe + 1, 20): WK.key_spine(f, flex=30, head=(-30, 0))
-camshot("S9", [(0.0, (DX.x + 3.4, -20.6, 0.95), (DX.x - 0.4, -18.0, 0.75), 30), (1.0, (DX.x + 3.8, -20.0, 0.9), (DX.x + 0.2, -18.0, 0.75), 30)])
+for f in range(fa, fe + 1, 20): WK.key_spine(f, flex=34, head=(-34, 0))
+camshot("S9", [(0.0, (DX.x + 2.6, -19.6, 0.75), (DX.x - 0.6, -18.0, 0.95), 32), (1.0, (DX.x + 2.9, -19.2, 0.75), (DX.x + 0.0, -18.0, 0.95), 34)])
 
 # ================================================================== S10: trucks loaded with drums; the Worker walks between them
 fa = f0("S10"); fe = fx("S10")

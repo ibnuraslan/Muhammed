@@ -48,6 +48,21 @@ L_fence = lib_model("fence", 1.0, rz=90)                  # runs along Y
 L_lamp = lib_model("lamp", 6.0)
 L_tree = lib_model("tree", 7.0, drop=("Groundcover", "grass"))
 L_drum = lib_model("drum", 0.88)
+# windows: the scans' see-through glass showed black voids (hollow houses). Opaque glass: sky reflection (clear coat) over cream curtain folds
+def window_mat():
+    m = bpy.data.materials.new("WindowCurtain"); m.use_nodes = True; nt = m.node_tree; P = nt.nodes["Principled BSDF"]
+    tc = nt.nodes.new("ShaderNodeTexCoord"); wv = nt.nodes.new("ShaderNodeTexWave"); wv.wave_type = 'BANDS'; wv.bands_direction = 'X'
+    wv.inputs["Scale"].default_value = 3.0; wv.inputs["Distortion"].default_value = 1.5; nt.links.new(tc.outputs["Object"], wv.inputs["Vector"])
+    rp = nt.nodes.new("ShaderNodeValToRGB"); nt.links.new(wv.outputs["Fac"], rp.inputs[0])
+    rp.color_ramp.elements[0].color = (0.72, 0.62, 0.5, 1); rp.color_ramp.elements[1].color = (0.95, 0.9, 0.8, 1)
+    nt.links.new(rp.outputs[0], P.inputs["Base Color"]); P.inputs["Roughness"].default_value = 0.6
+    nt.links.new(rp.outputs[0], P.inputs["Emission Color"]); P.inputs["Emission Strength"].default_value = 0.55   # panes sit in shadowed recesses: never a black void
+    P.inputs["Coat Weight"].default_value = 1.0; P.inputs["Coat Roughness"].default_value = 0.03; P.inputs["Coat IOR"].default_value = 1.6
+    return m
+M_win = window_mat()
+for L_ in (L_house0, L_house5):
+    for i, m in enumerate(L_.data.materials):
+        if m and any(k in m.name.lower() for k in ("glass", "window")): L_.data.materials[i] = M_win
 
 # ------------------------------------------------------------------ STREET (origin 0,0,0): road along +Y
 STREET = coll("SET_street")

@@ -36,10 +36,14 @@ def put(n, s_list):
     """rig object placement per shot: [(shot, world_xy_z, yaw_deg or Matrix)] -> constant keys; parked elsewhere"""
     o = OB[n]; o.rotation_mode = 'QUATERNION'
     marks = []
+    PK = Matrix.Translation((list(CH).index(n) * 40.0, -5000, -500))
+    starts = sorted(f0(s) for s, _, _ in s_list)
     for s, pos, yaw in s_list:
         M = yaw if isinstance(yaw, Matrix) else Matrix.Translation(Vector(pos)) @ Matrix.Rotation(R_(yaw), 4, 'Z')
-        PK = Matrix.Translation((list(CH).index(n) * 40.0, -5000, -500))
-        marks.append((f0(s), M)); marks.append((f1(s) + 1, PK))
+        nxt = min([x for x in starts if x > f0(s)] or [10 ** 6])
+        park = min(fx(s) + 2, nxt)                    # stays placed through its overrun (keys computed there stay valid)
+        marks.append((f0(s), M))
+        if park < nxt: marks.append((park, PK))
     marks.sort(key=lambda m: m[0])
     o.matrix_world = Matrix.Translation((list(CH).index(n) * 40.0, -5000, -500)); o.keyframe_insert("location", frame=0); o.keyframe_insert("rotation_quaternion", frame=0)
     for f, M in marks:
