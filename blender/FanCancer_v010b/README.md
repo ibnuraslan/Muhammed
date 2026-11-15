@@ -6,7 +6,7 @@ This is the full 41.5 s film (frames 1–2490) at 1080×1920 and 60 fps, in the 
 - `beats.json`: the 13 beat start frames at the target times. When the voiceover arrives, retime with `blender/pipeline/retime_to_vo.py`.
 - `SETTINGS.md` covers the render settings and test frames, and `CREDITS.md` holds the CC-BY block for the video description.
 - `package_check_lowres.jpg`: frame 2460 at 25 % and 8 samples, rendered from the packed file opened with `--factory-startup`.
-- Acting review: `../FanCancer_v001/review/ACTING_notes.md` (fix list), `ACTING_before_0.5s.jpg`, `ACTING_after_0.5s.jpg`, `ACTING_hand_closeups.jpg`, and the full motion preview `../FanCancer_v001/review/preview.mp4` rendered from this package (pages in `review/preview_pages_v010b/`).
+- Acting review: `../FanCancer_v001/review/ACTING_notes.md` (fix list), `ACTING_before_0.5s.jpg`, `ACTING_after_0.5s.jpg`, `ACTING_hand_closeups.jpg`, and the full motion preview `../FanCancer_v001/review/preview.mp4` rendered from this package (pages in `review/preview_pages_v010bb/`).
 
 **Voiceover:** none has been delivered yet. The film is built to the target beat times in `30_FanCancer.md`, so there is no mp3 in this folder.
 

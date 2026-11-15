@@ -127,3 +127,10 @@ The beat frames are unchanged, and there is no on-screen text.
 | 1 | The cheque filled the bottom half as a white slab. | The camera is about 0.4 m higher (z 1.74–1.78), tilted down onto her at lens 38. The cheque reads as a band across the lower third, with its blue border and signature line visible, and the slow push is kept. |
 | 2 | Her expression read as shocked or screaming. | The finale and the end of the laptop shot use a happy smile: smile 1.0, lips slightly parted (jaw 5), and eyes narrowed. The stunned open mouth stays only at 36.4–37.2 s, at the first moment at the laptop. |
 | 3 | His head near the lens at 121–136. | The 1.95 s and 2.2 s keys are higher (2.65–2.75 m) and further back. He now passes mid-frame below the camera. |
+
+## v010b (director review of v010). The preview `review/preview.mp4` (498 frames) comes from the exact v010b package: f1331–1461, f1846–2006 and f2281–2490 were re-rendered from it, and every other frame is unchanged from v010. Pages are in `review/preview_pages_v010b/`
+| Item | Fault | Fix |
+|---|---|---|
+| 1 | The ending: an A-pose, a neutral face, no movement, and a clapper's face cut by the frame edge. | She holds the cheque by its top edge with both hands, elbows bent, in front of her chest; the cheque hangs below as the lower band. A small bounce, a sway and a head tilt are keyed every 0.3 s, with a happy smile (smile, squint, lids). Both clappers stand closer (x −0.68 and +0.08), and their faces stay inside the frame through the slow push (1.70 → 1.50 m). |
+| 2 | The posting shot was near-frozen (1851–2001). | The push-in is stronger (lens 38 → 46 → 52). He lifts his head once (about 32.0 s), his body sways, and his thumb keeps tapping. |
+| 3 | The exam room opened on a static wide (1336–1426). | A slow push into the room (22.2 → 23.6 s, lens 30 → 36). |
