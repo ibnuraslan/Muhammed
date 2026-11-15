@@ -1,0 +1,110 @@
+{
+ "dogA": {
+  "uid": "a89b49b3d9c647a8805d8d5287f47f48",
+  "title": "Dog",
+  "author": "Yury Misiyuk",
+  "author_profile": "https://sketchfab.com/Tim0",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/a89b49b3d9c647a8805d8d5287f47f48",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "dogB": {
+  "uid": "a43ed994cafc43ebae92dad0440c246b",
+  "title": "Dog from Lamps",
+  "author": "Flightyfelon",
+  "author_profile": "https://sketchfab.com/Flightyfelon",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/a43ed994cafc43ebae92dad0440c246b",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "gun": {
+  "uid": "74da1e6054cc40e3b61bed4b4d8eef61",
+  "title": "Low-Poly Ithaca M37",
+  "author": "TastyTony",
+  "author_profile": "https://sketchfab.com/TastyTony",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/74da1e6054cc40e3b61bed4b4d8eef61",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "skel": {
+  "uid": "665890c542be433fb18ef235cf987cef",
+  "title": "Male Human Skeleton - ZBrush - Anatomy Study",
+  "author": "Ruslan Gadzhiev",
+  "author_profile": "https://sketchfab.com/ruslangadzhiev",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/665890c542be433fb18ef235cf987cef",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "lungs": {
+  "uid": "c98897905e9d456ca5327bdde59245dd",
+  "title": "FISIOLOGI PARU - PARU",
+  "author": "rimatrices94",
+  "author_profile": "https://sketchfab.com/rimatrices94",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/c98897905e9d456ca5327bdde59245dd",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "amb": {
+  "uid": "25392b75045946f7a4c9a03e3bea969e",
+  "title": "AMBULANCE CAR - LOW POLY",
+  "author": "Jasmin Daniel",
+  "author_profile": "https://sketchfab.com/jasmin.daniel",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/25392b75045946f7a4c9a03e3bea969e",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "bed": {
+  "uid": "60651eac7e96454c8cf5c43a91412336",
+  "title": "Simple Hospital Bed",
+  "author": "Yvo Pors",
+  "author_profile": "https://sketchfab.com/yvopors14",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/60651eac7e96454c8cf5c43a91412336",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "crate": {
+  "uid": "9dda05572f7b49e1afb42bbb55d733d7",
+  "title": "Dog Crate",
+  "author": "RunyonP",
+  "author_profile": "https://sketchfab.com/RunyonP",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/9dda05572f7b49e1afb42bbb55d733d7",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "phone": {
+  "uid": "03c75adf5d9a426a9435d20cc76090be",
+  "title": "Smartphone",
+  "author": "Rafael Benites de Souza",
+  "author_profile": "https://sketchfab.com/rafaelbell",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/03c75adf5d9a426a9435d20cc76090be",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "seats": {
+  "uid": "b9ac688d07e94f41bdb3e0de4a434c48",
+  "title": "Front Car Seats",
+  "author": "D0uble_Zer0",
+  "author_profile": "https://sketchfab.com/D0uble_Zer0",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/b9ac688d07e94f41bdb3e0de4a434c48",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "seat1": {
+  "uid": "cd0ca02387984cd19e1b7ad76ddc273b",
+  "title": "Car seat (in front of)",
+  "author": "Foulques",
+  "author_profile": "https://sketchfab.com/Foulques",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/cd0ca02387984cd19e1b7ad76ddc273b",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "truck": {
+  "uid": "cad83751a295463bbb8b823c11a181ea",
+  "title": "Toyota Pickup truck",
+  "author": "alban",
+  "author_profile": "https://sketchfab.com/alban",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/cad83751a295463bbb8b823c11a181ea",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
