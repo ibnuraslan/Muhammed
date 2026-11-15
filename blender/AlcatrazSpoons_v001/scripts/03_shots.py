@@ -255,12 +255,12 @@ def shot_1a(f0, n):
     sh = wpos("P1", "upperarm01.R", f0); elbow("P1", "R", f0, sh + V((-0.3, 0.3, -0.3)))
     Mw = sp.matrix_world
     sc.frame_set(f0); bpy.context.view_layer.update()
-    grip_object(bpy.data.objects["P1"], "R", f0, sp, Mw @ V((0, 0.05, 0.004)), Mw.to_3x3() @ V((-1, 0, 0)), finger_dir=Mw.to_3x3() @ V((0, 0, 1)), grip="wrap")
+    sp.rotation_euler = (0, 0, R_(160)); bpy.context.view_layer.update(); Mw = sp.matrix_world     # lying flat
+    hand("P1", "R", f0, Mw @ V((0, 0.06, -0.012)), V((0, 0, 1)), Mw.to_3x3() @ V((0, 1, 0)), pose="flat_palm")
     M0 = ik_mat("P1", "R", f0); child_of(sp, "P1", "wrist.R", f0)
     piv = V(sp.location)
     for f, up, fw, tilt in ((f0 + 45, 0.2, -0.04, 25), (f0 + 100, 0.23, -0.05, 35), (f0 + n - 1, 0.22, -0.04, 28)):
-        key_ik("P1", "R", f, rigid(piv, Rx(-tilt) @ Rz(tilt * 0.4), (0.05, fw, up)) @ M0)
-        apply_pose(bpy.data.objects["P1"], "R", "pinch", f)
+        key_ik("P1", "R", f, rigid(piv, Rz(tilt * 0.4), (0.05, fw, up)) @ M0)
         sh = wpos("P1", "upperarm01.R", f); elbow("P1", "R", f, sh + V((-0.3, 0.3, -0.3)))
     camera("1a", f0, n, [(0, (0.16, -1.05, 1.38), (0.16, 0.55, 1.24), 28), (1, (0.16, -0.85, 1.37), (0.16, 0.55, 1.25), 28)])
     return use
@@ -501,7 +501,7 @@ def shot_5b(f0, n):
     for f, loc, rx in ((push_end + 8, gpos + V((0.15, 0.24, -0.05)), 25), (push_end + 16, gpos + V((0.4, 0.38, -0.2)), 80), (push_end + 20, V((X2 + 0.6, gpos.y + 0.45, FZ2 + 0.012)), 90), (push_end + 24, V((X2 + 0.62, gpos.y + 0.47, FZ2 + 0.03)), 85), (push_end + 28, V((X2 + 0.63, gpos.y + 0.48, FZ2 + 0.012)), 90)):
         g.location = loc; g.rotation_euler = (R_(rx), 0, R_(180)); g.keyframe_insert("location", frame=f); g.keyframe_insert("rotation_euler", frame=f)
     for f in (push_end + 20, f1):     # hands back on the duct floor, ready to crawl
-        crawl_pose("P1", f, (X2, -0.8), yw, 0.0, FZ2, head=(-30, 0))
+        crawl_pose("P1", f, (X2, -1.0), yw, 0.0, FZ2, head=(-30, 0))
     for i in range(14):
         bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=1); pf = bpy.context.active_object; pf.name = "Puff_5b_%d" % i
         pf.data.materials.append(bpy.data.materials["M_Rubble"]); vis_window(pf, f0, f1)
@@ -570,8 +570,9 @@ def climb(n, f0, f1, z_start, rate, lad_x, lad_y, yaw=180.0, phase=0.0):
             top = z + 0.45
             zh = min(top, rung_z(kh) + 4 * RUNG) if uh < 0.6 else min(top, rung_z(kh) + 4 * RUNG + RUNG * ss((uh - 0.6) / 0.4))
             zh = rung_z(round((zh - 0.30) / RUNG)) if uh < 0.6 else zh
-            hand(n, s, f, V((lad_x - sx * 0.06, lad_y - 0.035, zh + 0.06)), V((0, 0.2, -1)), V((0, 1, 0.1)),
-                 pole=V((lad_x - sx * 0.3, lad_y - 0.65, zh - 0.35)), pose="flat_palm")
+            zr = z + 0.32 + 0.08 * math.sin(2 * math.pi * (cyc + ph))     # hands slide up the round rails, alternating a little
+            hand(n, s, f, V((lad_x - sx * 0.23, lad_y - 0.034, zr)), V((0, 1, 0)), V((sx * 0.25, 0, 1)),
+                 pole=V((lad_x - sx * 0.5, lad_y - 0.6, zr - 0.35)), pose="shield")
 
 def shot_6a(f0, n):
     """P1 and P2 climb the fixed steel ladder up the utility shaft (seen from below, faces turning up)"""
@@ -597,7 +598,7 @@ def shot_6b(f0, n):
         if on_pipe:
             for s in "LR":
                 sx = 1 if s == "L" else -1
-                ank = V((px - sx * 0.18, py - 0.21, z - 0.78)); foot("P1", s, f, ank, 180 + sx * 35, pitch=-10, knee=ank + V((-sx * 0.35, -0.35, 0.35)))
+                ank = V((px - sx * 0.15, py - 0.28, z - 0.78)); foot("P1", s, f, ank, 180 - sx * 20, pitch=-10, knee=ank + V((-sx * 0.45, -0.3, 0.35)))
             for s, dz in (("L", 0.42), ("R", 0.28)):
                 sx = 1 if s == "L" else -1
                 hp = V((px - sx * 0.015, py - 0.095, z + dz)); hand("P1", s, f, hp, V((0, 1, 0)), V((-sx, 0, 0.3)), pole=hp + V((-sx * 0.5, -0.3, -0.25)), pose="relaxed")

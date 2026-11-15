@@ -425,7 +425,7 @@ box("S3_Roof_c", (1.0, 1.3, 0.25), (X3 + 1.2, -0.85, HS + 0.12), M_CONC, C3)
 # fixed steel ladder: rails + rungs every 0.30 m, 0.18 m off the wall
 LAD_X, LAD_Y, RUNG = X3, -0.18, 0.30
 for sx in (-0.23, 0.23):
-    box("S3_Rail%+.0f" % (sx * 10), (0.05, 0.012, HS + 0.9), (LAD_X + sx, LAD_Y, (HS + 0.9) / 2), M_STEEL, C3)
+    cyl("S3_Rail%+.0f" % (sx * 10), 0.02, HS + 0.9, (LAD_X + sx, LAD_Y, (HS + 0.9) / 2), M_STEEL, C3, verts=16)      # round rails: hands slide up them
     for z in (1.0, 3.0, 5.0, 6.6):
         box("S3_Bracket%+.0f_%d" % (sx * 10, z * 10), (0.04, 0.2, 0.04), (LAD_X + sx, LAD_Y + 0.1, z), M_STEEL, C3)
 for k in range(int(HS / RUNG) + 2):
