@@ -1,0 +1,333 @@
+{
+ "frames": {
+  "751": {
+   "Crowd1_dup2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "781": {
+   "Crowd4_dup2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "883": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 7
+   }
+  },
+  "901": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 12
+   }
+  },
+  "913": {
+   "Teen": {
+    "self": 0,
+    "clothes": 0,
+    "other": 18
+   }
+  },
+  "1009": {
+   "Teen": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1033": {
+   "ResA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   },
+   "Teen": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1039": {
+   "ResA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 6
+   }
+  },
+  "1045": {
+   "ResA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "1057": {
+   "Teen": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1249": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 17
+   }
+  },
+  "1255": {
+   "Crowd1_dup2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   },
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 109
+   }
+  },
+  "1285": {
+   "Crowd4_dup1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "1327": {
+   "Crowd1_dup2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 15
+   },
+   "ResA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   },
+   "ResB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 14
+   }
+  },
+  "1333": {
+   "ResA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "1345": {
+   "ResB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "1351": {
+   "ResB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "1357": {
+   "ResB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "1363": {
+   "ResB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "1369": {
+   "ResB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "1387": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "1405": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 6
+   }
+  },
+  "1687": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "1771": {
+   "ResA": {
+    "self": 1389,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1819": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 23
+   },
+   "Teen": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1825": {
+   "Teen": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "1831": {
+   "Teen": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "1837": {
+   "Teen": {
+    "self": 0,
+    "clothes": 0,
+    "other": 9
+   }
+  },
+  "1843": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 15
+   }
+  },
+  "1867": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "1873": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 20
+   }
+  },
+  "1879": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 21
+   }
+  },
+  "1885": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 19
+   }
+  },
+  "1891": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 17
+   }
+  },
+  "1897": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 12
+   }
+  },
+  "1903": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 7
+   }
+  },
+  "1921": {
+   "Mother": {
+    "self": 54,
+    "clothes": 0,
+    "other": 12
+   }
+  },
+  "1927": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 20
+   }
+  },
+  "1933": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 35
+   }
+  },
+  "1939": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 44
+   }
+  },
+  "1945": {
+   "Mother": {
+    "self": 0,
+    "clothes": 0,
+    "other": 23
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   1255,
+   1255
+  ],
+  [
+   1771,
+   1771
+  ],
+  [
+   1921,
+   1939
+  ]
+ ],
+ "fps": 60
+}
