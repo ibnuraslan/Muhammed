@@ -47,5 +47,5 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 31 | PopeShot | `claude/beautiful-ptolemy-c5vrcq` | `blender/PopeShot_v012/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1475)** |
 | 32 | GoatOwner | `claude/beautiful-ptolemy-c5vrcq` | `blender/GoatOwner_v009/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1793)** |
 | 33 | WaterTubes | `claude/beautiful-ptolemy-c5vrcq` | `blender/WaterTubes_v006/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1769)** |
-| 34 | EscapeArtist | `claude/connect34-escape-artist` | `blender/EscapeArtist_v006b/` **acting fixed, approved, final commit 031e503 (VO sync when your voiceover arrives)** |
+| 34 | EscapeArtist | `claude/beautiful-ptolemy-c5vrcq` | `blender/EscapeArtist_v010/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–2815)** |
 | 35 | TitanicIceberg | `claude/beautiful-ptolemy-c5vrcq` | `blender/TitanicIceberg_v014/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1464)** |
