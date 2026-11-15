@@ -1,0 +1,74 @@
+{
+ "whale_hp": {
+  "uid": "5a6a09f1c27e4d0f890f2a30c10d7a81",
+  "title": "High-Poly Humbpack Whale",
+  "author": "K9239",
+  "author_profile": "https://sketchfab.com/K9239",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/5a6a09f1c27e4d0f890f2a30c10d7a81",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "whale_game": {
+  "uid": "da07e3ff73914ff28d2b8cf9da794036",
+  "title": "Game-ready Humpback Whale",
+  "author": "Allie2k",
+  "author_profile": "https://sketchfab.com/Allie2k",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/da07e3ff73914ff28d2b8cf9da794036",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "shark_bite": {
+  "uid": "936d4110b39945f5a46cb2d831ece920",
+  "title": "Great White Shark Attack Bite Animation Loop",
+  "author": "LasquetiSpice",
+  "author_profile": "https://sketchfab.com/LasquetiSpice",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/936d4110b39945f5a46cb2d831ece920",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "shark_wp": {
+  "uid": "8e429052939a4677861d0d550a0e27cd",
+  "title": "White Pointer",
+  "author": "VFX Stevenz",
+  "author_profile": "https://sketchfab.com/vfxstevenz",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/8e429052939a4677861d0d550a0e27cd",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "bed": {
+  "uid": "9cd9464990d2456e98b69978447852aa",
+  "title": "Hospital Bed",
+  "author": "Matt LeMoine",
+  "author_profile": "https://sketchfab.com/Matt_LeMoine",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/9cd9464990d2456e98b69978447852aa",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "bed_white": {
+  "uid": "60651eac7e96454c8cf5c43a91412336",
+  "title": "Simple Hospital Bed",
+  "author": "Yvo Pors",
+  "author_profile": "https://sketchfab.com/yvopors14",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/60651eac7e96454c8cf5c43a91412336",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "lifevest": {
+  "uid": "8481ac383f5348529d366c99cf86ab8e",
+  "title": "Life Vest / Life Jacket",
+  "author": "DPMA",
+  "author_profile": "https://sketchfab.com/DanTronMcTronDan",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/8481ac383f5348529d366c99cf86ab8e",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "boat": {
+  "uid": "8ea6bfc85e5d43b881dec5d224583f19",
+  "title": "Fast Rescue Craft Mako 655",
+  "author": "Pixel",
+  "author_profile": "https://sketchfab.com/stefan.lengyel1",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/8ea6bfc85e5d43b881dec5d224583f19",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}

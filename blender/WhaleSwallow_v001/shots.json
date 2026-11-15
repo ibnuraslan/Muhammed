@@ -1,0 +1,135 @@
+{
+ "note": "Phase-1 clip lengths = reference slot x 1.3 at 60 fps. Phase 2 adds 'start' (VO frame) per shot and trims 'frames'.",
+ "shots": [
+  {
+   "id": "1a",
+   "ref_seconds": 1.6,
+   "frames": 125
+  },
+  {
+   "id": "1b",
+   "ref_seconds": 1.4,
+   "frames": 109
+  },
+  {
+   "id": "1c",
+   "ref_seconds": 1.0,
+   "frames": 78
+  },
+  {
+   "id": "2",
+   "ref_seconds": 2.0,
+   "frames": 156
+  },
+  {
+   "id": "3a",
+   "ref_seconds": 1.6,
+   "frames": 125
+  },
+  {
+   "id": "3b",
+   "ref_seconds": 1.6,
+   "frames": 125
+  },
+  {
+   "id": "3c",
+   "ref_seconds": 1.3,
+   "frames": 101
+  },
+  {
+   "id": "4a",
+   "ref_seconds": 2.0,
+   "frames": 156
+  },
+  {
+   "id": "4b",
+   "ref_seconds": 1.5,
+   "frames": 117
+  },
+  {
+   "id": "5a",
+   "ref_seconds": 1.4,
+   "frames": 109
+  },
+  {
+   "id": "5b",
+   "ref_seconds": 1.8,
+   "frames": 140
+  },
+  {
+   "id": "5c",
+   "ref_seconds": 1.8,
+   "frames": 140
+  },
+  {
+   "id": "6a",
+   "ref_seconds": 1.0,
+   "frames": 78
+  },
+  {
+   "id": "6b",
+   "ref_seconds": 1.2,
+   "frames": 94
+  },
+  {
+   "id": "6c",
+   "ref_seconds": 1.0,
+   "frames": 78
+  },
+  {
+   "id": "7a",
+   "ref_seconds": 1.4,
+   "frames": 109
+  },
+  {
+   "id": "7b",
+   "ref_seconds": 1.4,
+   "frames": 109
+  },
+  {
+   "id": "8a",
+   "ref_seconds": 1.2,
+   "frames": 94
+  },
+  {
+   "id": "8b",
+   "ref_seconds": 1.0,
+   "frames": 78
+  },
+  {
+   "id": "9",
+   "ref_seconds": 1.2,
+   "frames": 94
+  },
+  {
+   "id": "10",
+   "ref_seconds": 2.6,
+   "frames": 203
+  },
+  {
+   "id": "11a",
+   "ref_seconds": 1.5,
+   "frames": 117
+  },
+  {
+   "id": "11b",
+   "ref_seconds": 1.3,
+   "frames": 101
+  },
+  {
+   "id": "12a",
+   "ref_seconds": 1.2,
+   "frames": 94
+  },
+  {
+   "id": "12b",
+   "ref_seconds": 1.0,
+   "frames": 78
+  },
+  {
+   "id": "13",
+   "ref_seconds": 1.5,
+   "frames": 117
+  }
+ ]
+}
