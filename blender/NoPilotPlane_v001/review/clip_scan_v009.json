@@ -105,6 +105,41 @@
     "other": 1
    }
   },
+  "679": {
+   "YOU": {
+    "self": 66,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "829": {
+   "YOU": {
+    "self": 79,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "835": {
+   "YOU": {
+    "self": 59,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "841": {
+   "YOU": {
+    "self": 54,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "847": {
+   "YOU": {
+    "self": 40,
+    "clothes": 0,
+    "other": 0
+   }
+  },
   "1429": {
    "YOU": {
     "self": 0,
@@ -151,6 +186,14 @@
  "step": 6,
  "depth_cm": 2.0,
  "bad_ranges": [
+  [
+   679,
+   679
+  ],
+  [
+   829,
+   847
+  ],
   [
    1429,
    1441
