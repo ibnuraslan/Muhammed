@@ -64,8 +64,8 @@ K = [  # frame, location, target, lens
  (1000, (0.35, 2.7, 1.4), (-1.35, 2.5, 1.35), 30),
  (1030, (0.6, 2.0, 1.5), (-1.12, 2.0, 1.55), 38),
  # hard cut at 1031: over his shoulder onto the rescuers listening (the teen alone is ~1.5 s)
- (1031, (-1.95, 2.85, 1.7), (0.0, 1.6, 1.45), 28),
- (1110, (-1.75, 2.65, 1.68), (0.0, 1.6, 1.45), 30),
+ (1031, (-0.75, 2.95, 1.7), (-0.9, 0.9, 1.55), 32),     # over his shoulder: ResA listening
+ (1110, (-0.7, 2.85, 1.68), (-0.9, 0.9, 1.55), 34),
  # hard cut at 1111
  (1111, (0.25, -0.35, 1.42), (-1.2, 1.4, 1.2), 30),
  (1125, (0.2, -0.4, 1.4), (-1.2, 1.4, 1.2), 30),
@@ -113,13 +113,15 @@ K = [  # frame, location, target, lens
  (1766, (0.5, 2.9, 1.5), (-0.3, 1.0, 1.2), 26),
  (1800, (0.7, 2.8, 1.5), (-0.4, 1.3, 1.25), 28),     # the mother runs in
  (1830, (0.9, 2.9, 1.55), (-0.5, 1.6, 1.3), 30),     # she takes him from the teen, in frame
- (1856, (0.9, 3.1, 1.45), (-0.6, 1.9, 1.3), 40),     # the hug: she turns to us, both faces
- (1915, (0.8, 3.0, 1.35), (-0.6, 1.9, 1.15), 44),
+ (1855, (0.95, 2.95, 1.55), (-0.5, 1.7, 1.3), 31),
+ # hard cut at 1856
+ (1856, (1.1, 1.3, 1.45), (-0.6, 1.9, 1.25), 36),     # the hug, from her side: both faces in profile
+ (1915, (1.05, 1.35, 1.3), (-0.6, 1.9, 1.05), 40),
  # hard cut at 1916: the wide (about 0.6 s)
  (1916, (2.4, -2.6, 2.6), (-0.3, 1.6, 1.0), 24),
  (1950, (2.6, -3.4, 3.6), (-0.3, 1.8, 0.9), 24),
 ]
-CUTS = [197, 248, 428, 1031, 1111, 1288, 1372, 1706, 1766, 1916]     # hard cuts: separate splines either side, constant step between
+CUTS = [197, 248, 428, 1031, 1111, 1288, 1372, 1706, 1766, 1856, 1916]     # hard cuts: separate splines either side, constant step between
 cam = bpy.data.objects["Cam"]; tg = bpy.data.objects["CamTarget"]
 bounds = [1] + CUTS + [1951]
 for a_, b_ in zip(bounds[:-1], bounds[1:]):

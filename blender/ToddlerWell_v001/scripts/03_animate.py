@@ -151,7 +151,7 @@ UP = lambda c, o=0.08, fw=0.05: ("rel", (o, fw, 0.92 * c.arm))
 
 # the far field plane ran under the well opening: cut the hole so nobody passes through a ground surface
 _ff = bpy.data.objects["FieldFar"]
-bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=0.33, depth=1.0, location=(0, 0, -0.03))
+bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=0.33, depth=3.0, location=(0, 0, -0.6))     # taller than the field plane (a coplanar face left the plane uncut)
 _cut = bpy.context.object; _cut.name = "FieldHoleCutter"; _cut.hide_render = True; _cut.display_type = "WIRE"
 _bm = _ff.modifiers.new("WellHole", "BOOLEAN"); _bm.operation = "DIFFERENCE"; _bm.object = _cut; _bm.solver = "EXACT"
 # ================================================================== TODDLER
@@ -326,9 +326,9 @@ for i, f in enumerate(range(1166, 1300, 8)):
     ph = i * 0.9
     TE.key(f, TPOS, TYAW, head=((4 if f < 1250 else (12 if i % 2 else -2)), 6 * math.sin(ph) if f < 1250 else 0), flex=-3,     # looks ahead, nervous; nods as he gets ready
            hands={"L": ("rel", (0.2, 0.12, -0.62 * TE.arm + 0.02 * math.sin(ph))), "R": ("rel", (0.2, 0.12, -0.62 * TE.arm + 0.02 * math.cos(ph)))} if f < 1250 else     # hands low in front: the knot is at his back
-                 {"L": ("rel", (0.22, 0.04, -0.7 * TE.arm)), "R": ("rel", (0.22, 0.04, -0.7 * TE.arm))})
+                 {"L": ("rel", (0.12, 0.06, -0.86 * TE.arm)), "R": ("rel", (0.12, 0.06, -0.86 * TE.arm))})
 # v007: ResB behind the teen, standing, tying the knot at the back of his waist: his face well clear of the body
-RBT = TPOS + (Rz(TYAW) @ V((0, 0.7, 0))).to_2d()
+RBT = TPOS + (Rz(TYAW) @ V((0, 0.8, 0))).to_2d()
 fwd_t = (Rz(TYAW) @ V((0, -1, 0)))
 knot = WAIST - fwd_t * 0.2      # at the back of his waist, on the rope loop
 for i, f in enumerate(range(1164, 1251, 6)):
@@ -340,7 +340,7 @@ for i, f in enumerate(range(1164, 1251, 6)):
         hl = knot + Rz(TYAW) @ (circ * 0.5 + V((-0.08, 0.06, 0))); hr = knot + Rz(TYAW) @ (-circ * 0.5 + V((0.08, 0.06, 0)))
     else:   # pull the knot tight: hands apart and back
         k = ease((f - 1232) / 16); hl = knot + Rz(TYAW) @ V((-0.06 - 0.1 * k, 0.08 + 0.08 * k, 0)); hr = knot + Rz(TYAW) @ V((0.06 + 0.1 * k, 0.08 + 0.08 * k, 0))
-    RB.key(f, RBT, yaw_to(RBT, TPOS), flex=14, crouch=0.14, head=(30, 0), hands={"L": ("wg", hl), "R": ("wg", hr)})
+    RB.key(f, RBT, yaw_to(RBT, TPOS), flex=9, crouch=0.12, head=(22, 0), hands={"L": ("wg", hl), "R": ("wg", hr)})
 for i, f in enumerate(range(1140, 1300, 10)):
     RA.key(f, V((0.75, -0.3)) if f > 1180 else V((-0.9, 0.9)), yaw_to((0.75, -0.3), (0.42, -0.7)), head=(-25, 0),
            hands={"L": ("w", V((0.47, -0.57, 1.82 - 0.04 * math.sin(i)))), "R": ("w", V((0.55, -0.68, 1.5)))} if f > 1190 else {})   # checks the tripod leg   # checks the tripod leg
@@ -530,7 +530,7 @@ for i, f in enumerate(range(1766, 1822, 8)):
 MO.walk([V(CROWD_POS["Mother"]), V((-1.0, 5.2)), V((-0.8, 3.2)), V((-0.6, 1.9))], 1750, 1816, stride=1.0, lift=0.11, arm_swing=0.3, lean=10)
 MP = V((-0.6, 1.9)); myaw = yaw_to(MP, OUTP)
 HELD0 = OUTP.to_3d() + V((0, 0, TE.root.z + 0.2 + 0.1)) + Rz(150) @ V((0, -0.34, 0))     # where the hold-up left him: against the teen's chest
-MTURN = ((yaw_to(MP, (0.9, 3.2)) - myaw + 180) % 360) - 180
+MTURN = 0.0     # (a turn in the hug pushed her into him; the camera goes to her side instead)
 for i, f in enumerate(range(1822, END + 10, 4)):
     my_ = myaw + MTURN * ease((f - 1856) / 30)     # once he is hers she turns toward the camera: both faces in the hug
     k = ease((f - 1822) / 34)
@@ -633,6 +633,8 @@ for f in range(1150, END + 10, 2):
         line = rope_haul_line(f)
         if f < 1300:
             pts = [knot_w, knot_w + V((0.1, 0.25, -0.8)), V((0.2, 1.4, 0.03)), V((0.4, 2.6, 0.03)), V((0.4, 4.2, 0.03))]
+        elif f >= 1762:     # out and upright: unclipped off screen; the line hangs from the pulley into the pipe, the haul end lies on the ground
+            pts = [V((0.02, 0.02, -0.6)), PULLEY_IN, PULLEY_TOP, PULLEY_OUT, V((0.45, 0.55, 0.03)), V((0.7, 1.6, 0.03)), V((0.9, 2.8, 0.03)), V((0.6, 4.2, 0.03))]
         else:
             pts = [knot_w, PULLEY_IN + V((0, 0.0, 0.0)), PULLEY_TOP, ] + line
         set_curve(RM, f, pts)
