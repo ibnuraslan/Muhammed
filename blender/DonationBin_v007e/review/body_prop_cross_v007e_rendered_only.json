@@ -1,0 +1,79 @@
+{
+"visible_frames": [],
+"frames": {
+"731": {
+"finger2-3.R|Flap|off": 6,
+"finger3-2.R|Flap|off": 2,
+"finger1-3.R|Flap|off": 1,
+"finger5-3.R|Flap|off": 1,
+"finger3-1.R|Flap|off": 1
+},
+"733": {
+"finger2-3.R|Flap|off": 6,
+"finger2-2.R|Flap|off": 5,
+"finger1-2.R|Flap|off": 1,
+"finger3-2.R|Flap|off": 2,
+"finger2-1.R|Flap|off": 1,
+"finger1-3.R|Flap|off": 1,
+"finger3-1.R|Flap|off": 2
+},
+"735": {
+"finger1-2.R|Flap|off": 1,
+"finger2-3.R|Flap|off": 5,
+"finger2-2.R|Flap|off": 8,
+"finger3-1.R|Flap|off": 2,
+"finger3-2.R|Flap|off": 1,
+"finger5-1.R|Flap|off": 2,
+"finger2-1.R|Flap|off": 2,
+"finger1-3.R|Flap|off": 1
+},
+"737": {
+"finger1-2.R|Flap|off": 1,
+"finger2-3.R|Flap|off": 5,
+"finger2-2.R|Flap|off": 8,
+"finger3-1.R|Flap|off": 2,
+"finger3-2.R|Flap|off": 1,
+"breast.R|Flap|off": 2,
+"finger2-1.R|Flap|off": 3,
+"finger5-1.R|Flap|off": 1,
+"finger5-3.R|Flap|off": 1,
+"finger1-3.R|Flap|off": 1,
+"upperarm02.R|Flap|off": 1
+},
+"739": {
+"finger1-2.R|Flap|off": 1,
+"finger2-3.R|Flap|off": 5,
+"finger2-2.R|Flap|off": 8,
+"finger3-1.R|Flap|off": 2,
+"finger3-2.R|Flap|off": 1,
+"finger5-1.R|Flap|off": 2,
+"finger2-1.R|Flap|off": 2,
+"finger1-3.R|Flap|off": 1
+},
+"741": {
+"finger1-2.R|Flap|off": 1,
+"finger2-3.R|Flap|off": 6,
+"finger2-2.R|Flap|off": 7,
+"finger3-1.R|Flap|off": 3,
+"finger5-1.R|Flap|off": 2,
+"finger2-1.R|Flap|off": 1,
+"finger1-3.R|Flap|off": 1,
+"finger3-2.R|Flap|off": 1
+},
+"743": {
+"finger2-3.R|Flap|off": 8,
+"finger2-2.R|Flap|off": 5,
+"finger1-2.R|Flap|off": 1,
+"finger3-2.R|Flap|off": 4,
+"finger1-3.R|Flap|off": 1,
+"finger3-1.R|Flap|off": 1
+},
+"745": {
+"finger2-3.R|Flap|off": 6,
+"finger3-2.R|Flap|off": 2,
+"finger1-3.R|Flap|off": 1,
+"finger5-3.R|Flap|off": 1,
+"finger3-1.R|Flap|off": 1
+}
+}
+}
