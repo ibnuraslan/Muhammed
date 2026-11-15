@@ -36,7 +36,7 @@ Build: `06_fix_v007.py` (with DOF at f/11) → **`07_v008.py`** → `04_package.
   - Fence, 1600–1795: the hits are his fingers hooked into the chain-link while climbing, plus his legs and seat on the blanket as he sits and swings over. The hits sit on the blanket's surface layer, and nothing passes the wire.
 - `qa_check`: see `qa_v008.json`.
   - CAMJUMP flags fall on the cuts (`cuts.json`), as intended.
-  - INSIDE, HOVER, ROLL and FACEPRESS are 0 on the previous build of this file.
+  - On the delivered file: **INSIDE 0, HOVER 0, ROLL 0, FACEPRESS 0, BACKHEAD 0**. CAMJUMP 43, all on the cuts except 2889 (cut into the tally close-up). FILL 2. CLAW 48 (grip_object holds). EMPTY 63 (room-wide frames).
 
 ## Known remaining items
 - 2440–2470: he turns from the window with his back to the camera for about 0.3 s, before the face.

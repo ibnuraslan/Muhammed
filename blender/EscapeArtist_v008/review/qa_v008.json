@@ -188,28 +188,6 @@
     "Prisoner.L curl 56"
    ]
   ],
-  "1860": [
-   [
-    "BACKHEAD",
-    "Prisoner"
-   ],
-   [
-    "CAMJUMP",
-    "cut: 18.40 m, 156 deg in one frame (neighbours 0.41 m, 1 deg)"
-   ]
-  ],
-  "1866": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "1884": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 14%"
-   ]
-  ],
   "2142": [
    [
     "EMPTY",
@@ -223,6 +201,174 @@
    ]
   ],
   "2154": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2190": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2196": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2202": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2220": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2226": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2232": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2250": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2256": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2262": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2280": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2286": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2304": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2316": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2334": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "2340": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2346": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "2352": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2358": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2364": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "2370": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "2376": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "2382": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2394": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2400": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2406": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2412": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2430": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2436": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 12%"
@@ -617,7 +763,7 @@
   "1472": [
    [
     "CAMJUMP",
-    "cut: 6.12 m, 72 deg in one frame (neighbours 0.05 m, 1 deg)"
+    "cut: 7.69 m, 72 deg in one frame (neighbours 0.00 m, 1 deg)"
    ]
   ],
   "1548": [
@@ -644,10 +790,10 @@
     "cut: 5.48 m, 155 deg in one frame (neighbours 0.02 m, 0 deg)"
    ]
   ],
-  "1871": [
+  "1860": [
    [
     "CAMJUMP",
-    "cut: 0.66 m, 65 deg in one frame (neighbours 0.44 m, 13 deg)"
+    "cut: 23.06 m, 48 deg in one frame (neighbours 0.09 m, 0 deg)"
    ]
   ],
   "1946": [
@@ -665,13 +811,13 @@
   "2186": [
    [
     "CAMJUMP",
-    "cut: 1.54 m, 16 deg in one frame (neighbours 0.00 m, 0 deg)"
+    "cut: 1.62 m, 25 deg in one frame (neighbours 0.00 m, 0 deg)"
    ]
   ],
   "2440": [
    [
     "CAMJUMP",
-    "cut: 1.65 m, 65 deg in one frame (neighbours 0.00 m, 0 deg)"
+    "cut: 1.88 m, 77 deg in one frame (neighbours 0.00 m, 0 deg)"
    ]
   ],
   "2590": [
@@ -748,10 +894,9 @@
   ]
  },
  "counts": {
-  "EMPTY": 37,
+  "EMPTY": 63,
   "CLAW": 48,
-  "BACKHEAD": 1,
   "FILL": 2,
-  "CAMJUMP": 44
+  "CAMJUMP": 43
  }
 }
