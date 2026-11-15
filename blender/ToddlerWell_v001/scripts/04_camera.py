@@ -77,8 +77,9 @@ K = [  # frame, location, target, lens
  # beat 8: inside, torch
  (1358, (-0.5, -0.6, 1.5), (-0.1, 0.35, 0.8), 24),     # beat 8: ResB's face as they feed his legs in
  (1361, (-0.4, -0.7, 1.4), (-0.1, 0.3, 0.6), 24),
- # hard cut at 1362 (CUTS): straight to beside his face inside the casing, never the empty pipe
- (1362, (0.3, -0.85, teen_head_z(1362) + 0.1), (0.0, 0.05, teen_head_z(1362) + 0.2), 24),
+ (1371, (-0.35, -0.75, 1.35), (-0.1, 0.3, 0.5), 24),
+ # hard cut at 1372 (CUTS): straight to beside his face inside the casing, never the empty pipe
+ (1372, (0.3, -0.85, teen_head_z(1372) + 0.1), (0.0, 0.05, teen_head_z(1372) + 0.2), 24),
  (1380, (0.3, -0.85, teen_head_z(1380) + 0.1), (0.0, 0.05, teen_head_z(1380) + 0.2), 24),
  (1400, (0.3, -0.85, teen_head_z(1400) + 0.1), (0.0, 0.05, teen_head_z(1400) + 0.2), 24),     # beside his face, not the empty wall below
  (1440, (-0.3, -0.85, teen_head_z(1440) + 0.1), (0.0, 0.05, teen_head_z(1440) + 0.2), 24),
@@ -95,9 +96,9 @@ K = [  # frame, location, target, lens
  (1742, (1.9, -2.2, 0.9), (0.05, 1.0, 1.0), 22),
  (1765, (2.6, 1.9, 1.2), (0.0, 0.2, 0.9), 28),     # round the outside of the tripod to the +y side: he faces +y head-down
  # beat 11: emerge, lift, mother, crane up
- (1778, (2.3, 2.3, 1.2), (-0.1, 0.45, 1.0), 28),
- # hard cut at 1779 (CUTS): the mother at the tape while he is swung upright with the toddler; she ducks under and runs in
- (1779, (-0.7, 4.0, 1.5), (-1.3, 6.15, 1.35), 40),
+ (1767, (2.58, 1.95, 1.2), (0.0, 0.22, 0.92), 28),
+ # hard cut at 1768 (CUTS): the mother at the tape while he is pulled out and swung upright with the toddler; she ducks under and runs in
+ (1768, (-0.7, 4.0, 1.5), (-1.3, 6.15, 1.35), 40),
  (1805, (-0.6, 3.5, 1.5), (-1.2, 5.8, 1.3), 36),
  (1831, (-0.4, 2.9, 1.5), (-0.95, 4.6, 1.25), 32),
  # hard cut at 1832: back on him, the toddler held against his chest
@@ -107,7 +108,7 @@ K = [  # frame, location, target, lens
  (1910, (1.6, -3.6, 4.0), (0.0, 2.2, 0.9), 22),
  (1950, (1.7, -4.6, 5.8), (0.0, 2.6, 0.8), 22),
 ]
-CUTS = [1362, 1779, 1832]     # hard cuts: separate splines either side, constant step between
+CUTS = [1372, 1768, 1832]     # hard cuts: separate splines either side, constant step between
 cam = bpy.data.objects["Cam"]; tg = bpy.data.objects["CamTarget"]
 bounds = [1] + CUTS + [1951]
 for a_, b_ in zip(bounds[:-1], bounds[1:]):

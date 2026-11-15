@@ -325,7 +325,7 @@ WAIST = TPOS.to_3d() + V((0, 0, TE.root.z + 0.08))
 for i, f in enumerate(range(1166, 1300, 8)):
     ph = i * 0.9
     TE.key(f, TPOS, TYAW, head=(25 if f < 1240 else -5, 0), flex=-3,
-           hands={"L": ("rel", (0.4, -0.04, -0.4 * TE.arm + 0.03 * math.sin(ph))), "R": ("rel", (0.4, -0.04, -0.4 * TE.arm + 0.03 * math.cos(ph)))} if f < 1250 else     # arms lowered, held a little out to the sides, clear of the knot
+           hands={"L": ("rel", (0.2, -0.03, -0.82 * TE.arm + 0.02 * math.sin(ph))), "R": ("rel", (0.2, -0.03, -0.82 * TE.arm + 0.02 * math.cos(ph)))} if f < 1250 else     # arms lowered, held a little out to the sides, clear of the knot
                  {"L": ("rel", (0.22, 0.04, -0.7 * TE.arm)), "R": ("rel", (0.22, 0.04, -0.7 * TE.arm))})
 # ResB in front of the teen, knotting at the waist
 RBT = TPOS + (Rz(TYAW) @ V((0, -0.74, 0))).to_2d()
@@ -380,7 +380,7 @@ TE.elbow_out = 0.05     # elbows tucked inside the pipe
 for f in range(1314, 1327, 4):
     k = ease((f - 1314) / 12)
     TE.key(f, RIM, 0, flex=80 * k, spine=8 * k, crouch=0.05 * k, head=(-25 * k, 0),
-           hands={"L": ("rel", (-0.02, 0.05, 0.9 * TE.arm)), "R": ("rel", (-0.02, 0.05, 0.9 * TE.arm))})
+           hands={s_: ("rel", (0.1, 0.35, -0.2 * TE.arm) if f < 1316 else (0.05, 0.35, 0.3 * TE.arm) if f < 1320 else (-0.02, 0.05, 0.9 * TE.arm)) for s_ in "LR"})     # hands forward from the waist, down the pipe only once bent: never straight up
 LOWER = []   # (frame, pelvis z, flex, xy)
 for f in range(1330, 1500, 4):
     u = (f - 1314) / (1500 - 1314)
@@ -656,13 +656,15 @@ XL = bpy.data.lights["XsecFill"]; SFL = bpy.data.lights["ShaftFill"]; HT = bpy.d
 def key_light(l, pts):
     for f, e in pts: l.energy = e; l.keyframe_insert("energy", frame=f)
 key_light(XL, [(1, 0), (455, 0), (470, 11000), (545, 11000), (560, 0), (770, 0), (785, 11000), (860, 11000), (875, 0), (1342, 0), (1350, 9000), (1745, 11000), (1765, 0)])
-key_light(SFL, [(1, 0), (110, 0), (140, 70), (196, 70), (208, 300), (238, 300), (244, 25), (292, 25), (300, 300),     # low while he falls past it and while the camera rises past it
+key_light(SFL, [(1, 0), (110, 0), (140, 70), (196, 70), (208, 300), (238, 300), (246, 70), (252, 25), (292, 25), (300, 300),     # low while he falls past it and while the camera rises past it
   (1300, 300), (1340, 40), (1770, 40)])
 # upper-shaft fill: no near-black frames as the camera follows the fall in (136-160), rises out (255-265) and dives back in (402-418)
 _ltd = bpy.data.lights.new("ShaftFillTop", "POINT"); _ltd.shadow_soft_size = 0.1; _ltd.color = (1.0, 0.85, 0.65)
 _lto = bpy.data.objects.new("ShaftFillTop", _ltd); bpy.data.objects["ShaftFill"].users_collection[0].objects.link(_lto)
 _lto.location = (0.22, 0.22, -2.4); _lto.visible_camera = False
-key_light(_ltd, [(1, 0), (128, 0), (134, 60), (160, 60), (172, 0), (248, 0), (254, 60), (268, 60), (274, 0), (398, 0), (403, 60), (420, 60), (428, 0)])
+key_light(_ltd, [(1, 0), (128, 0), (134, 60), (160, 60), (172, 0), (242, 0), (250, 60), (268, 60), (274, 0), (396, 0), (401, 40), (420, 60), (428, 0)])
+for f_, z_ in ((1, -2.4), (390, -2.4), (391, -0.9), (412, -0.9), (418, -2.4)):     # up inside the casing for the dive back in
+    _lto.location.z = z_; _lto.keyframe_insert("location", index=2, frame=f_)
 _sd = bpy.data.materials["M_ShaftDust"].node_tree.nodes["Principled Volume"].inputs["Density"]     # no glowing dust in front of the lens on the rise up the shaft
 for f_, v_ in ((1, 0.06), (250, 0.06), (256, 0.0), (292, 0.0), (298, 0.06)):
     _sd.default_value = v_; _sd.keyframe_insert("default_value", frame=f_)
