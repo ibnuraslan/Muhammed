@@ -101,5 +101,5 @@ Beat frames are unchanged and there is no VO.
 | 7 | Empty and in-wall city frames. | The city pass is removed: a straight cut from him posting to her at the laptop at f2155. |
 | 8 | Her forearms crossed. | Both palms go to her chest, apart. |
 | 9 | The beanie popped on at 2276. | It is off for the whole home shot and comes on at the rink cut, f2281. |
-| 10 | The ending was wide, with mannequin players. | A medium shot from about 2 m: her with the cheque, the man clapping beside her, and players around her clapping, fist-pumping and turning with their arms moving. **Not done: text and a logo on the cheque.** CONNECT_TONIGHT forbids on-screen text and logos, so this needs a post overlay or a rule change. |
+| 10 | The ending was wide, with mannequin players. | A medium shot from about 2 m: her with the cheque, the man clapping beside her, and players around her clapping, fist-pumping and turning with their arms moving. The cheque stays text-free (director confirmed the rule). It reads as a big cheque from its oversized board, a blue band across the top, a signature line and an ink scribble. |
 | 11 | Minor items. | The camera passes higher above him at 1.9 s, and the POV is moved off her beanie at 3.3–3.9 s. |

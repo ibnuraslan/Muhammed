@@ -722,6 +722,21 @@ cq.scale = (0.001,) * 3; cq.keyframe_insert("scale", frame=F(37.95)); cq.scale =
 # blue border stripe (no text)
 cb_ = box("ChequeBorder", (0.97, 0.010, 0.47), (0, 0, 0), mat("ChequeBlue", (0.08, 0.2, 0.45), 0.6, noise=0.1), C_CHAR, bevel=0.002)
 cb_.parent = cq; cb_.matrix_parent_inverse.identity(); cb_.location = (0, 0.003, 0)
+# v007: reads as a big cheque from its shape: a coloured band across the top, a signature line and an ink scribble (no letters)
+_band = box("ChequeBand", (0.95, 0.002, 0.07), (0, 0, 0), mat("ChequeBand", (0.10, 0.30, 0.75), 0.5), C_CHAR, bevel=0)
+_band.parent = cq; _band.matrix_parent_inverse.identity(); _band.location = (0, -0.0068, 0.19)
+_sl = box("ChequeSigLine", (0.30, 0.002, 0.004), (0, 0, 0), mat("ChequeInkGrey", (0.15, 0.15, 0.17), 0.6), C_CHAR, bevel=0)
+_sl.parent = cq; _sl.matrix_parent_inverse.identity(); _sl.location = (0.25, -0.0068, -0.15)
+_cv = bpy.data.curves.new("ChequeScribble", 'CURVE'); _cv.dimensions = '3D'; _cv.bevel_depth = 0.0022; _cv.bevel_resolution = 1
+_spl = _cv.splines.new('POLY'); _pts = []
+for _k in range(40):
+    _u = _k / 39.0
+    _pts.append((0.12 + 0.26 * _u, 0.0, -0.125 + 0.022 * math.sin(_u * 19.0) * (1 - 0.5 * _u) + 0.012 * math.sin(_u * 47.0)))
+_spl.points.add(len(_pts) - 1)
+for _p, _q in zip(_spl.points, _pts): _p.co = (_q[0], _q[1], _q[2], 1)
+_cv.materials.append(mat("ChequeInk", (0.05, 0.08, 0.30), 0.4))
+_scr = bpy.data.objects.new("ChequeScribble", _cv); C_CHAR.objects.link(_scr)
+_scr.parent = cq; _scr.matrix_parent_inverse.identity(); _scr.location = (0, -0.0075, 0)
 
 # ================================================================== FX: confetti, camera flashes, door, monitor, bus, TV, windows
 M_conf = [mat(f"Confetti{i}", c_, 0.4, noise=0.2, nscale=200) for i, c_ in enumerate(((0.9, 0.1, 0.1), (0.1, 0.3, 0.9), (0.95, 0.8, 0.1), (0.95, 0.95, 0.95), (0.1, 0.7, 0.3)))]
