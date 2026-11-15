@@ -350,7 +350,7 @@ for i, f in enumerate(range(1140, 1300, 10)):
 # teen stands at the rim on the +y side facing -y (yaw 0) then pitches forward into the pipe; ResA/ResB hold his legs.
 RIM = V((0.0, 0.55))
 TE.walk([TPOS, V((0.0, 1.25)), RIM], 1290, 1312, stride=0.6, arm_swing=0.04,
-        hands_fn=lambda f: {s_: ("rel", (0.08, 0.3 * ease((f - 1302) / 10), -0.75 * TE.arm + 0.55 * TE.arm * ease((f - 1302) / 10))) for s_ in "LR"} if f >= 1302 else {})     # hands come forward as he reaches the rim: clear of the holders' grip at his waist     # straight in between the two holders
+        hands_fn=lambda f: {s_: ("rel", (0.08 - 0.2 * ease((f - 1302) / 10), 0.3 * ease((f - 1302) / 10), -0.75 * TE.arm + 0.55 * TE.arm * ease((f - 1302) / 10))) for s_ in "LR"} if f >= 1302 else {})     # hands come forward as he reaches the rim: clear of the holders' grip at his waist     # straight in between the two holders
 TOP_Y = 0.0
 def teen_ank(rp, Rb, s, flex=180.0):
     """ankle target for the head-down teen: feet together, toes pointed up the pipe (narrow, like a dive)"""
