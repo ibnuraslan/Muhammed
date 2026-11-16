@@ -427,7 +427,12 @@ for j in range(NH + 1):
 for j in range(NH):
     for i in range(NH):
         hf_.append((j * (NH + 1) + i, j * (NH + 1) + i + 1, (j + 1) * (NH + 1) + i + 1, (j + 1) * (NH + 1) + i))
-M_HILL = tex_mat("M_Hills", "grass_path_2", tint=(0.5, 0.82, 0.38), scale=0.03, bump=0.15, sat=1.1)
+M_HILL = bpy.data.materials.new("M_Hills"); M_HILL.use_nodes = True; _nt = M_HILL.node_tree; _P = _nt.nodes["Principled BSDF"]
+_tc = _nt.nodes.new('ShaderNodeTexCoord'); _nz = _nt.nodes.new('ShaderNodeTexNoise'); _nz.inputs['Scale'].default_value = 0.004; _nz.inputs['Detail'].default_value = 6.0
+_nt.links.new(_tc.outputs['Object'], _nz.inputs['Vector'])
+_cr = _nt.nodes.new('ShaderNodeValToRGB'); _nt.links.new(_nz.outputs['Fac'], _cr.inputs['Fac'])
+_cr.color_ramp.elements[0].color = (0.16, 0.30, 0.09, 1); _cr.color_ramp.elements[1].color = (0.36, 0.48, 0.16, 1)
+_nt.links.new(_cr.outputs['Color'], _P.inputs['Base Color']); _P.inputs['Roughness'].default_value = 0.85     # no visible texture tiling from the air
 mesh_obj("FarHills", hv_, hf_, M_HILL, CT, smooth=True)
 random.seed(77); far_trees = 0
 for k in range(260):

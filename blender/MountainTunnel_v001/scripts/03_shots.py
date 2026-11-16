@@ -254,6 +254,7 @@ HAM_FACE = V((0.055, 0.0, 0.152)); HAM_GRIP = V((0.0, 0.0, float(os.environ.get(
 HOFF = [float(os.environ.get("HOFF", "-0.008"))]
 CHOFF = [float(os.environ.get("CHOFF", "0.03"))]
 HSC = [float(os.environ.get("HSC", "1.0"))]
+exec(open(os.path.join(HERE, "hammer_wood.py")).read())
 # slim the hammer HANDLE only (the head keeps its size): the closed fist pressed the palm skin a few mm into the stock handle
 _hm = bpy.data.objects["Hammer"].data
 _hx = [v.co for v in _hm.vertices if v.co.z < 0.0]
@@ -733,15 +734,15 @@ def shot_11a(f0, n):
     gorge_light(f0, f0 + n - 1)
     use = ("Man",); f1 = f0 + n - 1; yc = SLAB_Y - 0.35
     cut_window(f0, f1, YF + 6.0)
-    tip, hits = strike("11a", f0, min(n, 100), yc, 0.95, chip=True)
-    br = f0 + 100
+    tip, hits = strike("11a", f0, min(n, 44), yc, 0.95, chip=True, first=4)
+    br = f0 + 44
     for f in range(f0 + 100, f1 + 1, 4):     # after the last blow he lowers the tools and watches
         pass
     for i, o in enumerate(SLABS):
         key_vis(o, 1, False); key_vis(o, f0, True); key_vis(o, f1 + 1, False)
         p0 = o.location.copy()
         for j in range(0, n, 3):
-            t = max(0, j - 100 - 3 * i) / 60.0
+            t = max(0, j - 44 - 3 * i) / 60.0
             o.location = p0 + V((0.2 * (o.location.x), 1.2 * t, -min(p0.z - 0.5, 4.9 * t * t * 1.4))); o.rotation_euler = (R_(min(80, 160 * t)), 0, 0)
             o.keyframe_insert("location", frame=f0 + j); o.keyframe_insert("rotation_euler", frame=f0 + j)
             o.location = p0
