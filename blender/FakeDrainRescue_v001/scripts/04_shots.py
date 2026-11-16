@@ -78,8 +78,11 @@ HS = {}
 for n, rig in CH.items(): HS[n] = setup_char(rig)
 VIS = {n: [] for n in CH}
 def use(n, sid): VIS[n].append((SH[sid]["f0"], SH[sid]["f1"]))
-def W(sid): return SH[sid]["f0"], SH[sid]["f1"]
-def T(sid, u): f0, f1 = W(sid); return round(f0 + u * (f1 - f0))
+def W(sid):
+    """character-action window at 1x: the provisional (reference-pacing) length from the shot's VO start; the cut trims it"""
+    f0 = SH[sid]["f0"]; return f0, f0 + SH[sid].get("plen", SH[sid]["f1"] - SH[sid]["f0"] + 1) - 1
+def WV(sid): return SH[sid]["f0"], SH[sid]["f1"]   # the true (VO) window: cameras, prop visibility
+def T(sid, u): f0, f1 = WV(sid); return round(f0 + u * (f1 - f0))
 def blinkless(): pass
 # ------------------------------------------------------------------ props
 torch = bpy.data.objects["small_plastic_torch"]; phone = bpy.data.objects["Phone"]; scr = bpy.data.objects["Phone_Screen"]
@@ -101,7 +104,10 @@ def trim(names, f1):
     for n in names:
         for idb in (CH[n],):
             for fc in fcurves_of(idb):
-                for kp in [k for k in fc.keyframe_points if k.co.x > f1 + 0.5][::-1]: fc.keyframe_points.remove(kp)
+                late = [k for k in fc.keyframe_points if k.co.x > f1 + 0.5]
+                if late:
+                    v = fc.evaluate(f1); fc.keyframe_points.insert(f1, v, options={'FAST'})
+                    for kp in [k for k in fc.keyframe_points if k.co.x > f1 + 0.5][::-1]: fc.keyframe_points.remove(kp)
 def fcurves_of(idb):
     ad = getattr(idb, "animation_data", None)
     if not ad or not ad.action: return []
@@ -346,7 +352,7 @@ def hand_frame(rig, s):
     return wr, d, a, n, wr.lerp(m3, 0.6)
 def frame_matrix(xax, yax, zax, loc):
     M = Matrix((xax, yax, zax)).transposed().to_4x4(); M.translation = loc; return M
-PHONE_SHOTS = [s for s in ("S19", "S20", "S21") if (not ONLY or s in ONLY)]
+PHONE_SHOTS = [s for s in ("S19", "S20", "S21") if s in SH and (not ONLY or s in ONLY)]
 if PHONE_SHOTS:
     f0 = SH[PHONE_SHOTS[0]]["f0"]; sc.frame_set(f0); rig = CH["Mom"]
     wr, d, a, n, palm = hand_frame(rig, "R"); n = -n   # hand_frame's sign points to the back of the hand on this rig
@@ -360,14 +366,16 @@ if PHONE_SHOTS:
     sc.frame_set(f0); pbh = rig.pose.bones["IK_hand.R"]; L0, Q0 = pbh.location.copy(), pbh.rotation_quaternion.copy()
     fingers = {b.name: b.rotation_quaternion.copy() for b in rig.pose.bones if b.name.startswith("finger") and b.name.endswith(".R")}
     for sid_ in PHONE_SHOTS:
-        for f_ in (W(sid_)[0], W(sid_)[1]):
+        for f_ in (WV(sid_)[0], WV(sid_)[1]):
             pbh.location = L0; pbh.rotation_quaternion = Q0
             pbh.keyframe_insert("location", frame=f_, group=pbh.name); pbh.keyframe_insert("rotation_quaternion", frame=f_, group=pbh.name)
             for bn, q in fingers.items():
                 rig.pose.bones[bn].rotation_quaternion = q; rig.pose.bones[bn].keyframe_insert("rotation_quaternion", frame=f_, group=bn)
     sc.frame_set(f0); bpy.context.view_layer.update()
+    phone.matrix_world = Matrix.Translation(n * 0.004) @ phone.matrix_world   # director P1 / Phase 2: 4 mm off the palm
+    bpy.context.view_layer.update()
     attach(phone, rig, "wrist.R", f0)
-    key_vis([phone, scr], [W(s) for s in PHONE_SHOTS])
+    key_vis([phone, scr], [WV(s) for s in PHONE_SHOTS])
     if "S19" in PHONE_SHOTS:
         cam = bpy.data.objects["CAM_S19"]; tg = bpy.data.objects["TGT_S19"]; cam.animation_data_clear(); tg.animation_data_clear()
         f = T("S19", 0); sc.frame_set(f); M = phone.matrix_world; P = M @ Vector((0, 0, 0.075)); nS = (M.to_3x3() @ Vector((-1, 0, 0))).normalized()
@@ -379,7 +387,7 @@ if PHONE_SHOTS:
         print("S19 cam", tuple(round(x, 2) for x in C0), "phone", tuple(round(x, 2) for x in P))
 else:
     key_vis([phone, scr], [])
-TORCH_SHOTS = [s for s in ("S08", "S09") if (not ONLY or s in ONLY)]
+TORCH_SHOTS = [s for s in ("S08", "S09") if s in SH and (not ONLY or s in ONLY)]
 bpy.context.view_layer.update()
 tv = [Vector(v.co) for v in torch.data.vertices]
 ylo = [v for v in tv if v.y < min(p.y for p in tv) + 0.03]; yhi = [v for v in tv if v.y > max(p.y for p in tv) - 0.03]
@@ -394,7 +402,7 @@ if TORCH_SHOTS:
     tlo.matrix_world = frame_matrix(xax, yax, zax, palm + n * 0.04)
     attach(tlo, rig, "wrist.R", f0)
     apply_pose(rig, "R", "power_fist", f0)
-    key_vis([tlo], [W(s) for s in TORCH_SHOTS])
+    key_vis([tlo], [WV(s) for s in TORCH_SHOTS])
 else:
     key_vis([tlo], [])
 # ------------------------------------------------------------------ set states
@@ -420,11 +428,11 @@ for i in range(34):
     if k == "bag": o.material_slots[0].link = 'OBJECT'; o.material_slots[0].material = random.choice(bag_mats)
     if k == "can": o.material_slots[0].link = 'OBJECT'; o.material_slots[0].material = bpy.data.materials["Can_%d" % random.randint(0, 3)]
     clog.append(o.name)
-clog_rng = [W(s) for s in ("S14", "S17") if s in SH]
+clog_rng = [WV(s) for s in ("S14", "S17") if s in SH]
 key_vis([c for c in clog], clog_rng)
 for c in clog:
-    if bpy.data.objects[c].location.y < -14.3: key_vis([c], clog_rng + [W("S09")])
-f0, f1 = W("S17"); drift = []
+    if bpy.data.objects[c].location.y < -14.3: key_vis([c], clog_rng + [WV("S09")])
+f0, f1 = WV("S17"); drift = []
 for i in range(7):
     k = ["bag", "bottle", "bag", "can", "bottle", "bag", "bottle"][i]
     src = {"bag": bag_ph.data, "bottle": bot.data, "can": can}[k]
@@ -439,7 +447,7 @@ for i in range(7):
         if fc.data_path == "location" and fc.array_index == 2:
             nm = fc.modifiers.new('NOISE'); nm.scale = 30; nm.strength = 0.03; nm.phase = i * 3
     drift.append(o.name)
-key_vis(drift, [W("S17")])
+key_vis(drift, [WV("S17")])
 # forms pile on the desk (office)
 random.seed(5)
 for i in range(42):
@@ -457,7 +465,7 @@ print("TRUCK side hit", best)
 # flat side panel of the refuse box: x 7.06, y 23.9-25.6, z 1.0-2.6 (ray-sampled)
 logo = plane("Logo_Truck", 1.6, 1.6 * 414 / 967, (7.046, 24.75, 1.95), img_mat("LogoWhite", "/home/user/Muhammed/blender/assets/brand/DaKrasFilms_logo_white.png", 0.4, alpha=True), "Truck", rot=(R_(90), 0, R_(-90)))
 logo.parent = truck; logo.matrix_parent_inverse = truck.matrix_world.inverted()
-f0, f1 = W("S25")
+f0, f1 = WV("S25")
 truck.keyframe_insert("location", frame=f0)
 truck.location = (8.0, 24.0 + 9.0 * (f1 - f0) / 60.0 * 0.5, -0.1); truck.keyframe_insert("location", frame=f1)
 for fc in fcurves_of(truck):
@@ -475,7 +483,7 @@ for nm, loc, e, size in (("Off_Light1", (OX - 1.0, 0.8, 2.9), 220, 1.6), ("Off_L
     l = bpy.data.lights.new(nm, 'AREA'); l.energy = e; l.size = size; lo = bpy.data.objects.new(nm, l); sc.collection.objects.link(lo); lo.location = loc
 l = bpy.data.lights.new("Pipe_Fill", 'AREA'); l.energy = 40; l.size = 0.8; lo = bpy.data.objects.new("Pipe_Fill", l); sc.collection.objects.link(lo)
 lo.location = (0.0, -15.5, -0.3); lo.rotation_euler = (R_(-90), 0, 0)
-key_vis(["Pipe_Fill"], [W("S09")])
+key_vis(["Pipe_Fill"], [WV("S09")])
 # catchlights: a small emitter beside each close camera, seen only in glossy reflections (eyes)
 CL = mat("Catchlight", (1, 1, 1), 0.5, emit=((1, 1, 1), 6.0))
 for s in SHOTS:
@@ -491,5 +499,12 @@ sc.cycles.max_bounces = 6; sc.cycles.caustics_reflective = False; sc.cycles.caus
 sc.camera = bpy.data.objects.get("CAM_S01") or next(o for o in bpy.data.objects if o.type == 'CAMERA')
 for o in bpy.data.objects:
     if o.type == 'ARMATURE': o.location = (0, 0, 0)
+# the client's VO, frame 1 (packed with the package)
+sc.sequence_editor_create(); seq = sc.sequence_editor
+coll_ = seq.strips if hasattr(seq, "strips") else seq.sequences
+for st in list(coll_): coll_.remove(st)
+vo = coll_.new_sound("VO", HERE + "work/vo.mp3", 1, 1)
+sc.render.ffmpeg.audio_codec = 'AAC' if hasattr(sc.render, "ffmpeg") else None
+sc.frame_end = SHOTS[-1]["f1"]
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)
-print("SAVED", out)
+print("SAVED", out, "frames", sc.frame_start, sc.frame_end)

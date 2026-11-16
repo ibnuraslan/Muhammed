@@ -1,177 +1,209 @@
 [
  {
-  "id": "S01",
+  "id": "S05",
   "f0": 1,
-  "f1": 120,
+  "f1": 62,
   "state": "drain",
+  "plen": 110,
+  "vo": "She told police",
+  "note": "the police - Mom with two officers at the edge"
+ },
+ {
+  "id": "S01",
+  "f0": 63,
+  "f1": 104,
+  "state": "drain",
+  "plen": 120,
+  "vo": "her child",
   "note": "Her child accidentally fell - Mom and her boy walk along the drain edge"
  },
  {
   "id": "S02",
-  "f0": 121,
-  "f1": 210,
+  "f0": 105,
+  "f1": 146,
   "state": "drain",
+  "plen": 90,
+  "vo": "had fallen into",
   "note": "right into - Mom at the edge points down into the trash"
  },
  {
   "id": "S03",
-  "f0": 211,
-  "f1": 300,
+  "f0": 147,
+  "f1": 232,
   "state": "drain",
+  "plen": 90,
+  "vo": "the storm drain",
   "note": "the storm drain - high wide, the trash-filled drain, Mom at the edge"
  },
  {
-  "id": "S04",
-  "f0": 301,
-  "f1": 400,
-  "state": "drain",
-  "note": "is what she told - Mom close, pleading"
- },
- {
-  "id": "S05",
-  "f0": 401,
-  "f1": 510,
-  "state": "drain",
-  "note": "the police - Mom with two officers at the edge"
- },
- {
   "id": "S06",
-  "f0": 511,
-  "f1": 630,
+  "f0": 233,
+  "f1": 312,
   "state": "drain",
+  "plen": 120,
+  "vo": "So officers spent hours",
   "note": "So they spent hours - two rescuers wade through the trash"
  },
  {
   "id": "S07",
-  "f0": 631,
-  "f1": 735,
+  "f0": 313,
+  "f1": 440,
   "state": "drain",
+  "plen": 105,
+  "vo": "searching through piles of trash",
   "note": "sifting through trash - rescuer pushes trash aside"
  },
  {
   "id": "S08",
-  "f0": 736,
-  "f1": 840,
+  "f0": 441,
+  "f1": 493,
   "state": "drain",
+  "plen": 105,
+  "vo": "desperately looking",
   "note": "desperately looking - torch into the culvert"
  },
  {
   "id": "S09",
-  "f0": 841,
-  "f1": 930,
+  "f0": 494,
+  "f1": 604,
   "state": "drain",
+  "plen": 90,
+  "vo": "for any sign of the child",
   "note": "for any sign of life - from inside the culvert"
  },
  {
   "id": "S10",
-  "f0": 931,
-  "f1": 1030,
+  "f0": 605,
+  "f1": 650,
   "state": "drain",
+  "plen": 100,
+  "vo": "But there was nobody",
   "note": "But there wasn't - rescuer shakes his head"
  },
  {
   "id": "S11",
-  "f0": 1031,
-  "f1": 1140,
+  "f0": 651,
+  "f1": 726,
   "state": "clean",
+  "plen": 110,
+  "vo": "inside",
   "note": "anyone inside - top view, drain cleared, rescuers on the edge"
  },
  {
   "id": "S12",
-  "f0": 1141,
-  "f1": 1250,
+  "f0": 727,
+  "f1": 800,
   "state": "drain",
+  "plen": 110,
+  "vo": "You see, the woman",
   "note": "You see the woman - Mom walks along the trash"
  },
  {
   "id": "S13",
-  "f0": 1251,
-  "f1": 1340,
+  "f0": 801,
+  "f1": 860,
   "state": "drain",
+  "plen": 90,
+  "vo": "had been frustrated",
   "note": "couldn't stand - Mom close, frowning"
  },
  {
   "id": "S14",
-  "f0": 1341,
-  "f1": 1450,
+  "f0": 861,
+  "f1": 1022,
   "state": "drain",
+  "plen": 110,
+  "vo": "because the drain was completely clogged with garbage",
   "note": "the trash clogging up - trash jammed at the culvert"
  },
  {
   "id": "S15",
-  "f0": 1451,
-  "f1": 1550,
+  "f0": 1023,
+  "f1": 1073,
   "state": "office",
+  "plen": 100,
+  "vo": "People had already",
   "note": "And even though - clerk at a desk of complaint forms"
  },
  {
   "id": "S16",
-  "f0": 1551,
-  "f1": 1670,
+  "f0": 1074,
+  "f1": 1121,
   "state": "office",
+  "plen": 120,
+  "vo": "complained",
   "note": "people already made complaints - the pile of forms"
  },
  {
   "id": "S17",
-  "f0": 1671,
-  "f1": 1780,
+  "f0": 1122,
+  "f1": 1226,
   "state": "drain",
+  "plen": 110,
+  "vo": "but nothing was being done",
   "note": "nothing changed - more trash drifts out of the culvert"
  },
  {
   "id": "S18",
-  "f0": 1781,
-  "f1": 1880,
+  "f0": 1227,
+  "f1": 1270,
   "state": "drain",
+  "plen": 100,
+  "vo": "So she",
   "note": "So she made up - Mom gets the idea"
  },
  {
   "id": "S19",
-  "f0": 1881,
-  "f1": 1960,
+  "f0": 1271,
+  "f1": 1304,
   "state": "drain",
+  "plen": 80,
+  "vo": "invented",
   "note": "this fake - the phone in her hand"
  },
  {
   "id": "S20",
-  "f0": 1961,
-  "f1": 2070,
+  "f0": 1305,
+  "f1": 1366,
   "state": "drain",
+  "plen": 110,
+  "vo": "the emergency",
   "note": "emergency to tell - Mom on the phone"
  },
  {
-  "id": "S21",
-  "f0": 2071,
-  "f1": 2160,
-  "state": "drain",
-  "note": "the police - Mom glances at the drain, phone in hand"
- },
- {
   "id": "S22",
-  "f0": 2161,
-  "f1": 2280,
+  "f0": 1367,
+  "f1": 1444,
   "state": "clean",
+  "plen": 120,
+  "vo": "And after hours of police",
   "note": "just a few hours - rescuer carries a bag out"
  },
  {
-  "id": "S23",
-  "f0": 2281,
-  "f1": 2400,
-  "state": "clean",
-  "note": "of searching - garbage truck (logo), officer"
- },
- {
   "id": "S24",
-  "f0": 2401,
-  "f1": 2520,
+  "f0": 1445,
+  "f1": 1529,
   "state": "clean",
+  "plen": 120,
+  "vo": "searching through the drain",
   "note": "the drain was - clean drain, rescuers on the edge"
  },
  {
-  "id": "S25",
-  "f0": 2521,
-  "f1": 2640,
+  "id": "S23",
+  "f0": 1530,
+  "f1": 1614,
   "state": "clean",
+  "plen": 120,
+  "vo": "all the garbage had been removed",
+  "note": "of searching - garbage truck (logo), officer"
+ },
+ {
+  "id": "S25",
+  "f0": 1615,
+  "f1": 1752,
+  "state": "clean",
+  "plen": 120,
+  "vo": "and the drain was finally clean",
   "note": "left totally clean - top view crane up"
  }
 ]

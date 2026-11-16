@@ -74,7 +74,7 @@ while y < 66:
     c = fl.copy(); c.location = (-5.5, y, 0); coll("BG").objects.link(c); y += fw
 fpost.location = (-5.5, -50 - fw / 2, 0)
 shr = append_ph("shrub_02/shrub_02_1k.blend", ["shrub_02_a_LOD0", "shrub_02_b_LOD0", "shrub_02_c_LOD0"], "BG")
-tre = append_ph("tree_small_02/tree_small_02_1k.blend", ["tree_small_02_LOD0"], "BG")
+tre = append_ph("tree_small_02/tree_small_02_1k.blend", ["tree_small_02_LOD1"], "BG")
 for o in shr + tre: o.location = (0, 0, -60)
 for i in range(26):
     s = random.choice(shr).copy(); coll("BG").objects.link(s); s.location = (-4.6 + random.uniform(-0.4, 0.3), -40 + i * 4.0 + random.uniform(-1, 1), 0)
