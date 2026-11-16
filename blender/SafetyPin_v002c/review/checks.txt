@@ -1,0 +1,4 @@
+clip_scan (step 6): BAD_RANGES []
+limb_check (step 2): LC_COUNTS {}
+body_prop_cross: see body_prop_cross_summary.txt (only the accepted pinch contacts; 0 bench/table/paper crossings)
+v002c is a shader-only change from v002b (eye colours); geometry checks carried over from v002b.
