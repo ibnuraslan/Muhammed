@@ -92,7 +92,7 @@ for n in ("AmouY", "AmouO"):
 for k in part_has("V1", "casualsuit"):
     for m in k.data.materials: cloth_colour(m, (0.05, 0.05, 0.055), 0.8)        # charcoal trousers
 for k in part_has("V2", "casualsuit"):
-    for m in k.data.materials: cloth_colour(m, (0.10, 0.08, 0.05), 0.8)        # dark brown trousers
+    for m in k.data.materials: cloth_colour(m, (0.05, 0.05, 0.06), 0.8)        # charcoal trousers / sleeves
 
 # ---- skin: young hermit lightly dusty, old hermit sooty
 soot_skin(part("AmouY", ".body").data.materials[0], amount=0.25, scale=5.0)
@@ -390,7 +390,7 @@ T_HERMIT_O = tunic_mat("M_TunicO", (0.13, 0.10, 0.065), stains=0.9)
 tunic("AmouY", T_HERMIT_Y, hem_drop=0.16, off=0.016, seed=2)
 tunic("AmouO", T_HERMIT_O, hem_drop=0.16, off=0.016, ragged=True, seed=5)
 tunic("V1", tunic_mat("M_TunicV1", (0.12, 0.22, 0.42)), hem_drop=0.18, off=0.016, seed=3)
-tunic("V2", tunic_mat("M_TunicV2", (0.48, 0.20, 0.07)), hem_drop=0.18, off=0.016, seed=4)
+tunic("V2", tunic_mat("M_TunicV2", (0.13, 0.15, 0.06)), hem_drop=0.18, off=0.016, seed=4)      # dark olive
 for _n in ("AmouY", "AmouO"): strip_overall(_n)     # after the tunics are grown: nothing can poke through them
 
 # ---- old hermit: long tangled grey hair (hair curves from the crown, sides and back; nothing over the face)

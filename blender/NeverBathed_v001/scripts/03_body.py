@@ -404,13 +404,13 @@ def shot_9b(f0, n):
     return use
 
 # ================================================================== BEAT 10: someone finally convinced him to take a bath
-A10 = V((-1.0, 17.6, 0)); V10 = V((0.4, 17.6, 0))
+A10 = V((-0.55, 17.6, 0)); V10 = V((0.45, 17.6, 0))
 def shot_10a(f0, n):
     """the villager points at the tub; the hermit looks, shakes his head and steps back; camera pushes in"""
     use = ("AmouO", "V1"); f1 = f0 + n - 1; light(f0)
     ya = yaw_to(A10, V10); yv = yaw_to(V10, A10)
-    back = (A10 - V10).normalized(); A2 = A10 + back * 0.3
-    fs, fe = f0 + 38, f0 + 72                      # the step back (walk at 1x, facing the villager)
+    back = (A10 - V10).normalized(); A2 = A10 + back * 0.45
+    fs, fe = f0 + 30, f0 + 62                      # the step back (walk at 1x, facing the villager)
     for f in range(f0, fs + 1, 6):
         look = ss((f - f0 - 10) / 18.0)
         stand("AmouO", f, A10, ya - 25 + 30 * look, head=(4 + 6 * look, 20 - 35 * look), spine=(3, 10 * look, 0))
@@ -419,19 +419,19 @@ def shot_10a(f0, n):
     for f in range(fs, fe + 1, 6): HUM["AmouO"].key_spine(f, flex=-4, twist=0, head=(2, 10 * math.sin((f - fs) / 4.0)))
     walk_arms("AmouO", fs, fe, lambda f: ya + 5, amp=0.08)
     for f in range(fe + 4, f1 + 1, 5):
-        shake = 20 * math.sin((f - fe) / 4.5) * (1 - ss((f - fe - 20) / 15.0))
+        shake = 32 * math.sin((f - fe) / 4.0) * (1 - ss((f - fe - 30) / 10.0))
         stand("AmouO", f, A2, ya + 5, head=(0, shake), spine=(-3, 0, 0))
     for f in range(f0, f1 + 1, 8):
-        g = ss((f - f0 - 8) / 16.0)
+        g = ss((f - f0 - 4) / 12.0)
         stand("V1", f, V10, yv + 20, head=(2, -10 - 25 * g + 8 * math.sin((f - f0) / 9.0) * g), spine=(3, -10 * g, 0), arms=False)
         relaxed_arm("V1", "L", f, yv)
         sh = wpos("V1", "upperarm01.R", f)
-        dirt = (TUBP + V((0, 0.6, 0)) - V10); dirt.z = 0
+        dirt = V((TUB_X1 + 0.2, 19.0, 0)) - V10; dirt.z = 0
         rest = sh + V((0, 0, -0.55)) + rgt(yv) * 0.05 + fwd(yv) * 0.04
-        out = sh + dirt.normalized() * 0.50 + V((0, 0, -0.06)) + V((0, 0, 0.04 * math.sin((f - f0) / 7.0))) * g
+        out = sh + dirt.normalized() * 0.58 + V((0, 0, 0.04)) + (dirt.normalized() * 0.06 + V((0, 0, 0.03))) * math.sin((f - f0) / 6.0) * g
         hand("V1", "R", f, rest.lerp(out, g), V((0, 0, -1)), (V((0, 0, -1)) * (1 - g) + dirt.normalized() * g).normalized(),
              pole=sh + V((0, 0, -0.45)) - fwd(yv) * 0.25, pose="point" if g > 0.4 else "relaxed")
-    camera("10a", f0, n, [(0, (-0.4, 13.6, 1.5), (-0.4, 17.7, 1.15), 24), (1, (-0.45, 14.3, 1.45), (-0.45, 17.7, 1.18), 24)])
+    camera("10a", f0, n, [(0, (1.75, 15.95, 1.5), (-0.25, 17.9, 1.1), 26), (1, (1.5, 16.2, 1.45), (-0.4, 17.9, 1.12), 26)])
     return use
 TUBO = OB["V_Tub"]
 _tb = [TUBO.matrix_world @ v.co for v in TUBO.data.vertices]
