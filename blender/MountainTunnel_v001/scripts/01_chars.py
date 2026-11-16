@@ -71,7 +71,7 @@ def suit(n):
 WHITE, CREAM = (0.88, 0.88, 0.86), (0.80, 0.76, 0.64)
 for k in suit("Man"):
     for m in k.data.materials:
-        two_tone(m, WHITE, CREAM, 0.50); unlink(m.node_tree, PB(m)[1].inputs['Normal'])     # the donor shirt's print lived in its normal map
+        two_tone(m, WHITE, None, 0.50, check=((0.80, 0.84, 0.92), (0.55, 0.62, 0.78), 40.0)); unlink(m.node_tree, PB(m)[1].inputs['Normal'])     # the donor shirt's print lived in its normal map
         P_ = PB(m)[1]
         for l in list(m.node_tree.links):
             if l.to_node == P_ and l.to_socket.name in ('Alpha', 'Emission Color', 'Coat Weight'): m.node_tree.links.remove(l)
@@ -156,7 +156,7 @@ for m in hair.data.materials:
     mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.name = "AgeMix"
     if srcs: nt.links.new(srcs, mx.inputs['A'])
     else: mx.inputs['A'].default_value = P.inputs['Base Color'].default_value
-    mx.inputs['B'].default_value = (0.78, 0.78, 0.76, 1)
+    mx.inputs['B'].default_value = (0.95, 0.95, 0.93, 1)
     nt.links.new(age.outputs[0], mx.inputs['Factor']); nt.links.new(mx.outputs['Result'], P.inputs['Base Color'])
     print("AGE hair material", m.name)
 for k in man.children:      # brows also whiten
@@ -202,40 +202,19 @@ def bake(o):
     m2 = bpy.data.meshes.new_from_object(o.evaluated_get(dg)); old = o.data; o.modifiers.clear(); o.data = m2; m2.name = old.name
     bpy.data.meshes.remove(old)
 
-# short-cropped hair shell (replaces the donor's fringe hair, which covered an eye): dark, greys with Age
+# real hair: the donor's short hair, with the fringe trimmed back above the brows (it covered one eye); greys with Age
 hair = next(k for k in man.children if "short0" in k.name)
-hair.hide_render = hair.hide_viewport = True
-xs = [ECO[v.index].x for v in hv]; ys = [ECO[v.index].y for v in hv]; top = max(ECO[v.index].z for v in hv)
-cy = (min(ys) + max(ys)) / 2; rx, ry = (max(xs) - min(xs)) / 2 * 1.12, (max(ys) - min(ys)) / 2 * 1.12
-bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=64, v_segments=40, radius=1.0)
-rz = (top - eye_z) * 1.15
-for v in bm.verts: v.co = Vector((v.co.x * rx, v.co.y * ry, v.co.z * rz))
-def keep_hair(c):
-    yn = c.y / ry                                      # -1 front .. +1 back
-    rim = 0.048 if yn < -0.55 else (0.048 - (yn + 0.55) / 1.55 * 0.105)
-    if abs(c.x) > rx * 0.82 and -0.6 < yn < 0.3: rim = max(rim, 0.035)   # above the ears
-    return c.z > rim
-bmesh.ops.delete(bm, geom=[v for v in bm.verts if not keep_hair(v.co)], context='VERTS')
-me = bpy.data.meshes.new("Man.crop"); bm.to_mesh(me); bm.free()
-crop = bpy.data.objects.new("Man.crop", me); sc.collection.objects.link(crop); crop.location = (cx, cy, eye_z)
-for p_ in me.polygons: p_.use_smooth = True
-mh = bpy.data.materials.new("M_CropHair"); mh.use_nodes = True; nt = mh.node_tree; P = nt.nodes["Principled BSDF"]
-P.inputs['Roughness'].default_value = 0.55
-age = nt.nodes.new('ShaderNodeValue'); age.name = "Age"; age.outputs[0].default_value = 0.0
-mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.name = "AgeMix"
-mx.inputs['A'].default_value = (0.025, 0.018, 0.014, 1); mx.inputs['B'].default_value = (0.80, 0.80, 0.78, 1)
-nt.links.new(age.outputs[0], mx.inputs['Factor']); nt.links.new(mx.outputs['Result'], P.inputs['Base Color'])
-tc = nt.nodes.new('ShaderNodeTexCoord'); nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 400.0
-bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.3
-nt.links.new(tc.outputs['Object'], nz.inputs['Vector']); nt.links.new(nz.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs['Normal'], P.inputs['Normal'])
-me.materials.append(mh)
-sw = crop.modifiers.new("Fit", 'SHRINKWRAP'); sw.target = tgt; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.offset = 0.002
-crop.modifiers.new("Sm", 'SMOOTH').iterations = 3
-bake(crop); me = crop.data
-_so = crop.modifiers.new("Solid", 'SOLIDIFY'); _so.thickness = 0.006; _so.offset = 1.0
-crop.modifiers.new("Sub", 'SUBSURF').levels = 1
-bpy.context.view_layer.update(); Mw = crop.matrix_world.copy(); crop.parent = man; crop.parent_type = 'BONE'; crop.parent_bone = "head"
-bpy.context.view_layer.update(); crop.matrix_world = Mw
+hair.hide_render = hair.hide_viewport = False
+_sv = [(m, m.show_viewport) for m in hair.modifiers]
+for m, _ in _sv: m.show_viewport = False
+bpy.context.view_layer.update(); _dg = bpy.context.evaluated_depsgraph_get()
+_hm = hair.evaluated_get(_dg).to_mesh(); HCO = [v.co.copy() for v in _hm.vertices]; hair.evaluated_get(_dg).to_mesh_clear()
+for m, sv in _sv: m.show_viewport = sv
+brow_z = eye_z + 0.040
+bmh = bmesh.new(); bmh.from_mesh(hair.data); bmh.verts.ensure_lookup_table()
+cut = [v for v in bmh.verts if HCO[v.index].y < eye_y + 0.035 and HCO[v.index].z < brow_z + 0.012 * (abs(HCO[v.index].x - cx) / 0.07)]
+bmesh.ops.delete(bmh, geom=cut, context='VERTS'); bmh.to_mesh(hair.data); bmh.free()
+print("HAIR trimmed verts", len(cut), "of", len(HCO))
 
 def in_beard(p):
     dx = abs(p.x - cx); dz = p.z - mouth_z
