@@ -55,7 +55,16 @@ show_only(hunt, [WIN["B1"], WIN["B2"], WIN["B4"], WIN["B5"], WIN["B6"]])
 show_only(pal, [WIN["B3"], WIN["B4"]])
 show_only(buyer, [WIN["B6"]])
 HIP_H = Vector((-0.30, 0.12, 0.62)); HIP_P = Vector((0.38, 0.12, 0.62)); HIP_B = Vector((-0.05, -1.10, 0.62))
-for _n, _y in (("StoolHunt", 0.14), ("StoolPal", 0.14), ("StoolBuyer", -1.12)): bpy.data.objects[_n].location.y = _y
+HIP_B = Vector((-0.05, -1.20, 0.62))
+for _n, _y in (("StoolHunt", 0.14), ("StoolPal", 0.14), ("StoolBuyer", -1.22)): bpy.data.objects[_n].location.y = _y
+# bench moved 8 cm away from the sitters (jacket hems cleared the top's underside); bench dressing moves with it
+for _n in ["Workbench", "Candle", "Spool", "PinCushion", "Cloth0", "Cloth1"] + ["CushionPin%d" % i for i in range(7)] + [o.name for o in bpy.data.objects if o.name.startswith("SpoolFlange")]:
+    _o = bpy.data.objects.get(_n)
+    if _o: _o.location.y -= 0.08
+_l = bpy.data.objects.get("OilLamp")
+if _l:
+    for _c in list(_l.children_recursive): bpy.data.objects.remove(_c)
+    bpy.data.objects.remove(_l)
 # workbench: remove the long front/back aprons and the low stretcher (legs went through them); keep top, legs, end aprons
 _tb = bpy.data.objects["WoodenTable_01"]; _mw = _tb.matrix_world
 _bm = bmesh.new(); _bm.from_mesh(_tb.data)
@@ -78,8 +87,11 @@ RIGHT_FD = Vector((0.45, -0.75, -0.45)); RIGHT_PN = Vector((0.2, -0.3, 1.0))
 def hold_pin(body, s, f, C, rig=None, fd=None, pn=None, point_dir=Vector((0.45, -0.85, 0.25))):
     """pinch the pin by its coil: hand first, then the pin is oriented so its normal (Y) runs along the pad axis"""
     rig = rig or hunt
-    ax, g = pinch_at(rig, s, f, C, fd or RIGHT_FD, pn or RIGHT_PN, gap=0.0042)
-    x = (point_dir - ax * point_dir.dot(ax)).normalized(); z = x.cross(ax)
+    ax, g = pinch_at(rig, s, f, C, fd or RIGHT_FD, pn or RIGHT_PN, gap=0.0050)
+    sc.frame_set(int(f)); bpy.context.view_layer.update()
+    out = (LAST_Q - (rig.matrix_world @ rig.pose.bones["wrist." + s].head)).normalized()   # away from the hand, past the fingertips
+    pdir = (out * 0.8 + point_dir.normalized() * 0.2)
+    x = (pdir - ax * pdir.dot(ax)).normalized(); z = x.cross(ax)
     M = Matrix((x, ax, z)).transposed()
     body.matrix_world = Matrix.Translation(LAST_Q) @ M.to_4x4(); bpy.context.view_layer.update()   # at the measured pad midpoint
     parent_to_bone(body, rig, "wrist." + s, f)
@@ -105,14 +117,14 @@ def beat_B1():
     for f, v in ((f0, 0.0), (40, 0.0), (300, 1.0), (330, 1.0)):
         sk.value = v; sk.keyframe_insert("value", frame=f)
     pR = C + Vector((-half + 0.004, 0, 0)); pL = C + Vector((half - 0.004, 0, 0))
-    pinch_at(hunt, "R", f0, pR, Vector((0.45, -0.75, -0.45)), Vector((0.2, -0.3, 1.0)), gap=0.0018)
+    pinch_at(hunt, "R", f0, pR, Vector((0.05, -0.8, -0.6)), Vector((0.9, -0.1, 0.4)), gap=0.0023)
     wire.location = LAST_Q + (C - pR); C = wire.location.copy(); pL = C + Vector((half - 0.004, 0, 0))   # wire end sits in the measured pinch
     sc.frame_set(f0); pb = hunt.pose.bones["IK_hand.R"]; pb.keyframe_insert("location", frame=330); pb.keyframe_insert("rotation_quaternion", frame=330)
     hold_fingers(hunt, "R", f0, 330)
-    for k, f in enumerate(range(f0, 331, 30)):
+    for k, f in enumerate(list(range(f0, 331, 30)) + [330]):
         tw = 12 * math.sin(k * 1.3)       # twisting: the hand rolls about the wire axis through the pinch point
         Rx = Matrix.Rotation(R_(tw), 3, 'X')
-        pinch_at(hunt, "L", f, pL, Rx @ Vector((-0.45, -0.75, -0.45)), Rx @ Vector((-0.2, -0.3, 1.0)), gap=0.0018)
+        pinch_at(hunt, "L", f, pL, Rx @ Vector((-0.05, -0.8, -0.6)), Rx @ Vector((-0.9, -0.1, 0.4)), gap=0.0023)
     show_only(wire, [(f0, 330)])
     # --- 1c (331..480): macro, the finished coil spring: right hand holds the coil, left pinches the arm tip and opens/closes it
     f2 = 331
@@ -128,7 +140,7 @@ def beat_B1():
     for f in (f0, 330):
         pass
     for f in (f2, f1):
-        place_hand(hunt, "L", f, Vector((-0.10, -0.22, BT + 0.02)), Vector((0, 0, -1)), Vector((-0.25, -1, 0))); apply_pose(hunt, "L", "flat_palm", f)
+        place_hand(hunt, "L", f, Vector((-0.19, -0.03, 0.69)), Vector((0, 0, -1)), Vector((0.1, -1, -0.25))); apply_pose(hunt, "L", "relaxed", f)
     show_only(proto_b, [(f2, f1)])
     # cameras
     cam_shot("Cam1a", f0, 150, [(f0, (0.10, -1.55, 1.02), (-0.30, -0.25, 0.98)), (150, (0.0, -1.32, 1.00), (-0.30, -0.25, 0.97))], lens=38)
@@ -153,7 +165,7 @@ def beat_B2():
         hand_delta(RH, "R", f0, f, (0, 0, 0), rot=Matrix.Rotation(R_(ang), 3, Vector((0.3, -0.9, 0.2)).normalized()))
         hold_fingers(hunt, "R", f0, f)
     for f in (f0, 625, 810):
-        place_hand(hunt, "L", f, Vector((-0.10, -0.22, BT + 0.02)), Vector((0, 0, -1)), Vector((-0.25, -1, 0))); apply_pose(hunt, "L", "flat_palm", f)
+        place_hand(hunt, "L", f, Vector((-0.19, -0.03, 0.69)), Vector((0, 0, -1)), Vector((0.1, -1, -0.25))); apply_pose(hunt, "L", "relaxed", f)
     # 2b (651..810): he lifts the finished pin to look at it, small smile, face to camera
     sc.frame_set(650); M650 = hunt.pose.bones["IK_hand.R"].matrix.copy()
     for f, dz, dy in ((690, 0.10, -0.02), (760, 0.13, -0.03), (810, 0.13, -0.03)):
@@ -162,7 +174,9 @@ def beat_B2():
         u = min(1, (f - 651) / 50); ph = math.sin(2 * math.pi * (f - 651) / 150)
         HH.key_spine(f, flex=8 - 6 * u + ph, head=(24 - 22 * u + 2 * ph, -6 * u))
     show_only(hero_b, [(f0, f1)])
-    cam_shot("Cam2a", f0, 650, [(f0, tuple(pin_C + Vector((0.14, -0.20, 0.06))), tuple(pin_C + xax * 0.035)), (650, tuple(pin_C + Vector((0.11, -0.16, 0.05))), tuple(pin_C + xax * 0.04))], lens=55, fstop=11)
+    sc.frame_set(f0); bpy.context.view_layer.update()
+    clasp_w = hero_b.matrix_world @ Vector((PIN_L - 0.004, 0, 0))
+    cam_shot("Cam2a", f0, 650, [(f0, tuple(clasp_w + Vector((0.07, -0.11, 0.05))), tuple(clasp_w)), (650, tuple(clasp_w + Vector((0.055, -0.085, 0.04))), tuple(clasp_w))], lens=60, fstop=14)
     cam_shot("Cam2b", 651, f1, [(651, (0.10, -1.20, 1.10), (-0.30, -0.20, 1.02)), (f1, (0.04, -1.05, 1.10), (-0.30, -0.20, 1.04))], lens=42)
     catchlight(hunt, bpy.data.objects["Cam2b"], 0, 0)
 

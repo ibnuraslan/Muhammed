@@ -171,7 +171,8 @@ def open_box(name, loc, rotz=0.0, size=(0.42, 0.32, 0.26)):
 BOXES = []
 for r in range(3):
     for c in range(4):
-        BOXES.append(open_box("PinBox%d%d" % (r, c), (X - 1.0 + c * 0.62, -0.2 + r * 0.55, 0.0), R_(random.uniform(-4, 4))))
+        hero = (r == 0 and c in (1, 2))      # only the two front-centre boxes show the logo to camera
+        BOXES.append(open_box("PinBox%d%d" % (r, c), (X - 1.0 + c * 0.62, -0.2 + r * 0.55, 0.0), R_(random.uniform(-3, 3) + (0 if hero else 180))))
 for i, (dx, dy, aid) in enumerate(((-2.6, 2.6, "wooden_crate_01"), (-1.7, 2.8, "wooden_crate_02"), (1.9, 2.7, "wooden_crate_01"), (2.8, 2.4, "wooden_crate_02"))):
     append_asset(aid, "Crate%d" % i, cS, (X + dx, dy, 0), R_(random.uniform(-10, 10)), height=0.45)
     append_asset(aid, "CrateTop%d" % i, cS, (X + dx, dy, 0.45), R_(random.uniform(-10, 10)), height=0.45)

@@ -9,8 +9,9 @@ def look(H, f0, f1, flex, head_fn, step=20, period=170, amp=1.2):
 def rest_hands_on_bench(rig, f, xs, y=-0.24, flat=False):
     for s, x in zip("RL", xs):
         sx = 1 if s == "L" else -1
-        place_hand(rig, s, f, Vector((x, y, BT + 0.02)), Vector((0, 0, -1)), Vector((-0.2 * sx, -1, 0)))
-        apply_pose(rig, s, "flat_palm", f)
+        hx = rig.matrix_world.translation.x if False else x
+        place_hand(rig, s, f, Vector((x, 0.09 - 0.12, 0.69)), Vector((0, 0, -1)), Vector((-0.1 * sx, -1, -0.25)))   # on the thigh, under the bench
+        apply_pose(rig, s, "relaxed", f)
 
 def ease(u): u = max(0.0, min(1.0, u)); return u * u * (3 - 2 * u)
 
@@ -83,12 +84,12 @@ def beat_B4():
     for f, dz in ((1260, 0.03), (1400, 0.05), (1500, 0.06), (f1, 0.06)):
         hand_delta(RH, "L", f0, f, (0.0, 0.0, dz)); hold_fingers(hunt, "L", f0, f)
     rest_hands_on_bench(hunt, f0, (-0.42, None)) if False else None
-    place_hand(hunt, "R", f0, Vector((-0.40, -0.22, BT + 0.02)), Vector((0, 0, -1)), Vector((0.25, -1, 0))); apply_pose(hunt, "R", "flat_palm", f0)
-    place_hand(hunt, "R", f1, Vector((-0.40, -0.22, BT + 0.02)), Vector((0, 0, -1)), Vector((0.25, -1, 0))); apply_pose(hunt, "R", "flat_palm", f1)
+    place_hand(hunt, "R", f0, Vector((-0.41, -0.03, 0.69)), Vector((0, 0, -1)), Vector((-0.1, -1, -0.25))); apply_pose(hunt, "R", "relaxed", f0)
+    place_hand(hunt, "R", f1, Vector((-0.41, -0.03, 0.69)), Vector((0, 0, -1)), Vector((-0.1, -1, -0.25))); apply_pose(hunt, "R", "relaxed", f1)
     for s, x in (("L", 0.50), ("R", 0.28)):
         sx = 1 if s == "L" else -1
         for f in (f0, f1):
-            place_hand(pal, s, f, Vector((x, -0.22, BT + 0.02)), Vector((0, 0, -1)), Vector((-0.2 * sx, -1, 0))); apply_pose(pal, s, "flat_palm", f)
+            place_hand(pal, s, f, Vector((x, -0.03, 0.69)), Vector((0, 0, -1)), Vector((-0.1 * sx, -1, -0.25))); apply_pose(pal, s, "relaxed", f)
     # Hunt looks between the pin and his friend; Pal leans in, studies it, looks up and nods
     look(HH, f0, f1, 6, lambda f: (16, 6) if f < 1330 else (6, 14) if f < 1470 else (12, 8))
     def palhead(f):
@@ -112,7 +113,7 @@ def beat_B5():
     for i, (dx, dy) in enumerate(((0.10, -0.03), (0.125, -0.012), (0.115, 0.012))):
         c_ = bpy.data.objects["Coin%d" % i]; c_.location = (-0.30 + dx, -0.42 + dy, BT + 0.001 + 0.0021 * i)
     for f in (f0, 1700, f1):
-        rest_hands_on_bench(hunt, f, (-0.50, -0.10), y=-0.26)
+        rest_hands_on_bench(hunt, f, (-0.41, -0.19))
     # slumped, slow head shake, a breath; face kept toward the low camera
     def hd(f):
         sh = 9 * math.sin((f - f0) / 45 * math.pi) if 1630 < f < 1720 else 0
@@ -136,32 +137,31 @@ def beat_B6():
     def slide(obj, a, b, fa, fb):
         for f, p in ((f0, a), (fa, a), (fb, b), (f1, b)):
             obj.location = p; obj.keyframe_insert("location", frame=f)
-    slide(pat, p0, p1, 1900, 1975); slide(stack, m0, m1, 1935, 2005)
-    # Hunt's right palm on the patent pushes it across, then withdraws to the bench edge
-    for f, p in ((f0, p0), (1900, p0), (1975, p1)):
-        place_hand(hunt, "R", f, p + Vector((0.0, 0.0, 0.006)), Vector((0, 0, -1)), Vector((0.15, -1, 0))); apply_pose(hunt, "R", "flat_palm", f)
-    place_hand(hunt, "R", 2000, Vector((-0.42, -0.24, BT + 0.03)), Vector((0, 0, -1)), Vector((0.2, -1, 0))); apply_pose(hunt, "R", "relaxed", 2000)
-    place_hand(hunt, "R", f1, Vector((-0.42, -0.22, BT + 0.02)), Vector((0, 0, -1)), Vector((0.2, -1, 0))); apply_pose(hunt, "R", "flat_palm", f1)
-    place_hand(hunt, "L", f0, Vector((-0.12, -0.22, BT + 0.02)), Vector((0, 0, -1)), Vector((-0.2, -1, 0))); apply_pose(hunt, "L", "flat_palm", f0)
-    place_hand(hunt, "L", f1, Vector((-0.12, -0.22, BT + 0.02)), Vector((0, 0, -1)), Vector((-0.2, -1, 0))); apply_pose(hunt, "L", "flat_palm", f1)
+    slide(pat, p1, p1, 1900, 1975); slide(stack, m0, m1, 1935, 2005)   # patent already lies in front of the buyer
+    # Hunt's hands stay in his lap (no push: re-staged, the push hand crossed the bench)
+    place_hand(hunt, "R", f0, Vector((-0.41, -0.03, 0.69)), Vector((0, 0, -1)), Vector((-0.1, -1, -0.25))); apply_pose(hunt, "R", "relaxed", f0)
+    place_hand(hunt, "R", 2000, Vector((-0.41, -0.03, 0.69)), Vector((0, 0, -1)), Vector((-0.1, -1, -0.25))); apply_pose(hunt, "R", "relaxed", 2000)
+    place_hand(hunt, "R", f1, Vector((-0.41, -0.03, 0.69)), Vector((0, 0, -1)), Vector((-0.1, -1, -0.25))); apply_pose(hunt, "R", "relaxed", f1)
+    place_hand(hunt, "L", f0, Vector((-0.19, -0.03, 0.69)), Vector((0, 0, -1)), Vector((0.1, -1, -0.25))); apply_pose(hunt, "L", "relaxed", f0)
+    place_hand(hunt, "L", f1, Vector((-0.19, -0.03, 0.69)), Vector((0, 0, -1)), Vector((0.1, -1, -0.25))); apply_pose(hunt, "L", "relaxed", f1)
     # Buyer (faces +Y; his right hand is on +X) slides the money stack over, then takes the patent toward himself
     for f, p in ((f0, m0), (1935, m0), (2005, m1)):
         place_hand(buyer, "R", f, p + Vector((0, 0, 0.016)), Vector((0, 0, -1)), Vector((-0.15, 1, 0))); apply_pose(buyer, "R", "flat_palm", f)
-    place_hand(buyer, "R", 2035, Vector((0.10, -0.80, BT + 0.03)), Vector((0, 0, -1)), Vector((-0.2, 1, 0))); apply_pose(buyer, "R", "relaxed", 2035)
-    place_hand(buyer, "R", f1, Vector((0.10, -0.82, BT + 0.02)), Vector((0, 0, -1)), Vector((-0.2, 1, 0))); apply_pose(buyer, "R", "flat_palm", f1)
-    place_hand(buyer, "L", f0, Vector((-0.20, -0.80, BT + 0.02)), Vector((0, 0, -1)), Vector((0.2, 1, 0))); apply_pose(buyer, "L", "flat_palm", f0)
-    place_hand(buyer, "L", f1, Vector((-0.20, -0.80, BT + 0.02)), Vector((0, 0, -1)), Vector((0.2, 1, 0))); apply_pose(buyer, "L", "flat_palm", f1)
+    place_hand(buyer, "R", 2035, Vector((0.05, -1.04, 0.69)), Vector((0, 0, -1)), Vector((-0.1, 1, -0.25))); apply_pose(buyer, "R", "relaxed", 2035)
+    place_hand(buyer, "R", f1, Vector((0.05, -1.04, 0.69)), Vector((0, 0, -1)), Vector((-0.1, 1, -0.25))); apply_pose(buyer, "R", "relaxed", f1)
+    place_hand(buyer, "L", f0, Vector((-0.15, -1.04, 0.69)), Vector((0, 0, -1)), Vector((0.1, 1, -0.25))); apply_pose(buyer, "L", "relaxed", f0)
+    place_hand(buyer, "L", f1, Vector((-0.15, -1.04, 0.69)), Vector((0, 0, -1)), Vector((0.1, 1, -0.25))); apply_pose(buyer, "L", "relaxed", f1)
     look(HH, f0, f1, 8, lambda f: (20, 0) if f < 2060 else (14 - 10 * ease((f - 2060) / 40), 0))
     look(HB, f0, f1, 6, lambda f: (18, 0) if f < 2040 else (4, 0))
     for o in [pat, stack] + list(stack.children): show_only(o, [(f0, f1)])
-    cam_shot("Cam6a", f0, 2040, [(f0, (-1.75, -0.50, 1.30), (-0.15, -0.50, 0.92)), (2040, (-1.55, -0.50, 1.25), (-0.15, -0.48, 0.92))], lens=30)
+    cam_shot("Cam6a", f0, 2040, [(f0, (-1.95, -0.62, 1.22), (-0.15, -0.55, 1.02)), (2040, (-1.80, -0.62, 1.20), (-0.15, -0.55, 1.02))], lens=24)
     cam_shot("Cam6b", 2041, f1, [(2041, (-0.95, -0.95, 1.12), (-0.30, -0.25, 1.00)), (f1, (-0.88, -0.86, 1.12), (-0.30, -0.22, 1.02))], lens=40)
     for c in ("Cam6a", "Cam6b"): catchlight(hunt, bpy.data.objects[c], 0, 0)
 
 # ================================================================== B7 made millions (2221..2460)
 def beat_B7():
     f0, f1 = WIN["B7"]; X = 40.0
-    cam_shot("Cam7a", f0, 2340, [(f0, (X - 1.6, -1.6, 0.55), (X - 0.4, 0.3, 0.25)), (2340, (X - 0.9, -1.3, 0.52), (X - 0.2, 0.4, 0.22))], lens=30)
+    cam_shot("Cam7a", f0, 2340, [(f0, (X - 0.07, -1.85, 0.62), (X - 0.07, 0.2, 0.18)), (2340, (X - 0.07, -1.60, 0.58), (X - 0.07, 0.2, 0.18))], lens=26)
     cam_shot("Cam7b", 2341, f1, [(2341, (X + 0.2, -1.2, 0.9), (X - 0.1, 0.4, 0.2)), (f1, (X + 0.2, -1.0, 2.1), (X - 0.1, 0.6, 0.15))], lens=26)
 
 # ================================================================== B8 died poor but respected (2461..2730)
@@ -177,7 +177,7 @@ def beat_B8():
             l_.location = (x0 + 0.08 * math.sin(6 * u + i), -0.25 + 0.1 * i, max(sz + 0.02 if abs(x0 - X) < 0.5 else 0.01, 1.9 - 1.6 * u - 0.2 * i))
             l_.rotation_euler = (0.6 * math.sin(5 * u + i), 0.5 * math.cos(4 * u), 3 * u + i)
             l_.keyframe_insert("location", frame=f); l_.keyframe_insert("rotation_euler", frame=f)
-    cam_shot("Cam8a", f0, 2600, [(f0, (X - 0.35, -1.55, 0.80), (X, 0.0, 0.72)), (2600, (X - 0.30, -1.30, 0.80), (X, 0.0, 0.72))], lens=32)
+    cam_shot("Cam8a", f0, 2600, [(f0, (X - 0.35, -2.1, 1.05), (X, 0.0, 0.55)), (2600, (X - 0.30, -1.75, 1.0), (X, 0.0, 0.55))], lens=30)
     cam_shot("Cam8b", 2601, f1, [(2601, (X - 0.45, -0.60, sz + 0.42), (X - 0.08, -0.04, sz)), (f1, (X - 0.30, -0.66, sz + 0.40), (X - 0.06, -0.04, sz))], lens=40, fstop=9)
 
 # B3-only dressing (cloth + cushion) hidden elsewhere; pliers removed (read as food)
@@ -193,18 +193,10 @@ for nm, loc in (("Candle", (0.80, -0.20)),):
 # park pin: lying flat on the newspaper picture
 pp = bpy.data.objects["ParkPin_Body"]; szp = sc.get("park_seat_z", 0.65)
 pp.location = (80.0 - 0.16, -0.06, szp + 0.022); pp.rotation_euler = (R_(90), 0, R_(20))
-# Hunt hair: warm dark brown over the hair texture
-for ch in hunt.children:
-    if "short02" in ch.name or "eyebrow" in ch.name:
-        for m in ch.data.materials:
-            nt = m.node_tree; P_ = next((n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED'), None)
-            if not P_: continue
-            lk = P_.inputs["Base Color"].links
-            mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
-            mx.inputs['B'].default_value = (0.30, 0.20, 0.12, 1)
-            if lk: nt.links.new(lk[0].from_socket, mx.inputs['A'])
-            else: mx.inputs['A'].default_value = P_.inputs["Base Color"].default_value
-            nt.links.new(mx.outputs['Result'], P_.inputs["Base Color"])
+# park: the low-poly blob trees are removed (director note); lawn, shrubs and sky remain
+for o in list(bpy.data.collections["SetPark"].objects):
+    if o.type == 'MESH' and o.data.materials and o.data.materials[0] and o.data.materials[0].name in ("Bark", "Leaves"):
+        bpy.data.objects.remove(o)
 path_m = bpy.data.materials.get("Path")
 if path_m: path_m.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.55, 0.47, 0.36, 1)
 

@@ -3,7 +3,7 @@ import bpy, sys
 exec(open("/home/user/Muhammed/blender/SafetyPin_v001/scripts/lib.py").read())
 SPEC = {   # cid: (blend, donor)
     "Hunt":  (REPO + "BeethovenDeaf_v010/BeethovenDeaf_v010_60fps.blend", "Composer"),
-    "Pal":   (REPO + "PopeShot_v012/PopeShot_v012_60fps.blend", "GuardB"),
+    "Pal":   (REPO + "TitanicIceberg_v014/TitanicIceberg_v014_60fps.blend", "ExpertB"),
     "Buyer": (REPO + "PrisonKeyCake_v010/PrisonKeyCake_v010_60fps.blend", "President"),
 }
 cid = sys.argv[sys.argv.index("--") + 1]
@@ -85,7 +85,16 @@ if cid == "Hunt":     # 1840s inventor: charcoal frock-coat suit, grey waistcoat
     set_tint(rig, "elegantsuit", "Mix.002", (0.075, 0.075, 0.09))   # donor's red coat -> charcoal
     hair(rig, (0.16, 0.10, 0.06))
 elif cid == "Pal":    # young friend: green jacket (reference), light shirt kept, blond hair
-    set_tint(rig, "elegantsuit", "Mix", (0.22, 0.46, 0.15))   # donor's grey suit tint -> green suit (reference: green jacket)
+    # the Composer suit material keys its regions by channel (jacket / shirt / trim): green jacket, cream shirt
+    with bpy.data.libraries.load(REPO + "BeethovenDeaf_v010/BeethovenDeaf_v010_60fps.blend", link=False) as (fd, td):
+        td.materials = [n for n in fd.materials if n.startswith("Composer.male_elegantsuit01")][:1]
+    sm = td.materials[0]; sm.name = "Pal_Suit"
+    sm.node_tree.nodes["Mix"].inputs[7].default_value = (0.12, 0.34, 0.08, 1)      # jacket region
+    sm.node_tree.nodes["Mix.001"].inputs[7].default_value = (0.86, 0.82, 0.72, 1)  # shirt region
+    sm.node_tree.nodes["Mix.002"].inputs[7].default_value = (0.30, 0.20, 0.10, 1)  # tie stripes
+    for ch in rig.children:
+        if "elegantsuit" in ch.name:
+            for i in range(len(ch.data.materials)): ch.data.materials[i] = sm
     hair(rig, (0.85, 0.70, 0.42))
 elif cid == "Buyer":  # buyer: brown suit, dark hair
     recolor(rig, "elegantsuit", (0.42, 0.26, 0.14), gain=1.5)
