@@ -196,7 +196,21 @@ for _y in (-0.28, -1.72):    # stone path edges
 benchP, bobsP = append_asset("painted_wooden_bench", "ParkBench", cK, (X, 0, 0), 0.0, height=0.89)
 mnB, mxB = bounds(bobsP); print("PARKBENCH", mnB, mxB)
 append_asset("street_lamp_01", "StreetLamp", cK, (X + 1.5, 0.3, 0), 0.0, height=3.6)
+def dup_group(root, name, loc, rotz, sc_):
+    """linked duplicate (shared meshes) of an appended asset group"""
+    r2 = bpy.data.objects.new(name, None); root.users_collection[0].objects.link(r2)
+    for ch in root.children:
+        c2 = ch.copy(); root.users_collection[0].objects.link(c2); c2.parent = r2; c2.matrix_parent_inverse = ch.matrix_parent_inverse.copy()
+    r2.location = loc; r2.rotation_euler.z = rotz; r2.scale = (sc_,) * 3
+    return r2
+_sh = None
 for i in range(9):
+    _loc = (X - 4 + i * 1.0 + random.uniform(-0.3, 0.3), 1.6 + random.uniform(0, 0.8), 0); _h = random.uniform(0.7, 1.1)
+    if _sh is None:
+        _sh, _ = append_asset("shrub_01", "Shrub%d" % i, cK, _loc, 0.0, height=_h, keep=lambda o: o.name.endswith("LOD1")); _sh_s = _sh.scale.x / _h
+    else:
+        dup_group(_sh, "Shrub%d" % i, Vector(_loc) + Vector((0, 0, _sh.location.z)), random.uniform(0, 6), _sh_s * _h)
+if False:
     append_asset("shrub_01", "Shrub%d" % i, cK, (X - 4 + i * 1.0 + random.uniform(-0.3, 0.3), 1.6 + random.uniform(0, 0.8), 0), random.uniform(0, 6), height=random.uniform(0.7, 1.1))
 gsrc, gobs = append_asset("grass_medium_01", "GrassSrc", cK, (X, -30, 0), 0.0, keep=lambda o: o.name.endswith("LOD1"))
 # grass clumps scattered on the lawn around the bench (instanced copies of the Poly Haven grass, LOD1)
@@ -206,8 +220,17 @@ for i in range(160):
     if abs(_x - X) < 0.7 and -0.35 < _y < 0.35: _y += 0.6
     _c.location = (_x, _y, 0); _c.rotation_euler = (0, 0, random.uniform(0, 6.3)); _s = random.uniform(0.6, 1.1) * gsrc.scale.x; _c.scale = (_s, _s, _s)
 # real trees behind the bench (Poly Haven CC0)
+_tr = None
 for i, (tx, ty, h) in enumerate(((-2.6, 5.0, 4.2), (2.4, 6.2, 4.8), (5.5, 4.4, 3.8))):
-    append_asset("tree_small_02", "ParkTree%d" % i, cK, (X + tx, ty, 0), random.uniform(0, 6.3), height=h)
+    if _tr is None:
+        _tr, _tobs = append_asset("tree_small_02", "ParkTree%d" % i, cK, (X + tx, ty, 0), random.uniform(0, 6.3), height=h)
+        for _o in _tobs:      # 1.7M-vertex scan: decimate for the package (background tree, 4-6 m from the lens)
+            if len(_o.data.vertices) > 200000:
+                _d = _o.modifiers.new("Dec", 'DECIMATE'); _d.ratio = 0.06
+                with bpy.context.temp_override(object=_o, active_object=_o): bpy.ops.object.modifier_apply(modifier="Dec")
+        _tr_s = _tr.scale.x / h
+    else:
+        dup_group(_tr, "ParkTree%d" % i, Vector((X + tx, ty, _tr.location.z)), random.uniform(0, 6.3), _tr_s * h)
 # (old low-poly blob trees disabled: director note)
 if False:
     bark = mat("Bark", (0.35, 0.24, 0.16), 0.8); leaf = mat("Leaves", (0.30, 0.55, 0.18), 0.7)

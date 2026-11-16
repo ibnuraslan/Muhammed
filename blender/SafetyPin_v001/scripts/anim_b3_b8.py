@@ -180,7 +180,7 @@ def beat_B8():
             l_.location = (x0 + 0.08 * math.sin(6 * u + i), -0.25 + 0.1 * i, max(sz + 0.02 if abs(x0 - X) < 0.5 else 0.01, 1.9 - 1.6 * u - 0.2 * i))
             l_.rotation_euler = (0.6 * math.sin(5 * u + i), 0.5 * math.cos(4 * u), 3 * u + i)
             l_.keyframe_insert("location", frame=f); l_.keyframe_insert("rotation_euler", frame=f)
-    cam_shot("Cam8a", f0, 2600, [(f0, (X - 0.35, -2.1, 1.05), (X, 0.0, 0.55)), (2600, (X - 0.30, -1.75, 1.0), (X, 0.0, 0.55))], lens=30)
+    cam_shot("Cam8a", f0, 2600, [(f0, (X - 0.40, -1.55, 1.15), (X - 0.08, 0.05, 0.55)), (2600, (X - 0.33, -1.30, 1.08), (X - 0.08, 0.05, 0.56))], lens=30)
     cam_shot("Cam8b", 2601, f1, [(2601, (X - 0.45, -0.60, sz + 0.42), (X - 0.08, -0.04, sz)), (f1, (X - 0.30, -0.66, sz + 0.40), (X - 0.06, -0.04, sz))], lens=40, fstop=9)
 
 # B3-only dressing (cloth + cushion) hidden elsewhere; pliers removed (read as food)
@@ -201,7 +201,11 @@ for o in list(bpy.data.collections["SetPark"].objects):
     if o.type == 'MESH' and o.data.materials and o.data.materials[0] and o.data.materials[0].name in ("Bark", "Leaves"):
         bpy.data.objects.remove(o)
 path_m = bpy.data.materials.get("Path")
-if path_m: path_m.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.55, 0.47, 0.36, 1)
+if path_m:   # gravel path: warm brown, mottled
+    _nt = path_m.node_tree; _P = _nt.nodes["Principled BSDF"]
+    _nz = _nt.nodes.new("ShaderNodeTexNoise"); _nz.inputs["Scale"].default_value = 60.0; _nz.inputs["Detail"].default_value = 8.0
+    _cr = _nt.nodes.new("ShaderNodeValToRGB"); _cr.color_ramp.elements[0].color = (0.30, 0.24, 0.17, 1); _cr.color_ramp.elements[1].color = (0.52, 0.44, 0.33, 1)
+    _nt.links.new(_nz.outputs["Fac"], _cr.inputs[0]); _nt.links.new(_cr.outputs[0], _P.inputs["Base Color"])
 
 for b, fn in (("B3", beat_B3), ("B4", beat_B4), ("B5", beat_B5), ("B6", beat_B6), ("B7", beat_B7), ("B8", beat_B8)):
     if want(b): fn()
