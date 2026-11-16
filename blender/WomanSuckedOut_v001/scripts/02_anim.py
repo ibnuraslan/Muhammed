@@ -150,7 +150,8 @@ def away(rig, f):
 def seated(rig, f, x, y, look_turn=0.0, hflex=-4, flex=9, side=0, arms=None, legs=(86, 78)):
     R = RG[rig.name] if rig.name in RG else Rig(rig)
     place(rig, f, (x, y + 0.06 + (0.04 if rig.name == "W" else 0), -0.17 + (0.05 if rig.name == "W" else 0)), (0, 0, math.pi))
-    fk_leg(R, "L", f, hip=legs[0], knee=legs[1], splay=1); fk_leg(R, "R", f, hip=legs[0] - 2, knee=legs[1] + 3, splay=1)
+    wl = rig.name == "W"      # window seat: her left foot stays off the curved wall
+    fk_leg(R, "L", f, hip=legs[0], knee=legs[1], splay=-6 if wl else 1); fk_leg(R, "R", f, hip=legs[0] - 2, knee=legs[1] + 3, splay=3 if wl else 1)
     fk_spine(R, f, flex=flex, side=side, htwist=look_turn, hflex=hflex)
     a = arms or {}
     for s in "LR":
@@ -240,14 +241,18 @@ shot_cam("S01", [(0, (-0.38, -4.50, 1.66), (-0.98, -5.78, 1.10), 30), (1, (-0.42
 # ================================================================== S02: ... sucked out of a window (burst + lurch)
 _begin("S02")
 f0, f1 = T["S02"]; fb = f0 + 24
-for fr, tw in ((f0, -6), (fb, -6)):
-    seated(W, fr, *SEAT_W, look_turn=tw, hflex=-2); seated(HA, fr, SEAT_A[0] + 0.06, SEAT_A[1], look_turn=0, hflex=6, arms={"L": (44, 8, 80, 0)})
+for fr, tw in ((f0, -22), (fb, -22)):      # identical to the S01 end pose (checked clean)
+    seated(W, fr, SEAT_W[0] - 0.01, SEAT_W[1], look_turn=tw, hflex=-20, side=-4, arms={"R": (42, 10, 88, 0)})
+    seated(HA, fr, SEAT_A[0] + 0.06, SEAT_A[1], look_turn=3, hflex=8, side=4, arms={"L": (44, 8, 80, 0)})
 vis(OB["PANE"], 1, True); vis(OB["PANE"], fb, False)
-for fr, j in ((fb + 10, 0), (fb + 22, 1), (fb + 40, 0), (f1, 1)):
+for fr, j in ((fb + 4, 0), (fb + 22, 1), (fb + 40, 0), (f1, 1)):      # fast flinch: the raised arm clears HA within 4 frames
     # W yanked toward the hole: whole body slides toward the window, torso folds left toward it, arms flung up
-    seated(W, fr, -0.99, SEAT_W[1], look_turn=40, hflex=4, side=24 + 3 * j, flex=6,
-           arms={"L": (40, 22, 92, 0), "R": (-30 - 6 * j, 50, 60, 0)})
-    seated(HA, fr, SEAT_A[0] + 0.06, SEAT_A[1], look_turn=-32, hflex=-6, side=-14 - 2 * j, arms={"L": (40, 12, 82, 0), "R": (20, 42, 95, 0)})
+    seated(W, fr, SEAT_W[0] - 0.01, SEAT_W[1], look_turn=40, hflex=4, side=20 + 3 * j, flex=6,
+           arms={"R": (-30 - 6 * j, 50, 60, 0)})
+    if fr == fb + 4: continue      # HA eases away over the next 20 frames (his left arm stays clear of her)
+    seated(HA, fr, SEAT_A[0] + 0.06, SEAT_A[1], look_turn=-32, hflex=-6, side=-14 - 2 * j, arms={"L": (44, 8, 80, 0), "R": (20, 42, 95, 0)})
+# the flinch arm swings forward first (in front of her chest, clear of HA's forearm), then up; HA leans away at once
+seated(W, fb + 2, SEAT_W[0] - 0.01, SEAT_W[1], look_turn=20, hflex=-6, side=8, flex=6, arms={"R": (20, 75, 85, 0)})
 for s in "LR": hand_pose(W, s, fb + 10, "open_alarm"); hand_pose(HA, s, fb + 10, "open_alarm")
 # shards burst outward from the pane, papers fly into the hole
 rnd = random.Random(3)
@@ -330,7 +335,7 @@ for o in MASKS:
     for fr in range(fm + d + 21, sc.frame_end + 1, 20):
         key_loc(o, fr, home, (R_(rnd.uniform(-6, 6)), R_(rnd.uniform(-6, 6)), 0))
 for fr in (f0, f1):
-    seated(W, fr, -0.99, SEAT_W[1], look_turn=40, hflex=4, side=26, flex=6, arms={"L": (40, 22, 92, 0), "R": (-36, 50, 60, 0)})
+    seated(W, fr, -0.99, SEAT_W[1], look_turn=40, hflex=4, side=26, flex=6, arms={"R": (-36, 50, 60, 0)})
     seated(HA, fr, SEAT_A[0], SEAT_A[1], look_turn=-35, hflex=-10, side=-16, arms={"L": (40, 12, 82, 0), "R": (20, 42, 95, 0)})
 shot_cam("S08", [(0, (0.15, -3.55, 1.72), (0.35, -8.6, 0.95), 24), (1, (0.12, -3.95, 1.68), (0.30, -8.6, 0.95), 26)])
 # ================================================================== S09: and suck the nearby woman out (emerging, exterior)
