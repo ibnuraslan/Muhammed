@@ -10,4 +10,4 @@ Family buries their dog (hit by a truck, thought dead) and leaves for the weeken
 Dog in the hole with no face pressed into the dirt; the truck hit off-screen or as a soft cut; paws clawing up without passing through the soil mesh; the owners' faces readable at the reveal
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B21_DogBuriedAlive_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B21_DogBuriedAlive_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

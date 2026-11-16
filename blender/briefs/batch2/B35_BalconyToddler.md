@@ -10,4 +10,4 @@ A toddler slips through the bars of a second-floor balcony; his body drops but h
 **Sensitive (a child in danger):** keep it calm, face not distressed, no neck strain shown. **Contact:** head between the bars (contact, not through); the man's hands on the legs (grip, no crossing); chairs stacked with real contacts; grandma's arms under his arms. **Text:** no yellow measurement arrows
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B35_BalconyToddler_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B35_BalconyToddler_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

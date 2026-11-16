@@ -10,4 +10,4 @@
 Rebuild on a real 1848 railroad site; the rod through the head as a clean anatomy cutaway (skull and brain), not gore; no "rod into the face" close-up; the brain inset on a real background
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B12_IronRodHead_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B12_IronRodHead_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

@@ -10,4 +10,4 @@ He twists a wire into a coil spring and adds a clasp over the point → before t
 Wire in the fingertips (pinch, not through the finger); pin-prick injury kept mild; money and patent handover as clean hand-offs; no newspaper headline text
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B20_SafetyPin_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B20_SafetyPin_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

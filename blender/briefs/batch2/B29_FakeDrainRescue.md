@@ -10,4 +10,4 @@ She tells the police her child fell into the storm drain → they spend hours si
 No child shown falling (her fake story: show it as her telling it, or a stylized "imagined" shot); the police in the drain with hands in the trash (contact, not through); her phone in the fingers below her face; no complaint-form text
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B29_FakeDrainRescue_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B29_FakeDrainRescue_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

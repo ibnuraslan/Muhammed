@@ -10,4 +10,4 @@
 Crew hands on his legs (grip, not through); the seat belt or shoulder at the frame edge; his face not pressed into the fuselage, keep it a clear profile; no logo on the plane
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B17_PilotSuckedOut_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B17_PilotSuckedOut_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

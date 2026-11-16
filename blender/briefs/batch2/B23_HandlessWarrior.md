@@ -10,4 +10,4 @@ Enemies cut off his hands as punishment and send him back to tell his people to 
 **High gore:** no amputation shown (cut away, sound-only); wrists bandaged, no open wounds; knives strapped to the forearms (clean binding, no blade through the arm); battle without blood sprays
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B23_HandlessWarrior_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B23_HandlessWarrior_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

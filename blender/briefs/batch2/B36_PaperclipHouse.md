@@ -10,4 +10,4 @@ A red paperclip → fish pen → doorknob → camp stove → generator → keg p
 **Long, many props:** each trade a quick hand-to-hand swap (both hands on the item, no floating); one hero, many partners. **Brands and people:** no brand logos ("KISS" globe → a generic band globe; no "ZACK D RECORDS"); the rock star is a generic character, no likeness of Alice Cooper. **Text:** no "ONE-YEAR LEASE" signs
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B36_PaperclipHouse_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B36_PaperclipHouse_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

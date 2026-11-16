@@ -10,4 +10,4 @@ Walking the same line across your yard every day crushes the grass and packs the
 **Ground:** feet planted on the ground (no sinking or sliding); groove erosion shown as a clean time-lapse. **Text:** no "6 FT" text (show the depth with a person standing in it). **Ending:** the war punchline as a playful cut with no zombie gore or severed head (the reference ends on one)
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B37_YardTrench_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B37_YardTrench_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

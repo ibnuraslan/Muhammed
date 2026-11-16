@@ -10,4 +10,4 @@ A man pulls a dying crocodile from a riverbank and takes it home → six months 
 Crocodile rig with ground contact (no floating on the grass); the man's hands on its back or head (contact, not through); the bucket held in the fingers; no "9 Pounds" text on the bucket; the funeral with a portrait as a plain painting (no text)
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B28_CrocodileFriend_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B28_CrocodileFriend_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

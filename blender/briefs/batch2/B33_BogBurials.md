@@ -10,4 +10,4 @@
 **Burials:** respectful; people placing the bodies (hands under the shoulders, contact not through); skeletons clean, no gore. **Underwater:** must stay readable, no murky frames. **Text:** no "8000 YEARS" text. **Stakes:** they surround the body; none pass through it
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B33_BogBurials_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B33_BogBurials_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

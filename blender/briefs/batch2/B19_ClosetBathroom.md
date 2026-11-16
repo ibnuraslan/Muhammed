@@ -10,4 +10,4 @@ He opens his closet and finds a bathroom → the roommates insist it was always 
 Door-opening hand on the handle; roommates' faces readable; brain scan on a monitor as a clean graphic; no "PRANK" text signs
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B19_ClosetBathroom_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B19_ClosetBathroom_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

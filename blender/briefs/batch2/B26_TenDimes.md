@@ -10,4 +10,4 @@ The singer always carries ten dimes → years earlier his son was kidnapped, and
 Real person: a generic 1950s–60s singer, no likeness; coins in the fingers (pinch, not through the pocket fabric); payphone receiver at the ear (not into the head); no "thought bubble" kidnapper graphic; build every scene in a real set (club, street phone booth, home, cemetery)
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B26_TenDimes_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B26_TenDimes_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

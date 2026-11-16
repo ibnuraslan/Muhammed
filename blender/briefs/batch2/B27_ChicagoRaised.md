@@ -10,4 +10,4 @@ Rows of workers hand-crank jackscrews under a building, all at once → the buil
 Many workers turning cranks: the hands on the crank handles (grip), elbows bent, no arms through the cribbing; cutaway of the cribbing stack; 1850s street set; the swamp flood shown as dirty water, not a green glow; the modern skyline ending without logos
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B27_ChicagoRaised_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B27_ChicagoRaised_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

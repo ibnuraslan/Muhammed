@@ -10,4 +10,4 @@ She logs on to a library computer on a dial-up line → auto-dials hundreds of c
 **Long (62 s); trim to the VO.** No on-screen text (dialler windows, "FBI", "HACKER" chalkboard, "BANNED" screen); screens show abstract UI only; a fingertip on a key (no claw); agents with readable faces, no crowd heads merging; no real FBI or NASA logos
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B32_KidHacker_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B32_KidHacker_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

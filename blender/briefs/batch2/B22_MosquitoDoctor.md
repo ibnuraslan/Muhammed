@@ -10,4 +10,4 @@ A mosquito bites a sick boy → a doctor traps it in a glass vial and lets it bi
 Vial in the fingers, mosquito on the back of the hand (not on the face or eye); keep the black vomit very mild or show it as a stain only; organ cutaway as clean anatomy; death off-screen
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B22_MosquitoDoctor_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B22_MosquitoDoctor_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

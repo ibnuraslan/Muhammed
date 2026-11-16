@@ -10,4 +10,4 @@ A girl playing in shallow lake water steps on something hard → pulls out what 
 Sword gripped in both small hands (not through the fingers); dad's hands receiving it (clean hand-off); no "1020 A.D." text; warrior flashback with the sword on a belt, not floating
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B34_LakeSword_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B34_LakeSword_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

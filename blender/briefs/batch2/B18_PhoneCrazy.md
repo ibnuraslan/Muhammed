@@ -10,4 +10,4 @@ As they start digging, a phone unlocks itself → opens apps, takes screenshots,
 Phone held in the fingers, screens with no real app or brand logos; excavator and pit cross-section; on-screen numbers ("45,000 gallons") as 3D props or omitted (no-text rule)
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B18_PhoneCrazy_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B18_PhoneCrazy_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

@@ -10,4 +10,4 @@
 Surgery as a clean anatomy cutaway on a colour-coded model, not a real open mouth with gore; instruments in gloved fingers; the ending with mother and daughter's faces readable
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B24_TongueFromArm_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B24_TongueFromArm_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

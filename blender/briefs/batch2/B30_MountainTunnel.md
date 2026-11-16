@@ -10,4 +10,4 @@ A man chisels a tunnel through a mountain alone → villagers laugh, but he come
 Real person: generic, respectful; chisel in one hand, hammer in the other, each strike landing on the chisel head (no hand through rock); the wife's fall off-screen or as a cut to her lying injured (no face pressed into the ground); route map as 3D terrain with no "40 Miles" or "HOSPITAL" text; ageing shown through hair and beard
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B30_MountainTunnel_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B30_MountainTunnel_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

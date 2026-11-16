@@ -10,4 +10,4 @@
 Real victim: generic, respectful, no face shown in distress; passengers' hands on her (contact, not through bodies); exterior shot with no gore; oxygen masks fitted on faces
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B13_WomanSuckedOut_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B13_WomanSuckedOut_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

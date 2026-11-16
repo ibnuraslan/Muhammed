@@ -10,4 +10,4 @@
 First-person hand on the switches (fingers on the switch, no claw); the "stranger" in pain without a face pressed into the table; no on-screen text ("DANGER", voltage labels) per the no-text rule; lab coat and clipboard in the fingers
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B25_Milgram_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B25_Milgram_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.
