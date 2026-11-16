@@ -1,0 +1,177 @@
+{
+ "props": "FloorBar0-3,CageFrontBeam,CageSideBeam-1/1,BalconySlab,ChairTop,ChairStep,ChairCarry,Table,RailFront0-2",
+ "step": 3,
+ "rigs": "all 7",
+ "file": "build of commit with this report (p3)",
+ "visible_crossing_frames": {
+  "1420": {
+   "root|ChairTop|VIS": 6
+  },
+  "1423": {
+   "root|ChairTop|VIS": 6
+  },
+  "1426": {
+   "root|ChairTop|VIS": 4
+  },
+  "1429": {
+   "root|ChairTop|VIS": 4
+  },
+  "1432": {
+   "root|ChairTop|VIS": 4
+  },
+  "1435": {
+   "root|ChairTop|VIS": 4
+  },
+  "1438": {
+   "root|ChairTop|VIS": 4
+  },
+  "2332": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2335": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2338": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2341": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2344": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2347": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2350": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2353": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2356": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2359": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2362": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2365": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2368": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2371": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2374": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2377": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2380": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2383": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2386": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2389": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2392": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2395": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2398": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2401": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2404": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2407": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2410": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2413": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2416": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2419": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2422": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2425": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2428": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2431": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2434": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2437": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2440": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2443": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2446": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2449": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2452": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2455": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2458": {
+   "root|BalconySlab|VIS": 4
+  },
+  "2461": {
+   "root|BalconySlab|VIS": 2
+  },
+  "2464": {
+   "root|BalconySlab|VIS": 2
+  },
+  "2467": {
+   "root|BalconySlab|VIS": 2
+  },
+  "2470": {
+   "root|BalconySlab|VIS": 2
+  },
+  "2473": {
+   "root|BalconySlab|VIS": 2
+  },
+  "2476": {
+   "root|BalconySlab|VIS": 2
+  }
+ },
+ "explanation": "All remaining hits are 'root'-labelled vertices of the BODY mesh under the shoes (shot 16 Man on ChairTop f1420-1432; shots 25-26 Toddler on BalconySlab). body_prop_cross switches MPFB's MASK modifiers off, so the hidden soles inside the shoes show; with the render masks on the same frames give 0 crossings (checked at f1426 and f2335). Shot 17 changed only its camera after this run."
+}
