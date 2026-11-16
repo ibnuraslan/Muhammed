@@ -51,12 +51,33 @@ The build is fully scripted (`scripts/01`–`05`). Characters are generic MPFB/M
 - **Searcher torches.** Spot lights only. I removed the beam cones because they blocked the lens.
 - **Found bag.** The worker's flat palm rests on top (no grip, no peeling). The bag xy is solved from the palm position.
 
-## Known issues (Phase 1, fixing while I wait for the VO)
-1. S02: the floor-lamp shade sits directly behind her head (background merge). The camera will move.
-2. Girl: the jacket hem has small jagged patches at the hips. Her face reads early-teen rather than 9 (the reused body's phenotype). She has no shoulder straps on the front.
-3. S09: in the look-back pose the umbrella canopy tilts out to her side and is partly cut by the frame.
-4. S17: the plastic wrap reads as white flakes on top, not a wrapped bag. The wrap needs a proper shrinkwrap shell.
-5. The umbrella is a low-poly faceted model. A better one is pending.
-6. S16: the torch arm reaches out sideways at the end of the shot.
-7. Rain streaks occasionally pass close to the lens (one white streak in S12).
-8. Checks (`clip_scan`, `qa_check`, `limb_check`, `body_prop_cross`) have not run yet. They run on the packed Phase 2 file.
+## P1 checks (redone Nov 16 per the new CONNECT_BATCH2 rule)
+- **Sheets:** `review/P1_sheet_3frames_1.jpg` (S01–S12) and `_2.jpg` (S13–S24). Each shows the **first, middle and last frame of every shot** at 540×960, Cycles 8 spp, and I reviewed every frame.
+- **`body_prop_cross`:** the full film, step 6, on every held or touched prop. The props are the umbrellas, all book bags and badges, the plastic wrap, the torches, the clipboard, the French doors, the books, the toy box, the shed walls and door, and the crossing sign. Result: **0 visible crossings** (`review/body_prop_cross_P1.json`).
+
+## Changes since the first P1
+- **The girl now reads as 9 (director's answer 1).**
+  - She is a fresh MPFB child body at **1.31 m**, with child proportions and a rounder face. Her hair, eyes, brows and lashes were carried over with Surface Deform.
+  - She wears a **child's long-sleeved top (pink) and trousers (white)**, refitted from an existing child character. The adult crop top is gone.
+  - Teeth and tongue are hidden, because her mouth stays closed.
+- **Grips are solved (`grip_object`):** fingers close until they touch the umbrella shaft and the torch handles. Thumbs are eased so their skin clears the prop.
+- **Simpler staging (LESSONS §2.15):**
+  - S01–S02: her hands no longer touch the floor bag. She kneels upright behind it with relaxed arms.
+  - S09–S10: the umbrella stays up in its walking position, with continuous keys through the stop. She glances back briefly, then runs off holding it.
+- **Worn bag:** scaled for a 9-year-old and sits higher, so it clears her thighs and swinging arms.
+- **Found bag:** the plastic is now a shrink-wrapped crinkle shell. The worker's flat palm rests on top, and his shins and fingers stay clear.
+- **Lens blockers and framing:**
+  - The floor lamp moved behind her (it was beside the lens at the end of S04).
+  - The S02 camera moved off the lamp.
+  - The S06 camera moved off a street-lamp pole.
+  - Undergrowth within 1.6 m of every camera path is removed, and woods trees within 4.5 m.
+  - Rain streaks fade out within about 2 m of the lens.
+  - The construction barrier moved away from behind the worker.
+- **Visibility keys skip hidden helper meshes.** This fixes the white or skirted figure in the woods and ghost shots.
+- **The toy box with the logo is reframed.** It is readable in S01 and S03. It is the only logo placement (director's answer 2).
+- **The portrait is re-rendered with the 9-year-old girl** (director's answer 3: our own generic render).
+
+## Known items left for Phase 2
+1. The umbrella is a low-poly faceted model. I'll swap it if a better CC0/CC-BY model is found.
+2. S07 last frame: the girl exits frame right with the umbrella half cut. This shot will be retimed to the VO anyway.
+3. The four package checks (`clip_scan`, `qa_check`, `limb_check`, `body_prop_cross`) run again on the packed Phase 2 file.

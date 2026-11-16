@@ -719,7 +719,8 @@ for sid, setn, f0, f1, note in SHOTS:
 removed = 0
 for o in list(bpy.data.objects):
     if o.name.startswith(("Woods_Under", "Woods_Tree", "Woods_LaneTree", "Road_Shrub", "Shed_Under", "Shed_Tree", "Site_Tree", "Road_Tree")):
-        if any((o.location.xy - p.xy).length < 1.6 for p in pts):
+        rad = 4.5 if o.name.startswith("Woods_Tree") else 1.6
+        if any((o.location.xy - p.xy).length < rad for p in pts):
             bpy.data.objects.remove(o); removed += 1
 print("CLEARED near-lens vegetation", removed)
 bar = bpy.data.objects.get("Site_Barrier")

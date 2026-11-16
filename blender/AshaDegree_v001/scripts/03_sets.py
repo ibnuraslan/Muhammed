@@ -274,8 +274,8 @@ box("Yard_FenceRail", (8.0, 0.04, 0.08), (0.55, 8.48, 1.3), fence_m, C)
 rain("Rain_Room", C, (0.8, 6.0, 0.0), size=(7, 6, 4), count=3000)
 area("Yard_Moon", C, (0.8, 7.5, 4.5), (R_(-30), 0, 0), 300, 6, col=(0.55, 0.65, 1.0))
 # furniture: floor lamp (warm light), rug, toy-brick towers, book stack, toy box
-lamp = import_glb("Room_FloorLamp", "floorlamp.glb", C, size=1.65, loc=(2.3, 2.45, 0))
-point("Room_LampBulb", C, (2.3, 2.45, 1.45), 60, col=(1.0, 0.8, 0.55), radius=0.15)
+lamp = import_glb("Room_FloorLamp", "floorlamp.glb", C, size=1.65, loc=(-2.4, 2.5, 0))
+point("Room_LampBulb", C, (-2.4, 2.5, 1.45), 60, col=(1.0, 0.8, 0.55), radius=0.15)
 rug = bpy.data.materials.new("Rug"); rug.use_nodes = True; nt = rug.node_tree; P = nt.nodes["Principled BSDF"]
 tc = nt.nodes.new("ShaderNodeTexCoord"); wv = nt.nodes.new("ShaderNodeTexWave"); wv.inputs["Scale"].default_value = 3.0; wv.wave_profile = 'SAW'
 nt.links.new(tc.outputs["UV"], wv.inputs[0]); cr = nt.nodes.new("ShaderNodeValToRGB"); nt.links.new(wv.outputs["Fac"], cr.inputs[0])
