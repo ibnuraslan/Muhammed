@@ -592,7 +592,10 @@ for f in range(BA0, BA1 + 1, 3):
     root = GB + V(0, 0, hipz - 0.03 - crouch) + RzB @ V(0, 0.10 * (1 - u), 0)
     G.H.key_root(f, G.a(root), yaw=BYAW, flex=6 + 18 * (1 - u))
     hv = smooth((f - HANDS0) / (HANDS1 - HANDS0))
-    G.H.key_spine(f, flex=8 + 18 * (1 - u) - 4 * hv, head=(6 * (1 - u) - 14 * hv + 6 * hv * math.sin(f / 19.0), 10 * math.sin(f / 35.0) * (1 - hv) + 16 * hv * math.sin(f / 28.0)))
+    look = (1 - u) * (1 - hv)      # hiding: keeps checking the door and the roof, never frozen
+    G.H.key_spine(f, flex=8 + 18 * (1 - u) - 4 * hv + 3 * look * math.sin(f / 9.0),
+                  head=(6 * (1 - u) - 18 * look * (0.5 + 0.5 * math.sin(f / 31.0)) - 14 * hv + 6 * hv * math.sin(f / 19.0),
+                        18 * look * math.sin(f / 21.0) + 16 * hv * math.sin(f / 28.0)))
     for sd, sx in (("L", 1), ("R", -1)):
         G.use(); xy = GB + RzB @ V(sx * 0.15, 0.06 * sx, 0); G.H.key_foot(sd, f, G.a(xy).to_2d(), BYAW)
         pb = G.o.pose.bones["Pole_knee." + sd]; n = "Pole_knee." + sd
@@ -640,6 +643,7 @@ for o in [o for o in bpy.data.objects if o.name.startswith(("FlameBack", "FlameL
 BF = bpy.data.collections["BarnFire"]
 fire_emitter("BarnFireBack", V(X1, 6.55, 0.0), 8.2, 0.5, 2.7, 700, 0.15, 1.4, coll_=BF)
 fire_emitter("BarnFireLeft", V(X1 - 4.05, 2.0, 0.0), 0.5, 8.5, 2.1, 560, 0.14, 1.3, coll_=BF)
+fire_emitter("BarnFireRight", V(X1 + 4.05, 4.3, 0.0), 0.5, 4.8, 1.9, 320, 0.14, 1.3, coll_=BF)
 fire_emitter("BarnFireRoof", V(X1 - 2.3, 2.5, 3.35), 0.6, 8.0, 1.0, 220, 0.11, 1.0, coll_=BF)
 for ng in FIRE_T:
     T = ng.nodes["T"]
@@ -757,7 +761,7 @@ for fc in fcurves_of(rimL.animation_data.action):
     for k in fc.keyframe_points: k.interpolation = 'CONSTANT'
 camera("S12", [(0, V(96.0, -2.0, 1.6), V(106.0, 6.0, 2.0)), (-1, V(96.1, -1.8, 1.6), V(106.0, 6.0, 2.0))], lens=26)
 camera("S13", [(0, V(100.4, 6.8, 0.8), V(100.6, 13.0, 1.5)), (-1, V(100.4, 4.6, 0.9), V(100.5, 8.5, 1.55))], lens=24)
-camera("S14", [(0, GB + V(-1.65, -1.25, 0.55), GB + V(0, 0, 0.62)), (-1, GB + V(-1.45, -1.10, 0.55), GB + V(0, 0, 0.66))], lens=35)
+camera("S14", [(0, GB + V(-1.65, -1.25, 0.55), GB + V(0, 0, 0.62)), (-1, GB + V(-1.60, -1.25, 0.58), GB + V(0.08, 0.05, 0.64))], lens=35)
 camera("S14B", [(0, V(X1 + 0.5, -9.6, 1.7), V(X1 + 1.2, 2.5, 0.8)), (-1, V(X1 + 0.7, -8.3, 1.6), V(X1 + 1.2, 2.5, 1.1))], lens=38)
 camera("S15", [(0, V(X1 + 0.6, 0.55, 1.15), V(X1 + 1.25, 2.3, 1.55)), (-1, V(X1 + 0.55, 0.75, 1.2), V(X1 + 1.25, 2.3, 1.75))], lens=30)
 sc.camera = bpy.data.objects["CAM_S01"]
