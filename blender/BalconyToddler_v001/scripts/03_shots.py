@@ -330,7 +330,7 @@ for k, f in enumerate((f0, F(sid, 0.5), f1)):
     P = rail_pt(CHB, -1, f)
     hand("Woman", "L", f, P, Vector((0, 0, -1)), Vector((0.5, 1, -0.5)), shoulder("Woman", "L", f) + Ry(130) @ Vector((0.45, 0.2, -0.35)), "wrap_grip", 0.6)
     relax("Woman", "R", f, 130)
-shot_cam(sid, [(0, (1.75, -0.45, 1.75), (-0.3, -1.35, 1.45)), (1, (1.65, -0.40, 1.85), (-0.3, -1.3, 1.6))], 26, 8)
+shot_cam(sid, [(0, (1.30, -0.30, 1.45), (-0.35, -1.40, 1.20)), (1, (1.25, -0.30, 1.50), (-0.35, -1.40, 1.30))], 30, 8)
 
 # ---------- 15 Then one man: he steps to the tower, hand on the step chair's backrest, looks up
 sid = "15"; f0, f1 = SH[sid]; tod_static(sid); use(sid, "Man")
@@ -345,7 +345,7 @@ shot_cam(sid, [(0, (1.85, -0.40, 1.35), (1.3, -1.9, 1.45)), (1, (1.80, -0.40, 1.
 
 # ---------- 16 climbed up: low angle, he rises from a crouch on the top chair, arms coming up
 sid = "16"; f0, f1 = SH[sid]; tod_static(sid); use(sid, "Man")
-MANP = Vector((0.0, -0.86, 0.0))            # standing point on the top chair seat (feet)
+MANP = Vector((0.0, -0.95, 0.0))            # standing point on the top chair seat (feet)
 def man_on_top(f, crouch, armsup, head=(-25, 0), reach=None):
     n = "Man"; rz = CH_SEAT_TOP + CAST[n][2].root_head.z - 0.02 - crouch
     body(n, f, (MANP.x, MANP.y + 0.02 - crouch * 0.25, rz), 180, 4 + crouch * 40, 0, 6 + crouch * 30 - armsup * 8, 0, 0, head)
@@ -407,7 +407,7 @@ sid = "18"; shot_cam(sid, [(0, (0.75, -1.45, 1.75), (0.0, -0.55, 2.80)), (1, (0.
 # 19: close on the boy, calm, lifted a little (neck free)
 sid = "19"; shot_cam(sid, [(0, (-0.30, -1.75, 3.62), (0.0, -0.56, 3.26)), (1, (-0.22, -1.62, 3.60), (0.0, -0.56, 3.26))], 55, 9, 8)
 # 20: close on the man's hand (watch) on the shin
-sid = "20"; shot_cam(sid, [(0, (-0.85, -0.85, 2.80), (0.0, -0.62, 2.70)), (1, (-0.78, -0.82, 2.80), (0.0, -0.62, 2.70))], 40, 9, 0)
+sid = "20"; shot_cam(sid, [(0, (-0.95, -0.70, 2.95), (0.0, -0.62, 2.68)), (1, (-0.88, -0.68, 2.93), (0.0, -0.62, 2.68))], 38, 9, 0)
 
 # ---------- 21 Until the boy's: outside the cage at head height, the boy's head in front, grandma at the far door
 GM = "Grandma"
@@ -421,7 +421,7 @@ CAST[GM][2].walk(p21, yaw21, f0, f1, stride=0.62, lift=0.06, bob=0.015, lean=8, 
 walk_arms(GM, f0, f1, p21, yaw21, 0.62, swing=0.10, bend=0.05)
 for f in range(f0, f1 + 1, 2):
     pass
-shot_cam(sid, [(0, (0.9, 0.7, FLOOR2 + 1.45), (AD_X0 + 0.45, HY, FLOOR2 + 1.15)), (1, (0.85, 0.85, FLOOR2 + 1.45), (AD_X0 + 0.5, HY - 0.2, FLOOR2 + 1.15))], 26, 8, 4)
+shot_cam(sid, [(0, (0.15, 0.75, FLOOR2 + 1.45), (AD_X0 + 0.45, HY, FLOOR2 + 1.15)), (1, (0.12, 0.90, FLOOR2 + 1.45), (AD_X0 + 0.5, HY - 0.2, FLOOR2 + 1.15))], 26, 8, 4)
 
 # ---------- 22 got inside: inside the room, grandma comes through the doorway
 sid = "22"; f0, f1 = SH[sid]; use(sid, "Grandma", "Toddler", "Man")
