@@ -366,7 +366,7 @@ recolor(car, {"number_plate": mat("PlateBlank", (0.85, 0.85, 0.82), 0.5), "main_
 car.location = (X + 1.8, 60, 0)
 # =================================================================== WOODS (night run / torch search)
 C = coll("SET_Woods"); X = 200.0
-ground = tex_mat("ForestFloor", "forest_leaves_02", rough=0.7, tint=(0.9, 0.95, 0.85), bump=0.25)
+ground = tex_mat("ForestFloor", "forest_leaves_02", rough=0.3, tint=(0.5, 0.56, 0.55), bump=0.25)   # wet, night
 plane("Woods_Ground", (80, 80), (X, 0, 0), ground, C, uv_scale=2.5)
 for i in range(240):
     for _ in range(20):
@@ -385,7 +385,7 @@ trunk = lib_obj(PH + "dead_tree_trunk/dead_tree_trunk_1k.blend", "dead_tree_trun
 rain("Rain_Woods", C, (X, 6, 0), size=(14, 40, 8), count=12000)
 area("Woods_Moon", C, (X - 6, -6, 18), (R_(-30), R_(-20), 0), 9000, 25, col=(0.5, 0.62, 1.0))
 area("Woods_Clearing", C, (X + 12, 8, 7), (0, 0, 0), 2200, 10, col=(0.6, 0.7, 1.0))
-area("Woods_Fill", C, (X + 8, 0, 6), (R_(-50), R_(30), 0), 2500, 12, col=(0.55, 0.65, 1.0))
+area("Woods_Fill", C, (X + 8, 0, 6), (R_(-50), R_(30), 0), 700, 12, col=(0.55, 0.65, 1.0))
 for yy in range(-12, 36, 3):
     for sgn in (-1, 1):
         inst(random.choice(firs), "Woods_LaneTree%02d%s" % (yy + 12, "LR"[sgn > 0]), C, (X + sgn * random.uniform(3.2, 6.5), yy + random.uniform(-1, 1), 0), rot=(0, 0, random.uniform(0, 6.3)), scale=random.uniform(0.55, 0.8))

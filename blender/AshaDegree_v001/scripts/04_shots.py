@@ -372,8 +372,12 @@ for s in "LR":
     apply_pose(G, s, "relaxed", 1); apply_pose(G, s, "relaxed", 210)
 # S03 211..: standing (bag on back), small settle, then turns and walks to the open door
 yaw_s = -10.0
-for f in (211, 230, 255):
-    stand(H, f, W2A(G, (K.x, K.y, 0)), yaw_s if f < 255 else yaw_s, flex=2, head=(0, 6 if f < 240 else -4))
+for f, sd, hd in ((211, 0.0, (2, 0)), (225, 3.0, (0, -8)), (240, 4.0, (-2, -22)), (255, 1.0, (-2, -26))):
+    stand(H, f, W2A(G, (K.x, K.y, 0)), yaw_s, flex=2, head=hd, side=sd, arms=False, twist=-0.4 * hd[1])
+    for s_ in "LR":
+        sx_ = 1 if s_ == "L" else -1
+        body_hand(H, s_, f, Vector((K.x, K.y, H.root_head.z)), yaw_s, (H.sh[s_].x - 0.025 * sx_ - H.root_head.x, H.sh[s_].y - H.root_head.y - 0.03, H.sh[s_].z - H.root_head.z - H.arm * 0.95),
+                  (0, -0.1, -1), (-sx_, 0.15, 0), pole_off=(0.25 * sx_, 0.45, -0.2))
 for s in "LR": apply_pose(G, s, "relaxed", 212)
 path_pts = [(262, (K.x, K.y)), (300, (0.35, 0.75)), (345, (0.9, 1.6)), (395, (1.15, 2.55)), (440, (1.17, 3.6)), (480, (1.17, 4.6))]
 def room_path(f):
@@ -398,6 +402,7 @@ key_vis(["BagFloor"] + [c.name for c in bpy.data.objects["BagFloor"].children], 
 key_vis(["BagBack"] + [c.name for c in bpy.data.objects["BagBack"].children], [(211, 480)])
 for nm in ["BookBag"] + [c.name for c in bpy.data.objects["BookBag"].children]:
     bpy.data.objects[nm].hide_render = True; bpy.data.objects[nm].hide_viewport = True
+key_vis(["Room_ToyBox", "Room_ToyBoxLogo"], [(1, 120), (211, 330)])
 # French doors: right leaf open the whole time (night rain visible outside), left leaf closed
 bpy.data.objects["DoorLeafR"].rotation_euler = (0, 0, R_(-95))
 
@@ -420,7 +425,7 @@ walk_with_arms(H, road_path, lambda f: 180.0, 400, 905, stride=1.0 / G.scale.x)
 # umbrella in the right hand: forearm up, fist in front of the shoulder
 def umb_arm(f, p, yaw, look=(0, 0), out=-0.06):
     s = "R"; sx = -1
-    body_hand(H, s, f, p, yaw, (H.sh[s].x + 0.07 - out - H.root_head.x, H.sh[s].y - H.root_head.y - 0.37, H.sh[s].z - H.root_head.z - 0.11),
+    body_hand(H, s, f, p, yaw, (H.sh[s].x + 0.07 - out - H.root_head.x, H.sh[s].y - H.root_head.y - 0.36, H.sh[s].z - H.root_head.z - 0.04),
               (0.35, -1.0, 0.0), (1.0, 0.35, 0.0), pole_off=(-0.35, 0.0, -0.5))
 for f in range(400, 906, 2):
     p = road_path(f); p = Vector((p.x, p.y, H.root_head.z))
@@ -463,6 +468,13 @@ UMB_GL = Vector((0, 0, -UMB_GRIP)); UMB_R = radius_at(umb, (0, 0, 1), UMB_GL, 0.
 grip_prop(umb_road, G, "R", 400, Vector((0, 0, 1)), UMB_GL, UMB_R)
 for s in "L": apply_pose(G, s, "relaxed", 400)
 wear_bag(G, "BagRoad", 420, 180.0)
+# soft warm face fill from the street-lamp side (<= 10 W) with a catchlight, riding with her head
+fl = bpy.data.lights.new("FaceFill_Road", 'AREA'); fl.energy = 8; fl.size = 0.35; fl.color = (1.0, 0.85, 0.65)
+flo = bpy.data.objects.new("FaceFill_Road", fl); sc.collection.objects.link(flo)
+sc.frame_set(560); bpy.context.view_layer.update()
+hp_ = G.matrix_world @ G.pose.bones["head"].head
+flo.location = hp_ + Vector((0.35, 0.55, 0.05)); flo.rotation_euler = (hp_ - flo.location).to_track_quat('-Z', 'Y').to_euler()
+attach(flo, G, "head")
 # the motorist's car: passes from behind (S07), stops ahead (S08), holds with brake/head lights (S09-S10)
 car = bpy.data.objects["Car"]
 car.rotation_euler = (0, 0, 0)
@@ -483,8 +495,8 @@ cam_shot("S05", [(421, (SX - 0.9, road_y(421) - 3.4, 0.85)), (560, (SX - 0.8, ro
          target_keys=[(421, (SX, road_y(421), 1.25)), (560, (SX, road_y(560), 1.25))])
 cam_shot("S06", [(541, (SX - 1.6, road_y(541) + 3.0, 1.0)), (680, (SX - 1.5, road_y(680) + 2.4, 1.0))], lens=35,
          target_keys=[(541, (SX, road_y(541), 1.1)), (680, (SX, road_y(680), 1.12))])
-cam_shot("S07", [(661, (XR + 3.2, road_y(661) - 5.0, 1.1)), (800, (XR + 3.4, road_y(800) - 3.0, 1.15))], lens=28,
-         target_keys=[(661, (SX - 0.5, road_y(661) + 2.0, 1.0)), (800, (SX - 0.8, road_y(800) + 4.0, 1.0))])
+cam_shot("S07", [(661, (XR + 2.4, road_y(661) - 5.5, 1.15)), (730, (XR + 2.4, road_y(730) - 5.2, 1.15)), (800, (XR + 2.5, road_y(800) - 5.0, 1.15))], lens=30,
+         target_keys=[(661, (SX - 0.9, road_y(661) + 1.0, 1.0)), (730, (SX - 0.9, road_y(730) + 1.0, 1.0)), (800, (SX - 0.9, road_y(800) + 1.0, 1.0))])
 cam_shot("S08", [(781, (XR - 4.0, road_y(781) - 12.0, 4.2)), (890, (XR - 3.6, road_y(890) - 10.5, 4.0))], lens=26,
          target_keys=[(781, (XR + 3.5, road_y(781) + 5.0, 0.6)), (890, (XR + 3.5, road_y(890) + 5.0, 0.6))])
 cam_shot("S09", [(871, (SX + 0.6, road_y(871) - 2.6, 0.95)), (980, (SX + 0.9, road_y(925) - 2.1, 0.95))], lens=30,
@@ -671,7 +683,7 @@ def reach(f, amt):
                     pole=p + Rz(w_yaw) @ Vector((-0.5, 0.3, -0.2)))
         body_hand(Hw, "L", f, p, w_yaw, (Hw.ankle["L"].x * 1.3, -0.30, Hw.root_head.z * 0.53 - p.z + 0.05), (0, -1.0, -0.6), (-0.3, 0, -1.0), pole_off=(0.5, 0.2, 0.0))
     return hh
-for f, amt, hd in ((1780, 0.0, (20, 0)), (1900, 0.0, (26, 0)), (1960, 0.7, (30, 0)), (2000, 1.0, (30, 0)), (2120, 1.0, (28, 4)), (2200, 1.0, (24, -4)), (2310, 1.0, (20, 0))):
+for f, amt, hd in ((1780, 0.0, (4, 0)), (1900, 0.0, (6, 0)), (1960, 0.7, (10, 0)), (2000, 1.0, (10, 0)), (2120, 1.0, (8, 6)), (2200, 1.0, (4, -6)), (2310, 1.0, (2, 0))):
     squat(H, f, Vector((w_pos.x, w_pos.y, 0)), w_yaw, depth=0.5, flex=46, head=hd, hands=reach(f, amt))
 _site_loc0 = bag_site.location.copy()
 sc.frame_set(2000); bpy.context.view_layer.update()
@@ -686,12 +698,12 @@ print("SITEBAG", tuple(round(x, 3) for x in bag_site.location), "palm", tuple(ro
 apply_pose(WK, "R", "flat_palm", 1990); apply_pose(WK, "R", "relaxed", 1780); apply_pose(WK, "R", "flat_palm", 2000); apply_pose(WK, "L", "relaxed", 1780)
 cam_shot("S17", [(1801, (XT - 0.25, -0.42, 0.42)), (1900, (XT - 0.12, -0.25, 0.36))], lens=40,
          target_keys=[(1801, (XT + 0.15, 0.3, 0.08)), (1900, (XT + 0.15, 0.3, 0.08))])
-cam_shot("S18", [(1891, (XT - 0.55, -1.55, 0.95)), (2050, (XT - 0.35, -1.3, 0.9))], lens=30,
-         target_keys=[(1891, (XT + 0.5, 0.35, 0.35)), (2050, (XT + 0.45, 0.35, 0.35))])
+cam_shot("S18", [(1891, (XT - 0.5, -1.45, 0.42)), (2050, (XT - 0.35, -1.25, 0.42))], lens=28,
+         target_keys=[(1891, (XT + 0.5, 0.35, 0.45)), (2050, (XT + 0.45, 0.35, 0.45))])
 cam_shot("S19", [(2041, (XT + 0.05, -0.62, 0.55)), (2200, (XT + 0.2, -0.5, 0.5))], lens=35,
          target_keys=[(2041, (XT + 0.35, 0.3, 0.2)), (2200, (XT + 0.35, 0.3, 0.2))])
-cam_shot("S20", [(2191, (XT - 1.0, 1.55, 1.0)), (2300, (XT - 0.85, 1.4, 0.95))], lens=32,
-         target_keys=[(2191, (XT + 0.7, 0.35, 0.55)), (2300, (XT + 0.7, 0.35, 0.55))])
+cam_shot("S20", [(2191, (XT - 0.15, -1.15, 0.38)), (2300, (XT - 0.05, -1.0, 0.38))], lens=30,
+         target_keys=[(2191, (XT + 0.6, 0.38, 0.62)), (2300, (XT + 0.6, 0.38, 0.65))])
 
 # ================================================================== WALL (S23-S24)
 XP = 500.0
