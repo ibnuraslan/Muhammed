@@ -265,32 +265,95 @@ def pair(cx, cy, axis_deg, gap, turn):
     yA = axis_deg + 90 - turn; yB = axis_deg - 90 + turn
     return pA, yA, pB, yB
 
+def rest_on(item, t, p, rot=(0, 0, 0)):
+    """key the item resting with its lowest point on world height p.z (no hand touches it)"""
+    key_obj(item, t, loc=tuple(p), rot=rot, scale=(1, 1, 1)); sc.frame_set(t)
+    zmin = min((item.matrix_world @ Vector(c)).z for c in item.bound_box)
+    key_obj(item, t, loc=(p[0], p[1], p[2] + (p[2] - zmin)), rot=rot, scale=(1, 1, 1))
+
+def table_top(k):
+    e = O.get("Table_" + k)
+    if e is None: return None
+    zs = [(e.matrix_world @ o.matrix_world @ Vector(c)).z for o in e.instance_collection.objects if o.type == 'MESH' for c in o.bound_box]
+    return Vector((e.location.x, e.location.y, max(zs)))
+
+def handshake(A, B, t, n, u0=0.40, u1=0.86, meet=None, dz=-0.38):
+    """right hands meet between them (palms facing, 3 cm apart), three small pumps, then release to a relaxed hang"""
+    sc.frame_set(t)
+    if meet is None:
+        meet = (A.shoulder("R") + B.shoulder("R")) / 2 + Vector((0, 0, dz))
+    fa, fb = t + int(u0 * n), t + int(u1 * n)
+    for m in (A, B): m.hang("R", fa - 16)
+    def fr(f, u):
+        k = (f - fa) / max(1, fb - fa); pump = 0.025 * math.sin(k * 3 * 2 * math.pi)
+        for m in (A, B):
+            sc.frame_set(f)
+            side = -m.right()                            # palm faces the character's left (toward the other's palm)
+            W = meet + Vector((0, 0, pump)) - side * 0.016
+            place_hand(m.o, "R", f, W, side, m.fwd(), skin=0.0)
+            pb = m.r.PB["Pole_elbow.R"]; sh = m.shoulder("R")
+            pole = sh + m.right() * 0.45 - m.fwd() * 0.25 + Vector((0, 0, -0.45))
+            pb.location = m.r.rest("Pole_elbow.R").to_3x3().inverted() @ (pole - m.r.BN["Pole_elbow.R"].head_local)
+            pb.keyframe_insert("location", frame=f, group="Pole_elbow.R")
+    track(fa, fb - fa, 3, fr)
+    for m in (A, B):
+        apply_pose(m.o, "R", "relaxed", fa - 8); apply_pose(m.o, "R", "cup_hold", fa); apply_pose(m.o, "R", "cup_hold", fb)
+        m.hang("R", min(t + n, fb + 18))
+    return meet
+
+def palm_hold(item, m, s_, t, n, c_fn, lift=0.012):
+    """item rests on m's open, palm-up hand (no fingers around it); c_fn(u) = palm centre (world); the item rides the wrist"""
+    def fr(f, u):
+        sc.frame_set(f); place_hand(m.o, s_, f, c_fn(u), (0, 0, 1), m.fwd(), skin=0.0)
+        sh = m.shoulder(s_); sx = 1 if s_ == "L" else -1
+        pb = m.r.PB["Pole_elbow." + s_]; pole = sh - m.right() * sx * 0.40 - m.fwd() * 0.20 + Vector((0, 0, -0.50))
+        pb.location = m.r.rest("Pole_elbow." + s_).to_3x3().inverted() @ (pole - m.r.BN["Pole_elbow." + s_].head_local)
+        pb.keyframe_insert("location", frame=f, group="Pole_elbow." + s_)
+    track(t, n, 3, fr)
+    apply_pose(m.o, s_, "flat_palm", t)
+    sc.frame_set(t)
+    p0 = c_fn(0.0)
+    rest_on(item, t, p0 + Vector((0, 0, lift)), (0, 0, R(m.yaw)))
+    sc.frame_set(t)
+    BIND.append((item, m, s_, ik_world(m, s_).inverted() @ item.matrix_world.copy(), t, t + n))
+
 def swap_shot(k, men, A, B, itemA, itemB, cx, cy, axis=0.0, gap=0.80, turn=28, kindB="small", lens=35, side_cam=-1, cam_d=2.3,
-              extra_props=(), cam_h=1.45, push=0.3):
-    """A gives itemA (A.R -> B.L), B gives itemB (B.R -> A.L) at the same time; kindB big: B (both hands) -> A (both hands), itemA none"""
+              extra_props=(), cam_h=1.60, push=0.3, rest=None, shake=True, shake_dz=-0.38):
+    """the trade, staged without hand contact on the items: both items rest between the two (side table, counter or the
+    ground for big items), the partner presents them with an open palm, then the two shake hands on the deal"""
     t, n = T[k][0], CLIP[k]
     props = [p for p in (itemA, itemB) if p] + list(extra_props)
     setup(t, men, props)
     pA, yA, pB, yB = pair(cx, cy, axis, gap, turn)
     base(A, t, pA, yA); base(B, t, pB, yB)
     sc.frame_set(t)
-    if kindB == "big":
-        handover(itemB, B, ("L", "R"), A, ("L", "R"), t, n, kind="big", hold_hi=-0.14)
-    else:
-        if itemA: handover(itemA, A, ("R",), B, ("L",), t, n, kind="small", lat=0.10)
-        if itemB: handover(itemB, B, ("R",), A, ("L",), t, n, kind=kindB, lat=0.10)
-    mid = V(cx, cy, 1.15)
-    def fr(f, u):
-        it = (itemB or itemA)
-        look_at(A, f, it.matrix_world.translation if u < 0.75 else B.head_w(), flex=4 + 3 * math.sin(u * 5))
-        look_at(B, f, it.matrix_world.translation if u < 0.6 else A.head_w(), flex=4 + 2 * math.sin(u * 4))
-        if u > 0.78: A.jaw(f, 2.0 * math.sin((u - 0.78) * 20) ** 2)
-    track(t, n, 4, fr)
     a = R(axis); ux = Vector((math.cos(a), math.sin(a), 0)); perp = Vector((-ux.y, ux.x, 0))
-    if perp.y > 0: perp = -perp                       # camera on the -Y side
+    if perp.y > 0: perp = -perp
+    top = table_top(k)
+    if rest is not None: top = Vector(rest)
+    if top is None: top = Vector((cx, cy, 0.0)) + perp * 0.32          # on the ground between them, just in front
+    items = [p for p in (itemA, itemB) if p]
+    for i, it in enumerate(items):
+        off = (-0.12 if it is itemA else 0.12) if len(items) == 2 else 0.0
+        rot = (R(-90), 0, 0) if it.name in ("P_CondoKeys", "P_VanKeys", "P_HouseKeys") else (0, 0, math.atan2(ux.y, ux.x) + R(15))
+        rest_on(it, t, top + ux * off, rot)
+    # B presents the items with an open left palm, then both shake hands
+    def pres(f, u):
+        aa = ease((u - 0.08) / 0.18) * (1 - ease((u - 0.30) / 0.10))
+        B.hang("L", f, out=0.12 * aa, fwd=0.20 * aa, lift=0.10 * aa, pose="relaxed")
+    track(t, int(0.42 * n), 3, pres)
+    apply_pose(B.o, "L", "open_alarm", t + int(0.18 * n)); apply_pose(B.o, "L", "relaxed", t + int(0.42 * n))
+    if shake: handshake(A, B, t, n, dz=shake_dz)
+    def fr(f, u):
+        look_at(A, f, top if u < 0.35 else B.head_w(), flex=4 + 2 * math.sin(u * 5))
+        look_at(B, f, top if u < 0.25 else A.head_w(), flex=3)
+        A.jaw(f, 2.5 * ease((u - 0.6) / 0.2)); B.jaw(f, 2.0 * ease((u - 0.5) / 0.2))
+    track(t, n, 4, fr)
+    mid = V(cx, cy, 1.15)
     e0 = mid + perp * cam_d - ux * 0.55 * side_cam * -1 + V(0, 0, cam_h - 1.15)
     e1 = mid + perp * (cam_d - push) - ux * 0.45 * side_cam * -1 + V(0, 0, cam_h - 1.10)
-    return camera(k, lens, t, e0, mid + V(0, 0, 0.05), t + n, e1, mid + V(0, 0, 0.08))
+    tz = -0.20 if top.z < 0.3 else -0.10
+    return camera(k, lens, t, e0, mid + V(0, 0, tz), t + n, e1, mid + V(0, 0, tz + 0.03))
 
 HX, HY = sc["HOME"]; OX, OY = sc["OFFICE"]; GX, GY = sc["GARAGE"]; SX, SY = sc["STUDIO"]; CX, CY = sc["CAMP"]
 NX, NY = sc["SNOW"]; VX, VY = sc["VOID"]; CZ = sc["COUNTER_Z"]
@@ -298,49 +361,41 @@ P = {n: O[n] for n in [o.name for o in PROPS]}
 
 # ===================================================================== HOME
 def S01(t, n):
-    """paperclip <-> fish pen across the kitchen counter (hero behind the counter faces camera)"""
-    setup(t, [hero, M["PenLady"]], [P["P_Paperclip"], P["P_FishPen"]])
-    base(hero, t, (HX + 0.0, HY + 0.90), 0); base(M["PenLady"], t, (HX + 0.05, HY - 0.20), 180)
+    """paperclip and fish pen lie on the counter between them; hero (behind the counter, facing camera) and PenLady shake on it"""
     A, B = hero, M["PenLady"]
-    handover(P["P_Paperclip"], A, ("R",), B, ("L",), t, n, kind="small", lat=0.12, hold_hi=0.10)
-    handover(P["P_FishPen"], B, ("R",), A, ("L",), t, n, kind="small", lat=0.12, hold_hi=0.10)
-    def fr(f, u):
-        look_at(A, f, P["P_FishPen"].matrix_world.translation, flex=10 + 2 * math.sin(u * 5))
-        look_at(B, f, P["P_Paperclip"].matrix_world.translation, flex=10)
-        A.stand(f, (HX, HY + 0.90), 0, flex=4); B.stand(f, (HX + 0.05, HY - 0.20), 180, flex=4)
-    track(t, n, 4, fr)
-    camera("S01", 32, t, V(HX - 1.55, HY - 1.45, 1.62), V(HX + 0.0, HY + 0.40, 1.20), t + n, V(HX - 1.30, HY - 1.20, 1.58), V(HX + 0.0, HY + 0.45, 1.22))
+    swap_shot("S01", [A, B], A, B, P["P_Paperclip"], P["P_FishPen"], HX, HY + 0.35, axis=-90, gap=1.10, turn=0,
+              rest=(HX + 0.05, HY + 0.35, CZ), shake_dz=-0.22)
+    # the swap_shot camera is replaced: front-left over PenLady's shoulder onto the hero's face
+    c = O["CAM_S01"]
+    look(c, t, V(HX - 1.55, HY - 1.45, 1.62), V(HX + 0.0, HY + 0.40, 1.20)); look(c, t + n, V(HX - 1.30, HY - 1.20, 1.58), V(HX + 0.0, HY + 0.45, 1.22))
 
 def S02(t, n):
-    """CU: hero turns the fish pen in his fingers and smiles"""
+    """CU: the fish pen lies on the counter; the hero leans over it and smiles (no hands on it)"""
     setup(t, [hero], [P["P_FishPen"]])
-    base(hero, t, (HX, HY + 0.90), 0)
-    sc.frame_set(t)
-    c0 = hero.shoulder("R") + V(0.06, -0.33, -0.08)
-    def fnM(u): return item_matrix(c0 + V(0.03 * ease(u), 0, 0.05 * ease(u)), 150 + 40 * ease(u), Matrix.Rotation(R(-12 * math.sin(u * 3)), 4, 'X'))
-    hold(P["P_FishPen"], hero, ("R",), t, n, fnM)
+    xy = (HX, HY + 0.90); base(hero, t, xy, 0)
+    pen = V(HX + 0.05, HY + 0.35, CZ); rest_on(P["P_FishPen"], t, pen, (0, 0, R(20)))
     def fr(f, u):
-        look_at(hero, f, P["P_FishPen"].matrix_world.translation, flex=4)
-        hero.jaw(f, 2.5 * ease(u))
+        hero.stand(f, xy, 0, flex=6 + 6 * ease(u))
+        look_at(hero, f, pen, flex=8 + 6 * ease(u)); hero.jaw(f, 2.5 * ease((u - 0.3) / 0.5))
+        for s_ in "LR": hero.hang(s_, f)
     track(t, n, 4, fr)
-    sc.frame_set(t + n // 2); hd = hero.head_w(); pen = P["P_FishPen"].matrix_world.translation
-    tg = (hd + pen) / 2
-    camera("S02", 40, t, tg + V(-0.35, -1.30, 0.02), tg, t + n, tg + V(-0.28, -1.10, 0.02), tg + V(0, 0, 0.01), fstop=9)
+    camera("S02", 40, t, pen + V(-0.30, -0.95, 0.38), pen + V(0, 0.25, 0.30), t + n, pen + V(-0.22, -0.78, 0.33), pen + V(0, 0.25, 0.30), fstop=9)
 
 # ===================================================================== OFFICE
 def S03(t, n):
     swap_shot("S03", [hero, M["KnobMan"]], hero, M["KnobMan"], P["P_FishPen"], P["P_Doorknob"], OX, OY - 0.35, gap=0.80)
 
 def S04(t, n):
+    """CU: the doorknob stands on the side table; hero bends to look at it and smiles"""
     setup(t, [hero], [P["P_Doorknob"]])
-    xy = (OX - 0.3, OY - 0.4); base(hero, t, xy, 20)
-    sc.frame_set(t); c0 = hero.shoulder("L") + hero.fwd() * 0.34 + V(0, 0, -0.18)
-    def fnM(u): return item_matrix(c0 + V(0, 0, 0.08 * ease(u)), 110 + 40 * ease(u))
-    hold(P["P_Doorknob"], hero, ("L",), t, n, fnM)
-    def fr(f, u): look_at(hero, f, P["P_Doorknob"].matrix_world.translation, flex=3); hero.jaw(f, 2 * ease(u))
+    top = table_top("S03"); knob = top + V(0.05, 0, 0); rest_on(P["P_Doorknob"], t, knob, (0, 0, R(20)))
+    xy = (top.x - 0.05, top.y + 0.55); base(hero, t, xy, 0)
+    def fr(f, u):
+        hero.stand(f, xy, 0, flex=8 + 6 * ease(u))
+        look_at(hero, f, knob, flex=10 + 6 * ease(u)); hero.jaw(f, 2 * ease((u - 0.3) / 0.5))
+        for s_ in "LR": hero.hang(s_, f)
     track(t, n, 4, fr)
-    sc.frame_set(t + n // 2); tg = (hero.head_w() + P["P_Doorknob"].matrix_world.translation) / 2
-    camera("S04", 50, t, tg + V(0.35, -1.05, 0.02), tg, t + n, tg + V(0.28, -0.85, 0.0), tg, fstop=9)
+    camera("S04", 40, t, knob + V(0.25, -0.95, 0.45), knob + V(0, 0.25, 0.35), t + n, knob + V(0.18, -0.80, 0.40), knob + V(0, 0.25, 0.35), fstop=9)
 
 # ===================================================================== CAMP / STREET / GARAGE (big items)
 def S05(t, n):
@@ -522,21 +577,9 @@ def S18(t, n):
     camera("S18", 30, t, mid + V(-0.2, -2.0, -0.05), mid + V(0, 0, -0.05), t + n, mid + V(-0.1, -1.7, -0.05), mid + V(0, 0, 0.0))
 
 def S19(t, n):
-    """rocker hands over the band snow globe (cupped from below), CU"""
-    P["P_SnowGlobe"]["grip_half"] = 0.0
-    men = [hero, M["Rocker"]]; setup(t, men, [P["P_SnowGlobe"]])
-    pA, yA, pB, yB = pair(SX + 0.2, SY + 0.8, 0, 0.95, 25)
-    base(hero, t, pA, yA); base(M["Rocker"], t, pB, yB)
-    sc.frame_set(t)
-    PP = handover(P["P_SnowGlobe"], M["Rocker"], ("R",), hero, ("L",), t, n, kind="cup", lat=0.0, hold_hi=0.08)
-    def fr(f, u):
-        look_at(hero, f, P["P_SnowGlobe"].matrix_world.translation, flex=5)
-        look_at(M["Rocker"], f, P["P_SnowGlobe"].matrix_world.translation if u < 0.5 else hero.head_w(), flex=5)
-        hero.jaw(f, 2.5 * ease((u - 0.6) / 0.3))
-    track(t, n, 4, fr)
-    sc.frame_set(t + n // 2); g = P["P_SnowGlobe"].matrix_world.translation
-    hm = (hero.head_w() + M["Rocker"].head_w()) / 2; tg = hm * 0.5 + g * 0.5
-    camera("S19", 32, t, tg + V(0.0, -1.75, 0.10), tg, t + n, tg + V(0.0, -1.55, 0.10), tg + V(0, 0, 0.02), fstop=9)
+    """the rocker presents the band snow globe on the side table; hero leans in, smiling"""
+    swap_shot("S19", [hero, M["Rocker"]], hero, M["Rocker"], None, P["P_SnowGlobe"], SX + 0.2, SY + 0.8, gap=0.85,
+              rest=tuple(table_top("S17")), shake=False, cam_d=1.9, lens=35)
 
 def S20(t, n):
     """the band snow globe stands on the bar; hero leans in and looks into it (CU, no hands)"""
@@ -552,13 +595,10 @@ def S20(t, n):
     camera("S20", 40, t, gp + V(0.25, -1.15, 0.30), gp + V(0, 0.45, 0.28), t + n, gp + V(0.18, -0.95, 0.28), gp + V(0, 0.45, 0.30), fstop=9)
 
 def S21(t, n):
-    P["P_SnowGlobe"]["grip_half"] = 0.0; P["P_Clapper"]["grip_half"] = 0.10
-    men = [hero, M["Director"]]
-    t_ = T["S21"][0]
-    swap_shot("S21", men, hero, M["Director"], None, P["P_Clapper"], SX + 3.9, SY + 0.2, gap=0.80, extra_props=[P["P_SnowGlobe"], P["P_MovieCamera"]])
-    # the globe: hero hands it over at the same time (cupped, his R -> director's L)
-    PP = handover(P["P_SnowGlobe"], hero, ("R",), M["Director"], ("L",), t_, n, kind="cup", lat=0.10, hold_hi=0.0)
-    key_obj(P["P_MovieCamera"], t_, loc=(SX + 5.0, SY + 0.9, 0), rot=(0, 0, R(120)))
+    """snow globe and clapperboard on the side table; hero and the Director shake on the movie part"""
+    swap_shot("S21", [hero, M["Director"]], hero, M["Director"], P["P_SnowGlobe"], P["P_Clapper"], SX + 3.9, SY + 0.2, gap=0.80,
+              extra_props=[P["P_MovieCamera"]])
+    key_obj(P["P_MovieCamera"], T["S21"][0], loc=(SX + 5.0, SY + 0.9, 0), rot=(0, 0, R(120)))
 
 def S22(t, n):
     """film set: director (clapper raised) cues; hero acts in the lights, arms open"""

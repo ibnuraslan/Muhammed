@@ -356,6 +356,13 @@ bx = box("GAR_LogoBox", (0.55, 0.40, 0.40), (GX - 2.2, GY + 2.55, 0.20), mat("Ca
 logo_decal("Logo_Box", LD, 0.46, bx, (0, -0.205, 0.0), (0, 0, 0), G)
 bx2 = box("GAR_LogoBox2", (0.55, 0.40, 0.35), (GX - 2.2, GY + 2.55, 0.575), mat("Cardboard", (0.78, 0.60, 0.38), 0.7), G)
 
+
+# ===================================================================== side tables for the trades (items rest on them while the two shake hands)
+TBL = coll("TRADE_TABLES")
+for nm, (x, y) in {"S03": (30.0, 299.2), "S12": (-0.2, 699.95), "S14": (96.0, 299.4), "S15": (29.5, -9.65), "S17": (100.2, 300.35),
+                   "S21": (103.9, 299.75), "S27": (0.0, -7.05)}.items():
+    ph("side_table_01", (x, y, 0), rotz=0, col=TBL, name="Table_" + nm)
+
 # ===================================================================== world: soft partly-cloudy sky
 w = bpy.data.worlds.new("SkyWorld"); sc.world = w; w.use_nodes = True; nt = w.node_tree
 env = nt.nodes.new("ShaderNodeTexEnvironment"); env.image = bpy.data.images.load(PH + "/hdri/kloofendal_48d_partly_cloudy_puresky_1k.hdr")
