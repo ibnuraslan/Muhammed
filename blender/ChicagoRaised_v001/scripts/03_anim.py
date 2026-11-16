@@ -99,6 +99,66 @@ def hold_fingers(rig, s, fa, fb):
         if pb.name.endswith("." + s) and pb.name.startswith("finger"):
             pb.keyframe_insert("rotation_quaternion", frame=fb, group=pb.name)
 
+GRIP_OFF = float(os.environ.get("GRIP_OFF", "0.04")); GRIP_POSE = os.environ.get("GRIP_POSE", "palm")
+def hand_follow(rig, side, obj, fg, frames, contact, normal, finger_dir, pose):
+    """palm placed `contact` facing `normal`, fingers along `finger_dir`, posed once; then the hand rides with the object (translation)"""
+    place_hand(rig, side, fg, contact, normal, finger_dir); apply_pose(rig, side, pose, fg)
+    ev(fg); bn = "IK_hand." + side
+    rel = obj.matrix_world.inverted() @ rig.matrix_world @ rig.pose.bones[bn].matrix
+    for f in frames:
+        ev(f); A = rig.matrix_world.inverted() @ obj.matrix_world @ rel
+        l_, q_, _ = (rig.data.bones[bn].matrix_local.inverted() @ A).decompose(); pb = rig.pose.bones[bn]
+        if pb.rotation_quaternion.dot(q_) < 0: q_ = -q_
+        pb.location = l_; pb.rotation_quaternion = q_
+        pb.keyframe_insert("location", frame=f); pb.keyframe_insert("rotation_quaternion", frame=f)
+
+def crank_palm(rig, side, bar, dx, frames, pose="cup_hold"):
+    """palm resting ON the crank bar, hand aligned with the forearm (pronated, palm down) so the wrist limits never clamp it;
+    the fingers reach past the bar and do not wrap it (no crossing). Two passes per frame (forearm depends on the wrist spot)."""
+    up = Vector((0, 0, 1))
+    if os.environ.get("NOWRISTLIM", "1") == "1":     # the target is forearm-aligned (natural); the limit clamp only tilted the palm into the bar
+        c_ = rig.pose.bones["wrist." + side].constraints.get("HandLimit")
+        if c_: c_.mute = True
+    for f in frames:
+        ev(f); b = bar.matrix_world.translation + Vector((dx, 0, 0))
+        n = Vector((0, 0.15, -1)).normalized(); fd = Vector((0, 1, 0.15)).normalized()
+        for it in range(3):
+            P = b - n * (0.02 + float(os.environ.get("PALM_GAP", "0.008")))
+            place_hand(rig, side, f, P, n, fd)
+            ev(f); el = rig.matrix_world @ rig.pose.bones["lowerarm01." + side].head; wr = rig.matrix_world @ rig.pose.bones["wrist." + side].head
+            fd = (wr - el).normalized()
+            n = -(up - fd * up.dot(fd)).normalized()
+        # de-penetration: every metacarpal/phalanx (3 samples each, ~1.1 cm flesh radius) must stay clear of the bar axis
+        gap = 0.02 + float(os.environ.get("PALM_GAP", "0.008"))
+        for _ in range(10):
+            ev(f); Mw = rig.matrix_world; dmin = 9.0
+            for pb in rig.pose.bones:
+                if not pb.name.endswith("." + side) or not (pb.name.startswith("finger") or pb.name.startswith("metacarpal")): continue
+                for u in (0.0, 0.5, 1.0):
+                    q = Mw @ pb.head.lerp(pb.tail, u); d = math.hypot(q.y - b.y, q.z - b.z)
+                    if abs(q.x - b.x) < 0.30: dmin = min(dmin, d)
+            if dmin >= 0.032: break
+            gap += 0.034 - dmin
+            place_hand(rig, side, f, b - n * gap, n, fd)
+    apply_pose(rig, side, pose, frames[0]); hold_fingers(rig, side, frames[0], frames[-1])
+
+def grip_roll(rig, side, obj, fg, frames, contact, approach):
+    """wrap grip on a bar along world X; the hand then rides the bar AND rolls about the bar axis so the wrist stays in line
+    with the shoulder->bar direction (a wrap rolled about its own cylinder never cuts into it)"""
+    grip_object(rig, side, fg, obj, contact, approach, finger_radius=0.015)
+    def frame_at(f):
+        ev(f); b = obj.matrix_world.translation.copy(); sh = rig.matrix_world @ rig.pose.bones["upperarm01." + side].head
+        d = b - sh; a = math.atan2(d.z, d.y)
+        return Matrix.Translation(b) @ Matrix.Rotation(a, 4, 'X')
+    ev(fg); bn = "IK_hand." + side
+    rel = frame_at(fg).inverted() @ rig.matrix_world @ rig.pose.bones[bn].matrix
+    for f in frames:
+        Fm = frame_at(f); A = rig.matrix_world.inverted() @ Fm @ rel
+        l_, q_, _ = (rig.data.bones[bn].matrix_local.inverted() @ A).decompose(); pb = rig.pose.bones[bn]
+        if pb.rotation_quaternion.dot(q_) < 0: q_ = -q_
+        pb.location = l_; pb.rotation_quaternion = q_
+        pb.keyframe_insert("location", frame=f); pb.keyframe_insert("rotation_quaternion", frame=f)
+
 def key_prop(o, f, loc=None, rot=None):
     o.rotation_mode = 'XYZ'
     if loc is not None: o.location = Vector(loc); o.keyframe_insert("location", frame=f)
@@ -174,11 +234,12 @@ for o in [o for o in OB if o.name.startswith("Jack") or o.name.startswith("Crank
 # ================================================================== S1-S7: the jack crews (continuous cranking)
 JX = sorted({round(OB["CrankGrip.%d" % i]["axle"][0], 3) for i in range(20) if "CrankGrip.%d" % i in OB})
 NJ = len(JX)
-CREW = {"W1": 2, "W2": 1, "W3": 0, "W4": 4, "W5": 5, "W6": 6}            # worker -> jack index (centre jack 3 under the sign is unmanned)
+CREW = {"W1": 2, "W2": 1, "W3": 0, "W5": 5, "W6": 6}     # jack 3 (under the sign) and jack 4 unmanned: W4's short arms could not reach the far side of the crank without the bar cutting his palm            # worker -> jack index (centre jack 3 under the sign is unmanned)
 CREW = {k: v for k, v in CREW.items() if v < NJ}
 OMEGA = 2 * math.pi * 0.5                                              # rad/s (one turn per 2 s)
 def theta(f, ph=0.0): return ph + OMEGA * (f - FA_CR) / FPS            # 0 = grip toward the worker, 90 deg = bottom
 FRAMES_CR = list(range(FA_CR - 1, FB_CR + 2))
+for n_ in [n for n in ("W1", "W2", "W3", "W4", "W5", "W6") if n not in CREW]: put_ranges(n_, [])      # unused workers parked off-set for the whole film
 for i in range(NJ):
     g = OB["CrankGrip.%d" % i]; P = OB["CrankPivot.%d" % i]; ax_ = Vector(g["axle"]); r_ = g["radius"]
     for f in FRAMES_CR:
@@ -192,7 +253,11 @@ SHOULDER_DY = 0.50
 for n, ji in CREW.items():
     H = CH[n]; g = OB["CrankGrip.%d" % ji]; ax_ = Vector(g["axle"])
     sh = H.r.BN["upperarm01.L"].head_local
-    base = Vector((ax_.x, ax_.y - SHOULDER_DY - sh.y * -1.0 - 0.02, 0))      # rig faces +Y (yaw 180): local -y -> world +y
+    BNs = H.r.BN; L_arm = sum(BNs[b_ + ".L"].length for b_ in ("upperarm01", "upperarm02", "lowerarm01", "lowerarm02"))
+    D = float(os.environ.get("REACH", "0.78")) * L_arm; dz = sh.z * 0.97 - Vector(g["axle"]).z            # shoulder -> axle: the 0.12 m crank circle stays well inside the reach
+    sdy = SHOULDER_DY * min(1.0, L_arm / 0.549)            # shorter arms stand closer to the crank
+    print("CREW", n, "arm", round(L_arm, 3), "shoulder->axle", round(D, 3), "dy", round(sdy, 3))
+    base = Vector((ax_.x, ax_.y - sdy - sh.y * -1.0 - 0.02, 0))      # rig faces +Y (yaw 180): local -y -> world +y
     put_ranges(n, [(FA_CR, FB_CR, base, 180)])
     ph_n = 0.0
     for f in frs(FA_CR, FB_CR, 3):
@@ -203,15 +268,20 @@ for n, ji in CREW.items():
         shl = H.r.BN["upperarm01." + s].head_local
         key_pole(H, s, FA_CR, shl + Vector((sx * 0.38, 0.35, -0.55)))
     for s, dx in (("L", -0.12), ("R", 0.12)):                               # world x: his left hand is at world -x (he faces +Y)
-        ev(FA_CR); c = g.matrix_world.translation + Vector((dx, 0, 0)) - Vector((0, 0.55, -0.83)).normalized() * 0.022   # bar surface, not its axis
-        grip_follow(H.r.o, s, g, FA_CR, frs(FA_CR, FB_CR, 2), c, Vector((0, 0.55, -0.83)))
-        hold_fingers(H.r.o, s, FA_CR, FB_CR)
+        ev(FA_CR); nA = Vector((0, float(os.environ.get("GRIP_NY", "0.2")), -1)).normalized()
+        c = g.matrix_world.translation + Vector((dx, 0, 0)) - nA * GRIP_OFF            # palm held clear of the bar (no crossing)
+        if GRIP_POSE == "palm":
+            crank_palm(H.r.o, s, g, dx, frs(FA_CR, FB_CR, 2), os.environ.get("PALM_POSE", "flat_palm"))
+        elif GRIP_POSE == "wrap":
+            grip_roll(H.r.o, s, g, FA_CR, frs(FA_CR, FB_CR, 2), c, nA); hold_fingers(H.r.o, s, FA_CR, FB_CR)
+        else:
+            hand_follow(H.r.o, s, g, FA_CR, frs(FA_CR, FB_CR, 2), c, nA, Vector((0, 0.83, 0.55)), GRIP_POSE)
     face(H, FA_CR, -0.002, -9); blinks(H, FA_CR, FB_CR, -0.002, -9, every=170, ofs=40 + 13 * ji)
 
 # ---- cameras S1, S2, S4, S5, S7 (set A, worker side is -Y)
 def wpos(n): return Vector(OB["CrankGrip.%d" % CREW[n]]["axle"])
 a1 = wpos("W1")
-camshot("S1", [(0, a1 + Vector((2.55, 0.62, 0.42)), a1 + Vector((0, -0.45, 0.32)), 62), (1, a1 + Vector((2.35, 0.62, 0.40)), a1 + Vector((0, -0.45, 0.34)), 66)])
+camshot("S1", [(0, a1 + Vector((2.55, 0.62, 0.62)), a1 + Vector((0, -0.48, 0.58)), 85), (1, a1 + Vector((2.35, 0.62, 0.62)), a1 + Vector((0, -0.48, 0.60)), 92)])   # face + shoulders, hands out of frame
 camshot("S2", [(0, Vector((0, -26, 3.2)), Vector((0, 4, 6.5)), 26), (1, Vector((0, -22, 2.8)), Vector((0, 4, 6.2)), 26)])
 camshot("S4", [(0, Vector((9.2, -0.42, 0.88)), Vector((-3, -1.15, 1.25)), 30), (1, Vector((8.5, -0.42, 0.9)), Vector((-3.5, -1.15, 1.3)), 30)])
 camshot("S5", [(0, Vector((-9.2, -0.42, 0.88)), Vector((3, -1.15, 1.3)), 30), (1, Vector((-8.6, -0.42, 0.9)), Vector((3, -1.15, 1.35)), 30)])
@@ -365,10 +435,9 @@ def walk_arms(H, fa, fb, path, stride=0.6, step=2, amp=0.09):
             H.key_hand(s, f, W, Vector((0, -0.15 * ph * sg, -1)), Vector((-sx, 0, 0)), pole=W + Vector((0.3 * sx, 0.5, 0.3)))
     for s in "LR": apply_pose(H.r.o, s, "relaxed", fa)
 walk_arms(TM, fa, fb, pth); face(TM, fa, 0.0, -7); blinks(TM, fa, fb)
-put_ranges("TownWoman", [(fa, fb, (X0 + 4, 38, 0), 90), (f0("S19"), fx("S19"), (X0 - 1.0, 23.5, 0), 200), (f0("S20"), fx("S20"), (X0 + 1.5, 30, 0), 180)])
+put_ranges("TownWoman", [(f0("S19"), f1("S19"), (X0 - 1.0, 23.5, 0), 200), (f0("S20"), fx("S20"), (X0 - 2.2, 26.5, 0), 180)])
 pthw = lambda f: Vector((0, -0.7 * (f - fa) / FPS, 0))
-TWn.walk(pthw, lambda f: 0.0, fa, fb, stride=0.55, lift=0.08, bob=0.02, lean=5); walk_arms(TWn, fa, fb, pthw, stride=0.55)
-face(TWn, fa, 0.0, -6)
+
 camshot("S17", [(0, Vector((X0 + 0.6, 19.0, 1.5)), Vector((X0 - 1.5, 26, 1.3)), 34), (1, Vector((X0 + 0.5, 19.6, 1.5)), Vector((X0 - 1.5, 26, 1.3)), 34)])
 # S18: the horse in the water lifts its head; TownMan wades past behind
 HR = OB["Horse_rig"]; HR.rotation_mode = 'XYZ'; HRIG = Rig(HR)
@@ -408,7 +477,7 @@ apply_pose(SM.r.o, "R", "relaxed", fa + 20); apply_pose(SM.r.o, "L", "relaxed", 
 for s, sx in (("L", 1), ("R", -1)):
     key_pole(SM, s, fa, SM.r.BN["upperarm01." + s].head_local + Vector((sx * 0.45, 0.2, -0.45)))
 stand(TWn, fa, head=(4, 0)); arms_hang(TWn, fa); stand(TWn, fa + 70, head=(8, 10)); face(TWn, fa, 0.002, -5)
-camshot("S19", [(0, SP + Vector((1.6, -3.0, 1.35)), SP + Vector((0, 0, 1.15)), 32), (1, SP + Vector((1.4, -2.6, 1.3)), SP + Vector((0, 0, 1.15)), 32)])
+camshot("S19", [(0, SP + Vector((-1.2, -3.2, 1.35)), SP + Vector((0, 0, 1.15)), 32), (1, SP + Vector((-1.0, -2.8, 1.3)), SP + Vector((0, 0, 1.15)), 32)])
 # S20: the horse turns its head; the woman walks away down the street
 fa, fb = f0("S20"), fx("S20")
 horse_head(fa, 0, -4); horse_head(fa + 50, -4, 18); horse_head(fb, -6, 22)
@@ -420,6 +489,15 @@ camshot("S20", [(0, Vector((X0 - 5.5, 22, 1.8)), Vector((X0 + 0.5, 33, 1.3)), 26
 camshot("S21", [(0, Vector((X0 + 4, 106, 0.7)), Vector((X0, 118, 1.6)), 26), (1, Vector((X0 + 4, 108, 4.8)), Vector((X0, 125, 5.5)), 26)])
 camshot("S22", [(0, Vector((2600 - 50, -120, 16)), Vector((2600 + 15, 60, 30)), 24), (1, Vector((2600 - 25, -100, 30)), Vector((2600 + 20, 80, 38)), 24)])
 
+# fill light under the raised building for S8 and S11 (faces in the building's shadow); keyed on only in those shots
+UF = bpy.data.objects.new("UnderFill", bpy.data.lights.new("UnderFill", 'AREA')); sc.collection.objects.link(UF)
+UF.data.energy = 0.0; UF.data.size = 1.2; UF.data.color = (1.0, 0.95, 0.88)
+for s_, pos in (("S8", Vector((tx + 0.2, y_end - 1.6, 1.7))), ("S11", Vector((MX + 0.3, -1.3, 1.9)))):
+    UF.location = pos; UF.keyframe_insert("location", frame=f0(s_))
+    UF.rotation_mode = 'QUATERNION'; UF.rotation_quaternion = (Vector((pos.x, pos.y + 2.0, 1.2)) - pos).to_track_quat('-Z', 'Y'); UF.keyframe_insert("rotation_quaternion", frame=f0(s_))
+    UF.data.energy = 120.0; UF.data.keyframe_insert("energy", frame=f0(s_)); UF.data.energy = 0.0; UF.data.keyframe_insert("energy", frame=f1(s_) + 1)
+UF.data.energy = 0.0; UF.data.keyframe_insert("energy", frame=0)
+for o in (UF, UF.data): constant_all(o)
 bake_camera()
 json.dump([{"shot": s, "frame": f0(s), "end": f1(s), "seconds": T[s]} for s in ORDER], open(os.path.join(FILM, "work", "shots.json"), "w"), indent=1)
 sc.frame_set(1)

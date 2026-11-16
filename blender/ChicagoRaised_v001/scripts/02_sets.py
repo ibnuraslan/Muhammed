@@ -116,7 +116,7 @@ box("Sill", (BW + 0.4, 0.4, 0.32), (0, 0.25, -0.16), M_timber, SQ, bevel=0.01).p
 JX = [-6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0]
 JX = [x for x in JX if abs(x) < BW / 2 - 0.5]
 for i, x in enumerate(JX):
-    box("Needle.%d" % i, (0.32, 3.2, 0.3), (x, 1.0, -0.47), M_timber, SQ, bevel=0.01).parent = BLDG
+    box("Needle.%d" % i, (0.32, 3.05, 0.3), (x, 1.075, -0.47), M_timber, SQ, bevel=0.01).parent = BLDG     # front end at y=-0.45: clear of the crankers' fingers, still over the jack cap
 # shop sign over the ground-floor centre (logo placement 1): cream board on the facade, logo decal just proud of it
 sg = box("ShopSign", (4.4, 0.08, 1.35), (0, -0.25, 4.35), M_sign, SQ, bevel=0.015); sg.parent = BLDG
 lg = plane("Logo_sign", (3.6, 3.6 * 414 / 967), (0, -0.295, 4.35), logo_mat("Logo_dark", "DaKrasFilms_logo_dark.png"), SQ)
@@ -314,29 +314,44 @@ tg = plane("TownGround", (500, 500), (X0, 0, 0), M_mud, TW)
 for k in range(40):     # puddles
     p_ = plane("Puddle.%d" % k, (4 + random.random() * 10, 3 + random.random() * 6), (X0 - 120 + random.random() * 240, -120 + random.random() * 240, 0.03), M_water, TW)
     p_.rotation_euler = (0, 0, random.random() * 3)
-M_roof = mat("Shingle", (0.30, 0.20, 0.16), 0.8); M_clap = mat("Clapboard", (0.72, 0.62, 0.46), 0.75)
-def house(name, x, y, rz, w=6.0, d=9.0, h=5.0):
-    b_ = box(name, (w, d, h), (x, y, h / 2), M_clap, TW, bevel=0.05)
+M_roof = mat("Shingle", (0.30, 0.20, 0.16), 0.8)
+M_clapA = pbr("ClapboardA", "wood_planks_grey", 0.9, tint=(1.15, 1.0, 0.8), coords="Object")
+M_clapB = pbr("ClapboardB", "wood_planks_grey", 0.9, tint=(0.75, 0.85, 1.0), coords="Object")
+M_clapC = pbr("ClapboardC", "rough_wood", 0.7, tint=(1.1, 0.9, 0.7), coords="Object")
+M_winD = mat("WinDark", (0.10, 0.13, 0.18), 0.3)
+def house(name, x, y, rz, w=6.0, d=9.0, h=5.0, coll_=None, m_=None):
+    """timber house: textured clapboard box, gable roof, a door and window panes on the street (-Y local) side"""
+    coll_ = coll_ or TW; m_ = m_ or M_clapA
+    root = bpy.data.objects.new(name, None); link(root, coll_); root.location = (x, y, 0); root.rotation_euler = (0, 0, R_(rz))
+    parts = [box(name + "_b", (w, d, h), (0, 0, h / 2), m_, coll_, bevel=0.04)]
     bm = bmesh.new()
-    vs = [bm.verts.new(v) for v in ((-w / 2 - 0.3, -d / 2 - 0.3, 0), (w / 2 + 0.3, -d / 2 - 0.3, 0), (0, -d / 2 - 0.3, w * 0.45),
-                                    (-w / 2 - 0.3, d / 2 + 0.3, 0), (w / 2 + 0.3, d / 2 + 0.3, 0), (0, d / 2 + 0.3, w * 0.45))]
+    vs = [bm.verts.new(v) for v in ((-w / 2 - 0.3, -d / 2 - 0.3, h), (w / 2 + 0.3, -d / 2 - 0.3, h), (0, -d / 2 - 0.3, h + w * 0.42),
+                                    (-w / 2 - 0.3, d / 2 + 0.3, h), (w / 2 + 0.3, d / 2 + 0.3, h), (0, d / 2 + 0.3, h + w * 0.42))]
     for f in ((0, 1, 2), (3, 5, 4), (0, 2, 5, 3), (1, 4, 5, 2), (0, 3, 4, 1)): bm.faces.new([vs[i] for i in f])
-    me = bpy.data.meshes.new(name + "_roof"); bm.to_mesh(me); bm.free(); r_ = bpy.data.objects.new(name + "_roof", me); me.materials.append(M_roof); link(r_, TW)
-    r_.location = (x, y, h); r_.parent = None
-    for o in (b_, r_):
-        o.rotation_euler = (0, 0, R_(rz))
-    r_.location = (x, y, h)
+    me = bpy.data.meshes.new(name + "_roof"); bm.to_mesh(me); bm.free(); r_ = bpy.data.objects.new(name + "_roof", me); me.materials.append(M_roof); link(r_, coll_); parts.append(r_)
+    parts.append(box(name + "_door", (1.0, 0.06, 2.1), (0, -d / 2 - 0.02, 1.05), M_timber, coll_))
+    for k in range(2):
+        for zz in ((1.6, h - 1.3) if h > 4.2 else (1.6,)):
+            parts.append(box(name + "_w%d_%d" % (k, int(zz * 10)), (0.9, 0.06, 1.1), ((-1 if k else 1) * w * 0.3, -d / 2 - 0.02, zz), M_winD, coll_))
+    for o in parts: o.parent = root
+    return root
 TOWN = []
-for gx in range(-5, 6):
-    for gy in range(-5, 6):
-        bx, by = X0 + gx * 30, gy * 34
-        if gx % 3 == 0: continue            # north-south mud streets
-        for k in range(3):
-            xx, yy = bx - 8 + k * 9 + random.random(), by + random.random() * 2
-            if random.random() < 0.35:
-                o = copy_obj(L_shop, "TownB.%d_%d_%d" % (gx, gy, k), (xx, yy, 0), rz=random.choice((0, 180)), c=TW); s_ = 0.32 + random.random() * 0.06; o.scale = (s_, s_, s_)
-            else:
-                house("TownH.%d_%d_%d" % (gx, gy, k), xx, yy, random.choice((0, 90)), 5 + random.random() * 2, 8 + random.random() * 3, 4 + random.random() * 2.5)
+random.seed(9)
+CL = [M_clapA, M_clapB, M_clapC]
+for bx in range(-2, 3):          # blocks 40 x 36 m between 10 m mud streets; houses face the streets (+/-Y sides)
+    for by in range(-3, 3):
+        cx, cy = X0 + bx * 50, by * 46
+        for side in (-1, 1):
+            for k in range(5):
+                xx = cx - 16 + k * 8 + random.random() * 0.8; yy = cy + side * 12
+                if random.random() < 0.3:
+                    o = copy_obj(L_shop, "TownB.%d_%d_%d_%d" % (bx, by, side, k), (xx, yy - side * 1.5, 0), rz=(0 if side < 0 else 180), c=TW); s_ = 0.28 + random.random() * 0.05; o.scale = (s_, s_, s_)
+                else:
+                    house("TownH.%d_%d_%d_%d" % (bx, by, side, k), xx, yy, (0 if side < 0 else 180), 6 + random.random(), 8 + random.random() * 2, 4.5 + random.random() * 2.0, TW, random.choice(CL))
+# church with a spire at the town centre
+ch = house("Church", X0, 0, 0, 10, 18, 9, TW, mat("ChurchWhite", (0.85, 0.83, 0.78), 0.7))
+tw_ = box("ChurchTower", (4, 4, 16), (X0, -10, 8), mat("ChurchWhite", (0.85, 0.83, 0.78), 0.7), TW)
+bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=2.9, radius2=0.05, depth=10, location=(X0, -10, 21)); sp = bpy.context.active_object; sp.name = "ChurchSpire"; sp.data.materials.append(M_roof); link(sp, TW)
 # the lake beyond the town edge
 plane("TownLake", (600, 300), (X0, 380, 0.02), M_river, TW)
 
@@ -346,14 +361,9 @@ plane("FloodGround", (40, 200), (X0, 40, 0), M_mud, FS)
 fw = plane("FloodWater", (40, 200), (X0, 40, 0.35), M_water, FS)
 for k, y in enumerate(range(-10, 110, 26)):
     copy_obj(L_shop, "FsShopL.%d" % k, (X0 - 11.5, y, 0), rz=-90, c=FS).scale = (0.9, 0.9, 0.9)
-L_row2 = L_row.copy(); L_row2.data = L_row.data.copy(); L_row2.name = "LIB_vicrow_painted"; LIB.objects.link(L_row2)
-for i, m in enumerate(L_row2.data.materials):
-    if m and "lambert52" in m.name:
-        m2 = m.copy(); P_ = next(n for n in m2.node_tree.nodes if n.type == 'BSDF_PRINCIPLED')
-        for l in list(P_.inputs["Base Color"].links): m2.node_tree.links.remove(l)
-        P_.inputs["Base Color"].default_value = (0.42, 0.55, 0.40, 1); L_row2.data.materials[i] = m2
-for k, y in enumerate(range(-10, 110, 30)):
-    copy_obj(L_row2, "FsRowR.%d" % k, (X0 + 13, y, 0), rz=90, c=FS)
+for k, y in enumerate(range(-10, 110, 11)):    # right side: textured timber houses (2 storeys) and a brick shop every third lot
+    if k % 3 == 2: copy_obj(L_shop, "FsShopR.%d" % k, (X0 + 11.5, y, 0), rz=90, c=FS).scale = (0.45, 0.45, 0.45)
+    else: house("FsHouse.%d" % k, X0 + 13, y, -90, 9, 10, 6.5 + (k % 2) * 1.5, FS, (M_clapA, M_clapC)[k % 2])     # door and windows face the street (-X)
 for k in range(10):
     pk = box("FloatPlank.%d" % k, (1.2, 0.18, 0.05), (X0 - 4 + random.random() * 8, 5 + random.random() * 60, 0.36), M_plank, FS); pk.rotation_euler = (0, 0, random.random() * 3)
 # plank sidewalks along both fronts, partly awash
@@ -368,7 +378,7 @@ box("RaisedCurb", (34, 0.3, 0.25), (X0, 116.9, 2.52), mat("Curb", (0.7, 0.7, 0.6
 
 # ================================================================== F: modern skyline (2600,0)
 MC = coll("SET_modern"); X0 = 2600.0
-plane("ModernGround", (1600, 1600), (X0, 300, 0), mat("CityGround", (0.22, 0.23, 0.24), 0.8), MC)
+plane("ModernGround", (1600, 1600), (X0, 300, 0), mat("CityGround", (0.10, 0.11, 0.11), 0.8), MC)
 plane("ModernRiver", (1600, 60), (X0, -40, 0.05), M_river, MC)
 L_sky = lib_model("skyscrapers", 160.0, axis=2)
 for k, (x, y, rz, s_) in enumerate(((0, 120, 0, 1.0), (-140, 200, 90, 1.2), (150, 180, 30, 0.9), (60, 330, 180, 1.35), (-80, 380, 60, 1.1),
@@ -385,9 +395,10 @@ for sx in (-1, 1):
     for j in range(15):
         d_ = box("BridgeDiag.%d_%d" % (sx, j), (0.3, 0.3, 5.6), (X0 - 10 + sx * 6, -75 + j * 5 + 2.5, 3.6), mat("BridgeSteel", (0.18, 0.32, 0.45), 0.4, metal=0.6), MC)
         d_.rotation_euler = (R_(40 if j % 2 else -40), 0, 0)
-box("BridgeDeck", (12, 70, 0.5), (X0 - 10, -40, 0.9), mat("Concrete", (0.6, 0.6, 0.6), 0.8), MC)
-box("Embankment", (1600, 6, 1.2), (X0, -7, 0.6), mat("Concrete", (0.6, 0.6, 0.6), 0.8), MC)
-box("Embankment2", (1600, 6, 1.2), (X0, -73, 0.6), mat("Concrete", (0.6, 0.6, 0.6), 0.8), MC)
+M_stone = pbr("StoneGrey", "plastered_wall_02", 0.3, tint=(0.36, 0.36, 0.38), coords="Object")
+box("BridgeDeck", (12, 70, 0.5), (X0 - 10, -40, 0.9), M_stone, MC)
+box("Embankment", (1600, 6, 1.2), (X0, -7, 0.6), M_stone, MC)
+box("Embankment2", (1600, 6, 1.2), (X0, -73, 0.6), M_stone, MC)
 
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)
 print("SETS_OK")
