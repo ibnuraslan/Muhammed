@@ -355,7 +355,7 @@ def S08():     # a man lays his fingertips on the statue's foot; the others watc
         pe = RIG[n].PB["Pole_elbow.R"]; nm = "Pole_elbow.R"
         pe.location = RIG[n].rest(nm).to_3x3().inverted() @ (sh + V((-0.35, -0.15, -0.45)) - RIG[n].BN[nm].head_local); pe.keyframe_insert("location", frame=f, group=nm)
     drops_idle(f0, f1)
-    cam_keys(s, [(0, V((-1.15, -0.62, 1.72)), V((0.12, -0.92, 1.45)), 26), (1, V((-1.05, -0.62, 1.70)), V((0.12, -0.9, 1.47)), 28)], fstop=8)
+    cam_keys(s, [(0, V((-1.25, -0.95, 1.75)), V((0.10, -0.62, 1.38)), 24), (1, V((-1.15, -0.92, 1.72)), V((0.10, -0.60, 1.36)), 25)], fstop=8)
 # ---------------------------------------------------------------- bathroom
 CTK = "CrowdM5"
 CT = (BX - 0.05, -0.78); IV = (BX + 0.62, -0.52)
@@ -441,7 +441,7 @@ def trickle():
     sl_ = o.modifiers.new("thick", 'SOLIDIFY'); sl_.thickness = 0.003; sl_.offset = -1.0
     o.modifiers.new("sub", 'SUBSURF').levels = 1
     m = bpy.data.materials.new("M_Trickle"); m.use_nodes = True; nt = m.node_tree
-    p = nt.nodes["Principled BSDF"]; p.inputs['Base Color'].default_value = (0.55, 0.62, 0.6, 1); p.inputs['Roughness'].default_value = 0.03; p.inputs['Transmission Weight'].default_value = 1.0; p.inputs['IOR'].default_value = 1.33; p.inputs['Specular IOR Level'].default_value = 0.35; p.inputs['Coat Weight'].default_value = 0.5
+    p = nt.nodes["Principled BSDF"]; p.inputs['Base Color'].default_value = (0.035, 0.045, 0.028, 1); p.inputs['Roughness'].default_value = 0.18; p.inputs['Transmission Weight'].default_value = 0.0; p.inputs['Specular IOR Level'].default_value = 0.25; p.inputs['Coat Weight'].default_value = 0.35; p.inputs['Coat Roughness'].default_value = 0.08
     p.inputs['Coat Weight'].default_value = 1.0
     tc = nt.nodes.new('ShaderNodeTexCoord'); sp = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Generated'], sp.inputs[0])
     val = nt.nodes.new('ShaderNodeValue'); val.name = "Reveal"
@@ -523,7 +523,7 @@ def S16():     # two men point at him; he lowers his head
     idle(n, f0, f1, x, y, yaw, head=(-10.0, 10.0), head2=(-30.0, 0.0), every=30, ph=0.5)
     sd = Rz(yaw) @ V((1, 0, 0))
     for f in (f0, f1): trolley_at(f, V((x, y, 0)) + sd * -0.42 + Rz(yaw) @ V((0, -0.05, 0)), yaw + 90)
-    cam_keys(s, [(0, V((x + 1.6, y - 1.2, 1.7)), V((-0.2, -1.8, 1.45)), 28), (1, V((x + 1.45, y - 1.05, 1.68)), V((-0.2, -1.8, 1.5)), 30)], fstop=8)
+    cam_keys(s, [(0, V((x + 1.9, y - 1.6, 1.7)), V((0.15, -2.2, 1.45)), 26), (1, V((x + 1.75, y - 1.45, 1.68)), V((0.15, -2.2, 1.5)), 27)], fstop=8)
 def S17():     # close-up: eyes down, a sigh; his left hand rests on the case handle
     s = "S17"; f0, f1 = F0[s], F1[s]
     drops_idle(f0, f1)
@@ -561,17 +561,18 @@ def S18():     # he turns and walks away pulling the case (logo side to camera)
     for f in range(f0, f1 + 1, 2):
         p = path(f); Rb = body_R(yaw_w)
         P = V((p.x, p.y, H.root_head.z - 0.03))
-        back = Rb @ V((0, 1, 0)); right = Rb @ V((-1, 0, 0))
+        back = Rb @ V((0, 1, 0)); left = Rb @ V((1, 0, 0))
         u = max(0.0, min(1.0, (f - f0) / 20.0)); th = R_(TILT) * smooth(u)
-        base = V((p.x, p.y, 0)) + right * 0.36 + back * (0.22 + h * math.sin(R_(TILT)))
-        top = base - back * (h * math.sin(th)) + V((0, 0, h * math.cos(th)))
+        anchor = V((p.x, p.y, 0)) + left * 0.34 + back * 0.16           # the case starts upright beside him (camera side)
+        base = anchor + back * (h * math.sin(th))                       # and tilts back onto its wheels as he pulls it
+        top = anchor + V((0, 0, h * math.cos(th)))
         trolley_at(f, base, yaw_w, tilt=math.degrees(th))
-        hands = {"R": (top + V((0, 0, 0.035)), (Rb @ V((0, 0.35, -1))).normalized(), right, P + Rb @ V((-0.5, 0.25, -0.1)))}
+        hands = {"L": (top + V((0, 0, 0.035)), (Rb @ V((0, 0.35, -1))).normalized(), left, P + Rb @ V((0.5, 0.25, -0.1)))}
         sw = math.sin((f - f0) / 60.0 * 2 * math.pi * 0.9)
-        W0, d0, n0 = relaxed_hand(n, P, Rb, "L", fwd=0.10 * sw, out=0.04); hands["L"] = (W0, d0, n0)
+        W0, d0, n0 = relaxed_hand(n, P, Rb, "R", fwd=0.10 * sw); hands["R"] = (W0, d0, n0)
         key_hands(n, f, P, Rb, hands)
-    apply_pose(RIG[n].o, "R", "wrap_grip", f0 + 20)
-    cam_keys(s, [(0, V((x0 + 2.1, y0 - 1.0, 1.5)), V((x0 - 0.3, y0 - 0.4, 1.05)), 30), (1, V((x0 + 0.9, y0 - 1.2, 1.45)), V((x0 - 2.6, y0 - 1.0, 0.9)), 32)], fstop=8)
+    apply_pose(RIG[n].o, "L", "wrap_grip", f0 + 4); apply_pose(RIG[n].o, "R", "relaxed", f0 + 4)
+    cam_keys(s, [(0, V((x0 + 2.1, y0 - 1.0, 1.5)), V((x0 - 0.1, y0 - 0.5, 0.8)), 24), (1, V((x0 + 0.8, y0 - 1.4, 1.45)), V((x0 - 1.6, y0 - 0.75, 0.7)), 24)], fstop=8)
 
 for s in ORDER:
     print("SHOT", s, F0[s], F1[s]); globals()[s]()
