@@ -495,7 +495,7 @@ def trolley_at(f, p, yaw, tilt=0.0):
     TROL.keyframe_insert("location", frame=f); TROL.keyframe_insert("rotation_euler", frame=f)
 TB = sc["TROLLEY_BB"]
 HANDLE_TOP = TB[5]
-def crowd_point(n, f0, f1, side, t_on, lean=4.0):
+def crowd_point(n, f0, f1, side, t_on, lean=4.0, reach=0.34):
     """a crowd member leans in and points at the investigator from t_on (arm outside every body)"""
     x, y = ANGRY[n]; yaw = facing(x, y, *INV_P); on_stage(n, f0, f1)
     H = HUM[n]; P = V((x, y, H.root_head.z - 0.01)); Rb = body_R(yaw)
@@ -506,7 +506,7 @@ def crowd_point(n, f0, f1, side, t_on, lean=4.0):
         jab = 0.04 * math.sin(k * 2.1) * u
         W0, d0, n0 = relaxed_hand(n, P, Rb, side)
         stand(n, f, x, y, yaw, head=(-6.0, 4.0 * math.sin(k)), lean=lean * u, fingers=None,
-              hands={side: (W0.lerp(sh + dirv * (0.42 + jab), u), d0.lerp(dirv, u).normalized(), V((0, 0, -1)),
+              hands={side: (W0.lerp(sh + dirv * (reach + jab), u), d0.lerp(dirv, u).normalized(), V((0, 0, -1)),
                             sh + V((0, 0, -0.45)) + Rz(yaw) @ V((0.35 if side == "L" else -0.35, 0.2, 0)))})
         apply_pose(RIG[n].o, side, "point" if u else "relaxed", f); apply_pose(RIG[n].o, "L" if side == "R" else "R", "relaxed", f)
 def S15():     # "became furious": the crowd leans in and points; he raises open palms, looks back at them, leans away
@@ -515,7 +515,7 @@ def S15():     # "became furious": the crowd leans in and points; he raises open
     def side_to(n_):
         x_, y_ = ANGRY[n_]; yaw_ = facing(x_, y_, *INV_P)
         loc = Rz(-yaw_) @ V((INV_P[0] - x_, INV_P[1] - y_, 0)); return "L" if loc.x > 0 else "R"
-    PTS = tuple((n_, side_to(n_), t_) for n_, t_ in (("CrowdM2", 6), ("CrowdW2", 16), ("CrowdM1", 28)))
+    PTS = tuple((n_, side_to(n_), t_) for n_, t_ in (("CrowdM2", 6), ("CrowdM6", 16)))
     angry_crowd(f0, f1, pointers=tuple(p[0] for p in PTS), lean=5.0)
     for n_, sd_, t_ in PTS: crowd_point(n_, f0, f1, sd_, t_)
     n = "Investigator"; x, y = INV_P; yaw = 8.0; on_stage(n, f0, f1)
