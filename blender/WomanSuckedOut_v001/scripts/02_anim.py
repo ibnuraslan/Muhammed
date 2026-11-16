@@ -388,22 +388,24 @@ def kneel(rig, f, x, y, yaw, lean=20, z=0.0):
     fk_spine(R, f, flex=lean, side=0, twist=0, hflex=12, htwist=0)
     fk_arm(R, "L", f, down=78, fwd=22, elbow=28, out=0); fk_arm(R, "R", f, down=78, fwd=22, elbow=28, out=0)
     for s in "LR": hand_pose(rig, s, f, "flat_palm")
-def hold_shot(n, fr_list, pull=None, hb=False):
+def hold_shot(n, fr_list, pull=None, hb=False, ha=True):
     """W hanging, HA in the aisle holding both shins, HB behind bracing on the seat back"""
     f0, f1 = T[n]
     for fr in fr_list:
         u = 0.0 if pull is None else pull(fr)
         hang_pose(fr, out=-0.30 * u, flutter=0.4 * (1 - u), t=fr / 60, arms_in=min(1.0, 3 * u))
-        set_ik(HA, fr, 1, 1)
-        # director P1: lean in, elbows bent, hands low on her shins, face toward the 3/4-front camera
-        stand(HA, fr, 0.12 + 0.12 * u, -5.60, yaw=-90, flex=18 - 6 * u, crouch=0.05)
-        fk_spine(RA, fr, flex=16, side=0, twist=-8, hflex=-26, htwist=(34 if hb else -30))
-        sc.frame_set(fr)
-        grab(HA, "L", fr, leg_point("L", "ankle", fr), (0, -0.25, -1), skin=0.085)
-        grab(HA, "R", fr, leg_point("L", "shin", fr), (0, 0.15, -1), skin=0.11)
+        # v002b (director): HA turned to face her, kneeling on his row-6 aisle seat, leaning over the row-5 seat back;
+        # elbows bent, hands low on her left shin. Mirror of HB on the row-4 seat.
+        if ha:
+            kneel(HA, fr, -0.33, -6.42 - 0.06 * u, 180, lean=44 - 10 * u, z=0.70)
+            set_ik(HA, fr, 1, 0)
+            fk_spine(RA, fr, flex=34 - 8 * u, side=6, twist=10, hflex=-12, htwist=14)
+            sc.frame_set(fr)
+            grab(HA, "L", fr, leg_point("L", "shin", fr), (0, 0.15, -1), skin=0.095)
+            grab(HA, "R", fr, leg_point("L", "ankle", fr), (0, -0.15, -1), skin=0.085)
         if hb:
             # HB turned round, kneeling on his row-4 aisle seat, reaching back over the seat back to her knee and shin
-            kneel(HB, fr, -0.33, -4.66, 0, lean=44, z=0.70)
+            kneel(HB, fr, -0.33, -4.66 + 0.10 * u, 0, lean=52 - 10 * u, z=0.70)      # leans back as he pulls
             set_ik(HB, fr, 1, 0)
             fk_spine(RB, fr, flex=34, side=-6, twist=-10, hflex=-12, htwist=-14)
             sc.frame_set(fr)
@@ -412,8 +414,8 @@ def hold_shot(n, fr_list, pull=None, hb=False):
 # ================================================================== S11: the other passengers held on to her (closer)
 _begin("S11")
 f0, f1 = T["S11"]
-hold_shot("S11", list(range(f0, f1 + 1, 12)) + [f1], hb=True)
-shot_cam("S11", [(0, (0.22, -6.75, 1.66), (-0.55, -5.25, 1.12), 26), (1, (0.20, -6.55, 1.62), (-0.55, -5.25, 1.12), 28)])
+hold_shot("S11", list(range(f0, f1 + 1, 12)) + [f1], hb=True, ha=False)      # v002b: one holder per shot, face + grip
+shot_cam("S11", [(0, (0.22, -6.75, 1.66), (-0.55, -5.25, 1.12), 26), (1, (0.20, -6.55, 1.62), (-0.55, -5.25, 1.12), 28)])      # v002b: HB's face and grip
 # ================================================================== S12: as she hung halfway out (exterior, orbit)
 _begin("S12")
 f0, f1 = T["S12"]
@@ -424,8 +426,8 @@ _begin("S13")
 f0, f1 = T["S13"]
 def pull(fr):
     u = max(0.0, min(1.0, (fr - f0 - 20) / (f1 - f0 - 40))); return u * u * (3 - 2 * u)
-hold_shot("S13", list(range(f0, f1 + 1, 6)) + [f1], pull=pull, hb=True)
-shot_cam("S13", [(0, (0.28, -6.85, 1.70), (-0.45, -5.30, 1.08), 24), (1, (0.30, -6.70, 1.66), (-0.40, -5.30, 1.08), 26)])
+hold_shot("S13", list(range(f0, f1 + 1, 6)) + [f1], pull=pull, hb=True, ha=False)
+shot_cam("S13", [(0, (0.18, -6.60, 1.55), (-0.50, -5.15, 1.10), 32), (1, (0.16, -6.45, 1.52), (-0.45, -5.15, 1.10), 36)])      # v002b: HB pulls (closer, higher than S11)
 # ================================================================== S14: back into the plane (lying in the aisle, HA kneels)
 _begin("S14")
 f0, f1 = T["S14"]
@@ -433,7 +435,7 @@ for fr in range(f0, f1 + 1, 30):
     lie_pose(fr, breath=math.sin(fr / 40))
     kneel(HA, fr, 0.0, -7.20, 180, lean=22 + 3 * math.sin(fr / 30))
 lie_pose(f1); kneel(HA, f1, 0.0, -7.20, 180, lean=22)
-shot_cam("S14", [(0, (0.12, -4.75, 1.40), (0.0, -6.85, 0.55), 26), (1, (0.10, -4.95, 1.36), (0.0, -6.85, 0.55), 29)])
+shot_cam("S14", [(0, (0.26, -6.05, 1.25), (0.0, -6.95, 0.45), 22), (1, (0.25, -6.15, 1.22), (0.0, -6.95, 0.45), 24)])      # v002b: from beside her shoulders, legs out of frame
 # ================================================================== S15: but she had head trauma (closer, calm)
 _begin("S15")
 f0, f1 = T["S15"]

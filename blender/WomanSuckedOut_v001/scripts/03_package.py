@@ -9,7 +9,7 @@ sc.render.fps = 60; sc.frame_start = 1; sc.frame_end = 1651; sc.frame_step = 1
 sc.cycles.samples = 48; sc.cycles.adaptive_threshold = 0.05; sc.cycles.use_denoising = True
 sc.render.use_motion_blur = False
 sc.render.image_settings.file_format = 'PNG'
-sc.render.filepath = "//render/WomanSuckedOut_v002_####"
+sc.render.filepath = "####"
 if not sc.sequence_editor: sc.sequence_editor_create()
 se = sc.sequence_editor
 strips = getattr(se, "strips", None) or se.sequences

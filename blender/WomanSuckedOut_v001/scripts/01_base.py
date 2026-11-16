@@ -35,7 +35,7 @@ sc.timeline_markers.clear()
 # passengers: drop the skin-tight sport-suit variant (reads as a mannequin) and the hero row (row 5 left) + HB's seat (6L0)
 for a in [o for o in D.collections["PASSENGERS"].objects if o.type == 'ARMATURE']:
     nm = a.name
-    if nm.startswith("PE") or nm.endswith("05L0") or nm.endswith("05L1") or nm.endswith("06L0") or nm.endswith("06L1"):
+    if nm.startswith("PE") or nm.endswith("05L0") or nm.endswith("05L1") or nm.endswith("06L0") or nm.endswith("06L1") or nm.endswith("05R0") or nm.endswith("05R1"):   # 05R: S11/S13 camera seat
         kill(a)
 for o in list(D.collections["PASSENGERS"].objects):
     if o.type == 'MESH' and o.parent is None: D.objects.remove(o, do_unlink=True)
