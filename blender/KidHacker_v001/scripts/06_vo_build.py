@@ -491,7 +491,7 @@ def kid_lib_shots():
     # S16 the password was so easy: close-up, she leans back with a pleased look (head tilt), hands to the desk
     kid_block("S16", lambda u: "keys" if u < 0.25 else "desk", lambda u: 10 - 10 * min(1, u / 0.5), lambda u: (6 - 10 * min(1, u / 0.5) + breath(u, 1.2), -8 * min(1, u / 0.5)), back_fn=lambda u: 0.02 * min(1, u / 0.5), twist_fn=lambda u: -6 * min(1, u / 0.5))
     hf = head_pt("Kid", WIN["S16"][1])
-    cam_shot("Cam_S16", "S16", [(0, hf + Vector((-0.22, -0.48, 0.01)), hf + Vector((0, 0, -0.05))), (1, hf + Vector((-0.14, -0.42, 0.01)), hf + Vector((0, 0, -0.04)))], lens=50)
+    cam_shot("Cam_S16", "S16", [(0, hf + Vector((-0.38, -0.36, 0.02)), hf + Vector((0, 0, -0.04))), (1, hf + Vector((-0.31, -0.32, 0.02)), hf + Vector((0, 0, -0.035)))], lens=50)   # 3/4, not dead-front
     # S17 she thought it was a game: over her right shoulder, mouse clicks, tiles pop
     kid_block("S17", "mouse", lambda u: 10, lambda u: (12 + breath(u, 1.5), 0), bob=0.004)
     cam_shot("Cam_S17", "S17", [(0, (GX - 0.40, 0.30, 1.22), sp + Vector((0, 0, 0.02))), (1, (GX - 0.30, 0.14, 1.16), sp + Vector((0, 0, 0.02)))], lens=32)
@@ -543,12 +543,12 @@ def office_shots():
     cam_shot("Cam_S20", "S20", [(0, (OX - 0.75, -1.55, 1.45), hb + Vector((0.0, 0.0, -0.1))), (1, (OX - 0.55, -1.40, 1.40), hb + Vector((0.0, 0.0, -0.1)))], lens=30)
     # S21 to find the hacker: agent B stands at the end of the pinboard, 3/4 to camera, scanning it (head turns along the strings)
     f0, f1 = WIN["S21"]; PL = P1LEN["S21"]
-    p = Vector((OX + 1.35, -1.85, 0)); yb = -50
+    p = Vector((OX + 1.35, -1.85, 0)); yb = -112   # 3/4 toward the camera, board on his left
     Rz = Matrix.Rotation(R_(yb), 3, 'Z')
     for fx in FR(f0, f1, 12):
         u = (fx - f0) / PL
         Hb.key_root(fx, Vector((p.x, p.y, Hb.root_head.z)), yaw=yb)
-        Hb.key_spine(fx, flex=2, twist=-6 + 8 * u, head=(-4 + breath(u, 1), -18 + 30 * u))
+        Hb.key_spine(fx, flex=2, twist=8 - 10 * u, head=(-4 + breath(u, 1), 22 - 26 * u))   # glances from the board toward camera
         for s_ in "LR":
             sx = 1 if s_ == "L" else -1
             foot_at("AgentB", s_, fx, p + Rz @ Vector((sx * 0.12, 0.0, 0.07)), yaw=yb)
@@ -582,11 +582,11 @@ def walk_char(cid, H, path, yaw_fn, f0, f1, still=False):
             sw = (0.12 if s == "R" else -0.12) * math.sin(ph)
             hang(cid, H, s, fx, p, yaw_fn(fx), sw)
 
-def hang(cid, H, s, fx, p, yaw, swing):
+def hang(cid, H, s, fx, p, yaw, swing, bend=0.0):
     sx = 1 if s == "L" else -1
     Rz = Matrix.Rotation(R_(yaw), 3, 'Z')
     sh = H.sh[s] - H.root_head
-    off = Vector((sh.x + 0.045 * sx, sh.y - 0.04 - swing, sh.z - H.arm_len * 0.93 + abs(swing) * 0.25))
+    off = Vector((sh.x + 0.045 * sx, sh.y - 0.04 - swing - 0.16 * bend, sh.z - H.arm_len * 0.93 + abs(swing) * 0.25 + 0.14 * bend))
     W = Vector((p.x, p.y, H.root_head.z)) + Rz @ off
     place_hand(RIGS[cid], s, fx, W, Rz @ Vector((-sx, 0, 0)), Rz @ Vector((0, -0.25 - swing, -1)))
     fingers(cid, s, fx, "relaxed")
@@ -603,20 +603,23 @@ def arrival_shots():
     walk_char("AgentC", Hc, lambda fx: Vector((1.55, 6.2 - 2.6 * (fx - f0) / PL, 0)), lambda fx: 0, f0, f1)
     cam_shot("Cam_S22", "S22", [(0, (0.3, 0.4, 1.25), (1.15, 4.0, 1.25)), (1, (0.45, 0.8, 1.3), (1.15, 3.6, 1.35))], lens=30)
     kid_block("S22", "mouse", lambda u: 10, lambda u: (12, 0))
-    # S23 they were shocked: medium two-shot, they stop dead, heads tilt forward/down toward the child
-    f0, f1 = WIN["S23"]; PL = P1LEN["S23"]
-    for cid, H, x in (("AgentB", Hb, 0.75), ("AgentC", Hc, 1.55)):
-        p = Vector((x, 3.0, 0))
-        for fx in FR(f0, f1, 10):
-            u = (fx - f0) / PL; jerk = min(1, u / 0.25)
-            H.key_root(fx, Vector((p.x, p.y + 0.04 * jerk, H.root_head.z)), yaw=8 if cid == "AgentB" else -8, flex=3 * jerk)
-            H.key_spine(fx, flex=-4 * jerk, head=(12 * jerk + breath(u, 0.8), 0))
-            for s in "LR":
-                sx = 1 if s == "L" else -1; Rz = Matrix.Rotation(R_(8 if cid == "AgentB" else -8), 3, 'Z')
-                foot_at(cid, s, fx, p + Rz @ Vector((sx * 0.13, 0, 0.07)), yaw=8 if cid == "AgentB" else -8)
-                knee_pole(cid, s, fx, p + Vector((sx * 0.14, -0.8, 0.6)))
-                hang(cid, H, s, fx, p, 8 if cid == "AgentB" else -8, 0.0)
-            key_jaw(cid, fx, 6 * jerk)
+    # S23 they were shocked (v002b): they walk in, slow to a stop; B looks down at the child, C glances round the room; elbows bent
+    f0, f1 = WIN["S23"]; PL = P1LEN["S23"]; fm = f0 + int(0.45 * (f1 - f0))
+    for cid, H, x, y0 in (("AgentB", Hb, 0.75, 3.55), ("AgentC", Hc, 1.55, 3.75)):
+        y1 = y0 - 0.55
+        walk_char(cid, H, lambda fx, x=x, y0=y0, y1=y1: Vector((x, y0 + (y1 - y0) * (1 - (1 - (fx - f0) / max(1, fm - f0)) ** 2), 0)), lambda fx: 0, f0, fm)
+        p = Vector((x, y1, 0))
+        for fx in FR(fm + 1, f1, 6):
+            u = (fx - fm) / max(1, f1 - fm)
+            look = (12 * min(1, u * 2) + breath(u, 0.8), 0) if cid == "AgentB" else (4, 30 * math.sin(u * math.pi * 1.2))
+            H.key_root(fx, Vector((p.x, p.y, H.root_head.z)), yaw=0, flex=2)
+            H.key_spine(fx, flex=-3, twist=(look[1] * 0.4 if cid == "AgentC" else 0), head=look)
+            for s_ in "LR":
+                sx = 1 if s_ == "L" else -1
+                foot_at(cid, s_, fx, p + Vector((sx * 0.13, 0, 0.07)))
+                knee_pole(cid, s_, fx, p + Vector((sx * 0.14, -0.8, 0.6)))
+                hang(cid, H, s_, fx, p, 0, 0.0, bend=0.6)
+            key_jaw(cid, fx, 5 * min(1, u * 2))
     Lf = bpy.data.lights.new("ArrivalFill", 'AREA'); Lf.energy = 30; Lf.size = 1.5; Lf.color = (0.8, 0.88, 1.0)
     lf = bpy.data.objects.new("ArrivalFill", Lf); sc.collection.objects.link(lf); lf.location = (1.15, 1.4, 2.0)
     lf.rotation_euler = (Vector((1.15, 3.0, 1.6)) - lf.location).to_track_quat('-Z', 'Y').to_euler(); show_only(lf, [WIN["S22"], WIN["S23"]])

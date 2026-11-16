@@ -253,18 +253,67 @@ for (b0, b1, b2, b3) in _boxes:
     if _acc is None: _acc = mul
     else:
         mx_ = _nt.nodes.new("ShaderNodeMath"); mx_.operation = 'MAXIMUM'; _nt.links.new(_acc.outputs[0], mx_.inputs[0]); _nt.links.new(mul.outputs[0], mx_.inputs[1]); _acc = mx_
+_inv = _nt.nodes.new("ShaderNodeMath"); _inv.operation = 'SUBTRACT'; _inv.inputs[0].default_value = 1.0; _nt.links.new(_dt.outputs['Alpha'], _inv.inputs[1])
+_fac = _nt.nodes.new("ShaderNodeMath"); _fac.operation = 'MAXIMUM'; _nt.links.new(_acc.outputs[0], _fac.inputs[0]); _nt.links.new(_inv.outputs[0], _fac.inputs[1])
+_acc = _fac   # patch inside the boxes AND wherever the texture is transparent (white texels)
 for lk in list(_dt.outputs['Color'].links):
     mc = _nt.nodes.new('ShaderNodeMix'); mc.data_type = 'RGBA'; mc.name = "NostrilPatch"
-    _nt.links.new(_acc.outputs[0], mc.inputs['Factor']); _nt.links.new(_dt.outputs['Color'], mc.inputs['A']); mc.inputs["B"].default_value = (*(_skin * 0.84).tolist(), 1)
+    _nt.links.new(_acc.outputs[0], mc.inputs['Factor']); _nt.links.new(_dt.outputs['Color'], mc.inputs['A']); mc.inputs["B"].default_value = (*(_skin * 0.58).tolist(), 1)
     _nt.links.new(mc.outputs['Result'], lk.to_socket)
-for lk in list(_dt.outputs['Alpha'].links):
-    ma = _nt.nodes.new('ShaderNodeMath'); ma.operation = 'MAXIMUM'; _nt.links.new(_dt.outputs['Alpha'], ma.inputs[0]); _nt.links.new(_acc.outputs[0], ma.inputs[1])
-    _nt.links.new(ma.outputs[0], lk.to_socket)
+for lk in list(_dt.outputs['Alpha'].links):   # skin is opaque: the texture alpha opened see-through specks beside the nose
+    sock = lk.to_socket; _nt.links.remove(lk); sock.default_value = 1.0
 _E = bpy.data.objects["Kid.high-poly"]
-for _v in _E.data.vertices: _v.co.y += 0.002; _v.co.z += 0.001
+for _v in _E.data.vertices: _v.co.y += 0.002; _v.co.z += 0.001   # (kept) then scaled 0.87 about each eye below
 if _E.data.shape_keys:
     for _kb in _E.data.shape_keys.key_blocks:
         for _d in _kb.data: _d.co.y += 0.002; _d.co.z += 0.001
+# v002b (director): no faceting at full quality, smaller eyes with less white, slightly lowered upper lids, soft brows, less waxy skin
+for _n in ("Kid.long01", "Kid.female_casualsuit01", "Kid.eyebrow001"):
+    _o = bpy.data.objects[_n]
+    for _p in _o.data.polygons: _p.use_smooth = True
+    for _md in _o.modifiers:
+        if _md.type == 'SUBSURF': _md.render_levels = 2; _md.levels = 1
+from mathutils import Vector as _V
+_E = bpy.data.objects["Kid.high-poly"]
+_ctr = {}
+for _sd in (1, -1):
+    _vs = [v for v in _E.data.vertices if v.co.x * _sd > 0]
+    _c = sum((v.co for v in _vs), _V()) / len(_vs); _ctr[_sd] = _c.copy()
+    for v in _vs: v.co = _c + (v.co - _c) * 0.87 + _V((0, -0.001, 0))
+for n in _E.active_material.node_tree.nodes:
+    if n.type == 'GROUP' and "IrisToEyeWhiteRelation" in n.inputs: n.inputs["IrisToEyeWhiteRelation"].default_value = 0.46
+# upper lids: new shape key on the body, a soft 2.5 mm drop of the skin just above each eye (front of the face only)
+_kb = _B.data.shape_keys.key_blocks
+_rest = [_kb[0].data[i].co.copy() for i in range(len(_B.data.vertices))]
+for _k in _kb[1:]:
+    if _k.value and not _k.mute:
+        for i, d in enumerate(_k.data): _rest[i] += _k.value * (d.co - _kb[0].data[i].co)
+_lid = _B.shape_key_add(name="LidDrop", from_mix=False); _nlid = 0
+for i, co in enumerate(_rest):
+    for _sd, c in _ctr.items():
+        dx, dz = co.x - c.x, co.z - c.z; r = (dx * dx + (dz * 0.8) ** 2) ** 0.5
+        if r < 0.021 and dz > 0.004 and co.y < c.y - 0.002:
+            f_ = 1 - (r / 0.021) ** 2
+            _lid.data[i].co = _kb[0].data[i].co + _V((0, 0, -0.0025 * f_)); _nlid += 1
+_lid.value = 1.0
+print("LIDDROP", _nlid)
+# brows: thicker, softer brown
+_BR = bpy.data.objects["Kid.eyebrow001"]
+for _sd in (1, -1):
+    _vs = [v for v in _BR.data.vertices if v.co.x * _sd > 0]
+    _c = sum((v.co for v in _vs), _V()) / len(_vs)
+    for v in _vs: v.co.z = _c.z + (v.co.z - _c.z) * 1.55
+tint_tex(_BR, (0.55, 0.38, 0.25))
+# skin: warmer, less waxy (less subsurface, a little rougher)
+for m in _B.data.materials[:1]:
+    for nt in [m.node_tree] + [x.node_tree for x in m.node_tree.nodes if x.type == 'GROUP' and x.node_tree]:
+        for nd in nt.nodes:
+            if nd.name == "WarmSkin": nd.inputs['B'].default_value = (1.0, 0.74, 0.58, 1)
+            if nd.type == 'BSDF_PRINCIPLED':
+                nd.inputs["Roughness"].default_value = max(0.55, nd.inputs["Roughness"].default_value)
+                if not nd.inputs["Subsurface Weight"].links: nd.inputs["Subsurface Weight"].default_value = min(0.12, nd.inputs["Subsurface Weight"].default_value)
+                print("SKINBSDF", nt.name, nd.inputs["Subsurface Weight"].default_value, bool(nd.inputs["Subsurface Weight"].links))
+            if nd.name == "SSSStrength" and hasattr(nd, "outputs") and nd.type == 'VALUE': nd.outputs[0].default_value = min(0.12, nd.outputs[0].default_value)
 # eye fix on every EnhancedEye group
 for ng in list(bpy.data.node_groups):
     if ng.name.startswith("EnhancedEye") and "CorneaTransparentMix" not in ng.nodes:
