@@ -39,7 +39,7 @@ ConnectB21, branch `claude/connectB21-dog-buried-alive`. Phase 2 of `blender/bri
   through a body, no arm behind the back (`review/limb_check.json`).
 - `clip_scan` (step 6): two short ranges left, f91–97 (Dad's first walk steps in G03, forearm against his hip) and the single
   frame f1543 (Y20, Dad's hands rising); both tiny in a wide frame (`review/clip_scan.json`).
-- `qa_check` (`review/qa_check.json`, run on the previous build with the same staging): CAMJUMP = the 18 hard cuts;
+- `qa_check` (`review/qa_check.json`, run on the previous build with the same staging): CAMJUMP = only at the 17 hard cuts between the 18 shots;
   PROPMOVE = the falling dirt clods; EMPTY = dog/car shots (the check only counts human characters); FILL = the render-hidden
   pocket cutter near the U10/U11 lens (renders clean); FACEPRESS = Mom's hand-to-mouth in Y06/Y07 (8 cm off the face).
 - Camera: a scan of the baked camera found no in-shot jump (after fixing a ±180° Euler wrap in Y15).
