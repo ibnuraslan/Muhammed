@@ -55,10 +55,10 @@ def stand(H, f, pos=(0, 0), yaw=0.0, flex=4, spine=4, twist=0.0, head=(4, 0), si
     fp = feet or (0, 0)
     for s in "LR": H.key_foot(s, f, H.foot_xy(s, Vector(fp), yaw), yaw)
 
-def arms_hang(H, f, sway=0.0):
+def arms_hang(H, f, sway=0.0, out=0.08):
     for s, sx in (("L", 1), ("R", -1)):
         sh = H.r.BN["upperarm01." + s].head_local
-        W = Vector((sh.x + 0.05 * sx, sh.y - 0.03 + sway * sx, sh.z - 0.58))
+        W = Vector((sh.x + out * sx, sh.y - 0.03 + sway * sx, sh.z - 0.58))
         H.key_hand(s, f, W, Vector((0, -0.12, -1)), Vector((-sx, 0.0, 0)), pole=W + Vector((0.3 * sx, 0.5, 0.25)))
         apply_pose(H.r.o, s, "relaxed", f)
 
@@ -243,7 +243,7 @@ OMEGA = 2 * math.pi * 0.5                                              # rad/s (
 def theta(f, ph=0.0): return ph + OMEGA * (f - FA_CR) / FPS            # 0 = grip toward the worker, 90 deg = bottom
 FRAMES_CR = list(range(FA_CR - 1, FB_CR + 2))
 for n_ in [n for n in ("W1", "W2", "W3", "W4", "W5", "W6") if n not in CREW]: put_ranges(n_, [])      # unused workers parked off-set for the whole film
-for i in range(NJ):
+for i in sorted(CREW.values()):          # unmanned cranks (jacks 3 and 4) stay still
     g = OB["CrankGrip.%d" % i]; P = OB["CrankPivot.%d" % i]; ax_ = Vector(g["axle"]); r_ = g["radius"]
     for f in FRAMES_CR:
         th = theta(f)
@@ -411,7 +411,7 @@ camshot("S12", [(0, Vector((2.5, -4.6, 1.3)), Vector((0.5, 0.3, 1.6)), 26), (1, 
 
 # ================================================================== S13 / S14: facade on its new foundation, crane over the roof
 camshot("S13", [(0, Vector((-4.5, -9.0, 0.8)), Vector((0, 0, 6.0)), 22), (1, Vector((-4.0, -8.5, 0.9)), Vector((0, 0, 11.0)), 22)])
-camshot("S14", [(0, Vector((-9.0, -16.0, 12.0)), Vector((0, 4, 19.0)), 24), (1, Vector((-8.0, -15.0, 22.0)), Vector((0, 30, 30.0)), 24)])
+camshot("S14", [(0, Vector((-8.0, 30.0, 10.0)), Vector((0, 8, 17.0)), 24), (1, Vector((-6.0, 27.0, 24.0)), Vector((0, -10, 26.0)), 24)])   # from behind: the sign (front face) never in frame
 
 # ================================================================== S15: swamp aerial | S16: 1850s town aerial with chimney smoke
 camshot("S15", [(0, Vector((600, -70, 32)), Vector((600, 40, 0)), 30), (1, Vector((600, -40, 26)), Vector((600, 60, 0)), 30)])
@@ -430,7 +430,7 @@ fa, fb = f0("S17"), fx("S17")
 put_ranges("TownMan", [(fa, fb, (X0 - 1.5, 26, 0), 0), (f0("S18"), fx("S18"), (X0 + 3.5, 34, 0), 90)])
 pth = lambda f: Vector((0, -0.9 * (f - fa) / FPS, 0))
 TM.walk(pth, lambda f: 0.0, fa, fb, stride=0.6, lift=0.09, bob=0.02, lean=6)
-def walk_arms(H, fa, fb, path, stride=0.6, step=2, amp=0.09):
+def walk_arms(H, fa, fb, path, stride=0.6, step=2, amp=0.09, out=0.06):
     d = 0.0; prev = path(fa)
     for f in range(fa, fb + 1):
         p = path(f); d += (p - prev).length; prev = p
@@ -438,11 +438,11 @@ def walk_arms(H, fa, fb, path, stride=0.6, step=2, amp=0.09):
         ph = math.sin(2 * math.pi * d / stride)
         for s, sx, sg in (("L", 1, 1), ("R", -1, -1)):
             sh = H.r.BN["upperarm01." + s].head_local
-            W = Vector((p.x + sh.x + 0.06 * sx, p.y + sh.y - 0.02 - amp * ph * sg, sh.z - 0.6))
+            W = Vector((p.x + sh.x + out * sx, p.y + sh.y - 0.02 - amp * ph * sg, sh.z - 0.6))
             H.key_hand(s, f, W, Vector((0, -0.15 * ph * sg, -1)), Vector((-sx, 0, 0)), pole=W + Vector((0.3 * sx, 0.5, 0.3)))
     for s in "LR": apply_pose(H.r.o, s, "relaxed", fa)
 walk_arms(TM, fa, fb, pth); face(TM, fa, 0.0, -7); blinks(TM, fa, fb)
-put_ranges("TownWoman", [(f0("S19"), f1("S19"), (X0 - 1.0, 23.5, 0), 200), (f0("S20"), fx("S20"), (X0 - 2.2, 26.5, 0), 180)])
+put_ranges("TownWoman", [(f0("S19"), f1("S19"), (X0 - 1.0, 23.5, 0), 200), (f0("S20"), fx("S20"), (X0 - 2.2, 28.0, 0), 0)])
 pthw = lambda f: Vector((0, -0.7 * (f - fa) / FPS, 0))
 
 camshot("S17", [(0, Vector((X0 + 0.6, 19.0, 1.5)), Vector((X0 - 1.5, 26, 1.3)), 34), (1, Vector((X0 + 0.5, 19.6, 1.5)), Vector((X0 - 1.5, 26, 1.3)), 34)])
@@ -473,13 +473,11 @@ for k, f in enumerate(frs(fa + 20, fb, 30)):
 arms_hang(SM, fa)
 ev(fa + 21)
 for f in frs(fa + 20, fb, 4):
-    ev(f); M_ = SM.r.o.matrix_world
-    ch_ = SM.r.PB["spine02"]; chest = M_ @ (ch_.head.lerp(ch_.tail, 0.5)); fw_ = (M_.to_3x3() @ (ch_.matrix.to_3x3() @ Vector((0, 0, -1)))).normalized()
-    fw_ = (M_.to_3x3() @ Vector((0, -1, 0))).normalized() if fw_.length < 0.5 else fw_
-    fwd = (M_.to_3x3() @ Vector((0, -1, 0))).normalized()
-    place_hand(SM.r.o, "R", f, chest + fwd * 0.16 + Vector((0, 0, 0.06)), -fwd, Vector((0, 0, 1)).cross(fwd).normalized() * -1 + Vector((0, 0, 0.3)))
-    kn = M_ @ SM.r.PB["lowerleg01.L"].head + Vector((0, 0, 0.09)) + fwd * 0.02
-    place_hand(SM.r.o, "L", f, kn, Vector((0, 0, -1)), fwd)
+    ev(f); M_ = SM.r.o.matrix_world; fwd = (M_.to_3x3() @ Vector((0, -1, 0))).normalized(); up = Vector((0, 0, 1))
+    for s_ in "LR":
+        kn = M_ @ SM.r.PB["lowerleg01." + s_].head
+        nrm = (-fwd * 0.55 - up * 0.85).normalized()
+        place_hand(SM.r.o, s_, f, kn + fwd * 0.11 + up * 0.09, nrm, (fwd * 0.25 - up).normalized(), skin=0.02)
 apply_pose(SM.r.o, "R", "relaxed", fa + 20); apply_pose(SM.r.o, "L", "relaxed", fa + 20)
 for s, sx in (("L", 1), ("R", -1)):
     key_pole(SM, s, fa, SM.r.BN["upperarm01." + s].head_local + Vector((sx * 0.45, 0.2, -0.45)))
@@ -489,7 +487,7 @@ camshot("S19", [(0, SP + Vector((1.6, -3.0, 1.35)), SP + Vector((0, 0, 1.15)), 3
 fa, fb = f0("S20"), fx("S20")
 horse_head(fa, 0, -4); horse_head(fa + 50, -4, 18); horse_head(fb, -6, 22)
 pthw2 = lambda f: Vector((0, -0.8 * (f - fa) / FPS, 0))
-TWn.walk(pthw2, lambda f: 0.0, fa, fb, stride=0.55, lift=0.08, bob=0.02, lean=5); walk_arms(TWn, fa, fb, pthw2, stride=0.55)
+TWn.walk(pthw2, lambda f: 0.0, fa, fb, stride=0.55, lift=0.08, bob=0.02, lean=5); walk_arms(TWn, fa, fb, pthw2, stride=0.55, out=0.13)
 camshot("S20", [(0, Vector((X0 - 5.5, 22, 1.8)), Vector((X0 + 0.5, 33, 1.3)), 26), (1, Vector((X0 - 4.5, 22, 1.8)), Vector((X0 + 1.0, 33, 1.3)), 26)])
 
 # ================================================================== S21: rise from the water up the new foundation | S22: modern skyline
