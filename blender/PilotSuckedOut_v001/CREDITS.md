@@ -13,3 +13,4 @@
 | Cockpit set, sky dome, farmland ground, sun | procedural, from NoPilotPlane_v011 (`NoPilotPlane_v001/scripts/02_build_set.py`) | ours |
 | Nose liner, cloud clusters, runway, grass, hills, landing gear, papers | procedural (`scripts/02_sets.py`, `03_shots.py`) | ours |
 | DA KRAS FILMS logo | `blender/assets/brand/` | ours |
+| Trees and shrubs on the landing field | Poly Haven "Island Tree 01" (Rob Tuytel, Rico Cilliers), "Shrub 01" (Rico Cilliers) | CC0 |

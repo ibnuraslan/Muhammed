@@ -136,6 +136,57 @@ h.location = L0; h.data.materials.append(M_hill)
 bpy.ops.object.shade_smooth()
 for cc in list(h.users_collection): cc.objects.unlink(h)
 LC.objects.link(h)
+# dress the landing field: Poly Haven trees and shrubs (CC0) in lines and clumps, runway edge lights
+PH = "/home/user/work17/ph"
+TP = coll("LAND_PROTO"); TP.hide_render = False
+protos = []
+for pid in ("island_tree_01", "shrub_01"):
+    with bpy.data.libraries.load(f"{PH}/{pid}/{pid}_1k.blend") as (src, dst):
+        dst.objects = list(src.objects)
+    pc = D.collections.new("PROTO_" + pid)
+    for o in dst.objects:
+        if o and o.type == 'MESH': pc.objects.link(o); o.location = (0, 0, 0)
+    protos.append((pid, pc))
+bpy.ops.file.pack_all()
+random.seed(11)
+def inst(pc, loc, scale, rotz):
+    e = D.objects.new("I_" + pc.name, None); e.instance_type = 'COLLECTION'; e.instance_collection = pc
+    e.location = loc; e.scale = (scale,) * 3; e.rotation_euler = (0, 0, rotz); LC.objects.link(e)
+tree_pc, shrub_pc = protos[0][1], protos[1][1]
+def hz(x, y):
+    z = 0.0
+    for cx, cy, hh, rr in cent:
+        d2 = ((x - cx) ** 2 + (y - cy) ** 2) / rr ** 2
+        if d2 < 9: z += hh * math.exp(-d2)
+    return z * min(1.0, max(0.0, (abs(y) - 250) / 500.0)) - 0.5
+for side in (-1, 1):                     # tree lines along the field edges and clumps on the near hills
+    for i in range(70):
+        x = random.uniform(-1500, 1500); y = side * random.uniform(75, 260)
+        inst(tree_pc, L0 + Vector((x, y, hz(x, y))), random.uniform(2.6, 4.0), random.uniform(0, 6.28))
+    for i in range(90):
+        x = random.uniform(-1200, 1200); y = side * random.uniform(45, 200)
+        if side < 0 and 240 < x < 290 and y > -75: continue          # keep the van and its logo clear
+        inst(shrub_pc, L0 + Vector((x, y, hz(x, y))), random.uniform(2.5, 4.5), random.uniform(0, 6.28))
+for x, y in ((243, -52), (249, -46), (278, -50), (284, -44), (-310, -60), (-285, -66), (215, -40), (205, -34)):
+    inst(shrub_pc, L0 + Vector((x, y, 0)), random.uniform(2.5, 3.5), random.uniform(0, 6.28))
+for i in range(120):
+    x = random.uniform(-3000, 3000); y = random.choice((-1, 1)) * random.uniform(500, 2500)
+    inst(tree_pc, L0 + Vector((x, y, hz(x, y))), random.uniform(3.5, 6.0), random.uniform(0, 6.28))
+for k in range(2):                       # keep protos out of the scene centre
+    pass
+M_post = mat("M_light_post", (0.85, 0.75, 0.2), 0.4); M_lamp = mat("M_light_lamp", (1.0, 0.95, 0.8), 0.2, emit=3.0)
+lm_ = bmesh.new()
+for x in range(-1180, 1181, 60):
+    for sd in (-1, 1):
+        bmesh.ops.create_cone(lm_, cap_ends=True, segments=10, radius1=0.09, radius2=0.09, depth=0.35, matrix=Matrix.Translation((x, sd * 24.5, 0.18)))
+me = D.meshes.new("EDGE_LIGHTS"); lm_.to_mesh(me); lm_.free()
+el = D.objects.new("EDGE_LIGHTS", me); el.location = L0; me.materials.append(M_post); LC.objects.link(el)
+lm_ = bmesh.new()
+for x in range(-1180, 1181, 60):
+    for sd in (-1, 1):
+        bmesh.ops.create_uvsphere(lm_, u_segments=10, v_segments=6, radius=0.11, matrix=Matrix.Translation((x, sd * 24.5, 0.4)))
+me = D.meshes.new("EDGE_LAMPS"); lm_.to_mesh(me); lm_.free()
+ek = D.objects.new("EDGE_LAMPS", me); ek.location = L0; me.materials.append(M_lamp); LC.objects.link(ek)
 # landing copy of the 737 (shares the mesh; landing shots look at its right side)
 al = ap.copy(); al.name = "Airliner_LAND"; al.data = ap.data; coll("LANDING").objects.link(al)
 al.location = L0 + Vector((0, 0, 0))
