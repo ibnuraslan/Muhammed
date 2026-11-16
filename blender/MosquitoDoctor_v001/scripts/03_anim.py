@@ -39,7 +39,7 @@ sc.frame_set(0)
 BOYMESH = [D["Boy.body"], D["Boy.male_casualsuit03"]]
 BEDMESH = [o for o in D if o.name.startswith("low_Pillow_1_lagen") and o.users_collection[0] == sc.collection or o.name in ("low_Pillow_1_lagen_0",)]
 BEDMESH = [D["low_Pillow_1_lagen_0"], D["low_Pillow_1_pillow_0"]]
-def drape(name, x0, x1, y0, y1, bodies, base_z, nx=44, ny=52, lift=0.04, edge_drop=0.2, bed=None):
+def drape(name, x0, x1, y0, y1, bodies, base_z, nx=44, ny=52, lift=0.04, edge_drop=0.2, bed=None, iters=14):
     bm = bmesh.new(); vs = {}
     for i in range(nx + 1):
         for j in range(ny + 1):
@@ -48,7 +48,7 @@ def drape(name, x0, x1, y0, y1, bodies, base_z, nx=44, ny=52, lift=0.04, edge_dr
             inbed = bed is not None and bed[0] <= x <= bed[1] and bed[2] <= y <= bed[3]
             z = (h[0].z + lift) if h else (base_z + 0.015 if inbed else base_z - edge_drop)
             vs[i, j] = [x, y, max(z, base_z - edge_drop), (h[0].z + lift * 0.9) if h else (base_z + 0.015 if inbed else -9)]
-    for it in range(14):    # smooth (cloth-like), never below the surface
+    for it in range(iters):    # smooth (cloth-like), never below the surface
         new = {}
         for (i, j), v in vs.items():
             nb = [vs[k] for k in ((i - 1, j), (i + 1, j), (i, j - 1), (i, j + 1)) if k in vs]
@@ -420,9 +420,9 @@ for f in range(j0, j1 + 1, 40):
 key_vis(DBLANKET, 1, False); key_vis(DBLANKET, j0, True); key_vis(DBLANKET, j1 + 1, False)
 skin_tint("Doctor", j0, (1.0, 0.88, 0.45), 0.10); eye_white("Doctor", j0, (0.93, 0.87, 0.55))
 # empty desk shot 2621-2710: chair pushed back, notebook closed? (open notebook, pen down, vial on the desk)
-CH = D["DeskChair_pivot"]; CH.keyframe_insert("location", frame=1); CH.location.y += 0.45; CH.location.x += 0.55; CH.rotation_euler.z += math.radians(25)
+CH = D["DeskChair_pivot"]; CH.keyframe_insert("location", frame=1); CH.location.y += 0.40; CH.location.x -= 0.75; CH.rotation_euler.z += math.radians(25)
 CH.keyframe_insert("location", frame=2621); CH.keyframe_insert("rotation_euler", frame=2621)
-CH.location.y -= 0.45; CH.location.x -= 0.55; CH.rotation_euler.z -= math.radians(25); CH.keyframe_insert("location", frame=2620); CH.keyframe_insert("rotation_euler", frame=2620)
+CH.location.y -= 0.40; CH.location.x += 0.75; CH.rotation_euler.z -= math.radians(25); CH.keyframe_insert("location", frame=2620); CH.keyframe_insert("rotation_euler", frame=2620)
 CH.keyframe_insert("rotation_euler", frame=1)
 # ================================================================== K: colleagues at the desk; the vial held up
 k0, k1 = BLK["K"]
@@ -504,7 +504,7 @@ for n, side, by, hu in WARD_PAT:
     x0, x1 = (min(hx - side * 0.42, WX + side * 1.50), max(hx - side * 0.42, WX + side * 1.50))
     for c in D[n].children:            # shoes are under the blanket: hidden in the ward so they can't poke through
         if "shoes" in c.name: key_vis(c, l0, False)
-    wb, _ = drape("WardBlanket_" + n, x0, x1, by - 0.66, by + 0.66, [D[n + ".body"]] + [c for c in D[n].children if "suit" in c.name], MATT_Z, nx=40, ny=30, lift=0.05, bed=(WX + side * 2.5 - 0.95, WX + side * 2.5 + 0.95, by - 0.62, by + 0.62))
+    wb, _ = drape("WardBlanket_" + n, x0, x1, by - 0.66, by + 0.66, [D[n + ".body"]] + [c for c in D[n].children if "suit" in c.name], MATT_Z, nx=40, ny=30, lift=0.06, iters=45, bed=(WX + side * 2.5 - 0.95, WX + side * 2.5 + 0.95, by - 0.62, by + 0.62))
     WBL.append(wb)
 for n, side, by, hu in WARD_PAT:
     for f in list(range(l0, l1 + 1, 40)) + [l1]:
@@ -512,8 +512,8 @@ for n, side, by, hu in WARD_PAT:
 for wb in WBL: key_vis(wb, 1, False); key_vis(wb, l0, True)
 # nurse: stands in the aisle by the boy's bed, hands in front, looks at him, small weight shifts
 for k, f in enumerate(list(range(l0, l1 + 1, 30)) + [l1]):
-    stand("Nurse", f, 37.75, 1.52, yaw=0, spine=10, head=(22, -6 + 6 * math.sin(k * 0.8)), dz=-0.003 * math.sin(k * 1.7), hands=False)
-    hands_front("Nurse", f, V((37.75, 1.52, HUM["Nurse"].root_head.z - 0.02)), 0, flex=0)
+    stand("Nurse", f, 37.20, 1.50, yaw=0, spine=10, head=(22, -6 + 6 * math.sin(k * 0.8)), dz=-0.003 * math.sin(k * 1.7), hands=False)
+    hands_front("Nurse", f, V((37.20, 1.50, HUM["Nurse"].root_head.z - 0.02)), 0, flex=0)
 for n in ("Doctor",): key_vis(D[n], l0, False)
 print("ANIM all blocks done")
 sc["BLK"] = str(BLK)

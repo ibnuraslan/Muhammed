@@ -20,10 +20,10 @@ def add(a, o): return lambda f: a(f) + V(o)
 def smooth(x): x = max(0, min(1, x)); return x * x * (3 - 2 * x)
 # (name, f0, f1, aim_fn, cam_start, cam_end, lens, macro, relative)  relative: cam = aim + offset
 SH = [
- ("S01", 1, 100, mq, (0.065, -0.05, 0.03), (0.045, -0.035, 0.022), 50, True, True),
+ ("S01", 1, 100, mq, (0.12, -0.03, 0.05), (0.10, -0.02, 0.045), 60, True, True),
  ("S02", 101, 240, lambda f: headc("Boy", f), (0.48, 0.42, 0.42), (0.40, 0.35, 0.36), 40, False, True),
  ("S03", 241, 340, add(mq, (0, 0, 0.002)), (0.075, -0.012, 0.012), (0.065, 0.006, 0.012), 70, True, True),
- ("S04", 341, 440, add(mq, (0, 0, 0.002)), (0.065, 0.035, 0.03), (0.070, 0.015, 0.026), 60, True, True),
+ ("S04", 341, 440, add(mq, (0, 0, 0.002)), (0.075, -0.012, 0.018), (0.072, -0.004, 0.017), 60, True, True),
  ("S05", 441, 560, mix(lambda f: headc("Doctor", f), vialmid, 0.35), (-0.55, -0.32, -0.08), (-0.47, -0.26, -0.07), 35, False, True),
  ("S06", 561, 710, add(lambda f: obj("Mosquito", 600), (0, 0, 0.045)), (0.20, -0.36, 0.10), (0.18, -0.32, 0.09), 50, True, True),
  ("S07", 711, 830, fixed((1.47, 1.82, 0.98)), (1.02, 1.0, 1.38), (1.08, 1.12, 1.33), 30, False, False),
@@ -37,14 +37,14 @@ SH = [
  ("S15", 1851, 1940, lambda f: headc("Doctor", f), (0.06, -0.58, 0.0), (0.05, -0.47, 0.0), 50, False, True),
  ("S16", 1941, 2030, lambda f: eyes("Doctor", f), (0.02, -0.32, 0.02), (0.0, -0.25, 0.015), 50, True, True),
  ("S17", 2031, 2150, fixed((1.05, 2.20, 0.92)), (0.40, 1.86, 0.66), (0.46, 1.92, 0.63), 24, False, False),
- ("S18", 2151, 2270, fixed((0.75, 2.28, 0.08)), (0.0, 1.72, 0.58), (0.08, 1.80, 0.50), 30, False, False),
+ ("S18", 2151, 2270, fixed((0.82, 2.28, 0.62)), (0.02, 1.72, 0.56), (0.07, 1.76, 0.55), 22, False, False),
  ("S19", 2271, 2390, fixed((0.1, 2.15, 1.22)), (0.1, 0.75, 1.36), (0.1, 1.00, 1.31), 30, False, False),
  ("S20", 2391, 2510, fixed((0.1, 2.15, 1.17)), (0.1, 1.50, 1.24), (0.1, 1.64, 1.20), 35, False, False),
  ("S21", 2511, 2620, lambda f: headc("Doctor", f), (0.50, 0.40, 0.42), (0.42, 0.34, 0.36), 40, False, True),
  ("S22", 2621, 2710, fixed((1.45, 1.70, 0.82)), (0.98, 0.68, 1.30), (1.08, 0.84, 1.25), 26, False, False),
- ("S23", 2711, 2830, fixed((1.65, 2.0, 1.22)), (1.50, 0.70, 1.50), (1.56, 0.88, 1.45), 26, False, False),
+ ("S23", 2711, 2830, fixed((1.80, 2.05, 1.20)), (1.62, 0.30, 1.50), (1.66, 0.45, 1.46), 24, False, False),
  ("S24", 2831, 2950, fixed((1.18, 1.95, 1.12)), (1.02, 1.08, 0.96), (1.04, 1.16, 0.94), 30, False, False),
- ("S25", 2951, 3070, lambda f: V((38.35, 1.75, 0.60)).lerp(V((37.55, 1.05, 0.85)), smooth(max(0.0, (f - 3005) / 65))), (39.25, -1.05, 1.38), (39.12, -0.80, 1.34), 24, False, False),
+ ("S25", 2951, 3070, lambda f: V((37.75, 1.80, 0.70)).lerp(V((37.00, 1.50, 0.72)), smooth(max(0.0, (f - 3000) / 70))), (39.15, -1.05, 1.62), (38.35, -0.30, 1.65), 18, False, False),
  ("S26", 3071, 3190, lambda f: headc("Boy", f), (0.60, -0.32, 0.42), (0.50, -0.27, 0.36), 40, False, True),
 ]
 for m in list(sc.timeline_markers): sc.timeline_markers.remove(m)
@@ -65,7 +65,7 @@ for name, f0, f1, aim, c0, c1, lens, macro, rel in SH:
         cam.keyframe_insert("location", frame=f)
     tt = cam.constraints.new('TRACK_TO'); tt.target = a; tt.track_axis = 'TRACK_NEGATIVE_Z'; tt.up_axis = 'UP_Y'; tt.use_target_z = True
     cam.data.dof.use_dof = macro
-    if macro: cam.data.dof.focus_object = a; cam.data.dof.aperture_fstop = 11.0 if name == "S06" else 8.0
+    if macro: cam.data.dof.focus_object = a; cam.data.dof.aperture_fstop = {"S06": 11.0, "S01": 22.0, "S04": 16.0, "S03": 16.0}.get(name, 8.0)
     # catchlight: tiny point light near the lens, seen only in glossy reflections (eyes)
     L = bpy.data.objects.new("CATCH_" + name, bpy.data.lights.new("CATCH_" + name, 'POINT')); sc.collection.objects.link(L)
     L.data.energy = 1.5 if not macro else 0.3; L.data.shadow_soft_size = 0.02; L.parent = cam; L.location = (0.08, 0.10, 0)
