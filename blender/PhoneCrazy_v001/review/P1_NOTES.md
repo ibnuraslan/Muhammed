@@ -18,3 +18,14 @@
 - S10 crew seen from behind (they face the pit); they are not the subject of that shot.
 - S16 cross-section shows the excavator but no workers on top.
 - Excavator dig cycle is continuous (4.4 s) so any VO cut lands mid-action; bucket bites into the pit wall in S2 and S15 at the reference timing.
+
+## Director round 1 (Nov 16) applied: P1b
+1. Variety: S4, S7, S19 are now low reaction shots over the case, with the phone sharp in the foreground and faces behind (S4/S7 Foreman + Mate, S19 Foreman + Digger). DOF is off, so everything is sharp. The top-down phone close-ups drop from 11 to 8.
+2. Faces under hats: the S9 camera is lowered to chest height and chins are lifted (heads 0–6° down) in S5/S9. The hair meshes are removed under the hard hats, so no fringe or dark patch shows. Eye fix plus a camera catchlight (6 W) on all three; the catchlight is off in phone and water shots so it doesn't reflect on the screen or the water.
+3. S17: hats are re-seated from the eye bones (brim 3 cm above the eyes, bone-parented to the head, no gap). Mouth is barely parted (jaw 1.5°), no fringe.
+4. Clothing: solid shirt colour with a hard belt line from a per-vertex waist attribute, plus a dark 4 cm belt band. No gradient.
+5. Water: the edge is tucked under the bowl dirt (radius × 1.06, level surface). The whirlpool is a concave funnel with a dark throat and keyed spiral streaks. Specular is low (0.12), so there's no sky sheet.
+6. S15: the camera moves to the west rim, 3.5 m up. Nothing is within 3 m of the lens.
+7. S13: the crane ends east of the crew. No hats at the edge.
+8. Glitch tiles are rebuilt from bars, blocks and colour shifts on plain gradients only. No icon fragments.
+body_prop_cross on this build: 0 (Case, Phone, every 3rd frame).
