@@ -1,0 +1,247 @@
+{
+"visible_frames": [
+1,
+4,
+7,
+10,
+13,
+16,
+19,
+22,
+25,
+28,
+31,
+34,
+37,
+40,
+43,
+46,
+49,
+52,
+55,
+58,
+61,
+64,
+67,
+70,
+73,
+76,
+79,
+82,
+85,
+88,
+91,
+94,
+97,
+100,
+103,
+106,
+109,
+112,
+115,
+118,
+121,
+124,
+127,
+130,
+133,
+136,
+139,
+142,
+145,
+148,
+151,
+154,
+157,
+160,
+163,
+166,
+169,
+172,
+277,
+403
+],
+"frames": {
+"1": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"4": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"7": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"10": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"13": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"16": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"19": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"22": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"25": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"28": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"31": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"34": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"37": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"40": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"43": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"46": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"49": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"52": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"55": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"58": {
+"root|CoolerN2_Shell|VIS": 4
+},
+"61": {
+"root|CoolerN2_Shell|VIS": 6
+},
+"64": {
+"root|CoolerN2_Shell|VIS": 4,
+"root|CoolerHero_Shell|VIS": 4
+},
+"67": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"70": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"73": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"76": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"79": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"82": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"85": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"88": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"91": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"94": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"97": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"100": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"103": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"106": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"109": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"112": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"115": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"118": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"121": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"124": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"127": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"130": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"133": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"136": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"139": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"142": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"145": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"148": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"151": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"154": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"157": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"160": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"163": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"166": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"169": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"172": {
+"root|CoolerHero_Shell|VIS": 4
+},
+"277": {
+"upperleg02.L|CoolerHero|VIS": 1
+},
+"403": {
+"upperleg02.L|CoolerHero|VIS": 1
+}
+}
+}
