@@ -1,0 +1,85 @@
+{
+ "frames": {
+  "1815": {
+   "Boy": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1821": {
+   "Boy": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1827": {
+   "Boy": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1833": {
+   "Boy": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1839": {
+   "Boy": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1935": {
+   "Boy": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1941": {
+   "Boy": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1947": {
+   "Boy": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1953": {
+   "Boy": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1959": {
+   "Boy": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1965": {
+   "Boy": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}

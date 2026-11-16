@@ -24,13 +24,16 @@ The VO is 10 s shorter than the reference. S12 (top-down pile) and S21 (wide str
 - S22 (1785–1965): a closer, higher camera with a slow push. The boy stands at the bedside, and father and son hold hands palm to palm above his chest, in view the whole shot. The hospital walls and floor are deeper and the overhead fill is lower, with a warm key from the window side.
 
 ## Checks on the package (review/)
-Full-film checks ran on the package before the last S4 hand-path tweak; S4 (frames 325–427) was re-checked on the final package (`review/*_S4_recheck.json`): clip_scan 0 bad ranges, qa 0 flags, Glass crossings = the accepted thumb on the glass only. No other shot changed after the full run.
-- body_prop_cross: only the accepted contacts: S1 riding (1–76), S4 thumb on the glass (349–394), S9 fingertips on the drum (952–973), S19 fingertips on the box (1609–1693).
-- limb_check ARMBODY: upperarm01 points within 4 cm of the shoulder (known false positive) everywhere except S4 349–385 (the right forearm tucked to his side while he sips; hand and glass read clearly).
+The full-film checks ran on the package before the last S22 lens change (38→44 mm, camera only). S22 (1785–1966) was re-checked on the final package (`review/*_S22_recheck.json`): qa 0 flags, clip_scan 0 bad ranges, limb_check only the known shoulder false positive.
+- body_prop_cross:
+  - The accepted contacts: S1 riding (1–76), S4 thumb on the glass (349–394), S9 fingertips on the drum (952–973), S19 fingertips on the box (1609–1693).
+  - S22 1785–1966: the father's feet and pelvis meet the draped blanket, and a thigh meets the bed frame below the mattress. All of these are under the blanket or the mattress and outside the tight frame. Nothing pokes through on screen.
+- limb_check ARMBODY: upperarm01 points within 4 cm of the shoulder (known false positive), except S4 349–385, where the right forearm is tucked to his side while he sips (hand and glass read clearly).
 - clip_scan, explained ranges:
-  - 79–199 (S2 Neighbour), 259–319 (S3 Dad2), 433–613 (S5 Mother): relaxed hanging fingertips touch the side of the thigh; those hands are hidden behind the body, the bin and the kitchen island.
-  - 1789–1963 (S22 Father): his fingertips sit under the shirt fold beneath the boy's palm; on screen it reads as hand-on-hand (staging passed in Phase 1).
-- qa_check: EMPTY on the no-character shots (S7, S8, S11–S18 are set/prop shots by design), CAMJUMP = the 19 hard cuts, PROPMOVE = intended unaided motion: drums sliding off the tipping beds and tumbling in S11/S13 (1051–1201), the seep streaks growing in S16, the yard puddle growing in S17, the drips running down the tower in S18, the glass set down on the counter at the S4→S5 cut, BACKHEAD on single frames 1 and 565 (back views by design).
+  - 79–199 (S2 neighbour/mother) and 259–319 (S3 trash-can man): relaxed hanging fingertips touch the side of the thigh; those hands are hidden behind the body and the bin.
+  - 433–613 (S5): the same for the mother behind the island. The father's hand is at his mouth (493–499).
+  - The v002 S22 range is gone.
+- qa_check: EMPTY on the set/prop shots (S7, S8, S11–S18), CAMJUMP at the 19 hard cuts, and PROPMOVE for intended unaided motion: drums off the tipping beds (S11/S13), seep streaks (S16), the yard puddle (S17), tower drips (S18), and the glass on the counter at the S4→S5 cut. BACKHEAD on single frames 1 and 565.
 
 ## Known issues
 - S4 397–410: the left arm swings out briefly as the hand lifts to the chest.

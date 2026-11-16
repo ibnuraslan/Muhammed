@@ -232,5 +232,5 @@ for f in (fa, fe):
 arms_hang(BOY, fa); arms_hang(BOY, fe)
 for f in (fa, fe):
     place_hand(BOY.r.o, "R", f, HAND_P + Vector((0, CHAIR_SIDE * 0.03, 0.01)), Vector((0, -CHAIR_SIDE, 0)), Vector((HEAD_SGN * 0.35, 0, 1)).normalized())
-camshot("S22", [(0.0, (hip_w.x + HEAD_SGN * 0.6, bc.y - 1.2, 1.95), (hip_w.x + HEAD_SGN * 0.55, bc.y + 0.3, 0.84), 30),      # v002b: closer, looking down on the hands, slow push
-                (1.0, (hip_w.x + HEAD_SGN * 0.6, bc.y - 0.98, 1.88), (hip_w.x + HEAD_SGN * 0.55, bc.y + 0.3, 0.86), 33)])
+camshot("S22", [(0.0, (hip_w.x + HEAD_SGN * 0.6, bc.y - 1.2, 1.95), (hip_w.x + HEAD_SGN * 0.58, bc.y + 0.3, 0.86), 38),      # v002b: closer, looking down on the hands, slow push
+                (1.0, (hip_w.x + HEAD_SGN * 0.6, bc.y - 0.98, 1.88), (hip_w.x + HEAD_SGN * 0.58, bc.y + 0.3, 0.88), 44)])
