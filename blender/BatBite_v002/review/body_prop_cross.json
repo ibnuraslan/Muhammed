@@ -1,0 +1,2487 @@
+{
+"visible_frames": [
+385,
+388,
+391,
+394,
+397,
+400,
+403,
+406,
+409,
+412,
+415,
+460,
+463,
+466,
+469,
+472,
+475,
+478,
+481,
+484,
+487,
+490,
+493,
+601,
+604,
+607,
+610,
+613,
+616,
+619,
+622,
+625,
+628,
+631,
+634,
+637,
+640,
+643,
+646,
+1093,
+1096,
+1099,
+1102,
+1105,
+1108,
+1111,
+1114,
+1117,
+1120,
+1123,
+1126,
+1129,
+1132,
+1135,
+1138,
+1141,
+1144,
+1147,
+1150,
+1153,
+1156,
+1159,
+1162,
+1165,
+1168,
+1171,
+1174,
+1177,
+1180,
+1183,
+1186,
+1189,
+1192,
+1195,
+1198,
+1201,
+1204,
+1207,
+1210,
+1213,
+1216,
+1219,
+1222,
+1225,
+1228,
+1231,
+1234,
+1237
+],
+"frames": {
+"1": {
+"finger3-3.L|Clipboard|off": 6
+},
+"4": {
+"finger3-3.L|Clipboard|off": 6
+},
+"7": {
+"finger3-3.L|Clipboard|off": 6
+},
+"10": {
+"finger3-3.L|Clipboard|off": 6
+},
+"13": {
+"finger3-3.L|Clipboard|off": 6
+},
+"16": {
+"finger3-3.L|Clipboard|off": 6
+},
+"19": {
+"finger3-3.L|Clipboard|off": 6
+},
+"22": {
+"finger3-3.L|Clipboard|off": 6
+},
+"25": {
+"finger3-3.L|Clipboard|off": 6
+},
+"28": {
+"finger3-3.L|Clipboard|off": 6
+},
+"31": {
+"finger3-3.L|Clipboard|off": 6
+},
+"34": {
+"finger3-3.L|Clipboard|off": 6
+},
+"37": {
+"finger3-3.L|Clipboard|off": 6
+},
+"40": {
+"finger3-3.L|Clipboard|off": 6
+},
+"43": {
+"finger3-3.L|Clipboard|off": 6
+},
+"46": {
+"finger3-3.L|Clipboard|off": 6
+},
+"49": {
+"finger3-3.L|Clipboard|off": 6
+},
+"52": {
+"finger3-3.L|Clipboard|off": 6
+},
+"55": {
+"finger3-3.L|Clipboard|off": 6
+},
+"58": {
+"finger3-3.L|Clipboard|off": 6
+},
+"61": {
+"finger3-3.L|Clipboard|off": 6
+},
+"64": {
+"finger3-3.L|Clipboard|off": 6
+},
+"67": {
+"finger3-3.L|Clipboard|off": 6
+},
+"70": {
+"finger3-3.L|Clipboard|off": 6
+},
+"73": {
+"finger3-3.L|Clipboard|off": 6
+},
+"76": {
+"finger3-3.L|Clipboard|off": 6
+},
+"79": {
+"finger3-3.L|Clipboard|off": 6
+},
+"82": {
+"finger3-3.L|Clipboard|off": 6
+},
+"85": {
+"finger3-3.L|Clipboard|off": 6
+},
+"88": {
+"finger3-3.L|Clipboard|off": 6
+},
+"91": {
+"finger3-3.L|Clipboard|off": 6
+},
+"94": {
+"finger3-3.L|Clipboard|off": 6
+},
+"97": {
+"finger3-3.L|Clipboard|off": 6
+},
+"100": {
+"finger3-3.L|Clipboard|off": 6
+},
+"103": {
+"finger3-3.L|Clipboard|off": 6
+},
+"106": {
+"finger3-3.L|Clipboard|off": 6
+},
+"109": {
+"finger3-3.L|Clipboard|off": 6
+},
+"112": {
+"finger3-3.L|Clipboard|off": 6
+},
+"115": {
+"finger3-3.L|Clipboard|off": 6
+},
+"118": {
+"finger3-3.L|Clipboard|off": 6
+},
+"121": {
+"finger3-3.L|Clipboard|off": 6
+},
+"124": {
+"finger3-3.L|Clipboard|off": 6
+},
+"127": {
+"finger3-3.L|Clipboard|off": 6
+},
+"130": {
+"finger3-3.L|Clipboard|off": 6
+},
+"133": {
+"finger3-3.L|Clipboard|off": 6
+},
+"136": {
+"finger3-3.L|Clipboard|off": 6
+},
+"139": {
+"finger3-3.L|Clipboard|off": 6
+},
+"142": {
+"finger3-3.L|Clipboard|off": 6
+},
+"145": {
+"finger3-3.L|Clipboard|off": 6
+},
+"148": {
+"finger3-3.L|Clipboard|off": 6
+},
+"151": {
+"finger3-3.L|Clipboard|off": 6
+},
+"154": {
+"finger3-3.L|Clipboard|off": 6
+},
+"157": {
+"finger3-3.L|Clipboard|off": 6
+},
+"160": {
+"finger3-3.L|Clipboard|off": 6
+},
+"163": {
+"finger3-3.L|Clipboard|off": 6
+},
+"166": {
+"finger3-3.L|Clipboard|off": 6
+},
+"169": {
+"finger3-3.L|Clipboard|off": 6
+},
+"172": {
+"finger3-3.L|Clipboard|off": 6
+},
+"175": {
+"finger3-3.L|Clipboard|off": 6
+},
+"178": {
+"finger3-3.L|Clipboard|off": 6
+},
+"181": {
+"finger3-3.L|Clipboard|off": 6
+},
+"184": {
+"finger3-3.L|Clipboard|off": 6
+},
+"187": {
+"finger3-3.L|Clipboard|off": 6
+},
+"190": {
+"finger3-3.L|Clipboard|off": 6
+},
+"193": {
+"finger3-3.L|Clipboard|off": 6
+},
+"196": {
+"finger3-3.L|Clipboard|off": 6
+},
+"199": {
+"finger3-3.L|Clipboard|off": 6
+},
+"202": {
+"finger3-3.L|Clipboard|off": 6
+},
+"205": {
+"finger3-3.L|Clipboard|off": 6
+},
+"208": {
+"finger3-3.L|Clipboard|off": 6
+},
+"211": {
+"finger3-3.L|Clipboard|off": 6
+},
+"214": {
+"finger3-3.L|Clipboard|off": 6
+},
+"217": {
+"finger3-3.L|Clipboard|off": 6
+},
+"220": {
+"finger3-3.L|Clipboard|off": 6
+},
+"223": {
+"finger3-3.L|Clipboard|off": 6
+},
+"226": {
+"finger3-3.L|Clipboard|off": 6
+},
+"229": {
+"finger3-3.L|Clipboard|off": 6
+},
+"232": {
+"finger3-3.L|Clipboard|off": 6
+},
+"235": {
+"finger3-3.L|Clipboard|off": 6
+},
+"238": {
+"finger3-3.L|Clipboard|off": 6
+},
+"241": {
+"finger3-3.L|Clipboard|off": 6
+},
+"244": {
+"finger3-3.L|Clipboard|off": 6
+},
+"247": {
+"finger3-3.L|Clipboard|off": 6
+},
+"250": {
+"finger3-3.L|Clipboard|off": 6
+},
+"253": {
+"finger3-3.L|Clipboard|off": 6
+},
+"256": {
+"finger3-3.L|Clipboard|off": 6
+},
+"259": {
+"finger3-3.L|Clipboard|off": 6
+},
+"262": {
+"finger3-3.L|Clipboard|off": 6
+},
+"265": {
+"finger3-3.L|Clipboard|off": 6
+},
+"268": {
+"finger3-3.L|Clipboard|off": 6
+},
+"271": {
+"finger3-3.L|Clipboard|off": 6
+},
+"274": {
+"finger3-3.L|Clipboard|off": 6
+},
+"277": {
+"finger3-3.L|Clipboard|off": 6
+},
+"280": {
+"finger3-3.L|Clipboard|off": 6
+},
+"283": {
+"finger3-3.L|Clipboard|off": 6
+},
+"286": {
+"finger3-3.L|Clipboard|off": 6
+},
+"289": {
+"finger3-3.L|Clipboard|off": 6
+},
+"292": {
+"finger3-3.L|Clipboard|off": 6
+},
+"295": {
+"finger3-3.L|Clipboard|off": 6
+},
+"298": {
+"finger3-3.L|Clipboard|off": 6
+},
+"301": {
+"finger3-3.L|Clipboard|off": 6
+},
+"304": {
+"finger3-3.L|Clipboard|off": 6
+},
+"307": {
+"finger3-3.L|Clipboard|off": 6
+},
+"310": {
+"finger3-3.L|Clipboard|off": 6
+},
+"313": {
+"finger3-3.L|Clipboard|off": 6
+},
+"316": {
+"finger3-3.L|Clipboard|off": 6
+},
+"319": {
+"finger3-3.L|Clipboard|off": 6
+},
+"322": {
+"finger3-3.L|Clipboard|off": 6
+},
+"325": {
+"finger3-3.L|Clipboard|off": 6
+},
+"328": {
+"finger3-3.L|Clipboard|off": 6
+},
+"331": {
+"finger3-3.L|Clipboard|off": 6
+},
+"334": {
+"finger3-3.L|Clipboard|off": 6
+},
+"337": {
+"finger3-3.L|Clipboard|off": 6
+},
+"340": {
+"finger3-3.L|Clipboard|off": 6
+},
+"343": {
+"finger3-3.L|Clipboard|off": 6
+},
+"346": {
+"finger3-3.L|Clipboard|off": 6
+},
+"349": {
+"finger3-3.L|Clipboard|off": 6
+},
+"352": {
+"finger3-3.L|Clipboard|off": 6
+},
+"355": {
+"finger3-3.L|Clipboard|off": 6
+},
+"358": {
+"finger3-3.L|Clipboard|off": 6
+},
+"361": {
+"finger3-3.L|Clipboard|off": 6
+},
+"364": {
+"finger3-3.L|Clipboard|off": 6
+},
+"367": {
+"finger3-3.L|Clipboard|off": 6
+},
+"370": {
+"finger3-3.L|Clipboard|off": 6
+},
+"373": {
+"finger3-3.L|Clipboard|off": 6
+},
+"376": {
+"finger3-3.L|Clipboard|off": 6
+},
+"379": {
+"finger3-3.L|Clipboard|off": 6
+},
+"382": {
+"finger3-3.L|Clipboard|off": 6
+},
+"385": {
+"finger5-3.R|Bat|VIS": 11,
+"finger5-1.R|Bat|VIS": 17,
+"finger5-2.R|Bat|VIS": 22,
+"finger3-3.L|Clipboard|off": 6
+},
+"388": {
+"finger2-3.R|Bat|VIS": 25,
+"finger1-2.R|Bat|VIS": 17,
+"finger1-3.R|Bat|VIS": 25,
+"finger3-3.R|Bat|VIS": 7,
+"finger3-2.R|Bat|VIS": 7,
+"metacarpal1.R|Bat|VIS": 16,
+"finger1-1.R|Bat|VIS": 5,
+"metacarpal2.R|Bat|VIS": 5,
+"metacarpal3.R|Bat|VIS": 1,
+"finger2-2.R|Bat|VIS": 1,
+"finger2-1.R|Bat|VIS": 2,
+"finger3-1.R|Bat|VIS": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"391": {
+"finger2-1.R|Bat|VIS": 11,
+"finger2-3.R|Bat|VIS": 29,
+"finger1-2.R|Bat|VIS": 21,
+"finger1-3.R|Bat|VIS": 20,
+"metacarpal1.R|Bat|VIS": 30,
+"metacarpal2.R|Bat|VIS": 6,
+"finger3-1.R|Bat|VIS": 1,
+"finger1-1.R|Bat|VIS": 5,
+"finger3-2.R|Bat|VIS": 10,
+"wrist.R|Bat|VIS": 1,
+"finger3-3.L|Clipboard|off": 6
+},
+"394": {
+"finger2-3.R|Bat|VIS": 27,
+"finger2-1.R|Bat|VIS": 8,
+"finger2-2.R|Bat|VIS": 6,
+"finger1-2.R|Bat|VIS": 17,
+"finger1-3.R|Bat|VIS": 24,
+"finger3-2.R|Bat|VIS": 14,
+"metacarpal2.R|Bat|VIS": 5,
+"metacarpal1.R|Bat|VIS": 23,
+"finger1-1.R|Bat|VIS": 5,
+"metacarpal3.R|Bat|VIS": 1,
+"finger3-1.R|Bat|VIS": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"397": {
+"finger2-3.R|Bat|VIS": 26,
+"finger2-2.R|Bat|VIS": 4,
+"finger1-2.R|Bat|VIS": 17,
+"finger1-3.R|Bat|VIS": 15,
+"metacarpal1.R|Bat|VIS": 20,
+"metacarpal2.R|Bat|VIS": 4,
+"finger3-1.R|Bat|VIS": 2,
+"finger1-1.R|Bat|VIS": 5,
+"finger3-2.R|Bat|VIS": 6,
+"metacarpal3.R|Bat|VIS": 1,
+"finger3-3.L|Clipboard|off": 6
+},
+"400": {
+"finger2-3.R|Bat|VIS": 22,
+"finger1-2.R|Bat|VIS": 21,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 21,
+"metacarpal2.R|Bat|VIS": 5,
+"finger3-1.R|Bat|VIS": 2,
+"finger1-1.R|Bat|VIS": 4,
+"finger2-2.R|Bat|VIS": 4,
+"finger3-2.R|Bat|VIS": 3,
+"metacarpal3.R|Bat|VIS": 1,
+"finger3-3.L|Clipboard|off": 6
+},
+"403": {
+"finger2-3.R|Bat|VIS": 22,
+"finger1-2.R|Bat|VIS": 22,
+"finger1-3.R|Bat|VIS": 17,
+"finger3-1.R|Bat|VIS": 3,
+"metacarpal1.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3,
+"finger2-2.R|Bat|VIS": 3,
+"finger3-2.R|Bat|VIS": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"406": {
+"finger2-3.R|Bat|VIS": 21,
+"finger1-2.R|Bat|VIS": 26,
+"finger1-3.R|Bat|VIS": 21,
+"finger3-1.R|Bat|VIS": 3,
+"metacarpal1.R|Bat|VIS": 21,
+"metacarpal2.R|Bat|VIS": 5,
+"metacarpal3.R|Bat|VIS": 3,
+"finger1-1.R|Bat|VIS": 4,
+"finger2-2.R|Bat|VIS": 1,
+"finger3-2.R|Bat|VIS": 2,
+"finger3-3.R|Bat|VIS": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"409": {
+"finger2-3.R|Bat|VIS": 23,
+"finger1-3.R|Bat|VIS": 25,
+"finger1-2.R|Bat|VIS": 20,
+"finger2-2.R|Bat|VIS": 2,
+"metacarpal1.R|Bat|VIS": 20,
+"metacarpal2.R|Bat|VIS": 4,
+"metacarpal3.R|Bat|VIS": 2,
+"finger3-1.R|Bat|VIS": 3,
+"finger1-1.R|Bat|VIS": 6,
+"finger3-2.R|Bat|VIS": 6,
+"finger3-3.R|Bat|VIS": 6,
+"finger3-3.L|Clipboard|off": 6
+},
+"412": {
+"finger2-2.R|Bat|VIS": 5,
+"finger2-3.R|Bat|VIS": 24,
+"finger1-2.R|Bat|VIS": 19,
+"finger1-3.R|Bat|VIS": 34,
+"finger3-3.R|Bat|VIS": 9,
+"metacarpal1.R|Bat|VIS": 22,
+"finger1-1.R|Bat|VIS": 6,
+"finger2-1.R|Bat|VIS": 6,
+"finger3-2.R|Bat|VIS": 10,
+"metacarpal2.R|Bat|VIS": 5,
+"metacarpal3.R|Bat|VIS": 1,
+"finger3-1.R|Bat|VIS": 3,
+"finger3-3.L|Clipboard|off": 6
+},
+"415": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3,
+"finger3-3.L|Clipboard|off": 6
+},
+"418": {
+"finger2-1.R|Bat|off": 10,
+"finger2-3.R|Bat|off": 27,
+"finger2-2.R|Bat|off": 2,
+"finger3-2.R|Bat|off": 9,
+"finger1-3.R|Bat|off": 24,
+"metacarpal1.R|Bat|off": 26,
+"finger1-2.R|Bat|off": 15,
+"metacarpal2.R|Bat|off": 5,
+"finger1-1.R|Bat|off": 3,
+"finger3-3.L|Clipboard|off": 6
+},
+"421": {
+"finger2-3.R|Bat|off": 18,
+"finger2-2.R|Bat|off": 5,
+"finger3-2.R|Bat|off": 6,
+"finger1-3.R|Bat|off": 4,
+"metacarpal1.R|Bat|off": 17,
+"finger1-2.R|Bat|off": 7,
+"finger1-1.R|Bat|off": 4,
+"metacarpal2.R|Bat|off": 3,
+"finger3-3.L|Clipboard|off": 6
+},
+"424": {
+"finger2-3.R|Bat|off": 9,
+"finger2-2.R|Bat|off": 6,
+"metacarpal1.R|Bat|off": 8,
+"finger2-1.R|Bat|off": 2,
+"finger1-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"427": {
+"finger2-2.R|Bat|off": 15,
+"metacarpal1.R|Bat|off": 6,
+"finger1-2.R|Bat|off": 2,
+"finger2-1.R|Bat|off": 2,
+"finger1-1.R|Bat|off": 1,
+"finger3-3.L|Clipboard|off": 6
+},
+"430": {
+"finger2-2.R|Bat|off": 9,
+"finger2-1.R|Bat|off": 7,
+"metacarpal1.R|Bat|off": 5,
+"finger1-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"433": {
+"finger2-2.R|Bat|off": 20,
+"finger2-1.R|Bat|off": 9,
+"metacarpal1.R|Bat|off": 13,
+"finger1-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"436": {
+"finger2-2.R|Bat|off": 17,
+"finger2-1.R|Bat|off": 4,
+"metacarpal1.R|Bat|off": 18,
+"finger2-3.R|Bat|off": 7,
+"finger1-1.R|Bat|off": 2,
+"finger3-2.R|Bat|off": 1,
+"metacarpal2.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"439": {
+"finger2-3.R|Bat|off": 20,
+"finger2-2.R|Bat|off": 15,
+"finger3-2.R|Bat|off": 11,
+"finger2-1.R|Bat|off": 4,
+"metacarpal1.R|Bat|off": 18,
+"finger1-2.R|Bat|off": 2,
+"metacarpal2.R|Bat|off": 3,
+"finger1-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"442": {
+"finger2-1.R|Bat|off": 13,
+"finger2-3.R|Bat|off": 29,
+"finger2-2.R|Bat|off": 4,
+"finger3-2.R|Bat|off": 7,
+"finger1-3.R|Bat|off": 20,
+"metacarpal1.R|Bat|off": 25,
+"finger1-2.R|Bat|off": 14,
+"metacarpal2.R|Bat|off": 5,
+"finger1-1.R|Bat|off": 3,
+"finger3-3.L|Clipboard|off": 6
+},
+"445": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3,
+"finger3-3.L|Clipboard|off": 6
+},
+"448": {
+"finger2-3.R|Bat|off": 29,
+"finger3-2.R|Bat|off": 14,
+"finger1-3.R|Bat|off": 28,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 29,
+"finger1-2.R|Bat|off": 21,
+"finger1-1.R|Bat|off": 4,
+"metacarpal2.R|Bat|off": 7,
+"finger3-3.L|Clipboard|off": 6
+},
+"451": {
+"finger2-3.R|Bat|off": 28,
+"finger3-2.R|Bat|off": 12,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 28,
+"finger1-2.R|Bat|off": 22,
+"finger1-1.R|Bat|off": 4,
+"metacarpal2.R|Bat|off": 7,
+"finger3-3.L|Clipboard|off": 6
+},
+"454": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 12,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3,
+"finger3-3.L|Clipboard|off": 6
+},
+"457": {
+"finger2-3.R|Bat|off": 28,
+"finger3-2.R|Bat|off": 12,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 9,
+"metacarpal1.R|Bat|off": 28,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3,
+"finger3-3.L|Clipboard|off": 6
+},
+"460": {
+"finger2-3.R|Bat|off": 20,
+"finger2-3.R|Bat|VIS": 11,
+"finger3-2.R|Bat|off": 12,
+"finger1-3.R|Bat|off": 29,
+"finger2-1.R|Bat|VIS": 5,
+"metacarpal1.R|Bat|off": 18,
+"metacarpal1.R|Bat|VIS": 7,
+"finger1-2.R|Bat|off": 18,
+"finger1-2.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|VIS": 1,
+"finger1-1.R|Bat|off": 2,
+"finger2-2.R|Bat|VIS": 3,
+"finger3-3.L|Clipboard|off": 6
+},
+"463": {
+"finger2-2.R|Bat|VIS": 3,
+"finger2-2.R|Bat|off": 14,
+"finger2-3.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 5,
+"finger3-2.R|Bat|off": 21,
+"finger2-1.R|Bat|VIS": 8,
+"metacarpal2.R|Bat|off": 11,
+"metacarpal3.R|Bat|off": 3,
+"metacarpal1.R|Bat|off": 18,
+"finger1-2.R|Bat|off": 6,
+"finger1-1.R|Bat|VIS": 8,
+"finger1-2.R|Bat|VIS": 3,
+"metacarpal1.R|Bat|VIS": 10,
+"wrist.R|Bat|VIS": 1,
+"wrist.R|Bat|off": 1,
+"finger3-3.L|Clipboard|off": 6
+},
+"466": {
+"finger2-2.R|Bat|off": 14,
+"finger3-2.R|Bat|off": 13,
+"finger3-1.R|Bat|off": 5,
+"finger2-1.R|Bat|off": 20,
+"metacarpal2.R|Bat|off": 11,
+"metacarpal1.R|Bat|off": 32,
+"metacarpal3.R|Bat|off": 3,
+"finger1-2.R|Bat|off": 4,
+"finger1-1.R|Bat|VIS": 9,
+"metacarpal1.R|Bat|VIS": 3,
+"finger4-2.R|Bat|off": 5,
+"wrist.R|Bat|VIS": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"469": {
+"finger2-2.R|Bat|off": 22,
+"finger2-3.R|Bat|off": 16,
+"finger3-2.R|Bat|off": 14,
+"finger3-1.R|Bat|off": 5,
+"metacarpal2.R|Bat|off": 10,
+"metacarpal3.R|Bat|off": 1,
+"finger1-2.R|Bat|off": 8,
+"finger1-1.R|Bat|VIS": 2,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|VIS": 3,
+"finger1-3.R|Bat|off": 3,
+"finger1-1.R|Bat|off": 1,
+"wrist.R|Bat|VIS": 1,
+"finger3-3.L|Clipboard|off": 6
+},
+"472": {
+"finger2-3.R|Bat|off": 11,
+"finger2-2.R|Bat|VIS": 12,
+"finger3-2.R|Bat|off": 9,
+"finger1-3.R|Bat|off": 23,
+"metacarpal1.R|Bat|off": 10,
+"finger1-2.R|Bat|VIS": 18,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|off": 6,
+"metacarpal1.R|Bat|VIS": 7,
+"finger2-3.R|Bat|VIS": 8,
+"finger1-2.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"475": {
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 15,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 2,
+"metacarpal2.R|Bat|off": 4,
+"metacarpal1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"478": {
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 2,
+"metacarpal2.R|Bat|off": 4,
+"finger3-3.L|Clipboard|off": 6
+},
+"481": {
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6,
+"finger3-3.L|Clipboard|off": 6
+},
+"484": {
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6,
+"finger3-3.L|Clipboard|off": 6
+},
+"487": {
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6,
+"finger3-3.L|Clipboard|off": 6
+},
+"490": {
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6,
+"finger3-3.L|Clipboard|off": 6
+},
+"493": {
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 13,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6,
+"finger3-3.L|Clipboard|off": 6
+},
+"496": {
+"finger2-3.R|Bat|off": 21,
+"finger2-2.R|Bat|off": 10,
+"finger3-2.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 22,
+"metacarpal1.R|Bat|off": 17,
+"finger1-2.R|Bat|off": 20,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-3.L|Clipboard|off": 6
+},
+"499": {
+"finger2-3.R|Bat|off": 20,
+"finger2-2.R|Bat|off": 10,
+"finger3-2.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 22,
+"metacarpal1.R|Bat|off": 17,
+"finger1-2.R|Bat|off": 20,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-3.L|Clipboard|off": 6
+},
+"502": {
+"finger2-3.R|Bat|off": 20,
+"finger2-2.R|Bat|off": 10,
+"finger3-2.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 22,
+"metacarpal1.R|Bat|off": 17,
+"finger1-2.R|Bat|off": 20,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-3.L|Clipboard|off": 6
+},
+"505": {
+"finger2-3.R|Bat|off": 19,
+"finger2-2.R|Bat|off": 10,
+"finger3-2.R|Bat|off": 12,
+"finger1-3.R|Bat|off": 22,
+"metacarpal1.R|Bat|off": 17,
+"finger1-2.R|Bat|off": 20,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-3.L|Clipboard|off": 6
+},
+"508": {
+"finger2-3.R|Bat|off": 19,
+"finger2-2.R|Bat|off": 10,
+"finger3-2.R|Bat|off": 12,
+"finger1-3.R|Bat|off": 22,
+"metacarpal1.R|Bat|off": 17,
+"finger1-2.R|Bat|off": 19,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-3.L|Clipboard|off": 6
+},
+"511": {
+"finger2-3.R|Bat|off": 19,
+"finger2-2.R|Bat|off": 10,
+"finger3-2.R|Bat|off": 12,
+"finger1-3.R|Bat|off": 22,
+"metacarpal1.R|Bat|off": 17,
+"finger1-2.R|Bat|off": 19,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 1,
+"finger3-3.L|Clipboard|off": 6
+},
+"514": {
+"finger2-3.R|Bat|off": 19,
+"finger2-2.R|Bat|off": 10,
+"finger3-2.R|Bat|off": 12,
+"finger1-3.R|Bat|off": 23,
+"metacarpal1.R|Bat|off": 16,
+"finger1-2.R|Bat|off": 19,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 1,
+"finger3-3.L|Clipboard|off": 6
+},
+"517": {
+"finger2-3.R|Bat|off": 18,
+"finger2-2.R|Bat|off": 10,
+"finger3-2.R|Bat|off": 12,
+"finger1-3.R|Bat|off": 24,
+"metacarpal1.R|Bat|off": 16,
+"finger1-2.R|Bat|off": 19,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 1,
+"finger3-3.L|Clipboard|off": 6
+},
+"520": {
+"finger2-3.R|Bat|off": 17,
+"finger2-2.R|Bat|off": 11,
+"finger3-2.R|Bat|off": 12,
+"finger1-3.R|Bat|off": 25,
+"metacarpal1.R|Bat|off": 16,
+"finger1-2.R|Bat|off": 19,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 7,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"523": {
+"finger2-3.R|Bat|off": 17,
+"finger2-2.R|Bat|off": 11,
+"finger3-2.R|Bat|off": 12,
+"finger1-3.R|Bat|off": 21,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 19,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"526": {
+"finger2-2.R|Bat|off": 11,
+"finger2-3.R|Bat|off": 15,
+"finger3-2.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 23,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 19,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"529": {
+"finger2-2.R|Bat|off": 12,
+"finger2-3.R|Bat|off": 15,
+"finger3-2.R|Bat|off": 12,
+"finger1-3.R|Bat|off": 21,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 19,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"532": {
+"finger2-2.R|Bat|off": 12,
+"finger2-3.R|Bat|off": 15,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 21,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 19,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"535": {
+"finger2-2.R|Bat|off": 14,
+"finger2-3.R|Bat|off": 15,
+"finger1-3.R|Bat|off": 20,
+"finger3-2.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 19,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"538": {
+"finger2-2.R|Bat|off": 12,
+"finger2-3.R|Bat|off": 15,
+"finger1-3.R|Bat|off": 22,
+"finger3-2.R|Bat|off": 12,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 18,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"541": {
+"finger2-2.R|Bat|off": 12,
+"finger2-3.R|Bat|off": 14,
+"finger1-3.R|Bat|off": 23,
+"finger3-2.R|Bat|off": 12,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 18,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"544": {
+"finger2-2.R|Bat|off": 12,
+"finger2-3.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 23,
+"finger3-2.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 17,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"547": {
+"finger2-2.R|Bat|off": 12,
+"finger2-3.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 23,
+"finger3-2.R|Bat|off": 9,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 17,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"550": {
+"finger2-2.R|Bat|off": 12,
+"finger2-3.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 25,
+"finger3-2.R|Bat|off": 9,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 16,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"553": {
+"finger2-2.R|Bat|off": 12,
+"finger2-3.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 23,
+"finger3-2.R|Bat|off": 9,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 14,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"556": {
+"finger2-2.R|Bat|off": 12,
+"finger2-3.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 23,
+"finger3-2.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 14,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"559": {
+"finger2-2.R|Bat|off": 12,
+"finger2-3.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 23,
+"finger3-2.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 14,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"562": {
+"finger2-2.R|Bat|off": 12,
+"finger2-3.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 23,
+"finger3-2.R|Bat|off": 13,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 14,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"565": {
+"finger2-2.R|Bat|off": 12,
+"finger2-3.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 23,
+"finger3-2.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 14,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"568": {
+"finger2-2.R|Bat|off": 12,
+"finger2-3.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 23,
+"finger3-2.R|Bat|off": 9,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 14,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"571": {
+"finger2-2.R|Bat|off": 12,
+"finger2-3.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 23,
+"finger3-2.R|Bat|off": 9,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 16,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"574": {
+"finger2-2.R|Bat|off": 12,
+"finger2-3.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 23,
+"finger3-2.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 18,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"577": {
+"finger2-2.R|Bat|off": 12,
+"finger2-3.R|Bat|off": 15,
+"finger1-3.R|Bat|off": 21,
+"finger3-2.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 18,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"580": {
+"finger2-2.R|Bat|off": 12,
+"finger2-3.R|Bat|off": 15,
+"finger3-2.R|Bat|off": 12,
+"finger1-3.R|Bat|off": 21,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 19,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"583": {
+"finger2-2.R|Bat|off": 11,
+"finger2-3.R|Bat|off": 15,
+"finger3-2.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 23,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 19,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"586": {
+"finger2-3.R|Bat|off": 17,
+"finger2-2.R|Bat|off": 11,
+"finger3-2.R|Bat|off": 12,
+"finger1-3.R|Bat|off": 24,
+"metacarpal1.R|Bat|off": 14,
+"finger1-2.R|Bat|off": 19,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 7,
+"finger3-1.R|Bat|off": 1,
+"finger3-3.L|Clipboard|off": 6
+},
+"589": {
+"finger2-3.R|Bat|off": 19,
+"finger2-2.R|Bat|off": 10,
+"finger3-2.R|Bat|off": 12,
+"finger1-3.R|Bat|off": 22,
+"metacarpal1.R|Bat|off": 17,
+"finger1-2.R|Bat|off": 19,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-1.R|Bat|off": 1,
+"finger3-3.L|Clipboard|off": 6
+},
+"592": {
+"finger2-3.R|Bat|off": 19,
+"finger2-2.R|Bat|off": 10,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 22,
+"metacarpal1.R|Bat|off": 17,
+"finger1-2.R|Bat|off": 20,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-3.L|Clipboard|off": 6
+},
+"595": {
+"finger2-3.R|Bat|off": 20,
+"finger2-2.R|Bat|off": 10,
+"finger3-2.R|Bat|off": 12,
+"finger1-3.R|Bat|off": 22,
+"metacarpal1.R|Bat|off": 17,
+"finger1-2.R|Bat|off": 20,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-3.L|Clipboard|off": 6
+},
+"598": {
+"finger2-3.R|Bat|off": 21,
+"finger2-2.R|Bat|off": 10,
+"finger3-2.R|Bat|off": 13,
+"finger1-3.R|Bat|off": 22,
+"metacarpal1.R|Bat|off": 17,
+"finger1-2.R|Bat|off": 20,
+"finger1-1.R|Bat|off": 3,
+"metacarpal2.R|Bat|off": 6,
+"finger3-3.L|Clipboard|off": 6
+},
+"601": {
+"finger2-3.R|Bat|VIS": 20,
+"finger2-2.R|Bat|VIS": 9,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 23,
+"metacarpal1.R|Bat|VIS": 15,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 7,
+"finger3-3.L|Clipboard|off": 6
+},
+"604": {
+"finger2-3.R|Bat|VIS": 20,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6,
+"finger3-3.L|Clipboard|off": 6
+},
+"607": {
+"finger2-3.R|Bat|VIS": 19,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6,
+"finger3-3.L|Clipboard|off": 6
+},
+"610": {
+"finger2-3.R|Bat|VIS": 18,
+"finger2-2.R|Bat|VIS": 12,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 24,
+"metacarpal1.R|Bat|VIS": 16,
+"finger1-2.R|Bat|VIS": 19,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6,
+"finger3-1.R|Bat|VIS": 1,
+"finger3-3.L|Clipboard|off": 6
+},
+"613": {
+"finger2-3.R|Bat|VIS": 20,
+"finger2-2.R|Bat|VIS": 14,
+"finger3-2.R|Bat|VIS": 13,
+"finger1-3.R|Bat|VIS": 17,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 17,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6,
+"finger3-1.R|Bat|VIS": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"616": {
+"finger2-2.R|Bat|VIS": 15,
+"finger2-3.R|Bat|VIS": 18,
+"finger3-2.R|Bat|VIS": 16,
+"finger1-3.R|Bat|VIS": 11,
+"metacarpal1.R|Bat|VIS": 15,
+"finger1-2.R|Bat|VIS": 15,
+"metacarpal2.R|Bat|VIS": 7,
+"finger1-1.R|Bat|VIS": 2,
+"finger3-1.R|Bat|VIS": 2,
+"finger3-3.L|Clipboard|off": 6
+},
+"619": {
+"finger2-2.R|Bat|VIS": 23,
+"finger2-3.R|Bat|VIS": 19,
+"finger3-2.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 11,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6,
+"finger3-1.R|Bat|VIS": 2,
+"finger1-3.R|Bat|VIS": 3,
+"finger3-3.L|Clipboard|off": 6
+},
+"622": {
+"finger2-2.R|Bat|VIS": 18,
+"finger2-3.R|Bat|VIS": 25,
+"finger3-2.R|Bat|VIS": 13,
+"finger2-1.R|Bat|VIS": 7,
+"metacarpal1.R|Bat|VIS": 26,
+"finger1-2.R|Bat|VIS": 10,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3,
+"finger3-1.R|Bat|VIS": 3,
+"finger3-3.L|Clipboard|off": 6
+},
+"625": {
+"finger2-1.R|Bat|VIS": 13,
+"finger2-3.R|Bat|VIS": 23,
+"finger3-2.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 7,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3,
+"finger2-2.R|Bat|VIS": 11,
+"finger3-1.R|Bat|VIS": 3,
+"finger3-3.L|Clipboard|off": 6
+},
+"628": {
+"finger2-3.R|Bat|VIS": 24,
+"finger3-2.R|Bat|VIS": 12,
+"finger2-2.R|Bat|VIS": 9,
+"finger2-1.R|Bat|VIS": 11,
+"metacarpal1.R|Bat|VIS": 31,
+"finger1-2.R|Bat|VIS": 6,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3,
+"finger3-1.R|Bat|VIS": 3,
+"finger3-3.L|Clipboard|off": 6
+},
+"631": {
+"finger2-3.R|Bat|VIS": 24,
+"finger2-2.R|Bat|VIS": 8,
+"finger3-2.R|Bat|VIS": 12,
+"finger2-1.R|Bat|VIS": 11,
+"metacarpal1.R|Bat|VIS": 31,
+"finger1-2.R|Bat|VIS": 6,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3,
+"finger3-1.R|Bat|VIS": 3,
+"finger3-3.L|Clipboard|off": 6
+},
+"634": {
+"finger2-3.R|Bat|VIS": 24,
+"finger2-2.R|Bat|VIS": 8,
+"finger3-2.R|Bat|VIS": 12,
+"finger2-1.R|Bat|VIS": 11,
+"metacarpal1.R|Bat|VIS": 31,
+"finger1-2.R|Bat|VIS": 6,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3,
+"finger3-1.R|Bat|VIS": 3,
+"finger3-3.L|Clipboard|off": 6
+},
+"637": {
+"finger2-3.R|Bat|VIS": 24,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 31,
+"finger1-2.R|Bat|VIS": 6,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3,
+"finger3-1.R|Bat|VIS": 3,
+"finger3-3.L|Clipboard|off": 6
+},
+"640": {
+"finger2-3.R|Bat|VIS": 24,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 31,
+"finger1-2.R|Bat|VIS": 6,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3,
+"finger3-1.R|Bat|VIS": 3,
+"finger3-3.L|Clipboard|off": 6
+},
+"643": {
+"finger2-3.R|Bat|VIS": 20,
+"finger1-2.R|Bat|VIS": 23,
+"finger1-3.R|Bat|VIS": 28,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 29,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 4,
+"finger3-2.R|Bat|VIS": 7,
+"wrist.R|Bat|VIS": 1,
+"finger3-3.L|Clipboard|off": 6
+},
+"646": {
+"finger1-3.R|Bat|VIS": 37,
+"finger2-1.R|Bat|VIS": 4,
+"metacarpal1.R|Bat|VIS": 26,
+"finger1-2.R|Bat|VIS": 45,
+"finger1-1.R|Bat|VIS": 17,
+"metacarpal2.R|Bat|VIS": 6,
+"finger3-3.L|Clipboard|off": 6
+},
+"649": {
+"finger3-3.L|Clipboard|off": 6
+},
+"652": {
+"finger3-3.L|Clipboard|off": 6
+},
+"655": {
+"finger3-3.L|Clipboard|off": 6
+},
+"658": {
+"finger3-3.L|Clipboard|off": 6
+},
+"661": {
+"finger3-3.L|Clipboard|off": 6
+},
+"664": {
+"finger3-3.L|Clipboard|off": 6
+},
+"667": {
+"finger3-3.L|Clipboard|off": 6
+},
+"670": {
+"finger3-3.L|Clipboard|off": 6
+},
+"673": {
+"finger3-3.L|Clipboard|off": 6
+},
+"676": {
+"finger3-3.L|Clipboard|off": 6
+},
+"679": {
+"finger3-3.L|Clipboard|off": 6
+},
+"682": {
+"finger3-3.L|Clipboard|off": 6
+},
+"685": {
+"finger3-3.L|Clipboard|off": 6
+},
+"688": {
+"finger3-3.L|Clipboard|off": 6
+},
+"691": {
+"finger3-3.L|Clipboard|off": 6
+},
+"694": {
+"finger3-3.L|Clipboard|off": 6
+},
+"697": {
+"finger3-3.L|Clipboard|off": 6
+},
+"700": {
+"finger3-3.L|Clipboard|off": 6
+},
+"703": {
+"finger3-3.L|Clipboard|off": 6
+},
+"706": {
+"finger3-3.L|Clipboard|off": 6
+},
+"709": {
+"finger3-3.L|Clipboard|off": 6
+},
+"712": {
+"finger3-3.L|Clipboard|off": 6
+},
+"715": {
+"finger3-3.L|Clipboard|off": 6
+},
+"718": {
+"finger3-3.L|Clipboard|off": 6
+},
+"721": {
+"finger3-3.L|Clipboard|off": 6
+},
+"724": {
+"finger3-3.L|Clipboard|off": 6
+},
+"727": {
+"finger3-3.L|Clipboard|off": 6
+},
+"730": {
+"finger3-3.L|Clipboard|off": 6
+},
+"733": {
+"finger3-3.L|Clipboard|off": 6
+},
+"736": {
+"finger3-3.L|Clipboard|off": 6
+},
+"739": {
+"finger3-3.L|Clipboard|off": 6
+},
+"742": {
+"finger3-3.L|Clipboard|off": 6
+},
+"745": {
+"finger3-3.L|Clipboard|off": 6
+},
+"748": {
+"finger3-3.L|Clipboard|off": 6
+},
+"751": {
+"finger3-3.L|Clipboard|off": 6
+},
+"754": {
+"finger3-3.L|Clipboard|off": 6
+},
+"757": {
+"finger3-3.L|Clipboard|off": 6
+},
+"760": {
+"finger3-3.L|Clipboard|off": 6
+},
+"763": {
+"finger3-3.L|Clipboard|off": 6
+},
+"766": {
+"finger3-3.L|Clipboard|off": 6
+},
+"769": {
+"finger3-3.L|Clipboard|off": 6
+},
+"772": {
+"finger3-3.L|Clipboard|off": 6
+},
+"775": {
+"finger3-3.L|Clipboard|off": 6
+},
+"778": {
+"finger3-3.L|Clipboard|off": 6
+},
+"781": {
+"finger3-3.L|Clipboard|off": 6
+},
+"784": {
+"finger3-3.L|Clipboard|off": 6
+},
+"787": {
+"finger3-3.L|Clipboard|off": 6
+},
+"790": {
+"finger3-3.L|Clipboard|off": 6
+},
+"793": {
+"finger3-3.L|Clipboard|off": 6
+},
+"796": {
+"finger3-3.L|Clipboard|off": 6
+},
+"799": {
+"finger3-3.L|Clipboard|off": 6
+},
+"802": {
+"finger3-3.L|Clipboard|off": 6
+},
+"805": {
+"finger3-3.L|Clipboard|off": 6
+},
+"808": {
+"finger3-3.L|Clipboard|off": 6
+},
+"811": {
+"finger3-3.L|Clipboard|off": 6
+},
+"814": {
+"finger3-3.L|Clipboard|off": 6
+},
+"817": {
+"finger3-3.L|Clipboard|off": 6
+},
+"820": {
+"finger3-3.L|Clipboard|off": 6
+},
+"823": {
+"finger3-3.L|Clipboard|off": 6
+},
+"826": {
+"finger3-3.L|Clipboard|off": 6
+},
+"829": {
+"finger3-3.L|Clipboard|off": 6
+},
+"832": {
+"finger3-3.L|Clipboard|off": 6
+},
+"835": {
+"finger3-3.L|Clipboard|off": 6
+},
+"838": {
+"finger3-3.L|Clipboard|off": 6
+},
+"841": {
+"finger3-3.L|Clipboard|off": 6
+},
+"844": {
+"finger3-3.L|Clipboard|off": 6
+},
+"847": {
+"finger3-3.L|Clipboard|off": 6
+},
+"850": {
+"finger3-3.L|Clipboard|off": 6
+},
+"853": {
+"finger3-3.L|Clipboard|off": 6
+},
+"856": {
+"finger3-3.L|Clipboard|off": 6
+},
+"859": {
+"finger3-3.L|Clipboard|off": 6
+},
+"862": {
+"finger3-3.L|Clipboard|off": 6
+},
+"865": {
+"finger3-3.L|Clipboard|off": 6
+},
+"868": {
+"finger3-3.L|Clipboard|off": 6
+},
+"871": {
+"finger3-3.L|Clipboard|off": 6
+},
+"874": {
+"finger3-3.L|Clipboard|off": 6
+},
+"877": {
+"finger3-3.L|Clipboard|off": 6
+},
+"880": {
+"finger3-3.L|Clipboard|off": 6
+},
+"883": {
+"finger3-3.L|Clipboard|off": 6
+},
+"886": {
+"finger3-3.L|Clipboard|off": 6
+},
+"889": {
+"finger3-3.L|Clipboard|off": 6
+},
+"892": {
+"finger3-3.L|Clipboard|off": 6
+},
+"895": {
+"finger3-3.L|Clipboard|off": 6
+},
+"898": {
+"finger3-3.L|Clipboard|off": 6
+},
+"901": {
+"finger3-3.L|Clipboard|off": 6
+},
+"904": {
+"finger3-3.L|Clipboard|off": 6
+},
+"907": {
+"finger3-3.L|Clipboard|off": 6
+},
+"910": {
+"finger3-3.L|Clipboard|off": 6
+},
+"913": {
+"finger3-3.L|Clipboard|off": 6
+},
+"916": {
+"finger3-3.L|Clipboard|off": 6
+},
+"919": {
+"finger3-3.L|Clipboard|off": 6
+},
+"922": {
+"finger3-3.L|Clipboard|off": 6
+},
+"925": {
+"finger3-3.L|Clipboard|off": 6
+},
+"928": {
+"finger3-3.L|Clipboard|off": 6
+},
+"931": {
+"finger3-3.L|Clipboard|off": 6
+},
+"934": {
+"finger3-3.L|Clipboard|off": 6
+},
+"937": {
+"finger3-3.L|Clipboard|off": 6
+},
+"940": {
+"finger3-3.L|Clipboard|off": 6
+},
+"943": {
+"finger3-3.L|Clipboard|off": 6
+},
+"946": {
+"finger3-3.L|Clipboard|off": 6
+},
+"949": {
+"finger3-3.L|Clipboard|off": 6
+},
+"952": {
+"finger3-3.L|Clipboard|off": 6
+},
+"955": {
+"finger3-3.L|Clipboard|off": 6
+},
+"958": {
+"finger3-3.L|Clipboard|off": 6
+},
+"961": {
+"finger3-3.L|Clipboard|off": 6
+},
+"964": {
+"finger3-3.L|Clipboard|off": 6
+},
+"967": {
+"finger3-3.L|Clipboard|off": 6
+},
+"970": {
+"finger3-3.L|Clipboard|off": 6
+},
+"973": {
+"finger3-3.L|Clipboard|off": 6
+},
+"976": {
+"finger3-3.L|Clipboard|off": 6
+},
+"979": {
+"finger3-3.L|Clipboard|off": 6
+},
+"982": {
+"finger3-3.L|Clipboard|off": 6
+},
+"985": {
+"finger3-3.L|Clipboard|off": 6
+},
+"988": {
+"finger3-3.L|Clipboard|off": 6
+},
+"991": {
+"finger3-3.L|Clipboard|off": 6
+},
+"994": {
+"finger3-3.L|Clipboard|off": 6
+},
+"997": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1000": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1003": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1006": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1009": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1012": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1015": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1018": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1021": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1024": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1027": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1030": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1033": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1036": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1039": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1042": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1045": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1048": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1051": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1054": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1057": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1060": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1063": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1066": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1069": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1072": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1075": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1078": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1081": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1084": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1087": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1090": {
+"finger3-3.L|Clipboard|off": 6
+},
+"1093": {
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1096": {
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1099": {
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1102": {
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1105": {
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1108": {
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1111": {
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1114": {
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1117": {
+"foot.R|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1120": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 6,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1123": {
+"finger5-2.R|Blanket|VIS": 18,
+"finger5-1.R|Blanket|VIS": 18,
+"finger5-3.R|Blanket|VIS": 5,
+"finger1-2.R|Blanket|VIS": 35,
+"finger1-3.R|Blanket|VIS": 11,
+"metacarpal3.R|Blanket|VIS": 10,
+"finger2-1.R|Blanket|VIS": 7,
+"metacarpal1.R|Blanket|VIS": 17,
+"finger3-1.R|Blanket|VIS": 3,
+"finger1-1.R|Blanket|VIS": 5,
+"wrist.R|Blanket|VIS": 4,
+"finger5-2.L|Blanket|VIS": 7,
+"finger5-1.L|Blanket|VIS": 18,
+"finger1-2.L|Blanket|VIS": 35,
+"finger1-3.L|Blanket|VIS": 11,
+"finger2-1.L|Blanket|VIS": 7,
+"metacarpal1.L|Blanket|VIS": 17,
+"metacarpal3.L|Blanket|VIS": 8,
+"metacarpal4.L|Blanket|VIS": 19,
+"finger3-1.L|Blanket|VIS": 3,
+"finger1-1.L|Blanket|VIS": 5,
+"wrist.L|Blanket|VIS": 4,
+"metacarpal4.R|Blanket|VIS": 17,
+"metacarpal2.R|Blanket|VIS": 8,
+"metacarpal2.L|Blanket|VIS": 8,
+"finger4-1.R|Blanket|VIS": 7,
+"finger4-1.L|Blanket|VIS": 7,
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1126": {
+"finger5-2.R|Blanket|VIS": 18,
+"finger5-1.R|Blanket|VIS": 18,
+"finger5-3.R|Blanket|VIS": 4,
+"finger1-2.R|Blanket|VIS": 35,
+"finger1-3.R|Blanket|VIS": 11,
+"metacarpal3.R|Blanket|VIS": 10,
+"finger2-1.R|Blanket|VIS": 7,
+"metacarpal1.R|Blanket|VIS": 17,
+"metacarpal4.R|Blanket|VIS": 17,
+"finger3-1.R|Blanket|VIS": 3,
+"finger1-1.R|Blanket|VIS": 5,
+"wrist.R|Blanket|VIS": 4,
+"metacarpal2.R|Blanket|VIS": 8,
+"finger4-1.R|Blanket|VIS": 7,
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1129": {
+"finger5-1.R|Blanket|VIS": 20,
+"finger5-2.R|Blanket|VIS": 17,
+"finger1-2.R|Blanket|VIS": 35,
+"finger1-3.R|Blanket|VIS": 11,
+"metacarpal1.R|Blanket|VIS": 17,
+"metacarpal3.R|Blanket|VIS": 9,
+"metacarpal4.R|Blanket|VIS": 19,
+"metacarpal2.R|Blanket|VIS": 9,
+"finger3-1.R|Blanket|VIS": 3,
+"finger1-1.R|Blanket|VIS": 5,
+"wrist.R|Blanket|VIS": 5,
+"finger2-1.R|Blanket|VIS": 7,
+"finger4-1.R|Blanket|VIS": 7,
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1132": {
+"finger5-2.R|Blanket|VIS": 10,
+"finger5-1.R|Blanket|VIS": 19,
+"finger1-2.R|Blanket|VIS": 36,
+"finger1-3.R|Blanket|VIS": 14,
+"metacarpal1.R|Blanket|VIS": 17,
+"metacarpal3.R|Blanket|VIS": 8,
+"metacarpal4.R|Blanket|VIS": 18,
+"metacarpal2.R|Blanket|VIS": 9,
+"finger3-1.R|Blanket|VIS": 3,
+"finger1-1.R|Blanket|VIS": 4,
+"finger2-1.R|Blanket|VIS": 8,
+"wrist.R|Blanket|VIS": 4,
+"finger4-1.R|Blanket|VIS": 7,
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1135": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1138": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1141": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1144": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1147": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1150": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1153": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1156": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1159": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1162": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1165": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1168": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1171": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1174": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1177": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1180": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1183": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1186": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1189": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1192": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1195": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1198": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1201": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1204": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1207": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1210": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1213": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1216": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1219": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1222": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1225": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1228": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1231": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1234": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1237": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|VIS": 6
+},
+"1240": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1243": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1246": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1249": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1252": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1255": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1258": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1261": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1264": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1267": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1270": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1273": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1276": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1279": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1282": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1285": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1288": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1291": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1294": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1297": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1300": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1303": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1306": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1309": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1312": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1315": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1318": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1321": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1324": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1327": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1330": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1333": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1336": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1339": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1342": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1345": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 8
+},
+"1348": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 8
+},
+"1351": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 8
+},
+"1354": {
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1357": {
+"finger5-1.R|Blanket|off": 31,
+"finger5-2.R|Blanket|off": 25,
+"finger5-3.R|Blanket|off": 13,
+"finger1-2.R|Blanket|off": 32,
+"metacarpal3.R|Blanket|off": 11,
+"finger4-1.R|Blanket|off": 9,
+"finger1-1.R|Blanket|off": 11,
+"metacarpal1.R|Blanket|off": 19,
+"finger2-1.R|Blanket|off": 3,
+"wrist.R|Blanket|off": 4,
+"metacarpal4.R|Blanket|off": 13,
+"metacarpal2.R|Blanket|off": 9,
+"finger3-1.R|Blanket|off": 3,
+"finger1-3.R|Blanket|off": 2,
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+},
+"1360": {
+"finger5-1.R|Blanket|off": 20,
+"finger5-2.R|Blanket|off": 18,
+"finger1-2.R|Blanket|off": 35,
+"finger1-3.R|Blanket|off": 11,
+"metacarpal3.R|Blanket|off": 10,
+"finger2-1.R|Blanket|off": 7,
+"metacarpal1.R|Blanket|off": 17,
+"metacarpal4.R|Blanket|off": 18,
+"finger3-1.R|Blanket|off": 3,
+"finger1-1.R|Blanket|off": 5,
+"wrist.R|Blanket|off": 4,
+"metacarpal2.R|Blanket|off": 8,
+"finger4-1.R|Blanket|off": 7,
+"foot.R|Bed|off": 12,
+"foot.L|Bed|off": 8,
+"finger3-3.L|Clipboard|off": 6
+}
+}
+}
