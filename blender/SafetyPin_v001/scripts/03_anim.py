@@ -53,6 +53,9 @@ pal, RP, HP = setup("Pal")
 buyer, RB, HB = setup("Buyer")
 show_only(hunt, [WIN["B1"], WIN["B2"], WIN["B4"], WIN["B5"], WIN["B6"]])
 show_only(pal, [WIN["B3"], WIN["B4"]])
+# v002b: the Judge rig's pale grey irises read white at medium range -> use the inventor's eye material (same MPFB eye mesh/UVs)
+_he = next(o for o in hunt.children if o.name.endswith("high-poly")); _pe = next(o for o in pal.children if o.name.endswith("high-poly"))
+pass
 for _s in "LR":   # director: the friend's jacket read as a bust -> flatten the breast bones (body + jacket both follow)
     pass   # (v002b: friend re-cast on a male donor; breast-bone offsets removed)
 # chest lattice (follows spine01): pushes the front of the chest back so body + jacket read flat and male

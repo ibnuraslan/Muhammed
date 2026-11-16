@@ -31,7 +31,7 @@ def eye_fix_all():
         out_sock = ol[0].to_socket; g.links.remove(ol[0])
         tr = g.nodes.new("ShaderNodeBsdfTransparent"); mx = g.nodes.new("ShaderNodeMixShader"); mx.name = "CorneaTransparentMix"
         if src: g.links.new(src, mx.inputs[0])
-        else: mx.inputs[0].default_value = 0.0
+        else: mx.inputs[0].default_value = 1.0   # no transmission link (cornea transmission 1.0): keep the cornea transparent
         g.links.new(Pn.outputs[0], mx.inputs[1]); g.links.new(tr.outputs[0], mx.inputs[2]); g.links.new(mx.outputs[0], out_sock)
         print("EYEFIX", g.name)
 
