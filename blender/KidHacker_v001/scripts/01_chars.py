@@ -8,7 +8,9 @@ TS = R + "Tsunami2004_v012/Tsunami2004_v012_60fps.blend"
 TI = R + "TitanicIceberg_v014/TitanicIceberg_v014_60fps.blend"
 RB = R + "RingBullet_v008/RingBullet_v008_60fps.blend"
 SPEC = {
- "Kid":    (SWS, "Girl", {"age": 0.185, "height": 0.8}, ("long_skirt", "female_elegantsuit01", "shoes01", "braid01"), [(TS, "KidB", "female_casualsuit01"), (TS, "KidB", "shoes02"), (SWS, "Mother", "long01")]),
+ "Kid":    (SWS, "Girl", {"age": 0.185, "height": 0.8}, ("long_skirt", "female_elegantsuit01", "shoes01", "braid01"), [(TS, "KidB", "female_casualsuit01"), (TS, "KidB", "shoes02"), (SWS, "Mother", "long01")]),   # v002c: the elegantsuit blouse was tried and dropped (sleeves stretched on reaching arms)
+ "KidBob": (SWS, "Girl", {"age": 0.185, "height": 0.8}, ("long_skirt", "shoes01", "braid01"), [(TS, "KidB", "female_casualsuit01"), (TS, "KidB", "shoes02"), (R + "BellyFat_v010/BellyFat_v010_60fps.blend", "Woman", "bob02")]),
+ "KidPony": (SWS, "Girl", {"age": 0.185, "height": 0.8}, ("long_skirt", "shoes01", "braid01"), [(TS, "KidB", "female_casualsuit01"), (TS, "KidB", "shoes02"), (SWS, "Teacher", "ponytail01")]),
  "Mom":    (SWS, "Mother", {}, (), []),
  "AgentA": (TI, "ExpertA", {"age": 0.55}, ("short03",), [(TI, "ExpertB", "short02")]),
  "AgentB": (TI, "ExpertB", {}, (), []),

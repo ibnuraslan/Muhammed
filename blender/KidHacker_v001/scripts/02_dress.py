@@ -183,7 +183,57 @@ _o = bpy.data.objects["Kid.shoes02"]; _o.hide_render = True; _o.hide_viewport = 
 for m in list(bpy.data.objects["Kid.body"].modifiers):
     if m.type == 'MASK' and "shoes" in (m.vertex_group or ""): bpy.data.objects["Kid.body"].modifiers.remove(m)
 garment("Kid", "sneakers", lambda b, co: b.startswith(("foot", "toe")), mat("Kid_Shoes", (0.8, 0.22, 0.32), 0.5), offset=0.008, thick=0.004)
-_d = suit.modifiers.new("Puff", 'DISPLACE'); _d.strength = 0.006; _d.mid_level = 0.0   # skin no longer pokes through at the shoulders
+# v002c: clean top. The casual suit stays (short sleeves deform well on reaching arms) but its lumps are smoothed out,
+# the outward offset is tiny, and the skin under it is hidden by proximity so nothing pokes through.
+_sm = suit.modifiers.new("Unlump", 'CORRECTIVE_SMOOTH'); _sm.factor = 1.0; _sm.iterations = 30; _sm.smooth_type = 'LENGTH_WEIGHTED'; _sm.rest_source = 'ORCO'
+_d = suit.modifiers.new("Puff", "DISPLACE"); _d.strength = 0.007; _d.mid_level = 0.0
+for _p in suit.data.polygons: _p.use_smooth = True
+for _md in suit.modifiers:
+    if _md.type == 'SUBSURF': _md.render_levels = 2; _md.levels = 1
+# order: armature, unlump, subsurf, puff
+for _nm_, _ix in (("Unlump", 1),):
+    while suit.modifiers.find(_nm_) > _ix: suit.modifiers.move(suit.modifiers.find(_nm_), suit.modifiers.find(_nm_) - 1)
+from mathutils.bvhtree import BVHTree as _BVH
+_KB = bpy.data.objects["Kid.body"]
+bpy.context.view_layer.update(); _dgx = bpy.context.evaluated_depsgraph_get()
+_saved = [(m, m.show_viewport) for m in _KB.modifiers if m.type == 'MASK']
+for m, _ in _saved: m.show_viewport = False
+_se = suit.evaluated_get(_dgx).to_mesh(); _bv = _BVH.FromPolygons([v.co.copy() for v in _se.vertices], [tuple(p.vertices) for p in _se.polygons])
+_be = _KB.evaluated_get(bpy.context.evaluated_depsgraph_get()); _bm_ = _be.to_mesh()
+_ef = {}
+for _p in _se.polygons:
+    for _ek in _p.edge_keys: _ef[_ek] = _ef.get(_ek, 0) + 1
+_bdv = sorted({vi for ek, n in _ef.items() if n == 1 for vi in ek})
+from mathutils.kdtree import KDTree as _KDT
+_kd = _KDT(len(_bdv))
+for _n_, vi in enumerate(_bdv): _kd.insert(_se.vertices[vi].co, _n_)
+_kd.balance()
+_cov = [i for i, v in enumerate(_bm_.vertices) if i < len(_KB.data.vertices) and (_bv.find_nearest(v.co)[3] or 9) < 0.012
+        and _kd.find(v.co)[2] > 0.035]   # well inside the garment only: neckline, hems and cuffs keep their skin
+for m, sv in _saved: m.show_viewport = sv
+_vg = _KB.vertex_groups.new(name="cover_casualsuit_v002c"); _vg.add(_cov, 1.0, 'REPLACE')
+_mk = _KB.modifiers.new("Mask_casual_v002c", 'MASK'); _mk.vertex_group = _vg.name; _mk.invert_vertex_group = True
+while _KB.modifiers.find(_mk.name) > 1: _KB.modifiers.move(_KB.modifiers.find(_mk.name), _KB.modifiers.find(_mk.name) - 1)
+print("TOP_UNLUMP cover", len(_cov))
+# hair: a proper strand shader on long01 (strand bump + streaks from its own texture, anisotropic sheen, darker brown) + small clumping
+_H = bpy.data.objects["Kid.long01"]
+for _m in _H.data.materials:
+    _nt = _m.node_tree; _P = next(n for n in _nt.nodes if n.type == 'BSDF_PRINCIPLED')
+    _tx = next(n for n in _nt.nodes if n.type == 'TEX_IMAGE')
+    _bw = _nt.nodes.new("ShaderNodeRGBToBW"); _nt.links.new(_tx.outputs["Color"], _bw.inputs[0])
+    _cr = _nt.nodes.new("ShaderNodeValToRGB"); _nt.links.new(_bw.outputs[0], _cr.inputs[0])
+    _cr.color_ramp.elements[0].position = 0.15; _cr.color_ramp.elements[0].color = (0.035, 0.018, 0.009, 1)
+    _cr.color_ramp.elements[1].position = 0.75; _cr.color_ramp.elements[1].color = (0.30, 0.17, 0.08, 1)
+    _nt.links.new(_cr.outputs[0], _P.inputs["Base Color"])
+    _bp = _nt.nodes.new("ShaderNodeBump"); _bp.inputs["Strength"].default_value = 0.6; _bp.inputs["Distance"].default_value = 0.002
+    _nt.links.new(_bw.outputs[0], _bp.inputs["Height"]); _nt.links.new(_bp.outputs[0], _P.inputs["Normal"])
+    _P.inputs["Roughness"].default_value = 0.42
+    if "Anisotropic" in _P.inputs: _P.inputs["Anisotropic"].default_value = 0.7
+    if "Sheen Weight" in _P.inputs: _P.inputs["Sheen Weight"].default_value = 0.35; _P.inputs["Sheen Tint"].default_value = (0.6, 0.4, 0.25, 1)
+    if "Specular IOR Level" in _P.inputs: _P.inputs["Specular IOR Level"].default_value = 0.35
+_ct = bpy.data.textures.new("HairClumps", 'CLOUDS'); _ct.noise_scale = 0.03
+_dm = _H.modifiers.new("Clumps", 'DISPLACE'); _dm.texture = _ct; _dm.strength = 0.006; _dm.mid_level = 0.5; _dm.texture_coords = 'LOCAL'
+print("HAIR_SHADER", len(_H.data.materials))
 # Mom: light-blue work suit (no badges), warm auburn hair
 ws = bpy.data.objects["Mom.female_elegantsuit01"]; ws.data.materials.clear(); ws.data.materials.append(mat("Mom_BlueJacket", (0.12, 0.3, 0.75), 0.55, 0.2))
 sk = bpy.data.objects["Mom.long_skirt"]; sk.data.materials.clear(); sk.data.materials.append(mat("Mom_NavySkirt", (0.06, 0.09, 0.22), 0.6))
@@ -297,6 +347,22 @@ for i, co in enumerate(_rest):
             _lid.data[i].co = _kb[0].data[i].co + _V((0, 0, -0.0025 * f_)); _nlid += 1
 _lid.value = 1.0
 print("LIDDROP", _nlid)
+# nostril fold (mesh level): Laplacian-smooth the small fold beside each nostril so no crease or fleck shows
+_nv = set(vi for p in _bad for vi in p.vertices)
+_nbr = {}
+for e in _B.data.edges:
+    a_, b_ = e.vertices; _nbr.setdefault(a_, set()).add(b_); _nbr.setdefault(b_, set()).add(a_)
+_cur = {i: _rest[i].copy() for i in _nv}
+for _it in range(12):
+    _new = {}
+    for i in _nv:
+        ns = [(_cur[j] if j in _cur else _rest[j]) for j in _nbr.get(i, ())]
+        if ns: _new[i] = _cur[i] * 0.5 + (sum(ns, _V()) / len(ns)) * 0.5
+    _cur.update(_new)
+_nf = _B.shape_key_add(name="NoseFix", from_mix=False)
+for i in _nv: _nf.data[i].co = _kb[0].data[i].co + (_cur[i] - _rest[i])
+_nf.value = 1.0
+print("NOSEFIX", len(_nv), "max move %.4f" % max((_cur[i] - _rest[i]).length for i in _nv))
 # brows: thicker, softer brown
 _BR = bpy.data.objects["Kid.eyebrow001"]
 for _sd in (1, -1):

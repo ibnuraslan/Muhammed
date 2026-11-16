@@ -614,11 +614,22 @@ def arrival_shots():
             look = (12 * min(1, u * 2) + breath(u, 0.8), 0) if cid == "AgentB" else (4, 30 * math.sin(u * math.pi * 1.2))
             H.key_root(fx, Vector((p.x, p.y, H.root_head.z)), yaw=0, flex=2)
             H.key_spine(fx, flex=-3, twist=(look[1] * 0.4 if cid == "AgentC" else 0), head=look)
+            ease = min(1, u * 2.5)
             for s_ in "LR":
                 sx = 1 if s_ == "L" else -1
                 foot_at(cid, s_, fx, p + Vector((sx * 0.13, 0, 0.07)))
                 knee_pole(cid, s_, fx, p + Vector((sx * 0.14, -0.8, 0.6)))
-                hang(cid, H, s_, fx, p, 0, 0.0, bend=0.6)
+                sh = Vector((p.x, p.y, 0)) + H.sh[s_]
+                if cid == "AgentB" and s_ == "R":     # hand to his belt, at the front of the hip
+                    W = Vector((p.x + sx * 0.15, p.y - 0.07, H.root_head.z + 0.03))
+                    place_hand(RIGS[cid], s_, fx, sh.lerp(W, 0.55 + 0.45 * ease) if ease < 1 else W, (-sx * 0.9, 0.3, 0), (0.2 * sx, -0.4, -1))
+                    fingers(cid, s_, fx, "relaxed"); pole(cid, s_, fx, Vector((p.x + sx * 0.6, p.y + 0.35, H.root_head.z + 0.25)))
+                elif cid == "AgentC" and s_ == "L":   # open-hand gesture toward the room (palm up, forearm forward)
+                    W = Vector((p.x + sx * 0.2, p.y - 0.36, H.root_head.z + 0.15 + 0.03 * math.sin(u * math.pi * 2)))
+                    hang(cid, H, s_, fx, p, 0, 0.0, bend=0.6) if ease < 0.3 else place_hand(RIGS[cid], s_, fx, W, (0.2 * sx, 0.1, 1.0), (0.25 * sx, -1, 0.1))
+                    if ease >= 0.3: fingers(cid, s_, fx, "flat_palm"); pole(cid, s_, fx, Vector((p.x + sx * 0.45, p.y + 0.3, H.root_head.z - 0.1)))
+                else:
+                    hang(cid, H, s_, fx, p, 0, 0.0, bend=0.6)
             key_jaw(cid, fx, 5 * min(1, u * 2))
     Lf = bpy.data.lights.new("ArrivalFill", 'AREA'); Lf.energy = 30; Lf.size = 1.5; Lf.color = (0.8, 0.88, 1.0)
     lf = bpy.data.objects.new("ArrivalFill", Lf); sc.collection.objects.link(lf); lf.location = (1.15, 1.4, 2.0)
