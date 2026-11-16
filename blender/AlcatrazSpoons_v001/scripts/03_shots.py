@@ -131,10 +131,10 @@ def key_ik(n, s, f, M):
 def rigid(pivot, rot3, move):
     """world-space rigid transform: rotate about pivot, then translate by move"""
     return Matrix.Translation(V(pivot) + V(move)) @ rot3.to_4x4() @ Matrix.Translation(-V(pivot))
-def hold_prop(n, s, f, prop, contact, approach, finger_dir, grip):
+def hold_prop(n, s, f, prop, contact, approach, finger_dir, grip, finger_radius=0.008):
     """grip the prop where it stands at frame f and pin it to the wrist; returns the IK_hand matrix at the grip"""
     sc.frame_set(int(f)); bpy.context.view_layer.update()
-    grip_object(bpy.data.objects[n], s, f, prop, V(contact), V(approach), finger_dir=V(finger_dir), grip=grip)
+    grip_object(bpy.data.objects[n], s, f, prop, V(contact), V(approach), finger_dir=V(finger_dir), grip=grip, finger_radius=finger_radius)
     M0 = ik_mat(n, s, f); child_of(prop, n, "wrist." + s, f); return M0
 
 # ------------------------------------------------------------------ cameras (one per shot, marker-bound at its first frame: hard cuts)
@@ -210,7 +210,7 @@ def p_kneel_scrape(n, sid, f0, n_fr, knees, yaw, tip, ydir, side="R", head=(24.0
     out = rgt(yaw) * (1 if side == "R" else -1)
     elbow(n, side, f0, sh + out * 0.35 + V((0, 0, -0.15)) - fwd(yaw) * 0.2)
     Mw = sp.matrix_world
-    M0 = hold_prop(n, side, f0, sp, Mw @ V((0, 0.03, 0.006)), Mw.to_3x3() @ V((0, 0, -1)), Mw.to_3x3() @ V((0, 1, 0)), "pinch")
+    M0 = hold_prop(n, side, f0, sp, Mw @ V((0, 0.03, 0.006)), Mw.to_3x3() @ V((0, 0, -1)), Mw.to_3x3() @ V((0, 1, 0)), "pinch", finger_radius=0.013)
     scrape(n, side, f0 + 6, f1, sp, M0, V(tip), period=period, axis=axis)
     for f in range(f0, f1 + 1, 40):
         sh = wpos(n, "upperarm01." + side, f); elbow(n, side, f, sh + out * 0.35 + V((0, 0, -0.15)) - fwd(yaw) * 0.2)
@@ -246,7 +246,7 @@ def shot_1a(f0, n):
         sit("P1", f, st, 0.453, y1, spine=(10 + 3 * (k % 2), 0, 0), head=(14 if k == 0 else 24, -3 + 3 * k))
         knee = st + fwd(y1) * 0.40 + V((0, 0, 0.58))        # left hand rests on the left knee (never in the lap)
         hand("P1", "L", f, knee - rgt(y1) * 0.15, V((0, 0, -1)), fwd(y1) - rgt(y1) * 0.3, pole=knee - rgt(y1) * 0.45 + V((0, 0.35, 0.2)), pose="relaxed")
-    for nm, pos, yw, hd in (("P2", V((-0.02, 0.92, 0)), -14.0, (14, -12)), ("P3", V((0.42, 0.9, 0)), 16.0, (14, 10))):
+    for nm, pos, yw, hd in (("P2", V((-0.02, 1.0, 0)), -14.0, (14, -12)), ("P3", V((0.42, 1.0, 0)), 16.0, (14, 10))):
         for k, f in enumerate((f0, f0 + 60, f0 + 120, f0 + n - 1)):
             body(nm, f, pos + V((0, 0, HUM[nm].root_head.z - 0.015)), yw, flex=4, spine=(12 + 3 * (k % 2), 0, 0), head=(hd[0] + 3 * (k % 2), hd[1] + 3 * math.sin(k)))
             stand_feet(nm, f, pos, yw)
@@ -278,7 +278,7 @@ def shot_1b(f0, n):
         hand("P1", "L", f, knee - rgt(0.0) * 0.15, V((0, 0, -1)), fwd(0.0) - rgt(0.0) * 0.3, pole=knee - rgt(0.0) * 0.45 + V((0, 0.35, 0.2)), pose="relaxed")
         kr = st + fwd(0.0) * 0.40 + V((0, 0, 0.58)) + rgt(0.0) * 0.15
         hand("P1", "R", f, kr, V((0, 0, -1)), fwd(0.0) + rgt(0.0) * 0.3, pole=kr + rgt(0.0) * 0.3 + V((0, 0.35, 0.2)), pose="relaxed")
-    stand_idle("P2", f0, f1, V((-0.1, 0.9, 0)), -14.0, head_fn=lambda f: (10 + 10 * math.sin((f - f0) / 18.0) ** 2 if 60 < f - f0 < 130 else 8, 40 if f - f0 > 50 else -10))
+    stand_idle("P2", f0, f1, V((0.0, 0.95, 0)), -14.0, head_fn=lambda f: (10 + 10 * math.sin((f - f0) / 18.0) ** 2 if 60 < f - f0 < 130 else 8, 40 if f - f0 > 50 else -10))
     stand_idle("P3", f0, f1, V((0.45, 0.92, 0)), 16.0, head_fn=lambda f: (6, -40 if f - f0 > 70 else 8))
     camera("1b", f0, n, [(0, (-0.55, -1.15, 1.25), (0.18, 0.95, 0.85), 24), (1, (-0.15, -1.25, 1.3), (0.2, 0.95, 0.85), 24)])
     return use
@@ -390,7 +390,7 @@ def shot_3c(f0, n):
     tip = V((VX + 0.17, 1.58, VZ - 0.02)); ax = V((0.15, 1, 0.05)).normalized()
     orient(d, tip - ax * 0.23, ax)
     sc.frame_set(f0); bpy.context.view_layer.update(); Mw = d.matrix_world
-    hand("P3", "R", f0, Mw @ V((-0.02, 0, 0.102)), Mw.to_3x3() @ V((0, 0, -1)), Mw.to_3x3() @ V((1, 0, 0)), pose="cup_hold")
+    hand("P3", "R", f0, Mw @ V((-0.02, 0, 0.11)), Mw.to_3x3() @ V((0, 0, -1)), Mw.to_3x3() @ V((1, 0, 0)), pose="flat_palm")
     M0 = ik_mat("P3", "R", f0); child_of(d, "P3", "wrist.R", f0)
     for k, f in enumerate(range(f0 + 8, f1 + 1, 10)):
         key_ik("P3", "R", f, rigid(tip, Rz(1.5 * (1 if k % 2 else -1)), ax * (0.004 * (k % 2)) + V((0, 0, 0.01 * math.sin(k * 0.4)))) @ M0)
