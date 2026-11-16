@@ -192,6 +192,24 @@ tint_tex(bpy.data.objects["Mom.long01"], (1.0, 0.75, 0.5))
 for n in [c + s for c in ("Kid", "Mom", "AgentB", "AgentC") for s in (".teeth_base", ".tongue01")]:
     o = bpy.data.objects.get(n)
     if o: o.hide_render = True; o.hide_viewport = True
+# director P1 note: the girl read as a porcelain doll. Normal-size, darker (brown) iris, less glassy cornea, warmer skin.
+for n in bpy.data.objects["Kid.high-poly"].active_material.node_tree.nodes:
+    if n.type == 'GROUP' and "IrisMajorColor" in n.inputs:
+        n.inputs["IrisMajorColor"].default_value = (0.16, 0.085, 0.04, 1); n.inputs["IrisMinorColor"].default_value = (0.07, 0.035, 0.015, 1)
+        n.inputs["IrisSection4Color"].default_value = (0.05, 0.03, 0.015, 1)
+        n.inputs["IrisToEyeWhiteRelation"].default_value = 0.33
+        n.inputs["EyeWhiteColor"].default_value = (0.9, 0.88, 0.86, 1)
+        n.inputs["Clearcoat"].default_value = 0.15; n.inputs["OuterLayerRoughness"].default_value = 0.08
+for m in bpy.data.objects["Kid.body"].data.materials:
+    if not m: continue
+    for nt in [m.node_tree] + [x.node_tree for x in m.node_tree.nodes if x.type == 'GROUP' and x.node_tree]:
+        for nd in list(nt.nodes):
+            if nd.type == 'TEX_IMAGE' and nd.image and "diffuse" in nd.image.name.lower():
+                for lk in list(nd.outputs['Color'].links):
+                    mx = nt.nodes.new('ShaderNodeMix'); mx.name = "WarmSkin"; mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'
+                    mx.inputs['Factor'].default_value = 1.0; mx.inputs['B'].default_value = (1.0, 0.8, 0.66, 1)
+                    nt.links.new(nd.outputs['Color'], mx.inputs['A']); nt.links.new(mx.outputs['Result'], lk.to_socket)
+                print("WARMSKIN", nd.image.name)
 # eye fix on every EnhancedEye group
 for ng in list(bpy.data.node_groups):
     if ng.name.startswith("EnhancedEye") and "CorneaTransparentMix" not in ng.nodes:

@@ -142,7 +142,7 @@ def cam_shot(name, sid, keys, lens=35, fstop=8.0, track=None):
     m = sc.timeline_markers.new(sid, frame=f0); m.camera = c
     CAMS.append((sid, f0, f1, c.name))
     # catchlight: tiny camera-side point light (eyes read)
-    L = bpy.data.lights.new("Catch_" + name, 'POINT'); L.energy = 0.25; L.shadow_soft_size = 0.02
+    L = bpy.data.lights.new("Catch_" + name, 'POINT'); L.energy = 0.12; L.shadow_soft_size = 0.02
     lo = bpy.data.objects.new("Catch_" + name, L); sc.collection.objects.link(lo); lo.parent = c; lo.location = (0.04, 0.05, 0)
     show_only(lo, [(f0, f1)])
     return c
@@ -390,7 +390,7 @@ def kid_lib_shots():
     cam_shot("Cam_S02", "S02", [(0, hf + Vector((0.26, -0.44, 0.03)), hf + Vector((0, 0, -0.04))), (1, hf + Vector((0.10, -0.48, 0.04)), hf + Vector((0, 0, -0.04)))], lens=50)
     # S03 which connected: the back of the tower, cable leaving it; camera slides along the cable toward the panel
     kid_block("S03", "keys", lambda u: 8, lambda u: (12, 0), bob=0.006)
-    cam_shot("Cam_S03", "S03", [(0, (0.66, -0.66, 1.38), (0.42, -1.04, 0.92)), (1, (0.66, -0.76, 1.32), (0.46, -1.08, 0.92))], lens=30, fstop=9)
+    cam_shot("Cam_S03", "S03", [(0, (0.56, -0.70, 1.10), (0.49, -1.08, 0.90)), (1, (0.55, -0.78, 1.06), (0.49, -1.09, 0.91))], lens=35, fstop=10)   # close on cable + jack, tower face edge-on
     # S04 to the internet via a phone line: wall jack close-up, push in on the plug
     kid_block("S04", "keys", lambda u: 8, lambda u: (12, 0), bob=0.006)
     J = Vector((0.48, -1.098, 0.919))
@@ -688,7 +688,7 @@ def ending_shots():
     # S33 for eight years: she sits back, hands into her lap; camera pulls back and rises to a wide of the dark library
     kid_block("S33", lambda u: "desk" if u < 0.3 else "lap", lambda u: -2 - 4 * min(1, u / 0.5), lambda u: (10 + 6 * min(1, u / 0.5) + breath(u, 0.8), 0), back_fn=lambda u: 0.03 * min(1, u / 0.5))
     hf = head_pt("Kid", WIN["S33"][0])
-    cam_shot("Cam_S33", "S33", [(0, hf + Vector((-0.42, -0.60, 0.08)), hf + Vector((0, 0, -0.16))), (1, hf + Vector((-1.05, -1.15, 0.30)), hf + Vector((0, 0, -0.18)))], lens=40)
+    cam_shot("Cam_S33", "S33", [(0, hf + Vector((-0.42, -0.60, 0.08)), hf + Vector((0, 0, -0.16))), (1, hf + Vector((-0.95, -1.05, 0.40)), hf + Vector((0, 0, -0.08)))], lens=40)   # feet stay out of frame
 
 # red glow on her face while the screen is red
 gl = bpy.data.objects["ScreenGlow"].data
