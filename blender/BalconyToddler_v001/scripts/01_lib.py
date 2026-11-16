@@ -80,14 +80,14 @@ tint(MAN, "casualsuit", (0.22, 0.32, 0.55))     # navy T-shirt + trousers
 tint(MAN, "shoes", (0.15, 0.12, 0.10))
 GMA = append_char("Crowd1", "Grandma")
 tint(GMA, "casualsuit", (0.92, 0.50, 0.50))     # pink top (reference)
-tint(GMA, "bob02", (0.62, 0.62, 0.64), 0.55)    # grey hair
+tint(GMA, "bob02", (0.42, 0.42, 0.44), 0.55)    # grey hair
 # part the fringe: lift the central fringe (between the eyes) to a line above the brows so both eyes show
 eyes = bpy.data.objects["Grandma.high-poly"]; hair = bpy.data.objects["Grandma.bob02"]
 ev_ = [v.co for v in eyes.data.vertices]; EZ = sum(p.z for p in ev_) / len(ev_); EY = min(p.y for p in ev_)
 n_ = 0
 for v in hair.data.vertices:
-    if abs(v.co.x) < 0.075 and v.co.y < EY + 0.05 and v.co.z < EZ + 0.05:
-        v.co.z = EZ + 0.05 + (abs(v.co.x) * 0.25); n_ += 1
+    if abs(v.co.x) < 0.085 and v.co.y < EY + 0.07 and v.co.z < EZ + 0.06:
+        v.co.z = EZ + 0.06 + (abs(v.co.x) * 0.25); n_ += 1
 print("LIB fringe lifted", n_, round(EZ, 3), round(EY, 3))
 tint(GMA, "shoes", (0.25, 0.20, 0.18))
 OLD = append_char("Crowd2", "OldMan")

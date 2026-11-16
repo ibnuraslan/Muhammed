@@ -222,13 +222,13 @@ shot_cam(sid, [(0, (-0.55, -1.75, 3.40), (0.0, -0.55, 3.10)), (1, (-0.45, -1.60,
 sid = "07"; f0, f1 = SH[sid]; use(sid, "Toddler")
 for f, hd in ((f0, (2, -3)), (F(sid, 0.5), (3, 3)), (f1, (2, 0))):
     tod_hang(f, 0.0, head=hd, kick=0.02, ph=f * 0.1)
-shot_cam(sid, [(0, (0.10, -2.0, 3.36), (0.0, -0.57, 3.24)), (1, (0.06, -1.85, 3.35), (0.0, -0.57, 3.24))], 70, 10, 10)
+shot_cam(sid, [(0, (0.10, -1.95, 3.62), (0.0, -0.57, 3.25)), (1, (0.06, -1.80, 3.60), (0.0, -0.57, 3.25))], 65, 10, 10)
 
 # ---------- 08 got stuck: 3/4 side at bar level, head resting between the two bars
 sid = "08"; f0, f1 = SH[sid]; use(sid, "Toddler")
 for f, hd in ((f0, (3, 0)), (F(sid, 0.5), (3, 4)), (f1, (3, 0))):
     tod_hang(f, 0.0, head=hd, kick=0.02, ph=f * 0.1)
-shot_cam(sid, [(0, (1.05, -1.35, 3.30), (0.0, -0.53, 3.17)), (1, (0.95, -1.20, 3.28), (0.0, -0.53, 3.17))], 45, 9, 6)
+shot_cam(sid, [(0, (1.15, -1.45, 3.62), (0.0, -0.53, 3.22)), (1, (1.05, -1.32, 3.60), (0.0, -0.53, 3.22))], 45, 9, 6)
 
 # ---------- 09 Leaving him hanging in the air: from below/front, the whole boy under the cage, legs swaying
 sid = "09"; f0, f1 = SH[sid]; use(sid, "Toddler")
@@ -252,7 +252,7 @@ def look_at(n, pos, tgt, yaw):
     ay = (ay + 180) % 360 - 180
     pitch = -math.degrees(math.atan2(d.z, d.to_2d().length))
     return (max(-40, min(40, pitch)), max(-50, min(50, ay)))
-crowd10 = [("OldMan", (-1.2, -2.6), 20), ("Woman", (0.5, -3.0), -5), ("Lady", (1.6, -2.5), -25), ("YoungMan", (-0.4, -3.6), 5)]
+crowd10 = [("OldMan", (-1.1, -2.5), 205), ("Woman", (0.4, -3.1), 170), ("Lady", (1.5, -2.3), 150), ("YoungMan", (-0.3, -3.9), 190)]
 for n, (x, y), yaw in crowd10:
     pos = Vector((x, y, root_z(n)))
     for k, f in enumerate((f0, F(sid, 0.5), f1)):
@@ -264,7 +264,7 @@ for n, (x, y), yaw in crowd10:
             hand(n, "R", f, S + d * armlen(n) * ext + Vector((0, 0, -0.05)), Vector((0, 0, 1)).cross(d).normalized() * -1, d,
                  S + Vector((-0.4, 0.2, -0.4)), "point")
             relax(n, "L", f, yaw)
-shot_cam(sid, [(0, (-1.0, -6.6, 1.15), (0.0, -1.5, 2.6)), (1, (-0.8, -6.2, 1.25), (0.0, -1.5, 2.65))], 26, 8)
+shot_cam(sid, [(0, (3.6, -5.2, 1.05), (0.0, -1.6, 2.35)), (1, (3.4, -4.9, 1.1), (0.0, -1.5, 2.45))], 24, 8)
 
 # ---------- 11 saw him: the man hurries toward the building (camera low in front, he comes at us then passes)
 sid = "11"; f0, f1 = SH[sid]; tod_static(sid); use(sid, "Man")
@@ -318,10 +318,10 @@ for u, dz in ((0.0, 0.26), (0.2, 0.24), (0.65, 0.0), (1.0, 0.0)):
     for s, sx in (("L", -1), ("R", 1)):
         P = rail_pt(CHB, sx, f)
         hand(OM, s, f, P, Vector((0, 0, -1)), Vector((0, 1, -0.6)), shoulder(OM, s, f) + Vector((sx * -0.45, -0.3, -0.3)), "wrap_grip", 0.7)
-shot_cam(sid, [(0, (1.9, -2.7, 1.45), (0.0, -1.0, 0.95)), (1, (1.75, -2.55, 1.45), (0.0, -1.0, 0.95))], 30, 8, 0)
+shot_cam(sid, [(0, (2.5, -3.3, 1.55), (0.1, -1.2, 1.25)), (1, (2.35, -3.15, 1.55), (0.1, -1.2, 1.25))], 26, 8, 0)
 
 # ---------- 14 into a tower: the woman steadies the tower (hand on the top chair's backrest) and looks up
-sid = "14"; f0, f1 = SH[sid]; tod_static(sid); use(sid, "Woman", "OldMan")
+sid = "14"; f0, f1 = SH[sid]; tod_static(sid); use(sid, "Woman")
 WP = Vector((-0.35, -1.40, root_z("Woman")))
 for k, f in enumerate((f0, F(sid, 0.5), f1)):
     hd = look_at("Woman", WP, TOD_C, 130)
@@ -330,11 +330,7 @@ for k, f in enumerate((f0, F(sid, 0.5), f1)):
     P = rail_pt(CHB, -1, f)
     hand("Woman", "L", f, P, Vector((0, 0, -1)), Vector((0.5, 1, -0.5)), shoulder("Woman", "L", f) + Ry(130) @ Vector((0.45, 0.2, -0.35)), "wrap_grip", 0.6)
     relax("Woman", "R", f, 130)
-    # old man steps back, looking up
-    op = Vector((0.75, -1.75, root_z("OldMan")))
-    hd2 = look_at("OldMan", op, TOD_C, 200)
-    stand("OldMan", f, op, 200, 0.0, sflex=-4, head=(hd2[0] * 0.5, hd2[1] * 0.5))
-shot_cam(sid, [(0, (-1.9, -3.2, 2.2), (0.0, -0.9, 1.9)), (1, (-1.75, -3.0, 2.35), (0.0, -0.9, 2.1))], 26, 8)
+shot_cam(sid, [(0, (1.75, -0.45, 1.75), (-0.3, -1.35, 1.45)), (1, (1.65, -0.40, 1.85), (-0.3, -1.3, 1.6))], 26, 8)
 
 # ---------- 15 Then one man: he steps to the tower, hand on the step chair's backrest, looks up
 sid = "15"; f0, f1 = SH[sid]; tod_static(sid); use(sid, "Man")
@@ -345,7 +341,7 @@ walk_arms("Man", f0, F(sid, 0.6), p15, yaw15, 0.8, swing=0.12)
 mp = Vector((1.25, -1.60, root_z("Man")))
 for f, hd in ((F(sid, 0.6) + 2, (-20, 0)), (f1, (-32, 10))):
     stand("Man", f, mp, 215, 0.0, sflex=-3, head=hd)
-shot_cam(sid, [(0, (2.9, -4.1, 1.5), (1.0, -1.4, 1.9)), (1, (2.7, -3.8, 1.35), (0.9, -1.3, 2.1))], 28, 8)
+shot_cam(sid, [(0, (1.85, -0.40, 1.35), (1.3, -1.9, 1.45)), (1, (1.80, -0.40, 1.30), (1.2, -1.7, 1.6))], 26, 8)
 
 # ---------- 16 climbed up: low angle, he rises from a crouch on the top chair, arms coming up
 sid = "16"; f0, f1 = SH[sid]; tod_static(sid); use(sid, "Man")
@@ -363,7 +359,7 @@ def man_on_top(f, crouch, armsup, head=(-25, 0), reach=None):
                 hand(n, s, f, palm, Ry(180) @ Vector((-sx, -0.3, 0)), Ry(180) @ Vector((0, -0.4, 1)), S + Ry(180) @ Vector((sx * 0.5, 0.2, -0.3)), "relaxed")
 for f, cr, au, hd in ((f0, 0.38, 0.0, (-15, 0)), (F(sid, 0.35), 0.30, 0.0, (-25, 0)), (F(sid, 0.75), 0.04, 0.3, (-35, 0)), (f1, 0.0, 0.45, (-38, 0))):
     man_on_top(f, cr, au, hd)
-shot_cam(sid, [(0, (1.35, -2.75, 0.55), (0.0, -0.8, 2.0)), (1, (1.25, -2.6, 0.60), (0.0, -0.8, 2.3))], 26, 8)
+shot_cam(sid, [(0, (2.2, -2.2, 0.6), (0.0, -0.8, 2.0)), (1, (2.1, -2.05, 0.65), (0.0, -0.8, 2.3))], 26, 8)
 
 # ---------- 18 the boy's legs / Holding: his hands round the boy's shins (static proxy of the legs to close the fingers on)
 def tod_hold_pose(f, lift=0.015, hd=(3, 0)):
@@ -402,16 +398,16 @@ PROX["p"] = legs_proxy(SH["19"][0])
 sid = "17"; f0, f1 = SH[sid]
 for f, au, hd in ((f0, 0.45, (-38, 0)), (F(sid, 0.5), 0.75, (-42, 4)), (f1, 0.95, (-42, 0))):
     man_on_top(f, 0.0, au, hd)
-shot_cam(sid, [(0, (0.55, -1.75, 2.35), (0.0, -0.85, 2.55)), (1, (0.50, -1.65, 2.38), (0.0, -0.85, 2.55))], 40, 8, 8)
+shot_cam(sid, [(0, (0.42, -0.14, 2.12), (0.0, -0.88, 2.52)), (1, (0.40, -0.16, 2.15), (0.0, -0.88, 2.55))], 28, 8, 6)
 for s_ in ("18", "19", "20"):
     for k, f in enumerate((SH[s_][0], F(s_, 0.5), SH[s_][1])):
         man_hold(f, (-42, 3 * (k - 1)), breathe=k % 2)
 # 18: from below between the man and the wall, looking up: his hands on the shins, the boy above
 sid = "18"; shot_cam(sid, [(0, (0.75, -1.45, 1.75), (0.0, -0.55, 2.80)), (1, (0.68, -1.38, 1.80), (0.0, -0.55, 2.85))], 24, 8, 0)
 # 19: close on the boy, calm, lifted a little (neck free)
-sid = "19"; shot_cam(sid, [(0, (-0.25, -1.40, 3.30), (0.0, -0.55, 3.20)), (1, (-0.18, -1.28, 3.29), (0.0, -0.55, 3.20))], 48, 9, 6)
+sid = "19"; shot_cam(sid, [(0, (-0.30, -1.75, 3.62), (0.0, -0.56, 3.26)), (1, (-0.22, -1.62, 3.60), (0.0, -0.56, 3.26))], 55, 9, 8)
 # 20: close on the man's hand (watch) on the shin
-sid = "20"; shot_cam(sid, [(0, (-0.60, -1.20, 2.55), (-0.05, -0.60, 2.70)), (1, (-0.55, -1.12, 2.57), (-0.05, -0.60, 2.70))], 42, 9, 0)
+sid = "20"; shot_cam(sid, [(0, (-0.85, -0.85, 2.80), (0.0, -0.62, 2.70)), (1, (-0.78, -0.82, 2.80), (0.0, -0.62, 2.70))], 40, 9, 0)
 
 # ---------- 21 Until the boy's: outside the cage at head height, the boy's head in front, grandma at the far door
 GM = "Grandma"
@@ -425,7 +421,7 @@ CAST[GM][2].walk(p21, yaw21, f0, f1, stride=0.62, lift=0.06, bob=0.015, lean=8, 
 walk_arms(GM, f0, f1, p21, yaw21, 0.62, swing=0.10, bend=0.05)
 for f in range(f0, f1 + 1, 2):
     pass
-shot_cam(sid, [(0, (-0.35, -1.45, 3.50), (-0.6, 3.5, 3.9)), (1, (-0.32, -1.38, 3.50), (-0.6, 3.5, 3.9))], 30, 8)
+shot_cam(sid, [(0, (0.9, 0.7, FLOOR2 + 1.45), (AD_X0 + 0.45, HY, FLOOR2 + 1.15)), (1, (0.85, 0.85, FLOOR2 + 1.45), (AD_X0 + 0.5, HY - 0.2, FLOOR2 + 1.15))], 26, 8, 4)
 
 # ---------- 22 got inside: inside the room, grandma comes through the doorway
 sid = "22"; f0, f1 = SH[sid]; use(sid, "Grandma", "Toddler", "Man")

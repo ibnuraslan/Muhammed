@@ -137,7 +137,7 @@ plaster2 = texmat("Plaster2", "painted_plaster_wall", (0.70, 0.78, 0.86), 0.6, 0
 plaster3 = texmat("Plaster3", "painted_plaster_wall", (0.95, 0.88, 0.70), 0.6, 0.6, 0.2, 0.3)
 pave = texmat("Pave", "concrete_pavement", (0.88, 0.86, 0.82), 0.5, 0.7, 0.3, 0.6)
 asph = texmat("Asphalt", "asphalt_02", (0.55, 0.56, 0.60), 0.25, 0.75, 0.2, 0.4)
-lam = texmat("Laminate", "laminate_floor", (1.0, 0.92, 0.82), 0.6, 0.45, 0.2, 0.8)
+lam = mat("Laminate", (0.62, 0.42, 0.26), 0.5)
 wallin = mat("WallIn", (0.62, 0.70, 0.80), 0.8)
 ceil = mat("Ceiling", (0.95, 0.95, 0.93), 0.9)
 conc = mat("Concrete", (0.80, 0.79, 0.76), 0.8)
@@ -213,7 +213,7 @@ rbox("BodyL", (BW + RX0, 10, RZ1 + 0.15 - FLOOR2), ((-BW + RX0) / 2, WT + 5, (FL
 rbox("BodyR", (BW - RX1, 10, RZ1 + 0.15 - FLOOR2), ((BW + RX1) / 2, WT + 5, (FLOOR2 + RZ1 + 0.15) / 2), conc, CS, 0.0)
 rbox("BodyBack", (RX1 - RX0, 10 - RY1, RZ1 + 0.15 - FLOOR2), (0, WT + RY1 + (10 - RY1) / 2, (FLOOR2 + RZ1 + 0.15) / 2), conc, CS, 0.0)
 # room interior surfaces
-rbox("RoomFloor", (RX1 - RX0, RY1, 0.02), (0, WT + RY1 / 2, FLOOR2 - 0.01), lam, CS, 0.0)
+rbox("RoomFloor", (RX1 - RX0, RY1, 0.02), (0, WT + RY1 / 2, FLOOR2 - 0.008), lam, CS, 0.0)
 rbox("RoomCeil", (RX1 - RX0, RY1, 0.02), (0, WT + RY1 / 2, RZ1 + 0.01), ceil, CS, 0.0)
 rbox("RoomWallL", (0.02, RY1, RZ1 - FLOOR2), (RX0 + 0.01, WT + RY1 / 2, (FLOOR2 + RZ1) / 2), wallin, CS, 0.0)
 rbox("RoomWallR", (0.02, RY1, RZ1 - FLOOR2), (RX1 - 0.01, WT + RY1 / 2, (FLOOR2 + RZ1) / 2), wallin, CS, 0.0)
