@@ -358,7 +358,7 @@ def make_straps(rig, bagobj, f_bag, name):
         F3 = Vector((sh.x - 0.01 * sx, sh.y - 0.04, sh.z - 0.22))
         S1 = Vector((sh.x - 0.01 * sx, sh.y + 0.05, sh.z - 0.25))
         B1 = T + Vector((0.0, 0.07, -0.06))
-        G_ = [bb, S1, F3, F2, F1, T, B1, bt]; OFF = [0, 0.010, 0.018, 0.022, 0.018, 0.010, 0.010, 0]
+        G_ = [bb, S1, F3, F2, F1, T, B1, bt]; OFF = [0, 0.020, 0.026, 0.028, 0.026, 0.018, 0.018, 0]
         pts = []; offs = []; proj = []
         for k in range(len(G_) - 1):
             n_ = 8
@@ -528,8 +528,8 @@ place_hand(G, "R", 228, P + n * 0.07 + Vector((0, 0, -0.03)), -n, med, skin=0.01
 apply_pose(G, "R", "relaxed", 228)
 for f in range(234, 481, 2):
     P, n, med = strap_frame(f)
-    place_hand(G, "R", f, P, -n, med, skin=0.017)
-for f in (234, 300, 400, 480): apply_pose(G, "R", "cup_hold", f)
+    place_hand(G, "R", f, P, -n, med, skin=0.022)
+for f in (234, 300, 400, 480): apply_pose(G, "R", "shield", f)
 for nm in ["BookBag"] + [c.name for c in bpy.data.objects["BookBag"].children]:
     bpy.data.objects[nm].hide_render = True; bpy.data.objects[nm].hide_viewport = True
 key_vis(["Room_ToyBox", "Room_ToyBoxLogo"], [(1, 153), (211, 287)])   # source frames: only S01 and S03 (logo whole, flat-on)
@@ -811,32 +811,33 @@ for o in (bag_site, wrap):
     o.parent = carrier; o.matrix_parent_inverse = carrier.matrix_world.inverted()
 bpy.context.view_layer.update()
 dg = bpy.context.evaluated_depsgraph_get(); Ci = carrier.matrix_world.inverted()
-zs = []
+zs = []; XLO = YLO = 9.0; XHI = YHI = -9.0
 for ob in (wrap, lp) if lp else (wrap,):
     oe = ob.evaluated_get(dg); me = oe.to_mesh()
     for v in me.vertices:
         q = Ci @ (ob.matrix_world @ v.co)
         if abs(q.x) < 0.06 and abs(q.y) < 0.045: zs.append(q.z)
+        if ob is wrap and abs(q.z) < 0.12: XLO = min(XLO, q.x); XHI = max(XHI, q.x); YLO = min(YLO, q.y); YHI = max(YHI, q.y)
     oe.to_mesh_clear()
 ZP, ZM = max(zs), min(zs)
 AX = R0 @ Vector((0, 0, 1))
 R_END = ZP if AX.y > 0 else ZM; L_END = ZM if AX.y > 0 else ZP
 sgn = 1.0 if (Quaternion(AX, R_(90)) @ R0 @ Vector((0, -1, 0))).x > 0 else -1.0
-print("SITE ends", round(ZP, 3), round(ZM, 3), "axis", tuple(round(x, 2) for x in AX), "tilt sign", sgn)
+print("SITE box", round(XLO, 3), round(XHI, 3), round(YLO, 3), round(YHI, 3), "ends", round(ZP, 3), round(ZM, 3), "axis", tuple(round(x, 2) for x in AX), "tilt sign", sgn)
 def key_carrier(f, c, tilt=0.0, yaw=0.0):
     carrier.location = c
     carrier.rotation_quaternion = Quaternion((0, 0, 1), R_(yaw)) @ Quaternion(AX, R_(sgn * tilt)) @ R0
     carrier.keyframe_insert("location", frame=f); carrier.keyframe_insert("rotation_quaternion", frame=f)
 WX, WY = w_pos.x, w_pos.y
 for f, c, tl, yw in ((1780, C0, 0, 0), (1966, C0, 0, 0), (2002, Vector((WX - 0.52, WY - 0.02, 0.42)), 35, 0),
-                     (2040, Vector((WX - 0.42, WY, 0.98)), 88, 0), (2066, Vector((WX - 0.40, WY, 1.04)), 92, 0),
-                     (2092, Vector((WX - 0.40, WY + 0.02, 1.07)), 100, 24), (2122, Vector((WX - 0.40, WY - 0.02, 1.07)), 100, -20),
-                     (2150, Vector((WX - 0.40, WY, 1.04)), 92, 0), (2188, Vector((WX - 0.34, WY, 0.82)), 70, 0), (2278, Vector((WX - 0.34, WY, 0.81)), 68, 0)):
+                     (2040, Vector((WX - 0.46, WY, 0.98)), 88, 0), (2066, Vector((WX - 0.47, WY, 1.04)), 92, 0),
+                     (2092, Vector((WX - 0.47, WY + 0.02, 1.07)), 100, 5), (2122, Vector((WX - 0.47, WY - 0.02, 1.07)), 98, -12),
+                     (2150, Vector((WX - 0.46, WY, 1.04)), 92, 0), (2188, Vector((WX - 0.38, WY, 0.94)), 72, 0), (2278, Vector((WX - 0.38, WY, 0.93)), 70, 0)):
     key_carrier(f, c, tl, yw)
 def noh(p): pass
 # body: deep squat over the bag, rises as he lifts it, nearly upright at the end with the head up
-BODY = [(1780, 0.5, 40, (-14, 0), 0), (1900, 0.5, 40, (-12, 0), 0), (1945, 0.53, 44, (-18, 0), 0), (1966, 0.52, 42, (-16, 0), 0),
-        (2004, 0.34, 30, (6, 0), 0), (2040, 0.17, 16, (16, 0), 0), (2092, 0.15, 14, (22, 10), 3), (2122, 0.15, 14, (22, -10), -3),
+BODY = [(1780, 0.5, 40, (-14, 0), 0), (1900, 0.5, 40, (-12, 0), 0), (1928, 0.54, 52, (-14, 0), 0), (1945, 0.56, 60, (-20, 0), 0), (1966, 0.56, 60, (-20, 0), 0),
+        (2004, 0.38, 40, (0, 0), 0), (2040, 0.17, 16, (16, 0), 0), (2092, 0.15, 14, (22, 10), 3), (2122, 0.15, 14, (22, -10), -3),
         (2152, 0.14, 12, (18, 0), 0), (2190, 0.07, 5, (-10, -18), -6), (2235, 0.06, 4, (-16, -26), -9), (2278, 0.06, 4, (-14, -24), -8)]
 for f, dep, fl, hd, tw in BODY:
     squat(H, f, Vector((w_pos.x, w_pos.y, 0)), w_yaw, depth=dep, flex=fl, head=hd, twist=tw, hands=(None if f <= 1900 else noh), hips_back=0.10 * dep / 0.5)
@@ -851,13 +852,43 @@ def end_hands(f, approach=0.0):
         nrm = (M3 @ Vector((0, 0, -1 if zz > 0 else 1))).normalized()          # palm faces the bag end
         P_ = M @ Vector((0, 0, zz)) - nrm * approach + Vector((0, 0, approach * 0.6))
         fd = Vector((-1, 0, -0.25)); fd = (fd - nrm * fd.dot(nrm)).normalized()
-        place_hand(WK, s_, f, P_, nrm, fd, skin=0.011)
         root = WK.matrix_world @ WK.pose.bones["root"].head
         key_pole(s_, f, root + Rz(w_yaw) @ Vector((0.55 * sx, 0.35, 0.0)))
+        place_hand(WK, s_, f, P_, nrm, fd, skin=0.011)
+        for _ in range(2):   # fingers follow the forearm line (no wrist bend past its limits)
+            sc.frame_set(f); bpy.context.view_layer.update()
+            el = WK.matrix_world @ WK.pose.bones["lowerarm01." + s_].head
+            fa = P_ - el; fa = fa - nrm * fa.dot(nrm)
+            if fa.length > 1e-3: fd = (fa.normalized() * 0.8 + fd * 0.2).normalized()
+            place_hand(WK, s_, f, P_, nrm, fd, skin=0.011)
+        # if the wrist limit tilts the hand into the bag end, slide the hand out until palm and fingertips clear it by 6 mm
+        skin_ = 0.011
+        for _ in range(4):   # hand SKIN (body mesh) 4 mm off the plastic: in or out as needed
+            sc.frame_set(f); bpy.context.view_layer.update()
+            surf = M @ Vector((0, 0, zz)) - nrm * approach
+            dg_ = bpy.context.evaluated_depsgraph_get(); be = WKB.evaluated_get(dg_); bm_ = be.to_mesh(); mwb = WKB.matrix_world
+            Cq = M.inverted() @ mwb
+            over = [Cq @ bm_.vertices[i].co for i in HANDV[s_]]
+            over = [q for q in over if XLO < q.x < XHI and YLO < q.y < YHI]   # only skin that is over the end face
+            out_ = min((q.z * (1 if zz > 0 else -1) - abs(zz)) for q in over) - approach if over else 0.004
+            be.to_mesh_clear()
+            if abs(out_ - 0.004) < 0.0015: break
+            skin_ += 0.004 - out_
+            place_hand(WK, s_, f, P_, nrm, fd, skin=skin_)
+for s_ in "LR":
+    apply_pose(WK, s_, "relaxed", 1780); apply_pose(WK, s_, "relaxed", 1928); apply_pose(WK, s_, "flat_palm", 1946); apply_pose(WK, s_, "flat_palm", 2278)
+WKB = bpy.data.objects["Worker.body"]; _mods = [(m, m.show_viewport) for m in WKB.modifiers if m.type in ("MASK", "SUBSURF")]
+for m, _v in _mods: m.show_viewport = False
+_gi = {g.index: g.name for g in WKB.vertex_groups}; HANDV = {"L": [], "R": []}
+for v in WKB.data.vertices:
+    gs = [g for g in v.groups if g.weight > 0.3 and _gi[g.group] in WK.data.bones]
+    if not gs: continue
+    nm = _gi[max(gs, key=lambda g: g.weight).group]
+    if nm.startswith(("wrist.", "metacarpal", "finger")): HANDV[nm[-1]].append(v.index)
+print("HAND verts", {k: len(v) for k, v in HANDV.items()})
 end_hands(1928, approach=0.09)
 for f in range(1946, 2279, 2): end_hands(f)
-for s_ in "LR":
-    apply_pose(WK, s_, "relaxed", 1780); apply_pose(WK, s_, "relaxed", 1928); apply_pose(WK, s_, "shield", 1946); apply_pose(WK, s_, "shield", 2278)
+for m, _v in _mods: m.show_viewport = _v
 NAMESET_EXTRA = {"BagCarrier": "site"}
 cam_shot("S17", [(1801, (XT - 0.25, -0.42, 0.42)), (1900, (XT - 0.12, -0.25, 0.36))], lens=40,
          target_keys=[(1801, (XT + 0.15, 0.3, 0.08)), (1900, (XT + 0.15, 0.3, 0.08))])

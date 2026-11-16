@@ -57,7 +57,7 @@ Vertical explainer, 1080×1920, 60 fps, Cycles. **Frames 1–2009 (33.5 s).** 23
 
    The bag's carry loop now lies flat inside the plastic, so S17 (1375–1423) changed slightly too.
 
-Re-rendered and spliced into the preview: 136–352, 1086–1253, 1376–1926. Every other preview frame comes from v002 and is unchanged in this file.
+Re-rendered and spliced into the preview: 136–352, 1086–1253, 1376–1926 (each from this exact package). Every other preview frame comes from v002 and is unchanged in this file.
 
 ## Checks on this exact packed file (`review/`)
 - `body_prop_cross.json`: whole film, step 6, every held or touched prop: **0 visible crossings**.
