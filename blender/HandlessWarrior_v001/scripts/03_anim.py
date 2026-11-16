@@ -258,7 +258,7 @@ for s, sx in (("L", 1), ("R", -1)):
     # forearm surface direction for the knife: the outside of the forearm (away from the body), level
     out = V(sx, 0, 0); out = (out - ax * out.dot(ax)).normalized()
     rb = (rad + 0.004) * 1.16
-    base = c + out * (rb + 0.030)
+    base = c + out * (rb + 0.045)
     k = knife_src.copy(); k.data = knife_src.data; CP.objects.link(k); k.name = "Knife." + s
     k.hide_render = False; k.hide_viewport = False
     # butt 11 cm up the forearm, blade pointing past the stump along the forearm axis, flat of the blade on the arm
@@ -499,7 +499,7 @@ for c in (W, EL, VW, M1, M2): c.used.add("S06")
 
 # --- S07: the villagers raise their fists and agree (fists at shoulder height, below the hair line)
 s0, s1 = ST["S07"], SE("S07")
-VPOS7 = {EL: (V(HX - 0.05, 0.5, 0), None), VW: (V(HX - 0.75, 0.15, 0), None), M1: (V(HX + 0.55, 0.25, 0), None), M2: (V(HX + 0.25, 1.05, 0), None)}
+VPOS7 = {EL: (V(HX - 0.05, 0.5, 0), None), VW: (V(HX - 0.75, 0.15, 0), None), M1: (V(HX + 0.55, 0.25, 0), None), M2: (V(HX - 0.42, 1.1, 0), None)}
 WP7 = V(HX + 1.6, -1.6, 0)
 for c, (p, _) in VPOS7.items():
     y = face(c, p, WP7); R3 = Rz(y)
@@ -604,16 +604,16 @@ for f, g, t in ((s0, V(-0.28, -0.12, 1.0), V(0, -0.4, 1)), (s0 + 60, V(-0.28, -0
     base = SCP1 if f >= s0 + 60 else SCP0.lerp(SCP1, (f - s0) / 60)
     if f > FH2: base = SCP1 + V(0, -0.3 * min(1, (f - FH2) / 10) - 0.35 * max(0, min(1, (f - FH2 - 10) / 30)), 0)
     sword_key(SC2, swordB, f, base + RS @ g, (RS @ t).normalized(), RS @ V(1, 0, 0))
-for f, p_ in ((s0, V(-0.36, -0.28, 1.0)), (s0 + 60, V(-0.40, -0.32, 1.02)), (FH2 - 14, V(-0.40, -0.30, 1.04)), (FH2, V(-0.40, -0.50, 1.04)), (FH2 + 10, V(-0.42, -0.34, 0.98)), (s1, V(-0.40, -0.30, 0.96))):
+for f, p_ in ((s0, V(-0.48, -0.30, 0.98)), (s0 + 60, V(-0.52, -0.34, 1.0)), (FH2 - 14, V(-0.52, -0.32, 1.0)), (FH2, V(-0.50, -0.52, 1.0)), (FH2 + 10, V(-0.52, -0.36, 0.95)), (s1, V(-0.50, -0.32, 0.94))):
     base = SCP1 if f >= s0 + 60 else SCP0.lerp(SCP1, (f - s0) / 60)
     if f > FH2: base = SCP1 + V(0, -0.3 * min(1, (f - FH2) / 10) - 0.35 * max(0, min(1, (f - FH2 - 10) / 30)), 0)
     SC2.hand_w("R", f, base + RS @ p_, RS @ V(0, -1, -0.25).normalized(), RS @ V(1, 0, 0), base + RS @ V(-0.6, 0.3, 1.0))
 apply_pose(SC2.o, "R", "wrap_grip", s0)
 for f, b, tw in ((s0, 0.0, 0), (s0 + 60, 0.2, -10), (FH2 - 8, 0.6, -30), (FH2, 1.0, 20), (FH2 + 16, 1.0, 25), (s1, 0.8, 15)):
     W.stand(f, WP14 + V(0.25 * b, -0.2 * b, 0), WY14 - 10 * b, flex=6 + 6 * b, head=(2, 0), twist=tw, crouch=0.02 + 0.04 * b)
-for f, p in ((s0, V(-0.28, -0.3, 1.18)), (FH2 - 8, V(-0.55, -0.35, 1.40)), (FH2, V(0.0, -0.58, 1.33)), (FH2 + 12, V(0.22, -0.62, 1.22)), (s1, V(0.10, -0.60, 1.18))):
+for f, p in ((s0, V(-0.32, -0.45, 1.18)), (FH2 - 8, V(-0.55, -0.45, 1.40)), (FH2, V(0.0, -0.68, 1.33)), (FH2 + 12, V(0.22, -0.62, 1.22)), (s1, V(0.10, -0.60, 1.18))):
     W.hand_w("R", f, WP14 + R14 @ p, R14 @ V(-0.2, -1, 0.15).normalized(), R14 @ V(0, 0, -1), WP14 + R14 @ V(-0.6, 0.2, 1.0))
-for f in (s0, s1): W.hand_w("L", f, WP14 + R14 @ V(0.40, -0.42, 1.18), R14 @ V(0.2, -1, 0.3).normalized(), R14 @ V(1, 0, 0), WP14 + R14 @ V(0.6, 0.3, 0.9))
+for f in (s0, s1): W.hand_w("L", f, WP14 + R14 @ V(0.45, -0.58, 1.2), R14 @ V(0.2, -1, 0.3).normalized(), R14 @ V(1, 0, 0), WP14 + R14 @ V(0.6, 0.3, 0.9))
 spark("SparkS14", SCP1 + V(0.08, 0.22, 1.25), FH2)
 for c in (W, SC2): c.used.add("S14")
 
@@ -672,9 +672,9 @@ for sw_, c_, f_ in ((swordA, SA, ST["S01"]), (swordB, SC2, ST["S14"])):
     d_ = (c_.world_bone("finger3-1.R", f_).translation - wr_).normalized()
     a_ = (c_.world_bone("finger2-1.R", f_).translation - c_.world_bone("finger5-1.R", f_).translation).normalized()
     n_ = a_.cross(d_).normalized()
-    pc_ = wr_ + d_ * 0.078 + n_ * 0.036
+    pc_ = wr_ + d_ * 0.08 + n_ * 0.042
     sw_.matrix_world = Matrix.Translation(pc_) @ frame_from(a_, d_).to_4x4()
-    apply_pose(c_.o, "R", "wrap_grip", f_, amount=0.72)
+    apply_pose(c_.o, "R", "wrap_grip", f_, amount=0.5)
     child_of_now(sw_, c_.o, "wrist.R", f_)
 vis_only([swordA], [(ST["S01"], SE("S01"))]); vis_only([swordB], [(ST["S14"], SE("S14"))])
 

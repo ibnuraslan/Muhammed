@@ -1,0 +1,21 @@
+B23 P1b body_prop_cross (pipeline/body_prop_cross.py, step 3, all 2415 frames) on HandlessWarrior_v001_P1_60fps.blend
+props: Stump SwordA SwordB SpearC SpearB Knife.L/R Strap.L0/L1/R0/R1 HotPlate_Anvil AnvilBlock anvil TableTop LogoCrate
+Self-hits removed. On the Warrior the hand Mask shifts vertex indices: his labels (finger*/levator*/oris*) are forearm skin.
+
+S01 SwordA<-finger1-2.R 39fr max40; SwordA<-finger4-3.R 39fr max38; SwordA<-finger3-3.R 39fr max32; SwordA<-finger2-3.R 39fr max29; SwordA<-finger1-1.R 39fr max11; SwordA<-metacarpal1.R 39fr max3
+S02 0 visible crossings
+S03 0 visible crossings
+S04 0 visible crossings
+S05 0 visible crossings
+S06 0 visible crossings
+S07 AnvilBlock<-foot.L 40fr max140; AnvilBlock<-lowerleg02.L 40fr max73
+S08 0 visible crossings
+S09 0 visible crossings
+S10 0 visible crossings
+S11 Knife.L<-levator06.L 52fr max14; Knife.L<-levator05.L 52fr max13; Knife.R<-finger2-3.R 52fr max10; Knife.R<-finger3-1.R 52fr max8; Knife.R<-finger3-3.R 52fr max8; Strap.R0<-finger5-1.R 1fr max5; Strap.L1<-levator06.L 52fr max5; Strap.L0<-head 3fr max5; Knife.R<-finger3-2.R 52fr max5; Strap.R0<-spine04 1fr max5; Strap.L0<-spine03 4fr max5; Knife.L<-oris07.L 52fr max4 ...
+S12 Knife.L<-levator06.L 52fr max14; Knife.L<-levator05.L 52fr max13; Knife.R<-finger2-3.R 52fr max10; Knife.R<-finger3-1.R 52fr max8; Knife.R<-finger3-3.R 52fr max8; Strap.L1<-levator06.L 52fr max5; Knife.R<-finger3-2.R 52fr max5; Knife.L<-oris07.L 52fr max4; Knife.L<-oris03.L 52fr max4; Knife.R<-finger2-2.R 52fr max3; Strap.R1<-finger2-3.R 52fr max2; Strap.L0<-levator06.L 52fr max2 ...
+S13 Strap.R0<-spine02 2fr max15; Knife.L<-levator06.L 40fr max14; Strap.R1<-spine02 2fr max14; Knife.L<-levator05.L 40fr max13; Strap.R0<-breast.R 1fr max11; Knife.R<-finger2-3.R 40fr max10; Strap.R0<-upperarm02.R 1fr max10; Knife.R<-finger3-1.R 40fr max8; Knife.R<-finger3-3.R 40fr max8; Knife.R<-spine02 2fr max6; Strap.L1<-levator06.L 40fr max5; Knife.R<-finger3-2.R 40fr max5 ...
+S14 SwordB<-head 1fr max129; SwordB<-jaw 1fr max58; SwordB<-finger3-3.R 60fr max38; SwordB<-finger2-3.R 60fr max32; SwordB<-finger4-3.R 60fr max32; SwordB<-finger1-2.R 60fr max24; SwordB<-upperleg02.R 3fr max24; Strap.R1<-spine02 19fr max15; Knife.L<-levator06.L 60fr max14; Knife.L<-levator05.L 60fr max13; Knife.L<-spine03 14fr max12; Strap.L1<-spine03 28fr max11 ...
+S15 0 visible crossings
+S16 0 visible crossings
+S17 Knife.L<-levator06.L 68fr max14; Strap.R1<-breast.R 2fr max14; Strap.R0<-breast.R 2fr max14; Knife.L<-levator05.L 64fr max13; Knife.R<-finger2-3.R 58fr max10; Strap.R1<-spine02 2fr max9; Knife.R<-finger3-1.R 53fr max8; Knife.R<-finger3-3.R 52fr max8; Strap.R0<-spine02 3fr max7; Strap.L1<-levator06.L 64fr max5; Knife.R<-finger3-2.R 52fr max5; Knife.L<-oris07.L 59fr max4 ...
