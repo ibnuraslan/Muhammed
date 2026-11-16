@@ -522,11 +522,11 @@ def shot_5c(f0, n):
     use = ("P1",); f1 = f0 + n - 1; yw = 180.0
     g = bpy.data.objects["S2_Grille"]; gl = V(g.location)
     for f in (f0, f1): g.keyframe_insert("location", frame=f); g.keyframe_insert("rotation_euler", frame=f)
-    stride = 0.32; dist = 0.3
+    stride = 0.32; dist = 0.15
     for f in range(f0, f1 + 1, 6):
         u = (f - f0) / (n - 1); y = 0.74 + dist * ss(u)
         crawl_pose("P1", f, (X2 + 0.35, y), yw + 10 * ss(u), (y - 0.74) / stride, FZ2, head=(-30 - 10 * math.sin(u * 3), 35 * math.sin(u * 5)))
-    camera("5c", f0, n, [(0, (X2 + 1.55, 1.55, 0.62), (X2 + 0.15, 0.55, 0.5), 24), (1, (X2 + 1.5, 1.65, 0.66), (X2 + 0.15, 0.7, 0.55), 24)], fstop=6.0)
+    camera("5c", f0, n, [(0, (X2 + 1.6, 1.85, 1.35), (X2 + 0.3, 0.95, 0.5), 22), (1, (X2 + 1.6, 1.85, 1.32), (X2 + 0.35, 1.25, 0.52), 22)], fstop=6.0)
     return use
 
 def walk_arms(n, f0, f1, yaw_fn, every=8, amp=0.12):
