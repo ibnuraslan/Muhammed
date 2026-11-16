@@ -442,30 +442,23 @@ def S08(t, n):
     camera("S08", 26, t, V(GX - 0.6, GY - 3.2, 1.55), V(GX + 0.1, GY + 0.5, 1.45), t + n, V(GX - 0.2, GY - 2.8, 1.40), V(GX + 0.1, GY + 0.5, 1.50))
 
 def S09(t, n):
-    """garage: SledGuy presents the snowmobile with an open palm; hero steps toward it, both fists up"""
+    """garage: SledGuy presents the blue snowmobile with an open palm; the hero steps toward it and smiles (arms relaxed)"""
     men = [hero, M["SledGuy"]]; sm = P["P_Snowmobile"]
     setup(t, men, [sm])
     key_obj(sm, t, loc=(GX + 0.9, GY + 0.8, 0), rot=(0, 0, R(-70)))
     base(M["SledGuy"], t, (GX + 0.95, GY - 0.75), -20); base(hero, t, (GX - 1.1, GY - 0.6), 40)
+    s_ = M["SledGuy"]
     def fr(f, u):
-        s_ = M["SledGuy"]; a = ease(u / 0.35)
-        sc.frame_set(f); sh = s_.shoulder("L")
-        s_.hand("L", f, sh + s_.fwd() * 0.30 + s_.right() * (-0.25) + V(0, 0, -0.22 + 0.10 * a), s_.fwd() * 0.6 - s_.right() * 0.8, V(0, 0, -1) * 0 + V(0, 0, 1) * 0.0 - s_.right() * 0.0 + V(0, 0, 0.0) + s_.fwd() * 0.0 + V(0, 0, 1), pole=sh - s_.right() * (-1) * 0.4 + V(0, 0, -0.4))
+        a = ease(u / 0.35)
+        s_.hang("L", f, out=0.10 * a, fwd=0.22 * a, lift=0.12 * a)
         look_at(s_, f, hero.head_w(), flex=3)
-        w = ease((u - 0.25) / 0.4)
+        w = ease((u - 0.15) / 0.6)
         hero.stand(f, (GX - 1.1 + 0.35 * w, GY - 0.6 + 0.2 * w), 40 + 10 * w)
-        sc.frame_set(f)
-        for s in "LR":
-            sx = 1 if s == "L" else -1; sh2 = hero.shoulder(s); up = ease((u - 0.5) / 0.25)
-            if u > 0.5:
-                hero.hand(s, f, sh2 - hero.right() * sx * 0.20 + hero.fwd() * 0.12 + V(0, 0, -0.35 + 0.65 * up), V(0, 0, 1) * up + V(0, 0, -1) * (1 - up) + hero.fwd() * 0.3, hero.fwd(),
-                          pole=sh2 - hero.right() * sx * 0.5 + V(0, 0, -0.3) - hero.fwd() * 0.2)
+        for sd in "LR": hero.hang(sd, f)
         look_at(hero, f, sm.matrix_world.translation + V(0, 0, 0.8), flex=2)
-        hero.jaw(f, 3 * ease((u - 0.6) / 0.2))
+        hero.jaw(f, 3 * ease((u - 0.5) / 0.3))
     track(t, n, 3, fr)
-    hero.hang("L", t + int(0.5 * n) - 1); hero.hang("R", t + int(0.5 * n) - 1)
-    apply_pose(M["SledGuy"].o, "L", "flat_palm", t)
-    for s in "LR": apply_pose(hero.o, s, "relaxed", t + int(0.5 * n)); apply_pose(hero.o, s, "power_fist", t + int(0.75 * n))
+    apply_pose(s_.o, "L", "open_alarm", t + int(0.3 * n))
     camera("S09", 24, t, V(GX - 0.4, GY - 4.4, 1.45), V(GX - 0.05, GY + 0.2, 1.0), t + n, V(GX - 0.2, GY - 3.9, 1.40), V(GX - 0.05, GY + 0.2, 1.05))
 
 # ===================================================================== SNOW
@@ -516,7 +509,7 @@ def S13(t, n):
         if c.name.startswith("Logo_Van"):
             w = c.matrix_world.translation
             if w.y < NY + 3.0: side_y = w.y - 0.012
-    xy = (NX - 1.25, side_y - 0.42); base(hero, t, xy, 60)
+    xy = (NX - 1.75, side_y - 0.42); base(hero, t, xy, 60)
     def fr(f, u):
         a = ease((u - 0.12) / 0.3)
         sc.frame_set(f); sh = hero.shoulder("L")
@@ -526,7 +519,7 @@ def S13(t, n):
         hero.jaw(f, 3 * ease((u - 0.55) / 0.2))
     track(t, n, 3, fr)
     apply_pose(hero.o, "L", "open_alarm", t + int(0.42 * n))
-    camera("S13", 28, t, V(NX - 0.9, NY - 2.9, 1.35), V(NX - 0.3, NY + 2.0, 1.10), t + n, V(NX - 0.95, NY - 2.4, 1.35), V(NX - 0.6, NY + 2.0, 1.15))
+    camera("S13", 28, t, V(NX - 1.0, NY - 2.9, 1.35), V(NX - 0.5, NY + 2.0, 1.10), t + n, V(NX - 1.05, NY - 2.4, 1.35), V(NX - 0.7, NY + 2.0, 1.15))
 
 # ===================================================================== STUDIO
 def S14(t, n):
@@ -687,23 +680,18 @@ def S27(t, n):
     swap_shot("S27", [hero, M["Mayor"]], hero, M["Mayor"], P["P_Clapper"], P["P_HouseKeys"], 0.0, -6.6, gap=1.02, cam_d=2.6)
 
 def S28(t, n):
-    """house reveal: hero in front of his house, both arms up; camera cranes up and back"""
-    setup(t, [hero], [P["P_HouseKeys"]])
-    xy = (0.0, -7.2); base(hero, t, xy, 180)
-    sc.frame_set(t)
-    def fnM(u):
-        sc_ = hero.shoulder("R"); return item_matrix(sc_ + V(-0.02, 0.0, -0.55), 0)
-    key_obj(P["P_HouseKeys"], t, loc=(300, 0, -50)); vis_obj(P["P_HouseKeys"], t, False)
+    """house reveal: the hero stands in front of his house facing us, raises both arms out and up (sideways path), grinning;
+    the camera cranes up and back so the whole house fills the frame behind him"""
+    setup(t, [hero], [])
+    xy = (0.0, -7.6); base(hero, t, xy, 0)
     def fr(f, u):
-        a = ease((u - 0.25) / 0.3); sc.frame_set(f)
-        for s in "LR":
-            sx = 1 if s == "L" else -1; sh = hero.shoulder(s)
-            W = (sh + hero.right() * (-sx) * 0.12 + V(0, 0, -0.5)).lerp(sh - hero.right() * sx * 0.25 + V(0, 0.05, 0.55), a)
-            hero.hand(s, f, W, (W - sh).normalized(), hero.fwd() * -1 * 0 + V(0, 1, 0), pole=sh - hero.right() * sx * 0.4 + V(0, 0, -0.3) + V(0, 0.2, 0))
-        look_at(hero, f, V(0, 0, 4.5), flex=-4)
+        a = ease((u - 0.15) / 0.45)
+        for sd in "LR": hero.hang(sd, f, out=0.26 * a, fwd=0.08 * a, lift=0.88 * a)
+        look_at(hero, f, V(0.6, -13.0, 2.2), flex=-2)
+        hero.jaw(f, 3 * a)
     track(t, n, 3, fr)
-    for s in "LR": apply_pose(hero.o, s, "power_fist", t + int(0.4 * n))
-    camera("S28", 24, t, V(0.9, -10.6, 1.2), V(0.0, -3.0, 2.4), t + n, V(1.4, -13.0, 2.2), V(0.0, -2.0, 2.9))
+    for sd in "LR": apply_pose(hero.o, sd, "open_alarm", t + int(0.6 * n))
+    camera("S28", 24, t, V(0.6, -11.2, 1.25), V(0.0, -6.0, 2.0), t + n, V(0.9, -13.2, 2.1), V(0.0, -4.0, 2.7))
 
 def S29(t, n):
     """inside his new home: hero walks in, stops in the living room, looks around, smiles; camera pushes in"""
