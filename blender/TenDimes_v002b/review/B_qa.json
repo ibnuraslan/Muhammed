@@ -1,0 +1,944 @@
+{
+ "frames": {
+  "85": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "91": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "97": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "103": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "109": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "115": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "121": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "127": [
+   [
+    "FILL",
+    "Club_SideTableTop"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Club_SideTableTop in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "133": [
+   [
+    "FILL",
+    "Club_SideTableTop"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Club_SideTableTop in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "139": [
+   [
+    "FILL",
+    "Club_SideTableTop"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Club_SideTableTop in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "145": [
+   [
+    "FILL",
+    "Club_SideTableTop"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Club_SideTableTop in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "151": [
+   [
+    "FILL",
+    "Club_SideTableTop"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Club_SideTableTop in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "157": [
+   [
+    "FILL",
+    "Club_SideTableTop"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Club_SideTableTop in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "163": [
+   [
+    "FILL",
+    "Club_SideTableTop"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Club_SideTableTop in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "169": [
+   [
+    "FILL",
+    "Club_SideTableTop"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Club_SideTableTop in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "175": [
+   [
+    "FILL",
+    "Club_SideTableTop"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Club_SideTableTop in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "181": [
+   [
+    "FILL",
+    "Club_SideTableTop"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Club_SideTableTop in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "187": [
+   [
+    "FILL",
+    "Club_SideTableTop"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Club_SideTableTop in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "193": [
+   [
+    "FILL",
+    "Club_SideTableTop"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Club_SideTableTop in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "199": [
+   [
+    "FILL",
+    "Club_SideTableTop"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Club_SideTableTop in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "493": [
+   [
+    "CLAW",
+    "Kidnapper.L curl 30"
+   ],
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 40 deg (index vs little)"
+   ]
+  ],
+  "607": [
+   [
+    "BACKHEAD",
+    "Son"
+   ],
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "703": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "709": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "715": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "721": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "727": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "733": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "739": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "745": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "751": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "835": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "841": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "847": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "853": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "859": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "865": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "871": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "877": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "883": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "889": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "895": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "901": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "907": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "913": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "919": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "925": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "931": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "937": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "943": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "949": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "955": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "961": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "967": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "973": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "979": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "985": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "991": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "997": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "1003": [
+   [
+    "CLAW",
+    "Singer.R curl 31"
+   ],
+   [
+    "FAN",
+    "Singer.R fingers fanned 71 deg (index vs little)"
+   ]
+  ],
+  "80": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S01 -> CAM_S02"
+   ]
+  ],
+  "204": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S02 -> CAM_S03"
+   ]
+  ],
+  "360": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S03 -> CAM_S04"
+   ]
+  ],
+  "475": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S04 -> CAM_S05"
+   ]
+  ],
+  "608": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S05 -> CAM_S06"
+   ]
+  ],
+  "700": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S06 -> CAM_S07"
+   ]
+  ],
+  "752": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S07 -> CAM_S09"
+   ]
+  ],
+  "830": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S09 -> CAM_S10"
+   ]
+  ],
+  "900": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S10 -> CAM_S11"
+   ]
+  ],
+  "1008": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S11 -> CAM_S12"
+   ]
+  ],
+  "1064": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S12 -> CAM_S13"
+   ]
+  ],
+  "1130": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S13 -> CAM_S14"
+   ]
+  ],
+  "1200": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S14 -> CAM_S15"
+   ]
+  ],
+  "1285": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S15 -> CAM_S16"
+   ]
+  ],
+  "1393": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S16 -> CAM_S18"
+   ]
+  ],
+  "1493": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S18 -> CAM_S17"
+   ]
+  ],
+  "1598": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S17 -> CAM_S19"
+   ]
+  ],
+  "1712": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S19 -> CAM_S20"
+   ]
+  ],
+  "1770": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S20 -> CAM_S21"
+   ]
+  ],
+  "487": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 29 deg (index vs little)"
+   ]
+  ],
+  "499": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 53 deg (index vs little)"
+   ]
+  ],
+  "505": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 67 deg (index vs little)"
+   ]
+  ],
+  "511": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 80 deg (index vs little)"
+   ]
+  ],
+  "517": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 90 deg (index vs little)"
+   ]
+  ],
+  "523": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 95 deg (index vs little)"
+   ]
+  ],
+  "529": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "535": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "541": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "547": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "553": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "559": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "565": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "571": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "577": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "583": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "589": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "595": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "601": [
+   [
+    "FAN",
+    "Kidnapper.L fingers fanned 96 deg (index vs little)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 93,
+  "FILL": 13,
+  "CLAW": 19,
+  "BACKHEAD": 1,
+  "CAMJUMP": 19,
+  "FAN": 39
+ }
+}
