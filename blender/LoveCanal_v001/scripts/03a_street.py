@@ -66,11 +66,11 @@ fa = f0("S2")
 stand(NB, fa, head=(-4, 18)); face(NB, fa, 0.0, -6)
 stand(NB, fa + 18, head=(-8, 10), spine=3); face(NB, fa + 18, -0.004, -14)
 stand(NB, fa + 40, head=(2, 0), spine=6, flex=5); face(NB, fa + 40, -0.008, -24, 2)
-for i, f in enumerate(range(fa + 60, fx("S2") + 1, 25)):
+for i, f in enumerate(frs(fa + 60, fx("S2"), 25)):
     stand(NB, f, head=(3, 6 * math.sin(i * 1.9)), spine=6, flex=5); face(NB, f, -0.008, -24 if i % 3 else -30, 2)
 arms_hang(NB, fa); arms_hang(NB, fa + 30)
 NOSE = face_point(NB, "nose")
-for f in range(fa + 54, fx("S2") + 1, 6):
+for f in frs(fa + 54, fx("S2"), 6):
     ev(f)
     nose = world(NB, posed(NB, NOSE)); fwd = (NB.r.o.matrix_world.to_3x3() @ Vector((0, -1, 0))).normalized()
     up = Vector((0, 0, 1)); left = (NB.r.o.matrix_world.to_3x3() @ Vector((1, 0, 0))).normalized()
@@ -97,12 +97,12 @@ key_prop(LID, 0, LID.location.copy(), (0, 0, 0)); key_prop(LID, fa, LID.location
 stand(D2, fa, flex=8, spine=16, head=(18, 0)); arms_hang(D2, fa); face(D2, fa, 0.0, -8)
 stand(D2, fa + 20, flex=10, spine=20, head=(22, 0))
 GRIP = fa + 22
-for f in range(fa + 10, GRIP + 1, 4):        # reach: palm comes down onto the handle
+for f in frs(fa + 10, GRIP, 4):        # reach: palm comes down onto the handle
     u = smooth((f - fa - 10) / 12); ev(f)
     place_hand(D2.r.o, "R", f, HANDLE + Vector((0, -0.12 * (1 - u), 0.05 + 0.18 * (1 - u))), Vector((0, 0.15, -1)), Vector((0, 1, -0.2)))
 apply_pose(D2.r.o, "R", "open_alarm", fa + 10); apply_pose(D2.r.o, "R", "cup_hold", GRIP)
 # lift: torso leans back, lid comes up and toward him, face turns away
-for f in range(GRIP, fe + 1, 2):
+for f in frs(GRIP, fe, 2):
     ev(f); u = smooth((f - GRIP) / 36.0); v = smooth((f - GRIP - 14) / 30.0)
     stand(D2, f, flex=10 - 12 * v, spine=20 - 20 * v, twist=-12 * v, head=(22 - 30 * v, -38 * v), side=4 * v, pos=(0, 0.06 * v))
     p = HANDLE + Vector((0, 0.02 * u, 0.30 * u))
@@ -123,7 +123,7 @@ key_prop(TRUCK, 0, TR_POS, (0, 0, -90))         # model +X forward -> world -Y
 fa = f0("S19"); fe = fx("S19")
 pth = walk_line(D2, fa, fe, (0, 0), 0.95, stride=0.6)
 face(D2, fa, 0.0, -6); blinks(D2, fa, fe)
-for f in range(fa, fe + 1, 2):
+for f in frs(fa, fe, 2):
     ev(f)
     M = D2.r.o.matrix_world; ch = M @ D2.r.PB["spine03"].head
     fwd = (M.to_3x3() @ Vector((0, -1, 0))).normalized(); side = (M.to_3x3() @ Vector((1, 0, 0))).normalized()
@@ -148,10 +148,10 @@ camshot("S19", [(0.0, (4.0, 57.6, 1.75), (2.7, 49.4, 1.45), 32), (1.0, (3.8, 56.
 
 # ================================================================== S20: the truck pulls away; Dad2 watches it go
 fa = f0("S20"); fe = fx("S20")
-for f in range(fa, fx("S21") + 1, 2):
+for f in frs(fa, fx("S21"), 2):
     t = (f - fa) / FPS; y = TR_POS.y - (0.8 * t * t if t < 3 else 7.2 + 4.8 * (t - 3))
     key_prop(TRUCK, f, (TR_POS.x, y, 0), (0, 0, -90))
-for i, f in enumerate(range(fa, fe + 1, 20)):
+for i, f in enumerate(frs(fa, fe, 20)):
     u = (f - fa) / max(1, fe - fa)
     stand(D2, f, flex=3, spine=3, twist=-10 * u, head=(2, -10 + 55 * smooth((u - 0.55) / 0.4)))
 arms_hang(D2, fa); arms_hang(D2, fe, sway=0.01)

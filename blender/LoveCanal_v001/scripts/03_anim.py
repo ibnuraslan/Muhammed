@@ -55,6 +55,12 @@ def at_shot(n, s, M=None):
     """evaluate the rig at its placement for shot s (for world-space hand targets)"""
     ev(f0(s) + 1)
 
+def frs(a, b, step):
+    """stepped frame range that always ends ON b (keys at the cut, nothing left to interpolate toward the next shot)"""
+    r = list(range(a, b + 1, step))
+    if r and r[-1] != b: r.append(b)
+    return r
+
 def stand(H, f, pos=(0, 0), yaw=0.0, flex=4, spine=4, twist=0.0, head=(4, 0), side=0.0, dz=0.0):
     H.key_root(f, Vector((pos[0], pos[1], H.root_head.z - 0.015 + dz)), yaw=yaw, flex=flex, side=side)
     H.key_spine(f, flex=spine, twist=twist, head=head)

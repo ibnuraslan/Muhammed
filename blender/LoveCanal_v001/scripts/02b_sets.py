@@ -80,7 +80,7 @@ def cut_soil_mat():
     rp = nt.nodes.new("ShaderNodeValToRGB"); nt.links.new(ad.outputs[0], rp.inputs[0])
     cr = rp.color_ramp; cr.elements[0].position = 0.0; cr.elements[0].color = (0.75, 0.55, 0.38, 1); cr.elements[1].position = 1.0; cr.elements[1].color = (0.62, 0.42, 0.28, 1)
     e = cr.elements.new(0.45); e.color = (0.9, 0.7, 0.5, 1); e2 = cr.elements.new(0.8); e2.color = (0.5, 0.36, 0.25, 1)
-    mr = nt.nodes.new("ShaderNodeMapRange"); nt.links.new(sz.outputs["Z"], mr.inputs[0]); mr.inputs[1].default_value = 0.5; mr.inputs[2].default_value = 5.0   # object z: 0 bottom .. 5 top half
+    mr = nt.nodes.new("ShaderNodeMapRange"); nt.links.new(sz.outputs["Z"], mr.inputs[0]); mr.inputs[1].default_value = 0.5; mr.inputs[2].default_value = 9.0   # object z: 0 bottom .. 5 top half
     mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs[0].default_value = 1
     nt.links.new(src, mx.inputs[6]); nt.links.new(rp.outputs[0], mx.inputs[7]); nt.links.new(mx.outputs[2], P.inputs["Base Color"])
     nt.links.new(sz.outputs["Z"], rp.inputs[0])
@@ -89,8 +89,8 @@ M_cut = cut_soil_mat()
 M_rock = mat("CaveRock", (0.1, 0.075, 0.055), 0.9)
 
 def soil_block(name, origin, c, pocket=True):
-    o = box(name, (30, 14, 10), origin + Vector((0, 0, -5.0)), M_cut, c)
-    set_origin(o, origin + Vector((0, 0, -10)))
+    o = box(name, (30, 14, 18), origin + Vector((0, 0, -9.0)), M_cut, c)
+    set_origin(o, origin + Vector((0, 0, -18)))
     top = plane(name + "_lawn", (30, 14), origin + Vector((0, 0, 0.005)), M_lawn, c)
     edge = box(name + "_turf", (30.02, 14.02, 0.18), origin + Vector((0, 0, -0.09)), mat("TurfEdge", (0.18, 0.4, 0.08), 0.9), c)
     glow = []

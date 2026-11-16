@@ -11,28 +11,28 @@ MOUTH = face_point(FA, "mouth"); CHIN = face_point(FA, "chin")
 def glass_path(f):
     """glass centre (rig local, facing -Y): chest -> just below the lips -> chest"""
     t = f - fa
-    lo = Vector((-0.16, -0.30, 1.22)); hi_ = None
+    lo = Vector((-0.11, -0.32, 1.27)); hi_ = None
     ev(f); m = posed(FA, MOUTH)
     hi_ = m + Vector((-0.01, -0.085, -0.13))
     u = smooth(t / 30) - smooth((t - 95) / 30)
     return lo.lerp(hi_, u), u
-for i, f in enumerate(range(fa, fe + 1, 20)):
+for i, f in enumerate(frs(fa, fe, 20)):
     sip = smooth((f - fa - 25) / 20) - smooth((f - fa - 90) / 20)
     stand(FA, f, flex=3, spine=4 + 3 * math.sin(i), head=(10 * sip + 4 - 10 * smooth((f - fa - 110) / 20), 0))
 arms_hang(FA, fa)
 face(FA, fa, 0.0, -6); face(FA, fa + 60, 0.0, -18); face(FA, fa + 100, -0.006, -18, 1); face(FA, fa + 118, -0.010, -22, 2); face(FA, fe, -0.010, -20, 2)
 blinks(FA, fa, fa + 60, every=100)
-for f in range(fa, fe + 1, 2):
+for f in frs(fa, fe, 2):
     p, u = glass_path(f)
     tilt = 18 * (smooth((f - fa - 40) / 18) - smooth((f - fa - 85) / 18))
     gw = world(FA, p)
     GLASS.rotation_mode = 'XYZ'; GLASS.location = gw - Vector((0, 0, 0.075)); GLASS.rotation_euler = (R_(-tilt), 0, 0)
     GLASS.keyframe_insert("location", frame=f); GLASS.keyframe_insert("rotation_euler", frame=f)
 ev(fa); _side = (FA.r.o.matrix_world.to_3x3() @ Vector((1, 0, 0))).normalized(); _gc = GLASS.matrix_world @ Vector((0, 0, 0.07))
-print("GLASS grip", grip_follow(FA.r.o, "R", GLASS, fa, list(range(fa, fe + 1, 2)) + [fe], _gc - _side * 0.04, _side, back=0.009))
+print("GLASS grip", grip_follow(FA.r.o, "R", GLASS, fa, list(frs(fa, fe, 2)) + [fe], _gc - _side * 0.04, _side, back=0.009))
 # left hand to the collar after the frown
 NECK = (FA.r.BN["neck01"].head_local + FA.r.BN["neck02"].head_local) / 2
-for f in range(fa + 110, fe + 1, 4):
+for f in frs(fa + 110, fe, 4):
     ev(f); M = FA.r.o.matrix_world
     n_ = M @ (FA.r.PB["spine01"].head + Vector((0.04, -0.13, -0.03))); fw = (M.to_3x3() @ Vector((0, -1, 0))).normalized()
     u = smooth((f - fa - 110) / 24)
@@ -47,11 +47,11 @@ fa = f0("S5"); fe = fx("S5")
 key_vis_g = None
 GL_C = KX + Vector((-0.28, 0.62, 0.905))
 GLASS.location = GL_C; GLASS.rotation_euler = (0, 0, 0); GLASS.keyframe_insert("location", frame=fa); GLASS.keyframe_insert("rotation_euler", frame=fa)
-for i, f in enumerate(range(fa, fe + 1, 15)):
+for i, f in enumerate(frs(fa, fe, 15)):
     u = smooth((f - fa) / 50.0)
     stand(FA, f, flex=4 + 6 * u, spine=6 + 10 * u + 5 * math.sin(i * 1.9), head=(6 + 6 * u + 4 * math.sin(i * 1.9), 0), dz=-0.02 * u)
 face(FA, fa, -0.010, -20, 2); face(FA, fe, -0.011, -24, 2); blinks(FA, fa, fe, -0.010, -20, every=90)
-for f in range(fa, fe + 1, 4):        # right palm flat on the counter edge, left hand in front of the mouth
+for f in frs(fa, fe, 4):        # right palm flat on the counter edge, left hand in front of the mouth
     ev(f); M = FA.r.o.matrix_world; fw = (M.to_3x3() @ Vector((0, -1, 0))).normalized()
     place_hand(FA.r.o, "R", f, KX + Vector((-0.42, 0.66, 0.905)), Vector((0, 0, -1)), Vector((0.15, -1, 0)))
     m = M @ posed(FA, MOUTH); u = smooth((f - fa) / 24)
@@ -71,7 +71,7 @@ apply_pose(MO.r.o, "R", "shield", fa + 24)
 face(MO, fa, 0.004, -6, 1); blinks(MO, fa, fe, 0.004, -6, ofs=40)
 breathe(BOY, fa, fe, head=(-10, 8), step=24, flex=2, amp=2.5); arms_hang(BOY, fa)
 face(BOY, fa, 0.003, -4); blinks(BOY, fa, fe, 0.003, -4, ofs=70)
-camshot("S5", [(0.0, (300.95, -1.75, 1.55), (300.72, 0.85, 1.1), 24), (1.0, (300.9, -1.3, 1.52), (300.72, 0.85, 1.1), 24)])
+camshot("S5", [(0.0, (301.7, -1.95, 1.18), (300.45, 1.0, 1.08), 26), (1.0, (301.6, -1.6, 1.16), (300.45, 1.0, 1.08), 26)])
 
 # ================================================================== S22: hospital: Father in bed, Boy beside him, his hand resting on his father's
 HX = Vector((2100, 0, 0)); HBED = OB["HospitalBed"]; HCH = OB["BedsideChair"]
@@ -95,7 +95,7 @@ CHAIR_SIDE = 1                                                         # boy's c
 MF = Matrix.Translation(origin) @ tilt @ Rl
 put("Father", [("S4", FP, 0), ("S5", FP, 0), ("S22", None, MF)])
 ev(fa + 1)
-for i, f in enumerate(range(fa, fe + 1, 30)):
+for i, f in enumerate(frs(fa, fe, 30)):
     u = smooth((f - fa - 60) / 60)
     stand(FA, f, flex=0, spine=10 + 1.2 * math.sin(i * 1.5), head=(14, 14 * u * (1 if Xw.y > 0 else -1) * CHAIR_SIDE))
     for s_ in "LR": FA.key_foot(s_, f, FA.foot_xy(s_, Vector((0, 0)), 0.0) + Vector((0.0, -0.04)), 0.0, lift=-0.04, pitch=-55)   # lying: feet relaxed and pointed
@@ -198,8 +198,8 @@ print("CHAIR seat", round(SEAT_Z, 3))
 BP = Vector((hip_w.x + HEAD_SGN * 0.2, bmx.y + 0.36 if CHAIR_SIDE > 0 else bmn.y - 0.36, 0))
 put("Boy", [("S1", (0, 0, 0), 180), ("S5", BOP, yaw_to(BOP, FP)), ("S22", HX + Vector((BP.x - HX.x, BP.y, 0)), 180 if want.y < 0 else 0)])
 ev(fa + 1)
-for i, f in enumerate(range(fa, fe + 1, 30)):
-    stand(BOY, f, flex=14, spine=16 + 1.5 * math.sin(i * 1.3), head=(6, 0))
+for i, f in enumerate(frs(fa, fe, 30)):
+    stand(BOY, f, flex=12, spine=12 + 1.5 * math.sin(i * 1.3), head=(-12, 6 * math.sin(i * 0.8)))
 face(BOY, fa, 0.003, -12); blinks(BOY, fa, fe, 0.003, -12, ofs=55)
 bside = "R" if near_side == "R" else "R"
 for f in (fa, fe):
@@ -211,5 +211,5 @@ for f in (fa, fe):
 arms_hang(BOY, fa); arms_hang(BOY, fe)
 for f in (fa, fe):
     place_hand(BOY.r.o, "R", f, HAND_P + Vector((0, 0, 0.032)), Vector((0, 0, -1)), Vector((-HEAD_SGN * 0.7, 0.7 if want.y < 0 else -0.7, 0)).normalized())
-camshot("S22", [(0.0, (hip_w.x - HEAD_SGN * 0.45, bc.y - 1.55, 2.45), (hip_w.x + HEAD_SGN * 0.15, bc.y + 0.3, 0.7), 30),
-                (1.0, (hip_w.x - HEAD_SGN * 0.4, bc.y - 1.35, 2.35), (hip_w.x + HEAD_SGN * 0.15, bc.y + 0.3, 0.72), 30)])
+camshot("S22", [(0.0, (hip_w.x - HEAD_SGN * 0.15, bc.y - 1.75, 1.2), (hip_w.x + HEAD_SGN * 0.3, bc.y + 0.45, 0.88), 28),
+                (1.0, (hip_w.x - HEAD_SGN * 0.15, bc.y - 1.5, 1.18), (hip_w.x + HEAD_SGN * 0.3, bc.y + 0.45, 0.9), 28)])

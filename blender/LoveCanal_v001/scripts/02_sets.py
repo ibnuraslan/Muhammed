@@ -60,9 +60,43 @@ def window_mat():
     P.inputs["Coat Weight"].default_value = 1.0; P.inputs["Coat Roughness"].default_value = 0.03; P.inputs["Coat IOR"].default_value = 1.6
     return m
 M_win = window_mat()
+def siding_mat(name, rgb):
+    """painted lap siding without UVs (the scan's siding texture rendered black on its gable and porch faces)"""
+    m = bpy.data.materials.new(name); m.use_nodes = True; nt = m.node_tree; P = nt.nodes["Principled BSDF"]
+    P.inputs["Base Color"].default_value = (*rgb, 1); P.inputs["Roughness"].default_value = 0.7
+    P.inputs["Emission Color"].default_value = (*rgb, 1); P.inputs["Emission Strength"].default_value = 0.25
+    tc = nt.nodes.new("ShaderNodeTexCoord"); wv = nt.nodes.new("ShaderNodeTexWave"); wv.wave_type = 'BANDS'; wv.bands_direction = 'Z'
+    wv.wave_profile = 'SAW'; wv.inputs["Scale"].default_value = 1.6; nt.links.new(tc.outputs["Object"], wv.inputs["Vector"])
+    bp = nt.nodes.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.25; nt.links.new(wv.outputs["Fac"], bp.inputs["Height"]); nt.links.new(bp.outputs["Normal"], P.inputs["Normal"])
+    return m
+def fill_hull(L_, rgb):
+    bm = bmesh.new(); bm.from_mesh(L_.data)
+    ch = bmesh.ops.convex_hull(bm, input=bm.verts[:])
+    keep = set(ch["geom"]); [bm.faces.remove(f) for f in [f for f in bm.faces if f not in keep]]
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if not v.link_faces], context='VERTS')
+    c = sum((v.co for v in bm.verts), Vector()) / len(bm.verts)
+    for v in bm.verts: v.co = c + (v.co - c) * Vector((0.78, 0.78, 0.92))
+    me = bpy.data.meshes.new(L_.name + "_fill"); bm.to_mesh(me); bm.free()
+    o = bpy.data.objects.new(L_.name + "_fill", me); o.data.materials.append(mat("HouseInside", rgb, 0.8)); return o
 for L_ in (L_house0, L_house5):
     for i, m in enumerate(L_.data.materials):
         if m and any(k in m.name.lower() for k in ("glass", "window")): L_.data.materials[i] = M_win
+for i, m in enumerate(L_house5.data.materials):
+    if m and "Cladding_Siding_White" in m.name: L_house5.data.materials[i] = siding_mat("SidingTan", (0.72, 0.56, 0.38))
+    elif m and "Cladding_Siding_Tan" in m.name: L_house5.data.materials[i] = siding_mat("SidingTan2", (0.66, 0.5, 0.34))
+    elif m and m.name == "material": L_house5.data.materials[i] = siding_mat("SidingTan3", (0.7, 0.54, 0.37))
+for L_ in (L_house0, L_house5):          # inverted faces render black under bump/normal maps: make every normal face outward
+    _bm = bmesh.new(); _bm.from_mesh(L_.data)
+    bmesh.ops.remove_doubles(_bm, verts=_bm.verts[:], dist=0.002)
+    seen_ = {}; dup_ = []
+    for f_ in _bm.faces:                     # coincident duplicate faces shadow each other black: keep one
+        k_ = tuple(sorted(v.index for v in f_.verts))
+        if k_ in seen_: dup_.append(f_)
+        else: seen_[k_] = f_
+    bmesh.ops.delete(_bm, geom=dup_, context='FACES_ONLY')
+    bmesh.ops.recalc_face_normals(_bm, faces=_bm.faces[:]); _bm.to_mesh(L_.data); _bm.free()
+    print("HOUSE dedupe", L_.name, len(dup_))
+
 
 # ------------------------------------------------------------------ STREET (origin 0,0,0): road along +Y
 STREET = coll("SET_street")

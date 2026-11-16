@@ -1,7 +1,7 @@
 # exec'd by 03_anim.py: underground S7, S8; dump site S9-S14; house frames on the cut-away S15
 UX = Vector((600, 0, 0)); UX2 = Vector((600, 60, 0)); DX = Vector((900, 0, 0))
 key_vis(OB["Backdrop_under"], [(0, False)] + [x for s_ in ("S7", "S8", "S15") for x in ((f0(s_), True), (f1(s_) + 1, False))])
-camshot("S7", [(0.0, (600.0, -42.0, 4.0), (600.0, 0.0, 1.5), 32), (1.0, (600.0, -39.0, 2.2), (600.0, 0.0, -4.0), 32)])
+camshot("S7", [(0.0, (600.0, -40.0, 3.5), (600.0, 0.0, 0.5), 32), (1.0, (600.0, -37.0, 1.6), (600.0, 0.0, -3.0), 32)])
 camshot("S8", [(0.0, (597.5, -15.0, -5.7), (600.0, -4.0, -5.9), 30), (1.0, (598.8, -11.8, -5.75), (600.5, -3.0, -6.0), 30)])
 SL = OB["Under_sludge"]; SL2 = OB["Under2_sludge"]
 for o in (SL, SL2):             # slow flow: the ripple texture drifts (keyed, not Scene Time)
@@ -39,15 +39,27 @@ for f in range(fa - 1, fe + 2):
         place_hand(WK.r.o, s, f, p, n, Vector((1.0, 0, 0.32)))
 for s in "LR": apply_pose(WK.r.o, s, "flat_palm", fa)
 face(WK, fa, -0.004, -12); blinks(WK, fa, fe, -0.004, -12)
-for f in range(fa, fe + 1, 20): WK.key_spine(f, flex=34, head=(-34, 0))
+for f in frs(fa, fe, 20): WK.key_spine(f, flex=34, head=(-34, 0))
 camshot("S9", [(0.0, (DX.x + 2.6, -19.6, 0.75), (DX.x - 0.6, -18.0, 0.95), 32), (1.0, (DX.x + 2.9, -19.2, 0.75), (DX.x + 0.0, -18.0, 0.95), 34)])
 
 # ================================================================== S10: trucks loaded with drums; the Worker walks between them
 fa = f0("S10"); fe = fx("S10")
-pth = walk_line(WK, fa, fe, (0, 0), 1.1)
-walk_arms(WK, fa, fe, pth); face(WK, fa, -0.002, -8)
-for f in range(fa, fe + 1, 20): WK.key_spine(f, flex=4, head=(2, 0))
-camshot("S10", [(0.0, (DX.x + 1.8, 7.5, 1.75), (DX.x - 0.3, 17.0, 1.4), 24), (1.0, (DX.x + 1.5, 8.6, 1.7), (DX.x - 0.3, 17.0, 1.4), 24)])
+fw_ = fa + int((fe - fa) * 0.55)
+pth = walk_line(WK, fa, fw_, (0, 0), 1.1)
+walk_arms(WK, fa, fw_, pth); face(WK, fa, -0.002, -8)
+_p_end = pth(fw_)
+for i, f in enumerate(frs(fw_ + 2, fe, 6)):          # stops, turns toward the right truck and waves it back
+    stand(WK, f, pos=(_p_end.x, _p_end.y), yaw=0, flex=3, spine=4, twist=-22, head=(-4, -40))
+    sh = WK.r.BN["upperarm01.R"].head_local
+    sw = math.sin(i * 1.1)
+    W = Vector((_p_end.x + sh.x - 0.28 + 0.12 * sw, _p_end.y + sh.y - 0.12, sh.z + 0.22 + 0.04 * abs(sw)))
+    WK.key_hand("R", f, W, Vector((-0.2 * sw, -0.3, 1)), Vector((0, -1, 0)), pole=W + Vector((-0.4, 0.4, -0.3)))
+    shL = WK.r.BN["upperarm01.L"].head_local
+    WL = Vector((_p_end.x + shL.x + 0.05, _p_end.y + shL.y - 0.03, shL.z - 0.58))
+    WK.key_hand("L", f, WL, Vector((0, -0.12, -1)), Vector((-1, 0, 0)), pole=WL + Vector((0.3, 0.5, 0.25)))
+apply_pose(WK.r.o, "R", "open_alarm", fw_ + 8)
+for f in frs(fa, fw_, 20): WK.key_spine(f, flex=4, head=(2, 0))
+camshot("S10", [(0.0, (DX.x + 1.8, 7.0, 1.7), (DX.x - 0.2, 17.0, 1.4), 24), (1.0, (DX.x + 1.0, 12.2, 1.6), (DX.x - 0.2, 17.5, 1.45), 26)])
 
 # ================================================================== S11-S13: drums tip out of the truck beds and heap up in the pit
 # A throwaway rigid-body drop settles a dense heap in the pit (slots). Each drum is then KEYED: it flies in on an arc from the
@@ -87,6 +99,35 @@ for d in heap:
     M = final[d.name]; r = (M.translation.to_2d() - DX.to_2d()).length
     if r < 7.0 and M.translation.z > -3.6: slots.append((M.translation.z, d, M))
     else: bpy.data.objects.remove(d, do_unlink=True)
+_G = OB["DumpGround"]; _Gi = _G.matrix_world.inverted(); _dco = [Vector(c) for c in L_dr.bound_box]
+def _gz(x, y):
+    ok, loc, n, i = _G.ray_cast(_Gi @ Vector((x, y, 50)), _Gi.to_3x3() @ Vector((0, 0, -1)))
+    return (_G.matrix_world @ loc).z if ok else 0.0
+dropped = 0; keep_ = []
+for z_, d, M in slots:              # a drum sunk into the ground reads as a sliced wedge: leave it out
+    pen = max(_gz((M @ c).x, (M @ c).y) - (M @ c).z for c in _dco)
+    if pen > 0.04: bpy.data.objects.remove(d, do_unlink=True); dropped += 1
+    else: keep_.append((z_, d, M))
+slots = keep_
+# a drum whose core sits inside another drum (deep interpenetration) is also left out
+_ax = []
+for z_, d, M in slots:
+    a_ = (M.to_3x3() @ Vector((0, 0, 1))).normalized(); c_ = M @ Vector((0, 0, 0.44))
+    _ax.append((c_, a_))
+bad = set()
+for i in range(len(slots)):
+    if i in bad: continue
+    ci, ai = _ax[i]
+    for j in range(i + 1, len(slots)):
+        if j in bad: continue
+        cj, aj = _ax[j]
+        if (ci - cj).length > 0.95: continue
+        for t in (-0.3, -0.15, 0, 0.15, 0.3):
+            p_ = ci + ai * t; v_ = p_ - cj; h_ = v_.dot(aj)
+            if abs(h_) < 0.38 and (v_ - aj * h_).length < 0.22: bad.add(j); break
+for k in sorted(bad, reverse=True):
+    bpy.data.objects.remove(slots[k][1], do_unlink=True); slots.pop(k)
+print("HEAP dropped (ground)", dropped, "(overlap)", len(bad))
 slots.sort(key=lambda t: t[0])
 print("HEAP slots", len(slots), "of", len(heap), "top z", round(slots[-1][0], 2))
 HC = sum((t[2].translation for t in slots), Vector()) / len(slots); HC.z = 0.0
@@ -102,7 +143,7 @@ def fly(d, fs, fe_, P0, M1, q0, spin):
     """keyed arc from P0 (with orientation q0) into slot matrix M1, landing at fe_"""
     P1, q1, _ = M1.decompose(); d.rotation_mode = 'QUATERNION'
     apex = max(P0.z, P1.z) + 1.6
-    for f in list(range(fs, fe_ + 1, 2)) + [fe_]:
+    for f in list(frs(fs, fe_, 2)) + [fe_]:
         u = (f - fs) / max(1, fe_ - fs); w = u * u * (3 - 2 * u) * 0.35 + u * 0.65
         p = P0.lerp(P1, w); p.z = (1 - w) ** 2 * P0.z + 2 * (1 - w) * w * apex + w * w * P1.z
         q = q0.slerp(q1, smooth(u)) @ Quaternion((1, 0, 0), spin * (1 - smooth(u)))
@@ -119,7 +160,7 @@ for bi, b in enumerate(BEDS):            # wave 1: drums standing in each bed (s
             d.rotation_quaternion = Quaternion((0, 0, 1), random.random() * 6)
             REL = TIP0 + 50 + (4 - iy) * 6 + ix * 2
             ev(TIP0); OFF = b.matrix_world.inverted() @ d.matrix_world
-            for f in range(TIP0, REL + 1, 2):
+            for f in frs(TIP0, REL, 2):
                 ev(f); l_, q_, _ = (b.matrix_world @ OFF).decompose(); d.location = l_; d.rotation_quaternion = q_
                 d.keyframe_insert("location", frame=f); d.keyframe_insert("rotation_quaternion", frame=f)
             ev(REL); P0, q0, _ = d.matrix_world.decompose()
