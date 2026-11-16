@@ -296,47 +296,55 @@ pst.name = "Poster_logo"; pst.scale = (1.3, 1.3 * 414 / 967 + 0.12, 1); pst.data
 bpy.ops.object.transform_apply(scale=True)
 box("Poster_frame", (1.38, 0.02, 0.76), O + Vector((-0.3, 3.955, 1.85)), mat("Poster_frame", (0.3, 0.45, 0.65), rough=0.4), C)
 
-# ---------------------------------------------------------------- life vest (CC-BY, DPMA): orange, fitted on the diver
+# ---------------------------------------------------------------- life vest: built from the diver's own torso skin, inflated as foam
+# (the downloaded vest kept grey blotches and its sides cut into his arms). Follows every pose, cannot intersect the body.
 VC = col("CHARS")
-vs_ = flatten(glb(os.path.join(AS, "lifevest.glb"), VC)); vest = vs_[0]; vest.name = "Diver.vest"
-for m in vest.data.materials:
-    P = next(n for n in m.node_tree.nodes if n.type == 'BSDF_PRINCIPLED')
-    bl = next((l for l in m.node_tree.links if l.to_socket == P.inputs['Base Color']), None)
-    if bl:
-        hs = m.node_tree.nodes.new('ShaderNodeHueSaturation'); hs.inputs['Hue'].default_value = 0.08 + 0.5 - 0.5
-        src = bl.from_socket; m.node_tree.links.remove(bl)
-        bw = m.node_tree.nodes.new('ShaderNodeRGBToBW'); m.node_tree.links.new(src, bw.inputs[0])
-        rmp = m.node_tree.nodes.new('ShaderNodeValToRGB')
-        rmp.color_ramp.interpolation = 'CONSTANT'
-        rmp.color_ramp.elements[0].position = 0.0; rmp.color_ramp.elements[0].color = (0.22, 0.23, 0.25, 1)
-        rmp.color_ramp.elements[1].position = 0.035; rmp.color_ramp.elements[1].color = (0.95, 0.32, 0.04, 1)
-        m.node_tree.links.new(bw.outputs[0], rmp.inputs[0]); m.node_tree.links.new(rmp.outputs[0], P.inputs['Base Color'])
-    for l in list(m.node_tree.links):
-        if l.to_socket in (P.inputs['Roughness'], P.inputs['Metallic']): m.node_tree.links.remove(l)
-    P.inputs['Roughness'].default_value = 0.5; P.inputs['Metallic'].default_value = 0.0
 diver = bpy.data.objects["Diver"]; dbody = bpy.data.objects["Diver.body"]
-diver.location = (0, 0, 0); bpy.context.view_layer.update()   # weights must be transferred with the rig at the origin
+diver.location = (0, 0, 0); bpy.context.view_layer.update()
 BN = diver.data.bones
-ch_z = (BN["spine03"].head_local.z + BN["neck01"].head_local.z) / 2 - 0.06
-bpy.context.view_layer.objects.active = vest; vest.select_set(True)
-bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY', center='BOUNDS')
-vest.location = (BN["spine03"].head_local.x, BN["spine03"].head_local.y - 0.005, ch_z)
-vest.scale = (0.345, 0.335, 0.30); bpy.ops.object.transform_apply(location=False, scale=True)
-bpy.context.view_layer.update()
-print("VEST dims", [round(d, 3) for d in vest.dimensions], "at", tuple(round(x, 3) for x in vest.location))
-vest.parent = diver; vest.matrix_parent_inverse = diver.matrix_world.inverted()
-dt = vest.modifiers.new("DT", 'DATA_TRANSFER'); dt.object = dbody; dt.use_vert_data = True; dt.data_types_verts = {'VGROUP_WEIGHTS'}
-dt.vert_mapping = 'POLYINTERP_NEAREST'; dt.layers_vgroup_select_src = 'ALL'; dt.layers_vgroup_select_dst = 'NAME'
-bpy.ops.object.datalayout_transfer(modifier="DT"); bpy.ops.object.modifier_apply(modifier="DT")
-for g in list(vest.vertex_groups):
-    if g.name not in BN: vest.vertex_groups.remove(g)
-# crop the vest at the waist so its lower flap never cuts into the lap when he sits
-_cut = BN["spine02"].head_local.z + 0.02
-_bm = bmesh.new(); _bm.from_mesh(vest.data)
-bmesh.ops.bisect_plane(_bm, geom=_bm.verts[:] + _bm.edges[:] + _bm.faces[:], plane_co=Vector((0, 0, _cut - vest.location.z)), plane_no=Vector((0, 0, 1)), clear_inner=True)
-_bm.to_mesh(vest.data); _bm.free()
-am = vest.modifiers.new("Armature", 'ARMATURE'); am.object = diver
-sw = vest.modifiers.new("KeepOut", 'SHRINKWRAP'); sw.target = dbody; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.wrap_mode = 'OUTSIDE'; sw.offset = 0.05
+gi = {g.index: g.name for g in dbody.vertex_groups}; bodyg = dbody.vertex_groups["body"].index
+z_top = BN["neck01"].head_local.z - 0.08; z_bot = BN["spine04"].head_local.z + 0.03
+def _torso(v):
+    if not any(g.group == bodyg and g.weight > 0.5 for g in v.groups): return False
+    gs = [(gi[g.group], g.weight) for g in v.groups if gi[g.group] in BN]
+    if not gs: return False
+    dom = max(gs, key=lambda t: t[1])[0]
+    if any(k in dom for k in ("arm", "wrist", "finger", "hand", "metacarpal", "neck", "head", "clavicle", "shoulder")): return False
+    return z_bot < v.co.z < z_top
+vest = dbody.copy(); vest.data = dbody.data.copy(); vest.name = "Diver.vest"; VC.objects.link(vest); vest.parent = diver
+if vest.data.shape_keys:           # bake the phenotype shape-key mix, then drop the keys (editing a keyed mesh scrambles it)
+    kb = vest.data.shape_keys.key_blocks; base = kb[0]
+    mixed = [base.data[i].co.copy() for i in range(len(vest.data.vertices))]
+    for k in kb[1:]:
+        if k.value and not k.mute:
+            for i in range(len(mixed)): mixed[i] += (k.data[i].co - base.data[i].co) * k.value
+    vest.shape_key_clear()
+    for i, v in enumerate(vest.data.vertices): v.co = mixed[i]
+keepv = set(v.index for v in vest.data.vertices if _torso(v))
+bm = bmesh.new(); bm.from_mesh(vest.data); bm.verts.ensure_lookup_table()
+bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.index not in keepv], context='VERTS')
+for z, keep_side in ((z_top - 0.01, -1), (z_bot + 0.01, 1)):
+    bmesh.ops.bisect_plane(bm, geom=bm.verts[:] + bm.edges[:] + bm.faces[:], plane_co=Vector((0, 0, z)), plane_no=Vector((0, 0, 1)),
+                           clear_outer=(keep_side < 0), clear_inner=(keep_side > 0))
+bmesh.ops.dissolve_degenerate(bm, dist=0.003, edges=bm.edges[:])
+bm.normal_update()
+for v in bm.verts: v.co += v.normal * 0.045
+bm.to_mesh(vest.data); bm.free()
+for m in list(vest.modifiers):
+    if m.type in ('MASK',): vest.modifiers.remove(m)
+vest.data.materials.clear()
+orange = mat("Vest_orange", (0.95, 0.33, 0.04), rough=0.5)
+strap = mat("Vest_strap", (0.20, 0.21, 0.23), rough=0.6)
+vest.data.materials.append(orange); vest.data.materials.append(strap)
+zs = [BN["spine03"].head_local.z + 0.02, BN["spine04"].head_local.z + 0.07]
+for poly in vest.data.polygons:
+    cz = sum(vest.data.vertices[i].co.z for i in poly.vertices) / len(poly.vertices)
+    poly.material_index = 1 if any(abs(cz - z) < 0.022 for z in zs) else 0
+sm_ = vest.modifiers.new("SmoothFoam", 'SMOOTH'); sm_.factor = 1.0; sm_.iterations = 90
+ko_ = vest.modifiers.new("KeepOut", 'SHRINKWRAP'); ko_.target = dbody; ko_.wrap_method = 'NEAREST_SURFACEPOINT'; ko_.wrap_mode = 'OUTSIDE'; ko_.offset = 0.02
+so = vest.modifiers.new("Foam", 'SOLIDIFY'); so.thickness = 0.05; so.offset = 1; so.use_even_offset = False
+_sub = [m for m in vest.modifiers if m.type == 'SUBSURF']
+print("VEST verts", len(vest.data.vertices))
 vest.hide_render = vest.hide_viewport = True   # keyed visible only in the hospital shots (04_anim)
 
 sc.render.engine = 'CYCLES'; sc.render.resolution_x, sc.render.resolution_y = 1080, 1920; sc.render.fps = 60

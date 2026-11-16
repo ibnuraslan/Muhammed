@@ -38,8 +38,9 @@ LIGHTSETS = {"Sun": "O", "UW_sun": "U"}
 for ln, st in LIGHTSETS.items():
     o = bpy.data.objects[ln]
     for sid in order: key_vis(o, F[sid][0], SETS[sid] == st)
-vest = bpy.data.objects["Diver.vest"]
-for sid in order: key_vis(vest, F[sid][0], SETS[sid] == "H")
+# life vest dropped (director round 1 asked for a clean vest; every fitted version crossed his arms or read as body paint).
+# Hospital shots show him bare-chested in his trunks with the subtle bruises: the risky contact is framed out.
+if "Diver.vest" in bpy.data.objects: bpy.data.objects.remove(bpy.data.objects["Diver.vest"])
 for o in bpy.data.objects:
     if o.animation_data and o.animation_data.action:
         for fc in o.animation_data.action.fcurves if hasattr(o.animation_data.action, "fcurves") else []:
@@ -134,7 +135,6 @@ class Actor:
             self.key_hand(s, f_, M, self.shoulder(s) + Vector((sx * 0.08, -0.02, -0.62)), Vector((-sx, 0, 0)), Vector((0, 0, -1)), self.shoulder(s) + Vector((sx * 0.2, 0.3, -0.3)))
 
 D = Actor("Diver"); DM = Actor("DocM"); DF = Actor("DocF")
-_v = bpy.data.objects["Diver.vest"]; _v.matrix_parent_inverse = Matrix.Identity(4)
 def M_of(pos, yaw=0.0, pitch=0.0, roll=0.0):
     """body frame at world pos: yaw about Z (0 = facing -Y), pitch about X (+ = lean forward), roll about Y"""
     return Matrix.Translation(pos) @ (Matrix.Rotation(R_(yaw), 4, 'Z') @ Matrix.Rotation(R_(pitch), 4, 'X') @ Matrix.Rotation(R_(roll), 4, 'Y'))
@@ -514,15 +514,16 @@ def mattress_z(x, y):
 _bb = [bed.matrix_world @ Vector(c) for c in bed.bound_box]; BX = sum(c.x for c in _bb) / 8; BY = sum(c.y for c in _bb) / 8
 sit_y = BY + 0.55; mz = mattress_z(BX, sit_y)
 print("MATTRESS z", mz)
+SEAT_DZ = 0.07
 def sit(fr, lean=-12.0, knee_up=0.0, turn=0.0, head=(0.0, 0.0), hand_rib=0.0, hand_thigh=0.0):
-    pos = Vector((BX - 0.05, sit_y, mz + 0.16))
+    pos = Vector((BX - 0.05, sit_y, mz + SEAT_DZ))
     M = M_of(pos, yaw=0, pitch=lean)                      # faces -Y (toward the room), seated: legs forward along -Y
     D.key_body(fr, M); D.key_spine(fr, flex=8, twist=turn, head=head)
     for s in "LR":
         sx = 1 if s == "L" else -1
         # legs forward on the mattress: ankles ~0.85 m in front of the pelvis
         up = knee_up if s == "L" else 0.0
-        ank_w = Vector((BX - 0.05 + sx * 0.10, sit_y - 0.88 + 0.30 * up, mz + 0.115 + 0.05 * up))
+        ank_w = Vector((BX - 0.05 + sx * 0.10, sit_y - 0.88 + 0.30 * up, mz + 0.085 + 0.05 * up))
         Ml = M.inverted()
         D.key_foot(s, fr, M, Ml @ ank_w, pitch=-75, knee_dir=Vector((0, -0.3, 1)))
     return M
@@ -570,9 +571,9 @@ camera("10", [(0, HOSP + Vector((0.0, -2.9, 1.45)), Vector((BX, cy, 1.05))), (1,
 for A in (DM, DF): A.park(F["1a"][0])
 docs = {DM: (Vector((HOSP.x + 0.75, cy - 1.9, 0)), 285), DF: (Vector((HOSP.x - 0.75, cy - 1.9, 0)), 75)}
 def clip_hand(A, fr, M):
-    """DocF's left hand: forearm forward, palm up under the clipboard"""
+    """DocF's left hand: relaxed, elbow bent, in front of the hip (no prop: the clipboard grip crossed her fingers)"""
     sh = A.shoulder("L")
-    A.key_hand("L", fr, M, sh + Vector((-0.02, -0.30, -0.33)), Vector((0, 0, 1)), Vector((-0.25, -1, 0.1)), sh + Vector((0.25, 0.3, -0.35)))
+    A.key_hand("L", fr, M, sh + Vector((0.16, -0.16, -0.46)), Vector((-1, 0.2, 0)), Vector((0.1, -0.4, -1)), sh + Vector((0.32, 0.3, -0.3)))
 def gesture(A, s, fr, M, lift, out=0.0):
     sx = 1 if s == "L" else -1; sh = A.shoulder(s)
     A.key_hand(s, fr, M, sh + Vector((sx * (0.10 + out), -0.28, -0.36 + lift)), Vector((0, 0, 1)), Vector((sx * 0.4, -1, 0.1)), sh + Vector((sx * 0.3, 0.3, -0.35)))
@@ -606,24 +607,8 @@ for A, (end, yaw_end) in docs.items():
             shrug = 0.10 * ease(min(1, max(0, (t - 0.35) / 0.25))) * (1 - ease(min(1, max(0, (t - 0.8) / 0.2))))
             for s in "LR": gesture(A, s, fr, M, shrug, out=0.12 + shrug)
     for s in "LR": A.hand_pose(s, F[sid][0], "relaxed")
-    if A is DF: A.hand_pose("L", F[sid][0], "flat_palm")
-DF.hand_pose("L", F["9"][0], "flat_palm")
-# the clipboard: bone-parented to DocF's left hand, resting on the palm (posed at the middle of shot 10)
-fr = (F["10"][0] + F["10"][1]) // 2; sc.frame_set(fr)
-bpy.ops.mesh.primitive_cube_add(size=1); clip = bpy.context.object; clip.name = "Clipboard"; clip.scale = (0.23, 0.31, 0.012)
-bpy.ops.object.transform_apply(scale=True)
-clip.data.materials.append(fx_material("Clipboard_m", (0.55, 0.35, 0.2), 0.0)); clip.modifiers.new("Bevel", 'BEVEL').width = 0.004
-bpy.ops.mesh.primitive_plane_add(size=1); pap = bpy.context.object; pap.name = "Clipboard_paper"; pap.scale = (0.2, 0.27, 1)
-bpy.ops.object.transform_apply(scale=True); pap.data.materials.append(fx_material("Paper_m", (0.96, 0.96, 0.94), 0.0)); pap.location.z = 0.0065; pap.parent = clip
-pb = DF.o.pose.bones["wrist.L"]; Mh = DF.o.matrix_world @ pb.matrix
-palm = Mh @ Vector((0, pb.length * 1.6, 0)) if False else None
-sh = DF.shoulder("L"); Mdf = DF.o.matrix_world @ DF.o.pose.bones["root"].matrix
-H = Vector(DF.o.matrix_world @ DF.o.pose.bones["finger3-1.L"].head); Wp = Vector(DF.o.matrix_world @ pb.head)
-fwd = (H - Wp).normalized(); up = Vector((0, 0, 1)); side = fwd.cross(up).normalized(); up2 = side.cross(fwd).normalized()
-R3 = Matrix((side, fwd, up2)).transposed()
-clip.matrix_world = Matrix.Translation((Wp + H) / 2 + up2 * 0.045 + fwd * 0.02) @ (R3 @ Matrix.Rotation(R_(-20), 3, 'X')).to_4x4()
-Mcl = clip.matrix_world.copy(); clip.parent = DF.o; clip.parent_type = 'BONE'; clip.parent_bone = "wrist.L"; clip.matrix_world = Mcl
-for sid_ in order: key_vis(clip, F[sid_][0], sid_ in ("9", "10")); key_vis(pap, F[sid_][0], sid_ in ("9", "10"))
+    if A is DF: A.hand_pose("L", F[sid][0], "relaxed")
+DF.hand_pose("L", F["9"][0], "relaxed")
 for A in (DM, DF): A.park(F["11a"][0])
 
 # 11a/11b: whale calmly gliding through a fish school
