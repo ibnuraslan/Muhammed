@@ -620,10 +620,13 @@ def arrival_shots():
                 foot_at(cid, s_, fx, p + Vector((sx * 0.13, 0, 0.07)))
                 knee_pole(cid, s_, fx, p + Vector((sx * 0.14, -0.8, 0.6)))
                 sh = Vector((p.x, p.y, 0)) + H.sh[s_]
-                if cid == "AgentB" and s_ == "R":     # hand to his belt, at the front of the hip
-                    W = Vector((p.x + sx * 0.15, p.y - 0.07, H.root_head.z + 0.03))
-                    place_hand(RIGS[cid], s_, fx, sh.lerp(W, 0.55 + 0.45 * ease) if ease < 1 else W, (-sx * 0.9, 0.3, 0), (0.2 * sx, -0.4, -1))
-                    fingers(cid, s_, fx, "relaxed"); pole(cid, s_, fx, Vector((p.x + sx * 0.6, p.y + 0.35, H.root_head.z + 0.25)))
+                if cid == "AgentB" and s_ == "R":     # hand resting on the front of his belt buckle side, forearm forward, elbow out to the side
+                    hp = Vector((p.x + sx * 0.12, p.y - 0.255, H.root_head.z + 0.04))   # palm on the jacket front, not inside it
+                    if ease < 1:
+                        hang(cid, H, s_, fx, p, 0, 0.0, bend=0.6 + 0.4 * ease)
+                    else:
+                        place_hand(RIGS[cid], s_, fx, hp, (0, 1, 0), (-sx * 0.8, 0.1, -0.6))
+                        fingers(cid, s_, fx, "relaxed"); pole(cid, s_, fx, Vector((p.x + sx * 0.75, p.y - 0.05, H.root_head.z + 0.2)))
                 elif cid == "AgentC" and s_ == "L":   # open-hand gesture toward the room (palm up, forearm forward)
                     W = Vector((p.x + sx * 0.2, p.y - 0.36, H.root_head.z + 0.15 + 0.03 * math.sin(u * math.pi * 2)))
                     hang(cid, H, s_, fx, p, 0, 0.0, bend=0.6) if ease < 0.3 else place_hand(RIGS[cid], s_, fx, W, (0.2 * sx, 0.1, 1.0), (0.25 * sx, -1, 0.1))
