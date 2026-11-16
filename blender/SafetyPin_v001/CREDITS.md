@@ -25,3 +25,4 @@
 
 ## Our own
 - Safety pins, wire, straight pins, patent/note/banknote/newspaper textures (no text), pin heaps, rooms: built in scripts/.
+- tree_small_02 | Tree Small 02 | Rico Cilliers | CC0 polyhaven.com

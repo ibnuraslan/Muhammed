@@ -9,14 +9,20 @@ SPEC = {   # cid: (blend, donor)
 cid = sys.argv[sys.argv.index("--") + 1]
 bpy.ops.wm.read_factory_settings(use_empty=True)
 src, donor = SPEC[cid]
-with bpy.data.libraries.load(src, link=False) as (fd, td):
-    td.objects = [n for n in fd.objects if n == donor or n.startswith(donor + ".")]
-objs = [o for o in td.objects if o]
-col_ = bpy.data.collections.new("CH_" + cid); bpy.context.scene.collection.children.link(col_)
+if False:   # (tried: MPFB re-phenotype broke the refit) director: chest read as a bust -> MPFB re-phenotype (less muscle/weight), clothes and rig refitted
+    exec(open("/home/user/Muhammed/blender/SafetyPin_v001/scripts/remake.py").read())
+    remake(src, donor, donor, {"muscle": 0.35, "weight": 0.45})
+    col_ = bpy.data.collections["CH_" + donor]; col_.name = "CH_" + cid
+    objs = list(col_.objects); td = None
+else:
+    with bpy.data.libraries.load(src, link=False) as (fd, td):
+        td.objects = [n for n in fd.objects if n == donor or n.startswith(donor + ".")]
+    objs = [o for o in td.objects if o]
+    col_ = bpy.data.collections.new("CH_" + cid); bpy.context.scene.collection.children.link(col_)
 rig = bpy.data.objects[donor]
 for o in objs:
     if o.type == 'EMPTY' or (o != rig and o.parent != rig): bpy.data.objects.remove(o); continue
-    col_.objects.link(o)
+    if o.name not in col_.objects: col_.objects.link(o)
     o.animation_data_clear()
     if o.type == 'MESH' and o.data.shape_keys: o.data.shape_keys.animation_data_clear()
     for c in list(o.constraints): o.constraints.remove(c)

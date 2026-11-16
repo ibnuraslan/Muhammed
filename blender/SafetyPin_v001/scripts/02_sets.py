@@ -181,24 +181,43 @@ for i in range(6):   # back stacks of closed boxes with the logo
 # ============================================================ SetPark (x = 80)
 cK = col("SetPark"); X = 80.0
 grass_m = mat("Lawn", (0.32, 0.58, 0.20), 0.8)
+_nt = grass_m.node_tree; _P = _nt.nodes["Principled BSDF"]          # mottled lawn: two greens by noise, light bump
+_nz = _nt.nodes.new("ShaderNodeTexNoise"); _nz.inputs["Scale"].default_value = 18.0; _nz.inputs["Detail"].default_value = 6.0
+_cr = _nt.nodes.new("ShaderNodeValToRGB"); _cr.color_ramp.elements[0].color = (0.22, 0.45, 0.13, 1); _cr.color_ramp.elements[1].color = (0.42, 0.66, 0.24, 1)
+_nt.links.new(_nz.outputs["Fac"], _cr.inputs[0]); _nt.links.new(_cr.outputs[0], _P.inputs["Base Color"])
+_bp = _nt.nodes.new("ShaderNodeBump"); _bp.inputs["Strength"].default_value = 0.3; _n2 = _nt.nodes.new("ShaderNodeTexNoise"); _n2.inputs["Scale"].default_value = 160.0
+_nt.links.new(_n2.outputs["Fac"], _bp.inputs["Height"]); _nt.links.new(_bp.outputs["Normal"], _P.inputs["Normal"])
 gr = plane("ParkGround", cK, (X, 0, 0), (40, 40), grass_m)
 path_m = mat("Path", (0.80, 0.72, 0.58), 0.9)
 pa = plane("ParkPath", cK, (X, -1.0, 0.003), (40, 1.4), path_m)
+curb_m = mat("Curb", (0.62, 0.60, 0.56), 0.7)
+for _y in (-0.28, -1.72):    # stone path edges
+    box("PathCurb", cK, (X, _y, 0.025), (40, 0.10, 0.05), curb_m, 0.008)
 benchP, bobsP = append_asset("painted_wooden_bench", "ParkBench", cK, (X, 0, 0), 0.0, height=0.89)
 mnB, mxB = bounds(bobsP); print("PARKBENCH", mnB, mxB)
 append_asset("street_lamp_01", "StreetLamp", cK, (X + 1.5, 0.3, 0), 0.0, height=3.6)
 for i in range(9):
     append_asset("shrub_01", "Shrub%d" % i, cK, (X - 4 + i * 1.0 + random.uniform(-0.3, 0.3), 1.6 + random.uniform(0, 0.8), 0), random.uniform(0, 6), height=random.uniform(0.7, 1.1))
 gsrc, gobs = append_asset("grass_medium_01", "GrassSrc", cK, (X, -30, 0), 0.0, keep=lambda o: o.name.endswith("LOD1"))
-# simple park trees (trunk + clustered leaf balls) far behind
-bark = mat("Bark", (0.35, 0.24, 0.16), 0.8); leaf = mat("Leaves", (0.30, 0.55, 0.18), 0.7)
-for i, (tx, ty) in enumerate(((-3, 5), (2.5, 6), (6, 4.5), (-7, 6.5))):
-    bpy.ops.mesh.primitive_cylinder_add(radius=0.15, depth=3.0, location=(X + tx, ty, 1.5)); t_ = bpy.context.object; link(t_, cK); t_.data.materials.append(bark)
-    for k in range(6):
-        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=random.uniform(0.8, 1.2), location=(X + tx + random.uniform(-0.8, 0.8), ty + random.uniform(-0.6, 0.6), 3.2 + random.uniform(-0.3, 0.8)))
-        l_ = bpy.context.object; link(l_, cK); l_.data.materials.append(leaf)
-        d_ = l_.modifiers.new("Disp", 'DISPLACE'); tx_ = bpy.data.textures.new("LeafN%d%d" % (i, k), 'CLOUDS'); tx_.noise_scale = 0.4; d_.texture = tx_; d_.strength = 0.35
-        for p in l_.data.polygons: p.use_smooth = True
+# grass clumps scattered on the lawn around the bench (instanced copies of the Poly Haven grass, LOD1)
+for i in range(160):
+    _g = random.choice(gobs); _c = _g.copy(); cK.objects.link(_c); _c.parent = None
+    _x = X + random.uniform(-4, 4); _y = random.uniform(-0.15, 3.5) if random.random() < 0.8 else random.uniform(-4.5, -1.9)
+    if abs(_x - X) < 0.7 and -0.35 < _y < 0.35: _y += 0.6
+    _c.location = (_x, _y, 0); _c.rotation_euler = (0, 0, random.uniform(0, 6.3)); _s = random.uniform(0.6, 1.1) * gsrc.scale.x; _c.scale = (_s, _s, _s)
+# real trees behind the bench (Poly Haven CC0)
+for i, (tx, ty, h) in enumerate(((-2.6, 5.0, 4.2), (2.4, 6.2, 4.8), (5.5, 4.4, 3.8))):
+    append_asset("tree_small_02", "ParkTree%d" % i, cK, (X + tx, ty, 0), random.uniform(0, 6.3), height=h)
+# (old low-poly blob trees disabled: director note)
+if False:
+    bark = mat("Bark", (0.35, 0.24, 0.16), 0.8); leaf = mat("Leaves", (0.30, 0.55, 0.18), 0.7)
+    for i, (tx, ty) in enumerate(((-3, 5), (2.5, 6), (6, 4.5), (-7, 6.5))):
+        bpy.ops.mesh.primitive_cylinder_add(radius=0.15, depth=3.0, location=(X + tx, ty, 1.5)); t_ = bpy.context.object; link(t_, cK); t_.data.materials.append(bark)
+        for k in range(6):
+            bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=random.uniform(0.8, 1.2), location=(X + tx + random.uniform(-0.8, 0.8), ty + random.uniform(-0.6, 0.6), 3.2 + random.uniform(-0.3, 0.8)))
+            l_ = bpy.context.object; link(l_, cK); l_.data.materials.append(leaf)
+            d_ = l_.modifiers.new("Disp", 'DISPLACE'); tx_ = bpy.data.textures.new("LeafN%d%d" % (i, k), 'CLOUDS'); tx_.noise_scale = 0.4; d_.texture = tx_; d_.strength = 0.35
+            for p in l_.data.polygons: p.use_smooth = True
 # fallen leaves on the ground and the bench
 leaf_cols = [(0.85, 0.45, 0.12), (0.75, 0.25, 0.10), (0.88, 0.65, 0.18)]
 for i in range(140):

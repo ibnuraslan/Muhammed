@@ -80,7 +80,7 @@ def beat_B4():
     sb, sa = pin_parts("ShowPin", cP, clasp=True); sb = to_mesh(sb); sa = bpy.data.objects["ShowPin_Arm"]
     if sa.type == 'CURVE': to_mesh(sa)
     PC = Vector((0.0, -0.40, 0.98))
-    hold_pin(sb, "L", f0, PC, fd=LEFT_FD, pn=LEFT_PN, point_dir=Vector((0.6, -0.7, 0.3)))
+    hold_pin(sb, "L", f0, PC, fd=LEFT_FD, pn=LEFT_PN, point_dir=Vector((0.6, -0.7, 0.3)), out_w=1.0)
     for f, dz in ((1260, 0.03), (1400, 0.05), (1500, 0.06), (f1, 0.06)):
         hand_delta(RH, "L", f0, f, (0.0, 0.0, dz)); hold_fingers(hunt, "L", f0, f)
     rest_hands_on_bench(hunt, f0, (-0.42, None)) if False else None
@@ -101,7 +101,7 @@ def beat_B4():
     look(HP, f0, f1, 10, palhead, step=10)
     show_only(sb, [(f0, f1)])
     cam_shot("Cam4a", f0, 1400, [(f0, (0.10, -1.55, 1.12), (0.04, -0.15, 1.04)), (1400, (0.06, -1.35, 1.10), (0.04, -0.15, 1.04))], lens=40)
-    cam_shot("Cam4b", 1401, f1, [(1401, (0.05, -1.00, 1.14), (0.30, -0.05, 1.12)), (f1, (0.08, -0.90, 1.14), (0.32, -0.05, 1.13))], lens=42)
+    cam_shot("Cam4b", 1401, f1, [(1401, (0.08, -0.98, 1.26), (0.32, -0.04, 1.24)), (f1, (0.10, -0.90, 1.26), (0.33, -0.04, 1.25))], lens=55)
     for c in ("Cam4a", "Cam4b"): catchlight(pal, bpy.data.objects[c], 0, 0)
 
 # ================================================================== B5 the $15 debt (1591..1860)

@@ -53,6 +53,35 @@ pal, RP, HP = setup("Pal")
 buyer, RB, HB = setup("Buyer")
 show_only(hunt, [WIN["B1"], WIN["B2"], WIN["B4"], WIN["B5"], WIN["B6"]])
 show_only(pal, [WIN["B3"], WIN["B4"]])
+for _s in "LR":   # director: the friend's jacket read as a bust -> flatten the breast bones (body + jacket both follow)
+    _pb = pal.pose.bones["breast." + _s]; _pb.scale = (0.45, 0.45, 0.45); _pb.keyframe_insert("scale", frame=1)
+    _pb.location = pal.data.bones["breast." + _s].matrix_local.to_3x3().inverted() @ Vector((0, 0.04, -0.01)); _pb.keyframe_insert("location", frame=1)
+# chest lattice (follows spine01): pushes the front of the chest back so body + jacket read flat and male
+def _flat_chest(rig, depth=0.075):
+    sc.frame_set(1); bpy.context.view_layer.update()
+    B = rig.data.bones; bl = B["breast.L"].head_local; br = B["breast.R"].head_local
+    c = (bl + br) / 2; c.y += 0.02
+    ld = bpy.data.lattices.new(rig.name + "_ChestLat"); ld.points_u = ld.points_v = ld.points_w = 3
+    ld.interpolation_type_u = ld.interpolation_type_v = ld.interpolation_type_w = 'KEY_BSPLINE'
+    lo = bpy.data.objects.new(rig.name + "_ChestLat", ld); sc.collection.objects.link(lo)
+    lo.location = rig.matrix_world @ c; lo.scale = (0.46, 0.30, 0.34); lo.hide_render = True
+    for i, p_ in enumerate(ld.points):
+        u, v, w = i % 3, (i // 3) % 3, i // 9
+        if v == 0 and w == 1: p_.co_deform.y += depth / 0.30 * (1.0 if u == 1 else 0.6)
+        if v == 0 and w == 2 and u == 1: p_.co_deform.y += depth / 0.30 * 0.4
+    parent_to_bone(lo, rig, "spine01", 1)
+    for ch in rig.children:
+        if ch.type == 'MESH' and ("body" in ch.name or "suit" in ch.name):
+            vg = ch.vertex_groups.new(name="ChestFlat")
+            cc = c.copy(); cc.y -= 0.02
+            for v in ch.data.vertices:
+                d = Vector(((v.co.x - cc.x) / 0.20, (v.co.y - cc.y) / 0.22, (v.co.z - cc.z) / 0.15)).length
+                if d < 1.0 and v.co.y < cc.y + 0.05: vg.add([v.index], (1 - d) ** 0.7, 'REPLACE')
+            m = ch.modifiers.new("ChestFlat", 'LATTICE'); m.object = lo; m.vertex_group = "ChestFlat"
+            arm = next((i for i, mm in enumerate(ch.modifiers) if mm.type == 'ARMATURE'), None)
+            with bpy.context.temp_override(object=ch):
+                bpy.ops.object.modifier_move_to_index(modifier="ChestFlat", index=(arm + 1) if arm is not None else 0)
+# _flat_chest(pal)   # superseded by the MPFB re-phenotype in 01_chars
 show_only(buyer, [WIN["B6"]])
 HIP_H = Vector((-0.30, 0.12, 0.62)); HIP_P = Vector((0.38, 0.12, 0.62)); HIP_B = Vector((-0.05, -1.10, 0.62))
 HIP_B = Vector((-0.05, -1.20, 0.62))
@@ -84,13 +113,13 @@ proto_a = bpy.data.objects["ProtoPin_Arm"]; hero_a = bpy.data.objects["HeroPin_A
 spin = to_mesh(bpy.data.objects["StraightPin"])
 
 RIGHT_FD = Vector((0.45, -0.75, -0.45)); RIGHT_PN = Vector((0.2, -0.3, 1.0))
-def hold_pin(body, s, f, C, rig=None, fd=None, pn=None, point_dir=Vector((0.45, -0.85, 0.25))):
+def hold_pin(body, s, f, C, rig=None, fd=None, pn=None, point_dir=Vector((0.45, -0.85, 0.25)), out_w=0.8):
     """pinch the pin by its coil: hand first, then the pin is oriented so its normal (Y) runs along the pad axis"""
     rig = rig or hunt
     ax, g = pinch_at(rig, s, f, C, fd or RIGHT_FD, pn or RIGHT_PN, gap=0.0050)
     sc.frame_set(int(f)); bpy.context.view_layer.update()
     out = (LAST_Q - (rig.matrix_world @ rig.pose.bones["wrist." + s].head)).normalized()   # away from the hand, past the fingertips
-    pdir = (out * 0.8 + point_dir.normalized() * 0.2)
+    pdir = (out * out_w + point_dir.normalized() * (1 - out_w))
     x = (pdir - ax * pdir.dot(ax)).normalized(); z = x.cross(ax)
     M = Matrix((x, ax, z)).transposed()
     body.matrix_world = Matrix.Translation(LAST_Q) @ M.to_4x4(); bpy.context.view_layer.update()   # at the measured pad midpoint
@@ -176,7 +205,9 @@ def beat_B2():
     show_only(hero_b, [(f0, f1)])
     sc.frame_set(f0); bpy.context.view_layer.update()
     clasp_w = hero_b.matrix_world @ Vector((PIN_L - 0.004, 0, 0))
-    cam_shot("Cam2a", f0, 650, [(f0, tuple(clasp_w + Vector((0.07, -0.11, 0.05))), tuple(clasp_w)), (650, tuple(clasp_w + Vector((0.055, -0.085, 0.04))), tuple(clasp_w))], lens=60, fstop=14)
+    mid_w = hero_b.matrix_world @ Vector((PIN_L * 0.55, 0, 0))
+    side = yax if yax.dot(Vector((0, -1, 0.3))) > 0 else -yax          # the pin's flat side that faces the front
+    cam_shot("Cam2a", f0, 650, [(f0, tuple(mid_w + side * 0.15 + Vector((0, 0, 0.03))), tuple(mid_w)), (650, tuple(mid_w + side * 0.12 + Vector((0, 0, 0.025))), tuple(mid_w))], lens=60, fstop=14)
     cam_shot("Cam2b", 651, f1, [(651, (0.10, -1.20, 1.10), (-0.30, -0.20, 1.02)), (f1, (0.04, -1.05, 1.10), (-0.30, -0.20, 1.04))], lens=42)
     catchlight(hunt, bpy.data.objects["Cam2b"], 0, 0)
 
