@@ -510,6 +510,27 @@ box("Home_Pic", "Home", (0.62, 0.005, 0.42), (XH - 1.2, 2.21, 1.6), mat("M_Pic",
 # TV screen: an emissive picture of the subject (portrait image set in 02), placed over the TV's own screen
 scr = plane("Home_TVScreen", "Home", (0.40, 0.30), (XH - 0.07, 1.75 - 0.27, 0.549 + 0.31), (R_(90), 0, 0), mat("M_TVScreen", (0.05, 0.05, 0.05), 0.2))
 
+# lab tables: crisp procedural wood (the Poly Haven 1k texture, stretched by the table scale, read as a blurred smear)
+def table_wood(name):
+    m = bpy.data.materials.new(name); m.use_nodes = True; nt = m.node_tree; P = nt.nodes["Principled BSDF"]
+    tc = nt.nodes.new('ShaderNodeTexCoord'); mp = nt.nodes.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (0.25, 1.0, 1.0)
+    nt.links.new(tc.outputs['Object'], mp.inputs['Vector'])
+    w = nt.nodes.new('ShaderNodeTexWave'); w.wave_type = 'BANDS'; w.bands_direction = 'Y'; w.inputs['Scale'].default_value = 16.0
+    w.inputs['Distortion'].default_value = 2.5; w.inputs['Detail'].default_value = 4.0; w.inputs['Detail Scale'].default_value = 1.5
+    nt.links.new(mp.outputs[0], w.inputs['Vector'])
+    nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 40.0; nt.links.new(mp.outputs[0], nz.inputs['Vector'])
+    mx = nt.nodes.new('ShaderNodeMath'); mx.operation = 'MULTIPLY_ADD'; mx.inputs[1].default_value = 0.85
+    nt.links.new(w.outputs['Fac'], mx.inputs[0]); nt.links.new(nz.outputs['Fac'], mx.inputs[2])
+    cr = nt.nodes.new('ShaderNodeValToRGB')
+    cr.color_ramp.elements[0].position = 0.35; cr.color_ramp.elements[0].color = (0.07, 0.028, 0.010, 1)
+    cr.color_ramp.elements[1].position = 0.75; cr.color_ramp.elements[1].color = (0.20, 0.090, 0.032, 1)
+    nt.links.new(mx.outputs[0], cr.inputs['Fac']); nt.links.new(cr.outputs['Color'], P.inputs['Base Color'])
+    P.inputs['Roughness'].default_value = 0.55
+    return m
+for tn in ("LabA_Table", "LabB_Table"):
+    t = bpy.data.objects[tn]; mw = table_wood("M_TableWood_" + tn)
+    for o in [t] + list(t.children):
+        for i in range(len(o.data.materials)): o.data.materials[i] = mw
 # =============================================================== render settings / look
 w = bpy.data.worlds.new("World"); sc.world = w; w.use_nodes = True
 w.node_tree.nodes["Background"].inputs[0].default_value = (0.75, 0.82, 0.95, 1); w.node_tree.nodes["Background"].inputs[1].default_value = 0.12

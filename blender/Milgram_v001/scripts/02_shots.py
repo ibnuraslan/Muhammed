@@ -325,7 +325,7 @@ def fp_cam(sid, f0, n, i, push=0.05, lens=30, mode="mid"):
     else:
         c0 = V((x + 0.03 * side, -0.41, 1.27))
     c1 = c0 + (aim - c0).normalized() * push
-    camera(sid, f0, n, [(0, c0, aim, lens), (1, c1, aim, lens)], fstop=8.0, catch=False)
+    camera(sid, f0, n, [(0, c0, aim, lens), (1, c1, aim, lens)], fstop=22.0, catch=False)   # table 0.3 m from the lens: f/22 keeps it sharp
 
 def fp_shot(sid, f0, n, n_down, presses, lens=30, mode="mid", brace=False):
     f1 = f0 + n - 1
@@ -507,7 +507,7 @@ def shot_04(f0, n):
     cu, el = cuff_on("04", f0, f1)
     sc.frame_set(f0 + 20); c = el.matrix_world.translation.copy()
     arcs("ArcW", c, f0 + 22, f1, every=3, frac=0.55, seed=4)
-    camera("04", f0, n, [(0, (XB - 0.62, -0.65, 1.02), (XB - 0.15, -0.12, 0.80), 38), (1, (XB - 0.55, -0.57, 0.98), (XB - 0.15, -0.12, 0.80), 38)], fstop=10.0)
+    camera("04", f0, n, [(0, (XB - 0.62, -0.65, 1.02), (XB - 0.15, -0.12, 0.80), 38), (1, (XB - 0.55, -0.57, 0.98), (XB - 0.15, -0.12, 0.80), 38)], fstop=22.0)
     return ("Stranger",)
 
 def shot_05(f0, n):
@@ -673,7 +673,7 @@ def shot_19(f0, n):
 def shot_20(f0, n):
     """the clipboard on the table: the subject's own photo on the sheet (he is the real test subject)"""
     cb = bpy.data.objects["Clipboard_Table"]; c = cb.matrix_world.translation
-    camera("20", f0, n, [(0, (c.x - 0.10, c.y - 0.42, c.z + 0.40), (c.x, c.y, c.z), 34), (1, (c.x - 0.06, c.y - 0.28, c.z + 0.30), (c.x, c.y, c.z), 34)], fstop=10.0, catch=False)
+    camera("20", f0, n, [(0, (c.x - 0.10, c.y - 0.42, c.z + 0.40), (c.x, c.y, c.z), 34), (1, (c.x - 0.06, c.y - 0.28, c.z + 0.30), (c.x, c.y, c.z), 34)], fstop=22.0, catch=False)
     return ()
 
 def shot_21(f0, n):
