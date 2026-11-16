@@ -80,12 +80,14 @@ for k in suit("Wife"):          # blouse
 for k in RIGS["Wife"].children:  # long skirt: sari red with a gold hem band
     if "skirt" in k.name:
         for m in k.data.materials: two_tone(m, (0.62, 0.03, 0.05), (0.85, 0.6, 0.12), 0.12); unlink(m.node_tree, PB(m)[1].inputs['Normal'])
-        # the donor skirt has two oval holes at the hips: an under-layer 8 mm inside fills them with the same red
-        us = k.copy(); us.name = "Wife.underskirt"; sc.collection.objects.link(us)
-        dp = us.modifiers.new("Inward", 'DISPLACE'); dp.strength = -0.008; dp.mid_level = 0.0
-        while us.modifiers.find("Inward") > 0 and us.modifiers[us.modifiers.find("Inward") - 1].type in ('SUBSURF', 'SOLIDIFY'):
-            i_ = us.modifiers.find("Inward"); us.modifiers.move(i_, i_ - 1)
-        print("UNDERSKIRT", [md.type for md in us.modifiers])
+        # the donor skirt has two oval holes at the hips: fill them (small boundary loops only; waist and hem stay open)
+        bmk = bmesh.new(); bmk.from_mesh(k.data)
+        res = bmesh.ops.holes_fill(bmk, edges=bmk.edges[:], sides=40)
+        bmk.to_mesh(k.data); bmk.free(); print("SKIRT holes filled", len(res["faces"]))
+        for md in k.modifiers:          # the hip pushed through the skirt (dark oval): keep the skirt further off the body
+            if md.type == 'SHRINKWRAP' and md.name == "KeepOut": md.offset = 0.03
+            if md.type == 'SHRINKWRAP' and md.name == "DrapeOnLegs": md.offset = 0.03
+        # (no under-layer: a copy displaced along the normals ended up OUTSIDE the skirt and caused the dark hip blotch)
 DRESS = {"V1": ((0.15, 0.35, 0.75), ((0.08, 0.30, 0.12), (0.85, 0.85, 0.8), 18.0)),
          "V2": ((0.75, 0.30, 0.30), ((0.15, 0.15, 0.45), (0.85, 0.85, 0.8), 18.0)),
          "V3": ((0.90, 0.75, 0.25), ((0.10, 0.10, 0.10), (0.80, 0.80, 0.78), 18.0))}

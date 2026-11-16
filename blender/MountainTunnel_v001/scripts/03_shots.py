@@ -398,11 +398,11 @@ def shot_2b(f0, n):
     camera("2b", f0, n, [(0, (-8.5, -60.5, 1.5), (-3.5, -58.5, 1.1), 26), (1, (-7.5, -57.5, 1.6), (-0.8, -55.5, 1.2), 26)], fstop=8.0)
     return use
 
-def walk_arms(n, f0, f1, yaw_fn, every=8, amp=0.16):
+def walk_arms(n, f0, f1, yaw_fn, every=8, amp=0.16, out=0.04):
     for i, f in enumerate(sorted(set(list(range(f0, f1 + 1, every)) + [f1]))):
         sw = amp * math.sin((f - f0) * math.pi / 22.0)
-        relaxed_arm(n, "L", f, yaw_fn(f), fwd_=0.08 + sw, up=0.13 + 0.06 * max(0.0, sw / amp))
-        relaxed_arm(n, "R", f, yaw_fn(f), fwd_=0.08 - sw, up=0.13 + 0.06 * max(0.0, -sw / amp))
+        relaxed_arm(n, "L", f, yaw_fn(f), fwd_=0.08 + sw, out=out, up=0.13 + 0.06 * max(0.0, sw / amp))
+        relaxed_arm(n, "R", f, yaw_fn(f), fwd_=0.08 - sw, out=out, up=0.13 + 0.06 * max(0.0, -sw / amp))
 
 def laugh(n, f0, f1, pos, yaw, head_yaw=0.0, period=16, bend=0.0, point=None, hands_knees=False):
     """laughing: head tips back and forward in quick beats, shoulders shake; optional pointing arm"""
@@ -497,7 +497,7 @@ def shot_5a(f0, n):
     path = lambda f: p0.lerp(p1, min(1.0, (f - f0) / (n - 1)))
     HUM["Wife"].walk(path, lambda f: yaw, f0, f1, stride=0.55, lift=0.06)
     for f in range(f0, f1 + 1, 12): HUM["Wife"].key_spine(f, flex=4, head=(4 + 3 * math.sin(f / 14.0), -12 + 8 * math.sin(f / 35.0)))
-    walk_arms("Wife", f0, f1, lambda f: yaw, amp=0.12)
+    walk_arms("Wife", f0, f1, lambda f: yaw, amp=0.12, out=0.13)     # hands clear of the skirt (its keep-out wrap dented round them)
     camera("5a", f0, n, [(u, path(f0 + u * (n - 1)) + V((-0.9, -2.15, LEDGE_Z + 1.1)), path(f0 + u * (n - 1)) + V((-0.15, 0, LEDGE_Z + 0.95)), 28) for u in (0, 0.5, 1)], fstop=8.0)
     GZ[0] = 0.0
     return use
@@ -512,8 +512,8 @@ def shot_5b(f0, n):
         foot("Wife", "L", f, (p0.x - 0.1, p0.y + 0.1, GZ[0] + HUM["Wife"].ankle["L"].z), yaw)
         rf = V((p0.x + 0.15, p0.y - 0.12 - 0.22 * u, GZ[0] + HUM["Wife"].ankle["R"].z - 0.05 * u))
         foot("Wife", "R", f, rf, yaw - 10 * u, pitch=-15 * u)
-        relaxed_arm("Wife", "L", f, yaw, out=0.04 + 0.2 * u, up=0.25 * u, pose="open_alarm" if u > 0.5 else "relaxed")
-        relaxed_arm("Wife", "R", f, yaw, out=0.04 + 0.2 * u, up=0.25 * u, pose="open_alarm" if u > 0.5 else "relaxed")
+        relaxed_arm("Wife", "L", f, yaw, out=0.13 + 0.12 * u, up=0.25 * u, pose="open_alarm" if u > 0.5 else "relaxed")
+        relaxed_arm("Wife", "R", f, yaw, out=0.13 + 0.12 * u, up=0.25 * u, pose="open_alarm" if u > 0.5 else "relaxed")
     for i in range(5):     # pebbles break off the edge under her foot
         src = "Chip%d" % (i % 6); o = bpy.data.objects[src].copy(); o.name = "Pebble5b_%d" % i; bpy.data.objects[src].users_collection[0].objects.link(o)
         o.animation_data_clear(); o.scale = (3, 3, 3); p_ = V((-17.9 + 0.08 * i, LEDGE_EDGE + 0.06, LEDGE_Z + 0.03))
@@ -598,7 +598,7 @@ def drag(sid, f0, n, x0, speed=0.012):
                 hand(nm, s, f, pt - inward * 0.032, inward, V((0, 0, -1)), pole=pt + V((0, 0, 0.3)) - inward * 0.3 + d * -0.25, pose="wrap_grip")
         if f == f0 or f == f1 or i % 2 == 0:
             for f_ in (f,):
-                lie_pose("Wife", f_, head=(0, 20), arm_out=0.02)
+                lie_pose("Wife", f_, head=(0, 20), arm_out=0.09)
                 W = Ms @ Matrix.Translation(V((0, 0.35, 0.06))) @ Matrix.Translation(V((0, 0, 0.115))) @ Matrix.Rotation(R_(-90), 4, 'X')
                 loc, q, _ = W.decompose(); key_obj(bpy.data.objects["Wife"], f_, loc, q.to_euler('XYZ'))
     CUSTOM.setdefault(sid, set()).add("Wife")
@@ -639,7 +639,7 @@ def death_setup(sid, f0, n):
     Ms = Matrix.Translation(base) @ Matrix.Rotation(math.atan2(-d.x, d.y), 4, 'Z')
     loc, q, _ = Ms.decompose()
     for f in (f0, f1): key_obj(st, f, loc, q.to_euler('XYZ'))
-    for f in (f0, f1): lie_pose("Wife", f, head=(0, 22), arm_out=0.02)
+    for f in (f0, f1): lie_pose("Wife", f, head=(0, 22), arm_out=0.09)
     lie_at(sid, "Wife", f0, f1, Ms @ Matrix.Translation(V((0, 0.35, 0.06))))
     return Ms, d, side
 
