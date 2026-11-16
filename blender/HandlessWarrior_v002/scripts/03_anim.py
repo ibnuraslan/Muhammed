@@ -482,7 +482,7 @@ W.used.add("S04")
 HX = 40.0
 s0, s1 = ST["S05"], SE("S05")
 WP5 = V(HX - 0.1, -1.25, 0); WY5 = 180.0
-VPOS = {EL: (V(HX, 0.45, 0), None), VW: (V(HX - 1.05, 0.05, 0), None), M1: (V(HX + 0.95, 0.15, 0), None), M2: (V(HX + 1.15, 0.95, 0), None)}
+VPOS = {EL: (V(HX, 0.45, 0), None), VW: (V(HX - 1.05, 0.05, 0), None), M1: (V(HX + 0.45, 0.75, 0), None), M2: (V(HX + 1.15, 0.95, 0), None)}
 def face(c, p, tgt): return yaw_to(tgt - p)
 for f, b in ((s0, 0.0), (s0 + 70, 0.5), (s1, 1.0)):
     W.stand(f, WP5, WY5, flex=4, head=(4 * b, 0)); W.hang(f, WP5, WY5, out=0.15, fwd=0.04)
@@ -771,6 +771,7 @@ flag = bpy.data.objects["Flag"]; wv = flag.modifiers["Wave"]; wv.speed = 0.25
 for f in (1, END_FRAME):
     wv.time_offset = -f * 0.0; wv.keyframe_insert("time_offset", frame=f)
 vis_only([bpy.data.objects['Flag'], bpy.data.objects['FlagPole']], [(ST['S15'], END_FRAME)])
+vis_only([bpy.data.objects['Logo_Crate'], bpy.data.objects['Logo_Crate2']], [(ST['S07'], SE('S07'))])   # logo only where the crate is whole and flat-on
 hz = bpy.data.materials.new("Haze"); hn, hl_ = nodes_of(hz); hn.clear()
 ho_ = hn.new('ShaderNodeOutputMaterial'); pv = hn.new('ShaderNodeVolumePrincipled'); pv.inputs['Density'].default_value = 0.012
 pv.inputs['Color'].default_value = (1.0, 0.85, 0.85, 1); hl_.new(pv.outputs[0], ho_.inputs['Volume'])
@@ -810,7 +811,7 @@ h2 = head_at(W, ST["S02"] + 60)
 camera("S02", [(0, h2 + V(0.35, -1.55, -0.45), h2 + V(0, 0, -0.25)), (-1, h2 + V(0.3, -1.35, -0.42), h2 + V(0, 0, -0.18))], lens=32)
 camera("S03", [(0, V(-2.3, -0.2, 1.5), V(0.4, 0.6, 1.3)), (-1, V(-2.0, 0.2, 1.5), V(0.8, 1.0, 1.3))], lens=30)
 camera("S04", [(0, V(7.6, -1.4, 1.5), p4(ST["S04"]) + V(0, 0, 1.45)), (-1, V(9.6, -0.6, 1.5), p4(SE("S04")) + V(0, 0, 1.45))], lens=32)
-camera("S05", [(0, V(HX + 2.4, -0.9, 1.55), V(HX - 0.3, -0.35, 1.45)), (-1, V(HX + 2.2, -0.75, 1.55), V(HX - 0.3, -0.35, 1.48))], lens=26)
+camera("S05", [(0, V(HX + 2.7, -1.6, 1.55), V(HX - 0.05, -0.2, 1.35)), (-1, V(HX + 2.5, -1.45, 1.55), V(HX - 0.05, -0.2, 1.38))], lens=22)
 h6 = head_at(W, ST["S06"] + 40)
 camera("S06", [(0, h6 + V(0.55, 1.5, -0.12), h6 + V(0, 0, -0.22)), (-1, h6 + V(0.42, 1.25, -0.1), h6 + V(0, 0, -0.18))], lens=35)
 camera("S07", [(0, V(HX - 0.1, -3.6, 1.5), V(HX - 0.25, 0.3, 1.4)), (-1, V(HX - 0.1, -3.3, 1.5), V(HX - 0.25, 0.3, 1.45))], lens=20)
