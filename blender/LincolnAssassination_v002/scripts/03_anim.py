@@ -251,12 +251,12 @@ def actor(c, f, pos, yaw, arms_up=0.0, lean=0.0, head=(0, 0), stepw=0.0):
     c.stand(f, pos, yaw, flex=4 + lean, head=head, twist=8 * math.sin(f / 23.0))
     Rz = Matrix.Rotation(R_(yaw), 3, 'Z'); g = 0.0
     for sd, sx in (("L", 1), ("R", -1)):
-        a = arms_up if sd == "L" else arms_up * 0.85
+        a = min(1.0, arms_up * (1.0 if sd == "L" else 0.9))
         sh = c.o.data.bones["upperarm01." + sd].head_local * c.s
-        W = V(pos[0], pos[1], g) + Rz @ V(sx * (abs(sh.x) + 0.12 + 0.35 * a), -0.08 - 0.25 * a, sh.z - 0.55 * c.s + 0.55 * a)
-        d = Rz @ V(sx * 0.6 * a, -0.2, -1 + 1.6 * a).normalized(); n = Rz @ V(-sx * (1 - a), -a, 0).normalized()
-        c.hand_w(sd, f, W, d, n, V(pos[0], pos[1], g) + Rz @ V(sx * 0.6, 0.4, sh.z - 0.3))
-        apply_pose(c.o, sd, "open_alarm" if a > 0.4 else "relaxed", f)
+        W = V(pos[0], pos[1], g) + Rz @ V(sx * (abs(sh.x) - 0.02 - 0.06 * a), -0.20 - 0.12 * a, sh.z - 0.52 * c.s + 0.30 * a)
+        d = Rz @ V(-sx * 0.35, -0.7, 0.2 + 0.5 * a).normalized(); n = Rz @ V(-sx, -0.2, 0).normalized()
+        c.hand_w(sd, f, W, d, n, V(pos[0], pos[1], g) + Rz @ V(sx * 0.6, 0.45, sh.z - 0.35))
+        apply_pose(c.o, sd, "relaxed", f)
 for f in range(TH0, TH1 + 1, 10):
     t = f / 60.0
     peak = max(0.0, 1 - abs(f - EV_LOUD) / 45.0)
@@ -264,6 +264,8 @@ for f in range(TH0, TH1 + 1, 10):
     actor(AB, f, (3.55, -0.55), yaw_to(V(0.6, -1, 0)), arms_up=0.15 + 0.2 * abs(math.sin(t * 1.7)) + 0.4 * peak, lean=-10 * peak,
           head=(-12 * peak, -8))
 for c in (AA, AB): park(c, TH1 + 1); park(c, END_FRAME)
+_hat = bpy.data.objects.get("ActorA_Hat")
+if _hat: _hat.hide_render = True; _hat.hide_viewport = True   # the brim hid her face from the box's high angle
 
 # ---- gunman in the box: gun rises, aims at the back of the head, fires, lowers, turns to the ledge
 GPOS = CHP + Rc @ V(0.25, 1.70, 0) ; GPOS.z = BZ
@@ -327,7 +329,7 @@ def blend_gun(u):
     loc = G_LOW.translation.lerp(G_AIM.translation, u)
     q = G_LOW.to_quaternion().slerp(G_AIM.to_quaternion(), u)
     return Matrix.Translation(loc) @ q.to_matrix().to_4x4()
-RAISE0, RAISE1 = ST["S01"] + 20, ST["S01"] + 110
+RAISE0, RAISE1 = ST["S01"] + 4, ST["S01"] + 72
 for f in list(range(TH0, RAISE0, 10)) + list(range(RAISE0, RAISE1 + 1, 3)):
     key_gun(f, blend_gun((f - RAISE0) / (RAISE1 - RAISE0)) if f >= RAISE0 else G_LOW)
 for f in range(RAISE1 + 6, F_FIRE + 1, 6):            # steady aim, a tiny breath tremor
@@ -394,8 +396,8 @@ for f in range(LAUNCH, LAND + 1, 2):
     base = root - V(0, 0, hipz - 0.10 + 0.25 * tuck)
     feet_at(f, base, spread=0.14, fwd=(0.10 * tuck, -0.05 * tuck), lift=(0, 0), pitch=(10 * tuck, -5 * tuck))
     for sd, sx in (("L", 1), ("R", -1)):
-        W = root + Rj @ V(sx * (0.42 + 0.1 * tuck), -0.05, 0.05 + 0.25 * tuck)
-        G.hand_w(sd, f, W, Rj @ V(sx * 0.5, -0.3, 0.6).normalized(), Rj @ V(0, 1, 0), root + Rj @ V(sx * 0.6, 0.4, 0.2))
+        W = root + Rj @ V(sx * 0.30, -0.30, 0.02 + 0.14 * tuck)
+        G.hand_w(sd, f, W, Rj @ V(-sx * 0.2, -1, 0.35).normalized(), Rj @ V(-sx, 0, -0.3).normalized(), root + Rj @ V(sx * 0.65, 0.35, -0.1))
         apply_pose(G.o, sd, "open_alarm", f) if f == LAUNCH else None
 # landing: absorb, left knee buckles to the boards, left palm flat on the floor
 KNEEL0, KNEEL1 = LAND + 14, LAND + 52
@@ -590,7 +592,7 @@ for f in range(BA0, BA1 + 1, 3):
     root = GB + V(0, 0, hipz - 0.03 - crouch) + RzB @ V(0, 0.10 * (1 - u), 0)
     G.H.key_root(f, G.a(root), yaw=BYAW, flex=6 + 18 * (1 - u))
     hv = smooth((f - HANDS0) / (HANDS1 - HANDS0))
-    G.H.key_spine(f, flex=8 + 18 * (1 - u) - 4 * hv, head=(6 * (1 - u) - 18 * hv, 10 * math.sin(f / 35.0) * (1 - hv)))
+    G.H.key_spine(f, flex=8 + 18 * (1 - u) - 4 * hv, head=(6 * (1 - u) - 14 * hv + 6 * hv * math.sin(f / 19.0), 10 * math.sin(f / 35.0) * (1 - hv) + 16 * hv * math.sin(f / 28.0)))
     for sd, sx in (("L", 1), ("R", -1)):
         G.use(); xy = GB + RzB @ V(sx * 0.15, 0.06 * sx, 0); G.H.key_foot(sd, f, G.a(xy).to_2d(), BYAW)
         pb = G.o.pose.bones["Pole_knee." + sd]; n = "Pole_knee." + sd
@@ -753,9 +755,10 @@ for f, e in ((1, 0.0), (ST["S11"], 900.0), (ST["S12"], 0.0)):
     rimL.energy = e; rimL.keyframe_insert("energy", frame=f)
 for fc in fcurves_of(rimL.animation_data.action):
     for k in fc.keyframe_points: k.interpolation = 'CONSTANT'
-camera("S12", [(0, V(95.0, 2.5, 1.55), V(104.0, 14.0, 1.9)), (-1, V(95.2, 0.5, 1.55), V(104.0, -3.0, 1.9))], lens=26)
+camera("S12", [(0, V(96.0, -2.0, 1.6), V(106.0, 6.0, 2.0)), (-1, V(96.1, -1.8, 1.6), V(106.0, 6.0, 2.0))], lens=26)
 camera("S13", [(0, V(100.4, 6.8, 0.8), V(100.6, 13.0, 1.5)), (-1, V(100.4, 4.6, 0.9), V(100.5, 8.5, 1.55))], lens=24)
-camera("S14", [(0, V(X1 + 0.5, -9.6, 1.7), V(X1 + 1.2, 2.5, 0.8)), (-1, V(X1 + 0.7, -8.3, 1.6), V(X1 + 1.2, 2.5, 1.1))], lens=38)
+camera("S14", [(0, GB + V(-1.65, -1.25, 0.55), GB + V(0, 0, 0.62)), (-1, GB + V(-1.45, -1.10, 0.55), GB + V(0, 0, 0.66))], lens=35)
+camera("S14B", [(0, V(X1 + 0.5, -9.6, 1.7), V(X1 + 1.2, 2.5, 0.8)), (-1, V(X1 + 0.7, -8.3, 1.6), V(X1 + 1.2, 2.5, 1.1))], lens=38)
 camera("S15", [(0, V(X1 + 0.6, 0.55, 1.15), V(X1 + 1.25, 2.3, 1.55)), (-1, V(X1 + 0.55, 0.75, 1.2), V(X1 + 1.25, 2.3, 1.75))], lens=30)
 sc.camera = bpy.data.objects["CAM_S01"]
 

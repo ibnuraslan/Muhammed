@@ -72,7 +72,12 @@
  {
   "beat": "S14",
   "frame": 1131,
-  "first_words": "and he managed to hide for 12 days before authorities"
+  "first_words": "and he managed to hide for 12 days before"
+ },
+ {
+  "beat": "S14B",
+  "frame": 1271,
+  "first_words": "authorities finally"
  },
  {
   "beat": "S15",

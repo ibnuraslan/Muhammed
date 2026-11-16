@@ -7,7 +7,8 @@ SHOTS = [("S01", 1, "He pulled out a small pistol"), ("S02", 107, "and aimed it 
          ("S08", 687, "breaking his leg"), ("S09", 750, "when he landed"),
          ("S10", 801, "But despite the injury,"), ("S11", 893, "he escaped the theater on"),
          ("S12", 962, "horseback"), ("S13", 1025, "A massive manhunt followed,"),
-         ("S14", 1131, "and he managed to hide for 12 days before authorities"),
+         ("S14", 1131, "and he managed to hide for 12 days before"),
+         ("S14B", 1271, "authorities finally"),
          ("S15", 1325, "found him hiding inside a barn and killed him")]
 END_FRAME = 1503
 EV_FIRE = 480        # "trigger"

@@ -1,6 +1,6 @@
 # LincolnAssassination_v002: built to the client VO
 
-Vertical 1080×1920, 60 fps, Cycles, 16 shots with hard cuts, frames **1–1503** (VO 24.76 s; the last word ends at 24.54 s).
+Vertical 1080×1920, 60 fps, Cycles, 17 shots with hard cuts, frames **1–1503** (VO 24.76 s; the last word ends at 24.54 s).
 Built from Phase 1 (v001, director-passed at P1e) by putting the VO word frames into `scripts/timing.py` and rebuilding.
 Every action plays at 1× from its word frame; nothing is time-stretched.
 
@@ -29,5 +29,6 @@ Every action plays at 1× from its word frame; nothing is time-stretched.
 | S11 | 893 | he escaped the theater on | night street, gallops toward camera (moonlit rim) |
 | S12 | 962 | horseback. | side gallop past the DA KRAS FILMS poster |
 | S13 | 1025 | A massive manhunt followed, | three soldiers with torches jog toward camera (logo crate) |
-| S14 | 1131 | and he managed to hide for 12 days before authorities | barn from the doorway: he hides behind the hay; soldiers step in on "authorities" |
+| S14 | 1131 | and he managed to hide for 12 days before | close: he crouches hidden behind the hay bales, fire behind him, looks around |
+| S14B | 1271 | authorities finally | barn from the doorway: soldiers with torches step in, he stands up |
 | S15 | 1325 | found him hiding inside a barn and killed him. | medium on him, hands raised, fire behind; ends on a hard cut (no shooting shown) |
