@@ -393,7 +393,7 @@ def sleep_pose(f, u):
     head_w = MAN.matrix_world @ MAN.pose.bones["head"].head
     shR = MAN.matrix_world @ MAN.pose.bones["upperarm01.R"].head
     chest = MAN.matrix_world @ MAN.pose.bones["spine03"].head
-    W = chest + V((0.10, -0.04, 0.25 + 0.004 * br))            # right hand resting ON his chest (surface, not into it)
+    W = chest + V((0.12, -0.06, 0.19 + 0.004 * br))            # right hand resting ON his chest (surface, not into it)
     H.key_hand("R", f, W, V((-0.3, 0.9, 0)), V((0, 0, -1)), shR + V((0.3, -0.5, 0.2)))
 def sleep_hand(f):
     sc.frame_set(f)
