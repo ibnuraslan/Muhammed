@@ -223,9 +223,13 @@ def _():
     f0, f1 = W("S10"); _GZ[0] = DRAIN_FLOOR; H = HS["ResA"]; pos = Vector((0.0, -12.4, 0))
     for i, t in enumerate((0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.3)):
         f = f0 + round(t * (f1 - f0)); sh = 0 if i in (0, 6) else (-26 if i % 2 else 26)
-        stand(HS["ResA"], f, pos, 180, flex=4, head=(-4, sh))
-    poses(CH["ResA"], f0, "relaxed", None); use("ResA", "S10")
-    cam_shot("S10", [(0, (0.6, -10.8, -0.05)), (1, (0.3, -11.35, -0.18))], [(0, (0.0, -12.4, -0.3)), (1, (0.0, -12.4, -0.28))], lens=45)
+        p = stand(HS["ResA"], f, pos, 180, flex=8, head=(-4, sh), arms=False)
+        # director v002 note: forearms forward at the water surface, palms pushing floating trash aside (not an armless bust)
+        for s_ in "LR":
+            sx = 1 if s_ == "L" else -1; shv = H.sh[s_] - H.root_head; sw = sx * 0.07 * (0.5 + 0.5 * math.sin(i * 1.7 + (0 if s_ == "L" else 1.5)))
+            body_hand(H, s_, f, p, 180, (shv.x + sx * 0.10 + sw, shv.y - 0.40, -0.75 - p.z + 0.05), (sx * 0.25, -0.9, -0.2), (0, 0, -1))
+    poses(CH["ResA"], f0, "relaxed", "relaxed"); use("ResA", "S10")
+    cam_shot("S10", [(0, (0.75, -10.45, 0.08)), (1, (0.45, -11.0, -0.05))], [(0, (0.0, -12.4, -0.42)), (1, (0.0, -12.4, -0.4))], lens=36)
 def edge_stand(n, sid, pos, yaw, look=18, shift=0.0):
     f0, f1 = W(sid); _GZ[0] = 0.0; H = HS[n]
     for i, t in enumerate((0, 0.45, 0.9, 1.3)):
