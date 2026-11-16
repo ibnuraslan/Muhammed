@@ -1,0 +1,15 @@
+body_prop_cross (pipeline/body_prop_cross.py via scripts/bpc_frames.py), P1 file, frames: every 12th + mid + last of every shot (227 frames)
+props: tables, chairs, generator body/levers/plates, cuffs, clipboard on table. Counts = crossing edges summed over checked frames (VIS = in camera).
+shots with no visible crossing: 02, 05, 07, 10, 11, 12, 13a, 13b, 15, 16, 17, 19, 20, 21, 24, 27, 28, 29
+01    1029 edges on 9 frames: lowerleg01.R x LabB_Chair 279; lowerleg01.L x LabB_Chair 279; upperleg02.L x LabB_Chair 153; upperleg02.R x LabB_Chair 135; finger3-3.R x LabB_Table 58
+03      14 edges on 1 frames: finger2-3.L x Gen_LeverTip02 14
+04    2368 edges on 13 frames: lowerleg01.L x LabB_Chair 403; lowerleg01.R x LabB_Chair 307; upperleg02.L x LabB_Chair 221; finger2-2.L x LabB_Table 194; finger4-3.L x LabB_Table 192
+06    5023 edges on 9 frames: upperleg02.L x LabA_Chair 563; lowerleg01.R x LabA_Chair 435; lowerleg01.L x LabA_Chair 333; upperleg02.R x LabA_Chair 244; finger2-2.R x LabA_Table 226
+08    1318 edges on 13 frames: lowerleg01.R x LabB_Chair 465; lowerleg01.L x LabB_Chair 441; upperleg02.L x LabB_Chair 219; upperleg02.R x LabB_Chair 189; finger3-3.L x LabB_Table 4
+09    3366 edges on 13 frames: lowerleg01.R x LabB_Chair 403; lowerleg01.L x LabB_Chair 403; finger5-1.R x LabB_Table 241; finger3-2.R x LabB_Table 236; finger2-3.R x LabB_Table 230
+14    5094 edges on 9 frames: lowerleg01.R x LabA_Chair 576; upperleg02.L x LabA_Chair 567; upperleg02.R x LabA_Chair 360; lowerleg01.L x LabA_Chair 333; finger2-2.R x LabA_Table 252
+18    1803 edges on 17 frames: lowerleg01.R x LabB_Chair 635; lowerleg01.L x LabB_Chair 594; upperleg02.L x LabB_Chair 289; upperleg02.R x LabB_Chair 255; finger3-3.L x LabB_Table 18
+22    6281 edges on 11 frames: lowerleg01.R x LabA_Chair 704; upperleg02.L x LabA_Chair 682; upperleg02.R x LabA_Chair 440; lowerleg01.L x LabA_Chair 351; finger3-2.R x LabA_Table 276
+23      53 edges on 2 frames: finger2-3.R x Gen_LeverTip24 19; finger2-3.R x Gen_LeverTip25 19; finger2-3.R x Gen_Lever25 13; finger2-3.R x Gen_Lever24 2
+25      37 edges on 1 frames: finger2-3.R x Gen_LeverTip29 23; finger2-3.R x Gen_Lever29 14
+26    6243 edges on 11 frames: lowerleg01.R x LabA_Chair 704; upperleg02.L x LabA_Chair 693; upperleg02.R x LabA_Chair 440; lowerleg01.L x LabA_Chair 407; finger2-2.R x LabA_Table 303
