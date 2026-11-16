@@ -393,7 +393,7 @@ def sleep_pose(f, u):
     head_w = MAN.matrix_world @ MAN.pose.bones["head"].head
     shR = MAN.matrix_world @ MAN.pose.bones["upperarm01.R"].head
     chest = MAN.matrix_world @ MAN.pose.bones["spine03"].head
-    W = chest + V((0.10, -0.04, 0.13 + 0.004 * br))            # right hand resting on his chest
+    W = chest + V((0.10, -0.04, 0.25 + 0.004 * br))            # right hand resting ON his chest (surface, not into it)
     H.key_hand("R", f, W, V((-0.3, 0.9, 0)), V((0, 0, -1)), shR + V((0.3, -0.5, 0.2)))
 def sleep_hand(f):
     sc.frame_set(f)
@@ -575,7 +575,7 @@ def singer(s):
         sh = MAN.matrix_world @ MAN.pose.bones["upperarm01.R"].head
         ch = MAN.matrix_world @ MAN.pose.bones["spine03"].head
         k = 0.5 - 0.5 * math.cos((f - s["f0"]) * 0.05)           # starts on his heart, opens forward to the guests, returns
-        WR = (ch + V((0.05, -0.20, 0.10))).lerp(sh + V((-0.04, -0.44, -0.22)), k)
+        WR = (ch + V((0.04, -0.30, 0.10))).lerp(sh + V((-0.04, -0.44, -0.22)), k)
         hand_at(f, "R", WR, V((1, 0, 0.3)).lerp(V((-0.4, -0.8, 0.3)), k), V((0, 1, 0)).lerp(V((0, -0.3, 1)), k), 0.0, pole_off=(0.2, -0.3, 0.45))
         shL = MAN.matrix_world @ MAN.pose.bones["upperarm01.L"].head
         hand_idle(f, "L", 0.0, fwd_off=0.14 + 0.04 * math.sin(f * 0.05), out=0.10)
