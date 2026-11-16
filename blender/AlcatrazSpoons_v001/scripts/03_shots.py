@@ -499,8 +499,8 @@ def shot_5b(f0, n):
         for s, dx in (("L", -1.0), ("R", 1.0)):
             hand("P1", s, f, gpos + V((dx * 0.335, dy - 0.01, 0.0)), V((-dx, 0, 0)), V((0, 1, 0)), pole=wpos("P1", "upperarm01." + s, f) + V((dx * 0.12, -0.25, -0.35)), pose="relaxed")
     for s, dx in (("L", -1.0), ("R", 1.0)):     # release: hands open and come off the frame sides before it tips
-        hand("P1", s, push_end + 2, gpos + V((dx * 0.44, 0.1, 0.0)), V((-dx, 0, 0)), V((0, 1, 0)), pole=wpos("P1", "upperarm01." + s, push_end + 3) + V((dx * 0.12, -0.25, -0.35)), pose="flat_palm")
-    for f, loc, rx in ((push_end + 8, gpos + V((0.15, 0.24, -0.05)), 25), (push_end + 16, gpos + V((0.4, 0.38, -0.2)), 80), (push_end + 20, V((X2 + 0.6, gpos.y + 0.45, FZ2 + 0.012)), 90), (push_end + 24, V((X2 + 0.62, gpos.y + 0.47, FZ2 + 0.03)), 85), (push_end + 28, V((X2 + 0.63, gpos.y + 0.48, FZ2 + 0.012)), 90)):
+        hand("P1", s, push_end + 2, gpos + V((dx * 0.5, 0.08, 0.0)), V((-dx, 0, 0)), V((0, 1, 0)), pole=wpos("P1", "upperarm01." + s, push_end + 3) + V((dx * 0.12, -0.25, -0.35)), pose="flat_palm")
+    for f, loc, rx in ((push_end + 8, gpos + V((-0.03, 0.24, -0.05)), 25), (push_end + 16, gpos + V((-0.4, 0.38, -0.2)), 80), (push_end + 20, V((X2 - 0.6, gpos.y + 0.45, FZ2 + 0.012)), 90), (push_end + 24, V((X2 - 0.62, gpos.y + 0.47, FZ2 + 0.03)), 85), (push_end + 28, V((X2 - 0.63, gpos.y + 0.48, FZ2 + 0.012)), 90)):
         g.location = loc; g.rotation_euler = (R_(rx), 0, R_(180)); g.keyframe_insert("location", frame=f); g.keyframe_insert("rotation_euler", frame=f)
     for f, back in ((push_end + 20, 0.03), (f1, 0.06)):     # hands stay up in the opening, easing back as the grille falls
         crawl_pose("P1", f, (X2, -0.8 - back), yw, 0.0, FZ2, head=(-30, 0))
@@ -525,8 +525,8 @@ def shot_5c(f0, n):
     stride = 0.32; dist = 0.3
     for f in range(f0, f1 + 1, 6):
         u = (f - f0) / (n - 1); y = 0.74 + dist * ss(u)
-        crawl_pose("P1", f, (X2 - 0.2, y), yw - 10 * ss(u), (y - 0.74) / stride, FZ2, head=(-30 - 10 * math.sin(u * 3), 35 * math.sin(u * 5)))
-    camera("5c", f0, n, [(0, (X2 + 1.25, 1.75, 0.6), (X2 - 0.15, 0.55, 0.55), 24), (1, (X2 + 1.2, 1.85, 0.65), (X2 - 0.2, 0.75, 0.6), 24)], fstop=6.0)
+        crawl_pose("P1", f, (X2 + 0.35, y), yw + 10 * ss(u), (y - 0.74) / stride, FZ2, head=(-30 - 10 * math.sin(u * 3), 35 * math.sin(u * 5)))
+    camera("5c", f0, n, [(0, (X2 + 1.55, 1.55, 0.62), (X2 + 0.15, 0.55, 0.5), 24), (1, (X2 + 1.5, 1.65, 0.66), (X2 + 0.15, 0.7, 0.55), 24)], fstop=6.0)
     return use
 
 def walk_arms(n, f0, f1, yaw_fn, every=8, amp=0.12):
@@ -541,7 +541,7 @@ def shot_5d(f0, n):
     for f in (f0, f1):
         g.location = (X2 - 0.75, 0.09, FZ2 + 0.28); g.rotation_euler = (R_(-12), 0, R_(180))
         g.keyframe_insert("location", frame=f); g.keyframe_insert("rotation_euler", frame=f)
-    for nm, y, x0, x1, d0 in (("P1", 0.55, X2 - 1.2, X2 + 1.4, 0), ("P2", 0.82, X2 - 2.1, X2 + 0.6, 10)):
+    for nm, y, x0, x1, d0 in (("P1", 0.55, X2 - 1.2, X2 + 1.4, 0), ("P2", 0.78, X2 - 2.1, X2 + 0.6, 10)):
         path = lambda f, x0=x0, x1=x1, y=y: V((x0 + (x1 - x0) * (f - f0) / (n - 1), y, 0))
         HUM[nm].walk(path, lambda f: 90.0, f0, f1, stride=0.62, lift=0.07)
         for f in range(f0, f1 + 1, 12):
@@ -587,7 +587,7 @@ def stair_climb(n, f0, f1, k0, k1, x, delay=0):
     tread edges; the pelvis rises on a smooth ramp; arms swing loosely (no hand contacts)"""
     RISE, RUN, Y0 = 0.2, 0.29, -3.5
     yaw = 180.0; S = k1 - k0; T = (f1 - f0 - delay) / max(1, S)          # frames per tread
-    ty = lambda k: Y0 + (k - 1) * RUN + 0.035 if k > 0 else Y0 - 0.3
+    ty = lambda k: Y0 + (k - 1) * RUN + 0.035 if k > 0 else Y0 - 0.42
     tz = lambda k: max(0, k) * RISE + 0.025
     def foot_at(s, f):
         """tread events: event i lifts the L foot (even i) or R foot (odd i) onto tread k0+i+1 over 0.9 T frames"""

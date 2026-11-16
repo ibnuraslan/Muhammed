@@ -382,8 +382,8 @@ for i, (y, z, r) in enumerate(((0.14, 2.55, 0.06), (0.14, 2.3, 0.04), (2.1, 2.6,
 for k in range(6):
     cyl("S2_Vert%d" % k, 0.035, 3.0, (X2 - 3 + k * 1.3, 2.13, 1.5), M_STEEL, C2, verts=16)
 fit = append_model("modular_industrial_pipes_01", C2, (X2 + 1.6, 2.0, 1.6), rot=(0, 0, R_(180)), scale=1.0, names=["modular_industrial_pipes_01_pipe08"])
-cr = append_model("wooden_crate_01", C2, (X2 - 0.2, 1.58, 0.2), rot=(0, 0, R_(90)), scale=1.25, names=["wooden_crate_01", "wooden_crate_01_lid", "wooden_crate_01_latch"])
-cr2 = append_model("wooden_crate_01", C2, (X2 - 0.25, 1.6, 0.6), rot=(0, 0, R_(93)), scale=1.25, names=["wooden_crate_01", "wooden_crate_01_lid", "wooden_crate_01_latch"])
+cr = append_model("wooden_crate_01", C2, (X2 - 0.55, 1.58, 0.2), rot=(0, 0, R_(90)), scale=1.25, names=["wooden_crate_01", "wooden_crate_01_lid", "wooden_crate_01_latch"])
+cr2 = append_model("wooden_crate_01", C2, (X2 - 0.6, 1.6, 0.6), rot=(0, 0, R_(93)), scale=1.25, names=["wooden_crate_01", "wooden_crate_01_lid", "wooden_crate_01_latch"])
 CRATE = next(o for o in cr if o.name.startswith("wooden_crate_01") and "lid" not in o.name and "latch" not in o.name)
 # DA KRAS FILMS logo: decal on the crate's long side facing the corridor (-y), dark version (light wood)
 def logo_decal(name, img, parent, loc, rot, width, cname):
