@@ -1,0 +1,82 @@
+[
+ {
+  "beat": "S01_crowd_bat",
+  "frame": 1,
+  "first_words": "A fan threw what looked like"
+ },
+ {
+  "beat": "S02_bat_lands",
+  "frame": 95,
+  "first_words": "rubber bat onto the stage during"
+ },
+ {
+  "beat": "S03_notices",
+  "frame": 150,
+  "first_words": "the stage during the concert. Without"
+ },
+ {
+  "beat": "S04_steps",
+  "frame": 276,
+  "first_words": "Without thinking, Ozzy Osbourne picked it"
+ },
+ {
+  "beat": "S05_grabs",
+  "frame": 349,
+  "first_words": "Ozzy Osbourne picked it up and"
+ },
+ {
+  "beat": "S06_rises",
+  "frame": 386,
+  "first_words": "it up and bit into it,"
+ },
+ {
+  "beat": "S07_to_mouth",
+  "frame": 416,
+  "first_words": "and bit into it, believing it"
+ },
+ {
+  "beat": "S08_bite",
+  "frame": 460,
+  "first_words": "it, believing it was just a"
+ },
+ {
+  "beat": "S08c_crowd",
+  "frame": 494,
+  "first_words": "believing it was just a toy."
+ },
+ {
+  "beat": "S09_recoil",
+  "frame": 599,
+  "first_words": "But the moment he bit down,"
+ },
+ {
+  "beat": "S10_shock",
+  "frame": 712,
+  "first_words": "realized the bat was real. Its"
+ },
+ {
+  "beat": "S11_stares",
+  "frame": 843,
+  "first_words": "Its blood filled his mouth and"
+ },
+ {
+  "beat": "S12_drops",
+  "frame": 929,
+  "first_words": "and he immediately understood what had"
+ },
+ {
+  "beat": "S13_bends",
+  "frame": 1029,
+  "first_words": "happened. After the concert, he was"
+ },
+ {
+  "beat": "S14_hospital",
+  "frame": 1093,
+  "first_words": "After the concert, he was rushed"
+ },
+ {
+  "beat": "S15_mask_cu",
+  "frame": 1239,
+  "first_words": "where doctors gave him rabies shots."
+ }
+]
