@@ -183,7 +183,7 @@ strap_m = mat("StrapOrange", (0.95, 0.45, 0.08), 0.6)
 for k, yy in enumerate((-0.45, 0.62)):
     rbox(f"Strap{k}", (0.62, 0.05, 0.012), IX + Vector((0.30, yy, STR_Z + 0.033)), strap_m, CI, 0.004)
     rbox(f"StrapBuckle{k}", (0.06, 0.06, 0.018), IX + Vector((0.08, yy, STR_Z + 0.036)), chrome, CI, 0.004)
-for sx in (0.0,):          # far rail only: the near rail is down (he sits on that edge)
+for sx in (0.0, 0.6):
     cyl(f"StrRail{sx}", 0.012, 1.4, IX + Vector((sx, 0.0, STR_Z + 0.10)), steel, CI, rot=(R_(90), 0, 0))
 # defibrillator, IV pole + bag, jump bag
 rbox("Defib", (0.22, 0.30, 0.26), IX + Vector((-0.80, 0.55, 0.55)), mat("DefibOrange", (0.95, 0.5, 0.1), 0.45), CI, 0.03)

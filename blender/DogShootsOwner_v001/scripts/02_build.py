@@ -457,11 +457,10 @@ def seated(H, rig, f, pos, yaw=0.0, lean=-8.0, flex=6.0, head=(0, 0), twist=0.0,
             pb.location = H.r.rest(n).to_3x3().inverted() @ (pole - H.r.BN[n].head_local); pb.keyframe_insert("location", frame=f, group=n)
     H.key_spine(f, flex=flex, twist=twist, head=head)
 
-LAP_Z = float(os.environ.get("DSO_LAPZ", "0.24"))
 def hands_lap(rig, f, pos, yaw=0.0, legs_out=False):
     c = Matrix.Rotation(R_(yaw), 3, 'Z')
     for s, sx in (("L", 1), ("R", -1)):
-        place_hand(rig, s, f, pos + c @ Vector((0.16 * sx, -0.38, LAP_Z if not legs_out else 0.15)), (0, 0, -1), c @ Vector((0, -1, 0)))
+        place_hand(rig, s, f, pos + c @ Vector((0.12 * sx, -0.26, 0.17 if not legs_out else 0.15)), (0, 0, -1), c @ Vector((0, -1, 0)))
         apply_pose(rig, s, "relaxed", f)
 
 def dog_key(f, loc, yaw, pose):
@@ -588,7 +587,7 @@ def S04(f0, f1):
     D0 = Vector((0.13 - 0.17 - 0.03, 0.70, BZ + 0.008))
     for k in (0, f1 - f0):
         dog_key(f0 + k, D0, 90, dog_pose_stand(head=(-14, 0, -10), tail=10, ext={"__FR": "trig"}))
-    fb = f0 + 5
+    fb = f0 + 40
     keyobj(FLASH, f0, scale=0.01); keyobj(FLASH, fb - 1, scale=0.01); keyobj(FLASH, fb, scale=1.8); keyobj(FLASH, fb + 5, scale=1.2); keyobj(FLASH, fb + 12, scale=0.01)
     emit_key(fl_m, f0, 0); emit_key(fl_m, fb - 1, 0); emit_key(fl_m, fb, 40); emit_key(fl_m, fb + 12, 0)
     light_key(FL_L, f0, 0); light_key(FL_L, fb - 1, 0); light_key(FL_L, fb, 80); light_key(FL_L, fb + 14, 0)
@@ -697,7 +696,7 @@ def phone_pose(f, raise_=0.0, look=(22, 0), mouth=0):
     seated(HOWN, OWNER, f, seat_top, lean=-4, flex=10, head=look)
     hp = Vector((DRV.x - 0.06, DRV.y - 0.33, seat_top.z + 0.55 + raise_))
     place_hand(OWNER, "R", f, hp, (0.25, 0.85, -0.35), (0.25, -0.25, 0.95)); apply_pose(OWNER, "R", "cup_hold", f, amount=PHONE_CURL)
-    place_hand(OWNER, "L", f, seat_top + Vector((0.16, -0.38, LAP_Z)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "L", "relaxed", f)
+    place_hand(OWNER, "L", f, seat_top + Vector((0.12, -0.27, 0.17)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "L", "relaxed", f)
     return hp
 PH = dup(PHONE, "PhoneHeld", (0, 0, 0), (0, 0, 0), 1.0, CT, linked=False)
 PH.data.transform(Matrix.Diagonal((1.0, 0.82, 1.0, 1.0)))
@@ -751,7 +750,7 @@ def phone_grip_shot(keys):
     seat_top = SEAT_TOP.copy()
     for fr, lk in keys:
         seated(HOWN, OWNER, fr, seat_top, lean=-4, flex=10, head=lk)
-        place_hand(OWNER, "L", fr, seat_top + Vector((0.16, -0.38, LAP_Z)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "L", "relaxed", fr)
+        place_hand(OWNER, "L", fr, seat_top + Vector((0.12, -0.27, 0.17)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "L", "relaxed", fr)
     sc.frame_set(keys[0][0])
     C = Vector((DRV.x - 0.08, seat_top.y - 0.34, seat_top.z + 0.47))
     face = OWNER.matrix_world @ OWNER.pose.bones["head"].head
@@ -786,14 +785,14 @@ def tap_pose(f, reach, look=(18, -20)):
     """reach 0 = right hand on his thigh, 1 = index fingertip 4 mm off the screen"""
     seat_top = SEAT_TOP.copy()
     seated(HOWN, OWNER, f, seat_top, lean=-4, flex=10 + 6 * reach, head=look)
-    place_hand(OWNER, "L", f, seat_top + Vector((0.16, -0.38, LAP_Z)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "L", "relaxed", f)
+    place_hand(OWNER, "L", f, seat_top + Vector((0.12, -0.27, 0.17)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "L", "relaxed", f)
     if reach <= 0:
-        place_hand(OWNER, "R", f, seat_top + Vector((-0.16, -0.38, LAP_Z)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "R", "relaxed", f)
+        place_hand(OWNER, "R", f, seat_top + Vector((-0.12, -0.27, 0.17)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "R", "relaxed", f)
         return
     tip = MOUNT_C + PH_N * 0.010 + Vector((0, 0, -0.015))
     fdir = (tip - (seat_top + Vector((-0.10, -0.2, 0.45)))).normalized()
     palm = tip - fdir * 0.095
-    rest = seat_top + Vector((-0.16, -0.38, LAP_Z))
+    rest = seat_top + Vector((-0.12, -0.27, 0.17))
     p_ = rest.lerp(palm, reach)
     place_hand(OWNER, "R", f, p_, (0, 0, -1), fdir); apply_pose(OWNER, "R", "point", f)
     if reach >= 0.99:          # correct so the measured index tip sits 4 mm in front of the screen
@@ -831,20 +830,17 @@ _gb = GAUZE.modifiers.new("bev", 'BEVEL'); _gb.width = 0.003; _gb.segments = 2
 GAUZE.data.materials.append(mat("Gauze", (0.97, 0.97, 0.96), 0.8)); move_to(GAUZE, CI)
 def S09(f0, f1):
     PRESENT["09"] = {"own", "ma"}
-    st = IX + Vector((float(os.environ.get('DSO_SX', '0.44')), 0.15, STR_Z + float(os.environ.get('DSO_SZ', '0.05'))))
-    seated(HOWN, OWNER, f0, st, yaw=90, lean=-6, flex=8, head=(10, 15), knee_fwd=float(os.environ.get("DSO_K9", "0.45")), foot_z=0.34)
-    seated(HOWN, OWNER, f1, st, yaw=90, lean=-6, flex=9, head=(12, 25), knee_fwd=float(os.environ.get("DSO_K9", "0.45")), foot_z=0.34)
+    st = IX + Vector((0.40, 0.15, STR_Z + 0.13))
+    seated(HOWN, OWNER, f0, st, yaw=90, lean=-6, flex=8, head=(10, 15), knee_fwd=0.58, foot_z=0.30)
+    seated(HOWN, OWNER, f1, st, yaw=90, lean=-6, flex=9, head=(12, 25), knee_fwd=0.58, foot_z=0.30)
     hands_lap(OWNER, f0, st, yaw=90); hands_lap(OWNER, f1, st, yaw=90)
     # medic A stands behind him (he faces +X), left hand flat on his upper back, right arm bent, hand at his own waist
-    pa = IX + Vector((float(os.environ.get('DSO_PAX', '-0.30')), 0.22, 0))
+    pa = IX + Vector((-0.30, 0.22, 0))
     for fr, hd, dz in ((f0, (22, 0), 0.0), ((f0 + f1) // 2, (25, 5), -0.03), (f1, (24, 2), -0.05)):
         stand(HMA, MEDA, fr, pa, yaw=90, head=hd, flex=14, hands=False)
-        sc.frame_set(fr)
-        _bk = OWNER.matrix_world @ OWNER.pose.bones["spine03"].head
-        place_hand(MEDA, "L", fr, Vector((_bk.x - float(os.environ.get("DSO_BKX", "0.19")), _bk.y + 0.04, _bk.z + dz)), (1, 0, 0), (0, 0.15, 1)); apply_pose(MEDA, "L", "flat_palm", fr)
+        place_hand(MEDA, "L", fr, IX + Vector((0.155, 0.27, STR_Z + 0.50 + dz)), (1, 0, 0), (0, 0.15, 1)); apply_pose(MEDA, "L", "flat_palm", fr)
         place_hand(MEDA, "R", fr, pa + Vector((0.10, -0.24, 1.02)), (0, 1, 0), (1, 0.3, -0.4)); apply_pose(MEDA, "R", "relaxed", fr)
-    sc.frame_set(f0); _sp = OWNER.matrix_world @ OWNER.pose.bones["spine03"].head
-    attach_to_hand(GAUZE, MEDA, "L", f0, along=0.095, off=0.036, toward=_sp, axes="z")
+    attach_to_hand(GAUZE, MEDA, "L", f0, along=0.095, off=0.036, toward=IX + Vector((0.4, 0.27, STR_Z + 0.5)), axes="z")
     c = camera("09", 24)
     cam_key(c, f0, IX + Vector((0.55, -1.55, 1.55)), IX + Vector((0.0, 0.2, 1.0))); cam_key(c, f1, IX + Vector((0.45, -1.35, 1.52)), IX + Vector((0.0, 0.25, 1.0)))
 
@@ -1059,37 +1055,9 @@ def park(key, f):
     rig, H = CHARS[key]
     stand(H, rig, f, PARK[key])
 
-def all_fcurves(action):
-    try:
-        return list(action.fcurves)
-    except Exception:
-        out = []
-        for layer in action.layers:
-            for strip in layer.strips:
-                for cb in strip.channelbags: out += list(cb.fcurves)
-        return out
-def all_fcurves_of(idb):
-    ad = getattr(idb, "animation_data", None)
-    if not ad or not ad.action: return []
-    return all_fcurves(ad.action)
-def trim_after(f1, ff):
-    """cut every key in (f1, ff]: insert the curve's value at f1 first (pose exactly as authored at that frame)."""
-    if ff <= f1: return
-    ids = list(bpy.data.objects) + list(bpy.data.materials) + list(bpy.data.lights) + list(bpy.data.cameras) + \
-          [m.node_tree for m in bpy.data.materials if m.node_tree]
-    for idb in ids:
-        for fc in all_fcurves_of(idb):
-            pts = [k for k in fc.keyframe_points if f1 < k.co.x <= ff + 0.5]
-            if not pts: continue
-            v = fc.evaluate(f1)
-            for k in sorted(pts, key=lambda k: -k.co.x): fc.keyframe_points.remove(k)
-            fc.keyframe_points.insert(f1, v, options={'FAST'}); fc.update()
-
 lay = layout()
 for sid, st, f0, f1 in lay:
-    ff = max(f1, f0 + clip_len(sid) - 1)          # author the full 1x clip, then cut it at the VO frame
-    FUN[sid](f0, ff)
-    trim_after(f1, ff)
+    FUN[sid](f0, f1)
     pres = PRESENT[sid]
     for key in ("own", "ma", "mb", "dog"):
         if key not in pres:
@@ -1100,7 +1068,7 @@ f08 = SH["08a"][1]; f08e = SH["08b"][2]
 for fr, hid in ((1, True), (f08 - 1, True), (f08, False), (f08e, False), (f08e + 1, True)):
     PH.hide_render = PH.hide_viewport = hid; PH.keyframe_insert("hide_render", frame=fr); PH.keyframe_insert("hide_viewport", frame=fr)
 f9, f9e = SH["09"][1], SH["09"][2]
-f10, f10e = (SH["10"][1], SH["10"][2]) if "10" in SH else (-10, -9)
+f10, f10e = SH["10"][1], SH["10"][2]
 for ob_, (a_, b_) in ((CLIP, (f10, f10e)), (GAUZE, (f9, f9e))):
     for fr, hid in ((1, True), (a_ - 1, True), (a_, False), (b_, False), (b_ + 1, True)):
         ob_.hide_render = ob_.hide_viewport = hid; ob_.keyframe_insert("hide_render", frame=fr); ob_.keyframe_insert("hide_viewport", frame=fr)
@@ -1117,6 +1085,15 @@ def fix_curves(idblock):
                 kp.handle_left_type = 'VECTOR'; kp.handle_right_type = 'VECTOR'
             if any(fr == f1 for _, _, _, f1 in lay): kp.interpolation = 'CONSTANT'
         fc.update()
+def all_fcurves(action):
+    try:
+        return list(action.fcurves)
+    except Exception:
+        out = []
+        for layer in action.layers:
+            for strip in layer.strips:
+                for cb in strip.channelbags: out += list(cb.fcurves)
+        return out
 for idb in list(bpy.data.objects) + list(bpy.data.materials) + list(bpy.data.lights) + list(bpy.data.cameras):
     ad = getattr(idb, "animation_data", None)
     if not ad or not ad.action: continue

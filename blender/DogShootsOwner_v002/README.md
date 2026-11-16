@@ -1,7 +1,7 @@
 # DogShootsOwner_v002: delivery package (built to the voiceover)
 
 A vertical explainer film (1080×1920, 60 fps, Cycles, hard cuts), frames **1–1592** (26.5 s). The source version
-`DogShootsOwner_v001` (Phase 1, passed) is untouched. The build scripts live in `../DogShootsOwner_v001/scripts/`.
+`DogShootsOwner_v001` (Phase 1, passed) is untouched. The Phase-2 build scripts are in `scripts/` (copied from v001 and edited here).
 
 ## Files
 | File | What it is |
@@ -21,7 +21,7 @@ Shots 10 (hospital doorway) and 11 (ambulance toward camera) were dropped becaus
 
 ## Rebuild
 ```
-B=/opt/blender/blender-5.2.2-linux-x64/blender; S=../DogShootsOwner_v001/scripts
+B=/opt/blender/blender-5.2.2-linux-x64/blender; S=scripts
 $B -b lib3.blend --python $S/02_build.py -- film_vo.blend          # lib3 = 01_lib + 01b_lib2 + 01c_sleepdog
 $B -b film_vo.blend --python $S/03_package.py -- DogShootsOwner_v002_VO.mp3 pkg_big.blend
 $B -b pkg_big.blend --python $S/04_shrink_images.py -- /tmp/shrink DogShootsOwner_v002_60fps.blend
