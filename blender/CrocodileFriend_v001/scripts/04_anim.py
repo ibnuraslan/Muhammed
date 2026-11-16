@@ -29,7 +29,11 @@ def _gz(x, y, top=3.0):
 # ------------------------------------------------------------------ man (Keeper) rig prep
 MAN = OB["Keeper"]
 for ch in MAN.children:
-    if "short02" in ch.name: ch.hide_render = ch.hide_viewport = True     # bald, like the real story's man (generic face)
+    if "short02" in ch.name: ch.hide_render = ch.hide_viewport = True     # old flat cap-like hair off
+from bl_ext.user_default.mpfb.services.humanservice import HumanService
+_HAIR = "/root/.config/blender/5.2/extensions/.user/user_default/mpfb/data/hair/short01/short01.mhclo"
+HumanService.add_mhclo_asset(_HAIR, OB["Keeper.body"], asset_type="Hair", material_type="MAKESKIN")
+for o in bpy.context.selected_objects: o.select_set(False)
 bpy.context.view_layer.objects.active = MAN
 for o in bpy.context.selected_objects: o.select_set(False)
 MAN.select_set(True)
@@ -284,13 +288,17 @@ shot("S05_PondWide", 200, "B4 kept it in a secret pond behind his house",
 def s06(s):
     for f in frames(s):
         u = u_of(s, f)
-        croc_key(f, 2.6, 8.6 + 2.6 * u, 90.0, z=WATER_Z - 0.27, swim=f / 60.0, swim_amp=16, tuck=0.8)
-        man_stand(f, V((-2.0, 3.6)), 200.0, spine=(4, 0, 0), head=(-8, 8))
-        for s_ in "LR":
-            if f % 4 == 1 or f == s["f1"]: hand_idle(f, s_, 200.0)
-    for s_ in "LR": fingers(s["f0"], s_, "relaxed"); fingers(s["f1"], s_, "relaxed")
+        croc_key(f, 2.3 - 0.8 * u, 8.0 - 2.4 * u, -105.0, z=WATER_Z - 0.27, swim=f / 60.0, swim_amp=16, tuck=0.8)
+        man_stand(f, V((0.8, 3.6)), 165.0, flex=6, spine=(10 + 4 * math.sin(f * 0.05), 0, 0), head=(-14, 6 * math.sin(f * 0.03)), crouch=0.04)
+    for f in frames(s, 2):
+        sc.frame_set(f)
+        shR = MAN.matrix_world @ MAN.pose.bones["upperarm01.R"].head
+        wave = 0.12 * math.sin(f * 0.16)
+        hand_at(f, "R", shR + V((-0.10 + wave, 0.42, 0.02)), V((0, 1, 0.2)), V((0, 0, 1)), 165.0, pole_off=(-0.2, -0.4, 0.45))
+        hand_idle(f, "L", 165.0)
+    fingers(s["f0"], "R", "relaxed"); fingers(s["f1"], "R", "relaxed"); fingers(s["f0"], "L", "relaxed"); fingers(s["f1"], "L", "relaxed")
 shot("S06_CrocSwim", 150, "B4 (croc swimming toward camera, house behind)",
-     (((3.4, 14.6, 0.75), (1.0, 6.0, 0.9)), ((3.2, 14.3, 0.7), (1.0, 6.0, 0.85))), s06, 30)
+     (((2.6, 9.6, 1.35), (1.0, 3.6, 0.95)), ((2.3, 8.9, 1.25), (1.0, 3.6, 0.95))), s06, 30)
 
 # ---------------- B5 nine pounds of meat a day: bucket + toss
 BUCKET = OB["Bucket"]; MEAT = OB["Meat"]; MEAT2 = OB["MeatInBucket"]
@@ -384,8 +392,9 @@ def sleep_pose(f, u):
     sc.frame_set(f)
     head_w = MAN.matrix_world @ MAN.pose.bones["head"].head
     shR = MAN.matrix_world @ MAN.pose.bones["upperarm01.R"].head
-    W = V((head_w.x + 0.05, head_w.y - 0.22, g + 0.06))     # right hand resting on the grass beside his head
-    H.key_hand("R", f, W, V((-0.6, -0.4, 0)), V((0, 0, 1)), shR + V((0.2, -0.4, 0.3)))
+    chest = MAN.matrix_world @ MAN.pose.bones["spine03"].head
+    W = chest + V((0.10, -0.04, 0.13 + 0.004 * br))            # right hand resting on his chest
+    H.key_hand("R", f, W, V((-0.3, 0.9, 0)), V((0, 0, -1)), shR + V((0.3, -0.5, 0.2)))
 def sleep_hand(f):
     sc.frame_set(f)
     P = croc_point(("spine2", (0.0, 0.25, 0.40)))
@@ -397,17 +406,17 @@ def s09(s):
     for f in frames(s, 4): sleep_hand(f)
     for s_ in "LR": fingers(s["f0"], s_, "relaxed"); fingers(s["f1"], s_, "relaxed")
 shot("S09_SleepWide", 200, "B6 he even slept beside it (night)",
-     (((0.9, -0.1, 2.3), (0.8, 3.1, 0.2)), ((0.9, 0.5, 1.9), (0.8, 3.1, 0.2))), s09, 26)
+     (((0.9, -0.3, 2.4), (0.7, 3.1, 0.2)), ((0.8, 0.8, 1.7), (0.6, 3.1, 0.2))), s09, 26)
 def s10(s): s09(s)
 shot("S10_SleepClose", 170, "B6 thinking his love would heal its wounds",
-     (((0.4, 1.1, 1.5), (0.6, 3.2, 0.25)), ((0.5, 1.6, 1.25), (0.6, 3.2, 0.25))), s10, 30)
+     (((-0.25, 0.9, 1.5), (-0.05, 3.0, 0.3)), ((-0.1, 1.75, 1.05), (-0.05, 3.0, 0.3))), s10, 30)
 
 # ---------------- B7 release: points to the river, croc leaves, refuses, comes back
 def s11(s):
     for f in frames(s):
         u = u_of(s, f)
         croc_key(f, -3.6 - 1.8 * u, 2.6 + 1.4 * u, 140.0, gait=f / 45.0, gait_amp=22)
-        man_stand(f, V((-1.8, 0.6)), 225.0 - 90 + 90, spine=(4, -10, 0), head=(-5, -12))
+        man_stand(f, V((-1.8, 0.6)), 225.0, flex=4 * smooth(u * 3), spine=(4 + 6 * smooth(u * 3), -10 * math.sin(u * 3), 0), head=(-5, -12 + 10 * math.sin(u * 4)))
     for f in frames(s, 2):
         sc.frame_set(f); u = u_of(s, f)
         shR = MAN.matrix_world @ MAN.pose.bones["upperarm01.R"].head
@@ -418,7 +427,7 @@ def s11(s):
     fingers(s["f0"], "R", "relaxed"); fingers(s["f0"] + 50, "R", "point"); fingers(s["f1"] - 30, "R", "point"); fingers(s["f1"], "R", "relaxed")
     fingers(s["f0"], "L", "relaxed"); fingers(s["f1"], "L", "relaxed")
 shot("S11_Release", 200, "B7 when he tried to release it back to the wild",
-     (((-5.0, -2.0, 1.8), (-3.2, 2.0, 0.6)), ((-4.8, -1.7, 1.75), (-3.4, 2.2, 0.6))), s11, 22)
+     (((-7.4, 6.2, 1.5), (-2.4, 1.1, 0.9)), ((-6.8, 5.6, 1.4), (-2.3, 1.1, 0.9))), s11, 30)
 def s12(s):
     for f in frames(s):
         u = u_of(s, f); turn = smooth(min(1, max(0, (u - 0.2) / 0.6)))
@@ -532,7 +541,7 @@ def s18(s):
         hand_idle(f, "L", 180.0, drop=0.14, fwd_off=0.22)
     fingers(s["f0"], "R", "flat_palm"); fingers(s["f1"], "R", "flat_palm"); fingers(s["f0"], "L", "relaxed"); fingers(s["f1"], "L", "relaxed")
 shot("S18_Died", 220, "B10 and when it finally died",
-     (((0.4, 6.0, 1.35), (0.9, 3.5, 0.55)), ((0.5, 5.7, 1.25), (0.9, 3.5, 0.55))), s18, 30)
+     (((0.3, 6.3, 2.0), (0.9, 3.6, 0.45)), ((0.4, 5.9, 1.85), (0.9, 3.6, 0.45))), s18, 30)
 
 # ---------------- B11 public funeral, he sang for his friend
 FUN = [n for n in EX if n.startswith("Crowd")] + ["SpecB", "SpecE"]
@@ -565,10 +574,12 @@ def singer(s):
         sc.frame_set(f)
         sh = MAN.matrix_world @ MAN.pose.bones["upperarm01.R"].head
         ch = MAN.matrix_world @ MAN.pose.bones["spine03"].head
-        hand_at(f, "R", ch + V((0.05, -0.20, 0.10)), V((1, 0, 0.3)), V((0, 1, 0)), 0.0, pole_off=(0.2, -0.3, 0.45))
+        k = 0.5 + 0.5 * math.sin(f * 0.045)                      # slow sweep: hand on heart -> open to the guests
+        WR = (ch + V((0.05, -0.20, 0.10))).lerp(sh + V((-0.30, -0.38, -0.12)), k)
+        hand_at(f, "R", WR, V((1, 0, 0.3)).lerp(V((-0.4, -0.8, 0.3)), k), V((0, 1, 0)).lerp(V((0, -0.3, 1)), k), 0.0, pole_off=(0.2, -0.3, 0.45))
         shL = MAN.matrix_world @ MAN.pose.bones["upperarm01.L"].head
-        lift = 0.18 + 0.06 * math.sin(f * 0.04)
-        hand_at(f, "L", shL + V((0.32, -0.25, -0.3 + lift)), V((0.5, -0.6, 0.4)), V((0, 0, 1)), 0.0, pole_off=(0.1, -0.4, 0.5))
+        lift = 0.22 + 0.12 * math.sin(f * 0.05 + 1.0)
+        hand_at(f, "L", shL + V((0.34, -0.30, -0.32 + lift)), V((0.5, -0.6, 0.4)), V((0, 0, 1)), 0.0, pole_off=(0.1, -0.4, 0.5))
     fingers(s["f0"], "R", "flat_palm"); fingers(s["f1"], "R", "flat_palm"); fingers(s["f0"], "L", "relaxed"); fingers(s["f1"], "L", "relaxed")
     # singing: jaw opens and closes softly (no teeth grimace)
     jaw = MAN.pose.bones.get("jaw")
@@ -584,7 +595,7 @@ shot("S19_Portrait", 170, "B11 the man held a public funeral (painting + flowers
      (((HX + 1.2, 0.6, 1.5), (HX + 1.2, 3.2, 1.4)), ((HX + 1.2, 1.3, 1.45), (HX + 1.2, 3.2, 1.4))), s19, 30)
 def s20(s): singer(s); audience(s)
 shot("S20_Sing", 220, "B11 where he sang a song for his crocodile friend",
-     (((HX + 0.25, -2.4, 2.0), (HX + 0.25, 2.5, 1.3)), ((HX + 0.25, -2.0, 1.95), (HX + 0.2, 2.5, 1.3))), s20, 26)
+     (((HX - 0.5, 0.45, 1.5), (HX - 0.7, 2.3, 1.3)), ((HX - 0.55, 0.75, 1.47), (HX - 0.7, 2.3, 1.3))), s20, 32)
 def s21(s): singer(s); audience(s)
 shot("S21_HallWide", 170, "B11 (wide: guests, singer, portrait)",
      (((HX + 3.4, 3.4, 2.4), (HX - 0.6, 0.6, 1.0)), ((HX + 3.0, 3.6, 2.35), (HX - 0.7, 0.6, 1.0))), s21, 20)
@@ -616,11 +627,15 @@ def key_light(f, e_sun, col, e_bg, e_moon):
     sun.data.energy = e_sun; sun.data.color = col; bg.inputs[1].default_value = e_bg; moon.data.energy = e_moon
     sun.data.keyframe_insert("energy", frame=f); sun.data.keyframe_insert("color", frame=f)
     bg.inputs[1].keyframe_insert("default_value", frame=f); moon.data.keyframe_insert("energy", frame=f)
-key_light(1, 3.5, (1, 0.96, 0.9), 1.0, 0.0)
+key_light(1, 3.5, (1, 0.96, 0.9), 1.45, 0.0)
+mf = bpy.data.objects.new("MoonFaceFill", bpy.data.lights.new("MoonFaceFill", "AREA")); sc.collection.objects.link(mf)
+mf.data.energy = 30; mf.data.size = 1.2; mf.data.color = (0.7, 0.8, 1.0); mf.location = (-0.3, 1.8, 1.6)
+mf.rotation_euler = (V((-0.1, 2.9, 0.2)) - mf.location).to_track_quat('-Z', 'Y').to_euler()
+vis([mf], night[0]["f0"], night[-1]["f1"])
 for s in SHOTS:
     if s in night: key_light(s["f0"], 0.0, (1, 1, 1), 0.22, 3.2); key_light(s["f1"], 0.0, (1, 1, 1), 0.22, 3.2)
-    elif s in evening: key_light(s["f0"], 3.4, (1, 0.82, 0.62), 0.95, 0.0); key_light(s["f1"], 3.4, (1, 0.82, 0.62), 0.95, 0.0)
-    else: key_light(s["f0"], 3.5, (1, 0.96, 0.9), 1.0, 0.0); key_light(s["f1"], 3.5, (1, 0.96, 0.9), 1.0, 0.0)
+    elif s in evening: key_light(s["f0"], 3.4, (1, 0.82, 0.62), 1.45, 0.0); key_light(s["f1"], 3.4, (1, 0.82, 0.62), 1.45, 0.0)
+    else: key_light(s["f0"], 3.5, (1, 0.96, 0.9), 1.45, 0.0); key_light(s["f1"], 3.5, (1, 0.96, 0.9), 1.45, 0.0)
 for a in bpy.data.actions:
     for fc in getattr(a, "fcurves", []):
         for kp in fc.keyframe_points:

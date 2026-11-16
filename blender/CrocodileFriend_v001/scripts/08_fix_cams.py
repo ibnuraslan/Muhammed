@@ -5,8 +5,7 @@ from mathutils import Vector
 from bpy_extras.object_utils import world_to_camera_view
 sc = bpy.context.scene; cam = sc.camera; OB = bpy.data.objects
 def smooth(x): x = max(0.0, min(1.0, x)); return x * x * (3 - 2 * x)
-NEW = {(816, 985): (((-0.2, 1.0, 1.4), (-0.1, 3.0, 0.3)), ((-0.15, 1.4, 1.2), (-0.1, 3.0, 0.3)), 30),
-       (986, 1156): (((-5.0, -2.0, 1.8), (-2.6, 1.6, 0.7)), ((-4.8, -1.7, 1.75), (-2.8, 1.8, 0.7)), 20)}
+NEW = {}   # S10/S11 cameras now set in 04_anim.py
 for (a, b), ((l0, t0), (l1, t1), lens) in NEW.items():
     for f in range(a, b + 1):
         u = smooth((f - a) / (b - a)); l = Vector(l0).lerp(Vector(l1), u); t = Vector(t0).lerp(Vector(t1), u)
