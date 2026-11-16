@@ -729,6 +729,19 @@ for k, _ in SHOTS:
     globals()[k](t0, L)
     bind_items()
 
+# side tables: visible only in the shots that use them (hidden objects keyed on both render and viewport)
+USE = {"Table_S03": ("S03", "S04"), "Table_S12": ("S12",), "Table_S14": ("S14",), "Table_S15": ("S15",),
+       "Table_S17": ("S17", "S19"), "Table_S21": ("S21",), "Table_S27": ("S27",)}
+for tn, shots in USE.items():
+    e = O.get(tn)
+    if e is None: continue
+    e.hide_render = e.hide_viewport = True
+    e.keyframe_insert("hide_render", frame=1); e.keyframe_insert("hide_viewport", frame=1)
+    for k in sorted(T, key=lambda kk: T[kk][0]):
+        on = k in shots
+        e.hide_render = e.hide_viewport = not on
+        e.keyframe_insert("hide_render", frame=T[k][0]); e.keyframe_insert("hide_viewport", frame=T[k][0])
+
 cuts = sorted(v[0] for v in T.values())
 for o in ALL + list(cams.objects):
     for fc in all_fcurves(o):
