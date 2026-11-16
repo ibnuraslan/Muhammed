@@ -39,14 +39,13 @@ hung from the top truss (≥15% of frame width in S01, flat to camera, f-stop ir
 - **Set (director note 5):** black stage deck, 8 par cans with coloured lenses + spot lights on the top truss, two floor wedge monitors, floor cables, amps, PA stacks, drum kit, banner; a crowd of 13; the bay and the bridge fade into a bright haze with distance.
 
 ## Contact checks (director rule, Nov 15)
-- First, middle and last frame of every shot at 540×960, Cycles 8: `review/P1_stills_3perShot_540x960.jpg` (45 frames, 9 per row = 3 shots per row).
-- `body_prop_cross.py` (step 3, every frame range, props Bat, MicStand, OxygenMask, OxyTube, Blanket, Wedge, Bed; all 5 rigs):
-  `review/P1_body_prop_cross.json` + `review/P1_body_prop_cross_summary.txt`.
-  - **0** visible crossings: mic stand, oxygen mask + tube, blanket, wedge pillow, bed (whole film), doctor, fans.
-  - **Bat, still listed:**
-    - 445–466 ring/little fingers + 484–505 forearm/thigh while the hand closes and rises → **cut out in the edit** (S05 410–444, S06 from 506).
-    - 709–901 lips (oris) on the bat's head = the bite itself (head 8 mm between the lips). Intended contact.
-    - single frames 670, 736, 871–877, 976: index/thumb root a few mm into the bat's fur in the fist.
+- First, middle and last frame of every shot at 540×960, Cycles 8: `review/P1_stills_3perShot_540x960.jpg` (45 frames).
+- `body_prop_cross.py` step 3, whole film, props Bat, MicStand, OxygenMask, OxyTube, OxyStrap, OxyRim, Clipboard, Blanket, Wedge, Bed; all rigs:
+  `review/P1_body_prop_cross.json` + `_summary.txt`.
+  - **0**: mic stand, oxygen mask, tube, rim, clipboard, blanket, wedge pillow, bed, doctor, crowd.
+  - **Bat 445–508** (fingers closing on it, forearm/thigh on the lift): **cut in the edit** — S05 used 410–444, S06 from 516.
+  - **Bat 685–724** (index-finger root + thumb base, 7–12 sampled frames): the fist round the bat's body sinks a few mm into the fur in the profile bite close-up; no contact with the face.
+  - **OxyStrap ↔ long01 hair cards** (label "head" = the hair mesh): the elastic passes under/among the side hair strands on its way round the head; it never touches skin.
 - Mic clearance: the stand sits 2.5 cm further out and he takes a planted step back before looking down; min distance mic ↔ face/hair over 1–420 = 3.8 cm.
 - Fixes made because of these checks: no hand on the mic stand (thumb crossed the shaft); he steps back and sideways before turning (his head passed through the mic, 322–361); every IK hand target is clamped to the arm's reach (the bat floated up to 22 cm off the hand at 480–495); the rise lifts the bat straight up first (it passed through his thighs); the raise to the mouth stays 40+ cm out (it passed through his chest/shoulder 640–670); bat legs curl while held; fingers stay closed until the release; bat lands/drops clear of the stand base and his shoes; blanket covers the legs only, draped from ray hits with a dilation pass; legs/heels raised clear of the mattress; oxygen mask rebuilt as a clean grid cap 6–18 mm off the posed face, Child Of the head bone (the hole-filled version cut through the lips).
 
