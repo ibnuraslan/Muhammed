@@ -331,6 +331,7 @@ recolor(lampm, {"uv_grid": mat("LampPole", (0.35, 0.37, 0.4), 0.4, metal=0.6)})
 lampm.hide_render = True; lampm.hide_viewport = True
 # arm points to -y in the source; rotate so the head hangs over the road (-x)
 for i, yy in enumerate(range(-90, 100, 22)):
+    if yy == -24: yy = -17   # keep the pole clear of her stop / look-back spot
     o = inst(lampm, "Road_Lamp%02d" % i, C, (X + 6.0, yy, 0.0), rot=(0, 0, R_(-90)))
     l = spot("Road_LampLight%02d" % i, C, (X + 3.2, yy, 6.2), (0, 0, 0), 1400, angle=110, col=(1.0, 0.82, 0.55), blend=0.6, radius=0.25)
     bulb = mat("LampHead", (1, 0.9, 0.7), 0.3, emit=(1.0, 0.85, 0.6), estr=25)
