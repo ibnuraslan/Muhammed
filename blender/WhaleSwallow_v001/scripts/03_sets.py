@@ -321,7 +321,7 @@ ch_z = (BN["spine03"].head_local.z + BN["neck01"].head_local.z) / 2 - 0.06
 bpy.context.view_layer.objects.active = vest; vest.select_set(True)
 bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY', center='BOUNDS')
 vest.location = (BN["spine03"].head_local.x, BN["spine03"].head_local.y - 0.005, ch_z)
-vest.scale = (0.32, 0.31, 0.30); bpy.ops.object.transform_apply(location=False, scale=True)
+vest.scale = (0.345, 0.335, 0.30); bpy.ops.object.transform_apply(location=False, scale=True)
 bpy.context.view_layer.update()
 print("VEST dims", [round(d, 3) for d in vest.dimensions], "at", tuple(round(x, 3) for x in vest.location))
 vest.parent = diver; vest.matrix_parent_inverse = diver.matrix_world.inverted()
@@ -336,7 +336,7 @@ _bm = bmesh.new(); _bm.from_mesh(vest.data)
 bmesh.ops.bisect_plane(_bm, geom=_bm.verts[:] + _bm.edges[:] + _bm.faces[:], plane_co=Vector((0, 0, _cut - vest.location.z)), plane_no=Vector((0, 0, 1)), clear_inner=True)
 _bm.to_mesh(vest.data); _bm.free()
 am = vest.modifiers.new("Armature", 'ARMATURE'); am.object = diver
-sw = vest.modifiers.new("KeepOut", 'SHRINKWRAP'); sw.target = dbody; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.wrap_mode = 'OUTSIDE'; sw.offset = 0.022
+sw = vest.modifiers.new("KeepOut", 'SHRINKWRAP'); sw.target = dbody; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.wrap_mode = 'OUTSIDE'; sw.offset = 0.05
 vest.hide_render = vest.hide_viewport = True   # keyed visible only in the hospital shots (04_anim)
 
 sc.render.engine = 'CYCLES'; sc.render.resolution_x, sc.render.resolution_y = 1080, 1920; sc.render.fps = 60

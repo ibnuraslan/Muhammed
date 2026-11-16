@@ -340,7 +340,7 @@ def shark_mouth_world(fr):
             if hits[j][1] and not hits[j + 1][1]:
                 gap = hits[j + 1][0] - hits[j][0]
                 if 2.1 <= gap <= 4.5: best = (Vector((cx, y + 0.45, hits[j][0])), gap)
-                if best: best = (Vector((cx, y + 0.45, shark_floor(ev_, Mw, Mi, cx, y + 0.45, hits[j][0]) + 0.02)), gap)
+                if best: best = (Vector((cx, y + 0.45, shark_floor(ev_, Mw, Mi, cx, y + 0.45, hits[j][0]) + 0.08)), gap)
                 break
         if best: break
     if fr == F["3b"][0]: print("SHARK stand", best)
@@ -389,6 +389,31 @@ def baleen_edge(z):
     return 2.50 + 0.30 * max(0.0, min(1.0, (1.9 - z) / 1.24))
 BAL_U = lambda side: Vector((-side * 0.30, 0, 1.24)).normalized()
 BAL_N = lambda side: Vector((side * 1.24, 0, 0.30)).normalized()
+def _nudge(pbname, fr, dW):
+    pb = D.o.pose.bones[pbname]; R3 = D.o.data.bones[pbname].matrix_local.to_3x3().inverted()
+    pb.location = pb.location + R3 @ (D.o.matrix_world.inverted().to_3x3() @ dW); pb.keyframe_insert("location", frame=fr, group=pbname)
+def clear_hand_of_baleen(s, fr, side, margin=0.012):
+    """after posing: push the hand off the plates by the measured overlap of its fingers (2 passes)"""
+    for _ in range(3):
+        sc.frame_set(fr); Mw = D.o.matrix_world; worst = 0.0
+        for b in D.o.pose.bones:
+            if b.name.endswith("." + s) and (b.name.startswith("finger") or b.name.startswith("metacarpal") or b.name.startswith("wrist")):
+                for pt in (b.head, b.tail):
+                    p = Mw @ pt; v = (p.x - MOUTH.x) * side - (baleen_edge(p.z - MOUTH.z) - margin)
+                    worst = max(worst, v)
+        if worst <= 0: return
+        _nudge("IK_hand." + s, fr, Vector((-side * (worst + 0.005), 0, 0)))
+def clear_feet_of_tongue(fr, margin=0.028):
+    for s in "LR":
+        for _ in range(3):
+            sc.frame_set(fr); Mw = D.o.matrix_world; worst = 0.0
+            for b in D.o.pose.bones:
+                if b.name.endswith("." + s) and (b.name.startswith("toe") or b.name.startswith("foot")):
+                    for pt in (b.head, b.tail):
+                        p = Mw @ pt; v = (MOUTH.z + tongue_z(p.x - MOUTH.x, p.y - MOUTH.y) + margin) - p.z
+                        worst = max(worst, v)
+            if worst <= 0: break
+            _nudge("IK_foot." + s, fr, Vector((0, 0, worst + 0.004)))
 sid = "5a"; whale_park(F[sid][0])
 for fr in frames(sid, 3):
     t = T(sid, fr); M = stand_in_mouth(fr, -1.95, 0.1, -60 + 15 * math.sin(t * 2.5), 0.16, 8)
@@ -403,6 +428,7 @@ for fr in frames(sid, 3):
     shL = D.shoulder("L")
     D.key_hand("L", fr, M, shL + Vector((0.14, -0.16, -0.46)), Vector((-1, 0.2, 0)), Vector((0.1, -0.5, -1)), shL + Vector((0.3, 0.35, -0.3)))
 D.hand_pose("R", F[sid][0], "flat_palm"); D.hand_pose("L", F[sid][0], "relaxed")
+for fr in frames(sid, 3): clear_hand_of_baleen("R", fr, -1); clear_feet_of_tongue(fr)
 camera(sid, [(0, MOUTH + Vector((0.5, -2.5, 1.9)), MOUTH + Vector((-1.7, 0.2, 1.15))), (1, MOUTH + Vector((0.3, -2.2, 1.8)), MOUTH + Vector((-1.8, 0.2, 1.2)))], lens=26)
 for sid, side in (("5b", 1), ("5c", -1)):
     wall_x = side * 2.63
@@ -423,6 +449,9 @@ for sid, side in (("5b", 1), ("5c", -1)):
             pl = Minv @ pw
             D.key_hand(s, fr, M, pl, Minv.to_3x3() @ BAL_N(side), Minv.to_3x3() @ BAL_U(side), D.shoulder(s) + Vector((sx * 0.35, 0.1, -0.35)))
     for s in "LR": D.hand_pose(s, F[sid][0], "flat_palm")
+    for fr in frames(sid, 3):
+        for s in "LR": clear_hand_of_baleen(s, fr, side)
+        clear_feet_of_tongue(fr)
 cx = 1
 camera("5b", [(0, MOUTH + Vector((-0.6, -2.6, 1.7)), MOUTH + Vector((1.7, 0, 1.15))), (1, MOUTH + Vector((-0.4, -2.2, 1.6)), MOUTH + Vector((1.7, 0.1, 1.15)))], lens=26)
 camera("5c", [(0, MOUTH + Vector((0.8, 2.5, 1.3)), MOUTH + Vector((-1.6, 0, 1.4))), (1, MOUTH + Vector((0.6, 2.2, 1.0)), MOUTH + Vector((-1.6, -0.4, 1.8)))], lens=26)
@@ -486,14 +515,14 @@ _bb = [bed.matrix_world @ Vector(c) for c in bed.bound_box]; BX = sum(c.x for c 
 sit_y = BY + 0.55; mz = mattress_z(BX, sit_y)
 print("MATTRESS z", mz)
 def sit(fr, lean=-12.0, knee_up=0.0, turn=0.0, head=(0.0, 0.0), hand_rib=0.0, hand_thigh=0.0):
-    pos = Vector((BX - 0.05, sit_y, mz + 0.10))
+    pos = Vector((BX - 0.05, sit_y, mz + 0.16))
     M = M_of(pos, yaw=0, pitch=lean)                      # faces -Y (toward the room), seated: legs forward along -Y
     D.key_body(fr, M); D.key_spine(fr, flex=8, twist=turn, head=head)
     for s in "LR":
         sx = 1 if s == "L" else -1
         # legs forward on the mattress: ankles ~0.85 m in front of the pelvis
         up = knee_up if s == "L" else 0.0
-        ank_w = Vector((BX - 0.05 + sx * 0.10, sit_y - 0.88 + 0.30 * up, mz + 0.07 + 0.05 * up))
+        ank_w = Vector((BX - 0.05 + sx * 0.10, sit_y - 0.88 + 0.30 * up, mz + 0.115 + 0.05 * up))
         Ml = M.inverted()
         D.key_foot(s, fr, M, Ml @ ank_w, pitch=-75, knee_dir=Vector((0, -0.3, 1)))
     return M
@@ -513,7 +542,7 @@ def thigh_hand(fr, M, s, frac=0.55):
     hipw = D.o.matrix_world @ D.o.pose.bones["upperleg01." + s].head; kneew = D.o.matrix_world @ D.o.pose.bones["lowerleg01." + s].head
     pw = hipw.lerp(kneew, frac) + Vector((0, 0, 0.09))
     Ml = M.inverted()
-    D.key_hand(s, fr, M, Ml @ pw, Ml.to_3x3() @ Vector((0, 0, -1)), Ml.to_3x3() @ (kneew - hipw).normalized(), sh + Vector((sx * 0.3, 0.25, -0.35)))
+    D.key_hand(s, fr, M, Ml @ pw, Ml.to_3x3() @ Vector((0, 0, -1)), Ml.to_3x3() @ (kneew - hipw).normalized(), sh + Vector((sx * 0.55, 0.2, -0.3)))
 whale_park(F["7a"][0])
 for sid in ("7a", "7b", "8a", "8b", "9", "10"):
     for fr in frames(sid, 3):
@@ -577,8 +606,8 @@ for A, (end, yaw_end) in docs.items():
             shrug = 0.10 * ease(min(1, max(0, (t - 0.35) / 0.25))) * (1 - ease(min(1, max(0, (t - 0.8) / 0.2))))
             for s in "LR": gesture(A, s, fr, M, shrug, out=0.12 + shrug)
     for s in "LR": A.hand_pose(s, F[sid][0], "relaxed")
-    if A is DF: A.hand_pose("L", F[sid][0], "hold_flat_object")
-DF.hand_pose("L", F["9"][0], "hold_flat_object")
+    if A is DF: A.hand_pose("L", F[sid][0], "flat_palm")
+DF.hand_pose("L", F["9"][0], "flat_palm")
 # the clipboard: bone-parented to DocF's left hand, resting on the palm (posed at the middle of shot 10)
 fr = (F["10"][0] + F["10"][1]) // 2; sc.frame_set(fr)
 bpy.ops.mesh.primitive_cube_add(size=1); clip = bpy.context.object; clip.name = "Clipboard"; clip.scale = (0.23, 0.31, 0.012)
@@ -592,7 +621,7 @@ sh = DF.shoulder("L"); Mdf = DF.o.matrix_world @ DF.o.pose.bones["root"].matrix
 H = Vector(DF.o.matrix_world @ DF.o.pose.bones["finger3-1.L"].head); Wp = Vector(DF.o.matrix_world @ pb.head)
 fwd = (H - Wp).normalized(); up = Vector((0, 0, 1)); side = fwd.cross(up).normalized(); up2 = side.cross(fwd).normalized()
 R3 = Matrix((side, fwd, up2)).transposed()
-clip.matrix_world = Matrix.Translation((Wp + H) / 2 + up2 * 0.025 + fwd * 0.02) @ (R3 @ Matrix.Rotation(R_(-20), 3, 'X')).to_4x4()
+clip.matrix_world = Matrix.Translation((Wp + H) / 2 + up2 * 0.045 + fwd * 0.02) @ (R3 @ Matrix.Rotation(R_(-20), 3, 'X')).to_4x4()
 Mcl = clip.matrix_world.copy(); clip.parent = DF.o; clip.parent_type = 'BONE'; clip.parent_bone = "wrist.L"; clip.matrix_world = Mcl
 for sid_ in order: key_vis(clip, F[sid_][0], sid_ in ("9", "10")); key_vis(pap, F[sid_][0], sid_ in ("9", "10"))
 for A in (DM, DF): A.park(F["11a"][0])
