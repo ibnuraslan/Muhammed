@@ -143,9 +143,9 @@ def attach(item, fnM, t0, n, spec, u_on, u_off, reach=18, leave=20, step=2, driv
     sc.frame_set(f_on); Mi = item.matrix_world.copy()
     C = Mi @ Vector(lc); A = (Mi.to_3x3() @ Vector(la)).normalized(); F = (Mi.to_3x3() @ Vector(lf)).normalized()
     if mode == "grip":
-        grip_object(m.o, s, f_on, item, C - A * 0.024, A, finger_dir=F, finger_radius=0.012)
+        grip_object(m.o, s, f_on, item, C - A * 0.030, A, finger_dir=F, finger_radius=0.017)
     else:
-        place_hand(m.o, s, f_on, C, A, F, skin=0.014); apply_pose(m.o, s, mode, f_on)
+        place_hand(m.o, s, f_on, C, A, F, skin=0.030 if mode == "flat_palm" else 0.016); apply_pose(m.o, s, mode, f_on)
     sc.frame_set(f_on)
     rel = Mi.inverted() @ ik_world(m, s)
     if drive is not None:
@@ -174,9 +174,11 @@ def handover(item, giver, gsides, recv, rsides, t0, n, kind="small", ys=(0.0, 0.
         sh = sum((m.shoulder(s) for s in sides), Vector()) / len(sides)
         return sh + m.fwd() * 0.27 + Vector((0, 0, -0.30 + hold_hi)) + m.right() * lat * (1 if sides == ("R",) else -1 if sides == ("L",) else 0)
     A = front(giver, gsides); B = front(recv, rsides)
-    if kind == "big":                                   # keep the item's near edge clear of each chest
-        ext = max(0.0, item.dimensions.x / 2 - 0.08)
-        A = A + giver.fwd() * ext; B = B + recv.fwd() * ext
+    long_x = kind == "big" and item.dimensions.x > item.dimensions.y
+    if long_x: tilt = Matrix.Rotation(R(90), 4, 'Z')    # long side across: hands at the ends, forearms outside the item
+    along = (item.dimensions.y if long_x else item.dimensions.x) / 2
+    ext = max(0.0, along - (0.08 if kind == "big" else 0.05))   # keep the item's near edge clear of each chest
+    A = A + giver.fwd() * ext; B = B + recv.fwd() * ext
     Mid = (A + B) / 2 + Vector((0, 0, 0.04))
     ax = (B - A); yaw = math.degrees(math.atan2(ax.y, ax.x))
     ua, ub, uc, ud = u
@@ -197,6 +199,14 @@ def handover(item, giver, gsides, recv, rsides, t0, n, kind="small", ys=(0.0, 0.
         g = (giver, gsides[0], (-half, 0, 0.0), (0, 0, 1), (1, 0, 0), "cup_hold")
         r = (recv, rsides[0], (half, 0, 0.0), (0, 0, 1), (-1, 0, 0), "cup_hold")
         attach(item, P, t0, n, g, 0.0, uc, drive=(0.0, uc)); attach(item, P, t0, n, r, ub, 1.0, drive=(uc, 1.0))
+    elif long_x:   # big, long side across: side faces at local +-X (lateral after the 90 deg tilt)
+        wx = item.dimensions.x / 2; dz = item.get("side_z", 0.0); dx = item.get("side_dx", 0.06)
+        for s in gsides:
+            sy = 1 if s == "L" else -1
+            attach(item, P, t0, n, (giver, s, (sy * wx, dx, dz), (-sy, 0, 0), (0, -0.3, -1), "flat_palm"), 0.0, uc, drive=(0.0, uc) if s == "R" else None)
+        for s in rsides:
+            sy = -1 if s == "L" else 1
+            attach(item, P, t0, n, (recv, s, (sy * wx, -dx, dz), (-sy, 0, 0), (0, 0.3, -1), "flat_palm"), ub, 1.0, drive=(uc, 1.0) if s == "R" else None)
     else:   # big: side faces at local +-Y; giver at -X half, receiver at +X half
         wy = item.dimensions.y / 2; dz = item.get("side_z", 0.0); dx = item.get("side_dx", 0.07)
         for s in gsides:

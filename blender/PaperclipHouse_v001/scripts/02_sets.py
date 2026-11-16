@@ -168,8 +168,8 @@ H = coll("SET_HOME"); HX, HY = 0.0, 300.0
 room("HOME", HX, HY, 7.0, 5.0, 4.2, mat("HomeWall", (0.55, 0.78, 0.90), 0.6), wood_floor("HomeFloor"), H,
      win=[(-1.9, 1.55, 1.3, 1.2), (1.9, 1.55, 1.3, 1.2)])
 top = mat("CounterTop", (0.92, 0.90, 0.86), 0.35); cab = mat("CounterCab", (0.98, 0.98, 0.97), 0.45)
-box("HOME_Counter", (1.9, 0.38, 0.88), (HX, HY + 0.35, 0.44), cab, H)
-box("HOME_CounterTop", (2.0, 0.44, 0.04), (HX, HY + 0.35, 0.90), top, H)
+box("HOME_Counter", (1.6, 0.38, 0.88), (HX, HY + 0.35, 0.44), cab, H)
+box("HOME_CounterTop", (1.7, 0.44, 0.04), (HX, HY + 0.35, 0.90), top, H)
 sc["COUNTER_Z"] = 0.92
 box("HOME_BackCab", (2.6, 0.6, 0.9), (HX, HY + 2.18, 0.45), cab, H)
 box("HOME_BackTop", (2.6, 0.62, 0.04), (HX, HY + 2.18, 0.92), top, H)
