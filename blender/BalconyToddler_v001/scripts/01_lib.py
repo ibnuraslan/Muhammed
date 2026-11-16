@@ -73,14 +73,28 @@ def tint(rig, key, rgb, rough=0.6, keep_tex=0.25):
             for l in list(P.inputs['Roughness'].links): nt.links.remove(l)
 
 TOD = append_char("Toddler", "Toddler")
-tint(TOD, "casualsuit", (0.98, 0.90, 0.62))     # pale-yellow sleepsuit (reference: cream pyjamas)
+tint(TOD, "casualsuit", (0.45, 0.70, 0.95))     # light-blue sleepsuit with yellow dots (clearly clothing, not skin)
+def dots(rig, key, dot_rgb, scale=38.0, size=0.30):
+    for ch in rig.children:
+        if ch.type != 'MESH' or key not in ch.name: continue
+        for m in ch.data.materials:
+            nt = m.node_tree; P = next(n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED')
+            src = P.inputs['Base Color'].links[0].from_socket
+            tc = nt.nodes.new('ShaderNodeTexCoord'); vo = nt.nodes.new('ShaderNodeTexVoronoi'); vo.inputs['Scale'].default_value = scale
+            nt.links.new(tc.outputs['Generated'], vo.inputs['Vector'])
+            mr = nt.nodes.new('ShaderNodeMapRange'); mr.inputs['From Min'].default_value = size; mr.inputs['From Max'].default_value = size - 0.04
+            nt.links.new(vo.outputs['Distance'], mr.inputs['Value'])
+            mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.inputs['B'].default_value = (*dot_rgb, 1)
+            nt.links.new(mr.outputs['Result'], mx.inputs['Factor']); nt.links.new(src, mx.inputs['A'])
+            nt.links.new(mx.outputs['Result'], P.inputs['Base Color'])
+dots(TOD, "casualsuit", (1.0, 0.85, 0.25))
 tint(TOD, "shoes", (0.30, 0.55, 0.85))
 MAN = append_char("Teen", "Man", drop=("Torch", "torch"))
 tint(MAN, "casualsuit", (0.22, 0.32, 0.55))     # navy T-shirt + trousers
 tint(MAN, "shoes", (0.15, 0.12, 0.10))
 GMA = append_char("Crowd1", "Grandma")
 tint(GMA, "casualsuit", (0.92, 0.50, 0.50))     # pink top (reference)
-tint(GMA, "bob02", (0.42, 0.42, 0.44), 0.55)    # grey hair
+tint(GMA, "bob02", (0.62, 0.40, 0.72), 0.85)    # the bob becomes a soft lavender headscarf (cloth, with a dot pattern below)
 # part the fringe: lift the central fringe (between the eyes) to a line above the brows so both eyes show
 eyes = bpy.data.objects["Grandma.high-poly"]; hair = bpy.data.objects["Grandma.bob02"]
 ev_ = [v.co for v in eyes.data.vertices]; EZ = sum(p.z for p in ev_) / len(ev_); EY = min(p.y for p in ev_)
@@ -89,6 +103,8 @@ for v in hair.data.vertices:
     if abs(v.co.x) < 0.085 and v.co.y < EY + 0.07 and v.co.z < EZ + 0.06:
         v.co.z = EZ + 0.06 + (abs(v.co.x) * 0.25); n_ += 1
 print("LIB fringe lifted", n_, round(EZ, 3), round(EY, 3))
+dots(GMA, "bob02", (0.95, 0.92, 0.98), 30.0, 0.22)
+_dp = hair.modifiers.new("scarf_puff", 'DISPLACE'); _dp.strength = 0.004
 tint(GMA, "shoes", (0.25, 0.20, 0.18))
 OLD = append_char("Crowd2", "OldMan")
 tint(OLD, "casualsuit", (0.90, 0.90, 0.88))     # white shirt

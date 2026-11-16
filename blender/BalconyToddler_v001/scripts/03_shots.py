@@ -238,7 +238,7 @@ shot_cam(sid, [(0, (-0.55, -1.75, 3.40), (0.0, -0.55, 3.10)), (1, (-0.45, -1.60,
 sid = "07"; f0, f1 = SH[sid]; use(sid, "Toddler")
 for f, hd in ((f0, (2, -3)), (F(sid, 0.5), (3, 3)), (f1, (2, 0))):
     tod_hang(f, 0.0, head=hd, kick=0.02, ph=f * 0.1)
-shot_cam(sid, [(0, (0.10, -1.95, 3.62), (0.0, -0.57, 3.25)), (1, (0.06, -1.80, 3.60), (0.0, -0.57, 3.25))], 65, 10, 10)
+shot_cam(sid, [(0, (0.10, -1.95, 3.58), (0.0, -0.58, 3.25)), (1, (0.06, -1.82, 3.57), (0.0, -0.58, 3.26))], 95, 11, 10)
 
 # ---------- 08 got stuck: 3/4 side at bar level, head resting between the two bars
 sid = "08"; f0, f1 = SH[sid]; use(sid, "Toddler")
@@ -391,7 +391,7 @@ def legs_proxy(f):
     o = bpy.data.objects.new("LegsProxy_%d" % f, me); coll("PROXY").objects.link(o); o.hide_render = True; return o
 def man_hold(f, hd=(-40, 0), breathe=0.0):
     n = "Man"; rz = CH_SEAT_TOP + CAST[n][2].root_head.z - 0.02
-    body(n, f, (MANP.x, MANP.y + 0.02, rz - breathe * 0.01), 180, 3, 0, 4, 0, 0, hd)
+    body(n, f, (MANP.x, MANP.y + 0.0, rz - breathe * 0.01), 180, -3, 0, -6, 0, 0, hd)
     feet(n, f, (MANP.x, MANP.y, rz), 180, CH_SEAT_TOP + 0.006)
     prox = PROX.get("p")
     for s, tsx in (("L", -1), ("R", 1)):     # man's left hand (world -X) on the boy's right shin (world -X)
@@ -412,7 +412,7 @@ for s_ in ("17", "18", "19", "20"):
 PROX["p"] = legs_proxy(SH["19"][0])
 # 17 and grabbed: close on his face looking up, arms rising toward the legs
 sid = "17"; f0, f1 = SH[sid]
-for f, au, hd in ((f0, 0.45, (-38, 0)), (F(sid, 0.5), 0.75, (-42, 4)), (f1, 0.95, (-42, 0))):
+for f, au, hd in ((f0, 0.45, (-38, 0)), (F(sid, 0.5), 0.65, (-40, 4)), (f1, 0.75, (-40, 0))):
     man_on_top(f, 0.0, au, hd)
 shot_cam(sid, [(0, (1.05, -0.95, 2.35), (0.0, -0.80, 2.55)), (1, (1.00, -0.95, 2.37), (0.0, -0.78, 2.58))], 30, 8, 6)
 for s_ in ("18", "19", "20"):
@@ -421,7 +421,7 @@ for s_ in ("18", "19", "20"):
 # 18: from below between the man and the wall, looking up: his hands on the shins, the boy above
 sid = "18"; shot_cam(sid, [(0, (0.75, -1.45, 1.75), (0.0, -0.55, 2.80)), (1, (0.68, -1.38, 1.80), (0.0, -0.55, 2.85))], 24, 8, 0)
 # 19: close on the boy, calm, lifted a little (neck free)
-sid = "19"; shot_cam(sid, [(0, (-0.30, -1.75, 3.62), (0.0, -0.56, 3.26)), (1, (-0.22, -1.62, 3.60), (0.0, -0.56, 3.26))], 55, 9, 8)
+sid = "19"; shot_cam(sid, [(0, (-0.30, -1.80, 3.58), (0.0, -0.57, 3.27)), (1, (-0.24, -1.68, 3.57), (0.0, -0.57, 3.27))], 90, 11, 8)
 # 20: close on the man's hand (watch) on the shin
 sid = "20"; shot_cam(sid, [(0, (-0.95, -0.70, 2.95), (0.0, -0.62, 2.68)), (1, (-0.88, -0.68, 2.93), (0.0, -0.62, 2.68))], 38, 9, 0)
 
@@ -448,7 +448,7 @@ yaw22 = lambda f: 13.0
 GZ[0] = FLOOR2
 CAST[GM][2].walk(p22, yaw22, f0, f1, stride=0.66, lift=0.06, bob=0.015, lean=8, step=2)
 walk_arms(GM, f0, f1, p22, yaw22, 0.66, swing=0.11, bend=0.05)
-shot_cam(sid, [(0, (0.3, 1.3, FLOOR2 + 1.35), (AD_X0 + 0.5, HY, FLOOR2 + 1.3)), (1, (0.3, 1.15, FLOOR2 + 1.35), (AD_X0 + 0.8, HY - 1.2, FLOOR2 + 1.3))], 30, 8, 6)
+shot_cam(sid, [(0, (0.3, 1.3, FLOOR2 + 1.35), (AD_X0 + 0.5, HY, FLOOR2 + 1.3)), (1, (0.3, 1.15, FLOOR2 + 1.35), (AD_X0 + 0.8, HY - 1.2, FLOOR2 + 1.3))], 30, 8, 12)
 
 # ---------- 23 the apartment: grandma hurries toward the balcony (camera backs off in front of her)
 sid = "23"; f0, f1 = SH[sid]; use(sid, "Grandma", "Toddler", "Man")
@@ -459,7 +459,7 @@ yaw23 = lambda f: 16.0
 GZ[0] = FLOOR2
 CAST[GM][2].walk(p23, yaw23, f0, f1, stride=0.66, lift=0.06, bob=0.015, lean=10, step=2)
 walk_arms(GM, f0, f1, p23, yaw23, 0.66, swing=0.11, bend=0.05)
-shot_cam(sid, [(0, (0.15, 0.75, FLOOR2 + 1.45), (-0.55, 3.0, FLOOR2 + 1.3)), (1, (0.12, 0.45, FLOOR2 + 1.45), (-0.2, 1.4, FLOOR2 + 1.3))], 28, 8, 6)
+shot_cam(sid, [(0, (0.15, 0.75, FLOOR2 + 1.45), (-0.55, 3.0, FLOOR2 + 1.3)), (1, (0.12, 0.45, FLOOR2 + 1.45), (-0.2, 1.4, FLOOR2 + 1.3))], 28, 8, 12)
 
 # ---------- 24 And pulled: grandma kneels on the slab and lifts him under the arms (camera outside, front)
 def kneel(n, f, knee_y, lean, x=0.0, head=(0.0, 0.0), gz=FLOOR2):
@@ -492,7 +492,7 @@ for u, d, y, ln in ((0.0, 0.64, SLOT_Y, 44), (0.25, 0.65, SLOT_Y, 42), (0.65, 0.
     tod_lift(f, d, y)
     kneel(GM, f, -0.02, ln, head=(-6, 22))
     gma_hands_on_tod(f)
-shot_cam(sid, [(0, (0.40, -1.85, 3.98), (0.0, -0.35, 3.70)), (1, (0.34, -1.75, 4.00), (0.0, -0.30, 3.78))], 32, 8, 8)
+shot_cam(sid, [(0, (0.40, -1.85, 3.98), (0.0, -0.35, 3.70)), (1, (0.34, -1.75, 4.00), (0.0, -0.30, 3.78))], 32, 8, 14)
 
 # ---------- 25/26 the toddler back up / completely unharmed: he stands on the slab, grandma kneels behind, hands at his sides
 TODP = Vector((0.0, -0.10, 0.0))
@@ -505,11 +505,11 @@ for sid in ("25", "26"):
 sid = "25"; f0, f1 = SH[sid]
 for f, hd, ln in ((f0, (-4, 0), 22), (F(sid, 0.5), (-2, -6), 20), (f1, (-6, 4), 18)):
     tod_stand(f, hd); kneel(GM, f, 0.22, ln, head=(14, 0)); gma_hands_on_tod(f, 0.074, -0.01)
-shot_cam(sid, [(0, (0.55, -1.80, 4.02), (0.0, -0.05, 3.85)), (1, (0.45, -1.65, 4.02), (0.0, -0.05, 3.88))], 30, 8, 8)
+shot_cam(sid, [(0, (0.55, -1.80, 4.02), (0.0, -0.05, 3.85)), (1, (0.45, -1.65, 4.02), (0.0, -0.05, 3.88))], 30, 8, 14)
 sid = "26"; f0, f1 = SH[sid]
 for f, hd, tw, ln, gh in ((f0, (-6, 0), 0, 18, (14, 0)), (F(sid, 0.4), (-24, 18), 8, 20, (24, 8)), (F(sid, 0.7), (-26, 20), 10, 21, (26, 10)), (f1, (-22, 16), 8, 20, (24, 8))):
     tod_stand(f, hd, tw); kneel(GM, f, 0.22, ln, head=gh); gma_hands_on_tod(f, 0.074, -0.01)
-shot_cam(sid, [(0, (0.15, -1.75, 4.02), (0.0, -0.05, 3.95)), (1, (0.10, -1.45, 4.02), (0.0, -0.05, 3.98))], 38, 8, 8)
+shot_cam(sid, [(0, (0.15, -1.75, 4.02), (0.0, -0.05, 3.95)), (1, (0.10, -1.45, 4.02), (0.0, -0.05, 3.98))], 38, 8, 14)
 
 # ------------------------------------------------------------------ park everyone not used in a shot
 for sid in SH:
@@ -526,6 +526,18 @@ for ob in (CHB, CHC):
 TABLE.location = (3.9, -1.2, 0.0); TABLE.keyframe_insert("location", frame=1); TABLE.keyframe_insert("location", frame=SH["13"][0] - 1)
 TABLE.location = (0.0, -0.83, 0.0); TABLE.keyframe_insert("location", frame=SH["13"][0])
 
+# check: the man's head stays clear of the boy's legs while holding (shots 18-20)
+sc.frame_set(SH["20"][0]); _dg = bpy.context.evaluated_depsgraph_get()
+def _ev_pts(o):
+    e = o.evaluated_get(_dg); me = e.to_mesh(); r = [o.matrix_world @ v.co for v in me.vertices]; e.to_mesh_clear(); return r
+_hc = bonew("Man", "head") + (bonew("Man", "head", tail=True) - bonew("Man", "head")) * 0.5
+_mh = [p for p in _ev_pts(bpy.data.objects["Man.body"]) + _ev_pts(bpy.data.objects["Man.short04"]) if (p - _hc).length < 0.14]
+from mathutils.kdtree import KDTree
+_tl = [p for p in _ev_pts(bpy.data.objects["Toddler.male_casualsuit04"]) + _ev_pts(bpy.data.objects["Toddler.shoes01"])]
+_kd = KDTree(len(_tl))
+for i, p in enumerate(_tl): _kd.insert(p, i)
+_kd.balance()
+print("BUILD man head to boy legs min distance (m)", round(min(_kd.find(p)[2] for p in _mh), 3))
 # catchlights: on only during their own shot
 for lo, sid in CATCH:
     e = lo.data.energy; f0, f1 = SH[sid]

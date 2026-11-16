@@ -211,7 +211,8 @@ rbox("BodyLow", (2 * BW, 10, FLOOR2), (0, WT + 5, FLOOR2 / 2), conc, CS, 0.0)
 rbox("BodyHigh", (2 * BW, 10, 12.6 - RZ1 - 0.15), (0, WT + 5, (RZ1 + 0.15 + 12.6) / 2), conc, CS, 0.0)
 rbox("BodyL", (BW + RX0, 10, RZ1 + 0.15 - FLOOR2), ((-BW + RX0) / 2, WT + 5, (FLOOR2 + RZ1 + 0.15) / 2), conc, CS, 0.0)
 rbox("BodyR", (BW - RX1, 10, RZ1 + 0.15 - FLOOR2), ((BW + RX1) / 2, WT + 5, (FLOOR2 + RZ1 + 0.15) / 2), conc, CS, 0.0)
-rbox("BodyBack", (RX1 - RX0, 10 - RY1, RZ1 + 0.15 - FLOOR2), (0, WT + RY1 + (10 - RY1) / 2, (FLOOR2 + RZ1 + 0.15) / 2), conc, CS, 0.0)
+# the block behind the room starts behind the hallway (the hallway must be empty space: grandma walks through it)
+rbox("BodyBack", (RX1 - RX0, 10 - RY1 - 2.3, RZ1 + 0.15 - FLOOR2), (0, WT + RY1 + 2.3 + (10 - RY1 - 2.3) / 2, (FLOOR2 + RZ1 + 0.15) / 2), conc, CS, 0.0)
 # room interior surfaces
 rbox("RoomFloor", (RX1 - RX0, RY1, 0.02), (0, WT + RY1 / 2, FLOOR2 - 0.008), lam, CS, 0.0)
 rbox("RoomCeil", (RX1 - RX0, RY1, 0.02), (0, WT + RY1 / 2, RZ1 + 0.01), ceil, CS, 0.0)
@@ -341,6 +342,10 @@ area("RoomLight", (0, WT + 2.3, RZ1 - 0.1), (0, WT + 2.3, FLOOR2), 220, 2.0, CS,
 area("HallLight", (AD_X0 + 0.45, HY + 1.1, FLOOR2 + 2.65), (AD_X0 + 0.45, HY + 1.1, FLOOR2), 120, 1.2, CS, (1.0, 0.95, 0.88))
 area("BalconyFill", (0.0, -3.0, 4.6), (0, -0.4, 3.5), 220, 2.0, CS, (1.0, 0.98, 0.95))
 area("StreetFill", (0.0, -6.0, 3.0), (0, -1.0, 1.0), 300, 6.0, CS, (0.95, 0.97, 1.0))
+# face fills (not seen by the camera): grandma in the room and at the balcony
+for nm, loc, tgt, e in (("RoomFaceFill", (0.4, 0.9, FLOOR2 + 1.7), (-0.6, 3.5, FLOOR2 + 1.4), 90),
+                        ("BalconyFaceFill", (0.5, -1.4, FLOOR2 + 1.15), (0.0, 0.1, FLOOR2 + 0.95), 70)):
+    _l = area(nm, loc, tgt, e, 0.8, CS, (1.0, 0.97, 0.94)); _l.visible_camera = False
 
 # ------------------------------------------------------------------ cast: controls, limits, subsurf for close-ups
 CAST = {}
