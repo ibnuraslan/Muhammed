@@ -403,7 +403,7 @@ def S02(t, n):
     def fr(f, u):
         hero.stand(f, xy, 0, flex=6 + 6 * ease(u))
         look_at(hero, f, pen, flex=8 + 6 * ease(u)); hero.jaw(f, 2.5 * ease((u - 0.3) / 0.5))
-        for s_ in "LR": hero.hang(s_, f, fwd=-0.08, lift=-0.04)
+        for s_ in "LR": hero.hang(s_, f, out=0.05, fwd=0.02)
     track(t, n, 4, fr)
     camera("S02", 24, t, pen + V(-0.07, -0.32, 0.10), pen + V(0, 0.55, 0.36), t + n, pen + V(-0.05, -0.27, 0.10), pen + V(0, 0.55, 0.38), fstop=16)
 
@@ -498,7 +498,7 @@ def S10(t, n):
         cyc = (path(f) - path(t)).length / 0.70
         for s in "LR":
             ph = math.sin(2 * math.pi * cyc + (0 if s == "L" else math.pi))
-            hero.hang(s, f, fwd=0.14 * ph, lift=0.04 * max(0, ph))
+            hero.hang(s, f, out=0.045, fwd=0.07 + 0.09 * ph, lift=0.03 + 0.03 * max(0, ph))
         hero.eyes(f)
     track(t, n, 2, fr)
     c = camera("S10", 30, t, V(NX + 0.5, y0 - 3.0, 1.30), V(NX - 0.3, y0, 1.15), t + n, V(NX + 0.5, y1 - 3.0, 1.30), V(NX - 0.3, y1, 1.15))
@@ -694,7 +694,7 @@ def S26(t, n):
         cyc = (path(f) - path(t)).length / 0.70
         for s in "LR":
             ph = math.sin(2 * math.pi * cyc + (0 if s == "L" else math.pi))
-            hero.hang(s, f, fwd=0.14 * ph, lift=0.04 * max(0, ph))
+            hero.hang(s, f, out=0.045, fwd=0.07 + 0.09 * ph, lift=0.03 + 0.03 * max(0, ph))
         look_at(hero, f, V(3.0, -10.6, 1.0) if u > 0.5 else V(4.0, -14.0, 1.5), amount=0.6)
     track(t, n, 2, fr)
     c = camera("S26", 30, t, V(0.4, -14.4, 1.25), V(1.7, -7.5, 1.35), t + n, V(0.5, -14.0, 1.25), V(1.8, -9.0, 1.25))
