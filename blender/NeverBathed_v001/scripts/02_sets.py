@@ -58,9 +58,9 @@ M_STONE = mat("M_TroughStone", (0.62, 0.58, 0.52), 0.75, noise_scale=4.0, var=0.
 M_WATER = mat("M_Water", (0.20, 0.42, 0.50), 0.08)
 M_WATER.node_tree.nodes["Principled BSDF"].inputs['Specular IOR Level'].default_value = 0.3
 M_ROAD = mat("M_RoadDust", (0.50, 0.38, 0.27), 0.92, noise_scale=0.6, var=0.12, bump=0.25)
-M_DUNG = mat("M_DungCake", (0.14, 0.10, 0.05), 0.95, noise_scale=12.0, var=0.25, bump=0.4)
+M_DUNG = mat("M_DungCake", (0.075, 0.05, 0.028), 0.98, noise_scale=25.0, var=0.35, bump=0.6)
 M_POT = mat("M_ClayPot", (0.66, 0.36, 0.20), 0.65, noise_scale=5.0, var=0.08)
-M_CLOTH = mat("M_Blanket", (0.55, 0.12, 0.10), 0.85, noise_scale=10.0, var=0.15)
+M_CLOTH = mat("M_Blanket", (0.16, 0.10, 0.06), 0.85, noise_scale=10.0, var=0.15)
 M_SHRUB = mat("M_DryShrub", (0.45, 0.42, 0.22), 0.8, noise_scale=6.0, var=0.2)
 
 def smooth(ob):
@@ -359,11 +359,11 @@ fr_ = rock("D_FlatRock", (FLAT.x, FLAT.y, 0.08), 0.42, "SET_D", seed=8)
 for v in fr_.data.vertices:
     if v.co.z > 0.1: v.co.z = 0.1 + (v.co.z - 0.1) * 0.1
 for i in range(6):     # dried dung cakes on the flat rock
-    bpy.ops.mesh.primitive_cylinder_add(vertices=20, radius=rnd.uniform(0.05, 0.075), depth=0.025,
+    bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=rnd.uniform(0.05, 0.075), depth=0.016,
                                         location=(FLAT.x + 0.14 * math.cos(i) - 0.12, FLAT.y + 0.12 * math.sin(i * 1.7), 0.2 + 0.012 * (i % 2)),
                                         rotation=(R_(rnd.uniform(-8, 8)), R_(rnd.uniform(-8, 8)), 0))
     dc = bpy.context.active_object; dc.name = "D_Dung%d" % i
-    for v in dc.data.vertices: v.co += V((0, 0, 0.008 * noise.noise(v.co * 40)))
+    for v in dc.data.vertices: v.co += V((0.006 * noise.noise(v.co * 30 + V((7, 0, 0))), 0.006 * noise.noise(v.co * 30 + V((0, 7, 0))), 0.006 * noise.noise(v.co * 40)))
     dc.data.materials.append(M_DUNG); smooth(dc); link(dc, "SET_D")
 # flames: emissive flame tongues + a warm light (flicker is keyed in the shots)
 M_FLAME = mat("M_Flame", (0.9, 0.25, 0.02), 0.5, emit=((1.0, 0.30, 0.02), 0.9))
@@ -428,10 +428,13 @@ pipe.location = (FLAT.x + 0.12, FLAT.y - 0.15, 0.17)
 twig = cyl("Twig", (0, 0, 0), 0.008, 0.42, M_WOODL, "PROPS", verts=8); twig.rotation_euler = (0, R_(90), 0)
 bpy.context.view_layer.objects.active = twig; bpy.ops.object.transform_apply(rotation=True)
 twig.location = (FIRE.x + 0.5, FIRE.y - 0.4, 0.03)
-tf = bpy.data.objects.new("TwigFlame", None)
-bpy.ops.mesh.primitive_cone_add(vertices=12, radius1=0.018, depth=0.07, location=(0, 0, 0)); tfl = bpy.context.active_object
-tfl.name = "TwigFlame"; tfl.data.transform(Matrix.Translation(V((0, 0, 0.035)))); tfl.data.materials.append(M_FLAME); link(tfl, "PROPS")
+bpy.ops.mesh.primitive_cone_add(vertices=12, radius1=0.022, depth=0.09, location=(0, 0, 0)); tfl = bpy.context.active_object
+tfl.name = "TwigFlame"; tfl.data.transform(Matrix.Translation(V((0, 0, 0.045))))
+M_TFL = mat("M_TwigFlame", (1.0, 0.45, 0.05), 0.5, emit=((1.0, 0.45, 0.06), 6.0)); tfl.data.materials.append(M_TFL); link(tfl, "PROPS")
+L = bpy.data.lights.new("TwigGlow", 'POINT'); L.energy = 2.0; L.color = (1.0, 0.55, 0.2); L.shadow_soft_size = 0.02
+tgl = bpy.data.objects.new("TwigGlow", L); C["PROPS"].objects.link(tgl)
 tfl.location = twig.location + V((0.21, 0, 0)); tfl.parent = twig; tfl.matrix_parent_inverse = twig.matrix_world.inverted()
+tgl.location = tfl.location + V((0, 0, 0.05)); tgl.parent = twig; tgl.matrix_parent_inverse = twig.matrix_world.inverted()
 # meat on a spit over the fire (6b), propped on two forked sticks: no hands
 meat = bpy.data.objects.new("D_Meat", None)
 bpy.ops.mesh.primitive_uv_sphere_add(radius=0.08, location=(FIRE.x, FIRE.y, 0.55)); mt = bpy.context.active_object; mt.name = "D_Meat"
@@ -446,7 +449,7 @@ for sx in (-1, 1):
 for o in (mt,): o.hide_render = o.hide_viewport = False
 
 # smoke puffs (pipe and hair singe) and flies: built here, animated in the shots
-M_SMOKE = mat("M_Smoke", (0.7, 0.7, 0.72), 0.9, alpha=0.10)
+M_SMOKE = mat("M_Smoke", (0.62, 0.62, 0.65), 0.9, alpha=0.22)
 for i in range(8):
     bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=0.018, location=(0, 0, -50))
     p = bpy.context.active_object; p.name = "Smoke%d" % i; p.data.materials.append(M_SMOKE); smooth(p); link(p, "PROPS")

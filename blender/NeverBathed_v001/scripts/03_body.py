@@ -31,7 +31,7 @@ def light(f, dusk=False):
 def stand(n, f, pos, yaw, head=(0.0, 0.0), spine=(3.0, 0.0, 0.0), flex=0.0, arms=True, dz=0.0):
     body(n, f, V(pos) + V((0, 0, HUM[n].root_head.z - 0.01 + dz)), yaw, flex=flex, spine=spine, head=head)
     stand_feet(n, f, pos, yaw)
-    if arms: relaxed_arm(n, "L", f, yaw); relaxed_arm(n, "R", f, yaw)
+    if arms: relaxed_arm(n, "L", f, yaw, fwd_=0.08, up=0.05); relaxed_arm(n, "R", f, yaw, fwd_=0.08, up=0.05)
 
 def head_pt(n, f, rest_pt):
     sc.frame_set(int(f)); bpy.context.view_layer.update()
@@ -172,21 +172,20 @@ def shot_2c(f0, n):
 # ================================================================== BEAT 3: the dirt kept him healthy
 FP = V((0.3, -2.0, 0)); FYAW = 8.0
 def shot_3a(f0, n):
-    """in the lane he flexes both arms like a strongman, pumping twice, chest out"""
+    """in the lane he strides toward camera, stops, chest out, and thumps his chest twice with his right fist, grinning"""
     use = ("AmouO",); f1 = f0 + n - 1; light(f0)
-    for f in range(f0, f1 + 1, 6):
-        g = ss((f - f0 - 10) / 25.0); pump = 0.03 * math.sin((f - f0) / 9.0) * g
-        stand("AmouO", f, FP, FYAW, head=(-6 * g, 6 * math.sin((f - f0) / 30.0)), spine=(-5 * g + 2, 0, 0), arms=False, dz=pump * 0.2)
-        for s in "LR":
-            sx = 1 if s == "L" else -1
-            sh = wpos("AmouO", "upperarm01." + s, f); out = -rgt(FYAW) * sx
-            rest = sh + V((0, 0, -0.55)) + out * 0.07 + fwd(FYAW) * 0.04
-            flex_p = sh + out * 0.36 + V((0, 0, 0.12 + pump)) + fwd(FYAW) * 0.05
-            p = rest.lerp(flex_p, g)
-            nrm = (-out * g + out * 0.2 * (1 - g) + V((0, 0, -1)) * (1 - g)).normalized()
-            fd = (V((0, 0, 1)) * g + V((0, 0, -1)) * (1 - g) - out * 0.3 * g).normalized()
-            hand("AmouO", s, f, p, nrm, fd, pole=sh + out * 0.5 + V((0, 0, -0.45 * g - 0.2)) - fwd(FYAW) * 0.2, pose="power_fist" if g > 0.5 else "relaxed")
-    camera("3a", f0, n, [(0, (FP.x + 0.4, FP.y - 3.4, 0.85), (FP.x, FP.y, 1.25), 28), (1, (FP.x + 0.3, FP.y - 2.7, 0.95), (FP.x, FP.y, 1.3), 28)])
+    fw = f0 + 66
+    walk_shot("AmouO", f0, fw, [(FP.x, FP.y + 1.3, 0), (FP.x, FP.y, 0)], speed=1.2, head=(-6, 0))
+    for f in range(fw + 6, f1 + 1, 6):
+        k = f - fw
+        stand("AmouO", f, FP, 0.0, head=(-8, 6 * math.sin(k / 18.0)), spine=(-4, 0, 0), arms=False)
+        relaxed_arm("AmouO", "L", f, 0.0, fwd_=0.08, up=0.05)
+        sh = wpos("AmouO", "upperarm01.R", f)
+        chest = wpos("AmouO", "spine03", f) + fwd(0.0) * 0.17 + V((0, 0, 0.12)) - rgt(0.0) * 0.06
+        hit = abs(math.sin(k / 9.0 * math.pi))
+        p = chest + fwd(0.0) * (0.03 + 0.09 * hit)
+        hand("AmouO", "R", f, p, -fwd(0.0), (V((0, 0, 1)) * 0.3 - rgt(0.0) * -1).normalized(), pole=sh + rgt(0.0) * 0.35 + V((0, 0, -0.3)), pose="power_fist")
+    camera("3a", f0, n, [(0, (FP.x + 0.35, FP.y - 3.2, 1.05), (FP.x, FP.y + 0.8, 1.3), 30), (1, (FP.x + 0.25, FP.y - 2.4, 1.15), (FP.x, FP.y, 1.4), 30)])
     return use
 
 def shot_3b(f0, n):
@@ -275,7 +274,7 @@ def shot_6a(f0, n):
             sx = 1 if s == "L" else -1
             th = kn + fwd(yw) * 0.08 - rgt(yw) * sx * 0.14 + V((0, 0, 0.36))
             hand("AmouO", s, f, th, V((0, 0, -1)) + fwd(yw) * 0.3, fwd(yw) + V((0, 0, -0.6)), pole=wpos("AmouO", "upperarm01." + s, f) - rgt(yw) * sx * 0.4 - fwd(yw) * 0.2, pose="relaxed")
-    camera("6a", f0, n, [(0, (HARE.x - 1.1, HARE.y + 1.35, 0.95), (HARE.x + 0.0, HARE.y - 0.35, 0.45), 30), (1, (HARE.x - 0.95, HARE.y + 1.15, 0.9), (HARE.x + 0.0, HARE.y - 0.35, 0.45), 30)])
+    camera("6a", f0, n, [(0, (HARE.x - 0.85, HARE.y + 0.85, 0.62), (HARE.x + 0.02, HARE.y - 0.22, 0.38), 26), (1, (HARE.x - 0.7, HARE.y + 0.68, 0.55), (HARE.x + 0.02, HARE.y - 0.22, 0.36), 26)])
     return use
 def sit_fire(n, f, head=(10, 0), lean=8.0, hands=True, spine=(10, 0, 0)):
     root = sit(n, f, SEAT, SEAT_Z + 0.03 + 0.003 * max(0.0, lean - 8.0), 0.0, lean=lean, spine=spine, head=head, knee_fwd=0.5)
@@ -321,7 +320,11 @@ def shot_7b(f0, n):
     sc.frame_set(f0); bpy.context.view_layer.update()
     grip_object(OB["AmouO"], "R", f0, p, shank, npalm, finger_dir=(hf * 0.8 + V((0, 0, -0.3))).normalized(), grip="pinch")
     M0 = ik_mat("AmouO", "R", f0); child_of(p, "AmouO", "wrist.R", f0)
-    for pb_ in OB["AmouO"].pose.bones:          # middle/ring/little fingers curl loosely below the stem (never into it)
+    _keep = {pb.name: pb.rotation_quaternion.copy() for pb in OB["AmouO"].pose.bones if pb.name.endswith(".R") and (pb.name.startswith("finger1") or pb.name.startswith("finger2"))}
+    apply_pose(OB["AmouO"], "R", "power_fist", f0)
+    for nm_, q_ in _keep.items():
+        pb_ = OB["AmouO"].pose.bones[nm_]; pb_.rotation_quaternion = q_; pb_.keyframe_insert("rotation_quaternion", frame=f0, group=nm_)
+    for pb_ in []:          # (kept for reference)
         if pb_.name.endswith(".R") and pb_.name.split("-")[0] in ("finger3", "finger4", "finger5") and "-" in pb_.name and pb_.name[-3] in "123":
             pb_.rotation_quaternion = Quaternion().slerp(pb_.rotation_quaternion, 0.12 if pb_.name.startswith("finger3") else 0.45); pb_.keyframe_insert("rotation_quaternion", frame=f0, group=pb_.name)
     _fing = {pb.name: pb.rotation_quaternion.copy() for pb in OB["AmouO"].pose.bones if pb.name.endswith(".R") and ("finger" in pb.name or "metacarpal" in pb.name)}
@@ -342,13 +345,18 @@ def beard_tip(f):
     pts = [o.matrix_world @ V(c) for c in o.bound_box]
     zmin = min(p.z for p in pts); cx = sum(p.x for p in pts) / 8; cy = min(p.y for p in pts)
     return V((cx, cy + 0.03, zmin + 0.03))
-def shot_8a(f0, n):
+def shot_8a(f0, n): return twig_shot("8a", f0, n)
+def twig_shot(sid, f0, n):
     """seated, he holds a smouldering twig in his right hand to the very ends of his beard: a small singe and smoke, no flame near the face"""
     use = ("AmouO",); f1 = f0 + n - 1; light(f0)
     for f in list(range(f0, f1 + 1, 20)) + [f1]:
         root = sit_fire("AmouO", f, head=(24, -8), lean=6, hands=False, spine=(8, 0, 0))
         hand("AmouO", "L", f, root + fwd(0) * 0.3 - rgt(0) * 0.13 + V((0, 0, 0.09)), V((0, 0, -1)), fwd(0) + V((0, 0, -0.3)), pole=wpos("AmouO", "upperarm01.L", f) - rgt(0) * 0.35 - fwd(0) * 0.25, pose="relaxed")
-    t = prop_copy("Twig", "Twig_8a", f0, f1)
+    t = prop_copy("Twig", "Twig_" + sid, f0, f1)
+    for src in ("TwigFlame", "TwigGlow"):
+        c_ = OB[src].copy(); c_.name = src + "_" + sid; OB[src].users_collection[0].objects.link(c_); c_.animation_data_clear()
+        c_.parent = t; c_.matrix_parent_inverse = OB[src].matrix_parent_inverse.copy(); c_.location = OB[src].location.copy()
+        vis_window(c_, f0, f1)
     bt = beard_tip(f0)
     d = (V((0, 0, 0)) + rgt(0) * 1.0 + fwd(0) * 0.35 + V((0, 0, -0.15))).normalized()      # twig runs from the beard tip out to his right hand
     tipw = bt + rgt(0) * 0.015 + fwd(0) * 0.02
@@ -364,35 +372,38 @@ def shot_8a(f0, n):
         sh = wpos("AmouO", "upperarm01.R", f); elbow("AmouO", "R", f, sh + V((0, 0, -0.45)) + rgt(0) * 0.3)
     key_ik("AmouO", "R", f0, M0)
     puffs(lambda f: beard_tip(f0) + V((0, 0, 0.0)), f0 + 50, f1, every=12, rise=0.15, drift=rgt(0) * 0.06, grow=2.0, life=40, count=6)
-    camera("8a", f0, n, [(0, (SEAT.x - 1.05, SEAT.y - 1.25, 1.15), (SEAT.x - 0.2, SEAT.y - 0.2, 0.98), 34), (1, (SEAT.x - 0.95, SEAT.y - 1.12, 1.12), (SEAT.x - 0.2, SEAT.y - 0.2, 1.0), 34)])
+    bt0 = beard_tip(f0)
+    camera(sid, f0, n, [(0, bt0 + V((-0.55, -0.62, 0.12)), bt0 + V((-0.06, 0, 0.1)), 40), (1, bt0 + V((-0.45, -0.52, 0.12)), bt0 + V((-0.06, 0, 0.11)), 40)])
     return use
 def shot_8b(f0, n):
-    """wide: the hermit at his fire by the pit, smoke drifting from the singed beard ends"""
-    use = ("AmouO",); f1 = f0 + n - 1; light(f0)
-    for f in range(f0, f1 + 1, 25):
-        sit_fire("AmouO", f, head=(20, 10 * math.sin((f - f0) / 30.0)), lean=10, spine=(12, 0, 0))
-    puffs(lambda f: beard_tip(f0), f0, f1, every=14, rise=0.3, drift=rgt(0) * 0.1, grow=4, life=50, count=6)
-    camera("8b", f0, n, [(0, (DX - 0.4, 0.6, 1.7), (SEAT.x, SEAT.y - 0.4, 0.7), 24), (1, (DX - 0.8, 0.9, 1.6), (SEAT.x, SEAT.y - 0.4, 0.7), 24)])
+    """medium: the hermit at his fire holding the smouldering twig to his beard ends, smoke drifting"""
+    use = twig_shot("8b", f0, n)
+    CAMS.pop("8b", None)
+    cam = OB["CAM_8b"]; sc.timeline_markers.remove(next(m for m in sc.timeline_markers if m.name == "S8b"))
+    bpy.data.objects.remove(cam, do_unlink=True)
+    catch = OB.get("Catch_8b")
+    if catch: bpy.data.objects.remove(catch, do_unlink=True)
+    camera("8b", f0, n, [(0, (SEAT.x - 1.3, SEAT.y - 2.0, 1.25), (SEAT.x - 0.1, SEAT.y - 0.3, 0.8), 30), (1, (SEAT.x - 1.1, SEAT.y - 1.75, 1.2), (SEAT.x - 0.1, SEAT.y - 0.3, 0.82), 30)])
     return use
 
 # ================================================================== BEAT 9: the dirtiest man in the world
 HP9 = V((0.0, 4.5, 0))
 def shot_9a(f0, n):
+    """he walks slowly down the lane toward camera, flies circling over his head"""
     use = ("AmouO",); f1 = f0 + n - 1; light(f0)
-    for k, f in enumerate(range(f0, f1 + 1, 30)):
-        stand("AmouO", f, HP9, 0.0, head=(-6 + 1.5 * (k % 2), 4 * math.sin(k)), spine=(-2, 0, 0), dz=0.004 * (k % 2))
+    walk_shot("AmouO", f0, f1, [(HP9.x, HP9.y + 2.0, 0), (HP9.x, HP9.y, 0)], speed=0.9, head=(-6, 0))
     flies("AmouO", f0, f1)
-    camera("9a", f0, n, [(0, (0.25, HP9.y - 3.0, 0.95), (0, HP9.y, 1.45), 30), (1, (0.18, HP9.y - 2.1, 1.1), (0, HP9.y, 1.5), 30)])
+    camera("9a", f0, n, [(0, (0.25, HP9.y - 2.4, 0.95), (0, HP9.y + 1.6, 1.45), 30), (1, (0.2, HP9.y - 2.3, 1.0), (0, HP9.y + 0.2, 1.5), 30)])
     return use
 def shot_9b(f0, n):
+    """he keeps walking; the camera arcs from his front to his left side, revealing the lane"""
     use = ("AmouO",); f1 = f0 + n - 1; light(f0)
-    for k, f in enumerate(range(f0, f1 + 1, 30)):
-        stand("AmouO", f, HP9, 0.0, head=(-4, -10 - 6 * k), spine=(-2, 0, 0), dz=0.004 * (k % 2))
+    path = walk_shot("AmouO", f0, f1, [(HP9.x, HP9.y, 0), (HP9.x, HP9.y - 1.8, 0)], speed=0.9, head=(-4, 0))
     flies("AmouO", f0, f1)
     ks = []
     for i in range(5):
-        a_ = R_(-90 - 22 * i); r = 2.3
-        ks.append((i / 4, (HP9.x + r * math.cos(a_), HP9.y + r * math.sin(a_), 1.45 + 0.08 * i), (HP9.x, HP9.y, 1.35), 26))
+        u = i / 4; c = path(f0 + u * (n - 1)); a_ = R_(-70 - 25 * i); r = 2.3
+        ks.append((u, (c.x + r * math.cos(a_), c.y + r * math.sin(a_), 1.45 + 0.06 * i), (c.x, c.y, 1.35), 26))
     camera("9b", f0, n, ks)
     return use
 
@@ -404,16 +415,16 @@ def shot_10a(f0, n):
     ya = yaw_to(A10, V10); yv = yaw_to(V10, A10)
     for f in range(f0, f1 + 1, 8):
         look = ss((f - f0 - 40) / 20.0); nod = 8 * math.sin((f - f0 - 75) / 6.0) * (1 if 75 < f - f0 < 113 else 0)
-        stand("AmouO", f, A10, ya - 25, head=(4 + 8 * look + nod, 20 - 45 * look))
+        stand("AmouO", f, A10, ya - 25 + 30 * look, head=(4 + 8 * look + nod, 20 - 35 * look), spine=(3, 10 * look, 0))
         g = ss((f - f0 - 15) / 20.0) * (1 - ss((f - f0 - 100) / 20.0))
         stand("V1", f, V10, yv + 20, head=(2, -10 - 25 * g), spine=(3, -10 * g, 0), arms=False)
         relaxed_arm("V1", "L", f, yv)
         sh = wpos("V1", "upperarm01.R", f)
         dirt = (TUBP + V((0, 0.6, 0)) - V10); dirt.z = 0
         rest = sh + V((0, 0, -0.55)) + rgt(yv) * 0.05 + fwd(yv) * 0.04
-        out = sh + dirt.normalized() * 0.40 + V((0, 0, -0.18)) + rgt(yv) * 0.1
-        hand("V1", "R", f, rest.lerp(out, g), V((0, 0, -1)) * (1 - g) + V((0, 0, -1)) * g * -1, (V((0, 0, -1)) * (1 - g) + dirt * g).normalized(),
-             pole=sh + V((0, 0, -0.4)) + rgt(yv) * 0.4 - fwd(yv) * 0.2, pose="flat_palm")
+        out = sh + dirt.normalized() * 0.50 + V((0, 0, -0.06))
+        hand("V1", "R", f, rest.lerp(out, g), (V((0, 0, -1)) * (1 - g) + V((0, 0, -1)) * g).normalized(), (V((0, 0, -1)) * (1 - g) + dirt.normalized() * g).normalized(),
+             pole=sh + V((0, 0, -0.45)) - fwd(yv) * 0.25, pose="point" if g > 0.4 else "relaxed")
     camera("10a", f0, n, [(0, (-0.35, 13.9, 1.55), (-0.15, 17.8, 1.25), 28), (1, (-0.15, 14.3, 1.55), (-0.15, 17.8, 1.27), 28)])
     return use
 TUBO = OB["V_Tub"]
@@ -458,13 +469,24 @@ def shot_11a(f0, n):
     camera("11a", f0, n, [(0, (PIT.x + 1.6, PIT.y - 2.3, 1.15), (PIT.x - 0.1, PIT.y + 0.1, 0.0), 28), (1, (PIT.x + 1.25, PIT.y - 1.85, 1.0), (PIT.x - 0.1, PIT.y + 0.1, 0.0), 28)])
     return use
 def shot_11b(f0, n):
-    """dusk wide: two villagers stand quietly beyond the empty pit, heads bowed; slow pull back"""
+    """dusk: V2 kneels quietly at the pit's far edge, head bowed; V1 walks up beside him and stops, head bowed. Slow pull back."""
     use = ("V1", "V2"); f1 = f0 + n - 1; light(f0, dusk=True)
-    for k, f in enumerate(range(f0, f1 + 1, 30)):
-        stand("V1", f, V((PIT.x - 0.45, PIT.y + 1.75, 0)), 8.0, head=(24 + 2 * (k % 2), 0), spine=(8, 0, 0), dz=0.003 * (k % 2))
-        stand("V2", f, V((PIT.x + 0.55, PIT.y + 1.85, 0)), -6.0, head=(22 + 2 * ((k + 1) % 2), 0), spine=(8, 0, 0), dz=0.003 * ((k + 1) % 2))
-    camera("11b", f0, n, [(0, (PIT.x + 0.4, PIT.y - 2.6, 1.3), (PIT.x, PIT.y + 1.6, 1.0), 30), (1, (PIT.x + 0.5, PIT.y - 3.4, 1.4), (PIT.x, PIT.y + 1.5, 1.0), 30)])
+    for k, f in enumerate(range(f0, f1 + 1, 20)):
+        kneel("V2", f, (PIT.x + 0.5, PIT.y + 1.75), 0.0, lean=10, spine=(18 + 2 * (k % 2), 0, 0), head=(30, 0))
+        for s in "LR":
+            sx = 1 if s == "L" else -1
+            th = V((PIT.x + 0.5, PIT.y + 1.75, 0)) + fwd(0.0) * 0.08 - rgt(0.0) * sx * 0.14 + V((0, 0, 0.36))
+            hand("V2", s, f, th, V((0, 0, -1)) + fwd(0.0) * 0.3, fwd(0.0) + V((0, 0, -0.6)), pole=wpos("V2", "upperarm01." + s, f) - rgt(0.0) * sx * 0.4 - fwd(0.0) * 0.2, pose="relaxed")
+    fw = f0 + 75
+    walk_shot("V1", f0, fw, [(PIT.x - 1.9, PIT.y + 2.0, 0), (PIT.x - 0.45, PIT.y + 1.95, 0)], speed=1.0, head=(10, 0))
+    for k, f in enumerate(range(fw + 8, f1 + 1, 15)):
+        u = ss((f - fw) / 30.0)
+        stand("V1", f, V((PIT.x - 0.45, PIT.y + 1.95, 0)), -90.0 + 90 * u, head=(10 + 22 * u, 0), spine=(4 + 6 * u, 0, 0), dz=0.003 * (k % 2))
+    camera("11b", f0, n, [(0, (PIT.x + 0.2, PIT.y - 2.6, 1.3), (PIT.x - 0.1, PIT.y + 1.7, 0.9), 30), (1, (PIT.x + 0.3, PIT.y - 3.4, 1.4), (PIT.x, PIT.y + 1.6, 0.9), 30)])
     return use
+
+# the original twig (with its flame) is only a source for the per-shot copies
+for _n in ("Twig", "TwigFlame", "TwigGlow"): key_vis(OB[_n], 1, False)
 
 flame_flicker()
 SHOT_FUNCS = {k[5:]: v for k, v in list(globals().items()) if k.startswith("shot_")}
