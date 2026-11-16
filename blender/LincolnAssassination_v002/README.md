@@ -32,3 +32,8 @@ Every action plays at 1× from its word frame; nothing is time-stretched.
 | S14 | 1131 | and he managed to hide for 12 days before | close: he crouches hidden behind the hay bales, fire behind him, looks around |
 | S14B | 1271 | authorities finally | barn from the doorway: soldiers with torches step in, he stands up |
 | S15 | 1325 | found him hiding inside a barn and killed him. | medium on him, hands raised, fire behind; ends on a hard cut (no shooting shown) |
+
+## Review done before delivery
+- Watched the full moving preview twice (every 5th frame, all 7 pages) from the exact package; fixed everything found, re-rendered
+  only the changed ranges (S06, S08, S12, S14 to S15) from the repacked file and spliced them in.
+- Checks: `review/checks.md` (per-shot camera wrapper `scripts/per_shot_check.py`).

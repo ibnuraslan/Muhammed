@@ -291,7 +291,7 @@ def gun_matrix(pos, fwd, up_hint=V(0, 0, 1)):
     y = -fwd.normalized(); x = up_hint.cross(y).normalized(); z = y.cross(x)
     # pistol local: barrel -Y, up +Z
     return Matrix.Translation(pos) @ Matrix((x, y, z)).transposed().to_4x4()
-low_pos = V(GPOS.x, GPOS.y, BZ) + Rz @ V(-0.30, -0.12, 0.80)
+low_pos = V(GPOS.x, GPOS.y, BZ) + Rz @ V(-0.38, -0.20, 0.82)
 low_fwd = Rz @ V(0, -1, -1.3)
 aim_pos = shR + aim_dir * 0.47 + V(0, 0, -0.03)
 G_AIM = gun_matrix(aim_pos, aim_dir)
@@ -412,9 +412,9 @@ for f in range(LAND, SE("S09") + 1, 2):
     pL = LAND_P + Rj @ V(0.14, 0.05 + 0.55 * k, 0)
     G.H.key_foot("L", f, G.a(pL).to_2d(), JYAW, lift=0.0, pitch=-55 * k)
     # hands: right hand on the right knee, left palm down on the boards beside the left knee
-    WR = root + Rj @ V(-0.12, -0.32, -0.12 - 0.05 * k)
+    WR = root + Rj @ V(-0.20, -0.42, -0.10 - 0.05 * k)
     G.hand_w("R", f, WR, Rj @ V(0, -1, -0.4).normalized(), V(0, 0, -1), root + Rj @ V(-0.6, 0.3, 0))
-    WL = (1 - k) * (root + Rj @ V(0.36, -0.1, -0.3)) + k * (LAND_P + Rj @ V(0.42, -0.05, 0.06))
+    WL = (1 - k) * (root + Rj @ V(0.42, -0.22, -0.28)) + k * (LAND_P + Rj @ V(0.42, -0.05, 0.06))
     G.hand_w("L", f, WL, Rj @ V(0.1, -1, -0.15 * k).normalized(), (1 - k) * (Rj @ V(-1, 0, 0)) + k * V(0, 0, -1), root + Rj @ V(0.7, 0.3, 0))
     if f == LAND: apply_pose(G.o, "L", "relaxed", f); apply_pose(G.o, "R", "relaxed", f)
     if f == KNEEL1: apply_pose(G.o, "L", "flat_palm", f, amount=0.8)
@@ -508,7 +508,7 @@ def quad_gallop(rig, path, f0, f1, stride=3.0, lift=0.32, bob=0.07):
 CUR_S[0] = 1.0
 H_S11 = (ST["S11"], SE("S11")); H_S12 = (ST["S12"], SE("S12"))
 p11 = lambda f: V(99.2, 26.0 - 10.5 * (f - H_S11[0]) / 60.0, 0)
-p12 = lambda f: V(102.0, 10.0 - 8.0 * (f - H_S12[0]) / 60.0, 0)
+p12 = lambda f: V(102.0, 8.0 - 8.0 * (f - H_S12[0]) / 60.0, 0)
 quad_gallop(HR, p11, H_S11[0], H_S11[1], stride=3.4)
 quad_gallop(HR, p12, H_S12[0], H_S12[1], stride=3.0)
 for f in (1, H_S11[0] - 1): quad_hold(HR, f, V(150, 30, 0), 0.0)
