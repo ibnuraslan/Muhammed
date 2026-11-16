@@ -1,0 +1,4 @@
+S1: 40 frames (1-118), 5136 edge hits, top: Bike_frame <- upperleg02.L 1121, Bike_frame <- upperleg02.R 795, Bike_frame <- finger2-3.R 344
+S4: 5 frames (460-478), 70 edge hits, top: Glass <- finger1-1.R 32, Glass <- metacarpal1.R 25, Glass <- finger1-2.R 13
+S9: 8 frames (1057-1078), 214 edge hits, top: PushDrum <- finger4-3.R 121, PushDrum <- finger3-3.R 70, PushDrum <- finger5-3.R 19
+S19: 20 frames (2161-2218), 3934 edge hits, top: MovingBox <- finger3-2.R 372, MovingBox <- finger5-3.L 367, MovingBox <- finger3-2.L 362

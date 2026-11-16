@@ -1,6 +1,7 @@
 # B05 LoveCanal: Phase 1 checkpoint notes
 
-- Still sheet: `review/P1_still_sheet_540.jpg`: one 540×960 frame per shot (Cycles 8 spp, 60% into each shot), reference timing.
+- Still sheet: `review/P1_still_sheet_3frames_540.jpg`: first, middle and last frame of all 22 shots at 540×960 (Cycles 8 spp, after the anim_look pass), reference timing. The older 1-frame sheet `P1_still_sheet_540.jpg` is superseded.
+- Contact check: `review/body_prop_cross.json` (step 3, every frame range), summary in `review/body_prop_cross_summary.txt`.
 - Build: `scripts/01_chars.py` → `02_sets.py` (+`02b_sets.py`) → `03_anim.py` (+`03a…03d`). The whole film rebuilds in about 4 min. Phase 2 passes a timing JSON of VO seconds per shot; actions are keyed at 1× from each shot start and run 30% past the planned length.
 - Every shot's first and last frames were checked at 216 px (stills not committed).
 
@@ -10,14 +11,24 @@
 - **S19:** the truck's back doors are modelled closed, so Dad2 carries his box toward the truck instead of lifting it in.
 - **S20:** Dad2 is shown in profile, not from behind as in the reference, so his face reads.
 
-## Known issues I'll fix before Phase 2 (frame numbers on the reference timing)
-1. S8 (f841–1020): the cave walls read as crumpled green paper. Plan: smoother rock and darker walls, keeping the green glow.
-2. S12–S13 (f1261–1500): the drums scatter more than they pile; one falling drum passes close to the S13 lens (top-left, ~f1452). Plan: tighter spawn and a camera offset.
-3. S14 (f1501–1620): the dirt wave is a grey lump and there is a dark edge on the fill. Plan: brown lumpy dirt and a sloped fill edge.
-4. S20 (f2221–2340): Dad2's right hand drifts out toward the truck cab. Plan: hands back at his sides.
-5. S22 (f2401–2610): the blanket shows lumps and darker patches over the legs. Plan: smoother drape.
-6. No `anim_look.py` pass yet (AgX Punchy is set). The leaf tint is applied.
+## Director notes applied (Nov 15–16)
+- Logo kept on the truck's back doors (S19, S21).
+- Dense drum heap: one throwaway drop sim settles 504 drums into a mound in the pit. Each drum is then keyed flying in on an arc from the truck side into its slot, lowest first. Nothing passes through the heap, nothing comes near a lens, and all drums land before S14. In S14 the dozer works at the heap, and drums are buried as the dirt wave reaches them.
+- S2: her hand stays about 6 cm in front of her nose.
+- S9/S10: the worker wears blue-grey coveralls, dark boots, work gloves and a yellow hard hat. His face shows, and his palms rest on top of the rolling drum.
+- S6/S17: the brown house's windows were my curtain-glass material rendering black. It now shows curtains behind glass that reflects the sky.
+- S5: push-in on Father (coughing into his hand) at the counter, with the kitchen units, fridge, oven and a new back window behind. The son stands at the counter end, Mother is at the left with her hand to her chest.
+- S22: medium two-shot from above the bed. The father's face is on the pillow and the son stands at the bedside (moved from the armchair, which kept cutting into his legs), his palm on his father's hand on his chest. The blanket is draped from the body shape (arms excluded) and is a darker blue with folds.
+- anim_look pass applied (AgX Punchy, `--no-sky` to keep the HDRI clouds).
+- Expressions: oculi offsets below -0.002 bared the eye whites and lids past -12 closed the eyes, so `face()` clamps to a gentle squint (blinks unaffected).
 
-## Questions for the director
-- **Logo:** DA KRAS FILMS (dark) is on the truck's back doors in S19 (f2161–2220) and stays readable small in S21. The reference has its own logo on the same truck. Is a moving truck during the evacuation beat acceptable, or should it move to the box Dad2 carries, or be dropped?
-- **Drum pile:** is a top-down "drums tumbling into the pit" look fine for S11–S12, or do you want a dense heap like reference seconds 21–24?
+## Remaining body/prop contacts (frames on the reference timing)
+- S1 f1–118: the boy's thighs touch the saddle and his fingers wrap the grips. This is normal riding contact, and the rear camera hides both behind his body.
+- S19 f2161–2218: the flat palms hold the box sides and the fingertips press 2–5 mm into the cardboard. In close-up it reads as holding.
+- S9 f1057–1078: right fingertips touch the drum top as it rolls under the palm (a few mm).
+- S4 f460–478: the thumb base touches the glass for 5 sampled frames during the lowering.
+- All other shots: 0.
+
+## Build bugs found and fixed
+- A one-off rebuild crash meant one crossing check ran on a stale file; it was re-run.
+- Hand targets computed while a rig was parked off-set leaked into the last frame of a shot (the S3 lid vanished). Rigs now stay placed through their overrun, and actions end at the cut when the next shot reuses the character.
