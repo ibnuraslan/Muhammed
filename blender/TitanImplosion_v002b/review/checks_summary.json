@@ -1,0 +1,50 @@
+{
+ "clip_scan_full_film_before_hand_fix": [
+  [
+   307,
+   391
+  ],
+  [
+   409,
+   409
+  ],
+  [
+   1513,
+   1525
+  ],
+  [
+   1549,
+   1597
+  ]
+ ],
+ "clip_scan_S04-S05_after": [],
+ "clip_scan_S15_after": [],
+ "limb_check_S04-S05": {},
+ "limb_check_S15": {},
+ "body_prop_cross_raw_counts": {
+  "S04-S05 f306-443": {
+   "upperleg01.L|Object_2|VIS": 259,
+   "upperleg01.R|Object_2|VIS": 182,
+   "upperleg02.L|Object_2|VIS": 489,
+   "upperleg02.R|Object_2|VIS": 395,
+   "upperleg02.L|Object_2|off": 121,
+   "upperleg02.R|Object_2|off": 58,
+   "upperleg01.L|Object_2|off": 1
+  },
+  "S15 f1483-1600": {
+   "upperleg01.L|Object_2|VIS": 217,
+   "upperleg02.R|Object_2|VIS": 397,
+   "upperleg02.L|Object_2|VIS": 539,
+   "upperleg01.R|Object_2|VIS": 147,
+   "lowerleg01.L|Object_2|VIS": 59,
+   "lowerleg01.R|Object_2|VIS": 20
+  }
+ },
+ "qa_check_counts": {
+  "EMPTY": 262,
+  "INSIDE": 109,
+  "CAMJUMP": 15,
+  "ATTACH": 35,
+  "PROPMOVE": 61
+ }
+}
