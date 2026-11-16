@@ -108,3 +108,9 @@ Phase 2 reruns `03_shots.py` with VO frames in `shots.json`.
   - The basin sits beside the vent, not above it (head room for the kneelers).
   - The corridor floor is level with the vent sill, so the crawl is flat.
   - The logo crate is mid-corridor (5d), dark logo, about 20% of frame width.
+
+## P1 PASSED (director, Nov 16, commit e25a431)
+Phase-2 to-do (no P1 round):
+- **2a:** P1 bends forward with his face turned down into the wall corner, so the face doesn't read.
+  - Lift his head and turn it 3/4 toward the camera while he scrapes, e.g. `head=(10, -35)` in his `p_kneel_scrape` call for 2a.
+  - Re-check the spoon grip with `body_prop_cross` afterwards.
