@@ -1,0 +1,65 @@
+{
+ "pipe": {
+  "uid": "14802e7717ff4149bedb0569b93fd5ed",
+  "title": "Smoking Pipe",
+  "author": "beyondmatter",
+  "author_profile": "https://sketchfab.com/beyondmatter",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/14802e7717ff4149bedb0569b93fd5ed",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "shovel": {
+  "uid": "a35282e7c1664f209d212356ace63f45",
+  "title": "shovel",
+  "author": "Sergi Ezquerra",
+  "author_profile": "https://sketchfab.com/Sergi.Ezquerra",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/a35282e7c1664f209d212356ace63f45",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "bucket": {
+  "uid": "68d83e2d634940f594df30998aba652c",
+  "title": "Wooden Bucket",
+  "author": "FlukierJupiter",
+  "author_profile": "https://sketchfab.com/FlukierJupiter",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/68d83e2d634940f594df30998aba652c",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "campfire": {
+  "uid": "a77f7cc689d04b05842ffa86fff3056f",
+  "title": "Campfire",
+  "author": "Callum Behrendt",
+  "author_profile": "https://sketchfab.com/CBehrendt",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/a77f7cc689d04b05842ffa86fff3056f",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "tub": {
+  "uid": "d06c028a89a54c469e4af9cac50606fa",
+  "title": "Vintage Metal Bathtub FREE Low Poly",
+  "author": "Lady Lion Studios",
+  "author_profile": "https://sketchfab.com/LadyLionStudios",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/d06c028a89a54c469e4af9cac50606fa",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "hare": {
+  "uid": "019549ed2b8547c0af265abc0dc70a42",
+  "title": "Hare",
+  "author": "Ghalban",
+  "author_profile": "https://sketchfab.com/Ghalban",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/019549ed2b8547c0af265abc0dc70a42",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "crate": {
+  "uid": "cb73084fbb9d401387ed1ba8aa8b2942",
+  "title": "Wooden Crate",
+  "author": "FishyBusiness",
+  "author_profile": "https://sketchfab.com/FishyBusiness",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/cb73084fbb9d401387ed1ba8aa8b2942",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
