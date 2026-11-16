@@ -1096,6 +1096,46 @@
    [
     "EMPTY",
     "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W1.visor is 4.1 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W3.visor is 4.0 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W6.visor is 3.9 cm off W6's skin (median)"
    ]
   ],
   "1039": [
@@ -1120,6 +1160,46 @@
    [
     "EMPTY",
     "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W1.visor is 4.1 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W3.visor is 4.0 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W6.visor is 3.9 cm off W6's skin (median)"
    ]
   ],
   "1063": [
@@ -1895,13 +1975,13 @@
   "1023": [
    [
     "CAMJUMP",
-    "cut: 14.23 m, 26 deg in one frame (neighbours 0.08 m, 0 deg)"
+    "cut: 39.85 m, 136 deg in one frame (neighbours 0.12 m, 0 deg)"
    ]
   ],
   "1073": [
    [
     "CAMJUMP",
-    "cut: 610.78 m, 29 deg in one frame (neighbours 0.24 m, 0 deg)"
+    "cut: 614.30 m, 170 deg in one frame (neighbours 0.25 m, 0 deg)"
    ]
   ],
   "1124": [
@@ -2983,7 +3063,7 @@
   "EMPTY": 195,
   "BACKHEAD": 2,
   "CAMJUMP": 21,
-  "ATTACH": 182,
+  "ATTACH": 202,
   "PROPMOVE": 209
  }
 }

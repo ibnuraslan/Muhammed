@@ -180,12 +180,6 @@
     "W3 arm.R inside own torso (2 pts)"
    ]
   ],
-  "253": [
-   [
-    "ARMBODY",
-    "Foreman arm.R inside own torso (2 pts)"
-   ]
-  ],
   "259": [
    [
     "ARMBODY",
@@ -207,7 +201,7 @@
   "277": [
    [
     "ARMBODY",
-    "Foreman arm.R inside own torso (7 pts)"
+    "Foreman arm.R inside own torso (6 pts)"
    ]
   ],
   "283": [
@@ -219,7 +213,7 @@
   "289": [
    [
     "ARMBODY",
-    "Foreman arm.R inside own torso (4 pts)"
+    "Foreman arm.R inside own torso (3 pts)"
    ]
   ],
   "319": [
@@ -342,18 +336,56 @@
     "W3 arm.R inside own torso (2 pts)"
    ]
   ],
-  "1309": [
+  "1027": [
    [
     "ARMBODY",
-    "SickMan arm.L inside own torso (2 pts)"
-   ],
+    "Foreman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1033": [
    [
     "ARMBODY",
-    "SickMan arm.R inside own torso (2 pts)"
+    "Foreman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1039": [
+   [
+    "ARMBODY",
+    "Foreman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1045": [
+   [
+    "ARMBODY",
+    "Foreman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1051": [
+   [
+    "ARMBODY",
+    "Foreman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1057": [
+   [
+    "ARMBODY",
+    "Foreman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1063": [
+   [
+    "ARMBODY",
+    "Foreman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1069": [
+   [
+    "ARMBODY",
+    "Foreman arm.R inside own torso (3 pts)"
    ]
   ]
  },
  "counts": {
-  "ARMBODY": 69
+  "ARMBODY": 74
  }
 }
