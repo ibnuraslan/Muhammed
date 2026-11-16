@@ -1,0 +1,299 @@
+{
+"visible_frames": [
+361,
+364,
+376,
+379,
+382,
+385,
+388,
+391,
+394,
+397,
+403,
+406,
+409,
+412,
+415,
+418,
+421,
+424,
+427,
+430,
+433,
+436,
+439,
+442,
+445,
+448
+],
+"frames": {
+"361": {
+"lowerarm01.R|Sword_Found_05|VIS": 20
+},
+"364": {
+"lowerarm01.R|Sword_Found_05|VIS": 3
+},
+"376": {
+"lowerarm01.R|Sword_Found_05|VIS": 5
+},
+"379": {
+"lowerarm01.R|Sword_Found_05|VIS": 17
+},
+"382": {
+"lowerarm01.R|Sword_Found_05|VIS": 21
+},
+"385": {
+"lowerarm01.R|Sword_Found_05|VIS": 21
+},
+"388": {
+"lowerarm01.R|Sword_Found_05|VIS": 20
+},
+"391": {
+"lowerarm01.R|Sword_Found_05|VIS": 17
+},
+"394": {
+"lowerarm01.R|Sword_Found_05|VIS": 13
+},
+"397": {
+"lowerarm01.R|Sword_Found_05|VIS": 4
+},
+"403": {
+"finger4-3.R|Sword_Found_05|VIS": 8
+},
+"406": {
+"finger4-3.R|Sword_Found_05|VIS": 14
+},
+"409": {
+"finger4-3.R|Sword_Found_05|VIS": 21
+},
+"412": {
+"finger4-3.R|Sword_Found_05|VIS": 24
+},
+"415": {
+"finger4-3.R|Sword_Found_05|VIS": 24
+},
+"418": {
+"finger4-3.R|Sword_Found_05|VIS": 26,
+"finger3-3.R|Sword_Found_05|VIS": 3
+},
+"421": {
+"finger4-3.R|Sword_Found_05|VIS": 26,
+"finger3-3.R|Sword_Found_05|VIS": 3
+},
+"424": {
+"finger4-3.R|Sword_Found_05|VIS": 25,
+"finger3-3.R|Sword_Found_05|VIS": 3
+},
+"427": {
+"finger4-3.R|Sword_Found_05|VIS": 25,
+"finger3-3.R|Sword_Found_05|VIS": 4
+},
+"430": {
+"finger4-3.R|Sword_Found_05|VIS": 25,
+"finger3-3.R|Sword_Found_05|VIS": 4
+},
+"433": {
+"finger4-3.R|Sword_Found_05|VIS": 22,
+"finger3-3.R|Sword_Found_05|VIS": 4
+},
+"436": {
+"finger4-3.R|Sword_Found_05|VIS": 21,
+"finger3-3.R|Sword_Found_05|VIS": 13
+},
+"439": {
+"finger4-3.R|Sword_Found_05|VIS": 21,
+"finger3-3.R|Sword_Found_05|VIS": 13
+},
+"442": {
+"finger4-3.R|Sword_Found_05|VIS": 21,
+"finger3-3.R|Sword_Found_05|VIS": 13
+},
+"445": {
+"finger4-3.R|Sword_Found_05|VIS": 21,
+"finger3-3.R|Sword_Found_05|VIS": 13
+},
+"448": {
+"finger4-3.R|Sword_Found_05|VIS": 21,
+"finger3-3.R|Sword_Found_05|VIS": 13
+},
+"769": {
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 9,
+"metacarpal1.R|Sword_Found_09|off": 9,
+"finger1-1.R|Sword_Found_09|off": 7,
+"metacarpal4.R|Sword_Found_09|off": 1
+},
+"772": {
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 9,
+"metacarpal1.R|Sword_Found_09|off": 10,
+"finger1-1.R|Sword_Found_09|off": 8,
+"metacarpal4.R|Sword_Found_09|off": 1
+},
+"775": {
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 9,
+"metacarpal1.R|Sword_Found_09|off": 10,
+"finger1-1.R|Sword_Found_09|off": 8,
+"metacarpal4.R|Sword_Found_09|off": 1
+},
+"778": {
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 9,
+"metacarpal1.R|Sword_Found_09|off": 10,
+"finger1-1.R|Sword_Found_09|off": 8,
+"metacarpal4.R|Sword_Found_09|off": 1
+},
+"781": {
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 10,
+"metacarpal1.R|Sword_Found_09|off": 13,
+"finger1-1.R|Sword_Found_09|off": 10,
+"metacarpal4.R|Sword_Found_09|off": 1
+},
+"784": {
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 10,
+"metacarpal1.R|Sword_Found_09|off": 13,
+"finger1-1.R|Sword_Found_09|off": 10,
+"metacarpal4.R|Sword_Found_09|off": 1
+},
+"787": {
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 10,
+"metacarpal1.R|Sword_Found_09|off": 13,
+"finger1-1.R|Sword_Found_09|off": 10,
+"metacarpal4.R|Sword_Found_09|off": 1
+},
+"790": {
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 10,
+"metacarpal1.R|Sword_Found_09|off": 13,
+"finger1-1.R|Sword_Found_09|off": 10,
+"metacarpal4.R|Sword_Found_09|off": 1
+},
+"793": {
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 10,
+"metacarpal1.R|Sword_Found_09|off": 13,
+"finger1-1.R|Sword_Found_09|off": 11,
+"finger5-2.R|Sword_Found_09|off": 6,
+"metacarpal4.R|Sword_Found_09|off": 1
+},
+"796": {
+"finger5-2.R|Sword_Found_09|off": 11,
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 12,
+"metacarpal1.R|Sword_Found_09|off": 13,
+"finger1-1.R|Sword_Found_09|off": 11,
+"metacarpal4.R|Sword_Found_09|off": 1
+},
+"799": {
+"finger5-2.R|Sword_Found_09|off": 11,
+"finger5-3.R|Sword_Found_09|off": 7,
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 12,
+"metacarpal1.R|Sword_Found_09|off": 13,
+"finger1-1.R|Sword_Found_09|off": 11,
+"metacarpal4.R|Sword_Found_09|off": 1
+},
+"802": {
+"finger5-3.R|Sword_Found_09|off": 9,
+"finger5-2.R|Sword_Found_09|off": 15,
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 12,
+"metacarpal1.R|Sword_Found_09|off": 13,
+"finger1-1.R|Sword_Found_09|off": 11,
+"metacarpal4.R|Sword_Found_09|off": 1
+},
+"805": {
+"finger5-3.R|Sword_Found_09|off": 10,
+"finger5-2.R|Sword_Found_09|off": 17,
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 12,
+"metacarpal1.R|Sword_Found_09|off": 12,
+"finger1-1.R|Sword_Found_09|off": 12,
+"metacarpal4.R|Sword_Found_09|off": 1
+},
+"808": {
+"finger5-3.R|Sword_Found_09|off": 10,
+"finger5-2.R|Sword_Found_09|off": 19,
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 17,
+"metacarpal1.R|Sword_Found_09|off": 13,
+"finger1-1.R|Sword_Found_09|off": 12
+},
+"811": {
+"finger5-3.R|Sword_Found_09|off": 12,
+"finger5-2.R|Sword_Found_09|off": 19,
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 16,
+"metacarpal1.R|Sword_Found_09|off": 12,
+"finger1-1.R|Sword_Found_09|off": 12
+},
+"814": {
+"finger5-3.R|Sword_Found_09|off": 13,
+"finger5-2.R|Sword_Found_09|off": 20,
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 16,
+"metacarpal1.R|Sword_Found_09|off": 12,
+"finger1-1.R|Sword_Found_09|off": 11,
+"finger5-1.R|Sword_Found_09|off": 1
+},
+"817": {
+"finger5-3.R|Sword_Found_09|off": 17,
+"finger5-2.R|Sword_Found_09|off": 21,
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 16,
+"metacarpal1.R|Sword_Found_09|off": 12,
+"finger1-1.R|Sword_Found_09|off": 10,
+"finger5-1.R|Sword_Found_09|off": 1
+},
+"820": {
+"finger5-3.R|Sword_Found_09|off": 18,
+"finger5-2.R|Sword_Found_09|off": 21,
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 18,
+"metacarpal1.R|Sword_Found_09|off": 12,
+"finger1-1.R|Sword_Found_09|off": 7,
+"finger5-1.R|Sword_Found_09|off": 2
+},
+"823": {
+"finger5-3.R|Sword_Found_09|off": 21,
+"finger5-2.R|Sword_Found_09|off": 21,
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 18,
+"metacarpal1.R|Sword_Found_09|off": 12,
+"finger1-1.R|Sword_Found_09|off": 7,
+"finger5-1.R|Sword_Found_09|off": 4
+},
+"826": {
+"finger5-3.R|Sword_Found_09|off": 20,
+"finger5-2.R|Sword_Found_09|off": 23,
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 18,
+"metacarpal1.R|Sword_Found_09|off": 12,
+"finger1-1.R|Sword_Found_09|off": 7,
+"finger5-1.R|Sword_Found_09|off": 4
+},
+"829": {
+"finger5-3.R|Sword_Found_09|off": 20,
+"finger5-2.R|Sword_Found_09|off": 25,
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 22,
+"metacarpal1.R|Sword_Found_09|off": 13,
+"finger1-1.R|Sword_Found_09|off": 6,
+"finger5-1.R|Sword_Found_09|off": 5
+},
+"832": {
+"finger5-2.R|Sword_Found_09|off": 27,
+"finger5-3.R|Sword_Found_09|off": 21,
+"metacarpal2.R|Sword_Found_09|off": 7,
+"finger1-2.R|Sword_Found_09|off": 22,
+"metacarpal1.R|Sword_Found_09|off": 13,
+"finger1-1.R|Sword_Found_09|off": 6,
+"finger5-1.R|Sword_Found_09|off": 4
+}
+}
+}

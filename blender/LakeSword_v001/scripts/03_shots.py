@@ -66,13 +66,15 @@ def relaxed_arm(n, s, f, yaw, fwd_=0.04, out=0.04, up=0.0, pose="relaxed", swing
 def walk(n, f0, f1, p0, p1, yaw, stride=0.7, lift=0.08, swing=0.16, head=(0, 0), step=2, out=0.05):
     """walk p0 -> p1 at 1x (feet planted by Human.walk), bent arms swinging opposite the legs, head keys on top"""
     p0 = V((p0[0], p0[1], 0)); p1 = V((p1[0], p1[1], 0))
+    if PLAN_LEN[0] and PLAN_LEN[0] != (f1 - f0 + 1):        # VO layout: same speed as planned (1x), distance follows the length
+        p1 = p0 + (p1 - p0) * ((f1 - f0 + 1) / PLAN_LEN[0])
     def path(f):
         u = (f - f0) / max(1, f1 - f0); xy = p0.lerp(p1, u)
         return V((xy.x, xy.y, 0))
     HUM[n].walk(path, lambda f: yaw, f0, f1, stride=stride * HSC[n] / 1.0 if HSC[n] < 0.8 else stride, lift=lift * max(HSC[n], 0.6),
                 bob=0.02 * HSC[n], crouch=0.03 * HSC[n], lean=5.0, step=step)
     dist = (p1 - p0).length; st = stride * HSC[n] if HSC[n] < 0.8 else stride
-    for f in range(f0, f1 + 1, 6):
+    for f in sorted(set(list(range(f0, f1 + 1, 6)) + [f1])):
         u = (f - f0) / max(1, f1 - f0); cyc = u * dist / st
         HUM[n].key_spine(f, flex=5.0, twist=-6 * math.sin(2 * math.pi * cyc), head=head)
         for s, ph in (("L", 0.0), ("R", 0.5)):
@@ -96,7 +98,7 @@ def set_M(o, M, f=None):
         o.keyframe_insert("location", frame=f); o.keyframe_insert("rotation_euler", frame=f)
 GRIP_R = 0.0     # grip centre (local y)
 
-def hold_sword(n, sid, f0, f1, keys, left=None, src="Sword_Found", right_side="R", palm_dir=None, finger_dir=None):
+def hold_sword(n, sid, f0, f1, keys, left=None, src="Sword_Found", right_side="R", palm_dir=None, finger_dir=None, fr=0.012, gy=0.0):
     """n grips the sword's grip in the right hand (Child Of wrist); `keys` = [(frame, sword world Matrix)] drive the hand.
     left = (y_on_blade, from_frame) -> the left hand wraps the blade/sheath at local y from that frame on."""
     sw, shth = sword_copy(src, "%s_%s" % (src, sid), f0, f1)
@@ -115,8 +117,8 @@ def hold_sword(n, sid, f0, f1, keys, left=None, src="Sword_Found", right_side="R
         R3 = MA.to_3x3(); ax = R3 @ V((0, 1, 0)); sh = wpos(n, "upperarm01." + s, fA)
         pd = V(palm_dir) if palm_dir else (MA.translation - sh)
         pd = (pd - ax * pd.dot(ax)).normalized()
-        c = surface(sw, MA, MA.translation, pd)
-        rep = grip_object(ro, s, fA, sw, c - pd * (0.006 if HSC[n] < 0.8 else 0.014), pd, finger_dir=finger_dir)
+        c = surface(sw, MA, MA @ V((0, gy, 0)), pd)
+        rep = grip_object(ro, s, fA, sw, c - pd * (0.006 if HSC[n] < 0.8 else 0.014), pd, finger_dir=finger_dir, finger_radius=fr)
         sc.frame_set(fA); bpy.context.view_layer.update()
         Wa = ro.matrix_world @ ro.pose.bones["wrist." + s].matrix; Wt = ro.matrix_world @ ro.pose.bones["IK_hand." + s].matrix
         err = (Wa.translation - Wt.translation).length; print("REACH", sid, n, s, "pass", it, round(err, 3))
@@ -424,10 +426,10 @@ def belt_sword(f0, f1, sid):
 def shot_15(f0, n):
     """camp, long ago: the warrior walks toward camera along the shore, his sheathed sword at his hip; a companion behind"""
     f1 = f0 + n - 1
-    walk("Warrior", f0, f1, P2(CO, 0.5, 6.4), P2(CO, 0.25, 3.3), 0.0, stride=0.72, head=(4, 0))
+    walk("Warrior", f0, f1, P2(CO, 1.55, 6.0), P2(CO, 1.3, 2.9), 0.0, stride=0.72, head=(4, 0))     # beside the fire pit, not through it
     walk("Comp", f0, f1, P2(CO, -4.5, 9.8), P2(CO, -1.0, 9.4), -80.0, stride=0.7, head=(0, -30))
     belt_sword(f0, f1, "15")
-    camera("15", f0, n, [(0, CO + V((0.7, 0.6, 1.25)), CO + V((0.4, 5.6, 1.15)), 30), (1, CO + V((0.65, 0.2, 1.25)), CO + V((0.3, 3.6, 1.2)), 30)])
+    camera("15", f0, n, [(0, CO + V((1.75, 0.7, 1.25)), CO + V((1.45, 5.4, 1.15)), 30), (1, CO + V((1.7, 0.4, 1.25)), CO + V((1.35, 4.2, 1.2)), 30)])
     return ("Warrior", "Comp")
 
 def shot_16(f0, n):
@@ -446,29 +448,26 @@ def shot_17(f0, n):
     """by the boat: the sheathed sword drops into the lake, sinks through the clear water and settles on the bed"""
     f1 = f0 + n - 1
     sw, sh = sword_copy("Sword_Warrior", "Sword_Warrior_17", f0, f1)
-    b = V(sc["BOAT_WATER"]); x0 = b + V((2.9, -0.9, 0)); bed = camp_h(x0.x - 300, x0.y)
+    b = V(sc["BOAT_WATER"]); x0 = b + V((2.9, -0.9, 0))
+    g_end = x0 + V((0.12, 0.05, 0)); bdir = V((1, 0.35, -0.02)).normalized(); flat = V((-0.35, 1, 0))
+    bed_end = max(camp_h(g_end.x - 300 + bdir.x * t, g_end.y + bdir.y * t) for t in (0.0, 0.2, 0.4, 0.6, 0.77))
     keys = [(f0, sword_M(x0 + V((0, 0, 0.75)), V((0.3, 0.2, -1)), V((1, 0, 0)))),
             (f0 + 18, sword_M(x0 + V((0.02, 0.01, 0.05)), V((0.4, 0.25, -1)), V((1, 0, 0)))),
-            (f0 + 60, sword_M(x0 + V((0.08, 0.04, bed + 0.25)), V((0.9, 0.3, -0.5)), V((0, 0, 1)))),
-            (f0 + 100, sword_M(x0 + V((0.12, 0.05, bed + 0.025)), V((1, 0.35, -0.02)), V((0, 0, 1)))),
-            (f1, sword_M(x0 + V((0.12, 0.05, bed + 0.025)), V((1, 0.35, -0.02)), V((0, 0, 1))))]
+            (f0 + 60, sword_M(x0 + V((0.08, 0.04, bed_end + 0.25)), V((0.9, 0.3, -0.5)), flat)),
+            (f0 + 100, sword_M(V((g_end.x, g_end.y, bed_end + 0.03)), bdir, flat)),
+            (f1, sword_M(V((g_end.x, g_end.y, bed_end + 0.03)), bdir, flat))]
     for f, M in keys: set_M(sw, M, f)
-    # ripple ring on the surface when it enters
-    bpy.ops.mesh.primitive_torus_add(major_radius=0.12, minor_radius=0.004, location=x0 + V((0, 0, 0.0)))
-    rg = bpy.context.active_object; rg.name = "Ripple_17"; rg.data.materials.append(bpy.data.materials.get("M_Ripple") or bpy.data.materials.new("M_Ripple"))
-    rm = rg.data.materials[0]; rm.use_nodes = True; rm.node_tree.nodes["Principled BSDF"].inputs['Base Color'].default_value = (0.9, 0.97, 1, 1)
-    rm.node_tree.nodes["Principled BSDF"].inputs['Roughness'].default_value = 0.1
-    vis_window(rg, f0 + 16, f0 + 70)
-    for f, s_, z in ((f0 + 16, 0.3, 0.0), (f0 + 70, 3.0, -0.006)):
-        rg.scale = (s_, s_, 1); rg.location.z = z; rg.keyframe_insert("scale", frame=f); rg.keyframe_insert("location", frame=f)
-    camera("17", f0, n, [(0, x0 + V((0.9, -1.2, 1.3)), x0 + V((-0.1, 0.1, -0.05)), 30), (1, x0 + V((0.8, -1.0, 1.05)), x0 + V((0.0, 0.1, -0.3)), 30)])
+    rest = V((g_end.x, g_end.y, bed_end + 0.03)) + bdir * 0.38      # blade middle at rest
+    camera("17", f0, n, [(0, x0 + V((0.9, -1.2, 1.3)), x0 + V((-0.1, 0.1, -0.05)), 30), (0.45, x0 + V((0.6, -0.6, 1.2)), rest, 30),
+                         (1, rest + V((0.05, -0.18, 0.95)), rest, 30)], catch=False)      # nearly overhead: refraction barely shifts the sword
     return ()
 
 def shot_18(f0, n):
     """today: the girl wades along the shallows past camera, arms swinging, happy"""
     f1 = f0 + n - 1
     walk("Girl", f0, f1, (-1.6, -0.2), (0.7, -0.35), 90.0, stride=0.6, lift=0.12, head=(0, 12))
-    camera("18", f0, n, [(0, (1.2, -2.6, 0.55), (-0.6, -0.2, 0.5), 30), (1, (1.5, -2.4, 0.6), (0.5, -0.3, 0.5), 30)])
+    k = min(1.0, n / 150.0)
+    camera("18", f0, n, [(0, (-0.4, -2.6, 0.55), (-1.5, -0.2, 0.5), 30), (1, (-0.4 + 1.2 * k, -2.6, 0.58), (-1.5 + 2.2 * k, -0.25, 0.5), 30)])
     return ("Girl",)
 
 # clip lengths: ~1.3x the matching stretch of the reference (60 fps)
@@ -477,17 +476,20 @@ SHOTS = [("01", 110, shot_01), ("02", 110, shot_02), ("03a", 150, shot_03a), ("0
          ("10", 150, shot_10), ("11", 170, shot_11), ("12", 140, shot_12), ("13", 130, shot_13), ("14", 150, shot_14),
          ("15", 160, shot_15), ("16", 160, shot_16), ("17", 150, shot_17), ("18", 150, shot_18)]
 bpy.data.objects["Sword_Found"].rotation_mode = 'XYZ'; bpy.data.objects["Sword_Found"].matrix_world = stuck_M()
+PLAN_LEN = [0]
 LAY = json.load(open(a[1])) if len(a) > 1 else None
 f = 1; table = []
 for sid, ln, fn in SHOTS:
+    if LAY and sid not in LAY: continue
     f0, n = (LAY[sid] if LAY else (f, ln))
+    PLAN_LEN[0] = ln
     used = fn(f0, n) or ()
     for c in CH: place_rig(c, f0, f0 + n - 1, c in used)
     table.append({"id": sid, "f0": f0, "len": n, "f1": f0 + n - 1, "chars": list(used)})
     print("SHOT", sid, f0, f0 + n - 1, used); f = f0 + n
 sc.frame_start = 1; sc.frame_end = f - 1
 # hide the static lake sword copy outside nothing: the original Sword_Found lies on the bed only in shots 01-03b
-for so in [bpy.data.objects["Sword_Found"]] + list(bpy.data.objects["Sword_Found"].children): key_vis(so, 1, True); key_vis(so, table[4]["f0"], False)
+for so in [bpy.data.objects["Sword_Found"]] + list(bpy.data.objects["Sword_Found"].children): key_vis(so, 1, True); key_vis(so, next(t["f0"] for t in table if t["id"] == "04"), False)
 for c in bpy.data.cameras: c.clip_end = 80.0
 for o in bpy.data.objects:     # constant interpolation for visibility / park keys
     ad = o.animation_data
