@@ -411,7 +411,7 @@ for i in range(14):    # wooden roadside posts
 hare = import_model(os.path.join(MD, "hare.glb"), "R_Hare", 0.42, "SET_R")
 # lie the (sitting) hare on its side on the verge, eyes closed (eye area darkened by the fur texture already)
 hare.rotation_euler = (0, R_(90), R_(75)); hare.location = (RX + 1.25, 0.0, 0.07)
-hare.data.materials.clear(); hare.data.materials.append(mat("M_HareFur", (0.30, 0.20, 0.11), 0.85, noise_scale=40.0, var=0.25, bump=0.2))
+hare.data.materials.clear(); hare.data.materials.append(mat("M_HareFur", (0.16, 0.10, 0.055), 0.9, noise_scale=40.0, var=0.3, bump=0.2))
 for s_ in []:
     if s_ and s_.node_tree.nodes.get("Principled BSDF"):
         P = s_.node_tree.nodes["Principled BSDF"]
@@ -428,9 +428,11 @@ pipe.location = (FLAT.x + 0.12, FLAT.y - 0.15, 0.17)
 twig = cyl("Twig", (0, 0, 0), 0.008, 0.42, M_WOODL, "PROPS", verts=8); twig.rotation_euler = (0, R_(90), 0)
 bpy.context.view_layer.objects.active = twig; bpy.ops.object.transform_apply(rotation=True)
 twig.location = (FIRE.x + 0.5, FIRE.y - 0.4, 0.03)
-bpy.ops.mesh.primitive_cone_add(vertices=12, radius1=0.014, depth=0.065, location=(0, 0, 0)); tfl = bpy.context.active_object
-tfl.name = "TwigFlame"; tfl.data.transform(Matrix.Translation(V((0, 0, 0.045))))
-M_TFL = mat("M_TwigFlame", (1.0, 0.25, 0.0), 0.5, emit=((1.0, 0.22, 0.0), 1.6)); tfl.data.materials.append(M_TFL); link(tfl, "PROPS")
+bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=10, radius=0.016, location=(0, 0, 0)); tfl = bpy.context.active_object
+for v in tfl.data.vertices:
+    if v.co.z > 0: v.co.z *= 3.2; v.co.x *= (1 - v.co.z / 0.06) if v.co.z < 0.06 else 0.05; v.co.y = v.co.y * max(0.05, 1 - v.co.z / 0.06)
+tfl.name = "TwigFlame"; tfl.data.transform(Matrix.Translation(V((0, 0, 0.012)))); smooth(tfl)
+M_TFL = mat("M_TwigFlame", (0.0, 0.0, 0.0), 0.5, emit=((1.0, 0.11, 0.0), 3.0)); tfl.data.materials.append(M_TFL); link(tfl, "PROPS")
 L = bpy.data.lights.new("TwigGlow", 'POINT'); L.energy = 2.0; L.color = (1.0, 0.55, 0.2); L.shadow_soft_size = 0.02
 tgl = bpy.data.objects.new("TwigGlow", L); C["PROPS"].objects.link(tgl)
 tfl.location = twig.location + V((0.21, 0, 0)); tfl.parent = twig; tfl.matrix_parent_inverse = twig.matrix_world.inverted()
@@ -449,7 +451,9 @@ for sx in (-1, 1):
 for o in (mt,): o.hide_render = o.hide_viewport = False
 
 # smoke puffs (pipe and hair singe) and flies: built here, animated in the shots
-M_SMOKE = mat("M_Smoke", (0.62, 0.62, 0.65), 0.9, alpha=0.22)
+M_SMOKE = bpy.data.materials.new("M_Smoke"); M_SMOKE.use_nodes = True; _nt = M_SMOKE.node_tree
+_nt.nodes.remove(_nt.nodes["Principled BSDF"]); _pv = _nt.nodes.new('ShaderNodeVolumePrincipled'); _pv.inputs['Density'].default_value = 6.0
+_pv.inputs['Color'].default_value = (0.75, 0.75, 0.78, 1); _nt.links.new(_pv.outputs[0], _nt.nodes["Material Output"].inputs['Volume'])
 for i in range(8):
     bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=0.018, location=(0, 0, -50))
     p = bpy.context.active_object; p.name = "Smoke%d" % i; p.data.materials.append(M_SMOKE); smooth(p); link(p, "PROPS")

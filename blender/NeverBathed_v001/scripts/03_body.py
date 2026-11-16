@@ -47,7 +47,7 @@ def thighs_hands(n, f, yaw, root):
     """seated: both hands rest on the thighs just behind the knees"""
     for s in "LR":
         sx = 1 if s == "L" else -1
-        p = V(root) + fwd(yaw) * 0.30 - rgt(yaw) * sx * 0.13 + V((0, 0, 0.09))
+        p = V(root) + fwd(yaw) * 0.30 - rgt(yaw) * sx * 0.14 + V((0, 0, 0.20))
         hand(n, s, f, p, V((0, 0, -1)), fwd(yaw) + V((0, 0, -0.3)), pole=wpos(n, "upperarm01." + s, f) - rgt(yaw) * sx * 0.35 - fwd(yaw) * 0.25, pose="relaxed")
 
 def vis_only(o, f0, f1):
@@ -117,8 +117,7 @@ def trough_reach(n, f0, n_fr, use_hand=True):
     keys = ((f0, 0.0, 4.0, (2, 0), 0.0), (f0 + 40, 10.0, 20.0, (14, 6), 0.6), (f0 + 75, 14.0, 26.0, (16, 10), 1.0), (f1, 14.0, 27.0, (14, 14), 1.0))
     for f, fl, sp, hd, u in keys:
         stand(n, f, YP, YYAW, head=hd, spine=(sp, 0, 0), flex=fl, arms=False)
-        th = wpos(n, "upperleg01.L", f) + fwd(YYAW) * 0.12 - rgt(YYAW) * 0.04 + V((0, 0, -0.22))
-        hand(n, "L", f, th, rgt(YYAW) * 0.3 + fwd(YYAW) * 0.5 + V((0, 0, -0.4)), V((0, 0, -1)) + fwd(YYAW) * 0.3, pole=wpos(n, "upperarm01.L", f) - rgt(YYAW) * 0.4 - fwd(YYAW) * 0.2, pose="relaxed")
+        relaxed_arm(n, "L", f, YYAW, fwd_=0.10, up=0.06, out=0.07)
         sh = wpos(n, "upperarm01.R", f)
         rest = sh + V((0, 0, -0.55)) + fwd(YYAW) * 0.05 + rgt(YYAW) * 0.05
         tgt = V((TROUGH.x + 0.12, TROUGH.y - 0.55, TROUGH.z + 0.17))
@@ -135,7 +134,7 @@ def shot_1b(f0, n):
     use = ("AmouY",); f1 = f0 + n - 1; light(f0)
     for k, f in enumerate(range(f0, f1 + 1, 12)):
         u = ss((f - f0) / 40.0)
-        yw = YYAW - 125 * u; shake = 16 * math.sin((f - f0) / 7.0) * (1 if f - f0 > 25 else 0) * (1 - ss((f - f0 - 80) / 30.0))
+        yw = YYAW - 60 - 65 * u; shake = 16 * math.sin((f - f0) / 7.0) * (1 if f - f0 > 25 else 0) * (1 - ss((f - f0 - 80) / 30.0))
         stand("AmouY", f, YP, yw, head=(-4 + 8 * (1 - u), shake), spine=(12 * (1 - u) + 2, 0, 0), flex=6 * (1 - u))
     camera("1b", f0, n, [(0, (YP.x + 1.35, YP.y - 1.25, 1.62), (YP.x, YP.y, 1.52), 40), (1, (YP.x + 1.2, YP.y - 1.1, 1.62), (YP.x, YP.y, 1.54), 40)])
     return use
@@ -153,19 +152,12 @@ def shot_2a(f0, n):
 def shot_2b(f0, n):
     light(f0); portrait("AmouO", f0, n, (0.55, -1.55), (0.1, -1.62)); return ("AmouO",)
 def shot_2c(f0, n):
-    """old hermit at the same trough: looks at the water, turns his body and head away, a palm raised 'no'"""
+    """old hermit at the same trough: looks at the water, then turns his body away and shakes his head firmly (no hand contact)"""
     use = ("AmouO",); f1 = f0 + n - 1; light(f0)
-    for f in range(f0, f1 + 1, 10):
-        u = ss((f - f0 - 20) / 35.0); g = ss((f - f0 - 30) / 20.0) * (1 - ss((f - f0 - 95) / 20.0))
+    for f in range(f0, f1 + 1, 6):
+        u = ss((f - f0 - 8) / 30.0); shake = 18 * math.sin((f - f0) / 6.0) * ss((f - f0 - 20) / 10.0)
         yw = YYAW - 80 * u
-        stand("AmouO", f, YP, yw, head=(12 * (1 - u) - 6 * u, -25 * u), spine=(8 * (1 - u) + 2, 0, 0), arms=False)
-        relaxed_arm("AmouO", "L", f, yw)
-        sh = wpos("AmouO", "upperarm01.R", f)
-        rest = sh + V((0, 0, -0.55)) + fwd(yw) * 0.05 + rgt(yw) * 0.05
-        up = sh + fwd(YYAW) * 0.30 + V((0, 0, -0.2)) + rgt(yw) * 0.08
-        p = rest.lerp(up, g)
-        hand("AmouO", "R", f, p, fwd(YYAW) * g + V((0, 0, -1)) * (1 - g) - rgt(yw) * 0.3, V((0, 0, 1)) * g + V((0, 0, -1)) * (1 - g) + fwd(yw) * 0.3,
-             pole=sh + rgt(yw) * 0.35 + V((0, 0, -0.35)), pose="flat_palm")
+        stand("AmouO", f, YP, yw, head=(12 * (1 - u) - 4 * u, -15 * u + shake), spine=(8 * (1 - u) + 2, 0, 0))
     camera("2c", f0, n, [(0, (YP.x + 1.6, YP.y - 0.2, 1.5), (YP.x, YP.y + 0.1, 1.35), 32), (1, (YP.x + 1.5, YP.y - 0.45, 1.5), (YP.x, YP.y + 0.1, 1.37), 32)])
     return use
 
@@ -174,8 +166,8 @@ FP = V((0.3, -2.0, 0)); FYAW = 8.0
 def shot_3a(f0, n):
     """in the lane he strides toward camera, stops, chest out, and thumps his chest twice with his right fist, grinning"""
     use = ("AmouO",); f1 = f0 + n - 1; light(f0)
-    fw = f0 + 66
-    walk_shot("AmouO", f0, fw, [(FP.x, FP.y + 1.3, 0), (FP.x, FP.y, 0)], speed=1.2, head=(-6, 0))
+    fw = f0 + 40
+    walk_shot("AmouO", f0, fw, [(FP.x, FP.y + 0.8, 0), (FP.x, FP.y, 0)], speed=1.2, head=(-6, 0))
     for f in range(fw + 6, f1 + 1, 6):
         k = f - fw
         stand("AmouO", f, FP, 0.0, head=(-8, 6 * math.sin(k / 18.0)), spine=(-4, 0, 0), arms=False)
@@ -193,8 +185,8 @@ def shot_3b(f0, n):
     use = ("V1",); f1 = f0 + n - 1; light(f0)
     VP = V((2.05, -3.45, 0)); yw = yaw_to(VP, FP) + 10
     for f in range(f0, f1 + 1, 8):
-        u = ss((f - f0) / 50.0)
-        stand("V1", f, VP, yw - 25 * (1 - u), head=(4 + 6 * u, -20 * (1 - u) + 14 * math.sin((f - f0) / 8.0) * ss((f - f0 - 45) / 15.0)), spine=(4 + 5 * u, -10 * (1 - u), 0), flex=2 * u)
+        u = ss((f - f0) / 30.0)
+        stand("V1", f, VP, yw - 8 * (1 - u), head=(4 + 6 * u, -20 * (1 - u) + 14 * math.sin((f - f0) / 8.0) * ss((f - f0 - 22) / 12.0)), spine=(4 + 5 * u, -10 * (1 - u), 0), flex=2 * u)
     camera("3b", f0, n, [(0, (-0.75, -4.6, 1.5), (2.4, -2.8, 1.15), 30), (1, (-0.05, -4.05, 1.45), (2.35, -2.75, 1.2), 30)])
     return use
 
@@ -257,8 +249,10 @@ def shot_5b(f0, n):
             sx = 1 if s == "L" else -1
             ax = PIT.x + 0.98; ay = PIT.y - rgt(yw).y * sx * 0.13
             foot("AmouO", s, f, (ax, ay, pit_z(ax, ay) + 0.07), yw, pitch=-80.0, knee=V((ax - 0.4, ay, 0.6)))
-            belly = root + V((-0.22, -rgt(yw).y * sx * 0.06, 0.13 + b))
-            hand("AmouO", s, f, belly, V((0, 0, -1)), V((0, -rgt(yw).y * sx, 0)) * -1 + V((0.3, 0, 0)), pole=belly + V((0, -rgt(yw).y * sx * 0.45, 0.05)), pose="relaxed")
+            side = V((0, -rgt(yw).y * sx, 0))
+            hx = root.x + 0.12; hy = root.y + side.y * 0.30
+            gp = V((hx, hy, pit_z(hx, hy) + 0.035 + b))
+            hand("AmouO", s, f, gp, V((0, 0, -1)), V((1, 0, 0)), pole=wpos("AmouO", "upperarm01." + s, f) + side * 0.3 + V((0, 0, -0.05)), pose="relaxed")
     camera("5b", f0, n, [(0, (PIT.x + 0.3, PIT.y - 1.7, 2.3), (PIT.x - 0.2, PIT.y, -0.05), 26), (1, (PIT.x + 0.35, PIT.y - 1.6, 2.75), (PIT.x - 0.15, PIT.y, -0.05), 26)])
     return use
 
@@ -272,7 +266,7 @@ def shot_6a(f0, n):
         kneel("AmouO", f, kn, yw, lean=12 + 14 * u, spine=(12 + 16 * u, 0, 0), head=(22 + 8 * u, 6 * math.sin((f - f0) / 25.0)))
         for s in "LR":
             sx = 1 if s == "L" else -1
-            th = kn + fwd(yw) * 0.08 - rgt(yw) * sx * 0.14 + V((0, 0, 0.36))
+            th = kn + fwd(yw) * 0.17 - rgt(yw) * sx * 0.14 + V((0, 0, 0.36))
             hand("AmouO", s, f, th, V((0, 0, -1)) + fwd(yw) * 0.3, fwd(yw) + V((0, 0, -0.6)), pole=wpos("AmouO", "upperarm01." + s, f) - rgt(yw) * sx * 0.4 - fwd(yw) * 0.2, pose="relaxed")
     camera("6a", f0, n, [(0, (HARE.x - 0.85, HARE.y + 0.85, 0.62), (HARE.x + 0.02, HARE.y - 0.22, 0.38), 26), (1, (HARE.x - 0.7, HARE.y + 0.68, 0.55), (HARE.x + 0.02, HARE.y - 0.22, 0.36), 26)])
     return use
@@ -296,8 +290,7 @@ def shot_7a(f0, n):
     PIPE.location = (FLAT.x + 0.12, FLAT.y - 0.15, top_z(OB["D_FlatRock"]) - 0.003); PIPE.rotation_euler = (0, 0, R_(25))
     PIPE.keyframe_insert("location", frame=f0); PIPE.keyframe_insert("rotation_euler", frame=f0)
     bpy.context.view_layer.update(); bt = PIPE.matrix_world @ BOWL_TOP
-    puffs(lambda f: bt, f0, f1, every=24, rise=0.16, grow=1.2, life=60, count=4)
-    camera("7a", f0, n, [(0, (FLAT.x + 0.45, FLAT.y - 0.75, 0.62), (FLAT.x + 0.0, FLAT.y - 0.05, 0.2), 40), (1, (FLAT.x + 0.38, FLAT.y - 0.62, 0.55), (FLAT.x + 0.0, FLAT.y - 0.05, 0.2), 40)], fstop=11)
+    camera("7a", f0, n, [(0, (FLAT.x + 0.75, FLAT.y - 0.95, 0.75), (FLAT.x + 0.0, FLAT.y - 0.05, 0.2), 36), (1, (FLAT.x + 0.22, FLAT.y - 0.55, 0.45), (FLAT.x - 0.05, FLAT.y + 0.02, 0.18), 36)], fstop=11)
     return use
 def shot_7b(f0, n):
     """seated by the fire he holds the pipe in his right fingers, stem at his lips; he puffs, lowers it, exhales smoke"""
@@ -305,7 +298,7 @@ def shot_7b(f0, n):
     keys = [(f0 + i, (10, 0)) for i in range(0, n, 15)] + [(f1, (10, 0))]
     for f, hd in keys:
         root = sit_fire("AmouO", f, head=(4, -6), lean=6, hands=False, spine=(6, 0, 0))
-        hand("AmouO", "L", f, root + fwd(0) * 0.3 - rgt(0) * 0.13 + V((0, 0, 0.09)), V((0, 0, -1)), fwd(0) + V((0, 0, -0.3)), pole=wpos("AmouO", "upperarm01.L", f) - rgt(0) * 0.35 - fwd(0) * 0.25, pose="relaxed")
+        hand("AmouO", "L", f, root + fwd(0) * 0.3 - rgt(0) * 0.14 + V((0, 0, 0.20)), V((0, 0, -1)), fwd(0) + V((0, 0, -0.3)), pole=wpos("AmouO", "upperarm01.L", f) - rgt(0) * 0.35 - fwd(0) * 0.25, pose="relaxed")
     p = prop_copy("Pipe", "Pipe_7b", f0, f1); key_vis(PIPE, 1, True); key_vis(PIPE, f0, False); key_vis(PIPE, f1 + 1, True)
     m0 = mouth("AmouO", f0); hf = head_fwd("AmouO", f0)
     tip = m0 + hf * 0.026                                            # mouthpiece just at the lips, never inside
@@ -344,14 +337,14 @@ def beard_tip(f):
     sc.frame_set(int(f)); bpy.context.view_layer.update(); o = OB["AmouO.beard"]
     pts = [o.matrix_world @ V(c) for c in o.bound_box]
     zmin = min(p.z for p in pts); cx = sum(p.x for p in pts) / 8; cy = min(p.y for p in pts)
-    return V((cx, cy + 0.045, zmin + 0.08))
+    return V((cx, cy + 0.045, zmin + 0.14))
 def shot_8a(f0, n): return twig_shot("8a", f0, n)
-def twig_shot(sid, f0, n):
+def twig_shot(sid, f0, n, from_fire=False):
     """seated, he holds a smouldering twig in his right hand to the very ends of his beard: a small singe and smoke, no flame near the face"""
     use = ("AmouO",); f1 = f0 + n - 1; light(f0)
     for f in list(range(f0, f1 + 1, 20)) + [f1]:
         root = sit_fire("AmouO", f, head=(24, -8), lean=6, hands=False, spine=(8, 0, 0))
-        hand("AmouO", "L", f, root + fwd(0) * 0.3 - rgt(0) * 0.13 + V((0, 0, 0.09)), V((0, 0, -1)), fwd(0) + V((0, 0, -0.3)), pole=wpos("AmouO", "upperarm01.L", f) - rgt(0) * 0.35 - fwd(0) * 0.25, pose="relaxed")
+        hand("AmouO", "L", f, root + fwd(0) * 0.3 - rgt(0) * 0.14 + V((0, 0, 0.20)), V((0, 0, -1)), fwd(0) + V((0, 0, -0.3)), pole=wpos("AmouO", "upperarm01.L", f) - rgt(0) * 0.35 - fwd(0) * 0.25, pose="relaxed")
     t = prop_copy("Twig", "Twig_" + sid, f0, f1)
     for src in ("TwigFlame", "TwigGlow"):
         c_ = OB[src].copy(); c_.name = src + "_" + sid; OB[src].users_collection[0].objects.link(c_); c_.animation_data_clear()
@@ -367,17 +360,20 @@ def twig_shot(sid, f0, n):
     sh = wpos("AmouO", "upperarm01.R", f0); elbow("AmouO", "R", f0, sh + V((0, 0, -0.45)) + rgt(0) * 0.3)
     M0 = hold_prop("AmouO", "R", f0, t, grip_pt, (V((0, 0, 1)) + rgt(0) * 0.4).normalized(), fwd(0), "pinch")
     piv = grip_pt
-    for f, u in ((f0 + 30, 0.0), (f0 + 60, 1.0), (f0 + 85, 0.3), (f0 + 105, 1.0), (f1, 0.6)):
-        key_ik("AmouO", "R", f, rigid(piv, Matrix.Identity(3), rgt(0) * 0.03 * (1 - u)) @ M0)
+    fire_off = (V((FIRE.x - 0.28, FIRE.y + 0.42, 0.74)) - tipw) if from_fire else V((0, 0, 0))
+    seq = ((f0, 1.0), (f0 + 25, 1.0), (f0 + 60, 0.0), (f1, 0.0)) if from_fire else ((f0 + 30, 0.0), (f0 + 60, 1.0), (f0 + 85, 0.3), (f0 + 105, 1.0), (f1, 0.6))
+    for f, u in seq:
+        mv = fire_off * u if from_fire else rgt(0) * 0.03 * (1 - u)
+        key_ik("AmouO", "R", f, rigid(piv, Matrix.Identity(3), mv) @ M0)
         sh = wpos("AmouO", "upperarm01.R", f); elbow("AmouO", "R", f, sh + V((0, 0, -0.45)) + rgt(0) * 0.3)
-    key_ik("AmouO", "R", f0, M0)
-    puffs(lambda f: beard_tip(f0) + V((0, 0, 0.0)), f0 + 50, f1, every=12, rise=0.15, drift=rgt(0) * 0.06, grow=2.0, life=40, count=6)
+    if not from_fire: key_ik("AmouO", "R", f0, M0)
+    puffs(lambda f: beard_tip(f0) + rgt(0) * 0.03 + V((0, 0, -0.02)), f0 + 60 if from_fire else f0 + 50, f1, every=12, rise=0.07, drift=rgt(0) * 0.14 - fwd(0) * 0.05, grow=2.0, life=40, count=6)
     bt0 = beard_tip(f0)
     camera(sid, f0, n, [(0, bt0 + V((-0.55, -0.62, 0.12)), bt0 + V((-0.06, 0, 0.1)), 40), (1, bt0 + V((-0.45, -0.52, 0.12)), bt0 + V((-0.06, 0, 0.11)), 40)])
     return use
 def shot_8b(f0, n):
     """medium: the hermit at his fire holding the smouldering twig to his beard ends, smoke drifting"""
-    use = twig_shot("8b", f0, n)
+    use = twig_shot("8b", f0, n, from_fire=True)
     CAMS.pop("8b", None)
     cam = OB["CAM_8b"]; sc.timeline_markers.remove(next(m for m in sc.timeline_markers if m.name == "S8b"))
     bpy.data.objects.remove(cam, do_unlink=True)
@@ -425,7 +421,7 @@ def shot_10a(f0, n):
         out = sh + dirt.normalized() * 0.50 + V((0, 0, -0.06))
         hand("V1", "R", f, rest.lerp(out, g), (V((0, 0, -1)) * (1 - g) + V((0, 0, -1)) * g).normalized(), (V((0, 0, -1)) * (1 - g) + dirt.normalized() * g).normalized(),
              pole=sh + V((0, 0, -0.45)) - fwd(yv) * 0.25, pose="point" if g > 0.4 else "relaxed")
-    camera("10a", f0, n, [(0, (-0.35, 13.9, 1.55), (-0.15, 17.8, 1.25), 28), (1, (-0.15, 14.3, 1.55), (-0.15, 17.8, 1.27), 28)])
+    camera("10a", f0, n, [(0, (-0.3, 13.5, 1.5), (-0.15, 17.7, 1.15), 24), (1, (-0.15, 13.85, 1.5), (-0.15, 17.7, 1.17), 24)])
     return use
 TUBO = OB["V_Tub"]
 _tb = [TUBO.matrix_world @ v.co for v in TUBO.data.vertices]
@@ -435,17 +431,17 @@ def shot_10b(f0, n):
     """he sits in the tin tub, water to his chest; the villager behind him has both hands resting on his shoulders and rubs gently"""
     use = ("AmouO", "V1", "V2"); f1 = f0 + n - 1; light(f0)
     if LONG_X:
-        yw = 90.0; seat = V((TUB_X0 + 0.52, (TUB_Y0 + TUB_Y1) / 2, 0)); vpos = V((TUB_X0 - 0.38, seat.y, 0)); ax = 'x'
+        yw = 90.0; seat = V((TUB_X0 + 0.44, (TUB_Y0 + TUB_Y1) / 2, 0)); vpos = V((TUB_X0 - 0.34, seat.y, 0)); ax = 'x'
     else:
         yw = 180.0; seat = V(((TUB_X0 + TUB_X1) / 2, TUB_Y0 + 0.42, 0)); vpos = V((seat.x, TUB_Y0 - 0.38, 0)); ax = 'y'
     for k, f in enumerate(range(f0, f1 + 1, 10)):
         root = V((seat.x, seat.y, 0.19 + HUM["AmouO"].root_head.z - RIG["AmouO"].BN["upperleg01.L"].head_local.z + 0.02))
-        body("AmouO", f, root, yw, flex=12, spine=(10, 0, 0), head=(4 + 3 * math.sin((f - f0) / 20.0), -10 + 6 * math.sin((f - f0) / 35.0)))
+        body("AmouO", f, root, yw, flex=2, spine=(4, 0, 0), head=(4 + 3 * math.sin((f - f0) / 20.0), -10 + 6 * math.sin((f - f0) / 35.0)))
         for s in "LR":
             sx = 1 if s == "L" else -1
             ank = root + fwd(yw) * 0.72 - rgt(yw) * sx * 0.11; ank.z = 0.16
             foot("AmouO", s, f, ank, yw, pitch=-40, knee=root + fwd(yw) * 0.4 - rgt(yw) * sx * 0.12 + V((0, 0, 0.8)))
-            pp = root + fwd(yw) * 0.42 - rgt(yw) * sx * 0.09 + V((0, 0, 0.22))
+            pp = root + fwd(yw) * 0.42 - rgt(yw) * sx * 0.09 + V((0, 0, 0.29))
             hand("AmouO", s, f, pp, V((0, 0, -1)), fwd(yw) + V((0, 0, -0.4)), pole=wpos("AmouO", "upperarm01." + s, f) - rgt(yw) * sx * 0.12 - fwd(yw) * 0.35 + V((0, 0, -0.1)), pose="relaxed")
         rub = 0.012 * math.sin((f - f0) / 8.0)
         kneel("V1", f, vpos, yw, thigh_back=0.0, lean=8, spine=(26, 0, 0), head=(24, 0))
@@ -472,16 +468,16 @@ def shot_11b(f0, n):
     """dusk: V2 kneels quietly at the pit's far edge, head bowed; V1 walks up beside him and stops, head bowed. Slow pull back."""
     use = ("V1", "V2"); f1 = f0 + n - 1; light(f0, dusk=True)
     for k, f in enumerate(range(f0, f1 + 1, 20)):
-        kneel("V2", f, (PIT.x + 0.5, PIT.y + 1.75), 0.0, lean=10, spine=(18 + 2 * (k % 2), 0, 0), head=(30, 0))
+        kneel("V2", f, (PIT.x + 0.5, PIT.y + 1.75), 0.0, lean=8, spine=(12 + 2 * (k % 2), 0, 0), head=(14, 0))
         for s in "LR":
             sx = 1 if s == "L" else -1
-            th = V((PIT.x + 0.5, PIT.y + 1.75, 0)) + fwd(0.0) * 0.08 - rgt(0.0) * sx * 0.14 + V((0, 0, 0.36))
+            th = V((PIT.x + 0.5, PIT.y + 1.75, 0)) + fwd(0.0) * 0.17 - rgt(0.0) * sx * 0.14 + V((0, 0, 0.36))
             hand("V2", s, f, th, V((0, 0, -1)) + fwd(0.0) * 0.3, fwd(0.0) + V((0, 0, -0.6)), pole=wpos("V2", "upperarm01." + s, f) - rgt(0.0) * sx * 0.4 - fwd(0.0) * 0.2, pose="relaxed")
     fw = f0 + 75
-    walk_shot("V1", f0, fw, [(PIT.x - 1.9, PIT.y + 2.0, 0), (PIT.x - 0.45, PIT.y + 1.95, 0)], speed=1.0, head=(10, 0))
+    walk_shot("V1", f0, fw, [(PIT.x - 1.35, PIT.y + 2.0, 0), (PIT.x - 0.45, PIT.y + 1.95, 0)], speed=0.75, head=(10, 0))
     for k, f in enumerate(range(fw + 8, f1 + 1, 15)):
         u = ss((f - fw) / 30.0)
-        stand("V1", f, V((PIT.x - 0.45, PIT.y + 1.95, 0)), -90.0 + 90 * u, head=(10 + 22 * u, 0), spine=(4 + 6 * u, 0, 0), dz=0.003 * (k % 2))
+        stand("V1", f, V((PIT.x - 0.45, PIT.y + 1.95, 0)), 90.0 - 80 * u, head=(10 + 12 * u, 0), spine=(4 + 6 * u, 0, 0), dz=0.003 * (k % 2))
     camera("11b", f0, n, [(0, (PIT.x + 0.2, PIT.y - 2.6, 1.3), (PIT.x - 0.1, PIT.y + 1.7, 0.9), 30), (1, (PIT.x + 0.3, PIT.y - 3.4, 1.4), (PIT.x, PIT.y + 1.6, 0.9), 30)])
     return use
 
