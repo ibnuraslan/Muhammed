@@ -69,6 +69,10 @@ for n, (f0, f1) in T.items():
 for o in SHARDS + DEBRIS + SMOKE: vis(o, 1, False)
 # pane intact until the window breaks (S07 impact); the cabin sees it as glass (S01, S02 before the burst)
 # arc/blade intact until S06 break
+# exposure: exteriors one stop darker so the white airframe keeps its shading against the deep sky (director P1 note)
+for n, (f0, f1) in T.items():
+    sc.view_settings.exposure = -0.9 if n in EXTERIOR else 0.0
+    sc.view_settings.keyframe_insert("exposure", frame=f0)
 # ------------------------------------------------------------------ helpers: cameras
 def cam(name, lens=30, fstop=8.0):
     c = OB.get(name) or D.objects.new(name, D.cameras.new(name))
@@ -143,9 +147,9 @@ def place(rig, f, loc, rot):
 def away(rig, f):
     place(rig, f, (0, 30, -20), (0, 0, 0))
 
-def seated(rig, f, x, y, look_turn=0.0, hflex=-4, flex=4, side=0, arms=None, legs=(86, 78)):
+def seated(rig, f, x, y, look_turn=0.0, hflex=-4, flex=9, side=0, arms=None, legs=(86, 78)):
     R = RG[rig.name] if rig.name in RG else Rig(rig)
-    place(rig, f, (x, y - 0.05, -0.27), (0, 0, math.pi))
+    place(rig, f, (x, y + 0.01, -0.23), (0, 0, math.pi))
     fk_leg(R, "L", f, hip=legs[0], knee=legs[1], splay=5); fk_leg(R, "R", f, hip=legs[0] - 2, knee=legs[1] + 3, splay=4)
     fk_spine(R, f, flex=flex, side=side, htwist=look_turn, hflex=hflex)
     a = arms or {}
@@ -218,7 +222,8 @@ R_LIE = Matrix.Rotation(R_(90), 3, 'X') @ Matrix.Rotation(R_(180), 3, 'Z')   # f
 def lie_pose(f, breath=0.0):
     place_pelvis(W, f, R_LIE, (0.0, -6.05, 0.115))
     fk_spine(RW, f, flex=2 * breath, side=0, twist=0, hflex=-8, hside=0, htwist=-18)
-    fk_arm(RW, "L", f, down=62, fwd=6, elbow=18, out=0); fk_arm(RW, "R", f, down=60, fwd=10, elbow=24, out=0)
+    fk_arm(RW, "L", f, down=80, fwd=-2, elbow=10, out=0); fk_arm(RW, "R", f, down=80, fwd=-2, elbow=12, out=0)
+    for s in "LR": hand_pose(W, s, f, "relaxed")
     fk_leg(RW, "L", f, hip=8, knee=14, splay=4); fk_leg(RW, "R", f, hip=4, knee=8, splay=-3)
     eyes(RW, f, 1.0)
 
@@ -265,7 +270,7 @@ shot_cam("S03", [(0, (18.5, -11.0, 0.4), (0.0, -18.6, 3.7), 40), (1, (17.5, -15.
 _begin("S04")
 f0, f1 = T["S04"]
 for fr in range(f0, f1 + 1, 8): hang_pose(fr, out=0.0, flutter=1.0, t=fr / 60)
-shot_cam("S04", [(0, (-7.5, -1.6, -0.5), (-1.9, -5.9, 1.3), 44), (1, (-7.2, -2.6, -0.3), (-1.9, -5.9, 1.3), 48)], fstop=11)
+shot_cam("S04", [(0, (-4.5, -3.4, 0.25), (-2.0, -5.85, 1.2), 42), (1, (-4.3, -3.8, 0.35), (-2.0, -5.85, 1.2), 46)], fstop=11)
 # ================================================================== S05: It happened when an engine (fan spinning)
 _begin("S05")
 FAN = OB["FAN_L"]; FAN.rotation_mode = 'XYZ'
@@ -311,7 +316,7 @@ for i, o in enumerate(SHARDS):
     h = Vector(o["home"]); v = Vector((-rnd.uniform(1.5, 3.5), -rnd.uniform(3, 7), rnd.uniform(-0.6, 0.9)))
     vis(o, fi, True); key_loc(o, fi, h, (0, 0, 0)); key_loc(o, fi + 36, h + v, (rnd.uniform(-9, 9), rnd.uniform(-9, 9), rnd.uniform(-9, 9)))
     vis(o, fi + 37, False)
-shot_cam("S07", [(0, (-7.0, -2.4, 0.1), (-1.6, -5.4, 1.2), 38), (1, (-6.5, -3.2, 0.3), (-1.6, -5.6, 1.2), 42)], fstop=11)
+shot_cam("S07", [(0, (-7.0, -2.4, -0.7), (-1.6, -5.4, 1.5), 34), (1, (-6.5, -3.2, -0.5), (-1.6, -5.6, 1.5), 38)], fstop=11)
 # ================================================================== S08: the cabin to depressurize (masks drop, papers fly)
 _begin("S08")
 f0, f1 = T["S08"]; fm = f0 + 12
@@ -334,7 +339,7 @@ f0, f1 = T["S09"]
 for fr in range(f0, f1 + 1, 6):
     u = min(1.0, (fr - f0) / 50.0); u = u * u * (3 - 2 * u)
     hang_pose(fr, out=-0.55 * (1 - u), flutter=u, t=fr / 60)
-shot_cam("S09", [(0, (-6.0, -9.4, 0.3), (-1.9, -5.7, 1.25), 36), (1, (-5.8, -8.8, 0.4), (-1.9, -5.7, 1.25), 38)], fstop=11)
+shot_cam("S09", [(0, (-4.4, -7.5, 1.55), (-1.9, -5.7, 1.2), 42), (1, (-4.2, -7.2, 1.5), (-1.9, -5.7, 1.2), 46)], fstop=11)
 
 # ------------------------------------------------------------------ helpers for the hold / pull shots
 def leg_point(s, which, f, up=0.0):
@@ -364,58 +369,68 @@ def brace(rig, s, f, p, finger_dir):
     place_hand(rig, s, f, p, (0, 0, -1), finger_dir, skin=0.014); hand_pose(rig, s, f, "flat_palm")
 SEAT5_BACK_TOP = Vector((-0.55, rowy(5) - 0.30, 1.17))
 
-def hold_shot(n, fr_list, pull=None):
+def kneel(rig, f, x, y, yaw, lean=20, z=0.0):
+    """kneeling on both knees in the aisle, sitting back a little, hands on the thighs"""
+    R = RG[rig.name]; H = HU[rig.name]
+    set_ik(rig, f, 0, 0)
+    rz = R_(yaw)
+    # pelvis height when kneeling ~ thigh length + a little: put the rig root down so the knees touch the floor
+    place(rig, f, (x, y, -0.37 + z), (0, 0, rz))
+    fk_leg(R, "L", f, hip=20, knee=110, splay=6, ankle=40); fk_leg(R, "R", f, hip=20, knee=110, splay=4, ankle=40)
+    fk_spine(R, f, flex=lean, side=0, twist=0, hflex=12, htwist=0)
+    fk_arm(R, "L", f, down=78, fwd=22, elbow=28, out=0); fk_arm(R, "R", f, down=78, fwd=22, elbow=28, out=0)
+    for s in "LR": hand_pose(rig, s, f, "flat_palm")
+def hold_shot(n, fr_list, pull=None, hb=False):
     """W hanging, HA in the aisle holding both shins, HB behind bracing on the seat back"""
     f0, f1 = T[n]
     for fr in fr_list:
         u = 0.0 if pull is None else pull(fr)
         hang_pose(fr, out=-0.30 * u, flutter=0.4 * (1 - u), t=fr / 60, arms_in=min(1.0, 3 * u))
         set_ik(HA, fr, 1, 1)
-        stand(HA, fr, 0.02 + 0.22 * u, -5.62, yaw=-90, flex=18 - 8 * u, crouch=0.05)
-        fk_spine(RA, fr, flex=10, side=0, twist=0, hflex=-22, htwist=18)
+        # director P1: lean in, elbows bent, hands low on her shins, face toward the 3/4-front camera
+        stand(HA, fr, 0.0 + 0.18 * u, -5.84, yaw=-90, flex=22 - 6 * u, crouch=0.10)
+        fk_spine(RA, fr, flex=24, side=0, twist=-8, hflex=-26, htwist=(-38 if hb else 22))
         sc.frame_set(fr)
-        grab(HA, "L", fr, leg_point("L", "knee", fr), (0, -0.2, -1), skin=0.105)
-        grab(HA, "R", fr, leg_point("R", "shin", fr), (0, 0.2, -1), skin=0.095)
+        grab(HA, "L", fr, leg_point("L", "ankle", fr), (0, -0.25, -1), skin=0.085)
+        grab(HA, "R", fr, leg_point("L", "shin", fr), (0, 0.15, -1), skin=0.095)
+        if hb:
+            # HB turned round, kneeling on his row-4 aisle seat, reaching back over the seat back to her knee and shin
+            kneel(HB, fr, -0.52, -4.74, 0, lean=30, z=0.49)
+            set_ik(HB, fr, 1, 0)
+            fk_spine(RB, fr, flex=30, side=-6, twist=-10, hflex=-18, htwist=-14)
+            sc.frame_set(fr)
+            grab(HB, "L", fr, leg_point("R", "shin", fr), (0, -0.15, -1), skin=0.095)
+            grab(HB, "R", fr, leg_point("R", "knee", fr), (0, 0.15, -1), skin=0.105)
 # ================================================================== S10: out of the plane (interior wide)
 _begin("S10")
 f0, f1 = T["S10"]
 hold_shot("S10", list(range(f0, f1 + 1, 12)) + [f1])
-shot_cam("S10", [(0, (0.25, -3.95, 1.80), (-0.75, -5.65, 0.95), 24), (1, (0.18, -4.20, 1.74), (-0.80, -5.65, 0.98), 26)])
+shot_cam("S10", [(0, (-0.45, -4.25, 1.62), (-0.30, -5.70, 1.05), 22), (1, (-0.45, -4.45, 1.58), (-0.30, -5.70, 1.05), 24)])
 # ================================================================== S11: the other passengers held on to her (closer)
 _begin("S11")
 f0, f1 = T["S11"]
-hold_shot("S11", list(range(f0, f1 + 1, 12)) + [f1])
-shot_cam("S11", [(0, (0.42, -4.30, 1.62), (-0.55, -5.70, 1.02), 30), (1, (0.38, -4.48, 1.58), (-0.58, -5.70, 1.04), 33)])
+hold_shot("S11", list(range(f0, f1 + 1, 12)) + [f1], hb=True)
+shot_cam("S11", [(0, (0.22, -6.75, 1.66), (-0.55, -5.25, 1.12), 26), (1, (0.20, -6.55, 1.62), (-0.55, -5.25, 1.12), 28)])
 # ================================================================== S12: as she hung halfway out (exterior, orbit)
 _begin("S12")
 f0, f1 = T["S12"]
 for fr in range(f0, f1 + 1, 6): hang_pose(fr, out=0.0, flutter=1.0, t=fr / 60)
-shot_cam("S12", [(0, (-5.8, -2.6, 0.6), (-2.0, -5.85, 1.25), 55), (0.5, (-6.4, -4.0, 0.5), (-2.0, -5.9, 1.25), 55), (1, (-6.0, -5.2, 0.7), (-2.0, -5.9, 1.25), 55)], fstop=11)
+shot_cam("S12", [(0, (-4.3, -3.7, 0.55), (-2.0, -5.85, 1.2), 44), (0.5, (-4.7, -4.6, 0.45), (-2.0, -5.9, 1.2), 44), (1, (-4.5, -5.25, 0.6), (-2.0, -5.9, 1.2), 44)], fstop=11)
 # ================================================================== S13: after a few minutes they pulled her back in
 _begin("S13")
 f0, f1 = T["S13"]
 def pull(fr):
     u = max(0.0, min(1.0, (fr - f0 - 20) / (f1 - f0 - 40))); return u * u * (3 - 2 * u)
-hold_shot("S13", list(range(f0, f1 + 1, 6)) + [f1], pull=pull)
-shot_cam("S13", [(0, (0.30, -4.05, 1.78), (-0.70, -5.65, 1.0), 26), (1, (0.30, -4.25, 1.72), (-0.55, -5.65, 1.0), 28)])
+hold_shot("S13", list(range(f0, f1 + 1, 6)) + [f1], pull=pull, hb=True)
+shot_cam("S13", [(0, (0.28, -6.85, 1.70), (-0.45, -5.30, 1.08), 24), (1, (0.30, -6.70, 1.66), (-0.40, -5.30, 1.08), 26)])
 # ================================================================== S14: back into the plane (lying in the aisle, HA kneels)
 _begin("S14")
-def kneel(rig, f, x, y, yaw, lean=20):
-    """kneeling on both knees in the aisle, sitting back a little, hands on the thighs"""
-    R = RG[rig.name]; H = HU[rig.name]
-    set_ik(rig, f, 0, 0)
-    rz = R_(yaw)
-    # pelvis height when kneeling ~ thigh length + a little: put the rig root down so the knees touch the floor
-    place(rig, f, (x, y, -0.37), (0, 0, rz))
-    fk_leg(R, "L", f, hip=20, knee=110, splay=6, ankle=40); fk_leg(R, "R", f, hip=20, knee=110, splay=4, ankle=40)
-    fk_spine(R, f, flex=lean, side=0, twist=0, hflex=12, htwist=0)
-    fk_arm(R, "L", f, down=72, fwd=28, elbow=55, out=0); fk_arm(R, "R", f, down=72, fwd=28, elbow=55, out=0)
 f0, f1 = T["S14"]
 for fr in range(f0, f1 + 1, 30):
     lie_pose(fr, breath=math.sin(fr / 40))
     kneel(HA, fr, 0.0, -7.20, 180, lean=22 + 3 * math.sin(fr / 30))
 lie_pose(f1); kneel(HA, f1, 0.0, -7.20, 180, lean=22)
-shot_cam("S14", [(0, (0.12, -4.75, 1.55), (0.0, -6.85, 0.45), 26), (1, (0.10, -4.95, 1.50), (0.0, -6.85, 0.45), 29)])
+shot_cam("S14", [(0, (0.12, -4.75, 1.40), (0.0, -6.85, 0.55), 26), (1, (0.10, -4.95, 1.36), (0.0, -6.85, 0.55), 29)])
 # ================================================================== S15: but she had head trauma (closer, calm)
 _begin("S15")
 f0, f1 = T["S15"]
@@ -426,7 +441,7 @@ shot_cam("S15", [(0, (0.24, -5.62, 1.30), (0.0, -6.90, 0.55), 27), (1, (0.22, -5
 # ================================================================== S16: which unfortunately (exterior window row, broken window)
 _begin("S16")
 f0, f1 = T["S16"]
-shot_cam("S16", [(0, (-6.6, -3.4, 2.5), (-1.6, -6.2, 1.2), 34), (1, (-6.3, -3.9, 2.3), (-1.6, -6.2, 1.2), 36)], fstop=11)
+shot_cam("S16", [(0, (-6.4, -2.6, -0.5), (-1.6, -6.2, 1.6), 32), (1, (-6.2, -3.1, -0.4), (-1.6, -6.2, 1.6), 34)], fstop=11)
 # ================================================================== S17: caused her death (damaged engine)
 _begin("S17")
 f0, f1 = T["S17"]
@@ -447,6 +462,10 @@ for o in D.collections["CLOUDS_NEAR"].objects:
 _begin(None)
 for o in list(OB):
     const_interp(o)
+ad = sc.animation_data
+if ad and ad.action:
+    for fc in all_fc(sc):
+        for k in fc.keyframe_points: k.interpolation = 'CONSTANT'
     for pb_c in []: pass
 for r in HEROES:
     for fc in all_fc(r):

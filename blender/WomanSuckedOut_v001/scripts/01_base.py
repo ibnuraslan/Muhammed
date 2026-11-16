@@ -66,7 +66,7 @@ def append_rig(path, rig, newname):
     for c in root.constraints: root.constraints.remove(c)
     root.location = (0, 0, 0); root.rotation_euler = (0, 0, 0); root.parent = None
     return root
-W = append_rig(REPO + "/blender/CaveRescue_v010/CaveRescue_v010_60fps.blend", "Crowd3", "W")
+W = append_rig(REPO + "/blender/CaveRescue_v010/CaveRescue_v010_60fps.blend", "Crowd1", "W")
 HA = append_rig(REPO + "/blender/ShoeBomber_v008/ShoeBomber_v008_60fps.blend", "PaxB", "HA")
 HB = append_rig(REPO + "/blender/BelugaRescue_v008/BelugaRescue_v008_60fps.blend", "SpecD", "HB")
 STD = ("body", "eyebrow", "eyelash", "high-poly", "suit", "shoes", "teeth", "tongue", "bob", "short", "afro", "ponytail", "Body")
@@ -94,6 +94,14 @@ for c in W.children:            # Crowd3's suit had a flat red base colour; driv
             nt = m.node_tree; hs = next((n for n in nt.nodes if n.type == 'HUE_SAT'), None); pr = nt.nodes.get("Principled BSDF")
             if hs and pr and not pr.inputs["Base Color"].is_linked: nt.links.new(hs.outputs[0], pr.inputs["Base Color"]); print("W suit relinked")
 retex(HB, "casualsuit02", TEX + "/HB_sweater_diffuse.png")
+for c in W.children:
+    if any(k in c.name for k in ("ponytail", "bob")):
+        for m in c.data.materials:
+            nt = m.node_tree; pr = nt.nodes.get("Principled BSDF"); l = [x for x in nt.links if x.to_node == pr and x.to_socket.name == "Base Color"]
+            if l:
+                mu = nt.nodes.new("ShaderNodeMix"); mu.data_type = 'RGBA'; mu.blend_type = 'MULTIPLY'; mu.inputs["Factor"].default_value = 1.0
+                mu.inputs["B"].default_value = (0.32, 0.24, 0.18, 1); nt.links.new(l[0].from_socket, mu.inputs["A"]); nt.links.new(mu.outputs["Result"], pr.inputs["Base Color"])
+                print("W hair darkened", c.name)
 # eye fix on every EnhancedEye group that lacks it
 for g in list(D.node_groups):
     if g.name.startswith("EnhancedEye") and "CorneaTransparentMix" not in g.nodes:
@@ -116,7 +124,7 @@ def mat(name, col, rough=0.4, metal=0.0, emit=None, estr=0.0, alpha=None):
 M_paint = mat("X_paint_white", (0.86, 0.87, 0.89), 0.32)
 M_belly = mat("X_paint_grey", (0.56, 0.58, 0.62), 0.38)
 M_tail = mat("X_paint_blue", (0.06, 0.22, 0.62), 0.35)
-M_wing = mat("X_wing", (0.74, 0.76, 0.79), 0.35, 0.15)
+M_wing = mat("X_wing", (0.42, 0.45, 0.50), 0.4, 0.2)
 M_cowl = mat("X_cowl", (0.88, 0.89, 0.91), 0.3)
 M_cowl_in = mat("X_cowl_inner", (0.20, 0.21, 0.23), 0.45, 0.4)
 M_fan = mat("X_fan_blade", (0.32, 0.34, 0.37), 0.3, 0.8)
@@ -151,7 +159,7 @@ def window_paint(m, base_sock_col, gate_y=(-6.0, -5.2)):
     dark = M("MINIMUM", M("ADD", win, ws), 1.0)
     belly = M("LESS_THAN", Z, 0.25)
     mc = N.new("ShaderNodeMix"); mc.data_type = 'RGBA'; L.new(belly, mc.inputs["Factor"])
-    mc.inputs["A"].default_value = (0.86, 0.87, 0.89, 1); mc.inputs["B"].default_value = (0.56, 0.58, 0.62, 1)
+    mc.inputs["A"].default_value = (0.80, 0.81, 0.83, 1); mc.inputs["B"].default_value = (0.40, 0.42, 0.47, 1)
     mw = N.new("ShaderNodeMix"); mw.data_type = 'RGBA'; L.new(dark, mw.inputs["Factor"]); L.new(mc.outputs["Result"], mw.inputs["A"])
     mw.inputs["B"].default_value = (0.02, 0.025, 0.03, 1)
     L.new(mw.outputs["Result"], p.inputs["Base Color"])
@@ -384,9 +392,12 @@ for i in range(6):
 
 # ---- sky: deeper blue overhead, bright near the horizon; puffy cloud clusters around the plane (they drift past in 02)
 wn = sc.world.node_tree.nodes
-for n in wn:
+for n in wn:            # director P1 note: deep blue sky, real sun key with shadows on the fuselage
     if n.type == 'VALTORGB':
-        print("SKYRAMP", [(round(e.position, 2), tuple(round(c, 2) for c in e.color)) for e in n.color_ramp.elements])
+        n.color_ramp.elements[0].color = (0.22, 0.48, 0.88, 1); n.color_ramp.elements[-1].color = (0.015, 0.14, 0.55, 1)
+    if n.name == "Background": n.inputs["Color"].default_value = (0.35, 0.5, 0.75, 1); n.inputs["Strength"].default_value = 0.5
+sun = D.objects["SUN"]; sun.data.energy = 6.5; sun.data.angle = R_(1.5)
+sun.rotation_mode = 'XYZ'; sun.rotation_euler = Vector((0.6, -0.3, -0.75)).normalized().to_track_quat('-Z', 'Y').to_euler()
 cC = coll("CLOUDS_NEAR")
 M_cloud = mat("X_cloud", (0.95, 0.96, 0.98), 0.95)
 M_cloud.node_tree.nodes["Principled BSDF"].inputs["Emission Color"].default_value = (0.9, 0.93, 1.0, 1)
