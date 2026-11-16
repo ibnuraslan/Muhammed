@@ -229,7 +229,7 @@ for nm, x in (("ADFrameL", AD_X0 - 0.04), ("ADFrameR", AD_X1 + 0.04)):
 rbox("ADFrameT", (AD_X1 - AD_X0 + 0.16, 0.06, 0.08), ((AD_X0 + AD_X1) / 2, WT + RY1 - 0.03, FLOOR2 + 2.14), wood, CS, 0.01)
 # hallway (2 m deep) behind the door
 HY = WT + RY1
-rbox("HallFloor", (3.0, 2.2, 0.02), (AD_X0 + 0.45, HY + 1.1, FLOOR2 - 0.01), lam, CS, 0.0)
+rbox("HallFloor", (3.0, 2.3, 0.02), (AD_X0 + 0.45, HY + 1.1, FLOOR2 - 0.008), lam, CS, 0.0)
 rbox("HallBack", (3.0, 0.02, 2.75), (AD_X0 + 0.45, HY + 2.2, FLOOR2 + 1.37), plaster3, CS, 0.0)
 rbox("HallL", (0.02, 2.2, 2.75), (AD_X0 - 1.05, HY + 1.1, FLOOR2 + 1.37), plaster3, CS, 0.0)
 rbox("HallR", (0.02, 2.2, 2.75), (AD_X0 + 1.95, HY + 1.1, FLOOR2 + 1.37), plaster3, CS, 0.0)

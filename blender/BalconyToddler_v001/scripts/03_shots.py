@@ -423,7 +423,7 @@ sid = "18"; shot_cam(sid, [(0, (0.75, -1.45, 1.75), (0.0, -0.55, 2.80)), (1, (0.
 # 19: close on the boy, calm, lifted a little (neck free)
 sid = "19"; shot_cam(sid, [(0, (-0.30, -1.80, 3.58), (0.0, -0.57, 3.27)), (1, (-0.24, -1.68, 3.57), (0.0, -0.57, 3.27))], 90, 11, 8)
 # 20: close on the man's hand (watch) on the shin
-sid = "20"; shot_cam(sid, [(0, (-0.95, -0.70, 2.95), (0.0, -0.62, 2.68)), (1, (-0.88, -0.68, 2.93), (0.0, -0.62, 2.68))], 38, 9, 0)
+sid = "20"; shot_cam(sid, [(0, (-1.15, -0.95, 2.50), (0.0, -0.72, 2.60)), (1, (-1.08, -0.93, 2.52), (0.0, -0.72, 2.62))], 32, 9, 6)
 
 # ---------- 21 Until the boy's: outside the cage at head height, the boy's head in front, grandma at the far door
 GM = "Grandma"

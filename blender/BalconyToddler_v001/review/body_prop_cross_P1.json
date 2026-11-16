@@ -2,7 +2,6 @@
  "props": "FloorBar0-3,CageFrontBeam,CageSideBeam-1/1,BalconySlab,ChairTop,ChairStep,ChairCarry,Table,RailFront0-2",
  "step": 3,
  "rigs": "all 7",
- "file": "build of commit with this report (p3)",
  "visible_crossing_frames": {
   "1420": {
    "root|ChairTop|VIS": 6
@@ -173,5 +172,6 @@
    "root|BalconySlab|VIS": 2
   }
  },
- "explanation": "All remaining hits are 'root'-labelled vertices of the BODY mesh under the shoes (shot 16 Man on ChairTop f1420-1432; shots 25-26 Toddler on BalconySlab). body_prop_cross switches MPFB's MASK modifiers off, so the hidden soles inside the shoes show; with the render masks on the same frames give 0 crossings (checked at f1426 and f2335). Shot 17 changed only its camera after this run."
+ "explanation": "All remaining hits are 'root'-labelled BODY vertices under the shoes (shot 16 Man on ChairTop f1420-1432; shots 25-26 Toddler on BalconySlab). body_prop_cross switches MPFB's MASK modifiers off, so the soles hidden inside the shoes show; with the render masks on the same frames give 0 crossings (checked at f1426 and f2335). After this run only the S20 camera and the hallway floor (not a prop) changed.",
+ "man_head_to_boy_legs_min_m": 0.242
 }
