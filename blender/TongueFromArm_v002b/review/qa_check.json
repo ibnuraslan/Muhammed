@@ -1,0 +1,115 @@
+{
+ "frames": {
+  "50": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S01 -> CAM_S02"
+   ]
+  ],
+  "101": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S02 -> CAM_S03"
+   ]
+  ],
+  "153": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S03 -> CAM_S04"
+   ]
+  ],
+  "271": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S04 -> CAM_S05"
+   ]
+  ],
+  "323": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S05 -> CAM_S06"
+   ]
+  ],
+  "421": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S06 -> CAM_S07"
+   ]
+  ],
+  "542": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S07 -> CAM_S08"
+   ]
+  ],
+  "633": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S08 -> CAM_S09"
+   ]
+  ],
+  "693": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S09 -> CAM_S10"
+   ]
+  ],
+  "776": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S10 -> CAM_S11"
+   ]
+  ],
+  "863": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S11 -> CAM_S12"
+   ]
+  ],
+  "926": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S12 -> CAM_S13"
+   ]
+  ],
+  "986": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S13 -> CAM_S14"
+   ]
+  ],
+  "1073": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S14 -> CAM_S15"
+   ]
+  ],
+  "1142": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S15 -> CAM_S16"
+   ]
+  ],
+  "1201": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S16 -> CAM_S17"
+   ]
+  ],
+  "1263": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S17 -> CAM_S18"
+   ]
+  ],
+  "1332": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S18 -> CAM_S19"
+   ]
+  ]
+ },
+ "counts": {
+  "CAMJUMP": 18
+ }
+}

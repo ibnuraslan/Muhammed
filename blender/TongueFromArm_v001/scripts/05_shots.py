@@ -123,7 +123,7 @@ for f in range(1, 1112, 30):
 for s_ in "LR": apply_pose(P, s_, "relaxed", 1)
 _g["ground_z"] = lambda x, y: 0.0
 for n in ("orbicularis03.L", "orbicularis03.R"):
-    pb = P.pose.bones[n]; pb.rotation_quaternion = Euler((R_(26), 0, 0)).to_quaternion(); pb.keyframe_insert("rotation_quaternion", frame=1)
+    pb = P.pose.bones[n]; pb.rotation_quaternion = Euler((R_(-30), 0, 0)).to_quaternion(); pb.keyframe_insert("rotation_quaternion", frame=1)
 sc.frame_set(1); bpy.context.view_layer.update()
 HEAD = wpos(P, "head"); HEADT = wpos(P, "head", True); FACE = HEAD + (HEADT - HEAD) * 0.45
 EL = wpos(P, "lowerarm01.L"); WR = wpos(P, "wrist.L"); FA = (EL + WR) / 2
@@ -173,8 +173,8 @@ cam_shot("S05", [(253, FA + Vector((0.62, -0.92, 0.62))), (312, FA + Vector((0.5
 sc.frame_set(560); SF = wpos(Sg, 'head') + Vector((0, 0, 0.06)); sc.frame_set(1)
 cam_shot("S10", [(553, SF + Vector((0.70, -0.62, -0.05))), (612, SF + Vector((0.60, -0.52, -0.06)))], 40,
          [(553, SF + Vector((0.0, 0.0, -0.05))), (612, SF + Vector((0.0, 0.0, -0.05)))])
-cam_shot("S14", [(793, HEAD + Vector((1.30, -0.25, 0.40))), (852, HEAD + Vector((1.40, -0.30, 0.45)))], 28,
-         [(793, HEAD + Vector((-0.45, 0.05, -0.05))), (852, HEAD + Vector((-0.45, 0.05, 0.02)))])
+cam_shot("S14", [(793, HEAD + Vector((0.42, -0.62, 0.66))), (852, HEAD + Vector((0.38, -0.58, 0.62)))], 26,
+         [(793, HEAD + Vector((-0.30, 0.06, 0.14))), (852, HEAD + Vector((-0.30, 0.06, 0.16)))])
 
 # ============================================================ DIAGRAM clip (frames 1-1110)
 ob = bpy.data.objects
@@ -339,11 +339,21 @@ def gyaw(f):
     a = path(max(1115, f - 3)); b = path(min(1280, f + 3)); d = (b - a)
     return math.degrees(math.atan2(d.x, -d.y)) if d.length > 1e-4 else 60.0
 walk_with_arms(HG, path, gyaw, 1115, 1280, stride=0.75, amp=0.07)
-for f in (1282, 1320, 1360, 1400, 1520):
-    pos = Vector((p2.x, p2.y, HG.root_head.z)); yaw = gyaw(1278)
-    HG.key_root(f, pos, yaw=yaw, flex=1); HG.key_spine(f, flex=2, head=(-8 if f < 1350 else -6, 4 * math.sin(f / 30)))
-    for s in "LR": HG.key_foot(s, f, HG.foot_xy(s, Vector((pos.x, pos.y, 0)), yaw), yaw)
+p3 = p2 + Vector((0.10, 0.14, 0))   # one small step closer to the bed
+yawG = gyaw(1278)
+for f in (1282, 1320, 1348, 1352, 1366, 1372, 1520):
+    k = 0.0 if f <= 1348 else 1.0
+    pos = (p2.lerp(p3, k)); pos = Vector((pos.x, pos.y, HG.root_head.z)); yaw = yawG
+    HG.key_root(f, pos, yaw=yaw, flex=1); HG.key_spine(f, flex=2 + 3 * k, head=(-8 if f < 1350 else -10, 4 * math.sin(f / 30)))
+    for s in "LR":
+        lead = (s == "R")
+        fp = p2.lerp(p3, k if (lead or f >= 1366) else (0.0 if f < 1366 else 1.0))
+        lift = 0.05 if (lead and f == 1352) or ((not lead) and f == 1366) else 0.0
+        if f == 1352 and lead: fp = p2.lerp(p3, 0.5)
+        HG.key_foot(s, f, HG.foot_xy(s, Vector((fp.x, fp.y, 0)), yaw), yaw, lift=lift)
     key_hang(HG, f, pos, yaw)
+    if f >= 1366:   # right hand comes up to her chest
+        body_hand(HG, "R", f, pos, yaw, (-0.04, -0.12, 0.30), (0.6, 0.0, 0.8), (0.0, 1.0, 0.0), pole_off=(-0.35, 0.10, -0.1))
 for s in "LR": apply_pose(G, s, "relaxed", 1115)
 # ward lights
 for i, x in enumerate((-1.0, 0.0, 1.0)):

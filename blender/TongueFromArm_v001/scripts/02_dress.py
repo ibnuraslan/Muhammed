@@ -158,12 +158,29 @@ for rn, hair in (("Surgeon", "short02"), ("Nurse", "bob02")):
 tint(bpy.data.objects["Nurse.female_sportsuit01"].data.materials[0], (0.30, 0.60, 0.62), 1.0)
 for m in bpy.data.objects["Nurse.body"].data.materials:
     if m.name.startswith("NurseScrub"): tint(m, (0.30, 0.60, 0.62), 1.0)
-# ---- girl: part the fringe (remove the bob's front cards that hang over the eyes)
-G = bpy.data.objects["Girl"]; hb = bpy.data.objects["Girl.bob01"]
-ey = G.data.bones["eye.L"].head_local; hc = G.data.bones["head"].head_local
-bm = bmesh.new(); bm.from_mesh(hb.data)
-kill = [v for v in bm.verts if v.co.y < ey.y + 0.025 and v.co.z < ey.z + 0.045 and abs(v.co.x) < 0.085]
-bmesh.ops.delete(bm, geom=kill, context='VERTS'); bm.to_mesh(hb.data); bm.free(); print("FRINGE", len(kill), tuple(ey))
-# ---- girl: blue outfit
-tint(bpy.data.objects["Girl.female_casualsuit01"].data.materials[0], (0.25, 0.42, 0.95), 1.0)
+# ---- girl (v002b, director): loose clothes (tee + skirt, contrasting) and a ponytail so she reads as a girl
+G = bpy.data.objects["Girl"]
+for n in ("Girl.bob01", "Girl.female_casualsuit01"):
+    o = bpy.data.objects[n]; o.hide_render = True; o.hide_viewport = True
+for m in bpy.data.objects["Girl.body"].modifiers:          # skin under the old suit was masked out; the new clothes cover it
+    if m.type == 'MASK' and m.name.startswith("Delete"): m.show_render = False; m.show_viewport = False
+top = bpy.data.materials.new("GirlTee"); top.use_nodes = True; tp = top.node_tree.nodes["Principled BSDF"]
+tp.inputs["Base Color"].default_value = (0.95, 0.62, 0.20, 1); tp.inputs["Roughness"].default_value = 0.8
+sk = bpy.data.materials.new("GirlSkirt"); sk.use_nodes = True; sp = sk.node_tree.nodes["Principled BSDF"]
+sp.inputs["Base Color"].default_value = (0.20, 0.30, 0.75, 1); sp.inputs["Roughness"].default_value = 0.8
+gd = refit("Doctor", "female_elegantsuit01", "Girl", "dress", top)
+gd.data.materials.append(sk)
+wz = G.data.bones["spine05"].head_local.z - 0.02
+for pg in gd.data.polygons:
+    pg.material_index = 1 if sum(gd.data.vertices[i].co.z for i in pg.vertices) / len(pg.vertices) < wz else 0
+hair = refit("Patient", "ponytail01", "Girl", "ponytail", bpy.data.objects["Patient.ponytail01"].data.materials[0])
+GB = bpy.data.objects["Girl.body"]; bones = {b.name for b in G.data.bones}; gi = {g.index: g.name for g in GB.vertex_groups}
+hv = GB.vertex_groups.new(name="HideUnderDress"); idx = []
+for v in GB.data.vertices:
+    bw = {gi[g.group]: g.weight for g in v.groups if gi[g.group] in bones}
+    if bw and max(bw, key=bw.get).startswith(("spine02", "spine03", "spine04", "spine05", "breast", "shoulder01", "upperarm", "lowerarm", "pelvis", "upperleg01")): idx.append(v.index)
+hv.add(idx, 1.0, 'REPLACE')
+mk = GB.modifiers.new("HideUnderDress", 'MASK'); mk.vertex_group = "HideUnderDress"; mk.invert_vertex_group = True
+while GB.modifiers.find("HideUnderDress") > GB.modifiers.find("Armature") + 1: GB.modifiers.move(GB.modifiers.find("HideUnderDress"), GB.modifiers.find("HideUnderDress") - 1)
+print("GIRL dress + ponytail", len(gd.data.vertices), len(hair.data.vertices))
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)
