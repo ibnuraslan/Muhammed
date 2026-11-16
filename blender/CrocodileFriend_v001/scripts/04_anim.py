@@ -112,7 +112,7 @@ def man_stand(f, pos, yaw, flex=0.0, spine=(0, 0, 0), head=(0, 0), crouch=0.0, s
             sx = 1 if s == "L" else -1
             xy = H.foot_xy(s, pos, yaw) + (rightv(yaw) * (-sx * stance)).to_2d()
             H.key_foot(s, f, xy, yaw)
-def hand_idle(f, s, yaw, fwd_off=0.06, out=0.07, drop=0.0):
+def hand_idle(f, s, yaw, fwd_off=0.06, out=0.10, drop=0.0):
     """relaxed hanging hand beside the thigh (evaluated shoulder)"""
     sc.frame_set(f); sh = MAN.matrix_world @ MAN.pose.bones["upperarm01." + s].head
     sx = 1 if s == "L" else -1
@@ -284,13 +284,13 @@ shot("S05_PondWide", 200, "B4 kept it in a secret pond behind his house",
 def s06(s):
     for f in frames(s):
         u = u_of(s, f)
-        croc_key(f, 3.0, 13.0 - 2.2 * u, -90.0, z=WATER_Z - 0.27, swim=f / 60.0, swim_amp=16, tuck=0.8)
+        croc_key(f, 2.6, 8.6 + 2.6 * u, 90.0, z=WATER_Z - 0.27, swim=f / 60.0, swim_amp=16, tuck=0.8)
         man_stand(f, V((-2.0, 3.6)), 200.0, spine=(4, 0, 0), head=(-8, 8))
         for s_ in "LR":
             if f % 4 == 1 or f == s["f1"]: hand_idle(f, s_, 200.0)
     for s_ in "LR": fingers(s["f0"], s_, "relaxed"); fingers(s["f1"], s_, "relaxed")
 shot("S06_CrocSwim", 150, "B4 (croc swimming toward camera, house behind)",
-     (((3.3, 7.6, 0.3), (3.0, 12.0, 0.0)), ((3.5, 8.4, 0.32), (3.0, 10.8, 0.0))), s06, 28)
+     (((3.4, 14.6, 0.75), (2.0, 6.0, 0.9)), ((3.2, 14.3, 0.7), (2.0, 6.0, 0.85))), s06, 30)
 
 # ---------------- B5 nine pounds of meat a day: bucket + toss
 BUCKET = OB["Bucket"]; MEAT = OB["Meat"]; MEAT2 = OB["MeatInBucket"]
@@ -400,7 +400,7 @@ shot("S09_SleepWide", 200, "B6 he even slept beside it (night)",
      (((0.9, -0.1, 2.3), (0.8, 3.1, 0.2)), ((0.9, 0.5, 1.9), (0.8, 3.1, 0.2))), s09, 26)
 def s10(s): s09(s)
 shot("S10_SleepClose", 170, "B6 thinking his love would heal its wounds",
-     (((-0.3, 4.9, 1.35), (-0.1, 2.8, 0.25)), ((-0.2, 4.6, 1.25), (-0.1, 2.8, 0.25))), s10, 30)
+     (((-0.95, 4.25, 1.15), (-0.1, 3.05, 0.25)), ((-0.6, 3.85, 0.9), (-0.1, 3.05, 0.25))), s10, 32)
 
 # ---------------- B7 release: points to the river, croc leaves, refuses, comes back
 def s11(s):
@@ -418,7 +418,7 @@ def s11(s):
     fingers(s["f0"], "R", "relaxed"); fingers(s["f0"] + 50, "R", "point"); fingers(s["f1"] - 30, "R", "point"); fingers(s["f1"], "R", "relaxed")
     fingers(s["f0"], "L", "relaxed"); fingers(s["f1"], "L", "relaxed")
 shot("S11_Release", 200, "B7 when he tried to release it back to the wild",
-     (((2.8, -0.2, 1.6), (-2.6, 1.9, 0.9)), ((2.5, 0.0, 1.55), (-3.0, 2.2, 0.9))), s11, 26)
+     (((-3.7, -0.7, 1.6), (-3.0, 2.2, 0.8)), ((-3.5, -0.4, 1.55), (-3.2, 2.5, 0.8))), s11, 26)
 def s12(s):
     for f in frames(s):
         u = u_of(s, f); turn = smooth(min(1, max(0, (u - 0.2) / 0.6)))
@@ -447,7 +447,7 @@ def s13(s):
     fingers(s["f0"], "R", "relaxed"); fingers(kf + 30, "R", "relaxed"); fingers(kf + 50, "R", "flat_palm"); fingers(s["f1"], "R", "flat_palm")
     fingers(s["f0"], "L", "relaxed"); fingers(s["f1"], "L", "relaxed")
 shot("S13_ComesBack", 220, "B7 (croc crawls back, he kneels, hand on its head)",
-     (((-3.7, -0.9, 1.5), (-2.6, 1.4, 0.35)), ((-3.5, -0.6, 1.4), (-2.5, 1.3, 0.35))), s13, 28)
+     (((-4.1, -0.1, 1.3), (-2.2, 1.1, 0.5)), ((-3.9, 0.15, 1.25), (-2.2, 1.1, 0.5))), s13, 28)
 
 # ---------------- B8 together 20 years: walking along the pond bank
 def walk_pair(s, y0, x0, x1):
@@ -514,7 +514,7 @@ def in_water(s, pat=True):
     fingers(s["f0"], "R", "flat_palm"); fingers(s["f1"], "R", "flat_palm"); fingers(s["f0"], "L", "relaxed"); fingers(s["f1"], "L", "relaxed")
 def s16(s): tourists(s); in_water(s)
 shot("S16_ShowWide", 220, "B9 they performed for tourists (logo sign on the deck rail)",
-     (((1.6, 8.6, 0.9), (0.2, 14.5, 1.0)), ((1.0, 9.3, 0.95), (0.2, 14.5, 1.0))), s16, 26)
+     (((0.6, 8.4, 0.95), (0.8, 14.5, 1.1)), ((0.3, 9.0, 1.0), (0.8, 14.5, 1.1))), s16, 26)
 def s17(s): tourists(s); in_water(s)
 shot("S17_Tourists", 170, "B9 (tourists' faces, man + croc below)",
      (((-0.9, 13.0, 1.3), (-1.3, 16.4, 1.75)), ((-0.4, 13.2, 1.3), (-1.0, 16.4, 1.75))), s17, 28)
@@ -524,21 +524,21 @@ def s18(s):
     for f in frames(s):
         u = u_of(s, f)
         croc_key(f, 1.0, 4.2, 200.0, curl=-3)
-        kneel(f, V((0.9, 3.2)), 0.0 + 180 - 180 + 0, sway=1.0 * math.sin(f * 0.03), lean=28, head=(-26, 0))
+        kneel(f, V((0.9, 3.25)), 180.0, sway=1.0 * math.sin(f * 0.03), lean=28, head=(-22, 0))
     for f in frames(s, 4):
         sc.frame_set(f)
         P = croc_point(("spine2", (0.05, 0.1, 0.40)))
-        palm_on(f, "R", P, V((0, 0, -1)), V((-1, 0, 0)), 0.0, pole_off=(-0.3, -0.2, 0.4))
-        hand_idle(f, "L", 0.0, drop=0.14, fwd_off=0.22)
+        palm_on(f, "R", P, V((0, 0, -1)), V((1, 0, 0)), 180.0, pole_off=(-0.3, -0.2, 0.4))
+        hand_idle(f, "L", 180.0, drop=0.14, fwd_off=0.22)
     fingers(s["f0"], "R", "flat_palm"); fingers(s["f1"], "R", "flat_palm"); fingers(s["f0"], "L", "relaxed"); fingers(s["f1"], "L", "relaxed")
 shot("S18_Died", 220, "B10 and when it finally died",
-     (((2.5, 1.9, 1.5), (0.95, 3.75, 0.4)), ((2.3, 2.1, 1.4), (0.95, 3.75, 0.4))), s18, 30)
+     (((0.4, 6.0, 1.35), (0.9, 3.5, 0.55)), ((0.5, 5.7, 1.25), (0.9, 3.5, 0.55))), s18, 30)
 
 # ---------------- B11 public funeral, he sang for his friend
 FUN = [n for n in EX if n.startswith("Crowd")] + ["SpecB", "SpecE"]
 def audience(s):
     vis([OB[n] for n in FUN], s["f0"], s["f1"])
-    seats = [(HX - 2.4, -0.1), (HX - 1.3, 0.25), (HX + 0.4, -0.2), (HX + 1.5, 0.15), (HX - 1.8, -1.4), (HX + 0.9, -1.3)]
+    seats = [(HX - 2.4, -0.1), (HX - 1.3, 0.25), (HX + 0.4, -0.2), (HX + 2.6, 0.5), (HX - 1.8, -1.4), (HX + 0.9, -1.3)]
     for i, n in enumerate(FUN):
         h = EX[n]; x, y = seats[i]
         yw = 180.0 + math.degrees(math.atan2(x - (HX - 0.7), 2.3 - y)) * 0.6
@@ -552,7 +552,7 @@ def audience(s):
                 if i % 2 == 0:   # hands loosely clasped in front (wrists apart, no finger overlap)
                     W = sh + Rz @ V((-sx * 0.12 * -1 * -1 if False else sx * -0.10, -0.18, -0.48)); d = Rz @ V((0, -0.4, -1)); nrm = Rz @ V((-sx, 0, 0))
                 else:            # hanging relaxed
-                    W = sh + Rz @ V((sx * 0.07, -0.05, -0.56)); d = Rz @ V((0, -0.15, -1)); nrm = Rz @ V((-sx, 0, 0))
+                    W = sh + Rz @ V((sx * 0.13, -0.07, -0.54)); d = Rz @ V((0, -0.15, -1)); nrm = Rz @ V((-sx, 0, 0))
                 h.key_hand(s_, f, W, d, nrm, sh + Rz @ V((sx * 0.25, 0.5, -0.3)))
         for s_ in "LR":
             apply_pose(h.r.o, s_, "relaxed", s["f0"]); apply_pose(h.r.o, s_, "relaxed", s["f1"])
