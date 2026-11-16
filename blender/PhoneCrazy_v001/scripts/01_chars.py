@@ -146,7 +146,7 @@ if (mx.y - dc.y) > (dc.y - mn.y): hh.data.transform(Matrix.Rotation(math.pi, 4, 
 co, mn, mx = vb(hh)
 dome = [c for c in co if c.z > mn.z + 0.5 * (mx.z - mn.z)]; dc = sum((c for c in dome), Vector()) / len(dome)
 hh.data.transform(Matrix.Translation(-Vector((dc.x, dc.y, mn.z))))   # origin under the dome centre, at the brim
-co, mn, mx = vb(hh); k = 0.215 / (max(c.x for c in dome) - min(c.x for c in dome)); hh.data.transform(Matrix.Scale(k, 4))
+co, mn, mx = vb(hh); k = 0.205 / (max(c.x for c in dome) - min(c.x for c in dome)); hh.data.transform(Matrix.Scale(k, 4))
 co, mn, mx = vb(hh); print("HAT fixed", mn, mx)
 m = bpy.data.materials.new("HardHat_yellow"); m.use_nodes = True; P = m.node_tree.nodes["Principled BSDF"]
 P.inputs["Base Color"].default_value = (0.95, 0.75, 0.03, 1); P.inputs["Roughness"].default_value = 0.4

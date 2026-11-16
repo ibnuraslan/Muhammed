@@ -2,8 +2,8 @@
 import bpy, sys
 out = sys.argv[sys.argv.index("--") + 1]
 m = bpy.data.materials["PitWater"]; nt = m.node_tree; P = nt.nodes["Principled BSDF"]
-P.inputs["Roughness"].default_value = 0.06; P.inputs["Specular IOR Level"].default_value = 0.05
-cr = next(n for n in nt.nodes if n.type == "VALTORGB"); cr.color_ramp.elements[0].color = (0.02, 0.12, 0.2, 1); cr.color_ramp.elements[1].color = (0.12, 0.38, 0.5, 1)
+P.inputs["Roughness"].default_value = 0.06; P.inputs["Specular IOR Level"].default_value = 0.12
+cr = next(n for n in nt.nodes if n.type == "VALTORGB"); cr.color_ramp.elements[0].color = (0.006, 0.03, 0.045, 1); cr.color_ramp.elements[1].color = (0.03, 0.11, 0.14, 1)
 next(n for n in nt.nodes if n.type == "BUMP").inputs["Strength"].default_value = 0.5
 s = bpy.data.materials["Stream"].node_tree.nodes["Principled BSDF"]; s.inputs["Roughness"].default_value = 0.1
 bpy.context.scene.cycles.samples = 48

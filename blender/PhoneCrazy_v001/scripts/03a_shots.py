@@ -28,7 +28,7 @@ def crew(s, mode, fa=None, fb=None, **kw):
                  brow=o.get("brow", 0.0), jaw=o.get("jaw", 0.0))
         elif mode == "pit":
             a = R_(PIT_SPOT[n]); p = (PIT.x + 4.5 * _m.cos(a), PIT.y + 4.5 * _m.sin(a)); put(n, s, p, yaw_to(p, PIT))
-            idle(n, s, fa, fb, flex=5, spine=10, head=(18, 0), head_end=(30, 0), brow=0.002)
+            idle(n, s, fa, fb, flex=5, spine=8, head=(10, 0), head_end=(20, 0), brow=0.002)
 
 # ---------------------------------------------------------------- S1 "As soon as (they started digging)": wide site, excavator digging, crew watching
 crew("S1", "watch_exc")
@@ -46,9 +46,9 @@ crew("S4", "case")
 tiles("S4", [(0, 8)])
 camshot("S4", [(0, PH_W + Vector((-0.06, -0.06, 0.27)), PH_W, 42), (1, PH_W + Vector((0.04, -0.07, 0.25)), PH_W, 44)])
 # ---------------------------------------------------------------- S5 "touching it ... watch": crew around the case, low front; logo on the case front
-crew("S5", "case", Foreman={"hands": ("open", "R"), "head": (14, 0), "brow": 0.002}, Mate={"hands": ("point", "R"), "head": (14, 0)}, Digger={"head": (12, 0), "head_end": (18, -8)})
+crew("S5", "case", Foreman={"hands": ("open", "R"), "head": (2, 0), "spine": 8, "brow": 0.002}, Mate={"hands": ("point", "R"), "head": (4, 0)}, Digger={"head": (0, 0), "head_end": (6, -10)})
 tiles("S5", [(0, 8), (1.3, 9)])
-camshot("S5", [(0, (-3.75, -2.35, 0.95), (-4.0, 1.0, 1.0), 27), (1, (-3.85, -1.85, 0.9), (-4.0, 1.0, 1.0), 28)])
+camshot("S5", [(0, (-3.75, -2.25, 0.72), (-4.0, 1.0, 1.05), 27), (1, (-3.85, -1.8, 0.7), (-4.0, 1.0, 1.08), 28)])
 # ---------------------------------------------------------------- S6 "as it opened apps"
 crew("S6", "case")
 tiles("S6", [(0, 8), (0.3, 9), (0.8, 10)])
@@ -63,7 +63,7 @@ tiles("S8", [(0, 14), (0.4, 15), (0.65, 14), (0.85, 16), (1.1, 14), (1.3, 16), (
 BUZZ.append((sec("S8", 1.9), fx("S8")))
 camshot("S8", [(0, PH_W + Vector((-0.05, -0.08, 0.28)), PH_W, 42), (1, PH_W + Vector((-0.02, -0.05, 0.22)), PH_W, 44)])
 # ---------------------------------------------------------------- S9 "again": high over the crew, the phone calling again on the lid
-crew("S9", "case", Foreman={"head": (22, 0)}, Mate={"head": (18, 0), "head_end": (10, 20)})
+crew("S9", "case", Foreman={"head": (14, 0)}, Mate={"head": (10, 0), "head_end": (4, 20)})
 tiles("S9", [(0, 18), (0.25, 19), (0.5, 18), (0.75, 14), (1.0, 16), (1.2, 14), (1.4, 16), (1.6, 17), (1.9, 18), (2.15, 19), (2.4, 18)])
 BUZZ.append((f0("S9"), sec("S9", 0.7))); BUZZ.append((sec("S9", 1.9), fx("S9")))
 camshot("S9", [(0, (-5.3, -1.55, 2.35), (-4.0, 0.85, 0.95), 30), (1, (-5.1, -1.3, 2.2), (-4.0, 0.85, 0.95), 32)])
@@ -98,7 +98,7 @@ camshot("S16", [(0, XO + Vector((-3.0, FRONT - 19.0, -2.6)), XO + Vector((1.0, F
 # ---------------------------------------------------------------- S17 "until the phone": Foreman stares at the phone, then looks up at the Digger
 crew("S17", "case", Foreman={"head": (18, 0), "head_end": (-2, -22), "brow": 0.003, "jaw": 5, "spine": 10, "spine_end": 4}, Digger={"head": (8, 10)})
 tiles("S17", [(0, 20), (0.15, 8), (0.3, 21), (0.45, 20), (0.6, 22)]); JIT.append((f0("S17"), fx("S17")))
-camshot("S17", [(0, (-3.72, -0.45, 1.05), (-4.02, 1.32, 1.55), 34), (1, (-3.78, -0.2, 1.08), (-4.02, 1.32, 1.58), 36)])
+camshot("S17", [(0, (-3.45, -0.45, 1.05), (-4.0, 1.32, 1.55), 38), (1, (-3.5, -0.2, 1.08), (-4.0, 1.32, 1.58), 40)])
 # ---------------------------------------------------------------- S18-S19 "was going crazy": glitching screen, phone buzzing
 for s in ("S18", "S19", "S20", "S21"): crew(s, "case", Foreman={"head": (18, 0), "brow": 0.002})
 tiles("S18", [(t * 0.12, [20, 21, 8, 22, 20, 9, 21, 22][i % 8]) for i, t in enumerate(range(0, 22))]); JIT.append((f0("S18"), fx("S18"))); BUZZ.append((f0("S18"), fx("S18")))
@@ -114,7 +114,7 @@ camshot("S21", [(0, PH_W + Vector((-0.02, -0.06, 0.25)), PH_W, 42), (1, PH_W + V
 # ---------------------------------------------------------------- S22 "a message": the crew at the pit edge looks down into the hole
 crew("S22", "pit")
 tiles("S22", [(0, 18)])
-camshot("S22", [(0, (2.6, 10.9, 6.6), (-1.6, 5.2, -0.4), 30), (1, (2.2, 10.4, 6.1), (-1.6, 5.2, -0.5), 31)])
+camshot("S22", [(0, (-0.6, 12.4, 5.6), (-2.6, 4.6, 0.2), 34), (1, (-0.8, 11.8, 5.2), (-2.6, 4.6, 0.1), 36)])
 for s in ("S1", "S2", "S10", "S11", "S12", "S13", "S14", "S15", "S16"): pass
 bake_excavator([(1, F["END"], 4.4, 0.0)])
 

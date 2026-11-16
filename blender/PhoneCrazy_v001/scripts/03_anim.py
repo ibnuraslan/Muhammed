@@ -102,7 +102,7 @@ def idle(n, s, fa, fb, flex=4, spine=4, head=(4, 0), twist=0.0, amp=1.2, hands="
 # hard hats: bone-parented to the head, brim at the brow line
 for n in NAMES:
     HAT = OB[n + ".hardhat"]; rig = OB[n]; bn = rig.data.bones["head"]
-    desired = Matrix.Translation(bn.tail_local + Vector((0, -0.012, -0.115)))
+    desired = Matrix.Translation(bn.tail_local + Vector((0, -0.006, -0.085)))
     HAT.parent = rig; HAT.parent_type = 'BONE'; HAT.parent_bone = "head"
     Mb = Matrix.Translation(bn.tail_local) @ bn.matrix_local.to_3x3().to_4x4()
     HAT.matrix_parent_inverse = Matrix.Identity(4); HAT.matrix_basis = Mb.inverted() @ desired
