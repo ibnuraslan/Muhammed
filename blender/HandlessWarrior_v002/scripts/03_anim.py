@@ -482,7 +482,7 @@ W.used.add("S04")
 HX = 40.0
 s0, s1 = ST["S05"], SE("S05")
 WP5 = V(HX - 0.1, -1.25, 0); WY5 = 180.0
-VPOS = {EL: (V(HX, 0.45, 0), None), VW: (V(HX - 1.05, 0.05, 0), None), M1: (V(HX + 0.95, 0.15, 0), None), M2: (V(HX + 1.6, -0.55, 0), None)}
+VPOS = {EL: (V(HX, 0.45, 0), None), VW: (V(HX - 1.05, 0.05, 0), None), M1: (V(HX + 0.95, 0.15, 0), None), M2: (V(HX + 1.15, 0.95, 0), None)}
 def face(c, p, tgt): return yaw_to(tgt - p)
 for f, b in ((s0, 0.0), (s0 + 70, 0.5), (s1, 1.0)):
     W.stand(f, WP5, WY5, flex=4, head=(4 * b, 0)); W.hang(f, WP5, WY5, out=0.15, fwd=0.04)
@@ -651,7 +651,7 @@ for c in (W, SC): c.used.add("S16")
 s0, s1 = ST["S17"], SE("S17")
 RC = V(BX + 6.0, 4.0, 0)
 WP17 = RC; WY17 = 0.0
-GUARD_LOCAL = V(RC.x, RC.y + 2.1, 0); GY = 0.0      # SoldierB master guard stands north of the warrior, facing him (south)
+GUARD_LOCAL = V(RC.x + 1.0, RC.y + 1.9, 0); GY = 0.0      # SoldierB master guard stands north of the warrior, facing him (south)
 for f, b in ((s0, 0), (s0 + 60, 0.5), (s1, 1)):
     SB.stand(f, GUARD_LOCAL, GY, flex=4, head=(-2, 0), stance=1.2, crouch=0.05)
     SB.hand_w("R", f, GUARD_LOCAL + Rz(GY) @ V(-0.36, -0.24, 1.0), Rz(GY) @ V(0, -1, -0.15).normalized(), Rz(GY) @ V(1, 0, 0), GUARD_LOCAL + Rz(GY) @ V(-0.6, 0.3, 0.9))
