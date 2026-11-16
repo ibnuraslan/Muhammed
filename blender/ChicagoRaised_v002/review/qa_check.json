@@ -1,0 +1,2989 @@
+{
+ "frames": {
+  "73": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 36.1 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 36.8 cm off W2's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 36.5 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 40.3 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 43.4 cm off W6's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W1.visor is 4.1 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W3.visor is 4.0 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W6.visor is 3.9 cm off W6's skin (median)"
+   ]
+  ],
+  "79": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "85": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "91": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "97": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 49.8 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 50.0 cm off W2's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 50.0 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 50.0 cm off W6's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W1.visor is 4.1 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W3.visor is 4.0 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W6.visor is 3.9 cm off W6's skin (median)"
+   ]
+  ],
+  "103": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "109": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "115": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "229": [
+   [
+    "BACKHEAD",
+    "W1"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "325": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "331": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "337": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 47.7 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 47.3 cm off W2's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 47.1 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 50.0 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 50.0 cm off W6's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W1.visor is 4.1 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W3.visor is 4.0 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W6.visor is 3.9 cm off W6's skin (median)"
+   ]
+  ],
+  "343": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "349": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "427": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.0 moves 3.1 cm with no hand on it (nearest finger 502482 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.1 cm with no hand on it (nearest finger 502482 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.1 cm with no hand on it (nearest finger 502482 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.1 cm with no hand on it (nearest finger 502482 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.1 cm with no hand on it (nearest finger 502482 cm)"
+   ]
+  ],
+  "433": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "439": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "445": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "451": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "457": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "463": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "469": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "475": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "481": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "487": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "493": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "499": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "505": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "511": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "517": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "523": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "529": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "535": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "541": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "547": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "553": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "691": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "697": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "703": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "709": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "715": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "721": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "727": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "733": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "739": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "745": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "751": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "757": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "763": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "769": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "775": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "781": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "787": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "793": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "799": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "805": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "889": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "895": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "901": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "907": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "913": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "919": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "925": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "931": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "937": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "943": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "949": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "955": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "961": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "967": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "973": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "979": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "985": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "991": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "997": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1003": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1009": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "1015": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1021": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1027": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1033": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1039": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1045": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1051": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1057": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1063": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1069": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1075": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1081": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1087": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1093": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1099": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1105": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1111": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1117": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1123": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1129": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1135": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1141": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1147": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1153": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1159": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1165": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1171": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1177": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1183": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1189": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1267": [
+   [
+    "BACKHEAD",
+    "TownMan"
+   ]
+  ],
+  "1273": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1279": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1285": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1291": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1297": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1303": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1429": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1435": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1441": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1447": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1453": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1459": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1465": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1471": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1477": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1483": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1489": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1495": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1501": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1507": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1513": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1519": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1525": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1531": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1537": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1543": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1549": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1555": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1561": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1567": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1573": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1579": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1585": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1591": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1597": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1603": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1609": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "1615": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1621": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1627": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1633": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "1639": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1645": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1651": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1657": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "1663": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1669": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1675": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1681": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "1687": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1693": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1699": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1705": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1711": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1717": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1723": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1729": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1735": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1741": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1747": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1753": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1759": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1765": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1771": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1777": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1783": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1789": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1795": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1801": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1807": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1813": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1819": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1825": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1831": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1837": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1843": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1849": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1855": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1861": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1867": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1873": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1879": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1885": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1891": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1897": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1903": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1909": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1915": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1921": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "47": [
+   [
+    "CAMJUMP",
+    "cut: 8.77 m, 18 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "117": [
+   [
+    "CAMJUMP",
+    "cut: 27.10 m, 94 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "230": [
+   [
+    "CAMJUMP",
+    "cut: 16.13 m, 15 deg in one frame (neighbours 0.03 m, 0 deg)"
+   ]
+  ],
+  "294": [
+   [
+    "CAMJUMP",
+    "cut: 12.36 m, 108 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "353": [
+   [
+    "CAMJUMP",
+    "cut: 0.36 m, 13 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "426": [
+   [
+    "CAMJUMP",
+    "cut: 20.70 m, 67 deg in one frame (neighbours 0.03 m, 0 deg)"
+   ]
+  ],
+  "557": [
+   [
+    "CAMJUMP",
+    "cut: 311.05 m, 21 deg in one frame (neighbours 0.05 m, 0 deg)"
+   ]
+  ],
+  "689": [
+   [
+    "CAMJUMP",
+    "cut: 304.62 m, 18 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "806": [
+   [
+    "CAMJUMP",
+    "cut: 9.00 m, 18 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "885": [
+   [
+    "CAMJUMP",
+    "cut: 2.83 m, 12 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "953": [
+   [
+    "CAMJUMP",
+    "cut: 8.15 m, 54 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "1023": [
+   [
+    "CAMJUMP",
+    "cut: 14.23 m, 26 deg in one frame (neighbours 0.08 m, 0 deg)"
+   ]
+  ],
+  "1073": [
+   [
+    "CAMJUMP",
+    "cut: 610.78 m, 29 deg in one frame (neighbours 0.24 m, 0 deg)"
+   ]
+  ],
+  "1124": [
+   [
+    "CAMJUMP",
+    "cut: 604.30 m, 12 deg in one frame (neighbours 0.49 m, 0 deg)"
+   ]
+  ],
+  "1194": [
+   [
+    "CAMJUMP",
+    "cut: 611.04 m, 28 deg in one frame (neighbours 0.43 m, 0 deg)"
+   ]
+  ],
+  "1266": [
+   [
+    "CAMJUMP",
+    "cut: 6.97 m, 62 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "1307": [
+   [
+    "CAMJUMP",
+    "cut: 8.82 m, 73 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "1380": [
+   [
+    "CAMJUMP",
+    "cut: 7.00 m, 56 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "1427": [
+   [
+    "CAMJUMP",
+    "cut: 84.46 m, 46 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "1593": [
+   [
+    "CAMJUMP",
+    "cut: 1812.54 m, 5 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "1703": [
+   [
+    "CAMJUMP",
+    "cut: 2547.82 m, 32 deg in one frame (neighbours 0.14 m, 0 deg)"
+   ]
+  ],
+  "1": [
+   [
+    "ATTACH",
+    "W1.visor is 4.1 cm off W1's skin (median)"
+   ]
+  ],
+  "7": [
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "13": [
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "19": [
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "25": [
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "ATTACH",
+    "W1.visor is 4.1 cm off W1's skin (median)"
+   ]
+  ],
+  "31": [
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "49": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 36.5 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 32.8 cm off W2's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 33.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 34.2 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 35.4 cm off W6's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W1.visor is 4.1 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W3.visor is 4.0 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W6.visor is 3.9 cm off W6's skin (median)"
+   ]
+  ],
+  "55": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "61": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "67": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "121": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 50.0 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 50.0 cm off W2's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 50.0 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 50.0 cm off W6's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W1.visor is 4.1 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W3.visor is 4.0 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W6.visor is 3.9 cm off W6's skin (median)"
+   ]
+  ],
+  "127": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "133": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "139": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "145": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 50.0 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 48.7 cm off W2's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 48.7 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 49.5 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 49.7 cm off W6's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W1.visor is 4.1 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W3.visor is 4.0 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W6.visor is 3.9 cm off W6's skin (median)"
+   ]
+  ],
+  "151": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "157": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "163": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "169": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 38.8 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 35.0 cm off W2's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 35.2 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 35.8 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 36.6 cm off W6's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W1.visor is 4.1 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W3.visor is 4.0 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W6.visor is 3.9 cm off W6's skin (median)"
+   ]
+  ],
+  "175": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "181": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "187": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "193": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 34.7 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 34.6 cm off W2's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 34.4 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 38.0 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 41.0 cm off W6's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W1.visor is 4.1 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W3.visor is 4.0 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W6.visor is 3.9 cm off W6's skin (median)"
+   ]
+  ],
+  "199": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "205": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "211": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "217": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 48.3 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 48.7 cm off W2's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 48.4 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 50.0 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 50.0 cm off W6's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W1.visor is 4.1 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W3.visor is 4.0 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W6.visor is 3.9 cm off W6's skin (median)"
+   ]
+  ],
+  "223": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "241": [
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "265": [
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "289": [
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ]
+  ],
+  "295": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "301": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "307": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "313": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.0 is 35.1 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.1 is 33.3 cm off W2's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.2 is 33.2 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.3 is 50.0 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.4 is 50.0 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.5 is 36.5 cm off W5's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "JackCap.6 is 39.4 cm off W6's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W1.visor is 4.1 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W3.visor is 4.0 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W6.visor is 3.9 cm off W6's skin (median)"
+   ]
+  ],
+  "319": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "355": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "361": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "ATTACH",
+    "W1.visor is 4.1 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W3.visor is 4.0 cm off W3's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W6.visor is 3.9 cm off W6's skin (median)"
+   ]
+  ],
+  "367": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.6 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "373": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "379": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.5 moves 3.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "385": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "ATTACH",
+    "W1.visor is 4.1 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W3.visor is 4.0 cm off W3's skin (median)"
+   ]
+  ],
+  "391": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "397": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "403": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "409": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrankGrip.2 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "ATTACH",
+    "W1.visor is 4.1 cm off W1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "W3.visor is 4.0 cm off W3's skin (median)"
+   ]
+  ],
+  "415": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "421": [
+   [
+    "PROPMOVE",
+    "CrankGrip.1 moves 3.8 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "817": [
+   [
+    "PROPMOVE",
+    "HandBrick moves 0.9 cm with no hand on it (nearest finger 22 cm)"
+   ]
+  ],
+  "823": [
+   [
+    "PROPMOVE",
+    "HandBrick moves 1.3 cm with no hand on it (nearest finger 22 cm)"
+   ]
+  ],
+  "829": [
+   [
+    "PROPMOVE",
+    "HandBrick moves 1.4 cm with no hand on it (nearest finger 23 cm)"
+   ]
+  ],
+  "835": [
+   [
+    "PROPMOVE",
+    "HandBrick moves 1.3 cm with no hand on it (nearest finger 24 cm)"
+   ]
+  ],
+  "841": [
+   [
+    "PROPMOVE",
+    "HandBrick moves 0.9 cm with no hand on it (nearest finger 24 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 195,
+  "BACKHEAD": 2,
+  "CAMJUMP": 21,
+  "ATTACH": 182,
+  "PROPMOVE": 209
+ }
+}
