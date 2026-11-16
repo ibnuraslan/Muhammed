@@ -206,15 +206,15 @@ def kid_hands(f, mode="keys", bob=0.0, side_bob=1):
             fingers("Kid", s, f, "relaxed")
             pole("Kid", s, f, (GX + sx * 0.32, 0.25, 0.45))
         elif mode == "mouse" and s == "R":
-            place_hand(KID, s, f, (MS.location.x + 0.005, MS.location.y + 0.02, MS.location.z + 0.054 + bob * 0.3), (0, 0, -1), (0.1, -1, -0.15))
-            fingers("Kid", s, f, "cup_hold")
+            place_hand(KID, s, f, (MS.location.x + 0.005, MS.location.y + 0.02, MS.location.z + 0.062 + bob * 0.3), (0, 0, -1), (0.1, -1, -0.15))
+            fingers("Kid", s, f, "relaxed")   # v002: cup_hold curled the ring finger into the mouse shell
             pole("Kid", s, f, (GX + sx * 0.5, 0.2, 0.55))
         elif mode == "lap":
             place_hand(KID, s, f, (GX + sx * 0.08, -0.22, SEAT + 0.19), (0, 0, -1), (-sx * 0.25, -1, -0.2))   # on the thighs, in front of the belly
             fingers("Kid", s, f, "relaxed")
             pole("Kid", s, f, (GX + sx * 0.32, 0.15, 0.45))
         elif mode == "desk":
-            place_hand(KID, s, f, (GX + sx * 0.36, -0.25, DESK_TOP + 0.03), (0, 0, -1), (-sx * 0.45, -1, 0))   # beside the keyboard, palm flat
+            place_hand(KID, s, f, (GX + sx * 0.36, -0.25, DESK_TOP + 0.042), (0, 0, -1), (-sx * 0.45, -1, 0))   # beside the keyboard, palm flat
             fingers("Kid", s, f, "flat_palm")
             pole("Kid", s, f, (GX + sx * 0.3, 0.3, 0.45))
 
@@ -232,6 +232,8 @@ def kid_block(sid, mode, lean_fn, head_fn, step=12, bob=0.0, twist_fn=None, back
 def FR(f0, f1, step):
     """key frames of a shot window, always including its last frame (no drift into the next shot)"""
     return sorted(set(list(range(f0, f1 + 1, step)) + [f1]))
+
+HEADSIGN = 1    # S24 head turn toward the agents (camera side)
 
 def breath(u, amp=1.0, per=1.4): return amp * math.sin(2 * math.pi * u * per)
 
@@ -618,10 +620,10 @@ def arrival_shots():
     Lf = bpy.data.lights.new("ArrivalFill", 'AREA'); Lf.energy = 30; Lf.size = 1.5; Lf.color = (0.8, 0.88, 1.0)
     lf = bpy.data.objects.new("ArrivalFill", Lf); sc.collection.objects.link(lf); lf.location = (1.15, 1.4, 2.0)
     lf.rotation_euler = (Vector((1.15, 3.0, 1.6)) - lf.location).to_track_quat('-Z', 'Y').to_euler(); show_only(lf, [WIN["S22"], WIN["S23"]])
-    cam_shot("Cam_S23", "S23", [(0, (1.15, 1.0, 1.55), (1.15, 3.0, 1.55)), (1, (1.15, 1.3, 1.55), (1.15, 3.0, 1.58))], lens=32)
+    cam_shot("Cam_S23", "S23", [(0, (1.15, 0.85, 1.55), (1.15, 3.0, 1.5)), (1, (1.15, 1.05, 1.55), (1.15, 3.0, 1.52))], lens=26)   # both agents fully in frame
     kid_block("S23", "mouse", lambda u: 10, lambda u: (12, 0))
     # S24 it was a child: she turns on her chair toward them (yaw), head turned, innocent look; camera from the agents' side
-    kid_block("S24", "desk", lambda u: 0, lambda u: (4, 40 * min(1, u / 0.4)), twist_fn=lambda u: 18 * min(1, u / 0.4))
+    kid_block("S24", "desk", lambda u: 0, lambda u: (4, HEADSIGN * 55 * min(1, u / 0.4)), twist_fn=lambda u: HEADSIGN * 24 * min(1, u / 0.4))
     hf = head_pt("Kid", WIN["S24"][1])
     cam_shot("Cam_S24", "S24", [(0, hf + Vector((0.95, 0.40, 0.12)), hf + Vector((0, 0, -0.1))), (1, hf + Vector((0.80, 0.36, 0.10)), hf + Vector((0, 0, -0.08)))], lens=40)
 

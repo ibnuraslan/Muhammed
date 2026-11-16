@@ -210,6 +210,61 @@ for m in bpy.data.objects["Kid.body"].data.materials:
                     mx.inputs['Factor'].default_value = 1.0; mx.inputs['B'].default_value = (1.0, 0.8, 0.66, 1)
                     nt.links.new(nd.outputs['Color'], mx.inputs['A']); nt.links.new(mx.outputs['Result'], lk.to_socket)
                 print("WARMSKIN", nd.image.name)
+# v002: (1) faces beside the nostrils whose UVs fall on a red patch of the skin texture (child refit) -> neighbour skin UV;
+# (2) eyeballs set 2 mm back / 1 mm up so the white no longer shows below the lower lid
+import numpy as _np
+_B = bpy.data.objects["Kid.body"]; _me = _B.data; _uv = _me.uv_layers.active.data
+_img = next(n.image for m in _me.materials[:1] for nt in [m.node_tree] + [x.node_tree for x in m.node_tree.nodes if x.type == 'GROUP' and x.node_tree]
+            for n in nt.nodes if n.type == 'TEX_IMAGE' and n.image and "diffuse" in n.image.name.lower())
+_w, _h = _img.size; _px = _np.array(_img.pixels[:]).reshape(_h, _w, 4)
+def _ctr(p): return (sum(_uv[l].uv[0] for l in p.loop_indices) / p.loop_total, sum(_uv[l].uv[1] for l in p.loop_indices) / p.loop_total)
+def _red(u, v):
+    c = _px[min(_h - 1, int(v * _h)), min(_w - 1, int(u * _w))]; return c[0] - c[1] > 0.33
+_boxes = ((0.765, 0.80, 0.02, 0.06), (0.885, 0.92, 0.02, 0.06))
+_bad = [p for p in _me.polygons if any(b0 <= _ctr(p)[0] <= b1 and b2 <= _ctr(p)[1] <= b3 for b0, b1, b2, b3 in _boxes) and _red(*_ctr(p))]
+_vf = {}
+for p in _me.polygons:
+    for vi in p.vertices: _vf.setdefault(vi, []).append(p.index)
+_badset = {p.index for p in _bad}
+for p in _bad:
+    nb = [_me.polygons[j] for vi in p.vertices for j in _vf[vi] if j not in _badset and not _red(*_ctr(_me.polygons[j]))]
+    if not nb: continue
+    u, v = _ctr(nb[0])
+    pass
+print("NOSTRIL_UV_FIX", len(_bad))
+# the remap alone did not clear it: inside the two UV boxes the shader now uses a flat sampled skin colour, alpha 1
+_ring = [_px[y, x][:3] for (b0, b1, b2, b3) in _boxes for y in range(int(b2 * _h), int(b3 * _h)) for x in range(int(b0 * _w), int(b1 * _w))
+         if _px[y, x][0] - _px[y, x][1] < 0.22 and _px[y, x][3] > 0.9]
+_skin = _np.mean(_ring, axis=0) if _ring else _np.array([0.8, 0.6, 0.5]); print("NOSTRIL_SKIN", _skin.round(3), len(_ring))
+_nt, _dt = next((nt, n) for m in _me.materials[:1] for nt in [m.node_tree] + [x.node_tree for x in m.node_tree.nodes if x.type == 'GROUP' and x.node_tree]
+                 for n in nt.nodes if n.type == 'TEX_IMAGE' and n.image == _img)
+_tc = _nt.nodes.new("ShaderNodeTexCoord")
+_sep = _nt.nodes.new("ShaderNodeSeparateXYZ"); _nt.links.new(_tc.outputs["UV"], _sep.inputs[0])
+_acc = None
+for (b0, b1, b2, b3) in _boxes:
+    parts = []
+    for comp, lo, hi in ((0, b0, b1), (1, b2, b3)):
+        g = _nt.nodes.new("ShaderNodeMath"); g.operation = 'GREATER_THAN'; g.inputs[1].default_value = lo; _nt.links.new(_sep.outputs[comp], g.inputs[0])
+        l_ = _nt.nodes.new("ShaderNodeMath"); l_.operation = 'LESS_THAN'; l_.inputs[1].default_value = hi; _nt.links.new(_sep.outputs[comp], l_.inputs[0])
+        parts += [g, l_]
+    mul = parts[0]
+    for q in parts[1:]:
+        mm = _nt.nodes.new("ShaderNodeMath"); mm.operation = 'MULTIPLY'; _nt.links.new(mul.outputs[0], mm.inputs[0]); _nt.links.new(q.outputs[0], mm.inputs[1]); mul = mm
+    if _acc is None: _acc = mul
+    else:
+        mx_ = _nt.nodes.new("ShaderNodeMath"); mx_.operation = 'MAXIMUM'; _nt.links.new(_acc.outputs[0], mx_.inputs[0]); _nt.links.new(mul.outputs[0], mx_.inputs[1]); _acc = mx_
+for lk in list(_dt.outputs['Color'].links):
+    mc = _nt.nodes.new('ShaderNodeMix'); mc.data_type = 'RGBA'; mc.name = "NostrilPatch"
+    _nt.links.new(_acc.outputs[0], mc.inputs['Factor']); _nt.links.new(_dt.outputs['Color'], mc.inputs['A']); mc.inputs["B"].default_value = (*(_skin * 0.84).tolist(), 1)
+    _nt.links.new(mc.outputs['Result'], lk.to_socket)
+for lk in list(_dt.outputs['Alpha'].links):
+    ma = _nt.nodes.new('ShaderNodeMath'); ma.operation = 'MAXIMUM'; _nt.links.new(_dt.outputs['Alpha'], ma.inputs[0]); _nt.links.new(_acc.outputs[0], ma.inputs[1])
+    _nt.links.new(ma.outputs[0], lk.to_socket)
+_E = bpy.data.objects["Kid.high-poly"]
+for _v in _E.data.vertices: _v.co.y += 0.002; _v.co.z += 0.001
+if _E.data.shape_keys:
+    for _kb in _E.data.shape_keys.key_blocks:
+        for _d in _kb.data: _d.co.y += 0.002; _d.co.z += 0.001
 # eye fix on every EnhancedEye group
 for ng in list(bpy.data.node_groups):
     if ng.name.startswith("EnhancedEye") and "CorneaTransparentMix" not in ng.nodes:
