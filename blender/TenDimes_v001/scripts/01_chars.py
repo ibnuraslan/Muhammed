@@ -186,7 +186,7 @@ sol = hat.modifiers.new("sol", 'SOLIDIFY'); sol.thickness = 0.005; sol.offset = 
 EZ = RIGS["Singer"].data.bones["eye.L"].head_local.z
 print("HATFIT top", top, "eye", EZ)
 hat.location = (c.x, c.y + 0.012, EZ + 0.028)
-hat.rotation_euler = (math.radians(-10), 0, 0)             # tipped back: the brim clears the eyes
+hat.rotation_euler = (math.radians(-14), 0, 0)   # Phase-2 note: tipped back further for S16             # tipped back: the brim clears the eyes
 bpy.context.view_layer.update()
 parent_to_bone(hat, RIGS["Singer"], "head")
 # singer's hair hidden under the hat would poke through the crown: hide hair (the hat covers the head in every shot)
