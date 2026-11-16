@@ -8,7 +8,7 @@ BUILD = sys.argv[sys.argv.index("--") + 1]
 HERE = os.path.dirname(os.path.abspath(__file__)); REPO = os.path.abspath(HERE + "/../../..")
 exec(open(REPO + "/blender/pipeline/anim_lib.py").read())
 exec(open(REPO + "/blender/pipeline/hand_poses.py").read())
-def ground_z(x, y): return 0.0
+def ground_z(x, y): return 0.018      # aisle carpet top
 sc = bpy.context.scene; D = bpy.data; OB = D.objects
 sc.render.fps = 60; sc.render.resolution_x = 1080; sc.render.resolution_y = 1920
 
@@ -63,6 +63,8 @@ for n, (f0, f1) in T.items():
     for o in EXT:
         if o in SPECIAL: continue
         vis(o, f0, n in EXTERIOR)
+    for nm in ("CABIN_FIXED", "CABIN_SHELL", "HOLE_TRIM", "CABIN_BACKWALL", "COCKPIT_SHELL"):   # bins poke through the skin outside
+        if nm in OB: vis(OB[nm], f0, n not in EXTERIOR)
 # effects start hidden
 for o in SHARDS + DEBRIS + SMOKE: vis(o, 1, False)
 # pane intact until the window breaks (S07 impact); the cabin sees it as glass (S01, S02 before the burst)
@@ -143,7 +145,7 @@ def away(rig, f):
 
 def seated(rig, f, x, y, look_turn=0.0, hflex=-4, flex=4, side=0, arms=None, legs=(86, 78)):
     R = RG[rig.name] if rig.name in RG else Rig(rig)
-    place(rig, f, (x, y - 0.11, -0.30), (0, 0, math.pi))
+    place(rig, f, (x, y - 0.05, -0.27), (0, 0, math.pi))
     fk_leg(R, "L", f, hip=legs[0], knee=legs[1], splay=5); fk_leg(R, "R", f, hip=legs[0] - 2, knee=legs[1] + 3, splay=4)
     fk_spine(R, f, flex=flex, side=side, htwist=look_turn, hflex=hflex)
     a = arms or {}
@@ -202,10 +204,10 @@ def place_pelvis(rig, f, Rm, pelvis):
 R_HANG = Matrix(((0, 0, -1), (-1, 0, 0), (0, 1, 0)))
 def hang_pose(f, out=0.0, flutter=0.0, t=0.0):
     """out: how far the pelvis is outside the wall plane (0 = at the hole centre)."""
-    place_pelvis(W, f, R_HANG, (HOLE.x - out, HOLE.y, HOLE.z - 0.04))
+    place_pelvis(W, f, R_HANG, (HOLE.x - 0.12 - out, HOLE.y, HOLE.z - 0.04))
     w1 = math.sin(t * 9.0); w2 = math.sin(t * 7.3 + 1.0)
     # wind folds the upper body back toward the tail (her left side) and lifts the arms back
-    fk_spine(RW, f, flex=-6 + 2 * flutter * w1, side=34 + 4 * flutter * w2, twist=4 * flutter * w1, hflex=10, hside=18 + 5 * flutter * w2, htwist=0)
+    fk_spine(RW, f, flex=-4 + 2 * flutter * w1, side=12 + 3 * flutter * w2, twist=3 * flutter * w1, hflex=10, hside=8 + 4 * flutter * w2, htwist=0)
     fk_arm(RW, "L", f, down=-20 + 6 * flutter * w1, fwd=-30, elbow=25 + 8 * flutter * w2, out=0)
     fk_arm(RW, "R", f, down=10 + 6 * flutter * w2, fwd=-55, elbow=30 + 8 * flutter * w1, out=0)
     # legs inside, near straight and level (held by the passengers)
@@ -371,8 +373,8 @@ def hold_shot(n, fr_list, pull=None):
         stand(HA, fr, 0.02 + 0.25 * u, -5.62, yaw=-90, flex=18, crouch=0.05)
         fk_spine(RA, fr, flex=10, side=0, twist=0, hflex=-22, htwist=18)
         sc.frame_set(fr)
-        grab(HA, "L", fr, leg_point("L", "knee", fr), (0, -0.2, -1), skin=0.065)
-        grab(HA, "R", fr, leg_point("R", "shin", fr), (0, 0.2, -1), skin=0.062)
+        grab(HA, "L", fr, leg_point("L", "knee", fr), (0, -0.2, -1), skin=0.08)
+        grab(HA, "R", fr, leg_point("R", "shin", fr), (0, 0.2, -1), skin=0.075)
 # ================================================================== S10: out of the plane (interior wide)
 _begin("S10")
 f0, f1 = T["S10"]
