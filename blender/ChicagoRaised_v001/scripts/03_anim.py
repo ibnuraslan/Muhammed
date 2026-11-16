@@ -321,7 +321,7 @@ def sit(H, f, head=(0, 0), spine=-6):
     for s in "LR":
         a = H.ankle[s]; xy = Vector((a.x * 1.05, -0.47))
         H.key_foot(s, f, xy, 0)
-sit(LD, fa, head=(12, 0), spine=0); sit(LD, fa + 30, head=(4, 8), spine=0); sit(LD, fa + 70, head=(-4, 45), spine=-2); sit(LD, fa + 120, head=(-6, 50), spine=-2); sit(LD, fb, head=(-2, 40), spine=0)
+sit(LD, fa, head=(12, 0), spine=0); sit(LD, fa + 25, head=(2, -38), spine=2); sit(LD, fa + 55, head=(-2, -30), spine=4); sit(LD, fa + 85, head=(-6, 42), spine=3); sit(LD, fb, head=(-4, 48), spine=2)
 ev(fa + 1)
 thl = [LD.r.o.matrix_world @ LD.r.PB["upperleg02." + s].tail for s in "LR"]
 thh = [LD.r.o.matrix_world @ LD.r.PB["upperleg01." + s].head for s in "LR"]
@@ -329,17 +329,32 @@ lap = (thl[0] + thl[1] + thh[0] + thh[1]) / 4
 BOOK = OB["LapBook"]; BOOK.location = lap + Vector((0, -0.05, 0.125)); BOOK.rotation_euler = (R_(-12), 0, 0)
 key_vis(BOOK, [(0, False), (fa, True), (fb + 1, False)]); key_vis(OB["LapBookPages"], [(0, False), (fa, True), (fb + 1, False)])
 ev(fa + 1); bm_ = BOOK.matrix_world; nrm = (bm_.to_3x3() @ Vector((0, 0, 1))).normalized()
+dg_ = bpy.context.evaluated_depsgraph_get()
+def armrest_top(sx):
+    """top surface of the armrest on side sx (+1 = her left, world +x), found by casting down onto the chair"""
+    best = None
+    for dxa in (0.30, 0.33, 0.36, 0.39):
+        o_ = Vector((seat.x + sx * dxa, seat.y - 0.08, 1.5)); hit, loc, n_, i_, ob_, m_ = sc.ray_cast(dg_, o_, Vector((0, 0, -1)))
+        if hit and ob_.name == "Armchair" and 0.45 < loc.z < 0.85 and (best is None or loc.z > best.z): best = loc
+    return best
 for s, dx in (("L", 0.09), ("R", -0.09)):
-    p = bm_ @ Vector((dx, -0.02, 0.03))
-    for f in (fa, fb): place_hand(LD.r.o, s, f, p, -nrm, (bm_.to_3x3() @ Vector((0, -1, 0))).normalized())
-    apply_pose(LD.r.o, s, "relaxed", fa)
+    p = bm_ @ Vector((dx, -0.02, 0.03)); sx = 1 if s == "L" else -1
+    for f in (fa, fa + 50): place_hand(LD.r.o, s, f, p, -nrm, (bm_.to_3x3() @ Vector((0, -1, 0))).normalized())
+    top = armrest_top(sx)
+    if top is not None:                     # grips the armrest as the room lifts (palm on top, fingers forward over the front)
+        for f in (fa + 72, fb): place_hand(LD.r.o, s, f, top + Vector((0, 0, 0.004)), Vector((0, 0, -1)), Vector((0, -1, 0)), skin=0.018)
+        apply_pose(LD.r.o, s, "relaxed", fa + 50); apply_pose(LD.r.o, s, "cup_hold", fa + 72)
+    else:
+        for f in (fa + 72, fb): place_hand(LD.r.o, s, f, p, -nrm, (bm_.to_3x3() @ Vector((0, -1, 0))).normalized())
+        apply_pose(LD.r.o, s, "relaxed", fa)
+    print("ARMREST", s, top)
     shl = LD.r.BN["upperarm01." + s].head_local; sx = 1 if s == "L" else -1
     key_pole(LD, s, fa, shl + Vector((sx * 0.4, 0.25, -0.4)))
 face(LD, fa, 0.0, -10); face(LD, fa + 50, 0.0, -6); face(LD, fa + 85, 0.002, -4); blinks(LD, fa, fb, every=130, ofs=30)
 WV = OB["WindowView"]; z0w = WV.location.z
 key_prop(WV, 0, (WV.location.x, WV.location.y, z0w)); key_prop(WV, fa, (WV.location.x, WV.location.y, z0w)); key_prop(WV, fb, (WV.location.x, WV.location.y, z0w - 1.4))
 L0 = Vector((seat.x, seat.y, 1.0))
-camshot("S6", [(0, Vector((seat.x - 1.0, seat.y - 2.9, 1.4)), L0 + Vector((0.2, 0, 0.0)), 30), (1, Vector((seat.x - 0.5, seat.y - 1.9, 1.3)), L0 + Vector((0.2, 0, 0.15)), 34)])
+camshot("S6", [(0, Vector((seat.x - 1.7, seat.y - 2.5, 1.45)), L0 + Vector((0.15, 0, 0.0)), 30), (1, Vector((seat.x - 0.95, seat.y - 1.6, 1.3)), L0 + Vector((0.1, 0, 0.12)), 34)])   # 3/4, slow push-in
 
 # ================================================================== S8: W2 slides a timber onto the hero crib stack
 W2 = CH["W2"]; fa, fb = f0("S8"), f1("S8")          # W2 parks after S8: every key ends ON the cut
@@ -363,7 +378,7 @@ for s, dx in (("L", 0.13), ("R", -0.13)):
     shl = W2.r.BN["upperarm01." + s].head_local; sx = 1 if s == "L" else -1
     key_pole(W2, s, fa, shl + Vector((sx * 0.4, 0.3, -0.5)))
 face(W2, fa, -0.002, -9); blinks(W2, fa, fb, -0.002, -9, ofs=50)
-camshot("S8", [(0, Vector((tx - 0.2, -1.7, 1.95)), Vector((tx, y_end + 0.6, 1.3)), 40), (1, Vector((tx - 0.15, -1.45, 1.92)), Vector((tx, y_end + 0.5, 1.3)), 42)])
+camshot("S8", [(0, Vector((tx - 0.5, -1.9, 2.25)), Vector((tx, y_end + 0.45, 1.05)), 36), (1, Vector((tx - 0.15, -1.05, 2.15)), Vector((tx, y_end + 0.4, 1.05)), 38)])   # high: arms on the timber, push-in
 
 # ================================================================== S9 / S10: the building on its cribbing, rising to the new street level
 camshot("S9", [(0, Vector((-17, -19, 0.8)), Vector((0, 2, 4.5)), 24), (1, Vector((-10.5, -13.0, 1.8)), Vector((0, 2, 5.0)), 24)])
@@ -407,7 +422,7 @@ camshot("S11", [(0, Vector((MX + 0.8, -2.3, 1.55)), Vector((MX, wall_y + 0.5, 1.
 fa = f0("S12")
 key_vis_all(COURSES, [(fa, True)]); key_vis(BR, [(fa, False)])
 key_vis_all(COURSES, [(f0("S10"), False)])              # S10 (the rise to street level) comes before the foundation in the story
-camshot("S12", [(0, Vector((2.5, -4.6, 1.3)), Vector((0.5, 0.3, 1.6)), 26), (1, Vector((3.2, -6.4, 1.5)), Vector((0.5, 0.3, 1.7)), 26)])
+camshot("S12", [(0, Vector((2.8, -5.0, 0.6)), Vector((0.5, 0.3, 1.0)), 26), (1, Vector((2.0, -3.6, 0.9)), Vector((0.5, 0.3, 3.6)), 26)])   # push-in + tilt-up
 
 # ================================================================== S13 / S14: facade on its new foundation, crane over the roof
 camshot("S13", [(0, Vector((-4.5, -9.0, 0.8)), Vector((0, 0, 6.0)), 22), (1, Vector((-4.0, -8.5, 0.9)), Vector((0, 0, 11.0)), 22)])
@@ -427,7 +442,7 @@ X0 = 1800.0; WZ = 0.35
 TM, TWn, SM = CH["TownMan"], CH["TownWoman"], CH["SickMan"]
 # S17: TownMan wades toward camera, TownWoman further back crossing
 fa, fb = f0("S17"), fx("S17")
-put_ranges("TownMan", [(fa, fb, (X0 - 1.5, 26, 0), 0), (f0("S18"), fx("S18"), (X0 + 3.5, 34, 0), 90)])
+pass   # TownMan placements: see S21 (all three ranges set together)
 pth = lambda f: Vector((0, -0.9 * (f - fa) / FPS, 0))
 TM.walk(pth, lambda f: 0.0, fa, fb, stride=0.6, lift=0.09, bob=0.02, lean=6)
 def walk_arms(H, fa, fb, path, stride=0.6, step=2, amp=0.09, out=0.06):
@@ -445,7 +460,7 @@ walk_arms(TM, fa, fb, pth); face(TM, fa, 0.0, -7); blinks(TM, fa, fb)
 put_ranges("TownWoman", [(f0("S19"), f1("S19"), (X0 - 1.0, 23.5, 0), 200), (f0("S20"), fx("S20"), (X0 - 2.2, 28.0, 0), 0)])
 pthw = lambda f: Vector((0, -0.7 * (f - fa) / FPS, 0))
 
-camshot("S17", [(0, Vector((X0 + 0.6, 19.0, 1.5)), Vector((X0 - 1.5, 26, 1.3)), 34), (1, Vector((X0 + 0.5, 19.6, 1.5)), Vector((X0 - 1.5, 26, 1.3)), 34)])
+camshot("S17", [(0, Vector((X0 - 1.0, 23.6, 1.25)), Vector((X0 - 1.5, 26.0, 1.15)), 32), (1, Vector((X0 - 1.0, 23.1, 1.25)), Vector((X0 - 1.5, 25.2, 1.15)), 32)])   # knees-up, he wades toward camera
 # S18: the horse in the water lifts its head; TownMan wades past behind
 HR = OB["Horse_rig"]; HR.rotation_mode = 'XYZ'; HRIG = Rig(HR)
 HP = Vector((X0 - 1.0, 28, 0))
@@ -488,10 +503,23 @@ fa, fb = f0("S20"), fx("S20")
 horse_head(fa, 0, -4); horse_head(fa + 50, -4, 18); horse_head(fb, -6, 22)
 pthw2 = lambda f: Vector((0, -0.8 * (f - fa) / FPS, 0))
 TWn.walk(pthw2, lambda f: 0.0, fa, fb, stride=0.55, lift=0.08, bob=0.02, lean=5); walk_arms(TWn, fa, fb, pthw2, stride=0.55, out=0.13)
-camshot("S20", [(0, Vector((X0 - 5.5, 22, 1.8)), Vector((X0 + 0.5, 33, 1.3)), 26), (1, Vector((X0 - 4.5, 22, 1.8)), Vector((X0 + 1.0, 33, 1.3)), 26)])
+camshot("S20", [(0, Vector((X0 - 2.6, 24.9, 1.35)), Vector((X0 - 1.9, 28.0, 1.2)), 34), (1, Vector((X0 - 2.6, 24.6, 1.35)), Vector((X0 - 1.9, 27.4, 1.2)), 34)])   # she fills about half the height
 
 # ================================================================== S21: rise from the water up the new foundation | S22: modern skyline
-camshot("S21", [(0, Vector((X0 + 4, 106, 0.7)), Vector((X0, 118, 1.6)), 26), (1, Vector((X0 + 4, 108, 4.8)), Vector((X0, 125, 5.5)), 26)])
+camshot("S21", [(0, Vector((X0 + 5.5, 103.5, 1.1)), Vector((X0, 120, 2.6)), 26), (1, Vector((X0 + 3.6, 107.0, 1.6)), Vector((X0, 121, 4.4)), 28)])   # push-in
+fa, fb = f0("S21"), f1("S21")
+RS, RF = OB["RaisedShop"], OB["RaisedFoundation"]
+z_top = RS.location.z; h_f = RF.dimensions.z
+for f, u in ((0, 1.0), (fa, 0.0), (fa + int(dur("S21") * 0.85), 1.0), (fb + 1, 1.0)):       # the block rises 1.6 m out of the water to the new street level
+    RS.location.z = z_top - 1.6 * (1 - u); RS.keyframe_insert("location", index=2, frame=f)
+    k_ = (h_f - 1.6 * (1 - u)) / h_f; RF.scale.z = k_; RF.location.z = h_f * k_ / 2; RF.keyframe_insert("scale", index=2, frame=f); RF.keyframe_insert("location", index=2, frame=f)
+for o in (RS, RF):
+    for fc in fcurves_of(o.animation_data.action):
+        for k in fc.keyframe_points:
+            if int(k.co.x) == 0: k.interpolation = 'CONSTANT'
+put_ranges("TownMan", [(f0("S17"), f1("S17"), (X0 - 1.5, 26, 0), 0), (f0("S18"), fx("S18"), (X0 + 3.5, 34, 0), 90), (fa, fb, (X0 + 4.6, 110.5, 0), -90)])
+pth21 = lambda f: Vector((0, -0.85 * (f - fa) / FPS, 0))
+TM.walk(pth21, lambda f: 0.0, fa, fb, stride=0.6, lift=0.09, bob=0.02, lean=6); walk_arms(TM, fa, fb, pth21, out=0.08); face(TM, fa, 0.0, -7)
 camshot("S22", [(0, Vector((2600 - 60, -125, 12)), Vector((2600 + 15, 60, 30)), 24), (1, Vector((2600 - 5, -80, 42)), Vector((2600 + 25, 90, 44)), 24)])
 
 # fill light under the raised building for S8 and S11 (faces in the building's shadow); keyed on only in those shots
