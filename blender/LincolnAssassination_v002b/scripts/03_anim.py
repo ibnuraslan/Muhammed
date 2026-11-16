@@ -719,9 +719,9 @@ def flame_card_material():
     edge = M('SUBTRACT', 1.0, M('POWER', M('ABSOLUTE', M('SUBTRACT', M('MULTIPLY', u, 2.0), 1.0)), 3.0))
     a_ = M('MULTIPLY', M('MINIMUM', M('MULTIPLY', f, 2.2), 1.0), edge)
     ramp = n.new('ShaderNodeValToRGB'); el = ramp.color_ramp.elements
-    el[0].position = 0.0; el[0].color = (0.5, 0.03, 0.0, 1); el[1].position = 1.0; el[1].color = (1.0, 0.85, 0.45, 1)
+    el[0].position = 0.0; el[0].color = (0.5, 0.03, 0.0, 1); el[1].position = 1.0; el[1].color = (1.0, 0.72, 0.22, 1)
     e2 = el.new(0.3); e2.color = (0.95, 0.22, 0.01, 1); e3 = el.new(0.65); e3.color = (1.0, 0.55, 0.06, 1)
-    l.new(f, ramp.inputs[0]); l.new(ramp.outputs[0], em.inputs['Color']); em.inputs['Strength'].default_value = 3.0
+    l.new(f, ramp.inputs[0]); l.new(ramp.outputs[0], em.inputs['Color']); em.inputs['Strength'].default_value = 1.5
     l.new(a_, mix.inputs[0]); l.new(tr.outputs[0], mix.inputs[1]); l.new(em.outputs[0], mix.inputs[2]); l.new(mix.outputs[0], out.inputs[0])
     for fr in (1, END_FRAME):
         T.outputs[0].default_value = fr / 60.0; T.outputs[0].keyframe_insert("default_value", frame=fr)
