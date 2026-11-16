@@ -1,0 +1,97 @@
+{
+ "frames": {
+  "1423": {
+   "Singer": {
+    "self": 158,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1429": {
+   "Singer": {
+    "self": 427,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1435": {
+   "Singer": {
+    "self": 319,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1441": {
+   "Singer": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1447": {
+   "Singer": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1453": {
+   "Singer": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1459": {
+   "Singer": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1465": {
+   "Singer": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1471": {
+   "Singer": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1477": {
+   "Singer": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1483": {
+   "Singer": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1489": {
+   "Singer": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   1423,
+   1435
+  ]
+ ],
+ "fps": 60
+}

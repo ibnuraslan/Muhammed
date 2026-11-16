@@ -1,0 +1,25 @@
+{
+ "frames": {
+  "1403": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "1405": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "1407": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ]
+ },
+ "counts": {
+  "ARMBODY": 3
+ }
+}
