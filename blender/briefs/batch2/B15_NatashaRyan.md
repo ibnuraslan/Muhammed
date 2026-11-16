@@ -10,4 +10,4 @@
 Fully animated, no presenter or podcast mic; no real photos or news footage; real people as generic characters; the courtroom reveal with clear faces
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B15_NatashaRyan_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B15_NatashaRyan_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

@@ -10,4 +10,4 @@
 Rebuild in a real driveway or street; her hands on the car's bumper (grip, not through); the son's face visible under the car, not crushed; adrenaline and muscle cutaways as clean anatomy
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B14_MomLiftsCar_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B14_MomLiftsCar_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

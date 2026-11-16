@@ -10,4 +10,4 @@ The 5 Titan passengers died instantly → the brain takes 100 ms to feel pain, t
 Real disaster, respectful: no victims shown dying; the sub on the deep seabed in real 3D; brain and eye timing shown as clean 3D anatomy, not flat graphics; the implosion as an exterior shot only
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B16_TitanImplosion_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B16_TitanImplosion_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.
