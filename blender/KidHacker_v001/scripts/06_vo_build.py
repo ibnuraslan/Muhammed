@@ -195,6 +195,7 @@ def kid_seat(f, lean=0.0, head=(0.0, 0.0), twist=0.0, back=0.0, yaw=0.0):
         foot_at("Kid", s, f, Vector((GX + sx * 0.10, -0.24, 0.07 + Hk.ankle[s].z * 0.0 + 0.05)), yaw=0, pitch=-10)
         knee_pole("Kid", s, f, Vector((GX + sx * 0.12, -0.9, 0.55)))
 
+KEYZ = [0.0]
 def kid_hands(f, mode="keys", bob=0.0, side_bob=1):
     """hands: keys (both on the keyboard), mouse (R on mouse, L on keys), lap, desk (forearms resting on the desk edge)"""
     for s in "LR":
@@ -202,7 +203,7 @@ def kid_hands(f, mode="keys", bob=0.0, side_bob=1):
         if mode == "keysL" and s == "R": continue
         if mode in ("keys", "keysL") or (mode == "mouse" and s == "L"):
             dz = bob if (s == "L") == (side_bob > 0) else 0.0
-            place_hand(KID, s, f, (GX + sx * 0.085, KB_Y + 0.07, KB_TOP + 0.048 + dz), (0, 0, -1), (-sx * 0.15, -1, -0.25))
+            place_hand(KID, s, f, (GX + sx * 0.085, KB_Y + 0.045, KB_TOP + 0.060 + KEYZ[0] + dz), (0, 0, -1), (-sx * 0.15, -1, -0.25))
             fingers("Kid", s, f, "relaxed")
             pole("Kid", s, f, (GX + sx * 0.32, 0.25, 0.45))
         elif mode == "mouse" and s == "R":
@@ -437,7 +438,9 @@ def kid_lib_shots():
     pbo = next(x for x in ST["dial"].children if x.name.startswith("pbar") and not x.name.startswith("pbar_bg"))
     pbo.scale = (0.02, 1, 1); pbo.keyframe_insert("scale", frame=f0); pbo.scale = (0.95, 1, 1); pbo.keyframe_insert("scale", frame=f1)
     # S08 now back then...: she sits back, head tilts, looks up thinking (hands drop to the desk edge)
-    kid_block("S08", "lap", lambda u: 2 - 4 * u, lambda u: (-6 - 8 * u + breath(u, 1), 10 * u), back_fn=lambda u: 0.02 * u, twist_fn=lambda u: 4 * u)
+    KEYZ[0] = 0.03   # S08 OTS: forearms clear the desk edge
+    kid_block("S08", "keys", lambda u: 2 - 4 * u, lambda u: (-6 - 8 * u + breath(u, 1), 10 * u), back_fn=lambda u: 0.02 * u, twist_fn=lambda u: 4 * u)
+    KEYZ[0] = 0.0
     hf = head_pt("Kid", WIN["S08"][0]); sp = PCR.matrix_world @ Vector((0.43, 0.0, 1.1))
     cam_shot("Cam_S08", "S08", [(0, hf + Vector((0.42, 0.55, 0.16)), sp + Vector((0, 0, -0.02))), (1, hf + Vector((0.36, 0.48, 0.13)), sp + Vector((0, 0, -0.02)))], lens=30)   # v002d: 3/4-back OTS onto the glowing monitor
     # S09 you could access other people's files: the idea - she leans in fast, head up, eyes bright
