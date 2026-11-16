@@ -10,7 +10,7 @@ Vertical explainer, 1080×1920, 60 fps, Cycles. **Frames 1–2009 (33.5 s).** 23
 - CREDITS.md.
 
 ## How it was built
-- Source scripts: `blender/AshaDegree_v001/scripts/`, steps 01–07.
+- Source scripts: `blender/AshaDegree_v002/scripts/`, steps 01–07. These are the Phase 1 scripts plus the Phase 2 fixes and steps 06–07. v001 stays as it passed P1. They run from the v001 folder, which holds the `work/` intermediates.
 - Each set's action is animated at 1× on its own source timeline (Phase 1). Phase 2 (`06_vo_layout.py`) shifts each set by **one constant offset**. **Nothing is time-stretched.**
 - Every shot has its own camera, keyed over its window. Cuts fall on the VO words.
 - The S02→S03 cut falls exactly on the frame where the book bag moves from the floor to her back.

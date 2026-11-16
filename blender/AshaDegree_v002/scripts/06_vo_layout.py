@@ -82,8 +82,15 @@ cam("S08", [(0, lambda f: (XR - 4.0, road_y(f) - 12.0, 4.2)), (1, lambda f: (XR 
     [(0, lambda f: (XR + 3.5, road_y(f) + 6.0, 0.6)), (1, lambda f: (XR + 3.5, road_y(f) + 6.0, 0.6))], 26)
 cam("S09", [(0, lambda f: (SX + 0.6, road_y(f) - 2.6, 0.95)), (1, lambda f: (SX + 0.9, road_y(f) - 2.2, 0.95))],
     [(0, lambda f: (SX - 0.4, road_y(f) + 3.0, 1.0)), (1, lambda f: (SX - 0.6, road_y(f) + 3.0, 1.0))], 30)
-cam("S10", [(0, (XR + 2.4, y_stop - 1.5, 1.05)), (1, (XR + 3.0, y_stop - 0.4, 1.15))],
-    [(0, (SX + 0.3, y_stop + 0.3, 0.9)), (0.5, (SX + 3.0, y_stop + 1.6, 0.8)), (1, (SX + 6.0, y_stop + 3.2, 0.8))], 28)
+RUN = [(965, (SX, y_stop)), (985, (SX + 1.2, y_stop + 0.6)), (1010, (SX + 3.2, y_stop + 1.4)), (1050, (SX + 6.0, y_stop + 3.0)), (1100, (SX + 9.0, y_stop + 5.0))]
+def run_xy(f):
+    for (fa, a_), (fb, b_) in zip(RUN, RUN[1:]):
+        if f <= fb:
+            u = max(0.0, (f - fa) / (fb - fa)); return (a_[0] + (b_[0] - a_[0]) * u, a_[1] + (b_[1] - a_[1]) * u)
+    return RUN[-1][1]
+# follows her off the road: behind-left of her, she stays readable to the cut
+cam("S10", [(u, (lambda f: (run_xy(f)[0] - 2.6, run_xy(f)[1] - 2.0, 1.15))) for u in (0, 0.33, 0.66, 1)],
+    [(u, (lambda f: (run_xy(f)[0] + 0.4, run_xy(f)[1] + 0.3, 0.85))) for u in (0, 0.33, 0.66, 1)], 30)
 # ---- WOODS run
 cam("S11", [(0, lambda f: (XW - 2.4, wy(f) - 1.0, 1.0)), (1, lambda f: (XW - 2.4, wy(f) - 1.4, 1.05))],
     [(0, lambda f: (XW, wy(f), 0.85)), (1, lambda f: (XW, wy(f), 0.85))], 28)
@@ -100,7 +107,7 @@ cam("S17", [(0, (XT - 0.25, -0.42, 0.42)), (1, (XT - 0.15, -0.3, 0.38))], [(0, (
 cam("S18", [(0, (XT - 0.5, -1.45, 0.42)), (1, (XT - 0.38, -1.28, 0.42))], [(0, (XT + 0.5, 0.35, 0.45)), (1, (XT + 0.45, 0.35, 0.45))], 28)
 cam("S19", [(0, (XT - 2.6, -2.6, 1.5)), (1, (XT - 2.2, -2.2, 1.4))], [(0, (XT + 0.4, 0.3, 0.3)), (1, (XT + 0.4, 0.3, 0.3))], 28)
 cam("S20", [(0, (XT + 0.05, -0.62, 0.55)), (1, (XT + 0.15, -0.52, 0.5))], [(0, (XT + 0.3, 0.32, 0.2)), (1, (XT + 0.3, 0.32, 0.2))], 35)
-cam("S21", [(0, (XT - 0.15, -1.15, 0.38)), (1, (XT - 0.05, -1.0, 0.38))], [(0, (XT + 0.6, 0.38, 0.62)), (1, (XT + 0.6, 0.38, 0.65))], 30)
+cam("S21", [(0, (XT - 0.45, -1.3, 0.36)), (1, (XT + 0.15, -0.85, 0.42))], [(0, (XT + 0.6, 0.38, 0.6)), (1, (XT + 0.62, 0.38, 0.68))], 30)
 # ---- GHOST + WALL
 cam("S22", [(0, lambda f: (XR + 0.6, gy(f) - 3.2, 0.9)), (1, lambda f: (XR + 0.3, gy(f) - 2.4, 0.95))],
     [(0, lambda f: (XR + 1.6, gy(f), 1.0)), (1, lambda f: (XR + 1.6, gy(f), 1.05))], 32)
@@ -164,7 +171,7 @@ for sid, setn, f0, f1, words in shots:
 removed = 0
 for o in list(bpy.data.objects):
     if o.name.startswith(("Woods_Under", "Woods_Tree", "Woods_LaneTree", "Road_Shrub", "Shed_Under", "Shed_Tree", "Site_Tree", "Road_Tree")):
-        rad = 4.5 if o.name.startswith("Woods_Tree") else (2.8 if o.name.startswith("Woods_Under") else 1.8)
+        rad = 4.5 if o.name.startswith("Woods_Tree") else (4.0 if o.name.startswith("Woods_Under") else 1.8)
         if any((o.location.xy - p.xy).length < rad for p in pts):
             bpy.data.objects.remove(o); removed += 1
 print("CLEARED near-lens vegetation (new cameras)", removed)

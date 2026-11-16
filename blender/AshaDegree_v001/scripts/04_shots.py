@@ -402,7 +402,7 @@ key_vis(["BagFloor"] + [c.name for c in bpy.data.objects["BagFloor"].children], 
 key_vis(["BagBack"] + [c.name for c in bpy.data.objects["BagBack"].children], [(211, 480)])
 for nm in ["BookBag"] + [c.name for c in bpy.data.objects["BookBag"].children]:
     bpy.data.objects[nm].hide_render = True; bpy.data.objects[nm].hide_viewport = True
-key_vis(["Room_ToyBox", "Room_ToyBoxLogo"], [(1, 153), (211, 287)])   # source frames: only S01 and S03 (logo whole, flat-on)
+key_vis(["Room_ToyBox", "Room_ToyBoxLogo"], [(1, 120), (211, 330)])
 # French doors: right leaf open the whole time (night rain visible outside), left leaf closed
 bpy.data.objects["DoorLeafR"].rotation_euler = (0, 0, R_(-95))
 
@@ -478,7 +478,7 @@ attach(flo, G, "head")
 # the motorist's car: passes from behind (S07), stops ahead (S08), holds with brake/head lights (S09-S10)
 car = bpy.data.objects["Car"]
 car.rotation_euler = (0, 0, 0)
-CAR_KEYS = [(600, road_y(661) - 40.0), (661, road_y(661) - 22.0), (722, road_y(722) + 0.5), (780, road_y(780) + 13.0), (815, road_y(800) + 16.0), (870, road_y(800) + 16.0), (955, road_y(800) + 12.0), (1100, road_y(800) + 12.0)]   # 870-955: reverses slowly back toward her
+CAR_KEYS = [(600, road_y(661) - 40.0), (661, road_y(661) - 22.0), (722, road_y(722) + 0.5), (780, road_y(780) + 13.0), (815, road_y(800) + 16.0), (1100, road_y(800) + 16.0)]
 car_y = pchip([(f_, y_) for f_, y_ in CAR_KEYS])
 for f in range(600, 1101, 4):
     car.location = (XR + 1.9, car_y(f), 0.0); car.keyframe_insert("location", frame=f)
