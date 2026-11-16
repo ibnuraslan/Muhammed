@@ -231,6 +231,14 @@ def ease_path(a, b, f0, f1, ease_in=True, ease_out=True):
 def heading(a, b):
     d = Vector(b) - Vector(a); return math.degrees(math.atan2(d.x, -d.y))
 
+RELAX = {"Dad", "CopA", "CopB", "Killer", "Pros", "Nat18B", "CopFB", "Nat18", "CopF"}
+def key_hang(H, f, pos, yaw, swingL=0.0, swingR=0.0, fwd=0.0):
+    """relaxed hanging arms; for RELAX characters the elbows bend (wrist 10 cm up, 8 cm forward, slightly out)"""
+    for s_, sw in (("L", swingL), ("R", swingR)):
+        sx_ = 1 if s_ == "L" else -1
+        off = hang_off(H, s_, fwd, sw)
+        if H.rig.name in RELAX: off = (off[0] + 0.035 * sx_, off[1] - 0.08, off[2] + 0.10)
+        body_hand(H, s_, f, pos, yaw, off, (0.0, -0.35, -1.0), (-sx_, 0.0, 0.0))
 RIGS = {}
 def char(src, name):
     r = dup_char(bpy.data.objects[src], name) if name != src else bpy.data.objects[src]
@@ -247,10 +255,12 @@ for n in ("ExC",):
 # Natasha at 18 (found): same body, black top / dark trousers -> own clothing materials
 char("Nat", "NatS"); char("Nat", "Nat18")
 s18 = bpy.data.objects["Nat18.female_elegantsuit01"]; s18.data = s18.data.copy()
-s18.data.materials.clear(); s18.data.materials.append(M("Nat18_Black", (0.025, 0.025, 0.03), 0.55, sheen=0.3))
-for p in s18.data.polygons: p.material_index = 0
+knit = noise_mat("Nat18_Sweater", (0.42, 0.07, 0.11), (0.55, 0.12, 0.16), 60.0, 0.75, bump=0.25)
+knit.node_tree.nodes["Principled BSDF"].inputs["Sheen Weight"].default_value = 0.5
+denim = noise_mat("Nat18_Denim", (0.1, 0.17, 0.33), (0.16, 0.24, 0.42), 80.0, 0.7)
+s18.data.materials[0] = denim; s18.data.materials[1] = knit   # slot 0 = lower (skirt), slot 1 = top
 u18 = bpy.data.objects.get("Nat18.undershirt")
-if u18: u18.data = u18.data.copy(); u18.data.materials.clear(); u18.data.materials.append(M("Nat18_Black", (0.025, 0.025, 0.03), 0.55))
+if u18: u18.data = u18.data.copy(); u18.data.materials.clear(); u18.data.materials.append(knit)
 char("Nat18", "Nat18B")
 char("Mom", "MomH"); char("Mom", "MomK"); char("Mom", "MomC")
 char("Dad", "DadC")
@@ -553,11 +563,11 @@ for nm, dx in (("Nat18", 0.0), ("CopF", -0.75)):
     H = HS[nm]; a = (XH + 32 + dx, BFY - 1.0, 0); b = (XH + 32 + dx, 3.4, 0)
     walk(H, ease_path(a, b, 2300, 2520, ease_out=False), lambda f, a=a, b=b: heading(a, b), 2300, 2520, stride=1.05, amp=0.07)
     vis_char(RIGS[nm], [(2341, 2460)])
-cam_shot("S20", [(2341, (XH + 30.7, 1.0, 1.55)), (2460, (XH + 30.9, 1.5, 1.5))], lens=42,
-         target_keys=[(2341, (XH + 31.8, 7.0, 1.3)), (2460, (XH + 31.8, 5.0, 1.3))])
+cam_shot("S20", [(2341, (XH + 31.0, 2.2, 1.55)), (2460, (XH + 31.2, 2.5, 1.5))], lens=40,
+         target_keys=[(2341, (XH + 31.8, 7.6, 1.35)), (2460, (XH + 31.8, 5.6, 1.35))])
 # soft face fill for the night walk (street-lamp coloured, only during S20)
-pf_ = light("Police_FaceFill", 'AREA', (XH + 31.0, 1.2, 2.6), 0.0, size=2.5, rot=(R_(70), 0, 0), color=(1.0, 0.9, 0.8), cn="Home")
-for f, e in ((2300, 0.0), (2341, 90.0), (2470, 90.0), (2471, 0.0)):
+pf_ = light("Police_FaceFill", 'AREA', (XH + 31.2, 3.0, 2.4), 0.0, size=2.5, rot=(R_(70), 0, 0), color=(1.0, 0.9, 0.8), cn="Home")
+for f, e in ((2300, 0.0), (2341, 160.0), (2470, 160.0), (2471, 0.0)):
     pf_.data.energy = e; pf_.data.keyframe_insert("energy", frame=f)
 set_interp(pf_.data, 'CONSTANT')
 cam_shot("S22", [(2581, (XH + 44, -5.0, 2.5)), (2700, (XH + 47, -9.0, 9.0))], lens=28,
@@ -596,8 +606,8 @@ walk(H, lin_path(a, b, 640, 960), lambda f: heading(a, b), 640, 960, stride=1.05
 for nm in ("SearchA", "SearchB"): vis_char(RIGS[nm], [(661, 900)])
 cam_shot("S07", [(661, (XF - 2.2, 1.0, 1.25)), (780, (XF + 2.6, 1.3, 1.3))], lens=36,
          target_keys=[(661, (XF - 1.8, 5.2, 1.05)), (780, (XF + 2.6, 5.6, 1.05))])
-cam_shot("S08", [(781, (XF + 7.5, 1.0, 2.2)), (900, (XF + 7.0, 2.2, 2.0))], lens=30,
-         target_keys=[(781, (XF + 2.5, 8.5, 0.9)), (900, (XF + 2.9, 9.5, 0.8))])
+cam_shot("S08", [(781, (XF + 5.0, 11.8, 1.55)), (900, (XF + 4.9, 11.6, 1.35))], lens=28,
+         target_keys=[(781, (XF + 3.4, 7.2, 1.1)), (900, (XF + 3.6, 9.1, 0.75))])
 
 # ================================================================== KITCHEN
 XK = X["kitchen"]
@@ -689,6 +699,11 @@ for f in range(1240, 1661, 2):
     for n_, w_ in Human.HEAD_W.items():
         RIGS["Killer"].pose.bones[n_].rotation_quaternion = Quaternion((1, 0, 0), R_(16 * w_ * (1 if True else 0)))
         RIGS["Killer"].pose.bones[n_].keyframe_insert("rotation_quaternion", frame=f)
+for nm_, ph_ in (("CopA", 0.0), ("CopB", 1.7)):
+    for f in range(1240, 1661, 2):
+        yawh = 22.0 * max(0.0, math.sin((f - 1240) / 55.0 + ph_)) * (1 if nm_ == "CopA" else -1)
+        for n_, w_ in Human.HEAD_W.items():
+            HS[nm_].r.key_rot(n_, f, [("X", 4 * w_), ("Z", yawh * w_)])
 def zpos(f): return 12.2 + (1.0 - 12.2) * (f - 1240) / 420.0
 cam_shot("S11", [(1261, (XT + 1.6, 4.0, 1.2)), (1380, (XT + 1.4, 3.0, 1.25))], lens=30,
          target_keys=[(1261, (XT, zpos(1261), 1.3)), (1380, (XT, zpos(1380), 1.35))])
@@ -750,7 +765,7 @@ vis_char(RIGS["JudgeB"], [(1741, 2340)])
 PP = Vector((XC - 1.25, 4.05)); PY = 180.0
 def pros_hang(s_):
     h_ = hang_off(HS["Pros"], s_, fwd=0.07); sx_ = 1 if s_ == "L" else -1
-    return (h_[0] + 0.05 * sx_, h_[1], h_[2] + 0.03)   # hands clear of his thighs (clip_scan)
+    return (h_[0] + 0.07 * sx_, h_[1] - 0.06, h_[2] + 0.12)   # bent elbows, hands clear of his thighs (clip_scan)
 for f, hd in ((1720, (4, 0)), (1765, (4, 4)), (1810, (5, 8)), (1850, (6, 10)), (1895, (4, 4)), (1940, (2, 0)), (1960, (2, 0))):
     p = stand(HS["Pros"], f, PP, PY, head=hd, arms=False)
     for s_ in "LR":
@@ -762,6 +777,12 @@ for f, hd, g in ((1990, (0, 0), 0.0), (2020, (-2, -8), 1.0), (2080, (-2, 6), 1.0
     body_hand(Hp, "R", f, p, PY, pros_hang("R"), (0.0, -0.15, -1.0), (1, 0, 0))
     hg = pros_hang("L"); gest = (0.2, -0.36, 0.02)
     body_hand(Hp, "L", f, p, PY, tuple(hg[i] + (gest[i] - hg[i]) * g for i in range(3)), (-0.25 * g, -1.0, -0.3 * (1 - g)), (0, 0, 1) if g > 0.5 else (-1, 0, 0), pole_off=(0.4, 0.35, -0.1))
+for f, g in ((2125, 0.0), (2150, 1.0), (2200, 1.0), (2228, 0.0)):
+    sc.frame_set(f)
+    p = Vector((PP.x, PP.y, Hp.root_head.z))
+    hg = pros_hang("R"); gest = (-0.2, -0.38, 0.04)
+    body_hand(Hp, "R", f, p, PY, tuple(hg[i] + (gest[i] - hg[i]) * g for i in range(3)), (0.25 * g, -1.0, -0.3 * (1 - g)), (0, 0, 1) if g > 0.5 else (1, 0, 0), pole_off=(-0.4, 0.35, -0.1))
+apply_pose(RIGS["Pros"], "R", "relaxed", 2125); apply_pose(RIGS["Pros"], "R", "open_alarm", 2150); apply_pose(RIGS["Pros"], "R", "open_alarm", 2200); apply_pose(RIGS["Pros"], "R", "relaxed", 2228)
 apply_pose(RIGS["Pros"], "L", "relaxed", 1990); apply_pose(RIGS["Pros"], "L", "open_alarm", 2020); apply_pose(RIGS["Pros"], "L", "open_alarm", 2080); apply_pose(RIGS["Pros"], "L", "relaxed", 2160)
 vis_char(RIGS["Pros"], [(1741, 2340)])
 # gallery: parents front row left, extras
@@ -777,8 +798,8 @@ idle(HS["ExA"], 1720, 2380, Vector((XC + 6.6, -6.8)), heading((XC + 6.6, -6.8), 
 vis_char(RIGS["ExA"], [(1741, 2340)])
 idle(HS["ExD"], 1720, 2380, Vector((XC - 6.6, -6.4)), heading((XC - 6.6, -6.4), (XC, 4.0)), heads=[(1720, (6, 0)), (1880, (4, 12)), (2250, (0, 25))])
 vis_char(RIGS["ExD"], [(1741, 2340)])
-cam_shot("S15", [(1741, (XC - 5.5, -8.0, 3.0)), (1860, (XC - 4.6, -7.0, 2.8))], lens=24,
-         target_keys=[(1741, (XC + 0.3, 3.5, 1.2)), (1860, (XC + 0.3, 3.5, 1.2))])
+cam_shot("S15", [(1741, (XC - 1.0, 4.6, 3.0)), (1860, (XC - 1.9, 1.6, 1.9))], lens=28,
+         target_keys=[(1741, (XC - 2.2, -1.6, 0.9)), (1860, (XC - 2.4, -1.3, 1.0))])
 cam_shot("S16", [(1861, (XC - 6.4, 1.6, 1.7)), (1980, (XC - 5.0, 0.2, 1.45))], lens=30,
          target_keys=[(1861, (XC - 1.0, -2.6, 0.95)), (1980, (XC - 0.8, -2.6, 0.95))])
 cam_shot("S17", [(1981, (XC - 3.4, 6.0, 1.6)), (2100, (XC - 3.0, 5.7, 1.6))], lens=32,
@@ -832,15 +853,19 @@ H = HS["Nat18B"]; a = (WX, WY + 0.02, 0); b = (WX + 0.25, WY - 1.25, 0)
 for f in (2440, 2470):
     stand(H, f, Vector((a[0], a[1])), heading(a, b), head=(8, 0))
 walk(H, ease_path(a, b, 2472, 2560), lambda f: heading(a, b), 2472, 2560, stride=0.85, amp=0.06)
-idle(H, 2562, 2860, Vector((b[0], b[1])), heading(a, b), heads=[(2562, (6, 0)), (2620, (8, 20)), (2700, (12, 28)), (2745, (4, 8)), (2790, (14, -18)), (2850, (6, 5))])
+idle(H, 2562, 2706, Vector((b[0], b[1])), heading(a, b), heads=[(2562, (6, 0)), (2620, (8, 20)), (2690, (12, 10))])
+CAM23 = Vector((WX + 1.75, WY - 2.9))
+c_ = Vector((b[0], b[1])) + (CAM23 - Vector((b[0], b[1]))).normalized() * 0.4
+walk(H, ease_path((b[0], b[1], 0), (c_.x, c_.y, 0), 2712, 2752), lambda f: heading((b[0], b[1]), c_), 2712, 2752, stride=0.55, amp=0.04)
+idle(H, 2754, 2860, c_, heading(c_, CAM23), heads=[(2754, (8, 0)), (2775, (-3, 0)), (2860, (-4, 2))])
 vis_char(RIGS["Nat18B"], [(2461, 2580), (2701, 2820)])
 H = HS["CopFB"]; cp = Vector((WX + 1.35, WY - 0.55))
 idle(H, 2440, 2860, cp, heading(cp, (WX - 0.2, WY - 0.9)), heads=[(2440, (4, 0)), (2560, (6, -8)), (2700, (6, 0))])
 vis_char(RIGS["CopFB"], [(2461, 2580), (2701, 2820)])
 cam_shot("S21", [(2461, (XB + 1.5, -2.3, 1.55)), (2580, (XB + 1.0, -1.8, 1.5))], lens=28,
          target_keys=[(2461, (WX + 0.4, WY - 0.5, 1.15)), (2580, (WX + 0.4, WY - 0.8, 1.2))])
-cam_shot("S23", [(2701, (WX + 1.75, WY - 2.9, 1.55)), (2820, (WX + 0.95, WY - 2.35, 1.45))], lens=45,
-         target_keys=[(2701, (b[0], b[1], 1.45)), (2820, (b[0], b[1], 1.45))])
+cam_shot("S23", [(2701, (WX + 1.75, WY - 2.9, 1.5)), (2790, (WX + 1.45, WY - 2.6, 1.48))], lens=45,
+         target_keys=[(2701, (b[0], b[1], 1.42)), (2760, (c_.x, c_.y, 1.45)), (2790, (c_.x, c_.y, 1.45))])
 
 # ================================================================== per-shot sun / world (constant keys at the cuts)
 LOOK = {  # sun energy, sun colour, world light colour, world strength, sky tint
