@@ -90,10 +90,11 @@ for v in FILL.data.vertices: v.co.z += 0.5           # origin at the bottom -> s
 FILL.location.z = -PIT[2]
 jitter_top(FILL, 0.03, seed=5, zmin=0.49)
 # dog pocket (air pocket around the lying dog): ellipsoid cutter, its material = soil
-bpy.ops.mesh.primitive_uv_sphere_add(segments=40, ring_count=20, radius=1.0, location=(0, 0.24, -0.78))
-POCKET = bpy.context.active_object; POCKET.name = "PocketCutter"; POCKET.scale = (0.74, 0.50, 0.33)
+bpy.ops.mesh.primitive_uv_sphere_add(segments=40, ring_count=20, radius=1.0, location=(0, 0.24, -0.76))
+POCKET = bpy.context.active_object; POCKET.name = "PocketCutter"; POCKET.scale = (0.74, 0.55, 0.36)
 POCKET.data.materials.append(M_FILL); move_to(POCKET, CG)
 boolean(FILL, POCKET, "pocket"); boolean(SOIL, POCKET, "pocket")
+POCKET_REST = (POCKET.location.copy(), tuple(POCKET.scale))
 # tunnel cutter for U13 (capsule that grows upward with the dog)
 bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=1.0, location=(0, 0.18, -60))
 TUNNEL = bpy.context.active_object; TUNNEL.name = "TunnelCutter"; TUNNEL.scale = (0.42, 0.40, 0.55)
@@ -260,3 +261,9 @@ SHOVEL.location = (1.15, 1.6, -0.12); SHOVEL.rotation_euler = (R_(-12), R_(8), R
 SHOVY = dup(SHOVEL, "ShovelY", YMOUND + Vector((0.55, 0.25, -0.12)), (R_(-10), R_(14), R_(-30)), 1.0, CY)
 # soft fill on the cut face (the grave cross-section) and a little sky bounce for the yard faces
 area("GraveFill", (0.5, -3.5, 0.6), (0, 0.3, -0.7), 120, 3.0, CG, (1.0, 0.97, 0.92))
+
+# even, sunny light on the dog in the porch and road sets (the coat must match the sunlit yard shots)
+area("PorchKey", PX + Vector((0.6, -2.6, 2.2)), PX + Vector((0, 0.3, 0.8)), 220, 3.0, CP, (1.0, 0.97, 0.92))
+area("PorchFill", PX + Vector((-1.8, -1.5, 1.2)), PX + Vector((0, 0.3, 0.8)), 90, 2.0, CP, (0.95, 0.97, 1.0))
+area("RoadKey", RX + Vector((3.8, 0.0, 3.0)), RX + Vector((1.8, 4.5, 0.4)), 2200, 6.0, CR, (1.0, 0.97, 0.92))
+area("YardDogFill", YX + Vector((0.4, 7.4, 1.6)), YX + Vector((2.1, 6.0, 0.4)), 260, 2.5, CY, (1.0, 0.97, 0.92))

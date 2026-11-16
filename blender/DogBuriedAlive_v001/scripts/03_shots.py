@@ -82,6 +82,33 @@ def horrified(H, rig, f, pos, yaw, amt, head=(0, 0), back=0.0):
     if jaw:
         jaw.rotation_mode = 'XYZ'; jaw.rotation_euler = (R_(9 * amt), 0, 0); jaw.keyframe_insert("rotation_euler", frame=f)
 
+def hand_on_shoulder(f, giver, side, taker, tside):
+    """arm round the kid: giver's hand rests on taker's near upper back (behind the shoulder blade), elbow low and
+    behind him, so the arm never crosses his front or his head"""
+    sc.frame_set(f)
+    W = taker.matrix_world
+    shL = W @ taker.pose.bones["shoulder01.L"].head; shR = W @ taker.pose.bones["shoulder01.R"].head
+    lat = (shL - shR); lat.z = 0; lat.normalize()                       # toward taker's left
+    back = -lat.cross(Vector((0, 0, 1))); back.normalize()               # toward taker's back
+    sh = shL if tside == "L" else shR
+    out = lat if tside == "L" else -lat
+    pt = sh + back * 0.12 - out * 0.03 + Vector((0, 0, -0.12))
+    place_hand(giver, side, f, pt, -back, (-out + Vector((0, 0, -0.5))).normalized())
+    apply_pose(giver, side, "relaxed", f)
+    gs = giver.matrix_world @ giver.pose.bones["upperarm01." + side].head
+    pn = "Pole_elbow." + side; pb = giver.pose.bones[pn]
+    pole = giver.matrix_world.inverted() @ (gs + back * 0.5 + Vector((0, 0, -0.4)))
+    pb.location = giver.data.bones[pn].matrix_local.to_3x3().inverted() @ (pole - giver.data.bones[pn].head_local)
+    pb.keyframe_insert("location", frame=f, group=pn)
+def hand_to_mouth(f, rig, side="R"):
+    """fingers in front of the mouth, 5 cm off the face"""
+    sc.frame_set(f)
+    jaw = rig.pose.bones["jaw"]; chin = rig.matrix_world @ jaw.tail
+    hd = rig.matrix_world @ rig.pose.bones["head"].head
+    fw = chin - hd; fw.z = 0; fw.normalize()
+    mouth = chin + Vector((0, 0, 0.012))
+    place_hand(rig, side, f, mouth + fw * 0.055, -fw, (Vector((0, 0, 1)) - fw * 0.2).normalized())
+    apply_pose(rig, side, "relaxed", f)
 def park(key, f):
     if key == "dog":
         DOG.location = PARK["dog"]; DOG.keyframe_insert("location", frame=f); return
@@ -116,6 +143,28 @@ def dog_side(f, loc, yaw, roll=-90, **kw):
     org = loc - R @ (TORSO0 * DS)
     dog_key(f, org, (0, roll, yaw), side_pose(**kw))
 
+CURL_ROT = {"spine1": 18, "spine2": 15, "chest": 12, "neck1": 22, "neck2": 18, "head": 15, "tail1": -55, "tail2": -35}
+CURL_IK = {"IK_hoof.FL": (0.0, 0.16, 0.20), "IK_hoof.FR": (0.03, 0.12, 0.17), "IK_hoof.HL": (0.0, -0.22, 0.18), "IK_hoof.HR": (0.03, -0.18, 0.15)}
+def dog_curl(f, torso, yaw, roll=-90, lift=0.0, breath=0.0, tail=0.0):
+    """curled on his side, legs folded, head down toward the front paws (tested pose 'f').
+    lift 0..1 raises the head (wakes up / looks up). `torso` = where the torso centre goes."""
+    R = Matrix.Rotation(R_(yaw), 3, 'Z') @ Matrix.Rotation(R_(roll), 3, 'Y')
+    DOG.location = torso - R @ (TORSO0 * DS); DOG.rotation_mode = 'XYZ'; DOG.rotation_euler = R.to_euler()
+    DOG.keyframe_insert("location", frame=f); DOG.keyframe_insert("rotation_euler", frame=f)
+    for pb in DOG.pose.bones:
+        pb.rotation_mode = 'QUATERNION'; pb.location = Vector(); pb.rotation_quaternion = Quaternion()
+        pb.keyframe_insert("location", frame=f); pb.keyframe_insert("rotation_quaternion", frame=f)
+    lz = {"neck1": 28, "neck2": 18, "head": 6}
+    lx = {"neck1": -26, "neck2": -14, "head": -10}
+    for n, a in CURL_ROT.items():
+        seq = [("X", a + (breath if n == "spine1" else 0) + lift * lx.get(n, 0))]
+        if n in lz: seq.append(("Z", -lift * lz[n] if roll > 0 else lift * lz[n]))
+        if n == "tail1": seq.append(("Z", tail))
+        RD.key_rot(n, f, seq)
+    for n, off in CURL_IK.items():
+        pb = DOG.pose.bones[n]; pb.location = DOG.data.bones[n].matrix_local.to_3x3().inverted() @ Vector(off)
+        pb.keyframe_insert("location", frame=f)
+
 def stand_pose(head=(0, 0, 0), tail=0.0, pant=0.0, ext=None):
     p = {"neck1": (None, (head[0], head[1], head[2] * 0.5)), "head": (None, (pant, 0, head[2] * 0.5)), "tail1": (None, (tail, 0, 0)),
          "tail2": (None, (tail * 0.5, 0, 0))}
@@ -140,22 +189,61 @@ def dog_walk(path, f0, f1, stride, gait, origin, wag=25.0, head=(0, 0, 0)):
         RD.key_rot("neck1", f, [("X", head[0]), ("Z", head[2])])
 
 # eyelids (fur-coloured caps over the eyes; scale 1 = closed, 0 = open), bone-parented to the head
-LID_M = mat("DogLid", (0.80, 0.50, 0.24), 0.65)
+LID_M = mat("DogLid", (0.10, 0.06, 0.035), 0.95)
+_lp = LID_M.node_tree.nodes["Principled BSDF"]
+if "Specular IOR Level" in _lp.inputs: _lp.inputs["Specular IOR Level"].default_value = 0.0
 LIDS = []
 for sx in (1, -1):
     bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1.0, location=(0.0495 * sx, -0.4265, 0.6155))
     l = bpy.context.active_object; l.name = "DogLid" + ("L" if sx > 0 else "R"); l.scale = (0.0105, 0.0175, 0.0145)
     bpy.ops.object.transform_apply(location=False, rotation=False, scale=True); bpy.ops.object.shade_smooth()
-    l.data.materials.append(LID_M); move_to(l, bpy.data.collections["CHAR_Dog"])
+    move_to(l, bpy.data.collections["CHAR_Dog"])
     DOG.location = (0, 0, 0); DOG.rotation_euler = (0, 0, 0)
     for pb in DOG.pose.bones: pb.location = Vector(); pb.rotation_quaternion = Quaternion()
     bpy.context.view_layer.update()
+    # the lid wears the dog's own fur: every lid corner takes the UV of the nearest head vertex OUTSIDE the eye
+    # (the eye texture itself is excluded), with the dog's own material, so a closed eye reads as fur, not a button
+    from mathutils.kdtree import KDTree
+    _bw = DOGB.matrix_world; _bme = DOGB.data; _uvl = _bme.uv_layers.active.data
+    _vuv = {}
+    for _p in _bme.polygons:
+        for _li in _p.loop_indices: _vuv.setdefault(_bme.loops[_li].vertex_index, _uvl[_li].uv.copy())
+    _ec = Vector((0.0495 * sx, -0.4265, 0.6155))
+    _cand = [(i, _bw @ v.co) for i, v in enumerate(_bme.vertices) if 0.022 < (_bw @ v.co - _ec).length < 0.06 and i in _vuv]
+    _kd = KDTree(len(_cand))
+    for j, (i, p_) in enumerate(_cand): _kd.insert(p_, j)
+    _kd.balance()
+    _luv = l.data.uv_layers.active or l.data.uv_layers.new()
+    _fur = _vuv[_cand[_kd.find(_ec + Vector((0.006 * sx, 0.012, 0.035)))[1]][0]]   # plain fur just above the eye
+    for _p in l.data.polygons:
+        for _li in _p.loop_indices:
+            _luv.data[_li].uv = _fur
+    # closed eye = fur lid (flattened onto the eye, no bulge) with a thin dark slit across the middle (the lid line)
+    l.data.transform(Matrix.Translation(Vector((0.0025 * sx, -0.001, 0))) @ Matrix.Diagonal((0.80, 1.0, 0.85, 1.0)))   # mesh is local to the eye centre
+    if "DogLidFur" not in bpy.data.materials:
+        lm = DOGB.data.materials[0].copy(); lm.name = "DogLidFur"; nt = lm.node_tree
+        Pn = next(n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED')
+        src_ = Pn.inputs["Base Color"].links[0].from_socket
+        tc = nt.nodes.new("ShaderNodeTexCoord"); sp = nt.nodes.new("ShaderNodeSeparateXYZ"); nt.links.new(tc.outputs["Object"], sp.inputs[0])
+        ab = nt.nodes.new("ShaderNodeMath"); ab.operation = 'ABSOLUTE'; nt.links.new(sp.outputs["Z"], ab.inputs[0])
+        mr = nt.nodes.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = 0.0016; mr.inputs["From Max"].default_value = 0.0032
+        mr.inputs["To Min"].default_value = 1.0; mr.inputs["To Max"].default_value = 0.0; nt.links.new(ab.outputs[0], mr.inputs["Value"])
+        mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.inputs["B"].default_value = (0.07, 0.045, 0.03, 1)
+        dk = nt.nodes.new("ShaderNodeMix"); dk.data_type = 'RGBA'; dk.blend_type = 'MULTIPLY'; dk.inputs["Factor"].default_value = 1.0
+        dk.inputs["B"].default_value = (0.62, 0.50, 0.38, 1)          # lid fur a shade darker, like the fur round the eye
+        nt.links.new(src_, dk.inputs["A"])
+        nt.links.new(mr.outputs["Result"], mx.inputs["Factor"]); nt.links.new(dk.outputs["Result"], mx.inputs["A"]); nt.links.new(mx.outputs["Result"], Pn.inputs["Base Color"])
+        if "Specular IOR Level" in Pn.inputs: Pn.inputs["Specular IOR Level"].default_value = 0.1
+        Pn.inputs["Roughness"].default_value = 0.9
+    l.data.materials.append(bpy.data.materials["DogLidFur"])
+    bpy.context.view_layer.update()   # object origin = eye centre, so the slit (object z ~ 0) runs across the middle of the eye
     mw = l.matrix_world.copy(); l.parent = DOG; l.parent_type = 'BONE'; l.parent_bone = "head"; bpy.context.view_layer.update()
     l.matrix_world = mw
     LIDS.append(l)
+LID_S = LIDS[0].scale.x          # scale the parenting left on the lids (1 / dog scale)
 def lids(f, closed):
     for l in LIDS:
-        s = 1.0 if closed else 0.001
+        s = LID_S * 0.92 if closed else 0.001
         l.scale = (s, s, s); l.keyframe_insert("scale", frame=f)
         l.hide_render = not closed; l.keyframe_insert("hide_render", frame=f)
 
@@ -233,10 +321,14 @@ for sx in (1, -1):
 PKB, PKW = car_rig(PICKUP, "PickupCar", CR)
 
 # ------------------------------------------------------------------ dirt clumps
-CLUMPS = [dup(ROCK, f"Clump{i}", (0, 0, -70), (0, 0, 0), 2.2, CG) for i in range(26)]
-for cl in CLUMPS:
-    cl.data = ROCK.data.copy(); cl.data.materials.clear(); cl.data.materials.append(CLUMP_M)
-    for ms in cl.material_slots: ms.link = 'OBJECT'; ms.material = CLUMP_M
+random.seed(3)
+CLUMPS = []
+for i in range(26):
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=1.0, location=(0, 0, -70))
+    cl = bpy.context.active_object; cl.name = f"Clod{i}"
+    for v in cl.data.vertices: v.co *= random.uniform(0.75, 1.15)
+    cl.scale = (random.uniform(0.03, 0.05), random.uniform(0.03, 0.05), random.uniform(0.025, 0.04))
+    bpy.ops.object.shade_smooth(); cl.data.materials.append(M_FILL); move_to(cl, CG); CLUMPS.append(cl)
 def clump_fall(cl, f0, f1, p0, p1, spin=3.0, arc=0.0):
     n = f1 - f0
     for k in kr(n, 3):
@@ -246,15 +338,15 @@ def clump_fall(cl, f0, f1, p0, p1, spin=3.0, arc=0.0):
 def clump_park(cl, f): keyobj(cl, f, loc=Vector((0, 0, -70)))
 
 # ================================================================== GRAVE shots
-DOG_G = Vector((-0.12, 0.42, -0.86))
-YAW_G = 50                                     # diagonal in the pocket: head toward the open face (camera), clear of every wall         # torso of the lying dog in the pocket (head to +x, back to camera)
+DOG_G = Vector((-0.06, 0.42, -0.95))
+YAW_G = 90                                     # diagonal in the pocket: head toward the open face (camera), clear of every wall         # torso of the lying dog in the pocket (head to +x, back to camera)
 def grave_people(f0, f1, heads=(28, 0), turn_at=None):
     pass
 def fill_key(f, h):
     FILL.scale = (1, 1, h); FILL.keyframe_insert("scale", frame=f)
 def g_dog(f0, f1, breath_amp=2.0, closed=True, head=(0, 0, 0)):
     for k in kr(f1 - f0, 6):
-        dog_side(f0 + k, DOG_G, YAW_G, roll=90, breath=breath_amp * math.sin(k * 0.10), head=head)
+        dog_curl(f0 + k, DOG_G, YAW_G, roll=90, breath=breath_amp * math.sin(k * 0.10), tail=2 * math.sin(k * 0.05))
     lids(f0, closed); lids(f1, closed)
 
 def SG01(f0, f1):
@@ -262,15 +354,16 @@ def SG01(f0, f1):
     g_dog(f0, f1)
     fill_key(f0, 0.62); fill_key(f1, 0.96)
     keyobj(MOUND_G, f0, scale=(0.62, 0.62, 0.001)); keyobj(MOUND_G, f1, scale=(0.62, 0.62, 0.06))
-    for (rig, H), x, y, yw in ((CHARS["dad"], -0.55, 1.55, 8), (CHARS["mom"], 0.15, 1.75, -4), (CHARS["son"], 0.75, 1.55, -15)):
-        for k in (0, 40, 80, f1 - f0):
+    for k in (0, 40, 80, f1 - f0):
+        for (rig, H), x, y, yw in ((CHARS["mom"], -0.62, 1.70, 8), (CHARS["dad"], 0.02, 1.62, 0), (CHARS["son"], 0.52, 1.55, -8)):
             stand(H, rig, f0 + k, Vector((x, y, 0)), yw, head=(30 + 3 * math.sin(k * 0.05), 0), flex=6, breath=math.sin(k * 0.08))
+        hand_on_shoulder(f0 + k, DAD, "L", SON, "R"); hand_to_mouth(f0 + k, MOM, "R")
     random.seed(5)
     for i, cl in enumerate(CLUMPS[:14]):
         a = f0 + i * 7; b = a + 26
         if b > f1: clump_park(cl, f0); continue
         x = random.uniform(-0.45, 0.45)
-        clump_fall(cl, a, b, Vector((x, random.uniform(0.15, 0.9), 0.55)), Vector((x * 0.9, random.uniform(0.2, 0.9), -0.35 + 0.33 * (i / 14))))
+        clump_fall(cl, a, b, Vector((x, random.uniform(0.15, 0.9), 0.03)), Vector((x * 0.9, random.uniform(0.2, 0.9), -0.35 + 0.33 * (i / 14))))
         clump_park(cl, a - 1); keyobj(cl, f1, loc=cl.location.copy())
     c = camera("G01", 40)
     cam_key(c, f0, (0.25, -4.6, -0.35), (0, 0.6, 0.15)); cam_key(c, f1, (0.15, -4.1, -0.30), (0, 0.6, 0.12))
@@ -293,9 +386,10 @@ def SG03(f0, f1):
     g_dog(f0, f1, breath_amp=3.5)
     fill_key(f0, 1.0); keyobj(MOUND_G, f0, scale=(0.62, 0.62, 0.12))
     n = f1 - f0; tw = f0 + 40
-    for key, x, y, yw, dl in (("dad", -0.55, 1.55, 8, 0), ("mom", 0.15, 1.75, -4, 10), ("son", 0.75, 1.55, -15, 18)):
+    for key, x, y, yw, dl in (("dad", 0.02, 1.62, 0, 0), ("mom", -0.62, 1.70, 8, 10), ("son", 0.52, 1.55, -8, 18)):
         rig, H = CHARS[key]
         stand(H, rig, f0, Vector((x, y, 0)), yw, head=(30, 0), flex=6)
+        if key == "mom": hand_to_mouth(f0, MOM, "R"); hand_to_mouth(f0 + 20, MOM, "R")
         t0 = tw + dl
         stand(H, rig, t0, Vector((x, y, 0)), yw, head=(10, 0), flex=2)
         st = Vector((x, y, 0)); en = Vector((x + 0.3 * (1 if x > 0 else -1), y + 5.5 - dl * 0.04, 0))
@@ -304,6 +398,7 @@ def SG03(f0, f1):
         H.walk(pth, yfn, t0 + 1, f1, stride=0.72)
         walk_arms(rig, H, pth, yfn, t0 + 1, f1, stride=0.72 * 2)
         for f in sorted(set(range(t0 + 1, f1 + 1, 6)) | {f1}): H.key_spine(f, flex=4, head=(0, 0))
+    hand_on_shoulder(f0, DAD, "L", SON, "R"); hand_on_shoulder(f0 + 25, DAD, "L", SON, "R")
     random.seed(4)
     c = camera("G03", 40)
     cam_key(c, f0, (0.0, -4.4, -0.45), (0, 0.6, 0.05)); cam_key(c, f1, (0.0, -4.8, -0.20), (0, 1.2, 0.35))
@@ -321,7 +416,7 @@ def SR04(f0, f1):
 def SR05(f0, f1):
     PRESENT["R05"] = {"dog"}
     D = RX + Vector((2.35, 1.6, 0.0))
-    for k in kr(f1 - f0, 10): dog_side(f0 + k, D + Vector((0, 0, 0.16)), 180, roll=90, breath=0.0)
+    for k in kr(f1 - f0, 10): dog_curl(f0 + k, D + Vector((0, 0, 0.13)), 180)
     lids(f0, True); lids(f1, True)
     keyobj(PKB, f0, loc=RX + Vector((1.2, 6.2, 0)), rot=(0, 0, R_(4))); keyobj(PKB, f1, loc=RX + Vector((1.2, 6.2, 0)), rot=(0, 0, R_(4)))
     for w_ in PKW: keyobj(w_, f0, rot=(0, 0, 0)); keyobj(w_, f1, rot=(0, 0, 0))
@@ -332,12 +427,13 @@ def SR05(f0, f1):
 DOG_LAWN = YX + Vector((-1.8, 0.6, 0))
 def SY06(f0, f1):
     PRESENT["Y06"] = {"dad", "mom", "son", "dog"}
-    for k in kr(f1 - f0, 10): dog_side(f0 + k, DOG_LAWN + Vector((0, 0, 0.16)), 90, roll=90)
+    for k in kr(f1 - f0, 10): dog_curl(f0 + k, DOG_LAWN + Vector((0, 0, 0.13)), 90)
     lids(f0, True); lids(f1, True)
     for k in (0, 50, f1 - f0):
         stand(HDAD, DAD, f0 + k, DOG_LAWN + Vector((0.15, 0.95, 0)), 0, head=(34 + 4 * math.sin(k * 0.04), 0), flex=12, breath=math.sin(k * 0.06 + 2))
         stand(HMOM, MOM, f0 + k, DOG_LAWN + Vector((-1.0, 1.9, 0)), 18, head=(26, -8), flex=4, breath=math.sin(k * 0.06))
         stand(HSON, SON, f0 + k, DOG_LAWN + Vector((1.05, 1.75, 0)), -20, head=(28, 6), flex=4, breath=math.sin(k * 0.06 + 1))
+        hand_to_mouth(f0 + k, MOM, "R")
     c = camera("Y06", 30)
     cam_key(c, f0, DOG_LAWN + Vector((0.5, -3.6, 0.8)), DOG_LAWN + Vector((0.0, 1.2, 0.75)))
     cam_key(c, f1, DOG_LAWN + Vector((0.3, -3.1, 0.75)), DOG_LAWN + Vector((0.0, 1.2, 0.75)))
@@ -347,7 +443,8 @@ def SY07(f0, f1):
     for k in (0, 55, f1 - f0):
         stand(HDAD, DAD, f0 + k, YMOUND + Vector((-0.2, 1.25, 0)), 5, head=(30, 0), flex=6, breath=math.sin(k * 0.05))
         stand(HMOM, MOM, f0 + k, YMOUND + Vector((-1.05, 0.95, 0)), 30, head=(28, -6), flex=5, breath=math.sin(k * 0.05 + 1))
-        stand(HSON, SON, f0 + k, YMOUND + Vector((0.75, 1.05, 0)), -25, head=(30, 6), flex=5, breath=math.sin(k * 0.05 + 2))
+        stand(HSON, SON, f0 + k, YMOUND + Vector((0.30, 1.12, 0)), -8, head=(30, 6), flex=5, breath=math.sin(k * 0.05 + 2))
+        hand_on_shoulder(f0 + k, DAD, "L", SON, "R"); hand_to_mouth(f0 + k, MOM, "R")
         c = camera("Y07", 32)
     cam_key(c, f0, YMOUND + Vector((0.4, -3.4, 0.55)), YMOUND + Vector((0, 0.8, 0.75)))
     cam_key(c, f1, YMOUND + Vector((0.2, -2.8, 0.50)), YMOUND + Vector((0, 0.8, 0.75)))
@@ -373,54 +470,55 @@ def SU10(f0, f1):
     keyobj(MOUND_G, f0, scale=(0.62, 0.62, 0.12))
     sc.frame_set(f0); hd = DOG.matrix_world @ DOG.pose.bones["head"].head
     c = camera("U10", 40, fstop=9)
-    cam_key(c, f0, hd + Vector((-0.16, -1.00, 0.10)), hd + Vector((-0.05, 0, -0.02))); cam_key(c, f1, hd + Vector((-0.13, -0.90, 0.09)), hd + Vector((-0.05, 0, -0.02)))
+    cam_key(c, f0, hd + Vector((-0.10, -0.66, 0.44)), hd + Vector((-0.06, 0, 0.0))); cam_key(c, f1, hd + Vector((-0.09, -0.58, 0.39)), hd + Vector((-0.06, 0, 0.0)))
 
 def SU11(f0, f1):
     PRESENT["U11"] = {"dog"}
     fill_key(f0, 1.0); keyobj(MOUND_G, f0, scale=(0.62, 0.62, 0.12))
     for k in kr(f1 - f0, 6):
         t = k / (f1 - f0)
-        dog_side(f0 + k, DOG_G, YAW_G, roll=90, breath=4 * math.sin(k * 0.16), head=(-6 * ease(min(1, t * 2)), 0, 4 * math.sin(k * 0.2)))
+        dog_curl(f0 + k, DOG_G, YAW_G, roll=90, lift=0.25 * ease(max(0, min(1, (t - 0.3) * 2.5))) + 0.03 * math.sin(k * 0.2), breath=4 * math.sin(k * 0.16))
     lids(f0, True); lids(f0 + 30, True); lids(f0 + 34, False); lids(f1, False)
     sc.frame_set(f0); hd = DOG.matrix_world @ DOG.pose.bones["head"].head
     c = camera("U11", 45, fstop=9)
-    cam_key(c, f0, hd + Vector((-0.12, -0.92, 0.09)), hd + Vector((-0.03, 0, -0.01))); cam_key(c, f1, hd + Vector((-0.10, -0.84, 0.08)), hd + Vector((-0.03, 0, -0.01)))
+    cam_key(c, f0, hd + Vector((-0.08, -0.60, 0.40)), hd + Vector((-0.05, 0, 0.02))); cam_key(c, f1, hd + Vector((-0.07, -0.54, 0.36)), hd + Vector((-0.05, 0, 0.03)))
 
 def SU12(f0, f1):
     PRESENT["U12"] = {"dog"}
     fill_key(f0, 1.0); keyobj(MOUND_G, f0, scale=(0.62, 0.62, 0.12)); lids(f0, False); lids(f1, False)
     for k in kr(f1 - f0, 6):
         t = ease(min(1, k / (f1 - f0) * 1.4))
-        dog_side(f0 + k, DOG_G, YAW_G, roll=90, breath=5 * math.sin(k * 0.2), head=(-14 * t, 0, 18 * t + 3 * math.sin(k * 0.25)), curl=1.0 - 0.3 * t)
+        dog_curl(f0 + k, DOG_G, YAW_G, roll=90, lift=0.25 + 0.75 * t + 0.04 * math.sin(k * 0.25), breath=5 * math.sin(k * 0.2))
     c = camera("U12", 32)
-    cam_key(c, f0, (0.45, -1.6, -0.65), (0.15, 0.2, -0.82)); cam_key(c, f1, (0.40, -1.4, -0.55), (0.15, 0.2, -0.75))
+    cam_key(c, f0, (0.35, -1.5, -0.45), (0.15, 0.25, -0.88)); cam_key(c, f1, (0.30, -1.3, -0.42), (0.15, 0.25, -0.84))
 
 def SU13(f0, f1):
     PRESENT["U13"] = {"dog"}
     fill_key(f0, 1.0); keyobj(MOUND_G, f0, scale=(0.62, 0.62, 0.12)); lids(f0, False)
     n = f1 - f0
+    keyobj(POCKET, f0 - 1, loc=POCKET_REST[0], scale=POCKET_REST[1])
+    keyobj(POCKET, f0, loc=Vector((0.0, 0.26, -0.62)), scale=(0.50, 0.52, 0.66))
+    keyobj(POCKET, f1, loc=Vector((0.0, 0.26, -0.62)), scale=(0.50, 0.52, 0.66))
+    keyobj(POCKET, f1 + 1, loc=POCKET_REST[0], scale=POCKET_REST[1])
     for k in kr(n, 4):
         t = k / n; up = ease(t)
-        loc = Vector((-0.05, 0.24, -0.95 + 0.36 * up))
-        pitch = -48
+        loc = Vector((0.0, 0.14, -1.20 + 0.42 * up))
         pf = 0.5 + 0.5 * math.sin(k * 0.42); pr = 0.5 + 0.5 * math.sin(k * 0.42 + math.pi)
-        pose = stand_pose(head=(-12, 0, 0), tail=8 * math.sin(k * 0.3))
-        pose["IK_hoof.FL"] = ((0.02, -0.10 - 0.10 * pf, 0.10 + 0.16 * pf), None)
-        pose["IK_hoof.FR"] = ((-0.02, -0.10 - 0.10 * pr, 0.10 + 0.16 * pr), None)
-        pose["IK_hoof.HL"] = ((0.0, 0.02, 0.03 + 0.04 * pr), None); pose["IK_hoof.HR"] = ((0.0, 0.02, 0.03 + 0.04 * pf), None)
-        dog_key(f0 + k, loc, (pitch, 0, 90), pose)
-        # tunnel cutter rides with the dog (union with the pocket keeps the whole path open)
-        keyobj(TUNNEL, f0 + k, loc=loc + Vector((0.12, 0, 0.18)), rot=(0, R_(-48), 0), scale=(0.62, 0.44, 0.40))
-    keyobj(TUNNEL, f0 - 1, loc=Vector((0, 0.18, -60))); keyobj(TUNNEL, f1 + 1, loc=Vector((0, 0.18, -60)))
+        pose = stand_pose(head=(-10, 0, 4 * math.sin(k * 0.2)), tail=6 * math.sin(k * 0.3))
+        pose["IK_hoof.FL"] = ((0.04, -0.10 - 0.10 * pf, 0.04 + 0.05 * pf), None)
+        pose["IK_hoof.FR"] = ((-0.04, -0.10 - 0.10 * pr, 0.04 + 0.05 * pr), None)
+        pose["IK_hoof.HL"] = ((0.0, 0.0, 0.02 + 0.04 * pr), None); pose["IK_hoof.HR"] = ((0.0, 0.0, 0.02 + 0.04 * pf), None)
+        dog_key(f0 + k, loc, (-72, 0, 180), pose)      # nose up, back to camera
     random.seed(13)
     for i, cl in enumerate(CLUMPS):
-        a = f0 + 4 + i * 7; b = a + 30
-        if b > f1: clump_park(cl, f0); continue
-        sc.frame_set(a); paw = DOG.matrix_world @ DOG.pose.bones["hoof.FL" if i % 2 else "hoof.FR"].head
-        clump_fall(cl, a, b, paw + Vector((random.uniform(-0.05, 0.05), -0.16, 0.05)), paw + Vector((random.uniform(-0.3, 0.3), -0.18, -0.9)), arc=0.05)
-        clump_park(cl, a - 1); clump_park(cl, b + 1)
+        a_ = f0 + 4 + i * 7; b_ = a_ + 24
+        if b_ > f1: clump_park(cl, f0); continue
+        sc.frame_set(a_); paw = DOG.matrix_world @ DOG.pose.bones["hoof.FL" if i % 2 else "hoof.FR"].head
+        p0 = Vector((paw.x + random.uniform(-0.06, 0.06), 0.06, paw.z + 0.02))
+        clump_fall(cl, a_, b_, p0, Vector((p0.x + random.uniform(-0.12, 0.12), 0.06, -1.08)), spin=2.0)
+        clump_park(cl, a_ - 1); clump_park(cl, b_ + 1)
     c = camera("U13", 32)
-    cam_key(c, f0, (0.35, -1.9, -0.60), (0.1, 0.2, -0.62)); cam_key(c, f1, (0.30, -1.9, -0.35), (0.1, 0.2, -0.38))
+    cam_key(c, f0, (0.25, -1.75, -0.75), (0.0, 0.2, -0.75)); cam_key(c, f1, (0.22, -1.75, -0.45), (0.0, 0.2, -0.45))
 
 YEXIT = YMOUND
 def SY14(f0, f1):
@@ -440,8 +538,8 @@ def SY14(f0, f1):
         a = f0 + i * 6; b = a + 28
         if b > f1: clump_park(cl, f0); continue
         ang = random.uniform(0, 6.28)
-        clump_fall(cl, a, b, YEXIT + Vector((0.12 * math.cos(ang), 0.1 * math.sin(ang), 0.15)),
-                   YEXIT + Vector((0.75 * math.cos(ang), 0.6 * math.sin(ang), 0.04)), arc=0.30)
+        clump_fall(cl, a, b, YEXIT + Vector((0.30 * math.cos(ang), 0.34 * math.sin(ang), 0.19)),
+                   YEXIT + Vector((0.62 * math.cos(ang), 0.55 * math.sin(ang), 0.03)), arc=0.0, spin=2.0)
         clump_park(cl, a - 1)
     c = camera("Y14", 30)
     cam_key(c, f0, YEXIT + Vector((0.45, -1.7, 0.40)), YEXIT + Vector((0, 0.2, 0.30))); cam_key(c, f1, YEXIT + Vector((0.3, -1.4, 0.45)), YEXIT + Vector((0, 0.2, 0.40)))
@@ -465,12 +563,19 @@ def SY16(f0, f1):
 
 # ================================================================== PORCH shots
 DOG_P = PX + Vector((0.0, 0.25, DECK_Z))
-def porch_dog(f0, f1, head_fn, wag=38, pant=4):
+def porch_dog(f0, f1, head_fn, wag=38, pant=4, step=None):
     for k in kr(f1 - f0, 3):
-        h = head_fn(k)
-        dog_key(f0 + k, DOG_P, (0, 0, 0), stand_pose(head=h, pant=pant * math.sin(k * 0.9),
+        h = head_fn(k); loc = DOG_P.copy(); ext_ik = {}
+        if step:
+            u = max(0.0, min(1.0, (k - step[0]) / (step[1] - step[0]))); loc.y -= step[2] * ease(u)
+            lift = math.sin(math.pi * min(1.0, u * 2)) * 0.06 if u < 0.5 else 0.0
+            lift2 = math.sin(math.pi * (u * 2 - 1)) * 0.06 if u >= 0.5 else 0.0
+            ext_ik = {"IK_hoof.FL": ((0, 0.10 * (1 - min(1, u * 2)), lift), None), "IK_hoof.FR": ((0, 0.10 * (1 - u) if u >= 0.5 else 0.10, lift2), None),
+                      "IK_hoof.HL": ((0, 0.10 * (1 - ease(u)), 0), None), "IK_hoof.HR": ((0, 0.10 * (1 - ease(u)), 0), None)} if 0 < u < 1 else {}
+        sp = stand_pose(head=h, pant=pant * math.sin(k * 0.9),
                 ext={"tail1": (None, (20, 0, wag * math.sin(k * 0.75))), "tail2": (None, (0, 0, wag * 0.7 * math.sin(k * 0.75 - 0.7))),
-                     "spine2": (None, (0, 0, 3 * math.sin(k * 0.75)))}))
+                     "spine2": (None, (0, 0, 3 * math.sin(k * 0.75)))})
+        sp.update(ext_ik); dog_key(f0 + k, loc, (0, 0, 0), sp)
 def SP17(f0, f1):
     PRESENT["P17"] = {"dog"}
     porch_dog(f0, f1, lambda k: (-3, 0, 8 * math.sin(k * 0.04)))
@@ -478,7 +583,10 @@ def SP17(f0, f1):
     cam_key(c, f0, PX + Vector((0.25, -1.75, 0.80)), PX + Vector((0, 0.6, 1.05)), lens=30); cam_key(c, f1, PX + Vector((0.15, -1.45, 0.78)), PX + Vector((0, 0.6, 1.0)), lens=30)
 def SP18(f0, f1):
     PRESENT["P18"] = {"dog"}
-    porch_dog(f0, f1, lambda k: (-5, 0, -15 + 6 * math.sin(k * 0.05)), wag=45)
+    porch_dog(f0, f1, lambda k: (-5, 0, -15 + 6 * math.sin(k * 0.05)), wag=45, step=(30, 70, 0.16))
+    for k in kr(f1 - f0, 3):
+        tl = 18 * ease(max(0, min(1, (k - 50) / 25.0))) * (1 if k < 95 else max(0, 1 - (k - 95) / 15))
+        RD.key_rot("head", f0 + k, [("Y", tl)])
     c = camera("P18", 30)
     cam_key(c, f0, PX + Vector((1.55, -0.6, 0.85)), PX + Vector((0, 0.45, 0.85))); cam_key(c, f1, PX + Vector((1.35, -0.8, 0.82)), PX + Vector((0, 0.45, 0.85)))
 def SP19(f0, f1):
@@ -503,10 +611,10 @@ def SY20(f0, f1):
             stand(H, rig, f0 + k, p, yw, head=(0, 0), breath=math.sin(k * 0.1))
         for k, a in ((55, 0.6), (75, 1.0), (n, 1.0)):
             horrified(H, rig, f0 + k, p, yw, a, back=0.30 if key != "son" else 0.15)
-    pth = lambda f: YX + Vector((1.5, 2.0, 0)).lerp(Vector((3.0, 0.7, 0)), (f - f0) / n)
+    pth = lambda f: YX + Vector((2.0, 1.75, 0)).lerp(Vector((3.15, 0.75, 0)), (f - f0) / n)
     dog_walk(pth, f0, f1, 0.95, "trot", YX + Vector((1.5, 1.5, 0)), wag=40, head=(-8, 0, 0))
     c = camera("Y20", 28)
-    cam_key(c, f0, YX + Vector((-0.2, 3.0, 1.05)), YX + Vector((3.6, 0.3, 0.75)), lens=26); cam_key(c, f1, YX + Vector((0.3, 2.7, 1.05)), YX + Vector((3.8, 0.2, 0.85)), lens=26)
+    cam_key(c, f0, YX + Vector((-0.6, 3.3, 1.15)), YX + Vector((3.6, 0.3, 0.70)), lens=26); cam_key(c, f1, YX + Vector((0.3, 2.7, 1.05)), YX + Vector((3.8, 0.2, 0.85)), lens=26)
 def SY21(f0, f1):
     PRESENT["Y21"] = {"dad", "mom", "son"}
     park_suv(f0, f1)

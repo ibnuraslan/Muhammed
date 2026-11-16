@@ -186,11 +186,11 @@ def _fix(ad):
 for idb in list(bpy.data.objects) + list(bpy.data.materials) + list(bpy.data.lights) + list(bpy.data.cameras):
     _fix(getattr(idb, "animation_data", None))
 # parking keys one frame before a shot (clumps, cutters) must not drift: constant everywhere for those
-for o in CLUMPS + [TUNNEL, HOLE, FILL, MOUND_G, MOUND_Y] + LIDS:
+for o in CLUMPS + [TUNNEL, HOLE, FILL, MOUND_G, MOUND_Y, POCKET] + LIDS:
     if o.animation_data and o.animation_data.action:
         for fc in all_fcurves(o.animation_data.action):
             for kp in fc.keyframe_points:
-                if o in (TUNNEL, HOLE, MOUND_Y) or o in LIDS: kp.interpolation = 'CONSTANT'
+                if o in (TUNNEL, HOLE, MOUND_Y, POCKET) or o in LIDS: kp.interpolation = 'CONSTANT'
 
 for sid, st, f0, f1 in lay:
     mk = sc.timeline_markers.new("S" + sid, frame=f0); mk.camera = CAMS[sid]
