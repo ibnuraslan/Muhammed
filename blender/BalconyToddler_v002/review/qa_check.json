@@ -1,0 +1,2160 @@
+{
+ "frames": {
+  "25": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "31": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "37": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "43": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "49": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "55": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "61": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "67": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "73": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "79": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "85": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "91": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "97": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "103": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "109": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "115": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "121": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "127": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "CAMJUMP",
+    "camera switch CAM_02 -> CAM_03"
+   ]
+  ],
+  "133": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "139": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "145": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "151": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "157": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "163": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "169": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "175": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "181": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "187": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "193": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "199": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "205": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "211": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "217": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "223": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "229": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "235": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "241": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "247": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "253": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "259": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "265": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "271": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "277": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "283": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "289": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "295": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "301": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "307": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "313": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "319": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "325": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "331": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "337": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "343": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "349": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "355": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "361": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "367": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "373": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "379": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "385": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "391": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "397": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "403": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "409": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "415": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "421": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "CAMJUMP",
+    "camera switch CAM_08 -> CAM_09"
+   ]
+  ],
+  "427": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "433": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "439": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "445": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "451": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "457": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "463": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "469": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "475": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "481": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "487": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "493": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "499": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "505": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "511": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "517": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "523": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "529": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "535": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "541": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "547": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "553": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "559": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "565": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "571": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "577": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "583": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "589": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "595": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "601": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "607": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "613": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "619": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "625": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "631": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "637": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "643": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "649": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "655": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "661": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "667": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "673": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "679": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "685": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "691": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "697": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "703": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "709": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "715": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "721": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "727": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "733": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "739": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "745": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "751": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "757": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "763": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "769": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "775": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "781": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "787": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "793": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "799": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "805": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "811": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "817": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "823": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "829": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "835": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "841": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "847": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "853": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "859": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "865": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "871": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "CAMJUMP",
+    "camera switch CAM_16 -> CAM_17"
+   ]
+  ],
+  "877": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "883": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "907": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "913": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "919": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "925": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "931": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "937": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "943": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "949": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "955": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "961": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "967": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "973": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "979": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "985": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "991": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "997": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1003": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1009": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1015": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1021": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1027": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1033": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1039": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1045": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1051": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1057": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1063": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1069": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1075": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1081": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1087": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1093": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1099": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1105": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1111": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1117": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1123": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1129": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1135": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1141": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1147": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "CAMJUMP",
+    "camera switch CAM_19 -> CAM_20"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1153": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1159": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1165": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1171": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1177": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1183": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1189": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1195": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1201": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1207": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1213": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1219": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1225": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1231": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1237": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1243": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1249": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1255": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1261": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1267": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1273": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1279": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1285": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1291": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1297": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1303": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1309": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1315": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1321": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1327": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1333": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1339": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1345": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1351": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1357": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1363": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1369": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1375": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1381": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1387": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1393": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1399": [
+   [
+    "CLAW",
+    "Man.R curl 26"
+   ],
+   [
+    "FAN",
+    "Man.R fingers fanned 49 deg (index vs little)"
+   ]
+  ],
+  "1405": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "CAMJUMP",
+    "camera switch CAM_23 -> CAM_24"
+   ]
+  ],
+  "1411": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1417": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1423": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1429": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1435": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1441": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1447": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1453": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1459": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1465": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1471": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1477": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1483": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1489": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1495": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1501": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1507": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1513": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1519": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1525": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1531": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1537": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1543": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1549": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1555": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1561": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1567": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1573": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1579": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1585": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1591": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1597": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1603": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1609": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1615": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1621": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1627": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1633": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1639": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1645": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1651": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1657": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1663": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1669": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1675": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1681": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1687": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1693": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1699": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1705": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1711": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1717": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1723": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1729": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1735": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1741": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1747": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "57": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_01 -> CAM_02"
+   ]
+  ],
+  "224": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_03 -> CAM_05"
+   ]
+  ],
+  "314": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_05 -> CAM_07"
+   ]
+  ],
+  "369": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_07 -> CAM_08"
+   ]
+  ],
+  "554": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_09 -> CAM_10"
+   ]
+  ],
+  "633": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_10 -> CAM_11"
+   ]
+  ],
+  "692": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_11 -> CAM_12"
+   ]
+  ],
+  "743": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_12 -> CAM_13"
+   ]
+  ],
+  "807": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_13 -> CAM_16"
+   ]
+  ],
+  "915": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_17 -> CAM_18"
+   ]
+  ],
+  "1016": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_18 -> CAM_19"
+   ]
+  ],
+  "1256": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_20 -> CAM_21"
+   ]
+  ],
+  "1307": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_21 -> CAM_22"
+   ]
+  ],
+  "1353": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_22 -> CAM_23"
+   ]
+  ],
+  "1497": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_24 -> CAM_25"
+   ]
+  ],
+  "1581": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_25 -> CAM_26"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 204,
+  "CLAW": 81,
+  "CAMJUMP": 21,
+  "FAN": 81
+ }
+}

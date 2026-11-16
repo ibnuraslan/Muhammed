@@ -1,0 +1,176 @@
+{
+ "frames": {
+  "1507": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "1513": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "1519": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "1627": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "1633": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "1639": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1645": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1651": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "1657": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1663": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1669": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1675": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1681": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1687": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "1693": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1699": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1705": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1711": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1717": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1723": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "1729": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1735": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1741": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1747": {
+   "Grandma": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}
