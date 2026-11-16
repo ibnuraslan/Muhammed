@@ -277,11 +277,12 @@ sh.modifiers.new("Sub", 'SUBSURF').levels = 1
 # materials
 def m_iron_rust():
     m = bpy.data.materials.new("M_SwordRust"); m.use_nodes = True; nt = m.node_tree; P = nt.nodes["Principled BSDF"]
-    nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 40; nz.inputs['Detail'].default_value = 6
-    cr = nt.nodes.new('ShaderNodeValToRGB'); cr.color_ramp.elements[0].color = (0.20, 0.08, 0.03, 1); cr.color_ramp.elements[1].color = (0.55, 0.25, 0.08, 1)
+    tc = nt.nodes.new('ShaderNodeTexCoord')
+    nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 60; nz.inputs['Detail'].default_value = 8; nt.links.new(tc.outputs['Object'], nz.inputs['Vector'])
+    cr = nt.nodes.new('ShaderNodeValToRGB'); cr.color_ramp.elements[0].color = (0.05, 0.035, 0.02, 1); cr.color_ramp.elements[1].color = (0.30, 0.13, 0.04, 1)
     nt.links.new(nz.outputs['Fac'], cr.inputs[0]); nt.links.new(cr.outputs[0], P.inputs['Base Color'])
-    P.inputs['Roughness'].default_value = 0.8; P.inputs['Metallic'].default_value = 0.2
-    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.35; nt.links.new(nz.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs['Normal'], P.inputs['Normal'])
+    P.inputs['Roughness'].default_value = 0.85; P.inputs['Metallic'].default_value = 0.25
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.7; nt.links.new(nz.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs['Normal'], P.inputs['Normal'])
     return m
 def m_steel():
     m = mat("M_SwordSteel", (0.75, 0.76, 0.78), 0.3, 1.0); return m
@@ -291,8 +292,12 @@ def m_crust_leather(name, crust):
     tc = nt.nodes.new('ShaderNodeTexCoord')
     nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 28; nz.inputs['Detail'].default_value = 8
     nt.links.new(tc.outputs['Object'], nz.inputs['Vector'])
-    cr = nt.nodes.new('ShaderNodeValToRGB'); cr.color_ramp.elements[0].color = (0.16, 0.06, 0.02, 1); cr.color_ramp.elements[1].color = (0.62, 0.28, 0.08, 1)
-    nt.links.new(nz.outputs['Fac'], cr.inputs[0])
+    cr = nt.nodes.new('ShaderNodeValToRGB'); cr.color_ramp.elements[0].color = (0.035, 0.03, 0.018, 1); cr.color_ramp.elements[1].color = (0.32, 0.17, 0.06, 1)
+    cr.color_ramp.elements.new(0.55).color = (0.14, 0.13, 0.06, 1)          # brown-green lake crust
+    nz2 = nt.nodes.new('ShaderNodeTexNoise'); nz2.inputs['Scale'].default_value = 7; nt.links.new(tc.outputs['Object'], nz2.inputs['Vector'])
+    ad = nt.nodes.new('ShaderNodeMath'); ad.operation = 'MULTIPLY_ADD'; ad.inputs[1].default_value = 0.6; nt.links.new(nz.outputs['Fac'], ad.inputs[0])
+    m2 = nt.nodes.new('ShaderNodeMath'); m2.operation = 'MULTIPLY'; m2.inputs[1].default_value = 0.4; nt.links.new(nz2.outputs['Fac'], m2.inputs[0]); nt.links.new(m2.outputs[0], ad.inputs[2])
+    nt.links.new(ad.outputs[0], cr.inputs[0])
     # leather: warm brown + interlace pattern (two crossing wave bands -> embossed knot-like weave, no letters)
     mp = nt.nodes.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (1, 1, 1); nt.links.new(tc.outputs['Object'], mp.inputs['Vector'])
     w1 = nt.nodes.new('ShaderNodeTexWave'); w1.wave_type = 'BANDS'; w1.bands_direction = 'DIAGONAL'; w1.inputs['Scale'].default_value = 9; w1.inputs['Distortion'].default_value = 4
@@ -305,8 +310,8 @@ def m_crust_leather(name, crust):
     nt.links.new(cr.outputs[0], mix.inputs['A']); nt.links.new(lc.outputs[0], mix.inputs['B']); nt.links.new(mix.outputs['Result'], P.inputs['Base Color'])
     hgt = nt.nodes.new('ShaderNodeMix'); hgt.data_type = 'FLOAT'; hgt.name = "LeatherH"; hgt.inputs['Factor'].default_value = mix.inputs['Factor'].default_value
     nt.links.new(nz.outputs['Fac'], hgt.inputs['A']); nt.links.new(mn_.outputs[0], hgt.inputs['B'])
-    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.4; nt.links.new(hgt.outputs['Result'], bp.inputs['Height']); nt.links.new(bp.outputs['Normal'], P.inputs['Normal'])
-    P.inputs['Roughness'].default_value = 0.65
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.8; nt.links.new(hgt.outputs['Result'], bp.inputs['Height']); nt.links.new(bp.outputs['Normal'], P.inputs['Normal'])
+    P.inputs['Roughness'].default_value = 0.8
     return m
 M_RUST = m_iron_rust(); M_STEEL = m_steel()
 sw.data.materials.clear(); sw.data.materials.append(M_STEEL)
@@ -315,6 +320,11 @@ def make_sword(name, hilt_mat, shell_mat, coll_=CP):
     s.data.materials.clear(); s.data.materials.append(hilt_mat)
     h = sh.copy(); h.data = sh.data.copy(); h.name = name + ".sheath"; h.data.name = h.name; coll_.objects.link(h)
     h.data.materials.clear(); h.data.materials.append(shell_mat); h.parent = s; h.matrix_parent_inverse = Matrix()
+    if shell_mat is not M_LEATHER:
+        h.modifiers["Sub"].levels = 2; h.modifiers["Sub"].render_levels = 2
+        tx = bpy.data.textures.get("T_Crust") or bpy.data.textures.new("T_Crust", 'CLOUDS')
+        tx.noise_scale = 0.012; tx.noise_depth = 2
+        dsp = h.modifiers.new("Crust", 'DISPLACE'); dsp.texture = tx; dsp.texture_coords = 'OBJECT'; dsp.strength = 0.004; dsp.mid_level = 0.35
     return s
 M_CRUST = m_crust_leather("M_SheathCrust", True)
 M_LEATHER = m_crust_leather("M_SheathLeather", False)

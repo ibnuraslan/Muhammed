@@ -76,13 +76,25 @@ macro shows the crust turning into the leather sheath with an embossed interlace
 - **Sinking sword (17):** it drops into the lake beside the boat (ripple), decelerates in the water and settles on the bed; no hands.
 - **Child in water:** calm, playful, no distress.
 
+## P1b: director notes (Nov 16) and what changed
+1. **08 floating sword** → the sword now lies on the grass between the girl and her kneeling dad; both look down at it. Cut to 09.
+2. **Hair read as a painted cap/bald** → hair recolour now stretches each hair texture's real luminance range (strands visible)
+   plus a strand bump; the same hair mesh shows in every shot (it was never hidden; it had been flattened to one tone).
+3. **Mannequin clothes** → the girl's tee and trousers are loosened (cloth pushed out along normals, wider lower legs), mid-blue
+   denim instead of white leggings; 02 is reframed three-quarter low so her face and the sword lead, and the feet no longer cross.
+4. **07 lens blocker** → camera 1.7–1.85 m from her (55 mm), the blade ≥1.5 m from the lens, beside her face.
+5. **06 sword at the wrong end / out of the wrist** → the grip solve now keeps the grip within 90% of the arm's reach, moves the sword
+   to where the hand really is and re-solves the fingers on the real surface; the elbow pole is pinned for the whole hold (it was
+   swinging between neighbouring shots' keys, so the wrist limit twisted the sword). She holds it upright at her right side.
+6. **Toy-like sword** → dark brown-green crust with an uneven displaced surface (found sword); hilt dark rusted iron.
+7. **04 crop** → wider and further back.
+- Hand-in-grip: the model's grip was ~7 cm, too short for a fist, so the hilt below the guard is stretched 1.4×; the adults now hold
+  it one-handed (dad 09: upright at his side; Expert F 11: low over the table); in 12 it lies on the felt.
+
 ## P1 status (checks on the provisional build, frames 1–2710)
-- Sheet: `review/P1_3perShot_540x960_p1.jpg` (shots 01–10) and `_p2.jpg` (10–18): first / middle / last frame of every shot,
-  540×960, Cycles 8 samples, labelled with shot and frame.
-- `review/P1_body_prop_cross.json` (step 3, every sword copy and sheath, the felt and the table). Cleared since the first run:
-  the girl's thigh and arm through the sword (06/07), Expert M's forearm through the table (10/11), the warrior's arm through
-  his belt sword (15/16), dad's arm folding behind him (08).
-- **Still flagged (hand-in-grip only):** thumb tips sink into the grip in 04–06; in the adult two-hand holds (09, 11, 12)
-  knuckles/metacarpals sink into the crusty sheath. Planned fix: solve the wrap against the sheath's real thickness (shell
-  pushed out 4.5 mm), back the palm off until the metacarpals clear, then re-check with body_prop_cross; if it is not clean
-  after that one retry, the experts hold it on a cloth-covered tray and dad's hold is framed from the side.
+- Sheet: `review/P1b_3perShot_540x960_p1.jpg` / `_p2.jpg`: first / middle / last frame of every shot, 540×960, Cycles 8 samples.
+- `review/P1b_body_prop_cross.json` (step 3, every sword copy and sheath, the felt and the table).
+- Result on the final P1b build: **0 visible crossings in every shot except 05** (f643–778: fingertips 3–5 of her right hand
+  inside the grip, and her forearm touching the hilt during the pull, 13 of 46 checked frames). 09's grip is framed out (fist below
+  the frame edge) after two one-hand attempts still put dad's knuckles into the short Viking grip. A longer grip was tried and
+  reverted (the pommel then hit her hip in 05 and the warrior's arm in 15).

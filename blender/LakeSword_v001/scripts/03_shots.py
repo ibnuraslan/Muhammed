@@ -100,18 +100,34 @@ def hold_sword(n, sid, f0, f1, keys, left=None, src="Sword_Found", right_side="R
     """n grips the sword's grip in the right hand (Child Of wrist); `keys` = [(frame, sword world Matrix)] drive the hand.
     left = (y_on_blade, from_frame) -> the left hand wraps the blade/sheath at local y from that frame on."""
     sw, shth = sword_copy(src, "%s_%s" % (src, sid), f0, f1)
-    fA, MA = keys[0]; set_M(sw, MA); bpy.context.view_layer.update()
-    R3 = MA.to_3x3(); s = right_side
-    sh = wpos(n, "upperarm01." + s, fA)
-    pd = V(palm_dir) if palm_dir else (MA.translation - sh)
-    pd = (pd - (R3 @ V((0, 1, 0))) * pd.dot(R3 @ V((0, 1, 0)))).normalized()
-    rep = grip_object(bpy.data.objects[n], s, fA, sw, MA @ V((0, 0.0, 0)) - pd * 0.016, pd, finger_dir=finger_dir)
+    fA, MA = keys[0]; s = right_side; ro = bpy.data.objects[n]; BN = ro.data.bones
+    # 1) keep the grip within reach: 90% of shoulder->palm length
+    Larm = (BN["lowerarm01." + s].head_local - BN["upperarm01." + s].head_local).length + (BN["wrist." + s].head_local - BN["lowerarm01." + s].head_local).length \
+        + 0.6 * (BN["finger3-1." + s].head_local - BN["wrist." + s].head_local).length
+    sh = wpos(n, "upperarm01." + s, fA); v = MA.translation - sh
+    if v.length > 0.9 * Larm:
+        T = Matrix.Translation(-v.normalized() * (v.length - 0.9 * Larm)); keys = [(f, T @ Mk) for f, Mk in keys]; fA, MA = keys[0]
+    def surface(obj, M, p, d):
+        Mi = (obj.matrix_world).inverted(); ok, loc, nrm, idx = obj.ray_cast(Mi @ (p - d * 0.2), (Mi.to_3x3() @ d).normalized(), distance=0.4)
+        return (obj.matrix_world @ loc) if ok else p - d * 0.016
+    for it in range(3):          # 2) solve, move the sword to where the hand really is, re-solve on the real surface
+        set_M(sw, MA); bpy.context.view_layer.update()
+        R3 = MA.to_3x3(); ax = R3 @ V((0, 1, 0)); sh = wpos(n, "upperarm01." + s, fA)
+        pd = V(palm_dir) if palm_dir else (MA.translation - sh)
+        pd = (pd - ax * pd.dot(ax)).normalized()
+        c = surface(sw, MA, MA.translation, pd)
+        rep = grip_object(ro, s, fA, sw, c - pd * (0.006 if HSC[n] < 0.8 else 0.014), pd, finger_dir=finger_dir)
+        sc.frame_set(fA); bpy.context.view_layer.update()
+        Wa = ro.matrix_world @ ro.pose.bones["wrist." + s].matrix; Wt = ro.matrix_world @ ro.pose.bones["IK_hand." + s].matrix
+        err = (Wa.translation - Wt.translation).length; print("REACH", sid, n, s, "pass", it, round(err, 3))
+        if err < 0.008: break
+        C = Wa @ Wt.inverted(); keys = [(f, C @ Mk) for f, Mk in keys]; fA, MA = keys[0]
     M0 = ik_mat(n, s, fA)
-    sc.frame_set(fA); bpy.context.view_layer.update(); ro = bpy.data.objects[n]
-    Wa = ro.matrix_world @ ro.pose.bones["wrist." + s].matrix; Wt = ro.matrix_world @ ro.pose.bones["IK_hand." + s].matrix
-    C = Wa @ Wt.inverted(); print("REACH", sid, n, s, round((Wa.translation - Wt.translation).length, 3))
-    MA2 = C @ MA; set_M(sw, MA2); bpy.context.view_layer.update()
+    set_M(sw, MA); bpy.context.view_layer.update()
     child_of(sw, n, "wrist." + s, fA)
+    pe = bpy.data.objects[n].pose.bones["Pole_elbow." + s]; sc.frame_set(fA); ploc = pe.location.copy()
+    for f, _ in keys + [(f1, None)]:          # pin the elbow pole for the whole hold (no swing from neighbouring shots' keys)
+        pe.location = ploc; pe.keyframe_insert("location", frame=f, group=pe.name)
     for f, Mk in keys:
         key_ik(n, s, f, Mk @ MA.inverted() @ M0)
     if left:
@@ -134,7 +150,7 @@ def hands_grip(n, f, sw, ys=(0.0, 0.42)):
         Mi = tgt.matrix_world.inverted(); o_ = Mi @ (p - d * 0.2); dl = (Mi.to_3x3() @ d).normalized()
         ok, loc, nrm, idx = tgt.ray_cast(o_, dl, distance=0.4)
         c = tgt.matrix_world @ loc if ok else p - d * 0.016                       # the real surface point, not a guessed radius
-        grip_object(bpy.data.objects[n], s_, f, tgt, c - d * 0.004, d)
+        grip_object(bpy.data.objects[n], s_, f, tgt, c - d * 0.010, d)
         elbow(n, s_, f, shp + V((0, 0, -0.4)) + (shp - wpos(n, "spine01", f)).normalized() * 0.2)
 
 def palms_under(n, f, M, ys=(0.12, 0.42), lift=0.0):
@@ -174,14 +190,14 @@ def shot_02(f0, n):
     G = HUM["Girl"]
     for s in "LR":
         sx = 1 if s == "L" else -1
-        a0 = V((LG.x - sx * 0.07, LG.y + 0.02)); foot("Girl", s, f0, (a0.x, a0.y, ground_z(a0.x, a0.y) + G.ankle[s].z), sx * 6)
+        a0 = V((LG.x + sx * 0.07, LG.y + 0.02)); foot("Girl", s, f0, (a0.x, a0.y, ground_z(a0.x, a0.y) + G.ankle[s].z), sx * 6)
         if s == "L": foot("Girl", s, f1, (a0.x, a0.y, ground_z(a0.x, a0.y) + G.ankle[s].z), sx * 6)
-    aR = V((HILT.x + 0.08, HILT.y + 0.18)); a0 = V((LG.x + 0.07, LG.y + 0.02))
+    aR = V((HILT.x + 0.08, HILT.y + 0.18)); a0 = V((LG.x - 0.07, LG.y + 0.02))
     foot("Girl", "R", f0 + 24, (a0.x, a0.y, ground_z(a0.x, a0.y) + G.ankle["R"].z), -6)
     mid = a0.lerp(aR, 0.5); foot("Girl", "R", f0 + 40, (mid.x, mid.y, ground_z(mid.x, mid.y) + G.ankle["R"].z + 0.07), -6, pitch=10)
     for f in (f0 + 56, f1): foot("Girl", "R", f, (aR.x, aR.y, ground_z(aR.x, aR.y) + G.ankle["R"].z), -10)
     for f in (f0, f0 + 40, f0 + 70, f1): arms_relaxed("Girl", f, 0.0)
-    camera("02", f0, n, [(0, (0.0, -1.45, 0.55), (-0.08, -0.1, 0.18), 28), (1, (-0.02, -1.3, 0.52), (-0.1, -0.15, 0.12), 28)])
+    camera("02", f0, n, [(0, (0.75, -1.25, 0.55), (-0.1, -0.15, 0.22), 30), (1, (0.68, -1.12, 0.5), (-0.12, -0.2, 0.18), 30)])
     return ("Girl",)
 
 def shot_03a(f0, n):
@@ -231,7 +247,7 @@ def shot_04(f0, n):
     rep = grip_object(bpy.data.objects["Girl"], "R", f0 + 60, sw, M.translation - pd * 0.016, pd)
     M0 = ik_mat("Girl", "R", f0 + 60); key_ik("Girl", "R", f1, M0); reach_report("Girl", "R", f0 + 60, "04")
     SW_STUCK = M0
-    camera("04", f0, n, [(0, (-1.25, -0.75, 0.32), (-0.2, -0.05, 0.25), 32), (1, (-1.05, -0.65, 0.3), (-0.2, -0.1, 0.18), 32)])
+    camera("04", f0, n, [(0, (-1.6, -0.95, 0.42), (-0.16, -0.08, 0.28), 26), (1, (-1.45, -0.85, 0.4), (-0.16, -0.1, 0.24), 26)])
     return ("Girl",)
 
 def shot_05(f0, n):
@@ -243,10 +259,12 @@ def shot_05(f0, n):
         sh_ = wpos("Girl", "upperarm01.L", f); hand("Girl", "L", f, sh_ + V((0.10, -0.12, -0.32)), V((-0.3, 0, -1)), V((0, -0.4, -1)), pose="relaxed")
     Ms = stuck_M()
     chest = V((GPOS4.x, GPOS4.y, ground_z(GPOS4.x, GPOS4.y))) + V((-0.06, -0.24, 0.50))
-    Mmid = sword_M(V((HILT.x + 0.0, HILT.y + 0.1, 0.25)), V((0.3, -0.6, 0.1)), V((1, 0.3, 0)))
-    Me = sword_M(chest, V((0.55, -0.25, 0.80)), V((0.2, -1, 0)))
+    Mmid = sword_M(V((HILT.x + 0.02, HILT.y + 0.02, 0.12)), V((0.25, -0.9, -0.15)), V((1, 0.3, 0)))
+    base = V((GPOS4.x, GPOS4.y, ground_z(GPOS4.x, GPOS4.y))) + rgt(yaw) * 0.13 + fwd(yaw) * 0.21 + V((0, 0, 0.54))
+    Me = sword_M(base, V((0, 0, 1)) + rgt(yaw) * 0.25 + fwd(yaw) * 0.08, fwd(yaw))      # ends in the upright side hold of 06
     keys = [(f0, Ms), (f0 + 30, Mmid), (f0 + 60, Me), (f1, Me)]
-    sw, rep = hold_sword("Girl", "05", f0, f1, keys, left=(0.30, f0 + 75))
+    sw, rep = hold_sword("Girl", "05", f0, f1, keys, left=None, palm_dir=rgt(yaw) * -1, finger_dir=fwd(yaw))
+    for f in (f0 + 60, f1): relaxed_arm("Girl", "L", f, yaw)
     camera("05", f0, n, [(0, (0.25, -1.9, 0.62), (-0.12, -0.1, 0.42), 32), (1, (0.2, -1.6, 0.68), (-0.1, -0.1, 0.5), 32)])
     return ("Girl",)
 
@@ -256,6 +274,7 @@ def side_hold(n, sid, f0, f1, P, yaw, lean=-0.25, up=0.46, out=0.19, fw=0.25, ri
     tip = V((0, 0, 1)) + rgt(yaw) * (-lean) + fwd(yaw) * 0.08     # lean toward her right (outward)
     flat = fwd(yaw)
     keys = [(f0, sword_M(base, tip, flat)), (f0 + (f1 - f0) // 2, sword_M(base + V((0, 0, rise * 0.6)), tip + rgt(yaw) * 0.04, flat)), (f1, sword_M(base + V((0, 0, rise)), tip, flat))]
+    if rise == 0: keys = [(f0, sword_M(base, tip, flat)), (f1, sword_M(base, tip, flat))]
     sw, _ = hold_sword(n, sid, f0, f1, keys, left=None, palm_dir=rgt(yaw) * -1, finger_dir=fwd(yaw))
     for f in range(f0, f1 + 1, 40): relaxed_arm(n, "L", f, yaw)
     relaxed_arm(n, "L", f1, yaw)
@@ -279,21 +298,26 @@ def shot_07(f0, n):
     stand("Girl", f1, P, yaw, spine=(2, -6, 0), head=(-4, -14))
     side_hold("Girl", "07", f0, f1, P, yaw, lean=-0.12, rise=0.03)
     gz = ground_z(P.x, P.y)
-    camera("07", f0, n, [(0, (0.0, -0.95, gz + 0.86), (-0.10, -0.1, gz + 0.84), 36), (1, (-0.03, -0.85, gz + 0.92), (-0.10, -0.1, gz + 0.88), 36)])
+    camera("07", f0, n, [(0, (0.05, -1.85, gz + 0.85), (-0.09, -0.05, gz + 0.80), 55), (1, (0.02, -1.72, gz + 0.88), (-0.09, -0.05, gz + 0.84), 55)])
     return ("Girl",)
 
-DAD8 = V((0.12, 5.6)); GIRL8 = V((0.10, 4.82))
+DAD8 = V((0.12, 5.75)); GIRL8 = V((0.10, 4.75))
 def shot_08(f0, n):
     """shore: dad kneels to her height; she shows him the long crusty sword in both hands; he leans in to look"""
     f1 = f0 + n - 1; yawG, yawD = 180.0, 0.0
     for k, f in enumerate(range(f0, f1 + 1, 30)):
-        stand("Girl", f, GIRL8, yawG, spine=(2, 0, 0), head=(-6, 3 * math.sin(k)))
-        kneel("Dad", f, (DAD8.x, DAD8.y), yawD, lean=4 + 2 * min(k, 2), spine=(6 + 2 * min(k, 2), 0, 0), head=(14 + 3 * (k % 2), 10 + 4 * math.sin(k)))
+        stand("Girl", f, GIRL8, yawG, spine=(8, 0, 0), head=(22, 3 * math.sin(k)))
+        arms_relaxed("Girl", f, yawG)
+        kneel("Dad", f, (DAD8.x, DAD8.y), yawD, lean=4 + 2 * min(k, 2), spine=(6 + 2 * min(k, 2), 0, 0), head=(30 + 3 * (k % 2), 4 * math.sin(k)))
         relaxed_arm("Dad", "L", f, yawD, out=0.06, fwd_=0.06); relaxed_arm("Dad", "R", f, yawD, out=0.06, fwd_=0.06)
-    stand("Girl", f1, GIRL8, yawG, spine=(2, 0, 0), head=(-6, 0))
-    kneel("Dad", f1, (DAD8.x, DAD8.y), yawD, lean=8, spine=(10, 0, 0), head=(16, 8))
+    stand("Girl", f1, GIRL8, yawG, spine=(8, 0, 0), head=(20, 0))
+    kneel("Dad", f1, (DAD8.x, DAD8.y), yawD, lean=8, spine=(10, 0, 0), head=(30, 2))
     relaxed_arm("Dad", "L", f1, yawD, out=0.06, fwd_=0.06); relaxed_arm("Dad", "R", f1, yawD, out=0.06, fwd_=0.06)
-    side_hold("Girl", "08", f0, f1, GIRL8, yawG, lean=-0.18)
+    swg, _ = sword_copy("Sword_Found", "Sword_Found_08", f0, f1)
+    mid = (GIRL8 + DAD8) / 2; gzm = ground_z(mid.x, mid.y)
+    set_M(swg, sword_M(V((mid.x - 0.30, mid.y - 0.02, gzm + 0.012)), V((1, 0.08, 0)), V((0, 1, 0))))
+    for f in range(f0, f1 + 1, 30): arms_relaxed("Girl", f, yawG)
+    arms_relaxed("Girl", f1, yawG)
     camera("08", f0, n, [(0, (1.55, 4.55, 0.8), (0.1, 5.25, 0.68), 28), (1, (1.4, 4.45, 0.8), (0.1, 5.25, 0.7), 28)])
     return ("Girl", "Dad")
 
@@ -301,16 +325,12 @@ def shot_09(f0, n):
     """low, against the sky: still kneeling, dad holds the sword level on his palms at chest height, looks along it, amazed"""
     f1 = f0 + n - 1; yawD = 0.0
     for k, f in enumerate(range(f0, f1 + 1, 30)):
-        kneel("Dad", f, (DAD8.x, DAD8.y), yawD, lean=4, spine=(4, 0, 0), head=(14 - 3 * (k % 2), -6 + 4 * math.sin(k)))
-    kneel("Dad", f1, (DAD8.x, DAD8.y), yawD, lean=4, spine=(4, 0, 0), head=(12, -4))
+        kneel("Dad", f, (DAD8.x, DAD8.y), yawD, lean=4, spine=(4, 0, 0), head=(-8 - 3 * (k % 2), -22 + 4 * math.sin(k)))
+    kneel("Dad", f1, (DAD8.x, DAD8.y), yawD, lean=4, spine=(4, 0, 0), head=(-10, -24))
     sc.frame_set(f0); bpy.context.view_layer.update()
     ch = wpos("Dad", "spine01", f0)
-    swB, shB = sword_copy("Sword_Found", "Sword_Found_09", f0, f1)
-    for f, d in ((f0, 0.0), (f0 + 60, 0.03), (f1, 0.05)):
-        M = sword_M(V((DAD8.x - 0.30, DAD8.y - 0.33, ch.z - 0.12 + d)), V((1, 0.05 - d, 0.02 + d)), V((0, 1, 0)))
-        set_M(swB, M, f)
-    for f in (f0, f0 + 60, f1): hands_grip("Dad", f, swB, ys=(0.0, 0.40))
-    camera("09", f0, n, [(0, (0.8, 4.45, 0.45), (0.0, 5.5, 1.0), 26), (1, (0.55, 4.35, 0.42), (0.0, 5.5, 1.0), 26)])
+    side_hold("Dad", "09", f0, f1, DAD8, yawD, lean=-0.15, up=ch.z - ground_z(DAD8.x, DAD8.y) - 0.30, out=0.24, fw=0.30, rise=0)
+    camera("09", f0, n, [(0, (0.12, 4.3, 1.12), (-0.06, 5.6, 1.24), 40), (1, (0.1, 4.4, 1.12), (-0.06, 5.6, 1.25), 40)])     # face and the upright blade beside it (>1 m from the lens); the fist below the frame edge
     return ("Dad",)
 
 MO = V((100, 0, 0)); TBL = MO + V((0, 0.6, 0))
@@ -325,8 +345,8 @@ def shot_10(f0, n):
     for k, f in enumerate(range(f0, f1 + 1, 30)):
         stand("ExpM", f, P2(TBL, 0.25, 0.98), 0.0, flex=4, spine=(10, 0, 0), head=(30, 6 * math.sin(k)))
         stand("ExpF", f, P2(TBL, -0.55, 0.72), 8.0, spine=(10, 0, 0), head=(26, -8 + 5 * math.sin(k)))
-        stand("Dad", f, P2(TBL, -1.35, -0.25), -70.0, spine=(4, 0, 0), head=(12, -6))
-        stand("Girl", f, P2(TBL, -1.15, -0.62), -55.0, spine=(2, 0, 0), head=(-6, 3 * math.sin(k)))
+        stand("Dad", f, P2(TBL, -1.55, -0.25), -70.0, spine=(4, 0, 0), head=(12, -6))
+        stand("Girl", f, P2(TBL, -1.30, -0.70), -55.0, spine=(2, 0, 0), head=(-6, 3 * math.sin(k)))
         for nn, yw in (("ExpF", 8.0), ("Dad", -70.0), ("Girl", -55.0)): arms_relaxed(nn, f, yw)
         arms_relaxed("ExpM", f, 0.0)
     camera("10", f0, n, [(0, (101.6, -3.6, 1.65), (100.0, 1.2, 1.25), 26), (1, (101.3, -3.1, 1.6), (100.0, 1.2, 1.25), 26)])
@@ -335,7 +355,6 @@ def shot_10(f0, n):
 def shot_11(f0, n):
     """experts: she lifts the sword on her flat palms over the table; he leans in, studying it; the girl watches"""
     f1 = f0 + n - 1; tz = sc["TABLE_TOP"]
-    sw, sh = sword_copy("Sword_Found", "Sword_Found_11", f0, f1)
     P_F = P2(TBL, -0.15, 0.70); P_M = P2(TBL, 0.62, 0.98)
     for k, f in enumerate(range(f0, f1 + 1, 30)):
         stand("ExpF", f, P_F, 0.0, spine=(8, 0, 0), head=(22, 0))
@@ -344,25 +363,23 @@ def shot_11(f0, n):
         arms_relaxed("ExpM", f, 25.0)
     stand("ExpF", f1, P_F, 0.0, spine=(8, 0, 0), head=(24, 0))
     M0 = sword_M(TBL + V((-0.45, -0.05, tz + 0.02)), V((1, 0.04, 0)), V((0, 1, 0)))
-    M1 = sword_M(TBL + V((-0.47, 0.30, tz + 0.30)), V((1, 0.02, 0.03)), V((0, 1, 0)))
-    M0 = Matrix.Translation(V((0, -0.03, -0.06))) @ M1
-    for f, M in ((f0, M0), (f0 + 70, M1), (f1, M1)): set_M(sw, M, f)
-    for f in (f0, f0 + 70, f1): hands_grip("ExpF", f, sw, ys=(0.0, 0.42))
+    gF = V((P_F.x - 0.16, P_F.y - 0.26, tz + 0.04))
+    M1 = sword_M(gF + V((0, 0, 0.03)), V((0.55, -0.80, 0.06)), V((0.3, 0.2, 0.9))); M0 = sword_M(gF, V((0.55, -0.80, 0.03)), V((0.3, 0.2, 0.9)))
+    hold_sword("ExpF", "11", f0, f1, [(f0, M0), (f0 + 70, M1), (f1, M1)])
+    for f in (f0, f0 + 70, f1): relaxed_arm("ExpF", "L", f, 0.0)
     camera("11", f0, n, [(0, (100.25, -1.55, 1.45), (100.0, 1.0, 1.15), 32), (1, (100.15, -1.3, 1.45), (100.0, 1.0, 1.2), 32)])
     return ("ExpF", "ExpM", "Girl")
 
 def shot_12(f0, n):
     """closer two-shot: the experts look up from the sword to each other and nod: a thousand years old"""
     f1 = f0 + n - 1; tz = sc["TABLE_TOP"]
-    sw, sh = sword_copy("Sword_Found", "Sword_Found_12", f0, f1)
     P_F = P2(TBL, -0.15, 0.70); P_M = P2(TBL, 0.62, 0.98)
-    M1 = sword_M(TBL + V((-0.47, 0.30, tz + 0.30)), V((1, 0.02, 0.03)), V((0, 1, 0)))
     for k, f in enumerate((f0, f0 + 40, f0 + 70, f0 + 100, f1)):
         stand("ExpF", f, P_F, 0.0, spine=(8, 0, 0), head=((22, 10, 8, 12, 10)[k], (0, 18, 20, 16, 18)[k]))
         stand("ExpM", f, P_M, 25.0, flex=3, spine=(6, 0, 0), head=((20, 6, 14, 4, 6)[k], (10, -20, -22, -20, -18)[k]))
-        set_M(sw, M1, f)
-        if k in (0, 4): hands_grip("ExpF", f, sw, ys=(0.0, 0.42))
-        arms_relaxed("ExpM", f, 25.0)
+        arms_relaxed("ExpM", f, 25.0); relaxed_arm("ExpF", "L", f, 0.0)
+    museum_sword("Sword_Found_12", f0, f1)             # put down on the felt in front of them
+    for f in (f0, f1): relaxed_arm("ExpF", "R", f, 0.0)
     camera("12", f0, n, [(0, (100.55, -0.55, 1.55), (100.2, 1.3, 1.35), 38), (1, (100.45, -0.4, 1.55), (100.2, 1.3, 1.38), 38)])
     return ("ExpF", "ExpM")
 

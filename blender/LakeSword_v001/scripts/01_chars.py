@@ -88,14 +88,26 @@ def flat(k, rgb, rough=0.6):
         for l in list(P.inputs['Base Color'].links): nt.links.remove(l)
         P.inputs['Base Color'].default_value = (*rgb, 1); P.inputs['Roughness'].default_value = rough
 
-def tint_hair(k, rgb, lo=0.55, hi=1.25):
-    """recolour a hair card texture: luminance of the old texture x new colour (alpha untouched)"""
+def tint_hair(k, rgb, lo=0.30, hi=1.35):
+    """recolour a hair card texture: the old texture's luminance, stretched over its real range (so strands stay visible),
+    x the new colour; alpha untouched; a strand bump from the same texture"""
+    import numpy as np
     for m in k.data.materials:
         nt = m.node_tree; P = P_of(m)
         ln = P.inputs['Base Color'].links
         if not ln: P.inputs['Base Color'].default_value = (*rgb, 1); continue
         src = ln[0].from_socket; nt.links.remove(ln[0])
+        img = next((nd.image for nd in nt.nodes if nd.type == 'TEX_IMAGE' and nd.image), None)
+        a0, a1 = 0.0, 1.0
+        if img:
+            px = np.empty(len(img.pixels), dtype=np.float32); img.pixels.foreach_get(px); px = px.reshape(-1, 4)
+            sel = px[px[:, 3] > 0.5]
+            if len(sel):
+                lum = sel[:, 0] * 0.3 + sel[:, 1] * 0.59 + sel[:, 2] * 0.11
+                a0, a1 = float(np.percentile(lum, 3)), float(np.percentile(lum, 97))
+            print("HAIRTEX", k.name, img.name, round(a0, 3), round(a1, 3))
         bw = nt.nodes.new('ShaderNodeRGBToBW'); mr = nt.nodes.new('ShaderNodeMapRange')
+        mr.inputs['From Min'].default_value = a0; mr.inputs['From Max'].default_value = max(a1, a0 + 0.02)
         mr.inputs['To Min'].default_value = lo; mr.inputs['To Max'].default_value = hi
         mul = nt.nodes.new('ShaderNodeMix'); mul.data_type = 'RGBA'; mul.blend_type = 'MULTIPLY'; mul.inputs['Factor'].default_value = 1.0
         mul.inputs['B'].default_value = (*rgb, 1)
@@ -103,15 +115,34 @@ def tint_hair(k, rgb, lo=0.55, hi=1.25):
         cr = nt.nodes.new('ShaderNodeCombineColor')
         for ch in ('Red', 'Green', 'Blue'): nt.links.new(mr.outputs['Result'], cr.inputs[ch])
         nt.links.new(cr.outputs[0], mul.inputs['A']); nt.links.new(mul.outputs['Result'], P.inputs['Base Color'])
+        if not P.inputs['Normal'].links:
+            bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.6; bp.inputs['Distance'].default_value = 0.002
+            nt.links.new(mr.outputs['Result'], bp.inputs['Height']); nt.links.new(bp.outputs['Normal'], P.inputs['Normal'])
+        P.inputs['Roughness'].default_value = 0.42
+        for l in list(P.inputs['Roughness'].links): nt.links.remove(l)
 
 def part(r, key): return next((k for k in r.children if k.type == 'MESH' and key in k.name), None)
 def waist(r): return r.data.bones["pelvis.L"].head_local.z + 0.075 * r.data.bones["head"].head_local.z / 1.6
 
 G = RIGS["Girl"]
-two_tone(part(G, "casualsuit"), (0.78, 0.10, 0.70), (0.70, 0.76, 0.84), waist(G))     # pink-purple tee, pale trousers
+two_tone(part(G, "casualsuit"), (0.72, 0.12, 0.66), (0.16, 0.27, 0.50), waist(G))     # pink-purple tee, mid-blue denim
+def loosen(k, r, top_push=0.016, leg_push=0.018, split=None):
+    """loose clothes: push the cloth out along its normals (more on the lower legs: straight-leg jeans; the tee hangs loose)"""
+    vg = k.vertex_groups.new(name="Loose"); me = k.data
+    hz = r.data.bones["head"].head_local.z; knee = r.data.bones["lowerleg01.L"].head_local.z
+    for v in me.vertices:
+        z = v.co.z
+        if z > split: w = 0.9 if z < hz * 0.78 else 0.35            # tee body loose, shoulders/neck close
+        elif z > knee: w = 0.75                                     # thighs
+        else: w = 1.0                                               # lower legs widest
+        vg.add([v.index], w, 'REPLACE')
+    d = k.modifiers.new("Loose", 'DISPLACE'); d.direction = 'NORMAL'; d.mid_level = 0.0; d.strength = top_push; d.vertex_group = "Loose"
+    sm = k.modifiers.new("LooseSmooth", 'CORRECTIVE_SMOOTH'); sm.iterations = 6; sm.scale = 1.0
+    # keep modifier order: armature first, then the loosening
+loosen(part(G, "casualsuit"), G, 0.014, 0.016, split=waist(G))
 flat(part(G, "shoes"), (0.85, 0.35, 0.55), 0.5)
 tint_hair(part(G, "ponytail"), (0.95, 0.74, 0.42))
-tint_hair(part(G, "eyebrow"), (0.75, 0.55, 0.32), 0.7, 1.0)
+tint_hair(part(G, "eyebrow"), (0.75, 0.55, 0.32), 0.6, 1.0)
 D = RIGS["Dad"]
 two_tone(part(D, "casualsuit"), (0.42, 0.44, 0.46), (0.06, 0.09, 0.18), waist(D) - 0.09)   # grey tee, navy jeans
 flat(part(D, "shoes"), (0.18, 0.13, 0.09), 0.5)
@@ -120,7 +151,7 @@ EM = RIGS["ExpM"]
 # ExpM keeps his own dark suit + white shirt texture
 EF = RIGS["ExpF"]
 tint_hair(part(EF, "ponytail"), (0.75, 0.25, 0.08))
-tint_hair(part(EF, "eyebrow"), (0.55, 0.22, 0.10), 0.7, 1.0)
+tint_hair(part(EF, "eyebrow"), (0.55, 0.22, 0.10), 0.6, 1.0)
 W = RIGS["Warrior"]
 two_tone(part(W, "casualsuit"), (0.16, 0.30, 0.14), (0.28, 0.18, 0.10), waist(W) - 0.09, 0.8)   # green wool tunic to the hips
 flat(part(W, "shoes"), (0.20, 0.12, 0.06), 0.6)
