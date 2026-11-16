@@ -1,0 +1,8 @@
+body_prop_cross (pipeline/body_prop_cross.py via scripts/bpc_run.py), every 3rd frame, on the final P1 file:
+- B1+B2a (frames 1-780): props = car (all 3 meshes), jack; rigs = Mom, Son  -> 0 visible crossing frames
+- B4 (frames 1681-2200): props = trunk + branch stubs + cut faces; rig = Man   -> 3 frames (1858, 1861, 1864):
+    left-hand fingertips touch the trunk's near side while he rises. His hands are on the side of the trunk
+    facing away from every B4 camera; the 540x960 render of frame 1861 (Cam4a) shows the hands fully hidden
+    behind the trunk. Will be cleared in Phase 2 when the clip is trimmed/re-keyed.
+Also measured: car underside clears the son's body by >= 1.2 cm at rest (scripts/gap.py); all shoes on the ground
+(lowest sole 0-3 mm, scripts/lowz.py).

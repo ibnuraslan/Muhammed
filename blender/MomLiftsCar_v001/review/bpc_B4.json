@@ -1,0 +1,31 @@
+{
+"visible_frames": [
+1858,
+1861,
+1864
+],
+"frames": {
+"1858": {
+"finger2-2.L|Log|VIS": 18,
+"finger3-3.L|Log|VIS": 12,
+"finger3-2.L|Log|VIS": 18,
+"finger1-3.L|Log|VIS": 23,
+"finger2-1.L|Log|VIS": 12
+},
+"1861": {
+"finger2-1.L|Log|VIS": 15,
+"finger3-1.L|Log|VIS": 13,
+"finger3-2.L|Log|VIS": 17,
+"finger1-3.L|Log|VIS": 14,
+"finger2-2.L|Log|VIS": 11
+},
+"1864": {
+"finger2-1.L|Log|VIS": 16,
+"finger2-2.L|Log|VIS": 17,
+"finger3-2.L|Log|VIS": 16,
+"finger3-1.L|Log|VIS": 15,
+"finger1-3.L|Log|VIS": 17,
+"finger3-3.L|Log|VIS": 9
+}
+}
+}
