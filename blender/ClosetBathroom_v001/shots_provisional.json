@@ -1,0 +1,149 @@
+[
+ {
+  "shot": "S01",
+  "set": "hall",
+  "f0": 1,
+  "f1": 96,
+  "vo": "He opened his closet"
+ },
+ {
+  "shot": "S02",
+  "set": "hall",
+  "f0": 97,
+  "f1": 162,
+  "vo": "but instead"
+ },
+ {
+  "shot": "S03",
+  "set": "bath",
+  "f0": 163,
+  "f1": 276,
+  "vo": "discovered a bathroom"
+ },
+ {
+  "shot": "S04",
+  "set": "hall",
+  "f0": 277,
+  "f1": 342,
+  "vo": "Confused,"
+ },
+ {
+  "shot": "S05",
+  "set": "hall",
+  "f0": 343,
+  "f1": 438,
+  "vo": "he asked his roommates what happened"
+ },
+ {
+  "shot": "S06",
+  "set": "hall",
+  "f0": 439,
+  "f1": 522,
+  "vo": "to the closet"
+ },
+ {
+  "shot": "S07",
+  "set": "hall",
+  "f0": 523,
+  "f1": 612,
+  "vo": "They looked at him"
+ },
+ {
+  "shot": "S08",
+  "set": "hall",
+  "f0": 613,
+  "f1": 690,
+  "vo": "like he was joking"
+ },
+ {
+  "shot": "S09",
+  "set": "hall",
+  "f0": 691,
+  "f1": 822,
+  "vo": "insisting it had always been a bathroom"
+ },
+ {
+  "shot": "S10",
+  "set": "hall",
+  "f0": 823,
+  "f1": 894,
+  "vo": "He assumed"
+ },
+ {
+  "shot": "S11",
+  "set": "prank",
+  "f0": 895,
+  "f1": 1014,
+  "vo": "they had pulled off an elaborate prank"
+ },
+ {
+  "shot": "S12",
+  "set": "prank",
+  "f0": 1015,
+  "f1": 1112,
+  "vo": "while he was gone"
+ },
+ {
+  "shot": "S13",
+  "set": "hall",
+  "f0": 1113,
+  "f1": 1236,
+  "vo": "But as days passed"
+ },
+ {
+  "shot": "S14",
+  "set": "hall",
+  "f0": 1237,
+  "f1": 1356,
+  "vo": "his confusion turned to panic"
+ },
+ {
+  "shot": "S15",
+  "set": "hall",
+  "f0": 1357,
+  "f1": 1566,
+  "vo": "he couldn't even remember what the closet looked like"
+ },
+ {
+  "shot": "S16",
+  "set": "hall",
+  "f0": 1567,
+  "f1": 1656,
+  "vo": "he was losing his mind"
+ },
+ {
+  "shot": "S17",
+  "set": "clinic",
+  "f0": 1657,
+  "f1": 1776,
+  "vo": "the doctor"
+ },
+ {
+  "shot": "S18",
+  "set": "clinic",
+  "f0": 1777,
+  "f1": 1926,
+  "vo": "After some tests, they found"
+ },
+ {
+  "shot": "S19",
+  "set": "clinic",
+  "f0": 1927,
+  "f1": 2166,
+  "vo": "a brain tumor causing memory loss and hallucinations"
+ },
+ {
+  "shot": "S20",
+  "set": "hall",
+  "f0": 2167,
+  "f1": 2286,
+  "vo": "it had always"
+ },
+ {
+  "shot": "S21",
+  "set": "bath",
+  "f0": 2287,
+  "f1": 2406,
+  "vo": "been a bathroom"
+ }
+]
