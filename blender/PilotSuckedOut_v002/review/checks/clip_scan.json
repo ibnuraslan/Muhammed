@@ -1,0 +1,153 @@
+{
+ "frames": {
+  "781": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 12
+   }
+  },
+  "787": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 12
+   }
+  },
+  "793": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 11
+   }
+  },
+  "799": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 11
+   }
+  },
+  "805": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 11
+   }
+  },
+  "811": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 12
+   }
+  },
+  "817": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 11
+   }
+  },
+  "823": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 9
+   }
+  },
+  "829": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 9
+   }
+  },
+  "835": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 6
+   }
+  },
+  "877": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "883": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "889": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "895": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1441": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1447": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1453": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1459": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1465": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1501": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 27
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   1501,
+   1501
+  ]
+ ],
+ "fps": 60
+}

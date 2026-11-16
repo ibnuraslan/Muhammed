@@ -53,7 +53,7 @@ for f in range(_a, _b + 1, STEP):
     sc.frame_set(f)
     dg = bpy.context.evaluated_depsgraph_get()
     mk = [m for m in sc.timeline_markers if m.frame <= f]
-    if mk: sc.camera = max(mk, key=lambda m: m.frame).camera
+    if mk and max(mk, key=lambda m: m.frame).camera: sc.camera = max(mk, key=lambda m: m.frame).camera
     cam = sc.camera
     trees, lo, hi = [], Vector((1e9,) * 3), Vector((-1e9,) * 3)
     for n in PROPS:

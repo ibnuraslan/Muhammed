@@ -172,8 +172,19 @@ for pid in ("island_tree_01", "shrub_01"):
         dst.objects = list(src.objects)
     pc = D.collections.new("PROTO_" + pid)
     for o in dst.objects:
-        if o and o.type == 'MESH': pc.objects.link(o); o.location = (0, 0, 0)
+        if not o or o.type != 'MESH': continue
+        if "LOD" in o.name and not o.name.endswith("LOD1"): continue
+        pc.objects.link(o); o.location = (0, 0, 0)
+        if len(o.data.vertices) > 120000:
+            sc.collection.objects.link(o)
+            dm = o.modifiers.new("dec", 'DECIMATE'); dm.ratio = 50000 / len(o.data.vertices)
+            bpy.context.view_layer.update()
+            nm = bpy.data.meshes.new_from_object(o.evaluated_get(bpy.context.evaluated_depsgraph_get()))
+            o.modifiers.clear(); o.data = nm; sc.collection.objects.unlink(o)
+    print("SETS proto", pid, [(o.name, len(o.data.vertices)) for o in pc.objects])
     protos.append((pid, pc))
+for im in D.images:
+    if im.name.startswith(("island_tree", "shrub_01")) and im.size[0] > 512: im.scale(512, 512)
 bpy.ops.file.pack_all()
 random.seed(11)
 def inst(pc, loc, scale, rotz):

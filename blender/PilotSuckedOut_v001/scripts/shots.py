@@ -1,30 +1,31 @@
 # Shot table. Phase 1: provisional lengths (about 1.3x the reference stretch). Phase 2: VO frames replace LEN.
 # Every shot's animation is keyed at 1x from its own start frame, so a new length only trims or extends it.
-SHOTS = [
-    ("01", "sky",  156),  # In 1990: the 737 in the clouds, push toward the nose
-    ("02", "nose", 110),  # a pilot got sucked: he is pulled up out of the open windscreen
-    ("03", "nose", 156),  # out of the cockpit mid-air: out to the waist, arms thrown up
-    ("04", "cock", 150),  # his legs: low inside the cockpit, legs up into the windscreen
-    ("05", "cock", 150),  # preventing him from being fully ejected: legs over the glareshield, feet at the yoke
-    ("06", "nose", 140),  # windshield had suddenly broken off: close on the empty frame, papers whip out
-    ("07", "nose", 170),  # causing the cabin to become rapidly depressurized: low exterior, wind pushes him back
-    ("08", "nose", 110),  # (depressurized) close: head back, shouting
-    ("09", "cock", 160),  # A flight attendant managed: she steps in and grabs his legs
-    ("10", "cock", 190),  # the pilot's legs and held on: closer, she hugs his shins
-    ("11", "cock", 156),  # as the co-pilot attempted: FO flying, both hands on the yoke
-    ("12", "cock", 120),  # to stabilize: FO close
-    ("13", "cock", 100),  # His head was repeatedly: attendant holding, looks up
-    ("14", "nose", 180),  # striking the fuselage: close profile, head rocks near the skin
-    ("15", "nose", 150),  # the crew thought he was dead: limp, arms trailing
-    ("16", "cock", 130),  # But they kept holding: attendant braces, FO glances
-    ("17", "nose", 110),  # so his body wouldn't fly off: wide front of the nose
-    ("18", "sky",  150),  # and damage an engine: along the fuselage to the wing and engine
-    ("19", "sky",  110),  # or wing: engine close, fan spinning
-    ("20", "land", 170),  # twenty minutes later: descending over the hills to the runway
-    ("21", "land", 150),  # the plane landed: touchdown, tyre smoke
-    ("22", "land", 140),  # and miraculously: nose rolls toward camera
-    ("23", "land", 170),  # the pilot ended up surviving: rolls past the ambulance (logo)
+SHOTS = [   # Phase 2: lengths from the VO word frames (1 + round(s * 60)), frame_end = last word + 0.5 s = 1887
+    ("01", "sky",   89),  # f1    "In 1990,"
+    ("02", "nose", 108),  # f90   "a pilot was sucked halfway out"
+    ("03", "nose",  78),  # f198  "of his cockpit in mid-air,"
+    ("04", "cock",  79),  # f276  "with only his legs"
+    ("05", "cock", 146),  # f355  "keeping him from disappearing completely."
+    ("06", "nose", 126),  # f501  "The windshield suddenly blew out,"
+    ("07", "nose",  75),  # f627  "causing the cabin to rapidly"
+    ("08", "nose",  79),  # f702  "depressurize."
+    ("09", "cock", 109),  # f781  "A flight attendant grabbed the pilot's legs"
+    ("10", "cock",  85),  # f890  "and refused to let go"
+    ("11", "cock",  77),  # f975  "while the co-pilot fought"
+    ("12", "cock",  83),  # f1052 "to control the plane."
+    ("14", "nose", 191),  # f1135 "His body kept smashing against the outside of the aircraft,"
+    ("15", "nose", 111),  # f1326 "and the crew thought he was dead."
+    ("16", "cock",  70),  # f1437 "But they held on anyway."
+    ("17", "nose",  58),  # f1507 "Around"
+    ("20", "land",  79),  # f1565 "20 minutes later,"
+    ("21", "land",  74),  # f1644 "the plane landed."
+    ("22", "land",  57),  # f1718 "And somehow,"
+    ("23", "land",  66),  # f1775 "the pilot was" (rolls past the van, logo)
+    ("24", "land",  47),  # f1841 "still alive."  the captain, still out of the window, lifts his head -> 1887
 ]
+P1LEN = {"01": 156, "02": 110, "03": 156, "04": 150, "05": 150, "06": 140, "07": 170, "08": 110, "09": 160, "10": 190,
+         "11": 156, "12": 120, "13": 100, "14": 180, "15": 150, "16": 130, "17": 110, "18": 150, "19": 110, "20": 170,
+         "21": 150, "22": 140, "23": 170, "24": 60}
 def layout(shots=SHOTS, start=1):
     out = []; f = start
     for sid, st, n in shots:

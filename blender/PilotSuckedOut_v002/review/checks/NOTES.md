@@ -1,0 +1,6 @@
+# Check results on the packed file (v002) and what each remaining flag is
+
+- **clip_scan** (hands into bodies): 1 frame, 1501 (attendant fingertip on his trouser shin at the end of S16). Viewed at 540×960: reads as a grip, nothing through.
+- **body_prop_cross** (`../PilotSuckedOut_v001/scripts/bpc_b17.py`): only `root|COCKPIT_SHELL` (S09–S16). False positive: the 16 root-weighted helper vertices of `CAPT.body`/`FO.body` are not in the `body` vertex group, so the MPFB Mask modifier removes them at render; bpc switches Mask off.
+- **limb_check**: `ARMBODY ... inside own torso (2 pts)` on CAPT, FO and Attendant in every shot = the known upperarm01 shoulder-point false positive (LESSONS §4). `ARMBACK` on the captain (arms 30–40 cm behind the body plane) is the director's requested pose: arms swept back along the fuselage by the wind, elbows bent; checked in every page.
+- **qa_check**: EMPTY (S01 and the landing shots 17–23 show the plane/van, no person, as the VO names the plane), CAMJUMP (the hard cuts), PROPMOVE (papers blown by the wind, no hand by design), BACKHEAD 277/355 (S04/S05 show his legs; his head is outside the window), INSIDE 781–1501 (cockpit cameras near the left side panel; renders show a clean interior, no black panels).
