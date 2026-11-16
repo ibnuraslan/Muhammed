@@ -408,7 +408,7 @@ def S02(t, n):
         sc.frame_set(f)
         for sd, sx in (("L", 1), ("R", -1)):
             sh = hero.shoulder(sd)
-            hero.hand(sd, f, V(HX + sx * 0.21, HY + 0.53, CZ + 0.035), V(0, -1, -0.25).normalized(), V(0, 0, -1),
+            hero.hand(sd, f, V(HX + sx * 0.21, HY + 0.47, CZ + 0.090), V(0, -1, -0.02).normalized(), V(0, 0, -1),
                       pole=sh + V(sx * 0.40, 0.30, -0.30))
     track(t, n, 3, fr)
     for sd in "LR": apply_pose(hero.o, sd, "flat_palm", t)
