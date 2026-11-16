@@ -62,3 +62,4 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | B07 | AlcatrazSpoons | `blender/AlcatrazSpoons_v003/` | **READY TO RENDER (frames 1–2007)**, watched moving |
 | B12 | IronRodHead | `blender/IronRodHead_v003/` | **READY TO RENDER (frames 1–1909)**, watched moving |
 | B16 | TitanImplosion | `blender/TitanImplosion_v003/` | **READY TO RENDER (frames 1–1825)**, watched moving |
+| B14 | MomLiftsCar | `blender/MomLiftsCar_v003/` | **READY TO RENDER (frames 1–1577)**, watched moving |
