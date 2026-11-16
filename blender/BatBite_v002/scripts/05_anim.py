@@ -455,7 +455,8 @@ def thigh_hands(f):
         if hit is None: print("THIGH miss", f, s); continue
         if nrm.dot(o_ - hit) < 0: nrm = -nrm
         ax = (kn - hp); fd = (ax - nrm * ax.dot(nrm)).normalized()
-        place_hand(D[S], s, f, hit, -nrm, fd, skin=0.016)
+        fd = Matrix.Rotation(math.radians(-50), 3, nrm) @ fd       # fingers turned in across the thigh (tested: index/middle stay out of it)
+        place_hand(D[S], s, f, hit, -nrm, fd, skin=0.028 if s == "L" else 0.035)
         apply_pose(D[S], s, "shield", f)
         pb = D[S].pose.bones["Pole_elbow." + s]; nm = "Pole_elbow." + s
         pole = bone_world(S, "upperarm01." + s).to_translation() + Rz(YAW) @ V((0.5 * sx, 0.4, 0.0))
