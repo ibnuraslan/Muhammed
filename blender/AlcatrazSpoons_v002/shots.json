@@ -1,0 +1,218 @@
+[
+ {
+  "id": "1a",
+  "f0": 1,
+  "len": 156,
+  "in": 15,
+  "vo_f0": 1,
+  "vo_len": 107,
+  "words": "Three prisoners used spoons"
+ },
+ {
+  "id": "1b",
+  "f0": 157,
+  "len": 195,
+  "in": 30,
+  "vo_f0": 108,
+  "vo_len": 102,
+  "words": "to slowly dig through the walls"
+ },
+ {
+  "id": "1c",
+  "f0": 352,
+  "len": 195,
+  "in": 40,
+  "vo_f0": 210,
+  "vo_len": 85,
+  "words": "of their Alcatraz cells."
+ },
+ {
+  "id": "2a",
+  "f0": 547,
+  "len": 117,
+  "in": 10,
+  "vo_f0": 295,
+  "vo_len": 71,
+  "words": "Every night,"
+ },
+ {
+  "id": "2b",
+  "f0": 664,
+  "len": 117,
+  "in": 20,
+  "vo_f0": 366,
+  "vo_len": 48,
+  "words": "they scraped away"
+ },
+ {
+  "id": "2c",
+  "f0": 781,
+  "len": 156,
+  "in": 15,
+  "vo_f0": 414,
+  "vo_len": 114,
+  "words": "the concrete around their air vents,"
+ },
+ {
+  "id": "2d",
+  "f0": 937,
+  "len": 156,
+  "in": 0,
+  "vo_f0": 528,
+  "vo_len": 153,
+  "words": "making the holes larger and larger."
+ },
+ {
+  "id": "3a",
+  "f0": 1093,
+  "len": 156,
+  "in": 30,
+  "vo_f0": 681,
+  "vo_len": 75,
+  "words": "They even built a homemade"
+ },
+ {
+  "id": "3b",
+  "f0": 1249,
+  "len": 78,
+  "in": 0,
+  "vo_f0": 756,
+  "vo_len": 74,
+  "words": "drill from a vacuum"
+ },
+ {
+  "id": "3c",
+  "f0": 1327,
+  "len": 234,
+  "in": 30,
+  "vo_f0": 830,
+  "vo_len": 58,
+  "words": "cleaner and created"
+ },
+ {
+  "id": "4a",
+  "f0": 1561,
+  "len": 156,
+  "in": 40,
+  "vo_f0": 888,
+  "vo_len": 45,
+  "words": "fake heads"
+ },
+ {
+  "id": "4b",
+  "f0": 1717,
+  "len": 117,
+  "in": 25,
+  "vo_f0": 933,
+  "vo_len": 68,
+  "words": "to fool guards during"
+ },
+ {
+  "id": "4c",
+  "f0": 1834,
+  "len": 117,
+  "in": 20,
+  "vo_f0": 1001,
+  "vo_len": 68,
+  "words": "bed checks."
+ },
+ {
+  "id": "5a",
+  "f0": 1951,
+  "len": 156,
+  "in": 30,
+  "vo_f0": 1069,
+  "vo_len": 53,
+  "words": "After months of"
+ },
+ {
+  "id": "5b",
+  "f0": 2107,
+  "len": 117,
+  "in": 10,
+  "vo_f0": 1122,
+  "vo_len": 69,
+  "words": "digging, they finally"
+ },
+ {
+  "id": "5c",
+  "f0": 2224,
+  "len": 195,
+  "in": 20,
+  "vo_f0": 1191,
+  "vo_len": 63,
+  "words": "crawled through the wall"
+ },
+ {
+  "id": "5d",
+  "f0": 2419,
+  "len": 234,
+  "in": 60,
+  "vo_f0": 1254,
+  "vo_len": 105,
+  "words": "into a service corridor."
+ },
+ {
+  "id": "6a",
+  "f0": 2653,
+  "len": 156,
+  "in": 15,
+  "vo_f0": 1359,
+  "vo_len": 125,
+  "words": "From there, they climbed onto the roof,"
+ },
+ {
+  "id": "6b",
+  "f0": 2809,
+  "len": 195,
+  "in": 90,
+  "vo_f0": 1484,
+  "vo_len": 66,
+  "words": "slid down a pipe,"
+ },
+ {
+  "id": "7a",
+  "f0": 3004,
+  "len": 117,
+  "in": 5,
+  "vo_f0": 1550,
+  "vo_len": 107,
+  "words": "and reached the shore. Then,"
+ },
+ {
+  "id": "7b",
+  "f0": 3121,
+  "len": 156,
+  "in": 40,
+  "vo_f0": 1657,
+  "vo_len": 60,
+  "words": "they escaped on a raft"
+ },
+ {
+  "id": "7c",
+  "f0": 3277,
+  "len": 156,
+  "in": 30,
+  "vo_f0": 1717,
+  "vo_len": 97,
+  "words": "made from raincoats."
+ },
+ {
+  "id": "8a",
+  "f0": 3433,
+  "len": 156,
+  "in": 20,
+  "vo_f0": 1814,
+  "vo_len": 115,
+  "words": "Despite a massive manhunt,"
+ },
+ {
+  "id": "8b",
+  "f0": 3589,
+  "len": 234,
+  "in": 100,
+  "vo_f0": 1929,
+  "vo_len": 79,
+  "words": "they were never found."
+ }
+]
