@@ -40,29 +40,58 @@ def push_of(f, s, bed):
     if not worst: return 0.0, None
     worst.sort(key=lambda w: -w[0]); top = worst[:12]
     return top[0][0], sum((w[1] for w in top), V((0, 0, 0))).normalized()
-def key_ik(s, f, dw):
-    pb = R.pose.bones["IK_hand." + s]; sc.frame_set(f)
-    M = pb.matrix.copy(); M.translation = M.translation + R.matrix_world.inverted().to_3x3() @ dw
-    pb.matrix = M; bpy.context.view_layer.update()
-    pb.keyframe_insert("location", frame=f, group=pb.name); pb.keyframe_insert("rotation_quaternion", frame=f, group=pb.name)
-def solve(f, s, bed):
-    p0, _ = push_of(f, s, bed); p = p0
-    for it in range(8):
-        p, n = push_of(f, s, bed)
-        if p < 0.002: break
-        key_ik(s, f, n * (p + 0.002))
-    return p0, push_of(f, s, bed)[0]
-RANGES = [("R", 420, 446, 3, False), ("R", 868, 960, 4, False),
-          ("L", 1395, 1599, 4, False), ("R", 1395, 1599, 4, False),
-          ("L", 1600, 1930, 6, True), ("R", 1600, 1930, 6, True)]
-for s, f0, f1, st, bed in RANGES:
-    res = [(f,) + tuple(round(x * 1000, 1) for x in solve(f, s, bed)) for f in range(f0, f1 + 1, st)]
-    print("HC", s, f0, f1, "before>2mm", [(f, a) for f, a, b in res if a > 2][:12], "after>2mm", [(f, b) for f, a, b in res if b > 2])
-for ps in range(3):
-    bad = [(s, f, bed) for s, f0, f1, st, bed in RANGES for f in range(f0, f1 + 1) if push_of(f, s, bed)[0] > 0.010]
-    print("HC verify pass", ps, len(bad), [(s, f) for s, f, _ in bad][:40])
-    if not bad: break
-    for s, f, bed in bad: solve(f, s, bed)
+import math
+INV3 = R.matrix_world.inverted().to_3x3()
+def smooth_offsets(O, f0, f1, pad_l, pad_r, dil=5, sig=4.0):
+    """dilate (max length in a +-dil window, keeping that frame's vector) then gaussian-smooth componentwise;
+    zero-padded on a side that is not a hard cut, edge-padded on a cut side"""
+    fs = list(range(f0, f1 + 1)); n = len(fs)
+    D_ = []
+    for i in range(n):
+        w = [O[fs[j]] for j in range(max(0, i - dil), min(n, i + dil + 1))]
+        D_.append(max(w, key=lambda v: v.length))
+    K = [math.exp(-0.5 * (k / sig) ** 2) for k in range(-12, 13)]
+    out = {}
+    for i in range(n):
+        acc = V((0, 0, 0)); wsum = 0.0
+        for k, wk in zip(range(-12, 13), K):
+            j = i + k
+            if 0 <= j < n: v = D_[j]
+            elif j < 0: v = D_[0] if not pad_l else V((0, 0, 0))
+            else: v = D_[-1] if not pad_r else V((0, 0, 0))
+            acc += v * wk; wsum += wk
+        out[fs[i]] = acc / wsum
+    if pad_l:
+        for i in range(min(4, n)): out[fs[i]] = out[fs[i]] * (i / 4.0)
+    if pad_r:
+        for i in range(min(4, n)): out[fs[n - 1 - i]] = out[fs[n - 1 - i]] * (i / 4.0)
+    return out
+def write_keys(s, f0, f1, B, O):
+    pb = R.pose.bones["IK_hand." + s]
+    for f in list(range(f0, f1 + 1, 2)) + [f1]:
+        M = B[f].copy(); M.translation = M.translation + O[f]
+        sc.frame_set(f); pb.matrix = M; bpy.context.view_layer.update()
+        pb.keyframe_insert("location", frame=f, group=pb.name); pb.keyframe_insert("rotation_quaternion", frame=f, group=pb.name)
+# (side, first, last, bed, pad_left, pad_right): pad = blend back to the original motion; no pad at a hard cut (1599|1600)
+RANGES = [("R", 418, 446, False, True, True), ("R", 866, 962, False, True, True),
+          ("L", 1393, 1599, False, True, False), ("R", 1393, 1599, False, True, False),
+          ("L", 1600, 1930, True, False, False), ("R", 1600, 1930, True, False, False)]
+for s, f0, f1, bed, pl, pr in RANGES:
+    pb = R.pose.bones["IK_hand." + s]; B = {}
+    for f in range(f0, f1 + 1):
+        sc.frame_set(f); B[f] = pb.matrix.copy()
+    O = {f: V((0, 0, 0)) for f in range(f0, f1 + 1)}
+    for it in range(5):
+        raw = {}; worst = 0.0
+        for f in range(f0, f1 + 1):
+            p, n = push_of(f, s, bed); worst = max(worst, p)
+            raw[f] = INV3 @ (n * (p + 0.003)) if p > 0.0005 else V((0, 0, 0))
+        print("HC", s, f0, f1, "iter", it, "worst push mm", round(worst * 1000, 1))
+        if worst < 0.004: break
+        add = smooth_offsets(raw, f0, f1, pl, pr)
+        for f in O: O[f] = O[f] + add[f]
+        write_keys(s, f0, f1, B, O)
+    print("HC", s, f0, f1, "max offset cm", round(max(v.length for v in O.values()) * 100, 1))
 for m, sv in saved: m.show_viewport = sv
 bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=True)
 print("HC saved", OUT)
