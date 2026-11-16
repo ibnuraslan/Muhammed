@@ -1,0 +1,38 @@
+{
+ "frames": {
+  "91": {
+   "Mom": {
+    "self": 49,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "97": {
+   "Dad": {
+    "self": 103,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1543": {
+   "Dad": {
+    "self": 90,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   91,
+   97
+  ],
+  [
+   1543,
+   1543
+  ]
+ ],
+ "fps": 60
+}

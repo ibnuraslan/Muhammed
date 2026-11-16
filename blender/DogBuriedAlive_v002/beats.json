@@ -1,0 +1,92 @@
+[
+ {
+  "beat": "G01",
+  "frame": 1,
+  "first_words": "They buried the dog,"
+ },
+ {
+  "beat": "G03",
+  "frame": 81,
+  "first_words": "but as they walked away,"
+ },
+ {
+  "beat": "G02",
+  "frame": 193,
+  "first_words": "they didn't notice the dirt starting to move."
+ },
+ {
+  "beat": "R04",
+  "frame": 365,
+  "first_words": "You see, the dog had been hit"
+ },
+ {
+  "beat": "R05",
+  "frame": 452,
+  "first_words": "by a truck,"
+ },
+ {
+  "beat": "Y06",
+  "frame": 517,
+  "first_words": "and his owners thought he was dead."
+ },
+ {
+  "beat": "Y07",
+  "frame": 627,
+  "first_words": "So they buried him"
+ },
+ {
+  "beat": "Y08",
+  "frame": 695,
+  "first_words": "and left for the weekend."
+ },
+ {
+  "beat": "U10",
+  "frame": 770,
+  "first_words": "But he was actually only unconscious."
+ },
+ {
+  "beat": "U11",
+  "frame": 929,
+  "first_words": "When he woke up underground,"
+ },
+ {
+  "beat": "U13",
+  "frame": 1014,
+  "first_words": "he clawed his way back"
+ },
+ {
+  "beat": "Y14",
+  "frame": 1088,
+  "first_words": "to the surface."
+ },
+ {
+  "beat": "Y15",
+  "frame": 1155,
+  "first_words": "And when the family returned a few days later,"
+ },
+ {
+  "beat": "P17",
+  "frame": 1289,
+  "first_words": "they found him sitting on the porch,"
+ },
+ {
+  "beat": "P18",
+  "frame": 1389,
+  "first_words": "wagging his tail."
+ },
+ {
+  "beat": "P19",
+  "frame": 1464,
+  "first_words": "He was happy."
+ },
+ {
+  "beat": "Y20",
+  "frame": 1538,
+  "first_words": "They were"
+ },
+ {
+  "beat": "Y21",
+  "frame": 1591,
+  "first_words": "horrified."
+ }
+]
