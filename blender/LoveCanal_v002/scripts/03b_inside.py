@@ -34,12 +34,20 @@ print("GLASS grip", grip_follow(FA.r.o, "R", GLASS, fa, list(frs(fa, fe, 2)) + [
 NECK = (FA.r.BN["neck01"].head_local + FA.r.BN["neck02"].head_local) / 2
 for f in frs(fa + 72, fe, 4):
     ev(f); M = FA.r.o.matrix_world
-    n_ = M @ (FA.r.PB["spine01"].head + Vector((0.04, -0.13, -0.03))); fw = (M.to_3x3() @ Vector((0, -1, 0))).normalized()
+    n_ = M @ (FA.r.PB["spine01"].head + Vector((0.07, -0.13, -0.03))); fw = (M.to_3x3() @ Vector((0, -1, 0))).normalized()
     u = smooth((f - fa - 72) / 20)
     sh = M @ FA.r.PB["upperarm01.L"].head
-    tgt = (sh + Vector((0, 0, -0.5)) + fw * 0.15).lerp(n_ + fw * 0.03, u)
+    tgt = (sh + Vector((0, 0, -0.5)) + fw * 0.15).lerp(n_ + fw * 0.075, u)     # v002: hand clear of the shirt so the forearm reads in front of the torso
     place_hand(FA.r.o, "L", f, tgt, -fw, (M.to_3x3() @ Vector((-1, 0, 0.4))).normalized())
 apply_pose(FA.r.o, "L", "relaxed", fa + 72); apply_pose(FA.r.o, "L", "shield", fa + 92)
+_pn = "Pole_elbow.L"; _pb = FA.r.PB[_pn]
+_pt = FA.r.rest(_pn).to_3x3().inverted() @ (FA.r.BN["upperarm01.L"].head_local + Vector((0.45, -0.1, -0.45)) - FA.r.BN[_pn].head_local)
+for f, loc in ((fa + 50, (0, 0, 0)), (fa + 70, _pt), (f1("S4"), _pt), (f1("S4") + 1, (0, 0, 0))):   # elbow out to the side for the hand-on-chest only (S5, S22 unchanged)
+    _pb.location = loc; _pb.keyframe_insert("location", frame=f, group=_pn)
+for fc in fcurves_of(FA.r.o.animation_data.action):
+    if fc.data_path.startswith('pose.bones["Pole_elbow.L"]'):
+        for k in fc.keyframe_points:
+            if int(round(k.co.x)) == f1("S4"): k.interpolation = 'CONSTANT'
 camshot("S4", [(0.0, (300.08, -0.05, 1.58), (300.0, 1.2, 1.42), 40), (1.0, (300.06, 0.15, 1.57), (300.0, 1.2, 1.44), 40)])
 
 # ================================================================== S5: kitchen wide: glass on the counter, Father bends, hand over his mouth; Mother and Boy look on
@@ -211,5 +219,5 @@ for f in (fa, fe):
 arms_hang(BOY, fa); arms_hang(BOY, fe)
 for f in (fa, fe):
     place_hand(BOY.r.o, "R", f, HAND_P + Vector((0, 0, 0.032)), Vector((0, 0, -1)), Vector((-HEAD_SGN * 0.7, 0.7 if want.y < 0 else -0.7, 0)).normalized())
-camshot("S22", [(0.0, (hip_w.x + HEAD_SGN * 0.05, bc.y - 1.75, 1.42), (hip_w.x + HEAD_SGN * 0.5, bc.y + 0.45, 0.92), 28),
-                (1.0, (hip_w.x + HEAD_SGN * 0.05, bc.y - 1.5, 1.38), (hip_w.x + HEAD_SGN * 0.5, bc.y + 0.45, 0.94), 28)])
+camshot("S22", [(0.0, (hip_w.x + HEAD_SGN * 0.15, bc.y - 2.0, 1.48), (hip_w.x + HEAD_SGN * 0.5, bc.y + 0.45, 0.92), 28),
+                (1.0, (hip_w.x - HEAD_SGN * 0.02, bc.y - 1.38, 1.36), (hip_w.x + HEAD_SGN * 0.5, bc.y + 0.45, 0.95), 29)])

@@ -1,8 +1,8 @@
 # exec'd by 03_anim.py: underground S7, S8; dump site S9-S14; house frames on the cut-away S15
 UX = Vector((600, 0, 0)); UX2 = Vector((600, 60, 0)); DX = Vector((900, 0, 0))
 key_vis(OB["Backdrop_under"], [(0, False)] + [x for s_ in ("S7", "S8", "S15") for x in ((f0(s_), True), (f1(s_) + 1, False))])
-camshot("S7", [(0.0, (600.0, -40.0, 3.5), (600.0, 0.0, 0.5), 32), (1.0, (600.0, -37.0, 1.6), (600.0, 0.0, -3.0), 32)])
-camshot("S8", [(0.0, (597.5, -15.0, -5.7), (600.0, -4.0, -5.9), 30), (1.0, (598.8, -11.8, -5.75), (600.5, -3.0, -6.0), 30)])
+camshot("S7", [(0.0, (600.0, -43.0, 4.0), (600.0, 0.0, 0.8), 32), (1.0, (600.0, -29.0, 0.6), (600.0, 0.0, -3.4), 32)])
+camshot("S8", [(0.0, (596.0, -16.5, -5.4), (599.6, -4.0, -5.9), 30), (1.0, (599.6, -10.6, -5.9), (600.8, -3.0, -6.1), 30)])
 SL = OB["Under_sludge"]; SL2 = OB["Under2_sludge"]
 for o in (SL, SL2):             # slow flow: the ripple texture drifts (keyed, not Scene Time)
     tx = o.modifiers["ripple"].texture; tcoord = bpy.data.objects.new(o.name + "_flow", None); o.users_collection[0].objects.link(tcoord)
