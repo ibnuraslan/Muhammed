@@ -41,6 +41,32 @@ for g in [g for g in D.node_groups if g.name.startswith("EnhancedEye")]:
     if srcs: g.links.new(srcs, mx.inputs[0])
     else: mx.inputs[0].default_value = 0.0
     g.links.new(P.outputs[0], mx.inputs[1]); g.links.new(tr.outputs[0], mx.inputs[2]); g.links.new(mx.outputs[0], out_sock)
+# attendant: opaque dark tights (a 3 mm shell of her leg skin, same armature and masks), so no bare knees read as skin
+import bmesh
+src = D.objects["Attendant.body"]
+if "Attendant.tights" not in D.objects:
+    tg = src.copy(); tg.data = src.data.copy(); tg.name = "Attendant.tights"
+    for c in src.users_collection: c.objects.link(tg)
+    rigb = {b.name for b in ATT.data.bones}; gi = {g.index: g.name for g in tg.vertex_groups}
+    legs = ("upperleg", "lowerleg", "pelvis")
+    bm = bmesh.new(); bm.from_mesh(tg.data); dl = bm.verts.layers.deform.active; dead = []
+    for v in bm.verts:
+        gs = [(gi[k], w) for k, w in v[dl].items() if gi.get(k) in rigb]
+        if not gs or not max(gs, key=lambda x: x[1])[0].startswith(legs): dead.append(v)
+    bmesh.ops.delete(bm, geom=dead, context='VERTS'); bm.to_mesh(tg.data); bm.free()
+    dm = tg.modifiers.new("tights_offset", 'DISPLACE'); dm.strength = 0.004; dm.mid_level = 0.0
+    mt = D.materials.new("M_tights"); mt.use_nodes = True; Pn = mt.node_tree.nodes["Principled BSDF"]
+    Pn.inputs["Base Color"].default_value = (0.03, 0.03, 0.04, 1); Pn.inputs["Roughness"].default_value = 0.55
+    tg.data.materials.clear(); tg.data.materials.append(mt)
+    for poly in tg.data.polygons: poly.material_index = 0
+    print("TIGHTS verts", len(tg.data.vertices))
+for o in FO.children:
+    for m in (o.data.materials if o.type == 'MESH' else []):
+        if m and m.node_tree:
+            for n in m.node_tree.nodes:
+                if n.type == 'GROUP' and n.node_tree and n.node_tree.name.startswith("EnhancedEye"):
+                    n.inputs["IrisMajorColor"].default_value = (0.09, 0.045, 0.018, 1); n.inputs["IrisMinorColor"].default_value = (0.025, 0.012, 0.006, 1)
+                    n.inputs["EyeWhiteColor"].default_value = (0.66, 0.62, 0.58, 1)
 REST_ROOT = CAP.data.bones["root"].head_local.copy()
 def place(rig, f, pelvis_world, yaw_deg, extra=None):
     """key the rig object so the root head lands on pelvis_world, facing yaw (0 = faces -Y, 180 = faces +Y)"""
@@ -89,22 +115,23 @@ def cap_at_cock(f):            place(CAP, f, COCK_WIN, 180)                     
 def shin_pt(s, t):
     bpy.context.view_layer.update()
     return bone_w(CAP, "lowerleg01." + s).lerp(bone_w(CAP, "foot." + s), t)
-def att_hold(f, lean=24, t=0.45, head=(0, -0.25, 1), pel=(-0.45, 1.58, 1.0), reach=1.0, hands=True):
+def att_hold(f, lean=24, t=0.45, head=(0, -0.25, 1), pel=(-0.43, 1.70, 1.06), reach=1.0, hands=True):
     place(ATT, f, Vector(pel), 180)
     sp = Vector((0, -math.sin(R_(lean)), math.cos(R_(lean))))
     spec = {"spine": sp, "neck": (sp + Vector((0, -0.05, 0.3))).normalized(), "head": V(*head),
-            "thigh.L": V(0.08, -0.25, -1), "shin.L": V(0.0, 1, -0.12), "foot.L": V(0, 1, 0.2),
-            "thigh.R": V(-0.08, -0.25, -1), "shin.R": V(0.0, 1, -0.12), "foot.R": V(0, 1, 0.2)}
+            "thigh.L": V(0.03, -0.25, -1), "shin.L": V(0.02, 1, -0.12), "foot.L": V(0.02, 1, 0.2),
+            "thigh.R": V(-0.03, -0.25, -1), "shin.R": V(-0.02, 1, -0.12), "foot.R": V(-0.02, 1, 0.2)}
     pose(ATT, f, spec)
     if not hands: return
     for s_att, s_cap, out in (("L", "L", Vector((-1, 0, 0))), ("R", "R", Vector((1, 0, 0)))):
-        c = shin_pt(s_cap, t)
-        palm = c + out * 0.085
-        fd = Vector((0, 0.55, 0.85)).normalized()
+        c = shin_pt(s_cap, max(t, 0.55))
+        up = Vector((0, 0, 1))
+        palm = c + up * 0.135 - out * 0.01               # palm pressed down on TOP of his shin: no arm passes under or through a leg
+        fd = (out + Vector((0, -0.25, -0.35))).normalized()   # fingers drape over the shin to its outer side, away from the knee
         if reach < 1.0:
             sh = bone_w(ATT, "upperarm01." + s_att); palm = sh.lerp(palm, reach)
-        place_hand(ATT, s_att, f, palm, -out, fd, skin=0.0)
-        apply_pose(ATT, s_att, "wrap_grip" if reach >= 1.0 else "relaxed", f)
+        place_hand(ATT, s_att, f, palm, -up, fd, skin=0.0)
+        apply_pose(ATT, s_att, "relaxed", f)          # palm pressed flat on the outside of his shin (a wrap grip curled into the leg)
 # ------------------------------------------------------------------ helpers: cameras, markers
 CAMS = {}
 def camera(sid, keys, lens=35, fstop=11.0, focus=None):
@@ -136,17 +163,17 @@ for fc in _fcurves(cn.animation_data.action):
 YR = D.objects["YOKE_R"]
 HORN = [Vector((0.325, 2.10, 0.82)), Vector((0.655, 2.10, 0.82))]   # yoke horn grips, measured from YOKE_R verts
 GRIP_AMT = 0.0
-def fo_seat(f, lean=8, head=(0, 0.05, 1), hy=0.0, ht=0.0):
-    place(FO, f, Vector((0.45, 1.44, 0.72)), 180)
+def fo_seat(f, lean=8, head=(0, 0.05, 1), hy=0.0, ht=0.0, back=0.0):
+    place(FO, f, Vector((0.48, 1.44, 0.77)), 180)
     sp = Vector((0, math.sin(R_(-lean)), math.cos(R_(-lean))))
     spec = {"spine": sp, "neck": V(0, -0.05, 1), "head": V(*head),
-            "thigh.L": V(0.1, -1, 0.04), "shin.L": V(0.0, 0.35, -1), "foot.L": V(0, -1, -0.4),
+            "thigh.L": V(0.03, -1, 0.04), "shin.L": V(0.0, 0.35, -1), "foot.L": V(0, -1, -0.4),
             "thigh.R": V(-0.1, -1, 0.04), "shin.R": V(0.0, 0.35, -1), "foot.R": V(0, -1, -0.4)}
     pose(FO, f, spec)
     bpy.context.view_layer.update()
     for s, h in (("L", HORN[0]), ("R", HORN[1])):
         side = 1 if s == "L" else -1
-        tgt = h + Vector((0, -0.17 + hy, 0.03))
+        tgt = h + Vector((0, -0.17 + hy - back, 0.03 + back * 0.3))
         out = 1 if h.x > 0.5 else -1
         elbow_pole = bone_w(FO, "upperarm01." + s) + Vector((0.25 * out, 0.1, -0.7))
         spec = arm_ik(FO, s, f, tgt, elbow_pole, hand_dir=Vector((0, 1, 0.1)))
@@ -192,7 +219,7 @@ def clearance():
             w = AP.matrix_world @ loc; nw = (AP.matrix_world.to_3x3() @ n).normalized(); d = (p - w).length * (1 if (p - w).dot(nw) >= 0 else -1)
             best = min(best, d)
     return best
-def flail(f0, f1, lean0, lean1, jaw_deg=12, step=18, amp=1.0, head=(0, 0.25, 1), legs=(0.65, 1.2), seed=1, limp=False, side=0.0):
+def flail(f0, f1, lean0, lean1, jaw_deg=12, step=18, amp=1.0, head=(0, 0.25, 1), legs=(0.65, 1.2), seed=1, limp=False, side=0.0, low_left=False):
     rnd = random.Random(seed); f = f0
     while True:
         t = (f - f0) / max(1, (f1 - f0)); lean = lean0 + (lean1 - lean0) * (t * t * (3 - 2 * t))
@@ -201,8 +228,10 @@ def flail(f0, f1, lean0, lean1, jaw_deg=12, step=18, amp=1.0, head=(0, 0.25, 1),
                     armR=(-0.45, 0.9 + 0.05 * math.cos(f * 0.27), 0.25), fR=(-0.3, 1.0, 0.2), head=head, legs=legs, side=side)
         else:
             a = amp; u = rnd.uniform(-1, 1); v_ = rnd.uniform(-1, 1)
-            cap_out(f, lean=lean, armL=(0.7 + 0.15 * u, 0.75 + 0.2 * v_, 0.05 + 0.2 * a * u),
-                    fL=(0.35 + 0.15 * v_, 0.8 + 0.25 * u, 0.35 + 0.2 * a * v_),
+            aL = (0.85, 0.55 + 0.15 * v_, -0.3 + 0.1 * u) if low_left else (0.7 + 0.15 * u, 0.75 + 0.2 * v_, 0.05 + 0.2 * a * u)
+            fLL = (0.55, 0.75 + 0.15 * u, -0.15 + 0.1 * v_) if low_left else (0.35 + 0.15 * v_, 0.8 + 0.25 * u, 0.35 + 0.2 * a * v_)
+            cap_out(f, lean=lean, armL=aL,
+                    fL=fLL,
                     armR=(-0.7 - 0.15 * v_, 0.8 + 0.2 * u, 0.0 + 0.2 * a * v_),
                     fR=(-0.35 - 0.15 * u, 0.85 + 0.25 * v_, 0.3 + 0.2 * a * u),
                     head=(head[0] + 0.15 * rnd.uniform(-1, 1), head[1], head[2]), legs=legs, side=side)
@@ -214,7 +243,8 @@ ATT_PARK = Vector((-0.45, -0.9, 0.9))     # behind the cockpit door when not in 
 for sid, st, f0, f1 in LAY:
     n = f1 - f0
     if st == "cock":
-        fo_seat(f0); fo_seat(f1, head=(-0.18, 0.05, 1) if sid == "16" else (0, 0.05, 1))
+        bk = 0.06 if sid in ("04", "05") else 0.0
+        fo_seat(f0, back=bk); fo_seat(f1, head=(-0.18, 0.05, 1) if sid == "16" else (0, 0.05, 1), back=bk)
         if sid == "11": fo_seat(Fc(sid, 0.5), head=(0.04, 0.02, 1), hy=0.015)
         if sid == "16": fo_seat(Fc(sid, 0.45), head=(-0.18, 0.05, 1))
     if sid == "01":
@@ -232,13 +262,14 @@ for sid, st, f0, f1 in LAY:
         camera(sid, [(0, (19.9, -2999.0, 4.95), (17.85, -2999.56, 4.75)), (1, (19.4, -2998.5, 5.1), (17.85, -2999.56, 4.8))], lens=35)
     elif sid in ("04", "05"):
         cap_at_cock(f0); cap_at_cock(f1)
-        place(ATT, f0, ATT_PARK, 180); att_hold(f0, hands=False, pel=tuple(ATT_PARK)); att_hold(f1, hands=False, pel=tuple(ATT_PARK))
         for k, f in enumerate(range(f0, f1 + 1, 20)):
-            w = 0.3 * math.sin(k * 1.9)
+            w = 0.0   # she is holding his shins from S04 on (director v002b): no kick, so her grip stays on the trousers
             cap_out(f, lean=12, legs=(1.0, 2.7 + w)); 
         cap_out(f1, lean=12, legs=(1.0, 2.7))
-        if sid == "04": camera(sid, [(0, (-1.0, 0.85, 1.6), (-0.33, 2.2, 1.3)), (1, (-0.85, 1.25, 1.4), (-0.33, 2.4, 1.35))], lens=22)
-        else: camera(sid, [(0, (-1.02, 1.7, 1.48), (-0.42, 2.35, 1.25)), (1, (-0.98, 2.1, 1.3), (-0.5, 2.3, 1.1))], lens=33)
+        att_hold(f0, lean=26); att_hold(Fc(sid, 0.5), lean=28); att_hold(f1, lean=26)
+        if sid == "04": camera(sid, [(0, (-0.95, 1.0, 1.95), (-0.35, 2.2, 1.3)), (1, (-0.9, 1.15, 1.9), (-0.35, 2.25, 1.35))], lens=18)
+        elif False: camera(sid, [(0, (-1.0, 0.85, 1.6), (-0.33, 2.2, 1.3)), (1, (-0.85, 1.25, 1.4), (-0.33, 2.4, 1.35))], lens=22)
+        else: camera(sid, [(0, (0.62, 0.85, 1.85), (-0.38, 2.3, 1.35)), (1, (0.6, 1.05, 1.8), (-0.38, 2.3, 1.4))], lens=18)
     elif sid == "06":
         place(CAP, f0, HOLE + Vector((0, 0, -0.03)), 90); place(CAP, f1, HOLE + Vector((0, 0, -0.03)), 90)
         flail(f0, f1, 20, 26, jaw_deg=6, seed=6, step=20); papers(sid)
@@ -259,16 +290,16 @@ for sid, st, f0, f1 in LAY:
         if sid == "09":
             att_hold(f0, lean=14, head=(0, -0.1, 1)); att_hold(Fc(sid, 0.35), lean=22, t=0.5)
             att_hold(Fc(sid, 0.6), lean=28); att_hold(f1, lean=26)
-            camera(sid, [(0, (-0.97, 2.5, 1.5), (-0.4, 1.8, 1.22)), (1, (-0.93, 2.42, 1.45), (-0.38, 1.82, 1.2))], lens=22)
+            camera(sid, [(0, (-0.85, 2.4, 1.5), (-0.4, 1.95, 1.45)), (1, (-0.83, 2.35, 1.52), (-0.4, 1.95, 1.43))], lens=18)
         elif sid == "10":
             att_hold(f0, lean=26); att_hold(Fc(sid, 0.5), lean=30, t=0.5, head=(0.1, -0.2, 1)); att_hold(f1, lean=27)
-            camera(sid, [(0, (-0.98, 2.4, 1.5), (-0.4, 1.85, 1.3)), (1, (-0.95, 2.3, 1.48), (-0.4, 1.85, 1.3))], lens=24)
+            camera(sid, [(0, (-0.84, 2.36, 1.52), (-0.4, 1.97, 1.48)), (1, (-0.82, 2.3, 1.53), (-0.4, 1.97, 1.48))], lens=21)
         elif sid == "13":
             att_hold(f0, lean=27); att_hold(Fc(sid, 0.5), lean=24, head=(0, 0.05, 1)); att_hold(f1, lean=24, head=(0, 0.1, 1))
             camera(sid, [(0, (-0.95, 2.15, 1.65), (-0.42, 1.85, 1.35)), (1, (-0.93, 2.1, 1.6), (-0.42, 1.85, 1.35))], lens=26)
         else:
             att_hold(f0, lean=26); att_hold(Fc(sid, 0.5), lean=32, t=0.5); att_hold(f1, lean=30, head=(0.15, -0.2, 1))
-            camera(sid, [(0, (-0.99, 2.55, 1.55), (0.0, 1.7, 1.25)), (1, (-0.97, 2.5, 1.55), (0.05, 1.7, 1.25))], lens=19)
+            camera(sid, [(0, (-0.85, 2.45, 1.55), (-0.25, 1.9, 1.4)), (1, (-0.83, 2.42, 1.55), (-0.2, 1.9, 1.4))], lens=18)
     elif sid in ("11", "12"):
         cap_at_cock(f0); cap_at_cock(f1); cap_out(f0, lean=12, legs=(1.0, 2.7)); cap_out(f1, lean=12, legs=(1.0, 2.7))
         att_hold(f0, lean=26); att_hold(f1, lean=27)
@@ -279,7 +310,9 @@ for sid, st, f0, f1 in LAY:
         DZ = Vector((0, 0, 0.06))
         place(CAP, f0, HOLE + DZ, 90); place(CAP, f1, HOLE + DZ, 90)
         if sid == "14":
-            flail(f0, f1, 26, 33, jaw_deg=6, seed=14, side=20, head=(0.2, 0.15, 1), step=16, amp=0.8)
+            flail(f0, f1, 26, 33, jaw_deg=6, seed=14, side=20, head=(0.2, 0.15, 1), step=16, amp=0.8, low_left=True)
+            for f in sorted(set(list(range(f0, f1 + 1, 16)) + [f1])):    # face turned to camera: clear profile
+                key_pose(CAP, f, {"twist": {"head": 40, "neck03": 20}}, root=(Vector((0, 0, 0)), Quaternion()))
             print("CLEAR", sid, f1, round(clearance(), 3))
             camera(sid, [(0, (17.55, -2997.2, 5.35), (17.65, -2999.3, 4.85)), (1, (18.1, -2997.5, 5.1), (17.65, -2999.3, 4.85))], lens=35)
         else:

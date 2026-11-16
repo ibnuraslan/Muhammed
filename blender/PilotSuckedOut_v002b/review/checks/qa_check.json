@@ -1,0 +1,871 @@
+{
+ "frames": {
+  "1": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "7": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "13": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "19": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "25": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "31": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "37": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "43": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "49": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "55": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "61": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "67": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "73": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "79": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "85": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "277": [
+   [
+    "BACKHEAD",
+    "Attendant"
+   ]
+  ],
+  "355": [
+   [
+    "BACKHEAD",
+    "FO"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 1.55 m, 62 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "499": [
+   [
+    "BACKHEAD",
+    "FO"
+   ]
+  ],
+  "781": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 3001.22 m, 97 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "787": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "793": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "799": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "805": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "811": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "817": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "823": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "829": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "835": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "841": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "847": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "853": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "859": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "865": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "871": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "877": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "883": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "889": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "895": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "901": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "907": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "913": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "919": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "925": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "931": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "937": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "943": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "949": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "955": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "961": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "967": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "973": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "979": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "985": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "991": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "997": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1003": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1009": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1015": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1021": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1027": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1033": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1039": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1045": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1051": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1441": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1447": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1453": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1459": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1465": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1471": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1477": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1483": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1489": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1495": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1501": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1567": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1573": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1579": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1585": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1591": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1597": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1603": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1609": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1615": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1621": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1627": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1633": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1639": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1645": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1651": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1657": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1663": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1669": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1675": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1681": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1687": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1693": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1699": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1705": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1711": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1717": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1723": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1729": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1735": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1741": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1747": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1753": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1759": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1765": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1771": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1777": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1783": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1789": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1795": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1801": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1807": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1813": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1819": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1825": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1831": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1837": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "90": [
+   [
+    "CAMJUMP",
+    "cut: 32.45 m, 13 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "198": [
+   [
+    "CAMJUMP",
+    "cut: 2.61 m, 11 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "276": [
+   [
+    "CAMJUMP",
+    "cut: 2999.57 m, 151 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "501": [
+   [
+    "CAMJUMP",
+    "cut: 2999.71 m, 89 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "627": [
+   [
+    "CAMJUMP",
+    "cut: 1.52 m, 36 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "702": [
+   [
+    "CAMJUMP",
+    "cut: 2.29 m, 47 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "975": [
+   [
+    "CAMJUMP",
+    "cut: 1.83 m, 91 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1135": [
+   [
+    "CAMJUMP",
+    "cut: 2999.32 m, 39 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1326": [
+   [
+    "CAMJUMP",
+    "cut: 1.28 m, 33 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1437": [
+   [
+    "CAMJUMP",
+    "cut: 3000.71 m, 87 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1507": [
+   [
+    "CAMJUMP",
+    "cut: 2997.05 m, 113 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1565": [
+   [
+    "CAMJUMP",
+    "cut: 17327.50 m, 50 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "1644": [
+   [
+    "CAMJUMP",
+    "cut: 455.74 m, 66 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "1718": [
+   [
+    "CAMJUMP",
+    "cut: 534.37 m, 105 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "1775": [
+   [
+    "CAMJUMP",
+    "cut: 78.36 m, 67 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1841": [
+   [
+    "CAMJUMP",
+    "cut: 66.86 m, 139 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "523": [
+   [
+    "PROPMOVE",
+    "PAPER_1 moves 162.2 cm with no hand on it (nearest finger 64 cm)"
+   ]
+  ],
+  "661": [
+   [
+    "PROPMOVE",
+    "PAPER_0 moves 161.1 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "679": [
+   [
+    "PROPMOVE",
+    "PAPER_1 moves 161.4 cm with no hand on it (nearest finger 63 cm)"
+   ]
+  ],
+  "685": [
+   [
+    "PROPMOVE",
+    "PAPER_1 moves 29.4 cm with no hand on it (nearest finger 80 cm)"
+   ]
+  ],
+  "691": [
+   [
+    "PROPMOVE",
+    "PAPER_1 moves 62.2 cm with no hand on it (nearest finger 127 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 61,
+  "BACKHEAD": 3,
+  "INSIDE": 57,
+  "CAMJUMP": 18,
+  "PROPMOVE": 5
+ }
+}

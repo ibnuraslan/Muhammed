@@ -1,0 +1,85 @@
+{
+ "frames": {
+  "277": {
+   "FO": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "283": {
+   "FO": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "289": {
+   "FO": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "295": {
+   "FO": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "301": {
+   "FO": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "307": {
+   "FO": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "355": {
+   "FO": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "361": {
+   "FO": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "367": {
+   "FO": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "373": {
+   "FO": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "379": {
+   "FO": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}
