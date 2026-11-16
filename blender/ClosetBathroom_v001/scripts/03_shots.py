@@ -78,18 +78,18 @@ def palms_up(H, f, pos, yaw, k=1.0, crouch=0.0):
                 pole=(0.55 * sx, 0.35, 0.15))
 def sit(H, f, seat, yaw, seat_z, head=(0.0, 0.0), flex=6.0, knee_out=0.0, bounce=0.0, hands=True):
     Rm = Rz(yaw)
-    root = Vector((seat[0], seat[1], seat_z + 0.15)) + Rm @ Vector((0, -0.02, 0))
+    root = Vector((seat[0], seat[1], seat_z + 0.14)) + Rm @ Vector((0, 0.07, 0))   # hips well back on the seat
     H.key_root(f, root, yaw=yaw, flex=flex * 0.3)
     H.key_spine(f, flex=flex, head=head)
     for s in "LR":
         sx = 1 if s == "L" else -1
-        xy = Vector((seat[0], seat[1])) + (Rm @ Vector((H.ankle[s].x * (1.15 + knee_out), -0.47, 0))).to_2d()
+        xy = Vector((seat[0], seat[1])) + (Rm @ Vector((H.ankle[s].x * (1.15 + knee_out), -0.36, 0))).to_2d()
         H.key_foot(s, f, xy, yaw + sx * 6, lift=bounce if s == "L" else 0.0)
         pb = H.r.PB["Pole_knee." + s]; n = "Pole_knee." + s
         pole = root + Rm @ Vector((sx * 0.25, -1.2, 0.3))
         pb.location = H.r.rest(n).to_3x3().inverted() @ (pole - H.r.BN[n].head_local); pb.keyframe_insert("location", frame=f, group=n)
         if hands:
-            body_hand(H, s, f, root, yaw, (sx * 0.13, -0.33, 0.11 + (bounce if s == "L" else 0)), (sx * 0.1, -1.0, -0.25), (0.0, 0.0, -1.0),
+            body_hand(H, s, f, root, yaw, (sx * 0.13, -0.30, 0.10 + (bounce if s == "L" else 0)), (sx * 0.1, -1.0, -0.25), (0.0, 0.0, -1.0),
                       pole_off=(0.45 * sx, 0.25, 0.1))
 def relax_fingers(r, frames):
     for f in frames:
@@ -143,7 +143,7 @@ stand(T, END("S02"), P1, Y180, flex=8, head=(-6, -4), fwd=0.02)
 relax_fingers(TR, [F("S02", 0.0)])
 
 # ================================================================== HALL: confused, asks the roommates (S04-S06)
-PT = Vector((0.12, -0.42, 0)); RAY_P = Vector((-1.0, -3.4, 0)); KEN_P = Vector((-2.05, -3.0, 0))
+PT = Vector((0.12, -0.42, 0)); RAY_P = Vector((-1.0, -3.4, 0)); KEN_P = Vector((-1.85, -3.05, 0))
 YT_R = yaw_to(PT, RAY_P)
 stand(T, F("S04", 0.0), PT, YT_R + 10, head=(4, -6), flex=0)
 stand(T, F("S04", 0.35), PT, YT_R + 10, head=(8, 4), flex=-3, side=2)
@@ -178,12 +178,18 @@ for sid in ("S07", "S08"):
     pass
 stand(RY, F("S07", 0.0), RAY_P, YR_T, head=(2, 0)); stand(KN, F("S07", 0.0), KEN_P, YK_T, head=(0, 0))
 stand(RY, F("S07", 0.5), RAY_P, YR_T, head=(-2, -6), flex=1, side=3, arms=False)
-stand(RY, F("S07", 1.0), RAY_P, YR_T, head=(-4, -10), flex=1, side=4, arms=False)
+stand(RY, F("S07", 1.0), RAY_P, YR_T, head=(-4, 24), flex=1, side=4, arms=False)
 stand(RY, END("S07"), RAY_P, YR_T, head=(-3, -8), flex=1, side=3, arms=False)
 key_hang(RY, F("S07", 0.0), Vector((RAY_P.x, RAY_P.y, RY.root_head.z)), YR_T)
 palms_up(RY, F("S07", 0.5), RAY_P, YR_T, 0.7); palms_up(RY, F("S07", 1.0), RAY_P, YR_T, 0.9); palms_up(RY, END("S07"), RAY_P, YR_T, 0.8)
-stand(KN, F("S07", 0.7), KEN_P, YK_T + 4, head=(-3, 8), side=-2)
-stand(KN, END("S07"), KEN_P, YK_T + 6, head=(-2, 10), side=-3)
+KEN_P2 = KEN_P + (PT - KEN_P).normalized() * 0.42
+_kp = lambda f: KEN_P.lerp(KEN_P2, smooth(min(1, max(0, (f - F("S07", 0.1)) / (F("S07", 0.8) - F("S07", 0.1))))))
+walk_with_arms(KN, _kp, lambda f: YK_T, F("S07", 0.1), F("S07", 0.8), stride=0.9, amp=0.08)
+stand(KN, F("S07", 0.95), KEN_P2, YK_T, head=(-2, -22), arms=False)
+stand(KN, END("S07"), KEN_P2, YK_T, head=(-4, 6), side=-2, arms=False)
+key_hang(KN, F("S07", 0.95), Vector((KEN_P2.x, KEN_P2.y, KN.root_head.z)), YK_T)
+palms_up(KN, F("S07", 1.25), KEN_P2, YK_T, 0.75); palms_up(KN, END("S07"), KEN_P2, YK_T, 0.85)
+for s_ in "LR": apply_pose(KR, s_, "relaxed", F("S07", 0.95)); apply_pose(KR, s_, "open_alarm", F("S07", 1.25))
 # S08: Ray laughs it off (head back, right hand waves), Ken grins
 stand(RY, F("S08", 0.0), RAY_P, YR_T, head=(-3, -8), flex=1, side=3, arms=False)
 stand(RY, F("S08", 0.35), RAY_P, YR_T, head=(-12, 4), flex=-4, arms=False)
@@ -194,9 +200,9 @@ hang1(RY, "L", F("S08", 0.35), RAY_P, YR_T); hang1(RY, "L", END("S08"), RAY_P, Y
 for f, dx in ((F("S08", 0.35), 0.0), (F("S08", 0.6), 0.06), (F("S08", 0.85), -0.02), (END("S08"), 0.03)):
     gesture(RY, "R", f, RAY_P, YR_T, (-0.27 + dx, -0.30, 0.35), (-0.2, -0.3, 1.0), (0.0, -1.0, 0.1), pole=(-0.55, 0.3, 0.0))
 apply_pose(RR, "R", "open_alarm", F("S08", 0.35)); apply_pose(RR, "L", "relaxed", F("S08", 0.35))
-stand(KN, F("S08", 0.0), KEN_P, YK_T + 6, head=(-2, 10), side=-3)
-stand(KN, F("S08", 0.5), KEN_P, YK_T + 6, head=(-8, 6), side=-1, flex=-2)
-stand(KN, END("S08"), KEN_P, YK_T + 4, head=(-4, 4), side=-2)
+stand(KN, F("S08", 0.0), KEN_P2, YK_T, head=(-4, 6), side=-2)
+stand(KN, F("S08", 0.5), KEN_P2, YK_T, head=(-8, 6), side=-1, flex=-2)
+stand(KN, END("S08"), KEN_P2, YK_T, head=(-4, 4), side=-2)
 relax_fingers(KR, [F("S07", 0.0)]); relax_fingers(RR, [F("S07", 0.0)])
 for s in "LR": apply_pose(RR, s, "open_alarm", F("S07", 0.5))
 # S09: two-shot at the doorway, Ray walks up and insists, open palm toward the bathroom
@@ -444,7 +450,7 @@ cam("S09", [(F("S09", 0), mid9 + Vector((0.55, -2.25, 0.05))), (END("S09"), mid9
 hp10 = h("Tom", "S10", 0.5, 0.05)
 cam("S10", [(F("S10", 0), hp10 + Rz(YT9 + 18) @ Vector((-0.12, -0.85, 0.0))), (END("S10"), hp10 + Rz(YT9 + 18) @ Vector((-0.08, -0.7, 0.0)))], [(F("S10", 0), hp10), (END("S10"), hp10)], 50)
 cam("S11", [(F("S11", 0), (0.28, -1.35, 1.62)), (END("S11"), (0.24, -1.05, 1.58))], [(F("S11", 0), (-0.08, 1.2, 0.85)), (END("S11"), (-0.08, 1.2, 0.85))], 24)
-cam("S12", [(F("S12", 0), (0.42, -1.15, 1.5)), (END("S12"), (0.3, -1.0, 1.5))], [(F("S12", 0), (-0.3, 1.35, 1.2)), (END("S12"), (-0.3, 1.35, 1.25))], 30)
+cam("S12", [(F("S12", 0), (0.42, -1.15, 1.62)), (END("S12"), (0.3, -1.0, 1.62))], [(F("S12", 0), (-0.3, 1.35, 1.48)), (END("S12"), (-0.3, 1.35, 1.5))], 30)
 cam("S13", [(F("S13", 0), (1.75, -2.9, 1.5)), (END("S13"), (1.45, -2.0, 1.5))], [(F("S13", 0), (-0.9, -2.6, 1.2)), (F("S13", 1.5), (0.0, -0.9, 1.2)), (END("S13"), (0.05, -0.6, 1.25))], 28)
 cam("S14", [(F("S14", 0), (0.25, -2.75, 1.55)), (END("S14"), (0.2, -2.35, 1.6))], [(F("S14", 0), (0.08, -0.8, 1.25)), (END("S14"), (0.08, -0.9, 1.35))], 30)
 hp15 = h("Tom", "S15", 1.0, 0.0)

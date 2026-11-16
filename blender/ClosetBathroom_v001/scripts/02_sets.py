@@ -287,7 +287,7 @@ desk = glb("Clinic_Desk", "desk.glb", K, width=1.4, loc=(X0 + 0.55, 1.62, 0), ya
 mon = glb("Clinic_Monitor", "monitor.glb", K, width=0.62, loc=(X0 + 0.45, 1.6, 0.76), yaw=-12)
 for i_ in range(len(mon.data.materials)): mon.data.materials[i_] = mat("MonitorPlastic", (0.03, 0.03, 0.035), 0.4)   # no brand text
 glb("Clinic_DocChair", "ochair.glb", K, height=1.05, loc=(X0 + 0.98, 1.0, 0), yaw=-60)
-glb("Clinic_PatChair", "chair.glb", K, height=1.05, loc=(X0 - 0.55, 0.25, 0), yaw=-160)
+glb("Clinic_PatChair", "chair.glb", K, height=0.92, loc=(X0 - 0.55, 0.25, 0), yaw=-160)
 glb("Clinic_Clock", "clock.glb", K, height=0.34, loc=(X0 - 2.93, 0.55, 1.95), yaw=90)
 glb("Clinic_FirstAid", "firstaid.glb", K, height=0.5, loc=(X0 - 2.86, -0.35, 1.25), yaw=90)
 CAB = mat("Cabinet_White", (0.95, 0.95, 0.96), 0.35)
