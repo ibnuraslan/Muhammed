@@ -1,0 +1,74 @@
+{
+ "house": {
+  "uid": "faa69249ddb84765921401fa9438861f",
+  "title": "2 Story House",
+  "author": "Designed By Jonathan",
+  "author_profile": "https://sketchfab.com/designedbyjonathan",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/faa69249ddb84765921401fa9438861f",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "suv": {
+  "uid": "edc994ad28ed438cb365c0e0389ac177",
+  "title": "Lowpoly Generic SUV",
+  "author": "mk2design",
+  "author_profile": "https://sketchfab.com/mk2design",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/edc994ad28ed438cb365c0e0389ac177",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "pickup": {
+  "uid": "cad83751a295463bbb8b823c11a181ea",
+  "title": "Toyota Pickup truck",
+  "author": "alban",
+  "author_profile": "https://sketchfab.com/alban",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/cad83751a295463bbb8b823c11a181ea",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "pickup2": {
+  "uid": "616761063ad845fe84e1d965bdce5595",
+  "title": "Pickup Truck",
+  "author": "Han66st",
+  "author_profile": "https://sketchfab.com/Han66st",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/616761063ad845fe84e1d965bdce5595",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "house2": {
+  "uid": "db5d2cc306e84411945b2528dec37cd4",
+  "title": "Stylistic Suburban House",
+  "author": "NienkeSt",
+  "author_profile": "https://sketchfab.com/NienkeSt",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/db5d2cc306e84411945b2528dec37cd4",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "house3": {
+  "uid": "fb722ab0446d45a8829d55f436e3c2ba",
+  "title": "American style house",
+  "author": "Kishikov",
+  "author_profile": "https://sketchfab.com/pkishikov",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/fb722ab0446d45a8829d55f436e3c2ba",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "house4": {
+  "uid": "b8375c5e5e6b40639fc06492fbd95fcb",
+  "title": "Suburban House",
+  "author": "mbuannoart",
+  "author_profile": "https://sketchfab.com/mbuannoart",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/b8375c5e5e6b40639fc06492fbd95fcb",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "carpack": {
+  "uid": "20f9af9b8a404d5cb022ac6fe87f21f5",
+  "title": "Generic passenger car pack",
+  "author": "Comrade1280",
+  "author_profile": "https://sketchfab.com/comrade1280",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/20f9af9b8a404d5cb022ac6fe87f21f5",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
