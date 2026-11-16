@@ -83,3 +83,9 @@ The build is fully scripted (`scripts/01`–`04`):
 3. **Dusk and night house windows are dark** (S06, S20). I plan warm lit interiors behind the glass.
 4. **The logo van (S03)** is small in the aerial. In Phase 2 I will add a low pass by the van so the logo is at least 15% of the frame width for at least 1 s.
 5. **Asset credits** (CC-BY, Sketchfab via Objaverse) are in `review/asset_credits.json`: the school, two houses, the sedan, the van, candles, desk, chair, bed, flowers and tree. They go in CREDITS.md at Phase 2.
+
+## After P1 (local fixes, not yet re-checked on sheets; to be folded into the next reviewed push)
+- **Black roads.** The set ground planes overlapped across sets, so roads were coplanar with the next set's ground. Every set ground is now 92 m wide.
+- **Memorial photo and van logo** were lying flat because `plane()` already returns an upright mesh; both now stand upright. The van model is black, so it now carries the **white** logo.
+- **Natasha's lash cards** rendered as black "eyeliner" bands. They are removed, and the memorial portrait is re-rendered.
+- The 3-frame sheets and `body_prop_cross` will be re-run before the next delivery message.

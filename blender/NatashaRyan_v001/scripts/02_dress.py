@@ -21,6 +21,8 @@ suit = O["Nat.female_elegantsuit01"]; flat(suit, navy)
 recolor_by_bone(suit, TOPB, white, zabs=hip_z("Nat"))
 flat(O["Nat.shoes02"], mat("Shoe_Black", (0.02, 0.02, 0.02), 0.4))
 tint_group(O["Nat.long01"], (0.35, 0.25, 0.2))
+# lashes: the refitted teen lash cards render as black bands round the eyes ("eyeliner", director Nov 16) -> removed
+O["Nat.eyelashes01"].hide_render = True; O["Nat.eyelashes01"].hide_viewport = True
 # closed neckline: a white undershirt from her own skin (chest + neck base), just under the blouse
 garment("Nat", "undershirt", lambda b, co: b.startswith(("spine0", "breast", "pectoral", "clavicle", "neck01")), white, offset=0.004, thick=0.002, mask_body=False)
 # Mom: soft teal top (tinted), jeans, honey-blonde bob (tinted grey hair)

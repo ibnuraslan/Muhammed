@@ -351,12 +351,12 @@ cam_shot("S02", [(151, (XP - 0.55, -1.2, 1.25)), (240, (XP - 0.1, -0.95, 1.2))],
 
 # ================================================================== SCHOOL set (drop-off + memorial)
 XS = X["school"]
-plane("School_Lawn", 160, 120, (XS, 40, -0.01), grass_m, "School")
-plane("School_Road", 160, 7, (XS, -0.5, 0.0), asph_m, "School")
-for i in range(16):
-    plane("School_Line%d" % i, 2.5, 0.12, (XS - 75 + i * 10, -0.5, 0.004), white_line, "School")
-plane("School_Pavement", 160, 3.0, (XS, 4.5, 0.06), pave_m, "School")
-box("School_Kerb", (160, 0.2, 0.14), (XS, 3.0, 0.05), M("Kerb", (0.7, 0.7, 0.68), 0.6), "School", bevel=0.01)
+plane("School_Lawn", 92, 120, (XS, 40, -0.01), grass_m, "School")
+plane("School_Road", 92, 7, (XS, -0.5, 0.0), asph_m, "School")
+for i in range(9):
+    plane("School_Line%d" % i, 2.5, 0.12, (XS - 40 + i * 10, -0.5, 0.004), white_line, "School")
+plane("School_Pavement", 92, 3.0, (XS, 4.5, 0.06), pave_m, "School")
+box("School_Kerb", (92, 0.2, 0.14), (XS, 3.0, 0.05), M("Kerb", (0.7, 0.7, 0.68), 0.6), "School", bevel=0.01)
 plane("School_Path", 3.0, 14, (XS, 13, 0.065), pave_m, "School")
 schsrc = import_glb("school.glb", 40.0, axis=0)
 school = inst(schsrc, "School_Building", (XS, 33, 0.0), 0.0, "School"); soften(school)
@@ -381,16 +381,17 @@ van = inst(van_src, "Delivery_Van", (XS - 9.0, 1.9, 0.0), 0.0, "School"); soften
 for ms in van.material_slots:
     pass
 print("VAN dims", tuple(round(x, 2) for x in van.dimensions), "CAR dims", tuple(round(x, 2) for x in car.dimensions))
-# DA KRAS FILMS logo decal on the van's road-facing side (-Y)
-logo_img = bpy.data.images.load("/home/user/Muhammed/blender/assets/brand/DaKrasFilms_logo_dark.png"); logo_img.pack()
+# DA KRAS FILMS logo decal (white version: the van model is black) on the road-facing side (-Y), below the windows
+logo_img = bpy.data.images.load("/home/user/Muhammed/blender/assets/brand/DaKrasFilms_logo_white.png"); logo_img.pack()
 lm = bpy.data.materials.new("LogoDecal"); lm.use_nodes = True; lnt = lm.node_tree; LP = lnt.nodes["Principled BSDF"]
 ti = lnt.nodes.new("ShaderNodeTexImage"); ti.image = logo_img; ti.extension = 'CLIP'
 lnt.links.new(ti.outputs["Color"], LP.inputs["Base Color"]); lnt.links.new(ti.outputs["Alpha"], LP.inputs["Alpha"]); LP.inputs["Roughness"].default_value = 0.4
 bpy.context.view_layer.update()
 vbb = [van.matrix_world @ Vector(c) for c in van.bound_box]
 vminy = min(p.y for p in vbb); vz0 = min(p.z for p in vbb); vz1 = max(p.z for p in vbb)
-logo = plane("Van_Logo", 2.4, 2.4 * 414 / 967, (van.location.x, vminy - 0.03, vz0 + (vz1 - vz0) * 0.55), lm, "School", rot=(R_(90), 0, 0))
-logo.parent = van; logo.matrix_parent_inverse = van.matrix_world.inverted()
+logo = plane("Van_Logo", 2.2, 2.2 * 414 / 967, (van.location.x + 0.2, vminy - 0.03, vz0 + (vz1 - vz0) * 0.42), lm, "School", rot=(R_(90), 0, 0))
+logo.rotation_euler = (0, 0, 0)   # plane() leaves the mesh already upright
+bpy.context.view_layer.update(); logo.parent = van; logo.matrix_parent_inverse = van.matrix_world.inverted()
 
 # Natasha walks from the car to the school; mother stands by the car and waves
 H = HS["NatS"]; a = (XS + 1.4, 3.9, 0); b = (XS + 0.2, 14.0, 0)
@@ -454,14 +455,13 @@ photo_m = bpy.data.materials.new("PortraitPhoto"); photo_m.use_nodes = True
 if os.path.exists(HERE + "portrait.png"):
     pi_ = photo_m.node_tree.nodes.new("ShaderNodeTexImage"); pi_.image = bpy.data.images.load(HERE + "portrait.png"); pi_.image.pack()
     photo_m.node_tree.links.new(pi_.outputs["Color"], photo_m.node_tree.nodes["Principled BSDF"].inputs["Base Color"])
-    _tc = photo_m.node_tree.nodes.new("ShaderNodeTexCoord"); photo_m.node_tree.links.new(_tc.outputs["Generated"], pi_.inputs["Vector"])
     pi_.image.name = "NatPortraitPhoto"
 else:
     photo_m.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.4, 0.6, 0.75, 1)
 photo_m.node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value = 0.35
 bpy.context.view_layer.update()
 ph = plane("Mem_Photo", 0.29, 0.39, (0, 0, 0), photo_m, "School", rot=(R_(90), 0, 0))
-ph.parent = pf; ph.location = (0, -0.017, 0.0); ph.rotation_euler = (R_(90), 0, 0)
+ph.parent = pf; ph.location = (0, -0.017, 0.0); ph.rotation_euler = (0, 0, 0)   # plane() leaves the mesh already upright
 cand_src = import_glb("candles.glb", 0.42, axis=0)
 for i, (dx, dy, rz) in enumerate(((-0.42, -0.08, 0), (0.42, -0.05, 40))):
     inst(cand_src, "Mem_Candles%d" % i, (XS - 4.5 + dx, 5.3 + dy, TZ), rz, "School")
@@ -480,20 +480,20 @@ cam_shot("S09", [(901, (XS - 4.3, 0.0, 1.5)), (1080, (XS - 4.45, 1.5, 1.35))], l
 
 # ================================================================== HOME street (dusk S06, night S20, aerial S22)
 XH = X["home"]
-plane("Home_Lawn", 200, 120, (XH, 40, -0.01), grass_m, "Home")
-plane("Home_Road", 200, 7, (XH, -1.0, 0.0), asph_m, "Home")
-plane("Home_Pavement", 200, 2.4, (XH, 3.7, 0.06), pave_m, "Home")
-box("Home_Kerb", (200, 0.2, 0.14), (XH, 2.5, 0.05), M("Kerb", (0.7, 0.7, 0.68), 0.6), "Home", bevel=0.01)
+plane("Home_Lawn", 92, 120, (XH + 4, 40, -0.01), grass_m, "Home")
+plane("Home_Road", 92, 7, (XH + 4, -1.0, 0.0), asph_m, "Home")
+plane("Home_Pavement", 92, 2.4, (XH + 4, 3.7, 0.06), pave_m, "Home")
+box("Home_Kerb", (92, 0.2, 0.14), (XH + 4, 2.5, 0.05), M("Kerb", (0.7, 0.7, 0.68), 0.6), "Home", bevel=0.01)
 h2src = import_glb("house2.glb", 8.0, axis=2); h1src = import_glb("house1.glb", 7.0, axis=2)
 fam = inst(h2src, "Home_FamilyHouse", (XH, 14.0, 0.0), 0.0, "Home"); soften(fam)
 houses = [fam]
-for i, (dx, src_) in enumerate(((-16, h1src), (16, h1src), (32, h2src), (48, h1src), (-32, h2src))):
+for i, (dx, src_) in enumerate(((-16, h1src), (16, h1src), (32, h2src), (-32, h2src))):
     houses.append(inst(src_, "Home_House%d" % i, (XH + dx, 14.0, 0.0), 0.0, "Home"))
 for h in houses: soften(h)
 bf = houses[3]   # the house where she was found: two doors down (x + 32)
-for i, tx in enumerate((-24, -8, 8, 24, 40, 56, -40)):
+for i, tx in enumerate((-24, -8, 8, 24, 40, -38)):
     inst(treesrc, "Home_Tree%d" % i, (XH + tx, 7.5 + (i % 2) * 1.2, 0), random.uniform(0, 360), "Home", scale=random.uniform(0.8, 1.0))
-for i, tx in enumerate(range(-40, 61, 14)):
+for i, tx in enumerate(range(-38, 47, 14)):
     box("Home_LampPost%d" % i, (0.12, 0.12, 5.0), (XH + tx, 3.0, 2.5), M("LampGrey", (0.3, 0.32, 0.34), 0.4, metal=0.7), "Home", bevel=0.0)
     box("Home_LampHead%d" % i, (0.5, 0.25, 0.14), (XH + tx, 2.75, 5.0), M("LampGlow", (1, 0.9, 0.7), 0.3, emit=(1.0, 0.85, 0.6), ems=6.0), "Home", bevel=0.02)
     light("Home_Lamp%d" % i, 'POINT', (XH + tx, 2.7, 4.7), 450, size=0.4, color=(1.0, 0.82, 0.55), cn="Home")
@@ -547,7 +547,7 @@ for nm in ("MomH",):
 
 # ================================================================== FIELD (search)
 XF = X["field"]
-plane("Field_Ground", 160, 160, (XF, 30, 0.0), noise_mat("FieldGround", (0.3, 0.42, 0.12), (0.42, 0.5, 0.18), 1.5, 0.85), "Field")
+plane("Field_Ground", 92, 160, (XF, 30, 0.0), noise_mat("FieldGround", (0.3, 0.42, 0.12), (0.42, 0.5, 0.18), 1.5, 0.85), "Field")
 # tall grass: one mesh of ~22k blades (our own), deterministic
 bm = bmesh.new(); rnd = random.Random(11)
 for i in range(22000):
@@ -640,8 +640,8 @@ cam_shot("S14", [(1621, (XK - 1.3, -1.4, 1.3)), (1740, (XK - 1.0, -1.1, 1.25))],
 
 # ================================================================== STATION (escort)
 XT = X["station"]
-plane("Stn_Ground", 120, 80, (XT, 20, -0.01), pave_m, "Station")
-plane("Stn_Road", 120, 7, (XT, -3.5, 0.0), asph_m, "Station")
+plane("Stn_Ground", 92, 80, (XT, 20, -0.01), pave_m, "Station")
+plane("Stn_Road", 92, 7, (XT, -3.5, 0.0), asph_m, "Station")
 brick = noise_mat("StationBrick", (0.55, 0.3, 0.22), (0.62, 0.36, 0.26), 30, 0.7)
 box("Stn_Facade", (24, 0.6, 9), (XT, 14.0, 4.5), brick, "Station", bevel=0.02)
 box("Stn_Cornice", (24.4, 0.9, 0.35), (XT, 13.9, 9.0), M("Stone", (0.85, 0.82, 0.75), 0.6), "Station", bevel=0.03)
