@@ -1,0 +1,128 @@
+[
+ {
+  "name": "S01_RiverPull",
+  "f0": 1,
+  "f1": 190,
+  "beat": "B1 pulled a dying croc from the riverbank"
+ },
+ {
+  "name": "S02_CrocCloseLow",
+  "f0": 191,
+  "f1": 340,
+  "beat": "B1 (croc head close + man pulling behind)"
+ },
+ {
+  "name": "S03_DragHome",
+  "f0": 341,
+  "f1": 510,
+  "beat": "B2 and took it home"
+ },
+ {
+  "name": "S04_Treat",
+  "f0": 511,
+  "f1": 700,
+  "beat": "B3 to treat its wounds (logo crate by the porch steps)"
+ },
+ {
+  "name": "S05_PondWide",
+  "f0": 701,
+  "f1": 900,
+  "beat": "B4 kept it in a secret pond behind his house"
+ },
+ {
+  "name": "S06_CrocSwim",
+  "f0": 901,
+  "f1": 1050,
+  "beat": "B4 (croc swimming toward camera, house behind)"
+ },
+ {
+  "name": "S07_Feed",
+  "f0": 1051,
+  "f1": 1250,
+  "beat": "B5 he would feed it 9 pounds of meat a day (plain bucket, no text)"
+ },
+ {
+  "name": "S08_Snap",
+  "f0": 1251,
+  "f1": 1400,
+  "beat": "B5 (croc rises for the meat)"
+ },
+ {
+  "name": "S09_SleepWide",
+  "f0": 1401,
+  "f1": 1600,
+  "beat": "B6 he even slept beside it (night)"
+ },
+ {
+  "name": "S10_SleepClose",
+  "f0": 1601,
+  "f1": 1770,
+  "beat": "B6 thinking his love would heal its wounds"
+ },
+ {
+  "name": "S11_Release",
+  "f0": 1771,
+  "f1": 1970,
+  "beat": "B7 when he tried to release it back to the wild"
+ },
+ {
+  "name": "S12_RefuseTurn",
+  "f0": 1971,
+  "f1": 2140,
+  "beat": "B7 the crocodile refused to leave (turns back)"
+ },
+ {
+  "name": "S13_ComesBack",
+  "f0": 2141,
+  "f1": 2360,
+  "beat": "B7 (croc crawls back, he kneels, hand on its head)"
+ },
+ {
+  "name": "S14_WalkSide",
+  "f0": 2361,
+  "f1": 2560,
+  "beat": "B8 staying with him for over 20 years"
+ },
+ {
+  "name": "S15_WalkFront",
+  "f0": 2561,
+  "f1": 2730,
+  "beat": "B8 (front low)"
+ },
+ {
+  "name": "S16_ShowWide",
+  "f0": 2731,
+  "f1": 2950,
+  "beat": "B9 they performed for tourists (logo sign on the deck rail)"
+ },
+ {
+  "name": "S17_Tourists",
+  "f0": 2951,
+  "f1": 3120,
+  "beat": "B9 (tourists' faces, man + croc below)"
+ },
+ {
+  "name": "S18_Died",
+  "f0": 3121,
+  "f1": 3340,
+  "beat": "B10 and when it finally died"
+ },
+ {
+  "name": "S19_Portrait",
+  "f0": 3341,
+  "f1": 3510,
+  "beat": "B11 the man held a public funeral (painting + flowers)"
+ },
+ {
+  "name": "S20_Sing",
+  "f0": 3511,
+  "f1": 3730,
+  "beat": "B11 where he sang a song for his crocodile friend"
+ },
+ {
+  "name": "S21_HallWide",
+  "f0": 3731,
+  "f1": 3900,
+  "beat": "B11 (wide: guests, singer, portrait)"
+ }
+]

@@ -1,0 +1,33 @@
+{
+"visible_frames": [
+2241,
+2244,
+2247
+],
+"frames": {
+"2241": {
+"finger2-1.R|Croc_body|VIS": 29,
+"finger2-2.R|Croc_body|VIS": 8,
+"finger1-3.R|Croc_body|VIS": 16,
+"metacarpal1.R|Croc_body|VIS": 5
+},
+"2244": {
+"finger2-2.R|Croc_body|VIS": 15,
+"finger2-1.R|Croc_body|VIS": 22,
+"finger3-2.R|Croc_body|VIS": 7,
+"finger4-1.R|Croc_body|VIS": 25,
+"finger3-1.R|Croc_body|VIS": 20,
+"metacarpal3.R|Croc_body|VIS": 8,
+"metacarpal1.R|Croc_body|VIS": 3,
+"finger4-2.R|Croc_body|VIS": 4,
+"metacarpal2.R|Croc_body|VIS": 9
+},
+"2247": {
+"finger3-1.R|Croc_body|VIS": 23,
+"finger4-1.R|Croc_body|VIS": 20,
+"finger4-2.R|Croc_body|VIS": 5,
+"metacarpal3.R|Croc_body|VIS": 3,
+"metacarpal2.R|Croc_body|VIS": 3
+}
+}
+}

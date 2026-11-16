@@ -1,0 +1,139 @@
+{
+"visible_frames": [
+1117,
+1120,
+1123,
+1126,
+1129,
+1132,
+1135,
+1138,
+1141,
+1144,
+1147,
+1150,
+1153,
+1156,
+1159,
+1162
+],
+"frames": {
+"1117": {
+"finger2-2.R|Meat|VIS": 19,
+"finger2-3.R|Meat|VIS": 28,
+"finger2-1.R|Meat|VIS": 14,
+"finger1-2.R|Meat|VIS": 8,
+"finger1-3.R|Meat|VIS": 28
+},
+"1120": {
+"finger2-2.R|Meat|VIS": 19,
+"finger2-3.R|Meat|VIS": 26,
+"finger2-1.R|Meat|VIS": 14,
+"finger1-2.R|Meat|VIS": 8,
+"finger1-3.R|Meat|VIS": 28
+},
+"1123": {
+"finger2-2.R|Meat|VIS": 19,
+"finger2-3.R|Meat|VIS": 26,
+"finger2-1.R|Meat|VIS": 14,
+"finger1-2.R|Meat|VIS": 8,
+"finger1-3.R|Meat|VIS": 27
+},
+"1126": {
+"finger2-2.R|Meat|VIS": 19,
+"finger2-3.R|Meat|VIS": 26,
+"finger2-1.R|Meat|VIS": 14,
+"finger1-2.R|Meat|VIS": 8,
+"finger1-3.R|Meat|VIS": 26
+},
+"1129": {
+"finger2-2.R|Meat|VIS": 19,
+"finger2-3.R|Meat|VIS": 26,
+"finger2-1.R|Meat|VIS": 14,
+"finger1-2.R|Meat|VIS": 8,
+"finger1-3.R|Meat|VIS": 26
+},
+"1132": {
+"finger2-2.R|Meat|VIS": 19,
+"finger2-3.R|Meat|VIS": 24,
+"finger2-1.R|Meat|VIS": 14,
+"finger1-2.R|Meat|VIS": 8,
+"finger1-3.R|Meat|VIS": 26
+},
+"1135": {
+"finger2-2.R|Meat|VIS": 20,
+"finger2-3.R|Meat|VIS": 23,
+"finger2-1.R|Meat|VIS": 14,
+"finger1-2.R|Meat|VIS": 7,
+"finger1-3.R|Meat|VIS": 25
+},
+"1138": {
+"finger2-3.R|Meat|VIS": 19,
+"finger2-1.R|Meat|VIS": 16,
+"finger2-2.R|Meat|VIS": 20,
+"finger1-2.R|Meat|VIS": 6,
+"finger1-3.R|Meat|VIS": 24
+},
+"1141": {
+"finger2-1.R|Meat|VIS": 17,
+"finger2-2.R|Meat|VIS": 20,
+"finger2-3.R|Meat|VIS": 17,
+"finger1-2.R|Meat|VIS": 4,
+"finger1-3.R|Meat|VIS": 24
+},
+"1144": {
+"finger2-1.R|Meat|VIS": 17,
+"finger2-2.R|Meat|VIS": 20,
+"finger2-3.R|Meat|VIS": 12,
+"finger1-3.R|Meat|VIS": 27
+},
+"1147": {
+"finger2-1.R|Meat|VIS": 16,
+"finger2-2.R|Meat|VIS": 18,
+"finger2-3.R|Meat|VIS": 9,
+"finger3-3.R|Meat|VIS": 13,
+"finger1-3.R|Meat|VIS": 31
+},
+"1150": {
+"finger2-1.R|Meat|VIS": 16,
+"finger2-3.R|Meat|VIS": 5,
+"finger2-2.R|Meat|VIS": 20,
+"finger3-3.R|Meat|VIS": 23,
+"finger1-3.R|Meat|VIS": 33
+},
+"1153": {
+"finger2-1.R|Meat|VIS": 16,
+"finger3-3.R|Meat|VIS": 31,
+"finger1-3.R|Meat|VIS": 25,
+"finger2-2.R|Meat|VIS": 21,
+"finger2-3.R|Meat|VIS": 3
+},
+"1156": {
+"finger2-1.R|Meat|VIS": 16,
+"finger2-3.R|Meat|VIS": 18,
+"finger2-2.R|Meat|VIS": 19,
+"finger3-3.R|Meat|VIS": 33,
+"finger1-3.R|Meat|VIS": 20,
+"finger3-2.R|Meat|VIS": 5
+},
+"1159": {
+"finger2-3.R|Meat|VIS": 20,
+"finger2-1.R|Meat|VIS": 16,
+"finger2-2.R|Meat|VIS": 17,
+"finger3-3.R|Meat|VIS": 32,
+"finger1-3.R|Meat|VIS": 13,
+"finger3-2.R|Meat|VIS": 7
+},
+"1162": {
+"finger2-1.R|Meat|VIS": 16,
+"finger3-2.R|Meat|VIS": 21,
+"finger3-1.R|Meat|VIS": 33,
+"finger3-3.R|Meat|VIS": 3,
+"finger4-3.R|Meat|VIS": 16,
+"finger4-2.R|Meat|VIS": 23,
+"finger4-1.R|Meat|VIS": 7,
+"metacarpal2.R|Meat|VIS": 7,
+"metacarpal1.R|Meat|VIS": 1
+}
+}
+}
