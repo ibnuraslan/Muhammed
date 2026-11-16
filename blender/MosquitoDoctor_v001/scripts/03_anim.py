@@ -39,14 +39,15 @@ sc.frame_set(0)
 BOYMESH = [D["Boy.body"], D["Boy.male_casualsuit03"]]
 BEDMESH = [o for o in D if o.name.startswith("low_Pillow_1_lagen") and o.users_collection[0] == sc.collection or o.name in ("low_Pillow_1_lagen_0",)]
 BEDMESH = [D["low_Pillow_1_lagen_0"], D["low_Pillow_1_pillow_0"]]
-def drape(name, x0, x1, y0, y1, bodies, base_z, nx=44, ny=52, lift=0.04, edge_drop=0.2):
+def drape(name, x0, x1, y0, y1, bodies, base_z, nx=44, ny=52, lift=0.04, edge_drop=0.2, bed=None):
     bm = bmesh.new(); vs = {}
     for i in range(nx + 1):
         for j in range(ny + 1):
             x = x0 + (x1 - x0) * i / nx; y = y0 + (y1 - y0) * j / ny
             h = ray_down(V((x, y, 1.6)), bodies, up=0.0)
-            z = (h[0].z + lift) if h else base_z - edge_drop
-            vs[i, j] = [x, y, max(z, base_z - edge_drop), (h[0].z + lift * 0.9) if h else -9]
+            inbed = bed is not None and bed[0] <= x <= bed[1] and bed[2] <= y <= bed[3]
+            z = (h[0].z + lift) if h else (base_z + 0.015 if inbed else base_z - edge_drop)
+            vs[i, j] = [x, y, max(z, base_z - edge_drop), (h[0].z + lift * 0.9) if h else (base_z + 0.015 if inbed else -9)]
     for it in range(14):    # smooth (cloth-like), never below the surface
         new = {}
         for (i, j), v in vs.items():
@@ -63,7 +64,7 @@ def drape(name, x0, x1, y0, y1, bodies, base_z, nx=44, ny=52, lift=0.04, edge_dr
     so = o.modifiers.new("solid", 'SOLIDIFY'); so.thickness = 0.012; so.offset = 1
     o.modifiers.new("sub", 'SUBSURF').levels = 1
     m = bpy.data.materials.new(name + "Mat"); m.use_nodes = True; Pn = m.node_tree.nodes["Principled BSDF"]
-    Pn.inputs["Base Color"].default_value = (0.55, 0.72, 0.90, 1); Pn.inputs["Roughness"].default_value = 0.85
+    Pn.inputs["Base Color"].default_value = (0.10, 0.22, 0.50, 1); Pn.inputs["Roughness"].default_value = 0.85   # darker blue: the glass vial reads against it
     Pn.inputs["Sheen Weight"].default_value = 0.4; me.materials.append(m)
     return o, vs
 BLANKET, BV = drape("BoyBlanket", -2.06, -0.74, 0.84, 2.02, BOYMESH + BEDMESH, MATT_Z)
@@ -428,9 +429,10 @@ k0, k1 = BLK["K"]
 key_vis(D["Doctor"], k0, False); key_vis(DBLANKET, k0, False)
 for n in ("ColA", "ColB"): key_vis(D[n], 1, False); key_vis(D[n], k0, True)
 for k, f in enumerate(range(k0, k1 + 1, 30)):
-    stand("ColA", f, 1.30, 2.30, yaw=0, flex=8, spine=18, head=(26, 0), hands=False)
+    if f <= 2830: stand("ColA", f, 1.30, 2.30, yaw=0, flex=8, spine=18, head=(26, 0), hands=False)
     stand("ColB", f, 2.35, 2.20, yaw=-35, flex=6, spine=10, head=(22 + 3 * math.sin(k), 0), hands=False)
-for n in ("ColA", "ColB"): stand(n, k1, *( (1.30, 2.30) if n == "ColA" else (2.35, 2.20)), yaw=0 if n == "ColA" else -35, flex=8, spine=18 if n == "ColA" else 10, head=(26, 0) if n == "ColA" else (22, 0), hands=False)
+stand("ColA", 2830, 1.30, 2.30, yaw=0, flex=8, spine=18, head=(26, 0), hands=False)
+for n in ("ColB",): stand(n, k1, *( (1.30, 2.30) if n == "ColA" else (2.35, 2.20)), yaw=0 if n == "ColA" else -35, flex=8, spine=18 if n == "ColA" else 10, head=(26, 0) if n == "ColA" else (22, 0), hands=False)
 def hands_front(n, f, P, yaw, sides="LR", flex=0.0):
     """arms relaxed with a soft elbow bend: hands at the side of the thighs, a little forward (no straight mannequin arms)"""
     Rb = body_R(yaw, flex, 0)
@@ -438,7 +440,7 @@ def hands_front(n, f, P, yaw, sides="LR", flex=0.0):
         W, d, nn = relaxed_hand(n, P, Rb, s_, fwd=0.13, out=0.02, up=0.09)
         HUM[n].key_hand(s_, f, W, d, nn, elbow_pole(n, P, Rb, s_, back=0.6, out=0.3, down=-0.05))
         apply_pose(D[n], s_, "relaxed", f)
-for f in (k0, 2830, k1):
+for f in (k0, 2830):
     sc.frame_set(f)
     hands_front("ColA", f, V((1.30, 2.30, HUM["ColA"].root_head.z - 0.02)), 0, flex=8)
     hands_front("ColB", f, V((2.35, 2.20, HUM["ColB"].root_head.z - 0.02)), -35, sides="L", flex=6)
@@ -454,6 +456,14 @@ key_vis(D["Doctor"], k0, False)
 # S24 2831-2950: the corked vial stands on the desk by the notebook; ColB leans in and studies it (no grip)
 VK = Matrix.Translation(V((1.12, 1.62, DESK_Z))) @ Rz(10).to_4x4()
 key_obj(VIAL, 2830, VDESK); key_obj(MQ, 2830, Matrix.Translation(V((30, 0, 0))))
+# ColA reads the notebook in S24: leans on the desk with his left hand flat on the edge, nods as he reads
+for k, f in enumerate(list(range(2831, k1 + 1, 20)) + [k1]):
+    P_, Rb_ = stand("ColA", f, 1.30, 2.30, yaw=0, flex=12, spine=20, head=(24 + 7 * math.sin(k * 1.3), 5 * math.sin(k * 0.6)), hands=False)
+    sc.frame_set(f)
+    place_hand(D["ColA"], "L", f, V((1.52, 1.90, DESK_Z + 0.015)), V((0, 0, -1)), V((-0.1, -1, 0)).normalized()); apply_pose(D["ColA"], "L", "flat_palm", f)
+    nm = "Pole_elbow.L"; pb = RIG["ColA"].PB[nm]; pole = V((1.95, 2.45, 1.0))
+    pb.location = RIG["ColA"].rest(nm).to_3x3().inverted() @ (pole - RIG["ColA"].BN[nm].head_local); pb.keyframe_insert("location", frame=f, group=nm)
+    hands_front("ColA", f, P_, 0, sides="R", flex=12)
 for f in list(range(2831, k1 + 1, 30)) + [k1]:
     stand("ColB", f, 2.35, 2.20, yaw=-35, flex=14, spine=20, head=(24, 6 * math.sin(f / 40)), hands=False)
     sc.frame_set(f)
@@ -473,8 +483,8 @@ key_vis(D["Boy"], l0, True)
 for n in ("ColA", "ColB"): key_vis(D[n], l0, False)
 WARD_PAT = (("Boy", -1, 0.5, 0.10), ("PatA", 1, -1.5, 0.10), ("PatB", -1, 2.5, 0.12))
 def ward_lie(n, side, by, hu, f, hd=(18, 0), br=0.0, arms_up=False):
-    head = (WX + side * (2.5 - 0.72), by)
-    P, Rb = lie(n, f, head, MATT_Z, toward=(side, 0), head=hd, breathe=br, hip_up=hu)
+    head = (WX + side * (2.5 + 0.60), by)          # head on the pillow at the wall end, feet toward the aisle
+    P, Rb = lie(n, f, head, MATT_Z, toward=(-side, 0), head=hd, breathe=br, hip_up=hu)
     for s_ in "LR":
         sx = 1 if s_ == "L" else -1
         if arms_up:
@@ -490,9 +500,11 @@ for n, side, by, hu in WARD_PAT:
     sc.frame_set(l0)
     xa, xb = (WX + side * 2.5 - 0.98, WX + side * 2.5 + 0.98)
     # blanket from the chest to the feet (chest edge 0.45 m from the head end)
-    hx = WX + side * (2.5 - 0.72)
-    x0, x1 = (min(hx + side * 0.42, WX + side * 3.48), max(hx + side * 0.42, WX + side * 3.48))
-    wb, _ = drape("WardBlanket_" + n, x0, x1, by - 0.66, by + 0.66, [D[n + ".body"]] + [c for c in D[n].children if "suit" in c.name], MATT_Z, nx=40, ny=30)
+    hx = WX + side * (2.5 + 0.60)
+    x0, x1 = (min(hx - side * 0.42, WX + side * 1.50), max(hx - side * 0.42, WX + side * 1.50))
+    for c in D[n].children:            # shoes are under the blanket: hidden in the ward so they can't poke through
+        if "shoes" in c.name: key_vis(c, l0, False)
+    wb, _ = drape("WardBlanket_" + n, x0, x1, by - 0.66, by + 0.66, [D[n + ".body"]] + [c for c in D[n].children if "suit" in c.name], MATT_Z, nx=40, ny=30, lift=0.05, bed=(WX + side * 2.5 - 0.95, WX + side * 2.5 + 0.95, by - 0.62, by + 0.62))
     WBL.append(wb)
 for n, side, by, hu in WARD_PAT:
     for f in list(range(l0, l1 + 1, 40)) + [l1]:
@@ -500,8 +512,8 @@ for n, side, by, hu in WARD_PAT:
 for wb in WBL: key_vis(wb, 1, False); key_vis(wb, l0, True)
 # nurse: stands in the aisle by the boy's bed, hands in front, looks at him, small weight shifts
 for k, f in enumerate(list(range(l0, l1 + 1, 30)) + [l1]):
-    stand("Nurse", f, WX - 0.75, 0.5, yaw=-90, spine=4, head=(14, -8 + 6 * math.sin(k * 0.8)), dz=-0.003 * math.sin(k * 1.7), hands=False)
-    hands_front("Nurse", f, V((WX - 0.75, 0.5, HUM["Nurse"].root_head.z - 0.02)), -90)
+    stand("Nurse", f, 37.75, 1.52, yaw=0, spine=10, head=(22, -6 + 6 * math.sin(k * 0.8)), dz=-0.003 * math.sin(k * 1.7), hands=False)
+    hands_front("Nurse", f, V((37.75, 1.52, HUM["Nurse"].root_head.z - 0.02)), 0, flex=0)
 for n in ("Doctor",): key_vis(D[n], l0, False)
 print("ANIM all blocks done")
 sc["BLK"] = str(BLK)

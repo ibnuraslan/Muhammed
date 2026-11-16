@@ -17,6 +17,7 @@ def vialmid(f): sc.frame_set(f); return D["Vial"].matrix_world @ V((0, 0, 0.0375
 def fixed(p): return lambda f: V(p)
 def mix(a, b, t): return lambda f: a(f).lerp(b(f), t)
 def add(a, o): return lambda f: a(f) + V(o)
+def smooth(x): x = max(0, min(1, x)); return x * x * (3 - 2 * x)
 # (name, f0, f1, aim_fn, cam_start, cam_end, lens, macro, relative)  relative: cam = aim + offset
 SH = [
  ("S01", 1, 100, mq, (0.065, -0.05, 0.03), (0.045, -0.035, 0.022), 50, True, True),
@@ -43,12 +44,11 @@ SH = [
  ("S22", 2621, 2710, fixed((1.45, 1.70, 0.82)), (0.98, 0.68, 1.30), (1.08, 0.84, 1.25), 26, False, False),
  ("S23", 2711, 2830, fixed((1.65, 2.0, 1.22)), (1.50, 0.70, 1.50), (1.56, 0.88, 1.45), 26, False, False),
  ("S24", 2831, 2950, fixed((1.18, 1.95, 1.12)), (1.02, 1.08, 0.96), (1.04, 1.16, 0.94), 30, False, False),
- ("S25", 2951, 3070, fixed((40.0, 2.5, 0.55)), (40.0, -5.0, 2.15), (40.0, -3.6, 2.05), 24, False, False),
- ("S26", 3071, 3190, lambda f: headc("Boy", f), (-0.60, -0.30, 0.45), (-0.50, -0.25, 0.38), 40, False, True),
+ ("S25", 2951, 3070, lambda f: V((38.35, 1.75, 0.60)).lerp(V((37.55, 1.05, 0.85)), smooth(max(0.0, (f - 3005) / 65))), (39.25, -1.05, 1.38), (39.12, -0.80, 1.34), 24, False, False),
+ ("S26", 3071, 3190, lambda f: headc("Boy", f), (0.60, -0.32, 0.42), (0.50, -0.27, 0.36), 40, False, True),
 ]
 for m in list(sc.timeline_markers): sc.timeline_markers.remove(m)
 for c in [o for o in D if o.name.startswith(("CAM_", "AIM_", "CATCH_"))]: bpy.data.objects.remove(c, do_unlink=True)
-def smooth(x): x = max(0, min(1, x)); return x * x * (3 - 2 * x)
 for name, f0, f1, aim, c0, c1, lens, macro, rel in SH:
     a = bpy.data.objects.new("AIM_" + name, None); sc.collection.objects.link(a); a.empty_display_size = 0.02
     cam = bpy.data.objects.new("CAM_" + name, bpy.data.cameras.new("CAM_" + name)); sc.collection.objects.link(cam)
@@ -75,7 +75,7 @@ sc.camera = D["CAM_S01"]
 # ward net of the recovered boy's bed is tied up (hidden) so S26 sees him clearly; logo crate near the ward entrance
 n = D.get("Net_-1_0")
 if n: n.hide_render = True; n.hide_viewport = True
-cp = D["CrateWard_pivot"]; cp.location = V((40.40, -0.9, 0)); cp.rotation_euler = (0, 0, math.radians(-4)); cp.scale = (1.3, 1.3, 1.3)
+cp = D["CrateWard_pivot"]; cp.location = V((38.80, 1.80, 0)); cp.rotation_euler = (0, 0, math.radians(-30)); cp.scale = (1.3, 1.3, 1.3)
 bpy.context.view_layer.update()
 img = bpy.data.images.load("/home/user/Muhammed/blender/assets/brand/DaKrasFilms_logo_white.png"); img.pack()
 ml = bpy.data.materials.new("LogoDecal"); ml.use_nodes = True; nt = ml.node_tree; P = nt.nodes["Principled BSDF"]

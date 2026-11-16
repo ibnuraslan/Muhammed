@@ -330,6 +330,7 @@ for side in (-1, 1):
         y = k * 2.0 + 0.5
         inst = bpy.data.objects.new(f"WardBed_{side}_{k}", None); link(inst)
         inst.instance_type = 'COLLECTION'; inst.instance_collection = TPL; inst.location = V((WX + side * 2.5, y, 0))
+        if side > 0: inst.rotation_euler = (0, 0, math.pi)     # pillows at the wall on both sides
         net = box(f"Net_{side}_{k}", (hi.x - lo.x + 0.1, hi.y - lo.y + 0.1, 2.05 - 0.45), (WX + side * 2.5, y, 0.45 + (2.05 - 0.45) / 2), M_NET)
         net.visible_shadow = False
         bpy.context.view_layer.objects.active = net; bpy.ops.object.mode_set(mode='EDIT'); bm = bmesh.from_edit_mesh(net.data)

@@ -43,11 +43,11 @@ def stand_feet(n, f, x, y, yaw, width=1.0, fwdL=0.0, fwdR=0.0, z=0.0):
     for s, fw in (("L", fwdL), ("R", fwdR)):
         a = H.ankle[s]; loc = V((x, y, z)) + Rw @ V((a.x * width, a.y - H.root_head.y - fw, a.z))
         key_foot_free(n, s, f, loc, Rw)
-def stand(n, f, x, y, yaw=0.0, flex=0.0, side=0.0, spine=0.0, twist=0.0, head=(0.0, 0.0), dz=0.0, hands=True, feet=True, z=0.0):
+def stand(n, f, x, y, yaw=0.0, flex=0.0, side=0.0, spine=0.0, twist=0.0, head=(0.0, 0.0), dz=0.0, hands=True, feet=True, z=0.0, width=0.75):
     H = HUM[n]
     P = V((x, y, z + H.root_head.z - 0.02 + dz)); Rb = body_R(yaw, flex, side)
     H.key_root(f, P, yaw=yaw, flex=flex, side=side); H.key_spine(f, flex=spine, twist=twist, head=head)
-    if feet: stand_feet(n, f, x, y, yaw, z=z)
+    if feet: stand_feet(n, f, x, y, yaw, z=z, width=width)
     if hands: key_relaxed(n, f, P, Rb)
     return P, Rb
 def sit(n, f, x, y, seat_z, yaw=0.0, lean=0.0, spine=0.0, twist=0.0, head=(0.0, 0.0), knee_fwd=0.42, width=1.15, breathe=0.0):
