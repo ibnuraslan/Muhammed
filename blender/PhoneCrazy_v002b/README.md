@@ -37,3 +37,10 @@ Review: `review/preview.mp4` (every 5th frame at 270×480 with the VO), check re
 - S14: stronger push-in to the drain hole (was nearly static for 2.2 s).
 - S22: camera moved so the case no longer sits behind the Foreman's head.
 Changed ranges re-rendered and spliced into `review/preview.mp4`: f553–786, 1255–1385, 1440–1513, 1663–1931.
+
+## Checks (on this exact package)
+- clip_scan: 0 bad ranges.
+- body_prop_cross (Case, Phone, step 3): 0.
+- limb_check: 697 ARMBODY, all "(2 pts)" = the known upperarm points 0–2 at the shoulder false positive; no other hits.
+- qa_check: EMPTY 323 (phone, pit, excavator and cross-section shots have no person, by design), FILL 24 (the case lid / screen fills the phone close-ups), CAMJUMP 19 (the cuts), PROPMOVE 28 (the whirlpool cone), FAN 59 (Mate's pointing hand: index out, others curled), BACKHEAD 3 (Digger in the S1 wide and the last S10 frame, crew watching the excavator).
+Watched: the full v002 preview (8 pages) start to finish, then every changed range in the v002b splice.

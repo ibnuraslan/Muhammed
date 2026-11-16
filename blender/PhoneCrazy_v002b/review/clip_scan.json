@@ -1,0 +1,57 @@
+{
+ "frames": {
+  "751": {
+   "Digger": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "757": {
+   "Digger": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "763": {
+   "Digger": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "769": {
+   "Digger": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "829": {
+   "Digger": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "835": {
+   "Digger": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "841": {
+   "Digger": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}
