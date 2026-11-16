@@ -259,7 +259,7 @@ def tunic_mat(name, rgb, stains=0.0):
         no = nt.nodes.new('ShaderNodeTexNoise'); no.inputs['Scale'].default_value = 7.0; no.inputs['Detail'].default_value = 4.0
         cr = nt.nodes.new('ShaderNodeValToRGB'); cr.color_ramp.elements[0].position = 0.45; cr.color_ramp.elements[1].position = 0.6
         mul = nt.nodes.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'; mul.inputs[1].default_value = stains
-        st = nt.nodes.new('ShaderNodeMix'); st.data_type = 'RGBA'; st.inputs['B'].default_value = (0.13, 0.085, 0.045, 1)
+        st = nt.nodes.new('ShaderNodeMix'); st.data_type = 'RGBA'; st.inputs['B'].default_value = (0.05, 0.032, 0.018, 1)
         nt.links.new(tc.outputs['Object'], no.inputs['Vector']); nt.links.new(no.outputs['Fac'], cr.inputs['Fac'])
         nt.links.new(cr.outputs['Color'], mul.inputs[0]); nt.links.new(mul.outputs[0], st.inputs['Factor'])
         nt.links.new(out, st.inputs['A']); out = st.outputs['Result']
@@ -267,7 +267,7 @@ def tunic_mat(name, rgb, stains=0.0):
         sep = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Object'], sep.inputs[0])
         mr = nt.nodes.new('ShaderNodeMapRange'); mr.inputs['From Min'].default_value = 1.05; mr.inputs['From Max'].default_value = 0.85
         nt.links.new(sep.outputs['Z'], mr.inputs['Value'])
-        d2 = nt.nodes.new('ShaderNodeMix'); d2.data_type = 'RGBA'; d2.inputs['B'].default_value = (0.20, 0.14, 0.08, 1)
+        d2 = nt.nodes.new('ShaderNodeMix'); d2.data_type = 'RGBA'; d2.inputs['B'].default_value = (0.07, 0.045, 0.025, 1)
         m2 = nt.nodes.new('ShaderNodeMath'); m2.operation = 'MULTIPLY'; m2.inputs[1].default_value = 0.7
         nt.links.new(mr.outputs['Result'], m2.inputs[0]); nt.links.new(m2.outputs[0], d2.inputs['Factor'])
         nt.links.new(out, d2.inputs['A']); out = d2.outputs['Result']
@@ -304,7 +304,7 @@ def tunic(n, mtl, hem_drop=0.10, off=0.024, ragged=False, seed=1):
             bmesh.ops.delete(bm, geom=hole, context='FACES')
     bm.normal_update()
     for v in bm.verts:
-        flare = max(0.0, (hip_z + 0.12 - v.co.z)) * 0.25
+        flare = max(0.0, (hip_z + 0.12 - v.co.z)) * 0.12
         v.co += v.normal * (off + flare)
     bm.to_mesh(me); bm.free()
     me.materials.clear(); me.materials.append(mtl)
@@ -314,8 +314,8 @@ def tunic(n, mtl, hem_drop=0.10, off=0.024, ragged=False, seed=1):
     print("TUNIC", n, len(me.vertices), "verts")
     return ob
 
-T_HERMIT_Y = tunic_mat("M_TunicY", (0.36, 0.30, 0.22))
-T_HERMIT_O = tunic_mat("M_TunicO", (0.36, 0.30, 0.22), stains=0.9)
+T_HERMIT_Y = tunic_mat("M_TunicY", (0.13, 0.10, 0.065))
+T_HERMIT_O = tunic_mat("M_TunicO", (0.13, 0.10, 0.065), stains=0.9)
 tunic("AmouY", T_HERMIT_Y, hem_drop=0.16, off=0.016, seed=2)
 tunic("AmouO", T_HERMIT_O, hem_drop=0.16, off=0.016, ragged=True, seed=5)
 tunic("V1", tunic_mat("M_TunicV1", (0.12, 0.22, 0.42)), hem_drop=0.18, off=0.016, seed=3)
@@ -333,11 +333,11 @@ def scalp_hair(n, color, length=0.2, seed=9):
         if c.y < front + 0.06 and c.z < eye_z + 0.13: continue            # forehead stays clear
         if c.y < hc.y - 0.02 and abs(c.x - hc.x) < 0.07 and c.z < eye_z + 0.15: continue
         for _ in range(8):
-            p = c + nrm * 0.004 + Vector((rnd.uniform(-1, 1), rnd.uniform(-1, 1), 0)) * 0.006; d = (nrm * 0.5 + Vector((0, 0.5, 0))).normalized(); L = length * rnd.uniform(0.6, 1.1)
+            p = c + nrm * 0.004 + Vector((rnd.uniform(-1, 1), rnd.uniform(-1, 1), 0)) * 0.006; d = (nrm * 0.35 + Vector((0, 0.1, -0.3))).normalized(); L = length * rnd.uniform(0.6, 1.1)
             seg = []
             for i in range(6):
                 seg.append(p.copy())
-                d = (d + Vector((0, 0.25, -0.9)) + Vector((rnd.uniform(-.2, .2), rnd.uniform(-.1, .2), 0))).normalized()
+                d = (d + Vector((0, 0.05, -1.6)) + Vector((rnd.uniform(-.15, .15), rnd.uniform(-.05, .1), 0))).normalized()
                 p = p + d * L / 5
             strands.append(seg)
     strands = mat_strands(strands, rnd, clump=0.5, kink=0.01)

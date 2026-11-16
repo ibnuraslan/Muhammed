@@ -428,9 +428,9 @@ pipe.location = (FLAT.x + 0.12, FLAT.y - 0.15, 0.17)
 twig = cyl("Twig", (0, 0, 0), 0.008, 0.42, M_WOODL, "PROPS", verts=8); twig.rotation_euler = (0, R_(90), 0)
 bpy.context.view_layer.objects.active = twig; bpy.ops.object.transform_apply(rotation=True)
 twig.location = (FIRE.x + 0.5, FIRE.y - 0.4, 0.03)
-bpy.ops.mesh.primitive_cone_add(vertices=12, radius1=0.022, depth=0.09, location=(0, 0, 0)); tfl = bpy.context.active_object
+bpy.ops.mesh.primitive_cone_add(vertices=12, radius1=0.014, depth=0.065, location=(0, 0, 0)); tfl = bpy.context.active_object
 tfl.name = "TwigFlame"; tfl.data.transform(Matrix.Translation(V((0, 0, 0.045))))
-M_TFL = mat("M_TwigFlame", (1.0, 0.45, 0.05), 0.5, emit=((1.0, 0.45, 0.06), 6.0)); tfl.data.materials.append(M_TFL); link(tfl, "PROPS")
+M_TFL = mat("M_TwigFlame", (1.0, 0.25, 0.0), 0.5, emit=((1.0, 0.22, 0.0), 1.6)); tfl.data.materials.append(M_TFL); link(tfl, "PROPS")
 L = bpy.data.lights.new("TwigGlow", 'POINT'); L.energy = 2.0; L.color = (1.0, 0.55, 0.2); L.shadow_soft_size = 0.02
 tgl = bpy.data.objects.new("TwigGlow", L); C["PROPS"].objects.link(tgl)
 tfl.location = twig.location + V((0.21, 0, 0)); tfl.parent = twig; tfl.matrix_parent_inverse = twig.matrix_world.inverted()

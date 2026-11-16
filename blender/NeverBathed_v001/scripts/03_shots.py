@@ -496,7 +496,7 @@ def shot_6a(f0, n):
     camera("6a", f0, n, [(0, (HARE.x - 0.85, HARE.y + 0.85, 0.62), (HARE.x + 0.02, HARE.y - 0.22, 0.38), 26), (1, (HARE.x - 0.7, HARE.y + 0.68, 0.55), (HARE.x + 0.02, HARE.y - 0.22, 0.36), 26)])
     return use
 def sit_fire(n, f, head=(10, 0), lean=8.0, hands=True, spine=(10, 0, 0)):
-    root = sit(n, f, SEAT, SEAT_Z + 0.03 + 0.003 * max(0.0, lean - 8.0), 0.0, lean=lean, spine=spine, head=head, knee_fwd=0.5)
+    root = sit(n, f, SEAT, SEAT_Z + 0.07 + 0.003 * max(0.0, lean - 8.0), 0.0, lean=lean, spine=spine, head=head, knee_fwd=0.5)
     if hands: thighs_hands(n, f, 0.0, root)
     return root
 def shot_6b(f0, n):
@@ -563,7 +563,7 @@ def beard_tip(f):
     sc.frame_set(int(f)); bpy.context.view_layer.update(); o = OB["AmouO.beard"]
     pts = [o.matrix_world @ V(c) for c in o.bound_box]
     zmin = min(p.z for p in pts); cx = sum(p.x for p in pts) / 8; cy = min(p.y for p in pts)
-    return V((cx, cy + 0.03, zmin + 0.03))
+    return V((cx, cy + 0.045, zmin + 0.08))
 def shot_8a(f0, n): return twig_shot("8a", f0, n)
 def twig_shot(sid, f0, n):
     """seated, he holds a smouldering twig in his right hand to the very ends of his beard: a small singe and smoke, no flame near the face"""
@@ -602,7 +602,7 @@ def shot_8b(f0, n):
     bpy.data.objects.remove(cam, do_unlink=True)
     catch = OB.get("Catch_8b")
     if catch: bpy.data.objects.remove(catch, do_unlink=True)
-    camera("8b", f0, n, [(0, (SEAT.x - 1.3, SEAT.y - 2.0, 1.25), (SEAT.x - 0.1, SEAT.y - 0.3, 0.8), 30), (1, (SEAT.x - 1.1, SEAT.y - 1.75, 1.2), (SEAT.x - 0.1, SEAT.y - 0.3, 0.82), 30)])
+    camera("8b", f0, n, [(0, (SEAT.x - 1.9, SEAT.y - 0.9, 1.25), (SEAT.x - 0.1, SEAT.y - 0.25, 0.85), 30), (1, (SEAT.x - 1.7, SEAT.y - 0.75, 1.2), (SEAT.x - 0.1, SEAT.y - 0.25, 0.87), 30)])
     return use
 
 # ================================================================== BEAT 9: the dirtiest man in the world
@@ -654,18 +654,18 @@ def shot_10b(f0, n):
     """he sits in the tin tub, water to his chest; the villager behind him has both hands resting on his shoulders and rubs gently"""
     use = ("AmouO", "V1", "V2"); f1 = f0 + n - 1; light(f0)
     if LONG_X:
-        yw = 90.0; seat = V((TUB_X0 + 0.44, (TUB_Y0 + TUB_Y1) / 2, 0)); vpos = V((TUB_X0 - 0.34, seat.y, 0)); ax = 'x'
+        yw = 90.0; seat = V((TUB_X0 + 0.52, (TUB_Y0 + TUB_Y1) / 2, 0)); vpos = V((TUB_X0 - 0.38, seat.y, 0)); ax = 'x'
     else:
         yw = 180.0; seat = V(((TUB_X0 + TUB_X1) / 2, TUB_Y0 + 0.42, 0)); vpos = V((seat.x, TUB_Y0 - 0.38, 0)); ax = 'y'
     for k, f in enumerate(range(f0, f1 + 1, 10)):
-        root = V((seat.x, seat.y, 0.10 + HUM["AmouO"].root_head.z - RIG["AmouO"].BN["upperleg01.L"].head_local.z + 0.02))
-        body("AmouO", f, root, yw, flex=4, spine=(8, 0, 0), head=(4 + 3 * math.sin((f - f0) / 20.0), -10 + 6 * math.sin((f - f0) / 35.0)))
+        root = V((seat.x, seat.y, 0.19 + HUM["AmouO"].root_head.z - RIG["AmouO"].BN["upperleg01.L"].head_local.z + 0.02))
+        body("AmouO", f, root, yw, flex=12, spine=(10, 0, 0), head=(4 + 3 * math.sin((f - f0) / 20.0), -10 + 6 * math.sin((f - f0) / 35.0)))
         for s in "LR":
             sx = 1 if s == "L" else -1
             ank = root + fwd(yw) * 0.72 - rgt(yw) * sx * 0.11; ank.z = 0.16
             foot("AmouO", s, f, ank, yw, pitch=-40, knee=root + fwd(yw) * 0.4 - rgt(yw) * sx * 0.12 + V((0, 0, 0.8)))
-            pp = root + fwd(yw) * 0.42 - rgt(yw) * sx * 0.12 + V((0, 0, 0.22))
-            hand("AmouO", s, f, pp, V((0, 0, -1)), fwd(yw) + V((0, 0, -0.4)), pole=wpos("AmouO", "upperarm01." + s, f) - rgt(yw) * sx * 0.4 - fwd(yw) * 0.1, pose="relaxed")
+            pp = root + fwd(yw) * 0.42 - rgt(yw) * sx * 0.09 + V((0, 0, 0.22))
+            hand("AmouO", s, f, pp, V((0, 0, -1)), fwd(yw) + V((0, 0, -0.4)), pole=wpos("AmouO", "upperarm01." + s, f) - rgt(yw) * sx * 0.12 - fwd(yw) * 0.35 + V((0, 0, -0.1)), pose="relaxed")
         rub = 0.012 * math.sin((f - f0) / 8.0)
         kneel("V1", f, vpos, yw, thigh_back=0.0, lean=8, spine=(26, 0, 0), head=(24, 0))
         for s in "LR":
