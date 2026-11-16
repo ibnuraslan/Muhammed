@@ -49,3 +49,11 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 33 | WaterTubes | `claude/beautiful-ptolemy-c5vrcq` | `blender/WaterTubes_v006/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1769)** |
 | 34 | EscapeArtist | `claude/beautiful-ptolemy-c5vrcq` | `blender/EscapeArtist_v010/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–2815)** |
 | 35 | TitanicIceberg | `claude/beautiful-ptolemy-c5vrcq` | `blender/TitanicIceberg_v014/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1464)** |
+
+## Batch 2 (37 films, built to the client's VO, Nov 16)
+
+Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolemy-c5vrcq`, with the VO mp3, `SETTINGS.md`, `CREDITS.md`, `README.md` and `beats.json`. Only rows marked READY have been watched moving start to finish by the director.
+
+| # | Film | Package folder | Status |
+|---|---|---|---|
+| B18 | PhoneCrazy | `blender/PhoneCrazy_v003/` | **READY TO RENDER (frames 1–1932)**, watched moving |
