@@ -301,7 +301,7 @@ stand(FM, fa, head=(2, 0)); arms_hang(FM, fa); face(FM, fa, 0.0, -6)
 stand(FM, fa + 25, head=(-4, 0), spine=2); face(FM, fa + 25, 0.002, -4, 0)
 shR = FM.r.BN["upperarm01.R"].head_local
 for f, up in ((fa + 10, 0.0), (fa + 32, 1.0), (fa + 70, 1.0), (fa + 90, 0.8), (fb, 0.8)):
-    W = shR.lerp(shR + Vector((-0.18, -0.30, 0.38)), up) + Vector((0, 0, -0.55 * (1 - up)))
+    W = shR.lerp(shR + Vector((-0.18, -0.30, 0.38)), up) + Vector((-0.09 * (1 - up), -0.04 * (1 - up), -0.55 * (1 - up)))   # starts beside the thigh, never inside the torso
     FM.key_hand("R", f, W, Vector((0.1, -0.15, 1.0)) if up > 0.5 else Vector((0, -0.12, -1)), Vector((0, -1, 0)) if up > 0.5 else Vector((1, 0, 0)), pole=shR + Vector((-0.45, 0.25, -0.35)))
 apply_pose(FM.r.o, "R", "relaxed", fa + 10); apply_pose(FM.r.o, "R", "flat_palm", fa + 32)
 face(FM, fa + 32, 0.003, -4, 8); face(FM, fa + 60, 0.003, -4, 4); face(FM, fa + 75, 0.003, -4, 9); face(FM, fb, 0.002, -5, 2)
@@ -466,19 +466,19 @@ camshot("S18", [(0, HP + Vector((-3.2, -3.4, 1.2)), HP + Vector((0.4, 0.2, 1.4))
 fa, fb = f0("S19"), f1("S19")
 SP = Vector((X0 - 1.6, 20, 0))
 put_ranges("SickMan", [(fa, f1("S19"), SP, 20)])
-stand(SM, fa, flex=6, spine=8, head=(6, 0))
+stand(SM, fa, flex=12, spine=22, head=(-12, 0))      # already doubled over at the cut: hands on the knees from the first frame
 for k, f in enumerate(frs(fa + 20, fb, 30)):
     stand(SM, f, flex=14 + 4 * (k % 2), spine=26 + 8 * (k % 2), head=(-14 - 6 * (k % 2), 0))
     face(SM, f, -0.002, -10 if k % 2 else -12, 6 if k % 2 else 2)
 arms_hang(SM, fa)
 ev(fa + 21)
-for f in frs(fa + 20, fb, 4):
+for f in frs(fa, fb, 4):
     ev(f); M_ = SM.r.o.matrix_world; fwd = (M_.to_3x3() @ Vector((0, -1, 0))).normalized(); up = Vector((0, 0, 1))
     for s_ in "LR":
         kn = M_ @ SM.r.PB["lowerleg01." + s_].head
         nrm = (-fwd * 0.55 - up * 0.85).normalized()
         place_hand(SM.r.o, s_, f, kn + fwd * 0.11 + up * 0.09, nrm, (fwd * 0.25 - up).normalized(), skin=0.02)
-apply_pose(SM.r.o, "R", "relaxed", fa + 20); apply_pose(SM.r.o, "L", "relaxed", fa + 20)
+apply_pose(SM.r.o, "R", "relaxed", fa); apply_pose(SM.r.o, "L", "relaxed", fa)
 for s, sx in (("L", 1), ("R", -1)):
     key_pole(SM, s, fa, SM.r.BN["upperarm01." + s].head_local + Vector((sx * 0.45, 0.2, -0.45)))
 stand(TWn, fa, head=(4, 0)); arms_hang(TWn, fa); stand(TWn, fa + 70, head=(8, 10)); face(TWn, fa, 0.002, -5)
