@@ -121,7 +121,7 @@ def Mloc(p, R3): return Matrix.Translation(p) @ R3.to_4x4()
 
 # ================================================================= A: concert + bat flight (1-300)
 S = "Singer"; SP = V((0.0, 0.0))
-MIC = D["MicStand"]
+MIC = D["MicStand"]; MIC.location.y -= 0.025   # keeps the mic >= 3 cm from his face and hair while he sings
 # mic stand: shaft at (0,-0.45); right hand grips the shaft at chest height
 SHAFT = V((0.0, -0.45, 1.30))
 def sing_pose(f, bob=0.0, head=(0.0, 0.0), lpump=0.0):
@@ -157,9 +157,19 @@ def key_ikhand_matrix(n, s, f, M, clamp=True):
     pb.location = loc; pb.rotation_quaternion = q
     pb.keyframe_insert("location", frame=f, group=pb.name); pb.keyframe_insert("rotation_quaternion", frame=f, group=pb.name)
 # notices the bat: head turns down to his right front
+def step_back(f0):
+    H = HUM[S]
+    for s_, fa, fb in (("R", f0, f0 + 18), ("L", f0 + 16, f0 + 34)):
+        a = H.ankle[s_]; A = V((a.x, a.y - H.root_head.y, a.z)); B = A + V((0, 0.10, 0))
+        key_foot_free(S, s_, fa, A, Rz(0))
+        for k in range(1, 5):
+            u = k / 4; f = round(fa + (fb - fa) * u); p = A.lerp(B, smooth(u)); p.z += 0.05 * math.sin(math.pi * u)
+            key_foot_free(S, s_, f, p, Rx(-10 * math.sin(math.pi * u)))
+        for f in (fb + 1, 345): key_foot_free(S, s_, f, B, Rz(0))
+step_back(244)
 sing_pose(171, bob=0.3)
 for f, hd in ((200, (20, -14)), (240, (26, -18)), (275, (24, -12)), (300, (25, -16))):
-    P, Rb = stand(S, f, 0.0, 0.03 * (f - 171) / 129, flex=4, spine=6, head=hd, hands=False)
+    P, Rb = stand(S, f, 0.0, 0.10 * smooth((f - 240) / 40), flex=3, spine=4, head=(hd[0] * 0.8, hd[1]), hands=False, feet=False)
     key_relaxed(S, f, P, Rb)
 jaw(S, 1, 0); jaw(S, 60, 6); jaw(S, 90, 1); jaw(S, 120, 7); jaw(S, 150, 0); jaw(S, 200, 4); jaw(S, 300, 3)
 
@@ -254,21 +264,22 @@ bat_key(T1 + 4, Mloc(LAND + V((0.0, 0.0, 0.05)), BAT_LIE)); bat_key(T1 + 9, Mloc
 wings(T1 + 4, up=-10); wings(T1 + 9, up=-14); wings(T1 + 14, up=-15)
 HOLD_FOLD = float(os.environ.get("BAT_HOLD_FOLD", "-60")); HOLD_UP = float(os.environ.get("BAT_HOLD_UP", "25"))
 HW = float(os.environ.get('HOLD_WING', '-75'))
-wings(446, up=-15); wings(472, up=HW); wings(1296, up=HW)   # wings folded along the body while he holds it (clear of his arms and body)
-BR.key_rot("legs", 446, [("X", 0)]); BR.key_rot("legs", 470, [("X", -55)]); BR.key_rot("legs", 675, [("X", -55)]); BR.key_rot("legs", 695, [("X", 0)]); BR.key_rot("legs", 960, [("X", 0)]); BR.key_rot("legs", 985, [("X", -55)]); BR.key_rot("legs", 1296, [("X", -55)])   # legs hang free at the bite (curled legs read as a blob in the close-ups); BR.key_rot("legs", 1320, [("X", 0)])   # wings stay relaxed/drooping while held (a fold test swung them across his face)
+wings(446, up=-15); wings(472, up=HW); wings(756, up=HW)   # wings folded along the body while he holds it (clear of his arms and body)
+for f_, a_ in ((446, 0), (470, -55), (675, -55), (695, 0), (724, 0), (742, -55), (756, -55), (792, 0)):
+    BR.key_rot("legs", f_, [("X", a_)])   # legs hang free only at the bite (curled legs read as a blob in close-up)
 BAT_REST = Mloc(LAND + V((0.02, 0.01, 0.026)), BAT_LIE)
 bat_key(300, BAT_REST)
 
 # ================================================================= B: pick it up (300-620)
 # release the stand (hand back to relaxed), small step toward the bat, crouch, grip, rise, look at it
-P, Rb = stand(S, 300, 0.0, 0.03, flex=4, spine=6, head=(25, -16), hands=False); key_relaxed(S, 300, P, Rb)
-P, Rb = stand(S, 335, 0.0, 0.06, flex=2, spine=4, head=(16, -12), hands=False); key_relaxed(S, 335, P, Rb)
+P, Rb = stand(S, 300, 0.0, 0.10, flex=3, spine=4, head=(20, -16), hands=False, feet=False); key_relaxed(S, 300, P, Rb)
+P, Rb = stand(S, 335, 0.0, 0.10, flex=2, spine=4, head=(16, -12), hands=False, feet=False); key_relaxed(S, 335, P, Rb)
 # step: shift to stand at (0.25, -0.15) turned slightly right (yaw -15) -> right foot moves first
 def steps(f0):
     H = HUM[S]
     for s, fa, fb in (("R", f0, f0 + 22), ("L", f0 + 18, f0 + 40)):
         a = H.ankle[s]
-        A0 = V((0, 0, 0)) + V((a.x, a.y - H.root_head.y, a.z)); B0 = V((STEP.x, STEP.y, 0)) + Rz(YAW) @ V((a.x, a.y - H.root_head.y, a.z))
+        A0 = V((0, 0.10, 0)) + V((a.x, a.y - H.root_head.y, a.z)); B0 = V((STEP.x, STEP.y, 0)) + Rz(YAW) @ V((a.x, a.y - H.root_head.y, a.z))
         for k in range(0, 5):
             u = k / 4; f = round(fa + (fb - fa) * u)
             p = A0.lerp(B0, smooth(u)); p.z += 0.07 * math.sin(math.pi * u)
@@ -276,7 +287,7 @@ def steps(f0):
         key_foot_free(S, s, fb + 1, B0, Rz(YAW))
 steps(345)
 for f, u in ((345, 0.0), (365, 0.5), (387, 1.0)):
-    p = V((0, 0.06)).lerp(STEP, smooth(u)); p.y += 0.06 * math.sin(math.pi * u)   # steps right and slightly back, clear of the mic
+    p = V((0, 0.10)).lerp(STEP, smooth(u)); p.y += 0.04 * math.sin(math.pi * u)   # steps right and slightly back, clear of the mic
     P, Rb = stand(S, f, p.x, p.y, yaw=YAW * u, flex=2 + 6 * u, spine=4 + 8 * u, head=(16 + 12 * u, -8 * (1 - u)), hands=False, feet=False,
                   dz=-0.02 * math.sin(math.pi * u))
     key_relaxed(S, f, P, Rb)
@@ -292,7 +303,7 @@ for f in (450, 470, 520, 620):
 # grip the bat body from above at 450
 sc.frame_set(450)
 bat_set(BAT_REST); bpy.context.view_layer.update()
-bat_body = BAT_REST @ V((0, 0.0, -0.075))        # lower body / legs: keeps the hand well clear of his face at the bite
+bat_body = BAT_REST @ V((0, 0.0, -0.035))        # lower body / legs: keeps the hand well clear of his face at the bite
 up_dir = (BAT_REST.to_3x3() @ V((0, -1, 0)))     # local -Y (face) is down when lying, so the back faces +Z
 fd = (BAT_REST.to_3x3() @ V((1, 0, 0))).normalized()
 gr = grip_object(D[S], "R", 450, D["Bat"], bat_body + V((0, 0, 0.045)), V((0, 0, -1)), finger_dir=fd)
@@ -348,103 +359,60 @@ def bat_at_mouth(f, depth=0.0, roll=0.0, pitch=-14.0):
 for f, hd in ((640, (8, 0)), (665, (4, 0))):
     P, Rb = head_frame(f, hd)
     u = (f - 620) / 45; bat_front(f, P, Rb, fwd=0.46 - 0.04 * u, up=0.08 + 0.14 * u, yaw=0, tilt=-10 - 30 * u)
-jaw(S, 620, 2); jaw(S, 680, 3); jaw(S, 700, 12); jaw(S, 712, 8); jaw(S, 960, 8)
+jaw(S, 620, 2); jaw(S, 680, 3); jaw(S, 700, 5); jaw(S, 712, 3); jaw(S, 760, 2)
 P, Rb = head_frame(690, (2, 0)); bat_at_mouth(690, depth=-0.07)
-P, Rb = head_frame(700, (0, 0)); bat_at_mouth(700, depth=-0.010)
-P, Rb = head_frame(712, (3, 0)); bat_at_mouth(712, depth=0.001)
-for i, f in enumerate(range(730, 961, 18)):
-    sh = 4 * math.sin(i * 1.6) if f < 880 else 0
-    P, Rb = head_frame(f, (3 + 2 * math.sin(i), sh), side=1.5 * math.sin(i * 1.6))
-    bat_at_mouth(f, depth=0.001, roll=sh * 0.6)
-
-# ================================================================= D: pulls it away, shock (960-1280)
-P, Rb = head_frame(972, (6, 0), flex=2, spine=4); bat_at_mouth(972, depth=-0.06)
-for f, hd, yw in ((985, (16, -6), 0), (1010, (24, -8), 5), (1060, (27, -12), -8), (1120, (25, -7), 4), (1180, (28, -11), -4), (1240, (26, -8), 0), (1280, (26, -6), 2)):
-    P, Rb = stand(S, f, STEP.x, STEP.y, yaw=YAW, flex=-2, spine=-4, head=hd, hands=False, feet=False)
-    bat_front(f, P, Rb, fwd=0.38, up=0.0, yaw=yw, tilt=-20)
-    # left hand comes up, open, in shock (not touching the face)
-    sh = bw(S, P, Rb, rest_head(S, "upperarm01.L"))
-    if f >= 1010:
-        W = sh + Rb @ V((0.13, -0.27, -0.06)); key_hand(S, "L", f, W, (Rb @ V((-0.2, -0.3, 1))).normalized(), (Rb @ V((-0.3, -1, 0))).normalized(),
-                                                       pole=sh + Rb @ V((0.4, 0.2, -0.4)))
-        apply_pose(D[S], "L", "open_alarm", f)
+P, Rb = head_frame(702, (1, 0)); bat_at_mouth(702, depth=-0.02)
+P, Rb = head_frame(712, (2, 0)); bat_at_mouth(712, depth=-0.002)      # the bat's head reaches his lips: contact, nothing enters the mouth
+P, Rb = head_frame(722, (2, 0)); bat_at_mouth(722, depth=-0.002)
+# ================================================================= D: it's real: recoils, lets it fall, shock (724-1280)
+P, Rb = stand(S, 736, STEP.x, STEP.y, yaw=YAW, flex=-4, spine=-6, head=(4, 0), hands=False, feet=False); key_relaxed(S, 736, P, Rb, sides="L")
+bat_front(736, P, Rb, fwd=0.44, up=0.00, tilt=-20)
+P, Rb = stand(S, 752, STEP.x, STEP.y, yaw=YAW, flex=-3, spine=-5, head=(14, 0), hands=False, feet=False); key_relaxed(S, 752, P, Rb, sides="L")
+Mb = bat_front(752, P, Rb, fwd=0.44, up=-0.14, tilt=-25)
+P, Rb = stand(S, 758, STEP.x, STEP.y, yaw=YAW, flex=-3, spine=-5, head=(16, 0), hands=False, feet=False); key_relaxed(S, 758, P, Rb, sides="L")
+Mb = bat_front(758, P, Rb, fwd=0.44, up=-0.15, tilt=-25)
+apply_pose(D[S], "R", "wrap_grip", 756, amount=0.85); apply_pose(D[S], "R", "open_alarm", 762)   # lets go: the bat drops
+DROP = V((STEP.x, STEP.y, 0.026)) + Rz(YAW) @ V((0.12, -0.66, 0))   # in front of his feet, clear of both shoes and the stand base
+def shock_stand(f, hd, mouth_hand=False):
+    P, Rb = stand(S, f, STEP.x, STEP.y, yaw=YAW, flex=2, spine=4, head=hd, hands=False, feet=False)
+    key_relaxed(S, f, P, Rb, sides="R")
+    if mouth_hand:     # left hand raised toward his mouth, ~6 cm clear of the lips
+        sc.frame_set(f); m = rest_point_on(S, "head", MOUTH_REST)
+        Mh = bone_world(S, "head"); fwd = (Mh.to_3x3() @ (RIG[S].rest("head").to_3x3().inverted() @ V((0, -1, 0)))).normalized()
+        sh = bone_world(S, "upperarm01.L").to_translation()
+        hf = Rz(YAW) @ V((0, -1, 0)); W = m + hf * 0.15 + V((0, 0, -0.15)) + (Rz(YAW) @ V((0.03, 0, 0)))   # wrist below/in front: fingertips stop ~7 cm in front of the lips
+        key_hand(S, "L", f, W, (V((0, 0, 0.92)) - hf * 0.39).normalized(), -hf, pole=sh + Rz(YAW) @ V((0.45, 0.25, -0.45)))
+        apply_pose(D[S], "L", "relaxed", f)
     else:
         key_relaxed(S, f, P, Rb, sides="L")
-jaw(S, 972, 4); jaw(S, 985, 7); jaw(S, 1010, 5); jaw(S, 1280, 5)
-# light red trace at the right lip corner: a thin glossy streak on the chin, carried by the jaw, revealed 975-1010
-def blood_streak():
-    body = D[S + ".body"]; dg = bpy.context.evaluated_depsgraph_get(); sc.frame_set(1)
-    pts = []
-    for k in range(9):
-        u = k / 8
-        p_rest = LIPC_REST + V((-0.004 * u, 0.008 * u * u, -0.032 * u))
-        pts.append(p_rest)
-    me = bpy.data.meshes.new("Blood"); bm = bmesh.new(); ring = []
-    for k, p in enumerate(pts):
-        w = 0.0032 * (1 - 0.6 * (k / 8)) + 0.0008
-        a = bm.verts.new(p + V((-w, -0.0035, 0))); b = bm.verts.new(p + V((w, -0.0035, 0))); ring.append((a, b))
-    for (a, b), (c, d) in zip(ring, ring[1:]): bm.faces.new((a, b, d, c))
-    bm.to_mesh(me); o = bpy.data.objects.new("Blood", me); sc.collection.objects.link(o)
-    sw = o.modifiers.new("Wrap", 'SHRINKWRAP'); sw.target = body; sw.wrap_mode = 'OUTSIDE_SURFACE'; sw.offset = 0.0012
-    o.parent = D[S]; o.parent_type = 'BONE'; o.parent_bone = "jaw"
-    bpy.context.view_layer.update()
-    o.matrix_world = Matrix.Identity(4) if False else o.matrix_world
-    m = bpy.data.materials.new("M_BloodLight"); m.use_nodes = True; Pn = m.node_tree.nodes["Principled BSDF"]
-    Pn.inputs["Base Color"].default_value = (0.55, 0.02, 0.03, 1); Pn.inputs["Roughness"].default_value = 0.3
-    me.materials.append(m)
-    return o
-# parent-to-bone keeps the rest offset: compute with the rig at rest
-for pb in D[S].pose.bones: pass
-BLD = blood_streak()
-sc.frame_set(1); bpy.context.view_layer.update()
-Mj = bone_world(S, "jaw")
-BLD.matrix_parent_inverse = Matrix.Identity(4)
-BLD.matrix_world = Matrix.Identity(4)          # will be corrected below with the jaw's rest-relative transform
-jb = D[S].pose.bones["jaw"]
-# bone-parent space: matrix_world = arm @ pose_bone.matrix @ T(tail) @ parent_inverse @ basis -> set parent inverse so rest mesh coords stay put at rest
-tailT = Matrix.Translation(V((0, jb.length, 0)))
-BLD.matrix_parent_inverse = (D[S].matrix_world @ RIG[S].rest("jaw") @ tailT).inverted()
-BLD.location = (0, 0, 0); BLD.rotation_euler = (0, 0, 0)
-for f, hid in ((1, True), (984, False), (1600, True)):
-    BLD.hide_render = BLD.hide_viewport = hid; BLD.keyframe_insert("hide_render", frame=f); BLD.keyframe_insert("hide_viewport", frame=f)
+for f, hd, mh in ((775, (22, -4), False), (800, (30, -8), False), (860, (32, -10), False), (930, (30, -6), False), (1000, (33, -9), False),
+                  (1060, (30, -7), True), (1120, (32, -10), True), (1180, (30, -6), True), (1240, (33, -9), True), (1280, (31, -7), True)):
+    shock_stand(f, hd, mh)
+jaw(S, 775, 3); jaw(S, 860, 2); jaw(S, 1000, 3); jaw(S, 1280, 2)
+# (no blood: director / LESSONS hard limit)
 
 # ================================================================= E: drops it, bends over (1280-1600)
-P, Rb = stand(S, 1290, STEP.x, STEP.y, yaw=YAW, flex=-2, spine=-4, head=(18, 0), hands=False, feet=False)
-Mb = bat_front(1290, P, Rb, fwd=0.38, up=0.0, yaw=0, tilt=-20)
-apply_pose(D[S], "R", "wrap_grip", 1290) if False else None
-# release at 1296: fingers open, the bat falls to the deck by his feet
-apply_pose(D[S], "R", "wrap_grip", 1296, amount=0.85)   # fingers stay closed on the bat until the release
-apply_pose(D[S], "R", "open_alarm", 1300)
-DROP = V((STEP.x, STEP.y, 0.026)) + Rz(YAW) @ V((0.12, -0.66, 0))   # in front of his feet, clear of both shoes and the stand base
+wings(762, up=HW); wings(780, up=-20); wings(796, up=-15)
 def bake_held(f0, f1):
     for f in range(f0, f1 + 1):
         sc.frame_set(f)
         Mh = D[S].matrix_world @ D[S].pose.bones["IK_hand.R"].matrix
         bat_key(f, Mh @ REL)
-# fall
-for k, f in enumerate(range(1297, 1331, 3)):
-    u = (f - 1297) / 33.0
-    p0 = Mb.to_translation(); p = p0.lerp(DROP, u); p.z = p0.z + (DROP.z - p0.z) * u * u
-    R3 = Mb.to_3x3().to_quaternion().slerp((Rz(200 + 30) @ Rx(90)).to_quaternion(), smooth(u)).to_matrix()
-    BAT_FALL = Mloc(p, R3)
-wings(1297, up=0); wings(1320, up=-12); wings(1335, up=-15)
-P, Rb = stand(S, 1310, STEP.x, STEP.y, yaw=YAW, flex=0, spine=-2, head=(26, 0), hands=False, feet=False)
-key_relaxed(S, 1310, P, Rb, sides="L")
-W, d, nn = relaxed_hand(S, P, Rb, "R", fwd=0.15); key_hand(S, "R", 1318, W, d, nn, P=P, Rb=Rb); apply_pose(D[S], "R", "relaxed", 1318)
+
 def stagger(f, sway):
     P, Rb = stand(S, f, STEP.x, STEP.y + 0.03 * sway, yaw=YAW, flex=10, spine=12, side=3 * sway, head=(14, -6 * sway), hands=False, feet=False)
     sc.frame_set(f); m = rest_point_on(S, "head", MOUTH_REST)
     Mh = bone_world(S, "head"); fwd = (Mh.to_3x3() @ (RIG[S].rest("head").to_3x3().inverted() @ V((0, -1, 0)))).normalized()
     sh = bone_world(S, "upperarm01.L").to_translation()
-    W = m + fwd * 0.12 + V((0, 0, -0.09)) + (Rz(YAW) @ V((0.04, 0, 0)))          # hand raised toward the mouth, ~6 cm clear of the lips
-    key_hand(S, "L", f, W, (V((0, 0, 1)) + (-fwd) * 0.3).normalized(), -fwd, pole=sh + Rz(YAW) @ V((0.45, 0.25, -0.45)))
+    hf = Rz(YAW) @ V((0, -1, 0)); W = m + hf * 0.15 + V((0, 0, -0.15)) + (Rz(YAW) @ V((0.03, 0, 0)))   # fingertips ~7 cm in front of the lips
+    key_hand(S, "L", f, W, (V((0, 0, 0.92)) - hf * 0.39).normalized(), -hf, pole=sh + Rz(YAW) @ V((0.45, 0.25, -0.45)))
     apply_pose(D[S], "L", "relaxed", f)
     kn = bone_world(S, "lowerleg01.R").to_translation(); fwd2 = Rz(YAW) @ V((0, -1, 0))
     place_hand(D[S], "R", f, kn + fwd2 * 0.06 + V((0, 0, 0.07)), (-fwd2 + V((0, 0, -1.2))).normalized(), (fwd2 + V((0, 0, -0.6))).normalized())
     apply_pose(D[S], "R", "relaxed", f)
     pb = D[S].pose.bones["Pole_elbow.R"]; nm = "Pole_elbow.R"; pole = bone_world(S, "upperarm01.R").to_translation() + Rz(YAW) @ V((-0.5, 0.35, 0.0))
     pb.location = RIG[S].rest(nm).to_3x3().inverted() @ (D[S].matrix_world.inverted() @ pole - RIG[S].BN[nm].head_local); pb.keyframe_insert("location", frame=f, group=nm)
-for f, sw in ((1330, 0.0), (1348, 1.0), (1366, -0.6), (1384, 0.4)):
+for f, sw in ((1300, 0.0), (1325, 1.0), (1350, -0.6), (1375, 0.4)):
     stagger(f, sw)
 # bend over, hands on the thighs above the knees, breathing hard
 def bend(f, amt, br=0.0):
@@ -580,14 +548,14 @@ def oxygen_mask():
         for j in range(N_ + 1):
             a_ = -1 + 2 * i / N_; b_ = -1 + 2 * j / N_; r2 = a_ * a_ + b_ * b_
             if r2 > 1.0: continue
-            dirv = V((0.50 * a_, -1.0, 0.56 * b_ - 0.03)).normalized()
-            k = 1.0 / math.sqrt((dirv.x / 0.050) ** 2 + (dirv.y / 0.088) ** 2 + (dirv.z / 0.056) ** 2)
+            dirv = V((0.50 * a_ * (0.78 - 0.30 * b_), -1.0, 0.58 * b_ - 0.04)).normalized()   # triangular: narrow at the nose bridge, wide at the chin
+            k = 1.0 / math.sqrt((dirv.x / 0.056) ** 2 + (dirv.y / 0.094) ** 2 + (dirv.z / 0.060) ** 2)
             r_skin = 0.0
             for jx in (-0.006, 0.0, 0.006):
                 for jz in (-0.006, 0.0, 0.006):
                     dj = (dirv + V((jx, 0, jz)) / 0.12).normalized(); hit = _bvh.ray_cast(Ce + dj * 0.4, -dj, 0.4)
                     if hit[0] is not None: r_skin = max(r_skin, (hit[0] - Ce).length)
-            G[i, j] = bm.verts.new(Ce + dirv * max(k * (1 - 0.30 * r2), r_skin + 0.004 + 0.008 * (1 - r2)))   # small, low-profile medical cup
+            G[i, j] = bm.verts.new(Ce + dirv * max(k * (1 - 0.22 * r2), r_skin + 0.004 + 0.004 * (1 - r2)))   # rigid smooth shell; skin clearance only near the rim   # small, low-profile medical cup
     for i in range(N_):
         for j in range(N_):
             q = [(i, j), (i + 1, j), (i + 1, j + 1), (i, j + 1)]
@@ -623,14 +591,23 @@ def oxygen_mask():
     for bp, p in zip(sp.bezier_points, pts): bp.co = p; bp.handle_left_type = bp.handle_right_type = 'AUTO'
     t = bpy.data.objects.new("OxyTube", cu); sc.collection.objects.link(t); cu.materials.append(soft_mat("M_Tube", (0.85, 0.95, 0.92), 0.3))
     cs = bpy.data.curves.new("OxyStrap", 'CURVE'); cs.dimensions = '3D'; cs.bevel_depth = 0.0018
-    for sx in (-1, 1):   # elastic strap lying on the cheek from the cup's side to under the hair at the ear
-        st0 = G[N_ if sx > 0 else 0, N_ // 2].co.copy(); ear = V((0.080 * sx, -0.050, 1.655)); q = []
-        for k_ in range(13):
-            u = 0.55 * k_ / 12; p_ = st0.lerp(ear, u); n_ = V((sx, -0.35, 0)).normalized()
-            hit = _bvh.ray_cast(p_ + n_ * 0.08, -n_, 0.16)
-            q.append((hit[0] + n_ * 0.008) if hit[0] is not None else p_ + n_ * 0.02)
-        q[0] = st0
-        s2 = cs.splines.new("POLY"); s2.points.add(len(q) - 1)      # straight segments: no handle overshoot into the cheek
+    hair = D[S + ".long01"]; evh = hair.evaluated_get(bpy.context.evaluated_depsgraph_get()); mh = evh.to_mesh()
+    _hb = bmesh.new(); _hb.from_mesh(mh); _hb.transform(MW @ body.matrix_world.inverted() @ hair.matrix_world); _hbvh = BVHTree.FromBMesh(_hb); _hb.free()
+    HC = V((0.0, -0.01, 1.655))                       # head centre (rest frame)
+    def outer(p_dir):
+        best = None
+        for t_ in (_bvh, _hbvh):
+            hit = t_.ray_cast(HC + p_dir * 0.4, -p_dir, 0.4)
+            if hit[0] is not None and (best is None or (hit[0] - HC).length > (best - HC).length): best = hit[0]
+        return best
+    for sx in (-1, 1):   # elastic strap: from the cup's side over the cheek, then over the hair round the back of the head
+        st0 = G[N_ if sx > 0 else 0, N_ // 2].co.copy(); q = [st0]
+        a0 = math.atan2((st0 - HC).x * sx, -(st0 - HC).y)
+        for k_ in range(1, 25):
+            ang = a0 + (math.pi - a0) * k_ / 24; d_ = V((sx * math.sin(ang), -math.cos(ang), (st0.z - HC.z) / 0.4 * (1 - k_ / 24) + 0.04 * k_ / 24)).normalized()
+            h_ = outer(d_)
+            if h_ is not None: q.append(h_ + (h_ - HC).normalized() * 0.005)
+        s2 = cs.splines.new("POLY"); s2.points.add(len(q) - 1)
         for pt, p in zip(s2.points, q): pt.co = (p.x, p.y, p.z, 1.0)
     st = bpy.data.objects.new("OxyStrap", cs); sc.collection.objects.link(st); cs.materials.append(soft_mat("M_Strap", (0.9, 0.95, 0.95), 0.5))
     for ob in (o, t, st, rim):     # Child Of the head bone (a prop, not a rig child), identity at rest
@@ -719,33 +696,14 @@ sc.frame_set(CUT); print("CHART reach err mm", round((bone_world(D_, "wrist.L").
 # doctor parked in the hospital all along (not on stage), fans hidden after the stage block (only in hospital... they stay)
 
 # ================================================================= bake the bat in the hand (450-1296), rest after the drop
-bake_held(450, 1296)
-for k, f in enumerate(range(1297, 1334, 3)):
-    u = min(1.0, (f - 1297) / 33.0)
+bake_held(450, 761)
+sc.frame_set(761); Mb = BAT.matrix_world.copy()
+for f in range(762, 797, 3):
+    u = min(1.0, (f - 761) / 33.0)
     p0 = Mb.to_translation(); p = p0.lerp(DROP, u); p.z = p0.z + (DROP.z - p0.z) * u * u
     R3 = Mb.to_3x3().to_quaternion().slerp((Rz(230) @ Rx(90)).to_quaternion(), smooth(u)).to_matrix()
     bat_key(f, Mloc(p, R3))
 bat_key(CUT - 1, Mloc(DROP, Rz(230) @ Rx(90)))
-# ---- second hand at the bite (director: both hands hold the bat at chin height): left hand grips the bat's left flank at 712,
-# then rides with the bat every frame 690-975 (target clamped to reach); before/after it is the normal relaxed/shock keys
-BW = float(os.environ.get("BITE_WING", "40"))
-
-sc.frame_set(712); bpy.context.view_layer.update()
-Mb712 = BAT.matrix_world.copy(); left_w = Rz(YAW) @ V((1, 0, 0))
-xw = (Mb712.to_3x3() @ V((1, 0, 0))).normalized(); sgn = 1 if xw.dot(left_w) > 0 else -1
-yw_ = (Mb712.to_3x3() @ V((0, 1, 0))).normalized()          # bat back faces down at the bite: both hands under the bat
-cp = Mb712 @ V((0.028 * sgn, 0.032, -0.045))
-grL = grip_object(D[S], "L", 712, D["Bat"], cp, (-yw_).normalized())
-apply_pose(D[S], "L", "shield", 712); apply_pose(D[S], "L", "wrap_grip", 712, amount=0.8)
-print("GRIP bat L", grL)
-sc.frame_set(712); RELL = Mb712.inverted() @ (D[S].matrix_world @ D[S].pose.bones["IK_hand.L"].matrix)
-for f in range(690, 951):     # left hand lets go as the bite ends (no crossed wrists when he pulls the bat away)
-    sc.frame_set(f); Mb_f = BAT.matrix_world.copy()
-    key_ikhand_matrix(S, "L", f, D[S].matrix_world.inverted() @ (Mb_f @ RELL))
-    pb = D[S].pose.bones["Pole_elbow.L"]; nm = "Pole_elbow.L"
-    pole = bone_world(S, "upperarm01.L").to_translation() + Rz(YAW) @ V((0.45, 0.2, -0.45))
-    pb.location = RIG[S].rest(nm).to_3x3().inverted() @ (D[S].matrix_world.inverted() @ pole - RIG[S].BN[nm].head_local); pb.keyframe_insert("location", frame=f, group=nm)
-apply_pose(D[S], "L", "shield", 690); apply_pose(D[S], "L", "wrap_grip", 704, amount=0.8); apply_pose(D[S], "L", "wrap_grip", 946, amount=0.8); apply_pose(D[S], "L", "relaxed", 962); apply_pose(D[S], "L", "open_alarm", 985)
 bat_key(CUT, Mloc(V((HX, -3, -5)), Rz(0)))          # gone in the hospital
 
 # ================================================================= the cut: CONSTANT interpolation across 1599->1600 for everything
