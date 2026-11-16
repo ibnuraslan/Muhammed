@@ -143,8 +143,8 @@ def _():
 @shot("S03")
 def _():
     f0, f1 = W("S03"); _GZ[0] = 0.0; H = HS["Mom"]
-    for t, y in ((0, 8.6), (1.3, 8.9)):
-        stand(H, f0 + round(t * (f1 - f0)), (2.15 + 0.25 * t, y, 0), -90 + 20 * t, flex=4, head=(10, 0))
+    for i, t in enumerate((0, 0.4, 0.8, 1.3)):   # planted at the edge (no foot slide), looks along the drain; hands clear of the hips
+        stand(H, f0 + round(t * (f1 - f0)), (2.15, 8.6, 0), -90, flex=4, head=(10, (0, 18, -12, 6)[i]), fwd=0.08)
     poses(CH["Mom"], f0); use("Mom", "S03")
     cam_shot("S03", [(0, (0.0, 2.2, 9.5)), (1, (0.1, 3.0, 10.5))], [(0, (0.4, 9.0, -0.7)), (1, (0.4, 9.6, -0.7))], lens=30)
 @shot("S04")
