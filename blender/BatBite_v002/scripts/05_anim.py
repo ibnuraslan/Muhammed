@@ -721,6 +721,61 @@ for f, (tgt, fwd_) in sorted(BITE_TIP.items()):
         M.translation = pb.matrix.translation + D[S].matrix_world.inverted().to_3x3() @ delta
         key_ikhand_matrix(S, "R", f, M, clamp=False)
     print("BITE tip err mm", f, round(delta.length * 1000, 1))
+
+# director (Phase 2): bat tip 6-8 mm off the lips through the bite, and nothing touches the face on the way in (f679).
+# Measure the REAL clearance (posed bat mesh, carried by the actual wrist, vs the posed face surface) and move the hand
+# along the face's forward axis: bite keys are solved to 7 mm, every other key from 640 to 840 is pushed out to >= 7 mm.
+from mathutils.bvhtree import BVHTree
+_body = bpy.data.objects[S + ".body"]
+_arm = D[S].data.bones
+_headb = {b.name for b in _arm if b.name == "head" or any(p.name == "head" for p in b.parent_recursive)}
+_gname = {g.index: g.name for g in _body.vertex_groups}
+def _is_head(v):
+    gs = [g for g in v.groups if _gname[g.group] in _arm and g.weight > 0]
+    return bool(gs) and _gname[max(gs, key=lambda g: g.weight).group] in _headb
+_HEADV = {v.index for v in _body.data.vertices if _is_head(v)}
+_HEADP = [p.index for p in _body.data.polygons if all(i in _HEADV for i in p.vertices)]
+print("CLEAR face polys", len(_HEADP))
+def face_bvh():
+    mods = [(m, m.show_viewport) for m in _body.modifiers if m.type != 'ARMATURE']
+    for m, _ in mods: m.show_viewport = False
+    dg = bpy.context.evaluated_depsgraph_get(); dg.update()
+    e = _body.evaluated_get(dg); me = e.to_mesh()
+    vs = [_body.matrix_world @ v.co for v in me.vertices]
+    polys = [list(me.polygons[i].vertices) for i in _HEADP]
+    e.to_mesh_clear()
+    for m, sv in mods: m.show_viewport = sv
+    bpy.context.evaluated_depsgraph_get().update()
+    return BVHTree.FromPolygons(vs, polys)
+def bat_clear(f):
+    """min distance (m) from the bat (placed on the real wrist) to the face surface at frame f"""
+    sc.frame_set(f); Mw = D[S].matrix_world @ D[S].pose.bones["wrist.R"].matrix
+    BAT.matrix_world = Mw @ REL_W0; bpy.context.view_layer.update()
+    t = face_bvh(); dg = bpy.context.evaluated_depsgraph_get()
+    e = BAT.evaluated_get(dg); me = e.to_mesh()
+    d = min(t.find_nearest(BAT.matrix_world @ v.co)[3] for v in me.vertices)
+    e.to_mesh_clear(); return d
+def face_fwd(f):
+    sc.frame_set(f); Mh = bone_world(S, "head")
+    return (Mh.to_3x3() @ (RIG[S].rest("head").to_3x3().inverted() @ V((0, -1, 0)))).normalized()
+CLEAR, CLEAR_MAX = 0.0072, 0.0080
+def solve_clear(f, exact):
+    for it in range(10):
+        d = bat_clear(f)
+        if d >= CLEAR - 0.0006 and (not exact or d <= CLEAR_MAX): break
+        fw = face_fwd(f); pb = D[S].pose.bones["IK_hand.R"]; M = D[S].pose.bones["wrist.R"].matrix.copy()
+        M.translation = pb.matrix.translation + D[S].matrix_world.inverted().to_3x3() @ (fw * (CLEAR - d + 0.0005))
+        key_ikhand_matrix(S, "R", f, M, clamp=False)
+    print("CLEAR mm", f, round(bat_clear(f) * 1000, 1))
+_ck = sorted(set(BITE_TIP) | set(range(640, 842, 4)))
+for f in _ck:
+    solve_clear(f, f in BITE_TIP)
+# verify every frame; key any frame still under 6 mm (in-betweens of the keys above)
+for _pass in range(3):
+    low = [f for f in range(640, 842) if bat_clear(f) < 0.006]
+    print("CLEAR low frames pass", _pass, low)
+    if not low: break
+    for f in low: solve_clear(f, False)
 bake_held(450, 867)
 sc.frame_set(867); Mb = BAT.matrix_world.copy()
 for f in range(868, 903, 3):
