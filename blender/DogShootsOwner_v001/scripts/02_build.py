@@ -324,7 +324,8 @@ for i in range(260):
     a = random.random() * 2 * math.pi; r = 0.4 + random.random() * 4.5
     src = PLANTS[random.choice(["PH_grass_medium_01_large_a_LOD1", "PH_grass_medium_01_large_b_LOD1", "PH_grass_medium_01_mid_a_LOD1"])]
     p_ = CLR + Vector((math.cos(a) * r, math.sin(a) * r, 0))
-    if (p_ - (CLR + Vector((0.2, -0.4, 0)))).length < 0.95: continue      # keep the dog's spot clear of clumps
+    if (p_ - (CLR + Vector((0.2, -0.4, 0)))).length < 0.95: continue
+    if (p_ - (CLR + Vector((-0.6, -1.45, 0)))).length < 0.8: continue      # 15b camera spot: no blades in the lens      # keep the dog's spot clear of clumps
     dup(src, f"ClrGrass{i}", p_, (0, 0, random.random() * 6), 1.3 + random.random() * 0.8, CR)
 for i in range(16):
     a = random.random() * 2 * math.pi; r = 3 + random.random() * 3
@@ -955,11 +956,13 @@ def S15a(f0, f1):
     tgt = MANSPOT.lerp(DOGSPOT, 0.5) + Vector((0, 0, 0.75))
     cam_key(c, f0, tgt + Vector((0.6, -4.6, 0.0)), tgt, lens=26); cam_key(c, f1, tgt + Vector((0.5, -4.2, 0.05)), tgt, lens=26)
 def S15b(f0, f1):
-    PRESENT["15b"] = {"own"}
-    for fr in (f0, f1): clear_man(fr, head=(34, -3), back=1.4)
+    PRESENT["15b"] = set()          # the dog alone; the man is out of this shot
     c = camera("15b", 35)
-    tgt = DOGSPOT + Vector((0, 0, 0.15))
-    cam_key(c, f0, tgt + Vector((0.35, -1.35, 0.75)), tgt, lens=35); cam_key(c, f1, tgt + Vector((0.28, -1.15, 0.62)), tgt, lens=35)
+    # low 3/4 side view at the dog's head height: closed eyes and the side-lying body read clearly
+    bpy.context.view_layer.update()
+    hp_ = SDF.matrix_world @ Vector((0.0, 0.38, 0.12))       # scan head end (+Y local)
+    tgt = hp_.lerp(SDF.matrix_world.translation + Vector((0, 0, 0.12)), 0.35)
+    cam_key(c, f0, tgt + Vector((-0.55, -1.05, 0.10)), tgt, lens=40); cam_key(c, f1, tgt + Vector((-0.46, -0.90, 0.08)), tgt, lens=40)
 def S15c(f0, f1):
     PRESENT["15c"] = {"own"}
     for fr, hd, br in ((f0, (34, -3), 0), ((f0 + f1) // 2, (38, -4), 3), (f1, (36, -2), 0)):
