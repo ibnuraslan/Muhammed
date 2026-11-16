@@ -1,0 +1,113 @@
+{
+ "frames": {
+  "1785": {
+   "Boy": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1791": {
+   "Boy": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1797": {
+   "Boy": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1803": {
+   "Boy": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1809": {
+   "Boy": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1815": {
+   "Boy": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1821": {
+   "Boy": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1827": {
+   "Boy": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1833": {
+   "Boy": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1839": {
+   "Boy": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1845": {
+   "Boy": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1851": {
+   "Boy": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1857": {
+   "Boy": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1863": {
+   "Boy": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1869": {
+   "Boy": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}

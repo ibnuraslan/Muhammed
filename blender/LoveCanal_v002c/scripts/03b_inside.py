@@ -129,7 +129,7 @@ near_side = "L" if (MF.to_3x3() @ Vector((1, 0, 0))).y * CHAIR_SIDE > 0 else "R"
 far_side = "L" if near_side == "R" else "R"
 ev(fa)
 hip_w = FA.r.o.matrix_world @ FA.r.PB["root"].head; chest_w = FA.r.o.matrix_world @ FA.r.PB["spine03"].head
-x_feet = origin.x - HEAD_SGN * 0.15; x_top = hip_w.x + HEAD_SGN * 0.2     # blanket up to the waist: hands rest on his chest, clear of it
+x_feet = origin.x - HEAD_SGN * 0.15; x_top = hip_w.x - HEAD_SGN * 0.12     # v002c: blanket up to the hips, so his forearm and the joined hands lie clear of it
 nx, ny = 46, 34; W_ = (bmx.y - bmn.y) * 0.82
 # height field from the body/clothes vertices (arm and hand vertices left out), not from ray casts
 _mods = [(o, m) for o in OB if o.parent == FA.r.o for m in getattr(o, "modifiers", []) if m.type in ("SUBSURF", "MASK") and m.show_viewport]
@@ -196,15 +196,19 @@ def blanket_z(x, y):
     return hit[1].z if hit[0] else MTOP
 yh = hip_w.y + (-1 if near_side == "R" and Xw.y > 0 else 1) * 0.0
 # his hand rests on his own chest (above the blanket's top edge), toward the boy's side
-_hx = hip_w.x + HEAD_SGN * 0.05; _hy = bc.y + CHAIR_SIDE * (W_ / 2 - 0.08)   # v002c: his near arm rests on the blanket at the bed edge, by the boy
+_hx = hip_w.x + HEAD_SGN * 0.1; _hy = bc.y + CHAIR_SIDE * (W_ / 2 - 0.12)   # v002c: his near arm rests at the bed edge beside his hip, just above the blanket's edge, by the boy
 _h = sc.ray_cast(bpy.context.evaluated_depsgraph_get(), Vector((_hx, _hy, 2.7)), Vector((0, 0, -1)))
 # v002b: he lifts his forearm and the boy takes his hand, palm to palm, above the line of his chest so the camera sees it
 _bh = [h for h in (BL.ray_cast(BL.matrix_world.inverted() @ Vector((_hx, _hy, 2.7)), Vector((0, 0, -1)), depsgraph=bpy.context.evaluated_depsgraph_get()),) if h[0]]
-HAND_P = Vector((_hx, _hy, ((BL.matrix_world @ _bh[0][1]).z if _bh else MTOP + 0.06) + 0.028))
+HAND_P = Vector((_hx, _hy, MTOP + 0.05))
 print("S22 HAND_P", HAND_P, bool(_bh))
 for f in (fa, fe):
-    place_hand(FA.r.o, near_side, f, HAND_P, Vector((0, 0, -1)), Vector((-HEAD_SGN, CHAIR_SIDE * 0.25, 0)).normalized())   # palm down on the blanket
-apply_pose(FA.r.o, near_side, "relaxed", fa)
+    place_hand(FA.r.o, near_side, f, HAND_P, Vector((0, 0, -1)), Vector((-HEAD_SGN * 0.6, CHAIR_SIDE * 0.8, 0)).normalized())   # palm down at the bed edge, fingers toward the boy
+apply_pose(FA.r.o, near_side, "flat_palm", fa)
+for f in (fa, fe):     # v002c: his other hand lies a little out from his thigh (it rested 2.5 cm into it)
+    sx_ = 1 if far_side == "L" else -1; sh_ = FA.r.BN["upperarm01." + far_side].head_local
+    W_h = Vector((sh_.x + 0.12 * sx_, sh_.y - 0.03, sh_.z - 0.58))
+    FA.key_hand(far_side, f, W_h, Vector((0, -0.12, -1)), Vector((-sx_, 0.0, 0)), pole=W_h + Vector((0.3 * sx_, 0.5, 0.25)))
 key_vis(BL, [(0, False), (fa, True)])
 # chair beside the bed at the Father's hip, facing the bed; the Boy sits, leans in, and rests his palm on his father's hand
 cmn, cmx = bbox([HCH]); back_hi = [v for v in HCH.data.vertices if (HCH.matrix_world @ v.co).z > cmn.z + 0.8 * (cmx.z - cmn.z)]

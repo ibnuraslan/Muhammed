@@ -1,0 +1,1686 @@
+{
+ "frames": {
+  "1": [
+   [
+    "BACKHEAD",
+    "Boy"
+   ]
+  ],
+  "565": [
+   [
+    "BACKHEAD",
+    "Neighbour"
+   ]
+  ],
+  "625": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 599.41 m, 59 deg in one frame (neighbours 0.04 m, 0 deg)"
+   ]
+  ],
+  "631": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "637": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "643": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "649": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "655": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "661": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "667": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "673": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "679": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "685": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "691": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "697": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "703": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "709": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "715": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "721": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "727": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "733": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "739": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "745": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "751": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "757": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "763": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "769": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "775": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "781": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "787": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "793": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "799": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "805": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "811": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "817": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "823": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "829": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "835": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "841": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "847": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "853": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "859": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "865": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "871": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "877": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "883": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "889": [
+   [
+    "EMPTY",
+    "only Under in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "895": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "901": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "907": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "913": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1057": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_00 moves 2.9 cm with no hand on it (nearest finger 508274 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_01 moves 4.9 cm with no hand on it (nearest finger 508350 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_10 moves 2.9 cm with no hand on it (nearest finger 508284 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_11 moves 4.9 cm with no hand on it (nearest finger 508363 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_20 moves 2.9 cm with no hand on it (nearest finger 508290 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_21 moves 4.9 cm with no hand on it (nearest finger 508367 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_00 moves 4.1 cm with no hand on it (nearest finger 508250 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_01 moves 2.4 cm with no hand on it (nearest finger 508324 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_10 moves 4.1 cm with no hand on it (nearest finger 508258 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_11 moves 2.4 cm with no hand on it (nearest finger 508342 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_20 moves 4.1 cm with no hand on it (nearest finger 508266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_21 moves 2.4 cm with no hand on it (nearest finger 508343 cm)"
+   ]
+  ],
+  "1063": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_00 moves 4.3 cm with no hand on it (nearest finger 508268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_01 moves 7.3 cm with no hand on it (nearest finger 508345 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_10 moves 4.3 cm with no hand on it (nearest finger 508278 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_11 moves 7.3 cm with no hand on it (nearest finger 508358 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_21 moves 7.3 cm with no hand on it (nearest finger 508362 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_00 moves 6.0 cm with no hand on it (nearest finger 508245 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_01 moves 3.5 cm with no hand on it (nearest finger 508318 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_11 moves 3.5 cm with no hand on it (nearest finger 508337 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_21 moves 3.5 cm with no hand on it (nearest finger 508338 cm)"
+   ]
+  ],
+  "1069": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_01 moves 9.2 cm with no hand on it (nearest finger 508337 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_11 moves 9.2 cm with no hand on it (nearest finger 508350 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_11 moves 4.4 cm with no hand on it (nearest finger 508330 cm)"
+   ]
+  ],
+  "1075": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_11 moves 10.7 cm with no hand on it (nearest finger 508341 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_11 moves 5.2 cm with no hand on it (nearest finger 508322 cm)"
+   ]
+  ],
+  "1081": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_11 moves 5.7 cm with no hand on it (nearest finger 508314 cm)"
+   ]
+  ],
+  "1087": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1093": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1099": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1105": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1111": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1117": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1123": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_00 moves 252.6 cm with no hand on it (nearest finger 508028 cm)"
+   ]
+  ],
+  "1129": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_00 moves 296.8 cm with no hand on it (nearest finger 507992 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_20 moves 108.5 cm with no hand on it (nearest finger 508191 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_00 moves 53.6 cm with no hand on it (nearest finger 507971 cm)"
+   ]
+  ],
+  "1135": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_10 moves 271.9 cm with no hand on it (nearest finger 508031 cm)"
+   ]
+  ],
+  "1141": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_10 moves 298.9 cm with no hand on it (nearest finger 507987 cm)"
+   ]
+  ],
+  "1147": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1153": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_20 moves 294.3 cm with no hand on it (nearest finger 508004 cm)"
+   ]
+  ],
+  "1159": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1165": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1171": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_01 moves 284.9 cm with no hand on it (nearest finger 508062 cm)"
+   ]
+  ],
+  "1177": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_01 moves 3.5 cm with no hand on it (nearest finger 508063 cm)"
+   ]
+  ],
+  "1183": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_11 moves 258.3 cm with no hand on it (nearest finger 508095 cm)"
+   ]
+  ],
+  "1189": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_11 moves 6.5 cm with no hand on it (nearest finger 508087 cm)"
+   ]
+  ],
+  "1195": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_21 moves 272.5 cm with no hand on it (nearest finger 508096 cm)"
+   ]
+  ],
+  "1201": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_21 moves 6.4 cm with no hand on it (nearest finger 508093 cm)"
+   ]
+  ],
+  "1207": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1213": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1219": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1225": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1231": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1237": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1243": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1249": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1255": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1261": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1267": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1273": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1279": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1285": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1291": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1297": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1303": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1309": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1315": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1321": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1327": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1333": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1339": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1345": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1351": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1357": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1363": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1369": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1375": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.0 moves 2.6 cm with no hand on it (nearest finger 512625 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.1 moves 1.7 cm with no hand on it (nearest finger 512638 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.2 moves 2.2 cm with no hand on it (nearest finger 512654 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.3 moves 0.6 cm with no hand on it (nearest finger 512667 cm)"
+   ]
+  ],
+  "1381": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.0 moves 2.6 cm with no hand on it (nearest finger 512625 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.1 moves 1.8 cm with no hand on it (nearest finger 512638 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.2 moves 2.8 cm with no hand on it (nearest finger 512654 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.3 moves 1.2 cm with no hand on it (nearest finger 512667 cm)"
+   ]
+  ],
+  "1387": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.0 moves 2.5 cm with no hand on it (nearest finger 512625 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.1 moves 1.9 cm with no hand on it (nearest finger 512638 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.2 moves 3.2 cm with no hand on it (nearest finger 512654 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.3 moves 1.7 cm with no hand on it (nearest finger 512667 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.4 moves 1.2 cm with no hand on it (nearest finger 512683 cm)"
+   ]
+  ],
+  "1393": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.0 moves 2.2 cm with no hand on it (nearest finger 512625 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.1 moves 1.8 cm with no hand on it (nearest finger 512638 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.2 moves 3.4 cm with no hand on it (nearest finger 512654 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.3 moves 2.0 cm with no hand on it (nearest finger 512667 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.4 moves 1.9 cm with no hand on it (nearest finger 512683 cm)"
+   ]
+  ],
+  "1399": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.0 moves 1.7 cm with no hand on it (nearest finger 512625 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.1 moves 1.7 cm with no hand on it (nearest finger 512638 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.2 moves 3.4 cm with no hand on it (nearest finger 512654 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.3 moves 2.2 cm with no hand on it (nearest finger 512667 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.4 moves 2.5 cm with no hand on it (nearest finger 512683 cm)"
+   ]
+  ],
+  "1405": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.0 moves 1.1 cm with no hand on it (nearest finger 512625 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.1 moves 1.4 cm with no hand on it (nearest finger 512638 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.2 moves 3.2 cm with no hand on it (nearest finger 512654 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.3 moves 2.3 cm with no hand on it (nearest finger 512667 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.4 moves 2.8 cm with no hand on it (nearest finger 512683 cm)"
+   ]
+  ],
+  "1411": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.1 moves 1.0 cm with no hand on it (nearest finger 512638 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.2 moves 2.8 cm with no hand on it (nearest finger 512654 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.3 moves 2.2 cm with no hand on it (nearest finger 512667 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.4 moves 3.0 cm with no hand on it (nearest finger 512683 cm)"
+   ]
+  ],
+  "1417": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.2 moves 2.2 cm with no hand on it (nearest finger 512654 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.3 moves 2.0 cm with no hand on it (nearest finger 512667 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.4 moves 3.0 cm with no hand on it (nearest finger 512683 cm)"
+   ]
+  ],
+  "1423": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.2 moves 1.4 cm with no hand on it (nearest finger 512654 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.3 moves 1.7 cm with no hand on it (nearest finger 512667 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.4 moves 2.8 cm with no hand on it (nearest finger 512683 cm)"
+   ]
+  ],
+  "1429": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.3 moves 1.2 cm with no hand on it (nearest finger 512667 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.4 moves 2.5 cm with no hand on it (nearest finger 512683 cm)"
+   ]
+  ],
+  "1435": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.3 moves 0.6 cm with no hand on it (nearest finger 512667 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.4 moves 1.9 cm with no hand on it (nearest finger 512683 cm)"
+   ]
+  ],
+  "1441": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Seep_streak.4 moves 1.2 cm with no hand on it (nearest finger 512683 cm)"
+   ]
+  ],
+  "1447": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1453": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1459": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1465": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1471": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1477": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1483": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1489": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1495": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 300.90 m, 10 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "1501": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1507": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Yard_puddle moves 0.9 cm with no hand on it (nearest finger 518852 cm)"
+   ]
+  ],
+  "1513": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Yard_puddle moves 1.4 cm with no hand on it (nearest finger 518840 cm)"
+   ]
+  ],
+  "1519": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Yard_puddle moves 1.8 cm with no hand on it (nearest finger 518824 cm)"
+   ]
+  ],
+  "1525": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1531": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1537": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Yard_puddle2 moves 0.5 cm with no hand on it (nearest finger 518929 cm)"
+   ]
+  ],
+  "1543": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Yard_puddle2 moves 0.7 cm with no hand on it (nearest finger 518920 cm)"
+   ]
+  ],
+  "1549": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Yard_puddle2 moves 0.8 cm with no hand on it (nearest finger 518911 cm)"
+   ]
+  ],
+  "1555": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1561": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.0 moves 18.2 cm with no hand on it (nearest finger 527544 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.0 moves 3.6 cm with no hand on it (nearest finger 527365 cm)"
+   ]
+  ],
+  "1567": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.0 moves 24.2 cm with no hand on it (nearest finger 527541 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.1 moves 14.0 cm with no hand on it (nearest finger 527320 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.0 moves 6.9 cm with no hand on it (nearest finger 527363 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.1 moves 1.9 cm with no hand on it (nearest finger 527383 cm)"
+   ]
+  ],
+  "1573": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.0 moves 28.5 cm with no hand on it (nearest finger 527539 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.1 moves 22.6 cm with no hand on it (nearest finger 527318 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.0 moves 9.9 cm with no hand on it (nearest finger 527361 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.1 moves 5.3 cm with no hand on it (nearest finger 527381 cm)"
+   ]
+  ],
+  "1579": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.0 moves 31.9 cm with no hand on it (nearest finger 527535 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.1 moves 27.9 cm with no hand on it (nearest finger 527315 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.2 moves 15.4 cm with no hand on it (nearest finger 527456 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.0 moves 12.5 cm with no hand on it (nearest finger 527359 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.1 moves 8.5 cm with no hand on it (nearest finger 527380 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.2 moves 2.5 cm with no hand on it (nearest finger 527363 cm)"
+   ]
+  ],
+  "1585": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.0 moves 222.8 cm with no hand on it (nearest finger 527317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.1 moves 31.9 cm with no hand on it (nearest finger 527312 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.2 moves 22.3 cm with no hand on it (nearest finger 527453 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.0 moves 14.7 cm with no hand on it (nearest finger 527356 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.1 moves 11.2 cm with no hand on it (nearest finger 527378 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.2 moves 5.9 cm with no hand on it (nearest finger 527362 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.3 moves 1.3 cm with no hand on it (nearest finger 527433 cm)"
+   ]
+  ],
+  "1591": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.0 moves 37.7 cm with no hand on it (nearest finger 527316 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.1 moves 35.3 cm with no hand on it (nearest finger 527309 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.2 moves 27.1 cm with no hand on it (nearest finger 527453 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.3 moves 20.8 cm with no hand on it (nearest finger 527450 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.0 moves 16.6 cm with no hand on it (nearest finger 527353 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.1 moves 13.6 cm with no hand on it (nearest finger 527375 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.2 moves 8.9 cm with no hand on it (nearest finger 527360 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.3 moves 4.8 cm with no hand on it (nearest finger 527432 cm)"
+   ]
+  ],
+  "1597": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.0 moves 40.0 cm with no hand on it (nearest finger 527315 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.1 moves 38.2 cm with no hand on it (nearest finger 527305 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.2 moves 30.6 cm with no hand on it (nearest finger 527450 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.3 moves 26.1 cm with no hand on it (nearest finger 527447 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.1 moves 15.7 cm with no hand on it (nearest finger 527372 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.2 moves 11.6 cm with no hand on it (nearest finger 527358 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.3 moves 8.0 cm with no hand on it (nearest finger 527431 cm)"
+   ]
+  ],
+  "1603": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.0 moves 42.3 cm with no hand on it (nearest finger 527314 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.1 moves 40.9 cm with no hand on it (nearest finger 527301 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.2 moves 33.8 cm with no hand on it (nearest finger 527447 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.3 moves 30.2 cm with no hand on it (nearest finger 527444 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drip.4 moves 19.0 cm with no hand on it (nearest finger 527548 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.1 moves 17.4 cm with no hand on it (nearest finger 527369 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.2 moves 14.0 cm with no hand on it (nearest finger 527355 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.3 moves 10.8 cm with no hand on it (nearest finger 527428 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.4 moves 3.6 cm with no hand on it (nearest finger 527368 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DripTrail.5 moves 1.3 cm with no hand on it (nearest finger 527363 cm)"
+   ]
+  ],
+  "79": [
+   [
+    "CAMJUMP",
+    "cut: 11.60 m, 48 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "197": [
+   [
+    "CAMJUMP",
+    "cut: 16.40 m, 91 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "325": [
+   [
+    "CAMJUMP",
+    "cut: 304.84 m, 140 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "428": [
+   [
+    "CAMJUMP",
+    "cut: 3.03 m, 23 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "564": [
+   [
+    "CAMJUMP",
+    "cut: 299.81 m, 84 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "765": [
+   [
+    "CAMJUMP",
+    "cut: 17.01 m, 17 deg in one frame (neighbours 0.08 m, 0 deg)"
+   ]
+  ],
+  "915": [
+   [
+    "CAMJUMP",
+    "cut: 304.91 m, 73 deg in one frame (neighbours 0.03 m, 0 deg)"
+   ]
+  ],
+  "975": [
+   [
+    "CAMJUMP",
+    "cut: 26.32 m, 56 deg in one frame (neighbours 0.04 m, 0 deg)"
+   ]
+  ],
+  "1034": [
+   [
+    "CAMJUMP",
+    "cut: 16.43 m, 93 deg in one frame (neighbours 0.07 m, 0 deg)"
+   ]
+  ],
+  "1136": [
+   [
+    "CAMJUMP",
+    "cut: 27.78 m, 114 deg in one frame (neighbours 0.03 m, 0 deg)"
+   ]
+  ],
+  "1221": [
+   [
+    "CAMJUMP",
+    "cut: 4.17 m, 45 deg in one frame (neighbours 0.04 m, 0 deg)"
+   ]
+  ],
+  "1283": [
+   [
+    "CAMJUMP",
+    "cut: 325.11 m, 50 deg in one frame (neighbours 0.07 m, 0 deg)"
+   ]
+  ],
+  "1370": [
+   [
+    "CAMJUMP",
+    "cut: 614.88 m, 27 deg in one frame (neighbours 0.15 m, 0 deg)"
+   ]
+  ],
+  "1552": [
+   [
+    "CAMJUMP",
+    "cut: 302.61 m, 19 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "1608": [
+   [
+    "CAMJUMP",
+    "cut: 1800.47 m, 165 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "1695": [
+   [
+    "CAMJUMP",
+    "cut: 13.56 m, 59 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "1785": [
+   [
+    "CAMJUMP",
+    "cut: 2091.59 m, 58 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "433": [
+   [
+    "PROPMOVE",
+    "Glass moves 58.6 cm with no hand on it (nearest finger 12 cm)"
+   ]
+  ],
+  "1051": [
+   [
+    "PROPMOVE",
+    "Drum_b0_00 moves 1.2 cm with no hand on it (nearest finger 851 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_01 moves 2.1 cm with no hand on it (nearest finger 789 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_10 moves 1.2 cm with no hand on it (nearest finger 823 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_11 moves 2.1 cm with no hand on it (nearest finger 761 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_20 moves 1.2 cm with no hand on it (nearest finger 795 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b0_21 moves 2.1 cm with no hand on it (nearest finger 728 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_00 moves 1.7 cm with no hand on it (nearest finger 946 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_01 moves 1.0 cm with no hand on it (nearest finger 874 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_10 moves 1.7 cm with no hand on it (nearest finger 967 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_11 moves 1.0 cm with no hand on it (nearest finger 909 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_20 moves 1.7 cm with no hand on it (nearest finger 992 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drum_b1_21 moves 1.0 cm with no hand on it (nearest finger 928 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "BACKHEAD": 2,
+  "EMPTY": 167,
+  "CAMJUMP": 19,
+  "PROPMOVE": 150
+ }
+}
