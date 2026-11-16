@@ -9,8 +9,8 @@ def look(H, f0, f1, flex, head_fn, step=20, period=170, amp=1.2):
 def rest_hands_on_bench(rig, f, xs, y=-0.24, flat=False):
     for s, x in zip("RL", xs):
         sx = 1 if s == "L" else -1
-        place_hand(rig, s, f, Vector((x, y, BT)), Vector((0, 0, -1)), Vector((-0.2 * sx, -1, 0)))
-        apply_pose(rig, s, "flat_palm" if flat else "relaxed", f)
+        place_hand(rig, s, f, Vector((x, y, BT + 0.02)), Vector((0, 0, -1)), Vector((-0.2 * sx, -1, 0)))
+        apply_pose(rig, s, "flat_palm", f)
 
 def ease(u): u = max(0.0, min(1.0, u)); return u * u * (3 - 2 * u)
 
@@ -74,7 +74,7 @@ def beat_B3():
 def beat_B4():
     f0, f1 = WIN["B4"]
     for f in (f0, f1):
-        seat(RH, HH, f, HIP_H, flex=4, yaw=18); seat(RP, HP, f, HIP_P, flex=6, yaw=-22)
+        seat(RH, HH, f, HIP_H, flex=6, yaw=18); seat(RP, HP, f, HIP_P, flex=6, yaw=-22)
     arm_poles(RH, f0, HIP_H, yaw=18); arm_poles(RH, f1, HIP_H, yaw=18); arm_poles(RP, f0, HIP_P, yaw=-22); arm_poles(RP, f1, HIP_P, yaw=-22)
     sb, sa = pin_parts("ShowPin", cP, clasp=True); sb = to_mesh(sb); sa = bpy.data.objects["ShowPin_Arm"]
     if sa.type == 'CURVE': to_mesh(sa)
@@ -83,12 +83,12 @@ def beat_B4():
     for f, dz in ((1260, 0.03), (1400, 0.05), (1500, 0.06), (f1, 0.06)):
         hand_delta(RH, "L", f0, f, (0.0, 0.0, dz)); hold_fingers(hunt, "L", f0, f)
     rest_hands_on_bench(hunt, f0, (-0.42, None)) if False else None
-    place_hand(hunt, "R", f0, Vector((-0.40, -0.22, BT)), Vector((0, 0, -1)), Vector((0.25, -1, 0))); apply_pose(hunt, "R", "relaxed", f0)
-    place_hand(hunt, "R", f1, Vector((-0.40, -0.22, BT)), Vector((0, 0, -1)), Vector((0.25, -1, 0))); apply_pose(hunt, "R", "relaxed", f1)
+    place_hand(hunt, "R", f0, Vector((-0.40, -0.22, BT + 0.02)), Vector((0, 0, -1)), Vector((0.25, -1, 0))); apply_pose(hunt, "R", "flat_palm", f0)
+    place_hand(hunt, "R", f1, Vector((-0.40, -0.22, BT + 0.02)), Vector((0, 0, -1)), Vector((0.25, -1, 0))); apply_pose(hunt, "R", "flat_palm", f1)
     for s, x in (("L", 0.50), ("R", 0.28)):
         sx = 1 if s == "L" else -1
         for f in (f0, f1):
-            place_hand(pal, s, f, Vector((x, -0.22, BT)), Vector((0, 0, -1)), Vector((-0.2 * sx, -1, 0))); apply_pose(pal, s, "relaxed", f)
+            place_hand(pal, s, f, Vector((x, -0.22, BT + 0.02)), Vector((0, 0, -1)), Vector((-0.2 * sx, -1, 0))); apply_pose(pal, s, "flat_palm", f)
     # Hunt looks between the pin and his friend; Pal leans in, studies it, looks up and nods
     look(HH, f0, f1, 6, lambda f: (16, 6) if f < 1330 else (6, 14) if f < 1470 else (12, 8))
     def palhead(f):
@@ -106,7 +106,7 @@ def beat_B4():
 # ================================================================== B5 the $15 debt (1591..1860)
 def beat_B5():
     f0, f1 = WIN["B5"]
-    for f in (f0, f1): seat(RH, HH, f, HIP_H, flex=10)
+    for f in (f0, f1): seat(RH, HH, f, HIP_H, flex=6)
     arm_poles(RH, f0, HIP_H); arm_poles(RH, f1, HIP_H)
     note = bpy.data.objects["DebtNote"]; note.location = (-0.30, -0.42, BT + 0.0012); note.rotation_euler = (0, 0, R_(8))
     for i, (dx, dy) in enumerate(((0.10, -0.03), (0.125, -0.012), (0.115, 0.012))):
@@ -139,18 +139,18 @@ def beat_B6():
     slide(pat, p0, p1, 1900, 1975); slide(stack, m0, m1, 1935, 2005)
     # Hunt's right palm on the patent pushes it across, then withdraws to the bench edge
     for f, p in ((f0, p0), (1900, p0), (1975, p1)):
-        place_hand(hunt, "R", f, p + Vector((0.0, 0.0, 0.0)), Vector((0, 0, -1)), Vector((0.15, -1, 0))); apply_pose(hunt, "R", "flat_palm", f)
+        place_hand(hunt, "R", f, p + Vector((0.0, 0.0, 0.006)), Vector((0, 0, -1)), Vector((0.15, -1, 0))); apply_pose(hunt, "R", "flat_palm", f)
     place_hand(hunt, "R", 2000, Vector((-0.42, -0.24, BT + 0.03)), Vector((0, 0, -1)), Vector((0.2, -1, 0))); apply_pose(hunt, "R", "relaxed", 2000)
-    place_hand(hunt, "R", f1, Vector((-0.42, -0.22, BT)), Vector((0, 0, -1)), Vector((0.2, -1, 0))); apply_pose(hunt, "R", "relaxed", f1)
-    place_hand(hunt, "L", f0, Vector((-0.12, -0.22, BT)), Vector((0, 0, -1)), Vector((-0.2, -1, 0))); apply_pose(hunt, "L", "relaxed", f0)
-    place_hand(hunt, "L", f1, Vector((-0.12, -0.22, BT)), Vector((0, 0, -1)), Vector((-0.2, -1, 0))); apply_pose(hunt, "L", "relaxed", f1)
+    place_hand(hunt, "R", f1, Vector((-0.42, -0.22, BT + 0.02)), Vector((0, 0, -1)), Vector((0.2, -1, 0))); apply_pose(hunt, "R", "flat_palm", f1)
+    place_hand(hunt, "L", f0, Vector((-0.12, -0.22, BT + 0.02)), Vector((0, 0, -1)), Vector((-0.2, -1, 0))); apply_pose(hunt, "L", "flat_palm", f0)
+    place_hand(hunt, "L", f1, Vector((-0.12, -0.22, BT + 0.02)), Vector((0, 0, -1)), Vector((-0.2, -1, 0))); apply_pose(hunt, "L", "flat_palm", f1)
     # Buyer (faces +Y; his right hand is on +X) slides the money stack over, then takes the patent toward himself
     for f, p in ((f0, m0), (1935, m0), (2005, m1)):
-        place_hand(buyer, "R", f, p + Vector((0, 0, 0.012)), Vector((0, 0, -1)), Vector((-0.15, 1, 0))); apply_pose(buyer, "R", "flat_palm", f)
+        place_hand(buyer, "R", f, p + Vector((0, 0, 0.016)), Vector((0, 0, -1)), Vector((-0.15, 1, 0))); apply_pose(buyer, "R", "flat_palm", f)
     place_hand(buyer, "R", 2035, Vector((0.10, -0.80, BT + 0.03)), Vector((0, 0, -1)), Vector((-0.2, 1, 0))); apply_pose(buyer, "R", "relaxed", 2035)
-    place_hand(buyer, "R", f1, Vector((0.10, -0.82, BT)), Vector((0, 0, -1)), Vector((-0.2, 1, 0))); apply_pose(buyer, "R", "relaxed", f1)
-    place_hand(buyer, "L", f0, Vector((-0.20, -0.80, BT)), Vector((0, 0, -1)), Vector((0.2, 1, 0))); apply_pose(buyer, "L", "relaxed", f0)
-    place_hand(buyer, "L", f1, Vector((-0.20, -0.80, BT)), Vector((0, 0, -1)), Vector((0.2, 1, 0))); apply_pose(buyer, "L", "relaxed", f1)
+    place_hand(buyer, "R", f1, Vector((0.10, -0.82, BT + 0.02)), Vector((0, 0, -1)), Vector((-0.2, 1, 0))); apply_pose(buyer, "R", "flat_palm", f1)
+    place_hand(buyer, "L", f0, Vector((-0.20, -0.80, BT + 0.02)), Vector((0, 0, -1)), Vector((0.2, 1, 0))); apply_pose(buyer, "L", "flat_palm", f0)
+    place_hand(buyer, "L", f1, Vector((-0.20, -0.80, BT + 0.02)), Vector((0, 0, -1)), Vector((0.2, 1, 0))); apply_pose(buyer, "L", "flat_palm", f1)
     look(HH, f0, f1, 8, lambda f: (20, 0) if f < 2060 else (14 - 10 * ease((f - 2060) / 40), 0))
     look(HB, f0, f1, 6, lambda f: (18, 0) if f < 2040 else (4, 0))
     for o in [pat, stack] + list(stack.children): show_only(o, [(f0, f1)])

@@ -12,4 +12,4 @@ rn = [r.name for r in bpy.data.objects if r.type == 'ARMATURE' and any(r.name ==
 sc = bpy.context.scene; sc.frame_start, sc.frame_end = f0, f1; sc.frame_set(f0)
 print("BPC_PROPS", len(names), "RIGS", rn)
 sys.argv = [sys.argv[0], "--", out, step, ",".join(sorted(set(names))), ",".join(rn)]
-exec(open("/home/user/Muhammed/blender/pipeline/body_prop_cross.py").read())
+exec(open("/home/user/Muhammed/blender/SafetyPin_v001/scripts/bpc_vis.py").read())

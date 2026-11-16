@@ -54,7 +54,14 @@ buyer, RB, HB = setup("Buyer")
 show_only(hunt, [WIN["B1"], WIN["B2"], WIN["B4"], WIN["B5"], WIN["B6"]])
 show_only(pal, [WIN["B3"], WIN["B4"]])
 show_only(buyer, [WIN["B6"]])
-HIP_H = Vector((-0.30, 0.03, 0.57)); HIP_P = Vector((0.38, 0.03, 0.57)); HIP_B = Vector((-0.05, -1.00, 0.57))
+HIP_H = Vector((-0.30, 0.12, 0.62)); HIP_P = Vector((0.38, 0.12, 0.62)); HIP_B = Vector((-0.05, -1.10, 0.62))
+for _n, _y in (("StoolHunt", 0.14), ("StoolPal", 0.14), ("StoolBuyer", -1.12)): bpy.data.objects[_n].location.y = _y
+# workbench: remove the long front/back aprons and the low stretcher (legs went through them); keep top, legs, end aprons
+_tb = bpy.data.objects["WoodenTable_01"]; _mw = _tb.matrix_world
+_bm = bmesh.new(); _bm.from_mesh(_tb.data)
+def _c(f): return _mw @ f.calc_center_median()
+_del = [f for f in _bm.faces if _c(f).z < 0.725 and abs(_c(f).x) < 0.76]
+bmesh.ops.delete(_bm, geom=_del, context='FACES'); _bm.to_mesh(_tb.data); _bm.free(); print("TABLE_TRIM", len(_del))
 
 # props built here (meshes, so grips can be measured)
 bpy.data.objects.remove(bpy.data.objects["Wire"])
@@ -92,7 +99,7 @@ def beat_B1():
         HH.key_spine(f, flex=8 + 1.2 * ph, head=(24 + 2 * ph, 2 * ph))
     arm_poles(RH, f0, HIP_H); arm_poles(RH, f1, HIP_H)
     # --- 1a/1b (1..330): both hands pinch the wire ends; the left hand twists about the wire, the coil winds in
-    C = Vector((-0.30, -0.42, 0.89)); half = 0.035
+    C = Vector((-0.30, -0.42, 0.94)); half = 0.035
     wire.location = C; wire.rotation_euler = (0, 0, 0)
     sk = wire.data.shape_keys.key_blocks["S1"]
     for f, v in ((f0, 0.0), (40, 0.0), (300, 1.0), (330, 1.0)):
@@ -109,7 +116,7 @@ def beat_B1():
     show_only(wire, [(f0, 330)])
     # --- 1c (331..480): macro, the finished coil spring: right hand holds the coil, left pinches the arm tip and opens/closes it
     f2 = 331
-    pin_C = Vector((-0.31, -0.43, 0.91))
+    pin_C = Vector((-0.31, -0.43, 0.96))
     xax, yax = hold_pin(proto_b, "R", f2, pin_C)
     for f in (f2, f1): pass
     hold_R = f2
@@ -121,7 +128,7 @@ def beat_B1():
     for f in (f0, 330):
         pass
     for f in (f2, f1):
-        place_hand(hunt, "L", f, Vector((-0.10, -0.22, BT)), Vector((0, 0, -1)), Vector((-0.25, -1, 0))); apply_pose(hunt, "L", "relaxed", f)
+        place_hand(hunt, "L", f, Vector((-0.10, -0.22, BT + 0.02)), Vector((0, 0, -1)), Vector((-0.25, -1, 0))); apply_pose(hunt, "L", "flat_palm", f)
     show_only(proto_b, [(f2, f1)])
     # cameras
     cam_shot("Cam1a", f0, 150, [(f0, (0.10, -1.55, 1.02), (-0.30, -0.25, 0.98)), (150, (0.0, -1.32, 1.00), (-0.30, -0.25, 0.97))], lens=38)
@@ -135,7 +142,7 @@ def beat_B2():
     for f in (f0, f1): seat(RH, HH, f, HIP_H, flex=6)
     arm_poles(RH, f0, HIP_H); arm_poles(RH, f1, HIP_H)
     # 2a (481..650): macro, the clasp: the left fingers swing the point down into the clasp head
-    pin_C = Vector((-0.31, -0.43, 0.91))
+    pin_C = Vector((-0.31, -0.43, 0.96))
     for f in range(f0, 651, 30):
         ph = math.sin(2 * math.pi * (f - f0) / 160)
         HH.key_spine(f, flex=8 + ph, head=(24 + 2 * ph, 0))
@@ -146,7 +153,7 @@ def beat_B2():
         hand_delta(RH, "R", f0, f, (0, 0, 0), rot=Matrix.Rotation(R_(ang), 3, Vector((0.3, -0.9, 0.2)).normalized()))
         hold_fingers(hunt, "R", f0, f)
     for f in (f0, 625, 810):
-        place_hand(hunt, "L", f, Vector((-0.10, -0.22, BT)), Vector((0, 0, -1)), Vector((-0.25, -1, 0))); apply_pose(hunt, "L", "relaxed", f)
+        place_hand(hunt, "L", f, Vector((-0.10, -0.22, BT + 0.02)), Vector((0, 0, -1)), Vector((-0.25, -1, 0))); apply_pose(hunt, "L", "flat_palm", f)
     # 2b (651..810): he lifts the finished pin to look at it, small smile, face to camera
     sc.frame_set(650); M650 = hunt.pose.bones["IK_hand.R"].matrix.copy()
     for f, dz, dy in ((690, 0.10, -0.02), (760, 0.13, -0.03), (810, 0.13, -0.03)):
@@ -154,7 +161,7 @@ def beat_B2():
     for f in range(651, f1 + 1, 20):
         u = min(1, (f - 651) / 50); ph = math.sin(2 * math.pi * (f - 651) / 150)
         HH.key_spine(f, flex=8 - 6 * u + ph, head=(24 - 22 * u + 2 * ph, -6 * u))
-    show_only(hero_b, [(f0, f1), WIN["B4"]])
+    show_only(hero_b, [(f0, f1)])
     cam_shot("Cam2a", f0, 650, [(f0, tuple(pin_C + Vector((0.14, -0.20, 0.06))), tuple(pin_C + xax * 0.035)), (650, tuple(pin_C + Vector((0.11, -0.16, 0.05))), tuple(pin_C + xax * 0.04))], lens=55, fstop=11)
     cam_shot("Cam2b", 651, f1, [(651, (0.10, -1.20, 1.10), (-0.30, -0.20, 1.02)), (f1, (0.04, -1.05, 1.10), (-0.30, -0.20, 1.04))], lens=42)
     catchlight(hunt, bpy.data.objects["Cam2b"], 0, 0)
