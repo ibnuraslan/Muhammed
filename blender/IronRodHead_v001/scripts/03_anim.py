@@ -67,7 +67,9 @@ RzG = Matrix.Rotation(R_(GYAW), 3, 'Z')
 ROD_Z0 = -0.06                                                   # blunt end 6 cm down the hole
 def rod_M(z_off=0.0, tilt=0.0):
     return Matrix.Translation(HOLE + V(0, 0, ROD_Z0 + z_off)) @ Matrix.Rotation(R_(tilt), 4, 'Y')
-def tamp(f):               # lift 11 cm and drop, 46-frame cycle (a firm tamp, then a pause)
+def tamp(f):               # §2.15: the bar stays seated in the hole (a moving bar made the fingers cross it); no lift
+    return 0.0
+def _tamp_unused(f):
     u = ((f - ST["S01"]) % 46) / 46.0
     return 0.11 * (smooth(u / 0.55) if u < 0.55 else 1 - smooth((u - 0.55) / 0.2) if u < 0.75 else 0.0)
 TAMP0, TAMP1 = ST["S01"], ST["S03"] + 40
@@ -97,15 +99,21 @@ def key_rod_hands(f, Mrod):
         G.R.key_world("IK_hand." + sd, f, A); key_pole(G, sd, f, GP + pole)
 for f in list(range(TAMP0, BLAST + 1, 2)):
     zf = tamp(f) if f < TAMP1 else 0.0
-    rod.matrix_world = rod_M(zf); rod.keyframe_insert("location", frame=f); rod.keyframe_insert("rotation_euler", frame=f)
+    rod.matrix_world = rod_M(0); rod.keyframe_insert("location", frame=f); rod.keyframe_insert("rotation_euler", frame=f)
+    if f % 4 == 1: G.hang(f, GP, GYAW)          # relaxed left arm (the right hand is re-keyed on the bar just below)
     key_rod_hands(f, rod_M(zf))
     if f % 4 == 0:
-        hands_fp(G, f, GP, GYAW, "L", (0.27, 0.0, 0.42), (0, -0.15, -1), (-1, 0, 0), (0.55, 0.45, 0.95))
-        G.stand(f, (GP.x, GP.y), GYAW, crouch=0.03 + 0.03 * zf / 0.11, flex=9 + 4 * zf / 0.11, head=(14, 0))
+        _t = (f - TAMP0) / 60.0
+        G.stand(f, (GP.x, GP.y), GYAW, crouch=0.03, flex=9, head=(14 + 8 * math.sin(_t * 1.1), 14 * math.sin(_t * 0.7)))
 for n, q in FINGQ.items():
     pb = G.o.pose.bones[n]
     for f in (TAMP0, BLAST):
         pb.rotation_quaternion = q; pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
+# bake the bar to the evaluated right wrist (vertical bar, on the hole axis, rising and falling exactly with the fist)
+sc.frame_set(FGRIP); _w0 = (G.o.matrix_world @ G.o.pose.bones["wrist.R"].matrix).translation.z
+for f in range(TAMP0, BLAST, 1):
+    sc.frame_set(f); dz = (G.o.matrix_world @ G.o.pose.bones["wrist.R"].matrix).translation.z - _w0
+    rod.matrix_world = rod_M(dz); rod.keyframe_insert("location", frame=f); rod.keyframe_insert("rotation_euler", frame=f)
 # blast: the bar shoots straight up out of the hole and out of frame (hands stay where they were: framed out in S03)
 for f, dz in ((BLAST, 0.0), (BLAST + 3, 0.9), (BLAST + 8, 4.0), (BLAST + 14, 9.0), (SE("S03"), 12.0)):
     rod.matrix_world = rod_M(dz); rod.keyframe_insert("location", frame=f); rod.keyframe_insert("rotation_euler", frame=f)
