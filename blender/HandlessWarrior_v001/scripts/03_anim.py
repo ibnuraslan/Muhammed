@@ -579,7 +579,7 @@ sw = [(s0, V(-0.30, -0.28, 1.18)), (s0 + 30, V(-0.42, -0.10, 1.50)), (FH - 6, V(
 for f, p in sw:
     W.hand_w("R", f, WP13 + R13 @ p, R13 @ V(-0.2, -1, 0.15).normalized(), R13 @ V(0, 0, -1), WP13 + R13 @ V(-0.6, 0.2, 1.0))
 for f in (s0, s1): W.hand_w("L", f, WP13 + R13 @ V(0.40, -0.40, 1.15), R13 @ V(0.2, -1, 0.3).normalized(), R13 @ V(1, 0, 0), WP13 + R13 @ V(0.6, 0.3, 0.9))
-for f, back, lean in ((s0, 0.0, 0), (FH, 0.0, 0), (FH + 8, 0.25, -12), (FH + 30, 0.6, -6), (s1, 0.75, 4)):
+for f, back, lean in ((s0, 0.0, 0), (FH, 0.0, 0), (FH + 8, 0.2, -12), (FH + 30, 0.4, -6), (s1, 0.45, 4)):
     SB.stand(f, SBP + V(0, -back, 0), SBY + 12 * (back > 0), flex=lean, head=(lean * 0.5, 0))
     SB.hang(f, SBP + V(0, -back, 0), SBY, swing=(0.15 * (back > 0), 0.25 * (back > 0)), out=0.13 + 0.1 * (back > 0))
 spark("SparkS13", SBP + V(0, 0.2, 1.3), FH)
@@ -588,7 +588,7 @@ for c in (W, SB): c.used.add("S13")
 # S14: the general's second-in-command (brass helmet) comes at him with a sword; he ducks inside and cuts; spark; the officer reels
 s0, s1 = ST["S14"], SE("S14")
 WP14 = V(BX - 3.0, 0.6, 0); WY14 = 0.0; R14 = Rz(WY14)
-SCP0 = V(BX - 3.0, -1.4, 0); SCP1 = V(BX - 3.0, -0.4, 0); SCY = 180.0; RS = Rz(SCY)
+SCP0 = V(BX - 3.0, -1.7, 0); SCP1 = V(BX - 3.0, -0.75, 0); SCY = 180.0; RS = Rz(SCY)
 FH2 = s0 + 100
 walk(SC2, s0, s0 + 60, SCP0, SCP1, yaw=SCY, stride=0.7, arms="L")
 for f, back, lean in ((s0 + 60, 0, 4), (FH2, 0, 6), (FH2 + 10, 0.3, -14), (FH2 + 40, 0.65, -4), (s1, 0.8, 6)):
@@ -601,10 +601,10 @@ for f, g, t in ((s0, V(-0.28, -0.12, 1.0), V(0, -0.4, 1)), (s0 + 60, V(-0.28, -0
     base = SCP1 if f >= s0 + 60 else SCP0.lerp(SCP1, (f - s0) / 60)
     if f > FH2: base = SCP1 + V(0, -0.3 * min(1, (f - FH2) / 10) - 0.35 * max(0, min(1, (f - FH2 - 10) / 30)), 0)
     sword_key(SC2, swordB, f, base + RS @ g, (RS @ t).normalized(), RS @ V(1, 0, 0))
-for f, p_ in ((s0, V(-0.36, -0.25, 1.0)), (s0 + 60, V(-0.42, -0.12, 1.22)), (FH2 - 14, V(-0.44, -0.10, 1.26)), (FH2, V(-0.40, -0.45, 1.15)), (FH2 + 10, V(-0.40, -0.3, 1.05)), (s1, V(-0.38, -0.25, 1.0))):
+for f, p_ in ((s0, V(-0.36, -0.28, 1.0)), (s0 + 60, V(-0.40, -0.32, 1.02)), (FH2 - 14, V(-0.40, -0.30, 1.04)), (FH2, V(-0.40, -0.50, 1.04)), (FH2 + 10, V(-0.42, -0.34, 0.98)), (s1, V(-0.40, -0.30, 0.96))):
     base = SCP1 if f >= s0 + 60 else SCP0.lerp(SCP1, (f - s0) / 60)
     if f > FH2: base = SCP1 + V(0, -0.3 * min(1, (f - FH2) / 10) - 0.35 * max(0, min(1, (f - FH2 - 10) / 30)), 0)
-    SC2.hand_w("R", f, base + RS @ p_, RS @ V(0, -1, 0.3 if f in (s0 + 60, FH2 - 14) else -0.1).normalized(), RS @ V(1, 0, 0), base + RS @ V(-0.6, 0.3, 1.0))
+    SC2.hand_w("R", f, base + RS @ p_, RS @ V(0, -1, -0.25).normalized(), RS @ V(1, 0, 0), base + RS @ V(-0.6, 0.3, 1.0))
 apply_pose(SC2.o, "R", "wrap_grip", s0)
 for f, b, tw in ((s0, 0.0, 0), (s0 + 60, 0.2, -10), (FH2 - 8, 0.6, -30), (FH2, 1.0, 20), (FH2 + 16, 1.0, 25), (s1, 0.8, 15)):
     W.stand(f, WP14 + V(0.25 * b, -0.2 * b, 0), WY14 - 10 * b, flex=10 + 12 * b, head=(4, 0), twist=tw, crouch=0.02 + 0.08 * b)
@@ -794,8 +794,8 @@ camera("S10", [(0, TB + V(0.05, -0.75, 0.55), TB + V(0, 0, 0.02)), (-1, TB + V(0
 h11 = head_at(W, ST["S11"] + 60)
 camera("S11", [(0, WP11 + V(-0.35, -2.1, 1.45), WP11 + V(0, 0, 1.3)), (-1, WP11 + V(-0.25, -1.8, 1.45), WP11 + V(0, 0, 1.35))], lens=30)
 camera("S12", [(0, V(BX - 0.6, 0.2, 1.1), V(BX - 1.0, 4.4, 1.35)), (-1, V(BX - 0.6, -0.9, 1.15), V(BX - 1.0, 2.0, 1.4))], lens=28)
-camera("S13", [(0, V(BX + 2.55, 0.75, 1.35), V(BX, 0.6, 1.2)), (-1, V(BX + 2.3, 0.55, 1.3), V(BX, 0.45, 1.2))], lens=28)
-camera("S14", [(0, V(BX - 0.6, 0.0, 1.35), V(BX - 3.0, -0.3, 1.3)), (-1, V(BX - 0.85, 0.15, 1.3), V(BX - 3.0, -0.3, 1.25))], lens=26)
+camera("S13", [(0, V(BX + 2.75, 0.55, 1.35), V(BX, 0.5, 1.2)), (-1, V(BX + 2.6, 0.4, 1.32), V(BX, 0.4, 1.2))], lens=24)
+camera("S14", [(0, V(BX + 0.3, -0.5, 1.45), V(BX - 3.0, -0.55, 1.2)), (-1, V(BX + 0.1, -0.45, 1.42), V(BX - 3.0, -0.5, 1.22))], lens=22)
 FLP = Vector(sc["FLAG"])
 camera("S15", [(0, FLP + V(2.6, -6.5, -4.2), FLP + V(0.6, 0, -1.2)), (-1, FLP + V(2.2, -6.0, -4.0), FLP + V(0.8, 0, -0.5))], lens=30)
 camera("S16", [(0, V(BX + 5.6, 0.6, 2.3), V(BX + 2.1, -4.6, 1.1)), (-1, V(BX + 5.2, 0.2, 2.2), V(BX + 2.1, -4.4, 1.1))], lens=26)
