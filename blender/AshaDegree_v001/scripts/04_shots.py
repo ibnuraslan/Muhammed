@@ -495,7 +495,7 @@ cam_shot("S05", [(421, (SX - 0.9, road_y(421) - 3.4, 0.85)), (560, (SX - 0.8, ro
          target_keys=[(421, (SX, road_y(421), 1.25)), (560, (SX, road_y(560), 1.25))])
 cam_shot("S06", [(541, (SX - 1.6, road_y(541) + 3.0, 1.0)), (680, (SX - 1.5, road_y(680) + 2.4, 1.0))], lens=35,
          target_keys=[(541, (SX, road_y(541), 1.1)), (680, (SX, road_y(680), 1.12))])
-cam_shot("S07", [(661, (XR + 2.4, road_y(661) - 5.5, 1.15)), (730, (XR + 2.4, road_y(730) - 5.2, 1.15)), (800, (XR + 2.5, road_y(800) - 5.0, 1.15))], lens=30,
+cam_shot("S07", [(661, (XR + 3.9, road_y(661) - 5.5, 1.15)), (730, (XR + 3.9, road_y(730) - 5.2, 1.15)), (800, (XR + 3.9, road_y(800) - 5.0, 1.15))], lens=30,
          target_keys=[(661, (SX - 0.9, road_y(661) + 1.0, 1.0)), (730, (SX - 0.9, road_y(730) + 1.0, 1.0)), (800, (SX - 0.9, road_y(800) + 1.0, 1.0))])
 cam_shot("S08", [(781, (XR - 4.0, road_y(781) - 12.0, 4.2)), (890, (XR - 3.6, road_y(890) - 10.5, 4.0))], lens=26,
          target_keys=[(781, (XR + 3.5, road_y(781) + 5.0, 0.6)), (890, (XR + 3.5, road_y(890) + 5.0, 0.6))])
@@ -683,8 +683,8 @@ def reach(f, amt):
                     pole=p + Rz(w_yaw) @ Vector((-0.5, 0.3, -0.2)))
         body_hand(Hw, "L", f, p, w_yaw, (Hw.ankle["L"].x * 1.3, -0.30, Hw.root_head.z * 0.53 - p.z + 0.05), (0, -1.0, -0.6), (-0.3, 0, -1.0), pole_off=(0.5, 0.2, 0.0))
     return hh
-for f, amt, hd in ((1780, 0.0, (4, 0)), (1900, 0.0, (6, 0)), (1960, 0.7, (10, 0)), (2000, 1.0, (10, 0)), (2120, 1.0, (8, 6)), (2200, 1.0, (4, -6)), (2310, 1.0, (2, 0))):
-    squat(H, f, Vector((w_pos.x, w_pos.y, 0)), w_yaw, depth=0.5, flex=46, head=hd, hands=reach(f, amt))
+for f, amt, hd in ((1780, 0.0, (-14, 0)), (1900, 0.0, (-12, 0)), (1960, 0.7, (-8, 0)), (2000, 1.0, (-8, 0)), (2120, 1.0, (-10, 6)), (2200, 1.0, (-12, -6)), (2310, 1.0, (-14, 0))):
+    squat(H, f, Vector((w_pos.x, w_pos.y, 0)), w_yaw, depth=0.5, flex=40, head=hd, hands=reach(f, amt))
 _site_loc0 = bag_site.location.copy()
 sc.frame_set(2000); bpy.context.view_layer.update()
 _wr, _d, _a, _n, _palm = hand_frame(WK, "R")

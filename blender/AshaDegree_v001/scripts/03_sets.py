@@ -366,7 +366,7 @@ recolor(car, {"number_plate": mat("PlateBlank", (0.85, 0.85, 0.82), 0.5), "main_
 car.location = (X + 1.8, 60, 0)
 # =================================================================== WOODS (night run / torch search)
 C = coll("SET_Woods"); X = 200.0
-ground = tex_mat("ForestFloor", "forest_leaves_02", rough=0.3, tint=(0.5, 0.56, 0.55), bump=0.25)   # wet, night
+ground = tex_mat("ForestFloor", "forest_leaves_02", rough=0.5, tint=(0.5, 0.56, 0.55), bump=0.25)   # wet, night
 plane("Woods_Ground", (80, 80), (X, 0, 0), ground, C, uv_scale=2.5)
 for i in range(240):
     for _ in range(20):
