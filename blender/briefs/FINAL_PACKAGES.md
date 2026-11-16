@@ -66,3 +66,4 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | B24 | TongueFromArm | `blender/TongueFromArm_v003/` | **READY TO RENDER (frames 1–1404)**, watched moving |
 | B29 | FakeDrainRescue | `blender/FakeDrainRescue_v003/` | **READY TO RENDER (frames 1–1752)**, watched moving |
 | B20 | SafetyPin | `blender/SafetyPin_v003/` | **READY TO RENDER (frames 1–1857)**, watched moving |
+| B35 | BalconyToddler | `blender/BalconyToddler_v003/` | **READY TO RENDER (frames 1–1751)**, watched moving |
