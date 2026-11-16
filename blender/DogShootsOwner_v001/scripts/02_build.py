@@ -562,7 +562,8 @@ def S02(f0, f1):
     for k in list(range(0, n + 1, 6)) + [n]:
         t = k / n; u = ease(max(0.0, min(1.0, (t - 0.30) / 0.35)))
         uh = ease(min(1.0, u / 0.7))                      # sideways travel done by 70%, then straight down
-        lift = 0.10 * (math.sin(math.pi * min(1.0, u / 0.7) * 0.5) if u < 0.7 else (1.0 - (u - 0.7) / 0.3))
+        uh = ease(max(0.0, min(1.0, (u - 0.15) / 0.55)))   # lift first, then travel
+        lift = 0.10 * (math.sin(math.pi * 0.5 * min(1.0, u / 0.15)) if u < 0.7 else (1.0 - (u - 0.7) / 0.3))
         ext = {"__FR": ("trig", uh, lift), "torso": ((0, 0, -0.01 * u), (0, 3 * u, 0))}
         dog_key(f0 + k, D0, 90, dog_pose_stand(head=(-14 * u, 0, -10), tail=20 * math.sin(k * 0.4), pant=3 * math.sin(k * 0.9), ext=ext))
     c = camera("02", 40)
