@@ -991,6 +991,7 @@ def S14b(f0, f1):
 DOGSPOT = CLR + Vector((0.2, -0.4, 0)); MANSPOT = CLR + Vector((0.4, 0.75, 0))
 SDF = dup(bpy.data.objects["SleepDog"], "SleepDogField", DOGSPOT + Vector((0, 0, 0.0)), (0, 0, R_(90)), 1.0, CR, linked=True)
 SDF.hide_render = SDF.hide_viewport = False
+_df = area("SleepDogFill", DOGSPOT + Vector((-0.9, -1.3, 1.1)), DOGSPOT + Vector((0, 0, 0.15)), 45, 1.2, CR, (1.0, 0.95, 0.88)); _df.visible_camera = False
 def clear_man(f, head=(30, 0), breath=0.0, back=0.0):
     stand(HOWN, OWNER, f, MANSPOT + Vector((0, back, 0)), yaw=8, head=head, flex=6, breath=breath)
 def clear_dog(f, breath=0.0):

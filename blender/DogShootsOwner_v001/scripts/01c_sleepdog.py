@@ -16,12 +16,14 @@ for m in o.data.materials:
     tex = nt.nodes[tname]
     out = nt.nodes.new('ShaderNodeOutputMaterial'); P = nt.nodes.new('ShaderNodeBsdfPrincipled')
     nt.links.new(P.outputs[0], out.inputs['Surface'])
-    hs = nt.nodes.new('ShaderNodeHueSaturation'); hs.inputs['Saturation'].default_value = 0.0
-    gm = nt.nodes.new('ShaderNodeGamma'); gm.inputs[1].default_value = 0.78      # lift the baked shadows
-    mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
-    mx.inputs['B'].default_value = (1.0, 0.60, 0.26, 1)
-    nt.links.new(tex.outputs['Color'], hs.inputs['Color']); nt.links.new(hs.outputs[0], gm.inputs[0])
-    nt.links.new(gm.outputs[0], mx.inputs['A']); nt.links.new(mx.outputs['Result'], P.inputs['Base Color'])
+    # uniform golden-lab coat: the scan's luminance only drives a narrow golden->cream ramp (no dark patches)
+    bw = nt.nodes.new('ShaderNodeRGBToBW')
+    rp = nt.nodes.new('ShaderNodeValToRGB')
+    rp.color_ramp.elements[0].position = 0.0; rp.color_ramp.elements[0].color = (0.86, 0.48, 0.15, 1)
+    rp.color_ramp.elements[1].position = 1.0; rp.color_ramp.elements[1].color = (1.0, 0.74, 0.38, 1)
+    mr = nt.nodes.new('ShaderNodeMapRange'); mr.inputs['From Min'].default_value = 0.10; mr.inputs['From Max'].default_value = 0.65
+    nt.links.new(tex.outputs['Color'], bw.inputs[0]); nt.links.new(bw.outputs[0], mr.inputs['Value'])
+    nt.links.new(mr.outputs['Result'], rp.inputs['Fac']); nt.links.new(rp.outputs['Color'], P.inputs['Base Color'])
     P.inputs['Roughness'].default_value = 0.7
     if 'Specular IOR Level' in P.inputs: P.inputs['Specular IOR Level'].default_value = 0.25
 for img in bpy.data.images:
