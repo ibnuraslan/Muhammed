@@ -24,12 +24,27 @@ def region_attr(rig, me_obj, name="rc_top"):
     me = me_obj.data
     if name in me.color_attributes: me.color_attributes.remove(me.color_attributes[name])
     a = me.color_attributes.new(name, 'FLOAT_COLOR', 'POINT')
+    lab = []
     for v in me.vertices:
         gs = [g for g in v.groups if gi.get(g.group) in bones]
         b = gi[max(gs, key=lambda g: g.weight).group] if gs else ""
-        leg = any(k in b for k in ("leg", "foot", "toe", "pelvis", "root"))
-        x = 0.0 if leg else 1.0
-        a.data[v.index].color = (x, x, x, 1)
+        lab.append(0.0 if any(k in b for k in ("leg", "foot", "toe", "pelvis", "root")) else 1.0)
+    # whole connected pieces (shirt vs trousers) get one label: majority of their vertices (no colour band at the hem)
+    import bmesh
+    bm = bmesh.new(); bm.from_mesh(me); bm.verts.ensure_lookup_table()
+    seen = [False] * len(bm.verts); n_isl = 0
+    for v0 in bm.verts:
+        if seen[v0.index]: continue
+        stack = [v0]; isl = []; seen[v0.index] = True
+        while stack:
+            v = stack.pop(); isl.append(v.index)
+            for e in v.link_edges:
+                w = e.other_vert(v)
+                if not seen[w.index]: seen[w.index] = True; stack.append(w)
+        x = 1.0 if sum(lab[i] for i in isl) / len(isl) > 0.5 else 0.0
+        for i in isl: a.data[i].color = (x, x, x, 1)
+        n_isl += 1
+    bm.free(); print("ISLANDS", me_obj.name, n_isl)
     return name
 
 def recolor(rig, key, region, hue=0.5, sat=1.0, val=1.0, add=(0, 0, 0)):

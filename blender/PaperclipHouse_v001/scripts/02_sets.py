@@ -114,6 +114,7 @@ def room(name, ox, oy, w, d, h, wall_m, floor_m, col, win=(), skirt_m=None):
             sky_window(f"{name}_Win{i}", ox + xc, by, zc, ww, wh, col, mat("WinFrame", (0.95, 0.95, 0.95), 0.4))
             x_prev = b
         box(f"{name}_WallBend", (w / 2 - x_prev, 0.12, h), (ox + (w / 2 + x_prev) / 2, by + 0.06, h / 2), wall_m, col)
+    box(name + "_Ceil", (w + 0.3, d + 0.2, 0.12), (ox, oy + 0.1, h + 0.06), mat("Ceiling", (0.96, 0.96, 0.95), 0.6), col)
     box(name + "_WallL", (0.12, d, h), (ox - w / 2 - 0.06, oy, h / 2), wall_m, col)
     box(name + "_WallR", (0.12, d, h), (ox + w / 2 + 0.06, oy, h / 2), wall_m, col)
     sk = skirt_m or mat("Skirt", (0.95, 0.95, 0.93), 0.4)
@@ -177,8 +178,8 @@ ph("Shelf_01", (HX + 2.9, HY + 2.25, 0), rotz=0, col=H)
 ph("potted_plant_04", (HX - 3.1, HY + 2.1, 0), col=H)
 ph("Sofa_01", (HX - 2.4, HY - 0.6, 0), rotz=90, col=H)
 ph("modern_coffee_table_01", (HX - 1.5, HY - 0.6, 0), rotz=90, col=H)
-ph("dining_table", (HX + 2.3, HY + 0.6, 0), rotz=90, col=H)
-for dy in (-0.45, 0.45): ph("dining_chair_02", (HX + 2.3 - 0.75, HY + 0.6 + dy, 0), rotz=-90, col=H)
+ph("dining_table", (HX + 2.6, HY + 0.6, 0), rotz=90, col=H)
+for dy in (-0.45, 0.45): ph("dining_chair_02", (HX + 2.6 - 0.75, HY + 0.6 + dy, 0), rotz=-90, col=H)
 for i, c in enumerate([(0.95, 0.75, 0.2), (0.9, 0.3, 0.3), (0.3, 0.6, 0.9)]):      # bowl of fruit-coloured jars on the back counter
     o = box(f"HOME_Jar{i}", (0.10, 0.10, 0.16), (HX - 0.8 + i * 0.16, HY + 2.18, 1.02), mat(f"Jar{i}", c, 0.35), H)
 sc["HOME"] = (HX, HY)

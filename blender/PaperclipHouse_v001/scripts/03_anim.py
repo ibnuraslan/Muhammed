@@ -281,8 +281,8 @@ def S02(t, n):
     setup(t, [hero], [P["P_FishPen"]])
     base(hero, t, (HX, HY + 0.82), 0)
     sc.frame_set(t)
-    c0 = hero.shoulder("R") + V(0.12, -0.38, -0.12)
-    def fnM(u): return item_matrix(c0 + V(0.05 * ease(u), 0, 0.06 * ease(u)), 160 + 50 * ease(u), Matrix.Rotation(R(-15 * math.sin(u * 3)), 4, 'X'))
+    c0 = hero.shoulder("R") + V(0.06, -0.33, -0.08)
+    def fnM(u): return item_matrix(c0 + V(0.03 * ease(u), 0, 0.05 * ease(u)), 150 + 40 * ease(u), Matrix.Rotation(R(-12 * math.sin(u * 3)), 4, 'X'))
     hold(P["P_FishPen"], hero, ("R",), t, n, fnM)
     def fr(f, u):
         look_at(hero, f, P["P_FishPen"].matrix_world.translation, flex=4)
@@ -290,7 +290,7 @@ def S02(t, n):
     track(t, n, 4, fr)
     sc.frame_set(t + n // 2); hd = hero.head_w(); pen = P["P_FishPen"].matrix_world.translation
     tg = (hd + pen) / 2
-    camera("S02", 50, t, tg + V(-0.25, -1.05, 0.05), tg, t + n, tg + V(-0.18, -0.85, 0.05), tg + V(0, 0, 0.01), fstop=9)
+    camera("S02", 40, t, tg + V(-0.35, -1.30, 0.02), tg, t + n, tg + V(-0.28, -1.10, 0.02), tg + V(0, 0, 0.01), fstop=9)
 
 # ===================================================================== OFFICE
 def S03(t, n):
@@ -314,7 +314,7 @@ def S05(t, n):
     key_obj(P["P_Doorknob"], t, loc=(CX + 0.30, CY + 0.62, 0.785), rot=(R(-90), 0, 0))
 
 def S06(t, n):
-    gx, gy = 29.5, -9.2
+    gx, gy = 51.5, -9.4
     swap_shot("S06", [hero, M["Worker"]], hero, M["Worker"], None, P["P_Generator"], gx, gy, gap=0.85, kindB="big",
               extra_props=[P["P_CampStove"]])
     key_obj(P["P_CampStove"], t, loc=(gx + 1.15, gy - 0.2, P["P_CampStove"].get("bottom_z", 0.05)), rot=(0, 0, R(20)))
@@ -374,7 +374,7 @@ def S09(t, n):
     hero.hang("L", t + int(0.5 * n) - 1); hero.hang("R", t + int(0.5 * n) - 1)
     apply_pose(M["SledGuy"].o, "L", "flat_palm", t)
     for s in "LR": apply_pose(hero.o, s, "relaxed", t + int(0.5 * n)); apply_pose(hero.o, s, "power_fist", t + int(0.75 * n))
-    camera("S09", 28, t, V(GX - 0.3, GY - 3.6, 1.45), V(GX + 0.1, GY + 0.3, 1.0), t + n, V(GX + 0.1, GY - 3.1, 1.40), V(GX + 0.1, GY + 0.3, 1.05))
+    camera("S09", 24, t, V(GX - 0.4, GY - 4.4, 1.45), V(GX - 0.05, GY + 0.2, 1.0), t + n, V(GX - 0.2, GY - 3.9, 1.40), V(GX - 0.05, GY + 0.2, 1.05))
 
 # ===================================================================== SNOW
 def S10(t, n):
@@ -392,14 +392,14 @@ def S10(t, n):
             hero.hang(s, f, fwd=0.14 * ph, lift=0.04 * max(0, ph))
         hero.eyes(f)
     track(t, n, 2, fr)
-    camera("S10", 30, t, V(NX + 0.6, NY + 0.6, 1.35), V(NX - 0.2, NY + 7.0, 1.6), t + n, V(NX + 0.5, NY + 0.2, 1.30), V(NX - 0.2, NY + 5.0, 1.45))
+    camera("S10", 35, t, V(NX + 0.7, NY + 1.4, 1.30), V(NX - 0.3, NY + 7.0, 1.35), t + n, V(NX + 0.6, NY + 0.9, 1.30), V(NX - 0.3, NY + 4.5, 1.25))
 
 def S11(t, n):
     """CU: hero holds up the red ticket (the trip across Canada), smiles"""
     setup(t, [hero], [P["P_TicketCard"]])
     xy = (NX - 0.3, NY + 4.0); base(hero, t, xy, 0)
-    sc.frame_set(t); c0 = hero.shoulder("R") + V(0.16, -0.40, 0.02)
-    def fnM(u): return item_matrix(c0 + V(0, 0, 0.06 * ease(u)), 100, Matrix.Rotation(R(70), 4, 'Y'))
+    sc.frame_set(t); c0 = hero.shoulder("R") + V(0.08, -0.32, -0.16)
+    def fnM(u): return item_matrix(c0 + V(0, 0, 0.07 * ease(u)), 0, Matrix.Rotation(R(70), 4, 'X'))
     P["P_TicketCard"]["grip_half"] = 0.055
     hold(P["P_TicketCard"], hero, ("R",), t, n, fnM)
     def fr(f, u): look_at(hero, f, P["P_TicketCard"].matrix_world.translation, flex=2); hero.jaw(f, 2.5 * ease(u))
@@ -412,27 +412,33 @@ def S12(t, n):
     P["P_VanKeys"]["grip_half"] = 0.02
     swap_shot("S12", [hero, M["VanGuy"]], hero, M["VanGuy"], P["P_TicketCard"], P["P_VanKeys"], NX - 0.2, NY + 0.4, gap=0.80,
               extra_props=[van], cam_d=2.6)
-    key_obj(van, t, loc=(NX + 2.2, NY + 2.6, 0), rot=(0, 0, R(180)))
+    key_obj(van, t, loc=(NX + 1.2, NY + 4.6, 0), rot=(0, 0, 0))
 
 def S13(t, n):
-    """hero lays his hand flat on the van's side (logo side to camera) and grins"""
+    """hero lays his left hand flat on the van side (logo side to camera), then turns to camera and grins"""
     van = P["P_Van"]
     setup(t, [hero], [van])
-    key_obj(van, t, loc=(NX + 0.0, NY + 3.0, 0), rot=(0, 0, R(90)))    # front to +X; its local +X side (Logo_VanR) faces -Y
+    key_obj(van, t, loc=(NX + 0.4, NY + 3.0, 0), rot=(0, 0, R(90)))
     sc.frame_set(t)
-    side_y = NY + 3.0 - van.dimensions.x / 2
-    xy = (NX - 0.9, side_y - 0.55); base(hero, t, xy, 160)
+    ys = [(van.matrix_world @ Vector(c)).y for c in van.bound_box]
+    side_y = min(ys) + 0.10                                     # body side panel (mirrors/wheels stick out ~10 cm)
+    for c in van.children:
+        if c.name.startswith("Logo_Van"):
+            w = c.matrix_world.translation
+            if w.y < NY + 3.0: side_y = w.y - 0.012
+    xy = (NX - 1.25, side_y - 0.42); base(hero, t, xy, 60)
     def fr(f, u):
-        a = ease((u - 0.15) / 0.3)
+        a = ease((u - 0.12) / 0.3)
         sc.frame_set(f); sh = hero.shoulder("L")
-        if u > 0.15:
-            pt = V(sh.x + 0.05, side_y - 0.01, sh.z - 0.25 + 0.02 * a)
-            hero.hand("L", f, pt + V(0, -0.10, 0) * (1 - a) + V(0, -0.075, 0), V(0.3, 0, 1).normalized(), V(0, 1, 0), pole=sh + V(0.35, -0.3, -0.4))
-        look_at(hero, f, V(NX + 0.4, NY - 3.0, 1.5) if u > 0.4 else V(sh.x, side_y, 1.3), flex=1)
-        hero.jaw(f, 3 * ease((u - 0.5) / 0.2))
+        W1 = V(sh.x + 0.10, side_y - 0.040, sh.z - 0.30)
+        W0 = sh + hero.fwd() * 0.10 + V(0, 0, -0.50)
+        if u > 0.12:
+            hero.hand("L", f, W0.lerp(W1, a), V(0.35, 0, 1).normalized(), V(0, 1, 0), pole=sh + V(-0.1, -0.35, -0.45))
+        look_at(hero, f, V(sh.x + 0.1, side_y, 1.2) if u < 0.45 else V(NX - 0.6, NY - 2.6, 1.45), flex=1)
+        hero.jaw(f, 3 * ease((u - 0.55) / 0.2))
     track(t, n, 3, fr)
-    apply_pose(hero.o, "L", "flat_palm", t + int(0.3 * n))
-    camera("S13", 28, t, V(NX + 0.2, NY - 2.6, 1.30), V(NX + 0.1, NY + 3.0, 1.15), t + n, V(NX - 0.1, NY - 2.2, 1.30), V(NX + 0.0, NY + 3.0, 1.18))
+    apply_pose(hero.o, "L", "flat_palm", t + int(0.42 * n))
+    camera("S13", 28, t, V(NX - 0.9, NY - 2.9, 1.35), V(NX - 0.3, NY + 2.0, 1.10), t + n, V(NX - 0.95, NY - 2.4, 1.35), V(NX - 0.6, NY + 2.0, 1.15))
 
 # ===================================================================== STUDIO
 def S14(t, n):
@@ -442,17 +448,17 @@ def S14(t, n):
 # ===================================================================== STREET condo
 def S15(t, n):
     P["P_CondoKeys"]["grip_half"] = 0.02
-    swap_shot("S15", [hero, M["Landlady"]], hero, M["Landlady"], P["P_Contract"], P["P_CondoKeys"], -21.0, -6.2, gap=0.80, cam_d=2.5)
+    swap_shot("S15", [hero, M["Landlady"]], hero, M["Landlady"], P["P_Contract"], P["P_CondoKeys"], 21.0, -5.4, gap=0.80, cam_d=2.5)
 
 def S16(t, n):
     setup(t, [hero], [P["P_CondoKeys"]])
-    xy = (-21.0, -7.4); base(hero, t, xy, 0)
-    sc.frame_set(t); c0 = hero.shoulder("R") + V(0.05, -0.30, 0.10)
-    def fnM(u): return item_matrix(c0 + V(0, 0, 0.12 * ease(u / 0.5)), 90 + 20 * math.sin(u * 6))
+    xy = (21.0, -6.4); base(hero, t, xy, 0)
+    sc.frame_set(t); c0 = hero.shoulder("R") + V(0.06, -0.32, -0.14)
+    def fnM(u): return item_matrix(c0 + V(0, 0, 0.14 * ease(u / 0.5)), 90 + 20 * math.sin(u * 6))
     hold(P["P_CondoKeys"], hero, ("R",), t, n, fnM)
-    def fr(f, u): look_at(hero, f, V(-21.0, -11.0, 1.6), flex=-2, extra_pitch=-4); hero.jaw(f, 3 * ease(u))
+    def fr(f, u): look_at(hero, f, P["P_CondoKeys"].matrix_world.translation if u < 0.5 else V(21.4, -9.6, 1.5), flex=1); hero.jaw(f, 3 * ease((u - 0.4) / 0.4))
     track(t, n, 4, fr)
-    camera("S16", 30, t, V(-20.4, -10.6, 1.20), V(-21.0, -6.0, 2.0), t + n, V(-20.5, -10.1, 1.25), V(-21.0, -6.0, 2.1))
+    camera("S16", 30, t, V(21.6, -9.6, 1.30), V(21.0, -5.4, 1.6), t + n, V(21.5, -9.1, 1.30), V(21.0, -5.4, 1.65))
 
 # ===================================================================== STUDIO bar: rocker, snow globe
 def S17(t, n):
@@ -498,17 +504,16 @@ def S19(t, n):
         hero.jaw(f, 2.5 * ease((u - 0.6) / 0.3))
     track(t, n, 4, fr)
     sc.frame_set(t + n // 2); g = P["P_SnowGlobe"].matrix_world.translation
-    camera("S19", 40, t, g + V(-0.15, -1.25, 0.25), g + V(0, 0, 0.12), t + n, g + V(-0.10, -1.0, 0.22), g + V(0, 0, 0.14), fstop=9)
+    camera("S19", 35, t, g + V(-0.05, -1.55, 0.35), g + V(0, 0.15, 0.22), t + n, g + V(-0.02, -1.35, 0.33), g + V(0, 0.15, 0.24), fstop=9)
 
 def S20(t, n):
     """hero holds the snow globe in both hands and looks into it"""
     setup(t, [hero], [P["P_SnowGlobe"]])
     xy = (SX + 2.4, SY + 0.6); base(hero, t, xy, -15)
-    sc.frame_set(t); c0 = (hero.shoulder("L") + hero.shoulder("R")) / 2 + hero.fwd() * 0.34 + V(0, 0, -0.30)
+    sc.frame_set(t); c0 = hero.shoulder("R") + hero.fwd() * 0.32 + hero.right() * -0.10 + V(0, 0, -0.26)
     def fnM(u): return item_matrix(c0 + V(0, 0, 0.10 * ease(u)), -15 + 25 * ease(u))
     key_path(P["P_SnowGlobe"], t, n, fnM)
-    for s, sy in (("L", 1), ("R", -1)):
-        attach(P["P_SnowGlobe"], fnM, t, n, (hero, s, (0.0, sy * 0.035, 0.0), (0, 0, 1), (0, -sy, 0.0), "cup_hold"), 0.0, 1.0)
+    attach(P["P_SnowGlobe"], fnM, t, n, (hero, "R", (0.0, 0.0, 0.0), (0, 0, 1), (0, -1, 0.0), "cup_hold"), 0.0, 1.0)
     def fr(f, u): look_at(hero, f, P["P_SnowGlobe"].matrix_world.translation + V(0, 0, 0.06), flex=3); hero.jaw(f, 2 * ease(u))
     track(t, n, 4, fr)
     sc.frame_set(t + n // 2); tg = hero.head_w() * 0.5 + P["P_SnowGlobe"].matrix_world.translation * 0.5
@@ -536,7 +541,7 @@ def S22(t, n):
         a = ease((u - 0.3) / 0.35); sc.frame_set(f)
         for s in "LR":
             sx = 1 if s == "L" else -1; sh = hero.shoulder(s)
-            W = (sh + hero.right() * (-sx) * 0.10 + V(0, 0, -0.50)).lerp(sh - hero.right() * sx * 0.45 + hero.fwd() * 0.25 + V(0, 0, 0.05), a)
+            W = (sh + hero.right() * (-sx) * 0.10 + V(0, 0, -0.50)).lerp(sh - hero.right() * sx * 0.32 + hero.fwd() * 0.28 + V(0, 0, -0.28), a)
             hero.hand(s, f, W, (W - sh).normalized(), hero.fwd(), pole=sh - hero.right() * sx * 0.3 + V(0, 0, -0.4) - hero.fwd() * 0.2)
         look_at(hero, f, P["P_MovieCamera"].matrix_world.translation + V(0, 0, 1.4), flex=-3)
         hero.jaw(f, 3 * a)
@@ -565,14 +570,14 @@ def S23(t, n):
 def S24(t, n):
     setup(t, [hero], [P["P_Paperclip"]])
     base(hero, t, (VX, VY), 0)
-    sc.frame_set(t); c0 = hero.shoulder("R") + V(0.14, -0.32, 0.08)
+    sc.frame_set(t); c0 = hero.shoulder("R") + V(0.08, -0.32, -0.14)
     P["P_Paperclip"]["grip_half"] = 0.012
-    def fnM(u): return item_matrix(c0 + V(0.03 * ease(u), 0, 0.04 * ease(u)), 90, Matrix.Rotation(R(80), 4, 'Y'))
+    def fnM(u): return item_matrix(c0 + V(0.0, 0, 0.06 * ease(u)), 0, Matrix.Rotation(R(75), 4, 'X'))
     hold(P["P_Paperclip"], hero, ("R",), t, n, fnM)
-    def fr(f, u): look_at(hero, f, V(VX - 0.3, VY - 3, 1.65), flex=-1); hero.jaw(f, 2.5 * ease(u))
+    def fr(f, u): look_at(hero, f, P["P_Paperclip"].matrix_world.translation if u < 0.45 else V(VX - 0.3, VY - 3, 1.6), flex=1); hero.jaw(f, 2.5 * ease((u - 0.4) / 0.4))
     track(t, n, 4, fr)
-    sc.frame_set(t + n // 2); tg = hero.head_w() + V(0.06, 0, -0.08)
-    camera("S24", 45, t, tg + V(-0.2, -1.2, 0.0), tg, t + n, tg + V(-0.15, -0.95, 0.0), tg, fstop=9)
+    sc.frame_set(t + n // 2); tg = hero.head_w() * 0.55 + P["P_Paperclip"].matrix_world.translation * 0.45
+    camera("S24", 40, t, tg + V(-0.2, -1.35, 0.0), tg, t + n, tg + V(-0.15, -1.1, 0.0), tg, fstop=9)
 
 CHAIN = ["P_Paperclip", "P_FishPen", "P_Doorknob", "P_CampStove", "P_Generator", "P_Keg", "P_Snowmobile", "P_TicketCard", "P_Van",
          "P_Contract", "P_CondoKeys", "P_SnowGlobe", "P_Clapper"]
@@ -580,38 +585,34 @@ def S25(t, n):
     """explainer: every traded item stands on a line on the bright sky stage, small to big; camera tracks along the chain"""
     items = [P[k] for k in CHAIN]
     setup(t, [], items)
-    x = VX - 3.0; pos = {}
-    for k, o in zip(CHAIN, items):
-        w = max(o.dimensions.x, o.dimensions.y)
-        sc_ = 1.0
-        if k in ("P_Paperclip", "P_FishPen", "P_Doorknob", "P_TicketCard", "P_CondoKeys", "P_Contract", "P_Clapper", "P_SnowGlobe"): sc_ = 3.0
-        if k in ("P_Van", "P_Snowmobile"): sc_ = 0.45
-        w *= sc_
-        x += w / 2 + 0.25
-        z = 1.0
-        key_obj(o, t, loc=(x, VY + 1.0, z), rot=(R(10), 0, R(25)), scale=(sc_, sc_, sc_))
-        key_obj(o, t + n, loc=(x, VY + 1.0, z + 0.06), rot=(R(10), 0, R(55)), scale=(sc_, sc_, sc_))
-        x += w / 2
-    for k, o in zip(CHAIN, items):
-        key_obj(o, T["S25"][1], scale=(1, 1, 1))
-    camera("S25", 35, t, V(VX - 2.6, VY - 2.4, 1.35), V(VX - 2.0, VY + 1.0, 1.0), t + n, V(x - 1.8, VY - 2.4, 1.35), V(x - 1.2, VY + 1.0, 1.0), fstop=11)
+    for o in items:
+        for c in o.children:
+            if c.name.startswith("Logo_"): vis_obj(c, t, False)
+    x = VX - 3.0; size = 0.55; gap = 0.85
+    for i, (k, o) in enumerate(zip(CHAIN, items)):
+        d = o.dimensions; s_ = size / max(d.x, d.y, d.z)
+        x = VX - 3.0 + i * gap
+        key_obj(o, t, loc=(x, VY + 1.0, 0.95), rot=(R(12), 0, R(25)), scale=(s_, s_, s_))
+        key_obj(o, t + n, loc=(x, VY + 1.0, 0.95), rot=(R(12), 0, R(55)), scale=(s_, s_, s_))
+    for o in items: key_obj(o, T["S25"][1], scale=(1, 1, 1))
+    camera("S25", 35, t, V(VX - 2.4, VY - 2.6, 1.30), V(VX - 2.2, VY + 1.0, 0.95), t + n, V(x - 0.6, VY - 2.6, 1.30), V(x - 0.4, VY + 1.0, 0.95), fstop=11)
 
 # ===================================================================== STREET: one year later, the house
 def S26(t, n):
     """hero walks up the sidewalk past the blue mailbox toward the house"""
     setup(t, [hero], [])
-    y = -11.0; x0, x1 = 0.2, 2.6
-    path = lambda f: Vector((x0 + (x1 - x0) * ease((f - t) / n), y, 0))
-    base(hero, t, (x0, y), 90)
-    hero.h.walk(path, lambda f: 90.0, t, t + n, stride=0.70)
+    x = 2.2; y0, y1 = -6.8, -9.6
+    path = lambda f: Vector((x, y0 + (y1 - y0) * ease((f - t) / n), 0))
+    base(hero, t, (x, y0), 0)
+    hero.h.walk(path, lambda f: 0.0, t, t + n, stride=0.70)
     def fr(f, u):
         cyc = (path(f) - path(t)).length / 0.70
         for s in "LR":
             ph = math.sin(2 * math.pi * cyc + (0 if s == "L" else math.pi))
             hero.hang(s, f, fwd=0.14 * ph, lift=0.04 * max(0, ph))
-        look_at(hero, f, V(6.0, 0.0, 3.0), amount=0.6)
+        look_at(hero, f, V(3.0, -10.6, 1.0) if u > 0.5 else V(4.0, -14.0, 1.5), amount=0.6)
     track(t, n, 2, fr)
-    camera("S26", 28, t, V(4.2, -14.2, 1.10), V(2.4, -10.6, 1.5), t + n, V(4.6, -14.0, 1.15), V(3.0, -10.4, 1.55))
+    camera("S26", 30, t, V(3.9, -14.4, 1.25), V(2.4, -7.5, 1.35), t + n, V(3.8, -14.0, 1.25), V(2.5, -9.0, 1.25))
 
 def S27(t, n):
     P["P_Clapper"]["grip_half"] = 0.10; P["P_HouseKeys"]["grip_half"] = 0.02
@@ -634,25 +635,24 @@ def S28(t, n):
         look_at(hero, f, V(0, 0, 4.5), flex=-4)
     track(t, n, 3, fr)
     for s in "LR": apply_pose(hero.o, s, "power_fist", t + int(0.4 * n))
-    camera("S28", 24, t, V(1.2, -12.5, 1.3), V(0.0, -3.0, 2.6), t + n, V(1.6, -14.5, 2.4), V(0.0, -2.0, 3.0))
+    camera("S28", 24, t, V(0.9, -10.6, 1.2), V(0.0, -3.0, 2.4), t + n, V(1.4, -13.0, 2.2), V(0.0, -2.0, 2.9))
 
 def S29(t, n):
     """inside his new home: hero walks in, stops in the living room, looks around, smiles; camera pushes in"""
     setup(t, [hero], [])
-    y = HY - 0.4; x0, x1 = HX + 2.4, HX + 0.6
-    path = lambda f: Vector((x0 + (x1 - x0) * ease((f - t) / (0.6 * n)), y, 0))
-    base(hero, t, (x0, y), -70)
-    hero.h.walk(path, lambda f: -70.0 + 60 * ease((f - t) / n), t, t + int(0.6 * n), stride=0.65)
-    hero.stand(t + n, (x1, y), -10)
+    x = HX + 1.28; y0, y1 = HY + 1.7, HY - 0.3
+    path = lambda f: Vector((x, y0 + (y1 - y0) * ease((f - t) / (0.6 * n)), 0))
+    base(hero, t, (x, y0), 0)
+    hero.h.walk(path, lambda f: 0.0, t, t + int(0.6 * n), stride=0.65)
     def fr(f, u):
         cyc = (path(f) - path(t)).length / 0.65
         for s in "LR":
             ph = math.sin(2 * math.pi * cyc + (0 if s == "L" else math.pi)) if u < 0.6 else 0.0
             hero.hang(s, f, fwd=0.12 * ph, lift=0.03 * max(0, ph))
-        look_at(hero, f, V(HX - 2.0 + 3.5 * ease(u), HY + 2.5, 1.7), amount=0.8)
+        look_at(hero, f, V(HX - 2.5 + 3.5 * ease((u - 0.55) / 0.45), HY - 1.5, 1.6) if u > 0.55 else V(HX + 1.0, HY - 3.0, 1.6), amount=0.8)
         hero.jaw(f, 2.5 * ease((u - 0.6) / 0.3))
     track(t, n, 2, fr)
-    camera("S29", 28, t, V(HX - 0.4, HY - 3.6, 1.55), V(HX + 1.2, HY + 0.2, 1.3), t + n, V(HX - 0.1, HY - 2.9, 1.55), V(HX + 0.6, HY + 0.0, 1.45))
+    camera("S29", 30, t, V(HX + 0.2, HY - 2.3, 1.55), V(HX + 1.0, HY + 1.2, 1.3), t + n, V(HX + 0.4, HY - 1.9, 1.55), V(HX + 1.0, HY + 0.0, 1.4))
 
 for k, _ in SHOTS:
     if ONLY and k not in ONLY: continue
