@@ -27,6 +27,11 @@ S05 (police) moved to the opening "She told police". The camera-only shots S14 a
 3. **Rescuers' hi-vis:** three separate vest meshes crumpled, so per LESSONS §2.15 their own fitted work suit is now fluorescent yellow (ResA) or orange (ResB) above the belt, with silver reflective bands (S06–S11, S22, S24).
 4. **Clerk (S15, S16):** he sighs (slumps, drops his head, rises), and in S16 his palm slides a form across the desk. The form is keyed with the palm, so it moves only under his hand.
 5. **Phone:** moved 4 mm further off the palm (P1 known issue).
+6. **Fixes from watching the preview:**
+   - S06: the wading arms sweep outward only.
+   - S09, S14, S17: camera moves added (S17's drifting trash removed, because its path crossed the jammed bags).
+   - S03: she stays planted at the edge with her hands clear of her hips.
+   - S20: chest-up framing.
 
 ## Known issues
-See the check results in `review/checks.md`.
+See `review/checks.md` for every check result and the known issues (phone back contact in S19 and S20; ankle cuffs and the hip colour line, visible at full resolution only).
