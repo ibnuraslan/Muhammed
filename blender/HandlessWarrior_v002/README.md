@@ -4,6 +4,7 @@
 - `HandlessWarrior_v002_VO.mp3` + `HandlessWarrior_v002_VO.words.json` (faster-whisper word times).
 - `beats.json`: shot start frames = 1 + round(word seconds × 60).
 - `review/preview.mp4`: the full moving preview (every 5th frame, 270×480, Cycles 4 + OIDN) from this exact file, with the VO.
+- `review/CHECKS.md`: the four checks on this file and how each flag was resolved.
 - `SETTINGS.md`, `CREDITS.md`, `PLAN.md` (shots and staging; S04 is not used in the VO cut, S03 carries the walk-off).
 
 How it was built (`scripts/`): 01_chars → 02_sets → 03_anim (each shot animated at 1× as its own clip, P1 timeline) →
@@ -28,3 +29,8 @@ How it was built (`scripts/`): 01_chars → 02_sets → 03_anim (each shot anima
 | S15 | Eventually | 1147–1214 |
 | S16 | his people were defeated | 1215–1273 |
 | S17 | But despite losing both hands, the warrior continued fighting until the very end | 1274–1615 |
+
+## Known points
+- S03: the soldier stands half-turned toward the village so his pointing arm stays in front of him; the warrior's face carries the beat.
+- S08, S10, S15 are prop/insert shots (forge, knives on the table, the flag) with no character, as in the reference.
+- The DA KRAS FILMS logo is shown once, on the supply crate in S07 (whole, flat to camera, ~1.4 s).

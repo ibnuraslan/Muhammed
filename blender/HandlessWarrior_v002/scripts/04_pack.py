@@ -19,6 +19,13 @@ for o in list(bpy.data.objects):
             n.location = o.location; n.rotation_euler = o.rotation_euler; n.scale = [v * 3.2 for v in o.scale]
             n.hide_render = False; n.hide_viewport = False
         bpy.data.objects.remove(o, do_unlink=True)
+# crowd copies (army + guard ring, mid-distance extras): no subdivision; keeps the S16/S17 frames well inside farm RAM
+n_cp = 0
+for o in bpy.data.objects:
+    if "_cp" in o.name:
+        for m in o.modifiers:
+            if m.type == 'SUBSURF': m.levels = 0; m.render_levels = 0; n_cp += 1
+print("COPIES subsurf off", n_cp)
 bpy.data.orphans_purge(do_recursive=True)
 FAR = ("island_tree", "grass_medium", "shrub", "stone_fire_pit", "wooden_bucket", "wicker")
 for im in bpy.data.images:
