@@ -785,76 +785,7 @@ for f in range(868, 903, 3):
     bat_key(f, Mloc(p, R3))
 bat_key(CUT - 1, Mloc(DROP, Rz(230) @ Rx(90)))
 
-# ================================================================= hand clearance (Phase 2 clip_scan): fingers must stay OUT of his own
-# legs / torso (and above the blanket in bed). Measure the posed fingers against the posed body and move the IK hand target
-# out along the surface normal until every finger point is >= 1.2 cm clear; then verify every 2nd frame and fix in-betweens.
-_ARMK = ("hand", "finger", "metacarpal", "thumb", "palm")
-_TGTK = ("upperleg", "lowerleg", "foot", "toe", "pelvis", "spine", "glute", "root")
-_bones = {b.name for b in D[S].data.bones}
-_dom = {}
-for v in _body.data.vertices:
-    gs = [g for g in v.groups if _gname[g.group] in _bones and g.weight > 0]
-    if gs: _dom[v.index] = _gname[max(gs, key=lambda g: g.weight).group]
-_PROBE = {s: [i for i, n in _dom.items() if n.endswith("." + s) and any(k in n.lower() for k in _ARMK)] for s in "LR"}
-_TGTV = {i for i, n in _dom.items() if any(k in n.lower() for k in _TGTK)}
-_TGTP = [list(p.vertices) for p in _body.data.polygons if all(i in _TGTV for i in p.vertices)]
-print("HANDCLEAR probes", {s: len(v) for s, v in _PROBE.items()}, "target polys", len(_TGTP))
-def _posed_body_verts():
-    mods = [(m, m.show_viewport) for m in _body.modifiers if m.type != 'ARMATURE']
-    for m, _ in mods: m.show_viewport = False
-    dg = bpy.context.evaluated_depsgraph_get(); dg.update()
-    e = _body.evaluated_get(dg); me = e.to_mesh(); vs = [_body.matrix_world @ v.co for v in me.vertices]; e.to_mesh_clear()
-    for m, sv in mods: m.show_viewport = sv
-    bpy.context.evaluated_depsgraph_get().update()
-    return vs
-_BLK = None
-def _blanket_bvh():
-    global _BLK
-    if _BLK is None and "Blanket" in bpy.data.objects:
-        o = bpy.data.objects["Blanket"]; dg = bpy.context.evaluated_depsgraph_get(); e = o.evaluated_get(dg); me = e.to_mesh()
-        _BLK = BVHTree.FromPolygons([o.matrix_world @ v.co for v in me.vertices], [list(p.vertices) for p in me.polygons]); e.to_mesh_clear()
-    return _BLK
-HCLEAR = 0.012
-def hand_push(f, s, bed):
-    """(push length, push direction) that brings side s's fingers HCLEAR out of the body (and above the blanket in bed)"""
-    sc.frame_set(f); vs = _posed_body_verts(); t = BVHTree.FromPolygons(vs, _TGTP)
-    worst = []
-    for i in _PROBE[s]:
-        p = vs[i]; loc, nrm, _, d = t.find_nearest(p, 0.10)
-        if loc is not None:
-            sd = d if (p - loc).dot(nrm) >= 0 else -d            # signed: negative = inside
-            if sd < HCLEAR: worst.append((HCLEAR - sd, nrm))
-        if bed and _blanket_bvh():
-            loc, nrm, _, d = _BLK.find_nearest(p, 0.10)
-            if loc is not None:
-                if nrm.z < 0: nrm = -nrm                          # the blanket's outside faces up
-                sd = d if (p - loc).dot(nrm) >= 0 else -d
-                if sd < HCLEAR: worst.append((HCLEAR - sd, nrm))
-    if not worst: return 0.0, None
-    worst.sort(key=lambda w: -w[0]); top = worst[:12]
-    n = sum((w[1] for w in top), V((0, 0, 0))).normalized()
-    return top[0][0], n
-def solve_hand(f, s, bed=False):
-    for it in range(8):
-        push, n = hand_push(f, s, bed)
-        if push < 0.002: break
-        pb = D[S].pose.bones["IK_hand." + s]; M = pb.matrix.copy()
-        M.translation = M.translation + D[S].matrix_world.inverted().to_3x3() @ (n * (push + 0.002))
-        key_ikhand_matrix(S, s, f, M, clamp=False)
-    return push
-HC_RANGES = [("R", 420, 446, 3, False),          # crouch reach (before the grab keys at 450)
-             ("R", 868, 960, 4, False),          # right hand after it lets the bat drop
-             ("L", 1395, 1599, 4, False), ("R", 1395, 1599, 4, False),   # bent over, hands on the thighs
-             ("L", CUT, 1930, 6, True), ("R", CUT, 1930, 6, True)]       # in bed: hands on top of the blanket
-for s, f0, f1, st, bed in HC_RANGES:
-    left = [(f, round(solve_hand(f, s, bed) * 1000, 1)) for f in range(f0, f1 + 1, st)]
-    print("HANDCLEAR", s, f0, f1, "left mm", [x for x in left if x[1] > 2])
-for _pass in range(2):
-    bad = [(s, f, bed) for s, f0, f1, st, bed in HC_RANGES for f in range(f0, f1 + 1, 2) if hand_push(f, s, bed)[0] > 0.008]
-    print("HANDCLEAR verify pass", _pass, [(s, f) for s, f, _ in bad])
-    if not bad: break
-    for s, f, bed in bad: solve_hand(f, s, bed)
-bat_key(CUT, Mloc(V((HX, -3, -5)), Rz(0)))          # gone in the hospital
+# hand clearance: see 05b_hand_clear.py (runs on the saved anim.blend)
 
 # ================================================================= the cut: CONSTANT interpolation across 1599->1600 for everything
 def constant_at(obj, f):
