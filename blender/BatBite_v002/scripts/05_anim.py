@@ -565,7 +565,7 @@ for f in range(CUT, 2101, 30):
         if hit is None: print("BEDHAND miss", f, s_); continue
         if nrm.z < 0: nrm = -nrm
         fd = V((-sx, -0.3, 0)); fd = (fd - nrm * fd.dot(nrm)).normalized()     # fingers across his lap (tested: the whole hand stays on top of the blanket)
-        place_hand(D[S], s_, f, hit, -nrm, fd, skin=0.02)
+        place_hand(D[S], s_, f, hit, -nrm, fd, skin=0.035)
         apply_pose(D[S], s_, "shield", f)
 sc.frame_set(CUT); print("BEDHAND reach err mm", [round((bone_world(S, "wrist." + s_).to_translation() - (D[S].matrix_world @ D[S].pose.bones["IK_hand." + s_].matrix).to_translation()).length * 1000, 1) for s_ in "LR"])
 def oxygen_mask():
@@ -715,11 +715,11 @@ PAPER.data.materials.append(soft_mat("M_Paper", (0.95, 0.95, 0.93), 0.7))
 sc.frame_set(CUT); bpy.context.view_layer.update()
 Pd = D[D_].matrix_world @ D[D_].pose.bones["root"].head
 fwd_d = V((1, 0, 0)); left_d = V((0, 1, 0))
-CB_M = Mloc(V((DP.x, DP.y, 0)) + fwd_d * 0.38 + left_d * 0.12 + V((0, 0, 1.17)), Rz(90) @ Rx(18))   # tilted up toward his eyes, well clear of his chest
+CB_M = Mloc(V((DP.x, DP.y, 0)) + fwd_d * 0.50 + left_d * 0.12 + V((0, 0, 1.17)), Rz(90) @ Rx(18))   # tilted up toward his eyes, well clear of his chest
 CB.matrix_world = CB_M; bpy.context.view_layer.update()
-under = CB_M @ V((0.0, 0.07, -0.006 - 0.010))   # palm toward the board's middle: his fingers stay off his chest     # board local +y edge is the one nearest him (Rz 90)          # palm under the board's near edge: the forearm stays below the board
+under = CB_M @ V((0.0, 0.10, -0.006 - 0.035))   # palm toward the board's middle: his fingers stay off his chest     # board local +y edge is the one nearest him (Rz 90)          # palm under the board's near edge: the forearm stays below the board
 place_hand(D[D_], "L", CUT, under, (CB_M.to_3x3() @ V((0, 0, 1))).normalized(), (CB_M.to_3x3() @ V((0, -1, 0))).normalized())
-apply_pose(D[D_], "L", "hold_flat_object", CUT)
+apply_pose(D[D_], "L", "flat_palm", CUT)   # tested: the board rests on his fingertips, nothing passes through it
 sc.frame_set(CUT); IKDL = D[D_].pose.bones["IK_hand.L"].matrix.copy()
 shL = D[D_].matrix_world @ D[D_].pose.bones["upperarm01.L"].head
 pbp = D[D_].pose.bones["Pole_elbow.L"]; nmp = "Pole_elbow.L"; polep = shL + V((-0.1, 0.45, -0.35))
@@ -727,9 +727,9 @@ pbp.location = RIG[D_].rest(nmp).to_3x3().inverted() @ (D[D_].matrix_world.inver
 RELCB = (D[D_].matrix_world @ IKDL).inverted() @ CB_M
 for f in range(CUT, 2101, 30):
     M = IKDL.copy(); M.translation += V((0, 0, 0.008 * math.sin(f * 0.05))); key_ikhand_matrix(D_, "L", f, M, clamp=False)
-    pbp.keyframe_insert("location", frame=f, group=nmp); apply_pose(D[D_], "L", "hold_flat_object", f)
+    pbp.keyframe_insert("location", frame=f, group=nmp); apply_pose(D[D_], "L", "flat_palm", f)
 for f in range(CUT, 2101):
-    sc.frame_set(f); CB.matrix_world = (D[D_].matrix_world @ D[D_].pose.bones["IK_hand.L"].matrix) @ RELCB
+    sc.frame_set(f); CB.matrix_world = (D[D_].matrix_world @ D[D_].pose.bones["wrist.L"].matrix) @ RELCB   # carried by the REAL wrist (after IK + wrist limits), like the bat
     CB.keyframe_insert("location", frame=f); CB.rotation_mode = 'QUATERNION'; CB.keyframe_insert("rotation_quaternion", frame=f)
 sc.frame_set(CUT); print("CHART reach err mm", round((bone_world(D_, "wrist.L").to_translation() - (D[D_].matrix_world @ IKDL).to_translation()).length * 1000, 1))
 
