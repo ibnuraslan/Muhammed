@@ -70,3 +70,4 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | B37 | YardTrench | `blender/YardTrench_v003/` | **READY TO RENDER (frames 1–1825)**, watched moving |
 | B11 | FridgeTenYears | `blender/FridgeTenYears_v003/` | **READY TO RENDER (frames 1–1651)**, watched moving |
 | B10 | SodaMouse | `blender/SodaMouse_v003/` | **READY TO RENDER (frames 1–1702)**, watched moving |
+| B25 | Milgram | `blender/Milgram_v003/` | **READY TO RENDER (frames 1–1982)**, watched moving |
