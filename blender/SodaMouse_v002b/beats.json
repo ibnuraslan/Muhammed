@@ -1,0 +1,97 @@
+[
+ {
+  "beat": "S01",
+  "frame": 1,
+  "first_words": "A man claimed he found a"
+ },
+ {
+  "beat": "S02",
+  "frame": 78,
+  "first_words": "dead mouse inside a can"
+ },
+ {
+  "beat": "S03",
+  "frame": 165,
+  "first_words": "of Mountain Dew"
+ },
+ {
+  "beat": "S04",
+  "frame": 213,
+  "first_words": "he had been drinking"
+ },
+ {
+  "beat": "S05",
+  "frame": 276,
+  "first_words": "so he sued"
+ },
+ {
+  "beat": "S06",
+  "frame": 339,
+  "first_words": "PepsiCo."
+ },
+ {
+  "beat": "S07B",
+  "frame": 399,
+  "first_words": "But the company's defense was bizarre."
+ },
+ {
+  "beat": "S07B_angleB",
+  "frame": 464,
+  "first_words": "(second angle)"
+ },
+ {
+  "beat": "S07",
+  "frame": 561,
+  "first_words": "PepsiCo argued that Mountain Dew"
+ },
+ {
+  "beat": "S08",
+  "frame": 645,
+  "first_words": "was so acidic that"
+ },
+ {
+  "beat": "S10",
+  "frame": 723,
+  "first_words": "if a mouse had really been inside the can"
+ },
+ {
+  "beat": "S10_angleB",
+  "frame": 839,
+  "first_words": "(second angle)"
+ },
+ {
+  "beat": "S11",
+  "frame": 944,
+  "first_words": "dissolved into a jelly-like substance"
+ },
+ {
+  "beat": "S12",
+  "frame": 1062,
+  "first_words": "before the drink was ever opened."
+ },
+ {
+  "beat": "S13",
+  "frame": 1197,
+  "first_words": "That explanation only made people more disturbed,"
+ },
+ {
+  "beat": "S13_angleB",
+  "frame": 1275,
+  "first_words": "(second angle)"
+ },
+ {
+  "beat": "S14",
+  "frame": 1362,
+  "first_words": "because now they were wondering"
+ },
+ {
+  "beat": "S15",
+  "frame": 1435,
+  "first_words": "what Mountain Dew could do to the human body"
+ },
+ {
+  "beat": "S16",
+  "frame": 1559,
+  "first_words": "if it could supposedly dissolve a mouse."
+ }
+]
