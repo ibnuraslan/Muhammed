@@ -53,7 +53,7 @@ SOLE = 0.015
 def foot(n, s, f, ankle, yaw, pitch=0.0, roll=0.0, knee=None):
     """ankle: world point for the ankle joint; pitch>0 lifts the toes; knee: world point the knee aims at"""
     H = HUM[n]; a_ = H.ankle[s]; Rw = Rz(yaw) @ Rx(pitch) @ Ry(roll)
-    ankle = V(ankle) + V((0, 0, SOLE))          # MPFB shoe soles sit ~1.5 cm below the rest ankle height
+    ankle = V(ankle) + V((0, 0, SOLE + (0.015 if n == "P3" else 0.0)))    # MPFB shoe soles sit below the rest ankle height (P3's shoes03 ~1 cm more)
     M = Matrix.Translation(V(ankle)) @ Rw.to_4x4() @ Matrix.Translation(-a_) @ H.r.rest("IK_foot." + s)
     H.r.key_world("IK_foot." + s, f, M)
     if knee is None: knee = V(ankle) + Rz(yaw) @ V((0, -0.7, 0.45))
@@ -178,7 +178,7 @@ def kneel(n, f, knees, yaw, thigh_back=15.0, lean=20.0, spine=(25.0, 0.0, 0.0), 
     for s in "LR":
         sx = 1 if s == "L" else -1
         kn = k - rgt(yaw) * sx * spread
-        ank = kn - fwd(yaw) * (SHIN[n] * 0.93) + V((0, 0, GZ[0] + 0.185))
+        ank = kn - fwd(yaw) * (SHIN[n] * 0.93) + V((0, 0, GZ[0] + 0.225))
         foot(n, s, f, ank, yaw + sx * 5, pitch=toes, knee=kn + fwd(yaw) * 0.6 + V((0, 0, -0.1)))
     return root
 
@@ -479,7 +479,8 @@ def crawl_pose(n, f, pelvis_xy, yaw, phase, gz, head=(-35.0, 0.0), hand_pose="re
         swing = math.sin(math.pi * u * 2) * 0.08                   # hands and the opposite knee alternate
         kn = root - rgt(yaw) * sx * 0.12 + fwd(yaw) * (0.02 - swing) ; kn.z = gz + 0.13
         ank = kn - fwd(yaw) * (SHIN[n] * 0.96); ank.z = gz + 0.14
-        foot(n, s, f, ank, yaw, pitch=170, knee=kn + fwd(yaw) * 0.5 + V((0, 0, -0.2)))
+        mid = (root + ank) / 2; kd = (kn - mid); kd = kd.normalized() if kd.length > 1e-4 else fwd(yaw)
+        foot(n, s, f, ank, yaw, pitch=170, knee=kn + kd * 0.5)
     for s, ph in (("L", 0.5), ("R", 0.0)):
         sx = 1 if s == "L" else -1; u = (phase + ph) % 1.0
         swing = math.sin(math.pi * u * 2) * 0.09; lift = max(0.0, math.sin(math.pi * u * 2)) * 0.05
@@ -520,15 +521,20 @@ def shot_5b(f0, n):
     return use
 
 def shot_5c(f0, n):
-    """P1 crawls out of the hole on hands and knees into the corridor"""
-    use = ("P1",); f1 = f0 + n - 1; yw = 180.0
-    g = bpy.data.objects["S2_Grille"]; gl = V(g.location)
+    """P1 is out of the hole: he kneels up beside it in the corridor dust, hands on his thighs, and looks round"""
+    use = ("P1",); f1 = f0 + n - 1; yw = 190.0; kp = (X2 + 0.35, 0.85)
+    g = bpy.data.objects["S2_Grille"]
     for f in (f0, f1): g.keyframe_insert("location", frame=f); g.keyframe_insert("rotation_euler", frame=f)
-    stride = 0.32; dist = 0.15
-    for f in range(f0, f1 + 1, 6):
-        u = (f - f0) / (n - 1); y = 0.74 + dist * ss(u)
-        crawl_pose("P1", f, (X2 + 0.35, y), yw + 10 * ss(u), (y - 0.74) / stride, FZ2, head=(-30 - 10 * math.sin(u * 3), 35 * math.sin(u * 5)))
-    camera("5c", f0, n, [(0, (X2 + 1.6, 1.85, 1.35), (X2 + 0.3, 0.95, 0.5), 22), (1, (X2 + 1.6, 1.85, 1.32), (X2 + 0.35, 1.25, 0.52), 22)], fstop=6.0)
+    GZ[0] = FZ2
+    for k, f in enumerate(sorted(set(list(range(f0, f1 + 1, 30)) + [f1]))):
+        u = (f - f0) / (n - 1)
+        kneel("P1", f, kp, yw, lean=18 - 14 * ss(u), spine=(22 - 16 * ss(u), 8 * math.sin(u * 4), 0), head=(10 - 14 * ss(u), 40 * math.sin(u * 4.5)))
+        for s_ in "LR":
+            sx = 1 if s_ == "L" else -1
+            kn = V((kp[0], kp[1], 0.0)) + fwd(yw) * 0.05 - rgt(yw) * sx * 0.13 + V((0, 0, FZ2 + 0.32))
+            hand("P1", s_, f, kn, -fwd(yw) + V((0, 0, -0.6)), V((0, 0, -1)), pole=wpos("P1", "upperarm01." + s_, f) - rgt(yw) * sx * 0.4 - fwd(yw) * 0.2, pose="relaxed")
+    GZ[0] = 0.0
+    camera("5c", f0, n, [(0, (X2 + 1.55, 1.95, 1.3), (X2 + 0.3, 0.85, 0.85), 22), (1, (X2 + 1.5, 1.95, 1.32), (X2 + 0.35, 0.9, 0.95), 22)], fstop=6.0)
     return use
 
 def walk_arms(n, f0, f1, yaw_fn, every=8, amp=0.16):
