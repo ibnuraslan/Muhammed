@@ -563,7 +563,7 @@ def knee_w(sid):
 k8 = knee_w("8a")
 camera("8a", [(0, k8 + Vector((1.15, -0.30, 0.30)), k8 + Vector((0, 0.10, 0.02))), (1, k8 + Vector((1.0, -0.25, 0.28)), k8 + Vector((0, 0.10, 0.02)))], lens=35)
 k8 = knee_w("8b")
-camera("8b", [(0, k8 + Vector((0.72, -0.05, 0.06)), k8 + Vector((0, 0.03, -0.04))), (1, k8 + Vector((0.66, -0.04, 0.06)), k8 + Vector((0, 0.03, -0.04)))], lens=40)
+camera("8b", [(0, k8 + Vector((0.62, -0.12, 0.36)), k8 + Vector((0, -0.1, -0.05))), (1, k8 + Vector((0.56, -0.10, 0.33)), k8 + Vector((0, -0.1, -0.05)))], lens=34)
 camera("9", [(0, HOSP + Vector((1.2, -3.6, 1.7)), Vector((BX - 0.2, cy - 0.5, 0.9))), (1, HOSP + Vector((0.4, -3.6, 1.7)), Vector((BX - 0.2, cy - 0.5, 0.9)))], lens=26)
 camera("10", [(0, HOSP + Vector((0.0, -2.9, 1.45)), Vector((BX, cy, 1.05))), (1, HOSP + Vector((0.0, -2.5, 1.40)), Vector((BX, cy, 1.05)))], lens=28)
 

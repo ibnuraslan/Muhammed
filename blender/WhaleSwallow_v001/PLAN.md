@@ -81,3 +81,15 @@ Every clip is animated at 1× and about 30% longer than its slot, so it can be t
 - **Timeline**: `shots.json` holds each clip's length (reference slot × 1.3). `04_anim.py` lays the clips end to end
   (`clips.json`, frames 1–2925). In Phase 2 each shot gets a `start` (VO frame) and a trimmed `frames`, and 04 is re-run: no stretching.
 - **Build**: `01_chars.py` → `02_whale.py` → `03_sets.py` → `04_anim.py` (see the docstrings for the command lines).
+
+## Director round 1 (Nov 15–16): what changed
+- 1a/1b: the diver lies back along the inside of the open lower jaw (found by ray cast) and pushes at the upper jaw; 1b's jaws stop half open (26°) while he ducks. The whale's baleen is shorter and darker.
+- 1c: the whale stays in frame (sinks only to the eye line); the sun no longer glints on the water.
+- 2/5a–5c: ridged, glossy tongue; palate darkening into a dark throat; shallow water along the sides. 5a: he feels the baleen with one hand, face to camera.
+  Palms follow the sloped plate edge, and a measured clearance pass pushes fingers off the plates and toes off the tongue.
+- 3b/3c: the imagined shark is held at its widest bite; he stands on the measured floor of its mouth, shielding his face with bent elbows. No contact (the palate is out of reach for a standing man, so the contact is framed out).
+- 6a–6c: pushed in, shorter spit-out arc (he is about 1/8 of the frame height), and he lands and stays at the surface.
+- 7a–10: hands on his thighs near the knees, elbows bent. 8a/8b: knee in profile from above-side, his hand on it, a subtle bruise (amount 0.42).
+  The **life vest is dropped**: four fitted versions either cut into his arms or read as body paint. He is bare-chested in his trunks, which matches the reference's swimmer look at sea.
+  The **clipboard is dropped**: the grip crossed her fingers. Both doctors gesture with bent elbows; the man shrugs.
+- review/P1_sheet_3frames.jpg: first/mid/last frame of all 26 shots at 540×960. review/body_prop_cross.md: crossing results.
