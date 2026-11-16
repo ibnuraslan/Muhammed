@@ -303,7 +303,7 @@ def ray_down(o, x, y, z0=3.0):
     ok, loc, n, i = o.ray_cast(inv @ Vector((x, y, z0)), inv.to_3x3() @ Vector((0, 0, -1)))
     return (o.matrix_world @ loc).z if ok else None
 _pts = [_tmp.matrix_world @ v.co for v in _tmp.data.vertices]
-SEAT_H = max(p.z for p in _pts if abs(p.x) < 0.14 and -0.15 < p.y < 0.12 and p.z < 0.7)
+SEAT_H = max(ray_down(_tmp, x_, y_) or 0.0 for x_ in (-0.08, 0.0, 0.08) for y_ in (-0.08, 0.02, 0.10))
 CH_TOP = max(p.z for p in _pts); CH_YMIN = min(p.y for p in _pts); CH_YMAX = max(p.y for p in _pts)
 BACK_FRONT = min(p.y for p in _pts if p.z > SEAT_H + 0.06)
 SEAT_FRONT = min(p.y for p in _pts if abs(p.z - SEAT_H) < 0.03)

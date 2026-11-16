@@ -486,10 +486,10 @@ def tod_lift(f, drop, y, arms_out=0.75):
         hand("Toddler", s, f, S + Vector((sx * 0.20 * arms_out, -0.06, 0.04)), Vector((0, 0, -1)), Vector((sx, -0.3, 0.2)),
              S + Vector((sx * 0.2, 0.3, -0.2)), "relaxed", skin=0.0)
 sid = "24"; f0, f1 = SH[sid]; use(sid, "Toddler", "Grandma")
-for u, d, y, ln in ((0.0, 0.68, SLOT_Y, 44), (0.25, 0.70, SLOT_Y, 42), (0.65, 0.84, SLOT_Y, 32), (0.85, 0.86, SLOT_Y + 0.10, 28), (1.0, 0.86, SLOT_Y + 0.15, 26)):
+for u, d, y, ln in ((0.0, 0.64, SLOT_Y, 44), (0.25, 0.65, SLOT_Y, 42), (0.65, 0.72, SLOT_Y, 36), (0.85, 0.73, SLOT_Y + 0.06, 34), (1.0, 0.73, SLOT_Y + 0.09, 33)):
     f = F(sid, u)
     tod_lift(f, d, y)
-    kneel(GM, f, -0.10, ln, head=(18 - ln * 0.2, 0))
+    kneel(GM, f, -0.02, ln, head=(-6, 22))
     gma_hands_on_tod(f)
 shot_cam(sid, [(0, (0.40, -1.85, 3.98), (0.0, -0.35, 3.70)), (1, (0.34, -1.75, 4.00), (0.0, -0.30, 3.78))], 32, 8, 8)
 
