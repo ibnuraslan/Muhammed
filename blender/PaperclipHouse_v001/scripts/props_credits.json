@@ -1,0 +1,68 @@
+{
+ "P_Paperclip": "procedural (built in 10_props.py)",
+ "P_FishPen": "procedural (built in 10_props.py)",
+ "P_Doorknob": {
+  "uid": "7500ee9096a44579aecdf6e06e8d3cf0",
+  "title": "Rusty Door Knob",
+  "author": "marissag10",
+  "author_profile": "https://sketchfab.com/marissag10",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/7500ee9096a44579aecdf6e06e8d3cf0",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "P_CampStove": "procedural (built in 10_props.py)",
+ "P_Generator": {
+  "uid": "f266dd57a0fb46f4a6877abdad2bbe86",
+  "title": "Generator",
+  "author": "Tuuttipingu",
+  "author_profile": "https://sketchfab.com/Tuuttipingu",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/f266dd57a0fb46f4a6877abdad2bbe86",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "P_Keg": "procedural (built in 10_props.py)",
+ "P_Snowmobile": {
+  "uid": "b401b7ee6127461bb338ec1ab2c6e9c9",
+  "title": "HCR2 Snowmobile",
+  "author": "oakar258",
+  "author_profile": "https://sketchfab.com/oakar258",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/b401b7ee6127461bb338ec1ab2c6e9c9",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "P_Van": {
+  "uid": "98d85b403ba0426f84636b575319e4f7",
+  "title": "D3S MB Vito Panel Van (W447) '15",
+  "author": "DANZ | D3S DESIGN\u00ae",
+  "author_profile": "https://sketchfab.com/danzzzeg",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/98d85b403ba0426f84636b575319e4f7",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "P_Contract": "procedural (built in 10_props.py)",
+ "P_Pen2": "procedural (built in 10_props.py)",
+ "P_CondoKeys": {
+  "uid": "da957a350433461c9924faf08ec76dea",
+  "title": "Free Key Download (2 of 3)",
+  "author": "aclund3",
+  "author_profile": "https://sketchfab.com/aclund3",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/da957a350433461c9924faf08ec76dea",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "P_Guitar": {
+  "uid": "a1ad2734fdf14d0b90e90aea8a6c1dad",
+  "title": "Old Acoustic Guitar",
+  "author": "Raphael Escamilla",
+  "author_profile": "https://sketchfab.com/Raffey",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/a1ad2734fdf14d0b90e90aea8a6c1dad",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "P_SnowGlobe": "procedural (built in 10_props.py)",
+ "P_MovieCamera": "procedural (built in 10_props.py)",
+ "P_Clapper": "procedural (built in 10_props.py)",
+ "P_Newspaper": "procedural (built in 10_props.py)",
+ "P_PhotoFrame": "procedural (built in 10_props.py)",
+ "P_TicketCard": "procedural (built in 10_props.py)"
+}
