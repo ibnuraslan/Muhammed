@@ -10,4 +10,4 @@ Dog steps on a shotgun in the truck's back seat → bullet through the front sea
 Paw on the trigger; clean anatomy cutaway (no x-ray seat); phone in fingers below the face; dog's death off-screen or gentle
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B01_DogShootsOwner_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B01_DogShootsOwner_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

@@ -10,4 +10,4 @@ A fan throws what seems to be a rubber bat on stage → the singer picks it up a
 A generic rock singer, no likeness of the real person; bat in the fingers, the bite at the mouth (not into the face); keep blood light; oxygen-mask fit on the face
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B08_BatBite_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B08_BatBite_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

@@ -10,4 +10,4 @@
 Real missing child: a generic girl, respectful, no speculation; umbrella in hand; searchers' torches; no dark empty frames in the rain at night
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B06_AshaDegree_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B06_AshaDegree_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

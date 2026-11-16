@@ -10,4 +10,4 @@ Three prisoners dig around their cell air vents with spoons, night after night â
 Spoon in the fingers at the vent grille; dummy head in the bed (a prop, not a real face pressed in); pipe slide with hands on the pipe; raft seating
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B07_AlcatrazSpoons_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B07_AlcatrazSpoons_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

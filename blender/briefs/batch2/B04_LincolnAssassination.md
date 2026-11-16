@@ -10,4 +10,4 @@ Gunman aims at the back of Lincoln's head during the play → fires on a loud mo
 Gun in the fingers; jump and landing; seated on the saddle; barn ending
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B04_LincolnAssassination_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B04_LincolnAssassination_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.

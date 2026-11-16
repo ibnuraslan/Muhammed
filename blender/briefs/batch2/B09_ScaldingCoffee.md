@@ -10,4 +10,4 @@
 Rebuild with real sets (car, hospital, boardroom); no logo on the cup; spill without a body crossing the cup; temperature dial as a clean insert
 
 ## Narration
-The client supplies the script and the VO mp3. They will be added here as `B09_ScaldingCoffee_VO.mp3`. Until then, follow Phase 1 in `blender/briefs/CONNECT_BATCH2.md`.
+VO: `blender/briefs/batch2/B09_ScaldingCoffee_VO.mp3` (client recording, Nov 16). Transcribe it with `pipeline/transcribe.py`; the recording's wording is final.
