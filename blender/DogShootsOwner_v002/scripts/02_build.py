@@ -610,6 +610,10 @@ def S05(f0, f1):
     for fr in (fh, fh + 6, fh + 30, f1):
         place_hand(OWNER, "R", fr, (DRV.x - 0.15, -0.950, 1.04), (0, -0.7, 0.4), (0.35, 0, 1)); apply_pose(OWNER, "R", "relaxed", fr)
     place_hand(OWNER, "L", fh, (DRV.x + 0.15, -0.950, 1.04), (0, -0.7, 0.4), (-0.35, 0, 1)); apply_pose(OWNER, "L", "relaxed", fh)
+    # lift off the rim toward him first, so the sweep to the flank never passes through the wheel
+    place_hand(OWNER, "L", fh + 6, (DRV.x + 0.17, float(os.environ.get("DSO_LIFTY", "-0.88")), float(os.environ.get("DSO_LIFTZ", "1.06"))), (0, -0.7, 0.4), (-0.35, 0, 1)); apply_pose(OWNER, "L", "relaxed", fh + 6)
+    _wp = Vector((float(os.environ.get("DSO_WPX", "0.34")), float(os.environ.get("DSO_WPY", "-0.22")), float(os.environ.get("DSO_WPZ", "0.42"))))
+    place_hand(OWNER, "L", fh + 12, SEAT_TOP + _wp, (-1, 0.2, 0), (0, 0.1, -1)); apply_pose(OWNER, "L", "relaxed", fh + 12)   # wide waypoint: around his side, not through it
     for fr in (fh + 18, fh + 30, f1):      # left hand goes to the hurt side (flank), palm on the jumper
         sc.frame_set(fr)
         place_hand(OWNER, "L", fr, SEAT_TOP + Vector((0.20, 0.02, 0.32)), (-1, 0.2, 0), (0, 0.1, -1)); apply_pose(OWNER, "L", "relaxed", fr)
