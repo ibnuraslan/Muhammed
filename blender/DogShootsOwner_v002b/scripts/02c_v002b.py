@@ -36,7 +36,7 @@ def dog_lie(f, xy, surf_z, yaw, roll=-1, toward=None, reach=None, breath=0.0, he
         l_, r_ = pose.get(pb.name, (None, None))
         k = pb.name.split(".")[-1] if pb.name.startswith("IK_hoof.") else None
         if k:
-            v = Vector(CURL[k]); v.x += down * (float(os.environ.get('DSO_LTOP', '0.085')) if k[1] == top else float(os.environ.get('DSO_LBOT', '0.03')))
+            v = Vector(CURL[k]); v.x += down * (float(os.environ.get('DSO_LTOP', '0.06')) if k[1] == top else float(os.environ.get('DSO_LBOT', '0.03')))
             pb.location = DOG.data.bones[pb.name].matrix_local.to_3x3().inverted() @ v
         else:
             pb.location = Vector(l_) if l_ else Vector()
@@ -110,7 +110,7 @@ def _hand_inside_dog(f, side, bvh):
     return bad
 
 
-def hand_on_dog_side(f, origin, direction, fdir=(0, -0.3, -1), skin=None, side="L", pose_="flat_palm"):
+def hand_on_dog_side(f, origin, direction, fdir=(0, -0.3, -1), skin=None, side="L", pose_="relaxed"):
     skin = skin if skin is not None else float(os.environ.get("DSO_SKN", "0.016"))
     """palm on the side of the dog that faces him (its back): a horizontal ray from `origin` along `direction`
     finds the surface; the palm faces into it and the fingers point down along the fur (wrist stays neutral)"""
@@ -189,8 +189,9 @@ def S14b(f0, f1):
     for fr, t in ((f0, 0.0), ((f0 + f1) // 2, 1.0), (f1, 0.0)):
         hosp_dog(fr, breath=2.0 * t); hosp_man(fr, smile_head=(28, 12), stroke=t)
     c = camera("14b", 40)
-    tgt = HX + Vector((0.08, 0.62, BED_TOP + 0.38))
-    cam_key(c, f0, tgt + Vector((1.00, -0.55, 0.45)), tgt, lens=32); cam_key(c, f1, tgt + Vector((0.86, -0.46, 0.40)), tgt, lens=32)
+    # higher and centred on his face, hand and the dog's shoulders (not the hind quarter)
+    tgt = HX + Vector((-0.02, 0.62, BED_TOP + 0.50))
+    cam_key(c, f0, tgt + Vector((0.95, -0.80, 0.75)), tgt, lens=32); cam_key(c, f1, tgt + Vector((0.82, -0.70, 0.66)), tgt, lens=32)
 
 
 # ------------------------------------------------------------------ 4/5. field: dog asleep on its side, the man kneels by it
@@ -272,14 +273,15 @@ def S15c(f0, f1):
     PRESENT["15c"] = {"own", "dog"}
     n = f1 - f0
     # close-up: a slow breath and a small head turn toward the dog
-    for k, hd, br, tw in ((0, (34, 0), 0, 0), (int(n * 0.45), (38, -6), 3, -3), (n, (40, -10), 1, -4)):
+    for k, hd, br, tw in ((0, (8, 0), 0, 0), (int(n * 0.45), (12, -8), 3, -3), (n, (14, -12), 1, -4)):
         fr = f0 + k
         field_dog(fr); field_man(fr, head=hd, breath=br, twist=tw)
     sc.frame_set(f0)
     hd_ = OWNER.matrix_world @ OWNER.pose.bones["head"].head
     tgt = hd_ + Vector((0, -0.04, 0.02))
     c = camera("15c", 45)
-    cam_key(c, f0, tgt + Vector((0.30, -1.30, -0.20)), tgt); cam_key(c, f1, tgt + Vector((0.26, -1.10, -0.18)), tgt)
+    # low, looking up into his bowed face
+    cam_key(c, f0, tgt + Vector((0.28, -0.95, -0.62)), tgt); cam_key(c, f1, tgt + Vector((0.24, -0.82, -0.55)), tgt)
 
 
 def S15d(f0, f1):
