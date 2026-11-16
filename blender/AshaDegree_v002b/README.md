@@ -60,15 +60,14 @@ Vertical explainer, 1080×1920, 60 fps, Cycles. **Frames 1–2009 (33.5 s).** 23
 Re-rendered and spliced into the preview: 136–352, 1086–1253, 1376–1926 (each from this exact package). Every other preview frame comes from v002 and is unchanged in this file.
 
 ## Checks on this exact packed file (`review/`)
-- `body_prop_cross.json`: whole film, step 6, every held or touched prop: **0 visible crossings**.
-- `limb_check.json`: step 2: **clean**.
-- `clip_scan.json`: step 6: **BAD_RANGES []**.
-- `qa_check.json` (multi-camera run, step 6). Every flag is expected:
-  - CAMJUMP ×22: the 22 intended hard cuts.
-  - PROPMOVE and ATTACH: worn items (scrunchie, caps, bags, hard hat) follow their bones through constraints.
-  - INSIDE: S01 (1–77) and S23 (1927–2009) cameras sit outside single-sided room walls.
-  - BACKHEAD: shots that are back views by design (S05, S08–S11, S22).
-  - EMPTY: the bag close, the site wide and the portrait.
-  - CLAW: SearchC's right hand closed on the torch handle (S15–S16).
-- `preview.mp4`: frames 1–2009, every 5th frame, with the VO. I watched it start to finish.
-  - After my first watch I fixed S10 (follow camera), S11 (wet ground less bright), S16 (fern at the lens), the torch pinky (S15–S16) and S21 (camera now moves). I then re-rendered 821–1376 and 1686–1811 from this package, spliced them in and watched them again.
+- `body_prop_cross_masks_on.json`: whole film, step 6, every held or touched prop plus the new straps, with the meshes as rendered: **0 crossings**.
+- `body_prop_cross.json`: the official run. It turns the MASK modifiers off, which brings back the body skin that the shirt and sleeves hide.
+  - 36 frames (139–349) flag that hidden skin (spine01, breast, forearm) against the new straps.
+  - None of it can render, because those vertices are masked out; the masks-on run confirms 0.
+  - The worker and the bag: **0** in both runs.
+- `limb_check.json`: **clean**. `clip_scan.json`: **BAD_RANGES []**.
+- `qa_check.json` (multi-camera): the same expected flags as v002.
+  - CAMJUMP ×22 are the hard cuts. PROPMOVE and ATTACH are worn items. INSIDE is the single-sided walls in S01 and S23.
+  - BACKHEAD flags back views. EMPTY flags the bag close, the site wide and the portrait. CLAW is SearchC's fist on the torch.
+- `preview.mp4`: frames 1–2009 with the VO. I watched all the changed ranges, rendered from this package.
+

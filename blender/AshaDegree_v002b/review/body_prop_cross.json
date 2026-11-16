@@ -1,0 +1,394 @@
+{
+"visible_frames": [
+139,
+145,
+151,
+157,
+163,
+169,
+175,
+181,
+187,
+193,
+199,
+205,
+211,
+217,
+223,
+229,
+235,
+241,
+247,
+253,
+259,
+265,
+271,
+277,
+283,
+289,
+295,
+301,
+307,
+313,
+319,
+325,
+331,
+337,
+343,
+349
+],
+"frames": {
+"139": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 12,
+"lowerarm01.R|BagBack_Strap.R|VIS": 8,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"145": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 13,
+"lowerarm01.R|BagBack_Strap.R|VIS": 7,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"151": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 12,
+"lowerarm01.R|BagBack_Strap.R|VIS": 1,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"157": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 9,
+"upperarm02.R|BagBack|VIS": 4,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"163": {
+"upperarm02.R|BagBack|VIS": 14,
+"lowerarm01.L|BagBack_Strap.L|VIS": 8,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"169": {
+"upperarm02.R|BagBack|VIS": 10,
+"lowerarm01.L|BagBack_Strap.L|VIS": 7,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"175": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 9,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"181": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 10,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"187": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 9,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"193": {
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"199": {
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"205": {
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"211": {
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"217": {
+"spine01|BagBack_Strap.R|VIS": 2,
+"lowerarm01.L|BagBack_Strap.L|VIS": 8,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"223": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 14,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"229": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 11,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"235": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 13,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"241": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 13,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"247": {
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"253": {
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"259": {
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"265": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 13,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"271": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 8,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"277": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 15,
+"spine01|BagBack_Strap.R|VIS": 2,
+"upperarm02.L|BagBack_Strap.L|VIS": 1,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"283": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 8,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"289": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 15,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"295": {
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"301": {
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"307": {
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"313": {
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"lowerarm01.L|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"319": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 10,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"325": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 14,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"331": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 9,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"337": {
+"lowerarm01.L|BagBack_Strap.L|VIS": 16,
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"343": {
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"349": {
+"spine01|BagBack_Strap.R|VIS": 2,
+"breast.R|BagBack_Strap.R|VIS": 1,
+"head|BagBack_Strap.L|VIS": 2,
+"spine01|BagBack_Strap.L|VIS": 2,
+"breast.L|BagBack_Strap.L|VIS": 2
+},
+"355": {
+"spine01|BagBack_Strap.R|off": 2,
+"breast.R|BagBack_Strap.R|off": 1,
+"head|BagBack_Strap.L|off": 2,
+"spine01|BagBack_Strap.L|off": 2,
+"breast.L|BagBack_Strap.L|off": 2
+},
+"361": {
+"lowerarm01.L|BagBack_Strap.L|off": 14,
+"spine01|BagBack_Strap.R|off": 2,
+"breast.R|BagBack_Strap.R|off": 1,
+"head|BagBack_Strap.L|off": 2,
+"spine01|BagBack_Strap.L|off": 2,
+"breast.L|BagBack_Strap.L|off": 2
+},
+"367": {
+"lowerarm01.L|BagBack_Strap.L|off": 13,
+"spine01|BagBack_Strap.R|off": 2,
+"breast.R|BagBack_Strap.R|off": 1,
+"head|BagBack_Strap.L|off": 2,
+"spine01|BagBack_Strap.L|off": 2,
+"breast.L|BagBack_Strap.L|off": 2
+},
+"373": {
+"lowerarm01.L|BagBack_Strap.L|off": 9,
+"spine01|BagBack_Strap.R|off": 2,
+"breast.R|BagBack_Strap.R|off": 1,
+"head|BagBack_Strap.L|off": 2,
+"spine01|BagBack_Strap.L|off": 2,
+"breast.L|BagBack_Strap.L|off": 2
+},
+"379": {
+"lowerarm01.L|BagBack_Strap.L|off": 15,
+"spine01|BagBack_Strap.R|off": 2,
+"breast.R|BagBack_Strap.R|off": 1,
+"head|BagBack_Strap.L|off": 2,
+"spine01|BagBack_Strap.L|off": 2,
+"breast.L|BagBack_Strap.L|off": 2
+},
+"385": {
+"spine01|BagBack_Strap.R|off": 2,
+"breast.R|BagBack_Strap.R|off": 1,
+"head|BagBack_Strap.L|off": 2,
+"spine01|BagBack_Strap.L|off": 2,
+"breast.L|BagBack_Strap.L|off": 2
+},
+"391": {
+"spine01|BagBack_Strap.R|off": 2,
+"breast.R|BagBack_Strap.R|off": 1,
+"head|BagBack_Strap.L|off": 2,
+"spine01|BagBack_Strap.L|off": 2,
+"breast.L|BagBack_Strap.L|off": 2
+},
+"397": {
+"spine01|BagBack_Strap.R|off": 2,
+"breast.R|BagBack_Strap.R|off": 1,
+"head|BagBack_Strap.L|off": 2,
+"spine01|BagBack_Strap.L|off": 2,
+"lowerarm01.L|BagBack_Strap.L|off": 2,
+"breast.L|BagBack_Strap.L|off": 2
+},
+"403": {
+"lowerarm01.L|BagBack_Strap.L|off": 16,
+"spine01|BagBack_Strap.R|off": 2,
+"breast.R|BagBack_Strap.R|off": 1,
+"head|BagBack_Strap.L|off": 2,
+"spine01|BagBack_Strap.L|off": 2,
+"breast.L|BagBack_Strap.L|off": 2
+}
+}
+}
