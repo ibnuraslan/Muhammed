@@ -60,10 +60,10 @@ camshot(s, [(0.0, *top((0.0, -0.5), 24.0, 0.1), 30), (1.0, *top((0.0, -0.8), 29.
 s = "S4"; fa, fb = f0(s), fx(s)
 env_ramp(s, dict(bare=0.3, crush=0.55, halfw=0.42), dict(bare=0.32, crush=0.62))
 put("Boy", s, (0, 0, 0), 0)
-P4 = walk_path(BOY, fa, fb, -1.7, 0.95, dirn=1, stride=0.66)
+P4 = walk_path(BOY, fa, fb, -0.9, 0.95, dirn=1, stride=0.66)
 blinks(BOY, fa, fb, lid=-4)
-camshot(s, [(0.0, (path_x(-2.6) + 0.3, -2.6, 0.16), (path_x(0.5) - 0.05, 0.5, 0.12), 30),
-            (1.0, (path_x(-2.4) + 0.28, -2.4, 0.2), (path_x(1.5) - 0.05, 1.5, 0.4), 30)])
+camshot(s, [(0.0, (path_x(-2.6) + 0.3, -2.6, 0.16), (path_x(0.5) - 0.05, 0.5, 0.62), 26),
+            (1.0, (path_x(-2.4) + 0.28, -2.4, 0.2), (path_x(1.5) - 0.05, 1.5, 0.75), 26)])
 
 # ================================================================== S5: side, low: a shoe presses the blades flat
 s = "S5"; fa, fb = f0(s), fx(s)
@@ -77,13 +77,13 @@ camshot(s, [(0.0, (path_x(yc0) + 1.2, yc0 - 0.15, 0.32), (path_x(yc0), yc0, 0.2)
 # ================================================================== S6: cut-away block of lawn + soil; he walks across, the clods squash
 s = "S6"; fa, fb = f0(s), fx(s)
 SXB = 100.0
-put("Boy", s, (SXB - 0.95, 0.0, 0.0), 90)                    # walks toward +X along local -Y
-walk_line(BOY, fa, fb, (0.0, 0.0), 0.95, stride=0.66)
+put("Boy", s, (SXB - 0.55, 0.0, 0.0), 90)                    # walks toward +X along local -Y
+walk_line(BOY, fa, fb, (0.0, 0.0), 0.6, stride=0.55)
 blinks(BOY, fa, fb, lid=-4)
 CL = [o for o in OB if o.name.startswith("Clod_")]
 for o in CL:
     ix = int(o.name.split("_")[1]); iz = int(o.name.split("_")[2])
-    xw = o.location.x; tpass = (xw - (SXB - 0.95)) / 0.95; fp = fa + int(tpass * FPS)
+    xw = o.location.x; tpass = (xw - (SXB - 0.55)) / 0.6; fp = fa + int(tpass * FPS)
     k = (0.55 + 0.45 * iz / 2)                                 # top layer squashes most
     o.rotation_mode = 'XYZ'
     o.scale = (1.0, 1.0, 0.82); o.keyframe_insert("scale", frame=fa); o.keyframe_insert("scale", frame=max(fa, fp - 2))
@@ -91,7 +91,7 @@ for o in CL:
     o.scale = (1.0 + 0.14 * k, 1.0 + 0.1 * k, 0.82 - 0.22 * k); o.keyframe_insert("scale", frame=fp + 12)
     loc0 = o.location.copy(); o.location = (loc0.x, loc0.y, loc0.z - 0.035 * iz * k); o.keyframe_insert("location", frame=fp + 12)
     o.location = loc0
-camshot(s, [(0.0, (SXB - 0.35, -2.5, 0.85), (SXB - 0.3, 0.0, 0.78), 42), (1.0, (SXB + 0.2, -2.35, 0.85), (SXB + 0.2, 0.0, 0.78), 42)])
+camshot(s, [(0.0, (SXB - 0.4, -2.6, 0.66), (SXB - 0.4, 0.0, 0.62), 46), (1.0, (SXB + 0.25, -2.5, 0.66), (SXB + 0.25, 0.0, 0.62), 46)])
 
 # ================================================================== S7: top-down close: the strip goes bare (time-lapse, shadows sweep)
 s = "S7"; fa, fb = f0(s), f1(s)
@@ -274,7 +274,7 @@ OB['Man'].location = (0, 0, 0); OB['Man'].rotation_quaternion = (1, 0, 0, 0)
 ev(f0("S22") + 50)
 hb = MAN.r.o.matrix_world @ MAN.r.PB["head"].matrix
 crown = MAN.r.o.matrix_world @ MAN.r.PB["head"].tail
-want = Matrix.Translation(crown + Vector((0, 0, -0.075))) @ Matrix.Rotation(R_(90), 4, 'Z')
+want = Matrix.Translation(crown + Vector((0, 0, -0.105))) @ Matrix.Rotation(R_(90), 4, 'Z')
 OFFH = hb.inverted() @ want
 follow_bone(HEL, MAN.r.o, "head", f0("S22"), fx("S23"), OFFH, step=2)
 camshot("S22", [(0.0, (MX22 + 2.9, MY22 + 0.5, 0.62), (MX22, MY22, 0.42), 40), (1.0, (MX22 + 2.5, MY22 + 0.4, 0.62), (MX22, MY22, 0.45), 40)])

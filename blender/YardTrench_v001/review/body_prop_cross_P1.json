@@ -1,25 +1,30 @@
 {
 "visible_frames": [
 481,
+484,
 487,
 490,
 493,
 496,
+499,
 502,
 508,
 511,
-514,
 517,
+520,
 523,
+526,
 529,
 532,
 535,
 538,
+541,
 544,
+547,
 550,
 553,
 556,
-559,
+562,
 565,
 2209,
 2212,
@@ -58,12 +63,14 @@
 ],
 "frames": {
 "481": {
-"root|SectTurf|off": 2,
-"root|SectTurf|VIS": 2
+"root|SectTurf|VIS": 4
+},
+"484": {
+"root|SectTurf|VIS": 3
 },
 "487": {
-"root|SectTurf|VIS": 4,
-"root|SectTop|VIS": 4
+"root|SectTurf|VIS": 5,
+"root|SectTop|VIS": 3
 },
 "490": {
 "root|SectTurf|VIS": 4,
@@ -77,46 +84,59 @@
 "root|SectTurf|VIS": 4,
 "root|SectTop|VIS": 4
 },
+"499": {
+"root|SectTurf|VIS": 4,
+"root|SectTop|VIS": 4
+},
 "502": {
-"root|SectTurf|VIS": 4
+"root|SectTurf|VIS": 4,
+"root|SectTop|VIS": 4
 },
 "508": {
-"root|SectTurf|VIS": 4,
-"root|SectTop|VIS": 5
+"root|SectTurf|VIS": 4
 },
 "511": {
-"root|SectTurf|VIS": 4,
-"root|SectTop|VIS": 4
-},
-"514": {
-"root|SectTurf|VIS": 4,
-"root|SectTop|VIS": 4
+"root|SectTurf|VIS": 3
 },
 "517": {
 "root|SectTurf|VIS": 4,
 "root|SectTop|VIS": 4
 },
+"520": {
+"root|SectTurf|VIS": 4,
+"root|SectTop|VIS": 4
+},
 "523": {
-"root|SectTurf|VIS": 4
+"root|SectTurf|VIS": 4,
+"root|SectTop|VIS": 4
+},
+"526": {
+"root|SectTurf|VIS": 4,
+"root|SectTop|VIS": 4
 },
 "529": {
 "root|SectTurf|VIS": 4,
-"root|SectTop|VIS": 4
+"root|SectTop|VIS": 5
 },
 "532": {
-"root|SectTurf|VIS": 4,
-"root|SectTop|VIS": 4
+"root|SectTurf|VIS": 3
 },
 "535": {
-"root|SectTurf|VIS": 4,
-"root|SectTop|VIS": 4
+"root|SectTurf|VIS": 4
 },
 "538": {
-"root|SectTurf|VIS": 4,
-"root|SectTop|VIS": 4
+"root|SectTurf|VIS": 4
+},
+"541": {
+"root|SectTurf|VIS": 3
 },
 "544": {
-"root|SectTurf|VIS": 4
+"root|SectTurf|VIS": 4,
+"root|SectTop|VIS": 5
+},
+"547": {
+"root|SectTurf|VIS": 4,
+"root|SectTop|VIS": 4
 },
 "550": {
 "root|SectTurf|VIS": 4,
@@ -130,9 +150,8 @@
 "root|SectTurf|VIS": 4,
 "root|SectTop|VIS": 4
 },
-"559": {
-"root|SectTurf|VIS": 4,
-"root|SectTop|VIS": 5
+"562": {
+"root|SectTurf|VIS": 3
 },
 "565": {
 "root|SectTurf|VIS": 4
@@ -272,5 +291,6 @@
 "2308": {
 "root|FireStep|VIS": 4
 }
-}
+},
+"note": "whole film step 3; S06 (481-570) and S22-S23 (2131-2310) re-run on the final file"
 }
