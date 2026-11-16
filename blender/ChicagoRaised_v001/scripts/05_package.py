@@ -38,7 +38,7 @@ n = 0
 for im in bpy.data.images:
     if im.source != 'FILE' or im.size[0] == 0: continue
     w, h = im.size
-    cap = 512 if (any(t in im.name for t in SET_TEX) and not im.name.endswith(".hdr")) else 1024
+    cap = 256 if "nor_gl" in im.name else (512 if (any(t in im.name for t in SET_TEX) and not im.name.endswith(".hdr")) else 1024)   # normal maps at low strength: 256 px is enough
     if max(w, h) > cap:
         k = cap / max(w, h); im.scale(max(1, int(w * k)), max(1, int(h * k))); n += 1
     im.pack()
