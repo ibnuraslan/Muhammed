@@ -75,9 +75,9 @@ sc.camera = D["CAM_S01"]
 # ward net of the recovered boy's bed is tied up (hidden) so S26 sees him clearly; logo crate near the ward entrance
 n = D.get("Net_-1_0")
 if n: n.hide_render = True; n.hide_viewport = True
-cp = D["CrateWard_pivot"]; cp.location = V((40.40, -2.4, 0)); cp.rotation_euler = (0, 0, math.radians(-4)); cp.scale = (1.3, 1.3, 1.3)
+cp = D["CrateWard_pivot"]; cp.location = V((40.40, -0.9, 0)); cp.rotation_euler = (0, 0, math.radians(-4)); cp.scale = (1.3, 1.3, 1.3)
 bpy.context.view_layer.update()
-img = bpy.data.images.load("/home/user/Muhammed/blender/assets/brand/DaKrasFilms_logo_dark.png"); img.pack()
+img = bpy.data.images.load("/home/user/Muhammed/blender/assets/brand/DaKrasFilms_logo_white.png"); img.pack()
 ml = bpy.data.materials.new("LogoDecal"); ml.use_nodes = True; nt = ml.node_tree; P = nt.nodes["Principled BSDF"]
 tx = nt.nodes.new("ShaderNodeTexImage"); tx.image = img; nt.links.new(tx.outputs["Color"], P.inputs["Base Color"]); nt.links.new(tx.outputs["Alpha"], P.inputs["Alpha"])
 P.inputs["Roughness"].default_value = 0.7
