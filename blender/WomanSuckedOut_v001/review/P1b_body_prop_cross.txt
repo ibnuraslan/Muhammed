@@ -1,0 +1,14 @@
+P1b body_prop_cross (step 3), on the packed P1b file.
+Props: seats 04-06 L (both seats), HOLE_LINER, CABIN_SHELL, CABIN_FIXED (bins, floor), plus W's body and trousers.
+Rigs: HA and HB (helpers) and W separately.
+
+S01      helpers: 0 visible crossing frames | W: 0 visible crossing frames
+S02      helpers: 0 visible crossing frames | W: 0 visible crossing frames
+S08      helpers: 0 visible crossing frames | W: 0 visible crossing frames
+S10      helpers: 0 visible crossing frames | W: 0 visible crossing frames
+S11      helpers: 0 visible crossing frames | W: 0 visible crossing frames
+S13      helpers: 0 visible crossing frames | W: 0 visible crossing frames
+S14-S15  helpers: 0 visible crossing frames | W: 0 visible crossing frames
+
+Exterior shots S04, S09 and S12: W's legs are inside the cabin, behind the opaque skin, where they pass the hole liner. Only her torso shows, coming out of a clean hole (unchanged from P1).
+An every-frame spot check of S02 frames 120-160 (the burst) found a 2-frame graze (126-127): HA's left wrist against W's hand behind the seat backs. The step-3 run shows 0.

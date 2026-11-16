@@ -394,7 +394,7 @@ def hold_shot(n, fr_list, pull=None, hb=False):
         set_ik(HA, fr, 1, 1)
         # director P1: lean in, elbows bent, hands low on her shins, face toward the 3/4-front camera
         stand(HA, fr, 0.12 + 0.12 * u, -5.60, yaw=-90, flex=18 - 6 * u, crouch=0.05)
-        fk_spine(RA, fr, flex=16, side=0, twist=-8, hflex=-26, htwist=(-38 if hb else 22))
+        fk_spine(RA, fr, flex=16, side=0, twist=-8, hflex=-26, htwist=(34 if hb else -30))
         sc.frame_set(fr)
         grab(HA, "L", fr, leg_point("L", "ankle", fr), (0, -0.25, -1), skin=0.085)
         grab(HA, "R", fr, leg_point("L", "shin", fr), (0, 0.15, -1), skin=0.11)
