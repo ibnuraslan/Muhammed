@@ -1,6 +1,6 @@
-# B27 ChicagoRaised v002: How Chicago Raised Its Buildings
+# B27 ChicagoRaised v002b: How Chicago Raised Its Buildings
 
-Vertical 1080×1920 / 60 fps explainer, Cycles, hard cuts, built to the client VO (`ChicagoRaised_v002_VO.mp3`, 32.2 s).
+Vertical 1080×1920 / 60 fps explainer, Cycles, hard cuts, built to the client VO (`ChicagoRaised_v002b_VO.mp3`, 32.2 s).
 Reference order: workers crank jackscrews under a building → it rises with people inside → cribbing is stacked → new
 foundations are built → Chicago was built on a swamp, streets flooded, disease spread → they raised the city; it still stands on those foundations.
 
