@@ -49,16 +49,15 @@ ConnectB21, branch `claude/connectB21-dog-buried-alive`. Phase 2 of `blender/bri
 | Y20 | 1538–1590 | They were | By the SUV: he trots up to the family; they recoil. |
 | Y21 | 1591–1641 | horrified. | The family's horrified faces, hands up, mouths open. |
 
-## Checks (on the packed file)
-- `body_prop_cross` (step 3, SUV, pickup, house, mounds, backfill): **0 visible crossings** (`review/body_prop_cross.json`).
-- `limb_check` (step 2): only the known 2-point shoulder false positives (`upperarm01` points next to the shoulder); no arm
-  through a body, no arm behind the back (`review/limb_check.json`).
-- `clip_scan` (step 6): two short ranges left, f91–97 (Dad's first walk steps in G03, forearm against his hip) and the single
-  frame f1543 (Y20, Dad's hands rising); both tiny in a wide frame (`review/clip_scan.json`).
-- `qa_check` (`review/qa_check.json`, run on the previous build with the same staging): CAMJUMP = only at the 17 hard cuts between the 18 shots;
-  PROPMOVE = the falling dirt clods; EMPTY = dog/car shots (the check only counts human characters); FILL = the render-hidden
-  pocket cutter near the U10/U11 lens (renders clean); FACEPRESS = Mom's hand-to-mouth in Y06/Y07 (8 cm off the face).
-- Camera: a scan of the baked camera found no in-shot jump (after fixing a ±180° Euler wrap in Y15).
+## Checks (on the packed v002b file)
+- `body_prop_cross` (step 3): **0 visible crossings**.
+- `limb_check` (step 2): only the known 2-point shoulder false positives, plus Dad's raised right arm in Y21 (f1595–1641,
+  hand on top of his head: the upper-arm axis passes his shoulder/neck; it reads correctly on screen).
+- `clip_scan` (step 6): f85 and f145–157 (Mom's walk-away from behind, small forearm-to-hip contact in a wide shot), f1543
+  (Y20, one frame) and f1597–1609 (Y21, Mom going down to her knee and Dad's arm rising). Watched at 540×960: no limb
+  visibly passes through a body.
+- Preview: full re-render of v002b from this package (the wardrobe touches every family shot), with G03 re-rendered after
+  the walk-arm fix; every page watched.
 
 ## Known issues
 - The voiceover says "sitting on the porch"; the dog stands (the quadruped rig's sitting pose deforms badly, as B01 found).

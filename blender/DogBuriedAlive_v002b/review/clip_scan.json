@@ -1,0 +1,100 @@
+{
+ "frames": {
+  "85": {
+   "Mom": {
+    "self": 463,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "145": {
+   "Mom": {
+    "self": 627,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "157": {
+   "Mom": {
+    "self": 674,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "169": {
+   "Dad": {
+    "self": 13,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1543": {
+   "Dad": {
+    "self": 90,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1597": {
+   "Dad": {
+    "self": 572,
+    "clothes": 0,
+    "other": 0
+   },
+   "Mom": {
+    "self": 1148,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1603": {
+   "Dad": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1609": {
+   "Dad": {
+    "self": 455,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1627": {
+   "Mom": {
+    "self": 0,
+    "clothes": 0,
+    "other": 17
+   }
+  },
+  "1633": {
+   "Mom": {
+    "self": 0,
+    "clothes": 0,
+    "other": 12
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   85,
+   85
+  ],
+  [
+   145,
+   157
+  ],
+  [
+   1543,
+   1543
+  ],
+  [
+   1597,
+   1609
+  ]
+ ],
+ "fps": 60
+}

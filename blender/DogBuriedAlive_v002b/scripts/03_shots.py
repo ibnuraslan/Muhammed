@@ -28,7 +28,7 @@ def walk_arms(rig, H, path, yaw_fn, f0, f1, stride=0.75, swing=None, step=2):
     swing = swing if swing is not None else (0.07 if rig.name == 'Mom' else 0.10)
     # hands hang where this rig's arms reach: from its own shoulder height / width (Mom is shorter than Dad)
     BN_ = rig.data.bones; sh_ = BN_["upperarm01.L"].head_local
-    wide = abs(sh_.x) + 0.035; hang = sh_.z - 0.60 - BN_["root"].head_local.z + 0.95
+    wide = abs(sh_.x) + 0.05; hang = sh_.z * 0.57          # walking: hands hang beside the thighs (rig height relative)
     """arms swing opposite to the legs (no mannequin walk): relaxed hands at the hips, forward/back"""
     frames = list(range(f0, f1 + 1)); dist = [0.0]
     for a_, b_ in zip(frames, frames[1:]): dist.append(dist[-1] + (path(b_) - path(a_)).to_2d().length)
