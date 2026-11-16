@@ -321,7 +321,7 @@ def sit(H, f, head=(0, 0), spine=-6):
     for s in "LR":
         a = H.ankle[s]; xy = Vector((a.x * 1.05, -0.47))
         H.key_foot(s, f, xy, 0)
-sit(LD, fa, head=(10, 0), spine=0); sit(LD, fa + 50, head=(6, 0), spine=0); sit(LD, fa + 85, head=(0, 32), spine=0); sit(LD, fb, head=(-2, 38), spine=0)
+sit(LD, fa, head=(12, 0), spine=0); sit(LD, fa + 30, head=(4, 8), spine=0); sit(LD, fa + 70, head=(-4, 45), spine=-2); sit(LD, fa + 120, head=(-6, 50), spine=-2); sit(LD, fb, head=(-2, 40), spine=0)
 ev(fa + 1)
 thl = [LD.r.o.matrix_world @ LD.r.PB["upperleg02." + s].tail for s in "LR"]
 thh = [LD.r.o.matrix_world @ LD.r.PB["upperleg01." + s].head for s in "LR"]
@@ -339,7 +339,7 @@ face(LD, fa, 0.0, -10); face(LD, fa + 50, 0.0, -6); face(LD, fa + 85, 0.002, -4)
 WV = OB["WindowView"]; z0w = WV.location.z
 key_prop(WV, 0, (WV.location.x, WV.location.y, z0w)); key_prop(WV, fa, (WV.location.x, WV.location.y, z0w)); key_prop(WV, fb, (WV.location.x, WV.location.y, z0w - 1.4))
 L0 = Vector((seat.x, seat.y, 1.0))
-camshot("S6", [(0, Vector((seat.x - 0.9, seat.y - 2.6, 1.35)), L0 + Vector((0.2, 0, 0.0)), 30), (1, Vector((seat.x - 0.7, seat.y - 2.2, 1.3)), L0 + Vector((0.25, 0, 0.05)), 32)])
+camshot("S6", [(0, Vector((seat.x - 1.0, seat.y - 2.9, 1.4)), L0 + Vector((0.2, 0, 0.0)), 30), (1, Vector((seat.x - 0.5, seat.y - 1.9, 1.3)), L0 + Vector((0.2, 0, 0.15)), 34)])
 
 # ================================================================== S8: W2 slides a timber onto the hero crib stack
 W2 = CH["W2"]; fa, fb = f0("S8"), f1("S8")          # W2 parks after S8: every key ends ON the cut
@@ -363,14 +363,17 @@ for s, dx in (("L", 0.13), ("R", -0.13)):
     shl = W2.r.BN["upperarm01." + s].head_local; sx = 1 if s == "L" else -1
     key_pole(W2, s, fa, shl + Vector((sx * 0.4, 0.3, -0.5)))
 face(W2, fa, -0.002, -9); blinks(W2, fa, fb, -0.002, -9, ofs=50)
-camshot("S8", [(0, Vector((tx - 0.3, -3.2, 1.9)), Vector((tx, y_end + 0.5, 1.25)), 42), (1, Vector((tx - 0.25, -2.9, 1.88)), Vector((tx, y_end + 0.4, 1.25)), 44)])
+camshot("S8", [(0, Vector((tx - 0.2, -1.7, 1.95)), Vector((tx, y_end + 0.6, 1.3)), 40), (1, Vector((tx - 0.15, -1.45, 1.92)), Vector((tx, y_end + 0.5, 1.3)), 42)])
 
 # ================================================================== S9 / S10: the building on its cribbing, rising to the new street level
-camshot("S9", [(0, Vector((-14, -16, 1.0)), Vector((0, 2, 4.5)), 24), (1, Vector((-12.5, -14.5, 1.0)), Vector((0, 2, 4.6)), 24)])
+camshot("S9", [(0, Vector((-17, -19, 0.8)), Vector((0, 2, 4.5)), 24), (1, Vector((-10.5, -13.0, 1.8)), Vector((0, 2, 5.0)), 24)])
 camshot("S10", [(0, Vector((-5.0, -5.5, 0.5)), Vector((-6.0, 0.5, 0.9)), 22), (1, Vector((-5.0, -5.5, 2.9)), Vector((-6.0, 0.5, 3.0)), 22)])
 
 # ================================================================== S11: Mason builds the new brick foundation from behind it (face to camera)
 MS = CH["Mason"]; fa, fb = f0("S11"), f1("S11")
+for o in OB:
+    if o.parent == MS.r.o and o.name.split(".")[-1] in ("cap", "visor"): o.hide_render = o.hide_viewport = True
+    if o.parent == MS.r.o and "short0" in o.name: o.hide_render = o.hide_viewport = False
 MX = 3.0; wall_y = 0.25
 MPOS = Vector((MX + 0.14, wall_y + 0.50, 0))       # close behind the wall (back face at wall_y + 0.21): the reach stays ~0.4 m
 put_ranges("Mason", [(fa, f1("S11"), MPOS, 0)])
@@ -380,7 +383,7 @@ key_vis_all(COURSES[:n0], [(fa, True)])
 cyc = 66; c_ = n0
 for i, f in enumerate(range(fa, fb, cyc)):
     top = 0.25 * c_
-    stand(MS, f, flex=12, spine=16 + 4 * i, head=(10, 0), feet=(0, 0.10)); stand(MS, f + cyc // 2, flex=14, spine=20 + 4 * i, head=(12, 0), feet=(0, 0.10))
+    stand(MS, f, flex=12, spine=16 + 4 * i, head=(-14, 0), feet=(0, 0.10)); stand(MS, f + cyc // 2, flex=14, spine=20 + 4 * i, head=(-10, 0), feet=(0, 0.10))
     key_prop(BR, f, (MX, wall_y, top + 0.10)); key_prop(BR, f + 40, (MX, wall_y, top + 0.0375)); key_prop(BR, f + cyc - 1, (MX, wall_y, top + 0.0375))
     if c_ < len(COURSES): key_vis(COURSES[c_], [(0, False), (f + 50, True)]); key_vis(BR, [(f + 50, False), (f + cyc, True)])
     c_ += 1
@@ -408,7 +411,7 @@ camshot("S12", [(0, Vector((2.5, -4.6, 1.3)), Vector((0.5, 0.3, 1.6)), 26), (1, 
 
 # ================================================================== S13 / S14: facade on its new foundation, crane over the roof
 camshot("S13", [(0, Vector((-4.5, -9.0, 0.8)), Vector((0, 0, 6.0)), 22), (1, Vector((-4.0, -8.5, 0.9)), Vector((0, 0, 11.0)), 22)])
-camshot("S14", [(0, Vector((-9.0, -16.0, 9.0)), Vector((0, 4, 14.0)), 24), (1, Vector((-8.0, -15.0, 21.0)), Vector((0, 30, 28.0)), 24)])
+camshot("S14", [(0, Vector((-9.0, -16.0, 12.0)), Vector((0, 4, 19.0)), 24), (1, Vector((-8.0, -15.0, 22.0)), Vector((0, 30, 30.0)), 24)])
 
 # ================================================================== S15: swamp aerial | S16: 1850s town aerial with chimney smoke
 camshot("S15", [(0, Vector((600, -70, 32)), Vector((600, 40, 0)), 30), (1, Vector((600, -40, 26)), Vector((600, 60, 0)), 30)])
