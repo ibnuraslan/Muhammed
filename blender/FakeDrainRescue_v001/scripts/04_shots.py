@@ -299,7 +299,7 @@ def phone_shot(sid, yaw, heads, ear=False):
     for i, t in enumerate((0, 0.3, 0.6, 0.9, 1.3)):
         f = f0 + round(t * (f1 - f0)); p = stand(H, f, pos, yaw, flex=4, head=heads[i % len(heads)], arms=False)
         sh = H.sh["R"] - H.root_head
-        if i == 0: body_hand(H, "R", f, p, yaw, (sh.x + 0.10, sh.y - 0.33, sh.z - 0.06), (0.45, -0.35, 0.82), (0.0, 0.9, 0.35))
+        if i == 0: body_hand(H, "R", f, p, yaw, (sh.x + 0.10, sh.y - 0.30, sh.z - 0.17), (0.45, -0.35, 0.82), (0.0, 0.9, 0.35))
         key_hang(H, f, p, yaw, only=("L",))
     apply_pose(rig, "L", "relaxed", f0); use("Mom", sid)
     return f0
@@ -310,7 +310,7 @@ def _():
 @shot("S20")
 def _():
     phone_shot("S20", 80, ((20, 0), (16, 4), (20, -3)))
-    cam_shot("S20", [(0, (3.95, 4.72, 1.5)), (1, (3.75, 4.8, 1.5))], [(0, (2.85, 5.0, 1.36)), (1, (2.85, 5.0, 1.38))], lens=42)   # chest-up (director P1)
+    cam_shot("S20", [(0, (3.95, 4.62, 1.56)), (1, (3.7, 4.7, 1.55))], [(0, (2.8, 5.0, 1.42)), (1, (2.8, 5.0, 1.43))], lens=45)   # chest-up (director P1); the phone is in S19, here just below frame   # chest-up (director P1)
 @shot("S21")
 def _():
     phone_shot("S21", 80, ((18, 0), (6, -35), (6, -40)))
