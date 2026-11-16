@@ -513,7 +513,7 @@ def shot_5b(f0, n):
         t0 = push_end + 18 + random.randint(0, 6)
         for f, sz, up in ((f0, 0.0005, 0), (t0, 0.0005, 0), (t0 + 10, 0.03, 0.06), (t0 + 40, 0.004, 0.18)):
             pf.location = base + V((0, 0, up)); pf.scale = (sz,) * 3; pf.keyframe_insert("location", frame=f); pf.keyframe_insert("scale", frame=f)
-    camera("5b", f0, n, [(0, (X2 + 0.45, 1.45, 0.45), (X2, -0.2, 0.55), 30), (1, (X2 + 0.4, 1.3, 0.42), (X2, -0.2, 0.55), 30)])
+    camera("5b", f0, n, [(0, (X2 + 0.45, 1.45, 0.45), (X2, -0.2, 0.55), 30), (1, (X2 + 0.38, 1.42, 0.47), (X2 + 0.03, -0.2, 0.58), 30)])
     GZ[0] = 0.0
     return use
 

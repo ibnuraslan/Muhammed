@@ -358,7 +358,7 @@ sp_o = bpy.data.objects.new("FlashBeam", spot); col("Props").objects.link(sp_o);
 
 # ================================================================== S2 SERVICE CORRIDOR (x = 30): the vent from behind
 C2 = "S2_Corridor"; X2 = 30.0
-box("S2_Floor", (8, 4, 0.2), (X2, 1.0, 0.1), M_FLOOR, C2)
+box("S2_Floor", (8, 3.0, 0.2), (X2, 1.5, 0.1), M_FLOOR, C2)      # stops at the vent wall (nothing under the duct)
 S2_FZ = 0.2
 box("S2_Ceil", (8, 4, 0.2), (X2, 1.0, 3.1), M_CONC, C2)
 w2 = box("S2_WallVent", (8, 0.25, 3.0), (X2, -0.125, 1.5), M_WALL, C2)
@@ -367,7 +367,7 @@ box("S2_EndWall", (0.25, 3.0, 3.0), (X2 - 3.8, 1.0, 1.5), M_CONC, C2)
 cut2 = cut.copy(); cut2.data = cut.data.copy(); col(C2).objects.link(cut2); cut2.location = (X2, 0.0, 0.56); cut2.scale = (2.7, 2.7, 1.0)       # dug out to crawl size on this side
 b = w2.modifiers.new("Hole", 'BOOLEAN'); b.object = cut2; b.operation = 'DIFFERENCE'; b.solver = 'EXACT'
 M_DUCT = paint("M_Duct", (0.3, 0.32, 0.3), var=0.1)
-box("S2_DuctFloor", (0.9, 2.4, 0.05), (X2, -1.45, 0.025), M_DUCT, C2)
+box("S2_DuctFloor", (0.9, 2.4, 0.05), (X2, -1.45, -0.01), M_DUCT, C2)
 box("S2_DuctL", (0.05, 2.4, 0.8), (X2 - 0.45, -1.45, 0.6), M_DUCT, C2)
 box("S2_DuctR", (0.05, 2.4, 0.8), (X2 + 0.45, -1.45, 0.6), M_DUCT, C2)
 box("S2_DuctTop", (0.9, 2.4, 0.05), (X2, -1.45, 1.0), M_DUCT, C2)
