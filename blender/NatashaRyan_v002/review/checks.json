@@ -1,0 +1,40 @@
+{
+ "package": "NatashaRyan_v002_60fps.blend",
+ "frames": [
+  1,
+  2136
+ ],
+ "body_prop_cross": {
+  "script": "NatashaRyan_v001/scripts/bpc_shots.py (step 6 + first/mid/last per shot)",
+  "full_film_visible_frames": [],
+  "rechecked_after_fixes": {
+   "S06,S09,S10,S16,S20,S22": [],
+   "court S15-S19 (final package)": []
+  }
+ },
+ "limb_check": {
+  "step": 12,
+  "counts": {}
+ },
+ "clip_scan": {
+  "step": 12,
+  "first_package_bad_ranges": [
+   [
+    1189,
+    1561,
+    "prosecutor hands into own thighs"
+   ]
+  ],
+  "court_after_fix_bad_ranges": []
+ },
+ "qa_check": {
+  "step": 12,
+  "counts": {
+   "EMPTY": 139,
+   "FILL": 6,
+   "INSIDE": 2,
+   "CAMJUMP": 20
+  },
+  "notes": "CAMJUMP = the 20 intended hard cuts. EMPTY flags every sampled frame including frame 1 where Natasha fills the frame (false positive with marker-bound cameras). FILL/INSIDE at 1477-1501: lectern edge near the S17 camera; those frames watched, no lens blocker."
+ }
+}

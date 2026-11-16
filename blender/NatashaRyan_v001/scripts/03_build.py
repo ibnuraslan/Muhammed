@@ -225,7 +225,7 @@ def ease_path(a, b, f0, f1, ease_in=True, ease_out=True):
     def p(f):
         u = max(0.0, min(1.0, (f - f0) / max(1, (f1 - f0))))
         if ease_in and ease_out: u = smooth(u)
-        elif ease_in: u = u * u * (2 - u) if False else (u * u if u < 0.5 else u)
+        elif ease_in: u = 0.5 * (u * u + u)          # soft start, continuous, no jump
         return a.lerp(b, u)
     return p
 def heading(a, b):
@@ -265,8 +265,10 @@ for n, r in RIGS.items():
 print("RIGS", sorted(RIGS))
 
 VISSET = set()
+VISR = {}; HIDDENSET = set()
 def vis_char(rig, ranges):
-    VISSET.add(rig.name)
+    VISSET.add(rig.name); VISR[rig.name] = list(ranges)
+    HIDDENSET.update(c.name for c in rig.children if c.hide_render)
     names = [c.name for c in rig.children if not c.hide_render]
     props = [o for o in bpy.data.objects if any(c.type == 'CHILD_OF' and c.target == rig for c in o.constraints)]
     for o in props: names += [o.name] + [c.name for c in o.children if not c.hide_render]
@@ -341,13 +343,23 @@ for nm, x_, y_ in (("Port_SBoxL", XP - 2.1, -1.0), ("Port_SBoxR", XP + 2.2, -1.2
     box(nm, (0.75, 0.25, 0.75), (x_, y_, 1.95), M("SoftboxWhite", (0.95, 0.95, 0.95), 0.6, emit=(1, 1, 1), ems=1.5), "Port", bevel=0.03, rotz=-30 if x_ < XP else 30)
 
 H = HS["Nat"]; pos = Vector((XP, 0.0)); yaw = 0.0
-for f, fl, hd in ((1, 9, (12, -14)), (60, 6, (6, -6)), (110, 3, (2, 0)), (151, 4, (4, -24)), (195, 3, (0, -8)), (240, 2, (-4, 4)), (300, 3, (-3, 2)), (330, 3, (-3, 2))):
+for f, fl, hd in ((1, 9, (12, -14)), (50, 6, (6, -6)), (86, 3, (2, 0)), (110, 4, (2, -12)), (152, 2, (-5, 5)), (200, 3, (-3, 2)), (330, 3, (-3, 2))):
     sit(H, f, pos, stool_seat, yaw, flex=fl, head=hd, hands="lap", foot_fwd=0.40, knees=0.55, hip_up=0.22)
 vis_char(RIGS["Nat"], [(1, 330)])
-cam_shot("S01", [(1, (XP + 0.25, -2.6, 1.05)), (150, (XP + 0.12, -2.05, 1.08))], lens=50,
-         target_keys=[(1, (XP, 0.0, 0.92)), (150, (XP, 0.0, 0.98))])
-cam_shot("S02", [(151, (XP - 0.55, -1.2, 1.25)), (240, (XP - 0.1, -0.95, 1.2))], lens=60,
-         target_keys=[(151, (XP, 0.0, 1.17)), (240, (XP, 0.0, 1.18))])
+# visible studio kit for S01: light stand + softbox behind right, backdrop roll stands, stool footring
+for nm, x_, y_, rz in (("Port_StandA", XP + 0.62, 0.55, 35),):
+    box(nm + "_pole", (0.03, 0.03, 1.75), (x_, y_, 0.875), M("StandBlack", (0.03, 0.03, 0.035), 0.35, metal=0.6), "Port", bevel=0.0)
+    for k, a_ in enumerate((0, 120, 240)):
+        lg = box(nm + "_leg%d" % k, (0.02, 0.45, 0.02), (x_ + 0.18 * math.sin(R_(a_)), y_ + 0.18 * math.cos(R_(a_)), 0.08), M("StandBlack", (0.03, 0.03, 0.035), 0.35, metal=0.6), "Port", bevel=0.0)
+        lg.rotation_euler = (R_(-18), 0, R_(-a_))
+    sb = box(nm + "_box", (0.55, 0.35, 0.55), (x_, y_, 1.85), M("SoftboxBlack", (0.04, 0.04, 0.05), 0.5), "Port", bevel=0.03); sb.rotation_euler = (R_(10), 0, R_(rz))
+    fr = box(nm + "_diff", (0.5, 0.02, 0.5), (0, 0, 0), M("SoftboxWhite", (0.95, 0.95, 0.95), 0.6, emit=(1, 1, 1), ems=1.5), "Port", bevel=0.0)
+    fr.parent = sb; fr.location = (0, -0.18, 0)
+box("Port_StoolRing", (0.3, 0.3, 0.02), (XP, 0.0, 0.22), M("Chrome", (0.75, 0.75, 0.78), 0.25, metal=1.0), "Port", bevel=0.01)
+cam_shot("S01", [(1, (XP + 0.35, -2.45, 0.95)), (86, (XP + 0.22, -2.15, 0.98))], lens=35,
+         target_keys=[(1, (XP + 0.1, 0.1, 0.9)), (86, (XP + 0.08, 0.1, 0.94))])
+cam_shot("S02", [(87, (XP - 0.45, -1.2, 1.24)), (152, (XP - 0.15, -1.0, 1.21))], lens=60,
+         target_keys=[(87, (XP, 0.0, 1.17)), (152, (XP, 0.0, 1.18))])
 
 # ================================================================== SCHOOL set (drop-off + memorial)
 XS = X["school"]
@@ -377,7 +389,7 @@ sedan_src = import_glb("sedan.glb", 4.6, axis=1)
 sedan_src.data.transform(Matrix.Diagonal((1.0, 1.0, 0.72, 1.0)))   # the low-poly model is toy-tall; real sedan ~1.48 m
 car = inst(sedan_src, "Mom_Car", (XS + 2.5, 1.9, 0.0), 90.0, "School"); soften(car)
 van_src = import_glb("van.glb", 5.2, axis=0)
-van = inst(van_src, "Delivery_Van", (XS - 9.0, 1.9, 0.0), 0.0, "School"); soften(van)
+van = inst(van_src, "Delivery_Van", (XS - 4.6, 1.9, 0.0), 0.0, "School"); soften(van)
 for ms in van.material_slots:
     pass
 print("VAN dims", tuple(round(x, 2) for x in van.dimensions), "CAR dims", tuple(round(x, 2) for x in car.dimensions))
@@ -392,6 +404,7 @@ vminy = min(p.y for p in vbb); vz0 = min(p.z for p in vbb); vz1 = max(p.z for p 
 logo = plane("Van_Logo", 2.2, 2.2 * 414 / 967, (van.location.x + 0.2, vminy - 0.03, vz0 + (vz1 - vz0) * 0.42), lm, "School", rot=(R_(90), 0, 0))
 logo.rotation_euler = (0, 0, 0)   # plane() leaves the mesh already upright
 bpy.context.view_layer.update(); logo.parent = van; logo.matrix_parent_inverse = van.matrix_world.inverted()
+key_vis(["Delivery_Van", "Van_Logo"], [(241, 450)])   # the van is only there on the drop-off morning
 
 # Natasha walks from the car to the school; mother stands by the car and waves
 H = HS["NatS"]; a = (XS + 1.4, 3.9, 0); b = (XS + 0.2, 14.0, 0)
@@ -436,8 +449,8 @@ for f, amt in ((372, 0.0), (392, 1.0), (404, 0.85), (416, 1.0), (428, 0.85), (44
         body_hand(H, "R", f, p, myaw, off, (0.0, -0.1, 1.0), (0, -1, 0), pole_off=(-0.45, 0.35, 0.0))
 apply_pose(RIGS["Mom"], "R", "relaxed", 372); apply_pose(RIGS["Mom"], "R", "flat_palm", 392); apply_pose(RIGS["Mom"], "R", "flat_palm", 440); apply_pose(RIGS["Mom"], "R", "relaxed", 462)
 vis_char(RIGS["Mom"], [(241, 540)])
-cam_shot("S03", [(241, (XS + 22, -26, 20)), (360, (XS + 14, -17, 14))], lens=26,
-         target_keys=[(241, (XS + 0.0, 12, 3.0)), (360, (XS + 0.5, 10, 2.5))])
+cam_shot("S03", [(295, (XS - 6.4, -3.5, 1.3)), (360, (XS - 5.6, -4.4, 2.6))], lens=26,
+         target_keys=[(295, (XS - 2.4, 4.0, 1.2)), (360, (XS - 1.0, 6.5, 1.6))])
 cam_shot("S04", [(361, (XS - 1.6, 9.8, 1.55)), (450, (XS - 1.75, 10.3, 1.6))], lens=30,
          target_keys=[(361, (XS + 2.6, 4.2, 1.15)), (450, (XS + 2.3, 4.6, 1.15))])
 cam_shot("S05", [(451, (XS - 0.7, 15.2, 1.45)), (540, (XS - 1.0, 15.0, 2.0))], lens=40,
@@ -475,7 +488,9 @@ for nm, mp_, hds in (("MournA", Vector((XS - 5.45, 4.35)), [(880, (14, 0)), (980
                      ("MournB", Vector((XS - 3.55, 4.25)), [(880, (16, 0)), (960, (20, -5)), (1060, (16, 3))])):
     idle(HS[nm], 870, 1100, mp_, heading(mp_, (XS - 4.5, 5.35)), heads=hds)
     vis_char(RIGS[nm], [(901, 1080)])
-cam_shot("S09", [(901, (XS - 4.3, 0.0, 1.5)), (1080, (XS - 4.45, 1.5, 1.35))], lens=28,
+key_vis([o.name for o in bpy.data.objects if o.name.startswith("Mem_") and o.type in ('MESH', 'LIGHT')], [(901, 1080)])
+VISR["__mem__"] = [(901, 1080)]
+cam_shot("S09", [(901, (XS - 4.3, -0.2, 1.55)), (1080, (XS - 4.45, 2.6, 1.3))], lens=28,
          target_keys=[(901, (XS - 4.5, 5.4, 0.95)), (1080, (XS - 4.5, 5.45, 0.98))])
 
 # ================================================================== HOME street (dusk S06, night S20, aerial S22)
@@ -487,8 +502,8 @@ box("Home_Kerb", (92, 0.2, 0.14), (XH + 4, 2.5, 0.05), M("Kerb", (0.7, 0.7, 0.68
 h2src = import_glb("house2.glb", 8.0, axis=2); h1src = import_glb("house1.glb", 7.0, axis=2)
 fam = inst(h2src, "Home_FamilyHouse", (XH, 14.0, 0.0), 0.0, "Home"); soften(fam)
 houses = [fam]
-for i, (dx, src_) in enumerate(((-16, h1src), (16, h1src), (32, h2src), (-32, h2src))):
-    houses.append(inst(src_, "Home_House%d" % i, (XH + dx, 14.0, 0.0), 0.0, "Home"))
+for i, (dx, src_) in enumerate(((-16, h1src), (16, h1src), (32, h1src), (-32, h1src))):
+    houses.append(inst(src_, "Home_House%d" % i, (XH + dx, 14.0 + (5.57 if src_ is h1src else 0.0), 0.0), 0.0, "Home"))   # fronts in line
 for h in houses: soften(h)
 bf = houses[3]   # the house where she was found: two doors down (x + 32)
 for i, tx in enumerate((-24, -8, 8, 24, 40, -38)):
@@ -538,8 +553,13 @@ for nm, dx in (("Nat18", 0.0), ("CopF", -0.75)):
     H = HS[nm]; a = (XH + 32 + dx, BFY - 1.0, 0); b = (XH + 32 + dx, 3.4, 0)
     walk(H, ease_path(a, b, 2300, 2520, ease_out=False), lambda f, a=a, b=b: heading(a, b), 2300, 2520, stride=1.05, amp=0.07)
     vis_char(RIGS[nm], [(2341, 2460)])
-cam_shot("S20", [(2341, (XH + 30.0, 0.6, 1.5)), (2460, (XH + 30.4, 0.9, 1.5))], lens=34,
-         target_keys=[(2341, (XH + 31.8, 7.5, 1.35)), (2460, (XH + 31.8, 6.0, 1.3))])
+cam_shot("S20", [(2341, (XH + 30.7, 1.0, 1.55)), (2460, (XH + 30.9, 1.5, 1.5))], lens=42,
+         target_keys=[(2341, (XH + 31.8, 7.0, 1.3)), (2460, (XH + 31.8, 5.0, 1.3))])
+# soft face fill for the night walk (street-lamp coloured, only during S20)
+pf_ = light("Police_FaceFill", 'AREA', (XH + 31.0, 1.2, 2.6), 0.0, size=2.5, rot=(R_(70), 0, 0), color=(1.0, 0.9, 0.8), cn="Home")
+for f, e in ((2300, 0.0), (2341, 90.0), (2470, 90.0), (2471, 0.0)):
+    pf_.data.energy = e; pf_.data.keyframe_insert("energy", frame=f)
+set_interp(pf_.data, 'CONSTANT')
 cam_shot("S22", [(2581, (XH + 44, -5.0, 2.5)), (2700, (XH + 47, -9.0, 9.0))], lens=28,
          target_keys=[(2581, (XH + 30, 9, 2.5)), (2700, (XH + 14, 9, 2.0))])
 for nm in ("MomH",):
@@ -628,12 +648,14 @@ for f, fl, hd in ((1060, 10, (18, 0)), (1120, 12, (22, -5)), (1190, 10, (20, 4))
     sit(H, f, mpos, S1, 0.0, flex=fl, head=hd, hands="lap", foot_fwd=0.40)
 vis_char(RIGS["MomK"], [(1081, 1260), (1621, 1740)])
 H = HS["Dad"]; dp = Vector((XK + 1.4, 2.65))
-idle(H, 1060, 1300, dp, 180.0, heads=[(1060, (0, 0)), (1150, (-2, 8)), (1200, (6, -60)), (1260, (8, -65))])
+idle(H, 1060, 1125, dp, 180.0, heads=[(1060, (0, 0)), (1100, (-2, 8))])
+# he turns from the window to look at her (a 0.6 s turn in place), then stays facing her
+idle(H, 1160, 1300, dp, heading(dp, (XK, 1.72)), heads=[(1160, (6, 0)), (1220, (12, 4)), (1280, (14, -2))])
 dsp = Vector((XK + 1.35, 0.75))
 # S14: the father stands beside her at the table and lowers his head (no seat, no contact)
 idle(H, 1600, 1780, Vector((XK + 0.8, 2.05)), heading((XK + 0.8, 2.05), (XK + 0.2, 0.0)), heads=[(1600, (10, -10)), (1660, (24, -14)), (1720, (30, -16)), (1780, (30, -16))])
 vis_char(RIGS["Dad"], [(1081, 1260), (1621, 1740)])
-cam_shot("S10", [(1081, (XK - 0.9, -1.9, 1.45)), (1260, (XK - 0.5, -1.35, 1.4))], lens=32,
+cam_shot("S10", [(1081, (XK - 0.95, -2.0, 1.5)), (1260, (XK - 0.35, -0.95, 1.35))], lens=32,
          target_keys=[(1081, (XK + 0.3, 2.0, 1.1)), (1260, (XK + 0.2, 1.8, 1.05))])
 cam_shot("S14", [(1621, (XK - 1.3, -1.4, 1.3)), (1740, (XK - 1.0, -1.1, 1.25))], lens=36,
          target_keys=[(1621, (XK + 0.5, 1.3, 0.95)), (1740, (XK + 0.5, 1.25, 0.95))])
@@ -726,12 +748,19 @@ for f, hd in ((1720, (6, 0)), (1860, (8, 5)), (2000, (4, -10)), (2140, (2, -18))
 vis_char(RIGS["JudgeB"], [(1741, 2340)])
 # prosecutor at the lectern, facing the judge (+Y)
 PP = Vector((XC - 1.25, 4.05)); PY = 180.0
-idle(HS["Pros"], 1720, 1960, PP, PY, heads=[(1720, (4, 0)), (1850, (6, 10)), (1940, (2, 0))])
+def pros_hang(s_):
+    h_ = hang_off(HS["Pros"], s_, fwd=0.07); sx_ = 1 if s_ == "L" else -1
+    return (h_[0] + 0.05 * sx_, h_[1], h_[2] + 0.03)   # hands clear of his thighs (clip_scan)
+for f, hd in ((1720, (4, 0)), (1765, (4, 4)), (1810, (5, 8)), (1850, (6, 10)), (1895, (4, 4)), (1940, (2, 0)), (1960, (2, 0))):
+    p = stand(HS["Pros"], f, PP, PY, head=hd, arms=False)
+    for s_ in "LR":
+        sx_ = 1 if s_ == "L" else -1
+        body_hand(HS["Pros"], s_, f, p, PY, pros_hang(s_), (0.0, -0.15, -1.0), (-sx_, 0, 0))
 Hp = HS["Pros"]
 for f, hd, g in ((1990, (0, 0), 0.0), (2020, (-2, -8), 1.0), (2080, (-2, 6), 1.0), (2120, (0, -12), 0.6), (2160, (2, -25), 0.0), (2240, (2, -28), 0.0), (2300, (4, -10), 0.0), (2380, (4, 0), 0.0)):
     p = stand(Hp, f, PP, PY, head=hd, arms=False)
-    body_hand(Hp, "R", f, p, PY, hang_off(Hp, "R"), (0.0, -0.15, -1.0), (1, 0, 0))
-    hg = hang_off(Hp, "L"); gest = (0.2, -0.36, 0.02)
+    body_hand(Hp, "R", f, p, PY, pros_hang("R"), (0.0, -0.15, -1.0), (1, 0, 0))
+    hg = pros_hang("L"); gest = (0.2, -0.36, 0.02)
     body_hand(Hp, "L", f, p, PY, tuple(hg[i] + (gest[i] - hg[i]) * g for i in range(3)), (-0.25 * g, -1.0, -0.3 * (1 - g)), (0, 0, 1) if g > 0.5 else (-1, 0, 0), pole_off=(0.4, 0.35, -0.1))
 apply_pose(RIGS["Pros"], "L", "relaxed", 1990); apply_pose(RIGS["Pros"], "L", "open_alarm", 2020); apply_pose(RIGS["Pros"], "L", "open_alarm", 2080); apply_pose(RIGS["Pros"], "L", "relaxed", 2160)
 vis_char(RIGS["Pros"], [(1741, 2340)])
@@ -750,7 +779,7 @@ idle(HS["ExD"], 1720, 2380, Vector((XC - 6.6, -6.4)), heading((XC - 6.6, -6.4), 
 vis_char(RIGS["ExD"], [(1741, 2340)])
 cam_shot("S15", [(1741, (XC - 5.5, -8.0, 3.0)), (1860, (XC - 4.6, -7.0, 2.8))], lens=24,
          target_keys=[(1741, (XC + 0.3, 3.5, 1.2)), (1860, (XC + 0.3, 3.5, 1.2))])
-cam_shot("S16", [(1861, (XC - 6.4, 1.6, 1.7)), (1980, (XC - 6.0, 1.0, 1.6))], lens=30,
+cam_shot("S16", [(1861, (XC - 6.4, 1.6, 1.7)), (1980, (XC - 5.0, 0.2, 1.45))], lens=30,
          target_keys=[(1861, (XC - 1.0, -2.6, 0.95)), (1980, (XC - 0.8, -2.6, 0.95))])
 cam_shot("S17", [(1981, (XC - 3.4, 6.0, 1.6)), (2100, (XC - 3.0, 5.7, 1.6))], lens=32,
          target_keys=[(1981, (XC - 1.25, 3.95, 1.35)), (2100, (XC - 1.25, 3.95, 1.4))])
@@ -841,6 +870,19 @@ set_interp(sun.data, 'CONSTANT'); set_interp(W.node_tree, 'CONSTANT')
 for fc in fcurves_of(sun.data):
     for kp in fc.keyframe_points:
         if 901 <= kp.co.x < 1080: kp.interpolation = 'LINEAR'
+gm = bpy.data.materials.get("Translucent_Glass_Safety")
+if gm:
+    gP = next(n for n in gm.node_tree.nodes if n.type == 'BSDF_PRINCIPLED')
+    gP.inputs["Emission Color"].default_value = (1.0, 0.72, 0.38, 1)
+    gE = gP.inputs["Emission Strength"]
+    for f, on in ((1, 0), (541, 1), (661, 0), (2341, 1), (2461, 0)):
+        gE.default_value = 4.0 if on else 0.0; gE.keyframe_insert("default_value", frame=f)
+    set_interp(gm.node_tree, 'CONSTANT')
+# camera-only catchlights: a tiny specular-only light riding with every camera
+for c in [o for o in bpy.data.objects if o.name.startswith("CAM_")]:
+    cl = light("Catch_" + c.name[4:], 'POINT', (0, 0, 0), 2.5, size=0.03, cn="Cameras")
+    cl.data.diffuse_factor = 0.0; cl.data.volume_factor = 0.0; cl.data.specular_factor = 1.0
+    cl.parent = c; cl.location = (0.0, 0.06, 0.0)
 # per-set lights only where they belong (porch / street lights only at dusk and night)
 for o in bpy.data.objects:
     if o.name.startswith(("Home_Lamp", "Home_PorchLight", "Home_BfPorchLight")) and o.type == 'LIGHT':
@@ -850,6 +892,8 @@ for o in bpy.data.objects:
         set_interp(o.data, 'CONSTANT')
 for n, r in RIGS.items():
     if n not in VISSET: vis_char(r, [])
+VISR["__van__"] = [(241, 450)]
+json.dump(VISR, open(HERE + "work/visr.json", "w")); json.dump(sorted(HIDDENSET), open(HERE + "work/hidden.json", "w"))
 json.dump([{"shot": s[0], "set": s[1], "f0": s[2], "f1": s[3], "note": s[4]} for s in SHOTS], open(HERE + "shots_provisional.json", "w"), indent=1)
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)
 print("BUILD_DONE")
