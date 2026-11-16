@@ -301,7 +301,8 @@ for side in (-1, 1):
         segs.append(box("Ward_WinFrame", (0.14, 0.05, 1.6), (x, y + 0.5, 1.8), M_TRIM))
     WD += segs
 WD.append(box("Ward_End", (8, 0.12, H), (WX, 9.0, H / 2), M_WARDWALL)); WD.append(box("Ward_Ceiling", (8, 18, 0.05), (WX, 0, H + 0.02), M_CEIL))
-M_NET = mat("Net", (0.97, 0.97, 0.97), 0.9, alpha=0.05)
+M_NET = mat("Net", (0.90, 0.92, 0.92), 1.0, alpha=0.10)
+M_NET.node_tree.nodes["Principled BSDF"].inputs["Specular IOR Level"].default_value = 0.0
 WARD_BEDS = []
 # one bed template in its own collection (not in the view layer), instanced 14 times: keeps the file small
 TPL = bpy.data.collections.new("WardBedTpl"); sc.collection.children.link(TPL)

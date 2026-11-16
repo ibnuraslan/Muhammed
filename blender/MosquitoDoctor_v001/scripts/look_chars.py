@@ -10,16 +10,18 @@ for spec in a[1:]:
     pkg, rig = spec.split(":")
     for o in list(bpy.data.objects): bpy.data.objects.remove(o, do_unlink=True)
     import glob
-    path = glob.glob(B + pkg + "/*.blend")[0]
+    path = glob.glob(B + pkg + "/*_60fps.blend")[0]
     with bpy.data.libraries.load(path, link=False) as (s, d):
         d.objects = [n for n in s.objects if n == rig or n.startswith(rig + ".")]
     R = None
+    print("TRY", spec)
     for o in d.objects:
         if o is None: continue
         sc.collection.objects.link(o)
         if o.name.split(".")[0] == rig and o.type == 'ARMATURE': R = o
     for o in bpy.data.objects:
         o.animation_data_clear(); o.hide_render = False; o.hide_viewport = False
+    if R is None: print("NORIG", spec); continue
     for pb in R.pose.bones:
         for c in list(pb.constraints): pb.constraints.remove(c)
         pb.location = (0, 0, 0); pb.rotation_quaternion = (1, 0, 0, 0); pb.rotation_euler = (0, 0, 0)

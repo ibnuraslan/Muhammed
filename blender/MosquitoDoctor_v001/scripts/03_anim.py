@@ -13,7 +13,7 @@ random.seed(22)
 BLK = dict(A=(1, 240), B=(241, 440), C=(441, 710), D=(711, 950), E=(951, 1490), F=(1491, 1730), G=(1731, 2030), H=(2031, 2270),
            I=(2271, 2510), J=(2511, 2710), K=(2711, 2950), L=(2951, 3190))
 sc.frame_start, sc.frame_end = 1, 3190; sc.render.fps = 60
-for n in ("Doctor", "Boy", "ColA", "ColB"): setup_human(n)
+for n in ("Doctor", "Boy", "ColA", "ColB", "Nurse", "PatA", "PatB"): setup_human(n)
 for n in ("Doctor", "Boy"): key_vis(D[n], 1, True)   # visible from frame 1 (later hide keys must not extrapolate back)
 MATT_Z = 0.614
 # ------------------------------------------------------------------ BOY lying in bed (blocks A-E), head on the pillow, body along +y
@@ -31,7 +31,7 @@ def boy_pose(f, head=(8, 0), breathe=0.0, rhand=None):
     return P, Rb
 # frame 0: arms raised out of the way to drape the blanket over the body alone
 BLANKET_Z = {}
-P0, Rb0 = lie("Boy", 0, BOY_HEAD, MATT_Z, toward=(0, 1), head=(8, 0), hip_up=0.105)
+P0, Rb0 = lie("Boy", 0, BOY_HEAD, MATT_Z, toward=(0, 1), head=(20, 0), hip_up=0.105)
 for s in "LR":
     shw = bw("Boy", P0, Rb0, rest_head("Boy", "upperarm01." + s))
     HUM["Boy"].key_hand(s, 0, shw + V((0, -0.35, 0.30)), V((0, -0.6, 0.8)).normalized(), V((0, -1, 0)), shw + V((0, 0.3, 0.2)))
@@ -84,16 +84,16 @@ def strip_frame0(o):
             for kp in [k for k in fc.keyframe_points if abs(k.co.x) < 0.01][::-1]: fc.keyframe_points.remove(kp)
 strip_frame0(D["Boy"])
 # hands rest on the blanket: palm down, fingers toward the feet; right hand (room side) a bit out from the body
-RH = V((-1.06, 1.02, 0)); RH.z = blanket_z_at(RH.x, RH.y + 0.08) + 0.07
+RH = V((-1.13, 0.92, 0)); RH.z = blanket_z_at(RH.x, RH.y + 0.08) + 0.07
 LH_Z = blanket_z_at(-1.67, 1.0) + 0.06
 BLANKET_Z["L"] = LH_Z
 print("BLANKET right hand z", round(RH.z, 3), "left", round(LH_Z, 3))
 for f in range(1, BLK["E"][1] + 1, 40):
     ph = (f // 40) % 3
-    hd = (8, 0) if f < 120 else (10, 22)                     # from ~120 he turns his head toward his right hand
+    hd = (20, 0) if f < 120 else (22, 20)                     # from ~120 he turns his head toward his right hand
     boy_pose(f, head=hd, breathe=math.sin(f / 40 * 2.1), rhand=RH)
-boy_pose(BLK["E"][1], head=(10, 18), breathe=0.0, rhand=RH)
-boy_pose(2950, head=(10, 18), breathe=0.0, rhand=RH)
+boy_pose(BLK["E"][1], head=(22, 16), breathe=0.0, rhand=RH)
+boy_pose(2950, head=(22, 16), breathe=0.0, rhand=RH)
 sc.frame_set(60)
 # mosquito landing point: back of the right hand (ray from above at the hand centre)
 wr = bone_world("Boy", "wrist.R").translation; k3 = bone_world("Boy", "finger3-1.R").translation
@@ -319,9 +319,9 @@ for f in (g0, g1):
     place_hand(D["Doctor"], "R", f, V((1.18, 1.70, DESK_Z + 0.01)), V((0, 0, -1)), V((0.2, -1, 0)).normalized()); apply_pose(D["Doctor"], "R", "relaxed", f)
     doc_pole("R", f, V((0.95, 2.15, 0.95)))
 skin_tint("Doctor", 1, (1, 0.2, 0.2), 0.05); skin_tint("Doctor", g0, (1, 0.2, 0.2), 0.05)
-skin_tint("Doctor", 1800, (1.0, 0.30, 0.25), 0.45); skin_tint("Doctor", 1940, (1.0, 0.30, 0.25), 0.45)
-skin_tint("Doctor", 1990, (0.95, 0.80, 0.25), 0.30)
-eye_white("Doctor", 1, (0.9, 0.9, 0.9)); eye_white("Doctor", 1940, (0.9, 0.9, 0.9)); eye_white("Doctor", 1990, (0.85, 0.72, 0.15))
+skin_tint("Doctor", 1800, (1.0, 0.35, 0.30), 0.16); skin_tint("Doctor", 1940, (1.0, 0.35, 0.30), 0.16)
+skin_tint("Doctor", 1990, (1.0, 0.88, 0.45), 0.10)
+eye_white("Doctor", 1, (0.9, 0.9, 0.9)); eye_white("Doctor", 1940, (0.9, 0.9, 0.9)); eye_white("Doctor", 1990, (0.93, 0.87, 0.55))
 # ================================================================== H: sick over the basin (no fluid shown), then the stain on the floor
 h0, h1 = BLK["H"]
 for k, f in enumerate(list(range(h0, h1 + 1, 20)) + [h1]):
@@ -339,7 +339,8 @@ key_vis(D["FloorStain"], 1, False); key_vis(D["FloorStain"], 2151, True); key_vi
 # ================================================================== I: organs cutaway, standing by the cabinet
 i0, i1 = BLK["I"]
 for k, f in enumerate(list(range(i0, i1 + 1, 30))):
-    stand("Doctor", f, 0.1, 2.25, yaw=0, spine=2 + math.sin(k) * 1.5, head=(4, 3 * math.sin(k * 0.7)), dz=-0.004 * math.sin(k * 1.9))
+    look = math.sin(math.pi * min(1.0, k / 5.0))     # looks down at his chest, then back up to camera
+    stand("Doctor", f, 0.1, 2.25, yaw=0, spine=2 + math.sin(k) * 1.5, head=(2 + 24 * look, 10 * math.sin(k * 0.9)), dz=-0.004 * math.sin(k * 1.9))
 stand("Doctor", i1, 0.1, 2.25, yaw=0, spine=2, head=(4, 0))
 CUT = bpy.data.objects.new("CutawayCutter", bpy.data.meshes.new("CutawayCutter")); sc.collection.objects.link(CUT)
 bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.0); bm.to_mesh(CUT.data); bm.free()
@@ -416,7 +417,7 @@ for f in range(j0, j1 + 1, 40):
         h = ray_down(V((W.x, W.y, 1.5)), [DBLANKET], up=0.0); W.z = (h[0].z if h else MATT_Z + 0.2) + 0.035
         HUM["Doctor"].key_hand(s, f, W, V((0, 1, -0.15)).normalized(), V((0, 0, -1)), shw + V((-sx * 0.35, 0.25, -0.15))); apply_pose(D["Doctor"], s, "relaxed", f)
 key_vis(DBLANKET, 1, False); key_vis(DBLANKET, j0, True); key_vis(DBLANKET, j1 + 1, False)
-skin_tint("Doctor", j0, (0.95, 0.80, 0.25), 0.32); eye_white("Doctor", j0, (0.85, 0.72, 0.15))
+skin_tint("Doctor", j0, (1.0, 0.88, 0.45), 0.10); eye_white("Doctor", j0, (0.93, 0.87, 0.55))
 # empty desk shot 2621-2710: chair pushed back, notebook closed? (open notebook, pen down, vial on the desk)
 CH = D["DeskChair_pivot"]; CH.keyframe_insert("location", frame=1); CH.location.y += 0.45; CH.location.x += 0.55; CH.rotation_euler.z += math.radians(25)
 CH.keyframe_insert("location", frame=2621); CH.keyframe_insert("rotation_euler", frame=2621)
@@ -428,22 +429,33 @@ key_vis(D["Doctor"], k0, False); key_vis(DBLANKET, k0, False)
 for n in ("ColA", "ColB"): key_vis(D[n], 1, False); key_vis(D[n], k0, True)
 for k, f in enumerate(range(k0, k1 + 1, 30)):
     stand("ColA", f, 1.30, 2.30, yaw=0, flex=8, spine=18, head=(26, 0), hands=False)
-    stand("ColB", f, 2.35, 2.20, yaw=35, flex=6, spine=10, head=(22 + 3 * math.sin(k), 0), hands=False)
-for n in ("ColA", "ColB"): stand(n, k1, *( (1.30, 2.30) if n == "ColA" else (2.35, 2.20)), yaw=0 if n == "ColA" else 35, flex=8, spine=18 if n == "ColA" else 10, head=(26, 0) if n == "ColA" else (22, 0), hands=False)
+    stand("ColB", f, 2.35, 2.20, yaw=-35, flex=6, spine=10, head=(22 + 3 * math.sin(k), 0), hands=False)
+for n in ("ColA", "ColB"): stand(n, k1, *( (1.30, 2.30) if n == "ColA" else (2.35, 2.20)), yaw=0 if n == "ColA" else -35, flex=8, spine=18 if n == "ColA" else 10, head=(26, 0) if n == "ColA" else (22, 0), hands=False)
+def hands_front(n, f, P, yaw, sides="LR", flex=0.0):
+    """arms relaxed with a soft elbow bend: hands at the side of the thighs, a little forward (no straight mannequin arms)"""
+    Rb = body_R(yaw, flex, 0)
+    for s_ in sides:
+        W, d, nn = relaxed_hand(n, P, Rb, s_, fwd=0.13, out=0.02, up=0.09)
+        HUM[n].key_hand(s_, f, W, d, nn, elbow_pole(n, P, Rb, s_, back=0.6, out=0.3, down=-0.05))
+        apply_pose(D[n], s_, "relaxed", f)
 for f in (k0, 2830, k1):
     sc.frame_set(f)
-    key_relaxed("ColA", f, V((1.30, 2.30, HUM["ColA"].root_head.z - 0.02)), body_R(0, 8, 0))
-    key_relaxed("ColB", f, *(lambda P_, R_: (P_, R_))(V((2.35, 2.20, HUM["ColB"].root_head.z - 0.02)), body_R(35, 6, 0)), sides="L")
-for f in (k0, 2780, 2830):
+    hands_front("ColA", f, V((1.30, 2.30, HUM["ColA"].root_head.z - 0.02)), 0, flex=8)
+    hands_front("ColB", f, V((2.35, 2.20, HUM["ColB"].root_head.z - 0.02)), -35, sides="L", flex=6)
+for f in (k0, 2760, 2830):
     sc.frame_set(f); sh = bone_world("ColB", "upperarm01.R").translation
-    tgt = V((1.52, 1.58, DESK_Z + 0.10)) if f > k0 else V((2.0, 1.95, 1.0))
-    place_hand(D["ColB"], "R", f, tgt, V((0, 0, -1)), (V((1.45, 1.6, DESK_Z)) - tgt).normalized()); apply_pose(D["ColB"], "R", "point", f)
+    nbk = V((1.45, 1.62, DESK_Z)); dirn = (nbk - sh); dirn.z = 0; dirn.normalize()
+    u = 0.0 if f == k0 else 1.0
+    tgt = sh + dirn * (0.22 + 0.20 * u) + V((0, 0, -0.30 + 0.12 * u))      # comes up from the side to chest height
+    fdir = (nbk - tgt).normalized()
+    HUM["ColB"].key_hand("R", f, tgt, fdir, V((0, 0, -1)), sh + V((0, 0.10, -0.40)) + Rz(-35) @ V((-0.25, 0, 0)))
+    apply_pose(D["ColB"], "R", "point" if f > k0 else "relaxed", f)
 key_vis(D["Doctor"], k0, False)
 # S24 2831-2950: the corked vial stands on the desk by the notebook; ColB leans in and studies it (no grip)
 VK = Matrix.Translation(V((1.12, 1.62, DESK_Z))) @ Rz(10).to_4x4()
 key_obj(VIAL, 2830, VDESK); key_obj(MQ, 2830, Matrix.Translation(V((30, 0, 0))))
 for f in list(range(2831, k1 + 1, 30)) + [k1]:
-    stand("ColB", f, 2.35, 2.20, yaw=35, flex=14, spine=20, head=(24, 6 * math.sin(f / 40)), hands=False)
+    stand("ColB", f, 2.35, 2.20, yaw=-35, flex=14, spine=20, head=(24, 6 * math.sin(f / 40)), hands=False)
     sc.frame_set(f)
     for s_, hx, hy in (("L", 2.14, 1.86), ("R", 1.90, 1.84)):
         place_hand(D["ColB"], s_, f, V((hx, hy, DESK_Z + 0.012)), V((0, 0, -1)), V((-0.4, -1, 0)).normalized()); apply_pose(D["ColB"], s_, "relaxed", f)
@@ -453,21 +465,43 @@ for f in (2831, k1):
     key_obj(VIAL, f, VK); key_obj(MQ, f, VK @ Matrix.Translation(V((0, 0, 0.0035 + FOOT))) @ Rz(40).to_4x4())
 key_obj(MQ, k1 + 1, Matrix.Translation(V((30, 0, 0))))
 key_obj(VIAL, k1 + 1, VDESK)
-# ================================================================== L: the ward (x=40): patients resting under nets, the boy recovered
+# ================================================================== L: the ward (x=40): patients resting under nets, the boy recovered, a nurse
 l0, l1 = BLK["L"]
 WX = 40.0
+for n in ("Nurse", "PatA", "PatB"): key_vis(D[n], 1, False); key_vis(D[n], l0, True)
 key_vis(D["Boy"], l0, True)
-for n, bx, by in (("Boy", WX - 2.5 - 0.35, 2.5), ("ColA", WX + 2.5 + 0.35, -1.5), ("ColB", WX - 2.5 - 0.35, -3.5)):
-    if n != "Boy": key_vis(D[n], l0, True)
-    side = -1 if bx < WX else 1
-    for f in range(l0, l1 + 1, 40):
-        P, Rb = lie(n, f, (bx + side * 0.0, by), MATT_Z, toward=(side * 1, 0), head=(14, -side * 10 * math.sin(f / 60)), breathe=math.sin(f / 40), hip_up=0.10 if n == "Boy" else 0.12)
-        for s in "LR":
-            sh = bw(n, P, Rb, rest_head(n, "upperarm01." + s)); wrr = bw(n, P, Rb, rest_head(n, "wrist." + s))
-            W = V((P.x - side * 0.05, P.y + (0.0 if s == "L" else 0.0), P.z + 0.16)); W += (sh - P).normalized() * 0.0
-            W = bw(n, P, Rb, rest_head(n, "spine04") + V((0.07 if s == "L" else -0.07, -0.16, 0)))
-            HUM[n].key_hand(s, f, W, (P - sh).normalized(), Rb @ V((0, 1, 0)), sh + Rb @ V((0.3 if s == "L" else -0.3, 0.1, -0.2)))
-            apply_pose(D[n], s, "relaxed", f)
+for n in ("ColA", "ColB"): key_vis(D[n], l0, False)
+WARD_PAT = (("Boy", -1, 0.5, 0.10), ("PatA", 1, -1.5, 0.10), ("PatB", -1, 2.5, 0.12))
+def ward_lie(n, side, by, hu, f, hd=(18, 0), br=0.0, arms_up=False):
+    head = (WX + side * (2.5 - 0.72), by)
+    P, Rb = lie(n, f, head, MATT_Z, toward=(side, 0), head=hd, breathe=br, hip_up=hu)
+    for s_ in "LR":
+        sx = 1 if s_ == "L" else -1
+        if arms_up:
+            shw = bw(n, P, Rb, rest_head(n, "upperarm01." + s_))
+            HUM[n].key_hand(s_, f, shw + V((0, 0, 0.45)) + Rb @ V((0, 0, 0.2)), V((0, 0, 1)), Rb @ V((0, -1, 0)), shw + V((0, 0, 0.2)) + Rb @ V((0, 0, -0.2))); continue
+        W = bw(n, P, Rb, V((0.21 * sx, rest_head(n, "root").y + 0.02, rest_head(n, "root").z - 0.04)))
+        HUM[n].key_hand(s_, f, W, Rb @ V((0, 0, -1)), Rb @ V((-sx, 0, 0)), bw(n, P, Rb, rest_head(n, "lowerarm01." + s_) + V((0.25 * sx, 0.25, 0))))
+        apply_pose(D[n], s_, "relaxed", f)
+    return P, Rb
+WBL = []
+for n, side, by, hu in WARD_PAT:
+    ward_lie(n, side, by, hu, l0, arms_up=False)
+    sc.frame_set(l0)
+    xa, xb = (WX + side * 2.5 - 0.98, WX + side * 2.5 + 0.98)
+    # blanket from the chest to the feet (chest edge 0.45 m from the head end)
+    hx = WX + side * (2.5 - 0.72)
+    x0, x1 = (min(hx + side * 0.42, WX + side * 3.48), max(hx + side * 0.42, WX + side * 3.48))
+    wb, _ = drape("WardBlanket_" + n, x0, x1, by - 0.66, by + 0.66, [D[n + ".body"]] + [c for c in D[n].children if "suit" in c.name], MATT_Z, nx=40, ny=30)
+    WBL.append(wb)
+for n, side, by, hu in WARD_PAT:
+    for f in list(range(l0, l1 + 1, 40)) + [l1]:
+        ward_lie(n, side, by, hu, f, hd=(18, -side * 12 * math.sin(f / 60)), br=math.sin(f / 40))
+for wb in WBL: key_vis(wb, 1, False); key_vis(wb, l0, True)
+# nurse: stands in the aisle by the boy's bed, hands in front, looks at him, small weight shifts
+for k, f in enumerate(list(range(l0, l1 + 1, 30)) + [l1]):
+    stand("Nurse", f, WX - 0.75, 0.5, yaw=-90, spine=4, head=(14, -8 + 6 * math.sin(k * 0.8)), dz=-0.003 * math.sin(k * 1.7), hands=False)
+    hands_front("Nurse", f, V((WX - 0.75, 0.5, HUM["Nurse"].root_head.z - 0.02)), -90)
 for n in ("Doctor",): key_vis(D[n], l0, False)
 print("ANIM all blocks done")
 sc["BLK"] = str(BLK)

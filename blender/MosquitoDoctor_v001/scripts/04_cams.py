@@ -24,7 +24,7 @@ SH = [
  ("S03", 241, 340, add(mq, (0, 0, 0.002)), (0.075, -0.012, 0.012), (0.065, 0.006, 0.012), 70, True, True),
  ("S04", 341, 440, add(mq, (0, 0, 0.002)), (0.035, 0.055, 0.03), (0.050, 0.035, 0.026), 60, True, True),
  ("S05", 441, 560, mix(lambda f: headc("Doctor", f), vialmid, 0.35), (-0.55, -0.32, -0.08), (-0.47, -0.26, -0.07), 35, False, True),
- ("S06", 561, 710, add(lambda f: obj("Mosquito", 600), (0, 0, 0.035)), (0.03, 0.24, 0.03), (0.03, 0.20, 0.028), 70, True, True),
+ ("S06", 561, 710, add(lambda f: obj("Mosquito", 600), (0, 0, 0.045)), (0.20, -0.36, 0.10), (0.18, -0.32, 0.09), 50, True, True),
  ("S07", 711, 830, fixed((1.47, 1.82, 0.98)), (1.02, 1.0, 1.38), (1.08, 1.12, 1.33), 30, False, False),
  ("S08", 831, 950, add(mq, (0, 0, 0.004)), (-0.025, -0.11, 0.05), (-0.015, -0.09, 0.044), 50, True, True),
  ("S09", 951, 1110, fixed((-1.4, 0.8, 0.78)), (0.0, 0.25, 1.55), (-0.05, 0.40, 1.50), 30, False, False),
@@ -43,7 +43,7 @@ SH = [
  ("S22", 2621, 2710, fixed((1.45, 1.70, 0.82)), (0.98, 0.68, 1.30), (1.08, 0.84, 1.25), 26, False, False),
  ("S23", 2711, 2830, fixed((1.65, 2.0, 1.22)), (1.50, 0.70, 1.50), (1.56, 0.88, 1.45), 26, False, False),
  ("S24", 2831, 2950, fixed((1.18, 1.95, 1.12)), (1.02, 1.08, 0.96), (1.04, 1.16, 0.94), 30, False, False),
- ("S25", 2951, 3070, fixed((40.0, 6.0, 0.9)), (40.0, -7.6, 1.5), (40.0, -5.6, 1.45), 24, False, False),
+ ("S25", 2951, 3070, fixed((40.0, 2.5, 0.55)), (40.0, -5.0, 2.15), (40.0, -3.6, 2.05), 24, False, False),
  ("S26", 3071, 3190, lambda f: headc("Boy", f), (-0.60, -0.30, 0.45), (-0.50, -0.25, 0.38), 40, False, True),
 ]
 for m in list(sc.timeline_markers): sc.timeline_markers.remove(m)
@@ -65,7 +65,7 @@ for name, f0, f1, aim, c0, c1, lens, macro, rel in SH:
         cam.keyframe_insert("location", frame=f)
     tt = cam.constraints.new('TRACK_TO'); tt.target = a; tt.track_axis = 'TRACK_NEGATIVE_Z'; tt.up_axis = 'UP_Y'; tt.use_target_z = True
     cam.data.dof.use_dof = macro
-    if macro: cam.data.dof.focus_object = a; cam.data.dof.aperture_fstop = 8.0
+    if macro: cam.data.dof.focus_object = a; cam.data.dof.aperture_fstop = 11.0 if name == "S06" else 8.0
     # catchlight: tiny point light near the lens, seen only in glossy reflections (eyes)
     L = bpy.data.objects.new("CATCH_" + name, bpy.data.lights.new("CATCH_" + name, 'POINT')); sc.collection.objects.link(L)
     L.data.energy = 1.5 if not macro else 0.3; L.data.shadow_soft_size = 0.02; L.parent = cam; L.location = (0.08, 0.10, 0)
@@ -73,9 +73,9 @@ for name, f0, f1, aim, c0, c1, lens, macro, rel in SH:
     mk = sc.timeline_markers.new(name, frame=f0); mk.camera = cam
 sc.camera = D["CAM_S01"]
 # ward net of the recovered boy's bed is tied up (hidden) so S26 sees him clearly; logo crate near the ward entrance
-n = D.get("Net_-1_1")
+n = D.get("Net_-1_0")
 if n: n.hide_render = True; n.hide_viewport = True
-cp = D["CrateWard_pivot"]; cp.location = V((40.95, -6.2, 0)); cp.rotation_euler = (0, 0, math.radians(-15))
+cp = D["CrateWard_pivot"]; cp.location = V((40.40, -2.4, 0)); cp.rotation_euler = (0, 0, math.radians(-4)); cp.scale = (1.3, 1.3, 1.3)
 bpy.context.view_layer.update()
 img = bpy.data.images.load("/home/user/Muhammed/blender/assets/brand/DaKrasFilms_logo_dark.png"); img.pack()
 ml = bpy.data.materials.new("LogoDecal"); ml.use_nodes = True; nt = ml.node_tree; P = nt.nodes["Principled BSDF"]
@@ -85,7 +85,7 @@ cm = [o for o in cp.children_recursive if o.type == 'MESH']
 pts = [o.matrix_world @ V(c) for o in cm for c in o.bound_box]
 lo = V([min(p[i] for p in pts) for i in range(3)]); hi = V([max(p[i] for p in pts) for i in range(3)])
 bpy.ops.mesh.primitive_plane_add(size=1); dec = bpy.context.object; dec.name = "LogoWard"
-w = 0.42; dec.scale = (w, w * 414 / 967, 1); dec.data.materials.append(ml)
+w = 0.50; dec.scale = (w, w * 414 / 967, 1); dec.data.materials.append(ml)
 # front face of the crate (toward -y in the crate's frame)
 dec.parent = cp; dec.matrix_parent_inverse = Matrix.Identity(4)
 loc_local = cp.matrix_world.inverted() @ V(((lo.x + hi.x) / 2, (lo.y + hi.y) / 2, (lo.z + hi.z) / 2))
