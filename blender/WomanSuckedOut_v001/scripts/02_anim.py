@@ -149,12 +149,12 @@ def away(rig, f):
 
 def seated(rig, f, x, y, look_turn=0.0, hflex=-4, flex=9, side=0, arms=None, legs=(86, 78)):
     R = RG[rig.name] if rig.name in RG else Rig(rig)
-    place(rig, f, (x, y + 0.01, -0.23), (0, 0, math.pi))
-    fk_leg(R, "L", f, hip=legs[0], knee=legs[1], splay=5); fk_leg(R, "R", f, hip=legs[0] - 2, knee=legs[1] + 3, splay=4)
+    place(rig, f, (x, y + 0.06 + (0.04 if rig.name == "W" else 0), -0.17 + (0.05 if rig.name == "W" else 0)), (0, 0, math.pi))
+    fk_leg(R, "L", f, hip=legs[0], knee=legs[1], splay=1); fk_leg(R, "R", f, hip=legs[0] - 2, knee=legs[1] + 3, splay=1)
     fk_spine(R, f, flex=flex, side=side, htwist=look_turn, hflex=hflex)
     a = arms or {}
     for s in "LR":
-        dn, fw, el, ou = a.get(s, (40, 26, 60, 0))
+        dn, fw, el, ou = a.get(s, (38, 16, 74, 0))
         fk_arm(R, s, f, down=dn, fwd=fw, elbow=el, out=ou)
 
 # ------------------------------------------------------------------ passengers: awake, upright, breathing, looking around
@@ -233,21 +233,21 @@ SEAT_W = (-1.03, rowy(5)); SEAT_A = (-0.55, rowy(5))
 _begin("S01")
 f0, f1 = T["S01"]
 for k, (fr, tw, hf) in enumerate(((f0, -6, -6), (f0 + 40, -14, -8), (f0 + 70, -20, -8), (f1, -22, -8))):
-    seated(W, fr, *SEAT_W, look_turn=tw, hflex=hf - 12, side=-3)
-    seated(HA, fr, *SEAT_A, look_turn=-6 + 3 * k, hflex=8, side=2)
+    seated(W, fr, SEAT_W[0] - 0.01, SEAT_W[1], look_turn=tw, hflex=hf - 12, side=-4, arms={"R": (42, 10, 88, 0)})
+    seated(HA, fr, SEAT_A[0] + 0.06, SEAT_A[1], look_turn=-6 + 3 * k, hflex=8, side=4, arms={"L": (44, 8, 80, 0)})
 for s in "LR": hand_pose(W, s, f0, "relaxed"); hand_pose(HA, s, f0, "relaxed")
 shot_cam("S01", [(0, (-0.38, -4.50, 1.66), (-0.98, -5.78, 1.10), 30), (1, (-0.42, -4.68, 1.62), (-1.0, -5.78, 1.10), 34)])
 # ================================================================== S02: ... sucked out of a window (burst + lurch)
 _begin("S02")
 f0, f1 = T["S02"]; fb = f0 + 24
 for fr, tw in ((f0, -6), (fb, -6)):
-    seated(W, fr, *SEAT_W, look_turn=tw, hflex=-2); seated(HA, fr, *SEAT_A, look_turn=0, hflex=6)
+    seated(W, fr, *SEAT_W, look_turn=tw, hflex=-2); seated(HA, fr, SEAT_A[0] + 0.06, SEAT_A[1], look_turn=0, hflex=6, arms={"L": (44, 8, 80, 0)})
 vis(OB["PANE"], 1, True); vis(OB["PANE"], fb, False)
 for fr, j in ((fb + 10, 0), (fb + 22, 1), (fb + 40, 0), (f1, 1)):
     # W yanked toward the hole: whole body slides toward the window, torso folds left toward it, arms flung up
-    seated(W, fr, -1.12 - 0.02 * j, SEAT_W[1], look_turn=40, hflex=4, side=34 + 3 * j, flex=-4,
-           arms={"L": (10, 30, 70, 0), "R": (-30 - 6 * j, 50, 60, 0)})
-    seated(HA, fr, SEAT_A[0] + 0.05, SEAT_A[1], look_turn=-32, hflex=-6, side=-14 - 2 * j, arms={"L": (35, 28, 55, 0), "R": (20, 42, 95, 0)})
+    seated(W, fr, -0.99, SEAT_W[1], look_turn=40, hflex=4, side=24 + 3 * j, flex=6,
+           arms={"L": (40, 22, 92, 0), "R": (-30 - 6 * j, 50, 60, 0)})
+    seated(HA, fr, SEAT_A[0] + 0.06, SEAT_A[1], look_turn=-32, hflex=-6, side=-14 - 2 * j, arms={"L": (40, 12, 82, 0), "R": (20, 42, 95, 0)})
 for s in "LR": hand_pose(W, s, fb + 10, "open_alarm"); hand_pose(HA, s, fb + 10, "open_alarm")
 # shards burst outward from the pane, papers fly into the hole
 rnd = random.Random(3)
@@ -330,8 +330,8 @@ for o in MASKS:
     for fr in range(fm + d + 21, sc.frame_end + 1, 20):
         key_loc(o, fr, home, (R_(rnd.uniform(-6, 6)), R_(rnd.uniform(-6, 6)), 0))
 for fr in (f0, f1):
-    seated(W, fr, -1.14, SEAT_W[1], look_turn=40, hflex=4, side=36, flex=-4, arms={"L": (10, 30, 70, 0), "R": (-36, 50, 60, 0)})
-    seated(HA, fr, SEAT_A[0] + 0.05, SEAT_A[1], look_turn=-35, hflex=-10, side=-16, arms={"L": (35, 28, 55, 0), "R": (20, 42, 95, 0)})
+    seated(W, fr, -0.99, SEAT_W[1], look_turn=40, hflex=4, side=26, flex=6, arms={"L": (40, 22, 92, 0), "R": (-36, 50, 60, 0)})
+    seated(HA, fr, SEAT_A[0], SEAT_A[1], look_turn=-35, hflex=-10, side=-16, arms={"L": (40, 12, 82, 0), "R": (20, 42, 95, 0)})
 shot_cam("S08", [(0, (0.15, -3.55, 1.72), (0.35, -8.6, 0.95), 24), (1, (0.12, -3.95, 1.68), (0.30, -8.6, 0.95), 26)])
 # ================================================================== S09: and suck the nearby woman out (emerging, exterior)
 _begin("S09")
@@ -388,16 +388,16 @@ def hold_shot(n, fr_list, pull=None, hb=False):
         hang_pose(fr, out=-0.30 * u, flutter=0.4 * (1 - u), t=fr / 60, arms_in=min(1.0, 3 * u))
         set_ik(HA, fr, 1, 1)
         # director P1: lean in, elbows bent, hands low on her shins, face toward the 3/4-front camera
-        stand(HA, fr, 0.0 + 0.18 * u, -5.84, yaw=-90, flex=22 - 6 * u, crouch=0.10)
-        fk_spine(RA, fr, flex=24, side=0, twist=-8, hflex=-26, htwist=(-38 if hb else 22))
+        stand(HA, fr, 0.12 + 0.12 * u, -5.60, yaw=-90, flex=18 - 6 * u, crouch=0.05)
+        fk_spine(RA, fr, flex=16, side=0, twist=-8, hflex=-26, htwist=(-38 if hb else 22))
         sc.frame_set(fr)
         grab(HA, "L", fr, leg_point("L", "ankle", fr), (0, -0.25, -1), skin=0.085)
-        grab(HA, "R", fr, leg_point("L", "shin", fr), (0, 0.15, -1), skin=0.095)
+        grab(HA, "R", fr, leg_point("L", "shin", fr), (0, 0.15, -1), skin=0.11)
         if hb:
             # HB turned round, kneeling on his row-4 aisle seat, reaching back over the seat back to her knee and shin
-            kneel(HB, fr, -0.52, -4.74, 0, lean=30, z=0.49)
+            kneel(HB, fr, -0.33, -4.60, 0, lean=30, z=0.70)
             set_ik(HB, fr, 1, 0)
-            fk_spine(RB, fr, flex=30, side=-6, twist=-10, hflex=-18, htwist=-14)
+            fk_spine(RB, fr, flex=34, side=-6, twist=-10, hflex=-12, htwist=-14)
             sc.frame_set(fr)
             grab(HB, "L", fr, leg_point("R", "shin", fr), (0, -0.15, -1), skin=0.095)
             grab(HB, "R", fr, leg_point("R", "knee", fr), (0, 0.15, -1), skin=0.105)
