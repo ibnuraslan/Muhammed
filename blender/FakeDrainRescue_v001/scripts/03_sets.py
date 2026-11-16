@@ -217,10 +217,10 @@ for o in desk:
     if o.parent is None: o.location += Vector((OX, 1.45, 0))
 # office stool sized to the seated clerk (seat top 0.45 under his pelvis, no backrest: the PH chair crossed his thighs and back)
 STM = mat("StoolBlack", (0.08, 0.08, 0.09), 0.4); STL = mat("StoolMetal", (0.7, 0.72, 0.75), 0.3, metal=0.8)
-box("Off_StoolSeat", (0.44, 0.40, 0.06), (OX, 2.56, 0.40), STM, "Office", bevel=0.02)
+box("Off_StoolSeat", (0.44, 0.40, 0.06), (OX, 2.56, 0.36), STM, "Office", bevel=0.02)
 for dx in (-0.17, 0.17):
     for dy in (-0.15, 0.15):
-        box("Off_StoolLeg", (0.03, 0.03, 0.37), (OX + dx, 2.56 + dy, 0.185), STL, "Office")
+        box("Off_StoolLeg", (0.03, 0.03, 0.33), (OX + dx, 2.56 + dy, 0.165), STL, "Office")
 box("Off_Cabinet", (0.5, 0.6, 1.3), (OX + 2.6, 2.5, 0.65), mat("CabGrey", (0.6, 0.62, 0.65), 0.4, metal=0.4), "Office", bevel=0.01)
 box("Off_Board", (1.6, 0.04, 1.0), (OX - 1.4, 2.93, 1.7), mat("Cork", (0.7, 0.5, 0.3), 0.8), "Office")
 for k in range(6):

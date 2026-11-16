@@ -243,7 +243,7 @@ def _():
     cam_shot("S13", [(0, (1.75, 10.6, 1.0)), (1, (2.1, 10.95, 1.12))], [(0, (2.3, 11.8, 1.5)), (1, (2.3, 11.8, 1.5))], lens=40)
 @shot("S14")
 def _():
-    cam_shot("S14", [(0, (0.5, -9.8, 0.6)), (1, (0.3, -10.9, 0.25))], [(0, (0.0, -13.6, -0.85)), (1, (0.0, -13.7, -0.9))], lens=30)
+    cam_shot("S14", [(0, (0.5, -9.6, 0.75)), (1, (0.35, -10.4, 0.55))], [(0, (0.0, -13.6, -0.85)), (1, (0.0, -13.7, -0.9))], lens=30)
 def sit(n, sid, pos, yaw, desk_z=0.79, lean=(0, 0), heads=((0, 0),)):
     f0, f1 = W(sid); _GZ[0] = 0.0; H = HS[n]; rig = CH[n]
     seat = 0.46
@@ -284,9 +284,9 @@ def phone_shot(sid, yaw, heads, ear=False):
     for i, t in enumerate((0, 0.3, 0.6, 0.9, 1.3)):
         f = f0 + round(t * (f1 - f0)); p = stand(H, f, pos, yaw, flex=4, head=heads[i % len(heads)], arms=False)
         sh = H.sh["R"] - H.root_head
-        body_hand(H, "R", f, p, yaw, (sh.x + 0.10, sh.y - 0.30, sh.z - 0.17), (0.45, -0.35, 0.82), (0.0, 0.9, 0.35))
+        if i == 0: body_hand(H, "R", f, p, yaw, (sh.x + 0.10, sh.y - 0.30, sh.z - 0.17), (0.45, -0.35, 0.82), (0.0, 0.9, 0.35))
         key_hang(H, f, p, yaw, only=("L",))
-    apply_pose(rig, "R", "shield", f0); apply_pose(rig, "L", "relaxed", f0); use("Mom", sid)
+    apply_pose(rig, "L", "relaxed", f0); use("Mom", sid)
     return f0
 @shot("S19")
 def _():
@@ -299,7 +299,7 @@ def _():
 @shot("S21")
 def _():
     phone_shot("S21", 80, ((18, 0), (6, -35), (6, -40)))
-    cam_shot("S21", [(0, (3.6, 3.2, 1.55)), (1, (3.5, 3.4, 1.5))], [(0, (2.6, 5.0, 1.3)), (1, (2.6, 5.0, 1.3))], lens=35)
+    cam_shot("S21", [(0, (3.75, 4.45, 1.62)), (1, (3.55, 4.6, 1.6))], [(0, (2.72, 5.0, 1.52)), (1, (2.72, 5.0, 1.52))], lens=45)   # head and shoulders; phone hand below frame (S2.15)
 @shot("S22")
 def _():
     f0, f1 = W("S22"); d = D("S22"); _GZ[0] = 0.0
@@ -340,19 +340,34 @@ def frame_matrix(xax, yax, zax, loc):
 PHONE_SHOTS = [s for s in ("S19", "S20", "S21") if (not ONLY or s in ONLY)]
 if PHONE_SHOTS:
     f0 = SH[PHONE_SHOTS[0]]["f0"]; sc.frame_set(f0); rig = CH["Mom"]
-    wr, d, a, n, palm = hand_frame(rig, "R")
+    wr, d, a, n, palm = hand_frame(rig, "R"); n = -n   # hand_frame's sign points to the back of the hand on this rig
     zax = d; xax = (-n - d * (-n).dot(d)).normalized(); yax = zax.cross(xax)
     phone.matrix_world = frame_matrix(xax, yax, zax, palm + n * 0.03 + d * 0.01)
+    bpy.context.view_layer.update()
+    back = phone.matrix_world @ Vector((0.0045, 0, 0.075))      # centre of the phone's back (screen is -X)
+    rep = grip_object(rig, "R", f0, phone, back, n, grip="wrap")
+    print("PHONE GRIP", rep)
+    # hold the solved grip for the whole of every phone shot (the hand target is body-relative and identical in S19-S21)
+    sc.frame_set(f0); pbh = rig.pose.bones["IK_hand.R"]; L0, Q0 = pbh.location.copy(), pbh.rotation_quaternion.copy()
+    fingers = {b.name: b.rotation_quaternion.copy() for b in rig.pose.bones if b.name.startswith("finger") and b.name.endswith(".R")}
+    for sid_ in PHONE_SHOTS:
+        for f_ in (W(sid_)[0], W(sid_)[1]):
+            pbh.location = L0; pbh.rotation_quaternion = Q0
+            pbh.keyframe_insert("location", frame=f_, group=pbh.name); pbh.keyframe_insert("rotation_quaternion", frame=f_, group=pbh.name)
+            for bn, q in fingers.items():
+                rig.pose.bones[bn].rotation_quaternion = q; rig.pose.bones[bn].keyframe_insert("rotation_quaternion", frame=f_, group=bn)
+    sc.frame_set(f0); bpy.context.view_layer.update()
     attach(phone, rig, "wrist.R", f0)
     key_vis([phone, scr], [W(s) for s in PHONE_SHOTS])
     if "S19" in PHONE_SHOTS:
         cam = bpy.data.objects["CAM_S19"]; tg = bpy.data.objects["TGT_S19"]; cam.animation_data_clear(); tg.animation_data_clear()
-        for u in (0.0, 1.0):
-            f = T("S19", u); sc.frame_set(f); M = phone.matrix_world; P = M @ Vector((0, 0, 0.075)); nS = (M.to_3x3() @ Vector((-1, 0, 0))).normalized()
-            up = (M.to_3x3() @ Vector((0, 0, 1))).normalized(); side = nS.cross(up).normalized()
-            cam.location = P + nS * (0.42 - 0.05 * u) + side * 0.12 + up * 0.05; cam.keyframe_insert("location", frame=f)
+        f = T("S19", 0); sc.frame_set(f); M = phone.matrix_world; P = M @ Vector((0, 0, 0.075)); nS = (M.to_3x3() @ Vector((-1, 0, 0))).normalized()
+        up = (M.to_3x3() @ Vector((0, 0, 1))).normalized(); side = nS.cross(up).normalized()
+        C0 = P + nS * 0.36 - side * 0.30 + up * 0.14
+        for u in (0.0, 1.0):   # one framing from the first frame, slow push toward the phone (no swing through the hand)
+            f = T("S19", u); cam.location = C0.lerp(P, 0.18 * u); cam.keyframe_insert("location", frame=f)
             tg.location = P; tg.keyframe_insert("location", frame=f)
-            print("S19 cam", tuple(round(x, 2) for x in cam.location), "phone", tuple(round(x, 2) for x in P))
+        print("S19 cam", tuple(round(x, 2) for x in C0), "phone", tuple(round(x, 2) for x in P))
 else:
     key_vis([phone, scr], [])
 TORCH_SHOTS = [s for s in ("S08", "S09") if (not ONLY or s in ONLY)]
