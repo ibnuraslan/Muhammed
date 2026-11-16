@@ -172,7 +172,7 @@ GX = -0.04   # girl x (keyboard centre)
 # ------------------------------------------------------------------ girl at the library computer
 def kid_seat(f, lean=0.0, head=(0.0, 0.0), twist=0.0, back=0.0, yaw=0.0):
     """seated, facing -Y. lean = forward flex (deg) of the hips; back = hip slide back (m)"""
-    hip = Vector((GX, -0.09 + back, SEAT + 0.085))
+    hip = Vector((GX, -0.09 + back, SEAT + 0.11))
     Hk.key_root(f, hip, yaw=yaw, flex=-lean)
     Hk.key_spine(f, flex=-lean * 0.6, twist=twist, head=head)
     for s in "LR":
@@ -187,19 +187,19 @@ def kid_hands(f, mode="keys", bob=0.0, side_bob=1):
         if mode == "keysL" and s == "R": continue
         if mode in ("keys", "keysL") or (mode == "mouse" and s == "L"):
             dz = bob if (s == "L") == (side_bob > 0) else 0.0
-            place_hand(KID, s, f, (GX + sx * 0.085, KB_Y + 0.07, KB_TOP + 0.028 + dz), (0, 0, -1), (-sx * 0.15, -1, -0.25))
+            place_hand(KID, s, f, (GX + sx * 0.085, KB_Y + 0.07, KB_TOP + 0.048 + dz), (0, 0, -1), (-sx * 0.15, -1, -0.25))
             fingers("Kid", s, f, "relaxed")
             pole("Kid", s, f, (GX + sx * 0.32, 0.25, 0.45))
         elif mode == "mouse" and s == "R":
-            place_hand(KID, s, f, (MS.location.x + 0.005, MS.location.y + 0.02, MS.location.z + 0.034 + bob * 0.3), (0, 0, -1), (0.1, -1, -0.15))
+            place_hand(KID, s, f, (MS.location.x + 0.005, MS.location.y + 0.02, MS.location.z + 0.046 + bob * 0.3), (0, 0, -1), (0.1, -1, -0.15))
             fingers("Kid", s, f, "cup_hold")
             pole("Kid", s, f, (GX + sx * 0.5, 0.2, 0.55))
         elif mode == "lap":
-            place_hand(KID, s, f, (GX + sx * 0.07, -0.16, SEAT + 0.17), (0, 0, -1), (-sx * 0.3, -1, -0.3))
+            place_hand(KID, s, f, (GX + sx * 0.08, -0.22, SEAT + 0.19), (0, 0, -1), (-sx * 0.25, -1, -0.2))   # on the thighs, in front of the belly
             fingers("Kid", s, f, "relaxed")
-            pole("Kid", s, f, (GX + sx * 0.4, 0.25, 0.6))
+            pole("Kid", s, f, (GX + sx * 0.32, 0.15, 0.45))
         elif mode == "desk":
-            place_hand(KID, s, f, (GX + sx * 0.16, -0.30, DESK_TOP + 0.022), (0, 0, -1), (-sx * 0.45, -1, 0))
+            place_hand(KID, s, f, (GX + sx * 0.21, -0.25, DESK_TOP + 0.032), (0, 0, -1), (-sx * 0.45, -1, 0))
             fingers("Kid", s, f, "relaxed")
             pole("Kid", s, f, (GX + sx * 0.3, 0.3, 0.45))
 
@@ -213,6 +213,10 @@ def kid_block(sid, mode, lean_fn, head_fn, step=12, bob=0.0, twist_fn=None, back
         kid_hands(f, mode(u) if callable(mode) else mode, bob=(bob if i % 2 else 0.0), side_bob=1 if (i // 2) % 2 else -1)
     key_jaw("Kid", f0, 0.0); key_jaw("Kid", f1, 0.0)
     key_eyes("Kid", f0); key_eyes("Kid", f1)
+
+def FR(f0, f1, step):
+    """key frames of a shot window, always including its last frame (no drift into the next shot)"""
+    return sorted(set(list(range(f0, f1 + 1, step)) + [f1]))
 
 def breath(u, amp=1.0, per=1.4): return amp * math.sin(2 * math.pi * u * per)
 
@@ -440,7 +444,7 @@ def kid_lib_shots():
         place_hand(KID, "R", fx, (KEY.x - 0.02, KEY.y + 0.08, KEY.z + 0.07), (0, 0, -1), (0.05, -1, -0.5))
         fingers("Kid", "R", fx, "point")
         pole("Kid", "R", fx, (GX - 0.45, 0.2, 0.55))
-        tip_to("Kid", "R", fx, KEY + Vector((0, 0, -0.004 if down else 0.03)))
+        tip_to("Kid", "R", fx, KEY + Vector((0, 0, 0.001 if down else 0.03)))
         sc.frame_set(fx); print("TIP", fx, tuple(round(x, 3) for x in KID.matrix_world @ KID.pose.bones["finger2-3.R"].tail), tuple(round(x, 3) for x in KEY))
     pw = sorted([x for x in ST["login"].children if x.name.startswith("pw")], key=lambda x: x.name)
     cur = next(x for x in ST["login"].children if x.name.startswith("cur"))
@@ -506,25 +510,25 @@ def office_shots():
     dot = next(x for x in ST["map"].children if x.name.startswith("dot"))
     for k in range(f0, f1, 20): vis(dot, k, ((k - f0) // 20) % 2 == 0)
     seat_o = 0.47
-    for fx in range(f0, f1 + 1, 12):
+    for fx in FR(f0, f1, 12):
         u = (fx - f0) / (f1 - f0)
-        Hb.key_root(fx, Vector((OX + 0.0, 0.10, seat_o + 0.10)), flex=-(10 + 6 * u))
+        Hb.key_root(fx, Vector((OX + 0.0, 0.06, seat_o + 0.12)), flex=-(10 + 6 * u))
         Hb.key_spine(fx, flex=-(8 + 4 * u), head=(10 + breath(u, 1), -5 + 5 * u))
         for s in "LR":
             sx = 1 if s == "L" else -1
             foot_at("AgentB", s, fx, Vector((OX + sx * 0.14, -0.38, 0.07)), pitch=0)
             knee_pole("AgentB", s, fx, Vector((OX + sx * 0.16, -1.0, 0.6)))
-            place_hand(AGB, s, fx, (OX + sx * 0.20, -0.36, 0.749 + 0.022), (0, 0, -1), (-sx * 0.4, -1, 0))
+            place_hand(AGB, s, fx, (OX + sx * 0.20, -0.36, 0.749 + 0.032), (0, 0, -1), (-sx * 0.4, -1, 0))
             fingers("AgentB", s, fx, "relaxed"); pole("AgentB", s, fx, (OX + sx * 0.6, 0.3, 0.8))
     # agent C walks past behind (left to right), arms swinging
-    walk_char("AgentC", Hc, lambda fx: Vector((OX - 1.6 + 2.2 * (fx - f0) / (f1 - f0), 1.35, 0)), lambda fx: -90, f0, f1)
+    walk_char("AgentC", Hc, lambda fx: Vector((OX - 1.7 + 1.1 * (fx - f0) / (f1 - f0), 1.6, 0)), lambda fx: -90, f0, f1)   # stays clear of agent B's head
     hb = head_pt("AgentB", f0)
     cam_shot("Cam_S20", "S20", [(0, (OX - 0.75, -1.55, 1.45), hb + Vector((0.0, 0.0, -0.1))), (1, (OX - 0.55, -1.40, 1.40), hb + Vector((0.0, 0.0, -0.1)))], lens=30)
     # S21 to find the hacker: agent B stands at the end of the pinboard, 3/4 to camera, scanning it (head turns along the strings)
     f0, f1 = WIN["S21"]
     p = Vector((OX + 1.35, -1.85, 0)); yb = -50
     Rz = Matrix.Rotation(R_(yb), 3, 'Z')
-    for fx in range(f0, f1 + 1, 12):
+    for fx in FR(f0, f1, 12):
         u = (fx - f0) / (f1 - f0)
         Hb.key_root(fx, Vector((p.x, p.y, Hb.root_head.z)), yaw=yb)
         Hb.key_spine(fx, flex=2, twist=-6 + 8 * u, head=(-4 + breath(u, 1), -18 + 30 * u))
@@ -554,7 +558,7 @@ def walk_char(cid, H, path, yaw_fn, f0, f1, still=False):
         for fx in (f0 - 1, f1 + 1):
             pass
     dist = 0.0; prev = path(f0)
-    for fx in range(f0, f1 + 1, 2):
+    for fx in FR(f0, f1, 2):
         p = path(fx); dist += (p - prev).to_2d().length; prev = p
         ph = 2 * math.pi * dist / 1.25
         for s in "LR":
@@ -586,7 +590,7 @@ def arrival_shots():
     f0, f1 = WIN["S23"]
     for cid, H, x in (("AgentB", Hb, 0.75), ("AgentC", Hc, 1.55)):
         p = Vector((x, 3.0, 0))
-        for fx in range(f0, f1 + 1, 10):
+        for fx in FR(f0, f1, 10):
             u = (fx - f0) / (f1 - f0); jerk = min(1, u / 0.25)
             H.key_root(fx, Vector((p.x, p.y + 0.04 * jerk, H.root_head.z)), yaw=8 if cid == "AgentB" else -8, flex=3 * jerk)
             H.key_spine(fx, flex=-4 * jerk, head=(12 * jerk + breath(u, 0.8), 0))
@@ -607,22 +611,22 @@ def arrival_shots():
     cam_shot("Cam_S24", "S24", [(0, hf + Vector((0.95, 0.40, 0.12)), hf + Vector((0, 0, -0.1))), (1, hf + Vector((0.80, 0.36, 0.10)), hf + Vector((0, 0, -0.08)))], lens=40)
 
 IX = 80.0
-def int_sit(cid, H, f, side, lean=0.0, head=(0.0, 0.0), hands="table", yaw_extra=0.0, seat=0.46):
+def int_sit(cid, H, f, side, lean=0.0, head=(0.0, 0.0), hands="table", yaw_extra=0.0, seat=0.454):
     """seated at the interrogation table; side -1 = west chair facing +X, +1 = east chair facing -X"""
     yaw = 90 if side < 0 else -90
     yaw += yaw_extra
     Rz = Matrix.Rotation(R_(yaw), 3, 'Z')
     base = Vector((IX + side * 0.66, 0, 0))
-    H.key_root(f, base + Vector((0, 0, seat + 0.10)), yaw=yaw, flex=-lean)
+    H.key_root(f, base + Vector((0, 0, seat + 0.12)), yaw=yaw, flex=-lean)
     H.key_spine(f, flex=-lean * 0.5, head=head)
     for s in "LR":
         sx = 1 if s == "L" else -1
         foot_at(cid, s, f, base + Rz @ Vector((sx * 0.12, -0.42, 0.07)), yaw=yaw)
         knee_pole(cid, s, f, base + Rz @ Vector((sx * 0.14, -1.0, 0.6)))
         if hands == "table":
-            place_hand(RIGS[cid], s, f, base + Rz @ Vector((sx * 0.17, -0.40, 0.0)) + Vector((0, 0, 0.759 + 0.022)), (0, 0, -1), Rz @ Vector((-sx * 0.45, -1, 0)))
+            place_hand(RIGS[cid], s, f, base + Rz @ Vector((sx * 0.17, -0.40, 0.0)) + Vector((0, 0, 0.759 + 0.032)), (0, 0, -1), Rz @ Vector((-sx * 0.45, -1, 0)))
         elif hands == "lap":
-            place_hand(RIGS[cid], s, f, base + Rz @ Vector((sx * 0.08, -0.17, 0)) + Vector((0, 0, seat + 0.17)), (0, 0, -1), Rz @ Vector((-sx * 0.3, -1, -0.3)))
+            place_hand(RIGS[cid], s, f, base + Rz @ Vector((sx * 0.08, -0.30, 0)) + Vector((0, 0, seat + 0.19)), (0, 0, -1), Rz @ Vector((-sx * 0.25, -1, -0.2)))
         fingers(cid, s, f, "relaxed")
         pole(cid, s, f, base + Rz @ Vector((sx * 0.55, 0.3, 0.8)))
 
@@ -642,9 +646,9 @@ def interro_shots():
     # S25 brought her in for questioning: wide of the room, kid west (small), agent A east; slow push-in
     for sid in ("S25", "S26"):
         f0, f1 = WIN[sid]
-        for fx in range(f0, f1 + 1, 12):
+        for fx in FR(f0, f1, 12):
             u = (fx - f0) / (f1 - f0)
-            int_sit("Kid", Hk, fx, -1, lean=4, head=(6 + breath(u, 1), 0), hands="lap", seat=0.46)
+            int_sit("Kid", Hk, fx, -1, lean=4, head=(6 + breath(u, 1), 0), hands="lap", seat=0.454)
             int_sit("AgentB", Hb, fx, +1, lean=8 + 4 * u, head=(8 + breath(u, 1), 0), hands="table")
     cam_shot("Cam_S25", "S25", [(0, (IX, -2.25, 1.75), (IX, 0, 0.85)), (1, (IX + 0.05, -1.95, 1.65), (IX, 0, 0.88))], lens=24)
     # S26 discovered her mother worked for NASA: family photo on the table, agent's hand rests beside it; push in
@@ -656,9 +660,9 @@ def interro_shots():
     for sid, lean0, head_fn in (("S27", 6, lambda u: (4 + breath(u, 1.5), 4 * math.sin(u * 6))), ("S28", 10, lambda u: (6 + breath(u, 1), -6 + 6 * u)),
                                 ("S29", 14, lambda u: (8 + 4 * u + breath(u, 1), 0)), ("S30", 10, lambda u: (8 + 22 * min(1, u / 0.5), 0))):
         f0, f1 = WIN[sid]
-        for fx in range(f0, f1 + 1, 10):
+        for fx in FR(f0, f1, 10):
             u = (fx - f0) / (f1 - f0)
-            int_sit("Mom", Hm, fx, -1, lean=lean0, head=head_fn(u), hands="table", seat=0.46)
+            int_sit("Mom", Hm, fx, -1, lean=lean0, head=head_fn(u), hands="table", seat=0.454)
             int_sit("AgentB", Hb, fx, +1, lean=6, head=(6, 0), hands="table")
             key_jaw("Mom", fx, (5 + 4 * math.sin(fx * 0.35)) if sid in ("S27", "S28") else 1.0)
     hm = head_pt("Mom", WIN["S27"][0])
@@ -684,7 +688,7 @@ def ending_shots():
     # S33 for eight years: she sits back, hands into her lap; camera pulls back and rises to a wide of the dark library
     kid_block("S33", lambda u: "desk" if u < 0.3 else "lap", lambda u: -2 - 4 * min(1, u / 0.5), lambda u: (10 + 6 * min(1, u / 0.5) + breath(u, 0.8), 0), back_fn=lambda u: 0.03 * min(1, u / 0.5))
     hf = head_pt("Kid", WIN["S33"][0])
-    cam_shot("Cam_S33", "S33", [(0, hf + Vector((-0.42, -0.60, 0.08)), hf + Vector((0, 0, -0.16))), (1, hf + Vector((-1.15, -1.25, 0.45)), hf + Vector((0, 0, -0.28)))], lens=40)
+    cam_shot("Cam_S33", "S33", [(0, hf + Vector((-0.42, -0.60, 0.08)), hf + Vector((0, 0, -0.16))), (1, hf + Vector((-1.05, -1.15, 0.30)), hf + Vector((0, 0, -0.18)))], lens=40)
 
 # red glow on her face while the screen is red
 gl = bpy.data.objects["ScreenGlow"].data
@@ -699,7 +703,7 @@ LIB_KID = ["S%02d" % i for i in list(range(1, 20)) + [22, 23, 24, 31, 32, 33]]
 show_only(KID, rng(*LIB_KID, "S25", "S26"))
 show_only(MOM, rng("S27", "S28", "S29", "S30"))
 show_only(AGB, rng("S20", "S21", "S22", "S23", "S25", "S26", "S27", "S28", "S29", "S30"))
-show_only(AGC, rng("S20", "S21", "S22", "S23"))
+show_only(AGC, rng("S22", "S23"))   # S20 walk-by dropped: it only showed as a sliver at the frame edge
 for o in bpy.data.objects:
     const_all(o)
 # hold the kid in a neutral seat on the frames she is hidden is unnecessary: every shot keys its own pose at its first and last frame

@@ -353,9 +353,9 @@ for o in itab.children:
     mm = mat("IntTableTop", (0.55, 0.58, 0.6), 0.35, 0.5)
     o.data.materials.clear(); o.data.materials.append(mm)
 IT_TOP = 0.799 * 0.95
-chA = append_coll(A + "ph/plastic_monobloc_chair_01/plastic_monobloc_chair_01_1k.blend", "plastic_monobloc_chair_01", CI, (IX - 0.62, 0, 0), R_(-90), 1.0, "IntChairKid")
-chB = dup_tree(chA, CI, (IX + 0.62, 0, 0), R_(90), "IntChairAgent")
-for o in chA.children + chB.children:
+chA = dup_tree(chair, CI, (IX - 0.68, 0, 0), R_(90), "IntChairKid")      # armless chairs: arms reach the table without crossing armrests
+chB = dup_tree(chair, CI, (IX + 0.68, 0, 0), R_(-90), "IntChairAgent")
+for o in []:
     for m in o.data.materials:
         for n in m.node_tree.nodes:
             if n.type == 'BSDF_PRINCIPLED' and not n.inputs["Base Color"].links: n.inputs["Base Color"].default_value = (0.2, 0.25, 0.32, 1)
