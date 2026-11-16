@@ -1,0 +1,10 @@
+body_prop_cross.py, step 3, reference timing, final file (work/anim4 = the delivered build). Visible (in-camera) crossings only.
+S1: 13 sampled frames (1-37), 71 edge hits/frame avg; top: CrankGrip<-metacarpal1.R 123, CrankGrip<-metacarpal4.R 121, CrankGrip<-metacarpal3.R 79, CrankGrip<-metacarpal1.L 76, CrankGrip<-finger1-2.R 74
+S2: 40 sampled frames (61-178), 539 edge hits/frame avg; top: CrankGrip<-metacarpal4.R 2171, CrankGrip<-metacarpal4.L 2171, CrankGrip<-metacarpal1.R 1771, CrankGrip<-metacarpal1.L 1769, CrankGrip<-metacarpal2.R 1326
+S4: 30 sampled frames (241-328), 575 edge hits/frame avg; top: CrankGrip<-metacarpal4.R 1618, CrankGrip<-metacarpal4.L 1618, CrankGrip<-metacarpal1.R 1347, CrankGrip<-metacarpal1.L 1347, CrankGrip<-metacarpal2.R 1016
+S5: 30 sampled frames (331-418), 571 edge hits/frame avg; top: CrankGrip<-metacarpal4.R 1605, CrankGrip<-metacarpal4.L 1605, CrankGrip<-metacarpal1.R 1350, CrankGrip<-metacarpal1.L 1348, CrankGrip<-metacarpal2.R 1001
+S7: 20 sampled frames (541-598), 243 edge hits/frame avg; top: CrankGrip<-metacarpal4.L 643, CrankGrip<-metacarpal4.R 592, CrankGrip<-metacarpal1.L 488, CrankGrip<-metacarpal1.R 473, CrankGrip<-finger1-1.L 385
+S6: 40 sampled frames (421-538), 617 edge hits/frame avg; top: LapBook<-finger4-1.R 1000, LapBook<-finger4-1.L 1000, Armchair<-upperleg02.L 1000, LapBook<-finger3-1.R 880, LapBook<-finger3-1.L 880
+S8: 40 sampled frames (601-718), 268 edge hits/frame avg; top: SlideTimber<-finger5-2.R 1120, SlideTimber<-finger5-2.L 1120, SlideTimber<-finger4-2.R 960, SlideTimber<-finger4-2.L 960, SlideTimber<-finger2-2.R 680
+S11: 23 sampled frames (952-1018): fingertips of both flat palms resting ON the top course (FoundCourse.02 <- finger2/3/4 tips, ~250 edge hits each over the shot). Legs/feet: 0 (Mason moved back from the wall).
+Not checked with props: S3, S9, S10, S12-S22 (no held or touched props; S12-S14 camera-only; flood street has no props in contact).
