@@ -297,7 +297,7 @@ for f, a in ((395, 0.0), (415, 0.45), (435, 0.9), (450, 1.0)):
     P, Rb = crouch(f, a)
     if f < 450:
         key_relaxed(S, f, P, Rb, sides="L")
-        W, d, nn = relaxed_hand(S, P, Rb, "R", fwd=0.25 * a); key_hand(S, "R", f, W, d, nn, P=P, Rb=Rb); apply_pose(D[S], "R", "relaxed", f)
+        W, d, nn = relaxed_hand(S, P, Rb, "R", fwd=0.25 * a, out=0.04 * a, up=0.05 * a); key_hand(S, "R", f, W, d, nn, P=P, Rb=Rb); apply_pose(D[S], "R", "relaxed", f)   # clear of his shoe
 # feet stay planted at the step position from here (keys at the end of the block)
 for f in (450, 470, 520, 620):
     pass
@@ -383,7 +383,7 @@ apply_pose(D[S], "R", "wrap_grip", 846, amount=0.85); apply_pose(D[S], "R", "wra
 DROP = V((STEP.x, STEP.y, 0.026)) + Rz(YAW) @ V((0.12, -0.66, 0))   # in front of his feet, clear of both shoes and the stand base
 def shock_stand(f, hd, mouth_hand=False):
     P, Rb = stand(S, f, STEP.x, STEP.y, yaw=YAW, flex=2, spine=4, head=hd, hands=False, feet=False)
-    key_relaxed(S, f, P, Rb, sides="R")
+    W, d, nn = relaxed_hand(S, P, Rb, "R", out=0.06, fwd=0.03); key_hand(S, "R", f, W, d, nn, P=P, Rb=Rb); apply_pose(D[S], "R", "relaxed", f)   # clear of his thigh
     if mouth_hand:     # left hand raised toward his mouth, ~6 cm clear of the lips
         sc.frame_set(f); m = rest_point_on(S, "head", MOUTH_REST)
         Mh = bone_world(S, "head"); fwd = (Mh.to_3x3() @ (RIG[S].rest("head").to_3x3().inverted() @ V((0, -1, 0)))).normalized()
@@ -396,6 +396,9 @@ def shock_stand(f, hd, mouth_hand=False):
 for f, hd, mh in ((882, (22, -4), False), (905, (30, -8), False), (950, (32, -10), False), (1000, (30, -6), False), (1045, (33, -9), False),
                   (1075, (30, -7), True), (1120, (32, -10), True), (1180, (30, -6), True), (1240, (33, -9), True), (1280, (31, -7), True)):
     shock_stand(f, hd, mh)
+# after letting go (864 -> 882) the right hand swings down OUTSIDE the thigh, not through it
+P, Rb = stand(S, 873, STEP.x, STEP.y, yaw=YAW, flex=0, spine=0, head=(19, -2), hands=False, feet=False); key_relaxed(S, 873, P, Rb, sides="L")
+W, d, nn = relaxed_hand(S, P, Rb, "R", fwd=0.24, out=0.12, up=0.16); key_hand(S, "R", 873, W, d, nn, P=P, Rb=Rb); apply_pose(D[S], "R", "open_alarm", 873)
 jaw(S, 882, 3); jaw(S, 950, 2); jaw(S, 1045, 3); jaw(S, 1280, 2)
 # (no blood: director / LESSONS hard limit)
 
@@ -436,15 +439,24 @@ for f, a in ((1395, 0.0), (1420, 0.6), (1440, 1.0)):
     if a < 1.0:
         key_relaxed(S, f, P, Rb)
 # hands on thighs: palm on the front of each thigh, ~12 cm above the knee
+from mathutils.bvhtree import BVHTree as _BVH
+def _posed_bvh(o):
+    dg = bpy.context.evaluated_depsgraph_get(); e = o.evaluated_get(dg); me = e.to_mesh()
+    t = _BVH.FromPolygons([o.matrix_world @ v.co for v in me.vertices], [list(p.vertices) for p in me.polygons]); e.to_mesh_clear(); return t
+_JEANS = [o for o in bpy.data.objects if o.name.startswith(S + ".") and "suit" in o.name][0]
 def thigh_hands(f):
-    sc.frame_set(f)
+    """palm resting ON the front of each thigh (ray cast on the posed trousers), fingers down the thigh toward the knee"""
+    sc.frame_set(f); bpy.context.view_layer.update(); tj = _posed_bvh(_JEANS)
     for s in "LR":
         kn = bone_world(S, "lowerleg01." + s).to_translation(); hp = bone_world(S, "upperleg01." + s).to_translation()
-        p = kn.lerp(hp, 0.28); fwd = (Rz(YAW) @ V((0, -1, 0)))
+        p = kn.lerp(hp, 0.32); fwd = (Rz(YAW) @ V((0, -1, 0)))
         sx = 1 if s == "L" else -1
-        W_palm = p + fwd * 0.075 + V((0, 0, 0.01))
-        place_hand(D[S], s, f, W_palm, -fwd + V((0, 0, -0.35)), (V((0, 0, -1)) + fwd * 0.4 + (Rz(YAW) @ V((-0.25 * sx, 0, 0)))).normalized())
-        apply_pose(D[S], s, "relaxed", f)
+        o_ = p + fwd * 0.35 + V((0, 0, 0.25)); hit, nrm, _i, _d = tj.ray_cast(o_, (p - o_).normalized(), 1.0)
+        if hit is None: print("THIGH miss", f, s); continue
+        if nrm.dot(o_ - hit) < 0: nrm = -nrm
+        ax = (kn - hp); fd = (ax - nrm * ax.dot(nrm)).normalized()
+        place_hand(D[S], s, f, hit, -nrm, fd, skin=0.016)
+        apply_pose(D[S], s, "shield", f)
         pb = D[S].pose.bones["Pole_elbow." + s]; nm = "Pole_elbow." + s
         pole = bone_world(S, "upperarm01." + s).to_translation() + Rz(YAW) @ V((0.5 * sx, 0.4, 0.0))
         pb.location = RIG[S].rest(nm).to_3x3().inverted() @ (D[S].matrix_world.inverted() @ pole - RIG[S].BN[nm].head_local)
@@ -540,6 +552,17 @@ def blanket():
     for p in me.polygons: p.use_smooth = True
 blanket()
 print('BLANKET', D['Blanket'].location, len(D['Blanket'].data.vertices))
+_tb = _posed_bvh(D['Blanket'])
+for f in range(CUT, 2101, 30):
+    sc.frame_set(f)
+    for s_ in "LR":
+        sx = 1 if s_ == "L" else -1
+        o_ = V((HX + 0.12 * sx, HIP.y - 0.40, 2.0)); hit, nrm, _i, _d = _tb.ray_cast(o_, V((0, 0, -1)), 3.0)
+        if hit is None: print("BEDHAND miss", f, s_); continue
+        if nrm.z < 0: nrm = -nrm
+        place_hand(D[S], s_, f, hit, -nrm, V((-0.25 * sx, -1, 0)).normalized(), skin=0.016)
+        apply_pose(D[S], s_, "shield", f)
+sc.frame_set(CUT); print("BEDHAND reach err mm", [round((bone_world(S, "wrist." + s_).to_translation() - (D[S].matrix_world @ D[S].pose.bones["IK_hand." + s_].matrix).to_translation()).length * 1000, 1) for s_ in "LR"])
 def oxygen_mask():
     """cup built from the singer's own face (nose + mouth region), pushed out into a dome: fits the face exactly"""
     body = D[S + ".body"]; C = V((0.0, -0.150, 1.625))
