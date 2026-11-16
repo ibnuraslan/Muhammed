@@ -73,3 +73,4 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | B25 | Milgram | `blender/Milgram_v003/` | **READY TO RENDER (frames 1–1982)**, watched moving |
 | B03 | WeepingStatue | `blender/WeepingStatue_v003/` | **READY TO RENDER (frames 1–1724)**, watched moving |
 | B33 | BogBurials | `blender/BogBurials_v003/` | **READY TO RENDER (frames 1–2187)**, watched moving |
+| B26 | TenDimes | `blender/TenDimes_v003/` | **READY TO RENDER (frames 1–1868)**, watched moving |
