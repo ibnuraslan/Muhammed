@@ -1,0 +1,177 @@
+[
+ {
+  "beat": "S01",
+  "frame": 1,
+  "end": 80,
+  "master_from": 1,
+  "first_words": "A mosquito landed on a"
+ },
+ {
+  "beat": "S02",
+  "frame": 81,
+  "end": 155,
+  "master_from": 101,
+  "first_words": "sick boy's arm and"
+ },
+ {
+  "beat": "S03",
+  "frame": 156,
+  "end": 255,
+  "master_from": 241,
+  "first_words": "pierced his skin with its needle"
+ },
+ {
+  "beat": "S04",
+  "frame": 256,
+  "end": 348,
+  "master_from": 341,
+  "first_words": "mouth."
+ },
+ {
+  "beat": "S05",
+  "frame": 349,
+  "end": 468,
+  "master_from": 441,
+  "first_words": "Then, a doctor trapped that mosquito"
+ },
+ {
+  "beat": "S06",
+  "frame": 469,
+  "end": 536,
+  "master_from": 590,
+  "first_words": "a glass vial and"
+ },
+ {
+  "beat": "S07",
+  "frame": 537,
+  "end": 620,
+  "master_from": 711,
+  "first_words": "let it bite his own hand."
+ },
+ {
+  "beat": "S08",
+  "frame": 621,
+  "end": 700,
+  "master_from": 831,
+  "first_words": "You see,"
+ },
+ {
+  "beat": "S09",
+  "frame": 701,
+  "end": 809,
+  "master_from": 951,
+  "first_words": "the boy had a deadly disease,"
+ },
+ {
+  "beat": "S10",
+  "frame": 810,
+  "end": 930,
+  "master_from": 1111,
+  "first_words": "and the doctor believed mosquitoes were"
+ },
+ {
+  "beat": "S11",
+  "frame": 931,
+  "end": 1006,
+  "master_from": 1281,
+  "first_words": "it. So, he"
+ },
+ {
+  "beat": "S12",
+  "frame": 1007,
+  "end": 1080,
+  "master_from": 1491,
+  "first_words": "made himself the test subject."
+ },
+ {
+  "beat": "S13",
+  "frame": 1081,
+  "end": 1133,
+  "master_from": 1611,
+  "first_words": ""
+ },
+ {
+  "beat": "S14",
+  "frame": 1134,
+  "end": 1200,
+  "master_from": 1731,
+  "first_words": "Within days, he developed"
+ },
+ {
+  "beat": "S15",
+  "frame": 1201,
+  "end": 1273,
+  "master_from": 1851,
+  "first_words": "a fever."
+ },
+ {
+  "beat": "S16",
+  "frame": 1274,
+  "end": 1360,
+  "master_from": 1941,
+  "first_words": "His eyes turned yellow,"
+ },
+ {
+  "beat": "S17",
+  "frame": 1361,
+  "end": 1440,
+  "master_from": 2031,
+  "first_words": "and he began vomiting thick"
+ },
+ {
+  "beat": "S18",
+  "frame": 1441,
+  "end": 1531,
+  "master_from": 2151,
+  "first_words": "black fluid."
+ },
+ {
+  "beat": "S19",
+  "frame": 1532,
+  "end": 1600,
+  "master_from": 2271,
+  "first_words": "Eventually, his organs"
+ },
+ {
+  "beat": "S20",
+  "frame": 1601,
+  "end": 1681,
+  "master_from": 2391,
+  "first_words": "started shutting down,"
+ },
+ {
+  "beat": "S22",
+  "frame": 1682,
+  "end": 1739,
+  "master_from": 2621,
+  "first_words": "and he died."
+ },
+ {
+  "beat": "S23",
+  "frame": 1740,
+  "end": 1842,
+  "master_from": 2711,
+  "first_words": "But his death helped prove"
+ },
+ {
+  "beat": "S24",
+  "frame": 1843,
+  "end": 1918,
+  "master_from": 2831,
+  "first_words": "mosquitoes were carrying the"
+ },
+ {
+  "beat": "S25",
+  "frame": 1919,
+  "end": 2038,
+  "master_from": 2951,
+  "first_words": "disease, eventually saving millions"
+ },
+ {
+  "beat": "S26",
+  "frame": 2039,
+  "end": 2113,
+  "master_from": 3071,
+  "first_words": "of lives."
+ }
+]
