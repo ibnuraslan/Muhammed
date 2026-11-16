@@ -19,7 +19,7 @@ Shots (VO words → frames)
 | S04 | 350–456 | "Nobody knew where it was coming from" | Crowd at the wall, two point at the feet |
 | S05 | 457–562 | "so crowds gathered around" | Crowd 3/4, faces up, a woman lifts her hands to her chest |
 | S07 | 563–626 | "collecting the water" | A cup on the plinth fills from the drips |
-| S08 | 627–698 | "and touching the statue" | A man lays his palm on the wet stone under the feet |
+| S08 | 627–698 | "and touching the statue" | A man reaches up and touches the wet stone beside the statue's foot with his fingertip |
 | S06 | 699–808 | "believing it was a miracle" | The woman in close-up looking up |
 | S09 | 809–910 | "But one man investigated" | Bathroom wide: the investigator and the caretaker |
 | S10 | 911–983 | "and discovered a bathroom pipe" | He points at the leaking pipe joint |
@@ -33,3 +33,8 @@ Shots (VO words → frames)
 | S18 | 1613–1724 | "forcing him to flee the country" | He walks away pulling his case (logo) |
 
 Logo: DA KRAS FILMS (white) on both broad faces of the trolley case, S15–S18 (director-approved).
+
+Checks on this package (work/qa, not committed): body_prop_cross 0 visible crossings (13 props × 11 rigs, every 3rd frame; S08 every frame);
+clip_scan one sampled frame 631 (S08 start, the reaching man passes behind the statue's leg, no contact); limb_check remaining hits are the
+2–3 pt shoulder-root false positives (CrowdM4's bulky jacket) and the statue's arms on the crossbar (intended). qa_check EMPTY on the
+object shots (feet, drain, pipe: the VO names them), CAMJUMP at the hard cuts, PROPMOVE on the water drops — all intended.

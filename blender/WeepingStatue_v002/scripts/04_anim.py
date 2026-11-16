@@ -333,7 +333,7 @@ def S08():     # a man lays his fingertips on the statue's foot; the others watc
     crowd_idle(f0, f1, skip=("CrowdM4", "Woman"))
     n = "Woman"; x, y = CROWD[n]; idle(n, f0, f1, x - 0.15, y - 0.25, facing(x - 0.15, y - 0.25, *LOOK), head=(18.0, 0.0), ph=2)
     n = "CrowdM4"; on_stage(n, f0, f1)
-    x, y = 0.18, -1.02; yaw = facing(x, y, TOE.x, TOE.y)
+    x, y = 0.18, -1.10; yaw = facing(x, y, TOE.x, TOE.y)
     H = HUM[n]; P = V((x, y, H.root_head.z - 0.01)); Rb = body_R(yaw)
     sh = bw(n, P, Rb, rest_head(n, "upperarm01.R"))
     ev(f0)
@@ -342,15 +342,18 @@ def S08():     # a man lays his fingertips on the statue's foot; the others watc
     cn_ = V((0, -1, 0))
     print("S08 contact", tuple(round(t, 3) for t in contact), tuple(round(t, 2) for t in cn_))
     for k, f in enumerate((f0, f0 + 18, f0 + 34, f1)):
-        stand(n, f, x, y, yaw, head=(22.0, 0.0), lean=6.0 if k else 0.0, fingers="relaxed" if k == 0 else None)
+        stand(n, f, x, y, yaw, head=(22.0, 0.0), lean=10.0 if k else 0.0, fingers="relaxed" if k == 0 else None)
         if k == 0: continue
     ev(f0 + 34)
-    place_hand(RIG[n].o, "R", f0 + 34, contact, -cn_, V((-0.15, 0, 1)).normalized(), skin=0.018)
-    place_hand(RIG[n].o, "R", f1, contact + V((0, 0, -0.015)), -cn_, V((-0.15, 0, 1)).normalized(), skin=0.018)
-    apply_pose(RIG[n].o, "R", "flat_palm", f0 + 34); apply_pose(RIG[n].o, "R", "flat_palm", f1)
+    # fingertip touch: hand in line with the forearm (no wrist bend), index tip 1 cm off the wet stone
+    fdir = (contact - sh).normalized()
+    for f_, c_ in ((f0 + 34, contact), (f1, contact + V((0, 0, -0.015)))):
+        place_hand(RIG[n].o, "R", f_, c_ - fdir * 0.12, V((0, 0, -1)), fdir, skin=0.0)
+        apply_pose(RIG[n].o, "R", "point", f_)
     # reach in (between f0+10 and f0+70): an intermediate key below/in front of the contact
-    place_hand(RIG[n].o, "R", f0 + 18, contact + V((0.0, -0.18, -0.20)), V((0, 1, 0.3)).normalized(), V((0, 0.3, 1)).normalized(), skin=0.03)
-    apply_pose(RIG[n].o, "R", "relaxed", f0 + 18)
+    fdir0 = (contact - sh).normalized()        # approach along the touch line (the finger comes straight in)
+    place_hand(RIG[n].o, "R", f0 + 18, contact - fdir0 * 0.30, V((0, 0, -1)), fdir0, skin=0.0)
+    apply_pose(RIG[n].o, "R", "point", f0 + 18)
     for f in (f0 + 18, f0 + 34, f1):
         pe = RIG[n].PB["Pole_elbow.R"]; nm = "Pole_elbow.R"
         pe.location = RIG[n].rest(nm).to_3x3().inverted() @ (sh + V((-0.35, -0.15, -0.45)) - RIG[n].BN[nm].head_local); pe.keyframe_insert("location", frame=f, group=nm)
