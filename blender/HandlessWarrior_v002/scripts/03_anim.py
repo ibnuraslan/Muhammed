@@ -455,7 +455,7 @@ W.used.add("S02"); SA.used.add("S02")
 
 # --- S03: standing, soldier points toward the village (+X), the warrior turns and walks off
 s0, s1 = ST["S03"], SE("S03")
-WP3 = V(-0.2, 1.1, 0); SAP3 = V(1.0, 0.0, 0); SAY3 = yaw_to(WP3 - SAP3)
+WP3 = V(-0.2, 1.1, 0); SAP3 = V(1.0, 0.0, 0); SAY3 = yaw_to((WP3 - SAP3).normalized() + (V(8, 4, 0) - SAP3).normalized())   # half-turned: the pointing arm stays in front of him
 W.stand(s0, WP3, 20, flex=10, head=(18, 0)); W.hang(s0, WP3, 20, out=0.16, fwd=0.05)
 W.stand(s0 + 40, WP3, 20, flex=8, head=(10, -10)); W.hang(s0 + 40, WP3, 20, out=0.16, fwd=0.05)
 W.stand(s0 + 62, WP3, 60, flex=6, head=(6, 10)); W.hang(s0 + 62, WP3, 60, out=0.16, fwd=0.05)
@@ -466,6 +466,7 @@ sh = SA.shoulder_w("L", SAP3, SAY3)
 pt = (V(8, 4, 1.3) - sh).normalized()
 for f in (s0 + 18, s1):
     SA.hand_w("L", f, sh + pt * 0.56, pt, V(0, 0, -1), sh + V(0, 0.3, -0.4))
+apply_pose(SA.o, "L", "relaxed", s0)
 apply_pose(SA.o, "L", "point", s0 + 18)
 RzA3 = Rz(SAY3)
 for f in (s0, s1):
