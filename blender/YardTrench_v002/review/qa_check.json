@@ -53,13 +53,13 @@
   "271": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 7%"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "277": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 6%"
+    "wall/prop fills the frame, character only 5%"
    ]
   ],
   "283": [
@@ -77,13 +77,13 @@
   "295": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 3%"
+    "wall/prop fills the frame, character only 5%"
    ]
   ],
   "301": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 3%"
+    "wall/prop fills the frame, character only 5%"
    ]
   ],
   "307": [
@@ -547,7 +547,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 5.4 cm with no hand on it (nearest finger 501603 cm)"
+    "Rain moves 5.4 cm with no hand on it (nearest finger 501602 cm)"
    ]
   ],
   "823": [
@@ -561,7 +561,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 5.0 cm with no hand on it (nearest finger 501608 cm)"
+    "Rain moves 5.0 cm with no hand on it (nearest finger 501607 cm)"
    ]
   ],
   "829": [
@@ -575,7 +575,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 13.4 cm with no hand on it (nearest finger 501622 cm)"
+    "Rain moves 13.4 cm with no hand on it (nearest finger 501620 cm)"
    ]
   ],
   "835": [
@@ -589,7 +589,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 19.5 cm with no hand on it (nearest finger 501641 cm)"
+    "Rain moves 19.5 cm with no hand on it (nearest finger 501640 cm)"
    ]
   ],
   "841": [
@@ -603,7 +603,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 23.2 cm with no hand on it (nearest finger 501664 cm)"
+    "Rain moves 23.2 cm with no hand on it (nearest finger 501663 cm)"
    ]
   ],
   "847": [
@@ -617,7 +617,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 24.5 cm with no hand on it (nearest finger 501688 cm)"
+    "Rain moves 24.5 cm with no hand on it (nearest finger 501687 cm)"
    ]
   ],
   "853": [
@@ -631,7 +631,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 23.6 cm with no hand on it (nearest finger 501711 cm)"
+    "Rain moves 23.6 cm with no hand on it (nearest finger 501710 cm)"
    ]
   ],
   "859": [
@@ -671,7 +671,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 3.3 cm with no hand on it (nearest finger 501749 cm)"
+    "Rain moves 3.3 cm with no hand on it (nearest finger 501748 cm)"
    ]
   ],
   "883": [
@@ -681,7 +681,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 12.4 cm with no hand on it (nearest finger 501737 cm)"
+    "Rain moves 12.4 cm with no hand on it (nearest finger 501736 cm)"
    ]
   ],
   "889": [
@@ -691,7 +691,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 19.9 cm with no hand on it (nearest finger 501717 cm)"
+    "Rain moves 19.9 cm with no hand on it (nearest finger 501716 cm)"
    ]
   ],
   "895": [
@@ -701,7 +701,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 25.9 cm with no hand on it (nearest finger 501691 cm)"
+    "Rain moves 25.9 cm with no hand on it (nearest finger 501690 cm)"
    ]
   ],
   "901": [
@@ -711,7 +711,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 30.2 cm with no hand on it (nearest finger 501661 cm)"
+    "Rain moves 30.2 cm with no hand on it (nearest finger 501660 cm)"
    ]
   ],
   "907": [
@@ -721,7 +721,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 33.0 cm with no hand on it (nearest finger 501629 cm)"
+    "Rain moves 33.0 cm with no hand on it (nearest finger 501628 cm)"
    ]
   ],
   "913": [
@@ -731,7 +731,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 34.2 cm with no hand on it (nearest finger 501595 cm)"
+    "Rain moves 34.2 cm with no hand on it (nearest finger 501594 cm)"
    ]
   ],
   "919": [
@@ -741,7 +741,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 33.8 cm with no hand on it (nearest finger 501561 cm)"
+    "Rain moves 33.8 cm with no hand on it (nearest finger 501560 cm)"
    ]
   ],
   "925": [
@@ -795,7 +795,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 1.4 cm with no hand on it (nearest finger 501456 cm)"
+    "Rain moves 1.4 cm with no hand on it (nearest finger 501455 cm)"
    ]
   ],
   "967": [
@@ -809,7 +809,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 2.7 cm with no hand on it (nearest finger 501458 cm)"
+    "Rain moves 2.7 cm with no hand on it (nearest finger 501457 cm)"
    ]
   ],
   "973": [
@@ -823,7 +823,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 4.3 cm with no hand on it (nearest finger 501463 cm)"
+    "Rain moves 4.3 cm with no hand on it (nearest finger 501462 cm)"
    ]
   ],
   "979": [
@@ -837,7 +837,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 6.0 cm with no hand on it (nearest finger 501469 cm)"
+    "Rain moves 6.0 cm with no hand on it (nearest finger 501468 cm)"
    ]
   ],
   "985": [
@@ -851,7 +851,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 7.9 cm with no hand on it (nearest finger 501477 cm)"
+    "Rain moves 7.9 cm with no hand on it (nearest finger 501475 cm)"
    ]
   ],
   "991": [
@@ -865,7 +865,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 10.0 cm with no hand on it (nearest finger 501486 cm)"
+    "Rain moves 10.0 cm with no hand on it (nearest finger 501485 cm)"
    ]
   ],
   "997": [
@@ -879,7 +879,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 12.2 cm with no hand on it (nearest finger 501499 cm)"
+    "Rain moves 12.2 cm with no hand on it (nearest finger 501497 cm)"
    ]
   ],
   "1003": [
@@ -893,7 +893,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 14.6 cm with no hand on it (nearest finger 501513 cm)"
+    "Rain moves 14.6 cm with no hand on it (nearest finger 501512 cm)"
    ]
   ],
   "1009": [
@@ -907,7 +907,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 17.2 cm with no hand on it (nearest finger 501530 cm)"
+    "Rain moves 17.2 cm with no hand on it (nearest finger 501529 cm)"
    ]
   ],
   "1015": [
@@ -921,7 +921,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 20.0 cm with no hand on it (nearest finger 501550 cm)"
+    "Rain moves 20.0 cm with no hand on it (nearest finger 501549 cm)"
    ]
   ],
   "1021": [
@@ -935,7 +935,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 23.6 cm with no hand on it (nearest finger 501573 cm)"
+    "Rain moves 23.6 cm with no hand on it (nearest finger 501572 cm)"
    ]
   ],
   "1027": [
@@ -949,7 +949,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 29.9 cm with no hand on it (nearest finger 501597 cm)"
+    "Rain moves 29.9 cm with no hand on it (nearest finger 501596 cm)"
    ]
   ],
   "1033": [
@@ -963,7 +963,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 35.9 cm with no hand on it (nearest finger 501623 cm)"
+    "Rain moves 35.9 cm with no hand on it (nearest finger 501622 cm)"
    ]
   ],
   "1039": [
@@ -977,7 +977,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 40.1 cm with no hand on it (nearest finger 501649 cm)"
+    "Rain moves 40.1 cm with no hand on it (nearest finger 501648 cm)"
    ]
   ],
   "1045": [
@@ -1047,7 +1047,7 @@
    ],
    [
     "PROPMOVE",
-    "Rain moves 0.8 cm with no hand on it (nearest finger 501751 cm)"
+    "Rain moves 0.8 cm with no hand on it (nearest finger 501750 cm)"
    ]
   ],
   "1087": [
@@ -1389,7 +1389,7 @@
    ],
    [
     "ATTACH",
-    "Helmet is 9.0 cm off Man's skin (median)"
+    "Helmet is 9.8 cm off Man's skin (median)"
    ]
   ],
   "1639": [
@@ -1399,7 +1399,7 @@
    ],
    [
     "PROPMOVE",
-    "Helmet moves 3.0 cm with no hand on it (nearest finger 55 cm)"
+    "Helmet moves 3.0 cm with no hand on it (nearest finger 53 cm)"
    ]
   ],
   "1645": [
@@ -1409,7 +1409,7 @@
    ],
    [
     "PROPMOVE",
-    "Helmet moves 1.3 cm with no hand on it (nearest finger 56 cm)"
+    "Helmet moves 1.3 cm with no hand on it (nearest finger 55 cm)"
    ]
   ],
   "1651": [
@@ -1419,113 +1419,127 @@
    ],
    [
     "PROPMOVE",
-    "Helmet moves 2.9 cm with no hand on it (nearest finger 59 cm)"
+    "Helmet moves 2.9 cm with no hand on it (nearest finger 58 cm)"
+   ]
+  ],
+  "1657": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 4.4 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "ATTACH",
+    "Helmet is 10.8 cm off Man's skin (median)"
    ]
   ],
   "1735": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 3%"
+    "wall/prop fills the frame, character only 9%"
    ],
    [
     "PROPMOVE",
-    "Helmet moves 322.2 cm with no hand on it (nearest finger 71 cm)"
+    "Helmet moves 322.2 cm with no hand on it (nearest finger 68 cm)"
    ]
   ],
   "1741": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 3%"
+    "wall/prop fills the frame, character only 9%"
    ],
    [
     "PROPMOVE",
-    "Helmet moves 2.6 cm with no hand on it (nearest finger 70 cm)"
+    "Helmet moves 2.5 cm with no hand on it (nearest finger 68 cm)"
    ]
   ],
   "1747": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 5%"
+    "wall/prop fills the frame, character only 9%"
    ],
    [
     "PROPMOVE",
-    "Helmet moves 3.3 cm with no hand on it (nearest finger 68 cm)"
+    "Helmet moves 3.2 cm with no hand on it (nearest finger 65 cm)"
    ]
   ],
   "1753": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 5%"
+    "wall/prop fills the frame, character only 9%"
    ],
    [
     "PROPMOVE",
-    "Helmet moves 3.0 cm with no hand on it (nearest finger 66 cm)"
+    "Helmet moves 2.9 cm with no hand on it (nearest finger 63 cm)"
    ],
    [
     "ATTACH",
-    "Helmet is 7.7 cm off Man's skin (median)"
+    "Helmet is 8.4 cm off Man's skin (median)"
    ]
   ],
   "1759": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 5%"
-   ],
-   [
-    "PROPMOVE",
-    "Helmet moves 1.5 cm with no hand on it (nearest finger 64 cm)"
-   ]
-  ],
-  "1765": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 5%"
-   ]
-  ],
-  "1771": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 6%"
-   ]
-  ],
-  "1777": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 6%"
-   ],
-   [
-    "ATTACH",
-    "Helmet is 6.6 cm off Man's skin (median)"
-   ]
-  ],
-  "1783": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 6%"
-   ],
-   [
-    "PROPMOVE",
-    "Helmet moves 0.6 cm with no hand on it (nearest finger 64 cm)"
-   ]
-  ],
-  "1789": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 6%"
-   ],
-   [
-    "PROPMOVE",
-    "Helmet moves 1.3 cm with no hand on it (nearest finger 64 cm)"
-   ]
-  ],
-  "1795": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 7%"
    ],
    [
     "PROPMOVE",
-    "Helmet moves 2.6 cm with no hand on it (nearest finger 67 cm)"
+    "Helmet moves 1.5 cm with no hand on it (nearest finger 61 cm)"
+   ]
+  ],
+  "1765": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1771": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1777": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "ATTACH",
+    "Helmet is 7.4 cm off Man's skin (median)"
+   ]
+  ],
+  "1783": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 0.6 cm with no hand on it (nearest finger 60 cm)"
+   ]
+  ],
+  "1789": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 1.3 cm with no hand on it (nearest finger 61 cm)"
+   ]
+  ],
+  "1795": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 2.5 cm with no hand on it (nearest finger 64 cm)"
    ]
   ],
   "1801": [
@@ -1535,11 +1549,11 @@
    ],
    [
     "PROPMOVE",
-    "Helmet moves 3.5 cm with no hand on it (nearest finger 69 cm)"
+    "Helmet moves 3.3 cm with no hand on it (nearest finger 66 cm)"
    ],
    [
     "ATTACH",
-    "Helmet is 6.6 cm off Man's skin (median)"
+    "Helmet is 7.3 cm off Man's skin (median)"
    ]
   ],
   "1807": [
@@ -1549,7 +1563,7 @@
    ],
    [
     "PROPMOVE",
-    "Helmet moves 3.1 cm with no hand on it (nearest finger 71 cm)"
+    "Helmet moves 3.0 cm with no hand on it (nearest finger 68 cm)"
    ]
   ],
   "1813": [
@@ -1559,7 +1573,7 @@
    ],
    [
     "PROPMOVE",
-    "Helmet moves 2.1 cm with no hand on it (nearest finger 72 cm)"
+    "Helmet moves 2.1 cm with no hand on it (nearest finger 69 cm)"
    ]
   ],
   "65": [
@@ -1677,7 +1691,7 @@
    ],
    [
     "PROPMOVE",
-    "Clod_03_1_1 moves 2.2 cm with no hand on it (nearest finger 93 cm)"
+    "Clod_03_1_1 moves 2.2 cm with no hand on it (nearest finger 94 cm)"
    ]
   ],
   "397": [
@@ -1697,7 +1711,7 @@
    ],
    [
     "PROPMOVE",
-    "Clod_04_2_0 moves 4.2 cm with no hand on it (nearest finger 81 cm)"
+    "Clod_04_2_0 moves 4.2 cm with no hand on it (nearest finger 82 cm)"
    ],
    [
     "PROPMOVE",
@@ -1755,23 +1769,23 @@
    ],
    [
     "PROPMOVE",
-    "Clod_05_1_1 moves 1.5 cm with no hand on it (nearest finger 91 cm)"
+    "Clod_05_1_1 moves 1.5 cm with no hand on it (nearest finger 92 cm)"
    ]
   ],
   "439": [
    [
     "PROPMOVE",
-    "Clod_06_2_1 moves 1.4 cm with no hand on it (nearest finger 69 cm)"
+    "Clod_06_2_1 moves 1.4 cm with no hand on it (nearest finger 70 cm)"
    ]
   ],
   "445": [
    [
     "PROPMOVE",
-    "Clod_06_1_0 moves 0.7 cm with no hand on it (nearest finger 87 cm)"
+    "Clod_06_1_0 moves 0.7 cm with no hand on it (nearest finger 88 cm)"
    ],
    [
     "PROPMOVE",
-    "Clod_06_2_0 moves 3.9 cm with no hand on it (nearest finger 75 cm)"
+    "Clod_06_2_0 moves 3.9 cm with no hand on it (nearest finger 76 cm)"
    ],
    [
     "PROPMOVE",
@@ -1789,7 +1803,7 @@
    ],
    [
     "PROPMOVE",
-    "Clod_06_2_0 moves 2.7 cm with no hand on it (nearest finger 81 cm)"
+    "Clod_06_2_0 moves 2.7 cm with no hand on it (nearest finger 82 cm)"
    ],
    [
     "PROPMOVE",
@@ -1833,7 +1847,7 @@
   "475": [
    [
     "PROPMOVE",
-    "Clod_07_1_0 moves 1.7 cm with no hand on it (nearest finger 90 cm)"
+    "Clod_07_1_0 moves 1.7 cm with no hand on it (nearest finger 89 cm)"
    ],
    [
     "PROPMOVE",
@@ -1845,7 +1859,7 @@
    ],
    [
     "PROPMOVE",
-    "Clod_07_2_1 moves 0.8 cm with no hand on it (nearest finger 80 cm)"
+    "Clod_07_2_1 moves 0.8 cm with no hand on it (nearest finger 81 cm)"
    ]
   ],
   "481": [
@@ -1854,71 +1868,61 @@
     "Clod_07_1_0 moves 0.8 cm with no hand on it (nearest finger 93 cm)"
    ]
   ],
-  "1657": [
-   [
-    "PROPMOVE",
-    "Helmet moves 4.4 cm with no hand on it (nearest finger 64 cm)"
-   ],
-   [
-    "ATTACH",
-    "Helmet is 10.3 cm off Man's skin (median)"
-   ]
-  ],
   "1663": [
    [
     "PROPMOVE",
-    "Helmet moves 5.2 cm with no hand on it (nearest finger 70 cm)"
+    "Helmet moves 5.2 cm with no hand on it (nearest finger 68 cm)"
    ]
   ],
   "1669": [
    [
     "PROPMOVE",
-    "Helmet moves 4.4 cm with no hand on it (nearest finger 74 cm)"
+    "Helmet moves 4.4 cm with no hand on it (nearest finger 73 cm)"
    ]
   ],
   "1675": [
    [
     "PROPMOVE",
-    "Helmet moves 1.5 cm with no hand on it (nearest finger 73 cm)"
+    "Helmet moves 1.5 cm with no hand on it (nearest finger 71 cm)"
    ]
   ],
   "1681": [
    [
     "ATTACH",
-    "Helmet is 6.7 cm off Man's skin (median)"
+    "Helmet is 7.5 cm off Man's skin (median)"
    ]
   ],
   "1705": [
    [
     "ATTACH",
-    "Helmet is 6.6 cm off Man's skin (median)"
+    "Helmet is 7.4 cm off Man's skin (median)"
    ]
   ],
   "1729": [
    [
     "ATTACH",
-    "Helmet is 6.6 cm off Man's skin (median)"
+    "Helmet is 7.4 cm off Man's skin (median)"
    ]
   ],
   "1819": [
    [
     "PROPMOVE",
-    "Helmet moves 2.1 cm with no hand on it (nearest finger 72 cm)"
+    "Helmet moves 2.1 cm with no hand on it (nearest finger 69 cm)"
    ]
   ],
   "1825": [
    [
     "PROPMOVE",
-    "Helmet moves 1.1 cm with no hand on it (nearest finger 71 cm)"
+    "Helmet moves 1.1 cm with no hand on it (nearest finger 69 cm)"
    ],
    [
     "ATTACH",
-    "Helmet is 6.6 cm off Man's skin (median)"
+    "Helmet is 7.4 cm off Man's skin (median)"
    ]
   ]
  },
  "counts": {
-  "EMPTY": 258,
+  "EMPTY": 259,
   "BACKHEAD": 2,
   "CAMJUMP": 21,
   "PROPMOVE": 88,

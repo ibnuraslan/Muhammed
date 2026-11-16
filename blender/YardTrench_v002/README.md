@@ -8,7 +8,7 @@ A vertical 1080×1920, 60 fps Cycles short, built straight to the client's VO (`
 - `beats.json`: shot starts at the VO word frames (`1 + round(seconds × 60)`).
 - `timing_vo.json`: the shot start seconds fed to `scripts/03_anim.py`.
 - `review/preview.mp4`: every 5th frame at 270×480 with the VO, rendered from the exact package.
-- `review/`: check reports (qa_check, clip_scan, limb_check, body_prop_cross).
+- `review/`: check reports (qa_check, clip_scan, limb_check, body_prop_cross) and `CHECKS.md` with the explanation of every remaining flag.
 - `scripts/`: the full build (`bash scripts/build.sh` inside this folder, about 1 min). Assets are fetched by `pipeline/find_models.py` / `fetch_polyhaven.py` into `assets_src/` (not in git; the uids are in `CREDITS.md`).
 
 ## Story (22 shots, hard cuts)
