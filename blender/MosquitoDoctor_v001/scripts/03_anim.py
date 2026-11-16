@@ -327,12 +327,12 @@ eye_white("Doctor", 1, (0.9, 0.9, 0.9)); eye_white("Doctor", 1940, (0.9, 0.9, 0.
 h0, h1 = BLK["H"]
 for k, f in enumerate(list(range(h0, h1 + 1, 20)) + [h1]):
     heave = 1.0 if k % 3 == 1 else 0.0
-    sit("Doctor", f, 1.4, 2.22, SEAT_D, yaw=-70, lean=26 + 6 * heave, spine=24 + 8 * heave, twist=-4, head=(22 + 6 * heave, -4), knee_fwd=0.42)
+    sit("Doctor", f, 1.4, 2.22, SEAT_D, yaw=-70, lean=20 + 5 * heave, spine=18 + 6 * heave, twist=-4, head=(22 + 6 * heave, -4), knee_fwd=0.42)
 for f in (h0, h1):
     sc.frame_set(f)
-    P = bone_world("Doctor", "spine04").translation
-    place_hand(D["Doctor"], "R", f, P + V((0.0, -0.13, -0.05)), V((0, 1, 0.2)).normalized(), V((1, 0, 0))); apply_pose(D["Doctor"], "R", "relaxed", f)
-    doc_pole("R", f, P + V((-0.4, 0.2, -0.1)))
+    knr = bone_world("Doctor", "lowerleg01.R").translation      # both hands on the knees (no hand pressed into the belly)
+    place_hand(D["Doctor"], "R", f, knr + V((0, 0.06, 0.06)), V((0, 0, -1)), V((0, -1, 0))); apply_pose(D["Doctor"], "R", "relaxed", f)
+    doc_pole("R", f, knr + V((-0.4, 0.3, 0.4)))
     kn = bone_world("Doctor", "lowerleg01.L").translation
     place_hand(D["Doctor"], "L", f, kn + V((0, 0.06, 0.06)), V((0, 0, -1)), V((0, -1, 0))); apply_pose(D["Doctor"], "L", "relaxed", f)
     doc_pole("L", f, kn + V((0.4, 0.3, 0.4)))

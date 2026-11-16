@@ -118,14 +118,14 @@ def window(name, axis, pos, c, w, z0, z1, sky_off=1.5):
         for (sx, sz, lx, lz) in ((w, t, c, z0 + t / 2), (w, t, c, z1 - t / 2), (t, z1 - z0, c - w / 2 + t / 2, (z0 + z1) / 2),
                                  (t, z1 - z0, c + w / 2 - t / 2, (z0 + z1) / 2), (t * 0.6, z1 - z0, c, (z0 + z1) / 2),
                                  (w, t * 0.6, c, z0 + (z1 - z0) * 0.55)):
-            obs.append(box(name + "_frame", (sx, 0.14, sz), (lx, pos, lz), M_TRIM))
+            obs.append(box(name + "_frame", (sx, 0.14 if sx < sz else 0.12, sz), (lx, pos, lz), M_TRIM))
         obs.append(box(name + "_sill", (w + 0.16, 0.22, 0.04), (c, pos - 0.08, z0 - 0.02), M_TRIM))
         sky = box(name + "_sky", (w * 4, 0.02, (z1 - z0) * 3.5), (c, pos + sky_off, (z0 + z1) / 2 + 0.6), M_SKY)
     else:
         for (sy, sz, ly, lz) in ((w, t, c, z0 + t / 2), (w, t, c, z1 - t / 2), (t, z1 - z0, c - w / 2 + t / 2, (z0 + z1) / 2),
                                  (t, z1 - z0, c + w / 2 - t / 2, (z0 + z1) / 2), (t * 0.6, z1 - z0, c, (z0 + z1) / 2),
                                  (w, t * 0.6, c, z0 + (z1 - z0) * 0.55)):
-            obs.append(box(name + "_frame", (0.14, sy, sz), (pos, ly, lz), M_TRIM))
+            obs.append(box(name + "_frame", (0.14 if sy < sz else 0.12, sy, sz), (pos, ly, lz), M_TRIM))
         obs.append(box(name + "_sill", (0.22, w + 0.16, 0.04), (pos + 0.08, c, z0 - 0.02), M_TRIM))
         sky = box(name + "_sky", (0.02, w * 4, (z1 - z0) * 3.5), (pos - sky_off, c, (z0 + z1) / 2 + 0.6), M_SKY)
     sky.visible_shadow = False; sky.visible_diffuse = False
@@ -297,7 +297,7 @@ for side in (-1, 1):
         segs.append(box("Ward_WallLow", (0.12, 1.0, 1.0), (x, y + 0.5, 0.5), M_WARDWALL))
         segs.append(box("Ward_WallHi", (0.12, 1.0, 0.6), (x, y + 0.5, H - 0.3), M_WARDWALL))
         sky = box("Ward_Sky", (0.02, 1.0, 1.7), (x + side * 0.4, y + 0.5, 1.85), M_SKY); sky.visible_shadow = False; sky.visible_diffuse = False
-        segs.append(box("Ward_WinFrame", (0.14, 1.0, 0.05), (x, y + 0.5, 1.0), M_TRIM))
+        segs.append(box("Ward_WinFrame", (0.12, 1.0, 0.05), (x, y + 0.5, 1.0), M_TRIM))
         segs.append(box("Ward_WinFrame", (0.14, 0.05, 1.6), (x, y + 0.5, 1.8), M_TRIM))
     WD += segs
 WD.append(box("Ward_End", (8, 0.12, H), (WX, 9.0, H / 2), M_WARDWALL)); WD.append(box("Ward_Ceiling", (8, 18, 0.05), (WX, 0, H + 0.02), M_CEIL))
