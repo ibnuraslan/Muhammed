@@ -44,7 +44,6 @@
 463,
 466,
 472,
-478,
 1057,
 1060,
 1063,
@@ -550,28 +549,21 @@
 "lowerleg01.R|Bike_frame|off": 1
 },
 "460": {
-"finger1-1.R|Glass|VIS": 5,
-"metacarpal1.R|Glass|VIS": 5,
-"finger1-2.R|Glass|VIS": 1
-},
-"463": {
-"finger1-2.R|Glass|VIS": 1,
+"metacarpal1.R|Glass|VIS": 4,
 "finger1-1.R|Glass|VIS": 3
 },
-"466": {
-"metacarpal1.R|Glass|VIS": 11,
-"finger1-2.R|Glass|VIS": 9,
-"finger1-1.R|Glass|VIS": 11
-},
-"472": {
-"metacarpal1.R|Glass|VIS": 6,
-"finger1-1.R|Glass|VIS": 7,
+"463": {
+"metacarpal1.R|Glass|VIS": 4,
+"finger1-1.R|Glass|VIS": 8,
 "finger1-2.R|Glass|VIS": 1
 },
-"478": {
-"finger1-1.R|Glass|VIS": 6,
-"finger1-2.R|Glass|VIS": 1,
-"metacarpal1.R|Glass|VIS": 3
+"466": {
+"metacarpal1.R|Glass|VIS": 15,
+"finger1-2.R|Glass|VIS": 17,
+"finger1-1.R|Glass|VIS": 9
+},
+"472": {
+"finger1-1.R|Glass|VIS": 4
 },
 "1057": {
 "finger4-3.R|PushDrum|VIS": 4
@@ -877,7 +869,7 @@
 "finger2-2.L|MovingBox|VIS": 24,
 "finger3-2.L|MovingBox|VIS": 18,
 "finger4-2.L|MovingBox|VIS": 14,
-"finger5-3.L|MovingBox|VIS": 13,
+"finger5-3.L|MovingBox|VIS": 14,
 "finger5-2.L|MovingBox|VIS": 8
 },
 "2215": {
@@ -894,15 +886,15 @@
 },
 "2218": {
 "finger2-2.R|MovingBox|VIS": 25,
-"finger3-2.R|MovingBox|VIS": 16,
+"finger3-2.R|MovingBox|VIS": 18,
 "finger4-2.R|MovingBox|VIS": 14,
-"finger5-3.R|MovingBox|VIS": 9,
-"finger5-2.R|MovingBox|VIS": 11,
-"finger2-2.L|MovingBox|VIS": 23,
+"finger5-3.R|MovingBox|VIS": 10,
+"finger5-2.R|MovingBox|VIS": 10,
+"finger2-2.L|MovingBox|VIS": 25,
 "finger3-2.L|MovingBox|VIS": 18,
 "finger4-2.L|MovingBox|VIS": 14,
-"finger5-3.L|MovingBox|VIS": 9,
-"finger5-2.L|MovingBox|VIS": 11
+"finger5-3.L|MovingBox|VIS": 12,
+"finger5-2.L|MovingBox|VIS": 9
 },
 "2401": {
 "root|Blanket|off": 3,

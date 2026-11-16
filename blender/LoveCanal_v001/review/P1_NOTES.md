@@ -32,3 +32,14 @@
 ## Build bugs found and fixed
 - A one-off rebuild crash meant one crossing check ran on a stale file; it was re-run.
 - Hand targets computed while a rig was parked off-set leaked into the last frame of a shot (the S3 lid vanished). Rigs now stay placed through their overrun, and actions end at the cut when the next shot reuses the character.
+
+## Director round 2 (Nov 16) applied
+1. S19: the box stays in his hands to the cut. Every stepped keying loop now lands its last key ON the cut frame (`frs()`), so nothing interpolates toward the next shot.
+2. S5: lower camera at the front-right of the island. Father, Mother and son are whole in frame.
+3. S4: the glass stays in his hand at chest height to the cut.
+4. Tan house: the black gable and porch were duplicate coincident faces shadowing each other. Duplicates are removed, normals face outward, and it has painted tan lap siding (procedural, no UVs).
+5. S7: the cut-away blocks are 18 m deep and the camera is framed lower, so there's no empty grey under them.
+6. S10: the camera pushes in. The worker walks toward it, stops, turns and waves the right-hand truck back.
+7. S12: heap drums that sank into the ground (81) or overlapped another drum (65) are left out, leaving 358 drums with no sliced wedges.
+8. S22: camera at the son's eye line. The son stands by his father's chest (above the blanket edge), and both faces read with the hand-on-hand kept.
+Crossing check on this build (`body_prop_cross.json`, S5 and S22 re-checked after their last camera tweak: 0) has only the accepted S1, S4, S9 and S19 contacts.

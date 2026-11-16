@@ -71,7 +71,7 @@ apply_pose(MO.r.o, "R", "shield", fa + 24)
 face(MO, fa, 0.004, -6, 1); blinks(MO, fa, fe, 0.004, -6, ofs=40)
 breathe(BOY, fa, fe, head=(-10, 8), step=24, flex=2, amp=2.5); arms_hang(BOY, fa)
 face(BOY, fa, 0.003, -4); blinks(BOY, fa, fe, 0.003, -4, ofs=70)
-camshot("S5", [(0.0, (301.7, -1.95, 1.18), (300.45, 1.0, 1.08), 26), (1.0, (301.6, -1.6, 1.16), (300.45, 1.0, 1.08), 26)])
+camshot("S5", [(0.0, (301.9, -2.1, 1.05), (300.45, 1.0, 1.15), 26), (1.0, (301.8, -1.75, 1.04), (300.45, 1.0, 1.15), 26)])
 
 # ================================================================== S22: hospital: Father in bed, Boy beside him, his hand resting on his father's
 HX = Vector((2100, 0, 0)); HBED = OB["HospitalBed"]; HCH = OB["BedsideChair"]
@@ -195,7 +195,7 @@ HCH.location = HCH.location + Vector((hip_w.x - cc.x - HEAD_SGN * 0.75, seat_y -
 ev(fa); cmn, cmx = bbox([HCH])
 SEAT_Z = top_at((cmn.x + cmx.x) / 2, (cmn.y + cmx.y) / 2 + 0.05 * -want.y)
 print("CHAIR seat", round(SEAT_Z, 3))
-BP = Vector((hip_w.x + HEAD_SGN * 0.2, bmx.y + 0.36 if CHAIR_SIDE > 0 else bmn.y - 0.36, 0))
+BP = Vector((hip_w.x + HEAD_SGN * 0.62, bmx.y + 0.36 if CHAIR_SIDE > 0 else bmn.y - 0.36, 0))
 put("Boy", [("S1", (0, 0, 0), 180), ("S5", BOP, yaw_to(BOP, FP)), ("S22", HX + Vector((BP.x - HX.x, BP.y, 0)), 180 if want.y < 0 else 0)])
 ev(fa + 1)
 for i, f in enumerate(frs(fa, fe, 30)):
@@ -211,5 +211,5 @@ for f in (fa, fe):
 arms_hang(BOY, fa); arms_hang(BOY, fe)
 for f in (fa, fe):
     place_hand(BOY.r.o, "R", f, HAND_P + Vector((0, 0, 0.032)), Vector((0, 0, -1)), Vector((-HEAD_SGN * 0.7, 0.7 if want.y < 0 else -0.7, 0)).normalized())
-camshot("S22", [(0.0, (hip_w.x - HEAD_SGN * 0.15, bc.y - 1.75, 1.2), (hip_w.x + HEAD_SGN * 0.3, bc.y + 0.45, 0.88), 28),
-                (1.0, (hip_w.x - HEAD_SGN * 0.15, bc.y - 1.5, 1.18), (hip_w.x + HEAD_SGN * 0.3, bc.y + 0.45, 0.9), 28)])
+camshot("S22", [(0.0, (hip_w.x + HEAD_SGN * 0.05, bc.y - 1.75, 1.42), (hip_w.x + HEAD_SGN * 0.5, bc.y + 0.45, 0.92), 28),
+                (1.0, (hip_w.x + HEAD_SGN * 0.05, bc.y - 1.5, 1.38), (hip_w.x + HEAD_SGN * 0.5, bc.y + 0.45, 0.94), 28)])
