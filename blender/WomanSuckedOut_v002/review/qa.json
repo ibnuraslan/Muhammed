@@ -1,0 +1,2688 @@
+{
+ "frames": {
+  "109": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "CAMJUMP",
+    "camera switch CAM_S01 -> CAM_S04"
+   ]
+  ],
+  "115": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "121": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "127": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "133": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "139": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "145": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "151": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "157": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "163": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "169": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "175": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "181": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "187": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "193": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "199": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "205": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "211": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "217": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "223": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "229": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "235": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "241": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "247": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "253": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "259": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "265": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "271": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "277": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "283": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "289": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "295": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "301": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "307": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "313": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "319": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "325": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "331": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "337": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "343": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "349": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "355": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "361": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "367": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "373": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "379": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "385": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "391": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "397": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "403": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "409": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "415": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "421": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "427": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "433": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "439": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "445": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "451": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_00 moves 97.8 cm with no hand on it (nearest finger 152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_01 moves 88.6 cm with no hand on it (nearest finger 165 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_05 moves 105.1 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_08 moves 89.9 cm with no hand on it (nearest finger 192 cm)"
+   ]
+  ],
+  "457": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_00 moves 93.8 cm with no hand on it (nearest finger 128 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_01 moves 86.2 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_02 moves 97.5 cm with no hand on it (nearest finger 209 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_04 moves 75.5 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_05 moves 100.6 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_06 moves 83.7 cm with no hand on it (nearest finger 200 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_08 moves 86.2 cm with no hand on it (nearest finger 164 cm)"
+   ]
+  ],
+  "463": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_00 moves 85.4 cm with no hand on it (nearest finger 115 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_01 moves 80.3 cm with no hand on it (nearest finger 128 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_02 moves 88.9 cm with no hand on it (nearest finger 195 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_04 moves 68.8 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_05 moves 91.6 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_06 moves 76.8 cm with no hand on it (nearest finger 190 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_08 moves 78.4 cm with no hand on it (nearest finger 146 cm)"
+   ]
+  ],
+  "469": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_00 moves 72.7 cm with no hand on it (nearest finger 99 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_01 moves 68.4 cm with no hand on it (nearest finger 126 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_02 moves 75.7 cm with no hand on it (nearest finger 197 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_04 moves 58.7 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_06 moves 65.7 cm with no hand on it (nearest finger 187 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_08 moves 66.9 cm with no hand on it (nearest finger 140 cm)"
+   ]
+  ],
+  "475": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_00 moves 55.8 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_01 moves 51.8 cm with no hand on it (nearest finger 110 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_02 moves 58.1 cm with no hand on it (nearest finger 199 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_03 moves 29.6 cm with no hand on it (nearest finger 174 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_04 moves 45.1 cm with no hand on it (nearest finger 16 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_06 moves 50.3 cm with no hand on it (nearest finger 180 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_08 moves 51.5 cm with no hand on it (nearest finger 135 cm)"
+   ]
+  ],
+  "481": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_00 moves 34.7 cm with no hand on it (nearest finger 79 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_01 moves 32.0 cm with no hand on it (nearest finger 98 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_02 moves 36.1 cm with no hand on it (nearest finger 200 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_03 moves 18.3 cm with no hand on it (nearest finger 163 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_04 moves 28.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_06 moves 31.1 cm with no hand on it (nearest finger 174 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_08 moves 32.0 cm with no hand on it (nearest finger 122 cm)"
+   ]
+  ],
+  "487": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "CAMJUMP",
+    "camera switch CAM_S06 -> CAM_S07"
+   ]
+  ],
+  "493": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "499": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "505": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "511": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "517": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "523": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "529": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "535": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "541": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "547": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "553": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_11 moves 118.3 cm with no hand on it (nearest finger 73 cm)"
+   ]
+  ],
+  "559": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_10 moves 119.6 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_11 moves 146.9 cm with no hand on it (nearest finger 116 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_03 moves 53.3 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_05 moves 31.6 cm with no hand on it (nearest finger 91 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_09 moves 52.5 cm with no hand on it (nearest finger 78 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_16 moves 42.9 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_17 moves 43.4 cm with no hand on it (nearest finger 80 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_18 moves 53.2 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_20 moves 52.5 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_21 moves 36.8 cm with no hand on it (nearest finger 79 cm)"
+   ]
+  ],
+  "565": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_10 moves 162.0 cm with no hand on it (nearest finger 111 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_00 moves 95.4 cm with no hand on it (nearest finger 72 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_02 moves 110.3 cm with no hand on it (nearest finger 85 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_03 moves 131.5 cm with no hand on it (nearest finger 82 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_04 moves 85.6 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_05 moves 79.7 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_09 moves 132.4 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_11 moves 76.7 cm with no hand on it (nearest finger 80 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_12 moves 137.0 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_13 moves 113.1 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_14 moves 100.8 cm with no hand on it (nearest finger 75 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_15 moves 98.6 cm with no hand on it (nearest finger 91 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_16 moves 101.2 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_17 moves 108.4 cm with no hand on it (nearest finger 87 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_18 moves 132.2 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_20 moves 131.6 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_21 moves 91.9 cm with no hand on it (nearest finger 54 cm)"
+   ]
+  ],
+  "571": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_10 moves 165.5 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_00 moves 123.9 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_02 moves 132.4 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_03 moves 171.3 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_04 moves 108.2 cm with no hand on it (nearest finger 103 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_05 moves 106.1 cm with no hand on it (nearest finger 116 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_08 moves 91.6 cm with no hand on it (nearest finger 106 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_09 moves 170.8 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_10 moves 110.1 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_11 moves 112.0 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_12 moves 177.7 cm with no hand on it (nearest finger 157 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_13 moves 147.0 cm with no hand on it (nearest finger 166 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_14 moves 130.1 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_15 moves 125.6 cm with no hand on it (nearest finger 165 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_16 moves 144.5 cm with no hand on it (nearest finger 96 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_17 moves 141.7 cm with no hand on it (nearest finger 174 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_18 moves 172.7 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_20 moves 171.3 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_21 moves 119.6 cm with no hand on it (nearest finger 107 cm)"
+   ]
+  ],
+  "577": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_10 moves 128.8 cm with no hand on it (nearest finger 191 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_00 moves 123.6 cm with no hand on it (nearest finger 191 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_02 moves 137.0 cm with no hand on it (nearest finger 226 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_03 moves 175.2 cm with no hand on it (nearest finger 204 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_04 moves 112.1 cm with no hand on it (nearest finger 142 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_05 moves 104.2 cm with no hand on it (nearest finger 163 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_08 moves 80.3 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_09 moves 168.6 cm with no hand on it (nearest finger 199 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_10 moves 110.4 cm with no hand on it (nearest finger 213 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_11 moves 107.7 cm with no hand on it (nearest finger 209 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_12 moves 180.2 cm with no hand on it (nearest finger 227 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_13 moves 146.6 cm with no hand on it (nearest finger 225 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_14 moves 137.6 cm with no hand on it (nearest finger 208 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_15 moves 128.4 cm with no hand on it (nearest finger 240 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_16 moves 138.7 cm with no hand on it (nearest finger 139 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_17 moves 142.7 cm with no hand on it (nearest finger 239 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_18 moves 170.2 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_19 moves 111.9 cm with no hand on it (nearest finger 245 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_20 moves 174.8 cm with no hand on it (nearest finger 171 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_21 moves 119.5 cm with no hand on it (nearest finger 151 cm)"
+   ]
+  ],
+  "583": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "DEBRIS_10 moves 51.9 cm with no hand on it (nearest finger 213 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_00 moves 93.7 cm with no hand on it (nearest finger 236 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_02 moves 103.4 cm with no hand on it (nearest finger 283 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_03 moves 130.9 cm with no hand on it (nearest finger 255 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_04 moves 85.5 cm with no hand on it (nearest finger 166 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_05 moves 80.3 cm with no hand on it (nearest finger 196 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_08 moves 62.4 cm with no hand on it (nearest finger 188 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_09 moves 132.3 cm with no hand on it (nearest finger 253 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_10 moves 83.3 cm with no hand on it (nearest finger 258 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_11 moves 85.6 cm with no hand on it (nearest finger 263 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_12 moves 136.5 cm with no hand on it (nearest finger 287 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_13 moves 112.9 cm with no hand on it (nearest finger 288 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_14 moves 95.5 cm with no hand on it (nearest finger 255 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_15 moves 100.1 cm with no hand on it (nearest finger 294 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_16 moves 101.5 cm with no hand on it (nearest finger 169 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_17 moves 110.2 cm with no hand on it (nearest finger 303 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_18 moves 130.9 cm with no hand on it (nearest finger 206 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_19 moves 86.8 cm with no hand on it (nearest finger 289 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_20 moves 129.4 cm with no hand on it (nearest finger 214 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_21 moves 91.7 cm with no hand on it (nearest finger 191 cm)"
+   ]
+  ],
+  "589": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_00 moves 37.9 cm with no hand on it (nearest finger 254 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_02 moves 42.1 cm with no hand on it (nearest finger 306 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_03 moves 52.0 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_04 moves 34.0 cm with no hand on it (nearest finger 183 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_05 moves 32.3 cm with no hand on it (nearest finger 212 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_08 moves 28.2 cm with no hand on it (nearest finger 198 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_09 moves 53.6 cm with no hand on it (nearest finger 260 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_10 moves 35.1 cm with no hand on it (nearest finger 277 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_11 moves 29.2 cm with no hand on it (nearest finger 277 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_12 moves 54.8 cm with no hand on it (nearest finger 302 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_13 moves 45.1 cm with no hand on it (nearest finger 310 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_14 moves 44.4 cm with no hand on it (nearest finger 278 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_15 moves 39.4 cm with no hand on it (nearest finger 320 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_16 moves 44.5 cm with no hand on it (nearest finger 183 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_17 moves 43.8 cm with no hand on it (nearest finger 330 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_18 moves 53.1 cm with no hand on it (nearest finger 211 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_19 moves 35.2 cm with no hand on it (nearest finger 309 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_20 moves 51.3 cm with no hand on it (nearest finger 219 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_21 moves 37.0 cm with no hand on it (nearest finger 206 cm)"
+   ]
+  ],
+  "595": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "601": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "607": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "613": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "619": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "829": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "835": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "841": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "847": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "853": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "859": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "865": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "871": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "877": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "883": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "889": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "895": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "901": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "907": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "913": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "919": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "925": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "931": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "937": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "943": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "949": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "955": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "961": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "967": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "973": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "BACKHEAD",
+    "HB"
+   ],
+   [
+    "CAMJUMP",
+    "camera switch CAM_S09 -> CAM_S11"
+   ]
+  ],
+  "979": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "985": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "991": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "997": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1003": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1009": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1015": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1021": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1027": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1033": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1039": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1045": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1051": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1057": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1063": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1069": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1075": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1081": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1087": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1093": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1099": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1105": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "BACKHEAD",
+    "HB"
+   ]
+  ],
+  "1111": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1117": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1123": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1129": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1135": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1141": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1147": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1153": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1159": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1165": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1171": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1177": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1183": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1189": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1195": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1201": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1207": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1213": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1219": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1225": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1231": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1237": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1243": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1249": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1255": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1261": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1267": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1273": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1279": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1285": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1291": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1297": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "BACKHEAD",
+    "HB"
+   ]
+  ],
+  "1303": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1309": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1315": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1321": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1327": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1333": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1339": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1345": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1351": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1357": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1363": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1369": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1375": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1381": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1387": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1393": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1399": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1405": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1411": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1417": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1423": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1429": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1435": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1441": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1447": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1453": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1459": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1465": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1471": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1477": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1483": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1489": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1495": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1501": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1507": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1513": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1519": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1525": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1531": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1537": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1543": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1549": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1555": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1561": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1567": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1573": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1579": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1585": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1591": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1597": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1603": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1609": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1615": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1621": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1627": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1633": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1639": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1645": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1651": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "246": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S04 -> CAM_S03"
+   ]
+  ],
+  "353": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S03 -> CAM_S05"
+   ]
+  ],
+  "401": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S05 -> CAM_S06"
+   ]
+  ],
+  "620": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S07 -> CAM_S02"
+   ]
+  ],
+  "709": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S02 -> CAM_S08"
+   ]
+  ],
+  "825": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S08 -> CAM_S09"
+   ]
+  ],
+  "1106": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S11 -> CAM_S12"
+   ]
+  ],
+  "1191": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S12 -> CAM_S13"
+   ]
+  ],
+  "1298": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S13 -> CAM_S14"
+   ]
+  ],
+  "1385": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S14 -> CAM_S15"
+   ]
+  ],
+  "1488": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S15 -> CAM_S16"
+   ]
+  ],
+  "1547": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S16 -> CAM_S17"
+   ]
+  ],
+  "637": [
+   [
+    "PROPMOVE",
+    "SHARD_01 moves 60.2 cm with no hand on it (nearest finger 73 cm)"
+   ]
+  ],
+  "643": [
+   [
+    "PROPMOVE",
+    "PAPER_0 moves 59.5 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "PAPER_1 moves 46.9 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "PAPER_2 moves 31.8 cm with no hand on it (nearest finger 40 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "PAPER_3 moves 18.8 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SHARD_01 moves 51.8 cm with no hand on it (nearest finger 88 cm)"
+   ]
+  ],
+  "649": [
+   [
+    "PROPMOVE",
+    "PAPER_1 moves 53.4 cm with no hand on it (nearest finger 48 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "PAPER_2 moves 46.4 cm with no hand on it (nearest finger 40 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "PAPER_3 moves 43.7 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "PAPER_4 moves 28.6 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "PAPER_5 moves 13.4 cm with no hand on it (nearest finger 42 cm)"
+   ]
+  ],
+  "655": [
+   [
+    "PROPMOVE",
+    "PAPER_3 moves 49.9 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "PAPER_4 moves 41.7 cm with no hand on it (nearest finger 53 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "PAPER_5 moves 31.2 cm with no hand on it (nearest finger 43 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "INSIDE": 152,
+  "EMPTY": 180,
+  "FILL": 41,
+  "BACKHEAD": 3,
+  "CAMJUMP": 15,
+  "PROPMOVE": 158
+ }
+}
