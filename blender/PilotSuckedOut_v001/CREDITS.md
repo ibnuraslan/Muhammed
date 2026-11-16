@@ -2,7 +2,7 @@
 
 ## Required attribution (CC BY 4.0)
 ```
-3D models (CC BY 4.0, via Sketchfab): 737 Max-8 (Free) by AMPG · Low Poly White Van by AirStudios
+3D models (CC BY 4.0, via Sketchfab): 737 Max-8 (Free) by AMPG · Low Poly White Van by AirStudios · j type hanger by ElectricL · Apex Control Tower by alecbeauregard
 ```
 
 | Asset | Source | Licence |
@@ -14,3 +14,6 @@
 | Nose liner, cloud clusters, runway, grass, hills, landing gear, papers | procedural (`scripts/02_sets.py`, `03_shots.py`) | ours |
 | DA KRAS FILMS logo | `blender/assets/brand/` | ours |
 | Trees and shrubs on the landing field | Poly Haven "Island Tree 01" (Rob Tuytel, Rico Cilliers), "Shrub 01" (Rico Cilliers) | CC0 |
+| Hangars (4 copies) | "j type hanger" by ElectricL, https://sketchfab.com/3d-models/d86713d61b4941378a6ad21569e0cbac (via Objaverse) | CC BY 4.0 |
+| Control tower | "Apex Control Tower" by alecbeauregard, https://sketchfab.com/3d-models/b2070e094d1a4fbc9e3aae41af9badad (via Objaverse) | CC BY 4.0 |
+| Perimeter fence, runway edge lights | procedural (`scripts/02_sets.py`) | ours |

@@ -48,6 +48,14 @@ lengths become the VO frames and `03_shots.py` is re-run: shots are only trimmed
 
 Provisional total: 3328 frames (55.5 s). The VO decides the real lengths.
 
+## Director P1 notes (Nov 16) and what changed (P1c)
+1. FO eyes: his irises were pale blue on a pale sclera and read white; now brown irises, sclera toned to 0.82 on every character, catchlight kept.
+2. Captain's arms (03/06/07/08): no Y pose; upper arms swept back along the fuselage with bent elbows, varying per key (seeded), mouth only parted (jaw 6–8°).
+3. S14: lean 26–33° back and 20° to his left; head bone ≥17 cm from the skin, side profile camera in clear air.
+4. Exterior look: deeper sky ramp and lower sky/world strength, sun 7.5 (shadows), farmland darker and more saturated, cloud clusters toned down; S18 reframed on wing + engine with sky.
+5. Landing: 4 hangars and a control tower (CC-BY), perimeter fence, edge lights, Poly Haven trees and shrubs; S20 and S21 cameras pushed in.
+6. S09: the attendant grips his shins from the first frame. FO framed out of S05.
+
 ## Logo (DA KRAS FILMS)
 1. Side of the white service van by the runway, shot 23 (dark logo on white, flat-on, about 25% of frame width, f/11, >1 s).
 Never on the plane (brief), never on a person, never during the captain's danger beats.

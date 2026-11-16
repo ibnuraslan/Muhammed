@@ -25,6 +25,33 @@ for n in ("SUNSHADE_L", "SUNSHADE_R"):
 for n in ("EPAULETTE_CAPT_L", "EPAULETTE_CAPT_R"):
     o = D.objects.get(n)
     if o: D.objects.remove(o, do_unlink=True)
+# ---------------------------------------------------------------- director P1 notes: deeper sky, sun key, darker ground, FO brown irises
+sky = D.objects["SKY_DOME"].data.materials[0].node_tree
+for n in sky.nodes:
+    if n.type == 'VALTORGB':
+        el = n.color_ramp.elements; el[0].color = (0.55, 0.75, 0.95, 1); el[1].color = (0.25, 0.55, 0.92, 1); el[2].color = (0.04, 0.28, 0.78, 1)
+    if n.type == 'EMISSION': n.inputs["Strength"].default_value = 1.15
+for n in sc.world.node_tree.nodes:
+    if n.type == 'BACKGROUND' and not n.inputs[0].is_linked: n.inputs[1].default_value = 0.6
+D.objects["SUN"].data.energy = 7.5
+gm = D.objects["GROUND"].data.materials[0].node_tree
+for n in gm.nodes:
+    if n.type == 'HUE_SAT': n.inputs["Value"].default_value = n.inputs["Value"].default_value * 0.7; n.inputs["Saturation"].default_value = 1.25
+fo_eye = None
+for o in D.objects["FO"].children:
+    for m in (o.data.materials if o.type == 'MESH' else []):
+        if not m or not m.node_tree: continue
+        for n in m.node_tree.nodes:
+            if n.type == 'GROUP' and n.node_tree and n.node_tree.name.startswith("EnhancedEye"):
+                n.inputs["IrisMajorColor"].default_value = (0.23, 0.12, 0.05, 1); n.inputs["IrisMinorColor"].default_value = (0.07, 0.035, 0.015, 1)
+                n.inputs["EyeWhiteColor"].default_value = (0.82, 0.8, 0.78, 1); print("SETS FO iris ->", m.name)
+for o in (D.objects["CAPT"], D.objects["Attendant"]):
+    for c in o.children:
+        for m in (c.data.materials if c.type == 'MESH' else []):
+            if m and m.node_tree:
+                for n in m.node_tree.nodes:
+                    if n.type == 'GROUP' and n.node_tree and n.node_tree.name.startswith("EnhancedEye"):
+                        n.inputs["EyeWhiteColor"].default_value = (0.85, 0.83, 0.8, 1)
 # ---------------------------------------------------------------- 737 exterior
 ap = D.objects["Airliner"]
 OLD = ap.location.copy(); ap.location = (0, -3000, 0)
@@ -60,7 +87,7 @@ for o in (ln, st):
     for c in list(o.users_collection): c.objects.unlink(o)
     coll("PLANE").objects.link(o)
 # ---------------------------------------------------------------- cloud puffs near the 737 (white, soft), they drift past in 03
-M_cloud = mat("M_cloudpuff", (0.97, 0.98, 1.0), 0.9)
+M_cloud = mat("M_cloudpuff", (0.86, 0.89, 0.95), 0.9)
 M_cloud.node_tree.nodes["Principled BSDF"].inputs["Subsurface Weight"].default_value = 0.0
 CP = coll("CLOUDS_NEAR"); random.seed(17)
 def puff(name, loc, size):
@@ -162,9 +189,11 @@ def hz(x, y):
 for side in (-1, 1):                     # tree lines along the field edges and clumps on the near hills
     for i in range(70):
         x = random.uniform(-1500, 1500); y = side * random.uniform(75, 260)
+        if side > 0 and -320 < x < 160 and y < 175: continue          # hangar and tower apron
         inst(tree_pc, L0 + Vector((x, y, hz(x, y))), random.uniform(2.6, 4.0), random.uniform(0, 6.28))
     for i in range(90):
         x = random.uniform(-1200, 1200); y = side * random.uniform(45, 200)
+        if side > 0 and -320 < x < 160 and y < 175: continue
         if side < 0 and 240 < x < 290 and y > -75: continue          # keep the van and its logo clear
         inst(shrub_pc, L0 + Vector((x, y, hz(x, y))), random.uniform(2.5, 4.5), random.uniform(0, 6.28))
 for x, y in ((243, -52), (249, -46), (278, -50), (284, -44), (-310, -60), (-285, -66), (215, -40), (205, -34)):
@@ -187,6 +216,48 @@ for x in range(-1180, 1181, 60):
         bmesh.ops.create_uvsphere(lm_, u_segments=10, v_segments=6, radius=0.11, matrix=Matrix.Translation((x, sd * 24.5, 0.4)))
 me = D.meshes.new("EDGE_LAMPS"); lm_.to_mesh(me); lm_.free()
 ek = D.objects.new("EDGE_LAMPS", me); ek.location = L0; me.materials.append(M_lamp); LC.objects.link(ek)
+# airport: hangars (CC-BY ElectricL), control tower (CC-BY alecbeauregard), perimeter fence, more edge lights
+def glb(name, path, size_ax, size):
+    before = set(D.objects); bpy.ops.import_scene.gltf(filepath=path)
+    new = [o for o in D.objects if o not in before]; ms = [o for o in new if o.type == 'MESH']
+    for o in ms:
+        mw = o.matrix_world.copy(); o.parent = None; o.matrix_world = mw
+    for o in new:
+        if o.type != 'MESH': D.objects.remove(o, do_unlink=True)
+    bpy.ops.object.select_all(action='DESELECT')
+    for o in ms: o.select_set(True)
+    bpy.context.view_layer.objects.active = ms[0]; bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+    if len(ms) > 1: bpy.ops.object.join()
+    ob = bpy.context.view_layer.objects.active; ob.name = name
+    pts = [v.co for v in ob.data.vertices]; mn = Vector([min(p[i] for p in pts) for i in range(3)]); mx = Vector([max(p[i] for p in pts) for i in range(3)])
+    sc_ = size / (mx - mn)["xyz".index(size_ax)]
+    ob.data.transform(Matrix.Scale(sc_, 4) @ Matrix.Translation(-Vector(((mn.x + mx.x) / 2, (mn.y + mx.y) / 2, mn.z))))
+    for cc in list(ob.users_collection): cc.objects.unlink(ob)
+    LC.objects.link(ob)
+    pts = [v.co for v in ob.data.vertices]; print("SETS", name, [round(max(p[i] for p in pts) - min(p[i] for p in pts), 1) for i in range(3)])
+    return ob
+hg = glb("HANGAR", "/home/user/work17/models/hangar.glb", "z", 16.0)
+for i, x in enumerate((-260, -170, -80, 10)):
+    h_ = hg if i == 0 else hg.copy()
+    if i: LC.objects.link(h_)
+    h_.location = L0 + Vector((x, 120, 0)); h_.rotation_euler = (0, 0, R_(0))
+tw = glb("TOWER", "/home/user/work17/models/tower.glb", "z", 34.0); tw.location = L0 + Vector((120, 110, 0))
+M_fpost = mat("M_fence_post", (0.55, 0.57, 0.6), 0.4, 0.5)
+M_mesh = D.materials.new("M_fence_mesh"); M_mesh.use_nodes = True; nt = M_mesh.node_tree; P = nt.nodes["Principled BSDF"]
+tco = nt.nodes.new("ShaderNodeTexCoord"); br = nt.nodes.new("ShaderNodeTexBrick"); br.inputs["Scale"].default_value = 3.0; br.inputs["Mortar Size"].default_value = 0.012
+nt.links.new(tco.outputs["Object"], br.inputs["Vector"])
+br.offset = 0.0; br.squash = 1.0
+inv = nt.nodes.new("ShaderNodeMath"); inv.operation = 'SUBTRACT'; inv.inputs[0].default_value = 1.0
+nt.links.new(br.outputs["Fac"], inv.inputs[1]); nt.links.new(br.outputs["Fac"], P.inputs["Alpha"])
+P.inputs["Base Color"].default_value = (0.6, 0.62, 0.64, 1); P.inputs["Metallic"].default_value = 0.6; P.inputs["Roughness"].default_value = 0.4
+fb = bmesh.new(); pnl = bmesh.new()
+for side, y in ((1, 62.0),):
+    for x in range(-900, 901, 4):
+        bmesh.ops.create_cone(fb, cap_ends=True, segments=8, radius1=0.04, radius2=0.04, depth=2.2, matrix=Matrix.Translation((x, y, 1.1)))
+    bmesh.ops.create_cube(fb, size=1, matrix=Matrix.Translation((0, y, 2.18)) @ Matrix.Diagonal((1800, 0.05, 0.05, 1)))
+    bmesh.ops.create_cube(pnl, size=1, matrix=Matrix.Translation((0, y, 1.1)) @ Matrix.Diagonal((1800, 0.01, 2.1, 1)))
+me = D.meshes.new("FENCE_POSTS"); fb.to_mesh(me); fb.free(); fo_ = D.objects.new("FENCE_POSTS", me); fo_.location = L0; me.materials.append(M_fpost); LC.objects.link(fo_)
+me = D.meshes.new("FENCE_MESH"); pnl.to_mesh(me); pnl.free(); fm_ = D.objects.new("FENCE_MESH", me); fm_.location = L0; me.materials.append(M_mesh); LC.objects.link(fm_)
 # landing copy of the 737 (shares the mesh; landing shots look at its right side)
 al = ap.copy(); al.name = "Airliner_LAND"; al.data = ap.data; coll("LANDING").objects.link(al)
 al.location = L0 + Vector((0, 0, 0))

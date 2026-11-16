@@ -6,7 +6,7 @@ No VO yet. Shots are provisional-length 1× clips (`scripts/shots.py`); Phase 2 
 - `review/P1_sheet_540.jpg`: first, middle and last frame of all 23 shots, 540×960, Cycles 8 samples + OIDN.
 - `review/bpc.json`, `review/clip.json`: body_prop_cross (B17 copy with window mask + occlusion) and clip_scan results.
 
-Rebuild (all sources are in the repo; the draft .blend is not pushed at P1). 02_sets.py also needs Poly Haven island_tree_01 + shrub_01 (fetch_polyhaven.py /home/user/work17/ph 1k ...):
+Rebuild (all sources are in the repo; the draft .blend is not pushed at P1). 02_sets.py also needs Poly Haven island_tree_01 + shrub_01 (fetch_polyhaven.py /home/user/work17/ph 1k ...) and models van/hangar/tower (find_models.py get, uids in CREDITS.md) in /home/user/work17/models:
 ```
 B=/opt/blender/blender-5.2.2-linux-x64/blender
 $B -b blender/NoPilotPlane_v011/NoPilotPlane_v011_60fps.blend --python blender/PilotSuckedOut_v001/scripts/01_base.py -- base.blend

@@ -198,12 +198,12 @@ def flail(f0, f1, lean0, lean1, jaw_deg=12, step=18, amp=1.0, head=(0, 0.25, 1),
             cap_out(f, lean=lean, armL=(0.75, 0.75 + 0.05 * math.sin(f * 0.3), 0.15), fL=(0.5, 1.0, 0.1),
                     armR=(-0.45, 0.9 + 0.05 * math.cos(f * 0.27), 0.25), fR=(-0.3, 1.0, 0.2), head=head, legs=legs, side=side)
         else:
-            a = amp
-            cap_out(f, lean=lean, armL=(0.75, 0.35 + 0.25 * a * rnd.uniform(-1, 1), 0.55 + 0.2 * a * rnd.uniform(-1, 1)),
-                    fL=(0.5 + 0.2 * rnd.uniform(-1, 1), 0.45 + 0.35 * a * rnd.uniform(-1, 1), 0.85),
-                    armR=(-0.75, 0.3 + 0.25 * a * rnd.uniform(-1, 1), 0.6 + 0.2 * a * rnd.uniform(-1, 1)),
-                    fR=(-0.5 - 0.2 * rnd.uniform(-1, 1), 0.5 + 0.35 * a * rnd.uniform(-1, 1), 0.85),
-                    head=(head[0] + 0.12 * rnd.uniform(-1, 1), head[1], head[2]), legs=legs, side=side)
+            a = amp; u = rnd.uniform(-1, 1); v_ = rnd.uniform(-1, 1)
+            cap_out(f, lean=lean, armL=(0.7 + 0.15 * u, 0.75 + 0.2 * v_, 0.05 + 0.2 * a * u),
+                    fL=(0.35 + 0.15 * v_, 0.8 + 0.25 * u, 0.35 + 0.2 * a * v_),
+                    armR=(-0.7 - 0.15 * v_, 0.8 + 0.2 * u, 0.0 + 0.2 * a * v_),
+                    fR=(-0.35 - 0.15 * u, 0.85 + 0.25 * v_, 0.3 + 0.2 * a * u),
+                    head=(head[0] + 0.15 * rnd.uniform(-1, 1), head[1], head[2]), legs=legs, side=side)
         jaw(CAP, f, jaw_deg * (0.8 + 0.4 * rnd.random()))
         if f >= f1: break
         f = min(f1, f + step)
@@ -222,11 +222,11 @@ for sid, st, f0, f1 in LAY:
     elif sid == "02":
         rise = F(sid, 0.22)
         place(CAP, f0, HOLE + Vector((0.05, 0, -0.75)), 90); place(CAP, rise, HOLE + Vector((0, 0, -0.06)), 90); place(CAP, f1, HOLE + Vector((0, 0, -0.04)), 90)
-        flail(f0, f1, 0, 14, jaw_deg=10, seed=2)
+        flail(f0, f1, 0, 14, jaw_deg=7, seed=2)
         camera(sid, [(0, (23.5, -2997.0, 5.3), (17.9, -2999.6, 4.6)), (1, (22.0, -2997.6, 5.6), (17.9, -2999.6, 4.85))], lens=35)
     elif sid == "03":
         place(CAP, f0, HOLE + Vector((0, 0, -0.04)), 90); place(CAP, f1, HOLE + Vector((0, 0, -0.03)), 90)
-        flail(f0, f1, 14, 20, jaw_deg=13, seed=3)
+        flail(f0, f1, 14, 20, jaw_deg=7, seed=3, step=16)
         camera(sid, [(0, (19.9, -2999.0, 4.95), (17.85, -2999.56, 4.75)), (1, (19.4, -2998.5, 5.1), (17.85, -2999.56, 4.8))], lens=35)
     elif sid in ("04", "05"):
         cap_at_cock(f0); cap_at_cock(f1)
@@ -236,18 +236,18 @@ for sid, st, f0, f1 in LAY:
             cap_out(f, lean=12, legs=(1.0, 2.7 + w)); 
         cap_out(f1, lean=12, legs=(1.0, 2.7))
         if sid == "04": camera(sid, [(0, (-1.0, 0.85, 1.6), (-0.33, 2.2, 1.3)), (1, (-0.85, 1.25, 1.4), (-0.33, 2.4, 1.35))], lens=22)
-        else: camera(sid, [(0, (-1.02, 1.85, 1.4), (-0.3, 2.3, 1.22)), (1, (-1.0, 2.05, 1.38), (-0.3, 2.2, 1.12))], lens=22)
+        else: camera(sid, [(0, (-1.02, 1.85, 1.4), (-0.42, 2.35, 1.2)), (1, (-1.0, 2.0, 1.38), (-0.5, 2.3, 1.15))], lens=33)
     elif sid == "06":
         place(CAP, f0, HOLE + Vector((0, 0, -0.03)), 90); place(CAP, f1, HOLE + Vector((0, 0, -0.03)), 90)
-        flail(f0, f1, 20, 26, jaw_deg=12, seed=6); papers(sid)
+        flail(f0, f1, 20, 26, jaw_deg=6, seed=6, step=20); papers(sid)
         camera(sid, [(0, (19.1, -2998.6, 4.75), (17.95, -2999.45, 4.2)), (1, (18.9, -2998.4, 4.8), (17.9, -2999.5, 4.25))], lens=30)
     elif sid == "07":
         place(CAP, f0, HOLE + Vector((0, 0, -0.03)), 90); place(CAP, f1, HOLE + Vector((0, 0, -0.03)), 90)
-        flail(f0, f1, 24, 40, jaw_deg=14, seed=7); papers(sid, 0.2)
+        flail(f0, f1, 24, 40, jaw_deg=7, seed=7); papers(sid, 0.2)
         camera(sid, [(0, (19.6, -2997.4, 3.9), (17.8, -2999.5, 4.7)), (1, (19.0, -2997.1, 4.1), (17.7, -2999.5, 4.8))], lens=28)
     elif sid == "08":
         place(CAP, f0, HOLE + Vector((0, 0, -0.03)), 90); place(CAP, f1, HOLE + Vector((0, 0, -0.03)), 90)
-        flail(f0, f1, 40, 46, jaw_deg=15, seed=8, head=(0, 0.45, 1))
+        flail(f0, f1, 34, 40, jaw_deg=8, seed=8, head=(0, 0.45, 1), step=14)
         camera(sid, [(0, (18.75, -2998.85, 5.55), (17.6, -2999.56, 5.0)), (1, (18.55, -2998.75, 5.5), (17.55, -2999.56, 5.0))], lens=40)
     elif sid in ("09", "10", "13", "16"):
         cap_at_cock(f0); cap_at_cock(f1)
@@ -255,8 +255,8 @@ for sid, st, f0, f1 in LAY:
             w = 0.06 * math.sin(k * 1.3); cap_out(f, lean=12, legs=(1.0 + w, 2.7 - w))
         cap_out(f1, lean=12, legs=(1.0, 2.7))
         if sid == "09":
-            att_hold(f0, reach=0.35, lean=8, head=(0, -0.1, 1)); att_hold(F(sid, 0.3), reach=0.8, lean=18)
-            att_hold(F(sid, 0.45)); att_hold(f1, lean=26)
+            att_hold(f0, lean=14, head=(0, -0.1, 1)); att_hold(F(sid, 0.35), lean=22, t=0.5)
+            att_hold(F(sid, 0.6), lean=28); att_hold(f1, lean=26)
             camera(sid, [(0, (-0.97, 2.5, 1.5), (-0.4, 1.8, 1.22)), (1, (-0.93, 2.42, 1.45), (-0.38, 1.82, 1.2))], lens=22)
         elif sid == "10":
             att_hold(f0, lean=26); att_hold(F(sid, 0.5), lean=30, t=0.5, head=(0.1, -0.2, 1)); att_hold(f1, lean=27)
@@ -279,12 +279,12 @@ for sid, st, f0, f1 in LAY:
         if sid == "14":
             # head knocks: lean swings 34<->42 deg back and 30 deg to his left, where the fuselage falls away
             for k, f in enumerate(range(f0, f1 + 1, 22)):
-                lean = 34 + 8 * (k % 2)
-                cap_out(f, lean=lean, side=30, armL=(0.8, 0.7, 0.2), fL=(0.6, 0.9, 0.1), armR=(-0.5, 0.8, 0.45), fR=(-0.4, 0.9, 0.3),
-                        head=(0.35, 0.35, 1), legs=(0.65, 1.2)); jaw(CAP, f, 10)
+                lean = 26 + 7 * (k % 2)
+                cap_out(f, lean=lean, side=20,  armL=(0.8, 0.7, 0.2), fL=(0.6, 0.9, 0.1), armR=(-0.5, 0.8, 0.45), fR=(-0.4, 0.9, 0.3),
+                        head=(0.15 + 0.2 * (k % 2), 0.15, 1), legs=(0.65, 1.2)); jaw(CAP, f, 6)
                 print("CLEAR", sid, f, round(clearance(), 3))
-            cap_out(f1, lean=38, side=30, armL=(0.8, 0.7, 0.2), fL=(0.6, 0.9, 0.1), armR=(-0.5, 0.8, 0.45), fR=(-0.4, 0.9, 0.3), head=(0.35, 0.35, 1)); jaw(CAP, f1, 10)
-            camera(sid, [(0, (17.0, -2997.7, 5.2), (17.6, -2999.2, 4.75)), (1, (17.15, -2997.8, 5.15), (17.6, -2999.2, 4.75))], lens=30)
+            cap_out(f1, lean=30, side=20, armL=(0.8, 0.7, 0.2), fL=(0.6, 0.9, 0.1), armR=(-0.5, 0.8, 0.45), fR=(-0.4, 0.9, 0.3), head=(0.2, 0.15, 1)); jaw(CAP, f1, 6)
+            camera(sid, [(0, (17.75, -2997.3, 5.25), (17.65, -2999.3, 4.85)), (1, (17.85, -2997.35, 5.2), (17.65, -2999.3, 4.85))], lens=35)
         else:
             flail(f0, f1, 40, 42, jaw_deg=6, seed=15, limp=True, head=(0.45, 0.3, 1), side=30)
             print("CLEAR", sid, f1, round(clearance(), 3))
@@ -292,7 +292,7 @@ for sid, st, f0, f1 in LAY:
             else: camera(sid, [(0, (27, -2994.5, 7.0), (17.4, -2999.6, 4.5)), (1, (25.5, -2995.3, 6.6), (17.4, -2999.6, 4.5))], lens=35)
     elif sid in ("18", "19"):
         cap_at_cock(f0); cap_at_cock(f1)
-        if sid == "18": camera(sid, [(0, (9, -2992.5, 5.5), (-1, -2995, 2.0)), (1, (3, -2989.5, 4.5), (-2, -2996, 1.5))], lens=28)
+        if sid == "18": camera(sid, [(0, (14, -2988.0, 7.0), (2.5, -2994.0, 2.2)), (1, (11.5, -2986.5, 5.8), (1.5, -2994.0, 1.8))], lens=26)
         else: camera(sid, [(0, (12.5, -2990.0, 2.6), (3.5, -2994.7, 1.4)), (1, (11.5, -2989.0, 2.3), (2.5, -2994.7, 1.3))], lens=30)
     elif st == "land":
         cap_at_cock(f0); cap_at_cock(f1)
@@ -301,9 +301,9 @@ def plane_key(f, x, z, pitch=0.0):
     AL.location = L0 + Vector((x, 0, z)); AL.rotation_euler = (0, R_(-pitch), 0)
     AL.keyframe_insert("location", frame=f); AL.keyframe_insert("rotation_euler", frame=f)
 st, f0, f1 = SH["20"]; plane_key(f0, -950, 48, 4); plane_key(f1, -620, 24, 4)
-camera("20", [(0, L0 + Vector((-520, -95, 9)), L0 + Vector((-930, 0, 50))), (1, L0 + Vector((-515, -92, 8)), L0 + Vector((-610, 0, 26)))], lens=32)
+camera("20", [(0, L0 + Vector((-700, -80, 22)), L0 + Vector((-930, 0, 48))), (1, L0 + Vector((-660, -72, 16)), L0 + Vector((-618, 0, 25)))], lens=35)
 st, f0, f1 = SH["21"]; plane_key(f0, -420, 3.0, 4); plane_key(F("21", 0.45), -320, 0.0, 2); plane_key(f1, -220, 0.0, 0)
-camera("21", [(0, L0 + Vector((-300, -42, 2.2)), L0 + Vector((-415, 0, 6))), (0.5, L0 + Vector((-298, -42, 2.2)), L0 + Vector((-318, 0, 3.5))), (1, L0 + Vector((-296, -42, 2.2)), L0 + Vector((-222, 0, 3.5)))], lens=28)
+camera("21", [(0, L0 + Vector((-330, -40, 2.2)), L0 + Vector((-415, 0, 6))), (0.5, L0 + Vector((-298, -42, 2.2)), L0 + Vector((-318, 0, 3.5))), (1, L0 + Vector((-296, -42, 2.2)), L0 + Vector((-222, 0, 3.5)))], lens=28)
 st, f0, f1 = SH["22"]; plane_key(f0, 140, 0.0, 0); plane_key(f1, 180, 0.0, 0)
 camera("22", [(0, L0 + Vector((228, -24, 2.6)), L0 + Vector((158, 0, 3.5))), (1, L0 + Vector((227, -25, 2.5)), L0 + Vector((198, 0, 3.4)))], lens=32)
 st, f0, f1 = SH["23"]; plane_key(f0, 215, 0.0, 0); plane_key(f1, 255, 0.0, 0)
