@@ -422,7 +422,7 @@ camshot("S11", [(0, Vector((MX + 0.8, -2.3, 1.55)), Vector((MX, wall_y + 0.5, 1.
 fa = f0("S12")
 key_vis_all(COURSES, [(fa, True)]); key_vis(BR, [(fa, False)])
 key_vis_all(COURSES, [(f0("S10"), False)])              # S10 (the rise to street level) comes before the foundation in the story
-camshot("S12", [(0, Vector((2.8, -5.0, 0.6)), Vector((0.5, 0.3, 1.0)), 26), (1, Vector((2.0, -3.6, 0.9)), Vector((0.5, 0.3, 3.6)), 26)])   # push-in + tilt-up
+camshot("S12", [(0, Vector((2.8, -5.0, 0.6)), Vector((0.5, 0.3, 0.9)), 32), (1, Vector((2.0, -3.6, 0.9)), Vector((0.5, 0.3, 2.1)), 32)])   # push-in + tilt-up, the sign stays above the frame   # push-in + tilt-up
 
 # ================================================================== S13 / S14: facade on its new foundation, crane over the roof
 camshot("S13", [(0, Vector((-4.5, -9.0, 0.8)), Vector((0, 0, 6.0)), 22), (1, Vector((-4.0, -8.5, 0.9)), Vector((0, 0, 11.0)), 22)])
@@ -506,7 +506,7 @@ TWn.walk(pthw2, lambda f: 0.0, fa, fb, stride=0.55, lift=0.08, bob=0.02, lean=5)
 camshot("S20", [(0, Vector((X0 - 2.6, 24.9, 1.35)), Vector((X0 - 1.9, 28.0, 1.2)), 34), (1, Vector((X0 - 2.6, 24.6, 1.35)), Vector((X0 - 1.9, 27.4, 1.2)), 34)])   # she fills about half the height
 
 # ================================================================== S21: rise from the water up the new foundation | S22: modern skyline
-camshot("S21", [(0, Vector((X0 + 5.5, 103.5, 1.1)), Vector((X0, 120, 2.6)), 26), (1, Vector((X0 + 3.6, 107.0, 1.6)), Vector((X0, 121, 4.4)), 28)])   # push-in
+camshot("S21", [(0, Vector((X0 + 6.5, 102.5, 1.2)), Vector((X0 + 1.0, 120, 2.8)), 30), (1, Vector((X0 + 5.2, 104.5, 1.4)), Vector((X0 + 0.5, 121, 3.8)), 32)])   # push-in
 fa, fb = f0("S21"), f1("S21")
 RS, RF = OB["RaisedShop"], OB["RaisedFoundation"]
 z_top = RS.location.z; h_f = RF.dimensions.z
@@ -517,7 +517,7 @@ for o in (RS, RF):
     for fc in fcurves_of(o.animation_data.action):
         for k in fc.keyframe_points:
             if int(k.co.x) == 0: k.interpolation = 'CONSTANT'
-put_ranges("TownMan", [(f0("S17"), f1("S17"), (X0 - 1.5, 26, 0), 0), (f0("S18"), fx("S18"), (X0 + 3.5, 34, 0), 90), (fa, fb, (X0 + 4.6, 110.5, 0), -90)])
+put_ranges("TownMan", [(f0("S17"), f1("S17"), (X0 - 1.5, 26, 0), 0), (f0("S18"), fx("S18"), (X0 + 3.5, 34, 0), 90), (fa, fb, (X0 + 6.6, 108.0, 0), -90)])
 pth21 = lambda f: Vector((0, -0.85 * (f - fa) / FPS, 0))
 TM.walk(pth21, lambda f: 0.0, fa, fb, stride=0.6, lift=0.09, bob=0.02, lean=6); walk_arms(TM, fa, fb, pth21, out=0.08); face(TM, fa, 0.0, -7)
 camshot("S22", [(0, Vector((2600 - 60, -125, 12)), Vector((2600 + 15, 60, 30)), 24), (1, Vector((2600 - 5, -80, 42)), Vector((2600 + 25, 90, 44)), 24)])
