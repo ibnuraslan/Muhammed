@@ -191,6 +191,11 @@ snow.visible_shadow = False
 area("SeaKey", C_SEA, (4, -6, 14), (R(35), 0, R(20)), 14, 9000, (0.75, 0.88, 1.0))
 area("SeaRim", C_SEA, (-10, 8, 6), (R(-70), 0, R(-130)), 8, 2500, (0.5, 0.75, 1.0))
 area("SeaFill", C_SEA, (0, -14, 0), (R(90), 0, 0), 12, 2200, (0.7, 0.85, 1.0))
+# the same three lights around the implosion sub (SubB sits at SubA's spot + (-30, 25, -2)), so S11 matches SubA
+_OB = Vector((-30, 25, -2))
+area("SeaKeyB", C_SEA, _OB + Vector((4, -6, 14)), (R(35), 0, R(20)), 14, 9000, (0.75, 0.88, 1.0))
+area("SeaRimB", C_SEA, _OB + Vector((-10, 8, 6)), (R(-70), 0, R(-130)), 8, 2500, (0.5, 0.75, 1.0))
+area("SeaFillB", C_SEA, _OB + Vector((0, -14, 0)), (R(90), 0, 0), 12, 2200, (0.7, 0.85, 1.0))
 
 # ------------------------------------------------------------------ the sub (Titan-like, generic, no text)
 def build_sub(name, c, loc, rotz=0.0, scale=1.0, crush=False):
@@ -199,7 +204,7 @@ def build_sub(name, c, loc, rotz=0.0, scale=1.0, crush=False):
     parts = []
     mw = mat(name + "_White", (0.93, 0.94, 0.95), 0.32, coat=0.4)
     mt = mat(name + "_Ti", (0.16, 0.17, 0.19), 0.35, metal=0.8)
-    mdome = mat(name + "_Dome", (0.02, 0.05, 0.10), 0.06, coat=1.0, emit=(1.0, 0.7, 0.4), estr=0.15)
+    mdome = mat(name + "_Dome", (0.01, 0.03, 0.09), 0.06, coat=1.0, emit=(0.25, 0.4, 0.9), estr=0.05)
     mblk = mat(name + "_Black", (0.04, 0.04, 0.045), 0.45)
     mlamp = emit_mat(name + "_Lamp", (1.0, 0.95, 0.85), 30.0)
     mred = emit_mat(name + "_Strobe", (1.0, 0.15, 0.1), 12.0)
@@ -446,13 +451,48 @@ if g and not any(n.name == "CorneaTransparentMix" for n in g.nodes):
     else: mx.inputs[0].default_value = 0.0
     g.links.new(P.outputs[0], mx.inputs[1]); g.links.new(tr.outputs[0], mx.inputs[2]); g.links.new(mx.outputs[0], out_sock)
     print("EYEFIX applied")
-# clothes: shirt teal-blue, trousers dark (casualsuit03 is one garment; recolour by its diffuse multiply)
+# clothes (director P1 note): the striped skin-tight shirt becomes a plain, looser shirt; the jeans stay.
+# casualsuit03 is one garment: shirt texels are told apart from the blue denim (blue clearly above red).
+SHIRT_RGB = (0.16, 0.36, 0.30)      # plain muted green, clearly non-skin
 for ch in man.children:
-    if "casualsuit" in ch.name:
-        for m_ in ch.data.materials:
-            for nd in list(m_.node_tree.nodes):
-                if nd.type == 'MIX' and getattr(nd, "blend_type", "") == 'MULTIPLY':
-                    nd.inputs['B'].default_value = (0.25, 0.45, 0.75, 1)
+    if "casualsuit" not in ch.name: continue
+    m_ = ch.data.materials[0]; nt_ = m_.node_tree
+    dtex = next(n for n in nt_.nodes if n.type == 'TEX_IMAGE' and "diffuse" in n.image.name)
+    links_out = [l.to_socket for l in nt_.links if l.from_node == dtex and l.from_socket.name == "Color"]
+    sep = nt_.nodes.new("ShaderNodeSeparateColor"); nt_.links.new(dtex.outputs["Color"], sep.inputs[0])
+    sub_ = nt_.nodes.new("ShaderNodeMath"); sub_.operation = 'SUBTRACT'
+    nt_.links.new(sep.outputs[2], sub_.inputs[0]); nt_.links.new(sep.outputs[0], sub_.inputs[1])
+    mr_ = nt_.nodes.new("ShaderNodeMapRange"); mr_.inputs[1].default_value = 0.02; mr_.inputs[2].default_value = 0.10
+    nt_.links.new(sub_.outputs[0], mr_.inputs[0])                     # 1 = denim, 0 = shirt
+    shade = nt_.nodes.new("ShaderNodeMix"); shade.data_type = 'RGBA'; shade.blend_type = 'MULTIPLY'; shade.inputs[0].default_value = 1.0
+    shade.inputs['A'].default_value = (*SHIRT_RGB, 1)
+    gam = nt_.nodes.new("ShaderNodeMath"); gam.operation = 'MULTIPLY_ADD'
+    rgb2bw = nt_.nodes.new("ShaderNodeRGBToBW"); nt_.links.new(dtex.outputs["Color"], rgb2bw.inputs[0])
+    gam.inputs[1].default_value = 0.6; gam.inputs[2].default_value = 0.75   # gentle shading from the old texture, stripes flattened
+    nt_.links.new(rgb2bw.outputs[0], gam.inputs[0])
+    cmb = nt_.nodes.new("ShaderNodeCombineColor"); [nt_.links.new(gam.outputs[0], cmb.inputs[i]) for i in range(3)]
+    nt_.links.new(cmb.outputs[0], shade.inputs['B'])
+    mixc = nt_.nodes.new("ShaderNodeMix"); mixc.data_type = 'RGBA'
+    nt_.links.new(mr_.outputs[0], mixc.inputs[0]); nt_.links.new(shade.outputs['Result'], mixc.inputs['A']); nt_.links.new(dtex.outputs["Color"], mixc.inputs['B'])
+    for sock in links_out: nt_.links.new(mixc.outputs['Result'], sock)
+    # shirt vertex group from the texture at each vertex's UV, then smooth + push the shirt out a little (looser fit)
+    img = dtex.image; W_, H_ = img.size; px = list(img.pixels[:])
+    uvl = ch.data.uv_layers.active.data; vshirt = {}
+    for poly in ch.data.polygons:
+        for li in poly.loop_indices:
+            u, v_ = uvl[li].uv; x = min(W_ - 1, max(0, int(u * W_))); y = min(H_ - 1, max(0, int(v_ * H_)))
+            k = (y * W_ + x) * 4; r_, g_, b_ = px[k], px[k + 1], px[k + 2]
+            vi = ch.data.loops[li].vertex_index
+            vshirt[vi] = vshirt.get(vi, False) or (b_ - r_ < 0.04 and (r_ + g_ + b_) > 0.0)
+    vg = ch.vertex_groups.new(name="ShirtLoose"); vg.add([i for i, s_ in vshirt.items() if s_], 1.0, 'REPLACE')
+    sm = ch.modifiers.new("ShirtSmooth", 'SMOOTH'); sm.factor = 0.7; sm.iterations = 8; sm.vertex_group = "ShirtLoose"
+    dp = ch.modifiers.new("ShirtLoose", 'DISPLACE'); dp.strength = 0.012; dp.mid_level = 0.0; dp.vertex_group = "ShirtLoose"
+    # keep them right after the Armature modifier (before any subdivision)
+    while ch.modifiers.find("ShirtLoose") > 0 and ch.modifiers[ch.modifiers.find("ShirtLoose") - 1].type == 'SUBSURF':
+        bpy.ops.object.modifier_move_up({"object": ch}, modifier="ShirtLoose") if False else ch.modifiers.move(ch.modifiers.find("ShirtLoose"), ch.modifiers.find("ShirtLoose") - 1)
+    while ch.modifiers.find("ShirtSmooth") > 0 and ch.modifiers[ch.modifiers.find("ShirtSmooth") - 1].type == 'SUBSURF':
+        ch.modifiers.move(ch.modifiers.find("ShirtSmooth"), ch.modifiers.find("ShirtSmooth") - 1)
+    print("SHIRT verts", sum(vshirt.values()), "of", len(ch.data.vertices), [m.name for m in ch.modifiers])
 
 # ================================================================== SET 3: ANATOMY on the sky-blue gradient (x = 400)
 C_AN = coll("SET3_Anatomy")
@@ -629,7 +669,7 @@ def key_emit(m, f, v):
     nd = m.node_tree.nodes.get("Emission") or m.node_tree.nodes.get("Principled BSDF")
     sock = nd.inputs[1] if nd.type == 'EMISSION' else nd.inputs["Emission Strength"]
     sock.default_value = v; sock.keyframe_insert("default_value", frame=f)
-for mm, on in ((mlamp, 30.0), (mred, 12.0), (mdome, 0.15)):
+for mm, on in ((mlamp, 30.0), (mred, 12.0), (mdome, 0.05)):
     key_emit(mm, fs, on); key_emit(mm, F("S16", 0.5), on)
 key_emit(mlamp, F("S16", 0.9), 0.0); key_emit(mdome, F("S16", 1.1), 0.0); key_emit(mred, F("S16", 1.4), 0.0)
 for l in subA_lamps:
@@ -779,15 +819,18 @@ for it in range(3):
     if dn < 0.004 and bk < 0.004: break
     seat_root += Vector((0, -(bk + 0.01) if bk > 0.004 else 0, (dn + 0.01) if dn > 0.004 else 0))
 seat_root += Vector((0, 0, 0.035))   # margin: body_prop_cross tests the base mesh (no subsurf), which sits ~2 cm lower
-for sid, acts in (("S04", [(0.0, 0, (0, 0)), (0.5, 0, (-4, 0)), (1.0, 0, (-4, 6))]),
-                  ("S05", [(0.0, 0, (-4, 4)), (0.35, 6, (-2, 0)), (0.7, 10, (6, -10)), (1.0, 10, (6, -12))]),
-                  ("S06", [(0.0, 10, (6, -10)), (0.5, 11, (8, -6)), (1.0, 11, (8, -4))]),
-                  ("S15", [(0.0, 2, (-2, 0)), (0.45, 4, (14, 0)), (1.0, 4, (18, 2))])):
+# acting (director P1 note: no frozen sitting). (u, lean deg, (head pitch, head turn), hands slide toward knees)
+# S05: he leans in with his hands sliding to his knees, head tilting (wondering); S15: an exhale (sinks back), then he
+# leans forward and looks down, hands sliding forward, a small slow head shake.
+for sid, acts in (("S04", [(0.0, 0, (0, 0), 0.0), (0.5, 2, (-4, 0), 0.0), (1.0, 3, (-4, 6), 0.02)]),
+                  ("S05", [(0.0, 3, (-4, 4), 0.02), (0.3, 9, (-2, 0), 0.10), (0.6, 16, (6, -8), 0.22), (1.0, 18, (8, -12), 0.26)]),
+                  ("S06", [(0.0, 18, (8, -12), 0.26), (0.5, 18, (8, -6), 0.26), (1.0, 18, (8, -3), 0.26)]),
+                  ("S15", [(0.0, 4, (-2, 0), 0.04), (0.22, -2, (2, 0), 0.0), (0.5, 10, (14, 3), 0.14), (0.75, 13, (18, -4), 0.18), (1.0, 13, (20, 3), 0.18)])):
     f0, f1 = SHOT[sid]
-    for u, lean, head in acts:
+    for u, lean, head, fwd in acts:
         fr = round(f0 + u * (f1 - f0))
         seated(fr, lean=lean, head=head, breath=1.5 * math.sin(u * 6.28))
-        rest_hands(fr)
+        rest_hands(fr, fwd=fwd)
 # --- TV screen: a plane on the TV front showing a frame of the sub (filled in by 03_tvscreen.py)
 bpy.context.view_layer.update()
 tmn, tmx = bbox(tv)
@@ -803,17 +846,18 @@ seat_head = seat_root + Vector((0, 0, 0.75))
 SA = lambda: subA.location
 shot_cam("S01", [(0, Vector((14, -9, 13)), Vector((0, 0, 6.6))), (1, Vector((8.5, -11.5, 8.0)), Vector((0.3, 0.1, 5.0)))], 35)
 shot_cam("S02", [(0, Vector((7.6, -2.4, 5.4)), Vector((1.4, 0.5, 4.5))), (1, Vector((7.0, 0.6, 4.2)), Vector((1.5, 0.8, 3.5)))], 35)
-shot_cam("S03", [(0, Vector((11.5, -8.5, -5.0)), Vector((-0.6, -0.4, -2.9))), (1, Vector((7.5, -4.0, -4.3)), Vector((1.4, 0.3, -3.1)))], 30)
+shot_cam("S03", [(0, Vector((11.5, -8.5, -5.0)), Vector((-0.6, -0.4, -2.9))), (1, Vector((12.0, -7.4, -4.7)), Vector((1.6, 0.4, -3.0)))], 30)
 shot_cam("S04", [(0, RM + Vector((1.05, -1.15, 1.45)), seat_head + Vector((0.72, -0.35, -0.5))),
                  (1, RM + Vector((0.98, -0.8, 1.4)), seat_head + Vector((0.7, -0.35, -0.48)))], 22)
 shot_cam("S05", [(0, RM + Vector((0.75, 0.2, 1.25)), seat_head + Vector((0, -0.1, -0.15))),
                  (1, RM + Vector((0.6, 0.45, 1.2)), seat_head + Vector((0, -0.12, -0.08)))], 35)
 shot_cam("S06", [(0, RM + Vector((0.45, 0.65, 1.32)), seat_head + Vector((0, -0.05, 0.02))),
                  (1, RM + Vector((0.32, 0.95, 1.30)), seat_head + Vector((0, -0.05, 0.04)))], 50)
-shot_cam("S07", [(0, AN + Vector((1.2, -5.6, 0.2)), AN + Vector((-0.6, 0, -0.1))), (1, AN + Vector((0.4, -4.6, 0.6)), AN + Vector((-0.1, 0, 0.3)))], 35)
-shot_cam("S08", [(0, AN + Vector((-1.8, -3.4, 1.5)), AN + Vector((0.05, 0, 0.85))), (1, AN + Vector((1.2, -3.6, 1.6)), AN + Vector((0.05, 0, 0.85)))], 35)
+shot_cam("S07", [(0, AN + Vector((0.9, -4.6, 0.0)), AN + Vector((-0.5, 0, 0.0))), (1, AN + Vector((0.2, -2.7, 0.65)), AN + Vector((-0.1, 0, 0.5)))], 35)
+shot_cam("S08", [(0, AN + Vector((-1.1, -1.9, 1.2)), AN + Vector((0.05, 0, 0.95))), (1, AN + Vector((1.0, -2.2, 1.3)), AN + Vector((0.25, 0, 1.0)))], 35)
 shot_cam("S09", [(0, EY + Vector((-1.9, -2.8, 0.2)), EY + Vector((-0.1, -0.2, 0))), (1, EY + Vector((-1.0, -2.3, 0.45)), EY + Vector((-0.1, -0.2, 0)))], 50)
-shot_cam("S10", [(0, EY + Vector((-1.8, -3.8, 2.4)), EY + Vector((1.1, 1.0, 0.1))), (1, EY + Vector((0.2, -4.4, 2.6)), EY + Vector((1.6, 1.4, 0.2)))], 28)
+_b2 = br2E.location + Vector((0, 0, 0.6))
+shot_cam("S10", [(0, EY + Vector((-0.6, -2.7, 0.7)), EY + Vector((0.05, 0.25, 0.05))), (1, _b2 + Vector((-0.7, -2.7, 0.8)), _b2 + Vector((-0.3, 0, 0)))], 28)
 SB = Vector((-30, 25, 2))
 shot_cam("S11", [(0, SB + Vector((5.0, -9.5, 1.8)), SB), (1, SB + Vector((4.0, -8.0, 1.5)), SB + Vector((0.3, 0, -0.2)))], 32)
 shot_cam("S12", [(0, SB + Vector((-7.0, -6.5, 2.5)), SB + Vector((0.4, 0.1, 0.0))), (1, SB + Vector((-6.0, -5.6, 2.0)), SB + Vector((0.5, 0.1, -0.3)))], 32)
@@ -821,7 +865,7 @@ shot_cam("S13", [(0, CP + Vector((0.2, -4.6, 1.5)), CP + Vector((0.0, 0.5, 0.75)
 shot_cam("S14", [(0, CP + Vector((1.0, -3.9, 1.4)), CP + Vector((0.0, 0.4, 0.9))), (1, CP + Vector((0.8, -3.4, 1.35)), CP + Vector((0.0, 0.45, 0.9)))], 26)
 shot_cam("S15", [(0, RM + Vector((-0.75, -0.2, 1.05)), seat_head + Vector((0, -0.1, -0.2))),
                  (1, RM + Vector((-0.6, 0.1, 1.05)), seat_head + Vector((0, -0.1, -0.2)))], 35)
-shot_cam("S16", [(0, Vector((11.0, -5.5, -1.2)), Vector((0.6, 0.1, -2.3))), (1, Vector((8.0, -1.5, -2.0)), Vector((0.9, 0.3, -2.4)))], 32)
+shot_cam("S16", [(0, Vector((11.0, -5.5, -1.2)), Vector((0.6, 0.1, -2.3))), (1, Vector((12.2, -5.0, -1.7)), Vector((1.3, 0.4, -2.4)))], 32)
 shot_cam("S17", [(0, SF + Vector((-25, 30, 10.0)), SF + Vector((0, 150, 6))), (1, SF + Vector((5, 75, 7.0)), SF + Vector((0, 150, 6)))], 35)
 interp_all(cam, 'LINEAR'); interp_all(tgt, 'LINEAR'); interp_all(cam.data, 'LINEAR')
 # hard cuts: constant from each shot's last key to the next shot's first key
