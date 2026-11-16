@@ -443,7 +443,7 @@ def seated(H, rig, f, pos, yaw=0.0, lean=-8.0, flex=6.0, head=(0, 0), twist=0.0,
         if legs_out:
             fp = pos + c @ Vector((0.11 * sx, -0.92, 0.0))
             a = H.ankle[s]
-            M = Matrix.Translation(Vector((fp.x, fp.y, pos.z + 0.07))) @ Matrix.Rotation(R_(yaw), 4, 'Z') @ Matrix.Rotation(R_(-70), 4, 'X') @ \
+            M = Matrix.Translation(Vector((fp.x, fp.y, pos.z + 0.11))) @ Matrix.Rotation(R_(yaw), 4, 'Z') @ Matrix.Rotation(R_(-70), 4, 'X') @ \
                 Matrix.Translation(-a) @ H.r.rest("IK_foot." + s)
             H.r.key_world("IK_foot." + s, f, M)
             pole = fp + Vector((0, 0, 0.8)); pb = H.r.PB["Pole_knee." + s]; n = "Pole_knee." + s
@@ -905,25 +905,39 @@ def S13b(f0, f1):
 
 # hospital: the real curled sleeping-dog scan lies on the bed against his legs, head toward his lap;
 # his left hand rests flat on its back, right arm by his side
-SDH = dup(bpy.data.objects["SleepDog"], "SleepDogHosp", (0, 0, 0), (0, 0, 0), 0.85, CH, linked=True)
+SDH = dup(bpy.data.objects["SleepDog"], "SleepDogHosp", (0, 0, 0), (0, 0, 0), 0.80, CH, linked=True)
 SDH.hide_render = SDH.hide_viewport = False
 def _ray_down(obj, x, y, z0=3.0):
     inv = obj.matrix_world.inverted()
     ok, loc, n, i = obj.ray_cast(inv @ Vector((x, y, z0)), inv.to_3x3() @ Vector((0, 0, -1)))
     return (obj.matrix_world @ loc) if ok else None
-_bt = _ray_down(BD, HX.x + 0.20, 0.52)
+_bt = _ray_down(BD, HX.x + 0.20, 0.64)
 BED_TOP = _bt.z if _bt else MAT_Z
-SDH.location = Vector((HX.x + 0.21, 0.52, BED_TOP + 0.002)); bpy.context.view_layer.update()
-_bk = _ray_down(SDH, HX.x + 0.06, 0.62)
-DOG_BACK = _bk if _bk else Vector((HX.x + 0.07, 0.28, BED_TOP + 0.22))
+SDH.location = Vector((HX.x + 0.275, 0.64, BED_TOP + 0.002)); bpy.context.view_layer.update()
+# flattest top of the dog's back within his reach: highest ray hit on a small grid
+_best = None
+for _ix in range(16):
+    for _iy in range(24):
+        _p = _ray_down(SDH, HX.x + 0.0 + _ix * 0.03, 0.28 + _iy * 0.03)
+        if _p is not None and (_best is None or _p.z > _best.z): _best = _p
+DOG_BACK = _best if _best else Vector((HX.x + 0.13, 0.62, BED_TOP + 0.22))
 print("BUILD hosp bed top", round(BED_TOP, 3), "dog back", tuple(round(v, 3) for v in DOG_BACK))
+def _ray_down_n(obj, x, y, z0=3.0):
+    inv = obj.matrix_world.inverted()
+    ok, loc, n, i = obj.ray_cast(inv @ Vector((x, y, z0)), inv.to_3x3() @ Vector((0, 0, -1)))
+    if not ok: return None, None
+    nw = (obj.matrix_world.to_3x3().inverted().transposed() @ n).normalized()
+    if nw.z < 0: nw = -nw
+    return obj.matrix_world @ loc, nw
 def hosp_man(f, smile_head=(18, -20), stroke=0.0):
-    st = HX + Vector((-0.22, 0.78, BED_TOP + 0.02))
-    seated(HOWN, OWNER, f, st, yaw=0, lean=-34, flex=12, head=smile_head, legs_out=True)
+    st = HX + Vector((-0.235, 0.78, BED_TOP + 0.02))
+    seated(HOWN, OWNER, f, st, yaw=0, lean=-26, flex=14, head=smile_head, legs_out=True)
     sc.frame_set(f)
-    hp = DOG_BACK + Vector((0.0, -0.05 * stroke, 0.0))
-    _h = _ray_down(SDH, hp.x, hp.y) or hp
-    place_hand(OWNER, "L", f, _h, (0.15, 0, -1), (0.35, -1, 0)); apply_pose(OWNER, "L", "relaxed", f)
+    hp = DOG_BACK.copy()          # hand rests still on the back (stroking pushed the forearm into the fur)
+    _h, _n = _ray_down_n(SDH, hp.x, hp.y)
+    if _h is None: _h, _n = hp, Vector((0, 0, 1))
+    fd = Vector((0.2, -1, 0)); fd = (fd - _n * fd.dot(_n)).normalized()
+    place_hand(OWNER, "L", f, _h, -_n, fd, skin=float(os.environ.get("DSO_SKIN", "0.024"))); apply_pose(OWNER, "L", "flat_palm", f)
     place_hand(OWNER, "R", f, st + Vector((-0.18, -0.25, 0.10)), (-0.3, 0, -1), (0, -1, 0)); apply_pose(OWNER, "R", "relaxed", f)
 def S14a(f0, f1):
     PRESENT["14a"] = {"own"}
