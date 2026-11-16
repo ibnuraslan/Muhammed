@@ -1,6 +1,19 @@
-# PaperclipHouse_v002b: director fixes on v002 (B36, Connect B36)
+# PaperclipHouse_v002c: director fixes on v002 (B36, Connect B36)
 
-**How did a man trade a paperclip for a house.** 33.3 s, 1080×1920, 60 fps, Cycles. Every beat starts on its word in `PaperclipHouse_v002b_VO.mp3` (`beats.json`, frame = 1 + round(seconds × 60)); nothing is retimed.
+**How did a man trade a paperclip for a house.** 33.3 s, 1080×1920, 60 fps, Cycles. Every beat starts on its word in `PaperclipHouse_v002c_VO.mp3` (`beats.json`, frame = 1 + round(seconds × 60)); nothing is retimed.
+
+## Changes from v002b (director notes, three ranges)
+- **f122–251 (pen close-up):**
+  - His arms are in with bent elbows, and both hands rest on the counter close to his body. No A-pose.
+  - The fish pen lies at the counter edge, in the foreground and fully in frame.
+  - He looks down at the pen, then up, and smiles.
+- **f681–760 (garage, snowmobile):**
+  - Knees-up two-shot with a slow push-in.
+  - SledGuy presents the snowmobile with an open hand. The hero turns to him and nods with a grin.
+- **f1908–2000 (house reveal):**
+  - Starts wide on the house, then pushes in to knees-up, with him at about half the frame height.
+  - He raises both arms in a V, with the house behind him.
+- **Preview:** only these three ranges were re-rendered and spliced into the v002b preview. Every other frame is identical to the v002b package. Those other frames are the complete final-v002b render.
 
 ## Changes from v002 (director notes)
 1. **No mannequin arms.**
@@ -49,8 +62,8 @@ Close-ups show items resting on a surface. The vehicles are parked. The rock sta
 - Dark logo on a cardboard box in the garage (frames 614–760).
 
 ## Files
-- `PaperclipHouse_v002b_60fps.blend`: the package (see `SETTINGS.md`).
-- `PaperclipHouse_v002b_VO.mp3`, `PaperclipHouse_v002b_VO.words.json`, `beats.json`, `timing.json`.
+- `PaperclipHouse_v002c_60fps.blend`: the package (see `SETTINGS.md`).
+- `PaperclipHouse_v002c_VO.mp3`, `PaperclipHouse_v002c_VO.words.json`, `beats.json`, `timing.json`.
 - `review/preview.mp4`: the moving preview (every 5th frame, 270×480, with the VO), rendered from this exact package.
 - `review/checks.md`: results of `body_prop_cross`, `clip_scan`, `qa_check` and `limb_check`.
 - `scripts/`: the full rebuild chain:
