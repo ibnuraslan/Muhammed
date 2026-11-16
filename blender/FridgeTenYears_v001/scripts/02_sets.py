@@ -187,8 +187,10 @@ for nm, yc, sd in (("CoolerHero", 0.0, 1), ("CoolerN1", 2.02, 2), ("CoolerN2", -
 # condensing unit + fan on top of the hero unit (back-left corner, +Y end); the worker walks on the free -Y part
 cu = MB()
 cu.box((0.28, 0, 0.22), (0.5, 0.62, 0.44), M_CAB)
-cu.box((0.54, 0, 0.22), (0.02, 0.5, 0.36), M_GRILLE)
-for k in range(9): cu.box((0.552, -0.2 + k * 0.05, 0.22), (0.006, 0.008, 0.34), M_CHROME)
+cu.box((0.30, 0, 0.22), (0.02, 0.5, 0.36), M_GRILLE)                              # dark plate deep inside: the fan reads against it
+for zz in (0.03, 0.41): cu.box((0.54, 0, zz), (0.03, 0.56, 0.04), M_CAB)           # open grille frame
+for yy in (-0.26, 0.26): cu.box((0.546, yy, 0.22), (0.03, 0.04, 0.36), M_CAB)
+for k in range(7): cu.box((0.552, -0.18 + k * 0.06, 0.22), (0.006, 0.006, 0.34), M_CHROME)   # thin guard bars
 cuo = cu.done("CondUnit", C09); cuo.parent = units["CoolerHero"]; cuo.location = (0.0, 0.62, HT)
 fan = MB()
 fan.cyl((0, 0, 0), 0.03, 0.03, M_CHROME, 12, axis='X')
