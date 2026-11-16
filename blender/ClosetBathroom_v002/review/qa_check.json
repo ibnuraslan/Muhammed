@@ -1,0 +1,3057 @@
+{
+ "frames": {
+  "1": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "BACKHEAD",
+    "Tom"
+   ],
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "7": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "13": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "19": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "25": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ],
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "31": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "37": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "43": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "55": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "61": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "67": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "79": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "85": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "91": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "97": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "103": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "BACKHEAD",
+    "Tom"
+   ]
+  ],
+  "163": [
+   [
+    "BACKHEAD",
+    "Tom"
+   ]
+  ],
+  "169": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "175": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "181": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "187": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "193": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "199": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "205": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "211": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "217": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "223": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "229": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "235": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "241": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "247": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "253": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "259": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "265": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "271": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "277": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "343": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 1.44 m, 12 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "349": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "355": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "361": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "367": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "373": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "379": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "385": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "391": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "397": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "775": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "781": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "787": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "793": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "799": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "805": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "811": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "817": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "823": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "829": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "835": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "841": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "847": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "853": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "859": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "865": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "871": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "877": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "883": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "967": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "BACKHEAD",
+    "Tom"
+   ]
+  ],
+  "973": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "979": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "997": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1519": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1525": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1531": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1537": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1543": [
+   [
+    "CLAW",
+    "Doc.R curl 28"
+   ],
+   [
+    "FAN",
+    "Doc.R fingers fanned 36 deg (index vs little)"
+   ]
+  ],
+  "1549": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "FAN",
+    "Doc.R fingers fanned 54 deg (index vs little)"
+   ]
+  ],
+  "1579": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "FAN",
+    "Doc.R fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "1585": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "FAN",
+    "Doc.R fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "1603": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1609": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1615": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1621": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1627": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1633": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1639": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1645": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1651": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1657": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1663": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1669": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1675": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1681": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1687": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1693": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1699": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1705": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ],
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1711": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1717": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1723": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1735": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1783": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1789": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1795": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1801": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1807": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1813": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1819": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1825": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1831": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1837": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1843": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1849": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1855": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1861": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1867": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1873": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1879": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "104": [
+   [
+    "CAMJUMP",
+    "cut: 1.27 m, 32 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "164": [
+   [
+    "CAMJUMP",
+    "cut: 1.27 m, 16 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "283": [
+   [
+    "CAMJUMP",
+    "cut: 0.42 m, 8 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "398": [
+   [
+    "CAMJUMP",
+    "cut: 0.93 m, 24 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "464": [
+   [
+    "CAMJUMP",
+    "cut: 1.56 m, 169 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "529": [
+   [
+    "CAMJUMP",
+    "cut: 0.90 m, 15 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "601": [
+   [
+    "CAMJUMP",
+    "cut: 1.26 m, 136 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ],
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "686": [
+   [
+    "CAMJUMP",
+    "cut: 1.42 m, 30 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "885": [
+   [
+    "CAMJUMP",
+    "cut: 2.39 m, 76 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "966": [
+   [
+    "CAMJUMP",
+    "cut: 1.42 m, 40 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1070": [
+   [
+    "CAMJUMP",
+    "cut: 0.41 m, 34 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1277": [
+   [
+    "CAMJUMP",
+    "cut: 0.31 m, 30 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1386": [
+   [
+    "CAMJUMP",
+    "cut: 31.52 m, 104 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1514": [
+   [
+    "CAMJUMP",
+    "cut: 1.50 m, 104 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1601": [
+   [
+    "CAMJUMP",
+    "cut: 1.60 m, 12 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1701": [
+   [
+    "CAMJUMP",
+    "cut: 29.57 m, 35 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1779": [
+   [
+    "CAMJUMP",
+    "cut: 0.85 m, 21 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "49": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "73": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "121": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "145": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "289": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "313": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "337": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "409": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "433": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "457": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "625": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "649": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "673": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "985": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1009": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1033": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1057": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1081": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1105": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1129": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1153": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1171": [
+   [
+    "PROPMOVE",
+    "MemTile_5_7 moves 0.8 cm with no hand on it (nearest finger 153 cm)"
+   ]
+  ],
+  "1177": [
+   [
+    "PROPMOVE",
+    "MemTile_0_1 moves 1.0 cm with no hand on it (nearest finger 105 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_0 moves 1.0 cm with no hand on it (nearest finger 97 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_2 moves 1.6 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_3 moves 1.1 cm with no hand on it (nearest finger 121 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_6 moves 1.8 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_7 moves 0.7 cm with no hand on it (nearest finger 152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_3 moves 1.9 cm with no hand on it (nearest finger 121 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_4 moves 0.7 cm with no hand on it (nearest finger 130 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_7 moves 0.9 cm with no hand on it (nearest finger 154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_5 moves 3.0 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_4 moves 1.7 cm with no hand on it (nearest finger 129 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_7 moves 2.7 cm with no hand on it (nearest finger 156 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_4 moves 2.2 cm with no hand on it (nearest finger 129 cm)"
+   ],
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1183": [
+   [
+    "PROPMOVE",
+    "MemTile_0_1 moves 2.7 cm with no hand on it (nearest finger 104 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_2 moves 0.7 cm with no hand on it (nearest finger 113 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_0 moves 2.2 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_2 moves 3.5 cm with no hand on it (nearest finger 111 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_3 moves 2.2 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_6 moves 3.1 cm with no hand on it (nearest finger 148 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_7 moves 2.0 cm with no hand on it (nearest finger 154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_3 moves 3.7 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_7 moves 1.0 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_2 moves 1.8 cm with no hand on it (nearest finger 113 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_4 moves 1.8 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_6 moves 2.3 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_7 moves 1.7 cm with no hand on it (nearest finger 155 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_0 moves 1.1 cm with no hand on it (nearest finger 98 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_4 moves 1.7 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_5 moves 5.0 cm with no hand on it (nearest finger 143 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_4 moves 3.3 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_7 moves 3.9 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_0 moves 0.8 cm with no hand on it (nearest finger 97 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_5 moves 0.5 cm with no hand on it (nearest finger 137 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_2 moves 1.1 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_4 moves 3.6 cm with no hand on it (nearest finger 130 cm)"
+   ]
+  ],
+  "1189": [
+   [
+    "PROPMOVE",
+    "MemTile_0_1 moves 3.7 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_2 moves 2.3 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_7 moves 2.6 cm with no hand on it (nearest finger 154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_0 moves 3.0 cm with no hand on it (nearest finger 94 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_1 moves 0.7 cm with no hand on it (nearest finger 105 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_2 moves 4.7 cm with no hand on it (nearest finger 109 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_3 moves 2.9 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_6 moves 4.0 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_7 moves 3.0 cm with no hand on it (nearest finger 157 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_3 moves 4.7 cm with no hand on it (nearest finger 119 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_4 moves 2.0 cm with no hand on it (nearest finger 129 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_7 moves 2.5 cm with no hand on it (nearest finger 156 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_2 moves 2.8 cm with no hand on it (nearest finger 111 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_4 moves 2.6 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_5 moves 0.8 cm with no hand on it (nearest finger 138 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_6 moves 4.9 cm with no hand on it (nearest finger 152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_7 moves 2.3 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_0 moves 2.1 cm with no hand on it (nearest finger 96 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_4 moves 3.0 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_5 moves 6.0 cm with no hand on it (nearest finger 148 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_6 moves 1.3 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_4 moves 4.4 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_5 moves 2.8 cm with no hand on it (nearest finger 138 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_6 moves 1.6 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_7 moves 4.3 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_0 moves 2.1 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_3 moves 1.8 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_5 moves 2.6 cm with no hand on it (nearest finger 138 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_2 moves 3.6 cm with no hand on it (nearest finger 111 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_4 moves 4.4 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_5 moves 2.4 cm with no hand on it (nearest finger 138 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_6 moves 0.8 cm with no hand on it (nearest finger 144 cm)"
+   ]
+  ],
+  "1195": [
+   [
+    "PROPMOVE",
+    "MemTile_0_1 moves 4.2 cm with no hand on it (nearest finger 101 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_2 moves 3.3 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_5 moves 2.7 cm with no hand on it (nearest finger 137 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_7 moves 4.5 cm with no hand on it (nearest finger 157 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_0 moves 3.5 cm with no hand on it (nearest finger 92 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_1 moves 2.3 cm with no hand on it (nearest finger 103 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_2 moves 5.1 cm with no hand on it (nearest finger 107 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_3 moves 3.4 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_6 moves 4.5 cm with no hand on it (nearest finger 154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_7 moves 3.6 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_0 moves 0.6 cm with no hand on it (nearest finger 98 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_2 moves 1.6 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_3 moves 5.0 cm with no hand on it (nearest finger 119 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_4 moves 3.4 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_6 moves 0.9 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_7 moves 3.6 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_0 moves 1.7 cm with no hand on it (nearest finger 98 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_2 moves 3.5 cm with no hand on it (nearest finger 108 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_3 moves 1.5 cm with no hand on it (nearest finger 121 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_4 moves 3.1 cm with no hand on it (nearest finger 134 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_5 moves 2.3 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_6 moves 6.2 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_7 moves 2.6 cm with no hand on it (nearest finger 161 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_0 moves 2.8 cm with no hand on it (nearest finger 94 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_4 moves 3.7 cm with no hand on it (nearest finger 134 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_5 moves 6.1 cm with no hand on it (nearest finger 152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_6 moves 2.4 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_0 moves 1.8 cm with no hand on it (nearest finger 96 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_4 moves 5.0 cm with no hand on it (nearest finger 135 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_5 moves 5.2 cm with no hand on it (nearest finger 143 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_6 moves 3.2 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_7 moves 4.1 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_0 moves 3.1 cm with no hand on it (nearest finger 93 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_3 moves 3.1 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_5 moves 4.2 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_1 moves 1.3 cm with no hand on it (nearest finger 104 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_2 moves 5.4 cm with no hand on it (nearest finger 110 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_4 moves 4.7 cm with no hand on it (nearest finger 133 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_5 moves 4.2 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_6 moves 2.7 cm with no hand on it (nearest finger 146 cm)"
+   ]
+  ],
+  "1201": [
+   [
+    "PROPMOVE",
+    "MemTile_0_0 moves 2.0 cm with no hand on it (nearest finger 96 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_2 moves 3.9 cm with no hand on it (nearest finger 111 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_3 moves 1.1 cm with no hand on it (nearest finger 121 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_4 moves 3.0 cm with no hand on it (nearest finger 129 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_5 moves 4.9 cm with no hand on it (nearest finger 139 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_6 moves 1.3 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_7 moves 5.6 cm with no hand on it (nearest finger 162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_0 moves 3.6 cm with no hand on it (nearest finger 89 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_1 moves 3.5 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_2 moves 4.8 cm with no hand on it (nearest finger 106 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_3 moves 3.5 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_4 moves 1.6 cm with no hand on it (nearest finger 128 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_6 moves 4.5 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_7 moves 3.9 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_0 moves 2.7 cm with no hand on it (nearest finger 96 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_2 moves 2.5 cm with no hand on it (nearest finger 111 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_3 moves 4.7 cm with no hand on it (nearest finger 119 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_4 moves 4.2 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_6 moves 2.4 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_7 moves 4.1 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_0 moves 3.3 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_2 moves 3.6 cm with no hand on it (nearest finger 105 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_3 moves 2.8 cm with no hand on it (nearest finger 119 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_4 moves 3.3 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_5 moves 3.3 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_6 moves 6.4 cm with no hand on it (nearest finger 165 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_7 moves 2.8 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_0 moves 3.2 cm with no hand on it (nearest finger 92 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_3 moves 1.6 cm with no hand on it (nearest finger 121 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_4 moves 4.0 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_5 moves 5.2 cm with no hand on it (nearest finger 156 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_6 moves 3.2 cm with no hand on it (nearest finger 152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_0 moves 3.2 cm with no hand on it (nearest finger 93 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_2 moves 1.9 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_4 moves 5.1 cm with no hand on it (nearest finger 137 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_5 moves 6.4 cm with no hand on it (nearest finger 148 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_6 moves 4.1 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_7 moves 3.1 cm with no hand on it (nearest finger 172 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_0 moves 3.7 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_1 moves 1.7 cm with no hand on it (nearest finger 104 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_2 moves 1.7 cm with no hand on it (nearest finger 113 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_3 moves 4.0 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_5 moves 5.1 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_1 moves 2.1 cm with no hand on it (nearest finger 103 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_5 moves 5.2 cm with no hand on it (nearest finger 143 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_6 moves 4.1 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1207": [
+   [
+    "PROPMOVE",
+    "MemTile_0_0 moves 3.8 cm with no hand on it (nearest finger 94 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_3 moves 2.8 cm with no hand on it (nearest finger 121 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_4 moves 5.1 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_5 moves 6.2 cm with no hand on it (nearest finger 143 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_6 moves 2.8 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_7 moves 5.9 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_0 moves 3.4 cm with no hand on it (nearest finger 88 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_1 moves 4.2 cm with no hand on it (nearest finger 99 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_3 moves 3.3 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_4 moves 3.1 cm with no hand on it (nearest finger 129 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_6 moves 4.1 cm with no hand on it (nearest finger 161 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_7 moves 3.9 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_0 moves 4.2 cm with no hand on it (nearest finger 93 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_1 moves 1.9 cm with no hand on it (nearest finger 105 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_2 moves 3.1 cm with no hand on it (nearest finger 109 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_3 moves 3.7 cm with no hand on it (nearest finger 119 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_4 moves 4.5 cm with no hand on it (nearest finger 134 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_6 moves 3.5 cm with no hand on it (nearest finger 150 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_7 moves 4.1 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_0 moves 4.2 cm with no hand on it (nearest finger 92 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_1 moves 0.6 cm with no hand on it (nearest finger 106 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_2 moves 3.4 cm with no hand on it (nearest finger 103 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_3 moves 3.6 cm with no hand on it (nearest finger 117 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_4 moves 3.2 cm with no hand on it (nearest finger 138 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_5 moves 4.0 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_6 moves 5.5 cm with no hand on it (nearest finger 171 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_7 moves 2.7 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_0 moves 3.2 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_3 moves 2.6 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_4 moves 3.8 cm with no hand on it (nearest finger 138 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_5 moves 3.4 cm with no hand on it (nearest finger 159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_6 moves 3.5 cm with no hand on it (nearest finger 156 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_7 moves 1.0 cm with no hand on it (nearest finger 155 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_0 moves 4.1 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_1 moves 2.3 cm with no hand on it (nearest finger 104 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_2 moves 3.0 cm with no hand on it (nearest finger 111 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_3 moves 0.8 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_4 moves 4.7 cm with no hand on it (nearest finger 139 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_5 moves 6.6 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_6 moves 4.6 cm with no hand on it (nearest finger 157 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_7 moves 1.5 cm with no hand on it (nearest finger 173 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_0 moves 4.0 cm with no hand on it (nearest finger 88 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_1 moves 2.9 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_2 moves 3.0 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_3 moves 4.3 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_4 moves 2.1 cm with no hand on it (nearest finger 129 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_5 moves 5.5 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_7 moves 2.0 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_0 moves 2.2 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_1 moves 2.7 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_3 moves 1.4 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_5 moves 5.6 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_6 moves 4.7 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_7 moves 1.6 cm with no hand on it (nearest finger 153 cm)"
+   ]
+  ],
+  "1213": [
+   [
+    "PROPMOVE",
+    "MemTile_0_0 moves 4.8 cm with no hand on it (nearest finger 92 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_3 moves 4.0 cm with no hand on it (nearest finger 121 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_4 moves 6.2 cm with no hand on it (nearest finger 133 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_6 moves 3.9 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_7 moves 5.4 cm with no hand on it (nearest finger 172 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_0 moves 2.8 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_1 moves 4.6 cm with no hand on it (nearest finger 97 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_3 moves 2.8 cm with no hand on it (nearest finger 121 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_4 moves 4.1 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_5 moves 2.0 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_6 moves 3.3 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_7 moves 3.5 cm with no hand on it (nearest finger 171 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_0 moves 4.8 cm with no hand on it (nearest finger 89 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_1 moves 3.6 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_2 moves 3.4 cm with no hand on it (nearest finger 107 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_3 moves 1.9 cm with no hand on it (nearest finger 119 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_4 moves 4.1 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_5 moves 1.6 cm with no hand on it (nearest finger 138 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_6 moves 4.2 cm with no hand on it (nearest finger 155 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_7 moves 3.6 cm with no hand on it (nearest finger 172 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_0 moves 4.5 cm with no hand on it (nearest finger 89 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_1 moves 2.9 cm with no hand on it (nearest finger 104 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_2 moves 2.7 cm with no hand on it (nearest finger 101 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_3 moves 4.0 cm with no hand on it (nearest finger 115 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_4 moves 2.7 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_5 moves 4.3 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_6 moves 3.3 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_7 moves 2.4 cm with no hand on it (nearest finger 171 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_0 moves 2.9 cm with no hand on it (nearest finger 88 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_1 moves 1.9 cm with no hand on it (nearest finger 105 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_2 moves 1.7 cm with no hand on it (nearest finger 113 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_3 moves 3.2 cm with no hand on it (nearest finger 119 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_4 moves 3.1 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_5 moves 0.7 cm with no hand on it (nearest finger 159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_6 moves 3.4 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_7 moves 3.3 cm with no hand on it (nearest finger 159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_0 moves 4.5 cm with no hand on it (nearest finger 87 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_1 moves 4.2 cm with no hand on it (nearest finger 101 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_2 moves 3.6 cm with no hand on it (nearest finger 109 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_3 moves 2.3 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_4 moves 3.7 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_5 moves 5.7 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_6 moves 4.5 cm with no hand on it (nearest finger 162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_0 moves 3.9 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_1 moves 3.8 cm with no hand on it (nearest finger 101 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_2 moves 3.8 cm with no hand on it (nearest finger 111 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_3 moves 4.2 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_4 moves 3.4 cm with no hand on it (nearest finger 130 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_5 moves 5.3 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_6 moves 2.0 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_7 moves 3.8 cm with no hand on it (nearest finger 157 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_0 moves 3.7 cm with no hand on it (nearest finger 94 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_1 moves 3.1 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_3 moves 2.6 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_6 moves 4.8 cm with no hand on it (nearest finger 157 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_7 moves 3.4 cm with no hand on it (nearest finger 156 cm)"
+   ]
+  ],
+  "1219": [
+   [
+    "PROPMOVE",
+    "MemTile_0_3 moves 4.6 cm with no hand on it (nearest finger 122 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_6 moves 4.4 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_0_7 moves 4.2 cm with no hand on it (nearest finger 176 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_0 moves 1.8 cm with no hand on it (nearest finger 85 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_1 moves 4.5 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_3 moves 2.0 cm with no hand on it (nearest finger 121 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_4 moves 4.6 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_5 moves 3.5 cm with no hand on it (nearest finger 138 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_6 moves 2.0 cm with no hand on it (nearest finger 166 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_7 moves 2.8 cm with no hand on it (nearest finger 174 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_0 moves 4.6 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_1 moves 4.6 cm with no hand on it (nearest finger 99 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_2 moves 3.5 cm with no hand on it (nearest finger 106 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_4 moves 3.2 cm with no hand on it (nearest finger 138 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_5 moves 2.9 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_6 moves 4.5 cm with no hand on it (nearest finger 159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_7 moves 2.5 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_0 moves 4.2 cm with no hand on it (nearest finger 85 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_1 moves 4.5 cm with no hand on it (nearest finger 100 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_2 moves 1.6 cm with no hand on it (nearest finger 100 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_3 moves 3.8 cm with no hand on it (nearest finger 113 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_4 moves 2.0 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_5 moves 4.3 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_7 moves 1.8 cm with no hand on it (nearest finger 173 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_0 moves 2.3 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_1 moves 3.0 cm with no hand on it (nearest finger 103 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_2 moves 3.2 cm with no hand on it (nearest finger 111 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_3 moves 3.5 cm with no hand on it (nearest finger 119 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_4 moves 2.0 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_6 moves 2.8 cm with no hand on it (nearest finger 163 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_7 moves 4.8 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_0 moves 4.5 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_1 moves 5.2 cm with no hand on it (nearest finger 98 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_2 moves 3.6 cm with no hand on it (nearest finger 107 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_3 moves 3.2 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_4 moves 2.3 cm with no hand on it (nearest finger 142 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_5 moves 3.7 cm with no hand on it (nearest finger 161 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_6 moves 3.9 cm with no hand on it (nearest finger 165 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_0 moves 3.5 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_1 moves 4.2 cm with no hand on it (nearest finger 99 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_2 moves 4.1 cm with no hand on it (nearest finger 109 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_4 moves 4.1 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_5 moves 4.6 cm with no hand on it (nearest finger 154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_6 moves 3.2 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_7 moves 4.9 cm with no hand on it (nearest finger 162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_0 moves 4.5 cm with no hand on it (nearest finger 92 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_3 moves 3.4 cm with no hand on it (nearest finger 121 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_6 moves 4.2 cm with no hand on it (nearest finger 161 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_7 moves 4.5 cm with no hand on it (nearest finger 160 cm)"
+   ]
+  ],
+  "1225": [
+   [
+    "PROPMOVE",
+    "MemTile_0_6 moves 4.4 cm with no hand on it (nearest finger 156 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_0 moves 0.5 cm with no hand on it (nearest finger 85 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_4 moves 4.6 cm with no hand on it (nearest finger 134 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_5 moves 4.4 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_7 moves 1.8 cm with no hand on it (nearest finger 176 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_0 moves 3.6 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_1 moves 4.9 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_2 moves 3.2 cm with no hand on it (nearest finger 104 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_4 moves 1.7 cm with no hand on it (nearest finger 139 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_5 moves 3.8 cm with no hand on it (nearest finger 143 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_6 moves 4.4 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_7 moves 1.0 cm with no hand on it (nearest finger 176 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_0 moves 3.3 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_1 moves 5.2 cm with no hand on it (nearest finger 96 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_3 moves 3.1 cm with no hand on it (nearest finger 111 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_4 moves 0.9 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_5 moves 3.8 cm with no hand on it (nearest finger 162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_7 moves 1.0 cm with no hand on it (nearest finger 174 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_0 moves 1.3 cm with no hand on it (nearest finger 85 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_1 moves 3.6 cm with no hand on it (nearest finger 101 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_2 moves 4.0 cm with no hand on it (nearest finger 108 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_3 moves 3.5 cm with no hand on it (nearest finger 118 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_6 moves 1.9 cm with no hand on it (nearest finger 165 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_7 moves 5.4 cm with no hand on it (nearest finger 170 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_0 moves 4.0 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_1 moves 5.2 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_2 moves 3.1 cm with no hand on it (nearest finger 106 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_3 moves 3.8 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_5 moves 0.8 cm with no hand on it (nearest finger 162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_6 moves 2.7 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_0 moves 2.8 cm with no hand on it (nearest finger 82 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_1 moves 4.2 cm with no hand on it (nearest finger 97 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_2 moves 3.9 cm with no hand on it (nearest finger 108 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_4 moves 4.2 cm with no hand on it (nearest finger 134 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_6 moves 3.9 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_7 moves 5.2 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_3 moves 3.7 cm with no hand on it (nearest finger 121 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_7 moves 4.9 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1231": [
+   [
+    "PROPMOVE",
+    "MemTile_0_6 moves 3.9 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_4 moves 4.2 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_5 moves 4.7 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_7 moves 0.5 cm with no hand on it (nearest finger 176 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_0 moves 1.7 cm with no hand on it (nearest finger 82 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_1 moves 4.5 cm with no hand on it (nearest finger 92 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_2 moves 2.6 cm with no hand on it (nearest finger 103 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_5 moves 4.3 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_6 moves 3.8 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_0 moves 1.7 cm with no hand on it (nearest finger 82 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_1 moves 5.1 cm with no hand on it (nearest finger 92 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_3 moves 2.0 cm with no hand on it (nearest finger 110 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_5 moves 3.0 cm with no hand on it (nearest finger 165 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_1 moves 3.7 cm with no hand on it (nearest finger 98 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_2 moves 4.2 cm with no hand on it (nearest finger 105 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_3 moves 3.1 cm with no hand on it (nearest finger 117 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_6 moves 0.6 cm with no hand on it (nearest finger 165 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_7 moves 5.2 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_0 moves 3.0 cm with no hand on it (nearest finger 79 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_1 moves 4.4 cm with no hand on it (nearest finger 93 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_2 moves 2.1 cm with no hand on it (nearest finger 105 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_3 moves 3.9 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_6 moves 1.0 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_1 moves 3.9 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_2 moves 3.2 cm with no hand on it (nearest finger 107 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_4 moves 3.8 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_6 moves 4.2 cm with no hand on it (nearest finger 156 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_7 moves 4.8 cm with no hand on it (nearest finger 172 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_7 moves 4.6 cm with no hand on it (nearest finger 169 cm)"
+   ]
+  ],
+  "1237": [
+   [
+    "PROPMOVE",
+    "MemTile_0_6 moves 2.8 cm with no hand on it (nearest finger 163 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_5 moves 4.6 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_1 moves 3.4 cm with no hand on it (nearest finger 89 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_2 moves 1.8 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_5 moves 4.4 cm with no hand on it (nearest finger 150 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_6 moves 2.8 cm with no hand on it (nearest finger 170 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_1 moves 4.1 cm with no hand on it (nearest finger 89 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_5 moves 1.8 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_1 moves 3.2 cm with no hand on it (nearest finger 96 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_2 moves 3.7 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_3 moves 2.4 cm with no hand on it (nearest finger 117 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_7 moves 4.1 cm with no hand on it (nearest finger 179 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_0 moves 1.5 cm with no hand on it (nearest finger 78 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_1 moves 2.6 cm with no hand on it (nearest finger 91 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_2 moves 0.6 cm with no hand on it (nearest finger 105 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_3 moves 3.6 cm with no hand on it (nearest finger 119 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_4 moves 2.8 cm with no hand on it (nearest finger 137 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_6 moves 4.1 cm with no hand on it (nearest finger 159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_7 moves 3.6 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_7 moves 3.6 cm with no hand on it (nearest finger 172 cm)"
+   ]
+  ],
+  "1243": [
+   [
+    "PROPMOVE",
+    "MemTile_0_6 moves 1.3 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_1_5 moves 3.8 cm with no hand on it (nearest finger 150 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_1 moves 1.6 cm with no hand on it (nearest finger 88 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_2 moves 0.7 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_5 moves 4.1 cm with no hand on it (nearest finger 154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_6 moves 1.5 cm with no hand on it (nearest finger 172 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_3_1 moves 2.2 cm with no hand on it (nearest finger 87 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_1 moves 2.3 cm with no hand on it (nearest finger 94 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_2 moves 2.5 cm with no hand on it (nearest finger 101 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_3 moves 1.4 cm with no hand on it (nearest finger 117 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_7 moves 2.2 cm with no hand on it (nearest finger 182 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_3 moves 2.8 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_4 moves 1.3 cm with no hand on it (nearest finger 138 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_6 moves 3.5 cm with no hand on it (nearest finger 162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_7 moves 1.7 cm with no hand on it (nearest finger 177 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_7_7 moves 1.9 cm with no hand on it (nearest finger 173 cm)"
+   ]
+  ],
+  "1249": [
+   [
+    "PROPMOVE",
+    "MemTile_1_5 moves 2.5 cm with no hand on it (nearest finger 152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_5 moves 3.4 cm with no hand on it (nearest finger 157 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_1 moves 0.9 cm with no hand on it (nearest finger 94 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_4_2 moves 0.8 cm with no hand on it (nearest finger 100 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_5_3 moves 1.6 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_6 moves 2.4 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1255": [
+   [
+    "PROPMOVE",
+    "MemTile_1_5 moves 0.7 cm with no hand on it (nearest finger 152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_2_5 moves 2.3 cm with no hand on it (nearest finger 159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MemTile_6_6 moves 0.9 cm with no hand on it (nearest finger 165 cm)"
+   ]
+  ],
+  "1261": [
+   [
+    "PROPMOVE",
+    "MemTile_2_5 moves 0.9 cm with no hand on it (nearest finger 160 cm)"
+   ]
+  ],
+  "1273": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1393": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1417": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1441": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1465": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1489": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1513": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1729": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1753": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1777": [
+   [
+    "ATTACH",
+    "Bath_TileCap is 50.0 cm off Tom's skin (median)"
+   ]
+  ],
+  "1555": [
+   [
+    "FAN",
+    "Doc.R fingers fanned 74 deg (index vs little)"
+   ]
+  ],
+  "1561": [
+   [
+    "FAN",
+    "Doc.R fingers fanned 89 deg (index vs little)"
+   ]
+  ],
+  "1567": [
+   [
+    "FAN",
+    "Doc.R fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "1573": [
+   [
+    "FAN",
+    "Doc.R fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "1591": [
+   [
+    "FAN",
+    "Doc.R fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "1597": [
+   [
+    "FAN",
+    "Doc.R fingers fanned 96 deg (index vs little)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 167,
+  "BACKHEAD": 4,
+  "CLAW": 1,
+  "CAMJUMP": 18,
+  "ATTACH": 42,
+  "PROPMOVE": 426,
+  "FAN": 10
+ }
+}

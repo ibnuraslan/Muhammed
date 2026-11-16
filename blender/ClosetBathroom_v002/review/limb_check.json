@@ -1,0 +1,1805 @@
+{
+ "frames": {
+  "469": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "471": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "473": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "475": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "477": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "479": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "481": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "483": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "485": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "487": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "489": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "491": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "493": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "495": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "497": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "499": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "501": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "503": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "505": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "507": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "509": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "511": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "513": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "515": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "517": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "519": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "521": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "523": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "525": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "527": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "529": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "531": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "533": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "535": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "537": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "539": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "541": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "543": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "545": [
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "547": [
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "577": [
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "579": [
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "581": [
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "583": [
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "585": [
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "587": [
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "589": [
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "591": [
+   [
+    "ARMBODY",
+    "Ray arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "603": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "605": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "607": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "609": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "611": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "613": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "615": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "617": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "619": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "621": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "623": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "625": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "627": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "629": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "631": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "633": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "635": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "637": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "639": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "641": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "643": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "645": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "647": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "649": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "651": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "653": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "655": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "657": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "659": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "661": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "663": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "665": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "667": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "669": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "671": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "673": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "675": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "677": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "679": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "681": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "683": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "685": [
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "771": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "773": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "775": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "777": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "779": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "781": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "783": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "785": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "787": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "789": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "791": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "793": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "795": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "797": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "799": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "801": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "803": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "805": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "807": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "809": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "811": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "813": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "815": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "817": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "819": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "821": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "823": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "825": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "827": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "829": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "831": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "833": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "835": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "837": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "839": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "841": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "843": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "845": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "847": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "849": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "851": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "853": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "855": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "857": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "859": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "861": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "863": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "865": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "867": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "869": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "871": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "873": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "875": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "877": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "879": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "881": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "883": [
+   [
+    "ARMBODY",
+    "Ken arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ken arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Ray arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1517": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1519": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1521": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1523": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1525": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1527": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1529": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1531": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1533": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1535": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1537": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1539": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1541": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1543": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1545": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1547": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1549": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1551": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1553": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1555": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1557": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1559": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1561": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1563": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1565": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1567": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1569": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1571": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1573": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1575": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1577": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1579": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1581": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1583": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1585": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1587": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1589": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1591": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1593": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1595": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1597": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1599": [
+   [
+    "ARMBODY",
+    "Doc arm.R inside own torso (4 pts)"
+   ]
+  ]
+ },
+ "counts": {
+  "ARMBODY": 355
+ }
+}

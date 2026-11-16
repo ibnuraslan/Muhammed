@@ -1,0 +1,142 @@
+[
+ {
+  "shot": "S01",
+  "set": "hall",
+  "f0": 1,
+  "f1": 103,
+  "vo": "He opened what he remembered as"
+ },
+ {
+  "shot": "S02",
+  "set": "hall",
+  "f0": 104,
+  "f1": 163,
+  "vo": "his closet,"
+ },
+ {
+  "shot": "S03",
+  "set": "bath",
+  "f0": 164,
+  "f1": 282,
+  "vo": "but found a bathroom instead."
+ },
+ {
+  "shot": "S04",
+  "set": "hall",
+  "f0": 283,
+  "f1": 342,
+  "vo": "Confused,"
+ },
+ {
+  "shot": "S05",
+  "set": "hall",
+  "f0": 343,
+  "f1": 397,
+  "vo": "he asked his roommates"
+ },
+ {
+  "shot": "S06",
+  "set": "hall",
+  "f0": 398,
+  "f1": 463,
+  "vo": "what happened."
+ },
+ {
+  "shot": "S07",
+  "set": "hall",
+  "f0": 464,
+  "f1": 528,
+  "vo": "They stared at him and"
+ },
+ {
+  "shot": "S08",
+  "set": "hall",
+  "f0": 529,
+  "f1": 600,
+  "vo": "insisted it had"
+ },
+ {
+  "shot": "S09",
+  "set": "hall",
+  "f0": 601,
+  "f1": 685,
+  "vo": "always been a bathroom."
+ },
+ {
+  "shot": "S10",
+  "set": "hall",
+  "f0": 686,
+  "f1": 770,
+  "vo": "At first, he assumed"
+ },
+ {
+  "shot": "S11",
+  "set": "prank",
+  "f0": 771,
+  "f1": 884,
+  "vo": "they were pulling some elaborate prank."
+ },
+ {
+  "shot": "S13",
+  "set": "hall",
+  "f0": 885,
+  "f1": 965,
+  "vo": "But as days passed,"
+ },
+ {
+  "shot": "S14",
+  "set": "hall",
+  "f0": 966,
+  "f1": 1069,
+  "vo": "he became terrified because"
+ },
+ {
+  "shot": "S15",
+  "set": "hall",
+  "f0": 1070,
+  "f1": 1276,
+  "vo": "he couldn't even remember what the closet had looked like anymore."
+ },
+ {
+  "shot": "S16",
+  "set": "hall",
+  "f0": 1277,
+  "f1": 1385,
+  "vo": "Thinking he was losing his mind,"
+ },
+ {
+  "shot": "S17",
+  "set": "clinic",
+  "f0": 1386,
+  "f1": 1513,
+  "vo": "he finally went to a doctor."
+ },
+ {
+  "shot": "S18",
+  "set": "clinic",
+  "f0": 1514,
+  "f1": 1600,
+  "vo": "Tests revealed a brain tumor,"
+ },
+ {
+  "shot": "S19",
+  "set": "clinic",
+  "f0": 1601,
+  "f1": 1700,
+  "vo": "causing memory loss and hallucinations."
+ },
+ {
+  "shot": "S20",
+  "set": "hall",
+  "f0": 1701,
+  "f1": 1778,
+  "vo": "The closet"
+ },
+ {
+  "shot": "S21",
+  "set": "bath",
+  "f0": 1779,
+  "f1": 1881,
+  "vo": "had never existed."
+ }
+]

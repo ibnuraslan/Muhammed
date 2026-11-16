@@ -1,0 +1,108 @@
+{
+ "toilet": {
+  "uid": "132a8ee2af3a40d39d270fbed3d3666c",
+  "title": "Toilet",
+  "author": "HippoStance",
+  "author_profile": "https://sketchfab.com/hippostance",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/132a8ee2af3a40d39d270fbed3d3666c",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "sink": {
+  "uid": "901084912a1b41758dc8b892b25ac46d",
+  "title": "Sink",
+  "author": "JuanG3D",
+  "author_profile": "https://sketchfab.com/juang3d",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/901084912a1b41758dc8b892b25ac46d",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "clock": {
+  "uid": "2e964ac0242e4b1789adfd9549c653dc",
+  "title": "Wall Clock",
+  "author": "FelipeMSX",
+  "author_profile": "https://sketchfab.com/felipeprodev",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/2e964ac0242e4b1789adfd9549c653dc",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "firstaid": {
+  "uid": "e6177c57f52e4e76970d1349472a21eb",
+  "title": "Wall mount first aid kit",
+  "author": "AlexKurts",
+  "author_profile": "https://sketchfab.com/AlexKurts",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/e6177c57f52e4e76970d1349472a21eb",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "ochair": {
+  "uid": "af2f07d06f6349158c1d24d87f5ceb95",
+  "title": "Office chair",
+  "author": "AK STUDIO",
+  "author_profile": "https://sketchfab.com/inven2000",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/af2f07d06f6349158c1d24d87f5ceb95",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "monitor": {
+  "uid": "3dfd70d1c9404b0997b0fb456a91fd02",
+  "title": "Coumputer Monitor 24\"",
+  "author": "thethieme",
+  "author_profile": "https://sketchfab.com/thethieme",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/3dfd70d1c9404b0997b0fb456a91fd02",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "desk": {
+  "uid": "bf2f5c812068489c92188cde9932ef0d",
+  "title": "Office desk",
+  "author": "ms_Butor",
+  "author_profile": "https://sketchfab.com/butortervezo",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/bf2f5c812068489c92188cde9932ef0d",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "folded": {
+  "uid": "07de2b503170432ca72c1f6cfeace05b",
+  "title": "Folded Clothes - Square Scan Challenge",
+  "author": "Andre",
+  "author_profile": "https://sketchfab.com/andrea.nesta",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/07de2b503170432ca72c1f6cfeace05b",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "tp": {
+  "uid": "448e57880fa744e19e18604e42d64cf3",
+  "title": "Simple Toilet Paper 2.0",
+  "author": "Blender3D",
+  "author_profile": "https://sketchfab.com/Blender3D",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/448e57880fa744e19e18604e42d64cf3",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "brain": {
+  "uid": "0aa0e33c5c854d1bab7bac9e1c7acaec",
+  "title": "Human brain, Cerebrum & Brainstem",
+  "author": "FrankJohansson",
+  "author_profile": "https://sketchfab.com/pranktoy",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/0aa0e33c5c854d1bab7bac9e1c7acaec",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "sofa": {
+  "uid": "03550a3529c24611a12aa158747374e0",
+  "title": "Sofa",
+  "author": "katjagricishina",
+  "author_profile": "https://sketchfab.com/katjagricishina",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/03550a3529c24611a12aa158747374e0",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "chair": {
+  "uid": "b228a29fa84544c2be501c295653ffe7",
+  "title": "Office Chair",
+  "author": "Red Fox / nokillnando",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/b228a29fa84544c2be501c295653ffe7"
+ }
+}
