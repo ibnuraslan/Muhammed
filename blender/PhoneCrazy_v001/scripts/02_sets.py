@@ -277,7 +277,7 @@ spl.bezier_points.add(len(pts_) - 1)
 for bp_, p_ in zip(spl.bezier_points, pts_): bp_.co = XO + Vector(p_); bp_.handle_left_type = bp_.handle_right_type = 'AUTO'
 ST = bpy.data.objects.new("XS_stream", cu); XS.objects.link(ST); cu.materials.append(M_stream)
 bpy.ops.mesh.primitive_circle_add(vertices=48, radius=1.0, fill_type='NGON', location=XO + Vector((0.9, FRONT + 0.9, -8.75))); POOL = bpy.context.active_object
-POOL.name = "XS_pool"; POOL.scale = (3.0, 1.4, 1); POOL.data.materials.append(M_stream); link(POOL, XS)
+POOL.name = "XS_pool"; POOL.scale = (3.0, 1.4, 1); POOL.data.materials.append(mat("PoolSteady", (0.1, 0.4, 0.75), 0.15, emit=(0.15, 0.5, 0.9), emit_s=0.6, spec=0.2)); link(POOL, XS)   # steady (no flow bands flashing on a flat pool)
 # green surface around the block + an instance of the excavator at the pit rim
 XG = grid_mesh("XS_grass", -BW / 2 - 40, BW / 2 + 40, -BDp / 2 + 0.001, 80, 2.0, lambda x, y: 0.0, M_ground, XS); XG.location = XO
 XG.hide_render = True    # placeholder off: the block reads cleaner on the sky

@@ -132,7 +132,8 @@ PHONE = OB["Phone"]; P0 = PHONE.location.copy(); R0 = PHONE.rotation_euler.copy(
 TILE = bpy.data.materials["PhoneScreen"].node_tree.nodes["Tile"]
 SCHED = []          # (frame, tile)
 def tiles(s, seq):
-    for t, i in seq: SCHED.append((sec(s, t), i))
+    for t, i in seq:
+        if sec(s, t) <= f1(s): SCHED.append((sec(s, t), i))        # never leaks past the cut
 JIT = []            # (fa, fb): glitch shots, screen offset jitter
 BUZZ = []           # (fa, fb): phone vibrates on the lid
 def bake_screen():
