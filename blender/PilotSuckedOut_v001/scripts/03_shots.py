@@ -67,6 +67,12 @@ for o in FO.children:
                 if n.type == 'GROUP' and n.node_tree and n.node_tree.name.startswith("EnhancedEye"):
                     n.inputs["IrisMajorColor"].default_value = (0.09, 0.045, 0.018, 1); n.inputs["IrisMinorColor"].default_value = (0.025, 0.012, 0.006, 1)
                     n.inputs["EyeWhiteColor"].default_value = (0.66, 0.62, 0.58, 1)
+for o in CAP.children:                         # captain's shoes: dark brown (the tan shoes read as bare skin)
+    if o.type == 'MESH' and "shoes" in o.name:
+        ms = D.materials.new("M_capt_shoes"); ms.use_nodes = True; Pn = ms.node_tree.nodes["Principled BSDF"]
+        Pn.inputs["Base Color"].default_value = (0.045, 0.03, 0.02, 1); Pn.inputs["Roughness"].default_value = 0.35
+        o.data.materials.clear(); o.data.materials.append(ms)
+        for poly in o.data.polygons: poly.material_index = 0
 REST_ROOT = CAP.data.bones["root"].head_local.copy()
 def place(rig, f, pelvis_world, yaw_deg, extra=None):
     """key the rig object so the root head lands on pelvis_world, facing yaw (0 = faces -Y, 180 = faces +Y)"""
@@ -124,9 +130,9 @@ def att_hold(f, lean=24, t=0.45, head=(0, -0.25, 1), pel=(-0.43, 1.70, 1.06), re
     pose(ATT, f, spec)
     if not hands: return
     for s_att, s_cap, out in (("L", "L", Vector((-1, 0, 0))), ("R", "R", Vector((1, 0, 0)))):
-        c = shin_pt(s_cap, max(t, 0.55))
+        c = shin_pt(s_cap, 0.8 if s_att == "R" else max(t, 0.55))   # right hand nearer the ankle: within reach, fingers clear of the knee
         up = Vector((0, 0, 1))
-        palm = c + up * 0.135 - out * 0.01               # palm pressed down on TOP of his shin: no arm passes under or through a leg
+        palm = c + up * (0.16 if s_att == "R" else 0.135) - out * 0.01               # palm pressed down on TOP of his shin: no arm passes under or through a leg
         fd = (out + Vector((0, -0.25, -0.35))).normalized()   # fingers drape over the shin to its outer side, away from the knee
         if reach < 1.0:
             sh = bone_w(ATT, "upperarm01." + s_att); palm = sh.lerp(palm, reach)
@@ -288,18 +294,17 @@ for sid, st, f0, f1 in LAY:
             w = 0.06 * math.sin(k * 1.3); cap_out(f, lean=12, legs=(1.0 + w, 2.7 - w))
         cap_out(f1, lean=12, legs=(1.0, 2.7))
         if sid == "09":
-            att_hold(f0, lean=14, head=(0, -0.1, 1)); att_hold(Fc(sid, 0.35), lean=22, t=0.5)
-            att_hold(Fc(sid, 0.6), lean=28); att_hold(f1, lean=26)
-            camera(sid, [(0, (-0.85, 2.4, 1.5), (-0.4, 1.95, 1.45)), (1, (-0.83, 2.35, 1.52), (-0.4, 1.95, 1.43))], lens=18)
+            att_hold(f0, lean=18); att_hold(Fc(sid, 0.3), lean=20); att_hold(Fc(sid, 0.5), lean=6, head=(0, 0.1, 1)); att_hold(Fc(sid, 0.7), lean=16); att_hold(f1, lean=18)
+            camera(sid, [(0, (-0.95, 2.15, 1.75), (-0.35, 1.95, 1.32)), (1, (-0.86, 2.06, 1.72), (-0.35, 1.95, 1.32))], lens=16)
         elif sid == "10":
-            att_hold(f0, lean=26); att_hold(Fc(sid, 0.5), lean=30, t=0.5, head=(0.1, -0.2, 1)); att_hold(f1, lean=27)
-            camera(sid, [(0, (-0.84, 2.36, 1.52), (-0.4, 1.97, 1.48)), (1, (-0.82, 2.3, 1.53), (-0.4, 1.97, 1.48))], lens=21)
+            att_hold(f0, lean=18); att_hold(Fc(sid, 0.35), lean=6, head=(0.05, 0.1, 1)); att_hold(Fc(sid, 0.6), lean=16); att_hold(f1, lean=18)
+            camera(sid, [(0, (-0.9, 2.1, 1.73), (-0.35, 1.95, 1.34)), (1, (-0.82, 2.02, 1.7), (-0.35, 1.95, 1.36))], lens=17)
         elif sid == "13":
             att_hold(f0, lean=27); att_hold(Fc(sid, 0.5), lean=24, head=(0, 0.05, 1)); att_hold(f1, lean=24, head=(0, 0.1, 1))
             camera(sid, [(0, (-0.95, 2.15, 1.65), (-0.42, 1.85, 1.35)), (1, (-0.93, 2.1, 1.6), (-0.42, 1.85, 1.35))], lens=26)
         else:
-            att_hold(f0, lean=26); att_hold(Fc(sid, 0.5), lean=32, t=0.5); att_hold(f1, lean=30, head=(0.15, -0.2, 1))
-            camera(sid, [(0, (-0.85, 2.45, 1.55), (-0.25, 1.9, 1.4)), (1, (-0.83, 2.42, 1.55), (-0.2, 1.9, 1.4))], lens=18)
+            att_hold(f0, lean=18); att_hold(Fc(sid, 0.4), lean=6, head=(0.1, 0.1, 1)); att_hold(Fc(sid, 0.75), lean=16); att_hold(f1, lean=18, head=(0.15, -0.2, 1))
+            camera(sid, [(0, (-0.97, 2.2, 1.78), (-0.3, 1.9, 1.34)), (1, (-0.88, 2.1, 1.74), (-0.3, 1.9, 1.34))], lens=16)
     elif sid in ("11", "12"):
         cap_at_cock(f0); cap_at_cock(f1); cap_out(f0, lean=12, legs=(1.0, 2.7)); cap_out(f1, lean=12, legs=(1.0, 2.7))
         att_hold(f0, lean=26); att_hold(f1, lean=27)
