@@ -41,8 +41,8 @@ for f in frs(fa + 72, fe, 4):
     place_hand(FA.r.o, "L", f, tgt, -fw, (M.to_3x3() @ Vector((-1, 0, 0.4))).normalized())
 apply_pose(FA.r.o, "L", "relaxed", fa + 72); apply_pose(FA.r.o, "L", "shield", fa + 92)
 _pn = "Pole_elbow.L"; _pb = FA.r.PB[_pn]
-_pt = FA.r.rest(_pn).to_3x3().inverted() @ (FA.r.BN["upperarm01.L"].head_local + Vector((0.45, -0.1, -0.45)) - FA.r.BN[_pn].head_local)
-for f, loc in ((fa + 50, (0, 0, 0)), (fa + 70, _pt), (f1("S4"), _pt), (f1("S4") + 1, (0, 0, 0))):   # elbow out to the side for the hand-on-chest only (S5, S22 unchanged)
+_pt = FA.r.rest(_pn).to_3x3().inverted() @ (FA.r.BN["upperarm01.L"].head_local + Vector((0.22, -0.12, -0.4)) - FA.r.BN[_pn].head_local)
+for f, loc in ((fa + 74, (0, 0, 0)), (fa + 86, _pt), (f1("S4"), _pt), (f1("S4") + 1, (0, 0, 0))):   # elbow out to the side for the hand-on-chest only (S5, S22 unchanged)
     _pb.location = loc; _pb.keyframe_insert("location", frame=f, group=_pn)
 for fc in fcurves_of(FA.r.o.animation_data.action):
     if fc.data_path.startswith('pose.bones["Pole_elbow.L"]'):
