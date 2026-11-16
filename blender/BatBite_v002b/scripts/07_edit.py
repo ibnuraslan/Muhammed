@@ -21,7 +21,7 @@ EDIT = [("S01_crowd_bat",    1,   95,    1),   # A fan threw what looked like a 
         ("S11_stares",    1066, 1152,  843),   # Its blood filled his mouth (14.04 -> 843)
         ("S12_drops",     1280, 1380,  929),   # and he immediately understood (15.46 -> 929)
         ("S13_bends",     1400, 1464, 1029),   #   what had happened
-        ("S14_hospital",  1600, 1746, 1093),   # After the concert, he was rushed to the hospital (18.20 -> 1093)
+        ("S14_hospital",  1625, 1771, 1093),   # v002b: source starts 25 frames in (his legs have settled under his hands). After the concert, he was rushed to the hospital (18.20 -> 1093)
         ("S15_mask_cu",   1800, 1924, 1239)]   # where doctors gave him rabies shots (20.64 -> 1239)
 END = 1362                                     # last word ends 22.18 s; +0.5 s
 for (n0, s0, s1, d0), (n1, t0, t1, e0) in zip(EDIT, EDIT[1:]):
