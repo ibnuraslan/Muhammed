@@ -1,0 +1,36 @@
+{
+"visible_frames": [
+872,
+875,
+878,
+881,
+884
+],
+"frames": {
+"872": {
+"finger5-2.R|HandBrick|VIS": 24,
+"finger5-3.R|HandBrick|VIS": 14,
+"finger2-2.R|HandBrick|VIS": 4,
+"finger5-1.R|HandBrick|VIS": 2
+},
+"875": {
+"finger5-2.R|HandBrick|VIS": 23,
+"finger5-3.R|HandBrick|VIS": 14,
+"finger2-2.R|HandBrick|VIS": 4,
+"finger5-1.R|HandBrick|VIS": 2
+},
+"878": {
+"finger5-2.R|HandBrick|VIS": 24,
+"finger5-3.R|HandBrick|VIS": 13,
+"finger5-1.R|HandBrick|VIS": 1
+},
+"881": {
+"finger5-2.R|HandBrick|VIS": 23,
+"finger5-3.R|HandBrick|VIS": 13
+},
+"884": {
+"finger5-3.R|HandBrick|VIS": 14,
+"finger5-2.R|HandBrick|VIS": 20
+}
+}
+}

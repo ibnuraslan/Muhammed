@@ -14,7 +14,7 @@ T = {"S1": 0.0, "S2": 1.0, "S3": 3.0, "S4": 4.0, "S5": 5.5, "S6": 7.0, "S7": 9.0
      "S12": 17.0, "S13": 18.0, "S14": 20.0, "S15": 21.0, "S16": 22.5, "S17": 25.0, "S18": 26.0, "S19": 28.0, "S20": 30.0, "S21": 31.0,
      "S22": 34.0, "END": 37.5}
 if len(args) > 1: T.update(json.load(open(args[1])))
-ORDER = ["S%d" % i for i in range(1, 23)]
+ORDER = sorted([k for k in T if k != "END"], key=lambda k: T[k])     # shot order follows the timing (VO)
 F = {k: 1 + round(v * FPS) for k, v in T.items()}
 def f0(s): return F[s]
 def f1(s): i = ORDER.index(s); return (F[ORDER[i + 1]] if i + 1 < len(ORDER) else F["END"]) - 1
@@ -35,7 +35,9 @@ def put_ranges(n, ranges):
     o = OB[n]; o.rotation_mode = 'QUATERNION'
     PK = Matrix.Translation((NAMES.index(n) * 40.0 if n in NAMES else 900, -5000, -500))
     marks = [(0, PK)]
-    for fa, fb, pos, yaw in sorted(ranges, key=lambda r: r[0]):
+    rs = sorted(ranges, key=lambda r: r[0])
+    rs = [(fa, min(fb, rs[i + 1][0] - 1) if i + 1 < len(rs) else fb, pos, yaw) for i, (fa, fb, pos, yaw) in enumerate(rs)]   # an overrun never parks over the next placement
+    for fa, fb, pos, yaw in rs:
         marks.append((fa, Matrix.Translation(Vector(pos)) @ Matrix.Rotation(R_(yaw), 4, 'Z'))); marks.append((fb + 1, PK))
     for f, M in marks:
         loc, q, _ = M.decompose(); o.location = loc; o.rotation_quaternion = q
@@ -197,9 +199,10 @@ FA_CR, FB_CR = f0("S1"), f1("S7")                      # the continuous cranking
 Z_CR0, LIFT = 1.60, 0.03                               # m, m/s while cranking
 def z_crank(f): return Z_CR0 + LIFT * (f - FA_CR) / FPS
 Z_S8 = 2.30; Z_TOP = 2.85
-BK = [(0, Z_CR0, 'CONSTANT'), (FA_CR, Z_CR0, 'LINEAR'), (FB_CR, z_crank(FB_CR), 'CONSTANT'),
-      (f0("S8"), Z_S8, 'CONSTANT'), (f0("S9"), 2.48, 'LINEAR'), (f1("S9"), 2.50, 'CONSTANT'),
-      (f0("S10"), 2.50, 'LINEAR'), (f1("S10"), Z_TOP, 'CONSTANT'), (f0("S11"), Z_TOP, 'CONSTANT')]
+BK = sorted([(0, Z_CR0, 'CONSTANT'), (FA_CR, Z_CR0, 'LINEAR'), (FB_CR, z_crank(FB_CR), 'CONSTANT'),
+      (f0("S9"), 1.85, 'LINEAR'), (f1("S9"), Z_S8, 'CONSTANT'),              # "Slowly, the buildings rose into the air"
+      (f0("S8"), Z_S8, 'CONSTANT'), (f0("S11"), Z_TOP, 'CONSTANT'),
+      (f0("S10"), 2.50, 'LINEAR'), (f1("S10"), Z_TOP, 'CONSTANT')])        # "Raised the buildings above the swamp"
 for f, z, _ in BK:
     BLDG.location.z = z; BLDG.keyframe_insert("location", index=2, frame=f)
 for fc in fcurves_of(BLDG.animation_data.action):
@@ -221,10 +224,10 @@ def crib_state(f, z0, hero_upto=None, front=True):
         for l, o in lst: key_vis(o, [(f, l < n)])
 crib_state(0, Z_CR0)
 crib_state(f0("S1"), Z_CR0)
+crib_state(f0("S9"), 1.85)
 crib_state(f0("S8"), Z_S8, hero_upto=HERO_L)
-crib_state(f0("S9"), 2.48)
-crib_state(f0("S10"), 2.5)
 crib_state(f0("S11"), Z_TOP, front=False)
+crib_state(f0("S10"), 2.5)
 COURSES = sorted([o for o in OB if o.name.startswith("FoundCourse")], key=lambda o: o.name)
 key_vis_all(COURSES, [(0, False)])
 NC = int((Z_TOP - 0.32) / 0.25); COURSES = COURSES[:NC]                 # top course stays under the sill
@@ -281,7 +284,7 @@ for n, ji in CREW.items():
 # ---- cameras S1, S2, S4, S5, S7 (set A, worker side is -Y)
 def wpos(n): return Vector(OB["CrankGrip.%d" % CREW[n]]["axle"])
 a1 = wpos("W1")
-camshot("S1", [(0, a1 + Vector((2.55, 0.62, 0.62)), a1 + Vector((0, -0.48, 0.58)), 85), (1, a1 + Vector((2.35, 0.62, 0.62)), a1 + Vector((0, -0.48, 0.60)), 92)])   # face + shoulders, hands out of frame
+camshot("S1", [(0, a1 + Vector((2.55, 0.62, 0.62)), a1 + Vector((0, -0.34, 0.56)), 66), (1, a1 + Vector((2.45, 0.62, 0.62)), a1 + Vector((0, -0.34, 0.57)), 68)])   # face + shoulders, hands out of frame
 camshot("S2", [(0, Vector((0, -26, 3.2)), Vector((0, 4, 6.5)), 26), (1, Vector((0, -22, 2.8)), Vector((0, 4, 6.2)), 26)])
 camshot("S4", [(0, Vector((9.2, -0.42, 0.88)), Vector((-3, -1.15, 1.25)), 30), (1, Vector((8.5, -0.42, 0.9)), Vector((-3.5, -1.15, 1.3)), 30)])
 camshot("S5", [(0, Vector((-9.2, -0.42, 0.88)), Vector((3, -1.15, 1.3)), 30), (1, Vector((-8.6, -0.42, 0.9)), Vector((3, -1.15, 1.35)), 30)])
@@ -291,9 +294,9 @@ WINDLASS = [o for o in OB if o.name.split(".")[0] in ("JackUpright", "JackUpFoot
 key_vis_all(WINDLASS, [(0, True), (f0("S8"), False)])
 
 # ================================================================== S3: the Foreman calls the turn
-FM = CH["Foreman"]; fa, fb = f0("S3"), fx("S3")
+FM = CH["Foreman"]; fa, fb = f0("S3"), f1("S3")
 FPOS = Vector((0.9, -4.2, 0))
-put_ranges("Foreman", [(fa, fb, FPOS, 20)])
+put_ranges("Foreman", [(fa, f1("S3"), FPOS, 20)])
 stand(FM, fa, head=(2, 0)); arms_hang(FM, fa); face(FM, fa, 0.0, -6)
 stand(FM, fa + 25, head=(-4, 0), spine=2); face(FM, fa + 25, 0.002, -4, 0)
 shR = FM.r.BN["upperarm01.R"].head_local
@@ -400,6 +403,7 @@ camshot("S11", [(0, Vector((MX + 0.8, -2.3, 1.55)), Vector((MX, wall_y + 0.5, 1.
 # S12: the foundation complete across the front
 fa = f0("S12")
 key_vis_all(COURSES, [(fa, True)]); key_vis(BR, [(fa, False)])
+key_vis_all(COURSES, [(f0("S10"), False)])              # S10 (the rise to street level) comes before the foundation in the story
 camshot("S12", [(0, Vector((2.5, -4.6, 1.3)), Vector((0.5, 0.3, 1.6)), 26), (1, Vector((3.2, -6.4, 1.5)), Vector((0.5, 0.3, 1.7)), 26)])
 
 # ================================================================== S13 / S14: facade on its new foundation, crane over the roof
