@@ -106,7 +106,7 @@ def _gz(x, y):
 dropped = 0; keep_ = []
 for z_, d, M in slots:              # a drum sunk into the ground reads as a sliced wedge: leave it out
     pen = max(_gz((M @ c).x, (M @ c).y) - (M @ c).z for c in _dco)
-    if pen > 0.04: bpy.data.objects.remove(d, do_unlink=True); dropped += 1
+    if pen > 0.015: bpy.data.objects.remove(d, do_unlink=True); dropped += 1
     else: keep_.append((z_, d, M))
 slots = keep_
 # a drum whose core sits inside another drum (deep interpenetration) is also left out
@@ -122,6 +122,7 @@ for i in range(len(slots)):
         if j in bad: continue
         cj, aj = _ax[j]
         if (ci - cj).length > 0.95: continue
+        if (ci - cj).length < 0.5: bad.add(j); continue           # two 0.57 m drums can't have centres this close
         for t in (-0.3, -0.15, 0, 0.15, 0.3):
             p_ = ci + ai * t; v_ = p_ - cj; h_ = v_.dot(aj)
             if abs(h_) < 0.38 and (v_ - aj * h_).length < 0.22: bad.add(j); break
@@ -139,17 +140,36 @@ for b in BEDS:
     b.rotation_mode = 'XYZ'
     b.rotation_euler = (0, 0, 0); b.keyframe_insert("rotation_euler", frame=0); b.keyframe_insert("rotation_euler", frame=TIP0)
     b.rotation_euler = (R_(-52), 0, 0); b.keyframe_insert("rotation_euler", frame=TIP1)
-def fly(d, fs, fe_, P0, M1, q0, spin):
-    """keyed arc from P0 (with orientation q0) into slot matrix M1, landing at fe_"""
+def fly(d, fs, fe_, P0, M1, q0, spin, lane=0):
+    """keyed path into slot M1 landing at fe_: travel high over the heap to a point straight above the slot (rotation done
+    on the way), then a vertical drop. Lower slots are filled first, so a vertical drop never passes through a landed drum."""
     P1, q1, _ = M1.decompose(); d.rotation_mode = 'QUATERNION'
-    apex = max(P0.z, P1.z) + 1.6
-    for f in list(frs(fs, fe_, 2)) + [fe_]:
-        u = (f - fs) / max(1, fe_ - fs); w = u * u * (3 - 2 * u) * 0.35 + u * 0.65
-        p = P0.lerp(P1, w); p.z = (1 - w) ** 2 * P0.z + 2 * (1 - w) * w * apex + w * w * P1.z
-        q = q0.slerp(q1, smooth(u)) @ Quaternion((1, 0, 0), spin * (1 - smooth(u)))
+    zt = max(P1.z + 1.5, 3.0, P0.z) + 0.3 * (lane % 9)          # own travel height: drums in the air never meet
+    A = Vector((P1.x, P1.y, zt)); split = 0.62
+    for f in list(range(fs, fe_ + 1, 2)) + [fe_]:
+        u = (f - fs) / max(1, fe_ - fs)
+        if u < split:
+            w = smooth(u / split); p = P0.lerp(A, w); p.z = P0.z + (zt - P0.z) * (1 - (1 - w) ** 2)
+            q = q0.slerp(q1, w) @ Quaternion((1, 0, 0), spin * (1 - w))
+        else:
+            w = ((u - split) / (1 - split)) ** 2; p = A.lerp(P1, w); q = q1.copy()
+        if f != fe_:
+            R3 = q.to_matrix(); low = min((R3 @ c for c in _dco), key=lambda v: v.z)
+            for _ in range(2):
+                pc = p + low; need = _gz(pc.x, pc.y) + 0.02 - pc.z
+                if need > 0: p.z += need
         d.location = p; d.rotation_quaternion = q
         d.keyframe_insert("location", frame=f); d.keyframe_insert("rotation_quaternion", frame=f)
 drums = []
+N_PRE = len(slots) - 150                  # the lower part of the heap is already there (years of dumping); the rest arrives in the shots
+for z_, src, M1 in slots[:N_PRE]:
+    src.rotation_mode = 'QUATERNION'; l_, q_, _ = M1.decompose(); src.location = l_; src.rotation_quaternion = q_
+    src.keyframe_insert("location", frame=0); src.keyframe_insert("rotation_quaternion", frame=0); drums.append(src)
+slots = slots[N_PRE:]
+random.seed(23)                           # shuffle within 0.5 m height bands: neighbouring slots are not filled back to back
+_bands = {}
+for t_ in slots: _bands.setdefault(int((t_[0] + 5) / 0.5), []).append(t_)
+slots = [t_ for b_ in sorted(_bands) for t_ in random.sample(_bands[b_], len(_bands[b_]))]
 ev(1); k = 0
 for bi, b in enumerate(BEDS):            # wave 1: drums standing in each bed (seen in S10) ride the bed, then slide into the lowest slots
     bmn, bmx = bbox([b])
@@ -158,14 +178,15 @@ for bi, b in enumerate(BEDS):            # wave 1: drums standing in each bed (s
             x = bmn.x + 0.45 + ix * 0.62; y = bmn.y + 0.7 + iy * 0.75
             d = copy_obj(L_dr, "Drum_b%d_%d%d" % (bi, ix, iy), (x, y, bmn.z + 0.32 + 0.002), c=DCOLL); d.rotation_mode = 'QUATERNION'
             d.rotation_quaternion = Quaternion((0, 0, 1), random.random() * 6)
-            REL = TIP0 + 50 + (4 - iy) * 6 + ix * 2
+            REL = TIP0 + 30 + (4 - iy) * 12 + ix * 4
             ev(TIP0); OFF = b.matrix_world.inverted() @ d.matrix_world
             for f in frs(TIP0, REL, 2):
                 ev(f); l_, q_, _ = (b.matrix_world @ OFF).decompose(); d.location = l_; d.rotation_quaternion = q_
                 d.keyframe_insert("location", frame=f); d.keyframe_insert("rotation_quaternion", frame=f)
             ev(REL); P0, q0, _ = d.matrix_world.decompose()
             z_, src, M1 = slots[k]; k += 1
-            fly(d, REL, REL + 46, P0, M1, q0, R_(160))
+            bpy.data.objects.remove(src, do_unlink=True)          # the bed drum takes this slot: its heap twin goes
+            fly(d, REL, REL + 46, P0, M1, q0, R_(160), lane=k)
             drums.append(d)
 ARR0, ARR1 = TIP0 + 120, f1("S13") - 25
 rest = slots[k:]
@@ -174,10 +195,36 @@ for i, (z_, src, M1) in enumerate(rest):   # wave 2: one after another from the 
     P1 = M1.translation
     P0 = Vector((P1.x * 0.7 + DX.x * 0.3 + random.uniform(-0.6, 0.6), DX.y + 12.8, 1.4 + random.uniform(0, 0.6)))
     src.rotation_mode = 'QUATERNION'
-    fly(src, st, land, P0, M1, Quaternion((0, 0, 1), random.random() * 6) @ Quaternion((1, 0, 0), R_(80)), R_(random.choice((-200, 200))))
+    fly(src, st, land, P0, M1, Quaternion((0, 0, 1), random.random() * 6) @ Quaternion((1, 0, 0), R_(80)), R_(random.choice((-200, 200))), lane=i)
     key_vis(src, [(0, False), (st, True)])
     drums.append(src)
-print("DRUMS keyed", len(drums), "landing", ARR0, ARR1)
+def _overlap(da, db):
+    ca = da.matrix_world @ Vector((0, 0, 0.44)); cb = db.matrix_world @ Vector((0, 0, 0.44))
+    if (ca - cb).length > 0.95: return False
+    if (ca - cb).length < 0.5: return True
+    aa = (da.matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized(); ab = (db.matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized()
+    for (c1, a1, c2, a2) in ((ca, aa, cb, ab), (cb, ab, ca, aa)):
+        for t in (-0.3, -0.15, 0, 0.15, 0.3):
+            v = c1 + a1 * t - c2; h = v.dot(a2)
+            if abs(h) < 0.38 and (v - a2 * h).length < 0.22: return True
+    return False
+LAND = {}
+for d in drums:
+    fc_ = [k.co.x for fc in fcurves_of(d.animation_data.action) if fc.data_path == "location" for k in fc.keyframe_points] if d.animation_data and d.animation_data.action else [0]
+    LAND[d.name] = max(fc_)
+def _shift(d, df):
+    for fc in fcurves_of(d.animation_data.action):
+        for k in fc.keyframe_points:
+            if k.co.x > 0.5: k.co.x += df; k.handle_left.x += df; k.handle_right.x += df
+    LAND[d.name] += df
+ev(f1("S13")); gone = []                 # final heap: anything still overlapping another drum is left out
+for i in range(len(drums)):
+    if drums[i] in gone: continue
+    for j in range(i + 1, len(drums)):
+        if drums[j] not in gone and _overlap(drums[i], drums[j]): gone.append(drums[j])
+for d in gone: drums.remove(d); bpy.data.objects.remove(d, do_unlink=True)
+ev(1)
+print("DRUMS keyed", len(drums), "landing", ARR0, ARR1, "final-overlap removed", len(gone))
 camshot("S11", [(0.0, (DX.x + 0.01, 10.5, 18.0), (DX.x, 10.51, 0.0), 26), (1.0, (DX.x + 0.01, 9.0, 21.0), (DX.x, 9.01, 0.0), 26)])
 camshot("S12", [(0.0, HC + Vector((0.01, 0.6, 14.0)), HC + Vector((0, 0.61, 0)), 24), (1.0, HC + Vector((0.01, 0.6, 16.5)), HC + Vector((0, 0.61, 0)), 24)])
 camshot("S13", [(0.0, HC + Vector((-11.0, -10.0, 3.8)), HC + Vector((0, 0, 0.2)), 28), (1.0, HC + Vector((-7.8, -12.6, 4.0)), HC + Vector((0, 0, 0.2)), 28)])

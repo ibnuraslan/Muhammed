@@ -43,3 +43,14 @@
 7. S12: heap drums that sank into the ground (81) or overlapped another drum (65) are left out, leaving 358 drums with no sliced wedges.
 8. S22: camera at the son's eye line. The son stands by his father's chest (above the blanket edge), and both faces read with the hand-on-hand kept.
 Crossing check on this build (`body_prop_cross.json`, S5 and S22 re-checked after their last camera tweak: 0) has only the accepted S1, S4, S9 and S19 contacts.
+
+## Director round 3 (Nov 16): S07 + S12
+- S07: the cut-away blocks are 30 m deep, so the soil fills to the bottom edge at every frame.
+- S12, and the whole drum sequence S11–S14:
+  - The 30 truck-bed drums had left their heap "twins" sitting in the pit for the whole film. Those twins are now removed.
+  - The lower ~160 heap drums lie in the pit from the start (years of dumping). The top ~150 arrive during the shots.
+  - Each arriving drum travels over the heap to a point straight above its slot, then drops vertically. Lower slots fill first, and the order is shuffled within each height band.
+  - Fall paths are raised wherever a drum would dip below the ground. Resting drums sunk more than 1.5 cm, or overlapping another drum, are left out. 309 drums in total.
+  - Checked on EVERY frame f1141–1620: 0 frames with any drum corner more than 2 cm below the ground.
+  - Drum-to-drum: 56 frames still show a brief in-air touch, 62 pairs. These are 1–3 frame grazes between tumbling drums in flight, mostly two neighbouring truck-bed drums leaving the bed. No resting drum overlaps another, and no ground cuts remain.
+- body_prop_cross on f1081–1620 (worker, pushed drum, truck beds, bed drums): 0.
