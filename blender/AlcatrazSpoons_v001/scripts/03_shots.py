@@ -538,7 +538,7 @@ def walk_arms(n, f0, f1, yaw_fn, every=8, amp=0.16):
 
 def shot_5d(f0, n):
     """P1 and P2 walk along the service corridor toward camera among the pipes; the supply crate (logo) behind them"""
-    use = ("P1", "P2"); f1 = f0 + n - 1; GZ[0] = FZ2
+    use = ("P1", "P2"); f1 = f0 + n - 1; GZ[0] = FZ2 + 0.012       # shoe soles sit on the floor, not in it
     g = bpy.data.objects["S2_Grille"]
     for f in (f0, f1):
         g.location = (X2 - 0.75, 0.09, FZ2 + 0.28); g.rotation_euler = (R_(-12), 0, R_(180))
