@@ -41,7 +41,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 25 | Tsunami2004 | `claude/beautiful-ptolemy-c5vrcq` | `blender/Tsunami2004_v012/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–2066)** |
 | 26 | DwarfGiant | `claude/beautiful-ptolemy-c5vrcq` | `blender/DwarfGiant_v008/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–2083)** |
 | 27 | SwedishCoffee | `claude/beautiful-ptolemy-c5vrcq` | `blender/SwedishCoffee_v012/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1995)** |
-| 28 | ToucanBeak | `claude/beautiful-ptolemy-c5vrcq` | `blender/ToucanBeak_v009/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1932)** |
+| 28 | ToucanBeak | `claude/beautiful-ptolemy-c5vrcq` | `blender/ToucanBeak_v009/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1931)** |
 | 29 | AIAsleep | `claude/beautiful-ptolemy-c5vrcq` | `blender/AIAsleep_v007/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–2046)** |
 | 30 | FanCancer | `claude/beautiful-ptolemy-c5vrcq` | `blender/FanCancer_v011/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–2120)** |
 | 31 | PopeShot | `claude/beautiful-ptolemy-c5vrcq` | `blender/PopeShot_v012/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1475)** |
@@ -56,4 +56,4 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 
 | # | Film | Package folder | Status |
 |---|---|---|---|
-| B18 | PhoneCrazy | `blender/PhoneCrazy_v003/` | **READY TO RENDER (frames 1–1932)**, watched moving |
+| B18 | PhoneCrazy | `blender/PhoneCrazy_v003/` | **READY TO RENDER (frames 1–1931)**, watched moving |
