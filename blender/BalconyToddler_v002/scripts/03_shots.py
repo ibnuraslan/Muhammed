@@ -368,7 +368,7 @@ def man_on_top(f, crouch, armsup, head=(-25, 0), reach=None):
     feet(n, f, (MANP.x, MANP.y, rz), 180, CH_SEAT_TOP + 0.006)
     if reach is None:
         for s in "LR":
-            if armsup <= 0: relax(n, s, f, 180)
+            if armsup <= 0: relax(n, s, f, 180, fwd=0.10 + crouch * 0.5, out=0.05 + crouch * 0.2, up=crouch * 0.4)
             else:
                 S = shoulder(n, s, f); sx = 1 if s == "L" else -1
                 palm = S + Ry(180) @ Vector((sx * 0.06, -0.25 * armsup, 0.45 * armsup - 0.35 * (1 - armsup)))
@@ -448,7 +448,7 @@ yaw22 = lambda f: 13.0
 GZ[0] = FLOOR2
 CAST[GM][2].walk(p22, yaw22, f0, f1, stride=0.66, lift=0.06, bob=0.015, lean=8, step=2)
 walk_arms(GM, f0, f1, p22, yaw22, 0.66, swing=0.11, bend=0.05)
-shot_cam(sid, [(0, (0.3, 1.3, FLOOR2 + 1.35), (AD_X0 + 0.5, HY, FLOOR2 + 1.3)), (1, (0.3, 1.15, FLOOR2 + 1.35), (AD_X0 + 0.8, HY - 1.2, FLOOR2 + 1.3))], 30, 8, 8)
+shot_cam(sid, [(0, (0.3, 1.3, FLOOR2 + 1.35), (AD_X0 + 0.5, HY, FLOOR2 + 1.3)), (1, (0.3, 1.15, FLOOR2 + 1.35), (AD_X0 + 0.8, HY - 1.2, FLOOR2 + 1.3))], 30, 8, 4)
 
 # ---------- 23 the apartment: grandma hurries toward the balcony (camera backs off in front of her)
 sid = "23"; f0, f1 = SH[sid]; use(sid, "Grandma", "Toddler", "Man")
@@ -459,7 +459,7 @@ yaw23 = lambda f: 16.0
 GZ[0] = FLOOR2
 CAST[GM][2].walk(p23, yaw23, f0, f1, stride=0.66, lift=0.06, bob=0.015, lean=10, step=2)
 walk_arms(GM, f0, f1, p23, yaw23, 0.66, swing=0.11, bend=0.05)
-shot_cam(sid, [(0, (0.15, 0.75, FLOOR2 + 1.45), (-0.55, 3.0, FLOOR2 + 1.3)), (1, (0.12, 0.45, FLOOR2 + 1.45), (-0.2, 1.4, FLOOR2 + 1.3))], 28, 8, 8)
+shot_cam(sid, [(0, (0.15, 0.75, FLOOR2 + 1.45), (-0.55, 3.0, FLOOR2 + 1.3)), (1, (0.12, 0.45, FLOOR2 + 1.45), (-0.2, 1.4, FLOOR2 + 1.3))], 28, 8, 4)
 
 # ---------- 24 And pulled: grandma kneels on the slab and lifts him under the arms (camera outside, front)
 def kneel(n, f, knee_y, lean, x=0.0, head=(0.0, 0.0), gz=FLOOR2):
@@ -472,27 +472,44 @@ def kneel(n, f, knee_y, lean, x=0.0, head=(0.0, 0.0), gz=FLOOR2):
     for s in "LR":
         a = H.ankle[s]
         foot_air(n, s, f, Vector((x + a.x * 0.85, knee_y + shin * 0.95, gz + 0.12)), 0.0, 165, 0.6)
+from mathutils.bvhtree import BVHTree as _BVH
+def _tod_tree(f):
+    sc.frame_set(f); dg_ = bpy.context.evaluated_depsgraph_get(); vs = []; ps = []
+    for ch in TOD.children:
+        if ch.type == 'MESH' and any(k in ch.name for k in ("body", "casualsuit")):
+            e = ch.evaluated_get(dg_); me = e.to_mesh(); o = len(vs)
+            vs += [ch.matrix_world @ v.co for v in me.vertices]; ps += [tuple(i + o for i in p.vertices) for p in me.polygons]; e.to_mesh_clear()
+    return _BVH.FromPolygons(vs, ps)
 def gma_hands_on_tod(f, out=0.072, up=0.0):
-    """palms on the boy's chest sides just under the armpits, fingers forward"""
-    sp = bonew("Toddler", "spine02", f); sp2 = bonew("Toddler", "spine03", f)
+    """palms on the boy's sides just under the armpits, fingers forward: the palm point is ray-cast onto his real surface
+    (body, sleepsuit, or his arm if it hangs there), so the hand rests on him and never sinks in"""
+    sp = bonew("Toddler", "spine02", f); sp2 = bonew("Toddler", "spine03", f); T = _tod_tree(f)
     for s, sx in (("L", 1), ("R", -1)):          # grandma's left hand (world +X) on the boy's left side (+X)
-        P = sp.lerp(sp2, 0.5) + Vector((sx * out, 0.01, up))
+        C = sp.lerp(sp2, 0.5) + Vector((0, 0.01, up))
+        hit = T.ray_cast(C + Vector((sx * 0.4, 0, 0)), Vector((-sx, 0, 0)), 0.5)[0]
+        P = (hit if hit is not None else C + Vector((sx * out, 0, 0))) + Vector((sx * 0.006, 0, 0))
         S = shoulder(GM, s, f)
-        hand(GM, s, f, P, Vector((-sx, 0, 0)), Vector((0, -1, 0.15)), S + Vector((sx * 0.55, 0.10, -0.45)), "cup_hold", skin=0.004)
+        hand(GM, s, f, P, Vector((-sx, 0, 0)), Vector((sx * 0.45, -1, 0.15)), S + Vector((sx * 0.55, 0.10, -0.45)), "shield", skin=0.012)
+def gma_hands_on_arms(f):
+    """S24: she pulls him up by his raised forearms: palms on the back of each forearm, fingers round it toward the inside"""
+    for s, sx in (("L", 1), ("R", -1)):
+        A = bonew("Toddler", "lowerarm01." + s, f).lerp(bonew("Toddler", "lowerarm02." + s, f, tail=True), 0.55)
+        S = shoulder(GM, s, f)
+        hand(GM, s, f, A + Vector((0, 0.028, 0)), Vector((0, -1, 0)), Vector((-sx, -0.2, 0.0)), S + Vector((sx * 0.5, 0.05, -0.4)), "cup_hold", skin=0.012)
 def tod_lift(f, drop, y, arms_out=0.75):
     body("Toddler", f, tod_pos(drop, 0.0, y), 0.0, 0.0, 0.0, -2, 0.0, 0.0, (-4, 0))
     tod_legs(f, drop, 0.0, y, kick=0.0, bend=0.015)
     for s, sx in (("L", 1), ("R", -1)):
         S = shoulder("Toddler", s, f)
-        hand("Toddler", s, f, S + Vector((sx * 0.20 * arms_out, -0.06, 0.04)), Vector((0, 0, -1)), Vector((sx, -0.3, 0.2)),
-             S + Vector((sx * 0.2, 0.3, -0.2)), "relaxed", skin=0.0)
+        hand("Toddler", s, f, S + Vector((sx * 0.13, -0.07, 0.19)), Vector((-sx, 0, 0)), Vector((sx * 0.2, -0.2, 1.0)),
+             S + Vector((sx * 0.35, 0.0, 0.05)), "relaxed", skin=0.0)      # arms up, as children do when lifted under the arms
 sid = "24"; f0, f1 = SH[sid]; use(sid, "Toddler", "Grandma")
-for u, d, y, ln in ((0.0, 0.64, SLOT_Y, 44), (0.25, 0.65, SLOT_Y, 42), (0.65, 0.72, SLOT_Y, 36), (0.85, 0.73, SLOT_Y + 0.06, 34), (1.0, 0.73, SLOT_Y + 0.09, 33)):
+for u, d, y, ln in ((0.0, 0.64, SLOT_Y, 46), (0.25, 0.65, SLOT_Y, 45), (0.65, 0.72, SLOT_Y, 40), (0.85, 0.73, SLOT_Y + 0.06, 37), (1.0, 0.73, SLOT_Y + 0.09, 36)):
     f = F(sid, u)
     tod_lift(f, d, y)
-    kneel(GM, f, -0.02, ln, head=(-6, 22))
-    gma_hands_on_tod(f)
-shot_cam(sid, [(0, (0.40, -1.85, 3.98), (0.0, -0.35, 3.70)), (1, (0.34, -1.75, 4.00), (0.0, -0.30, 3.78))], 32, 8, 8)
+    kneel(GM, f, -0.06, ln, head=(-8, 22))
+    gma_hands_on_arms(f)
+shot_cam(sid, [(0, (0.40, -1.85, 3.98), (0.0, -0.35, 3.70)), (1, (0.34, -1.75, 4.00), (0.0, -0.30, 3.78))], 32, 8, 4)
 
 # ---------- 25/26 the toddler back up / completely unharmed: he stands on the slab, grandma kneels behind, hands at his sides
 TODP = Vector((0.0, -0.10, 0.0))
@@ -504,12 +521,12 @@ for sid in ("25", "26"):
     use(sid, "Toddler", "Grandma")
 sid = "25"; f0, f1 = SH[sid]
 for f, hd, ln in ((f0, (-4, 0), 22), (F(sid, 0.5), (-2, -6), 20), (f1, (-6, 4), 18)):
-    tod_stand(f, hd); kneel(GM, f, 0.22, ln, head=(14, 0)); gma_hands_on_tod(f, 0.074, -0.01)
-shot_cam(sid, [(0, (0.55, -1.80, 4.02), (0.0, -0.05, 3.85)), (1, (0.45, -1.65, 4.02), (0.0, -0.05, 3.88))], 30, 8, 8)
+    tod_stand(f, hd); kneel(GM, f, 0.22, ln, head=(6, 0)); gma_hands_on_tod(f, 0.074, -0.06)
+shot_cam(sid, [(0, (0.55, -1.80, 4.02), (0.0, -0.05, 3.85)), (1, (0.45, -1.65, 4.02), (0.0, -0.05, 3.88))], 30, 8, 4)
 sid = "26"; f0, f1 = SH[sid]
-for f, hd, tw, ln, gh in ((f0, (-6, 0), 0, 18, (14, 0)), (F(sid, 0.4), (-24, 18), 8, 20, (24, 8)), (F(sid, 0.7), (-26, 20), 10, 21, (26, 10)), (f1, (-22, 16), 8, 20, (24, 8))):
-    tod_stand(f, hd, tw); kneel(GM, f, 0.22, ln, head=gh); gma_hands_on_tod(f, 0.074, -0.01)
-shot_cam(sid, [(0, (0.15, -1.75, 4.02), (0.0, -0.05, 3.95)), (1, (0.10, -1.45, 4.02), (0.0, -0.05, 3.98))], 38, 8, 8)
+for f, hd, tw, ln, gh in ((f0, (-6, 0), 0, 18, (6, 0)), (F(sid, 0.4), (-24, 18), 8, 20, (12, 8)), (F(sid, 0.7), (-26, 20), 10, 21, (14, 10)), (f1, (-22, 16), 8, 20, (12, 8))):
+    tod_stand(f, hd, tw); kneel(GM, f, 0.22, ln, head=gh); gma_hands_on_tod(f, 0.074, -0.06)
+shot_cam(sid, [(0, (0.15, -1.75, 4.02), (0.0, -0.05, 3.95)), (1, (0.10, -1.45, 4.02), (0.0, -0.05, 3.98))], 38, 8, 4)
 
 # ------------------------------------------------------------------ park everyone not used in a shot
 for sid in SH:

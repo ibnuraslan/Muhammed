@@ -343,9 +343,9 @@ area("HallLight", (AD_X0 + 0.45, HY + 1.1, FLOOR2 + 2.65), (AD_X0 + 0.45, HY + 1
 area("BalconyFill", (0.0, -3.0, 4.6), (0, -0.4, 3.5), 220, 2.0, CS, (1.0, 0.98, 0.95))
 area("StreetFill", (0.0, -6.0, 3.0), (0, -1.0, 1.0), 300, 6.0, CS, (0.95, 0.97, 1.0))
 # face fills (not seen by the camera): grandma in the room and at the balcony
-for nm, loc, tgt, e in (("RoomFaceFill", (0.4, 0.9, FLOOR2 + 1.7), (-0.6, 3.5, FLOOR2 + 1.4), 190),
-                        ("BalconyFaceFill", (0.5, -1.4, FLOOR2 + 1.15), (0.0, 0.1, FLOOR2 + 0.95), 170)):
-    _l = area(nm, loc, tgt, e, 0.8, CS, (1.0, 0.97, 0.94)); _l.visible_camera = False
+for nm, loc, tgt, e in (("RoomFaceFill", (0.4, 0.9, FLOOR2 + 1.7), (-0.6, 3.5, FLOOR2 + 1.4), 90),
+                        ("BalconyFaceFill", (0.5, -1.4, FLOOR2 + 1.15), (0.0, 0.1, FLOOR2 + 0.95), 70)):
+    _l = area(nm, loc, tgt, e, 0.8, CS, (0.97, 0.98, 1.0)); _l.visible_camera = False
 
 # ------------------------------------------------------------------ cast: controls, limits, subsurf for close-ups
 CAST = {}
