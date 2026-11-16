@@ -426,13 +426,27 @@ def laugh(n, f0, f1, pos, yaw, head_yaw=0.0, period=16, bend=0.0, point=None, ha
             hand(n, "R", f, sh + dr * 0.56 + V((0, 0, -0.04 * u)), V((0, 0, -1)), dr, pole=sh + dr * 0.25 + V((0, 0, -0.35)) + rgt(yaw) * 0.25, pose="point")
 
 def shot_3a(f0, n):
-    """three villagers on the grass laugh at him; one points at the ridge where he works (tiny, behind them); logo crate beside them"""
-    use = ("V1", "V2", "V3", "Man"); f1 = f0 + n - 1; cut_window(f0, f1, YC0)
-    strike("3a", f0, n, YC0, 0.0, chip=False)
-    laugh("V1", f0, f1, V((-6.2, -65.2, 0)), 160.0, head_yaw=10, point=(0, -53.5, 1.3))
-    laugh("V2", f0, f1, V((-7.3, -66.0, 0)), 205.0, head_yaw=-20, period=18)
-    laugh("V3", f0, f1, V((-5.0, -66.3, 0)), 140.0, head_yaw=15, period=14, bend=10)
-    camera("3a", f0, n, [(0, (-3.0, -62.0, 1.45), (-7.0, -66.0, 1.0), 20), (1, (-3.5, -62.5, 1.42), (-7.0, -66.0, 1.0), 20)], fstop=8.0)
+    """low camera behind a logo crate in the near foreground; three villagers close behind it laugh big, V1 points toward the man"""
+    use = ("V1", "V2", "V3"); f1 = f0 + n - 1; cut_window(f0, f1, YC0)
+    C = V((-4.0, -63.0, 0.0)); dv = V((-0.655, -0.756, 0)).normalized(); lv = V((-dv.y, dv.x, 0))
+    yaw = math.degrees(math.atan2(-dv.x, dv.y)) if False else math.degrees(math.atan2(-dv.x, -(-dv.y)))
+    yaw = math.degrees(math.atan2((-dv).x, -(-dv).y))           # facing the camera
+    # foreground crate: a smaller copy of the village crate (with its logo) shown only in this shot; the original is hidden here
+    src = bpy.data.objects["Crate_Village"]
+    for k in src.children: key_vis(k, f0, False); key_vis(k, f1 + 1, True)
+    root = bpy.data.objects.new("Crate_3a", None); src.users_collection[0].objects.link(root)
+    for k in src.children:
+        c_ = k.copy(); c_.name = "Crate3a_" + k.name[:20]; src.users_collection[0].objects.link(c_); c_.animation_data_clear()
+        c_.parent = root; c_.matrix_parent_inverse = src.matrix_world.inverted() @ Matrix.Identity(4) if False else k.matrix_parent_inverse.copy()
+        vis_window(c_, f0, f1)
+    s_ = 0.62 / 1.6
+    root.location = C + dv * 2.0 + lv * 0.28; root.rotation_euler = (0, 0, math.atan2(dv.x, -dv.y) + math.pi + src.rotation_euler.z * 0 - math.pi); root.scale = (s_, s_, s_)
+    root.rotation_euler = (0, 0, math.atan2(-dv.x, dv.y) - math.pi)
+    for i, (nm, lat, dist, dy, per, bend) in enumerate((("V1", -0.75, 3.0, -38, 16, 4), ("V2", 0.05, 3.9, 10, 18, 6), ("V3", 0.70, 3.3, 40, 14, 22))):
+        pos = C + dv * dist + lv * lat
+        laugh(nm, f0, f1, pos, yaw + dy, head_yaw=-dy * 0.5, period=per, bend=bend, point=(0.0, -53.5, 1.3) if nm == "V1" else None, hands_knees=(nm == "V3"))
+    aim = C + dv * 3.2 + V((0, 0, 1.05)); c0 = C + V((0, 0, 0.62))
+    camera("3a", f0, n, [(0, c0, aim, 26), (1, c0 + dv * 0.25, aim, 26)], fstop=8.0)
     return use
 
 def shot_3b(f0, n):
@@ -484,7 +498,7 @@ def shot_5a(f0, n):
     HUM["Wife"].walk(path, lambda f: yaw, f0, f1, stride=0.55, lift=0.06)
     for f in range(f0, f1 + 1, 12): HUM["Wife"].key_spine(f, flex=4, head=(4 + 3 * math.sin(f / 14.0), -12 + 8 * math.sin(f / 35.0)))
     walk_arms("Wife", f0, f1, lambda f: yaw, amp=0.12)
-    camera("5a", f0, n, [(u, path(f0 + u * (n - 1)) + V((-1.3, -2.9, LEDGE_Z + 1.15)), path(f0 + u * (n - 1)) + V((-0.2, 0, LEDGE_Z + 1.05)), 28) for u in (0, 0.5, 1)], fstop=8.0)
+    camera("5a", f0, n, [(u, path(f0 + u * (n - 1)) + V((-0.9, -2.15, LEDGE_Z + 1.1)), path(f0 + u * (n - 1)) + V((-0.15, 0, LEDGE_Z + 0.95)), 28) for u in (0, 0.5, 1)], fstop=8.0)
     GZ[0] = 0.0
     return use
 
@@ -822,7 +836,8 @@ def shot_13c(f0, n):
         turn = 24 * ss(t / 0.45) * (1 - ss((t - 0.55) / 0.35))          # looks back toward the hospital, then to camera
         nod = 9 * math.sin((f - f0 - 60) / 9.0) if 60 < f - f0 < 92 else 0
         body("Man", f, pos + V((0, 0, HUM["Man"].root_head.z - 0.01 + 0.004 * (k % 2))), yaw, spine=(2, turn * 0.3, 0), head=(nod - 4, -8 + turn))
-        stand_feet("Man", f, pos, yaw); relaxed_arm("Man", "L", f, yaw); relaxed_arm("Man", "R", f, yaw)
+        stand_feet("Man", f, pos, yaw)
+        relaxed_arm("Man", "L", f, yaw, fwd_=0.16, up=0.17); relaxed_arm("Man", "R", f, yaw, fwd_=0.16, up=0.17)     # elbows softly bent, hands in front of the thighs
     key_age(f0, f1, 0.95)
     hd = wpos("Man", "head", f0)
     c = hd + fwd(yaw) * 1.3 + rgt(yaw) * 0.3 + V((0, 0, -0.12)); a_ = hd + V((0, 0, -0.05))

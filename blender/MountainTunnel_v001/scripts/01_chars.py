@@ -251,13 +251,13 @@ for m in body.data.materials:
         tc = g.nodes.new('ShaderNodeTexCoord'); sp = g.nodes.new('ShaderNodeSeparateXYZ'); g.links.new(tc.outputs['Object'], sp.inputs[0])
         def cmp(sock, op, v):
             n_ = g.nodes.new('ShaderNodeMath'); n_.operation = op; n_.inputs[1].default_value = v; g.links.new(sock, n_.inputs[0]); return n_.outputs[0]
-        a1 = cmp(sp.outputs['Z'], 'GREATER_THAN', eye_z + 0.075)
+        a1 = cmp(sp.outputs['Z'], 'GREATER_THAN', eye_z + 0.105)
         a2 = cmp(sp.outputs['Z'], 'GREATER_THAN', eye_z + 0.025); b2 = cmp(sp.outputs['Y'], 'GREATER_THAN', eye_y + 0.05)
         mul = g.nodes.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'; g.links.new(a2, mul.inputs[0]); g.links.new(b2, mul.inputs[1])
         mx_ = g.nodes.new('ShaderNodeMath'); mx_.operation = 'MAXIMUM'; g.links.new(a1, mx_.inputs[0]); g.links.new(mul.outputs[0], mx_.inputs[1])
         age = g.nodes.new('ShaderNodeValue'); age.name = "Age"
         f_ = g.nodes.new('ShaderNodeMath'); f_.operation = 'MULTIPLY'; g.links.new(mx_.outputs[0], f_.inputs[0]); g.links.new(age.outputs[0], f_.inputs[1])
-        mix = g.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'; mix.name = "ScalpGrey"; mix.inputs['B'].default_value = (0.72, 0.70, 0.68, 1)
+        mix = g.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'; mix.name = "ScalpGrey"; mix.inputs['B'].default_value = (0.20, 0.19, 0.18, 1)
         g.links.new(st.outputs['Result'], mix.inputs['A']); g.links.new(f_.outputs[0], mix.inputs['Factor']); g.links.new(mix.outputs['Result'], P_.inputs['Base Color'])
         print("SCALP grey added in", g.name)
 for k in suit("Man"):
@@ -277,7 +277,7 @@ mh = bpy.data.materials.new("M_OldHair"); mh.use_nodes = True; nt = mh.node_tree
 for nd in list(nt.nodes):
     if nd.type == 'BSDF_PRINCIPLED': nt.nodes.remove(nd)
 hb = nt.nodes.new('ShaderNodeBsdfHairPrincipled'); hb.parametrization = 'COLOR'
-hb.inputs['Color'].default_value = (0.42, 0.41, 0.39, 1); hb.inputs['Roughness'].default_value = 0.45; hb.inputs['Radial Roughness'].default_value = 0.6
+hb.inputs['Color'].default_value = (0.36, 0.35, 0.33, 1); hb.inputs['Roughness'].default_value = 0.45; hb.inputs['Radial Roughness'].default_value = 0.6
 nt.links.new(hb.outputs[0], nt.nodes['Material Output'].inputs['Surface'])
 # beard: strands from the jaw / chin / upper lip skin (evaluated rest shape), lips kept clear
 bmb = bmesh.new(); bmb.from_mesh(body.data); bmb.verts.ensure_lookup_table()
@@ -294,7 +294,8 @@ for v in bmb.verts:
     if dz > top or dx > 0.085: continue
     if dx < 0.022 and abs(dz) < 0.007: continue                       # lips clear
     lip = 0.008 < dz < 0.024 and dx < 0.034
-    for _ in range(9):
+    el = sum(e.calc_length() for e in v.link_edges) / max(1, len(v.link_edges))
+    for _ in range(max(8, min(48, int(10 * (el / 0.005) ** 2)))):           # density per area: cheeks as full as the chin
         j = Vector((rnd.uniform(-1, 1), rnd.uniform(-1, 1), rnd.uniform(-1, 1))) * 0.003
         p = c + j - nrm * 0.0015; L = (0.012 if lip else 0.030) * rnd.uniform(0.7, 1.2)
         d = (nrm * 0.55 + Vector((0, 0, -1)) * 0.45).normalized(); seg = []
@@ -319,9 +320,10 @@ for v in bms.verts:
     if front and p.z < brow_z + 0.025: continue
     if not front and p.z < eye_z + 0.005 and abs(p.x - cx) > 0.06 and p.y < eye_y + 0.12: continue   # sideburn/ear front stays clear
     if p.z < eye_z - 0.03: continue
-    for _ in range(16):
-        q = p + Vector((rnd.uniform(-1, 1), rnd.uniform(-1, 1), rnd.uniform(-1, 1))) * 0.006 - nrm * 0.001
-        d = (Vector((0, 1.0, 0.15 if front else -0.3)) * 0.6 + nrm * 0.4).normalized(); L = rnd.uniform(0.025, 0.04); seg = []
+    el = sum(e.calc_length() for e in v.link_edges) / max(1, len(v.link_edges))
+    for _ in range(max(14, min(70, int(22 * (el / 0.008) ** 2)))):
+        q = p + Vector((rnd.uniform(-1, 1), rnd.uniform(-1, 1), rnd.uniform(-1, 1))) * (el * 0.6) - nrm * 0.001
+        d = (Vector((0, 1.0, 0.15 if front else -0.3)) * 0.6 + nrm * 0.4).normalized(); L = rnd.uniform(0.035, 0.06); seg = []
         for i in range(5):
             seg.append(q.copy())
             d = (d + Vector((0, 0.15, -0.3)) + Vector((rnd.uniform(-.12, .12), rnd.uniform(-.08, .08), 0))).normalized()
@@ -329,7 +331,11 @@ for v in bms.verts:
             q = q + d * L / 4
         strands.append(seg)
 bms.free()
-oh = strands_to_curves("Man.oldhair", strands, (0.0011, 0.0010, 0.0009, 0.0007, 0.0003)); oh.data.materials.append(mh)
+mh2 = mh.copy(); mh2.name = "M_OldScalpHair"; nt2 = mh2.node_tree; hb2 = next(nd for nd in nt2.nodes if nd.type == 'BSDF_HAIR_PRINCIPLED')
+ci = nt2.nodes.new('ShaderNodeHairInfo'); rp = nt2.nodes.new('ShaderNodeValToRGB')
+rp.color_ramp.elements[0].color = (0.10, 0.095, 0.09, 1); rp.color_ramp.elements[1].position = 0.55; rp.color_ramp.elements[1].color = (0.34, 0.33, 0.31, 1)
+nt2.links.new(ci.outputs['Intercept'], rp.inputs['Fac']); nt2.links.new(rp.outputs['Color'], hb2.inputs['Color'])     # dark roots, grey tips
+oh = strands_to_curves("Man.oldhair", strands, (0.0013, 0.0012, 0.0010, 0.0008, 0.0004)); oh.data.materials.append(mh2)
 print("OLDHAIR strands", len(strands))
 for ob in (beard, oh):
     ob.parent = man; ob.parent_type = 'BONE'; ob.parent_bone = "head"
