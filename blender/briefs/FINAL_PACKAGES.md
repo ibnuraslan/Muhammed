@@ -75,3 +75,4 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | B33 | BogBurials | `blender/BogBurials_v003/` | **READY TO RENDER (frames 1–2187)**, watched moving |
 | B26 | TenDimes | `blender/TenDimes_v003/` | **READY TO RENDER (frames 1–1868)**, watched moving |
 | B22 | MosquitoDoctor | `blender/MosquitoDoctor_v003/` | **READY TO RENDER (frames 1–2113)**, watched moving |
+| B15 | NatashaRyan | `blender/NatashaRyan_v003/` | **READY TO RENDER (frames 1–2136)**, watched moving |
