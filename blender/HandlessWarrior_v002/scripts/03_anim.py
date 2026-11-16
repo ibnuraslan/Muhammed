@@ -242,7 +242,7 @@ def strap_ring(name, centre, ax, pts, width=0.022):
     cx = sum(a for a, b in hull) / len(hull); cy = sum(b for a, b in hull) / len(hull)
     bm = bmesh.new(); r0, r1 = [], []
     for a, b in hull:
-        d = Vector((a - cx, b - cy)); d = d.normalized() * (d.length + 0.006) + Vector((cx, cy))
+        d = Vector((a - cx, b - cy)); d = d.normalized() * (d.length + 0.004) + Vector((cx, cy))
         q = centre + u * d.x + w_ * d.y
         r0.append(bm.verts.new(q - ax * width / 2)); r1.append(bm.verts.new(q + ax * width / 2))
     n_ = len(hull)
@@ -252,7 +252,10 @@ def strap_ring(name, centre, ax, pts, width=0.022):
     so = o.modifiers.new("Thick", 'SOLIDIFY'); so.thickness = 0.004; so.offset = 1.0
     return o
 KNIVES = []
-W.o.scale = (1, 1, 1); bpy.context.view_layer.update()
+W.o.scale = (1, 1, 1)
+_muted = [cn for pb_ in W.o.pose.bones for cn in pb_.constraints if not cn.mute]   # true rest pose while parenting the knives
+for cn in _muted: cn.mute = True
+bpy.context.view_layer.update()
 _bd = next(ch for ch in W.o.children if ch.name.endswith("body"))
 _gi = {g.index: g.name for g in _bd.vertex_groups}
 _skin = [_bd.matrix_world @ v.co for v in _bd.data.vertices
@@ -264,13 +267,14 @@ for s, sx in (("L", 1), ("R", -1)):
     # forearm surface direction for the knife: the outside of the forearm (away from the body), level
     out = V(sx, 0, 0); out = (out - ax * out.dot(ax)).normalized()
     rb = (rad + 0.004) * 1.16
-    proj = max([((p - c) - ax * (p - c).dot(ax)).dot(out) for p in arm if -0.13 < (p - c).dot(ax) < 0.0] + [rb])
-    base = c + out * (proj + 0.012)
+    _bobj = bpy.data.objects["Warrior_Bandage." + s]
+    proj = max(((v.co - c) - ax * (v.co - c).dot(ax)).dot(out) for v in _bobj.data.vertices if -0.065 < (v.co - c).dot(ax) < 0.0)   # bandage local coords == rest positions
+    base = c + out * (proj + 0.008)   # the handle lies on the rigid bandage, not on the twisting forearm skin
     print("KNIFE", s, "arm pts", len(arm), "proj", round(proj, 3), "rb", round(rb, 3))
     k = knife_src.copy(); k.data = knife_src.data; CP.objects.link(k); k.name = "Knife." + s
     k.hide_render = False; k.hide_viewport = False
     # butt 11 cm up the forearm, blade pointing past the stump along the forearm axis, flat of the blade on the arm
-    Mk = Matrix.Translation(base - ax * 0.11) @ frame_from(ax, out).to_4x4()
+    Mk = Matrix.Translation(base - ax * 0.06) @ frame_from(ax, out).to_4x4()
     k.matrix_world = Mk
     # ensure the blade's flat faces the arm: the knife's thinnest local axis should be along `out`
     vs = [v.co for v in k.data.vertices]
@@ -280,18 +284,20 @@ for s, sx in (("L", 1), ("R", -1)):
     bpy.context.view_layer.update()
     kv = [k.matrix_world @ v.co for v in k.data.vertices]
     straps = []
-    for t in (-0.055, -0.012):
+    for t in (-0.048, -0.004):
         cen = c + ax * t
-        pts = [p for p in kv if abs((p - cen).dot(ax)) < 0.012]
+        kc = base + ax * (cen - base).dot(ax)            # knife's centre line at this section
+        pts = [p for p in kv if abs((p - cen).dot(ax)) < 0.012 and ((p - kc) - ax * (p - kc).dot(ax)).length < 0.016]
         u = (V(0, 0, 1) - ax * ax.z).normalized(); w_ = ax.cross(u)
-        pts += [cen + (u * math.cos(2 * math.pi * j / 24) + w_ * math.sin(2 * math.pi * j / 24)) * (rb + 0.003) for j in range(24)]
-        pts += [p for p in arm if abs((p - cen).dot(ax)) < 0.02]
+        band_ = bpy.data.objects["Warrior_Bandage." + s]
+        pts += [v.co.copy() for v in band_.data.vertices if abs((v.co - cen).dot(ax)) < 0.013]
         straps.append(strap_ring("Strap.%s%d" % (s, len(straps)), cen, ax, pts))
     for o in [k] + straps:
         bpy.context.view_layer.update(); mw = o.matrix_world.copy()
         o.parent = W.o; o.parent_type = 'BONE'; o.parent_bone = "lowerarm02." + s
         bpy.context.view_layer.update(); o.matrix_world = mw
     KNIVES += [k] + straps
+for cn in _muted: cn.mute = False
 W.o.scale = (W.s,) * 3; bpy.context.view_layer.update()
 
 # glowing iron plate (forge S08, anvil S09)
@@ -561,7 +567,7 @@ WP11 = V(HX + 0.15, 0.35, 0); WY11 = 0.0; R11 = Rz(WY11)
 for f, b in ((s0, 0.0), (s0 + 50, 1.0), (s0 + 100, 0.8), (s1, 1.0)):
     W.stand(f, WP11, WY11, flex=4, head=(18 * b, 10 * math.sin(f * 0.04)))
     for sd, sx in (("L", 1), ("R", -1)):
-        W.hand_w(sd, f, WP11 + R11 @ V(sx * (0.2 + 0.05 * b), -0.34 - 0.10 * b, 1.22 + 0.22 * b),
+        W.hand_w(sd, f, WP11 + R11 @ V(sx * (0.24 + 0.03 * b), -0.44 - 0.04 * b, 1.24 + 0.2 * b),
                  R11 @ V(-sx * 0.2, -0.6, 0.8 * b + 0.1).normalized(), R11 @ V(-sx, 0, 0), WP11 + R11 @ V(sx * 0.6, 0.3, 0.9))
 pM2 = V(HX + 1.0, 0.75, 0); yM2 = face(M2, pM2, WP11)
 for f, b in ((s0, 0), (s0 + 60, 1), (s0 + 100, 0), (s1, 1)):
@@ -586,8 +592,8 @@ FH = s0 + 52
 for f, b in ((s0, 0.0), (s0 + 30, 0.0), (FH - 6, 0.6), (FH, 1.0), (FH + 14, 1.0), (s1, 0.8)):
     W.stand(f, WP13 + V(0, -0.15 * b, 0), WY13 + 20 * b, flex=8 + 8 * b, head=(6, 0), twist=-25 + 45 * b)
 # right forearm: wind up to the right shoulder, sweep across in front of the soldier's chest (15 cm clear), follow through left
-sw = [(s0, V(-0.30, -0.36, 1.18)), (s0 + 30, V(-0.62, -0.48, 1.38)), (FH - 6, V(-0.40, -0.68, 1.36)), (FH, V(0.05, -0.55, 1.33)),
-      (FH + 10, V(0.22, -0.62, 1.22)), (s1, V(0.10, -0.60, 1.18))]
+sw = [(s0, V(-0.30, -0.36, 1.18)), (s0 + 30, V(-0.62, -0.48, 1.38)), (FH - 6, V(-0.40, -0.68, 1.36)), (FH, V(-0.02, -0.72, 1.33)),
+      (FH + 10, V(0.0, -0.74, 1.25)), (s1, V(-0.14, -0.68, 1.2))]
 for f, p in sw:
     W.hand_w("R", f, WP13 + R13 @ p, R13 @ V(-0.2, -1, 0.15).normalized(), R13 @ V(0, 0, -1), WP13 + R13 @ V(-0.6, 0.2, 1.0))
 for f in (s0, s1): W.hand_w("L", f, WP13 + R13 @ V(0.40, -0.40, 1.15), R13 @ V(0.2, -1, 0.3).normalized(), R13 @ V(1, 0, 0), WP13 + R13 @ V(0.6, 0.3, 0.9))
@@ -620,9 +626,9 @@ for f, p_ in ((s0, V(-0.48, -0.30, 0.98)), (s0 + 60, V(-0.52, -0.34, 1.0)), (FH2
 apply_pose(SC2.o, "R", "wrap_grip", s0)
 for f, b, tw in ((s0, 0.0, 0), (s0 + 60, 0.2, -10), (FH2 - 8, 0.6, -30), (FH2, 1.0, 20), (FH2 + 16, 1.0, 25), (s1, 0.8, 15)):
     W.stand(f, WP14 + V(0.25 * b, -0.2 * b, 0), WY14 - 10 * b, flex=6 + 6 * b, head=(2, 0), twist=tw, crouch=0.02 + 0.04 * b)
-for f, p in ((s0, V(-0.32, -0.45, 1.18)), (FH2 - 8, V(-0.62, -0.52, 1.36)), (FH2, V(0.12, -0.68, 1.40)), (FH2 + 12, V(0.22, -0.62, 1.22)), (s1, V(0.10, -0.60, 1.18))):
+for f, p in ((s0, V(-0.32, -0.45, 1.18)), (FH2 - 8, V(-0.62, -0.52, 1.36)), (FH2, V(0.02, -0.76, 1.40)), (FH2 + 12, V(0.0, -0.76, 1.25)), (s1, V(-0.14, -0.70, 1.2))):
     W.hand_w("R", f, WP14 + R14 @ p, R14 @ V(-0.2, -1, 0.15).normalized(), R14 @ V(0, 0, -1), WP14 + R14 @ V(-0.6, 0.2, 1.0))
-for f in (s0, s1): W.hand_w("L", f, WP14 + R14 @ V(0.45, -0.58, 1.2), R14 @ V(0.2, -1, 0.3).normalized(), R14 @ V(1, 0, 0), WP14 + R14 @ V(0.6, 0.3, 0.9))
+for f in (s0, s1): W.hand_w("L", f, WP14 + R14 @ V(0.52, -0.66, 1.2), R14 @ V(0.2, -1, 0.3).normalized(), R14 @ V(1, 0, 0), WP14 + R14 @ V(0.6, 0.3, 0.9))
 spark("SparkS14", SCP1 + V(0.08, 0.22, 1.25), FH2)
 for c in (W, SC2): c.used.add("S14")
 
@@ -654,7 +660,7 @@ FH3 = s0 + 70
 for f, yaw, b, tw in ((s0, -30, 0, 0), (s0 + 40, -10, 0.3, -25), (FH3, 15, 1.0, 25), (FH3 + 20, 20, 0.9, 20), (s0 + 150, 0, 0.5, 0), (s1, 0, 0.4, 0)):
     W.stand(f, WP17, yaw, flex=8 + 8 * b, head=(-8, 0), twist=tw, crouch=0.04 + 0.05 * b)
     R3 = Rz(yaw)
-    rp = V(-0.62, -0.50, 1.36) if f < FH3 else (V(0.15, -0.62, 1.33) if f == FH3 else V(-0.30, -0.50, 1.25))
+    rp = V(-0.62, -0.50, 1.36) if f < FH3 else (V(0.0, -0.74, 1.33) if f == FH3 else V(-0.30, -0.60, 1.25))
     W.hand_w("R", f, WP17 + R3 @ rp, R3 @ V(-0.2, -1, 0.3).normalized(), R3 @ V(0, 0, -1), WP17 + R3 @ V(-0.6, 0.2, 1.0))
     W.hand_w("L", f, WP17 + R3 @ V(0.40, -0.42, 1.22), R3 @ V(0.2, -1, 0.35).normalized(), R3 @ V(1, 0, 0), WP17 + R3 @ V(0.6, 0.3, 0.9))
 for c in (W, SB): c.used.add("S17")

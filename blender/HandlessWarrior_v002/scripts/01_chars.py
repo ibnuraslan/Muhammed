@@ -143,6 +143,14 @@ for hc in mesh_kids(W, "short"):
     print("FRINGE trimmed", len(kill), "brow", round(brow, 3), "ymin", round(ymin, 3))
 # hands off: mask the wrist + finger vertices (dominant bone weight)
 body = mesh_kids(W, "body")[0]
+# rest shape INCLUDING the MPFB shape keys (the basis coordinates are a thinner, different arm): evaluate with every modifier off
+_mstate = [(m, m.show_viewport) for m in body.modifiers]
+for m, _ in _mstate: m.show_viewport = False
+bpy.context.view_layer.update()
+_ev = body.evaluated_get(bpy.context.evaluated_depsgraph_get()); _me = _ev.to_mesh()
+REST = [v.co.copy() for v in _me.vertices]; _ev.to_mesh_clear()
+for m, sv in _mstate: m.show_viewport = sv
+print("REST verts", len(REST), "basis", len(body.data.vertices), "shape keys", body.data.shape_keys.key_blocks.keys()[:6] if body.data.shape_keys else None)
 gi = {g.index: g.name for g in body.vertex_groups}
 bones = {b.name for b in W.data.bones}
 hand_v = []
@@ -168,7 +176,7 @@ MW = body.matrix_world
 BANDAGE = flat("Bandage", (0.93, 0.89, 0.8), rough=0.85)
 BANDAGE_RED = flat("BandageStain", (0.62, 0.12, 0.1), rough=0.8)
 for s, sx in (("L", 1), ("R", -1)):
-    ring = [MW @ body.data.vertices[i].co for i in adj if (body.data.vertices[i].co.x > 0) == (sx > 0)]
+    ring = [MW @ REST[i] for i in adj if (REST[i].x > 0) == (sx > 0)]
     c = sum(ring, Vector()) / len(ring)
     wb = W.data.bones["wrist." + s]; la = W.data.bones["lowerarm02." + s]
     ax = (la.tail_local - la.head_local).normalized()              # forearm axis (towards the hand)
@@ -176,20 +184,12 @@ for s, sx in (("L", 1), ("R", -1)):
     # bandage: closed tube from 7 cm up the forearm to 2.2 cm past the cut, rounded end
     bm = bmesh.new()
     segs, rings_ = 20, []
-    prof = [(-0.07, 1.06), (-0.05, 1.16), (-0.025, 1.14), (0.0, 1.12), (0.012, 1.0), (0.020, 0.75), (0.025, 0.4), (0.027, 0.0)]
-    # forearm is slightly flattened: measure the cross-section shape per angle at the cut
+    prof = [(-0.075, 1.16), (-0.065, 1.18), (-0.05, 1.16), (-0.025, 1.15), (0.0, 1.13), (0.012, 1.02), (0.020, 0.78), (0.025, 0.42), (0.027, 0.0)]
     up = Vector((0, 0, 1)); u = (up - ax * up.dot(ax)).normalized(); w = ax.cross(u)
-    def rad_at(t):
-        best = 0.0
-        for p in ring:
-            d = (p - c) - ax * (p - c).dot(ax)
-            best = max(best, d.length)
-        return best
     for (t, k) in prof:
         rr = []
         for j in range(segs):
             a = 2 * math.pi * j / segs
-            # per-angle radius from the ring (nearest ring direction)
             dirv = u * math.cos(a) + w * math.sin(a)
             rj = max((((p - c) - ax * (p - c).dot(ax)).dot(dirv)) for p in ring)
             rj = max(rj, rad * 0.55)
@@ -209,8 +209,30 @@ for s, sx in (("L", 1), ("R", -1)):
         if 0.004 < cz < 0.016: p.material_index = 1
     # wrap ridges: subtle bands
     sm = o.modifiers.new("Sub", 'SUBSURF'); sm.levels = 1; sm.render_levels = 1
+    _muted = [cn for pb_ in W.pose.bones for cn in pb_.constraints if not cn.mute]   # true rest pose while parenting
+    for cn in _muted: cn.mute = True
     bpy.context.view_layer.update(); bone_parent(o, W, "lowerarm02." + s)
+    for cn in _muted: cn.mute = False
     W["cut_" + s] = list(c); W["cut_ax_" + s] = list(ax); W["cut_rad_" + s] = rad
+    extra = [v.index for v in body.data.vertices if v.index not in hv
+             and (MW @ REST[v.index] - c).dot(ax) > -0.004 and ((MW @ REST[v.index] - c) - ax * (MW @ REST[v.index] - c).dot(ax)).length < 0.09]
+    body.vertex_groups["HANDS_OFF"].add(extra, 1.0, 'REPLACE'); hv.update(extra)
+    print("PAST-CUT verts masked", s, len(extra))
+    # the remaining skin near the stump must move rigidly with the forearm (like the bone-parented bandage):
+    # strip wrist / metacarpal / finger weights there, give it to lowerarm02
+    handg = [g.index for g in body.vertex_groups if g.name.startswith(("wrist", "finger", "metacarpal")) and g.name.endswith("." + s)]
+    la2 = body.vertex_groups["lowerarm02." + s]
+    near = [v for v in body.data.vertices if v.index not in hv
+            and (MW @ REST[v.index] - c).dot(ax) > -0.12 and ((MW @ REST[v.index] - c) - ax * (MW @ REST[v.index] - c).dot(ax)).length < 0.09]
+    nfix = 0
+    for v in near:
+        moved = sum(g.weight for g in v.groups if g.group in handg)
+        if moved > 0:
+            for gidx in handg:
+                try: body.vertex_groups[gidx].remove([v.index])
+                except RuntimeError: pass
+            la2.add([v.index], min(1.0, moved), 'ADD'); nfix += 1
+    print("STUMP skin re-weighted to lowerarm02", s, nfix)
     print("BANDAGE", s, tuple(round(x, 3) for x in c), round(rad, 3))
 # keep wrists straight relative to the forearm (the IK copy-rotation would twist the stump)
 for s in "LR":
