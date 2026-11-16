@@ -211,6 +211,8 @@ def p_kneel_scrape(n, sid, f0, n_fr, knees, yaw, tip, ydir, side="R", head=(24.0
     elbow(n, side, f0, sh + out * 0.35 + V((0, 0, -0.15)) - fwd(yaw) * 0.2)
     Mw = sp.matrix_world
     M0 = hold_prop(n, side, f0, sp, Mw @ V((0, 0.03, 0.006)), Mw.to_3x3() @ V((0, 0, -1)), Mw.to_3x3() @ V((0, 1, 0)), "pinch", finger_radius=0.013)
+    apply_pose(bpy.data.objects[n], side, "pinch", f0)          # middle/ring/little curl less than the solver's fist (no fingertip in the handle)
+    sp.location = sp.location + V((0.016, 0.0, 0.006))          # seat the handle so the middle fingertip sits beside it, not in it (tested: 0 crossings)
     scrape(n, side, f0 + 6, f1, sp, M0, V(tip), period=period, axis=axis)
     for f in range(f0, f1 + 1, 40):
         sh = wpos(n, "upperarm01." + side, f); elbow(n, side, f, sh + out * 0.35 + V((0, 0, -0.15)) - fwd(yaw) * 0.2)
@@ -286,7 +288,12 @@ def shot_1b(f0, n):
 def shot_1c(f0, n):
     """wide of the cell at night: P1 kneels scraping at the vent, P2 kneels beside him watching, P3 keeps watch at the bars"""
     use = ("P1", "P2", "P3"); f1 = f0 + n - 1
-    p_kneel_scrape("P1", "1c", f0, n, (0.0, 1.0), 180.0, (VX - 0.15, 1.59, VZ + 0.02), V((0.25, 1, -0.35)), support=None)
+    for k, f in enumerate(sorted(set(list(range(f0, f1 + 1, 40)) + [f1]))):     # P1 kneels at the vent and studies it (scraping starts in 2a)
+        kneel("P1", f, (0.0, 1.0), 180.0, lean=14, spine=(18, 0, 0), head=(28, 8 * math.sin(k * 0.9)))
+        for s_ in "LR":
+            sx = 1 if s_ == "L" else -1
+            kq = V((0.0, 1.0, 0.0)) + fwd(180.0) * 0.05 - rgt(180.0) * sx * 0.13 + V((0, 0, 0.32))
+            hand("P1", s_, f, kq, -fwd(180.0) + V((0, 0, -0.6)), V((0, 0, -1)), pole=wpos("P1", "upperarm01." + s_, f) - rgt(180.0) * sx * 0.4 - fwd(180.0) * 0.2, pose="relaxed")
     for k, f in enumerate(range(f0, f1 + 1, 45)):
         kneel("P2", f, (0.7, 0.85), 150.0, lean=10, spine=(12, -10, 0), head=(20, 25 + 4 * math.sin(k)))
         for s_ in "LR":
