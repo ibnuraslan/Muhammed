@@ -57,3 +57,4 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | # | Film | Package folder | Status |
 |---|---|---|---|
 | B18 | PhoneCrazy | `blender/PhoneCrazy_v003/` | **READY TO RENDER (frames 1–1931)**, watched moving |
+| B19 | ClosetBathroom | `blender/ClosetBathroom_v003/` | **READY TO RENDER (frames 1–1881)**, watched moving |
