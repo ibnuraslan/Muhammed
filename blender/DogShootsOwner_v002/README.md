@@ -27,3 +27,12 @@ $B -b film_vo.blend --python $S/03_package.py -- DogShootsOwner_v002_VO.mp3 pkg_
 $B -b pkg_big.blend --python $S/04_shrink_images.py -- /tmp/shrink DogShootsOwner_v002_60fps.blend
 ```
 Clips are authored at their full 1× length and trimmed at the VO cut. No character animation is time-stretched.
+
+## Checks on this exact package (step: clip 6, qa 6, limb 2, bpc 3 humans / 1 dog)
+- clip_scan: 0 bad ranges. body_prop_cross: 0 visible crossings (humans and dog).
+- limb_check ARMBODY: all upperarm01 points 0–2 within 4 cm of the shoulder (known false positive), except frame 1507
+  (last frame of 15c): his left forearm rests against his side at the frame edge (2 axis points within 3 cm).
+- limb_check ARMBACK 375–403 (shot 05): intended, his left hand goes to the hurt side of his back.
+- qa_check EMPTY/INSIDE/PROPMOVE/CAMJUMP: dog-only, anatomy-cutaway and ambulance-exterior shots (no person by design),
+  smoke and bullet FX, and the hard cuts. FAN/CLAW 721–799: the fingertip tap on the dash-mounted phone.
+- Off camera: in shot 09 the patient's feet go past the far ambulance wall (AmbWall1), never in view.
