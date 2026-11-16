@@ -10,7 +10,7 @@
 | Camera | One camera (`CAM_Film`), hard cuts baked into its keys, no markers |
 | Motion blur | Off (the animated look) |
 | Colour | AgX, look "Punchy" |
-| Output | PNG sequence, written to `####.png` |
+| Output | PNG sequence, written to `//render/TitanImplosion_v002b_####.png` |
 | Audio | `TitanImplosion_v002_VO.mp3` is packed as a sound strip from frame 1. Add the mp3 at frame 1 when you encode at 60 fps. |
 
 ## Test frames before the full job
