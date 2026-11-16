@@ -92,3 +92,4 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | B21 | DogBuriedAlive | `blender/DogBuriedAlive_v003/` | **READY TO RENDER (frames 1–1641)**, watched moving |
 | B02 | WhaleSwallow | `blender/WhaleSwallow_v005/` | **READY TO RENDER (frames 1–1715)**, watched moving |
 | B08 | BatBite | `blender/BatBite_v003/` | **READY TO RENDER (frames 1–1362)**, watched moving |
+| B09 | ScaldingCoffee | `blender/ScaldingCoffee_v003/` | **READY TO RENDER (frames 1–1808)**, watched moving |
