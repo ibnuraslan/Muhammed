@@ -205,6 +205,41 @@ for nd in hm.node_tree.nodes:
 for i in range(len(nh.data.materials)): nh.data.materials[i] = hm
 bpy.data.objects.remove(sb, do_unlink=True)
 print("DOC HAIR swapped", [m.type for m in nh.modifiers], "head box src", tuple(round(x, 3) for x in smx - smn), "dst", tuple(round(x, 3) for x in dmx - dmn))
+
+# the stranger was bald (the client rejects bald heads): short02 from EarInArm's surgeon (same MPFB pipeline), refitted to
+# his head box, bound to his rig, dark-brown alpha-intact hair material
+pth = os.path.join(ROOT, "EarInArm_v011", "EarInArm_v011_60fps.blend")
+with bpy.data.libraries.load(pth, link=False) as (df, dt):
+    dt.objects = ["Surgeon.short02", "Surgeon.body"]
+sh_, sb_ = dt.objects
+sbody = kid("Stranger", ".body")
+def head_box_sk(body):      # the head box of the shape the body really shows (basis + active MPFB proportion keys)
+    gi = body.vertex_groups["head"].index; sk = body.data.shape_keys
+    idx = [v.index for v in body.data.vertices if any(g.group == gi and g.weight > 0.5 for g in v.groups)]
+    pts = []
+    for i in idx:
+        c = body.data.vertices[i].co.copy()
+        if sk:
+            for kb in sk.key_blocks[1:]:
+                if kb.value and not kb.mute: c += kb.value * (kb.data[i].co - kb.relative_key.data[i].co)
+        pts.append(c)
+    return V(tuple(min(p[k] for p in pts) for k in range(3))), V(tuple(max(p[k] for p in pts) for k in range(3)))
+smn, smx = head_box_sk(sb_); dmn, dmx = head_box_sk(sbody); hc = (dmn + dmx) / 2
+print("STRANGER SK", sbody.data.shape_keys and [(k.name[:30], round(k.value, 2)) for k in sbody.data.shape_keys.key_blocks if k.value], "donor", sb_.data.shape_keys and [(k.name[:30], round(k.value, 2)) for k in sb_.data.shape_keys.key_blocks if k.value])
+for v in sh_.data.vertices:
+    q = V(tuple(dmn[i] + (v.co[i] - smn[i]) * (dmx[i] - dmn[i]) / (smx[i] - smn[i]) for i in range(3)))
+    v.co = hc + (q - hc) * 0.985 - V((0, 0, 0.004))
+sc.collection.objects.link(sh_); sh_.name = "Stranger.short02"; sh_.data.name = sh_.name
+sh_.parent = RIGS["Stranger"]; sh_.matrix_parent_inverse = Matrix.Identity(4); sh_.location = (0, 0, 0)
+sh_.animation_data_clear(); sh_.hide_render = sh_.hide_viewport = False; sh_.hide_set(False)
+for m in sh_.modifiers:
+    if m.type == 'ARMATURE': m.object = RIGS["Stranger"]
+hm2 = kid("Subject", "short02").data.materials[0].copy()
+for nd in hm2.node_tree.nodes:
+    if nd.type == 'HUE_SAT': nd.inputs['Saturation'].default_value = 0.9; nd.inputs['Value'].default_value = 0.7
+for i in range(len(sh_.data.materials)): sh_.data.materials[i] = hm2
+bpy.data.objects.remove(sb_, do_unlink=True)
+print("STRANGER HAIR", [m.type for m in sh_.modifiers], "head box src", tuple(round(x, 3) for x in smx - smn), "dst", tuple(round(x, 3) for x in dmx - dmn))
 for n in RIGS:
     for k in RIGS[n].children:
         if "shoes" in k.name:
