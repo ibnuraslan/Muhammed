@@ -352,6 +352,27 @@ for i, x in enumerate((-1.6, 0.0, 1.6)):
         bpy.ops.mesh.primitive_circle_add(vertices=32, radius=0.14, fill_type='NGON', location=(X + x + cx, 1.98, 2.35 + cz), rotation=(R_(90), 0, 0))
         ci = bpy.context.object; ci.name = "MenuPic%d_%d" % (i, j); link(ci, cF); ci.data.materials.append(mat("MenuPic%d" % j, colr, 0.5))
         box("MenuLine%d_%d" % (i, j), cF, (X + x + cx, 1.979, 2.35 - 0.17), (0.22, 0.004, 0.025), mat("MenuLine", (0.5, 0.48, 0.45), 0.6), 0)
+# café front wall (-Y) with three big windows onto a bright street, planters; side walls extended to meet it
+m_front = mat("CafeFront", (0.98, 0.86, 0.62), 0.6)
+for nm, loc, sz in (("CafeFrontL", (X - 3.45, -4.6, 1.5), (1.1, 0.1, 3.0)), ("CafeFrontR", (X + 3.45, -4.6, 1.5), (1.1, 0.1, 3.0)),
+                    ("CafeFrontB", (X, -4.6, 0.45), (5.8, 0.1, 0.9)), ("CafeFrontT", (X, -4.6, 2.6), (5.8, 0.1, 0.8)),
+                    ("CafeFrontM1", (X - 0.97, -4.6, 1.5), (0.12, 0.1, 1.4)), ("CafeFrontM2", (X + 0.97, -4.6, 1.5), (0.12, 0.1, 1.4))):
+    box(nm, cF, loc, sz, m_front, 0)
+for i, x in enumerate((-1.95, 0.0, 1.95)):
+    plane("CafeStreet%d" % i, cF, (X + x, -4.75, 1.5), (1.85, 1.4), mat("StreetView", (0.55, 0.78, 0.95), 0.5, emit=((0.70, 0.85, 1.0), 2.2)), rot=(R_(90), 0, 0))
+    box("CafeSill%d" % i, cF, (X + x, -4.52, 0.80), (1.85, 0.12, 0.04), mat("WinFrame", (0.95, 0.95, 0.95), 0.4), 0.004)
+box("CafeWallL2", cF, (X - 4.0, -4.0, 1.5), (0.1, 1.3, 3.0), m_side, 0)
+box("CafeWallR2", cF, (X + 4.0, -4.0, 1.5), (0.1, 1.3, 3.0), m_side, 0)
+for i, x in enumerate((-3.2, 3.2)):
+    lathe("Planter%d" % i, cF, [(0.20, 0), (0.24, 0.45), (0.25, 0.47)], mat("Planter", (0.35, 0.35, 0.38), 0.4), (X + x, -4.15, 0.0))
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=0.38, location=(X + x, -4.15, 0.85)); bush = bpy.context.object
+    bush.name = "PlanterBush%d" % i; link(bush, cF); bush.data.materials.append(mat("Hedge", (0.16, 0.45, 0.14), 0.8))
+    dd = bush.modifiers.new("D", 'DISPLACE'); dd.texture = bpy.data.textures.get("HedgeTex"); dd.strength = 0.12
+# trays on the counter top (foreground of the behind-the-counter shots)
+for i, x in enumerate((39.55, 40.95)):
+    box("Tray%d" % i, cF, (x, 0.05, 1.047), (0.42, 0.30, 0.012), mat("Tray", (0.78, 0.22, 0.15), 0.4), 0.006)
+# standing (bar) table in the customer area for the B4 group
+lathe("BarTable", cF, [(0.13, 0.0), (0.13, 0.02), (0.04, 0.04), (0.035, 1.02), (0.25, 1.03), (0.25, 1.06), (0.0, 1.065)], mat("BarTable", (0.25, 0.25, 0.27), 0.35, metal=0.5), (X + 0.95, -2.05, 0.0))
 # ceiling light panels
 for i, x in enumerate((-2.5, 0.0, 2.5)):
     for y in (-2.0, 0.6):

@@ -192,10 +192,10 @@ def beat_B3():
     bl.modifiers.new("Sub", 'SUBSURF').levels = 2
     # staff at the foot of the bed, facing the patient (+Y)
     staff = {}
-    for cid, pos in (("Doctor", Vector((bx - 0.28, -1.45, 0))), ("Nurse2", Vector((bx + 0.42, -1.40, 0)))):
+    for cid, pos in (("Doc2", Vector((bx - 0.28, -1.45, 0))), ("Nurse2", Vector((bx + 0.42, -1.40, 0)))):
         r2, R2, H2 = setup(cid); staff[cid] = (r2, R2, H2)
         FLOORS[:] = [bpy.data.objects["HospFloor"]]
-        if cid == "Doctor":     # looks down at her legs, turns to the nurse, nods; shifts his weight
+        if cid == "Doc2":     # looks down at her legs, turns to the nurse, nods; shifts his weight
             hd = lambda f: (14 if f < 1440 else (4 + (6 * math.sin((f - 1500) / 8) if 1500 < f < 1560 else 0)), 0 if f < 1440 else 18)
             tw = lambda f: 0 if f < 1440 else 10
             stand(H2, R2, cid, 1201, 1700, pos, 180.0, head=hd, sway=1.6, twist=tw)
@@ -205,12 +205,12 @@ def beat_B3():
             stand(H2, R2, cid, 1201, 1700, pos, 180.0, head=hd, sway=1.2, twist=tw)
         o_ = -0.07 if cid == "Nurse2" else 0.0
         arms_alive(r2, R2, H2, 1201, 1700, pos, 180.0, out=o_)
-    tint(staff["Doctor"][0], "casualsuit01", (0.45, 0.62, 0.95))
+    tint(staff["Doc2"][0], "casualsuit04", (0.55, 0.70, 0.95))
     tint(staff["Nurse2"][0], "casualsuit01", (0.45, 0.85, 0.70))
     lookat = Vector((bx, 0.75, 1.05))
     cam_shot("Cam3a", 1201, 1360, [(1201, (78.55, -0.55, 1.30), (79.70, 0.55, 0.88)), (1360, (78.65, -0.30, 1.26), (79.70, 0.60, 0.90))], lens=28)
     sc.frame_set(1460); bpy.context.view_layer.update()
-    dh = staff["Doctor"][0].matrix_world @ staff["Doctor"][0].pose.bones["head"].head; nh = staff["Nurse2"][0].matrix_world @ staff["Nurse2"][0].pose.bones["head"].head
+    dh = staff["Doc2"][0].matrix_world @ staff["Doc2"][0].pose.bones["head"].head; nh = staff["Nurse2"][0].matrix_world @ staff["Nurse2"][0].pose.bones["head"].head
     mid = (dh + nh) / 2 - Vector((0, 0, 0.22))
     cam_shot("Cam3b", 1361, 1560, [(1361, (78.80, 0.05, 1.60), tuple(mid)), (1560, (78.83, -0.05, 1.59), tuple(mid))], lens=26)
     sc.frame_set(1630); bpy.context.view_layer.update()
@@ -221,21 +221,22 @@ def beat_B3():
 # ================================================================== B4 complaints (1701..2280)
 def beat_B4():
     cF = bpy.data.collections["SetCafe"]; FLOORS[:] = [bpy.data.objects["CafeFloor"]]
-    line = [("C2", 38.95, -1.30, 15), ("C1", 39.50, -1.10, 8), ("C4", 40.05, -1.15, 0), ("Hero2", 40.55, -1.12, -8), ("C5", 40.98, -1.30, -15)]
+    line = [("C2", 39.78, -0.62, 180), ("C1", 39.86, -1.18, 186), ("Hero2", 39.98, -1.74, 172), ("C4", 40.62, -1.55, 205), ("C5", 41.56, -1.99, 265)]   # a queue (column) at the counter + two talking at the standing table
     cols = {"Hero2": ("casualsuit01", (0.30, 0.55, 0.85)), "C1": ("casualsuit02", (0.95, 0.45, 0.35)), "C4": ("casualsuit04", (0.20, 0.21, 0.24))}
     cups = {}
     for cid, x, y, yaw in line:
         rig, R, H = setup(cid); pos = Vector((x, y, 0)); yaw_ = 180.0 + 180.0 + yaw   # face -Y (camera), small turn
         yaw_ = yaw
         if cid in cols: tint(rig, cols[cid][0], cols[cid][1])
-        hd = {"C4": lambda f: (18 if f < 1830 else 2, 0), "C1": lambda f: (22, 0), "Hero2": lambda f: (8, 10 * math.sin((f - 2000) / 14) if 1990 < f < 2090 else 0),
-              "C2": lambda f: (4, -20 if f > 2050 else 0), "C5": lambda f: (6, 18 if f > 2100 else 0), "C3": lambda f: (2, 0)}[cid]
-        tw = {"C2": lambda f: 14 if f > 2050 else 0, "C1": lambda f: -12 if 2000 < f < 2150 else 0, "C5": lambda f: 16 if f > 2100 else 0,
-              "Hero2": lambda f: -10 if 2100 < f < 2220 else 0, "C4": lambda f: 0}[cid]
-        stand(H, R, cid, 1701, 2280, pos, yaw_, head=hd, flex=(6 if cid == "C1" else 0), sway=1.4, twist=tw)
-        arms_alive(rig, R, H, 1701, 2280, pos, yaw_, sides=("L" if cid in ("C4", "C2") else "LR"))
-        if cid in ("C4", "C2"): arms_relaxed(rig, R, H, 1701, pos, yaw_, sides="R")   # start pose for the cup hand (grip keys follow)
-        if cid in ("C4", "C2"):
+        hd = {"C4": lambda f: (18 if f < 1830 else 2, (-20 if f > 2080 else 0)), "C1": lambda f: (6, -15 if 1990 < f < 2160 else 0),
+              "Hero2": lambda f: (8, 20 if 2040 < f < 2200 else 10 * math.sin((f - 2000) / 14) if 1990 < f < 2040 else 0),
+              "C2": lambda f: (16 if f < 2000 else 4, 0), "C5": lambda f: (6 + (5 * math.sin((f - 2100) / 9) if 2100 < f < 2180 else 0), 0)}[cid]
+        tw = {"C2": lambda f: 0, "C1": lambda f: -16 if 1990 < f < 2160 else 0, "C5": lambda f: 6 if f > 2020 else 0,
+              "Hero2": lambda f: 18 if 2040 < f < 2200 else 0, "C4": lambda f: -10 if f > 2060 else 0}[cid]   # turn to talk
+        stand(H, R, cid, 1701, 2280, pos, yaw_, head=hd, flex=(4 if cid == "C2" else 0), sway=1.4, twist=tw)
+        arms_alive(rig, R, H, 1701, 2280, pos, yaw_, sides=("L" if cid in ("C4",) else "LR"))
+        if cid in ("C4",): arms_relaxed(rig, R, H, 1701, pos, yaw_, sides="R")   # start pose for the cup hand (grip keys follow)
+        if cid in ("C4",):
             Rz = Matrix.Rotation(R_(yaw_), 3, 'Z')
             sc.frame_set(1701); bpy.context.view_layer.update()
             cp = pos + Rz @ Vector((-0.04, -0.30, 1.12 if cid != "C2" else 1.06))
@@ -255,8 +256,8 @@ def beat_B4():
             print("B4 cup grip", cid, rep)
             vis(cup, 1, False); vis(cup, 1701, True); vis(cup, 2281, False)
             cups[cid] = cup
-    cam_shot("Cam4a", 1701, 1960, [(1701, (40.02, -2.75, 1.52), (40.05, -1.15, 1.45)), (1960, (39.98, -2.50, 1.50), (40.05, -1.15, 1.44))], lens=42)
-    c4b = cam_shot("Cam4b", 1961, 2280, [(1961, (39.92, -4.65, 1.62), (39.97, -1.20, 1.30)), (2280, (40.02, -4.48, 1.60), (39.97, -1.20, 1.30))], lens=26)   # wide: all five customers stay whole in frame
+    cam_shot("Cam4a", 1701, 1960, [(1701, (40.72, 0.95, 1.58), (40.62, -1.55, 1.42)), (1960, (40.70, 0.80, 1.57), (40.62, -1.55, 1.41))], lens=85)   # from behind the counter; neighbours stay out of frame
+    c4b = cam_shot("Cam4b", 1961, 2280, [(1961, (40.30, 1.05, 1.44), (40.30, -1.40, 1.28)), (2280, (40.30, 0.92, 1.43), (40.30, -1.40, 1.28))], lens=20)   # from behind the counter, like the reference: queue + standing table, all five in frame
 
 # ================================================================== B5 backlash (2281..2560)
 def beat_B5():
@@ -271,7 +272,7 @@ def beat_B5():
     dg = bpy.context.evaluated_depsgraph_get(); hit = sc.ray_cast(dg, Vector((ccx, ccy + 0.08, 1.2)), Vector((0, 0, -1)))
     seat = hit[1].z if hit[0] and 0.3 < hit[1].z < 0.7 else 0.47
     print("B5 seat z", round(seat, 3), "chair", round(ccx, 2), round(ccy, 2))
-    hipA = Vector((120.0, ccy + 0.15, seat + 0.13)); BOSS_PALM = 0.045
+    hipA = Vector((120.0, ccy + 0.15, seat + 0.13)); BOSS_PALM = 0.050
     # seated at the head of the table facing +Y: lean in with palms flat, then sit back and exhale
     for f, fl in ((2281, 18), (2330, 24), (2400, 24), (2440, 17), (2560, 17)): HA.key_root(f, hipA, yaw=180.0, flex=fl)
     for f in range(2281, 2561, 20): HA.key_spine(f, flex=4 + 1.2 * math.sin((f - 2281) / 30), head=(14 if 2320 < f < 2410 else -6, (7 * math.sin((f - 2470) / 9) if 2470 < f < 2530 else 0)))   # looks down at the cup, up, exhales, small head shake
@@ -282,7 +283,8 @@ def beat_B5():
             knee_pole(RA, s, f, Vector((120.0 - sx * 0.15, -1.2, 0.6)))
         for f, y in ((2281, -1.66), (2330, -1.58), (2400, -1.58), (2440, -1.68), (2560, -1.68)):   # forearms resting on the table, palms flat, hovering >= 5 mm
             place_hand(rigA, s, f, Vector((120.0 - sx * 0.21, y, ttop + BOSS_PALM)), Vector((0, 0, -1)), Vector((sx * 0.20, 1, 0)))
-            apply_pose(rigA, s, "flat_palm", f); pole(RA, s, f, Vector((120.0 - sx * 0.55, -2.2, 0.80)))
+            apply_pose(rigA, s, "flat_palm", f, spread=0.0)   # fingers together, flat (curled tips touched the wood)
+            pole(RA, s, f, Vector((120.0 - sx * 0.55, -2.2, 0.80)))
     cF_ = paper_cup("BoardCup", cB, (120.0, -1.40, ttop), with_logo=False)
     st = steam("BoardSteam", cB, (120.0, -1.40, ttop + CUP_H * 0.86), h=0.22, r=0.035, dens=0.45); key_steam(st, 2281, 2560)
     others = []   # 5b is a close-up of the boss (side executives dropped: fewer bodies, no chair contacts)

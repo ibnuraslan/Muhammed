@@ -104,9 +104,11 @@ def cam_shot(name, f0, f1, keys, lens=35, fstop=8.0, focus=None):
     c = bpy.data.objects.new(name, bpy.data.cameras.new(name)); sc.collection.objects.link(c)
     c.data.lens = lens; c.data.clip_start = 0.01; c.data.sensor_fit = 'AUTO'
     c.data.dof.use_dof = True; c.data.dof.aperture_fstop = fstop
+    prev = None
     for f, loc, tgt in keys:
         c.location = loc; d = Vector(tgt) - Vector(loc)
-        c.rotation_euler = d.to_track_quat('-Z', 'Y').to_euler()
+        e = d.to_track_quat('-Z', 'Y').to_euler('XYZ', prev) if prev is not None else d.to_track_quat('-Z', 'Y').to_euler()
+        c.rotation_euler = e; prev = e.copy()   # compatible eulers: no 360-degree spin between keys
         c.keyframe_insert("location", frame=f); c.keyframe_insert("rotation_euler", frame=f)
         c.data.dof.focus_distance = d.length if focus is None else focus; c.data.dof.keyframe_insert("focus_distance", frame=f)
     m = sc.timeline_markers.new(name, frame=f0); m.camera = c
