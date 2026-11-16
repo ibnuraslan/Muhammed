@@ -17,6 +17,9 @@ SPEC = {
  "ExecB": (R + "TitanicIceberg_v014/TitanicIceberg_v014_60fps.blend", "ExpertB", {}, (), []),
  "ExecC": (R + "PrisonKeyCake_v010/PrisonKeyCake_v010_60fps.blend", "President", {}, (), []),
  "Employee": (BF, "Stocker", {}, (), []),
+ "Nurse2": (R + "ToucanBeak_v009/ToucanBeak_v009_60fps.blend", "VetA", {}, (), []),
+ "Hero2": (R + "AIAsleep_v007/AIAsleep_v007_60fps.blend", "Driver", {}, (), []),
+ "Boss2": (R + "BeethovenDeaf_v010/BeethovenDeaf_v010_60fps.blend", "Composer", {"age": 0.62}, (), []),
 }
 cid = sys.argv[sys.argv.index("--") + 1]
 bpy.ops.wm.read_factory_settings(use_empty=True)

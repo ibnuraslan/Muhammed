@@ -250,9 +250,8 @@ def beat_B1():
     bmesh.ops.subdivide_edges(bm, edges=bm.edges[:], cuts=3, use_grid_fill=True)
     me = bpy.data.meshes.new("SpillPool"); bm.to_mesh(me); bm.free()
     pool = bpy.data.objects.new("SpillPool", me); cC.objects.link(pool); pool.location = pool_c; pool.scale = (0.9, 1.4, 1)
-    me.materials.append(mat("CoffeeWet", (0.13, 0.06, 0.025), 0.12))
-    sw = pool.modifiers.new("Wrap", 'SHRINKWRAP'); sw.target = skirt; sw.wrap_method = 'PROJECT'; sw.use_project_z = True
-    sw.use_negative_direction = True; sw.use_positive_direction = True; sw.offset = 0.004
+    me.materials.append(mat("CoffeeStain", (0.07, 0.03, 0.012), 0.06, coat=0.8))   # flat, dark, glossy stain on the dress
+    sw = pool.modifiers.new("Wrap", 'SHRINKWRAP'); sw.target = skirt; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.wrap_mode = 'OUTSIDE_SURFACE'; sw.offset = 0.0025
     for f, sc_ in ((1, 0.02), (214, 0.02), (232, 0.55), (270, 1.0), (420, 1.12)):
         pool.scale = (0.9 * sc_, 1.4 * sc_, 1); pool.keyframe_insert("scale", frame=f)
     vis(pool, 1, False); vis(pool, 214, True)

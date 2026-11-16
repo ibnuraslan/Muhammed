@@ -522,6 +522,18 @@ box("WinSill", cB, (X + 3.5, 0, 0.35), (0.1, 8, 0.7), m_mul, 0.005)
 for i in range(12):
     hgt = 8 + (i * 37 % 11) * 2.5
     box("Tower%d" % i, cB, (X + 30 + (i % 3) * 9, -20 + i * 4.0, hgt / 2 - 6), (6, 3, hgt), mat("Tower%d" % (i % 3), [(0.75, 0.82, 0.9), (0.85, 0.85, 0.88), (0.7, 0.78, 0.86)][i % 3], 0.4), 0)
+# wall behind the boss (-Y) with a big window onto the city, and a low cabinet + plant (no empty backdrop)
+for nm, loc, sz in (("BoardWallFL", (X - 2.45, -3.45, 1.5), (2.1, 0.1, 3.0)), ("BoardWallFR", (X + 2.45, -3.45, 1.5), (2.1, 0.1, 3.0)),
+                    ("BoardWallFB", (X, -3.45, 0.4), (2.8, 0.1, 0.8)), ("BoardWallFT", (X, -3.45, 2.75), (2.8, 0.1, 0.5))):
+    box(nm, cB, loc, sz, m_bw, 0)
+for i in range(3):
+    box("FrontMullion%d" % i, cB, (X - 0.7 + i * 0.7, -3.42, 1.65), (0.05, 0.06, 1.7), m_mul, 0.004)
+box("FrontSill", cB, (X, -3.40, 0.82), (2.8, 0.14, 0.04), m_mul, 0.004)
+for i in range(10):
+    hgt = 10 + (i * 53 % 13) * 2.2
+    box("TowerF%d" % i, cB, (X - 22 + i * 4.6, -32 - (i % 3) * 6, hgt / 2 - 6), (3.8, 3.5, hgt), mat("Tower%d" % (i % 3), [(0.75, 0.82, 0.9), (0.85, 0.85, 0.88), (0.7, 0.78, 0.86)][i % 3], 0.4), 0)
+box("Sideboard", cB, (X - 2.3, -3.15, 0.40), (1.6, 0.45, 0.80), mat("Sideboard", (0.40, 0.27, 0.17), 0.4), 0.01)
+box("SideboardTop", cB, (X - 2.3, -3.15, 0.815), (1.64, 0.48, 0.03), mat("SideTop", (0.85, 0.85, 0.83), 0.3), 0.005)
 # wall art (abstract colour panels, no text)
 for i, (y, cl) in enumerate(((-1.0, (0.2, 0.45, 0.75)), (1.0, (0.85, 0.55, 0.2)))):
     box("Art%d" % i, cB, (X - 3.43, y, 1.65), (0.04, 1.1, 0.75), mat("Art%d" % i, cl, 0.5), 0.005)
