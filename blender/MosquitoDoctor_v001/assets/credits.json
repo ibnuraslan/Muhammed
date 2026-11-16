@@ -1,0 +1,38 @@
+{
+ "aedes": {
+  "uid": "a5c175f6c208415cb704033afcf5cb4c",
+  "title": "Aedes Aegypti",
+  "author": "Anastacio Games",
+  "author_profile": "https://sketchfab.com/fabio.brooks",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/a5c175f6c208415cb704033afcf5cb4c",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "organs": {
+  "uid": "035316622877438cb62de673b8f19217",
+  "title": "Human Organs",
+  "author": "mkhasant",
+  "author_profile": "https://sketchfab.com/mkhasant",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/035316622877438cb62de673b8f19217",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "bed": {
+  "uid": "f8c13a19e84343e7b644c19f7b9488d3",
+  "title": "Hospital Bed",
+  "author": "loxfear",
+  "author_profile": "https://sketchfab.com/loxfear",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/f8c13a19e84343e7b644c19f7b9488d3",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "desk": {
+  "uid": "c92290d214a84ea58951bdb6b79261c2",
+  "title": "Old Wooden Desk",
+  "author": "Dmitriy Korotkov",
+  "author_profile": "https://sketchfab.com/ArtDmitriyK",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/c92290d214a84ea58951bdb6b79261c2",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
