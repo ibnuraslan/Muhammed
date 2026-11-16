@@ -136,8 +136,9 @@ def tod_grip(f, side_x=0.20):
         apply_pose(rig, s, "shield", f)
         key_pole("Toddler", s, f, Vector((sx * 0.45, SLOT_Y + 0.05, BAR_Z - 0.10)))
 def tod_hang(f, drop, head=(4.0, 0.0), sflex=0.0, kick=0.0, ph=0.0, x=0.0, grip=True, side=0.0):
-    body("Toddler", f, tod_pos(drop, x), 0.0, 0.0, side, sflex, 0.0, 0.0, head)
-    tod_legs(f, drop, x, kick=kick, ph=ph)
+    y = SLOT_Y                                        # while slipping the bars are at his chest (hips are deeper than the gap)
+    body("Toddler", f, tod_pos(drop, x, y), 0.0, 0.0, side, sflex, 0.0, 0.0, head)
+    tod_legs(f, drop, x, y, kick=kick, ph=ph, bend=0.01 if drop > 0.1 else 0.03)
     if grip: tod_grip(f)
 
 # calibrate the stuck height: head/neck vertices (|x| < 7 cm) clear the two slot bars by 3 mm
@@ -197,15 +198,15 @@ BARS_N = [b.name for b in BARS]
 sid = "01"; f0, f1 = SH[sid]; use(sid, "Toddler")
 for f in range(f0, f1 + 1, 6):
     u = (f - f0) / (f1 - f0)
-    tod_hang(f, 0.30 - 0.02 * u, head=(14, 0), sflex=2, kick=0.025, ph=f * 0.16)
-tod_hang(f1, 0.28, head=(14, 0), sflex=2, kick=0.025, ph=f1 * 0.16)
+    tod_hang(f, 0.14 - 0.01 * u, head=(14, 0), sflex=2, kick=0.04, ph=f * 0.16)
+tod_hang(f1, 0.13, head=(14, 0), sflex=2, kick=0.04, ph=f1 * 0.16)
 shot_cam(sid, [(0, (0.55, -2.05, 4.05), (0.0, -0.55, 2.95)), (1, (0.40, -1.95, 3.95), (0.0, -0.55, 2.90))], 32, 8, 6)
 
 # ---------- 02 through the bars: low under the cage, the legs between the bars
 sid = "02"; f0, f1 = SH[sid]; use(sid, "Toddler")
 for f in range(f0, f1 + 1, 6):
-    tod_hang(f, 0.28, head=(10, 0), sflex=2, kick=0.025, ph=f * 0.18)
-tod_hang(f1, 0.28, head=(10, 0), sflex=2, kick=0.025, ph=f1 * 0.18)
+    tod_hang(f, 0.13, head=(10, 0), sflex=2, kick=0.04, ph=f * 0.18)
+tod_hang(f1, 0.13, head=(10, 0), sflex=2, kick=0.04, ph=f1 * 0.18)
 shot_cam(sid, [(0, (0.9, -1.9, 2.55), (0.0, -0.52, 3.05)), (1, (0.75, -1.75, 2.60), (0.0, -0.52, 3.05))], 30, 8, 0)
 
 # ---------- 03 of a second floor: wide across the street, the boy on the cage (hanging)
@@ -222,7 +223,7 @@ shot_cam(sid, [(0, (-2.6, -4.6, 4.6), (0.0, -0.4, 3.0)), (1, (-2.4, -4.4, 3.4), 
 
 # ---------- 05 His body fell: front of the cage, he slides down until the head stops
 sid = "05"; f0, f1 = SH[sid]; use(sid, "Toddler")
-drop_keys = [(0.0, 0.28), (0.25, 0.28), (0.45, 0.08), (0.53, 0.0), (0.60, 0.006), (0.70, 0.0), (1.0, 0.0)]
+drop_keys = [(0.0, 0.13), (0.25, 0.13), (0.35, 0.09), (0.45, 0.04), (0.53, 0.0), (0.60, 0.006), (0.70, 0.0), (1.0, 0.0)]
 for u, d in drop_keys:
     f = F(sid, u); tod_hang(f, d, head=(8 if d > 0.1 else 3, 0), sflex=2, kick=0.02, ph=f * 0.2)
 shot_cam(sid, [(0, (0.25, -2.25, 3.35), (0.0, -0.55, 3.05)), (1, (0.20, -2.05, 3.30), (0.0, -0.55, 3.05))], 35, 8, 8)
@@ -332,7 +333,7 @@ for u, dz in ((0.0, 0.16), (0.2, 0.15), (0.65, 0.0), (1.0, 0.0)):
     feet(OM, f, omp, 180, 0.0)
     for s, sx in (("L", -1), ("R", 1)):
         P = rail_pt(CHB, sx, f)
-        hand(OM, s, f, P, Vector((0, 0, -1)), Vector((0, 1, -0.6)), shoulder(OM, s, f) + Vector((sx * -0.45, -0.3, -0.3)), "cup_hold", 1.0, skin=0.03)
+        hand(OM, s, f, P, Vector((0, 0, -1)), Vector((0, 1, -0.6)), shoulder(OM, s, f) + Vector((sx * -0.45, -0.3, -0.3)), "cup_hold", 1.0, skin=0.04)
 shot_cam(sid, [(0, (2.5, -3.3, 1.55), (0.1, -1.2, 1.25)), (1, (2.35, -3.15, 1.55), (0.1, -1.2, 1.25))], 26, 8, 0)
 
 # ---------- 14 into a tower: the woman steadies the tower (hand on the top chair's backrest) and looks up
