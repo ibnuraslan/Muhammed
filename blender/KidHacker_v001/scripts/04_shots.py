@@ -191,7 +191,7 @@ def kid_hands(f, mode="keys", bob=0.0, side_bob=1):
             fingers("Kid", s, f, "relaxed")
             pole("Kid", s, f, (GX + sx * 0.32, 0.25, 0.45))
         elif mode == "mouse" and s == "R":
-            place_hand(KID, s, f, (MS.location.x + 0.005, MS.location.y + 0.02, MS.location.z + 0.046 + bob * 0.3), (0, 0, -1), (0.1, -1, -0.15))
+            place_hand(KID, s, f, (MS.location.x + 0.005, MS.location.y + 0.02, MS.location.z + 0.054 + bob * 0.3), (0, 0, -1), (0.1, -1, -0.15))
             fingers("Kid", s, f, "cup_hold")
             pole("Kid", s, f, (GX + sx * 0.5, 0.2, 0.55))
         elif mode == "lap":
@@ -199,8 +199,8 @@ def kid_hands(f, mode="keys", bob=0.0, side_bob=1):
             fingers("Kid", s, f, "relaxed")
             pole("Kid", s, f, (GX + sx * 0.32, 0.15, 0.45))
         elif mode == "desk":
-            place_hand(KID, s, f, (GX + sx * 0.21, -0.25, DESK_TOP + 0.032), (0, 0, -1), (-sx * 0.45, -1, 0))
-            fingers("Kid", s, f, "relaxed")
+            place_hand(KID, s, f, (GX + sx * 0.36, -0.25, DESK_TOP + 0.03), (0, 0, -1), (-sx * 0.45, -1, 0))   # beside the keyboard, palm flat
+            fingers("Kid", s, f, "flat_palm")
             pole("Kid", s, f, (GX + sx * 0.3, 0.3, 0.45))
 
 def kid_block(sid, mode, lean_fn, head_fn, step=12, bob=0.0, twist_fn=None, back_fn=None, yaw_fn=None):
@@ -444,7 +444,7 @@ def kid_lib_shots():
         place_hand(KID, "R", fx, (KEY.x - 0.02, KEY.y + 0.08, KEY.z + 0.07), (0, 0, -1), (0.05, -1, -0.5))
         fingers("Kid", "R", fx, "point")
         pole("Kid", "R", fx, (GX - 0.45, 0.2, 0.55))
-        tip_to("Kid", "R", fx, KEY + Vector((0, 0, 0.001 if down else 0.03)))
+        tip_to("Kid", "R", fx, KEY + Vector((0, 0, 0.005 if down else 0.03)))
         sc.frame_set(fx); print("TIP", fx, tuple(round(x, 3) for x in KID.matrix_world @ KID.pose.bones["finger2-3.R"].tail), tuple(round(x, 3) for x in KEY))
     pw = sorted([x for x in ST["login"].children if x.name.startswith("pw")], key=lambda x: x.name)
     cur = next(x for x in ST["login"].children if x.name.startswith("cur"))
