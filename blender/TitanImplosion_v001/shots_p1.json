@@ -1,0 +1,91 @@
+{
+ "headroom": 1.3,
+ "tail": 0,
+ "shots": [
+  {
+   "id": "S01",
+   "sec": 2.0,
+   "what": "Sub descends, wide"
+  },
+  {
+   "id": "S02",
+   "sec": 2.0,
+   "what": "Sub viewport close"
+  },
+  {
+   "id": "S03",
+   "sec": 2.0,
+   "what": "Sub over seabed"
+  },
+  {
+   "id": "S04",
+   "sec": 2.0,
+   "what": "Man on sofa watching TV"
+  },
+  {
+   "id": "S05",
+   "sec": 2.0,
+   "what": "Man leans in, wondering"
+  },
+  {
+   "id": "S06",
+   "sec": 2.0,
+   "what": "Close on his face"
+  },
+  {
+   "id": "S07",
+   "sec": 2.5,
+   "what": "Pain pulse along nerve to brain"
+  },
+  {
+   "id": "S08",
+   "sec": 2.0,
+   "what": "Brain lights up, pain sparks"
+  },
+  {
+   "id": "S09",
+   "sec": 2.0,
+   "what": "Light flash into the eye"
+  },
+  {
+   "id": "S10",
+   "sec": 2.0,
+   "what": "Optic pulse to brain"
+  },
+  {
+   "id": "S11",
+   "sec": 2.0,
+   "what": "Titan implodes (exterior)"
+  },
+  {
+   "id": "S12",
+   "sec": 1.5,
+   "what": "Bubble cloud, debris"
+  },
+  {
+   "id": "S13",
+   "sec": 2.5,
+   "what": "Compare: eye pulse vs sub crush"
+  },
+  {
+   "id": "S14",
+   "sec": 2.0,
+   "what": "Compare close: pulse barely moved"
+  },
+  {
+   "id": "S15",
+   "sec": 2.0,
+   "what": "Man lowers his eyes"
+  },
+  {
+   "id": "S16",
+   "sec": 2.0,
+   "what": "Sub lights go out"
+  },
+  {
+   "id": "S17",
+   "sec": 2.0,
+   "what": "Sunset surface, support ship"
+  }
+ ]
+}
