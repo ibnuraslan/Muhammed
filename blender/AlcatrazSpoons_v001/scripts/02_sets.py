@@ -432,6 +432,14 @@ for k in range(int(HS / RUNG) + 2):
     cyl("S3_Rung%02d" % k, 0.014, 0.46, (LAD_X, LAD_Y, 0.30 + k * RUNG), M_STEEL, C3, rot=(0, R_(90), 0), verts=12)
 for k in range(4):
     cyl("S3_ShaftPipe%d" % k, 0.04 + 0.01 * k, HS, (X3 - 1.2 + k * 0.18 + (1.9 if k > 1 else 0), -0.06, HS / 2), M_STEEL, C3, verts=16)
+# steep open-tread steel stair up the shaft (6a): 12 treads, rise 0.2, run 0.25, from y -3.2 to -0.2, centred at x X3-0.7
+ST_X, ST_Y0, ST_RISE, ST_RUN = X3 - 0.7, -3.5, 0.2, 0.29
+for k in range(1, 13):
+    box("S3_Tread%02d" % k, (0.8, ST_RUN - 0.01, 0.04), (ST_X, ST_Y0 + (k - 0.5) * ST_RUN, k * ST_RISE - 0.02), M_STEEL, C3, bevel=0.004)
+L_ = math.hypot(12 * ST_RUN, 12 * ST_RISE); ang_ = math.atan2(12 * ST_RISE, 12 * ST_RUN)
+for sx_ in (-0.42, 0.42):
+    st_ = box("S3_Stringer%+.0f" % (sx_ * 10), (0.03, L_, 0.22), (ST_X + sx_, ST_Y0 + 6 * ST_RUN, 6 * ST_RISE - 0.1), M_STEEL, C3)
+    st_.rotation_euler = (ang_, 0, 0)
 area("S3_Sky", (X3, -0.85, HS + 0.6), (0, 0, 0), 1.0, 300, (0.6, 0.72, 1.0), C3)
 area("S3_Key", (X3 + 0.9, -2.6, 2.5), (R_(70), 0, R_(25)), 1.5, 160, (0.95, 0.85, 0.7), C3)
 area("S3_Fill", (X3 - 1.0, -2.8, 4.5), (R_(75), 0, R_(-20)), 2.0, 120, (0.6, 0.7, 1.0), C3)

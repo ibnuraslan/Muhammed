@@ -256,7 +256,7 @@ def shot_1a(f0, n):
     Mw = sp.matrix_world
     sc.frame_set(f0); bpy.context.view_layer.update()
     sp.rotation_euler = (0, 0, R_(160)); bpy.context.view_layer.update(); Mw = sp.matrix_world     # lying flat
-    hand("P1", "R", f0, Mw @ V((0, 0.06, -0.012)), V((0, 0, 1)), Mw.to_3x3() @ V((0, 1, 0)), pose="flat_palm")
+    hand("P1", "R", f0, Mw @ V((0, 0.035, -0.014)), V((0, 0, 1)), Mw.to_3x3() @ V((0, 1, 0)), pose="flat_palm")
     M0 = ik_mat("P1", "R", f0); child_of(sp, "P1", "wrist.R", f0)
     piv = V(sp.location)
     for f, up, fw, tilt in ((f0 + 45, 0.2, -0.04, 25), (f0 + 100, 0.23, -0.05, 35), (f0 + n - 1, 0.22, -0.04, 28)):
@@ -497,11 +497,15 @@ def shot_5b(f0, n):
     for f, dy in ((f0, 0.0), (f0 + 20, 0.05), (push_end, 0.14)):
         g.location = gpos + V((0, dy, 0)); g.rotation_euler = (0, 0, R_(180)); g.keyframe_insert("location", frame=f); g.keyframe_insert("rotation_euler", frame=f)
         for s, dx in (("L", -1.0), ("R", 1.0)):
-            hand("P1", s, f, gpos + V((dx * 0.335, dy - 0.01, 0.0)), V((-dx, 0, 0)), V((0, 1, 0)), pole=wpos("P1", "upperarm01." + s, f) + V((dx * 0.4, -0.2, -0.3)), pose="relaxed")
+            hand("P1", s, f, gpos + V((dx * 0.335, dy - 0.01, 0.0)), V((-dx, 0, 0)), V((0, 1, 0)), pole=wpos("P1", "upperarm01." + s, f) + V((dx * 0.12, -0.25, -0.35)), pose="relaxed")
+    for s, dx in (("L", -1.0), ("R", 1.0)):     # release: hands open and come off the frame sides before it tips
+        hand("P1", s, push_end + 2, gpos + V((dx * 0.44, 0.1, 0.0)), V((-dx, 0, 0)), V((0, 1, 0)), pole=wpos("P1", "upperarm01." + s, push_end + 3) + V((dx * 0.12, -0.25, -0.35)), pose="flat_palm")
     for f, loc, rx in ((push_end + 8, gpos + V((0.15, 0.24, -0.05)), 25), (push_end + 16, gpos + V((0.4, 0.38, -0.2)), 80), (push_end + 20, V((X2 + 0.6, gpos.y + 0.45, FZ2 + 0.012)), 90), (push_end + 24, V((X2 + 0.62, gpos.y + 0.47, FZ2 + 0.03)), 85), (push_end + 28, V((X2 + 0.63, gpos.y + 0.48, FZ2 + 0.012)), 90)):
         g.location = loc; g.rotation_euler = (R_(rx), 0, R_(180)); g.keyframe_insert("location", frame=f); g.keyframe_insert("rotation_euler", frame=f)
-    for f in (push_end + 20, f1):     # hands back on the duct floor, ready to crawl
-        crawl_pose("P1", f, (X2, -1.0), yw, 0.0, FZ2, head=(-30, 0))
+    for f, back in ((push_end + 20, 0.03), (f1, 0.06)):     # hands stay up in the opening, easing back as the grille falls
+        crawl_pose("P1", f, (X2, -0.8 - back), yw, 0.0, FZ2, head=(-30, 0))
+        for s, dx in (("L", -1.0), ("R", 1.0)):
+            hand("P1", s, f, gpos + V((dx * 0.3, 0.14 - 0.01 - back * 2, 0.0)), V((-dx, 0, 0)), V((0, 1, 0)), pole=wpos("P1", "upperarm01." + s, f) + V((dx * 0.12, -0.25, -0.35)), pose="relaxed")
     for i in range(14):
         bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=1); pf = bpy.context.active_object; pf.name = "Puff_5b_%d" % i
         pf.data.materials.append(bpy.data.materials["M_Rubble"]); vis_window(pf, f0, f1)
@@ -570,16 +574,50 @@ def climb(n, f0, f1, z_start, rate, lad_x, lad_y, yaw=180.0, phase=0.0):
             top = z + 0.45
             zh = min(top, rung_z(kh) + 4 * RUNG) if uh < 0.6 else min(top, rung_z(kh) + 4 * RUNG + RUNG * ss((uh - 0.6) / 0.4))
             zh = rung_z(round((zh - 0.30) / RUNG)) if uh < 0.6 else zh
-            zr = z + 0.32 + 0.08 * math.sin(2 * math.pi * (cyc + ph))     # hands slide up the round rails, alternating a little
-            hand(n, s, f, V((lad_x - sx * 0.23, lad_y - 0.034, zr)), V((0, 1, 0)), V((sx * 0.25, 0, 1)),
-                 pole=V((lad_x - sx * 0.5, lad_y - 0.6, zr - 0.35)), pose="shield")
+            if uh < 0.6:      # gripping a rung: contact-aware grip closes the fingers onto it
+                k_r = int(round((zh - 0.30) / RUNG)); rung = bpy.data.objects.get("S3_Rung%02d" % k_r)
+                elbow(n, s, f, V((lad_x - sx * 0.45, lad_y - 0.55, zh - 0.35)))
+                grip_object(bpy.data.objects[n], s, f, rung, V((lad_x - sx * 0.11, lad_y - 0.014, zh)), V((0, 1, 0)), finger_dir=V((0, 0.3, 1)), grip="wrap")
+            else:             # moving up to the next rung, 8 cm in front of the ladder
+                hand(n, s, f, V((lad_x - sx * 0.11, lad_y - 0.09, zh)), V((0, 1, 0)), V((0, 0, 1)),
+                     pole=V((lad_x - sx * 0.45, lad_y - 0.55, zh - 0.35)), pose="relaxed")
+
+def stair_climb(n, f0, f1, k0, k1, x, delay=0):
+    """walk up the open-tread stair from tread k0 to k1 at 1x: each foot steps up two treads per stride, swinging clear of the
+    tread edges; the pelvis rises on a smooth ramp; arms swing loosely (no hand contacts)"""
+    RISE, RUN, Y0 = 0.2, 0.29, -3.5
+    yaw = 180.0; S = k1 - k0; T = (f1 - f0 - delay) / max(1, S)          # frames per tread
+    ty = lambda k: Y0 + (k - 1) * RUN + 0.035 if k > 0 else Y0 - 0.3
+    tz = lambda k: max(0, k) * RISE + 0.025
+    def foot_at(s, f):
+        """tread events: event i lifts the L foot (even i) or R foot (odd i) onto tread k0+i+1 over 0.9 T frames"""
+        sx = 1 if s == "L" else -1; t = f - f0 - delay; k = k0; D = 0.9 * T
+        for i in range(S):
+            if (i % 2 == 0) != (s == "L"): continue
+            ti = i * T; kn = min(k1, k0 + i + 1)
+            if t >= ti + D: k = kn; continue
+            if t > ti:
+                u = ss((t - ti) / D)
+                uy = ss(max(0.0, (u - 0.35) / 0.65)); uz = ss(min(1.0, u / 0.55))       # lift first, then forward
+                y = ty(k) + (ty(kn) - ty(k)) * uy - 0.13 * math.sin(math.pi * min(1.0, u / 0.6)); z = tz(k) + (tz(kn) - tz(k)) * uz + 0.14 * math.sin(math.pi * u)
+                return V((x - sx * 0.11, y, z + HUM[n].ankle[s].z)), -15 * math.sin(math.pi * u)
+            break
+        return V((x - sx * 0.11, ty(k), tz(k) + HUM[n].ankle[s].z)), 0.0
+    for f in range(f0, f1 + 1, 2):
+        prog = min(S, max(0.0, (f - f0 - delay) / T))
+        aL, _ = foot_at("L", f); aR, _ = foot_at("R", f)          # pelvis between the feet, slightly crouched: both legs always reach
+        root = V((x, (aL.y + aR.y) / 2 + 0.03, (aL.z + aR.z) / 2 - HUM[n].ankle["L"].z + HUM[n].root_head.z - 0.2))
+        body(n, f, root, yaw, flex=5, spine=(8, -6 * math.sin(math.pi * prog), 0), head=(-14, 8 * math.sin(f / 25.0)))
+        for s in "LR":
+            ank, pt = foot_at(s, f); foot(n, s, f, ank, yaw, pitch=pt, knee=ank + fwd(yaw) * 0.12 + V((0, 0, 0.8)))
+    walk_arms(n, f0, f1, lambda f: yaw, every=8, amp=0.08)
 
 def shot_6a(f0, n):
-    """P1 and P2 climb the fixed steel ladder up the utility shaft (seen from below, faces turning up)"""
+    """P1 and P2 climb the steep steel stair up the service shaft toward the roof hatch (seen from the top, faces up)"""
     use = ("P1", "P2"); f1 = f0 + n - 1
-    climb("P1", f0, f1, 3.0, 0.006, X3, -0.18)
-    climb("P2", f0, f1, 1.0, 0.006, X3, -0.18, phase=0.3)
-    camera("6a", f0, n, [(0, (X3 + 1.25, -2.4, 1.8), (X3, -0.3, 2.9), 18), (1, (X3 + 1.2, -2.45, 2.5), (X3, -0.3, 3.6), 18)], fstop=6.0)
+    stair_climb("P1", f0, f1, 2, 7, X3 - 0.7)
+    stair_climb("P2", f0, f1, 0, 4, X3 - 0.7, delay=10)
+    camera("6a", f0, n, [(0, (X3 - 0.7, -0.6, 3.6), (X3 - 0.7, -2.6, 1.3), 26), (1, (X3 - 0.65, -0.62, 3.65), (X3 - 0.7, -2.1, 1.6), 26)], fstop=6.0)
     return use
 
 def shot_6b(f0, n):
