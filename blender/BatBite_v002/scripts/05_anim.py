@@ -436,7 +436,7 @@ def bend(f, amt, br=0.0):
     return P, Rb
 for f, a in ((1395, 0.0), (1420, 0.6), (1440, 1.0)):
     P, Rb = bend(f, a)
-    if a < 1.0:
+    if a == 0.0:          # hands leave the sides here and travel to the thighs over 30 frames (no mid key: no snap)
         key_relaxed(S, f, P, Rb)
 # hands on thighs: palm on the front of each thigh, ~12 cm above the knee
 from mathutils.bvhtree import BVHTree as _BVH
@@ -456,7 +456,7 @@ def thigh_hands(f, extra=0.0):
         if nrm.dot(o_ - hit) < 0: nrm = -nrm
         ax = (kn - hp); fd = (ax - nrm * ax.dot(nrm)).normalized()
         fd = Matrix.Rotation(math.radians(-50), 3, nrm) @ fd       # fingers turned in across the thigh (tested: index/middle stay out of it)
-        place_hand(D[S], s, f, hit, -nrm, fd, skin=(0.028 if s == "L" else 0.035) + extra)
+        place_hand(D[S], s, f, hit, -nrm, fd, skin=(0.028 if s == "L" else 0.045) + extra)
         apply_pose(D[S], s, "shield", f)
         pb = D[S].pose.bones["Pole_elbow." + s]; nm = "Pole_elbow." + s
         pole = bone_world(S, "upperarm01." + s).to_translation() + Rz(YAW) @ V((0.5 * sx, 0.4, 0.0))
@@ -492,7 +492,7 @@ def recline(f, br=0.0, head=(0.0, 0.0)):
         # forearms resting on the blanket over the belly/thighs
         sh = bw(S, HIP, Rb, rest_head(S, "upperarm01." + s))
         Wh = V((HX + 0.13 * sx, HIP.y - 0.16, MATT_Z + 0.30))
-        key_hand(S, s, f, Wh, V((-0.6 * sx, -1, -0.2)).normalized(), V((0, 0.3, -1)).normalized(), pole=sh + V((0.5 * sx, 0.05, -0.3)))
+        key_hand(S, s, f, Wh, V((-0.6 * sx, -1, -0.2)).normalized(), V((0, 0.3, -1)).normalized(), pole=sh + V((0.18 * sx, 0.10, -0.6)))   # elbows down toward the bed (clear of the clipboard)
         apply_pose(D[S], s, "relaxed", f)
 for i, f in enumerate(range(CUT, 2101, 30)):
     recline(f, br=math.sin(i * 1.3))
@@ -714,7 +714,7 @@ PAPER.data.materials.append(soft_mat("M_Paper", (0.95, 0.95, 0.93), 0.7))
 sc.frame_set(CUT); bpy.context.view_layer.update()
 Pd = D[D_].matrix_world @ D[D_].pose.bones["root"].head
 fwd_d = V((1, 0, 0)); left_d = V((0, 1, 0))
-CB_M = Mloc(V((DP.x, DP.y, 0)) + fwd_d * 0.42 + left_d * 0.12 + V((0, 0, 1.17)), Rz(90) @ Rx(18))   # tilted up toward his eyes, well clear of his chest
+CB_M = Mloc(V((DP.x, DP.y, 0)) + fwd_d * 0.38 + left_d * 0.12 + V((0, 0, 1.17)), Rz(90) @ Rx(18))   # tilted up toward his eyes, well clear of his chest
 CB.matrix_world = CB_M; bpy.context.view_layer.update()
 under = CB_M @ V((0.0, 0.07, -0.006 - 0.010))   # palm toward the board's middle: his fingers stay off his chest     # board local +y edge is the one nearest him (Rz 90)          # palm under the board's near edge: the forearm stays below the board
 place_hand(D[D_], "L", CUT, under, (CB_M.to_3x3() @ V((0, 0, 1))).normalized(), (CB_M.to_3x3() @ V((0, -1, 0))).normalized())
