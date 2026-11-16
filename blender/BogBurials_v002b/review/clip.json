@@ -1,0 +1,43 @@
+{
+ "frames": {
+  "61": {
+   "BurB": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "67": {
+   "BurB": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "73": {
+   "BurB": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "79": {
+   "BurB": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "85": {
+   "BurB": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}

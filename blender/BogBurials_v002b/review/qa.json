@@ -1,0 +1,4155 @@
+{
+ "frames": {
+  "91": [
+   [
+    "BACKHEAD",
+    "BurB"
+   ]
+  ],
+  "157": [
+   [
+    "BACKHEAD",
+    "BurB"
+   ]
+  ],
+  "241": [
+   [
+    "BACKHEAD",
+    "BurB"
+   ]
+  ],
+  "325": [
+   [
+    "BACKHEAD",
+    "BurB"
+   ]
+  ],
+  "415": [
+   [
+    "BACKHEAD",
+    "BurB"
+   ]
+  ],
+  "541": [
+   [
+    "BACKHEAD",
+    "BurB"
+   ]
+  ],
+  "685": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "691": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "697": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "703": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "709": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "715": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "721": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "727": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "733": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "739": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "745": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "751": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "757": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "763": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "769": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "775": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "781": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "787": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble0 moves 3.5 cm with no hand on it (nearest finger 111151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble12 moves 2.6 cm with no hand on it (nearest finger 111233 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble13 moves 4.6 cm with no hand on it (nearest finger 111205 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble14 moves 19.4 cm with no hand on it (nearest finger 111216 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble15 moves 4.6 cm with no hand on it (nearest finger 111213 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble2 moves 20.1 cm with no hand on it (nearest finger 111340 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble4 moves 1.5 cm with no hand on it (nearest finger 111114 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble5 moves 11.0 cm with no hand on it (nearest finger 111142 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble6 moves 12.4 cm with no hand on it (nearest finger 111219 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble7 moves 16.5 cm with no hand on it (nearest finger 111244 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble9 moves 3.8 cm with no hand on it (nearest finger 111163 cm)"
+   ]
+  ],
+  "793": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble0 moves 14.7 cm with no hand on it (nearest finger 111151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble1 moves 7.4 cm with no hand on it (nearest finger 111337 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble10 moves 1.3 cm with no hand on it (nearest finger 111136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble11 moves 5.2 cm with no hand on it (nearest finger 111303 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble12 moves 16.1 cm with no hand on it (nearest finger 111234 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble13 moves 14.2 cm with no hand on it (nearest finger 111205 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble14 moves 14.6 cm with no hand on it (nearest finger 111217 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble15 moves 14.2 cm with no hand on it (nearest finger 111213 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble2 moves 23.1 cm with no hand on it (nearest finger 111342 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble3 moves 4.4 cm with no hand on it (nearest finger 111253 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble4 moves 10.3 cm with no hand on it (nearest finger 111115 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble5 moves 16.3 cm with no hand on it (nearest finger 111142 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble6 moves 17.8 cm with no hand on it (nearest finger 111220 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble7 moves 22.9 cm with no hand on it (nearest finger 111245 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble8 moves 7.2 cm with no hand on it (nearest finger 111133 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble9 moves 15.6 cm with no hand on it (nearest finger 111164 cm)"
+   ]
+  ],
+  "799": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble0 moves 18.7 cm with no hand on it (nearest finger 111152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble1 moves 14.5 cm with no hand on it (nearest finger 111338 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble10 moves 15.3 cm with no hand on it (nearest finger 111136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble11 moves 20.3 cm with no hand on it (nearest finger 111303 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble12 moves 21.0 cm with no hand on it (nearest finger 111235 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble13 moves 17.4 cm with no hand on it (nearest finger 111206 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble14 moves 7.1 cm with no hand on it (nearest finger 111219 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble15 moves 17.4 cm with no hand on it (nearest finger 111214 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble2 moves 8.9 cm with no hand on it (nearest finger 111343 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble3 moves 13.4 cm with no hand on it (nearest finger 111254 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble4 moves 15.6 cm with no hand on it (nearest finger 111115 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble5 moves 15.9 cm with no hand on it (nearest finger 111143 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble6 moves 16.1 cm with no hand on it (nearest finger 111221 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble7 moves 14.1 cm with no hand on it (nearest finger 111246 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble8 moves 20.3 cm with no hand on it (nearest finger 111134 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble9 moves 19.4 cm with no hand on it (nearest finger 111165 cm)"
+   ]
+  ],
+  "805": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble0 moves 14.8 cm with no hand on it (nearest finger 111153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble1 moves 16.3 cm with no hand on it (nearest finger 111339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble10 moves 22.0 cm with no hand on it (nearest finger 111138 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble11 moves 21.7 cm with no hand on it (nearest finger 111305 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble12 moves 14.3 cm with no hand on it (nearest finger 111236 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble13 moves 14.3 cm with no hand on it (nearest finger 111207 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble14 moves 4.9 cm with no hand on it (nearest finger 111222 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble15 moves 14.3 cm with no hand on it (nearest finger 111215 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble2 moves 7.5 cm with no hand on it (nearest finger 111347 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble3 moves 16.9 cm with no hand on it (nearest finger 111255 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble4 moves 15.7 cm with no hand on it (nearest finger 111116 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble5 moves 9.7 cm with no hand on it (nearest finger 111145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble6 moves 7.4 cm with no hand on it (nearest finger 111223 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble7 moves 4.9 cm with no hand on it (nearest finger 111249 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble8 moves 20.3 cm with no hand on it (nearest finger 111135 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble9 moves 14.2 cm with no hand on it (nearest finger 111166 cm)"
+   ]
+  ],
+  "811": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble0 moves 4.1 cm with no hand on it (nearest finger 111155 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble1 moves 12.7 cm with no hand on it (nearest finger 111340 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble10 moves 15.4 cm with no hand on it (nearest finger 111139 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble11 moves 8.2 cm with no hand on it (nearest finger 111306 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble12 moves 3.6 cm with no hand on it (nearest finger 111239 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble13 moves 5.2 cm with no hand on it (nearest finger 111208 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble14 moves 11.7 cm with no hand on it (nearest finger 111227 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble15 moves 5.2 cm with no hand on it (nearest finger 111216 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble2 moves 13.1 cm with no hand on it (nearest finger 111352 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble3 moves 14.4 cm with no hand on it (nearest finger 111257 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble4 moves 10.5 cm with no hand on it (nearest finger 111118 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble5 moves 3.7 cm with no hand on it (nearest finger 111147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble6 moves 6.2 cm with no hand on it (nearest finger 111226 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble7 moves 11.7 cm with no hand on it (nearest finger 111254 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble8 moves 7.6 cm with no hand on it (nearest finger 111136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble9 moves 3.3 cm with no hand on it (nearest finger 111167 cm)"
+   ]
+  ],
+  "817": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble0 moves 8.5 cm with no hand on it (nearest finger 111159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble1 moves 4.2 cm with no hand on it (nearest finger 111339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble10 moves 2.8 cm with no hand on it (nearest finger 111140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble11 moves 7.2 cm with no hand on it (nearest finger 111310 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble12 moves 10.8 cm with no hand on it (nearest finger 111244 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble13 moves 7.2 cm with no hand on it (nearest finger 111212 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble14 moves 14.3 cm with no hand on it (nearest finger 111230 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble15 moves 7.2 cm with no hand on it (nearest finger 111220 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble2 moves 14.1 cm with no hand on it (nearest finger 111355 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble3 moves 6.2 cm with no hand on it (nearest finger 111256 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble4 moves 2.3 cm with no hand on it (nearest finger 111118 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble5 moves 10.8 cm with no hand on it (nearest finger 111152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble6 moves 12.5 cm with no hand on it (nearest finger 111231 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble7 moves 14.3 cm with no hand on it (nearest finger 111258 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble8 moves 7.2 cm with no hand on it (nearest finger 111141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble9 moves 9.7 cm with no hand on it (nearest finger 111173 cm)"
+   ]
+  ],
+  "823": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble0 moves 13.4 cm with no hand on it (nearest finger 111163 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble1 moves 1.4 cm with no hand on it (nearest finger 111341 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble10 moves 9.2 cm with no hand on it (nearest finger 111145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble11 moves 12.8 cm with no hand on it (nearest finger 111315 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble12 moves 14.2 cm with no hand on it (nearest finger 111248 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble13 moves 12.8 cm with no hand on it (nearest finger 111217 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble14 moves 12.1 cm with no hand on it (nearest finger 111234 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble15 moves 12.8 cm with no hand on it (nearest finger 111225 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble2 moves 10.6 cm with no hand on it (nearest finger 111358 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble3 moves 1.0 cm with no hand on it (nearest finger 111257 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble4 moves 7.2 cm with no hand on it (nearest finger 111122 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble5 moves 14.2 cm with no hand on it (nearest finger 111156 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble6 moves 14.3 cm with no hand on it (nearest finger 111235 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble7 moves 12.1 cm with no hand on it (nearest finger 111261 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble8 moves 12.8 cm with no hand on it (nearest finger 111145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble9 moves 13.9 cm with no hand on it (nearest finger 111177 cm)"
+   ]
+  ],
+  "829": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble0 moves 14.0 cm with no hand on it (nearest finger 111167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble1 moves 7.1 cm with no hand on it (nearest finger 111344 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble10 moves 13.7 cm with no hand on it (nearest finger 111149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble11 moves 14.3 cm with no hand on it (nearest finger 111318 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble12 moves 12.9 cm with no hand on it (nearest finger 111251 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble13 moves 14.3 cm with no hand on it (nearest finger 111221 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble14 moves 6.9 cm with no hand on it (nearest finger 111236 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble15 moves 14.3 cm with no hand on it (nearest finger 111229 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble2 moves 5.5 cm with no hand on it (nearest finger 111360 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble3 moves 5.8 cm with no hand on it (nearest finger 111260 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble4 moves 12.6 cm with no hand on it (nearest finger 111126 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble5 moves 12.9 cm with no hand on it (nearest finger 111159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble6 moves 11.3 cm with no hand on it (nearest finger 111238 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble7 moves 6.9 cm with no hand on it (nearest finger 111263 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble8 moves 14.3 cm with no hand on it (nearest finger 111149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble9 moves 13.5 cm with no hand on it (nearest finger 111181 cm)"
+   ]
+  ],
+  "835": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble0 moves 10.6 cm with no hand on it (nearest finger 111170 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble1 moves 17.8 cm with no hand on it (nearest finger 111349 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble10 moves 15.6 cm with no hand on it (nearest finger 111154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble11 moves 11.8 cm with no hand on it (nearest finger 111322 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble12 moves 8.3 cm with no hand on it (nearest finger 111254 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble13 moves 11.8 cm with no hand on it (nearest finger 111224 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble14 moves 3.2 cm with no hand on it (nearest finger 111237 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble15 moves 11.8 cm with no hand on it (nearest finger 111232 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble2 moves 2.3 cm with no hand on it (nearest finger 111361 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble3 moves 15.7 cm with no hand on it (nearest finger 111265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble4 moves 16.7 cm with no hand on it (nearest finger 111131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble5 moves 8.3 cm with no hand on it (nearest finger 111162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble6 moves 6.4 cm with no hand on it (nearest finger 111240 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble7 moves 3.2 cm with no hand on it (nearest finger 111265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble8 moves 11.8 cm with no hand on it (nearest finger 111152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Bubble9 moves 9.4 cm with no hand on it (nearest finger 111183 cm)"
+   ]
+  ],
+  "841": [
+   [
+    "BACKHEAD",
+    "BurB"
+   ],
+   [
+    "CAMJUMP",
+    "camera switch CAM_12 -> CAM_13"
+   ]
+  ],
+  "943": [
+   [
+    "BACKHEAD",
+    "BurB"
+   ]
+  ],
+  "1105": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 572.5 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "ATTACH",
+    "Worker_HardHat is 5.3 cm off Worker's skin (median)"
+   ]
+  ],
+  "1111": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 7.0 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "1117": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 6.9 cm with no hand on it (nearest finger 65 cm)"
+   ]
+  ],
+  "1123": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 6.8 cm with no hand on it (nearest finger 65 cm)"
+   ]
+  ],
+  "1129": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 7.0 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "ATTACH",
+    "Worker_HardHat is 5.3 cm off Worker's skin (median)"
+   ]
+  ],
+  "1135": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 7.1 cm with no hand on it (nearest finger 71 cm)"
+   ]
+  ],
+  "1141": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 7.0 cm with no hand on it (nearest finger 69 cm)"
+   ]
+  ],
+  "1147": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 6.9 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "1153": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 3.5 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "ATTACH",
+    "Worker_HardHat is 5.3 cm off Worker's skin (median)"
+   ]
+  ],
+  "1159": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1165": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1171": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "camera switch CAM_15 -> CAM_16"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 359.9 cm with no hand on it (nearest finger 66 cm)"
+   ]
+  ],
+  "1177": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 5.3 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "ATTACH",
+    "Worker_HardHat is 5.3 cm off Worker's skin (median)"
+   ]
+  ],
+  "1183": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 5.2 cm with no hand on it (nearest finger 63 cm)"
+   ]
+  ],
+  "1189": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 5.0 cm with no hand on it (nearest finger 62 cm)"
+   ]
+  ],
+  "1195": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 4.6 cm with no hand on it (nearest finger 62 cm)"
+   ]
+  ],
+  "1201": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 4.2 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "ATTACH",
+    "Worker_HardHat is 5.3 cm off Worker's skin (median)"
+   ]
+  ],
+  "1207": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 3.6 cm with no hand on it (nearest finger 61 cm)"
+   ]
+  ],
+  "1213": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 3.0 cm with no hand on it (nearest finger 61 cm)"
+   ]
+  ],
+  "1219": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 2.2 cm with no hand on it (nearest finger 61 cm)"
+   ]
+  ],
+  "1225": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 1.4 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "ATTACH",
+    "Worker_HardHat is 5.3 cm off Worker's skin (median)"
+   ]
+  ],
+  "1231": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 1.1 cm with no hand on it (nearest finger 61 cm)"
+   ]
+  ],
+  "1237": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 0.9 cm with no hand on it (nearest finger 61 cm)"
+   ]
+  ],
+  "1243": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 0.6 cm with no hand on it (nearest finger 61 cm)"
+   ]
+  ],
+  "1249": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "Worker_HardHat is 5.3 cm off Worker's skin (median)"
+   ]
+  ],
+  "1255": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1261": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1267": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1273": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "Worker_HardHat is 5.3 cm off Worker's skin (median)"
+   ]
+  ],
+  "1663": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1669": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1675": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1681": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1687": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1693": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1699": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1705": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1711": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1717": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1723": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1729": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1735": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1741": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1747": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1753": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1759": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1765": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1771": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1777": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1783": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1789": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1795": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1801": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1807": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1813": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1819": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1825": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1831": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1837": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1843": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1849": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1855": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1861": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1867": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1873": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1879": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1885": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1891": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1897": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1903": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1909": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1915": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1921": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1927": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1933": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1939": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1945": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1951": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1957": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1963": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1969": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1975": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1981": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1987": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1993": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1999": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2005": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2011": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2017": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "camera switch CAM_21 -> CAM_22"
+   ]
+  ],
+  "2023": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2029": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2035": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2041": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2047": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2053": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2059": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2065": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2071": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2077": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2083": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2089": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2095": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2101": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2107": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2113": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2119": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2125": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2131": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2137": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2143": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2149": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2155": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2161": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2167": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2173": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2179": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2185": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "90": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_01 -> CAM_02"
+   ]
+  ],
+  "158": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_02 -> CAM_03"
+   ]
+  ],
+  "240": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_03 -> CAM_04"
+   ]
+  ],
+  "323": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_04 -> CAM_05"
+   ]
+  ],
+  "416": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_05 -> CAM_07"
+   ]
+  ],
+  "539": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_07 -> CAM_10"
+   ]
+  ],
+  "684": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_10 -> CAM_11"
+   ]
+  ],
+  "777": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_11 -> CAM_12"
+   ]
+  ],
+  "945": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_13 -> CAM_14"
+   ]
+  ],
+  "1104": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_14 -> CAM_15"
+   ]
+  ],
+  "1279": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_16 -> CAM_17"
+   ]
+  ],
+  "1376": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_17 -> CAM_18"
+   ]
+  ],
+  "1523": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_18 -> CAM_19"
+   ]
+  ],
+  "1658": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_19 -> CAM_20"
+   ]
+  ],
+  "1832": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_20 -> CAM_21"
+   ]
+  ],
+  "2117": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_22 -> CAM_23"
+   ]
+  ],
+  "547": [
+   [
+    "PROPMOVE",
+    "Leaf10 moves 0.6 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf29 moves 0.9 cm with no hand on it (nearest finger 79 cm)"
+   ]
+  ],
+  "553": [
+   [
+    "PROPMOVE",
+    "Leaf10 moves 1.6 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf17 moves 1.9 cm with no hand on it (nearest finger 109 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf21 moves 0.7 cm with no hand on it (nearest finger 96 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf29 moves 2.1 cm with no hand on it (nearest finger 78 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf3 moves 1.0 cm with no hand on it (nearest finger 90 cm)"
+   ]
+  ],
+  "559": [
+   [
+    "PROPMOVE",
+    "Leaf10 moves 2.5 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf17 moves 3.2 cm with no hand on it (nearest finger 108 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf21 moves 1.7 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf23 moves 1.1 cm with no hand on it (nearest finger 105 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf28 moves 1.0 cm with no hand on it (nearest finger 92 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf29 moves 3.2 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf3 moves 2.4 cm with no hand on it (nearest finger 89 cm)"
+   ]
+  ],
+  "565": [
+   [
+    "PROPMOVE",
+    "Leaf10 moves 3.3 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf17 moves 4.3 cm with no hand on it (nearest finger 106 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf21 moves 2.6 cm with no hand on it (nearest finger 94 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf23 moves 3.0 cm with no hand on it (nearest finger 104 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf28 moves 2.1 cm with no hand on it (nearest finger 91 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf29 moves 4.1 cm with no hand on it (nearest finger 75 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf3 moves 3.5 cm with no hand on it (nearest finger 88 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf41 moves 1.9 cm with no hand on it (nearest finger 78 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf5 moves 1.6 cm with no hand on it (nearest finger 150 cm)"
+   ]
+  ],
+  "571": [
+   [
+    "PROPMOVE",
+    "Leaf10 moves 3.9 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf17 moves 5.2 cm with no hand on it (nearest finger 105 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf19 moves 2.0 cm with no hand on it (nearest finger 126 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf21 moves 3.3 cm with no hand on it (nearest finger 93 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf23 moves 4.5 cm with no hand on it (nearest finger 103 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf28 moves 3.0 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf29 moves 4.8 cm with no hand on it (nearest finger 74 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf3 moves 4.4 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf41 moves 3.3 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf5 moves 3.6 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf6 moves 1.1 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf8 moves 0.6 cm with no hand on it (nearest finger 75 cm)"
+   ]
+  ],
+  "577": [
+   [
+    "PROPMOVE",
+    "Leaf0 moves 0.7 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf10 moves 4.4 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf17 moves 5.8 cm with no hand on it (nearest finger 104 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf19 moves 3.5 cm with no hand on it (nearest finger 125 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf21 moves 4.0 cm with no hand on it (nearest finger 92 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf23 moves 5.8 cm with no hand on it (nearest finger 101 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf28 moves 3.8 cm with no hand on it (nearest finger 89 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf29 moves 5.3 cm with no hand on it (nearest finger 72 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf3 moves 5.2 cm with no hand on it (nearest finger 85 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf40 moves 1.6 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf41 moves 4.5 cm with no hand on it (nearest finger 75 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf43 moves 0.7 cm with no hand on it (nearest finger 74 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf5 moves 5.2 cm with no hand on it (nearest finger 148 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf6 moves 2.2 cm with no hand on it (nearest finger 89 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf8 moves 2.0 cm with no hand on it (nearest finger 75 cm)"
+   ]
+  ],
+  "583": [
+   [
+    "PROPMOVE",
+    "Leaf0 moves 2.5 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf10 moves 4.8 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf11 moves 0.9 cm with no hand on it (nearest finger 170 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf17 moves 6.2 cm with no hand on it (nearest finger 103 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf19 moves 4.6 cm with no hand on it (nearest finger 124 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf2 moves 1.4 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf21 moves 4.4 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf23 moves 6.6 cm with no hand on it (nearest finger 100 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf24 moves 2.3 cm with no hand on it (nearest finger 130 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf28 moves 4.4 cm with no hand on it (nearest finger 88 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf29 moves 5.6 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf3 moves 5.7 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf32 moves 1.3 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf33 moves 2.0 cm with no hand on it (nearest finger 100 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf4 moves 2.1 cm with no hand on it (nearest finger 101 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf40 moves 3.3 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf41 moves 5.3 cm with no hand on it (nearest finger 73 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf43 moves 2.3 cm with no hand on it (nearest finger 73 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf5 moves 6.4 cm with no hand on it (nearest finger 148 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf6 moves 3.0 cm with no hand on it (nearest finger 88 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf8 moves 3.3 cm with no hand on it (nearest finger 74 cm)"
+   ]
+  ],
+  "589": [
+   [
+    "PROPMOVE",
+    "Leaf0 moves 4.0 cm with no hand on it (nearest finger 48 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf10 moves 5.1 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf11 moves 2.5 cm with no hand on it (nearest finger 169 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf17 moves 6.4 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf19 moves 5.5 cm with no hand on it (nearest finger 123 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf2 moves 3.2 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf21 moves 4.8 cm with no hand on it (nearest finger 89 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf23 moves 7.2 cm with no hand on it (nearest finger 99 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf24 moves 4.1 cm with no hand on it (nearest finger 129 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf28 moves 4.9 cm with no hand on it (nearest finger 87 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf29 moves 5.8 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf3 moves 6.0 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf32 moves 2.6 cm with no hand on it (nearest finger 75 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf33 moves 4.0 cm with no hand on it (nearest finger 99 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf4 moves 3.8 cm with no hand on it (nearest finger 100 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf40 moves 4.7 cm with no hand on it (nearest finger 139 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf41 moves 6.0 cm with no hand on it (nearest finger 72 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf43 moves 3.8 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf5 moves 7.2 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf6 moves 3.8 cm with no hand on it (nearest finger 87 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf8 moves 4.3 cm with no hand on it (nearest finger 72 cm)"
+   ]
+  ],
+  "595": [
+   [
+    "PROPMOVE",
+    "Leaf0 moves 5.3 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf10 moves 5.2 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf11 moves 3.9 cm with no hand on it (nearest finger 169 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf13 moves 0.7 cm with no hand on it (nearest finger 97 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf15 moves 0.9 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf17 moves 6.3 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf19 moves 6.2 cm with no hand on it (nearest finger 122 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf2 moves 4.7 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf21 moves 5.0 cm with no hand on it (nearest finger 88 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf23 moves 7.4 cm with no hand on it (nearest finger 99 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf24 moves 5.6 cm with no hand on it (nearest finger 127 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf25 moves 0.8 cm with no hand on it (nearest finger 78 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf27 moves 1.9 cm with no hand on it (nearest finger 89 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf28 moves 5.2 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf29 moves 5.8 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf3 moves 6.1 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf32 moves 3.8 cm with no hand on it (nearest finger 74 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf33 moves 5.6 cm with no hand on it (nearest finger 98 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf4 moves 5.2 cm with no hand on it (nearest finger 98 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf40 moves 5.8 cm with no hand on it (nearest finger 138 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf41 moves 6.4 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf43 moves 4.9 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf5 moves 7.6 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf6 moves 4.4 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf8 moves 5.1 cm with no hand on it (nearest finger 71 cm)"
+   ]
+  ],
+  "601": [
+   [
+    "PROPMOVE",
+    "Leaf0 moves 6.1 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf10 moves 5.2 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf11 moves 4.9 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf13 moves 1.4 cm with no hand on it (nearest finger 97 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf14 moves 0.8 cm with no hand on it (nearest finger 155 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf15 moves 2.5 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf17 moves 6.0 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf18 moves 1.8 cm with no hand on it (nearest finger 75 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf19 moves 6.6 cm with no hand on it (nearest finger 122 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf2 moves 5.8 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf21 moves 5.1 cm with no hand on it (nearest finger 87 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf23 moves 7.2 cm with no hand on it (nearest finger 99 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf24 moves 6.7 cm with no hand on it (nearest finger 126 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf25 moves 2.3 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf27 moves 3.2 cm with no hand on it (nearest finger 88 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf28 moves 5.4 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf29 moves 5.6 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf3 moves 6.0 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf32 moves 4.7 cm with no hand on it (nearest finger 72 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf33 moves 6.8 cm with no hand on it (nearest finger 96 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf4 moves 6.2 cm with no hand on it (nearest finger 96 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf40 moves 6.5 cm with no hand on it (nearest finger 137 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf41 moves 6.5 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf42 moves 0.7 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf43 moves 5.8 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf5 moves 7.6 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf6 moves 4.8 cm with no hand on it (nearest finger 85 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf8 moves 5.7 cm with no hand on it (nearest finger 69 cm)"
+   ]
+  ],
+  "607": [
+   [
+    "PROPMOVE",
+    "Leaf0 moves 6.7 cm with no hand on it (nearest finger 40 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf10 moves 5.1 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf11 moves 5.8 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf13 moves 2.0 cm with no hand on it (nearest finger 96 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf14 moves 1.6 cm with no hand on it (nearest finger 155 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf15 moves 3.8 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf17 moves 5.4 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf18 moves 3.4 cm with no hand on it (nearest finger 73 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf19 moves 6.7 cm with no hand on it (nearest finger 122 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf2 moves 6.6 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf21 moves 5.1 cm with no hand on it (nearest finger 87 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf23 moves 6.8 cm with no hand on it (nearest finger 99 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf24 moves 7.3 cm with no hand on it (nearest finger 125 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf25 moves 3.6 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf26 moves 1.2 cm with no hand on it (nearest finger 101 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf27 moves 4.3 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf28 moves 5.5 cm with no hand on it (nearest finger 85 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf29 moves 5.3 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf3 moves 5.7 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf31 moves 0.8 cm with no hand on it (nearest finger 78 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf32 moves 5.4 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf33 moves 7.5 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf37 moves 0.9 cm with no hand on it (nearest finger 117 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf4 moves 6.9 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf40 moves 6.9 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf41 moves 6.4 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf42 moves 1.4 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf43 moves 6.4 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf5 moves 7.2 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf6 moves 5.1 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf8 moves 6.1 cm with no hand on it (nearest finger 69 cm)"
+   ]
+  ],
+  "613": [
+   [
+    "PROPMOVE",
+    "Leaf0 moves 6.9 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf10 moves 4.8 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf11 moves 6.3 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf13 moves 2.6 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf14 moves 2.3 cm with no hand on it (nearest finger 154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf15 moves 4.9 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf17 moves 4.6 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf18 moves 4.7 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf19 moves 6.5 cm with no hand on it (nearest finger 122 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf2 moves 7.1 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf21 moves 5.0 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf22 moves 1.4 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf23 moves 5.9 cm with no hand on it (nearest finger 99 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf24 moves 7.6 cm with no hand on it (nearest finger 124 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf25 moves 4.6 cm with no hand on it (nearest finger 74 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf26 moves 2.0 cm with no hand on it (nearest finger 100 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf27 moves 5.2 cm with no hand on it (nearest finger 85 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf28 moves 5.4 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf29 moves 4.8 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf3 moves 5.2 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf31 moves 1.7 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf32 moves 5.9 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf33 moves 7.8 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf36 moves 0.6 cm with no hand on it (nearest finger 118 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf37 moves 1.7 cm with no hand on it (nearest finger 117 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf4 moves 7.2 cm with no hand on it (nearest finger 94 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf40 moves 7.0 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf41 moves 6.1 cm with no hand on it (nearest finger 72 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf42 moves 2.1 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf43 moves 6.8 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf5 moves 6.4 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf6 moves 5.3 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf8 moves 6.2 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf9 moves 1.0 cm with no hand on it (nearest finger 98 cm)"
+   ]
+  ],
+  "619": [
+   [
+    "PROPMOVE",
+    "Leaf0 moves 6.9 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf10 moves 4.4 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf11 moves 6.6 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf13 moves 3.1 cm with no hand on it (nearest finger 94 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf14 moves 2.9 cm with no hand on it (nearest finger 154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf15 moves 5.7 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf17 moves 3.6 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf18 moves 5.7 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf19 moves 6.1 cm with no hand on it (nearest finger 123 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf2 moves 7.2 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf21 moves 4.7 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf22 moves 2.3 cm with no hand on it (nearest finger 135 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf23 moves 4.8 cm with no hand on it (nearest finger 99 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf24 moves 7.5 cm with no hand on it (nearest finger 124 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf25 moves 5.4 cm with no hand on it (nearest finger 72 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf26 moves 2.7 cm with no hand on it (nearest finger 99 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf27 moves 5.9 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf28 moves 5.1 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf29 moves 4.1 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf3 moves 4.4 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf30 moves 1.5 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf31 moves 2.5 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf32 moves 6.1 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf33 moves 7.7 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf36 moves 1.7 cm with no hand on it (nearest finger 117 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf37 moves 2.5 cm with no hand on it (nearest finger 116 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf4 moves 7.2 cm with no hand on it (nearest finger 93 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf40 moves 6.7 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf41 moves 5.5 cm with no hand on it (nearest finger 72 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf42 moves 2.7 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf43 moves 6.8 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf5 moves 5.2 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf6 moves 5.3 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf8 moves 6.2 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf9 moves 1.9 cm with no hand on it (nearest finger 97 cm)"
+   ]
+  ],
+  "625": [
+   [
+    "PROPMOVE",
+    "Leaf0 moves 6.5 cm with no hand on it (nearest finger 40 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf1 moves 0.6 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf10 moves 3.9 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf11 moves 6.6 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf13 moves 3.6 cm with no hand on it (nearest finger 93 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf14 moves 3.5 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf15 moves 6.3 cm with no hand on it (nearest finger 53 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf17 moves 2.3 cm with no hand on it (nearest finger 103 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf18 moves 6.4 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf19 moves 5.4 cm with no hand on it (nearest finger 122 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf2 moves 7.0 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf21 moves 4.3 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf22 moves 3.1 cm with no hand on it (nearest finger 135 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf23 moves 3.3 cm with no hand on it (nearest finger 99 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf24 moves 6.9 cm with no hand on it (nearest finger 124 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf25 moves 5.9 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf26 moves 3.3 cm with no hand on it (nearest finger 98 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf27 moves 6.3 cm with no hand on it (nearest finger 82 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf28 moves 4.7 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf29 moves 3.2 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf3 moves 3.5 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf30 moves 2.6 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf31 moves 3.2 cm with no hand on it (nearest finger 75 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf32 moves 6.2 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf33 moves 7.2 cm with no hand on it (nearest finger 96 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf34 moves 1.1 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf36 moves 2.7 cm with no hand on it (nearest finger 117 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf37 moves 3.2 cm with no hand on it (nearest finger 115 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf4 moves 6.9 cm with no hand on it (nearest finger 93 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf40 moves 6.2 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf41 moves 4.6 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf42 moves 3.3 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf43 moves 6.6 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf44 moves 1.8 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf5 moves 3.6 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf6 moves 5.2 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf7 moves 1.2 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf8 moves 5.9 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf9 moves 2.8 cm with no hand on it (nearest finger 96 cm)"
+   ]
+  ],
+  "631": [
+   [
+    "PROPMOVE",
+    "Leaf0 moves 5.7 cm with no hand on it (nearest finger 40 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf1 moves 2.1 cm with no hand on it (nearest finger 135 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf10 moves 3.3 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf11 moves 6.4 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf13 moves 4.0 cm with no hand on it (nearest finger 92 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf14 moves 4.0 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf15 moves 6.5 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf16 moves 0.7 cm with no hand on it (nearest finger 72 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf17 moves 0.8 cm with no hand on it (nearest finger 103 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf18 moves 6.8 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf19 moves 4.5 cm with no hand on it (nearest finger 122 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf2 moves 6.5 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf20 moves 1.0 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf21 moves 3.8 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf22 moves 3.8 cm with no hand on it (nearest finger 134 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf23 moves 1.4 cm with no hand on it (nearest finger 99 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf24 moves 6.0 cm with no hand on it (nearest finger 124 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf25 moves 6.2 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf26 moves 3.9 cm with no hand on it (nearest finger 97 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf27 moves 6.5 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf28 moves 4.1 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf29 moves 2.1 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf3 moves 2.4 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf30 moves 3.5 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf31 moves 3.9 cm with no hand on it (nearest finger 74 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf32 moves 6.0 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf33 moves 6.2 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf34 moves 2.5 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf36 moves 3.6 cm with no hand on it (nearest finger 116 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf37 moves 3.8 cm with no hand on it (nearest finger 114 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf38 moves 1.7 cm with no hand on it (nearest finger 93 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf4 moves 6.2 cm with no hand on it (nearest finger 93 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf40 moves 5.3 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf41 moves 3.5 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf42 moves 3.9 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf43 moves 6.1 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf44 moves 3.0 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf5 moves 1.6 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf6 moves 5.0 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf7 moves 2.6 cm with no hand on it (nearest finger 48 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf8 moves 5.3 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf9 moves 3.6 cm with no hand on it (nearest finger 95 cm)"
+   ]
+  ],
+  "637": [
+   [
+    "PROPMOVE",
+    "Leaf0 moves 4.7 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf1 moves 3.5 cm with no hand on it (nearest finger 135 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf10 moves 2.5 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf11 moves 5.9 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf13 moves 4.4 cm with no hand on it (nearest finger 91 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf14 moves 4.5 cm with no hand on it (nearest finger 152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf15 moves 6.5 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf16 moves 2.6 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf18 moves 7.0 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf19 moves 3.2 cm with no hand on it (nearest finger 122 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf2 moves 5.6 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf20 moves 2.8 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf21 moves 3.1 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf22 moves 4.4 cm with no hand on it (nearest finger 133 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf24 moves 4.7 cm with no hand on it (nearest finger 124 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf25 moves 6.3 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf26 moves 4.4 cm with no hand on it (nearest finger 96 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf27 moves 6.4 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf28 moves 3.4 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf29 moves 0.9 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf3 moves 1.0 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf30 moves 4.3 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf31 moves 4.5 cm with no hand on it (nearest finger 73 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf32 moves 5.7 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf33 moves 4.9 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf34 moves 3.8 cm with no hand on it (nearest finger 101 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf35 moves 2.1 cm with no hand on it (nearest finger 88 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf36 moves 4.4 cm with no hand on it (nearest finger 115 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf37 moves 4.4 cm with no hand on it (nearest finger 113 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf38 moves 3.3 cm with no hand on it (nearest finger 92 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf4 moves 5.2 cm with no hand on it (nearest finger 93 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf40 moves 4.1 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf41 moves 2.2 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf42 moves 4.3 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf43 moves 5.3 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf44 moves 4.1 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf6 moves 4.6 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf7 moves 3.8 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf8 moves 4.6 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf9 moves 4.3 cm with no hand on it (nearest finger 94 cm)"
+   ]
+  ],
+  "643": [
+   [
+    "PROPMOVE",
+    "Leaf0 moves 3.3 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf1 moves 4.8 cm with no hand on it (nearest finger 134 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf10 moves 1.6 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf11 moves 5.1 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf13 moves 4.8 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf14 moves 4.9 cm with no hand on it (nearest finger 152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf15 moves 6.3 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf16 moves 4.2 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf18 moves 6.8 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf19 moves 1.7 cm with no hand on it (nearest finger 122 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf2 moves 4.4 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf20 moves 4.5 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf21 moves 2.3 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf22 moves 5.0 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf24 moves 2.9 cm with no hand on it (nearest finger 124 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf25 moves 6.2 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf26 moves 4.9 cm with no hand on it (nearest finger 96 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf27 moves 6.1 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf28 moves 2.6 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf30 moves 5.1 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf31 moves 5.0 cm with no hand on it (nearest finger 72 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf32 moves 5.1 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf33 moves 3.1 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf34 moves 5.0 cm with no hand on it (nearest finger 100 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf35 moves 3.9 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf36 moves 5.2 cm with no hand on it (nearest finger 114 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf37 moves 4.9 cm with no hand on it (nearest finger 113 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf38 moves 4.6 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf4 moves 3.8 cm with no hand on it (nearest finger 94 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf40 moves 2.5 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf41 moves 0.6 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf42 moves 4.7 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf43 moves 4.2 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf44 moves 5.1 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf6 moves 4.1 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf7 moves 4.9 cm with no hand on it (nearest finger 43 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf8 moves 3.6 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf9 moves 4.9 cm with no hand on it (nearest finger 93 cm)"
+   ]
+  ],
+  "649": [
+   [
+    "PROPMOVE",
+    "Leaf0 moves 1.6 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf1 moves 5.9 cm with no hand on it (nearest finger 133 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf10 moves 0.6 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf11 moves 4.1 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf13 moves 5.1 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf14 moves 5.3 cm with no hand on it (nearest finger 152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf15 moves 5.7 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf16 moves 5.7 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf18 moves 6.4 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf2 moves 2.9 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf20 moves 5.9 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf21 moves 1.4 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf22 moves 5.5 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf24 moves 0.8 cm with no hand on it (nearest finger 124 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf25 moves 5.8 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf26 moves 5.3 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf27 moves 5.6 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf28 moves 1.6 cm with no hand on it (nearest finger 87 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf30 moves 5.7 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf31 moves 5.5 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf32 moves 4.3 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf33 moves 0.9 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf34 moves 6.0 cm with no hand on it (nearest finger 98 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf35 moves 5.6 cm with no hand on it (nearest finger 85 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf36 moves 5.8 cm with no hand on it (nearest finger 113 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf37 moves 5.3 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf38 moves 5.8 cm with no hand on it (nearest finger 88 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf4 moves 2.1 cm with no hand on it (nearest finger 94 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf40 moves 0.7 cm with no hand on it (nearest finger 137 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf42 moves 5.1 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf43 moves 2.9 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf44 moves 5.9 cm with no hand on it (nearest finger 79 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf6 moves 3.4 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf7 moves 5.9 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf8 moves 2.5 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf9 moves 5.4 cm with no hand on it (nearest finger 92 cm)"
+   ]
+  ],
+  "655": [
+   [
+    "PROPMOVE",
+    "Leaf1 moves 6.8 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf11 moves 2.8 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf13 moves 5.4 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf14 moves 5.6 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf15 moves 4.9 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf16 moves 6.9 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf18 moves 5.7 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf2 moves 1.0 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf20 moves 7.1 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf22 moves 5.9 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf25 moves 5.1 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf26 moves 5.6 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf27 moves 4.8 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf30 moves 6.3 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf31 moves 5.9 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf32 moves 3.2 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf34 moves 6.9 cm with no hand on it (nearest finger 98 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf35 moves 6.9 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf36 moves 6.3 cm with no hand on it (nearest finger 113 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf37 moves 5.7 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf38 moves 6.9 cm with no hand on it (nearest finger 87 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf42 moves 5.4 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf43 moves 1.2 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf44 moves 6.7 cm with no hand on it (nearest finger 78 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf6 moves 2.6 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf7 moves 6.7 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf8 moves 1.1 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf9 moves 5.9 cm with no hand on it (nearest finger 91 cm)"
+   ]
+  ],
+  "661": [
+   [
+    "PROPMOVE",
+    "Leaf1 moves 7.6 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf11 moves 1.2 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf13 moves 5.6 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf14 moves 5.8 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf15 moves 3.8 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf16 moves 7.9 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf18 moves 4.7 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf20 moves 8.1 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf22 moves 6.2 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf25 moves 4.3 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf26 moves 5.9 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf27 moves 3.8 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf30 moves 6.7 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf31 moves 6.2 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf32 moves 2.0 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf34 moves 7.6 cm with no hand on it (nearest finger 97 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf35 moves 8.0 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf36 moves 6.8 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf37 moves 6.0 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf38 moves 7.7 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf42 moves 5.7 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf44 moves 7.3 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf6 moves 1.7 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf7 moves 7.3 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf9 moves 6.3 cm with no hand on it (nearest finger 91 cm)"
+   ]
+  ],
+  "667": [
+   [
+    "PROPMOVE",
+    "Leaf1 moves 8.2 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf13 moves 5.7 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf14 moves 6.1 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf15 moves 2.5 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf16 moves 8.7 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf18 moves 3.4 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf20 moves 8.9 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf22 moves 6.5 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf25 moves 3.2 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf26 moves 6.1 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf27 moves 2.6 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf30 moves 7.1 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf31 moves 6.4 cm with no hand on it (nearest finger 72 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf32 moves 0.5 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf34 moves 8.2 cm with no hand on it (nearest finger 98 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf35 moves 8.9 cm with no hand on it (nearest finger 80 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf36 moves 7.1 cm with no hand on it (nearest finger 113 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf37 moves 6.3 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf38 moves 8.4 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf42 moves 5.9 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf44 moves 7.7 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf6 moves 0.6 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf7 moves 7.8 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf9 moves 6.6 cm with no hand on it (nearest finger 91 cm)"
+   ]
+  ],
+  "673": [
+   [
+    "PROPMOVE",
+    "Leaf1 moves 8.6 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf13 moves 5.9 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf14 moves 6.2 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf15 moves 0.9 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf16 moves 9.3 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf18 moves 1.8 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf20 moves 9.4 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf22 moves 6.7 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf25 moves 1.8 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf26 moves 6.3 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf27 moves 1.1 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf30 moves 7.3 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf31 moves 6.6 cm with no hand on it (nearest finger 72 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf34 moves 8.6 cm with no hand on it (nearest finger 98 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf35 moves 9.6 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf36 moves 7.4 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf37 moves 6.4 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf38 moves 8.8 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf42 moves 6.0 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf44 moves 8.1 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf7 moves 8.2 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf9 moves 6.8 cm with no hand on it (nearest finger 91 cm)"
+   ]
+  ],
+  "679": [
+   [
+    "PROPMOVE",
+    "Leaf1 moves 8.9 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf13 moves 5.9 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf14 moves 6.3 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf16 moves 9.7 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf20 moves 9.8 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf22 moves 6.8 cm with no hand on it (nearest finger 130 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf26 moves 6.4 cm with no hand on it (nearest finger 95 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf30 moves 7.5 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf31 moves 6.7 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf34 moves 8.8 cm with no hand on it (nearest finger 98 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf35 moves 10.0 cm with no hand on it (nearest finger 80 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf36 moves 7.5 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf37 moves 6.5 cm with no hand on it (nearest finger 112 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf38 moves 9.1 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf42 moves 6.1 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf44 moves 8.3 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf7 moves 8.5 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Leaf9 moves 6.9 cm with no hand on it (nearest finger 91 cm)"
+   ]
+  ],
+  "949": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 205834.9 cm with no hand on it (nearest finger 68 cm)"
+   ]
+  ],
+  "955": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 9.8 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "961": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 9.8 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "ATTACH",
+    "Worker_HardHat is 5.3 cm off Worker's skin (median)"
+   ]
+  ],
+  "967": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 10.2 cm with no hand on it (nearest finger 70 cm)"
+   ]
+  ],
+  "973": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 10.0 cm with no hand on it (nearest finger 68 cm)"
+   ]
+  ],
+  "979": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 9.7 cm with no hand on it (nearest finger 60 cm)"
+   ]
+  ],
+  "985": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 9.9 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "ATTACH",
+    "Worker_HardHat is 5.3 cm off Worker's skin (median)"
+   ]
+  ],
+  "991": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 10.0 cm with no hand on it (nearest finger 71 cm)"
+   ]
+  ],
+  "997": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 10.0 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "1003": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 9.7 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "1009": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 10.0 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "ATTACH",
+    "Worker_HardHat is 5.3 cm off Worker's skin (median)"
+   ]
+  ],
+  "1015": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 10.1 cm with no hand on it (nearest finger 69 cm)"
+   ]
+  ],
+  "1021": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 9.9 cm with no hand on it (nearest finger 60 cm)"
+   ]
+  ],
+  "1027": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 9.7 cm with no hand on it (nearest finger 61 cm)"
+   ]
+  ],
+  "1033": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 10.0 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "ATTACH",
+    "Worker_HardHat is 5.3 cm off Worker's skin (median)"
+   ]
+  ],
+  "1039": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 10.0 cm with no hand on it (nearest finger 68 cm)"
+   ]
+  ],
+  "1045": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 9.8 cm with no hand on it (nearest finger 66 cm)"
+   ]
+  ],
+  "1051": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 9.8 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "1057": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 10.1 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "ATTACH",
+    "Worker_HardHat is 5.3 cm off Worker's skin (median)"
+   ]
+  ],
+  "1063": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 10.0 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "1069": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 9.7 cm with no hand on it (nearest finger 60 cm)"
+   ]
+  ],
+  "1075": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 10.0 cm with no hand on it (nearest finger 69 cm)"
+   ]
+  ],
+  "1081": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 10.0 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "ATTACH",
+    "Worker_HardHat is 5.3 cm off Worker's skin (median)"
+   ]
+  ],
+  "1087": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 9.9 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "1093": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 9.7 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "1099": [
+   [
+    "PROPMOVE",
+    "Worker_HardHat moves 10.0 cm with no hand on it (nearest finger 70 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "BACKHEAD": 8,
+  "EMPTY": 143,
+  "CAMJUMP": 19,
+  "PROPMOVE": 744,
+  "ATTACH": 14
+ }
+}
