@@ -286,7 +286,7 @@ def phone_shot(sid, yaw, heads, ear=False):
         sh = H.sh["R"] - H.root_head
         body_hand(H, "R", f, p, yaw, (sh.x + 0.10, sh.y - 0.30, sh.z - 0.17), (0.45, -0.35, 0.82), (0.0, 0.9, 0.35))
         key_hang(H, f, p, yaw, only=("L",))
-    apply_pose(rig, "R", "hold_flat_object", f0); apply_pose(rig, "L", "relaxed", f0); use("Mom", sid)
+    apply_pose(rig, "R", "shield", f0); apply_pose(rig, "L", "relaxed", f0); use("Mom", sid)
     return f0
 @shot("S19")
 def _():
@@ -342,7 +342,7 @@ if PHONE_SHOTS:
     f0 = SH[PHONE_SHOTS[0]]["f0"]; sc.frame_set(f0); rig = CH["Mom"]
     wr, d, a, n, palm = hand_frame(rig, "R")
     zax = d; xax = (-n - d * (-n).dot(d)).normalized(); yax = zax.cross(xax)
-    phone.matrix_world = frame_matrix(xax, yax, zax, palm + n * 0.034 - d * 0.01)
+    phone.matrix_world = frame_matrix(xax, yax, zax, palm + n * 0.03 + d * 0.01)
     attach(phone, rig, "wrist.R", f0)
     key_vis([phone, scr], [W(s) for s in PHONE_SHOTS])
     if "S19" in PHONE_SHOTS:
