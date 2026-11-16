@@ -1,0 +1,2555 @@
+{
+ "frames": {
+  "231": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "233": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "235": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "237": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "239": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "241": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "243": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "245": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "247": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "249": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "251": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "253": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "255": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "257": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "259": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "261": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "263": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "265": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "267": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "269": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "271": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "273": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "275": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "277": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "279": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "281": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "283": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "285": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "287": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "289": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "291": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "293": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "295": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "297": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "307": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "309": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "311": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "313": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "315": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "317": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "319": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "321": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "323": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "325": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "327": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "329": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "331": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "333": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "335": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "337": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "339": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "341": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "343": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "345": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "347": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "349": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "351": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "353": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "355": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "357": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "419": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "421": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "423": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "425": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "427": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "429": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "431": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "WorkerC arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBACK",
+    "WorkerC arm.L reaches 24 cm behind the body"
+   ]
+  ],
+  "433": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "WorkerC arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBACK",
+    "WorkerC arm.L reaches 23 cm behind the body"
+   ]
+  ],
+  "435": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "WorkerC arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "437": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "WorkerC arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "439": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "441": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Gage arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "697": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "699": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "701": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "703": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "705": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "707": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "709": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "711": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "713": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "715": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "717": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "719": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "721": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "723": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "725": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "727": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "729": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "731": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "733": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "735": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "737": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "739": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "741": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "743": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "745": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "747": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "749": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "751": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "753": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "755": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "757": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "759": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "761": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "763": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "765": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "767": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "769": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "771": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "773": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "775": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "777": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "779": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "781": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "783": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "785": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "787": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "789": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "791": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "793": [
+   [
+    "ARMBODY",
+    "Gage arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "961": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "963": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "965": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "967": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "969": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "971": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "973": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "975": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "977": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "979": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "981": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "983": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "985": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "987": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "989": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "991": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "993": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "995": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "997": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "999": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1001": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1003": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1005": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1007": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1009": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1011": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1013": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1015": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1017": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1019": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1021": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1023": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1025": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1027": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1029": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1031": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1033": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1035": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1037": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1039": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1041": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1043": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1045": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1047": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1049": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1051": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1053": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1055": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1057": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1059": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1061": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1063": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1065": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1067": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1069": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1071": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1073": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1075": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1077": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1079": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1081": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1083": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1085": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1087": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1089": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1091": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1093": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1095": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1097": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1099": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1101": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1103": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1105": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1107": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1109": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1111": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1113": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1115": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1117": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1119": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1121": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1123": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1125": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1127": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1129": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1131": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1133": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1135": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1137": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1139": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1141": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1143": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1145": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1147": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1149": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1151": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1153": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1155": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1157": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1159": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1161": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1163": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1165": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1167": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1169": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1171": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1173": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1175": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1177": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1179": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1181": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1183": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1185": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1187": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1189": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1191": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1193": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1195": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1197": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1199": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1201": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1203": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1205": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1207": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1209": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1211": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1213": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1215": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1217": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1219": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1221": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1223": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1225": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1227": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1229": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1231": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1233": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1235": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1237": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1239": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1241": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1243": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1245": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1247": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1249": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1251": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1253": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1255": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1257": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1259": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1261": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1263": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1265": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1267": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1269": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1271": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1273": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1275": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1277": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1279": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1281": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1283": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1285": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1287": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1289": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1291": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1293": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1295": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1297": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1299": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1301": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1303": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1305": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1307": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1309": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1311": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1313": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1315": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1317": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1319": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1321": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1323": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1325": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1327": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1329": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1331": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1333": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1335": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1337": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1339": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1341": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1343": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1345": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1347": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1349": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1351": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1353": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1355": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1357": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1359": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1361": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1363": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1365": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1367": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1369": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1371": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1373": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1375": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1377": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1379": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1381": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1383": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1385": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1387": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1389": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1391": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1393": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1395": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1397": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1399": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1401": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1403": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1405": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1407": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1409": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1411": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1413": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1415": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1417": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1419": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1421": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1423": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1425": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1427": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1429": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1431": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1433": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1435": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1437": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1439": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1441": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1443": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1445": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1447": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1449": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1451": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1453": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1455": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1457": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1459": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1461": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ],
+  "1463": [
+   [
+    "PROPHEAD",
+    "Gage_Pad inside Gage's head/face (33 pts)"
+   ]
+  ]
+ },
+ "counts": {
+  "ARMBODY": 196,
+  "ARMBACK": 2,
+  "PROPHEAD": 252
+ }
+}

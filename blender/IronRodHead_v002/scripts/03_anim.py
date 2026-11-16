@@ -180,7 +180,7 @@ def sit_pose(f, lean=0.0, head=(0, 0), hands="behind", twist=0.0, breath=0.0):
             W = SIT + RzG @ V(-sx * 0.27, 0.24, 0.035)
             G.hand_w(sd, f, W, RzG @ V(-sx * 0.25, 1, -0.15).normalized(), V(0, 0, -1), SIT + RzG @ V(-sx * 0.7, 0.3, 0.45))
         else:                                    # forearm resting on the raised knee
-            W = SIT + RzG @ V(-sx * 0.17, -0.48, 0.47)
+            W = SIT + RzG @ V(-sx * 0.17, -0.46, 0.55)
             G.hand_w(sd, f, W, RzG @ V(0, -1, -0.5).normalized(), RzG @ V(sx * 0.3, 0, -1).normalized(), SIT + RzG @ V(-sx * 0.6, 0.0, 0.5))
 def key_knee(c, sd, f, W):
     n = "Pole_knee." + sd; pb = c.o.pose.bones[n]
@@ -280,7 +280,7 @@ for f in range(S9, SE("S09") + 1, 6):
     for sd, sx in (("L", 1), ("R", -1)):
         ft = WBp + Rz @ V(sx * 0.17, -0.12, 0); WB.use(); WB.H.key_foot(sd, f, WB.a(V(ft.x, ft.y, 0)).to_2d(), WBy)
         key_knee(WB, sd, f, WBp + Rz @ V(sx * 0.3, -1.0, 0.7))
-        W = WBp + Rz @ V(sx * 0.19, -0.40, 0.53)
+        W = WBp + Rz @ V(sx * 0.19, -0.44, 0.61)
         WB.hand_w(sd, f, W, Rz @ V(0, -1, -0.6).normalized(), V(0, 0, -1), WBp + Rz @ V(sx * 0.6, 0.0, 0.9))
 
 # =========================================================================== head bandage (from S11 on), fitted to Gage's head
@@ -400,19 +400,17 @@ for o in KO:
 b0 = KO[0]; L0 = b0.location.copy()
 for f, dx, ry in ((KICK_F + 1, -0.06, 0), (KICK_F + 10, -0.24, 0), (KICK_F + 20, -0.30, 0)):
     b0.location = L0 + V(dx, 0, 0); b0.keyframe_insert("location", frame=f)
-for i, o in enumerate(KO[1:], 1):
-    L1 = o.location.copy(); h = {1: 0.55, 2: 0.5}[i]; w = {1: 0.7, 2: 0.62}[i]
-    d0 = KICK_F + 3 + 4 * i
-    piv = V(L1.x - w / 2 - 0.02, L1.y, L1.z)        # far bottom edge
-    for k in range(0, 31, 3):
-        u = k / 30.0; ang = (90 if i == 1 else 100) * (u ** 1.8)
-        fall = max(0.0, (u - 0.25) / 0.75)
-        R = Matrix.Rotation(R_(-ang), 3, 'Y')
-        cen = piv + R @ (V(L1.x, L1.y, L1.z + h / 2) - piv)
-        cen.z -= (L1.z) * (fall ** 2)
-        cen.x -= 0.45 * fall * (i - 1)
-        cen.z = max(cen.z, w / 2 if ang > 60 else cen.z)
-        o.location = cen - R @ V(0, 0, h / 2); o.rotation_euler = (0, R_(-ang), o.rotation_euler.z)
+# middle + top crate topple as ONE rigid block about the middle crate's far bottom edge (no crate-through-crate),
+# slide clear of the bottom crate first, then drop to the ground
+mid, top = KO[1], KO[2]; L1 = mid.location.copy(); wmid = 0.7
+piv = V(L1.x - wmid / 2 - 0.02, L1.y, L1.z)
+M0 = {o: o.matrix_world.copy() for o in (mid, top)}
+d0 = KICK_F + 7
+for k in range(0, 37, 3):
+    u = min(1.0, k / 30.0); ang = 90 * (u ** 1.8); fall = max(0.0, (u - 0.25) / 0.75)
+    D = Matrix.Translation(piv + V(-0.5 * min(1.0, fall * 2.5), 0, -L1.z * fall ** 2)) @ Matrix.Rotation(R_(-ang), 4, 'Y') @ Matrix.Translation(-piv)
+    for o in (mid, top):
+        o.matrix_world = D @ M0[o]
         o.keyframe_insert("location", frame=d0 + k); o.keyframe_insert("rotation_euler", frame=d0 + k)
 for o in KO:     # back in place for the earlier shots only matters before KICK_F; hold after
     o.keyframe_insert("location", frame=END_FRAME); o.keyframe_insert("rotation_euler", frame=END_FRAME)
@@ -546,7 +544,7 @@ mix = nt.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'; nt.links.new(mul.ou
 if src: nt.links.new(src, mix.inputs['A'])
 else: mix.inputs['A'].default_value = bsdf.inputs['Base Color'].default_value
 mix.inputs['B'].default_value = (1.0, 0.72, 0.04, 1)
-for _f, _c in ((1, (1.0, 0.72, 0.04, 1)), (F("S15", 0), (0.55, 0.22, 1.0, 1))):
+for _f, _c in ((1, (1.0, 0.72, 0.04, 1)), (F("S15", 0) - 1, (1.0, 0.72, 0.04, 1)), (F("S15", 0), (0.55, 0.22, 1.0, 1))):
     mix.inputs['B'].default_value = _c; mix.inputs['B'].keyframe_insert("default_value", frame=_f)
 mul2 = nt.nodes.new('ShaderNodeMath'); mul2.operation = 'MULTIPLY'; nt.links.new(mr.outputs[0], mul2.inputs[0]); nt.links.new(DM.outputs[0], mul2.inputs[1])
 mixd = nt.nodes.new('ShaderNodeMix'); mixd.data_type = 'RGBA'; nt.links.new(mul2.outputs[0], mixd.inputs['Factor'])
@@ -605,9 +603,9 @@ orbit("S08", 20, 45, 1.8, 1.7, 1.5, 1.2, DG + V(0.03, -0.1, 0.35), 35)
 sc.frame_set(F("S09", 100)); hS9 = headw(G, F("S09", 100))
 camera("S09", [(0, V(1.35, 0.75, 1.1), (SIT + WBp) / 2 + V(0, 0, 0.62)), (-1, V(1.55, 0.6, 1.05), (SIT + WBp) / 2 + V(0, 0, 0.6))], lens=28)
 camera("S11", [(0, V(-2.4, 3.9, 1.6), V(-2.6, 6.4, 1.3)), (-1, V(-2.4, 0.1, 1.6), V(-2.6, 2.6, 1.3))], lens=32)
-camera("S12", [(0, CAM12 + V(-0.3, 0, 0), V(2.3, -0.15, 1.2)), (-1, CAM12 + V(0.25, 0.05, -0.02), V(2.3, -0.15, 1.22))], lens=30)
-orbit("S13", 80, 95, 2.4, 2.2, 0.25, 0.2, DG + V(0.0, 0.0, 0.12), 35)
-orbit("S14", 95, 85, 2.1, 1.8, 0.2, 0.18, DG + V(0.0, -0.05, 0.12), 35)
+camera("S12", [(0, CAM12 + V(-0.3, 0, 0), V(2.3, -0.15, 1.2)), (-1, CAM12 + V(0.25, 0.05, -0.02), V(2.3, -0.15, 1.22))], lens=24)
+orbit("S13", -80, -95, 2.4, 2.2, 0.25, 0.2, DG + V(0.0, 0.0, 0.12), 35)
+orbit("S14", -95, -85, 2.1, 1.8, 0.2, 0.18, DG + V(0.0, -0.05, 0.12), 35)
 orbit("S15", -20, 25, 2.1, 2.0, 0.6, 0.5, DG + V(0, 0.05, 0.12), 35)
 orbit("S16", 70, 40, 1.9, 1.8, 0.9, 0.6, DG + V(0, 0.0, 0.12), 35)
 hS18 = headw(G, F("S18", 50))
@@ -616,7 +614,7 @@ camera("S19", [(0, V(-1.6, -11.6, 1.05), V(-2.4, -8.0, 0.75)), (-1, V(-1.9, -11.
 camera("S20", [(0, V(2.55, -6.6, 1.6), V(2.7, -4.2, 1.3)), (-1, V(2.55, -11.0, 1.6), V(2.7, -8.6, 1.3))], lens=30)
 camera("S21", [(0, V(2.75, -14.2, 1.5), V(2.95, -11.65, 1.35)), (-1, V(2.85, -13.8, 1.5), V(2.95, -11.65, 1.35))], lens=30)
 hS22 = headw(G, F("S22", 60))
-camera("S22", [(0, hS22 + V(0.42, -1.35, -0.1), hS22 + V(0, 0, -0.22)), (-1, hS22 + V(0.32, -1.0, -0.1), hS22 + V(0, 0, -0.22))], lens=40)
+camera("S22", [(0, hS22 + V(0.42, -1.35, -0.1), hS22 + V(0, 0, -0.24)), (-1, hS22 + V(0.34, -1.2, -0.1), hS22 + V(0, 0, -0.26))], lens=40)
 sc.camera = bpy.data.objects["CAM_S01"]
 for co in [o for o in CAMS.objects if o.type == 'CAMERA']:
     co.data.dof.use_dof = False

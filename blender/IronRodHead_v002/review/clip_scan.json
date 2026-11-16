@@ -1,0 +1,132 @@
+{
+ "frames": {
+  "697": {
+   "WorkerB": {
+    "self": 249,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "703": {
+   "WorkerB": {
+    "self": 258,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "709": {
+   "WorkerB": {
+    "self": 257,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "715": {
+   "WorkerB": {
+    "self": 260,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "721": {
+   "WorkerB": {
+    "self": 249,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "727": {
+   "WorkerB": {
+    "self": 239,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "733": {
+   "WorkerB": {
+    "self": 238,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "739": {
+   "WorkerB": {
+    "self": 235,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "745": {
+   "WorkerB": {
+    "self": 236,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "751": {
+   "WorkerB": {
+    "self": 233,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "757": {
+   "WorkerB": {
+    "self": 239,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "763": {
+   "WorkerB": {
+    "self": 245,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "769": {
+   "WorkerB": {
+    "self": 257,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "775": {
+   "WorkerB": {
+    "self": 245,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "781": {
+   "WorkerB": {
+    "self": 246,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "787": {
+   "WorkerB": {
+    "self": 251,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "793": {
+   "WorkerB": {
+    "self": 252,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   697,
+   793
+  ]
+ ],
+ "fps": 60
+}
