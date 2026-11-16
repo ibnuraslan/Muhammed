@@ -1,0 +1,65 @@
+{
+ "skull": {
+  "uid": "f1eaaef50e5845c796d6834fd1b702e5",
+  "title": "Human Male Skull",
+  "author": "Ruslan Gadzhiev",
+  "author_profile": "https://sketchfab.com/ruslangadzhiev",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/f1eaaef50e5845c796d6834fd1b702e5",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "brain": {
+  "uid": "0aa0e33c5c854d1bab7bac9e1c7acaec",
+  "title": "Human brain, Cerebrum & Brainstem",
+  "author": "FrankJohansson",
+  "author_profile": "https://sketchfab.com/pranktoy",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/0aa0e33c5c854d1bab7bac9e1c7acaec",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "track": {
+  "uid": "3c6b679284cc4964be7e55ab5674d168",
+  "title": "Train Track 1k uv unwrapped modular",
+  "author": "B._.render",
+  "author_profile": "https://sketchfab.com/Brendan_489",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/3c6b679284cc4964be7e55ab5674d168",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "crate": {
+  "uid": "e12fde1101b84b6da40056336a7b309d",
+  "title": "Wooden Crate",
+  "author": "YadroGames",
+  "author_profile": "https://sketchfab.com/yadrogames",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/e12fde1101b84b6da40056336a7b309d",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "wheelbarrow": {
+  "uid": "48314bafaffc4593ba1d7a5af31810c6",
+  "title": "Wooden Wheelbarrow",
+  "author": "Peter Nox",
+  "author_profile": "https://sketchfab.com/Peter.Nox",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/48314bafaffc4593ba1d7a5af31810c6",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "pickaxe": {
+  "uid": "726bd1041790439cba610fd8be337a42",
+  "title": "Pickaxe",
+  "author": "tediuminteractive",
+  "author_profile": "https://sketchfab.com/tediuminteractive",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/726bd1041790439cba610fd8be337a42",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "cliff": {
+  "uid": "a62ca9b92f844da18303f49a36839c2a",
+  "title": "Rock Cliff ( Tir\u00e1n - Moa\u00f1a)",
+  "author": "Alexandre Gonz\u00e1lez Rivas",
+  "author_profile": "https://sketchfab.com/AlexandreGonzalezRivas",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/a62ca9b92f844da18303f49a36839c2a",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
