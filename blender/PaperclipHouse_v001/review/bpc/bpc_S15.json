@@ -1,0 +1,156 @@
+{
+"visible_frames": [
+2222,
+2225,
+2228,
+2231,
+2234,
+2237,
+2246,
+2252,
+2264,
+2339,
+2342,
+2345,
+2348,
+2351,
+2354,
+2357,
+2360,
+2363,
+2366,
+2369,
+2372,
+2375,
+2378,
+2381,
+2384,
+2387,
+2390,
+2393,
+2396,
+2399,
+2402,
+2405,
+2408
+],
+"frames": {
+"2222": {
+"metacarpal1.L|P_CondoKeys|VIS": 4,
+"finger1-1.L|P_CondoKeys|VIS": 1
+},
+"2225": {
+"finger1-1.L|P_CondoKeys|VIS": 1,
+"metacarpal1.L|P_CondoKeys|VIS": 3
+},
+"2228": {
+"metacarpal1.L|P_CondoKeys|VIS": 1
+},
+"2231": {
+"metacarpal1.L|P_CondoKeys|VIS": 1
+},
+"2234": {
+"metacarpal1.L|P_CondoKeys|VIS": 1
+},
+"2237": {
+"metacarpal1.L|P_CondoKeys|VIS": 1
+},
+"2246": {
+"metacarpal1.L|P_CondoKeys|VIS": 1
+},
+"2252": {
+"metacarpal1.L|P_CondoKeys|VIS": 1
+},
+"2264": {
+"upperleg02.L|P_CondoKeys|VIS": 1
+},
+"2339": {
+"breast.R|P_CondoKeys|VIS": 17,
+"spine01|P_CondoKeys|VIS": 1
+},
+"2342": {
+"breast.R|P_CondoKeys|VIS": 22,
+"spine04|P_Contract|VIS": 5,
+"spine01|P_CondoKeys|VIS": 1
+},
+"2345": {
+"breast.R|P_CondoKeys|VIS": 42,
+"spine04|P_Contract|VIS": 12
+},
+"2348": {
+"breast.R|P_CondoKeys|VIS": 40,
+"spine04|P_Contract|VIS": 20
+},
+"2351": {
+"breast.R|P_CondoKeys|VIS": 43,
+"spine04|P_Contract|VIS": 21
+},
+"2354": {
+"breast.R|P_CondoKeys|VIS": 47,
+"spine04|P_Contract|VIS": 21
+},
+"2357": {
+"breast.R|P_CondoKeys|VIS": 44,
+"spine04|P_Contract|VIS": 21
+},
+"2360": {
+"breast.R|P_CondoKeys|VIS": 46,
+"spine04|P_Contract|VIS": 21
+},
+"2363": {
+"breast.R|P_CondoKeys|VIS": 44,
+"spine04|P_Contract|VIS": 18
+},
+"2366": {
+"breast.R|P_CondoKeys|VIS": 12,
+"spine04|P_Contract|VIS": 18,
+"spine01|P_CondoKeys|VIS": 1
+},
+"2369": {
+"breast.R|P_CondoKeys|VIS": 13,
+"spine04|P_Contract|VIS": 18,
+"spine01|P_CondoKeys|VIS": 1
+},
+"2372": {
+"spine04|P_Contract|VIS": 18,
+"breast.R|P_CondoKeys|VIS": 3
+},
+"2375": {
+"spine04|P_Contract|VIS": 17,
+"breast.R|P_CondoKeys|VIS": 2
+},
+"2378": {
+"spine04|P_Contract|VIS": 17
+},
+"2381": {
+"spine04|P_Contract|VIS": 15
+},
+"2384": {
+"spine04|P_Contract|VIS": 14
+},
+"2387": {
+"spine04|P_Contract|VIS": 14
+},
+"2390": {
+"spine04|P_Contract|VIS": 15
+},
+"2393": {
+"spine04|P_Contract|VIS": 15
+},
+"2396": {
+"spine04|P_Contract|VIS": 14
+},
+"2399": {
+"spine04|P_Contract|VIS": 11
+},
+"2402": {
+"spine04|P_Contract|VIS": 11
+},
+"2405": {
+"spine04|P_Contract|VIS": 10
+},
+"2408": {
+"spine04|P_Contract|VIS": 10
+}
+}
+}

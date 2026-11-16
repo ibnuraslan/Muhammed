@@ -1,0 +1,169 @@
+{
+"visible_frames": [
+1,
+4,
+7,
+10,
+13,
+16,
+19,
+22,
+25,
+28,
+31,
+46,
+52,
+55,
+58,
+61,
+64,
+67,
+70,
+73,
+76,
+79,
+82,
+85,
+88,
+91,
+94,
+100,
+106
+],
+"frames": {
+"1": {
+"lowerarm01.R|P_Paperclip|VIS": 4
+},
+"4": {
+"lowerarm01.R|P_Paperclip|VIS": 1
+},
+"7": {
+"lowerarm01.R|P_Paperclip|VIS": 1
+},
+"10": {
+"lowerarm01.R|P_Paperclip|VIS": 1
+},
+"13": {
+"lowerarm01.R|P_Paperclip|VIS": 1
+},
+"16": {
+"lowerarm01.R|P_Paperclip|VIS": 2
+},
+"19": {
+"lowerarm01.R|P_Paperclip|VIS": 2
+},
+"22": {
+"lowerarm01.R|P_Paperclip|VIS": 2
+},
+"25": {
+"lowerarm01.R|P_Paperclip|VIS": 4
+},
+"28": {
+"lowerarm01.R|P_Paperclip|VIS": 1
+},
+"31": {
+"lowerarm01.R|P_Paperclip|VIS": 1
+},
+"46": {
+"lowerarm01.R|P_Paperclip|VIS": 1
+},
+"52": {
+"lowerarm01.R|P_Paperclip|VIS": 2
+},
+"55": {
+"lowerarm01.R|P_Paperclip|VIS": 1
+},
+"58": {
+"finger2-3.L|HOME_CounterTop|VIS": 23,
+"finger3-3.L|HOME_CounterTop|VIS": 20,
+"finger3-2.L|HOME_CounterTop|VIS": 8,
+"finger4-3.L|HOME_CounterTop|VIS": 32,
+"finger5-3.L|HOME_CounterTop|VIS": 12,
+"finger4-2.L|HOME_CounterTop|VIS": 4,
+"finger2-1.L|HOME_CounterTop|VIS": 20,
+"finger1-3.L|HOME_CounterTop|VIS": 16,
+"metacarpal1.L|HOME_CounterTop|VIS": 16,
+"finger3-1.L|HOME_CounterTop|VIS": 3,
+"finger1-1.L|HOME_CounterTop|VIS": 6,
+"finger1-2.L|HOME_CounterTop|VIS": 5,
+"metacarpal2.L|HOME_CounterTop|VIS": 1
+},
+"61": {
+"lowerarm01.R|P_Paperclip|VIS": 2
+},
+"64": {
+"lowerarm01.R|P_Paperclip|VIS": 1
+},
+"67": {
+"finger5-1.L|P_FishPen|VIS": 7,
+"finger4-1.L|P_FishPen|VIS": 9,
+"metacarpal2.L|P_FishPen|VIS": 7,
+"metacarpal1.L|P_FishPen|VIS": 2,
+"metacarpal3.L|P_FishPen|VIS": 5,
+"metacarpal4.L|P_FishPen|VIS": 3,
+"finger1-2.L|P_FishPen|VIS": 4,
+"lowerarm01.R|P_Paperclip|VIS": 2
+},
+"70": {
+"lowerarm01.R|P_Paperclip|VIS": 3
+},
+"73": {
+"lowerarm01.R|P_Paperclip|VIS": 3
+},
+"76": {
+"lowerarm01.R|P_Paperclip|VIS": 1
+},
+"79": {
+"lowerarm01.R|P_Paperclip|VIS": 3
+},
+"82": {
+"lowerarm01.R|P_Paperclip|VIS": 3
+},
+"85": {
+"lowerarm01.R|P_Paperclip|VIS": 3
+},
+"88": {
+"lowerarm01.R|P_Paperclip|VIS": 3,
+"metacarpal3.L|P_FishPen|VIS": 1,
+"metacarpal4.L|P_FishPen|VIS": 3
+},
+"91": {
+"metacarpal3.L|P_FishPen|VIS": 1,
+"lowerarm01.R|P_Paperclip|VIS": 1,
+"metacarpal4.L|P_FishPen|VIS": 3
+},
+"94": {
+"metacarpal4.L|P_FishPen|VIS": 3,
+"metacarpal3.L|P_FishPen|VIS": 4,
+"lowerarm01.R|P_Paperclip|VIS": 1
+},
+"100": {
+"finger2-3.R|P_FishPen|VIS": 20,
+"finger3-3.R|P_FishPen|VIS": 12
+},
+"106": {
+"finger3-2.R|HOME_CounterTop|VIS": 29,
+"finger3-3.R|HOME_CounterTop|VIS": 26,
+"finger2-3.R|HOME_Counter|VIS": 16,
+"finger2-3.R|HOME_CounterTop|VIS": 16,
+"finger3-2.R|HOME_Counter|VIS": 16,
+"finger4-2.R|HOME_Counter|VIS": 13,
+"finger4-2.R|HOME_CounterTop|VIS": 16,
+"finger4-3.R|HOME_Counter|VIS": 16,
+"finger5-2.R|HOME_CounterTop|VIS": 11,
+"finger5-3.R|HOME_CounterTop|VIS": 12,
+"finger1-3.R|HOME_CounterTop|VIS": 12,
+"finger2-1.R|HOME_CounterTop|VIS": 11,
+"finger5-1.R|HOME_CounterTop|VIS": 20,
+"metacarpal1.R|HOME_CounterTop|VIS": 5,
+"metacarpal2.R|HOME_CounterTop|VIS": 5,
+"metacarpal3.R|HOME_CounterTop|VIS": 8,
+"finger3-1.R|HOME_CounterTop|VIS": 4,
+"finger4-1.R|HOME_CounterTop|VIS": 3,
+"finger1-2.R|HOME_CounterTop|VIS": 6,
+"metacarpal4.R|HOME_CounterTop|VIS": 2,
+"finger2-2.R|HOME_Counter|VIS": 2,
+"finger2-2.R|HOME_CounterTop|VIS": 2
+}
+}
+}

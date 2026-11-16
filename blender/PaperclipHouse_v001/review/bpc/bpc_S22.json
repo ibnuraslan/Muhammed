@@ -1,0 +1,525 @@
+{
+"visible_frames": [],
+"frames": {
+"3220": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3223": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3226": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 69,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3229": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 69,
+"lowerarm02.R|P_Clapper|off": 111,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3232": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 109,
+"wrist.R|P_Clapper|off": 38,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3235": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 109,
+"wrist.R|P_Clapper|off": 39,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3238": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 70,
+"lowerarm02.R|P_Clapper|off": 108,
+"wrist.R|P_Clapper|off": 39,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3241": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 69,
+"lowerarm02.R|P_Clapper|off": 106,
+"wrist.R|P_Clapper|off": 39,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3244": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 60,
+"lowerarm02.R|P_Clapper|off": 105,
+"wrist.R|P_Clapper|off": 39,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3247": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 61,
+"lowerarm02.R|P_Clapper|off": 104,
+"wrist.R|P_Clapper|off": 41,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3250": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 61,
+"lowerarm02.R|P_Clapper|off": 103,
+"wrist.R|P_Clapper|off": 41,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3253": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 60,
+"lowerarm02.R|P_Clapper|off": 100,
+"wrist.R|P_Clapper|off": 41,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3256": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 61,
+"lowerarm02.R|P_Clapper|off": 96,
+"wrist.R|P_Clapper|off": 39,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3259": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 61,
+"lowerarm02.R|P_Clapper|off": 96,
+"wrist.R|P_Clapper|off": 39,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3262": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 61,
+"lowerarm02.R|P_Clapper|off": 96,
+"wrist.R|P_Clapper|off": 39,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3265": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 56,
+"lowerarm02.R|P_Clapper|off": 98,
+"wrist.R|P_Clapper|off": 39,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3268": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 61,
+"lowerarm02.R|P_Clapper|off": 103,
+"wrist.R|P_Clapper|off": 41,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3271": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 61,
+"lowerarm02.R|P_Clapper|off": 104,
+"wrist.R|P_Clapper|off": 41,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3274": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 60,
+"lowerarm02.R|P_Clapper|off": 105,
+"wrist.R|P_Clapper|off": 39,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3277": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 67,
+"lowerarm02.R|P_Clapper|off": 106,
+"wrist.R|P_Clapper|off": 39,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3280": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 70,
+"lowerarm02.R|P_Clapper|off": 108,
+"wrist.R|P_Clapper|off": 39,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3283": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 109,
+"wrist.R|P_Clapper|off": 39,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3286": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 109,
+"wrist.R|P_Clapper|off": 38,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3289": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 69,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3292": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 69,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3295": {
+"finger3-1.R|P_Clapper|off": 34,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3298": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3301": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3304": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3307": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3310": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3313": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3316": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3319": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3322": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3325": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3328": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3331": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3334": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3337": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3340": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3343": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3346": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3349": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3352": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3355": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3358": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3361": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3364": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3367": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3370": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+},
+"3373": {
+"finger3-1.R|P_Clapper|off": 32,
+"finger3-3.R|P_Clapper|off": 21,
+"finger3-2.R|P_Clapper|off": 31,
+"metacarpal2.R|P_Clapper|off": 33,
+"lowerarm01.R|P_Clapper|off": 71,
+"lowerarm02.R|P_Clapper|off": 110,
+"wrist.R|P_Clapper|off": 37,
+"metacarpal1.R|P_Clapper|off": 3
+}
+}
+}

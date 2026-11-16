@@ -1,0 +1,597 @@
+{
+"visible_frames": [
+4015,
+4018,
+4021,
+4024,
+4027,
+4030,
+4033,
+4036,
+4039,
+4042,
+4045,
+4048,
+4051,
+4054,
+4057,
+4060,
+4063,
+4066,
+4069,
+4072,
+4075,
+4078,
+4081,
+4084,
+4087,
+4090,
+4093,
+4096,
+4099,
+4102,
+4105,
+4108,
+4111,
+4114,
+4117,
+4120,
+4123,
+4126,
+4129,
+4132,
+4135,
+4138,
+4141,
+4144,
+4147,
+4150,
+4153,
+4156,
+4159,
+4162,
+4165,
+4168,
+4171,
+4174,
+4177,
+4180,
+4183,
+4186,
+4189,
+4192,
+4195,
+4198,
+4201
+],
+"frames": {
+"4015": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 11,
+"lowerarm02.R|P_Clapper|VIS": 53,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 32
+},
+"4018": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 11,
+"lowerarm02.R|P_Clapper|VIS": 53,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 32
+},
+"4021": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 11,
+"lowerarm02.R|P_Clapper|VIS": 53,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 32
+},
+"4024": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 11,
+"lowerarm02.R|P_Clapper|VIS": 55,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 32
+},
+"4027": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 11,
+"lowerarm02.R|P_Clapper|VIS": 55,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 32
+},
+"4030": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 11,
+"lowerarm02.R|P_Clapper|VIS": 53,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 32
+},
+"4033": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 11,
+"lowerarm02.R|P_Clapper|VIS": 53,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 32
+},
+"4036": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 11,
+"lowerarm02.R|P_Clapper|VIS": 53,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 32
+},
+"4039": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 10,
+"lowerarm02.R|P_Clapper|VIS": 55,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 32
+},
+"4042": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 10,
+"lowerarm02.R|P_Clapper|VIS": 53,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 32
+},
+"4045": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 11,
+"lowerarm02.R|P_Clapper|VIS": 53,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 32
+},
+"4048": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 11,
+"lowerarm02.R|P_Clapper|VIS": 51,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 32
+},
+"4051": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 11,
+"lowerarm02.R|P_Clapper|VIS": 52,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 32
+},
+"4054": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 13,
+"lowerarm02.R|P_Clapper|VIS": 51,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 32
+},
+"4057": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 16,
+"lowerarm02.R|P_Clapper|VIS": 48,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 32
+},
+"4060": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 19,
+"lowerarm02.R|P_Clapper|VIS": 50,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 32
+},
+"4063": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 22,
+"lowerarm02.R|P_Clapper|VIS": 51,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 30
+},
+"4066": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 29,
+"lowerarm02.R|P_Clapper|VIS": 47,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 30
+},
+"4069": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 31,
+"lowerarm02.R|P_Clapper|VIS": 42,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 30
+},
+"4072": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 32,
+"lowerarm02.R|P_Clapper|VIS": 42,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 30
+},
+"4075": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 30,
+"lowerarm02.R|P_Clapper|VIS": 39,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 31
+},
+"4078": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 33,
+"lowerarm02.R|P_Clapper|VIS": 39,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 31
+},
+"4081": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 36,
+"lowerarm02.R|P_Clapper|VIS": 40,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 31
+},
+"4084": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 37,
+"lowerarm02.R|P_Clapper|VIS": 40,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 31,
+"finger2-3.L|P_Clapper|VIS": 7,
+"finger3-2.L|P_Clapper|VIS": 12
+},
+"4087": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 38,
+"lowerarm02.R|P_Clapper|VIS": 40,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 31,
+"finger2-3.L|P_Clapper|VIS": 7,
+"finger3-2.L|P_Clapper|VIS": 12
+},
+"4090": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 37,
+"lowerarm02.R|P_Clapper|VIS": 40,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 31,
+"finger2-3.L|P_Clapper|VIS": 7,
+"finger3-2.L|P_Clapper|VIS": 14
+},
+"4093": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 37,
+"lowerarm02.R|P_Clapper|VIS": 40,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 31,
+"finger2-3.L|P_Clapper|VIS": 7,
+"finger3-2.L|P_Clapper|VIS": 12
+},
+"4096": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 35,
+"lowerarm02.R|P_Clapper|VIS": 40,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 31,
+"finger2-3.L|P_Clapper|VIS": 7,
+"finger3-2.L|P_Clapper|VIS": 12
+},
+"4099": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 35,
+"lowerarm02.R|P_Clapper|VIS": 40,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 31,
+"finger2-3.L|P_Clapper|VIS": 7,
+"finger3-2.L|P_Clapper|VIS": 12
+},
+"4102": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 35,
+"lowerarm02.R|P_Clapper|VIS": 40,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 31,
+"finger2-3.L|P_Clapper|VIS": 7,
+"finger3-2.L|P_Clapper|VIS": 12
+},
+"4105": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 37,
+"lowerarm02.R|P_Clapper|VIS": 40,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 31,
+"finger2-3.L|P_Clapper|VIS": 7,
+"finger3-2.L|P_Clapper|VIS": 12
+},
+"4108": {
+"finger3-1.R|P_Clapper|VIS": 35,
+"finger3-2.R|P_Clapper|VIS": 26,
+"finger3-3.R|P_Clapper|VIS": 19,
+"metacarpal2.R|P_Clapper|VIS": 33,
+"lowerarm01.R|P_Clapper|VIS": 37,
+"lowerarm02.R|P_Clapper|VIS": 40,
+"metacarpal1.R|P_Clapper|VIS": 3,
+"wrist.R|P_Clapper|VIS": 31,
+"finger2-3.L|P_Clapper|VIS": 14,
+"finger3-2.L|P_Clapper|VIS": 12
+},
+"4111": {
+"finger3-2.R|P_Clapper|VIS": 33,
+"finger3-1.R|P_Clapper|VIS": 33,
+"finger3-3.R|P_Clapper|VIS": 32,
+"metacarpal2.R|P_Clapper|VIS": 31,
+"lowerarm01.R|P_Clapper|VIS": 27,
+"lowerarm02.R|P_Clapper|VIS": 49,
+"wrist.R|P_Clapper|VIS": 28,
+"metacarpal1.R|P_Clapper|VIS": 2,
+"metacarpal4.R|P_Clapper|VIS": 1,
+"metacarpal3.R|P_Clapper|VIS": 3,
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4114": {
+"finger3-2.R|P_Clapper|VIS": 33,
+"finger3-1.R|P_Clapper|VIS": 33,
+"finger3-3.R|P_Clapper|VIS": 50,
+"metacarpal2.R|P_Clapper|VIS": 31,
+"lowerarm01.R|P_Clapper|VIS": 27,
+"lowerarm02.R|P_Clapper|VIS": 50,
+"wrist.R|P_Clapper|VIS": 28,
+"metacarpal1.R|P_Clapper|VIS": 2,
+"metacarpal4.R|P_Clapper|VIS": 1,
+"metacarpal3.R|P_Clapper|VIS": 3,
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4117": {
+"finger3-2.R|P_Clapper|VIS": 33,
+"finger3-1.R|P_Clapper|VIS": 33,
+"finger3-3.R|P_Clapper|VIS": 47,
+"metacarpal2.R|P_Clapper|VIS": 31,
+"lowerarm01.R|P_Clapper|VIS": 26,
+"lowerarm02.R|P_Clapper|VIS": 50,
+"wrist.R|P_Clapper|VIS": 28,
+"metacarpal1.R|P_Clapper|VIS": 2,
+"metacarpal4.R|P_Clapper|VIS": 1,
+"metacarpal3.R|P_Clapper|VIS": 3,
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4120": {
+"finger3-2.R|P_Clapper|VIS": 33,
+"finger3-1.R|P_Clapper|VIS": 32,
+"finger3-3.R|P_Clapper|VIS": 47,
+"metacarpal2.R|P_Clapper|VIS": 31,
+"lowerarm01.R|P_Clapper|VIS": 12,
+"lowerarm02.R|P_Clapper|VIS": 51,
+"wrist.R|P_Clapper|VIS": 28,
+"metacarpal1.R|P_Clapper|VIS": 2,
+"metacarpal4.R|P_Clapper|VIS": 1,
+"metacarpal3.R|P_Clapper|VIS": 3,
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4123": {
+"finger3-2.R|P_Clapper|VIS": 34,
+"finger3-1.R|P_Clapper|VIS": 32,
+"finger3-3.R|P_Clapper|VIS": 51,
+"metacarpal2.R|P_Clapper|VIS": 31,
+"lowerarm02.R|P_Clapper|VIS": 46,
+"lowerarm01.R|P_Clapper|VIS": 5,
+"wrist.R|P_Clapper|VIS": 28,
+"metacarpal1.R|P_Clapper|VIS": 2,
+"metacarpal4.R|P_Clapper|VIS": 1,
+"metacarpal3.R|P_Clapper|VIS": 3,
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4126": {
+"finger3-2.R|P_Clapper|VIS": 33,
+"finger3-1.R|P_Clapper|VIS": 32,
+"finger3-3.R|P_Clapper|VIS": 49,
+"metacarpal2.R|P_Clapper|VIS": 31,
+"lowerarm02.R|P_Clapper|VIS": 38,
+"wrist.R|P_Clapper|VIS": 30,
+"metacarpal1.R|P_Clapper|VIS": 2,
+"metacarpal4.R|P_Clapper|VIS": 1,
+"metacarpal3.R|P_Clapper|VIS": 3,
+"lowerarm01.R|P_Clapper|VIS": 1,
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4129": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4132": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4135": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4138": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4141": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23,
+"breast.R|P_HouseKeys|VIS": 1
+},
+"4144": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23,
+"spine03|P_HouseKeys|VIS": 1
+},
+"4147": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23,
+"spine03|P_HouseKeys|VIS": 1
+},
+"4150": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23,
+"spine03|P_HouseKeys|VIS": 1
+},
+"4153": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23,
+"spine03|P_HouseKeys|VIS": 1
+},
+"4156": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23,
+"spine03|P_HouseKeys|VIS": 1
+},
+"4159": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4162": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4165": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4168": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4171": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4174": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4177": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4180": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4183": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4186": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4189": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4192": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4195": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4198": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+},
+"4201": {
+"finger3-3.L|P_Clapper|VIS": 21,
+"finger3-2.L|P_Clapper|VIS": 23
+}
+}
+}
