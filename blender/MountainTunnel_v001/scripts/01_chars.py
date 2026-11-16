@@ -71,7 +71,7 @@ def suit(n):
 WHITE, CREAM = (0.88, 0.88, 0.86), (0.80, 0.76, 0.64)
 for k in suit("Man"):
     for m in k.data.materials:
-        two_tone(m, WHITE, None, 0.50, check=((0.80, 0.84, 0.92), (0.55, 0.62, 0.78), 40.0)); unlink(m.node_tree, PB(m)[1].inputs['Normal'])     # the donor shirt's print lived in its normal map
+        two_tone(m, (0.80, 0.50, 0.04), (0.09, 0.08, 0.07), 0.56); unlink(m.node_tree, PB(m)[1].inputs['Normal'])     # the donor shirt's print lived in its normal map
         P_ = PB(m)[1]
         for l in list(m.node_tree.links):
             if l.to_node == P_ and l.to_socket.name in ('Alpha', 'Emission Color', 'Coat Weight'): m.node_tree.links.remove(l)
@@ -89,9 +89,10 @@ for k in RIGS["Wife"].children:  # long skirt: sari red with a gold hem band
 DRESS = {"V1": ((0.15, 0.35, 0.75), ((0.08, 0.30, 0.12), (0.85, 0.85, 0.8), 18.0)),
          "V2": ((0.75, 0.30, 0.30), ((0.15, 0.15, 0.45), (0.85, 0.85, 0.8), 18.0)),
          "V3": ((0.90, 0.75, 0.25), ((0.10, 0.10, 0.10), (0.80, 0.80, 0.78), 18.0))}
+BOTTOM = {"V1": (0.10, 0.12, 0.08), "V2": (0.05, 0.06, 0.15), "V3": (0.06, 0.06, 0.06)}      # solid dark trousers
 for n, (top, ck) in DRESS.items():
     for k in suit(n):
-        for m in k.data.materials: two_tone(m, top, None, 0.50, check=ck)
+        for m in k.data.materials: two_tone(m, top, BOTTOM[n], 0.50)
 for r in RIGS.values():
     for k in r.children:
         if "shoes" in k.name:
@@ -162,7 +163,13 @@ for m in hair.data.materials:
     mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.name = "AgeMix"
     if srcs: nt.links.new(srcs, mx.inputs['A'])
     else: mx.inputs['A'].default_value = P.inputs['Base Color'].default_value
-    mx.inputs['B'].default_value = (0.95, 0.95, 0.93, 1)
+    # grey keeps the strand texture (no flat painted cap): the hair texture desaturated and lifted
+    tex = next(nd for nd in nt.nodes if nd.type == 'TEX_IMAGE')
+    hs = nt.nodes.new('ShaderNodeHueSaturation'); hs.inputs['Saturation'].default_value = 0.0; hs.inputs['Value'].default_value = 1.0
+    nt.links.new(tex.outputs['Color'], hs.inputs['Color'])
+    mr = nt.nodes.new('ShaderNodeMix'); mr.data_type = 'RGBA'; mr.blend_type = 'SCREEN'; mr.inputs['Factor'].default_value = 0.72
+    nt.links.new(hs.outputs['Color'], mr.inputs['A']); mr.inputs['B'].default_value = (0.75, 0.74, 0.72, 1)
+    nt.links.new(mr.outputs['Result'], mx.inputs['B'])
     nt.links.new(age.outputs[0], mx.inputs['Factor']); nt.links.new(mx.outputs['Result'], P.inputs['Base Color'])
     print("AGE hair material", m.name)
 for k in man.children:      # brows also whiten
@@ -171,7 +178,7 @@ for k in man.children:      # brows also whiten
             nt, P = PB(m); l = P.inputs['Base Color'].links
             if l:
                 mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.name = "AgeMix"
-                nt.links.new(l[0].from_socket, mx.inputs['A']); mx.inputs['B'].default_value = (0.8, 0.8, 0.78, 1)
+                nt.links.new(l[0].from_socket, mx.inputs['A']); mx.inputs['B'].default_value = (0.45, 0.44, 0.42, 1)
                 age = nt.nodes.new('ShaderNodeValue'); age.name = "Age"
                 nt.links.new(age.outputs[0], mx.inputs['Factor']); nt.links.new(mx.outputs['Result'], P.inputs['Base Color'])
 
@@ -254,62 +261,80 @@ for m in body.data.materials:
         g.links.new(st.outputs['Result'], mix.inputs['A']); g.links.new(f_.outputs[0], mix.inputs['Factor']); g.links.new(mix.outputs['Result'], P_.inputs['Base Color'])
         print("SCALP grey added in", g.name)
 for k in suit("Man"):
-    so = k.modifiers.new("OuterShell", 'SOLIDIFY'); so.thickness = 0.006; so.offset = 1.0
+    so = k.modifiers.new("OuterShell", 'SOLIDIFY'); so.thickness = 0.014; so.offset = 1.0
     subs = [i for i, md in enumerate(k.modifiers) if md.type == 'SUBSURF']
     if subs: k.modifiers.move(len(k.modifiers) - 1, subs[0])
     print("SHELL", k.name, [md.type for md in k.modifiers])
 
-def in_beard(p):
-    dx = abs(p.x - cx); dz = p.z - mouth_z
-    if p.y > eye_y + 0.07: return False
-    if dz < -0.085: return False                                   # under the chin, not down the throat
-    if dx < 0.021 and abs(dz) < 0.0055: return False               # the lips show (a fully covered mouth read as a surgical mask)
-    top = 0.021 + max(0.0, dx - 0.030) / 0.045 * 0.036             # one smooth upper edge: moustache -> cheeks -> sideburns
-    return dz < top
-bm = bmesh.new(); bm.from_mesh(body.data); bm.verts.ensure_lookup_table()
-for v in bm.verts: v.co = ECO[v.index]
-keep = [f for f in bm.faces if all(v.index in CLEAN and abs(v.co.x - cx) < 0.085 and in_beard(v.co) for v in f.verts)]
-bm2 = bmesh.new(); vm = {}
-for f in keep:
-    vs = []
-    for v in f.verts:
-        if v.index not in vm: vm[v.index] = bm2.verts.new(v.co)
-        vs.append(vm[v.index])
-    bm2.faces.new(vs)
-me = bpy.data.meshes.new("Man.beard"); bm2.to_mesh(me); bm.free(); bm2.free()
-# soft edge: alpha fades over the outer 1.4 cm of the beard (distance to its boundary along the surface)
-import heapq
-bmb = bmesh.new(); bmb.from_mesh(me); bmb.verts.ensure_lookup_table()
-dist = {v.index: (0.0 if any(e.is_boundary for e in v.link_edges) else 9.0) for v in bmb.verts}
-pq = [(0.0, i) for i, d_ in dist.items() if d_ == 0.0]; heapq.heapify(pq)
-while pq:
-    d_, i = heapq.heappop(pq)
-    if d_ > dist[i]: continue
-    for e in bmb.verts[i].link_edges:
-        j = e.other_vert(bmb.verts[i]).index; nd_ = d_ + e.calc_length()
-        if nd_ < dist[j]: dist[j] = nd_; heapq.heappush(pq, (nd_, j))
+import random as _rnd
+def strands_to_curves(name, strands, radii):
+    cv = bpy.data.hair_curves.new(name); cv.add_curves([len(strands[0])] * len(strands))
+    cv.attributes["position"].data.foreach_set("vector", [x for st in strands for q in st for x in q])
+    rad = cv.attributes.get("radius") or cv.attributes.new("radius", 'FLOAT', 'POINT')
+    rad.data.foreach_set("value", [x for _ in strands for x in radii])
+    ob = bpy.data.objects.new(name, cv); sc.collection.objects.link(ob); return ob
+mh = bpy.data.materials.new("M_OldHair"); mh.use_nodes = True; nt = mh.node_tree
+for nd in list(nt.nodes):
+    if nd.type == 'BSDF_PRINCIPLED': nt.nodes.remove(nd)
+hb = nt.nodes.new('ShaderNodeBsdfHairPrincipled'); hb.parametrization = 'COLOR'
+hb.inputs['Color'].default_value = (0.42, 0.41, 0.39, 1); hb.inputs['Roughness'].default_value = 0.45; hb.inputs['Radial Roughness'].default_value = 0.6
+nt.links.new(hb.outputs[0], nt.nodes['Material Output'].inputs['Surface'])
+# beard: strands from the jaw / chin / upper lip skin (evaluated rest shape), lips kept clear
+bmb = bmesh.new(); bmb.from_mesh(body.data); bmb.verts.ensure_lookup_table()
+for v in bmb.verts: v.co = ECO[v.index]
+bmb.normal_update()
+rnd = _rnd.Random(7); strands = []
+_jg = body.vertex_groups.get("jaw"); _ji = _jg.index if _jg else -1
+_HJ = {v.index for v in body.data.vertices if v.index in CLEAN and any(g.group in (gi, _ji) and g.weight > 0.3 for g in v.groups)}
+for v in bmb.verts:
+    if v.index not in _HJ: continue
+    c = v.co; nrm = v.normal; dx = abs(c.x - cx); dz = c.z - mouth_z
+    if c.y > eye_y + 0.07 or dz < -0.085: continue
+    top = 0.021 + max(0.0, dx - 0.030) / 0.045 * 0.036
+    if dz > top or dx > 0.085: continue
+    if dx < 0.022 and abs(dz) < 0.007: continue                       # lips clear
+    lip = 0.008 < dz < 0.024 and dx < 0.034
+    for _ in range(9):
+        j = Vector((rnd.uniform(-1, 1), rnd.uniform(-1, 1), rnd.uniform(-1, 1))) * 0.003
+        p = c + j - nrm * 0.0015; L = (0.012 if lip else 0.030) * rnd.uniform(0.7, 1.2)
+        d = (nrm * 0.55 + Vector((0, 0, -1)) * 0.45).normalized(); seg = []
+        for i in range(5):
+            seg.append(p.copy())
+            d = (d + Vector((0, 0, -0.35)) + Vector((rnd.uniform(-.1, .1), rnd.uniform(-.08, .04), 0))).normalized()
+            p = p + d * L / 4
+        strands.append(seg)
 bmb.free()
-fa = me.attributes.new("edge_fade", 'FLOAT', 'POINT')
-for i in range(len(me.vertices)): fa.data[i].value = min(1.0, dist[i] / 0.014)
-beard = bpy.data.objects.new("Man.beard", me); sc.collection.objects.link(beard)
-for p_ in me.polygons: p_.use_smooth = True
-mb = bpy.data.materials.new("M_Beard"); mb.use_nodes = True; nt = mb.node_tree; P = nt.nodes["Principled BSDF"]
-P.inputs['Base Color'].default_value = (0.70, 0.70, 0.68, 1); P.inputs['Roughness'].default_value = 0.85
-tc = nt.nodes.new('ShaderNodeTexCoord'); w = nt.nodes.new('ShaderNodeTexNoise'); w.inputs['Scale'].default_value = 300.0
-bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.25
-nt.links.new(tc.outputs['Object'], w.inputs['Vector']); nt.links.new(w.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs['Normal'], P.inputs['Normal'])
-at = nt.nodes.new('ShaderNodeAttribute'); at.attribute_name = "edge_fade"; nt.links.new(at.outputs['Fac'], P.inputs['Alpha'])
-me.materials.append(mb)
-sw = beard.modifiers.new("Fit", 'SHRINKWRAP'); sw.target = tgt; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.offset = 0.003
-sm = beard.modifiers.new("Smooth", 'SMOOTH'); sm.factor = 0.8; sm.iterations = 14
-bt = bpy.data.textures.new("T_BeardFluff", 'CLOUDS'); bt.noise_scale = 0.012
-fl = beard.modifiers.new("Fluff", 'DISPLACE'); fl.texture = bt; fl.strength = 0.007; fl.mid_level = 0.3
-bake(beard)
-sol = beard.modifiers.new("Solid", 'SOLIDIFY'); sol.thickness = 0.006; sol.offset = 1.0
-beard.modifiers.new("Sub", 'SUBSURF').levels = 2
-Mw = beard.matrix_world.copy(); beard.parent = man; beard.parent_type = 'BONE'; beard.parent_bone = "head"
-bpy.context.view_layer.update(); beard.matrix_world = Mw
-print("BEARD faces", len(beard.data.polygons))
+beard = strands_to_curves("Man.beard", strands, (0.0010, 0.0009, 0.0008, 0.0006, 0.0003)); beard.data.materials.append(mh)
+print("BEARD strands", len(strands))
+# old scalp hair: strands grown from the scalp skin (the mesh hair is hidden when these show), swept back, never over the brow
+bms = bmesh.new(); bms.from_mesh(body.data); bms.verts.ensure_lookup_table()
+for v in bms.verts: v.co = ECO[v.index]
+bms.normal_update()
+rnd = _rnd.Random(11); strands = []
+for v in bms.verts:
+    if v.index not in HEADV: continue
+    p = v.co; nrm = v.normal
+    if nrm.z < -0.2: continue
+    front = p.y < eye_y + 0.05
+    if front and p.z < brow_z + 0.025: continue
+    if not front and p.z < eye_z + 0.005 and abs(p.x - cx) > 0.06 and p.y < eye_y + 0.12: continue   # sideburn/ear front stays clear
+    if p.z < eye_z - 0.03: continue
+    for _ in range(16):
+        q = p + Vector((rnd.uniform(-1, 1), rnd.uniform(-1, 1), rnd.uniform(-1, 1))) * 0.006 - nrm * 0.001
+        d = (Vector((0, 1.0, 0.15 if front else -0.3)) * 0.6 + nrm * 0.4).normalized(); L = rnd.uniform(0.025, 0.04); seg = []
+        for i in range(5):
+            seg.append(q.copy())
+            d = (d + Vector((0, 0.15, -0.3)) + Vector((rnd.uniform(-.12, .12), rnd.uniform(-.08, .08), 0))).normalized()
+            if d.dot(nrm) < 0.1: d = (d + nrm * 0.5).normalized()
+            q = q + d * L / 4
+        strands.append(seg)
+bms.free()
+oh = strands_to_curves("Man.oldhair", strands, (0.0011, 0.0010, 0.0009, 0.0007, 0.0003)); oh.data.materials.append(mh)
+print("OLDHAIR strands", len(strands))
+for ob in (beard, oh):
+    ob.parent = man; ob.parent_type = 'BONE'; ob.parent_bone = "head"
+    bpy.context.view_layer.update()
+    ob.matrix_parent_inverse = (man.matrix_world @ man.pose.bones["head"].matrix @ Matrix.Translation((0, man.data.bones["head"].length, 0))).inverted()
 bpy.data.objects.remove(tgt, do_unlink=True)
 
 for n, r in RIGS.items():

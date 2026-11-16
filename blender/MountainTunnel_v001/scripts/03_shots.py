@@ -211,16 +211,14 @@ def copy_tree(src, name, f0, f1):
 
 AGE_NT = [m.node_tree for m in bpy.data.materials if m.node_tree and "Age" in m.node_tree.nodes] + [g for g in bpy.data.node_groups if "Age" in g.nodes]
 AGE_MATS = AGE_NT
-BEARD = bpy.data.objects["Man.beard"]
+BEARD = bpy.data.objects["Man.beard"]; OLDHAIR = bpy.data.objects["Man.oldhair"]; MESHHAIR = next(o for o in bpy.data.objects if o.name.startswith("Man.short0"))
 def key_age(f0, f1, age):
     for nt_ in AGE_NT:
         nd = nt_.nodes["Age"].outputs[0]
         for f in (f0, f1):
             nd.default_value = age; nd.keyframe_insert("default_value", frame=f)
     show = age >= 0.6
-    key_vis(BEARD, f0, show)
-    s = 0.85 + 0.15 * min(1.0, max(0.0, (age - 0.6) / 0.3))
-    BEARD.scale = (s, s, s); BEARD.keyframe_insert("scale", frame=f0)
+    key_vis(BEARD, f0, show); key_vis(OLDHAIR, f0, show); key_vis(MESHHAIR, f0, not show)
 
 CUT = bpy.data.objects["Cutter"]; CUTFACE = bpy.data.objects["CutFace"]
 def key_cut(f, y):
@@ -384,7 +382,7 @@ def shot_2a(f0, n):
     """wide: the man small at the foot of the huge rock face, striking; slow push"""
     use = ("Man",); cut_window(f0, f0 + n - 1, YC0)
     tip, hits = strike("2a", f0, n, YC0, 0.0, chip=False)
-    camera("2a", f0, n, [(0, (7, -70, 2.2), (0, -48, 8.5), 24), (1, (6, -67, 2.0), (0, -48, 8.0), 24)], fstop=8.0, catch=False)
+    camera("2a", f0, n, [(0, (2.3, YC0 - 3.3, 0.7), (0.05, YC0 - 0.6, 1.45), 26), (1, (2.0, YC0 - 2.9, 0.75), (0.05, YC0 - 0.6, 1.5), 26)], fstop=8.0)
     return use
 
 def shot_2b(f0, n):
@@ -411,9 +409,9 @@ def laugh(n, f0, f1, pos, yaw, head_yaw=0.0, period=16, bend=0.0, point=None, ha
     k = 0
     for f in list(range(f0, f1, period // 2)) + [f1]:
         u = k % 2; k += 1
-        pitch = (-14 if u else -4) + bend * 0.6
+        pitch = (-30 if u else -8) + bend * 0.5           # big laughs: head thrown back on each beat
         body(n, f, V(pos) + V((0, 0, HUM[n].root_head.z - 0.012 - 0.006 * u - bend * 0.004)), yaw, flex=bend * 0.5,
-             spine=(4 + bend + 3 * u, 3 * math.sin(k * 0.7), 0), head=(pitch, head_yaw + 4 * math.sin(k * 0.9)))
+             spine=((-10 if u else 6) + bend, 6 * math.sin(k * 0.7), 0), head=(pitch, head_yaw + 7 * math.sin(k * 0.9)))
         stand_feet(n, f, pos, yaw, spread=0.03)
         if hands_knees:
             for s in "LR":
@@ -434,7 +432,7 @@ def shot_3a(f0, n):
     laugh("V1", f0, f1, V((-6.2, -65.2, 0)), 160.0, head_yaw=10, point=(0, -53.5, 1.3))
     laugh("V2", f0, f1, V((-7.3, -66.0, 0)), 205.0, head_yaw=-20, period=18)
     laugh("V3", f0, f1, V((-5.0, -66.3, 0)), 140.0, head_yaw=15, period=14, bend=10)
-    camera("3a", f0, n, [(0, (-3.3, -62.4, 1.55), (-6.6, -66.4, 1.15), 24), (1, (-3.5, -62.6, 1.5), (-6.6, -66.4, 1.15), 24)], fstop=8.0)
+    camera("3a", f0, n, [(0, (-3.0, -62.0, 1.45), (-7.0, -66.0, 1.0), 20), (1, (-3.5, -62.5, 1.42), (-7.0, -66.0, 1.0), 20)], fstop=8.0)
     return use
 
 def shot_3b(f0, n):
@@ -454,7 +452,9 @@ def shot_4a(f0, n):
     HUM["Man"].walk(path, lambda f: yaw, f0, f1, stride=0.68, lift=0.07)
     for f in range(f0, f1 + 1, 12): HUM["Man"].key_spine(f, flex=5, head=(-4 + 3 * math.sin(f / 13.0), 0))
     walk_arms("Man", f0, f1, lambda f: yaw); key_age(f0, f1, 0.1)
-    camera("4a", f0, n, [(0, (8.5, -61.5, 0.6), (2.2, -58.5, 1.6), 22), (1, (7.8, -59.0, 0.7), (1.0, -55.5, 1.8), 22)], fstop=8.0)
+    sd = V((-d.y, d.x, 0)).normalized()
+    if sd.x < 0: sd = -sd
+    camera("4a", f0, n, [(u, path(f0 + u * (n - 1)) + sd * 2.9 + d.normalized() * 0.9 + V((0, 0, 1.05)), path(f0 + u * (n - 1)) + V((0, 0, 1.05)), 28) for u in (0, 0.5, 1)], fstop=8.0)
     return use
 
 def shot_4b(f0, n):
@@ -478,13 +478,13 @@ LEDGE_Y, LEDGE_Z, LEDGE_EDGE = sc["LEDGE"][0], sc["LEDGE"][1], sc["LEDGE"][2]
 def shot_5a(f0, n):
     """years earlier: his wife walks along the narrow ledge path high on the rock face"""
     use = ("Wife",); f1 = f0 + n - 1; GZ[0] = LEDGE_Z
-    p0, p1 = V((-24.0, LEDGE_Y, 0)), V((-18.5, LEDGE_Y + 0.1, 0))
+    p0, p1 = V((-15.5, LEDGE_Y, 0)), V((-21.0, LEDGE_Y + 0.05, 0))
     yaw = -90.0
     path = lambda f: p0.lerp(p1, min(1.0, (f - f0) / (n - 1)))
     HUM["Wife"].walk(path, lambda f: yaw, f0, f1, stride=0.55, lift=0.06)
     for f in range(f0, f1 + 1, 12): HUM["Wife"].key_spine(f, flex=4, head=(4 + 3 * math.sin(f / 14.0), -12 + 8 * math.sin(f / 35.0)))
     walk_arms("Wife", f0, f1, lambda f: yaw, amp=0.12)
-    camera("5a", f0, n, [(0, (-15.6, LEDGE_Y - 3.4, LEDGE_Z + 0.7), (-21.0, LEDGE_Y, LEDGE_Z + 1.0), 26), (1, (-15.4, LEDGE_Y - 3.3, LEDGE_Z + 0.8), (-19.5, LEDGE_Y, LEDGE_Z + 1.0), 26)], fstop=8.0)
+    camera("5a", f0, n, [(u, path(f0 + u * (n - 1)) + V((-1.3, -2.9, LEDGE_Z + 1.15)), path(f0 + u * (n - 1)) + V((-0.2, 0, LEDGE_Z + 1.05)), 28) for u in (0, 0.5, 1)], fstop=8.0)
     GZ[0] = 0.0
     return use
 
@@ -533,7 +533,9 @@ def shot_5d(f0, n):
     for f in (f0, f1): lie_pose("Wife", f, head=(0, -25), arm_out=0.16)
     M = Matrix.Translation(V((-18.5, -58.2, 0.0))) @ Matrix.Rotation(R_(-75), 4, 'Z')
     lie_at("5d", "Wife", f0, f1, M)
-    camera("5d", f0, n, [(0, (-16.0, -61.6, 2.4), (-17.7, -58.7, 0.3), 28), (1, (-16.3, -61.0, 2.1), (-17.7, -58.7, 0.3), 30)], fstop=8.0)
+    cen = M @ V((0, 0.85, 0.15)); side = (M.to_3x3() @ V((1, 0, 0))).normalized(); along = (M.to_3x3() @ V((0, 1, 0))).normalized()
+    c0 = cen + side * 1.6 - along * 1.2 + V((0, 0, 1.55))
+    camera("5d", f0, n, [(0, c0, cen, 30), (1, c0 + (cen - c0).normalized() * 0.35, cen, 30)], fstop=8.0)
     return use
 
 # ---- map views (aerial, no text)
@@ -651,15 +653,16 @@ def shot_8b(f0, n):
     knees = Ms @ V((-0.62, 1.5, 0)); xax = Ms.to_3x3() @ V((1, 0, 0)); yaw = math.degrees(math.atan2(xax.x, -xax.y))
     for k, f in enumerate(list(range(f0, f1, 40)) + [f1]):
         u = ss((f - f0) / (n * 0.8))
-        kneel("Man", f, knees, yaw, lean=24 - 6 * u, spine=(28 - 8 * u, 0, 0), head=(40 - 22 * u, -5 + 4 * u))
+        kneel("Man", f, knees, yaw, lean=14 - 6 * u, spine=(14 - 8 * u, 0, 0), head=(26 - 20 * u, -5 + 4 * u))
         pole_pt = Ms @ V((-0.31, 1.25, 0.06))
         hand("Man", "R", f, pole_pt, V((0, 0, -1)), (Ms.to_3x3() @ V((1, 0.3, 0))).normalized(), pole=wpos("Man", "upperarm01.R", f) + rgt(yaw) * 0.3 - fwd(yaw) * 0.25, pose="wrap_grip")
         th = V((knees[0], knees[1], 0)) + fwd(yaw) * 0.05 + rgt(yaw) * 0.13 + V((0, 0, 0.33))
         hand("Man", "L", f, th, V((0, 0, -1)), fwd(yaw), pole=wpos("Man", "upperarm01.L", f) - rgt(yaw) * 0.35 - fwd(yaw) * 0.2, pose="relaxed")
     key_age(f0, f1, 0.0)
     hd = wpos("Man", "head", f0)
-    c = hd + fwd(yaw) * 0.95 + rgt(yaw) * 0.55 + V((0, 0, -0.30)); a_ = hd + V((0, 0, -0.04))     # low, in front-side: his bowed face, she stays below the frame
-    camera("8b", f0, n, [(0, c, a_, 40), (1, c + (a_ - c).normalized() * 0.1, a_, 40)], fstop=8.0)
+    ch_ = wpos("Man", "spine03", f0)
+    c = ch_ + fwd(yaw) * 1.1 + rgt(yaw) * 0.25 + V((0, 0, 0.0)); a_ = ch_ + V((0, 0, 0.30))     # front, low, waist-up: his face up and readable; she lies below the frame
+    camera("8b", f0, n, [(0, c, a_, 38), (1, c + (a_ - c).normalized() * 0.12, a_, 38)], fstop=8.0)
     return use
 
 def shot_9a(f0, n):
@@ -673,7 +676,7 @@ def shot_9a(f0, n):
         stand_feet("Man", f, pos, yaw)
         relaxed_arm("Man", "L", f, yaw, pose="power_fist" if u > 0.6 else "relaxed"); relaxed_arm("Man", "R", f, yaw, pose="power_fist" if u > 0.6 else "relaxed")
     key_age(f0, f1, 0.05)
-    camera("9a", f0, n, [(0, (2.6, -61.6, 0.55), (0.3, -57.5, 2.4), 24), (1, (2.2, -61.0, 0.5), (0.2, -57.5, 2.6), 24)], fstop=8.0)
+    camera("9a", f0, n, [(0, (1.9, -60.6, 0.55), (0.55, -58.4, 1.45), 26), (1, (1.75, -60.3, 0.55), (0.55, -58.4, 1.5), 26)], fstop=8.0)
     return use
 
 def shot_9b(f0, n):
@@ -772,7 +775,7 @@ def shot_11c(f0, n):
     HUM["Man"].walk(path, lambda f: 0.0, f0, f1, stride=0.58, lift=0.06)
     for f in range(f0, f1 + 1, 12): HUM["Man"].key_spine(f, flex=3, head=(-4 + 3 * math.sin(f / 13.0), 12 * math.sin(f / 30.0)))
     walk_arms("Man", f0, f1, lambda f: 0.0); key_age(f0, f1, 0.95)
-    camera("11c", f0, n, [(0, (0.35, 40.6, 1.55), (0.1, 44.5, 1.45), 30), (1, (0.35, 40.6 - 0.011 * n, 1.55), (0.1, 44.5 - 0.011 * n, 1.45), 30)], fstop=8.0)
+    camera("11c", f0, n, [(0, (0.3, 41.5, 1.45), (0.1, 44.5, 1.2), 28), (1, (0.3, 41.5 - 0.006 * n, 1.45), (0.1, 44.5 - 0.011 * n, 1.2), 28)], fstop=8.0)
     return use
 
 def shot_12a(f0, n):
@@ -794,7 +797,7 @@ def shot_13a(f0, n):
         HUM[nm].walk(path, lambda f: 180.0, f0, f1, stride=0.62, lift=0.06)
         for f in range(f0, f1 + 1, 12): HUM[nm].key_spine(f, flex=4, head=(-4, 10 * math.sin((f + y0) / 30.0)))
         walk_arms(nm, f0, f1, lambda f: 180.0)
-    camera("13a", f0, n, [(0, (0.4, 24.5, 2.0), (0.0, 36.0, 1.4), 24), (1, (0.4, 26.0, 2.0), (0.0, 38.0, 1.4), 24)], fstop=8.0)
+    camera("13a", f0, n, [(0, (0.25, 33.0, 1.5), (0.0, 29.5, 1.15), 28), (1, (0.25, 33.0 + 0.0095 * n, 1.5), (0.0, 29.5 + 0.012 * n, 1.15), 28)], fstop=8.0)
     return use
 
 def shot_13b(f0, n):
@@ -814,14 +817,16 @@ def shot_13c(f0, n):
     """close: the old man's face, a quiet nod, the hospital behind him"""
     use = ("Man",); f1 = f0 + n - 1
     pos = V((3.2, 87.0, 0)); yaw = 20.0
-    for k, f in enumerate(list(range(f0, f1, 20)) + [f1]):
-        nod = 8 * math.sin((f - f0) / 14.0) if 40 < f - f0 < 110 else 0
-        body("Man", f, pos + V((0, 0, HUM["Man"].root_head.z - 0.01 + 0.004 * (k % 2))), yaw, spine=(2, 0, 0), head=(nod - 4, -8))
+    for k, f in enumerate(list(range(f0, f1, 8)) + [f1]):
+        t = (f - f0) / max(1, n - 1)
+        turn = 24 * ss(t / 0.45) * (1 - ss((t - 0.55) / 0.35))          # looks back toward the hospital, then to camera
+        nod = 9 * math.sin((f - f0 - 60) / 9.0) if 60 < f - f0 < 92 else 0
+        body("Man", f, pos + V((0, 0, HUM["Man"].root_head.z - 0.01 + 0.004 * (k % 2))), yaw, spine=(2, turn * 0.3, 0), head=(nod - 4, -8 + turn))
         stand_feet("Man", f, pos, yaw); relaxed_arm("Man", "L", f, yaw); relaxed_arm("Man", "R", f, yaw)
     key_age(f0, f1, 0.95)
     hd = wpos("Man", "head", f0)
     c = hd + fwd(yaw) * 1.3 + rgt(yaw) * 0.3 + V((0, 0, -0.12)); a_ = hd + V((0, 0, -0.05))
-    camera("13c", f0, n, [(0, c, a_, 40), (1, c + (a_ - c).normalized() * 0.25, a_, 40)], fstop=8.0)
+    camera("13c", f0, n, [(0, c - (a_ - c).normalized() * 0.2, a_, 38), (1, c + (a_ - c).normalized() * 0.45, a_, 38)], fstop=8.0)
     return use
 
 SHOT_FUNCS = {k[5:]: v for k, v in list(globals().items()) if k.startswith("shot_")}

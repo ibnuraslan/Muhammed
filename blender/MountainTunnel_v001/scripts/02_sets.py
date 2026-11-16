@@ -263,7 +263,7 @@ def crate_at(name, loc, rz):
     root.location = loc; root.rotation_euler = (0, 0, rz)
     print("CRATE parts", [(o.name, tuple(round(d, 2) for d in o.dimensions)) for o in parts])
     return root, parts
-CRATE, CRP = crate_at("Crate_Village", (-8.6, -67.8, 0), R_(-40))
+CRATE, CRP = crate_at("Crate_Village", (-8.9, -65.2, 0), R_(-67))
 CRATE2, CRP2 = crate_at("Crate_Hospital", (4.5, 88.5, 0), R_(8))
 bpy.context.view_layer.update()
 print("CRATE dims", tuple(round(d, 3) for d in CRATE.dimensions))
@@ -312,7 +312,9 @@ for sx in (-1, 1): box("Hosp_Post%d" % sx, (0.25, 0.25, 3.0), (sx * 2.8, HY - 2.
 def red_cross(name, loc, rot, s):
     box(name + "_Panel", (s, 0.12, s), loc, M_SIGNW, CH_, rot=rot)
     off = Matrix.Rotation(rot[2], 3, 'Z') @ V((0, -0.08, 0)) if rot[0] == 0 else V((0, 0, 0.08))
-    box(name + "_H", (s * 0.7, 0.12, s * 0.22), V(loc) + off, M_RED, CH_, rot=rot)
+    hw = (s * 0.7 - s * 0.22) / 2; R3 = Euler(rot).to_matrix()       # two side arms beside the vertical bar: no overlapping faces (they rendered a black centre)
+    for sx in (-1, 1):
+        box(name + "_H%d" % sx, (hw, 0.12, s * 0.22), V(loc) + off + R3 @ V((sx * (s * 0.11 + hw / 2), 0, 0)), M_RED, CH_, rot=rot)
     box(name + "_V", (s * 0.22, 0.12, s * 0.7), V(loc) + off, M_RED, CH_, rot=rot)
 red_cross("Cross_Front", (0, HY - 0.1, 7.3), (0, 0, 0), 2.6)
 red_cross("Cross_Roof", (0, HY + 6, 9.5), (R_(90), 0, 0), 7.0)     # flat on the roof, reads from the map views
