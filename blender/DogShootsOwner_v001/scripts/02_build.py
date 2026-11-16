@@ -457,11 +457,11 @@ def seated(H, rig, f, pos, yaw=0.0, lean=-8.0, flex=6.0, head=(0, 0), twist=0.0,
             pb.location = H.r.rest(n).to_3x3().inverted() @ (pole - H.r.BN[n].head_local); pb.keyframe_insert("location", frame=f, group=n)
     H.key_spine(f, flex=flex, twist=twist, head=head)
 
-LAP_Z = float(os.environ.get("DSO_LAPZ", "0.25"))
+LAP_Z = float(os.environ.get("DSO_LAPZ", "0.20"))
 def hands_lap(rig, f, pos, yaw=0.0, legs_out=False):
     c = Matrix.Rotation(R_(yaw), 3, 'Z')
     for s, sx in (("L", 1), ("R", -1)):
-        place_hand(rig, s, f, pos + c @ Vector((0.12 * sx, -0.26, LAP_Z if not legs_out else 0.15)), (0, 0, -1), c @ Vector((0, -1, 0)))
+        place_hand(rig, s, f, pos + c @ Vector((0.16 * sx, -0.38, LAP_Z if not legs_out else 0.15)), (0, 0, -1), c @ Vector((0, -1, 0)))
         apply_pose(rig, s, "relaxed", f)
 
 def dog_key(f, loc, yaw, pose):
@@ -697,7 +697,7 @@ def phone_pose(f, raise_=0.0, look=(22, 0), mouth=0):
     seated(HOWN, OWNER, f, seat_top, lean=-4, flex=10, head=look)
     hp = Vector((DRV.x - 0.06, DRV.y - 0.33, seat_top.z + 0.55 + raise_))
     place_hand(OWNER, "R", f, hp, (0.25, 0.85, -0.35), (0.25, -0.25, 0.95)); apply_pose(OWNER, "R", "cup_hold", f, amount=PHONE_CURL)
-    place_hand(OWNER, "L", f, seat_top + Vector((0.12, -0.27, LAP_Z)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "L", "relaxed", f)
+    place_hand(OWNER, "L", f, seat_top + Vector((0.16, -0.38, LAP_Z)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "L", "relaxed", f)
     return hp
 PH = dup(PHONE, "PhoneHeld", (0, 0, 0), (0, 0, 0), 1.0, CT, linked=False)
 PH.data.transform(Matrix.Diagonal((1.0, 0.82, 1.0, 1.0)))
@@ -751,7 +751,7 @@ def phone_grip_shot(keys):
     seat_top = SEAT_TOP.copy()
     for fr, lk in keys:
         seated(HOWN, OWNER, fr, seat_top, lean=-4, flex=10, head=lk)
-        place_hand(OWNER, "L", fr, seat_top + Vector((0.12, -0.27, LAP_Z)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "L", "relaxed", fr)
+        place_hand(OWNER, "L", fr, seat_top + Vector((0.16, -0.38, LAP_Z)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "L", "relaxed", fr)
     sc.frame_set(keys[0][0])
     C = Vector((DRV.x - 0.08, seat_top.y - 0.34, seat_top.z + 0.47))
     face = OWNER.matrix_world @ OWNER.pose.bones["head"].head
@@ -786,14 +786,14 @@ def tap_pose(f, reach, look=(18, -20)):
     """reach 0 = right hand on his thigh, 1 = index fingertip 4 mm off the screen"""
     seat_top = SEAT_TOP.copy()
     seated(HOWN, OWNER, f, seat_top, lean=-4, flex=10 + 6 * reach, head=look)
-    place_hand(OWNER, "L", f, seat_top + Vector((0.12, -0.27, LAP_Z)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "L", "relaxed", f)
+    place_hand(OWNER, "L", f, seat_top + Vector((0.16, -0.38, LAP_Z)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "L", "relaxed", f)
     if reach <= 0:
-        place_hand(OWNER, "R", f, seat_top + Vector((-0.12, -0.27, LAP_Z)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "R", "relaxed", f)
+        place_hand(OWNER, "R", f, seat_top + Vector((-0.16, -0.38, LAP_Z)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "R", "relaxed", f)
         return
     tip = MOUNT_C + PH_N * 0.010 + Vector((0, 0, -0.015))
     fdir = (tip - (seat_top + Vector((-0.10, -0.2, 0.45)))).normalized()
     palm = tip - fdir * 0.095
-    rest = seat_top + Vector((-0.12, -0.27, LAP_Z))
+    rest = seat_top + Vector((-0.16, -0.38, LAP_Z))
     p_ = rest.lerp(palm, reach)
     place_hand(OWNER, "R", f, p_, (0, 0, -1), fdir); apply_pose(OWNER, "R", "point", f)
     if reach >= 0.99:          # correct so the measured index tip sits 4 mm in front of the screen
@@ -836,12 +836,15 @@ def S09(f0, f1):
     seated(HOWN, OWNER, f1, st, yaw=90, lean=-6, flex=9, head=(12, 25), knee_fwd=0.58, foot_z=0.30)
     hands_lap(OWNER, f0, st, yaw=90); hands_lap(OWNER, f1, st, yaw=90)
     # medic A stands behind him (he faces +X), left hand flat on his upper back, right arm bent, hand at his own waist
-    pa = IX + Vector((-0.30, 0.22, 0))
+    pa = IX + Vector((-0.18, 0.22, 0))
     for fr, hd, dz in ((f0, (22, 0), 0.0), ((f0 + f1) // 2, (25, 5), -0.03), (f1, (24, 2), -0.05)):
         stand(HMA, MEDA, fr, pa, yaw=90, head=hd, flex=14, hands=False)
-        place_hand(MEDA, "L", fr, IX + Vector((0.155, 0.27, STR_Z + 0.50 + dz)), (1, 0, 0), (0, 0.15, 1)); apply_pose(MEDA, "L", "flat_palm", fr)
+        sc.frame_set(fr)
+        _bk = OWNER.matrix_world @ OWNER.pose.bones["spine03"].head
+        place_hand(MEDA, "L", fr, Vector((_bk.x - 0.14, _bk.y + 0.04, _bk.z + dz)), (1, 0, 0), (0, 0.15, 1)); apply_pose(MEDA, "L", "flat_palm", fr)
         place_hand(MEDA, "R", fr, pa + Vector((0.10, -0.24, 1.02)), (0, 1, 0), (1, 0.3, -0.4)); apply_pose(MEDA, "R", "relaxed", fr)
-    attach_to_hand(GAUZE, MEDA, "L", f0, along=0.095, off=0.036, toward=IX + Vector((0.4, 0.27, STR_Z + 0.5)), axes="z")
+    sc.frame_set(f0); _sp = OWNER.matrix_world @ OWNER.pose.bones["spine03"].head
+    attach_to_hand(GAUZE, MEDA, "L", f0, along=0.095, off=0.036, toward=_sp, axes="z")
     c = camera("09", 24)
     cam_key(c, f0, IX + Vector((0.55, -1.55, 1.55)), IX + Vector((0.0, 0.2, 1.0))); cam_key(c, f1, IX + Vector((0.45, -1.35, 1.52)), IX + Vector((0.0, 0.25, 1.0)))
 
