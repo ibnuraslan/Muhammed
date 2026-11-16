@@ -33,7 +33,7 @@ def body_hand(H, s, f, pos, yaw, off, d, n, pole_off=None):
 def hang_off(H, s, fwd=0.0, swing=0.0, bend=0.03):
     sh = H.sh[s] - H.root_head; sx = 1 if s == "L" else -1
     z = sh.z - H.arm * 0.965 + abs(swing) * 0.2
-    return (sh.x + (0.03 + 0.05 * max(0.0, -swing) / 0.08) * sx, sh.y - bend - fwd - swing, z)
+    return (sh.x + (0.085 + 0.05 * max(0.0, -swing) / 0.08) * sx, sh.y - bend - fwd - swing, z)   # clear of the torso (limb_check)
 def key_hang(H, f, pos, yaw, swingL=0.0, swingR=0.0, fwd=0.0, only=("L", "R")):
     for s, sw in (("L", swingL), ("R", swingR)):
         if s not in only: continue
@@ -135,7 +135,7 @@ def _():
     for t, flex, pt in ((0, 6, 0.0), (0.35, 18, 1.0), (1.3, 20, 1.0)):
         f = f0 + round(t * (f1 - f0)); p = stand(H, f, pos, yaw, flex=flex, head=(6, 0), arms=False)
         sh = H.sh["R"] - H.root_head
-        body_hand(H, "R", f, p, yaw, (sh.x - 0.03, sh.y - 0.25 - 0.32 * pt, sh.z - 0.5 + 0.12 * pt), (0.0, -0.75, -0.65), (0.9, 0.0, -0.3))
+        body_hand(H, "R", f, p, yaw, (sh.x - 0.06, sh.y - 0.25 - 0.32 * pt, sh.z - 0.5 + 0.12 * pt), (0.0, -0.75, -0.65), (0.9, 0.0, -0.3))
         key_hang(H, f, p, yaw, fwd=0.05, only=("L",))
     apply_pose(rig, "R", "point", f0 + round(0.35 * (f1 - f0))); apply_pose(rig, "R", "relaxed", f0); apply_pose(rig, "L", "relaxed", f0)
     use("Mom", "S02")
@@ -250,7 +250,7 @@ def _():
     cam_shot("S13", [(0, (1.75, 10.6, 1.0)), (1, (2.1, 10.95, 1.12))], [(0, (2.3, 11.8, 1.5)), (1, (2.3, 11.8, 1.5))], lens=40)
 @shot("S14")
 def _():
-    cam_shot("S14", [(0, (0.5, -9.6, 0.75)), (1, (0.35, -10.4, 0.55))], [(0, (0.0, -13.6, -0.85)), (1, (0.0, -13.7, -0.9))], lens=30)
+    cam_shot("S14", [(0, (1.15, -9.2, 1.0)), (0.5, (0.45, -9.9, 0.7)), (1, (-0.45, -10.4, 0.55))], [(0, (0.0, -13.6, -0.85)), (1, (0.0, -13.7, -0.9))], lens=30)
 def sit(n, sid, pos, yaw, desk_z=0.79, heads=((0, 0),), slide=None):
     """seated at the desk, palms flat on the top; a sigh (slump, head drop, rise) and optionally the right palm slides a
     form across the desk (the form is keyed with the palm, so it only moves under the hand)"""
@@ -286,7 +286,7 @@ def _():
     cam_shot("S16", [(0, (OX - 0.7, 0.6, 1.75)), (1, (OX - 0.55, 0.8, 1.45))], [(0, (OX - 0.35, 1.45, 0.8)), (1, (OX - 0.35, 1.45, 0.82))], lens=30)
 @shot("S17")
 def _():
-    cam_shot("S17", [(0, (1.45, -10.2, 2.3)), (1, (1.35, -10.9, 2.0))], [(0, (0.0, -13.2, -0.75)), (1, (0.0, -13.3, -0.75))], lens=30)
+    cam_shot("S17", [(0, (1.5, -9.6, 2.5)), (0.5, (0.6, -10.2, 2.2)), (1, (-0.6, -10.6, 1.9))], [(0, (0.0, -13.2, -0.75)), (1, (0.0, -13.3, -0.75))], lens=30)
 @shot("S18")
 def _():
     f0, f1 = W("S18"); _GZ[0] = 0.0; H = HS["Mom"]
@@ -299,7 +299,7 @@ def phone_shot(sid, yaw, heads, ear=False):
     for i, t in enumerate((0, 0.3, 0.6, 0.9, 1.3)):
         f = f0 + round(t * (f1 - f0)); p = stand(H, f, pos, yaw, flex=4, head=heads[i % len(heads)], arms=False)
         sh = H.sh["R"] - H.root_head
-        if i == 0: body_hand(H, "R", f, p, yaw, (sh.x + 0.10, sh.y - 0.30, sh.z - 0.17), (0.45, -0.35, 0.82), (0.0, 0.9, 0.35))
+        if i == 0: body_hand(H, "R", f, p, yaw, (sh.x + 0.10, sh.y - 0.33, sh.z - 0.06), (0.45, -0.35, 0.82), (0.0, 0.9, 0.35))
         key_hang(H, f, p, yaw, only=("L",))
     apply_pose(rig, "L", "relaxed", f0); use("Mom", sid)
     return f0
@@ -447,7 +447,7 @@ for i in range(7):
         if fc.data_path == "location" and fc.array_index == 2:
             nm = fc.modifiers.new('NOISE'); nm.scale = 30; nm.strength = 0.03; nm.phase = i * 3
     drift.append(o.name)
-key_vis(drift, [WV("S17")])
+key_vis(drift, [])   # Phase 2: drift removed (its path crossed the jammed bags); S17 is a camera arc over the clog
 # forms pile on the desk (office)
 random.seed(5)
 for i in range(42):
