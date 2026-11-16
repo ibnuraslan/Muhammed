@@ -120,8 +120,8 @@ def vortex_mat():
     sp = N.new("ShaderNodeValue"); sp.name = "Spin"
     s2 = N.new("ShaderNodeMath"); s2.operation = 'ADD'; L.new(sm.outputs[0], s2.inputs[0]); L.new(sp.outputs[0], s2.inputs[1])
     sn = N.new("ShaderNodeMath"); sn.operation = 'SINE'; L.new(s2.outputs[0], sn.inputs[0])
-    cr = N.new("ShaderNodeValToRGB"); L.new(sn.outputs[0], cr.inputs[0]); cr.color_ramp.elements[0].position = 0.35; cr.color_ramp.elements[1].position = 0.95
-    cr.color_ramp.elements[0].color = (0.006, 0.03, 0.045, 1); cr.color_ramp.elements[1].color = (0.25, 0.42, 0.45, 1)
+    cr = N.new("ShaderNodeValToRGB"); L.new(sn.outputs[0], cr.inputs[0]); cr.color_ramp.elements[0].position = 0.0; cr.color_ramp.elements[1].position = 1.0   # soft, water-coloured streaks
+    cr.color_ramp.elements[0].color = (0.012, 0.05, 0.07, 1); cr.color_ramp.elements[1].color = (0.05, 0.15, 0.18, 1)
     dk = N.new("ShaderNodeMapRange"); L.new(ln.outputs["Value"], dk.inputs[0]); dk.inputs[1].default_value = 0.0; dk.inputs[2].default_value = 0.9
     mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; L.new(dk.outputs[0], mx.inputs[0]); mx.inputs[0].default_value = 1
     L.new(cr.outputs[0], mx.inputs[6]); L.new(dk.outputs[0], mx.inputs[7])
