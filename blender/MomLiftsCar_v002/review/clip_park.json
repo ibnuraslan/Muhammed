@@ -1,0 +1,29 @@
+{
+ "frames": {
+  "1020": {
+   "Man": {
+    "self": 8,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1023": {
+   "Man": {
+    "self": 14,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1026": {
+   "Man": {
+    "self": 16,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 3,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}

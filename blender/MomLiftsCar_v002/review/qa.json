@@ -1,0 +1,5010 @@
+{
+ "frames": {
+  "1": [
+   [
+    "BACKHEAD",
+    "Mom"
+   ]
+  ],
+  "211": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "217": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "247": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "253": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "259": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "265": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "271": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "277": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "283": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "289": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "295": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "301": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "307": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "313": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "319": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "451": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "457": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "463": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "469": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "475": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "481": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "601": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 108.61 m, 77 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "607": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "613": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "619": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "625": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "631": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "637": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "643": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "649": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "655": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "661": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "667": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "673": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "679": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_000 moves 1.5 cm with no hand on it (nearest finger 10769 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_001 moves 2.3 cm with no hand on it (nearest finger 10770 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_000 moves 2.6 cm with no hand on it (nearest finger 10752 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_001 moves 2.4 cm with no hand on it (nearest finger 10753 cm)"
+   ]
+  ],
+  "685": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_000 moves 2.2 cm with no hand on it (nearest finger 10770 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_001 moves 2.8 cm with no hand on it (nearest finger 10771 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_003 moves 0.7 cm with no hand on it (nearest finger 10771 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_000 moves 3.1 cm with no hand on it (nearest finger 10753 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_001 moves 2.9 cm with no hand on it (nearest finger 10754 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_002 moves 1.1 cm with no hand on it (nearest finger 10753 cm)"
+   ]
+  ],
+  "691": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_000 moves 2.2 cm with no hand on it (nearest finger 10772 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_001 moves 2.8 cm with no hand on it (nearest finger 10773 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_002 moves 2.4 cm with no hand on it (nearest finger 10773 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_003 moves 4.2 cm with no hand on it (nearest finger 10774 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_000 moves 3.1 cm with no hand on it (nearest finger 10755 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_001 moves 2.9 cm with no hand on it (nearest finger 10756 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_002 moves 3.3 cm with no hand on it (nearest finger 10754 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 1.5 cm with no hand on it (nearest finger 10753 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_004 moves 1.4 cm with no hand on it (nearest finger 10752 cm)"
+   ]
+  ],
+  "697": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_000 moves 2.2 cm with no hand on it (nearest finger 10773 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_001 moves 2.8 cm with no hand on it (nearest finger 10775 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_002 moves 3.5 cm with no hand on it (nearest finger 10775 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_003 moves 4.2 cm with no hand on it (nearest finger 10777 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_004 moves 2.2 cm with no hand on it (nearest finger 10773 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_005 moves 0.8 cm with no hand on it (nearest finger 10771 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_000 moves 3.1 cm with no hand on it (nearest finger 10758 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_001 moves 2.9 cm with no hand on it (nearest finger 10757 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_002 moves 3.3 cm with no hand on it (nearest finger 10756 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 2.2 cm with no hand on it (nearest finger 10755 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_004 moves 4.2 cm with no hand on it (nearest finger 10754 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_005 moves 0.5 cm with no hand on it (nearest finger 10750 cm)"
+   ]
+  ],
+  "703": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_000 moves 2.2 cm with no hand on it (nearest finger 10775 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_001 moves 2.8 cm with no hand on it (nearest finger 10777 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_002 moves 3.5 cm with no hand on it (nearest finger 10777 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_003 moves 4.2 cm with no hand on it (nearest finger 10780 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_004 moves 3.3 cm with no hand on it (nearest finger 10775 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_005 moves 2.4 cm with no hand on it (nearest finger 10772 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_006 moves 1.9 cm with no hand on it (nearest finger 10772 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_000 moves 3.1 cm with no hand on it (nearest finger 10760 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_001 moves 2.9 cm with no hand on it (nearest finger 10759 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_002 moves 3.3 cm with no hand on it (nearest finger 10758 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 2.2 cm with no hand on it (nearest finger 10757 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_004 moves 4.2 cm with no hand on it (nearest finger 10757 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_005 moves 3.1 cm with no hand on it (nearest finger 10751 cm)"
+   ]
+  ],
+  "709": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_000 moves 2.2 cm with no hand on it (nearest finger 10777 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_001 moves 2.8 cm with no hand on it (nearest finger 10779 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_002 moves 3.5 cm with no hand on it (nearest finger 10780 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_003 moves 4.2 cm with no hand on it (nearest finger 10784 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_004 moves 3.3 cm with no hand on it (nearest finger 10778 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_005 moves 2.4 cm with no hand on it (nearest finger 10774 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr0_006 moves 2.8 cm with no hand on it (nearest finger 10773 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_000 moves 3.1 cm with no hand on it (nearest finger 10762 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_001 moves 2.9 cm with no hand on it (nearest finger 10761 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_002 moves 3.3 cm with no hand on it (nearest finger 10760 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 2.2 cm with no hand on it (nearest finger 10759 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_004 moves 4.2 cm with no hand on it (nearest finger 10760 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_005 moves 3.1 cm with no hand on it (nearest finger 10753 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_006 moves 2.0 cm with no hand on it (nearest finger 10754 cm)"
+   ]
+  ],
+  "715": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_000 moves 3.1 cm with no hand on it (nearest finger 10764 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_001 moves 2.9 cm with no hand on it (nearest finger 10762 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_002 moves 3.3 cm with no hand on it (nearest finger 10762 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 2.2 cm with no hand on it (nearest finger 10761 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_004 moves 4.2 cm with no hand on it (nearest finger 10763 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_005 moves 3.1 cm with no hand on it (nearest finger 10755 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_006 moves 4.1 cm with no hand on it (nearest finger 10756 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_007 moves 1.8 cm with no hand on it (nearest finger 10751 cm)"
+   ]
+  ],
+  "721": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_000 moves 3.1 cm with no hand on it (nearest finger 10767 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_001 moves 2.9 cm with no hand on it (nearest finger 10764 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_002 moves 3.3 cm with no hand on it (nearest finger 10765 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 2.2 cm with no hand on it (nearest finger 10763 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_004 moves 4.2 cm with no hand on it (nearest finger 10766 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_005 moves 3.1 cm with no hand on it (nearest finger 10756 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_006 moves 4.1 cm with no hand on it (nearest finger 10759 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_007 moves 3.6 cm with no hand on it (nearest finger 10752 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_008 moves 2.8 cm with no hand on it (nearest finger 10752 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_009 moves 2.1 cm with no hand on it (nearest finger 10754 cm)"
+   ]
+  ],
+  "727": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_000 moves 3.1 cm with no hand on it (nearest finger 10769 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_001 moves 2.9 cm with no hand on it (nearest finger 10766 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_002 moves 3.3 cm with no hand on it (nearest finger 10767 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 2.2 cm with no hand on it (nearest finger 10765 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_004 moves 4.2 cm with no hand on it (nearest finger 10769 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_005 moves 3.1 cm with no hand on it (nearest finger 10758 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_006 moves 4.1 cm with no hand on it (nearest finger 10761 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_007 moves 3.6 cm with no hand on it (nearest finger 10754 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_008 moves 3.4 cm with no hand on it (nearest finger 10755 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_009 moves 2.6 cm with no hand on it (nearest finger 10756 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_010 moves 1.0 cm with no hand on it (nearest finger 10751 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_011 moves 1.6 cm with no hand on it (nearest finger 10752 cm)"
+   ]
+  ],
+  "733": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_000 moves 3.1 cm with no hand on it (nearest finger 10771 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_001 moves 2.9 cm with no hand on it (nearest finger 10767 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_002 moves 3.3 cm with no hand on it (nearest finger 10769 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 2.2 cm with no hand on it (nearest finger 10767 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_004 moves 4.2 cm with no hand on it (nearest finger 10772 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_005 moves 3.1 cm with no hand on it (nearest finger 10760 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_006 moves 4.1 cm with no hand on it (nearest finger 10764 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_007 moves 3.6 cm with no hand on it (nearest finger 10757 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_008 moves 3.4 cm with no hand on it (nearest finger 10758 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_009 moves 2.6 cm with no hand on it (nearest finger 10758 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_010 moves 2.9 cm with no hand on it (nearest finger 10752 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_011 moves 2.3 cm with no hand on it (nearest finger 10752 cm)"
+   ]
+  ],
+  "739": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_000 moves 3.1 cm with no hand on it (nearest finger 10773 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_001 moves 2.9 cm with no hand on it (nearest finger 10769 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_002 moves 3.3 cm with no hand on it (nearest finger 10771 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 2.2 cm with no hand on it (nearest finger 10769 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_004 moves 4.2 cm with no hand on it (nearest finger 10775 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_005 moves 3.1 cm with no hand on it (nearest finger 10762 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_006 moves 4.1 cm with no hand on it (nearest finger 10767 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_007 moves 3.6 cm with no hand on it (nearest finger 10759 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_008 moves 3.4 cm with no hand on it (nearest finger 10761 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_009 moves 2.6 cm with no hand on it (nearest finger 10760 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_010 moves 2.9 cm with no hand on it (nearest finger 10755 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_011 moves 2.3 cm with no hand on it (nearest finger 10754 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_012 moves 1.6 cm with no hand on it (nearest finger 10754 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_013 moves 1.1 cm with no hand on it (nearest finger 10753 cm)"
+   ]
+  ],
+  "745": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_000 moves 3.1 cm with no hand on it (nearest finger 10776 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_001 moves 2.9 cm with no hand on it (nearest finger 10771 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_002 moves 3.3 cm with no hand on it (nearest finger 10773 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 2.2 cm with no hand on it (nearest finger 10771 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_004 moves 4.2 cm with no hand on it (nearest finger 10778 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_005 moves 3.1 cm with no hand on it (nearest finger 10764 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_006 moves 4.1 cm with no hand on it (nearest finger 10770 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_007 moves 3.6 cm with no hand on it (nearest finger 10761 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_008 moves 3.4 cm with no hand on it (nearest finger 10764 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_009 moves 2.6 cm with no hand on it (nearest finger 10762 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_010 moves 2.9 cm with no hand on it (nearest finger 10757 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_011 moves 2.3 cm with no hand on it (nearest finger 10755 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_012 moves 3.3 cm with no hand on it (nearest finger 10755 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_013 moves 2.1 cm with no hand on it (nearest finger 10754 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_014 moves 1.6 cm with no hand on it (nearest finger 10750 cm)"
+   ]
+  ],
+  "751": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_000 moves 3.1 cm with no hand on it (nearest finger 10778 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_001 moves 2.9 cm with no hand on it (nearest finger 10772 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_002 moves 3.3 cm with no hand on it (nearest finger 10775 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 2.2 cm with no hand on it (nearest finger 10773 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_004 moves 4.2 cm with no hand on it (nearest finger 10781 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_005 moves 3.1 cm with no hand on it (nearest finger 10766 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_006 moves 4.1 cm with no hand on it (nearest finger 10773 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_007 moves 3.6 cm with no hand on it (nearest finger 10763 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_008 moves 3.4 cm with no hand on it (nearest finger 10767 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_009 moves 2.6 cm with no hand on it (nearest finger 10764 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_010 moves 2.9 cm with no hand on it (nearest finger 10759 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_011 moves 2.3 cm with no hand on it (nearest finger 10757 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_012 moves 3.3 cm with no hand on it (nearest finger 10757 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_013 moves 2.1 cm with no hand on it (nearest finger 10755 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_014 moves 3.2 cm with no hand on it (nearest finger 10751 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_015 moves 2.9 cm with no hand on it (nearest finger 10751 cm)"
+   ]
+  ],
+  "757": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_000 moves 3.1 cm with no hand on it (nearest finger 10780 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_001 moves 2.9 cm with no hand on it (nearest finger 10774 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_002 moves 3.3 cm with no hand on it (nearest finger 10777 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 2.2 cm with no hand on it (nearest finger 10775 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_005 moves 3.1 cm with no hand on it (nearest finger 10767 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_006 moves 4.1 cm with no hand on it (nearest finger 10775 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_007 moves 3.6 cm with no hand on it (nearest finger 10765 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_008 moves 3.4 cm with no hand on it (nearest finger 10771 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_009 moves 2.6 cm with no hand on it (nearest finger 10766 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_010 moves 2.9 cm with no hand on it (nearest finger 10761 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_011 moves 2.3 cm with no hand on it (nearest finger 10758 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_012 moves 3.3 cm with no hand on it (nearest finger 10760 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_013 moves 2.1 cm with no hand on it (nearest finger 10757 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_014 moves 3.2 cm with no hand on it (nearest finger 10752 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_015 moves 3.5 cm with no hand on it (nearest finger 10753 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_016 moves 1.3 cm with no hand on it (nearest finger 10753 cm)"
+   ]
+  ],
+  "763": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_000 moves 3.1 cm with no hand on it (nearest finger 10783 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_002 moves 3.3 cm with no hand on it (nearest finger 10779 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 2.2 cm with no hand on it (nearest finger 10777 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_006 moves 4.1 cm with no hand on it (nearest finger 10778 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_007 moves 3.6 cm with no hand on it (nearest finger 10768 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_008 moves 3.4 cm with no hand on it (nearest finger 10774 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_009 moves 2.6 cm with no hand on it (nearest finger 10768 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_010 moves 2.9 cm with no hand on it (nearest finger 10764 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_011 moves 2.3 cm with no hand on it (nearest finger 10759 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_012 moves 3.3 cm with no hand on it (nearest finger 10762 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_013 moves 2.1 cm with no hand on it (nearest finger 10759 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_014 moves 3.2 cm with no hand on it (nearest finger 10754 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_015 moves 3.5 cm with no hand on it (nearest finger 10755 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_016 moves 2.7 cm with no hand on it (nearest finger 10754 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_017 moves 1.4 cm with no hand on it (nearest finger 10753 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_018 moves 1.2 cm with no hand on it (nearest finger 10749 cm)"
+   ]
+  ],
+  "769": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_002 moves 3.3 cm with no hand on it (nearest finger 10781 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 2.2 cm with no hand on it (nearest finger 10779 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_006 moves 4.1 cm with no hand on it (nearest finger 10781 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_007 moves 3.6 cm with no hand on it (nearest finger 10770 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_008 moves 3.4 cm with no hand on it (nearest finger 10777 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_009 moves 2.6 cm with no hand on it (nearest finger 10770 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_010 moves 2.9 cm with no hand on it (nearest finger 10766 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_011 moves 2.3 cm with no hand on it (nearest finger 10761 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_012 moves 3.3 cm with no hand on it (nearest finger 10764 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_013 moves 2.1 cm with no hand on it (nearest finger 10761 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_014 moves 3.2 cm with no hand on it (nearest finger 10756 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_015 moves 3.5 cm with no hand on it (nearest finger 10757 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_016 moves 2.7 cm with no hand on it (nearest finger 10756 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_017 moves 2.9 cm with no hand on it (nearest finger 10754 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_018 moves 3.6 cm with no hand on it (nearest finger 10751 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_020 moves 0.7 cm with no hand on it (nearest finger 10753 cm)"
+   ]
+  ],
+  "775": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 2.2 cm with no hand on it (nearest finger 10781 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_008 moves 3.4 cm with no hand on it (nearest finger 10780 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_009 moves 2.6 cm with no hand on it (nearest finger 10772 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_010 moves 2.9 cm with no hand on it (nearest finger 10768 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_011 moves 2.3 cm with no hand on it (nearest finger 10762 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_012 moves 3.3 cm with no hand on it (nearest finger 10766 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_013 moves 2.1 cm with no hand on it (nearest finger 10762 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_014 moves 3.2 cm with no hand on it (nearest finger 10757 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_015 moves 3.5 cm with no hand on it (nearest finger 10760 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_016 moves 2.7 cm with no hand on it (nearest finger 10758 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_017 moves 2.9 cm with no hand on it (nearest finger 10757 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_018 moves 3.6 cm with no hand on it (nearest finger 10754 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_019 moves 2.3 cm with no hand on it (nearest finger 10749 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_020 moves 4.1 cm with no hand on it (nearest finger 10755 cm)"
+   ]
+  ],
+  "781": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 2.2 cm with no hand on it (nearest finger 10783 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_008 moves 3.4 cm with no hand on it (nearest finger 10783 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_009 moves 2.6 cm with no hand on it (nearest finger 10774 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_010 moves 2.9 cm with no hand on it (nearest finger 10770 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_011 moves 2.3 cm with no hand on it (nearest finger 10764 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_012 moves 3.3 cm with no hand on it (nearest finger 10768 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_013 moves 2.1 cm with no hand on it (nearest finger 10764 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_014 moves 3.2 cm with no hand on it (nearest finger 10759 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_015 moves 3.5 cm with no hand on it (nearest finger 10762 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_016 moves 2.7 cm with no hand on it (nearest finger 10760 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_017 moves 2.9 cm with no hand on it (nearest finger 10759 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_018 moves 3.6 cm with no hand on it (nearest finger 10757 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_019 moves 2.3 cm with no hand on it (nearest finger 10750 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_020 moves 4.1 cm with no hand on it (nearest finger 10757 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_021 moves 0.6 cm with no hand on it (nearest finger 10753 cm)"
+   ]
+  ],
+  "787": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 2.2 cm with no hand on it (nearest finger 10785 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_008 moves 3.4 cm with no hand on it (nearest finger 10786 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_009 moves 2.6 cm with no hand on it (nearest finger 10776 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_010 moves 2.9 cm with no hand on it (nearest finger 10773 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_011 moves 2.3 cm with no hand on it (nearest finger 10765 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_012 moves 3.3 cm with no hand on it (nearest finger 10770 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_013 moves 2.1 cm with no hand on it (nearest finger 10766 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_014 moves 3.2 cm with no hand on it (nearest finger 10761 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_015 moves 3.5 cm with no hand on it (nearest finger 10764 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_016 moves 2.7 cm with no hand on it (nearest finger 10761 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_017 moves 2.9 cm with no hand on it (nearest finger 10761 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_018 moves 3.6 cm with no hand on it (nearest finger 10761 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_019 moves 2.3 cm with no hand on it (nearest finger 10751 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_020 moves 4.1 cm with no hand on it (nearest finger 10760 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_021 moves 3.6 cm with no hand on it (nearest finger 10755 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_022 moves 2.4 cm with no hand on it (nearest finger 10755 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_023 moves 2.0 cm with no hand on it (nearest finger 10752 cm)"
+   ]
+  ],
+  "793": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 2.2 cm with no hand on it (nearest finger 10788 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_008 moves 3.4 cm with no hand on it (nearest finger 10789 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_009 moves 2.6 cm with no hand on it (nearest finger 10779 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_010 moves 2.9 cm with no hand on it (nearest finger 10775 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_011 moves 2.3 cm with no hand on it (nearest finger 10767 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_012 moves 3.3 cm with no hand on it (nearest finger 10772 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_013 moves 2.1 cm with no hand on it (nearest finger 10767 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_014 moves 3.2 cm with no hand on it (nearest finger 10763 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_015 moves 3.5 cm with no hand on it (nearest finger 10766 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_016 moves 2.7 cm with no hand on it (nearest finger 10763 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_017 moves 2.9 cm with no hand on it (nearest finger 10763 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_018 moves 3.6 cm with no hand on it (nearest finger 10764 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_019 moves 2.3 cm with no hand on it (nearest finger 10753 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_020 moves 4.1 cm with no hand on it (nearest finger 10762 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_021 moves 3.6 cm with no hand on it (nearest finger 10757 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_022 moves 2.8 cm with no hand on it (nearest finger 10756 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_023 moves 3.0 cm with no hand on it (nearest finger 10754 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_024 moves 1.2 cm with no hand on it (nearest finger 10750 cm)"
+   ]
+  ],
+  "799": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_003 moves 1.5 cm with no hand on it (nearest finger 10791 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_009 moves 2.6 cm with no hand on it (nearest finger 10781 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_010 moves 2.9 cm with no hand on it (nearest finger 10777 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_011 moves 2.3 cm with no hand on it (nearest finger 10768 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_012 moves 3.3 cm with no hand on it (nearest finger 10774 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_013 moves 2.1 cm with no hand on it (nearest finger 10769 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_014 moves 3.2 cm with no hand on it (nearest finger 10764 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_015 moves 3.5 cm with no hand on it (nearest finger 10769 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_016 moves 2.7 cm with no hand on it (nearest finger 10765 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_017 moves 2.9 cm with no hand on it (nearest finger 10766 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_018 moves 3.6 cm with no hand on it (nearest finger 10767 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_019 moves 2.3 cm with no hand on it (nearest finger 10754 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_020 moves 4.1 cm with no hand on it (nearest finger 10765 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_021 moves 3.6 cm with no hand on it (nearest finger 10760 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_022 moves 2.8 cm with no hand on it (nearest finger 10758 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_023 moves 3.0 cm with no hand on it (nearest finger 10756 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_024 moves 3.7 cm with no hand on it (nearest finger 10751 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_025 moves 1.4 cm with no hand on it (nearest finger 10753 cm)"
+   ]
+  ],
+  "805": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_009 moves 2.6 cm with no hand on it (nearest finger 10783 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_010 moves 2.9 cm with no hand on it (nearest finger 10779 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_011 moves 2.3 cm with no hand on it (nearest finger 10770 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_012 moves 3.3 cm with no hand on it (nearest finger 10777 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_013 moves 2.1 cm with no hand on it (nearest finger 10771 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_015 moves 3.5 cm with no hand on it (nearest finger 10771 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_016 moves 2.7 cm with no hand on it (nearest finger 10767 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_017 moves 2.9 cm with no hand on it (nearest finger 10768 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_018 moves 3.6 cm with no hand on it (nearest finger 10770 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_019 moves 2.3 cm with no hand on it (nearest finger 10755 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_020 moves 4.1 cm with no hand on it (nearest finger 10768 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_021 moves 3.6 cm with no hand on it (nearest finger 10764 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_022 moves 2.8 cm with no hand on it (nearest finger 10760 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_023 moves 3.0 cm with no hand on it (nearest finger 10759 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_024 moves 3.7 cm with no hand on it (nearest finger 10754 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_025 moves 2.1 cm with no hand on it (nearest finger 10754 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_026 moves 1.9 cm with no hand on it (nearest finger 10750 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_027 moves 1.1 cm with no hand on it (nearest finger 10753 cm)"
+   ]
+  ],
+  "811": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_009 moves 2.6 cm with no hand on it (nearest finger 10785 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_010 moves 2.9 cm with no hand on it (nearest finger 10782 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_012 moves 3.3 cm with no hand on it (nearest finger 10779 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_013 moves 2.1 cm with no hand on it (nearest finger 10772 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_015 moves 3.5 cm with no hand on it (nearest finger 10773 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_016 moves 2.7 cm with no hand on it (nearest finger 10769 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_017 moves 2.9 cm with no hand on it (nearest finger 10770 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_018 moves 3.6 cm with no hand on it (nearest finger 10773 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_019 moves 2.3 cm with no hand on it (nearest finger 10757 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_020 moves 4.1 cm with no hand on it (nearest finger 10770 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_021 moves 3.6 cm with no hand on it (nearest finger 10767 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_022 moves 2.8 cm with no hand on it (nearest finger 10762 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_023 moves 3.0 cm with no hand on it (nearest finger 10761 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_024 moves 3.7 cm with no hand on it (nearest finger 10757 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_025 moves 2.1 cm with no hand on it (nearest finger 10756 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_026 moves 3.8 cm with no hand on it (nearest finger 10752 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_027 moves 3.2 cm with no hand on it (nearest finger 10754 cm)"
+   ]
+  ],
+  "817": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_009 moves 2.6 cm with no hand on it (nearest finger 10787 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_010 moves 2.9 cm with no hand on it (nearest finger 10784 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_012 moves 3.3 cm with no hand on it (nearest finger 10781 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_013 moves 2.1 cm with no hand on it (nearest finger 10774 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_016 moves 2.7 cm with no hand on it (nearest finger 10771 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_017 moves 2.9 cm with no hand on it (nearest finger 10772 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_018 moves 3.6 cm with no hand on it (nearest finger 10776 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_019 moves 2.3 cm with no hand on it (nearest finger 10758 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_020 moves 4.1 cm with no hand on it (nearest finger 10773 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_021 moves 3.6 cm with no hand on it (nearest finger 10770 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_022 moves 2.8 cm with no hand on it (nearest finger 10764 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_023 moves 3.0 cm with no hand on it (nearest finger 10763 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_024 moves 3.7 cm with no hand on it (nearest finger 10760 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_025 moves 2.1 cm with no hand on it (nearest finger 10757 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_026 moves 3.8 cm with no hand on it (nearest finger 10755 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_027 moves 3.2 cm with no hand on it (nearest finger 10756 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_028 moves 2.9 cm with no hand on it (nearest finger 10750 cm)"
+   ]
+  ],
+  "823": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_012 moves 3.3 cm with no hand on it (nearest finger 10783 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_013 moves 2.1 cm with no hand on it (nearest finger 10776 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_016 moves 2.7 cm with no hand on it (nearest finger 10773 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_017 moves 2.9 cm with no hand on it (nearest finger 10775 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_018 moves 3.6 cm with no hand on it (nearest finger 10779 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_019 moves 2.3 cm with no hand on it (nearest finger 10760 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_020 moves 4.1 cm with no hand on it (nearest finger 10775 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_021 moves 3.6 cm with no hand on it (nearest finger 10773 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_022 moves 2.8 cm with no hand on it (nearest finger 10766 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_023 moves 3.0 cm with no hand on it (nearest finger 10765 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_024 moves 3.7 cm with no hand on it (nearest finger 10762 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_025 moves 2.1 cm with no hand on it (nearest finger 10759 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_026 moves 3.8 cm with no hand on it (nearest finger 10758 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_027 moves 3.2 cm with no hand on it (nearest finger 10758 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_028 moves 3.5 cm with no hand on it (nearest finger 10753 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_029 moves 2.9 cm with no hand on it (nearest finger 10754 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_030 moves 2.2 cm with no hand on it (nearest finger 10751 cm)"
+   ]
+  ],
+  "829": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_013 moves 2.1 cm with no hand on it (nearest finger 10778 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_016 moves 2.7 cm with no hand on it (nearest finger 10775 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_017 moves 2.9 cm with no hand on it (nearest finger 10777 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_018 moves 3.6 cm with no hand on it (nearest finger 10783 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_020 moves 4.1 cm with no hand on it (nearest finger 10778 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_021 moves 3.6 cm with no hand on it (nearest finger 10776 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_022 moves 2.8 cm with no hand on it (nearest finger 10768 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_023 moves 3.0 cm with no hand on it (nearest finger 10768 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_024 moves 3.7 cm with no hand on it (nearest finger 10765 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_025 moves 2.1 cm with no hand on it (nearest finger 10761 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_026 moves 3.8 cm with no hand on it (nearest finger 10760 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_027 moves 3.2 cm with no hand on it (nearest finger 10760 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_028 moves 3.5 cm with no hand on it (nearest finger 10756 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_029 moves 3.5 cm with no hand on it (nearest finger 10755 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_030 moves 2.2 cm with no hand on it (nearest finger 10753 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_031 moves 1.0 cm with no hand on it (nearest finger 10752 cm)"
+   ]
+  ],
+  "835": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_013 moves 2.1 cm with no hand on it (nearest finger 10779 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_016 moves 2.7 cm with no hand on it (nearest finger 10777 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_017 moves 2.9 cm with no hand on it (nearest finger 10779 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_018 moves 3.6 cm with no hand on it (nearest finger 10786 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_020 moves 4.1 cm with no hand on it (nearest finger 10780 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_021 moves 3.6 cm with no hand on it (nearest finger 10779 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_022 moves 2.8 cm with no hand on it (nearest finger 10770 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_023 moves 3.0 cm with no hand on it (nearest finger 10770 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_024 moves 3.7 cm with no hand on it (nearest finger 10768 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_025 moves 2.1 cm with no hand on it (nearest finger 10763 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_026 moves 3.8 cm with no hand on it (nearest finger 10763 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_027 moves 3.2 cm with no hand on it (nearest finger 10762 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_028 moves 3.5 cm with no hand on it (nearest finger 10759 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_029 moves 3.5 cm with no hand on it (nearest finger 10758 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_030 moves 2.2 cm with no hand on it (nearest finger 10755 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_031 moves 3.1 cm with no hand on it (nearest finger 10754 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_032 moves 1.8 cm with no hand on it (nearest finger 10751 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Adr1_033 moves 1.5 cm with no hand on it (nearest finger 10754 cm)"
+   ]
+  ],
+  "841": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_000 moves 1.2 cm with no hand on it (nearest finger 10665 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_012 moves 1.3 cm with no hand on it (nearest finger 10701 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_024 moves 1.5 cm with no hand on it (nearest finger 10668 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_036 moves 1.1 cm with no hand on it (nearest finger 10676 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_044 moves 1.4 cm with no hand on it (nearest finger 10693 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_048 moves 1.2 cm with no hand on it (nearest finger 10675 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_088 moves 1.2 cm with no hand on it (nearest finger 10709 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_092 moves 1.5 cm with no hand on it (nearest finger 10705 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_100 moves 1.4 cm with no hand on it (nearest finger 10695 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_104 moves 1.5 cm with no hand on it (nearest finger 10705 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_108 moves 1.3 cm with no hand on it (nearest finger 10692 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_003 moves 1.4 cm with no hand on it (nearest finger 10706 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_011 moves 1.3 cm with no hand on it (nearest finger 10720 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_013 moves 1.2 cm with no hand on it (nearest finger 10713 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_014 moves 1.2 cm with no hand on it (nearest finger 10670 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_015 moves 1.3 cm with no hand on it (nearest finger 10722 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_027 moves 1.2 cm with no hand on it (nearest finger 10712 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_039 moves 1.4 cm with no hand on it (nearest finger 10700 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_049 moves 1.4 cm with no hand on it (nearest finger 10702 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_058 moves 1.4 cm with no hand on it (nearest finger 10704 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_059 moves 1.2 cm with no hand on it (nearest finger 10706 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_062 moves 1.2 cm with no hand on it (nearest finger 10656 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_069 moves 1.1 cm with no hand on it (nearest finger 10713 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_071 moves 1.2 cm with no hand on it (nearest finger 10711 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_075 moves 1.3 cm with no hand on it (nearest finger 10712 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_079 moves 1.2 cm with no hand on it (nearest finger 10706 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_081 moves 1.2 cm with no hand on it (nearest finger 10706 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_082 moves 1.2 cm with no hand on it (nearest finger 10692 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_085 moves 1.3 cm with no hand on it (nearest finger 10705 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_094 moves 1.4 cm with no hand on it (nearest finger 10674 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_097 moves 1.5 cm with no hand on it (nearest finger 10715 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_101 moves 1.4 cm with no hand on it (nearest finger 10717 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_105 moves 1.2 cm with no hand on it (nearest finger 10707 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_106 moves 1.3 cm with no hand on it (nearest finger 10677 cm)"
+   ]
+  ],
+  "847": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_000 moves 7.3 cm with no hand on it (nearest finger 10663 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_012 moves 7.7 cm with no hand on it (nearest finger 10699 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_024 moves 8.9 cm with no hand on it (nearest finger 10666 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_036 moves 6.8 cm with no hand on it (nearest finger 10674 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_044 moves 8.4 cm with no hand on it (nearest finger 10691 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_048 moves 6.9 cm with no hand on it (nearest finger 10673 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_088 moves 7.2 cm with no hand on it (nearest finger 10708 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_092 moves 8.9 cm with no hand on it (nearest finger 10702 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_100 moves 8.5 cm with no hand on it (nearest finger 10692 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_104 moves 9.0 cm with no hand on it (nearest finger 10703 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_108 moves 8.1 cm with no hand on it (nearest finger 10689 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_003 moves 8.1 cm with no hand on it (nearest finger 10707 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_011 moves 7.6 cm with no hand on it (nearest finger 10720 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_013 moves 6.9 cm with no hand on it (nearest finger 10714 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_014 moves 7.0 cm with no hand on it (nearest finger 10668 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_015 moves 7.9 cm with no hand on it (nearest finger 10722 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_027 moves 7.1 cm with no hand on it (nearest finger 10712 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_039 moves 8.5 cm with no hand on it (nearest finger 10701 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_049 moves 8.2 cm with no hand on it (nearest finger 10703 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_058 moves 8.5 cm with no hand on it (nearest finger 10703 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_059 moves 7.1 cm with no hand on it (nearest finger 10706 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_062 moves 6.9 cm with no hand on it (nearest finger 10654 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_069 moves 6.8 cm with no hand on it (nearest finger 10713 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_071 moves 7.2 cm with no hand on it (nearest finger 10712 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_075 moves 7.6 cm with no hand on it (nearest finger 10712 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_079 moves 6.9 cm with no hand on it (nearest finger 10706 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_081 moves 7.1 cm with no hand on it (nearest finger 10706 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_082 moves 7.2 cm with no hand on it (nearest finger 10690 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_085 moves 7.6 cm with no hand on it (nearest finger 10706 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_094 moves 8.3 cm with no hand on it (nearest finger 10672 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_097 moves 9.1 cm with no hand on it (nearest finger 10716 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_101 moves 8.4 cm with no hand on it (nearest finger 10717 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_102 moves 7.1 cm with no hand on it (nearest finger 10704 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_105 moves 7.5 cm with no hand on it (nearest finger 10707 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_106 moves 7.6 cm with no hand on it (nearest finger 10675 cm)"
+   ]
+  ],
+  "853": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_000 moves 7.3 cm with no hand on it (nearest finger 10661 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_012 moves 7.7 cm with no hand on it (nearest finger 10697 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_024 moves 8.9 cm with no hand on it (nearest finger 10664 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_036 moves 6.8 cm with no hand on it (nearest finger 10672 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_044 moves 8.4 cm with no hand on it (nearest finger 10689 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_048 moves 6.9 cm with no hand on it (nearest finger 10672 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_088 moves 7.1 cm with no hand on it (nearest finger 10707 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_092 moves 8.9 cm with no hand on it (nearest finger 10700 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_100 moves 8.5 cm with no hand on it (nearest finger 10690 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_104 moves 9.0 cm with no hand on it (nearest finger 10701 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_108 moves 8.1 cm with no hand on it (nearest finger 10687 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_003 moves 8.1 cm with no hand on it (nearest finger 10708 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_011 moves 7.6 cm with no hand on it (nearest finger 10721 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_013 moves 6.9 cm with no hand on it (nearest finger 10715 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_014 moves 6.9 cm with no hand on it (nearest finger 10666 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_015 moves 7.9 cm with no hand on it (nearest finger 10722 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_027 moves 7.1 cm with no hand on it (nearest finger 10713 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_039 moves 8.5 cm with no hand on it (nearest finger 10701 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_049 moves 8.2 cm with no hand on it (nearest finger 10703 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_058 moves 8.5 cm with no hand on it (nearest finger 10702 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_059 moves 7.1 cm with no hand on it (nearest finger 10705 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_062 moves 6.9 cm with no hand on it (nearest finger 10653 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_069 moves 6.8 cm with no hand on it (nearest finger 10714 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_071 moves 7.2 cm with no hand on it (nearest finger 10713 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_075 moves 7.6 cm with no hand on it (nearest finger 10713 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_079 moves 6.9 cm with no hand on it (nearest finger 10707 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_081 moves 7.1 cm with no hand on it (nearest finger 10707 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_082 moves 7.2 cm with no hand on it (nearest finger 10689 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_085 moves 7.6 cm with no hand on it (nearest finger 10706 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_094 moves 8.3 cm with no hand on it (nearest finger 10670 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_097 moves 9.1 cm with no hand on it (nearest finger 10717 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_101 moves 8.4 cm with no hand on it (nearest finger 10717 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_102 moves 7.1 cm with no hand on it (nearest finger 10703 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_105 moves 7.5 cm with no hand on it (nearest finger 10708 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_106 moves 7.6 cm with no hand on it (nearest finger 10673 cm)"
+   ]
+  ],
+  "859": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_000 moves 7.3 cm with no hand on it (nearest finger 10660 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_012 moves 7.7 cm with no hand on it (nearest finger 10695 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_024 moves 8.9 cm with no hand on it (nearest finger 10662 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_036 moves 6.8 cm with no hand on it (nearest finger 10671 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_044 moves 8.4 cm with no hand on it (nearest finger 10687 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_048 moves 6.9 cm with no hand on it (nearest finger 10670 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_052 moves 8.0 cm with no hand on it (nearest finger 10710 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_088 moves 7.2 cm with no hand on it (nearest finger 10705 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_092 moves 8.9 cm with no hand on it (nearest finger 10698 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_100 moves 8.5 cm with no hand on it (nearest finger 10688 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_104 moves 9.0 cm with no hand on it (nearest finger 10699 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_108 moves 8.1 cm with no hand on it (nearest finger 10685 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_003 moves 8.1 cm with no hand on it (nearest finger 10708 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_011 moves 7.6 cm with no hand on it (nearest finger 10721 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_013 moves 6.9 cm with no hand on it (nearest finger 10715 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_014 moves 6.9 cm with no hand on it (nearest finger 10664 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_015 moves 7.9 cm with no hand on it (nearest finger 10722 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_027 moves 7.1 cm with no hand on it (nearest finger 10714 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_039 moves 8.5 cm with no hand on it (nearest finger 10702 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_049 moves 8.2 cm with no hand on it (nearest finger 10704 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_058 moves 8.3 cm with no hand on it (nearest finger 10701 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_059 moves 7.1 cm with no hand on it (nearest finger 10704 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_062 moves 6.9 cm with no hand on it (nearest finger 10652 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_066 moves 8.8 cm with no hand on it (nearest finger 10706 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_069 moves 6.8 cm with no hand on it (nearest finger 10714 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_071 moves 7.2 cm with no hand on it (nearest finger 10713 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_075 moves 7.6 cm with no hand on it (nearest finger 10714 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_079 moves 7.0 cm with no hand on it (nearest finger 10707 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_081 moves 7.1 cm with no hand on it (nearest finger 10708 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_082 moves 7.2 cm with no hand on it (nearest finger 10687 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_085 moves 7.6 cm with no hand on it (nearest finger 10707 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_094 moves 8.3 cm with no hand on it (nearest finger 10668 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_097 moves 9.1 cm with no hand on it (nearest finger 10717 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_101 moves 8.4 cm with no hand on it (nearest finger 10717 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_102 moves 7.1 cm with no hand on it (nearest finger 10702 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_105 moves 7.5 cm with no hand on it (nearest finger 10709 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_106 moves 7.6 cm with no hand on it (nearest finger 10672 cm)"
+   ]
+  ],
+  "865": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_000 moves 7.3 cm with no hand on it (nearest finger 10658 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_012 moves 7.7 cm with no hand on it (nearest finger 10693 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_024 moves 8.9 cm with no hand on it (nearest finger 10660 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_036 moves 6.8 cm with no hand on it (nearest finger 10669 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_044 moves 8.4 cm with no hand on it (nearest finger 10685 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_048 moves 6.9 cm with no hand on it (nearest finger 10668 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_052 moves 8.0 cm with no hand on it (nearest finger 10709 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_088 moves 7.2 cm with no hand on it (nearest finger 10704 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_092 moves 8.9 cm with no hand on it (nearest finger 10696 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_100 moves 8.5 cm with no hand on it (nearest finger 10686 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_104 moves 9.0 cm with no hand on it (nearest finger 10697 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_108 moves 8.1 cm with no hand on it (nearest finger 10684 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_003 moves 8.1 cm with no hand on it (nearest finger 10709 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_011 moves 7.6 cm with no hand on it (nearest finger 10719 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_013 moves 6.9 cm with no hand on it (nearest finger 10716 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_014 moves 6.9 cm with no hand on it (nearest finger 10663 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_015 moves 7.9 cm with no hand on it (nearest finger 10723 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_027 moves 7.1 cm with no hand on it (nearest finger 10715 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_039 moves 8.5 cm with no hand on it (nearest finger 10703 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_049 moves 8.2 cm with no hand on it (nearest finger 10704 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_058 moves 8.3 cm with no hand on it (nearest finger 10700 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_059 moves 7.1 cm with no hand on it (nearest finger 10703 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_062 moves 6.9 cm with no hand on it (nearest finger 10650 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_066 moves 8.8 cm with no hand on it (nearest finger 10705 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_069 moves 6.8 cm with no hand on it (nearest finger 10715 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_071 moves 7.2 cm with no hand on it (nearest finger 10714 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_075 moves 7.6 cm with no hand on it (nearest finger 10714 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_079 moves 7.0 cm with no hand on it (nearest finger 10708 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_081 moves 7.1 cm with no hand on it (nearest finger 10708 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_082 moves 7.2 cm with no hand on it (nearest finger 10685 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_085 moves 7.6 cm with no hand on it (nearest finger 10708 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_094 moves 8.3 cm with no hand on it (nearest finger 10665 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_097 moves 9.1 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_101 moves 8.4 cm with no hand on it (nearest finger 10717 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_102 moves 7.1 cm with no hand on it (nearest finger 10702 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_105 moves 7.5 cm with no hand on it (nearest finger 10709 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_106 moves 7.6 cm with no hand on it (nearest finger 10670 cm)"
+   ]
+  ],
+  "871": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_000 moves 7.3 cm with no hand on it (nearest finger 10656 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_012 moves 7.7 cm with no hand on it (nearest finger 10691 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_024 moves 8.9 cm with no hand on it (nearest finger 10658 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_036 moves 6.8 cm with no hand on it (nearest finger 10667 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_044 moves 8.4 cm with no hand on it (nearest finger 10682 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_048 moves 6.9 cm with no hand on it (nearest finger 10667 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_052 moves 8.0 cm with no hand on it (nearest finger 10708 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_088 moves 7.2 cm with no hand on it (nearest finger 10702 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_092 moves 8.9 cm with no hand on it (nearest finger 10693 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_100 moves 8.5 cm with no hand on it (nearest finger 10684 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_104 moves 9.0 cm with no hand on it (nearest finger 10694 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_108 moves 8.1 cm with no hand on it (nearest finger 10682 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_003 moves 8.1 cm with no hand on it (nearest finger 10710 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_011 moves 7.6 cm with no hand on it (nearest finger 10717 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_013 moves 6.9 cm with no hand on it (nearest finger 10717 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_014 moves 7.0 cm with no hand on it (nearest finger 10661 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_015 moves 7.9 cm with no hand on it (nearest finger 10722 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_027 moves 7.1 cm with no hand on it (nearest finger 10717 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_039 moves 8.5 cm with no hand on it (nearest finger 10703 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_049 moves 8.2 cm with no hand on it (nearest finger 10705 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_058 moves 8.5 cm with no hand on it (nearest finger 10698 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_059 moves 7.0 cm with no hand on it (nearest finger 10703 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_062 moves 6.9 cm with no hand on it (nearest finger 10649 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_066 moves 8.8 cm with no hand on it (nearest finger 10704 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_069 moves 6.8 cm with no hand on it (nearest finger 10716 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_071 moves 7.2 cm with no hand on it (nearest finger 10715 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_075 moves 7.6 cm with no hand on it (nearest finger 10715 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_079 moves 7.0 cm with no hand on it (nearest finger 10709 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_081 moves 7.1 cm with no hand on it (nearest finger 10708 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_082 moves 7.2 cm with no hand on it (nearest finger 10683 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_085 moves 7.6 cm with no hand on it (nearest finger 10708 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_094 moves 8.3 cm with no hand on it (nearest finger 10663 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_097 moves 9.1 cm with no hand on it (nearest finger 10719 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_101 moves 8.4 cm with no hand on it (nearest finger 10717 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_102 moves 7.1 cm with no hand on it (nearest finger 10701 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_105 moves 7.5 cm with no hand on it (nearest finger 10711 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_106 moves 7.6 cm with no hand on it (nearest finger 10668 cm)"
+   ]
+  ],
+  "877": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_000 moves 7.3 cm with no hand on it (nearest finger 10655 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_012 moves 7.7 cm with no hand on it (nearest finger 10689 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_024 moves 8.9 cm with no hand on it (nearest finger 10657 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_036 moves 6.8 cm with no hand on it (nearest finger 10666 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_044 moves 8.4 cm with no hand on it (nearest finger 10680 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_048 moves 6.9 cm with no hand on it (nearest finger 10666 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_052 moves 8.0 cm with no hand on it (nearest finger 10707 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_088 moves 7.2 cm with no hand on it (nearest finger 10700 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_092 moves 8.9 cm with no hand on it (nearest finger 10691 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_100 moves 8.5 cm with no hand on it (nearest finger 10681 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_104 moves 9.0 cm with no hand on it (nearest finger 10692 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_108 moves 8.1 cm with no hand on it (nearest finger 10680 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_003 moves 8.1 cm with no hand on it (nearest finger 10711 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_011 moves 7.6 cm with no hand on it (nearest finger 10715 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_013 moves 6.9 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_014 moves 7.0 cm with no hand on it (nearest finger 10660 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_015 moves 7.9 cm with no hand on it (nearest finger 10719 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_027 moves 7.1 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_039 moves 8.5 cm with no hand on it (nearest finger 10704 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_049 moves 8.2 cm with no hand on it (nearest finger 10706 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_058 moves 8.5 cm with no hand on it (nearest finger 10696 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_059 moves 6.9 cm with no hand on it (nearest finger 10703 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_062 moves 6.9 cm with no hand on it (nearest finger 10647 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_066 moves 8.8 cm with no hand on it (nearest finger 10704 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_069 moves 6.8 cm with no hand on it (nearest finger 10716 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_071 moves 7.2 cm with no hand on it (nearest finger 10716 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_075 moves 7.6 cm with no hand on it (nearest finger 10716 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_079 moves 7.0 cm with no hand on it (nearest finger 10709 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_081 moves 7.1 cm with no hand on it (nearest finger 10709 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_082 moves 7.2 cm with no hand on it (nearest finger 10681 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_085 moves 7.6 cm with no hand on it (nearest finger 10709 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_094 moves 8.3 cm with no hand on it (nearest finger 10662 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_097 moves 9.1 cm with no hand on it (nearest finger 10720 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_101 moves 8.4 cm with no hand on it (nearest finger 10717 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_102 moves 7.0 cm with no hand on it (nearest finger 10700 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_105 moves 7.5 cm with no hand on it (nearest finger 10712 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_106 moves 7.6 cm with no hand on it (nearest finger 10666 cm)"
+   ]
+  ],
+  "883": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_000 moves 7.3 cm with no hand on it (nearest finger 10653 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_012 moves 7.7 cm with no hand on it (nearest finger 10687 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_024 moves 8.9 cm with no hand on it (nearest finger 10655 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_036 moves 6.8 cm with no hand on it (nearest finger 10664 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_044 moves 8.4 cm with no hand on it (nearest finger 10678 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_048 moves 6.9 cm with no hand on it (nearest finger 10664 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_052 moves 8.0 cm with no hand on it (nearest finger 10707 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_088 moves 7.2 cm with no hand on it (nearest finger 10698 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_092 moves 8.9 cm with no hand on it (nearest finger 10689 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_100 moves 8.5 cm with no hand on it (nearest finger 10679 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_104 moves 9.0 cm with no hand on it (nearest finger 10690 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_108 moves 8.1 cm with no hand on it (nearest finger 10678 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_003 moves 8.1 cm with no hand on it (nearest finger 10712 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_011 moves 7.6 cm with no hand on it (nearest finger 10713 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_013 moves 6.9 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_014 moves 7.0 cm with no hand on it (nearest finger 10658 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_015 moves 7.9 cm with no hand on it (nearest finger 10717 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_027 moves 7.1 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_039 moves 8.5 cm with no hand on it (nearest finger 10705 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_049 moves 8.2 cm with no hand on it (nearest finger 10707 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_058 moves 8.5 cm with no hand on it (nearest finger 10694 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_059 moves 7.1 cm with no hand on it (nearest finger 10703 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_062 moves 6.9 cm with no hand on it (nearest finger 10645 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_066 moves 8.8 cm with no hand on it (nearest finger 10703 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_069 moves 6.8 cm with no hand on it (nearest finger 10717 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_071 moves 7.2 cm with no hand on it (nearest finger 10716 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_075 moves 7.6 cm with no hand on it (nearest finger 10717 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_079 moves 7.0 cm with no hand on it (nearest finger 10710 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_081 moves 7.1 cm with no hand on it (nearest finger 10709 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_082 moves 7.2 cm with no hand on it (nearest finger 10680 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_085 moves 7.6 cm with no hand on it (nearest finger 10710 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_094 moves 8.3 cm with no hand on it (nearest finger 10660 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_097 moves 9.1 cm with no hand on it (nearest finger 10720 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_101 moves 8.4 cm with no hand on it (nearest finger 10716 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_102 moves 6.9 cm with no hand on it (nearest finger 10699 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_103 moves 7.0 cm with no hand on it (nearest finger 10706 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_105 moves 7.5 cm with no hand on it (nearest finger 10713 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_106 moves 7.6 cm with no hand on it (nearest finger 10665 cm)"
+   ]
+  ],
+  "889": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_000 moves 7.0 cm with no hand on it (nearest finger 10652 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_004 moves 9.1 cm with no hand on it (nearest finger 10713 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_012 moves 7.7 cm with no hand on it (nearest finger 10685 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_024 moves 8.9 cm with no hand on it (nearest finger 10653 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_036 moves 6.8 cm with no hand on it (nearest finger 10662 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_044 moves 8.4 cm with no hand on it (nearest finger 10676 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_048 moves 6.9 cm with no hand on it (nearest finger 10663 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_052 moves 7.9 cm with no hand on it (nearest finger 10706 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_088 moves 7.2 cm with no hand on it (nearest finger 10696 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_092 moves 8.9 cm with no hand on it (nearest finger 10687 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_100 moves 8.5 cm with no hand on it (nearest finger 10677 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_104 moves 9.0 cm with no hand on it (nearest finger 10687 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_108 moves 8.1 cm with no hand on it (nearest finger 10675 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_003 moves 8.1 cm with no hand on it (nearest finger 10713 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_013 moves 6.9 cm with no hand on it (nearest finger 10719 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_014 moves 7.0 cm with no hand on it (nearest finger 10657 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_027 moves 7.1 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_039 moves 8.5 cm with no hand on it (nearest finger 10706 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_049 moves 8.2 cm with no hand on it (nearest finger 10707 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_058 moves 8.5 cm with no hand on it (nearest finger 10692 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_059 moves 7.1 cm with no hand on it (nearest finger 10704 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_062 moves 6.9 cm with no hand on it (nearest finger 10644 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_066 moves 8.7 cm with no hand on it (nearest finger 10702 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_069 moves 6.8 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_071 moves 7.2 cm with no hand on it (nearest finger 10717 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_075 moves 7.6 cm with no hand on it (nearest finger 10716 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_079 moves 7.0 cm with no hand on it (nearest finger 10710 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_081 moves 7.1 cm with no hand on it (nearest finger 10710 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_082 moves 7.2 cm with no hand on it (nearest finger 10678 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_085 moves 7.6 cm with no hand on it (nearest finger 10711 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_094 moves 8.3 cm with no hand on it (nearest finger 10658 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_097 moves 9.1 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_101 moves 8.4 cm with no hand on it (nearest finger 10713 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_102 moves 6.9 cm with no hand on it (nearest finger 10698 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_103 moves 7.0 cm with no hand on it (nearest finger 10705 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_105 moves 7.5 cm with no hand on it (nearest finger 10714 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_106 moves 7.6 cm with no hand on it (nearest finger 10663 cm)"
+   ]
+  ],
+  "895": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_000 moves 5.3 cm with no hand on it (nearest finger 10653 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_004 moves 9.1 cm with no hand on it (nearest finger 10713 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_012 moves 7.7 cm with no hand on it (nearest finger 10683 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_024 moves 8.9 cm with no hand on it (nearest finger 10651 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_036 moves 6.8 cm with no hand on it (nearest finger 10661 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_044 moves 8.4 cm with no hand on it (nearest finger 10674 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_048 moves 6.9 cm with no hand on it (nearest finger 10661 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_052 moves 7.8 cm with no hand on it (nearest finger 10704 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_088 moves 7.2 cm with no hand on it (nearest finger 10694 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_092 moves 8.9 cm with no hand on it (nearest finger 10684 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_100 moves 8.5 cm with no hand on it (nearest finger 10675 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_104 moves 9.0 cm with no hand on it (nearest finger 10685 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_108 moves 8.1 cm with no hand on it (nearest finger 10673 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_003 moves 8.1 cm with no hand on it (nearest finger 10713 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_013 moves 6.9 cm with no hand on it (nearest finger 10719 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_014 moves 7.0 cm with no hand on it (nearest finger 10656 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_027 moves 7.1 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_039 moves 8.5 cm with no hand on it (nearest finger 10707 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_049 moves 8.2 cm with no hand on it (nearest finger 10708 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_058 moves 8.5 cm with no hand on it (nearest finger 10691 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_059 moves 7.1 cm with no hand on it (nearest finger 10705 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_062 moves 6.9 cm with no hand on it (nearest finger 10643 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_066 moves 8.6 cm with no hand on it (nearest finger 10700 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_069 moves 6.8 cm with no hand on it (nearest finger 10717 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_071 moves 7.2 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_075 moves 7.6 cm with no hand on it (nearest finger 10714 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_079 moves 7.0 cm with no hand on it (nearest finger 10711 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_081 moves 7.1 cm with no hand on it (nearest finger 10710 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_082 moves 7.2 cm with no hand on it (nearest finger 10676 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_085 moves 7.6 cm with no hand on it (nearest finger 10712 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_094 moves 8.3 cm with no hand on it (nearest finger 10656 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_101 moves 8.4 cm with no hand on it (nearest finger 10711 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_102 moves 7.1 cm with no hand on it (nearest finger 10696 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_103 moves 7.0 cm with no hand on it (nearest finger 10704 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_105 moves 7.5 cm with no hand on it (nearest finger 10715 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_106 moves 7.6 cm with no hand on it (nearest finger 10661 cm)"
+   ]
+  ],
+  "901": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_000 moves 4.4 cm with no hand on it (nearest finger 10654 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_004 moves 9.1 cm with no hand on it (nearest finger 10712 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_012 moves 7.7 cm with no hand on it (nearest finger 10681 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_024 moves 8.1 cm with no hand on it (nearest finger 10649 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_036 moves 6.8 cm with no hand on it (nearest finger 10660 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_044 moves 8.4 cm with no hand on it (nearest finger 10671 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_048 moves 6.9 cm with no hand on it (nearest finger 10659 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_052 moves 7.8 cm with no hand on it (nearest finger 10703 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_088 moves 7.2 cm with no hand on it (nearest finger 10693 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_092 moves 8.9 cm with no hand on it (nearest finger 10682 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_100 moves 8.5 cm with no hand on it (nearest finger 10673 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_104 moves 9.0 cm with no hand on it (nearest finger 10683 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_108 moves 8.1 cm with no hand on it (nearest finger 10671 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_003 moves 8.1 cm with no hand on it (nearest finger 10714 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_013 moves 6.9 cm with no hand on it (nearest finger 10720 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_014 moves 7.0 cm with no hand on it (nearest finger 10654 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_027 moves 7.1 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_035 moves 8.1 cm with no hand on it (nearest finger 10703 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_039 moves 8.5 cm with no hand on it (nearest finger 10708 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_049 moves 8.2 cm with no hand on it (nearest finger 10709 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_058 moves 8.5 cm with no hand on it (nearest finger 10689 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_059 moves 7.1 cm with no hand on it (nearest finger 10706 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_062 moves 6.9 cm with no hand on it (nearest finger 10641 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_066 moves 8.6 cm with no hand on it (nearest finger 10698 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_069 moves 6.7 cm with no hand on it (nearest finger 10716 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_071 moves 7.2 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_075 moves 7.5 cm with no hand on it (nearest finger 10714 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_079 moves 7.0 cm with no hand on it (nearest finger 10711 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_081 moves 7.1 cm with no hand on it (nearest finger 10711 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_082 moves 7.2 cm with no hand on it (nearest finger 10674 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_085 moves 7.6 cm with no hand on it (nearest finger 10713 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_094 moves 8.3 cm with no hand on it (nearest finger 10655 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_101 moves 7.5 cm with no hand on it (nearest finger 10710 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_102 moves 7.1 cm with no hand on it (nearest finger 10694 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_103 moves 7.0 cm with no hand on it (nearest finger 10703 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_105 moves 7.5 cm with no hand on it (nearest finger 10716 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_106 moves 7.6 cm with no hand on it (nearest finger 10659 cm)"
+   ]
+  ],
+  "907": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_004 moves 9.1 cm with no hand on it (nearest finger 10711 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_012 moves 7.7 cm with no hand on it (nearest finger 10679 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_024 moves 3.7 cm with no hand on it (nearest finger 10651 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_036 moves 6.8 cm with no hand on it (nearest finger 10658 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_044 moves 8.4 cm with no hand on it (nearest finger 10669 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_048 moves 6.9 cm with no hand on it (nearest finger 10658 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_052 moves 8.0 cm with no hand on it (nearest finger 10700 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_088 moves 7.2 cm with no hand on it (nearest finger 10691 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_092 moves 8.9 cm with no hand on it (nearest finger 10680 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_100 moves 8.5 cm with no hand on it (nearest finger 10671 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_104 moves 9.0 cm with no hand on it (nearest finger 10680 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_108 moves 8.1 cm with no hand on it (nearest finger 10669 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_003 moves 8.1 cm with no hand on it (nearest finger 10715 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_013 moves 6.9 cm with no hand on it (nearest finger 10721 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_014 moves 7.0 cm with no hand on it (nearest finger 10653 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_027 moves 7.1 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_035 moves 8.1 cm with no hand on it (nearest finger 10702 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_039 moves 8.5 cm with no hand on it (nearest finger 10709 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_049 moves 8.2 cm with no hand on it (nearest finger 10710 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_058 moves 8.5 cm with no hand on it (nearest finger 10686 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_059 moves 7.1 cm with no hand on it (nearest finger 10706 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_066 moves 8.8 cm with no hand on it (nearest finger 10696 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_069 moves 6.6 cm with no hand on it (nearest finger 10719 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_071 moves 7.2 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_075 moves 7.4 cm with no hand on it (nearest finger 10716 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_078 moves 8.3 cm with no hand on it (nearest finger 10705 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_079 moves 7.0 cm with no hand on it (nearest finger 10712 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_081 moves 7.1 cm with no hand on it (nearest finger 10711 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_082 moves 7.2 cm with no hand on it (nearest finger 10672 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_085 moves 7.6 cm with no hand on it (nearest finger 10714 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_094 moves 8.3 cm with no hand on it (nearest finger 10653 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_101 moves 2.8 cm with no hand on it (nearest finger 10714 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_102 moves 7.1 cm with no hand on it (nearest finger 10692 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_103 moves 7.0 cm with no hand on it (nearest finger 10702 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_105 moves 7.5 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_106 moves 7.6 cm with no hand on it (nearest finger 10658 cm)"
+   ]
+  ],
+  "913": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_004 moves 9.0 cm with no hand on it (nearest finger 10710 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_012 moves 7.7 cm with no hand on it (nearest finger 10677 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_024 moves 3.1 cm with no hand on it (nearest finger 10652 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_036 moves 6.8 cm with no hand on it (nearest finger 10657 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_044 moves 8.4 cm with no hand on it (nearest finger 10667 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_048 moves 6.9 cm with no hand on it (nearest finger 10656 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_052 moves 8.0 cm with no hand on it (nearest finger 10698 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_088 moves 7.2 cm with no hand on it (nearest finger 10689 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_092 moves 8.9 cm with no hand on it (nearest finger 10677 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_100 moves 8.5 cm with no hand on it (nearest finger 10669 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_104 moves 9.0 cm with no hand on it (nearest finger 10678 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowO2_108 moves 8.1 cm with no hand on it (nearest finger 10667 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_003 moves 8.1 cm with no hand on it (nearest finger 10715 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_013 moves 6.9 cm with no hand on it (nearest finger 10721 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_014 moves 7.0 cm with no hand on it (nearest finger 10652 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_027 moves 7.1 cm with no hand on it (nearest finger 10719 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_035 moves 8.1 cm with no hand on it (nearest finger 10702 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_039 moves 8.5 cm with no hand on it (nearest finger 10710 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_049 moves 8.2 cm with no hand on it (nearest finger 10712 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_058 moves 8.5 cm with no hand on it (nearest finger 10683 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_059 moves 7.1 cm with no hand on it (nearest finger 10707 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_066 moves 8.8 cm with no hand on it (nearest finger 10693 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_069 moves 5.5 cm with no hand on it (nearest finger 10721 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_071 moves 7.2 cm with no hand on it (nearest finger 10716 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_075 moves 6.2 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_078 moves 8.3 cm with no hand on it (nearest finger 10704 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_079 moves 7.0 cm with no hand on it (nearest finger 10712 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_081 moves 7.1 cm with no hand on it (nearest finger 10712 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_082 moves 7.2 cm with no hand on it (nearest finger 10670 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_085 moves 7.6 cm with no hand on it (nearest finger 10716 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_094 moves 8.3 cm with no hand on it (nearest finger 10651 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_101 moves 2.3 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_102 moves 7.1 cm with no hand on it (nearest finger 10691 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_103 moves 7.0 cm with no hand on it (nearest finger 10701 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_105 moves 7.5 cm with no hand on it (nearest finger 10718 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FlowRBC_106 moves 7.6 cm with no hand on it (nearest finger 10656 cm)"
+   ]
+  ],
+  "919": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "925": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "931": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_000 moves 2.3 cm with no hand on it (nearest finger 10495 cm)"
+   ]
+  ],
+  "937": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_000 moves 6.8 cm with no hand on it (nearest finger 10495 cm)"
+   ]
+  ],
+  "943": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_000 moves 6.8 cm with no hand on it (nearest finger 10496 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_002 moves 4.6 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_003 moves 5.0 cm with no hand on it (nearest finger 10492 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_004 moves 4.6 cm with no hand on it (nearest finger 10533 cm)"
+   ]
+  ],
+  "949": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_000 moves 6.8 cm with no hand on it (nearest finger 10496 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_001 moves 8.0 cm with no hand on it (nearest finger 10475 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_002 moves 6.8 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_003 moves 7.5 cm with no hand on it (nearest finger 10493 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_004 moves 6.8 cm with no hand on it (nearest finger 10533 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_005 moves 6.9 cm with no hand on it (nearest finger 10525 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_006 moves 5.9 cm with no hand on it (nearest finger 10502 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_007 moves 5.8 cm with no hand on it (nearest finger 10462 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_008 moves 3.0 cm with no hand on it (nearest finger 10452 cm)"
+   ]
+  ],
+  "955": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_000 moves 6.8 cm with no hand on it (nearest finger 10497 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_001 moves 8.0 cm with no hand on it (nearest finger 10477 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_002 moves 6.8 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_003 moves 7.5 cm with no hand on it (nearest finger 10494 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_004 moves 6.8 cm with no hand on it (nearest finger 10534 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_005 moves 6.9 cm with no hand on it (nearest finger 10526 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_006 moves 5.9 cm with no hand on it (nearest finger 10501 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_007 moves 6.9 cm with no hand on it (nearest finger 10462 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_008 moves 5.9 cm with no hand on it (nearest finger 10452 cm)"
+   ]
+  ],
+  "961": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_000 moves 6.8 cm with no hand on it (nearest finger 10497 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_001 moves 8.0 cm with no hand on it (nearest finger 10479 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_002 moves 6.8 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_003 moves 7.5 cm with no hand on it (nearest finger 10495 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_004 moves 6.8 cm with no hand on it (nearest finger 10534 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_005 moves 6.9 cm with no hand on it (nearest finger 10527 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_006 moves 5.9 cm with no hand on it (nearest finger 10500 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_007 moves 6.9 cm with no hand on it (nearest finger 10463 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_008 moves 5.9 cm with no hand on it (nearest finger 10453 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_009 moves 7.3 cm with no hand on it (nearest finger 10539 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_010 moves 5.6 cm with no hand on it (nearest finger 10506 cm)"
+   ]
+  ],
+  "967": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_000 moves 6.8 cm with no hand on it (nearest finger 10498 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_001 moves 8.0 cm with no hand on it (nearest finger 10481 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_002 moves 6.8 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_003 moves 7.5 cm with no hand on it (nearest finger 10496 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_004 moves 6.8 cm with no hand on it (nearest finger 10535 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_005 moves 6.9 cm with no hand on it (nearest finger 10528 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_006 moves 5.9 cm with no hand on it (nearest finger 10499 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_007 moves 6.9 cm with no hand on it (nearest finger 10463 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_008 moves 5.9 cm with no hand on it (nearest finger 10453 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_009 moves 7.3 cm with no hand on it (nearest finger 10540 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_010 moves 5.6 cm with no hand on it (nearest finger 10507 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_011 moves 7.6 cm with no hand on it (nearest finger 10549 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_012 moves 5.6 cm with no hand on it (nearest finger 10481 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_013 moves 1.3 cm with no hand on it (nearest finger 10454 cm)"
+   ]
+  ],
+  "973": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_000 moves 6.8 cm with no hand on it (nearest finger 10498 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_001 moves 8.0 cm with no hand on it (nearest finger 10483 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_002 moves 6.8 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_003 moves 7.5 cm with no hand on it (nearest finger 10496 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_004 moves 6.8 cm with no hand on it (nearest finger 10535 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_005 moves 6.9 cm with no hand on it (nearest finger 10529 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_006 moves 5.9 cm with no hand on it (nearest finger 10497 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_007 moves 6.9 cm with no hand on it (nearest finger 10463 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_008 moves 5.9 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_009 moves 7.3 cm with no hand on it (nearest finger 10542 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_010 moves 5.6 cm with no hand on it (nearest finger 10508 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_011 moves 7.6 cm with no hand on it (nearest finger 10550 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_012 moves 6.7 cm with no hand on it (nearest finger 10482 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_013 moves 7.9 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_014 moves 7.9 cm with no hand on it (nearest finger 10478 cm)"
+   ]
+  ],
+  "979": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_000 moves 6.8 cm with no hand on it (nearest finger 10498 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_001 moves 8.0 cm with no hand on it (nearest finger 10484 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_002 moves 6.8 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_003 moves 7.5 cm with no hand on it (nearest finger 10497 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_004 moves 6.8 cm with no hand on it (nearest finger 10536 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_005 moves 6.9 cm with no hand on it (nearest finger 10530 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_006 moves 5.9 cm with no hand on it (nearest finger 10496 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_007 moves 6.9 cm with no hand on it (nearest finger 10463 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_008 moves 5.9 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_009 moves 7.3 cm with no hand on it (nearest finger 10543 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_010 moves 5.6 cm with no hand on it (nearest finger 10508 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_011 moves 7.6 cm with no hand on it (nearest finger 10552 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_012 moves 6.7 cm with no hand on it (nearest finger 10483 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_013 moves 7.9 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_014 moves 7.9 cm with no hand on it (nearest finger 10479 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_015 moves 7.7 cm with no hand on it (nearest finger 10499 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_016 moves 6.7 cm with no hand on it (nearest finger 10527 cm)"
+   ]
+  ],
+  "985": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_000 moves 5.4 cm with no hand on it (nearest finger 10500 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_001 moves 7.1 cm with no hand on it (nearest finger 10487 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_002 moves 6.8 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_003 moves 7.5 cm with no hand on it (nearest finger 10498 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_004 moves 6.8 cm with no hand on it (nearest finger 10537 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_005 moves 6.9 cm with no hand on it (nearest finger 10531 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_006 moves 5.9 cm with no hand on it (nearest finger 10495 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_007 moves 6.9 cm with no hand on it (nearest finger 10463 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_008 moves 5.9 cm with no hand on it (nearest finger 10455 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_009 moves 7.3 cm with no hand on it (nearest finger 10544 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_010 moves 5.6 cm with no hand on it (nearest finger 10509 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_011 moves 7.6 cm with no hand on it (nearest finger 10553 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_012 moves 6.7 cm with no hand on it (nearest finger 10483 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_013 moves 7.9 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_014 moves 7.9 cm with no hand on it (nearest finger 10479 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_015 moves 7.7 cm with no hand on it (nearest finger 10498 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_016 moves 6.7 cm with no hand on it (nearest finger 10527 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_017 moves 7.9 cm with no hand on it (nearest finger 10466 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_019 moves 3.9 cm with no hand on it (nearest finger 10446 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_020 moves 6.8 cm with no hand on it (nearest finger 10512 cm)"
+   ]
+  ],
+  "991": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_000 moves 4.7 cm with no hand on it (nearest finger 10502 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_001 moves 5.5 cm with no hand on it (nearest finger 10490 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_002 moves 6.8 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_003 moves 7.5 cm with no hand on it (nearest finger 10499 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_004 moves 6.8 cm with no hand on it (nearest finger 10537 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_005 moves 6.9 cm with no hand on it (nearest finger 10532 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_006 moves 5.9 cm with no hand on it (nearest finger 10494 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_007 moves 6.9 cm with no hand on it (nearest finger 10464 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_008 moves 5.9 cm with no hand on it (nearest finger 10455 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_009 moves 7.3 cm with no hand on it (nearest finger 10546 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_010 moves 5.6 cm with no hand on it (nearest finger 10510 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_011 moves 7.6 cm with no hand on it (nearest finger 10554 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_012 moves 6.7 cm with no hand on it (nearest finger 10484 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_013 moves 7.9 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_014 moves 7.9 cm with no hand on it (nearest finger 10480 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_015 moves 7.7 cm with no hand on it (nearest finger 10497 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_016 moves 6.7 cm with no hand on it (nearest finger 10527 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_017 moves 7.9 cm with no hand on it (nearest finger 10464 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_018 moves 8.4 cm with no hand on it (nearest finger 10532 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_019 moves 5.9 cm with no hand on it (nearest finger 10446 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_020 moves 6.8 cm with no hand on it (nearest finger 10513 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_021 moves 5.3 cm with no hand on it (nearest finger 10479 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_022 moves 4.3 cm with no hand on it (nearest finger 10561 cm)"
+   ]
+  ],
+  "997": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_001 moves 1.8 cm with no hand on it (nearest finger 10491 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_002 moves 4.7 cm with no hand on it (nearest finger 10456 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_003 moves 5.2 cm with no hand on it (nearest finger 10501 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_004 moves 4.7 cm with no hand on it (nearest finger 10539 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_005 moves 5.9 cm with no hand on it (nearest finger 10534 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_006 moves 5.3 cm with no hand on it (nearest finger 10493 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_007 moves 6.6 cm with no hand on it (nearest finger 10464 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_008 moves 5.9 cm with no hand on it (nearest finger 10456 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_009 moves 7.3 cm with no hand on it (nearest finger 10547 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_010 moves 5.6 cm with no hand on it (nearest finger 10511 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_011 moves 7.6 cm with no hand on it (nearest finger 10555 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_012 moves 6.7 cm with no hand on it (nearest finger 10485 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_013 moves 7.9 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_014 moves 7.9 cm with no hand on it (nearest finger 10480 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_015 moves 7.7 cm with no hand on it (nearest finger 10497 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_016 moves 6.7 cm with no hand on it (nearest finger 10527 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_017 moves 7.9 cm with no hand on it (nearest finger 10463 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_018 moves 8.4 cm with no hand on it (nearest finger 10532 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_019 moves 5.9 cm with no hand on it (nearest finger 10446 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_020 moves 6.8 cm with no hand on it (nearest finger 10514 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_021 moves 6.4 cm with no hand on it (nearest finger 10480 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_022 moves 6.5 cm with no hand on it (nearest finger 10560 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_023 moves 7.7 cm with no hand on it (nearest finger 10437 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_025 moves 8.0 cm with no hand on it (nearest finger 10491 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_026 moves 5.6 cm with no hand on it (nearest finger 10541 cm)"
+   ]
+  ],
+  "1003": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_002 moves 3.2 cm with no hand on it (nearest finger 10457 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_003 moves 3.5 cm with no hand on it (nearest finger 10503 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_004 moves 3.2 cm with no hand on it (nearest finger 10541 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_005 moves 4.8 cm with no hand on it (nearest finger 10536 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_006 moves 4.1 cm with no hand on it (nearest finger 10494 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_007 moves 4.8 cm with no hand on it (nearest finger 10466 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_008 moves 4.4 cm with no hand on it (nearest finger 10458 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_009 moves 7.3 cm with no hand on it (nearest finger 10549 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_010 moves 5.6 cm with no hand on it (nearest finger 10512 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_011 moves 7.6 cm with no hand on it (nearest finger 10556 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_012 moves 6.7 cm with no hand on it (nearest finger 10485 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_013 moves 7.9 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_014 moves 7.9 cm with no hand on it (nearest finger 10481 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_015 moves 7.7 cm with no hand on it (nearest finger 10496 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_016 moves 6.7 cm with no hand on it (nearest finger 10527 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_017 moves 7.9 cm with no hand on it (nearest finger 10462 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_018 moves 8.4 cm with no hand on it (nearest finger 10533 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_019 moves 5.9 cm with no hand on it (nearest finger 10446 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_020 moves 6.8 cm with no hand on it (nearest finger 10514 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_021 moves 6.4 cm with no hand on it (nearest finger 10481 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_022 moves 6.5 cm with no hand on it (nearest finger 10559 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_023 moves 7.7 cm with no hand on it (nearest finger 10439 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_024 moves 7.8 cm with no hand on it (nearest finger 10559 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_025 moves 8.0 cm with no hand on it (nearest finger 10491 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_026 moves 6.7 cm with no hand on it (nearest finger 10541 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_027 moves 2.5 cm with no hand on it (nearest finger 10468 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_028 moves 7.1 cm with no hand on it (nearest finger 10468 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_029 moves 2.3 cm with no hand on it (nearest finger 10435 cm)"
+   ]
+  ],
+  "1009": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_005 moves 0.8 cm with no hand on it (nearest finger 10537 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_006 moves 1.4 cm with no hand on it (nearest finger 10494 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_007 moves 2.4 cm with no hand on it (nearest finger 10467 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_008 moves 3.4 cm with no hand on it (nearest finger 10459 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_009 moves 5.1 cm with no hand on it (nearest finger 10551 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_010 moves 5.0 cm with no hand on it (nearest finger 10513 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_011 moves 6.9 cm with no hand on it (nearest finger 10558 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_012 moves 6.7 cm with no hand on it (nearest finger 10486 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_013 moves 7.9 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_014 moves 7.9 cm with no hand on it (nearest finger 10481 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_015 moves 7.7 cm with no hand on it (nearest finger 10495 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_016 moves 6.7 cm with no hand on it (nearest finger 10528 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_017 moves 7.9 cm with no hand on it (nearest finger 10460 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_018 moves 8.4 cm with no hand on it (nearest finger 10533 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_019 moves 5.9 cm with no hand on it (nearest finger 10446 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_020 moves 6.8 cm with no hand on it (nearest finger 10515 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_021 moves 6.4 cm with no hand on it (nearest finger 10482 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_022 moves 6.5 cm with no hand on it (nearest finger 10558 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_023 moves 7.7 cm with no hand on it (nearest finger 10440 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_024 moves 7.8 cm with no hand on it (nearest finger 10558 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_025 moves 8.0 cm with no hand on it (nearest finger 10491 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_026 moves 6.7 cm with no hand on it (nearest finger 10541 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_027 moves 7.6 cm with no hand on it (nearest finger 10468 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_028 moves 7.1 cm with no hand on it (nearest finger 10468 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_029 moves 6.8 cm with no hand on it (nearest finger 10437 cm)"
+   ]
+  ],
+  "1015": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_009 moves 3.4 cm with no hand on it (nearest finger 10553 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_010 moves 3.9 cm with no hand on it (nearest finger 10515 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_011 moves 5.3 cm with no hand on it (nearest finger 10560 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_012 moves 6.3 cm with no hand on it (nearest finger 10487 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_013 moves 7.9 cm with no hand on it (nearest finger 10454 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_014 moves 7.9 cm with no hand on it (nearest finger 10481 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_015 moves 7.7 cm with no hand on it (nearest finger 10494 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_016 moves 6.7 cm with no hand on it (nearest finger 10528 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_017 moves 7.9 cm with no hand on it (nearest finger 10459 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_018 moves 8.4 cm with no hand on it (nearest finger 10534 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_019 moves 5.9 cm with no hand on it (nearest finger 10446 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_020 moves 6.8 cm with no hand on it (nearest finger 10516 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_021 moves 6.4 cm with no hand on it (nearest finger 10483 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_022 moves 6.5 cm with no hand on it (nearest finger 10558 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_023 moves 7.7 cm with no hand on it (nearest finger 10442 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_024 moves 7.8 cm with no hand on it (nearest finger 10557 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_025 moves 8.0 cm with no hand on it (nearest finger 10491 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_026 moves 6.7 cm with no hand on it (nearest finger 10541 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_027 moves 7.6 cm with no hand on it (nearest finger 10469 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_028 moves 7.1 cm with no hand on it (nearest finger 10467 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_029 moves 6.8 cm with no hand on it (nearest finger 10438 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_030 moves 7.7 cm with no hand on it (nearest finger 10446 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_031 moves 4.0 cm with no hand on it (nearest finger 10456 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_033 moves 1.4 cm with no hand on it (nearest finger 10554 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MusO2_034 moves 2.1 cm with no hand on it (nearest finger 10454 cm)"
+   ]
+  ],
+  "97": [
+   [
+    "CAMJUMP",
+    "cut: 7.56 m, 120 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "246": [
+   [
+    "CAMJUMP",
+    "cut: 2.58 m, 37 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "320": [
+   [
+    "CAMJUMP",
+    "cut: 3.37 m, 149 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "402": [
+   [
+    "CAMJUMP",
+    "cut: 2.53 m, 176 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "487": [
+   [
+    "CAMJUMP",
+    "cut: 0.80 m, 90 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "713": [
+   [
+    "CAMJUMP",
+    "cut: 0.82 m, 15 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "840": [
+   [
+    "CAMJUMP",
+    "cut: 11.65 m, 35 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "918": [
+   [
+    "CAMJUMP",
+    "cut: 49.38 m, 37 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1020": [
+   [
+    "CAMJUMP",
+    "cut: 103.83 m, 167 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1141": [
+   [
+    "CAMJUMP",
+    "cut: 3.62 m, 66 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1220": [
+   [
+    "CAMJUMP",
+    "cut: 2.07 m, 47 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1309": [
+   [
+    "CAMJUMP",
+    "cut: 0.38 m, 5 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1400": [
+   [
+    "CAMJUMP",
+    "cut: 0.95 m, 2 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1489": [
+   [
+    "CAMJUMP",
+    "cut: 1.18 m, 16 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ]
+ },
+ "counts": {
+  "BACKHEAD": 1,
+  "EMPTY": 104,
+  "CAMJUMP": 15,
+  "PROPMOVE": 1077
+ }
+}
