@@ -90,7 +90,7 @@ def relaxed_arm(n, s, f, yaw, fwd_=0.04, out=0.04, up=0.0, pose="relaxed"):
 
 def sit(n, f, seat, seat_z, yaw, knee_fwd=0.46, spread=0.13, lean=0.0, spine=(0.0, 0.0, 0.0), head=(0.0, 0.0), feet_back=0.0):
     """seated on a surface at seat_z: pelvis on the seat, thighs forward, feet flat on the floor below the knees"""
-    root = V((seat[0], seat[1], seat_z + 0.18))
+    root = V((seat[0], seat[1], seat_z + 0.2))
     body(n, f, root, yaw, flex=lean, spine=spine, head=head)
     for s in "LR":
         sx = 1 if s == "L" else -1
@@ -173,12 +173,12 @@ SHIN = {n: (RIG[n].BN["lowerleg01.L"].head_local - RIG[n].BN["foot.L"].head_loca
 def kneel(n, f, knees, yaw, thigh_back=15.0, lean=20.0, spine=(25.0, 0.0, 0.0), head=(15.0, 0.0), spread=0.13, toes=78.0):
     """both knees on the floor (knees = midpoint, world), toes tucked, pelvis above and slightly behind the knees"""
     k = V((knees[0], knees[1], 0.0)); L = THIGH[n]; t = R_(thigh_back)
-    root = k + V((0, 0, GZ[0] + 0.115 + L * math.cos(t))) - fwd(yaw) * (L * math.sin(t)) + V((0, 0, HUM[n].root_head.z - RIG[n].BN["upperleg01.L"].head_local.z))
+    root = k + V((0, 0, GZ[0] + 0.13 + L * math.cos(t))) - fwd(yaw) * (L * math.sin(t)) + V((0, 0, HUM[n].root_head.z - RIG[n].BN["upperleg01.L"].head_local.z))
     body(n, f, root, yaw, flex=lean, spine=spine, head=head)
     for s in "LR":
         sx = 1 if s == "L" else -1
         kn = k - rgt(yaw) * sx * spread
-        ank = kn - fwd(yaw) * (SHIN[n] * 0.93) + V((0, 0, GZ[0] + 0.225))
+        ank = kn - fwd(yaw) * (SHIN[n] * 0.93) + V((0, 0, GZ[0] + 0.24))
         foot(n, s, f, ank, yaw + sx * 5, pitch=toes, knee=kn + fwd(yaw) * 0.6 + V((0, 0, -0.1)))
     return root
 
@@ -273,7 +273,7 @@ def shot_1b(f0, n):
     use = ("P1", "P2", "P3"); st = V((0.15, 0.5, 0)); f1 = f0 + n - 1
     keys = ((f0, 0, (18, -4)), (f0 + 50, 10, (8, 30)), (f0 + 110, 25, (2, 70)), (f0 + 160, 22, (6, 65)), (f1, 18, (10, 40)))
     for f, tw, hd in keys:
-        sit("P1", f, st, 0.453, 0.0, spine=(6, tw, 0), head=hd)
+        sit("P1", f, st, 0.453, 0.0, spine=(6, tw, 0), head=hd, spread=0.11)
         knee = st + fwd(0.0) * 0.40 + V((0, 0, 0.58))
         hand("P1", "L", f, knee - rgt(0.0) * 0.15, V((0, 0, -1)), fwd(0.0) - rgt(0.0) * 0.3, pole=knee - rgt(0.0) * 0.45 + V((0, 0.35, 0.2)), pose="relaxed")
         kr = st + fwd(0.0) * 0.40 + V((0, 0, 0.58)) + rgt(0.0) * 0.15
@@ -300,7 +300,7 @@ def shot_1c(f0, n):
 def shot_2a(f0, n):
     """low wide: P1 and P2 kneel at the vent, both scraping, rubble round their knees"""
     use = ("P1", "P2"); f1 = f0 + n - 1
-    p_kneel_scrape("P1", "2a", f0, n, (-0.04, 1.0), 165.0, (VX - 0.15, 1.59, VZ), V((0.3, 1, -0.3)), support=None)
+    p_kneel_scrape("P1", "2a", f0, n, (0.02, 1.0), 165.0, (VX - 0.15, 1.59, VZ), V((0.3, 1, -0.3)), support=None)
     for k, f in enumerate(range(f0, f0 + n, 40)):     # P2 kneels 75 cm to his right and watches the edge (hands on his thighs)
         kneel("P2", f, (0.55, 0.8), 200.0, lean=8, spine=(10, 0, 0), head=(28, -20 + 4 * math.sin(k)))
         for s_ in "LR":
@@ -313,7 +313,7 @@ def shot_2a(f0, n):
 def shot_2b(f0, n):
     """3/4 side of P1 kneeling and scraping the vent edge; crumbs fall"""
     use = ("P1",)
-    p_kneel_scrape("P1", "2b", f0, n, (-0.04, 1.0), 165.0, (VX - 0.15, 1.59, VZ), V((0.3, 1, -0.3)), support=None)
+    p_kneel_scrape("P1", "2b", f0, n, (0.02, 1.0), 165.0, (VX - 0.15, 1.59, VZ), V((0.3, 1, -0.3)), support=None)
     hole_grow(f0, 0.84, 0.65)
     camera("2b", f0, n, [(0, (0.98, 0.82, 0.72), (-0.2, 1.22, 0.7), 26), (1, (0.95, 0.9, 0.7), (-0.2, 1.25, 0.68), 26)])
     return use
@@ -321,7 +321,7 @@ def shot_2b(f0, n):
 def shot_2c(f0, n):
     """over the shoulder: P1's arm (to his visible shoulder) scrapes the corner of the grille"""
     use = ("P1",)
-    p_kneel_scrape("P1", "2c", f0, n, (-0.04, 1.0), 165.0, (VX - 0.15, 1.59, VZ), V((0.3, 1, -0.3)), support=None)
+    p_kneel_scrape("P1", "2c", f0, n, (0.02, 1.0), 165.0, (VX - 0.15, 1.59, VZ), V((0.3, 1, -0.3)), support=None)
     hole_grow(f0, 0.88, 0.75)
     camera("2c", f0, n, [(0, (0.55, 1.42, 0.36), (-0.08, 1.2, 0.72), 22), (1, (0.52, 1.44, 0.38), (-0.08, 1.2, 0.74), 22)])
     return use
@@ -329,7 +329,7 @@ def shot_2c(f0, n):
 def shot_2d(f0, n):
     """close on the grille corner: the spoon tip scrapes, the gap widens and crumbs build up"""
     use = ("P1",)
-    p_kneel_scrape("P1", "2d", f0, n, (-0.04, 1.0), 165.0, (VX - 0.15, 1.59, VZ), V((0.3, 1, -0.3)), support=None)
+    p_kneel_scrape("P1", "2d", f0, n, (0.02, 1.0), 165.0, (VX - 0.15, 1.59, VZ), V((0.3, 1, -0.3)), support=None)
     hole_grow(f0, 0.9, 0.8); hole_grow(f0 + n - 1, 1.0, 1.0)
     camera("2d", f0, n, [(0, (0.5, 0.85, 0.55), (0.05, 1.6, 0.44), 36), (1, (0.45, 0.92, 0.53), (0.05, 1.6, 0.44), 36)], fstop=11.0)
     return use
@@ -390,7 +390,7 @@ def shot_3c(f0, n):
     tip = V((VX + 0.17, 1.58, VZ - 0.02)); ax = V((0.15, 1, 0.05)).normalized()
     orient(d, tip - ax * 0.23, ax)
     sc.frame_set(f0); bpy.context.view_layer.update(); Mw = d.matrix_world
-    hand("P3", "R", f0, Mw @ V((-0.02, 0, 0.088)), Mw.to_3x3() @ V((0, 0, -1)), Mw.to_3x3() @ V((1, 0, 0)), pose="cup_hold")
+    hand("P3", "R", f0, Mw @ V((-0.02, 0, 0.102)), Mw.to_3x3() @ V((0, 0, -1)), Mw.to_3x3() @ V((1, 0, 0)), pose="cup_hold")
     M0 = ik_mat("P3", "R", f0); child_of(d, "P3", "wrist.R", f0)
     for k, f in enumerate(range(f0 + 8, f1 + 1, 10)):
         key_ik("P3", "R", f, rigid(tip, Rz(1.5 * (1 if k % 2 else -1)), ax * (0.004 * (k % 2)) + V((0, 0, 0.01 * math.sin(k * 0.4)))) @ M0)
