@@ -44,3 +44,17 @@ Vertical explainer, 1080×1920, 60 fps, Cycles. **Frames 1–2009 (33.5 s).** 23
 | S21 | 1686–1811 | but it revealed nothing. | the worker looks at the bag |
 | S22 | 1812–1926 | Nobody knows why she left that night, | glowing memory figure walks the wet road |
 | S23 | 1927–2009 | or where she went. | the framed portrait, push-in |
+
+## Checks on this exact packed file (`review/`)
+- `body_prop_cross.json`: whole film, step 6, every held or touched prop: **0 visible crossings**.
+- `limb_check.json`: step 2: **clean**.
+- `clip_scan.json`: step 6: **BAD_RANGES []**.
+- `qa_check.json` (multi-camera run, step 6). Every flag is expected:
+  - CAMJUMP ×22: the 22 intended hard cuts.
+  - PROPMOVE and ATTACH: worn items (scrunchie, caps, bags, hard hat) follow their bones through constraints.
+  - INSIDE: S01 (1–77) and S23 (1927–2009) cameras sit outside single-sided room walls.
+  - BACKHEAD: shots that are back views by design (S05, S08–S11, S22).
+  - EMPTY: the bag close, the site wide and the portrait.
+  - CLAW: SearchC's right hand closed on the torch handle (S15–S16).
+- `preview.mp4`: frames 1–2009, every 5th frame, with the VO. I watched it start to finish.
+  - After my first watch I fixed S10 (follow camera), S11 (wet ground less bright), S16 (fern at the lens), the torch pinky (S15–S16) and S21 (camera now moves). I then re-rendered 821–1376 and 1686–1811 from this package, spliced them in and watched them again.

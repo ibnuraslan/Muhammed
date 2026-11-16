@@ -1,0 +1,2541 @@
+{
+ "frames": {
+  "1": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "7": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "13": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "19": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "25": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "31": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "37": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "43": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "49": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 0.9 cm with no hand on it (nearest finger 53 cm)"
+   ]
+  ],
+  "55": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 1.9 cm with no hand on it (nearest finger 53 cm)"
+   ]
+  ],
+  "61": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 2.2 cm with no hand on it (nearest finger 53 cm)"
+   ]
+  ],
+  "67": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 2.0 cm with no hand on it (nearest finger 52 cm)"
+   ]
+  ],
+  "73": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 1.2 cm with no hand on it (nearest finger 52 cm)"
+   ]
+  ],
+  "211": [
+   [
+    "BACKHEAD",
+    "Girl"
+   ],
+   [
+    "PROPMOVE",
+    "BagBack moves 7.4 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 6.8 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "301": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "PROPMOVE",
+    "BagBack moves 11.9 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 11.9 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "307": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "BagBack moves 11.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 11.8 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "313": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "BagBack moves 11.8 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 12.0 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "319": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "BagBack moves 12.2 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 12.6 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "325": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "BagBack moves 14.0 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 14.4 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "331": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "BagBack moves 14.0 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 14.0 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "337": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ],
+   [
+    "PROPMOVE",
+    "BagBack moves 14.1 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 14.2 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "343": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "BagBack moves 14.1 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 14.3 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "349": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "BagBack moves 14.0 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 14.1 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "355": [
+   [
+    "BACKHEAD",
+    "GirlRoad"
+   ],
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "577": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "643": [
+   [
+    "BACKHEAD",
+    "GirlRoad"
+   ],
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "733": [
+   [
+    "BACKHEAD",
+    "GirlRoad"
+   ],
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "823": [
+   [
+    "BACKHEAD",
+    "GirlRoad"
+   ]
+  ],
+  "955": [
+   [
+    "BACKHEAD",
+    "GirlWoods"
+   ],
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.5 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.9 cm with no hand on it (nearest finger 41 cm)"
+   ]
+  ],
+  "1003": [
+   [
+    "BACKHEAD",
+    "GirlWoods"
+   ],
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.0 cm with no hand on it (nearest finger 39 cm)"
+   ]
+  ],
+  "1255": [
+   [
+    "BACKHEAD",
+    "SearchB2"
+   ],
+   [
+    "CLAW",
+    "SearchC.R curl 40"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_cap moves 10.4 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_capBrim moves 10.4 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1261": [
+   [
+    "CLAW",
+    "SearchC.R curl 40"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_cap moves 10.5 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_capBrim moves 10.5 cm with no hand on it (nearest finger 45 cm)"
+   ]
+  ],
+  "1267": [
+   [
+    "CLAW",
+    "SearchC.R curl 40"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_cap moves 10.5 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_capBrim moves 10.5 cm with no hand on it (nearest finger 45 cm)"
+   ]
+  ],
+  "1273": [
+   [
+    "CLAW",
+    "SearchC.R curl 40"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_cap moves 10.5 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_capBrim moves 10.5 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "ATTACH",
+    "SearchA2_capBrim is 5.9 cm off SearchA2's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "SearchC_capBrim is 5.1 cm off SearchC's skin (median)"
+   ]
+  ],
+  "1279": [
+   [
+    "CLAW",
+    "SearchC.R curl 40"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_cap moves 10.5 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_capBrim moves 10.4 cm with no hand on it (nearest finger 45 cm)"
+   ]
+  ],
+  "1285": [
+   [
+    "CLAW",
+    "SearchC.R curl 40"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_cap moves 10.4 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_capBrim moves 10.4 cm with no hand on it (nearest finger 45 cm)"
+   ]
+  ],
+  "1291": [
+   [
+    "CLAW",
+    "SearchC.R curl 40"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_cap moves 10.4 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_capBrim moves 10.4 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1297": [
+   [
+    "CLAW",
+    "SearchC.R curl 40"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_cap moves 10.5 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_capBrim moves 10.5 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "ATTACH",
+    "SearchA2_capBrim is 5.9 cm off SearchA2's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "SearchC_capBrim is 5.1 cm off SearchC's skin (median)"
+   ]
+  ],
+  "1303": [
+   [
+    "CLAW",
+    "SearchC.R curl 40"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_cap moves 10.5 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchA2_capBrim moves 10.5 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1363": [
+   [
+    "CLAW",
+    "SearchC.R curl 40"
+   ],
+   [
+    "PROPMOVE",
+    "SearchB2_cap moves 10.8 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchB2_capBrim moves 10.9 cm with no hand on it (nearest finger 45 cm)"
+   ]
+  ],
+  "1369": [
+   [
+    "CLAW",
+    "SearchC.R curl 40"
+   ],
+   [
+    "PROPMOVE",
+    "SearchB2_cap moves 10.9 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchB2_capBrim moves 10.9 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchC_capBrim moves 0.7 cm with no hand on it (nearest finger 43 cm)"
+   ],
+   [
+    "ATTACH",
+    "SearchB2_capBrim is 5.1 cm off SearchB2's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "SearchC_capBrim is 5.1 cm off SearchC's skin (median)"
+   ]
+  ],
+  "1417": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1423": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1567": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1573": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1579": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1585": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1813": [
+   [
+    "BACKHEAD",
+    "GirlGhost"
+   ],
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.1 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1927": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "camera switch CAM_S22 -> CAM_S23"
+   ]
+  ],
+  "1933": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1939": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1945": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1951": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1957": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1963": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1969": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1975": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1981": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1987": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1993": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1999": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2005": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "78": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S01 -> CAM_S02"
+   ]
+  ],
+  "135": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S02 -> CAM_S03"
+   ]
+  ],
+  "212": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S03 -> CAM_S04"
+   ]
+  ],
+  "353": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S04 -> CAM_S05"
+   ]
+  ],
+  "457": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S05 -> CAM_S06"
+   ],
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "536": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S06 -> CAM_S07"
+   ]
+  ],
+  "641": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S07 -> CAM_S08"
+   ]
+  ],
+  "732": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S08 -> CAM_S09"
+   ]
+  ],
+  "825": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S09 -> CAM_S10"
+   ]
+  ],
+  "954": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S10 -> CAM_S11"
+   ]
+  ],
+  "1005": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S11 -> CAM_S12"
+   ]
+  ],
+  "1087": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S12 -> CAM_S13"
+   ]
+  ],
+  "1170": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S13 -> CAM_S14"
+   ]
+  ],
+  "1254": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S14 -> CAM_S15"
+   ]
+  ],
+  "1309": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S15 -> CAM_S16"
+   ],
+   [
+    "PROPMOVE",
+    "SearchB2_cap moves 11.0 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchB2_capBrim moves 10.9 cm with no hand on it (nearest finger 43 cm)"
+   ]
+  ],
+  "1375": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S16 -> CAM_S17"
+   ]
+  ],
+  "1424": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S17 -> CAM_S18"
+   ]
+  ],
+  "1520": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S18 -> CAM_S19"
+   ]
+  ],
+  "1589": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S19 -> CAM_S20"
+   ]
+  ],
+  "1686": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S20 -> CAM_S21"
+   ]
+  ],
+  "1812": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_S21 -> CAM_S22"
+   ]
+  ],
+  "139": [
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 34.6 cm with no hand on it (nearest finger 52 cm)"
+   ]
+  ],
+  "145": [
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 1.4 cm with no hand on it (nearest finger 52 cm)"
+   ]
+  ],
+  "151": [
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 1.1 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "157": [
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 1.2 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "163": [
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 1.0 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "175": [
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 1.2 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "181": [
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 2.0 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "187": [
+   [
+    "PROPMOVE",
+    "BagBack moves 2.2 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 2.6 cm with no hand on it (nearest finger 52 cm)"
+   ]
+  ],
+  "193": [
+   [
+    "PROPMOVE",
+    "BagBack moves 8.2 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 10.4 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "199": [
+   [
+    "PROPMOVE",
+    "BagBack moves 4.6 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 9.2 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "205": [
+   [
+    "PROPMOVE",
+    "BagBack moves 1.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 6.8 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "217": [
+   [
+    "PROPMOVE",
+    "BagBack moves 9.0 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 8.9 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "223": [
+   [
+    "PROPMOVE",
+    "BagBack moves 9.0 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 9.3 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "229": [
+   [
+    "PROPMOVE",
+    "BagBack moves 13.0 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 13.2 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "235": [
+   [
+    "PROPMOVE",
+    "BagBack moves 13.5 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 13.5 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "241": [
+   [
+    "PROPMOVE",
+    "BagBack moves 13.6 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 13.6 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "247": [
+   [
+    "PROPMOVE",
+    "BagBack moves 13.6 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 13.8 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "253": [
+   [
+    "PROPMOVE",
+    "BagBack moves 13.6 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 13.6 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "259": [
+   [
+    "PROPMOVE",
+    "BagBack moves 13.5 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 13.5 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "265": [
+   [
+    "PROPMOVE",
+    "BagBack moves 13.6 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 13.9 cm with no hand on it (nearest finger 52 cm)"
+   ]
+  ],
+  "271": [
+   [
+    "PROPMOVE",
+    "BagBack moves 13.2 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 13.6 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "277": [
+   [
+    "PROPMOVE",
+    "BagBack moves 11.9 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 12.3 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "283": [
+   [
+    "PROPMOVE",
+    "BagBack moves 11.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 11.8 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "289": [
+   [
+    "PROPMOVE",
+    "BagBack moves 11.9 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 12.0 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "295": [
+   [
+    "PROPMOVE",
+    "BagBack moves 11.9 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Girl_Scrunchie moves 12.0 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "361": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "367": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "373": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "379": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "385": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "391": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "397": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "403": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "409": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "415": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "421": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "427": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "433": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "439": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "445": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "451": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "463": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "469": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "475": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "481": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "487": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "493": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "499": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "505": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "511": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "517": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "523": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "529": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "535": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "541": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "547": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "553": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "559": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "565": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "571": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "583": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "589": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "595": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "601": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "607": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "613": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "619": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "625": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "631": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "637": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "649": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "655": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "661": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "667": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "673": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "679": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "685": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "691": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "697": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "703": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "709": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "715": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "721": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "727": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "739": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "745": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "751": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "757": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "763": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "769": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 10.1 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "775": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 4.6 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 4.4 cm with no hand on it (nearest finger 45 cm)"
+   ]
+  ],
+  "781": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 1.5 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 0.9 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "799": [
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 1.6 cm with no hand on it (nearest finger 48 cm)"
+   ]
+  ],
+  "805": [
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 1.8 cm with no hand on it (nearest finger 47 cm)"
+   ]
+  ],
+  "811": [
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 1.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "829": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 5.9 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 11.5 cm with no hand on it (nearest finger 36 cm)"
+   ]
+  ],
+  "835": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 29.8 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 33.3 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "841": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 39.3 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 43.1 cm with no hand on it (nearest finger 33 cm)"
+   ]
+  ],
+  "847": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 40.1 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 40.2 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "853": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 46.1 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 46.5 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "859": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 51.7 cm with no hand on it (nearest finger 16 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 51.7 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "865": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 51.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 52.0 cm with no hand on it (nearest finger 35 cm)"
+   ]
+  ],
+  "871": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 51.8 cm with no hand on it (nearest finger 17 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 52.1 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "877": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 50.5 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 50.4 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "883": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 48.2 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 48.0 cm with no hand on it (nearest finger 35 cm)"
+   ]
+  ],
+  "889": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 48.8 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 49.4 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "895": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 48.4 cm with no hand on it (nearest finger 16 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 48.4 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "901": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 48.2 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 47.9 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "907": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 48.8 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 49.3 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "913": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 48.5 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 48.6 cm with no hand on it (nearest finger 35 cm)"
+   ]
+  ],
+  "919": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 44.6 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 44.2 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "925": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 43.5 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 43.8 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "931": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 43.8 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 44.5 cm with no hand on it (nearest finger 35 cm)"
+   ]
+  ],
+  "937": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 43.0 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 42.6 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "943": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 43.2 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 42.9 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "949": [
+   [
+    "PROPMOVE",
+    "BagRoad moves 43.8 cm with no hand on it (nearest finger 17 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlRoad_Scrunchie moves 44.7 cm with no hand on it (nearest finger 35 cm)"
+   ]
+  ],
+  "961": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.2 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.2 cm with no hand on it (nearest finger 41 cm)"
+   ]
+  ],
+  "967": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.1 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.1 cm with no hand on it (nearest finger 40 cm)"
+   ]
+  ],
+  "973": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.2 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.1 cm with no hand on it (nearest finger 42 cm)"
+   ]
+  ],
+  "979": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.2 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.2 cm with no hand on it (nearest finger 41 cm)"
+   ]
+  ],
+  "985": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.4 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.7 cm with no hand on it (nearest finger 39 cm)"
+   ]
+  ],
+  "991": [
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.7 cm with no hand on it (nearest finger 42 cm)"
+   ]
+  ],
+  "997": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.1 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.1 cm with no hand on it (nearest finger 39 cm)"
+   ]
+  ],
+  "1009": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.2 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.2 cm with no hand on it (nearest finger 43 cm)"
+   ]
+  ],
+  "1015": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.3 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.3 cm with no hand on it (nearest finger 39 cm)"
+   ]
+  ],
+  "1021": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.2 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.4 cm with no hand on it (nearest finger 39 cm)"
+   ]
+  ],
+  "1027": [
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.2 cm with no hand on it (nearest finger 43 cm)"
+   ]
+  ],
+  "1033": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.2 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.2 cm with no hand on it (nearest finger 39 cm)"
+   ]
+  ],
+  "1039": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.0 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.2 cm with no hand on it (nearest finger 40 cm)"
+   ]
+  ],
+  "1045": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.0 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.0 cm with no hand on it (nearest finger 42 cm)"
+   ]
+  ],
+  "1051": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.2 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.3 cm with no hand on it (nearest finger 40 cm)"
+   ]
+  ],
+  "1057": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.2 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.3 cm with no hand on it (nearest finger 41 cm)"
+   ]
+  ],
+  "1063": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.0 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.0 cm with no hand on it (nearest finger 41 cm)"
+   ]
+  ],
+  "1069": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.2 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.3 cm with no hand on it (nearest finger 40 cm)"
+   ]
+  ],
+  "1075": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.3 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.4 cm with no hand on it (nearest finger 42 cm)"
+   ]
+  ],
+  "1081": [
+   [
+    "PROPMOVE",
+    "BagWoods moves 30.1 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlWoods_Scrunchie moves 30.0 cm with no hand on it (nearest finger 41 cm)"
+   ]
+  ],
+  "1105": [
+   [
+    "ATTACH",
+    "SearchA_capBrim is 5.9 cm off SearchA's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "SearchB_capBrim is 5.1 cm off SearchB's skin (median)"
+   ]
+  ],
+  "1129": [
+   [
+    "ATTACH",
+    "SearchA_capBrim is 5.9 cm off SearchA's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "SearchB_capBrim is 5.1 cm off SearchB's skin (median)"
+   ]
+  ],
+  "1153": [
+   [
+    "ATTACH",
+    "SearchA_capBrim is 5.9 cm off SearchA's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "SearchB_capBrim is 5.1 cm off SearchB's skin (median)"
+   ]
+  ],
+  "1177": [
+   [
+    "ATTACH",
+    "SearchA_capBrim is 5.9 cm off SearchA's skin (median)"
+   ]
+  ],
+  "1201": [
+   [
+    "ATTACH",
+    "SearchA_capBrim is 5.9 cm off SearchA's skin (median)"
+   ]
+  ],
+  "1225": [
+   [
+    "ATTACH",
+    "SearchA_capBrim is 5.9 cm off SearchA's skin (median)"
+   ]
+  ],
+  "1249": [
+   [
+    "ATTACH",
+    "SearchA_capBrim is 5.9 cm off SearchA's skin (median)"
+   ]
+  ],
+  "1315": [
+   [
+    "PROPMOVE",
+    "SearchB2_cap moves 10.9 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchB2_capBrim moves 10.8 cm with no hand on it (nearest finger 44 cm)"
+   ]
+  ],
+  "1321": [
+   [
+    "PROPMOVE",
+    "SearchB2_cap moves 10.9 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchB2_capBrim moves 10.8 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "ATTACH",
+    "SearchB2_capBrim is 5.1 cm off SearchB2's skin (median)"
+   ]
+  ],
+  "1327": [
+   [
+    "PROPMOVE",
+    "SearchB2_cap moves 10.8 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchB2_capBrim moves 10.9 cm with no hand on it (nearest finger 44 cm)"
+   ]
+  ],
+  "1333": [
+   [
+    "PROPMOVE",
+    "SearchB2_cap moves 10.9 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchB2_capBrim moves 10.9 cm with no hand on it (nearest finger 44 cm)"
+   ]
+  ],
+  "1339": [
+   [
+    "PROPMOVE",
+    "SearchB2_cap moves 11.0 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchB2_capBrim moves 10.9 cm with no hand on it (nearest finger 44 cm)"
+   ]
+  ],
+  "1345": [
+   [
+    "PROPMOVE",
+    "SearchB2_cap moves 11.0 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchB2_capBrim moves 10.9 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "ATTACH",
+    "SearchB2_capBrim is 5.1 cm off SearchB2's skin (median)"
+   ]
+  ],
+  "1351": [
+   [
+    "PROPMOVE",
+    "SearchB2_cap moves 10.9 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchB2_capBrim moves 10.8 cm with no hand on it (nearest finger 44 cm)"
+   ]
+  ],
+  "1357": [
+   [
+    "PROPMOVE",
+    "SearchB2_cap moves 10.9 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "SearchB2_capBrim moves 10.8 cm with no hand on it (nearest finger 45 cm)"
+   ]
+  ],
+  "1819": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.1 cm with no hand on it (nearest finger 17 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1825": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.0 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1831": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.0 cm with no hand on it (nearest finger 17 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1837": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.0 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1843": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.0 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1849": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1855": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1861": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1867": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.1 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1873": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.1 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1879": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.1 cm with no hand on it (nearest finger 17 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.3 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1885": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.0 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1891": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.0 cm with no hand on it (nearest finger 17 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1897": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.0 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1903": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.0 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1909": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1915": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1921": [
+   [
+    "PROPMOVE",
+    "BagGhost moves 10.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "GirlGhost_Scrunchie moves 10.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "INSIDE": 24,
+  "BACKHEAD": 9,
+  "EMPTY": 44,
+  "CLAW": 11,
+  "CAMJUMP": 22,
+  "PROPMOVE": 378,
+  "ATTACH": 18
+ }
+}
