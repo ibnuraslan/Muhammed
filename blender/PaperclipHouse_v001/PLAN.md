@@ -45,6 +45,7 @@ Each set sits at its own world offset with its floor at z = 0.
 Each trade is a hand-to-hand swap:
 - **Small items:** the hero's right hand gives his item to the partner's left hand while the partner's right hand gives the new item to the hero's left hand. Both hands are on each item for about 0.3 s.
 - **Big items** (stove, generator, keg): two hands each on the item's side faces.
+- **Grip:** while a hand holds an item, the item is re-keyed every frame from that hand's evaluated wrist: the giver's until the release, then the receiver's.
 
 | Shot | Beat (reference words) | Set | Who and what they physically do | Camera | Clip (f) |
 |---|---|---|---|---|---|
@@ -58,20 +59,20 @@ Each trade is a hand-to-hand swap:
 | S08 | …keg party | GARAGE | Party: hero and KegGuy cheer with fists up; Camper and Worker dance. Bulbs, balloons, keg on the party table. Logo box on the shelf. | wide, slow push, 26 mm | 140 |
 | S09 | he got a snowmobile | GARAGE | SledGuy presents the blue snowmobile with an open palm; hero steps toward it, both fists up. | wide, push, 28 mm | 156 |
 | S10 | which he traded for a trip across Canada | SNOW | Hero walks down the snow trail toward camera (arms swinging), past the parked snowmobile, mountains behind. | low ¾, follows, 30 mm | 172 |
-| S11 | (the trip) | SNOW | CU: hero holds up the red ticket card, smiles. | CU push, 45 mm f/9 | 109 |
+| S11 | (the trip) | SNOW | CU: hero looks out over the mountains, his head following the range, and smiles. No prop: the ticket appears in S12. | CU push, 40 mm f/9 | 109 |
 | S12 | the trip for a van | SNOW | Hero gives the ticket to VanGuy; VanGuy gives him the van keys. The blue van is parked behind. | medium two-shot, 35 mm | 187 |
-| S13 | (the van) | SNOW | Hero lays his hand flat on the van side, then turns to camera and grins. The van-side logo is front-on. | medium, push, 28 mm | 117 |
+| S13 | (the van) | SNOW | Hero stands at the van's side and opens his left hand toward it (no contact), then turns to camera and grins. The van-side logo is front-on. | medium, push, 28 mm | 117 |
 | S14 | the van for a recording contract | STUDIO record | Hero gives the van keys to Exec; Exec gives him the contract (blank line blocks only). | medium two-shot, 35 mm | 187 |
 | S15 | which he swapped for a one-year condo rental | STREET | Hero gives the contract to Landlady in front of a house; she gives him the keys. | medium two-shot, 35 mm | 187 |
-| S16 | (condo rental) | STREET | Hero lifts the keys proudly, the house behind him. | low push, 30 mm | 109 |
+| S16 | (condo rental) | STREET | Hero lifts the keys in front of him, the brick house behind him. | low push, 30 mm | 109 |
 | S17 | He turned that into a day with a rock star | STUDIO bar | Hero hands the keys to Rocker at the bar; the guitar leans on the bar. | medium two-shot, 35 mm | 156 |
 | S18 | (rock star) | STUDIO bar | High five: palms meet above head height, then they laugh. | medium, push, 30 mm | 117 |
 | S19 | then a band snow globe | STUDIO bar | Rocker hands the snow globe over, cupped from below (generic black-clad band figures, no text). | CU, 40 mm f/9 | 117 |
-| S20 | He traded the snow globe… | STUDIO | Hero holds the globe in both cupped hands and looks into it. | CU push, 42 mm f/9 | 125 |
+| S20 | He traded the snow globe… | STUDIO bar | The globe stands on the bar; hero leans in and looks into it, hands relaxed (no contact). | CU over the bar, 40 mm f/9 | 125 |
 | S21 | …to a director who promised him a part | STUDIO film | Hero gives the globe to Director; Director gives him the clapperboard (blank slate). Movie camera behind. | medium two-shot, 35 mm | 187 |
 | S22 | a part in a movie | STUDIO film | Director cues with the clapper raised; hero acts in the lights, arms open toward the camera. | wide, push, 26 mm | 156 |
-| S23 | people all over the world followed… | STREET | Mayor reads a newspaper (line blocks and a blank picture block only); PenLady reads over his shoulder. | medium, 30 mm | 156 |
-| S24 | his story | VOID | Hero CU on the sky stage, the red paperclip in his fingers by his face, smiling. | CU push, 45 mm f/9 | 109 |
+| S23 | people all over the world followed… | STREET | Neighbours on the sidewalk: PenLady points down the street, talking; Mayor turns to look. (The newspaper was dropped: the two-hand hold didn't solve cleanly.) | medium, 30 mm | 156 |
+| S24 | his story | VOID | Hero CU on the sky stage, holding up the red paperclip in front of his chest, smiling. | CU push, 45 mm f/9 | 109 |
 | S25 | waiting to see what he'd trade next | VOID | Explainer: the whole chain of items stands in a row, small to big; the camera tracks along it. No hands. | tracking, 35 mm f/11 | 187 |
 | S26 | And exactly one year after he started | STREET | Hero walks along the sidewalk past the blue mailbox toward the houses. | low ¾, 28 mm | 187 |
 | S27 | he exchanged his movie role for a house | STREET | Hero gives the clapper to Mayor in front of the house; Mayor gives him the house keys. | medium two-shot, 35 mm | 187 |
@@ -92,6 +93,7 @@ The logo is never on a face, on skin or on a story-beat prop, and no real brands
 | Big items (stove, generator, keg) | Two hands each on the side faces. The previous item rests on the table or ground, so only one item moves. |
 | Rock star likeness | A generic Rocker (short hair, black jacket) with no likeness. The snow globe holds generic black-clad figures, with no face paint and no text. |
 | Text and brands | No signs, no "one-year lease", no studio name. The contract, newspaper and ticket show only blocks; the clapper is blank. |
+| Single-person holds near the body | Fingers always point forward from the hand (wrist inside its limits). The item is re-keyed every frame from the evaluated wrist, so it cannot leave the fingers. |
 | Riding the snowmobile or driving the van | Dropped (seat and handlebar contacts). The snowmobile is shown parked and presented, and the van parked with the hero's hand on its side. |
 | Item "floating on blue" beat | The items stand still in a row on the sky stage and only the camera moves. Nothing moves by itself. |
 

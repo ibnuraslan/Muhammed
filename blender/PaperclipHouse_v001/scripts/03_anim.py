@@ -217,6 +217,12 @@ def hold(item, m, sides, t0, n, fnM, kind="small", u_on=0.0, u_off=1.0):
             sy = 1 if s == "L" else -1
             attach(item, fnM, t0, n, (m, s, (0, sy * wy, dz), (0, -sy, 0), (0.3, 0, -1), "cup_hold"), u_on, u_off, drive=(u_on, u_off) if s == sides[0] else None)
 
+def front_hold(m, s_, fwd=0.30, down=0.26, inward=0.06):
+    """a natural one-hand hold point in front of the shoulder; item local +X = the person's forward (fingers point forward)"""
+    sc.frame_set(sc.frame_current)
+    sx = 1 if s_ == "L" else -1
+    return m.shoulder(s_) + m.fwd() * fwd + m.right() * sx * inward + Vector((0, 0, -down)), m.yaw - 90
+
 def catch(c, d=0.06, energy=1.5):
     nm = c.name + "_Catch"
     L = O.get(nm) or bpy.data.objects.new(nm, bpy.data.lights.new(nm, 'POINT'))
@@ -410,17 +416,15 @@ def S10(t, n):
     camera("S10", 35, t, V(NX + 0.7, NY + 1.4, 1.30), V(NX - 0.3, NY + 7.0, 1.35), t + n, V(NX + 0.6, NY + 0.9, 1.30), V(NX - 0.3, NY + 4.5, 1.25))
 
 def S11(t, n):
-    """CU: hero holds up the red ticket (the trip across Canada), smiles"""
-    setup(t, [hero], [P["P_TicketCard"]])
-    xy = (NX - 0.3, NY + 4.0); base(hero, t, xy, 0)
-    sc.frame_set(t); c0 = hero.shoulder("R") + V(0.08, -0.32, -0.16)
-    def fnM(u): return item_matrix(c0 + V(0, 0, 0.07 * ease(u)), 0, Matrix.Rotation(R(70), 4, 'X'))
-    P["P_TicketCard"]["grip_half"] = 0.055
-    hold(P["P_TicketCard"], hero, ("R",), t, n, fnM)
-    def fr(f, u): look_at(hero, f, P["P_TicketCard"].matrix_world.translation, flex=2); hero.jaw(f, 2.5 * ease(u))
+    """CU: hero on the snow trail looks out over the mountains (the trip across Canada) and smiles"""
+    setup(t, [hero], [])
+    xy = (NX - 0.3, NY + 4.0); base(hero, t, xy, 10)
+    def fr(f, u):
+        look_at(hero, f, V(NX - 6.0 + 9.0 * ease(u), NY + 60.0, 12.0), amount=0.8, flex=1 + math.sin(u * 6))
+        hero.jaw(f, 2.5 * ease((u - 0.4) / 0.4))
     track(t, n, 4, fr)
-    sc.frame_set(t + n // 2); tg = (hero.head_w() * 0.6 + P["P_TicketCard"].matrix_world.translation * 0.4)
-    camera("S11", 45, t, tg + V(0.1, -1.25, 0.05), tg, t + n, tg + V(0.05, -1.0, 0.03), tg, fstop=9)
+    sc.frame_set(t + n // 2); tg = hero.head_w() + V(0, 0, -0.12)
+    camera("S11", 40, t, tg + V(0.35, -1.30, -0.05), tg, t + n, tg + V(0.25, -1.05, -0.05), tg + V(0, 0, 0.02), fstop=9)
 
 def S12(t, n):
     van = P["P_Van"]
@@ -464,14 +468,15 @@ def S15(t, n):
     swap_shot("S15", [hero, M["Landlady"]], hero, M["Landlady"], P["P_Contract"], P["P_CondoKeys"], 29.5, -9.2, gap=0.80, cam_d=2.5)
 
 def S16(t, n):
+    """hero lifts the condo keys in front of him and grins; the house behind"""
     setup(t, [hero], [P["P_CondoKeys"]])
     xy = (29.5, -9.4); base(hero, t, xy, 0)
-    sc.frame_set(t); c0 = hero.shoulder("R") + V(0.06, -0.32, -0.14)
-    def fnM(u): return item_matrix(c0 + V(0, 0, 0.14 * ease(u / 0.5)), 90 + 20 * math.sin(u * 6))
+    sc.frame_set(t); c0, yw = front_hold(hero, "R")
+    def fnM(u): return item_matrix(c0 + V(0, 0, 0.10 * ease(u / 0.5)), yw + 8 * math.sin(u * 6))
     hold(P["P_CondoKeys"], hero, ("R",), t, n, fnM)
     def fr(f, u): look_at(hero, f, P["P_CondoKeys"].matrix_world.translation if u < 0.5 else V(29.9, -12.5, 1.5), flex=1); hero.jaw(f, 3 * ease((u - 0.4) / 0.4))
     track(t, n, 4, fr)
-    camera("S16", 30, t, V(30.1, -12.5, 1.30), V(29.5, -8.4, 1.6), t + n, V(30.0, -12.0, 1.30), V(29.5, -8.4, 1.65))
+    camera("S16", 30, t, V(30.1, -12.5, 1.30), V(29.5, -8.4, 1.5), t + n, V(30.0, -12.0, 1.30), V(29.5, -8.4, 1.55))
 
 # ===================================================================== STUDIO bar: rocker, snow globe
 def S17(t, n):
@@ -521,17 +526,17 @@ def S19(t, n):
     camera("S19", 32, t, tg + V(0.0, -1.75, 0.10), tg, t + n, tg + V(0.0, -1.55, 0.10), tg + V(0, 0, 0.02), fstop=9)
 
 def S20(t, n):
-    """hero holds the snow globe in both hands and looks into it"""
-    setup(t, [hero], [P["P_SnowGlobe"]])
-    xy = (SX + 2.4, SY + 0.6); base(hero, t, xy, -15)
-    sc.frame_set(t); c0 = hero.shoulder("R") + hero.fwd() * 0.32 + hero.right() * -0.10 + V(0, 0, -0.26)
-    def fnM(u): return item_matrix(c0 + V(0, 0, 0.10 * ease(u)), -15 + 25 * ease(u))
-    key_path(P["P_SnowGlobe"], t, n, fnM)
-    attach(P["P_SnowGlobe"], fnM, t, n, (hero, "R", (0.0, 0.0, 0.0), (0, 0, 1), (0, -1, 0.0), "cup_hold"), 0.0, 1.0, drive=(0.0, 1.0))
-    def fr(f, u): look_at(hero, f, P["P_SnowGlobe"].matrix_world.translation + V(0, 0, 0.06), flex=3); hero.jaw(f, 2 * ease(u))
+    """the band snow globe stands on the bar; hero leans in and looks into it (CU, no hands)"""
+    g = P["P_SnowGlobe"]
+    setup(t, [hero], [g])
+    gp = V(SX - 0.2, SY + 1.95, 1.095); key_obj(g, t, loc=gp, rot=(0, 0, R(-10)))
+    xy = (SX - 0.2, SY + 1.30); base(hero, t, xy, 180)
+    def fr(f, u):
+        hero.stand(f, xy, 180, flex=8 + 4 * ease(u))
+        look_at(hero, f, gp + V(0, 0, 0.06), flex=10 + 4 * ease(u)); hero.jaw(f, 2 * ease((u - 0.3) / 0.5))
+        for s_ in "LR": hero.hang(s_, f)
     track(t, n, 4, fr)
-    sc.frame_set(t + n // 2); tg = hero.head_w() * 0.5 + P["P_SnowGlobe"].matrix_world.translation * 0.5
-    camera("S20", 42, t, tg + V(-0.25, -1.15, -0.05), tg, t + n, tg + V(-0.15, -0.95, -0.03), tg, fstop=9)
+    camera("S20", 40, t, gp + V(-0.25, 0.75, 0.28), gp + V(0, -0.25, 0.25), t + n, gp + V(-0.18, 0.60, 0.25), gp + V(0, -0.25, 0.27), fstop=9)
 
 def S21(t, n):
     P["P_SnowGlobe"]["grip_half"] = 0.0; P["P_Clapper"]["grip_half"] = 0.10
@@ -562,33 +567,33 @@ def S22(t, n):
 
 # ===================================================================== STREET: newspaper readers
 def S23(t, n):
-    m = M["Mayor"]; np_ = P["P_Newspaper"]
-    men = [m, M["PenLady"]]; setup(t, men, [np_])
-    base(m, t, (-1.5, -11.0), 15); base(M["PenLady"], t, (-0.4, -10.4), -30)
-    sc.frame_set(t); c0 = (m.shoulder("L") + m.shoulder("R")) / 2 + m.fwd() * 0.40 + V(0, 0, -0.22)
-    def fnM(u): return item_matrix(c0 + V(0, 0, 0.02 * math.sin(u * 4)), m.yaw, Matrix.Rotation(R(-15), 4, 'X') @ Matrix.Translation(V(0.22, 0, 0)))
-    key_path(np_, t, n, fnM)
-    for s, x in (("L", 0.20), ("R", -0.20)):
-        attach(np_, fnM, t, n, (m, s, (x * 1.0 - 0.0, 0.0, 0.10), (0, 1, 0), (0, 0, -1), "grip"), 0.0, 1.0, drive=(0.0, 1.0) if s == "L" else None)
+    """neighbours on the street follow the story: PenLady points down the street, Mayor turns to look; both talk"""
+    m = M["Mayor"]; w = M["PenLady"]
+    setup(t, [m, w], [])
+    base(m, t, (-1.4, -11.0), 20); base(w, t, (-0.5, -10.7), -25)
     def fr(f, u):
-        look_at(m, f, np_.matrix_world.translation + V(0, 0, 0.05), flex=4)
-        look_at(M["PenLady"], f, np_.matrix_world.translation, flex=6)
-        M["PenLady"].jaw(f, 2 * ease(u))
+        a = ease((u - 0.15) / 0.3)
+        w.hang("R", f, out=0.05 * a, fwd=0.42 * a, lift=0.38 * a, pose="relaxed")
+        look_at(w, f, V(6.0, -16.0, 1.6), flex=2)
+        look_at(m, f, V(6.0, -16.0, 1.6) if u > 0.35 else w.head_w(), flex=2)
+        w.jaw(f, 3 * math.sin(u * 14) ** 2); m.jaw(f, 2 * ease((u - 0.5) / 0.3))
     track(t, n, 4, fr)
+    apply_pose(w.o, "R", "point", t + int(0.3 * n))
     camera("S23", 30, t, V(-0.6, -13.6, 1.45), V(-1.0, -10.6, 1.35), t + n, V(-0.7, -13.2, 1.45), V(-1.0, -10.6, 1.40))
 
 # ===================================================================== VOID: hero with the paperclip; the chain of trades
 def S24(t, n):
+    """CU on the sky stage: hero holds up the red paperclip in front of him and smiles (his story)"""
     setup(t, [hero], [P["P_Paperclip"]])
     base(hero, t, (VX, VY), 0)
-    sc.frame_set(t); c0 = hero.shoulder("R") + V(0.08, -0.32, -0.14)
+    sc.frame_set(t); c0, yw = front_hold(hero, "R", down=0.22)
     P["P_Paperclip"]["grip_half"] = 0.012
-    def fnM(u): return item_matrix(c0 + V(0.0, 0, 0.06 * ease(u)), 0, Matrix.Rotation(R(75), 4, 'X'))
+    def fnM(u): return item_matrix(c0 + V(0.0, 0, 0.07 * ease(u)), yw)
     hold(P["P_Paperclip"], hero, ("R",), t, n, fnM)
     def fr(f, u): look_at(hero, f, P["P_Paperclip"].matrix_world.translation if u < 0.45 else V(VX - 0.3, VY - 3, 1.6), flex=1); hero.jaw(f, 2.5 * ease((u - 0.4) / 0.4))
     track(t, n, 4, fr)
     sc.frame_set(t + n // 2); tg = hero.head_w() * 0.55 + P["P_Paperclip"].matrix_world.translation * 0.45
-    camera("S24", 40, t, tg + V(-0.2, -1.35, 0.0), tg, t + n, tg + V(-0.15, -1.1, 0.0), tg, fstop=9)
+    camera("S24", 40, t, tg + V(-0.2, -1.35, 0.12), tg, t + n, tg + V(-0.15, -1.1, 0.12), tg, fstop=9)
 
 CHAIN = ["P_Paperclip", "P_FishPen", "P_Doorknob", "P_CampStove", "P_Generator", "P_Keg", "P_Snowmobile", "P_TicketCard", "P_Van",
          "P_Contract", "P_CondoKeys", "P_SnowGlobe", "P_Clapper"]
