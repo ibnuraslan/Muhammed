@@ -1,0 +1,56 @@
+{
+ "truck": {
+  "uid": "abc7705b46bd4e9fa7a245ea15f9d89a",
+  "title": "Garbage Truck",
+  "author": "iedalton",
+  "author_profile": "https://sketchfab.com/iedalton",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/abc7705b46bd4e9fa7a245ea15f9d89a",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "trashbag": {
+  "uid": "69876d51e2f0462498b81dffe3387ae0",
+  "title": "Low Poly Trash Bag",
+  "author": "ROH3D",
+  "author_profile": "https://sketchfab.com/roh3d",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/69876d51e2f0462498b81dffe3387ae0",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "pile": {
+  "uid": "c593d45aa87b4b42b0116077b036b924",
+  "title": "Pile of garbage in low poly",
+  "author": "vicente betoret ferrero",
+  "author_profile": "https://sketchfab.com/deathcow",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/c593d45aa87b4b42b0116077b036b924",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "bottle": {
+  "uid": "daa6ea3a66c3418e80b025c015626642",
+  "title": "Plastic Bottle",
+  "author": "Shanice de Jong",
+  "author_profile": "https://sketchfab.com/jong3303",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/daa6ea3a66c3418e80b025c015626642",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "tire": {
+  "uid": "f10a3e7e50b04159ab71145ee847b670",
+  "title": "Car Tire",
+  "author": "DVGorohov",
+  "author_profile": "https://sketchfab.com/DVGorohov",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/f10a3e7e50b04159ab71145ee847b670",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "phone": {
+  "uid": "03c75adf5d9a426a9435d20cc76090be",
+  "title": "Smartphone",
+  "author": "Rafael Benites de Souza",
+  "author_profile": "https://sketchfab.com/rafaelbell",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/03c75adf5d9a426a9435d20cc76090be",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
