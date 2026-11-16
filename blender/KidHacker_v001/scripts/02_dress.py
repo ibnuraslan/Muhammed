@@ -25,13 +25,13 @@ def floral(name):
     vo = nt.nodes.new("ShaderNodeTexVoronoi"); vo.feature = 'F1'; nt.links.new(mp.outputs[0], vo.inputs["Vector"])
     vo.inputs["Randomness"].default_value = 0.9
     ramp = nt.nodes.new("ShaderNodeValToRGB"); nt.links.new(vo.outputs["Distance"], ramp.inputs[0])
-    ramp.color_ramp.elements[0].position = 0.18; ramp.color_ramp.elements[0].color = (1, 1, 1, 1)
-    ramp.color_ramp.elements[1].position = 0.24; ramp.color_ramp.elements[1].color = (0, 0, 0, 1)
+    ramp.color_ramp.elements[0].position = 0.26; ramp.color_ramp.elements[0].color = (1, 1, 1, 1)
+    ramp.color_ramp.elements[1].position = 0.32; ramp.color_ramp.elements[1].color = (0, 0, 0, 1)
     cr = nt.nodes.new("ShaderNodeValToRGB"); nt.links.new(vo.outputs["Color"], cr.inputs[0])
-    els = cr.color_ramp.elements; els[0].color = (0.85, 0.25, 0.35, 1); els[1].color = (0.15, 0.35, 0.75, 1)
+    els = cr.color_ramp.elements; els[0].color = (0.95, 0.3, 0.45, 1); els[1].color = (1.0, 1.0, 1.0, 1)
     e = els.new(0.5); e.color = (0.95, 0.5, 0.15, 1); cr.color_ramp.interpolation = 'CONSTANT'
     mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; nt.links.new(ramp.outputs[0], mx.inputs['Factor'])
-    mx.inputs['A'].default_value = (0.92, 0.88, 0.8, 1); nt.links.new(cr.outputs[0], mx.inputs['B'])
+    mx.inputs['A'].default_value = (0.16, 0.38, 0.85, 1)   # sky-blue blouse base (clearly not skin); nt.links.new(cr.outputs[0], mx.inputs['B'])
     nt.links.new(mx.outputs['Result'], P.inputs["Base Color"])
     return m
 def dominant_bone(v, names):
@@ -185,7 +185,7 @@ for m in list(bpy.data.objects["Kid.body"].modifiers):
 garment("Kid", "sneakers", lambda b, co: b.startswith(("foot", "toe")), mat("Kid_Shoes", (0.8, 0.22, 0.32), 0.5), offset=0.008, thick=0.004)
 _d = suit.modifiers.new("Puff", 'DISPLACE'); _d.strength = 0.006; _d.mid_level = 0.0   # skin no longer pokes through at the shoulders
 # Mom: light-blue work suit (no badges), warm auburn hair
-ws = bpy.data.objects["Mom.female_elegantsuit01"]; ws.data.materials.clear(); ws.data.materials.append(mat("Mom_BlueJacket", (0.2, 0.45, 0.88), 0.55, 0.2))
+ws = bpy.data.objects["Mom.female_elegantsuit01"]; ws.data.materials.clear(); ws.data.materials.append(mat("Mom_BlueJacket", (0.12, 0.3, 0.75), 0.55, 0.2))
 sk = bpy.data.objects["Mom.long_skirt"]; sk.data.materials.clear(); sk.data.materials.append(mat("Mom_NavySkirt", (0.06, 0.09, 0.22), 0.6))
 sh = bpy.data.objects["Mom.shoes01"]; sh.data.materials.clear(); sh.data.materials.append(mat("Mom_Shoes", (0.08, 0.06, 0.05), 0.4))
 tint_tex(bpy.data.objects["Mom.long01"], (1.0, 0.75, 0.5))

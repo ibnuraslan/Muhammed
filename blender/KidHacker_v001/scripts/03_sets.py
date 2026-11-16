@@ -329,6 +329,30 @@ for a_, b_ in ((0, 1), (1, 2), (2, 3), (1, 4), (2, 5), (0, 2)):
     cu = bpy.data.curves.new("String%d%d" % (a_, b_), 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0025
     sp = cu.splines.new('POLY'); sp.points.add(1); sp.points[0].co = (*PHOTOS[a_], 1); sp.points[1].co = (*PHOTOS[b_], 1)
     o = bpy.data.objects.new("String%d%d" % (a_, b_), cu); CF.objects.link(o); cu.materials.append(mat("StringRed", (0.8, 0.05, 0.05), 0.5))
+# dress the office behind the desk (front wall y = 3.4): filing cabinets, a bookcase, a framed map, a water cooler, a plant
+for i, x in enumerate((-2.4, -1.5, 1.6)):
+    dup_tree(cab, CF, (OX + x, 3.0, 0.084), R_(180), "OffCab%d" % i)
+dup_tree(shroot, CF, (OX + 0.0 + 0.76, 3.34, 0), R_(0), "OffShelf")
+fr_ = box("MapFrame", CF, (OX - 0.3, 3.38, 1.85), (1.3, 0.03, 0.85), mat("MapFrameWood", (0.2, 0.14, 0.1), 0.5))
+box("MapSea", CF, (OX - 0.3, 3.36, 1.85), (1.18, 0.01, 0.73), mat("MapSea", (0.35, 0.55, 0.8), 0.6))
+for i, (u, v, w, h) in enumerate(((-0.25, 0.1, 0.35, 0.25), (0.2, 0.05, 0.3, 0.35), (0.0, -0.2, 0.2, 0.15), (-0.4, -0.15, 0.15, 0.12))):
+    box("MapLand%d" % i, CF, (OX - 0.3 + u, 3.354, 1.85 + v), (w, 0.01, h), mat("MapLand", (0.45, 0.7, 0.4), 0.6), 0.02)
+box("CoolerBase", CF, (OX + 2.4, 3.1, 0.45), (0.32, 0.32, 0.9), mat("CoolerWhite", (0.88, 0.9, 0.92), 0.4), 0.02)
+bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=0.14, depth=0.42, location=(OX + 2.4, 3.1, 1.12)); cw = bpy.context.object; cw.name = "CoolerJug"
+cw.data.materials.append(mat("CoolerJugBlue", (0.35, 0.6, 0.95), 0.15))
+for cc in cw.users_collection: cc.objects.unlink(cw)
+CF.objects.link(cw)
+bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=0.16, depth=0.32, location=(OX - 2.9, 2.9, 0.16)); pt = bpy.context.object; pt.name = "PlantPot"
+pt.data.materials.append(mat("PotTerracotta", (0.7, 0.35, 0.2), 0.6))
+for cc in pt.users_collection: cc.objects.unlink(pt)
+CF.objects.link(pt)
+for i in range(9):
+    a_ = i * 2 * math.pi / 9
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.12, location=(OX - 2.9 + 0.12 * math.cos(a_), 2.9 + 0.12 * math.sin(a_), 0.55 + 0.25 * (i % 3) / 2))
+    lf = bpy.context.object; lf.name = "PlantLeaf%d" % i; lf.scale = (0.6, 1.4, 0.25); lf.rotation_euler = (R_(30), 0, a_)
+    lf.data.materials.append(mat("Leaf", (0.15, 0.5, 0.2), 0.5))
+    for cc in lf.users_collection: cc.objects.unlink(lf)
+    CF.objects.link(lf)
 light("OffPanel1", 'AREA', (OX, -0.2, 2.95), 180, (0.95, 0.97, 1.0), 2.0, rot=(0, 0, 0), c=CF)
 light("OffPanel2", 'AREA', (OX, 2.0, 2.95), 120, (0.95, 0.97, 1.0), 2.0, rot=(0, 0, 0), c=CF)
 light("OffFill", 'AREA', (OX - 1.2, -1.8, 1.6), 8, (0.9, 0.95, 1.0), 1.0, target=(OX, 0, 1.2), c=CF)
