@@ -30,7 +30,7 @@ SH = [   # source windows in the master animation (07_edit.py lays them onto the
  ("S11_stares",    1066, 1152, (1.35, -1.65, 1.50), (1.27, -1.53, 1.48), (0.55, -0.40, 1.35), (0.55, -0.40, 1.35), 35, False),
  ("S12_drops",     1280, 1380, (0.08, -1.98, 1.12), (0.12, -1.86, 1.12), (0.58, -0.25, 1.10), (0.58, -0.25, 1.10), 40, False),   # v002b: knees-up
  ("S13_bends",     1400, 1464, (1.7, -2.5, 0.60), (1.62, -2.35, 0.61), (0.55, -0.2, 0.95), (0.55, -0.2, 0.93), 28, False),
- ("S14_hospital",  1600, 1746, (HX + 1.05, -0.40, 1.75), (HX + 1.01, -0.33, 1.75), (HX - 0.35, 1.00, 1.36), (HX - 0.35, 1.00, 1.36), 22, False),   # v002b: doctor's face fully in frame (projected: head at 22-25% of the width)
+ ("S14_hospital",  1600, 1746, (HX + 0.99, 0.62, 1.65), (HX + 0.93, 0.63, 1.64), (HX - 0.29, 0.84, 1.30), (HX - 0.29, 0.84, 1.30), 28, False),   # v002b: from his left beside the bed; doctor's face in frame (projected ~25% of the width), patient ~85%
  ("S15_mask_cu",   1800, 1923, (HX + 0.42, 0.25, 1.60), (HX + 0.32, 0.50, 1.56), "HEAD", "HEAD", 50, True),
 ]
 for m in list(sc.timeline_markers): sc.timeline_markers.remove(m)
