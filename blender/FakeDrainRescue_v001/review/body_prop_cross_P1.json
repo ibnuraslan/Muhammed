@@ -1,0 +1,218 @@
+{
+ "S01": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S02": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S03": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S04": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S05": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S06": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S07": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S08": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S09": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S10": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S11": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S12": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S13": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S14": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S15": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S16": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S17": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S18": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S19": {
+  "visible_frames": [
+   1881,
+   1884,
+   1887,
+   1890,
+   1893,
+   1896,
+   1899,
+   1902,
+   1905,
+   1908,
+   1911,
+   1914,
+   1917,
+   1920,
+   1923,
+   1926,
+   1929,
+   1932,
+   1935,
+   1938,
+   1941,
+   1944,
+   1947,
+   1950,
+   1953,
+   1956,
+   1959
+  ],
+  "top_hits": [
+   [
+    "finger5-1.R|Phone",
+    486
+   ],
+   [
+    "metacarpal4.R|Phone",
+    405
+   ],
+   [
+    "finger4-1.R|Phone",
+    351
+   ],
+   [
+    "finger3-2.R|Phone",
+    297
+   ],
+   [
+    "finger4-2.R|Phone",
+    243
+   ],
+   [
+    "finger1-1.R|Phone",
+    189
+   ]
+  ]
+ },
+ "S20": {
+  "visible_frames": [
+   1961,
+   1964,
+   1967,
+   1970,
+   1973,
+   1976,
+   1979,
+   1982,
+   1985,
+   1988,
+   1991,
+   1994,
+   1997,
+   2000,
+   2003,
+   2006,
+   2009,
+   2012,
+   2015,
+   2018,
+   2021,
+   2024,
+   2027,
+   2030,
+   2033,
+   2036,
+   2039,
+   2042,
+   2045,
+   2048,
+   2051,
+   2054,
+   2057,
+   2060,
+   2063,
+   2066,
+   2069
+  ],
+  "top_hits": [
+   [
+    "finger5-1.R|Phone",
+    666
+   ],
+   [
+    "metacarpal4.R|Phone",
+    555
+   ],
+   [
+    "finger4-1.R|Phone",
+    481
+   ],
+   [
+    "finger3-2.R|Phone",
+    407
+   ],
+   [
+    "finger4-2.R|Phone",
+    333
+   ],
+   [
+    "finger1-1.R|Phone",
+    259
+   ]
+  ]
+ },
+ "S21": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S22": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S23": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S24": {
+  "visible_frames": [],
+  "top_hits": []
+ },
+ "S25": {
+  "visible_frames": [],
+  "top_hits": []
+ }
+}

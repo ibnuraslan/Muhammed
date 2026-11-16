@@ -70,14 +70,36 @@ The mother's fringe is lifted above her brows, so both eyes show.
   - He sits on a monobloc chair (checked against the desk and chair).
 - **Lens clearance:** every camera moves through open air or above the water. S14 and S17 were raised clear of the near bags.
 
-## P1 checks
-- **Sheet:** `review/P1_sheet_3frames_1.jpg` (S01–S13) and `_2.jpg` (S14–S25). Each shows the first, middle and last frame of every shot at 540×960, Cycles 8 spp.
-- **`body_prop_cross`:** run per shot, step 3, on that shot's visible rigs and props. The props are:
-  - the phone and the torch
-  - the desk, chair and top forms
-  - both drain walls, the end wall and the pipe
+## P1 checks (on the exact build in the sheets)
+- **Sheets:** `review/P1_sheet_3frames_1.jpg` (S01–S13) and `_2.jpg` (S14–S25). Each shows the first, middle and last frame of every shot at 540×960, Cycles 8 spp, and I looked at every cell.
+- **`body_prop_cross`:** run per shot, step 3, on that shot's visible rigs and every prop it touches or stands near. The props are:
+  - the phone
+  - the desk, the stool and the top forms
+  - both drain walls, the end wall and the culvert pipe
   - the truck
   - every floating bag, bottle or can within 1.3 m of the wading paths
-  - the clog and drift trash, and the clean-state bag rows
+  - the clog, drift and clean-row bags
 
-  Result: `review/body_prop_cross_P1.json`.
+  Result: `review/body_prop_cross_P1.json`. **23 of 25 shots: 0 visible crossings.**
+  - **S19 and S20 (phone):** the pinky-side palm (`metacarpal4`, `finger5-1`, `finger4-1`) presses a few mm into the back of the phone. The phone is held with `grip_object` (wrap, Child Of `wrist.R`). The contact is on the back face, which the phone itself hides from both cameras, and the sheet shows a clean grip. In Phase 2 I'll back the phone off its palm by 4–5 mm and re-check.
+- **Fixed during P1 (found by the check):**
+  - soles into the drain wall top: the hidden wall top is lowered under the coping
+  - a rescuer's arm through floating bags: the wading paths are cleared, allowing for bag size
+  - torch-in-fingers: the torch model is dropped and the beam kept
+  - the clerk's legs through the desk and his back through the PH chair: he sits further back on a fitted stool
+  - fingers through the phone: solved with `grip_object`
+- **Director's five-point list:**
+  - clothes are loose and contrast with skin (the mother's plum trousers are fitted but clearly coloured)
+  - everyone has real MPFB hair (police and rescuers in caps or helmets)
+  - the eye fix is applied and the irises read
+  - the sets are dressed (houses, fence, trees, lamps, hydrant, office)
+  - visibility is keyed per shot for every rig, its children and its props
+
+## Unsure / for the director
+1. **The boy:** he appears only in S01, walking ahead of his mother on the coping, and is never shown in or near the water. Is that OK, or should "her child" be shown only through her pointing?
+2. **The torch:** it exists only as its beam (S08–S09). Should a visible grip be attempted in Phase 2?
+3. **Phone screen direction:**
+   - In S19 the call screen faces the camera, like the reference "this fake" frame.
+   - In S20 she looks at the phone, so we see its back with a corner of the screen.
+   - S21 is a head-and-shoulders shot of her glancing at the drain, with the phone hand below frame (simplified after two failed grip attempts at that angle).
+4. **The logo:** one placement, on the truck (S23, about 45% of the frame width). Is a second placement wanted, for example a cap?
