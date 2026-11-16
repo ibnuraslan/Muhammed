@@ -3,6 +3,7 @@ blender -b sets.blend --python 03_shots.py -- <out.blend> <shots.json> [only=1a,
 shots.json: [{"id": "1a", "f0": 1, "len": 156}, ...]  (Phase 1: provisional, contiguous; Phase 2: VO frames, trimmed)
 Each shot function receives (f0, n) and keys its action at 1x from f0; a shot shorter than its clip is trimmed (cut), never stretched."""
 import sys, os, math, json, random
+random.seed(1962)
 import bpy
 from mathutils import Vector, Matrix, Euler, Quaternion
 V = Vector
@@ -307,7 +308,7 @@ def shot_1c(f0, n):
 def shot_2a(f0, n):
     """low wide: P1 and P2 kneel at the vent, both scraping, rubble round their knees"""
     use = ("P1", "P2"); f1 = f0 + n - 1
-    p_kneel_scrape("P1", "2a", f0, n, (0.02, 1.0), 165.0, (VX - 0.15, 1.59, VZ), V((0.3, 1, -0.3)), support=None, head=(10.0, -35.0))     # face lifted and turned 3/4 to the camera (director note, P1 pass)
+    p_kneel_scrape("P1", "2a", f0, n, (0.02, 1.0), 165.0, (VX - 0.15, 1.59, VZ), V((0.3, 1, -0.3)), support=None, head=(10.0, 35.0))     # face lifted and turned 3/4 to the camera (director note, P1 pass)
     for k, f in enumerate(range(f0, f0 + n, 40)):     # P2 kneels 75 cm to his right and watches the edge (hands on his thighs)
         kneel("P2", f, (0.55, 0.8), 200.0, lean=8, spine=(10, 0, 0), head=(28, -20 + 4 * math.sin(k)))
         for s_ in "LR":
