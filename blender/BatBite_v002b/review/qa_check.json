@@ -1,0 +1,147 @@
+{
+ "frames": {
+  "1": [
+   [
+    "BACKHEAD",
+    "Fan3"
+   ]
+  ],
+  "97": [
+   [
+    "BACKHEAD",
+    "Singer"
+   ]
+  ],
+  "277": [
+   [
+    "BACKHEAD",
+    "Fan3"
+   ]
+  ],
+  "95": [
+   [
+    "CAMJUMP",
+    "cut: 8.30 m, 169 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "150": [
+   [
+    "CAMJUMP",
+    "cut: 5.34 m, 169 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "276": [
+   [
+    "CAMJUMP",
+    "cut: 3.01 m, 21 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "349": [
+   [
+    "CAMJUMP",
+    "cut: 3.05 m, 12 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "386": [
+   [
+    "CAMJUMP",
+    "cut: 1.12 m, 18 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "416": [
+   [
+    "CAMJUMP",
+    "cut: 0.89 m, 14 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "494": [
+   [
+    "CAMJUMP",
+    "cut: 2.69 m, 152 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "599": [
+   [
+    "CAMJUMP",
+    "cut: 2.23 m, 177 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "712": [
+   [
+    "CAMJUMP",
+    "cut: 1.01 m, 45 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "843": [
+   [
+    "CAMJUMP",
+    "cut: 1.07 m, 44 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "929": [
+   [
+    "CAMJUMP",
+    "cut: 1.32 m, 49 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1029": [
+   [
+    "CAMJUMP",
+    "cut: 1.78 m, 43 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1093": [
+   [
+    "CAMJUMP",
+    "cut: 59.45 m, 58 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1239": [
+   [
+    "CAMJUMP",
+    "cut: 0.64 m, 53 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1213": [
+   [
+    "PROPMOVE",
+    "OxygenMask moves 0.5 cm with no hand on it (nearest finger 44 cm)"
+   ]
+  ],
+  "1219": [
+   [
+    "PROPMOVE",
+    "OxygenMask moves 0.5 cm with no hand on it (nearest finger 43 cm)"
+   ]
+  ],
+  "1225": [
+   [
+    "PROPMOVE",
+    "OxygenMask moves 0.5 cm with no hand on it (nearest finger 43 cm)"
+   ]
+  ],
+  "1243": [
+   [
+    "PROPMOVE",
+    "OxygenMask moves 0.6 cm with no hand on it (nearest finger 43 cm)"
+   ]
+  ],
+  "1267": [
+   [
+    "PROPMOVE",
+    "OxygenMask moves 0.5 cm with no hand on it (nearest finger 44 cm)"
+   ]
+  ],
+  "1333": [
+   [
+    "PROPMOVE",
+    "OxygenMask moves 0.5 cm with no hand on it (nearest finger 43 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "BACKHEAD": 3,
+  "CAMJUMP": 14,
+  "PROPMOVE": 6
+ }
+}
