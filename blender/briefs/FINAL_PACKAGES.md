@@ -86,3 +86,4 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | B23 | HandlessWarrior | `blender/HandlessWarrior_v003/` | **READY TO RENDER (frames 1–1615)**, watched moving |
 | B17 | PilotSuckedOut | `blender/PilotSuckedOut_v003/` | **READY TO RENDER (frames 1–1887)**, watched moving |
 | B01 | DogShootsOwner | `blender/DogShootsOwner_v003/` | **READY TO RENDER (frames 1–1592)**, watched moving |
+| B06 | AshaDegree | `blender/AshaDegree_v003/` | **READY TO RENDER (frames 1–2009)**, watched moving |

@@ -1,0 +1,166 @@
+[
+ {
+  "beat": "S01",
+  "set": "room",
+  "frame": 1,
+  "frame_last": 77,
+  "first_words": "In 2000,"
+ },
+ {
+  "beat": "S02",
+  "set": "room",
+  "frame": 78,
+  "frame_last": 134,
+  "first_words": "a nine-year-old girl"
+ },
+ {
+  "beat": "S03",
+  "set": "room",
+  "frame": 135,
+  "frame_last": 211,
+  "first_words": "packed a book bag and"
+ },
+ {
+  "beat": "S04",
+  "set": "room",
+  "frame": 212,
+  "frame_last": 352,
+  "first_words": "quietly left her house in the rain."
+ },
+ {
+  "beat": "S05",
+  "set": "road",
+  "frame": 353,
+  "frame_last": 456,
+  "first_words": "It was extremely early in the morning"
+ },
+ {
+  "beat": "S06",
+  "set": "road",
+  "frame": 457,
+  "frame_last": 535,
+  "first_words": "when a driver spotted her"
+ },
+ {
+  "beat": "S07",
+  "set": "road",
+  "frame": 536,
+  "frame_last": 640,
+  "first_words": "walking beside the highway."
+ },
+ {
+  "beat": "S08",
+  "set": "road",
+  "frame": 641,
+  "frame_last": 731,
+  "first_words": "He turned around to check on her,"
+ },
+ {
+  "beat": "S09",
+  "set": "road",
+  "frame": 732,
+  "frame_last": 824,
+  "first_words": "but as he approached,"
+ },
+ {
+  "beat": "S10",
+  "set": "road",
+  "frame": 825,
+  "frame_last": 953,
+  "first_words": "she suddenly ran into the woods."
+ },
+ {
+  "beat": "S11",
+  "set": "woods",
+  "frame": 954,
+  "frame_last": 1004,
+  "first_words": "By daylight,"
+ },
+ {
+  "beat": "S12",
+  "set": "woods",
+  "frame": 1005,
+  "frame_last": 1086,
+  "first_words": "she had vanished."
+ },
+ {
+  "beat": "S13",
+  "set": "shed",
+  "frame": 1087,
+  "frame_last": 1169,
+  "first_words": "A few belongings were later found"
+ },
+ {
+  "beat": "S14",
+  "set": "shed",
+  "frame": 1170,
+  "frame_last": 1253,
+  "first_words": "inside a nearby shed,"
+ },
+ {
+  "beat": "S15",
+  "set": "search",
+  "frame": 1254,
+  "frame_last": 1308,
+  "first_words": "but there was no"
+ },
+ {
+  "beat": "S16",
+  "set": "search",
+  "frame": 1309,
+  "frame_last": 1374,
+  "first_words": "sign of her."
+ },
+ {
+  "beat": "S17",
+  "set": "site",
+  "frame": 1375,
+  "frame_last": 1423,
+  "first_words": "A year later,"
+ },
+ {
+  "beat": "S18",
+  "set": "site",
+  "frame": 1424,
+  "frame_last": 1519,
+  "first_words": "her book bag was discovered buried"
+ },
+ {
+  "beat": "S19",
+  "set": "site",
+  "frame": 1520,
+  "frame_last": 1588,
+  "first_words": "at a construction site"
+ },
+ {
+  "beat": "S20",
+  "set": "site",
+  "frame": 1589,
+  "frame_last": 1685,
+  "first_words": "inside a plastic bag,"
+ },
+ {
+  "beat": "S21",
+  "set": "site",
+  "frame": 1686,
+  "frame_last": 1811,
+  "first_words": "but it revealed nothing."
+ },
+ {
+  "beat": "S22",
+  "set": "ghost",
+  "frame": 1812,
+  "frame_last": 1926,
+  "first_words": "Nobody knows why she left that night,"
+ },
+ {
+  "beat": "S23",
+  "set": "wall",
+  "frame": 1927,
+  "frame_last": 2009,
+  "first_words": "or where she went."
+ },
+ {
+  "frame_end": 2009
+ }
+]
