@@ -110,7 +110,7 @@ def _hand_inside_dog(f, side, bvh):
     return bad
 
 
-def hand_on_dog_side(f, origin, direction, fdir=(0, -0.3, -1), skin=None, side="L", pose_="relaxed"):
+def hand_on_dog_side(f, origin, direction, fdir=(0, -0.3, -1), skin=None, side="L", pose_="relaxed", angles=(0, -30, 30, -60, 60)):
     skin = skin if skin is not None else float(os.environ.get("DSO_SKN", "0.016"))
     """palm on the side of the dog that faces him (its back): a horizontal ray from `origin` along `direction`
     finds the surface; the palm faces into it and the fingers point down along the fur (wrist stays neutral)"""
@@ -124,7 +124,7 @@ def hand_on_dog_side(f, origin, direction, fdir=(0, -0.3, -1), skin=None, side="
     # finger direction turned about the palm normal (thumb away from the fur) and the palm lifted in 5 mm steps,
     # until every hand vertex is at least 3 mm outside the dog; the smallest lift wins
     best = None
-    for ang in (0, -30, 30, -60, 60):
+    for ang in angles:
         fa = Matrix.Rotation(R_(ang), 3, n) @ fd
         for k in range(16):
             sk = skin + 0.005 * k
@@ -223,8 +223,8 @@ def field_man(f, head=(32, 0), on_dog=True, dx=0.0, breath=0.0, twist=0.0):
     kneel(f, KNEEL, yaw=0, head=head, breath=breath, twist=twist, hip_back=float(os.environ.get("DSO_HB", "0.0")))
     hz = float(os.environ.get("DSO_FHZ", "0.24"))
     if on_dog:
-        hand_on_dog_side(f, (KNEEL.x + 0.14 + dx, KNEEL.y, hz), (0, -1, 0), fdir=(0.25, 0.0, -1), side="L")
-        hand_on_dog_side(f, (KNEEL.x - 0.22, KNEEL.y, hz + 0.02), (0, -1, 0), fdir=(-0.25, 0.0, -1), side="R")
+        hand_on_dog_side(f, (KNEEL.x + 0.14 + dx, KNEEL.y, hz), (0, -1, 0), fdir=(0.25, 0.0, -1), side="L", angles=(60,))
+        hand_on_dog_side(f, (KNEEL.x - 0.22, KNEEL.y, hz + 0.02), (0, -1, 0), fdir=(-0.25, 0.0, -1), side="R", angles=(0,))
     else:
         for s_, sx in (("L", 1), ("R", -1)):     # arms hang relaxed beside his thighs, elbows a little bent
             place_hand(OWNER, s_, f, KNEEL + Vector((0.27 * sx, -0.16, 0.46)), (-sx, 0, 0), (0, -0.35, -1)); apply_pose(OWNER, s_, "relaxed", f)
@@ -292,7 +292,7 @@ def S15d(f0, f1):
     for k in ks:
         u = k / n; t = math.sin(math.pi * min(1.0, u / 0.7) * 0.5) if u <= 0.7 else 1.0 - 0.3 * (u - 0.7) / 0.3
         fr = f0 + k
-        field_dog(fr); field_man(fr, head=(38 + 4 * t, -6 + 4 * t), dx=0.04 * t, breath=2.0 * t)
+        field_dog(fr); field_man(fr, head=(38 + 4 * t, -6 + 4 * t), dx=0.0, breath=2.0 * t)
     c = camera("15d", 32)
     tgt = KNEEL.lerp(DOGSPOT, 0.45) + Vector((0, 0, 0.42))
     cam_key(c, f0, tgt + Vector((0.95, -2.5, 0.70)), tgt, lens=32); cam_key(c, f1, tgt + Vector((0.62, -1.65, 0.45)), tgt, lens=32)
