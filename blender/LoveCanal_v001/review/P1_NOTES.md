@@ -54,3 +54,12 @@ Crossing check on this build (`body_prop_cross.json`, S5 and S22 re-checked afte
   - Checked on EVERY frame f1141–1620: 0 frames with any drum corner more than 2 cm below the ground.
   - Drum-to-drum: 56 frames still show a brief in-air touch, 62 pairs. These are 1–3 frame grazes between tumbling drums in flight, mostly two neighbouring truck-bed drums leaving the bed. No resting drum overlaps another, and no ground cuts remain.
 - body_prop_cross on f1081–1620 (worker, pushed drum, truck beds, bed drums): 0.
+
+## Director round 4 (Nov 16): S11 + S13 (no flying drums)
+- The whole drum heap rests in the pit from frame 0 (years of dumping); no drum flies over it. Each truck carries 6 drums. They ride the tipping bed, then slide off the tail and tumble DOWN onto the pit slope at the heap's near edge, at most 3 m behind the tail. Their path only descends. The trucks are parked 3.4 m closer to the pit.
+- Checked on every frame f1081–1620:
+  - Highest drum top vs the bed's top edge: −0.70 m, i.e. always below it.
+  - 0 frames with a drum below the ground.
+  - Drum-into-drum: 1 frame (f1244), two neighbouring drums on the same tipping bed.
+  - body_prop_cross: 0.
+- S14 fix found on the way: drums buried at the dozer's start had a single "hidden" key, which hid them for the whole film. They are now visible from frame 0 until buried.

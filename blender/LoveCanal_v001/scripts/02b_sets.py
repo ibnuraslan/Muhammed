@@ -203,7 +203,7 @@ for o in (L_tbed, L_tcab):
 TRUCKS = []
 for i, x in enumerate((-4.2, 4.2)):
     root = bpy.data.objects.new("DumpTruck%d" % i, None); DMP.objects.link(root)
-    root.location = DX + Vector((x, 16.0, 0)); root.rotation_euler = (0, 0, R_(180))
+    root.location = DX + Vector((x, 12.6, 0)); root.rotation_euler = (0, 0, R_(180))
     cab = copy_obj(L_tcab, "DumpTruck%d_cab" % i, (0, 0, 0), c=DMP); cab.parent = root
     bed = copy_obj(L_tbed, "DumpTruck%d_bed" % i, (0, 0, 0), c=DMP, linked=False); bed.parent = root
     bed.location = HINGE; bed.data.materials.clear(); bed.data.materials.append(M_blue)

@@ -161,70 +161,69 @@ def fly(d, fs, fe_, P0, M1, q0, spin, lane=0):
         d.location = p; d.rotation_quaternion = q
         d.keyframe_insert("location", frame=f); d.keyframe_insert("rotation_quaternion", frame=f)
 drums = []
-N_PRE = len(slots) - 150                  # the lower part of the heap is already there (years of dumping); the rest arrives in the shots
-for z_, src, M1 in slots[:N_PRE]:
+for z_, src, M1 in slots:                 # the heap is already there (years of dumping): every heap drum rests from frame 0
     src.rotation_mode = 'QUATERNION'; l_, q_, _ = M1.decompose(); src.location = l_; src.rotation_quaternion = q_
     src.keyframe_insert("location", frame=0); src.keyframe_insert("rotation_quaternion", frame=0); drums.append(src)
-slots = slots[N_PRE:]
-random.seed(23)                           # shuffle within 0.5 m height bands: neighbouring slots are not filled back to back
-_bands = {}
-for t_ in slots: _bands.setdefault(int((t_[0] + 5) / 0.5), []).append(t_)
-slots = [t_ for b_ in sorted(_bands) for t_ in random.sample(_bands[b_], len(_bands[b_]))]
-ev(1); k = 0
-for bi, b in enumerate(BEDS):            # wave 1: drums standing in each bed (seen in S10) ride the bed, then slide into the lowest slots
-    bmn, bmx = bbox([b])
-    for ix in range(3):
-        for iy in range(5):
-            x = bmn.x + 0.45 + ix * 0.62; y = bmn.y + 0.7 + iy * 0.75
-            d = copy_obj(L_dr, "Drum_b%d_%d%d" % (bi, ix, iy), (x, y, bmn.z + 0.32 + 0.002), c=DCOLL); d.rotation_mode = 'QUATERNION'
-            d.rotation_quaternion = Quaternion((0, 0, 1), random.random() * 6)
-            REL = TIP0 + 30 + (4 - iy) * 12 + ix * 4
-            ev(TIP0); OFF = b.matrix_world.inverted() @ d.matrix_world
-            for f in frs(TIP0, REL, 2):
-                ev(f); l_, q_, _ = (b.matrix_world @ OFF).decompose(); d.location = l_; d.rotation_quaternion = q_
-                d.keyframe_insert("location", frame=f); d.keyframe_insert("rotation_quaternion", frame=f)
-            ev(REL); P0, q0, _ = d.matrix_world.decompose()
-            z_, src, M1 = slots[k]; k += 1
-            bpy.data.objects.remove(src, do_unlink=True)          # the bed drum takes this slot: its heap twin goes
-            fly(d, REL, REL + 46, P0, M1, q0, R_(160), lane=k)
-            drums.append(d)
-ARR0, ARR1 = TIP0 + 120, f1("S13") - 25
-rest = slots[k:]
-for i, (z_, src, M1) in enumerate(rest):   # wave 2: one after another from the truck side, lowest slots first
-    land = ARR0 + int((ARR1 - ARR0) * i / max(1, len(rest) - 1)); st = land - 44
-    P1 = M1.translation
-    P0 = Vector((P1.x * 0.7 + DX.x * 0.3 + random.uniform(-0.6, 0.6), DX.y + 12.8, 1.4 + random.uniform(0, 0.6)))
-    src.rotation_mode = 'QUATERNION'
-    fly(src, st, land, P0, M1, Quaternion((0, 0, 1), random.random() * 6) @ Quaternion((1, 0, 0), R_(80)), R_(random.choice((-200, 200))), lane=i)
-    key_vis(src, [(0, False), (st, True)])
-    drums.append(src)
-def _overlap(da, db):
-    ca = da.matrix_world @ Vector((0, 0, 0.44)); cb = db.matrix_world @ Vector((0, 0, 0.44))
+def _overlap(da, db, Ma=None, Mb=None):
+    Ma = Ma or da.matrix_world; Mb = Mb or db.matrix_world
+    ca = Ma @ Vector((0, 0, 0.44)); cb = Mb @ Vector((0, 0, 0.44))
     if (ca - cb).length > 0.95: return False
     if (ca - cb).length < 0.5: return True
-    aa = (da.matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized(); ab = (db.matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized()
+    aa = (Ma.to_3x3() @ Vector((0, 0, 1))).normalized(); ab = (Mb.to_3x3() @ Vector((0, 0, 1))).normalized()
     for (c1, a1, c2, a2) in ((ca, aa, cb, ab), (cb, ab, ca, aa)):
         for t in (-0.3, -0.15, 0, 0.15, 0.3):
             v = c1 + a1 * t - c2; h = v.dot(a2)
             if abs(h) < 0.38 and (v - a2 * h).length < 0.22: return True
     return False
-LAND = {}
-for d in drums:
-    fc_ = [k.co.x for fc in fcurves_of(d.animation_data.action) if fc.data_path == "location" for k in fc.keyframe_points] if d.animation_data and d.animation_data.action else [0]
-    LAND[d.name] = max(fc_)
-def _shift(d, df):
-    for fc in fcurves_of(d.animation_data.action):
-        for k in fc.keyframe_points:
-            if k.co.x > 0.5: k.co.x += df; k.handle_left.x += df; k.handle_right.x += df
-    LAND[d.name] += df
-ev(f1("S13")); gone = []                 # final heap: anything still overlapping another drum is left out
+def tumble(d, fs, fe_, P0, q0, M1, roll):
+    """slide off the tail and tumble DOWN to M1: z only ever descends (never above the release point), lands at fe_"""
+    P1, q1, _ = M1.decompose(); d.rotation_mode = 'QUATERNION'
+    for f in list(range(fs, fe_ + 1, 2)) + [fe_]:
+        u = (f - fs) / max(1, fe_ - fs)
+        p = P0.lerp(P1, smooth(u) * 0.4 + u * 0.6); p.z = P0.z + (P1.z - P0.z) * (u * u)
+        q = q0.slerp(q1, smooth(u)) @ Quaternion((1, 0, 0), roll * (1 - u))
+        if f != fe_:
+            R3 = q.to_matrix(); low = min((R3 @ c for c in _dco), key=lambda v: v.z)
+            pc = p + low; need = _gz(pc.x, pc.y) + 0.02 - pc.z
+            if need > 0: p.z += need
+        d.location = p; d.rotation_quaternion = q
+        d.keyframe_insert("location", frame=f); d.keyframe_insert("rotation_quaternion", frame=f)
+_gone = []                               # resting heap: any drum still overlapping another is left out
 for i in range(len(drums)):
-    if drums[i] in gone: continue
+    if drums[i] in _gone: continue
     for j in range(i + 1, len(drums)):
-        if drums[j] not in gone and _overlap(drums[i], drums[j]): gone.append(drums[j])
-for d in gone: drums.remove(d); bpy.data.objects.remove(d, do_unlink=True)
+        if drums[j] not in _gone and _overlap(None, None, slots[i][2], slots[j][2]): _gone.append(drums[j])
+for d in _gone: drums.remove(d); bpy.data.objects.remove(d, do_unlink=True)
+print("HEAP static overlap removed", len(_gone))
+ev(1); landed = []
+for bi, b in enumerate(BEDS):            # each truck's load: 6 drums ride the tipping bed, slide off the tail, tumble <= 3 m
+    bmn, bmx = bbox([b]); cx = (bmn.x + bmx.x) / 2
+    for iy in range(2):
+        for ix in range(3):
+            x = cx + (ix - 1) * 0.66; y = bmn.y + 0.55 + iy * 0.75
+            d = copy_obj(L_dr, "Drum_b%d_%d%d" % (bi, ix, iy), (x, y, bmn.z + 0.32 + 0.002), c=DCOLL); d.rotation_mode = 'QUATERNION'
+            d.rotation_quaternion = Quaternion((0, 0, 1), random.random() * 6)
+            REL = TIP0 + 50 + iy * 44 + ix * 12          # the row at the tail goes first; the second row only after it has landed
+            ev(TIP0); OFF = b.matrix_world.inverted() @ d.matrix_world
+            for f in frs(TIP0, REL, 2):
+                ev(f); l_, q_, _ = (b.matrix_world @ OFF).decompose(); d.location = l_; d.rotation_quaternion = q_
+                d.keyframe_insert("location", frame=f); d.keyframe_insert("rotation_quaternion", frame=f)
+            ev(REL); P0, q0, _ = d.matrix_world.decompose()
+            qL = Quaternion((0, 0, 1), R_(random.uniform(-25, 25))) @ Quaternion((0, 1, 0), R_(90))      # lying, axis roughly along X
+            ax = qL @ Vector((0, 0, 1))
+            for step in range(12):                       # resting spot behind the tail, clear of the heap and of the other loads
+                tx = cx + (ix - 1) * 1.05 + random.uniform(-0.1, 0.1); ty = bmn.y - 1.2 - (1 - iy) * 0.9 - step * 0.25       # first row out lands farther, the second stops nearer the tail
+                tz = max(_gz(tx + ax.x * t, ty + ax.y * t) for t in (-0.44, 0, 0.44)) + 0.29
+                M1 = Matrix.Translation(Vector((tx, ty, tz)) - ax * 0.44) @ qL.to_matrix().to_4x4()
+                pen = max(_gz((M1 @ c).x, (M1 @ c).y) + 0.01 - (M1 @ c).z for c in _dco)
+                if pen > 0: M1 = Matrix.Translation((0, 0, pen)) @ M1
+                if not any(_overlap(None, o, M1, Mo) for o, Mo in [(o_, o_.matrix_world) for o_ in drums] + landed): break
+            landed.append((d, M1))
+            tumble(d, REL, REL + 34, P0, q0, M1, R_(random.choice((-160, 160))))
+            drums.append(d)
 ev(1)
-print("DRUMS keyed", len(drums), "landing", ARR0, ARR1, "final-overlap removed", len(gone))
+ARR0, ARR1 = TIP0, TIP0 + 140
+print("DRUMS heap", len(slots), "loads", len(landed), "landing by", ARR1)
 camshot("S11", [(0.0, (DX.x + 0.01, 10.5, 18.0), (DX.x, 10.51, 0.0), 26), (1.0, (DX.x + 0.01, 9.0, 21.0), (DX.x, 9.01, 0.0), 26)])
 camshot("S12", [(0.0, HC + Vector((0.01, 0.6, 14.0)), HC + Vector((0, 0.61, 0)), 24), (1.0, HC + Vector((0.01, 0.6, 16.5)), HC + Vector((0, 0.61, 0)), 24)])
 camshot("S13", [(0.0, HC + Vector((-11.0, -10.0, 3.8)), HC + Vector((0, 0, 0.2)), 28), (1.0, HC + Vector((-7.8, -12.6, 4.0)), HC + Vector((0, 0, 0.2)), 28)])
@@ -252,8 +251,8 @@ camshot("S14", [(0.0, HC + Vector((-4.5, -13.5, 3.6)), HC + Vector((-7.0, 0.0, 0
 for d in drums:                           # buried as the dirt wave in front of the blade reaches them
     ev(f1("S13")); px = d.matrix_world.translation.x
     tb = (px - (x0 + DOZ.get("blade", 3.6) + 0.6)) / v
-    if tb < 0: key_vis(d, [(f0("S14"), False)])
-    elif fa + tb * FPS < fe + 60: key_vis(d, [(int(fa + tb * FPS), False)])
+    if tb < 0: key_vis(d, [(0, True), (f0("S14"), False)]) if not (d.animation_data and d.animation_data.action and any(fc.data_path == "hide_render" for fc in fcurves_of(d.animation_data.action))) else key_vis(d, [(f0("S14"), False)])
+    elif fa + tb * FPS < fe + 60: key_vis(d, [(0, True), (int(fa + tb * FPS), False)]) if not (d.animation_data and d.animation_data.action and any(fc.data_path == "hide_render" for fc in fcurves_of(d.animation_data.action))) else key_vis(d, [(int(fa + tb * FPS), False)])
 
 # ================================================================== S15: houses are framed on top of the cut-away while the green pockets glow underneath
 fa = f0("S15"); fe = fx("S15")
