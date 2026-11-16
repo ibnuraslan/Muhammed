@@ -467,7 +467,7 @@ def shot_5a(f0, n):
     camera("5a", f0, n, [(0, (X2 + 0.55, 1.45, 0.6), (X2, 0, 0.46), 32), (1, (X2 + 0.4, 1.15, 0.55), (X2, 0, 0.46), 32)], catch=False)
     return ()
 
-def crawl_pose(n, f, pelvis_xy, yaw, phase, gz, head=(-35.0, 0.0), hand_pose="relaxed", reach=0.16):
+def crawl_pose(n, f, pelvis_xy, yaw, phase, gz, head=(-35.0, 0.0), hand_pose="relaxed", reach=0.16, palm_dz=0.0):
     """hands and knees. phase 0..1 per stride (diagonal pairs); pelvis_xy at hip height"""
     L = THIGH[n]; root = V((pelvis_xy[0], pelvis_xy[1], gz + 0.12 + L * 0.98)) + V((0, 0, HUM[n].root_head.z - RIG[n].BN["upperleg01.L"].head_local.z))
     body(n, f, root, yaw, flex=86, spine=(10, 0, 0), head=head)
@@ -482,7 +482,7 @@ def crawl_pose(n, f, pelvis_xy, yaw, phase, gz, head=(-35.0, 0.0), hand_pose="re
         sx = 1 if s == "L" else -1; u = (phase + ph) % 1.0
         swing = math.sin(math.pi * u * 2) * 0.09; lift = max(0.0, math.sin(math.pi * u * 2)) * 0.05
         sh = wpos(n, "upperarm01." + s)
-        palm = V((sh.x, sh.y, gz)) + fwd(yaw) * (reach + swing) - rgt(yaw) * sx * 0.04; palm.z = gz + 0.02 + lift
+        palm = V((sh.x, sh.y, gz)) + fwd(yaw) * (reach + swing) - rgt(yaw) * sx * 0.04; palm.z = gz + 0.02 + palm_dz + lift
         hand(n, s, f, palm, V((0, 0, -1)), fwd(yaw) - rgt(yaw) * sx * 0.25, pole=sh + fwd(yaw) * -0.25 - rgt(yaw) * sx * 0.45 + V((0, 0, 0.05)), pose=hand_pose)
 
 def shot_5b(f0, n):
@@ -490,9 +490,9 @@ def shot_5b(f0, n):
     use = ("P1",); f1 = f0 + n - 1; GZ[0] = FZ2; yw = 180.0
     g = bpy.data.objects["S2_Grille"]
     gpos = V(g.location); push_end = f0 + 40
-    for f in (f0, f0 + 20, push_end, push_end + 20, f1):
+    for f in (f0, f0 + 20, push_end):
         u = min(1.0, (f - f0) / 40.0)
-        crawl_pose("P1", f, (X2, -0.95 + 0.15 * u), yw, 0.0, 0.13, head=(-30, 0))
+        crawl_pose("P1", f, (X2, -0.95 + 0.15 * u), yw, 0.0, 0.07, head=(-30, 0))
     # the hands are flat on the grille's back while it is pushed (contact keyed on both), then the grille falls on its own weight
     for f, dy in ((f0, 0.0), (f0 + 20, 0.05), (push_end, 0.14)):
         g.location = gpos + V((0, dy, 0)); g.rotation_euler = (0, 0, R_(180)); g.keyframe_insert("location", frame=f); g.keyframe_insert("rotation_euler", frame=f)
@@ -504,8 +504,8 @@ def shot_5b(f0, n):
         g.location = loc; g.rotation_euler = (R_(rx), 0, R_(180)); g.keyframe_insert("location", frame=f); g.keyframe_insert("rotation_euler", frame=f)
     for s, dx in (("L", -1.0), ("R", 1.0)):     # hands come back through the middle of the opening
         hand("P1", s, push_end + 10, V((X2 + dx * 0.15, -0.15, 0.5)), V((0, 0, -1)), V((0, 1, 0)), pole=wpos("P1", "upperarm01." + s, push_end + 10) + V((dx * 0.15, -0.2, -0.3)), pose="relaxed")
-    for f, hd in ((push_end + 20, -40), (push_end + 45, -50), (f1, -48)):     # palms back on the duct floor; he looks up and out
-        crawl_pose("P1", f, (X2, -1.0), yw, 0.0, 0.13, head=(hd, 6 * math.sin(f / 9.0)), hand_pose="flat_palm", reach=0.0)
+    for f, hd in ((push_end + 20, -40), (push_end + 45, -50)):     # held to the end (hold_ends keys the last frame)     # palms back on the duct floor; he looks up and out
+        crawl_pose("P1", f, (X2, -1.0), yw, 0.0, 0.10, head=(hd, 6 * math.sin(f / 9.0)), hand_pose="flat_palm", reach=0.0, palm_dz=0.055)
     for i in range(14):
         bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=1); pf = bpy.context.active_object; pf.name = "Puff_5b_%d" % i
         pf.data.materials.append(bpy.data.materials["M_Rubble"]); vis_window(pf, f0, f1)
