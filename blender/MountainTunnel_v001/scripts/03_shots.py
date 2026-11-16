@@ -208,11 +208,12 @@ def copy_tree(src, name, f0, f1):
         vis_window(k, f0, f1)
     return root
 
-AGE_MATS = [m for m in bpy.data.materials if m.node_tree and "Age" in m.node_tree.nodes]
+AGE_NT = [m.node_tree for m in bpy.data.materials if m.node_tree and "Age" in m.node_tree.nodes] + [g for g in bpy.data.node_groups if "Age" in g.nodes]
+AGE_MATS = AGE_NT
 BEARD = bpy.data.objects["Man.beard"]
 def key_age(f0, f1, age):
-    for m in AGE_MATS:
-        nd = m.node_tree.nodes["Age"].outputs[0]
+    for nt_ in AGE_NT:
+        nd = nt_.nodes["Age"].outputs[0]
         for f in (f0, f1):
             nd.default_value = age; nd.keyframe_insert("default_value", frame=f)
     show = age >= 0.6
@@ -228,6 +229,8 @@ def cut_window(f0, f1, y0, y1=None):
 def show_cutface(f0, f1):
     key_vis(CUTFACE, f0, True); key_vis(CUTFACE, f1 + 1, False)
 key_vis(CUTFACE, 1, False)
+GSKY = bpy.data.objects["GorgeSky"]; key_vis(GSKY, 1, False)
+def gorge_light(f0, f1): key_vis(GSKY, f0, True); key_vis(GSKY, f1 + 1, False)
 
 # chips of rock: spawned at each strike, fall under gravity (keyed), hidden outside their flight
 CHIP_N = [0]
@@ -247,7 +250,20 @@ def chips(f, at, count=3, spread=0.12):
         key_vis(o, 1, False); key_vis(o, f, True); key_vis(o, f + 45, False)
 
 # hammer geometry (Poly Haven cross pein hammer): handle along local Z, head on top, striking face toward +X
-HAM_FACE = V((0.055, 0.0, 0.152)); HAM_GRIP = V((0.0, 0.0, -0.085))
+HAM_FACE = V((0.055, 0.0, 0.152)); HAM_GRIP = V((0.0, 0.0, float(os.environ.get("HGRIP", "-0.085"))))
+HOFF = [float(os.environ.get("HOFF", "-0.008"))]
+CHOFF = [float(os.environ.get("CHOFF", "0.03"))]
+HSC = [float(os.environ.get("HSC", "1.0"))]
+# slim the hammer HANDLE only (the head keeps its size): the closed fist pressed the palm skin a few mm into the stock handle
+_hm = bpy.data.objects["Hammer"].data
+_hx = [v.co for v in _hm.vertices if v.co.z < 0.0]
+_cx = sum(c.x for c in _hx) / len(_hx); _cy = sum(c.y for c in _hx) / len(_hx)
+for v in _hm.vertices:
+    if v.co.z < 0.115:
+        v.co.x = _cx + (v.co.x - _cx) * 0.6; v.co.y = _cy + (v.co.y - _cy) * 0.6
+HCEN = [float(os.environ.get("HCEN", "0.0"))]
+HAX = [float(os.environ.get("HAX", "0.0"))]
+HPOSE = [os.environ.get("HPOSE", "wrap_grip")]
 CH_BUTT = V((0.0, -0.12, 0.0)); CH_TIP = V((0.0, 0.125, 0.0)); CH_GRIP = V((0.0, -0.035, 0.0))
 def frame_from(x, z):
     x = V(x).normalized(); y = V(z).cross(x).normalized(); z = x.cross(y)
@@ -266,7 +282,7 @@ def strike(sid, f0, n, yc, age, period=44, x0=0.0, tip_z=1.05, first=10, chip=Tr
             foot(nm, s, f, (xy.x, xy.y, GZ[0] + HUM[nm].ankle[s].z), yaw + sx * 12)
     # chisel: tip on the rock, pointing into it and slightly down
     ch = prop_copy("Chisel", "Chisel_" + sid, f0, f1)
-    d = V((0.08, 1.0, -0.18)).normalized(); tip = V((x0, yc - 0.035, tip_z))
+    d = V((-0.5, 1.0, -0.15)).normalized(); tip = V((x0, yc - 0.035, tip_z))   # butt angled out to his right, clear of his left forearm
     Mc = frame_from(V((1, 0, 0)).cross(d) * -1, V((0, 0, 1)))       # placeholder axes, replaced below
     yax = d; xax = yax.cross(V((0, 0, 1))).normalized(); zax = xax.cross(yax)
     ch.matrix_world = Matrix.Translation(tip - yax * 0.125) @ Matrix((xax, yax, zax)).transposed().to_4x4()
@@ -274,7 +290,10 @@ def strike(sid, f0, n, yc, age, period=44, x0=0.0, tip_z=1.05, first=10, chip=Tr
     Mw = ch.matrix_world.copy(); butt = Mw @ CH_BUTT
     elbow(nm, "L", f0, wpos(nm, "upperarm01.L", f0) + V((-0.35, 0.05, -0.25)))
     grip_object(bpy.data.objects[nm], "L", f0, ch, Mw @ CH_GRIP, V((0.55, 0.0, -0.85)), finger_dir=V((0.4, 0, -1)), grip="wrap")
-    ML = ik_mat(nm, "L", f0); child_of(ch, nm, "wrist.L", f0)
+    apply_pose(bpy.data.objects[nm], "L", "wrap_grip", f0, 1.0)
+    # the curled fist sat ~3 cm above the shaft: lower the hand along the approach so the shaft runs through the fist
+    ML = Matrix.Translation(V((0.55, 0.0, -0.85)).normalized() * CHOFF[0]) @ ik_mat(nm, "L", f0); key_ik(nm, "L", f0, ML)
+    sc.frame_set(f0); bpy.context.view_layer.update(); child_of(ch, nm, "wrist.L", f0)
     # the chisel stays put: re-key the left hand at the same matrix on every body key
     for f in list(range(f0, f1, 30)) + [f1]:
         key_ik(nm, "L", f, ML); elbow(nm, "L", f, wpos(nm, "upperarm01.L", f) + V((-0.35, 0.05, -0.25)))
@@ -287,7 +306,18 @@ def strike(sid, f0, n, yc, age, period=44, x0=0.0, tip_z=1.05, first=10, chip=Tr
     sc.frame_set(f0); bpy.context.view_layer.update(); Mh = hm.matrix_world.copy(); G = Mh @ HAM_GRIP
     elbow(nm, "R", f0, wpos(nm, "upperarm01.R", f0) + rgt(yaw) * 0.45 - fwd(yaw) * 0.15 + V((0, 0, -0.3)))
     grip_object(bpy.data.objects[nm], "R", f0, hm, G, (-fwd(yaw) * 0.2 + V((0, 0, -1.0))).normalized(), finger_dir=fwd(yaw), grip="wrap")
-    MC = ik_mat(nm, "R", f0); child_of(hm, nm, "wrist.R", f0)
+    if HPOSE[0]: apply_pose(bpy.data.objects[nm], "R", HPOSE[0], f0, 1.0)
+    MC = ik_mat(nm, "R", f0)
+    hm.matrix_world = hm.matrix_world @ Matrix.Diagonal((HSC[0], HSC[0], 1.0, 1.0))   # handle slimmed a little inside the closed fist (palm skin was 2-5 mm into it)
+    # centre the handle in the fist: the fist hole ~ mean of the knuckle (x-1 tail) and the mid-phalanx heads of fingers 2-5
+    sc.frame_set(f0); bpy.context.view_layer.update(); R_o = bpy.data.objects[nm]
+    pts = [R_o.matrix_world @ R_o.pose.bones["finger%d-%d.R" % (k_, j_)].head for k_ in (2, 3, 4, 5) for j_ in (2, 3)]
+    pts += [R_o.matrix_world @ R_o.pose.bones["metacarpal%d.R" % k_].tail for k_ in (2, 3, 4)]
+    Cf = sum(pts, V((0, 0, 0))) / len(pts)
+    ax_o = hm.matrix_world.translation; ax_d = (hm.matrix_world.to_3x3() @ V((0, 0, 1))).normalized()
+    near = ax_o + ax_d * (Cf - ax_o).dot(ax_d); sh_ = (Cf - near) * HCEN[0]
+    hm.matrix_world = Matrix.Translation(sh_ + ax_d * HAX[0]) @ hm.matrix_world; print("HANDLE shift mm", round(sh_.length * 1000, 1))
+    bpy.context.view_layer.update(); child_of(hm, nm, "wrist.R", f0)
     # wrist-cock swing: rotate about the axis normal to the handle/strike plane, sign chosen so the head goes back
     # raise: the head lifts up over the grip (rotation about the strike axis) and the fist draws back a little;
     # the strike drives it forward along the chisel axis. Head stays below the hairline and away from the chest.
@@ -410,7 +440,7 @@ def shot_3b(f0, n):
     use = ("V2", "V3"); f1 = f0 + n - 1
     laugh("V2", f0, f1, V((-7.3, -66.0, 0)), 205.0, head_yaw=-30, period=18)
     laugh("V3", f0, f1, V((-5.0, -66.3, 0)), 140.0, head_yaw=25, period=14, bend=22, hands_knees=True)
-    camera("3b", f0, n, [(0, (-4.9, -64.0, 1.5), (-6.3, -66.2, 1.3), 30), (1, (-5.1, -63.9, 1.47), (-6.3, -66.2, 1.28), 30)], fstop=8.0)
+    camera("3b", f0, n, [(0, (-6.1, -61.8, 1.5), (-6.15, -66.2, 1.15), 20), (1, (-6.2, -62.0, 1.48), (-6.15, -66.2, 1.15), 20)], fstop=8.0)
     return use
 
 def shot_4a(f0, n):
@@ -626,8 +656,8 @@ def shot_8b(f0, n):
         hand("Man", "L", f, th, V((0, 0, -1)), fwd(yaw), pole=wpos("Man", "upperarm01.L", f) - rgt(yaw) * 0.35 - fwd(yaw) * 0.2, pose="relaxed")
     key_age(f0, f1, 0.0)
     hd = wpos("Man", "head", f0)
-    c = hd + rgt(yaw) * 1.3 - fwd(yaw) * 0.05 + V((0, 0, 0.05)); a_ = hd + V((0, 0, -0.08))
-    camera("8b", f0, n, [(0, c, a_, 38), (1, c + (a_ - c).normalized() * 0.2, a_, 38)], fstop=8.0)
+    c = hd + rgt(yaw) * 1.15 + fwd(yaw) * 0.2 + V((0, 0, 0.05)); a_ = hd + V((0, 0, 0.0))
+    camera("8b", f0, n, [(0, c + V((0, 0, 0.12)), a_ + V((0, 0, 0.1)), 65), (1, c + V((0, 0, 0.12)) + (a_ - c).normalized() * 0.1, a_ + V((0, 0, 0.1)), 65)], fstop=8.0)
     return use
 
 def shot_9a(f0, n):
@@ -668,6 +698,7 @@ def shot_10a(f0, n):
 
 def shot_10b(f0, n):
     """deep in the gorge, his hair greying: still striking"""
+    gorge_light(f0, f0 + n - 1)
     use = ("Man",); yc = 8.0; cut_window(f0, f0 + n - 1, yc); show_cutface(f0, f0 + n - 1)
     tip, hits = strike("10b", f0, n, yc, 0.45)
     c = tip + V((1.55, -0.30, 0.35)); a_ = tip + V((0.0, -0.62, 0.0))
@@ -676,6 +707,7 @@ def shot_10b(f0, n):
 
 def shot_10c(f0, n):
     """older now, white-bearded: the strike, closer"""
+    gorge_light(f0, f0 + n - 1)
     use = ("Man",); yc = 38.0; cut_window(f0, f0 + n - 1, yc); show_cutface(f0, f0 + n - 1)
     tip, hits = strike("10c", f0, n, yc, 0.85)
     c = tip + V((-1.45, -0.25, 0.42)); a_ = tip + V((0.1, -0.62, 0.25))
@@ -686,14 +718,19 @@ def shot_10c(f0, n):
 M_RCU = bpy.data.materials["M_RockCU"]
 SLAB_Y = YF - 1.6
 SLABS = []
-for i, (x, z, w, h) in enumerate(((-0.95, 1.0, 1.7, 2.0), (0.9, 1.0, 1.8, 2.0), (-0.9, 3.0, 1.8, 2.0), (0.95, 3.0, 1.7, 2.0))):
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(x, SLAB_Y, z)); o = bpy.context.active_object; o.name = "Slab%d" % i
-    o.scale = (w, 0.7, h); bpy.ops.object.transform_apply(scale=True); o.data.materials.append(M_RCU)
-    bv = o.modifiers.new("B", 'BEVEL'); bv.width = 0.08; bv.segments = 2
+random.seed(111)
+for i, (x, z, w, h) in enumerate(((-0.95, 0.8, 1.8, 1.6), (0.9, 0.75, 1.85, 1.5))):
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=0.5, location=(x, SLAB_Y, z)); o = bpy.context.active_object; o.name = "Slab%d" % i
+    o.scale = (w * 0.62, 0.55, h * 0.62); bpy.ops.object.transform_apply(scale=True)
+    for v in o.data.vertices:
+        v.co += V((random.uniform(-0.09, 0.09), random.uniform(-0.05, 0.05), random.uniform(-0.09, 0.09)))
+        v.co.x = max(-1.95 - x, min(1.95 - x, v.co.x))
+    o.data.materials.append(M_RCU); o.modifiers.new("S", 'SUBSURF').levels = 1
     o.hide_render = o.hide_viewport = True; SLABS.append(o)
 
 def shot_11a(f0, n):
     """the last wall: his final blows crack the slab, it falls outward, daylight and the plain beyond pour in"""
+    gorge_light(f0, f0 + n - 1)
     use = ("Man",); f1 = f0 + n - 1; yc = SLAB_Y - 0.35
     cut_window(f0, f1, YF + 6.0)
     tip, hits = strike("11a", f0, min(n, 100), yc, 0.95, chip=True)
@@ -715,6 +752,7 @@ def shot_11a(f0, n):
 
 def shot_11b(f0, n):
     """he walks out through the finished passage toward the light; camera follows behind and to the side"""
+    gorge_light(f0, f0 + n - 1)
     use = ("Man",); f1 = f0 + n - 1; cut_window(f0, f1, YF + 6.0)
     p0, p1 = V((0.2, 44.0, 0)), V((0.2, 44.0 + 0.0115 * n * 60 / 60, 0))
     path = lambda f: p0.lerp(p1, (f - f0) / (n - 1))
@@ -735,6 +773,7 @@ def shot_12a(f0, n):
 
 def shot_13a(f0, n):
     """a quick route: two villagers walk through the passage toward the hospital beyond it"""
+    gorge_light(f0, f0 + n - 1)
     use = ("V1", "V2"); f1 = f0 + n - 1; cut_window(f0, f1, YF + 6.0)
     for nm, x, y0 in (("V1", -0.45, 30.0), ("V2", 0.5, 29.0)):
         p0 = V((x, y0, 0)); p1 = p0 + V((0, 0.012 * n, 0))
@@ -821,8 +860,8 @@ for o in bpy.data.objects:
                         if fc.data_path in ("hide_render", "hide_viewport") or (o.name in ("Cutter", "Man.beard") and fc.data_path in ("location", "scale")):
                             for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
 # Age values: constant between shots (no greying drift across a cut)
-for m in AGE_MATS:
-    ad = m.node_tree.animation_data
+for nt_ in AGE_NT:
+    ad = nt_.animation_data
     if ad and ad.action:
         for layer in getattr(ad.action, "layers", []):
             for strip in layer.strips:

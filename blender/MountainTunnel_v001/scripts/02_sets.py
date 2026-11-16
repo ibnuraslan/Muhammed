@@ -414,6 +414,31 @@ for i, (x, y, s) in enumerate([(-14, -55, 2.0), (13, -55, 1.6), (-12, 56, 1.3), 
     inst(boul_src, CVG, (x, y, -0.2), random.uniform(0, 6.28), s, "Boulder%d" % i)
 print("PSYS", [(o.name, len(o.particle_systems)) for o in tree_src])
 
+# ================================================================== far land: rolling hills and tree belts (no bare plane to the horizon)
+NH = 120; HS_ = 4000.0
+hv_, hf_ = [], []
+for j in range(NH + 1):
+    for i in range(NH + 1):
+        x = -HS_ / 2 + HS_ * i / NH; y = -HS_ / 2 + HS_ * j / NH
+        r = math.hypot(x / 1.6, y)
+        t = max(0.0, min(1.0, (r - 260.0) / 700.0))
+        h = t ** 1.4 * (55 + 45 * noise.noise(V((x / 500.0, y / 500.0, 2.2)))) + t * 14 * noise.noise(V((x / 120.0, y / 120.0, 7.7)))
+        hv_.append((x, y, h - 0.4 * (1 - t)))
+for j in range(NH):
+    for i in range(NH):
+        hf_.append((j * (NH + 1) + i, j * (NH + 1) + i + 1, (j + 1) * (NH + 1) + i + 1, (j + 1) * (NH + 1) + i))
+M_HILL = tex_mat("M_Hills", "grass_path_2", tint=(0.5, 0.82, 0.38), scale=0.03, bump=0.15, sat=1.1)
+mesh_obj("FarHills", hv_, hf_, M_HILL, CT, smooth=True)
+random.seed(77); far_trees = 0
+for k in range(260):
+    ang = random.uniform(0, 6.283); rr = random.uniform(150, 420)
+    x, y = math.cos(ang) * rr * 1.5, math.sin(ang) * rr
+    if abs(x) < 280 and abs(y) < 70: continue          # not on the ridge
+    if abs(y + 73.5) < 8 or (x > 200 and abs(y) < 90): continue
+    if 80 < y < 125 and abs(x) < 35: continue
+    inst(tree_src, CVG, (x, y, 0), random.uniform(0, 6.28), random.uniform(1.0, 1.8), "FarTree%03d" % k); far_trees += 1
+print("FAR trees", far_trees)
+
 # ================================================================== light and world
 sunL = bpy.data.lights.new("Sun", 'SUN'); sunL.energy = 4.2; sunL.angle = R_(2.5); sunL.color = (1.0, 0.96, 0.9)
 sun = bpy.data.objects.new("Sun", sunL); sc.collection.objects.link(sun); sun.rotation_euler = (R_(48), 0, R_(-25))
