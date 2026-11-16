@@ -188,9 +188,9 @@ def wade(n, sid, p0, p1, yaw, sweep=True):
         for s in "LR":
             sx = 1 if s == "L" else -1; sh = H.sh[s] - H.root_head
             zw = -0.75 - pos.z + 0.04   # just above the water surface
-            sw = 0.16 * math.sin(ph + (0 if s == "L" else math.pi)) if sweep else 0
-            body_hand(H, s, f, pos, yaw, (sh.x + sx * 0.05 + sw, sh.y - 0.42, zw), (sx * 0.2, -0.9, -0.25), (0, 0, -1))
-        H.key_spine(f, flex=10, head=(14, 12 * math.sin(ph * 0.5)))
+            sw = sx * 0.13 * (0.5 + 0.5 * math.sin(ph + (0 if s == "L" else math.pi))) if sweep else 0   # outward only: never across the body
+            body_hand(H, s, f, pos, yaw, (sh.x + sx * 0.08 + sw, sh.y - 0.42, zw), (sx * 0.2, -0.9, -0.25), (0, 0, -1))
+        H.key_spine(f, flex=8, head=(2, 14 * math.sin(ph * 0.5)))
     poses(CH[n], f0, "relaxed", "relaxed"); use(n, sid)
 @shot("S06")
 def _():
@@ -217,7 +217,7 @@ def _():
 @shot("S09")
 def _():
     torch_hold("ResA", "S09", (-0.4, -12.75, 0), 0, turn=6)
-    cam_shot("S09", [(0, (0.55, -11.7, -0.15)), (1, (0.4, -12.6, -0.3))], [(0, (-0.15, -15.8, -0.8)), (1, (-0.15, -15.9, -0.8))], lens=35)
+    cam_shot("S09", [(0, (0.6, -11.5, -0.1)), (1, (0.3, -13.2, -0.35))], [(0, (-0.15, -15.8, -0.8)), (1, (-0.15, -15.9, -0.8))], lens=35)
 @shot("S10")
 def _():
     f0, f1 = W("S10"); _GZ[0] = DRAIN_FLOOR; H = HS["ResA"]; pos = Vector((0.0, -12.4, 0))
