@@ -1,0 +1,56 @@
+{
+ "sword_rusty": {
+  "uid": "9df766681e4e4db9a5f56e770f64e01b",
+  "title": "Rusty Sword",
+  "author": "ONEM",
+  "author_profile": "https://sketchfab.com/ONEM",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/9df766681e4e4db9a5f56e770f64e01b",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "sword_viking": {
+  "uid": "44099cd4da344239af199f246fef680d",
+  "title": "Viking Sword",
+  "author": "Kirhl",
+  "author_profile": "https://sketchfab.com/Kirhl",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/44099cd4da344239af199f246fef680d",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "sword_sheath": {
+  "uid": "c0eb5ba641964a25abbedf3b370307b9",
+  "title": "S\u00e6b\u00f8 /  Thurmuth sword",
+  "author": "JohnyNawalony",
+  "author_profile": "https://sketchfab.com/JohnyNawalony",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/c0eb5ba641964a25abbedf3b370307b9",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "rowboat": {
+  "uid": "1152ce68ca0e4e78bbd93a10c47056e5",
+  "title": "Row Boat",
+  "author": "Sk1ttle",
+  "author_profile": "https://sketchfab.com/Sk1ttle",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/1152ce68ca0e4e78bbd93a10c47056e5",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "tent": {
+  "uid": "751e002e5dbe4eef9edfcec2610409a7",
+  "title": "Viking Tent",
+  "author": "meganem",
+  "author_profile": "https://sketchfab.com/meganem",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/751e002e5dbe4eef9edfcec2610409a7",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "pedestal": {
+  "uid": "bcc6c9850ce8455897196555418c6fa7",
+  "title": "Small Museum Display Case",
+  "author": "Charlotte Kimberly Andreassen",
+  "author_profile": "https://sketchfab.com/charlottekimberly",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/bcc6c9850ce8455897196555418c6fa7",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
