@@ -62,3 +62,19 @@ Build everything that does not depend on exact timing:
   - Real victims and children: treat them respectfully, with no distress close-ups. Deaths happen off-screen or with a cut.
 - Anatomy is clean and colour-coded. No gore and no blood sprays. Violence is shown as impact, not wounds.
 - No weapon or explosive construction detail.
+
+## Wave-1 P1 lessons (B01–B10, Nov 16): check these before you send P1
+Every one of these cost a wave-1 chat an extra round. Look for them on your 3-frame sheet yourself first:
+- **Floating props.** A grip that reports 0 mm can still render the prop 10–20 cm off the hand (Child Of inverse or the prop's origin not at its centre). Judge the grip from the rendered frame, not the numbers.
+- **Headless or cut framing on the first or last frame.** A head cut by the top edge, a person half out at the side, a logo cut by the edge.
+- **Faces.** Fringes over an eye (part them). Black-hole eyes (eye fix plus catchlight on every character, including extras). A face hidden under a cap or hat, or back-only views for a whole shot. Faces pressed into walls. Two heads merging.
+- **Bodies.** A-pose or T-pose arms, stiff spread "claw" fingers, mannequin walks (arms must swing), extras standing in a straight row facing camera like a police lineup. Bare torsos and skin-tight one-colour suits read as mannequins: dress people properly.
+- **Empty or flat backgrounds.** Sky-gradient backdrops behind interiors, grey bands under cutaways, black window voids. Build the room.
+- **Static shots.** Three near-identical frames means a frozen shot. Add an action or a camera move.
+- **Continuity.** The same animal or person must keep the same colour and model from shot to shot.
+- **Physics.** No props flying where they wouldn't (e.g. drums arcing through the sky); no objects cut by the ground plane.
+- **Process.** No script-only micro-pushes. Fix everything, then push ONE commit with the 540×960 3-frame sheet plus body_prop_cross, and send one message.
+
+## Speed (client deadline: all 37 films within 2 days)
+- P1 within about 3 hours of launch. Keep sets simple and reuse finished assets from other films in the repo.
+- When the VO arrives, Phase 2 has priority over polish: a clean, watched preview within about 3 hours.
