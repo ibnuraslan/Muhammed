@@ -752,8 +752,8 @@ def bat_clear(f):
     sc.frame_set(f); Mw = D[S].matrix_world @ D[S].pose.bones["wrist.R"].matrix
     BAT.matrix_world = Mw @ REL_W0; bpy.context.view_layer.update()
     t = face_bvh(); dg = bpy.context.evaluated_depsgraph_get()
-    e = BAT.evaluated_get(dg); me = e.to_mesh()
-    d = min(t.find_nearest(BAT.matrix_world @ v.co)[3] for v in me.vertices)
+    bm_ = bpy.data.objects["Bat"]; e = bm_.evaluated_get(dg); me = e.to_mesh()
+    d = min(t.find_nearest(bm_.matrix_world @ v.co)[3] for v in me.vertices)
     e.to_mesh_clear(); return d
 def face_fwd(f):
     sc.frame_set(f); Mh = bone_world(S, "head")
