@@ -13,7 +13,7 @@ SHOTS = [
     ("10", "under", 200),   # Once the bodies (were in), a thick layer of dead plants
     ("11", "cut",   200),   # sealed them in like a lid
     ("12", "cut",   150),   # blocking out air
-    ("13", "cut",   200),   # and preventing the bodies from decaying
+    ("13", "under", 200),   # and preventing the bodies from decaying
     ("14", "site",  150),   # But 8,000 years later
     ("15", "site",  150),   # a construction crew
     ("16", "site",  180),   # hit a human skull

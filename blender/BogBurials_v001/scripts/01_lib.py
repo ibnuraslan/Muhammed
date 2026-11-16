@@ -93,8 +93,9 @@ tint(burB, "shoes", (0.22, 0.13, 0.07))
 dead = append_char(B + "BellyFat_v010/BellyFat_v010_60fps.blend", "ShopperC", "Dead")
 tint(dead, "elegantsuit", (0.86, 0.80, 0.66), 0.8, 0.3)   # cream woven burial garment
 tint(dead, "shoes", (0.30, 0.19, 0.10))
-worker = append_char(B + "DrunkTrain_v007/DrunkTrain_v007_60fps.blend", "Worker", "Worker", extra=("HardHat",))
-tint(worker, "worksuit", (1.0, 0.45, 0.05), 0.55, 0.35)  # hi-vis orange coverall
+worker = append_char(B + "ElectricianPolice_v010/ElectricianPolice_v010_60fps.blend", "Man", "Worker")
+tint(worker, "casualsuit", (0.20, 0.24, 0.32), 0.7, 0.15)  # navy work shirt and work trousers; the hi-vis vest keeps its own colour
+tint(worker, "shoes", (0.22, 0.14, 0.08))                  # brown work boots
 arch = append_char(B + "FrozenTearsGun_v010/FrozenTearsGun_v010_60fps.blend", "Inventor", "Arch", drop=("Funnel",))
 tint(arch, "casualsuit", (0.55, 0.50, 0.32))     # khaki field shirt and trousers
 tint(arch, "shoes", (0.25, 0.17, 0.10))
@@ -169,6 +170,7 @@ brain = imp("Brain", GLB + "/brain.glb", ("y", 0.16))
 excav = imp("Excavator", GLB + "/excav.glb", ("x", 9.0))
 truck = imp("Pickup", GLB + "/truck.glb", ("y", 4.9))
 brush = imp("Brush", GLB + "/brush.glb", ("x", 0.17))
+hardhat = imp("HardHat", GLB + "/hardhat.glb", ("x", 0.29))
 
 def plain(ob, rgb, rough=0.5, metal=0.0, keep_dark=True):
     """replace texture colours with one clean colour (removes brand text / grime); dark parts (tyres, glass) keep theirs"""
@@ -184,6 +186,7 @@ for m in truck.data.materials:
         if n.type == 'TEX_IMAGE':
             print("LIB truck tex", m.name, n.image.name if n.image else None, n.image.size[:] if n.image else None)
 plain(brush, (0.55, 0.38, 0.20), 0.6)
+plain(hardhat, (1.0, 0.62, 0.05), 0.4)
 
 # ------------------------------------------------------------------ Poly Haven plants
 PL = coll("PLANTS")

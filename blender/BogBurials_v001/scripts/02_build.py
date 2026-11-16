@@ -370,10 +370,11 @@ peat_m = tex_mat("PeatCut", "mud_forest", 1.0, (0.62, 0.42, 0.26), 0.05, 1.1, bo
 mudc_m = tex_mat("MudCut", "brown_mud_02", 1.0, (0.55, 0.40, 0.30), -0.05, 1.0, box=True)
 # lower mud block, upper peat layer (the lid), both cut flat toward the camera (-Y face at y = -0.55)
 rbox("CutMud", (4.0, 2.0, 3.0), CX + Vector((0, 0.45, FLOOR - 1.5)), mudc_m, CC, 0.01)
-LID = rbox("CutLid", (4.0, 2.0, 0.55), CX + Vector((0, 0.45, TOPZ + 0.30)), peat_m, CC, 0.01)
+NICHE = 0.12
+LID = rbox("CutLid", (4.0, 2.0, 0.55), CX + Vector((0, 0.45, TOPZ + NICHE + 0.275)), peat_m, CC, 0.01)
 # niche in front of the body: the body lies on the mud, exposed at the cut face; the lid covers it from above
-rbox("CutBack", (4.0, 0.9, 0.52), CX + Vector((0, 1.0, FLOOR + 0.26)), peat_m, CC, 0.01)
-CUTGRASS = scatter(GRASS, 70, CC, (CX.x - 1.9, CX.x + 1.9, -0.4, 1.4), lambda x, y: TOPZ + 0.575, (1.0, 1.6), None, "CutGrass")
+rbox("CutBack", (4.0, 0.9, TOPZ + NICHE - FLOOR), CX + Vector((0, 1.0, (FLOOR + TOPZ + NICHE) / 2)), peat_m, CC, 0.01)
+CUTGRASS = scatter(GRASS, 70, CC, (CX.x - 1.9, CX.x + 1.9, -0.4, 1.4), lambda x, y: TOPZ + NICHE + 0.55, (1.0, 1.6), None, "CutGrass")
 for g in CUTGRASS:
     g.parent = LID; g.matrix_parent_inverse = LID.matrix_world.inverted()
 CS = place_static("CutBody", CC, CX + Vector((0, 0.05, DEAD_CEN.z)))
@@ -539,17 +540,18 @@ sol = CLOTH.modifiers.new("shrink", 'DISPLACE'); sol.strength = -0.012
 # stomach contents: seeds and plant fibres inside the abdomen (between ribs and pelvis)
 sc.frame_set(1); bpy.context.view_layer.update()
 ABD = (SKR.matrix_world @ SKR.pose.bones["spine03"].head).lerp(SKR.matrix_world @ SKR.pose.bones["lowerleg01.R"].head, 0.45)
+ABD = ABD + (SKR.matrix_world.to_3x3() @ Vector((0, -1, 0))).normalized() * 0.10
 ABD.z = pit_floor + 0.06
-seed_m = mat("Seeds", (0.55, 0.30, 0.12), 0.45, emit=(1.0, 0.8, 0.3), ew=0.0)
+seed_m = mat("Seeds", (0.60, 0.32, 0.10), 0.45, emit=(1.0, 0.62, 0.12), ew=0.0)
 fib_m = mat("Fibres", (0.40, 0.28, 0.14), 0.8)
 SEEDS = []
 fwd_abd = (SKR.matrix_world.to_3x3() @ Vector((0, -1, 0))).normalized()
 
-for k in range(55):
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=10, ring_count=6, radius=0.011)
+for k in range(80):
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=10, ring_count=6, radius=0.012)
     s_ = bpy.context.active_object; s_.name = f"Seed{k}"; s_.scale = (1, 0.7, 0.7); bpy.ops.object.shade_smooth()
     s_.data.materials.append(seed_m); move_to(s_, CD)
-    d_ = Vector((random.gauss(0, 1), random.gauss(0, 1), random.gauss(0, 1))).normalized() * random.uniform(0, 0.05)
+    d_ = Vector((random.gauss(0, 1), random.gauss(0, 1), random.gauss(0, 1) * 0.5)).normalized() * random.uniform(0, 0.065)
     s_.location = ABD + d_; s_.rotation_euler = (random.uniform(0, 3), random.uniform(0, 3), random.uniform(0, 3)); SEEDS.append(s_)
 bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=0.055, location=ABD)
 FIB = bpy.context.active_object; FIB.name = "StomachMass"; FIB.scale = (1.0, 0.8, 0.75)
@@ -576,6 +578,20 @@ rc = sum(crown, Vector()) / len(crown)
 BR.location = Vector((rc.x, rc.y, skmx.z - 0.098)); BR.rotation_euler = SK2.rotation_euler.copy()
 area("DigFill", DX + Vector((-2, -4, 3.5)), DX + Vector((0, 0, 0)), 260, 5, CD)
 
+# logo on the pickup door: placed on the body side facing the site camera
+bpy.context.view_layer.update()
+dg = bpy.context.evaluated_depsgraph_get(); ev_ = TRK.evaluated_get(dg); inv = TRK.matrix_world.inverted()
+side_dir = TRK.matrix_world.to_3x3() @ Vector((1, 0, 0))
+probe = TRK.matrix_world @ Vector((0, -0.55, 0.95))
+ok, loc, nrm, idx = ev_.ray_cast(inv @ (probe + side_dir * 2.0), inv.to_3x3() @ (-side_dir))
+if ok:
+    hit = TRK.matrix_world @ loc; nw = (TRK.matrix_world.to_3x3() @ nrm).normalized()
+    LOGO1.location = hit + nw * 0.006
+    LOGO1.rotation_euler = nw.to_track_quat('Z', 'Y').to_euler()
+    print("BUILD logo door", tuple(round(v, 3) for v in hit), tuple(round(v, 2) for v in nw))
+LOGO1.parent = None
+LOGO_N = LOGO1.rotation_euler.to_matrix() @ Vector((0, 0, 1)); LOGO_N.z = 0; LOGO_N.normalize()
+LOGO_T = Vector((0, 0, 1)).cross(LOGO_N).normalized()        # along the truck body
 # ================================================================== rigs and helpers
 def ensure_leg_ik(obj):
     if "IK_foot.L" in obj.data.bones: return
@@ -610,6 +626,20 @@ for rg in (BURA, BURB, WORK, ARCH):
     for pb in rg.pose.bones: pb.rotation_mode = 'QUATERNION'
     add_hand_limits(rg)
 RA, RB, RW, RAR = Rig(BURA), Rig(BURB), Rig(WORK), Rig(ARCH)
+# hard hat on the worker's head: sits on the hair, Child Of the head bone
+HAT = dup(bpy.data.objects["HardHat"], "Worker_HardHat", (0, 0, 0), (0, 0, 0), 1.0, bpy.data.collections["CHAR_Worker"], linked=False)
+bpy.context.view_layer.update()
+_hair = next(c for c in WORK.children if "short" in c.name)
+_hp = [_hair.matrix_world @ v.co for v in _hair.data.vertices]
+_top = max(p.z for p in _hp); _up = [p for p in _hp if p.z > _top - 0.10]
+_cx = (max(p.x for p in _up) + min(p.x for p in _up)) / 2; _cy = (max(p.y for p in _up) + min(p.y for p in _up)) / 2
+_w = max(p.x for p in _up) - min(p.x for p in _up)
+_hd = HAT.dimensions.copy(); _s = (_w + 0.05) / _hd.x
+HAT.scale = (_s, _s, _s); HAT.location = (_cx, _cy + 0.01, _top - 0.085 * _s / 1.0)
+bpy.context.view_layer.update()
+_c = HAT.constraints.new('CHILD_OF'); _c.target = WORK; _c.subtarget = "head"
+_c.inverse_matrix = (WORK.matrix_world @ WORK.pose.bones["head"].matrix).inverted()
+print("BUILD hat", round(_w, 3), round(_s, 3), tuple(round(v, 3) for v in HAT.dimensions))
 HA, HB, HW, HAR = Human(RA), Human(RB), Human(RW), Human(RAR)
 CHARS = {"bA": (BURA, HA), "bB": (BURB, HB), "wk": (WORK, HW), "ar": (ARCH, HAR)}
 PARK = {"bA": Vector((0, -500, 0)), "bB": Vector((2, -500, 0)), "wk": Vector((4, -500, 0)), "ar": Vector((6, -500, 0)), "wolf": Vector((8, -500, 0))}
@@ -727,20 +757,20 @@ def bur_stand_by(f, d=1.3, yawA=180, yawB=0, head=(12, 0), breath=0.0):
 
 def S02(f0, f1):
     PRESENT["02"] = {"bA", "bB"}
-    dead_place(f0, (0, 0), FLOOR); bur_stand_by(f0); bur_stand_by(f1, breath=2)
+    dead_place(f0, (0, 0), FLOOR); dead_place(f1, (0, 0), FLOOR); bur_stand_by(f0); bur_stand_by(f1, breath=2)
     c = DEAD_CEN
     under_cam("02", f0, f1, (c + Vector((-0.55, -1.05, 0.05)), c + Vector((0, 0, 0))), (c + Vector((0.25, -1.0, 0.12)), c + Vector((0.05, 0, 0.0))), 32)
 
 def S03(f0, f1):
     PRESENT["03"] = {"bA", "bB"}
-    dead_place(f0, (0, 0), FLOOR); bur_stand_by(f0); bur_stand_by(f1, breath=2)
+    dead_place(f0, (0, 0), FLOOR); dead_place(f1, (0, 0), FLOOR); bur_stand_by(f0); bur_stand_by(f1, breath=2)
     c = DEAD_CEN
     under_cam("03", f0, f1, (c + Vector((0.95, -0.75, 0.25)), c + Vector((0.1, 0, -0.05))), (c + Vector((0.75, -0.55, 0.18)), c + Vector((0.15, 0, -0.05))), 32)
 
 STAKE_PUSH = None
 def S04(f0, f1):
     PRESENT["04"] = {"bA", "bB"}
-    dead_place(f0, (0, 0), FLOOR)
+    dead_place(f0, (0, 0), FLOOR); dead_place(f1, (0, 0), FLOOR)
     st = STK_MAIN[5]                           # front pair, +X end ("b" side: top end over -Y)
     base1 = st.location.copy(); e1 = st.rotation_euler.copy()
     axis = (st.matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized()
@@ -771,13 +801,13 @@ def S04(f0, f1):
 
 def S05(f0, f1):
     PRESENT["05"] = {"bA", "bB"}
-    dead_place(f0, (0, 0), FLOOR); bur_stand_by(f0, d=1.6); bur_stand_by(f1, d=1.6, breath=2, head=(16, -8))
+    dead_place(f0, (0, 0), FLOOR); dead_place(f1, (0, 0), FLOOR); bur_stand_by(f0, d=1.6); bur_stand_by(f1, d=1.6, breath=2, head=(16, -8))
     c = DEAD_CEN
     under_cam("05", f0, f1, (c + Vector((-1.9, -1.5, 0.15)), c + Vector((0, 0, 0.1))), (c + Vector((-1.2, -1.9, 0.2)), c + Vector((0, 0, 0.1))), 26)
 
 def S06(f0, f1):
     PRESENT["06"] = {"bA", "bB"}
-    dead_place(f0, (0, 0), FLOOR); bur_stand_by(f0, d=1.6); bur_stand_by(f1, d=1.6, breath=2)
+    dead_place(f0, (0, 0), FLOOR); dead_place(f1, (0, 0), FLOOR); bur_stand_by(f0, d=1.6); bur_stand_by(f1, d=1.6, breath=2)
     c = DEAD_CEN
     under_cam("06", f0, f1, (c + Vector((1.5, -0.25, -0.12)), c + Vector((0, 0, 0.12))), (c + Vector((1.3, 0.35, -0.10)), c + Vector((0, 0, 0.15))), 24)
 
@@ -824,7 +854,7 @@ def S09(f0, f1):
 LEAVES = []
 def S10(f0, f1):
     PRESENT["10"] = {"bA", "bB"}
-    dead_place(f0, (0, 0), FLOOR); bur_stand_by(f0, d=1.8); bur_stand_by(f1, d=1.8, breath=2)
+    dead_place(f0, (0, 0), FLOOR); dead_place(f1, (0, 0), FLOOR); bur_stand_by(f0, d=1.8); bur_stand_by(f1, d=1.8, breath=2)
     leaf_m = mat("DeadLeaf", (0.45, 0.30, 0.12), 0.7)
     for k in range(45):
         bpy.ops.mesh.primitive_circle_add(vertices=12, radius=0.035, fill_type='NGON')
@@ -851,12 +881,12 @@ def S11(f0, f1):
     z_end = LID.location.z
     for f, dz in ((f0, 0.9), (f0 + 25, 0.9), (f0 + 105, 0.0), (f1, 0.0)):
         LID.location.z = z_end + dz; LID.keyframe_insert("location", frame=f)
-    cam_move("11", f0, f1, (CX + Vector((0.7, -2.9, 0.35)), CX + Vector((0, 0, -0.30))), (CX + Vector((0.4, -2.4, 0.15)), CX + Vector((0, 0, -0.38))), 30)
+    cam_move("11", f0, f1, (CX + Vector((0.7, -2.8, 0.3)), CX + Vector((0, 0, -0.32))), (CX + Vector((0.3, -2.0, -0.05)), CX + Vector((0, 0, -0.42))), 30)
 
 def S12(f0, f1):
     PRESENT["12"] = set()
     LID.keyframe_insert("location", frame=f0)
-    top = TOPZ + 0.575
+    top = TOPZ + NICHE + 0.55
     for k, b in enumerate(BUBS):
         x = random.uniform(-1.3, 1.3); y = random.uniform(-0.45, -0.25)
         d0 = f0 + random.randint(0, 50); fall = random.randint(35, 55)
@@ -870,25 +900,31 @@ def S12(f0, f1):
     cam_move("12", f0, f1, (CX + Vector((-0.5, -3.0, 0.7)), CX + Vector((0, 0, -0.05))), (CX + Vector((-0.2, -2.6, 0.6)), CX + Vector((0, 0, -0.1))), 30)
 
 def S13(f0, f1):
-    PRESENT["13"] = set()
-    c = CS.location
-    cam_move("13", f0, f1, (c + Vector((0.35, -2.7, 0.30)), c + Vector((0, 0, -0.02))), (c + Vector((0.15, -2.0, 0.16)), c + Vector((0, 0, -0.02))), 35)
+    PRESENT["13"] = {"bA", "bB"}
+    dead_place(f0, (0, 0), FLOOR); dead_place(f1, (0, 0), FLOOR); bur_stand_by(f0, d=1.8); bur_stand_by(f1, d=1.8, breath=2)
+    c = DEAD_CEN
+    under_cam("13", f0, f1, (c + Vector((-0.6, -1.05, 0.12)), c + Vector((-0.12, 0, 0.0))), (c + Vector((-0.45, -0.85, 0.08)), c + Vector((-0.14, 0, 0.0))), 32)
 
 def S14(f0, f1):
     PRESENT["14"] = {"wk"}
-    a = SX + Vector((-1.5, -3.5, 0)); b_ = SX + Vector((1.0, -2.0, 0))
+    a = SX + Vector((1.2, -1.2, 0)); b_ = SX + Vector((-0.5, -3.1, 0))
     path = lambda f: a.lerp(b_, (f - f0) / (f1 - f0))
     yw = math.degrees(math.atan2((b_ - a).x, -(b_ - a).y))
     walk_swing(HW, WORK, path, lambda f: yw, f0, f1)
-    cam_move("14", f0, f1, (SX + Vector((-9, -13, 9)), SX + Vector((1.0, 1.5, 0.3))), (SX + Vector((-6, -11, 6.5)), SX + Vector((1.2, 1.5, 0.4))), 30)
+    cam_move("14", f0, f1, (SX + Vector((-4.2, -7.0, 3.6)), SX + Vector((1.8, 1.4, 0.9))), (SX + Vector((-3.0, -5.6, 2.6)), SX + Vector((1.6, 1.2, 0.9))), 32)
 
 def S15(f0, f1):
     PRESENT["15"] = {"wk"}
-    a = SX + Vector((-1.75, 3.25, 0)); b_ = SX + Vector((-1.3, 2.35, 0))
-    path = lambda f: a.lerp(b_, min(1.0, (f - f0) / (f1 - f0 - 10)))
-    yw = math.degrees(math.atan2((b_ - a).x, -(b_ - a).y))
+    L = LOGO1.location.copy(); L.z = 0
+    sgn = 1 if LOGO_T.dot(TRK.matrix_world.to_3x3() @ Vector((0, -1, 0))) > 0 else -1     # +: toward the truck's nose
+    a = L + LOGO_N * 0.75 + LOGO_T * sgn * 1.9; b_ = L + LOGO_N * 0.75 + LOGO_T * sgn * 0.75
+    path = lambda f: a.lerp(b_, min(1.0, (f - f0) / (f1 - f0 - 20)))
+    d = b_ - a; yw = math.degrees(math.atan2(d.x, -d.y))
     walk_swing(HW, WORK, path, lambda f: yw, f0, f1)
-    cam_move("15", f0, f1, (SX + Vector((0.6, -0.4, 1.35)), SX + Vector((-2.9, 2.6, 1.0))), (SX + Vector((0.4, -0.2, 1.3)), SX + Vector((-2.9, 2.5, 0.95))), 30)
+    Lw = LOGO1.location
+    print("BUILD S15 cam", tuple(round(v, 2) for v in Lw + LOGO_N * 3.0), tuple(round(v, 2) for v in LOGO_N), sgn)
+    cam_move("15", f0, f1, (Lw + LOGO_N * 3.0 + LOGO_T * sgn * 0.5 + Vector((0, 0, 0.25)), Lw + LOGO_T * sgn * 0.42 + Vector((0, 0, 0.05))),
+             (Lw + LOGO_N * 2.6 + LOGO_T * sgn * 0.45 + Vector((0, 0, 0.22)), Lw + LOGO_T * sgn * 0.38 + Vector((0, 0, 0.05))), 28)
 
 def S16(f0, f1):
     PRESENT["16"] = {"wk"}
@@ -960,12 +996,12 @@ def S20(f0, f1):
     PRESENT["20"] = set()
     for k, s_ in enumerate(SEEDS[:1]):
         pass
-    for f, v in ((f0, 0.0), (f0 + 40, 0.0), (f0 + 75, 1.6), (f1 - 30, 1.0), (f1, 1.0)):
+    for f, v in ((f0, 0.5), (f0 + 30, 0.5), (f0 + 65, 6.0), (f1 - 30, 4.5), (f1, 4.5)):
         emit_key(seed_m, f, v)
     a = ABD
     fw = fwd_abd
     side = Vector((0, 0, 1)).cross(fw).normalized()
-    cam_move("20", f0, f1, (a + fw * 0.22 + Vector((0, 0, 0.70)), a), (a + fw * 0.12 + Vector((0, 0, 0.48)), a), 35, 11)
+    cam_move("20", f0, f1, (a + fw * 0.42 + side * 0.06 + Vector((0, 0, 0.40)), a + Vector((0, 0, 0.01))), (a + fw * 0.32 + side * 0.04 + Vector((0, 0, 0.30)), a + Vector((0, 0, 0.01))), 45, 11)
 
 def S21(f0, f1):
     PRESENT["21"] = set()
@@ -987,7 +1023,7 @@ def S23(f0, f1):
 def S24(f0, f1):
     PRESENT["24"] = set()
     # the same curled body, as she was laid down: placed in the pit exactly where the skeleton lies
-    dead_place(f0, (SK_CEN.x, SK_CEN.y), pit_floor)
+    dead_place(f0, (SK_CEN.x, SK_CEN.y), pit_floor); dead_place(f1, (SK_CEN.x, SK_CEN.y), pit_floor)
     c = SK_CEN; o = camera("24", 30, 9)
     for k, f in enumerate((f0, (f0 + f1) // 2, f1)):
         a_ = R_(-46 + 22 * k)
@@ -1014,23 +1050,12 @@ def rng(*sids): return [(SH[s][1], SH[s][2]) for s in sids]
 for o in STK_MAIN + OB: vis(o, rng("04", "05", "06", "07", "08", "09", "10"))
 for o in list(SKO.children) + [SKO]: pass
 vis(SKO, rng("17", "18", "19", "20", "21", "22", "23"))
-vis(WATER, rng("01", "04", "08", "09")); vis(WUNDER, rng("02", "03", "05", "06", "07", "10")); vis(WVOL, rng("02", "03", "05", "06", "07", "10"))
+vis(WATER, rng("01", "04", "08", "09")); vis(WUNDER, rng("02", "03", "05", "06", "07", "10", "13")); vis(WVOL, rng("02", "03", "05", "06", "07", "10", "13"))
 vis(CLOTH, rng("22", "23"))
 for s_ in SEEDS + [FIB]: vis(s_, rng("19", "20", "21"))
 # the Dead rig only renders in the bog shots and the last shot
-for ch in DEAD.children: vis(ch, rng("01", "02", "03", "04", "05", "06", "07", "10", "24"))
-# logo on the pickup door: placed on the body side facing the site camera
-sc.frame_set(SH["14"][1]); bpy.context.view_layer.update()
-dg = bpy.context.evaluated_depsgraph_get(); ev_ = TRK.evaluated_get(dg); inv = TRK.matrix_world.inverted()
-side_dir = TRK.matrix_world.to_3x3() @ Vector((1, 0, 0))
-probe = TRK.matrix_world @ Vector((0, -0.55, 0.95))
-ok, loc, nrm, idx = ev_.ray_cast(inv @ (probe + side_dir * 2.0), inv.to_3x3() @ (-side_dir))
-if ok:
-    hit = TRK.matrix_world @ loc; nw = (TRK.matrix_world.to_3x3() @ nrm).normalized()
-    LOGO1.location = hit + nw * 0.006
-    LOGO1.rotation_euler = nw.to_track_quat('Z', 'Y').to_euler()
-    print("BUILD logo door", tuple(round(v, 3) for v in hit), tuple(round(v, 2) for v in nw))
-LOGO1.parent = None
+for ch in DEAD.children: vis(ch, rng("01", "02", "03", "04", "05", "06", "07", "10", "13", "24"))
+
 
 # hard cuts: the last key of every shot is constant (no inbetween across a cut)
 BOUND = set()
