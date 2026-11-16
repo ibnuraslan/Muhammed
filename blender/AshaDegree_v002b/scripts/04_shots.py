@@ -332,17 +332,23 @@ def make_straps(rig, bagobj, f_bag, name):
     rig.data.pose_position = 'REST'; bpy.context.view_layer.update()
     dg = bpy.context.evaluated_depsgraph_get(); dg.update()
     bagM = (Mw @ B["spine03"].matrix_local) @ s3_pose.inverted() @ bagM_pose      # the bag, carried into the rest pose
-    skip = ("hair", "ponytail", "shoes", "eye", "brow", "lash", "teeth", "tongue", "jacketsrc", "scrunch", "high-poly")
+    skip = ("hair", "ponytail", "shoes", "sleeves", "eye", "brow", "lash", "teeth", "tongue", "jacketsrc", "scrunch", "high-poly")
     cloth = [o for o in rig.children if o.type == 'MESH' and not o.hide_render and not any(k in o.name.lower() for k in skip)]
     print("STRAP cloth", [o.name for o in cloth])
-    trees = []
+    trees = []; SUIT_REST = None
+    _sub = [(m, m.show_viewport) for o in cloth for m in o.modifiers if m.type == 'SUBSURF']
+    for m, _v in _sub: m.show_viewport = False      # the unsubdivided cage is the outer bound of the cloth
+    dg.update()
     for o in cloth:
         oe = o.evaluated_get(dg); me = oe.to_mesh()
         vs = [o.matrix_world @ v.co for v in me.vertices]; ps = [tuple(p.vertices) for p in me.polygons]
+        if "casualsuit" in o.name and len(vs) == len(o.data.vertices): SUIT_REST = vs   # refitted rest positions (same vertex order)
         trees.append(BVHTree.FromPolygons(vs, ps)); oe.to_mesh_clear()
+    for m, _v in _sub: m.show_viewport = _v
     suit = next(o for o in cloth if "casualsuit" in o.name)
     kd = KDTree(len(suit.data.vertices))
-    for v in suit.data.vertices: kd.insert(suit.matrix_world @ v.co, v.index)
+    print("STRAP weights from", "evaluated rest suit" if SUIT_REST else "ORIGINAL suit coords")
+    for v in suit.data.vertices: kd.insert(SUIT_REST[v.index] if SUIT_REST else suit.matrix_world @ v.co, v.index)
     kd.balance()
     gname = {g.index: g.name for g in suit.vertex_groups}
     def bw(n): return Mw @ B[n].head_local
@@ -350,7 +356,7 @@ def make_straps(rig, bagobj, f_bag, name):
     for s_ in "LR":
         sx = 1 if s_ == "L" else -1
         sh = bw("upperarm01." + s_)
-        T = nk.lerp(sh, 0.5); T.z = sh.z + 0.07
+        T = nk.lerp(sh, 0.64); T.z = sh.z + 0.065
         bt = max([bagM @ Vector((q * 0.075, 0.06, 0.31)) for q in (1, -1)], key=lambda p: p.x * sx)
         bb = max([bagM @ Vector((q * 0.11, 0.06, 0.06)) for q in (1, -1)], key=lambda p: p.x * sx)
         F1 = T + Vector((0.0, -0.07, -0.05))
@@ -358,7 +364,7 @@ def make_straps(rig, bagobj, f_bag, name):
         F3 = Vector((sh.x - 0.01 * sx, sh.y - 0.04, sh.z - 0.22))
         S1 = Vector((sh.x - 0.01 * sx, sh.y + 0.05, sh.z - 0.25))
         B1 = T + Vector((0.0, 0.07, -0.06))
-        G_ = [bb, S1, F3, F2, F1, T, B1, bt]; OFF = [0, 0.020, 0.026, 0.028, 0.026, 0.018, 0.018, 0]
+        G_ = [bb, S1, F3, F2, F1, T, B1, bt]; OFF = [0, 0.020, 0.026, 0.030, 0.032, 0.028, 0.022, 0]
         pts = []; offs = []; proj = []
         for k in range(len(G_) - 1):
             n_ = 8
@@ -528,8 +534,8 @@ place_hand(G, "R", 228, P + n * 0.07 + Vector((0, 0, -0.03)), -n, med, skin=0.01
 apply_pose(G, "R", "relaxed", 228)
 for f in range(234, 481, 2):
     P, n, med = strap_frame(f)
-    place_hand(G, "R", f, P, -n, med, skin=0.022)
-for f in (234, 300, 400, 480): apply_pose(G, "R", "shield", f)
+    place_hand(G, "R", f, P, -n, med, skin=0.030)
+for f in (228, 234, 300, 400, 480): apply_pose(G, "R", "flat_palm", f)
 for nm in ["BookBag"] + [c.name for c in bpy.data.objects["BookBag"].children]:
     bpy.data.objects[nm].hide_render = True; bpy.data.objects[nm].hide_viewport = True
 key_vis(["Room_ToyBox", "Room_ToyBoxLogo"], [(1, 153), (211, 287)])   # source frames: only S01 and S03 (logo whole, flat-on)
@@ -829,10 +835,10 @@ def key_carrier(f, c, tilt=0.0, yaw=0.0):
     carrier.rotation_quaternion = Quaternion((0, 0, 1), R_(yaw)) @ Quaternion(AX, R_(sgn * tilt)) @ R0
     carrier.keyframe_insert("location", frame=f); carrier.keyframe_insert("rotation_quaternion", frame=f)
 WX, WY = w_pos.x, w_pos.y
-for f, c, tl, yw in ((1780, C0, 0, 0), (1966, C0, 0, 0), (2002, Vector((WX - 0.52, WY - 0.02, 0.42)), 35, 0),
+for f, c, tl, yw in ((1780, C0, 0, 0), (1966, C0, 0, 0), (1984, Vector((C0.x - 0.04, C0.y, C0.z + 0.10)), 12, 0), (2002, Vector((WX - 0.66, WY - 0.02, 0.45)), 35, 0), (2020, Vector((WX - 0.60, WY, 0.72)), 62, 0),
                      (2040, Vector((WX - 0.46, WY, 0.98)), 88, 0), (2066, Vector((WX - 0.47, WY, 1.04)), 92, 0),
                      (2092, Vector((WX - 0.47, WY + 0.02, 1.07)), 100, 5), (2122, Vector((WX - 0.47, WY - 0.02, 1.07)), 98, -12),
-                     (2150, Vector((WX - 0.46, WY, 1.04)), 92, 0), (2188, Vector((WX - 0.38, WY, 0.94)), 72, 0), (2278, Vector((WX - 0.38, WY, 0.93)), 70, 0)):
+                     (2150, Vector((WX - 0.46, WY, 1.04)), 92, 0), (2188, Vector((WX - 0.50, WY, 1.00)), 72, 0), (2278, Vector((WX - 0.50, WY, 0.99)), 70, 0)):
     key_carrier(f, c, tl, yw)
 def noh(p): pass
 # body: deep squat over the bag, rises as he lifts it, nearly upright at the end with the head up
@@ -872,11 +878,20 @@ def end_hands(f, approach=0.0):
             over = [q for q in over if XLO < q.x < XHI and YLO < q.y < YHI]   # only skin that is over the end face
             out_ = min((q.z * (1 if zz > 0 else -1) - abs(zz)) for q in over) - approach if over else 0.004
             be.to_mesh_clear()
+            wrw = WK.matrix_world @ WK.pose.bones["wrist." + s_].head
+            for sl in SLEEVES:
+                se = sl.evaluated_get(dg_); sm = se.to_mesh(); Cs = M.inverted() @ sl.matrix_world
+                for v in sm.vertices:
+                    if ((sl.matrix_world @ v.co) - wrw).length < 0.14:
+                        q = Cs @ v.co
+                        if XLO < q.x < XHI and YLO < q.y < YHI: out_ = min(out_, q.z * (1 if zz > 0 else -1) - abs(zz) - approach)
+                se.to_mesh_clear()
             if abs(out_ - 0.004) < 0.0015: break
             skin_ += 0.004 - out_
             place_hand(WK, s_, f, P_, nrm, fd, skin=skin_)
 for s_ in "LR":
     apply_pose(WK, s_, "relaxed", 1780); apply_pose(WK, s_, "relaxed", 1928); apply_pose(WK, s_, "flat_palm", 1946); apply_pose(WK, s_, "flat_palm", 2278)
+SLEEVES = [o for o in WK.children if o.type == 'MESH' and not o.hide_render and any(k in o.name for k in ("hivis", "worksuit"))]
 WKB = bpy.data.objects["Worker.body"]; _mods = [(m, m.show_viewport) for m in WKB.modifiers if m.type in ("MASK", "SUBSURF")]
 for m, _v in _mods: m.show_viewport = False
 _gi = {g.index: g.name for g in WKB.vertex_groups}; HANDV = {"L": [], "R": []}
