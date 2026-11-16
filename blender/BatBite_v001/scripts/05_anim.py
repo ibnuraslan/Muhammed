@@ -301,23 +301,23 @@ for f, a in ((395, 0.0), (415, 0.45), (435, 0.9), (450, 1.0)):
 # feet stay planted at the step position from here (keys at the end of the block)
 for f in (450, 470, 520, 620):
     pass
-# grip the bat body from above at 450
-sc.frame_set(450)
-bat_set(BAT_REST); bpy.context.view_layer.update()
-bat_body = BAT_REST @ V((0, 0.0, -0.035))        # lower body / legs: keeps the hand well clear of his face at the bite
-up_dir = (BAT_REST.to_3x3() @ V((0, -1, 0)))     # local -Y (face) is down when lying, so the back faces +Z
-fd = (BAT_REST.to_3x3() @ V((1, 0, 0))).normalized()
-gr = grip_object(D[S], "R", 450, D["Bat"], bat_body + V((0, 0, 0.045)), V((0, 0, -1)), finger_dir=fd)
-print("GRIP bat", gr)
-apply_pose(D[S], "R", "shield", 450); apply_pose(D[S], "R", "wrap_grip", 455, amount=0.85)     # fingers close once the hand is there round the bat's lower body (open-hand contact report above)
+# the hold, built from the hand's own geometry (director: the bat must sit INSIDE the closed fingers):
+# bat body centre 2.8 cm off the palm centre on the palm side, its back against the palm, head out past the index finger
+_wr, _B0, _basis, _palm = _rest_hand(D[S], "R"); _sg = _rest_palm_sign(D[S], "R", _B0.col[2])
+_d, _a, _n = _B0.col[0].normalized(), _B0.col[1].normalized(), (_B0.col[2] * _sg).normalized()
+_Z = _a; _Y = (-_n - _Z * (-_n).dot(_Z)).normalized(); _X = _Y.cross(_Z)
+BAT_IN_HAND = Mloc(_palm + _n * 0.028 + _d * 0.008 - _Z * 0.010, Matrix((_X, _Y, _Z)).transposed())   # armature rest space
+REL = (D[S].matrix_world @ RIG[S].rest("IK_hand.R")).inverted() @ (D[S].matrix_world @ BAT_IN_HAND)
+sc.frame_set(450); bat_set(BAT_REST); bpy.context.view_layer.update()
 P, Rb = crouch(450, 1.0); key_relaxed(S, 450, P, Rb, sides="L")
-apply_pose(D[S], "R", "shield", 432); apply_pose(D[S], "R", "shield", 446)      # open hand on the way down
+key_ikhand_matrix(S, "R", 450, D[S].matrix_world.inverted() @ (BAT_REST @ REL.inverted()))
+apply_pose(D[S], "R", "shield", 432); apply_pose(D[S], "R", "shield", 446); apply_pose(D[S], "R", "shield", 450)
+apply_pose(D[S], "R", "wrap_grip", 455, amount=0.85)     # fingers close round the bat's body
 sc.frame_set(450)
 IKR_GRAB = D[S].pose.bones["IK_hand.R"].matrix.copy()
 print("REACH err at grab (m):", round((bone_world(S, "wrist.R").to_translation() - (D[S].matrix_world @ IKR_GRAB).to_translation()).length, 4))
-REL = (D[S].matrix_world @ IKR_GRAB).inverted() @ BAT_REST     # bat in the hand from here on
-_off = (D[S].matrix_world @ IKR_GRAB).inverted().to_3x3() @ V((0, 0, -float(os.environ.get('PALM_GAP', '0.0'))))
-REL = Matrix.Translation(_off) @ REL          # bat body sits just out of the palm (no palm/finger-root overlap), fingers still round it
+_ach = (D[S].matrix_world @ IKR_GRAB) @ REL
+print("HOLD check: bat placed at grab off its floor pose by (m)", round((_ach.to_translation() - BAT_REST.to_translation()).length, 4))
 # hold the crouch a beat, then rise holding it at chest height in front, looking at it
 key_ikhand_matrix(S, "R", 458, IKR_GRAB); P, Rb = crouch(458, 1.0); key_relaxed(S, 458, P, Rb, sides="L")
 def hand_for_bat(Mbat):
@@ -346,6 +346,7 @@ for f in (390, 450, 620, 960, 1280, 1600):
 def head_frame(f, hd, flex=4, spine=8, side=0.0):
     P, Rb = stand(S, f, STEP.x, STEP.y, yaw=YAW, flex=flex, spine=spine, head=hd, side=side, hands=False, feet=False)
     key_relaxed(S, f, P, Rb, sides="L"); return P, Rb
+BITE_TIP = {}
 def bat_at_mouth(f, depth=0.0, roll=0.0, pitch=-14.0):
     """bat head between the lips: bat local +Z (head) points into the mouth along the face direction"""
     sc.frame_set(f)
@@ -357,6 +358,7 @@ def bat_at_mouth(f, depth=0.0, roll=0.0, pitch=-14.0):
     R3 = Matrix((xb, yb, zb)).transposed() @ Rz(180 + roll) @ Rx(pitch)
     tip = 0.054                                  # head top above the bat origin (local z)
     Mb = Mloc(m + fwd * (0.004 - depth) - upv * 0.006 - R3 @ V((0, 0, tip)), R3)
+    BITE_TIP[f] = (m + fwd * (0.004 - depth) - upv * 0.006, fwd)
     key_ikhand_matrix(S, "R", f, hand_for_bat(Mb)); return Mb
 # raise toward the mouth (620-700), jaw opens 680-700, bite 700-712, playful shake, hold
 for f, hd in ((640, (8, 0)), (665, (4, 0))):
@@ -391,7 +393,7 @@ def shock_stand(f, hd, mouth_hand=False):
     else:
         key_relaxed(S, f, P, Rb, sides="L")
 for f, hd, mh in ((775, (22, -4), False), (800, (30, -8), False), (860, (32, -10), False), (930, (30, -6), False), (1000, (33, -9), False),
-                  (1060, (30, -7), True), (1120, (32, -10), True), (1180, (30, -6), True), (1240, (33, -9), True), (1280, (31, -7), True)):
+                  (1060, (30, -7), False), (1120, (32, -10), True), (1180, (30, -6), True), (1240, (33, -9), True), (1280, (31, -7), True)):
     shock_stand(f, hd, mh)
 jaw(S, 775, 3); jaw(S, 860, 2); jaw(S, 1000, 3); jaw(S, 1280, 2)
 # (no blood: director / LESSONS hard limit)
@@ -399,10 +401,13 @@ jaw(S, 775, 3); jaw(S, 860, 2); jaw(S, 1000, 3); jaw(S, 1280, 2)
 # ================================================================= E: drops it, bends over (1280-1600)
 wings(762, up=HW, fold=HF); wings(780, up=-20); wings(796, up=-15)
 def bake_held(f0, f1):
+    """bat carried by the ACTUAL wrist bone (after IK + wrist limits), not the IK target: it sits in the fingers every frame"""
+    sc.frame_set(f0)
+    REL_W = (D[S].matrix_world @ D[S].pose.bones["wrist.R"].matrix).inverted() @ ((D[S].matrix_world @ D[S].pose.bones["IK_hand.R"].matrix) @ REL)
     for f in range(f0, f1 + 1):
         sc.frame_set(f)
-        Mh = D[S].matrix_world @ D[S].pose.bones["IK_hand.R"].matrix
-        bat_key(f, Mh @ REL)
+        Mh = D[S].matrix_world @ D[S].pose.bones["wrist.R"].matrix
+        bat_key(f, Mh @ REL_W)
 
 def stagger(f, sway):
     P, Rb = stand(S, f, STEP.x, STEP.y + 0.03 * sway, yaw=YAW, flex=10, spine=12, side=3 * sway, head=(14, -6 * sway), hands=False, feet=False)
@@ -615,7 +620,8 @@ def oxygen_mask():
         s2 = cs.splines.new("POLY"); s2.points.add(len(q) - 1)
         for pt, p in zip(s2.points, q): pt.co = (p.x, p.y, p.z, 1.0)
     st = bpy.data.objects.new("OxyStrap", cs); sc.collection.objects.link(st); cs.materials.append(soft_mat("M_Strap", (0.9, 0.95, 0.95), 0.5))
-    for ob in (o, t, st, rim):     # Child Of the head bone (a prop, not a rig child), identity at rest
+    bpy.data.objects.remove(st, do_unlink=True)   # director: no visible strap (it read as a rigid stick past the cheek)
+    for ob in (o, t, rim):     # Child Of the head bone (a prop, not a rig child), identity at rest
         c = ob.constraints.new('CHILD_OF'); c.target = D[S]; c.subtarget = "head"
         c.inverse_matrix = (D[S].matrix_world @ RIG[S].rest("head")).inverted()
         for f, hid in ((1, True), (CUT, False)):
@@ -701,6 +707,19 @@ sc.frame_set(CUT); print("CHART reach err mm", round((bone_world(D_, "wrist.L").
 # doctor parked in the hospital all along (not on stage), fans hidden after the stage block (only in hospital... they stay)
 
 # ================================================================= bake the bat in the hand (450-1296), rest after the drop
+# bite correction: the wrist limits change the hand's real orientation, so move the hand until the REAL bat's head tip
+# (carried by the actual wrist) lands on the lip point; tip kept on or in front of the lips (never inside the face)
+sc.frame_set(450)
+REL_W0 = (D[S].matrix_world @ D[S].pose.bones["wrist.R"].matrix).inverted() @ ((D[S].matrix_world @ D[S].pose.bones["IK_hand.R"].matrix) @ REL)
+for f, (tgt, fwd_) in sorted(BITE_TIP.items()):
+    for it in range(12):
+        sc.frame_set(f); Mw = D[S].matrix_world @ D[S].pose.bones["wrist.R"].matrix
+        tipw = (Mw @ REL_W0) @ V((0, 0, 0.054)); delta = tgt - tipw
+        if delta.length < 0.002: break
+        pb = D[S].pose.bones["IK_hand.R"]; M = D[S].pose.bones["wrist.R"].matrix.copy()     # target rotation = the hand's real rotation
+        M.translation = pb.matrix.translation + D[S].matrix_world.inverted().to_3x3() @ delta
+        key_ikhand_matrix(S, "R", f, M, clamp=False)
+    print("BITE tip err mm", f, round(delta.length * 1000, 1))
 bake_held(450, 761)
 sc.frame_set(761); Mb = BAT.matrix_world.copy()
 for f in range(762, 797, 3):
