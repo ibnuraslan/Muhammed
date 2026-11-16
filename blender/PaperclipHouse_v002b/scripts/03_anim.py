@@ -355,8 +355,9 @@ def swap_shot(k, men, A, B, itemA, itemB, cx, cy, axis=0.0, gap=1.02, turn=24, k
         aa = ease((u - 0.08) / 0.18) * (1 - ease((u - 0.30) / 0.10))
         B.hang("L", f, out=0.12 * aa, fwd=0.20 * aa, lift=0.10 * aa, pose="relaxed")
     if present: track(t, int(0.42 * n), 3, pres)
-    if present and n >= 90:
-        for ff in range(t + int(0.48 * n), t + n + 1, 6): B.hand_on_hip("L", ff)
+    if present and n >= 90:          # after presenting, the free hand settles into a relaxed bent hang (talking hand)
+        for ff in range(t + int(0.48 * n), t + n + 1, 6):
+            k = (ff - t) / n; B.hang("L", ff, fwd=0.04 + 0.03 * math.sin(k * 9), lift=0.03 + 0.03 * math.sin(k * 7))
     if present: apply_pose(B.o, "L", "open_alarm", t + int(0.18 * n)); apply_pose(B.o, "L", "relaxed", t + int(0.42 * n))
     if shake and n >= 90: handshake(A, B, t, n, dz=shake_dz)
     def fr(f, u):
@@ -388,14 +389,14 @@ def S01(t, n):
 def S02(t, n):
     """CU: the fish pen lies on the counter; the hero leans over it and smiles (no hands on it)"""
     setup(t, [hero], [P["P_FishPen"]])
-    xy = (HX, HY + 0.90); base(hero, t, xy, 0)
-    pen = V(HX + 0.05, HY + 0.35, CZ); rest_on(P["P_FishPen"], t, pen, (0, 0, R(20)))
+    xy = (HX, HY + 1.00); base(hero, t, xy, 0)
+    pen = V(HX + 0.05, HY + 0.20, CZ); rest_on(P["P_FishPen"], t, pen, (0, 0, R(20)))     # at the counter's front edge
     def fr(f, u):
         hero.stand(f, xy, 0, flex=6 + 6 * ease(u))
         look_at(hero, f, pen, flex=8 + 6 * ease(u)); hero.jaw(f, 2.5 * ease((u - 0.3) / 0.5))
-        for s_ in "LR": hero.hang(s_, f)
+        for s_ in "LR": hero.hang(s_, f, fwd=-0.08, lift=-0.04)
     track(t, n, 4, fr)
-    camera("S02", 28, t, pen + V(-0.12, -0.62, 0.24), pen + V(0, 0.30, 0.24), t + n, pen + V(-0.09, -0.52, 0.23), pen + V(0, 0.30, 0.25), fstop=16)
+    camera("S02", 24, t, pen + V(-0.07, -0.32, 0.10), pen + V(0, 0.55, 0.36), t + n, pen + V(-0.05, -0.27, 0.10), pen + V(0, 0.55, 0.38), fstop=16)
 
 # ===================================================================== OFFICE
 def S03(t, n):
