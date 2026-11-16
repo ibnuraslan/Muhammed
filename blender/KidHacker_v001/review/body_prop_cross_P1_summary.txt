@@ -1,0 +1,7 @@
+body_prop_cross, step 6, frames 1-5052, props: keyboard, mouse, desks, chairs, interrogation table, photo, doors, carrel panel
+S11 frames 1495 - 1585 {'finger3-3|PCL_Object_13': 2}
+S17 frames 2389 - 2461 {'finger4-3|Mouse': 13}
+S24 frames 3529 - 3553 {'finger5-3|wooden_table_02': 5, 'finger3-3|wooden_table_02': 2, 'finger4-3|wooden_table_02': 2}
+S25 frames 3685 - 3835 {'upperleg02|dining_chair_02.002': 52, 'lowerleg01|dining_chair_02.002': 52, 'upperleg01|dining_chair_02.002': 52}
+S28 frames 4165 - 4315 {'upperleg02|dining_chair_02.002': 52, 'upperleg01|dining_chair_02.002': 52, 'lowerleg01|dining_chair_02.002': 26}
+S33 frames 4873 - 5047 {'upperleg01|dining_chair_02': 60, 'finger2-1|wooden_table_02': 2, 'finger3-1|wooden_table_02': 2, 'finger3-3|wooden_table_02': 2, 'finger4-1|wooden_table_02': 2, 'finger5-1|wooden_table_02': 2}

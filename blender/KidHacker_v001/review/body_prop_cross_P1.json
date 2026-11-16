@@ -1,0 +1,2955 @@
+{
+"visible_frames": [
+1495,
+1585,
+2389,
+2395,
+2401,
+2407,
+2413,
+2419,
+2425,
+2431,
+2437,
+2443,
+2449,
+2455,
+2461,
+3529,
+3535,
+3541,
+3547,
+3553,
+3685,
+3691,
+3697,
+3703,
+3709,
+3715,
+3721,
+3727,
+3733,
+3739,
+3745,
+3751,
+3757,
+3763,
+3769,
+3775,
+3781,
+3787,
+3793,
+3799,
+3805,
+3811,
+3817,
+3823,
+3829,
+3835,
+4165,
+4171,
+4177,
+4183,
+4189,
+4195,
+4201,
+4207,
+4213,
+4219,
+4225,
+4231,
+4237,
+4243,
+4249,
+4255,
+4261,
+4267,
+4273,
+4279,
+4285,
+4291,
+4297,
+4303,
+4309,
+4315,
+4873,
+4879,
+4885,
+4891,
+4897,
+4903,
+4909,
+4915,
+4921,
+4927,
+4933,
+4939,
+4945,
+4951,
+4957,
+4963,
+4969,
+4975,
+4981,
+4987,
+4993,
+4999,
+5005,
+5011,
+5017,
+5023,
+5029,
+5035,
+5041,
+5047
+],
+"frames": {
+"1": {
+"finger3-3.R|Mouse|off": 3,
+"finger4-3.R|Mouse|off": 9
+},
+"7": {
+"finger3-3.R|Mouse|off": 3,
+"finger4-3.R|Mouse|off": 4
+},
+"13": {
+"finger4-3.R|Mouse|off": 4
+},
+"19": {
+"finger3-3.R|Mouse|off": 3,
+"finger4-3.R|Mouse|off": 4
+},
+"25": {
+"finger3-3.R|Mouse|off": 3,
+"finger4-3.R|Mouse|off": 9
+},
+"31": {
+"finger3-3.R|Mouse|off": 3,
+"finger4-3.R|Mouse|off": 4
+},
+"37": {
+"finger4-3.R|Mouse|off": 4
+},
+"43": {
+"finger3-3.R|Mouse|off": 3,
+"finger4-3.R|Mouse|off": 4
+},
+"49": {
+"finger3-3.R|Mouse|off": 3,
+"finger4-3.R|Mouse|off": 9
+},
+"55": {
+"finger3-3.R|Mouse|off": 3,
+"finger4-3.R|Mouse|off": 4
+},
+"61": {
+"finger4-3.R|Mouse|off": 4
+},
+"67": {
+"finger3-3.R|Mouse|off": 3,
+"finger4-3.R|Mouse|off": 4
+},
+"73": {
+"finger3-3.R|Mouse|off": 3,
+"finger4-3.R|Mouse|off": 9
+},
+"79": {
+"finger3-3.R|Mouse|off": 3,
+"finger4-3.R|Mouse|off": 4
+},
+"85": {
+"finger4-3.R|Mouse|off": 4
+},
+"91": {
+"finger4-3.R|Mouse|off": 3
+},
+"97": {
+"finger4-3.R|Mouse|off": 3
+},
+"103": {
+"finger4-3.R|Mouse|off": 3
+},
+"109": {
+"finger4-3.R|Mouse|off": 4
+},
+"115": {
+"finger4-3.R|Mouse|off": 3
+},
+"121": {
+"finger4-3.R|Mouse|off": 3
+},
+"127": {
+"finger4-3.R|Mouse|off": 3
+},
+"133": {
+"finger4-3.R|Mouse|off": 4
+},
+"139": {
+"finger4-3.R|Mouse|off": 3
+},
+"145": {
+"finger4-3.R|Mouse|off": 3
+},
+"151": {
+"finger4-3.R|Mouse|off": 3
+},
+"157": {
+"finger4-3.R|Mouse|off": 4
+},
+"163": {
+"finger4-3.R|Mouse|off": 3
+},
+"169": {
+"finger4-3.R|Mouse|off": 3
+},
+"175": {
+"finger4-3.R|Mouse|off": 3
+},
+"181": {
+"finger4-3.R|Mouse|off": 4
+},
+"187": {
+"finger4-3.R|Mouse|off": 3
+},
+"193": {
+"finger4-3.R|Mouse|off": 3
+},
+"199": {
+"finger4-3.R|Mouse|off": 3
+},
+"205": {
+"finger4-3.R|Mouse|off": 4
+},
+"211": {
+"finger4-3.R|Mouse|off": 3
+},
+"217": {
+"finger4-3.R|Mouse|off": 3
+},
+"223": {
+"finger4-3.R|Mouse|off": 3
+},
+"937": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12
+},
+"943": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12
+},
+"949": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12
+},
+"955": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12
+},
+"961": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12
+},
+"967": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12
+},
+"973": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12
+},
+"979": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12
+},
+"985": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12
+},
+"991": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"997": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"1003": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 10,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"1009": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 8,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"1015": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 8,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"1021": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 7,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"1027": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 7,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"1033": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 7,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"1039": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 7,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"1045": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 7,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"1051": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 7,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"1057": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 3,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"1063": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 3,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"1069": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 3,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 3
+},
+"1075": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 3,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 3
+},
+"1081": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 3,
+"upperleg01.L|dining_chair_02|off": 5,
+"upperleg01.R|dining_chair_02|off": 3
+},
+"1087": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 3,
+"upperleg01.L|dining_chair_02|off": 6,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"1093": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12
+},
+"1099": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 14
+},
+"1105": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 16,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16
+},
+"1111": {
+"finger5-3.R|wooden_table_02|off": 21,
+"finger5-3.L|wooden_table_02|off": 21,
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4
+},
+"1117": {
+"finger5-3.R|wooden_table_02|off": 25,
+"finger5-3.L|wooden_table_02|off": 25,
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 5,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 5
+},
+"1123": {
+"finger5-3.R|wooden_table_02|off": 29,
+"finger5-3.L|wooden_table_02|off": 29,
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 9,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 11
+},
+"1129": {
+"finger5-3.R|wooden_table_02|off": 29,
+"finger5-3.L|wooden_table_02|off": 29,
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 13,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 13
+},
+"1135": {
+"finger5-3.R|wooden_table_02|off": 29,
+"finger5-3.L|wooden_table_02|off": 29,
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 16,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 16
+},
+"1141": {
+"finger5-3.R|wooden_table_02|off": 30,
+"finger5-3.L|wooden_table_02|off": 30,
+"finger3-3.L|wooden_table_02|off": 5,
+"finger4-3.L|wooden_table_02|off": 18,
+"finger3-3.R|wooden_table_02|off": 5,
+"finger4-3.R|wooden_table_02|off": 18
+},
+"1147": {
+"finger5-3.R|wooden_table_02|off": 32,
+"finger5-3.L|wooden_table_02|off": 32,
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 18,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 18,
+"finger5-2.R|wooden_table_02|off": 1,
+"finger5-2.L|wooden_table_02|off": 1
+},
+"1153": {
+"finger4-3.R|wooden_table_02|off": 20,
+"finger5-3.R|wooden_table_02|off": 31,
+"finger5-2.R|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 20,
+"finger5-3.L|wooden_table_02|off": 31,
+"finger5-2.L|wooden_table_02|off": 3,
+"finger3-3.L|wooden_table_02|off": 4,
+"finger3-3.R|wooden_table_02|off": 4
+},
+"1159": {
+"finger2-3.R|PCL_Object_11|off": 17,
+"finger2-3.R|PCL_Object_13|off": 39,
+"finger3-3.R|PCL_Object_13|off": 43,
+"finger3-3.R|PCL_Object_11|off": 24,
+"finger3-2.R|PCL_Object_13|off": 13,
+"finger4-3.R|PCL_Object_11|off": 20,
+"finger4-3.R|PCL_Object_13|off": 31,
+"finger2-3.L|PCL_Object_11|off": 25,
+"finger2-3.L|PCL_Object_13|off": 1
+},
+"1495": {
+"finger3-3.R|PCL_Object_13|VIS": 3
+},
+"1585": {
+"finger3-3.R|PCL_Object_13|VIS": 3
+},
+"2239": {
+"finger2-3.R|PCL_Object_13|off": 39,
+"finger2-3.R|PCL_Object_11|off": 12,
+"finger3-3.R|PCL_Object_11|off": 26,
+"finger3-3.R|PCL_Object_13|off": 36,
+"finger3-2.R|PCL_Object_13|off": 19,
+"finger3-2.R|PCL_Object_11|off": 5,
+"finger4-3.R|PCL_Object_13|off": 32,
+"finger4-3.R|PCL_Object_11|off": 26,
+"finger2-3.L|PCL_Object_11|off": 22,
+"finger5-3.R|PCL_Object_11|off": 4
+},
+"2245": {
+"finger5-3.R|wooden_table_02|off": 25,
+"finger5-3.L|wooden_table_02|off": 21,
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 9
+},
+"2251": {
+"finger5-3.R|wooden_table_02|off": 23,
+"finger5-3.L|wooden_table_02|off": 18,
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 9
+},
+"2257": {
+"finger5-3.R|wooden_table_02|off": 23,
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 16,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 9,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"2263": {
+"finger5-3.R|wooden_table_02|off": 23,
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 14,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 5,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"2269": {
+"finger5-3.R|wooden_table_02|off": 21,
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 14,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 5,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"2275": {
+"finger5-3.R|wooden_table_02|off": 18,
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 5,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"2281": {
+"finger5-3.R|wooden_table_02|off": 18,
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 5,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 2
+},
+"2287": {
+"finger5-3.R|wooden_table_02|off": 18,
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 5,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 2
+},
+"2293": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"2299": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"2305": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"2311": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"2317": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"2323": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"2329": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"2335": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"2341": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"2347": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"2353": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"2359": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"2365": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"2371": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"2377": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"2383": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16,
+"upperleg01.L|dining_chair_02|off": 4,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"2389": {
+"finger4-3.R|Mouse|VIS": 4
+},
+"2395": {
+"finger4-3.R|Mouse|VIS": 3
+},
+"2401": {
+"finger4-3.R|Mouse|VIS": 3
+},
+"2407": {
+"finger4-3.R|Mouse|VIS": 3
+},
+"2413": {
+"finger4-3.R|Mouse|VIS": 4
+},
+"2419": {
+"finger4-3.R|Mouse|VIS": 3
+},
+"2425": {
+"finger4-3.R|Mouse|VIS": 3
+},
+"2431": {
+"finger4-3.R|Mouse|VIS": 3
+},
+"2437": {
+"finger4-3.R|Mouse|VIS": 4
+},
+"2443": {
+"finger4-3.R|Mouse|VIS": 3
+},
+"2449": {
+"finger4-3.R|Mouse|VIS": 3
+},
+"2455": {
+"finger4-3.R|Mouse|off": 2,
+"finger4-3.R|Mouse|VIS": 1
+},
+"2461": {
+"finger4-3.R|Mouse|off": 2,
+"finger4-3.R|Mouse|VIS": 2
+},
+"2467": {
+"finger4-3.R|Mouse|off": 3
+},
+"2473": {
+"finger4-3.R|Mouse|off": 3
+},
+"2479": {
+"finger4-3.R|Mouse|off": 3
+},
+"2485": {
+"finger4-3.R|Mouse|off": 4
+},
+"2491": {
+"finger4-3.R|Mouse|off": 3
+},
+"2497": {
+"finger4-3.R|Mouse|off": 3
+},
+"2503": {
+"finger4-3.R|Mouse|off": 3
+},
+"2509": {
+"finger4-3.R|Mouse|off": 4
+},
+"2515": {
+"finger4-3.R|Mouse|off": 3
+},
+"2521": {
+"finger4-3.R|Mouse|off": 3
+},
+"2527": {
+"finger4-3.R|Mouse|off": 3
+},
+"2533": {
+"finger4-3.R|Mouse|off": 4
+},
+"2539": {
+"finger4-3.R|Mouse|off": 3
+},
+"2545": {
+"finger4-3.R|Mouse|off": 3
+},
+"2551": {
+"finger4-3.R|Mouse|off": 3
+},
+"2557": {
+"finger4-3.R|Mouse|off": 4
+},
+"2563": {
+"finger4-3.R|Mouse|off": 3
+},
+"2569": {
+"finger4-3.R|Mouse|off": 3
+},
+"2575": {
+"finger4-3.R|Mouse|off": 3
+},
+"2581": {
+"finger4-3.R|Mouse|off": 4
+},
+"2587": {
+"finger4-3.R|Mouse|off": 3
+},
+"2593": {
+"finger4-3.R|Mouse|off": 4
+},
+"2599": {
+"finger4-3.R|Mouse|off": 4
+},
+"2605": {
+"finger4-3.R|Mouse|off": 4
+},
+"2611": {
+"finger4-3.R|Mouse|off": 4
+},
+"2617": {
+"finger4-3.R|Mouse|off": 4
+},
+"2623": {
+"finger4-3.R|Mouse|off": 4
+},
+"2629": {
+"finger4-3.R|Mouse|off": 4
+},
+"2635": {
+"finger4-3.R|Mouse|off": 4
+},
+"2641": {
+"finger4-3.R|Mouse|off": 4
+},
+"2647": {
+"finger4-3.R|Mouse|off": 4
+},
+"2653": {
+"finger4-3.R|Mouse|off": 4
+},
+"2659": {
+"finger4-3.R|Mouse|off": 4
+},
+"2665": {
+"finger4-3.R|Mouse|off": 4
+},
+"2671": {
+"finger4-3.R|Mouse|off": 4
+},
+"2677": {
+"finger4-3.R|Mouse|off": 4
+},
+"2683": {
+"finger4-3.R|Mouse|off": 4
+},
+"2689": {
+"finger4-3.R|Mouse|off": 4
+},
+"2695": {
+"finger4-3.R|Mouse|off": 4
+},
+"2701": {
+"finger4-3.R|Mouse|off": 4
+},
+"2707": {
+"finger4-3.R|Mouse|off": 4
+},
+"2713": {
+"finger4-3.R|Mouse|off": 4
+},
+"2719": {
+"finger4-3.R|Mouse|off": 4
+},
+"2725": {
+"finger4-3.R|Mouse|off": 4
+},
+"2731": {
+"finger4-3.R|Mouse|off": 4
+},
+"2737": {
+"finger4-3.R|Mouse|off": 4
+},
+"2743": {
+"finger4-3.R|Mouse|off": 4
+},
+"3253": {
+"finger4-3.R|Mouse|off": 4
+},
+"3259": {
+"finger4-3.R|Mouse|off": 4
+},
+"3265": {
+"finger4-3.R|Mouse|off": 4
+},
+"3271": {
+"finger4-3.R|Mouse|off": 4
+},
+"3277": {
+"finger4-3.R|Mouse|off": 4
+},
+"3283": {
+"finger4-3.R|Mouse|off": 4
+},
+"3289": {
+"finger4-3.R|Mouse|off": 4
+},
+"3295": {
+"finger4-3.R|Mouse|off": 4
+},
+"3301": {
+"finger4-3.R|Mouse|off": 4
+},
+"3307": {
+"finger4-3.R|Mouse|off": 4
+},
+"3313": {
+"finger4-3.R|Mouse|off": 4
+},
+"3319": {
+"finger4-3.R|Mouse|off": 4
+},
+"3325": {
+"finger4-3.R|Mouse|off": 4
+},
+"3331": {
+"finger4-3.R|Mouse|off": 4
+},
+"3337": {
+"finger4-3.R|Mouse|off": 4
+},
+"3343": {
+"finger4-3.R|Mouse|off": 4
+},
+"3349": {
+"finger4-3.R|Mouse|off": 4
+},
+"3355": {
+"finger4-3.R|Mouse|off": 4
+},
+"3361": {
+"finger4-3.R|Mouse|off": 4
+},
+"3367": {
+"finger4-3.R|Mouse|off": 4
+},
+"3373": {
+"finger4-3.R|Mouse|off": 4
+},
+"3379": {
+"finger4-3.R|Mouse|off": 4
+},
+"3385": {
+"finger4-3.R|Mouse|off": 4
+},
+"3391": {
+"finger4-3.R|Mouse|off": 4
+},
+"3397": {
+"finger4-3.R|Mouse|off": 4
+},
+"3403": {
+"finger4-3.R|Mouse|off": 4
+},
+"3409": {
+"finger4-3.R|Mouse|off": 4
+},
+"3415": {
+"finger4-3.R|Mouse|off": 4
+},
+"3421": {
+"finger4-3.R|Mouse|off": 4
+},
+"3427": {
+"finger4-3.R|Mouse|off": 4
+},
+"3433": {
+"finger4-3.R|Mouse|off": 4
+},
+"3439": {
+"finger4-3.R|Mouse|off": 4
+},
+"3445": {
+"finger4-3.R|Mouse|off": 4
+},
+"3451": {
+"finger4-3.R|Mouse|off": 4
+},
+"3457": {
+"finger4-3.R|Mouse|off": 4
+},
+"3463": {
+"finger4-3.R|Mouse|off": 4
+},
+"3469": {
+"finger4-3.R|Mouse|off": 4
+},
+"3475": {
+"finger4-3.R|Mouse|off": 4
+},
+"3481": {
+"finger4-3.R|Mouse|off": 4
+},
+"3487": {
+"finger4-3.R|Mouse|off": 4
+},
+"3493": {
+"finger4-3.R|Mouse|off": 4
+},
+"3499": {
+"finger4-3.R|Mouse|off": 4
+},
+"3505": {
+"finger4-3.R|Mouse|off": 4
+},
+"3511": {
+"finger4-3.R|Mouse|off": 4
+},
+"3517": {
+"finger4-3.R|Mouse|off": 4
+},
+"3523": {
+"finger4-3.R|Mouse|off": 4
+},
+"3529": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 3,
+"finger3-3.R|wooden_table_02|VIS": 3,
+"finger4-3.R|wooden_table_02|VIS": 3,
+"finger5-3.R|wooden_table_02|VIS": 3
+},
+"3535": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 3,
+"finger3-3.R|wooden_table_02|VIS": 3,
+"finger4-3.R|wooden_table_02|VIS": 3,
+"finger5-3.R|wooden_table_02|VIS": 3
+},
+"3541": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 7,
+"finger5-3.R|wooden_table_02|VIS": 3
+},
+"3547": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 8,
+"finger5-3.R|wooden_table_02|VIS": 3
+},
+"3553": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger5-3.R|wooden_table_02|VIS": 3
+},
+"3559": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 12
+},
+"3565": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 12
+},
+"3571": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 12
+},
+"3577": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 12
+},
+"3583": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 12
+},
+"3589": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14
+},
+"3595": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14
+},
+"3601": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14
+},
+"3607": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14
+},
+"3613": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14
+},
+"3619": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14
+},
+"3625": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14
+},
+"3631": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14
+},
+"3637": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14
+},
+"3643": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14
+},
+"3649": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14
+},
+"3655": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14
+},
+"3661": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14
+},
+"3667": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14
+},
+"3673": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14
+},
+"3679": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14
+},
+"3685": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3691": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3697": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3703": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3709": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3715": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3721": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3727": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3733": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3739": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3745": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3751": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3757": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3763": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3769": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3775": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3781": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3787": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3793": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3799": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3805": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3811": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3817": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3823": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3829": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3835": {
+"upperleg02.R|dining_chair_02.002|VIS": 84,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 96,
+"lowerleg01.L|dining_chair_02.002|VIS": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"3841": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3847": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3853": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3859": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3865": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3871": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3877": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3883": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3889": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3895": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3901": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3907": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3913": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3919": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3925": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3931": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3937": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3943": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3949": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3955": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3961": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3967": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3973": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3979": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3985": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3991": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"3997": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4003": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4009": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4015": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4021": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4027": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4033": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4039": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4045": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4051": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4057": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4063": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4069": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4075": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4081": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4087": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4093": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4099": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4105": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4111": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4117": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4123": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4129": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4135": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4141": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4147": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4153": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4159": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4165": {
+"upperleg02.R|dining_chair_02.002|VIS": 83,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 87,
+"lowerleg01.L|dining_chair_02.002|VIS": 6,
+"lowerleg01.L|dining_chair_02.002|off": 26,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"upperleg02.L|dining_chair_02.002|off": 9,
+"upperleg02.R|dining_chair_02.002|off": 1
+},
+"4171": {
+"upperleg02.R|dining_chair_02.002|VIS": 83,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 87,
+"lowerleg01.L|dining_chair_02.002|VIS": 6,
+"lowerleg01.L|dining_chair_02.002|off": 26,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"upperleg02.L|dining_chair_02.002|off": 9,
+"upperleg02.R|dining_chair_02.002|off": 1
+},
+"4177": {
+"upperleg02.R|dining_chair_02.002|VIS": 83,
+"lowerleg01.R|dining_chair_02.002|VIS": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 87,
+"lowerleg01.L|dining_chair_02.002|VIS": 4,
+"lowerleg01.L|dining_chair_02.002|off": 28,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"upperleg02.L|dining_chair_02.002|off": 9,
+"upperleg02.R|dining_chair_02.002|off": 1
+},
+"4183": {
+"upperleg02.R|dining_chair_02.002|VIS": 83,
+"lowerleg01.R|dining_chair_02.002|VIS": 37,
+"upperleg02.L|dining_chair_02.002|VIS": 87,
+"lowerleg01.L|dining_chair_02.002|VIS": 4,
+"lowerleg01.L|dining_chair_02.002|off": 28,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"upperleg02.L|dining_chair_02.002|off": 9,
+"upperleg02.R|dining_chair_02.002|off": 1,
+"lowerleg01.R|dining_chair_02.002|off": 1
+},
+"4189": {
+"upperleg02.R|dining_chair_02.002|VIS": 82,
+"lowerleg01.R|dining_chair_02.002|VIS": 35,
+"upperleg02.L|dining_chair_02.002|VIS": 86,
+"lowerleg01.L|dining_chair_02.002|VIS": 4,
+"lowerleg01.L|dining_chair_02.002|off": 28,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"upperleg02.L|dining_chair_02.002|off": 10,
+"upperleg02.R|dining_chair_02.002|off": 2,
+"lowerleg01.R|dining_chair_02.002|off": 3
+},
+"4195": {
+"upperleg02.R|dining_chair_02.002|VIS": 82,
+"lowerleg01.R|dining_chair_02.002|VIS": 30,
+"upperleg02.L|dining_chair_02.002|VIS": 86,
+"lowerleg01.L|dining_chair_02.002|VIS": 3,
+"lowerleg01.L|dining_chair_02.002|off": 29,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"upperleg02.L|dining_chair_02.002|off": 10,
+"upperleg02.R|dining_chair_02.002|off": 2,
+"lowerleg01.R|dining_chair_02.002|off": 8
+},
+"4201": {
+"upperleg02.R|dining_chair_02.002|VIS": 81,
+"lowerleg01.R|dining_chair_02.002|off": 15,
+"lowerleg01.R|dining_chair_02.002|VIS": 23,
+"upperleg02.L|dining_chair_02.002|VIS": 85,
+"lowerleg01.L|dining_chair_02.002|VIS": 3,
+"lowerleg01.L|dining_chair_02.002|off": 29,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"upperleg02.L|dining_chair_02.002|off": 11,
+"upperleg02.R|dining_chair_02.002|off": 3
+},
+"4207": {
+"upperleg02.R|dining_chair_02.002|VIS": 80,
+"lowerleg01.R|dining_chair_02.002|off": 19,
+"lowerleg01.R|dining_chair_02.002|VIS": 19,
+"upperleg02.L|dining_chair_02.002|VIS": 83,
+"lowerleg01.L|dining_chair_02.002|VIS": 1,
+"lowerleg01.L|dining_chair_02.002|off": 31,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"upperleg02.L|dining_chair_02.002|off": 13,
+"upperleg02.R|dining_chair_02.002|off": 4
+},
+"4213": {
+"upperleg02.R|dining_chair_02.002|VIS": 78,
+"lowerleg01.R|dining_chair_02.002|off": 24,
+"lowerleg01.R|dining_chair_02.002|VIS": 14,
+"upperleg02.L|dining_chair_02.002|VIS": 83,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"upperleg02.L|dining_chair_02.002|off": 13,
+"upperleg02.R|dining_chair_02.002|off": 6
+},
+"4219": {
+"upperleg02.R|dining_chair_02.002|VIS": 78,
+"lowerleg01.R|dining_chair_02.002|off": 24,
+"lowerleg01.R|dining_chair_02.002|VIS": 14,
+"upperleg02.L|dining_chair_02.002|VIS": 83,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"upperleg02.L|dining_chair_02.002|off": 13,
+"upperleg02.R|dining_chair_02.002|off": 6
+},
+"4225": {
+"upperleg02.R|dining_chair_02.002|VIS": 78,
+"lowerleg01.R|dining_chair_02.002|off": 26,
+"lowerleg01.R|dining_chair_02.002|VIS": 12,
+"upperleg02.L|dining_chair_02.002|VIS": 80,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"upperleg02.L|dining_chair_02.002|off": 16,
+"upperleg02.R|dining_chair_02.002|off": 6
+},
+"4231": {
+"upperleg02.R|dining_chair_02.002|VIS": 76,
+"lowerleg01.R|dining_chair_02.002|off": 30,
+"upperleg02.L|dining_chair_02.002|VIS": 79,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"upperleg02.L|dining_chair_02.002|off": 17,
+"upperleg02.R|dining_chair_02.002|off": 8,
+"lowerleg01.R|dining_chair_02.002|VIS": 8
+},
+"4237": {
+"upperleg02.R|dining_chair_02.002|VIS": 76,
+"lowerleg01.R|dining_chair_02.002|off": 30,
+"upperleg02.L|dining_chair_02.002|VIS": 78,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"upperleg02.L|dining_chair_02.002|off": 18,
+"upperleg02.R|dining_chair_02.002|off": 8,
+"lowerleg01.R|dining_chair_02.002|VIS": 8
+},
+"4243": {
+"upperleg02.R|dining_chair_02.002|VIS": 75,
+"lowerleg01.R|dining_chair_02.002|off": 35,
+"upperleg02.L|dining_chair_02.002|VIS": 75,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"upperleg02.L|dining_chair_02.002|off": 21,
+"upperleg02.R|dining_chair_02.002|off": 9,
+"lowerleg01.R|dining_chair_02.002|VIS": 3
+},
+"4249": {
+"upperleg02.R|dining_chair_02.002|VIS": 72,
+"lowerleg01.R|dining_chair_02.002|off": 35,
+"upperleg02.L|dining_chair_02.002|VIS": 71,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg02.L|dining_chair_02.002|off": 25,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"upperleg02.R|dining_chair_02.002|off": 12,
+"lowerleg01.R|dining_chair_02.002|VIS": 3
+},
+"4255": {
+"upperleg02.R|dining_chair_02.002|VIS": 71,
+"lowerleg01.R|dining_chair_02.002|off": 35,
+"upperleg02.L|dining_chair_02.002|VIS": 71,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg02.L|dining_chair_02.002|off": 25,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"upperleg02.R|dining_chair_02.002|off": 13,
+"lowerleg01.R|dining_chair_02.002|VIS": 3
+},
+"4261": {
+"upperleg02.R|dining_chair_02.002|VIS": 70,
+"lowerleg01.R|dining_chair_02.002|off": 37,
+"upperleg02.L|dining_chair_02.002|VIS": 69,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg02.L|dining_chair_02.002|off": 27,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg02.R|dining_chair_02.002|off": 14,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"lowerleg01.R|dining_chair_02.002|VIS": 1
+},
+"4267": {
+"upperleg02.R|dining_chair_02.002|VIS": 69,
+"lowerleg01.R|dining_chair_02.002|off": 37,
+"upperleg02.L|dining_chair_02.002|VIS": 68,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg02.L|dining_chair_02.002|off": 28,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg02.R|dining_chair_02.002|off": 15,
+"upperleg01.L|dining_chair_02.002|VIS": 15,
+"lowerleg01.R|dining_chair_02.002|VIS": 1
+},
+"4273": {
+"upperleg02.R|dining_chair_02.002|VIS": 68,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 66,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg02.L|dining_chair_02.002|off": 30,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg02.R|dining_chair_02.002|off": 16,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"4279": {
+"upperleg02.R|dining_chair_02.002|VIS": 68,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 65,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg02.L|dining_chair_02.002|off": 31,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg02.R|dining_chair_02.002|off": 16,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"4285": {
+"upperleg02.R|dining_chair_02.002|VIS": 64,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 65,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg02.L|dining_chair_02.002|off": 31,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg02.R|dining_chair_02.002|off": 20,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"4291": {
+"upperleg02.R|dining_chair_02.002|VIS": 63,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 65,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg02.L|dining_chair_02.002|off": 31,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg02.R|dining_chair_02.002|off": 21,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"4297": {
+"upperleg02.R|dining_chair_02.002|VIS": 63,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 64,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg02.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg02.R|dining_chair_02.002|off": 21,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"4303": {
+"upperleg02.R|dining_chair_02.002|VIS": 63,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 63,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg02.L|dining_chair_02.002|off": 33,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg02.R|dining_chair_02.002|off": 21,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"4309": {
+"upperleg02.R|dining_chair_02.002|VIS": 63,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 62,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg02.L|dining_chair_02.002|off": 34,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg02.R|dining_chair_02.002|off": 21,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"4315": {
+"upperleg02.R|dining_chair_02.002|VIS": 62,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|VIS": 61,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg02.L|dining_chair_02.002|off": 35,
+"upperleg01.R|dining_chair_02.002|VIS": 22,
+"upperleg02.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|VIS": 15
+},
+"4321": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4327": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4333": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4339": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4345": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4351": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4357": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4363": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4369": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4375": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4381": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4387": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4393": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4399": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4405": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4411": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4417": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4423": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4429": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4435": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4441": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4447": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4453": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4459": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4465": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4471": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4477": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4483": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4489": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4495": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4501": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4507": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4513": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4519": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4525": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4531": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4537": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4543": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4549": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4555": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4561": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4567": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4573": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4579": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4585": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4591": {
+"upperleg02.R|dining_chair_02.002|off": 84,
+"lowerleg01.R|dining_chair_02.002|off": 38,
+"upperleg02.L|dining_chair_02.002|off": 96,
+"lowerleg01.L|dining_chair_02.002|off": 32,
+"upperleg01.R|dining_chair_02.002|off": 22,
+"upperleg01.L|dining_chair_02.002|off": 15
+},
+"4717": {
+"finger5-3.R|wooden_table_02|off": 23,
+"finger5-3.L|wooden_table_02|off": 23,
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 5,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 5
+},
+"4723": {
+"finger5-3.R|wooden_table_02|off": 23,
+"finger5-3.L|wooden_table_02|off": 23,
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 5,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 5
+},
+"4729": {
+"finger5-3.R|wooden_table_02|off": 23,
+"finger5-3.L|wooden_table_02|off": 23,
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 5,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 5
+},
+"4735": {
+"finger5-3.R|wooden_table_02|off": 21,
+"finger5-3.L|wooden_table_02|off": 21,
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 5,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 5
+},
+"4741": {
+"finger5-3.R|wooden_table_02|off": 21,
+"finger5-3.L|wooden_table_02|off": 21,
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 5,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 5
+},
+"4747": {
+"finger5-3.R|wooden_table_02|off": 19,
+"finger5-3.L|wooden_table_02|off": 19,
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4
+},
+"4753": {
+"finger5-3.R|wooden_table_02|off": 18,
+"finger5-3.L|wooden_table_02|off": 18,
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4
+},
+"4759": {
+"finger5-3.R|wooden_table_02|off": 18,
+"finger5-3.L|wooden_table_02|off": 18,
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4
+},
+"4765": {
+"finger5-3.R|wooden_table_02|off": 18,
+"finger5-3.L|wooden_table_02|off": 18,
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4
+},
+"4771": {
+"finger3-3.L|wooden_table_02|off": 4,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 16,
+"finger3-3.R|wooden_table_02|off": 4,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16
+},
+"4777": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 16,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 16
+},
+"4783": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 14
+},
+"4789": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 14
+},
+"4795": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 14,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"4801": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 14,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 14,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"4807": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 4,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 4,
+"finger5-3.R|wooden_table_02|off": 12,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"4813": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"4819": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"4825": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"4831": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"4837": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"4843": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"4849": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 1
+},
+"4855": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12,
+"upperleg01.L|dining_chair_02|off": 3,
+"upperleg01.R|dining_chair_02|off": 3
+},
+"4861": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 12,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 12,
+"upperleg01.L|dining_chair_02|off": 5,
+"upperleg01.R|dining_chair_02|off": 3
+},
+"4867": {
+"finger3-3.L|wooden_table_02|off": 3,
+"finger4-3.L|wooden_table_02|off": 3,
+"finger5-3.L|wooden_table_02|off": 8,
+"finger3-3.R|wooden_table_02|off": 3,
+"finger4-3.R|wooden_table_02|off": 3,
+"finger5-3.R|wooden_table_02|off": 8,
+"upperleg01.L|dining_chair_02|off": 6,
+"upperleg01.R|dining_chair_02|off": 4
+},
+"4873": {
+"upperleg01.L|dining_chair_02|VIS": 3,
+"upperleg01.R|dining_chair_02|VIS": 1
+},
+"4879": {
+"upperleg01.L|dining_chair_02|VIS": 3,
+"upperleg01.R|dining_chair_02|VIS": 1
+},
+"4885": {
+"upperleg01.L|dining_chair_02|VIS": 3,
+"upperleg01.R|dining_chair_02|VIS": 1
+},
+"4891": {
+"upperleg01.L|dining_chair_02|VIS": 3,
+"upperleg01.R|dining_chair_02|VIS": 1
+},
+"4897": {
+"upperleg01.L|dining_chair_02|VIS": 3,
+"upperleg01.R|dining_chair_02|VIS": 1
+},
+"4903": {
+"upperleg01.L|dining_chair_02|VIS": 3,
+"upperleg01.R|dining_chair_02|VIS": 1
+},
+"4909": {
+"upperleg01.L|dining_chair_02|VIS": 3,
+"upperleg01.R|dining_chair_02|VIS": 3
+},
+"4915": {
+"upperleg01.L|dining_chair_02|VIS": 5,
+"upperleg01.R|dining_chair_02|VIS": 3
+},
+"4921": {
+"upperleg01.L|dining_chair_02|VIS": 5,
+"upperleg01.R|dining_chair_02|VIS": 3
+},
+"4927": {
+"finger2-1.R|wooden_table_02|VIS": 18,
+"finger3-1.R|wooden_table_02|VIS": 20,
+"finger3-3.R|wooden_table_02|VIS": 20,
+"finger4-1.R|wooden_table_02|VIS": 17,
+"finger5-1.R|wooden_table_02|VIS": 18,
+"finger2-1.L|wooden_table_02|VIS": 18,
+"finger3-1.L|wooden_table_02|VIS": 20,
+"finger3-3.L|wooden_table_02|VIS": 15,
+"finger4-1.L|wooden_table_02|VIS": 17,
+"finger5-1.L|wooden_table_02|VIS": 18,
+"finger4-3.L|wooden_table_02|off": 16,
+"metacarpal4.L|wooden_table_02|VIS": 4,
+"finger4-3.R|wooden_table_02|VIS": 16,
+"metacarpal4.R|wooden_table_02|VIS": 4,
+"upperleg01.L|dining_chair_02|VIS": 5,
+"finger3-3.L|wooden_table_02|off": 5,
+"upperleg01.R|dining_chair_02|VIS": 3,
+"metacarpal3.L|wooden_table_02|VIS": 4,
+"metacarpal2.L|wooden_table_02|VIS": 5,
+"metacarpal3.R|wooden_table_02|VIS": 4,
+"metacarpal2.R|wooden_table_02|VIS": 5
+},
+"4933": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"4939": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"4945": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"4951": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"4957": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"4963": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"4969": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"4975": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"4981": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"4987": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"4993": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"4999": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"5005": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"5011": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"5017": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"5023": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"5029": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"5035": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"5041": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+},
+"5047": {
+"upperleg01.L|dining_chair_02|VIS": 6,
+"upperleg01.R|dining_chair_02|VIS": 4
+}
+}
+}
