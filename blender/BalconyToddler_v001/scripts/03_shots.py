@@ -132,7 +132,8 @@ def tod_grip(f, side_x=0.11):
     """both hands on the front edge bar beside the chin"""
     rig = CAST["Toddler"][0]; bar = BARS[2]
     for s, sx in (("L", 1), ("R", -1)):
-        grip_object(rig, s, f, bar, Vector((sx * side_x, BAR_Y[2], BAR_Z + BAR_R)), Vector((0, 0, -1)), Vector((0, -1, 0)))
+        place_hand(rig, s, f, Vector((sx * side_x, BAR_Y[2] + 0.005, BAR_Z + BAR_R)), Vector((0, 0, -1)), Vector((0, -1, -0.25)).normalized(), skin=0.016)
+        apply_pose(rig, s, "relaxed", f)
         key_pole("Toddler", s, f, Vector((sx * 0.45, SLOT_Y + 0.05, BAR_Z - 0.10)))
 def tod_hang(f, drop, head=(4.0, 0.0), sflex=0.0, kick=0.0, ph=0.0, x=0.0, grip=True, side=0.0):
     body("Toddler", f, tod_pos(drop, x), 0.0, 0.0, side, sflex, 0.0, 0.0, head)
@@ -150,26 +151,36 @@ def tod_pts(names=("body", "male_casualsuit04", "short02")):
         if ch.type == 'MESH' and any(k in ch.name for k in names):
             e = ch.evaluated_get(dg); me = e.to_mesh(); out += [ch.matrix_world @ v.co for v in me.vertices]; e.to_mesh_clear()
     return out
-pts = [p for p in tod_pts() if abs(p.x) < 0.07 and p.z > BAR_Z - 0.08]
-def clearance(dz):
+pts = []
+for hd_ in ((14, 0), (4, 0), (2, 6), (3, -4), (10, 0)):
+    tod_hang(1, 0.0, head=hd_); sc.frame_set(1); dg = bpy.context.evaluated_depsgraph_get()
+    pts += [p for p in tod_pts(("body", "male_casualsuit04", "short02", "eyebrow", "eyelash")) if abs(p.x) < CX - 0.05 and p.z > BAR_Z - 0.10]
+tod_hang(1, 0.0)
+import numpy as _np
+_P = _np.array([(p.y, p.z) for p in pts])
+def clearance(dz, dy=0.0):
     c = 9.0
-    for p in pts:
-        for yb in (BAR_Y[1], BAR_Y[2]):
-            c = min(c, math.hypot(p.y - yb, p.z + dz - BAR_Z) - BAR_R)
+    for yb in (BAR_Y[1], BAR_Y[2]):
+        c = min(c, float(_np.min(_np.hypot(_P[:, 0] + dy - yb, _P[:, 1] + dz - BAR_Z))) - BAR_R)
     return c
 # smallest upward shift that clears (search from below: below the head the neck would pass, so scan down from +0.15)
-best = None
-for k in range(300):
-    dz = 0.15 - k * 0.001
-    if clearance(dz) < 0.003: best = dz + 0.001; break
+best = None; bdy = 0.0
+for dy in [i * 0.002 for i in range(-10, 11)]:
+    for k in range(300):
+        dz = 0.15 - k * 0.001
+        if clearance(dz, dy) < 0.004:
+            if best is None or dz + 0.001 < best: best = dz + 0.001; bdy = dy
+            break
 Q_HEAD.z -= best if best is not None else 0.0
+Q_HEAD.y -= bdy
+print("BUILD toddler slot centring dy", bdy)
 print("BUILD toddler head calib dz", best, "clearance at 0", round(clearance(0.0), 4))
 
 # ------------------------------------------------------------------ chairs and table (the tower)
 TABLE = dup(PH["PH_WoodenTable_01"], "Table", (0.0, -0.80, 0.0), (0, 0, 0), 1.0, CS)
 TAB_H = ray_down(TABLE, 0.0, -0.80)
 print("BUILD table top", round(TAB_H, 3))
-CHB_FINAL = Vector((0.0, -0.84, TAB_H))
+CHB_FINAL = Vector((0.0, -0.80, TAB_H))
 CHB = chair("ChairTop", CHB_FINAL, R_(180))        # on the table, backrest to the street (behind the climber)
 CHA = chair("ChairStep", (1.25, -0.95, 0.0), R_(-90))   # step chair beside the table
 CHC = chair("ChairCarry", (5.0, -1.5, 0.0), R_(90))
@@ -182,15 +193,15 @@ BARS_N = [b.name for b in BARS]
 sid = "01"; f0, f1 = SH[sid]; use(sid, "Toddler")
 for f in range(f0, f1 + 1, 6):
     u = (f - f0) / (f1 - f0)
-    tod_hang(f, 0.20 - 0.03 * u, head=(14, 0), sflex=4, kick=0.06, ph=f * 0.16)
-tod_hang(f1, 0.17, head=(14, 0), sflex=4, kick=0.06, ph=f1 * 0.16)
+    tod_hang(f, 0.30 - 0.02 * u, head=(14, 0), sflex=2, kick=0.06, ph=f * 0.16)
+tod_hang(f1, 0.28, head=(14, 0), sflex=2, kick=0.06, ph=f1 * 0.16)
 shot_cam(sid, [(0, (0.55, -2.05, 4.05), (0.0, -0.55, 2.95)), (1, (0.40, -1.95, 3.95), (0.0, -0.55, 2.90))], 32, 8, 6)
 
 # ---------- 02 through the bars: low under the cage, the legs between the bars
 sid = "02"; f0, f1 = SH[sid]; use(sid, "Toddler")
 for f in range(f0, f1 + 1, 6):
-    tod_hang(f, 0.16, head=(10, 0), sflex=3, kick=0.07, ph=f * 0.18)
-tod_hang(f1, 0.16, head=(10, 0), sflex=3, kick=0.07, ph=f1 * 0.18)
+    tod_hang(f, 0.28, head=(10, 0), sflex=2, kick=0.07, ph=f * 0.18)
+tod_hang(f1, 0.28, head=(10, 0), sflex=2, kick=0.07, ph=f1 * 0.18)
 shot_cam(sid, [(0, (0.9, -1.9, 2.55), (0.0, -0.52, 3.05)), (1, (0.75, -1.75, 2.60), (0.0, -0.52, 3.05))], 30, 8, 0)
 
 # ---------- 03 of a second floor: wide across the street, the boy on the cage (hanging)
@@ -207,7 +218,7 @@ shot_cam(sid, [(0, (-2.6, -4.6, 4.6), (0.0, -0.4, 3.0)), (1, (-2.4, -4.4, 3.4), 
 
 # ---------- 05 His body fell: front of the cage, he slides down until the head stops
 sid = "05"; f0, f1 = SH[sid]; use(sid, "Toddler")
-drop_keys = [(0.0, 0.17), (0.25, 0.17), (0.42, 0.06), (0.52, -0.004), (0.60, 0.006), (0.70, 0.0), (1.0, 0.0)]
+drop_keys = [(0.0, 0.28), (0.25, 0.28), (0.45, 0.08), (0.53, 0.0), (0.60, 0.006), (0.70, 0.0), (1.0, 0.0)]
 for u, d in drop_keys:
     f = F(sid, u); tod_hang(f, d, head=(8 if d > 0.1 else 3, 0), sflex=3, kick=0.05 if d > 0.05 else 0.02, ph=f * 0.2)
 shot_cam(sid, [(0, (0.25, -2.25, 3.35), (0.0, -0.55, 3.05)), (1, (0.20, -2.05, 3.30), (0.0, -0.55, 3.05))], 35, 8, 8)
@@ -292,8 +303,8 @@ for f in list(range(f0, f1 + 1, 4)) + [f1]:
     edge = Ry(cyaw) @ Vector((SEAT_XMIN + 0.012, 0.02, SEAT_H - 0.01))
     CHC.location = grip - edge; CHC.rotation_euler = (0, 0, R_(cyaw) + 0.03 * math.sin(f * 0.2))
     CHC.keyframe_insert("location", frame=f); CHC.keyframe_insert("rotation_euler", frame=f)
-    hand("YoungMan", "L", f, grip + Vector((0, 0, 0.012)), Vector((0, 0, -1)), Ry(yaw) @ Vector((1, 0, 0)) * -1 + Vector((0, 0, 0)),
-         S + Ry(yaw) @ Vector((0.4, 0.4, -0.3)), "wrap_grip", 0.8, skin=0.0)
+    hand("YoungMan", "L", f, grip + Vector((0, 0, 0.004)), Vector((0, 0, -1)), Ry(yaw) @ Vector((-1, 0, -0.35)),
+         S + Ry(yaw) @ Vector((0.4, 0.4, -0.3)), "cup_hold", 1.0, skin=0.022)
 cam12 = shot_cam(sid, [(0, (1.2, -4.6, 1.2), (3.6, -1.7, 0.9)), (1, (0.9, -4.4, 1.2), (2.2, -1.7, 0.9))], 30, 8)
 # outside shot 12 the carried chair stands beside the table (constant)
 for f in (f0 - 1, f1 + 1):
@@ -302,22 +313,22 @@ for f in (f0 - 1, f1 + 1):
 
 # ---------- 13 nearby chairs: the old man lowers a chair onto the table (hands on the backrest top rail)
 sid = "13"; f0, f1 = SH[sid]; tod_static(sid); use(sid, "OldMan")
-OM = "OldMan"; omp = Vector((0.05, -1.62, root_z(OM)))
+OM = "OldMan"; omp = Vector((0.05, -1.78, root_z(OM)))
 top_local = None
 _pp = [v.co for v in CHAIR_SRC.data.vertices]
 _top = max(p.z for p in _pp); _rail = [p for p in _pp if p.z > _top - 0.05]
 RAIL_Y = sum(p.y for p in _rail) / len(_rail); RAIL_X = max(p.x for p in _rail)
 def rail_pt(ch, sx, f):
     sc.frame_set(f); return ch.matrix_world @ Vector((sx * RAIL_X * 0.55, RAIL_Y, _top - 0.012))
-for u, dz in ((0.0, 0.26), (0.2, 0.24), (0.65, 0.0), (1.0, 0.0)):
+for u, dz in ((0.0, 0.16), (0.2, 0.15), (0.65, 0.0), (1.0, 0.0)):
     f = F(sid, u); CHB.location = CHB_FINAL + Vector((0, -0.05 * dz, dz)); CHB.keyframe_insert("location", frame=f)
     CHB.rotation_euler = (0, 0, R_(180)); CHB.keyframe_insert("rotation_euler", frame=f)
-    lean = 10 + 20 * (0.26 - dz) / 0.26
-    body(OM, f, omp - Vector((0, 0, 0.03 + 0.10 * (0.26 - dz))), 180, 8, 0, lean, 0, 0, (-10, 0))
+    lean = 6 + 14 * (0.16 - dz) / 0.16
+    body(OM, f, omp - Vector((0, 0, 0.03 + 0.10 * (0.16 - dz))), 180, 6, 0, lean, 0, 0, (-14, 0))
     feet(OM, f, omp, 180, 0.0)
     for s, sx in (("L", -1), ("R", 1)):
         P = rail_pt(CHB, sx, f)
-        hand(OM, s, f, P, Vector((0, 0, -1)), Vector((0, 1, -0.6)), shoulder(OM, s, f) + Vector((sx * -0.45, -0.3, -0.3)), "wrap_grip", 0.7)
+        hand(OM, s, f, P, Vector((0, 0, -1)), Vector((0, 1, -0.6)), shoulder(OM, s, f) + Vector((sx * -0.45, -0.3, -0.3)), "cup_hold", 1.0, skin=0.02)
 shot_cam(sid, [(0, (2.5, -3.3, 1.55), (0.1, -1.2, 1.25)), (1, (2.35, -3.15, 1.55), (0.1, -1.2, 1.25))], 26, 8, 0)
 
 # ---------- 14 into a tower: the woman steadies the tower (hand on the top chair's backrest) and looks up
@@ -328,7 +339,7 @@ for k, f in enumerate((f0, F(sid, 0.5), f1)):
     body("Woman", f, WP, 228, 0, 0, 2, 0, 0, (hd[0] * 0.5, hd[1] * 0.5 - 5 + 5 * k))
     feet("Woman", f, WP, 228, 0.0)
     P = rail_pt(CHB, 1, f)
-    hand("Woman", "R", f, P, Vector((0, 0, -1)), Vector((-0.6, 1, -0.5)), shoulder("Woman", "R", f) + Ry(228) @ Vector((-0.45, 0.2, -0.35)), "wrap_grip", 0.6)
+    hand("Woman", "R", f, P, Vector((0, 0, -1)), Vector((-0.6, 1, -0.5)), shoulder("Woman", "R", f) + Ry(228) @ Vector((-0.45, 0.2, -0.35)), "cup_hold", 1.0, skin=0.02)
     relax("Woman", "L", f, 228)
 shot_cam(sid, [(0, (1.95, -2.45, 1.0), (0.15, -1.1, 1.7)), (1, (1.85, -2.35, 1.05), (0.1, -1.0, 1.85))], 26, 8)
 
@@ -345,11 +356,11 @@ shot_cam(sid, [(0, (1.85, -0.40, 1.35), (1.3, -1.9, 1.45)), (1, (1.80, -0.40, 1.
 
 # ---------- 16 climbed up: low angle, he rises from a crouch on the top chair, arms coming up
 sid = "16"; f0, f1 = SH[sid]; tod_static(sid); use(sid, "Man")
-MANP = Vector((0.0, -0.95, 0.0))            # standing point on the top chair seat (feet)
+MANP = Vector((0.0, -0.92, 0.0))            # standing point on the top chair seat (feet)
 def man_on_top(f, crouch, armsup, head=(-25, 0), reach=None):
     n = "Man"; rz = CH_SEAT_TOP + CAST[n][2].root_head.z - 0.02 - crouch
-    body(n, f, (MANP.x, MANP.y + 0.02 - crouch * 0.25, rz), 180, 4 + crouch * 40, 0, 6 + crouch * 30 - armsup * 8, 0, 0, head)
-    feet(n, f, (MANP.x, MANP.y, rz), 180, CH_SEAT_TOP)
+    body(n, f, (MANP.x, MANP.y + 0.02 + crouch * 0.05, rz), 180, 4 + crouch * 55, 0, 6 + crouch * 30 - armsup * 8, 0, 0, head)
+    feet(n, f, (MANP.x, MANP.y, rz), 180, CH_SEAT_TOP + 0.006)
     if reach is None:
         for s in "LR":
             if armsup <= 0: relax(n, s, f, 180)
@@ -357,7 +368,7 @@ def man_on_top(f, crouch, armsup, head=(-25, 0), reach=None):
                 S = shoulder(n, s, f); sx = 1 if s == "L" else -1
                 palm = S + Ry(180) @ Vector((sx * 0.06, -0.25 * armsup, 0.45 * armsup - 0.35 * (1 - armsup)))
                 hand(n, s, f, palm, Ry(180) @ Vector((-sx, -0.3, 0)), Ry(180) @ Vector((0, -0.4, 1)), S + Ry(180) @ Vector((sx * 0.5, 0.2, -0.3)), "relaxed")
-for f, cr, au, hd in ((f0, 0.38, 0.0, (-15, 0)), (F(sid, 0.35), 0.30, 0.0, (-25, 0)), (F(sid, 0.75), 0.04, 0.3, (-35, 0)), (f1, 0.0, 0.45, (-38, 0))):
+for f, cr, au, hd in ((f0, 0.24, 0.0, (-15, 0)), (F(sid, 0.35), 0.20, 0.0, (-25, 0)), (F(sid, 0.75), 0.04, 0.3, (-35, 0)), (f1, 0.0, 0.45, (-38, 0))):
     man_on_top(f, cr, au, hd)
 shot_cam(sid, [(0, (2.2, -2.2, 0.6), (0.0, -0.8, 2.0)), (1, (2.1, -2.05, 0.65), (0.0, -0.8, 2.3))], 26, 8)
 
@@ -376,7 +387,7 @@ def legs_proxy(f):
 def man_hold(f, hd=(-40, 0), breathe=0.0):
     n = "Man"; rz = CH_SEAT_TOP + CAST[n][2].root_head.z - 0.02
     body(n, f, (MANP.x, MANP.y + 0.02, rz - breathe * 0.01), 180, 3, 0, 4, 0, 0, hd)
-    feet(n, f, (MANP.x, MANP.y, rz), 180, CH_SEAT_TOP)
+    feet(n, f, (MANP.x, MANP.y, rz), 180, CH_SEAT_TOP + 0.006)
     prox = PROX.get("p")
     for s, tsx in (("L", -1), ("R", 1)):     # man's left hand (world -X) on the boy's right shin (world -X)
         knee = bonew("Toddler", "lowerleg01." + ("R" if tsx < 0 else "L"), f)
@@ -451,11 +462,11 @@ def kneel(n, f, knee_y, lean, x=0.0, head=(0.0, 0.0), gz=FLOOR2):
     R = CAST[n][1]; H = CAST[n][2]
     thigh = (R.BN["upperleg01.L"].head_local - R.BN["lowerleg01.L"].head_local).length
     shin = (R.BN["lowerleg01.L"].head_local - R.BN["foot.L"].head_local).length
-    rz = gz + 0.06 + thigh * 0.97 + (H.root_head.z - R.BN["upperleg01.L"].head_local.z)
+    rz = gz + 0.09 + thigh * 0.97 + (H.root_head.z - R.BN["upperleg01.L"].head_local.z)
     body(n, f, (x, knee_y + 0.03, rz), 0.0, lean * 0.45, 0, lean * 0.55, 0, 0, head)
     for s in "LR":
         a = H.ankle[s]
-        foot_air(n, s, f, Vector((x + a.x * 0.85, knee_y + shin * 0.95, gz + 0.075)), 0.0, 165, 0.6)
+        foot_air(n, s, f, Vector((x + a.x * 0.85, knee_y + shin * 0.95, gz + 0.095)), 0.0, 165, 0.6)
 def gma_hands_on_tod(f, out=0.072, up=0.0):
     """palms on the boy's chest sides just under the armpits, fingers forward"""
     sp = bonew("Toddler", "spine02", f); sp2 = bonew("Toddler", "spine03", f)
@@ -465,13 +476,13 @@ def gma_hands_on_tod(f, out=0.072, up=0.0):
         hand(GM, s, f, P, Vector((-sx, 0, 0)), Vector((0, -1, 0.15)), S + Vector((sx * 0.55, 0.10, -0.45)), "cup_hold", skin=0.004)
 def tod_lift(f, drop, y, arms_out=0.75):
     body("Toddler", f, tod_pos(drop, 0.0, y), 0.0, 0.0, 0.0, -2, 0.0, 0.0, (-4, 0))
-    tod_legs(f, drop, 0.0, y, kick=0.0, bend=0.06)
+    tod_legs(f, drop, 0.0, y, kick=0.0, bend=0.015)
     for s, sx in (("L", 1), ("R", -1)):
         S = shoulder("Toddler", s, f)
         hand("Toddler", s, f, S + Vector((sx * 0.20 * arms_out, -0.06, 0.04)), Vector((0, 0, -1)), Vector((sx, -0.3, 0.2)),
              S + Vector((sx * 0.2, 0.3, -0.2)), "relaxed", skin=0.0)
 sid = "24"; f0, f1 = SH[sid]; use(sid, "Toddler", "Grandma")
-for u, d, y, ln in ((0.0, 0.42, SLOT_Y, 52), (0.25, 0.44, SLOT_Y, 50), (0.65, 0.76, SLOT_Y + 0.02, 34), (0.85, 0.80, SLOT_Y + 0.12, 28), (1.0, 0.80, SLOT_Y + 0.16, 26)):
+for u, d, y, ln in ((0.0, 0.50, SLOT_Y, 50), (0.25, 0.52, SLOT_Y, 48), (0.65, 0.80, SLOT_Y, 32), (0.85, 0.84, SLOT_Y + 0.10, 28), (1.0, 0.84, SLOT_Y + 0.15, 26)):
     f = F(sid, u)
     tod_lift(f, d, y)
     kneel(GM, f, -0.10, ln, head=(18 - ln * 0.2, 0))
@@ -481,8 +492,8 @@ shot_cam(sid, [(0, (0.40, -1.85, 3.98), (0.0, -0.35, 3.70)), (1, (0.34, -1.75, 4
 # ---------- 25/26 the toddler back up / completely unharmed: he stands on the slab, grandma kneels behind, hands at his sides
 TODP = Vector((0.0, -0.10, 0.0))
 def tod_stand(f, head=(0.0, 0.0), twist=0.0):
-    pos = Vector((TODP.x, TODP.y, FLOOR2 + TH.root_head.z - 0.01))
-    body("Toddler", f, pos, 0.0, 0.0, 0.0, 2, twist, 0.0, head); feet("Toddler", f, pos, 0.0, FLOOR2)
+    pos = Vector((TODP.x, TODP.y, FLOOR2 + TH.root_head.z - 0.002))
+    body("Toddler", f, pos, 0.0, 0.0, 0.0, 2, twist, 0.0, head); feet("Toddler", f, pos, 0.0, FLOOR2 + 0.008)
     relax_both("Toddler", f, 0.0, out=0.02)
 for sid in ("25", "26"):
     use(sid, "Toddler", "Grandma")

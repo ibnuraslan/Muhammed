@@ -127,8 +127,8 @@ SUN.data.energy = 3.0; SUN.data.angle = R_(6); SUN.rotation_euler = (R_(50), R_(
 CS = coll("SET")
 FLOOR2 = 3.2125           # 2nd-floor level (top of the room floor / slab / floor bars)
 BAR_Z = 3.20; BAR_R = 0.0125
-BAR_Y = [-0.27, -0.44, -0.61, -0.78]     # floor bars along X; 0.145 m clear gap between them
-SLOT_Y = -0.525                          # the boy's gap (between bars -0.44 and -0.61)
+BAR_Y = [-0.27, -0.445, -0.62, -0.78]    # floor bars along X; 0.150 m clear gap at the boy's slot
+SLOT_Y = -0.5325                         # the boy's gap (between bars -0.445 and -0.62)
 CX = 0.75                                # cage half width
 CY = -0.85                               # cage front
 
