@@ -1,0 +1,74 @@
+{
+ "boar": {
+  "uid": "92abe05c0496475c8a9c325fbd8e9c37",
+  "title": "Wild Boar",
+  "author": "jbnotjeebe",
+  "author_profile": "https://sketchfab.com/jbnotjeebe",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/92abe05c0496475c8a9c325fbd8e9c37",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "wolf": {
+  "uid": "f53173981deb44559419fd0370d5a4c8",
+  "title": "Wolf",
+  "author": "AX-7YK",
+  "author_profile": "https://sketchfab.com/AX-7YK",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/f53173981deb44559419fd0370d5a4c8",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "skel": {
+  "uid": "5f28b52cab3e439490727e0aede55a6b",
+  "title": "Female Human Skeleton - ZBrush - Anatomy Study",
+  "author": "Ruslan Gadzhiev",
+  "author_profile": "https://sketchfab.com/ruslangadzhiev",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/5f28b52cab3e439490727e0aede55a6b",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "brain": {
+  "uid": "7a27c17fd6c0488bb31ab093236a47fb",
+  "title": "Human Brain",
+  "author": "3DRT STUDIOS",
+  "author_profile": "https://sketchfab.com/Hanako.com",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/7a27c17fd6c0488bb31ab093236a47fb",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "excav": {
+  "uid": "84cd8adb9d104010b10f3fa89e5f6a70",
+  "title": "Excavator",
+  "author": "RhymOne",
+  "author_profile": "https://sketchfab.com/rhymone",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/84cd8adb9d104010b10f3fa89e5f6a70",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "truck": {
+  "uid": "cad83751a295463bbb8b823c11a181ea",
+  "title": "Toyota Pickup truck",
+  "author": "alban",
+  "author_profile": "https://sketchfab.com/alban",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/cad83751a295463bbb8b823c11a181ea",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "hardhat": {
+  "uid": "5a67c92ce3174c37946076512356b0c7",
+  "title": "Hard Hat",
+  "author": "Kristiyan Marinov",
+  "author_profile": "https://sketchfab.com/kristiyan",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/5a67c92ce3174c37946076512356b0c7",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "brush": {
+  "uid": "f74bfe01ca1e459b8c730a8881ea88bb",
+  "title": "Paint Brush",
+  "author": "bogdanzloy20280",
+  "author_profile": "https://sketchfab.com/bogdanzloy20280",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/f74bfe01ca1e459b8c730a8881ea88bb",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
