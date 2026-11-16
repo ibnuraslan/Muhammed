@@ -1,0 +1,154 @@
+[
+ {
+  "id": "S01",
+  "set": "or",
+  "f0": 1,
+  "f1": 49,
+  "line": "Doctors removed",
+  "camera_from": "S01"
+ },
+ {
+  "id": "S02",
+  "set": "dia",
+  "f0": 50,
+  "f1": 100,
+  "line": "90% of her",
+  "camera_from": "S02"
+ },
+ {
+  "id": "S03",
+  "set": "dia",
+  "f0": 101,
+  "f1": 152,
+  "line": "tongue",
+  "camera_from": "S03"
+ },
+ {
+  "id": "S04",
+  "set": "dia",
+  "f0": 153,
+  "f1": 270,
+  "line": "after discovering cancer.",
+  "camera_from": "S04"
+ },
+ {
+  "id": "S05",
+  "set": "or",
+  "f0": 271,
+  "f1": 322,
+  "line": "Then, they cut a muscle",
+  "camera_from": "S05"
+ },
+ {
+  "id": "S06",
+  "set": "dia",
+  "f0": 323,
+  "f1": 420,
+  "line": "from her arm and used it",
+  "camera_from": "S06"
+ },
+ {
+  "id": "S07",
+  "set": "dia",
+  "f0": 421,
+  "f1": 541,
+  "line": "to rebuild what was missing.",
+  "camera_from": "S07"
+ },
+ {
+  "id": "S08",
+  "set": "dia",
+  "f0": 542,
+  "f1": 632,
+  "line": "They connected the blood vessels",
+  "camera_from": "S08"
+ },
+ {
+  "id": "S09",
+  "set": "or",
+  "f0": 633,
+  "f1": 692,
+  "line": "inside her mouth,",
+  "camera_from": "S10"
+ },
+ {
+  "id": "S10",
+  "set": "dia",
+  "f0": 693,
+  "f1": 775,
+  "line": "stitched the nerves together,",
+  "camera_from": "S09"
+ },
+ {
+  "id": "S11",
+  "set": "dia",
+  "f0": 776,
+  "f1": 862,
+  "line": "and shaped the muscle to match",
+  "camera_from": "S11"
+ },
+ {
+  "id": "S12",
+  "set": "dia",
+  "f0": 863,
+  "f1": 925,
+  "line": "what remained of",
+  "camera_from": "S12"
+ },
+ {
+  "id": "S13",
+  "set": "or",
+  "f0": 926,
+  "f1": 985,
+  "line": "her tongue.",
+  "camera_from": "S14"
+ },
+ {
+  "id": "S14",
+  "set": "ward",
+  "f0": 986,
+  "f1": 1072,
+  "line": "Doctors warned that she might never",
+  "camera_from": "S15"
+ },
+ {
+  "id": "S15",
+  "set": "ward",
+  "f0": 1073,
+  "f1": 1141,
+  "line": "speak again.",
+  "camera_from": "S16"
+ },
+ {
+  "id": "S16",
+  "set": "ward",
+  "f0": 1142,
+  "f1": 1200,
+  "line": "But only days after",
+  "camera_from": "S17"
+ },
+ {
+  "id": "S17",
+  "set": "ward",
+  "f0": 1201,
+  "f1": 1262,
+  "line": "the surgery,",
+  "camera_from": "S19"
+ },
+ {
+  "id": "S18",
+  "set": "ward",
+  "f0": 1263,
+  "f1": 1331,
+  "line": "she managed to say hello",
+  "camera_from": "S18"
+ },
+ {
+  "id": "S19",
+  "set": "ward",
+  "f0": 1332,
+  "f1": 1404,
+  "line": "to her daughter.",
+  "camera_from": "S20"
+ }
+]

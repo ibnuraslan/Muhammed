@@ -32,8 +32,31 @@ SHOTS = [  # id, set, f0, f1, line
     ("S20", "ward", 1303, 1392, "both faces, mother and daughter"),
 ]
 SH = {s[0]: s for s in SHOTS}
-sc.frame_end = SHOTS[-1][3]
-json.dump([dict(id=s[0], set=s[1], f0=s[2], f1=s[3], line=s[4]) for s in SHOTS], open(HERE + "shots_provisional.json", "w"), indent=1)
+# Phase 2: shots laid to the VO word frames (beat frame = 1 + round(s*60)); id_new <- old camera id
+VO = [  # new id, old camera, f0, f1, VO words
+    ("S01", "S01", 1, 49, "Doctors removed"),
+    ("S02", "S02", 50, 100, "90% of her"),
+    ("S03", "S03", 101, 152, "tongue"),
+    ("S04", "S04", 153, 270, "after discovering cancer."),
+    ("S05", "S05", 271, 322, "Then, they cut a muscle"),
+    ("S06", "S06", 323, 420, "from her arm and used it"),
+    ("S07", "S07", 421, 541, "to rebuild what was missing."),
+    ("S08", "S08", 542, 632, "They connected the blood vessels"),
+    ("S09", "S10", 633, 692, "inside her mouth,"),
+    ("S10", "S09", 693, 775, "stitched the nerves together,"),
+    ("S11", "S11", 776, 862, "and shaped the muscle to match"),
+    ("S12", "S12", 863, 925, "what remained of"),
+    ("S13", "S14", 926, 985, "her tongue."),
+    ("S14", "S15", 986, 1072, "Doctors warned that she might never"),
+    ("S15", "S16", 1073, 1141, "speak again."),
+    ("S16", "S17", 1142, 1200, "But only days after"),
+    ("S17", "S19", 1201, 1262, "the surgery,"),
+    ("S18", "S18", 1263, 1331, "she managed to say hello"),
+    ("S19", "S20", 1332, 1404, "to her daughter."),
+]
+NEWMAP = {v[1]: v for v in VO}
+sc.frame_end = VO[-1][3]
+json.dump([dict(id=v[0], set=SH[v[1]][1], f0=v[2], f1=v[3], line=v[4], camera_from=v[1]) for v in VO], open(HERE + "shots_vo.json", "w"), indent=1)
 DX = Vector((40, 0, 0)); W0 = Vector((-40, 0, 0)); MZ = sc["MZ"]
 
 def cam_shot(sid, keys, lens=35, target_keys=None, fstop=11.0):
@@ -41,10 +64,15 @@ def cam_shot(sid, keys, lens=35, target_keys=None, fstop=11.0):
     c.dof.use_dof = False
     o = bpy.data.objects.new("CAM_" + sid, c); sc.collection.objects.link(o)
     t = bpy.data.objects.new("TGT_" + sid, None); sc.collection.objects.link(t)
-    for f, p in keys: o.location = p; o.keyframe_insert("location", frame=f)
-    for f, p in target_keys: t.location = p; t.keyframe_insert("location", frame=f)
+    if sid not in NEWMAP:
+        bpy.data.objects.remove(o); bpy.data.objects.remove(t); return None
+    nid, _, n0, n1, _w = NEWMAP[sid]; o0, o1 = SH[sid][2], SH[sid][3]
+    rm = lambda f: n0 + (f - o0) * (n1 - n0) / float(o1 - o0)   # camera-only move: may re-time
+    for f, p in keys: o.location = p; o.keyframe_insert("location", frame=rm(f))
+    for f, p in target_keys: t.location = p; t.keyframe_insert("location", frame=rm(f))
     tr = o.constraints.new('TRACK_TO'); tr.target = t; tr.track_axis = 'TRACK_NEGATIVE_Z'; tr.up_axis = 'UP_Y'
-    m = sc.timeline_markers.new(sid, frame=SH[sid][2]); m.camera = o
+    o.name = "CAM_" + nid; t.name = "TGT_" + nid; c.name = "CAM_" + nid
+    m = sc.timeline_markers.new(nid, frame=n0); m.camera = o
     return o
 def keyv(o, path, f, v, idx=None):
     if idx is None: setattr(o, path, v); o.keyframe_insert(path, frame=f)
@@ -114,8 +142,9 @@ def surgeon_pose(f, flex, head_p, head_y=0.0, twist=0.0, hands_up=0.0):
         sx = 1 if s == "L" else -1
         body_hand(HS, s, f, pos, yaw, (0.13 * sx, -0.22 - 0.05 * hands_up, -0.10 + 0.06 * hands_up), (-0.5 * sx, -0.4, 0.8), (-sx * 0.9, 0.0, 0.2),
                   pole_off=(0.45 * sx, 0.15, -0.1))
-for f, fl, hp, hy, tw in ((1, 14, 26, -4, 0), (60, 16, 28, 3, 2), (130, 15, 27, -2, 0), (253, 14, 24, 0, -3), (330, 15, 28, 4, 0),
-                          (553, 16, 30, -3, 0), (590, 17, 31, 2, 2), (640, 16, 28, -2, 0), (793, 15, 26, 0, 0), (830, 10, 6, 8, -4), (900, 6, 2, 12, -6), (1110, 6, 2, 10, -6)):
+for f, fl, hp, hy, tw in ((1, 14, 26, -4, 0), (40, 16, 28, 3, 2), (120, 15, 27, -2, 0), (271, 14, 24, 0, -3), (322, 15, 28, 4, 0),
+                          (633, 16, 30, -9, -3), (650, 19, 22, 6, 3), (670, 17, 32, -7, -2), (692, 18, 24, 8, 3), (926, 15, 26, 0, 0), (946, 9, -8, -42, -14), (968, 9, -8, -44, -14),
+                          (986, 13, 16, -8, -4), (1110, 13, 16, -8, -4)):
     surgeon_pose(f, fl, hp, hy, tw)
 for s in "LR":
     apply_pose(Sg, s, "relaxed", 1)
@@ -153,27 +182,27 @@ for n in ("UpperHinge",):
     keyv(ob[n], "rotation_euler", 1, Euler((R_(-0.75 * 57.3), 0, 0)))
 front = ob["Tongue_front"]; flap = ob["Flap"]; stump = ob["Tongue_stump"]
 fl0 = front.location.copy(); fr0 = front.rotation_euler.copy()
-keyv(front, "location", 1, fl0); keyv(front, "location", 150, fl0); keyv(front, "rotation_euler", 150, fr0)
-keyv(front, "location", 205, fl0 + Vector((0, -0.012, 0.032))); keyv(front, "rotation_euler", 205, Euler((R_(-18), 0, 0)))
-keyv(front, "location", 330, fl0 + Vector((0, -0.016, 0.050))); keyv(front, "rotation_euler", 330, Euler((R_(-22), 0, R_(70))))
-vis(front, 1, True); vis(front, 373, False); vis(ob["Tumour"], 1, True); vis(ob["Tumour"], 373, False)
-vis(flap, 1, False); vis(flap, 340, True)
-flap.location = fl0 + Vector((0, 0, 0.03)); flap.keyframe_insert("location", frame=340); flap.keyframe_insert("location", frame=380)
-flap.location = fl0 + Vector((0, 0, -0.0015)); flap.keyframe_insert("location", frame=418)
+keyv(front, "location", 1, fl0); keyv(front, "location", 110, fl0); keyv(front, "rotation_euler", 110, fr0)
+keyv(front, "location", 165, fl0 + Vector((0, -0.012, 0.032))); keyv(front, "rotation_euler", 165, Euler((R_(-18), 0, 0)))
+keyv(front, "location", 290, fl0 + Vector((0, -0.016, 0.050))); keyv(front, "rotation_euler", 290, Euler((R_(-22), 0, R_(70))))
+vis(front, 1, True); vis(front, 421, False); vis(ob["Tumour"], 1, True); vis(ob["Tumour"], 421, False)
+vis(flap, 1, False); vis(flap, 400, True)
+flap.location = fl0 + Vector((0, 0, 0.03)); flap.keyframe_insert("location", frame=400); flap.keyframe_insert("location", frame=428)
+flap.location = fl0 + Vector((0, 0, -0.0015)); flap.keyframe_insert("location", frame=478)
 kb = flap.data.shape_keys.key_blocks["Slab"]
-for f, v in ((1, 1.0), (625, 1.0), (735, 0.0)): kb.value = v; kb.keyframe_insert("value", frame=f)
+for f, v in ((1, 1.0), (782, 1.0), (925, 0.0)): kb.value = v; kb.keyframe_insert("value", frame=f)
 mixn = bpy.data.materials["D_Flap"].node_tree.nodes["Pinkify"]
-for f, v in ((1, 0.0), (630, 0.0), (750, 0.88)): mixn.inputs[0].default_value = v; mixn.inputs[0].keyframe_insert("default_value", frame=f)
-for nm, f0 in (("Artery", 392), ("Vein", 404), ("Nerve", 500)):
+for f, v in ((1, 0.0), (786, 0.0), (935, 0.88)): mixn.inputs[0].default_value = v; mixn.inputs[0].keyframe_insert("default_value", frame=f)
+for nm, f0 in (("Artery", 552), ("Vein", 566), ("Nerve", 702)):
     cu = ob["Join" + nm].data
     for f, v in ((1, 0.0), (f0, 0.0), (f0 + 45, 1.0)): cu.bevel_factor_end = v; cu.keyframe_insert("bevel_factor_end", frame=f)
-for nm, f0 in (("Artery", 452), ("Vein", 470), ("Nerve", 540)):
+for nm, f0 in (("Artery", 604), ("Vein", 616), ("Nerve", 752)):
     st = ob["Stitch" + nm]
     for f, v in ((1, 0.0), (f0, 0.0), (f0 + 14, 1.0)): st.scale = (v, v, v); st.keyframe_insert("scale", frame=f)
 # forearm flap lift + hooked strands
 af = ob["ArmFlap"]; a0 = af.location.copy()
-keyv(af, "location", 1, a0); keyv(af, "location", 325, a0); keyv(af, "rotation_euler", 325, Euler((0, 0, 0)))
-keyv(af, "location", 395, a0 + Vector((0.004, 0, 0.028))); keyv(af, "rotation_euler", 395, Euler((R_(-6), R_(-8), 0)))
+keyv(af, "location", 1, a0); keyv(af, "location", 335, a0); keyv(af, "rotation_euler", 335, Euler((0, 0, 0)))
+keyv(af, "location", 405, a0 + Vector((0.004, 0, 0.028))); keyv(af, "rotation_euler", 405, Euler((R_(-6), R_(-8), 0)))
 for nm in ("Artery", "Vein", "Nerve"):
     c = ob["ArmVes" + nm]; e = bpy.data.objects.new("Hook" + nm, None); sc.collection.objects.link(e)
     e.location = Vector(c.data.splines[0].points[0].co[:3]); e.parent = af; e.matrix_parent_inverse = af.matrix_world.inverted()
@@ -240,18 +269,18 @@ def patient_w(f, head_p, head_y, twist=0.0, lean=-14, jaw=0.0, hand_dy=0.0, hand
     # legs straight under the blanket
     for s in "LR":
         sx = 1 if s == "L" else -1
-        HP.key_foot(s, f, Vector((pos.x + 0.10 * sx, pos.y - 0.82)), 0, lift=-0.10, pitch=-50)
+        HP.key_foot(s, f, Vector((pos.x + 0.10 * sx, pos.y - 0.82)), 0, lift=0.0, pitch=-40)
         body_hand(HP, s, f, pos, yaw, (0.16 * sx, -0.30 + hand_dy, (0.75 if hands_up else HZ[s])), (0.15 * sx, -1.0, -0.15), (0, 0, -1.0), pole_off=(0.45 * sx, 0.25, 0.1))
     pb = PW.pose.bones["jaw"]; pb.rotation_quaternion = Euler((R_(jaw), 0, 0)).to_quaternion(); pb.keyframe_insert("rotation_quaternion", frame=f)
-WKEYS = ((853, 4, 22, 6, 0), (942, 2, 26, 8, 0), (1000, 6, 24, 6, 0), (1033, 2, 10, 0, 0), (1080, 0, -18, -6, 0),
-                          (1123, -2, -28, -10, 0), (1150, -4, -30, -12, 7), (1166, -4, -30, -12, 2), (1180, -4, -30, -12, 8), (1200, -4, -30, -12, 0),
-                          (1260, 0, -34, -12, 0), (1303, 2, -40, -14, 0), (1340, 0, -38, -14, 5), (1360, 0, -38, -14, 0), (1520, 0, -36, -12, 0))
+WKEYS = ((986, 4, 22, 6, 0), (1040, 2, 26, 8, 0), (1100, 6, 24, 6, 0), (1141, 2, 10, 0, 0), (1175, 0, -18, -6, 0),
+         (1215, -2, -28, -10, 0), (1262, -4, -30, -12, 0), (1300, -4, -30, -12, 0), (1307, -4, -30, -12, 8), (1316, -4, -30, -12, 3),
+         (1325, -4, -30, -12, 8), (1336, -4, -32, -12, 0), (1360, 0, -38, -14, 4), (1372, 0, -38, -14, 0), (1520, 0, -36, -12, 0))
 for f, hp, hy, tw, jw in WKEYS:
     patient_w(f, hp, hy, tw, jaw=jw)
-for s in "LR": apply_pose(PW, s, "relaxed", 853)
+for s in "LR": apply_pose(PW, s, "relaxed", 986)
 # blanket: a soft sheet shaped over her legs (built at frame 840 with her hands lifted out of the way)
-patient_w(840, 4, 22, 6, hands_up=True)
-sc.frame_set(840); bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
+patient_w(970, 4, 22, 6, hands_up=True)
+sc.frame_set(970); bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
 from mathutils.bvhtree import BVHTree
 vs_, ps_ = [], []
 for n in ("PatientW.body", "PatientW.gown"):
@@ -263,7 +292,7 @@ Z = [[0.0] * (NX + 1) for _ in range(NY + 1)]
 for j in range(NY + 1):
     for i in range(NX + 1):
         x = -0.56 + 1.12 * i / NX; y = y0 + (y1 - y0) * j / NY
-        hit = bvh.ray_cast(Vector((W0.x + x, y, MZ + 0.45)), Vector((0, 0, -1)))
+        hit = bvh.ray_cast(Vector((W0.x + x, y, MZ + 0.50)), Vector((0, 0, -1)))
         z = MZ + 0.035
         if hit[0] is not None: z = max(z, hit[0].z + 0.03)
         if abs(x) > 0.47: z = MZ + 0.035 - (abs(x) - 0.47) * 2.6
@@ -293,29 +322,29 @@ _g["ground_z"] = lambda x, y: 0.0
 # doctor at the right side of the bed, facing the patient
 D = bpy.data.objects["Doctor"]; D.location = (0, 0, 0); HD = setup_char(D)
 DP = W0 + Vector((0.64, 0.42, 0))
-for f, fl, hp, hy, gest in ((853, 4, 6, 0, 0), (885, 5, 9, -4, 0.6), (915, 6, 12, 2, 1.0), (942, 5, 8, -2, 0.8), (958, 6, 10, 10, 1.0), (972, 6, 10, -10, 1.0),
-                            (986, 6, 11, 10, 0.9), (1000, 6, 10, -10, 0.8), (1016, 5, 8, 6, 0.5), (1032, 4, 6, -2, 0), (1123, 3, 2, -30, 0), (1300, 3, 4, -20, 0), (1520, 3, 4, -16, 0)):
+for f, fl, hp, hy, gest in ((986, 4, 6, 0, 0), (1010, 5, 9, -4, 0.6), (1035, 6, 12, 2, 1.0), (1060, 5, 8, -2, 0.8), (1080, 6, 10, 16, 1.0), (1095, 6, 10, -16, 1.0),
+                            (1110, 6, 11, 16, 0.9), (1125, 6, 10, -16, 0.8), (1141, 5, 8, 0, 0.3), (1160, 4, 6, -2, 0), (1230, 3, 2, -30, 0), (1330, 3, 4, -20, 0), (1520, 3, 4, -16, 0)):
     pos = Vector((DP.x, DP.y, HD.root_head.z - 0.01)); yaw = -90
     HD.key_root(f, pos, yaw=yaw, flex=fl * 0.4); HD.key_spine(f, flex=fl, head=(hp, hy))
     for s in "LR": HD.key_foot(s, f, HD.foot_xy(s, Vector((pos.x, pos.y, 0)), yaw), yaw)
     key_hang(HD, f, pos, yaw)
     if gest:   # right hand opens forward at waist height while she explains
         body_hand(HD, "R", f, pos, yaw, (-0.17, -0.34 * gest - 0.06, 0.10 * gest - 0.04), (0.15, -1.0, 0.2), (0.0, 0.3, -1.0), pole_off=(-0.45, 0.2, -0.1))
-for s in "LR": apply_pose(D, s, "relaxed", 853)
+for s in "LR": apply_pose(D, s, "relaxed", 986)
 # daughter walks in from the door to the left bedside
 G = bpy.data.objects["Girl"]; G.location = (0, 0, 0); HG = setup_char(G)
 p0 = W0 + Vector((-3.0, -1.9, 0)); p1 = W0 + Vector((-1.6, -1.6, 0)); p2 = W0 + Vector((-0.85, -0.55, 0))
-path = catmull([(1040, p0), (1110, p1), (1260, p2)])
+path = catmull([(1115, p0), (1180, p1), (1280, p2)])
 def gyaw(f):
-    a = path(max(1040, f - 3)); b = path(min(1260, f + 3)); d = (b - a)
+    a = path(max(1115, f - 3)); b = path(min(1280, f + 3)); d = (b - a)
     return math.degrees(math.atan2(d.x, -d.y)) if d.length > 1e-4 else 60.0
-walk_with_arms(HG, path, gyaw, 1040, 1260, stride=0.75, amp=0.07)
-for f in (1262, 1300, 1340, 1400, 1520):
-    pos = Vector((p2.x, p2.y, HG.root_head.z)); yaw = gyaw(1258)
+walk_with_arms(HG, path, gyaw, 1115, 1280, stride=0.75, amp=0.07)
+for f in (1282, 1320, 1360, 1400, 1520):
+    pos = Vector((p2.x, p2.y, HG.root_head.z)); yaw = gyaw(1278)
     HG.key_root(f, pos, yaw=yaw, flex=1); HG.key_spine(f, flex=2, head=(-8 if f < 1350 else -6, 4 * math.sin(f / 30)))
     for s in "LR": HG.key_foot(s, f, HG.foot_xy(s, Vector((pos.x, pos.y, 0)), yaw), yaw)
     key_hang(HG, f, pos, yaw)
-for s in "LR": apply_pose(G, s, "relaxed", 1040)
+for s in "LR": apply_pose(G, s, "relaxed", 1115)
 # ward lights
 for i, x in enumerate((-1.0, 0.0, 1.0)):
     area("W_L%d" % i, W0 + Vector((x, 0.0, 2.7)), W0 + Vector((x, 0.0, 0)), 1.0, 40)
@@ -331,8 +360,8 @@ cam_shot("S17", [(1033, W0 + Vector((-0.2, -0.6, 1.25))), (1122, W0 + Vector((-0
          [(1033, W0 + Vector((-2.4, -1.9, 0.95))), (1122, W0 + Vector((-1.7, -1.6, 0.9)))])
 cam_shot("S18", [(1123, HPW + Vector((-0.75, -0.62, 0.02))), (1212, HPW + Vector((-0.62, -0.52, 0.02)))], 45,
          [(1123, HPW + Vector((0, 0, -0.02))), (1212, HPW + Vector((0, 0, -0.02)))])
-cam_shot("S19", [(1213, W0 + Vector((0.75, -2.65, 1.4))), (1302, W0 + Vector((0.68, -2.5, 1.38)))], 20,
-         [(1213, W0 + Vector((-0.4, -0.05, 1.0))), (1302, W0 + Vector((-0.36, 0.0, 1.0)))])
+cam_shot("S19", [(1213, W0 + Vector((0.10, -2.85, 1.45))), (1302, W0 + Vector((0.05, -2.70, 1.43)))], 22,
+         [(1213, W0 + Vector((-1.0, -0.9, 1.0))), (1302, W0 + Vector((-0.75, -0.42, 1.0)))])
 cam_shot("S20", [(1303, W0 + Vector((0.95, 0.15, 1.45))), (1392, W0 + Vector((0.88, 0.12, 1.43)))], 40,
          [(1303, W0 + Vector((-0.82, -0.52, 0.95))), (1392, W0 + Vector((-0.82, -0.52, 0.97)))])
 # smooth camera keys
@@ -341,6 +370,11 @@ for o in bpy.data.objects:
         for fc in fcurves_of(o) if 'fcurves_of' in globals() else []:
             pass
 sc.camera = bpy.data.objects["CAM_S01"]
+# VO on the sequencer from frame 1
+se = sc.sequence_editor_create()
+coll = se.strips if hasattr(se, "strips") else se.sequences
+snd = coll.new_sound("VO", HERE + "work/VO.mp3", 1, 1)
+print("VO strip", snd.frame_final_start, snd.frame_final_end)
 sc.render.resolution_x, sc.render.resolution_y = 1080, 1920
 sc.render.engine = 'CYCLES'; sc.cycles.samples = 48; sc.cycles.adaptive_threshold = 0.05; sc.cycles.use_denoising = True
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)
