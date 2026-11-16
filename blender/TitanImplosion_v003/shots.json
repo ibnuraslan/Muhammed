@@ -1,0 +1,105 @@
+{
+ "name": "TitanImplosion_v002b",
+ "vo": "TitanImplosion_v002_VO.mp3",
+ "frame_end": 1825,
+ "implode_s": 0.55,
+ "compare_crush_s": 1.37,
+ "shots": [
+  {
+   "id": "S01",
+   "frame": 1,
+   "end": 114,
+   "words": "The five passengers inside the Titan"
+  },
+  {
+   "id": "S02",
+   "frame": 115,
+   "end": 232,
+   "words": "died instantly when the"
+  },
+  {
+   "id": "S03",
+   "frame": 233,
+   "end": 305,
+   "words": "submersible imploded."
+  },
+  {
+   "id": "S04",
+   "frame": 306,
+   "end": 373,
+   "words": "But just how"
+  },
+  {
+   "id": "S05",
+   "frame": 374,
+   "end": 443,
+   "words": "instant was it?"
+  },
+  {
+   "id": "S07",
+   "frame": 444,
+   "end": 576,
+   "words": "Your brain takes roughly 100 milliseconds"
+  },
+  {
+   "id": "S08",
+   "frame": 577,
+   "end": 668,
+   "words": "to process pain,"
+  },
+  {
+   "id": "S09",
+   "frame": 669,
+   "end": 799,
+   "words": "while your eyes can process visual information"
+  },
+  {
+   "id": "S10",
+   "frame": 800,
+   "end": 940,
+   "words": "in around 13 milliseconds."
+  },
+  {
+   "id": "S11",
+   "frame": 941,
+   "end": 1062,
+   "words": "The Titan's implosion happened"
+  },
+  {
+   "id": "S12",
+   "frame": 1063,
+   "end": 1170,
+   "words": "than a single millisecond,"
+  },
+  {
+   "id": "S13",
+   "frame": 1171,
+   "end": 1325,
+   "words": "meaning the entire sub collapsed"
+  },
+  {
+   "id": "S14",
+   "frame": 1326,
+   "end": 1482,
+   "words": "than the human brain could even register what was happening."
+  },
+  {
+   "id": "S15",
+   "frame": 1483,
+   "end": 1600,
+   "words": "For the passengers inside,"
+  },
+  {
+   "id": "S16",
+   "frame": 1601,
+   "end": 1728,
+   "words": "there was essentially no time to see it,"
+  },
+  {
+   "id": "S17",
+   "frame": 1729,
+   "end": 1825,
+   "words": "feel it, or react."
+  }
+ ]
+}
