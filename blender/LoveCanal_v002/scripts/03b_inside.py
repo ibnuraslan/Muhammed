@@ -37,7 +37,7 @@ for f in frs(fa + 72, fe, 4):
     n_ = M @ (FA.r.PB["spine01"].head + Vector((0.07, -0.13, -0.03))); fw = (M.to_3x3() @ Vector((0, -1, 0))).normalized()
     u = smooth((f - fa - 72) / 20)
     sh = M @ FA.r.PB["upperarm01.L"].head
-    tgt = (sh + Vector((0, 0, -0.5)) + fw * 0.15).lerp(n_ + fw * 0.075, u)     # v002: hand clear of the shirt so the forearm reads in front of the torso
+    tgt = (sh + Vector((0, 0, -0.5)) + fw * 0.15).lerp(n_ + fw * 0.075, u) + fw * 0.12 * math.sin(math.pi * u)     # v002: arcs forward, clear of the hip;: hand clear of the shirt so the forearm reads in front of the torso
     place_hand(FA.r.o, "L", f, tgt, -fw, (M.to_3x3() @ Vector((-1, 0, 0.4))).normalized())
 apply_pose(FA.r.o, "L", "relaxed", fa + 72); apply_pose(FA.r.o, "L", "shield", fa + 92)
 _pn = "Pole_elbow.L"; _pb = FA.r.PB[_pn]

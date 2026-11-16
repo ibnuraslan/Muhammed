@@ -1,0 +1,50 @@
+{
+ "frames": {
+  "417": {
+   "Father": {
+    "self": 13,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "419": {
+   "Father": {
+    "self": 13,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "421": {
+   "Father": {
+    "self": 13,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "423": {
+   "Father": {
+    "self": 13,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "425": {
+   "Father": {
+    "self": 12,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "427": {
+   "Father": {
+    "self": 13,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 2,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}

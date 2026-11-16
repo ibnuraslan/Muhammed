@@ -1,0 +1,28 @@
+{
+"visible_frames": [
+349,
+352,
+388,
+394
+],
+"frames": {
+"349": {
+"finger1-2.R|Glass|VIS": 1,
+"finger1-1.R|Glass|VIS": 3
+},
+"352": {
+"finger1-1.R|Glass|VIS": 4,
+"finger1-2.R|Glass|VIS": 1
+},
+"388": {
+"finger1-2.R|Glass|VIS": 10,
+"finger1-1.R|Glass|VIS": 10,
+"metacarpal1.R|Glass|VIS": 8
+},
+"394": {
+"finger1-1.R|Glass|VIS": 8,
+"finger1-2.R|Glass|VIS": 1,
+"metacarpal1.R|Glass|VIS": 3
+}
+}
+}
