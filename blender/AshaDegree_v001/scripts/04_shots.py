@@ -419,7 +419,7 @@ cam_shot("S04", [(331, (2.45, 0.6, 1.05)), (440, (2.25, 1.15, 1.1))], lens=28,
 G = girls["road"]; H = HS["road"]; XR = 100.0
 SX = XR + 5.0                      # sidewalk line
 v = 1.0 / 60.0                      # m per frame
-def road_y(f): return -30.0 + max(0, min(f, 905) - 400) * v + (max(0, f - 905) * v * 0.15 if f < 925 else 20 * v * 0.15)
+def road_y(f): return -34.0 + max(0, min(f, 905) - 400) * v + (max(0, f - 905) * v * 0.15 if f < 925 else 20 * v * 0.15)
 road_path = lambda f: W2A(G, (SX, road_y(f), 0))
 walk_with_arms(H, road_path, lambda f: 180.0, 400, 905, stride=1.0 / G.scale.x)
 # umbrella in the right hand: forearm up, fist in front of the shoulder
@@ -495,8 +495,8 @@ cam_shot("S05", [(421, (SX - 0.9, road_y(421) - 3.4, 0.85)), (560, (SX - 0.8, ro
          target_keys=[(421, (SX, road_y(421), 1.25)), (560, (SX, road_y(560), 1.25))])
 cam_shot("S06", [(541, (SX - 1.6, road_y(541) + 3.0, 1.0)), (680, (SX - 1.5, road_y(680) + 2.4, 1.0))], lens=35,
          target_keys=[(541, (SX, road_y(541), 1.1)), (680, (SX, road_y(680), 1.12))])
-cam_shot("S07", [(661, (XR + 3.9, road_y(661) - 5.5, 1.15)), (730, (XR + 3.9, road_y(730) - 5.2, 1.15)), (800, (XR + 3.9, road_y(800) - 5.0, 1.15))], lens=30,
-         target_keys=[(661, (SX - 0.9, road_y(661) + 1.0, 1.0)), (730, (SX - 0.9, road_y(730) + 1.0, 1.0)), (800, (SX - 0.9, road_y(800) + 1.0, 1.0))])
+cam_shot("S07", [(661, (XR - 0.4, road_y(661) - 3.2, 1.25)), (730, (XR - 0.4, road_y(730) - 3.1, 1.25)), (800, (XR - 0.4, road_y(800) - 3.0, 1.25))], lens=30,
+         target_keys=[(661, (SX - 0.2, road_y(661) + 0.6, 0.95)), (730, (SX - 0.2, road_y(730) + 0.6, 0.95)), (800, (SX - 0.2, road_y(800) + 0.6, 0.95))])
 cam_shot("S08", [(781, (XR - 4.0, road_y(781) - 12.0, 4.2)), (890, (XR - 3.6, road_y(890) - 10.5, 4.0))], lens=26,
          target_keys=[(781, (XR + 3.5, road_y(781) + 5.0, 0.6)), (890, (XR + 3.5, road_y(890) + 5.0, 0.6))])
 cam_shot("S09", [(871, (SX + 0.6, road_y(871) - 2.6, 0.95)), (980, (SX + 0.9, road_y(925) - 2.1, 0.95))], lens=30,

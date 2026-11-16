@@ -362,8 +362,9 @@ car = import_glb("Car", "car.glb", C, size=None, keep=lambda o: _cx(o) < 200)
 _d = car.dimensions; _ax = 0 if _d.x > _d.y else 1
 _s = 4.7 / max(_d.x, _d.y); car.data.transform(Matrix.Scale(_s, 4))
 if _ax == 0: car.data.transform(Matrix.Rotation(R_(90), 4, 'Z'))   # length along y, nose to -y checked in 04
-recolor(car, {"number_plate": mat("PlateBlank", (0.85, 0.85, 0.82), 0.5), "main_body": mat("CarBlue", (0.12, 0.2, 0.45), 0.25, metal=0.4)})
+recolor(car, {"plate": mat("PlateBlank", (0.85, 0.85, 0.82), 0.5), "main_body": mat("CarBlue", (0.12, 0.2, 0.45), 0.25, metal=0.4)})
 car.location = (X + 1.8, 60, 0)
+print("CAR mats", [m.name for m in car.data.materials if m])
 # =================================================================== WOODS (night run / torch search)
 C = coll("SET_Woods"); X = 200.0
 ground = tex_mat("ForestFloor", "forest_leaves_02", rough=0.5, tint=(0.5, 0.56, 0.55), bump=0.25)   # wet, night
