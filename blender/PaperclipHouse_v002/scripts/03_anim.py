@@ -299,7 +299,7 @@ def handshake(A, B, t, n, u0=0.40, u1=0.86, meet=None, dz=-0.30):
             pb.keyframe_insert("location", frame=f, group="Pole_elbow.R")
     track(fa, fb - fa, 3, fr)
     for m in (A, B):
-        apply_pose(m.o, "R", "relaxed", fa - 8); apply_pose(m.o, "R", "cup_hold", fa); apply_pose(m.o, "R", "cup_hold", fb)
+        apply_pose(m.o, "R", "relaxed", fa - 8); apply_pose(m.o, "R", "relaxed", fa); apply_pose(m.o, "R", "relaxed", fb)
         m.hang("R", min(t + n, fb + 18))
     return meet
 
@@ -319,8 +319,8 @@ def palm_hold(item, m, s_, t, n, c_fn, lift=0.012):
     sc.frame_set(t)
     BIND.append((item, m, s_, ik_world(m, s_).inverted() @ item.matrix_world.copy(), t, t + n))
 
-def swap_shot(k, men, A, B, itemA, itemB, cx, cy, axis=0.0, gap=0.95, turn=24, kindB="small", lens=35, side_cam=-1, cam_d=2.3,
-              extra_props=(), cam_h=1.60, push=0.3, rest=None, shake=True, shake_dz=-0.30):
+def swap_shot(k, men, A, B, itemA, itemB, cx, cy, axis=0.0, gap=1.02, turn=24, kindB="small", lens=35, side_cam=-1, cam_d=2.3,
+              extra_props=(), cam_h=1.60, push=0.3, rest=None, shake=True, shake_dz=-0.26, present=True):
     """the trade, staged without hand contact on the items: both items rest between the two (side table, counter or the
     ground for big items), the partner presents them with an open palm, then the two shake hands on the deal"""
     t, n = T[k][0], CLIP[k]
@@ -343,8 +343,8 @@ def swap_shot(k, men, A, B, itemA, itemB, cx, cy, axis=0.0, gap=0.95, turn=24, k
     def pres(f, u):
         aa = ease((u - 0.08) / 0.18) * (1 - ease((u - 0.30) / 0.10))
         B.hang("L", f, out=0.12 * aa, fwd=0.20 * aa, lift=0.10 * aa, pose="relaxed")
-    track(t, int(0.42 * n), 3, pres)
-    apply_pose(B.o, "L", "open_alarm", t + int(0.18 * n)); apply_pose(B.o, "L", "relaxed", t + int(0.42 * n))
+    if present: track(t, int(0.42 * n), 3, pres)
+    if present: apply_pose(B.o, "L", "open_alarm", t + int(0.18 * n)); apply_pose(B.o, "L", "relaxed", t + int(0.42 * n))
     if shake and n >= 90: handshake(A, B, t, n, dz=shake_dz)
     def fr(f, u):
         look_at(A, f, top if u < 0.35 else B.head_w(), flex=4 + 2 * math.sin(u * 5))
@@ -365,11 +365,11 @@ P = {n: O[n] for n in [o.name for o in PROPS]}
 def S01(t, n):
     """paperclip and fish pen lie on the counter between them; hero (behind the counter, facing camera) and PenLady shake on it"""
     A, B = hero, M["PenLady"]
-    swap_shot("S01", [A, B], A, B, P["P_Paperclip"], P["P_FishPen"], HX, HY + 0.35, axis=-90, gap=1.10, turn=0,
-              rest=(HX + 0.05, HY + 0.35, CZ), shake_dz=-0.08)
+    swap_shot("S01", [A, B], A, B, P["P_Paperclip"], P["P_FishPen"], HX + 1.18, HY + 0.35, axis=-90, gap=1.00, turn=0,
+              rest=(HX + 0.62, HY + 0.35, CZ), present=False)
     # the swap_shot camera is replaced: front-left over PenLady's shoulder onto the hero's face
     c = O["CAM_S01"]
-    look(c, t, V(HX - 1.55, HY - 1.45, 1.62), V(HX + 0.0, HY + 0.40, 1.20)); look(c, t + n, V(HX - 1.30, HY - 1.20, 1.58), V(HX + 0.0, HY + 0.45, 1.22))
+    look(c, t, V(HX - 0.45, HY - 1.75, 1.62), V(HX + 1.0, HY + 0.40, 1.15)); look(c, t + n, V(HX - 0.25, HY - 1.45, 1.58), V(HX + 1.0, HY + 0.45, 1.18))
 
 def S02(t, n):
     """CU: the fish pen lies on the counter; the hero leans over it and smiles (no hands on it)"""
@@ -381,11 +381,11 @@ def S02(t, n):
         look_at(hero, f, pen, flex=8 + 6 * ease(u)); hero.jaw(f, 2.5 * ease((u - 0.3) / 0.5))
         for s_ in "LR": hero.hang(s_, f)
     track(t, n, 4, fr)
-    camera("S02", 35, t, pen + V(-0.22, -0.62, 0.10), pen + V(0, 0.30, 0.42), t + n, pen + V(-0.16, -0.50, 0.10), pen + V(0, 0.30, 0.45), fstop=11)
+    camera("S02", 35, t, pen + V(-0.25, -0.80, 0.30), pen + V(0, 0.25, 0.22), t + n, pen + V(-0.18, -0.66, 0.28), pen + V(0, 0.25, 0.24), fstop=11)
 
 # ===================================================================== OFFICE
 def S03(t, n):
-    swap_shot("S03", [hero, M["KnobMan"]], hero, M["KnobMan"], P["P_FishPen"], P["P_Doorknob"], OX, OY - 0.35, gap=0.95)
+    swap_shot("S03", [hero, M["KnobMan"]], hero, M["KnobMan"], P["P_FishPen"], P["P_Doorknob"], OX, OY - 0.35, gap=1.02)
 
 def S04(t, n):
     """CU: the doorknob stands on the side table; hero bends to look at it and smiles"""
@@ -500,7 +500,7 @@ def S11(t, n):
 def S12(t, n):
     van = P["P_Van"]
     P["P_VanKeys"]["grip_half"] = 0.02
-    swap_shot("S12", [hero, M["VanGuy"]], hero, M["VanGuy"], P["P_TicketCard"], P["P_VanKeys"], NX - 0.2, NY + 0.4, gap=0.95,
+    swap_shot("S12", [hero, M["VanGuy"]], hero, M["VanGuy"], P["P_TicketCard"], P["P_VanKeys"], NX - 0.2, NY + 0.4, gap=1.02,
               extra_props=[van], cam_d=2.6)
     key_obj(van, t, loc=(NX + 1.2, NY + 4.6, 0), rot=(0, 0, 0))
 
@@ -531,12 +531,12 @@ def S13(t, n):
 # ===================================================================== STUDIO
 def S14(t, n):
     P["P_Contract"]["grip_half"] = 0.09
-    swap_shot("S14", [hero, M["Exec"]], hero, M["Exec"], P["P_VanKeys"], P["P_Contract"], SX - 4.0, SY - 0.15, gap=0.95)
+    swap_shot("S14", [hero, M["Exec"]], hero, M["Exec"], P["P_VanKeys"], P["P_Contract"], SX - 4.0, SY - 0.15, gap=1.02)
 
 # ===================================================================== STREET condo
 def S15(t, n):
     P["P_CondoKeys"]["grip_half"] = 0.02
-    swap_shot("S15", [hero, M["Landlady"]], hero, M["Landlady"], P["P_Contract"], P["P_CondoKeys"], 29.5, -9.2, gap=0.95, cam_d=2.5)
+    swap_shot("S15", [hero, M["Landlady"]], hero, M["Landlady"], P["P_Contract"], P["P_CondoKeys"], 29.5, -9.2, gap=1.02, cam_d=2.5)
 
 def S16(t, n):
     """hero turns to look up at the condo, then back to camera with a grin; hands relaxed"""
@@ -551,7 +551,7 @@ def S16(t, n):
 # ===================================================================== STUDIO bar: rocker, snow globe
 def S17(t, n):
     P["P_CondoKeys"]["grip_half"] = 0.02
-    swap_shot("S17", [hero, M["Rocker"]], hero, M["Rocker"], P["P_CondoKeys"], None, SX + 0.2, SY + 0.8, gap=0.95, extra_props=[P["P_Guitar"]])
+    swap_shot("S17", [hero, M["Rocker"]], hero, M["Rocker"], P["P_CondoKeys"], None, SX + 0.2, SY + 0.8, gap=1.02, extra_props=[P["P_Guitar"]])
     key_obj(P["P_Guitar"], t, loc=(SX + 1.45, SY + 1.85, 0.55), rot=(R(-12), 0, R(10)))
 
 def S18(t, n):
@@ -598,7 +598,7 @@ def S20(t, n):
 
 def S21(t, n):
     """snow globe and clapperboard on the side table; hero and the Director shake on the movie part"""
-    swap_shot("S21", [hero, M["Director"]], hero, M["Director"], P["P_SnowGlobe"], P["P_Clapper"], SX + 3.9, SY + 0.2, gap=0.95,
+    swap_shot("S21", [hero, M["Director"]], hero, M["Director"], P["P_SnowGlobe"], P["P_Clapper"], SX + 3.9, SY + 0.2, gap=1.02,
               extra_props=[P["P_MovieCamera"]])
     key_obj(P["P_MovieCamera"], T["S21"][0], loc=(SX + 5.0, SY + 0.9, 0), rot=(0, 0, R(120)))
 
@@ -684,7 +684,7 @@ def S26(t, n):
 
 def S27(t, n):
     P["P_Clapper"]["grip_half"] = 0.10; P["P_HouseKeys"]["grip_half"] = 0.02
-    swap_shot("S27", [hero, M["Mayor"]], hero, M["Mayor"], P["P_Clapper"], P["P_HouseKeys"], 0.0, -6.6, gap=0.95, cam_d=2.6)
+    swap_shot("S27", [hero, M["Mayor"]], hero, M["Mayor"], P["P_Clapper"], P["P_HouseKeys"], 0.0, -6.6, gap=1.02, cam_d=2.6)
 
 def S28(t, n):
     """house reveal: hero in front of his house, both arms up; camera cranes up and back"""
