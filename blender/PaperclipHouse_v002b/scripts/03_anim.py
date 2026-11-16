@@ -357,7 +357,7 @@ def swap_shot(k, men, A, B, itemA, itemB, cx, cy, axis=0.0, gap=1.02, turn=24, k
     if present: track(t, int(0.42 * n), 3, pres)
     if present and n >= 90:          # after presenting, the free hand settles into a relaxed bent hang (talking hand)
         for ff in range(t + int(0.48 * n), t + n + 1, 6):
-            k = (ff - t) / n; B.hang("L", ff, fwd=0.04 + 0.03 * math.sin(k * 9), lift=0.03 + 0.03 * math.sin(k * 7))
+            kk = (ff - t) / n; B.hang("L", ff, fwd=0.04 + 0.03 * math.sin(kk * 9), lift=0.03 + 0.03 * math.sin(kk * 7))
     if present: apply_pose(B.o, "L", "open_alarm", t + int(0.18 * n)); apply_pose(B.o, "L", "relaxed", t + int(0.42 * n))
     if shake and n >= 90: handshake(A, B, t, n, dz=shake_dz)
     def fr(f, u):
