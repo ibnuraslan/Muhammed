@@ -69,16 +69,16 @@ def finish(name, plate, build):
 
 
 def drain(g):
-    g = darken(g, (0, 0, 1150, 300), 0.75, 160)
-    t = draw_text(g, ["FOUND ON"], 90, 60, 92, font="anton", color=WHITE, tracking=4)
-    t = draw_text(t, [[("SEARCH ", WHITE), ("#5", LIME)]], 82, 150, 250, font="anton")
+    g = darken(g, (900, 0, W, 380), 0.75, 170)
+    t = draw_text(g, ["FOUND ON THE"], W - 80, 55, 150, font="anton", color=WHITE, anchor="ra")
+    t = draw_text(t, [[("5TH", LIME), (" SEARCH", WHITE)]], W - 80, 185, 200, font="anton", anchor="ra")
     return t
 
 
 def killer(g):
     g = darken(g, (0, 0, 820, 640), 0.7, 180)
     t = draw_text(g, ["HE LIVED", [("IN ", WHITE), ("HERE", LIME)]], 80, 70, 230, font="anton", spacing=0.98)
-    return marker_arrow(t, ((560, 560), (700, 780), (850, 640)))
+    return marker_arrow(t, ((600, 650), (650, 790), (850, 700)))
 
 
 def radio(g):
