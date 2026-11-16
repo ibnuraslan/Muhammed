@@ -223,7 +223,7 @@ R_LIE = Matrix.Rotation(R_(90), 3, 'X') @ Matrix.Rotation(R_(180), 3, 'Z')   # f
 def lie_pose(f, breath=0.0):
     place_pelvis(W, f, R_LIE, (0.0, -6.05, 0.115))
     fk_spine(RW, f, flex=2 * breath, side=0, twist=0, hflex=-8, hside=0, htwist=-18)
-    fk_arm(RW, "L", f, down=80, fwd=-2, elbow=10, out=0); fk_arm(RW, "R", f, down=80, fwd=-2, elbow=12, out=0)
+    fk_arm(RW, "L", f, down=80, fwd=-2, elbow=-35, out=0); fk_arm(RW, "R", f, down=80, fwd=-2, elbow=-32, out=0)
     for s in "LR": hand_pose(W, s, f, "relaxed")
     fk_leg(RW, "L", f, hip=8, knee=14, splay=4); fk_leg(RW, "R", f, hip=4, knee=8, splay=-3)
     eyes(RW, f, 1.0)
@@ -321,7 +321,7 @@ for i, o in enumerate(SHARDS):
     h = Vector(o["home"]); v = Vector((-rnd.uniform(1.5, 3.5), -rnd.uniform(3, 7), rnd.uniform(-0.6, 0.9)))
     vis(o, fi, True); key_loc(o, fi, h, (0, 0, 0)); key_loc(o, fi + 36, h + v, (rnd.uniform(-9, 9), rnd.uniform(-9, 9), rnd.uniform(-9, 9)))
     vis(o, fi + 37, False)
-shot_cam("S07", [(0, (-7.0, -2.4, -0.7), (-1.6, -5.4, 1.5), 34), (1, (-6.5, -3.2, -0.5), (-1.6, -5.6, 1.5), 38)], fstop=11)
+shot_cam("S07", [(0, (-9.0, 0.2, -1.9), (-2.6, -4.9, 0.6), 22), (1, (-8.6, -0.3, -1.7), (-2.4, -5.1, 0.7), 24)], fstop=11)
 # ================================================================== S08: the cabin to depressurize (masks drop, papers fly)
 _begin("S08")
 f0, f1 = T["S08"]; fm = f0 + 12
@@ -400,12 +400,12 @@ def hold_shot(n, fr_list, pull=None, hb=False):
         grab(HA, "R", fr, leg_point("L", "shin", fr), (0, 0.15, -1), skin=0.11)
         if hb:
             # HB turned round, kneeling on his row-4 aisle seat, reaching back over the seat back to her knee and shin
-            kneel(HB, fr, -0.33, -4.60, 0, lean=30, z=0.70)
+            kneel(HB, fr, -0.33, -4.66, 0, lean=44, z=0.70)
             set_ik(HB, fr, 1, 0)
             fk_spine(RB, fr, flex=34, side=-6, twist=-10, hflex=-12, htwist=-14)
             sc.frame_set(fr)
-            grab(HB, "L", fr, leg_point("R", "shin", fr), (0, -0.15, -1), skin=0.095)
-            grab(HB, "R", fr, leg_point("R", "knee", fr), (0, 0.15, -1), skin=0.105)
+            grab(HB, "L", fr, leg_point("R", "ankle", fr), (0, -0.15, -1), skin=0.085)
+            grab(HB, "R", fr, leg_point("R", "shin", fr), (0, 0.15, -1), skin=0.095)
 # ================================================================== S10: out of the plane (interior wide)
 _begin("S10")
 f0, f1 = T["S10"]
@@ -446,7 +446,7 @@ shot_cam("S15", [(0, (0.24, -5.62, 1.30), (0.0, -6.90, 0.55), 27), (1, (0.22, -5
 # ================================================================== S16: which unfortunately (exterior window row, broken window)
 _begin("S16")
 f0, f1 = T["S16"]
-shot_cam("S16", [(0, (-6.4, -2.6, -0.5), (-1.6, -6.2, 1.6), 32), (1, (-6.2, -3.1, -0.4), (-1.6, -6.2, 1.6), 34)], fstop=11)
+shot_cam("S16", [(0, (-3.4, -1.6, 0.9), (-2.4, -5.3, 0.4), 26), (1, (-3.3, -2.0, 0.95), (-2.3, -5.4, 0.5), 28)], fstop=11)
 # ================================================================== S17: caused her death (damaged engine)
 _begin("S17")
 f0, f1 = T["S17"]
@@ -463,6 +463,11 @@ for o in D.collections["CLOUDS_NEAR"].objects:
     for fc in all_fc(o):
         for k in fc.keyframe_points: k.interpolation = 'LINEAR'
     o.location = p0; o.keyframe_insert("location", frame=1)
+# catchlight for W's eyes in the seated close shots (small, soft, near the S01 lens)
+cl = D.objects.new("L_W_catch", D.lights.new("L_W_catch", 'POINT')); cl.data.energy = 3.0; cl.data.shadow_soft_size = 0.04
+sc.collection.objects.link(cl); cl.location = (-0.42, -4.85, 1.45)
+vis(cl, 1, True); vis(cl, T["S03"][0], False)
+cl.data.use_shadow = False
 # ------------------------------------------------------------------ hold every hero channel to the end of each shot
 _begin(None)
 for o in list(OB):

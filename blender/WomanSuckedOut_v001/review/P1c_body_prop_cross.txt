@@ -1,0 +1,6 @@
+P1c (director's P1 must-dos, applied now ahead of Phase 2): body_prop_cross, step 3, re-run on every shot these changes touch.
+Props: seats 04-06 L, HOLE_LINER, CABIN_SHELL, CABIN_FIXED, plus W's body and trousers. Rigs: HA,HB and W separately.
+S11 (1221-1376): helpers 0
+S13 (1533-1688): helpers 0
+S14-S15 (1689-1964): helpers 0, W 0
+Unchanged from P1b: S01, S02, S08 and S10 are 0 (the seated poses and HA's grip didn't change). A lighting-only change (eyelashes hidden, a catchlight added) doesn't affect contacts.

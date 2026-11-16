@@ -102,6 +102,17 @@ for c in W.children:
                 mu = nt.nodes.new("ShaderNodeMix"); mu.data_type = 'RGBA'; mu.blend_type = 'MULTIPLY'; mu.inputs["Factor"].default_value = 1.0
                 mu.inputs["B"].default_value = (0.32, 0.24, 0.18, 1); nt.links.new(l[0].from_socket, mu.inputs["A"]); nt.links.new(mu.outputs["Result"], pr.inputs["Base Color"])
                 print("W hair darkened", c.name)
+# director P1 must-do: W's slacks opaque charcoal (alpha came from the texture), lighter eye area (heavy lash cards read as dark rings)
+for c in W.children:
+    if "casualsuit01" in c.name:
+        for m in c.data.materials:
+            nt = m.node_tree; pr = nt.nodes["Principled BSDF"]
+            for l in [x for x in nt.links if x.to_node == pr and x.to_socket.name == "Alpha"]: nt.links.remove(l)
+            pr.inputs["Alpha"].default_value = 1.0
+            if hasattr(m, "blend_method"): m.blend_method = 'OPAQUE'
+            print("W suit opaque")
+    if "eyelashes" in c.name:
+        c.hide_render = True; c.hide_viewport = True; print("W lashes hidden")
 # eye fix on every EnhancedEye group that lacks it
 for g in list(D.node_groups):
     if g.name.startswith("EnhancedEye") and "CorneaTransparentMix" not in g.nodes:
