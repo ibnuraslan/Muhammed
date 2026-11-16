@@ -367,7 +367,7 @@ for f in range(S19, SE("S19") + 1, 2):
     pl = P19 + RzK @ V(0.13, -0.05, 0); G.use(); G.H.key_foot("L", f, G.a(pl).to_2d(), KYAW)
     rf0 = P19 + RzK @ V(-0.13, 0.0, 0)
     rfb = P19 + RzK @ V(-0.13, 0.42, 0)
-    rfk = V(-2.50, -8.06, 0)
+    rfk = V(-2.36, -8.06, 0)
     p = rf0.lerp(rfb, wind)
     if f >= KICK_F - 8: p = p.lerp(rfk, strike)
     lift = 0.12 * wind + 0.20 * strike
@@ -384,7 +384,7 @@ for o in KO:
     o.rotation_mode = 'XYZ'; o.keyframe_insert("location", frame=1); o.keyframe_insert("rotation_euler", frame=1)
     o.keyframe_insert("location", frame=KICK_F); o.keyframe_insert("rotation_euler", frame=KICK_F)
 b0 = KO[0]; L0 = b0.location.copy()
-for f, dx, ry in ((KICK_F + 4, -0.10, 0), (KICK_F + 12, -0.26, 0), (KICK_F + 20, -0.30, 0)):
+for f, dx, ry in ((KICK_F + 1, -0.06, 0), (KICK_F + 10, -0.24, 0), (KICK_F + 20, -0.30, 0)):
     b0.location = L0 + V(dx, 0, 0); b0.keyframe_insert("location", frame=f)
 for i, o in enumerate(KO[1:], 1):
     L1 = o.location.copy(); h = {1: 0.55, 2: 0.5}[i]; w = {1: 0.7, 2: 0.62}[i]

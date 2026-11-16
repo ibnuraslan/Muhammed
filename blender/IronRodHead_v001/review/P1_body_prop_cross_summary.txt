@@ -1,0 +1,9 @@
+body_prop_cross on IronRodHead_v001_P1_60fps.blend, every 3rd frame, props: TampingIron, CrateKick0-2, CrateSup0-2
+visible crossing frames: 1 [2842]
+visible hits by part|prop: {'foot.R|CrateKick0|VIS': 78, 'toe4-1.R|CrateKick0|VIS': 2, 'toe1-1.R|CrateKick0|VIS': 10, 'toe5-3.R|CrateKick0|VIS': 3, 'toe5-1.R|CrateKick0|VIS': 3}
+off-camera hits (parked characters / off-shot), top: [('head|CrateKick2|off', 571), ('upperleg02.R|CrateKick1|off', 561), ('spine02|CrateKick2|off', 494), ('spine03|CrateKick1|off', 423), ('spine01|CrateKick2|off', 415), ('upperleg02.R|CrateKick0|off', 408), ('foot.R|CrateKick0|off', 389), ('lowerleg02.R|CrateKick0|off', 297)]
+
+Fix after this run: the kick foot (frame 2842) was pulled back 7 cm and the crate starts sliding on the impact frame.
+Re-check of S19 (frames 2779-2934, step 1, CrateKick0-2 vs Gage) on the final file: 0 visible crossings (P1_body_prop_cross_S19_step1.json).
+Tamping range S01-S03 (frames 1-360, step 1, TampingIron vs Gage): 0 visible crossings.
+=> P1 file: 0 visible crossings. The off-camera hits are characters parked out of shot / crates outside the camera view.
