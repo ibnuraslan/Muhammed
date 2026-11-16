@@ -293,7 +293,7 @@ for i in range(18):   # loose bricks on the rug
     o.material_slots[0].link = 'OBJECT'; o.material_slots[0].material = random.choice(brick_mats())
 book_cols = [(0.2, 0.45, 0.8), (0.85, 0.75, 0.2), (0.3, 0.7, 0.4), (0.8, 0.3, 0.3)]
 for i, col in enumerate(book_cols):   # a stack of plain school books beside her
-    box("Room_Book%d" % i, (0.21, 0.28, 0.025), (0.5, 0.45, 0.004 + 0.0125 + 0.026 * i), mat("Book%d" % i, col, 0.5), C, bevel=0.003, rot=(0, 0, R_(8 * i - 10)))
+    box("Room_Book%d" % i, (0.21, 0.28, 0.025), (-0.6, 0.45, 0.004 + 0.0125 + 0.026 * i), mat("Book%d" % i, col, 0.5), C, bevel=0.003, rot=(0, 0, R_(8 * i - 10)))
 # cardboard toy box with our logo (neutral opening moment, never in the sad beats)
 cb = mat("Cardboard", (0.72, 0.52, 0.32), 0.85)
 tb = box("Room_ToyBox", (0.55, 0.4, 0.38), (-1.05, 1.75, 0.19), cb, C, bevel=0.01, rot=(0, 0, R_(28)))

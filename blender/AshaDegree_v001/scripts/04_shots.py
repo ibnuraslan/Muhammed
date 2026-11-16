@@ -284,8 +284,8 @@ def wear_bag(rig, name, f, yaw, material=None):
     sc.frame_set(f); bpy.context.view_layer.update()
     s3 = rig.matrix_world @ rig.pose.bones["spine03"].head; s5 = rig.matrix_world @ rig.pose.bones["spine05"].head
     back = Rz(yaw) @ Vector((0, 1, 0))
-    b.rotation_mode = 'XYZ'; b.rotation_euler = (0, 0, R_(180 + yaw))
-    b.location = s3.lerp(s5, 0.3) + back * 0.165 + Vector((0, 0, -0.17))
+    b.rotation_mode = 'XYZ'; b.rotation_euler = (0, 0, R_(180 + yaw)); b.scale = (0.88, 0.88, 0.85)
+    b.location = s3.lerp(s5, 0.3) + back * 0.15 + Vector((0, 0, -0.11))
     if material:
         for o in [b] + list(b.children):
             o.data = o.data.copy(); o.data.materials.clear(); o.data.materials.append(material)
@@ -418,19 +418,21 @@ def road_y(f): return -30.0 + max(0, min(f, 905) - 400) * v + (max(0, f - 905) *
 road_path = lambda f: W2A(G, (SX, road_y(f), 0))
 walk_with_arms(H, road_path, lambda f: 180.0, 400, 905, stride=1.0 / G.scale.x)
 # umbrella in the right hand: forearm up, fist in front of the shoulder
-def umb_arm(f, p, yaw, look=(0, 0)):
+def umb_arm(f, p, yaw, look=(0, 0), out=-0.06):
     s = "R"; sx = -1
-    body_hand(H, s, f, p, yaw, (H.sh[s].x + 0.07 - H.root_head.x, H.sh[s].y - H.root_head.y - 0.32, H.sh[s].z - H.root_head.z - 0.20),
+    body_hand(H, s, f, p, yaw, (H.sh[s].x + 0.07 - out - H.root_head.x, H.sh[s].y - H.root_head.y - 0.37, H.sh[s].z - H.root_head.z - 0.11),
               (0.35, -1.0, 0.0), (1.0, 0.35, 0.0), pole_off=(-0.35, 0.0, -0.5))
 for f in range(400, 906, 2):
     p = road_path(f); p = Vector((p.x, p.y, H.root_head.z))
     umb_arm(f, p, 180.0)
 # stop, look over the left shoulder at the car (905-960), then turn right and run into the trees (960-1100)
 y_stop = road_y(925)
-for f, hd, tw in ((925, (0, 0), 0), (940, (0, 25), 20), (958, (-4, 40), 30)):
+for f, hd, tw in ((925, (0, 0), 0), (940, (0, 14), 6), (958, (-2, 20), 8)):
     stand(H, f, W2A(G, (SX, y_stop, 0)), 180.0, flex=1, head=hd, twist=tw, arms=False)
     umb_arm(f, W2A(G, (SX, y_stop, 0)) + Vector((0, 0, H.root_head.z)), 180.0)
     body_hand(H, "L", f, W2A(G, (SX, y_stop, 0)) + Vector((0, 0, H.root_head.z)), 180.0, hang_off(H, "L"), (0, -0.15, -1), (-1, 0, 0))
+for f in range(905, 962, 2):   # umbrella hand keyed continuously through the stop (no quaternion flip between keys)
+    umb_arm(f, W2A(G, (SX, road_y(min(f, 925)), 0)) + Vector((0, 0, H.root_head.z)), 180.0)
 run_pts = [(965, (SX, y_stop)), (985, (SX + 1.2, y_stop + 0.6)), (1010, (SX + 3.2, y_stop + 1.4)), (1050, (SX + 6.0, y_stop + 3.0)), (1100, (SX + 9.0, y_stop + 5.0))]
 def run_path(f):
     for (fa, a), (fb, b) in zip(run_pts, run_pts[1:]):
@@ -445,8 +447,7 @@ for f in range(960, 1101, 2):
     p = run_path(f); dist += (p - prev).to_2d().length; prev = p
     ph = 2 * math.pi * dist / (1.5 / G.scale.x); pz = Vector((p.x, p.y, H.root_head.z - 0.04))
     # umbrella hand: lowered and held out to the side while she runs
-    body_hand(H, "R", f, pz, run_yaw(f), (H.sh["R"].x - 0.12 - H.root_head.x, H.sh["R"].y - H.root_head.y - 0.12 + 0.08 * math.sin(ph),
-              H.sh["R"].z - H.root_head.z - 0.30), (0, -0.6, 0.6), (1, 0, 0), pole_off=(-0.5, 0.2, -0.3))
+    umb_arm(f, Vector((pz.x, pz.y, H.root_head.z)), run_yaw(f))   # umbrella stays up, as in the walk
     body_hand(H, "L", f, pz, run_yaw(f), (H.sh["L"].x + 0.05 - H.root_head.x, H.sh["L"].y - H.root_head.y - 0.06 - 0.16 * math.sin(ph),
               H.sh["L"].z - H.root_head.z - 0.36), (0, -0.7, 0.4), (-1, 0, 0), pole_off=(0.5, 0.35, -0.3))
 umb_road = umb.copy(); umb_road.name = "UmbrellaRoad"; umb.users_collection[0].objects.link(umb_road)
