@@ -1,0 +1,107 @@
+[
+ {
+  "beat": "01",
+  "frame": 1,
+  "first_words": "The dog"
+ },
+ {
+  "beat": "02",
+  "frame": 61,
+  "first_words": "on a loaded shotgun in the backseat of a"
+ },
+ {
+  "beat": "03",
+  "frame": 176,
+  "first_words": "truck and accidentally"
+ },
+ {
+  "beat": "04",
+  "frame": 245,
+  "first_words": "fired it."
+ },
+ {
+  "beat": "05",
+  "frame": 321,
+  "first_words": "The bullet ripped through the front"
+ },
+ {
+  "beat": "06",
+  "frame": 402,
+  "first_words": "seat and into"
+ },
+ {
+  "beat": "07a",
+  "frame": 453,
+  "first_words": "the man's back,"
+ },
+ {
+  "beat": "07b",
+  "frame": 519,
+  "first_words": "breaking several ribs and"
+ },
+ {
+  "beat": "07c",
+  "frame": 597,
+  "first_words": "tearing a hole in his lung."
+ },
+ {
+  "beat": "08a",
+  "frame": 716,
+  "first_words": "Somehow, he managed to call"
+ },
+ {
+  "beat": "08b",
+  "frame": 805,
+  "first_words": "911 and"
+ },
+ {
+  "beat": "09",
+  "frame": 870,
+  "first_words": "was rushed to the hospital,"
+ },
+ {
+  "beat": "12",
+  "frame": 949,
+  "first_words": "where he eventually recovered."
+ },
+ {
+  "beat": "13a",
+  "frame": 1056,
+  "first_words": "The dog was taken to animal"
+ },
+ {
+  "beat": "13b",
+  "frame": 1111,
+  "first_words": "control,"
+ },
+ {
+  "beat": "14a",
+  "frame": 1171,
+  "first_words": "but later returned to its"
+ },
+ {
+  "beat": "14b",
+  "frame": 1248,
+  "first_words": "owner."
+ },
+ {
+  "beat": "15a",
+  "frame": 1298,
+  "first_words": "Unfortunately,"
+ },
+ {
+  "beat": "15b",
+  "frame": 1353,
+  "first_words": "the dog was killed only a few"
+ },
+ {
+  "beat": "15c",
+  "frame": 1449,
+  "first_words": "weeks later in an"
+ },
+ {
+  "beat": "15d",
+  "frame": 1508,
+  "first_words": "unrelated incident."
+ }
+]
