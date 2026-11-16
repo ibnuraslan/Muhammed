@@ -54,3 +54,32 @@ for c in [o for o in OB if o.name.startswith("CAM_")]:
     c.data.dof.use_dof = False
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("LOOK done", "decal", ok)
+
+# --- director P1 checklist (Nov 16): real hair on everyone, two-tone loose clothes in contrasting colours (no one-piece / beige)
+def two_tone(rig, top, bottom, split=0.60):
+    for ch in rig.children:
+        if ch.type != 'MESH' or "suit" not in ch.name: continue
+        for i, m in enumerate(ch.data.materials):
+            if not m: continue
+            m2 = m.copy(); ch.data.materials[i] = m2; nt = m2.node_tree
+            b = [n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED'][0]
+            for l in list(b.inputs["Base Color"].links): nt.links.remove(l)
+            tc = nt.nodes.new("ShaderNodeTexCoord"); sz = nt.nodes.new("ShaderNodeSeparateXYZ"); nt.links.new(tc.outputs["Generated"], sz.inputs[0])
+            mr = nt.nodes.new("ShaderNodeMapRange"); nt.links.new(sz.outputs["Z"], mr.inputs[0])
+            mr.inputs[1].default_value = split - 0.01; mr.inputs[2].default_value = split + 0.01
+            mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; nt.links.new(mr.outputs[0], mx.inputs[0])
+            mx.inputs[6].default_value = bottom + (1,); mx.inputs[7].default_value = top + (1,)
+            nt.links.new(mx.outputs[2], b.inputs["Base Color"])
+for ch in OB["Keeper"].children:
+    if "short02" in ch.name: ch.hide_render = ch.hide_viewport = False
+two_tone(OB["Keeper"], (0.08, 0.38, 0.62), (0.22, 0.20, 0.17))          # teal-blue shirt, dark brown trousers
+PAL = [((0.70, 0.12, 0.12), (0.10, 0.12, 0.25)), ((0.95, 0.75, 0.10), (0.15, 0.25, 0.45)), ((0.12, 0.45, 0.20), (0.25, 0.22, 0.20)),
+       ((0.45, 0.18, 0.55), (0.12, 0.12, 0.14)), ((0.90, 0.45, 0.10), (0.20, 0.30, 0.20)), ((0.10, 0.30, 0.70), (0.55, 0.50, 0.42)),
+       ((0.80, 0.20, 0.40), (0.15, 0.15, 0.30))]
+FUN = {"Crowd1", "Crowd2", "Crowd3", "Crowd4"}
+for i, n in enumerate(sorted(o.name for o in OB if o.type == 'ARMATURE' and o.name not in ("Keeper", "Croc"))):
+    top, bot = PAL[i % len(PAL)]
+    if n in FUN or n in ("SpecB", "SpecE"): top, bot = (top[0] * 0.45, top[1] * 0.45, top[2] * 0.45), (0.06, 0.06, 0.08)   # sober funeral colours
+    two_tone(OB[n], top, bot)
+bpy.ops.wm.save_as_mainfile(filepath=OUT)
+print("LOOK2 done")
