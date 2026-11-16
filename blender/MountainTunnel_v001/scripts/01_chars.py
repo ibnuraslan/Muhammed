@@ -263,7 +263,7 @@ def in_beard(p):
     dx = abs(p.x - cx); dz = p.z - mouth_z
     if p.y > eye_y + 0.07: return False
     if dz < -0.085: return False                                   # under the chin, not down the throat
-    # (the mouth is covered: an open hole read as a mask)
+    if dx < 0.021 and abs(dz) < 0.0055: return False               # the lips show (a fully covered mouth read as a surgical mask)
     top = 0.021 + max(0.0, dx - 0.030) / 0.045 * 0.036             # one smooth upper edge: moustache -> cheeks -> sideburns
     return dz < top
 bm = bmesh.new(); bm.from_mesh(body.data); bm.verts.ensure_lookup_table()
@@ -294,7 +294,7 @@ for i in range(len(me.vertices)): fa.data[i].value = min(1.0, dist[i] / 0.014)
 beard = bpy.data.objects.new("Man.beard", me); sc.collection.objects.link(beard)
 for p_ in me.polygons: p_.use_smooth = True
 mb = bpy.data.materials.new("M_Beard"); mb.use_nodes = True; nt = mb.node_tree; P = nt.nodes["Principled BSDF"]
-P.inputs['Base Color'].default_value = (0.82, 0.82, 0.80, 1); P.inputs['Roughness'].default_value = 0.8
+P.inputs['Base Color'].default_value = (0.70, 0.70, 0.68, 1); P.inputs['Roughness'].default_value = 0.85
 tc = nt.nodes.new('ShaderNodeTexCoord'); w = nt.nodes.new('ShaderNodeTexNoise'); w.inputs['Scale'].default_value = 300.0
 bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.25
 nt.links.new(tc.outputs['Object'], w.inputs['Vector']); nt.links.new(w.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs['Normal'], P.inputs['Normal'])
@@ -305,7 +305,7 @@ sm = beard.modifiers.new("Smooth", 'SMOOTH'); sm.factor = 0.8; sm.iterations = 1
 bt = bpy.data.textures.new("T_BeardFluff", 'CLOUDS'); bt.noise_scale = 0.012
 fl = beard.modifiers.new("Fluff", 'DISPLACE'); fl.texture = bt; fl.strength = 0.007; fl.mid_level = 0.3
 bake(beard)
-sol = beard.modifiers.new("Solid", 'SOLIDIFY'); sol.thickness = 0.011; sol.offset = 1.0
+sol = beard.modifiers.new("Solid", 'SOLIDIFY'); sol.thickness = 0.006; sol.offset = 1.0
 beard.modifiers.new("Sub", 'SUBSURF').levels = 2
 Mw = beard.matrix_world.copy(); beard.parent = man; beard.parent_type = 'BONE'; beard.parent_bone = "head"
 bpy.context.view_layer.update(); beard.matrix_world = Mw

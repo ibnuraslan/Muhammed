@@ -3,6 +3,7 @@ blender -b sets.blend --python 03_shots.py -- <out.blend> <shots.json> [only=1a,
 shots.json: [{"id": "1a", "f0": 1, "len": 156}, ...]  (Phase 1: provisional, contiguous; Phase 2: VO frames, trimmed)
 Each shot function receives (f0, n) and keys its action at 1x from f0; a shot shorter than its clip is trimmed (cut), never stretched."""
 import sys, os, math, json, random
+random.seed(30)
 import bpy
 from mathutils import Vector, Matrix, Euler, Quaternion
 V = Vector
@@ -657,8 +658,8 @@ def shot_8b(f0, n):
         hand("Man", "L", f, th, V((0, 0, -1)), fwd(yaw), pole=wpos("Man", "upperarm01.L", f) - rgt(yaw) * 0.35 - fwd(yaw) * 0.2, pose="relaxed")
     key_age(f0, f1, 0.0)
     hd = wpos("Man", "head", f0)
-    c = hd + rgt(yaw) * 1.15 + fwd(yaw) * 0.2 + V((0, 0, 0.05)); a_ = hd + V((0, 0, 0.0))
-    camera("8b", f0, n, [(0, c + V((0, 0, 0.12)), a_ + V((0, 0, 0.1)), 65), (1, c + V((0, 0, 0.12)) + (a_ - c).normalized() * 0.1, a_ + V((0, 0, 0.1)), 65)], fstop=8.0)
+    c = hd + fwd(yaw) * 0.95 + rgt(yaw) * 0.55 + V((0, 0, -0.30)); a_ = hd + V((0, 0, -0.04))     # low, in front-side: his bowed face, she stays below the frame
+    camera("8b", f0, n, [(0, c, a_, 40), (1, c + (a_ - c).normalized() * 0.1, a_, 40)], fstop=8.0)
     return use
 
 def shot_9a(f0, n):
@@ -761,6 +762,17 @@ def shot_11b(f0, n):
     for f in range(f0, f1 + 1, 12): HUM["Man"].key_spine(f, flex=4, head=(-6 + 3 * math.sin(f / 13.0), 15 * math.sin(f / 40.0)))
     walk_arms("Man", f0, f1, lambda f: 180.0); key_age(f0, f1, 0.95)
     camera("11b", f0, n, [(0, (0.9, 39.8, 1.75), (0.0, 47.0, 1.3), 26), (1, (0.9, 40.8, 1.75), (0.0, 48.5, 1.3), 26)], fstop=8.0)
+    return use
+
+def shot_11c(f0, n):
+    """the shortcut is made: the old man walks out through the finished passage toward camera, the gorge walls behind him"""
+    use = ("Man",); f1 = f0 + n - 1; cut_window(f0, f1, YF + 6.0); gorge_light(f0, f1)
+    p0 = V((0.1, 44.5, 0)); p1 = p0 + V((0, -0.011 * n, 0))
+    path = lambda f: p0.lerp(p1, (f - f0) / (n - 1))
+    HUM["Man"].walk(path, lambda f: 0.0, f0, f1, stride=0.58, lift=0.06)
+    for f in range(f0, f1 + 1, 12): HUM["Man"].key_spine(f, flex=3, head=(-4 + 3 * math.sin(f / 13.0), 12 * math.sin(f / 30.0)))
+    walk_arms("Man", f0, f1, lambda f: 0.0); key_age(f0, f1, 0.95)
+    camera("11c", f0, n, [(0, (0.35, 40.6, 1.55), (0.1, 44.5, 1.45), 30), (1, (0.35, 40.6 - 0.011 * n, 1.55), (0.1, 44.5 - 0.011 * n, 1.45), 30)], fstop=8.0)
     return use
 
 def shot_12a(f0, n):
