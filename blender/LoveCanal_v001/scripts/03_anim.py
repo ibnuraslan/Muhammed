@@ -20,7 +20,7 @@ def f0(s): return F[s]
 def f1(s): i = ORDER.index(s); return (F[ORDER[i + 1]] if i + 1 < len(ORDER) else F["END"]) - 1
 def dur(s): return f1(s) - f0(s) + 1
 CONT = {"S1", "S2", "S4", "S7", "S9", "S11", "S12", "S19"}     # the next shot reuses this shot's characters/props: no overrun into it
-def fx(s, extra=1.3): return f1(s) + 1 if s in CONT else f0(s) + int(dur(s) * extra)       # action end (30% longer than planned)
+def fx(s, extra=1.3): return f1(s) if s in CONT else f0(s) + int(dur(s) * extra)       # action end (30% longer than planned)
 sc.frame_start = 1; sc.frame_end = F["END"]
 OB = bpy.data.objects
 ev(1)
@@ -114,11 +114,11 @@ def follow_bone(prop, rig, bone, fa, fb, step=1):
         l_, q_, _ = M.decompose(); prop.location = l_; prop.rotation_quaternion = q_
         prop.keyframe_insert("location", frame=f); prop.keyframe_insert("rotation_quaternion", frame=f)
 
-def grip_follow(rig, side, obj, fg, frames, contact, approach):
+def grip_follow(rig, side, obj, fg, frames, contact, approach, back=0.0):
     """grip_object once at fg (fingers close until they touch), then the hand rides with the object (same relative IK pose)"""
-    rep = grip_object(rig, side, fg, obj, contact, approach)
+    rep = grip_object(rig, side, fg, obj, contact, approach, finger_radius=0.015)
     ev(fg); bn = "IK_hand." + side
-    rel = obj.matrix_world.inverted() @ rig.matrix_world @ rig.pose.bones[bn].matrix
+    rel = obj.matrix_world.inverted() @ Matrix.Translation(-Vector(approach).normalized() * back) @ rig.matrix_world @ rig.pose.bones[bn].matrix
     for f in frames:
         ev(f); A = rig.matrix_world.inverted() @ obj.matrix_world @ rel
         l_, q_, _ = (rig.data.bones[bn].matrix_local.inverted() @ A).decompose(); pb = rig.pose.bones[bn]

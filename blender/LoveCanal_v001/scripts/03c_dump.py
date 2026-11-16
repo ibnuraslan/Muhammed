@@ -29,15 +29,15 @@ WK.walk(pth, lambda f: 0.0, fa, fe, stride=0.5, lift=0.05, bob=0.012, crouch=0.2
 DR.rotation_mode = 'XYZ'
 for f in range(fa - 1, fe + 2):
     d = V_W * (f - fa) / FPS
-    c = WK0 + Vector((0.62 + d, 0, r_d))
+    c = WK0 + Vector((0.74 + d, 0, r_d))
     DR.location = c; DR.rotation_euler = (R_(90), d / r_d, 0)      # lying, axis along Y, rolling toward +X
     DR.keyframe_insert("location", frame=f); DR.keyframe_insert("rotation_euler", frame=f)
     if (f - fa) % 2: continue
     ev(f)
     for s, sy in (("L", 0.16), ("R", -0.16)):
-        p = c + Vector((-0.07, sy, r_d + 0.004)); n = (c + Vector((0, sy, 0)) - p).normalized()
-        place_hand(WK.r.o, s, f, p, n, Vector((1.0, 0, -0.15)))
-for s in "LR": apply_pose(WK.r.o, s, "hold_flat_object", fa)
+        p = c + Vector((-0.1, sy, r_d + 0.02)); n = (c + Vector((0, sy, 0)) - p).normalized()
+        place_hand(WK.r.o, s, f, p, n, Vector((1.0, 0, 0.32)))
+for s in "LR": apply_pose(WK.r.o, s, "flat_palm", fa)
 face(WK, fa, -0.004, -12); blinks(WK, fa, fe, -0.004, -12)
 for f in range(fa, fe + 1, 20): WK.key_spine(f, flex=34, head=(-34, 0))
 camshot("S9", [(0.0, (DX.x + 2.6, -19.6, 0.75), (DX.x - 0.6, -18.0, 0.95), 32), (1.0, (DX.x + 2.9, -19.2, 0.75), (DX.x + 0.0, -18.0, 0.95), 34)])

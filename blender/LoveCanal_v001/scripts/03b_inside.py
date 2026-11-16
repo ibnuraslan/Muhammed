@@ -13,7 +13,7 @@ def glass_path(f):
     t = f - fa
     lo = Vector((-0.16, -0.30, 1.22)); hi_ = None
     ev(f); m = posed(FA, MOUTH)
-    hi_ = m + Vector((-0.01, -0.075, -0.10))
+    hi_ = m + Vector((-0.01, -0.085, -0.13))
     u = smooth(t / 30) - smooth((t - 95) / 30)
     return lo.lerp(hi_, u), u
 for i, f in enumerate(range(fa, fe + 1, 20)):
@@ -29,7 +29,7 @@ for f in range(fa, fe + 1, 2):
     GLASS.rotation_mode = 'XYZ'; GLASS.location = gw - Vector((0, 0, 0.075)); GLASS.rotation_euler = (R_(-tilt), 0, 0)
     GLASS.keyframe_insert("location", frame=f); GLASS.keyframe_insert("rotation_euler", frame=f)
 ev(fa); _side = (FA.r.o.matrix_world.to_3x3() @ Vector((1, 0, 0))).normalized(); _gc = GLASS.matrix_world @ Vector((0, 0, 0.07))
-print("GLASS grip", grip_follow(FA.r.o, "R", GLASS, fa, list(range(fa, fe + 1, 2)) + [fe], _gc - _side * 0.04, _side))
+print("GLASS grip", grip_follow(FA.r.o, "R", GLASS, fa, list(range(fa, fe + 1, 2)) + [fe], _gc - _side * 0.04, _side, back=0.009))
 # left hand to the collar after the frown
 NECK = (FA.r.BN["neck01"].head_local + FA.r.BN["neck02"].head_local) / 2
 for f in range(fa + 110, fe + 1, 4):
@@ -58,7 +58,7 @@ for f in range(fa, fe + 1, 4):        # right palm flat on the counter edge, lef
     sh = M @ FA.r.PB["upperarm01.L"].head
     place_hand(FA.r.o, "L", f, (sh + Vector((0, 0, -0.4)) + fw * 0.2).lerp(m + fw * 0.03, u), -fw, (M.to_3x3() @ Vector((-1, 0, 0.25))).normalized())
 apply_pose(FA.r.o, "R", "flat_palm", fa); apply_pose(FA.r.o, "L", "shield", fa)
-MOP = KX + Vector((-0.78, 1.32, 0)); BOP = KX + Vector((1.38, 0.42, 0))
+MOP = KX + Vector((-0.78, 1.32, 0)); BOP = KX + Vector((1.52, 0.42, 0))
 def yaw_to(p, tgt):
     d = (tgt - p); return math.degrees(math.atan2(d.x, -d.y))
 put("Mother", [("S5", MOP, yaw_to(MOP, FP))])
@@ -90,7 +90,7 @@ Rl = Matrix((Xw, Yw, h)).transposed().to_4x4()
 tilt = Matrix.Identity(4)                                              # flat bed; the head rests on a pillow
 head_end = bc.x + HEAD_SGN * ((bmx.x - bmn.x) / 2 - 0.22)
 height = FA.r.BN["head"].tail_local.z + 0.1
-origin = Vector((head_end - HEAD_SGN * height, bc.y, MTOP + 0.115))
+origin = Vector((head_end - HEAD_SGN * height, bc.y, MTOP + 0.135))
 CHAIR_SIDE = 1                                                         # boy's chair on the far side: he faces the camera across the bed
 MF = Matrix.Translation(origin) @ tilt @ Rl
 put("Father", [("S4", FP, 0), ("S5", FP, 0), ("S22", None, MF)])
@@ -98,7 +98,7 @@ ev(fa + 1)
 for i, f in enumerate(range(fa, fe + 1, 30)):
     u = smooth((f - fa - 60) / 60)
     stand(FA, f, flex=0, spine=10 + 1.2 * math.sin(i * 1.5), head=(14, 14 * u * (1 if Xw.y > 0 else -1) * CHAIR_SIDE))
-    for s_ in "LR": FA.key_foot(s_, f, FA.foot_xy(s_, Vector((0, 0)), 0.0) + Vector((0.0, 0.05)), 0.0, lift=-0.05, pitch=-55)   # lying: feet relaxed and pointed
+    for s_ in "LR": FA.key_foot(s_, f, FA.foot_xy(s_, Vector((0, 0)), 0.0) + Vector((0.0, -0.04)), 0.0, lift=-0.04, pitch=-55)   # lying: feet relaxed and pointed
 face(FA, fa, 0.002, -14); face(FA, fe, 0.004, -16, 1); blinks(FA, fa, fe, 0.002, -14, every=120)
 PIL = box("Pillow", (0.42, 0.62, 0.12), (head_end + HEAD_SGN * 0.02, bc.y, MTOP + 0.06), mat("PillowWhite", (0.95, 0.95, 0.97), 0.8), HBED.users_collection[0], bevel=0.05)
 PIL.modifiers.new("sub", 'SUBSURF').levels = 2
@@ -110,13 +110,13 @@ near_side = "L" if (MF.to_3x3() @ Vector((1, 0, 0))).y * CHAIR_SIDE > 0 else "R"
 far_side = "L" if near_side == "R" else "R"
 ev(fa)
 hip_w = FA.r.o.matrix_world @ FA.r.PB["root"].head; chest_w = FA.r.o.matrix_world @ FA.r.PB["spine03"].head
-x_feet = origin.x - HEAD_SGN * 0.15; x_top = chest_w.x + HEAD_SGN * 0.05
+x_feet = origin.x - HEAD_SGN * 0.15; x_top = hip_w.x + HEAD_SGN * 0.2     # blanket up to the waist: hands rest on his chest, clear of it
 nx, ny = 46, 34; W_ = (bmx.y - bmn.y) * 0.82
 # height field from the body/clothes vertices (arm and hand vertices left out), not from ray casts
 _mods = [(o, m) for o in OB if o.parent == FA.r.o for m in getattr(o, "modifiers", []) if m.type in ("SUBSURF", "MASK") and m.show_viewport]
 for o, m in _mods: m.show_viewport = False
 bpy.context.view_layer.update(); _dg = bpy.context.evaluated_depsgraph_get(); cell = {}
-gx0 = x_feet; gy0 = bc.y - W_ / 2 - 0.3; dx_ = (x_top - x_feet) / nx; dy_ = (W_ + 0.6) / ny
+gx0 = x_feet; gy0 = bc.y - W_ / 2 - 0.3 if CHAIR_SIDE > 0 else bc.y - W_ / 2; dx_ = (x_top - x_feet) / nx; dy_ = (W_ + 0.3) / ny
 for part in [o for o in OB if o.parent == FA.r.o and o.type == 'MESH' and any(k in o.name for k in ("body", "suit", "shoes"))]:
     gi = {g.index: g.name for g in part.vertex_groups}; ev_ = part.evaluated_get(_dg); me_ = ev_.to_mesh(); mw_ = ev_.matrix_world
     skip = set()
@@ -138,9 +138,10 @@ zs = []
 for j in range(ny + 1):
     row = []
     for i in range(nx + 1):
-        y = gy0 + dy_ * j; z = max(MTOP, cell.get((j, i), -9)) + 0.022
+        y = gy0 + dy_ * j; z = max(MTOP, cell.get((j, i), -9)) + 0.035
         off = abs(y - bc.y) - W_ / 2
-        if off > 0: z = max(MTOP - 0.3, MTOP + 0.022 - 1.1 * off)
+        if off > 0 and (y - bc.y) * CHAIR_SIDE > 0: z = MTOP + 0.035 - 0.25 * off       # boy's side: no overhang onto his legs
+        elif off > 0: z = max(MTOP - 0.3, MTOP + 0.022 - 1.1 * off)
         row.append(z)
     zs.append(row)
 raw = [r[:] for r in zs]
@@ -175,8 +176,10 @@ def blanket_z(x, y):
     hit = sc.ray_cast(bpy.context.evaluated_depsgraph_get(), Vector((x, y, 2.7)), Vector((0, 0, -1)))
     return hit[1].z if hit[0] else MTOP
 yh = hip_w.y + (-1 if near_side == "R" and Xw.y > 0 else 1) * 0.0
-hand_y = bc.y + CHAIR_SIDE * (W_ / 2 - 0.17)
-HAND_P = Vector((hip_w.x + HEAD_SGN * 0.05, hand_y, 0)); HAND_P.z = blanket_z(HAND_P.x, HAND_P.y) + 0.03
+# his hand rests on his own chest (above the blanket's top edge), toward the boy's side
+_hx = hip_w.x + HEAD_SGN * 0.42; _hy = bc.y + CHAIR_SIDE * 0.22
+_h = sc.ray_cast(bpy.context.evaluated_depsgraph_get(), Vector((_hx, _hy, 2.7)), Vector((0, 0, -1)))
+HAND_P = Vector((_hx, _hy, (_h[1].z if _h[0] else MTOP + 0.25) + 0.035))
 for f in (fa, fe):
     place_hand(FA.r.o, near_side, f, HAND_P, Vector((0, 0, -1)), Vector((-HEAD_SGN, 0, 0)))
 key_vis(BL, [(0, False), (fa, True)])
@@ -188,17 +191,15 @@ want = Vector((0, CHAIR_SIDE, 0))
 ang = math.atan2(want.y, want.x) - math.atan2(bdir.y, bdir.x)
 HCH.rotation_euler = (0, 0, HCH.rotation_euler.z + ang)
 seat_y = (bmx.y + 0.40) if CHAIR_SIDE > 0 else (bmn.y - 0.40)
-HCH.location = HCH.location + Vector((hip_w.x - cc.x, seat_y - cc.y, 0))
+HCH.location = HCH.location + Vector((hip_w.x - cc.x - HEAD_SGN * 0.75, seat_y - cc.y + 0.12 * CHAIR_SIDE, 0))   # chair set back toward the foot end; the boy stands at the bedside
 ev(fa); cmn, cmx = bbox([HCH])
 SEAT_Z = top_at((cmn.x + cmx.x) / 2, (cmn.y + cmx.y) / 2 + 0.05 * -want.y)
 print("CHAIR seat", round(SEAT_Z, 3))
-BP = Vector(((cmn.x + cmx.x) / 2, (cmn.y + cmx.y) / 2 + 0.06 * -want.y, 0))
+BP = Vector((hip_w.x + HEAD_SGN * 0.2, bmx.y + 0.36 if CHAIR_SIDE > 0 else bmn.y - 0.36, 0))
 put("Boy", [("S1", (0, 0, 0), 180), ("S5", BOP, yaw_to(BOP, FP)), ("S22", HX + Vector((BP.x - HX.x, BP.y, 0)), 180 if want.y < 0 else 0)])
 ev(fa + 1)
 for i, f in enumerate(range(fa, fe + 1, 30)):
-    BOY.key_root(f, Vector((0, 0.0, SEAT_Z + 0.12 + 0.004 * math.sin(i))), yaw=0, flex=24)
-    BOY.key_spine(f, flex=10 + 1.5 * math.sin(i * 1.3), head=(4, 0))
-    for s, sx in (("L", 1), ("R", -1)): BOY.key_foot(s, f, Vector((0.1 * sx, -0.33)), 0.0, lift=0.06, pitch=10)
+    stand(BOY, f, flex=14, spine=16 + 1.5 * math.sin(i * 1.3), head=(6, 0))
 face(BOY, fa, 0.003, -12); blinks(BOY, fa, fe, 0.003, -12, ofs=55)
 bside = "R" if near_side == "R" else "R"
 for f in (fa, fe):
@@ -206,8 +207,9 @@ for f in (fa, fe):
 apply_pose(BOY.r.o, "R", "relaxed_even" if "relaxed_even" in POSES else "relaxed", fa)
 ev(fa); M = BOY.r.o.matrix_world
 for f in (fa, fe):
-    lp = M @ (BOY.r.BN["upperleg01.L"].head_local + Vector((-0.04, -0.2, 0.17)))     # left hand resting on his own thigh, toward the middle
-    place_hand(BOY.r.o, "L", f, lp, Vector((0, 0, -1)), (M.to_3x3() @ Vector((0, -1, 0))).normalized())
-apply_pose(BOY.r.o, "L", "relaxed", fa)
+    pass
+arms_hang(BOY, fa); arms_hang(BOY, fe)
+for f in (fa, fe):
+    place_hand(BOY.r.o, "R", f, HAND_P + Vector((0, 0, 0.032)), Vector((0, 0, -1)), Vector((-HEAD_SGN * 0.7, 0.7 if want.y < 0 else -0.7, 0)).normalized())
 camshot("S22", [(0.0, (hip_w.x - HEAD_SGN * 0.45, bc.y - 1.55, 2.45), (hip_w.x + HEAD_SGN * 0.15, bc.y + 0.3, 0.7), 30),
                 (1.0, (hip_w.x - HEAD_SGN * 0.4, bc.y - 1.35, 2.35), (hip_w.x + HEAD_SGN * 0.15, bc.y + 0.3, 0.72), 30)])

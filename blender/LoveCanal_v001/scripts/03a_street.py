@@ -46,12 +46,12 @@ for f in range(f0("S1") - 1, fx("S1") + 2):
         pl = L180(pw)
         BOY.key_foot(s, f, (pl + Vector((0, 0.06, 0))).to_2d(), 0.0, lift=pl.z - BOY.ankle[s].z + 0.085, pitch=-8)
     seat = Mb @ (Vector((-0.19, 0, 1.0)) * K)
-    BOY.key_root(f, L180(seat) + Vector((0, 0.07, 0.13 + 0.006 * math.sin(th * 2))), yaw=0, flex=22)
+    BOY.key_root(f, L180(seat) + Vector((0, 0.08, 0.18 + 0.006 * math.sin(th * 2))), yaw=0, flex=22)
     BOY.key_spine(f, flex=14, twist=3 * math.sin(th), head=(-22, 0))
     for s, sy in (("L", 0.27), ("R", -0.27)):
         g = Mb @ (Vector((0.36, sy, 1.16)) * K)
-        place_hand(BOY.r.o, s, f, g + Vector((0, 0, 0.012)), Vector((0, 0.35, -1)), Vector((0, 1.0, -0.35)) if False else Vector((-0.3 if s == "L" else 0.3, 0.9, -0.3)))
-for s in "LR": apply_pose(BOY.r.o, s, "wrap_grip", f0("S1"))
+        place_hand(BOY.r.o, s, f, g + Vector((0, 0, 0.035)), Vector((0, 0.35, -1)), Vector((0, 1.0, -0.35)) if False else Vector((-0.3 if s == "L" else 0.3, 0.9, -0.3)))
+for s in "LR": apply_pose(BOY.r.o, s, "cup_hold", f0("S1"))
 face(BOY, f0("S1"), 0.002, -4); blinks(BOY, f0("S1"), fx("S1"))
 
 NBP = (-7.15, 10.8, LAWN_Z)
@@ -84,7 +84,7 @@ for f in (fa + 30, fa + 54):
     tgt = NB.r.BN["upperarm01.R"].head_local + Vector((-0.45, 0.05, -0.45))
     pb.location = NB.r.rest(n_).to_3x3().inverted() @ (tgt - NB.r.BN[n_].head_local); pb.keyframe_insert("location", frame=f)
 
-D2P = (-5.55, 22.42, WALK_Z)
+D2P = (-5.55, 22.3, WALK_Z)
 put("Dad2", [("S2", D2P, 180), ("S3", D2P, 180), ("S19", (4.7, 51.0, WALK_Z), -90), ("S20", (5.5, 44.5, WALK_Z), 0)])
 fa = f0("S2")
 breathe(D2, fa, f0("S3") - 1, flex=6, spine=10, head=(10, 0), step=30)
@@ -106,7 +106,7 @@ for f in range(GRIP, fe + 1, 2):
     ev(f); u = smooth((f - GRIP) / 36.0); v = smooth((f - GRIP - 14) / 30.0)
     stand(D2, f, flex=10 - 12 * v, spine=20 - 20 * v, twist=-12 * v, head=(22 - 30 * v, -38 * v), side=4 * v, pos=(0, 0.06 * v))
     p = HANDLE + Vector((0, 0.02 * u, 0.30 * u))
-    place_hand(D2.r.o, "R", f, p + Vector((0, 0, 0.03)), Vector((0, 0.15, -1)), Vector((0, 1, -0.2)))
+    place_hand(D2.r.o, "R", f, p + Vector((0, 0, 0.05)), Vector((0, 0.15, -1)), Vector((0, 1, -0.2)))
 face(D2, GRIP + 14, -0.004, -14); face(D2, GRIP + 26, -0.009, -32, 3); face(D2, fe, -0.009, -30, 3)
 follow_bone(LID, D2.r.o, "wrist.R", GRIP, min(fe, f1("S3")), step=1)
 
@@ -127,12 +127,12 @@ for f in range(fa, fe + 1, 2):
     ev(f)
     M = D2.r.o.matrix_world; ch = M @ D2.r.PB["spine03"].head
     fwd = (M.to_3x3() @ Vector((0, -1, 0))).normalized(); side = (M.to_3x3() @ Vector((1, 0, 0))).normalized()
-    c = ch + fwd * 0.43 + Vector((0, 0, -0.02))
-    MBOX.rotation_mode = 'XYZ'; MBOX.location = c - Vector((0, 0, 0.225)); MBOX.rotation_euler = (0, 0, R_(-90)); MBOX.keyframe_insert("location", frame=f); MBOX.keyframe_insert("rotation_euler", frame=f)
+    c = ch + fwd * 0.52 + Vector((0, 0, -0.02))
+    MBOX.rotation_mode = 'XYZ'; MBOX.location = c - Vector((0, 0, 0.17)); MBOX.rotation_euler = (0, 0, R_(-90)); MBOX.keyframe_insert("location", frame=f); MBOX.keyframe_insert("rotation_euler", frame=f)
     for s, sg in (("L", 1), ("R", -1)):
-        place_hand(D2.r.o, s, f, c + side * sg * 0.225, -side * sg, (fwd * 0.9 + Vector((0, 0, -0.3))).normalized())
-for s in "LR": apply_pose(D2.r.o, s, "flat_palm", fa)
-key_vis(MBOX, [(0, False), (fa, True), (f1("S19") + 1, False)])
+        place_hand(D2.r.o, s, f, c + side * sg * 0.21 + fwd * 0.04, -side * sg, (fwd * 0.35 + Vector((0, 0, -1))).normalized())
+for s in "LR": apply_pose(D2.r.o, s, "shield", fa)
+key_vis(MBOX, [(0, False), (fa, True), (f1("S19") + 1, False)]); MBOX.scale = (0.76, 0.76, 0.76)
 # logo decal on the back doors (dark version on the white doors), flat to the S19 camera
 LOGO_IMG = bpy.data.images.load(os.path.join(FILM, "..", "assets", "brand", "DaKrasFilms_logo_dark.png"))
 ml = bpy.data.materials.new("Logo_dark"); ml.use_nodes = True; nt_ = ml.node_tree; P_ = nt_.nodes["Principled BSDF"]
