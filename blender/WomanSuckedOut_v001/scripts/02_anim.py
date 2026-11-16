@@ -286,14 +286,15 @@ rnd = random.Random(5)
 for i, o in enumerate(DEBRIS[10:14]):
     st = Vector((-4.2 + 0.3 * i, -2.6 - 0.2 * i, -0.4)); tgt = HOLE + Vector((-0.12, rnd.uniform(-0.1, 0.1), rnd.uniform(-0.1, 0.1)))
     if i: tgt = HOLE + Vector((-0.3 - 0.2 * i, -1.2 - 0.5 * i, 0.4 * i))
-    vis(o, f0 + 2, True); key_loc(o, f0 + 2, st, (0, 0, 0)); key_loc(o, fi, tgt, (R_(400), R_(200), 0))
-    key_loc(o, fi + 30, tgt + Vector((-1.5, -6, 1.0)), (R_(700), R_(500), 0)); vis(o, fi + 31, False)
+    vis(o, f0 + 2, True); key_loc(o, f0 + 2, st, (0, 0, 0), scale=(3.0,) * 3); key_loc(o, fi, tgt, (R_(400), R_(200), 0), scale=(3.0,) * 3)
+    key_loc(o, fi + 30, tgt + Vector((-1.5, -6, 1.0)), (R_(700), R_(500), 0), scale=(3.0,) * 3); vis(o, fi + 31, False)
+    key_loc(o, fi + 31, scale=(1.0,) * 3)
 rnd = random.Random(9)
 for i, o in enumerate(SHARDS):
     h = Vector(o["home"]); v = Vector((-rnd.uniform(1.5, 3.5), -rnd.uniform(3, 7), rnd.uniform(-0.6, 0.9)))
     vis(o, fi, True); key_loc(o, fi, h, (0, 0, 0)); key_loc(o, fi + 36, h + v, (rnd.uniform(-9, 9), rnd.uniform(-9, 9), rnd.uniform(-9, 9)))
     vis(o, fi + 37, False)
-shot_cam("S07", [(0, (-9.0, 0.2, -1.9), (-2.6, -4.9, 0.6), 22), (1, (-8.6, -0.3, -1.7), (-2.4, -5.1, 0.7), 24)], fstop=11)
+shot_cam("S07", [(0, (-5.8, 1.2, -0.5), (-2.8, -4.5, 0.6), 26), (1, (-5.5, 0.7, -0.4), (-2.6, -4.8, 0.7), 28)], fstop=11)
 # ================================================================== S02: ... sucked out of a window (burst + lurch)
 _begin("S02")
 f0, f1 = T["S02"]; fb = f0 + 6          # burst on "smashing"
@@ -447,10 +448,7 @@ shot_cam("S16", [(0, (-3.4, -1.6, 0.9), (-2.4, -5.3, 0.4), 26), (1, (-3.3, -2.0,
 # ================================================================== S17: caused her death (damaged engine)
 _begin("S17")
 f0, f1 = T["S17"]
-for i, o in enumerate(SMOKE[:3]):
-    st = lip + Vector((0.6, -0.1, 0.4))
-    vis(o, f0, True); key_loc(o, f0, st + Vector((0, -0.3 * i, 0)), scale=(0.25,) * 3); key_loc(o, f1, st + Vector((0.2, -3.5 - i, 0.4)), scale=(0.6,) * 3)
-    vis(o, f1 + 1, False)
+# (no smoke here: in the preview the puffs sat in the intake as a grey lump)
 shot_cam("S17", [(0, (-7.4, 0.6, -2.3), (-4.4, -2.6, -0.85), 34), (1, (-6.6, -0.2, -2.0), (-4.4, -2.6, -0.85), 38)], fstop=11)
 
 # clouds drift past (speed read on the exterior shots)
