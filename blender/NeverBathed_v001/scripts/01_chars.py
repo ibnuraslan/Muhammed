@@ -244,7 +244,7 @@ def make_cap(n, rgb, rim_off):
     sw = cap.modifiers.new("Fit", 'SHRINKWRAP'); sw.target = body; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.offset = 0.007
     cap.modifiers.new("Solid", 'SOLIDIFY').thickness = 0.006; cap.modifiers.new("Sub", 'SUBSURF').levels = 1
     bpy.context.view_layer.update(); parent_to_bone(cap, r, "head")
-make_cap("V2", (0.92, 0.9, 0.84), 0.05)          # white skullcap
+
 
 # ---- loose village tunics: a shell grown from the body (torso, hips, upper arms), 2-3 cm proud, same skin weights
 def tunic_mat(name, rgb, stains=0.0):
@@ -296,16 +296,54 @@ def tunic(n, mtl, hem_drop=0.10, off=0.024, ragged=False, seed=1):
         hz = hem_z + (0.035 * math.sin(v.co.x * 41 + seed) + 0.02 * math.sin(v.co.y * 67) if ragged else 0.0)
         if bad > 0.25 or v.co.z < hz or v.co.z > neck_z - 0.01: kill.append(v)
     bmesh.ops.delete(bm, geom=kill, context='VERTS')
-    if ragged:   # a few torn holes
+    if "worksuit" in body.name:    # overall: drop its strap loops and buckles (main island above the upper chest); the T-shirt covers there
+        bm.verts.ensure_lookup_table(); seen = set(); isl = []
+        for v0 in bm.verts:
+            if v0.index in seen: continue
+            st = [v0]; seen.add(v0.index); cur = []
+            while st:
+                v = st.pop(); cur.append(v)
+                for e in v.link_edges:
+                    w = e.other_vert(v)
+                    if w.index not in seen: seen.add(w.index); st.append(w)
+            isl.append(cur)
+        isl.sort(key=lambda c: -max(v.co.z for v in c) + min(v.co.z for v in c))
+        main = max(isl, key=lambda c: min(v.co.z for v in c) < 0.5 and len(c))     # the overall reaches down the legs
+        cut = B["upperarm01.L"].head_local.z - 0.115
+        bmesh.ops.delete(bm, geom=[v for v in main if v.co.z > cut], context='VERTS')
+    if False:   # (torn holes removed: they revealed the overall underneath)
         for _ in range(6):
             bm.faces.ensure_lookup_table()
             f = bm.faces[rr.randrange(len(bm.faces))]; c = f.calc_center_median()
             hole = [g for g in bm.faces if (g.calc_center_median() - c).length < 0.022]
             bmesh.ops.delete(bm, geom=hole, context='FACES')
+    # drop the overall's separate strap / buckle pieces (small loose islands), then iron out the strap bumps
+    bm.verts.ensure_lookup_table(); seen = set(); small = []
+    for v0 in bm.verts:
+        if v0.index in seen: continue
+        isl = []; stack = [v0]; seen.add(v0.index)
+        while stack:
+            v = stack.pop(); isl.append(v)
+            for e in v.link_edges:
+                w = e.other_vert(v)
+                if w.index not in seen: seen.add(w.index); stack.append(w)
+        if len(isl) < 400: small += isl
+    bmesh.ops.delete(bm, geom=small, context='VERTS')
+    def lap(b_, it):
+        for _ in range(it):
+            bmesh.ops.smooth_laplacian_vert(b_, verts=[v for v in b_.verts if not v.is_boundary], lambda_factor=1.0, lambda_border=0.0,
+                                            use_x=True, use_y=True, use_z=True, preserve_volume=True)
+    bm.verts.index_update(); bm.normal_update()
+    heavy = bm.copy(); lap(heavy, 45); heavy.verts.ensure_lookup_table()
+    lap(bm, 12); bm.normal_update()
+    for v in bm.verts:             # buckles / strap ends: anything standing proud of the ironed surface goes flat
+        h = heavy.verts[v.index].co
+        if (v.co - h).dot(v.normal) > 0.004: v.co = h.copy()
+    heavy.free()
     bm.normal_update()
     for v in bm.verts:
         flare = max(0.0, (hip_z + 0.12 - v.co.z)) * 0.12
-        v.co += v.normal * (off + flare)
+        v.co += v.normal * (off + 0.012 + flare)
     bm.to_mesh(me); bm.free()
     me.materials.clear(); me.materials.append(mtl)
     sol = ob.modifiers.new("Solid", 'SOLIDIFY'); sol.thickness = 0.004; sol.offset = 1.0
@@ -314,12 +352,46 @@ def tunic(n, mtl, hem_drop=0.10, off=0.024, ragged=False, seed=1):
     print("TUNIC", n, len(me.vertices), "verts")
     return ob
 
+def iron_suit(n, z_from_hip=-0.05, proud=0.002):
+    """flatten the overall's straps and buckles under the tunic (they poked through it)"""
+    r = RIGS[n]; ob = next(k for k in r.children if k.type == 'MESH' and "suit" in k.name)
+    hip_z = r.data.bones["upperleg01.L"].head_local.z + z_from_hip
+    bm = bmesh.new(); bm.from_mesh(ob.data); bm.verts.ensure_lookup_table(); bm.normal_update()
+    up = [v for v in bm.verts if v.co.z > hip_z]
+    heavy = bm.copy(); heavy.verts.ensure_lookup_table()
+    for _ in range(45):
+        bmesh.ops.smooth_laplacian_vert(heavy, verts=[heavy.verts[v.index] for v in up if not v.is_boundary], lambda_factor=1.0, lambda_border=0.0,
+                                        use_x=True, use_y=True, use_z=True, preserve_volume=True)
+    k = 0
+    for v in up:
+        h = heavy.verts[v.index].co
+        if (v.co - h).dot(v.normal) > proud: v.co = h - v.normal * 0.004; k += 1
+    heavy.free(); bm.to_mesh(ob.data); bm.free(); ob.data.update(); print("IRON", n, k)
+def strip_overall(n):
+    """keep only the main shirt+trousers island of the overall: the bib, straps and buckles are separate islands"""
+    ob = next(k for k in RIGS[n].children if k.type == 'MESH' and "suit" in k.name)
+    bm = bmesh.new(); bm.from_mesh(ob.data); bm.verts.ensure_lookup_table(); seen = set(); isl = []
+    for v0 in bm.verts:
+        if v0.index in seen: continue
+        st = [v0]; seen.add(v0.index); cur = []
+        while st:
+            v = st.pop(); cur.append(v)
+            for e in v.link_edges:
+                w = e.other_vert(v)
+                if w.index not in seen: seen.add(w.index); st.append(w)
+        isl.append(cur)
+    isl.sort(key=len, reverse=True)
+    waist = RIGS[n].data.bones["upperleg01.L"].head_local.z + 0.12      # the bib and straps sit above the waist
+    kill = [v for v in isl[0] if v.co.z > waist] + [v for c in isl[2:] for v in c]    # isl[1] is the T-shirt: keep it
+    bmesh.ops.delete(bm, geom=kill, context='VERTS'); bm.to_mesh(ob.data); bm.free(); ob.data.update()
+    print("STRIP", n, len(kill), "verts removed")
 T_HERMIT_Y = tunic_mat("M_TunicY", (0.13, 0.10, 0.065))
 T_HERMIT_O = tunic_mat("M_TunicO", (0.13, 0.10, 0.065), stains=0.9)
 tunic("AmouY", T_HERMIT_Y, hem_drop=0.16, off=0.016, seed=2)
 tunic("AmouO", T_HERMIT_O, hem_drop=0.16, off=0.016, ragged=True, seed=5)
 tunic("V1", tunic_mat("M_TunicV1", (0.12, 0.22, 0.42)), hem_drop=0.18, off=0.016, seed=3)
 tunic("V2", tunic_mat("M_TunicV2", (0.48, 0.20, 0.07)), hem_drop=0.18, off=0.016, seed=4)
+for _n in ("AmouY", "AmouO"): strip_overall(_n)     # after the tunics are grown: nothing can poke through them
 
 # ---- old hermit: long tangled grey hair (hair curves from the crown, sides and back; nothing over the face)
 def scalp_hair(n, color, length=0.2, seed=9):
@@ -348,7 +420,50 @@ def scalp_hair(n, color, length=0.2, seed=9):
     ob = bpy.data.objects.new(n + ".hair", cv); sc.collection.objects.link(ob)
     m = bpy.data.materials.get("M_Beard_" + n); cv.materials.append(m)
     parent_to_bone(ob, r, "head"); print("SCALP", n, len(strands))
-scalp_hair("AmouO", (0.24, 0.21, 0.17), length=0.22)
+def cap_hair(n, n_strands=7000, seed=11):
+    r = RIGS[n]; B = r.data.bones; src = next(k for k in r.children if k.type == 'MESH' and "short" in k.name)
+    eye_z = (B["eye.L"].head_local.z + B["eye.R"].head_local.z) / 2; hc = B["head"].head_local
+    me = src.data; tris = []
+    me.calc_loop_triangles()
+    for t in me.loop_triangles:
+        a_, b_, c_ = (me.vertices[i].co for i in t.vertices); tris.append((a_.copy(), b_.copy(), c_.copy(), t.area, t.normal.copy()))
+    tot = sum(t[3] for t in tris); rnd = random.Random(seed); strands = []
+    top = max(v.co.z for v in me.vertices)
+    acc = []; s_ = 0.0
+    for t in tris: s_ += t[3]; acc.append(s_)
+    import bisect
+    for _ in range(n_strands):
+        t = tris[min(len(tris) - 1, bisect.bisect_left(acc, rnd.random() * tot))]
+        u, w = rnd.random(), rnd.random()
+        if u + w > 1: u, w = 1 - u, 1 - w
+        p = t[0] + (t[1] - t[0]) * u + (t[2] - t[0]) * w; nrm = t[4]
+        if nrm.z < -0.3: continue
+        front = p.y < hc.y - 0.03
+        if front:      # front hairline: swept back over the crown, short, never over the brow
+            d = Vector((0, 1.0, 0.25)).normalized(); L = rnd.uniform(0.04, 0.08); grav = Vector((0, 0.3, -0.25))
+        else:
+            out = Vector((p.x - hc.x, p.y - hc.y, 0)); out = out.normalized() if out.length > 1e-4 else Vector((0, 1, 0))
+            d = (out * 0.6 + Vector((0, 0.25, -0.2)) + nrm * 0.15).normalized()
+            L = rnd.uniform(0.06, 0.12) if p.z > top - 0.04 else rnd.uniform(0.12, 0.24); grav = Vector((0, 0.15, -1.1))
+        q = p + nrm * 0.002; seg = []
+        for i in range(6):
+            seg.append(q.copy())
+            d = (d + grav * 0.5 + Vector((rnd.uniform(-.2, .2), rnd.uniform(-.2, .2), rnd.uniform(-.1, .1)))).normalized()
+            if d.dot(nrm) < -0.1: d = (d + nrm * 0.3).normalized()      # follow the head, never into it
+            q = q + d * L / 5
+        strands.append(seg)
+    strands = mat_strands(strands, rnd, clump=0.55, kink=0.008)
+    cv = bpy.data.hair_curves.new(n + ".hair"); cv.add_curves([6] * len(strands))
+    cv.attributes["position"].data.foreach_set("vector", [x for st in strands for q in st for x in q])
+    rad = cv.attributes.get("radius") or cv.attributes.new("radius", 'FLOAT', 'POINT')
+    rad.data.foreach_set("value", [x for _ in strands for x in (0.0012, 0.0011, 0.001, 0.0008, 0.0006, 0.0003)])
+    ob = bpy.data.objects.new(n + ".hair", cv); sc.collection.objects.link(ob)
+    cv.materials.append(bpy.data.materials.get("M_Beard_" + n))
+    parent_to_bone(ob, r, "head")
+    for m in src.data.materials: flat_colour(m, (0.10, 0.09, 0.08), 0.9)     # dark, matte underlayer between strands
+    print("CAPHAIR", n, len(strands))
+cap_hair("AmouO")
+
 
 for n, r in RIGS.items():
     print("RIG", n, tuple(round(d, 2) for d in r.dimensions), "head z", round(r.data.bones["head"].head_local.z, 3))

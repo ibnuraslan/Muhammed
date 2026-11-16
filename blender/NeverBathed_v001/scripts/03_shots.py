@@ -472,7 +472,7 @@ def shot_5b(f0, n):
             hx = root.x + 0.12; hy = root.y + side.y * 0.30
             gp = V((hx, hy, pit_z(hx, hy) + 0.035 + b))
             hand("AmouO", s, f, gp, V((0, 0, -1)), V((1, 0, 0)), pole=wpos("AmouO", "upperarm01." + s, f) + side * 0.3 + V((0, 0, -0.05)), pose="relaxed")
-    camera("5b", f0, n, [(0, (PIT.x + 0.3, PIT.y - 1.7, 2.3), (PIT.x - 0.2, PIT.y, -0.05), 26), (1, (PIT.x + 0.35, PIT.y - 1.6, 2.75), (PIT.x - 0.15, PIT.y, -0.05), 26)])
+    camera("5b", f0, n, [(0, (PIT.x + 0.15, PIT.y - 1.25, 0.95), (PIT.x - 0.35, PIT.y + 0.02, -0.02), 30), (1, (PIT.x - 0.05, PIT.y - 1.05, 0.9), (PIT.x - 0.4, PIT.y + 0.02, -0.02), 30)])
     return use
 
 # ================================================================== BEAT 6: he ate only roadkill
@@ -623,24 +623,34 @@ def shot_9b(f0, n):
     return use
 
 # ================================================================== BEAT 10: someone finally convinced him to take a bath
-A10 = V((-1.15, 17.6, 0)); V10 = V((0.85, 17.6, 0))
+A10 = V((-1.0, 17.6, 0)); V10 = V((0.4, 17.6, 0))
 def shot_10a(f0, n):
-    """a villager talks to him and points an open hand toward the tub; the hermit looks at it and gives a reluctant nod"""
+    """the villager points at the tub; the hermit looks, shakes his head and steps back; camera pushes in"""
     use = ("AmouO", "V1"); f1 = f0 + n - 1; light(f0)
     ya = yaw_to(A10, V10); yv = yaw_to(V10, A10)
+    back = (A10 - V10).normalized(); A2 = A10 + back * 0.3
+    fs, fe = f0 + 38, f0 + 72                      # the step back (walk at 1x, facing the villager)
+    for f in range(f0, fs + 1, 6):
+        look = ss((f - f0 - 10) / 18.0)
+        stand("AmouO", f, A10, ya - 25 + 30 * look, head=(4 + 6 * look, 20 - 35 * look), spine=(3, 10 * look, 0))
+    path = lambda f: A10.lerp(A2, ss((f - fs) / (fe - fs)))
+    HUM["AmouO"].walk(path, lambda f: ya + 5, fs, fe, stride=0.45, lift=0.05)
+    for f in range(fs, fe + 1, 6): HUM["AmouO"].key_spine(f, flex=-4, twist=0, head=(2, 10 * math.sin((f - fs) / 4.0)))
+    walk_arms("AmouO", fs, fe, lambda f: ya + 5, amp=0.08)
+    for f in range(fe + 4, f1 + 1, 5):
+        shake = 20 * math.sin((f - fe) / 4.5) * (1 - ss((f - fe - 20) / 15.0))
+        stand("AmouO", f, A2, ya + 5, head=(0, shake), spine=(-3, 0, 0))
     for f in range(f0, f1 + 1, 8):
-        look = ss((f - f0 - 40) / 20.0); nod = 8 * math.sin((f - f0 - 75) / 6.0) * (1 if 75 < f - f0 < 113 else 0)
-        stand("AmouO", f, A10, ya - 25 + 30 * look, head=(4 + 8 * look + nod, 20 - 35 * look), spine=(3, 10 * look, 0))
-        g = ss((f - f0 - 15) / 20.0) * (1 - ss((f - f0 - 100) / 20.0))
-        stand("V1", f, V10, yv + 20, head=(2, -10 - 25 * g), spine=(3, -10 * g, 0), arms=False)
+        g = ss((f - f0 - 8) / 16.0)
+        stand("V1", f, V10, yv + 20, head=(2, -10 - 25 * g + 8 * math.sin((f - f0) / 9.0) * g), spine=(3, -10 * g, 0), arms=False)
         relaxed_arm("V1", "L", f, yv)
         sh = wpos("V1", "upperarm01.R", f)
         dirt = (TUBP + V((0, 0.6, 0)) - V10); dirt.z = 0
         rest = sh + V((0, 0, -0.55)) + rgt(yv) * 0.05 + fwd(yv) * 0.04
-        out = sh + dirt.normalized() * 0.50 + V((0, 0, -0.06))
-        hand("V1", "R", f, rest.lerp(out, g), (V((0, 0, -1)) * (1 - g) + V((0, 0, -1)) * g).normalized(), (V((0, 0, -1)) * (1 - g) + dirt.normalized() * g).normalized(),
+        out = sh + dirt.normalized() * 0.50 + V((0, 0, -0.06)) + V((0, 0, 0.04 * math.sin((f - f0) / 7.0))) * g
+        hand("V1", "R", f, rest.lerp(out, g), V((0, 0, -1)), (V((0, 0, -1)) * (1 - g) + dirt.normalized() * g).normalized(),
              pole=sh + V((0, 0, -0.45)) - fwd(yv) * 0.25, pose="point" if g > 0.4 else "relaxed")
-    camera("10a", f0, n, [(0, (-0.3, 13.5, 1.5), (-0.15, 17.7, 1.15), 24), (1, (-0.15, 13.85, 1.5), (-0.15, 17.7, 1.17), 24)])
+    camera("10a", f0, n, [(0, (-0.4, 13.6, 1.5), (-0.4, 17.7, 1.15), 24), (1, (-0.45, 14.3, 1.45), (-0.45, 17.7, 1.18), 24)])
     return use
 TUBO = OB["V_Tub"]
 _tb = [TUBO.matrix_world @ v.co for v in TUBO.data.vertices]
@@ -697,7 +707,7 @@ def shot_11b(f0, n):
     for k, f in enumerate(range(fw + 8, f1 + 1, 15)):
         u = ss((f - fw) / 30.0)
         stand("V1", f, V((PIT.x - 0.45, PIT.y + 1.95, 0)), 90.0 - 80 * u, head=(10 + 12 * u, 0), spine=(4 + 6 * u, 0, 0), dz=0.003 * (k % 2))
-    camera("11b", f0, n, [(0, (PIT.x + 0.2, PIT.y - 2.6, 1.3), (PIT.x - 0.1, PIT.y + 1.7, 0.9), 30), (1, (PIT.x + 0.3, PIT.y - 3.4, 1.4), (PIT.x, PIT.y + 1.6, 0.9), 30)])
+    camera("11b", f0, n, [(0, (PIT.x + 0.05, PIT.y - 0.55, 2.1), (PIT.x + 0.05, PIT.y + 1.9, 1.0), 24), (1, (PIT.x + 0.05, PIT.y - 0.3, 2.0), (PIT.x + 0.05, PIT.y + 1.9, 1.02), 24)])
     return use
 
 # the original twig (with its flame) is only a source for the per-shot copies
