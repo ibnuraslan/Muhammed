@@ -125,13 +125,86 @@ for m in kid("Subject", "short02").data.materials: tint_hair(m, 0.08, 1.9)
 dsuit = kid("Doc", "elegantsuit01")
 neck = RIGS["Doc"].data.bones["neck01"].head_local
 ys = [v.co.y for v in dsuit.data.vertices if abs(v.co.z - (neck.z - 0.15)) < 0.02]
-split_outfit(dsuit, hip["Doc"] - 0.02, (0.86, 0.87, 0.88), (0.06, 0.065, 0.08), tie=(neck.x, 0.03, min(ys) + 0.035, hip["Doc"] + 0.05))
-hair = kid("Doc", "short03"); rb = RIGS["Doc"].data.bones
-ez = (rb["eye.L"].head_local.z + rb["eye.R"].head_local.z) / 2; ey = rb["eye.L"].head_local.y; hy = rb["head"].head_local.y
-bm = bmesh.new(); bm.from_mesh(hair.data)
-cut = [v for v in bm.verts if v.co.z < ez + 0.045 and v.co.y < hy - 0.02]
-bmesh.ops.delete(bm, geom=cut, context='VERTS'); bm.to_mesh(hair.data); bm.free()
-print("FRINGE cut", len(cut), "verts below", round(ez + 0.045, 3))
+# Doc's coat: a per-vertex "coat" attribute (rest pose): everything above the hip, plus the jacket skirt below it, which
+# hangs off the body; the trousers hug the body. (A plain height split showed a light trouser band under the coat hem.)
+dbody = kid("Doc", ".body")
+coat = dsuit.data.attributes.new("coat", 'FLOAT', 'POINT')
+hz = hip["Doc"]; n_coat = 0
+bm = bmesh.new(); bm.from_mesh(dsuit.data); bm.verts.ensure_lookup_table()
+isl = [-1] * len(bm.verts); k = 0
+for v0 in bm.verts:
+    if isl[v0.index] >= 0: continue
+    st = [v0]; isl[v0.index] = k
+    while st:
+        v = st.pop()
+        for e in v.link_edges:
+            w = e.other_vert(v)
+            if isl[w.index] < 0: isl[w.index] = k; st.append(w)
+    k += 1
+top = {}
+for v in bm.verts: top[isl[v.index]] = max(top.get(isl[v.index], -9), v.co.z)
+bm.free()
+print("SUIT islands", k, sorted(round(z, 2) for z in top.values())[-6:])
+for v in dsuit.data.vertices:      # islands reaching the chest are the jacket (and shirt); the trouser islands stop at the waist
+    c = 1.0 if (top[isl[v.index]] > hz + 0.25 and (v.co.z > hz - 0.25)) else 0.0
+    coat.data[v.index].value = c; n_coat += int(c)
+print("COAT verts", n_coat, "of", len(dsuit.data.vertices))
+for m in dsuit.data.materials:
+    nt, P = P_of(m)
+    old = P.inputs['Base Color'].links[0].from_socket if P.inputs['Base Color'].links else None
+    for l in list(P.inputs['Base Color'].links): nt.links.remove(l)
+    at = nt.nodes.new('ShaderNodeAttribute'); at.attribute_name = "coat"; at.attribute_type = 'GEOMETRY'
+    mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'
+    mx.inputs['A'].default_value = (0.06, 0.065, 0.08, 1); mx.inputs['B'].default_value = (0.86, 0.87, 0.88, 1)
+    nt.links.new(at.outputs['Fac'], mx.inputs['Factor'])
+    # shirt + tie strip from the original texture (front, centre, chest only)
+    xs_ = [v.co.x for v in dsuit.data.vertices]
+    tc = nt.nodes.new('ShaderNodeTexCoord'); sep = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Generated'], sep.inputs[0])
+    def mth(op, a_, b_=None, val=None):
+        nd = nt.nodes.new('ShaderNodeMath'); nd.operation = op
+        nt.links.new(a_, nd.inputs[0])
+        if b_ is not None: nt.links.new(b_, nd.inputs[1])
+        if val is not None: nd.inputs[1].default_value = val
+        return nd.outputs[0]
+    ys = [v.co.y for v in dsuit.data.vertices if abs(v.co.z - (neck.z - 0.15)) < 0.02]
+    ya = [v.co.y for v in dsuit.data.vertices]; za = [v.co.z for v in dsuit.data.vertices]
+    gx = lambda x: (x - min(xs_)) / (max(xs_) - min(xs_)); gy = lambda y: (y - min(ya)) / (max(ya) - min(ya)); gz = lambda z: (z - min(za)) / (max(za) - min(za))
+    ax = mth('ABSOLUTE', mth('SUBTRACT', sep.outputs['X'], val=gx(neck.x)))
+    strip = mth('MULTIPLY', mth('MULTIPLY', mth('LESS_THAN', ax, val=0.02 / (max(xs_) - min(xs_))), mth('LESS_THAN', sep.outputs['Y'], val=gy(min(ys) + 0.035))), mth('GREATER_THAN', sep.outputs['Z'], val=gz(hz + 0.24)))
+    mx2 = nt.nodes.new('ShaderNodeMix'); mx2.data_type = 'RGBA'
+    nt.links.new(mx.outputs['Result'], mx2.inputs['A']); nt.links.new(old, mx2.inputs['B']); nt.links.new(strip, mx2.inputs['Factor'])
+    nt.links.new(mx2.outputs['Result'], P.inputs['Base Color'])
+    for l in list(P.inputs['Roughness'].links): nt.links.remove(l)
+    P.inputs['Roughness'].default_value = 0.65
+
+# Doc's hair: his donor fringe covered one eye; swap in short02 from ExpertB (same package, same MPFB pipeline),
+# re-fitted to Doc's head box and re-bound to Doc's rig
+def head_box(body, rig):
+    gi = body.vertex_groups["head"].index
+    pts = [v.co for v in body.data.vertices if any(g.group == gi and g.weight > 0.5 for g in v.groups)]
+    mn = V((min(p.x for p in pts), min(p.y for p in pts), min(p.z for p in pts))); mx_ = V((max(p.x for p in pts), max(p.y for p in pts), max(p.z for p in pts)))
+    return mn, mx_
+pth = os.path.join(ROOT, "TitanicIceberg_v014", "TitanicIceberg_v014_60fps.blend")
+with bpy.data.libraries.load(pth, link=False) as (df, dt):
+    dt.objects = ["ExpertB.short02", "ExpertB.body"]
+nh, sb = dt.objects
+smn, smx = head_box(sb, None); dmn, dmx = head_box(dbody, None)
+hc = (dmn + dmx) / 2
+for v in nh.data.vertices:
+    q = V(tuple(dmn[i] + (v.co[i] - smn[i]) * (dmx[i] - dmn[i]) / (smx[i] - smn[i]) for i in range(3)))
+    v.co = hc + (q - hc) * 0.975 - V((0, 0, 0.010))        # sit the quiff a little closer to the scalp
+old_h = kid("Doc", "short03"); bpy.data.objects.remove(old_h, do_unlink=True)
+sc.collection.objects.link(nh); nh.name = "Doc.short02"; nh.data.name = nh.name
+nh.parent = RIGS["Doc"]; nh.matrix_parent_inverse = Matrix.Identity(4); nh.location = (0, 0, 0)
+nh.animation_data_clear(); nh.hide_render = nh.hide_viewport = False; nh.hide_set(False)
+for m in nh.modifiers:
+    if m.type == 'ARMATURE': m.object = RIGS["Doc"]
+hm = kid("Subject", "short02").data.materials[0].copy()      # the subject's hair cards keep their alpha (the Titanic copy lost it)
+for nd in hm.node_tree.nodes:
+    if nd.type == 'HUE_SAT': nd.inputs['Saturation'].default_value = 1.0; nd.inputs['Value'].default_value = 0.55
+for i in range(len(nh.data.materials)): nh.data.materials[i] = hm
+bpy.data.objects.remove(sb, do_unlink=True)
+print("DOC HAIR swapped", [m.type for m in nh.modifiers], "head box src", tuple(round(x, 3) for x in smx - smn), "dst", tuple(round(x, 3) for x in dmx - dmn))
 for n in RIGS:
     for k in RIGS[n].children:
         if "shoes" in k.name:
@@ -298,10 +371,10 @@ def ray_top(o, x, y):
 room("LabA", 0.0, -0.6, 5.0, 6.0, 2.8, M_WALL, M_CARPET)
 area_light("LabA_Key", "LabA", (0.0, -0.8, 2.7), 3.0, 450)
 area_light("LabA_Fill", "LabA", (-1.5, -2.5, 2.2), 2.0, 110, rot=(R_(50), 0, R_(-30)))
-TA = asset("WoodenTable_01", "LabA_Table", "LabA", (0, 0.06, 0), 0.0, (0.92, 1.2, 1.37))
+TA = asset("WoodenTable_01", "LabA_Table", "LabA", (0, 0.11, 0), 0.0, (0.92, 1.2, 1.37))
 TABLE_Z = 0.549 * 1.37
 sc["TABLE_Z"] = TABLE_Z
-CH_A = asset("SchoolChair_01", "LabA_Chair", "LabA", (0.0, -0.72, 0), 180.0)
+CH_A = asset("SchoolChair_01", "LabA_Chair", "LabA", (0.0, -0.78, 0), 180.0, (1.0, 1.0, 0.88))   # lower seat: the subject's knees sit above the lip
 
 # --- the shock generator: a light-grey console with 30 lever switches, a lamp over each, colour bands (no text)
 GX0, GX1 = -0.52, 0.52; GY0, GY1 = -0.12, 0.30; GZ0, GZ1 = TABLE_Z, TABLE_Z + 0.30
@@ -327,7 +400,9 @@ for i, x in enumerate(SWX):
         o.parent = piv; o.matrix_parent_inverse = piv.matrix_world.inverted()
     piv.rotation_euler = (R_(25), 0, 0)      # lever up (off); keyed down (-25) when pressed
     LEVERS.append(piv)
-    lm = mat("M_Lamp%02d" % i, (0.35, 0.05, 0.04), 0.3, emit=(1.0, 0.08, 0.04), estr=0.0)
+    t_ = i / (NSW - 1)       # the lamp colour runs from amber (low switches) to deep red (the danger end)
+    ec = (1.0, 0.50 * (1 - t_) + 0.02 * t_, 0.08 * (1 - t_) + 0.01 * t_)
+    lm = mat("M_Lamp%02d" % i, (0.30, 0.10 * (1 - t_) + 0.02, 0.03), 0.3, emit=ec, estr=0.0)
     lamp = cyl("Gen_Lamp%02d" % i, "LabA", 0.0075, 0.012, (x, GY0 - 0.004, LAMPZ), (R_(90), 0, 0), lm, 16)
     bev = lamp.modifiers.new("Bev", 'BEVEL'); bev.width = 0.004; bev.segments = 3
 # a round meter (blank face, a needle) and a pilot lamp on the left of the top strip
@@ -388,7 +463,7 @@ room("LabB", XB, -0.6, 4.5, 5.0, 2.8, M_WALL, M_CARPET)
 area_light("LabB_Key", "LabB", (XB, -0.8, 2.7), 3.0, 450)
 area_light("LabB_Fill", "LabB", (XB + 1.0, -2.6, 2.0), 2.0, 110, rot=(R_(55), 0, R_(25)))
 TB = asset("WoodenTable_01", "LabB_Table", "LabB", (XB, -0.45, 0), 0.0, (0.72, 1.2, 1.37))
-CH_B = asset("SchoolChair_01", "LabB_Chair", "LabB", (XB, 0.44, 0), 0.0)
+CH_B = asset("SchoolChair_01", "LabB_Chair", "LabB", (XB, 0.47, 0), 0.0)
 # a speaker box on the wall (the stranger hears the questions); a small table lamp for depth
 box("LabB_Speaker", "LabB", (0.3, 0.12, 0.4), (XB - 1.6, 1.84, 1.9), mat("M_Speaker", (0.35, 0.25, 0.18), 0.5), bevel=0.01)
 box("LabB_SpeakerCloth", "LabB", (0.24, 0.005, 0.32), (XB - 1.6, 1.778, 1.9), mat("M_SpeakerCloth", (0.75, 0.68, 0.55), 0.9))

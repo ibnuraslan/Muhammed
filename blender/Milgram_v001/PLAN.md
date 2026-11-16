@@ -94,3 +94,13 @@ Bright clean 3D animation (`STYLE_ANIMATED.md`): AgX Punchy, soft area lights, s
 shot table; faces reset to neutral at every cut) → `frames.py` / `sheet.py` (review renders).
 The portrait image used on the TV and the clipboard (`assets_gen/portrait.png`) is a crop of our own render of shot 28.
 Poly Haven assets are fetched with `pipeline/fetch_polyhaven.py` into `assets/` (not committed; packed into the final .blend).
+
+## Director P1 notes, applied while waiting for the VO (pushed with the Phase 2 package)
+- Doc: hair swapped (short02 refitted from ExpertB, alpha-intact hair material), coat/trouser split by mesh island
+  (no light band under the hem), weight shifts and nods, an open-palm "please continue" gesture in 05 and 24; 10/29 point.
+- Seating: lab A chair lowered (seat scale 0.88) and moved back, lab table moved back 5 cm, heels slightly raised;
+  the subject's idle hands rest on his thighs; the stranger's chair moved back, his strapped hand rests as a loose fist,
+  his free hand on his thigh. Every lever press keys the fingertip along the lever's arc.
+  `body_prop_cross`: 0 visible crossings (every 12th + mid + last frame of every shot; every frame of the lever shots).
+- Lever shots varied: 03, 12, 25 tight on one lever; 07 over his shoulder at the panel; 23 the mid framing.
+  Lamp colour ramps from amber (low switches) to deep red (danger end).
