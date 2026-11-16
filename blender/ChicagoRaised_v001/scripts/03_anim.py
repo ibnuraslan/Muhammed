@@ -484,7 +484,7 @@ apply_pose(SM.r.o, "R", "relaxed", fa + 20); apply_pose(SM.r.o, "L", "relaxed", 
 for s, sx in (("L", 1), ("R", -1)):
     key_pole(SM, s, fa, SM.r.BN["upperarm01." + s].head_local + Vector((sx * 0.45, 0.2, -0.45)))
 stand(TWn, fa, head=(4, 0)); arms_hang(TWn, fa); stand(TWn, fa + 70, head=(8, 10)); face(TWn, fa, 0.002, -5)
-camshot("S19", [(0, SP + Vector((-1.2, -3.2, 1.35)), SP + Vector((0, 0, 1.15)), 32), (1, SP + Vector((-1.0, -2.8, 1.3)), SP + Vector((0, 0, 1.15)), 32)])
+camshot("S19", [(0, SP + Vector((1.6, -3.0, 1.35)), SP + Vector((0, 0, 1.15)), 32), (1, SP + Vector((1.3, -2.5, 1.3)), SP + Vector((0, 0, 1.15)), 34)])
 # S20: the horse turns its head; the woman walks away down the street
 fa, fb = f0("S20"), fx("S20")
 horse_head(fa, 0, -4); horse_head(fa + 50, -4, 18); horse_head(fb, -6, 22)
@@ -494,14 +494,15 @@ camshot("S20", [(0, Vector((X0 - 5.5, 22, 1.8)), Vector((X0 + 0.5, 33, 1.3)), 26
 
 # ================================================================== S21: rise from the water up the new foundation | S22: modern skyline
 camshot("S21", [(0, Vector((X0 + 4, 106, 0.7)), Vector((X0, 118, 1.6)), 26), (1, Vector((X0 + 4, 108, 4.8)), Vector((X0, 125, 5.5)), 26)])
-camshot("S22", [(0, Vector((2600 - 50, -120, 16)), Vector((2600 + 15, 60, 30)), 24), (1, Vector((2600 - 25, -100, 30)), Vector((2600 + 20, 80, 38)), 24)])
+camshot("S22", [(0, Vector((2600 - 60, -125, 12)), Vector((2600 + 15, 60, 30)), 24), (1, Vector((2600 - 5, -80, 42)), Vector((2600 + 25, 90, 44)), 24)])
 
 # fill light under the raised building for S8 and S11 (faces in the building's shadow); keyed on only in those shots
 UF = bpy.data.objects.new("UnderFill", bpy.data.lights.new("UnderFill", 'AREA')); sc.collection.objects.link(UF)
 UF.data.energy = 0.0; UF.data.size = 1.2; UF.data.color = (1.0, 0.95, 0.88)
-for s_, pos in (("S8", Vector((tx + 0.2, y_end - 1.6, 1.7))), ("S11", Vector((MX + 0.3, -1.3, 1.9)))):
+for s_, pos, tgt in (("S8", Vector((tx + 0.2, y_end - 1.6, 1.7)), Vector((tx + 0.2, y_end + 0.4, 1.2))), ("S11", Vector((MX + 0.3, -1.3, 1.9)), Vector((MX + 0.3, 0.7, 1.2))),
+                     ("S19", SP + Vector((1.4, -2.2, 1.9)), SP + Vector((0, 0, 1.3)))):     # S19: the sick man is back-lit by the sun
     UF.location = pos; UF.keyframe_insert("location", frame=f0(s_))
-    UF.rotation_mode = 'QUATERNION'; UF.rotation_quaternion = (Vector((pos.x, pos.y + 2.0, 1.2)) - pos).to_track_quat('-Z', 'Y'); UF.keyframe_insert("rotation_quaternion", frame=f0(s_))
+    UF.rotation_mode = 'QUATERNION'; UF.rotation_quaternion = (tgt - pos).to_track_quat('-Z', 'Y'); UF.keyframe_insert("rotation_quaternion", frame=f0(s_))
     UF.data.energy = 120.0; UF.data.keyframe_insert("energy", frame=f0(s_)); UF.data.energy = 0.0; UF.data.keyframe_insert("energy", frame=f1(s_) + 1)
 UF.data.energy = 0.0; UF.data.keyframe_insert("energy", frame=0)
 for o in (UF, UF.data): constant_all(o)
