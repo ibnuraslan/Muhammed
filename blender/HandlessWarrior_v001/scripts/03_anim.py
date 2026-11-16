@@ -399,8 +399,8 @@ for f in (s0, s0 + 60, s1):
     W.kneel(f, WK, WKY, lean=14 + 3 * math.sin(b * 6), head=(8 - 4 * b, 0))
 for sd, sx in (("L", 1), ("R", -1)):
     for f in (s0, s1):
-        place_hand(W.o, sd, f, V(sx * 0.11, 0.06, STUMP_TOP + 0.03), V(0, 0, -1), V(-sx * 0.25, -1, 0).normalized())
-    apply_pose(W.o, sd, "flat_palm", s0)
+        place_hand(W.o, sd, f, V(sx * 0.11, 0.06, STUMP_TOP + 0.075), V(0, 0, -1), V(-sx * 0.25, -1, 0).normalized())
+    apply_pose(W.o, sd, "relaxed", s0)
 SAP = V(0.95, -0.15, 0); SAY = yaw_to(V(0, 0.3, 0) - SAP)
 for f in (s0, s1):
     SA.stand(f, SAP, SAY, flex=2, head=(12, -8))
@@ -424,7 +424,7 @@ def hand_on_grip(c, sd, sword, f, palm_side):
     c.hand_w(sd, f, W_, (z.cross(ps) if sd == "R" else ps.cross(z)).normalized(), ps,
              None)
 for f, b in ((s0, 0.0), (s0 + 30, 0.0), (s0 + 85, 1.0), (s1, 1.0)):
-    SA.hand_w("R", f, SAP + RzA @ V(-0.30, -0.16 - 0.06 * b, 0.95 + 0.38 * b), RzA @ V(0, -1, -0.2 + 0.5 * b).normalized(), RzA @ V(1, 0, 0), SAP + RzA @ V(-0.6, 0.3, 1.0))
+    SA.hand_w("R", f, SAP + RzA @ V(-0.36 + 0.04 * b, -0.30 + 0.06 * b, 1.0 + 0.32 * b), RzA @ V(0, -1, -0.2 + 0.5 * b).normalized(), RzA @ V(1, 0, 0), SAP + RzA @ V(-0.6, 0.3, 1.0))
 apply_pose(SA.o, "R", "wrap_grip", s0)
 W.used.add("S01"); SA.used.add("S01")
 
@@ -575,10 +575,10 @@ for f, b in ((s0, 0.0), (s0 + 30, 0.0), (FH - 6, 0.6), (FH, 1.0), (FH + 14, 1.0)
     W.stand(f, WP13 + V(0, -0.15 * b, 0), WY13 + 20 * b, flex=8 + 8 * b, head=(6, 0), twist=-25 + 45 * b)
 # right forearm: wind up to the right shoulder, sweep across in front of the soldier's chest (15 cm clear), follow through left
 sw = [(s0, V(-0.30, -0.28, 1.18)), (s0 + 30, V(-0.42, -0.10, 1.50)), (FH - 6, V(-0.25, -0.50, 1.40)), (FH, V(0.05, -0.55, 1.33)),
-      (FH + 10, V(0.30, -0.40, 1.20)), (s1, V(0.28, -0.32, 1.12))]
+      (FH + 10, V(0.22, -0.62, 1.22)), (s1, V(0.10, -0.60, 1.18))]
 for f, p in sw:
     W.hand_w("R", f, WP13 + R13 @ p, R13 @ V(-0.2, -1, 0.15).normalized(), R13 @ V(0, 0, -1), WP13 + R13 @ V(-0.6, 0.2, 1.0))
-for f in (s0, s1): W.hand_w("L", f, WP13 + R13 @ V(0.25, -0.28, 1.05), R13 @ V(0.2, -1, 0.3).normalized(), R13 @ V(1, 0, 0), WP13 + R13 @ V(0.6, 0.3, 0.9))
+for f in (s0, s1): W.hand_w("L", f, WP13 + R13 @ V(0.40, -0.40, 1.15), R13 @ V(0.2, -1, 0.3).normalized(), R13 @ V(1, 0, 0), WP13 + R13 @ V(0.6, 0.3, 0.9))
 for f, back, lean in ((s0, 0.0, 0), (FH, 0.0, 0), (FH + 8, 0.25, -12), (FH + 30, 0.6, -6), (s1, 0.75, 4)):
     SB.stand(f, SBP + V(0, -back, 0), SBY + 12 * (back > 0), flex=lean, head=(lean * 0.5, 0))
     SB.hang(f, SBP + V(0, -back, 0), SBY, swing=(0.15 * (back > 0), 0.25 * (back > 0)), out=0.13 + 0.1 * (back > 0))
@@ -601,16 +601,16 @@ for f, g, t in ((s0, V(-0.28, -0.12, 1.0), V(0, -0.4, 1)), (s0 + 60, V(-0.28, -0
     base = SCP1 if f >= s0 + 60 else SCP0.lerp(SCP1, (f - s0) / 60)
     if f > FH2: base = SCP1 + V(0, -0.3 * min(1, (f - FH2) / 10) - 0.35 * max(0, min(1, (f - FH2 - 10) / 30)), 0)
     sword_key(SC2, swordB, f, base + RS @ g, (RS @ t).normalized(), RS @ V(1, 0, 0))
-for f, p_ in ((s0, V(-0.28, -0.12, 1.0)), (s0 + 60, V(-0.30, -0.10, 1.32)), (FH2 - 14, V(-0.30, -0.08, 1.38)), (FH2, V(-0.34, -0.42, 1.22)), (FH2 + 10, V(-0.34, -0.2, 1.08)), (s1, V(-0.32, -0.15, 1.0))):
+for f, p_ in ((s0, V(-0.36, -0.25, 1.0)), (s0 + 60, V(-0.42, -0.12, 1.22)), (FH2 - 14, V(-0.44, -0.10, 1.26)), (FH2, V(-0.40, -0.45, 1.15)), (FH2 + 10, V(-0.40, -0.3, 1.05)), (s1, V(-0.38, -0.25, 1.0))):
     base = SCP1 if f >= s0 + 60 else SCP0.lerp(SCP1, (f - s0) / 60)
     if f > FH2: base = SCP1 + V(0, -0.3 * min(1, (f - FH2) / 10) - 0.35 * max(0, min(1, (f - FH2 - 10) / 30)), 0)
     SC2.hand_w("R", f, base + RS @ p_, RS @ V(0, -1, 0.3 if f in (s0 + 60, FH2 - 14) else -0.1).normalized(), RS @ V(1, 0, 0), base + RS @ V(-0.6, 0.3, 1.0))
 apply_pose(SC2.o, "R", "wrap_grip", s0)
 for f, b, tw in ((s0, 0.0, 0), (s0 + 60, 0.2, -10), (FH2 - 8, 0.6, -30), (FH2, 1.0, 20), (FH2 + 16, 1.0, 25), (s1, 0.8, 15)):
     W.stand(f, WP14 + V(0.25 * b, -0.2 * b, 0), WY14 - 10 * b, flex=10 + 12 * b, head=(4, 0), twist=tw, crouch=0.02 + 0.08 * b)
-for f, p in ((s0, V(-0.28, -0.3, 1.18)), (FH2 - 8, V(-0.40, -0.12, 1.45)), (FH2, V(0.0, -0.58, 1.33)), (FH2 + 12, V(0.30, -0.45, 1.2)), (s1, V(0.28, -0.35, 1.15))):
+for f, p in ((s0, V(-0.28, -0.3, 1.18)), (FH2 - 8, V(-0.40, -0.12, 1.45)), (FH2, V(0.0, -0.58, 1.33)), (FH2 + 12, V(0.22, -0.62, 1.22)), (s1, V(0.10, -0.60, 1.18))):
     W.hand_w("R", f, WP14 + R14 @ p, R14 @ V(-0.2, -1, 0.15).normalized(), R14 @ V(0, 0, -1), WP14 + R14 @ V(-0.6, 0.2, 1.0))
-for f in (s0, s1): W.hand_w("L", f, WP14 + R14 @ V(0.25, -0.3, 1.1), R14 @ V(0.2, -1, 0.3).normalized(), R14 @ V(1, 0, 0), WP14 + R14 @ V(0.6, 0.3, 0.9))
+for f in (s0, s1): W.hand_w("L", f, WP14 + R14 @ V(0.40, -0.42, 1.18), R14 @ V(0.2, -1, 0.3).normalized(), R14 @ V(1, 0, 0), WP14 + R14 @ V(0.6, 0.3, 0.9))
 spark("SparkS14", SCP1 + V(0.08, 0.22, 1.25), FH2)
 for c in (W, SC2): c.used.add("S14")
 
@@ -642,9 +642,9 @@ FH3 = s0 + 70
 for f, yaw, b, tw in ((s0, -30, 0, 0), (s0 + 40, -10, 0.3, -25), (FH3, 15, 1.0, 25), (FH3 + 20, 20, 0.9, 20), (s0 + 150, 0, 0.5, 0), (s1, 0, 0.4, 0)):
     W.stand(f, WP17, yaw, flex=8 + 8 * b, head=(-8, 0), twist=tw, crouch=0.04 + 0.05 * b)
     R3 = Rz(yaw)
-    rp = V(-0.42, -0.10, 1.45) if f < FH3 else (V(0.15, -0.55, 1.33) if f == FH3 else V(-0.25, -0.38, 1.25))
+    rp = V(-0.42, -0.10, 1.45) if f < FH3 else (V(0.15, -0.62, 1.33) if f == FH3 else V(-0.30, -0.50, 1.25))
     W.hand_w("R", f, WP17 + R3 @ rp, R3 @ V(-0.2, -1, 0.3).normalized(), R3 @ V(0, 0, -1), WP17 + R3 @ V(-0.6, 0.2, 1.0))
-    W.hand_w("L", f, WP17 + R3 @ V(0.28, -0.34, 1.22), R3 @ V(0.2, -1, 0.35).normalized(), R3 @ V(1, 0, 0), WP17 + R3 @ V(0.6, 0.3, 0.9))
+    W.hand_w("L", f, WP17 + R3 @ V(0.40, -0.42, 1.22), R3 @ V(0.2, -1, 0.35).normalized(), R3 @ V(1, 0, 0), WP17 + R3 @ V(0.6, 0.3, 0.9))
 for c in (W, SB): c.used.add("S17")
 
 # --- spears: Child Of the wrist at a frame where the hand holds the shaft upright
