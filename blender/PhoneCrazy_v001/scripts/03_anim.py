@@ -13,10 +13,14 @@ T = {"S1": 0.0, "S2": 1.0, "S3": 2.0, "S4": 5.0, "S5": 6.0, "S6": 8.0, "S7": 9.0
      "S12": 19.0, "S13": 20.0, "S14": 22.0, "S15": 24.0, "S16": 26.0, "S17": 28.0, "S18": 29.0, "S19": 31.0, "S20": 33.0, "S21": 35.0,
      "S22": 36.5, "END": 38.5}
 if len(args) > 1: T.update(json.load(open(args[1])))
-ORDER = ["S%d" % i for i in range(1, 23)]
 F = {k: 1 + round(v * FPS) for k, v in T.items()}
+ORDER = sorted(["S%d" % i for i in range(1, 23)], key=lambda k: (F[k], int(k[1:])))   # VO order; a shot sharing its start frame with a later one is dropped
+ORDER = [k for i, k in enumerate(ORDER) if not (i + 1 < len(ORDER) and F[ORDER[i + 1]] == F[k])]
+ALL = ["S%d" % i for i in range(1, 23)]
 def f0(s): return F[s]
-def f1(s): i = ORDER.index(s); return (F[ORDER[i + 1]] if i + 1 < len(ORDER) else F["END"]) - 1
+def f1(s):
+    if s not in ORDER: return F[s]          # dropped shot: zero length
+    i = ORDER.index(s); return (F[ORDER[i + 1]] if i + 1 < len(ORDER) else F["END"]) - 1
 def dur(s): return f1(s) - f0(s) + 1
 def fx(s, extra=1.3): return f0(s) + int(dur(s) * extra)
 def sec(s, t): return f0(s) + round(t * FPS)

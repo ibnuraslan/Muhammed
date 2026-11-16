@@ -7,6 +7,14 @@ cr = next(n for n in nt.nodes if n.type == "VALTORGB"); cr.color_ramp.elements[0
 next(n for n in nt.nodes if n.type == "BUMP").inputs["Strength"].default_value = 0.5
 w = bpy.data.materials["Whirlpool"].node_tree.nodes["Principled BSDF"]; w.inputs["Roughness"].default_value = 0.3
 s = bpy.data.materials["Stream"].node_tree.nodes["Principled BSDF"]; s.inputs["Roughness"].default_value = 0.1
-bpy.context.scene.cycles.samples = 48
+sc = bpy.context.scene; sc.cycles.samples = 48
+import os
+vo = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets_src", "B18_PhoneCrazy_VO.mp3")
+if os.path.exists(vo):
+    if not sc.sequence_editor: sc.sequence_editor_create()
+    se = sc.sequence_editor
+    strips = se.strips if hasattr(se, "strips") else se.sequences
+    for st in list(strips): strips.remove(st)
+    strips.new_sound("VO", os.path.abspath(vo), 1, 1)
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)
 print("FINISH OK")

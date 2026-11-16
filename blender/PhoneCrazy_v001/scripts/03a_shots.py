@@ -39,7 +39,7 @@ ev(sec("S2", 0.6)); BK = OB["shovel_GEO"].matrix_world.translation.copy() if Fal
 camshot("S2", [(0, (0.0, 4.3, 1.1), (2.8, 8.3, 0.1), 30), (1, (0.4, 4.8, 0.8), (2.8, 8.3, -0.1), 32)])
 # ---------------------------------------------------------------- S3 "one of their phones unlocked itself": phone on the case lid wakes and unlocks
 crew("S3", "case", Foreman={"head": (20, 0), "head_end": (30, 0)})
-tiles("S3", [(0, 0), (0.35, 1), (1.0, 2), (1.25, 3), (1.5, 4), (1.75, 5), (2.0, 6), (2.3, 7), (2.7, 8)])
+tiles("S3", [(0, 0), (0.25, 1), (0.55, 2), (0.72, 3), (0.89, 4), (1.06, 5), (1.23, 6), (1.45, 7), (1.75, 8)])   # VO: "unlocked itself" ends ~1.8 s into the shot
 camshot("S3", [(0, PH_W + Vector((0.01, -0.03, 0.40)), PH_W + Vector((0, 0.01, 0)), 38), (1, PH_W + Vector((0.01, -0.06, 0.30)), PH_W + Vector((0, 0.01, 0)), 40)])
 # ---------------------------------------------------------------- S4 "without anyone": home screen, nobody near it
 crew("S4", "case", Foreman={"head": (14, 0), "head_end": (18, -6), "brow": 0.002}, Digger={"head": (12, 6)}, Mate={"head": (14, -4), "head_end": (8, 10)})
