@@ -150,7 +150,7 @@ def attach(item, fnM, t0, n, spec, u_on, u_off, reach=18, leave=20, step=2, driv
     rel = Mi.inverted() @ ik_world(m, s)
     if drive is not None:
         da, db = (t0 + int(round(drive[0] * n)), t0 + int(round(drive[1] * n)))
-        Wr = m.o.matrix_world @ m.r.PB["wrist." + s].matrix
+        Wr = ik_world(m, s)                  # the grip frame (where the wrist should be), not where IK reached
         BIND.append((item, m, s, Wr.inverted() @ Mi, da, db))
     pb = m.r.PB["Pole_elbow." + s]
     def fol(f, u):
@@ -445,14 +445,12 @@ def S13(t, n):
     def fr(f, u):
         a = ease((u - 0.12) / 0.3)
         sc.frame_set(f); sh = hero.shoulder("L")
-        W1 = V(sh.x + 0.10, side_y - 0.040, sh.z - 0.30)
-        W0 = sh + hero.fwd() * 0.10 + V(0, 0, -0.50)
         if u > 0.12:
-            hero.hand("L", f, W0.lerp(W1, a), V(0.35, 0, 1).normalized(), V(0, 1, 0), pole=sh + V(-0.1, -0.35, -0.45))
+            hero.hang("L", f, out=0.22 * a, fwd=0.22 * a, lift=0.22 * a, pose="relaxed")
         look_at(hero, f, V(sh.x + 0.1, side_y, 1.2) if u < 0.45 else V(NX - 0.6, NY - 2.6, 1.45), flex=1)
         hero.jaw(f, 3 * ease((u - 0.55) / 0.2))
     track(t, n, 3, fr)
-    apply_pose(hero.o, "L", "flat_palm", t + int(0.42 * n))
+    apply_pose(hero.o, "L", "open_alarm", t + int(0.42 * n))
     camera("S13", 28, t, V(NX - 0.9, NY - 2.9, 1.35), V(NX - 0.3, NY + 2.0, 1.10), t + n, V(NX - 0.95, NY - 2.4, 1.35), V(NX - 0.6, NY + 2.0, 1.15))
 
 # ===================================================================== STUDIO
@@ -463,17 +461,17 @@ def S14(t, n):
 # ===================================================================== STREET condo
 def S15(t, n):
     P["P_CondoKeys"]["grip_half"] = 0.02
-    swap_shot("S15", [hero, M["Landlady"]], hero, M["Landlady"], P["P_Contract"], P["P_CondoKeys"], 21.0, -8.6, gap=0.80, cam_d=2.5)
+    swap_shot("S15", [hero, M["Landlady"]], hero, M["Landlady"], P["P_Contract"], P["P_CondoKeys"], 29.5, -9.2, gap=0.80, cam_d=2.5)
 
 def S16(t, n):
     setup(t, [hero], [P["P_CondoKeys"]])
-    xy = (21.0, -8.8); base(hero, t, xy, 0)
+    xy = (29.5, -9.4); base(hero, t, xy, 0)
     sc.frame_set(t); c0 = hero.shoulder("R") + V(0.06, -0.32, -0.14)
     def fnM(u): return item_matrix(c0 + V(0, 0, 0.14 * ease(u / 0.5)), 90 + 20 * math.sin(u * 6))
     hold(P["P_CondoKeys"], hero, ("R",), t, n, fnM)
-    def fr(f, u): look_at(hero, f, P["P_CondoKeys"].matrix_world.translation if u < 0.5 else V(21.4, -11.9, 1.5), flex=1); hero.jaw(f, 3 * ease((u - 0.4) / 0.4))
+    def fr(f, u): look_at(hero, f, P["P_CondoKeys"].matrix_world.translation if u < 0.5 else V(29.9, -12.5, 1.5), flex=1); hero.jaw(f, 3 * ease((u - 0.4) / 0.4))
     track(t, n, 4, fr)
-    camera("S16", 30, t, V(21.6, -11.9, 1.30), V(21.0, -7.8, 1.6), t + n, V(21.5, -11.4, 1.30), V(21.0, -7.8, 1.65))
+    camera("S16", 30, t, V(30.1, -12.5, 1.30), V(29.5, -8.4, 1.6), t + n, V(30.0, -12.0, 1.30), V(29.5, -8.4, 1.65))
 
 # ===================================================================== STUDIO bar: rocker, snow globe
 def S17(t, n):
@@ -554,15 +552,12 @@ def S22(t, n):
     hold(P["P_Clapper"], d, ("R",), t, n, fnM)
     def fr(f, u):
         look_at(d, f, hero.head_w(), flex=2)
-        a = ease((u - 0.3) / 0.35); sc.frame_set(f)
-        for s in "LR":
-            sx = 1 if s == "L" else -1; sh = hero.shoulder(s)
-            W = (sh + hero.right() * (-sx) * 0.10 + V(0, 0, -0.50)).lerp(sh - hero.right() * sx * 0.22 + hero.fwd() * 0.30 + V(0, 0, -0.42), a)
-            hero.hand(s, f, W, (W - sh).normalized(), hero.fwd(), pole=sh - hero.right() * sx * 0.3 + V(0, 0, -0.4) - hero.fwd() * 0.2)
+        a = ease((u - 0.3) / 0.35)
+        for s_ in "LR": hero.hang(s_, f, out=0.28 * a, fwd=0.25 * a, lift=0.20 * a, pose="relaxed")
         look_at(hero, f, P["P_MovieCamera"].matrix_world.translation + V(0, 0, 1.4), flex=-3)
         hero.jaw(f, 3 * a)
     track(t, n, 3, fr)
-    for s in "LR": apply_pose(hero.o, s, "open_alarm", t)
+    for s in "LR": apply_pose(hero.o, s, "open_alarm", t + n)
     camera("S22", 26, t, V(SX + 3.1, SY - 2.4, 1.6), V(SX + 3.8, SY + 0.8, 1.2), t + n, V(SX + 3.3, SY - 2.0, 1.55), V(SX + 3.9, SY + 0.8, 1.25))
 
 # ===================================================================== STREET: newspaper readers
@@ -604,14 +599,15 @@ def S25(t, n):
     for o in items:
         for c in o.children:
             if c.name.startswith("Logo_"): vis_obj(c, t, False)
-    x = VX - 3.0; size = 0.55; gap = 0.85
+    x = VX - 3.0; size = 0.42; gap = 0.62
     for i, (k, o) in enumerate(zip(CHAIN, items)):
         d = o.dimensions; s_ = size / max(d.x, d.y, d.z)
         x = VX - 3.0 + i * gap
+        z0 = 0.95 - o.get("bottom_z", 0.0) * 0  # items are centred by origin; fine for a floating row
         key_obj(o, t, loc=(x, VY + 1.0, 0.95), rot=(R(12), 0, R(25)), scale=(s_, s_, s_))
         key_obj(o, t + n, loc=(x, VY + 1.0, 0.95), rot=(R(12), 0, R(55)), scale=(s_, s_, s_))
     for o in items: key_obj(o, T["S25"][1], scale=(1, 1, 1))
-    camera("S25", 35, t, V(VX - 2.2, VY - 2.3, 1.25), V(VX - 2.0, VY + 1.0, 0.95), t + n, V(x - 0.8, VY - 2.3, 1.25), V(x - 0.6, VY + 1.0, 0.95), fstop=11)
+    camera("S25", 30, t, V(VX - 2.4, VY - 0.9, 1.20), V(VX - 2.2, VY + 1.0, 0.95), t + n, V(x - 0.4, VY - 0.9, 1.20), V(x - 0.2, VY + 1.0, 0.95), fstop=11)
 
 # ===================================================================== STREET: one year later, the house
 def S26(t, n):
