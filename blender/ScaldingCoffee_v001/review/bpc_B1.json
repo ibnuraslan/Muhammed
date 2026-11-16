@@ -1,0 +1,666 @@
+{
+"visible_frames": [
+1,
+4,
+7,
+10,
+13,
+16,
+19,
+22,
+25,
+28,
+31,
+34,
+37,
+40,
+43,
+46,
+49,
+52,
+55,
+58,
+61,
+64,
+67,
+70,
+73,
+76,
+79,
+82,
+85,
+88,
+91,
+94,
+97,
+100,
+103,
+106,
+109,
+112,
+115,
+118,
+121,
+124,
+127,
+130,
+133,
+136,
+139,
+142,
+145,
+148,
+151,
+154,
+157,
+160,
+163,
+166,
+169,
+172,
+175,
+178,
+181,
+184,
+187,
+190,
+193,
+196,
+199,
+202,
+205,
+208,
+211,
+214,
+217,
+220,
+223,
+226,
+229,
+232,
+235,
+238,
+241,
+244,
+247,
+250,
+253,
+256,
+259,
+262,
+265,
+268,
+271,
+274,
+277,
+280,
+283,
+286,
+289,
+292,
+295,
+298
+],
+"frames": {
+"1": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"4": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"7": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"10": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"13": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"16": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"19": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"22": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"25": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"28": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"31": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"34": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"37": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"40": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"43": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"46": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"49": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"52": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"55": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"58": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"61": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"64": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"67": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"70": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"73": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"76": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"79": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"82": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"85": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"88": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"91": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"94": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"97": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"100": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"103": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"106": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"109": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"112": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"115": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"118": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"121": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"124": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"127": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"130": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"133": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"136": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"139": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"142": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"145": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"148": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"151": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"154": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"157": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"160": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"163": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"166": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"169": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"172": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"175": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"178": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"181": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"184": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"187": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"190": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"193": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"196": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"199": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"202": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"205": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"208": {
+"upperleg02.R|SpillSteam|VIS": 13,
+"upperleg02.L|SpillSteam|VIS": 15
+},
+"211": {
+"upperleg02.R|SpillSteam|VIS": 10,
+"upperleg02.L|SpillSteam|VIS": 12
+},
+"214": {
+"upperleg02.R|SpillSteam|VIS": 10,
+"upperleg02.L|SpillSteam|VIS": 12
+},
+"217": {
+"upperleg02.R|SpillSteam|VIS": 6,
+"upperleg02.L|SpillSteam|VIS": 8
+},
+"220": {
+"upperleg02.L|SpillSteam|VIS": 7,
+"upperleg02.R|SpillSteam|VIS": 5
+},
+"223": {
+"upperleg02.L|SpillSteam|VIS": 7,
+"upperleg02.R|SpillSteam|VIS": 8
+},
+"226": {
+"upperleg02.L|SpillSteam|VIS": 7,
+"upperleg02.R|SpillSteam|VIS": 5
+},
+"229": {
+"upperleg02.L|SpillSteam|VIS": 7,
+"upperleg02.R|SpillSteam|VIS": 5
+},
+"232": {
+"upperleg02.L|SpillSteam|VIS": 7,
+"upperleg02.R|SpillSteam|VIS": 5
+},
+"235": {
+"upperleg02.L|SpillSteam|VIS": 7,
+"upperleg02.R|SpillSteam|VIS": 5
+},
+"238": {
+"upperleg02.L|SpillSteam|VIS": 7,
+"upperleg02.R|SpillSteam|VIS": 5
+},
+"241": {
+"upperleg02.L|SpillSteam|VIS": 8,
+"upperleg02.R|SpillSteam|VIS": 5
+},
+"244": {
+"upperleg02.L|SpillSteam|VIS": 8,
+"upperleg02.R|SpillSteam|VIS": 8
+},
+"247": {
+"upperleg02.L|SpillSteam|VIS": 8,
+"upperleg02.R|SpillSteam|VIS": 8
+},
+"250": {
+"upperleg02.L|SpillSteam|VIS": 8,
+"upperleg02.R|SpillSteam|VIS": 8
+},
+"253": {
+"upperleg02.L|SpillSteam|VIS": 7,
+"upperleg02.R|SpillSteam|VIS": 5
+},
+"256": {
+"upperleg02.L|SpillSteam|VIS": 7,
+"upperleg02.R|SpillSteam|VIS": 5
+},
+"259": {
+"upperleg02.L|SpillSteam|VIS": 7,
+"upperleg02.R|SpillSteam|VIS": 5
+},
+"262": {
+"upperleg02.L|SpillSteam|VIS": 6,
+"upperleg02.R|SpillSteam|VIS": 4
+},
+"265": {
+"upperleg02.L|SpillSteam|VIS": 6,
+"upperleg02.R|SpillSteam|VIS": 4
+},
+"268": {
+"upperleg02.L|SpillSteam|VIS": 6,
+"upperleg02.R|SpillSteam|VIS": 4
+},
+"271": {
+"upperleg02.L|SpillSteam|VIS": 6,
+"upperleg02.R|SpillSteam|VIS": 4
+},
+"274": {
+"upperleg02.L|SpillSteam|VIS": 6,
+"upperleg02.R|SpillSteam|VIS": 4
+},
+"277": {
+"upperleg02.L|SpillSteam|VIS": 6,
+"upperleg02.R|SpillSteam|VIS": 4
+},
+"280": {
+"upperleg02.L|SpillSteam|VIS": 6,
+"upperleg02.R|SpillSteam|VIS": 4
+},
+"283": {
+"upperleg02.L|SpillSteam|VIS": 6,
+"upperleg02.R|SpillSteam|VIS": 4
+},
+"286": {
+"upperleg02.L|SpillSteam|VIS": 6,
+"upperleg02.R|SpillSteam|VIS": 4
+},
+"289": {
+"upperleg02.L|SpillSteam|VIS": 6,
+"upperleg02.R|SpillSteam|VIS": 4
+},
+"292": {
+"upperleg02.L|SpillSteam|VIS": 6,
+"upperleg02.R|SpillSteam|VIS": 4
+},
+"295": {
+"upperleg02.L|SpillSteam|VIS": 6,
+"upperleg02.R|SpillSteam|VIS": 4
+},
+"298": {
+"upperleg02.L|SpillSteam|VIS": 6,
+"upperleg02.R|SpillSteam|VIS": 5
+},
+"301": {
+"upperleg02.L|SpillSteam|off": 6,
+"upperleg02.R|SpillSteam|off": 5
+},
+"304": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"307": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"310": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"313": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"316": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"319": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"322": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"325": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"328": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"331": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"334": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"337": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"340": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"343": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"346": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"349": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"352": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"355": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"358": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"361": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"364": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"367": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"370": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"373": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"376": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"379": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"382": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"385": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"388": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"391": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"394": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"397": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"400": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"403": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"406": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"409": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"412": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"415": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+},
+"418": {
+"upperleg02.L|SpillSteam|off": 7,
+"upperleg02.R|SpillSteam|off": 5
+}
+}
+}

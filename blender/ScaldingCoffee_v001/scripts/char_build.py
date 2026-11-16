@@ -4,7 +4,7 @@ R = "/home/user/Muhammed/blender/"
 BF = R + "BellyFat_v010/BellyFat_v010_60fps.blend"
 SPEC = {
  "Gran":  (BF, "ShopperB", {"age": 0.92, "weight": 0.62, "height": 0.35, "muscle": 0.3}, ("ponytail01",), [(BF, "Woman", "bob02")]),
- "GranH": (BF, "ShopperC", {"age": 0.92, "weight": 0.62, "height": 0.35, "muscle": 0.3}, ("long01",), [(BF, "ShopperB", "ponytail01")]),
+ "GranH": (BF, "ShopperC", {"age": 0.92, "weight": 0.62, "height": 0.35, "muscle": 0.3}, ("long01",), [(BF, "ShopperA", "short02")]),
  "Doctor": (R + "MonkeyHeadTransplant_v012/MonkeyHeadTransplant_v012_60fps.blend", "Surgeon", {"age": 0.6}, (), [(R + "AIAsleep_v007/AIAsleep_v007_60fps.blend", "Driver", "short02")]),
  "Nurse": (R + "EarInArm_v011/EarInArm_v011_60fps.blend", "Nurse", {}, (), []),
  "Hero":  (R + "BelugaRescue_v008/BelugaRescue_v008_60fps.blend", "SpecB", {}, (), []),

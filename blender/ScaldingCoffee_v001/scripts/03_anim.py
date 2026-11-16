@@ -195,16 +195,19 @@ def beat_B1():
     FLOORS[:] = [bpy.data.objects["CarFloor"]]
     cC = bpy.data.collections["SetCar"]
     rig, R, H = setup("GranH", "GranC")
-    tint(rig, "ponytail", (1.35, 1.35, 1.4))
+    tint(rig, "short02", (0.62, 0.61, 0.60), "MIX", 0.6)
+    for ch in rig.children:
+        if "short02" in ch.name:
+            d_ = ch.modifiers.new("Puff", 'DISPLACE'); d_.strength = 0.004; d_.mid_level = 0.0   # close scalp gaps in the re-fitted cap
     tint(rig, "elegantsuit", (0.80, 0.74, 0.95), "MIX", 0.62)     # light lavender outfit: the coffee stain must read
-    sx = -0.42; hip = Vector((sx, -0.06, 0.70))
-    knee = {"L": Vector((sx + 0.11, -0.52, 0.70)), "R": Vector((sx - 0.11, -0.52, 0.70))}
-    lean = {1: -8, 250: -8, 268: -17, 300: -15, 340: -12, 420: -12}
+    sx = -0.42; hip = Vector((sx, -0.10, 0.72))
+    knee = {"L": Vector((sx + 0.12, -0.55, 0.70)), "R": Vector((sx - 0.12, -0.55, 0.70))}   # knees apart: the cup sits between them without touching
+    lean = {1: -8, 170: -8, 200: -2, 240: -4, 268: -17, 300: -15, 340: -12, 420: -12}   # leans forward to look at the cup, which tips as she shifts
     for f, l in lean.items(): H.key_root(f, hip, flex=l)
     for f in (1, 420):
         for s in "LR":
-            foot_at(R, H, s, f, Vector((knee[s].x, -0.60, 0.33 + H.ankle[s].z)))
-            knee_pole(R, s, f, knee[s] + Vector((0, -0.6, 0.15)))
+            foot_at(R, H, s, f, Vector((knee[s].x, -0.74, 0.345 + H.ankle[s].z)))   # shins slope clear of the seat front
+            knee_pole(R, s, f, knee[s] + Vector((0.05 if s == "L" else -0.05, -0.6, 0.15)))
     # spine/head: look down at the cup while opening it, recoil at the spill, then look down at her lap
     def headf(f):
         if f < 250: return (22.0, 0.0)
@@ -220,13 +223,14 @@ def beat_B1():
     kL = bone_w(rig, "lowerleg01.L"); kR = bone_w(rig, "lowerleg01.R"); hL = bone_w(rig, "upperleg01.L"); hR = bone_w(rig, "upperleg01.R")
     print("B1 knees", kL, kR, "hips", hL, hR)
     # cup wedged between the thighs near the knees
-    cpos = (kL + kR) / 2 * 0.72 + (hL + hR) / 2 * 0.28; cpos.z = min(kL.z, kR.z) - 0.035
-    cup = paper_cup("SpillCup", cC, tuple(cpos)); cup.rotation_mode = 'XYZ'
-    lidO = lid("SpillLid", cC, (cpos.x, cpos.y, cpos.z + CUP_H))
-    st = steam("SpillSteam", cC, (cpos.x, cpos.y, cpos.z + CUP_H), h=0.32, r=0.05, dens=0.55); st.parent = cup
+    cpos = (kL + kR) / 2 * 0.90 + (hL + hR) / 2 * 0.10; cpos.z = min(kL.z, kR.z) - 0.035
+    SC_ = 0.72   # a small cup: it fits between her knees without touching them
+    cup = paper_cup("SpillCup", cC, tuple(cpos)); cup.rotation_mode = 'XYZ'; cup.scale = (SC_,) * 3
+    lidO = lid("SpillLid", cC, (sx + 0.05, -0.86, 1.026)); lidO.scale = (SC_,) * 3   # already off, resting on the dashboard
+    st = steam("SpillSteam", cC, (cpos.x, cpos.y, cpos.z + CUP_H * 0.72), h=0.32, r=0.05, dens=0.55); st.parent = cup
     st.matrix_parent_inverse = cup.matrix_world.inverted()
     key_steam(st, 1, 420)
-    for f, ang in ((1, 0), (205, 0), (222, -24), (240, -30), (420, -30)):
+    for f, ang in ((1, 0), (205, 0), (222, 20), (240, 26), (420, 26)):   # tips forward into the wide gap toward her knees
         cup.rotation_euler.x = R_(ang); cup.keyframe_insert("rotation_euler", frame=f)
     # hands: left resting on the left thigh; right on the right thigh, then pinches the lid and peels it up and away
     def thigh_pt(s, u=0.55):
@@ -236,23 +240,10 @@ def beat_B1():
         apply_pose(rig, s, "relaxed", 1)
     place_hand(rig, "L", 250, thigh_pt("L"), Vector((0, 0, -1)), Vector((0.15, -1, -0.2))); apply_pose(rig, "L", "relaxed", 250)
     place_hand(rig, "R", 120, thigh_pt("R", 0.5), Vector((0, 0, -1)), Vector((-0.15, -1, -0.2))); apply_pose(rig, "R", "relaxed", 120)
-    edge = Vector((cpos.x - 0.012, cpos.y + CUP_R1 + 0.002, cpos.z + CUP_H + 0.003))
-    rep = grip_object(rig, "R", 150, lidO, edge, Vector((0.1, -1.0, -0.35)), grip="pinch")
-    for it in range(6):     # land the thumb-index midpoint on the lid edge (grip_object's pinch moved only twice)
-        sc.frame_set(150); bpy.context.view_layer.update(); M = rig.matrix_world
-        mid = M @ ((rig.pose.bones["finger2-3.R"].tail + rig.pose.bones["finger1-3.R"].tail) / 2)
-        err = edge - mid
-        if err.length < 0.004: break
-        hand_delta(R, "R", 150, 150, err)
-    print("B1 lid grip", rep, "pinch err", round(err.length, 4))
-    hold_fingers(rig, "R", 150, 165)
-    hand_delta(R, "R", 150, 165, (0, 0, 0))
-    hand_delta(R, "R", 150, 190, (-0.01, 0.02, 0.05), Matrix.Rotation(R_(-15), 3, 'Y'))
-    hand_delta(R, "R", 150, 215, (-0.08, 0.06, 0.15), Matrix.Rotation(R_(-35), 3, 'Y'))
-    child_of_hand(lidO, rig, "R", 165)
+    # she shifts on the seat (knees move) just before the cup tips: small hip slide keyed into the lean
     # spill: lid off at ~205, cup tips toward her lap 205..240; coffee pours onto the skirt and spreads
     skirt = next(o for o in rig.children if "elegantsuit" in o.name)
-    pool_c = (cpos + (hL + hR) / 2) / 2; pool_c.z = max(hL.z, kL.z) + 0.09
+    pool_c = cpos.lerp((kL + kR) / 2, 0.55); pool_c.z = max(hL.z, kL.z) + 0.09
     bm = bmesh.new(); bmesh.ops.create_circle(bm, cap_ends=True, segments=40, radius=0.09)
     for v in bm.verts:
         ang = math.atan2(v.co.y, v.co.x); v.co *= 1.0 + 0.22 * math.sin(3 * ang) + 0.12 * math.sin(7 * ang + 1)
@@ -276,13 +267,21 @@ def beat_B1():
     place_hand(rig, "L", 330, thigh_pt("L", 0.35) + Vector((0.10, 0.04, 0.22)), Vector((0.3, -1, 0.2)), Vector((0.2, -0.3, 1)))
     apply_pose(rig, "L", "open_alarm", 330, amount=0.7)
     place_hand(rig, "L", 400, thigh_pt("L", 0.3) + Vector((0.10, 0.03, 0.18)), Vector((0.3, -1, 0.0)), Vector((0.2, -0.5, 1)))
-    hand_delta(R, "R", 215, 250, (0, 0, 0)); hand_delta(R, "R", 215, 268, (-0.06, 0.02, 0.06)); hand_delta(R, "R", 215, 400, (-0.05, 0.03, 0.03))
-    for f in (250, 268, 400): hold_fingers(rig, "R", 150, f)
+    for s_, sxx in (("R", -1),):
+        place_hand(rig, "R", 250, thigh_pt("R"), Vector((0, 0, -1)), Vector((-0.15, -1, -0.2))); apply_pose(rig, "R", "relaxed", 250)
+        place_hand(rig, "R", 266, thigh_pt("R", 0.35) + Vector((-0.12, 0.05, 0.28)), Vector((-0.3, -1, 0.2)), Vector((-0.2, -0.3, 1)))
+        apply_pose(rig, "R", "open_alarm", 266)
+        place_hand(rig, "R", 330, thigh_pt("R", 0.35) + Vector((-0.10, 0.04, 0.22)), Vector((-0.3, -1, 0.2)), Vector((-0.2, -0.3, 1)))
+        apply_pose(rig, "R", "open_alarm", 330, amount=0.7)
+        place_hand(rig, "R", 400, thigh_pt("R", 0.3) + Vector((-0.10, 0.03, 0.18)), Vector((-0.3, -1, 0.0)), Vector((-0.2, -0.5, 1)))
     # cameras: 1a outside through the open door, 1b lap from the driver side, 1c her face from the door opening
     face = Vector((sx, -0.02, 1.16))
     c1 = cam_shot("Cam1a", 1, 110, [(1, (-2.35, 0.15, 1.22), (-0.42, -0.28, 0.88)), (110, (-2.05, 0.02, 1.16), (-0.42, -0.28, 0.86))], lens=32)
     c2 = cam_shot("Cam1b", 111, 300, [(111, (-1.30, -0.74, 1.24), (-0.42, -0.24, 0.94)), (300, (-1.18, -0.68, 1.22), (-0.42, -0.22, 0.95))], lens=24)
-    c3 = cam_shot("Cam1c", 301, 420, [(301, (-1.20, -0.80, 1.18), face), (420, (-1.10, -0.74, 1.17), face)], lens=40)
+    face_lo = face - Vector((0, 0, 0.06))
+    sc.frame_set(360); bpy.context.view_layer.update()
+    hf = rig.matrix_world @ rig.pose.bones["head"].head.lerp(rig.pose.bones["head"].tail, 0.4)
+    c3 = cam_shot("Cam1c", 301, 420, [(301, tuple(hf + Vector((-0.82, -0.62, -0.04))), tuple(hf - Vector((0, 0, 0.05)))), (420, tuple(hf + Vector((-0.74, -0.56, -0.04))), tuple(hf - Vector((0, 0, 0.05))))], lens=45)
     for c, f0, f1 in ((c2, 111, 300), (c3, 301, 420)): catchlight(rig, c, f0, f1)
     return rig
 

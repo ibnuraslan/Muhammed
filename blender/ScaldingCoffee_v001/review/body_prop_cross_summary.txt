@@ -1,0 +1,10 @@
+body_prop_cross, step 3 frames, per beat (B2 has no character contacts). Props: B1 cup, lid, car seats, door, dash, floor, wheel, roof lining, far door trim; B3 bed, mattress, backrest wedge, pillow, blanket, IV stand, cabinet; B4 customer cups, counter; B5 table, chairs, cup; B6 dial knob, dial, machine, both counters.
+Steam volumes (gas) excluded.
+
+B1.json: visible crossing frames (steam volumes excluded) = 0 []
+B3.json: visible crossing frames (steam volumes excluded) = 0 []
+B4.json: visible crossing frames (steam volumes excluded) = 0 []
+B5.json: visible crossing frames (steam volumes excluded) = 0 []
+B6.json: visible crossing frames (steam volumes excluded) = 0 []
+
+All crossings including off-camera (steam excluded): B1 0, B3 0, B4 0, B5 0, B6 0

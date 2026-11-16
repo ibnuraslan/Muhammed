@@ -224,6 +224,8 @@ for o in car:
         if ms.material and ms.material.name.startswith("main body"):
             ms.material = mat("CarPaint", (0.62, 0.12, 0.10), 0.3, coat=0.6)
 # split the passenger (x<0) front door parts out of the Cube.006 meshes and swing the door open
+for o in car:
+    if "glass" in o.name.lower(): o.visible_shadow = False   # glass must not dim the light into the cabin (left a light/shadow band across her head)
 door = bpy.data.objects.new("CarDoorP", None); cC.objects.link(door)
 door.location = (-0.89, -0.975, 0.0)
 for o in [o for o in car if o.name.startswith(("Cube.006", "Cube.015"))]:
@@ -238,10 +240,10 @@ door.rotation_euler.z = R_(68)
 # interior: floor carpet, dash, steering wheel, roof liner, far door trim, two seats
 m_trim = mat("CarTrim", (0.16, 0.16, 0.17), 0.6); m_carpet = mat("CarCarpet", (0.12, 0.12, 0.13), 0.9)
 box("CarFloor", cC, (0, -0.25, 0.30), (1.62, 1.9, 0.04), m_carpet, 0.005)
-box("CarRoofLiner", cC, (0, -0.03, 1.40), (1.40, 1.45, 0.02), mat("CarLiner", (0.72, 0.70, 0.66), 0.8), 0.005)
+box("CarRoofLiner", cC, (0, -0.03, 1.49), (1.40, 1.45, 0.02), mat("CarLiner", (0.72, 0.70, 0.66), 0.8), 0.005)
 box("CarDoorTrimFar", cC, (0.84, -0.48, 0.70), (0.04, 0.95, 0.42), m_trim, 0.01)
 # dashboard: swept profile along X
-prof = [(-1.02, 0.55), (-1.02, 0.78), (-0.98, 0.95), (-0.86, 1.02), (-0.70, 1.00), (-0.62, 0.90), (-0.66, 0.70), (-0.80, 0.55)]
+prof = [(-1.02, 0.55), (-1.02, 0.78), (-0.98, 0.95), (-0.88, 1.02), (-0.76, 1.00), (-0.70, 0.90), (-0.74, 0.70), (-0.86, 0.55)]
 bm = bmesh.new(); L = []
 for x in (-0.80, 0.80):
     L.append([bm.verts.new((x, y, z)) for y, z in prof])
@@ -271,9 +273,12 @@ for neg in (True, False):
     for o in grp: o.matrix_world = d @ o.matrix_world
 bpy.context.view_layer.update(); print("SEATS", bounds(seats))
 # cabin lights (camera-invisible): roof fill + door-side face fill
-for nm, loc, rot, size, en in (("CabinFill", (-0.2, -0.35, 1.36), (-0.2, -0.35, 0.0), 0.7, 30.0), ("DoorFill", (-1.7, -0.6, 1.25), (-0.42, -0.1, 0.9), 0.9, 60.0)):
+for nm, loc, rot, size, en in (("DoorFill", (-1.7, -0.6, 1.25), (-0.42, -0.1, 0.9), 0.9, 60.0),):
     L = bpy.data.lights.new(nm, 'AREA'); L.size = size; L.energy = en; L.color = (1.0, 0.97, 0.93)
     lo = bpy.data.objects.new(nm, L); cC.objects.link(lo); lo.location = loc; lo.rotation_euler = (Vector(rot) - Vector(loc)).to_track_quat('-Z', 'Y').to_euler(); lo.visible_camera = False
+# cabin fill: a soft point light in front of her face (an area light at head height cut a light band across her head)
+L = bpy.data.lights.new("CabinFill", 'POINT'); L.energy = 25.0; L.shadow_soft_size = 0.25; L.color = (1.0, 0.97, 0.93)
+lo = bpy.data.objects.new("CabinFill", L); cC.objects.link(lo); lo.location = (-0.30, -0.80, 1.30); lo.visible_camera = False
 # car park
 m_asph = mat("Asphalt", (0.30, 0.31, 0.33), 0.85)
 plane("CarPark", cC, (0, 0, 0.0), (60, 60), m_asph)
@@ -331,12 +336,12 @@ box("CafeWallR", cF, (X + 4.0, -1.0, 1.5), (0.1, 6.2, 3.0), m_side, 0)
 # front counter (customer side faces -Y)
 m_ctrF = mat("CounterFront", (0.86, 0.36, 0.12), 0.45, coat=0.3)
 m_ctrTop = mat("CounterTop", (0.80, 0.81, 0.82), 0.25, metal=0.8)
-box("FrontCounter", cF, (X, 0.35, 0.50), (4.2, 0.70, 1.0), m_ctrF, 0.015)
-box("FrontCounterTop", cF, (X, 0.33, 1.02), (4.3, 0.78, 0.04), m_ctrTop, 0.008)
-box("CounterKick", cF, (X, -0.005, 0.06), (4.2, 0.02, 0.12), mat("Kick", (0.2, 0.2, 0.22), 0.5), 0.003)
+box("FrontCounter", cF, (X, 0.10, 0.50), (4.2, 0.70, 1.0), m_ctrF, 0.015)
+box("FrontCounterTop", cF, (X, 0.08, 1.02), (4.3, 0.78, 0.04), m_ctrTop, 0.008)
+box("CounterKick", cF, (X, -0.255, 0.06), (4.2, 0.02, 0.12), mat("Kick", (0.2, 0.2, 0.22), 0.5), 0.003)
 # back counter (machines)
-box("BackCounter", cF, (X, 1.75, 0.45), (5.0, 0.62, 0.9), mat("BackCab", (0.85, 0.85, 0.86), 0.4), 0.01)
-box("BackCounterTop", cF, (X, 1.73, 0.915), (5.1, 0.68, 0.03), m_ctrTop, 0.006)
+box("BackCounter", cF, (X, 1.575, 0.45), (5.0, 1.0, 0.9), mat("BackCab", (0.85, 0.85, 0.86), 0.4), 0.01)
+box("BackCounterTop", cF, (X, 1.565, 0.915), (5.1, 1.04, 0.03), m_ctrTop, 0.006)
 # menu boards: blank light panels with simple colour blocks (no text)
 m_board = mat("MenuBoard", (0.12, 0.12, 0.13), 0.4)
 m_panel = mat("MenuPanel", (0.97, 0.95, 0.90), 0.6, emit=((1, 0.97, 0.9), 0.6))
@@ -363,13 +368,14 @@ bpy.context.view_layer.update()
 mn, mx = bounds(mach)
 SM = 0.94 / (mx.x - mn.x)
 root_m.scale = (SM,) * 3; bpy.context.view_layer.update(); mn, mx = bounds(mach)
-root_m.location = (X - 0.9 - (mn.x + mx.x) / 2, 1.70 - (mn.y + mx.y) / 2, 0.93 - mn.z)
+root_m.rotation_euler.z = R_(-90); bpy.context.view_layer.update(); mn, mx = bounds(mach)   # dial side faces the aisle
+root_m.location += Vector((X - 0.9 - (mn.x + mx.x) / 2, 1.60 - (mn.y + mx.y) / 2, 0.93 - mn.z))
 bpy.context.view_layer.update()
 print("BREWER_BOUNDS", bounds(mach))
 # our temperature dial on the brewer's right side panel (+X side): bezel, coloured arc, needle, knob
 dial = bpy.data.objects.new("TempDial", None); cF.objects.link(dial)
 mn, mx = bounds(mach)
-dial.location = (mx.x + 0.006, 1.84, mn.z + 0.40); dial.rotation_euler = (R_(90), 0, R_(90))
+dial.location = ((mn.x + mx.x) / 2 + 0.14, mn.y - 0.006, mn.z + 0.40); dial.rotation_euler = (R_(90), 0, 0)
 bpy.ops.mesh.primitive_cylinder_add(vertices=64, radius=0.055, depth=0.012, location=(0, 0, 0)); bz = bpy.context.object
 bz.name = "DialBezel"; link(bz, cF); bz.parent = dial; bz.data.materials.append(mat("Chrome", (0.9, 0.9, 0.92), 0.15, metal=1.0))
 bpy.ops.mesh.primitive_cylinder_add(vertices=64, radius=0.048, depth=0.002, location=(0, 0, 0.0065)); face = bpy.context.object
@@ -455,6 +461,7 @@ m_hw = mat("HospWall", (0.80, 0.90, 0.88), 0.7)
 box("HospWallBack", cH, (X, 2.2, 1.4), (6, 0.1, 2.8), m_hw, 0)
 box("HospWallLeft", cH, (X - 2.6, 0, 1.4), (0.1, 6, 2.8), m_hw, 0)
 box("HospWallRight", cH, (X + 2.6, 0, 1.4), (0.1, 6, 2.8), m_hw, 0)
+box("HospWallFront", cH, (X, -2.9, 1.4), (6, 0.1, 2.8), m_hw, 0)
 box("HospCeil", cH, (X, 0, 2.8), (6, 6, 0.05), mat("HospCeil", (0.96, 0.96, 0.96), 0.8), 0)
 plane("HospLight", cH, (X, 0.3, 2.77), (1.4, 0.7), mat("LightPanel", (1, 1, 1), 0.5, emit=((1, 0.98, 0.94), 6.0)), rot=(R_(180), 0, 0))
 # window in the back wall: bright sky panel behind a frame, blinds half up
@@ -525,14 +532,14 @@ root_t.location = (X - (mn.x + mx.x) / 2, 0.2 - (mn.y + mx.y) / 2, -mn.z); bpy.c
 print("TABLE_BOUNDS", bounds(tbl))
 root_c, chs = import_glb(A + "chair.glb", "ChairProto", cB, 0.85)
 mn, mx = bounds(chs); root_c.location.z -= mn.z; bpy.context.view_layer.update()
-proto = chs[0]
+proto = chs[0]; CHAIR_FIX = math.pi   # the model's seat faces -Y
 tmn, tmx = bounds(tbl)
 chairs = []
-for i, (cx, cy, rz) in enumerate(((X, tmn.y - 0.45, 0.0), (X - 1.05, tmn.y + 0.9, R_(-90)), (X + 1.05, tmn.y + 0.9, R_(90)),
-                                    (X - 1.05, tmn.y + 1.9, R_(-90)), (X + 1.05, tmn.y + 1.9, R_(90)))):
+for i, (cx, cy, rz) in enumerate(((X, tmn.y - 0.57, 0.0), (X - 1.05, tmn.y + 0.9, R_(90)), (X + 1.05, tmn.y + 0.9, R_(-90)),
+                                    (X - 1.05, tmn.y + 1.9, R_(90)), (X + 1.05, tmn.y + 1.9, R_(-90)))):
+    pmn, pmx = bounds([proto]); pc = Vector(((pmn.x + pmx.x) / 2, (pmn.y + pmx.y) / 2, pmn.z))
     o = proto.copy(); cB.objects.link(o); o.parent = None
-    o.matrix_world = Matrix.Translation((cx, cy, 0)) @ Matrix.Rotation(rz, 4, 'Z') @ Matrix.Translation((0, 0, -bounds([proto])[0].z)) @ \
-        Matrix.Diagonal((0.85, 0.85, 0.85, 1)) @ proto.matrix_basis.to_3x3().normalized().to_4x4()
+    o.matrix_world = Matrix.Translation((cx, cy, 0)) @ Matrix.Rotation(rz + CHAIR_FIX, 4, 'Z') @ Matrix.Translation(-pc) @ proto.matrix_world
     o.name = "BoardChair%d" % i; chairs.append(o)
 bpy.data.objects.remove(proto)
 # potted plant (Poly Haven CC0)
