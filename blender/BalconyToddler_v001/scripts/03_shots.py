@@ -128,12 +128,12 @@ def tod_legs(f, drop, x=0.0, y=SLOT_Y, kick=0.0, ph=0.0, bend=0.03):
         k = kick * math.sin(ph + (0 if i == 0 else math.pi))
         W = tod_pos(drop, x, y) - TH.root_head + Vector((a.x * 0.9, a.y - 0.02 - k, a.z + bend + abs(k) * 0.3))
         foot_air("Toddler", s, f, W, 0.0, 22 + (40 * k if kick else 0.0), 0.6)
-def tod_grip(f, side_x=0.11):
+def tod_grip(f, side_x=0.20):
     """both hands on the front edge bar beside the chin"""
     rig = CAST["Toddler"][0]; bar = BARS[2]
     for s, sx in (("L", 1), ("R", -1)):
-        place_hand(rig, s, f, Vector((sx * side_x, BAR_Y[2] + 0.005, BAR_Z + BAR_R)), Vector((0, 0, -1)), Vector((0, -1, -0.25)).normalized(), skin=0.016)
-        apply_pose(rig, s, "relaxed", f)
+        place_hand(rig, s, f, Vector((sx * side_x, BAR_Y[2], BAR_Z + BAR_R)), Vector((0, 0, -1)), Vector((0, -1, 0)), skin=0.010)
+        apply_pose(rig, s, "flat_palm", f)
         key_pole("Toddler", s, f, Vector((sx * 0.45, SLOT_Y + 0.05, BAR_Z - 0.10)))
 def tod_hang(f, drop, head=(4.0, 0.0), sflex=0.0, kick=0.0, ph=0.0, x=0.0, grip=True, side=0.0):
     body("Toddler", f, tod_pos(drop, x), 0.0, 0.0, side, sflex, 0.0, 0.0, head)
@@ -149,7 +149,11 @@ def tod_pts(names=("body", "male_casualsuit04", "short02")):
     out = []
     for ch in TOD.children:
         if ch.type == 'MESH' and any(k in ch.name for k in names):
-            e = ch.evaluated_get(dg); me = e.to_mesh(); out += [ch.matrix_world @ v.co for v in me.vertices]; e.to_mesh_clear()
+            e = ch.evaluated_get(dg); me = e.to_mesh(); vs = [ch.matrix_world @ v.co for v in me.vertices]; out += vs
+            for ed in me.edges:      # edge samples too (long hair-card edges can cross a bar between two clear vertices)
+                a_, b_ = vs[ed.vertices[0]], vs[ed.vertices[1]]
+                if (a_ - b_).length > 0.01: out += [a_.lerp(b_, t) for t in (0.25, 0.5, 0.75)]
+            e.to_mesh_clear()
     return out
 pts = []
 for hd_ in ((14, 0), (4, 0), (2, 6), (3, -4), (10, 0)):
@@ -168,7 +172,7 @@ best = None; bdy = 0.0
 for dy in [i * 0.002 for i in range(-10, 11)]:
     for k in range(300):
         dz = 0.15 - k * 0.001
-        if clearance(dz, dy) < 0.004:
+        if clearance(dz, dy) < 0.005:
             if best is None or dz + 0.001 < best: best = dz + 0.001; bdy = dy
             break
 Q_HEAD.z -= best if best is not None else 0.0
@@ -303,8 +307,8 @@ for f in list(range(f0, f1 + 1, 4)) + [f1]:
     edge = Ry(cyaw) @ Vector((SEAT_XMIN + 0.012, 0.02, SEAT_H - 0.01))
     CHC.location = grip - edge; CHC.rotation_euler = (0, 0, R_(cyaw) + 0.03 * math.sin(f * 0.2))
     CHC.keyframe_insert("location", frame=f); CHC.keyframe_insert("rotation_euler", frame=f)
-    hand("YoungMan", "L", f, grip + Vector((0, 0, 0.004)), Vector((0, 0, -1)), Ry(yaw) @ Vector((-1, 0, -0.35)),
-         S + Ry(yaw) @ Vector((0.4, 0.4, -0.3)), "cup_hold", 1.0, skin=0.022)
+    hand("YoungMan", "L", f, grip + Ry(yaw) @ Vector((-0.012, 0, -0.03)), Ry(yaw) @ Vector((1, 0, 0)), Vector((0, 0, -1)),
+         S + Ry(yaw) @ Vector((0.4, 0.4, -0.3)), "cup_hold", 1.0, skin=0.014)
 cam12 = shot_cam(sid, [(0, (1.2, -4.6, 1.2), (3.6, -1.7, 0.9)), (1, (0.9, -4.4, 1.2), (2.2, -1.7, 0.9))], 30, 8)
 # outside shot 12 the carried chair stands beside the table (constant)
 for f in (f0 - 1, f1 + 1):
@@ -328,7 +332,7 @@ for u, dz in ((0.0, 0.16), (0.2, 0.15), (0.65, 0.0), (1.0, 0.0)):
     feet(OM, f, omp, 180, 0.0)
     for s, sx in (("L", -1), ("R", 1)):
         P = rail_pt(CHB, sx, f)
-        hand(OM, s, f, P, Vector((0, 0, -1)), Vector((0, 1, -0.6)), shoulder(OM, s, f) + Vector((sx * -0.45, -0.3, -0.3)), "cup_hold", 1.0, skin=0.02)
+        hand(OM, s, f, P, Vector((0, 0, -1)), Vector((0, 1, -0.6)), shoulder(OM, s, f) + Vector((sx * -0.45, -0.3, -0.3)), "cup_hold", 1.0, skin=0.03)
 shot_cam(sid, [(0, (2.5, -3.3, 1.55), (0.1, -1.2, 1.25)), (1, (2.35, -3.15, 1.55), (0.1, -1.2, 1.25))], 26, 8, 0)
 
 # ---------- 14 into a tower: the woman steadies the tower (hand on the top chair's backrest) and looks up
@@ -462,7 +466,7 @@ def kneel(n, f, knee_y, lean, x=0.0, head=(0.0, 0.0), gz=FLOOR2):
     R = CAST[n][1]; H = CAST[n][2]
     thigh = (R.BN["upperleg01.L"].head_local - R.BN["lowerleg01.L"].head_local).length
     shin = (R.BN["lowerleg01.L"].head_local - R.BN["foot.L"].head_local).length
-    rz = gz + 0.09 + thigh * 0.97 + (H.root_head.z - R.BN["upperleg01.L"].head_local.z)
+    rz = gz + 0.14 + thigh * 0.97 + (H.root_head.z - R.BN["upperleg01.L"].head_local.z)
     body(n, f, (x, knee_y + 0.03, rz), 0.0, lean * 0.45, 0, lean * 0.55, 0, 0, head)
     for s in "LR":
         a = H.ankle[s]
@@ -482,7 +486,7 @@ def tod_lift(f, drop, y, arms_out=0.75):
         hand("Toddler", s, f, S + Vector((sx * 0.20 * arms_out, -0.06, 0.04)), Vector((0, 0, -1)), Vector((sx, -0.3, 0.2)),
              S + Vector((sx * 0.2, 0.3, -0.2)), "relaxed", skin=0.0)
 sid = "24"; f0, f1 = SH[sid]; use(sid, "Toddler", "Grandma")
-for u, d, y, ln in ((0.0, 0.50, SLOT_Y, 50), (0.25, 0.52, SLOT_Y, 48), (0.65, 0.80, SLOT_Y, 32), (0.85, 0.84, SLOT_Y + 0.10, 28), (1.0, 0.84, SLOT_Y + 0.15, 26)):
+for u, d, y, ln in ((0.0, 0.68, SLOT_Y, 44), (0.25, 0.70, SLOT_Y, 42), (0.65, 0.84, SLOT_Y, 32), (0.85, 0.86, SLOT_Y + 0.10, 28), (1.0, 0.86, SLOT_Y + 0.15, 26)):
     f = F(sid, u)
     tod_lift(f, d, y)
     kneel(GM, f, -0.10, ln, head=(18 - ln * 0.2, 0))
@@ -492,8 +496,8 @@ shot_cam(sid, [(0, (0.40, -1.85, 3.98), (0.0, -0.35, 3.70)), (1, (0.34, -1.75, 4
 # ---------- 25/26 the toddler back up / completely unharmed: he stands on the slab, grandma kneels behind, hands at his sides
 TODP = Vector((0.0, -0.10, 0.0))
 def tod_stand(f, head=(0.0, 0.0), twist=0.0):
-    pos = Vector((TODP.x, TODP.y, FLOOR2 + TH.root_head.z - 0.002))
-    body("Toddler", f, pos, 0.0, 0.0, 0.0, 2, twist, 0.0, head); feet("Toddler", f, pos, 0.0, FLOOR2 + 0.008)
+    pos = Vector((TODP.x, TODP.y, FLOOR2 + TH.root_head.z + 0.008))
+    body("Toddler", f, pos, 0.0, 0.0, 0.0, 2, twist, 0.0, head); feet("Toddler", f, pos, 0.0, FLOOR2 + 0.018)
     relax_both("Toddler", f, 0.0, out=0.02)
 for sid in ("25", "26"):
     use(sid, "Toddler", "Grandma")
