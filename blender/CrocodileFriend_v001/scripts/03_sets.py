@@ -120,8 +120,8 @@ def s_riv(X, Y, Z): return (X < RX + 9).astype(float)
 terrain("Ground_River", RX-14, RX+14, -20, 22, 0.35, h_riv, s_riv, CR)
 WATER_Z = -0.22
 wat = bpy.data.materials.new("Water"); wat.use_nodes = True; N = wat.node_tree.nodes; Lk = wat.node_tree.links; b = N["Principled BSDF"]
-b.inputs["Base Color"].default_value = (0.03, 0.32, 0.36, 1); b.inputs["Roughness"].default_value = 0.12
-b.inputs["Specular IOR Level"].default_value = 0.05; b.inputs["Alpha"].default_value = 0.78
+b.inputs["Base Color"].default_value = (0.045, 0.085, 0.05, 1); b.inputs["Roughness"].default_value = 0.04
+b.inputs["Specular IOR Level"].default_value = 0.35; b.inputs["Alpha"].default_value = 0.92
 nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 3.0; bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.08
 Lk.new(nz.outputs["Fac"], bp.inputs["Height"]); Lk.new(bp.outputs[0], b.inputs["Normal"])
 for nm, loc, size, c in (("Water_Pond", (0, 10, WATER_Z), (18, 13), CH), ("Water_River", (RX-8, 0, WATER_Z), (14, 44), CR)):

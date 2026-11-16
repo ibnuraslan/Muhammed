@@ -41,11 +41,15 @@ o0 = ctr + cy * 2.0; inv = cr.matrix_world.inverted()
 ok, loc, nrm, idx = cr.evaluated_get(dg).ray_cast(inv @ o0, (inv.to_3x3() @ -cy).normalized())
 if ok: d.location = cr.matrix_world @ loc + cy * 0.004
 d.parent = cr; d.matrix_parent_inverse = cr.matrix_world.inverted()
-# --- catchlights: a tiny light near every shot camera (eyes read white/iris/pupil)
+# --- catchlights: a tiny light near every shot camera, light-linked to the eyes only (no glints on the water)
+EYES = bpy.data.collections.new("CatchlightReceivers")
+for o in OB:
+    if o.type == 'MESH' and ("high-poly" in o.name): EYES.objects.link(o)
 for c in [o for o in OB if o.name.startswith("CAM_")]:
     l = bpy.data.objects.new("Catch_" + c.name, bpy.data.lights.new("Catch_" + c.name, 'POINT')); sc.collection.objects.link(l)
     l.data.energy = 6.0; l.data.shadow_soft_size = 0.05; l.parent = c; l.location = (0.15, 0.25, 0.0)
     l.visible_diffuse = False; l.visible_glossy = True
+    l.light_linking.receiver_collection = EYES
 # --- render settings (the farm renders these)
 sc.render.engine = 'CYCLES'; sc.cycles.samples = 48; sc.cycles.adaptive_threshold = 0.05; sc.cycles.use_denoising = True
 sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = 1080, 1920, 100
@@ -72,7 +76,7 @@ def two_tone(rig, top, bottom, split=0.60):
             nt.links.new(mx.outputs[2], b.inputs["Base Color"])
 for ch in OB["Keeper"].children:
     if "short02" in ch.name: ch.hide_render = ch.hide_viewport = False
-two_tone(OB["Keeper"], (0.08, 0.38, 0.62), (0.22, 0.20, 0.17))          # teal-blue shirt, dark brown trousers
+two_tone(OB["Keeper"], (0.62, 0.10, 0.08), (0.10, 0.09, 0.08))          # teal-blue shirt, dark brown trousers
 PAL = [((0.70, 0.12, 0.12), (0.10, 0.12, 0.25)), ((0.95, 0.75, 0.10), (0.15, 0.25, 0.45)), ((0.12, 0.45, 0.20), (0.25, 0.22, 0.20)),
        ((0.45, 0.18, 0.55), (0.12, 0.12, 0.14)), ((0.90, 0.45, 0.10), (0.20, 0.30, 0.20)), ((0.10, 0.30, 0.70), (0.55, 0.50, 0.42)),
        ((0.80, 0.20, 0.40), (0.15, 0.15, 0.30))]
@@ -81,5 +85,10 @@ for i, n in enumerate(sorted(o.name for o in OB if o.type == 'ARMATURE' and o.na
     top, bot = PAL[i % len(PAL)]
     if n in FUN or n in ("SpecB", "SpecE"): top, bot = (top[0] * 0.45, top[1] * 0.45, top[2] * 0.45), (0.06, 0.06, 0.08)   # sober funeral colours
     two_tone(OB[n], top, bot)
+# water: dark green-brown with sharp reflections (anim_look raised roughness / saturation on it)
+w = bpy.data.materials["Water"]; b = [n for n in w.node_tree.nodes if n.type == 'BSDF_PRINCIPLED'][0]
+for l in list(b.inputs["Base Color"].links): w.node_tree.links.remove(l)
+b.inputs["Base Color"].default_value = (0.045, 0.085, 0.05, 1); b.inputs["Roughness"].default_value = 0.04
+b.inputs["Specular IOR Level"].default_value = 0.35; b.inputs["Alpha"].default_value = 0.92
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("LOOK2 done")

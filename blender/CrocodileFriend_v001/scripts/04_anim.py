@@ -132,6 +132,12 @@ def palm_on(f, s, P, normal, fdir, yaw, pole_off=(-0.5, -0.25, 0.3)):
     pb.location = RM.rest(nme).to_3x3().inverted() @ (pole - RM.BN[nme].head_local); pb.keyframe_insert("location", frame=f, group=nme)
 def fingers(f, s, pose="relaxed"):
     apply_pose(MAN, s, pose, f)
+_wr, _B0, _bas, _pm = _rest_hand(MAN, "R")
+RPALM = _rest_palm_sign(MAN, "R", _B0.col[2])           # +1: the key_hand normal points out of the palm
+def palm_normal_w(s_):
+    wr, B0, bas, pm = _rest_hand(MAN, s_); sg = _rest_palm_sign(MAN, s_, B0.col[2])
+    pb = MAN.pose.bones["wrist." + s_]; Rp = (pb.matrix.to_3x3() @ MAN.data.bones["wrist." + s_].matrix_local.to_3x3().inverted())
+    return ((MAN.matrix_world.to_3x3() @ Rp) @ (B0.col[2] * sg)).normalized()
 def croc_point(local):
     """world point on the croc in its evaluated pose: local = (bone, offset in bone-rest world-aligned frame)"""
     bone, off = local; pb = CROC.pose.bones[bone]
@@ -274,7 +280,7 @@ def s05(s):
             hand_idle(f, s_, 90.0, fwd_off=0.06 + 0.12 * cyc)
     for s_ in "LR": fingers(s["f0"], s_, "relaxed"); fingers(s["f1"], s_, "relaxed")
 shot("S05_PondWide", 200, "B4 kept it in a secret pond behind his house",
-     (((-1.5, 0.8, 6.0), (0.0, 9.0, 0.0)), ((1.2, 1.1, 5.6), (0.6, 9.0, 0.0))), s05, 22)
+     (((-3.6, 0.7, 2.5), (-1.8, 6.5, 0.2)), ((1.6, 0.7, 2.5), (3.0, 6.5, 0.2))), s05, 24)
 def s06(s):
     for f in frames(s):
         u = u_of(s, f)
@@ -308,9 +314,10 @@ def s07(s):
         elif k < 0.8:  W = shR + V((-0.05, 0.12, -0.55)).lerp(V((0.22, 0.10, -0.15)), smooth((k - 0.45) / 0.35))
         elif k < 1.0:  W = shR + V((0.22, 0.10, -0.15)).lerp(V((0.0, 0.45, 0.05)), smooth((k - 0.8) / 0.2))
         else:          W = shR + V((0.0, 0.45, 0.05)).lerp(V((-0.05, 0.12, -0.5)), smooth((f - toss_f) / 50.0))
-        hand_at(f, "R", W, V((0, 0.6, -0.6)), V((1, 0, 0)), 180.0)
+        palm_up = V((0, 0, 1)) * RPALM
+        hand_at(f, "R", W, V((0, 1, 0)) if k >= 0.45 else V((0, 0.6, -0.6)), palm_up if k >= 0.45 else V((1, 0, 0)), 180.0)
     fingers(s["f0"], "L", "cup_hold"); fingers(s["f1"], "L", "cup_hold")
-    fingers(s["f0"], "R", "relaxed"); fingers(toss_f - 30, "R", "cup_hold"); fingers(toss_f, "R", "open_alarm"); fingers(s["f1"], "R", "relaxed")
+    fingers(s["f0"], "R", "relaxed"); fingers(toss_f - 50, "R", "flat_palm"); fingers(toss_f, "R", "flat_palm"); fingers(s["f1"], "R", "relaxed")
     # bucket hangs vertically, its handle apex in the curled left fingers (keyed every frame from the palm)
     BUCKET.rotation_euler = (0, 0, R_(90))
     for f in frames(s, 1):
@@ -325,7 +332,8 @@ def s07(s):
         if f <= rel_f - 45:
             P = BUCKET.matrix_world.translation + V((0, 0, 0.25))
         elif f <= rel_f:
-            P = MAN.matrix_world @ MAN.pose.bones["finger3-1.R"].head + V((0, 0, -0.06))
+            pw = MAN.pose.bones["wrist.R"]; P = MAN.matrix_world @ (pw.head.lerp(MAN.pose.bones["finger3-1.R"].head, 0.85))
+            P = P + palm_normal_w("R") * 0.05
             if f == rel_f: P_rel = P.copy(); V0 = V((0.0, 2.6, 2.2)) / 1.0
         else:
             t = (f - rel_f) / 60.0; P = P_rel + V0 * t + V((0, 0, -4.9 * t * t))
@@ -353,57 +361,44 @@ def s08(s):
     vis([BUCKET], SHOTS[-2]["f0"] if False else s["f0"] - 200, s["f1"])
     fingers(s["f0"], "L", "cup_hold"); fingers(s["f1"], "L", "cup_hold"); fingers(s["f0"], "R", "relaxed"); fingers(s["f1"], "R", "relaxed")
 shot("S08_Snap", 150, "B5 (croc rises for the meat)",
-     (((0.9, 8.6, 0.35), (-0.6, 6.0, 0.15)), ((0.7, 8.2, 0.45), (-0.6, 6.0, 0.25))), s08, 28)
+     (((1.0, 9.6, 0.7), (-0.7, 5.4, 0.8)), ((0.8, 9.2, 0.75), (-0.7, 5.4, 0.85))), s08, 24)
 
-# ---------------- B6 slept beside it (night)
-def lie(f, pos, yaw, breathe=0.0):
-    """lying on his side on the grass, facing the croc (to his right-hand side = his front after the roll)"""
-    g = ground_z(pos.x, pos.y)
-    H.key_root(f, Vector((pos.x, pos.y, g + 0.17)), yaw=yaw, flex=-90 + breathe)
-    H.key_spine(f, flex=6, side=0, head=(28, 0))
-    for s in "LR":
-        sx = 1 if s == "L" else -1
-        # legs straight-ish along the body, toward +body-down
-        down = fwd(yaw)
-        xy = (Vector((pos.x, pos.y)) + (down * -0.0).to_2d())
-    # feet in world: along the body axis (body points from feet to head = -fwd after flex -90 => along +Y_local up)
+# ---------------- B6 slept beside it (night): on his back, knees drawn up, rolled toward the croc, one hand by his head
+SLEEP_P = V((0.6, 2.75)); CROC_SLEEP = (1.2, 3.6)
+def sleep_pose(f, u):
+    g = ground_z(SLEEP_P.x, SLEEP_P.y); br = math.sin(f * 0.045)
+    M = Matrix.Translation(V((SLEEP_P.x, SLEEP_P.y, g + 0.14))) @ Matrix.Rotation(R_(90), 4, 'Z') @ Matrix.Rotation(R_(-88), 4, 'X') @ \
+        Matrix.Rotation(R_(-26), 4, 'Y') @ Matrix.Translation(-H.root_head) @ RM.rest("root")
+    RM.key_world("root", f, M)
+    H.key_spine(f, flex=4 + 1.2 * br, twist=0, side=0, head=(10, 34))
+    T = M @ RM.rest("root").inverted()
+    for s_ in "LR":
+        a_ = H.ankle[s_]
+        fw_ = T @ (a_ + V((0, 0, 0.36)))                      # feet slid toward the hips -> knees up
+        fw_.z = g + 0.08
+        Mf = Matrix.Translation(fw_) @ (T.to_3x3() @ RM.rest("IK_foot." + s_).to_3x3()).to_4x4()
+        RM.key_world("IK_foot." + s_, f, Mf)
+        pb = RM.PB["Pole_knee." + s_]; n = "Pole_knee." + s_
+        pole = (T @ RM.BN["lowerleg01." + s_].head_local) + V((0, 0, 0.9))
+        pb.location = RM.rest(n).to_3x3().inverted() @ (pole - RM.BN[n].head_local); pb.keyframe_insert("location", frame=f, group=n)
+    sc.frame_set(f)
+    head_w = MAN.matrix_world @ MAN.pose.bones["head"].head
+    shR = MAN.matrix_world @ MAN.pose.bones["upperarm01.R"].head
+    W = V((head_w.x + 0.05, head_w.y - 0.22, g + 0.06))     # right hand resting on the grass beside his head
+    H.key_hand("R", f, W, V((-0.6, -0.4, 0)), V((0, 0, 1)), shR + V((0.2, -0.4, 0.3)))
+def sleep_hand(f):
+    sc.frame_set(f)
+    P = croc_point(("spine2", (0.0, 0.25, 0.40)))
+    palm_on(f, "L", P, V((0, 0, -1)), V((-1, 0, 0)), 90.0, pole_off=(0.3, 0.4, 0.3))
 def s09(s):
     for f in frames(s):
-        u = u_of(s, f)
-        croc_key(f, 1.2, 3.6, 180.0, breathe=2 * math.sin(f * 0.04), curl=-6)
-        sleep_pose(f, u)
+        croc_key(f, CROC_SLEEP[0], CROC_SLEEP[1], 180.0, breathe=2 * math.sin(f * 0.04), curl=-6)
+        sleep_pose(f, u_of(s, f))
+    for f in frames(s, 4): sleep_hand(f)
     for s_ in "LR": fingers(s["f0"], s_, "relaxed"); fingers(s["f1"], s_, "relaxed")
-def sleep_pose(f, u):
-    # man lies on his back beside the croc, head toward -X (same way as croc head), hand resting on its back
-    pos = V((0.6, 2.75)); g = ground_z(pos.x, pos.y)
-    br = 1.2 * math.sin(f * 0.045)
-    M = Matrix.Translation(V((pos.x, pos.y, g + 0.13))) @ Matrix.Rotation(R_(90), 4, 'Z') @ Matrix.Rotation(R_(-88), 4, 'X') @ \
-        Matrix.Rotation(R_(-18), 4, 'Y') @ Matrix.Translation(-H.root_head) @ RM.rest("root")
-    RM.key_world("root", f, M)
-    H.key_spine(f, flex=2 + br, twist=0, side=0, head=(10, 30))
-    sc.frame_set(f)
-    for s in "LR":
-        a = H.ankle[s]; p = M @ RM.rest("root").inverted() @ Matrix.Translation(a) @ Matrix.Identity(4)
-        foot_w = (M @ RM.rest("root").inverted()) @ Vector(a)
-        Mf = (M @ RM.rest("root").inverted()) @ Matrix.Translation(Vector((0, 0, 0))) @ RM.rest("IK_foot." + s)
-        foot_w.z = max(foot_w.z, g + 0.07)
-        Mf.translation = foot_w + V((0, 0, 0))
-        RM.key_world("IK_foot." + s, f, Mf)
-        pb = RM.PB["Pole_knee." + s]; n = "Pole_knee." + s
-        pole = foot_w + V((0, 0, 0.8))
-        pb.location = RM.rest(n).to_3x3().inverted() @ (pole - RM.BN[n].head_local); pb.keyframe_insert("location", frame=f, group=n)
 shot("S09_SleepWide", 200, "B6 he even slept beside it (night)",
-     (((0.9, -0.2, 2.2), (0.9, 3.2, 0.2)), ((0.9, 0.6, 1.8), (0.9, 3.2, 0.2))), s09, 26)
-def s10(s):
-    for f in frames(s):
-        u = u_of(s, f)
-        croc_key(f, 1.2, 3.6, 180.0, breathe=2 * math.sin(f * 0.04), curl=-6)
-        sleep_pose(f, u)
-    for f in frames(s, 4):
-        sc.frame_set(f)
-        P = croc_point(("spine2", (0.0, 0.25, 0.36)))
-        palm_on(f, "L", P, V((0, 0, -1)), V((-1, 0, 0)), 90.0, pole_off=(0.3, 0.4, 0.3))
-    for s_ in "LR": fingers(s["f0"], s_, "relaxed"); fingers(s["f1"], s_, "relaxed")
+     (((0.9, -0.1, 2.3), (0.8, 3.1, 0.2)), ((0.9, 0.5, 1.9), (0.8, 3.1, 0.2))), s09, 26)
+def s10(s): s09(s)
 shot("S10_SleepClose", 170, "B6 thinking his love would heal its wounds",
      (((-0.3, 4.9, 1.35), (-0.1, 2.8, 0.25)), ((-0.2, 4.6, 1.25), (-0.1, 2.8, 0.25))), s10, 30)
 
@@ -433,7 +428,7 @@ def s12(s):
             for s_ in "LR": hand_idle(f, s_, 225.0)
     for s_ in "LR": fingers(s["f0"], s_, "relaxed"); fingers(s["f1"], s_, "relaxed")
 shot("S12_RefuseTurn", 170, "B7 the crocodile refused to leave (turns back)",
-     (((-6.6, 1.4, 0.35), (-5.3, 4.0, 0.2)), ((-6.9, 1.9, 0.35), (-5.3, 4.0, 0.2))), s12, 26)
+     (((-5.6, 1.6, 2.4), (-5.3, 4.1, 0.1)), ((-5.9, 1.9, 2.3), (-5.3, 4.1, 0.1))), s12, 28)
 def s13(s):
     kf = s["f0"] + 90
     for f in frames(s):
@@ -452,7 +447,7 @@ def s13(s):
     fingers(s["f0"], "R", "relaxed"); fingers(kf + 30, "R", "relaxed"); fingers(kf + 50, "R", "flat_palm"); fingers(s["f1"], "R", "flat_palm")
     fingers(s["f0"], "L", "relaxed"); fingers(s["f1"], "L", "relaxed")
 shot("S13_ComesBack", 220, "B7 (croc crawls back, he kneels, hand on its head)",
-     (((-4.2, -1.8, 1.0), (-2.4, 1.0, 0.5)), ((-4.0, -1.3, 0.9), (-2.4, 1.0, 0.45))), s13, 28)
+     (((-3.7, -0.9, 1.5), (-2.6, 1.4, 0.35)), ((-3.5, -0.6, 1.4), (-2.5, 1.3, 0.35))), s13, 28)
 
 # ---------------- B8 together 20 years: walking along the pond bank
 def walk_pair(s, y0, x0, x1):
@@ -468,10 +463,10 @@ def walk_pair(s, y0, x0, x1):
     for s_ in "LR": fingers(s["f0"], s_, "relaxed"); fingers(s["f1"], s_, "relaxed")
 def s14(s): walk_pair(s, 3.3, -5.0, -2.2)
 shot("S14_WalkSide", 200, "B8 staying with him for over 20 years",
-     (((-5.0, -0.4, 1.1), (-4.4, 3.6, 0.7)), ((-2.2, -0.4, 1.1), (-1.6, 3.6, 0.7))), s14, 28)
+     (((-4.8, 0.9, 1.4), (-4.2, 3.8, 0.45)), ((-2.0, 0.9, 1.4), (-1.4, 3.8, 0.45))), s14, 26)
 def s15(s): walk_pair(s, 3.3, -2.0, 0.4)
 shot("S15_WalkFront", 170, "B8 (front low)",
-     (((3.8, 2.6, 0.6), (0.0, 3.7, 0.75)), ((3.4, 2.6, 0.6), (0.6, 3.7, 0.75))), s15, 30)
+     (((2.9, 2.7, 1.5), (0.0, 3.8, 0.45)), ((2.7, 2.7, 1.45), (0.6, 3.8, 0.45))), s15, 28)
 
 # ---------------- B9 shows for tourists
 TOUR = [n for n in EX if n.startswith("Spec")]
@@ -537,7 +532,7 @@ def s18(s):
         hand_idle(f, "L", 0.0, drop=0.14, fwd_off=0.22)
     fingers(s["f0"], "R", "flat_palm"); fingers(s["f1"], "R", "flat_palm"); fingers(s["f0"], "L", "relaxed"); fingers(s["f1"], "L", "relaxed")
 shot("S18_Died", 220, "B10 and when it finally died",
-     (((3.8, 1.2, 1.6), (0.9, 3.7, 0.5)), ((3.2, 1.5, 1.4), (0.9, 3.7, 0.5))), s18, 30)
+     (((2.5, 1.9, 1.5), (0.95, 3.75, 0.4)), ((2.3, 2.1, 1.4), (0.95, 3.75, 0.4))), s18, 30)
 
 # ---------------- B11 public funeral, he sang for his friend
 FUN = [n for n in EX if n.startswith("Crowd")] + ["SpecB", "SpecE"]
@@ -596,6 +591,8 @@ shot("S21_HallWide", 170, "B11 (wide: guests, singer, portrait)",
 
 # ------------------------------------------------------------------ run
 for o in [o for o in OB if o.name.startswith("Bench")]: o.hide_render = o.hide_viewport = True
+_s16 = [x for x in SHOTS if x["name"].startswith("S16")][0]; _s17 = [x for x in SHOTS if x["name"].startswith("S17")][0]
+vis([OB["LogoSign_Board"], OB["LogoSign_Face"]], _s16["f0"], _s17["f1"])
 OB["Crate"].location = (-0.2, -8.9, ground_z(-0.2, -8.9))
 OB["Crate"].rotation_euler = (0, 0, R_(-15))
 EXTRA_ALL = [OB[n] for n in EX]
@@ -614,14 +611,14 @@ sun = OB["Sun"]; bg = sc.world.node_tree.nodes["Background"]
 night = [s for s in SHOTS if s["name"].startswith(("S09", "S10"))]
 evening = [s for s in SHOTS if s["name"].startswith("S18")]
 moon = bpy.data.objects.new("MoonFill", bpy.data.lights.new("MoonFill", "SUN")); sc.collection.objects.link(moon)
-moon.data.color = (0.55, 0.65, 1.0); moon.rotation_euler = (R_(50), 0, R_(-140))
+moon.data.color = (0.6, 0.7, 1.0); moon.rotation_euler = (R_(45), 0, R_(200))
 def key_light(f, e_sun, col, e_bg, e_moon):
     sun.data.energy = e_sun; sun.data.color = col; bg.inputs[1].default_value = e_bg; moon.data.energy = e_moon
     sun.data.keyframe_insert("energy", frame=f); sun.data.keyframe_insert("color", frame=f)
     bg.inputs[1].keyframe_insert("default_value", frame=f); moon.data.keyframe_insert("energy", frame=f)
 key_light(1, 3.5, (1, 0.96, 0.9), 1.0, 0.0)
 for s in SHOTS:
-    if s in night: key_light(s["f0"], 0.0, (1, 1, 1), 0.12, 1.6); key_light(s["f1"], 0.0, (1, 1, 1), 0.12, 1.6)
+    if s in night: key_light(s["f0"], 0.0, (1, 1, 1), 0.22, 3.2); key_light(s["f1"], 0.0, (1, 1, 1), 0.22, 3.2)
     elif s in evening: key_light(s["f0"], 2.6, (1, 0.78, 0.55), 0.7, 0.0); key_light(s["f1"], 2.6, (1, 0.78, 0.55), 0.7, 0.0)
     else: key_light(s["f0"], 3.5, (1, 0.96, 0.9), 1.0, 0.0); key_light(s["f1"], 3.5, (1, 0.96, 0.9), 1.0, 0.0)
 for a in bpy.data.actions:
