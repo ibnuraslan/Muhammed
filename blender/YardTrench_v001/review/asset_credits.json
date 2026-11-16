@@ -1,0 +1,38 @@
+{
+ "house": {
+  "uid": "faa69249ddb84765921401fa9438861f",
+  "title": "2 Story House",
+  "author": "Designed By Jonathan",
+  "author_profile": "https://sketchfab.com/designedbyjonathan",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/faa69249ddb84765921401fa9438861f",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "sandbag": {
+  "uid": "7d52600a15c747749d845d9f906045cf",
+  "title": "Sandbag [Low Poly Realist]",
+  "author": "Islide",
+  "author_profile": "https://sketchfab.com/Islide",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/7d52600a15c747749d845d9f906045cf",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "helmet": {
+  "uid": "f201fd09af8e4f048219917d6c7eb38a",
+  "title": "US Army helmet Vietnam war period M1",
+  "author": "etwo",
+  "author_profile": "https://sketchfab.com/etwo",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/f201fd09af8e4f048219917d6c7eb38a",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "fence": {
+  "uid": "43f8b3127fba4800bfc3f36078393e87",
+  "title": "Wooden Fence",
+  "author": "DmitriyGDS",
+  "author_profile": "https://sketchfab.com/DmitriyGDS",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/43f8b3127fba4800bfc3f36078393e87",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
