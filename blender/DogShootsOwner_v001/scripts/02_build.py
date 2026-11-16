@@ -314,7 +314,7 @@ for i in range(40):
     src = PLANTS[random.choice(["PH_shrub_02_a_LOD1", "PH_shrub_02_c_LOD1", "PH_fern_02_b", "PH_fern_02_c"])]
     dup(src, f"RoadShrub{i}", RX + Vector((side * (3.6 + random.random() * 3), -60 + i * 3 + random.random() * 2, 0)), (0, 0, random.random() * 6), 0.8 + random.random() * 0.5, CR)
 AM = dup(AMB, "Amb", RX + Vector((1.5, 0, 0)), (0, 0, 0), 1.0, CR, linked=False)
-logo_decal("Logo_Amb", AM.matrix_world @ Vector((0, -2.83, 0.80)), (R_(90), 0, 0), 0.85, True, CR, parent=AM)
+logo_decal("Logo_Amb", AM.matrix_world @ Vector((0, -2.83, float(os.environ.get("DSO_LZ", "0.73")))), (R_(90), 0, 0), float(os.environ.get("DSO_LW", "0.56")), True, CR, parent=AM)
 # ambulance light bar flashers (keyed blink)
 red_m = mat("FlashRed", (1, 0.1, 0.1), 0.3, emit=(1, 0.05, 0.05), ew=0.0); blue_m = mat("FlashBlue", (0.2, 0.3, 1), 0.3, emit=(0.15, 0.3, 1.0), ew=0.0)
 area("RoadSun", RX + Vector((8, -6, 14)), RX + Vector((0, 0, 0)), 3000, 8.0, CR, (1.0, 0.97, 0.9))
@@ -360,8 +360,7 @@ cminy = min(p.y for p in cpts); cmaxy = max(p.y for p in cpts); cminx = min(p.x 
 print("BUILD crate front y", round(cminy, 3), "x", round(cminx, 3), round(cmaxx, 3), "top", round(ctop, 3))
 # logo plate on the crate top front edge
 box_m = mat("Cardboard", (0.72, 0.52, 0.30), 0.8)
-KBOX = rbox("KBox", (0.40, 0.30, 0.28), (cmaxx + 0.26, 0.05, 0.785 + 0.14), box_m, CK, 0.006)
-logo_decal("Logo_Box", (cmaxx + 0.26, 0.05 - 0.151, 0.785 + 0.14), (R_(90), 0, 0), 0.36, True, CK)
+
 area("KennelKey", KX + Vector((1.5, -2.0, 2.4)), KX + Vector((0, 0.2, 1.0)), 450, 2.0, CK)
 area("KennelFill", KX + Vector((-1.8, -1.2, 1.6)), KX + Vector((0, 0.2, 1.0)), 180, 2.0, CK, (0.92, 0.96, 1.0))
 
@@ -579,7 +578,7 @@ def S03(f0, f1):
         dog_key(f0 + k, D0, 90, dog_pose_stand(head=(-14, 0, -10), tail=10, ext={"__FR": "trig"}))
     c = camera("03", 30)
     a = MUZ + Vector((-0.16, 0.50, 0.17)); b = MUZ + Vector((-0.12, 0.40, 0.14))
-    cam_key(c, f0, (-0.62, 0.30, 1.12), (0.22, 0.42, 0.58), lens=22); cam_key(c, f1, (-0.55, 0.30, 1.06), (0.24, 0.40, 0.58), lens=22)
+    cam_key(c, f0, (-0.58, 0.08, 1.30), (0.18, 0.62, 0.80), lens=18); cam_key(c, f1, (-0.52, 0.10, 1.26), (0.19, 0.62, 0.80), lens=18)
 
 def S04(f0, f1):
     PRESENT["04"] = {"own", "dog"}
@@ -903,65 +902,73 @@ def S13b(f0, f1):
     tgt = Vector((KX.x + 0.25, 0.1, 1.12))
     cam_key(c, f0, tgt + Vector((0.15, -2.4, 0.22)), tgt); cam_key(c, f1, tgt + Vector((0.10, -2.15, 0.18)), tgt)
 
+# hospital: the real curled sleeping-dog scan lies on the bed against his legs, head toward his lap;
+# his left hand rests flat on its back, right arm by his side
+SDH = dup(bpy.data.objects["SleepDog"], "SleepDogHosp", (0, 0, 0), (0, 0, 0), 0.85, CH, linked=True)
+SDH.hide_render = SDH.hide_viewport = False
+def _ray_down(obj, x, y, z0=3.0):
+    inv = obj.matrix_world.inverted()
+    ok, loc, n, i = obj.ray_cast(inv @ Vector((x, y, z0)), inv.to_3x3() @ Vector((0, 0, -1)))
+    return (obj.matrix_world @ loc) if ok else None
+_bt = _ray_down(BD, HX.x + 0.20, 0.52)
+BED_TOP = _bt.z if _bt else MAT_Z
+SDH.location = Vector((HX.x + 0.21, 0.52, BED_TOP + 0.002)); bpy.context.view_layer.update()
+_bk = _ray_down(SDH, HX.x + 0.06, 0.62)
+DOG_BACK = _bk if _bk else Vector((HX.x + 0.07, 0.28, BED_TOP + 0.22))
+print("BUILD hosp bed top", round(BED_TOP, 3), "dog back", tuple(round(v, 3) for v in DOG_BACK))
 def hosp_man(f, smile_head=(18, -20), stroke=0.0):
-    st = HX + Vector((-0.17, 0.78, MAT_Z + 0.02))
+    st = HX + Vector((-0.22, 0.78, BED_TOP + 0.02))
     seated(HOWN, OWNER, f, st, yaw=0, lean=-34, flex=12, head=smile_head, legs_out=True)
-    # left hand rests on the dog's back (dog lies on the bed on the man's +X side... see dog placement)
     sc.frame_set(f)
-    hp = HX + Vector((0.22, 0.32 - 0.08 * stroke, MAT_Z + 0.52))
-    place_hand(OWNER, "L", f, hp, (0.2, 0, -1), (0.3, -1, -0.2)); apply_pose(OWNER, "L", "relaxed", f)
-    place_hand(OWNER, "R", f, st + Vector((-0.14, -0.30, 0.12)), (0, 0, -1), (0, -1, 0)); apply_pose(OWNER, "R", "relaxed", f)
-def hosp_dog(f, tail=0.0, head=(0, 0, 0)):
-    # standing on the mattress beside him, facing the head of the bed, head turned toward his face
-    DOG.rotation_mode = 'XYZ'
-    dog_key(f, HX + Vector((0.24, 0.05, MAT_Z + 0.035)), 180, dog_pose_stand(head=(8 + head[0], 0, -28 + head[2]), tail=tail, pant=2))
+    hp = DOG_BACK + Vector((0.0, -0.05 * stroke, 0.0))
+    _h = _ray_down(SDH, hp.x, hp.y) or hp
+    place_hand(OWNER, "L", f, _h, (0.15, 0, -1), (0.35, -1, 0)); apply_pose(OWNER, "L", "relaxed", f)
+    place_hand(OWNER, "R", f, st + Vector((-0.18, -0.25, 0.10)), (-0.3, 0, -1), (0, -1, 0)); apply_pose(OWNER, "R", "relaxed", f)
 def S14a(f0, f1):
-    PRESENT["14a"] = {"own", "dog"}
+    PRESENT["14a"] = {"own"}
     for fr, t in ((f0, 0.0), ((f0 + f1) // 2, 0.5), (f1, 1.0)):
-        hosp_man(fr, smile_head=(18 + 4 * t, -18 - 4 * t), stroke=0.3 * t); hosp_dog(fr, tail=12 * math.sin(t * 6), head=(0, 0, 10 * t))
+        hosp_man(fr, smile_head=(26 + 4 * t, 10 + 4 * t), stroke=0.3 * t)
     c = camera("14a", 30)
-    tgt = HX + Vector((0.05, 0.50, 1.10))
-    cam_key(c, f0, tgt + Vector((1.55, -0.35, 0.25)), tgt); cam_key(c, f1, tgt + Vector((1.35, -0.25, 0.22)), tgt)
+    tgt = HX + Vector((0.0, 0.50, BED_TOP + 0.40))
+    cam_key(c, f0, tgt + Vector((1.55, -0.55, 0.45)), tgt); cam_key(c, f1, tgt + Vector((1.35, -0.45, 0.40)), tgt)
 def S14b(f0, f1):
-    PRESENT["14b"] = {"own", "dog"}
+    PRESENT["14b"] = {"own"}
     for fr, t in ((f0, 0.0), ((f0 + f1) // 2, 1.0), (f1, 0.0)):
-        hosp_man(fr, smile_head=(22, -22), stroke=t); hosp_dog(fr, tail=15 * math.sin(t * 5), head=(0, 0, 10))
+        hosp_man(fr, smile_head=(28, 12), stroke=t)
     c = camera("14b", 40)
-    tgt = HX + Vector((-0.02, 0.62, 1.32))
-    cam_key(c, f0, tgt + Vector((1.05, -0.25, 0.12)), tgt, lens=32); cam_key(c, f1, tgt + Vector((0.90, -0.22, 0.10)), tgt, lens=32)
+    tgt = HX + Vector((0.0, 0.62, BED_TOP + 0.45))
+    cam_key(c, f0, tgt + Vector((1.00, -0.45, 0.35)), tgt, lens=32); cam_key(c, f1, tgt + Vector((0.86, -0.38, 0.30)), tgt, lens=32)
 
+# field: the same scan, curled asleep in the grass, back toward the cameras (-Y), head on its front paws
 DOGSPOT = CLR + Vector((0.2, -0.4, 0)); MANSPOT = CLR + Vector((0.4, 0.75, 0))
+SDF = dup(bpy.data.objects["SleepDog"], "SleepDogField", DOGSPOT + Vector((0, 0, 0.0)), (0, 0, R_(90)), 1.0, CR, linked=True)
+SDF.hide_render = SDF.hide_viewport = False
 def clear_man(f, head=(30, 0), breath=0.0, back=0.0):
     stand(HOWN, OWNER, f, MANSPOT + Vector((0, back, 0)), yaw=8, head=head, flex=6, breath=breath)
 def clear_dog(f, breath=0.0):
-    dog_side(f, DOGSPOT, 260, head=(0, 0, 0), tail=0, roll_sign=1)
+    pass
 def S15a(f0, f1):
-    PRESENT["15a"] = {"own", "dog"}
+    PRESENT["15a"] = {"own"}
     for fr, hd in ((f0, (20, 5)), ((f0 + f1) // 2, (30, 0)), (f1, (34, -3))):
-        clear_man(fr, head=hd); clear_dog(fr)
+        clear_man(fr, head=hd)
     c = camera("15a", 28)
     tgt = MANSPOT.lerp(DOGSPOT, 0.5) + Vector((0, 0, 0.75))
     cam_key(c, f0, tgt + Vector((0.6, -4.6, 0.0)), tgt, lens=26); cam_key(c, f1, tgt + Vector((0.5, -4.2, 0.05)), tgt, lens=26)
 def S15b(f0, f1):
-    PRESENT["15b"] = {"own", "dog"}
-    for fr in (f0, f1): clear_man(fr, head=(34, -3), back=1.4); clear_dog(fr)
+    PRESENT["15b"] = {"own"}
+    for fr in (f0, f1): clear_man(fr, head=(34, -3), back=1.4)
     c = camera("15b", 35)
-    sc.frame_set(f0); Mw = DOG.matrix_world
-    Hd = Mw @ DOG.pose.bones["head"].head; Bd = Mw @ DOG.pose.bones["spine1"].head; Lg = Mw @ DOG.pose.bones["hoof.FL"].head
-    v = (Hd - Bd); v.z = 0; v.normalize(); pp = Vector((-v.y, v.x, 0))
-    if pp.dot(Lg - Bd) > 0: pp = -pp
-    tgt = Bd.lerp(Hd, 0.55); tgt.z = DOGSPOT.z + 0.18
-    print("BUILD 15b head", tuple(round(x, 2) for x in Hd), "body", tuple(round(x, 2) for x in Bd))
-    cam_key(c, f0, tgt + v * 0.15 + pp * 0.85 + Vector((0, 0, 1.35)), tgt, lens=30); cam_key(c, f1, tgt + v * 0.12 + pp * 0.74 + Vector((0, 0, 1.20)), tgt, lens=30)
+    tgt = DOGSPOT + Vector((0, 0, 0.15))
+    cam_key(c, f0, tgt + Vector((0.35, -1.35, 0.75)), tgt, lens=35); cam_key(c, f1, tgt + Vector((0.28, -1.15, 0.62)), tgt, lens=35)
 def S15c(f0, f1):
-    PRESENT["15c"] = {"own", "dog"}
+    PRESENT["15c"] = {"own"}
     for fr, hd, br in ((f0, (34, -3), 0), ((f0 + f1) // 2, (38, -4), 3), (f1, (36, -2), 0)):
         clear_man(fr, head=hd, breath=br); clear_dog(fr)
     c = camera("15c", 45)
     tgt = MANSPOT + Vector((0, 0, 1.55))
     cam_key(c, f0, tgt + Vector((0.35, -1.45, -0.25)), tgt); cam_key(c, f1, tgt + Vector((0.30, -1.20, -0.22)), tgt)
 def S15d(f0, f1):
-    PRESENT["15d"] = {"own", "dog"}
+    PRESENT["15d"] = {"own"}
     for fr in (f0, f1): clear_man(fr, head=(36, -2)); clear_dog(fr)
     c = camera("15d", 28)
     tgt = (MANSPOT + DOGSPOT) / 2 + Vector((0, 0, 0.5))
