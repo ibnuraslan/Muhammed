@@ -313,7 +313,7 @@ key_obj(VIAL, f0, VDESK); key_vis(CORK, f0, True)
 g0, g1 = BLK["G"]
 for f in list(range(g0, g1 + 1, 20)) + [g1]:
     br = math.sin(f / 20 * 1.3) * 1.6
-    hd = (30, 0) if f < 1850 else (6, 0)
+    hd = (14, 0) if f < 1850 else (6, 0)
     desk_sit(f, br, head=hd, lean=18 if f < 1850 else 8, spine=22 if f < 1850 else 8)
 for f in (g0, g1):
     sc.frame_set(f); flat_left(f, 1.72, 1.74)

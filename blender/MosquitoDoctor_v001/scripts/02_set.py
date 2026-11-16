@@ -297,7 +297,7 @@ for side in (-1, 1):
         segs.append(box("Ward_WallLow", (0.12, 1.0, 1.0), (x, y + 0.5, 0.5), M_WARDWALL))
         segs.append(box("Ward_WallHi", (0.12, 1.0, 0.6), (x, y + 0.5, H - 0.3), M_WARDWALL))
         sky = box("Ward_Sky", (0.02, 1.0, 1.7), (x + side * 0.4, y + 0.5, 1.85), M_SKY); sky.visible_shadow = False; sky.visible_diffuse = False
-        segs.append(box("Ward_WinFrame", (0.12, 1.0, 0.05), (x, y + 0.5, 1.0), M_TRIM))
+        segs.append(box("Ward_WinFrame", (0.16, 1.0, 0.05), (x, y + 0.5, 1.0), M_TRIM))
         segs.append(box("Ward_WinFrame", (0.14, 0.05, 1.6), (x, y + 0.5, 1.8), M_TRIM))
     WD += segs
 WD.append(box("Ward_End", (8, 0.12, H), (WX, 9.0, H / 2), M_WARDWALL)); WD.append(box("Ward_Ceiling", (8, 18, 0.05), (WX, 0, H + 0.02), M_CEIL))
