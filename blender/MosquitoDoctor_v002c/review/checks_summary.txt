@@ -1,0 +1,28 @@
+MosquitoDoctor_v002 — checks on the packed file (MosquitoDoctor_v002_60fps.blend), frames 1–2113.
+Full run on the package, then the two ranges changed by the last fix (1131–1201, 1916–2113) re-run on the final package.
+
+clip_scan (step 6): BAD_RANGES 1363–1681 = Doctor 'self' only.
+  1363–1439 S17 (bent forward on the chair, hands on knees: forearm/thigh contact); 1532–1681 S19/S20 the organ cut-away
+  (the boolean hole in the body/suit makes the self-test read the open torso as intersecting). Watched: nothing visible.
+qa_check (step 6): CAMJUMP 22 = the 24 hard cuts (expected). EMPTY = desk/ward wide shots where the character is
+  <15% of frame (S09, S22 empty desk by design, S25 ward). FILL = macro skin / blanket / hair close-ups (S01, S04, S16)
+  and the hidden cutaway cutter. CLAW/FAN = the doctor's wrap grip on the vial (S05) and ColB's pointing hand (S23).
+  PROPMOVE 3 = vial/lining moving across a cut.
+limb_check (step 2): ARMBODY on Doctor/ColA/Nurse = upper-arm points 0–3 at the shoulder (known false positive), except
+  S17 1361–1439 (up to 12 pts, forearm against the thigh/belly while bent over) and S19/S20 1533–1599 (cut-away boolean).
+  PROPHEAD 75 = CutawayLining near the neck inside the torso (hidden). Nothing visible on the preview.
+body_prop_cross (step 3; vial, cork, pen, notebook, blankets, desk, chairs, basin, bed, cutaway lining):
+  0 on vial, pen, notebook, desk, chairs, basin, bed frame, lining.
+  BoyBlanket 1–808 and WardBlanket_Boy/PatB 1919–2038: legs/feet under the draped blankets and the boy's resting fingertips
+  on his blanket; on the preview the blankets read clean (small fold at the feet in S25).
+
+v002b (director's v002 notes) — re-checked on MosquitoDoctor_v002b_60fps.blend over the changed ranges 1–80, 1681–2113:
+  body_prop_cross: 1–80 only the boy's left fingertips resting on his blanket (off the macro); 1681–1842 0; 1916–2113 feet/legs under the
+  ward blankets (as v002). limb_check: shoulder points ≤2 only. clip_scan 1681–2113: only frame 1681 (last frame of the cut-away).
+  qa_check: CAMJUMP = cuts, EMPTY = wide desk/ward frames, FAN = ColB's pointing hand.
+Preview: v002 preview with 256–351, 1441–1531, 1681–1842, 1916–2113 and 1–80 re-rendered from the v002b package and spliced in.
+
+v002c (director's v002b notes): S01 camera fixed on the landing spot, mosquito starts 2 cm off the forearm (sharp from frame 1, f/22);
+the doctor and his vial are hidden before his first shot (his raised hand had hovered over the boy's arm off-screen in A/B);
+S25 dolly stays above the bed rails and zooms 18->55 mm onto the boy's face; ward blankets clear the bed sheet's folds.
+Preview: v002b preview with 1-80 and 1916-2113 re-rendered from the v002c package and spliced in.

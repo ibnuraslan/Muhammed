@@ -20,7 +20,7 @@ def add(a, o): return lambda f: a(f) + V(o)
 def smooth(x): x = max(0, min(1, x)); return x * x * (3 - 2 * x)
 # (name, f0, f1, aim_fn, cam_start, cam_end, lens, macro, relative)  relative: cam = aim + offset
 SH = [
- ("S01", 1, 100, mq, (0.12, -0.03, 0.05), (0.10, -0.02, 0.045), 60, True, True),
+ ("S01", 1, 100, lambda f: obj("Mosquito", 72) + V((0, 0.0, 0.012)), (0.10, -0.012, 0.07), (0.095, -0.012, 0.06), 50, True, True),
  ("S02", 101, 240, lambda f: headc("Boy", f), (0.48, 0.42, 0.42), (0.40, 0.35, 0.36), 40, False, True),
  ("S03", 241, 340, add(mq, (0, 0, 0.002)), (0.075, -0.012, 0.012), (0.065, 0.006, 0.012), 70, True, True),
  ("S04", 341, 440, add(mq, (0, 0, 0.002)), (0.075, -0.012, 0.018), (0.072, -0.004, 0.017), 60, True, True),
@@ -44,7 +44,7 @@ SH = [
  ("S22", 2621, 2710, fixed((1.45, 1.70, 0.82)), (0.98, 0.68, 1.30), (1.08, 0.84, 1.25), 26, False, False),
  ("S23", 2711, 2830, fixed((1.80, 2.05, 1.20)), (1.62, 0.30, 1.50), (1.66, 0.45, 1.46), 24, False, False),
  ("S24", 2831, 2950, fixed((1.18, 1.95, 1.12)), (1.02, 1.08, 0.96), (1.04, 1.16, 0.94), 30, False, False),
- ("S25", 2951, 3070, lambda f: V((37.75, 1.80, 0.70)).lerp(V((37.00, 1.50, 0.72)), smooth(max(0.0, (f - 3000) / 70))), (39.15, -1.05, 1.62), (38.35, -0.30, 1.65), 18, False, False),
+ ("S25", 2951, 3070, lambda f: V((37.75, 1.80, 0.70)).lerp(headc("Boy", f), smooth(max(0.0, (f - 3000) / 70))), (39.15, -1.05, 1.62), (38.95, -0.70, 1.70), 18, False, False),
  ("S26", 3071, 3190, lambda f: headc("Boy", f), (0.60, -0.32, 0.42), (0.50, -0.27, 0.36), 40, False, True),
 ]
 for m in list(sc.timeline_markers): sc.timeline_markers.remove(m)
@@ -70,6 +70,8 @@ for name, f0, f1, aim, c0, c1, lens, macro, rel in SH:
     L = bpy.data.objects.new("CATCH_" + name, bpy.data.lights.new("CATCH_" + name, 'POINT')); sc.collection.objects.link(L)
     L.data.energy = 1.5 if not macro else 0.3; L.data.shadow_soft_size = 0.02; L.parent = cam; L.location = (0.08, 0.10, 0)
     L.visible_diffuse = False; L.visible_transmission = False; L.visible_volume_scatter = False; L.visible_camera = False
+    if name == "S25":    # push-in by zoom (the camera stays above the bed rails): 18 mm on the crate/nurse, 40 mm on the boy's face
+        cam.data.lens = 18; cam.data.keyframe_insert("lens", frame=3000); cam.data.lens = 55; cam.data.keyframe_insert("lens", frame=3070)
     mk = sc.timeline_markers.new(name, frame=f0); mk.camera = cam
 sc.camera = D["CAM_S01"]
 # ward net of the recovered boy's bed is tied up (hidden) so S26 sees him clearly; logo crate near the ward entrance

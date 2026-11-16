@@ -46,8 +46,10 @@ def drape(name, x0, x1, y0, y1, bodies, base_z, nx=44, ny=52, lift=0.04, edge_dr
             x = x0 + (x1 - x0) * i / nx; y = y0 + (y1 - y0) * j / ny
             h = ray_down(V((x, y, 1.6)), bodies, up=0.0)
             inbed = bed is not None and bed[0] <= x <= bed[1] and bed[2] <= y <= bed[3]
-            z = (h[0].z + lift) if h else (base_z + 0.015 if inbed else base_z - edge_drop)
-            vs[i, j] = [x, y, max(z, base_z - edge_drop), (h[0].z + lift * 0.9) if h else (base_z + 0.015 if inbed else -9)]
+            z = (h[0].z + lift) if h else (base_z + 0.10 if inbed else base_z - edge_drop)
+            floor_ = (h[0].z + lift * 0.9) if h else (base_z + 0.10 if inbed else -9)
+            if inbed: floor_ = max(floor_, base_z + 0.10)        # clear the bed sheet's own folds (they rise ~8 cm)
+            vs[i, j] = [x, y, max(z, base_z - edge_drop, floor_), floor_]
     for it in range(iters):    # smooth (cloth-like), never below the surface
         new = {}
         for (i, j), v in vs.items():
@@ -130,10 +132,10 @@ def land_hold(f, M):
     key_obj(MQ, f, M); wings(f, 0, 0); legs_fly(f, 0.0)
 # A: flies in from the room side, lands on the back of the boy's right hand (lands at 70)
 LM = surf_matrix(LAND_BOY[0], LAND_BOY[1], yaw_deg=200)
-start = LM.translation + V((0.22, -0.18, 0.16))
+start = LM.translation + V((0.010, -0.014, 0.020))      # starts just above the forearm: in frame and sharp from frame 1
 def pathA(u):
     p = start.lerp(LM.translation + V((0, 0, 0.01)), smooth(min(1, u * 1.05)))
-    p += V((0.01 * math.sin(u * 19), 0.008 * math.cos(u * 23), 0.006 * math.sin(u * 31))) * (1 - u)
+    p += V((0.004 * math.sin(u * 19), 0.003 * math.cos(u * 23), 0.0025 * math.sin(u * 31))) * (1 - u)
     return Matrix.Translation(p) @ LM.to_quaternion().to_matrix().to_4x4()
 fly(1, 66, pathA)
 land_hold(67, Matrix.Translation(LM.translation + V((0, 0, 0.004))) @ LM.to_quaternion().to_matrix().to_4x4())
@@ -186,6 +188,9 @@ key_relaxed("Doctor", dc0, *sit("Doctor", dc0, -0.4, 0.98, SEAT_Z, yaw=-90, lean
 # left hand rests on his left thigh
 bake_to_hand(VIAL, "Doctor", "R", dc0, dc1, REL_C)
 key_vis(CORK, 1, False)
+# the doctor (and his vial) first appear at the bedside in C: hidden before, so his raised hand can't hover over the boy's arm in A/B
+key_vis(D["Doctor"], 1, False); key_vis(D["Doctor"], dc0, True)
+key_vis(VIAL, 1, False); key_vis(VIAL, dc0, True); key_vis(CORK, dc0, False)
 # mosquito: on the skin until 655, then flies up into the vial and settles on the inner wall
 land_hold(dc0, BITE_B); feed(dc0, 0.55); land_hold(655, BITE_B)
 def pathC(u):
@@ -504,7 +509,7 @@ for n, side, by, hu in WARD_PAT:
     x0, x1 = (min(hx - side * 0.42, WX + side * 1.50), max(hx - side * 0.42, WX + side * 1.50))
     for c in D[n].children:            # shoes are under the blanket: hidden in the ward so they can't poke through
         if "shoes" in c.name: key_vis(c, l0, False)
-    wb, _ = drape("WardBlanket_" + n, x0, x1, by - 0.66, by + 0.66, [D[n + ".body"]] + [c for c in D[n].children if "suit" in c.name], MATT_Z, nx=40, ny=30, lift=0.06, iters=45, bed=(WX + side * 2.5 - 0.95, WX + side * 2.5 + 0.95, by - 0.62, by + 0.62))
+    wb, _ = drape("WardBlanket_" + n, x0, x1, by - 0.66, by + 0.66, [D[n + ".body"]] + [c for c in D[n].children if "suit" in c.name], MATT_Z, nx=60, ny=44, lift=0.07, iters=90, bed=(WX + side * 2.5 - 0.95, WX + side * 2.5 + 0.95, by - 0.62, by + 0.62))
     WBL.append(wb)
 for n, side, by, hu in WARD_PAT:
     for f in list(range(l0, l1 + 1, 40)) + [l1]:
