@@ -290,7 +290,7 @@ def s06(s):
             if f % 4 == 1 or f == s["f1"]: hand_idle(f, s_, 200.0)
     for s_ in "LR": fingers(s["f0"], s_, "relaxed"); fingers(s["f1"], s_, "relaxed")
 shot("S06_CrocSwim", 150, "B4 (croc swimming toward camera, house behind)",
-     (((3.4, 14.6, 0.75), (2.0, 6.0, 0.9)), ((3.2, 14.3, 0.7), (2.0, 6.0, 0.85))), s06, 30)
+     (((3.4, 14.6, 0.75), (1.0, 6.0, 0.9)), ((3.2, 14.3, 0.7), (1.0, 6.0, 0.85))), s06, 30)
 
 # ---------------- B5 nine pounds of meat a day: bucket + toss
 BUCKET = OB["Bucket"]; MEAT = OB["Meat"]; MEAT2 = OB["MeatInBucket"]
@@ -400,7 +400,7 @@ shot("S09_SleepWide", 200, "B6 he even slept beside it (night)",
      (((0.9, -0.1, 2.3), (0.8, 3.1, 0.2)), ((0.9, 0.5, 1.9), (0.8, 3.1, 0.2))), s09, 26)
 def s10(s): s09(s)
 shot("S10_SleepClose", 170, "B6 thinking his love would heal its wounds",
-     (((-0.95, 4.25, 1.15), (-0.1, 3.05, 0.25)), ((-0.6, 3.85, 0.9), (-0.1, 3.05, 0.25))), s10, 32)
+     (((0.4, 1.1, 1.5), (0.6, 3.2, 0.25)), ((0.5, 1.6, 1.25), (0.6, 3.2, 0.25))), s10, 30)
 
 # ---------------- B7 release: points to the river, croc leaves, refuses, comes back
 def s11(s):
@@ -418,7 +418,7 @@ def s11(s):
     fingers(s["f0"], "R", "relaxed"); fingers(s["f0"] + 50, "R", "point"); fingers(s["f1"] - 30, "R", "point"); fingers(s["f1"], "R", "relaxed")
     fingers(s["f0"], "L", "relaxed"); fingers(s["f1"], "L", "relaxed")
 shot("S11_Release", 200, "B7 when he tried to release it back to the wild",
-     (((-3.7, -0.7, 1.6), (-3.0, 2.2, 0.8)), ((-3.5, -0.4, 1.55), (-3.2, 2.5, 0.8))), s11, 26)
+     (((-5.0, -2.0, 1.8), (-3.2, 2.0, 0.6)), ((-4.8, -1.7, 1.75), (-3.4, 2.2, 0.6))), s11, 22)
 def s12(s):
     for f in frames(s):
         u = u_of(s, f); turn = smooth(min(1, max(0, (u - 0.2) / 0.6)))
@@ -447,7 +447,7 @@ def s13(s):
     fingers(s["f0"], "R", "relaxed"); fingers(kf + 30, "R", "relaxed"); fingers(kf + 50, "R", "flat_palm"); fingers(s["f1"], "R", "flat_palm")
     fingers(s["f0"], "L", "relaxed"); fingers(s["f1"], "L", "relaxed")
 shot("S13_ComesBack", 220, "B7 (croc crawls back, he kneels, hand on its head)",
-     (((-4.1, -0.1, 1.3), (-2.2, 1.1, 0.5)), ((-3.9, 0.15, 1.25), (-2.2, 1.1, 0.5))), s13, 28)
+     (((-4.3, 0.2, 1.4), (-2.0, 0.9, 0.6)), ((-4.1, 0.4, 1.35), (-2.0, 0.9, 0.6))), s13, 26)
 
 # ---------------- B8 together 20 years: walking along the pond bank
 def walk_pair(s, y0, x0, x1):
@@ -502,7 +502,7 @@ def in_water(s, pat=True):
         H.key_spine(f, flex=10, twist=-8, head=(-6, 6 * math.sin(u * 3)))
         for s_ in "LR": H.key_foot(s_, f, H.foot_xy(s_, mp, y_), y_, lift=0.0)
         rt = rightv(yaw); fw = fwd(yaw); hd = math.degrees(math.atan2(fw.y, fw.x))
-        cp = mp + (rt * -0.62).to_2d() - (fw * 0.55).to_2d()
+        cp = mp + (rt * 0.62).to_2d() - (fw * 0.55).to_2d()
         croc_key(f, cp.x, cp.y, hd, z=WATER_Z - 0.2, swim=f / 90.0, swim_amp=6, tuck=0.8, neck=(8 + 4 * math.sin(f * 0.05), 0), head_up=4)
     for f in frames(s, 2):
         sc.frame_set(f); u = u_of(s, f)
@@ -510,7 +510,7 @@ def in_water(s, pat=True):
         palm_on(f, "R", P, V((0, 0, -1)), croc_dir("head", (0, -1, 0)), yaw, pole_off=(-0.3, -0.25, 0.45))
         sh = MAN.matrix_world @ MAN.pose.bones["upperarm01.L"].head
         wave = math.sin(f * 0.15) * 0.08
-        hand_at(f, "L", sh + rightv(yaw) * 0.25 + V((0, 0, 0.35 + wave)), V((0, 0, 1)), fwd(yaw), yaw, pole_off=(-0.2, -0.4, 0.5))
+        hand_at(f, "L", sh + rightv(yaw) * -0.25 + V((0, 0, 0.35 + wave)), V((0, 0, 1)), fwd(yaw), yaw, pole_off=(-0.2, -0.4, 0.5))
     fingers(s["f0"], "R", "flat_palm"); fingers(s["f1"], "R", "flat_palm"); fingers(s["f0"], "L", "relaxed"); fingers(s["f1"], "L", "relaxed")
 def s16(s): tourists(s); in_water(s)
 shot("S16_ShowWide", 220, "B9 they performed for tourists (logo sign on the deck rail)",
@@ -538,7 +538,7 @@ shot("S18_Died", 220, "B10 and when it finally died",
 FUN = [n for n in EX if n.startswith("Crowd")] + ["SpecB", "SpecE"]
 def audience(s):
     vis([OB[n] for n in FUN], s["f0"], s["f1"])
-    seats = [(HX - 2.4, -0.1), (HX - 1.3, 0.25), (HX + 0.4, -0.2), (HX + 2.6, 0.5), (HX - 1.8, -1.4), (HX + 0.9, -1.3)]
+    seats = [(HX - 2.4, -0.1), (HX - 1.3, 0.25), (HX + 0.4, -0.2), (HX - 3.4, 0.6), (HX - 1.8, -1.4), (HX + 0.9, -1.3)]
     for i, n in enumerate(FUN):
         h = EX[n]; x, y = seats[i]
         yw = 180.0 + math.degrees(math.atan2(x - (HX - 0.7), 2.3 - y)) * 0.6
@@ -619,7 +619,7 @@ def key_light(f, e_sun, col, e_bg, e_moon):
 key_light(1, 3.5, (1, 0.96, 0.9), 1.0, 0.0)
 for s in SHOTS:
     if s in night: key_light(s["f0"], 0.0, (1, 1, 1), 0.22, 3.2); key_light(s["f1"], 0.0, (1, 1, 1), 0.22, 3.2)
-    elif s in evening: key_light(s["f0"], 2.6, (1, 0.78, 0.55), 0.7, 0.0); key_light(s["f1"], 2.6, (1, 0.78, 0.55), 0.7, 0.0)
+    elif s in evening: key_light(s["f0"], 3.4, (1, 0.82, 0.62), 0.95, 0.0); key_light(s["f1"], 3.4, (1, 0.82, 0.62), 0.95, 0.0)
     else: key_light(s["f0"], 3.5, (1, 0.96, 0.9), 1.0, 0.0); key_light(s["f1"], 3.5, (1, 0.96, 0.9), 1.0, 0.0)
 for a in bpy.data.actions:
     for fc in getattr(a, "fcurves", []):

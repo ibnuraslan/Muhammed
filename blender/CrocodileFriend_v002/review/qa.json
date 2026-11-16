@@ -1,0 +1,840 @@
+{
+ "frames": {
+  "301": [
+   [
+    "BACKHEAD",
+    "Keeper"
+   ]
+  ],
+  "817": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "823": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "829": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "835": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "841": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "847": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "853": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "859": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "865": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "871": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "877": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "883": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "889": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "895": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "901": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "907": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "913": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "919": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "925": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "931": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "937": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "943": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "949": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "955": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "961": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "967": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "973": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "979": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "985": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1003": [
+   [
+    "CLAW",
+    "Keeper.R curl 30"
+   ],
+   [
+    "FAN",
+    "Keeper.R fingers fanned 40 deg (index vs little)"
+   ]
+  ],
+  "1159": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1165": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1171": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1177": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1183": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1189": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1195": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1201": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1207": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1213": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1219": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1225": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1231": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1237": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1243": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1249": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1255": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1261": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1267": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1273": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1279": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1285": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1291": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1297": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1303": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1309": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1315": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1321": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1327": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1333": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1339": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1345": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1351": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1357": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1363": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1369": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1387": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1699": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1705": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1711": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1717": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1723": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1729": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1735": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1741": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1747": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1753": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1759": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1765": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1771": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1777": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1783": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "139": [
+   [
+    "CAMJUMP",
+    "cut: 55.81 m, 76 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "195": [
+   [
+    "CAMJUMP",
+    "cut: 6.79 m, 23 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "300": [
+   [
+    "CAMJUMP",
+    "cut: 15.63 m, 51 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "428": [
+   [
+    "CAMJUMP",
+    "cut: 14.40 m, 179 deg in one frame (neighbours 0.04 m, 0 deg)"
+   ]
+  ],
+  "542": [
+   [
+    "CAMJUMP",
+    "cut: 8.11 m, 34 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "657": [
+   [
+    "CAMJUMP",
+    "cut: 3.01 m, 23 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "738": [
+   [
+    "CAMJUMP",
+    "cut: 9.61 m, 158 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "816": [
+   [
+    "CAMJUMP",
+    "cut: 1.61 m, 7 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "986": [
+   [
+    "CAMJUMP",
+    "cut: 5.95 m, 35 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1157": [
+   [
+    "CAMJUMP",
+    "cut: 3.46 m, 36 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1292": [
+   [
+    "CAMJUMP",
+    "cut: 2.47 m, 65 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1370": [
+   [
+    "CAMJUMP",
+    "cut: 0.86 m, 65 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1488": [
+   [
+    "CAMJUMP",
+    "cut: 8.35 m, 22 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "1593": [
+   [
+    "CAMJUMP",
+    "cut: 2.70 m, 165 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1697": [
+   [
+    "CAMJUMP",
+    "cut: 46.06 m, 169 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1785": [
+   [
+    "CAMJUMP",
+    "cut: 3.54 m, 6 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "613": [
+   [
+    "PROPMOVE",
+    "Meat moves 11.2 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "619": [
+   [
+    "PROPMOVE",
+    "Meat moves 30.3 cm with no hand on it (nearest finger 27 cm)"
+   ]
+  ],
+  "625": [
+   [
+    "PROPMOVE",
+    "Meat moves 26.6 cm with no hand on it (nearest finger 56 cm)"
+   ]
+  ],
+  "997": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 29 deg (index vs little)"
+   ]
+  ],
+  "1009": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 53 deg (index vs little)"
+   ]
+  ],
+  "1015": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 68 deg (index vs little)"
+   ]
+  ],
+  "1021": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 81 deg (index vs little)"
+   ]
+  ],
+  "1027": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 91 deg (index vs little)"
+   ]
+  ],
+  "1033": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "1039": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1045": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1051": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1057": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1063": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1069": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1075": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1081": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1087": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1093": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1099": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1105": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1111": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1117": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1123": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1129": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1135": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1141": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1147": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "1153": [
+   [
+    "FAN",
+    "Keeper.R fingers fanned 97 deg (index vs little)"
+   ]
+  ]
+ },
+ "counts": {
+  "BACKHEAD": 1,
+  "EMPTY": 95,
+  "CLAW": 1,
+  "CAMJUMP": 16,
+  "PROPMOVE": 3,
+  "FAN": 27
+ }
+}

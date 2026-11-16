@@ -11,5 +11,6 @@ $B -b work/look.blend -P scripts/06_to_vo.py -- $V/CrocodileFriend_v002_VO.mp3 w
 $B -b work/vo.blend --python ../pipeline/package_for_farm.py -- $PWD/work/vo_packed.blend 2>&1 | grep -E "PROBLEMS" || true
 $B -b work/vo_packed.blend -P scripts/07_shrink.py -- work/vo_small.blend 2>&1 | grep -E "SHRUNK|rror" || true
 $B -b work/vo_small.blend --python ../pipeline/package_for_farm.py -- $V/CrocodileFriend_v002_60fps.blend 2>&1 | grep -E "FARM|PROBLEMS|rror" || true
+$B -b $V/CrocodileFriend_v002_60fps.blend -P scripts/08_fix_cams.py -- $V/CrocodileFriend_v002_60fps.blend 2>&1 | grep -E "FIXCAMS|rror" || true
 rm -f $V/*.blend1
 ls -la $V/CrocodileFriend_v002_60fps.blend
