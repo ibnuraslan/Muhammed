@@ -1,0 +1,166 @@
+{
+ "note": "Phase 2: starts at VO word frames (1+round(s*60)); frames = slot (trimmed, never stretched; motion runs at the clip's nominal rate). Dropped shots parked after frame_end.",
+ "frame_end": 1715,
+ "shots": [
+  {
+   "id": "1a",
+   "start": 1,
+   "frames": 95,
+   "nominal": 125
+  },
+  {
+   "id": "1b",
+   "start": 96,
+   "frames": 96,
+   "nominal": 109
+  },
+  {
+   "id": "1c",
+   "start": 3001,
+   "frames": 78,
+   "nominal": 78,
+   "dropped": true
+  },
+  {
+   "id": "2",
+   "start": 192,
+   "frames": 93,
+   "nominal": 156
+  },
+  {
+   "id": "3a",
+   "start": 285,
+   "frames": 87,
+   "nominal": 125
+  },
+  {
+   "id": "3b",
+   "start": 372,
+   "frames": 90,
+   "nominal": 125
+  },
+  {
+   "id": "3c",
+   "start": 462,
+   "frames": 72,
+   "nominal": 101
+  },
+  {
+   "id": "4a",
+   "start": 534,
+   "frames": 72,
+   "nominal": 156
+  },
+  {
+   "id": "4b",
+   "start": 606,
+   "frames": 66,
+   "nominal": 117
+  },
+  {
+   "id": "5a",
+   "start": 672,
+   "frames": 62,
+   "nominal": 109
+  },
+  {
+   "id": "5b",
+   "start": 734,
+   "frames": 75,
+   "nominal": 140
+  },
+  {
+   "id": "5c",
+   "start": 3089,
+   "frames": 140,
+   "nominal": 140,
+   "dropped": true
+  },
+  {
+   "id": "6a",
+   "start": 809,
+   "frames": 67,
+   "nominal": 78
+  },
+  {
+   "id": "6b",
+   "start": 876,
+   "frames": 107,
+   "nominal": 94
+  },
+  {
+   "id": "6c",
+   "start": 3239,
+   "frames": 78,
+   "nominal": 78,
+   "dropped": true
+  },
+  {
+   "id": "7a",
+   "start": 983,
+   "frames": 56,
+   "nominal": 109
+  },
+  {
+   "id": "7b",
+   "start": 1039,
+   "frames": 94,
+   "nominal": 109
+  },
+  {
+   "id": "8a",
+   "start": 1133,
+   "frames": 49,
+   "nominal": 94
+  },
+  {
+   "id": "8b",
+   "start": 1182,
+   "frames": 59,
+   "nominal": 78
+  },
+  {
+   "id": "9",
+   "start": 1241,
+   "frames": 72,
+   "nominal": 94
+  },
+  {
+   "id": "10",
+   "start": 1313,
+   "frames": 91,
+   "nominal": 203
+  },
+  {
+   "id": "11a",
+   "start": 1404,
+   "frames": 59,
+   "nominal": 117
+  },
+  {
+   "id": "11b",
+   "start": 1463,
+   "frames": 69,
+   "nominal": 101
+  },
+  {
+   "id": "12a",
+   "start": 1532,
+   "frames": 118,
+   "nominal": 94
+  },
+  {
+   "id": "12b",
+   "start": 3327,
+   "frames": 78,
+   "nominal": 78,
+   "dropped": true
+  },
+  {
+   "id": "13",
+   "start": 1650,
+   "frames": 66,
+   "nominal": 117
+  }
+ ]
+}
