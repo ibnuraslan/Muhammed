@@ -161,8 +161,11 @@ def beat_B6():
 # ================================================================== B7 made millions (2221..2460)
 def beat_B7():
     f0, f1 = WIN["B7"]; X = 40.0
+    for o in bpy.data.objects:      # logo only on the two front-centre boxes (director: no logos cut by the frame edge)
+        if o.name.startswith("PinBox") and o.name.endswith("_Logo") and o.name not in ("PinBox01_Logo", "PinBox02_Logo"):
+            o.hide_render = True; o.hide_viewport = True
     cam_shot("Cam7a", f0, 2340, [(f0, (X - 0.07, -1.85, 0.62), (X - 0.07, 0.2, 0.18)), (2340, (X - 0.07, -1.60, 0.58), (X - 0.07, 0.2, 0.18))], lens=26)
-    cam_shot("Cam7b", 2341, f1, [(2341, (X + 0.2, -1.2, 0.9), (X - 0.1, 0.4, 0.2)), (f1, (X + 0.2, -1.0, 2.1), (X - 0.1, 0.6, 0.15))], lens=26)
+    cam_shot("Cam7b", 2341, f1, [(2341, (X - 0.07, -1.45, 0.95), (X - 0.07, 0.4, 0.2)), (f1, (X - 0.07, -1.15, 2.1), (X - 0.07, 0.6, 0.15))], lens=26)
 
 # ================================================================== B8 died poor but respected (2461..2730)
 def beat_B8():
