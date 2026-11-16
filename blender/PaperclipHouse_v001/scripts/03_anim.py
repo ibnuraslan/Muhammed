@@ -83,6 +83,7 @@ def setup(t, men, props):
     for p in PROPS:
         on = p in props
         vis_obj(p, t, on)
+        key_obj(p, t, scale=(1, 1, 1))
         if not on: key_obj(p, t, loc=(300, 0, -50))
 
 def base(m, t, xy, yaw, pose="relaxed"):
@@ -124,7 +125,17 @@ def key_path(item, t0, n, fn, step=2):
     track(t0, n, step, k)
 
 # hand grips: spec = (person, side, local_contact, local_approach, local_finger_dir, mode) ; mode 'grip' (grip_object) or a pose name (place_hand)
-def attach(item, fnM, t0, n, spec, u_on, u_off, reach=18, leave=20, step=2):
+BIND = []
+def bind_items():
+    """the holding hand drives its item: re-key the item every frame from the EVALUATED wrist (no drift off the fingers)"""
+    for item, m, s, rel, fa, fb in BIND:
+        for f in range(fa, fb + 1):
+            sc.frame_set(f)
+            W = m.o.matrix_world @ m.r.PB["wrist." + s].matrix
+            key_matrix(item, f, W @ rel)
+    BIND.clear()
+
+def attach(item, fnM, t0, n, spec, u_on, u_off, reach=18, leave=20, step=2, drive=None):
     """hand follows item between u_on..u_off (fractions of the clip); hang before (reaching in over `reach` frames) and after"""
     m, s, lc, la, lf, mode = spec
     f_on = t0 + int(round(u_on * n)); f_off = t0 + int(round(u_off * n))
@@ -137,6 +148,10 @@ def attach(item, fnM, t0, n, spec, u_on, u_off, reach=18, leave=20, step=2):
         place_hand(m.o, s, f_on, C, A, F, skin=0.014); apply_pose(m.o, s, mode, f_on)
     sc.frame_set(f_on)
     rel = Mi.inverted() @ ik_world(m, s)
+    if drive is not None:
+        da, db = (t0 + int(round(drive[0] * n)), t0 + int(round(drive[1] * n)))
+        Wr = m.o.matrix_world @ m.r.PB["wrist." + s].matrix
+        BIND.append((item, m, s, Wr.inverted() @ Mi, da, db))
     pb = m.r.PB["Pole_elbow." + s]
     def fol(f, u):
         uu = u_on + (u_off - u_on) * u
@@ -173,19 +188,19 @@ def handover(item, giver, gsides, recv, rsides, t0, n, kind="small", ys=(0.0, 0.
     if kind == "small":
         g = (giver, gsides[0], (-half, 0, 0.0), (0, 0, -1), (1, 0, 0), "grip")
         r = (recv, rsides[0], (half, 0, 0.0), (0, 0, -1), (-1, 0, 0), "grip")
-        attach(item, P, t0, n, g, 0.0, uc); attach(item, P, t0, n, r, ub, 1.0)
+        attach(item, P, t0, n, g, 0.0, uc, drive=(0.0, uc)); attach(item, P, t0, n, r, ub, 1.0, drive=(uc, 1.0))
     elif kind == "cup":
         g = (giver, gsides[0], (-half, 0, 0.0), (0, 0, 1), (1, 0, 0), "cup_hold")
         r = (recv, rsides[0], (half, 0, 0.0), (0, 0, 1), (-1, 0, 0), "cup_hold")
-        attach(item, P, t0, n, g, 0.0, uc); attach(item, P, t0, n, r, ub, 1.0)
+        attach(item, P, t0, n, g, 0.0, uc, drive=(0.0, uc)); attach(item, P, t0, n, r, ub, 1.0, drive=(uc, 1.0))
     else:   # big: side faces at local +-Y; giver at -X half, receiver at +X half
         wy = item.dimensions.y / 2; dz = item.get("side_z", 0.0); dx = item.get("side_dx", 0.07)
         for s in gsides:
             sy = 1 if s == "L" else -1           # giver faces +X: his left is +Y
-            attach(item, P, t0, n, (giver, s, (-dx, sy * wy, dz), (0, -sy, 0), (0.3, 0, -1), "cup_hold"), 0.0, uc)
+            attach(item, P, t0, n, (giver, s, (-dx, sy * wy, dz), (0, -sy, 0), (0.3, 0, -1), "cup_hold"), 0.0, uc, drive=(0.0, uc) if s == "R" else None)
         for s in rsides:
             sy = -1 if s == "L" else 1           # receiver faces -X: his left is -Y
-            attach(item, P, t0, n, (recv, s, (dx, sy * wy, dz), (0, -sy, 0), (-0.3, 0, -1), "cup_hold"), ub, 1.0)
+            attach(item, P, t0, n, (recv, s, (dx, sy * wy, dz), (0, -sy, 0), (-0.3, 0, -1), "cup_hold"), ub, 1.0, drive=(uc, 1.0) if s == "R" else None)
     return P
 
 def hold(item, m, sides, t0, n, fnM, kind="small", u_on=0.0, u_off=1.0):
@@ -193,14 +208,14 @@ def hold(item, m, sides, t0, n, fnM, kind="small", u_on=0.0, u_off=1.0):
     key_path(item, t0, n, fnM)
     half = item.get("grip_half", max(0.02, min(0.10, item.dimensions.x * 0.30)))
     if kind == "small":
-        attach(item, fnM, t0, n, (m, sides[0], (-half, 0, 0), (0, 0, -1), (1, 0, 0), "grip"), u_on, u_off)
+        attach(item, fnM, t0, n, (m, sides[0], (-half, 0, 0), (0, 0, -1), (1, 0, 0), "grip"), u_on, u_off, drive=(u_on, u_off))
     elif kind == "cup":
-        attach(item, fnM, t0, n, (m, sides[0], (0, 0, 0), (0, 0, 1), (0, -1, 0), "cup_hold"), u_on, u_off)
+        attach(item, fnM, t0, n, (m, sides[0], (0, 0, 0), (0, 0, 1), (0, -1, 0), "cup_hold"), u_on, u_off, drive=(u_on, u_off))
     else:
         wy = item.dimensions.y / 2; dz = item.get("side_z", 0.0)
         for s in sides:
             sy = 1 if s == "L" else -1
-            attach(item, fnM, t0, n, (m, s, (0, sy * wy, dz), (0, -sy, 0), (0.3, 0, -1), "cup_hold"), u_on, u_off)
+            attach(item, fnM, t0, n, (m, s, (0, sy * wy, dz), (0, -sy, 0), (0.3, 0, -1), "cup_hold"), u_on, u_off, drive=(u_on, u_off) if s == sides[0] else None)
 
 def catch(c, d=0.06, energy=1.5):
     nm = c.name + "_Catch"
@@ -448,17 +463,17 @@ def S14(t, n):
 # ===================================================================== STREET condo
 def S15(t, n):
     P["P_CondoKeys"]["grip_half"] = 0.02
-    swap_shot("S15", [hero, M["Landlady"]], hero, M["Landlady"], P["P_Contract"], P["P_CondoKeys"], 21.0, -5.4, gap=0.80, cam_d=2.5)
+    swap_shot("S15", [hero, M["Landlady"]], hero, M["Landlady"], P["P_Contract"], P["P_CondoKeys"], 21.0, -8.6, gap=0.80, cam_d=2.5)
 
 def S16(t, n):
     setup(t, [hero], [P["P_CondoKeys"]])
-    xy = (21.0, -6.4); base(hero, t, xy, 0)
+    xy = (21.0, -8.8); base(hero, t, xy, 0)
     sc.frame_set(t); c0 = hero.shoulder("R") + V(0.06, -0.32, -0.14)
     def fnM(u): return item_matrix(c0 + V(0, 0, 0.14 * ease(u / 0.5)), 90 + 20 * math.sin(u * 6))
     hold(P["P_CondoKeys"], hero, ("R",), t, n, fnM)
-    def fr(f, u): look_at(hero, f, P["P_CondoKeys"].matrix_world.translation if u < 0.5 else V(21.4, -9.6, 1.5), flex=1); hero.jaw(f, 3 * ease((u - 0.4) / 0.4))
+    def fr(f, u): look_at(hero, f, P["P_CondoKeys"].matrix_world.translation if u < 0.5 else V(21.4, -11.9, 1.5), flex=1); hero.jaw(f, 3 * ease((u - 0.4) / 0.4))
     track(t, n, 4, fr)
-    camera("S16", 30, t, V(21.6, -9.6, 1.30), V(21.0, -5.4, 1.6), t + n, V(21.5, -9.1, 1.30), V(21.0, -5.4, 1.65))
+    camera("S16", 30, t, V(21.6, -11.9, 1.30), V(21.0, -7.8, 1.6), t + n, V(21.5, -11.4, 1.30), V(21.0, -7.8, 1.65))
 
 # ===================================================================== STUDIO bar: rocker, snow globe
 def S17(t, n):
@@ -504,7 +519,8 @@ def S19(t, n):
         hero.jaw(f, 2.5 * ease((u - 0.6) / 0.3))
     track(t, n, 4, fr)
     sc.frame_set(t + n // 2); g = P["P_SnowGlobe"].matrix_world.translation
-    camera("S19", 35, t, g + V(-0.05, -1.55, 0.35), g + V(0, 0.15, 0.22), t + n, g + V(-0.02, -1.35, 0.33), g + V(0, 0.15, 0.24), fstop=9)
+    hm = (hero.head_w() + M["Rocker"].head_w()) / 2; tg = hm * 0.5 + g * 0.5
+    camera("S19", 32, t, tg + V(0.0, -1.75, 0.10), tg, t + n, tg + V(0.0, -1.55, 0.10), tg + V(0, 0, 0.02), fstop=9)
 
 def S20(t, n):
     """hero holds the snow globe in both hands and looks into it"""
@@ -513,7 +529,7 @@ def S20(t, n):
     sc.frame_set(t); c0 = hero.shoulder("R") + hero.fwd() * 0.32 + hero.right() * -0.10 + V(0, 0, -0.26)
     def fnM(u): return item_matrix(c0 + V(0, 0, 0.10 * ease(u)), -15 + 25 * ease(u))
     key_path(P["P_SnowGlobe"], t, n, fnM)
-    attach(P["P_SnowGlobe"], fnM, t, n, (hero, "R", (0.0, 0.0, 0.0), (0, 0, 1), (0, -1, 0.0), "cup_hold"), 0.0, 1.0)
+    attach(P["P_SnowGlobe"], fnM, t, n, (hero, "R", (0.0, 0.0, 0.0), (0, 0, 1), (0, -1, 0.0), "cup_hold"), 0.0, 1.0, drive=(0.0, 1.0))
     def fr(f, u): look_at(hero, f, P["P_SnowGlobe"].matrix_world.translation + V(0, 0, 0.06), flex=3); hero.jaw(f, 2 * ease(u))
     track(t, n, 4, fr)
     sc.frame_set(t + n // 2); tg = hero.head_w() * 0.5 + P["P_SnowGlobe"].matrix_world.translation * 0.5
@@ -541,7 +557,7 @@ def S22(t, n):
         a = ease((u - 0.3) / 0.35); sc.frame_set(f)
         for s in "LR":
             sx = 1 if s == "L" else -1; sh = hero.shoulder(s)
-            W = (sh + hero.right() * (-sx) * 0.10 + V(0, 0, -0.50)).lerp(sh - hero.right() * sx * 0.32 + hero.fwd() * 0.28 + V(0, 0, -0.28), a)
+            W = (sh + hero.right() * (-sx) * 0.10 + V(0, 0, -0.50)).lerp(sh - hero.right() * sx * 0.22 + hero.fwd() * 0.30 + V(0, 0, -0.42), a)
             hero.hand(s, f, W, (W - sh).normalized(), hero.fwd(), pole=sh - hero.right() * sx * 0.3 + V(0, 0, -0.4) - hero.fwd() * 0.2)
         look_at(hero, f, P["P_MovieCamera"].matrix_world.translation + V(0, 0, 1.4), flex=-3)
         hero.jaw(f, 3 * a)
@@ -558,7 +574,7 @@ def S23(t, n):
     def fnM(u): return item_matrix(c0 + V(0, 0, 0.02 * math.sin(u * 4)), m.yaw, Matrix.Rotation(R(-15), 4, 'X') @ Matrix.Translation(V(0.22, 0, 0)))
     key_path(np_, t, n, fnM)
     for s, x in (("L", 0.20), ("R", -0.20)):
-        attach(np_, fnM, t, n, (m, s, (x * 1.0 - 0.0, 0.0, 0.10), (0, 1, 0), (0, 0, -1), "grip"), 0.0, 1.0)
+        attach(np_, fnM, t, n, (m, s, (x * 1.0 - 0.0, 0.0, 0.10), (0, 1, 0), (0, 0, -1), "grip"), 0.0, 1.0, drive=(0.0, 1.0) if s == "L" else None)
     def fr(f, u):
         look_at(m, f, np_.matrix_world.translation + V(0, 0, 0.05), flex=4)
         look_at(M["PenLady"], f, np_.matrix_world.translation, flex=6)
@@ -595,13 +611,13 @@ def S25(t, n):
         key_obj(o, t, loc=(x, VY + 1.0, 0.95), rot=(R(12), 0, R(25)), scale=(s_, s_, s_))
         key_obj(o, t + n, loc=(x, VY + 1.0, 0.95), rot=(R(12), 0, R(55)), scale=(s_, s_, s_))
     for o in items: key_obj(o, T["S25"][1], scale=(1, 1, 1))
-    camera("S25", 35, t, V(VX - 2.4, VY - 2.6, 1.30), V(VX - 2.2, VY + 1.0, 0.95), t + n, V(x - 0.6, VY - 2.6, 1.30), V(x - 0.4, VY + 1.0, 0.95), fstop=11)
+    camera("S25", 35, t, V(VX - 2.2, VY - 2.3, 1.25), V(VX - 2.0, VY + 1.0, 0.95), t + n, V(x - 0.8, VY - 2.3, 1.25), V(x - 0.6, VY + 1.0, 0.95), fstop=11)
 
 # ===================================================================== STREET: one year later, the house
 def S26(t, n):
     """hero walks up the sidewalk past the blue mailbox toward the house"""
     setup(t, [hero], [])
-    x = 2.2; y0, y1 = -6.8, -9.6
+    x = 1.5; y0, y1 = -6.8, -9.6
     path = lambda f: Vector((x, y0 + (y1 - y0) * ease((f - t) / n), 0))
     base(hero, t, (x, y0), 0)
     hero.h.walk(path, lambda f: 0.0, t, t + n, stride=0.70)
@@ -612,7 +628,7 @@ def S26(t, n):
             hero.hang(s, f, fwd=0.14 * ph, lift=0.04 * max(0, ph))
         look_at(hero, f, V(3.0, -10.6, 1.0) if u > 0.5 else V(4.0, -14.0, 1.5), amount=0.6)
     track(t, n, 2, fr)
-    camera("S26", 30, t, V(3.9, -14.4, 1.25), V(2.4, -7.5, 1.35), t + n, V(3.8, -14.0, 1.25), V(2.5, -9.0, 1.25))
+    camera("S26", 30, t, V(0.4, -14.4, 1.25), V(1.7, -7.5, 1.35), t + n, V(0.5, -14.0, 1.25), V(1.8, -9.0, 1.25))
 
 def S27(t, n):
     P["P_Clapper"]["grip_half"] = 0.10; P["P_HouseKeys"]["grip_half"] = 0.02
@@ -640,7 +656,7 @@ def S28(t, n):
 def S29(t, n):
     """inside his new home: hero walks in, stops in the living room, looks around, smiles; camera pushes in"""
     setup(t, [hero], [])
-    x = HX + 1.28; y0, y1 = HY + 1.7, HY - 0.3
+    x = HX + 1.28; y0, y1 = HY + 1.9, HY + 0.5
     path = lambda f: Vector((x, y0 + (y1 - y0) * ease((f - t) / (0.6 * n)), 0))
     base(hero, t, (x, y0), 0)
     hero.h.walk(path, lambda f: 0.0, t, t + int(0.6 * n), stride=0.65)
@@ -652,13 +668,14 @@ def S29(t, n):
         look_at(hero, f, V(HX - 2.5 + 3.5 * ease((u - 0.55) / 0.45), HY - 1.5, 1.6) if u > 0.55 else V(HX + 1.0, HY - 3.0, 1.6), amount=0.8)
         hero.jaw(f, 2.5 * ease((u - 0.6) / 0.3))
     track(t, n, 2, fr)
-    camera("S29", 30, t, V(HX + 0.2, HY - 2.3, 1.55), V(HX + 1.0, HY + 1.2, 1.3), t + n, V(HX + 0.4, HY - 1.9, 1.55), V(HX + 1.0, HY + 0.0, 1.4))
+    camera("S29", 30, t, V(HX + 0.3, HY - 2.6, 1.55), V(HX + 1.1, HY + 1.4, 1.3), t + n, V(HX + 0.5, HY - 2.2, 1.55), V(HX + 1.15, HY + 0.6, 1.4))
 
 for k, _ in SHOTS:
     if ONLY and k not in ONLY: continue
     t0, t1 = T[k]; L = CLIP[k]
     print("BUILD", k, t0, t1, L); sys.stdout.flush()
     globals()[k](t0, L)
+    bind_items()
 
 cuts = sorted(v[0] for v in T.values())
 for o in ALL + list(cams.objects):
