@@ -264,7 +264,8 @@ bat_key(T1 + 4, Mloc(LAND + V((0.0, 0.0, 0.05)), BAT_LIE)); bat_key(T1 + 9, Mloc
 wings(T1 + 4, up=-10); wings(T1 + 9, up=-14); wings(T1 + 14, up=-15)
 HOLD_FOLD = float(os.environ.get("BAT_HOLD_FOLD", "-60")); HOLD_UP = float(os.environ.get("BAT_HOLD_UP", "25"))
 HW = float(os.environ.get('HOLD_WING', '-75'))
-wings(446, up=-15); wings(472, up=HW); wings(756, up=HW)   # wings folded along the body while he holds it (clear of his arms and body)
+HF = float(os.environ.get('HOLD_FOLD', '40'))   # tips swing to the belly side, away from his forearm
+wings(446, up=-15); wings(472, up=HW, fold=HF); wings(756, up=HW, fold=HF)   # wings folded along the body while he holds it (clear of his arms and body)
 for f_, a_ in ((446, 0), (470, -55), (675, -55), (695, 0), (724, 0), (742, -55), (756, -55), (792, 0)):
     BR.key_rot("legs", f_, [("X", a_)])   # legs hang free only at the bite (curled legs read as a blob in close-up)
 BAT_REST = Mloc(LAND + V((0.02, 0.01, 0.026)), BAT_LIE)
@@ -315,6 +316,8 @@ sc.frame_set(450)
 IKR_GRAB = D[S].pose.bones["IK_hand.R"].matrix.copy()
 print("REACH err at grab (m):", round((bone_world(S, "wrist.R").to_translation() - (D[S].matrix_world @ IKR_GRAB).to_translation()).length, 4))
 REL = (D[S].matrix_world @ IKR_GRAB).inverted() @ BAT_REST     # bat in the hand from here on
+_off = (D[S].matrix_world @ IKR_GRAB).inverted().to_3x3() @ V((0, 0, -float(os.environ.get('PALM_GAP', '0.0'))))
+REL = Matrix.Translation(_off) @ REL          # bat body sits just out of the palm (no palm/finger-root overlap), fingers still round it
 # hold the crouch a beat, then rise holding it at chest height in front, looking at it
 key_ikhand_matrix(S, "R", 458, IKR_GRAB); P, Rb = crouch(458, 1.0); key_relaxed(S, 458, P, Rb, sides="L")
 def hand_for_bat(Mbat):
@@ -371,7 +374,9 @@ P, Rb = stand(S, 752, STEP.x, STEP.y, yaw=YAW, flex=-3, spine=-5, head=(14, 0), 
 Mb = bat_front(752, P, Rb, fwd=0.44, up=-0.14, tilt=-25)
 P, Rb = stand(S, 758, STEP.x, STEP.y, yaw=YAW, flex=-3, spine=-5, head=(16, 0), hands=False, feet=False); key_relaxed(S, 758, P, Rb, sides="L")
 Mb = bat_front(758, P, Rb, fwd=0.44, up=-0.15, tilt=-25)
-apply_pose(D[S], "R", "wrap_grip", 756, amount=0.85); apply_pose(D[S], "R", "open_alarm", 762)   # lets go: the bat drops
+GF = float(os.environ.get('BITE_LOOSEN', '0.0'))
+apply_pose(D[S], "R", "cup_hold", 672, amount=GF); apply_pose(D[S], "R", "cup_hold", 724, amount=GF)   # a looser fist at the bite (fingers resting on the fur)
+apply_pose(D[S], "R", "wrap_grip", 740, amount=0.85); apply_pose(D[S], "R", "wrap_grip", 756, amount=0.85); apply_pose(D[S], "R", "open_alarm", 762)   # lets go: the bat drops
 DROP = V((STEP.x, STEP.y, 0.026)) + Rz(YAW) @ V((0.12, -0.66, 0))   # in front of his feet, clear of both shoes and the stand base
 def shock_stand(f, hd, mouth_hand=False):
     P, Rb = stand(S, f, STEP.x, STEP.y, yaw=YAW, flex=2, spine=4, head=hd, hands=False, feet=False)
@@ -392,7 +397,7 @@ jaw(S, 775, 3); jaw(S, 860, 2); jaw(S, 1000, 3); jaw(S, 1280, 2)
 # (no blood: director / LESSONS hard limit)
 
 # ================================================================= E: drops it, bends over (1280-1600)
-wings(762, up=HW); wings(780, up=-20); wings(796, up=-15)
+wings(762, up=HW, fold=HF); wings(780, up=-20); wings(796, up=-15)
 def bake_held(f0, f1):
     for f in range(f0, f1 + 1):
         sc.frame_set(f)
@@ -603,10 +608,10 @@ def oxygen_mask():
     for sx in (-1, 1):   # elastic strap: from the cup's side over the cheek, then over the hair round the back of the head
         st0 = G[N_ if sx > 0 else 0, N_ // 2].co.copy(); q = [st0]
         a0 = math.atan2((st0 - HC).x * sx, -(st0 - HC).y)
-        for k_ in range(1, 25):
-            ang = a0 + (math.pi - a0) * k_ / 24; d_ = V((sx * math.sin(ang), -math.cos(ang), (st0.z - HC.z) / 0.4 * (1 - k_ / 24) + 0.04 * k_ / 24)).normalized()
+        for k_ in range(1, 61):
+            ang = a0 + (math.pi - a0) * k_ / 60; d_ = V((sx * math.sin(ang), -math.cos(ang), (st0.z - HC.z) / 0.4 * (1 - k_ / 60) + 0.04 * k_ / 60)).normalized()
             h_ = outer(d_)
-            if h_ is not None: q.append(h_ + (h_ - HC).normalized() * 0.005)
+            if h_ is not None: q.append(h_ + (h_ - HC).normalized() * 0.012)
         s2 = cs.splines.new("POLY"); s2.points.add(len(q) - 1)
         for pt, p in zip(s2.points, q): pt.co = (p.x, p.y, p.z, 1.0)
     st = bpy.data.objects.new("OxyStrap", cs); sc.collection.objects.link(st); cs.materials.append(soft_mat("M_Strap", (0.9, 0.95, 0.95), 0.5))

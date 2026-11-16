@@ -15,7 +15,7 @@ VO beat, so Phase 2 can shift and trim blocks to the VO frames without stretchin
 | | | **S03** 150–300 notices | singer finishes the line, head turns down to the bat | medium front-right, slow push |
 | 2. He picks it up and bites it, thinking it's a toy | 300–620 | **S04** 300–410 | lets go of the stand, two steps toward it, starts to crouch | 3/4 front-right medium-wide |
 | | | **S05** 410–470 grabs | deep crouch, right hand reaches the bat's lower body and closes (`grip_object` + wrap_grip; the bat is baked to the IK hand every frame from here on). **Edit plan:** use 410–444 (the reach) and cut to S06 at 506, so the finger-contact frames 445–505 are not shown. | low front-right, face visible |
-| | | **S06** 470–620 (used from 506) rises | stands up holding it at chest height, looks down at it, turns it | medium front-right, push-in |
+| | | **S06** 470–620 (used from 516) rises | stands up holding it at chest height, looks down at it, turns it | medium front-right, push-in |
 | | 620–724 | **S07** 620–680 to the mouth | lifts the bat (wings folded, held in ONE fist round its body) toward his face | close-up 3/4 left |
 | | | **S08** 680–718 bite | profile: the bat's head reaches his lips — **cut on contact** (nothing enters the mouth); other hand relaxed | close-up side profile from his left (~60°), framed on mouth + bat + fist |
 | 3. It was real | 718–1280 | **S09** 718–800 recoil | jerks it away from his face and lets it fall to the deck | medium 3/4 front-right |
