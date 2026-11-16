@@ -1,0 +1,142 @@
+[
+ {
+  "id": "S01",
+  "set": "or",
+  "f0": 1,
+  "f1": 72,
+  "line": "They surgically removed - OR, surgeon over the sleeping patient"
+ },
+ {
+  "id": "S02",
+  "set": "dia",
+  "f0": 73,
+  "f1": 132,
+  "line": "90% of her tongue - mouth model, tumour on the tongue"
+ },
+ {
+  "id": "S03",
+  "set": "dia",
+  "f0": 133,
+  "f1": 192,
+  "line": "90% of her tongue - the front 90% lifts out, the stump stays"
+ },
+ {
+  "id": "S04",
+  "set": "dia",
+  "f0": 193,
+  "f1": 252,
+  "line": "because it had cancer - the removed piece turns, purple tumour"
+ },
+ {
+  "id": "S05",
+  "set": "or",
+  "f0": 253,
+  "f1": 312,
+  "line": "they cut a muscle - her arm on the arm board, nurse at the arm"
+ },
+ {
+  "id": "S06",
+  "set": "dia",
+  "f0": 313,
+  "f1": 372,
+  "line": "out of her arm - forearm model, muscle flap lifts out with its vessels"
+ },
+ {
+  "id": "S07",
+  "set": "dia",
+  "f0": 373,
+  "f1": 432,
+  "line": "They connected - flap set onto the stump, vessels run to the neck"
+ },
+ {
+  "id": "S08",
+  "set": "dia",
+  "f0": 433,
+  "f1": 492,
+  "line": "the veins inside her mouth - vessels join, stitches"
+ },
+ {
+  "id": "S09",
+  "set": "dia",
+  "f0": 493,
+  "f1": 552,
+  "line": "and stitched the nerves - yellow nerve joins"
+ },
+ {
+  "id": "S10",
+  "set": "or",
+  "f0": 553,
+  "f1": 612,
+  "line": "(stitching) - surgeon's masked face, concentrating"
+ },
+ {
+  "id": "S11",
+  "set": "dia",
+  "f0": 613,
+  "f1": 672,
+  "line": "The muscle was shaped - the slab starts to take the tongue's form"
+ },
+ {
+  "id": "S12",
+  "set": "dia",
+  "f0": 673,
+  "f1": 732,
+  "line": "onto what was left of her tongue - shaping completes, colour turns tongue-pink"
+ },
+ {
+  "id": "S13",
+  "set": "dia",
+  "f0": 733,
+  "f1": 792,
+  "line": "matching its shape - full mouth, new tongue"
+ },
+ {
+  "id": "S14",
+  "set": "or",
+  "f0": 793,
+  "f1": 852,
+  "line": "its shape - surgeon straightens up, patient resting"
+ },
+ {
+  "id": "S15",
+  "set": "ward",
+  "f0": 853,
+  "f1": 942,
+  "line": "doctors said - ward wide, doctor at the bedside"
+ },
+ {
+  "id": "S16",
+  "set": "ward",
+  "f0": 943,
+  "f1": 1032,
+  "line": "she would never speak - doctor, slight head shake"
+ },
+ {
+  "id": "S17",
+  "set": "ward",
+  "f0": 1033,
+  "f1": 1122,
+  "line": "just days later - daughter walks in through the door"
+ },
+ {
+  "id": "S18",
+  "set": "ward",
+  "f0": 1123,
+  "f1": 1212,
+  "line": "she said hello - patient close: turns, smiles, says hello"
+ },
+ {
+  "id": "S19",
+  "set": "ward",
+  "f0": 1213,
+  "f1": 1302,
+  "line": "to her daughter - daughter walks to the bedside"
+ },
+ {
+  "id": "S20",
+  "set": "ward",
+  "f0": 1303,
+  "f1": 1392,
+  "line": "both faces, mother and daughter"
+ }
+]

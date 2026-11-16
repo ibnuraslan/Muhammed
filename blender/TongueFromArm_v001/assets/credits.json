@@ -1,0 +1,47 @@
+{
+ "teeth": {
+  "uid": "c4c569f0e08948e2a572007a7a5726f2",
+  "title": "Human teeth",
+  "author": "Alexander Antipov",
+  "author_profile": "https://sketchfab.com/Dessen",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/c4c569f0e08948e2a572007a7a5726f2",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "tongue": {
+  "uid": "1b91d1274a84411c8600f01ca482926c",
+  "title": "Tongue",
+  "author": "UseerNotFound",
+  "author_profile": "https://sketchfab.com/UseerNotFound",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/1b91d1274a84411c8600f01ca482926c",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "tongue_lp": {
+  "uid": "9a41683fa58e455ba32ede42503a9280",
+  "title": "Low Poly Tongue",
+  "author": "solidearthvr",
+  "author_profile": "https://sketchfab.com/solidearthvr",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/9a41683fa58e455ba32ede42503a9280",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "bed": {
+  "uid": "60651eac7e96454c8cf5c43a91412336",
+  "title": "Simple Hospital Bed",
+  "author": "Yvo Pors",
+  "author_profile": "https://sketchfab.com/yvopors14",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/60651eac7e96454c8cf5c43a91412336",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "orlamp": {
+  "uid": "04a8ddf6e47141289ce0372e9e842167",
+  "title": "Operating room lamps",
+  "author": "House Doctor",
+  "author_profile": "https://sketchfab.com/chin4grci4",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/04a8ddf6e47141289ce0372e9e842167",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
