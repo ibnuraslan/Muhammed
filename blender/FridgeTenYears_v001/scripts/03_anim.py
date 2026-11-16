@@ -141,7 +141,7 @@ TOP_X = BACK_X + 0.40                           # walking line on the cooler top
 def S01(t, L):
     """he walks along the cooler tops (careful steps, arms swinging), toward the hero unit"""
     era(t, 2009); cast(t, [wk]); hero_at(t, 0.0)
-    y0, y1 = -2.3, GAP_Y - 0.05
+    y1 = GAP_Y - 0.05; y0 = y1 - min(1.8, 0.75 * L * 0.85 / 60)        # ~0.75 m/s careful steps
     path = lambda f: Vector((TOP_X, y0 + (y1 - y0) * smooth(min(1, (f - t) / (L * 0.85))), 0))
     yaw = lambda f: 180.0
     wk.h.walk(path, yaw, t, t + L, stride=0.55, lift=0.07, lean=4, step=2)
@@ -176,11 +176,13 @@ def S02(t, L):
                 wk.h.key_foot(s, f, fx + Vector((0.10 * k, 0)), 90, lift=max(0.0, lift), pitch=-10 * k)
             wk.spine(f, flex=-8 * k, pitch=-25 * k); wk.jaw(f, 7 * k)
             sc.frame_set(f); rw = wk.root_world()
-            for s, sx in (("L", 1), ("R", -1)):
-                sh = rw @ wk.r.BN["upperarm01." + s].head_local
-                Wp = sh + Vector((0.10, -sx * 0.25 * 0 + sx * 0.0, 0)) + Vector((0.05, 0, 0)) + (Vector((0, 0, -0.45)).lerp(Vector((0, 0, 0.42)), smooth(k)))
-                Wp = Vector((Wp.x, sh.y + (0.30 if s == "R" else -0.30) * smooth(k) * 0 + (sh.y - rw.translation.y) * 0.6, Wp.z))
-                wk.arm_to(s, f, Wp, Vector((0, 0, 1)).lerp(Vector((0, 0, -1)), 1 - smooth(k)), Vector((1, 0, 0)), pose="open_alarm" if k > 0.5 else "relaxed")
+            for s in "LR":                              # arms swing up and OUT to the side (never across the chest)
+                sh = rw @ wk.r.BN["upperarm01." + s].head_local; sd = sh - rw.translation; sd.z = 0; sd.normalize()
+                u = smooth(k)
+                Wp = sh + sd * (0.14 + 0.26 * math.sin(math.pi * min(1, u * 1.2)) * 0.8 + 0.05 * u) + Vector((0.05, 0, -0.45 + 0.85 * u))
+                dv = (Wp - sh).normalized()
+                wk.arm_to(s, f, Wp, dv, Vector((1, 0, 0)), pose="open_alarm" if k > 0.5 else "relaxed",
+                          pole=sh + sd * 0.5 + Vector((-0.25, 0, -0.1)))
         else:                                        # drop into the gap (accelerating), lands knees bent, arms still up
             k = (i - td) / (L - td); fall = min(1.0, (k / 0.55) ** 2)
             x = GAP_X - 0.095; gz = (HT - 0.25) * (1 - fall)
@@ -210,7 +212,8 @@ def wedged(a, f, i, L, mood=0.0, wave=0.0):
     for s, ph in (("L", 0.0), ("R", 1.7)):
         sh = rw @ a.r.BN["upperarm01." + s].head_local; side = (sh.y - rw.translation.y)
         up = 0.38 + 0.08 * math.sin(i / 8 + ph) * wave
-        a.arm_to(s, f, Vector((GAP_X - 0.02, sh.y + side * 0.9, sh.z + up + 0.06)), Vector((0, side * 0.5, 1)), Vector((-1, 0, 0)), pose="open_alarm")
+        a.arm_to(s, f, Vector((GAP_X + 0.01, sh.y + side * 0.9, sh.z + up + 0.06)), Vector((0, side * 0.5, 1)), Vector((-1, 0, 0)), pose="open_alarm",
+                 pole=Vector((GAP_X + 0.12, sh.y + side * 2.0, sh.z - 0.1)))      # elbows out along the gap, clear of the wall
 
 def S03(t, L):
     """crane from the aisle up over the cooler bank: the supermarket, and the narrow gap behind it with him inside"""
@@ -222,7 +225,7 @@ def S03(t, L):
 def S04(t, L):
     era(t, 2009, gap_light=60); cast(t, [wk]); hero_at(t, 0.0)
     for i in range(0, L + 1, 3): wedged(wk, t + i, i + 200, L, 1.0, 1.0)
-    c = cam("CAM_S04", 26, 8); catch(c)
+    c = cam("CAM_S04", 40, 8); catch(c)
     cam_path(c, t, L, [(0, (GAP_X + 0.08, GAP_Y - 1.7, 4.2), (GAP_X, GAP_Y, 1.0)), (1, (GAP_X + 0.06, GAP_Y - 1.45, 4.1), (GAP_X, GAP_Y, 1.1))])
     mark("S04", c)
 def S05(t, L):
@@ -236,7 +239,7 @@ def S06(t, L):
     for i in range(0, L + 1, 3): wedged(wk, t + i, i + 600, L, 3.0, 1.0)
     c = cam("CAM_S06", 55, 8); catch(c)
     sc.frame_set(t + L // 2); hd = wk.o.matrix_world @ wk.r.PB["head"].head
-    cam_path(c, t, L, [(0, (GAP_X + 0.04, hd.y - 0.6, hd.z + 1.55), hd + Vector((0, 0, 0.08))), (1, (GAP_X + 0.04, hd.y - 0.5, hd.z + 1.3), hd + Vector((0, 0, 0.08)))])
+    cam_path(c, t, L, [(0, (GAP_X + 0.32, hd.y - 0.1, hd.z + 1.45), hd + Vector((0, 0, 0.05))), (1, (GAP_X + 0.28, hd.y - 0.08, hd.z + 1.25), hd + Vector((0, 0, 0.05)))])
     mark("S06", c)
 def S07(t, L):
     """cooler fronts humming: push along the glass doors (he is behind them, unseen)"""
@@ -268,7 +271,7 @@ def talk_pose(a, f, i, yaw, xy, nod=0.0, shake=0.0, shrug=0.0, talk=0.0):
         rw = a.root_world()
         for s in "LR":
             sh = rw @ a.r.BN["upperarm01." + s].head_local; fwd = rw.to_3x3() @ Vector((0, -1, 0)); side = (sh - rw.translation); side.z = 0
-            W = sh + fwd * 0.30 + side.normalized() * 0.12 * shrug + Vector((0, 0, -0.42 + 0.06 * shrug))
+            W = sh + fwd * 0.16 + side.normalized() * 0.20 * shrug + Vector((0, 0, -0.42 + 0.06 * shrug))
             a.arm_to(s, f, W, fwd + side.normalized() * 0.3, Vector((0, 0, 1)) * 1.0 + fwd * 0.2, pose="relaxed",
                      pole=sh + side.normalized() * 0.4 + Vector((0, 0, -0.3)) - fwd * 0.2)
     else:
@@ -297,7 +300,7 @@ def S10(t, L):
         talk_pose(mg, f, i, 180, (MEET.x, -0.55), nod=4, talk=1.0)
         talk_pose(dt, f, i, 0, (MEET.x + 0.1, 0.55), shake=10)
     c = cam("CAM_S10", 35, 8); catch(c)
-    cam_path(c, t, L, [(0, (-6.9, 1.6, 1.6), (MEET.x, 0.3, 1.5)), (1, (-6.8, 1.2, 1.6), (MEET.x, 0.4, 1.55))])
+    cam_path(c, t, L, [(0, (-7.15, 1.75, 1.6), (MEET.x, -0.05, 1.5)), (1, (-7.15, 1.5, 1.6), (MEET.x, 0.0, 1.55))])
     mark("S10", c)
 def S11(t, L):
     era(t, 2009); cast(t, [mg, dt]); hero_at(t, 0.0)
@@ -317,7 +320,7 @@ def S12(t, L):
         dt.stand_g(f, (MEET.x + 0.1, 0.55), 0 + 60 * k); dt.spine(f, flex=2, pitch=6 * k, turn=25 * k); sc.frame_set(f)
         for s in "LR": dt.hang(s, f)
     c = cam("CAM_S12", 28, 8); catch(c)
-    cam_path(c, t, L, [(0, (-7.2, 1.8, 1.6), (MEET.x, 0.4, 1.45)), (1, (-7.3, 1.6, 2.1), (BACK_X, 0.3, 1.45))])
+    cam_path(c, t, L, [(0, (-7.2, 1.9, 1.6), (MEET.x, 0.4, 1.45)), (1, (-7.25, 1.85, 1.65), (MEET.x - 0.15, 0.4, 1.45))])
     mark("S12", c)
 
 # ===================================================================== 2019
@@ -331,7 +334,7 @@ def S14(t, L):
     """two contractors walk down the aisle toward the cooler"""
     era(t, 2019); cast(t, [ca, cb]); hero_at(t, 0.0)
     for a, x0, yy in ((ca, -2.2, -0.35), (cb, -1.4, 0.40)):
-        p0, p1 = Vector((x0, yy, 0)), Vector((x0 - 2.6, yy, 0))
+        p0, p1 = Vector((x0, yy, 0)), Vector((x0 - 1.25 * L / 60, yy, 0))   # 1.25 m/s walk
         path = lambda f, p0=p0, p1=p1: p0.lerp(p1, (f - t) / L)
         a.h.walk(path, lambda f: -90.0, t, t + L, stride=0.75, step=2)
         for i in range(0, L + 1, 3):
@@ -363,16 +366,17 @@ def S15(t, L):
         ca.stand_g(f, (-8.2, -0.6), -70 + 0 * k); ca.spine(f, flex=2, pitch=-2, turn=10); sc.frame_set(f)
         rw = ca.root_world(); sh = rw @ ca.r.BN["upperarm01.R"].head_local
         tgt = Vector((FRONT_X, -0.3, 1.5)); dirv = (tgt - sh).normalized()
-        W = sh.lerp(sh + dirv * 0.55 + Vector((0, 0, -0.05)), k) + Vector((0, 0, -0.45 * (1 - k)))
+        sd = sh - rw.translation; sd.z = 0; sd.normalize()
+        W = (sh + sd * 0.11 + Vector((0, 0, -0.44))).lerp(sh + dirv * 0.55 + Vector((0, 0, -0.05)), k)   # from beside the hip, never through it
         ca.arm_to("R", f, W, dirv.lerp(Vector((0, 0, -1)), 1 - k), Vector((0, 0, -1)), pose="point" if k > 0.6 else "relaxed",
                   pole=sh + Vector((0.1, 0.35, -0.4)))
         ca.hang("L", f)
         cb.stand_g(f, (-7.9, 0.45), -110); cb.spine(f, flex=2, pitch=4 * math.sin(i / 8), turn=-6); sc.frame_set(f)
         for s in "LR": cb.hang(s, f)
-    c = cam("CAM_S15", 30, 8); catch(c)
-    cam_path(c, t, L, [(0, (-7.0, -2.4, 1.65), (-8.6, -0.1, 1.45)), (1, (-7.0, -2.0, 1.65), (-8.8, -0.1, 1.45))])
+    c = cam("CAM_S15", 24, 8); catch(c)
+    cam_path(c, t, L, [(0, (-7.0, -2.5, 1.65), (-8.2, 0.1, 1.4)), (1, (-7.0, -2.2, 1.65), (-8.3, 0.1, 1.4))])
     mark("S15", c)
-PUSH = 1.25
+PUSH = 0.95
 def pushing(t, L, y0, y1):
     for i in range(0, L + 1, 2):
         f = t + i; u = i / L; y = y0 + (y1 - y0) * smooth(u)
@@ -382,14 +386,14 @@ def pushing(t, L, y0, y1):
 def S16(t, L):
     """as they moved the unit: both push its side panel, it slides along the wall (logo on ConA's back)"""
     era(t, 2019); cast(t, [ca, cb])
-    pushing(t, L, -1.0, -1.0 + PUSH * 0.55)
+    pushing(t, L, -1.0, -1.0 + PUSH * 0.32)
     show([skel], t, False)                              # still behind the unit: the reveal belongs to S17-S19
     c = cam("CAM_S16", 42, 8); catch(c)
     cam_path(c, t, L, [(0, (-9.72, -3.9, 1.65), (-9.72, -1.0, 1.4)), (1, (-9.72, -3.4, 1.65), (-9.72, -0.6, 1.4))])
     mark("S16", c)
 def S17(t, L):
     era(t, 2019); cast(t, [ca, cb])
-    pushing(t, L, -1.0 + PUSH * 0.55, -1.0 + PUSH)
+    pushing(t, L, -1.0 + PUSH * 0.32, -1.0 + PUSH)
     c = cam("CAM_S17", 26, 8); catch(c)
     cam_path(c, t, L, [(0, (-9.0, -4.4, 2.0), (-9.9, -0.4, 1.1)), (1, (-9.1, -4.1, 2.0), (-9.95, -0.1, 1.1))])
     mark("S17", c)
@@ -406,34 +410,32 @@ def S18(t, L):
     c = cam("CAM_S18", 30, 8); catch(c)
     cam_path(c, t, L, [(0, (-10.55, -2.1, 1.55), (-9.7, -0.4, 1.55)), (1, (-10.5, -1.9, 1.55), (-9.7, -0.4, 1.55))])
     mark("S18", c)
-def S19(t, L):
-    """the man's remains: a clean skeleton standing wedged between the wall and where the cooler stood"""
-    era(t, 2019); cast(t, [ca, cb]); hero_at(t, PUSH)
+def staring(t, L, step=3):
+    """after the reveal: both stand beside the moved unit (beyond the skeleton from the camera), facing it, small reactions"""
     y = -1.0 + PUSH
-    for i in range(0, L + 1, 4):
-        f = t + i
-        ca.stand_g(f, (CA_PUSH.x + 0.05, y - 0.65), 280); ca.spine(f, pitch=-4); sc.frame_set(f)
-        for s in "LR": ca.hang(s, f)
-        cb.stand_g(f, (CB_PUSH.x + 0.08, y - 0.75), 280); cb.spine(f, pitch=-4); sc.frame_set(f)
-        for s in "LR": cb.hang(s, f)
+    for i in range(0, L + 1, step):
+        f = t + i; u = i / max(1, L)
+        ca.stand_g(f, (-9.45 + 0.08 * smooth(u), y - 0.47), 290); ca.spine(f, flex=-2, pitch=-6, turn=6 * math.sin(i / 13)); ca.jaw(f, 3)
+        sc.frame_set(f)
+        for s_ in "LR": ca.hang(s_, f)
+        cb.stand_g(f, (-9.85, y - 0.52), 295); cb.spine(f, flex=-3 * smooth(u), pitch=-10 + 4 * math.sin(i / 11), turn=-8 * smooth(u)); cb.jaw(f, 4)
+        sc.frame_set(f)
+        for s_ in "LR": cb.hang(s_, f, lift=0.02)
+def S19(t, L):
+    """the man's remains: the clean skeleton alone in frame, slow push-in (contractors out of shot)"""
+    era(t, 2019); cast(t, []); hero_at(t, PUSH); staring(t, L, 4)      # contractors out of shot (hidden: no edge slivers)
     c = cam("CAM_S19", 35, 8)
-    cam_path(c, t, L, [(0, (-9.1, -1.9, 1.45), (GAP_X, SKEL_XY[1], 1.1)), (1, (-9.4, -1.6, 1.4), (GAP_X, SKEL_XY[1], 1.15))])
+    cam_path(c, t, L, [(0, (-9.1, -1.95, 1.4), (GAP_X, SKEL_XY[1], 1.0)), (1, (-9.4, -1.65, 1.35), (GAP_X, SKEL_XY[1], 1.05))])
     mark("S19", c)
 def S20(t, L):
-    era(t, 2019); cast(t, [ca, cb]); hero_at(t, PUSH)
-    y = -1.0 + PUSH
-    for i in range(0, L + 1, 4):
-        f = t + i
-        ca.stand_g(f, (CA_PUSH.x + 0.05, y - 0.65), 280); ca.spine(f, pitch=-4); sc.frame_set(f)
-        for s in "LR": ca.hang(s, f)
-        cb.stand_g(f, (CB_PUSH.x + 0.08, y - 0.75), 280); cb.spine(f, pitch=-4); sc.frame_set(f)
-        for s in "LR": cb.hang(s, f)
-    c = cam("CAM_S20", 26, 8)
-    cam_path(c, t, L, [(0, (-8.4, -3.0, 2.0), (GAP_X, -0.3, 1.0)), (1, (-8.0, -3.4, 2.1), (GAP_X, -0.3, 1.0))])
+    """wedged behind it: wide, the skeleton by the wall and the two contractors beside the moved unit staring at it"""
+    era(t, 2019); cast(t, [ca, cb]); hero_at(t, PUSH); staring(t, L, 3)
+    c = cam("CAM_S20", 26, 8); catch(c)
+    cam_path(c, t, L, [(0, (-8.2, -2.7, 1.9), (-10.0, -0.4, 1.05)), (1, (-7.9, -3.1, 2.0), (-10.0, -0.4, 1.05))])
     mark("S20", c)
 
 only = os.environ.get("ONLY", "")
-for k, s, _ in SHOTS:
+for k in sorted(T, key=lambda k: T[k][0]):
     if only and k not in only.split(","): continue
     t0, t1 = T[k]; L = t1 - t0 - 1
     globals()[k](t0, L); print("ANIM", k, t0, t1 - 1)
