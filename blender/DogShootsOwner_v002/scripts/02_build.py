@@ -835,13 +835,14 @@ def S09(f0, f1):
     seated(HOWN, OWNER, f0, st, yaw=90, lean=-6, flex=8, head=(10, 15), knee_fwd=float(os.environ.get("DSO_K9", "0.45")), foot_z=0.34)
     seated(HOWN, OWNER, f1, st, yaw=90, lean=-6, flex=9, head=(12, 25), knee_fwd=float(os.environ.get("DSO_K9", "0.45")), foot_z=0.34)
     hands_lap(OWNER, f0, st, yaw=90); hands_lap(OWNER, f1, st, yaw=90)
-    # medic A stands behind him (he faces +X), left hand flat on his upper back, right arm bent, hand at his own waist
+    # medic A stands across the stretcher behind him (he faces +X), gauze pad held out in the left hand, right hand at his waist
     pa = IX + Vector((float(os.environ.get('DSO_PAX', '-0.30')), 0.22, 0))
     for fr, hd, dz in ((f0, (22, 0), 0.0), ((f0 + f1) // 2, (25, 5), -0.03), (f1, (24, 2), -0.05)):
-        stand(HMA, MEDA, fr, pa, yaw=90, head=hd, flex=14, hands=False)
+        stand(HMA, MEDA, fr, pa, yaw=90, head=hd, flex=float(os.environ.get("DSO_MFL", "14")), hands=False)
         sc.frame_set(fr)
         _bk = OWNER.matrix_world @ OWNER.pose.bones["spine03"].head
-        place_hand(MEDA, "L", fr, Vector((_bk.x - float(os.environ.get("DSO_BKX", "0.19")), _bk.y + 0.04, _bk.z + dz)), (1, 0, 0), (0, 0.15, 1)); apply_pose(MEDA, "L", "flat_palm", fr)
+        # left hand holds the gauze pad out toward his back (the stretcher is between them, so no contact)
+        place_hand(MEDA, "L", fr, pa + Vector((float(os.environ.get("DSO_LHX", "0.36")), 0.14, 1.12 + dz)), (1, 0, 0), (0, 0.15, 1)); apply_pose(MEDA, "L", "flat_palm", fr)
         place_hand(MEDA, "R", fr, pa + Vector((0.10, -0.24, 1.02)), (0, 1, 0), (1, 0.3, -0.4)); apply_pose(MEDA, "R", "relaxed", fr)
     sc.frame_set(f0); _sp = OWNER.matrix_world @ OWNER.pose.bones["spine03"].head
     attach_to_hand(GAUZE, MEDA, "L", f0, along=0.095, off=0.036, toward=_sp, axes="z")
