@@ -1,4 +1,38 @@
-# B37 YardTrench: Phase 1 plan
+# B37 YardTrench v002: built to the VO
+
+VO: `YardTrench_v002_VO.mp3` (30.2 s), transcribed with `pipeline/transcribe.py` (`YardTrench_v002_VO.words.json`). Shot start = `1 + round(word_seconds × 60)`; film frames 1–1825 (frame_end 0.5 s after "deep.").
+The VO wording differs from the reference: it ends "...could eventually turn into a trench several feet deep" (no "perfect for war"), so the playful helmet-and-sandbags peek plays on "turn into a trench" (S22) and the film ends on the depth shot (S21, walls above his head) on "several feet deep". The reference's S23 crane-out is dropped.
+Every action is procedural and keyed at 1× to its VO window (no time-stretch). Director notes applied: relaxed bent elbows on every standing pose (hands beside the thighs), weight shift and looks in S21, turned-to-camera look in S20.
+
+| Shot | Frames | VO words | What happens |
+|---|---|---|---|
+| S1 | 1–64 | If you walk across the | Boy walks the line on the lawn (front three-quarter, tracking). |
+| S2 | 65–148 | exact same strip of grass | Top-down: he walks the same strip as it wears bare (time-lapse ground). |
+| S3 | 149–240 | every single day, | High aerial: house, yard, the worn strip; the boy small on it. |
+| S4 | 241–314 | your feet slowly crush | Shoe level: he walks away to the house over flattened blades. |
+| S5 | 315–383 | the plants and compact | Side, low: shoes press the blades flat. |
+| S6 | 384–481 | the soil underneath. | Cut-away soil block: legs walk across the top, clods squash and pack. |
+| S7 | 482–570 | Over time, the path becomes | Top-down close: the strip turns bare, shadows sweep. |
+| S8 | 571–665 | bare and hard. | Top-down: it dries and cracks hard (time-lapse). |
+| S9 | 666–756 | Then, when it rains, | Rain starts; the boy looks up, palm out. |
+| S10 | 757–816 | water can't soak into | He looks down at the hard strip in the rain. |
+| S11 | 817–871 | the packed soil as | Close: puddles form on the cracked crust. |
+| S12 | 872–950 | easily, so it starts | Puddles spread and join along the strip. |
+| S13 | 951–1015 | flowing through the groove | Ground level: water flows along the groove toward us. |
+| S14 | 1016–1076 | instead. | Top-down: the stream flowing. |
+| S15 | 1077–1228 | Each storm carries away a little more dirt, | Wide time-lapse: storm and sun alternate, the strip sinks to a groove. |
+| S16 | 1229–1358 | making the path deeper and deeper. | Ground level: the groove deepens (~70 cm). |
+| S17 | 1359–1415 | And if this keeps happening | Decades later: the grown man walks beside the groove toward us (logo on shirt). |
+| S18 | 1416–1481 | for decades, | Top-down: he walks the groove floor as it deepens to a trench. |
+| S19 | 1482–1560 | under the right conditions, | Wide: house, yard, the full trench; he walks in it. |
+| S20 | 1561–1628 | that tiny footpath | From the rim: he stands deep in the trench, turns and looks up at us. |
+| S22 | 1629–1729 | could eventually turn into a trench | Sandbags on the rims; in a helmet he rises on the fire step and peeks over (the playful war trench). |
+| S21 | 1730–1825 | several feet deep. | Inside the trench: walls above his helmeted head (the depth, no text); weight shift, looks up at the rim and back. |
+
+---
+
+## Phase 1 plan (reference timing, kept for the record)
+
 
 ConnectB37 · branch `claude/connectB37-yard-trench` · 1080×1920 · 60 fps · Cycles · hard cuts (one camera object, keyed every frame; a cut is a jump between two frames, smooth move inside each shot).
 

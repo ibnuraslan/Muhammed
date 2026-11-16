@@ -141,12 +141,15 @@ def stand(H, f, pos=(0, 0), yaw=0.0, flex=4, spine=4, twist=0.0, head=(4, 0), si
     H.key_spine(f, flex=spine, twist=twist, head=head)
     for s in "LR": H.key_foot(s, f, H.foot_xy(s, Vector(pos), yaw), yaw)
 
-def arms_hang(H, f, pos=(0, 0), sway=0.0, dz=0.0):
-    g = gz_local(pos[0], pos[1], f)
+HX, HY, HZ = [float(v) for v in os.environ.get('YT_HANG', '0.075,0.07,0.50').split(',')]   # hand beside (not in front of) the thigh
+def arms_hang(H, f, pos=(0, 0), sway=0.0, dz=0.0, yaw=0.0):
+    """relaxed hands beside the thighs, elbows bent ~30 deg; offsets turn with the body (yaw)"""
+    g = gz_local(pos[0], pos[1], f); Rz = Matrix.Rotation(R_(yaw), 3, 'Z')
     for s, sx in (("L", 1), ("R", -1)):
         sh = H.r.BN["upperarm01." + s].head_local
-        W = Vector((pos[0] + sh.x + 0.025 * sx, pos[1] + sh.y - 0.085 + sway * sx, g + sh.z - 0.535 + dz))   # elbow ~25 deg bent, not an A-pose
-        H.key_hand(s, f, W, Vector((0, -0.12, -1)), Vector((-sx, 0.0, 0)), pole=W + Vector((0.3 * sx, 0.5, 0.25)))
+        off = Vector((sh.x + HX * sx, sh.y - HY + sway * sx, 0))
+        W = Vector((pos[0], pos[1], 0)) + Rz @ off; W.z = g + sh.z - HZ + dz
+        H.key_hand(s, f, W, Rz @ Vector((0, -0.3, -1)), Rz @ Vector((-sx, 0.0, 0)), pole=W + Rz @ Vector((0.3 * sx, 0.5, 0.25)))
         apply_pose(H.r.o, s, "relaxed", f)
 
 def walk_arms(H, fa, fb, path, stride=0.72, step=2, amp=0.11):
@@ -158,7 +161,7 @@ def walk_arms(H, fa, fb, path, stride=0.72, step=2, amp=0.11):
         ph = math.sin(2 * math.pi * d / stride); g = gz_local(p.x, p.y, f)
         for s, sx, sg in (("L", 1, 1), ("R", -1, -1)):
             sh = H.r.BN["upperarm01." + s].head_local
-            W = Vector((p.x + sh.x + 0.035 * sx, p.y + sh.y - 0.07 - amp * ph * sg, g + sh.z - 0.52 + 0.04 * abs(ph)))
+            W = Vector((p.x + sh.x + 0.07 * sx, p.y + sh.y - 0.06 - amp * ph * sg, g + sh.z - 0.52 + 0.04 * abs(ph)))
             H.key_hand(s, f, W, Vector((0, -0.25 * ph * sg - 0.08, -1)), Vector((-sx, 0, 0)), pole=W + Vector((0.3 * sx, 0.5, 0.3)))
     for s in "LR": apply_pose(H.r.o, s, "relaxed", fa)
 

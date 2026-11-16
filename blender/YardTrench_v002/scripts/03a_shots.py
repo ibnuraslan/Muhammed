@@ -18,7 +18,7 @@ def walk_path(H, fa, fb, y0, speed, dirn=-1, xoff=0.0, stride=0.72, lean=4):
         ph = math.sin(2 * math.pi * d / stride); g = gz_local(p.x, p.y, f); Rz = Matrix.Rotation(R_(Y(f)), 3, 'Z')
         for s, sx, sg in (("L", 1, 1), ("R", -1, -1)):
             sh = H.r.BN["upperarm01." + s].head_local
-            off = Vector((sh.x + 0.035 * sx, sh.y - 0.07 - 0.11 * ph * sg, 0))
+            off = Vector((sh.x + 0.07 * sx, sh.y - 0.06 - 0.11 * ph * sg, 0))
             W = p + Rz @ off; W.z = g + sh.z - 0.52 + 0.04 * abs(ph)
             H.key_hand(s, f, W, Rz @ Vector((0, -0.25 * ph * sg - 0.08, -1)), Rz @ Vector((-sx, 0, 0)), pole=W + Rz @ Vector((0.3 * sx, 0.5, 0.3)))
     for s in "LR": apply_pose(H.r.o, s, "relaxed", fa)
@@ -120,7 +120,7 @@ ev(fa + 40)
 # right hand rises to chest height, palm up, forearm forward (elbow bent ~90 deg), arm stays outside the body
 for f, up in ((fa + 18, 0.0), (fa + 52, 1.0), (fb, 1.0)):
     sh = BOY.r.BN["upperarm01.R"].head_local
-    W = Vector((BX9 + sh.x - 0.02 - 0.06 * up, BY9 + sh.y - 0.03 - 0.34 * up, sh.z - 0.58 + 0.42 * up))
+    W = Vector((BX9 + sh.x - 0.075 - 0.02 * up, BY9 + sh.y - 0.06 - 0.31 * up, sh.z - 0.52 + 0.36 * up))
     BOY.key_hand("R", f, W, Vector((0, -1, 0.1 * up)) if up > 0.5 else Vector((0, -0.12, -1)), Vector((0, 0, -1)) if up > 0.5 else Vector((1, 0, 0)),
                  pole=W + Vector((-0.4, 0.4, -0.25)))
 apply_pose(BOY.r.o, "R", "relaxed", fa + 18); apply_pose(BOY.r.o, "R", "cup_hold", fa + 52)
@@ -223,8 +223,8 @@ MY20 = -6.6; MX20 = path_x(MY20)
 put("Man", s, (0, 0, 0), 0)
 for i, f in enumerate(frs(fa, fb, 20)):
     u = min(1.0, (f - fa) / 50)
-    stand(MAN, f, (MX20, MY20), -25, flex=3, spine=2, head=(4 - 22 * u, -14 * u + 3 * math.sin(i)))
-arms_hang(MAN, fa, (MX20, MY20)); arms_hang(MAN, fb, (MX20, MY20))
+    stand(MAN, f, (MX20, MY20), 36, flex=3, spine=2, side=2.5 * math.sin(i * 0.6), head=(2 - 42 * u, 3 * math.sin(i)))   # turns to the rim/camera side, looks up
+arms_hang(MAN, fa, (MX20, MY20), yaw=36); arms_hang(MAN, fb, (MX20, MY20), yaw=36)
 blinks(MAN, fa, fb, every=70)
 camshot(s, [(0.0, (MX20 + 1.7, MY20 - 2.2, 1.9), (MX20, MY20, -0.75), 32), (1.0, (MX20 + 1.55, MY20 - 1.95, 1.75), (MX20, MY20, -0.7), 32)])
 
@@ -268,7 +268,7 @@ for s, (fa, fb) in [(x, (f0(x), fx(x))) for x in ("S22", "S23") if x in ORDER]:
     for f in (fa, fb):
         for sd, sx in (("L", 1), ("R", -1)):
             sh = MAN.r.BN["upperarm01." + sd].head_local
-            off = Vector((sh.x + 0.025 * sx, sh.y - 0.085, 0)); W = Vector((MX22, MY22, 0)) + Rz @ off
+            off = Vector((sh.x + 0.075 * sx, sh.y - 0.07, 0)); W = Vector((MX22, MY22, 0)) + Rz @ off
             W.z = top_z + sh.z - 0.535
             MAN.key_hand(sd, f, W, Rz @ Vector((0, -0.12, -1)), Rz @ Vector((-sx, 0, 0)), pole=W + Rz @ Vector((0.3 * sx, 0.5, 0.25)))
             apply_pose(MAN.r.o, sd, "relaxed", f)
@@ -277,7 +277,8 @@ OB['Man'].location = (0, 0, 0); OB['Man'].rotation_quaternion = (1, 0, 0, 0)
 ev(f0("S22") + 50)
 hb = MAN.r.o.matrix_world @ MAN.r.PB["head"].matrix
 crown = MAN.r.o.matrix_world @ MAN.r.PB["head"].tail
-want = Matrix.Translation(crown + Vector((0, 0, -0.105))) @ Matrix.Rotation(R_(90), 4, 'Z')
+HEL.scale = (1.1, 1.1, 1.1)
+want = Matrix.Translation(crown + Vector((0, 0, -0.122))) @ Matrix.Scale(1.1, 4) @ Matrix.Rotation(R_(90), 4, 'Z')
 OFFH = hb.inverted() @ want
 HEL_END = max(f1(x) for x in ORDER if x in ("S21", "S22", "S23") and f0(x) >= f0("S22"))   # helmet stays on through every later shot
 follow_bone(HEL, MAN.r.o, "head", f0("S22"), HEL_END, OFFH, step=2)

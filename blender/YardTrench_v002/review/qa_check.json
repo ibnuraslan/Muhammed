@@ -1,0 +1,1927 @@
+{
+ "frames": {
+  "121": [
+   [
+    "EMPTY",
+    "only Ground in view"
+   ]
+  ],
+  "127": [
+   [
+    "EMPTY",
+    "only Ground in view"
+   ]
+  ],
+  "241": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ],
+   [
+    "BACKHEAD",
+    "Boy"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 27.89 m, 98 deg in one frame (neighbours 0.04 m, 0 deg)"
+   ]
+  ],
+  "247": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "253": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "259": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "265": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "271": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "277": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "283": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "289": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "295": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "301": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "307": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "313": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "BACKHEAD",
+    "Boy"
+   ]
+  ],
+  "487": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "493": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "499": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "505": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "511": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "517": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "523": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "529": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "535": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "541": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "547": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "553": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "559": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "565": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "571": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 1.05 m, 0 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "577": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "583": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "589": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "595": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "601": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "607": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "613": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "619": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "625": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "631": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "637": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "643": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "649": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "655": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "661": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Ground in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "805": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "817": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 2.64 m, 23 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 5.4 cm with no hand on it (nearest finger 501603 cm)"
+   ]
+  ],
+  "823": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 5.0 cm with no hand on it (nearest finger 501608 cm)"
+   ]
+  ],
+  "829": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 13.4 cm with no hand on it (nearest finger 501622 cm)"
+   ]
+  ],
+  "835": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 19.5 cm with no hand on it (nearest finger 501641 cm)"
+   ]
+  ],
+  "841": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 23.2 cm with no hand on it (nearest finger 501664 cm)"
+   ]
+  ],
+  "847": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 24.5 cm with no hand on it (nearest finger 501688 cm)"
+   ]
+  ],
+  "853": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 23.6 cm with no hand on it (nearest finger 501711 cm)"
+   ]
+  ],
+  "859": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "865": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "871": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "877": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 3.3 cm with no hand on it (nearest finger 501749 cm)"
+   ]
+  ],
+  "883": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 12.4 cm with no hand on it (nearest finger 501737 cm)"
+   ]
+  ],
+  "889": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 19.9 cm with no hand on it (nearest finger 501717 cm)"
+   ]
+  ],
+  "895": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 25.9 cm with no hand on it (nearest finger 501691 cm)"
+   ]
+  ],
+  "901": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 30.2 cm with no hand on it (nearest finger 501661 cm)"
+   ]
+  ],
+  "907": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 33.0 cm with no hand on it (nearest finger 501629 cm)"
+   ]
+  ],
+  "913": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 34.2 cm with no hand on it (nearest finger 501595 cm)"
+   ]
+  ],
+  "919": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 33.8 cm with no hand on it (nearest finger 501561 cm)"
+   ]
+  ],
+  "925": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "931": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "937": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "943": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "949": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "955": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "961": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 1.4 cm with no hand on it (nearest finger 501456 cm)"
+   ]
+  ],
+  "967": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 2.7 cm with no hand on it (nearest finger 501458 cm)"
+   ]
+  ],
+  "973": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 4.3 cm with no hand on it (nearest finger 501463 cm)"
+   ]
+  ],
+  "979": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 6.0 cm with no hand on it (nearest finger 501469 cm)"
+   ]
+  ],
+  "985": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 7.9 cm with no hand on it (nearest finger 501477 cm)"
+   ]
+  ],
+  "991": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 10.0 cm with no hand on it (nearest finger 501486 cm)"
+   ]
+  ],
+  "997": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 12.2 cm with no hand on it (nearest finger 501499 cm)"
+   ]
+  ],
+  "1003": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 14.6 cm with no hand on it (nearest finger 501513 cm)"
+   ]
+  ],
+  "1009": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 17.2 cm with no hand on it (nearest finger 501530 cm)"
+   ]
+  ],
+  "1015": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 20.0 cm with no hand on it (nearest finger 501550 cm)"
+   ]
+  ],
+  "1021": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 23.6 cm with no hand on it (nearest finger 501573 cm)"
+   ]
+  ],
+  "1027": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 29.9 cm with no hand on it (nearest finger 501597 cm)"
+   ]
+  ],
+  "1033": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 35.9 cm with no hand on it (nearest finger 501623 cm)"
+   ]
+  ],
+  "1039": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 40.1 cm with no hand on it (nearest finger 501649 cm)"
+   ]
+  ],
+  "1045": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1051": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1057": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1063": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1069": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1075": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1081": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Rain moves 0.8 cm with no hand on it (nearest finger 501751 cm)"
+   ]
+  ],
+  "1087": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1093": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1099": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1105": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1111": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1117": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1123": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1129": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1135": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1141": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1147": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1153": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1159": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1165": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1171": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1177": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1183": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1189": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1195": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1201": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1207": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1213": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1219": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1225": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1231": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1237": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1243": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1249": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1255": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1261": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1267": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1273": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1279": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1285": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1291": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1297": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1303": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1309": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1315": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1321": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1327": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1333": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1339": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1345": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1351": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1357": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1417": [
+   [
+    "EMPTY",
+    "only Ground in view"
+   ]
+  ],
+  "1423": [
+   [
+    "EMPTY",
+    "only Ground in view"
+   ]
+  ],
+  "1435": [
+   [
+    "EMPTY",
+    "only Ground in view"
+   ]
+  ],
+  "1441": [
+   [
+    "EMPTY",
+    "only Ground in view"
+   ]
+  ],
+  "1633": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "Helmet is 9.0 cm off Man's skin (median)"
+   ]
+  ],
+  "1639": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 3.0 cm with no hand on it (nearest finger 55 cm)"
+   ]
+  ],
+  "1645": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 1.3 cm with no hand on it (nearest finger 56 cm)"
+   ]
+  ],
+  "1651": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 2.9 cm with no hand on it (nearest finger 59 cm)"
+   ]
+  ],
+  "1735": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 322.2 cm with no hand on it (nearest finger 71 cm)"
+   ]
+  ],
+  "1741": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 2.6 cm with no hand on it (nearest finger 70 cm)"
+   ]
+  ],
+  "1747": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 3.3 cm with no hand on it (nearest finger 68 cm)"
+   ]
+  ],
+  "1753": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 3.0 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "ATTACH",
+    "Helmet is 7.7 cm off Man's skin (median)"
+   ]
+  ],
+  "1759": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 1.5 cm with no hand on it (nearest finger 64 cm)"
+   ]
+  ],
+  "1765": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1771": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1777": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "ATTACH",
+    "Helmet is 6.6 cm off Man's skin (median)"
+   ]
+  ],
+  "1783": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 0.6 cm with no hand on it (nearest finger 64 cm)"
+   ]
+  ],
+  "1789": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 1.3 cm with no hand on it (nearest finger 64 cm)"
+   ]
+  ],
+  "1795": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 2.6 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "1801": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 3.5 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "ATTACH",
+    "Helmet is 6.6 cm off Man's skin (median)"
+   ]
+  ],
+  "1807": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 3.1 cm with no hand on it (nearest finger 71 cm)"
+   ]
+  ],
+  "1813": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "PROPMOVE",
+    "Helmet moves 2.1 cm with no hand on it (nearest finger 72 cm)"
+   ]
+  ],
+  "65": [
+   [
+    "CAMJUMP",
+    "cut: 6.28 m, 94 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "149": [
+   [
+    "CAMJUMP",
+    "cut: 16.69 m, 0 deg in one frame (neighbours 0.03 m, 0 deg)"
+   ]
+  ],
+  "315": [
+   [
+    "CAMJUMP",
+    "cut: 1.70 m, 86 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "384": [
+   [
+    "CAMJUMP",
+    "cut: 98.27 m, 83 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "482": [
+   [
+    "CAMJUMP",
+    "cut: 100.30 m, 89 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "666": [
+   [
+    "CAMJUMP",
+    "cut: 1.64 m, 100 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "757": [
+   [
+    "CAMJUMP",
+    "cut: 1.18 m, 53 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "872": [
+   [
+    "CAMJUMP",
+    "cut: 1.95 m, 25 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "951": [
+   [
+    "CAMJUMP",
+    "cut: 3.14 m, 23 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "1016": [
+   [
+    "CAMJUMP",
+    "cut: 4.74 m, 87 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "1077": [
+   [
+    "CAMJUMP",
+    "cut: 10.25 m, 78 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "1229": [
+   [
+    "CAMJUMP",
+    "cut: 7.26 m, 24 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "1359": [
+   [
+    "CAMJUMP",
+    "cut: 9.26 m, 6 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "1416": [
+   [
+    "CAMJUMP",
+    "cut: 5.15 m, 86 deg in one frame (neighbours 0.02 m, 0 deg)"
+   ]
+  ],
+  "1482": [
+   [
+    "CAMJUMP",
+    "cut: 13.81 m, 71 deg in one frame (neighbours 0.03 m, 0 deg)"
+   ]
+  ],
+  "1561": [
+   [
+    "CAMJUMP",
+    "cut: 7.72 m, 18 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "1629": [
+   [
+    "CAMJUMP",
+    "cut: 4.96 m, 72 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1730": [
+   [
+    "CAMJUMP",
+    "cut: 6.62 m, 98 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "391": [
+   [
+    "PROPMOVE",
+    "Clod_03_1_0 moves 2.6 cm with no hand on it (nearest finger 92 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_03_1_1 moves 2.2 cm with no hand on it (nearest finger 93 cm)"
+   ]
+  ],
+  "397": [
+   [
+    "PROPMOVE",
+    "Clod_04_2_0 moves 2.5 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04_2_1 moves 2.7 cm with no hand on it (nearest finger 75 cm)"
+   ]
+  ],
+  "403": [
+   [
+    "PROPMOVE",
+    "Clod_04_1_1 moves 0.8 cm with no hand on it (nearest finger 87 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04_2_0 moves 4.2 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04_2_1 moves 3.8 cm with no hand on it (nearest finger 80 cm)"
+   ]
+  ],
+  "409": [
+   [
+    "PROPMOVE",
+    "Clod_04_1_0 moves 1.7 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04_1_1 moves 2.0 cm with no hand on it (nearest finger 89 cm)"
+   ]
+  ],
+  "415": [
+   [
+    "PROPMOVE",
+    "Clod_05_2_1 moves 0.8 cm with no hand on it (nearest finger 71 cm)"
+   ]
+  ],
+  "421": [
+   [
+    "PROPMOVE",
+    "Clod_05_2_0 moves 3.0 cm with no hand on it (nearest finger 73 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_05_2_1 moves 3.8 cm with no hand on it (nearest finger 78 cm)"
+   ]
+  ],
+  "427": [
+   [
+    "PROPMOVE",
+    "Clod_05_1_0 moves 0.8 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_05_1_1 moves 1.2 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_05_2_0 moves 4.1 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_05_2_1 moves 2.2 cm with no hand on it (nearest finger 83 cm)"
+   ]
+  ],
+  "433": [
+   [
+    "PROPMOVE",
+    "Clod_05_1_0 moves 1.5 cm with no hand on it (nearest finger 92 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_05_1_1 moves 1.5 cm with no hand on it (nearest finger 91 cm)"
+   ]
+  ],
+  "439": [
+   [
+    "PROPMOVE",
+    "Clod_06_2_1 moves 1.4 cm with no hand on it (nearest finger 69 cm)"
+   ]
+  ],
+  "445": [
+   [
+    "PROPMOVE",
+    "Clod_06_1_0 moves 0.7 cm with no hand on it (nearest finger 87 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06_2_0 moves 3.9 cm with no hand on it (nearest finger 75 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06_2_1 moves 4.2 cm with no hand on it (nearest finger 76 cm)"
+   ]
+  ],
+  "451": [
+   [
+    "PROPMOVE",
+    "Clod_06_1_0 moves 1.8 cm with no hand on it (nearest finger 93 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06_1_1 moves 1.7 cm with no hand on it (nearest finger 92 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06_2_0 moves 2.7 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06_2_1 moves 1.6 cm with no hand on it (nearest finger 81 cm)"
+   ]
+  ],
+  "457": [
+   [
+    "PROPMOVE",
+    "Clod_06_1_0 moves 0.7 cm with no hand on it (nearest finger 94 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06_1_1 moves 0.8 cm with no hand on it (nearest finger 94 cm)"
+   ]
+  ],
+  "463": [
+   [
+    "PROPMOVE",
+    "Clod_07_2_0 moves 0.8 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_07_2_1 moves 2.2 cm with no hand on it (nearest finger 71 cm)"
+   ]
+  ],
+  "469": [
+   [
+    "PROPMOVE",
+    "Clod_07_1_1 moves 1.1 cm with no hand on it (nearest finger 87 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_07_2_0 moves 4.3 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_07_2_1 moves 4.2 cm with no hand on it (nearest finger 77 cm)"
+   ]
+  ],
+  "475": [
+   [
+    "PROPMOVE",
+    "Clod_07_1_0 moves 1.7 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_07_1_1 moves 1.4 cm with no hand on it (nearest finger 91 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_07_2_0 moves 1.8 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_07_2_1 moves 0.8 cm with no hand on it (nearest finger 80 cm)"
+   ]
+  ],
+  "481": [
+   [
+    "PROPMOVE",
+    "Clod_07_1_0 moves 0.8 cm with no hand on it (nearest finger 93 cm)"
+   ]
+  ],
+  "1657": [
+   [
+    "PROPMOVE",
+    "Helmet moves 4.4 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "ATTACH",
+    "Helmet is 10.3 cm off Man's skin (median)"
+   ]
+  ],
+  "1663": [
+   [
+    "PROPMOVE",
+    "Helmet moves 5.2 cm with no hand on it (nearest finger 70 cm)"
+   ]
+  ],
+  "1669": [
+   [
+    "PROPMOVE",
+    "Helmet moves 4.4 cm with no hand on it (nearest finger 74 cm)"
+   ]
+  ],
+  "1675": [
+   [
+    "PROPMOVE",
+    "Helmet moves 1.5 cm with no hand on it (nearest finger 73 cm)"
+   ]
+  ],
+  "1681": [
+   [
+    "ATTACH",
+    "Helmet is 6.7 cm off Man's skin (median)"
+   ]
+  ],
+  "1705": [
+   [
+    "ATTACH",
+    "Helmet is 6.6 cm off Man's skin (median)"
+   ]
+  ],
+  "1729": [
+   [
+    "ATTACH",
+    "Helmet is 6.6 cm off Man's skin (median)"
+   ]
+  ],
+  "1819": [
+   [
+    "PROPMOVE",
+    "Helmet moves 2.1 cm with no hand on it (nearest finger 72 cm)"
+   ]
+  ],
+  "1825": [
+   [
+    "PROPMOVE",
+    "Helmet moves 1.1 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "ATTACH",
+    "Helmet is 6.6 cm off Man's skin (median)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 258,
+  "BACKHEAD": 2,
+  "CAMJUMP": 21,
+  "PROPMOVE": 88,
+  "ATTACH": 9
+ }
+}
