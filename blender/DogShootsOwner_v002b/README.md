@@ -41,3 +41,12 @@ Clips are authored at their full 1× length and trimmed at the VO cut. No charac
    - 15d: a slow push-in while his hand moves a little on the dog's back as he breathes.
    - The parked ambulance and the kennel/hospital sets are hidden during the clearing shots: they were in view of 15b.
 5. **15c (f1449–1507):** a breath and a small head turn toward the dog.
+
+## Checks on this exact package (step: clip 6, qa 6, limb 2, bpc 3 humans / 1 dog; Dog_body is in the human bpc list)
+- clip_scan: 0 bad ranges. body_prop_cross: 0 visible crossings (humans incl. hands on the dog; the dog vs bed/crate/seats).
+- limb_check ARMBODY: upperarm01 points 0–2 at the shoulder (known false positive). Also arm.L points 4–5, 7 cm from the
+  shoulder (the armpit) while he leans 46° to reach the dog: 15a f1347–1351. And 359–367: the shot-05 arm coming around his side.
+- limb_check ARMBACK 375–403 (shot 05): intended, his hand on his hurt back.
+- qa_check EMPTY/INSIDE/PROPMOVE/CAMJUMP: dog-only, anatomy and ambulance-exterior shots, FX, hard cuts. FAN 721–799: the phone tap.
+- Off camera: in shot 09 the patient's feet pass the far ambulance wall, never in view.
+- His palm on the dog rests 1.6–3.6 cm off the fur so no finger enters it. The fur hides the gap.
