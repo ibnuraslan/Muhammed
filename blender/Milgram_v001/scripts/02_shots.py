@@ -251,15 +251,15 @@ def subj_body(f, lean=12.0, spine=(10.0, 0.0, 0.0), head=(8.0, 0.0)):
     return sit("Subject", f, SEAT_A, SEAT_AZ, YS, knee_fwd=0.44, lean=lean, spine=spine, head=head, heel=0.04)
 def subj_hand_table(s, f, x=None, y=-0.25):
     sx = 1 if s == "R" else -1
-    p = V(((0.28 if x is None else x) * sx, y, TABLE_Z + 0.028))
+    p = V(((0.26 if x is None else x) * sx, y, TABLE_Z + 0.056))      # loose fist resting on the table (flat/relaxed fingers grazed it)
     sh = wpos("Subject", "upperarm01." + s, f)
-    hand("Subject", s, f, p, V((0, 0, -1)), V((-0.25 * sx, 1, 0)), pole=sh + V((0.40 * sx, -0.10, -0.08)), pose="flat_palm")
+    hand("Subject", s, f, p, V((0, 0, -1)), V((-0.25 * sx, 1, 0)), pole=sh + V((0.40 * sx, -0.10, -0.08)), pose="power_fist")
 def subj_hand_lap(s, f):
     """idle hand resting on top of the thigh (the table top made fingertips graze in every flat pose)"""
     hp = wpos("Subject", "upperleg01." + s, f); kn = wpos("Subject", "lowerleg01." + s, f)
-    p = hp.lerp(kn, 0.55) + V((0, 0, 0.085)); sh = wpos("Subject", "upperarm01." + s, f)
     sx = 1 if s == "R" else -1
-    hand("Subject", s, f, p, V((0, 0, -1)), (kn - hp).normalized() + V((-0.3 * sx, 0, -0.2)), pole=sh + V((0.35 * sx, -0.20, -0.25)), pose="relaxed")
+    p = hp.lerp(kn, 0.68) + V((0.03 * sx, 0, 0.115)); sh = wpos("Subject", "upperarm01." + s, f)
+    hand("Subject", s, f, p, V((0, 0, -1)), (kn - hp).normalized() + V((-0.3 * sx, 0, -0.2)), pole=sh + V((0.35 * sx, -0.20, -0.25)), pose="flat_palm")
 def subj_seated(f0, n, heads, lean=12.0, hands=("table", "table"), spine_tw=None, flex=10.0):
     """heads: [(u, (pitch, yaw))] eased; hands on the table unless a shot overrides them"""
     f1 = f0 + n - 1; ks = list(range(f0, f1, 24)) + [f1]
@@ -268,8 +268,8 @@ def subj_seated(f0, n, heads, lean=12.0, hands=("table", "table"), spine_tw=None
         hd = interp_keys(heads, u)
         tw = interp_keys(spine_tw, u) if spine_tw else 0.0
         subj_body(f, lean=lean + (0.8 if k % 2 else 0.0), spine=(flex + (1.2 if k % 2 else 0), tw, 0.0), head=hd)
-        if hands[0] == "table": subj_hand_lap("L", f)
-        if hands[1] == "table": subj_hand_lap("R", f)
+        if hands[0] == "table": subj_hand_table("L", f)
+        if hands[1] == "table": subj_hand_table("R", f)
 def interp_keys(keys, u):
     if isinstance(keys, (int, float)): return keys
     for (u0, a0), (u1, a1) in zip(keys, keys[1:]):
@@ -408,7 +408,12 @@ def doc_shot(sid, f0, n, heads, point=None, talk_from=None, gesture=None):
         hd = interp_keys(heads, u); nod = 5.0 * math.sin(k * 1.9) if k % 3 == 1 else 0.0
         doc_body(f, head=(hd[0] + nod, hd[1]), spine=(3.0 + (1.0 if k % 2 else 0), 0.0, 2.5 * math.sin(k * 0.9)), dz=0.003 * (k % 2), shift=0.025 * math.sin(k * 0.9))
     cb = None      # P1 simplify (LESSONS 2.15): the clipboard grip crossed his fingers/forearm twice; he holds nothing
-    for f in ks: relaxed_arm("Doc", "R", f, YD); relaxed_arm("Doc", "L", f, YD)
+    win = []          # right-arm action windows: no relaxed keys inside them (they made the arm flap)
+    if point: win.append((f0 + int(point[0] * n) - 18, min(f1, f0 + int(point[1] * n)) + 24))
+    if gesture: win.append((f0 + int(gesture[0] * n) - 20, min(f1, f0 + int(gesture[1] * n)) + 22))
+    for f in ks:
+        relaxed_arm("Doc", "L", f, YD)
+        if not any(a_ <= f <= b_ for a_, b_ in win): relaxed_arm("Doc", "R", f, YD)
     if point:
         u0, u1, tgt = point
         fa, fb = f0 + int(u0 * n), min(f1, f0 + int(u1 * n))
@@ -432,13 +437,13 @@ RW = V((XB - 0.13, -0.15, TABLE_Z + 0.004))
 def str_right_on_table(f, curl="relaxed", lift=0.0):
     """the cuffed right hand rests on the table: loosely curled, knuckles just above the top (flat palms grazed it)"""
     curl = "power_fist"      # the strapped hand rests as a loose fist: open/relaxed fingers grazed the table top
-    lift = max(lift, 0.05 if curl == "power_fist" else 0.045)
+    lift = max(lift, 0.056 if curl == "power_fist" else 0.045)
     sh = wpos("Stranger", "upperarm01.R", f)
     hand("Stranger", "R", f, RW + V((0, 0, lift)), V((0, 0, -1)), V((0.15, -1, 0)), pole=sh + V((-0.35, 0.2, -0.3)), pose=curl)
 def str_left_on_table(f):
     """free left hand rests on his left thigh (under the table edge)"""
     hp = wpos("Stranger", "upperleg01.L", f); kn = wpos("Stranger", "lowerleg01.L", f)
-    p = hp.lerp(kn, 0.5) + V((0, 0, 0.085)); sh = wpos("Stranger", "upperarm01.L", f)
+    p = hp.lerp(kn, 0.78) + V((0.035, 0, 0.10)); sh = wpos("Stranger", "upperarm01.L", f)   # near the knee, outer side (never the lap centre)
     hand("Stranger", "L", f, p, V((0, 0, -1)), (kn - hp).normalized() + V((0.3, 0, -0.2)), pole=sh + V((0.35, 0.20, -0.25)), pose="relaxed")
 def cuff_on(sid, f0, f1):
     """electrode cuff round the right forearm just above the wrist, Child Of lowerarm02.R"""
@@ -498,7 +503,7 @@ def shot_04(f0, n):
     for k, f in enumerate((f0, f0 + 40, f0 + 80, f1)):
         str_body(f, lean=8.0 + 6 * (k % 2), spine=(8.0, 0.0, 0.0), head=(14.0, 0.0))
     str_right_on_table(f0); str_right_on_table(f0 + 20, "relaxed"); str_right_on_table(f0 + 30, "power_fist", lift=0.01); str_right_on_table(f1, "power_fist", lift=0.01)
-    str_left_on_table(f0)
+    for f in (f0, f0 + 40, f0 + 80, f1): str_left_on_table(f)      # the lap hand follows every body key
     cu, el = cuff_on("04", f0, f1)
     sc.frame_set(f0 + 20); c = el.matrix_world.translation.copy()
     arcs("ArcW", c, f0 + 22, f1, every=3, frac=0.55, seed=4)
@@ -507,7 +512,7 @@ def shot_04(f0, n):
 
 def shot_05(f0, n):
     """the man in the lab coat with his clipboard: looks down at it, then up at the subject"""
-    doc_shot("05", f0, n, gesture=(0.55, 0.95), heads=[(0, (28.0, -10.0)), (0.5, (24.0, -10.0)), (0.75, (2.0, 18.0)), (1, (0.0, 20.0))])
+    doc_shot("05", f0, n, gesture=(0.2, 0.6), heads=[(0, (28.0, -10.0)), (0.5, (24.0, -10.0)), (0.75, (2.0, 18.0)), (1, (0.0, 20.0))])
     camera("05", f0, n, [(0, (-0.55, -1.75, 1.50), (1.0, -1.05, 1.42), 32), (1, (-0.35, -1.65, 1.52), (1.0, -1.05, 1.45), 32)])
     return ("Doc",)
 
@@ -517,7 +522,7 @@ def shot_06(f0, n):
     panel_state(f0, 3)
     subj_seated(f0, n, [(0, (6.0, 0.0)), (0.5, (-8.0, 0.0)), (1, (-10.0, 0.0))], lean=8.0)
     wrong_lamp(f0, False); wrong_lamp(f0 + 14, True); wrong_lamp(f0 + 50, False); wrong_lamp(f0 + 62, True); wrong_lamp(f1 + 1, False)
-    camera("06", f0, n, [(0, (-1.25, -1.55, 1.62), (0.1, 0.8, 1.3), 26), (1, (-1.15, -1.40, 1.60), (0.1, 0.85, 1.3), 26)])
+    camera("06", f0, n, [(0, (-1.35, -1.75, 1.62), (0.35, 0.7, 1.25), 24), (1, (-1.25, -1.60, 1.60), (0.35, 0.75, 1.25), 24)])
     return ("Subject",)
 
 def shot_07(f0, n):
@@ -551,7 +556,8 @@ def shot_09(f0, n):
     for k, f in enumerate((f0, f0 + 40, f0 + 80, f1)):
         str_body(f, lean=(10.0, 22.0, 24.0, 22.0)[k], spine=((8.0, 14.0, 16.0, 14.0)[k], 0.0, 0.0), head=((-2.0, 0.0), (-16.0, 4.0), (-18.0, -4.0), (-16.0, 2.0))[k])
         str_right_on_table(f, "relaxed")
-    str_left_on_table(f0)
+    sh0 = wpos("Stranger", "upperarm01.L", f0)      # the left hand starts in front of his belly, above the table (never through its edge)
+    hand("Stranger", "L", f0, sh0 + V((0.06, -0.16, -0.24)), V((0, 1, 0)), V((-0.3, -0.3, 0.6)), pole=sh0 + V((0.35, 0.15, -0.3)), pose="relaxed")
     for f in (f0 + 34, f0 + 70, f1):
         sh = wpos("Stranger", "upperarm01.L", f)
         hand("Stranger", "L", f, sh + V((0.10, -0.34, -0.02)) + V((0, 0, 0.02 * ((f - f0) % 2))), V((0, 1, 0)), V((0, -0.15, 1)), pole=sh + V((0.35, 0.15, -0.3)), pose="flat_palm")
@@ -578,7 +584,7 @@ def shot_11(f0, n):
 
 def shot_12(f0, n):
     """first person: so you do: the next switch goes down"""
-    fp_shot("12", f0, n, 12, [(0.4, 12)], mode="tight")
+    fp_shot("12", f0, n, 12, [(0.2, 12)], mode="tight")
     return ("Subject",)
 
 def collapse(sid, f0, n, phase):
@@ -587,7 +593,7 @@ def collapse(sid, f0, n, phase):
     if phase == 0:
         keys = ((f0, 18.0, 12.0, (18.0, 0, 0), (2.0, 0.0)), (f0 + 50, 22.0, 18.0, (24.0, 0, 4), (-4.0, 10.0)), (f0 + 100, 20.0, 15.0, (22.0, 0, -4), (0.0, -8.0)), (f1, 26.0, 20.0, (26.0, 0, 0), (-2.0, 6.0)))
     else:
-        keys = ((f0, 26.0, 20.0, (26.0, 0, 0), (-2.0, 6.0)), (f0 + 60, 45.0, 30.0, (32.0, 0, 8), (-6.0, 14.0)), (f1, 55.0, 34.0, (34.0, 0, 10), (-8.0, 18.0)))
+        keys = ((f0, 26.0, 20.0, (26.0, 0, 0), (-2.0, 6.0)), (f0 + 60, 45.0, 30.0, (30.0, 0, 8), (-24.0, 18.0)), (f1, 55.0, 32.0, (30.0, 0, 10), (-26.0, 22.0)))
     for k, (f, tb, ln, sp, hd) in enumerate(keys):
         kneel("Stranger", f, K, yw, thigh_back=tb, lean=ln, spine=sp, head=hd)
         for s in "LR":
@@ -598,7 +604,7 @@ def collapse(sid, f0, n, phase):
                 hand("Stranger", s, f, p, V((0, 0, -1)), fwd(yw) - rgt(yw) * 0.3, pole=sh - rgt(yw) * 0.35 + V((0, 0, 0.1)) - fwd(yw) * 0.25, pose="flat_palm")
             else:                                         # palm on the front of the thigh, near the knee
                 hp = wpos("Stranger", "upperleg01." + s, f); kn = wpos("Stranger", "lowerleg01." + s, f)
-                th = hp.lerp(kn, 0.72) + fwd(yw) * (0.085 if s == "L" else 0.15) + V((0, 0, 0.05 if s == "L" else 0.09))
+                th = hp.lerp(kn, 0.72) + fwd(yw) * (0.10 if s == "L" else 0.15) + V((0, 0, 0.08 if s == "L" else 0.11))
                 hand("Stranger", s, f, th, -fwd(yw), V((0, 0, -1)) + fwd(yw) * 0.3, pole=sh - rgt(yw) * sx * 0.30 - fwd(yw) * 0.15 + V((0, 0, -0.25)), pose="relaxed")
     expr(f0, mouth_open=0.55, eyebrows_left_inner_up=1.0, eyebrows_right_inner_up=1.0, eye_left_slit=0.6, eye_right_slit=0.6)
     expr(f1, mouth_open=0.45 if phase == 0 else 0.3, eyebrows_left_inner_up=1.0, eyebrows_right_inner_up=1.0, eye_left_slit=0.7, eye_right_slit=0.7)
@@ -636,7 +642,7 @@ def shot_16(f0, n):
 
 def shot_17(f0, n):
     """the plug lies on the carpet, next to the wall socket: never plugged in"""
-    camera("17", f0, n, [(0, (1.25, 1.55, 0.42), (1.62, 2.12, 0.08), 32), (1, (1.38, 1.72, 0.32), (1.63, 2.14, 0.08), 32)], fstop=10.0)
+    camera("17", f0, n, [(0, (1.05, 1.30, 0.55), (1.60, 2.10, 0.06), 30), (1, (1.42, 1.78, 0.26), (1.63, 2.15, 0.08), 32)], fstop=10.0)
     return ()
 
 def shot_18(f0, n):
@@ -688,12 +694,12 @@ def shot_22(f0, n):
 
 def shot_23(f0, n):
     """first person: the finger moves on into the red danger switches"""
-    fp_shot("23", f0, n, 24, [(0.35, 24), (0.7, 25)])
+    fp_shot("23", f0, n, 24, [(0.2, 24), (0.5, 25)])
     return ("Subject",)
 
 def shot_24(f0, n):
     """an authority figure: the doctor from below, straightening up"""
-    doc_shot("24", f0, n, [(0, (10.0, 10.0)), (0.5, (14.0, 0.0)), (1, (16.0, -4.0))], talk_from=0.5, gesture=(0.25, 0.85))
+    doc_shot("24", f0, n, [(0, (10.0, 10.0)), (0.5, (14.0, 0.0)), (1, (16.0, -4.0))], talk_from=0.1, gesture=(0.15, 0.6))
     camera("24", f0, n, [(0, (-0.15, -1.25, 0.95), (1.0, -1.05, 1.52), 26), (1, (-0.05, -1.22, 0.92), (1.0, -1.05, 1.54), 26)])
     return ("Doc",)
 
@@ -773,11 +779,27 @@ def all_fcurves(idb):
         for strip in layer.strips:
             for cb in strip.channelbags: out.extend(cb.fcurves)
     return out
+def anim_ids():
+    return (list(bpy.data.objects) + list(bpy.data.lights) + list(bpy.data.cameras) + list(bpy.data.shape_keys)
+            + [m.node_tree for m in bpy.data.materials if m.node_tree])
+def trim_after(fe, fb):
+    """VO cut: the clip was built at its 1x length (to fb, with 'after' keys at fb+1 such as props hiding); keep it up to
+    fe, then jump straight to the clip's after-state at fe+1. No time-stretch: the action plays at 1x and is cut."""
+    if fb <= fe: return
+    for idb in anim_ids():
+        for fc in all_fcurves(idb):
+            ks = [kp.co.x for kp in fc.keyframe_points]
+            if not any(fe + 0.01 < k <= fb + 1.01 for k in ks): continue
+            v_fe = fc.evaluate(fe); v_end = fc.evaluate(fb + 1)
+            for kp in reversed(list(fc.keyframe_points)):
+                if fe - 0.01 < kp.co.x <= fb + 1.01: fc.keyframe_points.remove(kp)
+            k1 = fc.keyframe_points.insert(fe, v_fe, options={'FAST'}); k2 = fc.keyframe_points.insert(fe + 1, v_end, options={'FAST'})
+            k1.interpolation = 'CONSTANT'
+            fc.update()
 def hold_ends(f0, f1):
     """key every channel that moves inside [f0, f1] at f0 and f1 (evaluated now, before the next shot exists), so no shot's
     edge frame interpolates toward the next shot's pose"""
-    ids = list(bpy.data.objects) + list(bpy.data.lights) + list(bpy.data.cameras)
-    for idb in ids:
+    for idb in anim_ids():
         for fc in all_fcurves(idb):
             ks = [kp.co.x for kp in fc.keyframe_points]
             if not any(f0 <= k <= f1 for k in ks): continue
@@ -788,6 +810,7 @@ def hold_ends(f0, f1):
 
 # ================================================================== build
 shots = json.load(open(SHOTS))
+PROV = {x["id"]: x["len"] for x in json.load(open(os.path.join(HERE, "..", "shots_provisional.json")))}
 sc.frame_start = 1; sc.frame_end = max(s_["f0"] + s_["len"] - 1 for s_ in shots)
 used = {}
 for s_ in shots:
@@ -795,8 +818,10 @@ for s_ in shots:
     print("SHOT", s_["id"], s_["f0"], s_["len"])
     for n_ in CH: jaw(n_, s_["f0"], 0.0)          # faces start neutral every shot (no expression leaks across a cut)
     expr(s_["f0"])
-    used[s_["id"]] = SHOT_FUNCS[s_["id"]](s_["f0"], s_["len"])
-    hold_ends(s_["f0"], s_["f0"] + s_["len"] - 1)
+    nb = max(s_["len"], PROV.get(s_["id"], s_["len"]))     # build the clip at its 1x length, then cut it at the VO frame
+    used[s_["id"]] = SHOT_FUNCS[s_["id"]](s_["f0"], nb)
+    hold_ends(s_["f0"], s_["f0"] + nb - 1)
+    trim_after(s_["f0"] + s_["len"] - 1, s_["f0"] + nb - 1)
 for s_ in shots:
     if s_["id"] not in used: continue
     for n in CH: place_rig(n, s_["f0"], s_["f0"] + s_["len"] - 1, n in used[s_["id"]])
