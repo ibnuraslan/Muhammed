@@ -322,15 +322,15 @@ shot_cam(sid, [(0, (2.5, -3.3, 1.55), (0.1, -1.2, 1.25)), (1, (2.35, -3.15, 1.55
 
 # ---------- 14 into a tower: the woman steadies the tower (hand on the top chair's backrest) and looks up
 sid = "14"; f0, f1 = SH[sid]; tod_static(sid); use(sid, "Woman")
-WP = Vector((-0.35, -1.40, root_z("Woman")))
+WP = Vector((0.45, -1.42, root_z("Woman")))
 for k, f in enumerate((f0, F(sid, 0.5), f1)):
-    hd = look_at("Woman", WP, TOD_C, 130)
-    body("Woman", f, WP, 130, 0, 0, 2, 0, 0, (hd[0] * 0.5, hd[1] * 0.5 - 5 + 5 * k))
-    feet("Woman", f, WP, 130, 0.0)
-    P = rail_pt(CHB, -1, f)
-    hand("Woman", "L", f, P, Vector((0, 0, -1)), Vector((0.5, 1, -0.5)), shoulder("Woman", "L", f) + Ry(130) @ Vector((0.45, 0.2, -0.35)), "wrap_grip", 0.6)
-    relax("Woman", "R", f, 130)
-shot_cam(sid, [(0, (1.30, -0.30, 1.45), (-0.35, -1.40, 1.20)), (1, (1.25, -0.30, 1.50), (-0.35, -1.40, 1.30))], 30, 8)
+    hd = look_at("Woman", WP, TOD_C, 228)
+    body("Woman", f, WP, 228, 0, 0, 2, 0, 0, (hd[0] * 0.5, hd[1] * 0.5 - 5 + 5 * k))
+    feet("Woman", f, WP, 228, 0.0)
+    P = rail_pt(CHB, 1, f)
+    hand("Woman", "R", f, P, Vector((0, 0, -1)), Vector((-0.6, 1, -0.5)), shoulder("Woman", "R", f) + Ry(228) @ Vector((-0.45, 0.2, -0.35)), "wrap_grip", 0.6)
+    relax("Woman", "L", f, 228)
+shot_cam(sid, [(0, (1.95, -2.45, 1.0), (0.15, -1.1, 1.7)), (1, (1.85, -2.35, 1.05), (0.1, -1.0, 1.85))], 26, 8)
 
 # ---------- 15 Then one man: he steps to the tower, hand on the step chair's backrest, looks up
 sid = "15"; f0, f1 = SH[sid]; tod_static(sid); use(sid, "Man")
