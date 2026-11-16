@@ -374,9 +374,9 @@ def S10(t, L):
     worst = [1.0]
     def fr(f, u):
         s = 1.0 - 0.85 * ease(max(0, (u - 0.25) / 0.75))
-        pos = BEAK_P + Vector((0.0, 0.0, 0.088 - 0.025 * ease(min(1, u * 2))))
+        pos = BEAK_P + Vector((0.0, 0.0, 0.088 - 0.03 * ease(min(1, u * 1.6))))
         for _ in range(40):
-            M = Matrix.Translation(pos) @ Matrix.Rotation(R(-30 - 25 * u), 4, 'Y') @ Matrix.Rotation(R(90), 4, 'Z') @ Matrix.Scale(max(0.08, s), 4)
+            M = Matrix.Translation(pos) @ Matrix.Rotation(R(-50 * u), 4, 'Z') @ Matrix.Rotation(R(-30 - 25 * u), 4, 'Y') @ Matrix.Rotation(R(90), 4, 'Z') @ Matrix.Scale(max(0.08, s), 4)   # slow drift-turn as it sinks
             if inside(M): break
             s *= 0.97
         assert inside(M), f
@@ -506,13 +506,15 @@ def S15(t, L):
         man.eyes(f, pitch=18 * k)
         sc.frame_set(f); sh = man.r.PB["upperarm01.L"].head
         belly = man.o.matrix_world @ (man.r.PB["spine04"].matrix @ man.r.rest("spine04").inverted() @ Vector((0.03, -0.17, man.r.BN["spine04"].head_local.z + 0.02)))
-        if k > 0:
-            place_hand(man.o, "L", f, sh.lerp(belly, 0.35 + 0.65 * k) + Vector((0, -0.03 * (1 - k), 0)), (0, 1, 0), (-1, 0, -0.25))
+        # hand: relaxed at the thigh, then up in front of the body (arc out ~8 cm) onto the stomach; never via the chest
+        if u <= 0.12: man.hang("L", f)
+        elif 0.24 <= u <= 0.28: place_hand(man.o, "L", f, belly + Vector((0.07, -0.10, 0.01)), (0, 1, 0), (-1, 0, -0.25))
+        elif u >= 0.40: place_hand(man.o, "L", f, belly, (0, 1, 0), (-1, 0, -0.25))
     track(t, L, 6, fr)
     apply_pose(man.o, "L", "relaxed", t); apply_pose(man.o, "L", "flat_palm", t + int(0.4 * L))
-    c = cam("CAM_S15", 32, 8)
-    look(c, t, Vector((0.22, -1.30, 1.30)), Vector((0.0, 0.67, 1.15)))
-    look(c, t + L, Vector((0.12, -1.10, 1.30)), Vector((0.0, 0.67, 1.17)))
+    c = cam("CAM_S15", 40, 8)
+    look(c, t, Vector((0.20, -1.20, 1.32)), Vector((0.0, 0.67, 1.18)))
+    look(c, t + L, Vector((0.10, -1.00, 1.32)), Vector((0.0, 0.67, 1.20)))
     catch(c, energy=2.0)
     mark("S15", c)
 

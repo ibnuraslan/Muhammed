@@ -26,7 +26,7 @@ Built straight to the word frames of `SodaMouse_v002_VO.mp3`:
 
 - **On screen:** no real brands; the can is a generic green print with no text.
 - **Logo:** DA KRAS FILMS, once, on the man's shirt chest (front-on in S03–S05 and S13–S15).
-- **Checks (on this packed file):** see `review/CHECKS.md`.
+- **Checks (on this packed file):** see `review/CHECKS.md` (body_prop_cross 0 on every frame).
 - **Preview:** `review/preview.mp4` (every 5th frame, with the VO).
 
 Render settings: `SETTINGS.md`. Credits: `CREDITS.md`.

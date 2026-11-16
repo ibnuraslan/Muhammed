@@ -212,7 +212,7 @@ pud.scale = (0.075, 0.075, 1); put(pud, P); pud.data.materials.append(soda)
 # 2 L beaker (inner radius 79.5 mm, height 190 mm) so the whole mouse fits inside the liquid
 bk = [(0.0, 0.0), (0.077, 0.0), (0.0815, 0.002), (0.083, 0.006), (0.083, 0.184), (0.086, 0.19), (0.0825, 0.19), (0.0795, 0.184), (0.0795, 0.008), (0.0, 0.008)]
 beaker = lathe("Beaker", bk, seg=128)
-beaker.data.materials.append(mat("LabGlass", (0.95, 0.98, 1.0), 0.02, trans=1.0, ior=1.45)); put(beaker, P)
+beaker.data.materials.append(mat("LabGlass", (0.95, 0.98, 1.0), 0.09, trans=1.0, ior=1.45)); put(beaker, P)   # slight roughness: no zebra refraction at the base
 liq = lathe("BeakerLiquid", [(0.0, 0.0095), (0.0783, 0.0095), (0.0783, 0.11), (0.0, 0.11)], seg=128, cap_top=False)   # clear of the glass (no overlap artefact)
 bmh = bmesh.new(); bmh.from_mesh(liq.data); bmesh.ops.contextual_create(bmh, geom=[v for v in bmh.verts if abs(v.co.z - 0.11) < 1e-5]); bmh.to_mesh(liq.data); bmh.free()
 liq.data.materials.append(mat("SodaLiquid", (0.62, 0.95, 0.35), 0.05, trans=0.92, ior=1.33)); put(liq, P); liq.parent = beaker
