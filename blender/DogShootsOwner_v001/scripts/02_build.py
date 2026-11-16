@@ -905,7 +905,7 @@ def S13b(f0, f1):
 
 # hospital: the real curled sleeping-dog scan lies on the bed against his legs, head toward his lap;
 # his left hand rests flat on its back, right arm by his side
-SDH = dup(bpy.data.objects["SleepDog"], "SleepDogHosp", (0, 0, 0), (0, 0, 0), 0.80, CH, linked=True)
+SDH = dup(bpy.data.objects["SleepDog"], "SleepDogHosp", (0, 0, 0), (0, 0, 0), 0.80, CH, linked=False)
 SDH.hide_render = SDH.hide_viewport = False
 def _ray_down(obj, x, y, z0=3.0):
     inv = obj.matrix_world.inverted()
@@ -933,23 +933,56 @@ def hosp_man(f, smile_head=(18, -20), stroke=0.0):
     st = HX + Vector((-0.235, 0.78, BED_TOP + 0.02))
     seated(HOWN, OWNER, f, st, yaw=0, lean=-26, flex=14, head=smile_head, legs_out=True)
     sc.frame_set(f)
-    hp = DOG_BACK.copy()          # hand rests still on the back (stroking pushed the forearm into the fur)
+    # hand rests still and flat on the near side of the dog's back, beside his hip, forearm nearly level
+    hp = Vector((HX.x + float(os.environ.get("DSO_HX", "0.08")), float(os.environ.get("DSO_HY", "0.78")), 0))
     _h, _n = _ray_down_n(SDH, hp.x, hp.y)
-    if _h is None: _h, _n = hp, Vector((0, 0, 1))
-    fd = Vector((0.2, -1, 0)); fd = (fd - _n * fd.dot(_n)).normalized()
-    place_hand(OWNER, "L", f, _h, -_n, fd, skin=float(os.environ.get("DSO_SKIN", "0.024"))); apply_pose(OWNER, "L", "flat_palm", f)
+    if _h is None: _h, _n = DOG_BACK.copy(), Vector((0, 0, 1))
+    _n = (_n + Vector((0, 0, 1.5))).normalized()
+    fd = Vector(tuple(float(x) for x in os.environ.get("DSO_FD", "0.35,-1.0,0").split(","))); fd = (fd - _n * fd.dot(_n)).normalized()
+    place_hand(OWNER, "L", f, _h, -_n, fd, skin=float(os.environ.get("DSO_SKIN", "0.018"))); apply_pose(OWNER, "L", "flat_palm", f)
     place_hand(OWNER, "R", f, st + Vector((-0.18, -0.25, 0.10)), (-0.3, 0, -1), (0, -1, 0)); apply_pose(OWNER, "R", "relaxed", f)
 def S14a(f0, f1):
     PRESENT["14a"] = {"own"}
     for fr, t in ((f0, 0.0), ((f0 + f1) // 2, 0.5), (f1, 1.0)):
         hosp_man(fr, smile_head=(26 + 4 * t, 10 + 4 * t), stroke=0.3 * t)
+    press_fur_under_hand(f0); press_fur_under_hand((f0 + f1) // 2); press_fur_under_hand(f1)
     c = camera("14a", 30)
     tgt = HX + Vector((0.0, 0.50, BED_TOP + 0.40))
     cam_key(c, f0, tgt + Vector((1.55, -0.55, 0.45)), tgt); cam_key(c, f1, tgt + Vector((1.35, -0.45, 0.40)), tgt)
+def press_fur_under_hand(f):
+    """the hand is still in 14a/14b: press the dog's fur down under it (a few mm), so the palm rests on it, not in it"""
+    from mathutils.kdtree import KDTree
+    body = next(c for c in OWNER.children if c.name.endswith(".body"))
+    for m in body.modifiers:
+        if m.type in ("SUBSURF", "MASK"): m.show_viewport = False
+    sc.frame_set(f); bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
+    gi = {g.index: g.name for g in body.vertex_groups}
+    be = body.evaluated_get(dg); me = be.to_mesh(); mw = be.matrix_world
+    pts = []
+    for v in body.data.vertices:
+        if any(gi.get(g.group, "").endswith(".L") and gi.get(g.group, "").startswith(("finger", "metacarpal", "wrist", "lowerarm02")) and g.weight > 0.3 for g in v.groups):
+            pts.append(mw @ me.vertices[v.index].co)
+    be.to_mesh_clear()
+    for m in body.modifiers:
+        if m.type in ("SUBSURF", "MASK"): m.show_viewport = True
+    kd = KDTree(len(pts))
+    for i, p_ in enumerate(pts): kd.insert(Vector((p_.x, p_.y, 0)), i)
+    kd.balance()
+    inv = SDH.matrix_world.inverted(); M = SDH.matrix_world; n = 0
+    for v in SDH.data.vertices:
+        w = M @ v.co
+        near = kd.find_range(Vector((w.x, w.y, 0)), 0.022)
+        if not near: continue
+        zmin = min(pts[i].z for _, i, _ in near) - 0.006
+        if w.z > zmin:
+            w.z = zmin; v.co = inv @ w; n += 1
+    SDH.data.update(); print("BUILD fur pressed verts", n, "hand pts", len(pts))
+
 def S14b(f0, f1):
     PRESENT["14b"] = {"own"}
     for fr, t in ((f0, 0.0), ((f0 + f1) // 2, 1.0), (f1, 0.0)):
         hosp_man(fr, smile_head=(28, 12), stroke=t)
+    press_fur_under_hand(f0); press_fur_under_hand((f0 + f1) // 2); press_fur_under_hand(f1)
     c = camera("14b", 40)
     tgt = HX + Vector((0.0, 0.62, BED_TOP + 0.45))
     cam_key(c, f0, tgt + Vector((1.00, -0.45, 0.35)), tgt, lens=32); cam_key(c, f1, tgt + Vector((0.86, -0.38, 0.30)), tgt, lens=32)
