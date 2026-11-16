@@ -536,14 +536,14 @@ for c in (W, EL, VW, M1, M2): c.used.add("S07")
 s0, s1 = ST["S09"], SE("S09")
 WP9 = V(ANV.x + 0.02 - 0.2, ANV.y - 0.04 - 0.5, 0); WY9 = 180.0; R9 = Rz(WY9)
 con = plate9.location + V(0, 0, 0.012)
-for f, b, lean in ((s0, 0.0, 6), (s0 + 40, 0.6, 12), (s0 + 60, 1.0, 16), (s1, 1.0, 14)):
-    W.stand(f, WP9, WY9, flex=lean, head=(4 - 22 * b, 8 * b))
+for f, b, lean in ((s0, 0.0, 10), (s0 + 40, 0.6, 22), (s0 + 60, 1.0, 30), (s1, 1.0, 28)):
+    W.stand(f, WP9, WY9, flex=lean, head=(4 - 30 * b, 8 * b), crouch=0.02 + 0.13 * b)
     W.hang(f, WP9, WY9, which="L", out=0.16, fwd=0.04)
 c9, ax9, _ = CUT["R"]
 for f, h in ((s0, 0.28), (s0 + 40, 0.10), (s0 + 60, 0.0), (s1, 0.0)):
     # stump end (bandage tip) lands on the plate: the wrist point sits ~3 cm above the contact
     W.hand_w("R", f, con + V(0, 0, 0.035 + h) + R9 @ V(0, 0.02, 0), V(0, 0.15, -1).normalized(), R9 @ V(1, 0, 0), WP9 + R9 @ V(-0.6, 0.0, 1.0))
-steam(con, s0 + 60, n=7)
+# (steam dropped: the spheres read as a solid white ball at preview size; the glow carries the beat)
 W.used.add("S09")
 
 # --- S10: close-up of two knives and leather straps laid on the table (camera only)
@@ -587,25 +587,25 @@ for c in (W, M1, M2): c.used.add("S12")
 # S13: he slashes a soldier; spark on the cuirass; the soldier staggers back (no wound)
 s0, s1 = ST["S13"], SE("S13")
 WP13 = V(BX, 1.2, 0); WY13 = 0.0; R13 = Rz(WY13)
-SBP = V(BX + 0.05, 0.05, 0); SBY = 180.0
+SBP = V(BX + 0.05, -0.18, 0); SBY = 180.0
 FH = s0 + 52
 for f, b in ((s0, 0.0), (s0 + 30, 0.0), (FH - 6, 0.6), (FH, 1.0), (FH + 14, 1.0), (s1, 0.8)):
     W.stand(f, WP13 + V(0, -0.15 * b, 0), WY13 + 20 * b, flex=8 + 8 * b, head=(6, 0), twist=-25 + 45 * b)
 # right forearm: wind up to the right shoulder, sweep across in front of the soldier's chest (15 cm clear), follow through left
-sw = [(s0, V(-0.30, -0.36, 1.18)), (s0 + 30, V(-0.62, -0.48, 1.38)), (FH - 6, V(-0.40, -0.68, 1.36)), (FH, V(-0.02, -0.72, 1.33)),
-      (FH + 10, V(0.0, -0.74, 1.25)), (s1, V(-0.14, -0.68, 1.2))]
+sw = [(s0, V(-0.30, -0.36, 1.18)), (s0 + 30, V(-0.62, -0.48, 1.38)), (FH - 6, V(-0.42, -0.58, 1.36)), (FH, V(-0.02, -0.60, 1.33)),
+      (FH + 10, V(0.02, -0.62, 1.25)), (s1, V(-0.14, -0.60, 1.2))]
 for f, p in sw:
     W.hand_w("R", f, WP13 + R13 @ p, R13 @ V(-0.2, -1, 0.15).normalized(), R13 @ V(0, 0, -1), WP13 + R13 @ V(-0.6, 0.2, 1.0))
 for f in (s0, s1): W.hand_w("L", f, WP13 + R13 @ V(0.40, -0.40, 1.15), R13 @ V(0.2, -1, 0.3).normalized(), R13 @ V(1, 0, 0), WP13 + R13 @ V(0.6, 0.3, 0.9))
 for f, back, lean in ((s0, 0.0, 0), (FH, 0.0, 0), (FH + 8, 0.2, -12), (FH + 30, 0.4, -6), (s1, 0.45, 4)):
     SB.stand(f, SBP + V(0, -back, 0), SBY + 12 * (back > 0), flex=lean, head=(lean * 0.5, 0))
     SB.hang(f, SBP + V(0, -back, 0), SBY, swing=(0.15 * (back > 0), 0.25 * (back > 0)), out=0.13 + 0.1 * (back > 0), fwd=0.08)
-spark("SparkS13", SBP + V(0, 0.2, 1.3), FH)
+spark("SparkS13", SBP + V(0, 0.24, 1.3), FH)
 for c in (W, SB): c.used.add("S13")
 
 # S14: the general's second-in-command (brass helmet) comes at him with a sword; he ducks inside and cuts; spark; the officer reels
 s0, s1 = ST["S14"], SE("S14")
-WP14 = V(BX - 3.0, 0.6, 0); WY14 = 0.0; R14 = Rz(WY14)
+WP14 = V(BX - 3.0, 0.78, 0); WY14 = 0.0; R14 = Rz(WY14)
 SCP0 = V(BX - 3.0, -1.7, 0); SCP1 = V(BX - 3.0, -0.75, 0); SCY = 180.0; RS = Rz(SCY)
 FH2 = s0 + 100
 walk(SC2, s0, s0 + 60, SCP0, SCP1, yaw=SCY, stride=0.7, arms="L")
@@ -625,7 +625,7 @@ for f, p_ in ((s0, V(-0.48, -0.30, 0.98)), (s0 + 60, V(-0.52, -0.34, 1.0)), (FH2
     SC2.hand_w("R", f, base + RS @ p_, RS @ V(0, -1, -0.25).normalized(), RS @ V(1, 0, 0), base + RS @ V(-0.6, 0.3, 1.0))
 apply_pose(SC2.o, "R", "wrap_grip", s0)
 for f, b, tw in ((s0, 0.0, 0), (s0 + 60, 0.2, -10), (FH2 - 8, 0.6, -30), (FH2, 1.0, 20), (FH2 + 16, 1.0, 25), (s1, 0.8, 15)):
-    W.stand(f, WP14 + V(0.25 * b, -0.2 * b, 0), WY14 - 10 * b, flex=6 + 6 * b, head=(2, 0), twist=tw, crouch=0.02 + 0.04 * b)
+    W.stand(f, WP14 + V(0.25 * b, -0.08 * b, 0), WY14 - 10 * b, flex=4 + 3 * b, head=(2, 0), twist=tw, crouch=0.02 + 0.04 * b)
 for f, p in ((s0, V(-0.32, -0.45, 1.18)), (FH2 - 8, V(-0.62, -0.52, 1.36)), (FH2, V(0.02, -0.76, 1.40)), (FH2 + 12, V(0.0, -0.76, 1.25)), (s1, V(-0.14, -0.70, 1.2))):
     W.hand_w("R", f, WP14 + R14 @ p, R14 @ V(-0.2, -1, 0.15).normalized(), R14 @ V(0, 0, -1), WP14 + R14 @ V(-0.6, 0.2, 1.0))
 for f in (s0, s1): W.hand_w("L", f, WP14 + R14 @ V(0.52, -0.66, 1.2), R14 @ V(0.2, -1, 0.3).normalized(), R14 @ V(1, 0, 0), WP14 + R14 @ V(0.6, 0.3, 0.9))
@@ -657,12 +657,12 @@ for f, b in ((s0, 0), (s0 + 60, 0.5), (s1, 1)):
     SB.hand_w("R", f, GUARD_LOCAL + Rz(GY) @ V(-0.36, -0.24, 1.0), Rz(GY) @ V(0, -1, -0.15).normalized(), Rz(GY) @ V(1, 0, 0), GUARD_LOCAL + Rz(GY) @ V(-0.6, 0.3, 0.9))
     SB.hang(f, GUARD_LOCAL, GY, which="L")
 FH3 = s0 + 70
-for f, yaw, b, tw in ((s0, -30, 0, 0), (s0 + 40, -10, 0.3, -25), (FH3, 15, 1.0, 25), (FH3 + 20, 20, 0.9, 20), (s0 + 150, 0, 0.5, 0), (s1, 0, 0.4, 0)):
-    W.stand(f, WP17, yaw, flex=8 + 8 * b, head=(-8, 0), twist=tw, crouch=0.04 + 0.05 * b)
+for f, yaw, b, tw in ((s0, -30, 0, 0), (s0 + 40, -10, 0.3, -25), (FH3, 15, 1.0, 25), (FH3 + 20, 20, 0.9, 20), (s0 + 150, 0, 0.5, 0), (s0 + 215, -12, 0.45, -8), (s0 + 280, 10, 0.5, 6), (s1, -4, 0.4, 0)):
+    W.stand(f, WP17, yaw, flex=8 + 8 * b, head=(-8 + 6 * math.sin(f * 0.03), 9 * math.sin(f * 0.021)), twist=tw, crouch=0.04 + 0.05 * b)
     R3 = Rz(yaw)
-    rp = V(-0.62, -0.50, 1.36) if f < FH3 else (V(0.0, -0.74, 1.33) if f == FH3 else V(-0.30, -0.60, 1.25))
+    rp = V(-0.42, -0.42, 1.38) if f < FH3 else (V(0.0, -0.74, 1.33) if f == FH3 else V(-0.30, -0.48, 1.25))
     W.hand_w("R", f, WP17 + R3 @ rp, R3 @ V(-0.2, -1, 0.3).normalized(), R3 @ V(0, 0, -1), WP17 + R3 @ V(-0.6, 0.2, 1.0))
-    W.hand_w("L", f, WP17 + R3 @ V(0.40, -0.42, 1.22), R3 @ V(0.2, -1, 0.35).normalized(), R3 @ V(1, 0, 0), WP17 + R3 @ V(0.6, 0.3, 0.9))
+    W.hand_w("L", f, WP17 + R3 @ V(0.32, -0.46, 1.25), R3 @ V(0.2, -1, 0.35).normalized(), R3 @ V(1, 0, 0), WP17 + R3 @ V(0.6, 0.3, 0.9))
 for c in (W, SB): c.used.add("S17")
 
 # --- spears: Child Of the wrist at a frame where the hand holds the shaft upright
@@ -810,7 +810,7 @@ h2 = head_at(W, ST["S02"] + 60)
 camera("S02", [(0, h2 + V(0.35, -1.55, -0.45), h2 + V(0, 0, -0.25)), (-1, h2 + V(0.3, -1.35, -0.42), h2 + V(0, 0, -0.18))], lens=32)
 camera("S03", [(0, V(-2.3, -0.2, 1.5), V(0.4, 0.6, 1.3)), (-1, V(-2.0, 0.2, 1.5), V(0.8, 1.0, 1.3))], lens=30)
 camera("S04", [(0, V(7.6, -1.4, 1.5), p4(ST["S04"]) + V(0, 0, 1.45)), (-1, V(9.6, -0.6, 1.5), p4(SE("S04")) + V(0, 0, 1.45))], lens=32)
-camera("S05", [(0, WP5 + V(0.9, -2.0, 1.65), V(HX + 0.2, 0.2, 1.4)), (-1, WP5 + V(0.75, -1.75, 1.62), V(HX + 0.2, 0.2, 1.42))], lens=28)
+camera("S05", [(0, V(HX + 2.4, -0.9, 1.55), V(HX - 0.3, -0.35, 1.45)), (-1, V(HX + 2.2, -0.75, 1.55), V(HX - 0.3, -0.35, 1.48))], lens=26)
 h6 = head_at(W, ST["S06"] + 40)
 camera("S06", [(0, h6 + V(0.55, 1.5, -0.12), h6 + V(0, 0, -0.22)), (-1, h6 + V(0.42, 1.25, -0.1), h6 + V(0, 0, -0.18))], lens=35)
 camera("S07", [(0, V(HX - 0.1, -3.6, 1.5), V(HX - 0.25, 0.3, 1.4)), (-1, V(HX - 0.1, -3.3, 1.5), V(HX - 0.25, 0.3, 1.45))], lens=20)
