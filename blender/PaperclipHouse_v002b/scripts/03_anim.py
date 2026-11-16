@@ -41,9 +41,18 @@ class Person(Man):
         self.yaw = yaw; self.xy = xy
         super().stand(f, xy, yaw, crouch, flex, side, stance)
     def hang(self, s, f, out=0.0, fwd=0.0, lift=0.0, pose="relaxed", **kw):
-        """relaxed arm with a clearly bent elbow (~45 deg): hand forward of the thigh, not a straight mannequin hang"""
-        sc.frame_set(f)                      # root pose of THIS frame (hang is relative to the evaluated root)
-        super().hang(s, f, out=0.03 + out, fwd=0.11 + fwd, lift=0.11 + lift, pose=pose, **kw)
+        """relaxed arm with a bent elbow: hand in front of the thigh, close to the body; the elbow points BACK
+        (pole behind the shoulder, only slightly out) so the arm never flares sideways into an A-pose"""
+        sc.frame_set(f)                      # root pose of THIS frame
+        sx = 1 if s == "L" else -1
+        B = self.r.BN; sh = B["upperarm01." + s].head_local
+        root = self.r.PB["root"]
+        M = self.o.matrix_world.inverted() @ (self.o.matrix_world @ root.matrix) @ self.r.rest("root").inverted()
+        W = M @ Vector((sh.x + sx * (0.015 + out), sh.y - 0.17 - fwd, sh.z - 0.43 + lift))
+        Rz = M.to_3x3()
+        self.h.key_hand(s, f, W, Rz @ Vector((0.0, -0.45 - fwd, -1)), Rz @ Vector((-sx, 0.10, 0)),
+                        pole=M @ Vector((sh.x + sx * 0.08, sh.y + 0.65, sh.z - 0.20)))
+        apply_pose(self.o, s, pose, f)
     def hand_on_hip(self, s, f):
         """hand resting on the hip: wrist just outside the pelvis, fingers down-forward, elbow out and back"""
         sc.frame_set(f); sx = 1 if s == "L" else -1
@@ -636,7 +645,7 @@ def S23(t, n):
     base(m, t, (-1.4, -11.0), 20); base(w, t, (-0.5, -10.7), -25)
     def fr(f, u):
         a = ease((u - 0.15) / 0.3)
-        w.hang("R", f, out=0.05 * a, fwd=0.42 * a, lift=0.38 * a, pose="relaxed")
+        w.hang("R", f, out=0.04 * a, fwd=0.24 * a, lift=0.22 * a, pose="relaxed")
         look_at(w, f, V(6.0, -16.0, 1.6), flex=2)
         look_at(m, f, V(6.0, -16.0, 1.6) if u > 0.35 else w.head_w(), flex=2)
         w.jaw(f, 3 * math.sin(u * 14) ** 2); m.jaw(f, 2 * ease((u - 0.5) / 0.3))
