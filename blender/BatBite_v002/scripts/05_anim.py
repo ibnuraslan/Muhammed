@@ -566,7 +566,7 @@ def oxygen_mask():
                 for jz in (-0.006, 0.0, 0.006):
                     dj = (dirv + V((jx, 0, jz)) / 0.12).normalized(); hit = _bvh.ray_cast(Ce + dj * 0.4, -dj, 0.4)
                     if hit[0] is not None: r_skin = max(r_skin, (hit[0] - Ce).length)
-            G[i, j] = bm.verts.new(Ce + dirv * max(k * (1 - 0.22 * r2), r_skin + 0.004 + 0.004 * (1 - r2)))   # rigid smooth shell; skin clearance only near the rim   # small, low-profile medical cup
+            G[i, j] = bm.verts.new(Ce + dirv * max(0.93 * k * (1 - 0.22 * r2), r_skin + 0.004 + 0.004 * (1 - r2)))   # rigid smooth shell; skin clearance only near the rim   # small, low-profile medical cup
     for i in range(N_):
         for j in range(N_):
             q = [(i, j), (i + 1, j), (i + 1, j + 1), (i, j + 1)]
