@@ -45,3 +45,11 @@ Clips are authored at their full 1× length and trimmed at the VO cut. No charac
 ## v002c changes (director notes on v002b; everything else is as approved in v002b)
 1. **14a (f1171–1247):** opens on the approved 14b angle (6 % wider) and pushes in continuously into 14b. The crumpled wide of the dog is gone: its face rests forward and is visible.
 2. **15a (f1298–1352) and 15d (f1508–1592):** the camera is at his front 3/4 from his right (the dog's head side), low and framed from the knees up. His face reads as he looks down at the dog, and the dog's sleeping face is in the foreground. 15d keeps its slow push-in to the end, which stays on his face. His head bow is lighter (18–24°) so the face shows.
+## Checks on this exact package (step: clip 6, qa 6, limb 2, bpc 3 humans / 1 dog; Dog_body is in the human bpc list)
+- clip_scan: 0 bad ranges. body_prop_cross: 0 visible crossings (humans incl. hands on the dog; the dog vs bed/crate/seats).
+- limb_check ARMBODY: upperarm01 points 0–2 at the shoulder (known false positive). Also arm.L points 4–5, 7 cm from the
+  shoulder (the armpit) while he leans 46° to reach the dog: 15a f1347–1351. And 359–367: the shot-05 arm coming around his side.
+- limb_check ARMBACK 375–403 (shot 05): intended, his hand on his hurt back.
+- qa_check EMPTY/INSIDE/PROPMOVE/CAMJUMP: dog-only, anatomy and ambulance-exterior shots, FX, hard cuts. FAN 721–799: the phone tap.
+- Off camera: in shot 09 the patient's feet pass the far ambulance wall, never in view.
+- His palm on the dog rests 1.6–3.6 cm off the fur so no finger enters it. The fur hides the gap.
