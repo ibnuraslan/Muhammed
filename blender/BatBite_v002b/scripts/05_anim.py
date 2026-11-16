@@ -572,11 +572,13 @@ blanket()
 print('BLANKET', D['Blanket'].location, len(D['Blanket'].data.vertices))
 _tb = _posed_bvh(D['Blanket'])
 for f in range(CUT, 2101, 30):
-    sc.frame_set(f)
+    sc.frame_set(f); bpy.context.view_layer.update(); _tsuit = _posed_bvh(_JEANS)
     for s_ in "LR":
         sx = 1 if s_ == "L" else -1
-        o_ = V((HX + 0.11 * sx, HIP.y - 0.27, 2.0)); hit, nrm, _i, _d = _tb.ray_cast(o_, V((0, 0, -1)), 3.0)   # director v002b: on his lap, elbows bent
-        if hit is None: print("BEDHAND miss", f, s_); continue
+        o_ = V((HX + 0.11 * sx, HIP.y - 0.27, 2.0))   # director v002b: on his lap, elbows bent
+        hits = [h for h in (_tb.ray_cast(o_, V((0, 0, -1)), 3.0), _tsuit.ray_cast(o_, V((0, 0, -1)), 3.0)) if h[0] is not None]
+        if not hits: print("BEDHAND miss", f, s_); continue
+        hit, nrm, _i, _d = max(hits, key=lambda h: h[0].z)      # the higher of blanket / clothes under the hand
         if nrm.z < 0: nrm = -nrm
         fd = V((-sx, -0.3, 0)); fd = (fd - nrm * fd.dot(nrm)).normalized()     # fingers across his lap (tested: the whole hand stays on top of the blanket)
         place_hand(D[S], s_, f, hit, -nrm, fd, skin=0.035)
