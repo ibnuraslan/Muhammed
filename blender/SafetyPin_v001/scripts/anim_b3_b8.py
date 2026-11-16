@@ -108,20 +108,35 @@ def beat_B4():
 def beat_B5():
     f0, f1 = WIN["B5"]
     for f in (f0, f1): seat(RH, HH, f, HIP_H, flex=6)
-    arm_poles(RH, f0, HIP_H); arm_poles(RH, f1, HIP_H)
+    arm_poles(RH, f0, HIP_H, out=0.12, back=-0.35, z=0.45); arm_poles(RH, f1, HIP_H, out=0.12, back=-0.35, z=0.45)   # elbows in
     note = bpy.data.objects["DebtNote"]; note.location = (-0.30, -0.42, BT + 0.0012); note.rotation_euler = (0, 0, R_(8))
     for i, (dx, dy) in enumerate(((0.10, -0.03), (0.125, -0.012), (0.115, 0.012))):
         c_ = bpy.data.objects["Coin%d" % i]; c_.location = (-0.30 + dx, -0.42 + dy, BT + 0.001 + 0.0021 * i)
+    # B5 only: the bench (and its dressing) sits 20 cm further away so his forearms hang in front of its edge
+    DY = -0.20
+    grp = ["Workbench", "Candle", "Spool"] + [o.name for o in bpy.data.objects if o.name.startswith("SpoolFlange")]
+    for nm in grp:
+        o = bpy.data.objects[nm]; y0 = o.location.y
+        for f, y in ((f0 - 1, y0), (f0, y0 + DY), (f1, y0 + DY), (f1 + 1, y0)):
+            o.location.y = y; o.keyframe_insert("location", index=1, frame=f)
+        for fc in (o.animation_data.action.fcurves if hasattr(o.animation_data.action, "fcurves") and len(o.animation_data.action.fcurves) else _fcurves(o.animation_data.action)):
+            for k in fc.keyframe_points: k.interpolation = 'CONSTANT'
+        o.location.y = y0
+    note.location.y += DY
+    for i in range(3): bpy.data.objects["Coin%d" % i].location.y += DY
+    # director v002b: leaning forward, forearms resting on his thighs, hands near the knees, elbows in
     for f in (f0, 1700, f1):
-        rest_hands_on_bench(hunt, f, (-0.41, -0.19))
+        for s_, sx in (("R", -1), ("L", 1)):
+            place_hand(hunt, s_, f, Vector((-0.30 + sx * 0.14, -0.27, 0.66)), Vector((0, 0, -1)), Vector((-sx * 0.15, -1, -0.45)))
+            apply_pose(hunt, s_, "relaxed", f)
     # slumped, slow head shake, a breath; face kept toward the low camera
     def hd(f):
         sh = 9 * math.sin((f - f0) / 45 * math.pi) if 1630 < f < 1720 else 0
-        return (20, sh)
-    look(HH, f0, f1, 14, hd, step=10, period=150, amp=2.0)
+        return (12, sh)
+    look(HH, f0, f1, 22, hd, step=10, period=150, amp=2.0)
     for o in [note] + [bpy.data.objects["Coin%d" % i] for i in range(3)]: show_only(o, [(f0, f1)])
     cam_shot("Cam5a", f0, 1740, [(f0, (0.05, -1.50, 0.98), (-0.30, -0.20, 1.02)), (1740, (-0.05, -1.22, 0.98), (-0.30, -0.20, 1.02))], lens=40)
-    cam_shot("Cam5b", 1741, f1, [(1741, (-0.10, -0.80, 1.08), (-0.30, -0.40, 0.80)), (f1, (-0.16, -0.70, 1.02), (-0.30, -0.41, 0.80))], lens=45, fstop=9)
+    cam_shot("Cam5b", 1741, f1, [(1741, (-0.10, -1.00, 1.08), (-0.30, -0.60, 0.80)), (f1, (-0.16, -0.90, 1.02), (-0.30, -0.61, 0.80))], lens=45, fstop=9)
     catchlight(hunt, bpy.data.objects["Cam5a"], 0, 0)
 
 # ================================================================== B6 sells the patent for $400 (1861..2220)

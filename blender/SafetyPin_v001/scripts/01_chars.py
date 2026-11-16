@@ -3,7 +3,7 @@ import bpy, sys
 exec(open("/home/user/Muhammed/blender/SafetyPin_v001/scripts/lib.py").read())
 SPEC = {   # cid: (blend, donor)
     "Hunt":  (REPO + "BeethovenDeaf_v010/BeethovenDeaf_v010_60fps.blend", "Composer"),
-    "Pal":   (REPO + "TitanicIceberg_v014/TitanicIceberg_v014_60fps.blend", "ExpertB"),
+    "Pal":   (REPO + "EscapeArtist_v010/EscapeArtist_v010_60fps.blend", "Judge"),   # director v002b: clearly male donor (TenDimes Singer rig)
     "Buyer": (REPO + "PrisonKeyCake_v010/PrisonKeyCake_v010_60fps.blend", "President"),
 }
 cid = sys.argv[sys.argv.index("--") + 1]
@@ -101,6 +101,7 @@ elif cid == "Pal":    # young friend: green jacket (reference), light shirt kept
     for ch in rig.children:
         if "elegantsuit" in ch.name:
             for i in range(len(ch.data.materials)): ch.data.materials[i] = sm
+    hair(rig, (1.25, 1.0, 0.62))   # light blond over the donor's dark short hair
     hair(rig, (0.85, 0.70, 0.42))
 elif cid == "Buyer":  # buyer: brown suit, dark hair
     recolor(rig, "elegantsuit", (0.42, 0.26, 0.14), gain=1.5)

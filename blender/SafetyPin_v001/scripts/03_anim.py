@@ -54,8 +54,7 @@ buyer, RB, HB = setup("Buyer")
 show_only(hunt, [WIN["B1"], WIN["B2"], WIN["B4"], WIN["B5"], WIN["B6"]])
 show_only(pal, [WIN["B3"], WIN["B4"]])
 for _s in "LR":   # director: the friend's jacket read as a bust -> flatten the breast bones (body + jacket both follow)
-    _pb = pal.pose.bones["breast." + _s]; _pb.scale = (0.45, 0.45, 0.45); _pb.keyframe_insert("scale", frame=1)
-    _pb.location = pal.data.bones["breast." + _s].matrix_local.to_3x3().inverted() @ Vector((0, 0.04, -0.01)); _pb.keyframe_insert("location", frame=1)
+    pass   # (v002b: friend re-cast on a male donor; breast-bone offsets removed)
 # chest lattice (follows spine01): pushes the front of the chest back so body + jacket read flat and male
 def _flat_chest(rig, depth=0.075):
     sc.frame_set(1); bpy.context.view_layer.update()
