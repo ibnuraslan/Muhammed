@@ -288,7 +288,7 @@ shot("S05_PondWide", 200, "B4 kept it in a secret pond behind his house",
 def s06(s):
     for f in frames(s):
         u = u_of(s, f)
-        croc_key(f, 2.3 - 0.8 * u, 8.0 - 2.4 * u, -105.0, z=WATER_Z - 0.27, swim=f / 60.0, swim_amp=16, tuck=0.8)
+        croc_key(f, -0.2 + 0.7 * u, 7.6 - 2.4 * u, -75.0, z=WATER_Z - 0.27, swim=f / 60.0, swim_amp=16, tuck=0.8)
         man_stand(f, V((0.8, 3.6)), 165.0, flex=6, spine=(10 + 4 * math.sin(f * 0.05), 0, 0), head=(-14, 6 * math.sin(f * 0.03)), crouch=0.04)
     for f in frames(s, 2):
         sc.frame_set(f)
@@ -298,7 +298,7 @@ def s06(s):
         hand_idle(f, "L", 165.0)
     fingers(s["f0"], "R", "relaxed"); fingers(s["f1"], "R", "relaxed"); fingers(s["f0"], "L", "relaxed"); fingers(s["f1"], "L", "relaxed")
 shot("S06_CrocSwim", 150, "B4 (croc swimming toward camera, house behind)",
-     (((2.6, 9.6, 1.35), (1.0, 3.6, 0.95)), ((2.3, 8.9, 1.25), (1.0, 3.6, 0.95))), s06, 30)
+     (((3.6, 6.6, 1.3), (0.6, 4.2, 0.9)), ((3.3, 6.2, 1.25), (0.7, 4.0, 0.95))), s06, 30)
 
 # ---------------- B5 nine pounds of meat a day: bucket + toss
 BUCKET = OB["Bucket"]; MEAT = OB["Meat"]; MEAT2 = OB["MeatInBucket"]
@@ -415,7 +415,7 @@ shot("S10_SleepClose", 170, "B6 thinking his love would heal its wounds",
 def s11(s):
     for f in frames(s):
         u = u_of(s, f)
-        croc_key(f, -3.6 - 1.8 * u, 2.6 + 1.4 * u, 140.0, gait=f / 45.0, gait_amp=22)
+        croc_key(f, -3.3 - 1.3 * u, 2.4 + 0.9 * u, 140.0, gait=f / 45.0, gait_amp=22)
         man_stand(f, V((-1.8, 0.6)), 225.0, flex=4 * smooth(u * 3), spine=(4 + 6 * smooth(u * 3), -10 * math.sin(u * 3), 0), head=(-5, -12 + 10 * math.sin(u * 4)))
     for f in frames(s, 2):
         sc.frame_set(f); u = u_of(s, f)
@@ -427,7 +427,7 @@ def s11(s):
     fingers(s["f0"], "R", "relaxed"); fingers(s["f0"] + 50, "R", "point"); fingers(s["f1"] - 30, "R", "point"); fingers(s["f1"], "R", "relaxed")
     fingers(s["f0"], "L", "relaxed"); fingers(s["f1"], "L", "relaxed")
 shot("S11_Release", 200, "B7 when he tried to release it back to the wild",
-     (((-7.4, 6.2, 1.5), (-2.4, 1.1, 0.9)), ((-6.8, 5.6, 1.4), (-2.3, 1.1, 0.9))), s11, 30)
+     (((-6.0, 5.2, 1.45), (-2.2, 1.0, 1.0)), ((-5.6, 4.8, 1.4), (-2.2, 1.0, 1.0))), s11, 40)
 def s12(s):
     for f in frames(s):
         u = u_of(s, f); turn = smooth(min(1, max(0, (u - 0.2) / 0.6)))
@@ -574,12 +574,11 @@ def singer(s):
         sc.frame_set(f)
         sh = MAN.matrix_world @ MAN.pose.bones["upperarm01.R"].head
         ch = MAN.matrix_world @ MAN.pose.bones["spine03"].head
-        k = 0.5 + 0.5 * math.sin(f * 0.045)                      # slow sweep: hand on heart -> open to the guests
-        WR = (ch + V((0.05, -0.20, 0.10))).lerp(sh + V((-0.30, -0.38, -0.12)), k)
+        k = 0.5 - 0.5 * math.cos((f - s["f0"]) * 0.05)           # starts on his heart, opens forward to the guests, returns
+        WR = (ch + V((0.05, -0.20, 0.10))).lerp(sh + V((-0.04, -0.44, -0.22)), k)
         hand_at(f, "R", WR, V((1, 0, 0.3)).lerp(V((-0.4, -0.8, 0.3)), k), V((0, 1, 0)).lerp(V((0, -0.3, 1)), k), 0.0, pole_off=(0.2, -0.3, 0.45))
         shL = MAN.matrix_world @ MAN.pose.bones["upperarm01.L"].head
-        lift = 0.22 + 0.12 * math.sin(f * 0.05 + 1.0)
-        hand_at(f, "L", shL + V((0.34, -0.30, -0.32 + lift)), V((0.5, -0.6, 0.4)), V((0, 0, 1)), 0.0, pole_off=(0.1, -0.4, 0.5))
+        hand_idle(f, "L", 0.0, fwd_off=0.14 + 0.04 * math.sin(f * 0.05), out=0.10)
     fingers(s["f0"], "R", "flat_palm"); fingers(s["f1"], "R", "flat_palm"); fingers(s["f0"], "L", "relaxed"); fingers(s["f1"], "L", "relaxed")
     # singing: jaw opens and closes softly (no teeth grimace)
     jaw = MAN.pose.bones.get("jaw")
@@ -628,6 +627,13 @@ def key_light(f, e_sun, col, e_bg, e_moon):
     sun.data.keyframe_insert("energy", frame=f); sun.data.keyframe_insert("color", frame=f)
     bg.inputs[1].keyframe_insert("default_value", frame=f); moon.data.keyframe_insert("energy", frame=f)
 key_light(1, 3.5, (1, 0.96, 0.9), 1.45, 0.0)
+def shade_fill(name, loc, tgt, shotkey, energy=160):
+    L = bpy.data.objects.new(name, bpy.data.lights.new(name, "AREA")); sc.collection.objects.link(L)
+    L.data.energy = energy; L.data.size = 2.5; L.data.color = (1.0, 0.95, 0.88); L.location = loc
+    L.rotation_euler = (V(tgt) - V(loc)).to_track_quat('-Z', 'Y').to_euler()
+    ss = [x for x in SHOTS if x["name"].startswith(shotkey)][0]; vis([L], ss["f0"], ss["f1"])
+shade_fill("FillS13", (-3.6, 0.2, 2.2), (-2.0, 1.0, 0.6), "S13")
+shade_fill("FillS18", (0.6, 5.4, 2.4), (0.9, 3.4, 0.6), "S18")
 mf = bpy.data.objects.new("MoonFaceFill", bpy.data.lights.new("MoonFaceFill", "AREA")); sc.collection.objects.link(mf)
 mf.data.energy = 30; mf.data.size = 1.2; mf.data.color = (0.7, 0.8, 1.0); mf.location = (-0.3, 1.8, 1.6)
 mf.rotation_euler = (V((-0.1, 2.9, 0.2)) - mf.location).to_track_quat('-Z', 'Y').to_euler()
