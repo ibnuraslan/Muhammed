@@ -10,20 +10,20 @@ VO beat, so Phase 2 can shift and trim blocks to the VO frames without stretchin
 
 | Beat | Block | Shot (master frames) | Who / what physically happens | Camera |
 |---|---|---|---|---|
-| 1. A fan throws what looks like a rubber bat on stage | 1–300 | **S01** 1–80 crowd POV | 3 fans (red, green, yellow clothes) seen from behind, fists up and bobbing; the singer sings at the mic stand (right hand round the shaft, left fist pumps). The bat rises from between the fans (starts below frame) and flies in a tumbling arc, wings fluttering, over them toward the stage. **Logo:** DA KRAS FILMS banner hung from the top truss. | low behind the crowd, between two fans, looking up at the singer; slow push |
-| | | **S02** 80–150 bat lands | bat drops onto the deck right-front of the singer, small bounce, lies belly-down, wings flat | low front-left over the stage edge, drum kit (bass-drum **logo**) behind |
+| 1. A fan throws what looks like a rubber bat on stage | 1–300 | **S01** 1–80 crowd POV | a crowd of 13 (each in its own non-skin colour) seen from behind, one or both fists up, bobbing; the singer sings into the mic on the stand (no hand on the stand; left fist pumps). The bat rises from between the fans (starts below frame) and flies in a tumbling arc, wings fluttering, over them toward the stage. **Logo:** DA KRAS FILMS banner hung from the top truss. | low behind the crowd, between two fans, looking up at the singer; slow push |
+| | | **S02** 80–150 bat lands | bat drops onto the deck right-front of the singer, small bounce, lies belly-down, wings flat | reverse high wide from upstage over the singer's shoulder: the cheering crowd in the background |
 | | | **S03** 150–300 notices | singer finishes the line, head turns down to the bat | medium front-right, slow push |
 | 2. He picks it up and bites it, thinking it's a toy | 300–620 | **S04** 300–410 | lets go of the stand, two steps toward it, starts to crouch | 3/4 front-right medium-wide |
 | | | **S05** 410–470 grabs | deep crouch, right hand reaches the bat's lower body and closes (`grip_object` + wrap_grip; the bat is baked to the IK hand every frame from here on). **Edit plan:** use 410–444 (the reach) and cut to S06 at 506, so the finger-contact frames 445–505 are not shown. | low front-right, face visible |
 | | | **S06** 470–620 (used from 506) rises | stands up holding it at chest height, looks down at it, turns it | medium front-right, push-in |
 | | 620–960 | **S07** 620–700 to the mouth | lifts it to his face, jaw opens | close-up 3/4 left |
-| | | **S08** 700–860 bite | bat's head between his lips, jaw closes on it, playful head shakes; hand holds the bat from below (lower body), fingers clear of the face | close-up front, slightly left |
-| | | **S09** 860–960 bite front | same bite, straight-on (reference frames 9–12) | close-up front |
-| 3. It was real: blood in his mouth | 960–1280 | **S10** 960–1100 shock | pulls it away fast; mouth slightly open; a thin light red trace appears at the right lip corner (keyed visible from 984); stares at the bat | close-up front, slow push |
+| | | **S08** 700–860 bite | **both hands** hold the bat under its body at chin height (fists, fingers wrapped); only the bat's head touches his lips (1 mm), jaw closes a little, small playful head shakes; wings swept forward, away from his face | close-up 3/4 profile from his left, framed on mouth + bat + both hands |
+| | | **S09** 860–960 bite side | same bite, tighter 3/4 profile | close-up 3/4 profile, left |
+| 3. It was real: blood in his mouth | 960–1280 | **S10** 960–1100 shock | left hand lets go at 950; pulls it away fast with the right; mouth slightly open; a thin light red trace appears at the right lip corner (keyed visible from 984); stares at the bat | close-up front, slow push |
 | | | **S11** 1100–1280 stares | holds it out at chest height, left hand open in shock (not touching the face) | medium front-right |
-| | 1280–1600 | **S12** 1280–1380 drops it | fingers open, the bat falls to the deck | wide front |
-| | | **S13** 1380–1600 bends over | bends forward, hands on the thighs above the knees, heavy breaths (no vomiting/blood spray) | low front-right wide, face visible |
-| 4. Rushed to hospital for rabies shots | 1600–2100 | **S14** 1600–1800 hospital | reclined on a wedge pillow under a draped blanket, oxygen mask on; doctor (blue scrubs) beside the bed, hands relaxed, looking at him and nodding; syringe + vial on a steel tray cart (no hand contact) | medium from the foot-right of the bed |
+| | 1280–1600 | **S12** 1280–1380 drops it | fingers open, the bat falls; he staggers: left hand up toward his mouth (~6 cm clear), right hand on his right knee, small sway | wide front |
+| | | **S13** 1380–1600 bends over | stagger continues, then (from 1395) bends forward, hands on the thighs above the knees, heavy breaths (no vomiting/blood spray) | low front-right wide, face visible |
+| 4. Rushed to hospital for rabies shots | 1600–2100 | **S14** 1600–1800 hospital | reclined on a wedge pillow, blanket over the legs, oxygen mask on; the doctor (blue scrubs) reads a chart on a clipboard resting on his left palm, then looks up at the patient; syringe + vial on a tray cart (no hand contact) | medium on the patient's face from the bed's right side, doctor beside him |
 | | | **S15** 1800–2100 mask close-up | breathing under the mask, catchlights in the eyes | close-up, slow push-in |
 
 Logo placements (2): the bass-drum front head (white logo on black, covering the drum's stock brand print) and a black banner
@@ -31,11 +31,12 @@ hung from the top truss (≥15% of frame width in S01, flat to camera, f-stop ir
 
 ## Risky shots and the simplest safe staging used
 - **Generic singer, no likeness:** MPFB generic male, long dark-blond hair, black tee + black jeans + black shoes. No tattoos, no costume details of the real person.
-- **Bat in the fingers:** one grip only (right hand, wrap round the bat's lower body, solved by `grip_object`); every hand target is clamped to the arm's reach and IK error is 0 mm on every held frame; the bat is baked to the IK hand every frame while held, so it can't float. The landing spot is computed from the crouch pose so the hand really reaches it.
-- **Bite at the mouth, not into the face:** the bat's head goes 8–12 mm between the lips along the face direction; the hand holds the bat from below by its lower body (~10 cm from the face) so no finger touches the face.
+- **Bat in the fingers:** right hand wraps the bat's lower body from the grab to the drop (`grip_object`); at the bite the left hand joins under the bat (690–950) and rides with it every frame; every hand target is clamped to the arm's reach and IK error is 0 mm on every held frame; the bat is baked to the IK hand every frame while held, so it can't float. The landing spot is computed from the crouch pose so the hand really reaches it.
+- **Bite at the mouth, not into the face:** only the bat's head touches the lips (1 mm), along the face direction; both hands hold it from below (~10 cm under the mouth); the wings are swept forward away from the face; seen in 3/4 profile so nothing reads as entering the face.
 - **Blood light:** one thin red streak from the right lip corner (3 mm wide, 3 cm long), carried by the jaw, shrink-wrapped to the skin. No drips, no spray, no puddle (the reference's floor blood is dropped).
-- **Oxygen-mask fit:** a smooth cup computed from the singer's posed face (6 mm off the skin at the rim, 18 mm at the centre, from ray casts), Child Of the head bone so it can't slide; tube carried the same way; no strap (hidden by the hair; a free strap read as a rod). Head and jaw held still in the hospital (breathing in the spine only).
-- **Hospital hands:** syringe and vial on a steel tray cart instead of in the doctor's hand (simplify rule); the patient's hands rest on his belly above the blanket.
+- **Oxygen-mask fit:** a small clear-green medical cup over nose and mouth, computed from the singer's posed face by ray casts (4 mm off the skin at the rim, 12 mm at the centre), Child Of the head bone; an elastic strap laid on the cheeks (ray-projected, 3 mm off the skin) to under the hair at the ears; tube from the bottom of the cup. Head and jaw held still in the hospital (breathing in the spine only).
+- **Hospital hands:** syringe and vial on a tray cart (no hand contact); the doctor's clipboard rests flat on his palm (`hold_flat_object`, baked to the hand every frame); the patient's hands rest on his belly above the blanket.
+- **Set (director note 5):** black stage deck, 8 par cans with coloured lenses + spot lights on the top truss, two floor wedge monitors, floor cables, amps, PA stacks, drum kit, banner; a crowd of 13; the bay and the bridge fade into a bright haze with distance.
 
 ## Contact checks (director rule, Nov 15)
 - First, middle and last frame of every shot at 540×960, Cycles 8: `review/P1_stills_3perShot_540x960.jpg` (45 frames, 9 per row = 3 shots per row).

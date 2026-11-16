@@ -76,17 +76,17 @@ bg_cam = nt.nodes.new("ShaderNodeBackground"); bg_amb = nt.nodes.new("ShaderNode
 geo = nt.nodes.new("ShaderNodeNewGeometry"); sep = nt.nodes.new("ShaderNodeSeparateXYZ"); ramp = nt.nodes.new("ShaderNodeValToRGB")
 neg = nt.nodes.new("ShaderNodeMath"); neg.operation = 'MULTIPLY'; neg.inputs[1].default_value = -1.0
 nt.links.new(geo.outputs["Incoming"], sep.inputs[0]); nt.links.new(sep.outputs["Z"], neg.inputs[0]); nt.links.new(neg.outputs[0], ramp.inputs[0])
-ramp.color_ramp.elements[0].position = 0.0; ramp.color_ramp.elements[0].color = (0.72, 0.88, 1.0, 1)
-ramp.color_ramp.elements[1].position = 0.55; ramp.color_ramp.elements[1].color = (0.10, 0.42, 0.92, 1)
+ramp.color_ramp.elements[0].position = 0.0; ramp.color_ramp.elements[0].color = (0.62, 0.84, 1.0, 1)
+ramp.color_ramp.elements[1].position = 0.45; ramp.color_ramp.elements[1].color = (0.05, 0.33, 0.90, 1)
 nt.links.new(ramp.outputs["Color"], bg_cam.inputs["Color"]); bg_cam.inputs["Strength"].default_value = 1.0
 bg_amb.inputs["Color"].default_value = (0.55, 0.7, 0.95, 1); bg_amb.inputs["Strength"].default_value = 0.8
 nt.links.new(lp.outputs["Is Camera Ray"], mix.inputs[0]); nt.links.new(bg_amb.outputs[0], mix.inputs[1]); nt.links.new(bg_cam.outputs[0], mix.inputs[2])
 nt.links.new(mix.outputs[0], out.inputs["Surface"])
-sun = bpy.data.objects.new("Sun", bpy.data.lights.new("Sun", "SUN")); sun.data.energy = 4.0; sun.data.angle = math.radians(6)
+sun = bpy.data.objects.new("Sun", bpy.data.lights.new("Sun", "SUN")); sun.data.energy = 4.5; sun.data.angle = math.radians(6)
 sun.rotation_euler = (math.radians(50), 0, math.radians(-35)); coll("Lights").objects.link(sun)
 
 # ------------------------------------------------------------------ stage
-m_floor = mat("M_StageFloor", (0.42, 0.44, 0.47), rough=0.42)
+m_floor = mat("M_StageFloor", (0.07, 0.07, 0.08), rough=0.32)    # black stage deck (real stages are black; reads finished)
 m_skirt = mat("M_StageSkirt", (0.05, 0.05, 0.06), rough=0.7)
 m_black = mat("M_Black", (0.035, 0.035, 0.04), rough=0.45)
 m_roof = mat("M_Roof", (0.62, 0.62, 0.6), rough=0.8)
@@ -129,11 +129,51 @@ tr.hide_render = tr.hide_viewport = True; tr.location = (0, 0, 60)
 # logo 2: band banner hung from the top truss (black cloth, white logo)
 box("Banner", (3.4, 0.02, 1.45), (0, 0.05, 4.28), mat("M_Banner", (0.03, 0.03, 0.035), rough=0.8), bevel=0)
 plane_decal("Logo_Banner", 3.0, (0, 0.035, 4.28), (0, 0, 0), logo_mat("M_LogoWhite2", LOGO_W))
+# --- stage dressing: par-can lights on the top truss (coloured lenses + real spot lights), floor wedge monitors, cables
+m_can = mat("M_ParCan", (0.03, 0.03, 0.035), rough=0.4, metal=0.6)
+LENS = [(1.0, 0.45, 0.1), (0.9, 0.15, 0.6), (0.15, 0.55, 1.0), (1.0, 0.85, 0.3), (0.9, 0.15, 0.6), (0.15, 0.55, 1.0), (1.0, 0.45, 0.1), (1.0, 0.85, 0.3)]
+for i, x in enumerate([-4.2, -3.0, -1.8, -0.6, 0.6, 1.8, 3.0, 4.2]):
+    tgt = Vector((x * 0.45, -0.6 + (i % 2) * 0.8, 0.0)); pos = Vector((x, -0.35, 4.85))
+    q = (tgt - pos).to_track_quat('-Z', 'Y').to_euler()
+    bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=0.11, depth=0.30, location=pos, rotation=q); can = bpy.context.object
+    can.name = "ParCan%d" % i; can.data.materials.append(m_can); move(can, "Stage")
+    bv = can.modifiers.new("B", 'BEVEL'); bv.width = 0.01; bv.segments = 2
+    lm = bpy.data.materials.new("M_Lens%d" % i); lm.use_nodes = True; P = lm.node_tree.nodes["Principled BSDF"]
+    P.inputs["Base Color"].default_value = (*LENS[i], 1); P.inputs["Emission Color"].default_value = (*LENS[i], 1); P.inputs["Emission Strength"].default_value = 12.0
+    d = (tgt - pos).normalized()
+    bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=0.095, depth=0.01, location=pos + d * 0.155, rotation=q); ln = bpy.context.object
+    ln.name = "ParLens%d" % i; ln.data.materials.append(lm); move(ln, "Stage")
+    sp = bpy.data.objects.new("Spot%d" % i, bpy.data.lights.new("Spot%d" % i, "SPOT")); sp.data.energy = 450; sp.data.color = LENS[i]
+    sp.data.spot_size = math.radians(32); sp.data.spot_blend = 0.6; sp.data.shadow_soft_size = 0.1
+    sp.location = pos + d * 0.2; sp.rotation_euler = q; coll("Lights").objects.link(sp)
+amp_w = bpy.data.objects["Amp"]
+for k, x in enumerate((-1.7, 2.35)):          # floor wedges: small amp cabinets tipped back toward the singer
+    w = dup(amp_w, "Wedge%d" % k, Vector((x, -2.05, 0.10))); w.scale = (0.62, 0.62, 0.62)
+    w.rotation_mode = 'ZXY'; w.rotation_euler = (math.radians(38), 0, math.radians(180 + (15 if x < 0 else -15)))
+m_cable = mat("M_Cable", (0.02, 0.02, 0.02), rough=0.5)
+CAB = [[(-1.7, -1.9), (-1.9, -0.9), (-2.4, 0.2), (-3.4, 2.4)], [(2.35, -1.9), (2.5, -1.0), (2.45, 0.4), (2.4, 1.4)],
+       [(-0.2, -0.40), (-0.6, 0.4), (-1.0, 1.2), (-1.4, 2.6)], [(2.95, 1.45), (3.4, 2.0), (3.9, 2.5)]]
+for k, pts in enumerate(CAB):
+    cu = bpy.data.curves.new("Cable%d" % k, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.009; cu.bevel_resolution = 2
+    spl = cu.splines.new('BEZIER'); spl.bezier_points.add(len(pts) - 1)
+    for bp, (x, y) in zip(spl.bezier_points, pts): bp.co = (x, y, 0.009); bp.handle_left_type = bp.handle_right_type = 'AUTO'
+    o = bpy.data.objects.new("Cable%d" % k, cu); cu.materials.append(m_cable); coll("Stage").objects.link(o)
 # mic stand at the singer (round base); mic head ~1.66 m; stand at y=-0.42 in front of the singer
 mic = imp("micstand", "MicStand", 1.0, Vector((0.0, -0.42, 0.0)), rotz=-90)
 # bridge far behind, along X, in the bay
 br = imp("bridge", "Bridge", 4.0, Vector((-150, 1400, -40)), rotz=90, c="Roof")
-br.data.materials[0] = mat("M_Bridge", (0.78, 0.82, 0.88), rough=0.6)
+br.data.materials[0] = mat("M_Bridge", (0.62, 0.70, 0.80), rough=0.6)
+# depth: the bay goes from deep blue near the roof to pale haze at the horizon; the bridge fades into the same haze
+def haze(m, near_rgb, far_rgb, d0, d1, emit=0.0):
+    nt = m.node_tree; P = nt.nodes["Principled BSDF"]; cd = nt.nodes.new("ShaderNodeCameraData")
+    mr = nt.nodes.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = d0; mr.inputs["From Max"].default_value = d1
+    mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.inputs["A"].default_value = (*near_rgb, 1); mx.inputs["B"].default_value = (*far_rgb, 1)
+    nt.links.new(cd.outputs["View Distance"], mr.inputs["Value"]); nt.links.new(mr.outputs["Result"], mx.inputs["Factor"])
+    nt.links.new(mx.outputs["Result"], P.inputs["Base Color"])
+    if emit:   # far haze glows a little so it reads as bright air, not grey paint
+        nt.links.new(mx.outputs["Result"], P.inputs["Emission Color"]); P.inputs["Emission Strength"].default_value = emit
+haze(m_water, (0.02, 0.22, 0.50), (0.55, 0.75, 0.92), 30, 900, emit=0.25)
+haze(br.data.materials[0], (0.62, 0.70, 0.80), (0.70, 0.82, 0.95), 400, 1600, emit=0.35)
 # logo 1: on the bass drum front head (white logo on a black head disc covering the stock print)
 bpy.context.view_layer.update()
 dg = bpy.context.evaluated_depsgraph_get()
@@ -165,7 +205,12 @@ em = m_win.node_tree.nodes.new("ShaderNodeEmission"); em.inputs["Color"].default
 m_win.node_tree.links.new(em.outputs[0], m_win.node_tree.nodes["Material Output"].inputs["Surface"])
 box("H_Window", (1.6, 0.02, 1.1), (HX + 1.2, 2.53, 1.7), m_win, c="Hospital", bevel=0)
 bed = imp("bed", "Bed", 0.0068, Vector((HX, 0.6, 0.0)), rotz=0.0, c="Hospital")
-vit = imp("vitals", "Vitals", 0.27, Vector((HX - 0.2, 1.5, 0.0)), rotz=0, c="Hospital")
+vit = imp("vitals", "Vitals", 0.27, Vector((HX + 0.2, 1.5, 0.0)), rotz=180, c="Hospital")   # monitor at the bed head on the doctor's side
+import bmesh as _bm
+_b = _bm.new(); _b.from_mesh(vit.data)
+_ci = [i for i, m in enumerate(vit.data.materials) if m and m.name.startswith("Curtains")]
+_bm.ops.delete(_b, geom=[f for f in _b.faces if f.material_index in _ci], context='FACES')
+_b.to_mesh(vit.data); _b.free()        # curtain panels removed (they hid the doctor); rails + monitor stay
 iv = imp("ivstand", "IVStand", 1.6, Vector((HX + 1.05, 1.5, 0.0)), rotz=0, c="Hospital")
 for k_, L in (("H_Key", (HX - 1.5, -2.0, 2.6)), ("H_Fill", (HX + 2.0, -1.5, 2.2))):
     l = bpy.data.objects.new(k_, bpy.data.lights.new(k_, "AREA")); l.data.energy = 160 if k_ == "H_Key" else 60; l.data.size = 1.5

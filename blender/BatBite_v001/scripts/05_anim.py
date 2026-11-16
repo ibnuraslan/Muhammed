@@ -165,16 +165,49 @@ jaw(S, 1, 0); jaw(S, 60, 6); jaw(S, 90, 1); jaw(S, 120, 7); jaw(S, 150, 0); jaw(
 
 # fans: in front of the stage, facing it, arms up cheering (fists), bobbing
 FANS = {"Fan1": (-0.75, -3.75, 0.0), "Fan3": (0.55, -3.95, 8.0), "Fan4": (1.55, -3.65, -6.0)}
+# a real crowd: the 3 fans cloned to 13 people, each in its own non-skin clothes colour, one or both hands up
+def clone(src, name, rgb):
+    so = D[src]; o = so.copy(); o.name = name; sc.collection.objects.link(o)
+    o.animation_data_clear()
+    for pb in o.pose.bones:
+        for c_ in pb.constraints:
+            for k in ('target', 'pole_target'):
+                if getattr(c_, k, None) == so: setattr(c_, k, o)
+    for ch in so.children:
+        c2 = ch.copy(); c2.parent = o; c2.matrix_parent_inverse = ch.matrix_parent_inverse.copy(); sc.collection.objects.link(c2); c2.name = name + "." + ch.name.split(".", 1)[1]
+        for m in c2.modifiers:
+            if m.type == 'ARMATURE': m.object = o
+        if any(t in ch.name for t in ("suit", "worksuit")):
+            for sl in c2.material_slots:
+                mm = sl.material.copy(); sl.material = mm
+                for nd in mm.node_tree.nodes:
+                    if nd.type == 'MIX' and nd.blend_type == 'MULTIPLY': nd.inputs['B'].default_value = (*rgb, 1)
+                    if nd.type == 'BSDF_PRINCIPLED' and not nd.inputs['Base Color'].links: nd.inputs['Base Color'].default_value = (*rgb, 1)
+    RIG[name] = Rig(o); HUM[name] = Human(RIG[name])
+PAL = [(0.08, 0.12, 0.35), (0.05, 0.45, 0.45), (0.40, 0.12, 0.55), (0.06, 0.06, 0.07), (0.92, 0.92, 0.95), (0.95, 0.45, 0.05),
+       (0.35, 0.40, 0.10), (0.55, 0.06, 0.10), (0.15, 0.30, 0.75), (0.85, 0.80, 0.10)]
+CROWD_POS = [(-2.35, -3.55, 6), (-1.55, -4.25, -4), (2.45, -3.70, -8), (3.25, -4.30, 4), (-3.30, -4.05, 10),
+             (-1.05, -4.85, 3), (1.25, -4.75, -3), (-2.70, -4.95, 7), (2.40, -5.05, -6), (0.05, -3.35, 0)]
+SRC = ["Fan1", "Fan3", "Fan4"]
+ARMS = {}
+for k, (x, y, yaw) in enumerate(CROWD_POS):
+    n = "Crowd%02d" % k; clone(SRC[k % 3], n, PAL[k]); FANS_EXTRA = None
+    ARMS[n] = ("LR", "L", "R")[k % 3]
+    FANS_X = None
+FANS_ALL = dict(FANS)
+for k, (x, y, yaw) in enumerate(CROWD_POS): FANS_ALL["Crowd%02d" % k] = (x, y, float(yaw))
 def fan_pose(n, f, x, y, yaw, ph, up):
     H = HUM[n]; bob = 0.5 + 0.5 * math.sin(ph)
     P, Rb = stand(n, f, x, y, yaw=180 + yaw, flex=-3, spine=-6, head=(-15, 0), dz=-0.03 * bob, hands=False)
     for s, sx in (("L", 1), ("R", -1)):
+        if s not in ARMS.get(n, "LR"):
+            key_relaxed(n, f, P, Rb, sides=s); continue
         sh = bw(n, P, Rb, rest_head(n, "upperarm01." + s))
         lift = up * (0.55 + 0.12 * math.sin(ph + (0 if s == "L" else 1.7)))
         W = sh + Rb @ V((0.10 * sx, -0.18, lift)); d = (Rb @ V((0.05 * sx, -0.2, 1))).normalized(); nn = (Rb @ V((0, -1, 0))).normalized()
         key_hand(n, s, f, W, d, nn, pole=sh + Rb @ V((0.5 * sx, 0.1, -0.3)))
         apply_pose(D[n], s, "power_fist", f)
-for n, (x, y, yaw) in FANS.items():
+for n, (x, y, yaw) in FANS_ALL.items():
     ph0 = random.random() * 6
     for i, f in enumerate(range(1, 1301, 15)):
         fan_pose(n, f, x, y, yaw, ph0 + i * 1.1, up=1.0 if f < 330 else 0.75)
@@ -182,7 +215,7 @@ for n, (x, y, yaw) in FANS.items():
 # bat flight: thrown from behind the crowd (off screen), arcs over the fans, lands right-front of the singer,
 # at a spot his right hand reaches from the crouch (computed from the crouch pose so the grip is real)
 STEP = V((0.62, -0.12)); YAW = -14.0
-def crouch(f, amt, head=(-10, 0)):
+def crouch(f, amt, head=(-50, 0)):
     H = HUM[S]
     P = V((STEP.x, STEP.y + 0.16 * amt, H.root_head.z - 0.02 - 0.58 * amt)); Rb = body_R(YAW, 10 + 36 * amt)
     H.key_root(f, P, yaw=YAW, flex=10 + 36 * amt); H.key_spine(f, flex=12 + 30 * amt, head=head)
@@ -314,14 +347,14 @@ def bat_at_mouth(f, depth=0.0, roll=0.0, pitch=-14.0):
 for f, hd in ((640, (8, 0)), (665, (4, 0))):
     P, Rb = head_frame(f, hd)
     u = (f - 620) / 45; bat_front(f, P, Rb, fwd=0.46 - 0.04 * u, up=0.08 + 0.14 * u, yaw=0, tilt=-10 - 30 * u)
-jaw(S, 620, 2); jaw(S, 680, 3); jaw(S, 700, 16); jaw(S, 712, 9); jaw(S, 960, 9)
+jaw(S, 620, 2); jaw(S, 680, 3); jaw(S, 700, 12); jaw(S, 712, 8); jaw(S, 960, 8)
 P, Rb = head_frame(690, (2, 0)); bat_at_mouth(690, depth=-0.07)
 P, Rb = head_frame(700, (0, 0)); bat_at_mouth(700, depth=-0.010)
-P, Rb = head_frame(712, (3, 0)); bat_at_mouth(712, depth=0.008)
+P, Rb = head_frame(712, (3, 0)); bat_at_mouth(712, depth=0.001)
 for i, f in enumerate(range(730, 961, 18)):
-    sh = 7 * math.sin(i * 1.6) if f < 880 else 0
-    P, Rb = head_frame(f, (3 + 2 * math.sin(i), sh), side=2 * math.sin(i * 1.6))
-    bat_at_mouth(f, depth=0.008, roll=sh * 0.6)
+    sh = 4 * math.sin(i * 1.6) if f < 880 else 0
+    P, Rb = head_frame(f, (3 + 2 * math.sin(i), sh), side=1.5 * math.sin(i * 1.6))
+    bat_at_mouth(f, depth=0.001, roll=sh * 0.6)
 
 # ================================================================= D: pulls it away, shock (960-1280)
 P, Rb = head_frame(972, (6, 0), flex=2, spine=4); bat_at_mouth(972, depth=-0.06)
@@ -396,14 +429,29 @@ for k, f in enumerate(range(1297, 1331, 3)):
 wings(1297, up=0); wings(1320, up=-12); wings(1335, up=-15)
 P, Rb = stand(S, 1310, STEP.x, STEP.y, yaw=YAW, flex=0, spine=-2, head=(26, 0), hands=False, feet=False)
 key_relaxed(S, 1310, P, Rb, sides="L")
-W, d, nn = relaxed_hand(S, P, Rb, "R", fwd=0.15); key_hand(S, "R", 1325, W, d, nn, P=P, Rb=Rb); apply_pose(D[S], "R", "relaxed", 1325)
+W, d, nn = relaxed_hand(S, P, Rb, "R", fwd=0.15); key_hand(S, "R", 1318, W, d, nn, P=P, Rb=Rb); apply_pose(D[S], "R", "relaxed", 1318)
+def stagger(f, sway):
+    P, Rb = stand(S, f, STEP.x, STEP.y + 0.03 * sway, yaw=YAW, flex=10, spine=12, side=3 * sway, head=(14, -6 * sway), hands=False, feet=False)
+    sc.frame_set(f); m = rest_point_on(S, "head", MOUTH_REST)
+    Mh = bone_world(S, "head"); fwd = (Mh.to_3x3() @ (RIG[S].rest("head").to_3x3().inverted() @ V((0, -1, 0)))).normalized()
+    sh = bone_world(S, "upperarm01.L").to_translation()
+    W = m + fwd * 0.12 + V((0, 0, -0.09)) + (Rz(YAW) @ V((0.04, 0, 0)))          # hand raised toward the mouth, ~6 cm clear of the lips
+    key_hand(S, "L", f, W, (V((0, 0, 1)) + (-fwd) * 0.3).normalized(), -fwd, pole=sh + Rz(YAW) @ V((0.45, 0.25, -0.45)))
+    apply_pose(D[S], "L", "relaxed", f)
+    kn = bone_world(S, "lowerleg01.R").to_translation(); fwd2 = Rz(YAW) @ V((0, -1, 0))
+    place_hand(D[S], "R", f, kn + fwd2 * 0.06 + V((0, 0, 0.07)), (-fwd2 + V((0, 0, -1.2))).normalized(), (fwd2 + V((0, 0, -0.6))).normalized())
+    apply_pose(D[S], "R", "relaxed", f)
+    pb = D[S].pose.bones["Pole_elbow.R"]; nm = "Pole_elbow.R"; pole = bone_world(S, "upperarm01.R").to_translation() + Rz(YAW) @ V((-0.5, 0.35, 0.0))
+    pb.location = RIG[S].rest(nm).to_3x3().inverted() @ (D[S].matrix_world.inverted() @ pole - RIG[S].BN[nm].head_local); pb.keyframe_insert("location", frame=f, group=nm)
+for f, sw in ((1330, 0.0), (1348, 1.0), (1366, -0.6), (1384, 0.4)):
+    stagger(f, sw)
 # bend over, hands on the thighs above the knees, breathing hard
 def bend(f, amt, br=0.0):
     H = HUM[S]
     P = V((STEP.x, STEP.y + 0.10 * amt, H.root_head.z - 0.02 - 0.12 * amt)); Rb = body_R(YAW, 20 * amt)
     H.key_root(f, P, yaw=YAW, flex=20 * amt); H.key_spine(f, flex=(38 + 6 * br) * amt, head=(-10 + 8 * br, 0))
     return P, Rb
-for f, a in ((1340, 0.0), (1370, 0.6), (1395, 1.0)):
+for f, a in ((1395, 0.0), (1420, 0.6), (1440, 1.0)):
     P, Rb = bend(f, a)
     if a < 1.0:
         key_relaxed(S, f, P, Rb)
@@ -421,7 +469,7 @@ def thigh_hands(f):
         pole = bone_world(S, "upperarm01." + s).to_translation() + Rz(YAW) @ V((0.5 * sx, 0.4, 0.0))
         pb.location = RIG[S].rest(nm).to_3x3().inverted() @ (D[S].matrix_world.inverted() @ pole - RIG[S].BN[nm].head_local)
         pb.keyframe_insert("location", frame=f, group=nm)
-for i, f in enumerate(range(1395, 1601, 25)):
+for i, f in enumerate(range(1440, 1601, 20)):
     bend(f, 1.0, br=math.sin(i * 1.4)); thigh_hands(f)
 jaw(S, 1340, 4); jaw(S, 1400, 6); jaw(S, 1600, 5)
 
@@ -442,7 +490,7 @@ def recline(f, br=0.0, head=(0.0, 0.0)):
     Rb = body_R(0, RECL)
     for s in "LR":
         a = H.ankle[s]; sx = 1 if s == "L" else -1
-        W = V((HX + a.x * 0.9, HIP.y - 0.86, 0))
+        W = V((HX + a.x * 0.9, HIP.y - 0.93, 0))
         _h = sc.ray_cast(bpy.context.evaluated_depsgraph_get(), V((W.x, W.y - 0.08, 1.5)), V((0, 0, -1)))
         W.z = max(MATT_Z, _h[1].z if _h[0] and _h[4].name == "Bed" else MATT_Z) + 0.17   # heel clear of the mattress at the foot end
         key_foot_free(S, s, f, W, Rx(-80), pole=W + V((0, 0.3, 0.8)))
@@ -531,14 +579,14 @@ def oxygen_mask():
         for j in range(N_ + 1):
             a_ = -1 + 2 * i / N_; b_ = -1 + 2 * j / N_; r2 = a_ * a_ + b_ * b_
             if r2 > 1.0: continue
-            dirv = V((0.58 * a_, -1.0, 0.62 * b_ - 0.02)).normalized()
-            k = 1.0 / math.sqrt((dirv.x / 0.060) ** 2 + (dirv.y / 0.100) ** 2 + (dirv.z / 0.064) ** 2)
+            dirv = V((0.50 * a_, -1.0, 0.56 * b_ - 0.03)).normalized()
+            k = 1.0 / math.sqrt((dirv.x / 0.050) ** 2 + (dirv.y / 0.088) ** 2 + (dirv.z / 0.056) ** 2)
             r_skin = 0.0
             for jx in (-0.006, 0.0, 0.006):
                 for jz in (-0.006, 0.0, 0.006):
                     dj = (dirv + V((jx, 0, jz)) / 0.12).normalized(); hit = _bvh.ray_cast(Ce + dj * 0.4, -dj, 0.4)
                     if hit[0] is not None: r_skin = max(r_skin, (hit[0] - Ce).length)
-            G[i, j] = bm.verts.new(Ce + dirv * max(k * (1 - 0.15 * r2), r_skin + 0.006 + 0.012 * (1 - r2)))
+            G[i, j] = bm.verts.new(Ce + dirv * max(k * (1 - 0.30 * r2), r_skin + 0.004 + 0.008 * (1 - r2)))   # small, low-profile medical cup
     for i in range(N_):
         for j in range(N_):
             q = [(i, j), (i + 1, j), (i + 1, j + 1), (i, j + 1)]
@@ -549,24 +597,28 @@ def oxygen_mask():
     o = bpy.data.objects.new("OxygenMask", me); sc.collection.objects.link(o)
     so = o.modifiers.new("Sol", 'SOLIDIFY'); so.thickness = 0.0025; so.offset = 1
     o.modifiers.new("Sub", 'SUBSURF').levels = 1
-    m = soft_mat("M_OxyMask", (0.72, 0.92, 0.84), rough=0.25)
-    Pn = m.node_tree.nodes["Principled BSDF"]; Pn.inputs["Alpha"].default_value = 0.82
+    m = soft_mat("M_OxyMask", (0.62, 0.92, 0.74), rough=0.12)
+    Pn = m.node_tree.nodes["Principled BSDF"]; Pn.inputs["Alpha"].default_value = 0.55; Pn.inputs["Coat Weight"].default_value = 0.6   # clear green plastic
     me.materials.append(m)
     for p in me.polygons: p.use_smooth = True
     # tube from the bottom of the cup down over the chest to the bed side, and a thin elastic strap toward the ears
     cu = bpy.data.curves.new("OxyTube", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.006; cu.bevel_resolution = 3
-    sp = cu.splines.new('BEZIER'); pts = [C + V((0, -0.035, -0.055)), C + V((0.02, -0.08, -0.20)), C + V((0.12, -0.10, -0.40)), C + V((0.28, -0.05, -0.55))]
+    bot = G[N_ // 2, 0].co.copy(); sp = cu.splines.new('BEZIER'); pts = [bot + V((0, -0.004, -0.004)), bot + V((0.01, -0.04, -0.12)), bot + V((0.10, -0.06, -0.32)), bot + V((0.26, -0.02, -0.48))]
     sp.bezier_points.add(len(pts) - 1)
     for bp, p in zip(sp.bezier_points, pts): bp.co = p; bp.handle_left_type = bp.handle_right_type = 'AUTO'
     t = bpy.data.objects.new("OxyTube", cu); sc.collection.objects.link(t); cu.materials.append(soft_mat("M_Tube", (0.85, 0.95, 0.92), 0.3))
-    cs = bpy.data.curves.new("OxyStrap", 'CURVE'); cs.dimensions = '3D'; cs.bevel_depth = 0.0025
-    for sx in (-1, 1):
-        s2 = cs.splines.new('BEZIER'); q = [C + V((0.045 * sx, -0.01, 0.0)), C + V((0.075 * sx, 0.05, 0.02)), C + V((0.080 * sx, 0.11, 0.035))]
-        s2.bezier_points.add(len(q) - 1)
-        for bp, p in zip(s2.bezier_points, q): bp.co = p; bp.handle_left_type = bp.handle_right_type = 'AUTO'
+    cs = bpy.data.curves.new("OxyStrap", 'CURVE'); cs.dimensions = '3D'; cs.bevel_depth = 0.0018
+    for sx in (-1, 1):   # elastic strap lying on the cheek from the cup's side to under the hair at the ear
+        st0 = G[N_ if sx > 0 else 0, N_ // 2].co.copy(); ear = V((0.080 * sx, -0.050, 1.655)); q = []
+        for k_ in range(13):
+            u = 0.55 * k_ / 12; p_ = st0.lerp(ear, u); n_ = V((sx, -0.35, 0)).normalized()
+            hit = _bvh.ray_cast(p_ + n_ * 0.08, -n_, 0.16)
+            q.append((hit[0] + n_ * 0.008) if hit[0] is not None else p_ + n_ * 0.02)
+        q[0] = st0
+        s2 = cs.splines.new("POLY"); s2.points.add(len(q) - 1)      # straight segments: no handle overshoot into the cheek
+        for pt, p in zip(s2.points, q): pt.co = (p.x, p.y, p.z, 1.0)
     st = bpy.data.objects.new("OxyStrap", cs); sc.collection.objects.link(st); cs.materials.append(soft_mat("M_Strap", (0.9, 0.95, 0.95), 0.5))
-    bpy.data.objects.remove(st, do_unlink=True)   # strap hidden by the hair in reality; a free-floating strand read as a rod
-    for ob in (o, t):     # Child Of the head bone (a prop, not a rig child), identity at rest
+    for ob in (o, t, st):     # Child Of the head bone (a prop, not a rig child), identity at rest
         c = ob.constraints.new('CHILD_OF'); c.target = D[S]; c.subtarget = "head"
         c.inverse_matrix = (D[S].matrix_world @ RIG[S].rest("head")).inverted()
         for f, hid in ((1, True), (CUT, False)):
@@ -574,7 +626,7 @@ def oxygen_mask():
     print("MASK verts", len(vmap)); bpy.data.meshes.remove(me0)
 oxygen_mask()
 # doctor at the bed's right side (from the patient), facing the bed, syringe in the right hand, taps it
-DP = V((HX - 0.78, 0.30))
+DP = V((HX - 0.80, 0.62))
 SYR = None
 def make_syringe():
     me = bpy.data.meshes.new("Syringe"); bm = bmesh.new()
@@ -617,8 +669,37 @@ vial = bpy.context.object; vial.name = "Vial"; vial.data.materials.append(soft_m
 bpy.ops.mesh.primitive_cylinder_add(vertices=20, radius=0.0125, depth=0.01, location=(cx + 0.11, cy - 0.06, 0.947))
 cap = bpy.context.object; cap.name = "VialCap"; cap.data.materials.append(soft_mat("M_VialCap", (0.2, 0.45, 0.9), 0.4))
 for f in range(CUT, 2101, 30):
-    P, Rb = stand(D_, f, DP.x, DP.y, yaw=90, flex=4, spine=6, head=(16 if f < 1800 else 24, 8 if f < 1800 else 22), hands=False)
-    key_relaxed(D_, f, P, Rb, sides="LR")
+    reading = (f // 120) % 2 == 1          # alternates: reads the chart / looks up at the patient
+    P, Rb = stand(D_, f, DP.x, DP.y, yaw=90, flex=3, spine=5, head=(34, 10) if reading else (16, -6), hands=False)
+    key_relaxed(D_, f, P, Rb, sides="R")
+# chart: a blank clipboard resting flat on his left palm at chest height (palm under, thumb on top, no other contact)
+CB_SIZE = (0.23, 0.31, 0.012)
+bpy.ops.mesh.primitive_cube_add(size=1); CB = bpy.context.object; CB.name = "Clipboard"; CB.scale = CB_SIZE
+bpy.ops.object.transform_apply(scale=True); bv = CB.modifiers.new("B", 'BEVEL'); bv.width = 0.004; bv.segments = 2
+CB.data.materials.append(soft_mat("M_Clipboard", (0.35, 0.22, 0.12), 0.5))
+bpy.ops.mesh.primitive_plane_add(size=1); PAPER = bpy.context.object; PAPER.name = "ChartPaper"; PAPER.scale = (0.20, 0.26, 1)
+bpy.ops.object.transform_apply(scale=True); PAPER.location = (0, -0.01, 0.0065); PAPER.parent = CB
+PAPER.data.materials.append(soft_mat("M_Paper", (0.95, 0.95, 0.93), 0.7))
+sc.frame_set(CUT); bpy.context.view_layer.update()
+Pd = D[D_].matrix_world @ D[D_].pose.bones["root"].head
+fwd_d = V((1, 0, 0)); left_d = V((0, 1, 0))
+CB_M = Mloc(V((DP.x, DP.y, 0)) + fwd_d * 0.42 + left_d * 0.12 + V((0, 0, 1.17)), Rz(90) @ Rx(18))   # tilted up toward his eyes, well clear of his chest
+CB.matrix_world = CB_M; bpy.context.view_layer.update()
+under = CB_M @ V((0.0, 0.135, -0.006 - 0.010))     # board local +y edge is the one nearest him (Rz 90)          # palm under the board's near edge: the forearm stays below the board
+place_hand(D[D_], "L", CUT, under, (CB_M.to_3x3() @ V((0, 0, 1))).normalized(), (CB_M.to_3x3() @ V((0, -1, 0))).normalized())
+apply_pose(D[D_], "L", "hold_flat_object", CUT)
+sc.frame_set(CUT); IKDL = D[D_].pose.bones["IK_hand.L"].matrix.copy()
+shL = D[D_].matrix_world @ D[D_].pose.bones["upperarm01.L"].head
+pbp = D[D_].pose.bones["Pole_elbow.L"]; nmp = "Pole_elbow.L"; polep = shL + V((-0.1, 0.45, -0.35))
+pbp.location = RIG[D_].rest(nmp).to_3x3().inverted() @ (D[D_].matrix_world.inverted() @ polep - RIG[D_].BN[nmp].head_local)
+RELCB = (D[D_].matrix_world @ IKDL).inverted() @ CB_M
+for f in range(CUT, 2101, 30):
+    M = IKDL.copy(); M.translation += V((0, 0, 0.008 * math.sin(f * 0.05))); key_ikhand_matrix(D_, "L", f, M, clamp=False)
+    pbp.keyframe_insert("location", frame=f, group=nmp); apply_pose(D[D_], "L", "hold_flat_object", f)
+for f in range(CUT, 2101):
+    sc.frame_set(f); CB.matrix_world = (D[D_].matrix_world @ D[D_].pose.bones["IK_hand.L"].matrix) @ RELCB
+    CB.keyframe_insert("location", frame=f); CB.rotation_mode = 'QUATERNION'; CB.keyframe_insert("rotation_quaternion", frame=f)
+sc.frame_set(CUT); print("CHART reach err mm", round((bone_world(D_, "wrist.L").to_translation() - (D[D_].matrix_world @ IKDL).to_translation()).length * 1000, 1))
 
 # doctor parked in the hospital all along (not on stage), fans hidden after the stage block (only in hospital... they stay)
 
@@ -630,6 +711,26 @@ for k, f in enumerate(range(1297, 1334, 3)):
     R3 = Mb.to_3x3().to_quaternion().slerp((Rz(230) @ Rx(90)).to_quaternion(), smooth(u)).to_matrix()
     bat_key(f, Mloc(p, R3))
 bat_key(CUT - 1, Mloc(DROP, Rz(230) @ Rx(90)))
+# ---- second hand at the bite (director: both hands hold the bat at chin height): left hand grips the bat's left flank at 712,
+# then rides with the bat every frame 690-975 (target clamped to reach); before/after it is the normal relaxed/shock keys
+BW = float(os.environ.get("BITE_WING", "40"))
+wings(676, up=-15); wings(696, up=BW); wings(964, up=BW); wings(984, up=-15)
+sc.frame_set(712); bpy.context.view_layer.update()
+Mb712 = BAT.matrix_world.copy(); left_w = Rz(YAW) @ V((1, 0, 0))
+xw = (Mb712.to_3x3() @ V((1, 0, 0))).normalized(); sgn = 1 if xw.dot(left_w) > 0 else -1
+yw_ = (Mb712.to_3x3() @ V((0, 1, 0))).normalized()          # bat back faces down at the bite: both hands under the bat
+cp = Mb712 @ V((0.028 * sgn, 0.032, -0.045))
+grL = grip_object(D[S], "L", 712, D["Bat"], cp, (-yw_).normalized())
+apply_pose(D[S], "L", "shield", 712); apply_pose(D[S], "L", "wrap_grip", 712, amount=0.8)
+print("GRIP bat L", grL)
+sc.frame_set(712); RELL = Mb712.inverted() @ (D[S].matrix_world @ D[S].pose.bones["IK_hand.L"].matrix)
+for f in range(690, 951):     # left hand lets go as the bite ends (no crossed wrists when he pulls the bat away)
+    sc.frame_set(f); Mb_f = BAT.matrix_world.copy()
+    key_ikhand_matrix(S, "L", f, D[S].matrix_world.inverted() @ (Mb_f @ RELL))
+    pb = D[S].pose.bones["Pole_elbow.L"]; nm = "Pole_elbow.L"
+    pole = bone_world(S, "upperarm01.L").to_translation() + Rz(YAW) @ V((0.45, 0.2, -0.45))
+    pb.location = RIG[S].rest(nm).to_3x3().inverted() @ (D[S].matrix_world.inverted() @ pole - RIG[S].BN[nm].head_local); pb.keyframe_insert("location", frame=f, group=nm)
+apply_pose(D[S], "L", "shield", 690); apply_pose(D[S], "L", "wrap_grip", 704, amount=0.8); apply_pose(D[S], "L", "wrap_grip", 946, amount=0.8); apply_pose(D[S], "L", "relaxed", 962); apply_pose(D[S], "L", "open_alarm", 985)
 bat_key(CUT, Mloc(V((HX, -3, -5)), Rz(0)))          # gone in the hospital
 
 # ================================================================= the cut: CONSTANT interpolation across 1599->1600 for everything
