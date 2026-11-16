@@ -769,7 +769,7 @@ def solve_clear(f, exact):
     print("CLEAR mm", f, round(bat_clear(f) * 1000, 1))
 _ck = sorted(set(BITE_TIP) | set(range(640, 842, 4)))
 for f in _ck:
-    solve_clear(f, f in BITE_TIP)
+    solve_clear(f, f in BITE_TIP and f >= 712)   # 690/702 are the approach (9 cm, 3 cm out): only kept clear
 # verify every frame; key any frame still under 6 mm (in-betweens of the keys above)
 for _pass in range(3):
     low = [f for f in range(640, 842) if bat_clear(f) < 0.006]
