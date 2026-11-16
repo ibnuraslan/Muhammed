@@ -1,0 +1,79 @@
+"""Sets for B04: theatre (box over the stage) at the origin, night street at x=100, barn at x=200.
+blender -b chars.blend --python 02_sets.py -- <out.blend>"""
+import sys, os, math
+import bpy, bmesh
+from mathutils import Vector, Matrix
+HERE = os.path.dirname(os.path.abspath(__file__))
+exec(open(os.path.join(HERE, "00_lib.py")).read())
+OUT = sys.argv[sys.argv.index("--") + 1]
+sc = bpy.context.scene
+BRAND = os.path.join(HERE, "..", "..", "assets", "brand")
+
+def box(name, mn, mx, mat, c, bevel=0.0):
+    bm = bmesh.new(); add_box(bm, Vector(mn), Vector(mx)); o = mesh_obj(name, bm, [mat], c)
+    if bevel:
+        m = o.modifiers.new("Bevel", 'BEVEL'); m.width = bevel; m.segments = 2
+    return o
+
+def place(o, loc, yaw=0.0, scale=1.0):
+    o.location = loc; o.rotation_euler = (0, 0, R_(yaw)); o.scale = (scale,) * 3
+    return o
+
+def recolor(o, rgb, rough=None, keep_tex=True):
+    for i, m in enumerate(o.data.materials):
+        m = m.copy(); o.data.materials[i] = m
+        nt = m.node_tree; bs = next(n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED')
+        src = bs.inputs['Base Color'].links[0].from_socket if bs.inputs['Base Color'].links else None
+        if src is not None and keep_tex:
+            mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1
+            mx.inputs['B'].default_value = (*rgb, 1); nt.links.new(src, mx.inputs['A']); nt.links.new(mx.outputs['Result'], bs.inputs['Base Color'])
+        else:
+            for l in list(bs.inputs['Base Color'].links): nt.links.remove(l)
+            bs.inputs['Base Color'].default_value = (*rgb, 1)
+        if rough is not None:
+            for l in list(bs.inputs['Roughness'].links): nt.links.remove(l)
+            bs.inputs['Roughness'].default_value = rough
+
+def logo_mat(name, which):
+    m = bpy.data.materials.new(name); n, l = nodes_of(m)
+    bs = next(x for x in n if x.type == 'BSDF_PRINCIPLED'); t = n.new('ShaderNodeTexImage')
+    t.image = img(os.path.join(BRAND, "DaKrasFilms_logo_%s.png" % which)); t.extension = 'CLIP'
+    l.new(t.outputs['Color'], bs.inputs['Base Color']); l.new(t.outputs['Alpha'], bs.inputs['Alpha'])
+    bs.inputs['Roughness'].default_value = 0.6
+    try: m.blend_method = 'HASHED'
+    except Exception: pass
+    return m
+
+def decal(name, w, h, mat, c):
+    """plane in local XZ (normal -Y), size w x h, UV 0..1"""
+    bm = bmesh.new(); uv = bm.loops.layers.uv.new()
+    vs = [bm.verts.new((x, 0, z)) for x, z in ((-w / 2, -h / 2), (w / 2, -h / 2), (w / 2, h / 2), (-w / 2, h / 2))]
+    f = bm.faces.new(vs)
+    for lp, co in zip(f.loops, ((0, 0), (1, 0), (1, 1), (0, 1))): lp[uv].uv = co
+    return mesh_obj(name, bm, [mat], c)
+
+def swag(name, x0, x1, ztop, depth, n, mat, c, axis='X', fixed=0.0, thick=0.08):
+    """scalloped valance (velvet swags) between x0..x1 along `axis` at constant other coord `fixed`"""
+    bm = bmesh.new(); W = x1 - x0; N = 24 * n; rows = 10; grid = []
+    for j in range(rows + 1):
+        v = j / rows; row = []
+        for i in range(N + 1):
+            u = i / N; s = (u * n) % 1.0
+            sag = depth * (0.35 + 0.65 * math.sin(math.pi * s)) * v + depth * 0.15 * v
+            fold = 0.05 * math.sin(2 * math.pi * u * n * 6) * (0.3 + v)
+            a = x0 + W * u; z = ztop - sag
+            row.append(bm.verts.new((a, fixed + fold, z) if axis == 'X' else (fixed + fold, a, z)))
+        grid.append(row)
+    for j in range(rows):
+        for i in range(N):
+            bm.faces.new((grid[j][i], grid[j][i + 1], grid[j + 1][i + 1], grid[j + 1][i]))
+    o = mesh_obj(name, bm, [mat], c); shade_smooth(o)
+    m = o.modifiers.new("Solid", 'SOLIDIFY'); m.thickness = thick
+    return o
+
+def light(name, kind, loc, energy, rgb=(1, 1, 1), size=1.0, rot=(0, 0, 0), c=None):
+    L = bpy.data.lights.new(name, kind); L.energy = energy; L.color = rgb
+    if kind == 'AREA': L.size = size
+    elif kind in ('POINT', 'SPOT'): L.shadow_soft_size = size
+    o = bpy.data.objects.new(name, L); (c or sc.collection).objects.link(o); o.location = loc; o.rotation_euler = rot
+    return o
