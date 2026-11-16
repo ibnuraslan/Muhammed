@@ -1,0 +1,10 @@
+{
+ "humans": {
+  "visible_crossing_frames": [],
+  "step": 3
+ },
+ "dog": {
+  "visible_crossing_frames": [],
+  "step": 1
+ }
+}

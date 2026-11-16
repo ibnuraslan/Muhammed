@@ -1,0 +1,20 @@
+{
+ "sleep1": {
+  "uid": "91e169740c91489bbd9cec755c4fdcca",
+  "title": "Sleeping dog 01",
+  "author": "thuberchs",
+  "author_profile": "https://sketchfab.com/thuberchs",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/91e169740c91489bbd9cec755c4fdcca",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "sleep2": {
+  "uid": "faa9f521b7eb4e02b2bd6701a42318d9",
+  "title": "Sleeping dog 02",
+  "author": "thuberchs",
+  "author_profile": "https://sketchfab.com/thuberchs",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/faa9f521b7eb4e02b2bd6701a42318d9",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
