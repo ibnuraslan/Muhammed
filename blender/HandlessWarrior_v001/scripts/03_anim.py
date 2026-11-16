@@ -604,14 +604,14 @@ for f, g, t in ((s0, V(-0.28, -0.12, 1.0), V(0, -0.4, 1)), (s0 + 60, V(-0.28, -0
     base = SCP1 if f >= s0 + 60 else SCP0.lerp(SCP1, (f - s0) / 60)
     if f > FH2: base = SCP1 + V(0, -0.3 * min(1, (f - FH2) / 10) - 0.35 * max(0, min(1, (f - FH2 - 10) / 30)), 0)
     sword_key(SC2, swordB, f, base + RS @ g, (RS @ t).normalized(), RS @ V(1, 0, 0))
-for f, p_ in ((s0, V(-0.48, -0.30, 0.98)), (s0 + 60, V(-0.52, -0.34, 1.0)), (FH2 - 14, V(-0.52, -0.32, 1.0)), (FH2, V(-0.50, -0.52, 1.0)), (FH2 + 10, V(-0.52, -0.36, 0.95)), (s1, V(-0.50, -0.32, 0.94))):
+for f, p_ in ((s0, V(-0.48, -0.30, 0.98)), (s0 + 60, V(-0.52, -0.34, 1.0)), (FH2 - 14, V(-0.52, -0.32, 1.0)), (FH2, V(-0.66, -0.30, 0.92)), (FH2 + 10, V(-0.62, -0.26, 0.92)), (s1, V(-0.50, -0.32, 0.94))):
     base = SCP1 if f >= s0 + 60 else SCP0.lerp(SCP1, (f - s0) / 60)
     if f > FH2: base = SCP1 + V(0, -0.3 * min(1, (f - FH2) / 10) - 0.35 * max(0, min(1, (f - FH2 - 10) / 30)), 0)
     SC2.hand_w("R", f, base + RS @ p_, RS @ V(0, -1, -0.25).normalized(), RS @ V(1, 0, 0), base + RS @ V(-0.6, 0.3, 1.0))
 apply_pose(SC2.o, "R", "wrap_grip", s0)
 for f, b, tw in ((s0, 0.0, 0), (s0 + 60, 0.2, -10), (FH2 - 8, 0.6, -30), (FH2, 1.0, 20), (FH2 + 16, 1.0, 25), (s1, 0.8, 15)):
     W.stand(f, WP14 + V(0.25 * b, -0.2 * b, 0), WY14 - 10 * b, flex=6 + 6 * b, head=(2, 0), twist=tw, crouch=0.02 + 0.04 * b)
-for f, p in ((s0, V(-0.32, -0.45, 1.18)), (FH2 - 8, V(-0.55, -0.45, 1.40)), (FH2, V(0.0, -0.68, 1.33)), (FH2 + 12, V(0.22, -0.62, 1.22)), (s1, V(0.10, -0.60, 1.18))):
+for f, p in ((s0, V(-0.32, -0.45, 1.18)), (FH2 - 8, V(-0.55, -0.45, 1.40)), (FH2, V(0.12, -0.68, 1.40)), (FH2 + 12, V(0.22, -0.62, 1.22)), (s1, V(0.10, -0.60, 1.18))):
     W.hand_w("R", f, WP14 + R14 @ p, R14 @ V(-0.2, -1, 0.15).normalized(), R14 @ V(0, 0, -1), WP14 + R14 @ V(-0.6, 0.2, 1.0))
 for f in (s0, s1): W.hand_w("L", f, WP14 + R14 @ V(0.45, -0.58, 1.2), R14 @ V(0.2, -1, 0.3).normalized(), R14 @ V(1, 0, 0), WP14 + R14 @ V(0.6, 0.3, 0.9))
 spark("SparkS14", SCP1 + V(0.08, 0.22, 1.25), FH2)
@@ -674,8 +674,13 @@ for sw_, c_, f_ in ((swordA, SA, ST["S01"]), (swordB, SC2, ST["S14"])):
     n_ = a_.cross(d_).normalized()
     pc_ = wr_ + d_ * 0.08 + n_ * 0.042
     sw_.matrix_world = Matrix.Translation(pc_) @ frame_from(a_, d_).to_4x4()
-    apply_pose(c_.o, "R", "wrap_grip", f_, amount=0.5)
-    child_of_now(sw_, c_.o, "wrist.R", f_)
+    bpy.context.view_layer.update()
+    pbI = c_.o.pose.bones["IK_hand.R"]; keep = pbI.matrix.copy()
+    rep_ = grip_object(c_.o, "R", f_, sw_, pc_, n_, finger_dir=d_, finger_radius=0.009)   # fingers close onto the hilt
+    print("GRIP", sw_.name, rep_)
+    child_of_now(sw_, c_.o, "wrist.R", f_)                     # sword rides with the gripping hand
+    sc.frame_set(f_); pbI.matrix = keep; bpy.context.view_layer.update()
+    pbI.keyframe_insert("location", frame=f_, group=pbI.name); pbI.keyframe_insert("rotation_quaternion", frame=f_, group=pbI.name)
 vis_only([swordA], [(ST["S01"], SE("S01"))]); vis_only([swordB], [(ST["S14"], SE("S14"))])
 
 # --- copies: the marching army (SoldierC) and the guard ring (SoldierB); each copy shares the master's action
