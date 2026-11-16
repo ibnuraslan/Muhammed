@@ -13,8 +13,9 @@ sc = bpy.context.scene; D = bpy.data; OB = D.objects
 sc.render.fps = 60; sc.render.resolution_x = 1080; sc.render.resolution_y = 1920
 
 # ------------------------------------------------------------------ shot table (name, frames)
-SHOTS = [("S01", 100), ("S02", 150), ("S03", 120), ("S04", 120), ("S05", 120), ("S06", 100), ("S07", 150), ("S08", 120),
-         ("S09", 120), ("S10", 120), ("S11", 156), ("S12", 156), ("S13", 156), ("S14", 156), ("S15", 120), ("S16", 100), ("S17", 120)]
+# Phase 2: shots laid on the VO word frames (beat frame = 1 + round(seconds x 60), frame_end = 0.5 s after "died")
+SHOTS = [("S01", 108), ("S04", 137), ("S03", 107), ("S05", 48), ("S06", 86), ("S07", 133), ("S02", 89), ("S08", 116),
+         ("S09", 148), ("S11", 133), ("S12", 85), ("S13", 107), ("S14", 87), ("S15", 103), ("S16", 59), ("S17", 105)]
 T = {}; f = 1
 for n, L in SHOTS: T[n] = (f, f + L - 1); f += L
 sc.frame_start, sc.frame_end = 1, f - 1
@@ -238,13 +239,69 @@ for k, (fr, tw, hf) in enumerate(((f0, -6, -6), (f0 + 40, -14, -8), (f0 + 70, -2
     seated(HA, fr, SEAT_A[0] + 0.06, SEAT_A[1], look_turn=-6 + 3 * k, hflex=8, side=4, arms={"L": (44, 8, 80, 0)})
 for s in "LR": hand_pose(W, s, f0, "relaxed"); hand_pose(HA, s, f0, "relaxed")
 shot_cam("S01", [(0, (-0.38, -4.50, 1.66), (-0.98, -5.78, 1.10), 30), (1, (-0.42, -4.68, 1.62), (-1.0, -5.78, 1.10), 34)])
+# ================================================================== S04: headed to Dallas (exterior, W out of the window, wide)
+_begin("S04")
+f0, f1 = T["S04"]
+for fr in range(f0, f1 + 1, 8): hang_pose(fr, out=0.0, flutter=1.0, t=fr / 60)
+shot_cam("S04", [(0, (-4.5, -3.4, 0.25), (-2.0, -5.85, 1.2), 42), (1, (-4.3, -3.8, 0.35), (-2.0, -5.85, 1.2), 46)], fstop=11)
+# ================================================================== S03: on a Southwest flight (exterior, right side, tail logo)
+_begin("S03")
+f0, f1 = T["S03"]
+shot_cam("S03", [(0, (18.5, -11.0, 0.4), (0.0, -18.6, 3.7), 40), (1, (17.5, -15.5, 0.8), (0.0, -19.2, 3.9), 40)], fstop=11)
+# ================================================================== S05: It happened when an engine (fan spinning)
+_begin("S05")
+FAN = OB["FAN_L"]; FAN.rotation_mode = 'XYZ'
+FAN.rotation_euler = (0, 0, 0); FAN.keyframe_insert("rotation_euler", frame=1)
+FAN.rotation_euler = (0, R_(-7.0 * (T["S06"][0] + 4 - 1)), 0); FAN.keyframe_insert("rotation_euler", frame=T["S06"][0] + 4)
+FAN.rotation_euler = (0, R_(-7.0 * (T["S06"][0] + 4 - 1) - 2.0 * (sc.frame_end - T["S06"][0] - 30)), 0); FAN.keyframe_insert("rotation_euler", frame=sc.frame_end)
+for fc in all_fc(FAN):
+    for k in fc.keyframe_points: k.interpolation = 'LINEAR'
+FR_ = OB["FAN_R"]; FR_.rotation_mode = 'XYZ'; FR_.rotation_euler = (0, 0, 0); FR_.keyframe_insert("rotation_euler", frame=1)
+FR_.rotation_euler = (0, R_(7.0 * sc.frame_end), 0); FR_.keyframe_insert("rotation_euler", frame=sc.frame_end)
+for fc in all_fc(FR_):
+    for k in fc.keyframe_points: k.interpolation = 'LINEAR'
+shot_cam("S05", [(0, (-6.4, 2.4, -1.7), (-4.5, -2.4, -0.92), 30), (1, (-5.9, 1.2, -1.5), (-4.5, -2.5, -0.92), 34)], fstop=11)
+# ================================================================== S06: broke in the air (arc + blade break off, debris, smoke)
+_begin("S06")
+f0, f1 = T["S06"]; fb6 = f0 + 4          # break right after "exploded"
+ARC, BLD = OB["NACELLE_ARC_L"], OB["BLADE_BREAK_L"]
+vis(ARC, 1, True); vis(ARC, fb6, False); vis(BLD, 1, True); vis(BLD, fb6, False)
+rnd = random.Random(11); lip = Vector((-4.5, -2.15, -0.92))
+for i, o in enumerate(DEBRIS[:10]):
+    a = R_(rnd.uniform(-15, 75)); st = lip + Vector((0.8 * math.cos(a), -0.05, 0.8 * math.sin(a)))
+    v = Vector((rnd.uniform(0.5, 2.5), -rnd.uniform(4, 9), rnd.uniform(0.3, 2.2)))
+    vis(o, fb6, True); key_loc(o, fb6, st, (0, 0, 0))
+    key_loc(o, f1, st + v, (rnd.uniform(-9, 9), rnd.uniform(-9, 9), rnd.uniform(-9, 9))); vis(o, f1 + 1, False)
+for i, o in enumerate(SMOKE):
+    a = R_(rnd.uniform(-20, 80)); st = lip + Vector((0.7 * math.cos(a), 0.0, 0.7 * math.sin(a)))
+    vis(o, fb6 + 2 * i, True); key_loc(o, fb6 + 2 * i, st, scale=(0.15, 0.15, 0.15))
+    key_loc(o, f1, st + Vector((0.3, -4.5 - i * 0.4, 0.3)), scale=(0.9 + 0.1 * i,) * 3)
+    vis(o, f1 + 1, False)
+shot_cam("S06", [(0, (-7.4, 1.2, -1.4), (-4.3, -2.6, -0.8), 30), (1, (-7.2, 0.6, -1.2), (-3.9, -3.6, -0.6), 30)], fstop=11)
+# ================================================================== S07: causing debris to break a window
+_begin("S07")
+f0, f1 = T["S07"]; fi = f0 + 66          # impact on "window"
+vis(OB["PANE"], f0, True); vis(OB["PANE"], fi, False)
+rnd = random.Random(5)
+for i, o in enumerate(DEBRIS[10:14]):
+    st = Vector((-4.2 + 0.3 * i, -2.6 - 0.2 * i, -0.4)); tgt = HOLE + Vector((-0.12, rnd.uniform(-0.1, 0.1), rnd.uniform(-0.1, 0.1)))
+    if i: tgt = HOLE + Vector((-0.3 - 0.2 * i, -1.2 - 0.5 * i, 0.4 * i))
+    vis(o, f0 + 2, True); key_loc(o, f0 + 2, st, (0, 0, 0)); key_loc(o, fi, tgt, (R_(400), R_(200), 0))
+    key_loc(o, fi + 30, tgt + Vector((-1.5, -6, 1.0)), (R_(700), R_(500), 0)); vis(o, fi + 31, False)
+rnd = random.Random(9)
+for i, o in enumerate(SHARDS):
+    h = Vector(o["home"]); v = Vector((-rnd.uniform(1.5, 3.5), -rnd.uniform(3, 7), rnd.uniform(-0.6, 0.9)))
+    vis(o, fi, True); key_loc(o, fi, h, (0, 0, 0)); key_loc(o, fi + 36, h + v, (rnd.uniform(-9, 9), rnd.uniform(-9, 9), rnd.uniform(-9, 9)))
+    vis(o, fi + 37, False)
+shot_cam("S07", [(0, (-9.0, 0.2, -1.9), (-2.6, -4.9, 0.6), 22), (1, (-8.6, -0.3, -1.7), (-2.4, -5.1, 0.7), 24)], fstop=11)
 # ================================================================== S02: ... sucked out of a window (burst + lurch)
 _begin("S02")
-f0, f1 = T["S02"]; fb = f0 + 24
+f0, f1 = T["S02"]; fb = f0 + 6          # burst on "smashing"
 for fr, tw in ((f0, -22), (fb, -22)):      # identical to the S01 end pose (checked clean)
     seated(W, fr, SEAT_W[0] - 0.01, SEAT_W[1], look_turn=tw, hflex=-20, side=-4, arms={"R": (42, 10, 88, 0)})
     seated(HA, fr, SEAT_A[0] + 0.06, SEAT_A[1], look_turn=3, hflex=8, side=4, arms={"L": (44, 8, 80, 0)})
-vis(OB["PANE"], 1, True); vis(OB["PANE"], fb, False)
+vis(OB["PANE"], 1, True); vis(OB["PANE"], T["S04"][0], False); vis(OB["PANE"], T["S03"][0], True)
+vis(OB["PANE"], f0, True); vis(OB["PANE"], fb, False)
 for fr, j in ((fb + 4, 0), (fb + 22, 1), (fb + 40, 0), (f1, 1)):      # fast flinch: the raised arm clears HA within 4 frames
     # W yanked toward the hole: whole body slides toward the window, torso folds left toward it, arms flung up
     seated(W, fr, SEAT_W[0] - 0.01, SEAT_W[1], look_turn=40, hflex=4, side=20 + 3 * j, flex=6,
@@ -267,61 +324,6 @@ for i, o in enumerate(PAP):
     key_loc(o, fb + 2 + 3 * i, st, (0, 0, 0)); key_loc(o, fb + 30 + 3 * i, HOLE + Vector((-0.4, 0, 0)), (R_(200), R_(90 * i), R_(60)))
     vis(o, fb + 31 + 3 * i, False)
 shot_cam("S02", [(0, (-0.12, -6.75, 1.88), (-1.15, -5.62, 1.0), 26), (1, (-0.16, -6.60, 1.84), (-1.20, -5.60, 1.02), 28)])
-# ================================================================== S03: on a Southwest flight (exterior, right side, tail logo)
-_begin("S03")
-f0, f1 = T["S03"]
-shot_cam("S03", [(0, (18.5, -11.0, 0.4), (0.0, -18.6, 3.7), 40), (1, (17.5, -15.5, 0.8), (0.0, -19.2, 3.9), 40)], fstop=11)
-# ================================================================== S04: headed to Dallas (exterior, W out of the window, wide)
-_begin("S04")
-f0, f1 = T["S04"]
-for fr in range(f0, f1 + 1, 8): hang_pose(fr, out=0.0, flutter=1.0, t=fr / 60)
-shot_cam("S04", [(0, (-4.5, -3.4, 0.25), (-2.0, -5.85, 1.2), 42), (1, (-4.3, -3.8, 0.35), (-2.0, -5.85, 1.2), 46)], fstop=11)
-# ================================================================== S05: It happened when an engine (fan spinning)
-_begin("S05")
-FAN = OB["FAN_L"]; FAN.rotation_mode = 'XYZ'
-FAN.rotation_euler = (0, 0, 0); FAN.keyframe_insert("rotation_euler", frame=1)
-FAN.rotation_euler = (0, R_(-7.0 * (T["S06"][0] + 30 - 1)), 0); FAN.keyframe_insert("rotation_euler", frame=T["S06"][0] + 30)
-FAN.rotation_euler = (0, R_(-7.0 * (T["S06"][0] + 30 - 1) - 2.0 * (sc.frame_end - T["S06"][0] - 30)), 0); FAN.keyframe_insert("rotation_euler", frame=sc.frame_end)
-for fc in all_fc(FAN):
-    for k in fc.keyframe_points: k.interpolation = 'LINEAR'
-FR_ = OB["FAN_R"]; FR_.rotation_mode = 'XYZ'; FR_.rotation_euler = (0, 0, 0); FR_.keyframe_insert("rotation_euler", frame=1)
-FR_.rotation_euler = (0, R_(7.0 * sc.frame_end), 0); FR_.keyframe_insert("rotation_euler", frame=sc.frame_end)
-for fc in all_fc(FR_):
-    for k in fc.keyframe_points: k.interpolation = 'LINEAR'
-shot_cam("S05", [(0, (-6.4, 2.4, -1.7), (-4.5, -2.4, -0.92), 30), (1, (-5.9, 1.2, -1.5), (-4.5, -2.5, -0.92), 34)], fstop=11)
-# ================================================================== S06: broke in the air (arc + blade break off, debris, smoke)
-_begin("S06")
-f0, f1 = T["S06"]; fb6 = f0 + 30
-ARC, BLD = OB["NACELLE_ARC_L"], OB["BLADE_BREAK_L"]
-vis(ARC, 1, True); vis(ARC, fb6, False); vis(BLD, 1, True); vis(BLD, fb6, False)
-rnd = random.Random(11); lip = Vector((-4.5, -2.15, -0.92))
-for i, o in enumerate(DEBRIS[:10]):
-    a = R_(rnd.uniform(-15, 75)); st = lip + Vector((0.8 * math.cos(a), -0.05, 0.8 * math.sin(a)))
-    v = Vector((rnd.uniform(0.5, 2.5), -rnd.uniform(4, 9), rnd.uniform(0.3, 2.2)))
-    vis(o, fb6, True); key_loc(o, fb6, st, (0, 0, 0))
-    key_loc(o, f1, st + v, (rnd.uniform(-9, 9), rnd.uniform(-9, 9), rnd.uniform(-9, 9))); vis(o, f1 + 1, False)
-for i, o in enumerate(SMOKE):
-    a = R_(rnd.uniform(-20, 80)); st = lip + Vector((0.7 * math.cos(a), 0.0, 0.7 * math.sin(a)))
-    vis(o, fb6 + 2 * i, True); key_loc(o, fb6 + 2 * i, st, scale=(0.15, 0.15, 0.15))
-    key_loc(o, f1, st + Vector((0.3, -4.5 - i * 0.4, 0.3)), scale=(0.9 + 0.1 * i,) * 3)
-    vis(o, f1 + 1, False)
-shot_cam("S06", [(0, (-7.4, 1.2, -1.4), (-4.3, -2.6, -0.8), 30), (1, (-7.2, 0.6, -1.2), (-3.9, -3.6, -0.6), 30)], fstop=11)
-# ================================================================== S07: causing debris to break a window
-_begin("S07")
-f0, f1 = T["S07"]; fi = f0 + 46
-vis(OB["PANE"], f0, True); vis(OB["PANE"], fi, False)
-rnd = random.Random(5)
-for i, o in enumerate(DEBRIS[10:14]):
-    st = Vector((-4.2 + 0.3 * i, -2.6 - 0.2 * i, -0.4)); tgt = HOLE + Vector((-0.12, rnd.uniform(-0.1, 0.1), rnd.uniform(-0.1, 0.1)))
-    if i: tgt = HOLE + Vector((-0.3 - 0.2 * i, -1.2 - 0.5 * i, 0.4 * i))
-    vis(o, f0 + 2, True); key_loc(o, f0 + 2, st, (0, 0, 0)); key_loc(o, fi, tgt, (R_(400), R_(200), 0))
-    key_loc(o, fi + 30, tgt + Vector((-1.5, -6, 1.0)), (R_(700), R_(500), 0)); vis(o, fi + 31, False)
-rnd = random.Random(9)
-for i, o in enumerate(SHARDS):
-    h = Vector(o["home"]); v = Vector((-rnd.uniform(1.5, 3.5), -rnd.uniform(3, 7), rnd.uniform(-0.6, 0.9)))
-    vis(o, fi, True); key_loc(o, fi, h, (0, 0, 0)); key_loc(o, fi + 36, h + v, (rnd.uniform(-9, 9), rnd.uniform(-9, 9), rnd.uniform(-9, 9)))
-    vis(o, fi + 37, False)
-shot_cam("S07", [(0, (-9.0, 0.2, -1.9), (-2.6, -4.9, 0.6), 22), (1, (-8.6, -0.3, -1.7), (-2.4, -5.1, 0.7), 24)], fstop=11)
 # ================================================================== S08: the cabin to depressurize (masks drop, papers fly)
 _begin("S08")
 f0, f1 = T["S08"]; fm = f0 + 12
@@ -406,11 +408,6 @@ def hold_shot(n, fr_list, pull=None, hb=False):
             sc.frame_set(fr)
             grab(HB, "L", fr, leg_point("R", "ankle", fr), (0, -0.15, -1), skin=0.085)
             grab(HB, "R", fr, leg_point("R", "shin", fr), (0, 0.15, -1), skin=0.095)
-# ================================================================== S10: out of the plane (interior wide)
-_begin("S10")
-f0, f1 = T["S10"]
-hold_shot("S10", list(range(f0, f1 + 1, 12)) + [f1])
-shot_cam("S10", [(0, (-0.45, -4.25, 1.62), (-0.30, -5.70, 1.05), 22), (1, (-0.45, -4.45, 1.58), (-0.30, -5.70, 1.05), 24)])
 # ================================================================== S11: the other passengers held on to her (closer)
 _begin("S11")
 f0, f1 = T["S11"]
@@ -466,7 +463,7 @@ for o in D.collections["CLOUDS_NEAR"].objects:
 # catchlight for W's eyes in the seated close shots (small, soft, near the S01 lens)
 cl = D.objects.new("L_W_catch", D.lights.new("L_W_catch", 'POINT')); cl.data.energy = 3.0; cl.data.shadow_soft_size = 0.04
 sc.collection.objects.link(cl); cl.location = (-0.42, -4.85, 1.45)
-vis(cl, 1, True); vis(cl, T["S03"][0], False)
+vis(cl, 1, True); vis(cl, T["S01"][1] + 1, False)
 cl.data.use_shadow = False
 # ------------------------------------------------------------------ hold every hero channel to the end of each shot
 _begin(None)
