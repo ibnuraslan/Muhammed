@@ -1,0 +1,16 @@
+body_prop_cross, step 3. Rigs W,HA vs seats 04-06 L, HOLE_LINER, CABIN_SHELL, CABIN_FIXED, FUSELAGE; plus HA vs W's body and trousers (S10-S13).
+S01-S02  in-frustum crossing frames:  84  [('pelvis.R|SEAT_05L1', 84), ('spine05|SEAT_05L1', 84), ('upperleg02.R|SEAT_05L1', 84), ('pelvis.L|SEAT_05L1', 84)]
+S04      in-frustum crossing frames:  40  [('lowerleg02.R|FUSELAGE', 40), ('upperleg02.L|FUSELAGE', 40), ('upperleg02.L|HOLE_LINER', 40), ('lowerleg02.L|FUSELAGE', 40)]
+S08      in-frustum crossing frames:  40  [('upperleg01.R|SEAT_05L0', 40), ('upperleg02.R|SEAT_05L0', 40), ('spine04|SEAT_05L0', 40), ('pelvis.R|SEAT_05L0', 40)]
+S09      in-frustum crossing frames:  40  [('upperleg02.L|FUSELAGE', 40), ('upperleg02.R|FUSELAGE', 37), ('lowerleg01.R|FUSELAGE', 31), ('lowerleg01.L|FUSELAGE', 31)]
+S10-S11  in-frustum crossing frames:   0  []
+S12      in-frustum crossing frames:  52  [('lowerleg02.R|FUSELAGE', 52), ('upperleg02.L|FUSELAGE', 52), ('upperleg02.L|HOLE_LINER', 52), ('lowerleg02.L|FUSELAGE', 52)]
+S13      in-frustum crossing frames:   0  []
+S14-S15  in-frustum crossing frames:   0  []
+HA hands vs W, S10-S11 (1101-1376 part of 1101-1688 run): 0 frames
+HA hands vs W, S13: 0 frames
+
+Notes (the check counts crossings inside the camera frustum, not whether they are visible):
+- S01, S02, S08: the seated W (S01-S02) and HA (S08) sink a few cm into their own seat cushion and back padding. The crossing is behind or under their bodies and doesn't show on the sheet. NOT 0: it can be fixed with an extra seat offset if you want it at 0.
+- S04, S09, S12 (exterior): W's legs are inside the cabin, hidden behind the opaque fuselage skin. The hit is where the legs pass the liner just inside the hole. In the frame you see only the torso coming out of a clean hole.
+- Every interior contact shot (S10, S11, S13 hands on her shins; S14, S15 lying and kneeling): 0.

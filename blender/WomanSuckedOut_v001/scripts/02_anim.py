@@ -202,14 +202,15 @@ def place_pelvis(rig, f, Rm, pelvis):
     place(rig, f, loc, Rm.to_euler('XYZ'))
 # face-down hanging: head out of the hole (-x), back up, left side toward the tail
 R_HANG = Matrix(((0, 0, -1), (-1, 0, 0), (0, 1, 0)))
-def hang_pose(f, out=0.0, flutter=0.0, t=0.0):
+def hang_pose(f, out=0.0, flutter=0.0, t=0.0, arms_in=0.0):
     """out: how far the pelvis is outside the wall plane (0 = at the hole centre)."""
     place_pelvis(W, f, R_HANG, (HOLE.x - 0.12 - out, HOLE.y, HOLE.z - 0.04))
     w1 = math.sin(t * 9.0); w2 = math.sin(t * 7.3 + 1.0)
     # wind folds the upper body back toward the tail (her left side) and lifts the arms back
     fk_spine(RW, f, flex=-4 + 2 * flutter * w1, side=12 + 3 * flutter * w2, twist=3 * flutter * w1, hflex=10, hside=8 + 4 * flutter * w2, htwist=0)
-    fk_arm(RW, "L", f, down=-20 + 6 * flutter * w1, fwd=-30, elbow=25 + 8 * flutter * w2, out=0)
-    fk_arm(RW, "R", f, down=10 + 6 * flutter * w2, fwd=-55, elbow=30 + 8 * flutter * w1, out=0)
+    a = arms_in      # pulled back in: arms go overhead (narrowest shape through the hole, clear of the seat backs)
+    fk_arm(RW, "L", f, down=(-20 + 6 * flutter * w1) * (1 - a) - 80 * a, fwd=-30 * (1 - a), elbow=(25 + 8 * flutter * w2) * (1 - a) + 10 * a, out=0)
+    fk_arm(RW, "R", f, down=(10 + 6 * flutter * w2) * (1 - a) - 80 * a, fwd=-55 * (1 - a), elbow=(30 + 8 * flutter * w1) * (1 - a) + 10 * a, out=0)
     # legs inside, near straight and level (held by the passengers)
     fk_leg(RW, "L", f, hip=18, knee=22, splay=3, ankle=-25); fk_leg(RW, "R", f, hip=14, knee=18, splay=-2, ankle=-25)
     eyes(RW, f, 1.0)
@@ -368,13 +369,13 @@ def hold_shot(n, fr_list, pull=None):
     f0, f1 = T[n]
     for fr in fr_list:
         u = 0.0 if pull is None else pull(fr)
-        hang_pose(fr, out=-0.62 * u, flutter=0.4 * (1 - u), t=fr / 60)
+        hang_pose(fr, out=-0.30 * u, flutter=0.4 * (1 - u), t=fr / 60, arms_in=min(1.0, 3 * u))
         set_ik(HA, fr, 1, 1)
-        stand(HA, fr, 0.02 + 0.25 * u, -5.62, yaw=-90, flex=18, crouch=0.05)
+        stand(HA, fr, 0.02 + 0.22 * u, -5.62, yaw=-90, flex=18 - 8 * u, crouch=0.05)
         fk_spine(RA, fr, flex=10, side=0, twist=0, hflex=-22, htwist=18)
         sc.frame_set(fr)
-        grab(HA, "L", fr, leg_point("L", "knee", fr), (0, -0.2, -1), skin=0.08)
-        grab(HA, "R", fr, leg_point("R", "shin", fr), (0, 0.2, -1), skin=0.075)
+        grab(HA, "L", fr, leg_point("L", "knee", fr), (0, -0.2, -1), skin=0.105)
+        grab(HA, "R", fr, leg_point("R", "shin", fr), (0, 0.2, -1), skin=0.095)
 # ================================================================== S10: out of the plane (interior wide)
 _begin("S10")
 f0, f1 = T["S10"]
