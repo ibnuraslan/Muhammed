@@ -104,6 +104,29 @@ def cap(rig, col):
     bpy.context.view_layer.update()
     for o in (c, b): attach(o, rig, "head")
 for r in ("CopA", "CopB"): cap(r, None)
+# ---- rescuers: fitted hi-vis vests cut from their own torso skin (director P1 note: the old vest read as a crumpled sheet)
+exec(open(HERE + "scripts/garment_lib.py").read())
+def is_vest(b, co): return b.startswith(("spine", "clavicle", "breast", "pectoral"))
+for rig_, base_, nm_ in (("ResA", (0.85, 0.95, 0.05), "HiVisYellow"), ("ResB", (1.0, 0.45, 0.02), "HiVisOrange")):
+    bpy.data.objects.remove(bpy.data.objects[rig_ + ".vest"])   # the crumpled ToddlerWell vest
+    zb = bpy.data.objects[rig_].data.bones["spine05"].head_local.z + 0.03
+    vm = stripe_mat(nm_, base_, (0.85, 0.87, 0.9), [(zb + 0.07, zb + 0.115), (zb + 0.24, zb + 0.285), (zb + 0.40, zb + 0.44)])
+    # hi-vis work jacket = the rescuer's own fitted work suit, recoloured above the belt (3 separate vest meshes crumpled)
+    ws = next(c for c in bpy.data.objects[rig_].children if "worksuit" in c.name)
+    names = {g.index: g.name for g in ws.vertex_groups}
+    ws.data.materials.append(vm); mi = len(ws.data.materials) - 1
+    vt = [v.co.z > zb and bool((lambda b: b and b.startswith(TOP))(dominant_bone(v, names))) for v in ws.data.vertices]
+    n_ = 0
+    for pp in ws.data.polygons:
+        if sum(vt[i] for i in pp.vertices) * 2 > len(pp.vertices): pp.material_index = mi; n_ += 1
+    # reflective bands by face height (rest mesh), robust to the rig's object transform
+    zs = [v.co.z for i, v in enumerate(ws.data.vertices) if vt[i]]; z0, z1 = min(zs), max(zs)
+    sil = mat("HiVisSilver", (0.88, 0.9, 0.93), 0.25); ws.data.materials.append(sil); si = len(ws.data.materials) - 1
+    bands = [(z0 + (z1 - z0) * a_, z0 + (z1 - z0) * b_) for a_, b_ in ((0.18, 0.25), (0.45, 0.52))]
+    nb = 0
+    for pp in ws.data.polygons:
+        if pp.material_index == mi and any(lo <= pp.center.z <= hi for lo, hi in bands): pp.material_index = si; nb += 1
+    print("HIVIS faces", n_, "bands", nb, round(z0, 2), round(z1, 2))
 # ---- eye fix on every EnhancedEye group (idempotent)
 for ng in list(bpy.data.node_groups):
     if ng.name.startswith("EnhancedEye") and "CorneaTransparentMix" not in ng.nodes:

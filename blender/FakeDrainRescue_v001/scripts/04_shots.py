@@ -90,6 +90,7 @@ scr.matrix_basis = Matrix(((0, 0, -1, -0.0052), (-1, 0, 0, 0), (0, 1, 0, 0.075),
 # torch light
 tl = bpy.data.lights.new("TorchBeam", 'SPOT'); tl.energy = 60; tl.spot_size = R_(35); tl.color = (1, 0.95, 0.8); tl.shadow_soft_size = 0.02
 tlo = bpy.data.objects.new("TorchBeam", tl); sc.collection.objects.link(tlo)
+FORMM = [img_mat("FormM%d" % k, HERE + "assets/tex/form_%d.png" % k, 0.6) for k in range(3)]
 SHOT_FUNCS = {}
 def shot(sid):
     def deco(fn): SHOT_FUNCS[sid] = fn; return fn
@@ -244,22 +245,30 @@ def _():
 @shot("S14")
 def _():
     cam_shot("S14", [(0, (0.5, -9.6, 0.75)), (1, (0.35, -10.4, 0.55))], [(0, (0.0, -13.6, -0.85)), (1, (0.0, -13.7, -0.9))], lens=30)
-def sit(n, sid, pos, yaw, desk_z=0.79, lean=(0, 0), heads=((0, 0),)):
-    f0, f1 = W(sid); _GZ[0] = 0.0; H = HS[n]; rig = CH[n]
-    seat = 0.46
-    for i, t in enumerate((0, 0.3, 0.6, 0.9, 1.3)):
-        f = f0 + round(t * (f1 - f0)); hd = heads[i % len(heads)]
-        Rm = Rz(yaw); hip = Vector((pos[0], pos[1], seat + 0.10)) + Rm @ Vector((0, 0.05, 0))
-        H.key_root(f, hip, yaw=yaw, flex=-75 + lean[i % len(lean)] if False else 0, side=0)
-        rig.pose.bones["root"]
-        H.key_spine(f, flex=24 + lean[i % 2], head=(hd[0] - 12, hd[1]))
-        for s in "LR":
-            sx = 1 if s == "L" else -1
-            H.key_foot(s, f, Vector((pos[0], pos[1])) + (Rm @ Vector((sx * 0.14, -0.42, 0))).to_2d(), yaw)
-        for s in "LR":
-            sx = 1 if s == "L" else -1
-            Wd = Vector((pos[0], pos[1], desk_z + 0.035)) + Rm @ Vector((sx * 0.22, -0.66, 0))
-            H.key_hand(s, f, Wd, Rm @ Vector((-sx * 0.25, -1, 0)), Vector((0, 0, -1)), pole=Vector((pos[0], pos[1], 0.6)) + Rm @ Vector((sx * 0.6, 0.2, 0)))
+def sit(n, sid, pos, yaw, desk_z=0.79, heads=((0, 0),), slide=None):
+    """seated at the desk, palms flat on the top; a sigh (slump, head drop, rise) and optionally the right palm slides a
+    form across the desk (the form is keyed with the palm, so it only moves under the hand)"""
+    f0, f1 = W(sid); _GZ[0] = 0.0; H = HS[n]; rig = CH[n]; seat = 0.46
+    TS = (0, 0.15, 0.3, 0.45, 0.6, 0.8, 1.0, 1.3)
+    SIGH = (0, 0, 0.6, 1.0, 0.4, 0, 0, 0)          # slump amount
+    for i, t in enumerate(TS):
+        f = f0 + round(t * (f1 - f0)); hd = heads[i % len(heads)]; sg = SIGH[i]
+        Rm = Rz(yaw); hip = Vector((pos[0], pos[1], seat + 0.10 + 0.01 * (1 - sg))) + Rm @ Vector((0, 0.05, 0))
+        H.key_root(f, hip, yaw=yaw)
+        H.key_spine(f, flex=24 + 8 * sg, head=(hd[0] - 12 + 14 * sg, hd[1] * (1 - sg)))
+        for s_ in "LR":
+            sx = 1 if s_ == "L" else -1
+            H.key_foot(s_, f, Vector((pos[0], pos[1])) + (Rm @ Vector((sx * 0.14, -0.42, 0))).to_2d(), yaw)
+        for s_ in "LR":
+            sx = 1 if s_ == "L" else -1
+            dx = slide[i] if (slide and s_ == "R") else 0.0
+            Wd = Vector((pos[0], pos[1], desk_z + 0.035)) + Rm @ Vector((sx * 0.22 + dx, -0.66 + 0.4 * abs(dx), 0))
+            dvec = Rm @ Vector((-sx * 0.25, -1, 0))
+            H.key_hand(s_, f, Wd, dvec, Vector((0, 0, -1)), pole=Vector((pos[0], pos[1], 0.6)) + Rm @ Vector((sx * 0.6, 0.2, 0)))
+            if slide and s_ == "R":
+                fo = bpy.data.objects.get("Form_Slide") or plane("Form_Slide", 0.21, 0.297, (0, 0, 0), FORMM[0], "Office")
+                fo.location = Wd + dvec.normalized() * 0.10; fo.location.z = desk_z + 0.0025
+                fo.rotation_euler = (0, 0, math.atan2(-dvec.x, -dvec.y) if False else 0.0); fo.keyframe_insert("location", frame=f)
     poses(rig, f0, "flat_palm", "flat_palm"); use(n, sid)
 @shot("S15")
 def _():
@@ -267,7 +276,7 @@ def _():
     cam_shot("S15", [(0, (OX + 1.0, -0.3, 1.6)), (1, (OX + 0.6, 0.15, 1.5))], [(0, (OX, 1.9, 1.0)), (1, (OX, 1.95, 1.05))], lens=30)
 @shot("S16")
 def _():
-    sit("Clerk", "S16", (OX, 2.45), 0, heads=((14, -10), (10, 15)))
+    sit("Clerk", "S16", (OX, 2.45), 0, heads=((14, -10), (10, 15)), slide=(0, 0, 0, 0, -0.05, -0.14, -0.2, -0.2))
     cam_shot("S16", [(0, (OX - 0.7, 0.6, 1.75)), (1, (OX - 0.55, 0.8, 1.45))], [(0, (OX - 0.35, 1.45, 0.8)), (1, (OX - 0.35, 1.45, 0.82))], lens=30)
 @shot("S17")
 def _():
@@ -295,7 +304,7 @@ def _():
 @shot("S20")
 def _():
     phone_shot("S20", 80, ((20, 0), (16, 4), (20, -3)))
-    cam_shot("S20", [(0, (4.15, 4.75, 1.5)), (1, (4.0, 4.8, 1.48))], [(0, (2.75, 5.0, 1.3)), (1, (2.75, 5.0, 1.3))], lens=38)
+    cam_shot("S20", [(0, (3.95, 4.72, 1.5)), (1, (3.75, 4.8, 1.5))], [(0, (2.85, 5.0, 1.36)), (1, (2.85, 5.0, 1.38))], lens=42)   # chest-up (director P1)
 @shot("S21")
 def _():
     phone_shot("S21", 80, ((18, 0), (6, -35), (6, -40)))
@@ -432,7 +441,6 @@ for i in range(7):
     drift.append(o.name)
 key_vis(drift, [W("S17")])
 # forms pile on the desk (office)
-FORMM = [img_mat("FormM%d" % k, HERE + "assets/tex/form_%d.png" % k, 0.6) for k in range(3)]
 random.seed(5)
 for i in range(42):
     p = plane("Form_%d" % i, 0.21, 0.297, (OX - 0.42 + random.uniform(-0.03, 0.03), 1.33 + random.uniform(-0.03, 0.03), 0.792 + i * 0.0016), FORMM[i % 3], "Office", rot=(0, 0, R_(random.uniform(-12, 12))))

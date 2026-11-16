@@ -19,7 +19,7 @@ for m in (CONC, CONC2, ASPH):   # brighten / clean the scans (animated look)
         m.node_tree.links.new(l.from_socket, mx.inputs['A']); m.node_tree.links.new(mx.outputs['Result'], P.inputs["Base Color"])
 GRASS = mat("Grass", (0.22, 0.5, 0.12), 0.8, sheen=0.4)
 WDIRTY = mat("WaterMurky", (0.20, 0.17, 0.08), 0.22, spec=0.1)
-WCLEAN = mat("WaterClean", (0.06, 0.42, 0.62), 0.18, spec=0.1)
+WCLEAN = mat("WaterClean", (0.10, 0.17, 0.14), 0.07, spec=0.35)   # director P1: murky green-grey with reflections, not pool cyan
 for m in (WDIRTY, WCLEAN):   # gentle ripple bump
     nt = m.node_tree; P = nt.nodes["Principled BSDF"]; nz = nt.nodes.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 3.0
     bp = nt.nodes.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.08; nt.links.new(nz.outputs["Fac"], bp.inputs["Height"]); nt.links.new(bp.outputs["Normal"], P.inputs["Normal"])
