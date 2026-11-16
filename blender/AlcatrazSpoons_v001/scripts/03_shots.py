@@ -49,9 +49,11 @@ def body(n, f, root, yaw=0.0, flex=0.0, side=0.0, spine=(0.0, 0.0, 0.0), head=(0
     HUM[n].key_root(f, V(root), yaw=yaw, flex=flex, side=side)
     HUM[n].key_spine(f, flex=spine[0], twist=spine[1], side=spine[2], head=head)
 
+SOLE = 0.015
 def foot(n, s, f, ankle, yaw, pitch=0.0, roll=0.0, knee=None):
     """ankle: world point for the ankle joint; pitch>0 lifts the toes; knee: world point the knee aims at"""
     H = HUM[n]; a_ = H.ankle[s]; Rw = Rz(yaw) @ Rx(pitch) @ Ry(roll)
+    ankle = V(ankle) + V((0, 0, SOLE))          # MPFB shoe soles sit ~1.5 cm below the rest ankle height
     M = Matrix.Translation(V(ankle)) @ Rw.to_4x4() @ Matrix.Translation(-a_) @ H.r.rest("IK_foot." + s)
     H.r.key_world("IK_foot." + s, f, M)
     if knee is None: knee = V(ankle) + Rz(yaw) @ V((0, -0.7, 0.45))
@@ -171,12 +173,12 @@ SHIN = {n: (RIG[n].BN["lowerleg01.L"].head_local - RIG[n].BN["foot.L"].head_loca
 def kneel(n, f, knees, yaw, thigh_back=15.0, lean=20.0, spine=(25.0, 0.0, 0.0), head=(15.0, 0.0), spread=0.13, toes=78.0):
     """both knees on the floor (knees = midpoint, world), toes tucked, pelvis above and slightly behind the knees"""
     k = V((knees[0], knees[1], 0.0)); L = THIGH[n]; t = R_(thigh_back)
-    root = k + V((0, 0, GZ[0] + 0.075 + L * math.cos(t))) - fwd(yaw) * (L * math.sin(t)) + V((0, 0, HUM[n].root_head.z - RIG[n].BN["upperleg01.L"].head_local.z))
+    root = k + V((0, 0, GZ[0] + 0.09 + L * math.cos(t))) - fwd(yaw) * (L * math.sin(t)) + V((0, 0, HUM[n].root_head.z - RIG[n].BN["upperleg01.L"].head_local.z))
     body(n, f, root, yaw, flex=lean, spine=spine, head=head)
     for s in "LR":
         sx = 1 if s == "L" else -1
         kn = k - rgt(yaw) * sx * spread
-        ank = kn - fwd(yaw) * (SHIN[n] * 0.93) + V((0, 0, GZ[0] + 0.15))
+        ank = kn - fwd(yaw) * (SHIN[n] * 0.93) + V((0, 0, GZ[0] + 0.185))
         foot(n, s, f, ank, yaw + sx * 5, pitch=toes, knee=kn + fwd(yaw) * 0.6 + V((0, 0, -0.1)))
     return root
 
@@ -475,14 +477,14 @@ def crawl_pose(n, f, pelvis_xy, yaw, phase, gz, head=(-35.0, 0.0), hand_pose="re
     for s, ph in (("L", 0.0), ("R", 0.5)):
         sx = 1 if s == "L" else -1; u = (phase + ph) % 1.0
         swing = math.sin(math.pi * u * 2) * 0.08                   # hands and the opposite knee alternate
-        kn = root - rgt(yaw) * sx * 0.12 + fwd(yaw) * (0.02 - swing) ; kn.z = gz + 0.11
+        kn = root - rgt(yaw) * sx * 0.12 + fwd(yaw) * (0.02 - swing) ; kn.z = gz + 0.13
         ank = kn - fwd(yaw) * (SHIN[n] * 0.96); ank.z = gz + 0.14
         foot(n, s, f, ank, yaw, pitch=170, knee=kn + fwd(yaw) * 0.5 + V((0, 0, -0.2)))
     for s, ph in (("L", 0.5), ("R", 0.0)):
         sx = 1 if s == "L" else -1; u = (phase + ph) % 1.0
         swing = math.sin(math.pi * u * 2) * 0.09; lift = max(0.0, math.sin(math.pi * u * 2)) * 0.05
         sh = wpos(n, "upperarm01." + s)
-        palm = V((sh.x, sh.y, gz)) + fwd(yaw) * (reach + swing) - rgt(yaw) * sx * 0.04; palm.z = gz + 0.02 + palm_dz + lift
+        palm = V((sh.x, sh.y, gz)) + fwd(yaw) * (reach + swing) - rgt(yaw) * sx * 0.04; palm.z = gz + 0.045 + palm_dz + lift
         hand(n, s, f, palm, V((0, 0, -1)), fwd(yaw) - rgt(yaw) * sx * 0.25, pole=sh + fwd(yaw) * -0.25 - rgt(yaw) * sx * 0.45 + V((0, 0, 0.05)), pose=hand_pose)
 
 def shot_5b(f0, n):
