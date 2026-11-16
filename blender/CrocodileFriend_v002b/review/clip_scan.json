@@ -1,0 +1,224 @@
+{
+ "frames": {
+  "739": {
+   "Keeper": {
+    "self": 45,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "745": {
+   "Keeper": {
+    "self": 35,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "751": {
+   "Keeper": {
+    "self": 31,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "757": {
+   "Keeper": {
+    "self": 26,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "763": {
+   "Keeper": {
+    "self": 22,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "769": {
+   "Keeper": {
+    "self": 22,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "775": {
+   "Keeper": {
+    "self": 22,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "781": {
+   "Keeper": {
+    "self": 29,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "787": {
+   "Keeper": {
+    "self": 31,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "793": {
+   "Keeper": {
+    "self": 40,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "799": {
+   "Keeper": {
+    "self": 45,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "805": {
+   "Keeper": {
+    "self": 58,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "811": {
+   "Keeper": {
+    "self": 69,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "817": {
+   "Keeper": {
+    "self": 45,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "823": {
+   "Keeper": {
+    "self": 60,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "829": {
+   "Keeper": {
+    "self": 69,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "835": {
+   "Keeper": {
+    "self": 77,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "841": {
+   "Keeper": {
+    "self": 90,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "847": {
+   "Keeper": {
+    "self": 95,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "853": {
+   "Keeper": {
+    "self": 100,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "859": {
+   "Keeper": {
+    "self": 100,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "865": {
+   "Keeper": {
+    "self": 94,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "871": {
+   "Keeper": {
+    "self": 89,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "877": {
+   "Keeper": {
+    "self": 77,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "883": {
+   "Keeper": {
+    "self": 68,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "889": {
+   "Keeper": {
+    "self": 43,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "895": {
+   "Keeper": {
+    "self": 14,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "991": {
+   "Keeper": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "997": {
+   "Keeper": {
+    "self": 55,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   739,
+   757
+  ],
+  [
+   781,
+   889
+  ],
+  [
+   997,
+   997
+  ]
+ ],
+ "fps": 60
+}

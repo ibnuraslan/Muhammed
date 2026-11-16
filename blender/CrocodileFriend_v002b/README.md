@@ -39,3 +39,14 @@ Shots S02, S15, S17, S21 are left out (they would have been under 0.8 s at the V
    leaving croc, so he faces camera, leaning and pointing to the wild, with a push-in.
 4. Sky fill raised on all day and evening shots (shade on faces and the croc lifted); S18 camera raised so the croc's back is in the light.
 5. S20: close waist-up on the singer, hand sweeping from his heart to the guests, other arm open; the guest in grey leggings is out of frame.
+
+## Review (exact package, Nov 16)
+- Full preview re-rendered from this package after the hair/fill change and watched start to finish; the later fixes
+  (S06, S11, S13, S18, S20, sleep) were re-rendered from the final package and spliced. `review/preview.mp4` has the VO.
+- `body_prop_cross`: **0 visible crossings**.
+- `clip_scan`: S09/S10 739–757 and 781–889 = 29–45 shallow probes where his right palm rests on his chest (contact, reads clean);
+  S11 997 = 1 sample of the pointing arm at the shirt.
+- `limb_check`: ARMBODY 2-point shoulder false positives; 3 points on the arm resting on his chest (S09/S10) and on the
+  hand-on-heart (S20); 3–5 points at the armpit of the waving arm (S16). All read clean in the preview.
+- `qa_check`: CAMJUMP 16 = cuts; EMPTY = croc-only / portrait shots the VO names (S12, S19) and the wide framings S10/S13;
+  FAN/CLAW S11 = pointing hand; PROPMOVE S07 = thrown meat in flight; BACKHEAD 1 sample in S05.
