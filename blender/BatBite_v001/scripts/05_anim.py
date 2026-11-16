@@ -187,7 +187,7 @@ def clone(src, name, rgb):
 PAL = [(0.08, 0.12, 0.35), (0.05, 0.45, 0.45), (0.40, 0.12, 0.55), (0.06, 0.06, 0.07), (0.92, 0.92, 0.95), (0.95, 0.45, 0.05),
        (0.35, 0.40, 0.10), (0.55, 0.06, 0.10), (0.15, 0.30, 0.75), (0.85, 0.80, 0.10)]
 CROWD_POS = [(-2.35, -3.55, 6), (-1.55, -4.25, -4), (2.45, -3.70, -8), (3.25, -4.30, 4), (-3.30, -4.05, 10),
-             (-1.05, -4.85, 3), (1.25, -4.75, -3), (-2.70, -4.95, 7), (2.40, -5.05, -6), (0.05, -3.35, 0)]
+             (-1.05, -4.85, 3), (1.65, -4.95, -3), (-2.70, -4.95, 7), (2.40, -5.05, -6), (0.05, -3.35, 0)]
 SRC = ["Fan1", "Fan3", "Fan4"]
 ARMS = {}
 for k, (x, y, yaw) in enumerate(CROWD_POS):
@@ -253,7 +253,8 @@ for f in range(T0, T1 + 1, 4):    # floppy rubber-like flutter in the air
 bat_key(T1 + 4, Mloc(LAND + V((0.0, 0.0, 0.05)), BAT_LIE)); bat_key(T1 + 9, Mloc(LAND + V((0.02, 0.01, 0.026)), BAT_LIE))
 wings(T1 + 4, up=-10); wings(T1 + 9, up=-14); wings(T1 + 14, up=-15)
 HOLD_FOLD = float(os.environ.get("BAT_HOLD_FOLD", "-60")); HOLD_UP = float(os.environ.get("BAT_HOLD_UP", "25"))
-wings(446, up=-15); wings(1296, up=-15)
+HW = float(os.environ.get('HOLD_WING', '-75'))
+wings(446, up=-15); wings(472, up=HW); wings(1296, up=HW)   # wings folded along the body while he holds it (clear of his arms and body)
 BR.key_rot("legs", 446, [("X", 0)]); BR.key_rot("legs", 470, [("X", -55)]); BR.key_rot("legs", 675, [("X", -55)]); BR.key_rot("legs", 695, [("X", 0)]); BR.key_rot("legs", 960, [("X", 0)]); BR.key_rot("legs", 985, [("X", -55)]); BR.key_rot("legs", 1296, [("X", -55)])   # legs hang free at the bite (curled legs read as a blob in the close-ups); BR.key_rot("legs", 1320, [("X", 0)])   # wings stay relaxed/drooping while held (a fold test swung them across his face)
 BAT_REST = Mloc(LAND + V((0.02, 0.01, 0.026)), BAT_LIE)
 bat_key(300, BAT_REST)
@@ -593,12 +594,26 @@ def oxygen_mask():
             if all(k_ in G for k_ in q): bm.faces.new([G[k_] for k_ in q])
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     vmap = G
+    # visible rim: the cup's boundary loop as a soft green rubber bead
+    bnd = [e for e in bm.edges if e.is_boundary]; nxt = {}
+    for e in bnd:
+        a_, b_ = e.verts; nxt.setdefault(a_, []).append(b_); nxt.setdefault(b_, []).append(a_)
+    loop = [bnd[0].verts[0]]; prev = None
+    while True:
+        cands = [v for v in nxt[loop[-1]] if v is not prev]
+        if not cands or cands[0] is loop[0]: break
+        prev = loop[-1]; loop.append(cands[0])
+    rc = bpy.data.curves.new("OxyRim", 'CURVE'); rc.dimensions = '3D'; rc.bevel_depth = 0.0028; rc.bevel_resolution = 2
+    rs = rc.splines.new('POLY'); rs.points.add(len(loop) - 1); rs.use_cyclic_u = True
+    for pt, v in zip(rs.points, loop): pt.co = (v.co.x, v.co.y, v.co.z, 1.0)
+    rim = bpy.data.objects.new("OxyRim", rc); sc.collection.objects.link(rim); rc.materials.append(soft_mat("M_OxyRim", (0.35, 0.75, 0.55), 0.35))
+    print("MASK rim points", len(loop))
     me = bpy.data.meshes.new("OxygenMask"); bm.to_mesh(me)
     o = bpy.data.objects.new("OxygenMask", me); sc.collection.objects.link(o)
     so = o.modifiers.new("Sol", 'SOLIDIFY'); so.thickness = 0.0025; so.offset = 1
     o.modifiers.new("Sub", 'SUBSURF').levels = 1
-    m = soft_mat("M_OxyMask", (0.62, 0.92, 0.74), rough=0.12)
-    Pn = m.node_tree.nodes["Principled BSDF"]; Pn.inputs["Alpha"].default_value = 0.55; Pn.inputs["Coat Weight"].default_value = 0.6   # clear green plastic
+    m = soft_mat("M_OxyMask", (0.55, 0.90, 0.70), rough=0.08)
+    Pn = m.node_tree.nodes["Principled BSDF"]; Pn.inputs["Alpha"].default_value = 0.32; Pn.inputs["Coat Weight"].default_value = 0.8   # clear plastic, light green tint
     me.materials.append(m)
     for p in me.polygons: p.use_smooth = True
     # tube from the bottom of the cup down over the chest to the bed side, and a thin elastic strap toward the ears
@@ -618,7 +633,7 @@ def oxygen_mask():
         s2 = cs.splines.new("POLY"); s2.points.add(len(q) - 1)      # straight segments: no handle overshoot into the cheek
         for pt, p in zip(s2.points, q): pt.co = (p.x, p.y, p.z, 1.0)
     st = bpy.data.objects.new("OxyStrap", cs); sc.collection.objects.link(st); cs.materials.append(soft_mat("M_Strap", (0.9, 0.95, 0.95), 0.5))
-    for ob in (o, t, st):     # Child Of the head bone (a prop, not a rig child), identity at rest
+    for ob in (o, t, st, rim):     # Child Of the head bone (a prop, not a rig child), identity at rest
         c = ob.constraints.new('CHILD_OF'); c.target = D[S]; c.subtarget = "head"
         c.inverse_matrix = (D[S].matrix_world @ RIG[S].rest("head")).inverted()
         for f, hid in ((1, True), (CUT, False)):
@@ -714,7 +729,7 @@ bat_key(CUT - 1, Mloc(DROP, Rz(230) @ Rx(90)))
 # ---- second hand at the bite (director: both hands hold the bat at chin height): left hand grips the bat's left flank at 712,
 # then rides with the bat every frame 690-975 (target clamped to reach); before/after it is the normal relaxed/shock keys
 BW = float(os.environ.get("BITE_WING", "40"))
-wings(676, up=-15); wings(696, up=BW); wings(964, up=BW); wings(984, up=-15)
+
 sc.frame_set(712); bpy.context.view_layer.update()
 Mb712 = BAT.matrix_world.copy(); left_w = Rz(YAW) @ V((1, 0, 0))
 xw = (Mb712.to_3x3() @ V((1, 0, 0))).normalized(); sgn = 1 if xw.dot(left_w) > 0 else -1
