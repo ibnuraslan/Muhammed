@@ -397,30 +397,66 @@ def S17(t, L):
     c = cam("CAM_S17", 26, 8); catch(c)
     cam_path(c, t, L, [(0, (-9.0, -4.4, 2.0), (-9.9, -0.4, 1.1)), (1, (-9.1, -4.1, 2.0), (-9.95, -0.1, 1.1))])
     mark("S17", c)
+def _frame(a):
+    rw = a.root_world(); fwd = rw.to_3x3() @ Vector((0, -1, 0)); fwd.z = 0; fwd.normalize()
+    return rw, fwd
+def hat_hand(a, f, s, amt):
+    """one hand rises to the side of his hard hat (palm toward the hat, a few cm off it), elbow out and down"""
+    rw, fwd = _frame(a); sh = rw @ a.r.BN["upperarm01." + s].head_local
+    sd = sh - rw.translation; sd.z = 0; sd.normalize()
+    tail = a.o.matrix_world @ a.r.PB["head"].tail
+    rest = sh + sd * 0.10 + fwd * 0.05 + Vector((0, 0, -0.50))
+    tgt = tail + sd * 0.25 + fwd * 0.03 + Vector((0, 0, -0.13))         # beside the brim, fingers clear of the shell
+    W = rest.lerp(tgt, amt) + sd * 0.16 * math.sin(math.pi * amt)      # the hand swings out round the body, not up through it
+    a.arm_to(s, f, W, (Vector((0, 0, 1)) - sd * 0.25).lerp(Vector((0, 0, -1)) + fwd * 0.15, 1 - amt), (-sd).lerp(-sd + fwd * 0.3, 1 - amt),
+             pole=sh + sd * 0.55 + fwd * 0.05 + Vector((0, 0, -0.25)), pose="relaxed")
+def side_hand(a, f, s):
+    """relaxed hand hanging beside the thigh (outside the leg line, slightly forward), elbow soft"""
+    rw, fwd = _frame(a); sh = rw @ a.r.BN["upperarm01." + s].head_local
+    sd = sh - rw.translation; sd.z = 0; sd.normalize()
+    W = sh + sd * 0.10 + fwd * 0.05 + Vector((0, 0, -0.50))
+    a.arm_to(s, f, W, Vector((0, 0, -1)) + fwd * 0.12, -sd, pole=sh + sd * 0.3 - fwd * 0.5 + Vector((0, 0, -0.25)), pose="relaxed")
+def shock_hands(a, f, amt, wob=0.0):
+    """both hands up in shock at chest height in front, palms out toward what he sees, elbows bent and down"""
+    rw, fwd = _frame(a)
+    for s in "LR":
+        sh = rw @ a.r.BN["upperarm01." + s].head_local; sd = sh - rw.translation; sd.z = 0; sd.normalize()
+        rest = sh + sd * 0.07 + fwd * 0.10 + Vector((0, 0, -0.49))
+        tgt = sh + fwd * (0.30 + wob) + sd * 0.03 + Vector((0, 0, -0.20 + wob * 0.5))
+        W = rest.lerp(tgt, amt)
+        a.arm_to(s, f, W, (Vector((0, 0, 1)) + fwd * 0.25).lerp(Vector((0, 0, -1)) + fwd * 0.15, 1 - amt), fwd,
+                 pole=sh + sd * 0.40 + Vector((0, 0, -0.40)) - fwd * 0.1, pose="open_alarm" if amt > 0.5 else "relaxed")
 def S18(t, L):
-    """they found: both straighten, step back from the side panel and stare into the gap"""
+    """they found: ConB throws both hands up in shock; ConA steps back from the panel, head turning to ConB and back"""
     era(t, 2019); cast(t, [ca, cb]); hero_at(t, PUSH)
     y = -1.0 + PUSH
-    for i in range(0, L + 1, 3):
-        f = t + i; k = smooth(min(1, i / (L * 0.5)))
-        for a, x, tw in ((ca, CA_PUSH.x + 0.05 * k, -50), (cb, CB_PUSH.x + 0.08 * k, -40)):
-            a.stand_g(f, (x, y - 0.53 - 0.12 * k), 180 + 70 * k); a.spine(f, flex=-3 * k, pitch=-4, turn=tw * k * 0.4)
-            a.jaw(f, 4 * k); sc.frame_set(f)
-            for s in "LR": a.hang(s, f, lift=0.02)
+    for i in sorted(set(list(range(0, L + 1, 2)) + [L])):
+        f = t + i; k = smooth(min(1, i / (L * 0.45))); h = smooth(min(1, max(0, (i - L * 0.15) / (L * 0.45))))
+        ca.stand_g(f, (CA_PUSH.x + 0.12 * k, y - 0.53 - 0.20 * k), 180 + 70 * k)
+        ca.spine(f, flex=-5 * k, pitch=-4, turn=-8 * k + 8 * math.sin(math.pi * min(1, i / L)))
+        ca.jaw(f, 4 * k); sc.frame_set(f)
+        for s_ in "LR": side_hand(ca, f, s_)
+        cb.stand_g(f, (CB_PUSH.x + 0.08 * k, y - 0.53 - 0.08 * k), 180 + 70 * k)
+        cb.spine(f, flex=6 * h, pitch=-6, turn=-16 * k); cb.jaw(f, 6 * h); sc.frame_set(f)
+        shock_hands(cb, f, h)
     c = cam("CAM_S18", 30, 8); catch(c)
     cam_path(c, t, L, [(0, (-10.55, -2.1, 1.55), (-9.7, -0.4, 1.55)), (1, (-10.5, -1.9, 1.55), (-9.7, -0.4, 1.55))])
     mark("S18", c)
 def staring(t, L, step=3):
-    """after the reveal: both stand beside the moved unit (beyond the skeleton from the camera), facing it, small reactions"""
+    """after the reveal: ConA steps back with a hand going to his hard hat; ConB leans in, hands up in shock;
+    small head turns between them (never a frozen line-up)"""
     y = -1.0 + PUSH
-    for i in range(0, L + 1, step):
+    for i in sorted(set(list(range(0, L + 1, step)) + [L])):
         f = t + i; u = i / max(1, L)
-        ca.stand_g(f, (-9.45 + 0.08 * smooth(u), y - 0.47), 290); ca.spine(f, flex=-2, pitch=-6, turn=6 * math.sin(i / 13)); ca.jaw(f, 3)
-        sc.frame_set(f)
-        for s_ in "LR": ca.hang(s_, f)
-        cb.stand_g(f, (-9.85, y - 0.52), 295); cb.spine(f, flex=-3 * smooth(u), pitch=-10 + 4 * math.sin(i / 11), turn=-8 * smooth(u)); cb.jaw(f, 4)
-        sc.frame_set(f)
-        for s_ in "LR": cb.hang(s_, f, lift=0.02)
+        k = smooth(min(1, u / 0.45)); h = smooth(min(1, u / 0.35)); kh = 0.35 + 0.65 * k   # hat hand already on its way up at the cut
+        ca.stand_g(f, (-9.30 + 0.20 * k, y - 0.47 - 0.12 * k), 290 - 10 * k)
+        ca.spine(f, flex=-6 * k, pitch=-6 + 3 * math.sin(i / 9), turn=8 * math.sin(i / 12) - 12 * math.sin(math.pi * u)); ca.jaw(f, 3 + 3 * k)
+        sc.frame_set(f); hat_hand(ca, f, "L", kh); side_hand(ca, f, "R")
+        cb.stand_g(f, (-9.68 - 0.03 * h, y - 0.50), 295, flex=4 * h)
+        look = 18 * max(0.0, math.sin(math.pi * (u - 0.45) / 0.4)) if 0.45 < u < 0.85 else 0.0
+        cb.spine(f, flex=8 * h, pitch=-12 + 4 * math.sin(i / 11), turn=-6 * h + look)
+        cb.jaw(f, 5 * h); sc.frame_set(f)
+        shock_hands(cb, f, h, wob=-0.05 + 0.025 * math.sin(i / 6))
 def S19(t, L):
     """the man's remains: the clean skeleton alone in frame, slow push-in (contractors out of shot)"""
     era(t, 2019); cast(t, []); hero_at(t, PUSH); staring(t, L, 4)      # contractors out of shot (hidden: no edge slivers)
