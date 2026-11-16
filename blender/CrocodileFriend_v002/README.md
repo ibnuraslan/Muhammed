@@ -36,4 +36,4 @@ Shots S02, S15, S17, S21 are left out (they would have been under 0.8 s at the V
 - `clip_scan`: 0 bad ranges.
 - `qa_check`: CAMJUMP 16 = the 16 hard cuts. EMPTY = croc-only or portrait shots that the VO names (S12 "the crocodile refused", S19 "public funeral") plus wide shots where the man is small (S10, S13). FAN/CLAW S11 = the pointing hand (index straight by design). PROPMOVE S07 = the thrown meat in flight after release. BACKHEAD S05 = 1 sample in the walking track.
 - `limb_check`: ARMBODY = 2-point upper-arm hits at the shoulder (the known false positive in LESSONS §4) everywhere, plus 3–5 points on the raised waving arm in S16 (armpit region; it reads clean in the preview). ARMBACK S09/S10 = his arm resting beside his head while lying on his back.
-- `body_prop_cross`: see `review/body_prop_cross.json`.
+- `body_prop_cross` (step 3; croc body, bucket, meat, rail, crate, easel, sign, portrait; all characters): **0 visible crossings**.
