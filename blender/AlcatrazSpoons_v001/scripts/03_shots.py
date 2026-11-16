@@ -298,14 +298,14 @@ def shot_1c(f0, n):
 def shot_2a(f0, n):
     """low wide: P1 and P2 kneel at the vent, both scraping, rubble round their knees"""
     use = ("P1", "P2"); f1 = f0 + n - 1
-    p_kneel_scrape("P1", "2a", f0, n, (-0.12, 1.0), 165.0, (VX - 0.15, 1.59, VZ), V((0.3, 1, -0.3)), support=None)
-    for k, f in enumerate(range(f0, f0 + n, 40)):     # P2 kneels beside him and watches the edge (hands on his knees)
-        kneel("P2", f, (0.5, 0.85), 200.0, lean=12, spine=(16, 0, 0), head=(26, -18 + 4 * math.sin(k)))
+    p_kneel_scrape("P1", "2a", f0, n, (-0.2, 0.95), 160.0, (VX - 0.15, 1.59, VZ), V((0.3, 1, -0.3)), support=None, lean=12.0, spine=(14.0, 0.0, 0.0), head=(30.0, 0.0))
+    for k, f in enumerate(range(f0, f0 + n, 40)):     # P2 kneels 75 cm to his right and watches the edge (hands on his thighs)
+        kneel("P2", f, (0.55, 0.8), 200.0, lean=8, spine=(10, 0, 0), head=(28, -20 + 4 * math.sin(k)))
         for s_ in "LR":
-            kn = V((0.5, 0.85, 0.0)) + fwd(200.0) * 0.05 - rgt(200.0) * (0.13 if s_ == "L" else -0.13) + V((0, 0, 0.32))
+            kn = V((0.55, 0.8, 0.0)) + fwd(200.0) * 0.05 - rgt(200.0) * (0.13 if s_ == "L" else -0.13) + V((0, 0, 0.32))
             hand("P2", s_, f, kn, -fwd(200.0) + V((0, 0, -0.6)), V((0, 0, -1)), pole=wpos("P2", "upperarm01." + s_, f) - rgt(200.0) * (0.4 if s_ == "L" else -0.4) - fwd(200.0) * 0.2, pose="relaxed")
     hole_grow(f0, 0.80, 0.55)
-    camera("2a", f0, n, [(0, (0.95, 0.35, 1.3), (0.1, 1.35, 0.5), 18), (1, (0.92, 0.42, 1.26), (0.1, 1.38, 0.5), 18)], fstop=6.0)
+    camera("2a", f0, n, [(0, (-0.95, 1.42, 0.85), (0.25, 0.95, 0.62), 18), (1, (-0.95, 1.35, 0.8), (0.25, 0.95, 0.6), 18)], fstop=6.0)
     return use
 
 def shot_2b(f0, n):
@@ -321,7 +321,7 @@ def shot_2c(f0, n):
     use = ("P1",)
     p_kneel_scrape("P1", "2c", f0, n, (-0.12, 1.0), 165.0, (VX - 0.15, 1.59, VZ), V((0.3, 1, -0.3)), support=None)
     hole_grow(f0, 0.88, 0.75)
-    camera("2c", f0, n, [(0, (0.6, 0.45, 1.15), (0.05, 1.58, 0.45), 30), (1, (0.55, 0.55, 1.08), (0.05, 1.58, 0.45), 30)])
+    camera("2c", f0, n, [(0, (0.55, 1.42, 0.36), (-0.08, 1.2, 0.72), 22), (1, (0.52, 1.44, 0.38), (-0.08, 1.2, 0.74), 22)])
     return use
 
 def shot_2d(f0, n):
@@ -427,8 +427,8 @@ def shot_4a(f0, n):
 
 def shot_4b(f0, n):
     """the guard at the bars raises his flashlight, looks in, nods and lowers it (shot from inside the cell, his face in a gap)"""
-    use = ("Guard",); f1 = f0 + n - 1; gp = V((-0.06, -2.3, 0)); yw = 180.0
-    stand_idle("Guard", f0, f1, gp, yw, arms=False, head_fn=lambda f: (14 if 35 < f - f0 < 95 else 4, -10 + 12 * ss((f - f0) / 60.0) + (0 if f - f0 < 70 else 6 * math.sin((f - f0) / 6.0))))
+    use = ("Guard",); f1 = f0 + n - 1; gp = V((-0.06, -2.75, 0)); yw = 180.0
+    stand_idle("Guard", f0, f1, gp, yw, arms=False, head_fn=lambda f: (5 if 35 < f - f0 < 95 else 0, -10 + 12 * ss((f - f0) / 60.0) + (0 if f - f0 < 70 else 6 * math.sin((f - f0) / 6.0))))
     fl = prop_copy("Flashlight", "Flashlight_4b", f0, f1)
     sh = wpos("Guard", "upperarm01.R", f0)
     orient(fl, sh + V((-0.05, 0.47, -0.38)), V((0, 1, -0.3)))
@@ -443,7 +443,7 @@ def shot_4b(f0, n):
     so.rotation_quaternion = (V((BX, -1.1, 0.66)) - so.location).to_track_quat('-Z', 'Y')
     for f, e in ((f0, 0), (f0 + 30, 0), (f0 + 38, 120), (f1 - 12, 120), (f1 - 4, 0)):
         spot.energy = e; spot.keyframe_insert("energy", frame=f)
-    camera("4b", f0, n, [(0, (-0.06, -0.45, 1.62), (-0.06, -2.35, 1.66), 55), (1, (-0.06, -0.55, 1.63), (-0.06, -2.35, 1.66), 55)])
+    camera("4b", f0, n, [(0, (-0.06, -0.5, 1.7), (-0.06, -2.8, 1.66), 70), (1, (-0.06, -0.58, 1.7), (-0.06, -2.8, 1.66), 70)])
     return use
 
 def shot_4c(f0, n):
@@ -492,7 +492,7 @@ def shot_5b(f0, n):
     gpos = V(g.location); push_end = f0 + 40
     for f in (f0, f0 + 20, push_end, push_end + 20, f1):
         u = min(1.0, (f - f0) / 40.0)
-        crawl_pose("P1", f, (X2, -0.95 + 0.15 * u), yw, 0.0, FZ2, head=(-30, 0))
+        crawl_pose("P1", f, (X2, -0.95 + 0.15 * u), yw, 0.0, 0.105, head=(-30, 0))
     # the hands are flat on the grille's back while it is pushed (contact keyed on both), then the grille falls on its own weight
     for f, dy in ((f0, 0.0), (f0 + 20, 0.05), (push_end, 0.14)):
         g.location = gpos + V((0, dy, 0)); g.rotation_euler = (0, 0, R_(180)); g.keyframe_insert("location", frame=f); g.keyframe_insert("rotation_euler", frame=f)
@@ -502,10 +502,8 @@ def shot_5b(f0, n):
         hand("P1", s, push_end + 2, gpos + V((dx * 0.5, 0.08, 0.0)), V((-dx, 0, 0)), V((0, 1, 0)), pole=wpos("P1", "upperarm01." + s, push_end + 3) + V((dx * 0.12, -0.25, -0.35)), pose="flat_palm")
     for f, loc, rx in ((push_end + 8, gpos + V((-0.03, 0.24, -0.05)), 25), (push_end + 16, gpos + V((-0.4, 0.38, -0.2)), 80), (push_end + 20, V((X2 - 0.6, gpos.y + 0.45, FZ2 + 0.012)), 90), (push_end + 24, V((X2 - 0.62, gpos.y + 0.47, FZ2 + 0.03)), 85), (push_end + 28, V((X2 - 0.63, gpos.y + 0.48, FZ2 + 0.012)), 90)):
         g.location = loc; g.rotation_euler = (R_(rx), 0, R_(180)); g.keyframe_insert("location", frame=f); g.keyframe_insert("rotation_euler", frame=f)
-    for f, back in ((push_end + 20, 0.03), (f1, 0.06)):     # hands stay up in the opening, easing back as the grille falls
-        crawl_pose("P1", f, (X2, -0.8 - back), yw, 0.0, FZ2, head=(-30, 0))
-        for s, dx in (("L", -1.0), ("R", 1.0)):
-            hand("P1", s, f, gpos + V((dx * 0.3, 0.14 - 0.01 - back * 2, 0.0)), V((-dx, 0, 0)), V((0, 1, 0)), pole=wpos("P1", "upperarm01." + s, f) + V((dx * 0.12, -0.25, -0.35)), pose="relaxed")
+    for f, hd in ((push_end + 20, -40), (push_end + 45, -50), (f1, -48)):     # palms back on the duct floor; he looks up and out
+        crawl_pose("P1", f, (X2, -1.0), yw, 0.0, 0.105, head=(hd, 6 * math.sin(f / 9.0)))
     for i in range(14):
         bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=1); pf = bpy.context.active_object; pf.name = "Puff_5b_%d" % i
         pf.data.materials.append(bpy.data.materials["M_Rubble"]); vis_window(pf, f0, f1)
@@ -513,7 +511,7 @@ def shot_5b(f0, n):
         t0 = push_end + 18 + random.randint(0, 6)
         for f, sz, up in ((f0, 0.0005, 0), (t0, 0.0005, 0), (t0 + 10, 0.03, 0.06), (t0 + 40, 0.004, 0.18)):
             pf.location = base + V((0, 0, up)); pf.scale = (sz,) * 3; pf.keyframe_insert("location", frame=f); pf.keyframe_insert("scale", frame=f)
-    camera("5b", f0, n, [(0, (X2 + 0.5, 1.5, 0.62), (X2, 0, 0.5), 30), (1, (X2 + 0.45, 1.35, 0.58), (X2, 0, 0.48), 30)])
+    camera("5b", f0, n, [(0, (X2 + 0.45, 1.45, 0.45), (X2, -0.2, 0.55), 30), (1, (X2 + 0.4, 1.3, 0.42), (X2, -0.2, 0.55), 30)])
     GZ[0] = 0.0
     return use
 
@@ -529,10 +527,12 @@ def shot_5c(f0, n):
     camera("5c", f0, n, [(0, (X2 + 1.6, 1.85, 1.35), (X2 + 0.3, 0.95, 0.5), 22), (1, (X2 + 1.6, 1.85, 1.32), (X2 + 0.35, 1.25, 0.52), 22)], fstop=6.0)
     return use
 
-def walk_arms(n, f0, f1, yaw_fn, every=8, amp=0.12):
-    for i, f in enumerate(range(f0, f1 + 1, every)):
-        sw = amp * math.sin(i * math.pi * every / 22.0)
-        relaxed_arm(n, "L", f, yaw_fn(f), fwd_=0.04 + sw); relaxed_arm(n, "R", f, yaw_fn(f), fwd_=0.04 - sw)
+def walk_arms(n, f0, f1, yaw_fn, every=8, amp=0.16):
+    """bent elbows (~35 deg), forearms swinging opposite to the legs"""
+    for i, f in enumerate(sorted(set(list(range(f0, f1 + 1, every)) + [f1]))):
+        sw = amp * math.sin((f - f0) * math.pi / 22.0)
+        relaxed_arm(n, "L", f, yaw_fn(f), fwd_=0.08 + sw, up=0.13 + 0.06 * max(0.0, sw / amp))
+        relaxed_arm(n, "R", f, yaw_fn(f), fwd_=0.08 - sw, up=0.13 + 0.06 * max(0.0, -sw / amp))
 
 def shot_5d(f0, n):
     """P1 and P2 walk along the service corridor toward camera among the pipes; the supply crate (logo) behind them"""
@@ -624,14 +624,15 @@ def shot_6b(f0, n):
     """outside at night: P1 slides down the vent pipe, hands wrapped round it at chest height, knees and feet hugging it; he lands"""
     use = ("P1",); f1 = f0 + n - 1; px, py = X4, -0.30
     land = f0 + int(n * 0.72)
-    for f in range(f0, f1 + 1, 4):
+    walk_from = land + 10
+    for f in [x for x in range(f0, f1 + 1, 4) if x <= walk_from] + [walk_from]:
         if f <= land:
             u = (f - f0) / (land - f0); z = 4.6 - 3.6 * u            # root height: slides at a steady rate
         else:
             u = (f - land) / max(1, f1 - land); z = HUM["P1"].root_head.z - 0.12 * math.sin(math.pi * min(1, u * 1.5)) * (1 - u)
         on_pipe = f <= land
         root = V((px, py - 0.42, z)) if on_pipe else V((px + 0.05, py - 0.5, z))
-        yw6 = 180.0 if on_pipe else 180.0 - 55.0 * ss((f - land) / 30.0)
+        yw6 = 180.0 if on_pipe else 180.0 - 55.0 * ss((f - land) / 10.0)
         body("P1", f, root, yw6, flex=(0 if on_pipe else 4), spine=(-4 if on_pipe else 6, 0, 0), head=(-12 if on_pipe else 0, 40 if on_pipe else 30 * math.sin((f - land) / 20.0)))
         if on_pipe:
             for s in "LR":
@@ -643,12 +644,18 @@ def shot_6b(f0, n):
         else:
             stand_feet("P1", f, root - V((0, 0, root.z)), yw6)
             relaxed_arm("P1", "L", f, yw6); relaxed_arm("P1", "R", f, yw6)
+    p0 = V((px + 0.05, py - 0.5, 0)); p1 = V((px + 0.6, py - 1.25, 0))
+    path6 = lambda f: p0.lerp(p1, ss((f - walk_from) / max(1, f1 - walk_from)))
+    yaw6 = lambda f: 125.0 - 85.0 * ss((f - walk_from) / max(1, (f1 - walk_from) * 0.6))
+    HUM["P1"].walk(path6, yaw6, walk_from, f1, stride=0.6, lift=0.07)
+    for f in range(walk_from, f1 + 1, 8): HUM["P1"].key_spine(f, flex=4, head=(-4, 10 * math.sin(f / 14.0)))
+    walk_arms("P1", walk_from, f1, yaw6)
     camera("6b", f0, n, [(0, (X4 + 3.2, -4.0, 4.6), (X4, -0.4, 4.0), 26), (0.75, (X4 + 3.0, -4.2, 2.4), (X4, -0.5, 1.4), 26), (1, (X4 + 2.8, -4.0, 2.0), (X4, -0.6, 1.1), 26)], fstop=6.0)
     return use
 
 # ================================================================== BEAT 7-8: the raft
 RAFT_SEATS = {"P1": (0.18, 0.45, 180.0), "P2": (-0.2, -0.15, 180.0), "P3": (0.15, -0.78, 180.0)}
-def raft_z(f): return 0.03 * math.sin(f / 22.0) + 0.012 * math.sin(f / 9.0)
+def raft_z(f): return 0.045 * math.sin(f / 20.0) + 0.015 * math.sin(f / 8.0)
 def raft_shot(sid, f0, n, drift=0.0, paddle=True):
     use = ("P1", "P2", "P3"); f1 = f0 + n - 1; R = bpy.data.objects["Raft"]
     base = V((X5, 0.0 + drift * 0, 0))
@@ -660,11 +667,11 @@ def raft_shot(sid, f0, n, drift=0.0, paddle=True):
             u = (f - f0) / (n - 1); off = V((0, drift * u, raft_z(f)))
             seat = base + off + V((x, y, 0))
             GZ[0] = 0.085 + off.z
-            sit(nm, f, seat, 0.11 + off.z, yw, knee_fwd=0.36, spread=0.13, spine=(10 + 2 * math.sin(f / 15.0), 0, 0), head=(-4, 15 * math.sin((f + len(nm) * 30) / 45.0)))
+            sit(nm, f, seat, 0.11 + off.z, yw, knee_fwd=0.36, spread=0.13, spine=(10 + 3 * math.sin(f / 13.0), 4 * math.sin((f + 20 * x) / 19.0), 3 * math.sin((f + 37 * y) / 23.0)), head=(-4 + 5 * math.sin((f + 50 * y) / 21.0), 30 * math.sin((f + 70 * (x + y)) / 28.0)))
             for s in "LR":
                 sx = 1 if s == "L" else -1
                 if nm == "P1" and s == "R" and paddle: continue
-                kn = seat + fwd(yw) * 0.33 - rgt(yw) * sx * 0.13 + V((0, 0, 0.62))
+                kn = seat + fwd(yw) * 0.2 - rgt(yw) * sx * 0.14 + V((0, 0, 0.53))
                 hand(nm, s, f, kn, V((0, 0, -1)), fwd(yw), pole=wpos(nm, "upperarm01." + s, f) - rgt(yw) * sx * 0.4 - fwd(yw) * 0.2, pose="relaxed")
     GZ[0] = 0.0
     paddle = False
@@ -686,7 +693,7 @@ def shot_7a(f0, n):
     return use
 def shot_7b(f0, n):
     use = raft_shot("7b", f0, n, drift=0.6)
-    camera("7b", f0, n, [(0, (X5 + 3.3, -0.4, 0.75), (X5, 0.0, 0.55), 26), (1, (X5 + 3.2, 0.3, 0.72), (X5, 0.6, 0.55), 26)], fstop=6.0)
+    camera("7b", f0, n, [(0, (X5 + 3.3, -1.1, 0.95), (X5, -0.2, 0.6), 26), (1, (X5 + 2.9, 1.0, 0.65), (X5, 0.5, 0.6), 26)], fstop=6.0)
     return use
 def shot_7c(f0, n):
     use = raft_shot("7c", f0, n, drift=0.5)
