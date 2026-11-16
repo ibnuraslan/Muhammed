@@ -255,7 +255,7 @@ def box(name, loc, dims, m, col=wcol):
     o.location = W0 + Vector(loc); o.scale = dims; o.data.materials.append(m)
     bv = o.modifiers.new("Bev", 'BEVEL'); bv.width = min(0.01, min(dims) * 0.3); bv.segments = 2
     return o
-wall = mat("W_Wall", (0.78, 0.88, 0.95), 0.8); wall2 = mat("W_WallAccent", (0.36, 0.62, 0.86), 0.7)
+wall = mat("W_Wall", (0.70, 0.82, 0.92), 0.8); wall2 = mat("W_WallAccent", (0.36, 0.62, 0.86), 0.7)
 floor = mat("W_Floor", (0.80, 0.80, 0.78), 0.5); white = mat("W_White", (0.92, 0.93, 0.94), 0.4); wood = mat("W_Wood", (0.62, 0.45, 0.30), 0.5)
 box("W_Floor", (-0.8, 0, -0.05), (7.6, 7, 0.1), floor); box("W_Ceil", (0, 0, 2.85), (6, 7, 0.1), white)
 box("W_WallBack", (0, 1.55, 1.4), (6, 0.1, 2.9), wall); box("W_WallAccent", (0, 1.49, 0.55), (6, 0.02, 1.1), wall2)
@@ -268,7 +268,7 @@ box("W_DoorFrameA", (-2.27, -1.38, 1.0), (0.14, 0.06, 2.1), white); box("W_DoorF
 box("W_Corridor", (-3.6, -1.9, 1.4), (0.1, 3, 2.9), wall); 
 # window on the right wall: frame + bright sky panel behind (no black void)
 box("W_WinFrame", (2.54, 0.2, 1.55), (0.06, 1.5, 1.2), white)
-box("W_WinSky", (2.5, 0.2, 1.55), (0.02, 1.36, 1.06), mat("W_Sky", (0.55, 0.80, 0.98), 0.5, emit=1.2))
+box("W_WinSky", (2.5, 0.2, 1.55), (0.02, 1.36, 1.06), mat("W_Sky", (0.55, 0.80, 0.98), 0.5, emit=0.7))
 box("W_WinBar", (2.47, 0.2, 1.55), (0.03, 0.04, 1.06), white)
 # bed (CC-BY model), head against the back wall
 before = set(bpy.data.objects); bpy.ops.import_scene.gltf(filepath=HERE + "assets/bed.glb")
@@ -284,7 +284,7 @@ print("BED raw", mn, mx)
 L = mx.y - mn.y; sB = 2.15 / L
 root.scale = (sB, sB, sB); root.location = W0 + Vector((0, 1.45 - 2.15 / 2, 0)) - Vector(((mn.x + mx.x) / 2, (mn.y + mx.y) / 2, mn.z)) * sB
 bpy.context.view_layer.update()
-bm_ = mat("W_BedFrame", (0.90, 0.91, 0.93), 0.35); sheet = mat("W_Sheet", (0.96, 0.97, 0.98), 0.8)
+bm_ = mat("W_BedFrame", (0.80, 0.82, 0.85), 0.35); sheet = mat("W_Sheet", (0.86, 0.89, 0.92), 0.8)
 for o in bed_objs:
     if o.type == 'MESH':
         o.data.materials.clear(); o.data.materials.append(bm_)
@@ -297,24 +297,24 @@ print("MATTRESS", MZ, ob.name if hit else None)
 box("W_MattressSheet", (0, 0.35, MZ - W0.z + 0.0), (0.92, 2.0, 0.02), sheet)
 pw = box("W_Pillow", (0, 1.15, MZ + 0.28), (0.7, 0.22, 0.55), sheet); pw.rotation_euler = (math.radians(-20), 0, 0)
 pw.modifiers["Bev"].width = 0.08; pw.modifiers["Bev"].segments = 4
-bl = box("W_Blanket", (0, -0.2, MZ + 0.14), (0.98, 1.35, 0.26), mat("W_BlanketM", (0.55, 0.75, 0.92), 0.8))
-bl.modifiers["Bev"].width = 0.06; bl.modifiers["Bev"].segments = 4
+bl = None and box("W_Blanket", (0, -0.2, MZ + 0.14), (0.98, 1.35, 0.26), mat("W_BlanketM", (0.55, 0.75, 0.92), 0.8))
+
 # bedside table + cup, monitor on a stand, IV pole
 box("W_Table", (0.85, 0.95, 0.35), (0.45, 0.45, 0.7), wood); box("W_TableTop", (0.85, 0.95, 0.71), (0.5, 0.5, 0.03), white)
 box("W_MonStand", (1.55, 1.25, 0.6), (0.06, 0.06, 1.2), white); box("W_Mon", (1.55, 1.18, 1.35), (0.45, 0.06, 0.32), mat("W_MonBody", (0.25, 0.28, 0.32), 0.4))
 box("W_MonScreen", (1.55, 1.145, 1.35), (0.40, 0.01, 0.26), mat("W_MonScr", (0.05, 0.25, 0.20), 0.3, emit=0.8))
 # logo poster on the back wall (flat-on, dark logo on a white board)
-pb_ = box("W_Poster", (1.05, 1.47, 1.75), (0.95, 0.03, 0.55), white)
+pb_ = box("W_Poster", (-1.3, 1.47, 1.75), (0.95, 0.03, 0.55), white)
 img = bpy.data.images.load("/home/user/Muhammed/blender/assets/brand/DaKrasFilms_logo_dark.png"); img.pack()
 lm = bpy.data.materials.new("W_Logo"); lm.use_nodes = True; nt = lm.node_tree; P = nt.nodes["Principled BSDF"]
 ti = nt.nodes.new("ShaderNodeTexImage"); ti.image = img; ti.extension = 'CLIP'
 nt.links.new(ti.outputs["Color"], P.inputs["Base Color"]); nt.links.new(ti.outputs["Alpha"], P.inputs["Alpha"]); P.inputs["Roughness"].default_value = 0.6
 lm.blend_method = 'BLEND' if hasattr(lm, "blend_method") else None
 bpy.ops.mesh.primitive_plane_add(size=1); lg = bpy.context.active_object; lg.name = "W_LogoDecal"; move_to(lg, wcol)
-lg.scale = (0.85, 0.85 * 414 / 967, 1); lg.rotation_euler = (math.radians(90), 0, 0); lg.location = W0 + Vector((1.05, 1.453, 1.75))
+lg.scale = (0.85, 0.85 * 414 / 967, 1); lg.rotation_euler = (math.radians(90), 0, 0); lg.location = W0 + Vector((-1.3, 1.453, 1.75))
 lg.data.materials.append(lm)
 # ceiling light panel
-box("W_CeilLight", (0, 0, 2.79), (1.2, 0.6, 0.02), mat("W_Panel", (1, 1, 1), 0.5, emit=3.0))
+box("W_CeilLight", (0, 0, 2.79), (1.2, 0.6, 0.02), mat("W_Panel", (1, 1, 1), 0.5, emit=1.2))
 for o in wcol.objects:
     if o.type == 'MESH': o.data.polygons.foreach_set("use_smooth", [False] * len(o.data.polygons))
 sc["MZ"] = MZ

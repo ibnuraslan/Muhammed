@@ -61,7 +61,22 @@ Shot list: `shots_provisional.json`. Build: `scripts/01_chars.py` → `02_dress.
 2. The OR camera paths may be re-aimed once the VO sets the shot lengths.
 3. The four package checks run again on the packed Phase 2 file.
 
-## P1 checks (Nov 16)
+## P1b fixes (director notes on cf4dcf0, one rebuild)
+- **A. Ward exposure:** ceiling lights 90→40 W, fill 60→22 W, ceiling panel and window emission lowered, walls/sheets/bed frame a touch darker, so the whites read with shading.
+- **B. Patient clothing:** a loose short-sleeved top and trousers in a navy-dotted hospital print (the surgeon's MPFB scrub suit refitted to her body with Surface Deform), with a normal crew neckline. The skin-copy gown and its neck seam are gone.
+- **C. OR patient re-staged with IK** in the reclined chair: hips on the seat (item 1 fixed), feet on the leg rest, right forearm on the chair arm (no crossing), left forearm forward on the arm board (re-angled to run forward beside the chair arm). No arm out to the side. S01 and S14 are shot from her left side, so her legs run across the frame instead of toward the lens.
+- **D. Surgeon:** a mask over nose and mouth and a fitted scrub cap, both built from his own face/scalp surface; the old ball cap and low mask were removed. His hands are held low in front of him (item 6).
+- **E. Nurse:** removed from the film (simplest re-stage, LESSONS 2.15). She blocked the arm shots, and her fringe and waist band were faults. The surgeon is the only OR staff.
+- **F. Blanket:** a soft sheet shaped over her legs (ray-cast onto her legs, smoothed, draping over the mattress sides); her hands rest on top of it (item 2 fixed); shoes hidden in bed.
+- Item 3: S19 reframed wider left. Item 4: the logo poster moved to the left of the back wall (visible whole in S15 and S19, never behind her head in S18). Item 5: S20 is now a reverse angle on the daughter's face. Item 7: the doctor nods, shakes her head and gestures through S15–S16. Item 8: S09 is wider than S08.
+
+## P1b checks
+- **Sheets:** `review/P1b_sheet_3frames_1.jpg` (S01–S10) and `_2.jpg` (S11–S20): first/middle/last of every shot at 540×960, Cycles 8 spp, every cell looked at.
+- **`body_prop_cross`** (`review/body_prop_cross_P1b.json`, the 60 sheet frames; the script copy `scripts/bpc_frames.py` now tests each prop only against edges inside its own bounds, and only counts hits within 8 m of the shot's camera, since the sets are 40 m apart):
+  - OR (S01, S05, S10, S14): 3 edges of her right little-finger tip touch the chair arm (hand resting on it). No other contact: hips on the seat, right forearm on the chair arm, left forearm on the board, surgeon clear.
+  - Ward: hits remain between the bed patient and the blanket/mattress, all **under the opaque blanket**: legs, feet and toes sit a few cm into the mattress or pierce the sheet from below, and the blanket's top edge starts inside her waist (tucked look). Her fingertips dip a few mm into the soft blanket top. None of this shows on the sheet; I'll clean the leg/foot depth in Phase 2.
+
+## P1 checks (first round, Nov 16)
 - **Sheets:** `review/P1_sheet_3frames_1.jpg` (S01–S10) and `_2.jpg` (S11–S20): first, middle and last frame of every shot at 540×960, Cycles 8 spp. I looked at every cell.
 - **`body_prop_cross`** (`review/body_prop_cross_P1.json`, the 60 sheet frames, props: chair parts, arm board + drape, tray, trolley, bed parts, blanket, sheet, pillow, table, door frame, walls). It reports real crossings that I fix before Phase 2:
   1. **OR patient sits 3–5 cm into the chair seat** (the EarInArm pose was a taller male), and her right forearm passes through the chair's arm/back. Fix: raise her root and re-pose the right arm onto the armrest.

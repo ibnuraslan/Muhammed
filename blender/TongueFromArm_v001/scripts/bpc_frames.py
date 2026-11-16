@@ -50,7 +50,8 @@ for f in [1,36,72,73,102,132,133,162,192,193,222,252,253,282,312,313,342,372,373
             continue
         for p in vs:
             lo = Vector(map(min, lo, p)); hi = Vector(map(max, hi, p))
-        trees.append((n, BVHTree.FromPolygons(vs, ps)))
+        plo = Vector([min(v[k] for v in vs) - 0.05 for k in range(3)]); phi = Vector([max(v[k] for v in vs) + 0.05 for k in range(3)])
+        trees.append((n, BVHTree.FromPolygons(vs, ps), plo, phi))
     hits = {}
     for c, lab in WEAR:
         e = c.evaluated_get(dg); me = e.to_mesh(); mw = e.matrix_world
@@ -63,11 +64,13 @@ for f in [1,36,72,73,102,132,133,162,192,193,222,252,253,282,312,313,342,372,373
             p, q = vs[i], vs[j]; d = q - p; L = d.length
             if L < 1e-6:
                 continue
-            for bn, t in trees:
+            for bn, t, plo, phi in trees:
+                if not (all(plo[k] <= p[k] <= phi[k] for k in range(3)) or all(plo[k] <= q[k] <= phi[k] for k in range(3))):
+                    continue
                 loc = t.ray_cast(p, d / L, L)[0]
                 if loc is not None:
                     cv = world_to_camera_view(sc, cam, loc)
-                    vis = 0 <= cv.x <= 1 and 0 <= cv.y <= 1 and cv.z > 0
+                    vis = 0 <= cv.x <= 1 and 0 <= cv.y <= 1 and 0 < cv.z < 8.0   # same set only (sets are 40 m apart)
                     k = "%s|%s|%s" % (lab[i] if i < len(lab) else c.name, bn, "VIS" if vis else "off")
                     hits[k] = hits.get(k, 0) + 1
         e.to_mesh_clear()
