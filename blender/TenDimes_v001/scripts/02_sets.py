@@ -244,13 +244,12 @@ nt.links.new(tr.outputs[0], mx_.inputs[1]); nt.links.new(pr.outputs[0], mx_.inpu
 plane("Street_PosterLogo", (X + 1.6, 0.58, 1.95), 0.86, 0.86 * 414 / 967, lm, C, rot=(R(90), 0, 0), uv01=True)
 # a red band + a simple microphone silhouette drawn as shapes (no text) under the logo
 box("Street_PosterBand", (X + 1.6, 0.582, 1.4), (0.86, 0.004, 0.22), mat("M_PosterRed", (0.7, 0.08, 0.06), 0.6), C)
-append_ph("street_lamp_01", "Street_Lamp", C, (X - 3.2, -3.1, 0.0))
 append_ph("tree_small_02", "Street_Tree", C, (X + 5.0, -3.0, 0.0), scale=0.9)
 
 # ====================================================================== SUBURB (x=90): lawn, pavement along x, house behind, car at kerb
 C = coll("SET_SUBURB"); X = SETX["SUBURB"]
 M_GRASS = ph_mat("M_Grass", "grass_path_2", 6.0, tint=(0.75, 1.0, 0.6))
-plane("Sub_Lawn", (X, 6, 0.0), 40, 20, M_GRASS, C)
+plane("Sub_Lawn", (X, 30, 0.0), 28, 60, M_GRASS, C)   # x 76..104
 plane("Sub_Pavement", (X, -1.0, 0.01), 40, 2.0, M_CONC, C)
 box("Sub_Kerb", (X, -2.05, -0.03), (40, 0.15, 0.12), mat("M_Kerb", (0.7, 0.7, 0.68), 0.7), C, 0.01)
 plane("Sub_Road", (X, -6.0, -0.1), 40, 8.0, mat("M_Asphalt", (0.12, 0.12, 0.13), 0.8), C)
@@ -275,7 +274,7 @@ for i, (tx, ty, sc_) in enumerate([(-6, 4, 1.2), (8, 5, 1.0), (-12, 7, 1.3), (14
 
 # ====================================================================== CEMETERY (x=120): casket on a bier at (0,0) running along x
 C = coll("SET_CEMET"); X = SETX["CEMET"]
-plane("Cem_Lawn", (X, 4, 0.0), 40, 30, M_GRASS, C)
+plane("Cem_Lawn", (X + 37.5, 20, 0.0), 105, 120, M_GRASS, C)   # x 105..210, clear of the suburb set
 gr = import_glb(ASSETS + "/graves.glb", "Cem_Graves", C, join=False, loc=(0, 0, 0))
 for i, o in enumerate(gr):
     vv = [v.co for v in o.data.vertices]; cx = sum((v for v in vv), Vector()) / len(vv)
@@ -294,12 +293,29 @@ for i, (tx, ty, s_) in enumerate([(-7, 9, 1.4), (6, 10, 1.2), (-11, 5, 1.1), (10
 M_WOOD = mat("M_CasketWood", (0.10, 0.035, 0.015), 0.25)
 M_BRASS = mat("M_Brass", (0.8, 0.6, 0.25), 0.3, 1.0)
 CZ = 0.62
-box("Cem_Bier", (X, 0, CZ / 2 - 0.02), (2.1, 0.62, 0.06), mat("M_BierCloth", (0.03, 0.035, 0.08), 0.8), C)
-for dx in (-0.95, 0.95):
-    for dy in (-0.25, 0.25):
-        bpy.ops.mesh.primitive_cylinder_add(radius=0.022, depth=CZ - 0.05, location=(X + dx, dy, (CZ - 0.05) / 2))
-        o = bpy.context.active_object; o.name = "Cem_BierLeg"; o.data.materials.append(M_BRASS); move(o, C)
-box("Cem_BierTop", (X, 0, CZ - 0.03), (2.15, 0.66, 0.05), mat("M_BierCloth", (0.03, 0.035, 0.08), 0.8), C, 0.01)
+# draped dark stand: a cloth-covered plinth to the ground (no shelves, no legs)
+M_DRAPE = mat("M_Drape", (0.035, 0.012, 0.015), 0.85)
+dr = box("Cem_BierTop", (X, 0, (CZ - 0.01) / 2), (2.18, 0.70, CZ - 0.01), M_DRAPE, C, 0.02)
+bm = bmesh.new()                                  # a soft hanging skirt with folds around the plinth
+NF = 120; Hs = CZ - 0.02
+pts = []
+for i in range(NF):
+    u = i / NF; per = 2 * (2.2 + 0.72)
+    d = u * per
+    if d < 2.2: p = Vector((-1.1 + d, -0.36, 0))
+    elif d < 2.2 + 0.72: p = Vector((1.1, -0.36 + (d - 2.2), 0))
+    elif d < 4.4 + 0.72: p = Vector((1.1 - (d - 2.92), 0.36, 0))
+    else: p = Vector((-1.1, 0.36 - (d - 5.12), 0))
+    n = Vector((0 if abs(p.x) < 1.09 else (1 if p.x > 0 else -1), 0 if abs(p.y) < 0.355 else (1 if p.y > 0 else -1), 0))
+    off = 0.012 * (1 + math.sin(i * 1.7))
+    pts.append((p + n * off, p + n * (off + 0.015)))
+top_v = [bm.verts.new((X + a.x, a.y, Hs + 0.005)) for a, b in pts]
+bot_v = [bm.verts.new((X + b.x, b.y, 0.0)) for a, b in pts]
+for i in range(NF):
+    bm.faces.new((top_v[i], top_v[(i + 1) % NF], bot_v[(i + 1) % NF], bot_v[i]))
+me = bpy.data.meshes.new("Cem_Skirt"); bm.to_mesh(me); bm.free()
+sk = bpy.data.objects.new("Cem_Skirt", me); C.objects.link(sk); me.materials.append(M_DRAPE)
+for p_ in me.polygons: p_.use_smooth = True
 cb = box("Cem_Casket", (X, 0, CZ + 0.2), (2.05, 0.6, 0.4), M_WOOD, C, 0.03)
 lid = box("Cem_CasketLid", (X, 0, CZ + 0.45), (2.08, 0.62, 0.12), M_WOOD, C, 0.05)
 bpy.context.view_layer.objects.active = lid
@@ -330,11 +346,6 @@ for i in range(60):
 me = bpy.data.meshes.new("Cem_Leaves"); bm.to_mesh(me); bm.free()
 lv = bpy.data.objects.new("Cem_Leaves", me); C.objects.link(lv); me.materials.append(LEAF)
 lv.modifiers.new("sol", 'SOLIDIFY').thickness = 0.003
-# standing wreath stand behind the casket
-bpy.ops.mesh.primitive_torus_add(major_radius=0.32, minor_radius=0.07, location=(X + 1.4, 0.7, 1.05), rotation=(R(90), 0, 0))
-o = bpy.context.active_object; o.name = "Cem_Wreath"; o.data.materials.append(FLW[0]); move(o, C)
-box("Cem_WreathStand", (X + 1.4, 0.72, 0.4), (0.03, 0.03, 0.8), M_BRASS, C)
-
 # ====================================================================== PROPS
 P = coll("PROPS")
 M_DIME = mat("M_Dime", (0.82, 0.83, 0.85), 0.32, 1.0)

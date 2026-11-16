@@ -11,10 +11,10 @@ $B -b build/chars.blend --python scripts/02_sets.py           # -> build/sets.bl
 $B -b build/sets.blend --python scripts/03_anim.py [-- timing.json]   # -> build/anim.blend
 $B -b build/anim.blend --python ../pipeline/anim_look.py -- build/look.blend
 $B -b build/look.blend --python scripts/shotstills.py -- stills 540 8   # first/mid/last per shot
-python3 scripts/sheet.py stills review/P1_sheet.jpg
+python3 scripts/sheet.py stills review/P1b_sheet.jpg
 ```
 Assets (CC-BY GLBs, Poly Haven) are fetched with `pipeline/find_models.py` / `pipeline/fetch_polyhaven.py` (uids in CREDITS.md); `scripts/common.py` holds the paths.
 
 ## Review
-- `review/P1_sheet_p*.jpg`: 3 frames per shot (first, middle, last), 540x960, Cycles 8 samples.
+- `review/P1b_sheet_p*.jpg`: 3 frames per shot (first, middle, last), 540x960, Cycles 8 samples.
 - `review/BODY_PROP_CROSS.md`: body_prop_cross on every held/touched prop and set piece.

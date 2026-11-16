@@ -45,17 +45,24 @@ for o in PARTS:
     c, vv = cen(o)
     if max(v.z for v in vv) - min(v.z for v in vv) > 0.35: cord_old = o
     elif c.z > O["Street_PayRoot"].location.z + 0.45: hs_parts.append(o)
-bpy.ops.object.select_all(action='DESELECT')
-for o in hs_parts: o.select_set(True)
-bpy.context.view_layer.objects.active = hs_parts[0]; bpy.ops.object.join()
-hand_set = bpy.context.view_layer.objects.active; hand_set.name = "Handset"
-Mw = hand_set.matrix_world.copy(); hand_set.parent = None; hand_set.matrix_world = Mw
-bpy.context.view_layer.objects.active = hand_set
-bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY', center='BOUNDS')
-HS_REST = hand_set.matrix_world.copy()
-vv = [v.co for v in hand_set.data.vertices]
-HS_LEN = max(v.z for v in vv) - min(v.z for v in vv)
-print("HANDSET", hand_set.location, "len", HS_LEN, "cord", cord_old.name if cord_old else None)
+HS_MODEL = max(hs_parts, key=lambda o: len(o.data.vertices))      # the model's own handset (on the hook); hooks stay
+# clean modelled handset for the held shots: grip bar + earpiece and mouthpiece cups facing local -Y, long axis local Z
+import bmesh
+bm = bmesh.new()
+bmesh.ops.create_cone(bm, cap_ends=True, segments=20, radius1=0.016, radius2=0.016, depth=0.15)
+for zc in (0.085, -0.085):
+    r = bmesh.ops.create_cone(bm, cap_ends=True, segments=24, radius1=0.027, radius2=0.024, depth=0.026,
+                              matrix=Matrix.Translation((0, -0.019, zc)) @ Matrix.Rotation(R(90), 4, 'X'))
+me = bpy.data.meshes.new("Handset"); bm.to_mesh(me); bm.free()
+hand_set = bpy.data.objects.new("Handset", me); O["Street_Payphone"].users_collection[0].objects.link(hand_set)
+for p_ in me.polygons: p_.use_smooth = True
+hm = bpy.data.materials.new("M_Handset"); hm.use_nodes = True; hm.node_tree.nodes["Principled BSDF"].inputs['Base Color'].default_value = (0.03, 0.03, 0.035, 1)
+hm.node_tree.nodes["Principled BSDF"].inputs['Roughness'].default_value = 0.35; me.materials.append(hm)
+bv = hand_set.modifiers.new("bev", 'BEVEL'); bv.width = 0.003; bv.segments = 2
+c0, _ = cen(HS_MODEL)
+HS_REST = Matrix.Translation(c0)
+HS_LEN = 0.21
+print("HANDSET model", HS_MODEL.name, "cord", cord_old.name if cord_old else None)
 if cord_old: cord_old.hide_render = cord_old.hide_viewport = True
 # cord: a 3-point bezier keyed per frame (phone body -> sag -> handset bottom)
 cu = bpy.data.curves.new("HandsetCord", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.004; cu.bevel_resolution = 3
@@ -65,7 +72,7 @@ cord = bpy.data.objects.new("HandsetCord", cu)
 O["Street_Payphone"].users_collection[0].objects.link(cord)
 cm = bpy.data.materials.new("M_Cord"); cm.use_nodes = True; cm.node_tree.nodes["Principled BSDF"].inputs['Base Color'].default_value = (0.02, 0.02, 0.02, 1)
 cm.node_tree.nodes["Principled BSDF"].inputs['Roughness'].default_value = 0.4; cu.materials.append(cm)
-PB_ = O["Street_PayRoot"]; PAY_ANCHOR = Vector((hand_set.location.x - 0.03, hand_set.location.y - 0.01, PB_.location.z + 0.40))
+PB_ = O["Street_PayRoot"]; PAY_ANCHOR = Vector((c0.x - 0.03, c0.y - 0.01, PB_.location.z + 0.40))
 def key_cord(f):
     sc.frame_set(f)
     M = hand_set.matrix_world; a = M.to_3x3() @ Vector((0, 0, 1))
@@ -186,7 +193,9 @@ if LC.name not in sc.collection.children: sc.collection.children.link(LC)
 def area(name, loc, tgt, size, energy, col=(1, 1, 1)):
     L = bpy.data.objects.new(name, bpy.data.lights.new(name, 'AREA')); LC.objects.link(L)
     L.data.shape = 'RECTANGLE'; L.data.size = size; L.data.size_y = size * 0.7; L.data.energy = energy; L.data.color = col
-    L.location = loc; L.rotation_euler = (Vector(tgt) - Vector(loc)).to_track_quat('-Z', 'Y').to_euler(); return L
+    L.location = loc; L.rotation_euler = (Vector(tgt) - Vector(loc)).to_track_quat('-Z', 'Y').to_euler()
+    L.visible_camera = False                      # an edge-on area light read as a white sliver (S11)
+    return L
 X = SX["CLUB"]
 area("Club_Key", (X - 2.0, -3.0, 3.6), (X, -0.2, 1.4), 2.5, 420, (1.0, 0.92, 0.8))
 area("Club_Fill", (X + 2.6, -2.6, 2.2), (X, -0.2, 1.4), 2.5, 180, (0.9, 0.95, 1.0))
@@ -261,23 +270,31 @@ def S03(t, L):
     mark("S03", c)
 
 # ============================================================================================ ROOM
-RX = SX["ROOM"]; SON_ROOM = (RX + 0.5, 0.95)
+RX = SX["ROOM"]; SON_ROOM = (RX + 0.78, 0.95)   # 25 cm clear of the bed (x <= RX+0.45)
 def door_open(t, ang):
     door.rotation_euler = (0, 0, R(-ang)); door.keyframe_insert("rotation_euler", frame=t)
 def S04(t, L):
-    """'You see his son': son by the window turns, startled, toward the door (a knock)"""
+    """'You see his son': by the window he hears the door, turns to it and takes two steps toward it; arms relaxed, elbows bent"""
     begin(ALL, t); park(t, keep=(son,)); base(son, t, SON_ROOM, 10); door_open(t, 0)
+    ft = t + int(0.25 * L); f0 = t + int(0.55 * L); f1 = t + L
+    A = Vector((SON_ROOM[0], SON_ROOM[1], 0)); B_ = Vector((SON_ROOM[0] + 0.55, SON_ROOM[1] - 0.25, 0))
+    son.h.walk(lambda f: A.lerp(B_, ease((f - f0) / (f1 - f0))), lambda f: 65.0, f0, f1, stride=0.55, step=2, crouch=0.0, bob=0.012, lean=4.0)
     def fr(f, u):
-        k = ease((u - 0.3) / 0.35)
-        son.stand(f, SON_ROOM, 10 + 55 * k)
-        son.spine(f, flex=-2 * k, turn=25 * k, pitch=-4 * k, side=0)
-        son.eyes(f, yaw=12 * k); son.jaw(f, 4 * k)
-        for s in "LR": son.hang(s, f, out=0.04 * k, fwd=0.12 * k, lift=0.10 * k)
-    track(t, L, 4, fr)
-    c = cam("CAM_S04", 45, 8); catch(c)
+        k = ease((f - ft) / (f0 - ft))
+        if f <= f0: son.stand(f, SON_ROOM, 10 + 55 * k)
+        son.spine(f, flex=-2 * k, turn=18 * k * (1 - 0.6 * ease((f - f0) / (f1 - f0))), pitch=-3 * k)
+        son.eyes(f, yaw=10 * k); son.jaw(f, 2.5 * k)
+        for s_ in "LR":
+            if f <= f0: son.hang(s_, f, fwd=0.13 + 0.03 * k, lift=0.13 + 0.02 * k, out=-0.01)
+            else:
+                ph = (f - f0) / 60 * 2 * math.pi * 0.9 + (0 if s_ == "L" else math.pi)
+                son.hang(s_, f, fwd=0.07 + 0.08 * math.sin(ph), lift=0.06, out=0.01)
+    track(t, L, 2, fr)
+    c = cam("CAM_S04", 40, 8); catch(c)
     sc.frame_set(t); e = eyes_pt(son)
-    look(c, t, e + Vector((0.55, -1.75, -0.05)), e + Vector((0.05, 0, -0.22)))
-    look(c, t + L, e + Vector((0.70, -1.55, -0.03)), e + Vector((0.10, 0, -0.18)))
+    look(c, t, e + Vector((0.45, -2.25, -0.10)), e + Vector((0.20, 0, -0.35)))
+    look(c, t + int(0.55 * L), e + Vector((0.55, -2.20, -0.10)), e + Vector((0.25, 0, -0.35)))
+    look(c, t + L, e + Vector((1.05, -2.10, -0.08)), e + Vector((0.62, -0.20, -0.32)))
     mark("S04", c)
 
 def S05(t, L):
@@ -317,7 +334,8 @@ def S05(t, L):
 PX = SX["STREET"]; SING_PH = (PX + 0.48, 0.12); PH_YAW = -20.0
 def S06(t, L):
     """'years prior ... all of the calls': wide street; the singer walks along the brick wall to the payphone"""
-    begin(ALL, t); park(t, keep=(sing, hand_set)); door_open(t, 0); show(hand_set, t); key_matrix(hand_set, t, HS_REST)
+    begin(ALL, t); park(t, keep=(sing,)); door_open(t, 0); vis(HS_MODEL, t, True); vis(cord, t, False)
+    if cord_old: vis(cord_old, t, True)
     A = Vector((PX + 2.0, -0.45, 0)); B_ = Vector((SING_PH[0] + 0.15, SING_PH[1] - 0.18, 0))
     f1 = t + int(0.82 * L)
     base(sing, t, (A.x, A.y), -90)
@@ -340,7 +358,7 @@ def S06(t, L):
 
 def S07(t, L):
     """'had to be made from payphones': the street payphone (handset on its hook, cord), slow push-in; no hands"""
-    begin(ALL, t); park(t, keep=(hand_set,)); show(hand_set, t); key_matrix(hand_set, t, HS_REST); vis(cord, t, False)
+    begin(ALL, t); park(t); vis(cord, t, False); vis(HS_MODEL, t, True)
     if cord_old: vis(cord_old, t, True)
     c = cam("CAM_S07", 40, 11)
     ph = O["Street_PayRoot"].location + Vector((0.02, 0.0, 0.60))
@@ -348,40 +366,63 @@ def S07(t, L):
     look(c, t + L, ph + Vector((-0.40, -0.90, 0.06)), ph + Vector((0.0, 0.0, -0.03)))
     mark("S07", c)
 
-def phone_hand(m, f, s="R", it=4):
-    """handset locked to the head (earpiece 2.2 cm off the ear, mouthpiece toward the mouth); the hand is then driven so the
-    palm wraps the handset's outer side (palm centre + 2.4 cm along the palm normal = handset centre)."""
+def phone_hand(m, f, s="R", it=5):
+    """handset locked to the head: earpiece cup 1 cm off the ear, mouthpiece toward the mouth, grip 4.5 cm out from the
+    face line; the hand is driven so the palm rests on the grip's outer side (palm 2.9 cm from the grip axis)."""
     sc.frame_set(f)
     ear = ear_pt(m, s); e = eyes_pt(m)
     fw = (e - bone_w(m, "head")); fw.z = 0; fw.normalize()
     side = (ear - e); side.z = 0; side.normalize()
-    top = ear + side * 0.048 + Vector((0, 0, 0.01))
-    mouth = e + fw * 0.075 + Vector((0, 0, -0.105))
-    bot = mouth + side * 0.055
+    top = ear + side * 0.056 + Vector((0, 0, -0.008))          # earpiece end of the grip axis
+    mouth = e + fw * 0.07 + Vector((0, 0, -0.105))
+    bot = mouth + side * 0.095
     a = (top - bot).normalized()
-    ctr = top - a * HS_LEN * 0.45
-    y = -side; y = (y - a * y.dot(a)).normalized(); x = y.cross(a)
+    ctr = top - a * 0.085
+    y = side; y = (y - a * y.dot(a)).normalized(); x = y.cross(a)
     C = Matrix.Translation(ctr) @ Matrix((x, y, a)).transposed().to_4x4()
     sh = bone_w(m, "upperarm01." + s)
     pole = sh + Vector((0, 0, -0.45)) + side * 0.35 + fw * 0.15
-    W = ctr + side * 0.05 - a * 0.06
+    tgt = ctr + y * 0.050 + a * 0.012
+    W = tgt + y * 0.02 - fw * 0.06
     for k in range(it):
-        m.hand(s, f, W, a * 0.3 - fw * 0.7, -side, pole=pole)
+        m.hand(s, f, W, -fw * 0.85 + a * 0.15, -y, pole=pole)
         sc.frame_set(f)
         c, n, d = palm_centre(m, s)
-        err = (ctr + side * 0.048) - c
-        if err.length < 0.004: break
+        err = tgt - c
+        if err.length < 0.003: break
         W = W + err
+    if f % 30 == 0: print("PHERR", f, round(err.length, 4), "palm-axis", round((c - ctr).dot(y), 4), round((c - ctr).dot(a), 4), round((c - ctr).dot(x), 4))
     return C
 
+def phone_C(m, f, s="R"):
+    """head-locked handset matrix: earpiece cup at the ear, mouthpiece toward the mouth (local -Y cups face the head)"""
+    sc.frame_set(f)
+    ear = ear_pt(m, s); e = eyes_pt(m)
+    fw = (e - bone_w(m, "head")); fw.z = 0; fw.normalize()
+    side = (ear - e); side.z = 0; side.normalize()
+    top = ear + side * 0.056 + Vector((0, 0, -0.008))
+    bot = e + fw * 0.07 + Vector((0, 0, -0.105)) + side * 0.095
+    a = (top - bot).normalized(); ctr = top - a * 0.085
+    y = side; y = (y - a * y.dot(a)).normalized(); x = y.cross(a)
+    return Matrix.Translation(ctr) @ Matrix((x, y, a)).transposed().to_4x4(), fw, y, a
+
 def hold_phone(t, L, extra=None, cam_fn=None):
-    begin(ALL, t); park(t, keep=(sing, hand_set)); show(hand_set, t); show(cord, t)
+    """grip_object closes the hand on the handset at t; from then on the handset rides in the hand (Child Of the wrist)
+    and the wrist is steered so the handset stays at the ear. The hand can never pass through the handset."""
+    begin(ALL, t); park(t, keep=(sing, hand_set)); show(hand_set, t); show(cord, t); vis(HS_MODEL, t, False)
     if cord_old: vis(cord_old, t, False)
     base(sing, t, SING_PH, PH_YAW)
-    apply_pose(sing.o, "R", "wrap_grip", t, amount=0.75)
+    if extra: extra(t, 0.0)
+    C0, fw, y, a = phone_C(sing, t); key_matrix(hand_set, t, C0); sc.frame_set(t)
+    sh = bone_w(sing, "upperarm01.R")
+    hand_target(sing, "R", t, Matrix.Translation(C0.translation + y * 0.06) @ Matrix.Identity(4), pole=sh + Vector((0, 0, -0.45)) + y * 0.35 + fw * 0.15)
+    grip_object(sing.o, "R", t, hand_set, C0.translation + y * 0.016, -y, finger_dir=(-fw * 0.9 + a * 0.1))
+    H = Held(hand_set, sing, "R"); H.grab(t)
     def fr(f, u):
         if extra: extra(f, u)
-        key_matrix(hand_set, f, phone_hand(sing, f))
+        if f > t:
+            C, fw_, y_, a_ = phone_C(sing, f); sh_ = bone_w(sing, "upperarm01.R")
+            hand_target(sing, "R", f, H.wrist_for(C), pole=sh_ + Vector((0, 0, -0.45)) + y_ * 0.35 + fw_ * 0.15)
         key_cord(f)
     track(t, L, 3, fr)
 
@@ -419,8 +460,8 @@ def S10(t, L):
     hold_phone(t, L, ex)
     park(t, keep=(sing, hand_set, pile2)); show(pile2, t); key_matrix(pile2, t, Matrix.Translation(LT))
     c = cam("CAM_S10", 50, 11); catch(c)
-    look(c, t, LT + Vector((-0.42, -0.80, 0.22)), LT + Vector((0.12, 0.0, 0.12)))
-    look(c, t + L, LT + Vector((-0.36, -0.68, 0.20)), LT + Vector((0.12, 0.0, 0.11)))
+    look(c, t, LT + Vector((-0.20, -0.42, 0.16)), LT + Vector((0.03, 0.0, 0.03)))
+    look(c, t + L, LT + Vector((-0.16, -0.34, 0.13)), LT + Vector((0.03, 0.0, 0.025)))
     mark("S10", c)
 
 def S11(t, L):
@@ -430,15 +471,12 @@ def S11(t, L):
         sing_jaw(sing, f, u, 0.9); sing.eyes(f, yaw=-6)
         sh = sing.r.BN["upperarm01.L"].head_local
         Mr = sing.o.matrix_world @ sing.r.PB["root"].matrix @ sing.r.rest("root").inverted()
-        k = 0.5 + 0.5 * math.sin(u * 6)
-        sing.hand("L", f, Mr @ Vector((sh.x - 0.02, sh.y - 0.32, sh.z - 0.30 + 0.05 * k)), Mr.to_3x3() @ Vector((-0.3, -0.8, 0.5)), Mr.to_3x3() @ Vector((-0.5, 0, 1)),
-                  pole=Mr @ Vector((sh.x + 0.45, sh.y + 0.3, sh.z - 0.35)))
+        sing.hang("L", f, fwd=0.05, lift=0.04 + 0.02 * math.sin(u * 4))
     hold_phone(t, L, ex)
-    apply_pose(sing.o, "L", "open_alarm", t)
     c = cam("CAM_S11", 35, 8); catch(c)
     sc.frame_set(t); e = eyes_pt(sing)
-    look(c, t, e + fwd(PH_YAW) * 1.9 + right(PH_YAW) * -0.85 + Vector((0, 0, -0.25)), e + Vector((0, 0, -0.35)))
-    look(c, t + L, e + fwd(PH_YAW) * 1.6 + right(PH_YAW) * -0.55 + Vector((0, 0, -0.22)), e + Vector((0, 0, -0.32)))
+    look(c, t, e + fwd(PH_YAW) * 1.75 + right(PH_YAW) * -0.55 + Vector((0, 0, -0.25)), e + right(PH_YAW) * 0.20 + Vector((0, 0, -0.35)))
+    look(c, t + L, e + fwd(PH_YAW) * 1.5 + right(PH_YAW) * -0.35 + Vector((0, 0, -0.22)), e + right(PH_YAW) * 0.20 + Vector((0, 0, -0.32)))
     mark("S11", c)
 
 # ============================================================================================ SUBURB
@@ -509,25 +547,25 @@ def S15(t, L):
     """'But he never forgot that fear': CU, the father looks down, then away, jaw tight"""
     begin(ALL, t); park(t, keep=(sing,)); base(sing, t, FATHER, 20)
     def fr(f, u):
-        sing.spine(f, flex=4, pitch=10 * ease(u / 0.5), turn=-10 + 14 * ease(u)); sing.eyes(f, pitch=10 * ease(u / 0.5), yaw=6)
+        sing.spine(f, flex=2, pitch=-4 + 5 * ease(u / 0.5), turn=-10 + 14 * ease(u)); sing.eyes(f, pitch=12 * ease(u / 0.5), yaw=6)
     track(t, L, 4, fr)
     c = cam("CAM_S15", 60, 8); catch(c)
     sc.frame_set(t); e = eyes_pt(sing)
-    look(c, t, e + fwd(20) * 1.05 + right(20) * 0.30 + Vector((0, 0, -0.05)), e + Vector((0, 0, -0.10)))
-    look(c, t + L, e + fwd(20) * 0.90 + right(20) * 0.24 + Vector((0, 0, -0.04)), e + Vector((0, 0, -0.08)))
+    look(c, t, e + fwd(20) * 1.05 + right(20) * 0.30 + Vector((0, 0, -0.10)), e + Vector((0, 0, -0.08)))
+    look(c, t + L, e + fwd(20) * 0.90 + right(20) * 0.24 + Vector((0, 0, -0.09)), e + Vector((0, 0, -0.06)))
     mark("S15", c)
 
 def S16(t, L):
     """'of being helpless': ECU push-in, eyes glisten, a slow breath"""
     begin(ALL, t); park(t, keep=(sing,)); base(sing, t, FATHER, 20)
     def fr(f, u):
-        sing.spine(f, flex=2 + 2 * math.sin(u * 3), pitch=-2 - 2 * math.sin(u * 2), turn=4); sing.eyes(f, pitch=-2, yaw=-2)
+        sing.spine(f, flex=1 + 2 * math.sin(u * 3), pitch=-6 - 2 * math.sin(u * 2), turn=4); sing.eyes(f, pitch=-2, yaw=-2)
         sing.jaw(f, 0.0)
     track(t, L, 4, fr)
     c = cam("CAM_S16", 85, 8); catch(c, energy=2.0)
     sc.frame_set(t); e = eyes_pt(sing)
-    look(c, t, e + fwd(20) * 1.0 + Vector((0, 0, 0.0)), e + Vector((0, 0, -0.04)))
-    look(c, t + L, e + fwd(20) * 0.78 + Vector((0, 0, 0.0)), e + Vector((0, 0, -0.03)))
+    look(c, t, e + fwd(20) * 1.0 + Vector((0, 0, -0.05)), e + Vector((0, 0, -0.03)))
+    look(c, t + L, e + fwd(20) * 0.78 + Vector((0, 0, -0.04)), e + Vector((0, 0, -0.02)))
     mark("S16", c)
 
 # ============================================================================================ CLUB again (later years)
@@ -537,38 +575,29 @@ def S17(t, L):
     TT = Vector(sc["TABLE_TOP"]); key_matrix(pile10, t, Matrix.Translation(TT)); show(pile10, t)
     def fr(f, u):
         k = ease(u)
-        sing.stand(f, SING_CLUB, 25); sing.spine(f, flex=8, pitch=18 - 6 * k, turn=6 * k); sing.eyes(f, pitch=16 - 4 * k, yaw=4)
+        sing.stand(f, SING_CLUB, 25); sing.spine(f, flex=6, pitch=10 - 12 * k, turn=6 * k); sing.eyes(f, pitch=18 - 6 * k, yaw=4)
         sing.jaw(f, 1.0 * k)
         for s in "LR": sing.hang(s, f)
     track(t, L, 4, fr)
     c = cam("CAM_S17", 40, 10); catch(c)
     sc.frame_set(t + L // 2); e = eyes_pt(sing); tgt = TT.lerp(e, 0.5)
-    look(c, t, tgt + Vector((0.75, -1.15, 0.05)), tgt)
-    look(c, t + L, tgt + Vector((0.62, -0.98, 0.05)), tgt)
+    look(c, t, tgt + Vector((0.75, -1.15, -0.05)), tgt + Vector((0, 0, 0.05)))
+    look(c, t + L, tgt + Vector((0.62, -0.98, -0.05)), tgt + Vector((0, 0, 0.06)))
     mark("S17", c)
 
 def S18(t, L):
-    """'for the rest of his life': his left hand comes to rest flat on the breast pocket (hand on heart), a small nod"""
+    """'for the rest of his life': years on, he sings at the stand mic again, eyes closed then open, a small nod (no pat)"""
     begin(ALL, t); park(t, keep=(sing,)); base(sing, t, SING_CLUB, 0)
     def fr(f, u):
-        k = ease(u / 0.4) * (1 - ease((u - 0.8) / 0.2))
-        sing.stand(f, SING_CLUB, 0); sing.spine(f, flex=-2, pitch=6 * math.sin(u * 4) * k, turn=4); sing.eyes(f, pitch=-2)
-        sc.frame_set(f)
-        pk = O["Singer.pocketsquare"].matrix_world.translation + Vector((0.0, -0.01, -0.07))
-        sh = bone_w(sing, "upperarm01.L")
-        if k < 0.05: sing.hang("L", f)
-        else:
-            rest = sh + Vector((0.06, -0.10, -0.48))
-            place_hand(sing.o, "L", f, rest.lerp(pk, k), Vector((0, 1, 0)), Vector((-0.75, 0.0, 0.5)), skin=0.016)
-        sing.hang("R", f)
-    track(t, L, 3, fr)
-    apply_pose(sing.o, "L", "relaxed", t); apply_pose(sing.o, "L", "flat_palm", t + int(0.4 * L)); apply_pose(sing.o, "L", "relaxed", t + L)
-    c = cam("CAM_S18", 38, 8); catch(c)
-    look(c, t, (CX - 1.55, -2.05, 1.48), (CX - 0.02, -0.12, 1.36))
-    look(c, t + L, (CX - 1.30, -1.75, 1.50), (CX - 0.02, -0.12, 1.40))
+        sing.stand(f, SING_CLUB, 3 * math.sin(u * 2)); sing.spine(f, flex=-2, pitch=-6 + 4 * math.sin(u * 3), turn=-5 + 8 * ease(u), side=2 * math.sin(u * 2))
+        sing_jaw(sing, f, u, 0.7); sing.eyes(f, pitch=-2)
+        for s_ in "LR": sing.hang(s_, f, fwd=0.06, lift=0.05)
+    track(t, L, 4, fr)
+    c = cam("CAM_S18", 45, 8); catch(c)
+    look(c, t, (CX - 1.55, -2.05, 1.52), (CX - 0.02, -0.12, 1.45))
+    look(c, t + L, (CX - 1.25, -1.70, 1.56), (CX - 0.02, -0.12, 1.52))
     mark("S18", c)
 
-# ============================================================================================ CEMETERY
 MX = SX["CEMET"]; DAU = (MX + 0.15, 0.78)
 def S19(t, L):
     """'And when he was buried': wide, the casket with its flower spray; his daughter walks up to it"""
@@ -587,8 +616,8 @@ def S19(t, L):
             for s in "LR": dau.hang(s, f)
     track(t, L, 2, fr)
     c = cam("CAM_S19", 30, 8); catch(c, energy=1.0)
-    look(c, t, (MX - 1.0, -3.0, 1.6), (MX + 0.5, 0.5, 1.0))
-    look(c, t + L, (MX - 0.8, -2.6, 1.6), (MX + 0.3, 0.5, 1.05))
+    look(c, t, (MX + 2.9, -1.9, 1.55), (MX + 0.7, 0.55, 1.05))
+    look(c, t + L, (MX + 2.5, -1.6, 1.55), (MX + 0.5, 0.60, 1.10))
     mark("S19", c)
 
 def S20(t, L):

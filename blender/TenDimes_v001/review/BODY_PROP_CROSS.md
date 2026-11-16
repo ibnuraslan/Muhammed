@@ -1,23 +1,24 @@
-# body_prop_cross: B26 TenDimes P1
+# body_prop_cross: B26 TenDimes P1b
 
-Props checked (step 3): DimePile10, DimePile2, DimePileD, Handset, HandsetCord, Club_Mic, Club_SideTableTop/Stem,
-Street_PayLedge, Street_Payphone, Street_Wall, Room_Door, Room_DoorFrameL/R, Room_Bed, Cem_Casket, Cem_CasketLid, Cem_BierTop, Sub_Car.
-Rigs: Singer, Son, Kidnapper, Daughter.
+Tool: `scripts/bpc_run.py` → `scripts/bpc_nohelpers.py`. This is `pipeline/body_prop_cross.py` with one change: MPFB helper
+vertices (HelperGeometry / JointCubes) are skipped, as clip_scan does (LESSONS §3). Why: the pipeline version reported
+109 "head|Handset" frames that were the hidden helper-hair cube under the hat (vertices 18951–19020 of Singer.body,
+groups HelperGeometry + helper-hair; masked by the rig's "Hide helpers" modifier, never rendered).
 
-## Full film (frames 1–2784, build 3)
-| Shot | Visible crossing frames | What |
-|---|---|---|
-| S01–S07, S10, S12, S14–S22 | **0** | — |
-| S08 / S09 / S11 | 36 / 31 / 42 | Handset ↔ head, right hand and forearm, hat brim (see below) |
-| S13 | 5 (frames 1555–1567) | son's leg ↔ car at the start of his walk |
+Props: DimePile10, DimePile2, DimePileD, Handset, HandsetCord, Club_Mic, Club_SideTableTop/Stem, Street_PayLedge,
+Street_Payphone, Street_Wall, Room_Door, Room_DoorFrameL/R, Room_Bed, Cem_Casket, Cem_CasketLid, Cem_BierTop, Cem_Skirt, Sub_Car.
+Rigs: Singer, Son, Kidnapper, Daughter. Step 3.
 
-Fixed in the pushed scripts (build 5): S13 walk starts 0.25 m clear of the car → **0** (re-run on 1554–1694).
-Earlier builds also flagged S21 (fingers into the casket lid): re-staged with no hand → **0**.
+| Run | Frames | Visible crossings | Any crossing (incl. off-camera) |
+|---|---|---|---|
+| full film, build 6 | 1–2784 | **0** | 15 frames: son's right foot in the bed, S04 (off-camera) → fixed below |
+| phone shots, build 6 | 992–1445 (S08–S11) | **0** | 0 |
+| room, build 9 (son 25 cm off the bed) | 438–727 (S04–S05) | **0** | **0** |
+| S04, build 10 (final arm pose) | 438–555 | **0** | 0 |
 
-## Open: handset (S08, S09, S11), 109 visible frames on 992–1445 in build 5
-The "Handset" object was joined from the payphone model's loose parts above the cradle. It also picked up the
-**cradle hook pieces**, so it is bigger than the real handset (the funnel shape at his chin in S09), and it crosses his
-palm, wrist, forearm, the side of the head and the hat brim even with the earpiece 4.8 cm off the ear.
-Fix planned before Phase 2: keep only the handset part (loose part .000), or replace it with a clean modelled handset
-(earpiece + grip + mouthpiece, ~22 cm), re-fit the palm wrap to it, and re-run the check on the three shots until it
-reads 0. If it still fails, fall back to §2.15: frame the phone hand out (CU from his left side) for S08/S09.
+Builds 6 → 10 changed only: S04 (son's mark and arms), S04/S11 cameras, lawn extents, and lights hidden from the camera.
+No other animation changed.
+
+Handset (S08–S11): a modelled handset. `grip_object` closes the right hand on it at the first frame, then it rides in the
+hand (Child Of the wrist) while the wrist keeps it at the ear. The hand cannot pass through it. Hair cards at the
+right ear are trimmed under the earpiece.

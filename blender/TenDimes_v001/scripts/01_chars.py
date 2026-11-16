@@ -130,55 +130,76 @@ def head_metrics(r):
     xs = [p.x for p in pts]; ys = [p.y for p in pts]; zs = [p.z for p in pts]
     return Vector(((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2, 0)), max(xs) - min(xs), max(ys) - min(ys), max(zs)
 
-before = set(bpy.data.objects)
-bpy.ops.import_scene.gltf(filepath=ASSETS + "/fedora.glb")
-new = [o for o in bpy.data.objects if o not in before]
-new_names = [o.name for o in new]
-meshes = [o for o in new if o.type == 'MESH']
-bpy.ops.object.select_all(action='DESELECT')
-for o in meshes: o.select_set(True)
-bpy.context.view_layer.objects.active = meshes[0]
-for o in meshes:   # bake parent transforms in
-    Mw = o.matrix_world.copy(); o.parent = None; o.matrix_world = Mw
-if len(meshes) > 1: bpy.ops.object.join()
-hat = bpy.context.view_layer.objects.active; hat.name = "Singer.fedora"
-for nm in new_names:
-    o = bpy.data.objects.get(nm)
-    if o is not None and o != hat: bpy.data.objects.remove(o, do_unlink=True)
-bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
-# normalise: centre the crown base at origin; brim width ~ 0.36 m
-vs = [v.co for v in hat.data.vertices]
-mn = Vector((min(v.x for v in vs), min(v.y for v in vs), min(v.z for v in vs))); mx = Vector((max(v.x for v in vs), max(v.y for v in vs), max(v.z for v in vs)))
-print("HAT raw dims", mx - mn)
+# procedural fedora (classic shape): tapered crown with a centre crease and front pinches, plain dark band, snap brim
 c, wx, wy, top = head_metrics(RIGS["Singer"])
-sz = mx - mn
-s = 0.355 / max(sz.x, sz.y)
-for v in hat.data.vertices: v.co = (v.co - Vector(((mn.x + mx.x) / 2, (mn.y + mx.y) / 2, mn.z))) * s
-# crown inner width must fit the head: estimate crown width at 40% height
-vs = [v.co for v in hat.data.vertices]; H = max(v.z for v in vs)
-band = [v for v in vs if 0.25 * H < v.z < 0.45 * H]
-cw = max(v.x for v in band) - min(v.x for v in band) if band else 0.2
-k = (wx * 1.06) / cw
-print("HAT crown w", cw, "head w", wx, "scale fix", k)
-for v in hat.data.vertices: v.co *= k
-hat.location = (c.x, c.y + 0.005, top - 0.075)
-hat.rotation_euler = (math.radians(-4), 0, 0)
+rx, ry = wx / 2 * 1.16, wy / 2 * 1.12
+CH = 0.135; NU = 64; NV = 14
+bm = bmesh.new(); rings = []
+for k in range(NV + 1):
+    h = CH * k / NV; ring = []
+    for i in range(NU):
+        a = 2 * math.pi * i / NU; x = math.cos(a) * rx; y = math.sin(a) * ry
+        sc_ = 1.0 - 0.17 * (h / CH)
+        x *= sc_; y *= sc_
+        u = h / CH
+        if u > 0.45 and y < 0:                                  # front pinches
+            x *= 1.0 - 0.20 * ((u - 0.45) / 0.55) * (-y / ry) ** 1.5
+        z = h
+        if k == NV: z = h
+        ring.append(bm.verts.new((x, y, z)))
+    rings.append(ring)
+for k in range(NV):
+    for i in range(NU):
+        bm.faces.new((rings[k][i], rings[k][(i + 1) % NU], rings[k + 1][(i + 1) % NU], rings[k + 1][i]))
+# top with a centre crease (dent along the front-back line)
+ctr_top = bm.verts.new((0, 0, CH - 0.030))
+inner = []
+for i in range(NU):
+    v = rings[NV][i]; x, y = v.co.x, v.co.y
+    p = bm.verts.new((x * 0.55, y * 0.75, CH - 0.004 - 0.026 * math.exp(-(x / (0.35 * rx)) ** 2)))
+    inner.append(p)
+for i in range(NU):
+    bm.faces.new((rings[NV][i], rings[NV][(i + 1) % NU], inner[(i + 1) % NU], inner[i]))
+    bm.faces.new((inner[i], inner[(i + 1) % NU], ctr_top))
+# brim: flat ring outward, sides curl up, front snaps down slightly
+BR = 0.050; brim_o = []
+for i in range(NU):
+    a = 2 * math.pi * i / NU; ca, sa = math.cos(a), math.sin(a)
+    x = ca * (rx + BR); y = sa * (ry + BR * 1.1)
+    z = 0.012 * ca * ca - (0.010 * (-sa) if sa < 0 else 0.0) + 0.006 * (sa if sa > 0 else 0)
+    brim_o.append(bm.verts.new((x, y, z)))
+for i in range(NU):
+    bm.faces.new((rings[0][(i + 1) % NU], rings[0][i], brim_o[i], brim_o[(i + 1) % NU]))
+me = bpy.data.meshes.new("Singer.fedora"); bm.to_mesh(me); bm.free()
+hat = bpy.data.objects.new("Singer.fedora", me); sc.collection.objects.link(hat)
+for p_ in me.polygons: p_.use_smooth = True
 mh = bpy.data.materials.new("M_Fedora"); mh.use_nodes = True; Ph = mh.node_tree.nodes["Principled BSDF"]
-Ph.inputs['Base Color'].default_value = (0.36, 0.38, 0.41, 1); Ph.inputs['Roughness'].default_value = 0.8
+Ph.inputs['Base Color'].default_value = (0.30, 0.32, 0.35, 1); Ph.inputs['Roughness'].default_value = 0.8
 mb = bpy.data.materials.new("M_FedoraBand"); mb.use_nodes = True; Pb = mb.node_tree.nodes["Principled BSDF"]
-Pb.inputs['Base Color'].default_value = (0.02, 0.02, 0.025, 1); Pb.inputs['Roughness'].default_value = 0.5
-hat.data.materials.clear(); hat.data.materials.append(mh); hat.data.materials.append(mb)
+Pb.inputs['Base Color'].default_value = (0.015, 0.015, 0.02, 1); Pb.inputs['Roughness'].default_value = 0.5
+me.materials.append(mh); me.materials.append(mb)
+for p_ in me.polygons:
+    zc = sum(me.vertices[i].co.z for i in p_.vertices) / len(p_.vertices)
+    rr = max(math.hypot(me.vertices[i].co.x / rx, me.vertices[i].co.y / ry) for i in p_.vertices)
+    p_.material_index = 1 if 0.004 < zc < 0.032 and rr < 1.01 else 0
+sol = hat.modifiers.new("sol", 'SOLIDIFY'); sol.thickness = 0.005; sol.offset = 1.0
+EZ = RIGS["Singer"].data.bones["eye.L"].head_local.z
+print("HATFIT top", top, "eye", EZ)
+hat.location = (c.x, c.y + 0.012, EZ + 0.028)
+hat.rotation_euler = (math.radians(-10), 0, 0)             # tipped back: the brim clears the eyes
 bpy.context.view_layer.update()
-hz = [v.co.z for v in hat.data.vertices]; H = max(hz)
-for p in hat.data.polygons:
-    zc = sum(hat.data.vertices[i].co.z for i in p.vertices) / len(p.vertices)
-    rr = max(math.hypot(hat.data.vertices[i].co.x, hat.data.vertices[i].co.y) for i in p.vertices)
-    p.material_index = 1 if 0.10 * H < zc < 0.32 * H and abs(p.normal.z) < 0.7 and rr < 0.14 else 0
-    p.use_smooth = True
 parent_to_bone(hat, RIGS["Singer"], "head")
 # singer's hair hidden under the hat would poke through the crown: hide hair (the hat covers the head in every shot)
 for k in RIGS["Singer"].children:
-    if k.type == 'MESH' and "short0" in k.name: k.hide_render = True; k.hide_viewport = True; print("HIDE hair", k.name)
+    pass  # hair kept (shows at the temples under the hat)
+# trim the hair cards around the right ear (the payphone handset sits there; long card edges crossed the earpiece)
+hair = child(RIGS["Singer"], "short01"); body_ = child(RIGS["Singer"], ".body")
+B_ = RIGS["Singer"].data.bones; ez_ = B_["eye.R"].head_local.z
+gi_ = body_.vertex_groups["head"].index
+earR = min((v.co for v in body_.data.vertices if abs(v.co.z - (ez_ - 0.02)) < 0.02 and v.co.x < 0 and any(g.group == gi_ and g.weight > 0.5 for g in v.groups)), key=lambda p: p.x)
+bm_ = bmesh.new(); bm_.from_mesh(hair.data)
+dl_ = [v for v in bm_.verts if (v.co - earR).length < 0.075 and v.co.x < earR.x + 0.04]
+print("EARTRIM", len(dl_)); bmesh.ops.delete(bm_, geom=dl_, context='VERTS'); bm_.to_mesh(hair.data); bm_.free()
 
 # ---- breast pocket with a navy pocket-square edge on the singer's jacket (the dimes' pocket, used in every pocket shot)
 body = child(RIGS["Singer"], ".body"); A = RIGS["Singer"].data.bones
