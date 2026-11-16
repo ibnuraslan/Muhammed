@@ -1,0 +1,1898 @@
+{
+ "frames": {
+  "223": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "229": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "235": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "241": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "247": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "253": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "259": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "265": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "271": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "277": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "283": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "289": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "295": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "301": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "307": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "313": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "319": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "325": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "331": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "337": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "343": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "349": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "355": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "361": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "367": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "373": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "379": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "463": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "camera switch CAM_3a -> CAM_4a"
+   ]
+  ],
+  "469": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "475": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "481": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "487": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "541": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "547": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "553": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "559": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "565": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "571": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "721": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "BACKHEAD",
+    "Wife"
+   ],
+   [
+    "CAMJUMP",
+    "camera switch CAM_4b -> CAM_5a"
+   ]
+  ],
+  "727": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "733": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "739": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "751": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "757": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "775": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "787": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "793": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "799": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "811": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "817": [
+   [
+    "BACKHEAD",
+    "Wife"
+   ],
+   [
+    "CAMJUMP",
+    "camera switch CAM_5a -> CAM_5b"
+   ]
+  ],
+  "859": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_0 moves 11.6 cm with no hand on it (nearest finger 103 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_1 moves 11.9 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_2 moves 10.2 cm with no hand on it (nearest finger 100 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_3 moves 14.0 cm with no hand on it (nearest finger 102 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_4 moves 10.8 cm with no hand on it (nearest finger 97 cm)"
+   ]
+  ],
+  "865": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_0 moves 20.4 cm with no hand on it (nearest finger 125 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_1 moves 19.8 cm with no hand on it (nearest finger 124 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_2 moves 20.7 cm with no hand on it (nearest finger 122 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_3 moves 21.8 cm with no hand on it (nearest finger 125 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_4 moves 21.7 cm with no hand on it (nearest finger 119 cm)"
+   ]
+  ],
+  "877": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "889": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "991": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "997": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1003": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1009": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1015": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1021": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1027": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1033": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1039": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1045": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1051": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1057": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1063": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1069": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1075": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1081": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1087": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1093": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1099": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1105": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1111": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1117": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1123": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1129": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1135": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1141": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1147": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1237": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1243": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1249": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1255": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1261": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1267": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1273": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1279": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1285": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1291": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1297": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1303": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1309": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1315": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1321": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1327": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1333": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1339": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1345": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1351": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1357": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1363": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1369": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1375": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1507": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1513": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1519": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1525": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1531": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1537": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1543": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1549": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1555": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1561": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Cutter in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1567": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1573": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1579": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1585": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1591": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1597": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1603": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1609": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1615": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1621": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1627": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1825": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "BACKHEAD",
+    "V2"
+   ],
+   [
+    "CAMJUMP",
+    "camera switch CAM_11c -> CAM_13a"
+   ]
+  ],
+  "1831": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1879": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "149": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_1a -> CAM_4c"
+   ]
+  ],
+  "218": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_4c -> CAM_1b"
+   ]
+  ],
+  "275": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_1b -> CAM_2a"
+   ]
+  ],
+  "380": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_2a -> CAM_3a"
+   ]
+  ],
+  "575": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_4a -> CAM_4b"
+   ]
+  ],
+  "894": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_5b -> CAM_5d"
+   ]
+  ],
+  "986": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_5d -> CAM_6a"
+   ]
+  ],
+  "1151": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_6a -> CAM_7a"
+   ]
+  ],
+  "1232": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_7a -> CAM_7b"
+   ]
+  ],
+  "1379": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_7b -> CAM_8a"
+   ]
+  ],
+  "1446": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_8a -> CAM_8b"
+   ]
+  ],
+  "1502": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_8b -> CAM_9a"
+   ]
+  ],
+  "1562": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_9a -> CAM_10a"
+   ]
+  ],
+  "1628": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_10a -> CAM_10b"
+   ]
+  ],
+  "1679": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_10b -> CAM_10c"
+   ]
+  ],
+  "1747": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_10c -> CAM_11c"
+   ]
+  ],
+  "1889": [
+   [
+    "CAMJUMP",
+    "camera switch CAM_13a -> CAM_13c"
+   ]
+  ],
+  "49": [
+   [
+    "PROPMOVE",
+    "ChipF0002 moves 10.2 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0003 moves 10.9 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "55": [
+   [
+    "PROPMOVE",
+    "ChipF0001 moves 12.1 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0002 moves 18.0 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0003 moves 18.1 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "61": [
+   [
+    "PROPMOVE",
+    "ChipF0001 moves 21.1 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0002 moves 26.5 cm with no hand on it (nearest finger 43 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0003 moves 28.4 cm with no hand on it (nearest finger 53 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "91": [
+   [
+    "PROPMOVE",
+    "ChipF0004 moves 16.9 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0005 moves 9.7 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0006 moves 12.6 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "97": [
+   [
+    "PROPMOVE",
+    "ChipF0004 moves 21.9 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0005 moves 12.3 cm with no hand on it (nearest finger 17 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0006 moves 13.5 cm with no hand on it (nearest finger 17 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "103": [
+   [
+    "PROPMOVE",
+    "ChipF0005 moves 19.0 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0006 moves 19.1 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "109": [
+   [
+    "PROPMOVE",
+    "ChipF0005 moves 28.9 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0006 moves 28.5 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "133": [
+   [
+    "PROPMOVE",
+    "ChipF0007 moves 10.9 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0008 moves 12.6 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "139": [
+   [
+    "PROPMOVE",
+    "ChipF0007 moves 16.9 cm with no hand on it (nearest finger 19 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0008 moves 12.6 cm with no hand on it (nearest finger 16 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0009 moves 15.7 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "145": [
+   [
+    "PROPMOVE",
+    "ChipF0007 moves 23.8 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0008 moves 19.1 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0009 moves 22.5 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "193": [
+   [
+    "PROPMOVE",
+    "ChipF0010 moves 14.3 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0012 moves 10.9 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "199": [
+   [
+    "PROPMOVE",
+    "ChipF0010 moves 19.2 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0011 moves 14.0 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0012 moves 18.3 cm with no hand on it (nearest finger 25 cm)"
+   ]
+  ],
+  "205": [
+   [
+    "PROPMOVE",
+    "ChipF0010 moves 29.4 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0011 moves 23.0 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0012 moves 27.2 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "211": [
+   [
+    "PROPMOVE",
+    "ChipF0011 moves 31.9 cm with no hand on it (nearest finger 58 cm)"
+   ]
+  ],
+  "619": [
+   [
+    "PROPMOVE",
+    "ChipF0017 moves 9.3 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0018 moves 9.9 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 94 deg (index vs little)"
+   ]
+  ],
+  "625": [
+   [
+    "PROPMOVE",
+    "ChipF0016 moves 14.3 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0017 moves 9.4 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0018 moves 10.6 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 94 deg (index vs little)"
+   ]
+  ],
+  "631": [
+   [
+    "PROPMOVE",
+    "ChipF0016 moves 20.1 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0017 moves 19.1 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0018 moves 18.2 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 94 deg (index vs little)"
+   ]
+  ],
+  "637": [
+   [
+    "PROPMOVE",
+    "ChipF0016 moves 29.5 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0017 moves 27.8 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0018 moves 27.1 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 94 deg (index vs little)"
+   ]
+  ],
+  "643": [
+   [
+    "PROPMOVE",
+    "ChipF0016 moves 38.6 cm with no hand on it (nearest finger 96 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0017 moves 37.5 cm with no hand on it (nearest finger 90 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0018 moves 36.8 cm with no hand on it (nearest finger 89 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 93 deg (index vs little)"
+   ]
+  ],
+  "649": [
+   [
+    "PROPMOVE",
+    "ChipF0016 moves 17.5 cm with no hand on it (nearest finger 111 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0017 moves 20.0 cm with no hand on it (nearest finger 109 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0018 moves 25.6 cm with no hand on it (nearest finger 111 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 93 deg (index vs little)"
+   ]
+  ],
+  "667": [
+   [
+    "PROPMOVE",
+    "ChipF0020 moves 11.3 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0021 moves 12.8 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 92 deg (index vs little)"
+   ]
+  ],
+  "673": [
+   [
+    "PROPMOVE",
+    "ChipF0019 moves 14.7 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0020 moves 14.7 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0021 moves 20.1 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 92 deg (index vs little)"
+   ]
+  ],
+  "679": [
+   [
+    "PROPMOVE",
+    "ChipF0019 moves 23.6 cm with no hand on it (nearest finger 36 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0020 moves 23.4 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0021 moves 30.3 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 92 deg (index vs little)"
+   ]
+  ],
+  "685": [
+   [
+    "PROPMOVE",
+    "ChipF0019 moves 32.9 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0020 moves 31.9 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0021 moves 40.5 cm with no hand on it (nearest finger 94 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 92 deg (index vs little)"
+   ]
+  ],
+  "691": [
+   [
+    "PROPMOVE",
+    "ChipF0019 moves 39.0 cm with no hand on it (nearest finger 104 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0020 moves 41.5 cm with no hand on it (nearest finger 106 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0021 moves 16.0 cm with no hand on it (nearest finger 110 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 91 deg (index vs little)"
+   ]
+  ],
+  "697": [
+   [
+    "PROPMOVE",
+    "ChipF0019 moves 2.6 cm with no hand on it (nearest finger 97 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0020 moves 7.9 cm with no hand on it (nearest finger 106 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 91 deg (index vs little)"
+   ]
+  ],
+  "709": [
+   [
+    "PROPMOVE",
+    "ChipF0023 moves 9.9 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0024 moves 13.7 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 91 deg (index vs little)"
+   ]
+  ],
+  "715": [
+   [
+    "PROPMOVE",
+    "ChipF0022 moves 10.3 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0023 moves 16.5 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0024 moves 18.1 cm with no hand on it (nearest finger 21 cm)"
+   ],
+   [
+    "FAN",
+    "V1.R fingers fanned 90 deg (index vs little)"
+   ]
+  ],
+  "823": [
+   [
+    "PROPMOVE",
+    "Pebble5b_0 moves 0.7 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_1 moves 1.4 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_2 moves 1.4 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_3 moves 3.0 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_4 moves 2.0 cm with no hand on it (nearest finger 77 cm)"
+   ]
+  ],
+  "829": [
+   [
+    "PROPMOVE",
+    "Pebble5b_0 moves 0.6 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_1 moves 1.4 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_2 moves 1.4 cm with no hand on it (nearest finger 75 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_3 moves 3.0 cm with no hand on it (nearest finger 79 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_4 moves 2.0 cm with no hand on it (nearest finger 74 cm)"
+   ]
+  ],
+  "835": [
+   [
+    "PROPMOVE",
+    "Pebble5b_0 moves 0.7 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_1 moves 1.4 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_2 moves 1.4 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_3 moves 3.0 cm with no hand on it (nearest finger 80 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_4 moves 2.0 cm with no hand on it (nearest finger 76 cm)"
+   ]
+  ],
+  "841": [
+   [
+    "PROPMOVE",
+    "Pebble5b_0 moves 0.6 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_1 moves 1.4 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_2 moves 1.4 cm with no hand on it (nearest finger 79 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_3 moves 3.0 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_4 moves 2.0 cm with no hand on it (nearest finger 81 cm)"
+   ]
+  ],
+  "847": [
+   [
+    "PROPMOVE",
+    "Pebble5b_0 moves 5.4 cm with no hand on it (nearest finger 79 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_1 moves 6.3 cm with no hand on it (nearest finger 78 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_2 moves 3.8 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_3 moves 6.6 cm with no hand on it (nearest finger 79 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_4 moves 3.0 cm with no hand on it (nearest finger 81 cm)"
+   ]
+  ],
+  "853": [
+   [
+    "PROPMOVE",
+    "Pebble5b_0 moves 5.8 cm with no hand on it (nearest finger 87 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_1 moves 6.3 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_2 moves 4.1 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_3 moves 8.0 cm with no hand on it (nearest finger 85 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pebble5b_4 moves 4.5 cm with no hand on it (nearest finger 84 cm)"
+   ]
+  ],
+  "1675": [
+   [
+    "PROPMOVE",
+    "ChipF0025 moves 15.5 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0026 moves 10.9 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0027 moves 11.5 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "1723": [
+   [
+    "PROPMOVE",
+    "ChipF0034 moves 11.3 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0036 moves 11.0 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "1729": [
+   [
+    "PROPMOVE",
+    "ChipF0034 moves 17.3 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0035 moves 14.2 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0036 moves 16.9 cm with no hand on it (nearest finger 19 cm)"
+   ]
+  ],
+  "1735": [
+   [
+    "PROPMOVE",
+    "ChipF0034 moves 24.0 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0035 moves 21.7 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0036 moves 23.8 cm with no hand on it (nearest finger 42 cm)"
+   ]
+  ],
+  "1741": [
+   [
+    "PROPMOVE",
+    "ChipF0035 moves 32.0 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ChipF0036 moves 33.6 cm with no hand on it (nearest finger 76 cm)"
+   ]
+  ],
+  "1": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "7": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "13": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "19": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "25": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "31": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "37": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "43": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "67": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "73": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "79": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "85": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "115": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "121": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "127": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "385": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "391": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "397": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "403": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "409": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "415": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "421": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "427": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "433": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "439": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "445": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "451": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "457": [
+   [
+    "FAN",
+    "V1.R fingers fanned 97 deg (index vs little)"
+   ]
+  ],
+  "577": [
+   [
+    "FAN",
+    "V1.R fingers fanned 96 deg (index vs little)"
+   ]
+  ],
+  "583": [
+   [
+    "FAN",
+    "V1.R fingers fanned 95 deg (index vs little)"
+   ]
+  ],
+  "589": [
+   [
+    "FAN",
+    "V1.R fingers fanned 95 deg (index vs little)"
+   ]
+  ],
+  "595": [
+   [
+    "FAN",
+    "V1.R fingers fanned 95 deg (index vs little)"
+   ]
+  ],
+  "601": [
+   [
+    "FAN",
+    "V1.R fingers fanned 95 deg (index vs little)"
+   ]
+  ],
+  "607": [
+   [
+    "FAN",
+    "V1.R fingers fanned 95 deg (index vs little)"
+   ]
+  ],
+  "613": [
+   [
+    "FAN",
+    "V1.R fingers fanned 94 deg (index vs little)"
+   ]
+  ],
+  "655": [
+   [
+    "FAN",
+    "V1.R fingers fanned 93 deg (index vs little)"
+   ]
+  ],
+  "661": [
+   [
+    "FAN",
+    "V1.R fingers fanned 93 deg (index vs little)"
+   ]
+  ],
+  "703": [
+   [
+    "FAN",
+    "V1.R fingers fanned 91 deg (index vs little)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 130,
+  "INSIDE": 18,
+  "BACKHEAD": 3,
+  "CAMJUMP": 21,
+  "PROPMOVE": 126,
+  "FAN": 62
+ }
+}

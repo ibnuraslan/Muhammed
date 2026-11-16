@@ -1,0 +1,943 @@
+{
+"visible_frames": [
+1,
+4,
+7,
+10,
+13,
+16,
+19,
+22,
+25,
+28,
+31,
+34,
+37,
+40,
+43,
+46,
+49,
+52,
+55,
+58,
+61,
+64,
+67,
+70,
+73,
+76,
+79,
+82,
+85,
+88,
+91,
+94,
+97,
+100,
+103,
+106,
+109,
+112,
+115,
+118,
+121,
+124,
+127,
+130,
+133,
+136,
+139,
+142,
+145,
+148,
+151,
+154,
+157,
+160,
+163,
+166,
+169,
+172,
+175,
+178,
+181,
+184,
+187,
+190,
+193,
+196,
+199,
+202,
+205,
+208,
+211,
+214,
+217,
+220,
+223,
+226,
+229,
+232,
+235,
+238,
+241,
+244,
+247,
+250,
+253,
+256,
+259,
+262,
+265,
+268,
+271,
+274,
+277,
+280,
+283,
+286,
+289,
+292,
+295,
+298,
+301,
+304,
+307,
+310,
+313,
+316,
+319,
+322,
+325,
+328,
+331,
+334,
+337,
+340,
+343,
+346,
+349,
+352,
+355,
+358,
+361,
+364,
+367,
+370,
+373,
+376,
+379,
+577,
+580,
+583,
+586,
+589,
+592,
+595,
+598,
+601,
+604,
+607,
+610,
+613,
+616,
+619,
+622,
+625,
+628,
+631,
+634,
+637,
+640,
+643,
+646,
+649,
+652,
+655,
+658,
+661,
+664,
+667,
+670,
+673,
+676,
+679,
+682,
+685,
+688,
+691,
+694,
+697,
+700,
+703,
+706,
+709,
+712,
+715,
+718,
+1630,
+1633,
+1636,
+1639,
+1642,
+1645,
+1648,
+1651,
+1654,
+1657,
+1660,
+1663,
+1666,
+1669,
+1672,
+1675,
+1678,
+1681,
+1684,
+1687,
+1690,
+1693,
+1696,
+1699,
+1702,
+1705,
+1708,
+1711,
+1714,
+1717,
+1720,
+1723,
+1726,
+1729,
+1732,
+1735,
+1738,
+1741,
+1744
+],
+"frames": {
+"1": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"4": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"7": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"10": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"13": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"16": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"19": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"22": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"25": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"28": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"31": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"34": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"37": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"40": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"43": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"46": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"49": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"52": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"55": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"58": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"61": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"64": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"67": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"70": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"73": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"76": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"79": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"82": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"85": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"88": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"91": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"94": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"97": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"100": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"103": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"106": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"109": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"112": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"115": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"118": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"121": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"124": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"127": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"130": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"133": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"136": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"139": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"142": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"145": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"148": {
+"metacarpal1.R|Hammer_1a|VIS": 1
+},
+"151": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"154": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"157": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"160": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"163": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"166": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"169": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"172": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"175": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"178": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"181": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"184": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"187": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"190": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"193": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"196": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"199": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"202": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"205": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"208": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"211": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"214": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"217": {
+"metacarpal1.R|Hammer_4c|VIS": 1
+},
+"220": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"223": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"226": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"229": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"232": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"235": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"238": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"241": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"244": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"247": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"250": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"253": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"256": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"259": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"262": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"265": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"268": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"271": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"274": {
+"metacarpal1.R|Hammer_1b|VIS": 1
+},
+"277": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"280": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"283": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"286": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"289": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"292": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"295": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"298": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"301": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"304": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"307": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"310": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"313": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"316": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"319": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"322": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"325": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"328": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"331": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"334": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"337": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"340": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"343": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"346": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"349": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"352": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"355": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"358": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"361": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"364": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"367": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"370": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"373": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"376": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"379": {
+"metacarpal1.R|Hammer_2a|VIS": 1
+},
+"382": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"385": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"388": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"391": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"394": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"397": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"400": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"403": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"406": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"409": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"412": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"415": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"418": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"421": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"424": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"427": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"430": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"433": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"436": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"439": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"442": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"445": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"448": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"451": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"454": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"457": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"460": {
+"metacarpal1.R|Hammer_3a|off": 1
+},
+"577": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"580": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"583": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"586": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"589": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"592": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"595": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"598": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"601": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"604": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"607": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"610": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"613": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"616": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"619": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"622": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"625": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"628": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"631": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"634": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"637": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"640": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"643": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"646": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"649": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"652": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"655": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"658": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"661": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"664": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"667": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"670": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"673": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"676": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"679": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"682": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"685": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"688": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"691": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"694": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"697": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"700": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"703": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"706": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"709": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"712": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"715": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"718": {
+"metacarpal1.R|Hammer_4b|VIS": 1
+},
+"1630": {
+"metacarpal1.R|Hammer_10b|VIS": 1
+},
+"1633": {
+"metacarpal1.R|Hammer_10b|VIS": 1
+},
+"1636": {
+"metacarpal1.R|Hammer_10b|VIS": 1
+},
+"1639": {
+"metacarpal1.R|Hammer_10b|VIS": 1
+},
+"1642": {
+"metacarpal1.R|Hammer_10b|VIS": 1
+},
+"1645": {
+"metacarpal1.R|Hammer_10b|VIS": 1
+},
+"1648": {
+"metacarpal1.R|Hammer_10b|VIS": 1
+},
+"1651": {
+"metacarpal1.R|Hammer_10b|VIS": 1
+},
+"1654": {
+"metacarpal1.R|Hammer_10b|VIS": 1
+},
+"1657": {
+"metacarpal1.R|Hammer_10b|VIS": 1
+},
+"1660": {
+"metacarpal1.R|Hammer_10b|VIS": 1
+},
+"1663": {
+"metacarpal1.R|Hammer_10b|VIS": 1
+},
+"1666": {
+"metacarpal1.R|Hammer_10b|VIS": 1
+},
+"1669": {
+"metacarpal1.R|Hammer_10b|VIS": 1
+},
+"1672": {
+"metacarpal1.R|Hammer_10b|VIS": 1
+},
+"1675": {
+"metacarpal1.R|Hammer_10b|VIS": 1
+},
+"1678": {
+"metacarpal1.R|Hammer_10b|VIS": 1
+},
+"1681": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1684": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1687": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1690": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1693": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1696": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1699": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1702": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1705": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1708": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1711": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1714": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1717": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1720": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1723": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1726": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1729": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1732": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1735": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1738": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1741": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+},
+"1744": {
+"metacarpal1.R|Hammer_10c|VIS": 1
+}
+}
+}
