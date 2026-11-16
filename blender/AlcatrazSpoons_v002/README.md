@@ -45,3 +45,12 @@ It follows the reference still sheet shot for shot (24 hard-cut shots) and is cu
 ## Build
 `scripts/01_chars.py` → `02_sets.py` → `03_shots.py -- film2.blend ../shots.json` → `04_bake_camera.py -- VO.mp3 baked.blend` →
 `pipeline/package_for_farm.py`.
+
+## Checks on this exact file (ConnectB07)
+- **Moving preview** (`review/preview.mp4`, every 5th frame at 270×480, with the VO; contact pages `review/p01–p09.jpg`) watched start to finish.
+- **2a** frames 295–365: P1's face reads 3/4 toward the camera while he scrapes (head yaw +35°; −35° turned it away, so it was rejected).
+- `body_prop_cross` (every 6th frame, all props, including the four spoons): **0 visible crossings**. The only on-screen flags are the hidden MPFB "root" helper
+  shell the checker exposes by switching masks off (a known false positive). Other flags (the guard's feet and flashlight in 4b, P3's foot in 3c) are off-screen.
+- `clip_scan` and `limb_check`: hits are fingertips resting on thighs/knees (1c, 2a, 5c, raft) and arms bent at the body. They were checked in 540×960 renders
+  (frames 241, 1201, 1681) and look clean. `qa_check`: EMPTY/PROPMOVE flags are the intended no-character inserts (2d vent close-up, 3b drill, 4a/4c dummy head, 5a grille, 8a searchlight).
+- Note: in 7a (around frame 1620) moonlight glints on the wave crests show as soft white patches at the lower left.
