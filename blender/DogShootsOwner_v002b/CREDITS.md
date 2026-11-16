@@ -17,7 +17,7 @@ Characters: MakeHuman / MPFB2 system assets (CC0).
 | Asset | Used for | Author | Licence | Source |
 |---|---|---|---|---|
 | Dog | the Labrador (rigged by us) | Yury Misiyuk | CC BY | sketchfab.com/3d-models/a89b49b3d9c647a8805d8d5287f47f48 |
-| Sleeping dog 01 | curled sleeping dog, hospital + field (cut from its ground, recoloured) | thuberchs | CC BY | sketchfab.com/3d-models/91e169740c91489bbd9cec755c4fdcca |
+| Sleeping dog 01 | v002 only: in v002b it stays in the file but is hidden (the rigged "Dog" lies in the hospital and the field) | thuberchs | CC BY | sketchfab.com/3d-models/91e169740c91489bbd9cec755c4fdcca |
 | Low-Poly Ithaca M37 | the shotgun on the back seat | TastyTony | CC BY | sketchfab.com/3d-models/74da1e6054cc40e3b61bed4b4d8eef61 |
 | Male Human Skeleton - ZBrush - Anatomy Study | thorax cutaway | Ruslan Gadzhiev | CC BY | sketchfab.com/3d-models/665890c542be433fb18ef235cf987cef |
 | FISIOLOGI PARU - PARU | lungs | rimatrices94 | CC BY | sketchfab.com/3d-models/c98897905e9d456ca5327bdde59245dd |
@@ -31,7 +31,7 @@ Characters: MakeHuman / MPFB2 system assets (CC0).
 | Metal Storage Cabinet | kennel-room cabinet | jimbogies | CC BY | sketchfab.com/3d-models/4d49691a269745cabe0e1d5c1c3bef9b |
 | fir_tree_01, fir_sapling_medium, fern_02, shrub_02, grass_medium_01 | forest, road, clearing | Rob Tuytel, Rico Cilliers | CC0 | polyhaven.com |
 | brown_leather, fabric_leather_02, leather_white, rubber_tiles, floor_tiles_06, painted_plaster_wall, asphalt_02 | seats, interiors, road | Rob Tuytel, Amal Kumar | CC0 | polyhaven.com |
-| MPFB2 / MakeHuman system assets | the owner and the medic (re-dressed from our earlier films) | MakeHuman community | CC0 | makehumancommunity.org |
+| MPFB2 / MakeHuman system assets | the owner and the medic, and their clothes (male_casualsuit01: shirt, jeans, belt; recoloured, refitted onto the owner) | MakeHuman community | CC0 | makehumancommunity.org |
 | DA KRAS FILMS logo | ambulance rear doors (only placement) | client | client's own | blender/assets/brand |
 
 Everything else (truck cab, ambulance interior, rooms, props) is modelled by us.
