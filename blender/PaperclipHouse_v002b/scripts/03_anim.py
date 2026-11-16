@@ -530,12 +530,11 @@ def S13(t, n):
     def fr(f, u):
         a = ease((u - 0.12) / 0.3)
         sc.frame_set(f); sh = hero.shoulder("L")
-        if u > 0.12:
-            hero.hang("L", f, out=0.22 * a, fwd=0.22 * a, lift=0.22 * a, pose="relaxed")
+        hero.stand(f, xy, 60 - 35 * ease((u - 0.35) / 0.4), side=2 * math.sin(u * 4))
+        for sd in "LR": hero.hang(sd, f)
         look_at(hero, f, V(sh.x + 0.1, side_y, 1.2) if u < 0.45 else V(NX - 0.6, NY - 2.6, 1.45), flex=1)
         hero.jaw(f, 3 * ease((u - 0.55) / 0.2))
     track(t, n, 3, fr)
-    apply_pose(hero.o, "L", "open_alarm", t + int(0.42 * n))
     camera("S13", 28, t, V(NX - 1.0, NY - 2.9, 1.35), V(NX - 0.5, NY + 2.0, 1.10), t + n, V(NX - 1.05, NY - 2.4, 1.35), V(NX - 0.7, NY + 2.0, 1.15))
 
 # ===================================================================== STUDIO
