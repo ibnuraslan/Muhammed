@@ -102,7 +102,7 @@ class Char:
             if sd not in which: continue
             sx = 1 if sd == "L" else -1
             sh = self.o.data.bones["upperarm01." + sd].head_local * self.s
-            W = V(pos_w[0], pos_w[1], 0) + R3 @ V(sx * (abs(sh.x) + out * self.s / 1.2), -0.06 - swing[i] - fwd, sh.z - 0.56 * self.s + 0.5 * abs(swing[i]) ** 2 + fwd * 0.4)
+            W = V(pos_w[0], pos_w[1], 0) + R3 @ V(sx * (abs(sh.x) + out * self.s / 1.2), -0.11 - swing[i] - fwd, sh.z - 0.50 * self.s + 0.5 * abs(swing[i]) ** 2 + fwd * 0.4)
             d = R3 @ V(0, -0.15 - swing[i] * 0.6 - fwd, -1).normalized(); n = R3 @ V(-sx, 0, 0)
             pole = V(pos_w[0], pos_w[1], 0) + R3 @ V(sx * 0.45 * self.s, 0.5, sh.z - 0.3 * self.s)
             self.hand_w(sd, f, W, d, n, pole)
@@ -119,9 +119,9 @@ def walk(c, f0, f1, p0, p1, yaw=None, stride=0.72, swing=0.17, arms="LR", out=0.
     p0 = Vector(p0).to_3d(); p1 = Vector(p1).to_3d()
     yw = yaw if yaw is not None else yaw_to(p1 - p0)
     path = lambda f: p0.lerp(p1, min(1.0, max(0.0, (f - f0) / max(1, f1 - f0))))
-    c.use(); c.H.walk(lambda f: c.a(path(f)), lambda f: yw, f0, f1, stride=stride / c.s, lift=lift / c.s, bob=0.022 / c.s, crouch=0.03 / c.s, lean=lean)
+    c.use(); c.H.walk(lambda f: c.a(path(f)), lambda f: yw, f0, f1, stride=stride / c.s, lift=lift / c.s, bob=0.018 / c.s, crouch=0.004 / c.s, lean=lean)
     dist = (p1 - p0).to_2d().length
-    for f in range(f0, f1 + 1, 3):
+    for f in sorted(set(list(range(f0, f1 + 1, 3)) + [f1])):
         u = (f - f0) / max(1, f1 - f0); ph = 2 * math.pi * (u * dist / stride)
         sw = swing * math.sin(ph)
         c.hang(f, path(f), yw, swing=(sw, -sw), out=out, which=arms)
@@ -242,7 +242,7 @@ def strap_ring(name, centre, ax, pts, width=0.022):
     cx = sum(a for a, b in hull) / len(hull); cy = sum(b for a, b in hull) / len(hull)
     bm = bmesh.new(); r0, r1 = [], []
     for a, b in hull:
-        d = Vector((a - cx, b - cy)); d = d.normalized() * (d.length + 0.007) + Vector((cx, cy))
+        d = Vector((a - cx, b - cy)); d = d.normalized() * (d.length + 0.010) + Vector((cx, cy))
         q = centre + u * d.x + w_ * d.y
         r0.append(bm.verts.new(q - ax * width / 2)); r1.append(bm.verts.new(q + ax * width / 2))
     n_ = len(hull)
@@ -258,7 +258,7 @@ for s, sx in (("L", 1), ("R", -1)):
     # forearm surface direction for the knife: the outside of the forearm (away from the body), level
     out = V(sx, 0, 0); out = (out - ax * out.dot(ax)).normalized()
     rb = (rad + 0.004) * 1.16
-    base = c + out * (rb + 0.020)
+    base = c + out * (rb + 0.030)
     k = knife_src.copy(); k.data = knife_src.data; CP.objects.link(k); k.name = "Knife." + s
     k.hide_render = False; k.hide_viewport = False
     # butt 11 cm up the forearm, blade pointing past the stump along the forearm axis, flat of the blade on the arm
@@ -295,9 +295,9 @@ FORGE = Vector(sc["FORGE"]); ANV = Vector(sc["ANVIL"]); ANVT = sc["ANVIL_TOP"]
 plate8 = plate("HotPlate_Forge", V(FORGE.x, FORGE.y, sc["FORGE_TOP"] + 0.03))
 plate9 = plate("HotPlate_Anvil", V(ANV.x + 0.02, ANV.y - 0.04, ANVT + 0.001))
 vis_only([plate8], [(1, SE("S08"))]); vis_only([plate9], [(ST("S09") if False else ST["S09"], END_FRAME)])
-pl = bpy.data.lights.new("PlateGlow", 'POINT'); pl.energy = 60; pl.color = (1.0, 0.5, 0.15); pl.shadow_soft_size = 0.1
+pl = bpy.data.lights.new("PlateGlow", 'POINT'); pl.energy = 14; pl.color = (1.0, 0.5, 0.15); pl.shadow_soft_size = 0.1
 plo = bpy.data.objects.new("PlateGlow", pl); CP.objects.link(plo); plo.location = plate9.location + V(0, -0.1, 0.12)
-fgl = bpy.data.lights.new("ForgeGlow", 'POINT'); fgl.energy = 120; fgl.color = (1.0, 0.45, 0.12); fgl.shadow_soft_size = 0.3
+fgl = bpy.data.lights.new("ForgeGlow", 'POINT'); fgl.energy = 35; fgl.color = (1.0, 0.45, 0.12); fgl.shadow_soft_size = 0.3
 fgo = bpy.data.objects.new("ForgeGlow", fgl); CP.objects.link(fgo); fgo.location = FORGE + V(0, 0, sc["FORGE_TOP"] + 0.3)
 
 # ---------------------------------------------------------------- emissive flames (Geometry Nodes, keyed clock T, no Scene Time)
@@ -474,7 +474,7 @@ for f, b in ((s0, 0.0), (s0 + 70, 0.5), (s1, 1.0)):
     for c, (p, _) in VPOS.items():
         y = face(c, p, WP5)
         c.stand(f, p, y, flex=3, head=(2 + 3 * math.sin(b * 3 + p.x), 4 * math.sin(b * 2 + p.y)))
-        if c is not EL: c.hang(f, p, y)
+        if c is not EL: c.hang(f, p, y, fwd=0.03 + 0.04 * math.sin(f * 0.05 + p.x * 3))
 # elder: right hand comes up, palm up toward the warrior (telling him to surrender)
 pE = VPOS[EL][0]; yE = face(EL, pE, WP5); RE = Rz(yE)
 EL.hang(s0, pE, yE)
@@ -493,24 +493,27 @@ for f, b in ((s0, 0.0), (s0 + 45, 1.0), (s0 + 80, 0.7), (s0 + 115, 1.0), (s1, 0.
     W.hand_w("R", f, WP5 + RW @ V(-0.2, -0.30 - 0.10 * b, 1.12 + 0.36 * b), RW @ V(0.25, -0.4, 1).normalized(), RW @ V(1, -0.3, 0).normalized(), WP5 + RW @ V(-0.55, 0.2, 0.9))
 for c, (p, _) in VPOS.items():
     y = face(c, p, WP5)
-    for f in (s0, s1):
-        c.stand(f, p, y); c.hang(f, p, y)
+    for f in (s0, s0 + 50, s0 + 100, s1):
+        c.stand(f, p, y, head=(4 * math.sin(f * 0.06 + p.x), 6 * math.sin(f * 0.04 + p.y)), side=2 * math.sin(f * 0.03 + p.x)); c.hang(f, p, y, fwd=0.03 + 0.04 * math.sin(f * 0.05 + p.x * 3))
 for c in (W, EL, VW, M1, M2): c.used.add("S06")
 
 # --- S07: the villagers raise their fists and agree (fists at shoulder height, below the hair line)
 s0, s1 = ST["S07"], SE("S07")
-for c, (p, _) in VPOS.items():
-    y = face(c, p, WP5); R3 = Rz(y)
+VPOS7 = {EL: (V(HX - 0.05, 0.5, 0), None), VW: (V(HX - 0.75, 0.15, 0), None), M1: (V(HX + 0.55, 0.25, 0), None), M2: (V(HX + 0.25, 1.05, 0), None)}
+WP7 = V(HX + 1.6, -1.6, 0)
+for c, (p, _) in VPOS7.items():
+    y = face(c, p, WP7); R3 = Rz(y)
     c.stand(s0, p, y, head=(0, 0)); c.hang(s0, p, y)
     c.stand(s0 + 30, p, y, flex=-3, head=(-6, 0)); c.stand(s1, p, y, flex=2, head=(6, 0))
     c.hang(s0 + 30, p, y, which="L"); c.hang(s1, p, y, which="L")
     sh = c.shoulder_w("R", p, y)
     for f, h in ((s0 + 12, 0.0), (s0 + 34, 1.0), (s0 + 60, 0.85), (s0 + 84, 1.0), (s1, 0.9)):
-        Wf = sh + R3 @ V(-0.06, -0.24, -0.25 + 0.27 * h)
+        Wf = sh + R3 @ V(-0.08, -0.22, -0.05 + 0.25 * h)
         c.hand_w("R", f, Wf, R3 @ V(0, -0.3, 1).normalized(), R3 @ V(1, 0, 0) * -1, sh + R3 @ V(-0.35, 0.2, -0.35))
     apply_pose(c.o, "R", "power_fist", s0 + 34)
-W.stand(s0, WP5, WY5, head=(6, 0)); W.stand(s1, WP5, WY5, head=(-4, 0))
-W.hang(s0, WP5, WY5, out=0.15, fwd=0.04); W.hang(s1, WP5, WY5, out=0.15, fwd=0.04)
+WY7 = yaw_to(V(HX, 0.4, 0) - WP7)
+W.stand(s0, WP7, WY7, head=(6, 0)); W.stand(s1, WP7, WY7, head=(-4, 0))
+W.hang(s0, WP7, WY7, out=0.15, fwd=0.04); W.hang(s1, WP7, WY7, out=0.15, fwd=0.04)
 for c in (W, EL, VW, M1, M2): c.used.add("S07")
 
 # --- S08: the forge: an iron plate glowing in the coals (camera only, flames keyed)
@@ -574,7 +577,7 @@ FH = s0 + 52
 for f, b in ((s0, 0.0), (s0 + 30, 0.0), (FH - 6, 0.6), (FH, 1.0), (FH + 14, 1.0), (s1, 0.8)):
     W.stand(f, WP13 + V(0, -0.15 * b, 0), WY13 + 20 * b, flex=8 + 8 * b, head=(6, 0), twist=-25 + 45 * b)
 # right forearm: wind up to the right shoulder, sweep across in front of the soldier's chest (15 cm clear), follow through left
-sw = [(s0, V(-0.30, -0.28, 1.18)), (s0 + 30, V(-0.42, -0.10, 1.50)), (FH - 6, V(-0.25, -0.50, 1.40)), (FH, V(0.05, -0.55, 1.33)),
+sw = [(s0, V(-0.30, -0.36, 1.18)), (s0 + 30, V(-0.55, -0.35, 1.42)), (FH - 6, V(-0.35, -0.60, 1.38)), (FH, V(0.05, -0.55, 1.33)),
       (FH + 10, V(0.22, -0.62, 1.22)), (s1, V(0.10, -0.60, 1.18))]
 for f, p in sw:
     W.hand_w("R", f, WP13 + R13 @ p, R13 @ V(-0.2, -1, 0.15).normalized(), R13 @ V(0, 0, -1), WP13 + R13 @ V(-0.6, 0.2, 1.0))
@@ -607,8 +610,8 @@ for f, p_ in ((s0, V(-0.36, -0.28, 1.0)), (s0 + 60, V(-0.40, -0.32, 1.02)), (FH2
     SC2.hand_w("R", f, base + RS @ p_, RS @ V(0, -1, -0.25).normalized(), RS @ V(1, 0, 0), base + RS @ V(-0.6, 0.3, 1.0))
 apply_pose(SC2.o, "R", "wrap_grip", s0)
 for f, b, tw in ((s0, 0.0, 0), (s0 + 60, 0.2, -10), (FH2 - 8, 0.6, -30), (FH2, 1.0, 20), (FH2 + 16, 1.0, 25), (s1, 0.8, 15)):
-    W.stand(f, WP14 + V(0.25 * b, -0.2 * b, 0), WY14 - 10 * b, flex=10 + 12 * b, head=(4, 0), twist=tw, crouch=0.02 + 0.08 * b)
-for f, p in ((s0, V(-0.28, -0.3, 1.18)), (FH2 - 8, V(-0.40, -0.12, 1.45)), (FH2, V(0.0, -0.58, 1.33)), (FH2 + 12, V(0.22, -0.62, 1.22)), (s1, V(0.10, -0.60, 1.18))):
+    W.stand(f, WP14 + V(0.25 * b, -0.2 * b, 0), WY14 - 10 * b, flex=6 + 6 * b, head=(2, 0), twist=tw, crouch=0.02 + 0.04 * b)
+for f, p in ((s0, V(-0.28, -0.3, 1.18)), (FH2 - 8, V(-0.55, -0.35, 1.40)), (FH2, V(0.0, -0.58, 1.33)), (FH2 + 12, V(0.22, -0.62, 1.22)), (s1, V(0.10, -0.60, 1.18))):
     W.hand_w("R", f, WP14 + R14 @ p, R14 @ V(-0.2, -1, 0.15).normalized(), R14 @ V(0, 0, -1), WP14 + R14 @ V(-0.6, 0.2, 1.0))
 for f in (s0, s1): W.hand_w("L", f, WP14 + R14 @ V(0.40, -0.42, 1.18), R14 @ V(0.2, -1, 0.3).normalized(), R14 @ V(1, 0, 0), WP14 + R14 @ V(0.6, 0.3, 0.9))
 spark("SparkS14", SCP1 + V(0.08, 0.22, 1.25), FH2)
@@ -618,10 +621,10 @@ for c in (W, SC2): c.used.add("S14")
 # S16: the invading army marches over the meadow (one marcher action, copied in formation); the warrior faces them
 s0, s1 = ST["S16"], SE("S16")
 ARMY0 = V(BX + 2.0, -9.0, 0); ARMY1 = V(BX + 2.0, -6.4, 0)
-walk(SC, s0, s1, ARMY0, ARMY1, yaw=0.0, stride=0.7, arms="L", swing=0.15)
-for f in range(s0, s1 + 1, 6):
+walk(SC, s0, s1, ARMY0, ARMY1, yaw=180.0, stride=0.7, arms="L", swing=0.15)
+for f in sorted(set(list(range(s0, s1 + 1, 6)) + [s1])):
     u = (f - s0) / (s1 - s0); p = ARMY0.lerp(ARMY1, u)
-    SC.hand_w("R", f, p + V(-0.36, -0.24, 1.0), V(0, -1, -0.15).normalized(), V(1, 0, 0), p + V(-0.6, 0.3, 0.9))
+    SC.hand_w("R", f, p + Rz(180) @ V(-0.42, -0.26, 1.0), Rz(180) @ V(0, -1, -0.15).normalized(), Rz(180) @ V(1, 0, 0), p + Rz(180) @ V(-0.6, 0.3, 0.9))
 WP16 = V(BX + 2.2, -2.0, 0)
 for f, b in ((s0, 0), (s0 + 60, 1), (s0 + 110, 0), (s1, 1)):
     W.stand(f, WP16, 0, flex=6, head=(-4 * b, 6 * b), crouch=0.06)
@@ -642,7 +645,7 @@ FH3 = s0 + 70
 for f, yaw, b, tw in ((s0, -30, 0, 0), (s0 + 40, -10, 0.3, -25), (FH3, 15, 1.0, 25), (FH3 + 20, 20, 0.9, 20), (s0 + 150, 0, 0.5, 0), (s1, 0, 0.4, 0)):
     W.stand(f, WP17, yaw, flex=8 + 8 * b, head=(-8, 0), twist=tw, crouch=0.04 + 0.05 * b)
     R3 = Rz(yaw)
-    rp = V(-0.42, -0.10, 1.45) if f < FH3 else (V(0.15, -0.62, 1.33) if f == FH3 else V(-0.30, -0.50, 1.25))
+    rp = V(-0.55, -0.35, 1.40) if f < FH3 else (V(0.15, -0.62, 1.33) if f == FH3 else V(-0.30, -0.50, 1.25))
     W.hand_w("R", f, WP17 + R3 @ rp, R3 @ V(-0.2, -1, 0.3).normalized(), R3 @ V(0, 0, -1), WP17 + R3 @ V(-0.6, 0.2, 1.0))
     W.hand_w("L", f, WP17 + R3 @ V(0.40, -0.42, 1.22), R3 @ V(0.2, -1, 0.35).normalized(), R3 @ V(1, 0, 0), WP17 + R3 @ V(0.6, 0.3, 0.9))
 for c in (W, SB): c.used.add("S17")
@@ -654,11 +657,11 @@ def spear_grip(c, sp, f, d, n):
     wr = c.world_bone("wrist.R", f).translation
     d = Vector(d).normalized(); n = Vector(n).normalized()
     pc = wr + d * 0.062 + n * 0.032
-    sp.matrix_world = Matrix.Translation(pc) @ frame_from(-n * 0.18 + d * 0.08 + V(0, 0, 1), d).to_4x4()
+    sp.matrix_world = Matrix.Translation(pc) @ frame_from(-n * 0.32 + d * 0.10 + V(0, 0, 1), d).to_4x4()
     apply_pose(c.o, "R", "wrap_grip", f)
     bpy.context.view_layer.update()
     child_of_now(sp, c.o, "wrist.R", f)
-spear_grip(SC, spear, ST["S16"] + 20, V(0, -1, -0.15), V(1, 0, 0))
+spear_grip(SC, spear, ST["S16"] + 20, Rz(180) @ V(0, -1, -0.15), Rz(180) @ V(1, 0, 0))
 spear_grip(SB, spearB, ST["S17"] + 20, Rz(GY) @ V(0, -1, -0.15), Rz(GY) @ V(1, 0, 0))
 vis_only([spear], [(ST["S16"], END_FRAME)]); vis_only([spearB], [(ST["S17"], END_FRAME)])
 # the swords: Child Of is not used (keyed transforms + the hand follows the grip); visibility per shot
@@ -669,9 +672,9 @@ for sw_, c_, f_ in ((swordA, SA, ST["S01"]), (swordB, SC2, ST["S14"])):
     d_ = (c_.world_bone("finger3-1.R", f_).translation - wr_).normalized()
     a_ = (c_.world_bone("finger2-1.R", f_).translation - c_.world_bone("finger5-1.R", f_).translation).normalized()
     n_ = a_.cross(d_).normalized()
-    pc_ = wr_ + d_ * 0.075 + n_ * 0.03
+    pc_ = wr_ + d_ * 0.078 + n_ * 0.036
     sw_.matrix_world = Matrix.Translation(pc_) @ frame_from(a_, d_).to_4x4()
-    apply_pose(c_.o, "R", "wrap_grip", f_)
+    apply_pose(c_.o, "R", "wrap_grip", f_, amount=0.72)
     child_of_now(sw_, c_.o, "wrist.R", f_)
 vis_only([swordA], [(ST["S01"], SE("S01"))]); vis_only([swordB], [(ST["S14"], SE("S14"))])
 
@@ -695,10 +698,10 @@ def copy_char(c, idx, T, shown):
     vis_only(objs[1:], shown)
     return objs
 idx = 0
-for row in range(3):
-    for col in range(5):
-        if row == 0 and col == 2: continue
-        off = V((col - 2) * 1.25 + 0.3 * (row % 2), -row * 1.5 - 0.3 * (col % 2), 0)
+for row in range(5):
+    for col in range(6):
+        if row == 0 and col == 3: continue
+        off = V((col - 3) * 1.2 + 0.35 * (row % 2), -row * 1.45 - 0.25 * (col % 2), 0)
         copy_char(SC, idx, Matrix.Translation(off), [(ST["S16"], END_FRAME)]); idx += 1
 # master SC is the front-centre marcher; in S17 the army stands behind the ring (the master keeps its S16 end pose)
 gi = 0
@@ -719,10 +722,10 @@ for c in CAST:
         park(c, ST[s]); park(c, SE(s))
 # SC in S17: hold the S16 end pose shifted forward to stand behind the ring
 p = ARMY1
-SC.stand(ST["S17"], p, 0.0); SC.stand(SE("S17"), p, 0.0)
-SC.hang(ST["S17"], p, 0.0, which="L"); SC.hang(SE("S17"), p, 0.0, which="L")
-SC.hand_w("R", ST["S17"], p + V(-0.36, -0.24, 1.0), V(0, -1, -0.15).normalized(), V(1, 0, 0), p + V(-0.6, 0.3, 0.9))
-SC.hand_w("R", SE("S17"), p + V(-0.36, -0.24, 1.0), V(0, -1, -0.15).normalized(), V(1, 0, 0), p + V(-0.6, 0.3, 0.9))
+SC.stand(ST["S17"], p, 180.0); SC.stand(SE("S17"), p, 180.0)
+SC.hang(ST["S17"], p, 180.0, which="L"); SC.hang(SE("S17"), p, 180.0, which="L")
+SC.hand_w("R", ST["S17"], p + Rz(180) @ V(-0.42, -0.26, 1.0), Rz(180) @ V(0, -1, -0.15).normalized(), Rz(180) @ V(1, 0, 0), p + Rz(180) @ V(-0.6, 0.3, 0.9))
+SC.hand_w("R", SE("S17"), p + Rz(180) @ V(-0.42, -0.26, 1.0), Rz(180) @ V(0, -1, -0.15).normalized(), Rz(180) @ V(1, 0, 0), p + Rz(180) @ V(-0.6, 0.3, 0.9))
 # swords constant between keys outside their shots
 const_interp(swordA) if False else None
 
@@ -748,6 +751,11 @@ flag = bpy.data.objects["Flag"]; wv = flag.modifiers["Wave"]; wv.speed = 0.25
 for f in (1, END_FRAME):
     wv.time_offset = -f * 0.0; wv.keyframe_insert("time_offset", frame=f)
 vis_only([bpy.data.objects['Flag'], bpy.data.objects['FlagPole']], [(ST['S15'], END_FRAME)])
+hz = bpy.data.materials.new("Haze"); hn, hl_ = nodes_of(hz); hn.clear()
+ho_ = hn.new('ShaderNodeOutputMaterial'); pv = hn.new('ShaderNodeVolumePrincipled'); pv.inputs['Density'].default_value = 0.012
+pv.inputs['Color'].default_value = (1.0, 0.85, 0.85, 1); hl_.new(pv.outputs[0], ho_.inputs['Volume'])
+bm = bmesh.new(); add_box(bm, V(BX - 18, -45, -0.5), V(BX + 18, -2.0, 14)); hzo = mesh_obj("Haze", bm, [hz], CP)
+vis_only([hzo], [(ST['S16'], SE('S16'))])
 # hut fill under the roof
 hl = bpy.data.lights.new("HutFill", 'AREA'); hl.size = 5.0; hl.energy = 600; hl.color = (1.0, 0.93, 0.82)
 ho = bpy.data.objects.new("HutFill", hl); CP.objects.link(ho); ho.location = (HX, 0, 2.6)
@@ -785,11 +793,11 @@ camera("S04", [(0, V(7.6, -1.4, 1.5), p4(ST["S04"]) + V(0, 0, 1.45)), (-1, V(9.6
 camera("S05", [(0, WP5 + V(0.9, -2.0, 1.65), V(HX + 0.2, 0.2, 1.4)), (-1, WP5 + V(0.75, -1.75, 1.62), V(HX + 0.2, 0.2, 1.42))], lens=28)
 h6 = head_at(W, ST["S06"] + 40)
 camera("S06", [(0, h6 + V(0.55, 1.5, -0.12), h6 + V(0, 0, -0.22)), (-1, h6 + V(0.42, 1.25, -0.1), h6 + V(0, 0, -0.18))], lens=35)
-camera("S07", [(0, V(HX + 1.9, -2.7, 1.5), V(HX + 0.15, 0.1, 1.4)), (-1, V(HX + 1.75, -2.45, 1.5), V(HX + 0.15, 0.1, 1.45))], lens=24)
+camera("S07", [(0, V(HX - 0.1, -3.6, 1.5), V(HX - 0.25, 0.3, 1.4)), (-1, V(HX - 0.1, -3.3, 1.5), V(HX - 0.25, 0.3, 1.45))], lens=20)
 FT = sc["FORGE_TOP"]
 camera("S08", [(0, FORGE + V(-0.3, -1.6, FT + 0.8), FORGE + V(0, 0, FT)), (-1, FORGE + V(-0.2, -1.2, FT + 0.62), FORGE + V(0, 0, FT))], lens=40)
 h9 = head_at(W, ST["S09"] + 70)
-camera("S09", [(0, ANV + V(0.85, 0.75, 1.0), (h9 + con) / 2 + V(0, 0, 0.05)), (-1, ANV + V(0.7, 0.62, 1.02), (h9 + con) / 2 + V(0, 0, 0.1))], lens=30)
+camera("S09", [(0, WP9 + V(1.45, 0.45, 1.5), h9 * 0.58 + con * 0.42), (-1, WP9 + V(1.3, 0.42, 1.48), h9 * 0.6 + con * 0.4)], lens=30)
 camera("S10", [(0, TB + V(0.05, -0.75, 0.55), TB + V(0, 0, 0.02)), (-1, TB + V(0.03, -0.5, 0.4), TB + V(0, 0, 0.02))], lens=40)
 h11 = head_at(W, ST["S11"] + 60)
 camera("S11", [(0, WP11 + V(-0.35, -2.1, 1.45), WP11 + V(0, 0, 1.3)), (-1, WP11 + V(-0.25, -1.8, 1.45), WP11 + V(0, 0, 1.35))], lens=30)
@@ -798,7 +806,7 @@ camera("S13", [(0, V(BX + 2.75, 0.55, 1.35), V(BX, 0.5, 1.2)), (-1, V(BX + 2.6, 
 camera("S14", [(0, V(BX + 0.3, -0.5, 1.45), V(BX - 3.0, -0.55, 1.2)), (-1, V(BX + 0.1, -0.45, 1.42), V(BX - 3.0, -0.5, 1.22))], lens=22)
 FLP = Vector(sc["FLAG"])
 camera("S15", [(0, FLP + V(2.6, -6.5, -4.2), FLP + V(0.6, 0, -1.2)), (-1, FLP + V(2.2, -6.0, -4.0), FLP + V(0.8, 0, -0.5))], lens=30)
-camera("S16", [(0, V(BX + 5.6, 0.6, 2.3), V(BX + 2.1, -4.6, 1.1)), (-1, V(BX + 5.2, 0.2, 2.2), V(BX + 2.1, -4.4, 1.1))], lens=26)
+camera("S16", [(0, V(BX + 4.4, -3.0, 1.62), V(BX + 1.6, -7.6, 1.45)), (-1, V(BX + 4.3, -3.3, 1.62), V(BX + 1.6, -7.4, 1.5))], lens=28)
 h17 = head_at(W, ST["S17"] + 150)
 camera("S17", [(0, RC + V(0.6, -3.6, 1.7), RC + V(0, 0, 1.2)), (150, RC + V(0.35, -1.6, 1.6), RC + V(0, 0, 1.45)), (-1, RC + V(0.25, -1.1, 1.62), RC + V(0, 0, 1.55))], lens=30)
 sc.camera = bpy.data.objects["CAM_S01"]

@@ -88,5 +88,41 @@
   "license": "CC Attribution",
   "source": "https://sketchfab.com/3d-models/bac83c715d48430c812f154100908095",
   "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "acacia": {
+  "uid": "bb14c2bb679b4d0bb1c578a27e2ddabf",
+  "title": "Acacia tree",
+  "author": "evolveduk",
+  "author_profile": "https://sketchfab.com/evolveduk",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/bb14c2bb679b4d0bb1c578a27e2ddabf",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "tree2": {
+  "uid": "6ebb011b88ce43e6b7f8b21ac3a6af96",
+  "title": "Acacia",
+  "author": "SCADL & Co",
+  "author_profile": "https://sketchfab.com/scadl",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/6ebb011b88ce43e6b7f8b21ac3a6af96",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "palisade": {
+  "uid": "c88f57eb0d734484b010c3f170e48d4a",
+  "title": "Palisade",
+  "author": "adam127",
+  "author_profile": "https://sketchfab.com/adam127",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/c88f57eb0d734484b010c3f170e48d4a",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "fence": {
+  "uid": "e530c55db10348a3a547ef92149bdd10",
+  "title": "Fence (Wood)",
+  "author": "trentspi",
+  "author_profile": "https://sketchfab.com/trentspice",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/e530c55db10348a3a547ef92149bdd10",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
  }
 }

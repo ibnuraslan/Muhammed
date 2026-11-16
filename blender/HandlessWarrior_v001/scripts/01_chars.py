@@ -126,7 +126,7 @@ def height(rig):
 
 # ======================================================================== the warrior
 W, wobjs = char(SHOE, "Sleeper1", "Warrior")
-dress(W, "casualsuit06", woven("WarriorTunic", (0.42, 0.05, 0.03), (0.06, 0.04, 0.03), (0.85, 0.62, 0.2), (0.16, 0.1, 0.06), waist(W), period=0.30, zr=zrange(W, "casualsuit06")))
+dress(W, "casualsuit06", woven("WarriorTunic", (0.42, 0.05, 0.03), (0.06, 0.04, 0.03), (0.85, 0.62, 0.2), (0.07, 0.04, 0.025), waist(W), period=0.30, zr=zrange(W, "casualsuit06")))
 tint_tex(W, "body", (0.78, 0.58, 0.42))         # warm tan skin
 for ch in mesh_kids(W, "shoes"):
     for i in range(len(ch.data.materials)): ch.data.materials[i] = flatcol("Moccasin", (0.22, 0.12, 0.06), rough=0.8)

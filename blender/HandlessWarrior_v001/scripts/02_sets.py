@@ -127,17 +127,11 @@ pst.hair_length = 1.0; ps.vertex_group_density = "grass"; pst.use_emit_random = 
 pst.distribution = 'RAND'
 
 # trees and shrubs ring
-tree = ph_model("island_tree_02", CF, "TreeSrc"); soften(tree); tree.location = (0, 0, -80)
 sh2 = ph_model("shrub_02", CF, "Shrub2Src"); soften(sh2); sh2.location = (0, 0, -80)
 sh4 = ph_model("shrub_04", CF, "Shrub4Src"); soften(sh4); sh4.location = (0, 0, -80)
 def gz(x, y):
     d = min((Vector((x, y)) - Vector(a_)).length for a_ in ((0, 0), (40, 0), (-40, 0), (20, 0), (-20, 0))); flat_ = min(1.0, max(0.0, (d - 12) / 30))
     return flat_ * (6.0 * noise.noise(Vector((x / 45, y / 45, 0.3))) + 4.0 + 0.15 * noise.noise(Vector((x / 6, y / 6, 1.7))))
-for i in range(26):
-    a = random.uniform(0, 2 * math.pi); r = random.uniform(30, 70)
-    x, y = r * math.cos(a), r * math.sin(a)
-    if min((Vector((x, y)) - Vector(c_)).length for c_ in ((0, 0), (40, 0), (-40, 0))) < 16: continue
-    inst(tree, "Tree%02d" % i, (x, y, gz(x, y) - 0.1), random.uniform(0, 360), random.uniform(0.8, 1.3), CF)
 SHRUB_SPOTS = [(-6, 9), (7, 11), (-12, 5), (12, 4), (-3, 14), (5, -12), (-9, -10), (34, 9), (47, 8), (-36, 8), (-46, 9), (-44, -6), (-33, -8), (15, -6), (-16, -4)]
 for i, (x, y) in enumerate(SHRUB_SPOTS):
     inst(sh2 if i % 2 else sh4, "Shrub%02d" % i, (x, y, gz(x, y) - 0.05), random.uniform(0, 360), random.uniform(1.4, 2.2), CF)
@@ -146,6 +140,37 @@ for i in range(30):
     x, y = r * math.cos(a), r * math.sin(a)
     if min((Vector((x, y)) - Vector(c_)).length for c_ in ((0, 0), (40, 0), (-40, 0))) < 8: continue
     inst(sh2 if i % 2 else sh4, "ShrubR%02d" % i, (x, y, gz(x, y) - 0.05), random.uniform(0, 360), random.uniform(1.2, 2.4), CF)
+
+# ---- trees (CC-BY acacias), palisades, rail fences and huts so every meadow shot has a village edge behind it
+acc = glb_asset("acacia", CF, target_size=7.0, axis=2); acc.name = "AccSrcA"
+acc2 = glb_asset("tree2", CF, target_size=8.0, axis=2); acc2.name = "AccSrcB"
+for o in (acc, acc2): soften(o)
+TREES = [(-9, 16), (14, 15), (-14, 9), (17, 6), (6, 22), (-4, 24), (20, -4), (-18, -2), (11, -14), (-12, -15),
+         (16, 30), (-20, 20), (26, 4), (22, 22),
+         (-40 - 12, 15), (-40 + 13, 15), (-40 - 15, -8), (-40 - 9, -16), (-40 + 16, -6), (-40 - 20, 6), (-40 + 4, 22), (-40 - 3, -22),
+         (40 - 12, 12), (40 + 12, -12), (40 - 14, -10)]
+for i, (x, y) in enumerate(TREES):
+    src_ = acc if i % 2 else acc2
+    inst(src_, "Acc%02d" % i, (x, y, gz(x, y) - 0.05), random.uniform(0, 360), random.uniform(0.8, 1.2), CF)
+acc.location = (0, 0, -60); acc2.location = (0, 0, -60); acc.hide_render = acc2.hide_render = True
+pal = glb_asset("palisade", CF, target_size=2.6, axis=2); pal.name = "PalSrc"
+pw = max(pal.dimensions.x, pal.dimensions.y); pal_long_x = pal.dimensions.x >= pal.dimensions.y
+fen = glb_asset("fence", CF, target_size=1.1, axis=2); fen.name = "FenSrc"
+fw_ = max(fen.dimensions.x, fen.dimensions.y); fen_long_x = fen.dimensions.x >= fen.dimensions.y
+def line_of(src_, w_, long_x, p0, p1, name, jitter=0.0):
+    p0 = Vector(p0); p1 = Vector(p1); d = p1 - p0; n = max(1, int(d.length / (w_ * 0.98)))
+    yaw = math.degrees(math.atan2(d.y, d.x)) + (0 if long_x else -90)
+    for k in range(n):
+        q = p0 + d * ((k + 0.5) / n)
+        inst(src_, "%s%02d" % (name, k), (q.x, q.y, gz(q.x, q.y) - 0.05), yaw + random.uniform(-jitter, jitter), 1.0, CF)
+    src_.location = (0, 0, -60); src_.hide_render = True
+# field village edge (behind S01-S03, looking +y / +x)
+line_of(pal, pw, pal_long_x, (-9, 13), (13, 13), "PalF", 2)
+line_of(fen, fw_, fen_long_x, (-6, 6.5), (5, 7.5), "FenF", 3)
+# battle village edge: behind S12 (looking +y) and S13/S14 (looking -x)
+line_of(pal, pw, pal_long_x, (-49, 12), (-33, 12), "PalB", 2)
+line_of(pal, pw, pal_long_x, (-51, -6), (-51, 9), "PalW", 2)
+line_of(fen, fw_, fen_long_x, (-46, -3.5), (-46, 3.5), "FenB", 3)
 
 # the stump (punishment block) at the field origin
 stump = ph_model("tree_stump_01", CF, "Stump"); soften(stump)
@@ -159,7 +184,8 @@ sc["STUMP_TOP"] = mx.z; print("STUMP", tuple(round(v, 3) for v in mn), tuple(rou
 
 # village huts (CC-BY model) on the far side of the field toward the meeting hut
 hut = glb_asset("hut", CF, target_size=4.2, axis=2)
-for i, (x, y, yaw, s) in enumerate([(28, 14, 200, 1.0), (33, 18, 160, 0.9), (52, 12, 240, 1.1), (55, -10, 280, 1.0), (24, 20, 190, 0.85), (47, 19, 210, 0.95)]):
+for i, (x, y, yaw, s) in enumerate([(28, 14, 200, 1.0), (33, 18, 160, 0.9), (52, 12, 240, 1.1), (55, -10, 280, 1.0), (24, 20, 190, 0.85), (47, 19, 210, 0.95),
+        (-4, 17, 180, 1.0), (4, 18.5, 170, 0.9), (10, 16.5, 200, 1.0), (-45, 16, 180, 1.0), (-38, 17, 160, 0.9), (-55, 0, 270, 1.0), (-56, 7, 250, 0.9), (-55, -6, 290, 1.0)]):
     o = hut if i == 0 else inst(hut, "Hut%02d" % i, (0, 0, 0), c=CF)
     place(o, (x, y, gz(x, y) - 0.05), yaw, s)
 
@@ -216,15 +242,27 @@ bpy.context.view_layer.update(); mn, mx = bbox_world([pit])
 FORGE = Vector((HX + 1.9, HY + 2.0, 0))
 pit.location = (FORGE.x - (mn.x + mx.x) / 2, FORGE.y - (mn.y + mx.y) / 2, -mn.z)
 bpy.context.view_layer.update(); mn, mx = bbox_world([pit])
-coal_m = flat("Coals", (0.08, 0.05, 0.04), rough=0.9, emit=(1.0, 0.32, 0.05), emit_str=2.0)
+coal_m = flat("Coals", (0.025, 0.018, 0.015), rough=1.0, emit=(1.0, 0.28, 0.04), emit_str=2.0)
 _n, _l = nodes_of(coal_m); _bs = next(x for x in _n if x.type == 'BSDF_PRINCIPLED')
-_nz = _n.new('ShaderNodeTexVoronoi'); _nz.inputs['Scale'].default_value = 12.0
-_mr = _n.new('ShaderNodeMapRange'); _mr.inputs['From Min'].default_value = 0.0; _mr.inputs['From Max'].default_value = 0.6
-_mr.inputs['To Min'].default_value = 1.2; _mr.inputs['To Max'].default_value = 0.0
-_l.new(_nz.outputs['Distance'], _mr.inputs['Value']); _l.new(_mr.outputs[0], _bs.inputs['Emission Strength'])
+_nz = _n.new('ShaderNodeTexNoise'); _nz.inputs['Scale'].default_value = 9.0
+_mr = _n.new('ShaderNodeMapRange'); _mr.inputs['From Min'].default_value = 0.35; _mr.inputs['From Max'].default_value = 0.7
+_mr.inputs['To Min'].default_value = 0.0; _mr.inputs['To Max'].default_value = 3.0
+_l.new(_nz.outputs['Fac'], _mr.inputs['Value']); _l.new(_mr.outputs[0], _bs.inputs['Emission Strength'])
 bm = bmesh.new(); bmesh.ops.create_icosphere(bm, subdivisions=3, radius=1.0)
 for v in bm.verts: v.co = Vector((v.co.x * 0.36, v.co.y * 0.36, max(v.co.z, 0) * 0.08 + 0.02 * noise.noise(v.co * 6)))
-coal = mesh_obj("Coals", bm, [coal_m], CH); coal.location = (FORGE.x, FORGE.y, mx.z * 0.45)
+ash_m = flat("Ash", (0.06, 0.05, 0.045), rough=1.0)
+coal = mesh_obj("AshBed", bm, [ash_m], CH); coal.location = (FORGE.x, FORGE.y, mx.z * 0.45)
+# individual coal lumps on the ash bed (dark, glowing in the cracks)
+bm = bmesh.new()
+for i in range(280):
+    a_ = random.uniform(0, 2 * math.pi); r_ = 0.32 * math.sqrt(random.random())
+    rad_ = random.uniform(0.018, 0.04)
+    g_ = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=rad_)
+    for v in g_['verts']:
+        v.co = Vector((v.co.x * random.uniform(0.8, 1.3), v.co.y * random.uniform(0.8, 1.3), v.co.z * 0.7))
+    h_ = max(0.0, 0.08 * (1 - (r_ / 0.36) ** 2)) * 0.36 / 0.36 * 0.36 + 0.01
+    bmesh.ops.translate(bm, verts=g_['verts'], vec=(r_ * math.cos(a_), r_ * math.sin(a_), 0.03 * (1 - (r_ / 0.36) ** 2) + 0.04))
+lumps = mesh_obj("Coals", bm, [coal_m], CH); lumps.location = (FORGE.x, FORGE.y, mx.z * 0.45)
 sc["FORGE"] = list(FORGE); sc["FORGE_TOP"] = mx.z * 0.45 + 0.05
 
 anvil = glb_asset("anvil", CH, target_size=0.62, axis=1)
@@ -260,7 +298,7 @@ inst(bask, "Basket2", (HX - 2.5, HY + 3.0, 0), 75, s_ * 0.8, CH)
 buck = ph_model("wooden_bucket_01", CH, "Bucket"); soften(buck)
 mn, mx = bbox_world([buck]); s_ = 0.32 / max(mx.x - mn.x, mx.y - mn.y)
 place(buck, (FORGE.x + 0.9, FORGE.y - 0.3, 0), 0, s_)
-CR = Vector((HX - 1.0, HY + 1.45, 0)); cw = 0.62
+CR = Vector((HX - 1.05, HY - 0.75, 0)); cw = 0.62
 crate = box("LogoCrate", (CR.x - cw / 2, CR.y - cw / 2, 0), (CR.x + cw / 2, CR.y + cw / 2, 0.55), wood, CH)
 crate.rotation_euler = (0, 0, 0)
 lm = logo_mat("LogoWhite", "white")
