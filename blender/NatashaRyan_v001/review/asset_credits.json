@@ -1,0 +1,119 @@
+{
+ "school": {
+  "uid": "226f47e33bb2406086ad0e3c56a1269f",
+  "title": "Musik School",
+  "author": "swjeta",
+  "author_profile": "https://sketchfab.com/swjeta",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/226f47e33bb2406086ad0e3c56a1269f",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "house2": {
+  "uid": "faa69249ddb84765921401fa9438861f",
+  "title": "2 Story House",
+  "author": "Designed By Jonathan",
+  "author_profile": "https://sketchfab.com/designedbyjonathan",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/faa69249ddb84765921401fa9438861f",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "house1": {
+  "uid": "a0c72713894e418d8f93223c91eb1eac",
+  "title": "Suburban Home",
+  "author": "Designed By Jonathan",
+  "author_profile": "https://sketchfab.com/designedbyjonathan",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/a0c72713894e418d8f93223c91eb1eac",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "sedan": {
+  "uid": "aeb2699532b4402e8b75ec8888b800b9",
+  "title": "Low-Poly Sedan car",
+  "author": "scailman",
+  "author_profile": "https://sketchfab.com/scailman",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/aeb2699532b4402e8b75ec8888b800b9",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "van": {
+  "uid": "09d718c9cf72401b8534d265a06a803f",
+  "title": "Shvan '92 - Low poly model",
+  "author": "Daniel Zhabotinsky",
+  "author_profile": "https://sketchfab.com/DanielZhabotinsky",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/09d718c9cf72401b8534d265a06a803f",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "candles": {
+  "uid": "56a68205dae649a388c6e3ba04145a9e",
+  "title": "Candles Asset Pack",
+  "author": "Em Marshall",
+  "author_profile": "https://sketchfab.com/emarshall",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/56a68205dae649a388c6e3ba04145a9e",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "pew": {
+  "uid": "0fdeca01a1214150aeae21f46cfe98d5",
+  "title": "Church Pew",
+  "author": "awramos",
+  "author_profile": "https://sketchfab.com/awenram",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/0fdeca01a1214150aeae21f46cfe98d5",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "chair": {
+  "uid": "abe60bfc1d4f43c686a06fe04e29cab9",
+  "title": "Chair / Wooden Chair",
+  "author": "ROY",
+  "author_profile": "https://sketchfab.com/roy.3dartist",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/abe60bfc1d4f43c686a06fe04e29cab9",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "desk": {
+  "uid": "def73b8749e24090a59e6bb90cc6f846",
+  "title": "Office Desk",
+  "author": "Tytan",
+  "author_profile": "https://sketchfab.com/tylerhalterman",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/def73b8749e24090a59e6bb90cc6f846",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "bed": {
+  "uid": "96ed3f6ba55848809dfa8cd505edddae",
+  "title": "Bed Agape",
+  "author": "Render - City",
+  "author_profile": "https://sketchfab.com/greshnovk",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/96ed3f6ba55848809dfa8cd505edddae",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "flowers": {
+  "uid": "f1a984ec17b94cdd860b5e7c4fe40170",
+  "title": "Bouquet / Rose red",
+  "author": "GardenBee",
+  "author_profile": "https://sketchfab.com/pocketpastel456",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/f1a984ec17b94cdd860b5e7c4fe40170",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "tree": {
+  "uid": "4b27adcf92f644bdabf8ecc6c5bef399",
+  "title": "Maple tree",
+  "author": "atrodler",
+  "author_profile": "https://sketchfab.com/atrodler",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/4b27adcf92f644bdabf8ecc6c5bef399",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "frame": {
+  "uid": "5b4f6ab0cd54433c82b429b42f4c9259",
+  "title": "Picture Frame",
+  "author": "Wyme",
+  "author_profile": "https://sketchfab.com/Wyme",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/5b4f6ab0cd54433c82b429b42f4c9259",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
