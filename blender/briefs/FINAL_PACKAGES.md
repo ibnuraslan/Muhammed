@@ -83,3 +83,4 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | B32 | KidHacker | `blender/KidHacker_v003/` | **READY TO RENDER (frames 1–2234)**, watched moving |
 | B28 | CrocodileFriend | `blender/CrocodileFriend_v003/` | **READY TO RENDER (frames 1–1895)**, watched moving |
 | B36 | PaperclipHouse | `blender/PaperclipHouse_v003/` | **READY TO RENDER (frames 1–2000)**, watched moving |
+| B23 | HandlessWarrior | `blender/HandlessWarrior_v003/` | **READY TO RENDER (frames 1–1615)**, watched moving |
