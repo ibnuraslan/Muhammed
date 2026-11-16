@@ -514,7 +514,7 @@ def mattress_z(x, y):
 _bb = [bed.matrix_world @ Vector(c) for c in bed.bound_box]; BX = sum(c.x for c in _bb) / 8; BY = sum(c.y for c in _bb) / 8
 sit_y = BY + 0.55; mz = mattress_z(BX, sit_y)
 print("MATTRESS z", mz)
-SEAT_DZ = 0.07
+SEAT_DZ = 0.08
 def sit(fr, lean=-12.0, knee_up=0.0, turn=0.0, head=(0.0, 0.0), hand_rib=0.0, hand_thigh=0.0):
     pos = Vector((BX - 0.05, sit_y, mz + SEAT_DZ))
     M = M_of(pos, yaw=0, pitch=lean)                      # faces -Y (toward the room), seated: legs forward along -Y
