@@ -78,3 +78,4 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | B15 | NatashaRyan | `blender/NatashaRyan_v003/` | **READY TO RENDER (frames 1–2136)**, watched moving |
 | B04 | LincolnAssassination | `blender/LincolnAssassination_v003/` | **READY TO RENDER (frames 1–1503)**, watched moving |
 | B34 | LakeSword | `blender/LakeSword_v003/` | **READY TO RENDER (frames 1–1826)**, watched moving |
+| B31 | NeverBathed | `blender/NeverBathed_v003/` | **READY TO RENDER (frames 1–1728)**, watched moving |
