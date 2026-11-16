@@ -1,0 +1,280 @@
+"""MountainTunnel characters: MPFB2 rigs re-used from our own packages (Tsunami2004 locals, CaveRescue crowd), re-dressed.
+blender -b --factory-startup --python 01_chars.py -- <repo_blender_dir> <out.blend>
+Man = the hammer-and-chisel man (white top, cream dhoti; ages via the keyed 'Age' value: grey hair + beard)
+Wife = red sari-like dress; V1..V3 = villagers in checked lungis and plain shirts."""
+import sys, os, math
+import bpy, bmesh
+from mathutils import Vector
+a = sys.argv[sys.argv.index("--") + 1:]; ROOT, OUT = a[0], a[1]
+for ob in list(bpy.data.objects): bpy.data.objects.remove(ob, do_unlink=True)
+sc = bpy.context.scene
+TS = os.path.join(ROOT, "Tsunami2004_v012/Tsunami2004_v012_60fps.blend")
+CR = os.path.join(ROOT, "CaveRescue_v010/CaveRescue_v010_60fps.blend")
+SB = os.path.join(ROOT, "ShoeBomber_v008/ShoeBomber_v008_60fps.blend")
+SW = os.path.join(ROOT, "SpeakWithoutSight_v006/SpeakWithoutSight_v006_60fps.blend")
+SRC = [(SB, "Sleeper1", "Man"), (SW, "Mother", "Wife"), (TS, "Fisher", "V1"), (TS, "TouristM_C08", "V2"), (CR, "Coach", "V3")]
+RIGS = {}
+for path, src, new in SRC:
+    with bpy.data.libraries.load(path, link=False) as (df, dt):
+        dt.objects = [n for n in df.objects if n == src or n.startswith(src + ".")]
+    objs = [o for o in dt.objects if o is not None]
+    rig = next(o for o in objs if o.type == 'ARMATURE')
+    kids = [o for o in objs if o.parent == rig]
+    for o in [rig] + kids:
+        sc.collection.objects.link(o); o.animation_data_clear()
+        if o.type == 'MESH' and o.data.shape_keys: o.data.shape_keys.animation_data_clear()
+        o.hide_render = o.hide_viewport = False; o.hide_set(False)
+        o.constraints.clear() if o is rig else None
+    for o in [o for o in objs if o not in kids and o is not rig]: bpy.data.objects.remove(o, do_unlink=True)
+    rig.name = new; rig.data.name = new
+    for k in kids:
+        k.name = new + "." + k.name.split(".", 1)[1]; k.data.name = k.name
+        for m in k.modifiers:
+            if m.type == 'ARMATURE': m.object = rig
+    rig.parent = None
+    rig.location = (0, 0, 0); rig.rotation_euler = (0, 0, 0); rig.scale = (1, 1, 1)
+    for pb in rig.pose.bones:
+        pb.location = (0, 0, 0); pb.rotation_mode = 'QUATERNION'; pb.rotation_quaternion = (1, 0, 0, 0); pb.scale = (1, 1, 1)
+    RIGS[new] = rig
+    print("CHAR", new, "from", src, [k.name for k in kids])
+bpy.ops.outliner.orphans_purge(do_recursive=True)
+
+for r in RIGS.values():
+    for k in r.children:
+        if k.type != 'MESH': continue
+        for i, m in enumerate(k.data.materials):
+            if m and m.users > 1: k.data.materials[i] = m.copy()
+
+def PB(m):
+    nt = m.node_tree; return nt, next(n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED')
+def unlink(nt, sock):
+    for l in list(sock.links): nt.links.remove(l)
+def flat(m, rgb, rough=0.65):
+    nt, P = PB(m); unlink(nt, P.inputs['Base Color']); P.inputs['Base Color'].default_value = (*rgb, 1)
+    unlink(nt, P.inputs['Roughness']); P.inputs['Roughness'].default_value = rough
+def two_tone(m, top, bottom, split, check=None, rough=0.7):
+    """shirt colour above `split` (Generated Z of the suit mesh), the lower garment below; optional check pattern (c1, c2, scale)"""
+    nt, P = PB(m); unlink(nt, P.inputs['Base Color']); unlink(nt, P.inputs['Roughness']); P.inputs['Roughness'].default_value = rough
+    tc = nt.nodes.new('ShaderNodeTexCoord'); sep = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Generated'], sep.inputs[0])
+    lt = nt.nodes.new('ShaderNodeMath'); lt.operation = 'GREATER_THAN'; lt.inputs[1].default_value = split; nt.links.new(sep.outputs['Z'], lt.inputs[0])
+    mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.inputs['B'].default_value = (*top, 1)
+    if check:
+        c1, c2, scl = check
+        ck = nt.nodes.new('ShaderNodeTexChecker'); ck.inputs['Scale'].default_value = scl
+        ck.inputs['Color1'].default_value = (*c1, 1); ck.inputs['Color2'].default_value = (*c2, 1)
+        nt.links.new(tc.outputs['Object'], ck.inputs['Vector']); nt.links.new(ck.outputs['Color'], mx.inputs['A'])
+    else: mx.inputs['A'].default_value = (*bottom, 1)
+    nt.links.new(lt.outputs[0], mx.inputs['Factor']); nt.links.new(mx.outputs['Result'], P.inputs['Base Color'])
+
+def suit(n):
+    return [k for k in RIGS[n].children if k.type == 'MESH' and "suit" in k.name]
+WHITE, CREAM = (0.88, 0.88, 0.86), (0.80, 0.76, 0.64)
+for k in suit("Man"):
+    for m in k.data.materials:
+        two_tone(m, WHITE, CREAM, 0.50); unlink(m.node_tree, PB(m)[1].inputs['Normal'])     # the donor shirt's print lived in its normal map
+        P_ = PB(m)[1]
+        for l in list(m.node_tree.links):
+            if l.to_node == P_ and l.to_socket.name in ('Alpha', 'Emission Color', 'Coat Weight'): m.node_tree.links.remove(l)
+for k in suit("Wife"):          # blouse
+    for m in k.data.materials: flat(m, (0.10, 0.42, 0.18), 0.6)
+for k in RIGS["Wife"].children:  # long skirt: sari red with a gold hem band
+    if "skirt" in k.name:
+        for m in k.data.materials: two_tone(m, (0.62, 0.03, 0.05), (0.85, 0.6, 0.12), 0.12); unlink(m.node_tree, PB(m)[1].inputs['Normal'])
+DRESS = {"V1": ((0.15, 0.35, 0.75), ((0.08, 0.30, 0.12), (0.85, 0.85, 0.8), 18.0)),
+         "V2": ((0.75, 0.30, 0.30), ((0.15, 0.15, 0.45), (0.85, 0.85, 0.8), 18.0)),
+         "V3": ((0.90, 0.75, 0.25), ((0.10, 0.10, 0.10), (0.80, 0.80, 0.78), 18.0))}
+for n, (top, ck) in DRESS.items():
+    for k in suit(n):
+        for m in k.data.materials: two_tone(m, top, None, 0.50, check=ck)
+for r in RIGS.values():
+    for k in r.children:
+        if "shoes" in k.name:
+            for m in k.data.materials: flat(m, (0.22, 0.13, 0.07), 0.5)     # brown sandals/leather
+
+# ---- skin: warm medium-brown for every character (South Asian village), irises dark brown, hair near-black
+TINT = {"Man": (0.78, 0.60, 0.46), "Wife": (0.82, 0.64, 0.50), "V1": (0.72, 0.55, 0.42), "V2": (0.70, 0.52, 0.40), "V3": (0.80, 0.62, 0.48)}
+for n, r in RIGS.items():
+    b = next(k for k in r.children if k.name.endswith(".body"))
+    for m in b.data.materials:
+        for gn in [nd for nd in m.node_tree.nodes if nd.type == 'GROUP']:
+            g = gn.node_tree
+            if g.users > 1: g = gn.node_tree = g.copy()
+            bc = next((nd for nd in g.nodes if nd.type == 'BRIGHTCONTRAST'), None)
+            P = next((nd for nd in g.nodes if nd.type == 'BSDF_PRINCIPLED'), None)
+            if not (bc and P) or "SkinTint" in g.nodes: continue
+            mx = g.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.name = "SkinTint"
+            mx.inputs['Factor'].default_value = 1.0; mx.inputs['B'].default_value = (*TINT[n], 1)
+            g.links.new(bc.outputs['Color'], mx.inputs['A']); g.links.new(mx.outputs['Result'], P.inputs['Base Color'])
+            print("TINT", n, g.name)
+    eye = next(k for k in r.children if k.name.endswith("high-poly"))
+    for m in eye.data.materials:
+        for gn in [nd for nd in m.node_tree.nodes if nd.type == 'GROUP']:
+            if 'IrisMajorColor' in gn.inputs:
+                gn.inputs['IrisMajorColor'].default_value = (0.20, 0.10, 0.04, 1); gn.inputs['IrisMinorColor'].default_value = (0.09, 0.045, 0.02, 1)
+    for k in r.children:
+        if any(h in k.name for h in ("short0", "long0")):
+            for m in k.data.materials:
+                nt, P_ = PB(m); l = P_.inputs['Base Color'].links
+                if l and "HairTint" not in nt.nodes:
+                    mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.name = "HairTint"
+                    mx.inputs['Factor'].default_value = 1.0; mx.inputs['B'].default_value = (0.25, 0.2, 0.18, 1)
+                    nt.links.new(l[0].from_socket, mx.inputs['A']); nt.links.new(mx.outputs['Result'], P_.inputs['Base Color'])
+
+# ---- eye fix on every EnhancedEye group not yet fixed
+for g in [g for g in bpy.data.node_groups if g.name.startswith("EnhancedEye")]:
+    if not any(nd.name.startswith("CorneaTransparentMix") for nd in g.nodes):
+        print("EYEFIX on", g.name)
+        src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "eye_fix.py")).read().replace('bpy.data.node_groups["EnhancedEye"]', 'bpy.data.node_groups[%r]' % g.name)
+        _NO_SAVE = True; exec(src)
+for r in RIGS.values():
+    for k in r.children:
+        if k.name.endswith(("eyebrow001", "eyelashes01")):
+            for m in k.data.materials:
+                for nd in m.node_tree.nodes:
+                    if nd.type == 'TEX_IMAGE' and nd.image:
+                        al = nd.image.pixels[3::4]; print("CARD", k.name, nd.image.name, "alpha min", round(min(al), 3))
+
+# V3's donor cards lost their alpha (black bands, LESSONS s3): take V1's intact brow/lash materials
+for suf in ("eyebrow001", "eyelashes01"):
+    good = next(k for k in RIGS["V1"].children if k.name.endswith(suf)).data.materials[0]
+    for k in RIGS["V3"].children:
+        if k.name.endswith(suf): k.data.materials[0] = good
+
+# ---- open the elbow IK limit (MPFB rest elbow ~46 deg)
+for r in RIGS.values():
+    for s in "LR":
+        lo = r.pose.bones["lowerarm01." + s]; lo.use_ik_limit_x = True; lo.ik_min_x = math.radians(-40); lo.ik_max_x = math.radians(100)
+
+# ---- ageing for the Man: hair goes grey/white with the keyed Age value; beard grows (scale keyed in 03_shots)
+man = RIGS["Man"]
+hair = next(k for k in man.children if "short0" in k.name)
+for m in hair.data.materials:
+    nt, P = PB(m)
+    l = P.inputs['Base Color'].links
+    srcs = l[0].from_socket if l else None
+    age = nt.nodes.new('ShaderNodeValue'); age.name = "Age"; age.outputs[0].default_value = 0.0
+    mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.name = "AgeMix"
+    if srcs: nt.links.new(srcs, mx.inputs['A'])
+    else: mx.inputs['A'].default_value = P.inputs['Base Color'].default_value
+    mx.inputs['B'].default_value = (0.78, 0.78, 0.76, 1)
+    nt.links.new(age.outputs[0], mx.inputs['Factor']); nt.links.new(mx.outputs['Result'], P.inputs['Base Color'])
+    print("AGE hair material", m.name)
+for k in man.children:      # brows also whiten
+    if k.name.endswith("eyebrow001"):
+        for m in k.data.materials:
+            nt, P = PB(m); l = P.inputs['Base Color'].links
+            if l:
+                mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.name = "AgeMix"
+                nt.links.new(l[0].from_socket, mx.inputs['A']); mx.inputs['B'].default_value = (0.8, 0.8, 0.78, 1)
+                age = nt.nodes.new('ShaderNodeValue'); age.name = "Age"
+                nt.links.new(age.outputs[0], mx.inputs['Factor']); nt.links.new(mx.outputs['Result'], P.inputs['Base Color'])
+
+body = next(k for k in man.children if k.name.endswith(".body"))
+# the body's real shape includes its shape keys: read evaluated coordinates with the modifiers off (vertex order kept)
+_sv = [(m, m.show_viewport) for m in body.modifiers]
+for m, _ in _sv: m.show_viewport = False
+bpy.context.view_layer.update(); _dg = bpy.context.evaluated_depsgraph_get()
+_em = body.evaluated_get(_dg).to_mesh(); ECO = [v.co.copy() for v in _em.vertices]; body.evaluated_get(_dg).to_mesh_clear()
+for m, sv in _sv: m.show_viewport = sv
+print("SHAPEKEYS", bool(body.data.shape_keys), "verts", len(ECO), len(body.data.vertices))
+gi = body.vertex_groups["head"].index
+eye_z = (man.data.bones["eye.L"].head_local.z + man.data.bones["eye.R"].head_local.z) / 2
+eye_y = man.data.bones["eye.L"].head_local.y
+hv = [v for v in body.data.vertices if any(g.group == gi and g.weight > 0.5 for g in v.groups)]
+cx = sum(ECO[v.index].x for v in hv) / len(hv)
+teeth = next(k for k in man.children if "teeth" in k.name)
+tz = [v.co.z for v in teeth.data.vertices]; ty = [v.co.y for v in teeth.data.vertices]
+mouth_z = (min(tz) + max(tz)) / 2; mouth_y = min(ty)
+print("HEAD eye_z", round(eye_z, 3), "eye_y", round(eye_y, 3), "mouth_z", round(mouth_z, 3), "mouth_y", round(mouth_y, 3))
+
+# clean head target (no MPFB helper / joint geometry, which sits inside the head and caught the shrinkwrap)
+HELP = {g.index for g in body.vertex_groups if g.name.startswith(("helper", "joint")) or g.name in ("HelperGeometry", "JointCubes")}
+def clean(v): return not any(g.group in HELP and g.weight > 0.0 for g in v.groups)
+CLEAN = {v.index for v in body.data.vertices if clean(v)}
+HEADV = {v.index for v in hv if v.index in CLEAN}
+bmt = bmesh.new(); bmt.from_mesh(body.data); bmt.verts.ensure_lookup_table()
+for v in bmt.verts: v.co = ECO[v.index]
+bmesh.ops.delete(bmt, geom=[v for v in bmt.verts if v.index not in CLEAN or v.co.z < eye_z - 0.20], context='VERTS')
+tme = bpy.data.meshes.new("Man.headtgt"); bmt.to_mesh(tme); bmt.free()
+tgt = bpy.data.objects.new("Man.headtgt", tme); sc.collection.objects.link(tgt)
+def bake(o):
+    bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
+    m2 = bpy.data.meshes.new_from_object(o.evaluated_get(dg)); old = o.data; o.modifiers.clear(); o.data = m2; m2.name = old.name
+    bpy.data.meshes.remove(old)
+
+# short-cropped hair shell (replaces the donor's fringe hair, which covered an eye): dark, greys with Age
+hair = next(k for k in man.children if "short0" in k.name)
+hair.hide_render = hair.hide_viewport = True
+xs = [ECO[v.index].x for v in hv]; ys = [ECO[v.index].y for v in hv]; top = max(ECO[v.index].z for v in hv)
+cy = (min(ys) + max(ys)) / 2; rx, ry = (max(xs) - min(xs)) / 2 * 1.12, (max(ys) - min(ys)) / 2 * 1.12
+bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=64, v_segments=40, radius=1.0)
+rz = (top - eye_z) * 1.15
+for v in bm.verts: v.co = Vector((v.co.x * rx, v.co.y * ry, v.co.z * rz))
+def keep_hair(c):
+    yn = c.y / ry                                      # -1 front .. +1 back
+    rim = 0.048 if yn < -0.55 else (0.048 - (yn + 0.55) / 1.55 * 0.105)
+    if abs(c.x) > rx * 0.82 and -0.6 < yn < 0.3: rim = max(rim, 0.035)   # above the ears
+    return c.z > rim
+bmesh.ops.delete(bm, geom=[v for v in bm.verts if not keep_hair(v.co)], context='VERTS')
+me = bpy.data.meshes.new("Man.crop"); bm.to_mesh(me); bm.free()
+crop = bpy.data.objects.new("Man.crop", me); sc.collection.objects.link(crop); crop.location = (cx, cy, eye_z)
+for p_ in me.polygons: p_.use_smooth = True
+mh = bpy.data.materials.new("M_CropHair"); mh.use_nodes = True; nt = mh.node_tree; P = nt.nodes["Principled BSDF"]
+P.inputs['Roughness'].default_value = 0.55
+age = nt.nodes.new('ShaderNodeValue'); age.name = "Age"; age.outputs[0].default_value = 0.0
+mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.name = "AgeMix"
+mx.inputs['A'].default_value = (0.025, 0.018, 0.014, 1); mx.inputs['B'].default_value = (0.80, 0.80, 0.78, 1)
+nt.links.new(age.outputs[0], mx.inputs['Factor']); nt.links.new(mx.outputs['Result'], P.inputs['Base Color'])
+tc = nt.nodes.new('ShaderNodeTexCoord'); nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 400.0
+bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.3
+nt.links.new(tc.outputs['Object'], nz.inputs['Vector']); nt.links.new(nz.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs['Normal'], P.inputs['Normal'])
+me.materials.append(mh)
+sw = crop.modifiers.new("Fit", 'SHRINKWRAP'); sw.target = tgt; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.offset = 0.002
+crop.modifiers.new("Sm", 'SMOOTH').iterations = 3
+bake(crop); me = crop.data
+_so = crop.modifiers.new("Solid", 'SOLIDIFY'); _so.thickness = 0.006; _so.offset = 1.0
+crop.modifiers.new("Sub", 'SUBSURF').levels = 1
+bpy.context.view_layer.update(); Mw = crop.matrix_world.copy(); crop.parent = man; crop.parent_type = 'BONE'; crop.parent_bone = "head"
+bpy.context.view_layer.update(); crop.matrix_world = Mw
+
+def in_beard(p):
+    dx = abs(p.x - cx); dz = p.z - mouth_z
+    if p.y > eye_y + 0.07: return False
+    if dz < -0.085: return False                                   # under the chin, not down the throat
+    # (the mouth is covered: an open hole read as a mask)
+    if dx < 0.034: return dz < 0.021                               # chin, and the moustache up to the nose base
+    if dx < 0.060: return dz < 0.038                               # cheeks
+    return dz < 0.075                                              # jaw sides up to the sideburns
+bm = bmesh.new(); bm.from_mesh(body.data); bm.verts.ensure_lookup_table()
+for v in bm.verts: v.co = ECO[v.index]
+keep = [f for f in bm.faces if all(v.index in CLEAN and abs(v.co.x - cx) < 0.085 and in_beard(v.co) for v in f.verts)]
+bm2 = bmesh.new(); vm = {}
+for f in keep:
+    vs = []
+    for v in f.verts:
+        if v.index not in vm: vm[v.index] = bm2.verts.new(v.co)
+        vs.append(vm[v.index])
+    bm2.faces.new(vs)
+me = bpy.data.meshes.new("Man.beard"); bm2.to_mesh(me); bm.free(); bm2.free()
+beard = bpy.data.objects.new("Man.beard", me); sc.collection.objects.link(beard)
+for p_ in me.polygons: p_.use_smooth = True
+mb = bpy.data.materials.new("M_Beard"); mb.use_nodes = True; nt = mb.node_tree; P = nt.nodes["Principled BSDF"]
+P.inputs['Base Color'].default_value = (0.82, 0.82, 0.80, 1); P.inputs['Roughness'].default_value = 0.8
+tc = nt.nodes.new('ShaderNodeTexCoord'); w = nt.nodes.new('ShaderNodeTexNoise'); w.inputs['Scale'].default_value = 300.0
+bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.25
+nt.links.new(tc.outputs['Object'], w.inputs['Vector']); nt.links.new(w.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs['Normal'], P.inputs['Normal'])
+me.materials.append(mb)
+sw = beard.modifiers.new("Fit", 'SHRINKWRAP'); sw.target = tgt; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.offset = 0.003
+sm = beard.modifiers.new("Smooth", 'SMOOTH'); sm.factor = 0.6; sm.iterations = 4
+bake(beard)
+sol = beard.modifiers.new("Solid", 'SOLIDIFY'); sol.thickness = 0.011; sol.offset = 1.0
+beard.modifiers.new("Sub", 'SUBSURF').levels = 2
+Mw = beard.matrix_world.copy(); beard.parent = man; beard.parent_type = 'BONE'; beard.parent_bone = "head"
+bpy.context.view_layer.update(); beard.matrix_world = Mw
+print("BEARD faces", len(beard.data.polygons))
+bpy.data.objects.remove(tgt, do_unlink=True)
+
+for n, r in RIGS.items():
+    print("RIG", n, tuple(round(d, 2) for d in r.dimensions), "head z", round(r.data.bones["head"].head_local.z, 3))
+bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=True)
+print("CHARS_OK")
