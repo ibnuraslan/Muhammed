@@ -92,7 +92,7 @@ def calling(p):
     d.ellipse([W // 2 - 34, 560, W // 2 + 34, 628], fill=(235, 60, 55)); d.rounded_rectangle([W // 2 - 16, 588, W // 2 + 16, 600], 6, fill=(255, 255, 255))
     return t
 def glitch(src, seed):
-    rnd = random.Random(seed); t = src.copy()
+    rnd = random.Random(seed); t = src.copy()   # bars, blocks and colour shifts only (no glyph fragments)
     r, g, b = t.split(); t = Image.merge("RGB", (r.transform(t.size, Image.AFFINE, (1, 0, rnd.randint(-14, 14), 0, 1, 0)), g, b.transform(t.size, Image.AFFINE, (1, 0, rnd.randint(-14, 14), 0, 1, 0))))
     for _ in range(14):
         y = rnd.randint(0, H - 20); h = rnd.randint(4, 40); dx = rnd.randint(-60, 60)
@@ -114,7 +114,7 @@ TILES = [Image.new("RGB", (W, H), (6, 6, 8)),            # 0 off
          home(), G, M, flash(), shot(G), shot(M),       # 8 home, 9 gallery app, 10 map app, 11 flash, 12-13 screenshot thumbs
          dial(), dial(8), dial(0), dial(99, True),       # 14 pad, 15 '9' lit, 16 '1' lit, 17 call pressed
          calling(0), calling(1),                         # 18-19 calling (pulsing)
-         glitch(home(), 1), glitch(G, 2), glitch(dial(99, True), 3), ripple()]   # 20-22 glitch, 23 dark ripple
+         glitch(WALL, 1), glitch(grad((10, 30, 60), (60, 10, 70)), 2), glitch(grad((5, 5, 8), (20, 60, 70)), 3), ripple()]   # 20-22 glitch, 23 dark ripple
 for i, t in enumerate(TILES):
     t = t.convert("RGB"); m = Image.new("L", (W, H), 0); ImageDraw.Draw(m).rounded_rectangle([0, 0, W - 1, H - 1], 34, fill=255)
     bg = Image.new("RGB", (W, H), (0, 0, 0)); bg.paste(t, (0, 0), m)

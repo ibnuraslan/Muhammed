@@ -12,9 +12,9 @@ for ob in list(bpy.data.objects): bpy.data.objects.remove(ob, do_unlink=True)
 
 # new name, source package, source rig, outfit colours {cloth key: rgb}, drop (meshes to delete)
 CAST = [
-    ("Foreman", "EscapeArtist_v010", "Guard",   {"casualsuit": (0.55, 0.38, 0.78), "shoes": (0.12, 0.09, 0.07)}, []),   # lilac/purple shirt (phone owner, as in the reference)
+    ("Foreman", "EscapeArtist_v010", "Guard",   {"casualsuit": (0.55, 0.38, 0.78), "shoes": (0.12, 0.09, 0.07)}, ["short03"]),   # lilac/purple shirt (phone owner, as in the reference)
     ("Digger",  "EscapeArtist_v010", "Father",  {"casualsuit": (0.08, 0.08, 0.09), "shoes": (0.1, 0.1, 0.12)}, ["short01"]), # black shirt
-    ("Mate",    "BellyFat_v010",     "Stocker", {"worksuit": (0.12, 0.42, 0.40), "shoes": (0.1, 0.08, 0.06)}, []),          # teal work shirt
+    ("Mate",    "BellyFat_v010",     "Stocker", {"worksuit": (0.12, 0.42, 0.40), "shoes": (0.1, 0.08, 0.06)}, ["short04"]),          # teal work shirt
 ]
 LOW = {"Foreman": (0.78, 0.70, 0.55), "Digger": (0.32, 0.30, 0.26)}   # trousers
 
@@ -49,13 +49,16 @@ def tint_mat(m, rgb, low=None):
         out_ = mx.outputs[2]
         if low:   # trousers: darker colour below the waist (object space z, origin at the feet)
             lrgb, zc = low
-            tc = nt.nodes.new("ShaderNodeTexCoord"); sz = nt.nodes.new("ShaderNodeSeparateXYZ"); nt.links.new(tc.outputs["Object"], sz.inputs[0])
-            mz = nt.nodes.new("ShaderNodeMapRange"); mz.interpolation_type = 'SMOOTHSTEP'; nt.links.new(sz.outputs["Z"], mz.inputs[0])
-            mz.inputs[1].default_value = zc - 0.01; mz.inputs[2].default_value = zc + 0.01
+            at = nt.nodes.new("ShaderNodeAttribute"); at.attribute_name = "Waist"   # per-vertex: R = below the belt line, G = belt band
+            sz = nt.nodes.new("ShaderNodeSeparateColor"); nt.links.new(at.outputs["Color"], sz.inputs[0])
+            mz = nt.nodes.new("ShaderNodeMath"); mz.operation = 'GREATER_THAN'; nt.links.new(sz.outputs[0], mz.inputs[0]); mz.inputs[1].default_value = 0.5
             mx2 = nt.nodes.new("ShaderNodeMix"); mx2.data_type = 'RGBA'; mx2.blend_type = 'MULTIPLY'; mx2.inputs[0].default_value = 1
             nt.links.new(cc.outputs[0], mx2.inputs[6]); mx2.inputs[7].default_value = (*lrgb, 1)
             sw = nt.nodes.new("ShaderNodeMix"); sw.data_type = 'RGBA'; nt.links.new(mz.outputs[0], sw.inputs[0])
-            nt.links.new(mx2.outputs[2], sw.inputs[6]); nt.links.new(mx.outputs[2], sw.inputs[7]); out_ = sw.outputs[2]
+            nt.links.new(mx.outputs[2], sw.inputs[6]); nt.links.new(mx2.outputs[2], sw.inputs[7])
+            bt = nt.nodes.new("ShaderNodeMath"); bt.operation = 'GREATER_THAN'; nt.links.new(sz.outputs[1], bt.inputs[0]); bt.inputs[1].default_value = 0.5
+            bl = nt.nodes.new("ShaderNodeMix"); bl.data_type = 'RGBA'; nt.links.new(bt.outputs[0], bl.inputs[0])
+            nt.links.new(sw.outputs[2], bl.inputs[6]); bl.inputs[7].default_value = (0.06, 0.045, 0.035, 1); out_ = bl.outputs[2]
         nt.links.new(out_, s)
     else:
         s.default_value = (*rgb, 1)
@@ -89,6 +92,11 @@ for i, (new, pkg, src, cols, drop) in enumerate(CAST):
                 if m is None: continue
                 m2 = m.copy(); m2.name = new + "." + key + ("" if j == 0 else ".%d" % j); o.data.materials[j] = m2
                 zc = rig.data.bones["upperleg01.L"].head_local.z + 0.07
+                if new in LOW and "suit" in key and "Waist" not in o.data.color_attributes:
+                    zl = (o.matrix_world.inverted() @ rig.matrix_world @ Vector((0, 0, zc))).z
+                    ca = o.data.color_attributes.new("Waist", 'FLOAT_COLOR', 'POINT')
+                    for v in o.data.vertices:
+                        ca.data[v.index].color = (1.0 if v.co.z < zl else 0.0, 1.0 if abs(v.co.z - zl) < 0.022 else 0.0, 0, 1)
                 for ck, rgb in cols.items():
                     if ck in key: tint_mat(m2, rgb, (LOW[new], zc) if (new in LOW and "suit" in ck) else None)
     if rig.animation_data: rig.animation_data_clear()

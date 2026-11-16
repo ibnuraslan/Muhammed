@@ -99,10 +99,26 @@ def idle(n, s, fa, fb, flex=4, spine=4, head=(4, 0), twist=0.0, amp=1.2, hands="
             else: hand_hang(H, sd, f, sway=0.01 * math.sin(i * 0.8))
     blinks(H, fa, fb, brow=brow, jaw=jaw)
 
-# hard hats: bone-parented to the head, brim at the brow line
+# hard hats: bone-parented to the head, seated on the scalp (lowest drop with no hat/scalp triangle overlap, then 3 mm up)
+from mathutils.bvhtree import BVHTree
 for n in NAMES:
-    HAT = OB[n + ".hardhat"]; rig = OB[n]; bn = rig.data.bones["head"]
-    desired = Matrix.Translation(bn.tail_local + Vector((0, -0.006, -0.085)))
+    HAT = OB[n + ".hardhat"]; rig = OB[n]; bn = rig.data.bones["head"]; body = OB[n + ".body"]
+    hv = {g.index for g in body.vertex_groups if g.name == "head"}
+    gi = body.vertex_groups["head"].index
+    hidx = {v.index for v in body.data.vertices if any(g.group == gi and g.weight > 0.5 for g in v.groups)}
+    M_b = rig.matrix_world.inverted() @ body.matrix_world
+    bv = [M_b @ v.co for v in body.data.vertices]
+    tris = [list(p.vertices) for p in body.data.polygons if all(i in hidx for i in p.vertices)]
+    head_t = BVHTree.FromPolygons(bv, tris)
+    E = rig.data.bones["eye.L"].head_local; ER = rig.data.bones["eye.R"].head_local     # base-mesh coords ignore MPFB shape keys: use the eye bones
+    eye_z = (E.z + ER.z) / 2; top = eye_z + 0.115; cx = (E.x + ER.x) / 2; cy = (E.y + ER.y) / 2 + 0.085
+    hz = [v.co.z for v in HAT.data.vertices]; hh_ = max(hz) - min(hz)
+    want = hh_                                         # keep the model's proportions
+    HAT.data = HAT.data.copy()
+    if True:
+        HAT.data.transform(Matrix.Diagonal((1, 1, want / hh_, 1))); HAT["fitted"] = 1
+    best = Vector((cx, cy + 0.004, eye_z + 0.032)); print("HAT seat", n, best, "top", top, "eye", eye_z, "zscale", want / hh_)
+    desired = Matrix.Translation(best)
     HAT.parent = rig; HAT.parent_type = 'BONE'; HAT.parent_bone = "head"
     Mb = Matrix.Translation(bn.tail_local) @ bn.matrix_local.to_3x3().to_4x4()
     HAT.matrix_parent_inverse = Matrix.Identity(4); HAT.matrix_basis = Mb.inverted() @ desired
@@ -162,16 +178,17 @@ def bake_excavator(ranges):
             for k in ("arm_01_GEO1", "Arm_2_GEO", "shovel_GEO", "claw_GEO"): J[k].keyframe_insert("rotation_quaternion", frame=f)
 
 # ------------------------------------------------------------------ water: level + swirl keyed per frame
-WATER = OB["PitWater"]; VORT = OB["Vortex"]; SWIRL = bpy.data.materials["PitWater"].node_tree.nodes["Swirl"]
-def water_r(z): u = 1 - (-z / PD) ** (1 / 1.3) if z < 0 else 1.0; return PR * math.sqrt(max(u, 0.0)) * 0.995
+WATER = OB["PitWater"]; VORT = OB["Vortex"]; SWIRL = bpy.data.materials["PitWater"].node_tree.nodes["Swirl"]; SPIN = bpy.data.materials["Whirlpool"].node_tree.nodes["Spin"]
+def water_r(z): u = 1 - (-z / PD) ** (1 / 1.3) if z < 0 else 1.0; return PR * math.sqrt(max(u, 0.0)) * 1.06   # edge tucked under the dirt
 def key_water(f, z, swirl_deg, vort):
     vis = z > -PD + 0.08
     WATER.location = (PIT.x, PIT.y, z); r = water_r(z); WATER.scale = (r, r, 1)
-    VORT.location = (PIT.x, PIT.y, z + 0.004); VORT.scale = (r * 0.55 * vort + 0.001, r * 0.55 * vort + 0.001, max(0.001, vort * 0.9))
+    VORT.location = (PIT.x, PIT.y, z + 0.004); VORT.scale = (r * 0.6 * vort + 0.001, r * 0.6 * vort + 0.001, max(0.001, vort * 1.4))
     SWIRL.inputs["Rotation"].default_value = (0, 0, R_(swirl_deg))
     for o in (WATER, VORT):
         o.keyframe_insert("location", frame=f); o.keyframe_insert("scale", frame=f)
     SWIRL.inputs["Rotation"].keyframe_insert("default_value", frame=f)
+    SPIN.outputs[0].default_value = -R_(swirl_deg) * 3.0; SPIN.outputs[0].keyframe_insert("default_value", frame=f)
     key_vis(WATER, [(f, vis)]); key_vis(VORT, [(f, vis and vort > 0.01)])
 
 # ------------------------------------------------------------------ camera

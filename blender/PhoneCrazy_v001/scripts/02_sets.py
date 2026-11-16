@@ -107,7 +107,27 @@ bpy.ops.mesh.primitive_circle_add(vertices=96, radius=1.0, fill_type='TRIFAN', l
 WATER.data.materials.append(M_water); link(WATER, SITE)
 # swirl dimple: a shallow cone in the middle of the water (scale keyed in 03_anim)
 bpy.ops.mesh.primitive_cone_add(vertices=48, radius1=1.0, radius2=0.02, depth=1.0, location=(PIT.x, PIT.y, 0), rotation=(math.pi, 0, 0)); VORT = bpy.context.active_object
-VORT.name = "Vortex"; VORT.data.transform(Matrix.Translation((0, 0, 0.5))); bpy.ops.object.shade_smooth(); VORT.data.materials.append(M_water); link(VORT, SITE)
+VORT.name = "Vortex"; VORT.data.transform(Matrix.Translation((0, 0, 0.5))); bpy.ops.object.shade_smooth(); link(VORT, SITE)
+def vortex_mat():
+    """concave funnel: spiral streaks (angle + k*r), darker toward the throat; 03_anim keys the 'Spin' value"""
+    m = bpy.data.materials.new("Whirlpool"); m.use_nodes = True; nt = m.node_tree; N = nt.nodes; L = nt.links; P = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); sx = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs["Object"], sx.inputs[0])
+    at = N.new("ShaderNodeMath"); at.operation = 'ARCTAN2'; L.new(sx.outputs["Y"], at.inputs[0]); L.new(sx.outputs["X"], at.inputs[1])
+    ln = N.new("ShaderNodeVectorMath"); ln.operation = 'LENGTH'; L.new(tc.outputs["Object"], ln.inputs[0])
+    k = N.new("ShaderNodeMath"); k.operation = 'MULTIPLY_ADD'; L.new(ln.outputs["Value"], k.inputs[0]); k.inputs[1].default_value = 9.0; L.new(at.outputs[0], k.inputs[2])
+    a3 = N.new("ShaderNodeMath"); a3.operation = 'MULTIPLY'; L.new(at.outputs[0], a3.inputs[0]); a3.inputs[1].default_value = 3.0
+    sm = N.new("ShaderNodeMath"); sm.operation = 'ADD'; L.new(a3.outputs[0], sm.inputs[0]); L.new(k.outputs[0], sm.inputs[1])
+    sp = N.new("ShaderNodeValue"); sp.name = "Spin"
+    s2 = N.new("ShaderNodeMath"); s2.operation = 'ADD'; L.new(sm.outputs[0], s2.inputs[0]); L.new(sp.outputs[0], s2.inputs[1])
+    sn = N.new("ShaderNodeMath"); sn.operation = 'SINE'; L.new(s2.outputs[0], sn.inputs[0])
+    cr = N.new("ShaderNodeValToRGB"); L.new(sn.outputs[0], cr.inputs[0]); cr.color_ramp.elements[0].position = 0.35; cr.color_ramp.elements[1].position = 0.95
+    cr.color_ramp.elements[0].color = (0.006, 0.03, 0.045, 1); cr.color_ramp.elements[1].color = (0.25, 0.42, 0.45, 1)
+    dk = N.new("ShaderNodeMapRange"); L.new(ln.outputs["Value"], dk.inputs[0]); dk.inputs[1].default_value = 0.0; dk.inputs[2].default_value = 0.9
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; L.new(dk.outputs[0], mx.inputs[0]); mx.inputs[0].default_value = 1
+    L.new(cr.outputs[0], mx.inputs[6]); L.new(dk.outputs[0], mx.inputs[7])
+    L.new(mx.outputs[2], P.inputs["Base Color"]); P.inputs["Roughness"].default_value = 0.3; P.inputs["Specular IOR Level"].default_value = 0.1
+    return m
+VORT.data.materials.append(vortex_mat())
 
 # ------------------------------------------------------------------ excavator (CC-BY, articulated): clean animated-look materials
 def excavator(root_name, c):
