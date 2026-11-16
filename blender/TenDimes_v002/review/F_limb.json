@@ -1,0 +1,1398 @@
+{
+ "frames": {
+  "15": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "17": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "19": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "21": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "23": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "25": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "27": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "29": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "31": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "33": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "35": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "37": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "39": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "41": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "43": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "45": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "47": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "49": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "51": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "53": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "55": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "57": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "59": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "61": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "63": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "65": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "67": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "69": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "71": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "73": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "75": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "77": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "79": [
+   [
+    "ARMBODY",
+    "Singer arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "475": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "477": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "479": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "481": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "483": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "485": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "487": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "489": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "491": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "493": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "495": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "497": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "499": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "501": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "503": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "505": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "507": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "509": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "511": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "513": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "515": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "517": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "519": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "521": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "523": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (3 pts: upperarm01:0,upperarm01:1,upperarm01:2)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "525": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "527": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "529": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "531": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "533": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "535": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "537": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "539": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "541": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "543": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "545": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "547": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "549": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "551": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "553": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "555": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "557": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "559": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "561": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "563": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "565": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "567": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "569": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "571": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "573": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "575": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "577": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "579": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "581": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "583": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "585": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "587": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "589": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "591": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "593": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "595": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "597": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "599": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "601": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "603": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "605": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "607": [
+   [
+    "ARMBODY",
+    "Kidnapper arm.L inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ],
+   [
+    "ARMBODY",
+    "Kidnapper arm.R inside own torso (2 pts: upperarm01:0,upperarm01:1)"
+   ]
+  ],
+  "753": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (4 pts)"
+   ]
+  ],
+  "755": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "757": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "759": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "761": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "763": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "765": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "767": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "769": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "771": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "773": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "775": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "777": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (7 pts)"
+   ]
+  ],
+  "779": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "781": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "783": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "785": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "787": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "789": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "791": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "793": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "795": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "797": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "799": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "801": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "803": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "805": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "807": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "809": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "811": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "813": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "815": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "817": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "819": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "821": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "823": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "825": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "827": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "829": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (6 pts)"
+   ]
+  ],
+  "901": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (4 pts)"
+   ]
+  ],
+  "903": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "905": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "907": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "909": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "911": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "913": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "915": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "917": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "919": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "921": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "923": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "925": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "927": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "929": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "931": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "933": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "935": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "937": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (4 pts)"
+   ]
+  ],
+  "939": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (4 pts)"
+   ]
+  ],
+  "941": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (4 pts)"
+   ]
+  ],
+  "943": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (4 pts)"
+   ]
+  ],
+  "945": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "947": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "949": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "951": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "953": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "955": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "957": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "959": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "961": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "963": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (2 pts)"
+   ]
+  ],
+  "965": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (2 pts)"
+   ]
+  ],
+  "967": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "969": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "971": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "973": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "975": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "977": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "991": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (2 pts)"
+   ]
+  ],
+  "993": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "995": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "997": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "999": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "1001": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (3 pts)"
+   ]
+  ],
+  "1003": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (4 pts)"
+   ]
+  ],
+  "1005": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ],
+  "1007": [
+   [
+    "PROPHEAD",
+    "Handset inside Singer's head/face (5 pts)"
+   ]
+  ]
+ },
+ "counts": {
+  "ARMBODY": 167,
+  "PROPHEAD": 87
+ }
+}

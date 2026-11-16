@@ -1,0 +1,356 @@
+{
+"visible_frames": [
+901,
+904,
+907,
+910,
+913,
+916,
+919,
+922,
+925,
+928,
+931,
+934,
+937,
+940,
+943,
+946,
+949,
+952,
+955,
+958,
+961,
+964,
+967,
+970,
+973,
+976,
+979,
+982,
+985,
+988,
+991,
+994,
+997,
+1000,
+1003,
+1006
+],
+"frames": {
+"754": {
+"upperarm02.R|HandsetCord|off": 8
+},
+"757": {
+"upperarm02.R|HandsetCord|off": 9
+},
+"760": {
+"upperarm02.R|HandsetCord|off": 9
+},
+"763": {
+"upperarm02.R|HandsetCord|off": 11
+},
+"766": {
+"upperarm02.R|HandsetCord|off": 9
+},
+"769": {
+"upperarm02.R|HandsetCord|off": 12
+},
+"772": {
+"upperarm02.R|HandsetCord|off": 12
+},
+"775": {
+"upperarm02.R|HandsetCord|off": 8
+},
+"778": {
+"upperarm02.R|HandsetCord|off": 7
+},
+"781": {
+"upperarm02.R|HandsetCord|off": 1
+},
+"784": {
+"upperarm02.R|HandsetCord|off": 2
+},
+"787": {
+"upperarm02.R|HandsetCord|off": 2
+},
+"790": {
+"upperarm02.R|HandsetCord|off": 6
+},
+"793": {
+"upperarm02.R|HandsetCord|off": 6
+},
+"796": {
+"upperarm02.R|HandsetCord|off": 6
+},
+"799": {
+"upperarm02.R|HandsetCord|off": 6
+},
+"802": {
+"upperarm02.R|HandsetCord|off": 6
+},
+"805": {
+"upperarm02.R|HandsetCord|off": 6
+},
+"808": {
+"upperarm02.R|HandsetCord|off": 6
+},
+"811": {
+"upperarm02.R|HandsetCord|off": 6
+},
+"814": {
+"upperarm02.R|HandsetCord|off": 6
+},
+"817": {
+"upperarm02.R|HandsetCord|off": 6
+},
+"820": {
+"upperarm02.R|HandsetCord|off": 6
+},
+"823": {
+"upperarm02.R|HandsetCord|off": 6
+},
+"826": {
+"upperarm02.R|HandsetCord|off": 6
+},
+"829": {
+"upperarm02.R|HandsetCord|off": 6
+},
+"832": {
+"upperarm02.R|HandsetCord|off": 4,
+"lowerarm01.R|HandsetCord|off": 2
+},
+"835": {
+"upperarm02.R|HandsetCord|off": 3,
+"lowerarm01.R|HandsetCord|off": 5
+},
+"838": {
+"upperarm02.R|HandsetCord|off": 4,
+"lowerarm01.R|HandsetCord|off": 5
+},
+"841": {
+"upperarm02.R|HandsetCord|off": 5,
+"lowerarm01.R|HandsetCord|off": 5
+},
+"844": {
+"upperarm02.R|HandsetCord|off": 5,
+"lowerarm01.R|HandsetCord|off": 6
+},
+"847": {
+"upperarm02.R|HandsetCord|off": 6,
+"lowerarm01.R|HandsetCord|off": 9
+},
+"850": {
+"upperarm02.R|HandsetCord|off": 6,
+"lowerarm01.R|HandsetCord|off": 10
+},
+"853": {
+"upperarm02.R|HandsetCord|off": 5,
+"lowerarm01.R|HandsetCord|off": 12
+},
+"856": {
+"upperarm02.R|HandsetCord|off": 5,
+"lowerarm01.R|HandsetCord|off": 10
+},
+"859": {
+"upperarm02.R|HandsetCord|off": 6,
+"lowerarm01.R|HandsetCord|off": 12
+},
+"862": {
+"lowerarm01.R|HandsetCord|off": 16,
+"upperarm02.R|HandsetCord|off": 6
+},
+"865": {
+"upperarm02.R|HandsetCord|off": 9,
+"lowerarm01.R|HandsetCord|off": 18
+},
+"868": {
+"upperarm02.R|HandsetCord|off": 9,
+"lowerarm01.R|HandsetCord|off": 16
+},
+"871": {
+"upperarm02.R|HandsetCord|off": 11,
+"lowerarm01.R|HandsetCord|off": 16
+},
+"874": {
+"upperarm02.R|HandsetCord|off": 12,
+"lowerarm01.R|HandsetCord|off": 14
+},
+"877": {
+"upperarm02.R|HandsetCord|off": 12,
+"lowerarm01.R|HandsetCord|off": 14
+},
+"880": {
+"upperarm02.R|HandsetCord|off": 12,
+"lowerarm01.R|HandsetCord|off": 14
+},
+"883": {
+"upperarm02.R|HandsetCord|off": 12,
+"lowerarm01.R|HandsetCord|off": 14
+},
+"886": {
+"upperarm02.R|HandsetCord|off": 12,
+"lowerarm01.R|HandsetCord|off": 14
+},
+"889": {
+"upperarm02.R|HandsetCord|off": 12,
+"lowerarm01.R|HandsetCord|off": 14
+},
+"892": {
+"upperarm02.R|HandsetCord|off": 12,
+"lowerarm01.R|HandsetCord|off": 14
+},
+"895": {
+"upperarm02.R|HandsetCord|off": 12,
+"lowerarm01.R|HandsetCord|off": 14
+},
+"898": {
+"upperarm02.R|HandsetCord|off": 12,
+"lowerarm01.R|HandsetCord|off": 14
+},
+"901": {
+"upperarm02.R|HandsetCord|VIS": 12,
+"lowerarm01.R|HandsetCord|VIS": 10
+},
+"904": {
+"upperarm02.R|HandsetCord|VIS": 14,
+"lowerarm01.R|HandsetCord|VIS": 10
+},
+"907": {
+"upperarm02.R|HandsetCord|VIS": 18,
+"lowerarm01.R|HandsetCord|VIS": 12
+},
+"910": {
+"upperarm02.R|HandsetCord|VIS": 16,
+"lowerarm01.R|HandsetCord|VIS": 9
+},
+"913": {
+"upperarm02.R|HandsetCord|VIS": 16,
+"lowerarm01.R|HandsetCord|VIS": 9
+},
+"916": {
+"upperarm02.R|HandsetCord|VIS": 12,
+"lowerarm01.R|HandsetCord|VIS": 11
+},
+"919": {
+"upperarm02.R|HandsetCord|VIS": 9,
+"lowerarm01.R|HandsetCord|VIS": 9
+},
+"922": {
+"upperarm02.R|HandsetCord|VIS": 8,
+"lowerarm01.R|HandsetCord|VIS": 8
+},
+"925": {
+"upperarm02.R|HandsetCord|VIS": 9,
+"lowerarm01.R|HandsetCord|VIS": 8
+},
+"928": {
+"upperarm02.R|HandsetCord|VIS": 6,
+"lowerarm01.R|HandsetCord|VIS": 8
+},
+"931": {
+"upperarm02.R|HandsetCord|VIS": 5,
+"lowerarm01.R|HandsetCord|VIS": 8
+},
+"934": {
+"upperarm02.R|HandsetCord|VIS": 5,
+"lowerarm01.R|HandsetCord|VIS": 9
+},
+"937": {
+"upperarm02.R|HandsetCord|VIS": 7,
+"lowerarm01.R|HandsetCord|VIS": 9
+},
+"940": {
+"upperarm02.R|HandsetCord|VIS": 7,
+"lowerarm01.R|HandsetCord|VIS": 10
+},
+"943": {
+"upperarm02.R|HandsetCord|VIS": 7,
+"lowerarm01.R|HandsetCord|VIS": 9
+},
+"946": {
+"upperarm02.R|HandsetCord|VIS": 8,
+"lowerarm01.R|HandsetCord|VIS": 9
+},
+"949": {
+"upperarm02.R|HandsetCord|VIS": 8,
+"lowerarm01.R|HandsetCord|VIS": 9
+},
+"952": {
+"upperarm02.R|HandsetCord|VIS": 8,
+"lowerarm01.R|HandsetCord|VIS": 9
+},
+"955": {
+"upperarm02.R|HandsetCord|VIS": 11,
+"lowerarm01.R|HandsetCord|VIS": 11
+},
+"958": {
+"upperarm02.R|HandsetCord|VIS": 11,
+"lowerarm01.R|HandsetCord|VIS": 13
+},
+"961": {
+"upperarm02.R|HandsetCord|VIS": 11,
+"lowerarm01.R|HandsetCord|VIS": 14
+},
+"964": {
+"upperarm02.R|HandsetCord|VIS": 8,
+"lowerarm01.R|HandsetCord|VIS": 11
+},
+"967": {
+"upperarm02.R|HandsetCord|VIS": 7,
+"lowerarm01.R|HandsetCord|VIS": 11
+},
+"970": {
+"upperarm02.R|HandsetCord|VIS": 7,
+"lowerarm01.R|HandsetCord|VIS": 12
+},
+"973": {
+"upperarm02.R|HandsetCord|VIS": 9,
+"lowerarm01.R|HandsetCord|VIS": 15
+},
+"976": {
+"upperarm02.R|HandsetCord|VIS": 8,
+"lowerarm01.R|HandsetCord|VIS": 15
+},
+"979": {
+"upperarm02.R|HandsetCord|VIS": 9,
+"lowerarm01.R|HandsetCord|VIS": 15
+},
+"982": {
+"upperarm02.R|HandsetCord|VIS": 9,
+"lowerarm01.R|HandsetCord|VIS": 12
+},
+"985": {
+"upperarm02.R|HandsetCord|VIS": 12,
+"lowerarm01.R|HandsetCord|VIS": 12
+},
+"988": {
+"upperarm02.R|HandsetCord|VIS": 12,
+"lowerarm01.R|HandsetCord|VIS": 12
+},
+"991": {
+"upperarm02.R|HandsetCord|VIS": 11,
+"lowerarm01.R|HandsetCord|VIS": 13
+},
+"994": {
+"upperarm02.R|HandsetCord|VIS": 11,
+"lowerarm01.R|HandsetCord|VIS": 13
+},
+"997": {
+"upperarm02.R|HandsetCord|VIS": 10,
+"lowerarm01.R|HandsetCord|VIS": 9
+},
+"1000": {
+"upperarm02.R|HandsetCord|VIS": 10,
+"lowerarm01.R|HandsetCord|VIS": 6
+},
+"1003": {
+"upperarm02.R|HandsetCord|VIS": 10,
+"lowerarm01.R|HandsetCord|VIS": 6
+},
+"1006": {
+"upperarm02.R|HandsetCord|VIS": 10,
+"lowerarm01.R|HandsetCord|VIS": 6
+}
+}
+}
