@@ -437,13 +437,13 @@ def kid_lib_shots():
     pbo = next(x for x in ST["dial"].children if x.name.startswith("pbar") and not x.name.startswith("pbar_bg"))
     pbo.scale = (0.02, 1, 1); pbo.keyframe_insert("scale", frame=f0); pbo.scale = (0.95, 1, 1); pbo.keyframe_insert("scale", frame=f1)
     # S08 now back then...: she sits back, head tilts, looks up thinking (hands drop to the desk edge)
-    kid_block("S08", "desk", lambda u: 2 - 4 * u, lambda u: (-6 - 8 * u + breath(u, 1), 10 * u), back_fn=lambda u: 0.02 * u, twist_fn=lambda u: 4 * u)
-    hf = head_pt("Kid", WIN["S08"][0])
-    cam_shot("Cam_S08", "S08", [(0, hf + Vector((-0.32, -0.46, -0.03)), hf + Vector((0, 0, -0.07))), (1, hf + Vector((-0.22, -0.44, -0.01)), hf + Vector((0, 0, -0.06)))], lens=45)
+    kid_block("S08", "lap", lambda u: 2 - 4 * u, lambda u: (-6 - 8 * u + breath(u, 1), 10 * u), back_fn=lambda u: 0.02 * u, twist_fn=lambda u: 4 * u)
+    hf = head_pt("Kid", WIN["S08"][0]); sp = PCR.matrix_world @ Vector((0.43, 0.0, 1.1))
+    cam_shot("Cam_S08", "S08", [(0, hf + Vector((0.42, 0.55, 0.16)), sp + Vector((0, 0, -0.02))), (1, hf + Vector((0.36, 0.48, 0.13)), sp + Vector((0, 0, -0.02)))], lens=30)   # v002d: 3/4-back OTS onto the glowing monitor
     # S09 you could access other people's files: the idea - she leans in fast, head up, eyes bright
     kid_block("S09", lambda u: "desk" if u < 0.3 else "keys", lambda u: 2 + 12 * min(1, u / 0.3), lambda u: (-8 + 22 * min(1, u / 0.3) + breath(u, 1), 6 - 6 * min(1, u / 0.3)), bob=0.006)
     hf = head_pt("Kid", WIN["S09"][1])
-    cam_shot("Cam_S09", "S09", [(0, hf + Vector((0.28, -0.52, 0.05)), hf + Vector((0, 0, -0.05))), (1, hf + Vector((0.16, -0.42, 0.03)), hf + Vector((0, 0, -0.04)))], lens=45)
+    cam_shot("Cam_S09", "S09", [(0, hf + Vector((1.40, -0.30, -0.02)), hf + Vector((0, -0.30, -0.22))), (1, hf + Vector((1.32, -0.36, -0.03)), hf + Vector((0, -0.30, -0.22)))], lens=24)   # v002d: side medium, face <12% of width
     # S10 so she typed in: over-the-shoulder on the login box, password dots appear (S10..S11)
     kid_block("S10", "keys", lambda u: 12, lambda u: (16, 0), bob=0.008)
     cam_shot("Cam_S10", "S10", [(0, (GX + 0.32, 0.22, 1.20), sp + Vector((0, 0, 0.04))), (1, (GX + 0.26, 0.02, 1.12), sp + Vector((0, 0, 0.04)))], lens=35, fstop=8)
@@ -491,7 +491,7 @@ def kid_lib_shots():
     # S16 the password was so easy: close-up, she leans back with a pleased look (head tilt), hands to the desk
     kid_block("S16", lambda u: "keys" if u < 0.25 else "desk", lambda u: 10 - 10 * min(1, u / 0.5), lambda u: (6 - 10 * min(1, u / 0.5) + breath(u, 1.2), -8 * min(1, u / 0.5)), back_fn=lambda u: 0.02 * min(1, u / 0.5), twist_fn=lambda u: -6 * min(1, u / 0.5))
     hf = head_pt("Kid", WIN["S16"][1])
-    cam_shot("Cam_S16", "S16", [(0, hf + Vector((-0.38, -0.36, 0.02)), hf + Vector((0, 0, -0.04))), (1, hf + Vector((-0.31, -0.32, 0.02)), hf + Vector((0, 0, -0.035)))], lens=50)   # 3/4, not dead-front
+    cam_shot("Cam_S16", "S16", [(0, hf + Vector((-1.40, -0.40, -0.02)), hf + Vector((0, -0.25, -0.22))), (1, hf + Vector((-1.32, -0.34, -0.03)), hf + Vector((0, -0.25, -0.22)))], lens=24)   # v002d: side medium from her left, face <12% of width
     # S17 she thought it was a game: over her right shoulder, mouse clicks, tiles pop
     kid_block("S17", "mouse", lambda u: 10, lambda u: (12 + breath(u, 1.5), 0), bob=0.004)
     cam_shot("Cam_S17", "S17", [(0, (GX - 0.40, 0.30, 1.22), sp + Vector((0, 0, 0.02))), (1, (GX - 0.30, 0.14, 1.16), sp + Vector((0, 0, 0.02)))], lens=32)

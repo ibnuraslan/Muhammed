@@ -245,7 +245,7 @@ for n in [c + s for c in ("Kid", "Mom", "AgentB", "AgentC") for s in (".teeth_ba
 # director P1 note: the girl read as a porcelain doll. Normal-size, darker (brown) iris, less glassy cornea, warmer skin.
 for n in bpy.data.objects["Kid.high-poly"].active_material.node_tree.nodes:
     if n.type == 'GROUP' and "IrisMajorColor" in n.inputs:
-        n.inputs["IrisMajorColor"].default_value = (0.16, 0.085, 0.04, 1); n.inputs["IrisMinorColor"].default_value = (0.07, 0.035, 0.015, 1)
+        n.inputs["IrisMajorColor"].default_value = (0.06, 0.03, 0.012, 1); n.inputs["IrisMinorColor"].default_value = (0.025, 0.012, 0.005, 1)   # v002d: clear dark brown
         n.inputs["IrisSection4Color"].default_value = (0.05, 0.03, 0.015, 1)
         n.inputs["IrisToEyeWhiteRelation"].default_value = 0.33
         n.inputs["EyeWhiteColor"].default_value = (0.9, 0.88, 0.86, 1)
