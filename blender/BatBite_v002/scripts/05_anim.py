@@ -444,7 +444,7 @@ def _posed_bvh(o):
     dg = bpy.context.evaluated_depsgraph_get(); e = o.evaluated_get(dg); me = e.to_mesh()
     t = _BVH.FromPolygons([o.matrix_world @ v.co for v in me.vertices], [list(p.vertices) for p in me.polygons]); e.to_mesh_clear(); return t
 _JEANS = [o for o in bpy.data.objects if o.name.startswith(S + ".") and "suit" in o.name][0]
-def thigh_hands(f):
+def thigh_hands(f, extra=0.0):
     """palm resting ON the front of each thigh (ray cast on the posed trousers), fingers down the thigh toward the knee"""
     sc.frame_set(f); bpy.context.view_layer.update(); tj = _posed_bvh(_JEANS)
     for s in "LR":
@@ -456,12 +456,14 @@ def thigh_hands(f):
         if nrm.dot(o_ - hit) < 0: nrm = -nrm
         ax = (kn - hp); fd = (ax - nrm * ax.dot(nrm)).normalized()
         fd = Matrix.Rotation(math.radians(-50), 3, nrm) @ fd       # fingers turned in across the thigh (tested: index/middle stay out of it)
-        place_hand(D[S], s, f, hit, -nrm, fd, skin=0.028 if s == "L" else 0.035)
+        place_hand(D[S], s, f, hit, -nrm, fd, skin=(0.028 if s == "L" else 0.035) + extra)
         apply_pose(D[S], s, "shield", f)
         pb = D[S].pose.bones["Pole_elbow." + s]; nm = "Pole_elbow." + s
         pole = bone_world(S, "upperarm01." + s).to_translation() + Rz(YAW) @ V((0.5 * sx, 0.4, 0.0))
         pb.location = RIG[S].rest(nm).to_3x3().inverted() @ (D[S].matrix_world.inverted() @ pole - RIG[S].BN[nm].head_local)
         pb.keyframe_insert("location", frame=f, group=nm)
+for f, ex in ((1426, 0.08), (1433, 0.035)):     # hands come in from in front of the thighs, not through them
+    thigh_hands(f, ex)
 for i, f in enumerate(range(1440, 1601, 20)):
     bend(f, 1.0, br=math.sin(i * 1.4)); thigh_hands(f)
 jaw(S, 1340, 4); jaw(S, 1400, 6); jaw(S, 1600, 5)
@@ -561,7 +563,8 @@ for f in range(CUT, 2101, 30):
         o_ = V((HX + 0.12 * sx, HIP.y - 0.40, 2.0)); hit, nrm, _i, _d = _tb.ray_cast(o_, V((0, 0, -1)), 3.0)
         if hit is None: print("BEDHAND miss", f, s_); continue
         if nrm.z < 0: nrm = -nrm
-        place_hand(D[S], s_, f, hit, -nrm, V((-0.25 * sx, -1, 0)).normalized(), skin=0.016)
+        fd = V((-0.25 * sx, -1, 0)); fd = (fd - nrm * fd.dot(nrm)).normalized()     # fingers along the blanket, not into it
+        place_hand(D[S], s_, f, hit, -nrm, fd, skin=0.03)
         apply_pose(D[S], s_, "shield", f)
 sc.frame_set(CUT); print("BEDHAND reach err mm", [round((bone_world(S, "wrist." + s_).to_translation() - (D[S].matrix_world @ D[S].pose.bones["IK_hand." + s_].matrix).to_translation()).length * 1000, 1) for s_ in "LR"])
 def oxygen_mask():
@@ -711,9 +714,9 @@ PAPER.data.materials.append(soft_mat("M_Paper", (0.95, 0.95, 0.93), 0.7))
 sc.frame_set(CUT); bpy.context.view_layer.update()
 Pd = D[D_].matrix_world @ D[D_].pose.bones["root"].head
 fwd_d = V((1, 0, 0)); left_d = V((0, 1, 0))
-CB_M = Mloc(V((DP.x, DP.y, 0)) + fwd_d * 0.49 + left_d * 0.12 + V((0, 0, 1.17)), Rz(90) @ Rx(18))   # tilted up toward his eyes, well clear of his chest
+CB_M = Mloc(V((DP.x, DP.y, 0)) + fwd_d * 0.42 + left_d * 0.12 + V((0, 0, 1.17)), Rz(90) @ Rx(18))   # tilted up toward his eyes, well clear of his chest
 CB.matrix_world = CB_M; bpy.context.view_layer.update()
-under = CB_M @ V((0.0, 0.135, -0.006 - 0.010))     # board local +y edge is the one nearest him (Rz 90)          # palm under the board's near edge: the forearm stays below the board
+under = CB_M @ V((0.0, 0.07, -0.006 - 0.010))   # palm toward the board's middle: his fingers stay off his chest     # board local +y edge is the one nearest him (Rz 90)          # palm under the board's near edge: the forearm stays below the board
 place_hand(D[D_], "L", CUT, under, (CB_M.to_3x3() @ V((0, 0, 1))).normalized(), (CB_M.to_3x3() @ V((0, -1, 0))).normalized())
 apply_pose(D[D_], "L", "hold_flat_object", CUT)
 sc.frame_set(CUT); IKDL = D[D_].pose.bones["IK_hand.L"].matrix.copy()
