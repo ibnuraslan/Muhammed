@@ -436,8 +436,9 @@ def bend(f, amt, br=0.0):
     return P, Rb
 for f, a in ((1395, 0.0), (1420, 0.6), (1440, 1.0)):
     P, Rb = bend(f, a)
-    if a == 0.0:          # hands leave the sides here and travel to the thighs over 30 frames (no mid key: no snap)
-        key_relaxed(S, f, P, Rb)
+    if a == 0.0:          # hands leave the sides here (6 cm out from the thighs) and travel to the thighs over 30 frames
+        for s_ in "LR":
+            W, d, nn = relaxed_hand(S, P, Rb, s_, out=0.06); key_hand(S, s_, f, W, d, nn, P=P, Rb=Rb); apply_pose(D[S], s_, "relaxed", f)
 # hands on thighs: palm on the front of each thigh, ~12 cm above the knee
 from mathutils.bvhtree import BVHTree as _BVH
 def _posed_bvh(o):
@@ -563,8 +564,8 @@ for f in range(CUT, 2101, 30):
         o_ = V((HX + 0.12 * sx, HIP.y - 0.40, 2.0)); hit, nrm, _i, _d = _tb.ray_cast(o_, V((0, 0, -1)), 3.0)
         if hit is None: print("BEDHAND miss", f, s_); continue
         if nrm.z < 0: nrm = -nrm
-        fd = V((-0.25 * sx, -1, 0)); fd = (fd - nrm * fd.dot(nrm)).normalized()     # fingers along the blanket, not into it
-        place_hand(D[S], s_, f, hit, -nrm, fd, skin=0.03)
+        fd = V((-sx, -0.3, 0)); fd = (fd - nrm * fd.dot(nrm)).normalized()     # fingers across his lap (tested: the whole hand stays on top of the blanket)
+        place_hand(D[S], s_, f, hit, -nrm, fd, skin=0.02)
         apply_pose(D[S], s_, "shield", f)
 sc.frame_set(CUT); print("BEDHAND reach err mm", [round((bone_world(S, "wrist." + s_).to_translation() - (D[S].matrix_world @ D[S].pose.bones["IK_hand." + s_].matrix).to_translation()).length * 1000, 1) for s_ in "LR"])
 def oxygen_mask():
