@@ -4,10 +4,14 @@
 448,
 451,
 454,
-457,
 460,
 463,
 466,
+469,
+472,
+475,
+478,
+481,
 484,
 487,
 490,
@@ -17,7 +21,52 @@
 502,
 505,
 508,
+511,
+514,
+517,
+520,
+523,
+526,
+529,
+532,
+535,
+538,
+541,
+544,
+547,
+550,
+553,
+556,
+559,
+562,
+565,
+568,
+571,
+574,
+577,
+580,
+583,
+586,
+589,
+592,
+595,
+598,
+601,
+604,
+607,
+610,
+613,
+616,
+619,
+676,
+679,
+682,
 685,
+688,
+691,
+694,
+697,
+700,
 703,
 706,
 709,
@@ -26,1229 +75,1721 @@
 718,
 721,
 724,
-1600,
-1603,
-1606,
-1609,
-1612,
-1615,
-1618,
-1621,
-1624,
-1627,
-1630,
-1633,
-1636,
-1639,
-1642,
-1645,
-1648,
-1651,
-1654,
-1657,
-1660,
-1663,
-1666,
-1669,
-1672,
-1675,
-1678,
-1681,
-1684,
-1687,
-1690,
-1693,
-1696,
-1699,
-1702,
-1705,
-1708,
-1711,
-1714,
-1717,
-1720,
-1723,
-1726,
-1729,
-1732,
-1735,
-1738,
-1741,
-1744,
-1747,
-1750,
-1753,
-1756,
-1759,
-1762,
-1765,
-1768,
-1771,
-1774,
-1777,
-1780,
-1783,
-1786,
-1789,
-1792,
-1795,
-1798,
-1801,
-1804,
-1807,
-1810,
-1813,
-1816,
-1819,
-1822,
-1825,
-1828,
-1831,
-1834,
-1837,
-1840,
-1843,
-1846,
-1849,
-1852,
-1855,
-1858,
-1861,
-1864,
-1867,
-1870,
-1873,
-1876,
-1879,
-1882,
-1885,
-1888,
-1891,
-1894,
-1897,
-1900,
-1903,
-1906,
-1909,
-1912,
-1915,
-1918,
-1921,
-1924,
-1927,
-1930,
-1933,
-1936,
-1939,
-1942,
-1945,
-1948,
-1951,
-1954,
-1957,
-1960,
-1963,
-1966,
-1969,
-1972,
-1975,
-1978,
-1981,
-1984,
-1987,
-1990,
-1993,
-1996,
-1999,
-2002,
-2005,
-2008,
-2011,
-2014,
-2017,
-2020,
-2023,
-2026,
-2029,
-2032,
-2035,
-2038,
-2041,
-2044,
-2047,
-2050,
-2053,
-2056,
-2059,
-2062,
-2065,
-2068,
-2071,
-2074,
-2077,
-2080,
-2083,
-2086,
-2089,
-2092,
-2095,
-2098
+727,
+730,
+745,
+748,
+751,
+754,
+757,
+760
 ],
 "frames": {
 "445": {
-"finger2-2.R|Bat|VIS": 20,
-"finger2-3.R|Bat|VIS": 9,
-"finger3-2.R|Bat|VIS": 11,
-"finger1-3.R|Bat|VIS": 20
+"finger3-1.R|Bat|VIS": 13,
+"finger5-1.R|Bat|VIS": 28,
+"finger5-2.R|Bat|VIS": 14,
+"finger4-1.R|Bat|VIS": 16,
+"metacarpal3.R|Bat|VIS": 10,
+"metacarpal2.R|Bat|VIS": 4,
+"metacarpal4.R|Bat|VIS": 7
 },
 "448": {
-"finger2-1.R|Bat|VIS": 7,
-"finger2-2.R|Bat|VIS": 28,
-"finger3-2.R|Bat|VIS": 11,
-"finger4-2.R|Bat|VIS": 16,
-"finger5-1.R|Bat|VIS": 20,
-"finger5-2.R|Bat|VIS": 18,
-"finger4-1.R|Bat|VIS": 20,
-"finger3-1.R|Bat|VIS": 27
+"metacarpal1.R|Bat|VIS": 7,
+"finger1-2.R|Bat|VIS": 8,
+"finger1-1.R|Bat|VIS": 10
 },
 "451": {
-"finger3-2.R|Bat|VIS": 8,
-"finger3-1.R|Bat|VIS": 25,
-"finger4-1.R|Bat|VIS": 32,
-"finger4-2.R|Bat|VIS": 14,
-"finger5-2.R|Bat|VIS": 14,
-"finger5-1.R|Bat|VIS": 31,
-"finger2-3.R|Bat|VIS": 5,
-"metacarpal3.R|Bat|VIS": 3,
-"finger2-2.R|Bat|VIS": 2
+"wrist.R|Bat|VIS": 5,
+"finger1-1.R|Bat|VIS": 1
 },
 "454": {
-"finger2-2.R|Bat|VIS": 11,
-"finger2-3.R|Bat|VIS": 31,
-"finger3-2.R|Bat|VIS": 20,
-"finger3-1.R|Bat|VIS": 26,
-"finger4-1.R|Bat|VIS": 44,
-"finger4-3.R|Bat|VIS": 25,
-"finger4-2.R|Bat|VIS": 4,
-"finger5-3.R|Bat|VIS": 12,
-"finger5-1.R|Bat|VIS": 22,
-"finger1-3.R|Bat|VIS": 18,
-"finger5-2.R|Bat|VIS": 10,
-"finger1-2.R|Bat|VIS": 3
-},
-"457": {
-"finger2-3.R|Bat|VIS": 19,
-"finger2-2.R|Bat|VIS": 20,
-"finger3-1.R|Bat|VIS": 28,
-"finger3-3.R|Bat|VIS": 29,
-"finger4-1.R|Bat|VIS": 48,
-"finger4-3.R|Bat|VIS": 11,
-"finger5-1.R|Bat|VIS": 18,
-"finger1-2.R|Bat|VIS": 8,
-"finger1-3.R|Bat|VIS": 10,
-"finger4-2.R|Bat|VIS": 3,
-"finger2-1.R|Bat|VIS": 4,
-"finger3-2.R|Bat|VIS": 7
+"wrist.R|Bat|VIS": 2
 },
 "460": {
-"finger2-3.R|Bat|VIS": 38,
-"finger2-2.R|Bat|VIS": 24,
-"finger2-1.R|Bat|VIS": 6,
-"finger3-1.R|Bat|VIS": 29,
-"finger4-1.R|Bat|VIS": 28,
-"finger5-1.R|Bat|VIS": 7,
-"finger1-2.R|Bat|VIS": 11,
-"finger1-3.R|Bat|VIS": 14,
-"finger4-2.R|Bat|VIS": 3
-},
-"463": {
-"finger2-2.R|Bat|VIS": 13,
-"finger2-3.R|Bat|VIS": 23,
-"finger3-2.R|Bat|VIS": 20,
-"finger3-1.R|Bat|VIS": 22,
-"finger4-1.R|Bat|VIS": 25,
-"finger4-2.R|Bat|VIS": 8,
-"finger5-1.R|Bat|VIS": 1,
-"finger1-3.R|Bat|VIS": 14,
-"finger1-2.R|Bat|VIS": 1
-},
-"466": {
-"finger3-1.R|Bat|VIS": 8,
-"finger3-2.R|Bat|VIS": 14,
-"finger4-2.R|Bat|VIS": 8,
-"finger1-3.R|Bat|VIS": 5,
-"finger3-3.R|Bat|VIS": 5,
-"finger4-1.R|Bat|VIS": 9
-},
-"484": {
-"upperleg02.R|Bat|VIS": 30,
-"lowerleg01.R|Bat|VIS": 3
-},
-"487": {
-"lowerarm01.R|Bat|VIS": 23
-},
-"490": {
-"lowerarm01.R|Bat|VIS": 22
-},
-"493": {
-"lowerarm01.R|Bat|VIS": 9
-},
-"496": {
-"lowerarm01.R|Bat|VIS": 9
-},
-"499": {
-"lowerarm01.R|Bat|VIS": 14
-},
-"502": {
-"lowerarm01.R|Bat|VIS": 12
-},
-"505": {
-"lowerarm01.R|Bat|VIS": 11,
-"spine03|Bat|VIS": 2
-},
-"508": {
-"lowerarm01.R|Bat|VIS": 6
-},
-"640": {
-"finger1-3.R|Bat|off": 13
-},
-"643": {
-"finger3-2.R|Bat|off": 10,
-"finger3-3.R|Bat|off": 8,
-"finger1-3.R|Bat|off": 15
-},
-"646": {
-"finger2-3.R|Bat|off": 6,
-"finger2-2.R|Bat|off": 8,
-"finger3-2.R|Bat|off": 19,
-"finger3-3.R|Bat|off": 11,
-"finger1-3.R|Bat|off": 28,
-"finger3-1.R|Bat|off": 2
-},
-"649": {
-"finger3-2.R|Bat|off": 17,
-"finger3-3.R|Bat|off": 11,
-"finger1-3.R|Bat|off": 28,
-"finger3-1.R|Bat|off": 7
-},
-"652": {
-"finger3-2.R|Bat|off": 18,
-"finger4-2.R|Bat|off": 15,
-"finger1-3.R|Bat|off": 21,
-"finger3-1.R|Bat|off": 6,
-"finger3-3.R|Bat|off": 8
-},
-"655": {
-"finger3-2.R|Bat|off": 17,
-"finger4-2.R|Bat|off": 17,
-"finger1-3.R|Bat|off": 19,
-"finger3-1.R|Bat|off": 4,
-"finger3-3.R|Bat|off": 7,
-"finger4-1.R|Bat|off": 3
-},
-"658": {
-"finger3-2.R|Bat|off": 16,
-"finger3-3.R|Bat|off": 5,
-"finger4-1.R|Bat|off": 9,
-"finger4-2.R|Bat|off": 15,
-"finger1-3.R|Bat|off": 18,
-"finger3-1.R|Bat|off": 3
-},
-"661": {
-"finger3-2.R|Bat|off": 16,
-"finger3-3.R|Bat|off": 4,
-"finger4-2.R|Bat|off": 18,
-"finger4-1.R|Bat|off": 12,
-"finger1-3.R|Bat|off": 24,
-"finger3-1.R|Bat|off": 6
-},
-"664": {
-"finger3-1.R|Bat|off": 9,
-"finger3-2.R|Bat|off": 17,
-"finger4-2.R|Bat|off": 17,
-"finger4-1.R|Bat|off": 15,
-"finger1-3.R|Bat|off": 19
-},
-"667": {
-"finger2-2.R|Bat|off": 5,
-"finger3-2.R|Bat|off": 27,
-"finger3-1.R|Bat|off": 21,
-"finger4-2.R|Bat|off": 25,
-"finger4-1.R|Bat|off": 28,
-"finger1-3.R|Bat|off": 8,
-"finger5-2.R|Bat|off": 2,
-"finger5-1.R|Bat|off": 3
-},
-"670": {
-"finger2-1.R|Bat|off": 28,
-"finger2-2.R|Bat|off": 24,
-"finger3-1.R|Bat|off": 47,
-"finger3-2.R|Bat|off": 28,
-"finger4-1.R|Bat|off": 30
-},
-"673": {
-"finger2-1.R|Bat|off": 62,
-"finger2-2.R|Bat|off": 22,
-"finger3-1.R|Bat|off": 34,
-"metacarpal1.R|Bat|off": 1
-},
-"685": {
-"finger2-1.R|Bat|VIS": 34,
-"finger2-2.R|Bat|VIS": 16,
+"finger2-1.R|Bat|VIS": 5,
 "metacarpal1.R|Bat|VIS": 1
 },
-"703": {
-"finger2-1.R|Bat|VIS": 21,
-"finger2-2.R|Bat|VIS": 3
+"463": {
+"finger2-1.R|Bat|VIS": 23,
+"finger2-2.R|Bat|VIS": 8,
+"metacarpal1.R|Bat|VIS": 12,
+"finger1-1.R|Bat|VIS": 1
 },
-"706": {
-"finger2-1.R|Bat|VIS": 22,
-"finger2-2.R|Bat|VIS": 10,
-"metacarpal1.R|Bat|VIS": 2
+"466": {
+"finger2-2.R|Bat|VIS": 18,
+"finger2-1.R|Bat|VIS": 12,
+"finger3-1.R|Bat|VIS": 9,
+"finger3-2.R|Bat|VIS": 3,
+"metacarpal1.R|Bat|VIS": 29,
+"finger1-2.R|Bat|VIS": 1,
+"metacarpal2.R|Bat|VIS": 4,
+"finger1-1.R|Bat|VIS": 1
 },
-"709": {
-"finger2-2.R|Bat|VIS": 12,
-"finger2-1.R|Bat|VIS": 26,
-"metacarpal1.R|Bat|VIS": 3
+"469": {
+"finger2-3.R|Bat|VIS": 16,
+"finger1-3.R|Bat|VIS": 15,
+"finger3-2.R|Bat|VIS": 14,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 31,
+"finger1-2.R|Bat|VIS": 9,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3,
+"finger2-2.R|Bat|VIS": 6,
+"finger3-1.R|Bat|VIS": 4
 },
-"712": {
-"finger2-2.R|Bat|VIS": 13,
-"finger2-1.R|Bat|VIS": 24,
-"metacarpal1.R|Bat|VIS": 3
+"472": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 28,
+"finger1-3.R|Bat|off": 3,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
 },
-"715": {
-"finger2-2.R|Bat|VIS": 12,
-"finger2-1.R|Bat|VIS": 25,
-"metacarpal1.R|Bat|VIS": 3
+"475": {
+"finger2-3.R|Bat|VIS": 22,
+"finger2-3.R|Bat|off": 5,
+"finger3-2.R|Bat|off": 6,
+"finger1-3.R|Bat|off": 14,
+"finger1-3.R|Bat|VIS": 17,
+"finger3-2.R|Bat|VIS": 5,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
 },
-"718": {
-"finger2-2.R|Bat|VIS": 12,
-"finger2-1.R|Bat|VIS": 25,
-"metacarpal1.R|Bat|VIS": 3
+"478": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
 },
-"721": {
-"finger2-2.R|Bat|VIS": 12,
-"finger2-1.R|Bat|VIS": 25,
-"metacarpal1.R|Bat|VIS": 3
+"481": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
 },
-"724": {
-"finger2-1.R|Bat|VIS": 19,
+"484": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"lowerarm01.R|Bat|VIS": 15,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"lowerarm02.R|Bat|VIS": 7,
+"finger1-1.R|Bat|VIS": 3
+},
+"487": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"lowerarm01.R|Bat|VIS": 11,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"lowerarm02.R|Bat|VIS": 3,
+"finger1-1.R|Bat|VIS": 3
+},
+"490": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"493": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"496": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"499": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"502": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"505": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"508": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"511": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"514": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"517": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"520": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"523": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"526": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"529": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"532": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"535": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"538": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"541": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"544": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"547": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"550": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"553": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"556": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"559": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"562": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"565": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"568": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"571": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"574": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"577": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"580": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"583": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"586": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"589": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"592": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"595": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"598": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"601": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"604": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"607": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"610": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"613": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"616": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"619": {
+"finger2-3.R|Bat|VIS": 27,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 31,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 30,
+"finger1-2.R|Bat|VIS": 22,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3
+},
+"622": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"625": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"628": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"631": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"634": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"637": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"640": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"643": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"646": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"649": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"652": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"655": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"658": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"661": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"664": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"667": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"670": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"673": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 30,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3
+},
+"676": {
+"finger2-3.R|Bat|off": 27,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 31,
+"finger2-1.R|Bat|off": 3,
+"finger2-1.R|Bat|VIS": 7,
+"metacarpal1.R|Bat|off": 28,
+"finger1-2.R|Bat|off": 22,
+"metacarpal2.R|Bat|off": 6,
+"metacarpal1.R|Bat|VIS": 2,
+"finger1-1.R|Bat|off": 3
+},
+"679": {
+"finger2-1.R|Bat|VIS": 5,
+"finger2-3.R|Bat|off": 19,
+"finger2-3.R|Bat|VIS": 10,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 30,
+"finger2-1.R|Bat|off": 5,
+"metacarpal1.R|Bat|off": 27,
+"finger1-2.R|Bat|off": 21,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3,
+"levator05.R|Bat|VIS": 3,
+"jaw|Bat|VIS": 5
+},
+"682": {
+"finger2-3.R|Bat|VIS": 21,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 24,
+"metacarpal1.R|Bat|VIS": 22,
+"finger1-2.R|Bat|VIS": 21,
+"metacarpal2.R|Bat|VIS": 6,
+"finger2-1.R|Bat|VIS": 2,
+"finger1-1.R|Bat|VIS": 3,
 "finger2-2.R|Bat|VIS": 7
 },
-"1600": {
-"head|OxyStrap|VIS": 2
+"685": {
+"finger2-2.R|Bat|VIS": 15,
+"finger2-3.R|Bat|VIS": 18,
+"finger3-2.R|Bat|VIS": 11,
+"finger1-3.R|Bat|VIS": 24,
+"metacarpal1.R|Bat|VIS": 16,
+"finger1-2.R|Bat|VIS": 20,
+"metacarpal2.R|Bat|VIS": 2,
+"finger1-1.R|Bat|VIS": 2,
+"metacarpal2.R|Bat|off": 4,
+"metacarpal1.R|Bat|off": 1
 },
-"1603": {
-"head|OxyStrap|VIS": 2
+"688": {
+"finger2-3.R|Bat|VIS": 18,
+"finger2-2.R|Bat|VIS": 11,
+"finger3-2.R|Bat|VIS": 7,
+"finger1-3.R|Bat|VIS": 23,
+"metacarpal1.R|Bat|VIS": 13,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|off": 6,
+"metacarpal1.R|Bat|off": 4,
+"finger3-2.R|Bat|off": 2
 },
-"1606": {
-"head|OxyStrap|VIS": 2
+"691": {
+"finger2-3.R|Bat|VIS": 19,
+"finger2-2.R|Bat|VIS": 13,
+"finger3-2.R|Bat|VIS": 10,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 13,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|off": 5,
+"metacarpal1.R|Bat|off": 4,
+"finger3-2.R|Bat|off": 2,
+"metacarpal2.R|Bat|VIS": 1
 },
-"1609": {
-"head|OxyStrap|VIS": 2
+"694": {
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 15,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 2,
+"metacarpal2.R|Bat|off": 4,
+"metacarpal1.R|Bat|off": 2
 },
-"1612": {
-"head|OxyStrap|VIS": 2
+"697": {
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|off": 3
 },
-"1615": {
-"head|OxyStrap|VIS": 2
+"700": {
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6
 },
-"1618": {
-"head|OxyStrap|VIS": 2
+"703": {
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6
 },
-"1621": {
-"head|OxyStrap|VIS": 2
+"706": {
+"oris05|Bat|VIS": 8,
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6
 },
-"1624": {
-"head|OxyStrap|VIS": 2
+"709": {
+"oris05|Bat|VIS": 12,
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6,
+"oris03.R|Bat|VIS": 10
+},
+"712": {
+"oris03.R|Bat|VIS": 13,
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6,
+"oris05|Bat|VIS": 5
+},
+"715": {
+"oris03.R|Bat|VIS": 13,
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6,
+"oris05|Bat|VIS": 4
+},
+"718": {
+"oris03.R|Bat|VIS": 14,
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6,
+"oris05|Bat|VIS": 4
+},
+"721": {
+"oris03.R|Bat|VIS": 14,
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 4,
+"metacarpal2.R|Bat|off": 2,
+"oris05|Bat|VIS": 4
+},
+"724": {
+"finger2-3.R|Bat|VIS": 21,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 22,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 20,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 2,
+"metacarpal2.R|Bat|off": 4
+},
+"727": {
+"finger2-3.R|Bat|VIS": 19,
+"finger2-2.R|Bat|VIS": 13,
+"finger3-2.R|Bat|VIS": 12,
+"finger1-3.R|Bat|VIS": 20,
+"metacarpal1.R|Bat|VIS": 17,
+"finger1-2.R|Bat|VIS": 19,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|VIS": 6
+},
+"730": {
+"finger2-2.R|Bat|VIS": 11,
+"finger2-3.R|Bat|VIS": 11,
+"finger2-3.R|Bat|off": 10,
+"finger2-2.R|Bat|off": 1,
+"finger3-2.R|Bat|off": 6,
+"finger1-3.R|Bat|VIS": 8,
+"finger1-3.R|Bat|off": 8,
+"metacarpal1.R|Bat|off": 10,
+"finger1-2.R|Bat|VIS": 13,
+"finger1-1.R|Bat|VIS": 3,
+"metacarpal2.R|Bat|off": 6,
+"metacarpal1.R|Bat|VIS": 7,
+"finger3-2.R|Bat|VIS": 11,
+"finger3-1.R|Bat|off": 2,
+"finger1-2.R|Bat|off": 3
+},
+"733": {
+"finger2-3.R|Bat|off": 20,
+"finger2-2.R|Bat|off": 15,
+"finger3-2.R|Bat|off": 11,
+"finger1-3.R|Bat|off": 11,
+"metacarpal1.R|Bat|off": 17,
+"finger1-2.R|Bat|off": 12,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 2,
+"finger3-1.R|Bat|off": 2
+},
+"736": {
+"finger2-2.R|Bat|off": 22,
+"finger2-3.R|Bat|off": 20,
+"finger3-2.R|Bat|off": 13,
+"finger2-1.R|Bat|off": 8,
+"metacarpal1.R|Bat|off": 23,
+"finger1-2.R|Bat|off": 9,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 2,
+"finger3-1.R|Bat|off": 3
+},
+"739": {
+"finger2-1.R|Bat|off": 11,
+"finger2-3.R|Bat|off": 21,
+"finger2-2.R|Bat|off": 15,
+"finger3-2.R|Bat|off": 14,
+"metacarpal1.R|Bat|off": 27,
+"finger1-2.R|Bat|off": 6,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3,
+"finger3-1.R|Bat|off": 3
+},
+"742": {
+"finger2-3.R|Bat|off": 22,
+"finger3-2.R|Bat|off": 12,
+"finger2-1.R|Bat|off": 10,
+"metacarpal1.R|Bat|off": 31,
+"finger1-2.R|Bat|off": 6,
+"metacarpal2.R|Bat|off": 6,
+"finger1-1.R|Bat|off": 3,
+"finger2-2.R|Bat|off": 11,
+"finger3-1.R|Bat|off": 3
+},
+"745": {
+"finger2-3.R|Bat|VIS": 23,
+"finger2-2.R|Bat|VIS": 9,
+"finger3-2.R|Bat|VIS": 12,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 31,
+"finger1-2.R|Bat|VIS": 6,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3,
+"finger3-1.R|Bat|VIS": 3
+},
+"748": {
+"finger2-3.R|Bat|VIS": 23,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger2-1.R|Bat|VIS": 11,
+"metacarpal1.R|Bat|VIS": 31,
+"finger1-2.R|Bat|VIS": 6,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3,
+"finger3-1.R|Bat|VIS": 3
+},
+"751": {
+"finger2-3.R|Bat|VIS": 23,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger2-1.R|Bat|VIS": 11,
+"metacarpal1.R|Bat|VIS": 31,
+"finger1-2.R|Bat|VIS": 6,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3,
+"finger3-1.R|Bat|VIS": 3
+},
+"754": {
+"finger2-3.R|Bat|VIS": 23,
+"finger2-2.R|Bat|VIS": 10,
+"finger3-2.R|Bat|VIS": 12,
+"finger2-1.R|Bat|VIS": 11,
+"metacarpal1.R|Bat|VIS": 31,
+"finger1-2.R|Bat|VIS": 6,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3,
+"finger3-1.R|Bat|VIS": 3
+},
+"757": {
+"finger2-3.R|Bat|VIS": 23,
+"finger2-2.R|Bat|VIS": 9,
+"finger3-2.R|Bat|VIS": 9,
+"finger1-3.R|Bat|VIS": 14,
+"finger2-1.R|Bat|VIS": 10,
+"metacarpal1.R|Bat|VIS": 29,
+"finger1-2.R|Bat|VIS": 14,
+"metacarpal2.R|Bat|VIS": 6,
+"finger1-1.R|Bat|VIS": 3,
+"finger3-1.R|Bat|VIS": 2
+},
+"760": {
+"finger1-3.R|Bat|VIS": 22,
+"finger2-1.R|Bat|VIS": 7,
+"metacarpal1.R|Bat|VIS": 27,
+"finger1-2.R|Bat|VIS": 36,
+"finger1-1.R|Bat|VIS": 12,
+"metacarpal2.R|Bat|VIS": 6
 },
 "1627": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 6
 },
 "1630": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1633": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1636": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1639": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1642": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1645": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1648": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1651": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1654": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1657": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1660": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1663": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1666": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1669": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1672": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1675": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1678": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1681": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1684": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1687": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1690": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1693": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1696": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1699": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1702": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1705": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1708": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1711": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1714": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1717": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1720": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1723": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1726": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1729": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1732": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1735": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1738": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1741": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1744": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1747": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1750": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1753": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1756": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1759": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1762": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1765": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1768": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1771": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1774": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1777": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1780": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1783": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1786": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1789": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1792": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1795": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1798": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1801": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1804": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1807": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1810": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1813": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1816": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1819": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1822": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1825": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1828": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1831": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1834": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1837": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1840": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1843": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1846": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1849": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1852": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1855": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1858": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1861": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1864": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1867": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1870": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1873": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1876": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1879": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1882": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1885": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1888": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1891": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1894": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1897": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1900": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1903": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1906": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1909": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1912": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1915": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1918": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1921": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1924": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1927": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1930": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1933": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1936": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1939": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1942": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1945": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1948": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1951": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1954": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1957": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1960": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1963": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1966": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1969": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1972": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1975": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1978": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1981": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1984": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1987": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1990": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1993": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1996": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "1999": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2002": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2005": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2008": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2011": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2014": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2017": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2020": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2023": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2026": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2029": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2032": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2035": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2038": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2041": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2044": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2047": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2050": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2053": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2056": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2059": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2062": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2065": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2068": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2071": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2074": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2077": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2080": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2083": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2086": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2089": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2092": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2095": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 },
 "2098": {
-"head|OxyStrap|VIS": 2,
 "foot.R|Bed|off": 12,
 "foot.L|Bed|off": 8
 }
