@@ -11,4 +11,4 @@ for k in $(python3 -c "import json;print(' '.join(sorted(json.load(open('$TIM'))
   [ -z "${RIG[$k]}" ] && continue
   read a b < <(python3 -c "import json;v=json.load(open('$TIM'))['$k'];print(v[0],v[1]-1)")
   echo "$k $a $b ${RIG[$k]}"
-done | xargs -P 3 -L 1 bash -c 'B='$B'; $B -b '$F' --python '$D'/bpc_run.py -- '$OUT'/bpc_$0.json 3 $1 $2 '$PR' $3 2>&1 | grep BPC_DONE | sed "s/^/$0 /"'
+done | xargs -P 2 -L 1 bash -c 'B='$B'; $B -b '$F' --python '$D'/bpc_run.py -- '$OUT'/bpc_$0.json 3 $1 $2 '$PR' $3 2>&1 | grep BPC_DONE | sed "s/^/$0 /"'
