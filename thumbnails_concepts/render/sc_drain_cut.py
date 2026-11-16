@@ -32,9 +32,9 @@ bpy.ops.mesh.primitive_cube_add(size=1, location=(0, -2.5, 0)); CUTTER = bpy.con
 CUTTER.scale = (10, 5, 10); CUTTER.name = "Cutter"; CUTTER.hide_render = True; CUTTER.display_type = 'WIRE'
 
 # ---------------------------------------------------------------- materials
-conc = ph.texture("concrete_floor_02", scale=1.6, tint=(0.42, 0.43, 0.45), name="Concrete")
+conc = ph.texture("concrete_floor_02", scale=1.6, tint=(0.26, 0.27, 0.29), name="Concrete")
 pc = conc.node_tree.nodes["Principled BSDF"]; pc.inputs['Coat Weight'].default_value = 0.75; pc.inputs['Coat Roughness'].default_value = 0.08
-patch = ph.texture("concrete_floor_02", scale=3.1, tint=(1.3, 1.28, 1.22), name="Patch")
+patch = ph.texture("concrete_floor_02", scale=3.1, tint=(1.0, 1.0, 1.0), name="Patch")
 pp = patch.node_tree.nodes["Principled BSDF"]; pp.inputs['Coat Weight'].default_value = 0.5; pp.inputs['Coat Roughness'].default_value = 0.1
 soil = ph.texture("brown_mud_rocks_01", scale=2.2, tint=(1.0, 0.92, 0.82), name="Soil")
 grav = ph.texture("gravel_floor", scale=3.0, tint=(0.5, 0.5, 0.5), name="Gravel")
@@ -111,8 +111,8 @@ for k, (x, z) in enumerate(((-0.12, 0.02), (0.14, 0.05), (0.02, -0.1), (-0.05, 0
     cd.data.materials.append(em); point_at(cd, hero.location); cd.rotation_euler.rotate_axis('X', math.pi / 2)
     cd.visible_camera = False; cd.visible_diffuse = False; cd.visible_glossy = False
 # ---------------------------------------------------------------- camera
-CL = (0.0, -0.52, 0.07)
-cam = camera(CL, (PX + 0.06, 0.2, -0.105), lens=40)
+CL = (0.02, -0.42, 0.10)
+cam = camera(CL, (PX + 0.07, 0.17, -0.112), lens=40)
 cam.data.dof.use_dof = True; cam.data.dof.focus_distance = (Vector(CL) - Vector((PX, 0.05, TZ))).length
 cam.data.dof.aperture_fstop = 5.6
 out = arg("--out", os.path.join(HERE, "plates", "drain.png"))

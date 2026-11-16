@@ -68,32 +68,22 @@ hp2.data.energy = 0.0; hp2.data.color = (1.0, 0.55, 0.25); hp2.data.shadow_soft_
 
 box("Brace", (0.02, 0.0, CH + 0.36), (0.05, 1.6, 0.07), raft, rot=(0.0, 0.0, math.radians(18)))
 haze((0.3, 0.05, CH + T + 0.25), (1.4, 1.0, 0.42), density=1.1, color=(1.0, 0.8, 0.6), anis=0.2)
-# chalk: dimension lines and the two numbers, as the police marked them
-chalk = pbr("Chalk", (0.85, 0.85, 0.82), 0.95)
-zc0 = CH - 0.0015
-box("DimX", (HX, y0 - 0.07, zc0), (HL, 0.005, 0.002), chalk)
-for x in (x0, x1):
-    box("TickX", (x, y0 - 0.07, zc0), (0.005, 0.04, 0.002), chalk)
-box("DimY", (x1 + 0.07, HY, zc0), (0.005, HWD, 0.002), chalk)
-for y in (y0, y1):
-    box("TickY", (x1 + 0.07, y, zc0), (0.04, 0.005, 0.002), chalk)
-FONT = os.path.join(HERE, "..", "..", "assets", "fonts", "CaveatBrush-Regular.ttf")
-
-
-def chalk_text(s_, loc, rotz, size):
-    bpy.ops.object.text_add(location=loc); t = bpy.context.active_object
-    t.data.body = s_; t.data.size = size; t.data.align_x = 'CENTER'; t.data.align_y = 'CENTER'
-    try:
-        t.data.font = bpy.data.fonts.load(FONT)
-    except Exception as e:
-        print("font", e)
-    t.data.extrude = 0.0006; t.rotation_euler = (math.pi, 0, rotz)        # facing down, readable from below
-    t.data.materials.append(chalk)
-    return t
-
-
-chalk_text("15 in", (HX, y0 - 0.115, zc0), 0.0, 0.06)
-chalk_text("8 in", (x1 + 0.125, HY, zc0), math.radians(-90), 0.06)
+# chalk: rough police marks round the opening (painted decal: broken, dusty strokes, hand-written numbers)
+import chalk_decal
+DX0, DX1, DY0, DY1 = x0 - 0.06, x1 + 0.2, y0 - 0.2, y1 + 0.06
+png = chalk_decal.make(os.path.join(HERE, "plates", "chalk_decal.png"), DX0, DX1, DY0, DY1,
+    strokes=[((x0, y0 - 0.07), (x1, y0 - 0.068)), ((x0 - 0.002, y0 - 0.095), (x0 + 0.003, y0 - 0.045)),
+             ((x1 - 0.002, y0 - 0.093), (x1 + 0.002, y0 - 0.043)),
+             ((x1 + 0.07, y0), (x1 + 0.072, y1)), ((x1 + 0.045, y0 + 0.002), (x1 + 0.095, y0 - 0.001)),
+             ((x1 + 0.047, y1 - 0.001), (x1 + 0.096, y1 + 0.002))],
+    texts=[("15 in", (HX, y0 - 0.13), 2), ("8 in", (x1 + 0.142, HY), 0)],
+    font=os.path.join(HERE, "..", "..", "assets", "fonts", "PermanentMarker-Regular.ttf"))
+cm = bpy.data.materials.new("ChalkDecal"); cm.use_nodes = True
+Nn = cm.node_tree.nodes; Ll = cm.node_tree.links; pb = Nn["Principled BSDF"]
+ti = Nn.new("ShaderNodeTexImage"); ti.image = bpy.data.images.load(png); ti.extension = 'CLIP'
+Ll.new(ti.outputs['Color'], pb.inputs['Base Color']); Ll.new(ti.outputs['Alpha'], pb.inputs['Alpha']); pb.inputs['Roughness'].default_value = 1.0
+bpy.ops.mesh.primitive_plane_add(size=1, location=((DX0 + DX1) / 2, (DY0 + DY1) / 2, CH - 0.0012)); dec = bpy.context.active_object
+dec.scale = (DX1 - DX0, DY1 - DY0, 1); dec.data.materials.append(cm); dec.name = "Chalk"
 
 # the detectives' torch from below, cold white; plus a weak fill so the paper reads
 bpy.ops.object.light_add(type='SPOT', location=(-0.3, -0.45, 1.05)); sp = bpy.context.active_object

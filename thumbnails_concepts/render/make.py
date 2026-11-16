@@ -69,9 +69,9 @@ def finish(name, plate, build):
 
 
 def drain(g):
-    g = darken(g, (900, 0, W, 380), 0.75, 170)
-    t = draw_text(g, ["FOUND ON THE"], W - 80, 55, 150, font="anton", color=WHITE, anchor="ra")
-    t = draw_text(t, [[("5TH", LIME), (" SEARCH", WHITE)]], W - 80, 185, 200, font="anton", anchor="ra")
+    g = darken(g, (820, 0, W, 400), 0.8, 170)
+    t = draw_text(g, ["POLICE MISSED IT 4 TIMES"], W - 80, 62, 104, font="anton", color=WHITE, anchor="ra")
+    t = draw_text(t, [[("SEARCH ", WHITE), ("#5", LIME)]], W - 80, 160, 250, font="anton", anchor="ra")
     return t
 
 
