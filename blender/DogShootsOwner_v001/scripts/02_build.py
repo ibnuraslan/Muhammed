@@ -457,7 +457,7 @@ def seated(H, rig, f, pos, yaw=0.0, lean=-8.0, flex=6.0, head=(0, 0), twist=0.0,
             pb.location = H.r.rest(n).to_3x3().inverted() @ (pole - H.r.BN[n].head_local); pb.keyframe_insert("location", frame=f, group=n)
     H.key_spine(f, flex=flex, twist=twist, head=head)
 
-LAP_Z = float(os.environ.get("DSO_LAPZ", "0.20"))
+LAP_Z = float(os.environ.get("DSO_LAPZ", "0.24"))
 def hands_lap(rig, f, pos, yaw=0.0, legs_out=False):
     c = Matrix.Rotation(R_(yaw), 3, 'Z')
     for s, sx in (("L", 1), ("R", -1)):
@@ -831,17 +831,17 @@ _gb = GAUZE.modifiers.new("bev", 'BEVEL'); _gb.width = 0.003; _gb.segments = 2
 GAUZE.data.materials.append(mat("Gauze", (0.97, 0.97, 0.96), 0.8)); move_to(GAUZE, CI)
 def S09(f0, f1):
     PRESENT["09"] = {"own", "ma"}
-    st = IX + Vector((0.40, 0.15, STR_Z + 0.13))
-    seated(HOWN, OWNER, f0, st, yaw=90, lean=-6, flex=8, head=(10, 15), knee_fwd=0.58, foot_z=0.30)
-    seated(HOWN, OWNER, f1, st, yaw=90, lean=-6, flex=9, head=(12, 25), knee_fwd=0.58, foot_z=0.30)
+    st = IX + Vector((float(os.environ.get('DSO_SX', '0.44')), 0.15, STR_Z + float(os.environ.get('DSO_SZ', '0.05'))))
+    seated(HOWN, OWNER, f0, st, yaw=90, lean=-6, flex=8, head=(10, 15), knee_fwd=float(os.environ.get("DSO_K9", "0.45")), foot_z=0.34)
+    seated(HOWN, OWNER, f1, st, yaw=90, lean=-6, flex=9, head=(12, 25), knee_fwd=float(os.environ.get("DSO_K9", "0.45")), foot_z=0.34)
     hands_lap(OWNER, f0, st, yaw=90); hands_lap(OWNER, f1, st, yaw=90)
     # medic A stands behind him (he faces +X), left hand flat on his upper back, right arm bent, hand at his own waist
-    pa = IX + Vector((-0.18, 0.22, 0))
+    pa = IX + Vector((float(os.environ.get('DSO_PAX', '-0.30')), 0.22, 0))
     for fr, hd, dz in ((f0, (22, 0), 0.0), ((f0 + f1) // 2, (25, 5), -0.03), (f1, (24, 2), -0.05)):
         stand(HMA, MEDA, fr, pa, yaw=90, head=hd, flex=14, hands=False)
         sc.frame_set(fr)
         _bk = OWNER.matrix_world @ OWNER.pose.bones["spine03"].head
-        place_hand(MEDA, "L", fr, Vector((_bk.x - 0.14, _bk.y + 0.04, _bk.z + dz)), (1, 0, 0), (0, 0.15, 1)); apply_pose(MEDA, "L", "flat_palm", fr)
+        place_hand(MEDA, "L", fr, Vector((_bk.x - float(os.environ.get("DSO_BKX", "0.19")), _bk.y + 0.04, _bk.z + dz)), (1, 0, 0), (0, 0.15, 1)); apply_pose(MEDA, "L", "flat_palm", fr)
         place_hand(MEDA, "R", fr, pa + Vector((0.10, -0.24, 1.02)), (0, 1, 0), (1, 0.3, -0.4)); apply_pose(MEDA, "R", "relaxed", fr)
     sc.frame_set(f0); _sp = OWNER.matrix_world @ OWNER.pose.bones["spine03"].head
     attach_to_hand(GAUZE, MEDA, "L", f0, along=0.095, off=0.036, toward=_sp, axes="z")
