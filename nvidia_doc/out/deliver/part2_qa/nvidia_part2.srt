@@ -1,0 +1,780 @@
+1
+00:00:03,069 --> 00:00:05,380
+Before that briefing can happen, a reporter
+
+2
+00:00:05,430 --> 00:00:08,087
+puts a different question to Jensen Huang.
+
+3
+00:00:08,137 --> 00:00:10,491
+It’s about a woman inside Nvidia.
+
+4
+00:00:10,541 --> 00:00:12,432
+Her name is Kimberly Powell.
+
+5
+00:00:12,482 --> 00:00:14,220
+She joined the company in 2008,
+
+6
+00:00:14,270 --> 00:00:16,380
+when her job was to get Nvidia chips
+
+7
+00:00:16,430 --> 00:00:18,431
+into medical imaging equipment.
+
+8
+00:00:18,481 --> 00:00:20,005
+By 2026,
+
+9
+00:00:20,055 --> 00:00:22,400
+she runs the company’s healthcare business,
+
+10
+00:00:22,450 --> 00:00:24,480
+overseeing technology used in everything
+
+11
+00:00:24,530 --> 00:00:27,095
+from medical scans to drug discovery.
+
+12
+00:00:27,145 --> 00:00:29,156
+She reports directly to Huang.
+
+13
+00:00:29,206 --> 00:00:31,560
+On November eleventh, The New York Times reports
+
+14
+00:00:31,610 --> 00:00:33,793
+that Huang and Powell had an affair,
+
+15
+00:00:33,843 --> 00:00:36,449
+citing five people who worked at Nvidia.
+
+16
+00:00:36,499 --> 00:00:39,071
+When a reporter calls Huang to ask about Powell,
+
+17
+00:00:39,121 --> 00:00:40,820
+he says, “I don’t think you should
+
+18
+00:00:40,870 --> 00:00:42,358
+be talking to me directly.”
+
+19
+00:00:42,408 --> 00:00:44,936
+Then he hangs up, according to the Times.
+
+20
+00:00:44,986 --> 00:00:47,280
+Powell and Nvidia don’t immediately respond
+
+21
+00:00:47,330 --> 00:00:48,748
+to requests for comment.
+
+22
+00:00:48,798 --> 00:00:51,100
+Reuters says it couldn’t immediately verify
+
+23
+00:00:51,150 --> 00:00:52,479
+the Times report.
+
+24
+00:00:52,529 --> 00:00:54,688
+Open Nvidia’s code of conduct.
+
+25
+00:00:54,738 --> 00:00:57,196
+The first letter is signed by Jensen Huang.
+
+26
+00:00:57,246 --> 00:00:58,840
+A few pages later, the company
+
+27
+00:00:58,890 --> 00:01:01,180
+lists personal relationships among the things
+
+28
+00:01:01,230 --> 00:01:03,242
+that can create a conflict of interest.
+
+29
+00:01:03,292 --> 00:01:04,960
+If a conflict arises,
+
+30
+00:01:05,010 --> 00:01:07,360
+the code says employees should remove themselves
+
+31
+00:01:07,410 --> 00:01:09,093
+from decisions on the matter.
+
+32
+00:01:09,143 --> 00:01:10,660
+The Times report leaves a question
+
+33
+00:01:10,710 --> 00:01:11,818
+for the company.
+
+34
+00:01:11,868 --> 00:01:13,180
+Did the alleged relationship
+
+35
+00:01:13,230 --> 00:01:15,689
+affect any decisions inside Nvidia?
+
+36
+00:01:15,739 --> 00:01:17,526
+That night, according to Reuters,
+
+37
+00:01:17,576 --> 00:01:20,668
+Nvidia’s directors meet to consider removing Huang.
+
+38
+00:01:20,718 --> 00:01:21,900
+Three days earlier,
+
+39
+00:01:21,950 --> 00:01:23,720
+the board had publicly expressed confidence
+
+40
+00:01:23,770 --> 00:01:25,630
+in him and his leadership team.
+
+41
+00:01:25,680 --> 00:01:27,820
+Now the company he co-founded is preparing
+
+42
+00:01:27,870 --> 00:01:29,489
+for a change at the top.
+
+43
+00:01:29,539 --> 00:01:32,035
+The date is in Nvidia’s securities filing.
+
+44
+00:01:32,085 --> 00:01:34,180
+On November eleventh, the board accepts
+
+45
+00:01:34,230 --> 00:01:36,837
+Huang’s resignation, effective immediately.
+
+46
+00:01:36,887 --> 00:01:39,895
+On November twelfth, the company announces it.
+
+47
+00:01:39,945 --> 00:01:41,759
+After thirty-three years,
+
+48
+00:01:41,809 --> 00:01:44,468
+Jensen Huang is out as chief executive.
+
+49
+00:01:44,518 --> 00:01:45,780
+He also resigns as president
+
+50
+00:01:45,830 --> 00:01:47,897
+and gives up his seat on the board.
+
+51
+00:01:47,947 --> 00:01:51,206
+Colette Kress, Nvidia’s finance chief since 2013,
+
+52
+00:01:51,256 --> 00:01:52,800
+takes over as interim CEO.
+
+53
+00:01:52,850 --> 00:01:54,340
+The directors begin looking
+
+54
+00:01:54,390 --> 00:01:55,852
+for a permanent replacement,
+
+55
+00:01:55,902 --> 00:01:57,260
+and they name longtime director
+
+56
+00:01:57,310 --> 00:01:59,956
+Harvey Jones the company’s first board chair.
+
+57
+00:02:00,006 --> 00:02:01,580
+Nvidia is five days away
+
+58
+00:02:01,630 --> 00:02:03,731
+from reporting its quarterly results.
+
+59
+00:02:03,781 --> 00:02:06,371
+Then, with the resignation already public,
+
+60
+00:02:06,421 --> 00:02:08,247
+Reuters breaks another story.
+
+61
+00:02:08,297 --> 00:02:10,740
+Two people familiar with the matter tell Reuters
+
+62
+00:02:10,790 --> 00:02:12,800
+that Huang had an intimate relationship
+
+63
+00:02:12,850 --> 00:02:15,205
+with another Nvidia employee.
+
+64
+00:02:15,255 --> 00:02:17,743
+A different woman from Kimberly Powell.
+
+65
+00:02:17,793 --> 00:02:19,140
+Reuters withholds her name
+
+66
+00:02:19,190 --> 00:02:21,107
+and says it couldn’t reach her.
+
+67
+00:02:21,157 --> 00:02:23,174
+Nvidia declines to comment.
+
+68
+00:02:23,224 --> 00:02:25,000
+Huang, Powell, and a representative
+
+69
+00:02:25,050 --> 00:02:26,640
+for the board don’t respond
+
+70
+00:02:26,690 --> 00:02:28,704
+to Reuters’ requests for comment.
+
+71
+00:02:28,754 --> 00:02:30,800
+In four days, Nvidia has gone
+
+72
+00:02:30,850 --> 00:02:33,713
+from its founder’s email to a new chief executive
+
+73
+00:02:33,763 --> 00:02:36,995
+and two reports involving women inside the company.
+
+74
+00:02:37,045 --> 00:02:39,100
+Then a government statement from Singapore
+
+75
+00:02:39,150 --> 00:02:41,511
+puts the focus back on Alice Huang.
+
+76
+00:02:41,561 --> 00:02:44,240
+By the time the public saw the intelligence allegations,
+
+77
+00:02:44,290 --> 00:02:46,947
+Singapore’s police had already taken her passport,
+
+78
+00:02:46,997 --> 00:02:49,370
+given it back, and barred her from returning.
+
+79
+00:02:54,003 --> 00:02:56,506
+On June twenty-fourth, 2025,
+
+80
+00:02:56,556 --> 00:02:58,397
+Alice Huang is present when officials
+
+81
+00:02:58,447 --> 00:02:59,917
+from the U.S. Commerce Department
+
+82
+00:02:59,967 --> 00:03:03,329
+carry out a post-shipment check at Megaspeed.
+
+83
+00:03:03,379 --> 00:03:05,648
+According to Singapore’s Home Affairs Ministry,
+
+84
+00:03:05,698 --> 00:03:07,377
+that’s when Singapore first learns
+
+85
+00:03:07,427 --> 00:03:09,257
+that American authorities are interested
+
+86
+00:03:09,307 --> 00:03:10,894
+in her and the company.
+
+87
+00:03:10,944 --> 00:03:12,737
+Singapore’s police and customs officers
+
+88
+00:03:12,787 --> 00:03:14,613
+have already been investigating
+
+89
+00:03:14,663 --> 00:03:16,077
+possible false declarations
+
+90
+00:03:16,127 --> 00:03:18,914
+involving server purchases for four months.
+
+91
+00:03:18,964 --> 00:03:21,364
+That same day, police question Alice.
+
+92
+00:03:21,414 --> 00:03:23,257
+They take her passport so they can secure
+
+93
+00:03:23,307 --> 00:03:25,354
+her attendance during the investigation.
+
+94
+00:03:25,404 --> 00:03:27,377
+The servers in Singapore’s account have passed
+
+95
+00:03:27,427 --> 00:03:29,618
+through the country on their way to Malaysia.
+
+96
+00:03:29,668 --> 00:03:31,437
+Investigators are trying to find out
+
+97
+00:03:31,487 --> 00:03:32,497
+whether they went farther
+
+98
+00:03:32,547 --> 00:03:34,305
+than the paperwork said they would.
+
+99
+00:03:34,355 --> 00:03:36,985
+To do that, they need records from overseas.
+
+100
+00:03:37,035 --> 00:03:39,281
+One company they turn to is Supermicro,
+
+101
+00:03:39,331 --> 00:03:41,026
+an American server supplier.
+
+102
+00:03:41,076 --> 00:03:42,777
+Singapore says the company provided
+
+103
+00:03:42,827 --> 00:03:44,082
+limited cooperation,
+
+104
+00:03:44,132 --> 00:03:46,237
+and that repeated requests to U.S. authorities
+
+105
+00:03:46,287 --> 00:03:47,497
+brought limited help
+
+106
+00:03:47,547 --> 00:03:49,342
+in obtaining information about it.
+
+107
+00:03:49,392 --> 00:03:52,657
+By February 2026, Singapore police and prosecutors
+
+108
+00:03:52,707 --> 00:03:55,417
+say they have insufficient evidence to establish
+
+109
+00:03:55,467 --> 00:03:57,125
+that Alice committed an offense
+
+110
+00:03:57,175 --> 00:03:59,543
+tied to the suspected false declarations.
+
+111
+00:03:59,593 --> 00:04:01,137
+Police also say they assessed
+
+112
+00:04:01,187 --> 00:04:03,197
+that she knowingly gave them inaccurate
+
+113
+00:04:03,247 --> 00:04:06,004
+information to downplay her role at Megaspeed.
+
+114
+00:04:06,054 --> 00:04:07,357
+They issue a stern warning
+
+115
+00:04:07,407 --> 00:04:09,735
+and bar her from re-entering Singapore.
+
+116
+00:04:09,785 --> 00:04:11,144
+On February twenty-sixth,
+
+117
+00:04:11,194 --> 00:04:12,626
+she gets her passport back.
+
+118
+00:04:12,676 --> 00:04:14,493
+She leaves the country that day.
+
+119
+00:04:14,543 --> 00:04:16,417
+Nine months later, Bloomberg reports
+
+120
+00:04:16,467 --> 00:04:18,377
+that Alice is living in Beijing.
+
+121
+00:04:18,427 --> 00:04:19,723
+When asked to confirm that,
+
+122
+00:04:19,773 --> 00:04:21,357
+China’s Foreign Ministry spokesperson
+
+123
+00:04:21,407 --> 00:04:23,578
+says she’s unfamiliar with it.
+
+124
+00:04:23,628 --> 00:04:26,244
+Beijing has denied the spying allegation.
+
+125
+00:04:26,294 --> 00:04:27,986
+There’s another development in China,
+
+126
+00:04:28,036 --> 00:04:29,416
+and it starts with a shipment
+
+127
+00:04:29,466 --> 00:04:30,724
+that’s waiting to move.
+
+128
+00:04:30,774 --> 00:04:32,597
+In early November, Reuters reports
+
+129
+00:04:32,647 --> 00:04:34,557
+that about six hundred thousand
+
+130
+00:04:34,607 --> 00:04:37,743
+Nvidia H200 chips are sitting in Hong Kong.
+
+131
+00:04:37,793 --> 00:04:39,404
+Chinese companies want them.
+
+132
+00:04:39,454 --> 00:04:41,057
+Some H200s have already
+
+133
+00:04:41,107 --> 00:04:42,557
+been allowed into mainland China.
+
+134
+00:04:42,607 --> 00:04:44,497
+Beijing is holding back approval
+
+135
+00:04:44,547 --> 00:04:46,452
+for imports on that scale.
+
+136
+00:04:46,502 --> 00:04:47,797
+Reuters had also reported
+
+137
+00:04:47,847 --> 00:04:49,377
+a separate Chinese directive
+
+138
+00:04:49,427 --> 00:04:52,037
+requiring new state-funded data center projects
+
+139
+00:04:52,087 --> 00:04:54,535
+to use domestically made AI chips.
+
+140
+00:04:54,585 --> 00:04:56,102
+A sale can clear Washington
+
+141
+00:04:56,152 --> 00:04:58,439
+and still get held up on the Chinese side.
+
+142
+00:04:58,489 --> 00:05:00,995
+And for a company that needs computing power now,
+
+143
+00:05:01,045 --> 00:05:03,655
+there’s still the option of renting it overseas.
+
+144
+00:05:03,705 --> 00:05:06,477
+Reuters reports that some Chinese AI companies
+
+145
+00:05:06,527 --> 00:05:09,219
+are trying to secure more of that capacity,
+
+146
+00:05:09,269 --> 00:05:11,437
+worried that Washington could tighten the rules
+
+147
+00:05:11,487 --> 00:05:13,160
+on remote access too.
+
+148
+00:05:13,210 --> 00:05:14,497
+Against that backdrop,
+
+149
+00:05:14,547 --> 00:05:16,937
+The Information makes a much larger claim
+
+150
+00:05:16,987 --> 00:05:19,395
+about chips physically entering China.
+
+151
+00:05:19,445 --> 00:05:21,562
+It reports that when orders stalled,
+
+152
+00:05:21,612 --> 00:05:23,357
+Alice used her connections to Nvidia
+
+153
+00:05:23,407 --> 00:05:26,067
+and its distributors to secure supply.
+
+154
+00:05:27,313 --> 00:05:29,495
+Its sources say she helped move roughly
+
+155
+00:05:29,545 --> 00:05:32,525
+two hundred and forty thousand chips into China,
+
+156
+00:05:32,575 --> 00:05:35,557
+worth at least seven and a half billion dollars.
+
+157
+00:05:35,607 --> 00:05:36,957
+Reuters says it couldn’t
+
+158
+00:05:37,007 --> 00:05:39,076
+independently verify the account.
+
+159
+00:05:39,126 --> 00:05:41,537
+Megaspeed denies illegally diverting chips
+
+160
+00:05:41,587 --> 00:05:44,110
+and says it has hired a U.S. law firm
+
+161
+00:05:44,160 --> 00:05:45,177
+to inventory its GPUs
+
+162
+00:05:45,227 --> 00:05:47,633
+and review its export compliance.
+
+163
+00:05:47,683 --> 00:05:49,797
+On November thirteenth, Malaysia confirms
+
+164
+00:05:49,847 --> 00:05:52,090
+that Megaspeed’s local subsidiary,
+
+165
+00:05:52,140 --> 00:05:54,184
+Speedmatrix, imported servers
+
+166
+00:05:54,234 --> 00:05:56,872
+and AI chips as a data center tenant.
+
+167
+00:05:56,922 --> 00:05:58,884
+Its trade ministry says it’s working
+
+168
+00:05:58,934 --> 00:06:00,017
+with customs to establish
+
+169
+00:06:00,067 --> 00:06:02,754
+whether any of those chips were exported again,
+
+170
+00:06:02,804 --> 00:06:04,117
+and whether any such shipments
+
+171
+00:06:04,167 --> 00:06:06,025
+complied with Malaysian law.
+
+172
+00:06:06,075 --> 00:06:09,172
+That gives investigators a concrete place to look.
+
+173
+00:06:09,222 --> 00:06:12,020
+They know which company brought the equipment in.
+
+174
+00:06:12,070 --> 00:06:14,595
+They’re checking what happened after it arrived.
+
+175
+00:06:14,645 --> 00:06:16,937
+In Washington, Attorney General Todd Blanche
+
+176
+00:06:16,987 --> 00:06:19,505
+confirms the FBI is investigating.
+
+177
+00:06:19,555 --> 00:06:21,677
+He says the Justice Department has yet to reach
+
+178
+00:06:21,727 --> 00:06:23,627
+a conclusion on whether Alice worked
+
+179
+00:06:23,677 --> 00:06:25,157
+for Chinese intelligence.
+
+180
+00:06:25,207 --> 00:06:26,277
+And the congressional briefing
+
+181
+00:06:26,327 --> 00:06:28,183
+mentioned earlier has moved.
+
+182
+00:06:28,233 --> 00:06:30,561
+The House chairs now want a closed-door,
+
+183
+00:06:30,611 --> 00:06:32,537
+transcribed interview with Jensen Huang
+
+184
+00:06:32,587 --> 00:06:34,036
+on December first.
+
+185
+00:06:34,086 --> 00:06:36,847
+They want Nvidia’s top lawyer the following day.
+
+186
+00:06:36,897 --> 00:06:38,338
+If Huang doesn’t accept,
+
+187
+00:06:38,388 --> 00:06:40,500
+they say they’ll move to subpoena him.
+
+188
+00:06:40,550 --> 00:06:41,957
+Nvidia can point to a filing
+
+189
+00:06:42,007 --> 00:06:44,811
+and show exactly when its founder left.
+
+190
+00:06:44,861 --> 00:06:46,754
+To answer what reached Beijing,
+
+191
+00:06:46,804 --> 00:06:49,583
+investigators are still looking for the equivalent.
+
+192
+00:06:49,633 --> 00:06:52,704
+A shipping record that shows where the hardware ended up.
+
+193
+00:06:52,754 --> 00:06:55,507
+A customer record that shows who used it.
+
+194
+00:06:56,375 --> 00:06:58,977
+And evidence of what, if anything, passed
+
+195
+00:06:59,027 --> 00:07:01,507
+between Alice Huang and Chinese intelligence.
+

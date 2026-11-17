@@ -1,0 +1,38 @@
+[
+ {
+  "kind": "person",
+  "frame": 2596,
+  "name": "COLETTE KRESS",
+  "role": "INTERIM CEO, NVIDIA",
+  "photo": "photos/Colette_Kress__Colette_Kress.png",
+  "crop": [
+   0.38,
+   0.3,
+   0.62
+  ]
+ },
+ {
+  "kind": "place",
+  "frame": 6650,
+  "name": "HONG KONG",
+  "role": "CHINA",
+  "photo": "photos/HK.jpg",
+  "crop": [
+   0.52,
+   0.45,
+   0.85
+  ]
+ },
+ {
+  "kind": "person",
+  "frame": 9032,
+  "name": "TODD BLANCHE",
+  "role": "U.S. ATTORNEY GENERAL",
+  "photo": "photos/Todd_Blanche.jpg",
+  "crop": [
+   0.5,
+   0.36,
+   0.62
+  ]
+ }
+]

@@ -1,0 +1,12 @@
+frames 10155
+median frame diff 0.55
+diff>15 at EDL cuts: 45  NOT at cuts: [(7636, 19.99), (7650, 35.83), (10145, 15.47), (10146, 15.51)]
+single-frame luma spikes: []
+dark (luma<10) 1-8 (0.3s) ['c4_01_hq_dusk_push']
+dark (luma<10) 7236-7314 (3.3s) ['c5_15_remote_enter']
+dark (luma<10) 7650-7875 (9.4s) ['c5_17_warehouse_lights_off']
+dark (luma<10) 10151-10155 (0.2s) ['c5_27_memo_desk_memo_close']
+frames with caption 9644 with legibility halo 3557
+COLETTE card frames 2596 - 2683 88 
+HONG card frames 6650 - 6737 88 
+TODD card frames 9032 - 9119 88 boosted

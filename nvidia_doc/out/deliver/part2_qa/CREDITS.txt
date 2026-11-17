@@ -1,0 +1,23 @@
+NVIDIA — PART 2 (Chapters 4–5): photo credits for on-screen cards
+
+All card photos are free-license images from Wikimedia Commons. They are shown in black and white and cropped, which counts as a modification under CC BY / CC BY-SA.
+
+1. COLETTE KRESS — person card at 00:01:48:03
+   "Colette Kress (1).png" by SiliconANGLE theCUBE
+   License: CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
+   Source: https://commons.wikimedia.org/wiki/File:Colette_Kress_(1).png
+   (Frame from theCUBE video: https://www.youtube.com/watch?v=37BDzlW-1Ug)
+
+2. HONG KONG — place card at 00:04:37:01
+   "Hong Kong Skyline viewed from Victoria Peak.jpg" by Haydn Hsin (2014)
+   License: CC BY-SA 3.0 — https://creativecommons.org/licenses/by-sa/3.0/
+   Source: https://commons.wikimedia.org/wiki/File:Hong_Kong_Skyline_viewed_from_Victoria_Peak.jpg
+
+3. TODD BLANCHE — person card at 00:06:16:07
+   "AG Todd Blanche Official Portrait.jpg" by Ryan M. Biller, U.S. Department of Justice (2026)
+   License: Public domain (work of the U.S. federal government, PD-USGov-DOJ)
+   Source: https://commons.wikimedia.org/wiki/File:AG_Todd_Blanche_Official_Portrait.jpg
+
+No card (no free-license photo found): Kimberly Powell, Harvey Jones, Alice Huang.
+
+Fonts: Special Elite (Apache 2.0), Courier Prime (SIL OFL 1.1), Roboto Slab (Apache 2.0).
