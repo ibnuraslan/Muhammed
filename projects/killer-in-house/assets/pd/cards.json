@@ -1,0 +1,22 @@
+{
+  "film": "The Killer Was Still in the House",
+  "format": "nvidia_doc/scenes/callout.py: person_right (people, slide from right) / place_left (places, slide from left); first appearance only",
+  "cards": [
+    {"shot": "intro 1A", "set_move": "hx:street_push", "kind": "place", "label": "DENVER, COLORADO", "line2": "1942",
+     "photo": "loc_fsa_8c16232.jpg", "crop": null,
+     "source": "Library of Congress, FSA/OWI Collection, fsa 8c16232: 'Buyers discussing cattle for sale in Denver stockyards. Denver, Colorado', Sept. 1941",
+     "license": "Public domain (US government work; LoC: no known restrictions on publication)", "url": "https://hdl.loc.gov/loc.pnp/fsa.8c16232"},
+    {"shot": "3-15A", "set_move": "pen:gate", "kind": "place", "label": "CAÑON CITY, COLORADO", "line2": "STATE PENITENTIARY",
+     "photo": "loc_cph_3b20192.jpg", "crop": null,
+     "source": "Library of Congress, Prints & Photographs, cph 3b20192: 'Colorado: Cañon City. Street scene, business district', ca. 1910",
+     "license": "Public domain (published before 1929; LoC: no known restrictions on publication)", "url": "https://hdl.loc.gov/loc.pnp/cph.3b20192"}
+  ],
+  "skipped": [
+    {"shot": "1-1B", "kind": "person", "label": "PHILIP PETERS", "line2": "RETIRED RAILROAD MAN", "reason": "no free-license photo found (newspaper/library images only, rights unclear)"},
+    {"shot": "1-3A", "kind": "person", "label": "HELEN PETERS", "reason": "no free-license photo found"},
+    {"shot": "1-13B", "kind": "place", "label": "GRAND JUNCTION, COLORADO", "reason": "no free period photo found (LoC FSA hit is a newspaper ad; HABS set is 1998)"},
+    {"shot": "2-1B", "kind": "person", "label": "ROY BLOXOM / BILL JACKSON", "reason": "no free-license photo found"},
+    {"shot": "2-7A", "kind": "person", "label": "THEODORE CONEYS", "reason": "1942 arrest photo is held by Denver Public Library (copyright restrictions apply); 1942 American Weekly illustration rights unclear; no Commons file. Add if a licence/permission is obtained."},
+    {"shot": "2-9A", "kind": "person", "label": "FRED ZARNOW", "reason": "no free-license photo found"}
+  ]
+}
