@@ -27,6 +27,7 @@ from caption_burnin import parse_srt
 base, srt, cards_json, audio, out_mp4, qa_csv = sys.argv[2:8]
 W, H, FPS = 1920, 816, 24
 cues = parse_srt(srt); cards = json.load(open(cards_json))
+PATCH = (os.environ["PATCH_DIR"], 7551, 7875) if os.environ.get("PATCH_DIR") else None
 T_IN, HOLD, T_OUT = 0.35, 3.0, 0.3; DUR = T_IN + HOLD + T_OUT
 dec = subprocess.Popen(["ffmpeg", "-v", "error", "-i", base, "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], stdout=subprocess.PIPE, bufsize=W * H * 3 * 2)
 enc = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-framerate", "24", "-i", "-",
@@ -39,6 +40,8 @@ while True:
     buf = dec.stdout.read(W * H * 3)
     if len(buf) < W * H * 3: break
     n += 1; t = (n - 1) / FPS
+    if PATCH and PATCH[1] <= n <= PATCH[2]:      # c5_17 patch render laid in 1:1 (alpha dropped: opaque render)
+        buf = np.asarray(Image.open(os.path.join(PATCH[0], f"p{n - PATCH[1] + 1:05d}.png")).convert("RGB")).tobytes()
     im = None; cap_i = ""; card_i = ""
     for c in cards:
         sec = (n - c["frame"]) / FPS

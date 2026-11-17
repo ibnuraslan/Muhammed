@@ -86,3 +86,17 @@ These files went to the user directly, because they are too big for git:
   - 7650–7875: c5_17, broken in the farm render; the patch goes here.
   - 10151–10155: the end fade.
 - Contact sheet: `nvidia_part2_contact_sheet.jpg`, 72 tiles. It covers every redo seam, both titles (5 frames each), every card at slide-in and at hold, and c5_17.
+
+## v2: c5_17 patch spliced in (`nvidia_part2_NO_VOICE_FORMATTED_v2.mp4`)
+- Source: RenderStreet zip `nvidia_ch45_patch_c5_17-2883120.zip`, 654 MB.
+  - 325 PNGs, `_00001`–`_00325`, stored uncompressed. Nothing missing.
+  - RGBA with the same fixed border alpha pattern as the farm frames (0.23% of pixels, min 201). Treated as opaque.
+- Luma steps down as each row of lights switches off: 91 → 85 → 78 → 71 → 58 → 36. Only the last 21 frames (7855–7875) are dark, as designed.
+  - Patch frame 1 = old farm frame 7551 (luma 90.9 vs 91.0).
+  - Seam 7550 → 7551 (c5_16 46.5 → 90.2) and seam 7875 → 7876 (2.4 → 102.5) are the original EDL cuts.
+  - The only in-shot jumps are the light rows switching off (7696, 7749, 7802, 7855).
+- Patch frames 1–325 replace master 7551–7875. Cues #149–#154 are burned on top by the same final pass as the rest of the film, with the same halo rule.
+- Full re-encode with identical settings: 10155 frames, video and audio both 423.125 s, 129,883,989 bytes.
+- Compared with v1, only frames 7552–7875 changed.
+- Contact sheet: `nvidia_part2_v2_c5_17_contact_sheet.jpg`.
+- VOICE_ONLY, the SRT and CREDITS are unchanged.

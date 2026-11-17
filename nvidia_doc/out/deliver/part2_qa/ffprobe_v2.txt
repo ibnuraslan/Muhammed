@@ -1,0 +1,11 @@
+codec_name=h264
+profile=High
+pix_fmt=yuv420p
+color_space=bt709
+duration=423.125000
+nb_read_frames=10155
+codec_name=aac
+profile=LC
+duration=423.125000
+nb_read_frames=19834
+duration=423.125000

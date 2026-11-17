@@ -1,0 +1,17 @@
+frames v2 10155
+frames differing from v1 (luma): (7552, 7875) 318
+7549 luma 46.55 diff 0.28 cap 
+7550 luma 46.52 diff 0.07 cap 
+7551 luma 90.21 diff 57.12 cap 149 boost0.50
+7552 luma 90.21 diff 0.02 cap 149 boost0.50
+7600 luma 84.40 diff 0.47 cap 149 boost0.50
+7700 luma 70.19 diff 0.82 cap 151 boost0.46
+7800 luma 57.63 diff 0.55 cap 153 boost0.30
+7860 luma 2.40 diff 0.01 cap 154
+7874 luma 2.41 diff 0.00 cap 154
+7875 luma 2.41 diff 0.00 cap 154
+7876 luma 102.46 diff 100.10 cap 154 boost0.15
+7877 luma 102.39 diff 4.24 cap 154 boost0.14
+dark frames in patch window (7855, 7875, 21)
+cues burned in window ['149', '150', '151', '152', '153', '154']
+in-shot diff>8: [(7696, 8.12), (7749, 12.81), (7802, 21.22), (7855, 34.01)]
