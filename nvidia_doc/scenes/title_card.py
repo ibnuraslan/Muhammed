@@ -21,10 +21,10 @@ def split_title(big, limit=18):
     return [" ".join(words[:best]), " ".join(words[best:])]
 
 
-def title_image(small, big, path, W=1920, H=816, scrim=0.36):
+def title_image(small, big, path, W=1920, H=816, scrim=0.52):
     """RGBA title card. Long titles wrap onto two balanced lines, set smaller and kept inside the middle ~70% of the
-    width. Behind the text a soft centred scrim (about 36% darker at the middle, feathered, no hard edges) makes it
-    stand out; it rides on the same alpha, so it fades in and out with the title."""
+    width. Behind the text the WHOLE FRAME dims uniformly (full-frame black at ~52%: no oval or radial scrim, the
+    house rule for all films); it rides on the same alpha, so it fades in and out with the title."""
     s = skia.Surface(W, H); c = s.getCanvas(); c.clear(skia.Color4f(0, 0, 0, 0))
     p = skia.Paint(AntiAlias=True); p.setColor4f(skia.Color4f(1, 1, 1, 1))
     tf_big = skia.Typeface.MakeFromFile(os.path.join(FONTS, "RobotoSlab-ExtraBold.ttf"))
@@ -49,9 +49,7 @@ def title_image(small, big, path, W=1920, H=816, scrim=0.36):
     alpha = a[..., 3]
     glow = gaussian_filter(alpha, 18) * 0.55 + gaussian_filter(alpha, 5) * 0.35
     a_t = np.clip(alpha + glow * (1 - alpha), 0, 1)                 # the lettering with its glow (white)
-    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
-    cy = top + block / 2
-    a_s = scrim * np.exp(-0.5 * ((yy - cy) / (0.19 * H)) ** 2) * np.exp(-0.5 * ((xx - W / 2) / (0.36 * W)) ** 2)
+    a_s = np.full((H, W), scrim, np.float32)                         # uniform full-frame dim
     a_o = a_t + a_s * (1 - a_t)                                     # white text over a black scrim (straight alpha)
     out = np.zeros_like(a)
     out[..., :3] = np.array([1.0, 0.97, 0.92]) * (a_t / np.maximum(a_o, 1e-6))[..., None]
@@ -61,7 +59,7 @@ def title_image(small, big, path, W=1920, H=816, scrim=0.36):
     return path
 
 
-def add_title(cam, small, big, f_in, f_out, fade=12, name="ChapterTitle"):
+def add_title(cam, small, big, f_in, f_out, fade=10, name="ChapterTitle"):
     """Plane in front of the camera filling the frame; fades in at f_in, out at f_out (frames)."""
     os.makedirs(GEN, exist_ok=True)
     # one file per title (ChapterTitle_<slug>.png): a single shared ChapterTitle.png let one film's bake pick up another
