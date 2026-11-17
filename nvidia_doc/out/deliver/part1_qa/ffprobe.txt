@@ -1,0 +1,9 @@
+== ffprobe
+stream|codec_name=h264|profile=High|width=1920|height=816|pix_fmt=yuv420p|color_space=bt709|r_frame_rate=24/1|nb_read_frames=9949
+stream|codec_name=aac|sample_rate=48000|channels=2|duration=414.541000|bit_rate=290671
+stream|duration=414.541667
+-rw-r--r-- 1 root root 140377798 Nov 17 04:14 nvidia_part1_NO_VOICE.mp4
+-rw-r--r-- 1 root root  16584045 Nov 17 04:14 nvidia_part1_VOICE_ONLY.mp3
+-rw-r--r-- 1 root root  79592078 Nov 17 04:14 nvidia_part1_VOICE_ONLY.wav
+nvidia_part1_VOICE_ONLY.wav stream|sample_rate=48000|channels=2 format|duration=414.541667 
+nvidia_part1_VOICE_ONLY.mp3 stream|sample_rate=48000|channels=2 format|duration=414.576000 
