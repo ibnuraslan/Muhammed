@@ -1,7 +1,7 @@
 """Burn the script captions into a video (all films), in the user's 'mystery' style (callout.caption):
 small Courier-like white text with a soft shadow, one line, centred, baseline ~6% above the bottom edge.
 
-  python scenes/caption_burnin.py <in.mp4> <captions.srt> <out.mp4> [--fade 0.12]
+  python scenes/caption_burnin.py <in.mp4> <captions.srt> <out.mp4>        (captions hard-cut in and out; --fade S to soften)
 
 The SRT holds the exact script text, one line per cue, timed to the VO (word times from the VO alignment).
 Audio is copied unchanged. Long cues are not wrapped: split them into separate SRT cues instead (one line each)."""
@@ -33,7 +33,7 @@ def probe(path):
     return int(s["width"]), int(s["height"]), float(n) / float(d)
 
 
-def burn(src, srt, dst, fade=0.12):
+def burn(src, srt, dst, fade=0.0):
     W, H, fps = probe(src); cues = parse_srt(srt)
     dec = subprocess.Popen(["ffmpeg", "-v", "error", "-i", src, "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], stdout=subprocess.PIPE)
     enc = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(fps), "-i", "-",
@@ -57,4 +57,4 @@ def burn(src, srt, dst, fade=0.12):
 
 if __name__ == "__main__":
     a = sys.argv[1:]
-    burn(a[0], a[1], a[2], float(a[a.index("--fade") + 1]) if "--fade" in a else 0.12)
+    burn(a[0], a[1], a[2], float(a[a.index("--fade") + 1]) if "--fade" in a else 0.0)

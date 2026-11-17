@@ -8,14 +8,15 @@
   CAPTIONS -> caption(): burned-in "mystery" style: small Courier-like (Courier Prime), white, soft shadow,
       one line, centred, baseline ~6% above the bottom edge, ~2.2% of frame height. Exact script text, timed to the VO
       (see caption_burnin.py, which reads an SRT).
-Calm: cards fade (0.4 s), never slide or bounce. Sizes scale with the frame height, so 1920x816, 1920x1080 and 4K
+Motion (user, Nov 17): cards SLIDE, never fade. People slide in from the RIGHT edge, places from the LEFT edge:
+ease-out ~0.35 s with a slight overshoot (no bounce), hold, slide back out the same way ~0.3 s. Captions hard-cut. Sizes scale with the frame height, so 1920x816, 1920x1080 and 4K
 all match.
 
   python scenes/callout.py person <in.png> <photo.jpg> <out.png> --name "PHILIP PETERS" --role "RETIRED RAILROAD MAN" \
          [--caption "On October seventeenth, 1941, Philip Peters is seventy-three years old."] [--crop 0.75,0.42,0.64]
   python scenes/callout.py place  <in.png> <photo.jpg> <out.png> --name "DENVER, COLORADO" --role "1941" [--caption ...]
   python scenes/callout.py anim-person <frames_dir|video> <photo.jpg> <out.mp4> --name .. --role .. [--dur 4] [--fps 24]
-      (card fades in over 0.4 s, holds, fades out over 0.4 s)
+      (card slides in from its edge over 0.35 s, holds, slides back out over 0.3 s)
 """
 import os, sys, glob, subprocess
 import numpy as np
@@ -96,27 +97,38 @@ def _card_layer(Wf, Hf, photo_path, name, role, side, crop=None):
     return Image.alpha_composite(sh, lay)
 
 
-def _apply(img, layer, alpha):
+def _apply(img, layer, alpha, dx=0):
     base = img.convert("RGBA")
+    if dx:
+        sh = Image.new("RGBA", layer.size, (0, 0, 0, 0)); sh.alpha_composite(layer, (int(round(dx)), 0)) if dx > 0 else sh.paste(layer.crop((int(round(-dx)), 0, layer.width, layer.height)), (0, 0))
+        layer = sh
     if alpha < 1.0:
         layer = layer.copy(); layer.putalpha(layer.split()[-1].point(lambda v: int(v * max(0.0, alpha))))
     return Image.alpha_composite(base, layer).convert("RGB")
 
 
-def person_right(img, photo_path, name, role, alpha=1.0, crop=None, _cache={}):
-    """A real person's first appearance: photo card lower-right, NAME / ROLE right-aligned."""
+def person_right(img, photo_path, name, role, alpha=1.0, crop=None, slide=0.0, _cache={}):
+    """A real person's first appearance: photo card lower-right, NAME / ROLE right-aligned.
+    slide: 0 = in place, 1 = fully off the right edge (see card_slide)."""
     k = ("p", img.size, photo_path, name, role, crop)
     if k not in _cache:
         _cache[k] = _card_layer(img.size[0], img.size[1], photo_path, name, role, "right", crop)
-    return _apply(img, _cache[k], alpha)
+    return _apply(img, _cache[k], alpha, dx=slide * _travel(img.size, "right"))
 
 
-def place_left(img, photo_path, place, line2, alpha=1.0, crop=None, _cache={}):
-    """A place's first appearance: the same card lower-left, PLACE / year-or-region left-aligned."""
+def _travel(size, side):
+    """How far a card travels to leave the frame: its block width plus the margin (as a fraction of frame width)."""
+    Wf, Hf = size
+    return Wf * (MARGIN_X + 0.30) * (1 if side == "right" else -1)
+
+
+def place_left(img, photo_path, place, line2, alpha=1.0, crop=None, slide=0.0, _cache={}):
+    """A place's first appearance: the same card lower-left, PLACE / year-or-region left-aligned.
+    slide: 0 = in place, 1 = fully off the left edge."""
     k = ("l", img.size, photo_path, place, line2, crop)
     if k not in _cache:
         _cache[k] = _card_layer(img.size[0], img.size[1], photo_path, place, line2, "left", crop)
-    return _apply(img, _cache[k], alpha)
+    return _apply(img, _cache[k], alpha, dx=slide * _travel(img.size, "left"))
 
 
 def caption_layer(Wf, Hf, text):
@@ -139,11 +151,18 @@ def caption(img, text, alpha=1.0, _cache={}):
     return _apply(img, _cache[k], alpha)
 
 
-def card_alpha(sec, dur, fade=0.4):
-    """Fade in over 0.4 s, hold, fade out over 0.4 s (smoothstep, no slide or bounce)."""
-    a = min(1.0, sec / fade, max(0.0, (dur - sec) / fade))
-    a = max(0.0, a)
-    return a * a * (3 - 2 * a)
+def card_slide(sec, dur, t_in=0.35, t_out=0.3, over=0.6):
+    """Card position over its life: 1 = off-screen at its edge, 0 = in place.
+    In: ease-out over t_in with a slight overshoot (easeOutBack, small 'over'; it passes its mark once and settles,
+    no bounce). Out: ease-in back to the edge over t_out."""
+    if sec < t_in:
+        x = max(0.0, sec / t_in) - 1.0
+        e = 1 + (over + 1) * x ** 3 + over * x ** 2          # easeOutBack: 0 -> ~1.03 -> 1
+        return 1.0 - e
+    if sec > dur - t_out:
+        x = min(1.0, (sec - (dur - t_out)) / t_out)
+        return x ** 3                                        # ease-in, accelerating off
+    return 0.0
 
 
 def _frames_from(src, fps, dur):
@@ -178,7 +197,7 @@ if __name__ == "__main__":
         n = int(round(dur * fps))
         for i in range(n):
             im = frames[min(i, len(frames) - 1)].resize(size, Image.LANCZOS)
-            im = fn(im, photo, name, role, alpha=card_alpha(i / fps, dur), crop=crop)
+            im = fn(im, photo, name, role, slide=card_slide(i / fps, dur), crop=crop)
             im = caption(im, cap)
             im.save(os.path.join(tmp, f"c{i:04d}.png"))
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-framerate", str(fps), "-i", os.path.join(tmp, "c%04d.png"), "-c:v", "libx264",
