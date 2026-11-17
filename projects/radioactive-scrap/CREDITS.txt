@@ -1,0 +1,28 @@
+They Paid $30 for Radioactive Scrap - photo and font credits
+
+PLACE CARD PHOTOS (Wikimedia Commons; shown in black and white, cropped)
+
+Istanbul
+  "Panoramic view of Istanbul- Yeni Cami (The New Mosque), Galata Bridge. Turkey, Southeastern Europe" (2013)
+  Photo: Mstyslav Chernov - CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)
+  https://commons.wikimedia.org/wiki/File:Panoramic_view_of_Istanbul-_Yeni_Cami_(The_New_Mosque),_Galata_Bridge._Turkey,_Southeastern_Europe.jpg
+  file: assets/photos/istanbul_yeni_cami_galata_bridge.jpg
+
+Ikitelli
+  "Ikitelli-Istanbul - panoramio" (8 October 2009)
+  Photo: Haluk Comertel - CC BY 3.0 (https://creativecommons.org/licenses/by/3.0)
+  https://commons.wikimedia.org/wiki/File:%C4%B0kitelli-%C4%B0stanbul_-_panoramio.jpg
+  file: assets/photos/ikitelli_2009.jpg
+
+Ankara
+  "Ankara Castle" (18 May 2014)
+  Photo: Bernard Gagnon - CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)
+  https://commons.wikimedia.org/wiki/File:Ankara_Castle.jpg
+  file: assets/photos/ankara_castle.jpg
+
+Changes: converted to black and white, cropped, contrast adjusted, framed with a white border.
+
+FONTS
+  Special Elite - Astigmatic, Apache License 2.0
+  Courier Prime - Alan Dague-Greene, SIL Open Font License 1.1
+  Roboto Slab - Google, Apache License 2.0

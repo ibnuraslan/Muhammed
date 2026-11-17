@@ -5,9 +5,9 @@ Times are seconds into the chapter (chapter clock as in STORYBOARD_FULL); the ex
 
 | # | Shot | Approx. time | Kind | Label (NAME / role line) | Photo | Status |
 |---|---|---|---|---|---|---|
-| 1 | intro_1a | 0:02.5 (on "Istanbul") | place, left | ISTANBUL / TURKEY, DECEMBER 1998 | Commons, free licence, to be chosen | photo pending (Commons API rate-limited) |
-| 2 | ch1_1a | ~0:05 (after the 3 s title, on "İkitelli") | place, left | İKİTELLİ / WESTERN ISTANBUL | File:İkitelli-İstanbul - panoramio.jpg (2009, CC BY 3.0) | candidate found |
-| 3 | ch2_12a | 1:35 + (on "Ankara") | place, left | ANKARA / WHERE THE PACKAGES WERE KEPT | Commons, free licence, to be chosen | photo pending |
+| 1 | intro_1a | 0:02.5 (on "Istanbul") | place, left | ISTANBUL / TURKEY, DECEMBER 1998 | Yeni Cami + Galata Bridge, M. Chernov 2013, CC BY-SA 3.0 | ready |
+| 2 | ch1_1a | ~0:05 (after the 3 s title, on "İkitelli") | place, left | İKİTELLİ / WESTERN ISTANBUL | İkitelli-İstanbul (panoramio), H. Cömertel 2009, CC BY 3.0 | ready |
+| 3 | ch2_12a | 1:35 + (on "Ankara") | place, left | ANKARA / WHERE THE PACKAGES WERE KEPT | Ankara Castle, B. Gagnon 2014, CC BY-SA 3.0 | ready |
 
 Skipped (no card):
 - Naki and İlyas Ilgaz (ch1_1a): private people, victims; no free photo, and the film shows real people only as unnamed figures.
@@ -16,3 +16,5 @@ Skipped (no card):
 - "the local nuclear research center" (ch2_6a): not named in the VO.
 
 Credits for every photo used go to CREDITS.txt (title, author, licence, source URL).
+
+Photos: assets/photos/. Credits: CREDITS.txt. Test frames: review/cards/card_*.png.
