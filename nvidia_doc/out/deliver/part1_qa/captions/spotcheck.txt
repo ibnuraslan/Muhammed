@@ -1,0 +1,12 @@
+Raw aligner word starts vs audio onset after pauses: n=94, median +28 ms, p90 |err| 187 ms, max |err| 324 ms -> caption starts snapped to the real voice onsets
+#1 caption 2.613s  voice onset 2.603s  diff +10 ms  “I was unfaithful to my wife.”
+#13 caption 57.679s  voice onset 57.726s  diff -47 ms  One of the chips caught up / in those restrictio
+#26 caption 91.253s  voice onset 91.303s  diff -50 ms  A different set of records / would tell you who 
+#37 caption 123.021s  voice onset 123.070s  diff -49 ms  A year later, it reports three billion.
+#50 caption 167.634s  voice onset 167.680s  diff -46 ms  Chinese companies get access to advanced / chips
+#64 caption 220.437s  voice onset 220.487s  diff -50 ms  Taiwanese television footage shows / a group din
+#79 caption 267.526s  voice onset 267.574s  diff -48 ms  A company’s plans / for what it wants to sell,
+#93 caption 315.768s  voice onset 315.818s  diff -50 ms  and reporters at both Reuters / and the Financia
+#108 caption 361.654s  voice onset 361.703s  diff -49 ms  The next day, President Trump says / the FBI is 
+#124 caption 409.862s  voice onset 409.905s  diff -43 ms  What, if anything, reached Beijing?
+All 102 measurable caption starts: diff range -397..+108 ms, outside +-150 ms: 2 [(40, 132.965, 133.362, -397, 'that the pair makes a point of how / easily they'), (94, 318.5083333333333, 318.81, -302, 'were unable to reach Alice for comment.')]

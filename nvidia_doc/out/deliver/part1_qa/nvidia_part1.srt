@@ -1,0 +1,589 @@
+1
+00:00:02,613 --> 00:00:05,517
+“I was unfaithful to my wife.”
+
+2
+00:00:05,567 --> 00:00:10,357
+That’s what Nvidia CEO Jensen Huang
+tells his employees on November eighth.
+
+3
+00:00:10,407 --> 00:00:13,620
+The same day, Nvidia opens
+an independent investigation
+
+4
+00:00:13,670 --> 00:00:17,124
+into whether a foreign
+intelligence service targeted him.
+
+5
+00:00:17,174 --> 00:00:20,263
+The woman at the center
+of the allegation is Alice Huang.
+
+6
+00:00:20,313 --> 00:00:23,029
+She comes from the other side
+of Nvidia’s business.
+
+7
+00:00:23,079 --> 00:00:26,043
+The company she helps build
+buys the kinds of chips
+
+8
+00:00:26,093 --> 00:00:29,010
+Washington is trying
+to keep out of China.
+
+9
+00:00:39,686 --> 00:00:45,482
+In October 2022, the United States
+announces a new set of export controls.
+
+10
+00:00:45,532 --> 00:00:49,586
+Shipments of certain advanced
+processors to China are restricted.
+
+11
+00:00:49,636 --> 00:00:53,802
+Washington says the same computing power
+that drives commercial research
+
+12
+00:00:53,852 --> 00:00:57,629
+can also help China build more
+advanced military systems.
+
+13
+00:00:57,679 --> 00:01:01,762
+One of the chips caught up
+in those restrictions is Nvidia’s H100.
+
+14
+00:01:01,812 --> 00:01:04,063
+Put enough of them together
+in a data center
+
+15
+00:01:04,113 --> 00:01:06,435
+and they can split the work
+of training an AI model
+
+16
+00:01:06,485 --> 00:01:08,715
+across a whole bank of machines.
+
+17
+00:01:08,765 --> 00:01:11,206
+For a company trying to get
+that computing power,
+
+18
+00:01:11,256 --> 00:01:12,966
+there are two ways to go about it.
+
+19
+00:01:13,016 --> 00:01:15,674
+You can buy the hardware
+and install it yourself.
+
+20
+00:01:15,724 --> 00:01:18,287
+Or you can pay to use someone else’s.
+
+21
+00:01:18,337 --> 00:01:21,645
+The machines can be in one country
+and the person sending them work
+
+22
+00:01:21,695 --> 00:01:22,771
+can be in another.
+
+23
+00:01:22,821 --> 00:01:26,049
+The data moves.
+The chips stay in the rack.
+
+24
+00:01:26,099 --> 00:01:29,395
+That distinction matters because
+a shipping record can tell you
+
+25
+00:01:29,445 --> 00:01:31,203
+where a machine was delivered.
+
+26
+00:01:31,253 --> 00:01:33,976
+A different set of records
+would tell you who rented it
+
+27
+00:01:34,026 --> 00:01:35,593
+and where they connected from.
+
+28
+00:01:35,643 --> 00:01:38,105
+That’s the business
+Alice Huang moves into.
+
+29
+00:01:38,155 --> 00:01:40,598
+She comes from Shanghai’s
+investment world.
+
+30
+00:01:40,648 --> 00:01:45,080
+In 2023, she takes control
+of a Singapore company called Megaspeed.
+
+31
+00:01:45,130 --> 00:01:48,041
+It began as a subsidiary
+of a video game developer.
+
+32
+00:01:48,091 --> 00:01:50,675
+It becomes an Nvidia cloud partner.
+
+33
+00:01:50,725 --> 00:01:52,464
+By the end of 2023,
+
+34
+00:01:52,514 --> 00:01:56,654
+a Singapore company called SwiftData
+has taken ownership of Megaspeed.
+
+35
+00:01:56,704 --> 00:01:58,286
+Look at Megaspeed’s filings.
+
+36
+00:01:58,336 --> 00:02:02,971
+In 2023, the company reports
+thirty-three million dollars in assets.
+
+37
+00:02:03,021 --> 00:02:05,652
+A year later, it reports three billion.
+
+38
+00:02:05,702 --> 00:02:08,755
+And when Alice and a business partner
+pitch a new data center project
+
+39
+00:02:08,805 --> 00:02:12,915
+to investors in early 2025,
+an investor tells the Financial Times
+
+40
+00:02:12,965 --> 00:02:17,168
+that the pair makes a point of how
+easily they can get Nvidia GPUs.
+
+41
+00:02:17,218 --> 00:02:20,839
+The investor says they name Alibaba
+as a client for the project.
+
+42
+00:02:20,889 --> 00:02:23,352
+The chip deliveries leave their own trail.
+
+43
+00:02:23,402 --> 00:02:27,498
+Shipping records reviewed by Reuters
+show Megaspeed’s Indonesian subsidiary
+
+44
+00:02:27,548 --> 00:02:31,478
+importing Nvidia hardware
+between 2024 and 2026.
+
+45
+00:02:31,528 --> 00:02:33,792
+The records include H100s.
+
+46
+00:02:33,842 --> 00:02:37,320
+Those shipments establish
+that the hardware reached Indonesia.
+
+47
+00:02:37,370 --> 00:02:40,704
+The next question is
+who could use it, and from where.
+
+48
+00:02:40,754 --> 00:02:43,995
+By October 2025,
+the New York Times reports
+
+49
+00:02:44,045 --> 00:02:47,584
+that U.S. authorities are looking
+into whether Megaspeed helped
+
+50
+00:02:47,634 --> 00:02:53,097
+Chinese companies get access to advanced
+chips covered by American export controls.
+
+51
+00:02:53,147 --> 00:02:55,735
+Singapore police confirm
+their own investigation
+
+52
+00:02:55,785 --> 00:02:58,512
+into possible breaches of Singapore law.
+
+53
+00:02:58,562 --> 00:03:02,151
+Megaspeed denies illicit
+activity involving chips.
+
+54
+00:03:02,201 --> 00:03:06,315
+On October tenth, reporters from
+the Straits Times visit Megaspeed’s office
+
+55
+00:03:06,365 --> 00:03:09,917
+on the seventh floor
+of Singapore’s Ocean Financial Centre.
+
+56
+00:03:09,967 --> 00:03:14,397
+The glass door is locked. They can see
+two gray armchairs in reception.
+
+57
+00:03:14,447 --> 00:03:16,565
+The company’s nameplate is still there.
+
+58
+00:03:20,057 --> 00:03:23,091
+At the 2024 Computex trade show in Taiwan,
+
+59
+00:03:23,141 --> 00:03:26,641
+a server manufacturer called
+Gigabyte throws a party.
+
+60
+00:03:26,691 --> 00:03:28,757
+Its servers use Nvidia chips.
+
+61
+00:03:28,807 --> 00:03:33,012
+A person who attends tells Reuters
+that both Alice and Jensen are there.
+
+62
+00:03:33,062 --> 00:03:36,635
+In a photo posted on LinkedIn,
+the two are sitting side by side.
+
+63
+00:03:36,685 --> 00:03:40,387
+Then there’s video.
+On May twenty-second, 2025,
+
+64
+00:03:40,437 --> 00:03:44,489
+Taiwanese television footage shows
+a group dinner at a restaurant in Taipei.
+
+65
+00:03:44,539 --> 00:03:46,078
+Reuters later compares the footage
+
+66
+00:03:46,128 --> 00:03:49,505
+with a separate photograph
+and identifies Alice at the table.
+
+67
+00:03:49,555 --> 00:03:51,075
+Jensen is there too.
+
+68
+00:03:51,125 --> 00:03:53,692
+Their companies have a clear
+business connection.
+
+69
+00:03:53,742 --> 00:03:58,712
+The espionage allegation traces back
+to a document circulating in Washington.
+
+70
+00:03:58,762 --> 00:04:01,944
+In the spring of 2026,
+according to the New York Times,
+
+71
+00:04:01,994 --> 00:04:05,776
+a memo circulates among senior officials
+in the Trump administration.
+
+72
+00:04:05,826 --> 00:04:08,838
+People briefed on the intelligence
+tell the paper that China’s
+
+73
+00:04:08,888 --> 00:04:11,358
+Ministry of State Security
+recruited Alice Huang
+
+74
+00:04:11,408 --> 00:04:13,575
+to gather information on Jensen.
+
+75
+00:04:13,625 --> 00:04:17,458
+The reported goal includes learning more
+about America’s advanced AI chips
+
+76
+00:04:17,508 --> 00:04:21,607
+and potentially getting Nvidia
+to push for broader sales to China.
+
+77
+00:04:21,657 --> 00:04:24,752
+The allegation puts a different
+kind of information at stake.
+
+78
+00:04:24,802 --> 00:04:27,476
+A chip is something you can trace
+through a shipment.
+
+79
+00:04:27,526 --> 00:04:29,718
+A company’s plans
+for what it wants to sell,
+
+80
+00:04:29,768 --> 00:04:34,095
+or what it’s asking Washington to approve,
+can travel in a conversation.
+
+81
+00:04:34,145 --> 00:04:37,303
+Consider how much a single decision
+in Washington can change.
+
+82
+00:04:37,353 --> 00:04:41,578
+In April 2025, the U.S. government
+tells Nvidia it needs a license
+
+83
+00:04:41,628 --> 00:04:44,811
+to sell a different chip,
+the H20, into China.
+
+84
+00:04:44,861 --> 00:04:48,173
+Nvidia later reports
+a four and a half billion dollar charge
+
+85
+00:04:48,223 --> 00:04:51,291
+tied to inventory and purchase
+commitments for that chip.
+
+86
+00:04:51,341 --> 00:04:54,913
+Knowing which processors Washington
+might clear for sale, and when,
+
+87
+00:04:54,963 --> 00:04:57,548
+could shape where a customer
+spends billions.
+
+88
+00:04:57,598 --> 00:05:01,588
+On October twenty-ninth, the Times
+makes the suspected operation public.
+
+89
+00:05:02,328 --> 00:05:05,378
+Nvidia says its CEO routinely
+meets with customers
+
+90
+00:05:05,428 --> 00:05:09,375
+and that its regional cloud customers
+receive ordinary business information.
+
+91
+00:05:09,425 --> 00:05:12,770
+China’s Foreign Ministry later
+rejects the spying allegation.
+
+92
+00:05:12,820 --> 00:05:15,718
+Reuters says it was unable
+to verify it independently,
+
+93
+00:05:15,768 --> 00:05:18,458
+and reporters at both Reuters
+and the Financial Times
+
+94
+00:05:18,508 --> 00:05:20,708
+were unable to reach Alice for comment.
+
+95
+00:05:24,328 --> 00:05:28,455
+In Washington, three House committee
+chairs send Jensen a letter.
+
+96
+00:05:28,505 --> 00:05:30,668
+They want him to brief them
+behind closed doors
+
+97
+00:05:30,718 --> 00:05:34,848
+about his contacts with Alice Huang
+and what Nvidia does to protect itself
+
+98
+00:05:34,898 --> 00:05:36,534
+from foreign espionage.
+
+99
+00:05:36,584 --> 00:05:38,928
+They request November eighteenth.
+
+100
+00:05:38,978 --> 00:05:40,850
+Four days after the letter is dated,
+
+101
+00:05:40,900 --> 00:05:43,799
+Jensen sends the email
+admitting to an affair.
+
+102
+00:05:43,849 --> 00:05:46,992
+He says he’ll cooperate fully
+with the board’s investigation.
+
+103
+00:05:47,042 --> 00:05:49,647
+His message leaves
+the other person unnamed.
+
+104
+00:05:49,697 --> 00:05:53,772
+The Times and the Financial Times
+identify her as Alice Huang.
+
+105
+00:05:53,822 --> 00:05:56,468
+When Nvidia’s board
+announces its investigation,
+
+106
+00:05:56,518 --> 00:05:59,128
+it says it has no reason
+to believe company secrets
+
+107
+00:05:59,178 --> 00:06:01,604
+or national security were compromised.
+
+108
+00:06:01,654 --> 00:06:05,765
+The next day, President Trump says
+the FBI is looking into the matter.
+
+109
+00:06:05,815 --> 00:06:10,203
+On November tenth, Nvidia names the lawyer
+who will lead the outside investigation.
+
+110
+00:06:10,253 --> 00:06:14,223
+Joon H. Kim is a former acting
+U.S. attorney in Manhattan.
+
+111
+00:06:14,273 --> 00:06:16,849
+A shareholder lawsuit
+adds another question.
+
+112
+00:06:16,899 --> 00:06:20,828
+The complaint accuses Nvidia
+and its CEO of misleading investors
+
+113
+00:06:20,878 --> 00:06:24,324
+about the risks surrounding
+the company’s dealings with Megaspeed.
+
+114
+00:06:24,374 --> 00:06:26,766
+Those allegations are now before a court.
+
+115
+00:06:26,816 --> 00:06:28,308
+As of November eleventh,
+
+116
+00:06:28,358 --> 00:06:31,918
+there’s been no public finding
+that Megaspeed broke export rules.
+
+117
+00:06:31,968 --> 00:06:34,794
+Nvidia’s board has yet
+to publish its conclusions.
+
+118
+00:06:34,844 --> 00:06:37,588
+And the evidence behind the reported
+intelligence assessment
+
+119
+00:06:37,638 --> 00:06:39,538
+is still out of public view.
+
+120
+00:06:40,191 --> 00:06:42,768
+If Jensen gives Congress
+the briefing it requested,
+
+121
+00:06:42,818 --> 00:06:45,122
+it will take place behind closed doors.
+
+122
+00:06:45,172 --> 00:06:47,028
+The question on the other side
+of those doors
+
+123
+00:06:47,078 --> 00:06:49,812
+is the one the public still can’t answer.
+
+124
+00:06:49,862 --> 00:06:52,878
+What, if anything, reached Beijing?
+
