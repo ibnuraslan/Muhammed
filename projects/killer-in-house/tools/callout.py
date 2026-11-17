@@ -226,7 +226,11 @@ if __name__ == "__main__":
             sec = i / 24.0
             u = i / max(len(frames) - 1, 1)                               # plate frames span the tracked move
             j = u * (len(trk) - 1); j0 = int(j); j1 = min(j0 + 1, len(trk) - 1); f_ = j - j0
-            p = [trk[j0][key][k] * (1 - f_) + trk[j1][key][k] * f_ for k in (0, 1)]
+            def at(r):
+                if key == "shoulder":       # his near shoulder: a third of the way from chest to head, a touch to the side
+                    return (r["spine03"][0] + 0.35 * (r["head"][0] - r["spine03"][0]) + 0.022, r["spine03"][1] + 0.38 * (r["head"][1] - r["spine03"][1]))
+                return r[key][:2]
+            p = [at(trk[j0])[k] * (1 - f_) + at(trk[j1])[k] * f_ for k in (0, 1)]
             tgt = (p[0], 1 - p[1])
             ph = phases(sec)
             compose(Image.open(frames[i]), photo, style, tgt, corner, name, role, kind, **ph).save(os.path.join(tmp, f"c{i:04d}.png"))
