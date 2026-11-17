@@ -1,4 +1,4 @@
-# Radio Jingle, part A (Cold Open, Ch1, Ch2): callout cards
+# Radio Jingle, part A (Cold Open, Ch1, Ch2): callout cards (approved by the hub)
 
 Shared format: `nvidia_doc/scenes/callout.py` (copied from claude/killer-in-house @383c57c, with fonts).
 Cards slide in from their edge (0.35 s ease-out), hold about 3 s, then slide out (0.3 s).
@@ -25,5 +25,5 @@ Samples on real stills: `review/callouts_A/place_1-1A.jpg`, `review/callouts_A/p
 ## Notes for the hub
 
 - Card 1 enters only after the title in 1-1A has cleared (title lead ≥ 3 s). If the VO puts "Eching" under the title, the card waits until the title is out.
-- Ch2 2-8B: the VO says "It's tuned to Bayern Three". The exact-script caption would print the station name, which clashes with the "no Bayern 3 branding" rule. Should that caption read as scripted, or should the line be changed?
+- Ch2 2-8B: the caption keeps "Bayern Three" exactly as scripted (hub decision: the no-brand rule covers logos and branded visuals, not narrated words).
 - The photos are modern (2006 and 2017). The year on card 1 dates the story, not the photo.
