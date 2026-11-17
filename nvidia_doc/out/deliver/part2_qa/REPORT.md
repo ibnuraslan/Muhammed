@@ -5,6 +5,7 @@ These files went to the user directly, because they are too big for git:
   - Audio: `nvidia_ch45_AUDIO_no_voice.wav`, encoded as AAC 320k, 48 kHz stereo.
 - `nvidia_part2_VOICE_ONLY.wav` (48 kHz stereo, 423.125 s) and `.mp3` (320k). Aligned to frame 1.
 - `nvidia_part2.srt` (also in this folder) and `CREDITS.txt`.
+- `c5_17_captions_overlay.mov`: the captions for the c5_17 patch window on transparency (see below).
 
 ## Source
 - RenderStreet zip `nvidia_ch45-2881838.zip`, 18.40 GB.
@@ -14,7 +15,7 @@ These files went to the user directly, because they are too big for git:
   - The user chose to lay the patch render (`ch45_patch/nvidia_ch45_patch_c5_17.blend`) over it himself. Those frames are left as the farm rendered them.
   - The patch layer runs from 00:05:14:14 (frame 7551) to 00:05:28:02 (frame 7875).
   - No card falls in that window.
-  - Captions #150–#155 overlap it, so put the captions above the patch layer or re-burn them from the SRT.
+  - Captions #149–#154 overlap it. `c5_17_captions_overlay.mov` (delivered) carries exactly those cues on transparency: ProRes 4444 with alpha, 325 frames, frame 1 = master 7551, built with the same caption layer as the MP4 (`c5_17_overlay.py` here). Put it on top of the patch layer.
 - **Frozen farm shots:** zero frame-to-frame motion across the whole shot. They are delivered as rendered.
   - c4_07 memo_push, 1262–1404
   - c4_11 boardroom_empty_chair, 2150–2397. The plan describes a hold, so this may be intended.
