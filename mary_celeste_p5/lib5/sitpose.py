@@ -90,3 +90,31 @@ class Seat:
 
     def place_finish(self, look_world, density=1.0, hair=True):
         self.p.finish(look_at=look_world, place=self.M, density=density, hair=hair)
+
+
+    def grip_bar(self, side, center, bar_dir, radius=0.024, over=(0, 0, 1), elbow=(0.7, 0.4, -0.6), iters=3):
+        """Close a hand round a bar (oar loom, tiller): the palm sits on the bar at `center` (world), the hand lies
+        across the bar (fingers pointing perpendicular to it, wrapping over from the `over` side and under), then the
+        fingers close round it. The wrist target is corrected until the palm point is on the bar surface."""
+        h = self.p.h; sg = H.SIDE[side]
+        bar = Vector(bar_dir).normalized(); up = Vector(over).normalized()
+        up = (up - bar * up.dot(bar)).normalized()
+        palm_goal = Vector(center) + up * (radius + 0.012)          # palm resting on top of the loom
+        # fingers point across the bar, away from the body and down over it
+        body = self.M @ hip_mid(h)
+        away = (Vector(center) - body); away = (away - bar * away.dot(bar) - up * away.dot(up))
+        if away.length < 1e-4:
+            away = bar.cross(up)
+        away.normalize()
+        fdir = (away * 0.8 - up * 0.6).normalized()
+        el = Vector((elbow[0] * sg, elbow[1], elbow[2]))
+        target = palm_goal - fdir * 0.06
+        for _ in range(iters):
+            P.hand_reach(h, side, self.local(target), elbow=el)
+            h.aim(f"wrist.{side}", (self.Mi.to_3x3() @ fdir).normalized())
+            palm = self.M @ P.palm_point(h, side)
+            target = target + (palm_goal - palm)
+        P.hand_reach(h, side, self.local(target), elbow=el)
+        h.aim(f"wrist.{side}", (self.Mi.to_3x3() @ fdir).normalized())
+        P.grip(h, side, 1.0)
+        return (self.M @ P.palm_point(h, side) - palm_goal).length

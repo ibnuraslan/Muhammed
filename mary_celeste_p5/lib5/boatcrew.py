@@ -32,10 +32,12 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
                 hnd = b["oar_handles"].get((i, sg))
                 if hnd is not None:
                     hw = Mb @ hnd
-                    # both hands on the loom, a hand's width apart
-                    side_dir = (Mb.to_3x3() @ Vector((0, sg, 0))).normalized()
-                    st.hand("L" if sg < 0 else "R", hw + side_dir * 0.06, elbow=(0.7, 0.4, -0.6))
-                    st.hand("R" if sg < 0 else "L", hw - side_dir * 0.08, elbow=(0.7, 0.4, -0.6))
+                    loom = (Mb.to_3x3() @ b["oar_dirs"][(i, sg)]).normalized()     # handle -> rowlock
+                    # both hands closed on the loom, a hand's width apart along it (outboard hand nearer the rowlock)
+                    upw = Mb.to_3x3() @ Vector((0, 0, 1))
+                    err1 = st.grip_bar("L" if sg < 0 else "R", hw + loom * 0.07, loom, over=upw)
+                    err2 = st.grip_bar("R" if sg < 0 else "L", hw - loom * 0.05, loom, over=upw)
+                    p.grip_err = max(err1, err2)
                 st.head(look if i == 0 and sg > 0 else W((x - 3.0, sg * 0.2, 1.1)))
                 p.dv_seat = st
                 out.append((p, st))
@@ -55,7 +57,8 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
         st.legs({"L": W((-2.27, 0.24, floor)), "R": W((-2.27, 0.08, floor))})
         st.lean(fwd=4)
         tip = b["tiller"]
-        st.hand("R", Mb @ tip, elbow=(0.6, 0.3, -0.8))
+        tdir = (Mb.to_3x3() @ Vector((1, 0, 0.1))).normalized()
+        p.grip_err = st.grip_bar("R", Mb @ tip, tdir, radius=0.018, over=Mb.to_3x3() @ Vector((0, 0, 1)), elbow=(0.6, 0.3, -0.8))
         st.hand_on_thigh("L")
         st.head(look)
         p.brow_knit(0.6)
@@ -88,6 +91,8 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
         sst.head(look, share=0.6)
         sp.brow_knit(0.5)
     for p, st in out:
+        if hasattr(p, "grip_err"):
+            print(f"GRIP {p.name}: palm {p.grip_err * 1000:.0f} mm from the bar")
         st.place_finish(look, density=density, hair=hair)
         trim_under_seat(p, st.seat_world)
     return [p for p, _ in out]

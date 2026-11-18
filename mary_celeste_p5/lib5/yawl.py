@@ -175,7 +175,7 @@ def build(name="yawl", wet=0.6, oars="out", oar_angle=None, rudder=True, painter
         objs.append(ship.cyl(name + "_tiller", head, tip, 0.022, 0.016, mat=seat, verts=12))
         tiller = tip - Vector((0.12, 0, 0))
     # oars: loom through the rowlocks; handle inboard, blade outboard and down into the sea
-    oar_handles = {}
+    oar_handles = {}; oar_dirs = {}
     oar_m = ship.wood("brown_planks_05", 2.0, wet=wet, tint=(0.95, 0.85, 0.66), name=name + "_oarwood")
     if oars == "out":
         for (i, sg), pv in tholes.items():
@@ -190,6 +190,7 @@ def build(name="yawl", wet=0.6, oars="out", oar_angle=None, rudder=True, painter
             bl.rotation_mode = 'QUATERNION'
             bl.rotation_quaternion = d.to_track_quat('Y', 'Z'); objs.append(bl)
             oar_handles[(i, sg)] = handle + d * 0.18
+            oar_dirs[(i, sg)] = d.copy()
     elif oars == "in":
         for k, sg in enumerate((1, -1, 1, -1)):
             y = sg * (0.25 + 0.12 * (k // 2))
@@ -199,7 +200,7 @@ def build(name="yawl", wet=0.6, oars="out", oar_angle=None, rudder=True, painter
     for o in objs:
         _link(o, coll)
         o.parent = root
-    return dict(root=root, coll=coll, hull=hull, tholes=tholes, oar_handles=oar_handles, tiller=tiller, ring=ring,
+    return dict(root=root, coll=coll, hull=hull, tholes=tholes, oar_handles=oar_handles, oar_dirs=oar_dirs, tiller=tiller, ring=ring,
                 mats=dict(rope=rope_m, seat=seat), seat_z=SEAT_Z, floor_z=FLOOR_Z, thwarts=THWARTS)
 
 
