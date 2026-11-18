@@ -118,13 +118,15 @@ def canvas(name, wet=0.6, dirt=0.5, color=(0.62, 0.56, 0.45)):
     return m
 
 
-def tarred_rope(name="rope", color=(0.05, 0.04, 0.03)):
+def tarred_rope(name="rope", color=(0.028, 0.02, 0.013)):
+    """Tarred hemp: near-black brown, matte with a waxy sheen on the strands, a visible right-hand lay."""
     m, N, Lk, p = _mat(name)
-    p.inputs['Base Color'].default_value = (*color, 1); p.inputs['Roughness'].default_value = 0.6
+    p.inputs['Base Color'].default_value = (*color, 1); p.inputs['Roughness'].default_value = 0.72
+    p.inputs['Sheen Weight'].default_value = 0.25; p.inputs['Specular IOR Level'].default_value = 0.3
     tc = N.new("ShaderNodeTexCoord")
     wv = N.new("ShaderNodeTexWave"); wv.wave_type = 'BANDS'; wv.bands_direction = 'DIAGONAL'
-    wv.inputs['Scale'].default_value = 120; Lk.new(tc.outputs['Object'], wv.inputs['Vector'])
-    b = N.new("ShaderNodeBump"); b.inputs['Strength'].default_value = 0.4
+    wv.inputs['Scale'].default_value = 160; Lk.new(tc.outputs['Object'], wv.inputs['Vector'])
+    b = N.new("ShaderNodeBump"); b.inputs['Strength'].default_value = 0.8
     Lk.new(wv.outputs['Fac'], b.inputs['Height']); Lk.new(b.outputs['Normal'], p.inputs['Normal'])
     return m
 
@@ -577,9 +579,18 @@ def build_sails(name, sp, mats, coll, state="found", wind=(0.25, -1.0, 0.0)):
         # As found: fore course gone; lower fore-topsail set but torn; upper fore-topsail blown out (shreds);
         # topgallant and royal furled.
         rip = lambda u, v: (abs(u - 0.62 - 0.12 * math.sin(v * 7)) < 0.035 and v > 0.25) or (v > 0.86 and u > 0.55)
-        out.append(sq("ltop", "ltop", "course", 1.5, tear=rip, hang=0.35, seed=5))
+        out.append(sq("ltop", "ltop", "course", 2.3, tear=rip, hang=0.55, seed=5))
+        # upper fore-topsail: the top half still bent to its yard, the rest blown out in rags
+        ragged = lambda u, v: v > 0.42 + 0.18 * math.sin(u * 11.0) * math.sin(u * 3.7 + 1) + 0.1 * math.sin(u * 29)
+        out.append(sq("utop", "utop", "ltop", 1.6, tear=ragged, hang=0.3, seed=8))
         a, b, _ = Y["utop"]
-        out += shreds(f"{name}_utop_shred", a, b, 9, 3.2, can, coll, wind, seed=7)
+        out += shreds(f"{name}_utop_shred", a, b, 14, 5.2, can, coll, wind, seed=7)
+        # fore course: torn loose, hanging from the fore yard by its corners, a long rip through the middle
+        a2, b2, _ = Y["course"]
+        hang_rip = lambda u, v: (abs(u - 0.45 - 0.08 * math.sin(v * 9)) < 0.03) or (v > 0.8 and 0.2 < u < 0.7)
+        ca = a2 - Vector((0, 0, 0.1)); cb = b2 - Vector((0, 0, 0.1))
+        out.append(sail_mesh(f"{name}_course_hanging", (ca, cb, cb - Vector((0, 0, 3.4)) + (a2 - b2) * 0.08, ca - Vector((0, 0, 3.4)) - (a2 - b2) * 0.08),
+                             28, 20, 0.9, wind, can, coll, tear=hang_rip, seed=9, hang=2.2, flog=0.25))
         out.append(furled(f"{name}_tgal_furl", Y["tgal"][0], Y["tgal"][1], 0.2, can, coll, seed=2))
         out.append(furled(f"{name}_royal_furl", Y["royal"][0], Y["royal"][1], 0.15, can, coll, seed=3))
     # headsails: fore-topmast staysail and jib (both set when found)
@@ -587,9 +598,9 @@ def build_sails(name, sp, mats, coll, state="found", wind=(0.25, -1.0, 0.0)):
     jtear = (lambda u, v: (u > 0.8 and v > 0.7 and (u + v * 0.3) % 0.12 < 0.05)) if state == "found" else None
     jt = sp["jibboom_end"] - Vector((0.8, 0, 0.05)); jh = fore_top.lerp(jt, 0.22)
     out.append(tri_sail(f"{name}_jib", jh, jt, jt.lerp(Vector((FORE_X + 4.5, -1.6, zdeck(FORE_X + 4.5) + 3.2)), 0.72),
-                        can, coll, 1.4, wind, tear=jtear, seed=11))
+                        can, coll, 2.0, wind, tear=jtear, seed=11))
     st = sp["bowsprit_end"] - Vector((1.4, 0, 0.1)); sh = fore_top.lerp(st, 0.12)
-    out.append(tri_sail(f"{name}_fstay", sh, st, st.lerp(Vector((FORE_X + 1.0, -1.4, zdeck(FORE_X) + 2.2)), 0.8), can, coll, 1.2, wind, seed=12))
+    out.append(tri_sail(f"{name}_fstay", sh, st, st.lerp(Vector((FORE_X + 1.0, -1.4, zdeck(FORE_X) + 2.2)), 0.8), can, coll, 1.7, wind, seed=12))
     # mainsail: set on the Dei Gratia, furled on the Mary Celeste
     g0, g1 = sp["boom"]; f0, f1 = sp["gaff"]
     if state == "full":
@@ -614,7 +625,16 @@ def build_rigging(name, sp, mats, coll):
             for k in range(4):
                 x = m.x + 0.9 - k * 0.75
                 c = chain(x, sg); h = head + Vector((0, sg * 0.25, 0))
-                out.append(rope(f"{name}_shroud", (c, h), 0.022, rp, coll)); pts.append((c, h))
+                # deadeye pair with a laced lanyard at the channel; the shroud starts at the upper deadeye
+                d = (h - c).normalized(); lo_ = c + d * 0.05; up_ = c + d * 0.42
+                for q in (lo_, up_):
+                    out.append(cyl(f"{name}_deadeye", q - d * 0.04, q + d * 0.04, 0.085, mat=mats["deadeye"], verts=18, coll=coll))
+                # iron chainplate from the lower deadeye down the ship's side
+                out.append(cyl(f"{name}_chainplate", lo_ - d * 0.05, lo_ - Vector((0, 0, 0.75)) + Vector((0, sg * 0.04, 0)), 0.014, mat=mats["iron"], verts=8, coll=coll))
+                sd = Vector((0, sg, 0)).cross(d).normalized() if abs(sg) else Vector((1, 0, 0))
+                for k2 in (-1, 0, 1):
+                    out.append(rope(f"{name}_lanyard", (lo_ + sd * 0.045 * k2 + d * 0.03, up_ + sd * 0.045 * k2 - d * 0.03), 0.008, rp, coll))
+                out.append(rope(f"{name}_shroud", (up_ + d * 0.04, h), 0.022, rp, coll)); pts.append((up_, h))
             # ratlines
             for r in range(1, 30):
                 f = r / 31
@@ -710,12 +730,76 @@ def build_fittings(name, mats, coll, hatches_off=True, boat_chocks=True):
     return out
 
 
-def rail_section(name, mats, coll, gap, side="S"):
+def hull_detail(name, mats, coll):
+    """Heavier hull: two rubbing strakes following the sheer, channels (chain-wale ledges) with deadeyes at the
+    masts, catheads at the bow, quarter badges aft."""
+    out = []; xs0, xb0 = _ends(1.0)
+    wale = paint(name + "_wale", (0.32, 0.29, 0.24), rough=0.45, grime=0.6, chips=0.3)
+    for sg in (1, -1):
+        for dz, r in ((-0.18, 0.045), (-0.55, 0.035)):
+            pts = []
+            for i in range(60):
+                x = xs0 + 0.4 + (xb0 - 0.8 - xs0) * i / 59; s_ = (x - xs0) / (xb0 - xs0)
+                t = 1.0 + dz / (zdeck(x) + DRAFT)
+                pts.append(Vector((x, sg * (half_breadth(s_, t) + 0.02), zdeck(x) + dz)))
+            out.append(rope(f"{name}_strake", pts, r, wale if dz > -0.3 else mats["topside"], coll))
+        for mx in (FORE_X, MAIN_X):
+            s_ = (mx - xs0) / (xb0 - xs0); hb = half_breadth(s_, 1.0)
+            z = zdeck(mx) + RAIL_H - 0.3
+            out.append(box(f"{name}_channel", (mx - 0.35, sg * (hb + 0.2), z), (3.0, 0.32, 0.09), mats["rail"], bevel=0.01, coll=coll))
+            for k in range(4):
+                x = mx + 0.9 - k * 0.75
+                out.append(cyl(f"{name}_deadeye", (x, sg * (hb + 0.12), z + 0.05), (x, sg * (hb + 0.24), z + 0.05), 0.08, mat=mats["deadeye"], verts=16, coll=coll))
+                out.append(cyl(f"{name}_chainplate", (x, sg * (hb + 0.1), z - 0.02), (x, sg * (hb + 0.05), z - 0.75), 0.018, mat=mats["iron"], verts=8, coll=coll))
+        x = xb0 - 2.0; s_ = (x - xs0) / (xb0 - xs0)
+        out.append(box(f"{name}_cathead", (x, sg * (half_breadth(s_, 1.0) + 0.35), zdeck(x) + RAIL_H - 0.1), (0.3, 0.9, 0.3), mats["rail"], rot=(0, 0, sg * 0.5), bevel=0.02, coll=coll))
+    return out
+
+
+def bow_wave(name, coll, height=0.9, length=4.5):
+    """White water piled against the stem and peeling off both bows (a curling foam sheet)."""
+    m = bpy.data.materials.new(name + "_bowwave"); m.use_nodes = True
+    N = m.node_tree.nodes; Lk = m.node_tree.links; p = N["Principled BSDF"]
+    p.inputs['Base Color'].default_value = (0.85, 0.88, 0.88, 1); p.inputs['Roughness'].default_value = 0.45
+    p.inputs['Subsurface Weight'].default_value = 0.4; p.inputs['Transmission Weight'].default_value = 0.25
+    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 9; nz.inputs['Detail'].default_value = 10
+    Lk.new(tc.outputs['UV'], nz.inputs['Vector'])
+    sep = N.new("ShaderNodeSeparateXYZ"); Lk.new(tc.outputs['UV'], sep.inputs[0])
+    edge = N.new("ShaderNodeMath"); edge.operation = 'SUBTRACT'; Lk.new(nz.outputs['Fac'], edge.inputs[0]); Lk.new(sep.outputs['Y'], edge.inputs[1])
+    al = N.new("ShaderNodeMapRange"); al.inputs['From Min'].default_value = -0.35; al.inputs['From Max'].default_value = -0.1
+    Lk.new(edge.outputs[0], al.inputs['Value']); Lk.new(al.outputs[0], p.inputs['Alpha'])
+    out = []; xs0, xb0 = _ends(1.0)
+    for sg in (1, -1):
+        V = []; F = []; UV = []; nu, nv = 40, 8
+        for i in range(nu + 1):
+            u = i / nu; x = xb0 - 0.6 - length * u
+            s_ = (x - xs0) / (xb0 - xs0); t = DRAFT / (zdeck(x) + DRAFT)
+            hb = half_breadth(s_, t) + 0.05
+            hh = height * (1 - u) ** 1.3 + 0.12
+            for j in range(nv + 1):
+                v = j / nv
+                curl = 0.25 * (1 - u) * v ** 2
+                V.append((x - 0.15 * v, sg * (hb + 0.08 + 0.55 * v * (0.4 + u) + curl), -0.1 + hh * math.sin(math.pi * 0.5 * v) - curl * 0.6))
+                UV.append((u, v))
+        for i in range(nu):
+            for j in range(nv):
+                a = i * (nv + 1) + j
+                F.append([a, a + nv + 1, a + nv + 2, a + 1] if sg > 0 else [a, a + 1, a + nv + 2, a + nv + 1])
+        o = mesh_obj(f"{name}_bowwave", V, F, m, coll=coll)
+        uv = o.data.uv_layers.new(name="UVMap")
+        for l in o.data.loops:
+            uv.data[l.index].uv = UV[l.vertex_index]
+        so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.03
+        out.append(o)
+    return out
+
+
+def rail_section(name, mats, coll, gap, side="S", shift=0.0):
     """The section taken out of the bulwark, laid flat on the deck inboard of the gap: lining planks face up,
     the cap rail along its outboard edge, two iron pins at the foot."""
     x0, x1 = gap[0] + 0.05, gap[1] - 0.05; sg = 1 if side == "P" else -1
     xs0, xb0 = _ends(1.0)
-    xc = (x0 + x1) / 2 + 0.25; s = (xc - xs0) / (xb0 - xs0); hb = half_breadth(s, 1.0)
+    xc = (x0 + x1) / 2 + 0.25 + shift; s = (xc - xs0) / (xb0 - xs0); hb = half_breadth(s, 1.0)
     y = sg * (hb - 0.11 - RAIL_H / 2 - 0.55); z = zdeck(xc) + 0.012
     ln = x1 - x0; out = []
     rot = (0, 0, math.radians(4))
@@ -736,6 +820,17 @@ def rail_section(name, mats, coll, gap, side="S"):
     for k in (-1, 1):
         p = Vector((xc + k * (ln / 2 - 0.25), y - sg * (RAIL_H / 2 + 0.05), z + 0.04))
         out.append(cyl(f"{name}_railsec_pin", p, p + Vector((0, -sg * 0.18, 0)), 0.02, mat=mats["iron"], verts=10, coll=coll))
+    # bolt holes through the battens and torn iron straps where it was fastened to the stanchions
+    for k in (-1, 1):
+        bx = xc + k * (ln / 2 - 0.12) * ca; by = y + k * (ln / 2 - 0.12) * sa
+        for j in (-0.3, 0.0, 0.3):
+            q = Vector((bx - sg * j * sa, by + sg * j * ca, z + 0.111))
+            out.append(cyl(f"{name}_railsec_bolthole", q - Vector((0, 0, 0.004)), q + Vector((0, 0, 0.002)), 0.011, mat=mats["dark"], verts=12, coll=coll))
+        q = Vector((bx + sg * 0.42 * sa, by - sg * 0.42 * ca, z + 0.112))
+        strap = [q, q + Vector((0.02 * k, -sg * 0.09, 0.0)), q + Vector((0.05 * k, -sg * 0.16, 0.035)), q + Vector((0.06 * k, -sg * 0.19, 0.08))]
+        o = rope(f"{name}_railsec_strap", strap, 0.006, mats["iron"], coll); o.data.bevel_resolution = 0
+        o2 = rope(f"{name}_railsec_bolt", [q + Vector((0, sg * 0.05, 0)), q + Vector((0, sg * 0.05, 0.06)), q + Vector((0.03, sg * 0.07, 0.085))], 0.009, mats["iron"], coll)
+        out += [o, o2]
     # the stumps either side of the gap: iron sockets in the waterway
     for xx in gap[:2]:
         s2 = (xx - xs0) / (xb0 - xs0); hb2 = half_breadth(s2, 1.0)
@@ -744,19 +839,21 @@ def rail_section(name, mats, coll, gap, side="S"):
 
 
 def build(name="ship", sails="found", rail_gap=None, wind=(0.25, -1.0, 0), coll_name=None, detail=True, wet=0.6,
-          hatches_off=True, boat_chocks=True):
+          hatches_off=True, boat_chocks=True, bow_wave_h=0.0, rail_shift=0.0):
     coll = bpy.data.collections.new(coll_name or name); bpy.context.scene.collection.children.link(coll)
     mats = dict(
         bottom=paint(name + "_bottom", (0.2, 0.07, 0.04), rough=0.6, grime=0.5),
         boot=paint(name + "_boot", (0.5, 0.48, 0.42), rough=0.5, grime=0.6),
         topside=paint(name + "_topside", (0.012, 0.012, 0.013), rough=0.35, grime=0.25, wet=wet, chips=0.4, under=(0.2, 0.15, 0.1)),
-        lining=paint(name + "_lining", (0.36, 0.34, 0.29), rough=0.45, grime=0.65, wet=wet, chips=0.35, scale=9),
+        lining=(wood("weathered_planks", 1.1, wet=wet, tint=(0.62, 0.55, 0.46), name=name + "_lining") if detail
+                else paint(name + "_lining", (0.2, 0.17, 0.13), rough=0.5, grime=0.65, wet=wet, chips=0.35, scale=9)),
         rail=wood("brown_planks_05", 1.2, wet=wet, name=name + "_rail") if detail else paint(name + "_rail", (0.12, 0.07, 0.035)),
         deck=wood("wood_floor_deck", 1.0, wet=wet, name=name + "_deckmat") if detail else paint(name + "_deckp", (0.3, 0.25, 0.18)),
         deckwood=wood("weathered_planks", 0.8, wet=wet, name=name + "_dw") if detail else paint(name + "_dwp", (0.25, 0.2, 0.15)),
         spar=paint(name + "_spar", (0.32, 0.22, 0.12), rough=0.5, grime=0.4, wet=wet * 0.5),
         canvas=canvas(name + "_canvas", wet=wet),
         rope=tarred_rope(name + "_rope"), iron=iron(name + "_iron"),
+        deadeye=paint(name + "_deadeye", (0.018, 0.013, 0.009), rough=0.55, grime=0.3, wet=wet * 0.6, scale=12),
         dark=paint(name + "_dark", (0.01, 0.008, 0.006), rough=0.9, grime=0.0),
     )
     for k in ("deck",):
@@ -766,7 +863,10 @@ def build(name="ship", sails="found", rail_gap=None, wind=(0.25, -1.0, 0), coll_
     parts = [hull] + bulwark(name, mats, coll, gap=rail_gap) + [deck(name, mats, coll)]
     parts += build_fittings(name, mats, coll, hatches_off=hatches_off, boat_chocks=boat_chocks)
     if rail_gap:
-        parts += rail_section(name, mats, coll, rail_gap, rail_gap[2])
+        parts += rail_section(name, mats, coll, rail_gap, rail_gap[2], shift=rail_shift)
+    parts += hull_detail(name, mats, coll)
+    if bow_wave_h:
+        parts += bow_wave(name, coll, height=bow_wave_h)
     sp = build_spars(name, mats, coll)
     parts += build_sails(name, sp, mats, coll, state=sails, wind=wind)
     parts += build_rigging(name, sp, mats, coll)
