@@ -36,10 +36,10 @@ sea.ocean(size=240, res=int(os.environ.get("OCEAN_RES", "24")), scale=2.4, chop=
           direction=math.degrees(math.atan2(WIND_WORLD.y, WIND_WORLD.x)), hulls=(mc["hull"], dg["hull"]),
           loc=(-150, -150, 0), cut=(0.0, 0.0, ship.L / 2 - 0.4, ship.B / 2 - 0.15))
 sea.far_sea(370, mat=water, center=(-150, -150))
-sea.sky(strength=1.0, rot_deg=float(os.environ.get("SKY_ROT", "0")))
+sea.sky(strength=float(os.environ.get("SKY_K", "0.72")), rot_deg=float(os.environ.get("SKY_ROT", "255")))
 sun = bpy.data.objects.new("Sun", bpy.data.lights.new("Sun", 'SUN')); sc.collection.objects.link(sun)
 sun.data.energy = 1.4; sun.data.angle = math.radians(5); sun.data.color = (1.0, 0.94, 0.86)
-az, el = math.radians(139.0), math.radians(32)
+az, el = math.radians(139.0 + float(os.environ.get("SKY_ROT", "255"))), math.radians(30)
 sun.rotation_euler = (Vector((math.cos(az) * math.cos(el), math.sin(az) * math.cos(el), math.sin(el))) * -1).to_track_quat('-Z', 'Y').to_euler()
 
 # a coil of rope and a bucket left by the gap (the ship as found: things lie where they were dropped)

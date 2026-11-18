@@ -36,10 +36,10 @@ oc = sea.ocean(size=260, res=int(os.environ.get("OCEAN_RES", "26")), scale=3.6, 
                foam=0.5, mat=water, direction=math.degrees(math.atan2(WIND_WORLD.y, WIND_WORLD.x)),
                hulls=(dg["hull"], mc["hull"]), loc=(100, -60, 0))
 sea.far_sea(380, mat=water, center=(100, -60))
-sea.sky(strength=float(os.environ.get("SKY_K", "1.0")), rot_deg=float(os.environ.get("SKY_ROT", "0")))
+sea.sky(strength=float(os.environ.get("SKY_K", "0.72")), rot_deg=float(os.environ.get("SKY_ROT", "240")))
 sun = bpy.data.objects.new("Sun", bpy.data.lights.new("Sun", 'SUN')); sc.collection.objects.link(sun)
 sun.data.energy = 1.1; sun.data.angle = math.radians(4); sun.data.color = (1.0, 0.93, 0.84)
-az, el = math.radians(139.0), math.radians(32)
+az, el = math.radians(139.0 + float(os.environ.get("SKY_ROT", "240"))), math.radians(30)
 sun.rotation_euler = (Vector((math.cos(az) * math.cos(el), math.sin(az) * math.cos(el), math.sin(el))) * -1).to_track_quat('-Z', 'Y').to_euler()
 
 

@@ -25,3 +25,16 @@ ocean, foam, spray, Poly Haven sky).
 
     tools/render_all.sh                 # all three, 2560x1440 -> out/frames/
     PREVIEW=0.25 blender -b --python scenes/sc_c_rail.py   # quick look
+
+## lib/ API notes (for the part chats)
+
+* `ship.build(name, sails="found"|"full", rail_gap=(x0, x1, "P"|"S")|None, wind=(local vector), wet=0..1, detail=bool,
+  hatches_off=bool, boat_chocks=bool)` → dict(root, coll, mats, spars, hull). Bow +X, waterline z=0; `ship.zdeck(x)`,
+  `ship.half_breadth(s, t)`, `ship.L`, `ship.B`, `ship.RAIL_H`.
+* `sea.ocean(..., hulls=(hull objs), cut=(cx, cy, rx, ry))` (cut removes sea inside the hull you stand in), `sea.far_sea`,
+  `sea.sky(strength, rot_deg)` (default sky `kloppenheim_06_puresky`: blue noon sky; sun lamp az = 139° + rot), `sea.spray`,
+  `sea.mist_puff`.
+* `deveau.Deveau(wet=)`; pose with `poses.stand/head/hand_reach/grip/rest_hand/arm_down` (rig faces −Y, left = +X), then
+  `d.finish(look_at=world_pt, place=Matrix, density=1.0)`. `finish` bakes the pose, adds convex sea boots, grows hair,
+  aims the eyes, then places him.
+* Colour: grade `cine={"sat": 1.2, ...}` in exteriors; `tools/house_finish.py` never drains colour (hub/user: rich Atrium colour).

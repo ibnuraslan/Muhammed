@@ -283,6 +283,7 @@ class Deveau:
                                        flare=lambda b: np.clip((knee_z + 0.1 - b[:, 2]) / 0.4, 0, 1) * 0.02)
         # ---- boots (leather): feet and shins, smoothed so the toes read as a boot
         boot = u & (z < ankle_z + 0.27)
+        self.boot_mask = boot.copy()
         self.boots, _ = self._shell("boots", boot, 0.011, leather_material("boots", wet=self.wet + 0.2), solid=0.0025, drape=90,
                                     flare=lambda b: np.clip((ankle_z - b[:, 2]) / 0.06, 0, 1) * 0.006)
         # ---- reefer jacket (heavy navy wool): torso + arms, hem at the hip, cuffs short of the wrist
@@ -394,6 +395,7 @@ class Deveau:
             for e in h.eyes:
                 d = (Vector(look_at) - e.location).normalized()
                 e.rotation_mode = 'QUATERNION'; e.rotation_quaternion = (-d).to_track_quat('Y', 'Z')
+        self._sea_boots()
         if hair:
             self._grow_all(density)
         h.arm.hide_render = True; h.arm.hide_viewport = True
@@ -402,6 +404,37 @@ class Deveau:
                 if o.parent is None:
                     o.matrix_world = place @ o.matrix_world
             bpy.context.view_layer.update()
+
+    def _sea_boots(self):
+        """Replace the foot-shaped boot shell with leather sea boots: the convex hull of each posed foot and shin
+        (no toes, flat sole), pushed out a little and smoothed."""
+        h = self.h
+        P = np.array([v.co[:] for v in h.body.data.vertices])
+        mat = self.boots.data.materials[0]
+        self.boots.hide_render = True; self.boots.hide_viewport = True
+        self.sea_boots = []
+        for sg in (1, -1):
+            sel = self.used & self.boot_mask & (np.sign(self.rest_co[:, 0]) == sg)
+            pts = P[sel]
+            if len(pts) < 8:
+                continue
+            bm = bmesh.new()
+            for p in pts:
+                bm.verts.new(p)
+            r = bmesh.ops.convex_hull(bm, input=bm.verts)
+            for v in [g for g in r.get("geom_interior", []) if isinstance(g, bmesh.types.BMVert)]:
+                bm.verts.remove(v)
+            bmesh.ops.dissolve_degenerate(bm, dist=1e-4, edges=bm.edges)
+            bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+            me = bpy.data.meshes.new(f"{self.name}_seaboot"); bm.to_mesh(me); bm.free()
+            o = bpy.data.objects.new(me.name, me); bpy.context.collection.objects.link(o)
+            o.data.materials.append(mat)
+            rm = o.modifiers.new("Remesh", "REMESH"); rm.mode = 'VOXEL'; rm.voxel_size = 0.006; rm.use_smooth_shade = True
+            sm = o.modifiers.new("Smooth", "LAPLACIANSMOOTH"); sm.lambda_factor = 2.0; sm.iterations = 12; sm.use_volume_preserve = True
+            d = o.modifiers.new("Out", "DISPLACE"); d.strength = 0.012; d.mid_level = 0.0
+            sb = o.modifiers.new("Sub", "SUBSURF"); sb.levels = 1; sb.render_levels = 1
+            # keep the sole on the ground
+            self.sea_boots.append(o); h.parts.append(o)
 
     def _posed_surface(self):
         dg = bpy.context.evaluated_depsgraph_get()

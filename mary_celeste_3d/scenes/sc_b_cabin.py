@@ -302,7 +302,7 @@ ffo.rotation_euler = (head_w0 - ffo.location).to_track_quat('-Z', 'Y').to_euler(
 ffo.visible_glossy = False
 # ----------------------------------------------------------------------------- light and air
 sk = bpy.data.lights.new("skylight", 'AREA'); sk.shape = 'RECTANGLE'; sk.size = sw * 0.95; sk.size_y = sh * 0.95
-sk.energy = float(os.environ.get('SKYL', '700')); sk.color = (0.72, 0.8, 0.92)
+sk.energy = float(os.environ.get('SKYL', '420')); sk.color = (0.72, 0.8, 0.92)
 try:
     sk.spread = math.radians(40)
 except Exception:
@@ -320,7 +320,7 @@ fo.visible_camera = False; fo.visible_glossy = False
 bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 0, RZ / 2 + 0.2))
 air = bpy.context.active_object; air.name = "cabin_air"; air.scale = (2 * RX - 0.02, 2 * RY - 0.02, RZ + 0.38)
 am = bpy.data.materials.new("air"); am.use_nodes = True; N = am.node_tree.nodes; N.remove(N["Principled BSDF"])
-vs = N.new("ShaderNodeVolumeScatter"); vs.inputs['Density'].default_value = float(os.environ.get("FOG", "0.09")); vs.inputs['Anisotropy'].default_value = 0.35
+vs = N.new("ShaderNodeVolumeScatter"); vs.inputs['Density'].default_value = float(os.environ.get("FOG", "0.045")); vs.inputs['Anisotropy'].default_value = 0.35
 am.node_tree.links.new(vs.outputs[0], N["Material Output"].inputs['Volume']); air.data.materials.append(am)
 air.visible_shadow = False
 
