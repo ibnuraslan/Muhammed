@@ -57,7 +57,7 @@ if SHOT == "S24":
     water = sea.water_material()
     oc = sea.ocean(size=180, res=18, scale=0.5, chop=0.8, wind=5.0, repeat=2, foam=0.05, mat=water)
     sea.far_sea(190, mat=water)
-    sea.sky(strength=1.0, rot_deg=100, res="4k", aid="qwantani_late_afternoon_puresky")
+    sea.sky(strength=0.55, rot_deg=100, res="4k", aid="qwantani_late_afternoon_puresky")
     mc = ship.build("MC", sails="found", rail_gap=None, wind=(0.3, -1, 0), wet=0.2, detail=False)
     mc["root"].location = (0, 0, -0.1); mc["root"].rotation_euler = (0, 0, math.radians(-25))
     # the Rock: a long limestone ridge (426 m) 2.5 km off, sheer north face, scrub on the slopes
@@ -81,7 +81,7 @@ if SHOT == "S24":
     L.new(geo.outputs['Position'], nz.inputs['Vector'])
     flat = N.new("ShaderNodeMapRange"); flat.inputs['From Min'].default_value = 0.55; flat.inputs['From Max'].default_value = 0.8
     L.new(sp.outputs['Z'], flat.inputs['Value'])
-    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.inputs[6].default_value = (0.62, 0.56, 0.46, 1); mx.inputs[7].default_value = (0.2, 0.24, 0.1, 1)
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.inputs[6].default_value = (0.36, 0.33, 0.29, 1); mx.inputs[7].default_value = (0.1, 0.13, 0.05, 1)
     f2 = N.new("ShaderNodeMath"); f2.operation = 'MULTIPLY'; L.new(flat.outputs[0], f2.inputs[0]); L.new(nz.outputs['Fac'], f2.inputs[1])
     L.new(f2.outputs[0], mx.inputs['Factor']); L.new(mx.outputs[2], p.inputs['Base Color']); p.inputs['Roughness'].default_value = 0.95
     rock.data.materials.append(m)
@@ -103,7 +103,7 @@ if SHOT == "S24":
             root, _ = PR.put("dutch_ship_medium", (x, y, -1.0), rot_z=math.radians(r), size=32, axis=0, res="1k")
         except Exception as e:
             print("ship model failed", e)
-    sun((-0.95, 0.15, 0.2), 4.0, (1.0, 0.74, 0.5), 1.2)
+    sun((-0.35, -0.9, 0.22), 4.0, (1.0, 0.72, 0.48), 1.2)
     C.camera(Vector((-95, -70, 7)), Vector((800, 380, 70)), lens=35)
     cine = {"sat": 1.12, "exposure": 0.0}
 else:
