@@ -699,17 +699,38 @@ class Sarah(_SharedLive, _W.Sarah):
 
 
 class Visitor(Sarah):
-    """A lady visiting the ship in New York: lib Sarah's clothes and build, older, her own colours, bonnet on."""
-    DRESS = (0.03, 0.045, 0.075)          # dark blue wool
-    BONNET = (0.09, 0.05, 0.03)           # brown straw-coloured silk
-    SHAWL = (0.22, 0.12, 0.08)
-    HAIR = (0.5, 0.45)
-    EXTRA = dict(_W.Sarah.EXTRA, **{"targets/head/head-round": 0.4, "targets/cheek/l-cheek-volume-incr": 0.3,
-                                     "targets/cheek/r-cheek-volume-incr": 0.3})
+    """A lady visiting the ship in New York (shot 14). lib Sarah's construction, but her own person: older (48), a
+    rounder, heavier face, light greying hair, a dark blue dress under a short wool mantle with a white lace collar,
+    and a brown bonnet. (Shawl off: the mantle replaces it.)"""
+    DRESS = (0.025, 0.04, 0.08)           # dark blue wool
+    BONNET = (0.12, 0.07, 0.035)          # brown
+    MANTLE = (0.05, 0.03, 0.025)          # dark brown wool mantle
+    HAIR = (0.4, 0.05)                    # light, greying
+    WEIGHT = 0.62; HEIGHT = 0.4
+    EXTRA = {"targets/head/head-round": 0.6, "targets/cheek/l-cheek-volume-incr": 0.5, "targets/cheek/r-cheek-volume-incr": 0.5,
+             "targets/nose/nose-scale-vert-incr": 0.35, "targets/nose/nose-hump-incr": 0.3, "targets/chin/chin-width-incr": 0.4,
+             "targets/eyebrows/eyebrows-trans-down": 0.3, "targets/head/head-age-incr": 0.6,
+             "targets/breast/female-young-averagemuscle-averageweight-mincup-averagefirmness": 0.8,
+             "targets/breast/breast-point-decr": 1.0, "targets/breast/breast-dist-decr": 0.6}
 
     def __init__(self, name="Visitor", expr=None, **kw):
-        Sarah.__init__(self, name=name, bonnet=True, shawl=True, **{k: v for k, v in kw.items() if k in ("seated", "wet")})
-        self.years = 45
+        self.SEATED = False
+        _W.Sarah.__init__(self, name=name, years=48, seated=False, bonnet=True, shawl=False, wet=0.0)
+
+    def _dress(self):
+        _W.Sarah._dress(self)
+        m = self.marks; co = self.rest_co; z = co[:, 2]; u = self.used
+        wh = D._w(self.h, D.HEAD); whand = D._w(self.h, D.HAND)
+        sh = np.array(self.h.joint("upperarm01.L____head"))
+        # short mantle: shoulders and upper back/chest, down over the upper arms (a cape, open at the front edge)
+        top = m["neck"] + 0.02
+        mant = u & (wh < 0.5) & (whand < 0.02) & (z < top) & (z > sh[2] - 0.2) & ~((co[:, 1] < -0.02) & (np.abs(co[:, 0] - float(co[u, 0].mean())) < 0.13) & (z < m["neck"] - 0.06))
+        mm = D.wool_material(self.name + "_mantle", self.MANTLE, weave=300, sheen=0.3, dirt=0.15)
+        self.mantle, _ = self._shell("mantle", mant, 0.034, mm, solid=0.004, drape=140, displace=0.003,
+                                     flare=lambda b: np.clip((top - b[:, 2]) / 0.25, 0, 1) * 0.035)
+        lace = cotton_material(self.name + "_lace", (0.82, 0.8, 0.74), sheen=0.3)
+        col = u & (z > m["neck"] - 0.01) & (z < m["neck"] + 0.07) & (wh < 0.7) & (whand < 0.05)
+        self._shell("lacecollar", col, 0.042, lace, solid=0.002, drape=10)
 
 
 class Child(_SharedLive, _W.Sophia):
