@@ -227,15 +227,21 @@ def boot_leather(name, color=(0.055, 0.034, 0.02), rough=0.62, creases=1.0):
 
 # ----------------------------------------------------------------------------- the man
 class Deveau:
+    # body / skin parameters: subclasses (lib/women.py, the part chats' casts) override these
+    GENDER = 1.0; MUSCLE = 0.66; WEIGHT = 0.52; HEIGHT = 0.56
+    EXTRA = {"targets/chin/chin-prominent-incr": 0.3, "targets/nose/nose-hump-incr": 0.4,
+             "targets/nose/nose-scale-vert-incr": 0.2, "targets/eyebrows/eyebrows-trans-down": 0.3,
+             "targets/cheek/l-cheek-bones-incr": 0.35, "targets/cheek/r-cheek-bones-incr": 0.35,
+             "targets/head/head-age-incr": 0.25, "targets/chin/chin-bones-incr": 0.3}
+    SKIN = dict(base=(0.43, 0.25, 0.16), weather=0.6)
+    ASSET_BOOTS = True          # fit the Sketchfab leather boots (False: procedural boots/shoes from _sea_boots)
+    BOOT_TOP = 0.36             # boot shaft top above the ground (m); women/children set lower
+
     def __init__(self, name="Deveau", years=34, wet=0.35, cap=False):
-        extra = {"targets/chin/chin-prominent-incr": 0.3, "targets/nose/nose-hump-incr": 0.4,
-                 "targets/nose/nose-scale-vert-incr": 0.2, "targets/eyebrows/eyebrows-trans-down": 0.3,
-                 "targets/cheek/l-cheek-bones-incr": 0.35, "targets/cheek/r-cheek-bones-incr": 0.35,
-                 "targets/head/head-age-incr": 0.25, "targets/chin/chin-bones-incr": 0.3}
-        self.h = H.Human(name, gender=1.0, years=years, muscle=0.66, weight=0.52, height=0.56,
-                         extra=extra, eyebrows=None, eyelashes=None, skin=None)
+        self.h = H.Human(name, gender=self.GENDER, years=years, muscle=self.MUSCLE, weight=self.WEIGHT, height=self.HEIGHT,
+                         extra=dict(self.EXTRA), eyebrows=None, eyelashes=None, skin=None)
         h = self.h
-        h.body.data.materials[0] = sailor_skin(name + "_skin")
+        h.body.data.materials[0] = sailor_skin(name + "_skin", **self.SKIN)
         self._skin_regions()
         self.name = name; self.wet = wet
         self.rest_co = H.to_bl(h.hc)
@@ -250,7 +256,7 @@ class Deveau:
             self.used[list(pl.vertices)] = True
         self.faces = [tuple(pl.vertices) for pl in me.polygons]
         self._dress()
-        self.asset_boots = self._asset_boots(skin=True)
+        self.asset_boots = self._asset_boots(skin=True) if self.ASSET_BOOTS else False
 
     def _skin_regions(self):
         """Vertex colour 'skinvar': R = wind-burn redness (nose, cheeks, ears), G = shadowed eye sockets,
@@ -317,7 +323,7 @@ class Deveau:
             d.texture_coords = 'OBJECT'
         s = o.modifiers.new("Sub", "SUBSURF"); s.levels = 1; s.render_levels = 2
         if solid:
-            so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = solid; so.offset = -1; so.use_even_offset = True; so.thickness_clamp = 1.0
+            so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = solid; so.offset = -1; so.use_even_offset = False; so.thickness_clamp = 1.0; so.use_quality_normals = True
         h.parts.append(o)
         o["src_verts"] = used
         return o, used
@@ -789,7 +795,7 @@ class Deveau:
             tsel = (np.sign(T[:, 0] - P[self.used, 0].mean()) == sg) & (T[:, 2] < g + 0.42)
             Tp = T[tsel]
             shaft = []
-            zs = np.linspace(g + 0.07, g + 0.36, 12)
+            zs = np.linspace(g + 0.07 * min(1.0, self.BOOT_TOP / 0.36), g + self.BOOT_TOP, 12)
             Vs = []; Fs = []
             for j, z in enumerate(zs):
                 q = Lp[np.abs(Lp[:, 2] - z) < 0.025]
