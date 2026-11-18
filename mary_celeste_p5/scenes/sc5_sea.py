@@ -82,7 +82,7 @@ if SHOT in ("S01", "S02", "S03"):
     if SHOT == "S01":
         cam(Mb @ Vector((-9.5, -7.0, 0.9)), Mb @ Vector((1.0, 1.5, 2.4)), 26)
     elif SHOT == "S02":
-        c0 = Mb @ Vector((-0.9, -3.6, 1.15)); tgt = Mb @ Vector((-2.3, 0.0, 1.1))
+        c0 = Mb @ Vector((-1.1, -3.4, 1.75)); tgt = Mb @ Vector((-2.25, -0.1, 0.85))
         cam(c0, tgt, 38, fstop=2.8, focus=(Mb @ Vector((-2.3, -0.2, 1.05)) - c0).length)
     else:
         c = Mb @ Vector((1.2, -1.9, 1.05))
