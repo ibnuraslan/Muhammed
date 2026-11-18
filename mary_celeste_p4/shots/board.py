@@ -119,7 +119,7 @@ def S02():   # the nine red-oak barrels set apart, chalk X on each head
 
 
 def S03():   # BRIGGS card: on deck at dusk, looking forward at the yawl on the main hatch
-    d = S.set_deck(time="dusk", rail_gap=None, pumps="intact", sails="found", forehatch_off=False, sea_k=0.6)
+    d = S.set_deck(time="dusk", rail_gap=None, pumps="intact", sails="full", forehatch_off=False, sea_k=0.6)
     SHIP = d["SHIP"]
     dv, M = man("briggs", SHIP, (-6.2, -1.4), 15, pose_lookdown(pitch=6, yaw=-8, lean=2), (-1.2, 0.0, 2.4), wet=0.1)
     hw = head_of(M)
@@ -145,7 +145,7 @@ def S06():   # fire risk: the lantern's flame in the hold among the stow (ECU), 
 
 
 def S07():   # under way before the trouble: the full ship, slow track alongside (from the sea)
-    d = S.set_deck(time="dusk", rail_gap=None, pumps="intact", sails="found", forehatch_off=False, sea_k=0.8)
+    d = S.set_deck(time="dusk", rail_gap=None, pumps="intact", sails="full", forehatch_off=False, sea_k=0.8)
     SHIP = d["SHIP"]
     c = SHIP @ Vector((-30 + 6 * E(T), -42, 2.0))
     cam(c, SHIP @ Vector((2, 0, 9)), lens=35)
@@ -299,7 +299,7 @@ def S20():   # X-ray of the pump: a section through the pump-tree, the upper box
 
 
 def S21():   # Briggs at night, drawing the spear up out of the pump to see why it won't draw water
-    d = S.set_deck(time="night", rail_gap=None, pumps="intact", sails="found", forehatch_off=False, sea_k=1.2)
+    d = S.set_deck(time="night", rail_gap=None, pumps="intact", sails="full", forehatch_off=False, sea_k=1.2)
     SHIP = d["SHIP"]; px = d["px"]
     S.lantern_on_deck(SHIP, (px + 0.9, 0.2, ship.zdeck(px) + 0.01), energy=160)
     sp = (px, 0.7, ship.zdeck(px) + 1.05)
@@ -373,7 +373,7 @@ def S28():   # "It could." the model ship arrives at the second pin
 
 
 def S29():   # within sight of land: the ship at dawn with Santa Maria grey-blue on the horizon
-    d = S.set_deck(time="dawn", rail_gap=None, pumps="intact", sails="found", forehatch_off=False, sea_k=1.2)
+    d = S.set_deck(time="dawn", rail_gap=None, pumps="intact", sails="full", forehatch_off=False, sea_k=1.2)
     SHIP = d["SHIP"]
     S.santa_maria(dist_km=11.0, bearing_deg=200)
     c = SHIP @ Vector((34 - 4 * E(T), 52, 7.5))
@@ -382,7 +382,7 @@ def S29():   # within sight of land: the ship at dawn with Santa Maria grey-blue
 
 
 def S30():   # rough weather: night sea, the ship labouring (low, spray)
-    d = S.set_deck(time="night", rail_gap=None, pumps="intact", sails="found", forehatch_off=False, sea_k=1.7)
+    d = S.set_deck(time="night", rail_gap=None, pumps="intact", sails="full", forehatch_off=False, sea_k=1.7)
     SHIP = d["SHIP"]
     S.lantern_on_deck(SHIP, (-12.5, 0.0, ship.zdeck(-12.5) + 1.2), energy=40)
     c = SHIP @ Vector((30, -26, 2.0))
@@ -391,7 +391,7 @@ def S30():   # rough weather: night sea, the ship labouring (low, spray)
 
 
 def S31():   # Briggs sounds the well: the rod on its line, drawn up wet, read by the lantern
-    d = S.set_deck(time="night", rail_gap=None, pumps="intact", sails="found", forehatch_off=False, sea_k=1.3)
+    d = S.set_deck(time="night", rail_gap=None, pumps="intact", sails="full", forehatch_off=False, sea_k=1.3)
     SHIP = d["SHIP"]; px = d["px"]
     S.lantern_on_deck(SHIP, (px + 0.3, -1.4, ship.zdeck(px) + 0.01), energy=70)
     rz = ship.zdeck(px) + 1.15
@@ -414,7 +414,7 @@ def S32():   # CUTAWAY callback: camera sinks from the hatch through the tiers t
 
 
 def S33():   # Briggs at the rail at dawn: the island the only land in sight (OTS / MCU)
-    d = S.set_deck(time="dawn", rail_gap=None, pumps="intact", sails="found", forehatch_off=False, sea_k=1.1)
+    d = S.set_deck(time="dawn", rail_gap=None, pumps="intact", sails="full", forehatch_off=False, sea_k=1.1)
     SHIP = d["SHIP"]
     S.santa_maria(dist_km=11.0, bearing_deg=200)
     x = -7.0; hb = ship.half_breadth((x + ship.L / 2) / ship.L, 1.0)

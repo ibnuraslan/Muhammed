@@ -73,7 +73,7 @@ Courier Prime captions; every action has an SFX (list above → `sfx_cues.csv` a
 * S21 stays a lantern silhouette; S33 stays over the shoulder at dawn.
 
 ## Hub sign-off fixes
-* One ship, one sail state: every Mary Celeste shot uses the shared brigantine with the as-found sails (S03, S07, S21, S29, S30, S31, S33 changed from "full").
+* One ship, sails by timeline: always the shared brigantine. Crew aboard (S03, S07, S21, S29, S30, S31, S33): intact sails set and drawing ("full"). As found / after the abandonment (S08, S09, S10, S15, S16, S17, S22, S35, S36): torn as-found sails.
 * S31 / S35: over the shoulder with the head and shoulder in frame and the rod in their hands.
 * S18: subject is the pump's foot (museum scan) standing in the bilge under the hatch light, coal grit and shavings round it.
 * S10: high three-quarter on the whole battened hatch (iron bars, wedges), Deveau at its far edge.
