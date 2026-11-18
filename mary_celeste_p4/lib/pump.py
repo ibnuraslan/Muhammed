@@ -89,12 +89,34 @@ def upper_box(name, M, m, coll, valve_open=0.0, grit=0.0):
     return out
 
 
-def pump(name, base, intact=True, coll=None, brake_angle=0.0):
-    """One pump at world point `base` on deck. intact=False: spear out, brake unshipped (laid on deck)."""
+SCAN_TOP = "24f8540b2cd8478b83053ff368952474"     # "Top end of pump tube", Viking Ship Museum (CC BY), museum scan
+SCAN_FOOT = "7985bc32f0ef4b7698f3cbb47bf2613e"    # "Lower end of a ship's pump (pompvoet)", Batavialand (CC BY), scan
+
+
+def scan_top(name, base, H, coll=None, rot=0.0):
+    """The real pump-tree top (photoscan) standing on deck at `base`, scaled to H above the deck, decimated."""
+    import skfab
+    r, ms = skfab.model(SCAN_TOP, height=H + 0.05, name=name + "_scan")
+    for o in ms:
+        d = o.modifiers.new("dec", "DECIMATE"); d.ratio = 0.25
+        if coll:
+            ship._move(o, coll)
+    if coll:
+        ship._move(r, coll)
+    r.matrix_world = Matrix.Translation(Vector(base) + Vector((0, 0, -0.05))) @ Matrix.Rotation(rot, 4, 'Z')
+    return [r] + ms
+
+
+def pump(name, base, intact=True, coll=None, brake_angle=0.0, scan=True):
+    """One pump at world point `base` on deck. intact=False: spear out, brake unshipped (laid on deck).
+    scan=True uses the museum photoscan of a real pump-tree top for the part above the deck."""
     base = Vector(base)
     m = materials(); out = []
     H = 1.05
-    out += _tree(name, base, H, m, coll)
+    if scan:
+        out += scan_top(name, base, H, coll, rot=math.pi)
+    else:
+        out += _tree(name, base, H, m, coll)
     # crutch (two iron cheeks) and pin for the brake, on the fore side of the tree
     for sg in (1, -1):
         out.append(ship.box(f"{name}_cheek", base + Vector((-TREE - 0.05, sg * 0.05, H + 0.12)), (0.06, 0.018, 0.34), m["iron"], coll=coll))

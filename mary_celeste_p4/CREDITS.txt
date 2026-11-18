@@ -6,6 +6,9 @@ Mary Celeste Part 4 — third-party assets (all free licences)
   painted_plaster_wall, clay_plaster, red_slate_roof_tiles_01, brown_planks_05, dark_wooden_planks, weathered_planks,
   wood_table_worn, wood_table_large, oak_veneer_01, white_oak_veneer, red_oak_veneer;
   HDRIs belfast_sunset_puresky, industrial_sunset_02_puresky, mud_road_puresky.
+3D scans — Sketchfab (CC BY 4.0; attribution required):
+  "Top end of pump tube" by The Viking Ship Museum (vikingshipmuseum), CC Attribution, https://sketchfab.com/3d-models/top-end-of-pump-tube-24f8540b2cd8478b83053ff368952474
+  "Lower end of a ship's pump (pompvoet) OU86-137" by Museum Batavialand (Batavialand), CC Attribution, https://sketchfab.com/3d-models/lower-end-of-a-ships-pump-pompvoet-ou86-137-7985bc32f0ef4b7698f3cbb47bf2613e
 Terrain and bathymetry — AWS Open Data "Terrain Tiles" (Mapzen terrarium encoding), sources incl. SRTM (NASA/USGS, public domain),
   GMTED2010 (USGS), ETOPO1 (NOAA) and GEBCO; https://registry.opendata.aws/terrain-tiles/ (attribution as required by the sources).
 Human base mesh, rig and targets — MakeHuman 1.x (CC0), via the shared library mary_celeste_3d; MPFB 2 masks (CC0 assets).

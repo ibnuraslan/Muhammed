@@ -269,12 +269,15 @@ def S20():   # X-ray of the pump: a section through the pump-tree, the upper box
     ship.cyl("water", (0, 0, 0.55), (0, 0, 0.78), PU.BORE * 0.99, mat=water, verts=32)
     tbl = ship.wood("wood_table_worn", 0.6, tint=(0.9, 0.7, 0.5), name="t")
     ship.box("table", (0, 0, 0.52), (1.4, 1.0, 0.06), tbl)
+    import skfab                                     # beside it, a real ship's pump foot (museum photoscan)
+    fr, fms = skfab.model(PU.SCAN_FOOT, height=0.35, name="pumpfoot")
+    fr.matrix_world = Matrix.Translation((0.34, 0.12, 0.55)) @ Matrix.Rotation(0.6, 4, 'Z')
     p4.world_color((0.01, 0.007, 0.005))
     p4.light('SPOT', "lamp", 90, (1.0, 0.76, 0.5), loc=(0.15, -0.7, 1.5), target=(0, 0, 0.95), size=0.08, spot=40, blend=0.7)
     p4.light('AREA', "rim", 25, (1.0, 0.8, 0.6), loc=(-0.6, 0.5, 1.3), target=(0, 0, 0.9), size=0.8)
-    a = 1.35 + 0.3 * E(T)
-    p = Vector((0.55 * math.cos(a), 0.55 * math.sin(a), 1.12))
-    cam(p, (0, 0, 0.95), lens=70, fstop=5.6, focus=(p - Vector((0, 0, 0.95))).length)
+    a = 1.15 + 0.2 * E(T)
+    p = Vector((0.15 + 0.85 * math.cos(a), 0.85 * math.sin(a), 1.15))
+    cam(p, (0.14, 0.03, 0.82), lens=40, fstop=5.6, focus=(p - Vector((0.1, 0.0, 0.85))).length)
     finish(sat=1.05)
 
 
