@@ -32,6 +32,8 @@ class Person(D.Deveau):
                          extra=extra or {}, eyebrows=None, eyelashes=None, skin=None)
         h = self.h
         h.body.data.materials[0] = D.sailor_skin(name + "_skin", base=skin, weather=weather)
+        if hasattr(self, "_skin_regions"):          # shared lib >= 50560c7: per-region skin variation
+            self._skin_regions()
         self.name = name; self.wet = wet
         self.rest_co = H.to_bl(h.hc)
         me = h.body.data
@@ -48,12 +50,30 @@ class Person(D.Deveau):
         self._dress()
         if self.hair_cfg.get("cap"):
             self._cap(self.hair_cfg["cap"])
+        elif self.hair_cfg.get("style") == "short" and outfit not in ("toddler", "dress"):
+            # hair-coloured scalp under the strands (as in film grooms), so short hair reads at any distance
+            c = self.hair_cfg
+            col = (0.02 + 0.2 * (1 - c["melanin"]) * (0.6 + c["redness"]), 0.012 + 0.12 * (1 - c["melanin"]), 0.008)
+            self.scalpcap, _ = self._shell("scalp", self._scalp_mask(0.0), 0.0012, D.wool_material(name + "_scalpcol", col, rough=0.6,
+                                           sheen=0.2, weave=2000, bump=0.1, dirt=0.0), solid=0.0, drape=2)
         # even-offset solidify explodes on creased/degenerate shell vertices once posed (seen: 44 m spikes on
         # the toddler's frock); plain offset is visually the same at these thicknesses
         for o in h.parts:
             for md in o.modifiers:
                 if md.type == 'SOLIDIFY':
                     md.use_even_offset = False
+
+    # ------------------------------------------------------------------ shared-lib hooks (50560c7)
+    def _asset_boots(self):
+        # the shared fitted leather boots suit the men (sailors, captain) and the boy; Sarah's boots are under
+        # her skirt and Sophia wears none, so they keep their own shells
+        if self.outfit in ("sailor", "captain", "boy"):
+            return D.Deveau._asset_boots(self)
+        return True
+
+    def _sea_boots(self):
+        if self.outfit in ("sailor", "captain"):
+            return D.Deveau._sea_boots(self)
 
     # ------------------------------------------------------------------ outfits
     def _marks(self):
@@ -215,12 +235,6 @@ class Person(D.Deveau):
         mat = D.hair_material(self.name + "_hair", cfg["melanin"], cfg["redness"], grey=cfg.get("grey", 0.0))
         self.hair_objs = []
         st = cfg["style"]
-        if st in ("short", "curls") and not cfg.get("cap"):
-            # hair-coloured scalp under the strands (as in games and film grooms), so short hair reads at any distance
-            col = (0.02 + 0.2 * (1 - cfg["melanin"]) * (0.6 + cfg["redness"]), 0.012 + 0.12 * (1 - cfg["melanin"]), 0.008)
-            self.scalpcap, _ = self._shell("scalp", self._scalp_mask(0.0), 0.0012, D.wool_material(self.name + "_scalpcol", col, rough=0.6,
-                                           sheen=0.2, weave=2000, bump=0.1, dirt=0.0), solid=0.0, drape=2)
-            bpy.context.view_layer.update()
         if cfg.get("cap"):
             scalp = scalp & ~self._scalp_mask(0.03)       # only the hair that shows under the cap
         if st == "short":
