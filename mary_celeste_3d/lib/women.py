@@ -124,7 +124,7 @@ class _Woman(D.Deveau):
                 F.append([rows[j][i], rows[j][i2], rows[j + 1][i2], rows[j + 1][i]])
         o = D.mesh_obj(f"{self.name}_{label}", V, F, mat)
         sm = o.modifiers.new("Smooth", "SMOOTH"); sm.factor = 0.7; sm.iterations = 12        # even out the bell
-        so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.004; so.offset = 1; so.thickness_clamp = 1.0
+        so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.004; so.offset = 1; so.use_even_offset = False; so.thickness_clamp = 1.0; so.use_quality_normals = True
         sb = o.modifiers.new("Sub", "SUBSURF"); sb.levels = 1; sb.render_levels = 2
         vg = o.vertex_groups.new(name="spine05"); vg.add(list(range(len(V))), 1.0, 'REPLACE')
         mod = o.modifiers.new("Armature", "ARMATURE"); mod.object = self.h.arm
@@ -430,7 +430,7 @@ class Sarah(_Woman):
             keep.append(f)
         o = D.mesh_obj(f"{self.name}_bonnet", V, keep, mat)
         self._soft_edge(o, iters=30)
-        so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.003; so.offset = 1; so.thickness_clamp = 1.0
+        so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.003; so.offset = 1; so.use_even_offset = False; so.thickness_clamp = 1.0; so.use_quality_normals = True
         sb = o.modifiers.new("Sub", "SUBSURF"); sb.levels = 1; sb.render_levels = 2
         vg = o.vertex_groups.new(name="head"); vg.add(list(range(len(V))), 1.0, 'REPLACE')
         mod = o.modifiers.new("Armature", "ARMATURE"); mod.object = h.arm; o.modifiers.move(len(o.modifiers) - 1, 0)

@@ -821,7 +821,7 @@ class Deveau:
             up = mesh_obj(nm + "_upper", W, F, upper_m)
             sb = up.modifiers.new("Sub", "SUBSURF"); sb.levels = 2; sb.render_levels = 2
             sh = mesh_obj(nm + "_shaft", Vs, Fs, upper_m)
-            so = sh.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.004; so.offset = 1
+            so = sh.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.004; so.offset = 1; so.use_even_offset = False; so.thickness_clamp = 1.0
             sb = sh.modifiers.new("Sub", "SUBSURF"); sb.levels = 2; sb.render_levels = 2
             # sole (overhangs the welt by 4 mm) and a stacked heel
             outline = []
