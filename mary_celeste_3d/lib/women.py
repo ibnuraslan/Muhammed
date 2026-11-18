@@ -49,7 +49,7 @@ class _Woman(D.Deveau):
 
     def __init__(self, name, years, wet=0.0, seated=False, bonnet=True, shawl=True):
         self.seated = seated; self.want_bonnet = bonnet; self.want_shawl = shawl
-        self.button_objs = []
+        self.button_objs = []; self.hair_objs = []
         super().__init__(name=name, years=years, wet=wet)
 
     def relaxed(self, lean=2.0, look_down=4.0, hands="waist"):
@@ -245,6 +245,8 @@ class Sarah(_Woman):
         self.button_objs.append(core)
         # coiled strands wound round the core
         rng = np.random.default_rng(11); n = int(4000 * density); segs = 14
+        if n <= 0:
+            return
         pts = np.zeros((n, segs, 3), np.float32)
         rad = 0.033 * hs
         for i in range(n):
@@ -337,6 +339,8 @@ class Sarah(_Woman):
             return
         zs = np.array([r.z for r in roots]); lowcut = np.percentile(zs, 55)
         roots = [r for r in roots if r.z < lowcut]                      # only the hanging lower edge
+        if not roots:
+            return
         rng = np.random.default_rng(3); segs = 6
         pts = np.zeros((len(roots), segs, 3), np.float32)
         for i, r in enumerate(roots):
