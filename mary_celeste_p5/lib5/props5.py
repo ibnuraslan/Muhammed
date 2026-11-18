@@ -16,6 +16,13 @@ from mathutils import Vector, Matrix
 import ship
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+try:                                   # Blender's Python ships without Pillow: use the system one (same 3.13 ABI),
+    import PIL                         # appended last so Blender's own numpy still wins
+except ImportError:
+    import sys as _sys, glob as _g
+    for _p in _g.glob("/usr/local/lib/python3.13/site-packages") + _g.glob("/usr/lib/python3/dist-packages"):
+        if _p not in _sys.path:
+            _sys.path.append(_p)
 TEX = os.path.join(HERE, "..", "out", "tex")
 FONTS = os.path.join(HERE, "..", "..", "mary_celeste", "assets", "fonts")
 

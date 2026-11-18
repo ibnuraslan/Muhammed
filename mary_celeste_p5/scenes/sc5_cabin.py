@@ -137,7 +137,9 @@ else:
     w.node_tree.nodes["Background"].inputs[0].default_value = (0.03, 0.035, 0.045, 1)
     key = bpy.data.objects.new("door", bpy.data.lights.new("door", 'AREA')); sc.collection.objects.link(key)
     key.location = (gx - 0.05, -0.3, 1.1); key.data.size = 0.7; key.data.size_y = 1.6; key.data.shape = 'RECTANGLE'
-    key.data.energy = 220; key.data.color = (0.85, 0.9, 1.0); key.rotation_euler = (0, math.radians(-90), 0)
+    key.data.energy = 420; key.data.color = (0.85, 0.9, 1.0); key.rotation_euler = (0, math.radians(90), 0)
+    gf = bpy.data.objects.new("gfill", bpy.data.lights.new("gfill", 'POINT')); sc.collection.objects.link(gf)
+    gf.location = (0.2, 0.0, 1.7); gf.data.energy = 15; gf.data.color = (1.0, 0.75, 0.5)
     C.camera((1.05, -0.75, 1.25), (-0.45, 0.35, 0.55), lens=24, fstop=5.6, focus=1.9)
     cine = {"sat": 1.0}
 
