@@ -4,3 +4,4 @@ assets/photos/_pending_*
 __pycache__/
 *.tmp
 review/*.png
+assets/sketchfab/*/

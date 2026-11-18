@@ -1,7 +1,7 @@
 """Part 3 props, real-scale and built in code: ship's boat, sextant case, food sack, pump brake (pivoted),
 writing things (table, chair, lamp, inkwell, dip pen, letter), arrest notice with nails, sword and scabbard,
 chemist's glassware, magnifying glass. Every prop is a closed solid with its own material."""
-import math, random
+import math, random, os
 import numpy as np
 import bpy, bmesh
 from mathutils import Vector, Matrix
@@ -182,7 +182,25 @@ def chair(name, loc, heading_deg, mat=None, seat_h=0.45):
 
 
 def oil_lamp(name, base_loc, flame_energy=18.0):
-    """Brass table lamp with a glass chimney and a real flame light. Returns (objs, flame world point, light)."""
+    """Brass table lamp with a glass chimney and a real flame light. Returns (objs, flame world point, light).
+    Uses the Sketchfab 'Victorian Brass Oil Lamp' (CC-BY, see CREDITS) when available, else a built lamp."""
+    if os.environ.get("SKETCHFAB", "1") != "0":
+        try:
+            import sketchfab as SF
+            ob = SF.model("oil_lamp", name=name)
+            ob.location = base_loc
+            hgt = ob["dims"][2]
+            fp = Vector(base_loc) + Vector((0, 0, 0.5 * hgt))
+            fl = bpy.data.materials.new(name + "_flame"); fl.use_nodes = True; N = fl.node_tree.nodes; N.remove(N["Principled BSDF"])
+            em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (1.0, 0.55, 0.18, 1); em.inputs['Strength'].default_value = 40
+            fl.node_tree.links.new(em.outputs[0], N["Material Output"].inputs['Surface'])
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=0.008, location=fp)
+            f = bpy.context.active_object; f.scale = (1, 1, 2.4); f.name = name + "_flame"; f.data.materials.append(fl)
+            L = bpy.data.lights.new(name + "_light", 'POINT'); L.energy = flame_energy; L.color = (1.0, 0.62, 0.32); L.shadow_soft_size = 0.02
+            lo = bpy.data.objects.new(name + "_light", L); bpy.context.scene.collection.objects.link(lo); lo.location = fp + Vector((0, 0, 0.015))
+            return [ob, f], fp, lo
+        except Exception as e:
+            print("sketchfab lamp unavailable:", e)
     brass = D.brass_material(name + "_brass")
     glass = bpy.data.materials.new(name + "_glass"); glass.use_nodes = True
     g = glass.node_tree.nodes["Principled BSDF"]; g.inputs['Transmission Weight'].default_value = 1.0

@@ -275,6 +275,19 @@ def diver_helmet(p):
     """Standard diving dress: spun-copper/brass helmet with front and side ports, on a breastplate (corselet)."""
     c, up, fwd, top = head_frame(p)
     side = up.cross(fwd).normalized(); fwd = side.cross(up).normalized()
+    if os.environ.get("SKETCHFAB", "1") != "0":
+        try:
+            import sketchfab as SF
+            ob = SF.model("diving_helmet", name=p.name + "_helmet_sf")
+            R = Matrix(((-fwd).cross(up), -fwd, up)).transposed().to_4x4()
+            R.translation = c - up * 0.29
+            ob.matrix_world = R
+            for o in getattr(p, "hair_objs", []):
+                if o:
+                    o.hide_render = True
+            return [ob], c - fwd * 0.17 + up * 0.04
+        except Exception as e:
+            print("sketchfab helmet unavailable:", e)
     M = Matrix((side, fwd, up)).transposed().to_4x4(); M.translation = c + up * 0.01
     brass = D.brass_material(p.name + "_brass") if hasattr(D, "brass_material") else flat("brass", (0.6, 0.4, 0.2), 0.3, 1.0)
     copper = flat(p.name + "_copper", (0.55, 0.28, 0.16), rough=0.35, metal=1.0)
