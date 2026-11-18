@@ -161,17 +161,20 @@ bounce.rotation_euler = (0, math.radians(-80), 0)
 cams = {
     "S15": ((1.4, -1.6, 1.55), (-1.2, 0.2, 0.85), 26, None),
     "S16": ((-0.3, -0.9, 1.25), T + Vector((0.0, 0.05, 0.1)), 40, 1.3),
-    "S17": (T + Vector((0.22, -0.32, 0.42)), T + Vector((0.05, -0.12, 0.2)), 85, 0.4),
+    "S17": (T + Vector((0.3, -0.42, 0.55)), T + Vector((0.05, -0.12, 0.205)), 85, "auto"),
     "S18": ((-0.45, -0.85, 1.3), T + Vector((0, -0.05, 0.18)), 40, 1.1),
     "S19": ((-0.7, -0.7, 1.35), T + Vector((0, -0.05, 0.12)), 45, 0.95),
     "S20": ((-0.85, -0.55, 1.32), T + Vector((0.0, -0.05, 0.12)), 45, 0.75),
-    "S21": (T + Vector((-0.08, -0.32, 0.36)), T + Vector((-0.14, -0.02, 0.12)), 85, 0.45),
+    "S21": (T + Vector((-0.08, -0.42, 0.46)), T + Vector((0.02, -0.12, 0.12)), 85, "auto"),
     "S22": ((wx + 1.9, wy - 1.1, 1.05), (wx + 0.4, wy + 0.0, 0.95), 40, 1.75),
     "S23": ((wx + 0.75, wy - 0.25, 1.15), (wx + 0.1, wy + 0.3, 0.75), 50, 0.75),
     "S26": ((wx - 0.0, wy - 0.85, 1.0), (wx + 0.5, wy - 0.05, 0.75), 45, 1.0),
 }
 loc, tgt, lens, foc = cams[SHOT]
-C.camera(Vector(loc), Vector(tgt), lens=lens, fstop=2.8 if foc else None, focus=foc)
+fst = 2.8
+if foc == "auto":                       # macro: focus on the aim point, a deeper stop so the whole object holds
+    foc = (Vector(loc) - Vector(tgt)).length; fst = 6.3
+C.camera(Vector(loc), Vector(tgt), lens=lens, fstop=fst if foc else None, focus=foc)
 if os.environ.get("DEBUGCAM"):
     for o in bpy.data.objects:
         if o.name.startswith("ceiling"):
