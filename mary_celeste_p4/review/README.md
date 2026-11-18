@@ -72,6 +72,13 @@ Courier Prime captions; every action has an SFX (list above → `sfx_cues.csv` a
 * S31 Briggs / S35 Deveau: over the shoulder onto the sounding rod in their hands (wet mark is the subject).
 * S21 stays a lantern silhouette; S33 stays over the shoulder at dawn.
 
+## Hub sign-off fixes
+* One ship, one sail state: every Mary Celeste shot uses the shared brigantine with the as-found sails (S03, S07, S21, S29, S30, S31, S33 changed from "full").
+* S31 / S35: over the shoulder with the head and shoulder in frame and the rod in their hands.
+* S18: subject is the pump's foot (museum scan) standing in the bilge under the hatch light, coal grit and shavings round it.
+* S10: high three-quarter on the whole battened hatch (iron bars, wedges), Deveau at its far edge.
+* Table shots varied: S19 high angle over the whole table; S24 low across the relief past the lamp; S34 slow push to the found pin along the inked drift.
+
 ## Render budget (measured here: 4 CPU cores, no GPU)
 ~15 s/frame at 640×360/24 spp → full spec 2560×1440 at ~96 spp ≈ 15–20 min/frame. 175 s × 24 fps = 4,200 frames
 ≈ 1,000+ machine-hours on one container: not feasible as is. Options for the hub:

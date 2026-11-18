@@ -119,7 +119,7 @@ def S02():   # the nine red-oak barrels set apart, chalk X on each head
 
 
 def S03():   # BRIGGS card: on deck at dusk, looking forward at the yawl on the main hatch
-    d = S.set_deck(time="dusk", rail_gap=None, pumps="intact", sails="full", forehatch_off=False, sea_k=0.6)
+    d = S.set_deck(time="dusk", rail_gap=None, pumps="intact", sails="found", forehatch_off=False, sea_k=0.6)
     SHIP = d["SHIP"]
     dv, M = man("briggs", SHIP, (-6.2, -1.4), 15, pose_lookdown(pitch=6, yaw=-8, lean=2), (-1.2, 0.0, 2.4), wet=0.1)
     hw = head_of(M)
@@ -145,7 +145,7 @@ def S06():   # fire risk: the lantern's flame in the hold among the stow (ECU), 
 
 
 def S07():   # under way before the trouble: the full ship, slow track alongside (from the sea)
-    d = S.set_deck(time="dusk", rail_gap=None, pumps="intact", sails="full", forehatch_off=False, sea_k=0.8)
+    d = S.set_deck(time="dusk", rail_gap=None, pumps="intact", sails="found", forehatch_off=False, sea_k=0.8)
     SHIP = d["SHIP"]
     c = SHIP @ Vector((-30 + 6 * E(T), -42, 2.0))
     cam(c, SHIP @ Vector((2, 0, 9)), lens=35)
@@ -176,8 +176,10 @@ def S10():   # the main hatch still battened down (low insert, push in on the we
     SHIP = d["SHIP"]; xm = ship.MAIN_HATCH_X
     dv, M = man("deveau", SHIP, (xm + 2.4, 1.8), 200, pose_lookdown(pitch=34, lean=10), (xm, 0, ship.zdeck(xm) + 0.4))
     tgt = SHIP @ Vector((xm, -1.25, ship.zdeck(xm) + 0.42))
-    c0 = SHIP @ Vector((xm - 1.9, -2.6, ship.zdeck(xm) + 0.75)); c1 = SHIP @ Vector((xm - 1.4, -2.1, ship.zdeck(xm) + 0.68))
-    cam(lerp(c0, c1, E(T)), tgt, lens=35, fstop=3.5, focus=(tgt - c1).length)
+    # the whole battened hatch is the subject: high three-quarter, bars and wedges, Deveau at its far edge
+    tgt = SHIP @ Vector((xm, 0.1, ship.zdeck(xm) + 0.45))
+    c0 = SHIP @ Vector((xm - 3.2, -3.0, ship.zdeck(xm) + 2.6)); c1 = SHIP @ Vector((xm - 2.9, -2.7, ship.zdeck(xm) + 2.45))
+    cam(lerp(c0, c1, E(T)), tgt, lens=30, fstop=5.6, focus=(tgt - c1).length)
     finish(sat=0.95)
 
 
@@ -242,15 +244,27 @@ def S17():   # the port pump taken apart: spear out on deck, upper box off, brak
 
 def S18():   # NEW YORK, refit: the empty hold, coal dust in the bilge and shavings, a shaft of daylight
     S.set_hold(stain=False, coal=True, barrels_on=False, lantern_swing=0)
-    p = Vector((-3.4 + 0.4 * E(T), -0.9, -1.7))
-    cam(p, (2.4, 0.3, -2.2), lens=28)
+    # subject: the pump's foot standing in the bilge under the hatch light, coal grit and shavings heaped round it
+    import skfab, pump as PU
+    fr, fms = skfab.model(PU.SCAN_FOOT, height=0.35, name="pumpfoot")
+    fr.matrix_world = Matrix.Translation((2.4, 0.0, -2.445)) @ Matrix.Rotation(0.4, 4, 'Z')
+    cm = p4.mat("coalheap", (0.014, 0.012, 0.012), rough=0.8)
+    import random
+    rng = random.Random(11)
+    for k in range(1600):
+        a = rng.uniform(0, 6.28); r = abs(rng.gauss(0, 0.2)) + 0.07
+        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=rng.uniform(0.002, 0.01),
+                                              location=(2.4 + r * math.cos(a), r * math.sin(a), -2.44 + max(0, 0.06 - r * 0.12)))
+        bpy.context.active_object.data.materials.append(cm)
+    p = Vector((1.15 + 0.15 * E(T), -0.75, -1.85))
+    cam(p, (2.4, 0.0, -2.3), lens=40, fstop=4.0, focus=(Vector((2.4, 0, -2.3)) - p).length)
     finish()
 
 
 def S19():   # MACGREGOR card: the investigation table, papers, the pump drawing; lamp light (no figure)
     t = S.set_table(map_on=True, slate=True, papers=True)
-    p = Vector((1.9 - 0.15 * E(T), -1.6, 1.45))
-    cam(p, (0.7, -0.3, t["TZ"]), lens=45, fstop=2.8, focus=1.9)
+    p = Vector((0.35, -1.75 + 0.08 * E(T), 2.75))          # high angle over the whole table: papers, slate, map, lamp
+    cam(p, (0.2, -0.15, t["TZ"]), lens=32, fstop=5.6, focus=2.6)
     finish()
 
 
@@ -285,7 +299,7 @@ def S20():   # X-ray of the pump: a section through the pump-tree, the upper box
 
 
 def S21():   # Briggs at night, drawing the spear up out of the pump to see why it won't draw water
-    d = S.set_deck(time="night", rail_gap=None, pumps="intact", sails="full", forehatch_off=False, sea_k=1.2)
+    d = S.set_deck(time="night", rail_gap=None, pumps="intact", sails="found", forehatch_off=False, sea_k=1.2)
     SHIP = d["SHIP"]; px = d["px"]
     S.lantern_on_deck(SHIP, (px + 0.9, 0.2, ship.zdeck(px) + 0.01), energy=160)
     sp = (px, 0.7, ship.zdeck(px) + 1.05)
@@ -316,8 +330,8 @@ def S23():   # RICHARDSON card / the slate: the last entry in chalk
 
 def S24():   # the table map: Azores to the found position, high wide, slow push
     t = S.set_table()
-    p = lerp((-0.3, -2.0, 1.75), (-0.35, -1.8, 1.6), E(T))
-    cam(p, (-0.1, 0.15, t["TZ"]), lens=32, fstop=5.6, focus=2.2)
+    p = lerp((1.75, -0.35, 0.98), (1.65, -0.3, 0.95), E(T))     # low, past the lamp, across the relief
+    cam(p, (-0.6, 0.15, t["TZ"] + 0.05), lens=30, fstop=4.0, focus=1.6)
     finish(exposure=0.5)
 
 
@@ -359,7 +373,7 @@ def S28():   # "It could." the model ship arrives at the second pin
 
 
 def S29():   # within sight of land: the ship at dawn with Santa Maria grey-blue on the horizon
-    d = S.set_deck(time="dawn", rail_gap=None, pumps="intact", sails="full", forehatch_off=False, sea_k=1.2)
+    d = S.set_deck(time="dawn", rail_gap=None, pumps="intact", sails="found", forehatch_off=False, sea_k=1.2)
     SHIP = d["SHIP"]
     S.santa_maria(dist_km=11.0, bearing_deg=200)
     c = SHIP @ Vector((34 - 4 * E(T), 52, 7.5))
@@ -368,7 +382,7 @@ def S29():   # within sight of land: the ship at dawn with Santa Maria grey-blue
 
 
 def S30():   # rough weather: night sea, the ship labouring (low, spray)
-    d = S.set_deck(time="night", rail_gap=None, pumps="intact", sails="full", forehatch_off=False, sea_k=1.7)
+    d = S.set_deck(time="night", rail_gap=None, pumps="intact", sails="found", forehatch_off=False, sea_k=1.7)
     SHIP = d["SHIP"]
     S.lantern_on_deck(SHIP, (-12.5, 0.0, ship.zdeck(-12.5) + 1.2), energy=40)
     c = SHIP @ Vector((30, -26, 2.0))
@@ -377,7 +391,7 @@ def S30():   # rough weather: night sea, the ship labouring (low, spray)
 
 
 def S31():   # Briggs sounds the well: the rod on its line, drawn up wet, read by the lantern
-    d = S.set_deck(time="night", rail_gap=None, pumps="intact", sails="full", forehatch_off=False, sea_k=1.3)
+    d = S.set_deck(time="night", rail_gap=None, pumps="intact", sails="found", forehatch_off=False, sea_k=1.3)
     SHIP = d["SHIP"]; px = d["px"]
     S.lantern_on_deck(SHIP, (px + 0.3, -1.4, ship.zdeck(px) + 0.01), energy=70)
     rz = ship.zdeck(px) + 1.15
@@ -386,9 +400,9 @@ def S31():   # Briggs sounds the well: the rod on its line, drawn up wet, read b
     dv, M = man("briggs", SHIP, (px + 0.95, -1.75), 140, pose_rod(SHIP, a, (px + 0.55, -1.25, rz + 0.05)), (px + 0.55, -1.25, rz - 0.1), wet=0.8)
     hw = head_of(M)
     # over his shoulder by lantern light (no face): the rod comes up wet out of the well
-    cl = SHIP @ Vector((px + 1.9, -1.1, ship.zdeck(px) + 1.75))
+    cl = SHIP @ Vector((px + 2.1, -2.3, ship.zdeck(px) + 1.95))       # behind his right shoulder: head and shoulder in frame
     mark = SHIP @ Vector(a).lerp(Vector(b), 0.5)
-    cam(cl, mark, lens=40, fstop=4.0, focus=(mark - cl).length)
+    cam(cl, mark.lerp(head_of(M), 0.3), lens=28, fstop=4.0, focus=(mark - cl).length)
     finish(exposure=0.2)
 
 
@@ -400,7 +414,7 @@ def S32():   # CUTAWAY callback: camera sinks from the hatch through the tiers t
 
 
 def S33():   # Briggs at the rail at dawn: the island the only land in sight (OTS / MCU)
-    d = S.set_deck(time="dawn", rail_gap=None, pumps="intact", sails="full", forehatch_off=False, sea_k=1.1)
+    d = S.set_deck(time="dawn", rail_gap=None, pumps="intact", sails="found", forehatch_off=False, sea_k=1.1)
     SHIP = d["SHIP"]
     S.santa_maria(dist_km=11.0, bearing_deg=200)
     x = -7.0; hb = ship.half_breadth((x + ship.L / 2) / ship.L, 1.0)
@@ -415,8 +429,9 @@ def S33():   # Briggs at the rail at dawn: the island the only land in sight (OT
 def S34():   # back at the table: one reading of the evidence (the two pins, the lamp)
     t = S.set_table()
     drift(t, 1.0)
-    p = lerp((1.6, -1.7, 1.3), (1.4, -1.5, 1.25), E(T))
-    cam(p, (0.0, 0.1, t["TZ"] + 0.05), lens=40, fstop=4, focus=2.2)
+    b = t["found"]
+    p = lerp(b + Vector((-0.55, -0.75, 0.55)), b + Vector((-0.28, -0.4, 0.3)), E(T))   # slow push to the found pin
+    cam(p, b + Vector((-0.05, 0.02, 0.02)), lens=50, fstop=4.0, focus=(b - p).length)
     finish()
 
 
@@ -429,9 +444,9 @@ def S35():   # Deveau reads the sounding rod: three and a half feet in the hold 
     dv, M = man("deveau", SHIP, (px + 1.0, -1.7), 140, pose_rod(SHIP, a, (px + 0.6, -1.2, rz + 0.05)), (px + 0.6, -1.2, rz - 0.1))
     hw = head_of(M)
     # over his right shoulder onto the rod in his hands: the wet mark is the subject, his face is not shown
-    cl = SHIP @ Vector((px + 1.95, -1.05, ship.zdeck(px) + 1.75))
+    cl = SHIP @ Vector((px + 2.15, -2.25, ship.zdeck(px) + 1.95))     # behind his right shoulder: head and shoulder in frame
     mark = SHIP @ Vector(a).lerp(Vector(b), 0.5)
-    cam(cl, mark, lens=40, fstop=4.0, focus=(mark - cl).length)
+    cam(cl, mark.lerp(head_of(M), 0.3), lens=28, fstop=4.0, focus=(mark - cl).length)
     finish(sat=0.95)
 
 
