@@ -809,6 +809,17 @@ def rail_section(name, mats, coll, gap, side="S", shift=0.0):
     for k in (-1, 1):
         p = Vector((xc + k * (ln / 2 - 0.25), y - sg * (RAIL_H / 2 + 0.05), z + 0.04))
         out.append(cyl(f"{name}_railsec_pin", p, p + Vector((0, -sg * 0.18, 0)), 0.02, mat=mats["iron"], verts=10, coll=coll))
+    # bolt holes through the battens and torn iron straps where it was fastened to the stanchions
+    for k in (-1, 1):
+        bx = xc + k * (ln / 2 - 0.12) * ca; by = y + k * (ln / 2 - 0.12) * sa
+        for j in (-0.3, 0.0, 0.3):
+            q = Vector((bx - sg * j * sa, by + sg * j * ca, z + 0.111))
+            out.append(cyl(f"{name}_railsec_bolthole", q - Vector((0, 0, 0.004)), q + Vector((0, 0, 0.002)), 0.011, mat=mats["dark"], verts=12, coll=coll))
+        q = Vector((bx + sg * 0.42 * sa, by - sg * 0.42 * ca, z + 0.112))
+        strap = [q, q + Vector((0.02 * k, -sg * 0.09, 0.0)), q + Vector((0.05 * k, -sg * 0.16, 0.035)), q + Vector((0.06 * k, -sg * 0.19, 0.08))]
+        o = rope(f"{name}_railsec_strap", strap, 0.006, mats["iron"], coll); o.data.bevel_resolution = 0
+        o2 = rope(f"{name}_railsec_bolt", [q + Vector((0, sg * 0.05, 0)), q + Vector((0, sg * 0.05, 0.06)), q + Vector((0.03, sg * 0.07, 0.085))], 0.009, mats["iron"], coll)
+        out += [o, o2]
     # the stumps either side of the gap: iron sockets in the waterway
     for xx in gap[:2]:
         s2 = (xx - xs0) / (xb0 - xs0); hb2 = half_breadth(s2, 1.0)
@@ -823,7 +834,8 @@ def build(name="ship", sails="found", rail_gap=None, wind=(0.25, -1.0, 0), coll_
         bottom=paint(name + "_bottom", (0.2, 0.07, 0.04), rough=0.6, grime=0.5),
         boot=paint(name + "_boot", (0.5, 0.48, 0.42), rough=0.5, grime=0.6),
         topside=paint(name + "_topside", (0.012, 0.012, 0.013), rough=0.35, grime=0.25, wet=wet, chips=0.4, under=(0.2, 0.15, 0.1)),
-        lining=paint(name + "_lining", (0.36, 0.34, 0.29), rough=0.45, grime=0.65, wet=wet, chips=0.35, scale=9),
+        lining=(wood("weathered_planks", 1.1, wet=wet, tint=(0.62, 0.55, 0.46), name=name + "_lining") if detail
+                else paint(name + "_lining", (0.2, 0.17, 0.13), rough=0.5, grime=0.65, wet=wet, chips=0.35, scale=9)),
         rail=wood("brown_planks_05", 1.2, wet=wet, name=name + "_rail") if detail else paint(name + "_rail", (0.12, 0.07, 0.035)),
         deck=wood("wood_floor_deck", 1.0, wet=wet, name=name + "_deckmat") if detail else paint(name + "_deckp", (0.3, 0.25, 0.18)),
         deckwood=wood("weathered_planks", 0.8, wet=wet, name=name + "_dw") if detail else paint(name + "_dwp", (0.25, 0.2, 0.15)),

@@ -326,9 +326,11 @@ air.visible_shadow = False
 
 # ----------------------------------------------------------------------------- camera
 head_w = M @ Vector((0, -0.05, 1.66))
-cam_loc = Vector((-1.6, 0.05, 1.72))
-aim = head_w.lerp(Vector((CHILD["cx"], CHILD["cy"], TOP)), 0.62) + Vector((0.16, -0.12, 0.0))
-cam = C.camera(cam_loc, aim, lens=21, fstop=3.5, focus=(head_w - cam_loc).length, roll=-1.0)
+# medium shot: waist-up, the lantern at frame left side-lighting him, the far side of his face in shadow;
+# the hollow in the berth runs out of the bottom-left corner of the frame
+cam_loc = Vector((-1.3, -0.7, 1.6))
+aim = M @ Vector((0.05, -0.05, 1.42))
+cam = C.camera(cam_loc, aim, lens=38, fstop=2.8, focus=(head_w - cam_loc).length, roll=-1.0)
 if POSE_TEST:
     air.hide_render = True; sc.cycles.samples = 24
     for o in bpy.data.objects:
