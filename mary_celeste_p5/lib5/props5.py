@@ -261,7 +261,7 @@ def mug(name, at, r=0.042, h=0.09, color=(0.82, 0.8, 0.72), rim=(0.05, 0.08, 0.2
     bv = o.modifiers.new("B", "BEVEL"); bv.width = 0.0015; bv.segments = 2
     o.data.materials.append(m); bpy.ops.object.shade_smooth()
     o.location = at
-    bpy.ops.mesh.primitive_torus_add(major_radius=0.028, minor_radius=0.005, location=(at[0] + r + 0.012, at[1], at[2] + h * 0.55),
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.019, minor_radius=0.0042, location=(at[0] + r + 0.006, at[1], at[2] + h * 0.55),
                                      rotation=(math.pi / 2, 0, 0))
     hd = bpy.context.active_object; hd.name = name + "_handle"; hd.data.materials.append(m); bpy.ops.object.shade_smooth()
     cm, _, _, cp = _mat(name + "_coffee"); cp.inputs['Base Color'].default_value = (*fill, 1); cp.inputs['Roughness'].default_value = 0.05
