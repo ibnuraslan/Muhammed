@@ -356,7 +356,7 @@ class Deveau:
                                     solid=0.003, displace=0.003)
         # ---- trousers (wool): pelvis and legs down to the boot tops
         trous = u & (z < hip_z + 0.11) & (z > ankle_z + 0.2) & (wfoot < 0.2) & (whand < 0.05)
-        self.trousers, _ = self._shell("trousers", trous, 0.009, wool_material("trousers", (0.022, 0.02, 0.019), weave=500, wet=self.wet, sheen=0.25),
+        self.trousers, _ = self._shell("trousers", trous, 0.009, wool_material("trousers", (0.014, 0.013, 0.013), weave=500, wet=self.wet, sheen=0.08),
                                        solid=0.002, displace=0.004, drape=14,
                                        flare=lambda b: np.clip((b[:, 2] - knee_z + 0.05) / 0.25, 0, 1) * 0.007 * (b[:, 2] < hip_z - 0.02))
         # ---- boots (leather): feet and shins, smoothed so the toes read as a boot
@@ -368,7 +368,7 @@ class Deveau:
         dist_wrist = np.minimum(np.linalg.norm(co - wrist, axis=1), np.linalg.norm(co - wrist * np.array([-1, 1, 1]), axis=1))
         # cut above the crotch so the body of the jacket is one closed loop; the skirt is added as an open hem
         jacket = u & (wh < 0.2) & (whand < 0.05) & (z > hip_z - 0.015) & (z < neck_z + 0.01) & (dist_wrist > 0.045)
-        self.jacket, jv = self._shell("jacket", jacket, 0.011, wool_material("jacket", (0.010, 0.012, 0.02), weave=380, wet=self.wet, dirt=0.18, sheen=0.3),
+        self.jacket, jv = self._shell("jacket", jacket, 0.011, wool_material("jacket", (0.010, 0.012, 0.02), weave=380, wet=self.wet, dirt=0.18, sheen=0.08),
                                       solid=0.005, displace=0.002, drape=8)
         self._hem(self.jacket, hip_z)
         self._collar(self.jacket)
