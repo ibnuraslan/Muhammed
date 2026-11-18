@@ -358,7 +358,7 @@ def s07(t):
     for i, (key, end, sg) in enumerate((("sailor_a", ends[0], 1), ("sailor_b", ends[1], -1))):
         # each man stands outboard of his end of the brake, facing inboard, hands on the cross handle
         endl = SHIP.inverted() @ end
-        M = ST.on_ship(SHIP, endl.x, endl.y + sg * 0.42, -90 * sg)
+        M = ST.on_ship(SHIP, endl.x, endl.y + sg * (0.42, 0.58)[i], -90 * sg)
         grip = {"L": end + fwd * 0.16 * sg, "R": end - fwd * 0.16 * sg}
         p = crew.person(key, wet=0.5, idx=i); pose_pump(p, t, grip, M, phase=0.5 * i)
         p.finish(look_at=end - Vector((0, 0, 0.6)), place=M, density=hair(p))
