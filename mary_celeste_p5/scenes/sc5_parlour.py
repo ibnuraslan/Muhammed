@@ -76,7 +76,8 @@ ship.box("yard", (wx - 25, 0, -0.5), (50, 60, 0.1), snow)
 for k, (dx, dy, hh) in enumerate(((-6, -3, 7), (-9, 2.5, 9), (-14, -6, 8))):
     ship.cyl(f"trunk{k}", Vector((wx + dx, dy, -0.5)), Vector((wx + dx, dy, hh)), 0.18, 0.05, mat=mat(f"bark{k}", (0.05, 0.04, 0.035), 0.9), verts=10)
 # furniture: a round table by the window, a chair, a mantel clock on a chest
-PR.put("WoodenTable_01", (TABLE.x, TABLE.y, 0), rot_z=math.radians(90), size=TABLE.z, res="1k")
+if SHOT not in ("S22", "S23", "S26"):           # Arthur's shots are another day: the parcels and their table are not there
+    PR.put("WoodenTable_01", (TABLE.x, TABLE.y, 0), rot_z=math.radians(90), size=TABLE.z, res="1k")
 chair, _ = PR.put("WoodenChair_01", (-1.0, -0.75, 0), rot_z=math.radians(-60), size=0.92, res="1k")
 PR.put("vintage_wooden_drawer_01", (1.3, RY - 0.35, 0), rot_z=math.pi, size=0.9, res="1k")
 PR.put("mantel_clock_01", (1.3, RY - 0.35, 0.9), rot_z=math.pi, size=0.3, res="1k")
@@ -164,7 +165,7 @@ cams = {
     "S19": ((-0.7, -0.7, 1.35), T + Vector((0, -0.05, 0.12)), 45, 0.95),
     "S20": ((-0.85, -0.55, 1.32), T + Vector((0.0, -0.05, 0.12)), 45, 0.75),
     "S21": (T + Vector((-0.05, -0.45, 0.7)), T + Vector((-0.07, -0.08, 0.17)), 55, "auto"),
-    "S22": ((wx + 1.9, wy - 1.1, 1.05), (wx + 0.4, wy + 0.0, 0.95), 40, 1.75),
+    "S22": ((wx + 1.35, wy + 1.15, 1.1), (wx + 0.5, wy - 0.1, 0.98), 40, "auto"),
     "S23": ((wx + 0.75, wy - 0.25, 1.15), (wx + 0.1, wy + 0.3, 0.75), 50, 0.75),
     "S26": ((wx - 0.0, wy - 0.85, 1.0), (wx + 0.5, wy - 0.05, 0.75), 45, 1.0),
 }

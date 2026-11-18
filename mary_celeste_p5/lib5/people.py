@@ -215,6 +215,12 @@ class Person(D.Deveau):
         mat = D.hair_material(self.name + "_hair", cfg["melanin"], cfg["redness"], grey=cfg.get("grey", 0.0))
         self.hair_objs = []
         st = cfg["style"]
+        if st in ("short", "curls") and not cfg.get("cap"):
+            # hair-coloured scalp under the strands (as in games and film grooms), so short hair reads at any distance
+            col = (0.02 + 0.2 * (1 - cfg["melanin"]) * (0.6 + cfg["redness"]), 0.012 + 0.12 * (1 - cfg["melanin"]), 0.008)
+            self.scalpcap, _ = self._shell("scalp", self._scalp_mask(0.0), 0.0012, D.wool_material(self.name + "_scalpcol", col, rough=0.6,
+                                           sheen=0.2, weave=2000, bump=0.1, dirt=0.0), solid=0.0, drape=2)
+            bpy.context.view_layer.update()
         if cfg.get("cap"):
             scalp = scalp & ~self._scalp_mask(0.03)       # only the hair that shows under the cap
         if st == "short":
