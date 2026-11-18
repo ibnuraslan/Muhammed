@@ -168,7 +168,7 @@ def pose_haul(p, t, phase=0.0):
 def s03(t):
     SHIP = dg_deck(t=t)
     rope_top = []
-    for i, (x, y, key) in enumerate(((-2.9, 2.75, "sailor_a"), (-3.7, 2.8, "sailor_b"))):
+    for i, (x, y, key) in enumerate(((-2.9, 2.68, "sailor_a"), (-3.7, 2.73, "sailor_b"))):
         M = ST.on_ship(SHIP, x, y, 180)
         p = crew.person(key, wet=0.1, idx=i); pose_haul(p, t, phase=0.5 * i)
         p.finish(look_at=M @ Vector((0, -0.3, 3)), place=M, density=hair(p))
@@ -247,7 +247,7 @@ def s05(t):
     sl.finish(look_at=Mb @ Vector((0, 0, 0.5)), place=Msl, density=hair(sl))
     hand_w = Msl @ (rope_local + Vector((0, 0, 0.04 * math.sin(t * 6))))
     drop = 0.55 + 0.35 * ease(t)
-    sack_top = Mb @ Vector((0.1, 0.0, b["gunwale"] + 1.25 - drop))
+    sack_top = Mb @ Vector((-0.2, -0.12, b["gunwale"] + 1.25 - drop))
     sk = PR.sack("food_sack")
     for o in sk:
         o.matrix_world = Matrix.Translation(sack_top - Vector((0, 0, 0.5 * 1.02))) @ o.matrix_world
@@ -743,8 +743,8 @@ def seated_writer(room, t, pen_lift=0.0, rub=0.0):
     h = dv.h
     cx, cy = room["chair"]; tz = room["table_z"]
     seat = 0.45
-    drop = crew.hip_height(h) - seat - 0.08
-    M = crew.place((cx - 0.08, cy, 0.0), 0, drop=drop)           # facing +X, toward the table
+    drop = crew.hip_height(h) - seat - 0.12
+    M = crew.place((cx - 0.2, cy, 0.0), 0, drop=drop)           # facing +X, toward the table
     crew.sit(h, drop, lean=28 - 8 * rub, feet_fwd=0.42)
     Mi = M.inverted()
     paper_c = Vector((cx + 0.62, cy + 0.02, tz + 0.002))
@@ -871,7 +871,7 @@ def s22(t):
     face_n = side.normalized()
     note_c = mast + face_n * 0.17
     PR.notice("warrant", note_c, face_n, text_img=os.path.join(TEX, "warrant.png"))
-    M = ST.on_ship(SHIP, ship.MAIN_X - 0.35, -0.95, 75)
+    M = ST.on_ship(SHIP, ship.MAIN_X - 0.35, -0.9, 75)
     p = crew.person("captain2", wet=0.0)
     h = p.h; Mi = M.inverted()
     P.stand(h, lean=6, weight="L"); P.head(h, pitch=8, yaw=6)
@@ -901,7 +901,7 @@ def court_people(ct, which, t=0.0):
         for i, (key, dx) in enumerate((("deveau", -0.6), ("sailor_a", 0.1), ("sailor_b", 0.8))):
             px, py = ct["pews"][0]
             p = crew.person(key, wet=0.0, idx=i, seated=True)
-            h = p.h; seat = 0.47; drop = crew.hip_height(h) - seat - 0.08
+            h = p.h; seat = 0.47; drop = crew.hip_height(h) - seat - 0.12
             M = crew.place((px + dx, py + 0.05, 0.0), 90, drop=drop)
             crew.sit(h, drop, lean=6, feet_fwd=0.45)
             for sd in ("L", "R"):
@@ -940,9 +940,9 @@ def court_people(ct, which, t=0.0):
     if "clerk" in which:
         cx_, cy_ = ct["clerk"]
         p = crew.person("chemist", wet=0.0, idx=7, seated=True)
-        h = p.h; seat = 0.46; drop = crew.hip_height(h) - seat - 0.08
-        PR.chair("clerk_chair", (cx_, cy_ + 0.82, 0.0), 90)
-        M = crew.place((cx_, cy_ + 0.75, 0.0), -90, drop=drop)
+        h = p.h; seat = 0.46; drop = crew.hip_height(h) - seat - 0.12
+        PR.chair("clerk_chair", (cx_, cy_ + 0.95, 0.0), -90)
+        M = crew.place((cx_, cy_ + 0.9, 0.0), -90, drop=drop)
         crew.sit(h, drop, lean=26, feet_fwd=0.4)
         tip = Vector((cx_ + 0.05 * math.sin(t * 8), cy_ + 0.05, 0.762))
         P.hand_reach(h, "R", M.inverted() @ (tip + Vector((0.02, 0.03, 0.05))), elbow=(-0.8, 0.3, -0.5)); P.grip(h, "R", 0.6)
@@ -956,8 +956,8 @@ def court_people(ct, which, t=0.0):
         jx, jy, jz = ct["judge"]
         p = crew.person("judge", wet=0.0, wig=True, idx=8, seated=True)
         p.jacket.data.materials[0] = crew.flat("judge_robe", (0.28, 0.03, 0.025), rough=0.8)
-        h = p.h; drop = crew.hip_height(h) - 0.78 - 0.08
-        M = crew.place((jx, jy, jz), -90, drop=drop)
+        h = p.h; drop = crew.hip_height(h) - 0.78 - 0.12
+        M = crew.place((jx, jy - 0.06, jz), -90, drop=drop)
         crew.sit(h, drop, lean=10, feet_fwd=0.4)
         for sd in ("L", "R"):
             sg = H.SIDE[sd]
@@ -1196,7 +1196,7 @@ def s33(t):
     spotl = SHIP.inverted() @ cs[0]
     fl = crew.person("flood", wet=0.0, kneel=True)
     h = fl.h; drop = 0.45
-    M = ST.on_ship(SHIP, -6.0, -2.75, -90, drop=drop)
+    M = ST.on_ship(SHIP, -6.0, -2.68, -90, drop=drop)
     crew.kneel(h, drop, knee="L", lean=30); P.head(h, pitch=48)
     Mi = M.inverted()
     spot = SHIP @ spotl
@@ -1371,10 +1371,10 @@ def s40(t):
 def s41(t):
     ct = RM.court()
     p = crew.person("flood", wet=0.0, wig=True, seated=True)
-    h = p.h; seat = 0.46; drop = crew.hip_height(h) - seat - 0.08
+    h = p.h; seat = 0.46; drop = crew.hip_height(h) - seat - 0.12
     cxl, cyl = ct["counsel"]
-    PR.chair("flood_chair", (cxl - 0.6, cyl - 0.75, 0.0), 90)
-    M = crew.place((cxl - 0.6, cyl - 0.72, 0.0), 90, drop=drop)
+    PR.chair("flood_chair", (cxl - 0.6, cyl - 0.9, 0.0), 90)
+    M = crew.place((cxl - 0.6, cyl - 0.86, 0.0), 90, drop=drop)
     crew.sit(h, drop, lean=14 - 12 * ease(t), feet_fwd=0.45)
     for sd in ("L", "R"):
         sg = H.SIDE[sd]
@@ -1406,7 +1406,7 @@ def s42(t):
     wood = PR.mat_wood("chestw", "dark_wooden_planks", 2.0, tint=(0.75, 0.5, 0.3))
     for i, (key, x, y, hdg) in enumerate((("sailor_a", -1.4, -2.7, 0), ("sailor_b", 0.4, -2.6, 10))):
         M = ST.on_ship(SHIP, x, y, hdg)
-        cc = M @ Vector((0, -0.52, 0.98))
+        cc = M @ Vector((0, -0.62, 0.86))
         p = crew.person(key, wet=0.0, idx=i); pose_carry(p, M, cc)
         p.finish(look_at=cc + Vector((0, 0, -1)), place=M, density=hair(p))
         b = ship.box(f"seachest{i}", cc, (0.6, 0.38, 0.36), wood, bevel=0.01); b.rotation_euler = M.to_euler()

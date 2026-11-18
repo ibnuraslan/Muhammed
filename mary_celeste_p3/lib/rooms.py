@@ -86,7 +86,7 @@ def cabin_letter(day=True):
     if day:
         _plane_light("cab_sun", (X1 + 0.8, -0.2, 2.0), (0.2, -0.1, 0.75), (0.55, 0.4), 260, (1.0, 0.85, 0.66), spread=25)
     tb = PR.table("cab_table", (0.35, -0.1, 0.0), size=(1.0, 0.7, 0.74))
-    ch = PR.chair("cab_chair", (-0.58, -0.1, 0.0), 0)
+    ch = PR.chair("cab_chair", (-0.7, -0.1, 0.0), 0)
     lamp, flame, lt = PR.oil_lamp("cab_lamp", (0.7, 0.12, 0.74), flame_energy=10)
     _plane_light("cab_lampkey", flame + Vector((-0.1, 0.0, 0.5)), (0.2, -0.1, 0.74), (0.4, 0.4), 30, (1.0, 0.66, 0.4))
     world((0.08, 0.06, 0.045), 0.25)
