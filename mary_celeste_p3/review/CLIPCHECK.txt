@@ -1,0 +1,9 @@
+p3_07 t=0.0 CLIPCHECK p3_07_t0.00: 0 clipping, 5 contacts within allowance, 2 people
+p3_07 t=0.5 CLIPCHECK p3_07_t0.50: 0 clipping, 5 contacts within allowance, 2 people
+p3_07 t=1.0 CLIPCHECK p3_07_t1.00: 0 clipping, 5 contacts within allowance, 2 people
+p3_34 t=0.0 CLIPCHECK p3_34_t0.00: 0 clipping, 0 contacts within allowance, 1 people
+p3_34 t=0.5 CLIPCHECK p3_34_t0.50: 0 clipping, 0 contacts within allowance, 1 people
+p3_34 t=1.0 CLIPCHECK p3_34_t1.00: 0 clipping, 0 contacts within allowance, 1 people
+p3_41 t=0.0 CLIPCHECK p3_41_t0.00: 0 clipping, 3 contacts within allowance, 1 people
+p3_41 t=0.5 CLIPCHECK p3_41_t0.50: 0 clipping, 3 contacts within allowance, 1 people
+p3_41 t=1.0 CLIPCHECK p3_41_t1.00: 0 clipping, 3 contacts within allowance, 1 people
