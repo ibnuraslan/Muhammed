@@ -256,7 +256,7 @@ def build(mood="warm", letter_side=1, wet=0.0, lamp_on=True, skylight=1.0, organ
     # ---- table: mahogany top, turned legs, a chenille cloth with a fringe
     tx, ty, tz = TABLE
     box("table_top", (tx, ty, tz - 0.02), (TW, TD, 0.04), mahog, bevel=0.01)
-    box("table_apron", (tx, ty, tz - 0.06), (TW - 0.1, TD - 0.1, 0.04), mahog)
+    box("table_apron", (tx, ty, tz - 0.05), (TW - 0.1, TD - 0.1, 0.025), mahog)
     leg = [(0.03, 0), (0.035, 0.05), (0.025, 0.12), (0.03, 0.3), (0.042, 0.45), (0.028, 0.55), (0.032, 0.66), (0.03, tz - 0.04)]
     for sx_ in (-1, 1):
         for sy_ in (-1, 1):

@@ -109,6 +109,10 @@ class Person(D.Deveau):
         self.faces = [tuple(pl.vertices) for pl in me.polygons]
         self.button_objs = []; self.extra_objs = []
         self._dress()
+        # shared lib (9499317): fitted Sketchfab boots skinned to the legs, done at rest so they follow any pose
+        self.asset_boots = False
+        if self.BOOTS and getattr(self, "boots", None) is not None and hasattr(D.Deveau, "_skin_like_body"):
+            self.asset_boots = self._asset_boots(skin=True)
 
     # ---- helpers for subclasses
     def _marks(self):
@@ -274,7 +278,7 @@ class Person(D.Deveau):
             self._corneas()
             for c, e in zip(self.corneas, h.eyes):
                 mw = c.matrix_world.copy(); c.parent = e; c.matrix_world = mw
-        if self.BOOTS and hasattr(self, "_asset_boots") and getattr(self, "boots", None) is not None:
+        if False:
             try:
                 ok = self._asset_boots()
             except Exception as ex:
