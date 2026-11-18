@@ -58,7 +58,7 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
         st.lean(fwd=4)
         tip = b["tiller"]
         tdir = (Mb.to_3x3() @ Vector((1, 0, 0.1))).normalized()
-        p.grip_err = st.grip_bar("R", Mb @ tip, tdir, radius=0.018, over=Mb.to_3x3() @ Vector((0, 0, 1)), elbow=(0.6, 0.3, -0.8))
+        p.grip_err = st.grip_bar("R", Mb @ tip, tdir, radius=0.018, over=Mb.to_3x3() @ Vector((0, 0, 1)), elbow=(0.15, 0.8, 0.55))   # elbow back and up: the forearm stays above the tiller
         st.hand_on_thigh("L")
         st.head(look)
         p.brow_knit(0.6)

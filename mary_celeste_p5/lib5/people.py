@@ -9,7 +9,7 @@
 
 Same rules as Deveau: clothes are shells off the skinned body (bend with it, never clip); hair is strands.
 """
-import math
+import math, os
 import numpy as np
 import bpy
 from mathutils import Vector, Matrix
@@ -48,6 +48,7 @@ class Person(D.Deveau):
         self.faces = [tuple(pl.vertices) for pl in me.polygons]
         self.button_objs = []
         self._dress()
+        self.asset_boots = self._asset_boots(skin=True)
         if self.hair_cfg.get("cap"):
             self._cap(self.hair_cfg["cap"])
         elif self.hair_cfg.get("style") == "short" and outfit not in ("toddler", "dress"):
@@ -85,15 +86,11 @@ class Person(D.Deveau):
                 o["person"] = self.name; o["hands"] = flat
 
     # ------------------------------------------------------------------ shared-lib hooks (50560c7)
-    def _asset_boots(self):
-        # the shared fitted leather boots suit the men (sailors, captain) and the boy; Sarah's boots are under
-        # her skirt and Sophia wears none, so they keep their own shells
-        if getattr(self, "seated", False):
-            # the fitted asset boots stand upright on the floor (a standing man); a seated man's shins are angled,
-            # so use the shared per-foot modelled boots, which follow the posed foot
-            return self.outfit not in ("sailor", "captain", "boy")
+    def _asset_boots(self, skin=False):
+        # shared fitted leather boots (lib >= 9499317: skinned to the legs, so they follow seated poses) for the men
+        # and the boy; Sarah's boots are under her skirt and Sophia wears none, so they keep their own shells
         if self.outfit in ("sailor", "captain", "boy"):
-            return D.Deveau._asset_boots(self)
+            return D.Deveau._asset_boots(self, skin=skin)
         return True
 
     def _sea_boots(self):

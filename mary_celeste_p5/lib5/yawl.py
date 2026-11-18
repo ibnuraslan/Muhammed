@@ -171,7 +171,7 @@ def build(name="yawl", wet=0.6, oars="out", oar_angle=None, rudder=True, painter
         rv = [(p0.x - 0.04, 0, p0.z - 0.25), (p0.x - 0.42, 0, p0.z - 0.25), (p1.x - 0.24, 0, p1.z - 0.05), (p1.x - 0.04, 0, p1.z + 0.05)]
         r = ship.mesh_obj(name + "_rudder", rv, [[0, 1, 2, 3]], trim, smooth=False)
         so = r.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.035; so.offset = 0; objs.append(r)
-        head = Vector((p1.x - 0.08, 0, p1.z + 0.08)); tip = head + Vector((0.62, 0.0, 0.06))
+        head = Vector((p1.x - 0.08, 0, p1.z + 0.08)); tip = head + Vector((0.88, 0.0, 0.05))
         objs.append(ship.cyl(name + "_tiller", head, tip, 0.022, 0.016, mat=seat, verts=12))
         tiller = tip - Vector((0.12, 0, 0))
     # oars: loom through the rowlocks; handle inboard, blade outboard and down into the sea

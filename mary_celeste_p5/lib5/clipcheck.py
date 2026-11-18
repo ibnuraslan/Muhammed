@@ -17,7 +17,7 @@ SKIP_PREFIX = ("Ocean", "far_sea", "band", "island", "cabin_air", "rock")
 
 
 CENTERS = {}
-HAND_R = 0.13          # a contact whose triangles all lie this close to a wrist/knuckle is the hand, not the body
+HAND_R = 0.10          # a contact whose triangles all lie this close to a wrist/knuckle is the hand, not the body
 
 
 def _in_hands(o, pairs, first=True):
