@@ -351,7 +351,7 @@ def s07(t):
     for o in bpy.data.objects:
         if o.name.startswith("MC_pumpbrake"):
             o.hide_render = True
-    ang = 14 * math.sin(2 * math.pi * t * 1.2)
+    ang = 9 * math.sin(2 * math.pi * t * 1.2)
     wood = m["mats"]["deckwood"]
     objs, ends, fwd = PR.pump_brake("brake", SHIP, ang, wood)
     men = []
@@ -1234,7 +1234,8 @@ def s34(t):
     hilt, d = sword_under_berth(cab, drawn=ease(t))
     p = crew.person("captain2", wet=0.0, kneel=True)
     h = p.h; drop = 0.45
-    M = crew.place((hilt.x + 0.85, hilt.y - 0.1, 0.0), 180, drop=drop)
+    bx1 = cab["under"][0]
+    M = crew.place((bx1 + 0.12 - 0.25 + 0.85, hilt.y - 0.1, 0.0), 180, drop=drop)      # he kneels in one place
     crew.kneel(h, drop, knee="R", lean=30)
     P.head(h, pitch=40, yaw=0)
     Mi = M.inverted()

@@ -287,7 +287,7 @@ def bands(p):
     """Barrister's white bands at the throat."""
     c, up, fwd, top = head_frame(p)
     side = up.cross(fwd).normalized()
-    neck = c - up * 0.2 + fwd * 0.085
+    neck = c - up * 0.2 + fwd * 0.098
     mat = flat(p.name + "_bands", (0.8, 0.79, 0.75), rough=0.7)
     out = []
     for s in (-1, 1):
