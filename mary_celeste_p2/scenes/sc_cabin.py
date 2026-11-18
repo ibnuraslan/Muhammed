@@ -122,6 +122,7 @@ elif SHOT == "13":          # top-down white maquette of the cabin: every corner
     sc.world.node_tree.nodes["Background"].inputs[1].default_value = 0.1
     S.cam(Vector((2.6, -4.4, 6.4)), Vector((-0.1, 0.1, 0.3)), lens=35)
     bpy.data.objects["LampLight"].data.energy = 60
+    S.area("TopFill", Vector((0.2, -0.6, 4.5)), Vector((0, 0, 0.4)), 180, size=3.0, color=(1.0, 0.82, 0.62))
     k = bpy.data.objects.new("MaqSun", bpy.data.lights.new("MaqSun", 'SUN')); sc.collection.objects.link(k)
     k.data.energy = 3.0; k.data.angle = math.radians(4); k.data.color = (1, 0.93, 0.84)
     k.rotation_euler = (math.radians(50), 0, math.radians(-130))
@@ -248,7 +249,7 @@ elif SHOT in ("34", "35", "38", "39"):   # 4 December: Deveau goes through the c
     elif SHOT == "35":
         S.cam(hd + Vector((0.12, 0.22, 0.2)), SET["chrono_box"] + Vector((0.0, 0.03, 0)), lens=28, fstop=4.0)
     elif SHOT == "38":
-        S.cam(hd + Vector((-0.12, 0.22, 0.2)), sbt + Vector((0.32, 0.03, 0.1)), lens=28, fstop=4.0)
+        S.cam(hd + Vector((0.24, 0.26, 0.24)), sbt + Vector((0.32, 0.03, 0.1)), lens=28, fstop=4.0)
     else:
         S.frame([hd, tgt, sbt, hd - Vector((0, 0, 1.0))], Vector((1.0, 0.6, 0.35)), lens=30, fill=0.9, bounds=SET["bounds"], fstop=3.2)
     S.area("ColdKey", Vector((0.15, -0.3, cabin.RZ + 0.6)), sbt, 1400, size=0.7, color=(0.8, 0.86, 1.0))

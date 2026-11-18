@@ -125,11 +125,18 @@ elif SHOT == "41":  # a carved model of the ship on the cabin table: the empty c
     for dx in (-0.2, 0.2):
         c = mc["root"].matrix_world @ Vector((dx / k, 0, -ship.DRAFT))
         ship.box("cradle", (c.x, c.y, T.z + 0.03), (0.05, 0.2, 0.06), wd, bevel=0.005).rotation_euler = (0, 0, math.radians(-12))
-    cabin.sextant_case(T + Vector((0.42, -0.22, 0.0)), wd)
-    cabin._chronometer_box(T + Vector((0.42, 0.12, 0.0)), wd, cabin.brass(), state="empty")
+    cabin.sextant_case(T + Vector((0.4, 0.22, 0.0)), wd)
+    cabin._chronometer_box(T + Vector((0.12, 0.27, 0.0)), wd, cabin.brass(), state="empty")
     chocks = mc["root"].matrix_world @ Vector((ship.MAIN_HATCH_X, 0, ship.zdeck(ship.MAIN_HATCH_X) + 0.6))
     S.spot("pool_chocks", chocks + Vector((0, 0, 0.9)), chocks, 18, angle=10, blend=0.6, color=(1.0, 0.75, 0.45), radius=0.02)
-    S.cam(T + Vector((0.9, -1.0, 0.75)), T + Vector((0.05, 0.0, 0.12)), lens=35, fstop=4.0)
+    for o in mc["coll"].objects:
+        if o.type == 'MESH':
+            bb = [o.matrix_world @ Vector(c) for c in o.bound_box]
+            if ("furl" not in o.name) and any(m and "canvas" in m.name for m in o.data.materials):
+                o.hide_render = True
+    S.area("ModelKey", T + Vector((-0.6, -0.8, 1.2)), T, 70, size=0.8, color=(1.0, 0.78, 0.55))
+    S.area("ModelRim", T + Vector((0.9, 0.9, 0.9)), T, 25, size=0.6, color=(0.8, 0.85, 1.0))
+    S.cam(T + Vector((1.05, -1.25, 1.05)), T + Vector((0.0, 0.0, 0.14)), lens=30, fstop=5.6)
     cine = {"sat": 1.08, "exposure": 0.2}
 
 S.finish(S.out_path(SHOT), cine=cine)
