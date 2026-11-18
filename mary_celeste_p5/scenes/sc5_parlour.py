@@ -100,10 +100,8 @@ elif SHOT in ("S18", "S19", "S20", "S21"):
         import ph
         lo, hi = ph.bounds(_); sw.location.z += (T.z + 0.1) - lo[2]
     else:
-        PR.doll("doll_a", R @ Vector((0.0, -0.1, 0.1)), rot_z=0.1 + math.radians(-90), height=0.34, broken=True,
-                dress=(0.06, 0.12, 0.3), bonnet=(0.62, 0.56, 0.44))
-        PR.doll("doll_b", R @ Vector((0.02, 0.11, 0.1)), rot_z=0.1 + math.radians(-90), height=0.3, broken=False,
-                dress=(0.4, 0.06, 0.05), bonnet=(0.7, 0.66, 0.6), seed=1)
+        PR.doll("doll_a", R @ Vector((-0.12, 0.0, 0.1)), rot_z=0.1, height=0.34, broken=True, kind="china")
+        PR.doll("doll_b", R @ Vector((0.13, 0.0, 0.1)), rot_z=0.1, height=0.3, broken=False, kind="porcelain")
 elif SHOT in ("S22", "S23", "S26"):
     import people as PP
     from sitpose import Seat
@@ -119,10 +117,10 @@ elif SHOT in ("S22", "S23", "S26"):
         st.lean(fwd=16)
         knees = (st.M @ a.h.bone_tail("upperleg02.L") + st.M @ a.h.bone_tail("upperleg02.R")) / 2
         dpos = knees + Vector((0.06, 0, 0.1))
-        d, piece = PR.doll("doll_held", dpos, rot_z=math.radians(-90), height=0.3, broken=True, dress=(0.06, 0.12, 0.3))
-        import human as H2
-        lo, hi = H2.evaluated_bounds([o for o in d.objects if o.type == 'MESH'])
-        mid = Vector(((lo + hi) / 2).tolist())
+        d, piece = PR.doll("doll_held", dpos, rot_z=math.radians(-90), height=0.3, broken=True, kind="china")
+        import sketchfab as SF
+        lo, hi = SF.bounds([o for o in d.children_recursive if o.type == 'MESH'])
+        mid = (lo + hi) / 2
         st.hand("L", mid + Vector((0.0, 0.07, -0.005)), elbow=(0.6, 0.3, -0.8), grip=0.55)
         st.hand("R", mid + Vector((0.05, -0.08, -0.005)), elbow=(0.6, 0.3, -0.8), grip=0.55)
         st.head(mid, share=0.85)
@@ -165,7 +163,7 @@ cams = {
     "S18": ((-0.45, -0.85, 1.3), T + Vector((0, -0.05, 0.18)), 40, 1.1),
     "S19": ((-0.7, -0.7, 1.35), T + Vector((0, -0.05, 0.12)), 45, 0.95),
     "S20": ((-0.85, -0.55, 1.32), T + Vector((0.0, -0.05, 0.12)), 45, 0.75),
-    "S21": (T + Vector((-0.08, -0.42, 0.46)), T + Vector((0.02, -0.12, 0.12)), 85, "auto"),
+    "S21": (T + Vector((-0.05, -0.45, 0.7)), T + Vector((-0.07, -0.08, 0.17)), 55, "auto"),
     "S22": ((wx + 1.9, wy - 1.1, 1.05), (wx + 0.4, wy + 0.0, 0.95), 40, 1.75),
     "S23": ((wx + 0.75, wy - 0.25, 1.15), (wx + 0.1, wy + 0.3, 0.75), 50, 0.75),
     "S26": ((wx - 0.0, wy - 0.85, 1.0), (wx + 0.5, wy - 0.05, 0.75), 45, 1.0),

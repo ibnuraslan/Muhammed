@@ -533,3 +533,85 @@ def _break_forearm(p, side):
     lo, hi = H.evaluated_bounds(sel_parts)
     piv.location.z -= (lo[2] - (c.z - (c.z - lo[2]) if False else lo[2])) * 0
     return piv
+
+
+# ----------------------------------------------------------------------------- dolls (Sketchfab scans, CC-BY)
+DOLLS = {"china": "7c6f3f614592486e9124b0d84e1fde08",        # "China Doll - toy", CMBC (CC-BY)
+         "porcelain": "9ce09a8a6b1b45ce90c4479b54b4e003"}    # "A porcelain doll", alicean (CC-BY)
+
+
+def _split_box(ms, lo_n, hi_n, name):
+    """Separate the faces whose centres fall inside a box given in the models' normalised bounds (0..1 per axis)
+    into one new object; returns it (or None)."""
+    import sketchfab as SF
+    lo, hi = SF.bounds(ms); ext = hi - lo
+    blo = Vector([lo[i] + ext[i] * lo_n[i] for i in range(3)]); bhi = Vector([lo[i] + ext[i] * hi_n[i] for i in range(3)])
+    pieces = []
+    for o in ms:
+        M = o.matrix_world; bm = bmesh.new(); bm.from_mesh(o.data)
+        sel = [f for f in bm.faces if all(blo[i] <= (M @ f.calc_center_median())[i] <= bhi[i] for i in range(3))]
+        if not sel:
+            bm.free(); continue
+        keep = bmesh.new()
+        # copy the selected faces into a new mesh (with UVs), delete them from the original
+        uvl = bm.loops.layers.uv.active
+        vmap = {}; kuv = keep.loops.layers.uv.new("UVMap") if uvl else None
+        for f in sel:
+            vs = []
+            for v in f.verts:
+                if v not in vmap:
+                    vmap[v] = keep.verts.new(v.co)
+                vs.append(vmap[v])
+            try:
+                nf = keep.faces.new(vs)
+            except ValueError:
+                continue
+            nf.material_index = f.material_index; nf.smooth = f.smooth
+            if uvl:
+                for l0, l1 in zip(f.loops, nf.loops):
+                    l1[kuv].uv = l0[uvl].uv
+        bmesh.ops.delete(bm, geom=sel, context='FACES')
+        bm.to_mesh(o.data); bm.free(); o.data.update()
+        me = bpy.data.meshes.new(name); keep.to_mesh(me); keep.free()
+        for m in o.data.materials:
+            me.materials.append(m)
+        p = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(p); p.matrix_world = M.copy()
+        pieces.append(p)
+    if not pieces:
+        return None
+    if len(pieces) > 1:
+        bpy.ops.object.select_all(action='DESELECT')
+        for p in pieces:
+            p.select_set(True)
+        bpy.context.view_layer.objects.active = pieces[0]; bpy.ops.object.join()
+    return pieces[0]
+
+
+def doll(name, at, rot_z=0.0, height=0.36, broken=False, kind="china", lie=True, **_):
+    """A real antique doll (scan). Lies face up, head toward +Y before rot_z (lie=False: stands).
+    broken=True: her left forearm is broken off at the elbow and lies beside her, a few cm out."""
+    import sketchfab as SF
+    root, ms = SF.model(DOLLS[kind], size=height, axis=2)
+    piece = None
+    if broken:
+        # left forearm + hand of a standing doll facing -Y: her left is +X; elbow ~ 58% height, hand ~ 40%
+        piece = _split_box(ms, (0.78, 0.0, 0.40), (1.0, 1.0, 0.585), name + "_forearm")
+        if piece:
+            ms.append(piece); piece.parent = root; piece.matrix_parent_inverse = root.matrix_world.inverted()
+    if lie:
+        root.rotation_euler = (math.radians(-90), 0, rot_z)
+    else:
+        root.rotation_euler = (0, 0, rot_z)
+    bpy.context.view_layer.update()
+    lo, hi = SF.bounds(ms); c = (lo + hi) / 2
+    root.location += Vector((at[0] - c.x, at[1] - c.y, at[2] - lo.z))
+    bpy.context.view_layer.update()
+    if piece:
+        # the broken piece comes away from her side and lies flat on the tissue, turned a little
+        mw = piece.matrix_world.copy(); piece.parent = None; piece.matrix_world = mw
+        plo, phi = SF.bounds([piece]); pc = (plo + phi) / 2
+        side = Matrix.Rotation(rot_z, 4, 'Z') @ Vector((1, 0, 0)) if lie else Vector((1, 0, 0))
+        R = Matrix.Translation(pc + side * 0.07) @ Matrix.Rotation(math.radians(28), 4, 'Z') @ Matrix.Translation(-pc)
+        piece.matrix_world = R @ piece.matrix_world
+        plo, phi = SF.bounds([piece]); piece.location.z += at[2] - plo.z
+    return root, piece
