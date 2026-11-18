@@ -47,7 +47,7 @@ def wallpaper(name):
 
 # ----------------------------------------------------------------------------- the room
 paper = wallpaper("wallpaper")
-floor = ship.wood("wood_floor_deck", 1.0, wet=0.0, tint=(0.85, 0.6, 0.4), name="floorboards")
+floor = ship.wood("wood_floor_deck", 1.0, wet=0.0, tint=(0.68, 0.55, 0.42), name="floorboards")
 trim = mat("trim", (0.16, 0.08, 0.04), 0.45)
 ceil = mat("ceiling", (0.55, 0.5, 0.42), 0.9)
 ship.box("floor", (0, 0, -0.03), (2 * RX, 2 * RY, 0.06), floor)
@@ -76,7 +76,7 @@ ship.box("yard", (wx - 25, 0, -0.5), (50, 60, 0.1), snow)
 for k, (dx, dy, hh) in enumerate(((-6, -3, 7), (-9, 2.5, 9), (-14, -6, 8))):
     ship.cyl(f"trunk{k}", Vector((wx + dx, dy, -0.5)), Vector((wx + dx, dy, hh)), 0.18, 0.05, mat=mat(f"bark{k}", (0.05, 0.04, 0.035), 0.9), verts=10)
 # furniture: a round table by the window, a chair, a mantel clock on a chest
-PR.put("round_wooden_table_01", (TABLE.x, TABLE.y, 0), size=TABLE.z, res="1k")
+PR.put("WoodenTable_01", (TABLE.x, TABLE.y, 0), rot_z=math.radians(90), size=TABLE.z, res="1k")
 chair, _ = PR.put("WoodenChair_01", (-1.0, -0.75, 0), rot_z=math.radians(-60), size=0.92, res="1k")
 PR.put("vintage_wooden_drawer_01", (1.3, RY - 0.35, 0), rot_z=math.pi, size=0.9, res="1k")
 PR.put("mantel_clock_01", (1.3, RY - 0.35, 0.9), rot_z=math.pi, size=0.3, res="1k")
@@ -88,7 +88,7 @@ label = ["MRS. BRIGGS", "MARION, MASS.", "U.S.A.", "VIA BOSTON"]
 if SHOT in ("S15", "S16", "S17"):
     PR.parcel("parcel_a", T + Vector((0.05, -0.12, 0)), (0.5, 0.32, 0.2), rot_z=0.15, label=label)
     PR.parcel("parcel_b", T + Vector((-0.2, 0.28, 0)), (0.26, 0.2, 0.12), rot_z=-0.35)
-    PR.parcel("parcel_c", T + Vector((0.28, 0.25, 0)), (0.9, 0.12, 0.1), rot_z=0.55, seal_on=True)
+    PR.parcel("parcel_c", T + Vector((0.28, 0.25, 0)), (0.6, 0.12, 0.1), rot_z=0.55, seal_on=True)
 elif SHOT in ("S18", "S19", "S20", "S21"):
     PR.parcel("open_a", T + Vector((0.0, -0.05, 0)), (0.82, 0.46, 0.22), rot_z=0.1, open_top=True)
     R = Matrix.Translation(T + Vector((0.0, -0.05, 0))) @ Matrix.Rotation(0.1, 4, 'Z')
@@ -148,13 +148,13 @@ elif SHOT in ("S22", "S23", "S26"):
 
 # ----------------------------------------------------------------------------- light: low winter sun through the window
 w = bpy.data.worlds.new("w"); sc.world = w; w.use_nodes = True
-w.node_tree.nodes["Background"].inputs[0].default_value = (0.18, 0.22, 0.3, 1); w.node_tree.nodes["Background"].inputs[1].default_value = 0.6
+w.node_tree.nodes["Background"].inputs[0].default_value = (0.18, 0.22, 0.3, 1); w.node_tree.nodes["Background"].inputs[1].default_value = 1.6
 sun = bpy.data.objects.new("Sun", bpy.data.lights.new("Sun", 'SUN')); sc.collection.objects.link(sun)
 sun.data.energy = 5.5; sun.data.angle = math.radians(1.0); sun.data.color = (1.0, 0.72, 0.48)
 d = Vector((-1.0, -0.3, 0.6)).normalized()            # toward the sun: outside, low, a little to the side
 sun.rotation_euler = (-d).to_track_quat('-Z', 'Y').to_euler()
 bounce = bpy.data.objects.new("bounce", bpy.data.lights.new("bounce", 'AREA')); sc.collection.objects.link(bounce)
-bounce.location = (0.2, -0.6, 1.5); bounce.data.energy = 70; bounce.data.size = 2.0; bounce.data.color = (1.0, 0.75, 0.55)
+bounce.location = (0.2, -0.6, 1.5); bounce.data.energy = 160; bounce.data.size = 2.0; bounce.data.color = (1.0, 0.75, 0.55)
 bounce.rotation_euler = (0, math.radians(-80), 0)
 
 # ----------------------------------------------------------------------------- cameras
