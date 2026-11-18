@@ -28,10 +28,12 @@ def mat_from(aid, scale, wet=0.0, tint=None, name=None):
 
 POSE_TEST = os.environ.get("POSE_TEST")
 # ----------------------------------------------------------------------------- the room
-walls = mat_from("dark_wooden_planks", 1.4, wet=0.15, tint=(0.75, 0.62, 0.5), name="walls")
+walls = mat_from("dark_wooden_planks", 1.4, wet=0.15, tint=(0.3, 0.2, 0.13), name="walls")
+walls.node_tree.nodes["Principled BSDF"].inputs["Coat Weight"].default_value = 0.35   # old varnish
 floor = mat_from("weathered_planks", 0.9, wet=WET, tint=(0.8, 0.72, 0.62), name="floor")
-beams_m = ship.paint("beams", (0.38, 0.34, 0.27), rough=0.5, grime=0.6, chips=0.3, scale=6)
-berth_m = mat_from("brown_planks_05", 1.6, wet=0.3, tint=(0.7, 0.55, 0.42), name="berthwood")
+beams_m = ship.paint("beams", (0.16, 0.12, 0.08), rough=0.5, grime=0.7, chips=0.3, scale=6)
+berth_m = mat_from("brown_planks_05", 1.6, wet=0.3, tint=(0.34, 0.22, 0.14), name="berthwood")
+berth_m.node_tree.nodes["Principled BSDF"].inputs["Coat Weight"].default_value = 0.3
 
 
 def plane(name, verts, mat, uvscale=1.0):
@@ -172,10 +174,10 @@ so = matt.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.16; so.offset = -
 sheet_V = []
 for (x, y, z) in V:
     d = impression(x, y)
-    cr = 0.006 * noise.noise(Vector((x * 9, y * 14, 2.0))) * (0.3 + d) + 0.006 * math.sin((y - CHILD["cy"]) * 55 + x * 11) * min(1.0, 3 * d * (1 - d))
+    cr = 0.006 * noise.noise(Vector((x * 9, y * 14, 2.0))) * (0.3 + d) + 0.009 * noise.noise(Vector((x * 5, y * 21, 7.0))) ** 2 + 0.006 * math.sin((y - CHILD["cy"]) * 55 + x * 11) * min(1.0, 3 * d * (1 - d))
     sheet_V.append((x, y, z + 0.006 + cr))
 keepF = [f for f in F if V[f[0]][0] < BX1 - 0.55]
-sheet_m = wet_cloth_mat("sheet", (0.47, 0.43, 0.35), WET + 0.1, sheen=0.3)
+sheet_m = wet_cloth_mat("sheet", (0.26, 0.21, 0.16), WET + 0.1, sheen=0.55)   # grey-brown wool blanket over the mattress
 sheet = ship.mesh_obj("sheet", sheet_V, keepF, sheet_m)
 # water lying in the hollow: the sheet there is soaked through (darker, glossy)
 ca = sheet.data.color_attributes.new("imp", 'FLOAT_COLOR', 'POINT')
@@ -300,6 +302,17 @@ ffo = bpy.data.objects.new("lantern_bounce", ff); sc.collection.objects.link(ffo
 ffo.location = flame_c.lerp(head_w0, 0.35) + Vector((0, 0, -0.15))
 ffo.rotation_euler = (head_w0 - ffo.location).to_track_quat('-Z', 'Y').to_euler(); ffo.visible_camera = False
 ffo.visible_glossy = False
+# soot: years of lamp smoke darken the deckhead and planking above where the lantern hangs
+for _m in (beams_m, walls):
+    _N = _m.node_tree.nodes; _L = _m.node_tree.links; _p = _N["Principled BSDF"]
+    _g = _N.new("ShaderNodeNewGeometry"); _d = _N.new("ShaderNodeVectorMath"); _d.operation = 'DISTANCE'
+    _d.inputs[1].default_value = (flame_c.x, flame_c.y, RZ); _L.new(_g.outputs['Position'], _d.inputs[0])
+    _mr = _N.new("ShaderNodeMapRange"); _mr.inputs['From Min'].default_value = 0.25; _mr.inputs['From Max'].default_value = 1.1
+    _mr.inputs['To Min'].default_value = 0.85; _mr.inputs['To Max'].default_value = 0.0; _L.new(_d.outputs['Value'], _mr.inputs['Value'])
+    _src = _p.inputs['Base Color'].links[0].from_socket if _p.inputs['Base Color'].links else None
+    if _src is not None:
+        _mx = _N.new("ShaderNodeMix"); _mx.data_type = 'RGBA'; _mx.blend_type = 'MULTIPLY'; _mx.inputs[7].default_value = (0.08, 0.07, 0.06, 1)
+        _L.new(_mr.outputs[0], _mx.inputs['Factor']); _L.new(_src, _mx.inputs[6]); _L.new(_mx.outputs[2], _p.inputs['Base Color'])
 # ----------------------------------------------------------------------------- light and air
 sk = bpy.data.lights.new("skylight", 'AREA'); sk.shape = 'RECTANGLE'; sk.size = sw * 0.95; sk.size_y = sh * 0.95
 sk.energy = float(os.environ.get('SKYL', '420')); sk.color = (0.72, 0.8, 0.92)
