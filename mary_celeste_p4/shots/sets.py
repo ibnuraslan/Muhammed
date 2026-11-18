@@ -127,14 +127,14 @@ def set_cutaway(water=0.0, vapor=0.0, lantern=True):
         wm = p4.mat("bilge", (0.02, 0.03, 0.025), rough=0.05)
         ship.box("bilgewater", (0.8, -1.2, -2.55 + water / 2), (21, 2.6, water), wm)
     if vapor:
-        bpy.ops.mesh.primitive_cube_add(size=1, location=(0.8, -1.6, -0.6)); v = bpy.context.active_object; v.name = "vapor"
-        v.scale = (17, 3.0, 3.4)
+        bpy.ops.mesh.primitive_cube_add(size=1, location=(0.8, -1.45, 0.9)); v = bpy.context.active_object; v.name = "vapor"
+        v.scale = (17.5, 2.95, 0.75)                     # the space between the top tier and the deck beams
         vm = bpy.data.materials.new("vapor"); vm.use_nodes = True; N = vm.node_tree.nodes; L = vm.node_tree.links
         N.remove(N["Principled BSDF"]); vol = N.new("ShaderNodeVolumePrincipled")
         vol.inputs['Density'].default_value = 0.0; vol.inputs['Color'].default_value = (1.0, 0.85, 0.6, 1)
         nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 0.9; nz.inputs['Detail'].default_value = 4
-        mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.4; mr.inputs['From Max'].default_value = 0.75
-        mr.inputs['To Max'].default_value = 1.4 * vapor
+        mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.25; mr.inputs['From Max'].default_value = 0.75
+        mr.inputs['To Min'].default_value = 1.2 * vapor; mr.inputs['To Max'].default_value = 5.0 * vapor
         L.new(nz.outputs['Fac'], mr.inputs['Value']); L.new(mr.outputs[0], vol.inputs['Density'])
         L.new(vol.outputs[0], N["Material Output"].inputs['Volume']); v.data.materials.append(vm)
     return dict(ship=s, barrels=res)
