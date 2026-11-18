@@ -475,31 +475,24 @@ def sailor(i, wet=0.4):
                   colours=dict(jacket=jc, scarf=sc))
 
 
+# ----------------------------------------------------------------------------- the Briggs family: the shared cast
+# (mary_celeste_3d/lib/briggs.py, women.py; approved by the studio). The Person variants above are kept only as a
+# reference; every shot uses these.
 def briggs(wet=0.4):
-    extra = {"targets/chin/chin-prominent-incr": 0.2, "targets/nose/nose-scale-vert-incr": 0.25,
-             "targets/eyebrows/eyebrows-trans-down": 0.35, "targets/head/head-age-incr": 0.2}
-    return Person("Briggs", 1.0, 37, muscle=0.6, weight=0.5, height=0.58, extra=extra, wet=wet, outfit="captain",
-                  hair=dict(melanin=0.88, redness=0.3, beard=True, beard_len=(0.03, 0.06), cap=(0.012, 0.014, 0.024)),
-                  colours=dict(jacket=(0.008, 0.009, 0.012), trousers=(0.012, 0.012, 0.014)))
+    import briggs as _B
+    return _B.Briggs(wet=wet, cap=True)
 
 
-def sarah(wet=0.4):
-    extra = {"targets/nose/nose-scale-horiz-decr": 0.2, "targets/chin/chin-width-decr": 0.2,
-             # an 1870s corseted silhouette: small, high, smooth bust (MakeHuman's own cup / point targets)
-             "targets/breast/female-young-averagemuscle-averageweight-mincup-maxfirmness": 1.0,
-             "targets/breast/breast-point-decr": 1.0, "targets/breast/breast-volume-vert-up": 0.4}
-    return Person("Sarah", 0.0, 31, muscle=0.45, weight=0.45, height=0.45, extra=extra, wet=wet, outfit="dress",
-                  skin=(0.55, 0.36, 0.28), weather=0.25, hair=dict(melanin=0.85, redness=0.35, beard=False, style="parted"),
-                  colours=dict(dress=(0.035, 0.02, 0.028), shawl=(0.075, 0.03, 0.022), bonnet=(0.03, 0.025, 0.03)))
+def sarah(wet=0.3, seated=True):
+    import women as _W
+    return _W.Sarah(wet=wet, seated=seated, bonnet=True, shawl=True)
 
 
-def sophia(wet=0.3):
-    return Person("Sophia", 0.0, 2, muscle=0.5, weight=0.55, height=0.5, wet=wet, outfit="toddler",
-                  skin=(0.6, 0.4, 0.32), weather=0.1, hair=dict(melanin=0.55, redness=0.6, beard=False, style="curls"),
-                  colours=dict(dress=(0.25, 0.22, 0.18), shawl=(0.5, 0.42, 0.3)))
+def sophia(wet=0.2, seated=True):
+    import women as _W
+    return _W.Sophia(wet=wet, seated=seated, shawl=True)
 
 
-def arthur(wet=0.0):
-    return Person("Arthur", 1.0, 7, muscle=0.5, weight=0.5, height=0.5, wet=wet, outfit="boy",
-                  skin=(0.58, 0.39, 0.3), weather=0.15, hair=dict(melanin=0.7, redness=0.45, beard=False, style="short"),
-                  colours=dict(jacket=(0.07, 0.04, 0.022), trousers=(0.03, 0.03, 0.035), shirt=(0.7, 0.67, 0.6)))
+def arthur(wet=0.0, seated=True):
+    import women as _W
+    return _W.Arthur(wet=wet, seated=seated)
