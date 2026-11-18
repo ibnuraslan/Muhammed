@@ -1,0 +1,11 @@
+Part 1 — third-party assets (all free licences)
+
+3D / textures (Poly Haven, CC0, polyhaven.com): sky HDRI kloofendal_48d_partly_cloudy_puresky; models wooden_lantern_01,
+  wooden_bucket_01, wooden_bucket_02, wooden_handle_saber, wooden_stool_01, barrel_stove, pot_enamel_01, brass_pot_01;
+  textures used by the shared ship (brown_planks_05, wood_floor_deck, weathered_planks, dark_wooden_planks, wood_table_worn).
+Characters: MakeHuman 1.x base mesh, targets, skeleton (CC0) via the shared mary_celeste_3d library; MPFB UV masks (CC0).
+Map: Natural Earth 1:50m land (public domain, naturalearthdata.com).
+Fonts: Courier Prime (SIL OFL 1.1); Special Elite (Apache 2.0); Cedarville Cursive (SIL OFL 1.1, Google Fonts) for the
+  handwriting on the logbook and slate props.
+Card photos: none yet. Wikimedia Commons and the Library of Congress are blocked by this environment's network policy;
+  person/place cards render with a "PHOTO PENDING" slot until free-licence photos are supplied (see review/STORYBOARD.md).

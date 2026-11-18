@@ -1,0 +1,124 @@
+shot,start_s,end_s,sfx
+S01,0.00,2.40,sea wash
+S01,0.00,2.40,hull creak
+S01,0.00,2.40,canvas flap
+S01,0.00,2.40,oars knock in the tholes
+S02,2.40,5.00,boot on wet planks
+S02,2.40,5.00,hand slaps the rail
+S02,2.40,5.00,sea rush
+S03,5.00,6.60,footsteps on wet deck
+S03,5.00,6.60,rigging creak
+S03,5.00,6.60,slack sail flogging
+S04,6.60,8.20,ladder creak
+S04,6.60,8.20,boots on rungs
+S04,6.60,8.20,sea muffles
+S05,8.20,11.70,water drip
+S05,8.20,11.70,lantern creak
+S05,8.20,11.70,hull groan
+S06,11.70,13.90,lantern swing creak
+S06,11.70,13.90,drip
+S07,13.90,18.10,breath
+S07,13.90,18.10,lantern creak
+S07,13.90,18.10,sea against the hull
+S08,18.10,19.70,lantern creak
+S08,18.10,19.70,footstep in water
+S09,19.70,21.50,drip
+S09,19.70,21.50,hull creak
+S09,19.70,21.50,distant sea
+S10,21.50,27.00,sea through the gap
+S10,21.50,27.00,rope slap
+S10,21.50,27.00,wood knock
+S11,27.00,30.90,sea rush
+S11,27.00,30.90,water slap on the hull
+S12,30.90,33.10,wind gust
+S12,30.90,33.10,slack line taps the hatch
+S13,33.10,35.70,oars dip and pull
+S13,33.10,35.70,sea wash
+S14,35.70,37.70,boots land on deck
+S14,35.70,37.70,bag dropped
+S14,35.70,37.70,rope coil thrown down
+S15,37.70,40.70,canvas fills
+S15,37.70,40.70,bow wave
+S15,37.70,40.70,hull creak
+S16,40.70,43.90,low wind
+S16,40.70,43.90,a single bell-like rigging ping
+S16,40.70,43.90,sea
+S17,43.90,47.50,wind
+S17,43.90,47.50,rigging creak
+S17,43.90,47.50,sea
+S18,47.50,49.50,ocean bed
+S18,47.50,49.50,bow wave
+S18,47.50,49.50,canvas
+S19,49.50,52.30,pen scratch
+S19,49.50,52.30,lamp creak
+S19,49.50,52.30,hull work
+S20,52.30,54.70,sea
+S20,52.30,54.70,hull creak
+S20,52.30,54.70,rigging
+S21,54.70,57.10,wheel creak
+S21,54.70,57.10,wind in rigging
+S22,57.10,59.70,wind
+S22,57.10,59.70,sea
+S23,59.70,63.10,voice off (no lip-sync)
+S23,59.70,63.10,boots on ladder below
+S24,63.10,65.10,"wheel spins, pawl clicks"
+S24,63.10,65.10,rudder chain rattles
+S25,65.10,67.70,sails thunder as they fill
+S25,65.10,67.70,sea
+S26,67.70,71.90,"shout (off, no lip-sync)"
+S26,67.70,71.90,wind takes it
+S26,67.70,71.90,sea
+S27,71.90,73.90,wind
+S27,71.90,73.90,sea
+S27,71.90,73.90,silence beat
+S28,73.90,76.30,canvas boom
+S28,73.90,76.30,block creak
+S29,76.30,79.30,sail flogging
+S29,76.30,79.30,wind
+S30,79.30,82.30,oars
+S30,79.30,82.30,boat slaps the swell
+S31,82.30,85.30,boots
+S31,82.30,85.30,glass grit underfoot
+S32,85.30,88.30,glass crunch
+S32,85.30,88.30,card ticks
+S33,88.30,90.50,wind
+S33,88.30,90.50,hatch cover scrape
+S34,90.50,94.00,water slosh
+S34,90.50,94.00,pot rolls
+S34,90.50,94.00,drip
+S35,94.00,97.50,water laps against wood
+S36,97.50,100.70,iron scrape
+S36,97.50,100.70,water slop
+S37,100.70,104.10,line runs through hands
+S37,100.70,104.10,rod knocks the well
+S37,100.70,104.10,splash below
+S38,104.10,106.10,rod set down on planks
+S38,104.10,106.10,drip
+S39,106.10,108.30,low drone
+S39,106.10,108.30,water settle
+S40,108.30,109.90,mast creak
+S40,108.30,109.90,wind
+S41,109.90,112.70,bow wave
+S41,109.90,112.70,canvas
+S42,112.70,116.30,wind
+S42,112.70,116.30,rigging
+S42,112.70,116.30,his breath
+S43,116.30,120.30,map whoosh
+S43,116.30,120.30,marker thump
+S44,120.30,124.50,door latch
+S44,120.30,124.50,boots
+S44,120.30,124.50,lantern creak
+S45,124.50,128.90,lamp hiss
+S45,124.50,128.90,creak
+S46,128.90,132.10,page turn
+S47,132.10,134.70,chalk tap
+S48,134.70,138.50,breath
+S48,134.70,138.50,hull creak
+S49,138.50,141.30,page settles
+S50,141.30,144.30,chalk scratch
+S51,144.30,150.30,map whoosh
+S51,144.30,150.30,marker thump
+S52,150.30,154.10,whoosh
+S52,150.30,154.10,marker thump
+S53,154.10,158.30,low drone
+S53,154.10,158.30,sea under
