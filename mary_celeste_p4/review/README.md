@@ -60,7 +60,7 @@ Courier Prime captions; every action has an SFX (list above → `sfx_cues.csv` a
 ## Hub review round 1 (applied)
 * Barrels: matte, weathered oak staves; hoops dark wrought iron with rust (was glossy copper).
 * S13, S14, S18: hold now reads (warm bounce + fill from the lantern; open hatch shaft in S18).
-* S12: end grain is now a real relief mesh: earlywood pores sunk ~1.5 mm in red oak, plugged level in white oak, raking light.
+* S12 (round 2): a cooper's bench by lantern light. Two real staves stand on edge, cut ends to camera. White oak (left) has its pores sealed; red oak (right) has open pores sunk into the rings, spirit beading out, a drop at its foot and a wet patch soaking the bench. Nobody is in frame, so no hand. A hand-held lantern version can follow once the new characters land.
 * S05: vapour haze under the deck.
 * Characters (S03, S09, S16, S21, S31, S33, S35): on hold until the new character assets land in the shared lib.
 * MacGregor / Richardson: text cards over their work, no figure. Card photos: placeholders until the hub supplies them.

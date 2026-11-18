@@ -291,7 +291,11 @@ def end_grain(kind):
     mp = N.new("ShaderNodeMapping"); mp.inputs['Location'].default_value = (0, 0, 0.6)
     L.new(tc.outputs['Object'], mp.inputs['Vector'])
     ln = N.new("ShaderNodeVectorMath"); ln.operation = 'LENGTH'; L.new(mp.outputs[0], ln.inputs[0])
-    rs = N.new("ShaderNodeMath"); rs.operation = 'MULTIPLY'; rs.inputs[1].default_value = 260.0; L.new(ln.outputs['Value'], rs.inputs[0])
+    wv = N.new("ShaderNodeTexNoise"); wv.inputs['Scale'].default_value = 60.0; wv.inputs['Detail'].default_value = 3
+    L.new(tc.outputs['Object'], wv.inputs['Vector'])
+    wa = N.new("ShaderNodeMath"); wa.operation = 'MULTIPLY_ADD'; wa.inputs[1].default_value = 0.0012
+    L.new(wv.outputs['Fac'], wa.inputs[0]); L.new(ln.outputs['Value'], wa.inputs[2])
+    rs = N.new("ShaderNodeMath"); rs.operation = 'MULTIPLY'; rs.inputs[1].default_value = 260.0; L.new(wa.outputs[0], rs.inputs[0])
     fr = N.new("ShaderNodeMath"); fr.operation = 'FRACT'; L.new(rs.outputs[0], fr.inputs[0])
     early = N.new("ShaderNodeMapRange"); early.inputs['From Min'].default_value = 0.0; early.inputs['From Max'].default_value = 0.3
     early.inputs['To Min'].default_value = 1.0; early.inputs['To Max'].default_value = 0.0; L.new(fr.outputs[0], early.inputs['Value'])
@@ -313,6 +317,56 @@ def end_grain(kind):
     b = N.new("ShaderNodeBump"); b.inputs['Strength'].default_value = 0.9 if kind == "red" else 0.15; b.invert = True
     L.new(pore.outputs[0], b.inputs['Height']); L.new(b.outputs['Normal'], p.inputs['Normal'])
     return m
+
+
+def set_staves():
+    """S12: a cooper's bench. Two real barrel staves stood on edge, cut ends to camera, side by side:
+    white oak (left; vessels plugged by tyloses) and red oak (right; open vessels). Spirit seeps out of the red oak's
+    end grain and gathers into a drop at its foot; a dark wet patch spreads on the bench under it. A lantern stands on
+    the bench and lights them (nobody is in frame, so no hand is shown)."""
+    out = {}
+    bench = ship.wood("wood_table_worn", 0.5, tint=(0.9, 0.68, 0.48), name="bench")
+    ship.box("bench", (0, 0, 0.42), (1.4, 0.7, 0.06), bench)
+    Z0 = 0.45
+    T_, W_, L_ = 0.022, 0.10, 0.55                 # stave thickness, width, length (lying along +y, standing on edge)
+    for kind, x, aid, tint in (("white", -0.024, "white_oak_veneer", (1.0, 0.9, 0.75)), ("red", 0.024, "red_oak_veneer", (1.0, 0.78, 0.66))):
+        m = ship.wood(aid, 0.12, tint=tint, name=f"stavewood_{kind}")
+        ship.box(f"stave_{kind}", (x, L_ / 2 + 0.0005, Z0 + W_ / 2), (T_, L_, W_), m, bevel=0.0008)
+        # the cut end at y = 0 faces the camera (-Y): a relief mesh of the end grain, rotated into place
+        e = end_face(f"end_{kind}", kind, Vector((0, 0, 0)), end_grain(kind), w=T_ - 0.0012, h=W_ - 0.0012, nu=190, nv=840, seed=4 if kind == "red" else 9)
+        e.matrix_world = Matrix.Translation((x, 0.0, Z0 + W_ / 2)) @ Matrix.Rotation(math.radians(-90), 4, 'Z')
+        out[kind] = Vector((x, 0.0, Z0 + W_ / 2))
+    # spirit: a sheen running down the red oak's end, a drop hanging at its foot, a wet patch on the bench
+    drop = bpy.data.materials.new("spirit"); drop.use_nodes = True
+    dp = drop.node_tree.nodes["Principled BSDF"]; dp.inputs['Transmission Weight'].default_value = 1; dp.inputs['Roughness'].default_value = 0.02
+    dp.inputs['IOR'].default_value = 1.36
+    rng = random.Random(5)
+    rx = 0.024
+    for k in range(22):                               # beads standing in the open pores
+        r = rng.uniform(0.0003, 0.0008)
+        bpy.ops.mesh.primitive_uv_sphere_add(radius=r, location=(rx + rng.uniform(-0.009, 0.009), -r * 0.35, Z0 + rng.uniform(0.006, 0.095)))
+        o = bpy.context.active_object; o.scale.y = 0.45; o.data.materials.append(drop); bpy.ops.object.shade_smooth()
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.0028, location=(rx + 0.002, -0.0022, Z0 + 0.0026))
+    o = bpy.context.active_object; o.scale = (1, 0.9, 1.25); o.data.materials.append(drop); bpy.ops.object.shade_smooth()
+    wet = p4.mat("wetpatch", (0.05, 0.022, 0.012), rough=0.18)          # spirit soaked into the bench: darker, satin
+    for k, (dx, dy, r, sx) in enumerate(((0.004, -0.01, 0.016, 1.0), (-0.006, -0.018, 0.011, 1.3), (0.012, -0.022, 0.008, 0.8), (0.0, -0.004, 0.01, 1.6))):
+        bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=r, depth=0.0002 + k * 0.00002, location=(rx + dx, dy, Z0 + 0.0001 + k * 0.00002))
+        o = bpy.context.active_object; o.scale = (sx, 0.7, 1); o.rotation_euler.z = k * 0.7; o.data.materials.append(wet)
+    # the lantern on the bench, left and a little forward: warm key raking across both ends
+    ln, lms = ph.model("wooden_lantern_01"); p4.lamp_glass_passes(lms)
+    ln.matrix_world = Matrix.Translation((-0.2, -0.12, Z0)) @ Matrix.Rotation(0.4, 4, 'Z')
+    p4.light('POINT', "lantern_flame", 4, (1.0, 0.58, 0.26), loc=(-0.2, -0.12, Z0 + 0.2), size=0.012)
+    p4.light('SPOT', "lantern_spill", 1.5, (1.0, 0.6, 0.3), loc=(-0.17, -0.1, Z0 + 0.12), target=(0.02, 0, Z0 + 0.05), size=0.03, spot=30, blend=0.6)
+    p4.light('AREA', "rim", 3, (1.0, 0.8, 0.6), loc=(0.3, 0.5, Z0 + 0.3), target=(0, 0, Z0 + 0.05), size=0.4)
+    p4.light('AREA', "fill", 0.6, (0.6, 0.7, 0.9), loc=(0.25, -0.5, Z0 + 0.2), target=(0, 0, Z0 + 0.05), size=0.5)
+    walls = ship.wood("dark_wooden_planks", 1.2, tint=(0.6, 0.42, 0.3), name="shop")
+    ship.box("shopwall", (0, 1.2, 1.0), (4, 0.1, 2), walls)
+    for k in range(3):                                 # finished barrels standing in the dark behind
+        BR.upright("white", (-0.7 + k * 0.7, 0.75, 0.0), rot_z=k)
+    warm_haze((0, 0, 0.8), (3, 3, 1.6), density=0.01, color=(1.0, 0.85, 0.7))
+    p4.world_color((0.006, 0.004, 0.003))
+    out["Z0"] = Z0
+    return out
 
 
 # ============================================================================= THE DECK (as found, day)

@@ -186,12 +186,12 @@ def S11():   # OAK explainer: a white-oak barrel beside a red-oak one, staves in
     finish(sat=1.05)
 
 
-def S12():   # OAK macro: red-oak end grain, open pores, spirit beading out (white oak sealed, soft beside)
-    o = S.set_oak()
-    r = o["red"]; w = o["white"]
-    p = r + Vector((-0.12 - 0.01 * E(T), -0.07, 0.035))
-    cam(p, r + Vector((0.02, 0.0, 0.0)), lens=100, fstop=4.0, focus=(r - p).length)
-    finish(sat=1.05)
+def S12():   # the two staves' cut ends side by side by lantern light; spirit seeping from the red oak, a drop forming
+    o = S.set_staves()
+    c = (o["white"] + o["red"]) / 2 + Vector((0, 0, -0.008))
+    p = c + Vector((0.07 - 0.02 * E(T), -0.36 + 0.04 * E(T), 0.07))
+    cam(p, c + Vector((-0.02, 0, -0.005)), lens=55, fstop=8.0, focus=(c - p).length)
+    finish(sat=1.05, exposure=-0.4)
 
 
 def S13():   # in the hold: the red-oak barrel, its stave dark with spirit, the stain on the ceiling under it
