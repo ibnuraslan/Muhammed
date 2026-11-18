@@ -193,8 +193,27 @@ class Person(D.Deveau):
         if look_at is not None:
             self.look(look_at)
         h.arm.hide_render = True
+        self.tag()
+
+    def tag(self):
+        """Tag meshes for clipcheck (o["person"]) with world hand points (wrists + knuckles)."""
+        bpy.context.view_layer.update()
+        hp = []
+        for sd in ("L", "R"):
+            for b in (f"wrist.{sd}", f"finger3-1.{sd}", f"finger3-3.{sd}"):
+                if b in self.h.arm.pose.bones:
+                    hp.append(self.h.bone_head(b))
+        flat = [c for v in hp for c in v]
+        for o in self.objects + list(getattr(self, "sea_boots", []) or []) + list(getattr(self, "corneas", []) or []):
+            if getattr(o, "type", None) == 'MESH':
+                o["person"] = self.name; o["hands"] = flat
 
     BOOTS = True
+    SEATED = False
+
+    def _hem(self, o, hip_z, drop=0.15, flare=0.028):
+        """Seated men: the jacket skirt is kept short so it rests above the chair seat instead of through it."""
+        return D.Deveau._hem(self, o, hip_z, drop=(0.03 if self.SEATED else drop), flare=flare)
 
     def _rest_fittings(self):
         """Shared-lib fittings that expect an unposed body: corneas (then ride on the eyes) and the fitted Sketchfab boots

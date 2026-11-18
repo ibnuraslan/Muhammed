@@ -21,12 +21,14 @@ def seated(person, chair, lean=4, yaw=None):
     chair_pos, cyaw, _ = SET["chairs"][chair]
     A.sit_chair(person.h, lean=lean)
     yaw = (0.0 if chair == 1 else 180.0) if yaw is None else yaw
-    dy = -0.04 if chair == 1 else 0.04
-    return A.sit_place(person.h, (chair_pos.x, chair_pos.y + dy), yaw, SET["seat_z"])
+    dy = -0.01 if chair == 1 else 0.06
+    Mw = A.sit_place(person.h, (chair_pos.x, chair_pos.y + dy), yaw, SET["seat_z"])
+    A.feet_to_floor(person.h, Mw, 0.013)
+    return Mw
 
 
 def briggs_writing(pause=False, expr=None):
-    b = cast.Briggs(expr=expr)
+    b = cast.Briggs(expr=expr, seated=True)
     Mw = seated(b, 1)
     Mi = Mw.inverted()
     paper = SET["letter"] + Vector((0.0, 0.02, 0.0))

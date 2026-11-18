@@ -110,7 +110,19 @@ def probe():
         print("PROBE", " | ".join(row))
 
 
+def clip(shot):
+    import clipcheck
+    clipcheck.SKIP_PREFIX = tuple(clipcheck.SKIP_PREFIX) + ("air", "dust", "SeaHaze", "Haze", "far", "tug_plume", "lace")
+    if any("person" in o for o in bpy.data.objects):
+        return clipcheck.check(shot)
+    return []
+
+
 def finish(out, cine=None, bloom=0.3, exposure=0.0):
+    if os.environ.get("CLIP") or os.environ.get("PROBE"):
+        clip(os.path.splitext(os.path.basename(out))[0])
+    if os.environ.get("CLIPONLY"):
+        print("RENDERED cliponly"); return
     if os.environ.get("PROBE"):
         probe(); print("RENDERED probe"); return
     sc = bpy.context.scene

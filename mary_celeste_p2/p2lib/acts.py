@@ -48,11 +48,11 @@ def write(h, Mi, paper_w, side="R", other_on_table=None, lean=12.0, head_pitch=2
         h.rot(b, (1, 0, 0), lean * k)
     P.head(h, pitch=head_pitch, yaw=-4 * sg)
     tgt = Mi @ Vector(paper_w)
-    P.hand_reach(h, side, tgt + Vector((0.02 * sg, 0.05, 0.03)), elbow=(0.9 * sg, 0.3, -0.5))
+    P.hand_reach(h, side, tgt + Vector((0.02 * sg, 0.05, 0.055)), elbow=(0.9 * sg, 0.4, 0.3))
     h.aim(f"wrist.{side}", Vector((-0.35 * sg, -0.8, -0.45)))
     pen_grip(h, side)
     if other_on_table is not None:
-        P.hand_reach(h, os_, Mi @ Vector(other_on_table) + Vector((0, 0, 0.03)), elbow=(0.9 * so, 0.4, -0.6))
+        P.hand_reach(h, os_, Mi @ Vector(other_on_table) + Vector((0, 0, 0.045)), elbow=(0.9 * so, 0.5, 0.2))
         h.aim(f"wrist.{os_}", Vector((0.4 * so, -0.85, -0.25)))
         P.rest_hand(h, os_, curl=18)
 
@@ -98,3 +98,23 @@ def yaw_to(frm, to):
     """stand_place yaw (deg) that turns a rig (rest: facing -Y) at `frm` to face `to` (xy only)."""
     dx, dy = to[0] - frm[0], to[1] - frm[1]
     return math.degrees(math.atan2(dx, -dy))
+
+
+def feet_to_floor(h, Mw, floor_z=0.0, tries=None):
+    """Seated: swing the shins (about the knee) until the ankles sit at their standing height above the floor.
+    Mw = the world matrix the rig will be placed with."""
+    ank0 = h.joint("foot.L____head")[2]                 # rest ankle height above the sole
+    for sd, sg in H.SIDE.items():
+        best = None
+        for fwd in [i * 0.05 for i in range(0, 30)]:
+            d = Vector((0.02 * sg, -fwd, -1))
+            h.aim(f"lowerleg01.{sd}", d); h.aim(f"lowerleg02.{sd}", d)
+            h.aim(f"foot.{sd}", Vector((0.08 * sg, -1, -0.25)))
+            z = (Mw @ h.bone_head(f"foot.{sd}")).z - ank0 - floor_z
+            if best is None or abs(z) < abs(best[1]):
+                best = (fwd, z)
+            if z > 0.004:
+                break
+        d = Vector((0.02 * sg, -best[0], -1))
+        h.aim(f"lowerleg01.{sd}", d); h.aim(f"lowerleg02.{sd}", d)
+        h.aim(f"foot.{sd}", Vector((0.08 * sg, -1, -0.25)))

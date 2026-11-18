@@ -15,7 +15,7 @@ import ship, ph
 import stage as S
 
 RX, RY, RZ = 1.95, 1.6, 1.98
-TABLE = Vector((0.15, -0.3, 0.74)); TW, TD = 1.15, 0.78
+TABLE = Vector((0.15, -0.3, 0.76)); TW, TD = 1.15, 0.78
 BERTH = dict(x0=-1.9, x1=0.35, y0=0.86, top=0.62)
 ORGAN = Vector((-1.68, -0.75, 0.0))
 COMP = dict(x0=1.22, x1=1.9, y0=-1.6, y1=-0.95)       # companion ladder footprint
@@ -256,7 +256,7 @@ def build(mood="warm", letter_side=1, wet=0.0, lamp_on=True, skylight=1.0, organ
     # ---- table: mahogany top, turned legs, a chenille cloth with a fringe
     tx, ty, tz = TABLE
     box("table_top", (tx, ty, tz - 0.02), (TW, TD, 0.04), mahog, bevel=0.01)
-    box("table_apron", (tx, ty, tz - 0.08), (TW - 0.1, TD - 0.1, 0.08), mahog)
+    box("table_apron", (tx, ty, tz - 0.06), (TW - 0.1, TD - 0.1, 0.04), mahog)
     leg = [(0.03, 0), (0.035, 0.05), (0.025, 0.12), (0.03, 0.3), (0.042, 0.45), (0.028, 0.55), (0.032, 0.66), (0.03, tz - 0.04)]
     for sx_ in (-1, 1):
         for sy_ in (-1, 1):
@@ -266,11 +266,12 @@ def build(mood="warm", letter_side=1, wet=0.0, lamp_on=True, skylight=1.0, organ
     _tablecloth(tx, ty, tz, TW + 0.02, TD + 0.02, clothm)
     # ---- chairs (Poly Haven), one each side of the table
     A["chairs"] = []
-    for (cy_, yaw) in ((ty - 0.62, 0.0), (ty + 0.62, math.pi)):
-        r, ms = S.place_model("WoodenChair_01", (tx - 0.05, cy_, 0), size=0.95, rot_z=yaw)
+    for (cy_, yaw) in ((ty - 0.66, math.pi), (ty + 0.66, 0.0)):
+        r, ms = S.place_model("WoodenChair_01", (tx - 0.05, cy_, 0), size=1.02, rot_z=yaw)
         A["chairs"].append((Vector((tx - 0.05, cy_, 0)), yaw, ms))
     lo, hi = ph.bounds(A["chairs"][0][2])
-    A["seat_z"] = 0.46
+    lo, hi = ph.bounds(A["chairs"][0][2])
+    A["seat_z"] = 0.48
     # ---- the lamp on the table (Poly Haven vintage oil lamp) with its flame
     if lamp_on is not None:
         r, ms = S.place_model("vintage_oil_lamp", (tx + 0.33, ty + 0.18, tz), size=0.42)
@@ -336,7 +337,7 @@ def build(mood="warm", letter_side=1, wet=0.0, lamp_on=True, skylight=1.0, organ
     return A
 
 
-def _tablecloth(tx, ty, tz, w, d, mat, drop=0.16):
+def _tablecloth(tx, ty, tz, w, d, mat, drop=0.055):
     """A heavy cloth: flat on top, falling over each edge with soft folds and a rounded corner drape."""
     n = 60
     V = []; F = []
