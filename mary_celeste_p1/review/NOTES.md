@@ -4,7 +4,7 @@
 * Frames: real Cycles renders at half res and low samples, with card and Courier Prime caption burned in as they will play.
 * Shared library: `claude/mary-celeste-3d` @ 9499317 merged (final Deveau, Sketchfab boots, `clipcheck.py`). The lib is
   used unchanged.
-* **Clipping: `lib/clipcheck.py` ran on every character shot (run.py). All 27 character shots report 0 clips.**
+* **Clipping: `lib/clipcheck.py` ran on every character shot (run.py). All 26 character shots report 0 clips.**
   See `review/clip/CLIPCHECK.txt`; the per-shot JSON is in `review/clip/`.
 
 ## Your 9 fixes
