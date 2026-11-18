@@ -251,19 +251,17 @@ def set_oak():
     return out
 
 
-def end_face(name, kind, c, mat, w=0.1, h=0.024, nu=560, nv=136, seed=3):
+def end_face(name, kind, c, mat, w=0.1, h=0.024, nu=560, nv=136, seed=3, bend=None):
     """The stave's end as a real relief: a fine grid on the end face with the earlywood pores sunk into it
     (red oak: open vessels ~0.3 mm across, 1.5 mm deep; white oak: the same vessels filled level by tyloses)."""
     import numpy as np
     rng = np.random.default_rng(seed)
     ys = np.linspace(-w / 2, w / 2, nu); zs = np.linspace(-h / 2, h / 2, nv)
     Y, Z = np.meshgrid(ys, zs)
-    ring = np.hypot(Y * 0.15, Z + 0.6) * 260.0
-    early = (ring - np.floor(ring)) < 0.28
     depth = np.zeros_like(Y)
     n = 2600 if kind == "red" else 2600
     py = rng.uniform(-w / 2, w / 2, n); pz = rng.uniform(-h / 2, h / 2, n)
-    pr = np.hypot(py * 0.15, pz + 0.6) * 260.0
+    pr = np.hypot(pz * 0.15, py + 0.6) * 260.0           # quartersawn: rings run across the thickness
     keep = (pr - np.floor(pr)) < 0.26
     rad = 0.00032 if kind == "red" else 0.00022
     dmax = 0.0016 if kind == "red" else 0.00008
@@ -275,10 +273,15 @@ def end_face(name, kind, c, mat, w=0.1, h=0.024, nu=560, nv=136, seed=3):
                 if d < rad:
                     depth[i, j] = max(depth[i, j], dmax * (1 - (d / rad) ** 4))
     X = -depth                                    # sink into the stave (the face looks toward -X)
-    V = np.stack([X + c.x, Y + c.y, Z + c.z], -1).reshape(-1, 3)
+    flat = np.stack([X, Y, Z], -1).reshape(-1, 3)
+    if bend is not None:
+        V = bend(flat)
+    else:
+        V = flat + np.array([c.x, c.y, c.z])
     idx = np.arange(nu * nv).reshape(nv, nu)
     F = np.stack([idx[:-1, :-1], idx[:-1, 1:], idx[1:, 1:], idx[1:, :-1]], -1).reshape(-1, 4)
     me = bpy.data.meshes.new(name); me.from_pydata(V.tolist(), [], F.tolist()); me.update()
+    at = me.attributes.new("flat", 'FLOAT_VECTOR', 'POINT'); at.data.foreach_set("vector", flat.astype(np.float32).reshape(-1))
     o = bpy.data.objects.new(name, me); bpy.context.scene.collection.objects.link(o); me.materials.append(mat)
     return o
 
@@ -286,13 +289,14 @@ def end_face(name, kind, c, mat, w=0.1, h=0.024, nu=560, nv=136, seed=3):
 def end_grain(kind):
     m = bpy.data.materials.new(f"endgrain_{kind}"); m.use_nodes = True
     N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
-    tc = N.new("ShaderNodeTexCoord")
-    # rings: concentric about a pith far off below the stave (quartersawn: rings run across the stave's thickness)
-    mp = N.new("ShaderNodeMapping"); mp.inputs['Location'].default_value = (0, 0, 0.6)
-    L.new(tc.outputs['Object'], mp.inputs['Vector'])
+    tc = N.new("ShaderNodeAttribute"); tc.attribute_name = "flat"          # the face's own flat coordinates
+    # rings: concentric about a pith far off to one side (quartersawn: rings run across the stave's thickness)
+    mp = N.new("ShaderNodeMapping"); mp.inputs['Location'].default_value = (0, 0.6, 0)
+    mp.inputs['Scale'].default_value = (1, 1, 0.15)
+    L.new(tc.outputs['Vector'], mp.inputs['Vector'])
     ln = N.new("ShaderNodeVectorMath"); ln.operation = 'LENGTH'; L.new(mp.outputs[0], ln.inputs[0])
     wv = N.new("ShaderNodeTexNoise"); wv.inputs['Scale'].default_value = 60.0; wv.inputs['Detail'].default_value = 3
-    L.new(tc.outputs['Object'], wv.inputs['Vector'])
+    L.new(tc.outputs['Vector'], wv.inputs['Vector'])
     wa = N.new("ShaderNodeMath"); wa.operation = 'MULTIPLY_ADD'; wa.inputs[1].default_value = 0.0012
     L.new(wv.outputs['Fac'], wa.inputs[0]); L.new(ln.outputs['Value'], wa.inputs[2])
     rs = N.new("ShaderNodeMath"); rs.operation = 'MULTIPLY'; rs.inputs[1].default_value = 260.0; L.new(wa.outputs[0], rs.inputs[0])
@@ -300,13 +304,13 @@ def end_grain(kind):
     early = N.new("ShaderNodeMapRange"); early.inputs['From Min'].default_value = 0.0; early.inputs['From Max'].default_value = 0.3
     early.inputs['To Min'].default_value = 1.0; early.inputs['To Max'].default_value = 0.0; L.new(fr.outputs[0], early.inputs['Value'])
     vo = N.new("ShaderNodeTexVoronoi"); vo.inputs['Scale'].default_value = 900.0 if kind == "red" else 1100.0
-    vo.inputs['Randomness'].default_value = 0.9; L.new(tc.outputs['Object'], vo.inputs['Vector'])
+    vo.inputs['Randomness'].default_value = 0.9; L.new(tc.outputs['Vector'], vo.inputs['Vector'])
     pr = N.new("ShaderNodeMapRange"); pr.inputs['From Min'].default_value = 0.26 if kind == "red" else 0.16
     pr.inputs['From Max'].default_value = 0.34 if kind == "red" else 0.21
     pr.inputs['To Min'].default_value = 1.0; pr.inputs['To Max'].default_value = 0.0; L.new(vo.outputs['Distance'], pr.inputs['Value'])
     pore = N.new("ShaderNodeMath"); pore.operation = 'MULTIPLY'; L.new(pr.outputs[0], pore.inputs[0]); L.new(early.outputs[0], pore.inputs[1])
-    base = (0.62, 0.45, 0.28) if kind == "white" else (0.66, 0.38, 0.27)
-    late = (0.45, 0.3, 0.17) if kind == "white" else (0.5, 0.26, 0.18)
+    base = (0.36, 0.25, 0.15) if kind == "white" else (0.40, 0.21, 0.14)      # aged, oiled-dark end grain
+    late = (0.22, 0.15, 0.085) if kind == "white" else (0.26, 0.12, 0.08)
     c1 = N.new("ShaderNodeMix"); c1.data_type = 'RGBA'; c1.inputs[6].default_value = (*late, 1); c1.inputs[7].default_value = (*base, 1)
     L.new(early.outputs[0], c1.inputs['Factor'])
     hole = (0.015, 0.008, 0.005, 1) if kind == "red" else (0.78, 0.66, 0.46, 1)     # open void vs tylose plug
@@ -315,55 +319,154 @@ def end_grain(kind):
     rr = N.new("ShaderNodeMapRange"); rr.inputs['To Min'].default_value = 0.7; rr.inputs['To Max'].default_value = 0.9 if kind == "red" else 0.2
     L.new(pore.outputs[0], rr.inputs['Value']); L.new(rr.outputs[0], p.inputs['Roughness'])
     b = N.new("ShaderNodeBump"); b.inputs['Strength'].default_value = 0.9 if kind == "red" else 0.15; b.invert = True
-    L.new(pore.outputs[0], b.inputs['Height']); L.new(b.outputs['Normal'], p.inputs['Normal'])
+    L.new(pore.outputs[0], b.inputs['Height'])
+    # saw marks: shallow arcs from the cooper's saw, at a slant across the cut
+    sm = N.new("ShaderNodeMapping"); sm.inputs['Rotation'].default_value = (0.5, 0, 0)
+    L.new(tc.outputs['Vector'], sm.inputs['Vector'])
+    sw = N.new("ShaderNodeTexWave"); sw.wave_type = 'RINGS'; sw.inputs['Scale'].default_value = 1.4; sw.inputs['Distortion'].default_value = 2.0
+    sw.inputs['Detail'].default_value = 2
+    sl = N.new("ShaderNodeMapping"); sl.inputs['Location'].default_value = (0, 0.25, 0.0); sl.inputs['Scale'].default_value = (1, 1, 1)
+    L.new(sm.outputs[0], sl.inputs['Vector']); L.new(sl.outputs[0], sw.inputs['Vector'])
+    sb = N.new("ShaderNodeBump"); sb.inputs['Strength'].default_value = 0.12; sb.inputs['Distance'].default_value = 0.0004
+    L.new(sw.outputs['Fac'], sb.inputs['Height']); L.new(b.outputs['Normal'], sb.inputs['Normal'])
+    L.new(sb.outputs['Normal'], p.inputs['Normal'])
     return m
 
 
+def _aged_oak(aid, tint, name, hoops=((0.13, 0.175),), dark=0.55):
+    """Real oak texture (Poly Haven), darkened and aged; grime; dark iron-hoop stains with rust at the hoop seats."""
+    m = ship.wood(aid, 0.9, tint=tint, name=name)
+    N = m.node_tree.nodes; Lk = m.node_tree.links; p = N["Principled BSDF"]
+    src = p.inputs['Base Color'].links[0].from_socket
+    tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); Lk.new(tc.outputs['Object'], sep.inputs[0])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 40; nz.inputs['Detail'].default_value = 8
+    Lk.new(tc.outputs['Object'], nz.inputs['Vector'])
+    band = None
+    for y0, y1 in hoops:
+        a1 = N.new("ShaderNodeMapRange"); a1.inputs['From Min'].default_value = y0 - 0.006; a1.inputs['From Max'].default_value = y0 + 0.004
+        a2 = N.new("ShaderNodeMapRange"); a2.inputs['From Min'].default_value = y1 + 0.006; a2.inputs['From Max'].default_value = y1 - 0.004
+        Lk.new(sep.outputs['Y'], a1.inputs['Value']); Lk.new(sep.outputs['Y'], a2.inputs['Value'])
+        mn = N.new("ShaderNodeMath"); mn.operation = 'MINIMUM'; Lk.new(a1.outputs[0], mn.inputs[0]); Lk.new(a2.outputs[0], mn.inputs[1])
+        band = mn
+    jit = N.new("ShaderNodeMath"); jit.operation = 'MULTIPLY'; Lk.new(band.outputs[0], jit.inputs[0])
+    jr = N.new("ShaderNodeMapRange"); jr.inputs['From Min'].default_value = 0.3; jr.inputs['From Max'].default_value = 0.6
+    jr.inputs['To Min'].default_value = 0.55; Lk.new(nz.outputs['Fac'], jr.inputs['Value']); Lk.new(jr.outputs[0], jit.inputs[1])
+    dk = N.new("ShaderNodeMix"); dk.data_type = 'RGBA'; dk.blend_type = 'MULTIPLY'; dk.inputs['Factor'].default_value = 1
+    dk.inputs[7].default_value = (dark, dark * 0.9, dark * 0.82, 1); Lk.new(src, dk.inputs[6])
+    gr = N.new("ShaderNodeMix"); gr.data_type = 'RGBA'; gr.blend_type = 'MULTIPLY'
+    gr.inputs[7].default_value = (0.6, 0.55, 0.5, 1)
+    gm = N.new("ShaderNodeMapRange"); gm.inputs['From Min'].default_value = 0.45; gm.inputs['From Max'].default_value = 0.72; gm.inputs['To Max'].default_value = 0.8
+    Lk.new(nz.outputs['Fac'], gm.inputs['Value']); Lk.new(gm.outputs[0], gr.inputs['Factor']); Lk.new(dk.outputs[2], gr.inputs[6])
+    hs = N.new("ShaderNodeMix"); hs.data_type = 'RGBA'; hs.inputs[7].default_value = (0.05, 0.03, 0.02, 1)       # iron-black stain
+    Lk.new(jit.outputs[0], hs.inputs['Factor']); Lk.new(gr.outputs[2], hs.inputs[6])
+    rs = N.new("ShaderNodeMix"); rs.data_type = 'RGBA'; rs.blend_type = 'MIX'; rs.inputs[7].default_value = (0.22, 0.08, 0.03, 1)  # rust bleed
+    rq = N.new("ShaderNodeMath"); rq.operation = 'MULTIPLY'; rq.inputs[1].default_value = 0.45
+    rn = N.new("ShaderNodeTexNoise"); rn.inputs['Scale'].default_value = 120; Lk.new(tc.outputs['Object'], rn.inputs['Vector'])
+    Lk.new(rn.outputs['Fac'], rq.inputs[0])
+    rq2 = N.new("ShaderNodeMath"); rq2.operation = 'MULTIPLY'; Lk.new(rq.outputs[0], rq2.inputs[0]); Lk.new(band.outputs[0], rq2.inputs[1])
+    Lk.new(rq2.outputs[0], rs.inputs['Factor']); Lk.new(hs.outputs[2], rs.inputs[6])
+    Lk.new(rs.outputs[2], p.inputs['Base Color'])
+    p.inputs['Coat Weight'].default_value = 0.0; p.inputs['Specular IOR Level'].default_value = 0.3
+    return m
+
+
+def stave_mesh(name, cx, Z0, R=0.30, T=0.022, W=0.10, L=0.55, mat=None, nu=28, nl=40):
+    """A real barrel stave: curved across its width (barrel radius R), bevelled (radial) jointed edges, lying on
+    its convex outer face, length along +Y from y=0 (the cut end, toward the camera)."""
+    import numpy as np
+    am = W / 2 / (R - T / 2)
+    V = []; F = []
+    def P(a, r, y):
+        return (cx + r * math.sin(a), y, Z0 + R - r * math.cos(a))
+    def grid(fn, nA, nB):
+        b0 = len(V)
+        for j in range(nB + 1):
+            for i in range(nA + 1):
+                V.append(fn(i / nA, j / nB))
+        for j in range(nB):
+            for i in range(nA):
+                a = b0 + j * (nA + 1) + i
+                F.append([a, a + 1, a + nA + 2, a + nA + 1])
+    y0 = 0.0004
+    grid(lambda u, v: P(-am + 2 * am * u, R, y0 + L * v), nu, nl)                 # outer (bottom)
+    grid(lambda u, v: P(am - 2 * am * u, R - T, y0 + L * v), nu, nl)              # inner (top, concave)
+    for sg in (-1, 1):                                                               # jointed edges (radial)
+        grid(lambda u, v: P(sg * am, R - T * u if sg > 0 else R - T * (1 - u), y0 + L * v), 4, nl)
+    grid(lambda u, v: P(-am + 2 * am * u, R - T * v, y0 + L), nu, 4)               # far end
+    me = bpy.data.meshes.new(name); me.from_pydata(V, [], F); me.update()
+    o = bpy.data.objects.new(name, me); bpy.context.scene.collection.objects.link(o)
+    mw = o.modifiers.new("weld", "WELD"); mw.merge_threshold = 0.0002
+    bv = o.modifiers.new("bev", "BEVEL"); bv.width = 0.0012; bv.segments = 2; bv.limit_method = 'ANGLE'
+    if mat:
+        me.materials.append(mat)
+    def bend(flat):                                # end-face flat (depth, width, thickness) -> on the stave's cut end
+        a = flat[:, 1] / (R - T / 2); r = R - T / 2 - flat[:, 2]
+        return np.stack([cx + r * np.sin(a), -flat[:, 0], Z0 + R - r * np.cos(a)], -1)
+    return o, bend
+
+
 def set_staves():
-    """S12: a cooper's bench. Two real barrel staves stood on edge, cut ends to camera, side by side:
-    white oak (left; vessels plugged by tyloses) and red oak (right; open vessels). Spirit seeps out of the red oak's
-    end grain and gathers into a drop at its foot; a dark wet patch spreads on the bench under it. A lantern stands on
-    the bench and lights them (nobody is in frame, so no hand is shown)."""
+    """S12: a cooper's bench. Two real barrel staves (curved, bevelled, aged oak, hoop stains) lie side by side with
+    their saw-cut ends to camera: white oak (left; vessels plugged by tyloses) and red oak (right; open vessels).
+    Spirit seeps from the red oak's end grain; one small drop at its foot; a thin wet stain darkens the bench.
+    A lantern stands on the bench in a little haze (nobody in frame, so no hand)."""
     out = {}
-    bench = ship.wood("wood_table_worn", 0.5, tint=(0.9, 0.68, 0.48), name="bench")
-    ship.box("bench", (0, 0, 0.42), (1.4, 0.7, 0.06), bench)
+    bench = ship.wood("wood_table_worn", 0.5, tint=(0.85, 0.62, 0.44), name="bench")
+    bench_o = ship.box("bench", (0, 0, 0.42), (1.4, 0.7, 0.06), bench)
     Z0 = 0.45
-    T_, W_, L_ = 0.022, 0.10, 0.55                 # stave thickness, width, length (lying along +y, standing on edge)
-    for kind, x, aid, tint in (("white", -0.024, "white_oak_veneer", (1.0, 0.9, 0.75)), ("red", 0.024, "red_oak_veneer", (1.0, 0.78, 0.66))):
-        m = ship.wood(aid, 0.12, tint=tint, name=f"stavewood_{kind}")
-        ship.box(f"stave_{kind}", (x, L_ / 2 + 0.0005, Z0 + W_ / 2), (T_, L_, W_), m, bevel=0.0008)
-        # the cut end at y = 0 faces the camera (-Y): a relief mesh of the end grain, rotated into place
-        e = end_face(f"end_{kind}", kind, Vector((0, 0, 0)), end_grain(kind), w=T_ - 0.0012, h=W_ - 0.0012, nu=190, nv=840, seed=4 if kind == "red" else 9)
-        e.matrix_world = Matrix.Translation((x, 0.0, Z0 + W_ / 2)) @ Matrix.Rotation(math.radians(-90), 4, 'Z')
-        out[kind] = Vector((x, 0.0, Z0 + W_ / 2))
-    # spirit: a sheen running down the red oak's end, a drop hanging at its foot, a wet patch on the bench
+    for kind, x, aid, tint in (("white", -0.062, "oak_veneer_01", (0.85, 0.72, 0.55)), ("red", 0.062, "red_oak_veneer", (0.8, 0.55, 0.42))):
+        m = _aged_oak(aid, tint, f"stavewood_{kind}")
+        st, bend = stave_mesh(f"stave_{kind}", x, Z0, mat=m)
+        e = end_face(f"end_{kind}", kind, Vector((0, 0, 0)), end_grain(kind), w=0.0985, h=0.0205, nu=760, nv=170,
+                     seed=4 if kind == "red" else 9, bend=bend)
+        out[kind] = Vector((x, 0.0, Z0 + 0.011))
+    # spirit on the red oak's end: beads in the open pores, one small drop gathering at the lowest point
     drop = bpy.data.materials.new("spirit"); drop.use_nodes = True
     dp = drop.node_tree.nodes["Principled BSDF"]; dp.inputs['Transmission Weight'].default_value = 1; dp.inputs['Roughness'].default_value = 0.02
-    dp.inputs['IOR'].default_value = 1.36
+    dp.inputs['IOR'].default_value = 1.36; dp.inputs['Base Color'].default_value = (1, 0.97, 0.9, 1)
     rng = random.Random(5)
-    rx = 0.024
-    for k in range(22):                               # beads standing in the open pores
-        r = rng.uniform(0.0003, 0.0008)
-        bpy.ops.mesh.primitive_uv_sphere_add(radius=r, location=(rx + rng.uniform(-0.009, 0.009), -r * 0.35, Z0 + rng.uniform(0.006, 0.095)))
+    rx = 0.062
+    for k in range(16):
+        r = rng.uniform(0.00025, 0.0006); u = rng.uniform(-0.045, 0.045)
+        a = u / 0.289; rr = 0.289 + rng.uniform(-0.009, 0.009)
+        bpy.ops.mesh.primitive_uv_sphere_add(radius=r, location=(rx + rr * math.sin(a), -r * 0.3, Z0 + 0.30 - rr * math.cos(a)))
         o = bpy.context.active_object; o.scale.y = 0.45; o.data.materials.append(drop); bpy.ops.object.shade_smooth()
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.0028, location=(rx + 0.002, -0.0022, Z0 + 0.0026))
-    o = bpy.context.active_object; o.scale = (1, 0.9, 1.25); o.data.materials.append(drop); bpy.ops.object.shade_smooth()
-    wet = p4.mat("wetpatch", (0.05, 0.022, 0.012), rough=0.18)          # spirit soaked into the bench: darker, satin
-    for k, (dx, dy, r, sx) in enumerate(((0.004, -0.01, 0.016, 1.0), (-0.006, -0.018, 0.011, 1.3), (0.012, -0.022, 0.008, 0.8), (0.0, -0.004, 0.01, 1.6))):
-        bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=r, depth=0.0002 + k * 0.00002, location=(rx + dx, dy, Z0 + 0.0001 + k * 0.00002))
-        o = bpy.context.active_object; o.scale = (sx, 0.7, 1); o.rotation_euler.z = k * 0.7; o.data.materials.append(wet)
-    # the lantern on the bench, left and a little forward: warm key raking across both ends
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.0022, location=(rx + 0.002, -0.0022, Z0 + 0.0022))
+    o = bpy.context.active_object; o.scale = (1, 0.9, 1.15); o.data.materials.append(drop); bpy.ops.object.shade_smooth()
+    # the wet stain: an irregular, very thin darkening of the bench itself (same texture, darker and satin)
+    wet = bench.copy(); wet.name = "bench_wet"
+    wp = wet.node_tree.nodes["Principled BSDF"]
+    src = wp.inputs['Base Color'].links[0].from_socket
+    dk = wet.node_tree.nodes.new("ShaderNodeMix"); dk.data_type = 'RGBA'; dk.blend_type = 'MULTIPLY'; dk.inputs['Factor'].default_value = 1
+    dk.inputs[7].default_value = (0.32, 0.25, 0.2, 1); wet.node_tree.links.new(src, dk.inputs[6]); wet.node_tree.links.new(dk.outputs[2], wp.inputs['Base Color'])
+    for l in list(wp.inputs['Roughness'].links):
+        wet.node_tree.links.remove(l)
+    wp.inputs["Roughness"].default_value = 0.16
+    import mathutils
+    pts = []
+    for k in range(48):
+        a = 2 * math.pi * k / 48
+        rr = 0.018 * (1 + 0.45 * mathutils.noise.noise(Vector((math.cos(a) * 1.7, math.sin(a) * 1.7, 0.3))) + 0.2 * math.sin(3 * a + 1))
+        pts.append(Vector((rx + 0.004 + rr * math.cos(a) * 1.3, -0.014 + rr * math.sin(a) * 0.8, 0.0)))
+    cen = sum(pts, Vector()) / len(pts)
+    bo = bench_o.location
+    Vv = [tuple(cen + Vector((0, 0, Z0 + 0.00012)) - bo)] + [tuple(p + Vector((0, 0, Z0 + 0.00012)) - bo) for p in pts]
+    Ff = [[0, 1 + k, 1 + (k + 1) % 48] for k in range(48)]
+    me = bpy.data.meshes.new("wetstain"); me.from_pydata(Vv, [], Ff); me.update()
+    ws = bpy.data.objects.new("wetstain", me); bpy.context.scene.collection.objects.link(ws); ws.location = bo; me.materials.append(wet)
+    # lantern on the bench, left and forward; haze around it
     ln, lms = ph.model("wooden_lantern_01"); p4.lamp_glass_passes(lms)
-    ln.matrix_world = Matrix.Translation((-0.2, -0.12, Z0)) @ Matrix.Rotation(0.4, 4, 'Z')
-    p4.light('POINT', "lantern_flame", 4, (1.0, 0.58, 0.26), loc=(-0.2, -0.12, Z0 + 0.2), size=0.012)
-    p4.light('SPOT', "lantern_spill", 1.5, (1.0, 0.6, 0.3), loc=(-0.17, -0.1, Z0 + 0.12), target=(0.02, 0, Z0 + 0.05), size=0.03, spot=30, blend=0.6)
+    ln.matrix_world = Matrix.Translation((-0.24, -0.1, Z0)) @ Matrix.Rotation(0.4, 4, 'Z')
+    p4.light('POINT', "lantern_flame", 4, (1.0, 0.58, 0.26), loc=(-0.24, -0.1, Z0 + 0.2), size=0.012)
+    p4.light('SPOT', "lantern_spill", 1.5, (1.0, 0.6, 0.3), loc=(-0.21, -0.08, Z0 + 0.12), target=(0.02, 0, Z0 + 0.02), size=0.03, spot=30, blend=0.6)
     p4.light('AREA', "rim", 3, (1.0, 0.8, 0.6), loc=(0.3, 0.5, Z0 + 0.3), target=(0, 0, Z0 + 0.05), size=0.4)
     p4.light('AREA', "fill", 0.6, (0.6, 0.7, 0.9), loc=(0.25, -0.5, Z0 + 0.2), target=(0, 0, Z0 + 0.05), size=0.5)
     walls = ship.wood("dark_wooden_planks", 1.2, tint=(0.6, 0.42, 0.3), name="shop")
     ship.box("shopwall", (0, 1.2, 1.0), (4, 0.1, 2), walls)
-    for k in range(3):                                 # finished barrels standing in the dark behind
+    for k in range(3):
         BR.upright("white", (-0.7 + k * 0.7, 0.75, 0.0), rot_z=k)
-    warm_haze((0, 0, 0.8), (3, 3, 1.6), density=0.01, color=(1.0, 0.85, 0.7))
+    warm_haze((-0.2, 0.1, 0.65), (1.2, 1.0, 0.5), density=0.12, color=(1.0, 0.8, 0.6))
+    warm_haze((0, 0.4, 0.9), (3, 2, 1.6), density=0.02, color=(1.0, 0.85, 0.7))
     p4.world_color((0.006, 0.004, 0.003))
     out["Z0"] = Z0
     return out

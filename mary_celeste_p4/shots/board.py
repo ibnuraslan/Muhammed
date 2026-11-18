@@ -189,8 +189,8 @@ def S11():   # OAK explainer: a white-oak barrel beside a red-oak one, staves in
 def S12():   # the two staves' cut ends side by side by lantern light; spirit seeping from the red oak, a drop forming
     o = S.set_staves()
     c = (o["white"] + o["red"]) / 2 + Vector((0, 0, -0.008))
-    p = c + Vector((0.07 - 0.02 * E(T), -0.36 + 0.04 * E(T), 0.07))
-    cam(p, c + Vector((-0.02, 0, -0.005)), lens=55, fstop=8.0, focus=(c - p).length)
+    p = c + Vector((-0.02 - 0.02 * E(T), -0.52 + 0.04 * E(T), 0.13))
+    cam(p, c + Vector((-0.04, 0, -0.004)), lens=50, fstop=8.0, focus=(c - p).length)
     finish(sat=1.05, exposure=-0.4)
 
 
