@@ -89,7 +89,7 @@ elif SHOT == "04":  # WS: Briggs on the pier looks along her waterline; hands be
     tgt = SM @ Vector((ship.L / 2 - 6, -ship.B / 2, 0.2))
     b = briggs_on_pier((pier.SHIP_X - 8, PY - 1.4), None, tgt, head=(14, 0))
     hd = b.h.bone_head("head")
-    S.cam(Vector((pier.SHIP_X - 4.5, PY - 6.5, pier.DECK + 1.5)), hd.lerp(tgt, 0.25) + Vector((0, 0, -0.3)), lens=32, fstop=5.6)
+    S.frame([hd + Vector((0, 0, 0.15)), hd - Vector((0, 0, 1.7)), hd + Vector((3.0, 2.5, -0.8))], Vector((-0.25, -1.0, 0.15)), lens=32, fill=0.9, fstop=5.6)
 
 elif SHOT == "05":  # low on the water: her hull at the waterline, the reflection, piles beside
     a = SM @ Vector((ship.L / 2 - 2, -ship.B / 2 - 1.0, 0.25))
@@ -98,7 +98,9 @@ elif SHOT == "05":  # low on the water: her hull at the waterline, the reflectio
 elif SHOT == "06":  # MCU: Briggs looks up into the rigging, thoughtful
     b = briggs_on_pier((pier.SHIP_X - 3, PY - 1.2), None, SM @ Vector((-1.5, 0, 18)), head=(-30, 10))
     hd = b.h.bone_head("head")
-    S.frame([hd + Vector((0, 0, 0.1)), hd - Vector((0, 0, 0.25))], Vector((0.55, 1.0, -0.35)), lens=75, fill=0.8, fstop=2.4)
+    # MS low from behind: his silhouette against the rigging and sky
+    S.frame([hd + Vector((0, 0, 0.15)), hd - Vector((0, 0, 0.9))], Vector((-0.35, -1.0, -0.45)), lens=50, fill=0.85, fstop=2.8,
+            aim_offset=(0, 0, 0.5))
 
 elif SHOT == "15":  # WS: a barrel swings aboard in its sling; two stevedores guide it, one rolls the next
     sl = SET["sling_barrel"]

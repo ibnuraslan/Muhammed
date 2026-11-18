@@ -92,7 +92,7 @@ if SHOT in ("21", "22", "24", "25", "26", "27"):
         b.look(mt)
         hd = b.h.bone_head("head")
         fw = M.to_3x3() @ Vector((0, -1, 0)); sd = M.to_3x3() @ Vector((1, 0, 0))
-        S.frame([hd + Vector((0, 0, 0.1)), hd - Vector((0, 0, 0.28))], fw + sd * 0.45 + Vector((0, 0, -0.25)), lens=70, fill=0.8, fstop=2.8)
+        S.frame([hd + Vector((0, 0, 0.1)), hd - Vector((0, 0, 0.9)), mt], -fw + sd * 0.3 + Vector((0, 0, -0.15)), lens=35, fill=0.9, fstop=5.6)
     elif SHOT == "24":   # the pennant now streams forward: the wind has turned
         pennant(SM, mt, (1, -0.1, 0))
         S.cam(mt + Vector((-6, -12, -6)), mt + Vector((2.0, 0, -0.6)), lens=55)
@@ -209,7 +209,7 @@ elif SHOT in ("42", "43", "44", "45"):   # 4 December: the ship as found (overca
             f.finish_live(place=M, density=HAIR * 0.6)
             for dz in (0,):
                 ship.rope("fall", [tgt, tgt + Vector((0, -0.8, -2.0))], 0.014, mc["mats"]["rope"])
-        S.cam(SM @ Vector((-0.2, 1.4, ship.zdeck(-1.6) + 2.9)), SM @ Vector((-1.6, -5.2, 0.3)), lens=28, fstop=5.6)
+        S.cam(SM @ Vector((0.6, 2.0, ship.zdeck(-1.6) + 1.9)), SM @ Vector((-1.6, -5.2, 0.6)), lens=26, fstop=5.6)
     elif SHOT in ("44", "45"):   # Deveau at the pump well with the sounding rod; then determined
         d = cast.Deveau2(wet=0.6)
         xp = ship.MAIN_X + 0.9 if hasattr(ship, "MAIN_X") else -3.0
@@ -231,7 +231,7 @@ elif SHOT in ("42", "43", "44", "45"):   # 4 December: the ship as found (overca
         else:
             d.look(SM @ Vector((ship.L / 2, -2, 3)))
             fw = M.to_3x3() @ Vector((0, -1, 0)); sd = M.to_3x3() @ Vector((1, 0, 0))
-            S.frame([hd + Vector((0, 0, 0.1)), hd - Vector((0, 0, 0.2))], fw + sd * 0.35 + Vector((0, 0, -0.05)), lens=85, fill=0.8, fstop=2.4)
+            S.frame([hd + Vector((0, 0, 0.1)), hd - Vector((0, 0, 1.0))], -fw + sd * 0.45 + Vector((0, 0, 0.05)), lens=40, fill=0.8, fstop=4.0)
     cine = {"sat": 1.0, "exposure": 0.05}
 
 S.finish(S.out_path(SHOT), cine=cine)

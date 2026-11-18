@@ -56,7 +56,7 @@ elif SHOT in ("16", "18"):   # the hold: men stow barrels in tiers by lantern li
     R = rooms.hold()
     bd = R["bd"]
     s1 = cast.Sailor(name="Stev1", years=34, jacket=(0.1, 0.07, 0.05), scarf=(0.5, 0.35, 0.1))
-    tgt = R["barrels"][-1] + Vector((0.6, 0, 0))
+    tgt = R["barrels"][35] + Vector((R["bl"] + 0.06, 0, 0))
     P.stand(s1.h, lean=32, weight="L"); P.head(s1.h, pitch=24)
     M1 = A.stand_place((tgt.x + 0.95, tgt.y - 0.3), -90, z=0.55)
     Mi = M1.inverted()
@@ -80,7 +80,7 @@ elif SHOT in ("16", "18"):   # the hold: men stow barrels in tiers by lantern li
         cabin.attach(m, s1, "wrist.R"); cabin.attach(bpy.data.objects["mallet_head"], s1, "wrist.R")
         ship.cyl("bung", bung - Vector((0, 0, 0.015)), bung + Vector((0, 0, 0.008)), 0.022, mat=cabin.plain("bungwood", (0.3, 0.2, 0.1), rough=0.7), verts=14)
         hd = s1.h.bone_head("head")
-        S.frame([hd, bung], Vector((0.3, -1.0, 0.7)), lens=35, fill=0.9, fstop=2.8)
+        S.frame([hd, bung, hd - Vector((0, 0, 0.9))], Vector((0.6, -1.0, 0.2)), lens=35, fill=0.9, fstop=2.8)
     else:
         s2 = cast.Sailor(name="Stev2", years=26, jacket=(0.05, 0.05, 0.06), cap=True)
         P.stand(s2.h, lean=10, weight="R"); P.head(s2.h, pitch=-30)
