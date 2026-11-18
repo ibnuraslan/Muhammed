@@ -129,8 +129,9 @@ class Person(D.Deveau):
             D.Deveau.finish(self, look_at=look_at, lids=lids, hair=hair, density=density, place=place)
         self.tag(hp, before)
         if SETTLE and not getattr(self, "no_settle", False):
-            lf = settle(self)
-            print("SETTLE", self.name, round(lf, 4))
+            settle(self)
+            if getattr(self, "seated", False):
+                lift_off(self)
 
     def tag(self, hp=None, before=()):
         """Mark this man's meshes for clipcheck (o["person"], o["hands"] = wrist/knuckle points)."""
@@ -285,7 +286,7 @@ def bands(p):
     """Barrister's white bands at the throat."""
     c, up, fwd, top = head_frame(p)
     side = up.cross(fwd).normalized()
-    neck = c - up * 0.2 + fwd * 0.075
+    neck = c - up * 0.2 + fwd * 0.085
     mat = flat(p.name + "_bands", (0.8, 0.79, 0.75), rough=0.7)
     out = []
     for s in (-1, 1):
@@ -332,6 +333,8 @@ def diver_helmet(p):
             for o in getattr(p, "hair_objs", []):
                 if o:
                     o.hide_render = True
+            ob["person"] = p.name           # worn: part of the man for clipcheck
+            carve_inside(p, [ob])
             return [ob], c - fwd * 0.17 + up * 0.04
         except Exception as e:
             print("sketchfab helmet unavailable:", e)
@@ -566,3 +569,73 @@ def settle(p, up=(0, 0, 1), clearance=0.002, reach=0.6):
                 o.matrix_world = Matrix.Translation(up * lift) @ o.matrix_world
         bpy.context.view_layer.update()
     return lift
+
+
+def _tree_world(o, dg):
+    from mathutils.bvhtree import BVHTree
+    oe = o.evaluated_get(dg); me = oe.to_mesh(); M = oe.matrix_world
+    V = [M @ v.co for v in me.vertices]; me.calc_loop_triangles(); T = [tuple(t.vertices) for t in me.loop_triangles]
+    oe.to_mesh_clear()
+    return BVHTree.FromPolygons(V, T, all_triangles=True) if T else None
+
+
+def lift_off(p, keys=("chair", "pew_seat", "thwart", "seat"), step=0.003, max_lift=0.12, up=(0, 0, 1)):
+    """A seated man resting a little inside his seat: raise him until clothes and body clear every object whose
+    name contains one of `keys` (the seat), so he sits ON it."""
+    up = Vector(up)
+    mine = [o for o in bpy.data.objects if o.type == 'MESH' and o.get("person") == p.name]
+    seats = [o for o in bpy.data.objects if o.type == 'MESH' and "person" not in o and not o.hide_render and any(k in o.name for k in keys)]
+    if not seats:
+        return 0.0
+    moved = 0.0
+    while moved < max_lift:
+        bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
+        st = [t for t in (_tree_world(o, dg) for o in seats) if t]
+        hit = False
+        for o in mine:
+            t = _tree_world(o, dg)
+            if t and any(t.overlap(s) for s in st):
+                hit = True; break
+        if not hit:
+            break
+        for o in mine + [o for o in getattr(p, "hair_objs", []) if o]:
+            if o.parent is None:
+                o.matrix_world = Matrix.Translation(up * step) @ o.matrix_world
+        moved += step
+    return moved
+
+
+def carve_inside(p, shell_objs, parts=None):
+    """Remove the faces of his clothes/body that lie inside a worn rigid shell (the diver's helmet and corselet):
+    they are hidden anyway, and the shell must not intersect cloth."""
+    import bmesh
+    from mathutils.bvhtree import BVHTree
+    bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
+    trees = [t for t in (_tree_world(o, dg) for o in shell_objs) if t]
+    parts = parts or [o for o in p.objects if o.type == 'MESH' and o not in shell_objs]
+    for o in parts:
+        for md in list(o.modifiers):
+            if md.type in ('SUBSURF', 'SOLIDIFY', 'DISPLACE', 'SMOOTH'):
+                pass
+        me = o.data; M = o.matrix_world
+        bm = bmesh.new(); bm.from_mesh(me); bm.verts.ensure_lookup_table()
+        inside = set()
+        for v in bm.verts:
+            w = M @ v.co
+            for t in trees:
+                loc, n, i, d = t.find_nearest(w, 0.25)
+                if loc is not None and (w - loc).dot(n) < 0.0:
+                    # confirm with a ray: odd number of crossings upward means inside
+                    cnt = 0; s = w.copy()
+                    for _ in range(8):
+                        h = t.ray_cast(s, Vector((0, 0, 1)), 2.0)
+                        if h[0] is None:
+                            break
+                        cnt += 1; s = h[0] + Vector((0, 0, 1e-4))
+                    if cnt % 2 == 1:
+                        inside.add(v.index); break
+        kill = [f for f in bm.faces if any(v.index in inside for v in f.verts)]
+        if kill:
+            bmesh.ops.delete(bm, geom=kill, context='FACES')
+            bm.to_mesh(me); me.update()
+        bm.free()

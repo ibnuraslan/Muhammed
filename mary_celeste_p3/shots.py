@@ -254,7 +254,7 @@ def s05(t):
     ship.rope("lowering_line", [hand_w, hand_w.lerp(sack_top, 0.5) + Vector((0, 0, -0.03)), sack_top + Vector((0, 0, 0.02))], 0.009,
               ship.tarred_rope("line", (0.32, 0.26, 0.17)))
     # Deveau standing in the boat, hands on the sack
-    Mdv = Mb @ crew.place((0.35, 0.15, b["floor_z"]), 160)
+    Mdv = Mb @ crew.place((0.62, 0.25, b["floor_z"]), 160)
     Mi = Mdv.inverted()
     sc = sack_top - Vector((0, 0, 0.28))
     dv = crew.person("deveau", wet=0.2)
@@ -516,7 +516,7 @@ def s10(t):
     # Deveau stands at the near (south) edge, leaning over the table, right hand on the pencil
     dv = crew.person("deveau", wet=0.0)
     h = dv.h
-    M = crew.place((tip.x - 0.12, cy - wy / 2 - 0.22, 0.0), 90)
+    M = crew.place((tip.x - 0.12, cy - wy / 2 - 0.42, 0.0), 90)
     Mi = M.inverted()
     P.stand(h, lean=34, weight="L", twist=-6)
     P.head(h, pitch=36, yaw=6)
@@ -744,7 +744,7 @@ def seated_writer(room, t, pen_lift=0.0, rub=0.0):
     cx, cy = room["chair"]; tz = room["table_z"]
     seat = 0.45
     drop = crew.hip_height(h) - seat - 0.08
-    M = crew.place((cx + 0.05, cy, 0.0), 0, drop=drop)           # facing +X, toward the table
+    M = crew.place((cx - 0.08, cy, 0.0), 0, drop=drop)           # facing +X, toward the table
     crew.sit(h, drop, lean=28 - 8 * rub, feet_fwd=0.42)
     Mi = M.inverted()
     paper_c = Vector((cx + 0.62, cy + 0.02, tz + 0.002))
@@ -871,7 +871,7 @@ def s22(t):
     face_n = side.normalized()
     note_c = mast + face_n * 0.17
     PR.notice("warrant", note_c, face_n, text_img=os.path.join(TEX, "warrant.png"))
-    M = ST.on_ship(SHIP, ship.MAIN_X, -0.78, 90)
+    M = ST.on_ship(SHIP, ship.MAIN_X - 0.35, -0.95, 75)
     p = crew.person("captain2", wet=0.0)
     h = p.h; Mi = M.inverted()
     P.stand(h, lean=6, weight="L"); P.head(h, pitch=8, yaw=6)
@@ -923,7 +923,7 @@ def court_people(ct, which, t=0.0):
             h.aim(f"wrist.{sd}", Vector((0, -1, -0.7))); P.rest_hand(h, sd, 15)
         p.brow_knit(0.9); p.lids(0.35)
         p.finish(look_at=(3.2, 7.2, 1.85), place=M, density=hair(p))
-        crew.wig_rolls(p); crew.bands(p)
+        crew.bands(p)
         out["flood"] = (p, M)
     if "witness" in which:
         wx, wy = ct["witness"]
@@ -941,7 +941,8 @@ def court_people(ct, which, t=0.0):
         cx_, cy_ = ct["clerk"]
         p = crew.person("chemist", wet=0.0, idx=7, seated=True)
         h = p.h; seat = 0.46; drop = crew.hip_height(h) - seat - 0.08
-        M = crew.place((cx_, cy_ + 0.6, 0.0), -90, drop=drop)
+        PR.chair("clerk_chair", (cx_, cy_ + 0.82, 0.0), 90)
+        M = crew.place((cx_, cy_ + 0.75, 0.0), -90, drop=drop)
         crew.sit(h, drop, lean=26, feet_fwd=0.4)
         tip = Vector((cx_ + 0.05 * math.sin(t * 8), cy_ + 0.05, 0.762))
         P.hand_reach(h, "R", M.inverted() @ (tip + Vector((0.02, 0.03, 0.05))), elbow=(-0.8, 0.3, -0.5)); P.grip(h, "R", 0.6)
@@ -963,7 +964,6 @@ def court_people(ct, which, t=0.0):
             P.hand_reach(h, sd, M.inverted() @ Vector((jx + 0.13 * sg, jy - 0.6, 1.88)), elbow=(0.7 * sg, 0.3, -0.5)); P.grip(h, sd, 0.4)
         P.head(h, pitch=24)
         p.finish(look_at=(jx, jy - 0.65, 1.8), place=M, density=hair(p))
-        crew.wig_rolls(p)
         PR.paper("award", (jx, jy - 0.66, 1.80), size=(0.22, 0.3), rot_z=0.0, text_img=os.path.join(TEX, "warrant.png"))
         out["judge"] = (p, M)
     return out
@@ -1060,7 +1060,7 @@ def s29(t):
     P.arm_down(h, "L", bend=18); P.rest_hand(h, "L", 30)
     fl.finish(look_at=target, place=Mf, density=hair(fl))
     crew.top_hat(fl)
-    Ms = ST.on_ship(SHIP, 0.1, -1.95, -165)
+    Ms = ST.on_ship(SHIP, 0.1, -2.35, -165)
     sv = crew.person("surveyor", wet=0.0, idx=1)
     h2 = sv.h; P.stand(h2, lean=4, weight="R"); P.head(h2, pitch=10, yaw=12)
     nb = Ms @ Vector((0.05, -0.3, 1.1))
@@ -1233,7 +1233,7 @@ def s34(t):
     hilt, d = sword_under_berth(cab, drawn=ease(t))
     p = crew.person("captain2", wet=0.0, kneel=True)
     h = p.h; drop = 0.45
-    M = crew.place((hilt.x + 0.62, hilt.y - 0.1, 0.0), 180, drop=drop)
+    M = crew.place((hilt.x + 0.85, hilt.y - 0.1, 0.0), 180, drop=drop)
     crew.kneel(h, drop, knee="R", lean=30)
     P.head(h, pitch=40, yaw=0)
     Mi = M.inverted()
@@ -1249,7 +1249,7 @@ def s34(t):
 def deveau_draws(cab, t):
     dv = crew.person("deveau", wet=0.5)
     h = dv.h
-    M = crew.place((0.5, -0.2, 0.0), 160)
+    M = crew.place((0.0, -0.15, 0.0), 160)
     Mi = M.inverted()
     P.stand(h, lean=6, weight="R"); P.head(h, pitch=18, yaw=-12)
     # left hand holds the scabbard at waist height; right hand draws the blade out along it
@@ -1383,7 +1383,7 @@ def s41(t):
     P.head(h, pitch=8 - 6 * ease(t), yaw=-10)
     p.lids(0.5); p.brow_knit(0.6)
     p.finish(look_at=(0.0, 9.0, 1.9), place=M, density=hair(p))
-    crew.wig_rolls(p); crew.bands(p)
+    crew.bands(p)
     ef = eyes(p)
     loc = ef + Vector((0.6, -1.4, 0.3))
     cam(loc, ef + Vector((0.35, 1.2, -0.35)), lens=32, fstop=4.0, focus=(ef - loc).length)
@@ -1406,7 +1406,7 @@ def s42(t):
     wood = PR.mat_wood("chestw", "dark_wooden_planks", 2.0, tint=(0.75, 0.5, 0.3))
     for i, (key, x, y, hdg) in enumerate((("sailor_a", -1.4, -2.7, 0), ("sailor_b", 0.4, -2.6, 10))):
         M = ST.on_ship(SHIP, x, y, hdg)
-        cc = M @ Vector((0, -0.35, 0.95))
+        cc = M @ Vector((0, -0.52, 0.98))
         p = crew.person(key, wet=0.0, idx=i); pose_carry(p, M, cc)
         p.finish(look_at=cc + Vector((0, 0, -1)), place=M, density=hair(p))
         b = ship.box(f"seachest{i}", cc, (0.6, 0.38, 0.36), wood, bevel=0.01); b.rotation_euler = M.to_euler()
