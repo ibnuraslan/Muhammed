@@ -9,11 +9,12 @@ import common as C
 from mathutils import Vector
 OUT = os.environ.get("OUT", os.path.join(p5.OUTDIR, "S11.png"))
 os.environ["OUT"] = OUT
+os.environ.setdefault("FOG", "0.03")        # the shared scene's own haze knob: thinner for this low wide
 _finish = C.finish
 
 
 def finish(out, grade=True, cine=None, bloom=0.3):
-    C.camera(Vector((1.45, -1.2, 0.62)), Vector((-0.35, 0.45, 1.0)), lens=22, fstop=4.0, focus=2.2)
+    C.camera(Vector((-1.45, -1.15, 0.55)), Vector((0.05, 0.55, 1.0)), lens=22, fstop=4.0, focus=1.9)
     return _finish(out, grade=grade, cine={"exposure": 0.15, "sat": 1.08}, bloom=0.4)
 
 
