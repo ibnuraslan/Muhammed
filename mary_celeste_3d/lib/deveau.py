@@ -316,7 +316,7 @@ class Deveau:
             d.texture_coords = 'OBJECT'
         s = o.modifiers.new("Sub", "SUBSURF"); s.levels = 1; s.render_levels = 2
         if solid:
-            so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = solid; so.offset = -1; so.use_even_offset = True
+            so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = solid; so.offset = -1; so.use_even_offset = True; so.thickness_clamp = 1.0
         h.parts.append(o)
         o["src_verts"] = used
         return o, used
@@ -492,7 +492,8 @@ class Deveau:
         # clear film: see-through (no refraction), with a fresnel mirror layer for the wet highlight
         gl = N.new("ShaderNodeBsdfGlossy"); gl.inputs['Roughness'].default_value = 0.02
         tr = N.new("ShaderNodeBsdfTransparent"); fr = N.new("ShaderNodeFresnel"); fr.inputs['IOR'].default_value = 1.376
-        mx = N.new("ShaderNodeMixShader"); L.new(fr.outputs[0], mx.inputs[0]); L.new(tr.outputs[0], mx.inputs[1]); L.new(gl.outputs[0], mx.inputs[2])
+        fh = N.new("ShaderNodeMath"); fh.operation = 'MULTIPLY'; fh.inputs[1].default_value = 0.45; L.new(fr.outputs[0], fh.inputs[0])
+        mx = N.new("ShaderNodeMixShader"); L.new(fh.outputs[0], mx.inputs[0]); L.new(tr.outputs[0], mx.inputs[1]); L.new(gl.outputs[0], mx.inputs[2])
         lp = N.new("ShaderNodeLightPath"); mx2 = N.new("ShaderNodeMixShader")
         L.new(lp.outputs['Is Shadow Ray'], mx2.inputs[0]); L.new(mx.outputs[0], mx2.inputs[1]); L.new(tr.outputs[0], mx2.inputs[2])
         L.new(mx2.outputs[0], N["Material Output"].inputs['Surface'])
