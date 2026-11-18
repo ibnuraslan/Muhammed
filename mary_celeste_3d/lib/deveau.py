@@ -250,6 +250,7 @@ class Deveau:
             self.used[list(pl.vertices)] = True
         self.faces = [tuple(pl.vertices) for pl in me.polygons]
         self._dress()
+        self.asset_boots = self._asset_boots(skin=True)
 
     def _skin_regions(self):
         """Vertex colour 'skinvar': R = wind-burn redness (nose, cheeks, ears), G = shadowed eye sockets,
@@ -533,6 +534,7 @@ class Deveau:
         if place is not None and look_at is not None:
             look_at = place.inverted() @ Vector(look_at)
         bpy.context.view_layer.update()
+        self.wrist_rest = {sd: tuple(h.bone_tail(f"wrist.{sd}")) for sd in ("L", "R")}
         head_M = (h.arm.matrix_world @ h.arm.pose.bones["head"].matrix).copy()
         head_R = head_M.to_3x3() @ h.arm.data.bones["head"].matrix_local.to_3x3().inverted()
         self.head_R = head_R
@@ -544,7 +546,7 @@ class Deveau:
                 d = (Vector(look_at) - e.location).normalized()
                 e.rotation_mode = 'QUATERNION'; e.rotation_quaternion = (-d).to_track_quat('Y', 'Z')
         self._corneas()
-        if not self._asset_boots():
+        if not self.asset_boots:
             self._sea_boots()
         if hair:
             self._grow_all(density)
@@ -554,6 +556,13 @@ class Deveau:
                 if o.parent is None:
                     o.matrix_world = place @ o.matrix_world
             bpy.context.view_layer.update()
+        # tags for lib/clipcheck.py: own meshes overlap by design; contacts near the wrists are grips
+        wr = []
+        for sd in ("L", "R"):
+            w = (place or Matrix.Identity(4)) @ Vector(self.wrist_rest[sd])
+            wr += list(w)
+        for o in self.objects:
+            o["person"] = self.name; o["hands"] = wr
 
     def _corneas(self):
         """A clear, wet cornea over each eyeball: the bulge catches sharp highlights (no more 'dead' eyes)."""
@@ -584,7 +593,7 @@ class Deveau:
     BOOT_ASSET = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "sketchfab",
                               "988f94a8fc6945749e2b2ffdcce05e98.glb")   # "Leather boots" by kifir, CC-BY (see CREDITS)
 
-    def _asset_boots(self):
+    def _asset_boots(self, skin=False):
         """Fit a scanned/modelled pair of leather boots (Sketchfab CC-BY) to the posed feet: split the pair, scale each
         boot to the foot length, turn it to the foot, stand it on the ground, widen the shaft where the leg needs room."""
         if not os.path.exists(self.BOOT_ASSET):
@@ -687,9 +696,34 @@ class Deveau:
                         pp.inputs['Roughness'].default_value = 0.6
                     pp.inputs['Coat Weight'].default_value = 0.0
             o.name = f"{self.name}_boot{'L' if sg > 0 else 'R'}"
+            if skin:
+                self._skin_like_body(o, side)
             self.sea_boots.append(o); h.parts.append(o)
         bpy.data.objects.remove(pair)
         return True
+
+    def _skin_like_body(self, o, side_mask):
+        """Give a fitted rest-pose object the skin weights of the nearest body vertices on that leg, so it follows
+        any pose (seated, kneeling) like the clothes do."""
+        from mathutils.kdtree import KDTree
+        h = self.h
+        idx = np.nonzero(side_mask & (self.rest_co[:, 2] < self.marks["knee"] + 0.12))[0]
+        kd = KDTree(len(idx))
+        for i in idx:
+            kd.insert(Vector(self.rest_co[i]), int(i))
+        kd.balance()
+        V = np.array([v.co[:] for v in o.data.vertices])
+        near = np.array([kd.find(Vector(p))[1] for p in V])
+        Wv = h.W[near]
+        for j, bn in enumerate(h.rig.bones):
+            nz = np.nonzero(Wv[:, j] > 1e-3)[0]
+            if len(nz) == 0:
+                continue
+            vg = o.vertex_groups.new(name=bn)
+            for k in nz:
+                vg.add([int(k)], float(Wv[k, j]), 'REPLACE')
+        mod = o.modifiers.new("Armature", "ARMATURE"); mod.object = h.arm
+        o.parent = h.arm
 
     def _sea_boots(self):
         """1870s leather sea boots, modelled per posed foot (replaces the body-shaped boot shell):
