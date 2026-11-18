@@ -23,10 +23,10 @@ dg["root"].location = (0, 0, -0.15)
 
 # --- the Mary Celeste, about 230 m off the starboard bow, yawing with her sails half gone
 MC_HEAD = 128.0
-mc = ship.build("MC", sails="found", rail_gap=(-2.7, -0.6, "S"), wind=local_wind(MC_HEAD), wet=0.8, detail=False, bow_wave_h=1.0)
+mc = ship.build("MC", sails="found", rail_gap=(-2.7, -0.6, "S"), wind=local_wind(MC_HEAD), wet=0.8, detail=False, bow_wave_h=0.7)
 mc_pos = Vector((100.0, -66.0, 0))
-mc["root"].location = mc_pos + Vector((0, 0, -0.1))
-mc["root"].rotation_euler = (math.radians(7.0), math.radians(-2.5), math.radians(MC_HEAD))
+mc["root"].location = mc_pos + Vector((0, 0, -0.75))
+mc["root"].rotation_euler = (math.radians(5.0), math.radians(-1.5), math.radians(MC_HEAD))
 
 bpy.context.view_layer.update()
 

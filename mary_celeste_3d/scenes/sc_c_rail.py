@@ -17,9 +17,9 @@ WIND_WORLD = Vector((0.3, -1.0, 0)).normalized()
 def local_wind(hd):
     return Matrix.Rotation(math.radians(-hd), 3, 'Z') @ WIND_WORLD
 
-GAP = (-2.7, -0.6, "S")
+GAP = (-3.0, -0.7, "S")
 HEEL = 2.5
-mc = ship.build("MC", sails="found", rail_gap=GAP, wind=local_wind(0), wet=0.8, detail=True)
+mc = ship.build("MC", sails="found", rail_gap=GAP, wind=local_wind(0), wet=0.8, detail=True, rail_shift=-2.15)
 R = Matrix.Rotation(math.radians(-HEEL), 4, 'X')            # heeled a little to starboard
 mc["root"].matrix_world = R
 bpy.context.view_layer.update()
@@ -67,54 +67,46 @@ def dropped(name, p0, p1, wig=0.35, rr=0.017, n=40):
         q.z = ship.zdeck(q.x) + rr + 0.003
         pts.append(SHIP @ q)
     return ship.rope(name, pts, rr, mc["mats"]["rope"])
-dropped("fall_a", (-3.6, -1.4, 0), (-1.0, -3.55, 0), wig=0.4)
+dropped("fall_a", (-3.2, -1.2, 0), (-1.6, -3.6, 0), wig=0.4)
 dropped("fall_b", (0.4, -1.5, 0), (-0.9, -3.5, 0), wig=0.25)
-dropped("painter", (-2.3, -3.3, 0), (-2.0, -3.75, 0), wig=0.08, rr=0.012, n=12)
+dropped("painter", (-2.0, -3.3, 0), (-1.7, -3.75, 0), wig=0.08, rr=0.012, n=12)
 # a loose brace hanging slack from aloft across the gap
 ship.rope("loose_brace", [SHIP @ Vector((-1.0, -2.6, 13.0)), SHIP @ Vector((-1.4, -3.2, 6.0)), SHIP @ Vector((-1.7, -3.5, 2.6)),
                           SHIP @ Vector((-1.9, -3.4, ship.zdeck(-1.9) + 0.02)), SHIP @ Vector((-2.4, -2.6, ship.zdeck(-2.4) + 0.02))], 0.014, mc["mats"]["rope"])
-# standing water on the deck (it came aboard green; the scuppers have not cleared it)
-pw = bpy.data.materials.new("deck_water"); pw.use_nodes = True; pp = pw.node_tree.nodes["Principled BSDF"]
-pp.inputs['Roughness'].default_value = 0.03; pp.inputs['Base Color'].default_value = (0.9, 0.9, 0.9, 1)
-pp.inputs['Transmission Weight'].default_value = 1.0; pp.inputs['IOR'].default_value = 1.33
-nz = pw.node_tree.nodes.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 0.9; nz.inputs['Detail'].default_value = 6
-mr = pw.node_tree.nodes.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.5; mr.inputs['From Max'].default_value = 0.53
-pw.node_tree.links.new(nz.outputs['Fac'], mr.inputs['Value']); mr.inputs['To Max'].default_value = 0.75; pw.node_tree.links.new(mr.outputs[0], pp.inputs['Alpha'])
-for cx, cy, sx_, sy_ in ((-2.0, -2.4, 4.0, 2.2), (-5.0, -2.0, 3.0, 2.5), (0.5, -2.6, 2.0, 1.6)):
-    o = ship.box("deck_water", (cx, cy, ship.zdeck(cx) + 0.016), (sx_, sy_, 0.002), pw)
-    o.matrix_world = SHIP @ o.matrix_world
 # spray bursting off a distant crest and over the Dei Gratia's bow
 sea.spray("far_spray", (-260, -240, 0.5), (5.0, 3.0, 14.0), count=9000, rmin=0.03, rmax=0.09, up=4.0, dirv=(0.3, -1, 0), seed=3)
-sea.spray("near_spray", (2.0, -9.0, 0.3), (2.0, 1.5, 6.0), count=6000, rmin=0.008, rmax=0.03, up=3.2, dirv=(0.3, -1, 0), seed=5)
 sea.haze((-150, -150, 25), (2400, 2400, 50), density=0.00035, color=(0.9, 0.82, 0.72))
 
 # ----------------------------------------------------------------------------- Deveau at the gap
 dv = D.Deveau(wet=0.5)
 h = dv.h
-POS = Vector((-3.45, -3.05, 0.0))
-ANG = math.radians(-35)                      # facing forward and outboard, toward the gap
+POS = Vector((-0.12, -3.02, 0.0))             # at the forward end of the gap
+ANG = math.radians(203)                       # facing aft and outboard, into the gap
 zd = ship.zdeck(POS.x) + 0.006
 Mloc = Matrix.Translation((POS.x, POS.y, zd)) @ Matrix.Rotation(ANG - math.radians(-90), 4, 'Z')
 M = SHIP @ Mloc
 Mi = M.inverted()
-P.stand(h, lean=6, weight="R", twist=-3)
-P.head(h, pitch=22, yaw=10, tilt=2)
-dv.lids(0.7); dv.brow_knit(0.8)
-# right hand on the cap rail where the bulwark ends at the gap; left arm hangs
-cap = SHIP @ Vector((GAP[0] - 0.22, -(ship.half_breadth((GAP[0] + ship.L / 2) / ship.L, 1.0) - 0.03), ship.zdeck(GAP[0]) + ship.RAIL_H + 0.07 + 0.03))
-P.hand_reach(h, "R", Mi @ cap, elbow=(-0.8, 0.4, -0.5))
-h.aim("wrist.R", (Mi.to_3x3() @ Vector((0.35, -0.2, -0.85))).normalized())
-P.rest_hand(h, "R", curl=26)
-P.arm_down(h, "L", out=0.1, fwd=0.02, bend=14)
-P.rest_hand(h, "L", curl=24)
-look = SHIP @ Vector((-1.4, -2.9, ship.zdeck(-1.4)))
+P.stand(h, lean=9, weight="R", twist=6)
+P.head(h, pitch=24, yaw=14, tilt=4)
+dv.lids(0.7); dv.brow_knit(0.9)
+# left hand on the end of the cap rail where the bulwark stops; right hand on his hip
+hb_end = ship.half_breadth((GAP[1] + 0.2 + ship.L / 2) / ship.L, 1.0)
+cap = SHIP @ Vector((GAP[1] + 0.2, -(hb_end - 0.03), ship.zdeck(GAP[1]) + ship.RAIL_H + 0.07 + 0.035))
+P.hand_reach(h, "L", Mi @ cap, elbow=(0.9, 0.3, -0.4))
+h.aim("wrist.L", (Mi.to_3x3() @ Vector((-0.4, -0.2, -0.85))).normalized())
+P.rest_hand(h, "L", curl=30)
+hip = h.joint("upperleg01.R____head") + Vector((-0.07, 0.0, 0.08))
+P.hand_reach(h, "R", hip, elbow=(-1.0, 0.35, 0.05))
+h.aim("wrist.R", Vector((0.25, 0.1, -1)))
+P.rest_hand(h, "R", curl=40)
+look = SHIP @ Vector((-1.9, -3.7, ship.zdeck(-1.9) + 0.1))
 dv.finish(look_at=look, place=M, density=float(os.environ.get("HAIR", "1.0")))
 
 # ----------------------------------------------------------------------------- camera
-cam_loc = SHIP @ Vector((0.62, -1.25, ship.zdeck(0.62) + 1.66))
+cam_loc = SHIP @ Vector((-6.55, -1.35, ship.zdeck(-6.55) + 1.62))
 head_w = M @ Vector((0, -0.08, 1.64))
-aim = head_w.lerp(SHIP @ Vector((-1.4, -3.0, ship.zdeck(-1.4))), 0.6) + Vector((0, 0, 0.42))
-cam = C.camera(cam_loc, aim, lens=27, fstop=5.0, focus=(head_w - cam_loc).length, roll=0.0)
+aim = head_w.lerp(SHIP @ Vector((-2.4, -3.4, ship.zdeck(-2.4))), 0.55) + Vector((0, 0, 0.25))
+cam = C.camera(cam_loc, aim, lens=26, fstop=5.0, focus=(head_w - cam_loc).length, roll=0.0)
 
 if os.environ.get("POSE_TEST"):
     sc.cycles.samples = 24

@@ -745,7 +745,7 @@ def hull_detail(name, mats, coll):
     return out
 
 
-def bow_wave(name, coll, height=0.9, length=7.0):
+def bow_wave(name, coll, height=0.9, length=4.5):
     """White water piled against the stem and peeling off both bows (a curling foam sheet)."""
     m = bpy.data.materials.new(name + "_bowwave"); m.use_nodes = True
     N = m.node_tree.nodes; Lk = m.node_tree.links; p = N["Principled BSDF"]
@@ -783,12 +783,12 @@ def bow_wave(name, coll, height=0.9, length=7.0):
     return out
 
 
-def rail_section(name, mats, coll, gap, side="S"):
+def rail_section(name, mats, coll, gap, side="S", shift=0.0):
     """The section taken out of the bulwark, laid flat on the deck inboard of the gap: lining planks face up,
     the cap rail along its outboard edge, two iron pins at the foot."""
     x0, x1 = gap[0] + 0.05, gap[1] - 0.05; sg = 1 if side == "P" else -1
     xs0, xb0 = _ends(1.0)
-    xc = (x0 + x1) / 2 + 0.25; s = (xc - xs0) / (xb0 - xs0); hb = half_breadth(s, 1.0)
+    xc = (x0 + x1) / 2 + 0.25 + shift; s = (xc - xs0) / (xb0 - xs0); hb = half_breadth(s, 1.0)
     y = sg * (hb - 0.11 - RAIL_H / 2 - 0.55); z = zdeck(xc) + 0.012
     ln = x1 - x0; out = []
     rot = (0, 0, math.radians(4))
@@ -817,7 +817,7 @@ def rail_section(name, mats, coll, gap, side="S"):
 
 
 def build(name="ship", sails="found", rail_gap=None, wind=(0.25, -1.0, 0), coll_name=None, detail=True, wet=0.6,
-          hatches_off=True, boat_chocks=True, bow_wave_h=0.0):
+          hatches_off=True, boat_chocks=True, bow_wave_h=0.0, rail_shift=0.0):
     coll = bpy.data.collections.new(coll_name or name); bpy.context.scene.collection.children.link(coll)
     mats = dict(
         bottom=paint(name + "_bottom", (0.2, 0.07, 0.04), rough=0.6, grime=0.5),
@@ -839,7 +839,7 @@ def build(name="ship", sails="found", rail_gap=None, wind=(0.25, -1.0, 0), coll_
     parts = [hull] + bulwark(name, mats, coll, gap=rail_gap) + [deck(name, mats, coll)]
     parts += build_fittings(name, mats, coll, hatches_off=hatches_off, boat_chocks=boat_chocks)
     if rail_gap:
-        parts += rail_section(name, mats, coll, rail_gap, rail_gap[2])
+        parts += rail_section(name, mats, coll, rail_gap, rail_gap[2], shift=rail_shift)
     parts += hull_detail(name, mats, coll)
     if bow_wave_h:
         parts += bow_wave(name, coll, height=bow_wave_h)

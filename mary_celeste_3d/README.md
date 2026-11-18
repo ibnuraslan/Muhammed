@@ -44,4 +44,6 @@ ocean, foam, spray, Poly Haven sky).
 * MakeHuman 1.x base mesh, rig, targets and eyes: CC0 (MakeHuman team / Data Collection AB). MPFB UV masks: CC0.
 * Poly Haven (CC0): kloppenheim_06_puresky, mud_road_puresky (tests), wood_floor_deck, weathered_planks, dark_wooden_planks,
   brown_planks_05, wood_table_worn, rough_linen; models wooden_lantern_01, wooden_handle_saber, wooden_bucket_01.
-* No Sketchfab asset is used (search on 18 Nov 2026 found no suitable CC-BY rigged 1870s sailor; downloads need a token).
+* Sketchfab (CC-BY 4.0): "Leather boots" by kifir (https://sketchfab.com/3d-models/988f94a8fc6945749e2b2ffdcce05e98), fitted to
+  Deveau's feet in `deveau.Deveau._asset_boots` (falls back to the procedural boots if `assets/sketchfab/` is missing).
+  Download: `curl https://api.sketchfab.com/v3/models/<uid>/download` with a Sketchfab token. No suitable CC-BY 1870s character was found.

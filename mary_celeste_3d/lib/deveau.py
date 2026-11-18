@@ -474,7 +474,8 @@ class Deveau:
                 d = (Vector(look_at) - e.location).normalized()
                 e.rotation_mode = 'QUATERNION'; e.rotation_quaternion = (-d).to_track_quat('Y', 'Z')
         self._corneas()
-        self._sea_boots()
+        if not self._asset_boots():
+            self._sea_boots()
         if hair:
             self._grow_all(density)
         h.arm.hide_render = True; h.arm.hide_viewport = True
@@ -508,6 +509,116 @@ class Deveau:
             c.data.materials.append(cm)
             c.rotation_mode = 'QUATERNION'; c.rotation_quaternion = e.matrix_world.to_quaternion()
             self.corneas.append(c); self.h.parts.append(c)
+
+    BOOT_ASSET = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "sketchfab",
+                              "988f94a8fc6945749e2b2ffdcce05e98.glb")   # "Leather boots" by kifir, CC-BY (see CREDITS)
+
+    def _asset_boots(self):
+        """Fit a scanned/modelled pair of leather boots (Sketchfab CC-BY) to the posed feet: split the pair, scale each
+        boot to the foot length, turn it to the foot, stand it on the ground, widen the shaft where the leg needs room."""
+        if not os.path.exists(self.BOOT_ASSET):
+            return False
+        h = self.h
+        P = np.array([v.co[:] for v in h.body.data.vertices])
+        before = set(bpy.data.objects)
+        bpy.ops.import_scene.gltf(filepath=self.BOOT_ASSET)
+        new = [o for o in bpy.data.objects if o not in before]
+        ms = [o for o in new if o.type == 'MESH']
+        others = [o.name for o in new if o.type != 'MESH']
+        bpy.ops.object.select_all(action='DESELECT')
+        for o in ms:
+            o.select_set(True)
+        bpy.context.view_layer.objects.active = ms[0]
+        bpy.ops.object.parent_clear(type='CLEAR_KEEP_TRANSFORM')
+        bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+        if len(ms) > 1:
+            bpy.ops.object.join()
+        pair = bpy.context.active_object
+        for nm in others:
+            if nm in bpy.data.objects:
+                bpy.data.objects.remove(bpy.data.objects[nm])
+        V = np.array([v.co[:] for v in pair.data.vertices])
+        lo, hi = V.min(0), V.max(0); size = hi - lo
+        ax = int(np.argmax(size[:2]))                    # the pair stands side by side along this axis
+        mid = (lo[ax] + hi[ax]) / 2
+        # keep one whole boot: the connected parts whose centre lies on the low side of the pair
+        bm = bmesh.new(); bm.from_mesh(pair.data); bm.verts.ensure_lookup_table()
+        seen = set(); kill = []
+        for v0 in bm.verts:
+            if v0.index in seen:
+                continue
+            comp = []; stack = [v0]; seen.add(v0.index)
+            while stack:
+                v = stack.pop(); comp.append(v)
+                for e in v.link_edges:
+                    w = e.other_vert(v)
+                    if w.index not in seen:
+                        seen.add(w.index); stack.append(w)
+            if sum(v.co[ax] for v in comp) / len(comp) > mid:
+                kill += comp
+        bmesh.ops.delete(bm, geom=kill, context='VERTS'); bm.to_mesh(pair.data); bm.free()
+        B0 = np.array([v.co[:] for v in pair.data.vertices])
+        blo, bhi = B0.min(0), B0.max(0)
+        low = B0[B0[:, 2] < blo[2] + 0.12 * (bhi[2] - blo[2])]
+        lc = low[:, :2].mean(0); w_, v_ = np.linalg.eigh(np.cov((low[:, :2] - lc).T)); bl = v_[:, np.argmax(w_)]
+        shaft = B0[B0[:, 2] > blo[2] + 0.6 * (bhi[2] - blo[2])]
+        if ((low[:, :2] - shaft[:, :2].mean(0)) @ bl).max() < -((low[:, :2] - shaft[:, :2].mean(0)) @ bl).min():
+            bl = -bl                                          # toe end = the far end of the sole from the shaft
+        bs = np.array([-bl[1], bl[0]])
+        ub = (B0[:, :2] - lc) @ bl; vb = (B0[:, :2] - lc) @ bs; zb = B0[:, 2] - blo[2]
+        blen = float(ub.max() - ub.min())
+        self.boots.hide_render = True; self.boots.hide_viewport = True
+        self.sea_boots = []
+        for sg in (1, -1):
+            side = self.used & (np.sign(self.rest_co[:, 0]) == sg)
+            foot = P[side & (self.rest_co[:, 2] < self.marks["ankle"] + 0.03)]
+            g = float(foot[:, 2].min())
+            ank = np.array(h.bone_head(f"foot.{'L' if sg > 0 else 'R'}"))[:2]
+            xy = foot[:, :2] - foot[:, :2].mean(0)
+            w2, v2 = np.linalg.eigh(np.cov(xy.T)); fwd = v2[:, np.argmax(w2)]
+            if ((foot[:, :2] - ank) @ fwd).mean() < 0:
+                fwd = -fwd
+            fl = float((xy @ fwd).max() - (xy @ fwd).min()); heel_u = float((xy @ fwd).min())
+            k = (fl + 0.04) / blen
+            o = pair.copy(); o.data = pair.data.copy(); bpy.context.collection.objects.link(o)
+            u = ub * k; vv = vb * k * (1 if sg < 0 else -1); z = zb * k     # mirror for the other foot
+            u = u + (heel_u - 0.022) - float(u.min())
+            side_v = np.array([-fwd[1], fwd[0]]); c0 = foot[:, :2].mean(0)
+            W = np.column_stack([c0 + np.outer(u, fwd) + np.outer(vv, side_v), z + g])
+            if sg > 0:                                        # mirrored: flip the faces so normals point out
+                bmm = bmesh.new(); bmm.from_mesh(o.data); bmesh.ops.reverse_faces(bmm, faces=bmm.faces); bmm.to_mesh(o.data); bmm.free()
+            # make room for the shin and trouser leg in the shaft
+            leg = P[side & (self.rest_co[:, 2] > self.marks["ankle"]) & (self.rest_co[:, 2] < self.marks["ankle"] + 0.4)]
+            for zz in np.linspace(g + 0.12, g + float(z.max()) - 0.01, 10):
+                band = np.abs(W[:, 2] - zz) < 0.03; lb = leg[np.abs(leg[:, 2] - zz) < 0.03]
+                if band.sum() < 6 or len(lb) < 4:
+                    continue
+                cc = lb[:, :2].mean(0)
+                need = float(np.linalg.norm(lb[:, :2] - cc, axis=1).max()) + 0.016
+                have = float(np.median(np.linalg.norm(W[band, :2] - cc, axis=1)))
+                if have < need:
+                    f = need / have
+                    W[band, :2] = cc + (W[band, :2] - cc) * f
+            o.data.vertices.foreach_set("co", W.astype(np.float32).ravel()); o.data.update()
+            o.matrix_world = Matrix.Identity(4)
+            # keep the model's own textures but darken/matte them toward worn brown leather
+            for sl in o.material_slots:
+                m = sl.material
+                if m and m.node_tree and m.node_tree.nodes.get("Principled BSDF"):
+                    pp = m.node_tree.nodes["Principled BSDF"]
+                    bc = pp.inputs['Base Color']
+                    if bc.links:
+                        src = bc.links[0].from_socket
+                        mx = m.node_tree.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'
+                        mx.inputs['Factor'].default_value = 1.0; mx.inputs[7].default_value = (0.75, 0.55, 0.4, 1)
+                        m.node_tree.links.new(src, mx.inputs[6]); m.node_tree.links.new(mx.outputs[2], bc)
+                    if not pp.inputs['Roughness'].links:
+                        pp.inputs['Roughness'].default_value = 0.6
+                    pp.inputs['Coat Weight'].default_value = 0.0
+            o.name = f"{self.name}_boot{'L' if sg > 0 else 'R'}"
+            self.sea_boots.append(o); h.parts.append(o)
+        bpy.data.objects.remove(pair)
+        return True
 
     def _sea_boots(self):
         """1870s leather sea boots, modelled per posed foot (replaces the body-shaped boot shell):
