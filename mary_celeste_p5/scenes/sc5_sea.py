@@ -74,7 +74,7 @@ if SHOT in ("S01", "S02", "S03"):
                                              ship.zdeck(-1.6) + ship.RAIL_H))
     # lying alongside: the oars on the ship's side trail fore-and-aft along the boat so they clear her hull
     b = boat_at(oc, -1.8, by, 0.0, oars="out", crew=True, look=rail + Vector((0, 0, 0.5)), extra_hulls=(mc["hull"],),
-                oar_angle={(i, 1): 80.0 for i in range(3)})
+                oar_angle={(i, 1): 86.0 for i in range(3)})
     Mb = b["root"].matrix_world
     ring = Mb @ b["ring"]
     cleat = mc["root"].matrix_world @ Vector((4.5, -(ship.B / 2 - 0.25), ship.zdeck(4.5) + ship.RAIL_H + 0.05))

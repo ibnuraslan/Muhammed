@@ -93,15 +93,15 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
     return [p for p, _ in out]
 
 
-def trim_under_seat(p, seat_w, r=0.42):
+def trim_under_seat(p, seat_w, r=0.42, boxes=None):
     """Coat tails and skirts that the person sits on are pressed onto the seat: shell vertices that would go below
     the seat surface, over the seat itself, are lifted to lie on it (the shells cannot fold, so they are flattened)."""
     import bpy
     from mathutils import Vector
     z0 = seat_w.z + 0.006
     seats = [o for o in bpy.data.objects if o.type == 'MESH' and any(k in o.name for k in ("thwart", "sternseat", "sideseat", "Chair", "settee"))]
-    boxes = []
-    for o in seats:
+    given = boxes; boxes = list(given or [])
+    for o in ([] if given else seats):
         bb = [o.matrix_world @ Vector(c) for c in o.bound_box]
         lo = Vector([min(v[i] for v in bb) for i in range(3)]); hi = Vector([max(v[i] for v in bb) for i in range(3)])
         if lo.z - 0.06 < seat_w.z < hi.z + 0.06:

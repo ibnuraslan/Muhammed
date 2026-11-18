@@ -108,22 +108,35 @@ elif SHOT in ("S22", "S23", "S26"):
     from sitpose import Seat
     import human as H, poses as P
     a = PP.arthur()
-    seat_pt = Vector((wx + 0.55, wy - 0.05, 0.47))
-    chairA, _ = PR.put("WoodenChair_01", (seat_pt.x + 0.02, seat_pt.y, 0), rot_z=math.radians(90), size=0.85, res="1k")
+    cx, cy = wx + 0.55, wy - 0.05
+    chairA, _ = PR.put("WoodenChair_01", (cx + 0.04, cy, 0), rot_z=math.radians(-90), size=0.85, res="1k")
+    # the chair's real seat height under its middle (raycast down), so he sits on it, not in it
+    bpy.context.view_layer.update()
+    import numpy as np
+    zs = []
+    for o in chairA.children_recursive:
+        if o.type == 'MESH':
+            for v in o.data.vertices:
+                w = o.matrix_world @ v.co
+                if abs(w.x - cx) < 0.1 and abs(w.y - cy) < 0.1 and 0.3 < w.z < 0.6:
+                    zs.append(w.z)
+    seat_pt = Vector((cx, cy, float(np.percentile(zs, 90)) if zs else 0.45))
+    print("chair seat", seat_pt)
     st = Seat(a, seat_pt, 180.0 if SHOT != "S26" else 200.0)       # facing the window (-X)
-    st.legs({"L": seat_pt + Vector((-0.3, 0.08, -0.4)), "R": seat_pt + Vector((-0.28, -0.08, -0.38))}, knees_out=0.06)
+    st.legs({"L": Vector((seat_pt.x - 0.3, seat_pt.y + 0.08, 0.085)), "R": Vector((seat_pt.x - 0.28, seat_pt.y - 0.08, 0.085))}, knees_out=0.06)
     look_out = Vector((wx - 8, wy - 1.5, 1.2))
     if SHOT == "S26":
         # the doll in his hands, on his knees; he looks down at her
         st.lean(fwd=16)
         knees = (st.M @ a.h.bone_tail("upperleg02.L") + st.M @ a.h.bone_tail("upperleg02.R")) / 2
-        dpos = knees + Vector((0.06, 0, 0.1))
-        d, piece = PR.doll("doll_held", dpos, rot_z=math.radians(-90), height=0.3, broken=True, kind="china")
+        hipw = (st.M @ a.h.bone_head("upperleg01.L") + st.M @ a.h.bone_head("upperleg01.R")) / 2
+        dpos = hipw.lerp(knees, 0.62) + Vector((0, 0, 0.085))       # across his thighs, clear of his body
+        d, piece = PR.doll("doll_held", dpos, rot_z=math.radians(0), height=0.26, broken=True, kind="china")
         import sketchfab as SF
         lo, hi = SF.bounds([o for o in d.children_recursive if o.type == 'MESH'])
         mid = (lo + hi) / 2
-        st.hand("L", mid + Vector((0.0, 0.07, -0.005)), elbow=(0.6, 0.3, -0.8), grip=0.55)
-        st.hand("R", mid + Vector((0.05, -0.08, -0.005)), elbow=(0.6, 0.3, -0.8), grip=0.55)
+        st.hand("L", mid + Vector((0.0, 0.1, 0.0)), elbow=(0.6, 0.3, -0.8), grip=0.4)
+        st.hand("R", mid + Vector((0.0, -0.1, 0.0)), elbow=(0.6, 0.3, -0.8), grip=0.4)
         st.head(mid, share=0.85)
         a.lids(0.8); a.brow_knit(0.4)
         look = mid
@@ -134,6 +147,8 @@ elif SHOT in ("S22", "S23", "S26"):
         a.brow_knit(0.3)
         look = look_out
     st.place_finish(look, density=DENS)
+    import boatcrew
+    boatcrew.trim_under_seat(a, seat_pt, r=0.3, boxes=[(seat_pt - Vector((0.2, 0.2, 0.03)), seat_pt + Vector((0.2, 0.2, 0.0)))])
     # his father's letter on the sill (folded open, ink lines)
     lp = PR.text_texture("letter", ["My dear Arthur,", "", "I wish I could find", "room for you", "aboard . . .", "", "  your loving Father"],
                          size=(1024, 1400), font="InstrumentSerifItalic.ttf", bg=(205, 190, 160, 255), ink=(40, 30, 40, 255), px=78,
