@@ -674,7 +674,7 @@ def s15(t):
     org = (35.985, -5.56)
     ST.exterior("day", sky_rot=80, sun_az=110, sun_el=9)
     ST.coast("spain", (36.14, -5.72, 36.0, -5.40), 12, org, res=600)
-    hd = 250.0                                 # 40 degrees off her bow: the square foremast reads (brigantine)
+    hd = 268.0                                 # ~20 degrees off her bow: the square foremast and spare course face the lens
     m = ST.mc("spare", wind=ST.local_wind((0.3, -1.0, 0), hd), wet=0.7, detail=False)
     SHIP = ST.set_ship(m, loc=(0, 0, 0), heading=hd, heel=1.5, pitch=0.3 * math.sin(t * 1.4))
     ST.ocean_around((0, 0, 0), hulls=[m["hull"]], mood="day", size=240, scale=1.1, chop=1.1, wind=9, foam=0.15, time=11 + t * 3)
