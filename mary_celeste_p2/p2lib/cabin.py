@@ -437,7 +437,7 @@ def _chronometer_box(p, wood_m, br, state="full"):
     for sx in (-1, 1):
         for sy in (-1, 1):
             box("chrono_corner", (p.x + sx * w / 2, p.y + sy * d / 2, p.z + h / 2), (0.008, 0.008, h + 0.004), br)
-    lid = box("chrono_lid", (p.x, p.y + d / 2 + 0.01, p.z + h + d / 2), (w, 0.015, d), wood_m, bevel=0.003)
+    lid = box("chrono_lid", (p.x, p.y - d / 2 - 0.01, p.z + h + d / 2), (w, 0.015, d), wood_m, bevel=0.003)
     inner = plain("velvet", (0.12, 0.02, 0.03), rough=1.0)
     box("chrono_bed", (p.x, p.y, p.z + h - 0.015), (w - 0.02, d - 0.02, 0.005), inner)
     if state == "full":
@@ -615,7 +615,7 @@ def sextant_case(p, wood_m, empty=True, yaw=0.0):
     """The sextant's wooden box, lid open, with the fitted wedge-shaped bed (empty)."""
     w, d, h = 0.3, 0.28, 0.12
     o = [box("sx_base", (p.x, p.y, p.z + h / 2), (w, d, h), wood_m, bevel=0.004)]
-    o.append(box("sx_lid", (p.x, p.y + d / 2 + 0.008, p.z + h + d / 2 - 0.01), (w, 0.012, d), wood_m, bevel=0.003))
+    o.append(box("sx_lid", (p.x, p.y - d / 2 - 0.008, p.z + h + d / 2 - 0.01), (w, 0.012, d), wood_m, bevel=0.003))
     vel = plain("sx_velvet", (0.05, 0.08, 0.15), rough=1.0)
     o.append(box("sx_bed", (p.x, p.y, p.z + h - 0.012), (w - 0.02, d - 0.02, 0.004), vel))
     if empty:

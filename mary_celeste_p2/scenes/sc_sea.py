@@ -112,8 +112,7 @@ if SHOT in ("21", "22", "24", "25", "26", "27"):
         let = cabin.sheet("letter", mid + Vector((0, 0, -0.03)), 0.11, 0.16, cabin.paper_material("env", ink=False), rot=0.5)
         let.rotation_euler = (math.radians(70), 0, 0)
         s.look(pl.h.bone_head("head")); pl.look(mid)
-        S.frame([s.h.bone_head("head"), pl.h.bone_head("head"), mid, mid - Vector((0, 0, 0.6))], Vector((0.15, 1.0, 0.05)),
-                lens=40, fill=0.85, fstop=4.0)
+        S.cam(SM @ Vector((xr + 0.9, yr + 2.6, ship.zdeck(xr) + 1.55)), mid + Vector((0, 0, -0.15)), lens=35, fstop=4.0)
     elif SHOT == "26":   # the pilot boat pulls away; the Mary Celeste sets sail behind it
         bt, _ = W.pilot_boat("pilotboat", Vector((-30, -26, 0.0)), 200)
         S.cam(Vector((-58, -52, 3.5)), Vector((-8, 0, 7)), lens=35)

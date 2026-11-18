@@ -210,7 +210,7 @@ elif SHOT in ("30", "31", "32"):   # 25 November, dawn: the mate chalks the morn
         m.finish_live(place=Mm, density=HAIR)
         m.look(sl)
         hd = m.h.bone_head("head")
-        S.ots(hd, sl, side=-1, back=0.5, out=0.16, up=0.42, lens=40)
+        S.cam(Vector((0.5, -0.98, 1.5)), sl + Vector((0.12, 0.0, 0.08)), lens=35, fstop=2.8)
     elif SHOT == "31":
         S.cam(sl + Vector((0.08, -0.22, 0.2)), sl + Vector((0.0, -0.03, 0)), lens=60, fstop=2.8)
     else:
@@ -238,7 +238,7 @@ elif SHOT in ("34", "35", "38", "39"):   # 4 December: Deveau goes through the c
         S.frame([hd, hd - Vector((0, 0, 1.4)), sbt + Vector((-0.6, 0, 0)), sbt + Vector((0.6, 0, 0))], Vector((0.9, 0.5, 0.3)),
                 lens=26, fill=0.9, bounds=SET["bounds"], fstop=4.0)
     elif SHOT == "35":
-        S.ots(hd, SET["chrono_box"], side=-1, back=0.5, out=0.16, up=0.45, lens=40)
+        S.cam(hd + Vector((0.12, 0.22, 0.2)), SET["chrono_box"] + Vector((0.0, 0.03, 0)), lens=28, fstop=4.0)
     elif SHOT == "38":
         S.ots(hd, sbt + Vector((0.32, 0, 0.1)), side=1, back=0.5, out=0.16, up=0.45, lens=40)
     else:
