@@ -169,13 +169,13 @@ def rain(name, center, size, count=20000, drop_len=0.5, wind=(0.35, -0.15), seed
     P_ = (rng.random((count, 3)) - 0.5) * np.array(size) + np.array(center)
     me = bpy.data.meshes.new(name); me.from_pydata(P_.tolist(), [], []); me.update()
     o = bpy.data.objects.new(name, me); bpy.context.scene.collection.objects.link(o)
-    bpy.ops.mesh.primitive_cylinder_add(vertices=5, radius=0.0018, depth=drop_len)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=5, radius=0.0009, depth=drop_len)
     drop = bpy.context.active_object; drop.name = name + "_drop"
     w = Vector((wind[0], wind[1], -1)).normalized()
     drop.rotation_euler = w.to_track_quat('Z', 'Y').to_euler(); bpy.ops.object.transform_apply(rotation=True)
     m = bpy.data.materials.new(name + "_m"); m.use_nodes = True; q = m.node_tree.nodes["Principled BSDF"]
     q.inputs['Base Color'].default_value = (0.8, 0.85, 0.9, 1); q.inputs['Transmission Weight'].default_value = 0.6
-    q.inputs['Roughness'].default_value = 0.2; q.inputs['Alpha'].default_value = 0.35
+    q.inputs['Roughness'].default_value = 0.2; q.inputs['Alpha'].default_value = 0.2
     drop.data.materials.append(m); drop.hide_render = True; drop.hide_viewport = True
     ng = bpy.data.node_groups.new(name + "_gn", "GeometryNodeTree")
     ng.interface.new_socket("Geometry", in_out='INPUT', socket_type='NodeSocketGeometry')

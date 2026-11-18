@@ -106,7 +106,7 @@ def sextant_case(name="sextant_case"):
     return objs
 
 
-def sack(name="sack", size=(0.42, 0.3, 0.5), seed=2):
+def sack(name="sack", size=(0.24, 0.19, 0.42), seed=2):
     """Canvas food bag, tied at the neck: a lumpy displaced capsule."""
     bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=20, radius=1)
     o = bpy.context.active_object; o.name = name

@@ -485,7 +485,7 @@ def route_line(frac, table_z, mat=None):
         out.append(pts[i + 1]); acc += s_
     mat = mat or crew.flat("graphite", (0.06, 0.06, 0.065), rough=0.35, metal=0.3)
     if len(out) >= 2:
-        ship.rope("route", out, 0.0026, mat)
+        ship.rope("route", out, 0.0035, mat)
     return out[-1]
 
 
@@ -507,7 +507,7 @@ def lamp_room(center, energy=40.0, key_from=(-0.8, 0.9, 1.4), key=90.0, fill=12.
 def s10(t):
     tz = 0.8
     o, (cx, cy, wx, wy) = maquette(tz)
-    lamp_room((cx, cy, tz))
+    lamp_room((cx, cy, tz), key=35.0, fill=6.0)
     frac = 0.35 + 0.3 * ease(t)
     tip = route_line(frac, tz)
     PR.dip_pen  # (pen for the letter scene; the route is drawn with a pencil)
@@ -582,7 +582,7 @@ def gale(t, cam_near=True):
 def s11(t):
     SHIP, m = gale(t)
     ST.rain("rain", SHIP @ Vector((-4, 0, 6)), (30, 20, 14), count=int(E("RAIN", "40000")))
-    sea.spray("greenwater", SHIP @ Vector((0.0, -3.6, 2.2)), (2.5, 3.0, 1.0), count=9000, up=2.2, dirv=(SHIP.to_3x3() @ Vector((0, 1, 0.2))))
+    sea.spray("greenwater", SHIP @ Vector((2.0, -3.6, 2.2)), (2.5, 3.0, 1.0), count=9000, rmax=0.008, up=2.2, dirv=(SHIP.to_3x3() @ Vector((0, 1, 0.2))))
     sea.mist_puff("spraymist", SHIP @ Vector((1.0, -4.0, 2.6)), (3.0, 2.0, 1.4), density=0.18, seed=t)
     loc = ST.deck_world(SHIP, -6.4, 2.2, 2.7) + Vector((0.05 * math.sin(t * 9), 0.04 * math.sin(t * 7), 0.04 * math.sin(t * 11)))
     cam(loc, ST.deck_world(SHIP, 5.0, -2.4, 1.0), lens=24, fstop=None, roll=-4)
@@ -599,7 +599,7 @@ def s12(t):
     dv = crew.person("deveau", wet=1.0); pose_wheel(dv, wc, M, t)
     dv.finish(look_at=SHIP @ Vector((10, -2, 3)), place=M, density=hair(dv))
     ed = eyes(dv)
-    ST.rain("rain", ed, (8, 8, 5), count=int(E("RAIN", "30000")) // 2, drop_len=0.3)
+    ST.rain("rain", ed, (8, 8, 5), count=int(E("RAIN", "30000")) // 3, drop_len=0.25)
     loc = SHIP @ Vector((xw - 2.1, -1.5, ship.zdeck(xw) + 1.75)) + Vector((0.02 * math.sin(t * 10), 0, 0.02 * math.sin(t * 8)))
     cam(loc, SHIP @ Vector((xw + 3.0, 0.2, ship.zdeck(xw) + 1.2)), lens=35, fstop=4.0, focus=(ed - loc).length, roll=-5)
     rim = bpy.data.objects.new("rim", bpy.data.lights.new("rim", 'AREA')); bpy.context.scene.collection.objects.link(rim)
