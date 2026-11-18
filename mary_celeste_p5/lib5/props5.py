@@ -304,7 +304,7 @@ def seal_texture():
         r = 210 if k % 2 == 0 else 85; a = -math.pi / 2 + k * math.pi / 5
         pts.append((S / 2 + r * math.cos(a), S / 2 + r * math.sin(a)))
     d.polygon(pts, fill=255)
-    im = im.filter(ImageFilter.GaussianBlur(3))
+    im = im.filter(ImageFilter.GaussianBlur(3)).transpose(Image.FLIP_LEFT_RIGHT)    # UVs run mirrored on the disc
     p = os.path.join(TEX, "seal_height.png"); im.save(p)
     return p
 
