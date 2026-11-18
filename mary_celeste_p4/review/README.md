@@ -65,6 +65,13 @@ Courier Prime captions; every action has an SFX (list above → `sfx_cues.csv` a
 * Characters (S03, S09, S16, S21, S31, S33, S35): on hold until the new character assets land in the shared lib.
 * MacGregor / Richardson: text cards over their work, no figure. Card photos: placeholders until the hub supplies them.
 
+## Framing rule (hub, user decision): no face close-ups
+* S03 Briggs: medium-wide from behind, the yawl on the main hatch beyond (yawl: Sketchfab "Old Boat", CC BY).
+* S09 Deveau over the fore hatch: medium-wide from the side, face down into the hatch.
+* S16 Deveau: over the shoulder from behind as he turns toward the pumps.
+* S31 Briggs / S35 Deveau: over the shoulder onto the sounding rod in their hands (wet mark is the subject).
+* S21 stays a lantern silhouette; S33 stays over the shoulder at dawn.
+
 ## Render budget (measured here: 4 CPU cores, no GPU)
 ~15 s/frame at 640×360/24 spp → full spec 2560×1440 at ~96 spp ≈ 15–20 min/frame. 175 s × 24 fps = 4,200 frames
 ≈ 1,000+ machine-hours on one container: not feasible as is. Options for the hub:

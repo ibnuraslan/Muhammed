@@ -9,6 +9,7 @@ Mary Celeste Part 4 — third-party assets (all free licences)
 3D scans — Sketchfab (CC BY 4.0; attribution required):
   "Top end of pump tube" by The Viking Ship Museum (vikingshipmuseum), CC Attribution, https://sketchfab.com/3d-models/top-end-of-pump-tube-24f8540b2cd8478b83053ff368952474
   "Lower end of a ship's pump (pompvoet) OU86-137" by Museum Batavialand (Batavialand), CC Attribution, https://sketchfab.com/3d-models/lower-end-of-a-ships-pump-pompvoet-ou86-137-7985bc32f0ef4b7698f3cbb47bf2613e
+  "Old Boat" by donnichols (donnichols), CC Attribution, https://sketchfab.com/3d-models/old-boat-a9ce4ca0cac14f448c72bb94ad193437 (the ship's yawl)
 Terrain and bathymetry — AWS Open Data "Terrain Tiles" (Mapzen terrarium encoding), sources incl. SRTM (NASA/USGS, public domain),
   GMTED2010 (USGS), ETOPO1 (NOAA) and GEBCO; https://registry.opendata.aws/terrain-tiles/ (attribution as required by the sources).
 Human base mesh, rig and targets — MakeHuman 1.x (CC0), via the shared library mary_celeste_3d; MPFB 2 masks (CC0 assets).

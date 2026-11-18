@@ -473,8 +473,11 @@ def set_staves():
 
 
 # ============================================================================= THE DECK (as found, day)
+YAWL = "a9ce4ca0cac14f448c72bb94ad193437"     # "Old Boat" by donnichols (CC BY): stands in for the ship's yawl
+
+
 def set_deck(time="day", heel=2.5, rail_gap=(-2.7, -0.6, "S"), pumps="found", sails="found", sea_k=1.0,
-             forehatch_off=True, boat=False):
+             forehatch_off=True, boat=None):
     """The Mary Celeste's deck. time: 'day' (grey Atlantic noon, as Deveau found her), 'dusk' (warm low sun,
     before the weather), 'night' (lantern, after rough weather), 'dawn' (grey-rose, Santa Maria on the horizon)."""
     sc = bpy.context.scene
@@ -507,6 +510,14 @@ def set_deck(time="day", heel=2.5, rail_gap=(-2.7, -0.6, "S"), pumps="found", sa
     for o in pcoll.all_objects:
         if o.parent is None:
             o.matrix_world = SHIP @ o.matrix_world
+    if boat is None:
+        boat = rail_gap is None            # before the evacuation the yawl is still on its chocks on the main hatch
+    if boat:
+        import skfab
+        br, bms = skfab.model(YAWL, height=0.98, name="yawl")          # ~4.6 m boat, keel up on the chocks
+        xm = ship.MAIN_HATCH_X
+        br.matrix_world = SHIP @ Matrix.Translation((xm, 0, ship.zdeck(xm) + 0.755)) @ Matrix.Rotation(math.radians(90), 4, 'Z')
+        out["yawl"] = br
     water = sea.water_material()
     sky_aid = {"day": sea.SKY, "dusk": "belfast_sunset_puresky", "night": "belfast_sunset_puresky", "dawn": "industrial_sunset_02_puresky"}[time]
     chop = {"day": 1.7, "dusk": 1.2, "night": 2.4, "dawn": 1.5}[time] * sea_k

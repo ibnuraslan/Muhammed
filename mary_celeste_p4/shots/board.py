@@ -123,8 +123,9 @@ def S03():   # BRIGGS card: on deck at dusk, looking forward at the yawl on the 
     SHIP = d["SHIP"]
     dv, M = man("briggs", SHIP, (-6.2, -1.4), 15, pose_lookdown(pitch=6, yaw=-8, lean=2), (-1.2, 0.0, 2.4), wet=0.1)
     hw = head_of(M)
-    cl = SHIP @ Vector((-4.4, -2.6, ship.zdeck(-4.4) + 1.62))
-    cam(cl + Vector((0.12 * E(T), 0, 0)), hw + Vector((0, 0, -0.18)), lens=58, fstop=2.4, focus=(hw - cl).length)
+    # framing rule: no face close-ups. Medium-wide from behind: Briggs's back, the boat on the main hatch beyond
+    cl = SHIP @ Vector((-9.4 + 0.25 * E(T), -0.5, ship.zdeck(-9.4) + 1.95))
+    cam(cl, SHIP @ Vector((-1.6, -0.6, ship.zdeck(-1.6) + 0.9)), lens=32, fstop=4.0, focus=(hw - cl).length)
     finish()
 
 
@@ -164,8 +165,9 @@ def S09():   # Deveau over the open fore hatch, breathing in: no smell of spirit
     xf = ship.FORE_X + 2.6
     dv, M = man("deveau", SHIP, (xf - 1.35, -0.25), 0, pose_sniff, (xf, 0, ship.zdeck(xf)))
     hw = head_of(M)
-    cl = SHIP @ Vector((xf + 0.4, -1.5, ship.zdeck(xf) + 1.05))
-    cam(cl + Vector((0, 0, 0.05 * E(T))), hw + Vector((0, 0, -0.1)), lens=58, fstop=2.8, focus=(hw - cl).length)
+    # medium-wide from the side: he bends over the hatch, his face turned down into it (no face close-up)
+    cl = SHIP @ Vector((xf + 1.5, -2.6, ship.zdeck(xf) + 1.45))
+    cam(cl + Vector((0, 0, 0.05 * E(T))), SHIP @ Vector((xf - 0.6, 0, ship.zdeck(xf) + 0.75)), lens=32, fstop=4.0, focus=(hw - cl).length)
     finish(sat=0.95)
 
 
@@ -222,8 +224,9 @@ def S16():   # Deveau turns: something by the mainmast (MCU, his eyeline aft)
     SHIP = d["SHIP"]; px = d["px"]
     dv, M = man("deveau", SHIP, (px + 3.6, 1.6), 180 + 20 * (1 - E(T)), pose_lookdown(pitch=12, yaw=12, lean=3), (px, 0.7, ship.zdeck(px) + 0.4))
     hw = head_of(M)
-    cl = SHIP @ Vector((px + 2.1, 1.05, ship.zdeck(px) + 1.6))
-    cam(cl, hw + Vector((0, 0, -0.08)), lens=65, fstop=2.4, focus=(hw - cl).length)
+    # over his shoulder from behind: as his head turns, the mainmast and the pumps come into his eyeline
+    cl = SHIP @ Vector((px + 5.1, 2.25, ship.zdeck(px) + 1.8))
+    cam(cl, SHIP @ Vector((px + 0.2, 0.8, ship.zdeck(px) + 0.7)), lens=35, fstop=4.0, focus=(SHIP @ Vector((px, 0.7, ship.zdeck(px))) - cl).length)
     finish(sat=0.95)
 
 
@@ -382,8 +385,10 @@ def S31():   # Briggs sounds the well: the rod on its line, drawn up wet, read b
     rod(SHIP, a, b, wet=0.55)
     dv, M = man("briggs", SHIP, (px + 0.95, -1.75), 140, pose_rod(SHIP, a, (px + 0.55, -1.25, rz + 0.05)), (px + 0.55, -1.25, rz - 0.1), wet=0.8)
     hw = head_of(M)
-    cl = SHIP @ Vector((px - 0.6, -0.4, ship.zdeck(px) + 1.5))
-    cam(cl, hw.lerp(SHIP @ Vector(b), 0.45), lens=45, fstop=2.8, focus=(hw - cl).length)
+    # over his shoulder by lantern light (no face): the rod comes up wet out of the well
+    cl = SHIP @ Vector((px + 1.9, -1.1, ship.zdeck(px) + 1.75))
+    mark = SHIP @ Vector(a).lerp(Vector(b), 0.5)
+    cam(cl, mark, lens=40, fstop=4.0, focus=(mark - cl).length)
     finish(exposure=0.2)
 
 
@@ -423,8 +428,10 @@ def S35():   # Deveau reads the sounding rod: three and a half feet in the hold 
     rod(SHIP, a, b, wet=0.5)
     dv, M = man("deveau", SHIP, (px + 1.0, -1.7), 140, pose_rod(SHIP, a, (px + 0.6, -1.2, rz + 0.05)), (px + 0.6, -1.2, rz - 0.1))
     hw = head_of(M)
-    cl = SHIP @ Vector((px - 0.5, -0.3, ship.zdeck(px) + 1.55))
-    cam(cl, hw.lerp(SHIP @ Vector(b), 0.45), lens=45, fstop=2.8, focus=(hw - cl).length)
+    # over his right shoulder onto the rod in his hands: the wet mark is the subject, his face is not shown
+    cl = SHIP @ Vector((px + 1.95, -1.05, ship.zdeck(px) + 1.75))
+    mark = SHIP @ Vector(a).lerp(Vector(b), 0.5)
+    cam(cl, mark, lens=40, fstop=4.0, focus=(mark - cl).length)
     finish(sat=0.95)
 
 
@@ -512,11 +519,11 @@ def rod(SHIP, top, bottom, wet=0.5):
     """An iron sounding rod (graduated, chalked) on a line; the lower part dark and wet to the water mark."""
     import ship as SH
     a = SHIP @ Vector(top); b = SHIP @ Vector(bottom)
-    dry = p4.mat("rod_dry", (0.45, 0.44, 0.4), rough=0.6, metal=0.6)
+    dry = p4.mat("rod_dry", (0.62, 0.6, 0.55), rough=0.55, metal=0.5)
     wetm = p4.mat("rod_wet", (0.04, 0.04, 0.04), rough=0.08, metal=0.5)
     m = a.lerp(b, wet)
-    SH.cyl("rod_dry", a, m, 0.009, mat=dry, verts=12)
-    SH.cyl("rod_wet", m, b, 0.0092, mat=wetm, verts=12)
+    SH.cyl("rod_dry", a, m, 0.012, mat=dry, verts=12)
+    SH.cyl("rod_wet", m, b, 0.0122, mat=wetm, verts=12)
     for k in range(1, 8):                                  # graduations
         q = a.lerp(b, k / 8)
         SH.cyl("grad", q, q + (b - a).normalized() * 0.004, 0.0105, mat=p4.mat("notch", (0.02, 0.02, 0.02), 0.5), verts=12)
