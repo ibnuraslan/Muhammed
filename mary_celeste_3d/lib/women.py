@@ -42,14 +42,31 @@ def jet(name="jet"):
 class _Woman(D.Deveau):
     GENDER = 0.0; MUSCLE = 0.4; WEIGHT = 0.45; HEIGHT = 0.45
     EXTRA = {}
-    SKIN = dict(base=(0.6, 0.42, 0.33), weather=0.15)
+    SKIN = dict(base=(0.5, 0.32, 0.23), weather=0.3)        # warm, natural (same SSS/colour range as Deveau)
     ASSET_BOOTS = False
     HAIR = (0.7, 0.4)                          # melanin, redness
+    HAIR_LIFT = 0.0025
 
     def __init__(self, name, years, wet=0.0, seated=False, bonnet=True, shawl=True):
         self.seated = seated; self.want_bonnet = bonnet; self.want_shawl = shawl
         self.button_objs = []
         super().__init__(name=name, years=years, wet=wet)
+
+    def relaxed(self, lean=2.0, look_down=4.0, hands="waist"):
+        """Natural default: weight on one leg, soft elbows, hands loosely together in front at the waist, lids relaxed."""
+        import poses as P
+        h = self.h; m = self.marks
+        P.stand(h, lean=lean, weight="L", twist=-2)
+        P.head(h, pitch=look_down, yaw=-4, tilt=2)
+        hs = self.head_scale
+        front = float(self.rest_co[self.used & (np.abs(self.rest_co[:, 2] - (m["hip"] + 0.1 * hs)) < 0.03), 1].min())
+        cx = float(self.rest_co[self.used, 0].mean())
+        zt = m["hip"] + (0.1 if hands == "waist" else 0.02) * hs
+        for sd, sg in (("L", 1), ("R", -1)):
+            P.hand_reach(h, sd, Vector((cx + sg * 0.035 * hs, front - 0.1 * hs, zt)), elbow=(sg * 1.0, 0.25, -0.5))
+            h.aim(f"wrist.{sd}", Vector((-sg * 0.8, -0.35, -0.3)))
+            P.rest_hand(h, sd, curl=34)
+        self.lids(0.3)
 
     # ---------------------------------------------------------------- shared helpers
     def _m(self):
@@ -66,6 +83,7 @@ class _Woman(D.Deveau):
         u = self.used; z = self.rest_co[:, 2]
         band = u & (z > top - 0.012) & (z < top + 0.004) & (wh < 0.75) & (whand < 0.1)
         o, _ = self._shell("collar_edge", band, offset, mat, solid=0.002)
+        Sarah._soft_edge(self, o, iters=20)
         return o
 
     def _bell(self, label, mat, z_top, z_bottom, R, back=0.06, folds=9, arc=None, offset=0.02, nr=72, nh=26):
@@ -159,24 +177,18 @@ class _Woman(D.Deveau):
         head = self.used & (wh > 0.55) & (ears < 0.2)
         line = np.interp(y / hs, [-0.06, -0.03, 0.0, 0.05, 0.12], [0.085, 0.075, 0.045, -0.05, -0.08]) * hs
         scalp = head & (z > line)
-        if getattr(self, "bonnet", None) is not None:
-            scalp &= (y < 0.0) & (z > line)                    # under the bonnet only the front shows
         brow = head & (z > 0.014 * hs) & (z < (0.03 - 0.12 * np.abs(np.abs(x) / hs - 0.03)) * hs) & (y < -0.012 * hs) & \
                (self.rest_n[:, 1] < -0.45) & (np.abs(x) > 0.011 * hs) & (np.abs(x) < 0.05 * hs)
         P, bvh = self._posed_surface(); R = self.head_R
         self._mid_x = float(P[self.used, 0].mean())
         hm = D.hair_material(self.name + "_hair", *self.HAIR, rough=0.3)
         self.hair_objs = []
-        hl = self.HAIR_LEN if (getattr(self, "bonnet", None) is not None or not isinstance(self, Sarah)) else (0.06, 0.1)
-        self.hair_objs.append(self._strands("hair", scalp, P, bvh, int(self.HAIR_N * density), hl, 0.0009,
-                                            comb=self._comb(R), lift=0.0025, mat=hm, curl=self.CURL, clump=0.45, segs=9))
-        if getattr(self, "bonnet", None) is None and isinstance(self, Sarah):
-            # bare-headed: hair drawn back to a low knot at the nape
-            knot = head & (y > 0.045 * hs) & (z > -0.07 * hs) & (z < -0.015 * hs) & (np.abs(x) < 0.035 * hs)
-            kc = Vector((float(self._mid_x), 0, 0))
-            self.hair_objs.append(self._strands("knot", knot, P, bvh, int(14000 * density), (0.05, 0.08), 0.0011,
-                                                comb=lambda p: R @ Vector((math.copysign(0.8, self._mid_x - p.x), 0.4, 0.5)),
-                                                lift=0.012, mat=hm, curl=0.9, clump=0.75, segs=11))
+        bun = self._bun_point(P) if isinstance(self, Sarah) else None
+        self.hair_objs.append(self._strands("hair", scalp, P, bvh, int(self.HAIR_N * density), self.HAIR_LEN, 0.0009,
+                                            comb=self._comb(R), lift=self.HAIR_LIFT, mat=hm, curl=self.CURL, clump=0.45, segs=10,
+                                            attract=bun))
+        if isinstance(self, Sarah):
+            self._bun(P, R, hm, density)
         self.hair_objs.append(self._strands("brows", brow, P, bvh, int(900 * density), (0.005, 0.008), 0.0005,
                                             comb=lambda p: R @ Vector((math.copysign(1.0, p.x - self._mid_x), 0, 0.2)),
                                             lift=0.0006, mat=hm, curl=0.05))
@@ -188,7 +200,7 @@ class _Woman(D.Deveau):
 
 
 class Sarah(_Woman):
-    HAIR_N = 40000; HAIR_LEN = (0.03, 0.05); CURL = 0.1
+    HAIR_N = 90000; HAIR_LEN = (0.08, 0.13); CURL = 0.1; HAIR_LIFT = 0.0055
     HAIR = (0.88, 0.3)
     DRESS = (0.075, 0.035, 0.045)     # deep plum-brown wool
     SHAWL = (0.2, 0.17, 0.13)         # undyed grey-brown knitted wool
@@ -205,7 +217,52 @@ class Sarah(_Woman):
 
     def _comb(self, R):
         mid = lambda: self._mid_x
-        return lambda p: R @ Vector((math.copysign(0.55, p.x - mid()), 0.85, -0.15))   # centre parting, drawn back
+        return lambda p: R @ Vector((math.copysign(0.45, p.x - mid()), 0.9, -0.3))    # centre parting, drawn back
+
+    def _bun_point(self, P):
+        h = self.h; hs = self.head_scale
+        hd = P[self.used & (D._w(h, D.HEAD) > 0.6)]
+        # back of the head, low (posed positions; the head may be turned: use the head rotation)
+        ctr = hd.mean(0); back = self.head_R @ Vector((0, 1, 0)); down = self.head_R @ Vector((0, 0, -1))
+        return tuple(Vector(ctr) + back * 0.085 * hs + down * 0.035 * hs)
+
+    def _bun(self, P, R, hm, density):
+        """A low bun at the nape: a coiled core of hair wound with clumped strands (rides with the head)."""
+        h = self.h; hs = self.head_scale
+        c = Vector(self._bun_point(P))
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=0.032 * hs, location=c)
+        core = bpy.context.active_object; core.name = self.name + "_bun"; core.scale = (1.25, 0.85, 0.9)
+        bpy.ops.object.shade_smooth()
+        bm_ = bpy.data.materials.new(self.name + "_buncore"); bm_.use_nodes = True
+        bp = bm_.node_tree.nodes["Principled BSDF"]; bp.inputs['Base Color'].default_value = (0.03, 0.018, 0.012, 1)
+        bp.inputs['Roughness'].default_value = 0.45; bp.inputs['Sheen Weight'].default_value = 0.6
+        tc = bm_.node_tree.nodes.new("ShaderNodeTexCoord"); wv = bm_.node_tree.nodes.new("ShaderNodeTexWave")
+        wv.wave_type = 'RINGS'; wv.inputs['Scale'].default_value = 25; wv.inputs['Distortion'].default_value = 6
+        bm_.node_tree.links.new(tc.outputs['Object'], wv.inputs['Vector'])
+        bb = bm_.node_tree.nodes.new("ShaderNodeBump"); bb.inputs['Strength'].default_value = 0.8
+        bm_.node_tree.links.new(wv.outputs['Fac'], bb.inputs['Height']); bm_.node_tree.links.new(bb.outputs['Normal'], bp.inputs['Normal'])
+        core.data.materials.append(bm_)
+        self.button_objs.append(core)
+        # coiled strands wound round the core
+        rng = np.random.default_rng(11); n = int(4000 * density); segs = 14
+        pts = np.zeros((n, segs, 3), np.float32)
+        rad = 0.033 * hs
+        for i in range(n):
+            a0 = rng.uniform(0, 2 * math.pi); el = rng.uniform(-1.1, 1.1); tilt = rng.uniform(-0.3, 0.3)
+            for k in range(segs):
+                a = a0 + k * 0.32
+                r = rad * (1.02 + 0.06 * rng.random())
+                v = Vector((math.cos(a) * math.cos(el + tilt * math.sin(a)) * 1.25, math.sin(el + tilt * math.sin(a)) * 0.85,
+                            math.sin(a) * math.cos(el) * 0.9)) * r
+                pts[i, k] = c + v
+        cv = bpy.data.hair_curves.new(self.name + "_bunhair"); cv.add_curves([segs] * n)
+        cv.position_data.foreach_set("vector", pts.reshape(-1))
+        try:
+            cv.attributes["radius"].data.foreach_set("value", np.full(n * segs, 0.00005, np.float32))
+        except Exception:
+            pass
+        ob = bpy.data.objects.new(cv.name, cv); bpy.context.collection.objects.link(ob); cv.materials.append(hm)
+        self.hair_objs.append(ob)
 
     def _dress(self):
         m, wh, whand, wfoot, warm = self._m()
@@ -235,17 +292,66 @@ class Sarah(_Woman):
             self.skirt = self._bell("skirt", dress, m["hip"] + 0.09, 0.012, R=0.36, back=0.07, folds=11)
         # shawl: knitted wool over the shoulders, deeper at the back, ends crossing on the chest
         back = np.clip((y - self.rest_co[u, 1].mean()) / 0.08 + 0.5, 0, 1)
-        sh_lo = top - 0.12 - 0.2 * back
+        cxm = self.rest_co[u, 0].mean()
+        vfront = (y < self.rest_co[u, 1].mean()) * np.exp(-((co[:, 0] - cxm) / 0.07) ** 2)
+        sh_lo = top - 0.12 - 0.2 * back - 0.13 * vfront             # point at the back, ends crossed low in front
         shawl = u & (wh < 0.5) & (whand < 0.05) & (z > sh_lo) & (z < top - 0.035) & (warm < 0.6) | \
                 (u & (warm > 0.3) & (z > top - 0.22) & (z < top - 0.03) & (whand < 0.05))
         if not self.want_shawl:
             shawl = np.zeros_like(shawl)
         self.shawl = None if not shawl.any() else self._shell("shawl", shawl, 0.026, cloth(self.name + "_shawl", self.SHAWL, rough=0.9, sheen=0.6, knit=True,
                                                                   wet=self.wet), solid=0.006, drape=30, displace=0.006)[0]
+        if self.shawl is not None:
+            self._soft_edge(self.shawl)
         self.bonnet = None
         if self.want_bonnet:
             self._bonnet(m, wh)
         self._hide_skin(bod | st | (shawl & (wh < 0.2)))
+
+    def _soft_edge(self, o, iters=40):
+        """Knitted edge: the stair-stepped boundary of the shell is relaxed along itself into a smooth curve."""
+        me = o.data; bm = bmesh.new(); bm.from_mesh(me)
+        bnd = [v for v in bm.verts if v.is_boundary]
+        nb = {v: [e.other_vert(v) for e in v.link_edges if e.is_boundary] for v in bnd}
+        for _ in range(iters):
+            new = {v: (v.co * 0.4 + sum((w.co for w in nb[v]), Vector()) / max(1, len(nb[v])) * 0.6) for v in bnd if len(nb[v]) == 2}
+            for v, p in new.items():
+                v.co = p
+        bm.to_mesh(me); bm.free(); me.update()
+
+    def _fringe(self, o, length=0.05, step=0.004):
+        """Wool fringe hanging from the shawl's lower edge (after the pose is baked)."""
+        dg = bpy.context.evaluated_depsgraph_get(); oe = o.evaluated_get(dg); me = oe.to_mesh()
+        bm = bmesh.new(); bm.from_mesh(me); oe.to_mesh_clear()
+        edges = [e for e in bm.edges if e.is_boundary]
+        roots = []
+        for e in edges:
+            a = o.matrix_world @ e.verts[0].co; b = o.matrix_world @ e.verts[1].co
+            if (a.z + b.z) / 2 > o.matrix_world.translation.z + 1e9:
+                continue
+            n = max(1, int((b - a).length / step))
+            for k in range(n):
+                roots.append(a.lerp(b, (k + 0.5) / n))
+        bm.free()
+        if not roots:
+            return
+        zs = np.array([r.z for r in roots]); lowcut = np.percentile(zs, 55)
+        roots = [r for r in roots if r.z < lowcut]                      # only the hanging lower edge
+        rng = np.random.default_rng(3); segs = 6
+        pts = np.zeros((len(roots), segs, 3), np.float32)
+        for i, r in enumerate(roots):
+            ln = length * rng.uniform(0.7, 1.1); sw = Vector((rng.normal(0, 0.004), rng.normal(0, 0.004), 0))
+            for k in range(segs):
+                t = k / (segs - 1); pts[i, k] = r + Vector((0, 0, -ln * t)) + sw * t
+        cv = bpy.data.hair_curves.new(self.name + "_fringe"); cv.add_curves([segs] * len(roots))
+        cv.position_data.foreach_set("vector", pts.reshape(-1))
+        try:
+            cv.attributes["radius"].data.foreach_set("value", np.full(len(roots) * segs, 0.0007, np.float32))
+        except Exception:
+            pass
+        ob = bpy.data.objects.new(cv.name, cv); bpy.context.collection.objects.link(ob)
+        cv.materials.append(o.data.materials[0])
+        self.hair_objs.append(ob)
 
     def _corset_front(self, o, used_idx, m):
         """Bodice front over a corset: across the chest the cloth spans the bust as one smooth surface (each front
@@ -290,7 +396,7 @@ class Sarah(_Woman):
         mat = cloth(self.name + "_bonnet", self.BONNET, rough=0.6, sheen=0.5, weave=900, wet=self.wet)
         fwd = np.array([0, -1.0, 0.18]); fwd /= np.linalg.norm(fwd)
         nu, nv = 48, 20
-        open_deg = 62.0                     # face opening half-angle round the forward axis
+        open_deg = 70.0                     # face opening half-angle round the forward axis
         V = []; F = []
         up = np.array([0, 0, 1.0]); side = np.cross(fwd, up); side /= np.linalg.norm(side); up2 = np.cross(side, fwd)
         for j in range(nv + 1):
@@ -304,8 +410,9 @@ class Sarah(_Woman):
                 r += 0.03 * hs
                 if math.sin(ph) < -0.2:                              # lower half: stop at the nape / under the ears
                     r *= 1.0
-                brim = max(0.0, 1 - t / 0.12)                         # soft roll out at the face edge
-                p = c + d * (r + 0.02 * hs * brim) + fwd * 0.012 * hs * brim
+                # structured brim: a stiff band standing out and forward round the face (straight, not rolled)
+                brim = 1.0 if t < 0.05 else max(0.0, 1 - (t - 0.05) / 0.05)
+                p = c + d * (r + 0.022 * hs * brim) + fwd * 0.014 * hs * brim
                 V.append(tuple(p))
         rows = nu
         for j in range(nv):
@@ -316,12 +423,13 @@ class Sarah(_Woman):
         keep = []
         for f in F:
             pc = sum(np.array(V[k]) for k in f) / 4
-            if pc[2] < ec[2] - 0.07 * hs and pc[1] < c[1] + 0.03 * hs:
+            if pc[2] < ec[2] - 0.045 * hs:                       # sides end at the ears (ties take over)
                 continue
-            if pc[2] < ec[2] - 0.11 * hs:
+            if pc[1] > c[1] + 0.025 * hs and pc[2] < ec[2] + 0.005 * hs:   # crown sits above the bun at the back
                 continue
             keep.append(f)
         o = D.mesh_obj(f"{self.name}_bonnet", V, keep, mat)
+        self._soft_edge(o, iters=30)
         so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.003; so.offset = 1; so.thickness_clamp = 1.0
         sb = o.modifiers.new("Sub", "SUBSURF"); sb.levels = 1; sb.render_levels = 2
         vg = o.vertex_groups.new(name="head"); vg.add(list(range(len(V))), 1.0, 'REPLACE')
@@ -357,15 +465,20 @@ class Sarah(_Woman):
         self.button_objs.append(bow)
 
     def finish(self, *a, **k):
-        # ties and bow are bone-parented; keep them with the head through the bake
-        return super().finish(*a, **k)
+        r = super().finish(*a, **k)
+        if self.shawl is not None:
+            self._fringe(self.shawl)
+        return r
 
 
 class Sophia(_Woman):
     HAIR_N = 40000; HAIR_LEN = (0.03, 0.06); CURL = 0.6
-    HAIR = (0.45, 0.45)
-    SKIN = dict(base=(0.66, 0.46, 0.37), weather=0.05)
-    MUSCLE = 0.5; WEIGHT = 0.6; HEIGHT = 0.5
+    HAIR = (0.55, 0.4)
+    SKIN = dict(base=(0.55, 0.36, 0.27), weather=0.2)
+    MUSCLE = 0.5; WEIGHT = 0.62; HEIGHT = 0.5
+    EXTRA = {"targets/eyes/l-eye-scale-decr": 0.35, "targets/eyes/r-eye-scale-decr": 0.35,
+             "targets/cheek/l-cheek-volume-incr": 0.5, "targets/cheek/r-cheek-volume-incr": 0.5,
+             "targets/eyes/l-eye-height2-decr": 0.3, "targets/eyes/r-eye-height2-decr": 0.3}
     BOOT_TOP = 0.11
     FROCK = (0.11, 0.06, 0.06)        # rust-red wool
     PINAFORE = (0.82, 0.8, 0.74)
@@ -411,7 +524,8 @@ class Sophia(_Woman):
         # bib + shoulder straps
         straps = u & (wh < 0.4) & (z > waist - 0.01) & (z < top - 0.01) & (warm < 0.2) & \
                  ((np.abs(np.abs(co[:, 0] - co[u, 0].mean()) - 0.045 * self.head_scale) < 0.012) | (co[:, 1] < co[u, 1].mean() - 0.03))
-        self._shell("pinafore_bib", straps, 0.013, pin, solid=0.002)
+        bib, _ = self._shell("pinafore_bib", straps, 0.013, pin, solid=0.002)
+        Sarah._soft_edge(self, bib, iters=30)
         self._hide_skin(yoke | st)
 
 
