@@ -63,8 +63,7 @@ CAST = {
 class Person(D.Deveau):
     def __init__(self, key="deveau", wet=0.2, wig=False, idx=0, kneel=False, seated=False):
         spec = dict(CAST[key]); self.key = key; self.spec = spec; self.wig_on = wig
-        if seated:      # the fitted asset boots stand upright; a seated man's shins are angled: use the per-foot boots
-            self._asset_boots = lambda: False
+        self.seated = seated    # the shared boots (lib 9499317) are skinned to the legs and follow seated poses
         if kneel:       # the shared boots stand the pair on the ground; a kneeling man keeps his fitted boot shells
             self._asset_boots = lambda: True
         self._dens = spec.get("dens", {})
