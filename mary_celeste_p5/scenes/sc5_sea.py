@@ -123,14 +123,14 @@ elif SHOT == "S08":
     cine = {"sat": 1.05, "exposure": -0.1}
 elif SHOT in ("S27", "S28"):
     oc = sea_patch(170, 20, 1.6, 1.3, 12.0, foam=0.2, seed=5)
-    sea.sky(strength=0.9, rot_deg=180, res="4k", aid="qwantani_sunset_puresky")
-    sun(90, 3.5, energy=3.0, color=(1.0, 0.62, 0.36), angle=0.8)
+    sea.sky(strength=0.32, rot_deg=180, res="4k", aid="qwantani_sunset_puresky")
+    sun(90, 3.5, energy=1.6, color=(1.0, 0.62, 0.36), angle=0.8)
     if SHOT == "S27":
         b = boat_at(oc, 0, 0, 80.0, oars="out", crew=True, look=Vector((0, 400, 4)))
         cam((-6, -48, 6.0), (0, 30, 0.5), 60)
     else:
         cam((0, -40, 3.0), (0, 400, 3.5), 40)
-    cine = {"sat": 1.15, "exposure": -0.05}
+    cine = {"sat": 1.25, "exposure": -0.45}
 
 C.finish(OUT, cine=cine, bloom=0.4)
 print("RENDERED", OUT)
