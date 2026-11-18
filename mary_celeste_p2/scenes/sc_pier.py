@@ -96,7 +96,7 @@ elif SHOT == "05":  # low on the water: her hull at the waterline, the reflectio
     S.cam(SM @ Vector((ship.L / 2 + 5, ship.B / 2 + 4.0, 0.55)), SM @ Vector((-2, ship.B / 2, 1.2)), lens=35, fstop=8)
 
 elif SHOT == "06":  # MCU: Briggs looks up into the rigging, thoughtful
-    b = briggs_on_pier((pier.SHIP_X - 3, PY - 1.2), None, SM @ Vector((-1.5, 0, 18)), head=(-30, 10))
+    b = briggs_on_pier((pier.SHIP_X - 4.6, PY - 1.2), None, SM @ Vector((-3.0, 0, 18)), head=(-30, 10))
     hd = b.h.bone_head("head")
     # MS low from behind: his silhouette against the rigging and sky
     S.cam(hd + Vector((-0.7, -2.6, -0.75)), hd + Vector((0.1, 0.4, 0.55)), lens=40, fstop=2.8)
