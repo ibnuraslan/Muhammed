@@ -38,3 +38,10 @@ ocean, foam, spray, Poly Haven sky).
   `d.finish(look_at=world_pt, place=Matrix, density=1.0)`. `finish` bakes the pose, adds convex sea boots, grows hair,
   aims the eyes, then places him.
 * Colour: grade `cine={"sat": 1.2, ...}` in exteriors; `tools/house_finish.py` never drains colour (hub/user: rich Atrium colour).
+
+## Credits
+
+* MakeHuman 1.x base mesh, rig, targets and eyes: CC0 (MakeHuman team / Data Collection AB). MPFB UV masks: CC0.
+* Poly Haven (CC0): kloppenheim_06_puresky, mud_road_puresky (tests), wood_floor_deck, weathered_planks, dark_wooden_planks,
+  brown_planks_05, wood_table_worn, rough_linen; models wooden_lantern_01, wooden_handle_saber, wooden_bucket_01.
+* No Sketchfab asset is used (search on 18 Nov 2026 found no suitable CC-BY rigged 1870s sailor; downloads need a token).

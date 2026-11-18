@@ -161,7 +161,23 @@ def sailor_skin(name, base=(0.43, 0.25, 0.16), weather=0.6):
     nf = N.new("ShaderNodeMath"); nf.operation = 'MULTIPLY'; nf.inputs[1].default_value = 0.6
     L.new(mask("mpfb_fingernails.jpg"), nf.inputs[0]); L.new(nf.outputs[0], nails.inputs['Factor'])
     L.new(lips.outputs[2], nails.inputs[6])
-    L.new(nails.outputs[2], p.inputs['Base Color'])
+    # regions: wind-burn, socket shadow, oily T-zone (vertex colour 'skinvar', see Deveau._skin_regions)
+    at = N.new("ShaderNodeAttribute"); at.attribute_name = "skinvar"
+    spc = N.new("ShaderNodeSeparateColor"); L.new(at.outputs['Color'], spc.inputs[0])
+    rr = N.new("ShaderNodeMix"); rr.data_type = 'RGBA'; rr.blend_type = 'MULTIPLY'; rr.inputs[7].default_value = (1.0, 0.58, 0.5, 1)
+    rf = N.new("ShaderNodeMath"); rf.operation = 'MULTIPLY'; rf.inputs[1].default_value = 0.55; L.new(spc.outputs[0], rf.inputs[0])
+    L.new(rf.outputs[0], rr.inputs['Factor']); L.new(nails.outputs[2], rr.inputs[6])
+    sk = N.new("ShaderNodeMix"); sk.data_type = 'RGBA'; sk.blend_type = 'MULTIPLY'; sk.inputs[7].default_value = (0.62, 0.5, 0.48, 1)
+    sf = N.new("ShaderNodeMath"); sf.operation = 'MULTIPLY'; sf.inputs[1].default_value = 0.6; L.new(spc.outputs[1], sf.inputs[0])
+    L.new(sf.outputs[0], sk.inputs['Factor']); L.new(rr.outputs[2], sk.inputs[6])
+    L.new(sk.outputs[2], p.inputs['Base Color'])
+    rs = p.inputs['Roughness'].links[0].from_socket
+    ro = N.new("ShaderNodeMath"); ro.operation = 'MULTIPLY_ADD'; ro.inputs[1].default_value = -0.16
+    L.new(spc.outputs[2], ro.inputs[0]); L.new(rs, ro.inputs[2]); L.new(ro.outputs[0], p.inputs['Roughness'])
+    p.inputs['Subsurface Weight'].default_value = 0.55
+    p.inputs['Subsurface Radius'].default_value = (1.0, 0.38, 0.18)
+    p.inputs['Subsurface Scale'].default_value = 0.009
+    p.inputs['Coat Weight'].default_value = 0.08; p.inputs['Coat Roughness'].default_value = 0.35
     return m
 
 
@@ -220,6 +236,7 @@ class Deveau:
                          extra=extra, eyebrows=None, eyelashes=None, skin=None)
         h = self.h
         h.body.data.materials[0] = sailor_skin(name + "_skin")
+        self._skin_regions()
         self.name = name; self.wet = wet
         self.rest_co = H.to_bl(h.hc)
         me = h.body.data
@@ -233,6 +250,21 @@ class Deveau:
             self.used[list(pl.vertices)] = True
         self.faces = [tuple(pl.vertices) for pl in me.polygons]
         self._dress()
+
+    def _skin_regions(self):
+        """Vertex colour 'skinvar': R = wind-burn redness (nose, cheeks, ears), G = shadowed eye sockets,
+        B = oily T-zone (forehead, nose) for a lower roughness. Drives sailor_skin."""
+        h = self.h; co = H.to_bl(h.hc)
+        ec = (np.array(h.joint("eye.L____head")) + np.array(h.joint("eye.R____head"))) / 2
+        r = co - ec; x, y, z = r[:, 0], r[:, 1], r[:, 2]
+        g = lambda cx, cy, cz, sx, sy, sz: np.exp(-(((x - cx) / sx) ** 2 + ((y - cy) / sy) ** 2 + ((z - cz) / sz) ** 2))
+        red = np.clip(0.9 * g(0, -0.06, -0.035, 0.018, 0.03, 0.025) + 0.7 * g(0.045, -0.035, -0.03, 0.025, 0.03, 0.025)
+                      + 0.7 * g(-0.045, -0.035, -0.03, 0.025, 0.03, 0.025) + 0.35 * g(0.075, 0.01, -0.01, 0.015, 0.03, 0.03)
+                      + 0.35 * g(-0.075, 0.01, -0.01, 0.015, 0.03, 0.03), 0, 1)
+        sock = np.clip(0.8 * g(0.032, -0.01, -0.004, 0.022, 0.03, 0.016) + 0.8 * g(-0.032, -0.01, -0.004, 0.022, 0.03, 0.016), 0, 1)
+        oily = np.clip(g(0, -0.05, 0.05, 0.03, 0.05, 0.03) + g(0, -0.06, -0.03, 0.012, 0.04, 0.03), 0, 1)
+        ca = h.body.data.color_attributes.new("skinvar", 'FLOAT_COLOR', 'POINT')
+        ca.data.foreach_set("color", np.stack([red, sock, oily, np.ones_like(red)], 1).astype(np.float32).ravel())
 
     # ------------------------------------------------------------------ clothes
     def _shell(self, label, vmask, offset, mat, solid=0.003, smooth=0.0, displace=0.0, keep_faces=None, drape=0, flare=None):
@@ -324,7 +356,7 @@ class Deveau:
                                     solid=0.003, displace=0.003)
         # ---- trousers (wool): pelvis and legs down to the boot tops
         trous = u & (z < hip_z + 0.11) & (z > ankle_z + 0.2) & (wfoot < 0.2) & (whand < 0.05)
-        self.trousers, _ = self._shell("trousers", trous, 0.012, wool_material("trousers", (0.022, 0.02, 0.019), weave=500, wet=self.wet, sheen=0.25),
+        self.trousers, _ = self._shell("trousers", trous, 0.009, wool_material("trousers", (0.022, 0.02, 0.019), weave=500, wet=self.wet, sheen=0.25),
                                        solid=0.002, displace=0.004, drape=14,
                                        flare=lambda b: np.clip((knee_z + 0.1 - b[:, 2]) / 0.4, 0, 1) * 0.006)
         # ---- boots (leather): feet and shins, smoothed so the toes read as a boot
@@ -441,6 +473,7 @@ class Deveau:
             for e in h.eyes:
                 d = (Vector(look_at) - e.location).normalized()
                 e.rotation_mode = 'QUATERNION'; e.rotation_quaternion = (-d).to_track_quat('Y', 'Z')
+        self._corneas()
         self._sea_boots()
         if hair:
             self._grow_all(density)
@@ -450,6 +483,31 @@ class Deveau:
                 if o.parent is None:
                     o.matrix_world = place @ o.matrix_world
             bpy.context.view_layer.update()
+
+    def _corneas(self):
+        """A clear, wet cornea over each eyeball: the bulge catches sharp highlights (no more 'dead' eyes)."""
+        cm = bpy.data.materials.new(self.name + "_cornea"); cm.use_nodes = True
+        N = cm.node_tree.nodes; L = cm.node_tree.links; p = N["Principled BSDF"]
+        # clear film: see-through (no refraction), with a fresnel mirror layer for the wet highlight
+        gl = N.new("ShaderNodeBsdfGlossy"); gl.inputs['Roughness'].default_value = 0.02
+        tr = N.new("ShaderNodeBsdfTransparent"); fr = N.new("ShaderNodeFresnel"); fr.inputs['IOR'].default_value = 1.376
+        mx = N.new("ShaderNodeMixShader"); L.new(fr.outputs[0], mx.inputs[0]); L.new(tr.outputs[0], mx.inputs[1]); L.new(gl.outputs[0], mx.inputs[2])
+        lp = N.new("ShaderNodeLightPath"); mx2 = N.new("ShaderNodeMixShader")
+        L.new(lp.outputs['Is Shadow Ray'], mx2.inputs[0]); L.new(mx.outputs[0], mx2.inputs[1]); L.new(tr.outputs[0], mx2.inputs[2])
+        L.new(mx2.outputs[0], N["Material Output"].inputs['Surface'])
+        self.corneas = []
+        for e in self.h.eyes:
+            r = e.dimensions.x / 2
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=32, radius=r * 1.012, location=e.matrix_world.translation)
+            c = bpy.context.active_object; c.name = self.name + "_cornea"
+            for v in c.data.vertices:                         # bulge forward (local -Y is where the iris looks)
+                if v.co.y < 0:
+                    k = max(0.0, -v.co.y / (r * 1.012)) ** 3
+                    v.co.y -= r * 0.06 * k
+            bpy.ops.object.shade_smooth()
+            c.data.materials.append(cm)
+            c.rotation_mode = 'QUATERNION'; c.rotation_quaternion = e.matrix_world.to_quaternion()
+            self.corneas.append(c); self.h.parts.append(c)
 
     def _sea_boots(self):
         """1870s leather sea boots, modelled per posed foot (replaces the body-shaped boot shell):
@@ -522,8 +580,8 @@ class Deveau:
                 if len(q) < 6:
                     q = Lp[np.argsort(np.abs(Lp[:, 2] - z))[:40]]
                 c = q[:, :2].mean(0); d = q[:, :2] - c
-                ra = float(np.abs(d @ fwd).max()) + 0.02; rb = float(np.abs(d @ S3[:2]).max()) + 0.02
-                flare = 1.0 + 0.12 * max(0.0, (j - 8) / 3)
+                ra = float(np.abs(d @ fwd).max()) + 0.013; rb = float(np.abs(d @ S3[:2]).max()) + 0.013
+                flare = 1.0 + 0.05 * max(0.0, (j - 9) / 2)
                 ring = []
                 for k in range(nr):
                     a = 2 * math.pi * k / nr
@@ -607,10 +665,10 @@ class Deveau:
         brown = hair_material(self.name + "_hair", 0.82, 0.38)
         self.hair_objs = []
         self.hair_objs.append(self._strands("hair", scalp, P, bvh, int(70000 * density), (0.014, 0.028), 0.001,
-                                            comb=lambda p: R @ Vector((0, 0.8, -0.45)), lift=0.0022, mat=brown, curl=0.22))
+                                            comb=lambda p: R @ Vector((0, 0.8, -0.45)), lift=0.0022, mat=brown, curl=0.22, clump=0.35))
         beard_m = hair_material(self.name + "_beard", 0.8, 0.45, rough=0.38)
         self.hair_objs.append(self._strands("beard", beard | neck, P, bvh, int(46000 * density), (0.014, 0.03), 0.0009,
-                                            comb=lambda p: R @ Vector((0, -0.25, -1)), lift=0.003, mat=beard_m, curl=0.45))
+                                            comb=lambda p: R @ Vector((0, -0.25, -1)), lift=0.003, mat=beard_m, curl=0.35, clump=0.55, segs=9))
         self.hair_objs.append(self._strands("moustache", tache, P, bvh, int(5000 * density), (0.012, 0.02), 0.0008,
                                             comb=lambda p: R @ Vector((math.copysign(0.7, p.x - self._mid_x), -0.2, -1)),
                                             lift=0.002, mat=beard_m, curl=0.2))
@@ -618,7 +676,7 @@ class Deveau:
                                             comb=lambda p: R @ Vector((math.copysign(1.0, p.x - self._mid_x), 0, 0.25)),
                                             lift=0.0008, mat=beard_m, curl=0.08))
 
-    def _strands(self, label, vmask, P, bvh, count, length, radius, comb, lift, mat, curl=0.2, segs=7, seed=1):
+    def _strands(self, label, vmask, P, bvh, count, length, radius, comb, lift, mat, curl=0.2, segs=7, seed=1, clump=0.0):
         rng = np.random.default_rng(seed + len(label))
         self._mid_x = float(P[self.used, 0].mean())
         fs = [f for f in self.faces if vmask[list(f)].sum() >= 3]
@@ -664,6 +722,18 @@ class Deveau:
         span = np.linalg.norm(pts[:, -1] - pts[:, 0], axis=1)
         ok &= span < lens * 1.2
         pts = pts[ok]; count = int(ok.sum())
+        if clump and count > 50:
+            # groomed look: strands gather toward the tips of nearby guide strands
+            from mathutils.kdtree import KDTree
+            ng = max(20, count // 60); gi = rng.choice(count, ng, replace=False)
+            kd = KDTree(ng)
+            for j, g in enumerate(gi):
+                kd.insert(Vector(pts[g, 0]), j)
+            kd.balance()
+            t = np.linspace(0, 1, segs)[None, :, None] ** 1.4
+            G = np.array([gi[kd.find(Vector(pts[i, 0]))[1]] for i in range(count)])
+            tgt = pts[G] - pts[G][:, :1] + pts[:, :1]
+            pts = pts + (tgt - pts) * clump * t
         cv = bpy.data.hair_curves.new(f"{self.name}_{label}")
         cv.add_curves([segs] * count)
         cv.position_data.foreach_set("vector", pts.reshape(-1))
