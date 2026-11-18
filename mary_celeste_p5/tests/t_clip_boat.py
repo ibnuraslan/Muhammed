@@ -5,12 +5,12 @@ import p5; C = p5.C
 C.reset()
 import bpy
 from mathutils import Vector
-import yawl, boatcrew, clipcheck
+import yawl, boatcrew, clipcheck5
 sc = C.render_setup(samples=16, res=(800, 450)); sc.render.resolution_percentage = 100
 b = yawl.build("yawl", oars="out")
 bpy.context.view_layer.update()
 boatcrew.man_the_boat(b, look=Vector((30, 20, 4)), density=0.0, hair=False)
-clipcheck.check("boat_test")
+clipcheck5.check("boat_test")
 if os.environ.get("BOUNDS"):
     import sketchfab as SF
     for n in os.environ["BOUNDS"].split(","):

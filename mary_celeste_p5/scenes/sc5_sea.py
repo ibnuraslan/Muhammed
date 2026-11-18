@@ -72,9 +72,9 @@ if SHOT in ("S01", "S02", "S03"):
     by = -(ship.B / 2 + 1.45)
     rail = mc["root"].matrix_world @ Vector((-1.6, -(ship.half_breadth((-1.6 + ship.L / 2) / ship.L, 1.0) - 0.05),
                                              ship.zdeck(-1.6) + ship.RAIL_H))
-    # lying alongside: the oars on the ship's side are boated (laid in along the gunwale), the others held ready
+    # lying alongside, held by the painter: oars boated along the middle of the boat
     b = boat_at(oc, -1.8, by, 0.0, oars="out", crew=True, look=rail + Vector((0, 0, 0.5)), extra_hulls=(mc["hull"],),
-                boated=(1,))
+                boated=(1, -1))   # holding on by the painter: all oars boated, the men at rest
     Mb = b["root"].matrix_world
     ring = Mb @ b["ring"]
     cleat = mc["root"].matrix_world @ Vector((4.5, -(ship.B / 2 - 0.25), ship.zdeck(4.5) + ship.RAIL_H + 0.05))

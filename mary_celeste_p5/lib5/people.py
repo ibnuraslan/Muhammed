@@ -11,7 +11,7 @@ Same rules as Deveau: clothes are shells off the skinned body (bend with it, nev
 """
 import math, os
 import numpy as np
-import bpy
+import bpy, bmesh
 from mathutils import Vector, Matrix
 import human as H
 import deveau as D
@@ -155,31 +155,189 @@ class Person(D.Deveau):
         self._hide_skin(shirt | trous | boot | coat)
 
     def _woman(self):
-        """Sarah: a dark wool dress (fitted bodice, long sleeves, full skirt to the ankle) and a knitted shawl
-        over the head and shoulders, tied at the throat. The skirt is a shell over the legs with a strong
-        drape and flare, so it hangs as cloth rather than following each leg."""
+        """Sarah, 1870s: a structured bodice (smoothed over the figure: corseted, no modelled bust), high standing
+        collar, jet buttons down the front, full sleeves; a full skirt; a wool cloak over the shoulders to the waist,
+        open in a narrow band at the front; a soft bonnet over the hair with a brim round the face and ribbons tied
+        under the chin."""
         co, z, wh, whand, wfoot, dw, m = self._base_masks(); u = self.used; w = self.wet
-        rel_head = co - np.array(self.h.joint("head____head"))
-        bod = u & (wh < 0.25) & (whand < 0.05) & (z > m["hip"] - 0.05) & (z < m["neck"] + 0.03) & (dw > 0.03)
+        x, y = co[:, 0], co[:, 1]
         dress_m = D.wool_material(self.name + "_dress", self.col["dress"], weave=700, wet=w, dirt=0.12, sheen=0.45, rough=0.85)
-        self.shirt, _ = self._shell("bodice", bod, 0.009, dress_m, solid=0.002, displace=0.0015, drape=24)
+        arm = np.abs(x) > 0.17                                        # beyond the shoulder line: the sleeves
+        bod = u & (wh < 0.25) & (whand < 0.05) & (z > m["hip"] - 0.05) & (z < m["neck"] + 0.005) & (dw > 0.03)
+        # corseted bodice: heavy smoothing bridges the figure into one surface; sleeves cut full (gathered)
+        self.shirt, bv = self._shell("bodice", bod, 0.014, dress_m, solid=0.002, displace=0.001, drape=140,
+                                     flare=lambda b: np.where(np.abs(b[:, 0]) > 0.17, 0.016, 0.0) + np.clip((b[:, 2] - (m["neck"] - 0.3)) / 0.25, 0, 1) * 0.004)
+        coll = u & (z > m["neck"] - 0.03) & (z < m["neck"] + 0.07) & (wh < 0.75) & (whand < 0.05) & (dw > 0.2)
+        self.collar, _ = self._shell("collar", coll, 0.007, dress_m, solid=0.003, drape=6)
         skirt = u & (z < m["hip"] + 0.02) & (z > m["ankle"] - 0.02) & (whand < 0.05)
         self.trousers, _ = self._shell("skirt", skirt, 0.03, dress_m, solid=0.003, displace=0.008, drape=60,
-                                       flare=lambda b: np.clip((m["hip"] - b[:, 2]) / (m["hip"] - m["ankle"]), 0, 1) ** 1.3 * 0.07
-                                       + np.clip(-b[:, 1] * 0.0, 0, 1))
+                                       flare=lambda b: np.clip((m["hip"] - b[:, 2]) / (m["hip"] - m["ankle"]), 0, 1) ** 1.3 * 0.07)
         boot = u & (z < m["ankle"] + 0.06)
         self.boots, _ = self._shell("boots", boot, 0.008, D.leather_material("boots", wet=w), solid=0.002, drape=60)
-        # shawl: crown, back of head and neck, shoulders and upper back/chest; the face stays open
-        ec = (np.array(self.h.joint("eye.L____head")) + np.array(self.h.joint("eye.R____head"))) / 2
-        r = co - ec
-        hs = float(np.linalg.norm(np.array(self.h.joint("eye.L____head")) - np.array(self.h.joint("eye.R____head")))) / 0.064
-        face = (r[:, 1] < 0.012 * hs) & (r[:, 2] < 0.05 * hs) & (r[:, 2] > -0.17 * hs) & (np.abs(r[:, 0]) < 0.082 * hs)
-        hood = u & (wh > 0.3) & ~face & (r[:, 2] > -0.2)
-        cape = u & (wh < 0.6) & (whand < 0.05) & (z > m["neck"] - 0.24) & (z < m["neck"] + 0.06) & (dw > 0.2)
-        self.scarf, _ = self._shell("shawl", hood | cape, 0.022, D.wool_material(self.name + "_shawl", self.col["shawl"], weave=160, bump=0.8,
-                                    wet=w, dirt=0.15, sheen=0.5), solid=0.006, displace=0.006, drape=30)
+        # cloak over the shoulders: a lofted bell from the collar to below the elbows, hanging straight from the
+        # widest point (radius never shrinks going down), so it falls over the figure instead of following it
+        self.scarf = self._cape(m, D.wool_material(self.name + "_cloak", self.col["shawl"], weave=160, bump=0.7,
+                                wet=w, dirt=0.15, sheen=0.5))
         self.jacket = self.shirt
-        self._hide_skin(bod | skirt | boot | (cape & (wh < 0.2)))
+        self._buttons_front(bv, n=7)
+        self._bonnet()
+        self._hide_skin(bod | skirt | boot | coll)
+
+    def _cape(self, m, mat, n=72, margin=0.014):
+        from mathutils.kdtree import KDTree
+        h = self.h; co = self.rest_co; u = self.used
+        wh = D._w(h, HEAD); whand = D._w(h, HAND)
+        body = u & (wh < 0.2) & (whand < 0.02)
+        top, bot = m["neck"] - 0.01, m["hip"] + 0.2
+        levels = np.linspace(top, bot, 26)
+        c0 = co[body & (np.abs(co[:, 2] - (top + bot) / 2) < 0.15)][:, :2].mean(0)
+        ang = np.linspace(0, 2 * np.pi, n, endpoint=False)
+        dirs = np.stack([np.cos(ang), np.sin(ang)], 1)
+        R = []
+        for k, zl in enumerate(levels):
+            sl = co[body & (np.abs(co[:, 2] - zl) < 0.012)][:, :2] - c0
+            if len(sl) < 8:
+                R.append(R[-1] if R else np.full(n, 0.08)); continue
+            # support function of the slice in each direction = convex-hull radius along that direction
+            proj = sl @ dirs.T                                     # (pts, n)
+            r = proj.max(0) + margin
+            if k <= 2:
+                r = r + (2 - k) * 0.004                            # the collar end: snug round the neck
+            R.append(r)
+        R = np.array(R)
+        for k in range(1, len(R)):                                 # hangs: never narrower than the level above
+            R[k] = np.maximum(R[k], R[k - 1] * 0.995)
+        R = sum(np.roll(R, k, axis=1) for k in (-2, -1, 0, 1, 2)) / 5.0   # soft round the body, no corners
+        verts = []
+        for k, zl in enumerate(levels):
+            for j in range(n):
+                verts.append((c0[0] + dirs[j, 0] * R[k, j], c0[1] + dirs[j, 1] * R[k, j], zl))
+        faces = [[k * n + j, k * n + (j + 1) % n, (k + 1) * n + (j + 1) % n, (k + 1) * n + j] for k in range(len(levels) - 1) for j in range(n)]
+        me = bpy.data.meshes.new(self.name + "_cloak"); me.from_pydata(verts, [], faces); me.update()
+        o = bpy.data.objects.new(me.name, me); bpy.context.collection.objects.link(o); o.data.materials.append(mat)
+        for pl in me.polygons:
+            pl.use_smooth = True
+        # skin: each cloak vertex takes the weights of the nearest torso/arm vertex
+        idx = np.nonzero(body)[0]; kd = KDTree(len(idx))
+        for i in idx:
+            kd.insert(Vector(co[i]), int(i))
+        kd.balance()
+        near = np.array([kd.find(Vector(v))[1] for v in verts])
+        h.rig.skin(o, h.W[near])
+        so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.005; so.offset = -1
+        sub = o.modifiers.new("Sub", "SUBSURF"); sub.levels = 1; sub.render_levels = 2
+        tx = bpy.data.textures.new(self.name + "_cloakfolds", "CLOUDS"); tx.noise_scale = 0.08
+        d = o.modifiers.new("Folds", "DISPLACE"); d.texture = tx; d.strength = 0.006; d.texture_coords = 'OBJECT'
+        o["src_verts"] = [int(i) for i in near]
+        h.parts.append(o)
+        return o
+
+    def _buttons_front(self, jv, n=7):
+        """Small jet buttons down the centre front of the bodice (seen in the cloak's front opening)."""
+        h = self.h; co = self.rest_co[jv] + self.rest_n[jv] * 0.018
+        front = co[(co[:, 1] < -0.02) & (np.abs(co[:, 0]) < 0.02)]
+        mat = D._mat(self.name + "_jet")[0]; pp = mat.node_tree.nodes["Principled BSDF"]
+        pp.inputs['Base Color'].default_value = (0.01, 0.01, 0.012, 1); pp.inputs['Roughness'].default_value = 0.15
+        zs = np.linspace(self.marks["neck"] - 0.04, self.marks["hip"] + 0.06, n)
+        for zz in zs:
+            cand = front[np.abs(front[:, 2] - zz) < 0.012]
+            if len(cand) == 0:
+                continue
+            p = cand[np.argmin(cand[:, 1])]
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.005, location=tuple(p))
+            bt = bpy.context.active_object; bt.name = "button"; bt.data.materials.append(mat)
+            mw = bt.matrix_world.copy(); bt.parent = h.arm; bt.parent_type = 'BONE'; bt.parent_bone = "spine03"
+            bpy.context.view_layer.update(); bt.matrix_world = mw
+            self.button_objs.append(bt)
+
+    def _bonnet(self):
+        """A soft wool bonnet built round the skull: a hood (ellipsoidal shell fitted to contain the scalp, ears and
+        back of the head with a margin), open at the face and below the nape; its front edge flares and rolls into a
+        brim framing the face; ribbons from its lower front corners run under the jaw to a bow. Skinned to the head."""
+        from mathutils.bvhtree import BVHTree
+        h = self.h; co = self.rest_co
+        wh = D._w(h, HEAD)
+        eyeL = np.array(h.joint("eye.L____head")); eyeR = np.array(h.joint("eye.R____head")); ec = (eyeL + eyeR) / 2
+        hs = float(np.linalg.norm(eyeL - eyeR)) / 0.064
+        hc = ec + np.array([0.0, 0.045, 0.02]) * hs
+        head = co[self.used & (wh > 0.6)] - hc
+        # ellipsoid radii that contain the skull (x lateral, y front-back, z up), plus a cloth margin
+        rx, ry, rz = [float(np.percentile(np.abs(head[:, i]), 99.5)) for i in range(3)]
+        rx += 0.018 * hs; ry += 0.016 * hs; rz += 0.02 * hs
+        front = -0.07 * hs                                       # the opening: this far in front of the skull centre
+        nu, nv = 40, 18
+        verts = []
+        for j in range(nv + 1):                                  # j = 0 at the face opening .. nv at the back
+            t = j / nv
+            yy = front + t * (ry - front) * 0.98
+            k = math.sqrt(max(0.0, 1 - (yy / ry) ** 2))          # ellipsoid cross-section scale at that depth
+            k = max(k, 0.25)
+            for i in range(nu + 1):
+                a = math.radians(-118 + 236 * i / nu)            # from under one ear, over the top, to the other
+                verts.append((hc[0] + math.sin(a) * rx * k, hc[1] + yy, hc[2] + math.cos(a) * rz * k))
+        # brim: three rings in front of the opening, flaring out then rolling back
+        brim = [(0.012, -0.016), (0.022, -0.026), (0.026, -0.024)]
+        base = [Vector(verts[i]) for i in range(nu + 1)]
+        rings = []
+        for out_, fwd in brim:
+            ring = []
+            for i, p0 in enumerate(base):
+                d = Vector((p0.x - hc[0], 0.0, p0.z - hc[2])).normalized()
+                ring.append(tuple(p0 + d * out_ * hs + Vector((0, fwd * hs, 0))))
+            rings.append(ring)
+        allv = []
+        for ring in reversed(rings):
+            allv += ring
+        allv += verts
+        rows = len(rings) + nv + 1
+        faces = [[r_ * (nu + 1) + i, r_ * (nu + 1) + i + 1, (r_ + 1) * (nu + 1) + i + 1, (r_ + 1) * (nu + 1) + i]
+                 for r_ in range(rows - 1) for i in range(nu)]
+        me = bpy.data.meshes.new(self.name + "_bonnet"); me.from_pydata(allv, [], faces); me.update()
+        o = bpy.data.objects.new(me.name, me); bpy.context.collection.objects.link(o)
+        mat = D.wool_material(self.name + "_bonnetwool", self.col.get("bonnet", (0.05, 0.035, 0.04)), rough=0.95, weave=1100, bump=0.25, sheen=0.7, dirt=0.05)
+        o.data.materials.append(mat)
+        for pl in me.polygons:
+            pl.use_smooth = True
+        so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.004; so.offset = 0
+        sb = o.modifiers.new("Sub", "SUBSURF"); sb.levels = 1; sb.render_levels = 2
+        self.bonnet = o
+        self._skin_to(o, "head")
+        # ribbons from the lower front corners of the hood, pressed onto the skin, under the jaw to a bow
+        bvh = BVHTree.FromPolygons(co.tolist(), [list(f) for f in self.faces])
+        def onskin(p, lift=0.004):
+            loc, n, _, _ = bvh.find_nearest(Vector(p))
+            return (loc + n.normalized() * lift) if loc is not None else Vector(p)
+        corners = [Vector(verts[0]), Vector(verts[nu])]
+        c = Vector(ec.tolist())
+        chin = onskin(c + Vector((0, -0.055, -0.15)) * hs, 0.006)
+        rib = D._mat(self.name + "_ribbon")[0]; rp = rib.node_tree.nodes["Principled BSDF"]
+        rp.inputs['Base Color'].default_value = (*self.col.get("bonnet", (0.05, 0.035, 0.04)), 1); rp.inputs['Roughness'].default_value = 0.7
+        pts = []
+        for a0, sx in ((corners[0], -1), (corners[1], 1)):
+            jaw = c + Vector((sx * 0.05, -0.02, -0.135)) * hs
+            ctrl = [a0, jaw, chin] if not pts else [chin, jaw, a0]
+            for i in range(len(ctrl) - 1):
+                for t in np.linspace(0, 1, 7, endpoint=False):
+                    pts.append(onskin(ctrl[i].lerp(ctrl[i + 1], float(t))))
+        pts.append(onskin(corners[1]))
+        import ship
+        tie = ship.rope(self.name + "_ties", pts, 0.003, rib); self._skin_to(tie, "head")
+        for sgn in (1, -1):
+            loop = [chin + Vector((sgn * (0.006 + 0.009 * math.sin(a)), -0.004, -0.004 - 0.005 * math.cos(a) + 0.005))
+                    for a in np.linspace(0, 2 * math.pi, 14)]
+            bow = ship.rope(self.name + "_bow", loop, 0.0028, rib); self._skin_to(bow, "head")
+
+    def _skin_to(self, o, bone):
+        if o.type == 'CURVE':                                  # ribbons are made as curves: make them meshes to skin
+            for ob in bpy.context.selected_objects:
+                ob.select_set(False)
+            bpy.context.view_layer.objects.active = o; o.select_set(True)
+            bpy.ops.object.convert(target='MESH'); o = bpy.context.active_object
+        if bone not in [b.name for b in self.h.arm.data.bones]:
+            bone = "head"
+        vg = o.vertex_groups.new(name=bone); vg.add(list(range(len(o.data.vertices))), 1.0, 'REPLACE')
+        md = o.modifiers.new("Armature", "ARMATURE"); md.object = self.h.arm
+        self.h.parts.append(o)
 
     def _toddler(self):
         """Sophia: a long woollen frock and a knitted shawl wrapped round her, bonnet-like over the head."""
@@ -326,10 +484,13 @@ def briggs(wet=0.4):
 
 
 def sarah(wet=0.4):
-    extra = {"targets/nose/nose-scale-horiz-decr": 0.2, "targets/chin/chin-width-decr": 0.2}
+    extra = {"targets/nose/nose-scale-horiz-decr": 0.2, "targets/chin/chin-width-decr": 0.2,
+             # an 1870s corseted silhouette: small, high, smooth bust (MakeHuman's own cup / point targets)
+             "targets/breast/female-young-averagemuscle-averageweight-mincup-maxfirmness": 1.0,
+             "targets/breast/breast-point-decr": 1.0, "targets/breast/breast-volume-vert-up": 0.4}
     return Person("Sarah", 0.0, 31, muscle=0.45, weight=0.45, height=0.45, extra=extra, wet=wet, outfit="dress",
                   skin=(0.55, 0.36, 0.28), weather=0.25, hair=dict(melanin=0.85, redness=0.35, beard=False, style="parted"),
-                  colours=dict(dress=(0.035, 0.02, 0.028), shawl=(0.075, 0.03, 0.022)))
+                  colours=dict(dress=(0.035, 0.02, 0.028), shawl=(0.075, 0.03, 0.022), bonnet=(0.03, 0.025, 0.03)))
 
 
 def sophia(wet=0.3):

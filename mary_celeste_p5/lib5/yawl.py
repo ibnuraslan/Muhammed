@@ -114,8 +114,8 @@ def build(name="yawl", wet=0.6, oars="out", oar_angle=None, rudder=True, painter
     coll = bpy.data.collections.new(name); bpy.context.scene.collection.children.link(coll)
     root = bpy.data.objects.new(name + "_root", None); coll.objects.link(root)
     # old white lead paint gone to a dirty cream-grey, grimy streaks, worn through to the grey wood in soft patches
-    outside = ship.paint(name + "_paint", (0.25, 0.235, 0.2), rough=0.62, grime=0.9, wet=wet, scale=2.5, chips=0.3,
-                         under=(0.12, 0.1, 0.08))
+    outside = ship.paint(name + "_paint", (0.13, 0.125, 0.11), rough=0.66, grime=0.9, wet=wet, scale=2.5, chips=0.25,
+                         under=(0.08, 0.07, 0.055))
     inside = ship.wood("weathered_planks", 0.8, wet=wet * 0.8, tint=(0.6, 0.5, 0.4), name=name + "_inwood")
     seat = ship.wood("weathered_planks", 1.1, wet=wet * 0.6, tint=(0.62, 0.5, 0.38), name=name + "_seat")
     trim = ship.paint(name + "_trim", (0.05, 0.08, 0.06), rough=0.4, grime=0.4, wet=wet, scale=5, chips=0.3)
@@ -146,15 +146,12 @@ def build(name="yawl", wet=0.6, oars="out", oar_angle=None, rudder=True, painter
         # knees under the ends
         for sg in (1, -1):
             objs.append(ship.box(f"{name}_knee{i}{sg}", (x, sg * (hb - 0.05), SEAT_Z - 0.12), (0.06, 0.08, 0.2), seat))
-    # stern sheets: an aft bench across the boat and a side bench each side, open in the middle for the feet
+    # stern sheets: a bench across the stern, deeper on the port side (the helmsman's side is shallow so his knees
+    # clear its edge and his feet reach the bottom boards); open forward of it for the feet
     x0, x1 = STERN_SHEETS
-    xa = x0 + 0.8                     # the side benches start forward of the legs of the two on the aft bench
-    xb = x0 + 0.42                    # aft bench depth
-    hb = half_breadth_at((x0 + xb) / 2, SEAT_Z)
-    objs.append(ship.box(name + "_sternseat", ((x0 + xb) / 2, 0, SEAT_Z - 0.02), (xb - x0, 2 * hb, 0.04), seat, bevel=0.006))
-    for sg in (1, -1):
-        hbs = half_breadth_at((xa + x1) / 2, SEAT_Z)
-        objs.append(ship.box(f"{name}_sideseat{sg}", ((xa + x1) / 2, sg * (hbs - 0.13), SEAT_Z - 0.02), (x1 - xa, 0.26, 0.04), seat, bevel=0.006))
+    for nm, xb, sgn in (("_sternseat", -2.27, 1), ("_sternseatp", -1.95, -1)):
+        hb = half_breadth_at((x0 + xb) / 2, SEAT_Z)
+        objs.append(ship.box(name + nm, ((x0 + xb) / 2, sgn * hb / 2, SEAT_Z - 0.02), (xb - x0, hb, 0.04), seat, bevel=0.006))
     # rowlocks (pairs of thole pins) at each rowing thwart
     tholes = {}
     for i, x in enumerate(THWARTS[:3]):
@@ -171,7 +168,7 @@ def build(name="yawl", wet=0.6, oars="out", oar_angle=None, rudder=True, painter
         rv = [(p0.x - 0.04, 0, p0.z - 0.25), (p0.x - 0.42, 0, p0.z - 0.25), (p1.x - 0.24, 0, p1.z - 0.05), (p1.x - 0.04, 0, p1.z + 0.05)]
         r = ship.mesh_obj(name + "_rudder", rv, [[0, 1, 2, 3]], trim, smooth=False)
         so = r.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.035; so.offset = 0; objs.append(r)
-        head = Vector((p1.x - 0.08, 0, p1.z + 0.08)); tip = head + Vector((0.88, 0.0, 0.05))
+        head = Vector((p1.x - 0.08, 0, p1.z + 0.03)); tip = head + Vector((0.86, 0.0, -0.2))   # slopes down to lap height
         objs.append(ship.cyl(name + "_tiller", head, tip, 0.022, 0.016, mat=seat, verts=12))
         tiller = tip - Vector((0.12, 0, 0))
     # oars: loom through the rowlocks; handle inboard, blade outboard and down into the sea
@@ -184,7 +181,7 @@ def build(name="yawl", wet=0.6, oars="out", oar_angle=None, rudder=True, painter
             ang = (oar_angle or {}).get((i, sg), 0.0)
             d = Vector((math.sin(math.radians(ang)), sg * math.cos(math.radians(ang)), -0.13)).normalized()
             # inboard length: the handle ends ~0.24 m off the centreline, so the two men on a thwart keep apart
-            inb = 0.84 if ang else max(0.5, (abs(pv.y) - 0.24) / max(0.5, abs(d.y)))
+            inb = 0.84 if abs(ang) > 60 else max(0.5, (abs(pv.y) - 0.24) / max(0.5, abs(d.y)))
             handle = pv - d * inb
             blade_root = pv + d * 1.6; tip = pv + d * 2.45
             objs.append(ship.cyl(f"{name}_oar{i}{sg}", handle, blade_root, 0.024, 0.02, mat=oar_m, verts=12))
@@ -197,10 +194,10 @@ def build(name="yawl", wet=0.6, oars="out", oar_angle=None, rudder=True, painter
     # the two rows of men (below their hands, clear of their legs), blades toward the bow
     for k, sg in enumerate(sorted(boated)):
         for j in range(3):
-            yo = 0.045 * (j - 1)
-            a = Vector((-1.05, yo, SEAT_Z + 0.025)); b2 = Vector((1.85, yo, SEAT_Z + 0.025))
+            yo = 0.045 * (j - 1); zo = SEAT_Z + 0.025 + 0.048 * k          # a second side's oars lie on top
+            a = Vector((-1.05, yo, zo)); b2 = Vector((1.85, yo, zo))
             objs.append(ship.cyl(f"{name}_oarboated{sg}{j}", a, b2, 0.024, mat=oar_m, verts=12))
-            bl = ship.box(f"{name}_bladeboated{sg}{j}", b2 + Vector((0.42, 0, 0.004)), (0.84, 0.05 if j != 1 else 0.05, 0.016), oar_m, bevel=0.004)
+            bl = ship.box(f"{name}_bladeboated{sg}{j}", b2 + Vector((0.42 + 0.9 * k, 0, 0.004)), (0.84, 0.05, 0.016), oar_m, bevel=0.004)
             objs.append(bl)
     if oars == "in":
         for k, sg in enumerate((1, -1, 1, -1)):

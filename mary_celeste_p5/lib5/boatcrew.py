@@ -25,9 +25,9 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
             x = yawl.THWARTS[i]
             for sg in (1, -1):
                 p = PP.sailor(k % len(PP.CREW)); k += 1
-                yy = sg * min(0.36, yawl.half_breadth_at(x, yawl.SEAT_Z + 0.4) - 0.39)
+                yy = sg * min(0.37, yawl.half_breadth_at(x, yawl.SEAT_Z + 0.4) - (0.38 if i == 0 else 0.35))
                 st = Seat(p, W((x, yy, yawl.SEAT_Z)), 180.0, frame=Mb)
-                fy, fw = (yy, 0.06) if i == 0 else (yy * 0.62, 0.08)      # the bow thwart is narrow: feet under the knees
+                fy, fw = (yy * 0.92, 0.055) if i == 0 else (yy * 0.74, 0.07)      # the bow thwart is narrow: feet under the knees
                 st.legs({"L": W((x - 0.48, fy - fw, floor)), "R": W((x - 0.48, fy + fw, floor))}, knees_out=0.06)
                 st.lean(fwd=9 - 14 * stroke)
                 hnd = b["oar_handles"].get((i, sg))
@@ -49,46 +49,46 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
         # the mate on the after thwart, facing aft toward the captain; feet tucked in under the stern sheets
         p = PP.sailor(0)
         x = yawl.THWARTS[3]
-        st = Seat(p, W((x, 0.2, yawl.SEAT_Z)), 180.0, frame=Mb)
-        st.legs({"L": W((x - 0.3, 0.16, floor)), "R": W((x - 0.3, 0.31, floor))}, knees_out=0.05)
+        st = Seat(p, W((x, 0.36, yawl.SEAT_Z)), 180.0, frame=Mb)
+        st.legs({"L": W((x - 0.22, 0.25, floor)), "R": W((x - 0.22, 0.34, floor))}, knees_out=0.0)
         st.lean(fwd=6)
         st.hand_on_thigh("L"); st.hand_on_thigh("R")
         st.head(look)
         out.append((p, st))
     if "Briggs" in who:
+        # the approved composition: Briggs and Sarah side by side across the stern, calm, the tiller between them
         p = PP.briggs()
-        st = Seat(p, W((-2.63, 0.3, yawl.SEAT_Z)), 0.0, frame=Mb)
-        st.legs({"L": W((-2.27, 0.31, floor)), "R": W((-2.27, 0.17, floor))}, knees_out=0.0)
+        st = Seat(p, W((-2.56, 0.28, yawl.SEAT_Z)), 0.0, frame=Mb)
+        st.legs({"L": W((-2.06, 0.3, floor)), "R": W((-2.06, 0.15, floor))}, knees_out=0.0)
         st.lean(fwd=4)
         tip = b["tiller"]
-        tdir = (Mb.to_3x3() @ Vector((1, 0, 0.1))).normalized()
-        p.grip_err = st.grip_bar("R", Mb @ tip, tdir, radius=0.018, over=Mb.to_3x3() @ Vector((0, 0, 1)), elbow=(0.15, 0.8, 0.55))   # elbow back and up: the forearm stays above the tiller
+        tdir = (Mb.to_3x3() @ Vector((1, 0, -0.23))).normalized()
+        # a natural hold: hand round the end of the tiller, forearm low beside his thigh
+        hold = Mb @ (tip - Vector((0.16, 0, -0.04)))            # partway along: the forearm meets the tiller across it
+        p.grip_err = st.grip_bar("R", hold, tdir, radius=0.019, over=Mb.to_3x3() @ Vector((0, 0, 1)), elbow=(0.65, 0.3, -0.1))
         st.hand_on_thigh("L")
         st.head(look)
         p.brow_knit(0.6)
         out.append((p, st))
     sarah = None
     if "Sarah" in who:
-        # beside her husband on the aft bench, the tiller between them, facing forward (the approved composition)
         p = PP.sarah()
-        st = Seat(p, W((-2.63, -0.3, yawl.SEAT_Z)), 0.0, frame=Mb)
-        st.legs({"L": W((-2.3, -0.16, floor)), "R": W((-2.3, -0.28, floor))}, knees_out=0.0)
+        st = Seat(p, W((-2.22, -0.3, yawl.SEAT_Z)), 8.0, frame=Mb)
+        st.legs({"L": W((-1.8, -0.22, floor)), "R": W((-1.82, -0.34, floor))}, knees_out=0.0)
         st.lean(fwd=6)
         st.hand_on_thigh("L"); st.hand_on_thigh("R")
         sarah = (p, st)
         out.append((p, st))
     if "Sophia" in who and sarah:
-        # Sophia on the port side bench at her mother's right, legs out on the bench, wrapped in her shawl
+        # Sophia sits on the bottom boards at her mother's feet, leaning back against her shins
         sp, sst = sarah
-        hbs = yawl.half_breadth_at(-1.95, yawl.SEAT_Z)
         p = PP.sophia()
-        qx, qy = -1.9, -(hbs - 0.14)
-        st = Seat(p, W((qx, qy, yawl.SEAT_Z)), 15.0, frame=Mb)             # along the bench, legs out on it
-        st.legs({"L": W((qx + 0.32, qy + 0.1, yawl.SEAT_Z + 0.03)), "R": W((qx + 0.32, qy + 0.02, yawl.SEAT_Z + 0.03))}, knees_out=0.05)
-        st.lean(fwd=-2)
+        qx, qy = -1.63, -0.0
+        st = Seat(p, W((qx, qy, yawl.FLOOR_Z + 0.022)), 0.0, frame=Mb)
+        st.legs({"L": W((qx + 0.3, qy + 0.05, yawl.FLOOR_Z + 0.07)), "R": W((qx + 0.3, qy - 0.05, yawl.FLOOR_Z + 0.07))}, knees_out=0.05)
+        st.lean(fwd=-6)
         st.hand_on_thigh("L"); st.hand_on_thigh("R")
-        mum = sst.M @ (sp.h.bone_head("head") + Vector((0, 0, 0.05)))
-        st.head(mum, tilt=4, share=0.9)                                    # she looks back up at her mother
+        st.head(look, tilt=4)
         out.append((p, st))
         sst.head(look, share=0.6)
         sp.brow_knit(0.5)
@@ -96,8 +96,8 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
         if hasattr(p, "grip_err"):
             print(f"GRIP {p.name}: palm {p.grip_err * 1000:.0f} mm from the bar")
             if p.grip_err > 0.015:
-                import clipcheck
-                clipcheck.FLOATING.append((p.name, round(p.grip_err, 3)))
+                import clipcheck5
+                clipcheck5.FLOATING.append((p.name, round(p.grip_err, 3)))
                 print(f"FLOAT {p.name}: hand {p.grip_err * 1000:.0f} mm off the bar it should hold")
         st.place_finish(look, density=density, hair=hair)
         trim_under_seat(p, st.seat_world)

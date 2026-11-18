@@ -15,10 +15,10 @@ _finish = C.finish
 
 
 def _checked_finish(out, *a, **k):
-    import bpy, clipcheck, weather
+    import bpy, clipcheck5, weather
     shot = os.path.splitext(os.path.basename(out))[0]
     weather.soften_chips()
-    bad = clipcheck.check(shot)
+    bad = clipcheck5.check(shot)
     if os.environ.get("CLIPONLY"):
         print("RENDERED", out, "(clip check only)")
         return

@@ -20,5 +20,5 @@ sun = bpy.data.objects.new("Sun", bpy.data.lights.new("Sun", 'SUN')); sc.collect
 sun.rotation_euler = (math.radians(50), 0, math.radians(-30))
 C.camera((0, -5.2, 1.1), (0, 0, 0.9), lens=40)
 sc.render.filepath = "/tmp/dl/t_cast.png"; bpy.ops.render.render(write_still=True)
-C.camera((-1.2, -1.6, 1.5), (-1.2, 0, 1.25), lens=50)
+C.camera((-1.2 + float(os.environ.get("FX", "0")), -1.6, 1.4), (-1.2 + float(os.environ.get("FX", "0")), 0, 1.2), lens=45)
 sc.render.filepath = "/tmp/dl/t_cast_face.png"; bpy.ops.render.render(write_still=True)

@@ -21,7 +21,7 @@ FLOATING = []          # (person, mm) hands that could not reach the bar they ar
 HAND_R = 0.10          # a contact whose triangles all lie this close to a wrist/knuckle is the hand, not the body
 
 
-def _in_hands(o, pairs, first=True):
+def _in_hands(o, pairs, first=True, r=None):
     import numpy as np
     h = o.get("hands")
     if not h:
@@ -30,7 +30,7 @@ def _in_hands(o, pairs, first=True):
     idx = np.array([p[0] if first else p[1] for p in pairs])
     c = CENTERS[o.name][idx]
     d = np.min(np.linalg.norm(c[:, None, :] - H[None, :, :], axis=2), axis=1)
-    return bool((d < HAND_R).all())
+    return bool((d < (r or HAND_R)).all())
 
 
 def _trees(objs, dg):
@@ -82,7 +82,10 @@ def check(shot, limit=60, hand_ok=("oar", "tiller", "doll", "Sophia", "letter", 
                 n = len(pairs)
                 if n == 0:
                     continue
-                grip = _in_hands(a, pairs) or ("person" in b and _in_hands(b, pairs, first=False))
+                # only the hand itself can grip (body mesh within HAND_R of a wrist/knuckle); clothing only at the cuff
+                ra = HAND_R if a.name.endswith("_body") else 0.07
+                rb = HAND_R if b.name.endswith("_body") else 0.07
+                grip = _in_hands(a, pairs, r=ra) or ("person" in b and _in_hands(b, pairs, first=False, r=rb))
                 allowed = limit if any(k in b.name or k in b.get("person", "") for k in hand_ok) else 4
                 import numpy as np
                 c = CENTERS[a.name][np.array([q[0] for q in pairs])]
