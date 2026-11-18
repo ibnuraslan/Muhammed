@@ -179,5 +179,5 @@ if os.environ.get("DEBUGCAM"):
         if o.name.startswith("ceiling"):
             o.hide_render = True
     C.camera(Vector((0.5, -1.5, 5.5)), Vector((-1.0, 0.1, 0.5)), lens=24)
-C.finish(OUT, cine={"sat": 1.15, "exposure": 0.05}, bloom=0.4)
+C.finish(OUT, cine={"sat": 1.15, "exposure": 0.55 if SHOT == "S15" else 0.05}, bloom=0.4)
 print("RENDERED", OUT)
