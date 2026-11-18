@@ -205,6 +205,9 @@ def set_hold(stain=True, lantern_swing=0.0, coal=False, barrels_on=True):
     ship.rope("lanyard", [pivot, pivot + Matrix.Rotation(a, 3, 'X') @ Vector((0, 0, -0.04))], 0.004, ship.tarred_rope("lanyard_m"))
     flame = p4.light('POINT', "flame", 90, (1.0, 0.55, 0.22), loc=ln.matrix_world @ Vector((0, 0, 0.2)), size=0.02)
     out["lantern"] = ln.matrix_world @ Vector((0, 0, 0.2))
+    # lantern light bouncing off the deckhead and the stows: a warm soft fill so the hold reads
+    p4.light('AREA', "bounce", 140, (1.0, 0.62, 0.32), loc=(0.3, 0, ship.zdeck(0) - 0.45), target=(0.3, 0, -2.4), size=5.0)
+    p4.light('POINT', "low_fill", 25, (1.0, 0.6, 0.3), loc=(-2.5, 0.0, -1.6), size=0.3)
     out["hb"] = hb
     # a grey shaft of daylight from a hatch further forward (the main hatch is battened)
     p4.light('SPOT', "hatchlight", 6000 if coal else 0, (0.85, 0.88, 0.9), loc=(2.6, 0, 5.0), target=(2.4, 0, -2.4), size=0.6, spot=22, blend=0.3)
@@ -228,7 +231,7 @@ def set_oak():
         # end grain face: growth rings with earlywood pores (ring-porous oak). Red oak: big open pores.
         # White oak: the same pores plugged by tyloses (glossy pale fill), so they read closed.
         endm = end_grain(kind)
-        e_o = ship.box(f"end_{kind}", (x - 0.2505, -0.25, 0.442), (0.0015, 0.1, 0.024), endm)
+        e_o = end_face(f"end_{kind}", kind, Vector((x - 0.2501, -0.25, 0.442)), endm)
         out[kind] = Vector((x - 0.25, -0.25, 0.442))
     # beads of spirit sweating out of the red oak stave's end and face
     drop = bpy.data.materials.new("spirit"); drop.use_nodes = True
@@ -241,10 +244,43 @@ def set_oak():
         o = bpy.context.active_object; o.scale.x = 0.5; o.data.materials.append(drop)
         bpy.ops.object.shade_smooth()
     p4.world_color((0.012, 0.008, 0.006))
+    p4.light('SPOT', "rake", 12, (1.0, 0.8, 0.55), loc=(0.035, -0.75, 0.47), target=(0.07, -0.25, 0.442), size=0.02, spot=25, blend=0.5)
     p4.light('SPOT', "lamp", 45, (1.0, 0.76, 0.5), loc=(0.2, -0.6, 1.6), target=(0, -0.1, 0.45), size=0.12, spot=55, blend=0.7)
     p4.light('AREA', "rim", 60, (1.0, 0.8, 0.6), loc=(-0.6, 1.2, 0.9), target=(0, 0, 0.5), size=1.0)
     p4.light('AREA', "fill", 12, (0.6, 0.7, 0.9), loc=(-1.2, -1.3, 0.8), target=(0, 0, 0.5), size=1.5)
     return out
+
+
+def end_face(name, kind, c, mat, w=0.1, h=0.024, nu=560, nv=136, seed=3):
+    """The stave's end as a real relief: a fine grid on the end face with the earlywood pores sunk into it
+    (red oak: open vessels ~0.3 mm across, 1.5 mm deep; white oak: the same vessels filled level by tyloses)."""
+    import numpy as np
+    rng = np.random.default_rng(seed)
+    ys = np.linspace(-w / 2, w / 2, nu); zs = np.linspace(-h / 2, h / 2, nv)
+    Y, Z = np.meshgrid(ys, zs)
+    ring = np.hypot(Y * 0.15, Z + 0.6) * 260.0
+    early = (ring - np.floor(ring)) < 0.28
+    depth = np.zeros_like(Y)
+    n = 2600 if kind == "red" else 2600
+    py = rng.uniform(-w / 2, w / 2, n); pz = rng.uniform(-h / 2, h / 2, n)
+    pr = np.hypot(py * 0.15, pz + 0.6) * 260.0
+    keep = (pr - np.floor(pr)) < 0.26
+    rad = 0.00032 if kind == "red" else 0.00022
+    dmax = 0.0016 if kind == "red" else 0.00008
+    for yy, zz in zip(py[keep], pz[keep]):
+        j0 = int((yy + w / 2) / w * (nu - 1)); i0 = int((zz + h / 2) / h * (nv - 1))
+        for i in range(max(0, i0 - 3), min(nv, i0 + 4)):
+            for j in range(max(0, j0 - 3), min(nu, j0 + 4)):
+                d = np.hypot(Y[i, j] - yy, Z[i, j] - zz)
+                if d < rad:
+                    depth[i, j] = max(depth[i, j], dmax * (1 - (d / rad) ** 4))
+    X = -depth                                    # sink into the stave (the face looks toward -X)
+    V = np.stack([X + c.x, Y + c.y, Z + c.z], -1).reshape(-1, 3)
+    idx = np.arange(nu * nv).reshape(nv, nu)
+    F = np.stack([idx[:-1, :-1], idx[:-1, 1:], idx[1:, 1:], idx[1:, :-1]], -1).reshape(-1, 4)
+    me = bpy.data.meshes.new(name); me.from_pydata(V.tolist(), [], F.tolist()); me.update()
+    o = bpy.data.objects.new(name, me); bpy.context.scene.collection.objects.link(o); me.materials.append(mat)
+    return o
 
 
 def end_grain(kind):

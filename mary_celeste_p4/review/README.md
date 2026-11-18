@@ -57,12 +57,13 @@ Courier Prime captions; every action has an SFX (list above → `sfx_cues.csv` a
 `S01.jpg` … `S36.jpg` (no S04): one real Cycles render per shot from `shots/board.py`, 1024×576, 40 spp + OIDN, taken at mid-shot (t = 0.5).
 `CONTACT_SHEET.jpg`: all of them. Ungraded house finish; cards and captions are not burned in yet.
 
-## Known issues to fix before the final
-* S05 cutaway: the alcohol vapour volume does not read yet (will be a visible warm haze thickening under the deck).
-* S13 hold: too dark; the stain under the red-oak barrel must read.
-* Deveau/Briggs faces: dark strands near the temple/cheek at this resolution (shared Deveau hair growth); to check at full res.
-* S31/S35 rod-reading pose: hands are on the rod but the grip reads stiff; will refine.
-* Cards (Genoa, Briggs, Santa Maria, New York) need free-licence photos: this container cannot reach Wikimedia/LOC.
+## Hub review round 1 (applied)
+* Barrels: matte, weathered oak staves; hoops dark wrought iron with rust (was glossy copper).
+* S13, S14, S18: hold now reads (warm bounce + fill from the lantern; open hatch shaft in S18).
+* S12: end grain is now a real relief mesh: earlywood pores sunk ~1.5 mm in red oak, plugged level in white oak, raking light.
+* S05: vapour haze under the deck.
+* Characters (S03, S09, S16, S21, S31, S33, S35): on hold until the new character assets land in the shared lib.
+* MacGregor / Richardson: text cards over their work, no figure. Card photos: placeholders until the hub supplies them.
 
 ## Render budget (measured here: 4 CPU cores, no GPU)
 ~15 s/frame at 640×360/24 spp → full spec 2560×1440 at ~96 spp ≈ 15–20 min/frame. 175 s × 24 fps = 4,200 frames

@@ -13,28 +13,58 @@ _PROTO = {}
 
 
 def _wood_variant(src, kind):
+    """Matte, weathered oak staves; the hoops (the texture's metal mask) become dark wrought iron with rust bloom."""
     m = src.copy(); m.name = f"oak_{kind}"
     N = m.node_tree.nodes; Lk = m.node_tree.links
     p = next(n for n in N if n.type == 'BSDF_PRINCIPLED')
-    bc = p.inputs['Base Color']
-    if bc.links:
-        s = bc.links[0].from_socket
-        mix = N.new("ShaderNodeMix"); mix.data_type = 'RGBA'; mix.blend_type = 'MULTIPLY'; mix.inputs['Factor'].default_value = 1
-        mix.inputs[7].default_value = (1.08, 0.92, 0.74, 1) if kind == "white" else (1.15, 0.66, 0.52, 1)
-        hs = N.new("ShaderNodeHueSaturation"); hs.inputs['Saturation'].default_value = 1.1 if kind == "white" else 1.25
-        Lk.new(s, mix.inputs[6]); Lk.new(mix.outputs[2], hs.inputs['Color']); Lk.new(hs.outputs[0], bc)
+    sep = next(n for n in N if n.bl_idname == 'ShaderNodeSeparateColor')
+    mask = sep.outputs['Blue']
+    diff = p.inputs['Base Color'].links[0].from_socket
+    tc = N.new("ShaderNodeTexCoord")
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 9.0; nz.inputs['Detail'].default_value = 8
+    Lk.new(tc.outputs['Object'], nz.inputs['Vector'])
+    # wood: tint toward the species, desaturate a little, grime in the noise, weathered grey on the bilge
+    mul = N.new("ShaderNodeMix"); mul.data_type = 'RGBA'; mul.blend_type = 'MULTIPLY'; mul.inputs['Factor'].default_value = 1
+    mul.inputs[7].default_value = (0.95, 0.80, 0.62, 1) if kind == "white" else (1.0, 0.62, 0.50, 1)
+    Lk.new(diff, mul.inputs[6])
+    hs = N.new("ShaderNodeHueSaturation"); hs.inputs['Saturation'].default_value = 0.8; hs.inputs['Value'].default_value = 0.85
+    Lk.new(mul.outputs[2], hs.inputs['Color'])
+    gr = N.new("ShaderNodeMix"); gr.data_type = 'RGBA'; gr.blend_type = 'MULTIPLY'
+    gr.inputs[7].default_value = (0.55, 0.5, 0.44, 1)
+    gm = N.new("ShaderNodeMapRange"); gm.inputs['From Min'].default_value = 0.45; gm.inputs['From Max'].default_value = 0.7
+    gm.inputs['To Max'].default_value = 0.7
+    Lk.new(nz.outputs['Fac'], gm.inputs['Value']); Lk.new(gm.outputs[0], gr.inputs['Factor'])
+    Lk.new(hs.outputs[0], gr.inputs[6])
+    # iron: near-black with rust blooms
+    rn = N.new("ShaderNodeTexNoise"); rn.inputs['Scale'].default_value = 40.0; rn.inputs['Detail'].default_value = 10
+    Lk.new(tc.outputs['Object'], rn.inputs['Vector'])
+    rr = N.new("ShaderNodeMapRange"); rr.inputs['From Min'].default_value = 0.5; rr.inputs['From Max'].default_value = 0.68
+    Lk.new(rn.outputs['Fac'], rr.inputs['Value'])
+    ir = N.new("ShaderNodeMix"); ir.data_type = 'RGBA'
+    ir.inputs[6].default_value = (0.035, 0.032, 0.03, 1); ir.inputs[7].default_value = (0.22, 0.08, 0.03, 1)
+    Lk.new(rr.outputs[0], ir.inputs['Factor'])
+    mk = N.new("ShaderNodeMapRange"); mk.inputs['From Min'].default_value = 0.3; mk.inputs['From Max'].default_value = 0.6
+    Lk.new(mask, mk.inputs['Value'])
+    col = N.new("ShaderNodeMix"); col.data_type = 'RGBA'
+    Lk.new(mk.outputs[0], col.inputs['Factor']); Lk.new(gr.outputs[2], col.inputs[6]); Lk.new(ir.outputs[2], col.inputs[7])
+    Lk.new(col.outputs[2], p.inputs['Base Color'])
+    met = N.new("ShaderNodeMath"); met.operation = 'MULTIPLY'; met.inputs[1].default_value = 0.45
+    Lk.new(mk.outputs[0], met.inputs[0]); Lk.new(met.outputs[0], p.inputs['Metallic'])
+    ro = N.new("ShaderNodeMix"); ro.data_type = 'FLOAT'
+    ro.inputs['A'].default_value = 0.88; ro.inputs['B'].default_value = 0.62
+    Lk.new(mk.outputs[0], ro.inputs['Factor']); Lk.new(ro.outputs['Result'], p.inputs['Roughness'])
+    p.inputs['Specular IOR Level'].default_value = 0.35
     if kind == "red":                                   # open pores: fine dark pits along the grain
-        tc = N.new("ShaderNodeTexCoord")
         mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (900, 900, 40)
         Lk.new(tc.outputs['Object'], mp.inputs['Vector'])
         vo = N.new("ShaderNodeTexVoronoi"); vo.feature = 'F1'; Lk.new(mp.outputs[0], vo.inputs['Vector'])
-        rr = N.new("ShaderNodeMapRange"); rr.inputs['From Min'].default_value = 0.0; rr.inputs['From Max'].default_value = 0.18
-        Lk.new(vo.outputs['Distance'], rr.inputs['Value'])
-        b = N.new("ShaderNodeBump"); b.inputs['Strength'].default_value = 0.25; Lk.new(rr.outputs[0], b.inputs['Height'])
+        r2 = N.new("ShaderNodeMapRange"); r2.inputs['From Min'].default_value = 0.0; r2.inputs['From Max'].default_value = 0.18
+        Lk.new(vo.outputs['Distance'], r2.inputs['Value'])
+        bb = N.new("ShaderNodeBump"); bb.inputs['Strength'].default_value = 0.25; Lk.new(r2.outputs[0], bb.inputs['Height'])
         nrm = p.inputs['Normal']
         if nrm.links:
-            Lk.new(nrm.links[0].from_socket, b.inputs['Normal'])
-        Lk.new(b.outputs['Normal'], nrm)
+            Lk.new(nrm.links[0].from_socket, bb.inputs['Normal'])
+        Lk.new(bb.outputs['Normal'], nrm)
     return m
 
 
