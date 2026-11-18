@@ -29,7 +29,7 @@ def atlantic(center=(0, 0), size=240, res=None, scale=2.4, chop=1.7, wind=15.0, 
              sun_az=200.0, sun_el=29.0, sun_energy=3.6, sky_rot=0.0, sky_k=1.0, time=11.0):
     res = res or int(os.environ.get("OCEAN_RES", "20"))
     w = water_mat()
-    oc = sea.ocean(size=size, res=res, scale=scale, chop=chop, wind=wind, repeat=3, foam=foam, mat=w,
+    oc = sea.ocean(size=size, res=res, scale=scale, chop=chop, wind=wind, repeat=int(os.environ.get("OCEAN_REPEAT", "3")), foam=foam, mat=w,
                    direction=math.degrees(math.atan2(WIND.y, WIND.x)), hulls=hulls, loc=(center[0], center[1], 0),
                    cut=cut, time=time)
     sea.far_sea(size * 1.45, mat=w, center=center)

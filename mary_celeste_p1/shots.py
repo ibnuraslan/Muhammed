@@ -24,6 +24,7 @@ def shot(sid, vo, dur, desc, sfx, cine=None, card=None):
 
 
 HAIR = float(os.environ.get("HAIR", "1.0"))
+ANIM = {}          # set by run_anim.py: {"on": True, "dur": seconds, "actors": [], "actions": {index: fn(dv, M, t)}}
 
 
 # ============================================================================ set builders
@@ -72,8 +73,20 @@ def person(kind, M, pose, look_w=None, density=None, seat=False):
     bpy.context.view_layer.update()
     dv.hip_w = M @ ((dv.h.bone_head("upperleg01.L") + dv.h.bone_head("upperleg01.R")) / 2)
     dv.place_M = M
+    if ANIM.get("on"):
+        # live rig for the final render: key the pose over the shot with a breathing/idle layer and blinks,
+        # grow the hair on the first pose and ride it on the head bone (p1/anim.py)
+        import anim as A
+        A.live(dv, M, pose, look_w, ANIM["dur"], density=HAIR if density is None else density, seed=len(ANIM["actors"]),
+               action=ANIM.get("actions", {}).get(len(ANIM["actors"])))
+        ANIM["actors"].append(dv)
+        return dv
     dv.finish(look_at=look_w, place=M, density=HAIR if density is None else density)
     return dv
+
+
+def A_ease(u):
+    u = min(max(u, 0.0), 1.0); return u * u * (3 - 2 * u)
 
 
 def heading_to(px, py, tx, ty):
@@ -229,17 +242,14 @@ def s02():
 
 
 @shot("S03", "He searches the deck,", 1.6,
-      "From behind and low, Deveau walks aft along the wet deck past the mainmast and the pumps, looking left and right.",
+      "From behind, Deveau stops on the wet deck by the mainmast and the pumps and looks left, then right.",
       ["footsteps on wet deck", "rigging creak", "slack sail flogging"])
 def s03():
     mc, _ = mc_at_sea(heel=3.0)
     M = mc["M"]
     Mp = S.deck_place(M, -3.2, 1.6, -90)
     def pose(dv, Mx):
-        h = dv.h
-        import human as H
-        H.pose_walk(h, 0.25, stride=20, arm_swing=12)
-        P.head(h, pitch=4, yaw=28)
+        Cw.stand_relaxed(dv, pitch=4, yaw=0, lean=4, weight="R")     # stopped, scanning the deck (run_anim turns his head)
     person("deveau", Mp, pose, look_w=S.deck_point(M, -9, -1.5, 1.2))
     cam = S.deck_point(M, -0.9, 1.1, 1.05)
     E.camera(cam, S.deck_point(M, -6.5, 1.8, 1.15), lens=40, fstop=3.2, focus=2.4)
@@ -592,12 +602,31 @@ def s23():
 def s24():
     d, _ = dg_at_sea(heading=95.0)
     M = d["M"]; xw = -ship.L / 2 + 1.7; zc = ship.zdeck(xw) + 1.25
-    Mp = S.deck_place(M, xw - 0.5, 0.0, 90)
+    Mp = S.deck_place(M, xw - 0.42, 0.0, 90)
     a1, a2 = math.radians(60), math.radians(150)
     L = M @ Vector((xw, 0.62 * math.sin(a1), zc + 0.62 * math.cos(a1))); R = M @ Vector((xw, -0.62 * math.sin(a2), zc + 0.62 * math.cos(a2)))
     def pose(dv, Mx):
         Cw.stand_relaxed(dv, pitch=8, yaw=-6, lean=12, weight="R")
         Cw.hands_on(dv, Mx, left_w=L, right_w=R, elbow_l=(0.9, 0.2, -0.3), elbow_r=(-0.9, 0.2, -0.6))
+    if ANIM.get("on"):
+        # the wheel goes over ~75 degrees: the wheel and spokes turn about the hub, his hands travel with the rim
+        import anim as A
+        dur = ANIM["dur"]
+        pivot = bpy.data.objects.new("wheel_pivot", None); bpy.context.scene.collection.objects.link(pivot)
+        pivot.matrix_world = M @ Matrix.Translation((xw, 0, zc)); pivot.parent = d["root"]
+        bpy.context.view_layer.update(); pivot.matrix_world = M @ Matrix.Translation((xw, 0, zc))
+        bpy.context.view_layer.update()
+        for o in [o for o in bpy.data.objects if o.name.startswith(("DG_wheel", "DG_spoke")) and not o.name.startswith("DG_wheelbox")]:
+            mw = o.matrix_world.copy(); o.parent = pivot; o.matrix_world = mw
+        th = lambda t: math.radians(32) * A_ease(t / dur)
+        pivot.rotation_mode = 'XYZ'
+        for i in range(0, int(dur * 24) + 2, 2):
+            pivot.rotation_euler = (-th(i / 24), 0, 0); pivot.keyframe_insert("rotation_euler", frame=1 + i)
+        pivot.rotation_euler = (0, 0, 0)
+        # hands grip two spokes (at the horizontal, between the rim and the handles), the wrist just aft of the spoke
+        spoke = lambda a: M @ Vector((xw - 0.07, 0.74 * math.sin(a), zc + 0.74 * math.cos(a)))
+        ANIM["actions"][0] = lambda dv, Mx, t: Cw.hands_on(dv, Mx, left_w=spoke(math.pi / 2 + th(t)), right_w=spoke(-math.pi / 2 + th(t)),
+                                                         elbow_l=(0.9, 0.2, -0.6), elbow_r=(-0.9, 0.2, -0.6))
     person(2, Mp, pose, look_w=M @ Vector((xw, 0, zc)))
     c = M @ Vector((xw + 1.3, 1.6, ship.zdeck(xw) + 1.7))
     E.camera(c, M @ Vector((xw - 0.25, 0, zc - 0.05)), lens=35, fstop=3.5)
