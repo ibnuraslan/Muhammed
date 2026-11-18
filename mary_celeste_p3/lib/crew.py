@@ -82,6 +82,8 @@ class Person(D.Deveau):
         h = self.h
         h.body.data.materials[0] = D.sailor_skin(name + "_skin", base=spec.get("skin", (0.43, 0.25, 0.16)),
                                                  weather=spec.get("weather", 0.6))
+        if hasattr(self, "_skin_regions"):
+            self._skin_regions()
         self.name = name; self.wet = wet
         self.rest_co = H.to_bl(h.hc)
         me = h.body.data
@@ -97,7 +99,7 @@ class Person(D.Deveau):
         self._dress()
 
     # -------------------------------------------------------------- hair: per-person density and colour
-    def _strands(self, label, vmask, P_, bvh, count, length, radius, comb, lift, mat, curl=0.2, segs=7, seed=1):
+    def _strands(self, label, vmask, P_, bvh, count, length, radius, comb, lift, mat, curl=0.2, segs=7, seed=1, **kw):
         k = self._dens.get(label, 1.0)
         if self.wig_on and label in ("hair", "sideburns"):
             k = 0.0
@@ -109,7 +111,7 @@ class Person(D.Deveau):
         if hc:
             mat = D.hair_material(f"{self.name}_{label}_m", hc[0], hc[1], rough=0.35)
             _grey_tint(mat, hc[2])
-        return D.Deveau._strands(self, label, vmask, P_, bvh, int(count * k), length, radius, comb, lift, mat, curl, segs, seed)
+        return D.Deveau._strands(self, label, vmask, P_, bvh, int(count * k), length, radius, comb, lift, mat, curl, segs, seed, **kw)
 
     def finish(self, look_at=None, lids=0.0, hair=True, density=1.0, place=None):
         if CACHE_DIR and hair:
