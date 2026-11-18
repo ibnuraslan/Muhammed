@@ -83,11 +83,12 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
         hbs = yawl.half_breadth_at(-1.95, yawl.SEAT_Z)
         p = PP.sophia()
         qx, qy = -1.9, -(hbs - 0.14)
-        st = Seat(p, W((qx, qy, yawl.SEAT_Z)), 60.0, frame=Mb)
-        st.legs({"L": W((qx + 0.16, qy + 0.3, yawl.SEAT_Z + 0.02)), "R": W((qx + 0.08, qy + 0.32, yawl.SEAT_Z + 0.02))}, knees_out=0.05)
+        st = Seat(p, W((qx, qy, yawl.SEAT_Z)), 15.0, frame=Mb)             # along the bench, legs out on it
+        st.legs({"L": W((qx + 0.32, qy + 0.1, yawl.SEAT_Z + 0.03)), "R": W((qx + 0.32, qy + 0.02, yawl.SEAT_Z + 0.03))}, knees_out=0.05)
         st.lean(fwd=-2)
         st.hand_on_thigh("L"); st.hand_on_thigh("R")
-        st.head(look, tilt=4)
+        mum = sst.M @ (sp.h.bone_head("head") + Vector((0, 0, 0.05)))
+        st.head(mum, tilt=4, share=0.9)                                    # she looks back up at her mother
         out.append((p, st))
         sst.head(look, share=0.6)
         sp.brow_knit(0.5)
