@@ -165,7 +165,7 @@ class Person(D.Deveau):
         self.shirt, _ = self._shell("bodice", bod, 0.009, dress_m, solid=0.002, displace=0.0015, drape=24)
         skirt = u & (z < m["hip"] + 0.02) & (z > m["ankle"] - 0.02) & (whand < 0.05)
         self.trousers, _ = self._shell("skirt", skirt, 0.03, dress_m, solid=0.003, displace=0.008, drape=60,
-                                       flare=lambda b: np.clip((m["hip"] - b[:, 2]) / (m["hip"] - m["ankle"]), 0, 1) ** 1.3 * 0.11
+                                       flare=lambda b: np.clip((m["hip"] - b[:, 2]) / (m["hip"] - m["ankle"]), 0, 1) ** 1.3 * 0.07
                                        + np.clip(-b[:, 1] * 0.0, 0, 1))
         boot = u & (z < m["ankle"] + 0.06)
         self.boots, _ = self._shell("boots", boot, 0.008, D.leather_material("boots", wet=w), solid=0.002, drape=60)

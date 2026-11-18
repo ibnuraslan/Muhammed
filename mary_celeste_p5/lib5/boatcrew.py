@@ -58,7 +58,7 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
     if "Briggs" in who:
         p = PP.briggs()
         st = Seat(p, W((-2.63, 0.3, yawl.SEAT_Z)), 0.0, frame=Mb)
-        st.legs({"L": W((-2.27, 0.24, floor)), "R": W((-2.27, 0.08, floor))})
+        st.legs({"L": W((-2.27, 0.31, floor)), "R": W((-2.27, 0.17, floor))}, knees_out=0.0)
         st.lean(fwd=4)
         tip = b["tiller"]
         tdir = (Mb.to_3x3() @ Vector((1, 0, 0.1))).normalized()
@@ -69,29 +69,26 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
         out.append((p, st))
     sarah = None
     if "Sarah" in who:
-        # on the port side bench, turned in toward the middle
-        hbs = yawl.half_breadth_at(-1.95, yawl.SEAT_Z)
+        # beside her husband on the aft bench, the tiller between them, facing forward (the approved composition)
         p = PP.sarah()
-        sy = -(hbs - 0.16)
-        st = Seat(p, W((-1.95, sy, yawl.SEAT_Z)), 72.0, frame=Mb)
-        st.legs({"L": W((-1.88, sy + 0.27, floor)), "R": W((-2.05, sy + 0.25, floor))}, knees_out=0.02)
-        st.lean(fwd=8)
+        st = Seat(p, W((-2.63, -0.3, yawl.SEAT_Z)), 0.0, frame=Mb)
+        st.legs({"L": W((-2.3, -0.16, floor)), "R": W((-2.3, -0.28, floor))}, knees_out=0.0)
+        st.lean(fwd=6)
+        st.hand_on_thigh("L"); st.hand_on_thigh("R")
         sarah = (p, st)
         out.append((p, st))
     if "Sophia" in who and sarah:
-        # Sophia on the aft bench at her mother's left, on the other side of the tiller from her father
+        # Sophia on the port side bench at her mother's right, legs out on the bench, wrapped in her shawl
         sp, sst = sarah
+        hbs = yawl.half_breadth_at(-1.95, yawl.SEAT_Z)
         p = PP.sophia()
-        qx, qy = -2.69, -0.34
-        st = Seat(p, W((qx, qy, yawl.SEAT_Z)), 10.0, frame=Mb)
-        st.legs({"L": W((qx + 0.38, qy + 0.06, yawl.SEAT_Z + 0.02)), "R": W((qx + 0.38, qy - 0.04, yawl.SEAT_Z + 0.02))}, knees_out=0.05)
+        qx, qy = -1.9, -(hbs - 0.14)
+        st = Seat(p, W((qx, qy, yawl.SEAT_Z)), 60.0, frame=Mb)
+        st.legs({"L": W((qx + 0.16, qy + 0.3, yawl.SEAT_Z + 0.02)), "R": W((qx + 0.08, qy + 0.32, yawl.SEAT_Z + 0.02))}, knees_out=0.05)
         st.lean(fwd=-2)
         st.hand_on_thigh("L"); st.hand_on_thigh("R")
         st.head(look, tilt=4)
         out.append((p, st))
-        knee = st.M @ (p.h.bone_tail("upperleg02.L") + Vector((0, 0, 0.055)))
-        sst.hand("L", knee, elbow=(0.7, 0.3, -0.6), grip=0)
-        sst.hand_on_thigh("R")
         sst.head(look, share=0.6)
         sp.brow_knit(0.5)
     for p, st in out:

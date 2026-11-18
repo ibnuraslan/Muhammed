@@ -148,7 +148,7 @@ def build(name="yawl", wet=0.6, oars="out", oar_angle=None, rudder=True, painter
             objs.append(ship.box(f"{name}_knee{i}{sg}", (x, sg * (hb - 0.05), SEAT_Z - 0.12), (0.06, 0.08, 0.2), seat))
     # stern sheets: an aft bench across the boat and a side bench each side, open in the middle for the feet
     x0, x1 = STERN_SHEETS
-    xa = x0 + 0.7                     # the side benches start forward of the helmsman's legs
+    xa = x0 + 0.8                     # the side benches start forward of the legs of the two on the aft bench
     xb = x0 + 0.42                    # aft bench depth
     hb = half_breadth_at((x0 + xb) / 2, SEAT_Z)
     objs.append(ship.box(name + "_sternseat", ((x0 + xb) / 2, 0, SEAT_Z - 0.02), (xb - x0, 2 * hb, 0.04), seat, bevel=0.006))
