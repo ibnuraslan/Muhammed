@@ -1,0 +1,78 @@
+{
+ "shot": "S35",
+ "bad": [],
+ "contacts": [
+  {
+   "person": "deveau",
+   "part": "Deveau_body",
+   "other": "grad.003",
+   "pairs": 38,
+   "grip": true,
+   "ok": true,
+   "at": [
+    -3.099,
+    -1.085,
+    2.723
+   ],
+   "span": [
+    0.027,
+    0.006,
+    0.009
+   ]
+  },
+  {
+   "person": "deveau",
+   "part": "Deveau_body",
+   "other": "grad.004",
+   "pairs": 76,
+   "grip": true,
+   "ok": true,
+   "at": [
+    -3.101,
+    -1.087,
+    2.66
+   ],
+   "span": [
+    0.016,
+    0.013,
+    0.006
+   ]
+  },
+  {
+   "person": "deveau",
+   "part": "Deveau_body",
+   "other": "rod_dry",
+   "pairs": 40,
+   "grip": true,
+   "ok": true,
+   "at": [
+    -3.1,
+    -1.089,
+    2.73
+   ],
+   "span": [
+    0.027,
+    0.01,
+    0.019
+   ]
+  },
+  {
+   "person": "deveau",
+   "part": "Deveau_body",
+   "other": "rod_wet",
+   "pairs": 242,
+   "grip": true,
+   "ok": true,
+   "at": [
+    -3.102,
+    -1.089,
+    2.673
+   ],
+   "span": [
+    0.03,
+    0.025,
+    0.089
+   ]
+  }
+ ]
+}

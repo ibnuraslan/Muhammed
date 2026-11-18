@@ -38,8 +38,44 @@ def man(kind, SHIP, pos, ang_deg, pose, look_local, hair=1.0, **kw):
     Mloc = Matrix.Translation((pos[0], pos[1], zd)) @ Matrix.Rotation(math.radians(ang_deg + 90), 4, 'Z')
     M = SHIP @ Mloc; Mi = M.inverted()
     pose(h, dv, M, Mi)
+    hands = []                                   # wrist + knuckles (placed), for the clipping check's grip test
+    for sd in ("L", "R"):
+        for b in (f"wrist.{sd}", f"metacarpal3.{sd}", f"finger3-2.{sd}", f"finger1-2.{sd}"):
+            if b in h.arm.pose.bones:
+                hands.append(tuple(M @ h.bone_head(b)))
     dv.finish(look_at=SHIP @ Vector(look_local), place=M, density=hair)
+    settle_on_deck(dv, SHIP)
+    flat = [c for p in hands for c in p]
+    for o in dv.objects:
+        o["person"] = kind
+        o["hands"] = flat
     return dv, M
+
+
+def settle_on_deck(dv, SHIP, gap=0.002):
+    """Lift the man so the lowest point of his boots rests on the planking (deck sheer + camber), never in it."""
+    import numpy as np
+    Si = SHIP.inverted()
+    dg = bpy.context.evaluated_depsgraph_get()
+    worst = -1.0
+    for o in dv.objects:
+        if o.type != 'MESH' or "boot" not in o.name.lower():
+            continue
+        oe = o.evaluated_get(dg); me = oe.to_mesh()
+        for v in me.vertices:
+            q = Si @ (oe.matrix_world @ v.co)
+            s_ = (q.x - ship._ends(1.0)[0]) / (ship._ends(1.0)[1] - ship._ends(1.0)[0])
+            hb = max(ship.half_breadth(min(max(s_, 0.0), 1.0), 1.0) - 0.1, 0.1)
+            zdk = ship.zdeck(q.x) + 0.012 * (1 - min(1.0, (q.y / hb) ** 2))
+            worst = max(worst, zdk - q.z)
+        oe.to_mesh_clear()
+    if worst > -gap:
+        up = SHIP.to_3x3() @ Vector((0, 0, worst + gap))
+        for o in dv.objects:
+            if o.parent is None:
+                o.location += up
+        bpy.context.view_layer.update()
+    return worst
 
 
 def head_of(M):
@@ -47,6 +83,12 @@ def head_of(M):
 
 
 def finish(sat=1.0, exposure=0.0, bloom=0.3):
+    if os.environ.get("CLIPONLY"):              # P5's clipping check (BVH overlap of every person vs everything else)
+        sys.path.insert(0, os.path.join(p4.ROOT, "mary_celeste_p4", "out", "ext"))
+        import clipcheck
+        clipcheck.OUT = os.path.join(p4.ROOT, "mary_celeste_p4", "out", "clip")
+        clipcheck.check(SHOT, hand_ok=("rod", "spear", "pump", "brake", "rail", "cap", "bulwark", "lantern", "deck"))
+        sys.exit(0)
     p4.C.finish(OUT, cine={"sat": sat, "exposure": exposure}, bloom=bloom)
     print("RENDERED", OUT)
 
@@ -174,7 +216,7 @@ def S09():   # Deveau over the open fore hatch, breathing in: no smell of spirit
 def S10():   # the main hatch still battened down (low insert, push in on the wedges), Deveau soft behind
     d = S.set_deck(time="day")
     SHIP = d["SHIP"]; xm = ship.MAIN_HATCH_X
-    dv, M = man("deveau", SHIP, (xm + 2.4, 1.8), 200, pose_lookdown(pitch=34, lean=10), (xm, 0, ship.zdeck(xm) + 0.4))
+    dv, M = man("deveau", SHIP, (xm + 0.2, 2.25), 262, pose_lookdown(pitch=34, lean=10), (xm, 0, ship.zdeck(xm) + 0.4))
     tgt = SHIP @ Vector((xm, -1.25, ship.zdeck(xm) + 0.42))
     # the whole battened hatch is the subject: high three-quarter, bars and wedges, Deveau at its far edge
     tgt = SHIP @ Vector((xm, 0.1, ship.zdeck(xm) + 0.45))
@@ -224,7 +266,7 @@ def S15():   # the rail gap and the empty boat chocks: "ten people climb over th
 def S16():   # Deveau turns: something by the mainmast (MCU, his eyeline aft)
     d = S.set_deck(time="day")
     SHIP = d["SHIP"]; px = d["px"]
-    dv, M = man("deveau", SHIP, (px + 3.6, 1.6), 180 + 20 * (1 - E(T)), pose_lookdown(pitch=12, yaw=12, lean=3), (px, 0.7, ship.zdeck(px) + 0.4))
+    dv, M = man("deveau", SHIP, (0.6, 2.05), 180 + 20 * (1 - E(T)), pose_lookdown(pitch=12, yaw=12, lean=3), (px, 0.7, ship.zdeck(px) + 0.4))
     hw = head_of(M)
     # over his shoulder from behind: as his head turns, the mainmast and the pumps come into his eyeline
     cl = SHIP @ Vector((px + 5.1, 2.25, ship.zdeck(px) + 1.8))
@@ -235,7 +277,7 @@ def S16():   # Deveau turns: something by the mainmast (MCU, his eyeline aft)
 def S17():   # the port pump taken apart: spear out on deck, upper box off, brake unshipped; Deveau over it
     d = S.set_deck(time="day")
     SHIP = d["SHIP"]; px = d["px"]
-    dv, M = man("deveau", SHIP, (px + 1.6, 2.05), 210, pose_lookdown(pitch=40, yaw=-6, lean=14), (px + 0.6, 1.2, ship.zdeck(px)))
+    dv, M = man("deveau", SHIP, (px + 1.6, 2.5), 225, pose_lookdown(pitch=40, yaw=-6, lean=14), (px + 0.6, 1.2, ship.zdeck(px)))
     tgt = SHIP @ Vector((px + 1.0, 1.5, ship.zdeck(px) + 0.7))
     c0 = SHIP @ Vector((px + 3.6, -0.1, ship.zdeck(px) + 1.65)); c1 = SHIP @ Vector((px + 3.3, 0.05, ship.zdeck(px) + 1.55))
     cam(lerp(c0, c1, E(T)), tgt, lens=28, fstop=4.0, focus=(tgt - c1).length)
@@ -303,7 +345,7 @@ def S21():   # Briggs at night, drawing the spear up out of the pump to see why 
     SHIP = d["SHIP"]; px = d["px"]
     S.lantern_on_deck(SHIP, (px + 0.9, 0.2, ship.zdeck(px) + 0.01), energy=160)
     sp = (px, 0.7, ship.zdeck(px) + 1.05)
-    dv, M = man("briggs", SHIP, (px + 0.55, 0.95), 200, pose_spear(SHIP, (px, 0.7, ship.zdeck(px) + 1.25), (px, 0.7, ship.zdeck(px) + 1.55)),
+    dv, M = man("briggs", SHIP, (px + 0.35, 1.1), 200, pose_spear(SHIP, (px, 0.7, ship.zdeck(px) + 1.25), (px, 0.7, ship.zdeck(px) + 1.55)),
                 (px, 0.7, ship.zdeck(px) + 1.05), wet=0.7)
     hw = head_of(M)
     cl = SHIP @ Vector((px - 1.7, 1.55, ship.zdeck(px) + 1.6))

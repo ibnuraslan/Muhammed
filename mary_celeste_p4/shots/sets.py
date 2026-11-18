@@ -514,7 +514,7 @@ def set_deck(time="day", heel=2.5, rail_gap=(-2.7, -0.6, "S"), pumps="found", sa
         boat = rail_gap is None            # before the evacuation the yawl is still on its chocks on the main hatch
     if boat:
         import skfab
-        br, bms = skfab.model(YAWL, height=0.98, name="yawl")          # ~4.6 m boat, keel up on the chocks
+        br, bms = skfab.model(YAWL, height=0.77, name="yawl")          # ~3.6 m yawl, sized to sit on the main hatch
         xm = ship.MAIN_HATCH_X
         br.matrix_world = SHIP @ Matrix.Translation((xm, 0, ship.zdeck(xm) + 0.755)) @ Matrix.Rotation(math.radians(90), 4, 'Z')
         out["yawl"] = br

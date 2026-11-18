@@ -1,0 +1,60 @@
+{
+ "shot": "S21",
+ "bad": [],
+ "contacts": [
+  {
+   "person": "briggs",
+   "part": "Briggs_body",
+   "other": "pumpP_brake",
+   "pairs": 231,
+   "grip": true,
+   "ok": true,
+   "at": [
+    -3.693,
+    0.806,
+    2.623
+   ],
+   "span": [
+    0.073,
+    0.078,
+    0.075
+   ]
+  },
+  {
+   "person": "briggs",
+   "part": "Briggs_body",
+   "other": "pumpP_spear",
+   "pairs": 159,
+   "grip": true,
+   "ok": true,
+   "at": [
+    -3.696,
+    0.811,
+    2.624
+   ],
+   "span": [
+    0.047,
+    0.046,
+    0.075
+   ]
+  },
+  {
+   "person": "briggs",
+   "part": "Briggs_body",
+   "other": "pumpP_spear_eye",
+   "pairs": 238,
+   "grip": true,
+   "ok": true,
+   "at": [
+    -3.708,
+    0.812,
+    2.663
+   ],
+   "span": [
+    0.063,
+    0.074,
+    0.072
+   ]
+  }
+ ]
+}
