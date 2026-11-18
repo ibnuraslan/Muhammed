@@ -616,7 +616,7 @@ def doll(name, at, rot_z=0.0, height=0.36, broken=False, kind="china", lie=True,
             piece.matrix_world = Matrix.Translation(pc) @ Matrix.Rotation(math.radians(-90), 4, 'X') @ Matrix.Translation(-pc) @ piece.matrix_world
             bpy.context.view_layer.update(); plo, phi = SF.bounds([piece]); pc = (plo + phi) / 2
         side = Matrix.Rotation(rot_z, 4, 'Z') @ Vector((1, 0, 0)) if lie else Vector((1, 0, 0))
-        R = Matrix.Translation(pc + side * 0.03) @ Matrix.Rotation(math.radians(28), 4, 'Z') @ Matrix.Translation(-pc)
+        R = Matrix.Translation(pc + side * 0.06) @ Matrix.Rotation(math.radians(28), 4, 'Z') @ Matrix.Translation(-pc)
         piece.matrix_world = R @ piece.matrix_world
         plo, phi = SF.bounds([piece]); piece.location.z += at[2] - plo.z
     return root, piece
