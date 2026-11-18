@@ -157,9 +157,55 @@ def sailor_skin(name, base=(0.43, 0.25, 0.16), weather=0.6):
     lips.inputs[7].default_value = (0.72, 0.42, 0.40, 1); L.new(mask("mpfb_lips.jpg"), lips.inputs['Factor'])
     L.new(red.outputs[2], lips.inputs[6])
     nails = N.new("ShaderNodeMix"); nails.data_type = 'RGBA'; nails.blend_type = 'MIX'
-    nails.inputs[7].default_value = (0.62, 0.48, 0.42, 1); L.new(mask("mpfb_fingernails.jpg"), nails.inputs['Factor'])
+    nails.inputs[7].default_value = (0.42, 0.28, 0.23, 1)
+    nf = N.new("ShaderNodeMath"); nf.operation = 'MULTIPLY'; nf.inputs[1].default_value = 0.6
+    L.new(mask("mpfb_fingernails.jpg"), nf.inputs[0]); L.new(nf.outputs[0], nails.inputs['Factor'])
     L.new(lips.outputs[2], nails.inputs[6])
     L.new(nails.outputs[2], p.inputs['Base Color'])
+    return m
+
+
+def mesh_obj(name, verts, faces, mat):
+    me = bpy.data.meshes.new(name); me.from_pydata([tuple(v) for v in verts], [], faces); me.update()
+    me.polygons.foreach_set("use_smooth", np.ones(len(me.polygons), bool))
+    o = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(o); o.data.materials.append(mat)
+    return o
+
+
+def boot_leather(name, color=(0.055, 0.034, 0.02), rough=0.62, creases=1.0):
+    """Matte, worn, salt-stained boot leather: creases across the vamp and ankle, scuffed toes and edges,
+    pale salt tide-marks low on the boot."""
+    m, N, L, p = _mat(name)
+    tc = N.new("ShaderNodeTexCoord")
+    base = N.new("ShaderNodeRGB"); base.outputs[0].default_value = (*color, 1)
+    wear = N.new("ShaderNodeTexNoise"); wear.inputs['Scale'].default_value = 40; wear.inputs['Detail'].default_value = 8
+    L.new(tc.outputs['Object'], wear.inputs['Vector'])
+    sc = N.new("ShaderNodeMapRange"); sc.inputs['From Min'].default_value = 0.55; sc.inputs['From Max'].default_value = 0.75
+    sc.inputs['To Max'].default_value = 0.35; L.new(wear.outputs['Fac'], sc.inputs['Value'])
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.inputs[7].default_value = (0.16, 0.11, 0.075, 1)   # scuffed
+    L.new(sc.outputs[0], mx.inputs['Factor']); L.new(base.outputs[0], mx.inputs[6])
+    geo = N.new("ShaderNodeNewGeometry"); sp = N.new("ShaderNodeSeparateXYZ"); L.new(geo.outputs['Position'], sp.inputs[0])
+    salt = N.new("ShaderNodeTexNoise"); salt.inputs['Scale'].default_value = 9; L.new(tc.outputs['Object'], salt.inputs['Vector'])
+    zz = N.new("ShaderNodeMath"); zz.operation = 'MULTIPLY_ADD'; zz.inputs[1].default_value = 0.03
+    L.new(salt.outputs['Fac'], zz.inputs[0]); L.new(sp.outputs['Z'], zz.inputs[2])
+    sm = N.new("ShaderNodeMapRange"); sm.inputs['From Min'].default_value = 0.085; sm.inputs['From Max'].default_value = 0.05
+    sm.inputs['To Max'].default_value = 0.18; L.new(zz.outputs[0], sm.inputs['Value'])
+    mx2 = N.new("ShaderNodeMix"); mx2.data_type = 'RGBA'; mx2.inputs[7].default_value = (0.36, 0.32, 0.27, 1)  # salt
+    L.new(sm.outputs[0], mx2.inputs['Factor']); L.new(mx.outputs[2], mx2.inputs[6])
+    L.new(mx2.outputs[2], p.inputs['Base Color'])
+    rr = N.new("ShaderNodeMapRange"); rr.inputs['To Min'].default_value = rough - 0.12; rr.inputs['To Max'].default_value = rough + 0.15
+    L.new(wear.outputs['Fac'], rr.inputs['Value']); L.new(rr.outputs[0], p.inputs['Roughness'])
+    p.inputs['Specular IOR Level'].default_value = 0.35
+    # creases: stretched noise across the boot + fine grain
+    mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (60, 6, 60); L.new(tc.outputs['Object'], mp.inputs['Vector'])
+    cr = N.new("ShaderNodeTexNoise"); cr.inputs['Scale'].default_value = 1.0; cr.inputs['Detail'].default_value = 4
+    L.new(mp.outputs[0], cr.inputs['Vector'])
+    gr = N.new("ShaderNodeTexVoronoi"); gr.inputs['Scale'].default_value = 900; L.new(tc.outputs['Object'], gr.inputs['Vector'])
+    b1 = N.new("ShaderNodeBump"); b1.inputs['Strength'].default_value = 0.35 * creases; b1.inputs['Distance'].default_value = 0.002
+    L.new(cr.outputs['Fac'], b1.inputs['Height'])
+    b2 = N.new("ShaderNodeBump"); b2.inputs['Strength'].default_value = 0.15; b2.inputs['Distance'].default_value = 0.0003
+    L.new(gr.outputs['Distance'], b2.inputs['Height']); L.new(b1.outputs['Normal'], b2.inputs['Normal'])
+    L.new(b2.outputs['Normal'], p.inputs['Normal'])
     return m
 
 
@@ -277,10 +323,10 @@ class Deveau:
         self.scarf, _ = self._shell("scarf", nk, 0.011, wool_material("scarf", (0.20, 0.035, 0.025), rough=0.8, sheen=0.3, weave=900, dirt=0.3),
                                     solid=0.003, displace=0.003)
         # ---- trousers (wool): pelvis and legs down to the boot tops
-        trous = u & (z < hip_z + 0.11) & (z > ankle_z + 0.05) & (wfoot < 0.2) & (whand < 0.05)
+        trous = u & (z < hip_z + 0.11) & (z > ankle_z + 0.2) & (wfoot < 0.2) & (whand < 0.05)
         self.trousers, _ = self._shell("trousers", trous, 0.012, wool_material("trousers", (0.022, 0.02, 0.019), weave=500, wet=self.wet, sheen=0.25),
                                        solid=0.002, displace=0.004, drape=14,
-                                       flare=lambda b: np.clip((knee_z + 0.1 - b[:, 2]) / 0.4, 0, 1) * 0.02)
+                                       flare=lambda b: np.clip((knee_z + 0.1 - b[:, 2]) / 0.4, 0, 1) * 0.006)
         # ---- boots (leather): feet and shins, smoothed so the toes read as a boot
         boot = u & (z < ankle_z + 0.27)
         self.boot_mask = boot.copy()
@@ -406,35 +452,124 @@ class Deveau:
             bpy.context.view_layer.update()
 
     def _sea_boots(self):
-        """Replace the foot-shaped boot shell with leather sea boots: the convex hull of each posed foot and shin
-        (no toes, flat sole), pushed out a little and smoothed."""
+        """1870s leather sea boots, modelled per posed foot (replaces the body-shaped boot shell):
+        a lofted upper (rounded toe, instep, heel counter) sized to enclose the foot, a stitched sole that overhangs
+        a few mm, a stacked leather heel, and a shaft that rises over the tucked-in trousers to below the knee."""
         h = self.h
         P = np.array([v.co[:] for v in h.body.data.vertices])
-        mat = self.boots.data.materials[0]
         self.boots.hide_render = True; self.boots.hide_viewport = True
+        dg = bpy.context.evaluated_depsgraph_get()
+        te = self.trousers.evaluated_get(dg); tm = te.to_mesh()
+        T = np.array([te.matrix_world @ v.co for v in tm.vertices]); te.to_mesh_clear()
+        upper_m = boot_leather(self.name + "_boot_leather")
+        sole_m = boot_leather(self.name + "_boot_sole", color=(0.035, 0.024, 0.016), rough=0.8, creases=0.0)
         self.sea_boots = []
         for sg in (1, -1):
-            sel = self.used & self.boot_mask & (np.sign(self.rest_co[:, 0]) == sg)
-            pts = P[sel]
-            if len(pts) < 8:
+            side = self.used & (np.sign(self.rest_co[:, 0]) == sg)
+            foot = P[side & (self.rest_co[:, 2] < self.marks["ankle"] + 0.03)]
+            if len(foot) < 20:
                 continue
-            bm = bmesh.new()
-            for p in pts:
-                bm.verts.new(p)
-            r = bmesh.ops.convex_hull(bm, input=bm.verts)
-            for v in [g for g in r.get("geom_interior", []) if isinstance(g, bmesh.types.BMVert)]:
-                bm.verts.remove(v)
-            bmesh.ops.dissolve_degenerate(bm, dist=1e-4, edges=bm.edges)
-            bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-            me = bpy.data.meshes.new(f"{self.name}_seaboot"); bm.to_mesh(me); bm.free()
-            o = bpy.data.objects.new(me.name, me); bpy.context.collection.objects.link(o)
-            o.data.materials.append(mat)
-            rm = o.modifiers.new("Remesh", "REMESH"); rm.mode = 'VOXEL'; rm.voxel_size = 0.006; rm.use_smooth_shade = True
-            sm = o.modifiers.new("Smooth", "LAPLACIANSMOOTH"); sm.lambda_factor = 2.0; sm.iterations = 12; sm.use_volume_preserve = True
-            d = o.modifiers.new("Out", "DISPLACE"); d.strength = 0.012; d.mid_level = 0.0
-            sb = o.modifiers.new("Sub", "SUBSURF"); sb.levels = 1; sb.render_levels = 1
-            # keep the sole on the ground
-            self.sea_boots.append(o); h.parts.append(o)
+            g = float(foot[:, 2].min())                                     # ground under this foot
+            ank = np.array(h.bone_head(f"foot.{'L' if sg > 0 else 'R'}"))[:2]
+            xy = foot[:, :2] - foot[:, :2].mean(0)
+            w_, v_ = np.linalg.eigh(np.cov(xy.T)); fwd = v_[:, np.argmax(w_)]
+            if ((foot[:, :2] - ank) @ fwd).mean() < 0:
+                fwd = -fwd                                                  # toes point away from the ankle
+            F3 = np.array([fwd[0], fwd[1], 0.0]); S3 = np.array([-fwd[1], fwd[0], 0.0])
+            c0 = foot[:, :2].mean(0)
+            loc = np.stack([(foot[:, :2] - c0) @ fwd, (foot[:, :2] - c0) @ S3[:2], foot[:, 2] - g], 1)
+            u0, u1 = loc[:, 0].min() - 0.012, loc[:, 0].max() + 0.02            # heel back .. toe tip (room for the toe)
+            ns = 22; nr = 28
+            def env(u):
+                m = np.abs(loc[:, 0] - u) < 0.02
+                q = loc[m] if m.sum() > 3 else loc
+                return (float(q[:, 1].min()) - 0.011, float(q[:, 1].max()) + 0.011, float(q[:, 2].max()) + 0.012)
+            V = []; F = []
+            rings = []
+            for i in range(ns + 1):
+                t = i / ns; u = u0 + (u1 - u0) * t
+                ylo, yhi, top = env(min(max(u, u0 + 0.02), u1 - 0.03))
+                # rounded toe and heel in plan; instep falls away to the toe cap
+                taper = math.sin(math.pi * min(1.0, t / 0.12) / 2) ** 0.5 * math.sin(math.pi * min(1.0, (1 - t) / 0.2) / 2) ** 0.6
+                toe = math.sqrt(max(0.0, 1 - max(0.0, (t - 0.72) / 0.28) ** 2))      # round toe in plan
+                hee = math.sqrt(max(0.0, 1 - max(0.0, (0.1 - t) / 0.1) ** 2))         # round heel counter
+                yc = (ylo + yhi) / 2; hw = max(0.008, (yhi - ylo) / 2 * (0.25 + 0.75 * min(toe, hee)))
+                top = max(0.03, 0.03 + (top - 0.03) * (0.35 + 0.65 * toe)) if t > 0.6 else top
+                ring = []
+                for k in range(nr):
+                    a = 2 * math.pi * k / nr
+                    cy, sz = math.cos(a), math.sin(a)
+                    zz = 0.012 + (top - 0.012) * (0.5 + 0.5 * sz) ** 1.0
+                    yy = yc + hw * np.sign(cy) * abs(cy) ** 0.55 * (1 - 0.15 * max(0, sz))
+                    if sz < 0:                                             # flat welt along the bottom
+                        zz = 0.012 + 0.006 * (1 + sz)
+                    ring.append(len(V)); V.append((u, yy, zz))
+                rings.append(ring)
+            for i in range(ns):
+                for k in range(nr):
+                    F.append([rings[i][k], rings[i][(k + 1) % nr], rings[i + 1][(k + 1) % nr], rings[i + 1][k]])
+            F.append(rings[0][::-1]); F.append(rings[-1])
+            # shaft: ellipses round the (tucked) trouser leg from the ankle to below the knee
+            leg = side & (self.rest_co[:, 2] > self.marks["ankle"] - 0.01) & (self.rest_co[:, 2] < self.marks["ankle"] + 0.34)
+            Lp = P[leg]
+            tsel = (np.sign(T[:, 0] - P[self.used, 0].mean()) == sg) & (T[:, 2] < g + 0.42)
+            Tp = T[tsel]
+            shaft = []
+            zs = np.linspace(g + 0.07, g + 0.36, 12)
+            Vs = []; Fs = []
+            for j, z in enumerate(zs):
+                q = Lp[np.abs(Lp[:, 2] - z) < 0.025]
+                if len(q) < 6:
+                    q = Lp[np.argsort(np.abs(Lp[:, 2] - z))[:40]]
+                c = q[:, :2].mean(0); d = q[:, :2] - c
+                ra = float(np.abs(d @ fwd).max()) + 0.02; rb = float(np.abs(d @ S3[:2]).max()) + 0.02
+                flare = 1.0 + 0.12 * max(0.0, (j - 8) / 3)
+                ring = []
+                for k in range(nr):
+                    a = 2 * math.pi * k / nr
+                    p = c + fwd * math.cos(a) * ra * flare + S3[:2] * math.sin(a) * rb * flare
+                    ring.append(len(Vs)); Vs.append((p[0], p[1], z))
+                shaft.append(ring)
+            for j in range(len(zs) - 1):
+                for k in range(nr):
+                    Fs.append([shaft[j][k], shaft[j][(k + 1) % nr], shaft[j + 1][(k + 1) % nr], shaft[j + 1][k]])
+            # to world: foot-local (u, v, z) -> c0 + u*fwd + v*side, ground g
+            W = [(c0[0] + uu * fwd[0] + vv * S3[0], c0[1] + uu * fwd[1] + vv * S3[1], g + zz) for uu, vv, zz in V]
+            nm = f"{self.name}_boot{'L' if sg > 0 else 'R'}"
+            up = mesh_obj(nm + "_upper", W, F, upper_m)
+            sb = up.modifiers.new("Sub", "SUBSURF"); sb.levels = 2; sb.render_levels = 2
+            sh = mesh_obj(nm + "_shaft", Vs, Fs, upper_m)
+            so = sh.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.004; so.offset = 1
+            sb = sh.modifiers.new("Sub", "SUBSURF"); sb.levels = 2; sb.render_levels = 2
+            # sole (overhangs the welt by 4 mm) and a stacked heel
+            outline = []
+            for i in range(ns + 1):
+                k0 = rings[i][0]; k1 = rings[i][nr // 2]
+                outline.append((V[k0], V[k1]))
+            SV = []; SF = []
+            for i, (pa, pb) in enumerate(outline):
+                for (uu, vv, _), z in ((pa, 0.0), (pa, 0.012), (pb, 0.012), (pb, 0.0)):
+                    off = 0.004 if vv > (pa[1] + pb[1]) / 2 else -0.004
+                    SV.append((c0[0] + uu * fwd[0] + (vv + off) * S3[0], c0[1] + uu * fwd[1] + (vv + off) * S3[1], g + z))
+            for i in range(ns):
+                q = 4 * i; r = 4 * (i + 1)
+                SF += [[q, r, r + 1, q + 1], [q + 1, r + 1, r + 2, q + 2], [q + 2, r + 2, r + 3, q + 3], [q + 3, r + 3, r, q]]
+            SF += [[0, 1, 2, 3][::-1], [4 * ns, 4 * ns + 1, 4 * ns + 2, 4 * ns + 3]]
+            so_ = mesh_obj(nm + "_sole", SV, SF, sole_m)
+            bv = so_.modifiers.new("Bevel", "BEVEL"); bv.width = 0.002; bv.segments = 2
+            hl = ns // 4
+            HV = []; HF = []
+            for i in range(hl + 1):
+                pa, pb = outline[i]
+                for (uu, vv, _), z in ((pa, -0.022), (pa, 0.0), (pb, 0.0), (pb, -0.022)):
+                    HV.append((c0[0] + uu * fwd[0] + vv * S3[0], c0[1] + uu * fwd[1] + vv * S3[1], g + z + 0.022))
+            for i in range(hl):
+                q = 4 * i; r = 4 * (i + 1)
+                HF += [[q, r, r + 1, q + 1], [q + 1, r + 1, r + 2, q + 2], [q + 2, r + 2, r + 3, q + 3], [q + 3, r + 3, r, q]]
+            HF += [[0, 1, 2, 3][::-1], [4 * hl, 4 * hl + 1, 4 * hl + 2, 4 * hl + 3]]
+            hh = mesh_obj(nm + "_heel", HV, HF, sole_m)
+            for o in (up, sh, so_, hh):
+                self.sea_boots.append(o); h.parts.append(o)
 
     def _posed_surface(self):
         dg = bpy.context.evaluated_depsgraph_get()
@@ -456,7 +591,7 @@ class Deveau:
         x, y, z = rel[:, 0], rel[:, 1], rel[:, 2]
         head = self.used & (wh > 0.55) & (ears < 0.2)
         # hairline: high on the forehead, low at the nape; sideburns down in front of the ears
-        line = np.interp(y, [-0.12, -0.06, 0.0, 0.05, 0.12], [0.06, 0.055, 0.02, -0.05, -0.085])
+        line = np.interp(y, [-0.06, -0.03, 0.0, 0.05, 0.12], [0.088, 0.078, 0.05, -0.05, -0.085])
         scalp = head & (z > line)
         sideburn = head & (np.abs(x) > 0.055) & (y > -0.045) & (y < 0.0) & (z > -0.04) & (z <= line + 0.01)
         mz = np.array(mouth)[2] - ec[2]
@@ -466,24 +601,22 @@ class Deveau:
         beard &= ~((z > mz - 0.004) & (z < mz + 0.009) & (np.abs(x) < 0.026))                 # mouth slit
         tache = head & (lips < 0.1) & (y < -0.06) & (z > mz + 0.004) & (z < mz + 0.026) & (np.abs(x) < 0.04)
         neck = self.used & (wh > 0.3) & (z < -0.11) & (z > -0.16) & (y < 0.0)
-        brow = head & (z > 0.012) & (z < 0.03) & (y < -0.055) & (np.abs(x) > 0.012) & (np.abs(x) < 0.058)
+        brow = head & (z > 0.014) & (z < 0.03 - 0.12 * np.abs(np.abs(x) - 0.03)) & (y < -0.012) & (self.rest_n[:, 1] < -0.45) & (np.abs(x) > 0.011) & (np.abs(x) < 0.054)
         P, bvh = self._posed_surface()
         R = self.head_R
         brown = hair_material(self.name + "_hair", 0.82, 0.38)
         self.hair_objs = []
         self.hair_objs.append(self._strands("hair", scalp, P, bvh, int(70000 * density), (0.014, 0.028), 0.001,
                                             comb=lambda p: R @ Vector((0, 0.8, -0.45)), lift=0.0022, mat=brown, curl=0.22))
-        self.hair_objs.append(self._strands("sideburns", sideburn, P, bvh, int(3000 * density), (0.012, 0.02), 0.0009,
-                                            comb=lambda p: R @ Vector((0, 0.1, -1)), lift=0.002, mat=brown, curl=0.3))
         beard_m = hair_material(self.name + "_beard", 0.8, 0.45, rough=0.38)
         self.hair_objs.append(self._strands("beard", beard | neck, P, bvh, int(46000 * density), (0.014, 0.03), 0.0009,
                                             comb=lambda p: R @ Vector((0, -0.25, -1)), lift=0.003, mat=beard_m, curl=0.45))
         self.hair_objs.append(self._strands("moustache", tache, P, bvh, int(5000 * density), (0.012, 0.02), 0.0008,
                                             comb=lambda p: R @ Vector((math.copysign(0.7, p.x - self._mid_x), -0.2, -1)),
                                             lift=0.002, mat=beard_m, curl=0.2))
-        self.hair_objs.append(self._strands("brows", brow, P, bvh, int(2600 * density), (0.006, 0.011), 0.0006,
-                                            comb=lambda p: R @ Vector((math.copysign(1.0, p.x - self._mid_x), 0, 0.35)),
-                                            lift=0.0012, mat=beard_m, curl=0.1))
+        self.hair_objs.append(self._strands("brows", brow, P, bvh, int(1500 * density), (0.007, 0.012), 0.0007,
+                                            comb=lambda p: R @ Vector((math.copysign(1.0, p.x - self._mid_x), 0, 0.25)),
+                                            lift=0.0008, mat=beard_m, curl=0.08))
 
     def _strands(self, label, vmask, P, bvh, count, length, radius, comb, lift, mat, curl=0.2, segs=7, seed=1):
         rng = np.random.default_rng(seed + len(label))
