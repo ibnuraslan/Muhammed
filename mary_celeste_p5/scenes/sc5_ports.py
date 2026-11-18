@@ -20,6 +20,19 @@ def mat(name, col, rough=0.8):
     return m
 
 
+def facade(name, col):
+    """Plastered front with rows of dark shuttered windows (a brick texture used as a window grid)."""
+    m = bpy.data.materials.new(name); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); br = N.new("ShaderNodeTexBrick")
+    br.inputs['Scale'].default_value = 1.0; br.inputs['Brick Width'].default_value = 2.6; br.inputs['Row Height'].default_value = 3.2
+    br.inputs['Mortar Size'].default_value = 1.1; br.offset = 0.0
+    br.inputs['Color1'].default_value = (0.04, 0.035, 0.03, 1); br.inputs['Color2'].default_value = (0.05, 0.04, 0.035, 1)
+    br.inputs['Mortar'].default_value = (*col, 1)
+    L.new(tc.outputs['Object'], br.inputs['Vector']); L.new(br.outputs['Color'], p.inputs['Base Color'])
+    p.inputs['Roughness'].default_value = 0.85
+    return m
+
+
 def sun(d, energy, col, angle=1.0):
     s = bpy.data.objects.new("Sun", bpy.data.lights.new("Sun", 'SUN')); sc.collection.objects.link(s)
     s.data.energy = energy; s.data.color = col; s.data.angle = math.radians(angle)
@@ -126,8 +139,11 @@ else:
             for lvl in range(2 if row < 2 else 1):
                 x = -6 + k * 0.95 + (0.47 if lvl else 0); y = 2.2 + row * 1.25
                 z = 1.0 + lvl * 0.62
-                r, _ = PR.put("wine_barrel_01", (x, y, z), size=1.15, axis=2, res="1k")
+                r, bms = PR.put("wine_barrel_01", (x, y, z), size=1.0, axis=2, res="1k")
                 r.rotation_euler = (math.radians(90), 0, math.radians(90 + rng.uniform(-4, 4)))
+                bpy.context.view_layer.update()
+                lo, hi = ph.bounds(bms)                       # lying on its side: rest it on the quay / the casks below
+                r.location.z += (1.0 + lvl * 0.62) - lo[2]
                 bpy.context.view_layer.update()
     mc = ship.build("MC", sails="found", rail_gap=None, wind=(0.3, -1, 0), wet=0.2, detail=False)
     mc["root"].location = (2, -ship.B / 2 - 1.2, -0.6); mc["root"].rotation_euler = (0, 0, 0)
@@ -137,7 +153,7 @@ else:
     while y < 160:
         w = rng.uniform(10, 20); h = rng.uniform(16, 30)
         col = [(0.72, 0.45, 0.22), (0.7, 0.36, 0.28), (0.8, 0.62, 0.38), (0.62, 0.5, 0.36)][rng.integers(4)]
-        ship.box("palazzo", (170 + rng.uniform(0, 10), y + w / 2, h / 2 + 2), (12, w - 0.5, h), mat(f"p{y}", col, 0.9))
+        ship.box("palazzo", (170 + rng.uniform(0, 10), y + w / 2, h / 2 + 2), (12, w - 0.5, h), facade(f"p{y}", col))
         y += w
     sun((0.5, -0.9, 0.35), 3.5, (1.0, 0.82, 0.62), 1.2)
     C.camera(Vector((-10.5, 4.6, 2.3)), Vector((20, -1.5, 3.0)), lens=30, fstop=5.6, focus=8.0)
