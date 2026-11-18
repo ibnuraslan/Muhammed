@@ -39,8 +39,8 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
                     loom = (Mb.to_3x3() @ b["oar_dirs"][(i, sg)]).normalized()     # handle -> rowlock
                     # both hands closed on the loom, a hand's width apart along it (outboard hand nearer the rowlock)
                     upw = Mb.to_3x3() @ Vector((0, 0, 1))
-                    err1 = st.grip_bar("L" if sg < 0 else "R", hw + loom * 0.07, loom, over=upw)
-                    err2 = st.grip_bar("R" if sg < 0 else "L", hw - loom * 0.05, loom, over=upw)
+                    err1 = st.grip_bar("L" if sg < 0 else "R", hw + loom * 0.09, loom, over=upw)
+                    err2 = st.grip_bar("R" if sg < 0 else "L", hw - loom * 0.07, loom, over=upw)
                     p.grip_err = max(err1, err2)
                 st.head(look if i == 0 and sg > 0 else W((x - 3.0, sg * 0.2, 1.1)))
                 p.dv_seat = st

@@ -116,5 +116,33 @@ class Seat:
             target = target + (palm_goal - palm)
         P.hand_reach(h, side, self.local(target), elbow=el)
         h.aim(f"wrist.{side}", (self.Mi.to_3x3() @ fdir).normalized())
-        P.grip(h, side, 1.0)
+        self.wrap_fingers(side, Vector(center), bar, radius)
         return (self.M @ P.palm_point(h, side) - palm_goal).length
+
+    def wrap_fingers(self, side, center, bar, radius):
+        """Curl each finger joint about its own (local) hinge axis, in the direction that brings the fingertip round
+        the bar, until the finger wraps it (tip about one bar radius + a finger's thickness from the bar's axis)."""
+        h = self.p.h
+        def dist_to_axis(pw):
+            v = pw - center
+            return (v - bar * v.dot(bar)).length
+        target = radius + 0.009
+        for f in range(1, 6):
+            chain = [f"finger{f}-{k}.{side}" for k in (1, 2, 3)]
+            if not all(c in h.arm.pose.bones for c in chain):
+                continue
+            tip = lambda: self.M @ h.bone_tail(chain[-1])
+            for k, bn in enumerate(chain):
+                step = 8.0 if f > 1 else 6.0
+                limit = (80 if k == 0 else 95) if f > 1 else 50
+                d0 = dist_to_axis(tip())
+                H.rotate_bone(h.arm, bn, (1, 0, 0), step, space="LOCAL")
+                sgn = 1.0
+                if dist_to_axis(tip()) > d0:                 # wrong way: curl the other way
+                    H.rotate_bone(h.arm, bn, (1, 0, 0), -2 * step, space="LOCAL"); sgn = -1.0
+                total = step
+                while total < limit and dist_to_axis(tip()) > target:
+                    before = dist_to_axis(tip())
+                    H.rotate_bone(h.arm, bn, (1, 0, 0), sgn * step, space="LOCAL"); total += step
+                    if dist_to_axis(tip()) >= before:        # this joint no longer helps: next joint
+                        H.rotate_bone(h.arm, bn, (1, 0, 0), -sgn * step, space="LOCAL"); break
