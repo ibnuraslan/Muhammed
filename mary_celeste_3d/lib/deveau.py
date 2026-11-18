@@ -900,7 +900,8 @@ class Deveau:
                                             comb=lambda p: R @ Vector((math.copysign(1.0, p.x - self._mid_x), 0, 0.25)),
                                             lift=0.0008, mat=beard_m, curl=0.08))
 
-    def _strands(self, label, vmask, P, bvh, count, length, radius, comb, lift, mat, curl=0.2, segs=7, seed=1, clump=0.0):
+    def _strands(self, label, vmask, P, bvh, count, length, radius, comb, lift, mat, curl=0.2, segs=7, seed=1, clump=0.0,
+                 attract=None):
         rng = np.random.default_rng(seed + len(label))
         self._mid_x = float(P[self.used, 0].mean())
         fs = [f for f in self.faces if vmask[list(f)].sum() >= 3]
@@ -946,6 +947,10 @@ class Deveau:
         span = np.linalg.norm(pts[:, -1] - pts[:, 0], axis=1)
         ok &= span < lens * 1.2
         pts = pts[ok]; count = int(ok.sum())
+        if attract is not None and count:
+            # gather the strands to a point (a bun): tips pulled in, the rest of each strand eased toward it
+            A = np.array(attract, np.float32); t = np.linspace(0, 1, segs)[None, :, None] ** 2
+            pts = pts + (A[None, None, :] + (pts[:, :1] - A) * 0.15 - pts) * t * 0.85
         if clump and count > 50:
             # groomed look: strands gather toward the tips of nearby guide strands
             from mathutils.kdtree import KDTree
