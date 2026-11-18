@@ -107,19 +107,25 @@ elif SHOT == "12":          # WS: Briggs stands and looks round the crowded cabi
 
 elif SHOT == "13":          # top-down white maquette of the cabin: every corner used
     SET = cabin.build("warm", letter_side=1)
-    white_maquette()
+    for o in bpy.data.objects:          # the real cabin, opened up: deckhead and the near bulkheads lifted off
+        if o.type == 'MESH' and (o.name.startswith(("ceil", "beam", "skylight", "well", "glazing", "air", "wall_s", "wain_y-1",
+                                                      "wall_x1", "wain_x1", "rail_y-1", "rail_x1", "stile", "wframe", "wglass",
+                                                      "comp_coaming", "comp_beam")) or "glazing" in o.name):
+            o.hide_render = True
     for n in ("berth_top", "berth_valance", "shelf"):
         for o in bpy.data.objects:
             if o.name.startswith(n):
                 o.hide_render = True
     for o in [o for o in bpy.data.objects if o.type == 'LIGHT' and o.name not in ("LampLight",)]:
         o.hide_render = True
-    sc.world.node_tree.nodes["Background"].inputs[1].default_value = 0.15
+    sc.world.node_tree.nodes["Background"].inputs[0].default_value = (0.01, 0.008, 0.006, 1)
+    sc.world.node_tree.nodes["Background"].inputs[1].default_value = 0.1
     S.cam(Vector((2.6, -4.4, 6.4)), Vector((-0.1, 0.1, 0.3)), lens=35)
+    bpy.data.objects["LampLight"].data.energy = 60
     k = bpy.data.objects.new("MaqSun", bpy.data.lights.new("MaqSun", 'SUN')); sc.collection.objects.link(k)
     k.data.energy = 3.0; k.data.angle = math.radians(4); k.data.color = (1, 0.93, 0.84)
     k.rotation_euler = (math.radians(50), 0, math.radians(-130))
-    cine = {"sat": 0.95, "exposure": -0.2}
+    cine = {"sat": 1.05, "exposure": 0.1}
 
 elif SHOT in ("07", "08"):  # Sarah at the table; Sophia beside her holds up her doll
     SET = cabin.build("warm", letter_side=-1, letters=False)
@@ -211,8 +217,10 @@ elif SHOT in ("30", "31", "32"):   # 25 November, dawn: the mate chalks the morn
         m.look(sl)
         hd = m.h.bone_head("head")
         S.cam(Vector((0.5, -0.98, 1.5)), sl + Vector((0.12, 0.0, 0.08)), lens=35, fstop=2.8)
-    elif SHOT == "31":
-        S.cam(sl + Vector((0.08, -0.22, 0.2)), sl + Vector((0.0, -0.03, 0)), lens=60, fstop=2.8)
+    elif SHOT == "31":        # the real slate close: frame, chalk, the stub of chalk set down
+        ship = cabin.ship
+        ship.cyl("chalk_stub", sl + Vector((0.2, -0.06, 0.005)), sl + Vector((0.2, -0.015, 0.006)), 0.0055, mat=cabin.plain("chalkstick", (0.75, 0.74, 0.7), rough=0.95), verts=10)
+        S.cam(sl + Vector((0.34, -0.3, 0.3)), sl + Vector((0.0, 0.0, 0)), lens=50, fstop=4.0)
     else:
         S.cam(Vector((T.x + 1.2, T.y - 0.9, 1.25)), sl, lens=40, fstop=4.0)
     cine = {"sat": 1.05, "exposure": 0.1}
@@ -240,7 +248,7 @@ elif SHOT in ("34", "35", "38", "39"):   # 4 December: Deveau goes through the c
     elif SHOT == "35":
         S.cam(hd + Vector((0.12, 0.22, 0.2)), SET["chrono_box"] + Vector((0.0, 0.03, 0)), lens=28, fstop=4.0)
     elif SHOT == "38":
-        S.ots(hd, sbt + Vector((0.32, 0, 0.1)), side=1, back=0.5, out=0.16, up=0.45, lens=40)
+        S.cam(hd + Vector((-0.12, 0.22, 0.2)), sbt + Vector((0.32, 0.03, 0.1)), lens=28, fstop=4.0)
     else:
         S.frame([hd, tgt, sbt, hd - Vector((0, 0, 1.0))], Vector((1.0, 0.6, 0.35)), lens=30, fill=0.9, bounds=SET["bounds"], fstop=3.2)
     S.area("ColdKey", Vector((0.15, -0.3, cabin.RZ + 0.6)), sbt, 1400, size=0.7, color=(0.8, 0.86, 1.0))

@@ -84,34 +84,52 @@ elif SHOT in ("16", "18"):   # the hold: men stow barrels in tiers by lantern li
         hd = s1.h.bone_head("head")
         S.frame([hd, bung, hd - Vector((0, 0, 0.9))], Vector((0.6, -1.0, 0.2)), lens=35, fill=0.9, fstop=2.8)
     else:
-        S.cam(Vector((3.3, 2.2, 2.35)), Vector((-0.6, -0.2, 1.1)), lens=24, fstop=5.6)
+        # two more men steady the next barrel as it comes down on the whip from a block on the deck beam
+        nb = Vector((2.75, 1.0, 1.35))
+        b2 = pier._inst(bpy.data.objects["wine_barrel_01"], nb, rz=0); b2.rotation_euler = (0, math.pi / 2, 0)
+        rope = ship.tarred_rope("whip")
+        blk = Vector((2.75, 1.0, 2.48))
+        ship.box("block", tuple(blk + Vector((0, 0, 0.05))), (0.08, 0.06, 0.14), cabin.plain("blockwood", (0.25, 0.16, 0.08), rough=0.6))
+        for dy in (-0.22, 0.22):
+            ship.rope("sling", [nb + Vector((-0.28, dy, -0.25)), blk - Vector((0, 0, 0.05))], 0.01, rope)
+            ship.rope("sling", [nb + Vector((0.28, dy, -0.25)), blk - Vector((0, 0, 0.05))], 0.01, rope)
+        for nm, pos, yrs, jk in (("Stev2", (2.75, 0.05), 26, (0.05, 0.05, 0.06)), ("Stev3", (3.55, 1.05), 41, (0.14, 0.1, 0.07))):
+            st = cast.Sailor(name=nm, years=yrs, jacket=jk, cap=(nm == "Stev2"))
+            yaw = A.yaw_to(pos, nb)
+            Mx = A.stand_place(pos, yaw, z=0.55); Mxi = Mx.inverted()
+            P.stand(st.h, lean=10, weight="R"); P.head(st.h, pitch=-8)
+            d = (nb - Vector((pos[0], pos[1], nb.z))).normalized()
+            side = Vector((-d.y, d.x, 0))
+            for sd, sg in (("L", 1), ("R", -1)):
+                P.hand_reach(st.h, sd, Mxi @ (nb - d * 0.42 + side * (0.17 * sg) + Vector((0, 0, 0.02))), elbow=(0.9 * sg, 0.3, -0.6))
+                P.rest_hand(st.h, sd, curl=22)
+            st.finish_live(place=Mx, density=HAIR)
+            st.look(nb)
+        S.cam(Vector((3.3, -2.0, 2.3)), Vector((1.6, 0.6, 1.15)), lens=24, fstop=5.6)
     cine = {"sat": 1.08, "exposure": 0.15}
 
-elif SHOT == "41":  # white maquette of the ship from above; warm pools where things are missing
-    mc = ship.build("MC", sails="found", rail_gap=(-2.7, -0.6, "S"), wet=0.0, detail=False)
-    clay = cabin.plain("clay", (0.62, 0.58, 0.52), rough=0.6)
+elif SHOT == "41":  # a carved model of the ship on the cabin table: the empty chocks, the instrument boxes, the papers
+    SET = cabin.build("night", letters=False, chrono="empty")
+    T = cabin.TABLE
+    chart = cabin.sheet("chart", T + Vector((0.0, 0.0, 0.002)), 0.9, 0.6, cabin.paper_material("chart", ink=True, lines=40), rot=0.05)
+    mc = ship.build("MCmodel", sails="found", rail_gap=(-2.7, -0.6, "S"), wet=0.0, detail=True, hatches_off=False, boat_chocks=True)
     for o in mc["coll"].objects:
-        if o.type == 'MESH':
-            if any(k in o.name for k in ("_sail", "_furl", "_shred", "_jib", "_fstay", "_main_furl", "_gaff_furl")):
-                o.hide_render = True
-            o.data.materials.clear(); o.data.materials.append(clay)
-        elif o.type == 'CURVE':
+        if o.type == 'MESH' and any(k in o.name for k in ("_sail_", "_shred", "_jib", "_fstay")):
             o.hide_render = True
-    ship.box("table", (0, 0, -3.2), (60, 30, 0.2), cabin.plain("maqtable", (0.08, 0.05, 0.035), rough=0.5))
+    k = 0.024
+    mc["root"].scale = (k, k, k); mc["root"].location = T + Vector((-0.06, 0.03, 0.002 + ship.DRAFT * k + 0.004))
+    mc["root"].rotation_euler = (0, 0, math.radians(-12))
     bpy.context.view_layer.update()
-    for o in mc["coll"].objects:
-        if o.type == 'MESH':
-            bb = [o.matrix_world @ Vector(c) for c in o.bound_box]
-            if min(v.z for v in bb) > 3.2 or max(v.z for v in bb) > 9:
-                o.hide_render = True
-    w = bpy.data.worlds.new("w"); sc.world = w; w.use_nodes = True
-    w.node_tree.nodes["Background"].inputs[0].default_value = (0.03, 0.025, 0.02, 1)
-    S.area("MaqKey", Vector((-14, -18, 30)), Vector((0, 0, 0)), 9000, size=6, color=(1, 0.95, 0.88))
-    for (x, y, z), lab in (((ship.MAIN_HATCH_X, 0, ship.zdeck(ship.MAIN_HATCH_X) + 0.8), "boat"),
-                           ((-ship.L / 2 + 5.8, 0, ship.zdeck(-10) + 1.2), "cabin"),
-                           ((-1.65, -ship.B / 2, ship.zdeck(-1.65) + 1.0), "gap")):
-        S.spot(f"pool_{lab}", Vector((x, y, z + 9)), Vector((x, y, z)), 2600, angle=16, blend=0.5, color=(1.0, 0.62, 0.3), radius=0.2)
-    S.cam(Vector((6, -34, 30)), Vector((-1.5, 0, 0.5)), lens=50)
-    cine = {"sat": 1.0, "exposure": 0.0}
+    # the model's cradle: two carved chocks under the hull
+    wd = cabin.M("brown_planks_05", 5.0, tint=(0.75, 0.42, 0.26), name="cradle")
+    for dx in (-0.2, 0.2):
+        c = mc["root"].matrix_world @ Vector((dx / k, 0, -ship.DRAFT))
+        ship.box("cradle", (c.x, c.y, T.z + 0.03), (0.05, 0.2, 0.06), wd, bevel=0.005).rotation_euler = (0, 0, math.radians(-12))
+    cabin.sextant_case(T + Vector((0.42, -0.22, 0.0)), wd)
+    cabin._chronometer_box(T + Vector((0.42, 0.12, 0.0)), wd, cabin.brass(), state="empty")
+    chocks = mc["root"].matrix_world @ Vector((ship.MAIN_HATCH_X, 0, ship.zdeck(ship.MAIN_HATCH_X) + 0.6))
+    S.spot("pool_chocks", chocks + Vector((0, 0, 0.9)), chocks, 18, angle=10, blend=0.6, color=(1.0, 0.75, 0.45), radius=0.02)
+    S.cam(T + Vector((0.9, -1.0, 0.75)), T + Vector((0.05, 0.0, 0.12)), lens=35, fstop=4.0)
+    cine = {"sat": 1.08, "exposure": 0.2}
 
 S.finish(S.out_path(SHOT), cine=cine)

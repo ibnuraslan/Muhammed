@@ -141,25 +141,40 @@ def tug(name, at, yaw, smoke=True):
         o.parent = root
     root.location = at; root.rotation_euler = (0, 0, math.radians(yaw))
     if smoke:
+        # coal smoke from the stack: a trail of soft puffs drifting aft and up, thinning as they spread
         sm = bpy.data.materials.new(name + "_smoke"); sm.use_nodes = True
-        N = sm.node_tree.nodes; N.remove(N["Principled BSDF"])
-        pv = N.new("ShaderNodeVolumePrincipled"); pv.inputs['Density'].default_value = 0.35
-        pv.inputs['Color'].default_value = (0.08, 0.07, 0.065, 1)
-        nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 0.6
-        tc = N.new("ShaderNodeTexCoord"); sm.node_tree.links.new(tc.outputs['Object'], nz.inputs['Vector'])
-        mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.45; mr.inputs['From Max'].default_value = 0.7
-        sm.node_tree.links.new(nz.outputs['Fac'], mr.inputs['Value']); sm.node_tree.links.new(mr.outputs[0], pv.inputs['Density'])
-        sm.node_tree.links.new(pv.outputs[0], N["Material Output"].inputs['Volume'])
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=16, radius=1.0)
-        pl = bpy.context.active_object; pl.name = name + "_plume"; pl.data.materials.append(sm)
-        pl.scale = (7, 2.2, 2.2)
-        pl.parent = root; pl.location = (-6.5, 0, 11.0); pl.rotation_euler = (0, math.radians(-12), 0)
+        N = sm.node_tree.nodes; Lk = sm.node_tree.links; N.remove(N["Principled BSDF"])
+        pv = N.new("ShaderNodeVolumePrincipled"); pv.inputs['Color'].default_value = (0.09, 0.08, 0.075, 1)
+        tc = N.new("ShaderNodeTexCoord")
+        gr = N.new("ShaderNodeTexGradient"); gr.gradient_type = 'SPHERICAL'; Lk.new(tc.outputs['Object'], gr.inputs['Vector'])
+        nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 2.5; nz.inputs['Detail'].default_value = 6
+        Lk.new(tc.outputs['Object'], nz.inputs['Vector'])
+        mul = N.new("ShaderNodeMath"); mul.operation = 'MULTIPLY'; Lk.new(gr.outputs['Fac'], mul.inputs[0]); Lk.new(nz.outputs['Fac'], mul.inputs[1])
+        mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.12; mr.inputs['From Max'].default_value = 0.5
+        mr.inputs['To Max'].default_value = 0.6; Lk.new(mul.outputs[0], mr.inputs['Value'])
+        Lk.new(mr.outputs[0], pv.inputs['Density'])
+        Lk.new(pv.outputs[0], N["Material Output"].inputs['Volume'])
+        for k in range(7):
+            t = k / 6
+            r = 0.7 + 2.6 * t
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=20, ring_count=12, radius=1.0)
+            pl = bpy.context.active_object; pl.name = f"{name}_plume{k}"; pl.data.materials.append(sm)
+            pl.scale = (r * 1.4, r, r)
+            pl.parent = root; pl.location = (0.4 - 2.2 * k - 1.2 * k * k * 0.3, 0.2 * math.sin(k), 9.8 + 1.1 * k + 0.12 * k * k)
+            pl.visible_shadow = False
     return root
 
 
 def pilot_boat(name, at, yaw, rowers=2):
     """The pilot's yawl: Poly Haven ship_pinnace scaled to a 6 m boat."""
-    r, ms = S.place_model("ship_pinnace", at, size=6.0, axis=0, rot_z=math.radians(yaw), ground=False)
+    r, ms = S.place_model("ship_pinnace", at, size=1.0, axis=0, rot_z=math.radians(yaw), ground=False)
+    for o in ms:                                   # a pulling boat: no mast or sail
+        if any(k in o.name.lower() for k in ("rig", "mast", "sail", "rope", "flag")):
+            o.hide_render = True; o.hide_viewport = True
+    ms = [o for o in ms if not o.hide_render]
+    lo, hi = ph.bounds(ms); L = max(hi.x - lo.x, hi.y - lo.y)
+    r.scale = tuple(c * 6.0 / L for c in r.scale)
+    bpy.context.view_layer.update()
     lo, hi = ph.bounds(ms)
     r.location.z += -(lo.z + (hi.z - lo.z) * 0.35) + at[2]
     return r, ms

@@ -53,8 +53,8 @@ def write(h, Mi, paper_w, side="R", other_on_table=None, lean=12.0, head_pitch=2
     pen_grip(h, side)
     if other_on_table is not None:
         P.hand_reach(h, os_, Mi @ Vector(other_on_table) + Vector((0, 0, 0.045)), elbow=(0.9 * so, 0.5, 0.2))
-        h.aim(f"wrist.{os_}", Vector((0.4 * so, -0.85, -0.25)))
-        P.rest_hand(h, os_, curl=18)
+        h.aim(f"wrist.{os_}", Vector((0.25 * so, -0.55, -0.8)))      # palm down, fingers on the page
+        P.rest_hand(h, os_, curl=8)
 
 
 def pen_grip(h, side):

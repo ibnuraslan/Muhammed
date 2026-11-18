@@ -628,7 +628,16 @@ def sextant_case(p, wood_m, empty=True, yaw=0.0):
 def chalk_text(name, c, w, d, lines, size=0.018, rot=0.0):
     """Chalked slate entries as real text objects (Courier-like hand); flat on the slate face."""
     objs = []
-    chalk = plain("chalk", (0.72, 0.72, 0.68), rough=0.95)
+    chalk = bpy.data.materials.new("chalk"); chalk.use_nodes = True
+    N = chalk.node_tree.nodes; L = chalk.node_tree.links; p = N["Principled BSDF"]
+    p.inputs['Base Color'].default_value = (0.72, 0.72, 0.68, 1); p.inputs['Roughness'].default_value = 0.95
+    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 900
+    nz.inputs['Detail'].default_value = 4; L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.38; mr.inputs['From Max'].default_value = 0.55
+    L.new(nz.outputs['Fac'], mr.inputs['Value'])
+    tr = N.new("ShaderNodeBsdfTransparent"); mx = N.new("ShaderNodeMixShader")
+    L.new(mr.outputs[0], mx.inputs[0]); L.new(tr.outputs[0], mx.inputs[1]); L.new(p.outputs[0], mx.inputs[2])
+    L.new(mx.outputs[0], N["Material Output"].inputs['Surface'])
     for i, t in enumerate(lines):
         cu = bpy.data.curves.new(f"{name}{i}", 'FONT'); cu.body = t; cu.size = size
         try:
