@@ -60,8 +60,10 @@ CAST = {
 
 
 class Person(D.Deveau):
-    def __init__(self, key="deveau", wet=0.2, wig=False, idx=0, kneel=False):
+    def __init__(self, key="deveau", wet=0.2, wig=False, idx=0, kneel=False, seated=False):
         spec = dict(CAST[key]); self.key = key; self.spec = spec; self.wig_on = wig
+        if seated:      # the fitted asset boots stand upright; a seated man's shins are angled: use the per-foot boots
+            self._asset_boots = lambda: False
         if kneel:       # the shared boots stand the pair on the ground; a kneeling man keeps his fitted boot shells
             self._asset_boots = lambda: True
         self._dens = spec.get("dens", {})
@@ -116,10 +118,25 @@ class Person(D.Deveau):
         return D.Deveau._strands(self, label, vmask, P_, bvh, int(count * k), length, radius, comb, lift, mat, curl, segs, seed, **kw)
 
     def finish(self, look_at=None, lids=0.0, hair=True, density=1.0, place=None):
+        M = place if place is not None else Matrix.Identity(4)
+        hp = [M @ self.h.bone_head(b) for sd in ("L", "R") for b in (f"wrist.{sd}", f"finger3-1.{sd}") if b in self.h.arm.pose.bones]
+        before = set(o.name for o in bpy.data.objects)
         if CACHE_DIR and hair:
-            return finish_cached(self, look_at=look_at, place=place, density=density,
-                                 cache=os.path.join(CACHE_DIR, f"{CACHE_TAG}_{self.name}.npz"))
-        return D.Deveau.finish(self, look_at=look_at, lids=lids, hair=hair, density=density, place=place)
+            finish_cached(self, look_at=look_at, place=place, density=density,
+                          cache=os.path.join(CACHE_DIR, f"{CACHE_TAG}_{self.name}.npz"))
+        else:
+            D.Deveau.finish(self, look_at=look_at, lids=lids, hair=hair, density=density, place=place)
+        self.tag(hp, before)
+
+    def tag(self, hp=None, before=()):
+        """Mark this man's meshes for clipcheck (o["person"], o["hands"] = wrist/knuckle points)."""
+        flat = [c for v in (hp or []) for c in v]
+        for o in self.objects:
+            if o.type == 'MESH':
+                o["person"] = self.name; o["hands"] = flat
+        for o in bpy.data.objects:
+            if o.type == 'MESH' and "person" not in o and (o.name.startswith(self.name + "_") or (before and o.name not in before and "boot" in o.name.lower())):
+                o["person"] = self.name; o["hands"] = flat
 
     # -------------------------------------------------------------- wig and diving dress (shells, rest pose)
     def _scalp_mask(self, lo=0.0):

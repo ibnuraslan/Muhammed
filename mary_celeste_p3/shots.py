@@ -278,7 +278,7 @@ def s06(t):
     SHIP = dg_deck(t=0.5, mc_far=False)
     b, Mb = boat_alongside(SHIP, t=0.4 + t * 0.3)
     xth, zth = b["thwarts"][1]
-    dv = crew.person("deveau", wet=0.2)
+    dv = crew.person("deveau", wet=0.2, seated=True)
     h = dv.h
     drop = crew.hip_height(h) - 0.1
     seat = zth + 0.04
@@ -739,7 +739,7 @@ TEX = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "tex")
 def seated_writer(room, t, pen_lift=0.0, rub=0.0):
     """Deveau on the cabin chair at the table: right hand writing, left forearm on the table; or (rub > 0)
     the heel of his right hand pressed to his eyes."""
-    dv = crew.person("deveau", wet=0.0)
+    dv = crew.person("deveau", wet=0.0, seated=True)
     h = dv.h
     cx, cy = room["chair"]; tz = room["table_z"]
     seat = 0.45
@@ -900,7 +900,7 @@ def court_people(ct, which, t=0.0):
     if "salvors" in which:
         for i, (key, dx) in enumerate((("deveau", -0.6), ("sailor_a", 0.1), ("sailor_b", 0.8))):
             px, py = ct["pews"][0]
-            p = crew.person(key, wet=0.0, idx=i)
+            p = crew.person(key, wet=0.0, idx=i, seated=True)
             h = p.h; seat = 0.47; drop = crew.hip_height(h) - seat - 0.08
             M = crew.place((px + dx, py + 0.05, 0.0), 90, drop=drop)
             crew.sit(h, drop, lean=6, feet_fwd=0.45)
@@ -939,7 +939,7 @@ def court_people(ct, which, t=0.0):
         out["witness"] = (p, M)
     if "clerk" in which:
         cx_, cy_ = ct["clerk"]
-        p = crew.person("chemist", wet=0.0, idx=7)
+        p = crew.person("chemist", wet=0.0, idx=7, seated=True)
         h = p.h; seat = 0.46; drop = crew.hip_height(h) - seat - 0.08
         M = crew.place((cx_, cy_ + 0.6, 0.0), -90, drop=drop)
         crew.sit(h, drop, lean=26, feet_fwd=0.4)
@@ -953,7 +953,7 @@ def court_people(ct, which, t=0.0):
         out["clerk"] = (p, M)
     if "judge" in which:
         jx, jy, jz = ct["judge"]
-        p = crew.person("judge", wet=0.0, wig=True, idx=8)
+        p = crew.person("judge", wet=0.0, wig=True, idx=8, seated=True)
         p.jacket.data.materials[0] = crew.flat("judge_robe", (0.28, 0.03, 0.025), rough=0.8)
         h = p.h; drop = crew.hip_height(h) - 0.78 - 0.08
         M = crew.place((jx, jy, jz), -90, drop=drop)
@@ -1370,7 +1370,7 @@ def s40(t):
       "Behind Flood: he sits back slowly at the counsel's table; the empty witness box beyond", "Chair creak")
 def s41(t):
     ct = RM.court()
-    p = crew.person("flood", wet=0.0, wig=True)
+    p = crew.person("flood", wet=0.0, wig=True, seated=True)
     h = p.h; seat = 0.46; drop = crew.hip_height(h) - seat - 0.08
     cxl, cyl = ct["counsel"]
     PR.chair("flood_chair", (cxl - 0.6, cyl - 0.75, 0.0), 90)

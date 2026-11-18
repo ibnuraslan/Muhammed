@@ -23,6 +23,12 @@ def one(t, out):
     C.reset()
     t0 = time.time()
     info = S.build(SHOT, t)
+    if os.environ.get("CLIPONLY") or os.environ.get("CLIPCHECK"):
+        import clipcheck
+        clipcheck.OUT = os.path.join(HERE, "out", "clip")
+        bad = clipcheck.check(f"{SHOT}_t{t:.2f}")
+        if os.environ.get("CLIPONLY"):
+            return
     sc = bpy.context.scene
     C.finish(out, cine=info.get("cine"), bloom=info.get("bloom", 0.3))
     print("RENDERED", out, f"{time.time() - t0:.0f}s")
