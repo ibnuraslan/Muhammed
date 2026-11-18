@@ -217,8 +217,9 @@ def water_floor(name, center, size, depth=0.03, ripple=0.004):
     tx = bpy.data.textures.new(name + "_rip", 'CLOUDS'); tx.noise_scale = 0.12
     d = o.modifiers.new("Rip", "DISPLACE"); d.texture = tx; d.strength = ripple
     m, N, L, p = _mat(name + "_m")
+    # a film of water: mostly see-through to the planks, glossy on top (no refraction depth to go black)
     p.inputs['Base Color'].default_value = (0.05, 0.07, 0.06, 1); p.inputs['Roughness'].default_value = 0.03
-    p.inputs['Transmission Weight'].default_value = 1.0; p.inputs['IOR'].default_value = 1.333
+    p.inputs['Alpha'].default_value = 0.35; p.inputs['IOR'].default_value = 1.333
     o.data.materials.append(m)
     bpy.ops.object.shade_smooth()
     return o

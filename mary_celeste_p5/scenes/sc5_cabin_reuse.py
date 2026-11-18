@@ -9,7 +9,7 @@ import common as C
 from mathutils import Vector
 OUT = os.environ.get("OUT", os.path.join(p5.OUTDIR, "S11.png"))
 os.environ["OUT"] = OUT
-os.environ.setdefault("FOG", "0.03")        # the shared scene's own haze knob: thinner for this low wide
+os.environ.setdefault("FOG", "0.0")        # the shared scene's own haze knob: thinner for this low wide
 _finish = C.finish
 
 
