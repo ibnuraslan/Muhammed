@@ -100,11 +100,11 @@ elif SHOT in ("S04", "S05"):
 elif SHOT == "S06":
     # top-down 3D maquette: ship, boat, and the unknown: soft orange bands round the boat
     mc = mc_ship(-60.0, (70, -40, 0), sails="full", heel=6.0)
-    oc = sea_patch(220, 18, 1.4, 1.3, 11.0, center=(30, -20), foam=0.25)
+    oc = sea_patch(220, 18, 1.4, 1.3, 11.0, center=(30, -20), foam=0.08)
     sea.sky(strength=1.0, rot_deg=40, res="4k", aid="kloofendal_48d_partly_cloudy_puresky")
     sun(-60, 35)
     b = boat_at(oc, 0, 0, -30.0, oars="out", crew=True, look=Vector((70, -40, 6)))
-    props5.bands(Vector((0, 0, 0.35)), [14, 24, 34], width=4.0)
+    props5.bands(Vector((0, 0, 4.0)), [12, 22, 32], width=7.0, alpha=0.42, strength=1.4)
     cam((32, -18, 165), (32, -18, 0), 35)
 elif SHOT == "S07":
     oc = sea_patch(150, 20, 1.3, 1.2, 10.0, foam=0.22)

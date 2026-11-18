@@ -34,7 +34,8 @@ def bands(center, radii, width=3.0, color=(1.0, 0.45, 0.12), strength=2.5, alpha
     at = N.new("ShaderNodeAttribute"); at.attribute_name = "edge"
     rp = N.new("ShaderNodeMapRange"); rp.inputs['From Min'].default_value = 0.0; rp.inputs['From Max'].default_value = 1.0
     L.new(at.outputs['Fac'], rp.inputs['Value'])
-    sm = N.new("ShaderNodeMath"); sm.operation = 'SINE'; L.new(rp.outputs[0], sm.inputs[0])
+    sm0 = N.new("ShaderNodeMath"); sm0.operation = 'SINE'; L.new(rp.outputs[0], sm0.inputs[0])
+    sm = N.new("ShaderNodeMath"); sm.operation = 'POWER'; sm.inputs[1].default_value = 2.0; L.new(sm0.outputs[0], sm.inputs[0])
     sc = N.new("ShaderNodeMath"); sc.operation = 'MULTIPLY'; sc.inputs[1].default_value = alpha; L.new(sm.outputs[0], sc.inputs[0])
     em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (*color, 1); em.inputs['Strength'].default_value = strength
     tr = N.new("ShaderNodeBsdfTransparent")
