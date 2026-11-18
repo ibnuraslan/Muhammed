@@ -48,7 +48,10 @@ ocean, foam, spray, Poly Haven sky).
   a knitted shawl and a soft brimmed bonnet with ribbon ties. Sophia has a frock (yoke, puffed sleeves), a pinafore,
   stockings and ankle boots. The bell skirts ride on the pelvis, so for seated poses pass `seated=True` (draped shell).
   Keep arms clear of the skirts in the pose (`poses.arm_down(out=0.25+)` for Sophia).
-* `deveau.Deveau` class attributes for subclasses: GENDER, MUSCLE, WEIGHT, HEIGHT, EXTRA (targets), SKIN,
+* `lib/women.py` options: `Sarah(seated=False, bonnet=True, shawl=True)` (bonnet off indoors: centre-parted hair
+  drawn back to a low knot), `Sophia(seated=False, shawl=False)`, `Arthur(seated=False)` (7: wool jacket, white
+  collar, knickerbockers, stockings, ankle boots). `lib/briggs.py`: `Briggs(wet=)` (promoted from Part 4), Deveau API.
+* `deveau.Deveau` class attributes for subclasses (also HAIR_COLOR, BEARD_COLOR): GENDER, MUSCLE, WEIGHT, HEIGHT, EXTRA (targets), SKIN,
   ASSET_BOOTS, BOOT_TOP. Clothing solidify no longer uses even offset (no spikes on creased shells).
 
 ## Credits

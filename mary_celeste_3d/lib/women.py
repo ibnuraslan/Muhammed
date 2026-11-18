@@ -46,8 +46,8 @@ class _Woman(D.Deveau):
     ASSET_BOOTS = False
     HAIR = (0.7, 0.4)                          # melanin, redness
 
-    def __init__(self, name, years, wet=0.0, seated=False):
-        self.seated = seated
+    def __init__(self, name, years, wet=0.0, seated=False, bonnet=True, shawl=True):
+        self.seated = seated; self.want_bonnet = bonnet; self.want_shawl = shawl
         self.button_objs = []
         super().__init__(name=name, years=years, wet=wet)
 
@@ -167,8 +167,16 @@ class _Woman(D.Deveau):
         self._mid_x = float(P[self.used, 0].mean())
         hm = D.hair_material(self.name + "_hair", *self.HAIR, rough=0.3)
         self.hair_objs = []
-        self.hair_objs.append(self._strands("hair", scalp, P, bvh, int(self.HAIR_N * density), self.HAIR_LEN, 0.0009,
+        hl = self.HAIR_LEN if (getattr(self, "bonnet", None) is not None or not isinstance(self, Sarah)) else (0.06, 0.1)
+        self.hair_objs.append(self._strands("hair", scalp, P, bvh, int(self.HAIR_N * density), hl, 0.0009,
                                             comb=self._comb(R), lift=0.0025, mat=hm, curl=self.CURL, clump=0.45, segs=9))
+        if getattr(self, "bonnet", None) is None and isinstance(self, Sarah):
+            # bare-headed: hair drawn back to a low knot at the nape
+            knot = head & (y > 0.045 * hs) & (z > -0.07 * hs) & (z < -0.015 * hs) & (np.abs(x) < 0.035 * hs)
+            kc = Vector((float(self._mid_x), 0, 0))
+            self.hair_objs.append(self._strands("knot", knot, P, bvh, int(14000 * density), (0.05, 0.08), 0.0011,
+                                                comb=lambda p: R @ Vector((math.copysign(0.8, self._mid_x - p.x), 0.4, 0.5)),
+                                                lift=0.012, mat=hm, curl=0.9, clump=0.75, segs=11))
         self.hair_objs.append(self._strands("brows", brow, P, bvh, int(900 * density), (0.005, 0.008), 0.0005,
                                             comb=lambda p: R @ Vector((math.copysign(1.0, p.x - self._mid_x), 0, 0.2)),
                                             lift=0.0006, mat=hm, curl=0.05))
@@ -191,8 +199,9 @@ class Sarah(_Woman):
              "targets/breast/female-young-averagemuscle-averageweight-mincup-averagefirmness": 0.8,
              "targets/breast/breast-point-decr": 1.0, "targets/breast/breast-dist-decr": 0.6}
 
-    def __init__(self, name="Sarah", years=31, wet=0.0, seated=False):
-        super().__init__(name, years, wet=wet, seated=seated)
+    def __init__(self, name="Sarah", years=31, wet=0.0, seated=False, bonnet=True, shawl=True):
+        """bonnet=False indoors (hair then shows whole: centre parting drawn back to a low knot); shawl optional."""
+        super().__init__(name, years, wet=wet, seated=seated, bonnet=bonnet, shawl=shawl)
 
     def _comb(self, R):
         mid = lambda: self._mid_x
@@ -220,7 +229,8 @@ class Sarah(_Woman):
         st = self._stockings_and_shoes(m, wh, whand, wfoot, (0.03, 0.028, 0.03), m["knee"] + 0.1)
         if self.seated:
             sk = u & (z < m["hip"] + 0.09) & (z > m["ankle"] - 0.02) & (whand < 0.05)
-            self.skirt, _ = self._shell("skirt", sk, 0.03, dress, solid=0.003, drape=60, displace=0.008)
+            self.skirt, _ = self._shell("skirt", sk, 0.045, dress, solid=0.003, drape=70, displace=0.008,
+                                        flare=lambda b: np.clip(1 - np.abs(b[:, 2] - m["knee"]) / 0.12, 0, 1) * 0.02)
         else:
             self.skirt = self._bell("skirt", dress, m["hip"] + 0.09, 0.012, R=0.36, back=0.07, folds=11)
         # shawl: knitted wool over the shoulders, deeper at the back, ends crossing on the chest
@@ -228,9 +238,13 @@ class Sarah(_Woman):
         sh_lo = top - 0.12 - 0.2 * back
         shawl = u & (wh < 0.5) & (whand < 0.05) & (z > sh_lo) & (z < top - 0.035) & (warm < 0.6) | \
                 (u & (warm > 0.3) & (z > top - 0.22) & (z < top - 0.03) & (whand < 0.05))
-        self.shawl, _ = self._shell("shawl", shawl, 0.026, cloth(self.name + "_shawl", self.SHAWL, rough=0.9, sheen=0.6, knit=True,
-                                                                  wet=self.wet), solid=0.006, drape=30, displace=0.006)
-        self._bonnet(m, wh)
+        if not self.want_shawl:
+            shawl = np.zeros_like(shawl)
+        self.shawl = None if not shawl.any() else self._shell("shawl", shawl, 0.026, cloth(self.name + "_shawl", self.SHAWL, rough=0.9, sheen=0.6, knit=True,
+                                                                  wet=self.wet), solid=0.006, drape=30, displace=0.006)[0]
+        self.bonnet = None
+        if self.want_bonnet:
+            self._bonnet(m, wh)
         self._hide_skin(bod | st | (shawl & (wh < 0.2)))
 
     def _corset_front(self, o, used_idx, m):
@@ -356,8 +370,9 @@ class Sophia(_Woman):
     FROCK = (0.11, 0.06, 0.06)        # rust-red wool
     PINAFORE = (0.82, 0.8, 0.74)
 
-    def __init__(self, name="Sophia", years=2, wet=0.0, seated=False):
-        super().__init__(name, years, wet=wet, seated=seated)
+    def __init__(self, name="Sophia", years=2, wet=0.0, seated=False, bonnet=False, shawl=False):
+        """shawl=True wraps a small knitted shawl round her shoulders (out on deck)."""
+        super().__init__(name, years, wet=wet, seated=seated, bonnet=bonnet, shawl=shawl)
 
     def _comb(self, R):
         return lambda p: R @ Vector((math.copysign(0.4, p.x - self._mid_x), 0.6, -0.6))
@@ -377,10 +392,22 @@ class Sophia(_Woman):
         Sarah._fill_sleeves(self, self.bodice, bv, warm, 0.02)          # puffed short sleeves
         st = self._stockings_and_shoes(m, wh, whand, wfoot, (0.75, 0.72, 0.64), m["knee"] + 0.06)
         hem = m["knee"] - 0.04
-        self.skirt = self._bell("frock_skirt", frock, waist, hem, R=0.19, back=0.02, folds=8, offset=0.02)
+        if self.seated:
+            sk = u & (z < waist + 0.01) & (z > hem) & (whand < 0.05)
+            self.skirt, _ = self._shell("frock_skirt", sk, 0.02, frock, solid=0.003, drape=40, displace=0.005)
+        else:
+            self.skirt = self._bell("frock_skirt", frock, waist, hem, R=0.19, back=0.02, folds=8, offset=0.02)
         pin = cloth(self.name + "_pinafore", self.PINAFORE, rough=0.85, sheen=0.3, weave=1200, wet=self.wet)
-        self.pinafore = self._bell("pinafore", pin, waist + 0.005, hem + 0.03, R=0.2, back=0.0, folds=6, offset=0.032,
-                                   arc=(-115, 115))
+        if self.seated:
+            front = u & (z < waist + 0.01) & (z > hem + 0.03) & (co[:, 1] < co[u, 1].mean()) & (whand < 0.05)
+            self.pinafore, _ = self._shell("pinafore", front, 0.028, pin, solid=0.002, drape=40)
+        else:
+            self.pinafore = self._bell("pinafore", pin, waist + 0.005, hem + 0.03, R=0.2, back=0.0, folds=6, offset=0.032,
+                                       arc=(-115, 115))
+        if self.want_shawl:
+            shl = u & (wh < 0.5) & (whand < 0.05) & (z > chest - 0.02) & (z < top - 0.01) & ((warm < 0.5) | (z > elbow[2]))
+            self._shell("shawl", shl, 0.03, cloth(self.name + "_shawl", (0.6, 0.55, 0.45), rough=0.9, sheen=0.6, knit=True),
+                        solid=0.006, drape=25, displace=0.004)
         # bib + shoulder straps
         straps = u & (wh < 0.4) & (z > waist - 0.01) & (z < top - 0.01) & (warm < 0.2) & \
                  ((np.abs(np.abs(co[:, 0] - co[u, 0].mean()) - 0.045 * self.head_scale) < 0.012) | (co[:, 1] < co[u, 1].mean() - 0.03))
@@ -388,4 +415,45 @@ class Sophia(_Woman):
         self._hide_skin(yoke | st)
 
 
-__all__ = ["Sarah", "Sophia"]
+class Arthur(_Woman):
+    """Arthur Briggs (7), at school in Massachusetts in 1872: a boy's wool jacket buttoned high over a white shirt
+    collar, knickerbockers gathered below the knee, dark stockings, ankle boots; short side-parted hair.
+    (Shares the civilian base class with Sarah and Sophia: no beard, own clothes.)"""
+    GENDER = 1.0; MUSCLE = 0.5; WEIGHT = 0.45; HEIGHT = 0.5
+    SKIN = dict(base=(0.64, 0.45, 0.36), weather=0.1)
+    HAIR = (0.7, 0.35); HAIR_N = 50000; HAIR_LEN = (0.02, 0.04); CURL = 0.15
+    BOOT_TOP = 0.16
+    JACKET = (0.07, 0.065, 0.06)      # brown-grey tweedy wool
+    BREECHES = (0.05, 0.05, 0.055)
+
+    def __init__(self, name="Arthur", years=7, wet=0.0, seated=False, cap=False):
+        super().__init__(name, years, wet=wet, seated=seated, bonnet=False, shawl=False)
+
+    def _comb(self, R):
+        part = 0.025 * self.head_scale
+        return lambda p: R @ Vector((-0.9 if (p.x - self._mid_x) < part else 0.6, 0.5, -0.2))   # side parting
+
+    def _dress(self):
+        m, wh, whand, wfoot, warm = self._m()
+        u = self.used; co = self.rest_co; z = co[:, 2]
+        wrist = np.array(self.h.joint("wrist.L____head"))
+        dist_wrist = np.minimum(np.linalg.norm(co - wrist, axis=1), np.linalg.norm(co - wrist * np.array([-1, 1, 1]), axis=1))
+        hs = self.head_scale
+        shirt = u & (wh < 0.5) & (whand < 0.1) & (z > m["hip"]) & (z < m["neck"] + 0.04 * hs)
+        self.shirt, _ = self._shell("shirt", shirt, 0.004, D.linen_material(self.name + "_shirt", color=(0.8, 0.78, 0.72)), solid=0.0015)
+        jk = u & (wh < 0.2) & (whand < 0.04) & (z > m["hip"] - 0.01) & (z < m["neck"] + 0.005) & (dist_wrist > 0.03)
+        self.jacket, jv = self._shell("jacket", jk, 0.009, cloth(self.name + "_jacket", self.JACKET, rough=0.85, weave=500, wet=self.wet),
+                                      solid=0.004, drape=10, displace=0.002)
+        self._hem(self.jacket, m["hip"], drop=0.08 * hs, flare=0.015)
+        self._collar(self.jacket)
+        self._folds(self.jacket)
+        self._front_buttons(jv, m["hip"] + 0.05 * hs, m["neck"] - 0.04 * hs, 5, 0.011, r=0.006, mat=D.brass_material(self.name + "_brass"))
+        kb = u & (z < m["hip"] + 0.08 * hs) & (z > m["knee"] - 0.05 * hs) & (wfoot < 0.2) & (whand < 0.05)
+        self.trousers_kb, _ = self._shell("knickerbockers", kb, 0.012, cloth(self.name + "_breeches", self.BREECHES, rough=0.85, weave=600),
+                                          solid=0.003, drape=14, displace=0.003,
+                                          flare=lambda b: np.clip(1 - np.abs(b[:, 2] - (m["knee"] + 0.02)) / 0.08, 0, 1) * 0.012)
+        st = self._stockings_and_shoes(m, wh, whand, wfoot, (0.03, 0.03, 0.035), m["knee"] + 0.02)
+        self._hide_skin(shirt | jk | kb | st)
+
+
+__all__ = ["Sarah", "Sophia", "Arthur"]

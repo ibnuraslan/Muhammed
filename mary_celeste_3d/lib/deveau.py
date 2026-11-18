@@ -236,6 +236,8 @@ class Deveau:
     SKIN = dict(base=(0.43, 0.25, 0.16), weather=0.6)
     ASSET_BOOTS = True          # fit the Sketchfab leather boots (False: procedural boots/shoes from _sea_boots)
     BOOT_TOP = 0.36             # boot shaft top above the ground (m); women/children set lower
+    HAIR_COLOR = (0.82, 0.38)   # melanin, redness
+    BEARD_COLOR = (0.8, 0.45)
 
     def __init__(self, name="Deveau", years=34, wet=0.35, cap=False):
         self.h = H.Human(name, gender=self.GENDER, years=years, muscle=self.MUSCLE, weight=self.WEIGHT, height=self.HEIGHT,
@@ -884,11 +886,11 @@ class Deveau:
         brow = head & (z > 0.014) & (z < 0.03 - 0.12 * np.abs(np.abs(x) - 0.03)) & (y < -0.012) & (self.rest_n[:, 1] < -0.45) & (np.abs(x) > 0.011) & (np.abs(x) < 0.054)
         P, bvh = self._posed_surface()
         R = self.head_R
-        brown = hair_material(self.name + "_hair", 0.82, 0.38)
+        brown = hair_material(self.name + "_hair", *self.HAIR_COLOR)
         self.hair_objs = []
         self.hair_objs.append(self._strands("hair", scalp, P, bvh, int(70000 * density), (0.014, 0.028), 0.001,
                                             comb=lambda p: R @ Vector((0, 0.8, -0.45)), lift=0.0022, mat=brown, curl=0.22, clump=0.35))
-        beard_m = hair_material(self.name + "_beard", 0.8, 0.45, rough=0.38)
+        beard_m = hair_material(self.name + "_beard", *self.BEARD_COLOR, rough=0.38)
         self.hair_objs.append(self._strands("beard", beard | neck, P, bvh, int(46000 * density), (0.014, 0.03), 0.0009,
                                             comb=lambda p: R @ Vector((0, -0.25, -1)), lift=0.003, mat=beard_m, curl=0.35, clump=0.55, segs=9))
         self.hair_objs.append(self._strands("moustache", tache, P, bvh, int(5000 * density), (0.012, 0.02), 0.0008,
