@@ -49,7 +49,7 @@ class _Woman(D.Deveau):
 
     def __init__(self, name, years, wet=0.0, seated=False, bonnet=True, shawl=True):
         self.seated = seated; self.want_bonnet = bonnet; self.want_shawl = shawl
-        self.button_objs = []
+        self.button_objs = []; self.hair_objs = []
         super().__init__(name=name, years=years, wet=wet)
 
     def relaxed(self, lean=2.0, look_down=4.0, hands="waist"):
@@ -124,7 +124,7 @@ class _Woman(D.Deveau):
                 F.append([rows[j][i], rows[j][i2], rows[j + 1][i2], rows[j + 1][i]])
         o = D.mesh_obj(f"{self.name}_{label}", V, F, mat)
         sm = o.modifiers.new("Smooth", "SMOOTH"); sm.factor = 0.7; sm.iterations = 12        # even out the bell
-        so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.004; so.offset = 1; so.thickness_clamp = 1.0
+        so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.004; so.offset = 1; so.use_even_offset = False; so.thickness_clamp = 1.0; so.use_quality_normals = True
         sb = o.modifiers.new("Sub", "SUBSURF"); sb.levels = 1; sb.render_levels = 2
         vg = o.vertex_groups.new(name="spine05"); vg.add(list(range(len(V))), 1.0, 'REPLACE')
         mod = o.modifiers.new("Armature", "ARMATURE"); mod.object = self.h.arm
@@ -245,6 +245,8 @@ class Sarah(_Woman):
         self.button_objs.append(core)
         # coiled strands wound round the core
         rng = np.random.default_rng(11); n = int(4000 * density); segs = 14
+        if n <= 0:
+            return
         pts = np.zeros((n, segs, 3), np.float32)
         rad = 0.033 * hs
         for i in range(n):
@@ -337,6 +339,8 @@ class Sarah(_Woman):
             return
         zs = np.array([r.z for r in roots]); lowcut = np.percentile(zs, 55)
         roots = [r for r in roots if r.z < lowcut]                      # only the hanging lower edge
+        if not roots:
+            return
         rng = np.random.default_rng(3); segs = 6
         pts = np.zeros((len(roots), segs, 3), np.float32)
         for i, r in enumerate(roots):
@@ -430,7 +434,7 @@ class Sarah(_Woman):
             keep.append(f)
         o = D.mesh_obj(f"{self.name}_bonnet", V, keep, mat)
         self._soft_edge(o, iters=30)
-        so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.003; so.offset = 1; so.thickness_clamp = 1.0
+        so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.003; so.offset = 1; so.use_even_offset = False; so.thickness_clamp = 1.0; so.use_quality_normals = True
         sb = o.modifiers.new("Sub", "SUBSURF"); sb.levels = 1; sb.render_levels = 2
         vg = o.vertex_groups.new(name="head"); vg.add(list(range(len(V))), 1.0, 'REPLACE')
         mod = o.modifiers.new("Armature", "ARMATURE"); mod.object = h.arm; o.modifiers.move(len(o.modifiers) - 1, 0)

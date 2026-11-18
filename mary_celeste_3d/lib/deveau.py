@@ -501,6 +501,7 @@ class Deveau:
         front = co[(co[:, 1] < -0.02)]
         mat = brass_material(self.name + "_brass")
         self.button_objs = getattr(self, "button_objs", [])
+        self.hair_objs = getattr(self, "hair_objs", [])
         zmin, zmax = self.marks["hip"] - 0.08, self.marks["neck"] - 0.12
         for k in range(4):
             zz = zmax - k * (zmax - zmin) / 3.4
@@ -821,7 +822,7 @@ class Deveau:
             up = mesh_obj(nm + "_upper", W, F, upper_m)
             sb = up.modifiers.new("Sub", "SUBSURF"); sb.levels = 2; sb.render_levels = 2
             sh = mesh_obj(nm + "_shaft", Vs, Fs, upper_m)
-            so = sh.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.004; so.offset = 1
+            so = sh.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.004; so.offset = 1; so.use_even_offset = False; so.thickness_clamp = 1.0
             sb = sh.modifiers.new("Sub", "SUBSURF"); sb.levels = 2; sb.render_levels = 2
             # sole (overhangs the welt by 4 mm) and a stacked heel
             outline = []
@@ -947,6 +948,8 @@ class Deveau:
         span = np.linalg.norm(pts[:, -1] - pts[:, 0], axis=1)
         ok &= span < lens * 1.2
         pts = pts[ok]; count = int(ok.sum())
+        if count == 0:
+            return None                                   # (hair_curves.add_curves([]) crashes Blender)
         if attract is not None and count:
             # gather the strands to a point (a bun): tips pulled in, the rest of each strand eased toward it
             A = np.array(attract, np.float32); t = np.linspace(0, 1, segs)[None, :, None] ** 2
