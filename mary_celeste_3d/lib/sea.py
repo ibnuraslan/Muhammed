@@ -14,7 +14,7 @@ def sky(strength=1.0, rot_deg=0.0, res="8k", aid=SKY):
     return w
 
 
-def water_material(name="sea", deep=(0.002, 0.022, 0.034), crest=(0.01, 0.11, 0.105), foam_attr="foam", hull_attr="hullfoam",
+def water_material(name="sea", deep=(0.0012, 0.017, 0.03), crest=(0.006, 0.1, 0.1), foam_attr="foam", hull_attr="hullfoam",
                    fog_color=(0.42, 0.5, 0.58)):
     m = bpy.data.materials.new(name); m.use_nodes = True
     N = m.node_tree.nodes; Lk = m.node_tree.links; p = N["Principled BSDF"]
@@ -49,7 +49,7 @@ def water_material(name="sea", deep=(0.002, 0.022, 0.034), crest=(0.01, 0.11, 0.
     fm2 = N.new("ShaderNodeMath"); fm2.operation = 'MULTIPLY'; Lk.new(fm.outputs[0], fm2.inputs[0]); Lk.new(stm.outputs[0], fm2.inputs[1])
     ramp = N.new("ShaderNodeMapRange"); ramp.inputs['From Min'].default_value = 0.2; ramp.inputs['From Max'].default_value = 0.5
     Lk.new(fm2.outputs[0], ramp.inputs['Value'])
-    p.inputs['Roughness'].default_value = 0.11; p.inputs['IOR'].default_value = 1.333
+    p.inputs['Roughness'].default_value = 0.075; p.inputs['IOR'].default_value = 1.333
     p.inputs['Specular IOR Level'].default_value = 0.5
     foam = N.new("ShaderNodeBsdfPrincipled"); foam.inputs['Base Color'].default_value = (0.78, 0.8, 0.8, 1)
     foam.inputs['Roughness'].default_value = 0.6; foam.inputs['Subsurface Weight'].default_value = 0.3
@@ -63,7 +63,7 @@ def water_material(name="sea", deep=(0.002, 0.022, 0.034), crest=(0.01, 0.11, 0.
     Lk.new(p.outputs[0], mix.inputs[1]); Lk.new(foam.outputs[0], mix.inputs[2])
     # aerial perspective: toward the horizon the sea fades into the grey of the sky (camera rays only)
     cd = N.new("ShaderNodeCameraData")
-    fd = N.new("ShaderNodeMapRange"); fd.inputs['From Min'].default_value = 300; fd.inputs['From Max'].default_value = 7000
+    fd = N.new("ShaderNodeMapRange"); fd.inputs['From Min'].default_value = 150; fd.inputs['From Max'].default_value = 5000
     fd.inputs['To Max'].default_value = 0.92; fd.interpolation_type = 'SMOOTHSTEP'
     Lk.new(cd.outputs['View Distance'], fd.inputs['Value'])
     lp = N.new("ShaderNodeLightPath"); fm_ = N.new("ShaderNodeMath"); fm_.operation = 'MULTIPLY'

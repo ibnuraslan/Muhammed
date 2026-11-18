@@ -36,10 +36,10 @@ sea.ocean(size=240, res=int(os.environ.get("OCEAN_RES", "24")), scale=2.4, chop=
           direction=math.degrees(math.atan2(WIND_WORLD.y, WIND_WORLD.x)), hulls=(mc["hull"], dg["hull"]),
           loc=(-150, -150, 0), cut=(0.0, 0.0, ship.L / 2 - 0.4, ship.B / 2 - 0.15))
 sea.far_sea(370, mat=water, center=(-150, -150))
-sea.sky(strength=float(os.environ.get("SKY_K", "0.72")), rot_deg=float(os.environ.get("SKY_ROT", "255")))
+sea.sky(strength=float(os.environ.get("SKY_K", "0.72")), rot_deg=float(os.environ.get("SKY_ROT", "281")))
 sun = bpy.data.objects.new("Sun", bpy.data.lights.new("Sun", 'SUN')); sc.collection.objects.link(sun)
-sun.data.energy = 1.4; sun.data.angle = math.radians(5); sun.data.color = (1.0, 0.94, 0.86)
-az, el = math.radians(139.0 + float(os.environ.get("SKY_ROT", "255"))), math.radians(30)
+sun.data.energy = 3.6; sun.data.angle = math.radians(1.2); sun.data.color = (1.0, 0.7, 0.45)   # low, warm late-afternoon sun
+az, el = math.radians(139.0 + float(os.environ.get("SKY_ROT", "281"))), math.radians(11)
 sun.rotation_euler = (Vector((math.cos(az) * math.cos(el), math.sin(az) * math.cos(el), math.sin(el))) * -1).to_track_quat('-Z', 'Y').to_euler()
 
 # a coil of rope and a bucket left by the gap (the ship as found: things lie where they were dropped)
@@ -54,6 +54,39 @@ def coil(name, c, r0=0.22, turns=7, rr=0.016):
     return ship.rope(name, pts, rr, mc["mats"]["rope"])
 for k in range(3):
     coil(f"coil{k}", (0.9, -3.2, ship.zdeck(0.9) + 0.012 + k * 0.03), r0=0.26 - k * 0.025)
+for k in range(2):
+    coil(f"coilb{k}", (-4.9, -3.3, ship.zdeck(-4.9) + 0.012 + k * 0.03), r0=0.3 - k * 0.03)
+# lines dropped where they were let go: the boat's falls and painter snake across the deck to the gap
+import random
+rnd = random.Random(4)
+def dropped(name, p0, p1, wig=0.35, rr=0.017, n=40):
+    a = Vector(p0); b = Vector(p1); pts = []
+    for i in range(n):
+        t = i / (n - 1); q = a.lerp(b, t)
+        q += Vector((math.sin(t * 9 + rnd.random()) * wig * (1 - abs(2 * t - 1)) * 0.6, math.cos(t * 7) * wig * 0.5, 0))
+        q.z = ship.zdeck(q.x) + rr + 0.003
+        pts.append(SHIP @ q)
+    return ship.rope(name, pts, rr, mc["mats"]["rope"])
+dropped("fall_a", (-3.6, -1.4, 0), (-1.0, -3.55, 0), wig=0.4)
+dropped("fall_b", (0.4, -1.5, 0), (-0.9, -3.5, 0), wig=0.25)
+dropped("painter", (-2.3, -3.3, 0), (-2.0, -3.75, 0), wig=0.08, rr=0.012, n=12)
+# a loose brace hanging slack from aloft across the gap
+ship.rope("loose_brace", [SHIP @ Vector((-1.0, -2.6, 13.0)), SHIP @ Vector((-1.4, -3.2, 6.0)), SHIP @ Vector((-1.7, -3.5, 2.6)),
+                          SHIP @ Vector((-1.9, -3.4, ship.zdeck(-1.9) + 0.02)), SHIP @ Vector((-2.4, -2.6, ship.zdeck(-2.4) + 0.02))], 0.014, mc["mats"]["rope"])
+# standing water on the deck (it came aboard green; the scuppers have not cleared it)
+pw = bpy.data.materials.new("deck_water"); pw.use_nodes = True; pp = pw.node_tree.nodes["Principled BSDF"]
+pp.inputs['Roughness'].default_value = 0.03; pp.inputs['Base Color'].default_value = (0.9, 0.9, 0.9, 1)
+pp.inputs['Transmission Weight'].default_value = 1.0; pp.inputs['IOR'].default_value = 1.33
+nz = pw.node_tree.nodes.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 0.9; nz.inputs['Detail'].default_value = 6
+mr = pw.node_tree.nodes.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.5; mr.inputs['From Max'].default_value = 0.53
+pw.node_tree.links.new(nz.outputs['Fac'], mr.inputs['Value']); mr.inputs['To Max'].default_value = 0.75; pw.node_tree.links.new(mr.outputs[0], pp.inputs['Alpha'])
+for cx, cy, sx_, sy_ in ((-2.0, -2.4, 4.0, 2.2), (-5.0, -2.0, 3.0, 2.5), (0.5, -2.6, 2.0, 1.6)):
+    o = ship.box("deck_water", (cx, cy, ship.zdeck(cx) + 0.016), (sx_, sy_, 0.002), pw)
+    o.matrix_world = SHIP @ o.matrix_world
+# spray bursting off a distant crest and over the Dei Gratia's bow
+sea.spray("far_spray", (-260, -240, 0.5), (5.0, 3.0, 14.0), count=9000, rmin=0.03, rmax=0.09, up=4.0, dirv=(0.3, -1, 0), seed=3)
+sea.spray("near_spray", (2.0, -9.0, 0.3), (2.0, 1.5, 6.0), count=6000, rmin=0.008, rmax=0.03, up=3.2, dirv=(0.3, -1, 0), seed=5)
+sea.haze((-150, -150, 25), (2400, 2400, 50), density=0.00035, color=(0.9, 0.82, 0.72))
 
 # ----------------------------------------------------------------------------- Deveau at the gap
 dv = D.Deveau(wet=0.5)

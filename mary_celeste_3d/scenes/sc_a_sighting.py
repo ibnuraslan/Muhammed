@@ -23,8 +23,8 @@ dg["root"].location = (0, 0, -0.15)
 
 # --- the Mary Celeste, about 230 m off the starboard bow, yawing with her sails half gone
 MC_HEAD = 128.0
-mc = ship.build("MC", sails="found", rail_gap=(-2.7, -0.6, "S"), wind=local_wind(MC_HEAD), wet=0.8, detail=False)
-mc_pos = Vector((122.0, -80.0, 0))
+mc = ship.build("MC", sails="found", rail_gap=(-2.7, -0.6, "S"), wind=local_wind(MC_HEAD), wet=0.8, detail=False, bow_wave_h=1.0)
+mc_pos = Vector((100.0, -66.0, 0))
 mc["root"].location = mc_pos + Vector((0, 0, -0.1))
 mc["root"].rotation_euler = (math.radians(7.0), math.radians(-2.5), math.radians(MC_HEAD))
 
@@ -32,8 +32,8 @@ bpy.context.view_layer.update()
 
 # --- sea and sky
 water = sea.water_material()
-oc = sea.ocean(size=260, res=int(os.environ.get("OCEAN_RES", "26")), scale=3.6, chop=2.0, wind=17.0, repeat=3,
-               foam=0.5, mat=water, direction=math.degrees(math.atan2(WIND_WORLD.y, WIND_WORLD.x)),
+oc = sea.ocean(size=260, res=int(os.environ.get("OCEAN_RES", "26")), scale=4.6, chop=2.2, wind=18.0, repeat=3,
+               foam=0.55, mat=water, direction=math.degrees(math.atan2(WIND_WORLD.y, WIND_WORLD.x)),
                hulls=(dg["hull"], mc["hull"]), loc=(100, -60, 0))
 sea.far_sea(380, mat=water, center=(100, -60))
 sea.sky(strength=float(os.environ.get("SKY_K", "0.72")), rot_deg=float(os.environ.get("SKY_ROT", "240")))
@@ -54,8 +54,8 @@ dbow = dg["root"].matrix_world @ Vector((ship.L / 2 + 0.6, -2.6, 0.2))
 
 # --- camera: on the Dei Gratia's starboard bow, eye height, looking out over the rail
 cam_loc = dg["root"].matrix_world @ Vector((3.2, -2.75, ship.zdeck(3.2) + 1.74))
-tgt = mc_pos + Vector((-6, 0, 24.0))
-cam = C.camera(cam_loc, tgt, lens=42, fstop=4.0, focus=(mc_pos - cam_loc).length, roll=-2.0)
+tgt = mc_pos + Vector((-4, 0, 17.0))
+cam = C.camera(cam_loc, tgt, lens=50, fstop=4.0, focus=(mc_pos - cam_loc).length, roll=-2.0)
 
 C.finish(OUT, cine={"sat": 1.2, "exposure": -0.15, "warm": (1.03, 1.0, 0.97)})
 print("RENDERED", OUT)
