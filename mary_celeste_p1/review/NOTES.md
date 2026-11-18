@@ -1,24 +1,38 @@
-# Part 1 storyboard — notes for the hub
+# Part 1 storyboard v2 — notes for the hub
 
-* 53 shots, 2:38 at 147 wpm (VO split across shots is the script verbatim; checked word for word). Median shot 3.0 s.
-* Frames: real Cycles renders of the 3D sets (half res, 24 spp), card + Courier Prime caption burned in as they will play.
-* Shared library `mary_celeste_3d/lib` used unchanged. New assets in `mary_celeste_p1/p1/`: `smallboat.py` (16 ft ship's
-  boat), binnacle compass bowl with smashed glass (`sets.compass_bowl`), galley and mate's cabin sets, logbook + slate props,
-  X-ray hold cutaway and the 3D map (`explain.py`), Morehouse + 3 sailors (subclass of the shared Deveau builder).
-* Atrium devices used: grey clay figures for the ten people only mentioned (S16), X-ray cutaway with dimension (S39),
-  dark map with red hexagons and a dashed route (S43, S51-S53), filled soft orange bands as the only highlight (S11, S33,
-  S38, S51, S53), ghost of the missing boat (S12).
+* 54 shots, 2:38. The VO split across shots is the script verbatim (checked word for word).
+* Frames: real Cycles renders at half res and low samples, with card and Courier Prime caption burned in as they will play.
+* Shared library: `claude/mary-celeste-3d` @ 9499317 merged (final Deveau, Sketchfab boots, `clipcheck.py`). The lib is
+  used unchanged.
+* **Clipping: `lib/clipcheck.py` ran on every character shot (run.py). All 27 character shots report 0 clips.**
+  See `review/clip/CLIPCHECK.txt`; the per-shot JSON is in `review/clip/`.
 
-## Needs a decision
-1. **Card photos**: Wikimedia Commons and the Library of Congress are blocked by this environment's network policy, so the
-   five cards (Deveau, Morehouse, Atlantic Ocean, Gibraltar, Santa Maria) show "PHOTO PENDING". Can the hub supply free-licence
-   photos (with source + licence), or should I drop cards that have none (as killer-in-house did)?
-2. **Render budget**: one full-res frame (2560x1440, 32 spp + OIDN) takes ~4 min on this 4-core CPU box. The part is ~3,800
-   frames, so ~250 h in one session. Options: (a) split the shots across several render sessions (e.g. 10 sessions -> ~25 h);
-   (b) 1920x1080 internal + upscale to 2560x1440 (~2.3x faster); (c) both.
+## Your 9 fixes
+1. S16: no mannequins. S16 is the empty forecastle (seven berths, a sea chest at each, blankets thrown back). The new
+   S16b ("on the Mary Celeste.") shows the little girl's rag doll on the captain's sea chest.
+2. Face close-ups reframed. S07 is over the shoulder, his face turned away into the lantern light. S42 is from behind,
+   looking up at her rig. S48 is over the shoulder onto the slate. I also reframed S21 (over the helmsman's shoulder),
+   S23 (Morehouse in profile) and S38 (side-on, chest down).
+3. S05/S06 bedding: the shared look-frame (b) recipe. Dark varnished panelling with lamp soot, a grey-brown wool blanket
+   over a striped straw tick, matte, dark wet patches, a shallower child-sized hollow.
+4. S12: the empty chocks with the canvas gripes lying slack and cut, frayed ends, and Deveau looking down at them. No ghost.
+5. S38: the chalked sounding rod in Deveau's hands, wet and dark up to the 3½ ft mark, with a small burned-in "3½ FT".
+   S39: realistic dark sea-green bilge water, no glow.
+6. Maps (S43, S51–S53): P4's chart table (`terrain.py` copied unchanged, same AZORES bbox as P4). Real relief and
+   bathymetry, brass pins with red heads, pencilled course, cream chart lettering, filled soft orange bands.
+7. Galley (S34–S36): dark sooty planking. The "Star 6" cast-iron stove (Sketchfab CC-BY) stands askew off its hearth,
+   its pipe torn down. The water is dark and rippled, with a bucket, spoon, rag, wood chips and straw afloat. In the
+   final render the ripples move and the debris bobs.
+8. S27: the shared brigantine in her as-found state, with torn topsails.
+9. S14: real boarding. One man is in through the gap with a hand on the main shroud. The second is coming up from the
+   boat with his hands on the deck edge. Deveau turns and reaches down to him.
 
-## Known for the final pass
-* Motion per shot: keyframed rigs (`p1/anim.py`: live armature, hair on the head bone, blinks), eased camera moves, ships
-  worked by the sea (heave/roll), FFT sea advancing in time. S03 walk will be a short back-view step, not a full cycle.
-* Beards read dark at half res; sails come from the shared ship (flat canvas look).
-* SFX list per shot in `sfx_cues.csv` (every action has a sound); the delivered MP4 will be silent as asked.
+## For the 3D chat (shared-lib bug)
+* `deveau._shell`: Solidify `use_even_offset=True` throws one jacket vertex ~20 m away in strongly bent poses (seen
+  in the cabin lantern pose: a sliver triangle). My shots switch even offset off on the clothes shells (`no_spikes`),
+  which fixes it. Worth fixing in the lib.
+
+## Still open
+* Card photos: placeholders until the hub supplies them.
+* Final render budget: your decision. The animation pipeline is ready and runs clipcheck on frames 1/mid/last before
+  rendering.

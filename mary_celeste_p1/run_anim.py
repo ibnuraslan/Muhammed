@@ -129,10 +129,22 @@ for r in roots:
     A.ship_motion(r, dur, seed=sum(map(ord, r.name)) % 97, **cfg)
 
 A.ocean_time(dur)
+if bpy.data.objects.get("Ocean_galley_water"):
+    A.galley_water(dur, [o for o in bpy.data.objects if o.name.startswith(("float_", "wooden_bucket_02", "wooden_spoon"))])
 bpy.context.view_layer.update()
 if move[0] != "hold" or hh:
     A.camera_move(cam, move if move[0] != "hold" else ("push", 0.0), dur, handheld=hh)
 
+# clipping check over the shot (first, middle, last frame) for every shot with people; zero clips required
+if any("person" in o for o in bpy.data.objects):
+    import clipcheck
+    nf = int(round(dur * E.FPS)); total_bad = 0
+    for f in sorted({1, max(1, nf // 2), max(1, nf)}):
+        sc.frame_set(f); total_bad += len(clipcheck.check(f"{sid}_f{f:04d}"))
+    print(f"CLIPRESULT {sid} {total_bad}", flush=True)
+    if total_bad and os.environ.get("CLIP_STRICT", "1") == "1":
+        print("ABORT: clipping in", sid, flush=True); sys.exit(2)
+    sc.frame_set(1)
 sc.frame_start = int(opt("--start", 1)); sc.frame_end = int(opt("--end", int(round(dur * E.FPS))))
 out = os.path.join(HERE, "out", "frames", sid); os.makedirs(out, exist_ok=True)
 sc.render.filepath = os.path.join(out, "f")

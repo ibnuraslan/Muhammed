@@ -1,0 +1,24 @@
+{
+ "shot": "S36",
+ "bad": [],
+ "contacts": [
+  {
+   "person": "Deveau",
+   "part": "Deveau_shirt",
+   "other": "wooden_lantern_01_handle.001",
+   "pairs": 18,
+   "grip": true,
+   "ok": true,
+   "at": [
+    -0.419,
+    0.177,
+    1.276
+   ],
+   "span": [
+    0.007,
+    0.004,
+    0.003
+   ]
+  }
+ ]
+}

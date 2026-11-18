@@ -1,0 +1,24 @@
+{
+ "shot": "S31",
+ "bad": [],
+ "contacts": [
+  {
+   "person": "Deveau",
+   "part": "Deveau_body",
+   "other": "MC_binnacle",
+   "pairs": 172,
+   "grip": true,
+   "ok": true,
+   "at": [
+    -13.097,
+    -0.014,
+    2.441
+   ],
+   "span": [
+    0.087,
+    0.114,
+    0.011
+   ]
+  }
+ ]
+}

@@ -1,0 +1,60 @@
+{
+ "shot": "S44",
+ "bad": [],
+ "contacts": [
+  {
+   "person": "Deveau",
+   "part": "Deveau_body",
+   "other": "wooden_lantern_01_handle.001",
+   "pairs": 27,
+   "grip": true,
+   "ok": true,
+   "at": [
+    0.475,
+    0.584,
+    1.402
+   ],
+   "span": [
+    0.101,
+    0.044,
+    0.003
+   ]
+  },
+  {
+   "person": "Deveau",
+   "part": "Deveau_jacket",
+   "other": "wooden_lantern_01_handle.001",
+   "pairs": 38,
+   "grip": true,
+   "ok": true,
+   "at": [
+    0.553,
+    0.615,
+    1.388
+   ],
+   "span": [
+    0.015,
+    0.01,
+    0.012
+   ]
+  },
+  {
+   "person": "Deveau",
+   "part": "Deveau_shirt",
+   "other": "wooden_lantern_01_handle.001",
+   "pairs": 31,
+   "grip": true,
+   "ok": true,
+   "at": [
+    0.546,
+    0.613,
+    1.396
+   ],
+   "span": [
+    0.005,
+    0.004,
+    0.005
+   ]
+  }
+ ]
+}

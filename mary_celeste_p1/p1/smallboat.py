@@ -86,7 +86,7 @@ def build(name="boat", oars_out=True):
                 d = (blade - inboard).normalized()
                 b = ship.box(f"{name}_blade", blade - d * 0.25, (0.6, 0.13, 0.015), spruce, coll=coll)
                 b.rotation_euler = d.to_track_quat('X', 'Z').to_euler(); out += [o, b]
-                oars.append((inboard, pin))
+                oars.append((inboard, pin, blade))
     root = bpy.data.objects.new(name + "_root", None); coll.objects.link(root)
     for o in coll.objects:
         if o is not root and o.parent is None:

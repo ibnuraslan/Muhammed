@@ -31,18 +31,20 @@ S10,21.50,27.00,wood knock
 S11,27.00,30.90,sea rush
 S11,27.00,30.90,water slap on the hull
 S12,30.90,33.10,wind gust
-S12,30.90,33.10,slack line taps the hatch
+S12,30.90,33.10,slack gripe taps the hatch
 S13,33.10,35.70,oars dip and pull
 S13,33.10,35.70,sea wash
 S14,35.70,37.70,boots land on deck
-S14,35.70,37.70,bag dropped
-S14,35.70,37.70,rope coil thrown down
+S14,35.70,37.70,hand slaps wet wood
+S14,35.70,37.70,boat knocks the hull
 S15,37.70,40.70,canvas fills
 S15,37.70,40.70,bow wave
 S15,37.70,40.70,hull creak
-S16,40.70,43.90,low wind
-S16,40.70,43.90,a single bell-like rigging ping
-S16,40.70,43.90,sea
+S16,40.70,42.50,lamp creak
+S16,40.70,42.50,hull work
+S16,40.70,42.50,drip
+S16b,42.50,43.90,drip
+S16b,42.50,43.90,creak
 S17,43.90,47.50,wind
 S17,43.90,47.50,rigging creak
 S17,43.90,47.50,sea
@@ -92,8 +94,9 @@ S36,97.50,100.70,water slop
 S37,100.70,104.10,line runs through hands
 S37,100.70,104.10,rod knocks the well
 S37,100.70,104.10,splash below
-S38,104.10,106.10,rod set down on planks
-S38,104.10,106.10,drip
+S38,104.10,106.10,rod drips
+S38,104.10,106.10,line slack
+S38,104.10,106.10,wind
 S39,106.10,108.30,low drone
 S39,106.10,108.30,water settle
 S40,108.30,109.90,mast creak
@@ -103,8 +106,8 @@ S41,109.90,112.70,canvas
 S42,112.70,116.30,wind
 S42,112.70,116.30,rigging
 S42,112.70,116.30,his breath
-S43,116.30,120.30,map whoosh
-S43,116.30,120.30,marker thump
+S43,116.30,120.30,chart paper rustle
+S43,116.30,120.30,pin pressed in
 S44,120.30,124.50,door latch
 S44,120.30,124.50,boots
 S44,120.30,124.50,lantern creak
@@ -114,11 +117,12 @@ S46,128.90,132.10,page turn
 S47,132.10,134.70,chalk tap
 S48,134.70,138.50,breath
 S48,134.70,138.50,hull creak
+S48,134.70,138.50,chalk dust brushed
 S49,138.50,141.30,page settles
 S50,141.30,144.30,chalk scratch
-S51,144.30,150.30,map whoosh
-S51,144.30,150.30,marker thump
+S51,144.30,150.30,lamp hiss
+S51,144.30,150.30,pin pressed in
 S52,150.30,154.10,whoosh
-S52,150.30,154.10,marker thump
+S52,150.30,154.10,pin pressed in
 S53,154.10,158.30,low drone
-S53,154.10,158.30,sea under
+S53,154.10,158.30,lamp hiss

@@ -1,0 +1,42 @@
+{
+ "shot": "S08",
+ "bad": [],
+ "contacts": [
+  {
+   "person": "Deveau",
+   "part": "Deveau_body",
+   "other": "wooden_lantern_01_handle",
+   "pairs": 38,
+   "grip": true,
+   "ok": true,
+   "at": [
+    0.115,
+    -0.107,
+    1.336
+   ],
+   "span": [
+    0.098,
+    0.042,
+    0.018
+   ]
+  },
+  {
+   "person": "Deveau",
+   "part": "Deveau_shirt",
+   "other": "wooden_lantern_01_handle",
+   "pairs": 36,
+   "grip": true,
+   "ok": true,
+   "at": [
+    0.065,
+    -0.128,
+    1.339
+   ],
+   "span": [
+    0.01,
+    0.009,
+    0.005
+   ]
+  }
+ ]
+}

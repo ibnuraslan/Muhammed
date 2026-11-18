@@ -1,0 +1,42 @@
+{
+ "shot": "S23",
+ "bad": [],
+ "contacts": [
+  {
+   "person": "Morehouse",
+   "part": "Morehouse_body",
+   "other": "trunk_end.001",
+   "pairs": 217,
+   "grip": true,
+   "ok": true,
+   "at": [
+    -0.921,
+    -7.203,
+    2.263
+   ],
+   "span": [
+    0.029,
+    0.022,
+    0.051
+   ]
+  },
+  {
+   "person": "Morehouse",
+   "part": "Morehouse_body",
+   "other": "trunk_roof.001",
+   "pairs": 563,
+   "grip": true,
+   "ok": true,
+   "at": [
+    -0.912,
+    -7.225,
+    2.31
+   ],
+   "span": [
+    0.059,
+    0.139,
+    0.078
+   ]
+  }
+ ]
+}

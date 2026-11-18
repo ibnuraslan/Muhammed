@@ -37,7 +37,7 @@ def ghost_mat(name, edge=(0.95, 0.65, 0.35), body=(0.6, 0.75, 0.9), alpha=0.12):
     m = bpy.data.materials.new(name); m.use_nodes = True
     N = m.node_tree.nodes; Lk = m.node_tree.links; N.remove(N["Principled BSDF"])
     fr = N.new("ShaderNodeLayerWeight"); fr.inputs['Blend'].default_value = 0.12
-    em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (*edge, 1); em.inputs['Strength'].default_value = 1.6
+    em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (*edge, 1); em.inputs['Strength'].default_value = 0.9
     tr = N.new("ShaderNodeBsdfTransparent")
     gl = N.new("ShaderNodeBsdfGlossy"); gl.inputs['Roughness'].default_value = 0.15; gl.inputs['Color'].default_value = (*body, 1)
     m1 = N.new("ShaderNodeMixShader"); m1.inputs[0].default_value = alpha
@@ -79,7 +79,11 @@ def hold_water(z_top, inset=0.12, name="hold_water"):
             a = i * per + k; b_ = i * per + (k + 1) % per
             F.append([a, b_, b_ + per, a + per])
     F.append(list(range(per))[::-1]); F.append([ns * per + k for k in range(per)])
-    m = E.principled("holdwater", (0.04, 0.3, 0.75), rough=0.08, **{"Emission Color": (0.03, 0.25, 0.75, 1), "Emission Strength": 1.4})
+    # real bilge water: dark sea-green, glossy, light dies in it with depth (no glow)
+    m = E.principled("holdwater", (0.1, 0.2, 0.18), rough=0.08, **{"Transmission Weight": 0.5, "IOR": 1.333})
+    va = m.node_tree.nodes.new("ShaderNodeVolumeAbsorption"); va.inputs['Color'].default_value = (0.25, 0.45, 0.38, 1)
+    va.inputs['Density'].default_value = 1.5
+    m.node_tree.links.new(va.outputs[0], m.node_tree.nodes["Material Output"].inputs['Volume'])
     o = ship.mesh_obj(name, V, F, m, smooth=True)
     return o
 
@@ -87,7 +91,7 @@ def hold_water(z_top, inset=0.12, name="hold_water"):
 def hold_cutaway(water_ft=3.5):
     E.render_setup(samples=96)
     mc = ship.build("MCx", sails="found", rail_gap=None, detail=False, wet=0.2)
-    g = ghost_mat("xray", edge=(1.0, 0.62, 0.3), body=(0.5, 0.6, 0.7), alpha=0.03)
+    g = ghost_mat("xray", edge=(1.0, 0.62, 0.3), body=(0.5, 0.6, 0.7), alpha=0.015)
     for o in list(mc["coll"].objects):
         if o.type not in ('MESH', 'CURVE'):
             continue
@@ -273,3 +277,124 @@ def dashed_route(name, pts_lonlat, color=ORANGE, dash=0.35, gap=0.22, r=0.05, z=
 def label(name, body, lon, lat, size=0.55, dx=0.0, dy=0.6, color=(0.95, 0.92, 0.86)):
     p = geo(lon, lat, 0.25) + Vector((dx, dy, 0))
     return text3d(name, body, p, size=size, color=color, strength=2.2)
+
+
+# ============================================================================ the chart table (P4's look, shared)
+AZORES_BBOX = (-28.6, 35.6, -15.6, 39.9)          # = mary_celeste_p4 MAP_BBOX, so P1 and P4 maps match
+WIDE_BBOX = (-28.6, 33.4, -4.6, 41.6)             # out to Gibraltar
+LAST = (-24.98, 37.03)                            # 25 Nov 1872, 8 a.m.: Santa Maria's eastern point SSW, 6 miles (the slate)
+FOUND = (-17.25, 38.33)                           # 4 Dec 1872 (sea time): where the Dei Gratia found her
+GIB = (-5.35, 36.13)
+INK = (0.82, 0.76, 0.62)          # cream chart lettering (reads on the dark painted sea)
+
+
+def chart_table(bbox=AZORES_BBOX, zoom=8, out_w=1100, SX=2.2):
+    """A real 3D relief chart on a chart table under a lamp (mary_celeste_p4 shots/sets.set_table, same recipe):
+    terrain + bathymetry from the AWS Terrain Tiles, painted-relief chart material, an oak frame, papers, a lamp.
+    Returns dict with mp(lon, lat, lift) -> world point on the chart surface."""
+    import terrain as T, ph
+    E.render_setup(samples=64)
+    out = {}
+    tbl = ship.wood("wood_table_large", 0.7, tint=(0.85, 0.6, 0.42), name="chart_table")
+    ship.box("tabletop", (0, 0, 0.75), (3.2, 1.9, 0.06), tbl, bevel=0.01)
+    for sx in (-1.45, 1.45):
+        for sy in (-0.8, 0.8):
+            ship.box("leg", (sx, sy, 0.36), (0.09, 0.09, 0.72), tbl)
+    TZ = 0.78
+    e, lons, lats = T.grid(*bbox, zoom=zoom, out_w=out_w)
+    SY = SX * e.shape[0] / e.shape[1]
+    base = ship.wood("oak_veneer_01", 0.5, tint=(0.8, 0.6, 0.42), name="mapbase")
+    ship.box("map_frame", (0, 0.1, TZ + 0.012), (SX + 0.08, SY + 0.08, 0.024), base, bevel=0.004)
+    mo = T.relief_mesh("map", e, SX, SY, land_k=3.0e-5, sea_k=2.6e-6, mat=T.map_material(), skirt=0.0)
+    MZ = TZ + 0.024 + 6200 * 2.6e-6 + 0.001
+    mo.location = (0, 0.1, MZ)
+
+    def mp(lon, lat, lift=0.0):
+        x, y = T.lonlat_to_map(lon, lat, bbox, (SX, SY))
+        h = T.height_at(e, lons, lats, lon, lat)
+        return Vector((x, y + 0.1, MZ + (h * 2.6e-6 if h < 0 else h * 3.0e-5) + lift))
+    out.update(mp=mp, SX=SX, SY=SY, TZ=TZ, MZ=MZ, bbox=bbox)
+    pap = E.principled("paper", (0.78, 0.68, 0.5), rough=0.8)
+    import random
+    rng = random.Random(2)
+    for k in range(5):
+        ship.box("paper", (1.32 + rng.uniform(-0.05, 0.05), -0.62 + rng.uniform(-0.05, 0.05), TZ + 0.002 + k * 0.0015),
+                 (0.21, 0.297, 0.001), pap, rot=(0, 0, rng.uniform(-0.3, 0.3)))
+    lamp, lms = ph.model("vintage_oil_lamp"); lamp.location = (1.35, 0.7, TZ)
+    E.point("lampflame", (1.35, 0.7, TZ + 0.42), 22, (1.0, 0.6, 0.3))
+    k = bpy.data.lights.new("key", 'SPOT'); k.energy = 420; k.color = (1.0, 0.74, 0.48); k.shadow_soft_size = 0.25
+    k.spot_size = math.radians(60); k.spot_blend = 0.7
+    ko = bpy.data.objects.new("key", k); bpy.context.scene.collection.objects.link(ko); ko.location = (0.6, 0.4, 2.6)
+    ko.rotation_euler = (Vector((-0.1, 0.05, TZ)) - ko.location).to_track_quat('-Z', 'Y').to_euler()
+    E.area("rim", (-1.8, 1.8, 1.4), (0, 0, TZ), 80, size=1.5, color=(0.9, 0.7, 0.5))
+    w = bpy.data.worlds.new("W"); bpy.context.scene.world = w; w.use_nodes = True
+    w.node_tree.nodes["Background"].inputs[0].default_value = (0.008, 0.005, 0.004, 1)
+    walls = ship.wood("dark_wooden_planks", 1.2, tint=(0.6, 0.42, 0.3), name="room")
+    ship.box("wall_back", (0, 2.6, 1.6), (8, 0.1, 3.2), walls)
+    ship.box("floor_room", (0, 0, -0.01), (8, 8, 0.02), walls)
+    return out
+
+
+def pin(ch, name, lon, lat, head=(0.55, 0.04, 0.02), scale=1.6):
+    """A brass chart pin with a red glass head, pushed into the chart."""
+    p = ch["mp"](lon, lat)
+    brass = E.principled("pinbrass", (0.72, 0.5, 0.22), rough=0.25, metal=1.0)
+    red = E.principled("pinhead_" + name, head, rough=0.25)
+    ship.cyl(f"pin_{name}", p - Vector((0, 0, 0.004)), p + Vector((0, 0, 0.07 * scale)), 0.0016 * scale, mat=brass, verts=10)
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.008 * scale, location=p + Vector((0, 0, 0.074 * scale)))
+    o = bpy.context.active_object; o.name = f"pinhead_{name}"; o.data.materials.append(red); bpy.ops.object.shade_smooth()
+    return p
+
+
+def chart_bands(ch, name, lon, lat, radii=((0.02, 0.035), (0.05, 0.062)), strength=1.4):
+    """Filled soft orange bands lying on the chart round a point (the house highlight)."""
+    c = ch["mp"](lon, lat, 0.0012); out = []
+    for k, (r0, r1) in enumerate(radii):
+        n = 72; V = []; F = []
+        for i in range(n):
+            a = 2 * math.pi * i / n
+            for rr in (r0, (r0 + r1) / 2, r1):
+                V.append((c.x + rr * math.cos(a), c.y + rr * math.sin(a), c.z + 0.0004))
+        for i in range(n):
+            j = (i + 1) % n
+            F.append([3 * i, 3 * j, 3 * j + 1, 3 * i + 1]); F.append([3 * i + 1, 3 * j + 1, 3 * j + 2, 3 * i + 2])
+        o = ship.mesh_obj(f"{name}{k}", V, F, None, smooth=True)
+        ca = o.data.color_attributes.new("a", 'FLOAT_COLOR', 'POINT')
+        for i in range(len(V)):
+            v = (1.0 if i % 3 == 1 else 0.0) * (0.85 - 0.3 * k); ca.data[i].color = (v, v, v, 1)
+        m = bpy.data.materials.new(f"{name}{k}_m"); m.use_nodes = True; N = m.node_tree.nodes; Lk = m.node_tree.links
+        N.remove(N["Principled BSDF"])
+        at = N.new("ShaderNodeAttribute"); at.attribute_name = "a"
+        em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (*ORANGE, 1); em.inputs['Strength'].default_value = strength
+        tr = N.new("ShaderNodeBsdfTransparent"); mx = N.new("ShaderNodeMixShader")
+        Lk.new(at.outputs['Fac'], mx.inputs[0]); Lk.new(tr.outputs[0], mx.inputs[1]); Lk.new(em.outputs[0], mx.inputs[2])
+        Lk.new(mx.outputs[0], N["Material Output"].inputs['Surface'])
+        o.data.materials.append(m); o.visible_shadow = False
+        out.append(o)
+    return out
+
+
+def pencil_route(ch, name, pts, dash=0.03, gap=0.018, r=0.0024):
+    """The route drawn on the chart in pencil: short graphite dashes lying on the paper."""
+    m = E.principled("graphite", (0.06, 0.06, 0.065), rough=0.45, metal=0.3)
+    P = [ch["mp"](a, b, 0.0006) for a, b in pts]
+    out = []; on = True
+    for a, b in zip(P[:-1], P[1:]):
+        L = (b - a).length; d = (b - a).normalized(); t = 0.0
+        while t < L:
+            t1 = min(L, t + (dash if on else gap))
+            if on:
+                out.append(ship.cyl(name, a + d * t, a + d * t1, r, mat=m, verts=6))
+            on = not on; t = t1
+    return out
+
+
+def chart_label(ch, name, body, lon, lat, size=0.022, dx=0.0, dy=0.03, rot=0.0):
+    """Lettering printed on the chart (dark ink, lying flat on the paper)."""
+    p = ch["mp"](lon, lat, 0.001) + Vector((dx, dy, 0))
+    cu = bpy.data.curves.new(name, 'FONT'); cu.body = body; cu.size = size; cu.align_x = 'CENTER'; cu.align_y = 'CENTER'
+    cu.font = bpy.data.fonts.load(FONT, check_existing=True)
+    o = bpy.data.objects.new(name, cu); bpy.context.scene.collection.objects.link(o)
+    o.location = p; o.rotation_euler = (0, 0, rot)
+    o.data.materials.append(E.principled(name + "_ink", INK, rough=0.6))
+    return o

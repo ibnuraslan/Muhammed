@@ -38,7 +38,7 @@ def wet_cloth_mat(name, color, wet, stripes=False, sheen=0.4):
     dk = N.new("ShaderNodeMix"); dk.data_type = 'RGBA'; dk.blend_type = 'MULTIPLY'; dk.inputs[7].default_value = (0.52, 0.5, 0.47, 1)
     Lk.new(wm.outputs[0], dk.inputs['Factor']); Lk.new(base, dk.inputs[6])
     Lk.new(dk.outputs[2], p.inputs['Base Color'])
-    rr = N.new("ShaderNodeMapRange"); rr.inputs['To Min'].default_value = 0.85; rr.inputs['To Max'].default_value = 0.3
+    rr = N.new("ShaderNodeMapRange"); rr.inputs['To Min'].default_value = 0.92; rr.inputs['To Max'].default_value = 0.55
     Lk.new(wm.outputs[0], rr.inputs['Value']); Lk.new(rr.outputs[0], p.inputs['Roughness'])
     p.inputs['Sheen Weight'].default_value = sheen; p.inputs['Specular IOR Level'].default_value = 0.55
     wv2 = N.new("ShaderNodeTexWave"); wv2.inputs['Scale'].default_value = 300; Lk.new(tc.outputs['Object'], wv2.inputs['Vector'])
@@ -190,13 +190,14 @@ def _berth(BX0, BX1, BY0, RY, TOP, BOARD, berth_m, beams_m, imp=None, wet=0.85, 
         for i in range(nx + 1):
             x = x0 + (x1 - x0) * i / nx; y = y0 + (y1 - y0) * j / ny
             edge = min(i, nx - i, j, ny - j) / 4.0
-            z = TOP - 0.085 * imp(x, y) - 0.03 * math.exp(-edge) + 0.004 * noise.noise(Vector((x * 6, y * 6, 0.5)))
+            z = TOP - 0.05 * imp(x, y) - 0.03 * math.exp(-edge) + 0.004 * noise.noise(Vector((x * 6, y * 6, 0.5))) \
+                + 0.014 * noise.noise(Vector((x * 2.6, y * 3.1, 4.2))) * (1 - math.exp(-edge))
             V.append((x, y, z)); UV.append(((x - x0) * 2, (y - y0) * 2))
     for j in range(ny):
         for i in range(nx):
             a = j * (nx + 1) + i
             F.append([a, a + 1, a + nx + 2, a + nx + 1])
-    matt = ship.mesh_obj(name + "_mattress", V, F, wet_cloth_mat("ticking", (0.62, 0.55, 0.44), wet, stripes=True))
+    matt = ship.mesh_obj(name + "_mattress", V, F, wet_cloth_mat("ticking", (0.46, 0.4, 0.3), wet, stripes=True))      # straw tick
     uvl = matt.data.uv_layers.new(name="UVMap")
     for l in matt.data.loops:
         uvl.data[l.index].uv = UV[l.vertex_index]
@@ -204,10 +205,11 @@ def _berth(BX0, BX1, BY0, RY, TOP, BOARD, berth_m, beams_m, imp=None, wet=0.85, 
     sheet_V = []
     for (x, y, z) in V:
         d = imp(x, y)
-        cr = 0.006 * noise.noise(Vector((x * 9, y * 14, 2.0))) * (0.3 + d) + 0.006 * math.sin((y - CHILD["cy"]) * 55 + x * 11) * min(1.0, 3 * d * (1 - d))
+        cr = 0.006 * noise.noise(Vector((x * 9, y * 14, 2.0))) * (0.3 + d) + 0.009 * noise.noise(Vector((x * 5, y * 21, 7.0))) ** 2 \
+            + 0.005 * math.sin((y - CHILD["cy"]) * 55 + x * 11) * min(1.0, 3 * d * (1 - d))
         sheet_V.append((x, y, z + 0.006 + cr))
     keepF = [f for f in F if V[f[0]][0] < BX1 - 0.55]
-    sheet_m = wet_cloth_mat("sheet", (0.72, 0.66, 0.56), wet + 0.1, sheen=0.3)
+    sheet_m = wet_cloth_mat("sheet", (0.26, 0.21, 0.16), wet + 0.1, sheen=0.55)       # grey-brown wool blanket
     sheet = ship.mesh_obj(name + "_sheet", sheet_V, keepF, sheet_m)
     ca = sheet.data.color_attributes.new("imp", 'FLOAT_COLOR', 'POINT')
     for i, (x, y, z) in enumerate(sheet_V):
@@ -215,10 +217,10 @@ def _berth(BX0, BX1, BY0, RY, TOP, BOARD, berth_m, beams_m, imp=None, wet=0.85, 
     _N = sheet_m.node_tree.nodes; _L = sheet_m.node_tree.links; _p = _N["Principled BSDF"]
     _at = _N.new("ShaderNodeAttribute"); _at.attribute_name = "imp"
     _bc = _p.inputs['Base Color'].links[0].from_socket
-    _dk = _N.new("ShaderNodeMix"); _dk.data_type = 'RGBA'; _dk.blend_type = 'MULTIPLY'; _dk.inputs[7].default_value = (0.42, 0.4, 0.37, 1)
+    _dk = _N.new("ShaderNodeMix"); _dk.data_type = 'RGBA'; _dk.blend_type = 'MULTIPLY'; _dk.inputs[7].default_value = (0.55, 0.52, 0.5, 1)
     _L.new(_at.outputs['Fac'], _dk.inputs['Factor']); _L.new(_bc, _dk.inputs[6]); _L.new(_dk.outputs[2], _p.inputs['Base Color'])
     _rs = _p.inputs['Roughness'].links[0].from_socket
-    _rm = _N.new("ShaderNodeMix"); _rm.data_type = 'FLOAT'; _rm.inputs[3].default_value = 0.12
+    _rm = _N.new("ShaderNodeMix"); _rm.data_type = 'FLOAT'; _rm.inputs[3].default_value = 0.6
     _L.new(_at.outputs['Fac'], _rm.inputs['Factor']); _L.new(_rs, _rm.inputs[2]); _L.new(_rm.outputs[0], _p.inputs['Roughness'])
     uvl = sheet.data.uv_layers.new(name="UVMap")
     for l in sheet.data.loops:
@@ -229,9 +231,10 @@ def _berth(BX0, BX1, BY0, RY, TOP, BOARD, berth_m, beams_m, imp=None, wet=0.85, 
         for j in range(ny + 1):
             for i in range(nx + 1):
                 u = i / nx; v = j / ny
-                x = BX1 - 0.62 + 0.6 * u
+                x = BX1 - 1.0 + 0.98 * u
                 y = BY0 - 0.12 + (RY - BY0 + 0.1) * v
-                hh = 0.05 + 0.05 * math.sin(u * math.pi * 3.2 + v * 1.5) ** 2 + 0.035 * noise.noise(Vector((u * 5, v * 5, 3.0)))
+                hh = 0.03 + 0.06 * math.sin(u * math.pi * 4.2 + v * 2.1) ** 2 * (0.4 + u) + 0.03 * noise.noise(Vector((u * 7, v * 6, 3.0))) \
+                    + 0.015 * noise.noise(Vector((u * 19, v * 17, 1.0)))
                 z = TOP + 0.01 + hh
                 if y < BY0 + 0.02:
                     over = (BY0 + 0.02 - y)
@@ -242,7 +245,7 @@ def _berth(BX0, BX1, BY0, RY, TOP, BOARD, berth_m, beams_m, imp=None, wet=0.85, 
             for i in range(nx):
                 a = j * (nx + 1) + i
                 bF.append([a, a + 1, a + nx + 2, a + nx + 1])
-        bl = ship.mesh_obj(name + "_blanket", bV, bF, wet_cloth_mat("blanket", (0.20, 0.07, 0.05), wet, sheen=0.7))
+        bl = ship.mesh_obj(name + "_blanket", bV, bF, wet_cloth_mat("blanket", (0.1, 0.075, 0.055), wet, sheen=0.6))
         bl.modifiers.new("Thick", "SOLIDIFY").thickness = 0.008
         s = bl.modifiers.new("Sub", "SUBSURF"); s.levels = 1; s.render_levels = 2
     bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, radius=1, location=(BX0 + 0.24, (BY0 + RY) / 2, TOP + 0.06))
@@ -255,16 +258,42 @@ def _berth(BX0, BX1, BY0, RY, TOP, BOARD, berth_m, beams_m, imp=None, wet=0.85, 
             v.co.z -= 0.035 * dd
         v.co.z = max(v.co.z, -0.055)
     bpy.ops.object.shade_smooth()
-    pil.data.materials.append(wet_cloth_mat("pillowcase", (0.7, 0.64, 0.54), wet))
+    pil.data.materials.append(wet_cloth_mat("pillowcase", (0.5, 0.46, 0.38), wet))
     return matt, sheet
+
+
+def panelling(soot_at=None, RZ=2.0):
+    """Dark varnished cabin panelling with lamp soot on the deckhead (the shared look frame b, Nov 18 notes)."""
+    walls = wood("dark_wooden_planks", 1.4, wet=0.15, tint=(0.3, 0.2, 0.13), name="walls")
+    walls.node_tree.nodes["Principled BSDF"].inputs["Coat Weight"].default_value = 0.35
+    beams_m = ship.paint("beams", (0.16, 0.12, 0.08), rough=0.5, grime=0.7, chips=0.3, scale=6)
+    berth_m = wood("brown_planks_05", 1.6, wet=0.3, tint=(0.34, 0.22, 0.14), name="berthwood")
+    berth_m.node_tree.nodes["Principled BSDF"].inputs["Coat Weight"].default_value = 0.3
+    if soot_at is not None:
+        soot(walls, soot_at, RZ); soot(beams_m, soot_at, RZ)
+    return walls, beams_m, berth_m
+
+
+def soot(m, at, RZ, r0=0.25, r1=1.1, k=0.85):
+    N = m.node_tree.nodes; Lk = m.node_tree.links; p = N["Principled BSDF"]
+    g = N.new("ShaderNodeNewGeometry"); d = N.new("ShaderNodeVectorMath"); d.operation = 'DISTANCE'
+    d.inputs[1].default_value = (at[0], at[1], RZ); Lk.new(g.outputs['Position'], d.inputs[0])
+    mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = r0; mr.inputs['From Max'].default_value = r1
+    mr.inputs['To Min'].default_value = k; mr.inputs['To Max'].default_value = 0.0; Lk.new(d.outputs['Value'], mr.inputs['Value'])
+    src = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs[7].default_value = (0.08, 0.07, 0.06, 1)
+    Lk.new(mr.outputs[0], mx.inputs['Factor'])
+    if src is not None:
+        Lk.new(src, mx.inputs[6])
+    else:
+        mx.inputs[6].default_value = p.inputs['Base Color'].default_value
+    Lk.new(mx.outputs[2], p.inputs['Base Color'])
 
 
 def captain_cabin(fog=0.022, skylight=450.0):
     c = CAB; RX, RY, RZ = c["RX"], c["RY"], c["RZ"]
-    walls = wood("dark_wooden_planks", 1.4, wet=0.15, tint=(0.85, 0.6, 0.42), name="walls")
-    floor = wood("weathered_planks", 0.9, wet=c["WET"], tint=(0.8, 0.66, 0.52), name="floor")
-    beams_m = ship.paint("beams", (0.42, 0.33, 0.22), rough=0.5, grime=0.6, chips=0.3, scale=6)
-    berth_m = wood("brown_planks_05", 1.6, wet=0.3, tint=(0.75, 0.5, 0.34), name="berthwood")
+    walls, beams_m, berth_m = panelling(soot_at=(0.0, 0.4), RZ=RZ)
+    floor = wood("weathered_planks", 0.9, wet=c["WET"], tint=(0.6, 0.48, 0.36), name="floor")
     _room(RX, RY, RZ, walls, floor, beams_m, sky=c["SKY"], door=c["DOOR"])
     for sg in (1, -1):
         ship.box(f"chair_rail{sg}", (0, sg * (RY - 0.015), 0.95), (2 * RX, 0.035, 0.06), berth_m, bevel=0.005)
@@ -277,7 +306,7 @@ def captain_cabin(fog=0.022, skylight=450.0):
     chest_m = wood("wood_table_worn", 1.5, wet=0.4, tint=(0.62, 0.42, 0.28), name="chest")
     ship.box("chest", (1.15, 0.95, 0.24), (0.75, 0.5, 0.48), chest_m, rot=(0, 0, 0.12), bevel=0.012)
     ship.box("chest_lid", (1.15, 0.95, 0.495), (0.78, 0.53, 0.04), chest_m, rot=(0, 0, 0.12), bevel=0.01)
-    ship.box("puddles", (0, 0, 0.002), (2 * RX - 0.02, 2 * RY - 0.02, 0.003), puddle_mat())
+    ship.box("puddles", (0, 0, 0.0005), (2 * RX - 0.02, 2 * RY - 0.02, 0.001), puddle_mat())
     _daylight(c["SKY"], RZ, skylight)
     if float(os.environ.get("NOFOG", "0")) == 0:
         _air(RX, RY, RZ, fog)
@@ -307,10 +336,8 @@ MATE = dict(RX=1.35, RY=1.2, RZ=1.98, BX0=-1.28, BX1=0.62, BY0=0.5, TOP=0.62, BO
 
 def mate_cabin(fog=0.02, skylight=320.0):
     c = MATE; RX, RY, RZ = c["RX"], c["RY"], c["RZ"]
-    walls = wood("dark_wooden_planks", 1.4, wet=0.1, tint=(0.9, 0.64, 0.46), name="walls")
-    floor = wood("weathered_planks", 0.9, wet=0.5, tint=(0.8, 0.66, 0.52), name="floor")
-    beams_m = ship.paint("beams", (0.42, 0.33, 0.22), rough=0.5, grime=0.6, chips=0.3, scale=6)
-    berth_m = wood("brown_planks_05", 1.6, wet=0.2, tint=(0.75, 0.5, 0.34), name="berthwood")
+    walls, beams_m, berth_m = panelling(soot_at=(c["TABLE"][0] - 0.1, c["TABLE"][1] - 0.55), RZ=RZ)
+    floor = wood("weathered_planks", 0.9, wet=0.5, tint=(0.6, 0.48, 0.36), name="floor")
     _room(RX, RY, RZ, walls, floor, beams_m, sky=c["SKY"], door=c["DOOR"])
     ship.box("chair_rail", (0, -(RY - 0.015), 0.95), (2 * RX, 0.035, 0.06), berth_m, bevel=0.005)
     _berth(c["BX0"], c["BX1"], c["BY0"], RY, c["TOP"], c["BOARD"], berth_m, beams_m, wet=0.35, blanket_heap=False, name="mate")
@@ -318,17 +345,18 @@ def mate_cabin(fog=0.02, skylight=320.0):
     tx, ty, tz = c["TABLE"]
     top_m = wood("wood_table_worn", 1.2, wet=0.1, tint=(0.7, 0.45, 0.3), name="tabletop")
     ship.box("table_top", (tx, ty, tz), (1.0, 0.7, 0.04), top_m, bevel=0.006)
+    # fiddle rails on the far side and the ends only (the near one is unshipped: the mate writes at this side)
+    ship.box("fiddle", (tx, ty - 0.34, tz + 0.035), (1.0, 0.02, 0.03), top_m)
     for sx_ in (-1, 1):
-        ship.box("fiddle", (tx, ty + sx_ * 0.34, tz + 0.035), (1.0, 0.02, 0.03), top_m)
         ship.box("fiddle", (tx + sx_ * 0.49, ty, tz + 0.035), (0.02, 0.7, 0.03), top_m)
     ship.cyl("table_post", (tx, ty, 0), (tx, ty, tz - 0.02), 0.06, mat=top_m, verts=16)
-    ship.box("table_foot", (tx, ty, 0.02), (0.5, 0.4, 0.04), top_m, bevel=0.01)
+    ship.box("table_foot", (tx, ty - 0.05, 0.02), (0.24, 0.24, 0.04), top_m, bevel=0.01)
     st, _ = ph.model("wooden_stool_01"); st.location = (tx + 0.1, ty + 0.62, 0); st.rotation_euler = (0, 0, 0.3)
     book = logbook((tx - 0.12, ty + 0.02, tz + 0.02), rot=0.12)
     sl = slate((tx + 0.3, ty - 0.08, tz + 0.02), rot=-0.25)
-    lamp = lantern((tx - 0.1, ty - 0.55, RZ - 0.15), energy=30.0)
+    lamp = lantern((tx - 0.1, ty - 0.55, RZ - 0.15), energy=70.0)
     ship.cyl("lamp_hook", (tx - 0.1, ty - 0.55, RZ - 0.15), (tx - 0.1, ty - 0.55, RZ), 0.006, mat=ship.iron("hookiron"), verts=8)
-    ship.box("puddles", (0, 0, 0.002), (2 * RX - 0.02, 2 * RY - 0.02, 0.003), puddle_mat(cover=0.2))
+    ship.box("puddles", (0, 0, 0.0005), (2 * RX - 0.02, 2 * RY - 0.02, 0.001), puddle_mat(cover=0.2))
     _daylight(c["SKY"], RZ, skylight)
     if float(os.environ.get("NOFOG", "0")) == 0:
         _air(RX, RY, RZ, fog)
@@ -405,53 +433,138 @@ def slate(c, rot=0.0):
 
 # ============================================================================ galley
 GAL = dict(RX=1.9, RY=1.55, RZ=1.95, SILL=0.32, WATER=0.29, DOOR=("x-", 0.35, 0.72, 1.7))
+STAR6 = "da4bd868e0c04fc59678391b0128ede8"         # "Star 6" cast-iron stove, jefpat, CC-BY 4.0 (Sketchfab)
+
+
+def galley_water_mat(name="galleywater"):
+    """Dirty sea water a few inches deep over the planking: dark, glossy, a little turbid, with a slow moving
+    ripple (4D noise; anim keys W) and a scum of soot near the stove."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    N = m.node_tree.nodes; Lk = m.node_tree.links; p = N["Principled BSDF"]
+    p.inputs['Base Color'].default_value = (0.012, 0.014, 0.011, 1); p.inputs['Roughness'].default_value = 0.05
+    p.inputs['Transmission Weight'].default_value = 0.55; p.inputs['IOR'].default_value = 1.333
+    tc = N.new("ShaderNodeTexCoord")
+    nz = N.new("ShaderNodeTexNoise"); nz.noise_dimensions = '4D'; nz.name = "ripple"
+    nz.inputs['Scale'].default_value = 3.5; nz.inputs['Detail'].default_value = 4; nz.inputs['W'].default_value = 0.0
+    Lk.new(tc.outputs['Object'], nz.inputs['Vector'])
+    bm = N.new("ShaderNodeBump"); bm.inputs['Strength'].default_value = 0.7; bm.inputs['Distance'].default_value = 0.012
+    Lk.new(nz.outputs['Fac'], bm.inputs['Height']); Lk.new(bm.outputs['Normal'], p.inputs['Normal'])
+    vol = N.new("ShaderNodeVolumeAbsorption"); vol.inputs['Color'].default_value = (0.3, 0.28, 0.2, 1); vol.inputs['Density'].default_value = 16
+    Lk.new(vol.outputs[0], N["Material Output"].inputs['Volume'])
+    return m
+
+
+def cast_iron(meshes):
+    """Read the scanned stove as worn cast iron under a lantern: lift its near-black albedo to iron grey (keeping its
+    texture detail), satin roughness, and rust blooms low down where the sea water has been at it."""
+    seen = set()
+    for o in meshes:
+        for sl in o.material_slots:
+            m = sl.material
+            if m is None or m.name in seen or not m.use_nodes:
+                continue
+            seen.add(m.name)
+            N = m.node_tree.nodes; Lk = m.node_tree.links
+            p = next((n for n in N if n.type == 'BSDF_PRINCIPLED'), None)
+            if p is None:
+                continue
+            src = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
+            lift = N.new("ShaderNodeMix"); lift.data_type = 'RGBA'; lift.blend_type = 'SCREEN'; lift.inputs['Factor'].default_value = 1.0
+            lift.inputs[7].default_value = (0.07, 0.065, 0.06, 1)
+            if src is not None:
+                Lk.new(src, lift.inputs[6])
+            else:
+                lift.inputs[6].default_value = p.inputs['Base Color'].default_value
+            g = N.new("ShaderNodeNewGeometry"); sp = N.new("ShaderNodeSeparateXYZ"); Lk.new(g.outputs['Position'], sp.inputs[0])
+            nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 9; Lk.new(g.outputs['Position'], nz.inputs['Vector'])
+            mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.45; mr.inputs['From Max'].default_value = 0.1
+            Lk.new(sp.outputs['Z'], mr.inputs['Value'])
+            mm = N.new("ShaderNodeMath"); mm.operation = 'MULTIPLY'; Lk.new(mr.outputs[0], mm.inputs[0]); Lk.new(nz.outputs['Fac'], mm.inputs[1])
+            rust = N.new("ShaderNodeMix"); rust.data_type = 'RGBA'; rust.inputs[7].default_value = (0.2, 0.08, 0.03, 1)
+            Lk.new(mm.outputs[0], rust.inputs['Factor']); Lk.new(lift.outputs[2], rust.inputs[6]); Lk.new(rust.outputs[2], p.inputs['Base Color'])
+            for k in ('Metallic', 'Roughness'):
+                for l in list(p.inputs[k].links):
+                    Lk.remove(l)
+            p.inputs['Metallic'].default_value = 0.55; p.inputs['Roughness'].default_value = 0.5
 
 
 def galley(fog=0.015, water=True):
-    """The galley in the deckhouse. The door in the after wall has a raised sill (the coaming, 'the raised lip').
-    Water has sloshed about inside up to the sill; the stove has shifted off its chocks."""
+    """The galley in the deckhouse: old, dark, sooty planking; the door in the after wall has a raised sill (the
+    'raised lip'); sea water has slopped about inside up to the sill (it moves, with things afloat in it);
+    the cast-iron stove has been knocked off its chocks and stands askew, its pipe torn from the deckhead."""
     c = GAL; RX, RY, RZ = c["RX"], c["RY"], c["RZ"]
-    walls = ship.paint("galleywalls", (0.55, 0.46, 0.32), rough=0.6, grime=0.8, chips=0.4, scale=5, wet=0.4)
-    floor = wood("weathered_planks", 0.9, wet=0.9, tint=(0.75, 0.6, 0.45), name="gfloor")
-    beams_m = ship.paint("gbeams", (0.3, 0.24, 0.17), rough=0.5, grime=0.7, chips=0.3, scale=6)
+    hx, hy = 0.85, -0.8
+    walls = wood("dark_wooden_planks", 1.3, wet=0.3, tint=(0.24, 0.17, 0.11), name="gwalls")
+    soot(walls, (hx, hy), RZ, r0=0.2, r1=1.6, k=0.9)
+    floor = wood("weathered_planks", 0.9, wet=0.9, tint=(0.38, 0.29, 0.2), name="gfloor")
+    beams_m = ship.paint("gbeams", (0.07, 0.055, 0.04), rough=0.6, grime=0.8, chips=0.2, scale=6)
+    soot(beams_m, (hx, hy), RZ, r0=0.2, r1=2.0, k=0.9)
     _room(RX, RY, RZ, walls, floor, beams_m, door=c["DOOR"])
-    # the door sill: a raised board across the bottom of the doorway
     dc, dw = c["DOOR"][1], c["DOOR"][2]
-    sill_m = wood("brown_planks_05", 1.4, wet=0.8, tint=(0.75, 0.5, 0.32), name="sill")
+    sill_m = wood("brown_planks_05", 1.4, wet=0.8, tint=(0.3, 0.2, 0.12), name="sill")
     ship.box("door_sill", (-RX - 0.03, dc, c["SILL"] / 2), (0.12, dw + 0.12, c["SILL"]), sill_m, bevel=0.01)
-    # outside: daylight on the deck beyond the door
+    # beyond the door: the sunlit deck, a bulwark and the sky, daylight pouring in low over the sill
     ext = ship.wood("wood_floor_deck", 1.0, wet=0.6, name="deckout")
     ship.box("deck_out", (-RX - 1.6, dc, -0.03), (3.0, 3.0, 0.06), ext)
-    # beyond the door: the sunlit deck, a bulwark and bright sky (an emissive backdrop), daylight pouring in
     ship.box("bulwark_out", (-RX - 2.9, dc, 0.5), (0.15, 3.0, 1.0), ship.paint("bwout", (0.42, 0.38, 0.3), rough=0.5, grime=0.5))
     ship.box("sky_out", (-RX - 4.0, dc, 2.0), (0.05, 8.0, 5.0), E.emission_mat("skyout", (0.55, 0.72, 1.0), 2.2))
     E.area("door_day", (-RX - 1.2, dc, 1.6), (-RX + 1.2, dc, 0.1), 900, size=1.4, color=(0.9, 0.95, 1.0))
     E.area("deck_sun", (-RX - 2.0, dc - 1.5, 3.0), (-RX - 1.4, dc, 0.0), 1500, size=1.0, color=(1.0, 0.86, 0.66))
-    # the stove: an iron barrel stove, knocked off its brick hearth and leaning, its pipe pulled out of the deck collar
-    hearth_m = ship.paint("hearth", (0.36, 0.12, 0.07), rough=0.8, grime=0.6, scale=12)
-    hx, hy = 0.9, -0.85
-    ship.box("hearth", (hx, hy, 0.05), (0.9, 0.8, 0.1), hearth_m, bevel=0.01)
-    ship.box("hearth_chock", (hx - 0.42, hy, 0.15), (0.06, 0.8, 0.1), sill_m)
-    sv, sms = ph.model("barrel_stove")
-    lo, hi = ph.bounds(sms); s = 0.85 / max(hi.z - lo.z, 1e-3); sv.scale = (s, s, s)
-    sv.location = (hx - 0.55, hy + 0.25, 0.0); sv.rotation_euler = (math.radians(7), math.radians(-5), math.radians(38))
-    bpy.context.view_layer.update(); lo, hi = ph.bounds(sms); sv.location.z -= lo.z
+    # brick hearth with an iron fender; the stove has slid off it toward the door and stands askew
+    hearth_m = ship.paint("hearth", (0.22, 0.08, 0.05), rough=0.85, grime=0.8, scale=12)
+    ship.box("hearth", (hx, hy, 0.06), (1.0, 0.85, 0.12), hearth_m, bevel=0.01)
     iron = ship.iron("gpipe")
-    ship.cyl("stovepipe_hanging", (hx, hy, RZ), (hx + 0.05, hy - 0.05, RZ - 0.55), 0.07, mat=iron, verts=16)
-    ship.cyl("stovepipe_fallen", (hx - 0.2, hy + 0.7, 0.07), (hx - 0.95, hy + 0.55, 0.07), 0.07, mat=iron, verts=16)
-    # pots and a kettle thrown down
-    for aid, loc, rot in (("pot_enamel_01", (0.1, 0.6, 0.0), (0, 0, 0.5)), ("brass_pot_01", (-0.6, -0.9, 0.0), (1.5, 0, 0.3)),
-                          ("wooden_bucket_02", (1.3, 0.9, 0.0), (0, 0, 0.0))):
+    ship.box("hearth_fender", (hx - 0.5, hy, 0.17), (0.04, 0.85, 0.1), iron)
+    sv = None
+    try:
+        import sf
+        sv, sms = sf.model(STAR6, height=0.78)
+        sv.rotation_euler = (math.radians(4), math.radians(-6), math.radians(205))
+        sv.location = (hx - 0.62, hy + 0.32, 0.0)
+        bpy.context.view_layer.update(); lo, hi = ph.bounds(sms); sv.location.z -= lo.z - 0.01
+        bpy.context.view_layer.update(); lo, hi = ph.bounds(sms)
+        stove_top = Vector(((lo.x + hi.x) / 2, (lo.y + hi.y) / 2, hi.z))
+        cast_iron(sms)
+    except Exception as e:
+        print("stove asset missing, falling back:", e)
+        sv, sms = ph.model("barrel_stove"); stove_top = Vector((hx - 0.6, hy + 0.3, 0.8))
+    # the stovepipe: the upper length still hangs from the deckhead collar, the lower length lies in the water
+    ship.cyl("stove_collar", (hx, hy, RZ + 0.02), (hx, hy, RZ - 0.06), 0.1, mat=iron, verts=20)
+    ship.cyl("stovepipe_hanging", (hx, hy, RZ - 0.04), (hx + 0.06, hy - 0.05, RZ - 0.6), 0.07, mat=iron, verts=16)
+    ship.cyl("stovepipe_fallen", (hx - 0.1, hy + 0.85, 0.08), (hx - 0.85, hy + 0.7, 0.07), 0.07, mat=iron, verts=16)
+    for aid, loc, rot in (("pot_enamel_01", (0.05, 0.62, 0.0), (0, 0, 0.5)), ("brass_pot_01", (-0.7, -0.95, 0.0), (1.5, 0, 0.3))):
         o, ms = ph.model(aid); o.location = loc; o.rotation_euler = rot
         bpy.context.view_layer.update(); lo, hi = ph.bounds(ms); o.location.z -= lo.z
-    # shelf with a lip along the fore wall, some crockery still on it
     ship.box("shelf", (RX - 0.18, 0, 1.25), (0.3, 2.2, 0.03), sill_m)
     ship.box("shelf_lip", (RX - 0.32, 0, 1.3), (0.02, 2.2, 0.08), sill_m)
-    # the water: standing just under the sill top, with the tide line on the walls and on the sill
+    floating = []
     if water:
-        wm = water_body_mat()
-        ship.box("galley_water", (0, 0, c["WATER"] / 2), (2 * RX - 0.01, 2 * RY - 0.01, c["WATER"]), wm)
-    tide = ship.paint("tideline", (0.16, 0.14, 0.11), rough=0.4, grime=0.2, wet=0.9)
+        wm = galley_water_mat()
+        # named as sea water ("Ocean..."): clipcheck treats water as non-solid, like the open sea (boots stand in it)
+        ship.box("Ocean_galley_water", (0, 0, c["WATER"] / 2), (2 * RX - 0.01, 2 * RY - 0.01, c["WATER"]), wm)
+        # things afloat: a wooden bucket on its side, a spoon, a sodden rag, chips of wood and straw from the bunks
+        b, bms = ph.model("wooden_bucket_02"); b.rotation_euler = (math.radians(80), 0, 0.6)
+        bpy.context.view_layer.update(); lo, hi = ph.bounds(bms); b.location = (-0.55, 0.75, c["WATER"] - 0.11 - lo.z * 0)
+        sp, sms2 = ph.model("wooden_spoon"); sp.location = (0.35, 0.15, c["WATER"] + 0.004); sp.rotation_euler = (0, 0, 1.1)
+        floating += [b, sp]
+        rng = np.random.default_rng(3)
+        chip = wood("brown_planks_05", 4.0, wet=0.9, tint=(0.4, 0.3, 0.2), name="chip")
+        straw = E.principled("straw", (0.55, 0.43, 0.2), rough=0.7)
+        for k in range(40):
+            x, y = rng.uniform(-RX + 0.2, RX - 0.3), rng.uniform(-RY + 0.2, RY - 0.2)
+            if (x - hx) ** 2 + (y - hy) ** 2 < 0.4:
+                continue
+            if k % 2:
+                o = ship.box("float_chip", (x, y, c["WATER"] + 0.002), (rng.uniform(0.03, 0.09), rng.uniform(0.01, 0.025), 0.006), chip,
+                             rot=(0, 0, rng.uniform(0, 3.14)))
+            else:
+                p0 = Vector((x, y, c["WATER"] + 0.001)); d = Vector((math.cos(k), math.sin(k), 0)) * rng.uniform(0.05, 0.12)
+                o = ship.cyl("float_straw", p0, p0 + d, 0.0015, mat=straw, verts=6)
+            floating.append(o)
+        rag = ship.box("float_rag", (0.95, 0.55, c["WATER"] + 0.003), (0.28, 0.2, 0.004), E.principled("rag", (0.3, 0.26, 0.2), rough=0.9),
+                       rot=(0, 0, 0.4))
+        floating.append(rag)
+    tide = ship.paint("tideline", (0.06, 0.05, 0.04), rough=0.4, grime=0.2, wet=0.9)
     for sg in (1, -1):
         ship.box("tide_y", (0, sg * (RY - 0.004), c["SILL"] - 0.03), (2 * RX, 0.004, 0.06), tide)
     ship.box("tide_x", (RX - 0.004, 0, c["SILL"] - 0.03), (0.004, 2 * RY, 0.06), tide)
@@ -459,4 +572,100 @@ def galley(fog=0.015, water=True):
     w.node_tree.nodes["Background"].inputs[0].default_value = (0.5, 0.42, 0.34, 1); w.node_tree.nodes["Background"].inputs[1].default_value = 0.02
     if float(os.environ.get("NOFOG", "0")) == 0:
         _air(RX, RY, RZ, fog)
-    return dict(sill=Vector((-RX - 0.03, dc, c["SILL"])), stove=Vector((hx - 0.55, hy + 0.25, 0.4)), door=Vector((-RX, dc, 0)))
+    return dict(sill=Vector((-RX - 0.03, dc, c["SILL"])), stove=stove_top - Vector((0, 0, 0.35)), door=Vector((-RX, dc, 0)),
+                floating=floating, water_z=c["WATER"])
+
+
+# ============================================================================ forecastle (crew's quarters)
+OLD_CHEST = "1bc76dbb341947fa83e147edba95dd88"     # "old chest", pavlovichevzet, CC-BY 4.0 (Sketchfab)
+FOC = dict(RX=1.6, RY=1.55, RZ=1.9)
+
+
+def oilskin(name, peg, mat, length=0.95, seed=0):
+    """An oilskin coat hanging from a peg by its collar loop: a flattened lathe shape with vertical folds."""
+    rng = np.random.default_rng(seed)
+    nu, nv = 28, 18; V = []; F = []
+    for j in range(nv + 1):
+        t = j / nv
+        w = 0.07 + 0.13 * min(1.0, t * 2.2) ** 0.7 + 0.025 * t         # shoulders out, then a slight flare
+        d = 0.035 + 0.045 * min(1.0, t * 2.5)
+        for i in range(nu):
+            a = 2 * math.pi * i / nu
+            fold = 0.012 * math.sin(a * 7 + seed) * t
+            V.append((math.cos(a) * (w + fold), math.sin(a) * (d + fold * 0.5), -t * length))
+    for j in range(nv):
+        for i in range(nu):
+            a = j * nu + i; b = j * nu + (i + 1) % nu
+            F.append([a, b, b + nu, a + nu])
+    o = ship.mesh_obj(name, V, F, mat, smooth=True)
+    o.location = Vector(peg) + Vector((0, 0.08, -0.03)); o.rotation_euler = (0, 0, rng.uniform(-0.15, 0.15))
+    s = o.modifiers.new("Sub", "SUBSURF"); s.levels = 1; s.render_levels = 2
+    return o
+
+
+def forecastle(fog=0.02):
+    """The crew's quarters forward: seven berths in two tiers, a sea chest at each, oilskins on their pegs, a lamp.
+    Everything as the men left it (the chests were found with their clothes and pipes in them)."""
+    c = FOC; RX, RY, RZ = c["RX"], c["RY"], c["RZ"]
+    walls, beams_m, berth_m = panelling(soot_at=(0.0, 0.0), RZ=RZ)
+    floor = wood("weathered_planks", 0.9, wet=0.6, tint=(0.5, 0.4, 0.3), name="ffloor")
+    _room(RX, RY, RZ, walls, floor, beams_m, door=("x-", 0.0, 0.7, 1.7))
+    out = dict(chests=[])
+    # two tiers of berths along each side (7 berths: one lower berth on the port side holds the bosun's gear)
+    for sg in (1, -1):
+        for tier, z in ((0, 0.45), (1, 1.15)):
+            ship.box(f"berth_floor{sg}{tier}", (0.2, sg * (RY - 0.35), z), (2.4, 0.66, 0.03), berth_m)
+            ship.box(f"berth_board{sg}{tier}", (0.2, sg * (RY - 0.69), z + 0.12), (2.4, 0.03, 0.22), berth_m, bevel=0.004)
+            ship.box(f"berth_straw{sg}{tier}", (0.2, sg * (RY - 0.35), z + 0.06), (2.3, 0.6, 0.09),
+                     wet_cloth_mat(f"tick{sg}{tier}", (0.42, 0.35, 0.25), 0.3, stripes=True), bevel=0.02)
+        for x in (-1.0, 0.2, 1.4):
+            ship.box("stanchion", (x, sg * (RY - 0.69), 0.8), (0.06, 0.06, 1.6), berth_m)
+    # sea chests on the floor along the berths, lids shut
+    try:
+        import sf
+        k = 0
+        for sg in (1, -1):
+            for x in ((-0.85, 0.15, 1.15) if sg > 0 else (-0.85, 0.15, 1.15, -1.35)):
+                if k >= 7:
+                    break
+                r, ms = sf.model(OLD_CHEST, height=0.42)
+                r.rotation_euler = (0, 0, math.radians(90 + (k * 7) % 11 - 5))
+                bpy.context.view_layer.update(); lo, hi = ph.bounds(ms)
+                r.location = (x, sg * (RY - 0.95), 0.0); bpy.context.view_layer.update()
+                lo, hi = ph.bounds(ms); r.location.z -= lo.z
+                out["chests"].append(r); k += 1
+    except Exception as e:
+        print("chest asset missing:", e)
+    # the men's blankets still thrown back on the berths, a pea jacket on a peg by the door
+    for k, (sg, z) in enumerate(((1, 0.45), (1, 1.15), (-1, 0.45), (-1, 1.15))):
+        bl = ship.box(f"berth_blanket{k}", (0.45 - 0.2 * k, sg * (RY - 0.35), z + 0.13), (1.1, 0.58, 0.025),
+                      wet_cloth_mat(f"fblanket{k}", (0.12 + 0.03 * k, 0.08, 0.06), 0.2, sheen=0.5), rot=(0, 0, 0.05 * k), bevel=0.01)
+        d = bl.modifiers.new("lumps", "DISPLACE"); tx = bpy.data.textures.new(f"lump{k}", "CLOUDS"); tx.noise_scale = 0.12
+        d.texture = tx; d.strength = 0.05
+        sub = bl.modifiers.new("Sub", "SUBSURF"); sub.levels = 3; sub.render_levels = 3; bl.modifiers.move(1, 0)
+    lamp = lantern((0.2, 0.0, RZ - 0.12), energy=45)
+    ship.cyl("lamp_hook", (0.2, 0.0, RZ - 0.12), (0.2, 0.0, RZ), 0.006, mat=ship.iron("hookiron"), verts=8)
+    w = bpy.data.worlds.new("W"); bpy.context.scene.world = w; w.use_nodes = True
+    w.node_tree.nodes["Background"].inputs[0].default_value = (0.5, 0.42, 0.34, 1); w.node_tree.nodes["Background"].inputs[1].default_value = 0.03
+    E.area("door_day", (-RX - 1.0, 0.0, 1.2), (0.5, 0.0, 0.4), 420, size=1.0, color=(0.85, 0.92, 1.0))
+    ship.box("sky_out", (-RX - 2.0, 0, 1.5), (0.05, 6.0, 4.0), E.emission_mat("skyout", (0.55, 0.72, 1.0), 2.0))
+    if float(os.environ.get("NOFOG", "0")) == 0:
+        _air(RX, RY, RZ, fog)
+    out["lamp"] = lamp
+    return out
+
+
+DOLL = "ccb1f5791a7341ed85cb767bbddda2b3"           # "Rag doll - popka", Wirtualne Muzea Malopolski, CC0 (Sketchfab)
+
+
+def family_things():
+    """In the captain's cabin, the family's things left behind: the little girl's rag doll on the sea chest."""
+    try:
+        import sf
+        r, ms = sf.model(DOLL, height=0.26)
+        r.rotation_euler = (0, 0, math.radians(200)); bpy.context.view_layer.update()
+        r.location = (1.12, 0.92, 0.515); bpy.context.view_layer.update()
+        lo, hi = ph.bounds(ms); r.location.z += 0.515 - lo.z
+        return r
+    except Exception as e:
+        print("doll asset missing:", e)

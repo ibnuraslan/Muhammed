@@ -1,0 +1,114 @@
+{
+ "shot": "S19",
+ "bad": [],
+ "contacts": [
+  {
+   "person": "Deveau",
+   "part": "Deveau_body",
+   "other": "log_block.001",
+   "pairs": 583,
+   "grip": true,
+   "ok": true,
+   "at": [
+    0.35,
+    -0.57,
+    0.776
+   ],
+   "span": [
+    0.106,
+    0.087,
+    0.023
+   ]
+  },
+  {
+   "person": "Deveau",
+   "part": "Deveau_body",
+   "other": "log_cover",
+   "pairs": 777,
+   "grip": true,
+   "ok": true,
+   "at": [
+    0.349,
+    -0.562,
+    0.763
+   ],
+   "span": [
+    0.162,
+    0.081,
+    0.013
+   ]
+  },
+  {
+   "person": "Deveau",
+   "part": "Deveau_body",
+   "other": "log_page",
+   "pairs": 338,
+   "grip": true,
+   "ok": true,
+   "at": [
+    0.362,
+    -0.571,
+    0.785
+   ],
+   "span": [
+    0.159,
+    0.086,
+    0.007
+   ]
+  },
+  {
+   "person": "Deveau",
+   "part": "Deveau_body",
+   "other": "slate_face",
+   "pairs": 172,
+   "grip": true,
+   "ok": true,
+   "at": [
+    0.523,
+    -0.526,
+    0.767
+   ],
+   "span": [
+    0.034,
+    0.053,
+    0.004
+   ]
+  },
+  {
+   "person": "Deveau",
+   "part": "Deveau_body",
+   "other": "slate_frame.003",
+   "pairs": 437,
+   "grip": true,
+   "ok": true,
+   "at": [
+    0.502,
+    -0.531,
+    0.765
+   ],
+   "span": [
+    0.039,
+    0.066,
+    0.02
+   ]
+  },
+  {
+   "person": "Deveau",
+   "part": "Deveau_body",
+   "other": "table_top",
+   "pairs": 915,
+   "grip": true,
+   "ok": true,
+   "at": [
+    0.426,
+    -0.542,
+    0.76
+   ],
+   "span": [
+    0.227,
+    0.096,
+    0.005
+   ]
+  }
+ ]
+}

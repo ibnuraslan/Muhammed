@@ -1,0 +1,150 @@
+{
+ "shot": "S30",
+ "bad": [],
+ "contacts": [
+  {
+   "person": "Sailor0",
+   "part": "Sailor0_body",
+   "other": "DGboat_oar",
+   "pairs": 62,
+   "grip": true,
+   "ok": true,
+   "at": [
+    7.63,
+    4.299,
+    0.567
+   ],
+   "span": [
+    0.025,
+    0.044,
+    0.033
+   ]
+  },
+  {
+   "person": "Sailor0",
+   "part": "Sailor0_body",
+   "other": "DGboat_oar.001",
+   "pairs": 62,
+   "grip": true,
+   "ok": true,
+   "at": [
+    7.556,
+    4.171,
+    0.567
+   ],
+   "span": [
+    0.033,
+    0.038,
+    0.033
+   ]
+  },
+  {
+   "person": "Sailor0",
+   "part": "Sailor0_shirt",
+   "other": "DGboat_oar",
+   "pairs": 10,
+   "grip": true,
+   "ok": true,
+   "at": [
+    7.629,
+    4.257,
+    0.582
+   ],
+   "span": [
+    0.006,
+    0.007,
+    0.002
+   ]
+  },
+  {
+   "person": "Sailor0",
+   "part": "Sailor0_shirt",
+   "other": "DGboat_oar.001",
+   "pairs": 20,
+   "grip": true,
+   "ok": true,
+   "at": [
+    7.591,
+    4.194,
+    0.582
+   ],
+   "span": [
+    0.006,
+    0.006,
+    0.003
+   ]
+  },
+  {
+   "person": "Sailor1",
+   "part": "Sailor1_body",
+   "other": "DGboat_oar.002",
+   "pairs": 54,
+   "grip": true,
+   "ok": true,
+   "at": [
+    8.59,
+    3.757,
+    0.569
+   ],
+   "span": [
+    0.019,
+    0.04,
+    0.031
+   ]
+  },
+  {
+   "person": "Sailor1",
+   "part": "Sailor1_body",
+   "other": "DGboat_oar.003",
+   "pairs": 54,
+   "grip": true,
+   "ok": true,
+   "at": [
+    8.506,
+    3.611,
+    0.569
+   ],
+   "span": [
+    0.03,
+    0.034,
+    0.031
+   ]
+  },
+  {
+   "person": "Sailor1",
+   "part": "Sailor1_jacket",
+   "other": "DGboat_oar.002",
+   "pairs": 40,
+   "grip": true,
+   "ok": true,
+   "at": [
+    8.58,
+    3.703,
+    0.584
+   ],
+   "span": [
+    0.028,
+    0.027,
+    0.01
+   ]
+  },
+  {
+   "person": "Sailor1",
+   "part": "Sailor1_jacket",
+   "other": "DGboat_oar.003",
+   "pairs": 44,
+   "grip": true,
+   "ok": true,
+   "at": [
+    8.547,
+    3.647,
+    0.585
+   ],
+   "span": [
+    0.025,
+    0.026,
+    0.01
+   ]
+  }
+ ]
+}

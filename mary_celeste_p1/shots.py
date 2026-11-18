@@ -16,9 +16,9 @@ SHOTS = {}
 ORDER = []
 
 
-def shot(sid, vo, dur, desc, sfx, cine=None, card=None):
+def shot(sid, vo, dur, desc, sfx, cine=None, card=None, label=None):
     def deco(fn):
-        SHOTS[sid] = dict(fn=fn, vo=vo, dur=dur, desc=desc, sfx=sfx, cine=cine, card=card); ORDER.append(sid)
+        SHOTS[sid] = dict(fn=fn, vo=vo, dur=dur, desc=desc, sfx=sfx, cine=cine, card=card, label=label); ORDER.append(sid)
         return fn
     return deco
 
@@ -46,7 +46,7 @@ def dg_at_sea(heading=0.0, heel=-4.0, mc=None, detail=True, cut=True, **kw):
     d = S.dei_gratia(heading=heading, heel=heel, detail=detail)
     hulls = [d["hull"]]; m = None
     if mc:
-        m = S.mary_celeste(heel=mc.get("heel", 6.0), heading=mc["heading"], loc=mc["loc"], detail=False); hulls.append(m["hull"])
+        m = S.mary_celeste(heel=mc.get("heel", 6.0), heading=mc["heading"], loc=mc["loc"], detail=mc.get("detail", False)); hulls.append(m["hull"])
     S.atlantic(center=kw.pop("center", (80, -60)), hulls=hulls,
                cut=(0.0, 0.0, ship.L / 2 - 0.4, ship.B / 2 - 0.15) if cut else None, **kw)
     return d, m
@@ -64,10 +64,12 @@ def person(kind, M, pose, look_w=None, density=None, seat=False):
         # seated: fold the legs, find how far the boots now hang below the rig origin, and lift the placement so
         # the soles rest on the floor (z of M); hand targets are then computed against the corrected placement
         import human as H
+        ankle_rest = min(dv.h.bone_head("foot.L").z, dv.h.bone_head("foot.R").z)
         H.pose_sit(dv.h, lean=0)
         bpy.context.view_layer.update()
-        low = min(float(H._world_verts(o)[:, 2].min()) for o in dv.h.parts if o.type == 'MESH' and len(o.data.polygons))
-        M = M @ Matrix.Translation((0, 0, -low))
+        # how far the ankles rose when the legs folded = how far to lower him so the soles meet the floor
+        low = min(dv.h.bone_head("foot.L").z, dv.h.bone_head("foot.R").z) - ankle_rest
+        M = M @ Matrix.Translation((0, 0, -low + 0.004))
         H.reset_pose(dv.h)
     pose(dv, M)
     bpy.context.view_layer.update()
@@ -80,9 +82,20 @@ def person(kind, M, pose, look_w=None, density=None, seat=False):
         A.live(dv, M, pose, look_w, ANIM["dur"], density=HAIR if density is None else density, seed=len(ANIM["actors"]),
                action=ANIM.get("actions", {}).get(len(ANIM["actors"])))
         ANIM["actors"].append(dv)
+        no_spikes(dv)
         return dv
     dv.finish(look_at=look_w, place=M, density=HAIR if density is None else density)
+    no_spikes(dv)
     return dv
+
+
+def no_spikes(dv):
+    """Shared-lib workaround (reported to the hub): Solidify with even offset can throw a single vertex metres away at a
+    degenerate fold in strongly bent poses. Plain offset keeps the shells' look and never spikes."""
+    for o in dv.h.parts:
+        for m in getattr(o, "modifiers", []):
+            if m.type == 'SOLIDIFY':
+                m.use_even_offset = False
 
 
 def A_ease(u):
@@ -115,7 +128,7 @@ def seat_chest(dv):
         o.hide_render = True
         for c in o.children_recursive:
             c.hide_render = True
-    h = dv.hip_w; top = h.z - 0.11
+    h = dv.hip_w; top = h.z - 0.17
     m = I.wood("wood_table_worn", 1.5, wet=0.2, tint=(0.62, 0.42, 0.28), name="seatchest")
     th = dv.place_M.to_euler().z
     ship.box("seat_chest", (h.x, h.y, top / 2), (0.52, 0.42, top), m, rot=(0, 0, th), bevel=0.01)
@@ -132,10 +145,12 @@ def crew_in_boat(b, rowers=(0, 1), cox="deveau", look=None):
         def row(dv, Mx, handles=handles):
             H.pose_sit(dv.h, lean=26, hands="knees"); P.head(dv.h, pitch=-8)
             if len(handles) == 2:
-                (iL, _), (iR, _) = sorted(handles, key=lambda h: -h[0].y)
-                Cw.hands_on(dv, Mx, left_w=Bm @ iR, right_w=Bm @ iL, elbow_l=(0.8, 0.0, -0.6), elbow_r=(-0.8, 0.0, -0.6))
+                # the wrist sits just past the end of the loom, the fist closed on its last few inches (no sleeve on the wood)
+                grip = lambda hd: Bm @ (hd[0] + (hd[0] - hd[2]).normalized() * 0.075 + Vector((0, 0, 0.035)))
+                hL, hR = sorted(handles, key=lambda h: -h[0].y)
+                Cw.hands_on(dv, Mx, left_w=grip(hR), right_w=grip(hL), elbow_l=(0.8, 0.0, -0.6), elbow_r=(-0.8, 0.0, -0.6))
         person(who, Mp, row, look_w=look, density=0.35, seat=True)
-    Mp = Bm @ Matrix.Translation((-SB.LB / 2 + 0.75, 0, SB.GUN - SB.DEPTH + 0.115)) @ Matrix.Rotation(math.radians(90), 4, 'Z')
+    Mp = Bm @ Matrix.Translation((-SB.LB / 2 + 0.5, 0, SB.GUN - SB.DEPTH + 0.115)) @ Matrix.Rotation(math.radians(90), 4, 'Z')
     def cx(dv, Mx):
         H.pose_sit(dv.h, lean=8, hands="knees"); P.head(dv.h, pitch=-4)
     person(cox, Mp, cx, look_w=look, density=0.35, seat=True)
@@ -227,7 +242,7 @@ def s02():
     M = mc["M"]
     gx = (S.GAP[0] + S.GAP[1]) / 2
     hb = ship.half_breadth((gx + ship.L / 2) / ship.L, 1.0)
-    Mp = S.deck_place(M, gx + 0.2, -hb + 0.55, 180 + 15)          # just inboard of the gap, facing port (inboard)
+    Mp = S.deck_place(M, S.GAP[1] + 0.6, -hb + 0.62, 180 + 15)   # just in at the forward end of the gap, facing inboard
     cap = M @ Vector((S.GAP[1] + 0.18, -(ship.half_breadth((S.GAP[1] + ship.L / 2) / ship.L, 1.0) - 0.03),
                       ship.zdeck(S.GAP[1]) + ship.RAIL_H + 0.1))
     def pose(dv, Mx):
@@ -264,32 +279,55 @@ def s04():
     x0 = -ship.L / 2 + 3.2; cx = x0 + 4.7
     open_companion(mc, "MC")
     zc = ship.zdeck(cx)
-    Mp = M @ Matrix.Translation((cx - 0.05, 1.2, zc - 0.55)) @ Matrix.Rotation(math.radians(90 + 180), 4, 'Z')
-    rung = M @ Vector((cx - 0.25, 1.2 + 0.2, zc + 0.9))
+    Mp = M @ Matrix.Translation((cx + 0.08, 1.2, zc - 0.55)) @ Matrix.Rotation(math.radians(90 + 180), 4, 'Z')
+    rung = M @ Vector((cx - 0.3, 1.2, zc + 0.9))
     def pose(dv, Mx):
         Cw.stand_relaxed(dv, pitch=30, yaw=0, lean=8)
-        Cw.hands_on(dv, Mx, left_w=rung - M.to_3x3() @ Vector((0, 0.42, 0)), right_w=rung + M.to_3x3() @ Vector((0, 0.05, 0)),
-                    elbow_l=(0.8, 0.3, -0.5), elbow_r=(-0.8, 0.3, -0.5))
+        Cw.hands_on(dv, Mx, left_w=rung - M.to_3x3() @ Vector((0, 0.15, 0)) + M.to_3x3() @ Vector((0.03, 0, 0)), right_w=rung + M.to_3x3() @ Vector((0, 0.15, 0)) + M.to_3x3() @ Vector((0.03, 0, 0)),
+                    elbow_l=(0.3, 0.6, -0.7), elbow_r=(-0.3, 0.6, -0.7))
     person("deveau", Mp, pose, look_w=M @ Vector((cx, 1.2, zc - 2.0)))
     cam = M @ Vector((cx + 1.9, 2.6, zc + 2.6))
     E.camera(cam, M @ Vector((cx - 0.1, 1.2, zc + 0.7)), lens=32, fstop=4)
 
 
 def open_companion(sh, tag):
-    """The companion over the after cabin stairs, open: its sliding cover pushed back, a ladder down into the dark."""
-    x0 = -ship.L / 2 + 3.2; cx = x0 + 4.7
-    E.hide([f"{tag}_companion"])
-    wd = sh["mats"]["deckwood"]; dk = sh["mats"]["dark"]
-    zc = ship.zdeck(cx)
+    """The companion over the after cabin stairs, open: its sliding cover pushed back, a ladder going down through an
+    opening in the cabin-trunk roof into the dark. The trunk becomes a hollow box (walls + roof with the hatchway)."""
+    x0 = -ship.L / 2 + 3.2; cx = x0 + 4.7; cy = 1.2
+    E.hide([f"{tag}_companion", f"{tag}_cabin"])
+    wd = sh["mats"]["deckwood"]; dk = sh["mats"]["dark"]; P_ = sh["mats"]["lining"]; W = sh["mats"]["deckwood"]
     made = []
+    # hollow trunk: four walls and a roof with a 0.84 m square opening under the companion
+    tx, tl, tw, th = x0 + 2.6, 5.6, 4.4, 0.9
+    zb = ship.zdeck(tx)
     for sy in (-1, 1):
-        made.append(ship.box("comp_side", (cx, 1.2 + sy * 0.45, zc + 0.95), (0.9, 0.06, 0.8), sh["mats"]["lining"]))
-    made.append(ship.box("comp_fwd", (cx + 0.45, 1.2, zc + 0.95), (0.06, 0.96, 0.8), sh["mats"]["lining"]))
-    made.append(ship.box("comp_slide", (cx - 0.25, 1.2, zc + 1.39), (0.6, 1.0, 0.05), wd))
-    made.append(ship.box("comp_well", (cx, 1.2, zc - 0.4), (0.84, 0.84, 2.6), dk))
-    for k in range(5):
-        made.append(ship.box("rung", (cx - 0.25, 1.2, zc + 0.9 - k * 0.3), (0.05, 0.6, 0.04), wd))
+        made.append(ship.box("trunk_side", (tx, sy * (tw / 2 - 0.03), zb + 0.42), (tl, 0.06, th), P_, bevel=0.01))
+        made.append(ship.box("trunk_end", (tx + sy * (tl / 2 - 0.03), 0, zb + 0.42), (0.06, tw, th), P_, bevel=0.01))
+    rz = ship.zdeck(tx) + 0.9; hx0, hx1, hy0, hy1 = cx - 0.42, cx + 0.42, cy - 0.42, cy + 0.42
+    rx0, rx1, ry0, ry1 = tx - 2.9, tx + 2.9, -2.3, 2.3
+    for (a0, a1, b0, b1) in ((rx0, hx0, ry0, ry1), (hx1, rx1, ry0, ry1), (hx0, hx1, ry0, hy0), (hx0, hx1, hy1, ry1)):
+        made.append(ship.box("trunk_roof", ((a0 + a1) / 2, (b0 + b1) / 2, rz), (a1 - a0, b1 - b0, 0.07), W, bevel=0.005))
+    zc = ship.zdeck(cx)
+    for sy in (-1, 1):
+        made.append(ship.box("comp_side", (cx, cy + sy * 0.45, zc + 0.95), (0.9, 0.06, 0.8), P_))
+    made.append(ship.box("comp_fwd", (cx + 0.45, cy, zc + 0.95), (0.06, 0.96, 0.8), P_))
+    made.append(ship.box("comp_slide", (cx - 0.25, cy, zc + 1.39), (0.6, 1.0, 0.05), wd))
+    # the stair well below: dark walls (not a solid block), a floor far down
+    for sy in (-1, 1):
+        made.append(ship.box("well_wall", (cx, cy + sy * 0.44, zc - 0.6), (0.9, 0.03, 2.2), dk))
+        made.append(ship.box("well_wall", (cx + sy * 0.44, cy, zc - 0.6), (0.03, 0.9, 2.2), dk))
+    made.append(ship.box("well_floor", (cx, cy, zc - 1.75), (0.9, 0.9, 0.03), dk))
+    for k in range(6):
+        made.append(ship.box("rung", (cx - 0.3, cy, zc + 0.9 - k * 0.3), (0.05, 0.6, 0.04), wd))
     S._parent(made, sh["root"])
+    # cut the stair hatchway through the main deck plane under the trunk (a boolean on this shot's copy of the deck)
+    deck = bpy.data.objects.get(f"{tag}_deck")
+    if deck is not None:
+        bpy.context.view_layer.update()
+        cutter = ship.box("deck_hatch_cut", (cx, cy, zc), (0.84, 0.84, 0.5), None)
+        cutter.matrix_world = sh["root"].matrix_world @ cutter.matrix_world
+        cutter.hide_render = True; cutter.display_type = 'WIRE'
+        bo = deck.modifiers.new("hatchway", "BOOLEAN"); bo.operation = 'DIFFERENCE'; bo.object = cutter; bo.solver = 'EXACT'
     return cx
 
 
@@ -298,12 +336,13 @@ def cabin_with_deveau(cam_fn, lantern_side="L", **kw):
     import interiors as I
     E.render_setup(samples=128)
     a = I.captain_cabin()
-    M = Matrix.Translation((0.22, 0.3, 0.0)) @ Matrix.Rotation(math.radians(223), 4, 'Z')
+    M = Matrix.Translation((0.34, 0.1, 0.003)) @ Matrix.Rotation(math.radians(223), 4, 'Z')
     dv = Cw.deveau(wet=0.55)
-    P.cabin(dv, M, (0.48, I.CAB["BY0"] - 0.02, I.CAB["BOARD"] + 0.045), (-0.3, 0.62, 1.40), lantern_side=lantern_side)
+    P.cabin(dv, M, (0.3, I.CAB["BY0"] - 0.02, I.CAB["BOARD"] + 0.075), (-0.12, 0.5, 1.3), lantern_side=lantern_side)
     bpy.context.view_layer.update()
     grip_local = P.palm_point(dv.h, lantern_side)
     dv.finish(look_at=a["child"] + Vector((-0.05, 0, 0)), place=M, density=HAIR)
+    no_spikes(dv)
     lan = I.lantern(M @ grip_local + Vector((0, 0, 0.005)), energy=55.0)
     head = M @ Vector((0, -0.05, 1.66))
     E.area("lantern_bounce", lan["center"].lerp(head, 0.35) + Vector((0, 0, -0.15)), head, 4.0, size=0.35, color=(1.0, 0.62, 0.36))
@@ -333,12 +372,13 @@ def s06():
 
 
 @shot("S07", "that looks to him as though a child has been lying there.", 4.2,
-      "Deveau, leaning over the berth with the lantern held up: he looks down at the hollow, brows drawn. Slow push-in.",
-      ["breath", "lantern creak", "sea against the hull"], cine={"exposure": 0.15})
+      "Over Deveau's shoulder as he leans in with the lantern: the small hollow in the wet wool, his face turned away "
+      "into the lantern's side-light. Slow push past his shoulder.",
+      ["breath", "lantern creak", "sea against the hull"], cine={"exposure": 0.3})
 def s07():
     def cam(a, M, head, lan):
-        c = head + Vector((-0.95, -0.55, -0.12))
-        E.camera(c, head + Vector((0.0, 0.0, -0.1)), lens=45, fstop=2.4, focus=(head - c).length)
+        c = M @ Vector((0.4, 0.8, 1.8))                    # behind his right shoulder, above, the hollow beyond him
+        E.camera(c, a["child"] + Vector((0.1, -0.05, 0.02)), lens=26, fstop=3.2, focus=(a["child"] - c).length)
     cabin_with_deveau(cam)
 
 
@@ -349,7 +389,7 @@ def s08():
     import interiors as I
     E.render_setup(samples=128)
     a = I.captain_cabin()
-    M = Matrix.Translation((-0.4, -0.1, 0.0)) @ Matrix.Rotation(math.radians(heading_to(-0.4, -0.1, 1.2, 0.9)), 4, 'Z')
+    M = Matrix.Translation((-0.4, -0.1, 0.003)) @ Matrix.Rotation(math.radians(heading_to(-0.4, -0.1, 1.2, 0.9)), 4, 'Z')
     lw = M @ Vector((-0.28, -0.42, 1.35))
     def pose(dv, Mx):
         Cw.stand_relaxed(dv, pitch=6, yaw=-6, lean=2)
@@ -410,21 +450,47 @@ def s11():
 
 
 @shot("S12", "The ship's boat is gone.", 2.2,
-      "High over the main hatch: the two empty boat chocks; a glass ghost of the missing boat sits on them, then fades.",
-      ["wind gust", "slack line taps the hatch"])
+      "On the main hatch the two empty boat chocks; the canvas gripes that lashed the boat down lie slack across them, "
+      "cut through, the ends frayed. Deveau stands at the hatch looking down at them (seen side-on, from behind).",
+      ["wind gust", "slack gripe taps the hatch"])
 def s12():
-    import explain as X, smallboat as SB
     mc, _ = mc_at_sea(heel=2.0)
-    M = mc["M"]
-    b = SB.build("ghostboat", oars_out=False)
-    g = X.ghost_mat("ghostboat_m", edge=(1.0, 0.55, 0.2), alpha=0.06)
-    for o in b["coll"].objects:
-        if o.type in ('MESH', 'CURVE'):
-            o.data.materials.clear(); o.data.materials.append(g); o.visible_shadow = False
-    xm = ship.MAIN_HATCH_X
-    b["root"].matrix_world = M @ Matrix.Translation((xm, 0, ship.zdeck(xm) + 0.75 - (SB.GUN - SB.DEPTH))) @ Matrix.Rotation(math.radians(90), 4, 'Z')
-    cam = S.deck_point(M, xm + 3.2, -4.6, 5.2)
-    E.camera(cam, S.deck_point(M, xm, 0, 0.5), lens=30, fstop=8)
+    M = mc["M"]; xm = ship.MAIN_HATCH_X; zt = ship.zdeck(xm) + 0.75
+    gripes(mc, xm)
+    Mp = S.deck_place(M, xm - 0.6, -1.95, heading_to(xm - 0.6, -1.95, xm, 0.0))
+    person("deveau", Mp, relaxed(pitch=32, yaw=0, lean=10, brow=0.7, lids=0.6), look_w=S.deck_point(M, xm + 0.6, 0.0, 0.75))
+    cam = S.deck_point(M, xm - 3.2, -3.0, 2.3)
+    E.camera(cam, S.deck_point(M, xm + 0.2, -0.3, 0.6), lens=30, fstop=5.6)
+
+
+def gripes(mc, xm):
+    """Two canvas gripes (lashing straps) that held the boat on its chocks, from ringbolts in the deck: now slack,
+    each cut through, one end lying over a chock, the other on the hatch cover, both ends frayed."""
+    M = mc["M"]; zc = ship.zdeck(xm)
+    can = ship.canvas("gripe", wet=0.7, dirt=0.7, color=(0.5, 0.44, 0.34))
+    iron = mc["mats"]["iron"]; made = []
+    import numpy as np
+    rng = np.random.default_rng(5)
+    for k, gx in enumerate((xm - 0.55, xm + 0.6)):
+        for sg in (1, -1):
+            rb = (gx, sg * 1.42, zc + 0.02)
+            made.append(ship.cyl("ringbolt", rb, (rb[0], rb[1], rb[2] + 0.03), 0.02, mat=iron, verts=10))
+            # strap: from the ringbolt up over the coaming edge and across the hatch cover toward the centre line
+            pts = [rb, (gx, sg * 1.32, zc + 0.47), (gx, sg * 0.75, zc + 0.5), (gx + 0.04 * sg, sg * (0.18 + 0.1 * k), zc + 0.495)]
+            V = []; F = []
+            for i, q in enumerate(pts):
+                for w in (-0.04, 0.04):
+                    V.append((q[0] + w, q[1], q[2]))
+            for i in range(len(pts) - 1):
+                F.append([2 * i, 2 * i + 1, 2 * i + 3, 2 * i + 2])
+            o = ship.mesh_obj("gripe_strap", V, F, can, smooth=True); o.modifiers.new("t", "SOLIDIFY").thickness = 0.004
+            made.append(o)
+            end = pts[-1]
+            for f in range(7):                                  # frayed threads at the cut end
+                a = (end[0] - 0.035 + f * 0.012, end[1], end[2] + 0.004)
+                b = (a[0] + rng.normal(0, 0.008), a[1] - sg * rng.uniform(0.02, 0.05), a[2])
+                made.append(ship.cyl("fray", a, b, 0.0016, mat=can, verts=5))
+    S._parent(made, mc["root"])
 
 
 @shot("S13", "Deveau goes back for two men.", 2.6,
@@ -444,28 +510,56 @@ def s13():
 
 
 @shot("S14", "Then the three of them climb aboard", 2.0,
-      "On the Mary Celeste's deck by the gap: Deveau and the two men, one still stepping in through the gap.",
-      ["boots land on deck", "bag dropped", "rope coil thrown down"])
+      "At the gap in the rail: one man steps in over the waterway, a hand on the main shroud; the second is coming up "
+      "from the boat alongside, hands on the deck edge; Deveau, already aboard, turns to reach for him.",
+      ["boots land on deck", "hand slaps wet wood", "boat knocks the hull"])
 def s14():
     mc, _ = mc_at_sea(heel=3.0)
     M = mc["M"]; gx = (S.GAP[0] + S.GAP[1]) / 2
     hb = ship.half_breadth((gx + ship.L / 2) / ship.L, 1.0)
-    # Deveau turned aft, pointing the way with his left arm; one man just in through the gap with a hand on the
-    # bulwark end; the other looking aloft at the sails
-    def dpose(dv, Mx):
-        Cw.stand_relaxed(dv, pitch=-2, yaw=18, lean=4, weight="R")
-        P.hand_reach(dv.h, "L", Mx.inverted() @ S.deck_point(M, gx - 4.5, -hb + 2.6, 1.55), elbow=(0.6, 0.3, -0.7))
-        P.rest_hand(dv.h, "L", curl=12)
-    person("deveau", S.deck_place(M, gx - 1.5, -hb + 1.7, 180 - 55), dpose, look_w=S.deck_point(M, gx - 6, -1, 1.4))
-    capE = M @ Vector((S.GAP[1] + 0.18, -(ship.half_breadth((S.GAP[1] + ship.L / 2) / ship.L, 1.0) - 0.03),
-                       ship.zdeck(S.GAP[1]) + ship.RAIL_H + 0.1))
+    import smallboat as SB
+    xb = -0.78                                          # the second man comes up at the forward end of the gap
+    b = SB.build("DGboat", oars_out=False)
+    b["root"].matrix_world = M @ Matrix.Translation((xb - 0.45, -hb - 0.95, 0.32)) @ Matrix.Rotation(math.radians(2), 4, 'Z')
+    bpy.context.view_layer.update()
+    xa = S.GAP[0] - 0.35                                # first man: just in, aft of the gap, a hand on the main shroud
+    shroud = nearest_shroud(mc, M @ Vector((xa - 0.5, -hb, ship.zdeck(xa) + 1.5)))
     def p0(dv, Mx):
-        Cw.stand_relaxed(dv, pitch=14, yaw=-8, lean=10, weight="L")
-        Cw.hands_on(dv, Mx, left_w=None, right_w=capE, elbow_r=(-0.8, 0.5, -0.4), grip=False, curl=34)
-    person(0, S.deck_place(M, S.GAP[1] - 0.35, -hb + 0.55, 180 + 25), p0, look_w=S.deck_point(M, gx - 1.5, -hb + 1.7, 1.0))
-    person(1, S.deck_place(M, gx + 0.6, -hb + 2.3, 180 + 70), relaxed(pitch=-28, yaw=10, weight="R"), look_w=M @ Vector((ship.MAIN_X, 0, 16)))
-    cam = S.deck_point(M, gx + 2.2, 2.2, 1.6)
-    E.camera(cam, S.deck_point(M, gx - 0.6, -hb + 1.3, 1.15), lens=30, fstop=4)
+        Cw.stand_relaxed(dv, pitch=12, yaw=-15, lean=12, weight="L")
+        P.hand_reach(dv.h, "R", Mx.inverted() @ shroud, elbow=(-0.7, 0.4, -0.6)); P.grip(dv.h, "R", 0.9)
+    person(0, S.deck_place(M, xa, -hb + 0.5, heading_to(xa, -hb + 0.5, gx, 0.5)), p0, look_w=S.deck_point(M, gx - 1.0, 0.0, 0.2))
+    Bm = b["root"].matrix_world
+    edge_l = M @ Vector((xb + 0.28, -hb + 0.06, ship.zdeck(xb) + 0.02)); edge_r = M @ Vector((xb - 0.28, -hb + 0.06, ship.zdeck(xb) + 0.02))
+    Mb = Bm @ Matrix.Translation((0.45, 0.25, SB.GUN - SB.DEPTH + 0.13)) @ Matrix.Rotation(math.radians(180), 4, 'Z')
+    def p1(dv, Mx):
+        Cw.stand_relaxed(dv, pitch=-14, yaw=0, lean=8)
+        Cw.hands_on(dv, Mx, left_w=edge_r, right_w=edge_l, elbow_l=(0.8, 0.3, -0.5), elbow_r=(-0.8, 0.3, -0.5), grip=False, curl=40)
+    person(1, Mb, p1, look_w=S.deck_point(M, xb, -hb + 1.2, 1.0))
+    xd, yd = 0.25, -hb + 0.9                            # Deveau, forward of the rail section, turns and reaches down to him
+    def dp(dv, Mx):
+        Cw.stand_relaxed(dv, pitch=34, yaw=0, lean=22, weight="R")
+        P.hand_reach(dv.h, "R", Mx.inverted() @ (M @ Vector((xb + 0.2, -hb + 0.45, ship.zdeck(xb) + 0.6))), elbow=(-0.6, 0.3, -0.7))
+        P.rest_hand(dv.h, "R", curl=18)
+    person("deveau", S.deck_place(M, xd, yd, heading_to(xd, yd, xb, -hb)), dp, look_w=S.deck_point(M, xb, -hb, 0.3))
+    cam = S.deck_point(M, gx + 1.6, -hb + 3.6, 1.65)
+    E.camera(cam, S.deck_point(M, xb - 0.6, -hb + 0.6, 0.75), lens=28, fstop=5)
+
+
+def nearest_shroud(sh, p):
+    """World point on the nearest shroud (curve) to p, about at p's height."""
+    best, bd = None, 1e9
+    dg = bpy.context.evaluated_depsgraph_get()
+    for o in bpy.data.objects:
+        if o.type != 'CURVE' or "shroud" not in o.name.lower():
+            continue
+        for spl in o.data.splines:
+            pts = [o.matrix_world @ Vector(q.co[:3]) for q in spl.points]
+            for a, b in zip(pts[:-1], pts[1:]):
+                for k in range(11):
+                    q = a.lerp(b, k / 10); d = (q - p).length
+                    if d < bd:
+                        best, bd = q, d
+    return best if best is not None else p
 
 
 @shot("S15", "and sail the ship to Gibraltar.", 3.0,
@@ -479,19 +573,26 @@ def s15():
     E.camera(cam, M @ Vector((0.0, 0.0, 6.0)), lens=45, fstop=8, roll=-1)
 
 
-@shot("S16", "Ten people had been on the Mary Celeste.", 3.2,
-      "High wide over her deck: ten plain grey clay figures standing where the crew would have been (Atrium device for "
-      "people only mentioned): the captain, his wife, their small daughter and seven men.",
-      ["low wind", "a single bell-like rigging ping", "sea"])
+@shot("S16", "Ten people had been", 1.8,
+      "The forecastle in lantern light, empty: seven berths, a sea chest at each, the men's oilskins still on their pegs.",
+      ["lamp creak", "hull work", "drip"], cine={"exposure": 0.35})
 def s16():
-    mc, _ = mc_at_sea(heel=2.0)
-    M = mc["M"]
-    # on the open deck only (clear of the cabin trunk, hatches, pumps, masts and the galley house)
-    pts = [(-12.0, -2.8, 95), (-11.3, -2.95, 100), (-10.75, -2.75, 115), (-14.7, 0.0, 90), (-5.5, 2.4, 160), (-2.0, -2.6, 70),
-           (0.9, -2.7, 90), (5.5, 2.5, 110), (8.2, -2.0, 70), (-8.0, -2.9, 95)]
-    clay_people(pts, M)
-    cam = S.deck_point(M, 0.6, -2.9, 2.3)
-    E.camera(cam, S.deck_point(M, -8.5, 0.2, 0.9), lens=24, fstop=8)
+    import interiors as I
+    E.render_setup(samples=128)
+    I.forecastle()
+    E.camera(Vector((-1.35, -0.35, 1.5)), Vector((1.2, 0.35, 0.65)), lens=22, fstop=4)
+
+
+@shot("S16b", "on the Mary Celeste.", 1.4,
+      "The captain's cabin: on the sea chest, the little girl's rag doll, left where she put it.",
+      ["drip", "creak"], cine={"exposure": 0.35})
+def s16b():
+    import interiors as I
+    E.render_setup(samples=128)
+    I.captain_cabin(skylight=600)
+    I.family_things()
+    E.point("lantern_offscreen", (0.45, 0.55, 1.35), 45, (1.0, 0.56, 0.24), radius=0.05)    # Deveau's lantern, just out of frame
+    E.camera(Vector((0.3, 0.2, 1.0)), Vector((1.12, 0.92, 0.62)), lens=45, fstop=2.8)
 
 
 @shot("S17", "Whatever made them leave, the ship survived it.", 3.6,
@@ -528,7 +629,7 @@ def s19():
     def pose(dv, Mx):
         H.pose_sit(dv.h, lean=22, hands="knees")
         P.head(dv.h, pitch=32)
-        Cw.hands_on(dv, Mx, left_w=t + Vector((0.2, 0.1, 0.07)), right_w=t + Vector((-0.05, 0.06, 0.07)),
+        Cw.hands_on(dv, Mx, left_w=t + Vector((0.2, 0.1, 0.1)), right_w=t + Vector((-0.05, 0.06, 0.1)),
                     elbow_l=(0.8, 0.5, -0.6), elbow_r=(-0.8, 0.5, -0.6), grip=False, curl=30)
     # seat height: the stool top ~0.45
     dv = person("deveau", M, pose, look_w=t + Vector((-0.1, 0.02, 0.05)), seat=True)
@@ -549,7 +650,7 @@ def s20():
 
 
 @shot("S21", "Shortly after noon, the man at the wheel", 2.4,
-      "The Dei Gratia's helmsman at the wheel, both hands on the spokes; he narrows his eyes at something off the bow.",
+      "Over the helmsman's shoulder at the Dei Gratia's wheel, both hands on the rim; he leans to look at something far off the bow.",
       ["wheel creak", "wind in rigging"])
 def s21():
     d, _ = dg_at_sea(heading=95.0)
@@ -563,8 +664,8 @@ def s21():
         dv.lids(0.35); dv.brow_knit(0.6)
     person(2, Mp, pose, look_w=M @ Vector((200, -60, 3)))
     hw = head_w(Mp)
-    c = M @ Vector((xw + 1.9, -1.2, ship.zdeck(xw) + 1.55))
-    E.camera(c, hw + Vector((0, 0, -0.12)), lens=45, fstop=2.8, focus=(hw - c).length)
+    c = M @ Vector((xw - 1.3, -0.5, ship.zdeck(xw) + 1.85))         # behind his right shoulder, looking out past him
+    E.camera(c, hw.lerp(M @ Vector((xw + 12.0, 0.6, ship.zdeck(xw) + 1.0)), 0.12), lens=28, fstop=4, focus=(hw - c).length)
 
 
 @shot("S22", "spots sails in the distance.", 2.6,
@@ -584,16 +685,16 @@ def s23():
     d, _ = dg_at_sea(heading=95.0)
     M = d["M"]; cx = open_companion(d, "DG")
     zc = ship.zdeck(cx)
-    Mp = S.deck_place(M, cx + 0.78, 1.05, heading_to(cx + 0.78, 1.05, cx, 1.2))   # at the companion's door, facing aft
-    top = M @ Vector((cx + 0.4, 1.4, zc + 1.47))                     # right hand on its top (port side of him)
+    Mp = S.deck_place(M, cx + 1.02, 1.05, heading_to(cx + 1.02, 1.05, cx, 1.2))   # on deck at the trunk's forward end
+    top = M @ Vector((-ship.L / 2 + 3.2 + 2.6 + 2.8 - 0.06, 1.38, ship.zdeck(cx) + 0.94 + 0.05))   # right hand on the trunk roof edge
     def pose(dv, Mx):
-        Cw.stand_relaxed(dv, pitch=6, yaw=-10, lean=12)
+        Cw.stand_relaxed(dv, pitch=6, yaw=-10, lean=6)
         Cw.hands_on(dv, Mx, left_w=None, right_w=top, elbow_r=(-0.8, 0.4, -0.5), grip=False, curl=20)
         dv.brow_knit(0.4)
     person("morehouse", Mp, pose, look_w=M @ Vector((cx, 1.2, zc + 0.4)))
     hw = head_w(Mp)
-    c = M @ Vector((cx - 1.25, 0.55, zc + 1.7))
-    E.camera(c, hw + Vector((0, 0, -0.2)), lens=45, fstop=2.8, focus=(hw - c).length)
+    c = M @ Vector((cx + 0.7, -2.4, zc + 1.6))                     # from his left side: profile, the companion beyond him
+    E.camera(c, hw.lerp(M @ Vector((cx, 1.2, zc + 1.1)), 0.4), lens=28, fstop=4, focus=(hw - c).length)
 
 
 @shot("S24", "They change course", 2.0,
@@ -665,12 +766,13 @@ def s26():
 
 
 @shot("S27", "Nobody answers.", 2.0,
-      "Long lens across the water: the Mary Celeste's after deck, her wheel with no one at it.", ["wind", "sea", "silence beat"])
+      "Long lens across the water: the Mary Celeste as found, torn topsails, nobody at her wheel, nobody on deck.",
+      ["wind", "sea", "silence beat"])
 def s27():
-    d, mc = dg_at_sea(heading=95.0, mc=dict(heading=128.0, loc=(150.0, -40.0, -0.32)), detail=False)
-    tgt = mc["M"] @ Vector((-ship.L / 2 + 1.7, 0, ship.zdeck(-14) + 1.0))
+    d, mc = dg_at_sea(heading=95.0, mc=dict(heading=128.0, loc=(150.0, -40.0, -0.32), detail=True), detail=False)
+    tgt = mc["M"] @ Vector((-3.0, 0, 7.0))
     c = d["M"] @ Vector((ship.L / 2 - 4.0, -3.0, ship.zdeck(11) + 1.7))
-    E.camera(c, tgt, lens=180, fstop=8)
+    E.camera(c, tgt, lens=95, fstop=8)
 
 
 @shot("S28", "A few sails are still drawing wind.", 2.4,
@@ -711,15 +813,15 @@ def s30():
 def s31():
     mc, _ = mc_at_sea(heel=2.5)
     M = mc["M"]; xw = -ship.L / 2 + 1.7; bx = xw + 0.75
-    Mp = S.deck_place(M, bx + 0.62, -0.1, heading_to(bx + 0.62, -0.1, bx, 0.0))
-    top = M @ Vector((bx + 0.22, -0.2, ship.zdeck(xw) + 1.07))         # the binnacle top, on his left (starboard) side
+    Mp = S.deck_place(M, bx + 0.05, -0.6, heading_to(bx + 0.05, -0.6, bx, 0.0))   # beside the binnacle (the trunk is close forward)
+    top = M @ Vector((bx + 0.2, -0.2, ship.zdeck(xw) + 1.09))          # the binnacle top, forward of the bowl: his right hand
     def pose(dv, Mx):
-        Cw.stand_relaxed(dv, pitch=36, yaw=0, lean=14)
-        Cw.hands_on(dv, Mx, left_w=top, right_w=None, elbow_l=(0.8, 0.4, -0.5), grip=False, curl=30)
+        Cw.stand_relaxed(dv, pitch=36, yaw=0, lean=12)
+        Cw.hands_on(dv, Mx, left_w=None, right_w=top, elbow_r=(-0.8, 0.4, -0.5), grip=False, curl=30)
         dv.brow_knit(0.9); dv.lids(0.6)
     person("deveau", Mp, pose, look_w=M @ Vector((bx, 0, ship.zdeck(xw) + 1.1)))
     hw = head_w(Mp)
-    c = M @ Vector((bx - 1.6, -1.4, ship.zdeck(xw) + 1.45))
+    c = M @ Vector((bx - 1.4, -2.0, ship.zdeck(xw) + 1.55))
     E.camera(c, hw.lerp(M @ Vector((bx, 0, ship.zdeck(xw) + 1.1)), 0.4), lens=40, fstop=2.8, focus=(hw - c).length)
 
 
@@ -748,15 +850,15 @@ def s33():
 
 @shot("S34", "Down in the galley, water has sloshed high enough", 3.5,
       "Inside the galley, looking aft at the doorway and the daylit deck: the floor under dark water, pots thrown down, Deveau's lantern light.",
-      ["water slosh", "pot rolls", "drip"], cine={"exposure": 0.25})
+      ["water slosh", "pot rolls", "drip"], cine={"exposure": 0.5})
 def s34():
     import interiors as I
     E.render_setup(samples=128)
     a = I.galley()
-    lan = I.lantern((0.6, 0.9, 1.75), energy=40)
+    lan = I.lantern((0.6, 0.9, 1.75), energy=95)
     ship.cyl("lamp_hook", (0.6, 0.9, 1.75), (0.6, 0.9, 1.95), 0.006, mat=ship.iron("hk"), verts=8)
-    c = Vector((1.6, -0.6, 1.35))
-    E.camera(c, Vector((-1.9, 0.35, 0.55)), lens=22, fstop=4)
+    c = Vector((1.55, 1.15, 1.4))
+    E.camera(c, Vector((-0.9, -0.2, 0.45)), lens=22, fstop=4)
 
 
 @shot("S35", "to reach the raised lip around the doorway.", 3.5,
@@ -766,7 +868,7 @@ def s35():
     import interiors as I
     E.render_setup(samples=128)
     a = I.galley()
-    I.lantern((0.6, 0.9, 1.75), energy=40)
+    I.lantern((0.6, 0.9, 1.75), energy=70)
     s = a["sill"]
     c = Vector((s.x + 0.9, s.y - 0.55, 0.42))
     E.camera(c, Vector((s.x, s.y + 0.05, 0.3)), lens=45, fstop=2.8)
@@ -774,21 +876,25 @@ def s35():
 
 @shot("S36", "The stove has been knocked out of place.", 3.2,
       "The iron galley stove shoved off its hearth and leaning, its pipe torn from the deckhead collar; Deveau in the "
-      "background holding up the lantern.", ["iron scrape", "water slop"], cine={"exposure": 0.25})
+      "background holding up the lantern.", ["iron scrape", "water slop"], cine={"exposure": 0.5})
 def s36():
     import interiors as I
     E.render_setup(samples=128)
     a = I.galley()
-    Mp = Matrix.Translation((-0.9, 0.55, 0.0)) @ Matrix.Rotation(math.radians(-90 + 30), 4, 'Z')
-    lw = Mp @ Vector((0.28, -0.4, 1.4))
+    st = a["stove"]
+    I.lantern((0.6, 0.9, 1.75), energy=95)               # the galley lamp, still hanging, lights the stove
+    ship.cyl("lamp_hook", (0.6, 0.9, 1.75), (0.6, 0.9, 1.95), 0.006, mat=ship.iron("hk"), verts=8)
+    px, py = -0.95, 0.15                                 # Deveau beyond it, by the door, lantern held up, looking at it
+    Mp = Matrix.Translation((px, py, 0.003)) @ Matrix.Rotation(math.radians(heading_to(px, py, st.x, st.y)), 4, 'Z')
+    lw = Mp @ Vector((0.3, -0.45, 1.3))
     def pose(dv, Mx):
-        Cw.stand_relaxed(dv, pitch=18, yaw=-10, lean=6)
+        Cw.stand_relaxed(dv, pitch=22, yaw=0, lean=6)
         P.hand_reach(dv.h, "L", Mx.inverted() @ lw, elbow=(0.8, 0.3, -0.6)); P.grip(dv.h, "L")
         dv.brow_knit(0.7)
-    person("deveau", Mp, pose, look_w=a["stove"])
-    I.lantern(lw + Vector((0, 0, -0.02)), energy=45)
-    c = Vector((1.55, -1.25, 0.75))
-    E.camera(c, a["stove"] + Vector((-0.4, 0.3, 0.3)), lens=28, fstop=3.5, focus=(a["stove"] - c).length)
+    person("deveau", Mp, pose, look_w=st)
+    I.lantern(lw + Vector((0, 0, -0.04)), energy=80)
+    c = Vector((1.65, -0.2, 1.45))
+    E.camera(c, st + Vector((-0.45, 0.25, 0.05)), lens=22, fstop=4, focus=(st - c).length)
 
 
 @shot("S37", "He measures the water in the bottom of the ship.", 3.4,
@@ -803,7 +909,7 @@ def s37():
     made = [ship.box("well_cap", (well.x, well.y, ship.zdeck(px) + 0.06), (0.24, 0.24, 0.12), mc["mats"]["deckwood"]),
             ship.box("well_hole", (well.x, well.y, ship.zdeck(px) + 0.121), (0.12, 0.12, 0.004), mc["mats"]["dark"])]
     S._parent(made, mc["root"])
-    Mp = S.deck_place(M, well.x + 0.45, well.y - 0.2, heading_to(well.x + 0.45, well.y - 0.2, well.x, well.y))
+    Mp = S.deck_place(M, well.x, well.y - 0.52, heading_to(well.x, well.y - 0.52, well.x, well.y))   # clear of hatch and pumps
     lineTop = M @ Vector((well.x + 0.05, well.y, ship.zdeck(px) + 1.15))
     lineLow = M @ Vector((well.x + 0.02, well.y, ship.zdeck(px) + 0.85))
     def pose(dv, Mx):
@@ -819,28 +925,34 @@ def s37():
 
 
 @shot("S38", "Three and a half feet.", 2.0,
-      "Insert: the sounding rod laid on the deck, wet and dark up to its three-and-a-half-foot mark, a filled soft orange band at the mark.",
-      ["rod set down on planks", "drip"])
+      "Over Deveau's shoulder: he holds the sounding rod up to the light, the iron dark and wet up to the notch at "
+      "three and a half feet. Small burned-in callout '3½ FT' beside the mark.",
+      ["rod drips", "line slack", "wind"], label=("3½ FT", 0.6, 0.47))
 def s38():
-    import explain as X
     mc, _ = mc_at_sea(heel=2.5)
-    M = mc["M"]; x0 = ship.MAIN_X + 1.6; RY_ = 2.45          # port walkway, clear of the rail section and the hatch
-    zd = ship.zdeck(x0) + 0.012
-    dry = ship.paint("rod_dry", (0.55, 0.42, 0.26), rough=0.6, grime=0.3, scale=8)
-    wet = ship.paint("rod_wet", (0.22, 0.14, 0.08), rough=0.2, grime=0.2, wet=1.0, scale=8)
+    M = mc["M"]; px = ship.MAIN_X + 0.9
+    x0, y0 = px + 0.3, -1.95                            # by the pumps, clear of the main hatch
+    Mp = S.deck_place(M, x0, y0, heading_to(x0, y0, x0 + 1.0, -2.2))
     ft = 0.3048
-    a = M @ Vector((x0, RY_, zd + 0.02)); b = M @ Vector((x0 + 3.5 * ft, RY_, zd + 0.02)); c_ = M @ Vector((x0 + 6 * ft, RY_, zd + 0.02))
-    ship.cyl("rod_wet", a, b, 0.02, mat=wet, verts=16); ship.cyl("rod_dry", b, c_, 0.02, mat=dry, verts=16)
-    notch = E.principled("notch", (0.03, 0.02, 0.01), rough=0.8)
-    for k in range(1, 7):
-        p = M @ Vector((x0 + k * ft, RY_, zd + 0.02))
-        ship.cyl("rod_notch", p - M.to_3x3() @ Vector((0.004, 0, 0)), p + M.to_3x3() @ Vector((0.004, 0, 0)), 0.0175, mat=notch, verts=12)
-    soft_band(M, x0 + 3.5 * ft, RY_, 0.09, 0.16, name="markband", z=0.004)
-    X.text3d("ftlabel", "3½ FT", M @ Vector((x0 + 3.5 * ft, RY_ - 0.3, zd + 0.004)), size=0.12, color=(1, 0.93, 0.85), strength=2.5,
-             rot=M.to_euler())
-    E.hide(["MC_pumpbrake", "MC_pump"])
-    c = M @ Vector((x0 + 1.0, RY_ - 1.05, zd + 0.7))
-    E.camera(c, M @ Vector((x0 + 1.0, RY_ - 0.05, zd)), lens=32, fstop=5.6)
+    # the rod hangs from his right fist by its top; left hand steadies it lower down
+    top = Mp @ Vector((-0.2, -0.42, 1.52)); bottom = top - Vector((0, 0, 4.4 * ft))
+    def pose(dv, Mx):
+        Cw.stand_relaxed(dv, pitch=26, yaw=-8, lean=8)
+        Cw.hands_on(dv, Mx, right_w=top + Vector((0, 0, 0.02)), left_w=None, elbow_r=(-0.8, 0.3, -0.6), grip=True)
+        P.hand_reach(dv.h, "L", Mx.inverted() @ (top - Vector((0, 0, 0.42))), elbow=(0.8, 0.3, -0.6)); P.grip(dv.h, "L", 0.7)
+    person("deveau", Mp, pose, look_w=bottom + Vector((0, 0, 3.5 * ft)))
+    wet = ship.paint("rod_wet", (0.08, 0.07, 0.065), rough=0.18, grime=0.1, wet=1.0, scale=8)
+    dry = ship.paint("rod_dry", (0.62, 0.6, 0.55), rough=0.8, grime=0.3, scale=12)      # chalked, so the wet line shows
+    mark = bottom + Vector((0, 0, 3.5 * ft))
+    ship.cyl("rod_wet", bottom, mark, 0.011, mat=wet, verts=14); ship.cyl("rod_dry", mark, top + Vector((0, 0, 0.06)), 0.011, mat=dry, verts=14)
+    notch = E.principled("notch", (0.6, 0.55, 0.45), rough=0.5, metal=0.5)
+    for k in range(1, 5):
+        q = bottom + Vector((0, 0, k * ft))
+        ship.cyl("rod_mark", q - Vector((0, 0, 0.003)), q + Vector((0, 0, 0.003)), 0.0118, mat=notch, verts=14)
+    rope = mc["mats"]["rope"]
+    ship.rope("sounding_line", [top + Vector((0, 0, 0.06)), top + Vector((0.05, 0.1, 0.25)), S.deck_point(M, x0 - 0.3, y0 + 0.2, 0.02)], 0.005, rope)
+    c = Mp @ Vector((-1.5, -1.0, 1.15))                # side-on from his right, chest-down: the rod and both hands
+    E.camera(c, mark + Vector((0, 0, 0.05)), lens=35, fstop=3.5, focus=(mark - c).length)
 
 
 @shot("S39", "The hull looks in good shape.", 2.2,
@@ -871,31 +983,32 @@ def s41():
 
 
 @shot("S42", "The question is whether three men can handle her", 3.6,
-      "Deveau alone by the mainmast, looking aloft and then aft along the deck: weighing it. Slow push-in.",
-      ["wind", "rigging", "his breath"])
+      "From behind Deveau by the mainmast: he looks up at her rig, the torn canvas working against the sky; then aft "
+      "along her empty deck. Medium shot, his face away from us.", ["wind", "rigging", "his breath"])
 def s42():
     mc, _ = mc_at_sea(heel=2.5)
     M = mc["M"]
     px, py = ship.MAIN_X + 1.4, -1.65
-    Mp = S.deck_place(M, px, py, heading_to(px, py, -0.6, -2.6) + 25)
-    person("deveau", Mp, relaxed(pitch=-14, yaw=14, brow=0.8, lids=0.2), look_w=M @ Vector((ship.MAIN_X, 0, 14)))
+    Mp = S.deck_place(M, px, py, heading_to(px, py, ship.FORE_X, 0.0))
+    person("deveau", Mp, relaxed(pitch=-22, yaw=-10, brow=0.6), look_w=M @ Vector((ship.FORE_X, 0, 14)))
+    c = S.deck_point(M, px - 2.6, py - 0.9, 1.6)
     hw = head_w(Mp)
-    c = S.deck_point(M, -0.6, -2.6, 1.55)
-    E.camera(c, hw + Vector((0, 0, -0.12)), lens=50, fstop=2.8, focus=(hw - c).length)
+    E.camera(c, hw.lerp(M @ Vector((ship.FORE_X, 0, 10.0)), 0.3), lens=24, fstop=4, focus=(hw - c).length)
 
 
 @shot("S43", "and keep the water down all the way to Gibraltar.", 4.0,
-      "3D map: from the hexagon where the Dei Gratia found her, a dashed orange route east to Gibraltar.",
-      ["map whoosh", "marker thump"], card="place:GIBRALTAR|BRITISH TERRITORY, 1872")
+      "The chart table: a real relief chart of the eastern Atlantic; a brass pin where the Dei Gratia found her, a "
+      "pencilled course east to a second pin at Gibraltar, a filled soft orange band round it.",
+      ["chart paper rustle", "pin pressed in"], card="place:GIBRALTAR|BRITISH TERRITORY, 1872")
 def s43():
     import explain as X
-    X.atlas()
-    found = (-17.25, 38.33)
-    X.hex_marker("found", *found); X.hex_marker("gib", -5.35, 36.14, color=X.ORANGE)
-    X.dashed_route("route", [found, (-12.0, 37.0), (-8.0, 36.2), (-5.6, 36.1)])
-    X.label("lab_gib", "GIBRALTAR", -5.35, 36.14, dy=0.75)
-    c = X.geo(-12.8, 29.2, 13.5)
-    E.camera(c, X.geo(-11.6, 36.0, 0), lens=33)
+    ch = X.chart_table(bbox=X.WIDE_BBOX, zoom=7, out_w=1300, SX=2.6)
+    X.pin(ch, "found", *X.FOUND, scale=2.2); X.pin(ch, "gib", *X.GIB, scale=2.2)
+    X.pencil_route(ch, "route", [X.FOUND, (-12.0, 37.0), (-8.6, 36.3), (-6.2, 36.0), X.GIB])
+    X.chart_bands(ch, "gibband", *X.GIB, radii=((0.03, 0.05), (0.07, 0.085)))
+    X.chart_label(ch, "lab_gib", "GIBRALTAR", X.GIB[0], X.GIB[1], size=0.04, dy=-0.06)
+    tgt = ch["mp"](-9.8, 37.3)
+    E.camera(tgt + Vector((0.1, -0.85, 1.1)), tgt, lens=34, fstop=5.6, focus=1.4)
 
 
 # ============================================================================ 6. the mate's cabin: log and slate
@@ -912,7 +1025,7 @@ def s44():
     import interiors as I
     a = mate_scene()
     d = a["door"]
-    Mp = Matrix.Translation((d.x - 0.35, d.y, 0)) @ Matrix.Rotation(math.radians(-90 + 25), 4, 'Z')
+    Mp = Matrix.Translation((d.x - 0.35, d.y, 0.003)) @ Matrix.Rotation(math.radians(-90 + 25), 4, 'Z')
     lw = Mp @ Vector((-0.25, -0.45, 1.42))
     def pose(dv, Mx):
         Cw.stand_relaxed(dv, pitch=14, yaw=8, lean=4)
@@ -952,24 +1065,24 @@ def s47():
 
 
 @shot("S48", "the crew used to jot things down during a watch.", 3.8,
-      "Deveau seated at the table reading, the lantern beside him lighting his face from below; his eyes move along the lines.",
-      ["breath", "hull creak"], cine={"exposure": 0.2})
+      "Over Deveau's shoulder, seated at the table: the slate under his hand in the lantern light, his finger on the last lines.",
+      ["breath", "hull creak", "chalk dust brushed"], cine={"exposure": 0.9})
 def s48():
     import interiors as I, human as H
     a = mate_scene()
     t = a["table"]
     M = Matrix.Translation((t.x + 0.05, t.y + 0.62, 0.0))
+    sl = a["slate"].location
     def pose(dv, Mx):
-        H.pose_sit(dv.h, lean=16, hands="knees")
-        P.head(dv.h, pitch=4, yaw=-18)
-        Cw.hands_on(dv, Mx, left_w=t + Vector((0.42, 0.06, 0.07)), right_w=t + Vector((0.12, 0.1, 0.07)),
-                    elbow_l=(0.8, 0.5, -0.6), elbow_r=(-0.8, 0.5, -0.6), grip=False, curl=25)
+        H.pose_sit(dv.h, lean=20, hands="knees")
+        P.head(dv.h, pitch=26, yaw=-14)
+        Cw.hands_on(dv, Mx, left_w=sl + Vector((0.12, 0.08, 0.08)), right_w=t + Vector((-0.12, 0.12, 0.1)),
+                    elbow_l=(0.8, 0.5, -0.6), elbow_r=(-0.8, 0.5, -0.6), grip=False, curl=20)
         dv.brow_knit(0.6); dv.lids(0.6)
-    dv = person("deveau", M, pose, look_w=a["slate"].location, seat=True)
+    dv = person("deveau", M, pose, look_w=sl, seat=True)
     seat_chest(dv)
-    hw = dv.place_M @ Vector((0, -0.16, 1.6))
-    c = Vector((t.x - 0.85, t.y - 0.3, 1.42))
-    E.camera(c, hw + Vector((0.0, -0.1, -0.12)), lens=38, fstop=2.4, focus=(hw - c).length)
+    c = dv.place_M @ Vector((-0.35, 0.42, 1.78))
+    E.camera(c, sl + Vector((0.0, 0.0, 0.02)), lens=35, fstop=3.2, focus=(sl - c).length)
 
 
 @shot("S49", "The book stops on November twenty-fourth.", 2.8,
@@ -993,41 +1106,41 @@ def s50():
 
 # ============================================================================ 7. where she should have been
 @shot("S51", "It puts the Mary Celeste six miles from Santa Maria, an island in the Azores.", 6.0,
-      "3D map close on the Azores: Santa Maria marked with a red hexagon and filled soft orange bands; '6 MILES' callout.",
-      ["map whoosh", "marker thump"], card="place:SANTA MARIA|AZORES")
+      "Close on the chart: Santa Maria in relief, a brass pin six miles off its eastern point where the slate puts her, "
+      "filled soft orange bands round it; the island's name in the chart's lettering.",
+      ["lamp hiss", "pin pressed in"], card="place:SANTA MARIA|AZORES")
 def s51():
     import explain as X
-    X.atlas()
-    sm = (-25.1, 36.97)
-    X.hex_marker("sm", sm[0] + 0.18, sm[1] + 0.05, r=0.16)
-    X.ripple_bands("smr", sm[0] + 0.18, sm[1] + 0.05, radii=((0.28, 0.42), (0.55, 0.68)))
-    X.label("lab_sm", "SANTA MARIA", *sm, size=0.32, dy=-0.75)
-    X.label("lab_6", "6 MILES", sm[0] + 0.18, sm[1] + 0.05, size=0.22, dx=0.9, dy=0.35, color=(1.0, 0.75, 0.5))
-    c = X.geo(-25.8, 35.0, 4.0)
-    E.camera(c, X.geo(-25.0, 37.1, 0), lens=40)
+    ch = X.chart_table()
+    X.pin(ch, "last", *X.LAST)
+    X.chart_bands(ch, "lastband", *X.LAST, radii=((0.012, 0.022), (0.03, 0.038)))
+    X.chart_label(ch, "lab_sm", "STA MARIA", -25.1, 36.97, size=0.014, dy=-0.03)
+    tgt = ch["mp"](-25.05, 37.0)
+    E.camera(tgt + Vector((0.12, -0.42, 0.33)), tgt, lens=50, fstop=3.2, focus=0.55)
 
 
 @shot("S52", "Deveau is hundreds of miles east of that island.", 3.8,
-      "The map pulls back and slides east: a second hexagon where the Dei Gratia found her, far from the Azores.",
-      ["whoosh", "marker thump"])
+      "The camera rises off the chart: the Azores pin to the west, a second pin far to the east where the Dei Gratia found her.",
+      ["whoosh", "pin pressed in"])
 def s52():
     import explain as X
-    X.atlas()
-    X.hex_marker("sm", -24.92, 37.02, r=0.3); X.hex_marker("found", -17.25, 38.33)
-    X.label("lab_az", "AZORES", -27.0, 38.3, size=0.7, dy=1.1)
-    X.label("lab_dg", "DEI GRATIA, DEC 4", -17.25, 38.33, size=0.6, dy=0.9)
-    c = X.geo(-21.8, 30.8, 10.5)
-    E.camera(c, X.geo(-21.8, 37.9, 0), lens=30)
+    ch = X.chart_table()
+    X.pin(ch, "last", *X.LAST, scale=2.4); X.pin(ch, "found", *X.FOUND, scale=2.4)
+    X.chart_label(ch, "lab_az", "AZORES", -27.0, 39.05, size=0.05)
+    X.chart_label(ch, "lab_dg", "DEI GRATIA  DEC 4", X.FOUND[0], X.FOUND[1], size=0.04, dy=0.06)
+    tgt = ch["mp"](-21.2, 37.6)
+    E.camera(tgt + Vector((0.05, -1.2, 1.5)), tgt, lens=30, fstop=8, focus=1.9)
 
 
 @shot("S53", "He has no record of what happened in between.", 4.2,
-      "The open water between the two markers: no line joins them; filled soft orange bands pulse over the empty sea. Hold.",
-      ["low drone", "sea under"])
+      "The open sea on the chart between the two pins: no pencil line joins them; a filled soft orange band lies over the "
+      "empty water. Hold.", ["low drone", "lamp hiss"])
 def s53():
     import explain as X
-    X.atlas()
-    X.hex_marker("sm", -24.92, 37.02, r=0.3); X.hex_marker("found", -17.25, 38.33)
-    X.ripple_bands("gap", -21.0, 37.7, radii=((1.0, 1.5), (2.0, 2.4)))
-    X.text3d("q", "?", X.geo(-21.0, 37.7, 0.4), size=1.2, color=(1.0, 0.8, 0.6), strength=2.0)
-    c = X.geo(-21.0, 33.5, 7.0)
-    E.camera(c, X.geo(-21.0, 37.8, 0), lens=35)
+    ch = X.chart_table()
+    X.pin(ch, "last", *X.LAST, scale=2.4); X.pin(ch, "found", *X.FOUND, scale=2.4)
+    X.chart_bands(ch, "gapband", -21.1, 37.7, radii=((0.12, 0.2), (0.26, 0.31)), strength=1.1)
+    tgt = ch["mp"](-21.1, 37.7)
+    E.camera(tgt + Vector((-0.05, -1.2, 1.4)), tgt, lens=30, fstop=8, focus=1.85)
+
+

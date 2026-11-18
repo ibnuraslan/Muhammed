@@ -4,7 +4,7 @@
 # Aboard / interior shots use a lighter FFT sea (it is seen past rails); sea-level wides keep the full one.
 D=$(cd "$(dirname "$0")/.." && pwd); B=${BLENDER:-/opt/blender/blender-5.2.2-linux-x64/blender}
 mkdir -p "$D/out/logs"
-IDS=${@:-$(python3 -c "import re;print(' '.join(re.findall(r'@shot\(\"(S\d+)\"', open('$D/shots.py').read())))")}
+IDS=${@:-$(python3 -c "import re;print(' '.join(re.findall(r'@shot\(\"(S\d+[a-z]?)\"', open('$D/shots.py').read())))")}
 WIDE="S01 S13 S15 S18 S20 S25 S30 S41"
 for s in $IDS; do
   if [[ " $WIDE " == *" $s "* ]]; then R=18; P=3; else R=14; P=2; fi

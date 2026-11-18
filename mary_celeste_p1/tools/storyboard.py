@@ -24,7 +24,8 @@ def shots():
                 if isinstance(d, ast.Call) and getattr(d.func, "id", "") == "shot":
                     a = [ast.literal_eval(x) for x in d.args]
                     kw = {k.arg: ast.literal_eval(k.value) for k in d.keywords}
-                    out.append(dict(id=a[0], vo=a[1], dur=a[2], desc=a[3], sfx=a[4], card=kw.get("card"), line=node.lineno))
+                    out.append(dict(id=a[0], vo=a[1], dur=a[2], desc=a[3], sfx=a[4], card=kw.get("card"), label=kw.get("label"),
+                                    line=node.lineno))
     out.sort(key=lambda s: s["line"])
     return out
 
@@ -37,6 +38,19 @@ def photo_for(label):
         if os.path.exists(p):
             return p
     return None
+
+
+def burn_label(im, text, fx, fy):
+    """A small burned-in callout (Courier Prime Bold, white, soft shadow) at (fx, fy) of the frame, like '3½ FT'."""
+    from PIL import ImageFilter
+    W, H = im.size
+    f = ImageFont.truetype(FONTB, int(0.03 * H))
+    lay = Image.new("RGBA", im.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    d.text((fx * W, fy * H), text, font=f, fill=(255, 255, 255, 255))
+    sh = lay.split()[-1].filter(ImageFilter.GaussianBlur(0.004 * H)).point(lambda v: v * 180 // 255)
+    shadow = Image.new("RGBA", im.size, (0, 0, 0, 0)); shadow.putalpha(sh)
+    out = Image.alpha_composite(im.convert("RGBA"), shadow); out = Image.alpha_composite(out, lay)
+    return out.convert("RGB")
 
 
 def placeholder(size=(400, 440)):
@@ -64,6 +78,8 @@ def main():
             if ph is None:
                 ph = placeholder(); note = " (photo pending)"
             im = (CO.person_right if kind == "person" else CO.place_left)(im, ph, name, role)
+        if s.get("label"):
+            im = burn_label(im, *s["label"])
         im = CO.caption(im, s["vo"])
         im.save(os.path.join(fr, s["id"] + ".jpg"), quality=88)
         thumbs.append((s, im))

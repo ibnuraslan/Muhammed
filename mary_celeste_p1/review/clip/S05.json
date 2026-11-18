@@ -1,0 +1,42 @@
+{
+ "shot": "S05",
+ "bad": [],
+ "contacts": [
+  {
+   "person": "Deveau",
+   "part": "Deveau_body",
+   "other": "berth_board_cap",
+   "pairs": 50,
+   "grip": false,
+   "ok": true,
+   "at": [
+    0.279,
+    0.617,
+    0.83
+   ],
+   "span": [
+    0.013,
+    0.01,
+    0.002
+   ]
+  },
+  {
+   "person": "Deveau",
+   "part": "Deveau_body",
+   "other": "wooden_lantern_01_handle",
+   "pairs": 28,
+   "grip": true,
+   "ok": true,
+   "at": [
+    -0.141,
+    0.541,
+    1.272
+   ],
+   "span": [
+    0.035,
+    0.016,
+    0.01
+   ]
+  }
+ ]
+}

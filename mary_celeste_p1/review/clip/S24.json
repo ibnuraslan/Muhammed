@@ -1,0 +1,60 @@
+{
+ "shot": "S24",
+ "bad": [],
+ "contacts": [
+  {
+   "person": "Sailor2",
+   "part": "Sailor2_body",
+   "other": "DG_wheel",
+   "pairs": 217,
+   "grip": true,
+   "ok": true,
+   "at": [
+    0.451,
+    -13.923,
+    3.386
+   ],
+   "span": [
+    0.093,
+    0.075,
+    0.063
+   ]
+  },
+  {
+   "person": "Sailor2",
+   "part": "Sailor2_body",
+   "other": "DG_wheelbox",
+   "pairs": 80,
+   "grip": true,
+   "ok": true,
+   "at": [
+    1.292,
+    -13.892,
+    2.797
+   ],
+   "span": [
+    0.019,
+    0.005,
+    0.026
+   ]
+  },
+  {
+   "person": "Sailor2",
+   "part": "Sailor2_shirt",
+   "other": "DG_wheel",
+   "pairs": 202,
+   "grip": true,
+   "ok": true,
+   "at": [
+    0.474,
+    -13.945,
+    3.382
+   ],
+   "span": [
+    0.048,
+    0.041,
+    0.051
+   ]
+  }
+ ]
+}

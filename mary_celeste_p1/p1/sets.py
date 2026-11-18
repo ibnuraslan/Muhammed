@@ -169,4 +169,12 @@ def deck_point(M, x, y, dz=0.0):
 
 def deck_place(M, x, y, heading_local):
     """A person's placement matrix on deck: heading in ship frame (0 faces -Y/starboard, 90 faces the bow)."""
-    return M @ Matrix.Translation((x, y, ship.zdeck(x) + 0.006)) @ Matrix.Rotation(math.radians(heading_local), 4, 'Z')
+    slope = abs(ship.zdeck(x + 0.15) - ship.zdeck(x - 0.15)) / 0.3            # the sheer rises toward bow and stern
+    return M @ Matrix.Translation((x, y, deck_z(x, y) + 0.01 + slope * 0.2)) @ Matrix.Rotation(math.radians(heading_local), 4, 'Z')
+
+
+def deck_z(x, y):
+    """Deck surface height in ship coords, with the deck's camber (lib/ship.deck: +12 mm at the centre line)."""
+    xs0, xb0 = ship._ends(1.0)
+    hb = max(ship.half_breadth((x - xs0) / (xb0 - xs0), 1.0) - 0.1, 0.1)
+    return ship.zdeck(x) + 0.012 * max(0.0, 1 - (y / hb) ** 2)

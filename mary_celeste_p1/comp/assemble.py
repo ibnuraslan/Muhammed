@@ -74,6 +74,8 @@ def main():
                 if c["t0"] <= tt < c["t0"] + CARD_DUR:
                     fn = CO.person_right if c["kind"] == "person" else CO.place_left
                     im = fn(im, c["photo"], c["name"], c["role"], slide=CO.card_slide(tt - c["t0"], CARD_DUR))
+            if s.get("label") and 0.25 <= i / FPS:
+                im = SB.burn_label(im, *s["label"])
             for (c0, c1, txt) in cues:
                 if c0 <= tt < c1:
                     im = CO.caption(im, txt)

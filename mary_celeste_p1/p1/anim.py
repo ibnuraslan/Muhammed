@@ -84,10 +84,23 @@ def live(dv, M, pose, look_w, dur, density=1.0, seed=0, action=None, key_every=0
             R = (-d).to_track_quat('Y', 'Z').to_matrix().to_4x4()
             e.matrix_world = Matrix.Translation(loc) @ R
     bpy.context.view_layer.update()
+    if hasattr(dv, "_corneas"):                      # shared lib (Nov 18): wet corneas over the eyes, riding the head
+        dv._corneas()
+        for c in getattr(dv, "corneas", []):
+            mw = c.matrix_world.copy(); c.parent = h.arm; c.parent_type = 'BONE'; c.parent_bone = "head"
+            bpy.context.view_layer.update(); c.matrix_world = mw
+    if not getattr(dv, "asset_boots", True) and hasattr(dv, "_sea_boots"):
+        dv._sea_boots()
     _grow_hair(dv, density)
     h.arm.matrix_world = M
     h.arm.hide_render = True
     bpy.context.view_layer.update()
+    # tags for lib/clipcheck.py (as Deveau.finish does)
+    wr = []
+    for sd in ("L", "R"):
+        wr += list(h.arm.matrix_world @ h.arm.pose.bones[f"wrist.{sd}"].tail)
+    for o in dv.objects:
+        o["person"] = dv.name; o["hands"] = wr
 
 
 def _grow_hair(dv, density):
@@ -178,3 +191,25 @@ def ocean_time(dur, speed=1.0):
         md.time = t0 + dur * speed; md.keyframe_insert("time", frame=1 + int(round(dur * FPS)))
         md.time = t0
     _bezier_keys()
+
+
+def galley_water(dur, floating=(), seed=4):
+    """The water in the galley moves with the ship's roll: the ripple pattern drifts (noise W), the things afloat in
+    it bob and drift a few centimetres (keys every 2 frames)."""
+    for m in bpy.data.materials:
+        if m.name.startswith("galleywater") and m.node_tree:
+            nz = m.node_tree.nodes.get("ripple")
+            if nz is not None:
+                _linear_keys()
+                nz.inputs['W'].default_value = 0.0; nz.inputs['W'].keyframe_insert("default_value", frame=1)
+                nz.inputs['W'].default_value = 0.35 * dur; nz.inputs['W'].keyframe_insert("default_value", frame=1 + int(dur * FPS))
+                _bezier_keys()
+    rng = np.random.default_rng(seed)
+    for o in floating:
+        base = o.location.copy(); r0 = o.rotation_euler.copy(); ph = rng.uniform(0, 6.28, 3); amp = rng.uniform(0.01, 0.03)
+        for i in range(0, int(dur * FPS) + 3, 2):
+            t = i / FPS
+            o.location = base + Vector((amp * math.sin(0.6 * t + ph[0]), amp * math.sin(0.45 * t + ph[1]), 0.004 * math.sin(1.3 * t + ph[2])))
+            o.rotation_euler = (r0.x, r0.y, r0.z + 0.08 * math.sin(0.3 * t + ph[2]))
+            o.keyframe_insert("location", frame=1 + i); o.keyframe_insert("rotation_euler", frame=1 + i)
+        o.location = base; o.rotation_euler = r0

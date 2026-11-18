@@ -1,0 +1,24 @@
+{
+ "shot": "S26",
+ "bad": [],
+ "contacts": [
+  {
+   "person": "Morehouse",
+   "part": "Morehouse_body",
+   "other": "DG_caprail_S0",
+   "pairs": 430,
+   "grip": true,
+   "ok": true,
+   "at": [
+    1.365,
+    11.643,
+    2.449
+   ],
+   "span": [
+    0.063,
+    0.082,
+    0.076
+   ]
+  }
+ ]
+}

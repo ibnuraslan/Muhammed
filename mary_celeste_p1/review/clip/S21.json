@@ -1,0 +1,42 @@
+{
+ "shot": "S21",
+ "bad": [],
+ "contacts": [
+  {
+   "person": "Sailor2",
+   "part": "Sailor2_body",
+   "other": "DG_spoke",
+   "pairs": 179,
+   "grip": true,
+   "ok": true,
+   "at": [
+    0.461,
+    -13.937,
+    3.067
+   ],
+   "span": [
+    0.051,
+    0.028,
+    0.025
+   ]
+  },
+  {
+   "person": "Sailor2",
+   "part": "Sailor2_body",
+   "other": "DG_spoke.004",
+   "pairs": 177,
+   "grip": true,
+   "ok": true,
+   "at": [
+    1.556,
+    -13.84,
+    3.143
+   ],
+   "span": [
+    0.047,
+    0.031,
+    0.021
+   ]
+  }
+ ]
+}

@@ -1,0 +1,42 @@
+{
+ "shot": "S04",
+ "bad": [],
+ "contacts": [
+  {
+   "person": "Deveau",
+   "part": "Deveau_body",
+   "other": "rung",
+   "pairs": 304,
+   "grip": true,
+   "ok": true,
+   "at": [
+    -8.093,
+    1.321,
+    1.979
+   ],
+   "span": [
+    0.058,
+    0.349,
+    0.063
+   ]
+  },
+  {
+   "person": "Deveau",
+   "part": "Deveau_shirt",
+   "other": "rung",
+   "pairs": 84,
+   "grip": true,
+   "ok": true,
+   "at": [
+    -8.077,
+    1.321,
+    1.957
+   ],
+   "span": [
+    0.012,
+    0.356,
+    0.033
+   ]
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+S01 0
+S02 0
+S03 0
+S04 0
+S05 0
+S06 0
+S07 0
+S08 0
+S09 no people
+S10 0
+S11 no people
+S12 0
+S13 0
+S14 0
+S15 0
+S16 no people
+S16b no people
+S17 no people
+S18 no people
+S19 0
+S20 no people
+S21 0
+S22 no people
+S23 0
+S24 0
+S25 no people
+S26 0
+S27 no people
+S28 no people
+S29 no people
+S30 0
+S31 0
+S32 no people
+S33 no people
+S34 no people
+S35 no people
+S36 0
+S37 0
+S38 0
+S39 no people
+S40 no people
+S41 no people
+S42 0
+S43 no people
+S44 0
+S45 no people
+S46 no people
+S47 no people
+S48 0
+S49 no people
+S50 no people
+S51 no people
+S52 no people
+S53 no people

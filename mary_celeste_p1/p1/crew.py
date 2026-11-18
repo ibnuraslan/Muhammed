@@ -31,6 +31,7 @@ class Sailor(D.Deveau):
                          extra=tg, eyebrows=None, eyelashes=None, skin=None)
         h = self.h
         h.body.data.materials[0] = D.sailor_skin(name + "_skin", base=skin)
+        self._skin_regions()
         self.name = name; self.wet = wet
         self.rest_co = H.to_bl(h.hc)
         me = h.body.data
@@ -44,9 +45,11 @@ class Sailor(D.Deveau):
             self.used[list(pl.vertices)] = True
         self.faces = [tuple(pl.vertices) for pl in me.polygons]
         self._dress()
+        self.asset_boots = self._asset_boots(skin=True)
         self._recolour(jacket, trousers, scarf, shirt)
-        if no_jacket:                                   # in shirt sleeves: drop the reefer jacket and its buttons
-            for o in [self.jacket] + self.button_objs:
+        if no_jacket:                                   # in shirt sleeves: drop the reefer jacket, its pockets and buttons
+            drop = [self.jacket] + self.button_objs + [o for o in h.parts if "pocket" in o.name.lower()]
+            for o in drop:
                 if o in h.parts:
                     h.parts.remove(o)
                 bpy.data.objects.remove(o)
@@ -56,7 +59,11 @@ class Sailor(D.Deveau):
     def _recolour(self, jacket, trousers, scarf, shirt):
         n = self.name
         if jacket:
-            self.jacket.data.materials[0] = D.wool_material(n + "_jk", jacket, weave=380, wet=self.wet, dirt=0.2, sheen=0.3)
+            jm = D.wool_material(n + "_jk", jacket, weave=380, wet=self.wet, dirt=0.2, sheen=0.1)
+            self.jacket.data.materials[0] = jm
+            for b in self.button_objs:
+                if b.name.startswith("pocket_flap"):
+                    b.data.materials[0] = jm
         if trousers:
             self.trousers.data.materials[0] = D.wool_material(n + "_tr", trousers, weave=500, wet=self.wet, sheen=0.25)
         if scarf:
