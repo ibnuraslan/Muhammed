@@ -75,16 +75,16 @@ if SHOT != "S12":
         PR.put("carved_wooden_plate", T + Vector((-0.2, 0.2, 0)), size=0.24, axis=0)
         bowl, _ = PR.put("wooden_bowl_01", T + Vector((0.0, 0.02, 0)), size=0.22, axis=0)
         stew = ship.cyl("stew", T + Vector((0.0, 0.02, 0.045)), T + Vector((0.0, 0.02, 0.05)), 0.085, mat=ship.paint("stew", (0.16, 0.07, 0.025), rough=0.25, grime=0.3), verts=32)
-        PR.steam("steam_bowl", T + Vector((0.0, 0.02, 0.06)), size=(0.16, 0.16, 0.32), density=0.9)
+        PR.steam("steam_bowl", T + Vector((0.0, 0.02, 0.06)), size=(0.16, 0.16, 0.32), density=4.0)
         for k, (x, y) in enumerate(((0.45, 0.12), (-0.48, 0.1), (0.1, -0.28))):
             mug = PR.mug(f"mug{k}", T + Vector((x, y, 0)))
-            PR.steam(f"steam{k}", T + Vector((x, y, 0.09)), size=(0.08, 0.08, 0.22), density=0.8)
+            PR.steam(f"steam{k}", T + Vector((x, y, 0.09)), size=(0.08, 0.08, 0.22), density=3.5)
         PR.put("jug_01", T + Vector((-0.5, -0.25, 0)), size=0.2)
-        PR.put("hamburger_buns", T + Vector((0.22, 0.22, 0)), size=0.12, axis=0)
+        PR.put("hamburger_buns", T + Vector((0.22, 0.22, 0)), size=0.24, axis=0)
         for k, x in enumerate((0.3, -0.35)):
             fk = ship.box(f"fork{k}", (0, 0, 0), (0.18, 0.012, 0.004), ship.iron(f"steel{k}"))
             fk.matrix_world = Matrix.Translation(T + Vector((x + 0.06, -0.2, 0.012))) @ Matrix.Rotation(0.5 + k, 4, 'Z')
-        lamp, lm = PR.put("vintage_oil_lamp", T + Vector((-0.05, 0.28, 0)), size=0.38)
+        lamp, lm = PR.put("vintage_oil_lamp", T + Vector((-0.05, 0.28, 0)), size=0.46)
         lp = bpy.data.objects.new("flame", bpy.data.lights.new("flame", 'POINT')); sc.collection.objects.link(lp)
         lp.location = T + Vector((-0.05, 0.28, 0.2)); lp.data.energy = 40; lp.data.color = (1.0, 0.6, 0.28); lp.data.shadow_soft_size = 0.02
     else:
