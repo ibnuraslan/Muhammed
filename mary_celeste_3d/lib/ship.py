@@ -118,13 +118,15 @@ def canvas(name, wet=0.6, dirt=0.5, color=(0.62, 0.56, 0.45)):
     return m
 
 
-def tarred_rope(name="rope", color=(0.05, 0.04, 0.03)):
+def tarred_rope(name="rope", color=(0.028, 0.02, 0.013)):
+    """Tarred hemp: near-black brown, matte with a waxy sheen on the strands, a visible right-hand lay."""
     m, N, Lk, p = _mat(name)
-    p.inputs['Base Color'].default_value = (*color, 1); p.inputs['Roughness'].default_value = 0.6
+    p.inputs['Base Color'].default_value = (*color, 1); p.inputs['Roughness'].default_value = 0.72
+    p.inputs['Sheen Weight'].default_value = 0.25; p.inputs['Specular IOR Level'].default_value = 0.3
     tc = N.new("ShaderNodeTexCoord")
     wv = N.new("ShaderNodeTexWave"); wv.wave_type = 'BANDS'; wv.bands_direction = 'DIAGONAL'
-    wv.inputs['Scale'].default_value = 120; Lk.new(tc.outputs['Object'], wv.inputs['Vector'])
-    b = N.new("ShaderNodeBump"); b.inputs['Strength'].default_value = 0.4
+    wv.inputs['Scale'].default_value = 160; Lk.new(tc.outputs['Object'], wv.inputs['Vector'])
+    b = N.new("ShaderNodeBump"); b.inputs['Strength'].default_value = 0.8
     Lk.new(wv.outputs['Fac'], b.inputs['Height']); Lk.new(b.outputs['Normal'], p.inputs['Normal'])
     return m
 
@@ -623,7 +625,16 @@ def build_rigging(name, sp, mats, coll):
             for k in range(4):
                 x = m.x + 0.9 - k * 0.75
                 c = chain(x, sg); h = head + Vector((0, sg * 0.25, 0))
-                out.append(rope(f"{name}_shroud", (c, h), 0.022, rp, coll)); pts.append((c, h))
+                # deadeye pair with a laced lanyard at the channel; the shroud starts at the upper deadeye
+                d = (h - c).normalized(); lo_ = c + d * 0.05; up_ = c + d * 0.42
+                for q in (lo_, up_):
+                    out.append(cyl(f"{name}_deadeye", q - d * 0.04, q + d * 0.04, 0.085, mat=mats["deadeye"], verts=18, coll=coll))
+                # iron chainplate from the lower deadeye down the ship's side
+                out.append(cyl(f"{name}_chainplate", lo_ - d * 0.05, lo_ - Vector((0, 0, 0.75)) + Vector((0, sg * 0.04, 0)), 0.014, mat=mats["iron"], verts=8, coll=coll))
+                sd = Vector((0, sg, 0)).cross(d).normalized() if abs(sg) else Vector((1, 0, 0))
+                for k2 in (-1, 0, 1):
+                    out.append(rope(f"{name}_lanyard", (lo_ + sd * 0.045 * k2 + d * 0.03, up_ + sd * 0.045 * k2 - d * 0.03), 0.008, rp, coll))
+                out.append(rope(f"{name}_shroud", (up_ + d * 0.04, h), 0.022, rp, coll)); pts.append((up_, h))
             # ratlines
             for r in range(1, 30):
                 f = r / 31
@@ -738,7 +749,7 @@ def hull_detail(name, mats, coll):
             out.append(box(f"{name}_channel", (mx - 0.35, sg * (hb + 0.2), z), (3.0, 0.32, 0.09), mats["rail"], bevel=0.01, coll=coll))
             for k in range(4):
                 x = mx + 0.9 - k * 0.75
-                out.append(cyl(f"{name}_deadeye", (x, sg * (hb + 0.12), z + 0.05), (x, sg * (hb + 0.24), z + 0.05), 0.08, mat=mats["rail"], verts=16, coll=coll))
+                out.append(cyl(f"{name}_deadeye", (x, sg * (hb + 0.12), z + 0.05), (x, sg * (hb + 0.24), z + 0.05), 0.08, mat=mats["deadeye"], verts=16, coll=coll))
                 out.append(cyl(f"{name}_chainplate", (x, sg * (hb + 0.1), z - 0.02), (x, sg * (hb + 0.05), z - 0.75), 0.018, mat=mats["iron"], verts=8, coll=coll))
         x = xb0 - 2.0; s_ = (x - xs0) / (xb0 - xs0)
         out.append(box(f"{name}_cathead", (x, sg * (half_breadth(s_, 1.0) + 0.35), zdeck(x) + RAIL_H - 0.1), (0.3, 0.9, 0.3), mats["rail"], rot=(0, 0, sg * 0.5), bevel=0.02, coll=coll))
@@ -842,6 +853,7 @@ def build(name="ship", sails="found", rail_gap=None, wind=(0.25, -1.0, 0), coll_
         spar=paint(name + "_spar", (0.32, 0.22, 0.12), rough=0.5, grime=0.4, wet=wet * 0.5),
         canvas=canvas(name + "_canvas", wet=wet),
         rope=tarred_rope(name + "_rope"), iron=iron(name + "_iron"),
+        deadeye=paint(name + "_deadeye", (0.018, 0.013, 0.009), rough=0.55, grime=0.3, wet=wet * 0.6, scale=12),
         dark=paint(name + "_dark", (0.01, 0.008, 0.006), rough=0.9, grime=0.0),
     )
     for k in ("deck",):

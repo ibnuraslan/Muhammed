@@ -83,9 +83,8 @@ def head_of(M):
 
 
 def finish(sat=1.0, exposure=0.0, bloom=0.3):
-    if os.environ.get("CLIPONLY"):              # P5's clipping check (BVH overlap of every person vs everything else)
-        sys.path.insert(0, os.path.join(p4.ROOT, "mary_celeste_p4", "out", "ext"))
-        import clipcheck
+    if os.environ.get("CLIPONLY"):              # shared clipping check (BVH overlap of every person vs everything else)
+        import clipcheck                         # shared lib (mary_celeste_3d/lib/clipcheck.py)
         clipcheck.OUT = os.path.join(p4.ROOT, "mary_celeste_p4", "out", "clip")
         clipcheck.check(SHOT, hand_ok=("rod", "spear", "pump", "brake", "rail", "cap", "bulwark", "lantern", "deck"))
         sys.exit(0)

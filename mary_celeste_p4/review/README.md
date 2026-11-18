@@ -79,7 +79,7 @@ Courier Prime captions; every action has an SFX (list above → `sfx_cues.csv` a
 * S10: high three-quarter on the whole battened hatch (iron bars, wedges), Deveau at its far edge.
 * Table shots varied: S19 high angle over the whole table; S24 low across the relief past the lamp; S34 slow push to the found pin along the inked drift.
 
-## Clipping check (P5's lib5/clipcheck.py, BVH triangle overlap, every person vs every other mesh)
+## Clipping check (shared mary_celeste_3d/lib/clipcheck.py @9499317, BVH triangle overlap, every person vs every other mesh)
 `tools/clipall.sh`: 9 character shots x 3 times in the shot (t = 0, 0.5, 1) -> **0 clipping** (review/clip/SUMMARY.txt and per-shot JSON).
 The only contacts are hands closed on the sounding rod (S31, S35) and on the pump spear/brake (S21), inside the grip allowance.
 Fixed on the way: boots sinking into the deck (new automatic foot settle on the sheer + camber), Deveau standing inside the galley
