@@ -358,7 +358,7 @@ class Deveau:
         trous = u & (z < hip_z + 0.11) & (z > ankle_z + 0.2) & (wfoot < 0.2) & (whand < 0.05)
         self.trousers, _ = self._shell("trousers", trous, 0.009, wool_material("trousers", (0.022, 0.02, 0.019), weave=500, wet=self.wet, sheen=0.25),
                                        solid=0.002, displace=0.004, drape=14,
-                                       flare=lambda b: np.clip((knee_z + 0.1 - b[:, 2]) / 0.4, 0, 1) * 0.006)
+                                       flare=lambda b: np.clip((b[:, 2] - knee_z + 0.05) / 0.25, 0, 1) * 0.007 * (b[:, 2] < hip_z - 0.02))
         # ---- boots (leather): feet and shins, smoothed so the toes read as a boot
         boot = u & (z < ankle_z + 0.27)
         self.boot_mask = boot.copy()
@@ -366,12 +366,15 @@ class Deveau:
                                     flare=lambda b: np.clip((ankle_z - b[:, 2]) / 0.06, 0, 1) * 0.006)
         # ---- reefer jacket (heavy navy wool): torso + arms, hem at the hip, cuffs short of the wrist
         dist_wrist = np.minimum(np.linalg.norm(co - wrist, axis=1), np.linalg.norm(co - wrist * np.array([-1, 1, 1]), axis=1))
-        jacket = u & (wh < 0.2) & (whand < 0.05) & (z > hip_z - 0.13) & (z < neck_z + 0.01) & (dist_wrist > 0.045)
-        self.jacket, jv = self._shell("jacket", jacket, 0.014, wool_material("jacket", (0.010, 0.012, 0.02), weave=380, wet=self.wet, dirt=0.18, sheen=0.3),
-                                      solid=0.005, displace=0.003, drape=12,
-                                      flare=lambda b: np.clip((hip_z + 0.05 - b[:, 2]) / 0.15, 0, 1) * 0.012)
+        # cut above the crotch so the body of the jacket is one closed loop; the skirt is added as an open hem
+        jacket = u & (wh < 0.2) & (whand < 0.05) & (z > hip_z - 0.015) & (z < neck_z + 0.01) & (dist_wrist > 0.045)
+        self.jacket, jv = self._shell("jacket", jacket, 0.011, wool_material("jacket", (0.010, 0.012, 0.02), weave=380, wet=self.wet, dirt=0.18, sheen=0.3),
+                                      solid=0.005, displace=0.002, drape=8)
+        self._hem(self.jacket, hip_z)
         self._collar(self.jacket)
+        self._folds(self.jacket)
         self._buttons(jv)
+        # (pocket flaps dropped: they read as tabs at render distance)
         self._hide_skin(shirt | trous | boot | jacket)
 
     def _collar(self, o):
@@ -386,15 +389,82 @@ class Deveau:
         nv = [g for g in r["geom"] if isinstance(g, bmesh.types.BMVert)]
         for v in nv:
             d = Vector((v.co.x - c.x, v.co.y - c.y, 0)).normalized()
-            v.co += d * 0.004 + Vector((0, 0, 0.018))
+            v.co += d * 0.003 + Vector((0, 0, 0.016))
         ne = [g for g in r["geom"] if isinstance(g, bmesh.types.BMEdge) and all(vv in nv for vv in g.verts)]
         r2 = bmesh.ops.extrude_edge_only(bm, edges=ne)
         for v in [g for g in r2["geom"] if isinstance(g, bmesh.types.BMVert)]:
             d = Vector((v.co.x - c.x, v.co.y - c.y, 0)).normalized()
-            v.co += d * 0.008 + Vector((0, 0, 0.022))       # upturned collar, against the weather
+            v.co += d * 0.038 - Vector((0, 0, 0.03))        # turned down: lies flat on the shoulders
         bm.to_mesh(me); bm.free(); me.update()
         # new vertices take the weights of their nearest neighbours already in the groups
         self._fill_weights(o)
+
+    def _hem(self, o, hip_z, drop=0.15, flare=0.028):
+        """Open skirt below the waist: the bottom edge of the jacket body is extruded straight down and a little out,
+        so the jacket hangs over the hips like cloth instead of wrapping between the legs."""
+        me = o.data; bm = bmesh.new(); bm.from_mesh(me)
+        edges = [e for e in bm.edges if e.is_boundary and all(v.co.z < hip_z + 0.05 and abs(v.co.x) < 0.3 for v in e.verts)]
+        if not edges:
+            bm.free(); return
+        vs = {v for e in edges for v in e.verts}
+        c = sum((v.co for v in vs), Vector()) / len(vs)
+        cur = edges
+        for step in range(3):
+            r = bmesh.ops.extrude_edge_only(bm, edges=cur)
+            nv = [g for g in r["geom"] if isinstance(g, bmesh.types.BMVert)]
+            for v in nv:
+                d = Vector((v.co.x - c.x, (v.co.y - c.y) * 0.8, 0)).normalized()
+                v.co += d * flare / 3 * (1 + 0.3 * step) - Vector((0, 0, drop / 3))
+            cur = [g for g in r["geom"] if isinstance(g, bmesh.types.BMEdge) and all(vv in nv for vv in g.verts)]
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        for f in bm.faces:
+            f.smooth = True
+        bm.to_mesh(me); bm.free(); me.update()
+        self._fill_weights(o)
+
+    def _folds(self, o):
+        """Creases where wool bunches: inside the elbows and round the waist (vertex group drives a displace)."""
+        h = self.h; me = o.data
+        co = np.array([v.co[:] for v in me.vertices])
+        el = [np.array(h.joint(f"lowerarm01.{s}____head")) for s in ("L", "R")]
+        w = np.zeros(len(co))
+        for e in el:
+            w = np.maximum(w, np.clip(1 - np.linalg.norm(co - e, axis=1) / 0.1, 0, 1))
+        w = np.maximum(w, np.clip(1 - np.abs(co[:, 2] - (self.marks["hip"] + 0.13)) / 0.06, 0, 1) * 0.7)
+        vg = o.vertex_groups.new(name="folds")
+        for i in np.nonzero(w > 0.01)[0]:
+            vg.add([int(i)], float(w[i]), 'REPLACE')
+        tx = bpy.data.textures.new("creases", "WOOD"); tx.wood_type = 'BANDNOISE'; tx.noise_scale = 0.02; tx.turbulence = 8
+        d = o.modifiers.new("Creases", "DISPLACE"); d.texture = tx; d.strength = 0.007; d.mid_level = 0.5
+        d.vertex_group = "folds"; d.texture_coords = 'OBJECT'
+        # keep it before subsurf/solidify
+        while o.modifiers.find("Creases") > 1:
+            bpy.ops.object.modifier_move_up({"object": o}, modifier="Creases") if False else o.modifiers.move(o.modifiers.find("Creases"), o.modifiers.find("Creases") - 1)
+
+    def _pockets(self, jv, hip_z):
+        """Flapped hip pockets either side of the front."""
+        h = self.h
+        co = np.array([v.co[:] for v in self.jacket.data.vertices])     # includes the skirt
+        front = co[co[:, 1] < -0.04]
+        mat = self.jacket.data.materials[0]
+        for sx in (-0.1, 0.1):
+            cand = front[np.abs(front[:, 2] - (hip_z - 0.04)) < 0.02]
+            if len(cand) == 0:
+                continue
+            cand = cand[np.abs(cand[:, 0] - sx) < 0.03]
+            if len(cand) == 0:
+                continue
+            p = cand[np.argmin(cand[:, 1])]
+            bpy.ops.mesh.primitive_cube_add(size=1, location=tuple(p))
+            b = bpy.context.active_object; b.name = "pocket_flap"; b.scale = (0.13, 0.007, 0.045)
+            b.location.y -= 0.009
+            b.rotation_euler = (math.radians(-4), 0, math.radians(-12 if sx > 0 else 12))
+            bv = b.modifiers.new("Bevel", "BEVEL"); bv.width = 0.003; bv.segments = 2
+            b.data.materials.append(mat)
+            bpy.context.view_layer.update(); mw = b.matrix_world.copy()
+            b.parent = h.arm; b.parent_type = 'BONE'; b.parent_bone = "spine05"
+            bpy.context.view_layer.update(); b.matrix_world = mw
+            self.button_objs.append(b)
 
     def _fill_weights(self, o):
         me = o.data
@@ -421,7 +491,7 @@ class Deveau:
         h = self.h; co = self.rest_co[jv] + self.rest_n[jv] * 0.02
         front = co[(co[:, 1] < -0.02)]
         mat = brass_material(self.name + "_brass")
-        self.button_objs = []
+        self.button_objs = getattr(self, "button_objs", [])
         zmin, zmax = self.marks["hip"] - 0.08, self.marks["neck"] - 0.12
         for k in range(4):
             zz = zmax - k * (zmax - zmin) / 3.4
