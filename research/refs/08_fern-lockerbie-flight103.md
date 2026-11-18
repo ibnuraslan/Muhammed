@@ -107,3 +107,15 @@
 | 11 | Silhouettes behind bars / in a cell, hard backlight | Faceless = no likeness issues for real convicts | Easy |
 | 12 | "Simplified for illustrative purposes" card before a reconstruction | Text card | Easy |
 | 13 | Aircraft breakup sequence | Cell fracture + rigid bodies on a 747 model. Heavy | Hard |
+
+## Addendum (style_v2, audio copy from `competitors/`)
+
+The competitor folder holds this film **with audio** (`The 13-Year Investigation Into Flight 103 - fern (1080p).mp4`), so here are the narration stats the silent copy couldn't give:
+
+| Metric | Value |
+|---|---|
+| Loudness | −14.6 LUFS integrated, LRA 4.2 LU |
+| VO | ≈4,370 words · **≈156 wpm** · 361 sentences · median **11 words** · 52 sentences ≤5 words · 10 questions |
+| Hook (paraphrased) | Future-tense countdown over the 3D plane: "in a few seconds a bomb will explode here", everyone on board and on the ground will die → it's no accident → the largest crime scene and one of the most complex investigations ever, unresolved nearly 40 years later |
+| Hook technique | **Future tense** ("will") for the cold open, so the known disaster plays as suspense; then archival soundbites; then a founder's on-camera sponsor read |
+| Chapters (from the VO) | Crash night → search and the bomb in the cargo hold → the aircraft and breakup → clothing clue and Malta → Libya → trial at Camp Zeist → appeals and the open case |
