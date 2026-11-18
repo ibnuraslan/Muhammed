@@ -48,8 +48,8 @@ def mc_ship(heading, pos, sails="full", gap=(-2.7, -0.6, "S"), heel=4.0):
     return mc
 
 
-def boat_at(oc, x, y, heading, oars="out", stroke=0.0, crew=True, look=None, extra_hulls=(), oar_angle=None):
-    b = yawl.build("yawl", oars=oars, wet=0.6, oar_angle=oar_angle)
+def boat_at(oc, x, y, heading, oars="out", stroke=0.0, crew=True, look=None, extra_hulls=(), oar_angle=None, boated=()):
+    b = yawl.build("yawl", oars=oars, wet=0.6, oar_angle=oar_angle, boated=boated)
     boatsea.float_on(oc, b["root"], heading, x, y, draft=0.40)
     boatsea.cut_and_wash(oc, [b["hull"], *extra_hulls], [b["root"]])
     if crew:
@@ -72,9 +72,9 @@ if SHOT in ("S01", "S02", "S03"):
     by = -(ship.B / 2 + 1.45)
     rail = mc["root"].matrix_world @ Vector((-1.6, -(ship.half_breadth((-1.6 + ship.L / 2) / ship.L, 1.0) - 0.05),
                                              ship.zdeck(-1.6) + ship.RAIL_H))
-    # lying alongside: the oars on the ship's side trail fore-and-aft along the boat so they clear her hull
+    # lying alongside: the oars on the ship's side are boated (laid in along the gunwale), the others held ready
     b = boat_at(oc, -1.8, by, 0.0, oars="out", crew=True, look=rail + Vector((0, 0, 0.5)), extra_hulls=(mc["hull"],),
-                oar_angle={(i, 1): 86.0 for i in range(3)})
+                boated=(1,))
     Mb = b["root"].matrix_world
     ring = Mb @ b["ring"]
     cleat = mc["root"].matrix_world @ Vector((4.5, -(ship.B / 2 - 0.25), ship.zdeck(4.5) + ship.RAIL_H + 0.05))

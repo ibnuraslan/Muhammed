@@ -108,7 +108,7 @@ def transom(name, mat):
     return o
 
 
-def build(name="yawl", wet=0.6, oars="out", oar_angle=None, rudder=True, painter=None):
+def build(name="yawl", wet=0.6, oars="out", oar_angle=None, rudder=True, painter=None, boated=()):
     """oars: "out" (shipped in the rowlocks, blades in the water), "in" (laid along the thwarts) or None.
     painter: optional world end point for the bow line (a rope to the ship)."""
     coll = bpy.data.collections.new(name); bpy.context.scene.collection.children.link(coll)
@@ -179,6 +179,8 @@ def build(name="yawl", wet=0.6, oars="out", oar_angle=None, rudder=True, painter
     oar_m = ship.wood("brown_planks_05", 2.0, wet=wet, tint=(0.95, 0.85, 0.66), name=name + "_oarwood")
     if oars == "out":
         for (i, sg), pv in tholes.items():
+            if sg in boated:
+                continue
             ang = (oar_angle or {}).get((i, sg), 0.0)
             d = Vector((math.sin(math.radians(ang)), sg * math.cos(math.radians(ang)), -0.13)).normalized()
             # inboard length: the handle ends ~0.24 m off the centreline, so the two men on a thwart keep apart
@@ -191,7 +193,16 @@ def build(name="yawl", wet=0.6, oars="out", oar_angle=None, rudder=True, painter
             bl.rotation_quaternion = d.to_track_quat('Y', 'Z'); objs.append(bl)
             oar_handles[(i, sg)] = handle + d * 0.18
             oar_dirs[(i, sg)] = d.copy()
-    elif oars == "in":
+    # boated oars (alongside a ship): laid fore-and-aft along the middle of the boat, resting on the thwarts between
+    # the two rows of men (below their hands, clear of their legs), blades toward the bow
+    for k, sg in enumerate(sorted(boated)):
+        for j in range(3):
+            yo = 0.045 * (j - 1)
+            a = Vector((-1.05, yo, SEAT_Z + 0.025)); b2 = Vector((1.85, yo, SEAT_Z + 0.025))
+            objs.append(ship.cyl(f"{name}_oarboated{sg}{j}", a, b2, 0.024, mat=oar_m, verts=12))
+            bl = ship.box(f"{name}_bladeboated{sg}{j}", b2 + Vector((0.42, 0, 0.004)), (0.84, 0.05 if j != 1 else 0.05, 0.016), oar_m, bevel=0.004)
+            objs.append(bl)
+    if oars == "in":
         for k, sg in enumerate((1, -1, 1, -1)):
             y = sg * (0.25 + 0.12 * (k // 2))
             objs.append(ship.cyl(f"{name}_oarin{k}", Vector((-1.6, y, SEAT_Z + 0.03)), Vector((2.0, y, SEAT_Z + 0.08)), 0.024, mat=oar_m, verts=12))

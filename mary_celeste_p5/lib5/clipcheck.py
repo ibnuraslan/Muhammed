@@ -17,6 +17,7 @@ SKIP_PREFIX = ("Ocean", "far_sea", "band", "island", "cabin_air", "rock")
 
 
 CENTERS = {}
+FLOATING = []          # (person, mm) hands that could not reach the bar they are meant to hold (set by boatcrew)
 HAND_R = 0.10          # a contact whose triangles all lie this close to a wrist/knuckle is the hand, not the body
 
 
@@ -87,7 +88,9 @@ def check(shot, limit=60, hand_ok=("oar", "tiller", "doll", "Sophia", "letter", 
                 c = CENTERS[a.name][np.array([q[0] for q in pairs])]
                 at = [round(float(v), 3) for v in c.mean(0)]; span = [round(float(v), 3) for v in (c.max(0) - c.min(0))]
                 found.append(dict(person=pn, part=a.name, other=b.name, pairs=n, grip=grip, ok=grip or n <= allowed, at=at, span=span))
-    bad = [f for f in found if not f["ok"]]
+    bad = [f for f in found if not f["ok"]] + [dict(person=n, part=n + " hand", other="(nothing: floating)", pairs=0, ok=False, gap_m=g) for n, g in FLOATING]
+    for n, g in FLOATING:
+        print(f"CLIP {n} hand floating {g * 1000:.0f} mm off its bar")
     for f in found:
         print(("CLIP " if not f["ok"] else "touch ") + f"{f['part']} x {f['other']}: {f['pairs']}  at {f['at']} span {f['span']}")
     print(f"CLIPCHECK {shot}: {len(bad)} clipping, {len(found) - len(bad)} contacts within allowance, {len(names)} people")

@@ -27,10 +27,14 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
                 p = PP.sailor(k % len(PP.CREW)); k += 1
                 yy = sg * min(0.36, yawl.half_breadth_at(x, yawl.SEAT_Z + 0.4) - 0.39)
                 st = Seat(p, W((x, yy, yawl.SEAT_Z)), 180.0, frame=Mb)
-                st.legs({"L": W((x - 0.48, yy * 0.55 - 0.08, floor)), "R": W((x - 0.48, yy * 0.55 + 0.08, floor))}, knees_out=0.06)
+                fy, fw = (yy, 0.06) if i == 0 else (yy * 0.62, 0.08)      # the bow thwart is narrow: feet under the knees
+                st.legs({"L": W((x - 0.48, fy - fw, floor)), "R": W((x - 0.48, fy + fw, floor))}, knees_out=0.06)
                 st.lean(fwd=9 - 14 * stroke)
                 hnd = b["oar_handles"].get((i, sg))
-                if hnd is not None:
+                if hnd is None:
+                    # his oar is boated: hands rest on his thighs
+                    st.hand_on_thigh("L"); st.hand_on_thigh("R")
+                else:
                     hw = Mb @ hnd
                     loom = (Mb.to_3x3() @ b["oar_dirs"][(i, sg)]).normalized()     # handle -> rowlock
                     # both hands closed on the loom, a hand's width apart along it (outboard hand nearer the rowlock)
@@ -93,6 +97,10 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
     for p, st in out:
         if hasattr(p, "grip_err"):
             print(f"GRIP {p.name}: palm {p.grip_err * 1000:.0f} mm from the bar")
+            if p.grip_err > 0.015:
+                import clipcheck
+                clipcheck.FLOATING.append((p.name, round(p.grip_err, 3)))
+                print(f"FLOAT {p.name}: hand {p.grip_err * 1000:.0f} mm off the bar it should hold")
         st.place_finish(look, density=density, hair=hair)
         trim_under_seat(p, st.seat_world)
     return [p for p, _ in out]
