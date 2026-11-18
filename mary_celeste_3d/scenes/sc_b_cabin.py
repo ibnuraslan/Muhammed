@@ -28,10 +28,12 @@ def mat_from(aid, scale, wet=0.0, tint=None, name=None):
 
 POSE_TEST = os.environ.get("POSE_TEST")
 # ----------------------------------------------------------------------------- the room
-walls = mat_from("dark_wooden_planks", 1.4, wet=0.15, tint=(0.75, 0.62, 0.5), name="walls")
+walls = mat_from("dark_wooden_planks", 1.4, wet=0.15, tint=(0.3, 0.2, 0.13), name="walls")
+walls.node_tree.nodes["Principled BSDF"].inputs["Coat Weight"].default_value = 0.35   # old varnish
 floor = mat_from("weathered_planks", 0.9, wet=WET, tint=(0.8, 0.72, 0.62), name="floor")
-beams_m = ship.paint("beams", (0.38, 0.34, 0.27), rough=0.5, grime=0.6, chips=0.3, scale=6)
-berth_m = mat_from("brown_planks_05", 1.6, wet=0.3, tint=(0.7, 0.55, 0.42), name="berthwood")
+beams_m = ship.paint("beams", (0.16, 0.12, 0.08), rough=0.5, grime=0.7, chips=0.3, scale=6)
+berth_m = mat_from("brown_planks_05", 1.6, wet=0.3, tint=(0.34, 0.22, 0.14), name="berthwood")
+berth_m.node_tree.nodes["Principled BSDF"].inputs["Coat Weight"].default_value = 0.3
 
 
 def plane(name, verts, mat, uvscale=1.0):
@@ -116,7 +118,7 @@ def mattress():
             edge = min(i, nx - i, j, ny - j) / 4.0
             roll = 1 - math.exp(-edge)                       # rounded mattress edges
             z = TOP - 0.085 * impression(x, y) - 0.03 * (1 - roll)
-            z += 0.004 * noise.noise(Vector((x * 6, y * 6, 0.5)))
+            z += 0.004 * noise.noise(Vector((x * 6, y * 6, 0.5))) + 0.014 * noise.noise(Vector((x * 2.6, y * 3.1, 4.2))) * roll
             z -= 0.012 * math.exp(-((x - (BX0 + 0.25)) / 0.25) ** 2) * 0                # (pillow sits here)
             V.append((x, y, z)); UV.append(((x - x0) * 2, (y - y0) * 2))
     for j in range(ny):
@@ -153,7 +155,7 @@ def wet_cloth_mat(name, color, wet, stripes=False, sheen=0.4):
     tm = N.new("ShaderNodeMath"); tm.operation = 'PINGPONG'; tm.inputs[1].default_value = 0.5; Lk.new(tide.outputs[0], tm.inputs[0])
     Lk.new(tm.outputs[0], td.inputs['Factor']); Lk.new(dk.outputs[2], td.inputs[6])
     Lk.new(td.outputs[2], p.inputs['Base Color'])
-    rr = N.new("ShaderNodeMapRange"); rr.inputs['To Min'].default_value = 0.85; rr.inputs['To Max'].default_value = 0.32
+    rr = N.new("ShaderNodeMapRange"); rr.inputs['To Min'].default_value = 0.9; rr.inputs['To Max'].default_value = 0.5
     Lk.new(wm.outputs[0], rr.inputs['Value']); Lk.new(rr.outputs[0], p.inputs['Roughness'])
     p.inputs['Sheen Weight'].default_value = sheen; p.inputs['Specular IOR Level'].default_value = 0.55
     wv2 = N.new("ShaderNodeTexWave"); wv2.inputs['Scale'].default_value = 300; Lk.new(tc.outputs['Object'], wv2.inputs['Vector'])
@@ -163,7 +165,7 @@ def wet_cloth_mat(name, color, wet, stripes=False, sheen=0.4):
 
 
 V, F, UV = mattress()
-matt = ship.mesh_obj("mattress", V, F, wet_cloth_mat("ticking", (0.62, 0.58, 0.5), WET, stripes=True))
+matt = ship.mesh_obj("mattress", V, F, wet_cloth_mat("ticking", (0.46, 0.4, 0.3), WET, stripes=True))
 uvl = matt.data.uv_layers.new(name="UVMap")
 for l in matt.data.loops:
     uvl.data[l.index].uv = UV[l.vertex_index]
@@ -172,10 +174,10 @@ so = matt.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.16; so.offset = -
 sheet_V = []
 for (x, y, z) in V:
     d = impression(x, y)
-    cr = 0.006 * noise.noise(Vector((x * 9, y * 14, 2.0))) * (0.3 + d) + 0.006 * math.sin((y - CHILD["cy"]) * 55 + x * 11) * min(1.0, 3 * d * (1 - d))
+    cr = 0.006 * noise.noise(Vector((x * 9, y * 14, 2.0))) * (0.3 + d) + 0.009 * noise.noise(Vector((x * 5, y * 21, 7.0))) ** 2 + 0.006 * math.sin((y - CHILD["cy"]) * 55 + x * 11) * min(1.0, 3 * d * (1 - d))
     sheet_V.append((x, y, z + 0.006 + cr))
 keepF = [f for f in F if V[f[0]][0] < BX1 - 0.55]
-sheet_m = wet_cloth_mat("sheet", (0.7, 0.67, 0.6), WET + 0.1, sheen=0.3)
+sheet_m = wet_cloth_mat("sheet", (0.26, 0.21, 0.16), WET + 0.1, sheen=0.55)   # grey-brown wool blanket over the mattress
 sheet = ship.mesh_obj("sheet", sheet_V, keepF, sheet_m)
 # water lying in the hollow: the sheet there is soaked through (darker, glossy)
 ca = sheet.data.color_attributes.new("imp", 'FLOAT_COLOR', 'POINT')
@@ -200,10 +202,10 @@ def blanket():
     for j in range(ny + 1):
         for i in range(nx + 1):
             u = i / nx; v = j / ny
-            x = BX1 - 0.62 + 0.6 * u
+            x = BX1 - 1.0 + 0.98 * u
             y = BY0 - 0.12 + (RY - BY0 + 0.1) * v
             # folds: a few big rolls across the bed plus noise
-            h = 0.05 + 0.05 * math.sin(u * math.pi * 3.2 + v * 1.5) ** 2 + 0.035 * noise.noise(Vector((u * 5, v * 5, 3.0)))
+            h = 0.03 + 0.06 * math.sin(u * math.pi * 4.2 + v * 2.1) ** 2 * (0.4 + u) + 0.03 * noise.noise(Vector((u * 7, v * 6, 3.0))) + 0.015 * noise.noise(Vector((u * 19, v * 17, 1.0)))
             z = TOP + 0.01 + h
             if y < BY0 + 0.02:                      # spills over the berth board and hangs down
                 over = (BY0 + 0.02 - y)
@@ -216,7 +218,7 @@ def blanket():
             F.append([a, a + 1, a + nx + 2, a + nx + 1])
     return V, F
 bV, bF = blanket()
-bl = ship.mesh_obj("blanket", bV, bF, wet_cloth_mat("blanket", (0.13, 0.12, 0.1), WET, sheen=0.7))
+bl = ship.mesh_obj("blanket", bV, bF, wet_cloth_mat("blanket", (0.1, 0.075, 0.055), WET, sheen=0.6))
 bl.modifiers.new("Thick", "SOLIDIFY").thickness = 0.008
 s = bl.modifiers.new("Sub", "SUBSURF"); s.levels = 1; s.render_levels = 2
 # pillow with the dent of a small head
@@ -230,7 +232,7 @@ for v in pil.data.vertices:
         v.co.z -= 0.035 * dd
     v.co.z = max(v.co.z, -0.055)
 bpy.ops.object.shade_smooth()
-pil.data.materials.append(wet_cloth_mat("pillowcase", (0.68, 0.65, 0.58), WET))
+pil.data.materials.append(wet_cloth_mat("pillowcase", (0.5, 0.46, 0.38), WET))
 
 # ----------------------------------------------------------------------------- props
 r, ms = ph.model("wooden_handle_saber")       # the sword from beneath the captain's berth (in its sheath)
@@ -260,7 +262,7 @@ h = dv.h
 ANG = math.radians(223)                          # he faces the berth, turned toward the hollow at its head end
 POS = Vector((0.22, 0.3, 0.0))
 M = Matrix.Translation(POS) @ Matrix.Rotation(ANG, 4, 'Z')
-P.cabin(dv, M, (0.48, BY0 - 0.02, BOARD + 0.045), (-0.3, 0.62, 1.40), lantern_side="L")
+P.cabin(dv, M, (0.48, BY0 - 0.02, BOARD + 0.045), (-0.12, 0.5, 1.3), lantern_side="L")
 bpy.context.view_layer.update()
 grip_local = P.palm_point(h, "L")
 look = Vector((CHILD["cx"] - 0.05, CHILD["cy"], TOP))
@@ -300,6 +302,17 @@ ffo = bpy.data.objects.new("lantern_bounce", ff); sc.collection.objects.link(ffo
 ffo.location = flame_c.lerp(head_w0, 0.35) + Vector((0, 0, -0.15))
 ffo.rotation_euler = (head_w0 - ffo.location).to_track_quat('-Z', 'Y').to_euler(); ffo.visible_camera = False
 ffo.visible_glossy = False
+# soot: years of lamp smoke darken the deckhead and planking above where the lantern hangs
+for _m in (beams_m, walls):
+    _N = _m.node_tree.nodes; _L = _m.node_tree.links; _p = _N["Principled BSDF"]
+    _g = _N.new("ShaderNodeNewGeometry"); _d = _N.new("ShaderNodeVectorMath"); _d.operation = 'DISTANCE'
+    _d.inputs[1].default_value = (flame_c.x, flame_c.y, RZ); _L.new(_g.outputs['Position'], _d.inputs[0])
+    _mr = _N.new("ShaderNodeMapRange"); _mr.inputs['From Min'].default_value = 0.25; _mr.inputs['From Max'].default_value = 1.1
+    _mr.inputs['To Min'].default_value = 0.85; _mr.inputs['To Max'].default_value = 0.0; _L.new(_d.outputs['Value'], _mr.inputs['Value'])
+    _src = _p.inputs['Base Color'].links[0].from_socket if _p.inputs['Base Color'].links else None
+    if _src is not None:
+        _mx = _N.new("ShaderNodeMix"); _mx.data_type = 'RGBA'; _mx.blend_type = 'MULTIPLY'; _mx.inputs[7].default_value = (0.08, 0.07, 0.06, 1)
+        _L.new(_mr.outputs[0], _mx.inputs['Factor']); _L.new(_src, _mx.inputs[6]); _L.new(_mx.outputs[2], _p.inputs['Base Color'])
 # ----------------------------------------------------------------------------- light and air
 sk = bpy.data.lights.new("skylight", 'AREA'); sk.shape = 'RECTANGLE'; sk.size = sw * 0.95; sk.size_y = sh * 0.95
 sk.energy = float(os.environ.get('SKYL', '420')); sk.color = (0.72, 0.8, 0.92)
@@ -328,9 +341,9 @@ air.visible_shadow = False
 head_w = M @ Vector((0, -0.05, 1.66))
 # medium shot: waist-up, the lantern at frame left side-lighting him, the far side of his face in shadow;
 # the hollow in the berth runs out of the bottom-left corner of the frame
-cam_loc = Vector((-1.3, -0.7, 1.6))
-aim = M @ Vector((0.05, -0.05, 1.42))
-cam = C.camera(cam_loc, aim, lens=38, fstop=2.8, focus=(head_w - cam_loc).length, roll=-1.0)
+cam_loc = Vector((-1.56, 0.5, 1.78))                # high at the head of the berth, looking along the bedding to him
+aim = (M @ Vector((0.0, -0.05, 1.55))).lerp(Vector((CHILD["cx"], CHILD["cy"], TOP)), 0.33)
+cam = C.camera(cam_loc, aim, lens=26, fstop=3.2, focus=(head_w - cam_loc).length, roll=-1.0)
 if POSE_TEST:
     air.hide_render = True; sc.cycles.samples = 24
     for o in bpy.data.objects:
