@@ -366,7 +366,7 @@ class Sailor(Person):
         self.hair_objs.append(o)
 
 
-class Briggs(Sailor):
+class OldBriggs(Sailor):
     """Capt. Benjamin Spooner Briggs, 37: tall, straight, full dark beard; dark double-breasted coat, white shirt,
     black silk necktie; bareheaded below decks."""
     YEARS = 37; MUSCLE = 0.55; WEIGHT = 0.5; HEIGHT = 0.62
@@ -560,7 +560,7 @@ class Woman(Person):
         pass
 
 
-class Sarah(Woman):
+class OldSarah(Woman):
     """Sarah Elizabeth Cobb Briggs, 30: a dark bottle-green wool day dress."""
     YEARS = 30; HEIGHT = 0.42
     EXTRA = {"targets/nose/nose-scale-horiz-decr": 0.25, "targets/chin/chin-prominent-decr": 0.2,
@@ -568,14 +568,14 @@ class Sarah(Woman):
     DRESS = (0.02, 0.055, 0.04)
 
 
-class Visitor(Woman):
+class OldVisitor(Woman):
     YEARS = 45; WEIGHT = 0.6
     DRESS = (0.12, 0.035, 0.07)
     HAIR = dict(melanin=0.55, redness=0.5)
     EXTRA = {"targets/head/head-round": 0.4}
 
 
-class Child(Woman):
+class OldChild(Woman):
     """Sophia Matilda Briggs, 2: a short cotton dress over pantalettes; fine light hair."""
     YEARS = 2; HEIGHT = 0.5; WEIGHT = 0.5; MUSCLE = 0.4
     EXTRA = {}
@@ -618,7 +618,7 @@ class Child(Woman):
                                             comb=lambda p: R @ Vector((0, 0.5, -0.8)), lift=0.002, mat=mat, curl=0.35, segs=8))
 
 
-class Boy(Sailor):
+class OldBoy(Sailor):
     """Arthur Briggs, 7."""
     YEARS = 7; MUSCLE = 0.45; WEIGHT = 0.45; HEIGHT = 0.5
     EXTRA = {}
@@ -643,3 +643,82 @@ class Deveau2(Person):
 
     def _grow_hair(self, density):
         D.Deveau._grow_all(self, density)
+
+
+
+# ============================================================================= shared cast (claude/mary-celeste-3d lib)
+# The approved shared characters (briggs.Briggs, women.Sarah / Sophia / Arthur) bake their pose in finish(). This adapter
+# keeps the scenes' API: finish_live() = shared finish() + the rig moved to its place (so bone positions are world
+# positions for cameras and hand props) + ground() + look() that re-aims eyes and corneas together.
+import briggs as _B
+import women as _W
+
+
+class _SharedLive:
+    def __init__(self, *a, seated=False, expr=None, **kw):
+        self.SEATED = seated
+        super().__init__(*a, **kw)
+
+    def _hem(self, o, hip_z, drop=0.15, flare=0.028):
+        return super()._hem(o, hip_z, drop=(0.03 if getattr(self, "SEATED", False) else drop), flare=flare)
+
+    def finish_live(self, look_at=None, hair=True, density=1.0, place=None, ground=True):
+        place = place or Matrix.Identity(4)
+        self.finish(look_at=look_at, place=place, density=density, hair=hair)
+        h = self.h
+        h.arm.matrix_world = place @ h.arm.matrix_world          # meshes are baked: moving the rig only moves the bones
+        bpy.context.view_layer.update()
+        if ground:
+            Person.ground(self)
+        return self
+
+    def ground(self, *a, **k):
+        lift = Person.ground(self, *a, **k)
+        return lift
+
+    def look(self, target):
+        bpy.context.view_layer.update()
+        cor = list(getattr(self, "corneas", []) or [])
+        for i, e in enumerate(self.h.eyes):
+            loc = e.matrix_world.to_translation(); sc = e.matrix_world.to_scale()
+            q = (-(Vector(target) - loc).normalized()).to_track_quat('Y', 'Z')
+            e.matrix_world = Matrix.LocRotScale(loc, q, sc)
+            if i < len(cor):
+                c = cor[i]; c.matrix_world = Matrix.LocRotScale(c.matrix_world.to_translation(), q, c.matrix_world.to_scale())
+
+
+class Briggs(_SharedLive, _B.Briggs):
+    def __init__(self, name="Briggs", wet=0.0, seated=False, expr=None, **kw):
+        _SharedLive.__init__(self, name=name, wet=wet, seated=seated)
+
+
+class Sarah(_SharedLive, _W.Sarah):
+    def __init__(self, name="Sarah", seated=False, bonnet=False, shawl=False, expr=None, wet=0.0, **kw):
+        self.SEATED = seated
+        _W.Sarah.__init__(self, name=name, seated=seated, bonnet=bonnet, shawl=shawl, wet=wet)
+
+
+class Visitor(Sarah):
+    """A lady visiting the ship in New York: lib Sarah's clothes and build, older, her own colours, bonnet on."""
+    DRESS = (0.03, 0.045, 0.075)          # dark blue wool
+    BONNET = (0.09, 0.05, 0.03)           # brown straw-coloured silk
+    SHAWL = (0.22, 0.12, 0.08)
+    HAIR = (0.5, 0.45)
+    EXTRA = dict(_W.Sarah.EXTRA, **{"targets/head/head-round": 0.4, "targets/cheek/l-cheek-volume-incr": 0.3,
+                                     "targets/cheek/r-cheek-volume-incr": 0.3})
+
+    def __init__(self, name="Visitor", expr=None, **kw):
+        Sarah.__init__(self, name=name, bonnet=True, shawl=True, **{k: v for k, v in kw.items() if k in ("seated", "wet")})
+        self.years = 45
+
+
+class Child(_SharedLive, _W.Sophia):
+    def __init__(self, name="Sophia", seated=False, expr=None, wet=0.0, **kw):
+        self.SEATED = seated
+        _W.Sophia.__init__(self, name=name, seated=seated, wet=wet)
+
+
+class Boy(_SharedLive, _W.Arthur):
+    def __init__(self, name="Arthur", seated=False, expr=None, wet=0.0, **kw):
+        self.SEATED = seated
+        _W.Arthur.__init__(self, name=name, seated=seated, wet=wet)

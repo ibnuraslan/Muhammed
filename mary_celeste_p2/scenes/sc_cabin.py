@@ -165,7 +165,6 @@ elif SHOT == "14":          # the visitor ducks under the companion beam; her bo
     xs = cabin.COMP["x0"] - 0.4
     Mv = A.stand_place((xs, -1.1), -90)
     v.finish_live(place=Mv, density=HAIR)
-    cabin.bonnet(v)
     s = cast.Sarah(expr={"mouth-corner-puller": 0.4})
     P.stand(s.h, weight="R", lean=4)
     P.head(s.h, pitch=-14, yaw=8)

@@ -97,7 +97,7 @@ if SHOT in ("21", "22", "24", "25", "26", "27"):
         pennant(SM, mt, (1, -0.1, 0))
         S.cam(mt + Vector((-6, -12, -6)), mt + Vector((2.0, 0, -0.6)), lens=55)
     elif SHOT == "25":   # MS: Sarah hands her letter to the pilot at the rail
-        s = cast.Sarah(expr={"mouth-corner-puller": 0.3})
+        s = cast.Sarah(bonnet=True, shawl=True)
         pl = cast.Sailor(name="Pilot", years=50, jacket=(0.02, 0.02, 0.03), beard=True, cap=True)
         xr = -5.0; yr = -(ship.B / 2 - 0.95)
         P.stand(s.h, weight="L"); P.head(s.h, pitch=6, yaw=6)
