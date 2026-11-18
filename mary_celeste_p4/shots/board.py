@@ -11,7 +11,7 @@ from mathutils import Vector, Matrix
 import ship, sea
 import sets as S
 import poses as P, human as H, deveau as D
-import briggs as BG
+import briggs as BG                       # shared cast: mary_celeste_3d/lib/briggs.py
 
 argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else ["S05"]
 SHOT = argv[0]; T = float(argv[1]) if len(argv) > 1 else 0.5

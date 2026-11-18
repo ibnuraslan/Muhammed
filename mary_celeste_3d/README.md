@@ -42,6 +42,18 @@ ocean, foam, spray, Poly Haven sky).
 * `lib/sf.py`: Sketchfab fetcher (`sf.fetch(uid)`, `sf.model(uid, loc, rot_z, height)`, `sf.CATALOG`), CC-BY/CC0 only.
 * Jacket/clothes solidify uses `thickness_clamp=1.0` (no even-offset spikes at render subsurf 2).
 
+* `lib/women.py`: the shared women/child cast. `Sarah(wet=, seated=False)` and `Sophia(wet=, seated=False)` are
+  `deveau.Deveau` subclasses: pose `s.h` with `poses.*`, then `s.finish(look_at=, place=, density=)` like Deveau.
+  Sarah has a corseted day bodice (smooth front, high collar, jet buttons), full sleeves, a bell skirt (fuller behind),
+  a knitted shawl and a soft brimmed bonnet with ribbon ties. Sophia has a frock (yoke, puffed sleeves), a pinafore,
+  stockings and ankle boots. The bell skirts ride on the pelvis, so for seated poses pass `seated=True` (draped shell).
+  Keep arms clear of the skirts in the pose (`poses.arm_down(out=0.25+)` for Sophia).
+* `lib/women.py` options: `Sarah(seated=False, bonnet=True, shawl=True)` (bonnet off indoors: centre-parted hair
+  drawn back to a low knot), `Sophia(seated=False, shawl=False)`, `Arthur(seated=False)` (7: wool jacket, white
+  collar, knickerbockers, stockings, ankle boots). `lib/briggs.py`: `Briggs(wet=)` (promoted from Part 4), Deveau API.
+* `deveau.Deveau` class attributes for subclasses (also HAIR_COLOR, BEARD_COLOR): GENDER, MUSCLE, WEIGHT, HEIGHT, EXTRA (targets), SKIN,
+  ASSET_BOOTS, BOOT_TOP. Clothing solidify no longer uses even offset (no spikes on creased shells).
+
 ## Credits
 
 * MakeHuman 1.x base mesh, rig, targets and eyes: CC0 (MakeHuman team / Data Collection AB). MPFB UV masks: CC0.

@@ -9,7 +9,7 @@ Sets (all new, in `mary_celeste_p4/`, built on the shared `mary_celeste_3d/lib` 
 Genoa quay · cutaway hold (explainer) · hold interior · oak studio (explainer) · deck (day as found / dusk / night / dawn) ·
 chart table with a **real 3D relief map** (AWS Terrain Tiles: SRTM + GEBCO bathymetry) · Santa Maria island (real terrain, true scale).
 New shared assets: `lib/barrels.py` (40-gal barrels, white/red oak, hold stow), `lib/pump.py` (1870s common pump, intact and dismantled),
-`lib/briggs.py` (Captain Briggs, built on the shared Deveau character), `lib/terrain.py`, `lib/cutaway.py`.
+`lib/briggs.py` (Captain Briggs; now shared as `mary_celeste_3d/lib/briggs.py` @5d2439d), `lib/terrain.py`, `lib/cutaway.py`.
 
 | # | ~TC | VO (exact words) | Shot | Action / move | Card / text | SFX |
 |---|---|---|---|---|---|---|
