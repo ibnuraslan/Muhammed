@@ -6,7 +6,7 @@ import bpy
 from mathutils import Vector
 import ph
 
-SKY = "mud_road_puresky"
+SKY = "kloppenheim_06_puresky"
 
 
 def sky(strength=1.0, rot_deg=0.0, res="8k", aid=SKY):
@@ -14,8 +14,8 @@ def sky(strength=1.0, rot_deg=0.0, res="8k", aid=SKY):
     return w
 
 
-def water_material(name="sea", deep=(0.004, 0.013, 0.017), crest=(0.02, 0.07, 0.068), foam_attr="foam", hull_attr="hullfoam",
-                   fog_color=(0.42, 0.43, 0.45)):
+def water_material(name="sea", deep=(0.0012, 0.017, 0.03), crest=(0.006, 0.1, 0.1), foam_attr="foam", hull_attr="hullfoam",
+                   fog_color=(0.42, 0.5, 0.58)):
     m = bpy.data.materials.new(name); m.use_nodes = True
     N = m.node_tree.nodes; Lk = m.node_tree.links; p = N["Principled BSDF"]
     tc = N.new("ShaderNodeTexCoord")
@@ -33,13 +33,14 @@ def water_material(name="sea", deep=(0.004, 0.013, 0.017), crest=(0.02, 0.07, 0.
     Lk.new(tc.outputs['Object'], lace.inputs['Vector'])
     ln = N.new("ShaderNodeTexNoise"); ln.inputs['Scale'].default_value = 0.35; ln.inputs['Detail'].default_value = 10; ln.inputs['Roughness'].default_value = 0.65
     Lk.new(tc.outputs['Object'], ln.inputs['Vector'])
-    fsum = N.new("ShaderNodeMath"); fsum.operation = 'ADD'; Lk.new(fa.outputs['Fac'], fsum.inputs[0]); Lk.new(ha.outputs['Fac'], fsum.inputs[1])
+    hw = N.new("ShaderNodeMath"); hw.operation = 'MULTIPLY'; hw.inputs[1].default_value = 0.45; Lk.new(ha.outputs['Fac'], hw.inputs[0])
+    fsum = N.new("ShaderNodeMath"); fsum.operation = 'ADD'; Lk.new(fa.outputs['Fac'], fsum.inputs[0]); Lk.new(hw.outputs[0], fsum.inputs[1])
     fm = N.new("ShaderNodeMath"); fm.operation = 'MULTIPLY'; Lk.new(fsum.outputs[0], fm.inputs[0]); Lk.new(ln.outputs['Fac'], fm.inputs[1])
     lm = N.new("ShaderNodeMapRange"); lm.inputs['From Min'].default_value = 0.0; lm.inputs['From Max'].default_value = 0.12
     lm.inputs['To Min'].default_value = 1.0; lm.inputs['To Max'].default_value = 0.35
     Lk.new(lace.outputs['Distance'], lm.inputs['Value'])
     # streaky foam: stretched fine noise along the wind instead of a cellular pattern
-    st_map = N.new("ShaderNodeMapping"); st_map.inputs['Scale'].default_value = (0.35, 1.6, 1.0)
+    st_map = N.new("ShaderNodeMapping"); st_map.inputs['Scale'].default_value = (0.7, 1.3, 1.0)
     Lk.new(tc.outputs['Object'], st_map.inputs['Vector'])
     stn = N.new("ShaderNodeTexNoise"); stn.inputs['Scale'].default_value = 1.4; stn.inputs['Detail'].default_value = 14
     stn.inputs['Roughness'].default_value = 0.7; Lk.new(st_map.outputs[0], stn.inputs['Vector'])
@@ -49,8 +50,8 @@ def water_material(name="sea", deep=(0.004, 0.013, 0.017), crest=(0.02, 0.07, 0.
     fm2 = N.new("ShaderNodeMath"); fm2.operation = 'MULTIPLY'; Lk.new(fm.outputs[0], fm2.inputs[0]); Lk.new(stm.outputs[0], fm2.inputs[1])
     ramp = N.new("ShaderNodeMapRange"); ramp.inputs['From Min'].default_value = 0.2; ramp.inputs['From Max'].default_value = 0.5
     Lk.new(fm2.outputs[0], ramp.inputs['Value'])
-    p.inputs['Roughness'].default_value = 0.11; p.inputs['IOR'].default_value = 1.333
-    p.inputs['Specular IOR Level'].default_value = 0.5
+    p.inputs['Roughness'].default_value = 0.075; p.inputs['IOR'].default_value = 1.333
+    p.inputs['Specular IOR Level'].default_value = 0.32
     foam = N.new("ShaderNodeBsdfPrincipled"); foam.inputs['Base Color'].default_value = (0.78, 0.8, 0.8, 1)
     foam.inputs['Roughness'].default_value = 0.6; foam.inputs['Subsurface Weight'].default_value = 0.3
     Lk.new(col.outputs[2], p.inputs['Base Color'])
@@ -63,7 +64,7 @@ def water_material(name="sea", deep=(0.004, 0.013, 0.017), crest=(0.02, 0.07, 0.
     Lk.new(p.outputs[0], mix.inputs[1]); Lk.new(foam.outputs[0], mix.inputs[2])
     # aerial perspective: toward the horizon the sea fades into the grey of the sky (camera rays only)
     cd = N.new("ShaderNodeCameraData")
-    fd = N.new("ShaderNodeMapRange"); fd.inputs['From Min'].default_value = 300; fd.inputs['From Max'].default_value = 7000
+    fd = N.new("ShaderNodeMapRange"); fd.inputs['From Min'].default_value = 150; fd.inputs['From Max'].default_value = 5000
     fd.inputs['To Max'].default_value = 0.92; fd.interpolation_type = 'SMOOTHSTEP'
     Lk.new(cd.outputs['View Distance'], fd.inputs['Value'])
     lp = N.new("ShaderNodeLightPath"); fm_ = N.new("ShaderNodeMath"); fm_.operation = 'MULTIPLY'

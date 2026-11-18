@@ -124,7 +124,7 @@ def S03():   # BRIGGS card: on deck at dusk, looking forward at the yawl on the 
     dv, M = man("briggs", SHIP, (-6.2, -1.4), 15, pose_lookdown(pitch=6, yaw=-8, lean=2), (-1.2, 0.0, 2.4), wet=0.1)
     hw = head_of(M)
     # framing rule: no face close-ups. Medium-wide from behind: Briggs's back, the boat on the main hatch beyond
-    cl = SHIP @ Vector((-9.4 + 0.25 * E(T), -0.5, ship.zdeck(-9.4) + 1.95))
+    cl = SHIP @ Vector((-9.6 + 0.25 * E(T), -2.35, ship.zdeck(-9.6) + 1.7))
     cam(cl, SHIP @ Vector((-1.6, -0.6, ship.zdeck(-1.6) + 0.9)), lens=32, fstop=4.0, focus=(hw - cl).length)
     finish()
 
@@ -292,7 +292,7 @@ def S21():   # Briggs at night, drawing the spear up out of the pump to see why 
     dv, M = man("briggs", SHIP, (px + 0.55, 0.95), 200, pose_spear(SHIP, (px, 0.7, ship.zdeck(px) + 1.25), (px, 0.7, ship.zdeck(px) + 1.55)),
                 (px, 0.7, ship.zdeck(px) + 1.05), wet=0.7)
     hw = head_of(M)
-    cl = SHIP @ Vector((px + 1.9, -0.7, ship.zdeck(px) + 1.45))
+    cl = SHIP @ Vector((px - 1.7, 1.55, ship.zdeck(px) + 1.6))
     cam(cl + Vector((0.08 * E(T), 0, 0)), hw.lerp(SHIP @ Vector(sp), 0.4), lens=40, fstop=2.8, focus=(hw - cl).length)
     finish(exposure=0.2)
 

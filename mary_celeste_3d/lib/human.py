@@ -411,7 +411,7 @@ class Human:
         stops = [(0.0, (0.004, 0.003, 0.003)), (0.11, (0.004, 0.003, 0.003)),      # pupil
                  (0.14, tuple(c * 0.5 for c in iris_col)), (0.30, iris_col),       # iris
                  (0.36, (0.03, 0.022, 0.018)),                                     # limbal ring
-                 (0.42, (0.62, 0.55, 0.50)), (1.0, (0.55, 0.45, 0.42))]            # sclera
+                 (0.42, (0.56, 0.49, 0.45)), (1.0, (0.5, 0.36, 0.34))]            # sclera
         cr.elements[0].position, cr.elements[0].color = stops[0][0], (*stops[0][1], 1)
         cr.elements[1].position, cr.elements[1].color = stops[-1][0], (*stops[-1][1], 1)
         for pos, col in stops[1:-1]:
