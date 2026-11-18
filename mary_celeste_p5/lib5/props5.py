@@ -70,8 +70,8 @@ def island(center, length=12000.0, height=500.0, depth=4000.0, seed=3):
         for i in range(nx + 1):
             u = i / nx; v = j / ny
             x = center.x + (u - 0.5) * length; y = center.y + (v - 0.5) * depth
-            prof = math.sin(math.pi * u) ** 0.8 * math.sin(math.pi * v) ** 0.6
-            n = noise.noise(Vector((u * 6, v * 3, seed))) * 0.35 + noise.noise(Vector((u * 18, v * 9, seed + 1))) * 0.12
+            prof = math.sin(math.pi * u) ** 1.6 * math.sin(math.pi * v) ** 0.6
+            n = noise.noise(Vector((u * 6, v * 3, seed))) * 0.5 + noise.noise(Vector((u * 18, v * 9, seed + 1))) * 0.12
             z = max(-20.0, height * prof * (0.75 + n) - 30)
             V.append((x, y, z))
     for j in range(ny):
@@ -83,8 +83,8 @@ def island(center, length=12000.0, height=500.0, depth=4000.0, seed=3):
     m, N, L, p = _mat("island")
     p.inputs['Base Color'].default_value = (0.16, 0.2, 0.12, 1); p.inputs['Roughness'].default_value = 0.95
     # haze: mix toward the horizon colour by a fixed amount (10 km of air)
-    em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (0.55, 0.62, 0.72, 1); em.inputs['Strength'].default_value = 0.7
-    mx = N.new("ShaderNodeMixShader"); mx.inputs[0].default_value = 0.62
+    em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (0.5, 0.58, 0.7, 1); em.inputs['Strength'].default_value = 0.45
+    mx = N.new("ShaderNodeMixShader"); mx.inputs[0].default_value = 0.38
     L.new(p.outputs[0], mx.inputs[1]); L.new(em.outputs[0], mx.inputs[2])
     L.new(mx.outputs[0], N["Material Output"].inputs['Surface'])
     o.data.materials.append(m)

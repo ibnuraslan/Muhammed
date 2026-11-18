@@ -110,10 +110,10 @@ elif SHOT == "S07":
     oc = sea_patch(150, 20, 1.3, 1.2, 10.0, foam=0.22)
     sea.sky(strength=1.0, rot_deg=40, res="4k", aid="kloofendal_48d_partly_cloudy_puresky")
     sun(-80, 18)
-    props5.island(Vector((0, 9500, 0)), length=12000, height=520)
+    props5.island(Vector((-1500, 9500, 0)), length=9000, height=560)
     b = boat_at(oc, 0, 0, 90.0, oars="out", stroke=0.6, look=Vector((0, 9000, 200)))
     Mb = b["root"].matrix_world
-    cam(Mb @ Vector((-8.0, -2.6, 1.6)), Mb @ Vector((40, 0.0, 2.5)), 40)
+    cam(Mb @ Vector((-8.5, 0.9, 2.0)), Mb @ Vector((40, -2.0, 2.5)), 40)
 elif SHOT == "S08":
     oc = sea_patch(160, 22, 2.6, 1.8, 16.0, foam=0.42, seed=11)
     sea.sky(strength=0.9, rot_deg=120, res="4k", aid="kloofendal_38d_partly_cloudy_puresky")
