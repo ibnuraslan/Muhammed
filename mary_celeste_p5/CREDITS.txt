@@ -1,0 +1,24 @@
+Part 5 — "The Ship That Came Back Without Its Crew" — asset credits
+
+3D (rendered, not redistributed here unless noted)
+* MakeHuman 1.x base mesh, rig, weights, eyes (CC0): makehumancommunity/makehuman (GitHub), targets.npz from the
+  makehuman 1.3.2 wheel on PyPI (CC0). Compiled with mary_celeste_3d/tools/mh_compile.py.
+* MPFB UV masks (lips, nails, ears) from the installed MPFB extension (CC0 data).
+* Poly Haven (CC0, polyhaven.com): HDRIs kloofendal_48d_partly_cloudy_puresky, kloofendal_38d_partly_cloudy_puresky,
+  qwantani_sunset_puresky, qwantani_late_afternoon_puresky, qwantani_morning_puresky; models WoodenChair_01,
+  carved_wooden_plate, wooden_bowl_01, jug_01, hamburger_buns (bread rolls), vintage_oil_lamp, brass_pot_01,
+  pot_enamel_01, wooden_bucket_01, round_wooden_table_01, vintage_wooden_drawer_01, mantel_clock_01,
+  fancy_picture_frame_01, wooden_handle_saber, wine_barrel_01, dutch_ship_medium; textures as used by
+  mary_celeste_3d/lib/ship.py plus cobblestone_floor_04.
+* Everything else (yawl, crew and Briggs family clothes, dolls, reed organ, parcels, seal, slate, stove, island,
+  the Rock, Genoa quay) is procedural code in mary_celeste_p5/lib5 and scenes.
+
+Fonts
+* Courier Prime (OFL 1.1) — captions, card role line.  * Special Elite (Apache 2.0) — card names, slate chalk.
+* Instrument Serif Italic (OFL 1.1) — the letter prop.
+
+Photos for the cards (to be supplied; this container cannot reach Wikimedia Commons / LoC):
+* santa_maria.jpg, marion.jpg, gibraltar.jpg, genoa.jpg, arthur.jpg — source, author, licence: TBD
+
+Seal text and the slate entry are props written for the film (the slate's wording follows the published log-slate
+entry for 25 Nov 1872); no third-party imagery is reproduced.
