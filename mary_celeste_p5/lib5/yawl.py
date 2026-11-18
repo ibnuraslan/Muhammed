@@ -114,8 +114,8 @@ def build(name="yawl", wet=0.6, oars="out", oar_angle=None, rudder=True, painter
     coll = bpy.data.collections.new(name); bpy.context.scene.collection.children.link(coll)
     root = bpy.data.objects.new(name + "_root", None); coll.objects.link(root)
     # old white lead paint gone to a dirty cream-grey, grimy streaks, worn through to the grey wood in soft patches
-    outside = ship.paint(name + "_paint", (0.40, 0.385, 0.33), rough=0.55, grime=0.8, wet=wet, scale=4, chips=0.3,
-                         under=(0.17, 0.15, 0.12))
+    outside = ship.paint(name + "_paint", (0.25, 0.235, 0.2), rough=0.62, grime=0.9, wet=wet, scale=2.5, chips=0.3,
+                         under=(0.12, 0.1, 0.08))
     inside = ship.wood("weathered_planks", 0.8, wet=wet * 0.8, tint=(0.6, 0.5, 0.4), name=name + "_inwood")
     seat = ship.wood("weathered_planks", 1.1, wet=wet * 0.6, tint=(0.62, 0.5, 0.38), name=name + "_seat")
     trim = ship.paint(name + "_trim", (0.05, 0.08, 0.06), rough=0.4, grime=0.4, wet=wet, scale=5, chips=0.3)
