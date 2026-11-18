@@ -1,5 +1,36 @@
 # Yarnhub Style Bible — reproducible spec for Seldom
 
+## A. All 7 style films at a glance (Yarnhub + 6 Atrium, measured)
+
+| # | Film | Fmt | Shots | Median shot | Luma med | Sat med | LUFS / LRA | wpm | Median sentence | Q | Structure |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 01 | Yarnhub: Tigers vs IS-2 | 16:9 25p | 204 | **3.9 s** | 0.25 | 0.32 | −10.4 / 3.4 | 151 | 14 w | 0 | One battle, two POV commanders |
+| 02 | Atrium: Alcatraz | 16:9 60p | 251 | 4.3 s | 0.28 | 0.22 | −15.9 / 3.8 | 143 | 7 w | 14 | Heist in phases + progress % |
+| 03 | Atrium: Lincoln | 16:9 60p | 256 | 3.2 s | 0.19 | 0.44 | −14.3 / 3.3 | 139 | 7 w | 6 | Countdown "10 HOURS UNTIL…" |
+| 06 | Atrium: Obersalzberg | 16:9 30p | 274 | 3.6 s | 0.30 | 0.17 | −14.0 / 2.9 | 137 | 9 w | 1 | Journey through 3 zones |
+| 07 | Atrium: Gulags | 16:9 30p | 305 | 3.2 s | 0.28 | 0.21 | (−28, quiet file) | 140 | 8 w | 0 | System tour through one body |
+| 08 | Atrium: Hitler's car | 16:9 30p | 177 | 3.3 s | 0.23 | 0.11 | −14.0 / 2.6 | 139 | 11 w | 1 | Object tested ×4 scenarios |
+| 10 | Atrium: Camp 14 | 16:9 60p | 247 | 3.9 s | 0.21 | 0.17 | −14.4 / 2.6 | 148 | 8 w | 2 | One day, three phases |
+| | **Target for Seldom** | **21:9** (2.39:1) | 200–300 / 20 min | **3.5–4.0 s** | 0.20–0.28 | 0.15–0.35 | **−14 / 3–5** | **140–150** | **8–12 w** | 0–2 | A concrete plan or test the viewer can track |
+
+## B. Rules shared by all 7 (the "house style" to copy)
+
+| Area | Rule |
+|---|---|
+| Hook | Named person + exact time or place + goal + lethal stakes inside 30 s; the structure of the whole film announced by 1:10 (phases, zones, scenarios, countdown) |
+| Progress device | Always visible: % bar, numbered zones, countdown cards, clock cards, "three traps have failed" |
+| Staging | People mostly **seated, kneeling, in vehicles or hatches, at desks, behind bars**; walks short, from behind, in low light |
+| Hands | Single-action inserts only |
+| Faces | Small, held expressions; ECU eyes at decisions; tears/frost/dirt for intensity; no lip-sync |
+| Faceless villains | The most notorious figure is often barely shown (back seat, silhouette) |
+| Explainer 3D | Cutaways, maquettes, floor plans, X-ray of objects, held 15–45 s |
+| Grade | Low-key; one dominant temperature per location (cold exterior / warm interior); saturation reserved for fire, blood, uniform red, UI red |
+| Sound | Mastered around −14 LUFS with a narrow LRA (2.6–3.8 LU); no silent gaps; diegetic sound as plot (music hides a drill, a laugh line times a shot) |
+| Production promise | "We rebuilt X in 3D / spent 200 hours modelling" at 0:30–0:50 |
+| Epilogue | Real outcome + one human or ironic detail + open question for comments |
+
+## C. Yarnhub-specific spec (below)
+
 Reference: "When Tigers and Joseph Stalin Clashed" (Yarnhub), 16:39, 1920×1080, 25 fps. Contact sheet of all 204 shots: `01_yarnhub-tigers-is2.jpg`.
 Measurements come from the file itself (frame sampling, ffmpeg loudness). Observations are marked **obs**; numbers are **measured**.
 Style inspiration only: we never reuse their assets, shots or audio.

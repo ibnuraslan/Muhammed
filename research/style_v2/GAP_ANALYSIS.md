@@ -2,7 +2,7 @@
 
 Sources:
 - Seldom: `nvidia_part1_contact_sheet.jpg` + REPORT (branch `claude/nvidia-part1-mp4`), `nvidia_part2_contact_sheet.jpg`, `nvidia_part2_v2_c5_17_contact_sheet.jpg` + REPORT (branch `claude/nvidia-part2-mp4`), and our character code `nvidia_doc/scenes/human.py`.
-- Targets: the files in this folder (`YARNHUB_STYLE_BIBLE.md`, `02`–`07`).
+- Targets: the files in this folder: `YARNHUB_STYLE_BIBLE.md` (incl. the 7-film table), Atrium `02`, `03`, `06`, `07`, `08`, `10`, Fern/competitors `04`, `05`, `09`, plus `research/refs/06` and `08`.
 
 Effort: **E** = Easy (rule or preset change) · **M** = Medium (new script or asset set, days) · **H** = Hard (new toolchain, weeks). "New tool" = something we don't have today.
 
@@ -73,14 +73,14 @@ Effort: **E** = Easy (rule or preset change) · **M** = Medium (new script or as
 | 5.2 | Camera at eye height, centred | Default lower heights (hull/knee height for exteriors, seated eye line for interiors); rule-of-thirds framing | E |
 | 5.3 | Single angle per beat | Coverage template per beat: wide → MCU → POV/insert → reaction (see `CINEMATIC_SHOT_PLAYBOOK.md`) | E |
 | 5.4 | Moves are linear | Camera rig with ease-in/out, a subtle handheld noise modifier (0.2–0.5° rotation, 0.5–1 Hz) for interiors, slow dolly for exteriors | E |
-| 5.5 | Shot length | Target **median 3.5–4.5 s**, p90 ≈ 10 s, one long take (15–30 s) per chapter (Yarnhub 3.9 s, Atrium 3.2–4.3 s, Fern 3.4–6 s) | E |
+| 5.5 | Shot length | Target **median 3.5–4.0 s**, p90 ≈ 8–10 s, one long take (15–30 s) per chapter (measured: Yarnhub 3.9 s; Atrium 3.2–4.3 s across 6 films; Fern 2.6–6.4 s) | E |
 | 5.6 | POV shots missing | Mask library: binoculars, gun sight, periscope, keyhole, phone screen, CCTV | E |
 
 ## 4. Sound
 
 | # | Gap | Fix | Effort |
 |---|---|---|---|
-| 6.1 | Mix level (ours −14 LUFS in part 1) | Fine for YouTube. Keep −14 integrated, LRA 4–6; refs measure −10.4 to −15.9 with LRA 3.3–3.8 | E |
+| 6.1 | Mix level (ours −14 LUFS in part 1) | Keep −14 integrated; tighten LRA to **3–5 LU** (refs: Atrium −14.0 to −15.9 with LRA 2.6–3.8; Yarnhub −10.4/3.4; Fern −14.2 to −15.5 with 3.5–4.8) | E |
 | 6.2 | Beds | Never true silence; per-location beds (room tone, city hum, server whine) under everything | E |
 | 6.3 | Foley density | Foley list generated from the shot plan's action verbs (each verb → 1 sound); `sound_design.py` places them on the action frames | M |
 | 6.4 | Music | Cues per beat: tension pulse / action / decision stinger / aftermath pad; duck 6–8 dB under VO | E |
@@ -96,3 +96,13 @@ Effort: **E** = Easy (rule or preset change) · **M** = Medium (new script or as
 | 5 | **Coverage template + POV masks + no frozen shots** | E | Cinematic feel |
 | 6 | Small facial expressions + blinks + ECU eyes | M | Expressions |
 | 7 | Hybrid live-action close-ups (Fern Hansa) for the hardest acting moments | M, new tool (camera + actors) | Faces/hands at full realism |
+
+## 6. New from the extra Atrium films (Obersalzberg, Gulags, Hitler's car, Camp 14)
+
+| # | Gap | Fix | Effort |
+|---|---|---|---|
+| 7.1 | Our films have no visible progress device | Pick one per film: % bar, zone hexes, countdown cards, clock cards, scenario scoreboard (`title_card.py` overlays) | E |
+| 7.2 | Objects are props, not protagonists | Object-as-protagonist template (Hitler's car): hero object + X-ray cutaway + dimension lines + scenario tests. Fits films 2–5 (phone, typewriter, container, drain) | M |
+| 7.3 | No explainer 3D (cutaways, maquettes, floor plans) | Section-plane cutaway rig + white-maquette material + emissive labels | M |
+| 7.4 | Faces lack intensity details | Eye wetness/redness maps, dirt and frost decals, sweat specular | M |
+| 7.5 | Kneeling/seated group scenes need idle motion | Mocap kneel, sit and idle loops with random offsets; only 1–2 walkers per shot | M |
