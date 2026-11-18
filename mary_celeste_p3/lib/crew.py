@@ -43,6 +43,18 @@ CAST = {
                              "targets/head/head-scale-vert-decr": 0.4},
                       hair=(0.98, 0.05, 0.08), dens=dict(beard=1.6, moustache=1.4, hair=0.8),
                       jacket=(0.045, 0.06, 0.08), cap=(0.32, 0.08, 0.05), skin=(0.36, 0.21, 0.13)),
+    # the new crew taken on at Gibraltar (never the Dei Gratia's men): a grey-bearded older hand in a brown jacket,
+    # and a dark young man in a faded blue shirt
+    "hand_c":    dict(years=55, height=0.5, weight=0.6, muscle=0.5,
+                      extra={"targets/head/head-age-incr": 0.9, "targets/nose/nose-hump-incr": 0.9, "targets/head/head-diamond": 0.7,
+                             "targets/cheek/l-cheek-volume-decr": 0.7, "targets/cheek/r-cheek-volume-decr": 0.7},
+                      hair=(0.5, 0.2, 0.85), dens=dict(beard=1.2, moustache=1.0, hair=0.5), jacket=(0.09, 0.055, 0.03),
+                      skin=(0.42, 0.26, 0.17)),
+    "hand_d":    dict(years=24, height=0.55, weight=0.42, muscle=0.6,
+                      extra={"targets/head/head-invertedtriangular": 0.8, "targets/nose/nose-greek-incr": 0.6,
+                             "targets/eyebrows/eyebrows-angle-up": 0.6, "targets/chin/chin-cleft-incr": 0.8},
+                      hair=(0.95, 0.15, 0.0), hlen=1.3, dens=dict(beard=0.15, moustache=0.6, hair=1.2),
+                      no_jacket=True, shirt=(0.16, 0.22, 0.32), scarf=(0.12, 0.1, 0.09), skin=(0.4, 0.24, 0.15)),
     "flood":     dict(years=43, extra={"targets/nose/nose-scale-vert-incr": 0.5, "targets/nose/nose-trans-down": 0.2,
                                        "targets/chin/chin-prominent-incr": 0.5, "targets/head/head-oval": 0.5,
                                        "targets/eyebrows/eyebrows-angle-down": 0.4, "targets/cheek/l-cheek-bones-incr": 0.5,
@@ -52,7 +64,7 @@ CAST = {
     "surveyor":  dict(years=52, extra={"targets/nose/nose-scale-horiz-incr": 0.5, "targets/head/head-age-incr": 0.6,
                                        "targets/chin/chin-width-incr": 0.3},
                       weight=0.6, hair=(0.5, 0.2, 0.7), dens=dict(beard=1.0, moustache=1.0, hair=0.6),
-                      jacket=(0.02, 0.018, 0.016)),
+                      jacket=(0.075, 0.065, 0.05)),
     "judge":     dict(years=60, extra={"targets/head/head-age-incr": 0.8, "targets/nose/nose-scale-vert-incr": 0.3},
                       weight=0.55, hair=(0.4, 0.2, 0.9), dens=dict(beard=0.0, moustache=0.0, hair=0.0, sideburns=1.0),
                       jacket=(0.012, 0.01, 0.01), skin=(0.5, 0.31, 0.24), weather=0.2),
@@ -89,7 +101,7 @@ class Person(D.Deveau):
             for b in getattr(self, "button_objs", []):
                 b.hide_render = True
         if spec.get("no_jacket"):
-            self.shirt.data.materials[0] = D.linen_material(self.name + "_shirt", color=(0.47, 0.42, 0.33), wet=wet)
+            self.shirt.data.materials[0] = D.linen_material(self.name + "_shirt", color=spec.get("shirt", (0.47, 0.42, 0.33)), wet=wet)
         if spec.get("scarf"):
             self.scarf.data.materials[0] = D.wool_material(self.name + "_scarf", spec["scarf"], rough=0.8, sheen=0.3, weave=900, dirt=0.3)
         if wig:

@@ -133,8 +133,9 @@ def s01(t):
     mo, dv, Mmo, Mdv = _pair(SHIP, t)
     em = eyes(mo); ed = eyes(dv)
     back = (ed - em).normalized(); side = back.cross(Vector((0, 0, 1))).normalized()
-    loc = ed + back * 0.55 + side * 1.05 + Vector((0, 0, 0.0)) + back * 0.06 * ease(t)
-    cam(loc, em + Vector((0, 0, -0.3)) - side * 0.1, lens=35, fstop=4.0, focus=(em - loc).length)
+    mid = (ed + em) / 2
+    loc = mid + side * 2.3 + back * 0.25 + Vector((0, 0, -0.12)) + side * 0.08 * ease(t)
+    cam(loc, mid + Vector((0, 0, -0.38)), lens=32, fstop=4.0, focus=(mid - loc).length)
     return dict(cine={"sat": 1.08, "exposure": -0.05})
 
 
@@ -145,8 +146,9 @@ def s02(t):
     mo, dv, Mmo, Mdv = _pair(SHIP, t)
     em = eyes(mo); ed = eyes(dv)
     back = (em - ed).normalized(); side = back.cross(Vector((0, 0, 1))).normalized()
-    loc = em + back * 0.55 - side * 1.05 + Vector((0, 0, 0.0))
-    cam(loc, ed + Vector((0, 0, -0.32)) + side * 0.15, lens=35, fstop=4.0, focus=(ed - loc).length)
+    mid = (ed + em) / 2
+    loc = mid - side * 2.1 + back * 0.35 + Vector((0, 0, -0.05))      # the other side of the pair: Deveau side-on
+    cam(loc, mid.lerp(ed, 0.45) + Vector((0, 0, -0.4)), lens=35, fstop=4.0, focus=(ed - loc).length)
     return dict(cine={"sat": 1.08, "exposure": -0.05})
 
 
@@ -189,8 +191,9 @@ def s04(t):
     mo, dv, Mmo, Mdv = _pair(SHIP, 0.9, turn=ease(t))
     ed = eyes(dv); em = eyes(mo)
     back = (em - ed).normalized(); side = back.cross(Vector((0, 0, 1))).normalized()
-    loc = em + back * 0.9 - side * 1.6 + Vector((0, 0, -0.05))
-    cam(loc, ed.lerp(em, 0.3) + Vector((0, 0, -0.4)), lens=35, fstop=4.0, focus=(ed - loc).length)
+    mid = (ed + em) / 2
+    loc = mid + side * 3.0 + Vector((0, 0, 0.1))                       # wide profile: he turns away, out of the two-shot
+    cam(loc, mid + Vector((0, 0, -0.5)), lens=28, fstop=5.6, focus=(mid - loc).length)
     return dict(cine={"sat": 1.06})
 
 
@@ -671,7 +674,7 @@ def s15(t):
     org = (35.985, -5.56)
     ST.exterior("day", sky_rot=80, sun_az=110, sun_el=9)
     ST.coast("spain", (36.14, -5.72, 36.0, -5.40), 12, org, res=600)
-    hd = 200.0
+    hd = 250.0                                 # 40 degrees off her bow: the square foremast reads (brigantine)
     m = ST.mc("spare", wind=ST.local_wind((0.3, -1.0, 0), hd), wet=0.7, detail=False)
     SHIP = ST.set_ship(m, loc=(0, 0, 0), heading=hd, heel=1.5, pitch=0.3 * math.sin(t * 1.4))
     ST.ocean_around((0, 0, 0), hulls=[m["hull"]], mood="day", size=240, scale=1.1, chop=1.1, wind=9, foam=0.15, time=11 + t * 3)
@@ -1414,7 +1417,7 @@ def pose_carry(p, M, chest_c):
 def s42(t):
     SHIP, m = mc_at_gib(t)
     wood = PR.mat_wood("chestw", "dark_wooden_planks", 2.0, tint=(0.75, 0.5, 0.3))
-    for i, (key, x, y, hdg) in enumerate((("sailor_a", -1.4, -2.7, 0), ("sailor_b", 0.4, -2.6, 10))):
+    for i, (key, x, y, hdg) in enumerate((("hand_c", -1.4, -2.7, 0), ("hand_d", 0.4, -2.6, 10))):
         M = ST.on_ship(SHIP, x, y, hdg)
         cc = M @ Vector((0, -0.62, 0.86))
         p = crew.person(key, wet=0.0, idx=i); pose_carry(p, M, cc)
@@ -1434,7 +1437,7 @@ def s43(t):
     ST.exterior("sunset", sky_rot=120, sun_az=245, sun_el=9)
     gib_land(town_on=True)
     rx, ry = TR.to_xy(36.135, -5.36, GIB_BAY)
-    hd = 150.0
+    hd = 196.0                                 # seen 40 degrees off her bow, the Rock beyond
     m = ST.mc("spare", wind=ST.local_wind(WIND, hd), wet=0.2, detail=False, gap=True)
     loc0 = Vector((rx - 1400 + 60 * t, ry - 1500 - 100 * t, 0))
     SHIP = ST.set_ship(m, loc=loc0, heading=hd, heel=5 + 0.6 * math.sin(t * 2))
