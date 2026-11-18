@@ -116,7 +116,7 @@ def mattress():
             edge = min(i, nx - i, j, ny - j) / 4.0
             roll = 1 - math.exp(-edge)                       # rounded mattress edges
             z = TOP - 0.085 * impression(x, y) - 0.03 * (1 - roll)
-            z += 0.004 * noise.noise(Vector((x * 6, y * 6, 0.5)))
+            z += 0.004 * noise.noise(Vector((x * 6, y * 6, 0.5))) + 0.014 * noise.noise(Vector((x * 2.6, y * 3.1, 4.2))) * roll
             z -= 0.012 * math.exp(-((x - (BX0 + 0.25)) / 0.25) ** 2) * 0                # (pillow sits here)
             V.append((x, y, z)); UV.append(((x - x0) * 2, (y - y0) * 2))
     for j in range(ny):
@@ -153,7 +153,7 @@ def wet_cloth_mat(name, color, wet, stripes=False, sheen=0.4):
     tm = N.new("ShaderNodeMath"); tm.operation = 'PINGPONG'; tm.inputs[1].default_value = 0.5; Lk.new(tide.outputs[0], tm.inputs[0])
     Lk.new(tm.outputs[0], td.inputs['Factor']); Lk.new(dk.outputs[2], td.inputs[6])
     Lk.new(td.outputs[2], p.inputs['Base Color'])
-    rr = N.new("ShaderNodeMapRange"); rr.inputs['To Min'].default_value = 0.85; rr.inputs['To Max'].default_value = 0.32
+    rr = N.new("ShaderNodeMapRange"); rr.inputs['To Min'].default_value = 0.9; rr.inputs['To Max'].default_value = 0.5
     Lk.new(wm.outputs[0], rr.inputs['Value']); Lk.new(rr.outputs[0], p.inputs['Roughness'])
     p.inputs['Sheen Weight'].default_value = sheen; p.inputs['Specular IOR Level'].default_value = 0.55
     wv2 = N.new("ShaderNodeTexWave"); wv2.inputs['Scale'].default_value = 300; Lk.new(tc.outputs['Object'], wv2.inputs['Vector'])
@@ -163,7 +163,7 @@ def wet_cloth_mat(name, color, wet, stripes=False, sheen=0.4):
 
 
 V, F, UV = mattress()
-matt = ship.mesh_obj("mattress", V, F, wet_cloth_mat("ticking", (0.62, 0.58, 0.5), WET, stripes=True))
+matt = ship.mesh_obj("mattress", V, F, wet_cloth_mat("ticking", (0.46, 0.4, 0.3), WET, stripes=True))
 uvl = matt.data.uv_layers.new(name="UVMap")
 for l in matt.data.loops:
     uvl.data[l.index].uv = UV[l.vertex_index]
@@ -175,7 +175,7 @@ for (x, y, z) in V:
     cr = 0.006 * noise.noise(Vector((x * 9, y * 14, 2.0))) * (0.3 + d) + 0.006 * math.sin((y - CHILD["cy"]) * 55 + x * 11) * min(1.0, 3 * d * (1 - d))
     sheet_V.append((x, y, z + 0.006 + cr))
 keepF = [f for f in F if V[f[0]][0] < BX1 - 0.55]
-sheet_m = wet_cloth_mat("sheet", (0.7, 0.67, 0.6), WET + 0.1, sheen=0.3)
+sheet_m = wet_cloth_mat("sheet", (0.47, 0.43, 0.35), WET + 0.1, sheen=0.3)
 sheet = ship.mesh_obj("sheet", sheet_V, keepF, sheet_m)
 # water lying in the hollow: the sheet there is soaked through (darker, glossy)
 ca = sheet.data.color_attributes.new("imp", 'FLOAT_COLOR', 'POINT')
@@ -200,10 +200,10 @@ def blanket():
     for j in range(ny + 1):
         for i in range(nx + 1):
             u = i / nx; v = j / ny
-            x = BX1 - 0.62 + 0.6 * u
+            x = BX1 - 1.0 + 0.98 * u
             y = BY0 - 0.12 + (RY - BY0 + 0.1) * v
             # folds: a few big rolls across the bed plus noise
-            h = 0.05 + 0.05 * math.sin(u * math.pi * 3.2 + v * 1.5) ** 2 + 0.035 * noise.noise(Vector((u * 5, v * 5, 3.0)))
+            h = 0.03 + 0.06 * math.sin(u * math.pi * 4.2 + v * 2.1) ** 2 * (0.4 + u) + 0.03 * noise.noise(Vector((u * 7, v * 6, 3.0))) + 0.015 * noise.noise(Vector((u * 19, v * 17, 1.0)))
             z = TOP + 0.01 + h
             if y < BY0 + 0.02:                      # spills over the berth board and hangs down
                 over = (BY0 + 0.02 - y)
@@ -216,7 +216,7 @@ def blanket():
             F.append([a, a + 1, a + nx + 2, a + nx + 1])
     return V, F
 bV, bF = blanket()
-bl = ship.mesh_obj("blanket", bV, bF, wet_cloth_mat("blanket", (0.13, 0.12, 0.1), WET, sheen=0.7))
+bl = ship.mesh_obj("blanket", bV, bF, wet_cloth_mat("blanket", (0.1, 0.075, 0.055), WET, sheen=0.6))
 bl.modifiers.new("Thick", "SOLIDIFY").thickness = 0.008
 s = bl.modifiers.new("Sub", "SUBSURF"); s.levels = 1; s.render_levels = 2
 # pillow with the dent of a small head
@@ -230,7 +230,7 @@ for v in pil.data.vertices:
         v.co.z -= 0.035 * dd
     v.co.z = max(v.co.z, -0.055)
 bpy.ops.object.shade_smooth()
-pil.data.materials.append(wet_cloth_mat("pillowcase", (0.68, 0.65, 0.58), WET))
+pil.data.materials.append(wet_cloth_mat("pillowcase", (0.5, 0.46, 0.38), WET))
 
 # ----------------------------------------------------------------------------- props
 r, ms = ph.model("wooden_handle_saber")       # the sword from beneath the captain's berth (in its sheath)
@@ -260,7 +260,7 @@ h = dv.h
 ANG = math.radians(223)                          # he faces the berth, turned toward the hollow at its head end
 POS = Vector((0.22, 0.3, 0.0))
 M = Matrix.Translation(POS) @ Matrix.Rotation(ANG, 4, 'Z')
-P.cabin(dv, M, (0.48, BY0 - 0.02, BOARD + 0.045), (-0.3, 0.62, 1.40), lantern_side="L")
+P.cabin(dv, M, (0.48, BY0 - 0.02, BOARD + 0.045), (-0.12, 0.5, 1.3), lantern_side="L")
 bpy.context.view_layer.update()
 grip_local = P.palm_point(h, "L")
 look = Vector((CHILD["cx"] - 0.05, CHILD["cy"], TOP))

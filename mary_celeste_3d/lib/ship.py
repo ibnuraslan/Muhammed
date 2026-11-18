@@ -118,13 +118,15 @@ def canvas(name, wet=0.6, dirt=0.5, color=(0.62, 0.56, 0.45)):
     return m
 
 
-def tarred_rope(name="rope", color=(0.05, 0.04, 0.03)):
+def tarred_rope(name="rope", color=(0.028, 0.02, 0.013)):
+    """Tarred hemp: near-black brown, matte with a waxy sheen on the strands, a visible right-hand lay."""
     m, N, Lk, p = _mat(name)
-    p.inputs['Base Color'].default_value = (*color, 1); p.inputs['Roughness'].default_value = 0.6
+    p.inputs['Base Color'].default_value = (*color, 1); p.inputs['Roughness'].default_value = 0.72
+    p.inputs['Sheen Weight'].default_value = 0.25; p.inputs['Specular IOR Level'].default_value = 0.3
     tc = N.new("ShaderNodeTexCoord")
     wv = N.new("ShaderNodeTexWave"); wv.wave_type = 'BANDS'; wv.bands_direction = 'DIAGONAL'
-    wv.inputs['Scale'].default_value = 120; Lk.new(tc.outputs['Object'], wv.inputs['Vector'])
-    b = N.new("ShaderNodeBump"); b.inputs['Strength'].default_value = 0.4
+    wv.inputs['Scale'].default_value = 160; Lk.new(tc.outputs['Object'], wv.inputs['Vector'])
+    b = N.new("ShaderNodeBump"); b.inputs['Strength'].default_value = 0.8
     Lk.new(wv.outputs['Fac'], b.inputs['Height']); Lk.new(b.outputs['Normal'], p.inputs['Normal'])
     return m
 
@@ -623,7 +625,14 @@ def build_rigging(name, sp, mats, coll):
             for k in range(4):
                 x = m.x + 0.9 - k * 0.75
                 c = chain(x, sg); h = head + Vector((0, sg * 0.25, 0))
-                out.append(rope(f"{name}_shroud", (c, h), 0.022, rp, coll)); pts.append((c, h))
+                # deadeye pair with a laced lanyard at the channel; the shroud starts at the upper deadeye
+                d = (h - c).normalized(); lo_ = c + d * 0.05; up_ = c + d * 0.42
+                for q in (lo_, up_):
+                    out.append(cyl(f"{name}_deadeye", q - d * 0.04, q + d * 0.04, 0.085, mat=mats["rail"], verts=18, coll=coll))
+                sd = Vector((0, sg, 0)).cross(d).normalized() if abs(sg) else Vector((1, 0, 0))
+                for k2 in (-1, 0, 1):
+                    out.append(rope(f"{name}_lanyard", (lo_ + sd * 0.045 * k2 + d * 0.03, up_ + sd * 0.045 * k2 - d * 0.03), 0.008, rp, coll))
+                out.append(rope(f"{name}_shroud", (up_ + d * 0.04, h), 0.022, rp, coll)); pts.append((up_, h))
             # ratlines
             for r in range(1, 30):
                 f = r / 31

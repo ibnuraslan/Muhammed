@@ -77,7 +77,7 @@ def cabin(dv, M, board_w, lantern_w, lantern_side="L"):
     h.aim(f"wrist.{bs}", Vector((0.15 * sb, -0.8, -0.6)))
     rest_hand(h, bs, curl=28)
     ln = Mi @ Vector(lantern_w)
-    hand_reach(h, ls, ln, elbow=(0.8 * sl, 0.3, -0.6))
+    hand_reach(h, ls, ln, elbow=(0.45 * sl, 0.15, -1.0))          # elbow drops under the lantern's weight
     fa = (h.bone_tail(f"lowerarm02.{ls}") - h.bone_head(f"lowerarm01.{ls}")).normalized()
     h.aim(f"wrist.{ls}", (fa + Vector((0, 0, -0.15))).normalized())
     grip(h, ls, 1.0)
