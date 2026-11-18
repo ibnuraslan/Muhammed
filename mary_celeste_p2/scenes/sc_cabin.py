@@ -85,11 +85,10 @@ if SHOT in ("02", "03", "11"):
     if SHOT == "02":        # MS: Briggs writes home (person card right)
         S.cam(Vector((T.x + 1.35, T.y - 1.05, 1.22)), head.lerp(SET["letter"], 0.35) + Vector((0, 0, -0.05)), lens=40, fstop=2.8)
     elif SHOT == "03":      # OTS insert: over his right shoulder onto the nib and the page
-        S.ots(head, SET["letter"] + Vector((0.03, 0.02, 0)), side=-1, back=0.5, out=0.16, up=0.42, lens=40, fstop=2.4)
+        S.cam(head + Vector((-0.36, 0.12, 0.34)), SET["letter"] + Vector((0.03, 0.0, 0)), lens=40, fstop=2.4)
     else:                   # CU: he pauses mid-letter, a small sad smile
         # MS profile, lamp-lit side toward camera's far side: face half in shadow
-        S.frame([head + Vector((0, 0, 0.12)), head - Vector((0, 0, 0.75)), SET["letter"]], Vector((-1.0, -0.15, 0.1)), lens=40,
-                fill=0.85, bounds=SET["bounds"], fstop=2.8)
+        S.cam(head + Vector((-1.1, -0.4, 0.02)), head + Vector((0, -0.12, -0.25)), lens=40, fstop=2.8)
 
 elif SHOT == "12":          # WS: Briggs stands and looks round the crowded cabin; no corner left for a boy
     SET = cabin.build("warm", letter_side=1)
@@ -102,7 +101,7 @@ elif SHOT == "12":          # WS: Briggs stands and looks round the crowded cabi
     b.finish_live(place=Mw, density=HAIR)
     b.look(Vector((-1.4, 1.2, 0.9)))
     bh = b.h.bone_head("head")
-    S.cam(Vector((-0.6, -1.38, 1.55)), Vector((0.5, 0.8, 1.0)), lens=20, fstop=5.6)
+    S.cam(Vector((-0.7, -1.38, 1.4)), Vector((0.6, 0.45, 1.45)), lens=22, fstop=5.6)
 
 elif SHOT == "13":          # top-down white maquette of the cabin: every corner used
     SET = cabin.build("warm", letter_side=1)
@@ -145,8 +144,7 @@ elif SHOT in ("07", "08"):  # Sarah at the table; Sophia beside her holds up her
         S.frame([sh, kh, sh - Vector((0, 0, 0.5)), d.location], Vector((1.0, 0.45, 0.4)), lens=28, fill=0.8,
                 bounds=SET["bounds"], fstop=4.0)
     else:
-        S.frame([kh, d.matrix_world.translation + Vector((0, 0, 0.1)), sh], (sh - kh).normalized() + Vector((0, 0, 0.25)), lens=45, fill=0.9,
-                bounds=SET["bounds"], fstop=2.0)
+        S.ots(sh, kh - Vector((0, 0, 0.12)), side=1, back=0.4, out=0.42, up=0.25, lens=35, fstop=2.8)
 
 elif SHOT == "14":          # the visitor ducks under the companion beam; her bonnet brim knocks it; Sarah rises
     SET = cabin.build("warm", letter_side=-1)
@@ -170,8 +168,7 @@ elif SHOT == "14":          # the visitor ducks under the companion beam; her bo
     s.finish_live(place=Ms, density=HAIR)
     s.look(v.h.bone_head("head")); v.look(s.h.bone_head("head"))
     vh, shh = v.h.bone_head("head"), s.h.bone_head("head")
-    S.frame([vh, shh, SET["comp_beam"], shh - Vector((0, 0, 0.5))], Vector((-1.0, 0.35, -0.05)), lens=24, fill=0.95,
-            bounds=SET["bounds"], fstop=4.0)
+    S.cam(Vector((-1.2, -0.45, 0.95)), Vector((1.3, -1.25, 1.85)), lens=24, fstop=4.0)
 
 elif SHOT in ("17", "19"):  # Sarah writing; a bang overhead (17); fingers to her temple (19)
     SET = cabin.build("warm", letter_side=-1)

@@ -88,7 +88,31 @@ def flame(name, loc, h=0.03, strength=60.0, color=(1.0, 0.55, 0.18)):
     return o
 
 
+def probe():
+    """Print what the camera sees at 9 points (nearest hit object), for layout checks without rendering."""
+    sc = bpy.context.scene; cam = sc.camera
+    for o in bpy.data.objects:
+        if o.name.startswith(("SeaHaze", "air", "dust", "Haze", "haze")) or "plume" in o.name:
+            o.hide_viewport = True
+    dg = bpy.context.evaluated_depsgraph_get()
+    fr = cam.data.view_frame(scene=sc); tr, br, bl, tl = fr[0], fr[1], fr[2], fr[3]
+    print("PROBE cam", tuple(round(c, 2) for c in cam.matrix_world.translation), "lens", cam.data.lens)
+    for v in (0.85, 0.5, 0.15):
+        row = []
+        for u in (0.15, 0.5, 0.85):
+            p = bl + (br - bl) * u + (tl - bl) * v
+            if cam.data.type == 'ORTHO':
+                o = cam.matrix_world @ p; d = cam.matrix_world.to_3x3() @ Vector((0, 0, -1))
+            else:
+                o = cam.matrix_world.translation; d = (cam.matrix_world.to_3x3() @ p).normalized()
+            hit = sc.ray_cast(dg, o, d)
+            row.append(f"{hit[4].name[:18] if hit[0] else 'SKY'}@{(hit[1]-o).length:.1f}" if hit[0] else "SKY")
+        print("PROBE", " | ".join(row))
+
+
 def finish(out, cine=None, bloom=0.3, exposure=0.0):
+    if os.environ.get("PROBE"):
+        probe(); print("RENDERED probe"); return
     sc = bpy.context.scene
     sc.view_settings.exposure += exposure
     C.finish(out, cine=cine, bloom=bloom)

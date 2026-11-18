@@ -89,7 +89,7 @@ elif SHOT == "04":  # WS: Briggs on the pier looks along her waterline; hands be
     tgt = SM @ Vector((ship.L / 2 - 6, -ship.B / 2, 0.2))
     b = briggs_on_pier((pier.SHIP_X - 8, PY - 1.4), None, tgt, head=(14, 0))
     hd = b.h.bone_head("head")
-    S.frame([hd + Vector((0, 0, 0.15)), hd - Vector((0, 0, 1.7)), hd + Vector((3.0, 2.5, -0.8))], Vector((-0.25, -1.0, 0.15)), lens=32, fill=0.9, fstop=5.6)
+    S.cam(hd + Vector((2.2, -3.6, -0.35)), hd + Vector((0.6, 1.0, -0.55)), lens=35, fstop=5.6)
 
 elif SHOT == "05":  # low on the water: her hull at the waterline, the reflection, piles beside
     a = SM @ Vector((ship.L / 2 - 2, -ship.B / 2 - 1.0, 0.25))
@@ -99,8 +99,7 @@ elif SHOT == "06":  # MCU: Briggs looks up into the rigging, thoughtful
     b = briggs_on_pier((pier.SHIP_X - 3, PY - 1.2), None, SM @ Vector((-1.5, 0, 18)), head=(-30, 10))
     hd = b.h.bone_head("head")
     # MS low from behind: his silhouette against the rigging and sky
-    S.frame([hd + Vector((0, 0, 0.15)), hd - Vector((0, 0, 0.9))], Vector((-0.35, -1.0, -0.45)), lens=50, fill=0.85, fstop=2.8,
-            aim_offset=(0, 0, 0.5))
+    S.cam(hd + Vector((-0.7, -2.6, -0.75)), hd + Vector((0.1, 0.4, 0.55)), lens=40, fstop=2.8)
 
 elif SHOT == "15":  # WS: a barrel swings aboard in its sling; two stevedores guide it, one rolls the next
     sl = SET["sling_barrel"]
@@ -120,7 +119,7 @@ elif SHOT == "20":  # 5 November: a steam tug tows her off the pier and out into
     t = W.tug("tug", SM @ Vector((ship.L / 2 + 38, 2, 0)), 22)
     ship.rope("hawser", [SM @ Vector((ship.L / 2 + 1, 0, 3.0)), SM @ Vector((ship.L / 2 + 18, 0, 0.6)), SM @ Vector((ship.L / 2 + 30, 0, 1.6))],
               0.05, mc["mats"]["rope"])
-    S.cam(Vector((pier.SHIP_X - 4, pier.PIER_W / 2 - 1.5, pier.DECK + 1.7)), SM @ Vector((ship.L / 2 + 8, 0, 5)), lens=26)
+    S.cam(Vector((pier.X_HEAD - 1.5, pier.PIER_W / 2 - 1.2, pier.DECK + 1.7)), SM @ Vector((ship.L / 2 - 2, 0, 3.5)), lens=28)
     cine = {"sat": 1.1, "exposure": 0.0}
 
 S.finish(S.out_path(SHOT), cine=cine)
