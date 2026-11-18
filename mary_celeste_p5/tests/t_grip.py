@@ -17,7 +17,7 @@ ship.cyl("bar", c - bar * 0.6, c + bar * 0.6, 0.024, verts=16)
 e1 = st.grip_bar("R", c + bar * 0.07, bar); e2 = st.grip_bar("L", c - bar * 0.05, bar)
 print("GRIPERR", round(e1 * 1000), round(e2 * 1000))
 st.place_finish(Vector((-3, 0, 1)), density=0.0, hair=False)
-import clipcheck5; clipcheck5.check("grip_test")
+import clipcheck; clipcheck.check("grip_test")
 w = bpy.data.worlds.new("w"); sc.world = w; w.use_nodes = True; w.node_tree.nodes["Background"].inputs[0].default_value = (0.8, 0.8, 0.8, 1)
 for i, off in enumerate([Vector((-0.45, -0.3, 0.2)), Vector((-0.5, 0.35, 0.1)), Vector((0.1, -0.1, 0.45))]):
     C.camera(c + off, c, lens=60)

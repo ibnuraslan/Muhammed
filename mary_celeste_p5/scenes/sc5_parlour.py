@@ -146,7 +146,7 @@ elif SHOT in ("S22", "S23", "S26"):
         st.head(look_out, share=0.7)
         a.brow_knit(0.3)
         look = look_out
-    st.place_finish(look, density=DENS)
+    st.place_finish(look, density=max(DENS, 0.05))
     import boatcrew
     boatcrew.trim_under_seat(a, seat_pt, r=0.3, boxes=[(seat_pt - Vector((0.2, 0.2, 0.03)), seat_pt + Vector((0.2, 0.2, 0.0)))])
     # his father's letter on the sill (folded open, ink lines)

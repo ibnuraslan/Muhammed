@@ -476,8 +476,8 @@ def sailor(i, wet=0.4):
 
 
 # ----------------------------------------------------------------------------- the Briggs family: the shared cast
-# (mary_celeste_3d/lib/briggs.py, women.py; approved by the studio). The Person variants above are kept only as a
-# reference; every shot uses these.
+# (mary_celeste_3d/lib/briggs.py, women.py: v2, approved by the hub at d503977). The Person variants above are kept
+# only as a reference; every shot uses these.
 def briggs(wet=0.4):
     import briggs as _B
     return _B.Briggs(wet=wet, cap=True)

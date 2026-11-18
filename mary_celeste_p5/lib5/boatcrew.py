@@ -95,11 +95,13 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
     for p, st in out:
         if hasattr(p, "grip_err"):
             print(f"GRIP {p.name}: palm {p.grip_err * 1000:.0f} mm from the bar")
+            import clipcheck
+            clipcheck.report_floating(p.name, p.grip_err)          # gaps over 15 mm fail the clip check
             if p.grip_err > 0.015:
-                import clipcheck5
-                clipcheck5.FLOATING.append((p.name, round(p.grip_err, 3)))
                 print(f"FLOAT {p.name}: hand {p.grip_err * 1000:.0f} mm off the bar it should hold")
-        st.place_finish(look, density=density, hair=hair)
+        woman = type(p).__module__ == "women"
+        # shared women (d503977) need hair on and density > 0 (their bun / shawl fringe assume it)
+        st.place_finish(look, density=max(density, 0.05) if woman else density, hair=True if woman else hair)
         trim_under_seat(p, st.seat_world)
     return [p for p, _ in out]
 
