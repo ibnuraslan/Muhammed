@@ -118,3 +118,9 @@ def feet_to_floor(h, Mw, floor_z=0.0, tries=None):
         d = Vector((0.02 * sg, -best[0], -1))
         h.aim(f"lowerleg01.{sd}", d); h.aim(f"lowerleg02.{sd}", d)
         h.aim(f"foot.{sd}", Vector((0.08 * sg, -1, -0.25)))
+        if best[1] > 0.008:          # legs too short for the chair: point the toes down to the floor
+            for k in range(1, 12):
+                h.aim(f"foot.{sd}", Vector((0.08 * sg, -1, -0.25 - 0.18 * k)))
+                toe = Mw @ h.bone_tail(f"foot.{sd}")
+                if toe.z - floor_z < 0.03:
+                    break

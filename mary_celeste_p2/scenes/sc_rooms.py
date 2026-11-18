@@ -21,7 +21,7 @@ if SHOT == "09":    # Arthur, 7, at the window of his grandmother's house in Mar
     P.stand(k.h, weight="L", lean=4)
     P.head(k.h, pitch=-4, yaw=-10)
     sill = R["sill"]
-    Mk = A.stand_place((sill.x - 0.38, sill.y - 0.12), 90)
+    Mk = A.stand_place((sill.x - 0.48, sill.y - 0.12), 90)
     Mi = Mk.inverted()
     P.hand_reach(k.h, "L", Mi @ (sill + Vector((0.0, 0.12, 0.03))), elbow=(0.7, 0.3, -0.6)); P.rest_hand(k.h, "L", 18)
     P.hand_reach(k.h, "R", Mi @ (sill + Vector((0.0, -0.18, 0.03))), elbow=(-0.7, 0.3, -0.6)); P.rest_hand(k.h, "R", 18)
@@ -34,15 +34,17 @@ if SHOT == "09":    # Arthur, 7, at the window of his grandmother's house in Mar
 
 elif SHOT == "10":  # Arthur at a school desk writes on his own slate
     R = rooms.schoolroom()
-    k = cast.Boy()
+    k = cast.Boy(seated=True)
     d = R["desk"]; top = R["desk_top"]
     A.sit_chair(k.h, lean=10)
     seat_z = top - 0.3
     Mk = A.sit_place(k.h, (d.x - 0.5, d.y), 90, seat_z)
-    try:
-        S.place_model("SchoolChair_01", (d.x - 0.52, d.y, 0), size=0.8, rot_z=math.radians(-90))
-    except Exception:
-        ship.box("stool", (d.x - 0.52, d.y, seat_z / 2), (0.36, 0.36, seat_z), cabin.plain("stoolwood", (0.3, 0.2, 0.12)))
+    A.feet_to_floor(k.h, Mk, 0.003)
+    hip = Mk @ ((k.h.bone_head("upperleg01.L") + k.h.bone_head("upperleg01.R")) / 2)
+    bench = ship.wood("brown_planks_05", 2.0, tint=(0.6, 0.42, 0.28), name="bench")
+    ship.box("bench_top", (hip.x - 0.02, d.y, seat_z - 0.02), (0.3, 0.9, 0.035), bench, bevel=0.005)
+    for sy in (-0.38, 0.38):
+        ship.box("bench_leg", (hip.x - 0.02, d.y + sy, (seat_z - 0.04) / 2), (0.26, 0.04, seat_z - 0.04), bench)
     Mi = Mk.inverted()
     sl = cabin._slate(Vector((d.x - 0.12, d.y, top)), cabin.M("brown_planks_05", 5.0, tint=(0.7, 0.5, 0.3), name="slframe"))
     A.write(k.h, Mi, sl + Vector((0, -0.03, 0)), side="R", other_on_table=sl + Vector((0.05, 0.2, 0)), lean=16, head_pitch=30)
@@ -82,12 +84,6 @@ elif SHOT in ("16", "18"):   # the hold: men stow barrels in tiers by lantern li
         hd = s1.h.bone_head("head")
         S.frame([hd, bung, hd - Vector((0, 0, 0.9))], Vector((0.6, -1.0, 0.2)), lens=35, fill=0.9, fstop=2.8)
     else:
-        s2 = cast.Sailor(name="Stev2", years=26, jacket=(0.05, 0.05, 0.06), cap=True)
-        P.stand(s2.h, lean=10, weight="R"); P.head(s2.h, pitch=-30)
-        M2 = A.stand_place((0.9, 0.6), 160, z=0.55)
-        P.hand_reach(s2.h, "L", s2.h.bone_head("upperarm01.L") + Vector((0.1, -0.1, 0.55)), elbow=(0.8, 0.3, -0.4)); P.grip(s2.h, "L")
-        P.hand_reach(s2.h, "R", s2.h.bone_head("upperarm01.R") + Vector((-0.1, -0.1, 0.5)), elbow=(-0.8, 0.3, -0.4)); P.grip(s2.h, "R")
-        s2.finish_live(place=M2, density=HAIR)
         S.cam(Vector((3.3, 2.2, 2.35)), Vector((-0.6, -0.2, 1.1)), lens=24, fstop=5.6)
     cine = {"sat": 1.08, "exposure": 0.15}
 

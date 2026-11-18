@@ -167,7 +167,7 @@ class Person(D.Deveau):
             pass
         return P, bvh
 
-    def finish_live(self, look_at=None, hair=True, density=1.0, place=None):
+    def finish_live(self, look_at=None, hair=True, density=1.0, place=None, ground=True):
         """Grow hair on the posed body and keep the rig live; then move everything to `place`."""
         h = self.h
         for o in h.parts:
@@ -193,7 +193,54 @@ class Person(D.Deveau):
         if look_at is not None:
             self.look(look_at)
         h.arm.hide_render = True
+        if ground:
+            self.ground()
         self.tag()
+
+    def ground(self, clearance=0.006, max_lift=0.25):
+        """Stand on whatever is really underneath: ray-cast down under the soles (boots, shoes or the skirt hem) and lift
+        the whole rig so the lowest point clears the surface below. Returns the lift applied."""
+        import numpy as np
+        bpy.context.view_layer.update()
+        mine = set(o.name for o in self.objects) | set(o.name for o in (getattr(self, "sea_boots", []) or []))
+        feet = [o for o in bpy.data.objects if o.name in mine and o.type == 'MESH' and
+                any(k in o.name for k in (("boot", "shoes") if self.SEATED else ("boot", "shoes", "skirt")))]
+        if not feet:
+            return 0.0
+        dg = bpy.context.evaluated_depsgraph_get()
+        lows = []
+        for o in feet:
+            oe = o.evaluated_get(dg); me = oe.to_mesh()
+            P = np.array([(oe.matrix_world @ v.co)[:] for v in me.vertices]); oe.to_mesh_clear()
+            if len(P):
+                low = P[P[:, 2] < P[:, 2].min() + 0.03]
+                lows.append(low[np.linspace(0, len(low) - 1, min(len(low), 40)).astype(int)])
+        hidden = []
+        for o in bpy.data.objects:
+            if o.name in mine or o.name.startswith(("air", "dust", "SeaHaze", "Ocean", "far_sea")):
+                if not o.hide_viewport:
+                    o.hide_viewport = True; hidden.append(o)
+        bpy.context.view_layer.update()
+        dg = bpy.context.evaluated_depsgraph_get()
+        sc = bpy.context.scene
+        need = -1.0
+        for low in lows:
+            for p in low:
+                hit = sc.ray_cast(dg, Vector((p[0], p[1], p[2] + 0.06)), Vector((0, 0, -1)), distance=0.5)
+                if hit[0]:
+                    need = max(need, hit[1].z + clearance - p[2])
+        for o in hidden:
+            o.hide_viewport = False
+        bpy.context.view_layer.update()
+        lift = min(max(need, 0.0), max_lift) if need > -1.0 else 0.0
+        if lift > 0:
+            self.h.arm.location.z += lift
+            for o in self.objects:
+                if o.parent is None and o is not self.h.arm:
+                    o.location.z += lift
+            bpy.context.view_layer.update()
+        self.lifted = lift
+        return lift
 
     def tag(self):
         """Tag meshes for clipcheck (o["person"]) with world hand points (wrists + knuckles)."""
@@ -362,7 +409,7 @@ class Woman(Person):
     SKIN = dict(base=(0.6, 0.4, 0.3), weather=0.12)
     HAIR = dict(melanin=0.75, redness=0.42)
     DRESS = (0.16, 0.05, 0.045); TRIM = (0.05, 0.02, 0.02); PATTERN = None
-    SEATED = False; BONNET = False; SKIRT_R = 0.42
+    SEATED = False; BONNET = False; SKIRT_R = 0.34
 
     def _dress(self):
         h = self.h
@@ -380,7 +427,12 @@ class Woman(Person):
         if self.SEATED:
             sk = u & (z < hip_z + 0.08) & (z > knee_z - 0.2) & (whand < 0.05)
             self.skirt, _ = self._shell("skirt", sk, 0.03, self.dress_mat, solid=0.003, drape=40, displace=0.008)
-            self._hide_skin(bod | (u & (z < hip_z + 0.06)))
+            ankle_z = self.marks["ankle"]
+            st = u & (z <= knee_z - 0.15) & (z > ankle_z + 0.02)
+            self._shell("stockings", st, 0.003, cotton_material(self.name + "_st", (0.08, 0.06, 0.05), sheen=0.4), solid=0.001)
+            sh = u & (z <= ankle_z + 0.05)
+            self._shell("shoes", sh, 0.006, leather_material(self.name + "_sh", wet=0.0, rough=0.35), solid=0.002, drape=60)
+            self._hide_skin(bod | (u & (z < hip_z + 0.06) & (z > knee_z - 0.15)) | st | sh)
         else:
             self.skirt = self._bell_skirt(hip_z, co)
             self._hide_skin(bod | legs)
@@ -417,7 +469,7 @@ class Woman(Person):
         # waist radius per angle from the body ring (+ ease)
         ra = np.arctan2(ring[:, 1] - cy, ring[:, 0] - cx); rr = np.hypot(ring[:, 0] - cx, ring[:, 1] - cy)
         wr = np.array([rr[np.argmin(np.abs(np.angle(np.exp(1j * (ra - a)))))] for a in ang]) + 0.012
-        floor = 0.01
+        floor = 0.03
         rng = np.random.default_rng(3)
         ph = rng.uniform(0, 2 * np.pi, 3)
         for j in range(nv + 1):

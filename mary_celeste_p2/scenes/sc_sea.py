@@ -87,7 +87,7 @@ if SHOT in ("21", "22", "24", "25", "26", "27"):
         b = cast.Briggs()
         P.stand(b.h, weight="L"); P.head(b.h, pitch=-28, yaw=-12)
         P.arm_down(b.h, "L"); P.rest_hand(b.h, "L"); P.arm_down(b.h, "R"); P.rest_hand(b.h, "R")
-        M = on_deck(-8.5, -1.5, 160, SM)
+        M = on_deck(-6.0, -2.7, 160, SM)
         b.finish_live(place=M, density=HAIR)
         b.look(mt)
         hd = b.h.bone_head("head")
@@ -99,7 +99,7 @@ if SHOT in ("21", "22", "24", "25", "26", "27"):
     elif SHOT == "25":   # MS: Sarah hands her letter to the pilot at the rail
         s = cast.Sarah(expr={"mouth-corner-puller": 0.3})
         pl = cast.Sailor(name="Pilot", years=50, jacket=(0.02, 0.02, 0.03), beard=True, cap=True)
-        xr = -5.0; yr = -(ship.B / 2 - 0.55)
+        xr = -5.0; yr = -(ship.B / 2 - 0.95)
         P.stand(s.h, weight="L"); P.head(s.h, pitch=6, yaw=6)
         Ms = on_deck(xr - 0.35, yr + 0.15, 75, SM); Mp = on_deck(xr + 0.45, yr + 0.05, -105, SM)
         mid = (Ms.to_translation() + Mp.to_translation()) / 2 + Vector((0, 0, 1.2))
@@ -170,7 +170,7 @@ elif SHOT in ("28", "29", "33", "37"):  # 25 November, dawn: Santa Maria in view
         S.cam(SM @ Vector((-1.7, 0.2, ship.zdeck(-1.7) + 1.25)), SM @ Vector((-1.7, -40, -1.5)), lens=24)
     elif SHOT == "37":   # flashback, warm noon: Briggs takes a sight with the sextant
         b = cast.Briggs()
-        M = on_deck(-9.0, -2.4, 0, SM)
+        M = on_deck(-6.2, -2.8, 0, SM)
         P.stand(b.h, weight="R", lean=-4)
         P.head(b.h, pitch=-12, yaw=0)
         eye = b.h.bone_head("head") + Vector((0.0, -0.11, 0.06))
@@ -196,9 +196,12 @@ elif SHOT in ("42", "43", "44", "45"):   # 4 December: the ship as found (overca
         S.cam(SM @ Vector((-1.75, 0.6, ship.zdeck(-1.75) + 1.25)), SM @ Vector((-1.7, -40, -1.8)), lens=24)
     elif SHOT == "43":   # reconstruction: figures (faces away) lower the boat through the gap; one passes a box down
         cine = {"sat": 0.9, "exposure": 0.05}
-        bt, ms = W.pilot_boat("yawl", SM @ Vector((-1.65, -(ship.B / 2) - 1.6, 0.0)), 0)
+        bt, ms = W.pilot_boat("yawl", SM @ Vector((-1.65, -(ship.B / 2) - 1.9, 0.0)), 0)
+        for o in ms:
+            if any(k in o.name.lower() for k in ("rig", "mast", "sail", "rope")):
+                o.hide_render = True; o.hide_viewport = True
         figs = []
-        for k, (x, y, yaw) in enumerate(((-2.2, -3.0, -10), (-1.0, -3.1, 10), (-1.6, -2.3, 0))):
+        for k, (x, y, yaw) in enumerate(((-3.05, -3.0, 20), (0.15, -3.0, -20), (-1.6, -1.75, 0))):
             f = cast.Sailor(name=f"fig{k}", years=30 + k * 6, jacket=[(0.05, 0.04, 0.03), (0.02, 0.02, 0.03), (0.1, 0.08, 0.05)][k])
             P.stand(f.h, lean=22, weight="L"); P.head(f.h, pitch=30)
             M = on_deck(x, y, yaw, SM)

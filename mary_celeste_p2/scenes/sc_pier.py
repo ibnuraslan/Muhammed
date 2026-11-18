@@ -87,7 +87,7 @@ if SHOT == "01":   # EWS: the pier from over the river, the Mary Celeste alongsi
 
 elif SHOT == "04":  # WS: Briggs on the pier looks along her waterline; hands behind his back; a small nod
     tgt = SM @ Vector((ship.L / 2 - 6, -ship.B / 2, 0.2))
-    b = briggs_on_pier((pier.SHIP_X - 8, PY - 1.4), None, tgt, head=(14, 0))
+    b = briggs_on_pier((pier.SHIP_X - 11, PY - 1.4), None, tgt, head=(14, 0))
     hd = b.h.bone_head("head")
     S.cam(hd + Vector((2.2, -3.6, -0.35)), hd + Vector((0.6, 1.0, -0.55)), lens=35, fstop=5.6)
 
@@ -103,8 +103,8 @@ elif SHOT == "06":  # MCU: Briggs looks up into the rigging, thoughtful
 
 elif SHOT == "15":  # WS: a barrel swings aboard in its sling; two stevedores guide it, one rolls the next
     sl = SET["sling_barrel"]
-    stevedore("g1", (sl.x - 0.7, sl.y - 0.95), None, pose="guide", target=sl - Vector((0, 0, 0.4)))
-    stevedore("g2", (sl.x + 0.8, sl.y - 0.85), None, pose="guide", target=sl - Vector((0, 0, 0.4)), years=45, jacket=(0.12, 0.1, 0.08))
+    stevedore("g1", (sl.x - 0.85, sl.y - 1.15), None, pose="guide", target=sl - Vector((0, 0, 0.4)))
+    stevedore("g2", (sl.x + 0.95, sl.y - 1.1), None, pose="guide", target=sl - Vector((0, 0, 0.4)), years=45, jacket=(0.12, 0.1, 0.08))
     bd, bh = SET["barrel_size"]
     rb = pier._inst(SET["barrel_proto"][0], Vector((sl.x - 4.2, PY - 2.0, pier.DECK + bh / 2 - 0.0)) - Vector((0, 0, bh / 2)), rz=1.57, lying=True)
     stevedore("r1", (sl.x - 4.9, PY - 2.0), None, pose="roll", target=Vector((sl.x - 4.2, PY - 2.0, pier.DECK + bd / 2 + 0.1)))

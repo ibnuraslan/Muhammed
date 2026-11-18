@@ -17,12 +17,12 @@ T = cabin.TABLE
 SET = None
 
 
-def seated(person, chair, lean=4, yaw=None):
+def seated(person, chair, lean=4, yaw=None, back=0.0, lift=0.0):
     chair_pos, cyaw, _ = SET["chairs"][chair]
     A.sit_chair(person.h, lean=lean)
     yaw = (0.0 if chair == 1 else 180.0) if yaw is None else yaw
-    dy = -0.01 if chair == 1 else 0.06
-    Mw = A.sit_place(person.h, (chair_pos.x, chair_pos.y + dy), yaw, SET["seat_z"])
+    dy = (-0.01 + back) if chair == 1 else (0.06 - back)
+    Mw = A.sit_place(person.h, (chair_pos.x, chair_pos.y + dy), yaw, SET["seat_z"] + lift)
     A.feet_to_floor(person.h, Mw, 0.013)
     return Mw
 
@@ -124,7 +124,7 @@ elif SHOT == "13":          # top-down white maquette of the cabin: every corner
 elif SHOT in ("07", "08"):  # Sarah at the table; Sophia beside her holds up her doll
     SET = cabin.build("warm", letter_side=-1, letters=False)
     s = cast.Sarah(seated=True, expr={"mouth-corner-puller": 0.35})
-    Mw = seated(s, 0, lean=0, yaw=200.0)
+    Mw = seated(s, 0, lean=-6, yaw=192.0, back=0.06, lift=0.015)
     A.hands_in_lap(s.h)
     P.head(s.h, pitch=16, yaw=-34, tilt=4)
     s.finish_live(place=Mw, density=HAIR)
@@ -155,10 +155,8 @@ elif SHOT == "14":          # the visitor ducks under the companion beam; her bo
     P.head(v.h, pitch=10)
     P.arm_down(v.h, "R", out=0.25, fwd=0.3, bend=50); P.rest_hand(v.h, "R")
     P.arm_down(v.h, "L", out=0.2, fwd=0.2, bend=30); P.rest_hand(v.h, "L")
-    step = 4
-    zst = cabin.RZ * step / 9
-    xs = cabin.COMP["x0"] + 0.12 + (cabin.COMP["x1"] - cabin.COMP["x0"] - 0.2) * step / 9
-    Mv = A.stand_place((xs + 0.05, (cabin.COMP["y0"] + cabin.COMP["y1"]) / 2), -90, z=zst + 0.035)
+    xs = cabin.COMP["x0"] - 0.4
+    Mv = A.stand_place((xs, -1.1), -90)
     v.finish_live(place=Mv, density=HAIR)
     cabin.bonnet(v)
     s = cast.Sarah(expr={"mouth-corner-puller": 0.4})
@@ -166,7 +164,12 @@ elif SHOT == "14":          # the visitor ducks under the companion beam; her bo
     P.head(s.h, pitch=-14, yaw=8)
     P.arm_down(s.h, "L", out=0.1, fwd=0.2, bend=40); P.rest_hand(s.h, "L")
     P.arm_down(s.h, "R", out=0.1, fwd=0.25, bend=50); P.rest_hand(s.h, "R")
-    Ms = A.stand_place((0.45, -0.75), A.yaw_to((0.45, -0.75), (xs, -1.27)))
+    ch0 = SET["chairs"][0][2][0]
+    while ch0.parent is not None:
+        ch0 = ch0.parent
+    ch0.location += Vector((-1.05, 0.5, 0))        # she has pushed her chair back from the table
+    bpy.context.view_layer.update()
+    Ms = A.stand_place((0.04, -1.12), A.yaw_to((0.04, -1.12), (xs, -1.1)))
     s.finish_live(place=Ms, density=HAIR)
     s.look(v.h.bone_head("head")); v.look(s.h.bone_head("head"))
     vh, shh = v.h.bone_head("head"), s.h.bone_head("head")
@@ -187,17 +190,12 @@ elif SHOT in ("17", "19"):  # Sarah writing; a bang overhead (17); fingers to he
 elif SHOT == "23":          # 7 November, evening: Sarah writes by the lamp; Sophia asleep in the berth behind
     SET = cabin.build("night", letter_side=-1)
     s = sarah_writing()
-    k = cast.Child(expr={"eye-left-closure": 1.0, "eye-right-closure": 1.0})
-    b = cabin.BERTH
-    Mk = (Matrix.Translation((b["x0"] + 0.32, (b["y0"] + cabin.RY) / 2, b["top"] + 0.06)) @ Matrix.Rotation(math.radians(-90), 4, 'Z')
-          @ Matrix.Rotation(math.radians(-90), 4, 'X') @ Matrix.Translation((0, 0.0, -k.h.bone_head("head").z - 0.05)))
-    k.finish_live(place=Mk, density=HAIR)
     head = s.h.bone_head("head")
     S.cam(Vector((T.x + 1.05, T.y - 0.95, 1.12)), head.lerp(Vector((-1.4, 1.2, 0.7)), 0.3), lens=35, fstop=2.8)
     cine = {"sat": 1.08, "exposure": 0.25}
 
 elif SHOT in ("30", "31", "32"):   # 25 November, dawn: the mate chalks the morning entry on the slate
-    SET = cabin.build("dawn", letters=False, slate=True)
+    SET = cabin.build("dawn", letters=False, slate=True, slate_at=(0.32, 0.0))
     sl = SET["slate"]
     lines = ["Nov 24  Lat 36.56 N", "        Lon 27.20 W", "", "Nov 25  At 8, Eastern point", "        bore SSW 6 miles"]
     cabin.chalk_text("chalk", sl, 0.32, 0.22, lines, size=0.0135)
@@ -205,10 +203,10 @@ elif SHOT in ("30", "31", "32"):   # 25 November, dawn: the mate chalks the morn
         m = cast.Sailor(name="Mate", years=31, cap=False)
         P.stand(m.h, lean=28, weight="L")
         P.head(m.h, pitch=34)
-        Mm = A.stand_place((sl.x - 0.05, sl.y + 0.62), 0)
+        Mm = A.stand_place((T.x + cabin.TW / 2 + 0.3, sl.y), -90)
         Mi = Mm.inverted()
-        P.hand_reach(m.h, "R", Mi @ (sl + Vector((0.05, -0.02, 0.04))), elbow=(-0.8, 0.3, -0.6)); A.pen_grip(m.h, "R")
-        P.hand_reach(m.h, "L", Mi @ (sl + Vector((-0.24, 0.05, 0.03))), elbow=(0.8, 0.3, -0.6)); P.rest_hand(m.h, "L", 15)
+        P.hand_reach(m.h, "R", Mi @ (sl + Vector((0.06, -0.05, 0.05))), elbow=(-0.8, 0.3, -0.3)); A.pen_grip(m.h, "R")
+        P.hand_reach(m.h, "L", Mi @ (sl + Vector((0.12, 0.2, 0.04))), elbow=(0.8, 0.3, -0.3)); P.rest_hand(m.h, "L", 15)
         m.finish_live(place=Mm, density=HAIR)
         m.look(sl)
         hd = m.h.bone_head("head")
@@ -253,9 +251,9 @@ elif SHOT == "36":          # flashback, warm: Briggs winds the chronometer
     SET = cabin.build("warm", letters=False, chrono="full")
     b = cast.Briggs()
     cb = SET["chrono_box"]
-    P.stand(b.h, lean=16, weight="L")
-    P.head(b.h, pitch=32)
-    Mb = A.stand_place((cb.x + 0.1, cb.y + 0.6), 0)
+    P.stand(b.h, lean=24, weight="L")
+    P.head(b.h, pitch=30)
+    Mb = A.stand_place((cb.x + 0.1, cb.y + 0.56), 0)
     Mi = Mb.inverted()
     P.hand_reach(b.h, "R", Mi @ (cb + Vector((0.0, 0.08, 0.06))), elbow=(-0.8, 0.3, -0.6)); A.pen_grip(b.h, "R")
     P.hand_reach(b.h, "L", Mi @ (cb + Vector((-0.12, 0.05, -0.04))), elbow=(0.8, 0.3, -0.6)); P.rest_hand(b.h, "L", 20)

@@ -177,7 +177,7 @@ def sheet(name, c, w, d, mat, rot=0.0, curl=0.004):
 
 # ----------------------------------------------------------------------------- build
 def build(mood="warm", letter_side=1, wet=0.0, lamp_on=True, skylight=1.0, organ=True, letters=True, family=True, slate=False,
-          chrono="full", maquette=False):
+          chrono="full", maquette=False, slate_at=(-0.1, -0.08)):
     """mood: warm (New York morning), night (evening, lamp only), dawn (25 Nov), cold (Deveau, 4 Dec)."""
     A = {}
     wd = wet
@@ -188,7 +188,7 @@ def build(mood="warm", letter_side=1, wet=0.0, lamp_on=True, skylight=1.0, organ
     mahog = M("brown_planks_05", 5.0, tint=(0.75, 0.42, 0.26), name="mahogany", wet=wd * 0.2)
     br = brass()
     # sole, bulkheads (walnut wainscot below, cream panels above), deckhead with beams and skylight
-    box("sole", (0, 0, -0.03), (2 * RX, 2 * RY, 0.06), pine)
+    box("floor_sole", (0, 0, -0.03), (2 * RX, 2 * RY, 0.06), pine)
     for sg in (1, -1):
         box(f"wain_y{sg}", (0, sg * (RY + 0.03), 0.45), (2 * RX + 0.3, 0.06, 0.9), walnut)
         box(f"wall_y{sg}", (0, sg * (RY + 0.035), 0.9 + (RZ - 0.9) / 2), (2 * RX + 0.3, 0.06, RZ - 0.9 + 0.15), paint_c)
@@ -314,7 +314,7 @@ def build(mood="warm", letter_side=1, wet=0.0, lamp_on=True, skylight=1.0, organ
         r, ms = S.place_model("mantel_clock_01", (sbx + 0.85, -RY + 0.12, 1.333), size=0.26)
     except Exception:
         pass
-    A["chrono_box"] = _chronometer_box(Vector((sbx - 0.3, -RY + 0.24, 0.84)), mahog, br, state=chrono)
+    A["chrono_box"] = _chronometer_box(Vector((sbx + 0.38, -RY + 0.24, 0.84)), mahog, br, state=chrono)
     A["sideboard_top"] = Vector((sbx, -RY + 0.24, 0.84))
     # ---- the rug
     rug = ship.mesh_obj("rug", [(-1.0, -1.0, 0.004), (1.15, -1.0, 0.004), (1.15, 0.78, 0.004), (-1.0, 0.78, 0.004)], [[0, 1, 2, 3]],
@@ -330,7 +330,7 @@ def build(mood="warm", letter_side=1, wet=0.0, lamp_on=True, skylight=1.0, organ
         sheet("letter2", A["letter"] + Vector((-0.24, 0.06, -0.0004)), 0.2, 0.25, paper_material("letter_b", lines=22), rot=-0.25)
         A["inkwell"] = _inkwell(A["letter"] + Vector((0.22, 0.05 * letter_side, 0)), br)
     if slate:
-        A["slate"] = _slate(Vector((tx - 0.1, ty - 0.08, tz)), mahog)
+        A["slate"] = _slate(Vector((tx + slate_at[0], ty + slate_at[1], tz)), mahog)
     # ---- daylight through the skylight and the trunk lights; cabin air
     A["sky_c"] = Vector((sx, sy, RZ + 0.44))
     _light(mood, A, skylight)
@@ -601,9 +601,7 @@ def bonnet(person, name="bonnet"):
     brim = ship.mesh_obj(name + "_brim", [tuple(v) for v in V2], F2, st)
     brim.modifiers.new("t", "SOLIDIFY").thickness = 0.004
     rib = cloth_material(name + "_ribbon", (0.25, 0.05, 0.08), sheen=1.0)
-    band = ship.box(name + "_band", tuple(c + R @ Vector((0, 0.01, 0.0))), (0.24, 0.26, 0.018), rib)
-    band.rotation_mode = 'QUATERNION'; band.rotation_quaternion = R.to_quaternion()
-    for o in (crown, brim, band):
+    for o in (crown, brim):
         attach(o, person, "head")
     return crown, brim
 
