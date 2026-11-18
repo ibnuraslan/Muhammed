@@ -177,6 +177,42 @@ def build_pdf(total):
         c.drawString(14 * mm, PH * 0.34 - 36 * mm - i * 5.2 * mm, l)
     c.showPage()
 
+    # ---------- look page (approve first) ----------
+    from lookdev import FRAMES as LOOK
+    c.setFillColor(ink); c.setFont("SansB", 15)
+    c.drawString(12 * mm, PH - 16 * mm, "0 · THE LOOK (approve first)")
+    c.setFont("Sans", 8.5); c.setFillColor(grey)
+    c.drawString(12 * mm, PH - 21.5 * mm, "Light and grade tests on blockout geometry. Photoreal materials and characters come at render (needs Blender, blocked here for now).")
+    lw = (PW - 24 * mm - 2 * 5 * mm) / 3
+    lh = lw * 9 / 16
+    for i, (name, _, cap) in enumerate(LOOK):
+        x = 12 * mm + i * (lw + 5 * mm)
+        c.drawImage(ImageReader(os.path.join(FR, name)), x, PH - 27 * mm - lh, lw, lh)
+        p = Paragraph(f"<b>Style frame {i + 1}.</b> {cap}", st)
+        _, ph_ = p.wrap(lw, 30 * mm)
+        p.drawOn(c, x, PH - 29 * mm - lh - ph_)
+    pal = [("Atlantic, 4 Dec (noon)", ["#101619", "#3b474d", "#6e7c82", "#b9c3c6", "#e2e8e9"], "Cold silver overcast, soft top light, haze on the horizon. Wet wood goes near-black; canvas glows when backlit"),
+           ("Below decks", ["#07090b", "#1d252a", "#4e5b61", "#a9b7bb", "#f0f2f0"], "One hard skylight or port shaft, dust in the beam, fill under 1/8; brass and water catch specular highlights"),
+           ("New York / cabin lamp", ["#140c07", "#4a2f1a", "#8a5a33", "#d6a873", "#fbe5bd"], "Warm oil lamp + autumn window; ochre and walnut; soft haze over the pier"),
+           ("Santa Maria dawn", ["#1c0f0d", "#5c3524", "#a96f4b", "#f0b884", "#fff0d2"], "Low gold sun through sea haze; ship in silhouette; island softened by distance"),
+           ("Gale", ["#03060c", "#172433", "#3a4f66", "#8aa3b8", "#d7e6f0"], "Blue-black; lightning rim on sails; the lantern is the only warm light; rain, spray, motion blur"),
+           ("Gibraltar court / Genoa", ["#130d09", "#3e2a1c", "#7a5638", "#cfa577", "#f6e5c8"], "Warm window light and dust in the courtroom; Genoa in warm daylight"),
+           ("Reconstruction / legend", ["#1c1c1e", "#4a4a4c", "#7c7c7e", "#b0b0b0", "#d8d8d8"], "Speculative beats desaturated; the warm-meal legend in sepia, then a match-cut to cold truth")]
+    y = PH - 29 * mm - lh - 16 * mm
+    c.setFillColor(ink); c.setFont("SansB", 10)
+    c.drawString(12 * mm, y, "Colour script by location")
+    y -= 5 * mm
+    for name, sw, note in pal:
+        c.setFillColor(ink); c.setFont("SansB", 8)
+        c.drawString(12 * mm, y - 3.2 * mm, name)
+        for k, hx in enumerate(sw):
+            c.setFillColor(colors.HexColor(hx))
+            c.rect(62 * mm + k * 9 * mm, y - 4.5 * mm, 8.5 * mm, 5 * mm, fill=1, stroke=0)
+        c.setFillColor(ink); c.setFont("Sans", 7.6)
+        c.drawString(110 * mm, y - 3.2 * mm, note)
+        y -= 6.4 * mm
+    footer(); c.showPage()
+
     # ---------- how to read ----------
     table_page("1 · How to read this board", [
         ["Item", "Meaning"],
