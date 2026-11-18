@@ -29,7 +29,7 @@ def world(color=(0.08, 0.06, 0.05), strength=0.3):
 
 def air(center, size, density=0.02, aniso=0.4):
     bpy.ops.mesh.primitive_cube_add(size=1, location=center)
-    o = bpy.context.active_object; o.name = "room_air"; o.scale = size
+    o = bpy.context.active_object; o.name = "cabin_air_room"; o.scale = size
     m = bpy.data.materials.new("room_air"); m.use_nodes = True; N = m.node_tree.nodes; N.remove(N["Principled BSDF"])
     v = N.new("ShaderNodeVolumeScatter"); v.inputs['Density'].default_value = density; v.inputs['Anisotropy'].default_value = aniso
     m.node_tree.links.new(v.outputs[0], N["Material Output"].inputs['Volume']); o.data.materials.append(m)
@@ -123,9 +123,9 @@ def court():
     # judge's bench (raised dais) at the north wall
     ship.box("ct_dais", (0, Y1 - 1.3, 0.3), (5.0, 2.4, 0.6), pan)
     ship.box("ct_bench_front", (0, Y1 - 2.4, 1.15), (4.4, 0.12, 1.1), pan, bevel=0.01)
-    ship.box("ct_bench_top", (0, Y1 - 2.2, 1.72), (4.6, 0.6, 0.06), pan, bevel=0.01)
-    ship.box("ct_bench_cloth", (0, Y1 - 2.2, 1.755), (4.0, 0.5, 0.01), cloth)
-    PR.chair("ct_judgechair", (0, Y1 - 1.5, 0.6), -90, seat_h=0.78)
+    ship.box("ct_bench_top", (0, Y1 - 2.35, 1.72), (4.6, 0.6, 0.06), pan, bevel=0.01)
+    ship.box("ct_bench_cloth", (0, Y1 - 2.35, 1.755), (4.0, 0.5, 0.01), cloth)
+    ship.box("ct_judgeseat", (0, Y1 - 1.2, 0.6 + 0.39), (1.4, 0.5, 0.78), pan, bevel=0.01)      # the bench seat on the dais
     # witness box (east)
     wb = (3.2, 7.2)
     ship.box("ct_wbox_floor", (wb[0], wb[1], 0.2), (1.2, 1.2, 0.4), pan)
@@ -135,7 +135,7 @@ def court():
     # counsel's table and the clerk's desk
     PR.table("ct_counsel", (-0.6, 5.2, 0.0), size=(2.4, 0.9, 0.78), mat=pan)
     ship.box("ct_counsel_cloth", (-0.6, 5.2, 0.785), (2.3, 0.8, 0.01), cloth)
-    PR.table("ct_clerk", (0.0, Y1 - 3.4, 0.0), size=(1.6, 0.7, 0.76), mat=pan)
+    PR.table("ct_clerk", (0.0, Y1 - 3.8, 0.0), size=(1.6, 0.7, 0.76), mat=pan)
     # benches for the salvors (south-west)
     for k, yy in enumerate((3.0, 1.9)):
         ship.box("ct_pew_seat", (-2.6, yy, 0.45), (3.4, 0.42, 0.05), pan)
@@ -149,7 +149,7 @@ def court():
     _plane_light("ct_bounce", (2.0, 4.0, 5.8), (0, 6, 0), (4, 4), 160, (1.0, 0.75, 0.55))
     world((0.07, 0.05, 0.04), 0.3)
     air((0, 6, Hh / 2), (X1 - X0, Y1 - Y0, Hh), density=0.012, aniso=0.55)
-    return dict(witness=wb, judge=(0, Y1 - 1.5, 0.6), counsel=(-0.6, 5.2), clerk=(0.0, Y1 - 3.4), pews=((-2.6, 3.0), (-2.6, 1.9)))
+    return dict(witness=wb, judge=(0, Y1 - 1.5, 0.6), counsel=(-0.6, 5.2), clerk=(0.0, Y1 - 3.8), pews=((-2.6, 3.0), (-2.6, 1.9)))
 
 
 # ----------------------------------------------------------------------------- the chemist's laboratory

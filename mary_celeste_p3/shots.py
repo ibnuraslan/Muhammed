@@ -168,7 +168,7 @@ def pose_haul(p, t, phase=0.0):
 def s03(t):
     SHIP = dg_deck(t=t)
     rope_top = []
-    for i, (x, y, key) in enumerate(((-2.9, 2.68, "sailor_a"), (-3.7, 2.73, "sailor_b"))):
+    for i, (x, y, key) in enumerate(((-2.75, 2.68, "sailor_a"), (-3.7, 2.73, "sailor_b"))):
         M = ST.on_ship(SHIP, x, y, 180)
         p = crew.person(key, wet=0.1, idx=i); pose_haul(p, t, phase=0.5 * i)
         p.finish(look_at=M @ Vector((0, -0.3, 3)), place=M, density=hair(p))
@@ -254,7 +254,8 @@ def s05(t):
     ship.rope("lowering_line", [hand_w, hand_w.lerp(sack_top, 0.5) + Vector((0, 0, -0.03)), sack_top + Vector((0, 0, 0.02))], 0.009,
               ship.tarred_rope("line", (0.32, 0.26, 0.17)))
     # Deveau standing in the boat, hands on the sack
-    Mdv = Mb @ crew.place((0.62, 0.25, b["floor_z"]), 160)
+    sl_local = Mb.inverted() @ sack_top
+    Mdv = Mb @ crew.place((sl_local.x + 0.62, sl_local.y + 0.22, b["floor_z"]), 160)
     Mi = Mdv.inverted()
     sc = sack_top - Vector((0, 0, 0.28))
     dv = crew.person("deveau", wet=0.2)
@@ -871,7 +872,7 @@ def s22(t):
     face_n = side.normalized()
     note_c = mast + face_n * 0.17
     PR.notice("warrant", note_c, face_n, text_img=os.path.join(TEX, "warrant.png"))
-    M = ST.on_ship(SHIP, ship.MAIN_X - 0.35, -0.9, 75)
+    M = ST.on_ship(SHIP, ship.MAIN_X - 0.4, -1.08, 75)
     p = crew.person("captain2", wet=0.0)
     h = p.h; Mi = M.inverted()
     P.stand(h, lean=6, weight="L"); P.head(h, pitch=8, yaw=6)
@@ -957,14 +958,14 @@ def court_people(ct, which, t=0.0):
         p = crew.person("judge", wet=0.0, wig=True, idx=8, seated=True)
         p.jacket.data.materials[0] = crew.flat("judge_robe", (0.28, 0.03, 0.025), rough=0.8)
         h = p.h; drop = crew.hip_height(h) - 0.78 - 0.12
-        M = crew.place((jx, jy - 0.06, jz), -90, drop=drop)
+        M = crew.place((jx, jy - 0.02, jz), -90, drop=drop)
         crew.sit(h, drop, lean=10, feet_fwd=0.4)
         for sd in ("L", "R"):
             sg = H.SIDE[sd]
-            P.hand_reach(h, sd, M.inverted() @ Vector((jx + 0.13 * sg, jy - 0.6, 1.88)), elbow=(0.7 * sg, 0.3, -0.5)); P.grip(h, sd, 0.4)
+            P.hand_reach(h, sd, M.inverted() @ Vector((jx + 0.13 * sg, jy - 0.72, 1.88)), elbow=(0.7 * sg, 0.3, -0.5)); P.grip(h, sd, 0.4)
         P.head(h, pitch=24)
         p.finish(look_at=(jx, jy - 0.65, 1.8), place=M, density=hair(p))
-        PR.paper("award", (jx, jy - 0.66, 1.80), size=(0.22, 0.3), rot_z=0.0, text_img=os.path.join(TEX, "warrant.png"))
+        PR.paper("award", (jx, jy - 0.78, 1.80), size=(0.22, 0.3), rot_z=0.0, text_img=os.path.join(TEX, "warrant.png"))
         out["judge"] = (p, M)
     return out
 
@@ -1373,8 +1374,8 @@ def s41(t):
     p = crew.person("flood", wet=0.0, wig=True, seated=True)
     h = p.h; seat = 0.46; drop = crew.hip_height(h) - seat - 0.12
     cxl, cyl = ct["counsel"]
-    PR.chair("flood_chair", (cxl - 0.6, cyl - 0.9, 0.0), 90)
-    M = crew.place((cxl - 0.6, cyl - 0.86, 0.0), 90, drop=drop)
+    PR.chair("flood_chair", (cxl - 0.6, cyl - 1.02, 0.0), 90)
+    M = crew.place((cxl - 0.6, cyl - 0.98, 0.0), 90, drop=drop)
     crew.sit(h, drop, lean=14 - 12 * ease(t), feet_fwd=0.45)
     for sd in ("L", "R"):
         sg = H.SIDE[sd]

@@ -128,6 +128,7 @@ class Person(D.Deveau):
         else:
             D.Deveau.finish(self, look_at=look_at, lids=lids, hair=hair, density=density, place=place)
         self.tag(hp, before)
+        drop_spikes(self)
         if SETTLE and not getattr(self, "no_settle", False):
             settle(self)
             if getattr(self, "seated", False):
@@ -638,4 +639,37 @@ def carve_inside(p, shell_objs, parts=None):
         if kill:
             bmesh.ops.delete(bm, geom=kill, context='FACES')
             bm.to_mesh(me); me.update()
+        bm.free()
+
+
+def drop_spikes(p, max_edge=0.12):
+    _calm_solidify(p)
+    _drop_spikes(p, max_edge)
+
+
+def _calm_solidify(p):
+    """Solidify on a bent shell can shoot a vertex out along a sharp normal: clamp it (as the shared jacket does)."""
+    for o in p.objects:
+        if o.type == 'MESH':
+            for md in o.modifiers:
+                if md.type == 'SOLIDIFY':
+                    md.use_even_offset = False
+                    try:
+                        md.thickness_clamp = 1.0
+                    except Exception:
+                        pass
+
+
+def _drop_spikes(p, max_edge=0.12):
+    """Delete stretched faces a clothing shell can grow in an extreme pose (any edge longer than max_edge, where the
+    garments' own edges are ~1-3 cm): they would render as spikes and cut through the set."""
+    import bmesh
+    for o in p.objects:
+        if o.type != 'MESH' or o.get("person") != p.name or "helmet" in o.name:
+            continue
+        me = o.data; M = o.matrix_world
+        bm = bmesh.new(); bm.from_mesh(me)
+        kill = [f for f in bm.faces if any(((M @ e.verts[0].co) - (M @ e.verts[1].co)).length > max_edge for e in f.edges)]
+        if kill and len(kill) < len(bm.faces) * 0.02:
+            bmesh.ops.delete(bm, geom=kill, context='FACES'); bm.to_mesh(me); me.update()
         bm.free()

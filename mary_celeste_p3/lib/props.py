@@ -118,11 +118,12 @@ def sack(name="sack", size=(0.24, 0.19, 0.42), seed=2):
         v.co = Vector((x * r, y * r, z))
         v.co.z = (v.co.z + 1) / 2
         v.co.z *= 1.0 + 0.05 * math.sin(x * 9 + seed)
-    o.scale = size; me.update()
+    me.update()
+    me.transform(Matrix.Diagonal((size[0], size[1], size[2], 1)))      # bake the size into the mesh
     for p in me.polygons:
         p.use_smooth = True
     tx = bpy.data.textures.new(name + "_lumps", "CLOUDS"); tx.noise_scale = 0.35
-    d = o.modifiers.new("lumps", "DISPLACE"); d.texture = tx; d.strength = 0.06
+    d = o.modifiers.new("lumps", "DISPLACE"); d.texture = tx; d.strength = 0.02
     o.data.materials.append(ship.canvas(name + "_canvas", wet=0.3, dirt=0.6, color=(0.55, 0.47, 0.34)))
     tie = ship.cyl(name + "_tie", (0, 0, size[2] * 0.92), (0, 0, size[2] * 1.02), size[0] * 0.18, size[0] * 0.22,
                    ship.tarred_rope(name + "_rope", (0.2, 0.15, 0.09)), verts=12)
