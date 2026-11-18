@@ -1,6 +1,6 @@
 """House finish for stills, matched to research/style_v2/YARNHUB_STYLE_BIBLE.md (branch claude/fern-analysis):
 luma median 0.20-0.28 with crushed blacks (p5 ~0.01) and highlights held under clip (p95 <= 0.80),
-saturation median 0.15-0.35 (earthy, no teal-orange), light fine grain, a whisper of edge chromatic softness.
+rich colour: the hub/user want Atrium-like saturated teal sea and sky, warm amber skin and lantern, light fine grain, a whisper of edge chromatic softness.
 
     python3 house_finish.py in.png out.png [--luma 0.24] [--sat 0.28]
 Prints the measured stats before and after."""
@@ -31,7 +31,7 @@ def finish(a, luma=0.24, sat=0.28, grain=0.010, seed=1):
         a = a * (yy / np.maximum(y, 1e-5))[..., None]
     # 4. saturation toward the target median (scale chroma around luma)
     y = a @ np.array([0.2126, 0.7152, 0.0722])
-    s_now = stats(np.clip(a, 0, 1))["sat"]; f = np.clip(sat / max(s_now, 1e-3), 0.4, 1.4)
+    s_now = stats(np.clip(a, 0, 1))["sat"]; f = np.clip(sat / max(s_now, 1e-3), 0.9, 1.6)          # never drain colour (Atrium is rich, warm colour)
     a = y[..., None] + (a - y[..., None]) * f
     # 5. edge chromatic softness (0.4 px at the corners) and fine luminance grain
     h, w = y.shape
@@ -50,7 +50,7 @@ def finish(a, luma=0.24, sat=0.28, grain=0.010, seed=1):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("src"); ap.add_argument("dst")
-    ap.add_argument("--luma", type=float, default=0.24); ap.add_argument("--sat", type=float, default=0.28)
+    ap.add_argument("--luma", type=float, default=0.24); ap.add_argument("--sat", type=float, default=0.45)
     o = ap.parse_args()
     a = np.asarray(Image.open(o.src).convert("RGB"), np.float32) / 255.0
     print("before", {k: round(v, 3) for k, v in stats(a).items()})

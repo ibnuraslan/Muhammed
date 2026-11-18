@@ -6,7 +6,7 @@ import bpy
 from mathutils import Vector
 import ph
 
-SKY = "mud_road_puresky"
+SKY = "kloppenheim_06_puresky"
 
 
 def sky(strength=1.0, rot_deg=0.0, res="8k", aid=SKY):
@@ -14,8 +14,8 @@ def sky(strength=1.0, rot_deg=0.0, res="8k", aid=SKY):
     return w
 
 
-def water_material(name="sea", deep=(0.004, 0.013, 0.017), crest=(0.02, 0.07, 0.068), foam_attr="foam", hull_attr="hullfoam",
-                   fog_color=(0.42, 0.43, 0.45)):
+def water_material(name="sea", deep=(0.002, 0.022, 0.034), crest=(0.01, 0.11, 0.105), foam_attr="foam", hull_attr="hullfoam",
+                   fog_color=(0.42, 0.5, 0.58)):
     m = bpy.data.materials.new(name); m.use_nodes = True
     N = m.node_tree.nodes; Lk = m.node_tree.links; p = N["Principled BSDF"]
     tc = N.new("ShaderNodeTexCoord")

@@ -39,7 +39,7 @@ sea.far_sea(380, mat=water, center=(100, -60))
 sea.sky(strength=float(os.environ.get("SKY_K", "1.0")), rot_deg=float(os.environ.get("SKY_ROT", "0")))
 sun = bpy.data.objects.new("Sun", bpy.data.lights.new("Sun", 'SUN')); sc.collection.objects.link(sun)
 sun.data.energy = 1.1; sun.data.angle = math.radians(4); sun.data.color = (1.0, 0.93, 0.84)
-az, el = math.radians(-75.0), math.radians(24)
+az, el = math.radians(139.0), math.radians(32)
 sun.rotation_euler = (Vector((math.cos(az) * math.cos(el), math.sin(az) * math.cos(el), math.sin(el))) * -1).to_track_quat('-Z', 'Y').to_euler()
 
 
@@ -57,5 +57,5 @@ cam_loc = dg["root"].matrix_world @ Vector((3.2, -2.75, ship.zdeck(3.2) + 1.74))
 tgt = mc_pos + Vector((-6, 0, 24.0))
 cam = C.camera(cam_loc, tgt, lens=42, fstop=4.0, focus=(mc_pos - cam_loc).length, roll=-2.0)
 
-C.finish(OUT, cine={"sat": 0.92, "exposure": -0.2})
+C.finish(OUT, cine={"sat": 1.2, "exposure": -0.15, "warm": (1.03, 1.0, 0.97)})
 print("RENDERED", OUT)

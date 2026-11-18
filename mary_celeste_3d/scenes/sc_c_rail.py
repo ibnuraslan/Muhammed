@@ -36,10 +36,10 @@ sea.ocean(size=240, res=int(os.environ.get("OCEAN_RES", "24")), scale=2.4, chop=
           direction=math.degrees(math.atan2(WIND_WORLD.y, WIND_WORLD.x)), hulls=(mc["hull"], dg["hull"]),
           loc=(-150, -150, 0), cut=(0.0, 0.0, ship.L / 2 - 0.4, ship.B / 2 - 0.15))
 sea.far_sea(370, mat=water, center=(-150, -150))
-sea.sky(strength=1.0, rot_deg=float(os.environ.get("SKY_ROT", "60")))
+sea.sky(strength=1.0, rot_deg=float(os.environ.get("SKY_ROT", "0")))
 sun = bpy.data.objects.new("Sun", bpy.data.lights.new("Sun", 'SUN')); sc.collection.objects.link(sun)
 sun.data.energy = 1.4; sun.data.angle = math.radians(5); sun.data.color = (1.0, 0.94, 0.86)
-az, el = math.radians(150.0), math.radians(26)
+az, el = math.radians(139.0), math.radians(32)
 sun.rotation_euler = (Vector((math.cos(az) * math.cos(el), math.sin(az) * math.cos(el), math.sin(el))) * -1).to_track_quat('-Z', 'Y').to_euler()
 
 # a coil of rope and a bucket left by the gap (the ship as found: things lie where they were dropped)
@@ -90,5 +90,5 @@ if os.environ.get("POSE_TEST"):
     C.camera(hw + (M.to_3x3() @ Vector((0.2, -0.9, 0.05))), hw, lens=50)
     sc.render.filepath = OUT.replace(".png", "_face.png"); bpy.ops.render.render(write_still=True)
     sys.exit(0)
-C.finish(OUT, cine={"sat": 0.93, "exposure": -0.1})
+C.finish(OUT, cine={"sat": 1.2, "exposure": -0.05, "warm": (1.03, 1.0, 0.97)})
 print("RENDERED", OUT)
