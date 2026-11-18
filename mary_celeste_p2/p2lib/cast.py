@@ -93,6 +93,8 @@ class Person(D.Deveau):
                          height=self.HEIGHT, extra=extra, eyebrows=None, eyelashes=None, skin=None)
         h = self.h
         h.body.data.materials[0] = sailor_skin(name + "_skin", **self.SKIN)
+        if hasattr(self, "_skin_regions"):
+            self._skin_regions()
         self.name = name; self.wet = wet
         self.rest_co = H.to_bl(h.hc)
         me = h.body.data
@@ -172,6 +174,7 @@ class Person(D.Deveau):
             for m in getattr(o, "modifiers", []):
                 if m.type == 'SOLIDIFY':
                     m.thickness_clamp = 1.0          # even-offset spikes at sharp hem corners
+        self._rest_fittings()
         bpy.context.view_layer.update()
         head_M = (h.arm.matrix_world @ h.arm.pose.bones["head"].matrix).copy()
         self.head_R = head_M.to_3x3() @ h.arm.data.bones["head"].matrix_local.to_3x3().inverted()
@@ -190,6 +193,35 @@ class Person(D.Deveau):
         if look_at is not None:
             self.look(look_at)
         h.arm.hide_render = True
+
+    BOOTS = True
+
+    def _rest_fittings(self):
+        """Shared-lib fittings that expect an unposed body: corneas (then ride on the eyes) and the fitted Sketchfab boots
+        (then ride on the foot bones). Done at the rest pose, then the pose is put back."""
+        h = self.h; pb = h.arm.pose.bones
+        saved = {b.name: (b.rotation_mode, tuple(b.rotation_quaternion), tuple(b.rotation_euler), tuple(b.location)) for b in pb}
+        for b in pb:
+            b.rotation_quaternion = (1, 0, 0, 0); b.rotation_euler = (0, 0, 0); b.location = (0, 0, 0)
+        bpy.context.view_layer.update()
+        if hasattr(self, "_corneas"):
+            self._corneas()
+            for c, e in zip(self.corneas, h.eyes):
+                mw = c.matrix_world.copy(); c.parent = e; c.matrix_world = mw
+        if self.BOOTS and hasattr(self, "_asset_boots") and getattr(self, "boots", None) is not None:
+            try:
+                ok = self._asset_boots()
+            except Exception as ex:
+                print("boots failed", ex); ok = False
+            if ok:
+                for o in self.sea_boots:
+                    bone = "foot.L" if o.name.endswith("L") else "foot.R"
+                    mw = o.matrix_world.copy(); o.parent = h.arm; o.parent_type = 'BONE'; o.parent_bone = bone
+                    bpy.context.view_layer.update(); o.matrix_world = mw
+        for b in pb:
+            m, q, e, l = saved[b.name]
+            b.rotation_quaternion = q; b.rotation_euler = e; b.location = l
+        bpy.context.view_layer.update()
 
     def _attach_hair(self, o):
         mw = o.matrix_world.copy()
