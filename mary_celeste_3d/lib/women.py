@@ -294,9 +294,10 @@ class Sarah(_Woman):
         back = np.clip((y - self.rest_co[u, 1].mean()) / 0.08 + 0.5, 0, 1)
         cxm = self.rest_co[u, 0].mean()
         vfront = (y < self.rest_co[u, 1].mean()) * np.exp(-((co[:, 0] - cxm) / 0.07) ** 2)
-        sh_lo = top - 0.12 - 0.2 * back - 0.13 * vfront             # point at the back, ends crossed low in front
-        shawl = u & (wh < 0.5) & (whand < 0.05) & (z > sh_lo) & (z < top - 0.035) & (warm < 0.6) | \
-                (u & (warm > 0.3) & (z > top - 0.22) & (z < top - 0.03) & (whand < 0.05))
+        sh_lo = top - 0.2 - 0.18 * back - 0.16 * vfront             # to mid-back behind, ends crossed low in front
+        elbow_z = self.h.joint("lowerarm01.L____head")[2]
+        shawl = u & (wh < 0.5) & (whand < 0.05) & (z > sh_lo) & (z < top - 0.035) & (warm < 0.5) | \
+                (u & (warm >= 0.5) & (z > elbow_z - 0.07) & (z < top - 0.03) & (whand < 0.05))      # over the arms past the elbow
         if not self.want_shawl:
             shawl = np.zeros_like(shawl)
         self.shawl = None if not shawl.any() else self._shell("shawl", shawl, 0.026, cloth(self.name + "_shawl", self.SHAWL, rough=0.9, sheen=0.6, knit=True,
@@ -319,10 +320,9 @@ class Sarah(_Woman):
                 v.co = p
         bm.to_mesh(me); bm.free(); me.update()
 
-    def _fringe(self, o, length=0.05, step=0.004):
+    def _fringe(self, o, length=0.07, step=0.004):
         """Wool fringe hanging from the shawl's lower edge (after the pose is baked)."""
-        dg = bpy.context.evaluated_depsgraph_get(); oe = o.evaluated_get(dg); me = oe.to_mesh()
-        bm = bmesh.new(); bm.from_mesh(me); oe.to_mesh_clear()
+        bm = bmesh.new(); bm.from_mesh(o.data)          # base (baked) mesh: the solidify would close the open edge
         edges = [e for e in bm.edges if e.is_boundary]
         roots = []
         for e in edges:
@@ -346,7 +346,7 @@ class Sarah(_Woman):
         cv = bpy.data.hair_curves.new(self.name + "_fringe"); cv.add_curves([segs] * len(roots))
         cv.position_data.foreach_set("vector", pts.reshape(-1))
         try:
-            cv.attributes["radius"].data.foreach_set("value", np.full(len(roots) * segs, 0.0007, np.float32))
+            cv.attributes["radius"].data.foreach_set("value", np.full(len(roots) * segs, 0.0014, np.float32))
         except Exception:
             pass
         ob = bpy.data.objects.new(cv.name, cv); bpy.context.collection.objects.link(ob)
@@ -441,7 +441,7 @@ class Sarah(_Woman):
         chin = ec + np.array([0, -0.05, -0.115]) * hs
         U = np.nonzero(self.used)[0]
         for sg in (1, -1):
-            ear = ec + np.array([sg * 0.07, -0.005, -0.03]) * hs
+            ear = ec + np.array([sg * 0.07, 0.012, -0.01]) * hs      # starts under the bonnet's side (no visible end)
             pts = []
             for t in np.linspace(0, 1, 12):
                 p = ear * (1 - t) + chin * t
@@ -449,7 +449,7 @@ class Sarah(_Woman):
                 pts.append(Vector(co[vi] + self.rest_n[vi] * 0.007))
             pts[-1] = Vector(chin + np.array([sg * 0.01, -0.012, 0]) * hs)
             cu = bpy.data.curves.new(f"{self.name}_tie", 'CURVE'); cu.dimensions = '3D'
-            cu.bevel_depth = 0.0018 * hs; cu.extrude = 0.006 * hs; cu.bevel_resolution = 1
+            cu.bevel_depth = 0.0018 * hs; cu.extrude = 0.006 * hs; cu.bevel_resolution = 1; cu.use_fill_caps = False
             sp = cu.splines.new('POLY'); sp.points.add(len(pts) - 1)
             for k, p in enumerate(pts):
                 sp.points[k].co = (*p, 1)
@@ -457,12 +457,22 @@ class Sarah(_Woman):
             ob.parent = h.arm; ob.parent_type = 'BONE'; ob.parent_bone = "head"
             bpy.context.view_layer.update(); ob.matrix_world = Matrix.Identity(4)
             self.button_objs.append(ob)
-        bpy.ops.mesh.primitive_torus_add(major_radius=0.011 * hs, minor_radius=0.004 * hs,
-                                         location=tuple(chin + np.array([0, -0.014, 0]) * hs), rotation=(math.pi / 2, 0, 0))
-        bow = bpy.context.active_object; bow.name = f"{self.name}_bow"; bow.scale = (1.7, 1, 0.75); bow.data.materials.append(rib)
-        bpy.context.view_layer.update(); mw = bow.matrix_world.copy()
-        bow.parent = h.arm; bow.parent_type = 'BONE'; bow.parent_bone = "head"; bpy.context.view_layer.update(); bow.matrix_world = mw
-        self.button_objs.append(bow)
+        # ribbon bow under the chin: two flat loops and a knot (no ring)
+        kc = Vector(chin + np.array([0, -0.014, 0]) * hs)
+        for sgn in (1, -1):
+            bpy.ops.mesh.primitive_torus_add(major_radius=0.009 * hs, minor_radius=0.0025 * hs, major_segments=24, minor_segments=8,
+                                             location=tuple(kc + Vector((sgn * 0.011 * hs, 0, 0))), rotation=(math.pi / 2, 0, sgn * 0.35))
+            lp = bpy.context.active_object; lp.name = f"{self.name}_bowloop"; lp.scale = (1.0, 1.0, 0.45)
+            lp.data.materials.append(rib); bpy.ops.object.shade_smooth()
+            bpy.context.view_layer.update(); mw = lp.matrix_world.copy()
+            lp.parent = h.arm; lp.parent_type = 'BONE'; lp.parent_bone = "head"; bpy.context.view_layer.update(); lp.matrix_world = mw
+            self.button_objs.append(lp)
+        bpy.ops.mesh.primitive_uv_sphere_add(radius=0.004 * hs, location=tuple(kc))
+        kn = bpy.context.active_object; kn.name = f"{self.name}_bowknot"; kn.scale = (1.0, 0.7, 1.2); kn.data.materials.append(rib)
+        bpy.ops.object.shade_smooth()
+        bpy.context.view_layer.update(); mw = kn.matrix_world.copy()
+        kn.parent = h.arm; kn.parent_type = 'BONE'; kn.parent_bone = "head"; bpy.context.view_layer.update(); kn.matrix_world = mw
+        self.button_objs.append(kn)
 
     def finish(self, *a, **k):
         r = super().finish(*a, **k)
