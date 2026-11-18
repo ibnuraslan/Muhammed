@@ -120,29 +120,38 @@ class Seat:
         return (self.M @ P.palm_point(h, side) - palm_goal).length
 
     def wrap_fingers(self, side, center, bar, radius):
-        """Curl each finger joint about its own (local) hinge axis, in the direction that brings the fingertip round
-        the bar, until the finger wraps it (tip about one bar radius + a finger's thickness from the bar's axis)."""
+        """Wrap each finger round the bar by construction: every segment is aimed at the next point of a circle
+        about the bar's axis (radius = bar + finger thickness), going over the bar the way the finger already
+        points; the thumb wraps from the other side. Works for any hand orientation (rig space throughout)."""
+        import math as _m
         h = self.p.h
-        def dist_to_axis(pw):
-            v = pw - center
-            return (v - bar * v.dot(bar)).length
-        target = radius + 0.009
+        c = self.Mi @ Vector(center); ax = (self.Mi.to_3x3() @ Vector(bar)).normalized()
+        R = radius + 0.010
+        def frame(p):
+            v = p - c; along = v.dot(ax); perp = v - ax * along
+            return along, perp
         for f in range(1, 6):
             chain = [f"finger{f}-{k}.{side}" for k in (1, 2, 3)]
-            if not all(c in h.arm.pose.bones for c in chain):
+            if not all(b in h.arm.pose.bones for b in chain):
                 continue
-            tip = lambda: self.M @ h.bone_tail(chain[-1])
-            for k, bn in enumerate(chain):
-                step = 8.0 if f > 1 else 6.0
-                limit = (80 if k == 0 else 95) if f > 1 else 50
-                d0 = dist_to_axis(tip())
-                H.rotate_bone(h.arm, bn, (1, 0, 0), step, space="LOCAL")
-                sgn = 1.0
-                if dist_to_axis(tip()) > d0:                 # wrong way: curl the other way
-                    H.rotate_bone(h.arm, bn, (1, 0, 0), -2 * step, space="LOCAL"); sgn = -1.0
-                total = step
-                while total < limit and dist_to_axis(tip()) > target:
-                    before = dist_to_axis(tip())
-                    H.rotate_bone(h.arm, bn, (1, 0, 0), sgn * step, space="LOCAL"); total += step
-                    if dist_to_axis(tip()) >= before:        # this joint no longer helps: next joint
-                        H.rotate_bone(h.arm, bn, (1, 0, 0), -sgn * step, space="LOCAL"); break
+            K = h.bone_head(chain[0]); along, perp = frame(K)
+            if perp.length < 1e-5:
+                continue
+            u = perp.normalized(); w = ax.cross(u)                     # circle basis at the knuckle
+            d0 = h.bone_tail(chain[0]) - K
+            sense = 1.0 if d0.dot(w) >= 0 else -1.0                   # wrap the way the finger points
+            if f == 1:
+                sense = -sense                                         # the thumb closes from the other side
+            ang = 0.0; pcur = K; rr = perp.length
+            limit = _m.radians(120 if f == 1 else 250)
+            for bn in chain:
+                L = h.arm.data.bones[bn].length
+                # next point: on the circle (radius R, shrinking from the knuckle's radius), advanced along the arc
+                rr_next = max(R, rr - L * 0.7)
+                dang = min(L / max(rr_next, 1e-3), limit - ang)
+                if dang <= 1e-3:
+                    break
+                ang += dang
+                t = c + ax * along + (u * _m.cos(ang) + w * sense * _m.sin(ang)) * rr_next
+                h.aim(bn, t - pcur)
+                pcur = h.bone_tail(bn); rr = rr_next
