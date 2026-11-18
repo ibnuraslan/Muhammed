@@ -205,7 +205,7 @@ def mc_cabin(skylight=True):
     ship.box("mcc_under", (BX1 + 0.01, (BY + Y1) / 2, 0.2), (0.02, Y1 - BY - 0.1, 0.3), crew.flat("mcc_dark", (0.01, 0.008, 0.006), 0.9))
     PR.table("mcc_table", (0.9, -0.7, 0.0), size=(0.9, 0.7, 0.74), mat=berthw)
     if skylight:
-        _plane_light("mcc_sky", (0.05, -0.55, Hh - 0.16), (0.2, -0.2, 0.0), (0.6, 0.5), 90, (0.95, 0.9, 0.82), spread=60, visible=True)
+        _plane_light("mcc_sky", (0.05, -0.55, Hh - 0.16), (0.2, -0.2, 0.0), (0.6, 0.5), 90, (0.95, 0.9, 0.82), spread=60, visible=False)
     _plane_light("mcc_fill", (-1.2, -1.0, 1.4), (0.2, 0.3, 0.6), (1.2, 1.2), 14, (1.0, 0.8, 0.6))
     world((0.1, 0.09, 0.08), 0.15)
     air((0, 0, Hh / 2), (X1 - X0, Y1 - Y0, Hh), density=0.06)

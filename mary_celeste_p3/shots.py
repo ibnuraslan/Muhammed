@@ -266,7 +266,7 @@ def s05(t):
     xth, zth = b["thwarts"][0]
     for o in cs:
         o.matrix_world = Mb @ Matrix.Translation((xth, 0.25, zth + 0.02)) @ Matrix.Rotation(0.3, 4, 'Z') @ o.matrix_world
-    loc = Mb @ Vector((-2.3, -0.25, b["gunwale"] + 0.75 + 0.04 * math.sin(t * 2.5)))
+    loc = Mb @ Vector((-1.7, 0.55, b["gunwale"] + 0.8 + 0.04 * math.sin(t * 2.5)))
     tgt = eyes(dv).lerp(eyes(sl), 0.45)
     cam(loc, tgt, lens=28, fstop=4.0, focus=(eyes(dv) - loc).length)
     return dict(cine={"sat": 1.08})
@@ -281,7 +281,7 @@ def s06(t):
     dv = crew.person("deveau", wet=0.2, seated=True)
     h = dv.h
     drop = crew.hip_height(h) - 0.1
-    seat = zth + 0.04
+    seat = zth + 0.075
     Mdv = Mb @ crew.place((xth, -0.12, seat), 180, drop=drop)
     crew.sit(h, drop - seat + b["floor_z"], lean=24, feet_fwd=0.42)
     Mi = Mdv.inverted()
@@ -416,7 +416,7 @@ def s09(t):
     m = ST.mc("spare", wind=ST.local_wind(WIND, hd), wet=0.4, detail=False)
     SHIP = ST.set_ship(m, loc=(0, 0, 0), heading=hd, heel=6 + 1.0 * math.sin(t * 2), pitch=0.8 * math.sin(t * 1.5))
     # three men aboard, small at the wheel and in the waist
-    for i, (x, y, key, hdg) in enumerate(((-ship.L / 2 + 1.0, 0.4, "deveau", 0), (-2.0, -1.0, "sailor_a", 160), (2.6, 1.6, "sailor_b", 200))):
+    for i, (x, y, key, hdg) in enumerate(((-ship.L / 2 + 1.0, 0.4, "deveau", 0), (-2.0, -2.6, "sailor_a", 160), (6.0, 2.3, "sailor_b", 200))):
         M = ST.on_ship(SHIP, x, y, hdg)
         p = crew.person(key, wet=0.2, idx=i); P.stand(p.h, lean=4); P.arm_down(p.h, "L"); P.arm_down(p.h, "R")
         if key == "deveau":
@@ -460,8 +460,8 @@ def maquette(table_z=0.8):
     Lk.new(mr.outputs[0], cr.inputs['Fac']); Lk.new(cr.outputs['Color'], p.inputs['Base Color'])
     o = TR.relief_mesh("maq_relief", hm, info, MAQ_ORIGIN, scale=MAQ_SCALE, vex=MAQ_VEX, res=420, clip_low=-2000, mat=land)
     o.location.z = table_z
-    seam = crew.flat("maq_sea", (0.02, 0.09, 0.14), rough=0.25)
-    seam.node_tree.nodes["Principled BSDF"].inputs['Coat Weight'].default_value = 0.6
+    seam = crew.flat("maq_sea", (0.02, 0.09, 0.14), rough=0.6)
+    seam.node_tree.nodes["Principled BSDF"].inputs['Coat Weight'].default_value = 0.1
     xw, yn = TR.to_xy(MAQ_BOX[0], MAQ_BOX[1], MAQ_ORIGIN); xe, ys = TR.to_xy(MAQ_BOX[2], MAQ_BOX[3], MAQ_ORIGIN)
     cx, cy = (xw + xe) / 2 * MAQ_SCALE, (yn + ys) / 2 * MAQ_SCALE
     wx, wy = (xe - xw) * MAQ_SCALE, (yn - ys) * MAQ_SCALE
@@ -851,7 +851,7 @@ def point_hand(h, side):
 def s21(t):
     SHIP, m = mc_at_gib(t)
     ppl = []
-    for i, (key, x, y, hdg) in enumerate((("surveyor", -2.2, -2.7, 10), ("captain2", -3.3, -2.0, -20))):
+    for i, (key, x, y, hdg) in enumerate((("surveyor", -3.3, -2.8, 10), ("captain2", -4.2, -1.9, -20))):
         M = ST.on_ship(SHIP, x, y, hdg)
         p = crew.person(key, wet=0.0, idx=i); stand_pose(p, hands="behind" if i == 0 else "down", yaw=-10 + 20 * ease(t) if i == 0 else 0)
         p.finish(look_at=ST.deck_world(SHIP, -6, 0, 3), place=M, density=hair(p))
@@ -1385,8 +1385,8 @@ def s41(t):
     p.finish(look_at=(0.0, 9.0, 1.9), place=M, density=hair(p))
     crew.wig_rolls(p); crew.bands(p)
     ef = eyes(p)
-    loc = ef + Vector((0.55, -1.35, 0.25))
-    cam(loc, ef.lerp(Vector((3.2, 7.2, 1.3)), 0.35), lens=32, fstop=4.0, focus=(ef - loc).length)
+    loc = ef + Vector((0.6, -1.4, 0.3))
+    cam(loc, ef + Vector((0.35, 1.2, -0.35)), lens=32, fstop=4.0, focus=(ef - loc).length)
     return dict(cine={"sat": 1.1, "exposure": 0.05})
 
 

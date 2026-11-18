@@ -16,6 +16,7 @@ import human as H, deveau as D, poses as P, ship
 
 CACHE_DIR = None          # set by render.py for frame sequences (hair strand cache per shot and person)
 CACHE_TAG = ""
+SETTLE = True             # lift each man onto the real floor/deck after placing (clipcheck: no sunk soles)
 
 # ----------------------------------------------------------------------------- cast sheet
 # hair: (melanin, redness, grey); beard: density multipliers for the shared strand sets
@@ -127,6 +128,8 @@ class Person(D.Deveau):
         else:
             D.Deveau.finish(self, look_at=look_at, lids=lids, hair=hair, density=density, place=place)
         self.tag(hp, before)
+        if SETTLE and not getattr(self, "no_settle", False):
+            settle(self)
 
     def tag(self, hp=None, before=()):
         """Mark this man's meshes for clipcheck (o["person"], o["hands"] = wrist/knuckle points)."""
@@ -231,11 +234,11 @@ def head_frame(p, place=None):
     return c, up, fwd, top
 
 
-def top_hat(p, color=(0.012, 0.011, 0.011), h_=0.17, r=0.098):
+def top_hat(p, color=(0.012, 0.011, 0.011), h_=0.17, r=0.104):
     c, up, fwd, top = head_frame(p)
     side = up.cross(fwd).normalized(); fwd = side.cross(up).normalized()
     M = Matrix((side, fwd, up)).transposed().to_4x4()
-    base = c + up * (top - 0.045) + fwd * -0.008
+    base = c + up * (top - 0.012) + fwd * -0.008
     M.translation = base
     mat = flat(p.name + "_hat", color, rough=0.45); mat.node_tree.nodes["Principled BSDF"].inputs['Sheen Weight'].default_value = 0.8
     bpy.ops.mesh.primitive_cylinder_add(vertices=40, radius=1, depth=1)
@@ -472,3 +475,68 @@ def finish_cached(p, look_at=None, place=None, density=1.0, cache=None, hair=Tru
             if o.parent is None:
                 o.matrix_world = place @ o.matrix_world
         bpy.context.view_layer.update()
+
+
+# ----------------------------------------------------------------------------- contact: stand on the real surface
+def _bvh_of(objs, dg):
+    from mathutils.bvhtree import BVHTree
+    out = []
+    for o in objs:
+        try:
+            out.append(BVHTree.FromObject(o, dg))
+        except Exception:
+            pass
+    return out
+
+
+def settle(p, up=(0, 0, 1), clearance=0.002, reach=0.6):
+    """Lift a placed man so no part of his boots is below the floor/deck under him (ray cast down from above each
+    sole vertex onto every non-person mesh nearby). Removes the few-mm sinking that comes from zdeck() and heel."""
+    import numpy as np
+    up = Vector(up).normalized()
+    bpy.context.view_layer.update()
+    dg = bpy.context.evaluated_depsgraph_get()
+    mine = [o for o in bpy.data.objects if o.type == 'MESH' and o.get("person") == p.name]
+    feet = [o for o in mine if "boot" in o.name.lower()] or [p.h.body]
+    pts = []
+    for o in feet:
+        oe = o.evaluated_get(dg); me = oe.to_mesh()
+        M = oe.matrix_world
+        co = [M @ v.co for v in me.vertices]
+        oe.to_mesh_clear()
+        if co:
+            lo = min(c.dot(up) for c in co)
+            pts += [c for c in co if c.dot(up) < lo + 0.03]
+    if not pts:
+        return 0.0
+    c0 = sum(pts, Vector()) / len(pts)
+    cands = []
+    for o in bpy.data.objects:
+        if o.type != 'MESH' or o.hide_render or "person" in o or o.name.startswith(("Ocean", "FarSea", "far_sea", "room_air", "harbour_water", "SeaHaze")):
+            continue
+        try:
+            bb = [o.matrix_world @ Vector(b) for b in o.bound_box]
+        except Exception:
+            continue
+        mn = Vector((min(b.x for b in bb), min(b.y for b in bb), min(b.z for b in bb))) - Vector((reach,) * 3)
+        mx = Vector((max(b.x for b in bb), max(b.y for b in bb), max(b.z for b in bb))) + Vector((reach,) * 3)
+        if all(mn[i] <= c0[i] <= mx[i] for i in range(3)):
+            cands.append(o)
+    trees = _bvh_of(cands, dg)
+    lift = 0.0
+    for v in pts[::3]:
+        start = v + up * 0.35
+        best = None
+        for tr in trees:
+            hit = tr.ray_cast(start, -up, 0.7)
+            if hit[0] is not None:
+                h = hit[0].dot(up)
+                best = h if best is None else max(best, h)
+        if best is not None:
+            lift = max(lift, best + clearance - v.dot(up))
+    if lift > 0:
+        for o in mine + [o for o in getattr(p, "hair_objs", []) if o]:
+            if o.parent is None:
+                o.matrix_world = Matrix.Translation(up * lift) @ o.matrix_world
+        bpy.context.view_layer.update()
+    return lift
