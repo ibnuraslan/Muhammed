@@ -133,8 +133,8 @@ def s01(t):
     mo, dv, Mmo, Mdv = _pair(SHIP, t)
     em = eyes(mo); ed = eyes(dv)
     back = (ed - em).normalized(); side = back.cross(Vector((0, 0, 1))).normalized()
-    loc = ed + back * 1.0 + side * 0.42 + Vector((0, 0, 0.0)) + back * 0.06 * ease(t)
-    cam(loc, em + Vector((0, 0, -0.32)) - side * 0.15, lens=35, fstop=4.0, focus=(em - loc).length)
+    loc = ed + back * 0.55 + side * 1.05 + Vector((0, 0, 0.0)) + back * 0.06 * ease(t)
+    cam(loc, em + Vector((0, 0, -0.3)) - side * 0.1, lens=35, fstop=4.0, focus=(em - loc).length)
     return dict(cine={"sat": 1.08, "exposure": -0.05})
 
 
@@ -145,7 +145,7 @@ def s02(t):
     mo, dv, Mmo, Mdv = _pair(SHIP, t)
     em = eyes(mo); ed = eyes(dv)
     back = (em - ed).normalized(); side = back.cross(Vector((0, 0, 1))).normalized()
-    loc = em + back * 1.0 - side * 0.42 + Vector((0, 0, 0.0))
+    loc = em + back * 0.55 - side * 1.05 + Vector((0, 0, 0.0))
     cam(loc, ed + Vector((0, 0, -0.32)) + side * 0.15, lens=35, fstop=4.0, focus=(ed - loc).length)
     return dict(cine={"sat": 1.08, "exposure": -0.05})
 
@@ -189,8 +189,8 @@ def s04(t):
     mo, dv, Mmo, Mdv = _pair(SHIP, 0.9, turn=ease(t))
     ed = eyes(dv); em = eyes(mo)
     back = (em - ed).normalized(); side = back.cross(Vector((0, 0, 1))).normalized()
-    loc = em + back * 1.6 - side * 0.55 + Vector((0, 0, -0.1))
-    cam(loc, ed + Vector((0, 0, -0.45)), lens=35, fstop=4.0, focus=(ed - loc).length)
+    loc = em + back * 0.9 - side * 1.6 + Vector((0, 0, -0.05))
+    cam(loc, ed.lerp(em, 0.3) + Vector((0, 0, -0.4)), lens=35, fstop=4.0, focus=(ed - loc).length)
     return dict(cine={"sat": 1.06})
 
 
@@ -672,7 +672,7 @@ def s15(t):
     ST.exterior("day", sky_rot=80, sun_az=110, sun_el=9)
     ST.coast("spain", (36.14, -5.72, 36.0, -5.40), 12, org, res=600)
     hd = 200.0
-    m = ST.mc("found", wind=ST.local_wind((0.3, -1.0, 0), hd), wet=0.7, detail=False)
+    m = ST.mc("spare", wind=ST.local_wind((0.3, -1.0, 0), hd), wet=0.7, detail=False)
     SHIP = ST.set_ship(m, loc=(0, 0, 0), heading=hd, heel=1.5, pitch=0.3 * math.sin(t * 1.4))
     ST.ocean_around((0, 0, 0), hulls=[m["hull"]], mood="day", size=240, scale=1.1, chop=1.1, wind=9, foam=0.15, time=11 + t * 3)
     sea.haze((0, 3000, 100), (12000, 12000, 220), density=0.00005, color=(0.7, 0.66, 0.62))
@@ -727,8 +727,8 @@ def s17(t):
     target = loc0 + Vector((-900, -300, 5))
     mo.finish(look_at=target, place=M, density=hair(mo))
     em = eyes(mo)
-    camloc = em + Vector((-2.4, -0.9, -0.2))
-    cam(camloc, em + Vector((0, 0, -0.15)) + Vector((0, 0.45, 0)), lens=50, fstop=4.0, focus=(em - camloc).length)
+    camloc = em + Vector((-0.5, -2.6, -0.15))
+    cam(camloc, em + Vector((0, 0, -0.3)) + Vector((-0.6, 0.0, 0)), lens=45, fstop=4.0, focus=(em - camloc).length)
     return dict(cine={"sat": 1.1})
 
 
@@ -806,8 +806,8 @@ def s20(t):
     lift = 1.0 - ease(max(0, (t - 0.5) * 2))
     dv, M, tip = seated_writer(room, 0.6 + 0.2 * t, pen_lift=lift)
     ed = eyes(dv)
-    loc = ed + Vector((-0.32, -0.35, 0.22))
-    cam(loc, tip + Vector((0.0, 0.03, 0.0)), lens=50, fstop=2.8, focus=(tip - loc).length)
+    loc = ed + Vector((-0.55, -0.42, 0.3))
+    cam(loc, tip.lerp(ed, 0.3), lens=35, fstop=3.2, focus=(tip - loc).length)
     return dict(cine={"sat": 1.12, "exposure": 0.15})
 
 
@@ -904,11 +904,19 @@ def court_people(ct, which, t=0.0):
             p = crew.person(key, wet=0.0, idx=i, seated=True)
             h = p.h; seat = 0.47; drop = crew.hip_height(h) - seat - 0.12
             M = crew.place((px + dx, py + 0.05, 0.0), 90, drop=drop)
-            crew.sit(h, drop, lean=6, feet_fwd=0.45)
+            # three men, three ways of sitting: Deveau upright, hands on his knees; the young sailor hunched forward,
+            # forearms on his thighs and hands loosely together; the stocky one sitting back, hands on his thighs
+            crew.sit(h, drop, lean=(6, 26, -3)[i], feet_fwd=(0.45, 0.4, 0.55)[i], feet_apart=(0.13, 0.18, 0.2)[i])
             for sd in ("L", "R"):
-                sg = H.SIDE[sd]; knee = h.bone_tail(f"upperleg02.{sd}")
-                P.hand_reach(h, sd, knee + Vector((0, -0.04, 0.07)), elbow=(0.7 * sg, 0.3, -0.5)); h.aim(f"wrist.{sd}", Vector((0, -1, -0.5))); P.rest_hand(h, sd, 30)
-            P.head(h, pitch=-2, yaw=-15 if key == "deveau" else 0)
+                sg = H.SIDE[sd]; knee = h.bone_tail(f"upperleg02.{sd}"); hipj = h.bone_head(f"upperleg01.{sd}")
+                if i == 0:
+                    tg = knee + Vector((0, -0.04, 0.07))
+                elif i == 1:
+                    tg = knee.lerp(hipj, 0.25) + Vector((-0.07 * sg, -0.1, 0.06))
+                else:
+                    tg = knee.lerp(hipj, 0.55) + Vector((0.0, -0.02, 0.08))
+                P.hand_reach(h, sd, tg, elbow=(0.7 * sg, 0.3, -0.5)); h.aim(f"wrist.{sd}", Vector((-0.2 * sg * (i == 1), -1, -0.5))); P.rest_hand(h, sd, (30, 45, 20)[i])
+            P.head(h, pitch=(-2, 18, -6)[i], yaw=(-15, 6, 22)[i], tilt=(0, 3, -2)[i])
             p.finish(look_at=(3.2, 7.2, 1.9), place=M, density=hair(p))
             out[key] = (p, M)
     if "flood" in which:
@@ -1000,8 +1008,8 @@ def s25(t):
     ppl = court_people(ct, {"witness": 1, "clerk": 1}, t)
     p, M = ppl["witness"]
     ed = eyes(p)
-    loc = Vector((0.4, 5.8, 1.75))
-    cam(lerp(loc, loc + Vector((0.12, 0.0, 0.0)), ease(t)), ed + Vector((0, -0.6, -0.35)), lens=45, fstop=3.2, focus=(ed - loc).length)
+    loc = Vector((2.2, 9.6, 2.05))
+    cam(lerp(loc, loc + Vector((0.12, 0.0, 0.0)), ease(t)), ed + Vector((-0.2, 0, -0.4)), lens=40, fstop=3.2, focus=(ed - loc).length)
     return dict(cine={"sat": 1.12, "exposure": 0.1})
 
 
@@ -1427,7 +1435,7 @@ def s43(t):
     gib_land(town_on=True)
     rx, ry = TR.to_xy(36.135, -5.36, GIB_BAY)
     hd = 150.0
-    m = ST.mc("full", wind=ST.local_wind(WIND, hd), wet=0.2, detail=False, gap=False)
+    m = ST.mc("spare", wind=ST.local_wind(WIND, hd), wet=0.2, detail=False, gap=True)
     loc0 = Vector((rx - 1400 + 60 * t, ry - 1500 - 100 * t, 0))
     SHIP = ST.set_ship(m, loc=loc0, heading=hd, heel=5 + 0.6 * math.sin(t * 2))
     ST.ocean_around(loc0, hulls=[m["hull"]], mood="sunset", size=300, scale=1.0, chop=1.1, wind=9, foam=0.15, time=11 + t * 4)

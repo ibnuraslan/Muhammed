@@ -27,14 +27,22 @@ CAST = {
                                        "targets/cheek/l-cheek-inflate-incr": 0.3, "targets/cheek/r-cheek-inflate-incr": 0.3},
                       weight=0.62, hair=(0.9, 0.2, 0.12), dens=dict(beard=1.3, moustache=1.2, hair=1.5), hlen=1.7,
                       jacket=(0.012, 0.011, 0.012)),
-    "sailor_a":  dict(years=26, extra={"targets/nose/nose-point-width-incr": 0.4, "targets/chin/chin-prominent-decr": 0.2,
-                                       "targets/cheek/l-cheek-bones-decr": 0.2, "targets/cheek/r-cheek-bones-decr": 0.2},
-                      weight=0.45, hair=(0.55, 0.55, 0.0), dens=dict(beard=0.0, moustache=0.0, sideburns=0.6),
-                      jacket=(0.055, 0.045, 0.035), skin=(0.47, 0.28, 0.18)),
-    "sailor_b":  dict(years=30, extra={"targets/nose/nose-hump-incr": 0.7, "targets/head/head-oval": 0.4,
-                                       "targets/eyebrows/eyebrows-angle-up": 0.3},
-                      weight=0.5, hair=(0.95, 0.1, 0.0), dens=dict(beard=0.35, moustache=1.0),
-                      jacket=(0.03, 0.032, 0.03), skin=(0.38, 0.22, 0.14)),
+    # the two Dei Gratia sailors: nothing alike - a lanky fair young man in shirtsleeves, and a short broad dark man
+    # in a blue-grey jacket and knitted cap with a bushy beard
+    "sailor_a":  dict(years=22, height=0.68, weight=0.32, muscle=0.45,
+                      extra={"targets/head/head-oval": 1.0, "targets/nose/nose-scale-vert-incr": 0.6, "targets/chin/chin-prominent-incr": 0.6,
+                             "targets/chin/chin-height-incr": 0.6, "targets/head/head-scale-horiz-decr": 0.5,
+                             "targets/cheek/l-cheek-volume-decr": 0.6, "targets/cheek/r-cheek-volume-decr": 0.6,
+                             "targets/nose/nose-point-up": 0.5, "targets/ears/l-ear-flap-incr": 0.6, "targets/ears/r-ear-flap-incr": 0.6},
+                      hair=(0.22, 0.6, 0.0), hlen=1.5, dens=dict(beard=0.0, moustache=0.0, sideburns=0.3, hair=1.3),
+                      no_jacket=True, scarf=(0.55, 0.42, 0.12), skin=(0.52, 0.32, 0.22), weather=0.4),
+    "sailor_b":  dict(years=36, height=0.32, weight=0.82, muscle=0.8,
+                      extra={"targets/head/head-round": 1.0, "targets/head/head-fat-incr": 0.6, "targets/nose/nose-flaring-incr": 0.8,
+                             "targets/nose/nose-scale-horiz-incr": 0.8, "targets/nose/nose-curve-concave": 0.5,
+                             "targets/eyebrows/eyebrows-trans-down": 0.8, "targets/chin/chin-width-incr": 0.8,
+                             "targets/head/head-scale-vert-decr": 0.4},
+                      hair=(0.98, 0.05, 0.08), dens=dict(beard=1.6, moustache=1.4, hair=0.8),
+                      jacket=(0.045, 0.06, 0.08), cap=(0.32, 0.08, 0.05), skin=(0.36, 0.21, 0.13)),
     "flood":     dict(years=43, extra={"targets/nose/nose-scale-vert-incr": 0.5, "targets/nose/nose-trans-down": 0.2,
                                        "targets/chin/chin-prominent-incr": 0.5, "targets/head/head-oval": 0.5,
                                        "targets/eyebrows/eyebrows-angle-down": 0.4, "targets/cheek/l-cheek-bones-incr": 0.5,
@@ -51,10 +59,12 @@ CAST = {
     "chemist":   dict(years=46, extra={"targets/nose/nose-point-width-incr": 0.6, "targets/head/head-round": 0.4,
                                        "targets/eyebrows/eyebrows-trans-up": 0.3},
                       weight=0.55, hair=(0.75, 0.25, 0.3), dens=dict(beard=0.0, moustache=1.3),
-                      jacket=(0.03, 0.022, 0.016), skin=(0.46, 0.29, 0.2), weather=0.3),
-    "captain2":  dict(years=38, extra={"targets/chin/chin-prominent-incr": 0.6, "targets/nose/nose-trans-up": 0.3},
-                      weight=0.5, hair=(0.85, 0.3, 0.05), dens=dict(beard=1.0, moustache=1.0),
-                      jacket=(0.008, 0.01, 0.02)),
+                      jacket=(0.03, 0.022, 0.016), skin=(0.46, 0.29, 0.2), weather=0.3, height=0.42),
+    "captain2":  dict(years=40, height=0.7, weight=0.45,
+                      extra={"targets/chin/chin-prominent-incr": 0.8, "targets/head/head-rectangular": 0.8, "targets/nose/nose-greek-incr": 0.7,
+                             "targets/head/head-scale-vert-incr": 0.4},
+                      hair=(0.45, 0.95, 0.0), dens=dict(beard=0.9, moustache=1.2), chops=True,
+                      jacket=(0.008, 0.01, 0.02), skin=(0.55, 0.35, 0.27), weather=0.35),
     "diver":     dict(years=35, weight=0.6, hair=(0.8, 0.3, 0.0), dens=dict(beard=0.0, moustache=0.0, hair=0.0, sideburns=0.0, brows=0.0),
                       diver=True),
 }
@@ -74,13 +84,21 @@ class Person(D.Deveau):
             self.jacket.data.materials[0] = D.wool_material(self.name + "_jk", spec["jacket"], weave=380, wet=wet, dirt=0.18, sheen=0.3)
         if spec.get("diver"):
             self._diver_dress()
+        if spec.get("no_jacket"):           # shirtsleeves: the linen shirt shows, jacket and its buttons off
+            self.jacket.hide_render = True; self.jacket.hide_viewport = True
+            for b in getattr(self, "button_objs", []):
+                b.hide_render = True
+        if spec.get("no_jacket"):
+            self.shirt.data.materials[0] = D.linen_material(self.name + "_shirt", color=(0.47, 0.42, 0.33), wet=wet)
+        if spec.get("scarf"):
+            self.scarf.data.materials[0] = D.wool_material(self.name + "_scarf", spec["scarf"], rough=0.8, sheen=0.3, weave=900, dirt=0.3)
         if wig:
             self._wig()
 
     def _init_variant(self, spec, name, wet):
         # same construction as Deveau.__init__, with this man's face, age and build
         extra = dict(spec.get("extra", {}))
-        self.h = H.Human(name, gender=1.0, years=spec.get("years", 34), muscle=0.6, weight=spec.get("weight", 0.5),
+        self.h = H.Human(name, gender=1.0, years=spec.get("years", 34), muscle=spec.get("muscle", 0.6), weight=spec.get("weight", 0.5),
                          height=spec.get("height", 0.52), extra=extra, eyebrows=None, eyelashes=None, skin=None)
         h = self.h
         h.body.data.materials[0] = D.sailor_skin(name + "_skin", base=spec.get("skin", (0.43, 0.25, 0.16)),
@@ -129,6 +147,8 @@ class Person(D.Deveau):
             D.Deveau.finish(self, look_at=look_at, lids=lids, hair=hair, density=density, place=place)
         self.tag(hp, before)
         drop_spikes(self)
+        if self.spec.get("cap"):
+            knit_cap(self, self.spec["cap"])
         if SETTLE and not getattr(self, "no_settle", False):
             settle(self)
             if getattr(self, "seated", False):
@@ -673,3 +693,32 @@ def _drop_spikes(p, max_edge=0.12):
         if kill and len(kill) < len(bm.faces) * 0.02:
             bmesh.ops.delete(bm, geom=kill, context='FACES'); bm.to_mesh(me); me.update()
         bm.free()
+
+
+def knit_cap(p, color):
+    """A close knitted wool cap with a turned-up brim, sitting on the skull (raised clear of body and hair)."""
+    c, up, fwd, top = head_frame(p)
+    side = up.cross(fwd).normalized(); fwd = side.cross(up).normalized()
+    M = Matrix((side, fwd, up)).transposed().to_4x4(); M.translation = c + up * (top - 0.088) - fwd * 0.014
+    m = D.wool_material(p.name + "_cap", color, rough=0.9, sheen=0.5, weave=260, bump=0.6, dirt=0.3)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=40, ring_count=20, radius=1)
+    cap = bpy.context.active_object; cap.name = p.name + "_cap"
+    me = cap.data
+    import bmesh
+    bm = bmesh.new(); bm.from_mesh(me)
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.z < -0.05], context='VERTS'); bm.to_mesh(me); bm.free()
+    cap.matrix_world = M @ Matrix.Diagonal((0.104, 0.117, 0.075, 1))
+    so = cap.modifiers.new("t", "SOLIDIFY"); so.thickness = 0.08; so.offset = 1
+    me.materials.append(m); me.polygons.foreach_set("use_smooth", [True] * len(me.polygons))
+    bpy.ops.mesh.primitive_torus_add(major_radius=1, minor_radius=0.12, major_segments=48)
+    rim = bpy.context.active_object; rim.name = p.name + "_cap_rim"
+    rim.matrix_world = M @ Matrix.Translation((0, 0, -0.004)) @ Matrix.Diagonal((0.108, 0.121, 0.11, 1))
+    rim.data.materials.append(m)
+    parts = [cap, rim]
+    for o in getattr(p, "hair_objs", []):     # hair under the cap is hidden by it; drop the scalp strands
+        if o and o.name.endswith("_hair"):
+            o.hide_render = True
+    _clear_of_body(p, parts, up)
+    for o in parts:
+        o["person"] = p.name
+    return parts
