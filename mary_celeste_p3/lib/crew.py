@@ -64,8 +64,7 @@ class Person(D.Deveau):
     def __init__(self, key="deveau", wet=0.2, wig=False, idx=0, kneel=False, seated=False):
         spec = dict(CAST[key]); self.key = key; self.spec = spec; self.wig_on = wig
         self.seated = seated    # the shared boots (lib 9499317) are skinned to the legs and follow seated poses
-        if kneel:       # the shared boots stand the pair on the ground; a kneeling man keeps his fitted boot shells
-            self._asset_boots = lambda: True
+        self.kneel = kneel      # the shared boots are skinned to the legs (lib 9499317) and follow kneeling too
         self._dens = spec.get("dens", {})
         if key == "deveau":
             D.Deveau.__init__(self, name=f"Deveau{idx}", wet=wet)
@@ -101,6 +100,8 @@ class Person(D.Deveau):
             self.used[list(pl.vertices)] = True
         self.faces = [tuple(pl.vertices) for pl in me.polygons]
         self._dress()
+        if "skin" in D.Deveau._asset_boots.__code__.co_varnames:
+            self.asset_boots = self._asset_boots(skin=True)     # lib 9499317: boots skinned to the legs
 
     # -------------------------------------------------------------- hair: per-person density and colour
     def _strands(self, label, vmask, P_, bvh, count, length, radius, comb, lift, mat, curl=0.2, segs=7, seed=1, **kw):
@@ -128,7 +129,8 @@ class Person(D.Deveau):
             D.Deveau.finish(self, look_at=look_at, lids=lids, hair=hair, density=density, place=place)
         self.tag(hp, before)
         if SETTLE and not getattr(self, "no_settle", False):
-            settle(self)
+            lf = settle(self)
+            print("SETTLE", self.name, round(lf, 4))
 
     def tag(self, hp=None, before=()):
         """Mark this man's meshes for clipcheck (o["person"], o["hands"] = wrist/knuckle points)."""
@@ -254,7 +256,29 @@ def top_hat(p, color=(0.012, 0.011, 0.011), h_=0.17, r=0.104):
     bd = bpy.context.active_object; bd.name = p.name + "_hat_band"
     bd.matrix_world = M @ Matrix.Translation((0, 0, 0.025)) @ Matrix.Diagonal((r * 1.05, r * 1.19, 0.03, 1))
     bd.data.materials.append(band)
-    return [crown, brim, bd]
+    parts = [crown, brim, bd]
+    _clear_of_body(p, parts, up)
+    return parts
+
+
+def _clear_of_body(p, parts, up, step=0.004, max_lift=0.06):
+    """Raise a worn prop (hat) along the head's up axis until it no longer cuts the body or hair-free scalp."""
+    from mathutils.bvhtree import BVHTree
+    dg = bpy.context.evaluated_depsgraph_get()
+    def tree(o):
+        oe = o.evaluated_get(dg); me = oe.to_mesh(); M = oe.matrix_world
+        V = [M @ v.co for v in me.vertices]; me.calc_loop_triangles(); T = [tuple(t.vertices) for t in me.loop_triangles]
+        oe.to_mesh_clear(); return BVHTree.FromPolygons(V, T, all_triangles=True)
+    body = [tree(o) for o in p.objects if o.type == 'MESH' and o not in parts]
+    moved = 0.0
+    while moved < max_lift:
+        bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
+        if not any(tree(h).overlap(b) for h in parts for b in body):
+            break
+        for h in parts:
+            h.matrix_world = Matrix.Translation(up * step) @ h.matrix_world
+        moved += step
+    return moved
 
 
 def bands(p):
@@ -478,11 +502,13 @@ def finish_cached(p, look_at=None, place=None, density=1.0, cache=None, hair=Tru
 
 # ----------------------------------------------------------------------------- contact: stand on the real surface
 def _bvh_of(objs, dg):
+    """(tree, M, Minv) per object: BVHTree.FromObject is in object space, so rays are mapped in and hits out."""
     from mathutils.bvhtree import BVHTree
     out = []
     for o in objs:
         try:
-            out.append(BVHTree.FromObject(o, dg))
+            oe = o.evaluated_get(dg)
+            out.append((BVHTree.FromObject(o, dg), oe.matrix_world.copy(), oe.matrix_world.inverted()))
         except Exception:
             pass
     return out
@@ -526,10 +552,11 @@ def settle(p, up=(0, 0, 1), clearance=0.002, reach=0.6):
     for v in pts[::3]:
         start = v + up * 0.35
         best = None
-        for tr in trees:
-            hit = tr.ray_cast(start, -up, 0.7)
+        for tr, M, Mi in trees:
+            sl = Mi @ start; dl = (Mi.to_3x3() @ -up); dist = 0.7 * dl.length
+            hit = tr.ray_cast(sl, dl.normalized(), dist)
             if hit[0] is not None:
-                h = hit[0].dot(up)
+                h = (M @ hit[0]).dot(up)
                 best = h if best is None else max(best, h)
         if best is not None:
             lift = max(lift, best + clearance - v.dot(up))
