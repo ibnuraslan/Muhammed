@@ -20,19 +20,25 @@ SHIP_X = 2.0
 
 
 def harbour_rig(mc):
-    """Turn the as-found sail plan into a ship in port: every square sail furled on its yard, headsails stowed."""
-    keep = []
+    """A ship in port / at anchor before the voyage: every sail intact and furled. Removes all set or torn canvas
+    (whatever the build state) and furls each square sail on its yard and the mainsail on boom and gaff."""
     for o in list(mc["coll"].objects):
-        n = o.name
-        if any(k in n for k in ("_sail_", "_shred", "_jib", "_fstay")):
+        if o.type != 'MESH' or "furl" in o.name:
+            continue
+        if any(m is not None and "canvas" in m.name for m in o.data.materials) or any(
+                k in o.name for k in ("_sail_", "_shred", "_jib", "_fstay", "_mainsail")):
             bpy.data.objects.remove(o)
     Y = mc["spars"]["yards"]
     can = mc["mats"]["canvas"]
-    for nm in ("course", "ltop", "utop"):
-        if nm in Y:
+    have = {o.name for o in mc["coll"].objects}
+    for nm, r in (("course", 0.22), ("ltop", 0.18), ("utop", 0.17), ("tgal", 0.15), ("royal", 0.13)):
+        if nm in Y and not any(n.endswith(f"_{nm}_furl") for n in have):
             a, b, _ = Y[nm]
-            f = ship.furled(f"MC_{nm}_furl", a, b, 0.22 if nm == "course" else 0.18, can, mc["coll"], seed=hash(nm) % 9)
-            f.parent = mc["root"]
+            ship.furled(f"MC_{nm}_furl", a, b, r, can, mc["coll"], seed=len(nm)).parent = mc["root"]
+    if not any("main_furl" in n for n in have):
+        g0, g1 = mc["spars"]["boom"]; f0, f1 = mc["spars"]["gaff"]
+        ship.furled("MC_main_furl", g0, g1, 0.32, can, mc["coll"], seed=4).parent = mc["root"]
+        ship.furled("MC_gaff_furl", f0, f1, 0.12, can, mc["coll"], seed=5).parent = mc["root"]
     return mc
 
 

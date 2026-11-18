@@ -151,16 +151,22 @@ def tug(name, at, yaw, smoke=True):
         Lk.new(tc.outputs['Object'], nz.inputs['Vector'])
         mul = N.new("ShaderNodeMath"); mul.operation = 'MULTIPLY'; Lk.new(gr.outputs['Fac'], mul.inputs[0]); Lk.new(nz.outputs['Fac'], mul.inputs[1])
         mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.12; mr.inputs['From Max'].default_value = 0.5
-        mr.inputs['To Max'].default_value = 0.6; Lk.new(mul.outputs[0], mr.inputs['Value'])
-        Lk.new(mr.outputs[0], pv.inputs['Density'])
+        mr.inputs['To Max'].default_value = 1.0; Lk.new(mul.outputs[0], mr.inputs['Value'])
+        at = N.new("ShaderNodeAttribute"); at.attribute_type = 'OBJECT'; at.attribute_name = "dens"
+        dm = N.new("ShaderNodeMath"); dm.operation = 'MULTIPLY'; Lk.new(mr.outputs[0], dm.inputs[0]); Lk.new(at.outputs['Fac'], dm.inputs[1])
+        Lk.new(dm.outputs[0], pv.inputs['Density'])
         Lk.new(pv.outputs[0], N["Material Output"].inputs['Volume'])
-        for k in range(7):
-            t = k / 6
-            r = 0.7 + 2.6 * t
-            bpy.ops.mesh.primitive_uv_sphere_add(segments=20, ring_count=12, radius=1.0)
-            pl = bpy.context.active_object; pl.name = f"{name}_plume{k}"; pl.data.materials.append(sm)
-            pl.scale = (r * 1.4, r, r)
-            pl.parent = root; pl.location = (0.4 - 2.2 * k - 1.2 * k * k * 0.3, 0.2 * math.sin(k), 9.8 + 1.1 * k + 0.12 * k * k)
+        # many small overlapping puffs along one curved path: reads as a single soft plume
+        n = 40
+        for k in range(n):
+            t = k / (n - 1)
+            r = 0.45 + 2.4 * t ** 1.2
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=10, radius=1.0)
+            pl = bpy.context.active_object; pl.name = f"{name}_plume{k:02d}"; pl.data.materials.append(sm)
+            pl.scale = (r * 1.25, r, r * 0.85)
+            pl.parent = root
+            pl.location = (0.4 - 16.0 * t ** 1.15, 0.6 * math.sin(t * 5.0), 9.6 + 1.2 + 6.5 * t ** 0.8)
+            pl["dens"] = 0.55 / r * (1.0 - 0.6 * t)       # thin as it spreads; similar opacity per unit length
             pl.visible_shadow = False
     return root
 
