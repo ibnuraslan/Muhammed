@@ -1,0 +1,13 @@
+Mary Celeste Part 4 — third-party assets (all free licences)
+
+3D models and textures — Poly Haven (CC0), https://polyhaven.com:
+  wine_barrel_01, wooden_lantern_01, vintage_oil_lamp, seadogs_compass, cross_pein_hammer, wooden_bucket_01;
+  textures seaworn_sandstone_brick, cobblestone_floor_04, yellow_plaster, yellow_plaster_02, red_plaster_weathered,
+  painted_plaster_wall, clay_plaster, red_slate_roof_tiles_01, brown_planks_05, dark_wooden_planks, weathered_planks,
+  wood_table_worn, wood_table_large, oak_veneer_01, white_oak_veneer, red_oak_veneer;
+  HDRIs belfast_sunset_puresky, industrial_sunset_02_puresky, mud_road_puresky.
+Terrain and bathymetry — AWS Open Data "Terrain Tiles" (Mapzen terrarium encoding), sources incl. SRTM (NASA/USGS, public domain),
+  GMTED2010 (USGS), ETOPO1 (NOAA) and GEBCO; https://registry.opendata.aws/terrain-tiles/ (attribution as required by the sources).
+Human base mesh, rig and targets — MakeHuman 1.x (CC0), via the shared library mary_celeste_3d; MPFB 2 masks (CC0 assets).
+Fonts — Courier Prime (OFL), Special Elite (Apache 2.0), Instrument Serif (OFL).
+Photos — none yet: this container cannot reach Wikimedia Commons / LOC; person/place cards need free-licence photos supplied by the hub.
