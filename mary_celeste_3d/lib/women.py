@@ -534,11 +534,13 @@ class Arthur(_Woman):
     collar, knickerbockers gathered below the knee, dark stockings, ankle boots; short side-parted hair.
     (Shares the civilian base class with Sarah and Sophia: no beard, own clothes.)"""
     GENDER = 1.0; MUSCLE = 0.5; WEIGHT = 0.45; HEIGHT = 0.5
-    SKIN = dict(base=(0.64, 0.45, 0.36), weather=0.1)
+    SKIN = dict(base=(0.53, 0.34, 0.25), weather=0.25)
     HAIR = (0.7, 0.35); HAIR_N = 50000; HAIR_LEN = (0.02, 0.04); CURL = 0.15
     BOOT_TOP = 0.16
     JACKET = (0.07, 0.065, 0.06)      # brown-grey tweedy wool
     BREECHES = (0.05, 0.05, 0.055)
+
+    EXTRA = {"targets/eyes/l-eye-scale-decr": 0.25, "targets/eyes/r-eye-scale-decr": 0.25}
 
     def __init__(self, name="Arthur", years=7, wet=0.0, seated=False, cap=False):
         super().__init__(name, years, wet=wet, seated=seated, bonnet=False, shawl=False)

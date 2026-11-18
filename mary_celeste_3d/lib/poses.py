@@ -74,7 +74,7 @@ def cabin(dv, M, board_w, lantern_w, lantern_side="L"):
     dv.lids(1.0); dv.brow_knit(1.0)
     bl = Mi @ Vector(board_w)
     hand_reach(h, bs, bl + Vector((0, 0, 0.035)), elbow=(0.7 * sb, 0.5, -0.4))
-    h.aim(f"wrist.{bs}", Vector((0.15 * sb, -0.8, -0.6)))
+    h.aim(f"wrist.{bs}", Vector((0.15 * sb, -0.95, -0.12)))     # palm flat on the board cap, fingers forward
     rest_hand(h, bs, curl=28)
     ln = Mi @ Vector(lantern_w)
     hand_reach(h, ls, ln, elbow=(0.45 * sl, 0.15, -1.0))          # elbow drops under the lantern's weight

@@ -260,9 +260,9 @@ lan, lms = ph.model("wooden_lantern_01")
 dv = D.Deveau(wet=0.55)
 h = dv.h
 ANG = math.radians(223)                          # he faces the berth, turned toward the hollow at its head end
-POS = Vector((0.22, 0.3, 0.0))
+POS = Vector((0.18, 0.2, 0.0))
 M = Matrix.Translation(POS) @ Matrix.Rotation(ANG, 4, 'Z')
-P.cabin(dv, M, (0.48, BY0 - 0.02, BOARD + 0.045), (-0.12, 0.5, 1.3), lantern_side="L")
+P.cabin(dv, M, (0.22, BY0 - 0.02, BOARD + 0.085), (-0.12, 0.5, 1.3), lantern_side="L")
 bpy.context.view_layer.update()
 grip_local = P.palm_point(h, "L")
 look = Vector((CHILD["cx"] - 0.05, CHILD["cy"], TOP))
@@ -337,6 +337,10 @@ vs = N.new("ShaderNodeVolumeScatter"); vs.inputs['Density'].default_value = floa
 am.node_tree.links.new(vs.outputs[0], N["Material Output"].inputs['Volume']); air.data.materials.append(am)
 air.visible_shadow = False
 
+if os.environ.get("CLIP"):                       # clip QA only (lib/clipcheck.py), no render
+    import clipcheck
+    clipcheck.check(os.path.basename(OUT).split(".")[0], limit=40)
+    sys.exit(0)
 # ----------------------------------------------------------------------------- camera
 head_w = M @ Vector((0, -0.05, 1.66))
 # medium shot: waist-up, the lantern at frame left side-lighting him, the far side of his face in shadow;

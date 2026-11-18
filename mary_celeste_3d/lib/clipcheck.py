@@ -13,14 +13,15 @@ from mathutils.bvhtree import BVHTree
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "..", "out", "clip")
-SKIP_PREFIX = ("Ocean", "far_sea", "band", "island", "cabin_air", "rock")
+SKIP_PREFIX = ("Ocean", "far_sea", "band", "island", "cabin_air", "rock", "puddles", "deck_water", "SeaHaze")
 
 
 CENTERS = {}
-HAND_R = 0.13          # a contact whose triangles all lie this close to a wrist/knuckle is the hand, not the body
+FLOATING = []          # (person, mm) hands that could not reach the bar they are meant to hold (set by boatcrew)
+HAND_R = 0.10          # a contact whose triangles all lie this close to a wrist/knuckle is the hand, not the body
 
 
-def _in_hands(o, pairs, first=True):
+def _in_hands(o, pairs, first=True, r=None):
     import numpy as np
     h = o.get("hands")
     if not h:
@@ -29,7 +30,7 @@ def _in_hands(o, pairs, first=True):
     idx = np.array([p[0] if first else p[1] for p in pairs])
     c = CENTERS[o.name][idx]
     d = np.min(np.linalg.norm(c[:, None, :] - H[None, :, :], axis=2), axis=1)
-    return bool((d < HAND_R).all())
+    return bool((d < (r or HAND_R)).all())
 
 
 def _trees(objs, dg):
@@ -81,16 +82,28 @@ def check(shot, limit=60, hand_ok=("oar", "tiller", "doll", "Sophia", "letter", 
                 n = len(pairs)
                 if n == 0:
                     continue
-                grip = _in_hands(a, pairs) or ("person" in b and _in_hands(b, pairs, first=False))
+                # only the hand itself can grip (body mesh within HAND_R of a wrist/knuckle); clothing only at the cuff
+                ra = HAND_R if a.name.endswith("_body") else 0.07
+                rb = HAND_R if b.name.endswith("_body") else 0.07
+                grip = _in_hands(a, pairs, r=ra) or ("person" in b and _in_hands(b, pairs, first=False, r=rb))
                 allowed = limit if any(k in b.name or k in b.get("person", "") for k in hand_ok) else 4
                 import numpy as np
                 c = CENTERS[a.name][np.array([q[0] for q in pairs])]
                 at = [round(float(v), 3) for v in c.mean(0)]; span = [round(float(v), 3) for v in (c.max(0) - c.min(0))]
                 found.append(dict(person=pn, part=a.name, other=b.name, pairs=n, grip=grip, ok=grip or n <= allowed, at=at, span=span))
-    bad = [f for f in found if not f["ok"]]
+    bad = [f for f in found if not f["ok"]] + [dict(person=n, part=n + " hand", other="(nothing: floating)", pairs=0, ok=False, gap_m=g) for n, g in FLOATING]
+    for n, g in FLOATING:
+        print(f"CLIP {n} hand floating {g * 1000:.0f} mm off its bar")
     for f in found:
         print(("CLIP " if not f["ok"] else "touch ") + f"{f['part']} x {f['other']}: {f['pairs']}  at {f['at']} span {f['span']}")
     print(f"CLIPCHECK {shot}: {len(bad)} clipping, {len(found) - len(bad)} contacts within allowance, {len(names)} people")
     os.makedirs(OUT, exist_ok=True)
     json.dump(dict(shot=shot, bad=bad, contacts=[f for f in found if f["ok"]]), open(os.path.join(OUT, shot + ".json"), "w"), indent=1)
     return bad
+
+
+def report_floating(person, gap_m, limit=0.015):
+    """Hook for pose helpers that aim a hand at a bar/handle: call with the palm-to-target residual after the IK.
+    Gaps over `limit` become CLIP entries in the next check() ("hand floating N mm off its bar")."""
+    if gap_m > limit:
+        FLOATING.append((person, float(gap_m)))

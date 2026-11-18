@@ -39,6 +39,11 @@ ocean, foam, spray, Poly Haven sky).
   aims the eyes, then places him.
 * Colour: grade `cine={"sat": 1.2, ...}` in exteriors; `tools/house_finish.py` never drains colour (hub/user: rich Atrium colour).
 
+* `lib/clipcheck.py` (P5's strict rules): grips count only for the hand (body within 0.10 m of a wrist; clothing 0.07 m),
+  `clipcheck.report_floating(person, gap_m)` for hands that miss their bar, findings carry `at`/`span`.
+  Scenes: `CLIP=1 blender -b --python scenes/sc_b_cabin.py` runs the check without rendering.
+* `lib/sitpose.py` (from P5): `Seat` placement for seated people, `grip_bar`, `wrap_fingers`.
+* `women._Woman.relaxed()`: default stance with hands together at the waist.
 * `lib/sf.py`: Sketchfab fetcher (`sf.fetch(uid)`, `sf.model(uid, loc, rot_z, height)`, `sf.CATALOG`), CC-BY/CC0 only.
 * Jacket/clothes solidify uses `thickness_clamp=1.0` (no even-offset spikes at render subsurf 2).
 
