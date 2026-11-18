@@ -309,11 +309,11 @@ def end_grain(kind):
     pr.inputs['From Max'].default_value = 0.34 if kind == "red" else 0.21
     pr.inputs['To Min'].default_value = 1.0; pr.inputs['To Max'].default_value = 0.0; L.new(vo.outputs['Distance'], pr.inputs['Value'])
     pore = N.new("ShaderNodeMath"); pore.operation = 'MULTIPLY'; L.new(pr.outputs[0], pore.inputs[0]); L.new(early.outputs[0], pore.inputs[1])
-    base = (0.36, 0.25, 0.15) if kind == "white" else (0.40, 0.21, 0.14)      # aged, oiled-dark end grain
-    late = (0.22, 0.15, 0.085) if kind == "white" else (0.26, 0.12, 0.08)
+    base = (0.25, 0.165, 0.10) if kind == "white" else (0.40, 0.21, 0.14)      # aged, oiled-dark end grain
+    late = (0.19, 0.125, 0.075) if kind == "white" else (0.26, 0.12, 0.08)
     c1 = N.new("ShaderNodeMix"); c1.data_type = 'RGBA'; c1.inputs[6].default_value = (*late, 1); c1.inputs[7].default_value = (*base, 1)
     L.new(early.outputs[0], c1.inputs['Factor'])
-    hole = (0.015, 0.008, 0.005, 1) if kind == "red" else (0.78, 0.66, 0.46, 1)     # open void vs tylose plug
+    hole = (0.015, 0.008, 0.005, 1) if kind == "red" else (0.21, 0.14, 0.085, 1)     # open void vs tylose plug (filled, a shade darker)
     c2 = N.new("ShaderNodeMix"); c2.data_type = 'RGBA'; L.new(c1.outputs[2], c2.inputs[6]); c2.inputs[7].default_value = hole
     L.new(pore.outputs[0], c2.inputs['Factor']); L.new(c2.outputs[2], p.inputs['Base Color'])
     rr = N.new("ShaderNodeMapRange"); rr.inputs['To Min'].default_value = 0.7; rr.inputs['To Max'].default_value = 0.9 if kind == "red" else 0.2
@@ -431,14 +431,14 @@ def set_staves():
         a = u / 0.289; rr = 0.289 + rng.uniform(-0.009, 0.009)
         bpy.ops.mesh.primitive_uv_sphere_add(radius=r, location=(rx + rr * math.sin(a), -r * 0.3, Z0 + 0.30 - rr * math.cos(a)))
         o = bpy.context.active_object; o.scale.y = 0.45; o.data.materials.append(drop); bpy.ops.object.shade_smooth()
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.0022, location=(rx + 0.002, -0.0022, Z0 + 0.0022))
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.003, location=(rx + 0.002, -0.003, Z0 + 0.003))
     o = bpy.context.active_object; o.scale = (1, 0.9, 1.15); o.data.materials.append(drop); bpy.ops.object.shade_smooth()
     # the wet stain: an irregular, very thin darkening of the bench itself (same texture, darker and satin)
     wet = bench.copy(); wet.name = "bench_wet"
     wp = wet.node_tree.nodes["Principled BSDF"]
     src = wp.inputs['Base Color'].links[0].from_socket
     dk = wet.node_tree.nodes.new("ShaderNodeMix"); dk.data_type = 'RGBA'; dk.blend_type = 'MULTIPLY'; dk.inputs['Factor'].default_value = 1
-    dk.inputs[7].default_value = (0.32, 0.25, 0.2, 1); wet.node_tree.links.new(src, dk.inputs[6]); wet.node_tree.links.new(dk.outputs[2], wp.inputs['Base Color'])
+    dk.inputs[7].default_value = (0.22, 0.16, 0.12, 1); wet.node_tree.links.new(src, dk.inputs[6]); wet.node_tree.links.new(dk.outputs[2], wp.inputs['Base Color'])
     for l in list(wp.inputs['Roughness'].links):
         wet.node_tree.links.remove(l)
     wp.inputs["Roughness"].default_value = 0.16
@@ -446,7 +446,7 @@ def set_staves():
     pts = []
     for k in range(48):
         a = 2 * math.pi * k / 48
-        rr = 0.018 * (1 + 0.45 * mathutils.noise.noise(Vector((math.cos(a) * 1.7, math.sin(a) * 1.7, 0.3))) + 0.2 * math.sin(3 * a + 1))
+        rr = 0.026 * (1 + 0.45 * mathutils.noise.noise(Vector((math.cos(a) * 1.7, math.sin(a) * 1.7, 0.3))) + 0.2 * math.sin(3 * a + 1))
         pts.append(Vector((rx + 0.004 + rr * math.cos(a) * 1.3, -0.014 + rr * math.sin(a) * 0.8, 0.0)))
     cen = sum(pts, Vector()) / len(pts)
     bo = bench_o.location
