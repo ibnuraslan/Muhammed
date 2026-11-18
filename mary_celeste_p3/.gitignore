@@ -1,0 +1,6 @@
+out/
+assets/terrain/
+assets/photos/_pending_*
+__pycache__/
+*.tmp
+review/*.png
