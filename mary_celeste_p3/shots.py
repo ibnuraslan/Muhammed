@@ -890,7 +890,7 @@ def s22(t):
     crew.top_hat(p)
     PR.hammer("hammer", head, hd, -face_n)
     em = eyes(p)
-    loc = note_c + face_n * 0.55 + fwd * 1.15 + Vector((0, 0, 0.1))
+    loc = note_c + face_n * 0.9 + fwd * 1.7 + Vector((0, 0, 0.05))
     cam(loc, note_c.lerp(em, 0.5), lens=50, fstop=3.5, focus=(note_c - loc).length)
     return dict(cine={"sat": 1.1})
 
@@ -987,8 +987,8 @@ def s24(t):
     ppl = court_people(ct, {"salvors": 1}, t)
     p, M = ppl["deveau"]
     ed = eyes(p)
-    loc = ed + Vector((1.2, 2.1, 0.05))
-    cam(lerp(loc, loc + Vector((-0.1, -0.15, 0)), ease(t)), ed + Vector((0.45, 0, -0.2)), lens=50, fstop=2.8, focus=(ed - loc).length)
+    loc = ed + Vector((2.6, 0.9, 0.05))
+    cam(lerp(loc, loc + Vector((-0.1, -0.15, 0)), ease(t)), ed + Vector((0.3, 0, -0.35)), lens=40, fstop=2.8, focus=(ed - loc).length)
     return dict(cine={"sat": 1.12, "exposure": 0.1})
 
 
@@ -1012,8 +1012,8 @@ def s26(t):
     ppl = court_people(ct, {"flood": ease(t)}, t)
     p, M = ppl["flood"]
     ef = eyes(p)
-    loc = ef + Vector((0.75, 1.55, -0.7)) + Vector((-0.05, -0.12, 0.0)) * ease(t)
-    cam(loc, ef + Vector((0, 0, -0.25)), lens=35, fstop=2.8, focus=(ef - loc).length)
+    loc = ef + Vector((1.9, 1.9, -0.8)) + Vector((-0.05, -0.12, 0.0)) * ease(t)
+    cam(loc, ef + Vector((0, 0, -0.45)), lens=28, fstop=2.8, focus=(ef - loc).length)
     return dict(cine={"sat": 1.12, "exposure": 0.1})
 
 
@@ -1154,7 +1154,7 @@ def s31(t):
       "Flood kneels on the deck by the rail with a magnifying glass", "Knee on wood, coat rustle")
 def s32(t):
     SHIP, m = mc_at_gib(t)
-    fl = crew.person("flood", wet=0.0)
+    fl = crew.person("flood", wet=0.0, kneel=True)
     h = fl.h
     drop = 0.45
     M = ST.on_ship(SHIP, -6.0, -2.75, -90, drop=drop)
@@ -1194,7 +1194,7 @@ def s33(t):
         deck.data.materials[k] = PR.stain_decal_mat(deck.data.materials[k], cs, radius=0.06)
 
     spotl = SHIP.inverted() @ cs[0]
-    fl = crew.person("flood", wet=0.0)
+    fl = crew.person("flood", wet=0.0, kneel=True)
     h = fl.h; drop = 0.45
     M = ST.on_ship(SHIP, -6.0, -2.75, -90, drop=drop)
     crew.kneel(h, drop, knee="L", lean=30); P.head(h, pitch=48)
@@ -1231,7 +1231,7 @@ def sword_under_berth(cab, drawn=0.0):
 def s34(t):
     cab = RM.mc_cabin()
     hilt, d = sword_under_berth(cab, drawn=ease(t))
-    p = crew.person("captain2", wet=0.0)
+    p = crew.person("captain2", wet=0.0, kneel=True)
     h = p.h; drop = 0.45
     M = crew.place((hilt.x + 0.62, hilt.y - 0.1, 0.0), 180, drop=drop)
     crew.kneel(h, drop, knee="R", lean=30)
@@ -1273,8 +1273,9 @@ def s35(t):
     dv, hilt, d = deveau_draws(cab, t)
     ed = eyes(dv)
     fwd = Vector((math.cos(math.radians(160)), math.sin(math.radians(160)), 0))
-    loc = ed + fwd * 1.25 + Vector((0, -0.35, -0.2))
-    cam(loc, ed.lerp(hilt, 0.5), lens=40, fstop=2.8, focus=(ed - loc).length)
+    side = fwd.cross(Vector((0, 0, 1)))
+    loc = ed + fwd * 0.6 + side * 1.1 + Vector((0, 0, -0.25))
+    cam(loc, ed.lerp(hilt, 0.6), lens=35, fstop=2.8, focus=(ed - loc).length)
     return dict(cine={"sat": 0.95, "exposure": 0.2})
 
 
@@ -1384,8 +1385,8 @@ def s41(t):
     p.finish(look_at=(0.0, 9.0, 1.9), place=M, density=hair(p))
     crew.wig_rolls(p); crew.bands(p)
     ef = eyes(p)
-    loc = ef + Vector((0.5, -1.15, 0.22))
-    cam(loc, Vector((2.6, 7.4, 1.1)), lens=35, fstop=4.0, focus=(ef - loc).length)
+    loc = ef + Vector((0.55, -1.35, 0.25))
+    cam(loc, ef.lerp(Vector((3.2, 7.2, 1.3)), 0.35), lens=32, fstop=4.0, focus=(ef - loc).length)
     return dict(cine={"sat": 1.1, "exposure": 0.05})
 
 

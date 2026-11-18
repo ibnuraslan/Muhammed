@@ -60,8 +60,10 @@ CAST = {
 
 
 class Person(D.Deveau):
-    def __init__(self, key="deveau", wet=0.2, wig=False, idx=0):
+    def __init__(self, key="deveau", wet=0.2, wig=False, idx=0, kneel=False):
         spec = dict(CAST[key]); self.key = key; self.spec = spec; self.wig_on = wig
+        if kneel:       # the shared boots stand the pair on the ground; a kneeling man keeps his fitted boot shells
+            self._asset_boots = lambda: True
         self._dens = spec.get("dens", {})
         if key == "deveau":
             D.Deveau.__init__(self, name=f"Deveau{idx}", wet=wet)
