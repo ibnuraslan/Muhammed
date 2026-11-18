@@ -8,3 +8,21 @@ for p in (os.path.join(HERE, "..", "lib5"), os.path.join(ROOT, "mary_celeste_3d"
 os.environ.setdefault("MH_DATA", os.path.join(ROOT, "mary_celeste_3d", "assets", "makehuman"))
 import common as C
 OUTDIR = os.environ.get("OUTDIR", os.path.join(HERE, "..", "out", "frames"))
+
+
+# every shot runs the clipping check before it renders (CLIPONLY=1: check, write out/clip/<shot>.json, no render)
+_finish = C.finish
+
+
+def _checked_finish(out, *a, **k):
+    import bpy, clipcheck, weather
+    shot = os.path.splitext(os.path.basename(out))[0]
+    weather.soften_chips()
+    bad = clipcheck.check(shot)
+    if os.environ.get("CLIPONLY"):
+        print("RENDERED", out, "(clip check only)")
+        return
+    return _finish(out, *a, **k)
+
+
+C.finish = _checked_finish

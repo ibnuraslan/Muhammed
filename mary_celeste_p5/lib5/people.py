@@ -63,16 +63,41 @@ class Person(D.Deveau):
                 if md.type == 'SOLIDIFY':
                     md.use_even_offset = False
 
+    def finish(self, *a, **k):
+        place = k.get("place")
+        M = place if place is not None else Matrix.Identity(4)
+        hp = []
+        for sd in ("L", "R"):                        # wrist and knuckles, world space after placing
+            for b in (f"wrist.{sd}", f"finger3-1.{sd}"):
+                if b in self.h.arm.pose.bones:
+                    hp.append(M @ self.h.bone_head(b))
+        self.hand_pts = hp
+        D.Deveau.finish(self, *a, **k)
+        flat = [c for v in self.hand_pts for c in v]
+        for o in self.objects:                       # tag for lib5.clipcheck
+            if o.type == 'MESH':
+                o["person"] = self.name; o["hands"] = flat
+        for o in getattr(self, "sea_boots", []) or []:
+            if getattr(o, "type", None) == 'MESH':
+                o["person"] = self.name
+        for o in bpy.data.objects:                   # fitted boots/corneas created during finish carry the name
+            if o.type == 'MESH' and o.name.startswith(self.name + "_") and "person" not in o:
+                o["person"] = self.name; o["hands"] = flat
+
     # ------------------------------------------------------------------ shared-lib hooks (50560c7)
     def _asset_boots(self):
         # the shared fitted leather boots suit the men (sailors, captain) and the boy; Sarah's boots are under
         # her skirt and Sophia wears none, so they keep their own shells
+        if getattr(self, "seated", False):
+            # the fitted asset boots stand upright on the floor (a standing man); a seated man's shins are angled,
+            # so use the shared per-foot modelled boots, which follow the posed foot
+            return self.outfit not in ("sailor", "captain", "boy")
         if self.outfit in ("sailor", "captain", "boy"):
             return D.Deveau._asset_boots(self)
         return True
 
     def _sea_boots(self):
-        if self.outfit in ("sailor", "captain"):
+        if self.outfit in ("sailor", "captain", "boy"):
             return D.Deveau._sea_boots(self)
 
     # ------------------------------------------------------------------ outfits

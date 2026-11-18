@@ -21,6 +21,8 @@ class Seat:
         """seat_world: point on the seat surface under the pelvis; facing_deg: heading (deg, about world Z, in
         `frame`) the person looks along; frame: the boat/room matrix the heading is measured in."""
         self.p = person; h = person.h
+        self.seat_world = Vector(seat_world)
+        person.seated = True
         H.reset_pose(h)
         hip = hip_mid(h)
         Rz = Matrix.Rotation(math.radians(facing_deg + 90.0), 4, 'Z')     # rig faces -Y; heading 0 = +X
