@@ -23,7 +23,7 @@ for sid, scene, vo, shot, action, sfx, card in SHOTS:
     d.text((24, H + 14), f"{sid}  {shot}", font=fb, fill=(240, 200, 140))
     y = H + 50
     for line in textwrap.wrap(f'VO: "{vo}"', 100)[:2] + textwrap.wrap(f"{action}", 100)[:2] + \
-            textwrap.wrap(f"SFX: {sfx}" + (f"   |   {card}" if card else ""), 100)[:2]:
+            textwrap.wrap(f"SFX: {sfx}" + (f"   |   in CapCut (not rendered): {card}" if card else ""), 100)[:2]:
         d.text((24, y), line, font=fr, fill=(225, 220, 210)); y += 26
     fn = f"sb_{sid}.jpg"; pan.save(os.path.join(OUT, fn), quality=88)
     tiles.append(pan)
