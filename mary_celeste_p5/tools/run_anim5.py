@@ -50,7 +50,9 @@ for rec in {r[1].name: r for r in p5.FLOATS}.values():     # one ride per boat (
     A.adopt(root)
     RIDERS.append((root, root.matrix_world.copy()))
     q = root.matrix_world.inverted() @ cam.matrix_world.to_translation()
-    if abs(q.x) < 3.6 and abs(q.y) < 1.4 and q.z < 3.0:      # a camera aboard the boat rides with it
+    # a camera aboard rides with the boat; S02's approved two-shot of Briggs and Sarah is held on them the same way
+    # (as from a boat lying alongside on the same swell), so the composition stays exactly as approved
+    if (abs(q.x) < 3.6 and abs(q.y) < 1.4 and q.z < 3.0) or sid in ("S02",):
         cam.parent = root; cam.matrix_parent_inverse = root.matrix_world.inverted()
     A.ride(rec, dur)
 mc = bpy.data.objects.get("MC_root")
@@ -122,7 +124,14 @@ out = os.path.join(P5, "out", "anim", sid); os.makedirs(out, exist_ok=True)
 if os.environ.get("STILLS"):                          # check frames only: STILLS=first,mid,last or a list of numbers
     fr = [1, max(1, nf // 2), nf] if os.environ["STILLS"] == "fml" else [int(x) for x in os.environ["STILLS"].split(",")]
     for f in fr:
-        sc.frame_set(f); sc.render.filepath = os.path.join(out, f"s{f:04d}.png"); bpy.ops.render.render(write_still=True)
+        sc.frame_set(f)
+        if os.environ.get("DBGCAM"):
+            for root, R0 in RIDERS:
+                rel = root.matrix_world.inverted() @ cam.matrix_world
+                print("DBGCAM", f, [round(v, 3) for v in rel.to_translation()], [round(v, 2) for v in rel.to_euler()],
+                      "root", [round(v, 3) for v in root.matrix_world.to_translation()], "par", cam.parent.name if cam.parent else None, flush=True)
+            continue
+        sc.render.filepath = os.path.join(out, f"s{f:04d}.png"); bpy.ops.render.render(write_still=True)
     print("STILLS", sid, fr, flush=True); sys.exit(0)
 sc.render.filepath = os.path.join(out, "f")
 sc.render.use_overwrite = False; sc.render.use_placeholder = True
