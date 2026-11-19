@@ -90,12 +90,8 @@ def person(kind, M, pose, look_w=None, density=None, seat=False):
 
 
 def no_spikes(dv):
-    """Shared-lib workaround (reported to the hub): Solidify with even offset can throw a single vertex metres away at a
-    degenerate fold in strongly bent poses. Plain offset keeps the shells' look and never spikes."""
-    for o in dv.h.parts:
-        for m in getattr(o, "modifiers", []):
-            if m.type == 'SOLIDIFY':
-                m.use_even_offset = False
+    """(Former local workaround for the Solidify spike; fixed in the shared lib @920b585, so this is a no-op.)"""
+    return
 
 
 def A_ease(u):

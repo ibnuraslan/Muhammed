@@ -28,7 +28,7 @@
    boat with his hands on the deck edge. Deveau turns and reaches down to him.
 
 ## For the 3D chat (shared-lib bug)
-* `deveau._shell`: Solidify `use_even_offset=True` throws one jacket vertex ~20 m away in strongly bent poses (seen
+* `deveau._shell` Solidify spike: fixed in the shared lib @920b585 (t_spikes.py: OK). The local workaround is removed.
   in the cabin lantern pose: a sliver triangle). My shots switch even offset off on the clothes shells (`no_spikes`),
   which fixes it. Worth fixing in the lib.
 
