@@ -1,0 +1,32 @@
+Mary Celeste film, Part 3 (5:20-7:50) - asset credits
+
+3D (all built in code here or in the shared library on claude/mary-celeste-3d)
+  * Human bodies, rig and eyes: MakeHuman 1.x system data (CC0), via mary_celeste_3d/tools/mh_compile.py
+    (base mesh, rig, eyes from the makehumancommunity/makehuman repository; targets.npz from the makehuman 1.3.2 wheel).
+    UV masks for lips/nails/ears from the MPFB extension (CC0 data).
+  * Textures and skies: Poly Haven (CC0) - dark_wooden_planks, weathered_planks, brown_planks_05, wood_floor_deck,
+    kloofendal_48d_partly_cloudy_puresky, kloofendal_38d_partly_cloudy_puresky, qwantani_dusk_2_puresky,
+    overcast_soil_puresky, qwantani_sunset_puresky, kloofendal_overcast_puresky. https://polyhaven.com (CC0)
+  * Elevation (Gibraltar, the Strait, Spanish and Moroccan coasts, the chart-table maquette): Terrain Tiles
+    (Terrarium format) on the AWS Open Data Registry, https://registry.opendata.aws/terrain-tiles/
+    Data sources and attribution: https://github.com/tilezen/joerd/blob/master/docs/attribution.md
+    (includes SRTM, GMTED2010 and ETOPO1, courtesy of the U.S. Geological Survey and NOAA; EU-DEM produced using
+    Copernicus data and information funded by the European Union).
+
+Fonts
+  * Courier Prime (captions, card roles, letter heading) - SIL Open Font License 1.1, assets/fonts/OFL_CourierPrime.txt
+  * Special Elite (card names, via the shared callout.py) - Apache License 2.0, assets/fonts/LICENSE_SpecialElite.txt
+
+Photos
+  * None: per the user (19 Nov), cards and captions are added in CapCut, not in our renders.
+
+Code
+  * shared/callout.py is the shared card/caption module from claude/killer-in-house (nvidia_doc/scenes/callout.py),
+    copied unchanged.
+
+Sketchfab models (CC Attribution):
+  * Old Diving Helmet by Kingy (CC Attribution) https://sketchfab.com/3d-models/old-diving-helmet-eff849bb58864ce19987fe9b7b5e28cc
+  * Victorian Brass Oil Lamp by Tijerín Art Studio (CC Attribution) https://sketchfab.com/3d-models/victorian-brass-oil-lamp-c932f6165fef40029c3f18afe19b9934
+  * Inkwell glass with quill pen Victorian style by Rylae Shylna (CC Attribution) https://sketchfab.com/3d-models/inkwell-glass-with-quill-pen-victorian-style-64812fa9b17248e0aacb1800a278972b
+  * Victorian Row Boat by Ashley Aslett (CC Attribution) https://sketchfab.com/3d-models/victorian-row-boat-3e9093b6f0ce474da4d8cfea7e01f420
+  * Leather boots by kifir (CC Attribution), via the shared library

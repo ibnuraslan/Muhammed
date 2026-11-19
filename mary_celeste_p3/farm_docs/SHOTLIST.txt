@@ -1,0 +1,138 @@
+Mary Celeste - Part 3 - shot list for CapCut (44 shots, 02:19:20 = 139.83 s, 24 fps, mm:ss:ff)
+Timed to vo/MaryCeleste_Part3_VO.mp3 (2:18.8): each shot cuts just before its first word, pauses stay on the shot before.
+Import each shot's frames as a PNG sequence at 24 fps and lay them end to end; the start times below follow.
+No cards or captions are burned in. Person/place cards to add in CapCut: DAVID MOREHOUSE (Captain, Dei Gratia)
+on p3_01; GIBRALTAR + date DECEMBER 13, 1872 on p3_16; FREDERICK SOLLY FLOOD (Attorney General, Gibraltar) on p3_26.
+
+p3_01   00:00:00 - 00:04:23  (4.96 s, 119 fr)  OTS · 35mm
+        VO:   Morehouse warns him that taking her in could put both crews at risk.
+        SFX:  Wind in the rigging, hull creak, Morehouse's boots shift
+p3_02   00:04:23 - 00:07:01  (2.08 s, 50 fr)  OTS · 35mm
+        VO:   The Dei Gratia will have to give up men
+        SFX:  Wind, rigging slap
+p3_03   00:07:01 - 00:09:19  (2.75 s, 66 fr)  WS · 28mm
+        VO:   it needs for its own voyage.
+        SFX:  Blocks squeal, rope, footsteps
+p3_04   00:09:19 - 00:11:18  (1.96 s, 47 fr)  MS · 35mm
+        VO:   Deveau goes anyway.
+        SFX:  One footstep, music beat
+p3_05   00:11:18 - 00:14:21  (3.12 s, 75 fr)  MS · 35mm
+        VO:   He brings two sailors, his own navigation instruments,
+        SFX:  Rope through hands, sack thump, oarlocks knock, water slap
+p3_06   00:14:21 - 00:17:04  (2.29 s, 55 fr)  OTS insert · 50mm
+        VO:   and food from his ship.
+        SFX:  Wood on wood, brass handle clicks
+p3_07   00:17:04 - 00:18:21  (1.71 s, 41 fr)  MS · 35mm
+        VO:   They pump out the Mary Celeste
+        SFX:  Pump clank and suck, water gush, scupper gurgle, grunts
+p3_08   00:18:21 - 00:22:16  (3.79 s, 91 fr)  LOW · 24mm
+        VO:   and put up a spare sail in place of one she's lost.
+        SFX:  Halyard and block squeal, canvas cracks as it fills
+p3_09   00:22:16 - 00:24:01  (1.38 s, 33 fr)  EWS · 35mm
+        VO:   For the first few days,
+        SFX:  Bow wash, steady wind, canvas
+p3_10   00:24:01 - 00:25:21  (1.83 s, 44 fr)  MAQUETTE · 50mm
+        VO:   they make progress.
+        SFX:  Pencil on paper, lamp hiss, clock tick
+p3_11   00:25:21 - 00:27:21  (2.00 s, 48 fr)  WS · 24mm
+        VO:   Then a gale catches them
+        SFX:  Gale roar, rain, timbers groan, sea over the deck
+p3_12   00:27:21 - 00:30:02  (2.21 s, 53 fr)  MS · 35mm
+        VO:   near the Strait of Gibraltar.
+        SFX:  Rain on wool, wheel strain, wind
+p3_13   00:30:02 - 00:32:07  (2.21 s, 53 fr)  POV · 85mm
+        VO:   Deveau can't make the bay.
+        SFX:  Wind roar, rain
+p3_14   00:32:07 - 00:34:20  (2.54 s, 61 fr)  WS · 35mm
+        VO:   He shelters off the North African coast,
+        SFX:  Quieter sea, chain, gulls
+p3_15   00:34:20 - 00:36:14  (1.75 s, 42 fr)  WS · 35mm
+        VO:   then off Spain.
+        SFX:  Gulls return, swell, chain
+p3_16   00:36:14 - 00:40:13  (3.96 s, 95 fr)  EWS · 24mm
+        VO:   By the time he finally brings the ship in on December thirteenth,
+        SFX:  Harbour bells, gulls, anchor chain
+p3_17   00:40:13 - 00:43:09  (2.83 s, 68 fr)  MS · 50mm
+        VO:   the Dei Gratia is already there.
+        SFX:  Gulls, halyards tapping
+p3_18   00:43:09 - 00:48:05  (4.83 s, 116 fr)  MS · 50mm
+        VO:   The next day, he writes to his wife about how exhausted he is.
+        SFX:  Pen scratch, chair creak, a long breath, harbour gulls outside
+p3_19   00:48:05 - 00:51:03  (2.92 s, 70 fr)  MS · 40mm
+        VO:   He says he wouldn't take on the job again.
+        SFX:  Long exhale, chair creak
+p3_20   00:51:03 - 00:55:16  (4.54 s, 109 fr)  OTS insert · 50mm
+        VO:   He also asks whether his little boy, James, can talk yet.
+        SFX:  Pen lifts, pause, pen scratch
+p3_21   00:55:16 - 00:56:23  (1.29 s, 31 fr)  WS · 35mm
+        VO:   At Gibraltar,
+        SFX:  Boat bumps the side, boots on deck, gulls
+p3_22   00:56:23 - 00:59:04  (2.21 s, 53 fr)  CU · 50mm
+        VO:   the authorities seize the Mary Celeste
+        SFX:  Hammer blows on wood
+p3_23   00:59:04 - 01:03:02  (3.92 s, 94 fr)  WS · 24mm
+        VO:   while a court decides what to pay the men who saved her.
+        SFX:  Room tone, rustle, a cough, clock tick
+p3_24   01:03:02 - 01:07:21  (4.79 s, 115 fr)  MS · 50mm
+        VO:   Deveau and the crew stand to earn a share of the value they brought into port.
+        SFX:  Quill scratch, murmur
+p3_25   01:07:21 - 01:12:12  (4.62 s, 111 fr)  MS · 50mm
+        VO:   That gives the court a reason to go through their story in detail.
+        SFX:  Quill scratch, Deveau's voice under (no lip-sync)
+p3_26   01:12:12 - 01:18:21  (6.38 s, 153 fr)  LOW MS · 35mm
+        VO:   It also gives Gibraltar's attorney general, Frederick Solly Flood, a question to pursue.
+        SFX:  Chair scrape, robe rustle
+p3_27   01:18:21 - 01:20:22  (2.04 s, 49 fr)  OTS · 50mm
+        VO:   Could the men who found the ship
+        SFX:  Clock tick, the room falls quiet
+p3_28   01:20:22 - 01:23:08  (2.42 s, 58 fr)  OTS · 50mm
+        VO:   know more than they're saying?
+        SFX:  Clock tick
+p3_29   01:23:08 - 01:25:21  (2.54 s, 61 fr)  WS · 35mm
+        VO:   Flood has the vessel inspected.
+        SFX:  Gulls, harbour, boots
+p3_29b  01:25:21 - 01:29:19  (3.92 s, 94 fr)  UNDERWATER · 24mm
+        VO:   A diver goes under her and checks the hull for damage.
+        SFX:  Air-pump hiss, bubbles, muffled water
+p3_30   01:29:19 - 01:32:09  (2.58 s, 62 fr)  CU · 50mm
+        VO:   He finds no sign of a collision.
+        SFX:  Bubbles, glove on wood
+p3_31   01:32:09 - 01:38:08  (5.96 s, 143 fr)  MS · 50mm
+        VO:   The surveyor comes away unable to explain why anybody would have abandoned the vessel.
+        SFX:  Pencil stops, wind, gulls
+p3_32   01:38:08 - 01:41:00  (2.67 s, 64 fr)  MS · 35mm
+        VO:   Flood looks for evidence of violence.
+        SFX:  Knee on wood, coat rustle
+p3_33   01:41:00 - 01:44:17  (3.71 s, 89 fr)  OTS insert · 50mm
+        VO:   There are marks on the deck that he thinks might be blood.
+        SFX:  Wind, a breath
+p3_34   01:44:17 - 01:48:09  (3.67 s, 88 fr)  MS · 35mm
+        VO:   There's also a sword from beneath the captain's berth.
+        SFX:  Scabbard scrapes on the boards
+p3_35   01:48:09 - 01:52:03  (3.75 s, 90 fr)  MS · 50mm
+        VO:   Deveau says he drew it from its sheath when he first boarded.
+        SFX:  Blade rasps out of the sheath
+p3_36   01:52:03 - 01:54:05  (2.08 s, 50 fr)  INSERT · 50mm
+        VO:   It looked rusty to him.
+        SFX:  End of the rasp, a drip
+p3_37   01:54:05 - 01:57:14  (3.38 s, 81 fr)  MS · 50mm
+        VO:   The marks and the sword go for chemical examination.
+        SFX:  Scraping, glass clink
+p3_38   01:57:14 - 02:01:04  (3.58 s, 86 fr)  MS · 50mm
+        VO:   The examination finds no trace of blood.
+        SFX:  SILENCE, then glass on wood
+p3_39   02:01:04 - 02:04:00  (2.83 s, 68 fr)  WS · 24mm
+        VO:   The court hears evidence for months.
+        SFX:  Clock tick, quill, rain on glass
+p3_40   02:04:00 - 02:07:09  (3.38 s, 81 fr)  MS · 50mm
+        VO:   It awards the salvors seventeen hundred pounds.
+        SFX:  Paper rustle, murmur
+p3_41   02:07:09 - 02:10:00  (2.62 s, 63 fr)  OTS · 35mm
+        VO:   No murder is established.
+        SFX:  Chair creak
+p3_42   02:10:00 - 02:15:06  (5.25 s, 126 fr)  WS · 35mm
+        VO:   By then, the owners have recovered the ship and put a new captain and crew on board.
+        SFX:  Boots, chests set down, harbour
+p3_43   02:15:06 - 02:19:20  (4.58 s, 110 fr)  EWS · 24mm
+        VO:   The Mary Celeste can finish the voyage Briggs began.
+        SFX:  Sails fill, wind; music lifts
