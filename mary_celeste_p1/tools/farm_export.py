@@ -79,7 +79,7 @@ def export(pkg, sid, samples=None):
         if img.packed_file:
             try:
                 img.packed_file  # packed glTF images: drop the packed copy, use the shared file
-                img.unpack(method='USE_ORIGINAL')
+                img.unpack(method='REMOVE')
             except Exception:
                 pass
         img.filepath = bpy.path.relpath(dst, start=shots)
