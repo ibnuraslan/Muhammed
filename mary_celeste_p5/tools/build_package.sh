@@ -15,4 +15,4 @@ done
 python3 "$D/tools/farm_docs5.py" "$PKG" "$TIMINGS"
 du -sh "$PKG"
 cd "$(dirname "$PKG")" && rm -f "$(basename "$PKG")".zip* && zip -qr -9 "$(basename "$PKG").zip" "$(basename "$PKG")" \
-  && split -b 450m -d -a 2 "$(basename "$PKG").zip" "$(basename "$PKG").zip.part" && ls -la "$(basename "$PKG")".zip*
+  && split -b 300m -d -a 2 "$(basename "$PKG").zip" "$(basename "$PKG").zip.part" && ls -la "$(basename "$PKG")".zip*
