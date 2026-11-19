@@ -14,4 +14,4 @@ Terrain and bathymetry — AWS Open Data "Terrain Tiles" (Mapzen terrarium encod
   GMTED2010 (USGS), ETOPO1 (NOAA) and GEBCO; https://registry.opendata.aws/terrain-tiles/ (attribution as required by the sources).
 Human base mesh, rig and targets — MakeHuman 1.x (CC0), via the shared library mary_celeste_3d; MPFB 2 masks (CC0 assets).
 Fonts — Courier Prime (OFL), Special Elite (Apache 2.0), Instrument Serif (OFL).
-Photos — none yet: this container cannot reach Wikimedia Commons / LOC; person/place cards need free-licence photos supplied by the hub.
+Photos — none (cards and captions are added outside the render, in CapCut).

@@ -1,5 +1,7 @@
 # Mary Celeste — Part 4 of 5 (barrels, pump, drift) — storyboard
 
+> **User decision (hub, 19 Nov):** no burned-in cards (person/place) and no captions in any render; they are added later in CapCut. The Card/text column below is for the editor only. Frames keep the clean composition with room where a card would sit. Card photos are no longer needed.
+
 Script: `mary_celeste/SCRIPT.txt` (branch `claude/mary-celeste`), lines 31–38, word for word, not edited.
 From "When the cargo is unloaded in Genoa, nine barrels are empty." to "…sent them over the side." ≈ 2:55 at ~140 wpm.
 Look: Atrium (rich warm colour: oxblood, walnut, brass, lamp amber; one cool exterior per location).
@@ -50,5 +52,4 @@ New shared assets: `lib/barrels.py` (40-gal barrels, white/red oak, hold stow), 
 | S36 | 2:45 | We don't have the reading Briggs was working with, or even know that water was the danger that sent them over the side. | Wide: the empty ship sails on; slow pull back | pull back | — | sea, wind fades |
 
 Rules applied: no flat 2D (map = relief mesh on a table, island = true-scale terrain); hands only with their person in frame;
-no living person depicted (MacGregor, Richardson as text cards over their work); bands are filled soft orange; cards slide (person right, place left, shared callout.py);
-Courier Prime captions; every action has an SFX (list above → `sfx_cues.csv` at render time).
+no living person depicted (MacGregor, Richardson as text cards over their work); bands are filled soft orange; no burned-in cards or captions (added later in CapCut); every action has an SFX (list above → `sfx_cues.csv` at render time).
