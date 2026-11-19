@@ -277,9 +277,10 @@ def s04():
     zc = ship.zdeck(cx)
     Mp = M @ Matrix.Translation((cx + 0.08, 1.2, zc - 0.55)) @ Matrix.Rotation(math.radians(90 + 180), 4, 'Z')
     rung = M @ Vector((cx - 0.3, 1.2, zc + 0.9))
+    grip = rung + M.to_3x3() @ Vector((0.03, 0, 0.075))      # hands close over the top of the rung, not through it
     def pose(dv, Mx):
         Cw.stand_relaxed(dv, pitch=30, yaw=0, lean=8)
-        Cw.hands_on(dv, Mx, left_w=rung - M.to_3x3() @ Vector((0, 0.15, 0)) + M.to_3x3() @ Vector((0.03, 0, 0)), right_w=rung + M.to_3x3() @ Vector((0, 0.15, 0)) + M.to_3x3() @ Vector((0.03, 0, 0)),
+        Cw.hands_on(dv, Mx, left_w=grip - M.to_3x3() @ Vector((0, 0.15, 0)) + M.to_3x3() @ Vector((0.03, 0, 0)), right_w=grip + M.to_3x3() @ Vector((0, 0.15, 0)) + M.to_3x3() @ Vector((0.03, 0, 0)),
                     elbow_l=(0.3, 0.6, -0.7), elbow_r=(-0.3, 0.6, -0.7))
     person("deveau", Mp, pose, look_w=M @ Vector((cx, 1.2, zc - 2.0)))
     cam = M @ Vector((cx + 1.9, 2.6, zc + 2.6))
@@ -392,7 +393,7 @@ def s08():
         P.hand_reach(dv.h, "R", Mx.inverted() @ lw, elbow=(-0.8, 0.3, -0.6)); P.grip(dv.h, "R")
         dv.brow_knit(0.6)
     dv = person("deveau", M, pose, look_w=Vector((1.3, 0.9, 0.5)))
-    lan = I.lantern(lw + Vector((0, 0, -0.02)), energy=110.0)
+    lan = I.lantern(lw + Vector((0, 0, -0.035)), energy=110.0)
     head = M @ Vector((0, -0.05, 1.66))
     E.area("lantern_bounce", lan["center"].lerp(head, 0.4) + Vector((0, 0, -0.1)), head, 5.0, size=0.35, color=(1.0, 0.62, 0.36))
     c = M @ Vector((-0.45, 0.85, 1.75))
