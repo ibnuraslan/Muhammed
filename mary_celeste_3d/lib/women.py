@@ -389,6 +389,53 @@ class Sarah(_Woman):
         co = np.array([v.co[:] for v in me.vertices]) + nrm * (amount * np.clip(w, 0, 1))[:, None]
         me.vertices.foreach_set("co", co.astype(np.float32).ravel()); me.update()
 
+    def _bonnet_cloth(self):
+        """Matte silk-cotton: a fine plain weave, soft sheen at grazing angles only (no plastic shine)."""
+        m = cloth(self.name + "_bonnet", self.BONNET, rough=0.88, sheen=0.35, weave=1400, bump=0.35, wet=self.wet)
+        N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+        p.inputs['Specular IOR Level'].default_value = 0.12; p.inputs['Coat Weight'].default_value = 0.0
+        tc = N.new("ShaderNodeTexCoord")
+        w1 = N.new("ShaderNodeTexWave"); w1.wave_type = 'BANDS'; w1.bands_direction = 'X'; w1.inputs['Scale'].default_value = 900
+        w2 = N.new("ShaderNodeTexWave"); w2.wave_type = 'BANDS'; w2.bands_direction = 'Y'; w2.inputs['Scale'].default_value = 900
+        for w in (w1, w2):
+            L.new(tc.outputs['Object'], w.inputs['Vector'])
+        mx = N.new("ShaderNodeMath"); mx.operation = 'MULTIPLY'; L.new(w1.outputs['Fac'], mx.inputs[0]); L.new(w2.outputs['Fac'], mx.inputs[1])
+        b = N.new("ShaderNodeBump"); b.inputs['Strength'].default_value = 0.25; b.inputs['Distance'].default_value = 0.0003
+        L.new(mx.outputs[0], b.inputs['Height'])
+        old = p.inputs['Normal'].links[0].from_socket if p.inputs['Normal'].links else None
+        if old is not None:
+            L.new(old, b.inputs['Normal'])
+        L.new(b.outputs['Normal'], p.inputs['Normal'])
+        return m
+
+    def _bavolet(self, c, ec, hs, fwd, side, up2, dist, dn, mat):
+        """The curtain at the back of the bonnet: a short gathered frill over the nape, below the crown and round the bun."""
+        h = self.h
+        nu, nv = 64, 6; V = []; F = []
+        for j in range(nv + 1):
+            t = j / nv
+            for i in range(nu + 1):
+                a = math.radians(-115 + 230 * i / nu)               # round the back, ear to ear
+                d = (-fwd * math.cos(a) + side * math.sin(a)) * 1.0
+                d = d / np.linalg.norm(d)
+                near = (dn @ d) > math.cos(math.radians(18))
+                r = (float(dist[near].max()) if near.any() else float(dist.max())) + 0.034 * hs
+                z0 = ec[2] + 0.012 * hs                              # hangs from the crown's lower edge
+                ruff = 0.006 * hs * math.sin(i * 1.9) * (0.4 + t)    # gathered frill
+                p = np.array(c) + d * (r + 0.012 * hs * t + ruff)
+                p[2] = z0 - 0.05 * hs * t
+                V.append(tuple(p))
+        for j in range(nv):
+            for i in range(nu):
+                a_ = j * (nu + 1) + i
+                F.append([a_, a_ + 1, a_ + nu + 2, a_ + nu + 1])
+        o = D.mesh_obj(f"{self.name}_bavolet", V, F, mat)
+        so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.002; so.offset = 1; so.use_even_offset = False; so.thickness_clamp = 1.0
+        sb = o.modifiers.new("Sub", "SUBSURF"); sb.levels = 1; sb.render_levels = 2
+        vg = o.vertex_groups.new(name="head"); vg.add(list(range(len(V))), 1.0, 'REPLACE')
+        mod = o.modifiers.new("Armature", "ARMATURE"); mod.object = h.arm; o.modifiers.move(len(o.modifiers) - 1, 0)
+        o.parent = h.arm; h.parts.append(o)
+
     def _bonnet(self, m, wh):
         """Soft brimmed bonnet: a smooth cap over the back, top and sides of the head (clear of the hair), open round
         the face, its edge rolled out into a soft brim; ribbon ties from the brim down to a bow under the chin.
@@ -397,7 +444,7 @@ class Sarah(_Woman):
         head = self.used & (wh > 0.6)
         Hc = co[head]; c = Hc.mean(0); c[2] = ec[2] + 0.02 * hs
         dirs = Hc - c; dist = np.linalg.norm(dirs, axis=1); dn = dirs / dist[:, None]
-        mat = cloth(self.name + "_bonnet", self.BONNET, rough=0.6, sheen=0.5, weave=900, wet=self.wet)
+        mat = self._bonnet_cloth()
         fwd = np.array([0, -1.0, 0.18]); fwd /= np.linalg.norm(fwd)
         nu, nv = 48, 20
         open_deg = 70.0                     # face opening half-angle round the forward axis
@@ -416,7 +463,9 @@ class Sarah(_Woman):
                     r *= 1.0
                 # structured brim: a stiff band standing out and forward round the face (straight, not rolled)
                 brim = 1.0 if t < 0.05 else max(0.0, 1 - (t - 0.05) / 0.05)
-                p = c + d * (r + 0.022 * hs * brim) + fwd * 0.014 * hs * brim
+                # soft crown: radial gathers that deepen toward the back where the fabric is drawn in
+                gath = 0.0045 * hs * (t ** 1.2) * (1 - brim) * math.sin(ph * 16 + 0.6 * math.sin(ph * 3))
+                p = c + d * (r + 0.022 * hs * brim + gath) + fwd * 0.014 * hs * brim
                 V.append(tuple(p))
         rows = nu
         for j in range(nv):
@@ -440,6 +489,7 @@ class Sarah(_Woman):
         mod = o.modifiers.new("Armature", "ARMATURE"); mod.object = h.arm; o.modifiers.move(len(o.modifiers) - 1, 0)
         o.parent = h.arm; h.parts.append(o)
         self.bonnet = o
+        self._bavolet(c, ec, hs, fwd, side, up2, dist, dn, mat)
         # ribbon ties: from the brim below each ear down along the jaw to a bow under the chin
         rib = cloth(self.name + "_ribbon", (0.05, 0.05, 0.065), rough=0.35, sheen=0.8, weave=2000)
         chin = ec + np.array([0, -0.05, -0.115]) * hs
