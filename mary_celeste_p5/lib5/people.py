@@ -526,11 +526,16 @@ def _tie_without_bow(p):
         if "_bowloop" in ob.name or "_bowknot" in ob.name:
             bpy.data.objects.remove(ob, do_unlink=True); continue
         if "_tie" in ob.name and ob.type == 'CURVE':
-            U = np.nonzero(p.used)[0]
-            for k in (-2, -1):
-                pt = ob.data.splines[0].points[k]; q = np.array(pt.co[:3])
+            # the last third of the ribbon runs under the jaw to a point under the chin, tight to the skin: no end
+            # standing forward of the chin in profile
+            U = np.nonzero(p.used)[0]; pts = ob.data.splines[0].points; n = len(pts)
+            ec = np.array(p._head_frame()); hs = p.head_scale
+            end = ec + np.array([0.0, -0.025, -0.125]) * hs
+            k0 = n - 5; a0 = np.array(pts[k0].co[:3])
+            for k in range(k0 + 1, n):
+                t = (k - k0) / (n - 1 - k0); q = a0 * (1 - t) + end * t
                 vi = U[int(np.argmin(np.linalg.norm(p.rest_co[U] - q, axis=1)))]
-                pt.co = (*Vector(p.rest_co[vi] + p.rest_n[vi] * 0.006), 1)
+                pts[k].co = (*Vector(p.rest_co[vi] + p.rest_n[vi] * 0.005), 1)
         keep.append(ob)
     p.button_objs[:] = keep
 
