@@ -53,7 +53,7 @@ def cam(loc, target, lens=50, fstop=None, focus=None, roll=0.0):
 
 def eyes(p):
     e = p.h.eyes
-    return (e[0].location + e[1].location) / 2 if e else None
+    return (e[0].matrix_world.translation + e[1].matrix_world.translation) / 2 if e else None
 
 
 def hair(p):
@@ -139,7 +139,7 @@ def s01(t):
     return dict(cine={"sat": 1.08, "exposure": -0.05})
 
 
-@shot("p3_02", "The Dei Gratia will have to give up men it needs for its own voyage.", "OTS · 35mm", 3.4,
+@shot("p3_02", "The Dei Gratia will have to give up men", "OTS · 35mm", 3.4,
       "Reverse over Morehouse onto Deveau, who listens", "Wind, rigging slap")
 def s02(t):
     SHIP = dg_deck(t=t)
@@ -165,7 +165,7 @@ def pose_haul(p, t, phase=0.0):
         P.grip(h, sd, 1.0)
 
 
-@shot("p3_03", "The Dei Gratia will have to give up men it needs for its own voyage.", "WS · 28mm", 3.6,
+@shot("p3_03", "it needs for its own voyage.", "WS · 28mm", 3.6,
       "Track along the Dei Gratia's deck: two of her small crew haul on the main sheet", "Blocks squeal, rope, footsteps")
 def s03(t):
     SHIP = dg_deck(t=t)
@@ -235,7 +235,7 @@ def pose_guide(p, t, hands_local):
         P.rest_hand(h, sd, curl=40)
 
 
-@shot("p3_05", "He brings two sailors, his own navigation instruments, and food from his ship.", "MS · 35mm", 3.8,
+@shot("p3_05", "He brings two sailors, his own navigation instruments,", "MS · 35mm", 3.8,
       "From the Dei Gratia's rail: a sailor lowers the food sack on a line; Deveau, standing in the boat, steadies it; his sextant case is already on the thwart",
       "Rope through hands, sack thump, oarlocks knock, water slap")
 def s05(t):
@@ -276,7 +276,7 @@ def s05(t):
     return dict(cine={"sat": 1.08})
 
 
-@shot("p3_06", "He brings two sailors, his own navigation instruments, and food from his ship.", "OTS insert · 50mm", 2.4,
+@shot("p3_06", "and food from his ship.", "OTS insert · 50mm", 2.4,
       "In the boat: Deveau sets his own sextant case down on the thwart beside him", "Wood on wood, brass handle clicks")
 def s06(t):
     SHIP = dg_deck(t=0.5, mc_far=False)
@@ -326,7 +326,7 @@ def mc_deck(mood="day", t=0.0, sails="spare", heel=4.0, sun_az=210, sun_el=20, w
 def pose_pump(p, t, grip_w, M, phase=0.0, up=True):
     h = p.h; Mi = M.inverted()
     s = math.sin(2 * math.pi * (t * 1.2 + phase))
-    P.stand(h, lean=18 + 10 * s, weight="L", twist=0)
+    P.stand(h, lean=20 + 6 * s, weight="L", twist=0)
     P.head(h, pitch=12 + 6 * s, yaw=0)
     for sd, sg in (("L", 1), ("R", -1)):
         hp = Mi @ grip_w[sd]
@@ -361,7 +361,7 @@ def s07(t):
     for i, (key, end, sg) in enumerate((("sailor_a", ends[0], 1), ("sailor_b", ends[1], -1))):
         # each man stands outboard of his end of the brake, facing inboard, hands on the cross handle
         endl = SHIP.inverted() @ end
-        M = ST.on_ship(SHIP, endl.x, endl.y + sg * (0.42, 0.58)[i], -90 * sg)
+        M = ST.on_ship(SHIP, endl.x, endl.y + sg * (0.56, 0.7)[i], -90 * sg)
         grip = {"L": end + fwd * 0.16 * sg, "R": end - fwd * 0.16 * sg}
         p = crew.person(key, wet=0.5, idx=i); pose_pump(p, t, grip, M, phase=0.5 * i)
         p.finish(look_at=end - Vector((0, 0, 0.6)), place=M, density=hair(p))
@@ -411,7 +411,7 @@ def s08(t):
     return dict(cine={"sat": 1.08})
 
 
-@shot("p3_09", "For the first few days, they make progress.", "EWS · 35mm", 4.0,
+@shot("p3_09", "For the first few days,", "EWS · 35mm", 4.0,
       "Low over the water, tracking alongside: the Mary Celeste under her spare course, making way east in warm sun",
       "Bow wash, steady wind, canvas", tag=None)
 def s09(t):
@@ -505,7 +505,7 @@ def lamp_room(center, energy=40.0, key_from=(-0.8, 0.9, 1.4), key=90.0, fill=12.
         o.visible_camera = False
 
 
-@shot("p3_10", "For the first few days, they make progress.", "MAQUETTE · 50mm", 3.4,
+@shot("p3_10", "they make progress.", "MAQUETTE · 50mm", 3.4,
       "Over Deveau's shoulder at the chart table: his pencil draws the route east toward Gibraltar on the relief",
       "Pencil on paper, lamp hiss, clock tick")
 def s10(t):
@@ -581,7 +581,7 @@ def gale(t, cam_near=True):
     return SHIP, m
 
 
-@shot("p3_11", "Then a gale catches them near the Strait of Gibraltar.", "WS · 24mm", 3.6,
+@shot("p3_11", "Then a gale catches them", "WS · 24mm", 3.6,
       "Handheld on deck: she heels hard into the gale; a sea comes over the rail, rain lashing", "Gale roar, rain, timbers groan, sea over the deck")
 def s11(t):
     SHIP, m = gale(t)
@@ -593,7 +593,7 @@ def s11(t):
     return dict(cine={"sat": 0.95, "exposure": 0.2})
 
 
-@shot("p3_12", "Then a gale catches them near the Strait of Gibraltar.", "MS · 35mm", 2.6,
+@shot("p3_12", "near the Strait of Gibraltar.", "MS · 35mm", 2.6,
       "From behind and to leeward: Deveau at the wheel, soaked, fighting the helm; the bow buries in grey seas", "Rain on wool, wheel strain, wind")
 def s12(t):
     SHIP, m = gale(t)
@@ -684,7 +684,7 @@ def s15(t):
     return dict(cine={"sat": 1.05, "exposure": 0.15})
 
 
-@shot("p3_16", "By the time he finally brings the ship in on December thirteenth, the Dei Gratia is already there.", "EWS · 24mm", 5.0,
+@shot("p3_16", "By the time he finally brings the ship in on December thirteenth,", "EWS · 24mm", 5.0,
       "Crane down over Gibraltar Bay: the Mary Celeste sails in under the Rock; the Dei Gratia already at anchor",
       "Harbour bells, gulls, anchor chain", card=("l", "GIBRALTAR", "British territory · 1872"), tag="DECEMBER 13, 1872")
 def s16(t):
@@ -849,7 +849,7 @@ def point_hand(h, side):
     h.rot(f"finger1-2.{side}", (0, 0, sg), 25)
 
 
-@shot("p3_21", "At Gibraltar, the authorities seize the Mary Celeste", "WS · 35mm", 3.4,
+@shot("p3_21", "At Gibraltar,", "WS · 35mm", 3.4,
       "The Admiralty marshal and an officer stand on the Mary Celeste's deck at anchor; the Rock behind",
       "Boat bumps the side, boots on deck, gulls")
 def s21(t):
@@ -866,7 +866,7 @@ def s21(t):
     return dict(cine={"sat": 1.1})
 
 
-@shot("p3_22", "At Gibraltar, the authorities seize the Mary Celeste", "CU · 50mm", 2.6,
+@shot("p3_22", "the authorities seize the Mary Celeste", "CU · 50mm", 2.6,
       "The marshal (face in frame) nails the arrest warrant to the mainmast", "Hammer blows on wood")
 def s22(t):
     SHIP, m = mc_at_gib(t)
@@ -1029,7 +1029,7 @@ def s26(t):
     return dict(cine={"sat": 1.12, "exposure": 0.1})
 
 
-@shot("p3_27", "Could the men who found the ship know more than they're saying?", "OTS · 50mm", 2.4,
+@shot("p3_27", "Could the men who found the ship", "OTS · 50mm", 2.4,
       "Over Flood's wigged shoulder: Deveau in the witness box, across the court", "Clock tick, the room falls quiet")
 def s27(t):
     ct = RM.court()
@@ -1042,7 +1042,7 @@ def s27(t):
     return dict(cine={"sat": 1.1, "exposure": 0.05})
 
 
-@shot("p3_28", "Could the men who found the ship know more than they're saying?", "OTS · 50mm", 2.2,
+@shot("p3_28", "know more than they're saying?", "OTS · 50mm", 2.2,
       "Reverse over Deveau's shoulder from the box: Flood waits at the counsel's table, side-lit by the windows", "Clock tick")
 def s28(t):
     ct = RM.court()

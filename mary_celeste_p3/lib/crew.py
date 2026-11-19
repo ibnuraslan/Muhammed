@@ -14,6 +14,7 @@ import bpy
 from mathutils import Vector, Matrix
 import human as H, deveau as D, poses as P, ship
 
+MODE = None               # None: bake each pose (stills); "probe"/"live": keep the rig (animation export)
 CACHE_DIR = None          # set by render.py for frame sequences (hair strand cache per shot and person)
 CACHE_TAG = ""
 SETTLE = True             # lift each man onto the real floor/deck after placing (clipcheck: no sunk soles)
@@ -152,7 +153,9 @@ class Person(D.Deveau):
         M = place if place is not None else Matrix.Identity(4)
         hp = [M @ self.h.bone_head(b) for sd in ("L", "R") for b in (f"wrist.{sd}", f"finger3-1.{sd}") if b in self.h.arm.pose.bones]
         before = set(o.name for o in bpy.data.objects)
-        if CACHE_DIR and hair:
+        if MODE in ("probe", "live"):
+            self._finish_anim(look_at, density, place, grow=(MODE == "live" and hair))
+        elif CACHE_DIR and hair:
             finish_cached(self, look_at=look_at, place=place, density=density,
                           cache=os.path.join(CACHE_DIR, f"{CACHE_TAG}_{self.name}.npz"))
         else:
@@ -162,9 +165,50 @@ class Person(D.Deveau):
         if self.spec.get("cap"):
             knit_cap(self, self.spec["cap"])
         if SETTLE and not getattr(self, "no_settle", False):
-            settle(self)
+            _lf = settle(self)
+            if os.environ.get("SETTLE_DEBUG"):
+                print("SETTLE", self.name, MODE, round(_lf, 4), flush=True)
             if getattr(self, "seated", False):
                 lift_off(self)
+
+    def _finish_anim(self, look_at, density, place, grow):
+        """Live rig (farm export): keep the armature and its skinned clothes, boots and buttons; eyes and corneas ride
+        the head bone; hair is grown once on this pose and parented to the head bone; the rig is placed by `place`.
+        probe mode does the same without hair (only the pose and placement are recorded)."""
+        h = self.h
+        M = place if place is not None else Matrix.Identity(4)
+        bpy.context.view_layer.update()
+        self.wrist_rest = {sd: tuple(h.bone_tail(f"wrist.{sd}")) for sd in ("L", "R")}
+        head_M = (h.arm.matrix_world @ h.arm.pose.bones["head"].matrix).copy()
+        self.head_R = head_M.to_3x3() @ h.arm.data.bones["head"].matrix_local.to_3x3().inverted()
+        if look_at is not None:
+            tgt = M.inverted() @ Vector(look_at)
+            for e in h.eyes:
+                loc = e.matrix_world.translation.copy(); d = (tgt - loc).normalized()
+                e.matrix_world = Matrix.Translation(loc) @ (-d).to_track_quat('Y', 'Z').to_matrix().to_4x4()
+        if grow:
+            self._corneas()
+            for cc in getattr(self, "corneas", []):
+                mw = cc.matrix_world.copy(); cc.parent = h.arm; cc.parent_type = 'BONE'; cc.parent_bone = "head"
+                bpy.context.view_layer.update(); cc.matrix_world = mw
+            sub = [m for m in h.body.modifiers if m.type == 'SUBSURF']
+            for m in sub:
+                m.show_viewport = False
+            bpy.context.view_layer.update()
+            dg = bpy.context.evaluated_depsgraph_get(); oe = h.body.evaluated_get(dg); me = oe.to_mesh()
+            Pts = np.array([v.co[:] for v in me.vertices]); oe.to_mesh_clear()
+            from mathutils.bvhtree import BVHTree
+            bvh = BVHTree.FromObject(h.body, dg)
+            for m in sub:
+                m.show_viewport = True
+            self._posed_surface = lambda: (Pts, bvh)
+            self._grow_all(density)
+            for o in [o for o in getattr(self, "hair_objs", []) if o]:
+                mw = o.matrix_world.copy(); o.parent = h.arm; o.parent_type = 'BONE'; o.parent_bone = "head"
+                bpy.context.view_layer.update(); o.matrix_world = mw
+        h.arm.matrix_world = M
+        h.arm.hide_render = True
+        bpy.context.view_layer.update()
 
     def tag(self, hp=None, before=()):
         """Mark this man's meshes for clipcheck (o["person"], o["hands"] = wrist/knuckle points)."""
@@ -249,23 +293,36 @@ def flat(name, color, rough=0.5, metal=0.0, emit=None):
 
 
 # ----------------------------------------------------------------------------- head frame (after finish)
+def eval_coords(o):
+    """World-space positions of a mesh's own vertices as posed (armature applied, other modifiers off), in the
+    order of o.data.vertices. Works for baked men (no armature) and live rigs alike."""
+    off = [m for m in o.modifiers if m.type != 'ARMATURE' and m.show_viewport]
+    for m in off:
+        m.show_viewport = False
+    bpy.context.view_layer.update()
+    dg = bpy.context.evaluated_depsgraph_get(); oe = o.evaluated_get(dg); me = oe.to_mesh()
+    M = np.array(oe.matrix_world)
+    co = np.array([v.co[:] for v in me.vertices]); oe.to_mesh_clear()
+    for m in off:
+        m.show_viewport = True
+    bpy.context.view_layer.update()
+    return co @ M[:3, :3].T + M[:3, 3]
+
+
 def head_frame(p, place=None):
-    """Centre of the skull, up and forward axes, in world space (call after finish()).
-    Uses the baked body vertices weighted to the head."""
+    """Centre of the skull, up and forward axes, in world space (call after finish())."""
     h = p.h
     wh = D._w(h, ("head",))
-    me = h.body.data
-    co = np.array([v.co[:] for v in me.vertices]) if len(me.vertices) == len(wh) else None
-    R = p.head_R
+    co = eval_coords(h.body)
+    Mw = h.body.matrix_world
+    R = Mw.to_3x3().normalized() @ p.head_R
     up = (R @ Vector((0, 0, 1))).normalized(); fwd = (R @ Vector((0, -1, 0))).normalized()
-    if co is not None:
+    if len(co) == len(wh):
         sel = co[(wh > 0.8) & p.used]
         c = Vector(sel.mean(0))
         top = max((Vector(v) - c).dot(up) for v in sel[::7])
     else:
-        c = h.bone_head("head") + up * 0.09; top = 0.1
-    Mw = h.body.matrix_world
-    c = Mw @ c; up = (Mw.to_3x3() @ up).normalized(); fwd = (Mw.to_3x3() @ fwd).normalized()
+        c = Mw @ (h.bone_head("head")) + up * 0.09; top = 0.1
     return c, up, fwd, top
 
 
@@ -597,7 +654,7 @@ def settle(p, up=(0, 0, 1), clearance=0.002, reach=0.6):
         if best is not None:
             lift = max(lift, best + clearance - v.dot(up))
     if lift > 0:
-        for o in mine + [o for o in getattr(p, "hair_objs", []) if o]:
+        for o in mine + [o for o in getattr(p, "hair_objs", []) if o] + [p.h.arm]:
             if o.parent is None:
                 o.matrix_world = Matrix.Translation(up * lift) @ o.matrix_world
         bpy.context.view_layer.update()
@@ -631,7 +688,7 @@ def lift_off(p, keys=("chair", "pew_seat", "thwart", "seat"), step=0.003, max_li
                 hit = True; break
         if not hit:
             break
-        for o in mine + [o for o in getattr(p, "hair_objs", []) if o]:
+        for o in mine + [o for o in getattr(p, "hair_objs", []) if o] + [p.h.arm]:
             if o.parent is None:
                 o.matrix_world = Matrix.Translation(up * step) @ o.matrix_world
         moved += step
@@ -650,11 +707,12 @@ def carve_inside(p, shell_objs, parts=None):
         for md in list(o.modifiers):
             if md.type in ('SUBSURF', 'SOLIDIFY', 'DISPLACE', 'SMOOTH'):
                 pass
-        me = o.data; M = o.matrix_world
+        me = o.data
+        W = eval_coords(o)
         bm = bmesh.new(); bm.from_mesh(me); bm.verts.ensure_lookup_table()
         inside = set()
         for v in bm.verts:
-            w = M @ v.co
+            w = Vector(W[v.index])
             for t in trees:
                 loc, n, i, d = t.find_nearest(w, 0.25)
                 if loc is not None and (w - loc).dot(n) < 0.0:
