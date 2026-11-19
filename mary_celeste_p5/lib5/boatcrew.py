@@ -11,18 +11,6 @@ import yawl, people as PP
 from sitpose import Seat
 
 
-def head(st, look_world, tilt=0.0, share=0.75):
-    """Seat.head with the yaw sign corrected (the shared one turns the head AWAY from the target: the rig faces -Y,
-    so a target at +X needs +yaw = atan2(dx, -dy)). Reported to the studio; use this until it is fixed upstream."""
-    import poses as P
-    h = st.p.h
-    d = st.local(look_world) - h.bone_head("head")
-    yaw = math.degrees(math.atan2(d.x, -d.y))
-    pitch = -math.degrees(math.atan2(d.z, math.hypot(d.x, d.y)))
-    P.head(h, pitch=pitch * share, yaw=yaw * share, tilt=tilt)
-    return pitch, yaw
-
-
 def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
     """stroke: 0 = catch (arms long, leaning toward the stern), 1 = finish (leaning back, hands at the chest)."""
     Mb = b["root"].matrix_world.copy()
@@ -54,7 +42,7 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
                     err1 = st.grip_bar("L" if sg < 0 else "R", hw + loom * 0.09, loom, over=upw)
                     err2 = st.grip_bar("R" if sg < 0 else "L", hw - loom * 0.07, loom, over=upw)
                     p.grip_err = max(err1, err2)
-                head(st, look if i == 0 and sg > 0 else W((x - 3.0, sg * 0.2, 1.1)))
+                st.head(look if i == 0 and sg > 0 else W((x - 3.0, sg * 0.2, 1.1)))
                 p.dv_seat = st
                 out.append((p, st))
     if "Richardson" in who:
@@ -66,7 +54,7 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
         st.lean(fwd=1)               # upright: his head stays clear of Sarah in the S02 frame
         st.hand_on_thigh("L"); st.hand_on_thigh("R")
         p.dv_look = W((x - 0.4, 0.33, yawl.SEAT_Z + 0.08))       # eyes down on his hands, not on the camera
-        head(st, p.dv_look, share=0.9)
+        st.head(p.dv_look, share=0.9)
         out.append((p, st))
     if "Briggs" in who:
         # the approved composition: Briggs and Sarah side by side across the stern, calm, the tiller between them
@@ -82,7 +70,7 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
         p.grip_err = st.grip_bar("L", hold, tdir, radius=0.019, over=Mb.to_3x3() @ Vector((0, 0, 1)), elbow=(0.65, 0.3, -0.1))
         st.hand_on_thigh("R")
         p.dv_look = W((0.5, 3.2, 1.25))                          # calm, level, toward the ship
-        head(st, p.dv_look)
+        st.head(p.dv_look)
         p.brow_knit(0.6)
         out.append((p, st))
     sarah = None
@@ -92,7 +80,7 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
         st.legs({"L": W((-1.69, -0.08, floor)), "R": W((-1.73, -0.21, floor))}, knees_out=0.0)
         st.lean(fwd=4)
         st.hand_on_thigh("L"); st.hand_on_thigh("R")
-        p.dv_look = W((0.6, 3.2, 1.15)); head(st, p.dv_look, share=0.6)
+        p.dv_look = W((0.6, 3.2, 1.15)); st.head(p.dv_look, share=0.6)
         sarah = (p, st)
         out.append((p, st))
     if "Sophia" in who and sarah:
@@ -105,10 +93,10 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
         st.lean(fwd=-2)
         st.hand_on_thigh("L"); st.hand_on_thigh("R")
         p.dv_look = W((0.5, 3.2, 1.0))
-        head(st, p.dv_look, tilt=3)
+        st.head(p.dv_look, tilt=3)
         out.append((p, st))
         sp.dv_look = W((0.6, 3.2, 1.15))                          # level and calm, toward the ship
-        head(sst, sp.dv_look, share=0.6)
+        sst.head(sp.dv_look, share=0.6)
         sp.brow_knit(0.5)
     for p, st in out:
         if hasattr(p, "grip_err"):
