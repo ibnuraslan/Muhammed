@@ -16,6 +16,9 @@ sid = argv[0]
 opt = lambda k, d=None: argv[argv.index(k) + 1] if k in argv else d
 sh = shots.SHOTS[sid]
 dur = float(opt("--dur", sh["dur"]))
+if os.environ.get("TIMINGS"):                     # VO-retimed durations: {"S01": 2.31, ...}
+    import json
+    dur = float(json.load(open(os.environ["TIMINGS"])).get(sid, dur))
 
 # per-shot camera moves: (move, handheld). Default by kind of shot (see default_move).
 MOVES = {
@@ -158,5 +161,10 @@ for o in bpy.data.objects:
     if o.name in ("Ocean", "FarSea") or o.name.endswith(("_hull", "_sail", "_deck")):
         o.cycles.use_motion_blur = False
 sc.render.use_persistent_data = True
+if os.environ.get("EXPORT"):
+    sys.path.insert(0, os.path.join(HERE, "tools"))
+    import farm_export
+    farm_export.export(os.environ["EXPORT"], sid)
+    sys.exit(0)
 bpy.ops.render.render(animation=True)
 print("RENDERED_ANIM", sid, sc.frame_start, sc.frame_end, flush=True)
