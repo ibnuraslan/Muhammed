@@ -96,9 +96,25 @@ SCAN_FOOT = "7985bc32f0ef4b7698f3cbb47bf2613e"    # "Lower end of a ship's pump 
 def scan_top(name, base, H, coll=None, rot=0.0):
     """The real pump-tree top (photoscan) standing on deck at `base`, scaled to H above the deck, decimated."""
     import skfab
-    r, ms = skfab.model(SCAN_TOP, height=H + 0.05, name=name + "_scan")
+    if "_scan_cache" not in globals():          # load once, decimate for real (25%), then share the meshes
+        r0, ms0 = skfab.model(SCAN_TOP, height=H + 0.05, name="pumpscan_src")
+        dg = bpy.context.evaluated_depsgraph_get()
+        for o in ms0:
+            d = o.modifiers.new("dec", "DECIMATE"); d.ratio = 0.25
+            bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
+            me = bpy.data.meshes.new_from_object(o.evaluated_get(dg)); o.modifiers.clear(); old = o.data; o.data = me
+            bpy.data.meshes.remove(old)
+        globals()["_scan_cache"] = (r0, ms0)
+        r, ms = r0, ms0; r.name = name + "_scan"
+    else:
+        r0, ms0 = globals()["_scan_cache"]
+        r = bpy.data.objects.new(name + "_scan", None); bpy.context.scene.collection.objects.link(r)
+        r.matrix_world = Matrix()
+        ms = []
+        for o in ms0:
+            c = o.copy(); c.data = o.data; bpy.context.scene.collection.objects.link(c)
+            c.parent = r; c.matrix_parent_inverse = o.matrix_parent_inverse.copy(); ms.append(c)
     for o in ms:
-        d = o.modifiers.new("dec", "DECIMATE"); d.ratio = 0.25
         if coll:
             ship._move(o, coll)
     if coll:

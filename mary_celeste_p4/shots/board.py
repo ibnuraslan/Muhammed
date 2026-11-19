@@ -19,6 +19,9 @@ OUT = os.environ.get("OUT", os.path.join(p4.ROOT, "mary_celeste_p4", "out", "boa
 sc = p4.C.render_setup(samples=int(os.environ.get("SPP", "96")), noise=0.03, bounces=8)
 sc.cycles.volume_bounces = 0
 E = p4.ease
+ANIM = os.environ.get("ANIM")            # animated pass (run_anim.py): people stay live, no render here
+CAMDUMP = os.environ.get("CAMDUMP")      # write this T's camera to a json and stop (people are not built)
+CAMS = []; ACTORS = []; BANDS = []; DRIFT = {}; GRADE = {}
 
 
 def lerp(a, b, t):
@@ -26,17 +29,27 @@ def lerp(a, b, t):
 
 
 def cam(loc, tgt, lens=35, fstop=None, focus=None, roll=0.0):
+    CAMS.append(dict(loc=list(loc), tgt=list(tgt), lens=lens, fstop=fstop, focus=focus, roll=roll))
+    if CAMDUMP:
+        import json
+        json.dump(CAMS[-1], open(CAMDUMP, "w")); print("CAMDUMPED", CAMDUMP, flush=True); sys.exit(0)
     return p4.C.camera(tuple(loc), tuple(tgt), lens=lens, fstop=fstop, focus=focus, roll=roll)
 
 
 def man(kind, SHIP, pos, ang_deg, pose, look_local, hair=1.0, **kw):
     """Place Deveau or Briggs on deck. pos: ship-local x, y (feet on the deck); ang: facing, degrees from +X.
     pose(h, dv, M, Mi) sets the joints; look_local: ship-local point the eyes look at."""
+    if CAMDUMP:                                  # the camera needs only where he stands
+        zd = ship.zdeck(pos[0]) + 0.006 + kw.get("dz", 0.0)
+        return None, SHIP @ Matrix.Translation((pos[0], pos[1], zd)) @ Matrix.Rotation(math.radians(ang_deg + 90), 4, 'Z')
     dv = (BG.Briggs if kind == "briggs" else D.Deveau)(wet=kw.get("wet", 0.4))
     h = dv.h
     zd = ship.zdeck(pos[0]) + 0.006 + kw.get("dz", 0.0)
     Mloc = Matrix.Translation((pos[0], pos[1], zd)) @ Matrix.Rotation(math.radians(ang_deg + 90), 4, 'Z')
     M = SHIP @ Mloc; Mi = M.inverted()
+    if ANIM:                                     # run_anim.py keys the rig live (breathing, blinks) on this pose
+        ACTORS.append(dict(kind=kind, dv=dv, M=M, SHIP=SHIP, pose=pose, look=SHIP @ Vector(look_local), hair=hair))
+        return dv, M
     pose(h, dv, M, Mi)
     hands = []                                   # wrist + knuckles (placed), for the clipping check's grip test
     for sd in ("L", "R"):
@@ -83,6 +96,9 @@ def head_of(M):
 
 
 def finish(sat=1.0, exposure=0.0, bloom=0.3):
+    if ANIM:
+        GRADE.update(sat=sat, exposure=exposure, bloom=bloom)
+        return
     if os.environ.get("CLIPONLY"):              # shared clipping check (BVH overlap of every person vs everything else)
         import clipcheck                         # shared lib (mary_celeste_3d/lib/clipcheck.py)
         clipcheck.OUT = os.path.join(p4.ROOT, "mary_celeste_p4", "out", "clip")
@@ -502,9 +518,10 @@ def S36():   # the empty ship sails on; slow pull back
 # ----------------------------------------------------------------------------- map graphics (3D, on the table)
 def ring(pin, t, n=2):
     """Soft filled orange bands spreading from a pin across the map (emissive, feathered annulus on the relief)."""
+    RMAX = 0.18
     for k in range(n):
         ph_ = (t + k / n) % 1.0
-        r = 0.02 + 0.16 * ph_
+        r = RMAX
         m = bpy.data.materials.new("band"); m.use_nodes = True; m.blend_method = 'BLEND'
         N = m.node_tree.nodes; L = m.node_tree.links; N.remove(N["Principled BSDF"])
         em = N.new("ShaderNodeEmission"); em.inputs[0].default_value = (1.0, 0.32, 0.04, 1); em.inputs[1].default_value = 1.4
@@ -513,16 +530,20 @@ def ring(pin, t, n=2):
         mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (1 / r, 1 / r, 1 / r)
         L.new(tc.outputs['Object'], mp.inputs['Vector']); L.new(mp.outputs[0], gr.inputs['Vector'])
         cr = N.new("ShaderNodeValToRGB"); e = cr.color_ramp
-        a = 0.55 * (1 - ph_)
+        a = 0.55
         # a filled disc with a soft feathered rim (spherical gradient: 1 at the centre, 0 at radius r)
         e.elements[0].position = 0.0; e.elements[0].color = (0, 0, 0, 1)
         e.elements[1].position = 1.0; e.elements[1].color = (a * 0.8, a * 0.8, a * 0.8, 1)
         el = e.elements.new(0.22); el.color = (a, a, a, 1)
         L.new(gr.outputs['Fac'], cr.inputs['Fac'])
-        mx = N.new("ShaderNodeMixShader"); L.new(cr.outputs['Color'], mx.inputs[0]); L.new(tr.outputs[0], mx.inputs[1]); L.new(em.outputs[0], mx.inputs[2])
+        fade = N.new("ShaderNodeMath"); fade.name = "fade"; fade.operation = 'MULTIPLY'; fade.inputs[1].default_value = 1 - ph_
+        L.new(cr.outputs['Color'], fade.inputs[0])
+        mx = N.new("ShaderNodeMixShader"); L.new(fade.outputs[0], mx.inputs[0]); L.new(tr.outputs[0], mx.inputs[1]); L.new(em.outputs[0], mx.inputs[2])
         L.new(mx.outputs[0], N["Material Output"].inputs['Surface'])
         bpy.ops.mesh.primitive_plane_add(size=2 * r * 1.3, location=pin + Vector((0, 0, 0.004)))
-        o = bpy.context.active_object; o.data.materials.append(m)
+        o = bpy.context.active_object; o.name = f"band{k}"; o.data.materials.append(m)
+        sc_ = (0.02 + 0.16 * ph_) / RMAX; o.scale = (sc_, sc_, 1.0)
+        BANDS.append(dict(obj=o, fade=fade, k=k, n=n))
         sw = o.modifiers.new("sw", "SHRINKWRAP"); sw.target = bpy.data.objects["map"]; sw.wrap_method = 'PROJECT'
         sw.use_project_z = True; sw.use_negative_direction = True; sw.offset = 0.003
         sub = o.modifiers.new("sub", "SUBSURF"); sub.subdivision_type = 'SIMPLE'; sub.levels = 5; sub.render_levels = 5
@@ -551,10 +572,12 @@ def drift(tb, t):
             d -= s
         return W[-1], (W[-1] - W[-2]).normalized()
     ink = p4.mat("ink", (0.08, 0.02, 0.01), rough=0.4)
-    n = max(2, int(60 * t))
-    dots = [at(k / 60)[0] for k in range(n + 1)]
-    for k in range(0, len(dots) - 1, 2):                    # dashed inked line
-        SH.rope("dash", [dots[k], dots[k + 1]], 0.0018, ink)
+    dots = [at(k / 60)[0] for k in range(61)]
+    dashes = []
+    for k in range(0, 60, 2):                                # dashed inked line (drawn up to t)
+        o = SH.rope("dash", [dots[k], dots[k + 1]], 0.0018, ink)
+        o.hide_render = (k + 1) / 60 > max(t, 2 / 60) + 1e-6
+        dashes.append((o, (k + 1) / 60))
     # wind streaks: fine raised strokes NE-ward across the map (the historical westerlies), fixed
     import random
     rng = random.Random(4)
@@ -569,6 +592,7 @@ def drift(tb, t):
     k = 0.0016
     ang = math.atan2(d.y, d.x)
     s["root"].matrix_world = Matrix.Translation(p + Vector((0, 0, 0.0005))) @ Matrix.Rotation(ang, 4, 'Z') @ Matrix.Diagonal((k, k, k, 1))
+    DRIFT.update(dashes=dashes, at=at, root=s["root"], k=k)
 
 
 def rod(SHIP, top, bottom, wet=0.5):

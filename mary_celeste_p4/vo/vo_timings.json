@@ -1,0 +1,177 @@
+{
+ "S01": {
+  "start": 0,
+  "frames": 61,
+  "seconds": 2.5417
+ },
+ "S02": {
+  "start": 61,
+  "frames": 55,
+  "seconds": 2.2917
+ },
+ "S03": {
+  "start": 116,
+  "frames": 123,
+  "seconds": 5.125
+ },
+ "S05": {
+  "start": 239,
+  "frames": 201,
+  "seconds": 8.375
+ },
+ "S06": {
+  "start": 440,
+  "frames": 97,
+  "seconds": 4.0417
+ },
+ "S07": {
+  "start": 537,
+  "frames": 198,
+  "seconds": 8.25
+ },
+ "S08": {
+  "start": 735,
+  "frames": 71,
+  "seconds": 2.9583
+ },
+ "S09": {
+  "start": 806,
+  "frames": 88,
+  "seconds": 3.6667
+ },
+ "S10": {
+  "start": 894,
+  "frames": 95,
+  "seconds": 3.9583
+ },
+ "S11": {
+  "start": 989,
+  "frames": 81,
+  "seconds": 3.375
+ },
+ "S12": {
+  "start": 1070,
+  "frames": 199,
+  "seconds": 8.2917
+ },
+ "S13": {
+  "start": 1269,
+  "frames": 85,
+  "seconds": 3.5417
+ },
+ "S14": {
+  "start": 1354,
+  "frames": 59,
+  "seconds": 2.4583
+ },
+ "S15": {
+  "start": 1413,
+  "frames": 84,
+  "seconds": 3.5
+ },
+ "S16": {
+  "start": 1497,
+  "frames": 110,
+  "seconds": 4.5833
+ },
+ "S17": {
+  "start": 1607,
+  "frames": 90,
+  "seconds": 3.75
+ },
+ "S18": {
+  "start": 1697,
+  "frames": 115,
+  "seconds": 4.7917
+ },
+ "S19": {
+  "start": 1812,
+  "frames": 214,
+  "seconds": 8.9167
+ },
+ "S20": {
+  "start": 2026,
+  "frames": 97,
+  "seconds": 4.0417
+ },
+ "S21": {
+  "start": 2123,
+  "frames": 149,
+  "seconds": 6.2083
+ },
+ "S22": {
+  "start": 2272,
+  "frames": 89,
+  "seconds": 3.7083
+ },
+ "S23": {
+  "start": 2361,
+  "frames": 118,
+  "seconds": 4.9167
+ },
+ "S24": {
+  "start": 2479,
+  "frames": 56,
+  "seconds": 2.3333
+ },
+ "S25": {
+  "start": 2535,
+  "frames": 59,
+  "seconds": 2.4583
+ },
+ "S26": {
+  "start": 2594,
+  "frames": 106,
+  "seconds": 4.4167
+ },
+ "S27": {
+  "start": 2700,
+  "frames": 176,
+  "seconds": 7.3333
+ },
+ "S28": {
+  "start": 2876,
+  "frames": 35,
+  "seconds": 1.4583
+ },
+ "S29": {
+  "start": 2911,
+  "frames": 137,
+  "seconds": 5.7083
+ },
+ "S30": {
+  "start": 3048,
+  "frames": 56,
+  "seconds": 2.3333
+ },
+ "S31": {
+  "start": 3104,
+  "frames": 142,
+  "seconds": 5.9167
+ },
+ "S32": {
+  "start": 3246,
+  "frames": 149,
+  "seconds": 6.2083
+ },
+ "S33": {
+  "start": 3395,
+  "frames": 194,
+  "seconds": 8.0833
+ },
+ "S34": {
+  "start": 3589,
+  "frames": 80,
+  "seconds": 3.3333
+ },
+ "S35": {
+  "start": 3669,
+  "frames": 94,
+  "seconds": 3.9167
+ },
+ "S36": {
+  "start": 3763,
+  "frames": 188,
+  "seconds": 7.8333
+ }
+}
