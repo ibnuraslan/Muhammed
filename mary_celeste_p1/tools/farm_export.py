@@ -26,8 +26,8 @@ def export(pkg, sid, samples=None):
     # render settings for the farm
     sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = 2560, 1440, 100
     sc.render.fps = 24
-    sc.cycles.samples = samples or int(os.environ.get("FARM_SPP", "128"))
-    sc.cycles.use_adaptive_sampling = True; sc.cycles.adaptive_threshold = 0.02
+    sc.cycles.samples = samples or int(os.environ.get("FARM_SPP", "64"))
+    sc.cycles.use_adaptive_sampling = True; sc.cycles.adaptive_threshold = 0.03
     sc.cycles.use_denoising = True
     try:
         sc.cycles.denoiser = 'OPENIMAGEDENOISE'

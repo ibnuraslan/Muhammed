@@ -53,7 +53,7 @@ def main(pkg):
 Blender:     5.2.2 (built and tested with 5.2.2; any 5.2.x should open it)
 Engine:      Cycles, CPU (GPU is fine: no CPU-only features are used)
 Output:      2560 x 1440, 100%, 24 fps, PNG 16-bit RGB, written to //../frames/<shot>/<shot>_####.png
-Sampling:    128 max samples, adaptive (threshold 0.02), OpenImageDenoise, motion blur on (shutter 0.4)
+Sampling:    64 max samples, adaptive (threshold 0.03), OpenImageDenoise, motion blur on (shutter 0.4)
 Grade:       in the compositor of each .blend (bloom, cinematic look, vignette) - leave "Compositing" on
 Frames:      clean - no cards, captions or labels (they are added in CapCut)
 
