@@ -112,41 +112,51 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
 
 def trim_under_seat(p, seat_w, r=0.42, boxes=None):
     """Coat tails and skirts that the person sits on are pressed onto the seat: shell vertices that would go below
-    the seat surface, over the seat itself, are lifted to lie on it (the shells cannot fold, so they are flattened)."""
+    the seat surface, over the seat itself, are lifted to lie on it (the shells cannot fold, so they are flattened).
+    Boat seats are handled in their own local frame, so a boat heeled or pitched on the swell is trimmed correctly;
+    `boxes` (world-aligned (lo, hi) pairs) is for furniture standing level."""
     import bpy
-    from mathutils import Vector
-    z0 = seat_w.z + 0.006
-    seats = [o for o in bpy.data.objects if o.type == 'MESH' and any(k in o.name for k in ("thwart", "sternseat", "sideseat", "Chair", "settee"))]
-    given = boxes; boxes = list(given or [])
-    for o in ([] if given else seats):
-        bb = [o.matrix_world @ Vector(c) for c in o.bound_box]
-        lo = Vector([min(v[i] for v in bb) for i in range(3)]); hi = Vector([max(v[i] for v in bb) for i in range(3)])
-        if lo.z - 0.06 < seat_w.z < hi.z + 0.06:
-            boxes.append((lo, hi))
+    from mathutils import Vector, Matrix
+    ents = []                                            # (lo, hi, world->box matrix, box->world matrix)
+    if boxes:
+        ents = [(Vector(lo), Vector(hi), Matrix.Identity(4), Matrix.Identity(4)) for lo, hi in boxes]
+    else:
+        for o in bpy.data.objects:
+            if o.type != 'MESH' or not any(k in o.name for k in ("thwart", "sternseat", "sideseat", "Chair", "settee")):
+                continue
+            Mi = o.matrix_world.inverted(); bb = [Vector(c) for c in o.bound_box]
+            lo = Vector([min(v[i] for v in bb) for i in range(3)]); hi = Vector([max(v[i] for v in bb) for i in range(3)])
+            sl = Mi @ seat_w
+            if lo.z - 0.06 < sl.z < hi.z + 0.06:
+                ents.append((lo, hi, Mi, o.matrix_world.copy()))
     for o in p.objects:
         if o.type != 'MESH' or o is p.h.body or "src_verts" not in o:
             continue
-        M = o.matrix_world; Mi = M.inverted(); ch = False
+        M = o.matrix_world; Mo = M.inverted(); ch = False
         for v in o.data.vertices:
-            w = M @ v.co
-            if w.z < z0 + 0.04 and (w.xy - seat_w.xy).length < r:
-                for lo, hi in boxes:
-                    top = hi.z + 0.006
-                    if w.z >= top or w.z < lo.z - 0.25:
-                        continue
-                    if lo.x - 0.035 < w.x < hi.x + 0.035 and lo.y - 0.035 < w.y < hi.y + 0.035:
-                        w.z = top; v.co = Mi @ w; ch = True            # lying on the seat (and rolling over its edge)
-                        break
-                    m = 0.06
-                    if lo.x - m < w.x < hi.x + m and lo.y - m < w.y < hi.y + m and w.z > lo.z - 0.02:
-                        # hanging just past the edge: keep the cloth 12 mm clear of the seat's side
-                        dx = min(w.x - (lo.x - 0.012), (hi.x + 0.012) - w.x); dy = min(w.y - (lo.y - 0.012), (hi.y + 0.012) - w.y)
-                        if 0 < dx and 0 < dy:
-                            if dx < dy:
-                                w.x = lo.x - 0.012 if w.x < (lo.x + hi.x) / 2 else hi.x + 0.012
-                            else:
-                                w.y = lo.y - 0.012 if w.y < (lo.y + hi.y) / 2 else hi.y + 0.012
-                            v.co = Mi @ w; ch = True
-                        break
+            w0 = M @ v.co
+            if (w0 - seat_w).length > r + 0.1:
+                continue
+            for lo, hi, Bi, B in ents:
+                w = Bi @ w0; sl = Bi @ seat_w
+                if w.z >= sl.z + 0.04 + 0.006 or (w.xy - sl.xy).length > r:
+                    continue
+                top = hi.z + 0.006
+                if w.z >= top or w.z < lo.z - 0.25:
+                    continue
+                if lo.x - 0.035 < w.x < hi.x + 0.035 and lo.y - 0.035 < w.y < hi.y + 0.035:
+                    w.z = top; v.co = Mo @ (B @ w); ch = True            # lying on the seat (and rolling over its edge)
+                    break
+                m = 0.06
+                if lo.x - m < w.x < hi.x + m and lo.y - m < w.y < hi.y + m and w.z > lo.z - 0.02:
+                    # hanging just past the edge: keep the cloth 12 mm clear of the seat's side
+                    dx = min(w.x - (lo.x - 0.012), (hi.x + 0.012) - w.x); dy = min(w.y - (lo.y - 0.012), (hi.y + 0.012) - w.y)
+                    if 0 < dx and 0 < dy:
+                        if dx < dy:
+                            w.x = lo.x - 0.012 if w.x < (lo.x + hi.x) / 2 else hi.x + 0.012
+                        else:
+                            w.y = lo.y - 0.012 if w.y < (lo.y + hi.y) / 2 else hi.y + 0.012
+                        v.co = Mo @ (B @ w); ch = True
+                    break
         if ch:
             o.data.update()

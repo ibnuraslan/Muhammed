@@ -123,20 +123,45 @@ elif SHOT in ("S22", "S23", "S26"):
     seat_pt = Vector((cx, cy, float(np.percentile(zs, 90)) if zs else 0.45))
     print("chair seat", seat_pt)
     st = Seat(a, seat_pt, 180.0 if SHOT != "S26" else 200.0)       # facing the window (-X)
-    st.legs({"L": Vector((seat_pt.x - 0.3, seat_pt.y + 0.08, 0.085)), "R": Vector((seat_pt.x - 0.28, seat_pt.y - 0.08, 0.085))}, knees_out=0.06)
+    if SHOT == "S26":
+        # feet tucked up on the chair's front rung side of the floor, thighs level: a lap for the doll
+        st.legs({"L": Vector((seat_pt.x - 0.36, seat_pt.y + 0.09, 0.2)), "R": Vector((seat_pt.x - 0.34, seat_pt.y - 0.09, 0.2))}, knees_out=0.06)
+    else:
+        st.legs({"L": Vector((seat_pt.x - 0.3, seat_pt.y + 0.08, 0.085)), "R": Vector((seat_pt.x - 0.28, seat_pt.y - 0.08, 0.085))}, knees_out=0.06)
     look_out = Vector((wx - 8, wy - 1.5, 1.2))
     if SHOT == "S26":
         # the doll in his hands, on his knees; he looks down at her
-        st.lean(fwd=16)
+        st.lean(fwd=0)
         knees = (st.M @ a.h.bone_tail("upperleg02.L") + st.M @ a.h.bone_tail("upperleg02.R")) / 2
         hipw = (st.M @ a.h.bone_head("upperleg01.L") + st.M @ a.h.bone_head("upperleg01.R")) / 2
-        dpos = hipw.lerp(knees, 0.62) + Vector((0, 0, 0.085))       # across his thighs, clear of his body
-        d, piece = PR.doll("doll_held", dpos, rot_z=math.radians(0), height=0.26, broken=True, kind="china")
+        fwd = (knees - hipw); fwd.z = 0; fwd.normalize()
+        side = (st.M.to_3x3() @ Vector((1, 0, 0))).normalized()     # his left
+        dpos = hipw.lerp(knees, 0.88) + Vector((0, 0, 0.1))         # lying across his thighs, clear of his jacket
+        d, piece = PR.doll("doll_held", dpos, rot_z=math.atan2(fwd.y, fwd.x), height=0.22, broken=True, kind="china")
         import sketchfab as SF
         lo, hi = SF.bounds([o for o in d.children_recursive if o.type == 'MESH'])
+        # rest her on top of his thighs: bottom of the doll 9 cm above the thigh bones (child's thigh + cloth)
+        # the real lap surface: his posed clothes (armature live, rig at the origin; st.M places him) under her footprint
+        bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get(); lap = hipw.lerp(knees, 0.88).z + 0.05
+        for o in a.objects:
+            if o.type != 'MESH' or o.hide_render:
+                continue
+            ev = o.evaluated_get(dg); me = ev.to_mesh()
+            for v in me.vertices:
+                w = st.M @ (o.matrix_world @ v.co)
+                if lo.x - 0.01 < w.x < hi.x + 0.01 and lo.y - 0.01 < w.y < hi.y + 0.01 and w.z < hipw.z + 0.22 and "body" not in o.name:
+                    lap = max(lap, w.z)
+            ev.to_mesh_clear()
+        print("LAP", round(lap, 3))
+        dz = lap + 0.01 - lo.z; d.location.z += dz
+        if piece:
+            piece.location.z += dz             # the broken forearm is its own object: it rides along
+        bpy.context.view_layer.update()
+        lo, hi = SF.bounds([o for o in d.children_recursive if o.type == 'MESH'])
         mid = (lo + hi) / 2
-        st.hand("L", mid + Vector((0.0, 0.1, 0.0)), elbow=(0.6, 0.3, -0.8), grip=0.4)
-        st.hand("R", mid + Vector((0.0, -0.1, 0.0)), elbow=(0.6, 0.3, -0.8), grip=0.4)
+        # she lies across his thighs; his hands rest on her, one either side of the middle
+        for sd, sg in (("L", 1), ("R", -1)):
+            st.hand(sd, Vector((mid.x, mid.y, hi.z + 0.026)) + side * (sg * 0.07), elbow=(0.6, 0.3, -0.8), grip=0.0)
         st.head(mid, share=0.85)
         a.lids(0.8); a.brow_knit(0.4)
         look = mid
@@ -181,8 +206,8 @@ cams = {
     "S20": ((-0.85, -0.55, 1.32), T + Vector((0.0, -0.05, 0.12)), 45, 0.75),
     "S21": (T + Vector((0.02, -0.4, 0.62)), T + Vector((-0.04, -0.06, 0.13)), 45, "auto"),
     "S22": ((wx + 1.35, wy + 1.15, 1.1), (wx + 0.5, wy - 0.1, 0.98), 40, "auto"),
-    "S23": ((wx + 0.75, wy - 0.25, 1.15), (wx + 0.1, wy + 0.3, 0.75), 50, 0.75),
-    "S26": ((wx + 1.25, wy - 0.75, 1.35), (wx + 0.3, wy - 0.05, 0.62), 40, "auto"),
+    "S23": ((wx + 0.6, wy + 0.8, 1.35), (wx + 0.1, wy + 0.3, 0.75), 50, "auto"),     # over the sill, clear of his head
+    "S26": ((wx + 0.45, wy - 1.75, 1.05), (wx + 0.45, wy - 0.05, 0.7), 40, "auto"),     # side-lit by the window: him and the doll
 }
 loc, tgt, lens, foc = cams[SHOT]
 fst = 2.8
@@ -194,5 +219,5 @@ if os.environ.get("DEBUGCAM"):
         if o.name.startswith("ceiling"):
             o.hide_render = True
     C.camera(Vector((0.5, -1.5, 5.5)), Vector((-1.0, 0.1, 0.5)), lens=24)
-C.finish(OUT, cine={"sat": 1.15, "exposure": 0.55 if SHOT == "S15" else 0.05}, bloom=0.4)
+C.finish(OUT, cine={"sat": 1.15, "exposure": 0.55 if SHOT == "S15" else (0.6 if SHOT == "S26" else 0.05)}, bloom=0.4)
 print("RENDERED", OUT)
