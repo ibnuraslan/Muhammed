@@ -108,14 +108,15 @@ elif SHOT == "S06":
     sea.sky(strength=1.0, rot_deg=40, res="4k", aid="kloofendal_48d_partly_cloudy_puresky")
     sun(-60, 35)
     b = boat_at(oc, 0, 0, -30.0, oars="out", crew=True, look=Vector((70, -40, 6)))
-    props5.bands(Vector((0, 0, 4.0)), [12, 22, 32], width=7.0, alpha=0.42, strength=1.4)
+    props5.glow_band(Vector((0, 0, 2.5)), 7.0, 16.0, 36.0, alpha=0.5, strength=1.5)     # one soft band, gradient fade
     cam((32, -18, 165), (32, -18, 0), 35)
 elif SHOT == "S07":
     oc = sea_patch(150, 20, 1.3, 1.2, 10.0, foam=0.22)
     sea.sky(strength=1.0, rot_deg=40, res="4k", aid="kloofendal_48d_partly_cloudy_puresky")
     sun(-80, 18)
-    props5.island(Vector((-1500, 9500, 0)), length=9000, height=560)
-    b = boat_at(oc, 0, 0, 90.0, oars="out", stroke=0.6, look=Vector((0, 9000, 200)))
+    import land
+    land.santa_maria(dist_km=11.0, bearing_deg=90.0)      # real elevation (P4's terrain + santa_maria), in sea haze
+    b = boat_at(oc, 0, 0, 112.0, oars="out", stroke=0.6, look=Vector((-4500, 11000, 200)))   # pulling for the island
     Mb = b["root"].matrix_world
     cam(Mb @ Vector((-8.5, 0.9, 2.0)), Mb @ Vector((40, -2.0, 2.5)), 40)
 elif SHOT == "S08":

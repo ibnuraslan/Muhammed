@@ -22,3 +22,10 @@ Photos for the cards (to be supplied; this container cannot reach Wikimedia Comm
 
 Seal text and the slate entry are props written for the film (the slate's wording follows the published log-slate
 entry for 25 Nov 1872); no third-party imagery is reproduced.
+
+Reused from other parts (code used as is, at its own path):
+- Galley set and slate (S12-S14): mary_celeste_p1/p1/interiors.py (Part 1). Its stove: "Star 6" cast-iron stove
+  by jefpat, Sketchfab, CC BY 4.0 (credited in Part 1).
+- Genoa quay set (S25): mary_celeste_p4/shots/sets.py set_genoa (Part 4), with its Poly Haven textures (CC0).
+- Real terrain (S07 Santa Maria, S24 Gibraltar): mary_celeste_p4/lib/terrain.py; elevation from AWS Terrain Tiles
+  (Mapzen terrarium: SRTM, GMTED, ETOPO1/GEBCO), open data.

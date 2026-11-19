@@ -101,7 +101,8 @@ elif SHOT in ("S18", "S19", "S20", "S21"):
         import ph
         lo, hi = ph.bounds(_); sw.location.z += (T.z + 0.1) - lo[2]
     else:
-        PR.doll("doll_a", R @ Vector((-0.12, 0.0, 0.1)), rot_z=0.1, height=0.34, broken=True, kind="china")
+        da, _pc = PR.doll("doll_a", R @ Vector((-0.12, 0.0, 0.1)), rot_z=0.1, height=0.34, broken=True, kind="china")
+        STUMP = Vector(da["stump"]) if "stump" in da else None
         PR.doll("doll_b", R @ Vector((0.13, 0.0, 0.1)), rot_z=0.1, height=0.3, broken=False, kind="porcelain")
 elif SHOT in ("S22", "S23", "S26"):
     import people as PP
@@ -210,6 +211,9 @@ cams = {
     "S26": ((wx + 0.45, wy - 1.75, 1.05), (wx + 0.45, wy - 0.05, 0.7), 40, "auto"),     # side-lit by the window: him and the doll
 }
 loc, tgt, lens, foc = cams[SHOT]
+if SHOT == "S21" and globals().get("STUMP") is not None:
+    # close on the break: the torn elbow seam, its threads, the sawdust trail and the forearm lying apart
+    tgt = STUMP + Vector((0.04, 0.0, -0.02)); loc = tgt + Vector((-0.02, -0.2, 0.5)); lens = 50
 fst = 2.8
 if foc == "auto":                       # macro: focus on the aim point, a deeper stop so the whole object holds
     foc = (Vector(loc) - Vector(tgt)).length; fst = 6.3

@@ -13,6 +13,16 @@ import bpy
 from mathutils import Vector, Matrix
 import ship, props5 as PR
 
+
+def p1_interiors():
+    """Part 1's interiors module, used as is (mary_celeste_p1/p1, same set as P1 S34-S36 and its slate), so the
+    galley and the slate match Part 1 shot for shot."""
+    p1 = os.path.abspath(os.path.join(p5.ROOT, "mary_celeste_p1", "p1"))
+    if p1 not in sys.path:
+        sys.path.append(p1)
+    import interiors
+    return interiors
+
 SHOT = os.environ.get("SHOT", "S09")
 OUT = os.environ.get("OUT", os.path.join(p5.OUTDIR, f"{SHOT}.png"))
 sc = C.render_setup(samples=int(os.environ.get("SPP", "200")), noise=0.025, bounces=8)
@@ -88,7 +98,7 @@ if SHOT != "S12":
         lp = bpy.data.objects.new("flame", bpy.data.lights.new("flame", 'POINT')); sc.collection.objects.link(lp)
         lp.location = T + Vector((-0.05, 0.28, 0.2)); lp.data.energy = 40; lp.data.color = (1.0, 0.6, 0.28); lp.data.shadow_soft_size = 0.02
     else:
-        PR.slate("slate", T + Vector((0.12, -0.08, 0.0)), rot_z=math.radians(-8), wet=0.6)
+        p1_interiors().slate(T + Vector((0.12, -0.08, 0.0)), rot=math.radians(-8))     # P1/P2's dark slate, chalk hand
         PR.water_floor("bilge", (0, 0, 0.0), (2 * RX - 0.1, 2 * RY - 0.1), depth=0.035)
         chair, _ = PR.put("WoodenChair_01", (-1.0, -0.7, 0), rot_z=math.radians(60), size=0.9)
         chair.rotation_euler = (math.radians(0), math.radians(90), math.radians(70))      # knocked over
@@ -124,24 +134,14 @@ if SHOT != "S12":
     elif SHOT == "S14":
         C.camera((0.12, -0.42, 1.25), T + Vector((0.12, -0.06, 0.02)), lens=60, fstop=3.5, focus=0.62)
 else:
-    # ---- the galley: a deckhouse room 2.4 x 1.8, door to the deck on one side
-    gx, gy, gz = 1.2, 0.9, 1.95
-    room(gx, gy, gz, wood("dark_wooden_planks", 1.4, (0.7, 0.6, 0.5), "gwalls", wet=0.2), floor, ceil, sky=(0.5, 0.0, 0.4, 0.4))
-    PR.stove("stove", Vector((-0.6, 0.45, 0)), rot_z=0.0, wet=0.5)
-    PR.put("brass_pot_01", (-0.82, 0.45, 0.8), size=0.24, axis=0)
-    PR.put("pot_enamel_01", (0.35, -0.6, 0.0), size=0.22, axis=0)           # slid off onto the floor
-    PR.put("wooden_bucket_01", (0.7, 0.5, 0.0), size=0.3)
-    ship.box("bench", (0.75, 0.65, 0.42), (0.8, 0.45, 0.06), tabw, bevel=0.006)
-    PR.water_floor("galley_water", (0, 0, 0.0), (2 * gx - 0.1, 2 * gy - 0.1), depth=0.05, ripple=0.008)
-    w = bpy.data.worlds.new("w"); sc.world = w; w.use_nodes = True
-    w.node_tree.nodes["Background"].inputs[0].default_value = (0.03, 0.035, 0.045, 1)
-    key = bpy.data.objects.new("door", bpy.data.lights.new("door", 'AREA')); sc.collection.objects.link(key)
-    key.location = (gx - 0.05, -0.3, 1.1); key.data.size = 0.7; key.data.size_y = 1.6; key.data.shape = 'RECTANGLE'
-    key.data.energy = 420; key.data.color = (0.85, 0.9, 1.0); key.rotation_euler = (0, math.radians(90), 0)
-    gf = bpy.data.objects.new("gfill", bpy.data.lights.new("gfill", 'POINT')); sc.collection.objects.link(gf)
-    gf.location = (0.2, 0.0, 1.7); gf.data.energy = 15; gf.data.color = (1.0, 0.75, 0.5)
-    C.camera((1.05, -0.75, 1.25), (-0.45, 0.35, 0.55), lens=24, fstop=5.6, focus=1.9)
-    cine = {"sat": 1.0}
+    # ---- the galley: Part 1's set as is (sooty planking, the cast-iron "Star 6" stove knocked off its hearth,
+    # sea water up to the door sill), lit by its hanging lamp and the daylight from the door, as P1 S34
+    I = p1_interiors()
+    a = I.galley()
+    I.lantern((0.6, 0.9, 1.75), energy=95)
+    ship.cyl("lamp_hook", (0.6, 0.9, 1.75), (0.6, 0.9, 1.95), 0.006, mat=ship.iron("hk"), verts=8)
+    C.camera((1.55, 1.15, 1.4), (-0.9, -0.2, 0.45), lens=22, fstop=4.0)
+    cine = {"sat": 1.05, "exposure": 0.5}
 
 C.finish(OUT, cine=cine, bloom=0.4)
 print("RENDERED", OUT)

@@ -68,48 +68,26 @@ def town(x0, x1, y0, depth, zf, n, seed=1, colours=None, hmin=6, hmax=14):
 if SHOT == "S24":
     # Gibraltar Bay, from the west: the ship at anchor, the town along the shore, the Rock rising to the north
     water = sea.water_material()
-    oc = sea.ocean(size=180, res=18, scale=0.5, chop=0.8, wind=5.0, repeat=2, foam=0.05, mat=water)
-    sea.far_sea(190, mat=water)
+    oc = sea.ocean(size=900, res=18, scale=0.5, chop=0.8, wind=5.0, repeat=6, foam=0.05, mat=water)
+    sea.far_sea(9000, mat=water)
     sea.sky(strength=0.55, rot_deg=100, res="4k", aid="qwantani_late_afternoon_puresky")
     mc = ship.build("MC", sails="found", rail_gap=None, wind=(0.3, -1, 0), wet=0.2, detail=False)
     mc["root"].location = (0, 0, -0.1); mc["root"].rotation_euler = (0, 0, math.radians(-25))
-    # the Rock: a long limestone ridge (426 m) 2.5 km off, sheer north face, scrub on the slopes
-    nx, ny = 200, 60; V = []; F = []
-    for j in range(ny + 1):
-        for i in range(nx + 1):
-            u = i / nx; v = j / ny
-            x = 2600 + v * 1800; y = -2200 + u * 5200
-            ridge = (np.clip(u * 1.25, 0, 1) ** 1.4) * (1 - np.clip((u - 0.83) / 0.17, 0, 1) ** 0.5)
-            prof = math.sin(math.pi * min(1, v * 1.4)) ** 0.7
-            n = noise.noise(Vector((u * 9, v * 5, 2))) * 0.12 + noise.noise(Vector((u * 30, v * 15, 3))) * 0.04
-            V.append((x, y, max(-5.0, 420 * ridge * prof * (1 + n))))
-    for j in range(ny):
-        for i in range(nx):
-            a = j * (nx + 1) + i; F.append([a, a + 1, a + nx + 2, a + nx + 1])
-    me = bpy.data.meshes.new("rock"); me.from_pydata(V, [], F); me.update()
-    rock = bpy.data.objects.new("rock", me); sc.collection.objects.link(rock)
-    m = bpy.data.materials.new("limestone"); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
-    geo = N.new("ShaderNodeNewGeometry"); sp = N.new("ShaderNodeSeparateXYZ"); L.new(geo.outputs['Normal'], sp.inputs[0])
-    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 0.01; nz.inputs['Detail'].default_value = 10
-    L.new(geo.outputs['Position'], nz.inputs['Vector'])
-    flat = N.new("ShaderNodeMapRange"); flat.inputs['From Min'].default_value = 0.55; flat.inputs['From Max'].default_value = 0.8
-    L.new(sp.outputs['Z'], flat.inputs['Value'])
-    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.inputs[6].default_value = (0.36, 0.33, 0.29, 1); mx.inputs[7].default_value = (0.1, 0.13, 0.05, 1)
-    f2 = N.new("ShaderNodeMath"); f2.operation = 'MULTIPLY'; L.new(flat.outputs[0], f2.inputs[0]); L.new(nz.outputs['Fac'], f2.inputs[1])
-    L.new(f2.outputs[0], mx.inputs['Factor']); L.new(mx.outputs[2], p.inputs['Base Color']); p.inputs['Roughness'].default_value = 0.95
-    rock.data.materials.append(m)
-    for pl in me.polygons:
-        pl.use_smooth = True
-    # the town on the shore below the Rock's west face: three rows of houses climbing the slope
+    # the Rock and the head of the bay from real elevation (P4's terrain.py), true scale, in evening haze; the
+    # ship lies at anchor in the bay off the town (world origin = 36.132 N, 5.372 W)
+    import land
+    rock, height, world = land.gibraltar()
+    # the town on the lower west slope of the Rock: rows of whitewashed / ochre houses set on the real ground
     rng = np.random.default_rng(2)
-    yy = -1500
-    while yy < 1600:
-        for row in range(3):
-            w = rng.uniform(8, 16); h = rng.uniform(7, 14); x = 2480 + row * 22 + rng.uniform(-3, 3)
-            col = [(0.82, 0.78, 0.68), (0.78, 0.62, 0.42), (0.7, 0.58, 0.46), (0.86, 0.82, 0.74)][rng.integers(4)]
-            ship.box("house", (x, yy, row * 6 + h / 2), (16, w - 0.5, h), mat(f"h{yy}{row}", col, 0.85))
-            ship.box("roof", (x, yy, row * 6 + h + 0.5), (16.5, w, 1.0), mat("roof", (0.38, 0.13, 0.06), 0.8))
-        yy += rng.uniform(9, 17)
+    for k in range(700):
+        lon = rng.uniform(-5.3585, -5.3485); lat = rng.uniform(36.128, 36.146)
+        p = world(lon, lat); z = height(p.x, p.y)
+        if not (2.0 < z < 70.0):
+            continue
+        w = rng.uniform(12, 22); h = rng.uniform(9, 16); d = rng.uniform(12, 18)
+        col = [(0.6, 0.55, 0.47), (0.62, 0.46, 0.3), (0.52, 0.42, 0.33), (0.66, 0.62, 0.54)][rng.integers(4)]
+        ship.box("house", (p.x, p.y, z + h / 2 - 2.0), (d, w, h + 4.0), mat(f"h{k}", col, 0.85))
+        ship.box("roof", (p.x, p.y, z + h + 0.5), (d + 0.5, w + 0.5, 1.0), mat("roof", (0.38, 0.13, 0.06), 0.8))
     # other ships at anchor
     for k, (x, y, r) in enumerate(((180, 220, 30), (-150, 420, -70), (320, -260, 10))):
         try:
@@ -117,47 +95,20 @@ if SHOT == "S24":
         except Exception as e:
             print("ship model failed", e)
     sun((-0.35, -0.9, 0.22), 4.0, (1.0, 0.72, 0.48), 1.2)
-    C.camera(Vector((-95, -70, 7)), Vector((800, 380, 70)), lens=35)
+    C.camera(Vector((-150, 30, 6)), Vector((2400, -330, 180)), lens=50)          # past the ship to the Rock
     cine = {"sat": 1.12, "exposure": 0.0}
 else:
-    # Genoa: a stone quay, the casks landed and stacked, a ship's side alongside, the harbour front behind in haze
-    water = sea.water_material()
-    oc = sea.ocean(size=120, res=16, scale=0.2, chop=0.5, wind=3.0, repeat=2, foam=0.0, mat=water, loc=(0, -40, 0))
-    sea.far_sea(130, mat=water, center=(0, -40))
-    sea.sky(strength=1.0, rot_deg=200, res="4k", aid="qwantani_morning_puresky")
-    import ph
-    try:
-        stone = ph.texture("cobblestone_floor_04", scale=1.0, res="1k", name="quay")
-    except Exception:
-        stone = mat("quay", (0.42, 0.38, 0.32), 0.9)
-    ship.box("quay", (0, 15, -0.5), (200, 30, 3.0), stone)
-    ship.box("quay_face", (0, 0.0, -1.0), (200, 0.6, 4.0), mat("quayface", (0.33, 0.3, 0.26), 0.95))
-    rng = np.random.default_rng(5)
-    roots = []
-    for row in range(3):
-        for k in range(9):
-            for lvl in range(2 if row < 2 else 1):
-                x = -6 + k * 0.95 + (0.47 if lvl else 0); y = 2.2 + row * 1.25
-                z = 1.0 + lvl * 0.62
-                r, bms = PR.put("wine_barrel_01", (x, y, z), size=1.0, axis=2, res="1k")
-                r.rotation_euler = (math.radians(90), 0, math.radians(90 + rng.uniform(-4, 4)))
-                bpy.context.view_layer.update()
-                lo, hi = ph.bounds(bms)                       # lying on its side: rest it on the quay / the casks below
-                r.location.z += (1.0 + lvl * 0.62) - lo[2]
-                bpy.context.view_layer.update()
-    mc = ship.build("MC", sails="found", rail_gap=None, wind=(0.3, -1, 0), wet=0.2, detail=False)
-    mc["root"].location = (2, -ship.B / 2 - 1.2, -0.6); mc["root"].rotation_euler = (0, 0, 0)
-    # harbour front: tall Genoese houses (ochre, rose) across the water in haze
-    rng = np.random.default_rng(9)
-    y = -260
-    while y < 160:
-        w = rng.uniform(10, 20); h = rng.uniform(16, 30)
-        col = [(0.72, 0.45, 0.22), (0.7, 0.36, 0.28), (0.8, 0.62, 0.38), (0.62, 0.5, 0.36)][rng.integers(4)]
-        ship.box("palazzo", (170 + rng.uniform(0, 10), y + w / 2, h / 2 + 2), (12, w - 0.5, h), facade(f"p{y}", col))
-        y += w
-    sun((0.5, -0.9, 0.35), 3.5, (1.0, 0.82, 0.62), 1.2)
-    C.camera(Vector((-10.5, 4.6, 2.3)), Vector((20, -1.5, 3.0)), lens=30, fstop=5.6, focus=8.0)
-    cine = {"sat": 1.1, "exposure": 0.0}
+    # Genoa: Part 4's quay set used as is (mary_celeste_p4/shots/sets.py set_genoa: the ship alongside, the stone
+    # quay, the casks of alcohol landed and stowed, Genoese ochre / terracotta / rose plaster fronts with green
+    # shutters, late sun), so Genoa looks the same in both parts. Our framing: along the stow toward the houses.
+    P4S = os.path.abspath(os.path.join(p5.ROOT, "mary_celeste_p4", "shots"))
+    if P4S not in sys.path:
+        sys.path.append(P4S)
+    import sets as P4set
+    g = P4set.set_genoa()
+    QY, QZ = g["QY"], g["QZ"]
+    C.camera(Vector((-19.0, QY + 1.2, QZ + 1.6)), Vector((4.0, QY + 9.0, QZ + 5.0)), lens=26, fstop=8.0)
+    cine = {"sat": 1.08, "exposure": 0.0}
 
 C.finish(OUT, cine=cine, bloom=0.4)
 print("RENDERED", OUT)

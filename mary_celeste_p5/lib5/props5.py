@@ -66,6 +66,39 @@ def bands(center, radii, width=3.0, color=(1.0, 0.45, 0.12), strength=2.5, alpha
     return objs
 
 
+def glow_band(center, r_in, r_peak, r_out, color=(1.0, 0.42, 0.1), strength=2.0, alpha=0.5, n=160, rings=24):
+    """ONE filled soft orange glow band (house style, as P1/P4): clear inside r_in, rising smoothly to its fullest at
+    r_peak and fading out by r_out (smoothstep both sides, no hard edge anywhere). Hovers flat over the sea."""
+    m = bpy.data.materials.new("glowband"); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
+    out = N.new("ShaderNodeOutputMaterial")
+    at = N.new("ShaderNodeAttribute"); at.attribute_name = "glow"
+    sc = N.new("ShaderNodeMath"); sc.operation = 'MULTIPLY'; sc.inputs[1].default_value = alpha; L.new(at.outputs['Fac'], sc.inputs[0])
+    em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (*color, 1); em.inputs['Strength'].default_value = strength
+    tr = N.new("ShaderNodeBsdfTransparent")
+    mx = N.new("ShaderNodeMixShader"); L.new(sc.outputs[0], mx.inputs[0]); L.new(tr.outputs[0], mx.inputs[1]); L.new(em.outputs[0], mx.inputs[2])
+    L.new(mx.outputs[0], out.inputs['Surface'])
+    ss = lambda t: t * t * (3 - 2 * t)
+    radii = [r_in + (r_out - r_in) * j / rings for j in range(rings + 1)]
+    gv = [ss((r - r_in) / (r_peak - r_in)) if r <= r_peak else ss(1 - (r - r_peak) / (r_out - r_peak)) for r in radii]
+    V = []; F = []; G = []
+    for k in range(n):
+        a = 2 * math.pi * k / n
+        for r, g in zip(radii, gv):
+            V.append((center.x + r * math.cos(a), center.y + r * math.sin(a), center.z)); G.append(g)
+    R = rings + 1
+    for k in range(n):
+        a0, a1 = k * R, ((k + 1) % n) * R
+        for j in range(rings):
+            F.append([a0 + j, a1 + j, a1 + j + 1, a0 + j + 1])
+    me = bpy.data.meshes.new("glowband"); me.from_pydata(V, [], F); me.update()
+    me.polygons.foreach_set("use_smooth", [True] * len(me.polygons))
+    at_ = me.attributes.new("glow", 'FLOAT', 'POINT'); at_.data.foreach_set("value", G)
+    o = bpy.data.objects.new("glowband", me); bpy.context.collection.objects.link(o); o.data.materials.append(m)
+    o.visible_shadow = False
+    return o
+
+
 # ----------------------------------------------------------------------------- island
 def island(center, length=12000.0, height=500.0, depth=4000.0, seed=3):
     """A low island on the horizon (Santa Maria is ~17 km long, 587 m high): ridge of noise hills, green-brown,
@@ -541,9 +574,34 @@ DOLLS = {"china": "7c6f3f614592486e9124b0d84e1fde08",        # "China Doll - toy
          "porcelain": "9ce09a8a6b1b45ce90c4479b54b4e003"}    # "A porcelain doll", alicean (CC-BY)
 
 
-def _split_box(ms, lo_n, hi_n, name):
+def _tex_pixels(o):
+    """(numpy HxWx4, w, h) of the base-colour image of the object's first textured material, or None."""
+    import numpy as np
+    for m in o.data.materials:
+        if m and m.use_nodes:
+            for n in m.node_tree.nodes:
+                if n.type == 'TEX_IMAGE' and n.image is not None:
+                    im = n.image; w, h = im.size
+                    px = np.empty(w * h * 4, np.float32); im.pixels.foreach_get(px)
+                    return px.reshape(h, w, 4), w, h
+    return None
+
+
+def _china_face(px_wh, uvl):
+    """Pale glazed china (not the dress, not the hair): bright and nearly colourless at the face's UV centre."""
+    px, w, h = px_wh
+    def pred(f):
+        u = sum(l[uvl].uv.x for l in f.loops) / len(f.loops); v = sum(l[uvl].uv.y for l in f.loops) / len(f.loops)
+        c = px[int((v % 1.0) * (h - 1)), int((u % 1.0) * (w - 1)), :3]
+        mx, mn = float(max(c)), float(min(c))
+        return mx > 0.55 and (mx - mn) / max(mx, 1e-3) < 0.3
+    return pred
+
+
+def _split_box(ms, lo_n, hi_n, name, china=False):
     """Separate the faces whose centres fall inside a box given in the models' normalised bounds (0..1 per axis)
-    into one new object; returns it (or None)."""
+    into one new object; returns it (or None). china=True: only the pale glazed faces in it (the limb, not the
+    dress around it), read from the scan's own texture."""
     import sketchfab as SF
     lo, hi = SF.bounds(ms); ext = hi - lo
     blo = Vector([lo[i] + ext[i] * lo_n[i] for i in range(3)]); bhi = Vector([lo[i] + ext[i] * hi_n[i] for i in range(3)])
@@ -551,6 +609,10 @@ def _split_box(ms, lo_n, hi_n, name):
     for o in ms:
         M = o.matrix_world; bm = bmesh.new(); bm.from_mesh(o.data)
         sel = [f for f in bm.faces if all(blo[i] <= (M @ f.calc_center_median())[i] <= bhi[i] for i in range(3))]
+        if china and sel:
+            pw = _tex_pixels(o); uvl0 = bm.loops.layers.uv.active
+            if pw is not None and uvl0 is not None:
+                pr = _china_face(pw, uvl0); sel = [f for f in sel if pr(f)]
         if not sel:
             bm.free(); continue
         keep = bmesh.new()
@@ -590,15 +652,20 @@ def _split_box(ms, lo_n, hi_n, name):
 
 def doll(name, at, rot_z=0.0, height=0.36, broken=False, kind="china", lie=True, **_):
     """A real antique doll (scan). Lies face up, head toward +Y before rot_z (lie=False: stands).
-    broken=True: her left forearm is broken off at the elbow and lies beside her, a few cm out."""
+    broken=True: her left forearm has come off at the elbow seam of her cloth arm and lies apart from her: a glazed
+    china forearm and hand with a torn linen cuff, loose stitching, and sawdust stuffing spilled between them.
+    (The scan's own arm cannot be cut out cleanly - its triangles are a texture soup - so the left arm is the
+    scan's sleeve and the broken forearm is modelled.)"""
     import sketchfab as SF
     root, ms = SF.model(DOLLS[kind], size=height, axis=2)
     piece = None
+    stump = None
     if broken:
-        # left forearm + hand of a standing doll facing -Y: her left is +X; elbow ~ 58% height, hand ~ 40%
-        piece = _split_box(ms, (0.78, 0.0, 0.40), (1.0, 1.0, 0.585), name + "_forearm")
-        if piece:
-            ms.append(piece); piece.parent = root; piece.matrix_parent_inverse = root.matrix_world.inverted()
+        # the elbow seam at her left sleeve (standing doll facing -Y: her left is +X), on the sleeve's outer side
+        lo, hi = SF.bounds(ms); ext = hi - lo
+        stump = bpy.data.objects.new(name + "_stump", None); bpy.context.collection.objects.link(stump)
+        stump.location = Vector((lo.x + ext.x * 0.74, lo.y + ext.y * 0.5, lo.z + ext.z * 0.6))
+        stump.parent = root; stump.matrix_parent_inverse = root.matrix_world.inverted()
     if lie:
         root.rotation_euler = (math.radians(-90), 0, rot_z)
     else:
@@ -607,17 +674,105 @@ def doll(name, at, rot_z=0.0, height=0.36, broken=False, kind="china", lie=True,
     lo, hi = SF.bounds(ms); c = (lo + hi) / 2
     root.location += Vector((at[0] - c.x, at[1] - c.y, at[2] - lo.z))
     bpy.context.view_layer.update()
-    if piece:
-        # the broken piece comes away from her side and lies flat on the tissue, turned a little
-        mw = piece.matrix_world.copy(); piece.parent = None; piece.matrix_world = mw
-        plo, phi = SF.bounds([piece]); pc = (plo + phi) / 2
-        ext = phi - plo
-        if lie and ext.z > max(ext.x, ext.y):
-            # it came away upright: lay it down along her side (long axis horizontal)
-            piece.matrix_world = Matrix.Translation(pc) @ Matrix.Rotation(math.radians(-90), 4, 'X') @ Matrix.Translation(-pc) @ piece.matrix_world
-            bpy.context.view_layer.update(); plo, phi = SF.bounds([piece]); pc = (plo + phi) / 2
+    if broken:
+        sw = stump.matrix_world.translation.copy()
         side = Matrix.Rotation(rot_z, 4, 'Z') @ Vector((1, 0, 0)) if lie else Vector((1, 0, 0))
-        R = Matrix.Translation(pc + side * 0.06) @ Matrix.Rotation(math.radians(28), 4, 'Z') @ Matrix.Translation(-pc)
-        piece.matrix_world = R @ piece.matrix_world
-        plo, phi = SF.bounds([piece]); piece.location.z += at[2] - plo.z
+        along = Matrix.Rotation(rot_z, 4, 'Z') @ Vector((0, -1, 0)) if lie else Vector((0, -1, 0))   # toward her feet
+        elbow = Vector((sw.x, sw.y, at[2])) + side * 0.07 + along * 0.01
+        piece = _china_forearm(name + "_forearm", elbow, (side * 0.5 + along).normalized(), at[2], scale=height / 0.34)
+        root["stump"] = tuple(sw)
+        _seam_damage(name, sw, piece, floor_z=at[2])
     return root, piece
+
+
+def _china_forearm(name, elbow, direction, floor_z, scale=1.0):
+    """A doll's glazed china forearm and hand, broken off at the elbow: a tapering glazed tube, a cupped hand, and the
+    torn end of the cloth upper arm still sewn to it (linen, frayed). Lies on the tissue, `direction` elbow->hand."""
+    import bmesh
+    d = Vector(direction); d.z = 0; d.normalize(); up = Vector((0, 0, 1)); sd = d.cross(up).normalized()
+    s = scale
+    glaze = bpy.data.materials.new(name + "_glaze"); glaze.use_nodes = True
+    gp = glaze.node_tree.nodes["Principled BSDF"]
+    gp.inputs['Base Color'].default_value = (0.86, 0.78, 0.72, 1); gp.inputs['Roughness'].default_value = 0.12
+    gp.inputs['Coat Weight'].default_value = 0.6; gp.inputs['Subsurface Weight'].default_value = 0.1
+    linen = bpy.data.materials.new(name + "_linen"); linen.use_nodes = True
+    lp = linen.node_tree.nodes["Principled BSDF"]; lp.inputs['Base Color'].default_value = (0.6, 0.52, 0.4, 1); lp.inputs['Roughness'].default_value = 0.95
+    L = 0.06 * s; r0, r1 = 0.0085 * s, 0.0058 * s
+    bm = bmesh.new(); rings = []
+    for k in range(13):
+        t = k / 12; r = r0 + (r1 - r0) * t
+        c = elbow + d * (L * t) + up * (r0 + 0.0005)
+        ring = []
+        for j in range(16):
+            a = 2 * math.pi * j / 16
+            ring.append(bm.verts.new(c + sd * (math.cos(a) * r) + up * (math.sin(a) * r * 0.9)))
+        rings.append(ring)
+    for k in range(12):
+        for j in range(16):
+            bm.faces.new([rings[k][j], rings[k][(j + 1) % 16], rings[k + 1][(j + 1) % 16], rings[k + 1][j]])
+    bm.faces.new(rings[-1][::-1])
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    arm = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(arm); me.materials.append(glaze)
+    for p_ in me.polygons:
+        p_.use_smooth = True
+    # cupped hand: a flattened rounded palm, fingers together, a thumb
+    wrist = elbow + d * L + up * (r0 + 0.0005)
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=1.0, location=tuple(wrist + d * 0.012 * s), segments=24, ring_count=12)
+    hand = bpy.context.active_object; hand.name = name + "_hand"
+    hand.scale = (0.014 * s, 0.009 * s, 0.0045 * s)
+    hand.rotation_euler = (0, 0, math.atan2(d.y, d.x)); hand.data.materials.append(glaze); bpy.ops.object.shade_smooth()
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=1.0, location=tuple(wrist + d * 0.006 * s + sd * 0.008 * s), segments=16, ring_count=8)
+    th = bpy.context.active_object; th.name = name + "_thumb"; th.scale = (0.007 * s, 0.003 * s, 0.003 * s)
+    th.rotation_euler = (0, 0, math.atan2(d.y, d.x) + 0.6); th.data.materials.append(glaze); bpy.ops.object.shade_smooth()
+    # the torn cloth of the upper arm still sewn round the china at the elbow: a short linen sleeve, frayed
+    bpy.ops.mesh.primitive_cylinder_add(radius=r0 * 1.25, depth=0.014 * s, vertices=20, end_fill_type='NOTHING',
+                                        location=tuple(elbow - d * 0.002 + up * (r0 + 0.0005)))
+    cuff = bpy.context.active_object; cuff.name = name + "_cuff"
+    cuff.rotation_euler = (0, math.pi / 2, math.atan2(d.y, d.x)); cuff.data.materials.append(linen)
+    sub = cuff.modifiers.new("Sub", "SUBSURF"); sub.levels = 2
+    tx = bpy.data.textures.new(name + "_fray", "CLOUDS"); tx.noise_scale = 0.003
+    dp = cuff.modifiers.new("Fray", "DISPLACE"); dp.texture = tx; dp.strength = 0.0015
+    so = cuff.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.0008
+    bpy.context.view_layer.update()
+    for o in (hand, th, cuff):                      # one piece: moving the forearm moves all of it
+        o.parent = arm; o.matrix_parent_inverse = arm.matrix_world.inverted()
+    return arm
+
+
+def _seam_damage(name, stump, piece, floor_z, seed=5):
+    """What the broken arm shows close up: the cloth seam at the elbow split, loose stitching threads standing out of
+    it, and sawdust stuffing spilled from it across the tissue toward the fallen forearm."""
+    import random
+    rng = random.Random(seed)
+    import sketchfab as SF
+    plo, phi = SF.bounds([piece]); pc = (plo + phi) / 2
+    # sawdust: a little heap at the seam thinning out toward the piece
+    dust = bpy.data.materials.new(name + "_sawdust"); dust.use_nodes = True
+    bp = dust.node_tree.nodes["Principled BSDF"]; bp.inputs['Base Color'].default_value = (0.62, 0.47, 0.28, 1); bp.inputs['Roughness'].default_value = 0.95
+    d = Vector((pc.x - stump.x, pc.y - stump.y, 0)); L = max(0.02, d.length); d.normalize()
+    side = Vector((-d.y, d.x, 0))
+    V = []; F = []
+    for k in range(260):
+        t = rng.random() ** 1.8                                   # most of it near the seam
+        p = Vector((stump.x, stump.y, floor_z)) + d * (t * L * 0.9) + side * rng.gauss(0, 0.006 + 0.012 * t)
+        r = rng.uniform(0.0008, 0.0022); z = floor_z + 0.0006 + (1 - t) * rng.uniform(0, 0.004)
+        b = len(V)
+        V += [(p.x - r, p.y - r * 0.6, z), (p.x + r, p.y - r * 0.6, z), (p.x + r * 0.2, p.y + r, z + r * 0.5)]
+        F.append([b, b + 1, b + 2])
+    me = bpy.data.meshes.new(name + "_sawdust"); me.from_pydata(V, [], F); me.update()
+    o = bpy.data.objects.new(me.name, me); bpy.context.collection.objects.link(o); me.materials.append(dust)
+    o.parent = piece; o.matrix_parent_inverse = piece.matrix_world.inverted()
+    # loose stitching: dark linen threads standing out of the torn seam, a few curling over
+    thr = bpy.data.materials.new(name + "_thread"); thr.use_nodes = True
+    tp = thr.node_tree.nodes["Principled BSDF"]; tp.inputs['Base Color'].default_value = (0.06, 0.05, 0.04, 1); tp.inputs['Roughness'].default_value = 0.8
+    for k in range(7):
+        cu = bpy.data.curves.new(f"{name}_thread{k}", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.00035; cu.bevel_resolution = 1
+        sp = cu.splines.new('BEZIER'); sp.bezier_points.add(2)
+        a = rng.uniform(0, 2 * math.pi); ln = rng.uniform(0.008, 0.02)
+        base = stump + Vector((math.cos(a) * 0.004, math.sin(a) * 0.004, rng.uniform(-0.003, 0.003)))
+        tipd = (d * 0.6 + Vector((math.cos(a), math.sin(a), rng.uniform(-0.2, 0.6))) * 0.8).normalized()
+        pts = [base, base + tipd * ln * 0.5 + Vector((0, 0, 0.002)), base + tipd * ln + Vector((0, 0, rng.uniform(-0.004, 0.001)))]
+        for bp_, q in zip(sp.bezier_points, pts):
+            bp_.co = q; bp_.handle_left_type = bp_.handle_right_type = 'AUTO'
+        ob = bpy.data.objects.new(cu.name, cu); bpy.context.collection.objects.link(ob); cu.materials.append(thr)
+        ob.parent = piece; ob.matrix_parent_inverse = piece.matrix_world.inverted()
