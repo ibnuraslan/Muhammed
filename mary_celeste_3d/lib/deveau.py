@@ -950,10 +950,6 @@ class Deveau:
         pts = pts[ok]; count = int(ok.sum())
         if count == 0:
             return None                                   # (hair_curves.add_curves([]) crashes Blender)
-        if attract is not None and count:
-            # gather the strands to a point (a bun): tips pulled in, the rest of each strand eased toward it
-            A = np.array(attract, np.float32); t = np.linspace(0, 1, segs)[None, :, None] ** 2
-            pts = pts + (A[None, None, :] + (pts[:, :1] - A) * 0.15 - pts) * t * 0.85
         if clump and count > 50:
             # groomed look: strands gather toward the tips of nearby guide strands
             from mathutils.kdtree import KDTree
@@ -966,6 +962,25 @@ class Deveau:
             G = np.array([gi[kd.find(Vector(pts[i, 0]))[1]] for i in range(count)])
             tgt = pts[G] - pts[G][:, :1] + pts[:, :1]
             pts = pts + (tgt - pts) * clump * t
+        if attract is not None:
+            # gather the strands to a point (a bun): tips pulled in, the rest of each strand eased toward it
+            # (after clumping, which would otherwise copy hanging guide shapes back onto the tips)
+            A = np.array(attract, np.float32)
+            t = np.clip((np.linspace(0, 1, segs) - 0.35) / 0.65, 0, 1)[None, :, None] ** 1.3   # roots/upper strand stay groomed under the bonnet
+            pts = pts + (A[None, None, :] + (pts[:, :1] - A) * 0.08 - pts) * t
+            # a straight pull bows the crown strands out through a bonnet: keep them lying on the skull
+            # (4 mm off the scalp) until they are near the knot, then let them leave the head for it
+            for i in range(count):
+                for k in range(1, segs):
+                    p = Vector(pts[i, k]); dA = (p - Vector(A)).length
+                    w = min(1.0, max(0.0, (dA - 0.035) / 0.04))
+                    if w <= 0:
+                        continue
+                    loc, nrm, _, d = bvh.find_nearest(p)
+                    if loc is None or d > 0.05:
+                        continue
+                    q = loc + (p - loc).normalized() * 0.004 if d > 1e-6 else loc + nrm * 0.004
+                    pts[i, k] = p.lerp(q, w)
         cv = bpy.data.hair_curves.new(f"{self.name}_{label}")
         cv.add_curves([segs] * count)
         cv.position_data.foreach_set("vector", pts.reshape(-1))
