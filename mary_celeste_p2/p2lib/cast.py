@@ -670,6 +670,7 @@ class _SharedLive:
         bpy.context.view_layer.update()
         if ground:
             Person.ground(self)
+        Person.tag(self)                    # wrists + knuckles + fingertips as hand points (P5's convention)
         return self
 
     def ground(self, *a, **k):

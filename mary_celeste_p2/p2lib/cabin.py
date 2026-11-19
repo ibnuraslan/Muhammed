@@ -266,7 +266,7 @@ def build(mood="warm", letter_side=1, wet=0.0, lamp_on=True, skylight=1.0, organ
     _tablecloth(tx, ty, tz, TW + 0.02, TD + 0.02, clothm)
     # ---- chairs (Poly Haven), one each side of the table
     A["chairs"] = []
-    for (cy_, yaw) in ((ty - 0.66, math.pi), (ty + 0.66, 0.0)):
+    for (cy_, yaw) in ((ty - 0.8, math.pi), (ty + 0.8, 0.0)):
         r, ms = S.place_model("WoodenChair_01", (tx - 0.05, cy_, 0), size=1.02, rot_z=yaw)
         A["chairs"].append((Vector((tx - 0.05, cy_, 0)), yaw, ms))
     lo, hi = ph.bounds(A["chairs"][0][2])

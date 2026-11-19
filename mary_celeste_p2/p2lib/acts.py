@@ -41,19 +41,19 @@ def stand_place(pos, yaw_deg, z=0.0):
     return Matrix.Translation(Vector((pos[0], pos[1], z))) @ Matrix.Rotation(math.radians(yaw_deg), 4, 'Z')
 
 
-def write(h, Mi, paper_w, side="R", other_on_table=None, lean=12.0, head_pitch=26.0):
+def write(h, Mi, paper_w, side="R", other_on_table=None, lean=20.0, head_pitch=26.0):
     """Seated, writing: the pen hand on the paper (fingers in a pen grip), the other forearm resting on the table."""
     sg = H.SIDE[side]; os_ = "L" if side == "R" else "R"; so = H.SIDE[os_]
     for b, k in (("spine04", 0.35), ("spine03", 0.35), ("spine02", 0.3)):
         h.rot(b, (1, 0, 0), lean * k)
     P.head(h, pitch=head_pitch, yaw=-4 * sg)
     tgt = Mi @ Vector(paper_w)
-    P.hand_reach(h, side, tgt + Vector((0.02 * sg, 0.05, 0.055)), elbow=(0.9 * sg, 0.4, 0.3))
+    P.hand_reach(h, side, tgt + Vector((0.02 * sg, 0.06, 0.075)), elbow=(0.9 * sg, 0.4, 0.45))
     h.aim(f"wrist.{side}", Vector((-0.35 * sg, -0.8, -0.45)))
     pen_grip(h, side)
     if other_on_table is not None:
-        P.hand_reach(h, os_, Mi @ Vector(other_on_table) + Vector((0, 0, 0.045)), elbow=(0.9 * so, 0.5, 0.2))
-        h.aim(f"wrist.{os_}", Vector((0.25 * so, -0.55, -0.8)))      # palm down, fingers on the page
+        P.hand_reach(h, os_, Mi @ Vector(other_on_table) + Vector((0, 0.03, 0.05)), elbow=(0.9 * so, 0.5, 0.45))
+        h.aim(f"wrist.{os_}", Vector((0.25 * so, -0.95, -0.2)))      # palm down, hand flat on the page
         P.rest_hand(h, os_, curl=8)
 
 

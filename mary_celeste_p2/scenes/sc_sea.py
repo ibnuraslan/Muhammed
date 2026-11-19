@@ -55,7 +55,7 @@ def _sextant(person, M):
     apex = c + up * 0.07
     for p in (pts[0], pts[-1], pts[len(pts) // 2]):
         parts.append(ship.cyl("sx_frame", apex, p, 0.004, mat=br, verts=8))
-    parts.append(ship.cyl("sx_scope", apex - fw * 0.06 + sd * 0.03, apex + fw * 0.08 + sd * 0.03, 0.012, mat=dk, verts=14))
+    parts.append(ship.cyl("sx_scope", apex + fw * 0.03 + sd * 0.03, apex + fw * 0.15 + sd * 0.03, 0.012, mat=dk, verts=14))
     parts.append(ship.box("sx_mirror", tuple(apex + sd * 0.0), (0.03, 0.005, 0.04), cabin.plain("mirror", (0.9, 0.9, 0.9), rough=0.02, metal=1.0)))
     for o in parts:
         cabin.attach(o, person, "wrist.R")

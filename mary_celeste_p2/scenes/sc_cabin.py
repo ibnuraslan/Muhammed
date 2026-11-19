@@ -29,7 +29,7 @@ def seated(person, chair, lean=4, yaw=None, back=0.0, lift=0.0):
 
 def briggs_writing(pause=False, expr=None):
     b = cast.Briggs(expr=expr, seated=True)
-    Mw = seated(b, 1)
+    Mw = seated(b, 1, lift=0.0, back=-0.06)
     Mi = Mw.inverted()
     paper = SET["letter"] + Vector((0.0, 0.02, 0.0))
     A.write(b.h, Mi, paper, side="R", other_on_table=SET["letter"] + Vector((-0.2, 0.06, 0)), lean=14,
@@ -44,7 +44,7 @@ def briggs_writing(pause=False, expr=None):
 
 def sarah_writing(look_up=False, temple=False, expr=None):
     s = cast.Sarah(seated=True, expr=expr)
-    Mw = seated(s, 0)
+    Mw = seated(s, 0, lift=0.03, back=-0.04)
     Mi = Mw.inverted()
     paper = SET["letter"] + Vector((0.0, -0.02, 0.0))
     A.write(s.h, Mi, paper, side="R", other_on_table=SET["letter"] + Vector((0.2, -0.05, 0)), lean=10,
@@ -131,7 +131,7 @@ elif SHOT == "13":          # top-down white maquette of the cabin: every corner
 elif SHOT in ("07", "08"):  # Sarah at the table; Sophia beside her holds up her doll
     SET = cabin.build("warm", letter_side=-1, letters=False)
     s = cast.Sarah(seated=True, expr={"mouth-corner-puller": 0.35})
-    Mw = seated(s, 0, lean=-6, yaw=192.0, back=0.06, lift=0.015)
+    Mw = seated(s, 0, lean=-6, yaw=205.0, back=0.0, lift=0.03)
     A.hands_in_lap(s.h)
     P.head(s.h, pitch=16, yaw=-34, tilt=4)
     s.finish_live(place=Mw, density=HAIR)
@@ -162,8 +162,8 @@ elif SHOT == "14":          # the visitor ducks under the companion beam; her bo
     P.head(v.h, pitch=10)
     P.arm_down(v.h, "R", out=0.25, fwd=0.3, bend=50); P.rest_hand(v.h, "R")
     P.arm_down(v.h, "L", out=0.2, fwd=0.2, bend=30); P.rest_hand(v.h, "L")
-    xs = cabin.COMP["x0"] - 0.4
-    Mv = A.stand_place((xs, -1.1), -90)
+    xs = cabin.COMP["x0"] - 0.3
+    Mv = A.stand_place((xs, -1.15), -90)
     v.finish_live(place=Mv, density=HAIR)
     s = cast.Sarah(expr={"mouth-corner-puller": 0.4})
     P.stand(s.h, weight="R", lean=4)
@@ -175,7 +175,7 @@ elif SHOT == "14":          # the visitor ducks under the companion beam; her bo
         ch0 = ch0.parent
     ch0.location += Vector((-1.05, 0.5, 0))        # she has pushed her chair back from the table
     bpy.context.view_layer.update()
-    Ms = A.stand_place((0.04, -1.12), A.yaw_to((0.04, -1.12), (xs, -1.1)))
+    Ms = A.stand_place((-0.1, -1.0), A.yaw_to((-0.1, -1.0), (xs, -1.15)))
     s.finish_live(place=Ms, density=HAIR)
     s.look(v.h.bone_head("head")); v.look(s.h.bone_head("head"))
     vh, shh = v.h.bone_head("head"), s.h.bone_head("head")
@@ -263,8 +263,8 @@ elif SHOT == "36":          # flashback, warm: Briggs winds the chronometer
     P.head(b.h, pitch=30)
     Mb = A.stand_place((cb.x + 0.1, cb.y + 0.56), 0)
     Mi = Mb.inverted()
-    P.hand_reach(b.h, "R", Mi @ (cb + Vector((0.0, 0.08, 0.06))), elbow=(-0.8, 0.3, -0.6)); A.pen_grip(b.h, "R")
-    P.hand_reach(b.h, "L", Mi @ (cb + Vector((-0.12, 0.05, -0.04))), elbow=(0.8, 0.3, -0.6)); P.rest_hand(b.h, "L", 20)
+    P.hand_reach(b.h, "R", Mi @ (cb + Vector((0.0, 0.1, 0.13))), elbow=(-0.8, 0.3, -0.4)); A.pen_grip(b.h, "R")
+    P.hand_reach(b.h, "L", Mi @ (cb + Vector((-0.17, 0.08, 0.06))), elbow=(0.8, 0.3, -0.4)); P.rest_hand(b.h, "L", 10)
     b.finish_live(place=Mb, density=HAIR)
     b.look(cb)
     hd = b.h.bone_head("head")
