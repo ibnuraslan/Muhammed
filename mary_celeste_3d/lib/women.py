@@ -224,20 +224,21 @@ class Sarah(_Woman):
         hd = P[self.used & (D._w(h, D.HEAD) > 0.6)]
         # back of the head, low (posed positions; the head may be turned: use the head rotation)
         ctr = hd.mean(0); back = self.head_R @ Vector((0, 1, 0)); down = self.head_R @ Vector((0, 0, -1))
-        return tuple(Vector(ctr) + back * 0.085 * hs + down * 0.035 * hs)
+        # low at the nape, clear of the neck (the nape is ~8 cm behind the head centre) and below the bavolet
+        return tuple(Vector(ctr) + back * 0.145 * hs + down * 0.06 * hs)
 
     def _bun(self, P, R, hm, density):
         """A low bun at the nape: a coiled core of hair wound with clumped strands (rides with the head)."""
         h = self.h; hs = self.head_scale
         c = Vector(self._bun_point(P))
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=0.032 * hs, location=c)
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=0.042 * hs, location=c)
         core = bpy.context.active_object; core.name = self.name + "_bun"; core.scale = (1.25, 0.85, 0.9)
         bpy.ops.object.shade_smooth()
         bm_ = bpy.data.materials.new(self.name + "_buncore"); bm_.use_nodes = True
         bp = bm_.node_tree.nodes["Principled BSDF"]; bp.inputs['Base Color'].default_value = (0.03, 0.018, 0.012, 1)
         bp.inputs['Roughness'].default_value = 0.45; bp.inputs['Sheen Weight'].default_value = 0.6
         tc = bm_.node_tree.nodes.new("ShaderNodeTexCoord"); wv = bm_.node_tree.nodes.new("ShaderNodeTexWave")
-        wv.wave_type = 'RINGS'; wv.inputs['Scale'].default_value = 25; wv.inputs['Distortion'].default_value = 6
+        wv.wave_type = 'BANDS'; wv.bands_direction = 'Z'; wv.inputs['Scale'].default_value = 60; wv.inputs['Distortion'].default_value = 3
         bm_.node_tree.links.new(tc.outputs['Object'], wv.inputs['Vector'])
         bb = bm_.node_tree.nodes.new("ShaderNodeBump"); bb.inputs['Strength'].default_value = 0.8
         bm_.node_tree.links.new(wv.outputs['Fac'], bb.inputs['Height']); bm_.node_tree.links.new(bb.outputs['Normal'], bp.inputs['Normal'])
@@ -248,9 +249,9 @@ class Sarah(_Woman):
         if n <= 0:
             return
         pts = np.zeros((n, segs, 3), np.float32)
-        rad = 0.033 * hs
+        rad = 0.043 * hs
         for i in range(n):
-            a0 = rng.uniform(0, 2 * math.pi); el = rng.uniform(-1.1, 1.1); tilt = rng.uniform(-0.3, 0.3)
+            a0 = rng.uniform(0, 2 * math.pi); el = math.asin(rng.uniform(-0.995, 0.995)); tilt = rng.uniform(-0.3, 0.3)   # cover the poles too
             for k in range(segs):
                 a = a0 + k * 0.32
                 r = rad * (1.02 + 0.06 * rng.random())
@@ -282,7 +283,7 @@ class Sarah(_Woman):
         self._fill_sleeves(self.bodice, bv, warm, 0.012)
         self._folds(self.bodice)
         linen = D.linen_material(self.name + "_collar", color=(0.78, 0.75, 0.68))
-        self._band_collar(m, wh, whand, top, linen, offset=0.013)
+        # (no separate linen edge: at this mesh density it reduced to a stray white dot at the nape)
         self._front_buttons(bv, m["hip"] + 0.08, top - 0.02, 11, 0.012)
         # skirt: bell from the waist to the floor (standing) or a draped shell (seated)
         st = self._stockings_and_shoes(m, wh, whand, wfoot, (0.03, 0.028, 0.03), m["knee"] + 0.1)
@@ -423,7 +424,7 @@ class Sarah(_Woman):
                 z0 = ec[2] + 0.012 * hs                              # hangs from the crown's lower edge
                 ruff = 0.006 * hs * math.sin(i * 1.9) * (0.4 + t)    # gathered frill
                 p = np.array(c) + d * (r + 0.012 * hs * t + ruff)
-                p[2] = z0 - 0.05 * hs * t
+                p[2] = z0 - 0.035 * hs * t
                 V.append(tuple(p))
         for j in range(nv):
             for i in range(nu):
