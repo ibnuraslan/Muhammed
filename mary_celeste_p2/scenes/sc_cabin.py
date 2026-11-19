@@ -179,7 +179,7 @@ elif SHOT == "14":          # the visitor ducks under the companion beam; her bo
     s.finish_live(place=Ms, density=HAIR)
     s.look(v.h.bone_head("head")); v.look(s.h.bone_head("head"))
     vh, shh = v.h.bone_head("head"), s.h.bone_head("head")
-    S.cam(Vector((-1.2, -0.45, 0.95)), Vector((1.3, -1.25, 1.85)), lens=24, fstop=4.0)
+    S.cam(Vector((0.35, 0.35, 1.45)), Vector((0.42, -1.12, 1.4)), lens=24, fstop=4.0)
 
 elif SHOT in ("17", "19"):  # Sarah writing; a bang overhead (17); fingers to her temple (19)
     SET = cabin.build("warm", letter_side=-1)
