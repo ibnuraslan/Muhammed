@@ -420,7 +420,7 @@ def s09(t):
     m = ST.mc("spare", wind=ST.local_wind(WIND, hd), wet=0.4, detail=False)
     SHIP = ST.set_ship(m, loc=(0, 0, 0), heading=hd, heel=6 + 1.0 * math.sin(t * 2), pitch=0.8 * math.sin(t * 1.5))
     # three men aboard, small at the wheel and in the waist
-    for i, (x, y, key, hdg) in enumerate(((-ship.L / 2 + 1.0, 0.4, "deveau", 0), (-2.0, -2.6, "sailor_a", 160), (6.0, 2.3, "sailor_b", 200))):
+    for i, (x, y, key, hdg) in enumerate(((-ship.L / 2 + 1.0, 0.4, "deveau", 0), (-4.2, -2.3, "sailor_a", 160), (6.0, 2.3, "sailor_b", 200))):
         M = ST.on_ship(SHIP, x, y, hdg)
         p = crew.person(key, wet=0.2, idx=i); P.stand(p.h, lean=4); P.arm_down(p.h, "L"); P.arm_down(p.h, "R")
         if key == "deveau":
