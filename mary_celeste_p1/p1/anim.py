@@ -61,8 +61,11 @@ def live(dv, M, pose, look_w, dur, density=1.0, seed=0, action=None, key_every=0
             continue
         H.reset_pose(h)
         idle(dv, t, seed)          # breathing first: the shot's pose (with its hand IK) goes on top, so hands stay on
+        pre = action is not None and getattr(action, "pre", False)
+        if pre:                    # body actions (leaning in) also go under the pose, so the hand IK solves after them
+            action(dv, M, t)
         pose(dv, M)                # their rails, spokes and tables while the chest moves
-        if action:
+        if action and not pre:
             action(dv, M, t)
         for b in blinks:
             u = (t - b) / 0.07

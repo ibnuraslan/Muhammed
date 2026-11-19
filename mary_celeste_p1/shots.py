@@ -142,7 +142,7 @@ def crew_in_boat(b, rowers=(0, 1), cox="deveau", look=None):
             H.pose_sit(dv.h, lean=26, hands="knees"); P.head(dv.h, pitch=-8)
             if len(handles) == 2:
                 # the wrist sits just past the end of the loom, the fist closed on its last few inches (no sleeve on the wood)
-                grip = lambda hd: Bm @ (hd[0] + (hd[0] - hd[2]).normalized() * 0.075 + Vector((0, 0, 0.035)))
+                grip = lambda hd: Bm @ (hd[0] + (hd[0] - hd[2]).normalized() * 0.075 + Vector((0, 0, 0.043)))
                 hL, hR = sorted(handles, key=lambda h: -h[0].y)
                 Cw.hands_on(dv, Mx, left_w=grip(hR), right_w=grip(hL), elbow_l=(0.8, 0.0, -0.6), elbow_r=(-0.8, 0.0, -0.6))
         person(who, Mp, row, look_w=look, density=0.35, seat=True)
@@ -527,7 +527,7 @@ def s14():
     person(0, S.deck_place(M, xa, -hb + 0.5, heading_to(xa, -hb + 0.5, gx, 0.5)), p0, look_w=S.deck_point(M, gx - 1.0, 0.0, 0.2))
     Bm = b["root"].matrix_world
     edge_l = M @ Vector((xb + 0.28, -hb + 0.06, ship.zdeck(xb) + 0.02)); edge_r = M @ Vector((xb - 0.28, -hb + 0.06, ship.zdeck(xb) + 0.02))
-    Mb = Bm @ Matrix.Translation((0.45, 0.25, SB.GUN - SB.DEPTH + 0.13)) @ Matrix.Rotation(math.radians(180), 4, 'Z')
+    Mb = Bm @ Matrix.Translation((0.45, 0.19, SB.GUN - SB.DEPTH + 0.13)) @ Matrix.Rotation(math.radians(180), 4, 'Z')
     def p1(dv, Mx):
         Cw.stand_relaxed(dv, pitch=-14, yaw=0, lean=8)
         Cw.hands_on(dv, Mx, left_w=edge_r, right_w=edge_l, elbow_l=(0.8, 0.3, -0.5), elbow_r=(-0.8, 0.3, -0.5), grip=False, curl=40)
@@ -624,9 +624,9 @@ def s19():
     t = a["table"]
     M = Matrix.Translation((t.x + 0.05, t.y + 0.62, 0.0)) @ Matrix.Rotation(math.radians(0), 4, 'Z')
     def pose(dv, Mx):
-        H.pose_sit(dv.h, lean=22, hands="knees")
+        H.pose_sit(dv.h, lean=16, hands="knees")
         P.head(dv.h, pitch=32)
-        Cw.hands_on(dv, Mx, left_w=t + Vector((0.2, 0.1, 0.1)), right_w=t + Vector((-0.05, 0.06, 0.1)),
+        Cw.hands_on(dv, Mx, left_w=t + Vector((0.2, 0.1, 0.15)), right_w=t + Vector((-0.05, 0.06, 0.15)),
                     elbow_l=(0.8, 0.5, -0.6), elbow_r=(-0.8, 0.5, -0.6), grip=False, curl=30)
     # seat height: the stool top ~0.45
     dv = person("deveau", M, pose, look_w=t + Vector((-0.1, 0.02, 0.05)), seat=True)
@@ -654,7 +654,7 @@ def s21():
     M = d["M"]; xw = -ship.L / 2 + 1.7; zc = ship.zdeck(xw) + 1.25
     Mp = S.deck_place(M, xw - 0.5, 0.0, 90)
     a = math.radians(95)
-    L = M @ Vector((xw, 0.62 * math.sin(a), zc + 0.62 * math.cos(a))); R = M @ Vector((xw, -0.62 * math.sin(a), zc + 0.62 * math.cos(a)))
+    L = M @ Vector((xw - 0.07, 0.48 * math.sin(a), zc + 0.48 * math.cos(a))); R = M @ Vector((xw - 0.07, -0.48 * math.sin(a), zc + 0.48 * math.cos(a)))
     def pose(dv, Mx):
         Cw.stand_relaxed(dv, pitch=-3, yaw=-10, lean=6)
         Cw.hands_on(dv, Mx, left_w=L, right_w=R, elbow_l=(0.9, 0.2, -0.5), elbow_r=(-0.9, 0.2, -0.5))
@@ -682,8 +682,8 @@ def s23():
     d, _ = dg_at_sea(heading=95.0)
     M = d["M"]; cx = open_companion(d, "DG")
     zc = ship.zdeck(cx)
-    Mp = S.deck_place(M, cx + 1.02, 1.05, heading_to(cx + 1.02, 1.05, cx, 1.2))   # on deck at the trunk's forward end
-    top = M @ Vector((-ship.L / 2 + 3.2 + 2.6 + 2.8 - 0.06, 1.38, ship.zdeck(cx) + 0.94 + 0.05))   # right hand on the trunk roof edge
+    Mp = S.deck_place(M, cx + 1.20, 1.05, heading_to(cx + 1.20, 1.05, cx, 1.2))   # on deck at the trunk's forward end
+    top = M @ Vector((-ship.L / 2 + 3.2 + 2.6 + 2.8 - 0.06, 1.38, ship.zdeck(cx) + 0.94 + 0.09))   # right hand on the trunk roof edge
     def pose(dv, Mx):
         Cw.stand_relaxed(dv, pitch=6, yaw=-10, lean=6)
         Cw.hands_on(dv, Mx, left_w=None, right_w=top, elbow_r=(-0.8, 0.4, -0.5), grip=False, curl=20)
@@ -702,7 +702,7 @@ def s24():
     M = d["M"]; xw = -ship.L / 2 + 1.7; zc = ship.zdeck(xw) + 1.25
     Mp = S.deck_place(M, xw - 0.42, 0.0, 90)
     a1, a2 = math.radians(60), math.radians(150)
-    spoke0 = lambda a: M @ Vector((xw - 0.07, 0.48 * math.sin(a), zc + 0.48 * math.cos(a)))
+    spoke0 = lambda a: M @ Vector((xw - 0.11, 0.48 * math.sin(a), zc + 0.48 * math.cos(a)))
     L = spoke0(math.pi / 2); R = spoke0(-math.pi / 2)            # fists closed on two spokes
     def pose(dv, Mx):
         Cw.stand_relaxed(dv, pitch=8, yaw=-6, lean=12, weight="R")
@@ -723,7 +723,7 @@ def s24():
             pivot.rotation_euler = (-th(i / 24), 0, 0); pivot.keyframe_insert("rotation_euler", frame=1 + i)
         pivot.rotation_euler = (0, 0, 0)
         # hands grip two spokes (at the horizontal, between the rim and the handles), the wrist just aft of the spoke
-        spoke = lambda a: M @ Vector((xw - 0.07, 0.48 * math.sin(a), zc + 0.48 * math.cos(a)))
+        spoke = lambda a: M @ Vector((xw - 0.11, 0.48 * math.sin(a), zc + 0.48 * math.cos(a)))
         ANIM["actions"][0] = lambda dv, Mx, t: Cw.hands_on(dv, Mx, left_w=spoke(math.pi / 2 + th(t)), right_w=spoke(-math.pi / 2 + th(t)),
                                                          elbow_l=(0.9, 0.2, -0.6), elbow_r=(-0.9, 0.2, -0.6))
     person(2, Mp, pose, look_w=M @ Vector((xw, 0, zc)))
@@ -750,7 +750,7 @@ def s26():
     d, mc = dg_at_sea(heading=95.0, mc=dict(heading=128.0, loc=(230.0, -60.0, -0.32)))
     M = d["M"]; xb = ship.L / 2 - 4.5
     hb = ship.half_breadth((xb + ship.L / 2) / ship.L, 1.0)
-    Mp = S.deck_place(M, xb, -hb + 0.55, 60)
+    Mp = S.deck_place(M, xb, -hb + 0.65, 60)
     cap = M @ Vector((xb + 0.2, -(hb - 0.03), ship.zdeck(xb) + ship.RAIL_H + 0.1))
     mouth_off = Vector((0.05, -0.12, 1.6))
     def pose(dv, Mx):
@@ -812,7 +812,7 @@ def s31():
     mc, _ = mc_at_sea(heel=2.5)
     M = mc["M"]; xw = -ship.L / 2 + 1.7; bx = xw + 0.75
     Mp = S.deck_place(M, bx + 0.05, -0.6, heading_to(bx + 0.05, -0.6, bx, 0.0))   # beside the binnacle (the trunk is close forward)
-    top = M @ Vector((bx + 0.2, -0.2, ship.zdeck(xw) + 1.09))          # the binnacle top, forward of the bowl: his right hand
+    top = M @ Vector((bx + 0.2, -0.2, ship.zdeck(xw) + 1.115))          # the binnacle top, forward of the bowl: his right hand
     def pose(dv, Mx):
         Cw.stand_relaxed(dv, pitch=36, yaw=0, lean=12)
         Cw.hands_on(dv, Mx, left_w=None, right_w=top, elbow_r=(-0.8, 0.4, -0.5), grip=False, curl=30)
@@ -942,13 +942,13 @@ def s38():
     wet = ship.paint("rod_wet", (0.08, 0.07, 0.065), rough=0.18, grime=0.1, wet=1.0, scale=8)
     dry = ship.paint("rod_dry", (0.62, 0.6, 0.55), rough=0.8, grime=0.3, scale=12)      # chalked, so the wet line shows
     mark = bottom + Vector((0, 0, 3.5 * ft))
-    ship.cyl("rod_wet", bottom, mark, 0.011, mat=wet, verts=14); ship.cyl("rod_dry", mark, top + Vector((0, 0, 0.06)), 0.011, mat=dry, verts=14)
+    ship.cyl("rod_wet", bottom, mark, 0.011, mat=wet, verts=14); ship.cyl("rod_dry", mark, top - Vector((0, 0, 0.07)), 0.011, mat=dry, verts=14)
     notch = E.principled("notch", (0.6, 0.55, 0.45), rough=0.5, metal=0.5)
     for k in range(1, 5):
         q = bottom + Vector((0, 0, k * ft))
         ship.cyl("rod_mark", q - Vector((0, 0, 0.003)), q + Vector((0, 0, 0.003)), 0.0118, mat=notch, verts=14)
     rope = mc["mats"]["rope"]
-    ship.rope("sounding_line", [top + Vector((0, 0, 0.06)), top + Vector((0.05, 0.1, 0.25)), S.deck_point(M, x0 - 0.3, y0 + 0.2, 0.02)], 0.005, rope)
+    ship.rope("sounding_line", [top - Vector((0, 0, 0.07)), top + Vector((0, 0, 0.06)), top + Vector((0.05, 0.1, 0.25)), S.deck_point(M, x0 - 0.3, y0 + 0.2, 0.02)], 0.005, rope)
     c = Mp @ Vector((-1.5, -1.0, 1.15))                # side-on from his right, chest-down: the rod and both hands
     E.camera(c, mark + Vector((0, 0, 0.05)), lens=35, fstop=3.5, focus=(mark - c).length)
 
@@ -1031,7 +1031,7 @@ def s44():
         P.hand_reach(dv.h, "R", Mx.inverted() @ lw, elbow=(-0.8, 0.3, -0.6)); P.grip(dv.h, "R")
         dv.brow_knit(0.4)
     person("deveau", Mp, pose, look_w=a["table"])
-    I.lantern(lw + Vector((0, 0, -0.02)), energy=45)
+    I.lantern(lw + Vector((0, 0, -0.035)), energy=45)
     c = Vector((-1.15, -0.95, 1.5))
     E.camera(c, Vector((d.x - 0.4, d.y - 0.1, 1.2)), lens=26, fstop=3.5)
 
@@ -1073,9 +1073,9 @@ def s48():
     M = Matrix.Translation((t.x + 0.05, t.y + 0.62, 0.0))
     sl = a["slate"].location
     def pose(dv, Mx):
-        H.pose_sit(dv.h, lean=20, hands="knees")
+        H.pose_sit(dv.h, lean=15, hands="knees")
         P.head(dv.h, pitch=26, yaw=-14)
-        Cw.hands_on(dv, Mx, left_w=sl + Vector((0.12, 0.08, 0.08)), right_w=t + Vector((-0.12, 0.12, 0.1)),
+        Cw.hands_on(dv, Mx, left_w=sl + Vector((0.12, 0.08, 0.13)), right_w=t + Vector((-0.12, 0.12, 0.15)),
                     elbow_l=(0.8, 0.5, -0.6), elbow_r=(-0.8, 0.5, -0.6), grip=False, curl=20)
         dv.brow_knit(0.6); dv.lids(0.6)
     dv = person("deveau", M, pose, look_w=sl, seat=True)

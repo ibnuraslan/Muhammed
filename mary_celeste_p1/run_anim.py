@@ -59,12 +59,14 @@ def lean_in(deg, t0=0.0):
         e = ease((t - t0) / max(dur - t0, 1e-3))
         for b, k in (("spine04", 0.35), ("spine03", 0.35), ("spine02", 0.3)):
             dv.h.rot(b, (1, 0, 0), deg * k * e)
+    f.pre = True                                   # runs under the pose: hands stay on what they hold
     return f
 
 
 def narrow(amount):
     def f(dv, M, t):
         dv.lids(amount * ease(t / dur)); dv.brow_knit(amount * 0.8 * ease(t / dur))
+    f.pre = True
     return f
 
 
@@ -72,6 +74,7 @@ def both(*fs):
     def f(dv, M, t):
         for g in fs:
             g(dv, M, t)
+    f.pre = all(getattr(g, "pre", False) for g in fs)
     return f
 
 
