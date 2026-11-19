@@ -44,6 +44,9 @@ for rec in {r[1].name: r for r in p5.FLOATS}.values():     # one ride per boat (
     root = rec[1]
     A.adopt(root)
     RIDERS.append((root, root.matrix_world.copy()))
+    q = root.matrix_world.inverted() @ cam.matrix_world.to_translation()
+    if abs(q.x) < 3.6 and abs(q.y) < 1.4 and q.z < 3.0:      # a camera aboard the boat rides with it
+        cam.parent = root; cam.matrix_parent_inverse = root.matrix_world.inverted()
     A.ride(rec, dur)
 mc = bpy.data.objects.get("MC_root")
 if mc is not None:
