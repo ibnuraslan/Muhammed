@@ -95,5 +95,7 @@ def export(pkg, sid, samples=None):
     except Exception:
         pass
     bpy.ops.wm.save_as_mainfile(filepath=blend, compress=True, relative_remap=True, copy=False)
+    if os.path.exists(blend + "1"):
+        os.remove(blend + "1")                      # no .blend1 backups in the package
     print("EXPORTED", blend, round(os.path.getsize(blend) / 1e6, 1), "MB", flush=True)
     return blend

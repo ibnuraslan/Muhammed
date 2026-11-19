@@ -43,7 +43,8 @@ def main(pkg):
             fh.write(f"      VO:   {r['vo']}\n")
     est = ""
     if MIN_PER_FRAME:
-        est = (f"Measured on a 4-core CPU test box at these exact settings: about {MIN_PER_FRAME:.1f} min per frame at 2560x1440\n"
+        est = (f"Expected time: about {MIN_PER_FRAME:.1f} min per frame at 2560x1440 on a 4-core CPU box (measured 21 min at 128 spp\n"
+               f"on S10, halved for 64 spp; not measured at 64 spp)\n"
                f"(the open-sea wides S01 S13 S15 S18 S20 S25 S30 S41 run longer, about 1.5x, because of the FFT ocean).\n"
                f"Total {total_f} frames, about {total_f * MIN_PER_FRAME / 60:.0f} CPU-box hours; a farm node with 32+ cores\n"
                f"should be roughly 6-10x faster per frame.\n")
