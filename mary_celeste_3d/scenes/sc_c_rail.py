@@ -102,6 +102,10 @@ P.rest_hand(h, "R", curl=40)
 look = SHIP @ Vector((-1.9, -3.7, ship.zdeck(-1.9) + 0.1))
 dv.finish(look_at=look, place=M, density=float(os.environ.get("HAIR", "1.0")))
 
+if os.environ.get("CLIP"):                       # clip QA only (lib/clipcheck.py), no render
+    import clipcheck
+    clipcheck.check(os.path.basename(OUT).split(".")[0], limit=40)
+    sys.exit(0)
 # ----------------------------------------------------------------------------- camera
 cam_loc = SHIP @ Vector((-6.55, -1.35, ship.zdeck(-6.55) + 1.62))
 head_w = M @ Vector((0, -0.08, 1.64))

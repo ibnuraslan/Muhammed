@@ -39,8 +39,25 @@ ocean, foam, spray, Poly Haven sky).
   aims the eyes, then places him.
 * Colour: grade `cine={"sat": 1.2, ...}` in exteriors; `tools/house_finish.py` never drains colour (hub/user: rich Atrium colour).
 
+* `lib/clipcheck.py` (P5's strict rules): grips count only for the hand (body within 0.10 m of a wrist; clothing 0.07 m),
+  `clipcheck.report_floating(person, gap_m)` for hands that miss their bar, findings carry `at`/`span`.
+  Scenes: `CLIP=1 blender -b --python scenes/sc_b_cabin.py` runs the check without rendering.
+* `lib/sitpose.py` (from P5): `Seat` placement for seated people, `grip_bar`, `wrap_fingers`.
+* `women._Woman.relaxed()`: default stance with hands together at the waist.
 * `lib/sf.py`: Sketchfab fetcher (`sf.fetch(uid)`, `sf.model(uid, loc, rot_z, height)`, `sf.CATALOG`), CC-BY/CC0 only.
 * Jacket/clothes solidify uses `thickness_clamp=1.0` (no even-offset spikes at render subsurf 2).
+
+* `lib/women.py`: the shared women/child cast. `Sarah(wet=, seated=False)` and `Sophia(wet=, seated=False)` are
+  `deveau.Deveau` subclasses: pose `s.h` with `poses.*`, then `s.finish(look_at=, place=, density=)` like Deveau.
+  Sarah has a corseted day bodice (smooth front, high collar, jet buttons), full sleeves, a bell skirt (fuller behind),
+  a knitted shawl and a soft brimmed bonnet with ribbon ties. Sophia has a frock (yoke, puffed sleeves), a pinafore,
+  stockings and ankle boots. The bell skirts ride on the pelvis, so for seated poses pass `seated=True` (draped shell).
+  Keep arms clear of the skirts in the pose (`poses.arm_down(out=0.25+)` for Sophia).
+* `lib/women.py` options: `Sarah(seated=False, bonnet=True, shawl=True)` (bonnet off indoors: centre-parted hair
+  drawn back to a low knot), `Sophia(seated=False, shawl=False)`, `Arthur(seated=False)` (7: wool jacket, white
+  collar, knickerbockers, stockings, ankle boots). `lib/briggs.py`: `Briggs(wet=)` (promoted from Part 4), Deveau API.
+* `deveau.Deveau` class attributes for subclasses (also HAIR_COLOR, BEARD_COLOR): GENDER, MUSCLE, WEIGHT, HEIGHT, EXTRA (targets), SKIN,
+  ASSET_BOOTS, BOOT_TOP. Clothing solidify no longer uses even offset (no spikes on creased shells).
 
 ## Credits
 

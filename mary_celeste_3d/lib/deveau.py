@@ -227,15 +227,23 @@ def boot_leather(name, color=(0.055, 0.034, 0.02), rough=0.62, creases=1.0):
 
 # ----------------------------------------------------------------------------- the man
 class Deveau:
+    # body / skin parameters: subclasses (lib/women.py, the part chats' casts) override these
+    GENDER = 1.0; MUSCLE = 0.66; WEIGHT = 0.52; HEIGHT = 0.56
+    EXTRA = {"targets/chin/chin-prominent-incr": 0.3, "targets/nose/nose-hump-incr": 0.4,
+             "targets/nose/nose-scale-vert-incr": 0.2, "targets/eyebrows/eyebrows-trans-down": 0.3,
+             "targets/cheek/l-cheek-bones-incr": 0.35, "targets/cheek/r-cheek-bones-incr": 0.35,
+             "targets/head/head-age-incr": 0.25, "targets/chin/chin-bones-incr": 0.3}
+    SKIN = dict(base=(0.43, 0.25, 0.16), weather=0.6)
+    ASSET_BOOTS = True          # fit the Sketchfab leather boots (False: procedural boots/shoes from _sea_boots)
+    BOOT_TOP = 0.36             # boot shaft top above the ground (m); women/children set lower
+    HAIR_COLOR = (0.82, 0.38)   # melanin, redness
+    BEARD_COLOR = (0.8, 0.45)
+
     def __init__(self, name="Deveau", years=34, wet=0.35, cap=False):
-        extra = {"targets/chin/chin-prominent-incr": 0.3, "targets/nose/nose-hump-incr": 0.4,
-                 "targets/nose/nose-scale-vert-incr": 0.2, "targets/eyebrows/eyebrows-trans-down": 0.3,
-                 "targets/cheek/l-cheek-bones-incr": 0.35, "targets/cheek/r-cheek-bones-incr": 0.35,
-                 "targets/head/head-age-incr": 0.25, "targets/chin/chin-bones-incr": 0.3}
-        self.h = H.Human(name, gender=1.0, years=years, muscle=0.66, weight=0.52, height=0.56,
-                         extra=extra, eyebrows=None, eyelashes=None, skin=None)
+        self.h = H.Human(name, gender=self.GENDER, years=years, muscle=self.MUSCLE, weight=self.WEIGHT, height=self.HEIGHT,
+                         extra=dict(self.EXTRA), eyebrows=None, eyelashes=None, skin=None)
         h = self.h
-        h.body.data.materials[0] = sailor_skin(name + "_skin")
+        h.body.data.materials[0] = sailor_skin(name + "_skin", **self.SKIN)
         self._skin_regions()
         self.name = name; self.wet = wet
         self.rest_co = H.to_bl(h.hc)
@@ -250,7 +258,7 @@ class Deveau:
             self.used[list(pl.vertices)] = True
         self.faces = [tuple(pl.vertices) for pl in me.polygons]
         self._dress()
-        self.asset_boots = self._asset_boots(skin=True)
+        self.asset_boots = self._asset_boots(skin=True) if self.ASSET_BOOTS else False
 
     def _skin_regions(self):
         """Vertex colour 'skinvar': R = wind-burn redness (nose, cheeks, ears), G = shadowed eye sockets,
@@ -317,7 +325,7 @@ class Deveau:
             d.texture_coords = 'OBJECT'
         s = o.modifiers.new("Sub", "SUBSURF"); s.levels = 1; s.render_levels = 2
         if solid:
-            so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = solid; so.offset = -1; so.use_even_offset = True; so.thickness_clamp = 1.0
+            so = o.modifiers.new("Thick", "SOLIDIFY"); so.thickness = solid; so.offset = -1; so.use_even_offset = False; so.thickness_clamp = 1.0; so.use_quality_normals = True
         h.parts.append(o)
         o["src_verts"] = used
         return o, used
@@ -493,6 +501,7 @@ class Deveau:
         front = co[(co[:, 1] < -0.02)]
         mat = brass_material(self.name + "_brass")
         self.button_objs = getattr(self, "button_objs", [])
+        self.hair_objs = getattr(self, "hair_objs", [])
         zmin, zmax = self.marks["hip"] - 0.08, self.marks["neck"] - 0.12
         for k in range(4):
             zz = zmax - k * (zmax - zmin) / 3.4
@@ -789,7 +798,7 @@ class Deveau:
             tsel = (np.sign(T[:, 0] - P[self.used, 0].mean()) == sg) & (T[:, 2] < g + 0.42)
             Tp = T[tsel]
             shaft = []
-            zs = np.linspace(g + 0.07, g + 0.36, 12)
+            zs = np.linspace(g + 0.07 * min(1.0, self.BOOT_TOP / 0.36), g + self.BOOT_TOP, 12)
             Vs = []; Fs = []
             for j, z in enumerate(zs):
                 q = Lp[np.abs(Lp[:, 2] - z) < 0.025]
@@ -813,7 +822,7 @@ class Deveau:
             up = mesh_obj(nm + "_upper", W, F, upper_m)
             sb = up.modifiers.new("Sub", "SUBSURF"); sb.levels = 2; sb.render_levels = 2
             sh = mesh_obj(nm + "_shaft", Vs, Fs, upper_m)
-            so = sh.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.004; so.offset = 1
+            so = sh.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.004; so.offset = 1; so.use_even_offset = False; so.thickness_clamp = 1.0
             sb = sh.modifiers.new("Sub", "SUBSURF"); sb.levels = 2; sb.render_levels = 2
             # sole (overhangs the welt by 4 mm) and a stacked heel
             outline = []
@@ -878,11 +887,11 @@ class Deveau:
         brow = head & (z > 0.014) & (z < 0.03 - 0.12 * np.abs(np.abs(x) - 0.03)) & (y < -0.012) & (self.rest_n[:, 1] < -0.45) & (np.abs(x) > 0.011) & (np.abs(x) < 0.054)
         P, bvh = self._posed_surface()
         R = self.head_R
-        brown = hair_material(self.name + "_hair", 0.82, 0.38)
+        brown = hair_material(self.name + "_hair", *self.HAIR_COLOR)
         self.hair_objs = []
         self.hair_objs.append(self._strands("hair", scalp, P, bvh, int(70000 * density), (0.014, 0.028), 0.001,
                                             comb=lambda p: R @ Vector((0, 0.8, -0.45)), lift=0.0022, mat=brown, curl=0.22, clump=0.35))
-        beard_m = hair_material(self.name + "_beard", 0.8, 0.45, rough=0.38)
+        beard_m = hair_material(self.name + "_beard", *self.BEARD_COLOR, rough=0.38)
         self.hair_objs.append(self._strands("beard", beard | neck, P, bvh, int(46000 * density), (0.014, 0.03), 0.0009,
                                             comb=lambda p: R @ Vector((0, -0.25, -1)), lift=0.003, mat=beard_m, curl=0.35, clump=0.55, segs=9))
         self.hair_objs.append(self._strands("moustache", tache, P, bvh, int(5000 * density), (0.012, 0.02), 0.0008,
@@ -892,7 +901,8 @@ class Deveau:
                                             comb=lambda p: R @ Vector((math.copysign(1.0, p.x - self._mid_x), 0, 0.25)),
                                             lift=0.0008, mat=beard_m, curl=0.08))
 
-    def _strands(self, label, vmask, P, bvh, count, length, radius, comb, lift, mat, curl=0.2, segs=7, seed=1, clump=0.0):
+    def _strands(self, label, vmask, P, bvh, count, length, radius, comb, lift, mat, curl=0.2, segs=7, seed=1, clump=0.0,
+                 attract=None):
         rng = np.random.default_rng(seed + len(label))
         self._mid_x = float(P[self.used, 0].mean())
         fs = [f for f in self.faces if vmask[list(f)].sum() >= 3]
@@ -938,6 +948,12 @@ class Deveau:
         span = np.linalg.norm(pts[:, -1] - pts[:, 0], axis=1)
         ok &= span < lens * 1.2
         pts = pts[ok]; count = int(ok.sum())
+        if count == 0:
+            return None                                   # (hair_curves.add_curves([]) crashes Blender)
+        if attract is not None and count:
+            # gather the strands to a point (a bun): tips pulled in, the rest of each strand eased toward it
+            A = np.array(attract, np.float32); t = np.linspace(0, 1, segs)[None, :, None] ** 2
+            pts = pts + (A[None, None, :] + (pts[:, :1] - A) * 0.15 - pts) * t * 0.85
         if clump and count > 50:
             # groomed look: strands gather toward the tips of nearby guide strands
             from mathutils.kdtree import KDTree
