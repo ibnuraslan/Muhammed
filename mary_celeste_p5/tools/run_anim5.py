@@ -98,6 +98,21 @@ sc.render.use_motion_blur = os.environ.get("MBLUR", "1") == "1"; sc.render.motio
 for o in bpy.data.objects:
     if o.name.startswith(("Ocean", "FarSea")) or o.name.endswith(("_hull", "_sail", "_deck")):
         o.cycles.use_motion_blur = False
+# wides: the people are a few pixels tall, so their meshes are decimated for the farm file (after the clip check)
+DECIM = {"S01": 0.2, "S03": 0.3, "S04": 0.08, "S06": 0.06, "S07": 0.45, "S08": 0.06, "S27": 0.06}
+if os.environ.get("EXPORT") and sid in DECIM:
+    r = DECIM[sid]; n0 = n1 = 0
+    for o in [o for o in bpy.data.objects if o.type == 'MESH' and "person" in o and len(o.data.vertices) > 400]:
+        if o.data.users > 1:
+            o.data = o.data.copy()
+        n0 += len(o.data.vertices)
+        md = o.modifiers.new("farm_decimate", 'DECIMATE'); md.ratio = r; md.use_collapse_triangulate = False
+        while o.modifiers[0] is not md:
+            o.modifiers.move(o.modifiers.find(md.name), 0)
+        with bpy.context.temp_override(object=o, active_object=o, selected_objects=[o]):
+            bpy.ops.object.modifier_apply(modifier=md.name)
+        n1 += len(o.data.vertices)
+    print(f"DECIMATED people {n0} -> {n1} verts", flush=True)
 if os.environ.get("EXPORT"):
     sys.path.insert(0, os.path.join(p5.ROOT, "mary_celeste_p1", "tools"))
     import farm_export                                # Part 1's farm export, used as is
