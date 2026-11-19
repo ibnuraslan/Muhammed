@@ -107,9 +107,9 @@ if os.environ.get("EXPORT") and sid in DECIM:
             o.data = o.data.copy()
         n0 += len(o.data.vertices)
         md = o.modifiers.new("farm_decimate", 'DECIMATE'); md.ratio = r; md.use_collapse_triangulate = False
-        while o.modifiers[0] is not md:
-            o.modifiers.move(o.modifiers.find(md.name), 0)
         with bpy.context.temp_override(object=o, active_object=o, selected_objects=[o]):
+            if len(o.modifiers) > 1:
+                bpy.ops.object.modifier_move_to_index(modifier=md.name, index=0)
             bpy.ops.object.modifier_apply(modifier=md.name)
         n1 += len(o.data.vertices)
     print(f"DECIMATED people {n0} -> {n1} verts", flush=True)
