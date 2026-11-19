@@ -103,6 +103,8 @@ def _spine(dv, bone, axis, deg):
 
 def idle(dv, t, seed=0):
     """Breathing (0.25 Hz chest), a slow weight shift (0.08 Hz), small head drift: a person alive and still."""
+    if os.environ.get("NOIDLE"):
+        return
     rng = np.random.default_rng(seed); p = rng.uniform(0, 6.28, 4)
     _spine(dv, "spine03", (1, 0, 0), -0.7 * math.sin(2 * math.pi * 0.25 * t + p[0]))
     _spine(dv, "spine05", (0, 1, 0), 0.5 * math.sin(2 * math.pi * 0.08 * t + p[1]))
@@ -113,6 +115,16 @@ def idle(dv, t, seed=0):
 def key_pose(dv, key_every=0.25):
     """Key the posed rig over the shot (rig still at its own frame: placing comes after)."""
     h = dv.h; pb = h.arm.pose.bones; D = dur()
+    # the shared bake applies the armature to the base mesh, then displace / subsurf / solidify act on the posed shape:
+    # put the armature first in every stack so the live clothes take exactly the approved (baked) shape
+    for o in list(h.parts) + list(getattr(dv, "objects", [])):
+        mods = getattr(o, "modifiers", None)
+        if not mods:
+            continue
+        for i, m in enumerate(mods):
+            if m.type == 'ARMATURE' and i > 0:
+                mods.move(i, 0)
+                break
     seed = sum(map(ord, dv.name)) % 997
     rng = np.random.default_rng(seed + 11)
     blinks = []; tb = rng.uniform(0.4, 1.6)
@@ -156,7 +168,7 @@ def live(dv, density=1.0, hair=True):
     dv.wrist_rest = {sd: tuple(h.bone_tail(f"wrist.{sd}")) for sd in ("L", "R")}
     dv._corneas()
     if not getattr(dv, "asset_boots", True) and hasattr(dv, "_sea_boots"):
-        dv._sea_boots()
+        _with_posed_data(dv, dv._sea_boots)        # it models each boot on the body's mesh data: give it the posed one
         for o in getattr(dv, "sea_boots", []) or []:
             mw = o.matrix_world.copy(); o.parent = h.arm; o.matrix_world = mw
     if hair:
@@ -177,6 +189,32 @@ def live(dv, density=1.0, hair=True):
             mw = o.matrix_world.copy(); o.parent = h.arm; o.matrix_world = mw
     h.arm.hide_render = True
     bpy.context.view_layer.update()
+
+
+def _with_posed_data(dv, fn):
+    """Run fn with the body's mesh data holding the posed vertex positions (what the shared lib's bake would leave),
+    the armature modifier off meanwhile; then put the rest positions and the modifier back."""
+    body = dv.h.body
+    sub = [m for m in body.modifiers if m.type == 'SUBSURF']
+    for m in sub:
+        m.show_viewport = False
+    bpy.context.view_layer.update()
+    dg = bpy.context.evaluated_depsgraph_get()
+    oe = body.evaluated_get(dg); me = oe.to_mesh()
+    posed = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", posed); oe.to_mesh_clear()
+    rest = np.empty(len(body.data.vertices) * 3, np.float32); body.data.vertices.foreach_get("co", rest)
+    arm = [m for m in body.modifiers if m.type == 'ARMATURE']
+    for m in arm:
+        m.show_viewport = False
+    body.data.vertices.foreach_set("co", posed); body.data.update()
+    bpy.context.view_layer.update()
+    try:
+        fn()
+    finally:
+        body.data.vertices.foreach_set("co", rest); body.data.update()
+        for m in arm + sub:
+            m.show_viewport = True
+        bpy.context.view_layer.update()
 
 
 def _grow_hair(dv, density):
@@ -282,7 +320,7 @@ SEA = {   # shot: ship motion for vessels afloat (pier shots: moored alongside, 
 }
 AT_ANCHOR = {"21", "22", "24", "25", "26"}
 SKIP = ("Ocean", "FarSea", "far_sea", "Sun", "SeaHaze", "water", "sky", "land", "island", "air", "haze", "dust",
-        "World", "harbour", "river", "pier", "street", "smoke", "sea_", "Sea")
+        "World", "harbour", "river", "pier", "street", "smoke", "sea_", "Sea_", "SeaPlane", "SeaSurface")
 
 
 def _inside(root, p, pad):
@@ -339,6 +377,27 @@ def _adopt(root, cam, pad=0.6):
     bpy.context.view_layer.update()
 
 
+def retag():
+    """Hand points for clipcheck from the rigs as they are on this frame (people move with the ship and breathe)."""
+    rigs = {}
+    for o in bpy.data.objects:
+        if "person" in o and o.type == 'MESH':
+            r = o.parent
+            while r is not None and r.type != 'ARMATURE':
+                r = r.parent
+            if r is not None:
+                rigs.setdefault(o["person"], r)
+    for name, arm in rigs.items():
+        hp = []
+        for sd in ("L", "R"):
+            for b in (f"wrist.{sd}", f"finger3-1.{sd}", f"finger3-3.{sd}"):
+                if b in arm.pose.bones:
+                    hp += list(arm.matrix_world @ arm.pose.bones[b].head)
+        for o in bpy.data.objects:
+            if o.get("person") == name:
+                o["hands"] = hp
+
+
 def run(shot, cine=None, bloom=0.3):
     sc = bpy.context.scene; cam = sc.camera
     n = nframes(); sc.frame_start = 1; sc.frame_end = n; sc.render.fps = FPS
@@ -382,6 +441,7 @@ def run(shot, cine=None, bloom=0.3):
         bad = 0
         for f in sorted({1, max(1, n // 2), n}):
             sc.frame_set(f); bpy.context.view_layer.update()
+            retag()
             bad += len(S.clip(f"{shot}_f{f:04d}") or [])
         print(f"CLIPRESULT {shot} {bad}", flush=True)
         if bad and os.environ.get("CLIP_STRICT", "1") == "1":

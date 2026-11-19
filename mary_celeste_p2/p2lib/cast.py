@@ -1,3 +1,4 @@
+import os
 """Part 2 cast, built on the shared character library (claude/mary-celeste-3d, mary_celeste_3d/lib).
 
 Nothing in the shared library is changed: every person here is a subclass of deveau.Deveau that swaps the
@@ -210,18 +211,18 @@ class Person(D.Deveau):
         import numpy as np
         bpy.context.view_layer.update()
         mine = set(o.name for o in self.objects) | set(o.name for o in (getattr(self, "sea_boots", []) or []))
-        feet = [o for o in bpy.data.objects if o.name in mine and o.type == 'MESH' and
+        feet = [o for o in bpy.data.objects if o.name in mine and o.type == 'MESH' and not o.hide_render and
                 any(k in o.name for k in (("boot", "shoes") if self.SEATED else ("boot", "shoes", "skirt")))]
         if not feet:
             return 0.0
         dg = bpy.context.evaluated_depsgraph_get()
-        lows = []
+        lows = []; owner = []
         for o in feet:
             oe = o.evaluated_get(dg); me = oe.to_mesh()
             P = np.array([(oe.matrix_world @ v.co)[:] for v in me.vertices]); oe.to_mesh_clear()
             if len(P):
                 low = P[P[:, 2] < P[:, 2].min() + 0.03]
-                lows.append(low[np.linspace(0, len(low) - 1, min(len(low), 40)).astype(int)])
+                lows.append(low[np.linspace(0, len(low) - 1, min(len(low), 40)).astype(int)]); owner.append(o.name)
         hidden = []
         for o in bpy.data.objects:
             if o.name in mine or o.name.startswith(("air", "dust", "SeaHaze", "Ocean", "far_sea")):
@@ -231,11 +232,13 @@ class Person(D.Deveau):
         dg = bpy.context.evaluated_depsgraph_get()
         sc = bpy.context.scene
         need = -1.0
-        for low in lows:
+        for low, nm in zip(lows, owner):
             for p in low:
                 hit = sc.ray_cast(dg, Vector((p[0], p[1], p[2] + 0.06)), Vector((0, 0, -1)), distance=0.5)
                 if hit[0]:
                     need = max(need, hit[1].z + clearance - p[2])
+                    if os.environ.get("GROUNDDBG"):
+                        print("GROUND", self.name, nm, round(hit[1].z + clearance - p[2], 4), hit[4].name)
         for o in hidden:
             o.hide_viewport = False
         bpy.context.view_layer.update()
