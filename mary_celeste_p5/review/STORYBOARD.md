@@ -1,6 +1,6 @@
 # Part 5 storyboard — "The Ship That Came Back Without Its Crew"
 
-Section: "A boat could also have been lowered as a temporary precaution." → "...were never found." Total ≈ 124 s at 145 wpm (retimed to the VO in the edit). Frames are real Cycles renders of the 3D scenes (half res, low samples). Captions = exact script text; cards = shared callout.py (shown at rest; they slide in).
+Section: "A boat could also have been lowered as a temporary precaution." → "...were never found." Total ≈ 124 s at 145 wpm (retimed to the VO in the edit). Frames are real Cycles renders of the 3D scenes (half res, low samples). Frames are clean: captions and cards are added by the user in CapCut (Card column = what goes there).
 
 | Shot | Start | Dur | VO (exact) | Picture | Camera | SFX | Card |
 |---|---|---|---|---|---|---|---|
