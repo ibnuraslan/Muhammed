@@ -686,8 +686,7 @@ def s23():
     top = M @ Vector((-ship.L / 2 + 3.2 + 2.6 + 2.8 - 0.06, 1.38, ship.zdeck(cx) + 0.94 + 0.105))   # right hand on the trunk roof edge
     def pose(dv, Mx):
         Cw.stand_relaxed(dv, pitch=6, yaw=-10, lean=6)
-        Cw.hands_on(dv, Mx, left_w=None, right_w=top, elbow_r=(-0.8, 0.4, -0.5), grip=False, curl=20)
-        dv.brow_knit(0.4)
+        dv.brow_knit(0.4)                              # hands hang free: no contact with the trunk roof
     person("morehouse", Mp, pose, look_w=M @ Vector((cx, 1.2, zc + 0.4)))
     hw = head_w(Mp)
     c = M @ Vector((cx + 0.7, -2.4, zc + 1.6))                     # from his left side: profile, the companion beyond him
@@ -755,7 +754,7 @@ def s26():
     mouth_off = Vector((0.05, -0.12, 1.6))
     def pose(dv, Mx):
         Cw.stand_relaxed(dv, pitch=-4, yaw=0, lean=6)
-        Cw.hands_on(dv, Mx, left_w=Mx @ Vector((0.07, -0.14, 1.58)), right_w=cap, elbow_l=(0.6, 0.0, -0.8), elbow_r=(-0.8, 0.4, -0.5),
+        Cw.hands_on(dv, Mx, left_w=Mx @ Vector((0.07, -0.14, 1.58)), right_w=None, elbow_l=(0.6, 0.0, -0.8), elbow_r=(-0.8, 0.4, -0.5),
                     grip=False, curl=25)
     person("morehouse", Mp, pose, look_w=Vector((230, -60, 3)))
     person(0, S.deck_place(M, xb - 1.3, -hb + 0.7, 45), relaxed(pitch=-3, yaw=-8), look_w=Vector((230, -60, 3)), density=0.5)
@@ -815,8 +814,7 @@ def s31():
     top = M @ Vector((bx + 0.2, -0.2, ship.zdeck(xw) + 1.14))          # the binnacle top, forward of the bowl: his right hand
     def pose(dv, Mx):
         Cw.stand_relaxed(dv, pitch=36, yaw=0, lean=8)
-        Cw.hands_on(dv, Mx, left_w=None, right_w=top, elbow_r=(-0.8, 0.4, -0.5), grip=False, curl=30)
-        dv.brow_knit(0.9); dv.lids(0.6)
+        dv.brow_knit(0.9)                              # hands hang free: he looks, he does not touch; dv.lids(0.6)
     person("deveau", Mp, pose, look_w=M @ Vector((bx, 0, ship.zdeck(xw) + 1.1)))
     hw = head_w(Mp)
     c = M @ Vector((bx - 1.4, -2.0, ship.zdeck(xw) + 1.55))
