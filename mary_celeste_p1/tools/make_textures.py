@@ -87,5 +87,30 @@ def cracks(path, n=1200, seed=5):
     im.save(path)
 
 
+def dollface(path, n=1024):
+    """Muslin doll's face for an equirectangular sphere UV (face centred at u=0.75): stitched black eyes, embroidered
+    brows, a small red stitched mouth, rubbed pink cheeks, and a stitched seam."""
+    im = Image.new("RGB", (2 * n, n), (214, 196, 168)); d = ImageDraw.Draw(im)
+    cx, cy = int(1.5 * n), int(0.47 * n)
+    for sx in (-1, 1):
+        d.ellipse([cx + sx * 70 - 16, cy - 16, cx + sx * 70 + 16, cy + 16], fill=(25, 20, 18))      # button-stitch eyes
+        d.arc([cx + sx * 70 - 28, cy - 62, cx + sx * 70 + 28, cy - 30], 200, 340, fill=(80, 55, 40), width=6)
+        d.ellipse([cx + sx * 105 - 40, cy + 40, cx + sx * 105 + 40, cy + 90], fill=(222, 170, 150))
+    d.arc([cx - 34, cy + 55, cx + 34, cy + 105], 20, 160, fill=(150, 40, 35), width=8)
+    for k in range(0, n, 26):                                                                         # side seam stitches
+        d.line([(int(1.0 * n), k), (int(1.0 * n), k + 12)], fill=(150, 130, 105), width=4)
+    im = im.filter(ImageFilter.GaussianBlur(1.5)); im.save(path)
+
+
+def calico(path, n=512):
+    import random
+    rnd = random.Random(1)
+    im = Image.new("RGB", (n, n), (120, 38, 32)); d = ImageDraw.Draw(im)
+    for k in range(260):
+        x, y = rnd.uniform(0, n), rnd.uniform(0, n); r = rnd.uniform(3, 7)
+        d.ellipse([x - r, y - r, x + r, y + r], fill=(205, 180, 140))
+    im.save(path)
+
+
 if __name__ == "__main__":
-    {"compass": compass_card, "cracks": cracks}.get(sys.argv[1], lambda p: make(p, sys.argv[1]))(sys.argv[2])
+    {"compass": compass_card, "cracks": cracks, "dollface": dollface, "calico": calico}.get(sys.argv[1], lambda p: make(p, sys.argv[1]))(sys.argv[2])

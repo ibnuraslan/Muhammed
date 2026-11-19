@@ -347,31 +347,36 @@ def pin(ch, name, lon, lat, head=(0.55, 0.04, 0.02), scale=1.6):
 
 
 def chart_bands(ch, name, lon, lat, radii=((0.02, 0.035), (0.05, 0.062)), strength=1.4):
-    """Filled soft orange bands lying on the chart round a point (the house highlight)."""
-    c = ch["mp"](lon, lat, 0.0012); out = []
-    for k, (r0, r1) in enumerate(radii):
-        n = 72; V = []; F = []
-        for i in range(n):
-            a = 2 * math.pi * i / n
-            for rr in (r0, (r0 + r1) / 2, r1):
-                V.append((c.x + rr * math.cos(a), c.y + rr * math.sin(a), c.z + 0.0004))
-        for i in range(n):
-            j = (i + 1) % n
-            F.append([3 * i, 3 * j, 3 * j + 1, 3 * i + 1]); F.append([3 * i + 1, 3 * j + 1, 3 * j + 2, 3 * i + 2])
-        o = ship.mesh_obj(f"{name}{k}", V, F, None, smooth=True)
-        ca = o.data.color_attributes.new("a", 'FLOAT_COLOR', 'POINT')
-        for i in range(len(V)):
-            v = (1.0 if i % 3 == 1 else 0.0) * (0.85 - 0.3 * k); ca.data[i].color = (v, v, v, 1)
-        m = bpy.data.materials.new(f"{name}{k}_m"); m.use_nodes = True; N = m.node_tree.nodes; Lk = m.node_tree.links
-        N.remove(N["Principled BSDF"])
-        at = N.new("ShaderNodeAttribute"); at.attribute_name = "a"
-        em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (*ORANGE, 1); em.inputs['Strength'].default_value = strength
-        tr = N.new("ShaderNodeBsdfTransparent"); mx = N.new("ShaderNodeMixShader")
-        Lk.new(at.outputs['Fac'], mx.inputs[0]); Lk.new(tr.outputs[0], mx.inputs[1]); Lk.new(em.outputs[0], mx.inputs[2])
-        Lk.new(mx.outputs[0], N["Material Output"].inputs['Surface'])
-        o.data.materials.append(m); o.visible_shadow = False
-        out.append(o)
-    return out
+    """The house highlight on the chart: a FILLED soft orange glow, a disc whose fill is strongest in a broad band
+    two-thirds of the way out and fades smoothly to nothing at its rim (no line rings). radii: the outer radius used is
+    the largest given."""
+    R = max(r1 for r0, r1 in radii) * 1.15
+    c = ch["mp"](lon, lat, 0.0012)
+    nr, na = 40, 96; V = []; F = []; A = []
+    for i in range(nr + 1):
+        r = R * i / nr; u = r / R
+        a_ = 0.38 * (1 - u * u) + 0.55 * math.exp(-((u - 0.66) / 0.17) ** 2)
+        a_ *= min(1.0, (1 - u) / 0.18)                      # soft fade at the rim
+        for k in range(na):
+            t = 2 * math.pi * k / na
+            V.append((c.x + r * math.cos(t), c.y + r * math.sin(t), c.z + 0.0004)); A.append(max(0.0, a_))
+    for i in range(nr):
+        for k in range(na):
+            a0 = i * na + k; a1 = i * na + (k + 1) % na
+            F.append([a0, a1, a1 + na, a0 + na])
+    o = ship.mesh_obj(name, V, F, None, smooth=True)
+    ca = o.data.color_attributes.new("a", 'FLOAT_COLOR', 'POINT')
+    for i, v in enumerate(A):
+        ca.data[i].color = (v, v, v, 1)
+    m = bpy.data.materials.new(name + "_m"); m.use_nodes = True; N = m.node_tree.nodes; Lk = m.node_tree.links
+    N.remove(N["Principled BSDF"])
+    at = N.new("ShaderNodeAttribute"); at.attribute_name = "a"
+    em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (*ORANGE, 1); em.inputs['Strength'].default_value = strength
+    tr = N.new("ShaderNodeBsdfTransparent"); mx = N.new("ShaderNodeMixShader")
+    Lk.new(at.outputs['Fac'], mx.inputs[0]); Lk.new(tr.outputs[0], mx.inputs[1]); Lk.new(em.outputs[0], mx.inputs[2])
+    Lk.new(mx.outputs[0], N["Material Output"].inputs['Surface'])
+    o.data.materials.append(m); o.visible_shadow = False
+    return [o]
 
 
 def pencil_route(ch, name, pts, dash=0.03, gap=0.018, r=0.0024):
@@ -398,3 +403,31 @@ def chart_label(ch, name, body, lon, lat, size=0.022, dx=0.0, dy=0.03, rot=0.0):
     o.location = p; o.rotation_euler = (0, 0, rot)
     o.data.materials.append(E.principled(name + "_ink", INK, rough=0.6))
     return o
+
+
+# ============================================================================ the hold, real cutaway (P4's look)
+def hold_cutaway_real(water_ft=3.5):
+    """P4's dim cutaway of the hold (p4lib/cutaway.py + barrels.py, copied unchanged): the brigantine sliced fore-aft,
+    the port half removed, the cargo of barrels in their tiers, one hold lamp; the bilge water standing 3.5 ft deep,
+    following the inside of the hull, dark and glossy. No graphics: the caption carries the number."""
+    import sys as _s, os as _o
+    p4dir = _o.path.join(E.P1, "p4lib")
+    if p4dir not in _s.path:
+        _s.path.insert(0, p4dir)
+    import p4, cutaway as CX, barrels as BR
+    E.render_setup(samples=96)
+    s = CX.build("MCX", y_cut=0.02)
+    res = BR.stow(ymax=0.02, red_slots=CX.RED_SLOTS if hasattr(CX, "RED_SLOTS") else None)
+    p4.world_color((0.03, 0.017, 0.011), 1.0)
+    floor = p4.mat("void_floor", (0.04, 0.025, 0.017), rough=0.6)
+    ship.box("ground", (0, 0, -3.25), (200, 200, 0.02), floor)
+    p4.light('AREA', "key", 5000, (1.0, 0.76, 0.52), loc=(8, 15, 11), target=(0, -1, -0.5), size=9)
+    p4.light('AREA', "fill", 700, (0.55, 0.6, 0.75), loc=(-12, 12, 2), target=(0, 0, 0), size=10)
+    p4.light('AREA', "rim", 2000, (1.0, 0.7, 0.45), loc=(-16, -8, 9), target=(0, 0, 0), size=6)
+    p4.light('POINT', "holdlamp", 60, (1.0, 0.6, 0.28), loc=(-1.2, -0.6, 0.9), size=0.04)
+    keel_in = -ship.DRAFT + 0.25
+    w = hold_water(keel_in + water_ft * 0.3048, inset=0.28, name="bilgewater")
+    w.data.materials.clear(); w.data.materials.append(p4.mat("bilge", (0.06, 0.1, 0.085), rough=0.03))
+    p4.light('POINT', "bilge_glint", 40, (1.0, 0.6, 0.28), loc=(0.8, -1.0, keel_in + water_ft * 0.3048 + 0.5), size=0.04)
+    CX._bisect(w, 0.02)
+    return dict(ship=s, barrels=res, ztop=keel_in + water_ft * 0.3048)

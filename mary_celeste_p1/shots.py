@@ -591,8 +591,8 @@ def s16b():
     E.render_setup(samples=128)
     I.captain_cabin(skylight=600)
     I.family_things()
-    E.point("lantern_offscreen", (0.45, 0.55, 1.35), 45, (1.0, 0.56, 0.24), radius=0.05)    # Deveau's lantern, just out of frame
-    E.camera(Vector((0.3, 0.2, 1.0)), Vector((1.12, 0.92, 0.62)), lens=45, fstop=2.8)
+    E.point("lantern_offscreen", (0.7, 0.6, 1.05), 40, (1.0, 0.56, 0.24), radius=0.05)    # Deveau's lantern, just out of frame
+    E.camera(Vector((0.62, 0.62, 0.95)), Vector((1.07, 0.93, 0.56)), lens=50, fstop=2.8)
 
 
 @shot("S17", "Whatever made them leave, the ship survived it.", 3.6,
@@ -705,7 +705,8 @@ def s24():
     M = d["M"]; xw = -ship.L / 2 + 1.7; zc = ship.zdeck(xw) + 1.25
     Mp = S.deck_place(M, xw - 0.42, 0.0, 90)
     a1, a2 = math.radians(60), math.radians(150)
-    L = M @ Vector((xw, 0.62 * math.sin(a1), zc + 0.62 * math.cos(a1))); R = M @ Vector((xw, -0.62 * math.sin(a2), zc + 0.62 * math.cos(a2)))
+    spoke0 = lambda a: M @ Vector((xw - 0.07, 0.48 * math.sin(a), zc + 0.48 * math.cos(a)))
+    L = spoke0(math.pi / 2); R = spoke0(-math.pi / 2)            # fists closed on two spokes
     def pose(dv, Mx):
         Cw.stand_relaxed(dv, pitch=8, yaw=-6, lean=12, weight="R")
         Cw.hands_on(dv, Mx, left_w=L, right_w=R, elbow_l=(0.9, 0.2, -0.3), elbow_r=(-0.9, 0.2, -0.6))
@@ -725,7 +726,7 @@ def s24():
             pivot.rotation_euler = (-th(i / 24), 0, 0); pivot.keyframe_insert("rotation_euler", frame=1 + i)
         pivot.rotation_euler = (0, 0, 0)
         # hands grip two spokes (at the horizontal, between the rim and the handles), the wrist just aft of the spoke
-        spoke = lambda a: M @ Vector((xw - 0.07, 0.74 * math.sin(a), zc + 0.74 * math.cos(a)))
+        spoke = lambda a: M @ Vector((xw - 0.07, 0.48 * math.sin(a), zc + 0.48 * math.cos(a)))
         ANIM["actions"][0] = lambda dv, Mx, t: Cw.hands_on(dv, Mx, left_w=spoke(math.pi / 2 + th(t)), right_w=spoke(-math.pi / 2 + th(t)),
                                                          elbow_l=(0.9, 0.2, -0.6), elbow_r=(-0.9, 0.2, -0.6))
     person(2, Mp, pose, look_w=M @ Vector((xw, 0, zc)))
@@ -927,7 +928,7 @@ def s37():
 @shot("S38", "Three and a half feet.", 2.0,
       "Over Deveau's shoulder: he holds the sounding rod up to the light, the iron dark and wet up to the notch at "
       "three and a half feet. Small burned-in callout '3½ FT' beside the mark.",
-      ["rod drips", "line slack", "wind"], label=("3½ FT", 0.6, 0.47))
+      ["rod drips", "line slack", "wind"])
 def s38():
     mc, _ = mc_at_sea(heel=2.5)
     M = mc["M"]; px = ship.MAIN_X + 0.9
@@ -939,7 +940,7 @@ def s38():
     def pose(dv, Mx):
         Cw.stand_relaxed(dv, pitch=26, yaw=-8, lean=8)
         Cw.hands_on(dv, Mx, right_w=top + Vector((0, 0, 0.02)), left_w=None, elbow_r=(-0.8, 0.3, -0.6), grip=True)
-        P.hand_reach(dv.h, "L", Mx.inverted() @ (top - Vector((0, 0, 0.42))), elbow=(0.8, 0.3, -0.6)); P.grip(dv.h, "L", 0.7)
+        P.arm_down(dv.h, "L", out=0.1, fwd=0.05, bend=14); P.rest_hand(dv.h, "L", curl=26)   # one fist holds the rod up
     person("deveau", Mp, pose, look_w=bottom + Vector((0, 0, 3.5 * ft)))
     wet = ship.paint("rod_wet", (0.08, 0.07, 0.065), rough=0.18, grime=0.1, wet=1.0, scale=8)
     dry = ship.paint("rod_dry", (0.62, 0.6, 0.55), rough=0.8, grime=0.3, scale=12)      # chalked, so the wet line shows
@@ -956,12 +957,13 @@ def s38():
 
 
 @shot("S39", "The hull looks in good shape.", 2.2,
-      "X-ray cutaway: the Mary Celeste as glass on a dark studio floor, the water in her hold a solid blue body, the "
-      "3½ ft dimension beside it. Slow orbit.", ["low drone", "water settle"])
+      "Low on the sea along her starboard side: the black topsides, sound and tight, the sea sliding past the waterline.",
+      ["water along the hull", "hull creak"])
 def s39():
-    import explain as X
-    X.hold_cutaway()
-    E.camera(Vector((10.0, -19.0, 4.0)), Vector((-1.0, 0.0, -1.0)), lens=32, fstop=None)
+    mc, _ = mc_at_sea(heel=-4.0, heading=30.0, cut=False, center=(0, 0))     # leaning toward us: her side down in the sea
+    M = mc["M"]
+    cam = M @ Vector((14.0, -7.5, 0)); cam.z = 0.9
+    E.camera(cam, M @ Vector((-6.0, -3.6, 0.8)), lens=30, fstop=8)
 
 
 @shot("S40", "The masts are standing.", 1.6,

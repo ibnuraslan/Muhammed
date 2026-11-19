@@ -658,14 +658,71 @@ def forecastle(fog=0.02):
 DOLL = "ccb1f5791a7341ed85cb767bbddda2b3"           # "Rag doll - popka", Wirtualne Muzea Malopolski, CC0 (Sketchfab)
 
 
+def _tex(kind):
+    p = os.path.join(E.P1, "out", "tex", kind + ".png")
+    if not os.path.exists(p):
+        import subprocess
+        subprocess.run(["python3", os.path.join(E.P1, "tools", "make_textures.py"), kind, p], check=True)
+    return p
+
+
+def rag_doll(base, rot_z=0.0, tilt=0.0, scale=1.0):
+    """An 1870s rag doll, sewn from muslin: a round stuffed head with a stitched face, a cloth body in a calico dress
+    with a white pinafore, muslin arms and legs ending in little stitched hands and black cloth boots. Built lying on
+    its back at `base` (the surface point under its middle), a little askew. About 34 cm long."""
+    root = bpy.data.objects.new("rag_doll", None); bpy.context.scene.collection.objects.link(root)
+    muslin = E.principled("doll_muslin", (0.72, 0.62, 0.5), rough=0.9, **{"Sheen Weight": 0.5})
+    face = bpy.data.materials.new("doll_face"); face.use_nodes = True
+    N = face.node_tree.nodes; Lk = face.node_tree.links
+    t = N.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(_tex("dollface"), check_existing=True)
+    Lk.new(t.outputs['Color'], N["Principled BSDF"].inputs['Base Color']); N["Principled BSDF"].inputs['Roughness'].default_value = 0.9
+    dress = bpy.data.materials.new("doll_calico"); dress.use_nodes = True
+    N = dress.node_tree.nodes; Lk = dress.node_tree.links
+    t = N.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(_tex("calico"), check_existing=True)
+    mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (3, 3, 3); tc = N.new("ShaderNodeTexCoord")
+    Lk.new(tc.outputs['UV'], mp.inputs['Vector']); Lk.new(mp.outputs[0], t.inputs['Vector'])
+    Lk.new(t.outputs['Color'], N["Principled BSDF"].inputs['Base Color']); N["Principled BSDF"].inputs['Roughness'].default_value = 0.85
+    pin = E.principled("doll_pinafore", (0.75, 0.72, 0.66), rough=0.9)
+    boot = E.principled("doll_boots", (0.03, 0.025, 0.02), rough=0.7)
+    hairm = E.principled("doll_hair", (0.18, 0.1, 0.05), rough=0.95)
+    parts = []
+    S = scale
+    def sph(name, loc, r, sc, mat, uvface=False):
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=r * S, location=Vector(loc) * S)
+        o = bpy.context.active_object; o.name = name; o.scale = sc; bpy.ops.object.shade_smooth()
+        o.data.materials.append(mat); parts.append(o); return o
+    def limb(name, a, b, r0, r1, mat):
+        o = ship.cyl(name, Vector(a) * S, Vector(b) * S, r0 * S, r1 * S, mat=mat, verts=16)
+        sub = o.modifiers.new("Sub", "SUBSURF"); sub.levels = 2; sub.render_levels = 2; parts.append(o); return o
+    # lying on its back along +X (head toward -X), z up from the surface
+    h = sph("doll_head", (-0.12, 0, 0.045), 0.045, (1.0, 0.95, 0.92), muslin)
+    # the stitched face, as real stitching on the cloth: black bead eyes, brown brows, a red mouth, rubbed cheeks
+    black = E.principled("doll_eye", (0.01, 0.01, 0.01), rough=0.3); red = E.principled("doll_mouth", (0.45, 0.06, 0.05), rough=0.8)
+    rose = E.principled("doll_cheek", (0.75, 0.42, 0.38), rough=0.9); brown = E.principled("doll_brow", (0.15, 0.08, 0.04), rough=0.9)
+    hz = 0.045 + 0.045 * 0.92                                          # top of the head (the face looks up)
+    for sg in (1, -1):
+        sph("doll_eyebead", (-0.125, sg * 0.016, hz - 0.002), 0.0055, (1, 1, 0.6), black)
+        sph("doll_cheekpatch", (-0.105, sg * 0.024, hz - 0.006), 0.009, (1, 1, 0.25), rose)
+        limb("doll_browstitch", (-0.137, sg * 0.009, hz - 0.002), (-0.139, sg * 0.024, hz - 0.004), 0.0014, 0.0014, brown)
+    limb("doll_mouthstitch", (-0.1, -0.008, hz - 0.004), (-0.098, 0.008, hz - 0.004), 0.0017, 0.0017, red)
+    sph("doll_hair", (-0.152, 0, 0.042), 0.046, (0.62, 1.04, 0.88), hairm)                 # yarn hair at the back
+    sph("doll_body", (-0.035, 0, 0.032), 0.05, (1.0, 0.75, 0.55), muslin)
+    skirt = sph("doll_dress", (0.035, 0, 0.034), 0.062, (1.25, 0.95, 0.5), dress)
+    sph("doll_bodice", (-0.04, 0, 0.036), 0.052, (1.0, 0.82, 0.6), dress)
+    sph("doll_pinafore", (0.0, 0, 0.052), 0.045, (1.3, 0.55, 0.22), pin)
+    for sg in (1, -1):                                                 # arms, one flung out
+        a0 = (-0.06, sg * 0.04, 0.035); a1 = (0.0, sg * 0.1, 0.02) if sg > 0 else (-0.11, -0.1, 0.02)
+        limb("doll_arm", a0, a1, 0.012, 0.01, muslin)
+        sph("doll_hand", a1, 0.012, (1, 1, 0.8), muslin)
+        l0 = (0.07, sg * 0.022, 0.025); l1 = (0.16, sg * (0.03 + 0.012 * sg), 0.016)
+        limb("doll_leg", l0, l1, 0.014, 0.012, muslin)
+        sph("doll_boot", (l1[0] + 0.012, l1[1], l1[2]), 0.015, (1.4, 0.9, 0.9), boot)
+    for o in parts:
+        o.parent = root
+    root.matrix_world = Matrix.Translation(base) @ Matrix.Rotation(rot_z, 4, 'Z') @ Matrix.Rotation(tilt, 4, 'X')
+    return root
+
+
 def family_things():
-    """In the captain's cabin, the family's things left behind: the little girl's rag doll on the sea chest."""
-    try:
-        import sf
-        r, ms = sf.model(DOLL, height=0.26)
-        r.rotation_euler = (0, 0, math.radians(200)); bpy.context.view_layer.update()
-        r.location = (1.12, 0.92, 0.515); bpy.context.view_layer.update()
-        lo, hi = ph.bounds(ms); r.location.z += 0.515 - lo.z
-        return r
-    except Exception as e:
-        print("doll asset missing:", e)
+    """In the captain's cabin, the family's things left behind: the little girl's rag doll on the sea chest, askew."""
+    return rag_doll(Vector((1.1, 0.93, 0.517)), rot_z=math.radians(25), tilt=math.radians(6))

@@ -36,3 +36,15 @@
 * Card photos: placeholders until the hub supplies them.
 * Final render budget: your decision. The animation pipeline is ready and runs clipcheck on frames 1/mid/last before
   rendering.
+
+## v3 (hub's last four fixes)
+1. S39: the glowing X-ray is gone. I tried P4's dim cutaway, but its hold floor sits right at the 3½ ft bilge level, so
+   the water can't read honestly. "The hull looks in good shape" is now a low shot along her sound black topsides from
+   the sea. S38: the floating "3½ FT" label is removed; only the burned-in VO caption carries the number. Deveau holds
+   the chalked rod up in one fist (no open hand).
+2. S16b: a recognisable 1870s rag doll lying askew on the sea chest: a muslin head with stitched bead eyes, brows,
+   a red mouth and rubbed cheeks, yarn hair, muslin arms and legs, a calico dress with a pinafore, black cloth boots.
+3. S43/S51/S53: the chart highlights are now filled soft orange glows (a disc with a gradient fill fading to nothing
+   at its rim), not line rings.
+4. S24: both fists close on spokes within reach. The animated wheel turn uses the same grip points.
+Clipping: still 0 on every character shot.
