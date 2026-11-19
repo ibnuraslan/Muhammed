@@ -99,6 +99,13 @@ if SHOT != "S12":
         lp.location = T + Vector((-0.05, 0.28, 0.2)); lp.data.energy = 40; lp.data.color = (1.0, 0.6, 0.28); lp.data.shadow_soft_size = 0.02
     else:
         p1_interiors().slate(T + Vector((0.12, -0.08, 0.0)), rot=math.radians(-8))     # P1/P2's dark slate, chalk hand
+        # under our grey skylight P1's slate face read pale: deepen the slate (gamma), the chalk stays bright
+        sm = bpy.data.materials.get("slateface")
+        if sm:
+            N = sm.node_tree.nodes; Lk = sm.node_tree.links; tex = next(n for n in N if n.type == 'TEX_IMAGE')
+            g = N.new("ShaderNodeGamma"); g.inputs['Gamma'].default_value = 2.2
+            Lk.new(tex.outputs['Color'], g.inputs['Color']); Lk.new(g.outputs['Color'], N["Principled BSDF"].inputs['Base Color'])
+            N["Principled BSDF"].inputs['Roughness'].default_value = 0.85
         PR.water_floor("bilge", (0, 0, 0.0), (2 * RX - 0.1, 2 * RY - 0.1), depth=0.035)
         chair, _ = PR.put("WoodenChair_01", (-1.0, -0.7, 0), rot_z=math.radians(60), size=0.9)
         chair.rotation_euler = (math.radians(0), math.radians(90), math.radians(70))      # knocked over
