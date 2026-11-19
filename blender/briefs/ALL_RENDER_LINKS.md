@@ -2,7 +2,7 @@
 
 All files: 1080×1920, 60 fps, Cycles; VO and textures packed in each .blend. Links download directly when logged in to GitHub.
 
-## Batch 1 (35 films)
+## Batch 1 (35 films) — ON HOLD, do not render (failed Nov 19 re-review; only 08 BeethovenDeaf borderline)
 
 | # | Film | Frames | Blend | Voiceover |
 |---|---|---|---|---|
