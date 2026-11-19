@@ -17,6 +17,7 @@ import human as H, deveau as D, poses as P, ship
 MODE = None               # None: bake each pose (stills); "probe"/"live": keep the rig (animation export)
 CACHE_DIR = None          # set by render.py for frame sequences (hair strand cache per shot and person)
 CACHE_TAG = ""
+SETTLE_CLEAR = 0.002      # gap left under the soles (a heeling deck between probes needs a little more)
 SETTLE = True             # lift each man onto the real floor/deck after placing (clipcheck: no sunk soles)
 
 # ----------------------------------------------------------------------------- cast sheet
@@ -165,7 +166,7 @@ class Person(D.Deveau):
         if self.spec.get("cap"):
             knit_cap(self, self.spec["cap"])
         if SETTLE and not getattr(self, "no_settle", False):
-            _lf = settle(self)
+            _lf = settle(self, clearance=SETTLE_CLEAR)
             if os.environ.get("SETTLE_DEBUG"):
                 print("SETTLE", self.name, MODE, round(_lf, 4), flush=True)
             if getattr(self, "seated", False):

@@ -417,6 +417,7 @@ def s08(t):
 def s09(t):
     ST.exterior("gold", sky_rot=120, sun_az=240, sun_el=16)
     hd = 95.0
+    crew.SETTLE_CLEAR = 0.015                  # she heels and pitches under them between the animation probes
     m = ST.mc("spare", wind=ST.local_wind(WIND, hd), wet=0.4, detail=False)
     SHIP = ST.set_ship(m, loc=(0, 0, 0), heading=hd, heel=6 + 1.0 * math.sin(t * 2), pitch=0.8 * math.sin(t * 1.5))
     # three men aboard, small at the wheel and in the waist
