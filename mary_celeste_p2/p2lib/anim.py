@@ -331,6 +331,19 @@ def _inside(root, p, pad):
     return False
 
 
+def _fits(root, o, pad=2.0):
+    """The whole object (all bounding-box corners, children included for rigs) lies on the ship: land, sea and harbour
+    meshes whose origin happens to fall inside her box are not taken along."""
+    objs = [o] + ([c for c in o.children_recursive if c.type == 'MESH'] if o.type == 'ARMATURE' else [])
+    for ob in objs:
+        if ob.type not in ('MESH', 'CURVE', 'ARMATURE'):
+            continue
+        for c in ob.bound_box:
+            if not _inside(root, ob.matrix_world @ Vector(c), pad):
+                return False
+    return True
+
+
 def ship_motion(root, heave=0.18, roll=1.6, pitch=0.6, period=7.0, seed=0, travel=None):
     base = root.matrix_world.copy(); D = dur()
     rng = np.random.default_rng(seed); p = rng.uniform(0, 6.28, 3); w = 2 * math.pi / period
@@ -372,7 +385,7 @@ def _adopt(root, cam, pad=0.6):
             continue
         if o is cam and not aboard:
             continue
-        if o is cam or _inside(root, o.matrix_world.to_translation(), pad):
+        if o is cam or (_inside(root, o.matrix_world.to_translation(), pad) and _fits(root, o)):
             mw = o.matrix_world.copy(); o.parent = root; o.matrix_world = mw
     bpy.context.view_layer.update()
 
