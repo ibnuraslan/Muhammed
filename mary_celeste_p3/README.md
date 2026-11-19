@@ -26,3 +26,9 @@ Everything is real Blender 5.2 Cycles 3D built on the shared library (`mary_cele
 The gale (`shots.gale`, `sets.rain`), Gibraltar harbour (`shots.gib_land`: real DEM Rock + town + bay hills),
 the court (`rooms.court`), Flood / judge / marshal / surveyor / diver (`crew.CAST`), the underwater harbour
 (`rooms.underwater`), the chart-table maquette (`shots.maquette`).
+
+## Cards and captions (user decision, 19 Nov)
+
+No person/place cards and no captions are burned into any render or the assembled MP4: the user adds them in
+CapCut. `render.py` writes clean frames only; `tools/board.py` (storyboard boards for review) is the only place
+cards/captions were ever drawn and it is not part of the render or assembly pipeline. Card photos are not needed.

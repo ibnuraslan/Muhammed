@@ -17,11 +17,8 @@ Fonts
   * Courier Prime (captions, card roles, letter heading) - SIL Open Font License 1.1, assets/fonts/OFL_CourierPrime.txt
   * Special Elite (card names, via the shared callout.py) - Apache License 2.0, assets/fonts/LICENSE_SpecialElite.txt
 
-Photos (person and place cards)
-  * PENDING. Free-license portraits of David Morehouse and Frederick Solly Flood and an 1870s view of Gibraltar are
-    needed (Wikimedia Commons public-domain scans are the intended source). This environment's network blocks
-    Wikimedia, so the storyboard shows "PHOTO PENDING" cards. Each photo goes in assets/photos/<name>.jpg with its
-    source URL, author and licence listed here.
+Photos
+  * None: per the user (19 Nov), cards and captions are added in CapCut, not in our renders.
 
 Code
   * shared/callout.py is the shared card/caption module from claude/killer-in-house (nvidia_doc/scenes/callout.py),
