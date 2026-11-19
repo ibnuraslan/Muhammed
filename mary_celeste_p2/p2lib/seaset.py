@@ -112,7 +112,7 @@ def island_santa_maria(center, scale=1.0):
 
 def tug(name, at, yaw, smoke=True):
     """A New York harbour steam tug of the 1870s: low black hull, white deckhouse, tall black stack, walking beam."""
-    root = bpy.data.objects.new(name, None); bpy.context.collection.objects.link(root)
+    root = bpy.data.objects.new(name + "_root", None); bpy.context.collection.objects.link(root)
     blk = ship.paint(name + "_blk", (0.015, 0.014, 0.013), rough=0.4, grime=0.3)
     wht = ship.paint(name + "_wht", (0.62, 0.58, 0.5), rough=0.5, grime=0.4)
     red = ship.paint(name + "_red", (0.3, 0.04, 0.03), rough=0.5, grime=0.3)
@@ -183,4 +183,5 @@ def pilot_boat(name, at, yaw, rowers=2):
     bpy.context.view_layer.update()
     lo, hi = ph.bounds(ms)
     r.location.z += -(lo.z + (hi.z - lo.z) * 0.35) + at[2]
+    r.name = name + "_root"
     return r, ms

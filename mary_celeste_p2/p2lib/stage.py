@@ -119,6 +119,10 @@ def clip(shot):
 
 
 def finish(out, cine=None, bloom=0.3, exposure=0.0):
+    import anim
+    if anim.on():
+        bpy.context.scene.view_settings.exposure += exposure
+        anim.run(anim.SHOT, cine=cine, bloom=bloom); return
     if os.environ.get("CLIP") or os.environ.get("PROBE"):
         clip(os.path.splitext(os.path.basename(out))[0])
     if os.environ.get("CLIPONLY"):

@@ -180,6 +180,9 @@ class Person(D.Deveau):
                     m.thickness_clamp = 1.0          # even-offset spikes at sharp hem corners
         self._rest_fittings()
         bpy.context.view_layer.update()
+        import anim
+        if anim.on():                       # final render: key the pose over the shot before hair is grown on it
+            anim.key_pose(self)
         head_M = (h.arm.matrix_world @ h.arm.pose.bones["head"].matrix).copy()
         self.head_R = head_M.to_3x3() @ h.arm.data.bones["head"].matrix_local.to_3x3().inverted()
         self.hair_objs = []
@@ -664,10 +667,21 @@ class _SharedLive:
 
     def finish_live(self, look_at=None, hair=True, density=1.0, place=None, ground=True):
         place = place or Matrix.Identity(4)
-        self.finish(look_at=look_at, place=place, density=density, hair=hair)
+        import anim
         h = self.h
-        h.arm.matrix_world = place @ h.arm.matrix_world          # meshes are baked: moving the rig only moves the bones
-        bpy.context.view_layer.update()
+        if anim.on():                       # final render: the rig stays live and is keyed over the shot
+            anim.live(self, density=density, hair=hair)
+            h.arm.matrix_world = place @ h.arm.matrix_world
+            for o in self.objects:
+                if o.parent is None and o is not h.arm:
+                    o.matrix_world = place @ o.matrix_world
+            bpy.context.view_layer.update()
+            if look_at is not None:
+                self.look(look_at)
+        else:
+            self.finish(look_at=look_at, place=place, density=density, hair=hair)
+            h.arm.matrix_world = place @ h.arm.matrix_world          # meshes are baked: moving the rig only moves the bones
+            bpy.context.view_layer.update()
         if ground:
             Person.ground(self)
         Person.tag(self)                    # wrists + knuckles + fingertips as hand points (P5's convention)
