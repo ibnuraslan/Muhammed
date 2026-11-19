@@ -11,6 +11,18 @@ import yawl, people as PP
 from sitpose import Seat
 
 
+def head(st, look_world, tilt=0.0, share=0.75):
+    """Seat.head with the yaw sign corrected (the shared one turns the head AWAY from the target: the rig faces -Y,
+    so a target at +X needs +yaw = atan2(dx, -dy)). Reported to the studio; use this until it is fixed upstream."""
+    import poses as P
+    h = st.p.h
+    d = st.local(look_world) - h.bone_head("head")
+    yaw = math.degrees(math.atan2(d.x, -d.y))
+    pitch = -math.degrees(math.atan2(d.z, math.hypot(d.x, d.y)))
+    P.head(h, pitch=pitch * share, yaw=yaw * share, tilt=tilt)
+    return pitch, yaw
+
+
 def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
     """stroke: 0 = catch (arms long, leaning toward the stern), 1 = finish (leaning back, hands at the chest)."""
     Mb = b["root"].matrix_world.copy()
@@ -42,55 +54,61 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
                     err1 = st.grip_bar("L" if sg < 0 else "R", hw + loom * 0.09, loom, over=upw)
                     err2 = st.grip_bar("R" if sg < 0 else "L", hw - loom * 0.07, loom, over=upw)
                     p.grip_err = max(err1, err2)
-                st.head(look if i == 0 and sg > 0 else W((x - 3.0, sg * 0.2, 1.1)))
+                head(st, look if i == 0 and sg > 0 else W((x - 3.0, sg * 0.2, 1.1)))
                 p.dv_seat = st
                 out.append((p, st))
     if "Richardson" in who:
         # the mate on the after thwart, facing aft toward the captain; feet tucked in under the stern sheets
         p = PP.sailor(0)
         x = yawl.THWARTS[3]
-        st = Seat(p, W((x, 0.36, yawl.SEAT_Z)), 180.0, frame=Mb)
-        st.legs({"L": W((x - 0.22, 0.25, floor)), "R": W((x - 0.22, 0.34, floor))}, knees_out=0.0)
-        st.lean(fwd=6)
+        st = Seat(p, W((x, 0.37, yawl.SEAT_Z)), 180.0, frame=Mb)
+        st.legs({"L": W((x - 0.12, 0.29, floor)), "R": W((x - 0.15, 0.355, floor))}, knees_out=0.0)
+        st.lean(fwd=1)               # upright: his head stays clear of Sarah in the S02 frame
         st.hand_on_thigh("L"); st.hand_on_thigh("R")
-        st.head(look)
+        p.dv_look = W((x - 0.4, 0.33, yawl.SEAT_Z + 0.08))       # eyes down on his hands, not on the camera
+        head(st, p.dv_look, share=0.9)
         out.append((p, st))
     if "Briggs" in who:
         # the approved composition: Briggs and Sarah side by side across the stern, calm, the tiller between them
         p = PP.briggs()
-        st = Seat(p, W((-2.56, 0.28, yawl.SEAT_Z)), 0.0, frame=Mb)
-        st.legs({"L": W((-2.06, 0.3, floor)), "R": W((-2.06, 0.15, floor))}, knees_out=0.0)
+        # port side of the tiller, aft; Sarah sits ~0.6 m to his right in the frame at the same depth (side by side)
+        st = Seat(p, W((-2.6, -0.31, yawl.SEAT_Z)), 0.0, frame=Mb)
+        st.legs({"L": W((-2.14, -0.2, floor)), "R": W((-2.12, -0.34, floor))}, knees_out=0.0)
         st.lean(fwd=4)
         tip = b["tiller"]
-        tdir = (Mb.to_3x3() @ Vector((1, 0, -0.23))).normalized()
-        # a natural hold: hand round the end of the tiller, forearm low beside his thigh
-        hold = Mb @ (tip - Vector((0.16, 0, -0.04)))            # partway along: the forearm meets the tiller across it
-        p.grip_err = st.grip_bar("R", hold, tdir, radius=0.019, over=Mb.to_3x3() @ Vector((0, 0, 1)), elbow=(0.65, 0.3, -0.1))
-        st.hand_on_thigh("L")
-        st.head(look)
+        tdir = (Mb.to_3x3() @ Vector((1, 0, -0.24))).normalized()
+        # a natural hold: left hand round the tiller near its end, forearm low beside his thigh
+        hold = Mb @ (tip - Vector((0.08, 0, -0.02)))
+        p.grip_err = st.grip_bar("L", hold, tdir, radius=0.019, over=Mb.to_3x3() @ Vector((0, 0, 1)), elbow=(0.65, 0.3, -0.1))
+        st.hand_on_thigh("R")
+        p.dv_look = W((0.5, 3.2, 1.25))                          # calm, level, toward the ship
+        head(st, p.dv_look)
         p.brow_knit(0.6)
         out.append((p, st))
     sarah = None
     if "Sarah" in who:
         p = PP.sarah()
-        st = Seat(p, W((-2.22, -0.3, yawl.SEAT_Z)), 8.0, frame=Mb)
-        st.legs({"L": W((-1.8, -0.22, floor)), "R": W((-1.82, -0.34, floor))}, knees_out=0.0)
-        st.lean(fwd=6)
+        st = Seat(p, W((-2.1, 0.16, yawl.SEAT_Z)), -20.0, frame=Mb)       # knees turned a little to port, clear of the mate's
+        st.legs({"L": W((-1.69, -0.08, floor)), "R": W((-1.73, -0.21, floor))}, knees_out=0.0)
+        st.lean(fwd=4)
         st.hand_on_thigh("L"); st.hand_on_thigh("R")
+        p.dv_look = W((0.6, 3.2, 1.15)); head(st, p.dv_look, share=0.6)
         sarah = (p, st)
         out.append((p, st))
     if "Sophia" in who and sarah:
-        # Sophia sits on the bottom boards at her mother's feet, leaning back against her shins
+        # Sophia sits on the stern bench just aft of her mother, legs out along the seat
         sp, sst = sarah
         p = PP.sophia()
-        qx, qy = -1.63, -0.0
-        st = Seat(p, W((qx, qy, yawl.FLOOR_Z + 0.022)), 0.0, frame=Mb)
-        st.legs({"L": W((qx + 0.3, qy + 0.05, yawl.FLOOR_Z + 0.07)), "R": W((qx + 0.3, qy - 0.05, yawl.FLOOR_Z + 0.07))}, knees_out=0.05)
-        st.lean(fwd=-6)
+        qx, qy = -2.64, 0.46
+        st = Seat(p, W((qx, qy, yawl.SEAT_Z)), 0.0, frame=Mb)
+        st.legs({"L": W((qx + 0.24, qy + 0.05, yawl.SEAT_Z + 0.06)), "R": W((qx + 0.24, qy - 0.03, yawl.SEAT_Z + 0.06))}, knees_out=0.03)
+        st.lean(fwd=-2)
         st.hand_on_thigh("L"); st.hand_on_thigh("R")
-        st.head(look, tilt=4)
+        p.dv_look = W((0.5, 3.2, 1.0))
+        head(st, p.dv_look, tilt=3)
         out.append((p, st))
-        sst.head(look, share=0.6)
+        sp.dv_look = W((0.6, 3.2, 1.15))                          # level and calm, toward the ship
+        head(sst, sp.dv_look, share=0.6)
         sp.brow_knit(0.5)
     for p, st in out:
         if hasattr(p, "grip_err"):
@@ -99,7 +117,7 @@ def man_the_boat(b, look, density=0.5, who=None, stroke=0.0, hair=True):
             clipcheck.report_floating(p.name, p.grip_err)          # gaps over 15 mm fail the clip check
             if p.grip_err > 0.015:
                 print(f"FLOAT {p.name}: hand {p.grip_err * 1000:.0f} mm off the bar it should hold")
-        st.place_finish(look, density=density, hair=hair)
+        st.place_finish(getattr(p, "dv_look", look), density=density, hair=hair)
         trim_under_seat(p, st.seat_world)
     return [p for p, _ in out]
 

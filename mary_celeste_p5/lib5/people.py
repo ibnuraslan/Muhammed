@@ -485,7 +485,54 @@ def briggs(wet=0.4):
 
 def sarah(wet=0.3, seated=True):
     import women as _W
-    return _W.Sarah(wet=wet, seated=seated, bonnet=True, shawl=True)
+
+    class _Sarah(_W.Sarah):
+        SHAWL = (0.072, 0.064, 0.055)          # dark brown-grey wool: no pale chest that shades as anatomy
+
+    p = _Sarah(wet=wet, seated=seated, bonnet=True, shawl=True)
+    _loose_front(p)
+    _tie_without_bow(p)
+    return p
+
+
+def _loose_front(p, half_w=0.12, drop=0.32):
+    """The shawl hangs loosely over the chest: below its most forward point each front column falls straight down
+    (cloth bridges the hollow under the bust instead of following it). Rest coordinates, front = -Y."""
+    import numpy as np
+    for o, dz in ((p.shawl, drop), (getattr(p, "bodice", None), 0.08)):
+        if o is None:
+            continue
+        me = o.data; n = len(me.vertices)
+        co = np.zeros(n * 3); me.vertices.foreach_get("co", co); co = co.reshape(-1, 3)
+        cx = float(p.rest_co[p.used, 0].mean()); cy = float(p.rest_co[p.used, 1].mean())
+        front = (co[:, 1] < cy) & (np.abs(co[:, 0] - cx) < half_w)
+        idx = np.nonzero(front)[0]
+        new = co.copy()
+        for i in idx:
+            col = idx[(np.abs(co[idx, 0] - co[i, 0]) < 0.014) & (co[idx, 2] > co[i, 2]) & (co[idx, 2] < co[i, 2] + dz)]
+            if len(col):
+                fall = np.clip(1 - (np.abs(co[i, 0] - cx) - half_w * 0.7) / (half_w * 0.3), 0, 1)   # fade out at the sides
+                y = min(co[i, 1], float(co[col, 1].min()) - 0.004)
+                new[i, 1] = co[i, 1] + (y - co[i, 1]) * fall
+        me.vertices.foreach_set("co", new.ravel()); me.update()
+
+
+def _tie_without_bow(p):
+    """Bonnet ribbons lie along the jaw and meet under the chin (no bow loops standing off the chin)."""
+    import bpy, numpy as np
+    from mathutils import Vector
+    keep = []
+    for ob in list(p.button_objs):
+        if "_bowloop" in ob.name or "_bowknot" in ob.name:
+            bpy.data.objects.remove(ob, do_unlink=True); continue
+        if "_tie" in ob.name and ob.type == 'CURVE':
+            U = np.nonzero(p.used)[0]
+            for k in (-2, -1):
+                pt = ob.data.splines[0].points[k]; q = np.array(pt.co[:3])
+                vi = U[int(np.argmin(np.linalg.norm(p.rest_co[U] - q, axis=1)))]
+                pt.co = (*Vector(p.rest_co[vi] + p.rest_n[vi] * 0.006), 1)
+        keep.append(ob)
+    p.button_objs[:] = keep
 
 
 def sophia(wet=0.2, seated=True):

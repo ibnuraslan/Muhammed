@@ -149,7 +149,8 @@ def build(name="yawl", wet=0.6, oars="out", oar_angle=None, rudder=True, painter
     # stern sheets: a bench across the stern, deeper on the port side (the helmsman's side is shallow so his knees
     # clear its edge and his feet reach the bottom boards); open forward of it for the feet
     x0, x1 = STERN_SHEETS
-    for nm, xb, sgn in (("_sternseat", -2.27, 1), ("_sternseatp", -1.95, -1)):
+    # starboard: full depth (Sarah sits forward on it, Sophia aft of her); port: shallow, the helmsman's side
+    for nm, xb, sgn in (("_sternseat", -1.85, 1), ("_sternseatp", -2.27, -1)):
         hb = half_breadth_at((x0 + xb) / 2, SEAT_Z)
         objs.append(ship.box(name + nm, ((x0 + xb) / 2, sgn * hb / 2, SEAT_Z - 0.02), (xb - x0, hb, 0.04), seat, bevel=0.006))
     # rowlocks (pairs of thole pins) at each rowing thwart
@@ -168,7 +169,7 @@ def build(name="yawl", wet=0.6, oars="out", oar_angle=None, rudder=True, painter
         rv = [(p0.x - 0.04, 0, p0.z - 0.25), (p0.x - 0.42, 0, p0.z - 0.25), (p1.x - 0.24, 0, p1.z - 0.05), (p1.x - 0.04, 0, p1.z + 0.05)]
         r = ship.mesh_obj(name + "_rudder", rv, [[0, 1, 2, 3]], trim, smooth=False)
         so = r.modifiers.new("Thick", "SOLIDIFY"); so.thickness = 0.035; so.offset = 0; objs.append(r)
-        head = Vector((p1.x - 0.08, 0, p1.z + 0.03)); tip = head + Vector((0.86, 0.0, -0.2))   # slopes down to lap height
+        head = Vector((p1.x - 0.08, 0, p1.z + 0.03)); tip = head + Vector((0.70, 0.0, -0.17))   # slopes down to lap height
         objs.append(ship.cyl(name + "_tiller", head, tip, 0.022, 0.016, mat=seat, verts=12))
         tiller = tip - Vector((0.12, 0, 0))
     # oars: loom through the rowlocks; handle inboard, blade outboard and down into the sea

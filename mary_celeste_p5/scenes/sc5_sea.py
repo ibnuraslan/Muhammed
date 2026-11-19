@@ -82,8 +82,10 @@ if SHOT in ("S01", "S02", "S03"):
     if SHOT == "S01":
         cam(Mb @ Vector((-9.5, -7.0, 0.9)), Mb @ Vector((1.0, 1.5, 2.4)), 26)
     elif SHOT == "S02":
-        c0 = Mb @ Vector((-0.9, -3.6, 1.15)); tgt = Mb @ Vector((-2.3, 0.0, 1.1))   # the frame the user approved: keep exactly
-        cam(c0, tgt, 38, fstop=2.8, focus=(Mb @ Vector((-2.3, -0.2, 1.05)) - c0).length)
+        # the approved frame, 4 deg left and a touch tighter (hub v4): the rowers forward of the after thwart stay
+        # out of frame whole, hands included
+        c0 = Mb @ Vector((-0.9, -3.6, 1.15)); tgt = Mb @ Vector((-2.44, -0.05, 1.1))
+        cam(c0, tgt, 42, fstop=2.8, focus=(Mb @ Vector((-2.25, 0.0, 1.05)) - c0).length)
     else:
         c = Mb @ Vector((1.2, -1.9, 1.05))
         cam(c, ring.lerp(cleat, 0.3) + Vector((0, 0, -0.4)), 24, fstop=5.6, focus=(ring - c).length)
