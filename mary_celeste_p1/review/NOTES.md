@@ -48,3 +48,7 @@
    at its rim), not line rings.
 4. S24: both fists close on spokes within reach. The animated wheel turn uses the same grip points.
 Clipping: still 0 on every character shot.
+
+## Nov 19: no cards, no captions in the render
+User decision via the hub: comp/assemble.py now writes clean frames only (no person/place cards, no captions, no labels);
+they are added later in CapCut. The storyboard frames in review/ still show them only to mark timing and placement.

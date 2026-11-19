@@ -1,5 +1,5 @@
-"""Assemble Part 1: rendered shot frames -> cards (shared callout.py: people slide in from the right, places from the
-left, first appearance only) + burned-in Courier Prime captions (the script, verbatim, one line per cue) -> silent MP4.
+"""Assemble Part 1: rendered shot frames -> clean silent MP4. NO cards and NO captions (user decision, Nov 19: they are
+added later in CapCut; the frames keep room where a card would sit). The card/caption code below is disabled.
 
     python3 comp/assemble.py [--out out/part1.mp4] [--size 2560x1440] [--only S01,S02]
 Frames: out/frames/<id>/f0001.png ... (run_anim.py). A shot with missing frames is reported and holds its last frame.
@@ -43,7 +43,7 @@ def main():
     t = 0.0; cards = []; cues = []
     for s in shots:
         s["t0"] = t
-        if s["card"]:
+        if False and s["card"]:                              # cards: added in CapCut, not burned in
             kind, rest = s["card"].split(":", 1); name, role = rest.split("|")
             ph = SB.photo_for(name)
             if ph is not None:                               # cards only with a real free-licence photo
@@ -70,15 +70,6 @@ def main():
                     last = last.resize((W, H), Image.LANCZOS)
             im = last if last is not None else Image.new("RGB", (W, H))
             tt = fi / FPS
-            for c in cards:
-                if c["t0"] <= tt < c["t0"] + CARD_DUR:
-                    fn = CO.person_right if c["kind"] == "person" else CO.place_left
-                    im = fn(im, c["photo"], c["name"], c["role"], slide=CO.card_slide(tt - c["t0"], CARD_DUR))
-            if s.get("label") and 0.25 <= i / FPS:
-                im = SB.burn_label(im, *s["label"])
-            for (c0, c1, txt) in cues:
-                if c0 <= tt < c1:
-                    im = CO.caption(im, txt)
             enc.stdin.write(im.tobytes()); fi += 1
     enc.stdin.close(); enc.wait()
     print("wrote", out, fi, "frames", round(total, 2), "s")

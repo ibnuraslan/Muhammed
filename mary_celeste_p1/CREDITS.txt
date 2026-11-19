@@ -7,5 +7,4 @@ Characters: MakeHuman 1.x base mesh, targets, skeleton (CC0) via the shared mary
 Map: Natural Earth 1:50m land (public domain, naturalearthdata.com).
 Fonts: Courier Prime (SIL OFL 1.1); Special Elite (Apache 2.0); Cedarville Cursive (SIL OFL 1.1, Google Fonts) for the
   handwriting on the logbook and slate props.
-Card photos: none yet. Wikimedia Commons and the Library of Congress are blocked by this environment's network policy;
-  person/place cards render with a "PHOTO PENDING" slot until free-licence photos are supplied (see review/STORYBOARD.md).
+Card photos: not needed (no cards or captions are burned into the render; they are added later in CapCut).
