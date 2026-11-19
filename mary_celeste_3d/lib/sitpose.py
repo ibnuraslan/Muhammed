@@ -83,7 +83,7 @@ class Seat:
         h = self.p.h
         hd = h.bone_head("head"); t = self.local(look_world)
         d = (t - hd)
-        yaw = math.degrees(math.atan2(-d.x, -d.y))         # +yaw turns to his left (+X)
+        yaw = math.degrees(math.atan2(d.x, -d.y))          # rig faces -Y; P.head +yaw turns toward +X (fix from P5)
         pitch = -math.degrees(math.atan2(d.z, math.hypot(d.x, d.y)))
         P.head(h, pitch=pitch * share, yaw=yaw * share, tilt=tilt)
         return pitch, yaw

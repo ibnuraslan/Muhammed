@@ -451,7 +451,9 @@ class Sarah(_Woman):
                 p = ear * (1 - t) + chin * t
                 i = int(np.argmin(np.linalg.norm(co[U] - p, axis=1))); vi = U[i]
                 pts.append(Vector(co[vi] + self.rest_n[vi] * 0.007))
-            pts[-1] = Vector(chin + np.array([sg * 0.01, -0.012, 0]) * hs)
+            for j in (-2, -1):                                   # last points sit on the skin under the chin (P5)
+                q = np.array(pts[j]); i = int(np.argmin(np.linalg.norm(co[U] - q, axis=1))); vi = U[i]
+                pts[j] = Vector(co[vi] + self.rest_n[vi] * 0.006)
             cu = bpy.data.curves.new(f"{self.name}_tie", 'CURVE'); cu.dimensions = '3D'
             cu.bevel_depth = 0.0018 * hs; cu.extrude = 0.006 * hs; cu.bevel_resolution = 1; cu.use_fill_caps = False
             sp = cu.splines.new('POLY'); sp.points.add(len(pts) - 1)
@@ -461,22 +463,7 @@ class Sarah(_Woman):
             ob.parent = h.arm; ob.parent_type = 'BONE'; ob.parent_bone = "head"
             bpy.context.view_layer.update(); ob.matrix_world = Matrix.Identity(4)
             self.button_objs.append(ob)
-        # ribbon bow under the chin: two flat loops and a knot (no ring)
-        kc = Vector(chin + np.array([0, -0.014, 0]) * hs)
-        for sgn in (1, -1):
-            bpy.ops.mesh.primitive_torus_add(major_radius=0.009 * hs, minor_radius=0.0025 * hs, major_segments=24, minor_segments=8,
-                                             location=tuple(kc + Vector((sgn * 0.011 * hs, 0, 0))), rotation=(math.pi / 2, 0, sgn * 0.35))
-            lp = bpy.context.active_object; lp.name = f"{self.name}_bowloop"; lp.scale = (1.0, 1.0, 0.45)
-            lp.data.materials.append(rib); bpy.ops.object.shade_smooth()
-            bpy.context.view_layer.update(); mw = lp.matrix_world.copy()
-            lp.parent = h.arm; lp.parent_type = 'BONE'; lp.parent_bone = "head"; bpy.context.view_layer.update(); lp.matrix_world = mw
-            self.button_objs.append(lp)
-        bpy.ops.mesh.primitive_uv_sphere_add(radius=0.004 * hs, location=tuple(kc))
-        kn = bpy.context.active_object; kn.name = f"{self.name}_bowknot"; kn.scale = (1.0, 0.7, 1.2); kn.data.materials.append(rib)
-        bpy.ops.object.shade_smooth()
-        bpy.context.view_layer.update(); mw = kn.matrix_world.copy()
-        kn.parent = h.arm; kn.parent_type = 'BONE'; kn.parent_bone = "head"; bpy.context.view_layer.update(); kn.matrix_world = mw
-        self.button_objs.append(kn)
+        # (no bow object: from the side a modelled bow read as a buckle on the chin; the ribbons meet under it)
 
     def finish(self, *a, **k):
         r = super().finish(*a, **k)
