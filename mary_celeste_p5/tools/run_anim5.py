@@ -14,7 +14,12 @@ from shots import SHOTS
 scene = {s[0]: s[1] for s in SHOTS}[sid]
 tim = json.load(open(os.environ.get("TIMINGS", os.path.join(P5, "vo", "vo_timings.json"))))
 dur = float(tim[sid])
-os.environ.update(P5_ANIM="1", SHOT=sid, PREVIEW=os.environ.get("PREVIEW", "0"), HAIR=os.environ.get("HAIR", "1.0"))
+# hair strand density by how close the people are (0.7 = the approved storyboard look; far boats need very little):
+# keeps every farm .blend small
+HAIRD = {"S01": 0.12, "S02": 0.7, "S03": 0.15, "S04": 0.05, "S05": 0.7, "S06": 0.03, "S07": 0.35, "S08": 0.03,
+         "S11": 0.6, "S22": 0.7, "S23": 0.4, "S26": 0.7, "S27": 0.03}
+os.environ.update(P5_ANIM="1", SHOT=sid, PREVIEW=os.environ.get("PREVIEW", "0"),
+                  HAIR=os.environ.get("HAIR", str(HAIRD.get(sid, 0.5))))
 os.environ.setdefault("OUT", os.path.join(P5, "out", "anim", sid, sid + ".png"))
 runpy.run_path(os.path.join(P5, "scenes", scene + ".py"), run_name="__main__")
 
