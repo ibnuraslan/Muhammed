@@ -29,6 +29,11 @@ for sid, *_ in shots.SHOTS:
     st.frame_final_duration = t["frames"]
     print("LINKED", sid, sc.library.filepath, t["start_frame"], t["frames"], flush=True)
 
+# farms (RenderStreet) refuse a scene without a camera even when the sequencer drives the render: give MASTER one
+# (the sequencer output ignores it)
+cd = bpy.data.cameras.new("MASTER_cam"); cam = bpy.data.objects.new("MASTER_cam", cd)
+master.collection.objects.link(cam); master.camera = cam
+
 total = max(T[s]["start_frame"] + T[s]["frames"] - 1 for s in T)
 master.frame_start, master.frame_end = 1, total
 r = master.render
