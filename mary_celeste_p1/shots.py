@@ -243,8 +243,7 @@ def s02():
                       ship.zdeck(S.GAP[1]) + ship.RAIL_H + 0.1))
     def pose(dv, Mx):
         Cw.stand_relaxed(dv, pitch=8, yaw=-12, lean=10, weight="R")
-        Cw.hands_on(dv, Mx, left_w=None, right_w=cap, elbow_r=(-0.8, 0.5, -0.4), grip=False, curl=34)
-        dv.brow_knit(0.5)
+        dv.brow_knit(0.5)                              # arms hang relaxed: he has just stepped aboard and looks around
     look = S.deck_point(M, -4.0, 0.6, 1.0)
     person("deveau", Mp, pose, look_w=look)
     hw = head_w(Mp)
@@ -523,7 +522,7 @@ def s14():
     shroud = nearest_shroud(mc, M @ Vector((xa - 0.5, -hb, ship.zdeck(xa) + 1.5)))
     def p0(dv, Mx):
         Cw.stand_relaxed(dv, pitch=12, yaw=-15, lean=12, weight="L")
-        P.hand_reach(dv.h, "R", Mx.inverted() @ shroud, elbow=(-0.7, 0.4, -0.6)); P.grip(dv.h, "R", 0.9)
+        pass                                           # arms relaxed (the shroud is behind him: no reaching back)
     person(0, S.deck_place(M, xa, -hb + 0.5, heading_to(xa, -hb + 0.5, gx, 0.5)), p0, look_w=S.deck_point(M, gx - 1.0, 0.0, 0.2))
     Bm = b["root"].matrix_world
     edge_l = M @ Vector((xb + 0.28, -hb + 0.06, ship.zdeck(xb) + 0.02)); edge_r = M @ Vector((xb - 0.28, -hb + 0.06, ship.zdeck(xb) + 0.02))
