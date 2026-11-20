@@ -25,6 +25,12 @@ r.resolution_x, r.resolution_y, r.resolution_percentage = 2560, 1440, 100
 r.engine = 'CYCLES'; master.cycles.samples = 64; master.cycles.use_adaptive_sampling = True
 master.cycles.adaptive_threshold = 0.03; master.cycles.use_denoising = True
 r.use_sequencer = True
+# colour management must match the shots, or the strips come out washed out (the sequencer output uses MASTER's view)
+shot0 = [s for s in bpy.data.scenes if s.name != "MASTER"][0]
+for k in ("view_transform", "look", "exposure", "gamma"):
+    setattr(master.view_settings, k, getattr(shot0.view_settings, k))
+master.display_settings.display_device = shot0.display_settings.display_device
+master.sequencer_colorspace_settings.name = shot0.sequencer_colorspace_settings.name
 r.image_settings.file_format = 'PNG'; r.image_settings.color_mode = 'RGB'; r.image_settings.color_depth = '16'
 r.filepath = "//frames/MASTER_"; r.use_overwrite = False; r.use_placeholder = True
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)
