@@ -117,6 +117,18 @@ def relaxed(pitch=0.0, yaw=0.0, lean=3, weight="L", brow=0.0, lids=0.0):
     return f
 
 
+def soft_skin(dv, weight=0.2, radius=(0.7, 0.45, 0.35)):
+    """Gentler subsurface on this character's skin: a hand in shade with the sun behind it otherwise glows deep red."""
+    for o in dv.objects:
+        for sl in getattr(o, "material_slots", []):
+            m = sl.material
+            if m and "skin" in m.name.lower() and m.node_tree:
+                for n in m.node_tree.nodes:
+                    if n.type == 'BSDF_PRINCIPLED':
+                        n.inputs['Subsurface Weight'].default_value = weight
+                        n.inputs['Subsurface Radius'].default_value = radius
+
+
 def seat_chest(dv):
     """A sea chest under a seated man, its lid just under his seat (hip joints ~0.1 m above the lid)."""
     import interiors as I
@@ -245,7 +257,8 @@ def s02():
         Cw.stand_relaxed(dv, pitch=8, yaw=-12, lean=10, weight="R")
         dv.brow_knit(0.5)                              # arms hang relaxed: he has just stepped aboard and looks around
     look = S.deck_point(M, -4.0, 0.6, 1.0)
-    person("deveau", Mp, pose, look_w=look)
+    dv = person("deveau", Mp, pose, look_w=look)
+    soft_skin(dv)                                     # the shaded right hand reads as skin, not red
     hw = head_w(Mp)
     cam = S.deck_point(M, gx - 2.6, -hb + 2.7, 1.55)
     E.camera(cam, hw + Vector((0, 0, -0.18)), lens=40, fstop=2.8, focus=(hw - cam).length)
