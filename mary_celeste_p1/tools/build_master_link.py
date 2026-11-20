@@ -33,6 +33,9 @@ master.display_settings.display_device = shot0.display_settings.display_device
 master.sequencer_colorspace_settings.name = shot0.sequencer_colorspace_settings.name
 r.image_settings.file_format = 'PNG'; r.image_settings.color_mode = 'RGB'; r.image_settings.color_depth = '16'
 r.filepath = "//frames/MASTER_"; r.use_overwrite = False; r.use_placeholder = True
+# a camera in MASTER: farms (RenderStreet) refuse a scene without one; the sequencer output ignores it
+cd = bpy.data.cameras.new("MASTER_cam"); co = bpy.data.objects.new("MASTER_cam", cd)
+master.collection.objects.link(co); co.location = (0, -10, 2); master.camera = co
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)
 print("MASTERLINK", out, master.frame_end, [l.filepath for l in bpy.data.libraries][:2], len(bpy.data.libraries),
       round(os.path.getsize(out) / 1e3), "KB", flush=True)
