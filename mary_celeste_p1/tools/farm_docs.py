@@ -53,12 +53,17 @@ def main(pkg):
 
 Blender:     5.2.2 (built and tested with 5.2.2; any 5.2.x should open it)
 Engine:      Cycles, CPU (GPU is fine: no CPU-only features are used)
-Output:      2560 x 1440, 100%, 24 fps, PNG 16-bit RGB, written to //../frames/<shot>/<shot>_####.png
+Output:      2560 x 1440, 100%, 24 fps, PNG 16-bit RGB: MASTER writes //frames/MASTER_####.png
 Sampling:    64 max samples, adaptive (threshold 0.03), OpenImageDenoise, motion blur on (shutter 0.4)
 Grade:       in the compositor of each .blend (bloom, cinematic look, vignette) - leave "Compositing" on
 Frames:      clean - no cards, captions or labels (they are added in CapCut)
 
-Layout:      shots/<shot>.blend    one scene per shot, camera and frame range set
+ONE JOB:     MASTER.blend, scene MASTER, frames 1-{total_f}: its Video Sequencer plays every shot as a Scene strip
+             linked from //shots/<shot>.blend in VO order, so rendering MASTER renders the whole part.
+             Keep the folder as it is (MASTER.blend next to shots/ and textures/).
+
+Layout:      MASTER.blend          the one file to render
+             shots/<shot>.blend    one scene per shot, camera and frame range set
              textures/             shared images, relative paths (//../textures/...); fonts packed
              SHOTLIST.csv / .txt   timings for the edit
 Nothing to bake: ocean, ships, people and camera are all keyframed or computed per frame. No simulation caches.
