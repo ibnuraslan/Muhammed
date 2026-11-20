@@ -46,6 +46,9 @@ elif argv[0] == "master":
     m.view_settings.view_transform = 'AgX'; m.view_settings.look = 'AgX - Medium High Contrast'
     m.view_settings.exposure = 0.0; m.view_settings.gamma = 1.0
     m.render.use_overwrite = False; m.render.use_placeholder = True
+    # a scene camera for farms that insist on one (RenderStreet); the sequencer output ignores it
+    cam = bpy.data.objects.new("MASTER_camera", bpy.data.cameras.new("MASTER_camera"))
+    m.collection.objects.link(cam); m.camera = cam
     se = m.sequence_editor_create()
     strips = se.strips if hasattr(se, "strips") else se.sequences
     f = 1
