@@ -40,6 +40,8 @@ for sid, _, _ in SHOTS:
     assert s.frame_final_start == 1 + t["start"] and s.frame_final_end == 1 + t["start"] + n
     total = max(total, t["start"] + n)
 m.frame_start, m.frame_end = 1, total
+# farms (RenderStreet) refuse a scene without a camera: a placeholder; the sequencer output ignores it
+camd = bpy.data.cameras.new("MASTER_cam"); camo = bpy.data.objects.new("MASTER_cam", camd); m.collection.objects.link(camo); m.camera = camo
 m.view_settings.view_transform = 'AgX'; m.view_settings.look = 'AgX - Medium High Contrast'   # must match the shots
 bpy.data.scenes.remove(blank)
 bpy.context.preferences.filepaths.save_version = 0
