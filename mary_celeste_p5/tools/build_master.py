@@ -61,7 +61,7 @@ master.render.filepath = "//frames/MaryCeleste_P5_"
 master.render.use_sequencer = True; master.render.use_compositing = False      # each shot scene carries its own grade
 master.render.use_overwrite = False; master.render.use_placeholder = True
 se = master.sequence_editor_create()
-strips = getattr(se, "strips", None) or se.sequences
+strips = se.strips if hasattr(se, "strips") else se.sequences
 f = 1
 for sid, sc, n in scenes:
     st = strips.new_scene(name=sid, scene=sc, channel=1, frame_start=f)
