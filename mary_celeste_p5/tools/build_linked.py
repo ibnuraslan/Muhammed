@@ -42,6 +42,9 @@ elif argv[0] == "master":
     m.render.image_settings.file_format = 'PNG'; m.render.image_settings.color_mode = 'RGB'; m.render.image_settings.color_depth = '16'
     m.render.filepath = "//frames/MaryCeleste_P5_"
     m.render.use_sequencer = True; m.render.use_compositing = False
+    # colour management as every shot (AgX, Medium High Contrast): the sequencer output goes through MASTER's view
+    m.view_settings.view_transform = 'AgX'; m.view_settings.look = 'AgX - Medium High Contrast'
+    m.view_settings.exposure = 0.0; m.view_settings.gamma = 1.0
     m.render.use_overwrite = False; m.render.use_placeholder = True
     se = m.sequence_editor_create()
     strips = se.strips if hasattr(se, "strips") else se.sequences
