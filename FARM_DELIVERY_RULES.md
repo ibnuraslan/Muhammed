@@ -11,3 +11,4 @@
 4. Settings: 2560x1440, 24 fps, Cycles 64 spp adaptive + OIDN, motion blur, textures 2K max, no burned-in cards or captions.
 5. Send with a one-line note: "Extract all zips into ONE folder → upload the folder → render MASTER.blend, scene MASTER, frames 1–N."
 6. Also send the CapCut shot list (.txt + .csv).
+7. MASTER.blend colour management MUST copy the shots exactly (view transform, look, display, exposure, gamma, sequencer colourspace). Verify: MASTER frame vs shot rendered at 100% then downscaled — pixel diff ~0.
