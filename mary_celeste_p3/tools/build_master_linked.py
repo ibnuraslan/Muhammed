@@ -30,6 +30,9 @@ for k in ("view_transform", "look", "exposure", "gamma"):
     setattr(master.view_settings, k, getattr(ref.view_settings, k))
 master.display_settings.display_device = ref.display_settings.display_device
 master.sequencer_colorspace_settings.name = ref.sequencer_colorspace_settings.name
+# a scene camera, required by farm upload checks; the sequencer output ignores it
+cd = bpy.data.cameras.new("MASTER_cam"); co = bpy.data.objects.new("MASTER_cam", cd)
+master.collection.objects.link(co); master.camera = co
 r = master.render
 r.engine = 'CYCLES'; master.cycles.samples = 64; master.cycles.use_adaptive_sampling = True
 master.cycles.adaptive_threshold = 0.03; master.cycles.use_denoising = True
