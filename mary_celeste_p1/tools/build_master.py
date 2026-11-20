@@ -37,7 +37,7 @@ for img in list(bpy.data.images):
 
 # MASTER: sequencer of scene strips, back to back
 se = master.sequence_editor_create()
-coll = getattr(se, "strips", None) or se.sequences
+coll = se.strips if hasattr(se, "strips") else se.sequences
 f = 1
 for sid in order:
     sc = bpy.data.scenes[sid]
