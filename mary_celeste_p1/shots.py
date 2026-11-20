@@ -522,7 +522,7 @@ def s14():
     shroud = nearest_shroud(mc, M @ Vector((xa - 0.5, -hb, ship.zdeck(xa) + 1.5)))
     def p0(dv, Mx):
         Cw.stand_relaxed(dv, pitch=12, yaw=-15, lean=12, weight="L")
-        pass                                           # arms relaxed (the shroud is behind him: no reaching back)
+        P.hand_reach(dv.h, "R", Mx.inverted() @ shroud, elbow=(-0.7, 0.4, -0.6)); P.grip(dv.h, "R", 0.9)
     person(0, S.deck_place(M, xa, -hb + 0.5, heading_to(xa, -hb + 0.5, gx, 0.5)), p0, look_w=S.deck_point(M, gx - 1.0, 0.0, 0.2))
     Bm = b["root"].matrix_world
     edge_l = M @ Vector((xb + 0.28, -hb + 0.06, ship.zdeck(xb) + 0.02)); edge_r = M @ Vector((xb - 0.28, -hb + 0.06, ship.zdeck(xb) + 0.02))
