@@ -658,15 +658,62 @@ for nm in ("Surgeon", "Nurse", "Anaes"):
     nose = min((p for p in hv if abs(p.x - cx) < 0.015 and top - 0.17 < p.z < top - 0.09), key=lambda p: p.y)
     print("HEADTOP", nm, top, cx, cy, "nose", nose)
     cap.location = V(cx, nose.y + 0.122, top - 0.088); cap.scale = (1.02, 1.12, 1.05)
+    # v013: fitted surgical cap over the MPFB hair. Rim above the brows at the front, down to the nape at the back;
+    # every vertex is ray-cast in toward the skull centre onto hair-or-scalp and sits 7 mm outside it; skinned to the head bones.
+    bpy.data.objects.remove(cap, do_unlink=True)
+    hair_ob = next((c for c in rig.children if c.type == "MESH" and c.name.split(".")[-1].startswith(("short", "bob"))), None)
+    _hb = [body] + ([hair_ob] if hair_ob else [])
+    _vs, _ps = [], []
+    bpy.context.view_layer.update(); _dg = bpy.context.evaluated_depsgraph_get()
+    for _o in _hb:
+        _e = _o.evaluated_get(_dg); _m = _e.to_mesh(); _n0 = len(_vs)
+        _vs += [_e.matrix_world @ v.co for v in _m.vertices]; _ps += [tuple(_n0 + i for i in p_.vertices) for p_ in _m.polygons]; _e.to_mesh_clear()
+    _hbvh = BVHTree.FromPolygons(_vs, _ps)
+    HC = V(cx, cy, top - 0.105)
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.16, segments=96, ring_count=64, location=HC)
+    cap = bpy.context.active_object; cap.name = nm + "_Cap"
+    bm = bmesh.new(); bm.from_mesh(cap.data)
+    def _rim(p_):
+        t_ = max(0.0, min(1.0, (cy - (HC.y + p_.y)) / 0.07))      # 1 at the face (front, -y), 0 at the back
+        return -0.035 + 0.085 * t_
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.z < _rim(v.co)], context="VERTS")
+    for v in bm.verts:            # smooth rim: snap the boundary ring onto the rim curve (no stair steps)
+        if v.is_boundary: v.co.z = _rim(v.co)
+    for v in bm.verts:
+        w_ = HC + v.co; d_ = (HC - w_).normalized()
+        hit = _hbvh.ray_cast(w_, d_, 0.3)
+        v.co = ((hit[0] - d_ * 0.007) if hit[0] is not None else w_) - HC
+    bm.to_mesh(cap.data); bm.free()
+    cap.data.materials.append(M_cap); bpy.ops.object.shade_smooth()
+    _ctx = bpy.data.textures.get("TX_CapFolds") or bpy.data.textures.new("TX_CapFolds", "CLOUDS"); _ctx.noise_scale = 0.025
+    _cd = cap.modifiers.new("folds", "DISPLACE"); _cd.texture = _ctx; _cd.strength = 0.004
+    cap.modifiers.new("s", "SOLIDIFY").thickness = 0.002
     bpy.ops.mesh.primitive_uv_sphere_add(radius=0.1, segments=32, ring_count=16)
     mask = bpy.context.active_object; mask.name = nm + "_Mask"
     bm = bmesh.new(); bm.from_mesh(mask.data)
     bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.y > -0.045 or v.co.z > 0.03 or v.co.z < -0.07], context="VERTS"); bm.to_mesh(mask.data); bm.free()
     mask.data.materials.append(M_mask); mask.modifiers.new("s", "SOLIDIFY").thickness = 0.003; bpy.ops.object.shade_smooth()
     mask.location = V(cx, nose.y + 0.079, nose.z + 0.006); mask.scale = (0.82, 1.0, 0.95)
-    for o in (cap, mask):
+    for o in (mask,):
         M = o.matrix_world.copy(); o.parent = rig; o.parent_type = "BONE"; o.parent_bone = "head"
         bpy.context.view_layer.update(); o.matrix_world = M
+    _bw = body.matrix_world.copy(); bpy.context.view_layer.update()
+    _Mc = cap.matrix_world.copy(); cap.data.transform(_Mc); cap.matrix_world = Matrix.Identity(4); cap.data.transform(_bw.inverted())
+    cap.parent = body.parent; cap.parent_type = body.parent_type; cap.matrix_parent_inverse = body.matrix_parent_inverse.copy(); cap.matrix_basis = body.matrix_basis.copy()
+    from mathutils.kdtree import KDTree as _KD
+    _kd = _KD(len(body.data.vertices))
+    for v in body.data.vertices: _kd.insert(v.co, v.index)
+    _kd.balance(); _gn = {g.index: g.name for g in body.vertex_groups}; _bones = {b_.name for b_ in rig.data.bones}
+    for v in cap.data.vertices:
+        acc = {}
+        for (_c, i_, d_) in _kd.find_n(v.co, 4):
+            for g in body.data.vertices[i_].groups:
+                if _gn[g.group] in _bones: acc[_gn[g.group]] = acc.get(_gn[g.group], 0) + g.weight / max(d_, 1e-4)
+        tot = sum(acc.values()) or 1
+        for n_, w_ in acc.items():
+            (cap.vertex_groups.get(n_) or cap.vertex_groups.new(name=n_)).add([v.index], w_ / tot, "REPLACE")
+    _am = cap.modifiers.new("arm", "ARMATURE"); _am.object = rig; cap.modifiers.move(len(cap.modifiers) - 1, 0)
+    print("CAP fitted", nm, len(cap.data.vertices), "hair", hair_ob.name if hair_ob else None)
     # gloves: tint the skin material of the hands via a mask on the body's generated coords is fiddly - use the body's
     # vertex groups for the hands instead and give those faces a glove material
     body.data.materials.append(M_glove); gi = len(body.data.materials) - 1
@@ -694,7 +741,7 @@ for nm in ("Surgeon", "Nurse", "Anaes"):
     hv_ids = {g.index for g in body.vertex_groups if g.name in ("body",)}
     tb = BVHTree.FromPolygons(wv, polys)
     Hh = top
-    zs = [Hh * (0.29 + 0.52 * t_ / 19.0) for t_ in range(20)]
+    zs = [Hh * (0.30 + 0.27 * t_ / 19.0) for t_ in range(20)]      # v013: skirt only (mid-thigh to hip); the fitted top is built from the body below
     NSEG = 72; rings = []
     for k, z in enumerate(zs):
         ring = []
@@ -742,5 +789,34 @@ for nm in ("Surgeon", "Nurse", "Anaes"):
     gtx.noise_scale = 0.06; gtx.noise_depth = 2
     gown.modifiers.new("sub", "SUBSURF").levels = 1
     print("GOWN", nm, len(gme.vertices))
+    # v013 fitted gown top: the body's torso + sleeves pushed 2 cm out, cloth folds, skinned exactly like the body
+    _gi = {g.index: g.name for g in body.vertex_groups}; _bn = {b_.name for b_ in rig.data.bones}
+    _keep = set(); _hand = set()
+    for v in body.data.vertices:
+        gs = [g for g in v.groups if _gi[g.group] in _bn and g.weight > 0.05]
+        if not gs or any(_gi[g.group].lower().startswith(("helper", "joint")) and g.weight > 0.5 for g in v.groups): continue
+        dom = _gi[max(gs, key=lambda g: g.weight).group]
+        if dom.startswith(("wrist", "finger", "metacarpal")): _hand.add(v.index); continue
+        if dom.startswith(("neck", "head", "jaw", "eye", "tongue", "lowerleg", "foot", "toe")): continue
+        if dom.startswith("upperleg") and (body.matrix_world @ v.co).z < Hh * 0.50: continue
+        if (body.matrix_world @ v.co).z > Hh * 0.835 and not dom.startswith(("clavicle", "shoulder", "upperarm", "lowerarm")): continue   # nothing above the collar (face-muscle groups)
+        _keep.add(v.index)
+    for part, ids, off, mat_, folds in (("_GownTop", _keep, 0.02, M_cap, 0.008), ("_Gloves", _hand, 0.0022, M_glove, 0.0)):
+        g_ = body.copy(); g_.data = body.data.copy(); g_.name = nm + part; col.objects.link(g_)
+        for md_ in list(g_.modifiers):
+            if md_.type != "ARMATURE": g_.modifiers.remove(md_)
+        bm = bmesh.new(); bm.from_mesh(g_.data)
+        bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.index not in ids], context="VERTS"); bm.to_mesh(g_.data); bm.free()
+        g_.data.materials.clear(); g_.data.materials.append(mat_)
+        for p_ in g_.data.polygons: p_.material_index = 0; p_.use_smooth = True
+        d1 = g_.modifiers.new("out", "DISPLACE"); d1.strength = off; d1.mid_level = 0.0
+        if folds:
+            ftx = bpy.data.textures.get("TX_GownFolds") or bpy.data.textures.new("TX_GownFolds", "CLOUDS"); ftx.noise_scale = 0.045; ftx.noise_depth = 2
+            d2 = g_.modifiers.new("folds", "DISPLACE"); d2.texture = ftx; d2.strength = folds
+        for k_ in range(len(g_.modifiers)):
+            if g_.modifiers[0].type == "ARMATURE": g_.modifiers.move(0, len(g_.modifiers) - 1)
+        g_.modifiers.new("sol", "SOLIDIFY").thickness = 0.003 if folds else 0.0008
+        g_.modifiers.new("sub", "SUBSURF").levels = 1
+        print("FITTED", g_.name, len(g_.data.vertices), [m.type for m in g_.modifiers])
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("SAVED", OUT)

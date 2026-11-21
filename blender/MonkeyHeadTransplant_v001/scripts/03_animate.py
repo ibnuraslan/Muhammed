@@ -138,9 +138,9 @@ for i, s_ in enumerate(st):
     hide_keys(s_, [(1, True), (max(2, t_on), False)])
 print("STITCH up", len(_up))
 hide_keys(D["Seam"], [(1, True), (392, False)])
-hide_keys(D["Collar_Head"], [(1, True), (256, False), (392, True)])
+hide_keys(D["Collar_Head"], [(1, True), (256, False), (366, True)])
 hide_keys(D["Collar_BodyA"], [(1, True), (256, False)])
-hide_keys(D["Collar_BodyB"], [(1, False), (392, True)])
+hide_keys(D["Collar_BodyB"], [(1, False), (366, True)])
 
 # ------------------------------------------------------------------ eyes: closed (sedated) until beat 4, flicker, open, blinks; gaze; ears
 LIDS = {s: (D["LidUp_" + s], D["LidLo_" + s]) for s in "LR"}
@@ -199,6 +199,12 @@ for nm, turns in (("ClockHandMin", 36), ("ClockHandHour", 3)):
 # ------------------------------------------------------------------ ECG trace on the monitor (procedural), beeping lamp
 mon = D["Monitor"]
 SCR = V(3.05, 0.582, 1.075); SCR_R = 0.075
+_dm = [i for i, m in enumerate(mon.data.materials) if m and m.name.lower().startswith("disk")]
+_dp = [mon.matrix_world @ v.co for p_ in mon.data.polygons if p_.material_index in _dm for v in (mon.data.vertices[k] for k in p_.vertices)]
+if _dp:
+    _lo = V(min(q.x for q in _dp), min(q.y for q in _dp), min(q.z for q in _dp)); _hi = V(max(q.x for q in _dp), max(q.y for q in _dp), max(q.z for q in _dp))
+    SCR = (_lo + _hi) / 2 + V(0, -(_hi.y - _lo.y) / 2 - 0.003, 0); SCR_R = max(_hi.x - _lo.x, _hi.z - _lo.z) / 2 * 1.04     # v013: one disc, on the scope's
+print("SCR", SCR, SCR_R)
 bpy.ops.mesh.primitive_circle_add(vertices=48, radius=SCR_R, fill_type="NGON", location=SCR, rotation=(math.radians(90), 0, 0))
 ecg = bpy.context.active_object; ecg.name = "ECG_Trace"
 em = bpy.data.materials.new("M_ECG"); em.use_nodes = True; nt = em.node_tree
@@ -512,6 +518,8 @@ for f in list(range(672, 1040, 6)):
 # beats 7-9: recovery corner. Surgeon beside the chair waves a hand in front of the monkey (no reaction), then clipboard at the monitor
 S3 = V(1.44, 1.16, 0); Y3 = yaw_to(S3, CH + V(0, 0.2, 0))
 S4 = V(2.6, 0.6, 0); Y4 = yaw_to(S4, V(3.05, 0.95, 0))
+YS = yaw_to(S4, S4 + V(-0.92, 0.40, 0))      # v013 ending: half toward the camera, half toward the monkey (monkey on his right)
+YS = Y4 + ((YS - Y4 + 180.0) % 360.0 - 180.0)    # turn the short way
 board = D["Forceps"]
 for f in list(range(1190, 1771, 3)):
     if f < 1380:
@@ -537,6 +545,19 @@ for f in list(range(1190, 1771, 3)):
     else:
         ur = max(0.0, min(1.0, (f - 1380) / 40.0)); u = smooth(ur)
         pos = S3.lerp(S4, u); yw = Y3 + (Y4 - Y3) * u
+        if f >= 1540:   # v013 ending: checks the monkey, three-quarters to camera
+            ut = max(0.0, min(1.0, (f - 1540) / 40.0)); yw = Y4 + (YS - Y4) * smooth(ut)
+            pose(SURG, f, S4, yw, flex=12 + 6 * smooth((f - 1560) / 40.0), headr=(16, 0), crouch=0.0, step=(S4, Y4, S4, YS, ut))
+            Rz = Matrix.Rotation(math.radians(yw), 3, "Z")
+            hang(SURG, "L", f, S4, yw, 0.06)
+            kg = smooth((f - 1566) / 30.0) * (1 - smooth((f - 1728) / 30.0))
+            Em = M_CHAIR @ EYEMID; to_s = (S4 - Em); to_s.z = 0; to_s.normalize(); tang = V(-to_s.y, to_s.x, 0)
+            gw = Em + to_s * 0.24 + V(0, 0, 0.02) + tang * (0.03 * math.sin((f - 1600) / 9.0) if 1600 < f < 1720 else 0.0)
+            hw = V(S4.x, S4.y, 0) + Rz @ V(-0.31, -0.11, 0) + V(0, 0, SURG.root_head.z * 0.9)
+            dn = V(0, 0, -1).lerp(V(0, 0, 1), kg).normalized() + V(0.001, 0, 0); nn = (Rz @ V(1, 0, 0)).lerp((Em - gw).normalized(), kg).normalized()
+            hand(SURG, "R", f, hw.lerp(gw, kg), dn, nn, 0.45, yw)
+            pose_hand(SURG, "R", f, "flat_palm" if kg > 0.5 else "relaxed")
+            continue
         pose(SURG, f, pos, yw, flex=22 - 10 * u + 10 * smooth((f - 1600) / 80.0), headr=(18 + 14 * smooth((f - 1600) / 80.0), 0), crouch=0.05 * (1 - u), step=(S3, Y3, S4, Y4, ur))
         Rz = Matrix.Rotation(math.radians(yw), 3, "Z")
         bow = smooth((f - 1600) / 80.0)
@@ -747,7 +768,7 @@ print("TOOLGRIPS", len(TOOL_LOG))
 # ------------------------------------------------------------------ camera: one spline (keys in world, or in monkey-B space during the void)
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.lens = 28; cam_d.sensor_fit = "AUTO"; cam_d.clip_start = 0.01
 cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 5.6
-for f_, fs_ in ((1, 5.6), (380, 5.6), (400, 11.0), (660, 11.0), (690, 5.6)):
+for f_, fs_ in ((1, 5.6), (380, 5.6), (400, 11.0), (660, 11.0), (690, 5.6), (1028, 5.6), (1040, 16.0), (1196, 16.0), (1215, 5.6)):
     cam_d.dof.aperture_fstop = fs_; cam_d.dof.keyframe_insert("aperture_fstop", frame=f_)
 cam = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(cam); sc.camera = cam
 void = D["XR_Void"]; void.parent = cam; void.matrix_parent_inverse = Matrix.Identity(4); void.location = (0, 0, 0)
@@ -759,6 +780,7 @@ L = lambda f: M_root(f)
 FWW = M_LIE2.to_3x3() @ V(-0.385, -0.923, 0)       # monkey B face direction in the world while lying
 UPW = V(0, 0, 1)
 # (frame, pos, aim, lens, up, space)   space 'W' world, 'B' monkey-B model space
+END_A = (M_CHAIR @ EYEMID) * 0.65 + (S4 + V(0, 0, 1.55)) * 0.35; END_D = V(-0.85, -0.50, 0.12).normalized()
 K = [
  (1,    V(0.35, 0.95, 1.72), V(-0.3, -0.35, 1.2), 24, UPW, "W"),
  (61,   V(0.45, 0.30, 1.62), NA + V(-0.05, -0.15, 0.05), 28, UPW, "W"),
@@ -781,10 +803,8 @@ K = [
  (975,  FBp + V(0.06, 0.14, 0.25), FBp + V(-0.02, 0.05, 0), 38, V(0, -1, 0.4), "W"),
  (1005, NBp + V(0.0, 0.02, 0.33), NBp + V(0, 0.03, 0), 34, V(0, -1, 0), "W"),
  (1030, NBp + V(0.0, 0.03, 0.22), NBp + V(0, 0.03, 0), 34, V(0, -1, 0), "W"),
- (1064, NC + V(0.24, 0.02, 0.0), NC + V(0, 0.02, -0.02), 34, V(0, 0, 1), "B"),
- (1110, V(0.24, -0.55, 0.32), V(-0.02, -0.28, 0.27), 28, V(0, 0, 1), "B"),
- (1160, V(-0.04, -0.66, 0.52), EYEMID + V(0.0, 0.05, -0.02), 32, V(0, 0, 1), "B"),
- (1190, V(-0.05, -0.80, 0.46), V(-0.05, -0.32, 0.32), 30, V(0, 0, 1), "B"),
+ (1064, V(0.10, -1.02, 0.46), V(-0.03, -0.30, 0.30), 32, V(0, 0, 1), "B"),
+ (1190, V(0.04, -0.80, 0.43), V(-0.03, -0.30, 0.30), 32, V(0, 0, 1), "B"),
  (1250, CH + V(-0.6, -1.35, 0.62), CH + V(0, 0.25, 0.62), 24, UPW, "W"),
  (1320, CH + V(0.35, -1.45, 0.85), CH + V(0.05, 0.2, 0.66), 26, UPW, "W"),
  (1380, V(2.85, -0.42, 1.08), V(2.95, 0.7, 0.95), 30, UPW, "W"),
@@ -792,10 +812,10 @@ K = [
  (1500, SCR + V(0.16, -0.36, 0.05), SCR, 55, UPW, "W"),
  (1515, SCR + V(0.32, -0.80, 0.15), SCR + V(0.12, 0, -0.02), 36, UPW, "W"),
  (1530, V(2.75, -0.95, 1.5), V(2.6, 0.85, 1.0), 26, UPW, "W"),
- (1560, V(1.72, -0.05, 1.38), M_CHAIR @ EYEMID, 42, UPW, "W"),
- (1620, V(1.7, -0.75, 1.6), V(2.4, 0.9, 0.8), 28, UPW, "W"),
- (1700, V(1.8, -2.1, 1.8), V(2.3, 0.9, 0.9), 24, UPW, "W"),
- (1770, V(1.6, -2.5, 1.95), V(2.2, 0.85, 0.9), 24, UPW, "W"),
+ (1560, END_A + END_D * 1.75, END_A, 35, UPW, "W"),      # v013: push in on the monkey with the surgeon checking it
+ (1620, END_A + END_D * 1.55, END_A, 35, UPW, "W"),
+ (1700, END_A + END_D * 1.40, END_A, 35, UPW, "W"),
+ (1770, END_A + END_D * 1.32, END_A, 35, UPW, "W"),
 ]
 # convert every key to monkey-B space with the root at that frame, spline there, map back per frame
 def to_local(f, p, space):
@@ -919,6 +939,7 @@ for o in D:
     set_const(o)
     if o.type == "LIGHT": o.visible_camera = False; o.visible_glossy = False
 sc.frame_set(1)
+_NO_SAVE = True; exec(open(os.path.join(HERE, "eye_fix.py")).read())   # v013: real eyes (LESSONS 3)
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("ANIM_SAVED", OUT)
 

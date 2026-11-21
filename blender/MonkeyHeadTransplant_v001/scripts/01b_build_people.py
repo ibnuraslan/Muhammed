@@ -5,7 +5,9 @@ import bpy
 from bl_ext.user_default.mpfb.services.humanservice import HumanService
 out = sys.argv[sys.argv.index("--") + 1]
 for ob in list(bpy.data.objects): bpy.data.objects.remove(ob, do_unlink=True)
-def person(name, gender, age, race, skin, clothes, x, tint):
+import json as _json
+_EYE = _json.load(open("/root/.config/blender/5.2/extensions/user_default/mpfb/data/settings/eye_settings.default.json"))
+def person(name, gender, age, race, skin, clothes, x, tint, hair="", iris=((0.10, 0.05, 0.02), (0.04, 0.02, 0.008))):
     info = HumanService._create_default_human_info_dict()
     info["name"] = name
     info["phenotype"] = {"gender": gender, "age": age, "muscle": 0.5, "weight": 0.5, "proportions": 0.6,
@@ -13,7 +15,8 @@ def person(name, gender, age, race, skin, clothes, x, tint):
     info["rig"] = "default"
     info["eyes"] = "high-poly/high-poly.mhclo"; info["eyebrows"] = "eyebrow001/eyebrow001.mhclo"
     info["eyelashes"] = "eyelashes01/eyelashes01.mhclo"; info["teeth"] = "teeth_base/teeth_base.mhclo"
-    info["tongue"] = "tongue01/tongue01.mhclo"; info["hair"] = ""
+    info["tongue"] = "tongue01/tongue01.mhclo"; info["hair"] = hair      # v013: real hair under the caps
+    es = dict(_EYE); es["IrisMajorColor"] = list(iris[0]) + [1.0]; es["IrisMinorColor"] = list(iris[1]) + [1.0]; info["eyes_material_settings"] = es   # v013: dark irises
     info["clothes"] = clothes
     info["skin_mhmat"] = skin; info["skin_material_type"] = "ENHANCED_SSS"; info["eyes_material_type"] = "PROCEDURAL_EYES"
     st = HumanService.get_default_deserialization_settings(); st["subdiv_levels"] = 1
@@ -33,10 +36,10 @@ def person(name, gender, age, race, skin, clothes, x, tint):
     print("PERSON", name, [c.name for c in rig.children])
     return rig
 person("Surgeon", 1.0, 0.55, {"asian": 0.1, "caucasian": 0.8, "african": 0.1}, "middleage_caucasian_male/middleage_caucasian_male.mhmat",
-       ["male_casualsuit01/male_casualsuit01.mhclo", "shoes03/shoes03.mhclo"], 0, (0.42, 0.62, 0.52, 1))
+       ["male_casualsuit01/male_casualsuit01.mhclo", "shoes03/shoes03.mhclo"], 0, (0.42, 0.62, 0.52, 1), hair="short02/short02.mhclo")
 person("Nurse", 0.0, 0.4, {"asian": 0.3, "caucasian": 0.4, "african": 0.3}, "young_african_female/young_african_female.mhmat",
-       ["male_casualsuit01/male_casualsuit01.mhclo", "shoes03/shoes03.mhclo"], 1.5, (0.55, 0.72, 0.66, 1))
+       ["male_casualsuit01/male_casualsuit01.mhclo", "shoes03/shoes03.mhclo"], 1.5, (0.55, 0.72, 0.66, 1), hair="short02/short02.mhclo")
 person("Anaes", 0.0, 0.6, {"asian": 0.7, "caucasian": 0.2, "african": 0.1}, "middleage_asian_female/middleage_asian_female.mhmat",
-       ["male_casualsuit01/male_casualsuit01.mhclo", "shoes03/shoes03.mhclo"], 3.0, (0.42, 0.62, 0.52, 1))
+       ["male_casualsuit01/male_casualsuit01.mhclo", "shoes03/shoes03.mhclo"], 3.0, (0.42, 0.62, 0.52, 1), hair="short02/short02.mhclo")
 bpy.ops.wm.save_as_mainfile(filepath=out)
 print("SAVED", out)
