@@ -134,15 +134,17 @@ def pat_rec(f, head=(8, -18, 4), breath=0.0):   # v009d: less head turn (client:
 ARM_R = ((-0.32, -0.12, 0.77), (0, -1, -0.15), (0, 0, -1))
 ARM_L_REST = ((0.32, -0.12, 0.77), (0, -1, -0.15), (0, 0, -1))
 EARHAND_W = EAR_C + Vector((0.055, 0.035, -0.304 - 0.115))   # seated: head is 0.304 lower than rest
-ARM_L_BOARD = ((0.68, -0.11, 1.01), (0.92, -0.38, -0.03), (0, 0, 1))   # v009k: elbow slightly bent, palm up (straight arm read as a T-pose)   # palm up on the arm board (tilt frame)
+ARM_L_BOARD = ((0.58, -0.25, 1.0), (0.7, -0.71, -0.06), (0, 0, 1))   # v012: elbow bent ~35 deg, palm up   # v009k: elbow slightly bent, palm up (straight arm read as a T-pose)   # palm up on the arm board (tilt frame)
 # beat 1: shock. Head jolts back, hand flies up toward the dressing, then settles
 pat_up(1, head=(0, -8, 0)); pat_up(18, head=(-6, -12, 3), spine=(2, 0, 0)); pat_up(40, head=(-10, -18, 4), spine=(-2, 2, 0))
 pat_up(80, head=(-4, -22, 6), spine=(4, 3, 4)); pat_up(126, head=(-2, -16, 4), spine=(6, 2, 2)); pat_up(165, head=(0, -4, 0))
+pat_up(215, head=(0, -2, 0), spine=(6, 0, 0)); pat_up(238, head=(0, 22, -4), spine=(7, 0, 0)); pat_up(262, head=(0, 24, -4), spine=(6, 0, 0))   # v012: glances at the surgeon
+pat_up(290, head=(0, 0, 0), spine=(7.5, 0, 0)); pat_up(320, head=(2, 2, 0))
 for f, a in ((1, ARM_L_REST), (22, ARM_L_REST)): PAT.key_hand("L", f, *a)
 ALARM_L = Vector((0.13, -0.3, 1.04))
 for f, dz in ((44, 0.0), (70, -0.012), (110, 0.012)):
     PAT.key_hand("L", f, ALARM_L + Vector((0, 0, dz)), (-0.1, -0.3, 1.0), (0, -1, 0.2))
-PAT.key_hand("L", 150, ALARM_L + Vector((0.12, 0.06, -0.16)), (0.2, -0.6, -0.5), (0, 0, -1))
+PAT.key_hand("L", 150, ARM_L_REST[0], ARM_L_REST[1], ARM_L_REST[2])   # v012: forearm on the armrest, where the surgeon examines it
 PAT.key_hand("L", 380, ARM_L_REST[0], ARM_L_REST[1], ARM_L_REST[2])
 PAT.key_hand("L", 470, *ARM_L_BOARD); PAT.key_hand("L", B["b9"] + 15, *ARM_L_BOARD)
 for f in (1, 16, 175, 300, B["b9"]): PAT.key_hand("R", f, *ARM_R)
@@ -158,13 +160,24 @@ SHOCK = dict(N0, eye_left_opened_up=1, eye_right_opened_up=1, eyebrows_left_up=1
              eyebrows_right_inner_up=0.8, mouth_open=0.18)   # v009k: lips slightly parted (wide open read as a scream mask)
 PAT.face(14, **SHOCK); PAT.face(100, **dict(SHOCK, mouth_open=0.1, mouth_depression=0.3)); PAT.face(160, **dict(N0, eyebrows_left_inner_up=0.5, eyebrows_right_inner_up=0.5))
 SLEEP = dict(N0, eye_left_closure=1, eye_right_closure=1)
-PAT.face(340, **dict(N0, eye_left_slit=0.3, eye_right_slit=0.3)); PAT.face(430, **SLEEP); PAT.face(B["b9"] + 20, **SLEEP)
+WORRY = dict(N0, eyebrows_left_inner_up=0.5, eyebrows_right_inner_up=0.5)
+def blink(f, base):
+    PAT.face(f - 4, **base); PAT.face(f, **dict(base, eye_left_closure=1, eye_right_closure=1)); PAT.face(f + 5, **base)
+for f in (190, 232, 268): blink(f, WORRY)   # v012: the worried close-up is alive (blinks, glance, breath)
+PAT.face(340, **dict(N0, eye_left_slit=0.3, eye_right_slit=0.3)); PAT.face(430, **SLEEP); PAT.face(560, **SLEEP)
+CALM = dict(N0, eye_left_slit=0.15, eye_right_slit=0.15)
+PAT.face(600, **CALM)   # v012: awake and relaxed on the arm board (not a stiff sleeper)
+for f in (650, 712, 790, 868, 918): blink(f, CALM)
+PAT.face(940, **CALM); PAT.face(965, **SLEEP); PAT.face(B["b9"] + 20, **SLEEP)
 SMILE = dict(N0, mouth_corner_puller=1.0, mouth_upward_retraction=0.5, eye_left_slit=0.35, eye_right_slit=0.35, eyebrows_left_up=0.3, eyebrows_right_up=0.3)
 PAT.face(B["b9"] + 45, **dict(N0, eye_left_opened_up=0.3, eye_right_opened_up=0.3)); PAT.face(B["b9"] + 75, **SMILE); PAT.face(B["end"], **SMILE)
 # reclined: breathing and a slow head roll; head turned to the right so the left ear faces the surgeon
 pat_up(340, head=(4, 0, 0)); pat_up(355, head=(4, 0, 0))
 for f in range(470, B["b9"], 120):
+    if 600 <= f <= 960: continue
     pat_rec(f, breath=0.0); pat_rec(f + 60, breath=1.5)
+for f, hd, br in ((600, (8, -18, 4), 0.0), (660, (6, -6, 2), 1.2), (720, (6, 6, 0), 0.0), (790, (8, 8, -1), 1.4), (850, (6, -4, 2), 0.0), (910, (8, -14, 3), 1.2), (950, (8, -18, 4), 0.0)):
+    pat_rec(f, head=hd, breath=br)   # v012: relaxed, breathing, head turns toward the arm and the surgeon
 pat_rec(B["b9"] + 10)
 # beat 9: sits up, turns to camera, left hand comes up and touches the new ear, big smile
 pat_up(B["b9"] + 75, head=(-2, -8, 0)); pat_up(B["b9"] + 100, head=(-4, -14, 3), spine=(4, 2, 3)); pat_up(B["end"], head=(-5, -10, 2), spine=(5, 1, 2))
@@ -300,19 +313,18 @@ def sh(f, s, W, d, n, pole=None, tip_mode=False):
     SUR.key_hand(s, f, W, d, n, pole)
 # beat 1: hands together in front, then R hand to the patient's chest on "A surgeon takes"
 CHEST = pat_world(130, (0.08, -0.16, 1.02))
-for f in (1, 60):
+for f in (1, 60, 100):   # v012: hands stay in front of his own chest until they go to the forearm (no low reach)
     ev_at(f); c = SUR.wpos("spine03")
     fwd = Matrix.Rotation(R_(yA), 3, 'Z') @ Vector((0, -1, 0))
-    sh(f, "L", c + fwd * 0.25 + Vector((0.05, 0, -0.12)), fwd + Vector((0, 0, -0.3)), Vector((0, 0, 1)).cross(fwd))
-    sh(f, "R", c + fwd * 0.27 + Vector((-0.02, 0, -0.1)), fwd + Vector((0, 0, -0.3)), -Vector((0, 0, 1)).cross(fwd))
-sh(100, "L", CHEST + Vector((0.12, -0.19, 0.05)), (-0.6, 0.6, -0.4), (0.4, -0.5, 0.6))
-sh(128, "L", CHEST + Vector((0.05, -0.135, 0.0)), (-0.6, 0.6, -0.3), (0.4, -0.6, 0.5))   # v009d: on the chest, not 2 cm in
-sh(175, "L", CHEST + Vector((0.06, -0.14, 0.0)), (-0.6, 0.6, -0.3), (0.4, -0.6, 0.5))
-sh(215, "L", CHEST + Vector((0.18, -0.22, -0.15)), (-0.3, 0.3, -0.9), (0, 0, -1))
+    sh(f, "L", c + fwd * 0.22 + Vector((0.05, 0, 0.02)), fwd + Vector((0, 0, -0.3)), Vector((0, 0, 1)).cross(fwd))   # v012: at his own chest height
+    sh(f, "R", c + fwd * 0.24 + Vector((-0.02, 0, 0.04)), fwd + Vector((0, 0, -0.3)), -Vector((0, 0, 1)).cross(fwd))
+pass   # v012: hands on the forearm (03b)
+pass   # v012: hands on the forearm (03b)
+pass   # v012: hands on the forearm (03b)
+pass   # v012: hands on the forearm (03b)
 # beat 2: forceps go into the x-rayed chest, free the cartilage piece and carry it to the tray (keys re-aimed + tip-solved below)
 PCW = CHEST_PIECE_W   # world point of the cartilage piece in the patient's chest (patient upright 1..350)
-for f, tip in ((200, PCW + Vector((0.05, -0.12, 0.08))), (225, PCW + Vector((0.0, -0.01, 0.0))), (250, PCW), (268, PCW + Vector((0.0, -0.06, 0.04))),
-               (334, BLK + Vector((0.0, 0.0, 0.012))), (339, BLK + Vector((0.02, 0.04, 0.06)))):
+for f, tip in ((334, BLK + Vector((0.0, 0.0, 0.012))), (339, BLK + Vector((0.02, 0.04, 0.06)))):
     sh(f, "R", tip, (0, 0, 0), (0, 0, 1), tip_mode=True)
 # v009d: while he walks, both hands are keyed relative to his body every 4 frames (in front of the chest, below it),
 # so the IK arms never trail behind the torso or pass through it
@@ -733,7 +745,7 @@ for f in list(range(1, B["end"] + 1, 2)) + [B["end"]]:
         keymat(kd, f, Matrix.Translation((Lw + Rw_) / 2 + Vector((0, 0, 0.03))) @ Matrix.Rotation(R_(-200 + 90), 4, 'Z'))
     else:
         keymat(kd, f, Matrix.Translation(TRAY + Vector((-0.6, 1.6, 0.02)) + Vector((1.9 - 1.05 - 0.25, 1.4 - TRAY.y - 1.6, 0.0))))
-key_vis(nh, 1, False); key_vis(nh, 1500, True); key_vis(forc, 1, True); key_vis(forc, 1503, False)   # v009d: no tool left in the temple / by the head
+key_vis(nh, 1, False); key_vis(nh, 1500, True); key_vis(forc, 1, False); key_vis(forc, 296, True); key_vis(forc, 1503, False)   # v012: no forceps at the patient in beats 1-2   # v009d: no tool left in the temple / by the head
 # ear_real only on the tray; hidden once lifted (ear_arm takes over). ear_arm hidden before 566, swapped for ear_new at 1150
 key_vis(ear_real, 566, False)
 key_vis(ear_arm, 1, False); key_vis(ear_arm, 566, True); key_vis(ear_arm, 1150, False)

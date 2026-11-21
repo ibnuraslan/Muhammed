@@ -183,13 +183,11 @@ SEGS = [
     (1, V(1.75, -0.35, 1.5), FACE1 + V(0.2, -0.25, -0.15), 22), (30, V(1.25, -0.12, 1.5), FACE1, 32), (45, V(0.62, -0.62, 2.08), FACE1, 34), (60, V(0.02, -0.92, 1.42), FACE1, 40),
     (76, V(0.15, -1.15, 1.95), FACE1.lerp(EAR1, 0.5), 38)],
   [  # v009j: clean cut - side two-shot (the camera went round behind his cap)
-    (77, V(-0.75, -1.2, 1.55), V(0.22, -0.3, 1.42), 30), (131, V(-0.7, -1.12, 1.55), V(0.22, -0.3, 1.42), 32)],
-  [     (132, V(-0.25, -1.45, 1.65), PC + V(0.1, 0, 0.45), 28), (145, V(0.05, -1.5, 1.62), PC + V(0.04, 0, 0.42), 28),
-    (155, V(0.08, -1.48, 1.62), PC + V(0.04, 0, 0.42), 28)],
+    (77, V(-0.55, -1.5, 1.66), V(0.28, -0.22, 1.3), 40), (155, V(-0.47, -1.42, 1.64), V(0.28, -0.22, 1.3), 42)],   # v012: waist-up two-shot, his hands examine the patient's forearm (no lap in frame)
   [  # v009i: insert - the harvested rib cartilage already on the tray (the see-through x-ray chest is gone, client)
     (156, BLK + V(0.05, -0.3, 0.3), BLK + V(0, 0, 0.0), 44), (215, BLK + V(0.03, -0.16, 0.15), BLK + V(0, 0, 0.0), 50)],
   [  # v009j: clean cut - the two of them while the surgeon finishes at the chest (insert cut to 1 s)
-    (216, FACE1 + V(0.02, -0.68, 0.02), FACE1 + V(0, 0, -0.04), 42), (295, FACE1 + V(0.0, -0.6, 0.02), FACE1 + V(0, 0, -0.04), 46)],   # v009k: his worried face (the two-shot showed the surgeon's knee between his legs)
+    (216, FACE1 + V(0.03, -0.78, 0.02), FACE1 + V(0, 0, -0.04), 40), (295, FACE1 + V(0.0, -0.52, 0.02), FACE1 + V(0, 0, -0.03), 46)],   # v012: slow push-in   # v009k: his worried face (the two-shot showed the surgeon's knee between his legs)
   [ (296, V(1.32, -1.28, 1.62), PC.lerp(BLK, 0.5) + V(0, 0, 0.32), 28), (306, V(1.3, -1.25, 1.62), PC.lerp(BLK, 0.6) + V(0, 0, 0.3), 28),
     (322, V(0.85, -1.45, 1.58), BLK + V(0, 0, 0.22), 32),
     # v009i: tray at chest height from his front: his masked face in the top third, looking down at his hands (no headless torso)
@@ -235,6 +233,9 @@ cam = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(cam); 
 aim = bpy.data.objects.new("CAM_Film_Aim", None); sc.collection.objects.link(aim)
 tt = cam.constraints.new('TRACK_TO'); tt.target = aim; tt.track_axis = 'TRACK_NEGATIVE_Z'; tt.up_axis = 'UP_Y'
 cam_d.dof.focus_object = aim
+_cl = OB.get("Catchlight")   # v012: eye catchlight rides with the camera
+if _cl:
+    _cl.parent = cam; _cl.matrix_parent_inverse = Matrix.Identity(4); _cl.location = Vector(_cl.get("follow_camera", (0.12, 0.1, 0.0)))
 JUMPS = []
 for seg in SEGS:
     fc = catmull([(f, c) for f, c, a, l in seg]); fa = catmull([(f, a) for f, c, a, l in seg]); fl = catmull([(f, float(l)) for f, c, a, l in seg])

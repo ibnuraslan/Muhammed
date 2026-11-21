@@ -51,5 +51,8 @@ _cg = bpy.data.materials.new("CabGlass_Matte"); _cg.use_nodes = True; _cb = _cg.
 _cb.inputs["Base Color"].default_value = (0.03, 0.035, 0.04, 1); _cb.inputs["Roughness"].default_value = 0.55
 for _o in [o for o in bpy.data.objects if o.name.startswith("OR_CabGlass")]:
     for _i in range(len(_o.data.materials)): _o.data.materials[_i] = _cg
+# v012: warmer light (the clinic read bare and grey)
+for _n, _c in (("OR_Key0", (1.0, 0.88, 0.74)), ("OR_Key1", (1.0, 0.86, 0.7)), ("OR_Key2", (1.0, 0.92, 0.82)), ("OR_Key3", (1.0, 0.9, 0.8)), ("OR_SurgSpot", (1.0, 0.95, 0.86))):
+    if _n in bpy.data.objects: bpy.data.objects[_n].data.color = _c
 print("ANIMFIX_DONE")
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)

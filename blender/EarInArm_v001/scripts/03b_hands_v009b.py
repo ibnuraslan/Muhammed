@@ -52,7 +52,7 @@ def grip_forceps(f):
     sc.frame_set(f); C = FORC.matrix_world @ Vector((0, 0.04, 0))
     rep = grip_object(SUR, "R", f, FORC, C, (C - wrist(SUR, "R")).normalized(), grip="pinch")
     LOG.append(("forceps", f, rep))
-FORC_F = sorted(set(list(range(100, 337, 12)) + [336] + [f for f in range(572, 1500, 12) if not 784 <= f <= 1062] + [1498]))   # v009d: not while he waits with the hand at his side
+FORC_F = sorted(set(list(range(296, 337, 12)) + [336] + [f for f in range(572, 1500, 12) if not 784 <= f <= 1062] + [1498]))   # v009d: not while he waits with the hand at his side
 lock(SUR, "R", 90)
 for f in FORC_F: grip_forceps(f)
 # grip_object places the hand on the shafts; in the chest and head beats the fingers are then set to the full pinch
@@ -61,13 +61,18 @@ for f in FORC_F:
     if f <= 337: apply_pose(SUR, "R", "pinch", f)
     elif f >= 1300: apply_pose(SUR, "R", "pinch", f, amount=0.8)
 
-# ---------------------------------------------------------------- 1. chest x-ray: L flat on the chest beside the forceps
-for f in (130, 290): lock(SUR, "L", f)
-for f in range(136, 280, 12):
-    sc.frame_set(f); tip = FORC.matrix_world @ Vector((0, 0.13, 0))
-    p, n = surf(TEE, tip + Vector((0.17, -0.01, 0.11)))   # v009d: further onto his upper-left chest, clear of the forceps hand
-    place_hand(SUR, "L", f, p, -n, Vector((0, 0, 1)) - n * n.z, skin=0.014); apply_pose(SUR, "L", "flat_palm", f)
-apply_pose(SUR, "L", "relaxed", 290)
+# ---------------------------------------------------------------- 1. v012: he examines the patient's left forearm on the armrest
+# (both hands on the forearm, framed waist-up; his hand no longer reaches toward the patient's lap)
+for s_ in "LR":
+    for f in (104, 300): lock(SUR, s_, f)
+for f in range(132, 292, 8):
+    sc.frame_set(f)
+    a_ = PAT.matrix_world @ PAT.pose.bones["lowerarm01.L"].head; b_ = PAT.matrix_world @ PAT.pose.bones["wrist.L"].head
+    fd = (b_ - a_); fd.z = 0; fd.normalize()
+    for s_, u, pose in (("L", 0.4, "flat_palm"), ("R", 0.78, "point")):
+        p, n = surf(BODY[PAT], a_.lerp(b_, u) + Vector((0, 0, 0.06)))
+        place_hand(SUR, s_, f, p, -n, fd, skin=0.012); apply_pose(SUR, s_, pose, f, spread=0)
+apply_pose(SUR, "L", "relaxed", 300); apply_pose(SUR, "R", "relaxed", 300)
 
 # ---------------------------------------------------------------- 2. over the tray (9.0-9.5 s): L pinches the carved ear, R flat on the tray edge
 for f in (528, 570): lock(SUR, "L", f)
@@ -170,7 +175,7 @@ POSES["relaxed_even"] = dict(curl={2: (24, 30, 16), 3: (26, 32, 17), 4: (28, 34,
 for rig in (SUR,):
     gm = BODY[rig].modifiers.get("GloveThin")
     if gm: BODY[rig].modifiers.remove(gm)
-SCHED = {(SUR, "R"): [(1, "pinch_tuck"), (339, "pinch_tuck"), (343, "pinch_tuck"), (464, "pinch_tuck"),   # v009j: the scalpel is held in a pinch (cup_hold read as an empty flat hand)
+SCHED = {(SUR, "R"): [(1, "relaxed_even"), (126, "relaxed_even"), (136, "point"), (284, "point"), (296, "pinch_tuck"), (339, "pinch_tuck"), (343, "pinch_tuck"), (464, "pinch_tuck"),   # v009j: the scalpel is held in a pinch (cup_hold read as an empty flat hand)
                       (472, "relaxed_even"), (560, "relaxed_even"), (566, "pinch_tuck"),
                       (1500, "pinch_tuck"), (1502, "pinch_tuck"), (1685, "pinch_tuck"), (1715, "relaxed_even"), (1770, "relaxed_even")],
          (SUR, "L"): [(1, "relaxed_even"), (128, "relaxed_even"), (136, "flat_palm"), (278, "flat_palm"), (290, "relaxed_even"), (337, "relaxed_even"), (343, "relaxed_even"),
