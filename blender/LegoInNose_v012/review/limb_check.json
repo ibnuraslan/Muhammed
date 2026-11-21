@@ -1,0 +1,4256 @@
+{
+ "frames": {
+  "5": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (72 pts)"
+   ]
+  ],
+  "123": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (89 pts)"
+   ]
+  ],
+  "125": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (69 pts)"
+   ]
+  ],
+  "127": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (45 pts)"
+   ]
+  ],
+  "129": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (43 pts)"
+   ]
+  ],
+  "131": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (82 pts)"
+   ]
+  ],
+  "133": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (83 pts)"
+   ]
+  ],
+  "135": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (70 pts)"
+   ]
+  ],
+  "137": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (41 pts)"
+   ]
+  ],
+  "139": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (40 pts)"
+   ]
+  ],
+  "141": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (70 pts)"
+   ]
+  ],
+  "143": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (81 pts)"
+   ]
+  ],
+  "145": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (70 pts)"
+   ]
+  ],
+  "147": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (39 pts)"
+   ]
+  ],
+  "149": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (46 pts)"
+   ]
+  ],
+  "151": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (69 pts)"
+   ]
+  ],
+  "153": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (71 pts)"
+   ]
+  ],
+  "155": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (67 pts)"
+   ]
+  ],
+  "157": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (46 pts)"
+   ]
+  ],
+  "159": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (51 pts)"
+   ]
+  ],
+  "161": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (64 pts)"
+   ]
+  ],
+  "163": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (68 pts)"
+   ]
+  ],
+  "165": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (65 pts)"
+   ]
+  ],
+  "167": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (49 pts)"
+   ]
+  ],
+  "169": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (51 pts)"
+   ]
+  ],
+  "171": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (54 pts)"
+   ]
+  ],
+  "173": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (59 pts)"
+   ]
+  ],
+  "175": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (57 pts)"
+   ]
+  ],
+  "177": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (48 pts)"
+   ]
+  ],
+  "179": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (52 pts)"
+   ]
+  ],
+  "181": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (53 pts)"
+   ]
+  ],
+  "183": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (60 pts)"
+   ]
+  ],
+  "185": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (60 pts)"
+   ]
+  ],
+  "187": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (58 pts)"
+   ]
+  ],
+  "189": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (55 pts)"
+   ]
+  ],
+  "191": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (49 pts)"
+   ]
+  ],
+  "193": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (46 pts)"
+   ]
+  ],
+  "195": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (48 pts)"
+   ]
+  ],
+  "197": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (47 pts)"
+   ]
+  ],
+  "199": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (43 pts)"
+   ]
+  ],
+  "201": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (43 pts)"
+   ]
+  ],
+  "203": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (42 pts)"
+   ]
+  ],
+  "205": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (40 pts)"
+   ]
+  ],
+  "207": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (41 pts)"
+   ]
+  ],
+  "209": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (43 pts)"
+   ]
+  ],
+  "211": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (48 pts)"
+   ]
+  ],
+  "213": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "215": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "217": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "219": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "289": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "295": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (59 pts)"
+   ]
+  ],
+  "297": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (59 pts)"
+   ]
+  ],
+  "299": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (59 pts)"
+   ]
+  ],
+  "301": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (59 pts)"
+   ]
+  ],
+  "303": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (58 pts)"
+   ]
+  ],
+  "305": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (58 pts)"
+   ]
+  ],
+  "307": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (58 pts)"
+   ]
+  ],
+  "309": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (58 pts)"
+   ]
+  ],
+  "311": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (57 pts)"
+   ]
+  ],
+  "313": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (57 pts)"
+   ]
+  ],
+  "315": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (60 pts)"
+   ]
+  ],
+  "317": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (55 pts)"
+   ]
+  ],
+  "319": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (55 pts)"
+   ]
+  ],
+  "321": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (55 pts)"
+   ]
+  ],
+  "323": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (55 pts)"
+   ]
+  ],
+  "325": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (53 pts)"
+   ]
+  ],
+  "327": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (53 pts)"
+   ]
+  ],
+  "329": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (53 pts)"
+   ]
+  ],
+  "331": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (53 pts)"
+   ]
+  ],
+  "333": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (53 pts)"
+   ]
+  ],
+  "335": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (53 pts)"
+   ]
+  ],
+  "337": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (53 pts)"
+   ]
+  ],
+  "339": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (53 pts)"
+   ]
+  ],
+  "341": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (52 pts)"
+   ]
+  ],
+  "343": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (52 pts)"
+   ]
+  ],
+  "345": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (52 pts)"
+   ]
+  ],
+  "347": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (52 pts)"
+   ]
+  ],
+  "349": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (52 pts)"
+   ]
+  ],
+  "351": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (52 pts)"
+   ]
+  ],
+  "353": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (52 pts)"
+   ]
+  ],
+  "355": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (52 pts)"
+   ]
+  ],
+  "357": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (52 pts)"
+   ]
+  ],
+  "359": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (53 pts)"
+   ]
+  ],
+  "361": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (53 pts)"
+   ]
+  ],
+  "363": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (53 pts)"
+   ]
+  ],
+  "365": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (53 pts)"
+   ]
+  ],
+  "367": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (53 pts)"
+   ]
+  ],
+  "369": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (55 pts)"
+   ]
+  ],
+  "371": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (57 pts)"
+   ]
+  ],
+  "373": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (58 pts)"
+   ]
+  ],
+  "375": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (57 pts)"
+   ]
+  ],
+  "377": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (59 pts)"
+   ]
+  ],
+  "379": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (58 pts)"
+   ]
+  ],
+  "381": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (58 pts)"
+   ]
+  ],
+  "427": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (60 pts)"
+   ]
+  ],
+  "429": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (61 pts)"
+   ]
+  ],
+  "431": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (62 pts)"
+   ]
+  ],
+  "433": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (62 pts)"
+   ]
+  ],
+  "435": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (62 pts)"
+   ]
+  ],
+  "437": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (62 pts)"
+   ]
+  ],
+  "469": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (56 pts)"
+   ]
+  ],
+  "471": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (57 pts)"
+   ]
+  ],
+  "473": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (56 pts)"
+   ]
+  ],
+  "475": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (55 pts)"
+   ]
+  ],
+  "477": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (54 pts)"
+   ]
+  ],
+  "479": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (54 pts)"
+   ]
+  ],
+  "481": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (54 pts)"
+   ]
+  ],
+  "483": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (53 pts)"
+   ]
+  ],
+  "485": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (55 pts)"
+   ]
+  ],
+  "487": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (55 pts)"
+   ]
+  ],
+  "489": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (51 pts)"
+   ]
+  ],
+  "491": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (47 pts)"
+   ]
+  ],
+  "493": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (42 pts)"
+   ]
+  ],
+  "495": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (39 pts)"
+   ]
+  ],
+  "497": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (38 pts)"
+   ]
+  ],
+  "499": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (36 pts)"
+   ]
+  ],
+  "501": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (36 pts)"
+   ]
+  ],
+  "503": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (36 pts)"
+   ]
+  ],
+  "505": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (37 pts)"
+   ]
+  ],
+  "507": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (37 pts)"
+   ]
+  ],
+  "509": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (38 pts)"
+   ]
+  ],
+  "511": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (39 pts)"
+   ]
+  ],
+  "513": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (44 pts)"
+   ]
+  ],
+  "515": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (56 pts)"
+   ]
+  ],
+  "517": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (59 pts)"
+   ]
+  ],
+  "519": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (55 pts)"
+   ]
+  ],
+  "521": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (58 pts)"
+   ]
+  ],
+  "523": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (54 pts)"
+   ]
+  ],
+  "525": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (45 pts)"
+   ]
+  ],
+  "527": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (42 pts)"
+   ]
+  ],
+  "529": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (41 pts)"
+   ]
+  ],
+  "531": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (40 pts)"
+   ]
+  ],
+  "533": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (38 pts)"
+   ]
+  ],
+  "535": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (37 pts)"
+   ]
+  ],
+  "537": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (37 pts)"
+   ]
+  ],
+  "539": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (37 pts)"
+   ]
+  ],
+  "541": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (39 pts)"
+   ]
+  ],
+  "543": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (39 pts)"
+   ]
+  ],
+  "545": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (39 pts)"
+   ]
+  ],
+  "547": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (41 pts)"
+   ]
+  ],
+  "549": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (41 pts)"
+   ]
+  ],
+  "551": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (42 pts)"
+   ]
+  ],
+  "553": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (46 pts)"
+   ]
+  ],
+  "555": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (49 pts)"
+   ]
+  ],
+  "557": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (52 pts)"
+   ]
+  ],
+  "559": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (54 pts)"
+   ]
+  ],
+  "561": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (55 pts)"
+   ]
+  ],
+  "563": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (57 pts)"
+   ]
+  ],
+  "565": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (54 pts)"
+   ]
+  ],
+  "567": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (54 pts)"
+   ]
+  ],
+  "569": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (55 pts)"
+   ]
+  ],
+  "571": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (56 pts)"
+   ]
+  ],
+  "573": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (54 pts)"
+   ]
+  ],
+  "575": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (54 pts)"
+   ]
+  ],
+  "577": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (58 pts)"
+   ]
+  ],
+  "729": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (76 pts)"
+   ]
+  ],
+  "731": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (76 pts)"
+   ]
+  ],
+  "733": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (76 pts)"
+   ]
+  ],
+  "735": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (76 pts)"
+   ]
+  ],
+  "737": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (76 pts)"
+   ]
+  ],
+  "739": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (77 pts)"
+   ]
+  ],
+  "741": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (77 pts)"
+   ]
+  ],
+  "743": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (77 pts)"
+   ]
+  ],
+  "745": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (77 pts)"
+   ]
+  ],
+  "747": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (77 pts)"
+   ]
+  ],
+  "749": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (78 pts)"
+   ]
+  ],
+  "751": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (81 pts)"
+   ]
+  ],
+  "753": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (81 pts)"
+   ]
+  ],
+  "755": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (91 pts)"
+   ]
+  ],
+  "757": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (82 pts)"
+   ]
+  ],
+  "759": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (84 pts)"
+   ]
+  ],
+  "761": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (82 pts)"
+   ]
+  ],
+  "763": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (84 pts)"
+   ]
+  ],
+  "765": [
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (82 pts)"
+   ]
+  ],
+  "767": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (82 pts)"
+   ]
+  ],
+  "769": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (87 pts)"
+   ]
+  ],
+  "771": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (85 pts)"
+   ]
+  ],
+  "773": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (82 pts)"
+   ]
+  ],
+  "775": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (82 pts)"
+   ]
+  ],
+  "777": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (95 pts)"
+   ]
+  ],
+  "779": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (91 pts)"
+   ]
+  ],
+  "781": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (53 pts)"
+   ]
+  ],
+  "783": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (74 pts)"
+   ]
+  ],
+  "785": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (121 pts)"
+   ]
+  ],
+  "787": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (89 pts)"
+   ]
+  ],
+  "789": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (61 pts)"
+   ]
+  ],
+  "791": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (80 pts)"
+   ]
+  ],
+  "793": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (128 pts)"
+   ]
+  ],
+  "795": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (82 pts)"
+   ]
+  ],
+  "797": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (67 pts)"
+   ]
+  ],
+  "799": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Boy arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (89 pts)"
+   ]
+  ],
+  "801": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (83 pts)"
+   ]
+  ],
+  "803": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (104 pts)"
+   ]
+  ],
+  "805": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (120 pts)"
+   ]
+  ],
+  "807": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (74 pts)"
+   ]
+  ],
+  "809": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (60 pts)"
+   ]
+  ],
+  "811": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (97 pts)"
+   ]
+  ],
+  "813": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (95 pts)"
+   ]
+  ],
+  "815": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "817": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "819": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "821": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "823": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "825": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "827": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "829": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "831": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "833": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "835": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "837": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "839": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "841": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "843": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "845": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "847": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "849": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "851": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "853": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "855": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "857": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (9 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (75 pts)"
+   ]
+  ],
+  "859": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (75 pts)"
+   ]
+  ],
+  "861": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (74 pts)"
+   ]
+  ],
+  "863": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (75 pts)"
+   ]
+  ],
+  "865": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (75 pts)"
+   ]
+  ],
+  "867": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (74 pts)"
+   ]
+  ],
+  "869": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (75 pts)"
+   ]
+  ],
+  "871": [
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (75 pts)"
+   ]
+  ],
+  "873": [
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (75 pts)"
+   ]
+  ],
+  "875": [
+   [
+    "ARMBODY",
+    "Mom arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (75 pts)"
+   ]
+  ],
+  "877": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (75 pts)"
+   ]
+  ],
+  "879": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (75 pts)"
+   ]
+  ],
+  "881": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (75 pts)"
+   ]
+  ],
+  "883": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (75 pts)"
+   ]
+  ],
+  "885": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (76 pts)"
+   ]
+  ],
+  "887": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (76 pts)"
+   ]
+  ],
+  "889": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (76 pts)"
+   ]
+  ],
+  "891": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (77 pts)"
+   ]
+  ],
+  "893": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (75 pts)"
+   ]
+  ],
+  "895": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (77 pts)"
+   ]
+  ],
+  "897": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (84 pts)"
+   ]
+  ],
+  "899": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (65 pts)"
+   ]
+  ],
+  "901": [
+   [
+    "PROPHEAD",
+    "Brick_Big inside Boy's head/face (31 pts)"
+   ]
+  ],
+  "909": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "911": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "913": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "915": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "917": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "921": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "923": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "925": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "927": [
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "929": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Mom arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "931": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "933": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "935": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "939": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1151": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1153": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1155": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1157": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1159": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1161": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1163": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1165": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1167": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1169": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1171": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1173": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1175": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1177": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1179": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1181": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1183": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1185": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1187": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1189": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1191": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1193": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1195": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1197": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1217": [
+   [
+    "ARMBODY",
+    "Boy arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1269": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1271": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1273": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1275": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1277": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1279": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1281": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1283": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1285": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1287": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1289": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1293": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1295": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1297": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1299": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1301": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1303": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1305": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1307": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1309": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1311": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1313": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1315": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1317": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1319": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1321": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1323": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1325": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1327": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1329": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1331": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1333": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1335": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1379": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1381": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1383": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1385": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1387": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1389": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1391": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1393": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1395": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1397": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1399": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1401": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1403": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1405": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1407": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1409": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1411": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1413": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1415": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1417": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1419": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1421": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1423": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1425": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1427": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1429": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1431": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1433": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1447": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1449": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1451": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1453": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1455": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1457": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1459": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1461": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1463": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1465": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1467": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1469": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1471": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1473": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1475": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1505": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1565": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (5 pts)"
+   ]
+  ],
+  "1567": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1575": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1577": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1579": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1581": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1591": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1593": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1595": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1597": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1599": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1601": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1603": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1605": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1607": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1609": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1611": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1613": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1615": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1617": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1619": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1621": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1623": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1625": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1627": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1629": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1631": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1633": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1635": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1637": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1639": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1641": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1643": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1645": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1647": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1649": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1651": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1653": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1655": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1657": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1659": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1773": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1775": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1777": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1779": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1781": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1783": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1785": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1787": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1789": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1791": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1793": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1795": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1797": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1799": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1801": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1803": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1805": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1807": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1809": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1811": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1813": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1815": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1817": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1819": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1821": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1823": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1825": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1827": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1829": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1831": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1833": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1835": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1837": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1839": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1841": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1843": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1845": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1847": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1849": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1851": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1853": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1855": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1857": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1859": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1861": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1863": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1865": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1867": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1869": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1871": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1873": [
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1875": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1877": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1879": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1881": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1883": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1885": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1887": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1889": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1891": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1893": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1895": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1897": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1899": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1901": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1903": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1905": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1907": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1909": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1911": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1913": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1915": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1917": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1919": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1921": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1923": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1925": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1927": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1929": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1931": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1933": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1935": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1937": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1939": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1941": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1943": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1945": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1947": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1949": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1951": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1953": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1955": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1957": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1959": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1961": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1963": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1965": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1967": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1969": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1971": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1973": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1975": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1977": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1979": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1981": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1983": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1985": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1987": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1989": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1991": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1993": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1995": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1997": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1999": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2001": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2003": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2005": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2007": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2009": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2011": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2013": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2015": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2017": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2019": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2021": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2023": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2025": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2027": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2029": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2031": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2033": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "2035": [
+   [
+    "ARMBODY",
+    "Man arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Man arm.R inside own torso (2 pts)"
+   ]
+  ]
+ },
+ "counts": {
+  "PROPHEAD": 217,
+  "ARMBODY": 579
+ }
+}
