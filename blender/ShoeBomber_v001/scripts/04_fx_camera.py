@@ -11,7 +11,7 @@ OUT = sys.argv[sys.argv.index("--") + 1:][0]
 V = Vector
 random.seed(11)
 sc = bpy.context.scene
-END = 1620
+END = 1730
 O = bpy.data.objects
 RIG = {n: O[n] for n in ["Bomber", "Attendant", "Steward", "PaxA", "PaxB", "PaxC", "PaxD", "Traveller", "Officer"]}
 SXS = V((200, 0, 0)); KX = V((-2000, 0, 600)); AX = V((400, 0, 0))
@@ -105,14 +105,29 @@ for s, hs in (("L", "L"), ("R", "R")):
     shoe = O["Shoe_" + s]
     offs = shoe_on_foot(bom, s)
     cr = Carry(shoe)
-    cr.hold(bom, "foot." + s, 1, attach_rest(shoe, bom, "foot." + s, 1, offs))
-    cr.hold(RIG["PaxB"], "wrist." + hs, 878)    # v006d: PaxB grasps the heel; the shoe leaves the foot with his hand
-    cr.free(930)                                # set down on the carpet: released, then settles the last few cm (no pop)
-    cr.done()
-    park = bpy.data.objects["Park_%s_930" % shoe.name]; sc.frame_set(929)
-    Mw = shoe.matrix_world.copy(); zmin = min((Mw @ V(c)).z for c in shoe.bound_box)
-    park.keyframe_insert("location", frame=930)
-    park.location = park.location - V((0, 0, max(0.0, zmin - 0.003))); park.keyframe_insert("location", frame=938)
+    if s == "R":
+        # v009: his right sneaker is OFF from the start, resting across his raised left palm (toe left, heel and fuse to
+        # his right); knocked out of his hand when he is grabbed (481) it drops to the carpet in his row
+        Wl = bone_w(bom, "wrist.L", 20)
+        Mshoe = Matrix.Translation(Wl.translation + V((0.12, 0.08, 0.02))) @ Matrix.Rotation(math.radians(90), 4, 'Z')
+        cr.hold(bom, "wrist.L", 1, Mshoe)
+        cr.cons[-1].inverse_matrix = Wl.inverted() @ Mshoe
+        cr.free(481)
+        cr.done()
+        park = bpy.data.objects["Park_%s_481" % shoe.name]; sc.frame_set(480)
+        Mw = shoe.matrix_world.copy(); zmin = min((Mw @ V(c)).z for c in shoe.bound_box)
+        park.keyframe_insert("location", frame=481); park.keyframe_insert("rotation_euler", frame=481)
+        park.location = park.location + V((0.05, 0.08, -max(0.0, zmin - 0.003))); park.rotation_euler.z += math.radians(25)
+        park.keyframe_insert("location", frame=496); park.keyframe_insert("rotation_euler", frame=496)
+    else:
+        cr.hold(bom, "foot." + s, 1, attach_rest(shoe, bom, "foot." + s, 1, offs))
+        cr.hold(RIG["PaxB"], "wrist." + hs, 878)    # v006d: PaxB grasps the heel; the shoe leaves the foot with his hand
+        cr.free(930)                                # set down on the carpet: released, then settles the last few cm (no pop)
+        cr.done()
+        park = bpy.data.objects["Park_%s_930" % shoe.name]; sc.frame_set(929)
+        Mw = shoe.matrix_world.copy(); zmin = min((Mw @ V(c)).z for c in shoe.bound_box)
+        park.keyframe_insert("location", frame=930)
+        park.location = park.location - V((0, 0, max(0.0, zmin - 0.003))); park.keyframe_insert("location", frame=938)
     # traveller's pair
     ts = O["Shoe_%s_Trav" % s]
     ct = Carry(ts)
@@ -145,8 +160,8 @@ for s, hs in (("L", "L"), ("R", "R")):
 
 for s_ in "LR":
     fo = O["Fuse_Shoe_" + s_]
-    for f, h in ((1, True), (877, True), (878, False)):
-        fo.hide_render = h; fo.keyframe_insert("hide_render", frame=f)
+    for f, h in (((1, False), (480, False), (481, True), (877, True), (878, False)) if s_ == "R" else ((1, True), (877, True), (878, False))):
+        fo.hide_render = h; fo.keyframe_insert("hide_render", frame=f)   # v009: his right shoe's fuse shows while he lights it
     constant_at(fo, set(range(0, END + 1)))
 # v006d: the fuselage shell's bottom sat ~0.18 m above the carpet and hid shins and feet; flatten it onto the carpet
 cs_ = O["CabinShell"]; n_ = 0
@@ -177,19 +192,19 @@ def foot_mask(rig_name, s_, on_until):
     constant_at(body, set(range(0, 2000)), "ShoeHide")
 
     print("MASK", rig_name, s_, len(sel))
-for s_ in "LR":
-    foot_mask("Bomber", s_, 877)
+foot_mask("Bomber", "L", 877)
+foot_mask("Bomber", "R", 1)          # v009: right sneaker is off from the start (sock shows)
 foot_mask("Traveller", "R", 1440)
-shirt = O["Bomber.male_casualsuit04"]
+shirt = O["Bomber.male_casualsuit05"]
 cs_ = shirt.modifiers.new("CorrectiveSmooth", 'CORRECTIVE_SMOOTH'); cs_.factor = 0.9; cs_.iterations = 12; cs_.rest_source = 'ORCO'
-pants = O.get("Bomber.male_casualsuit04")
+pants = O.get("Bomber.male_casualsuit05")
 # ------------------------------------------------------------------ match + matchbox (bomber's hands), drops in the tackle
 match = O["Match"]; mbox = O["Matchbox"]
 cm = Carry(match)
 sc.frame_set(30)
 fw = bone_w(bom, "finger2-3.R", 30); th = bone_w(bom, "finger1-3.R", 30)
 tip = (fw @ V((0, bom.data.bones["finger2-3.R"].length * 0.8, 0)) + th @ V((0, bom.data.bones["finger1-3.R"].length * 0.8, 0))) / 2   # pinched between thumb and index
-sh = bone_w(bom, "foot.R", 12).translation
+sc.frame_set(30); _fo = O["Fuse_Shoe_R"]; sh = _fo.matrix_world @ _fo.data.splines[0].bezier_points[-1].co - V((0, 0, 0.05))   # v009: match points at the fuse end
 d = (sh + V((0, 0, 0.05)) - tip).normalized()
 Rm = d.to_track_quat('Z', 'Y').to_matrix().to_4x4()
 _Mm = Matrix.Translation(tip - d * 0.012) @ Rm
@@ -400,18 +415,18 @@ for i, x in enumerate((-4, 0, 4)):
     area("TerminalSky_%d" % i, AX + V((x, 0, 6.8)), AX + V((x, 0, 0)), 250, 3.0, (0.95, 0.97, 1.0), 'RECTANGLE', 6.0)
 area("TerminalWindow", AX + V((0, 8.5, 2.5)), AX + V((0, 0, 1)), 300, 10.0, (0.9, 0.95, 1.0), 'RECTANGLE', 4.0)
 # the sun lamp affects the whole world; keep it off outside the sky beat
-for f, e in ((1, 0.0), (1248, 0.0), (1249, 4.0), (1392, 4.0), (1393, 2.5)):
+for f, e in ((1, 0.0), (1158, 0.0), (1159, 4.0), (1392, 4.0), (1393, 2.5)):
     sun.energy = e; sun.keyframe_insert("energy", frame=f)
 for f, r in ((1392, (80, 0, -60)), (1393, (78, 0, 175))):
     su.rotation_euler = [math.radians(v) for v in r]; su.keyframe_insert("rotation_euler", frame=f)
 constant_at(su, {1392, 1393})
-constant_at(sun, {1248, 1249, 1392, 1393})
+constant_at(sun, {1158, 1159, 1392, 1393})
 
 # ------------------------------------------------------------------ grade
 sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Medium High Contrast'
-for f, ex in ((1, 0.3), (1158, 0.3), (1249, 0.0), (1392, 0.0), (1393, -1.0), (END, -1.0)):
+for f, ex in ((1, 0.3), (1158, 0.3), (1159, 0.0), (1392, 0.0), (1393, -1.0), (END, -1.0)):
     sc.view_settings.exposure = ex; sc.view_settings.keyframe_insert("exposure", frame=f)
-constant_at(sc, {1158, 1248, 1392})
+constant_at(sc, {1158, 1392})
 
 # v006f: the pin and sedation are shot at seated eye height from the left; the four empty seats behind that lens are struck for the cut (580-776)
 for o in bpy.data.objects:
@@ -501,11 +516,9 @@ SEG2 = [   # v006e: beat 7 -- ONE cut-open shoe resting on the cabin aisle floor
 ]
 # sky: from the cloud next to a cabin window, back along the wing, huge pull-out, tilt down into the deck
 SEG3 = [
-    (1249, KX + V((11.0, 5.2, 1.6)), KX + V((10.5, 0.0, 1.0)), 32),
-    (1290, KX + V((4.0, 12.0, 4.5)), KX + V((3.0, 0.0, 0.8)), 26),
-    (1335, KX + V((-22.0, 34.0, 12.0)), KX + V((0.0, 0.0, 0.0)), 24),
-    (1372, KX + V((-55.0, 75.0, 22.0)), KX + V((0.0, 0.0, -5.0)), 22),
-    (1392, KX + V((-60.0, 82.0, 5.0)), KX + V((-58.0, 85.0, -80.0)), 22),
+    # v009 (director): 2.6 s, the whole airliner sharp over the cloud deck, a slow arc beside it (no haze, no fly-through)
+    (1215, KX + V((40.0, 34.0, 15.0)), KX + V((0.0, 0.0, -1.0)), 40),
+    (1370, KX + V((26.0, 44.0, 12.0)), KX + V((-2.0, 0.0, -1.0)), 40),
 ]
 # airport: dropping through the skylight -> crane to belt level -> dolly with the tray -> settle on the traveller in socks
 SEG4 = [
@@ -532,7 +545,7 @@ for seg in CAB + [SEG2, SEG3] + SEG4S:
         cam.location = fc(f); cam.keyframe_insert("location", frame=f)
         aim.location = fa(f); aim.keyframe_insert("location", frame=f)
         cam_d.lens = fl_(f); cam_d.keyframe_insert("lens", frame=f)
-CUTS |= {1068, 1158, 1248, 1392}
+CUTS |= {1068, 1158, 1214, 1370, 1392}
 CUTS |= {seg[-1][0] for seg in SEG4S[:-1]}
 constant_at(cam, CUTS); constant_at(aim, CUTS); constant_at(cam_d, CUTS)
 

@@ -19,7 +19,7 @@ FWD = 180                                          # yaw for facing +Y (towards 
 
 # beat start frames (target times; retime later)
 B = {1: 1, 2: 199, 3: 373, 4: 481, 5: 655, 6: 769, 7: 1069, 8: 1249, 9: 1393}
-END = 1620
+END = 1730
 
 def setup(name):
     o = bpy.data.objects[name]
@@ -116,29 +116,36 @@ def set_pole(h, s, f, P):
 def bomber_hunch(f, lean=38, head=(28, 0), foot_up=0.42, twist=-8, hx=0.0):
     """v006: right heel up on the seat edge, knee out to his right, foot well clear of his body; a shallower lean
     (head stays off the seat in front)"""
-    lean = lean * 0.3
-    bom.key_root(f, V((BX + 0.02, BY - 0.08, 0.56)), yaw=FWD, flex=6, side=-3)
-    bom.key_spine(f, flex=lean, twist=twist * 0.7, side=3, head=(head[0] * 0.9, head[1]))
-    bom.key_foot("L", f, V((BX - 0.12, BY + 0.44)), FWD, 0, 0)
-    bom.key_foot("R", f, V((BX + 0.22, BY + 0.32)), FWD + 15, foot_up, 15)
-    set_pole(bom, "R", f, (BX + 0.75, BY + 0.55, 0.85))     # knee out to his right, away from his arms
+    # v009: figure-four -- right ankle up across his left knee, the shoe in his lap in front of his belly (clear of the
+    # seat ahead); a light lean so his face stays readable
+    lean = lean * 0.25
+    bom.key_root(f, V((BX + 0.02, BY - 0.10, 0.56)), yaw=FWD, flex=4, side=-2)
+    bom.key_spine(f, flex=lean, twist=twist * 0.5, side=2, head=(head[0] * 0.55, head[1]))
+    # v009: both feet on the floor (the rows leave no room to lift a leg: knees touch the seat ahead). He has the right
+    # sneaker OFF and holds it up in his left hand at chest height, above the seat backs, to light its fuse.
+    bom.key_foot("L", f, V((BX - 0.10, BY + 0.38)), FWD, 0, 0)
+    bom.key_foot("R", f, V((BX + 0.12, BY + 0.36)), FWD, 0, 0)
 
-for f, lean, hd, tw in ((1, 36, (26, -4), -8), (40, 40, (30, 2), -10), (90, 42, (34, -2), -12), (150, 40, (30, 4), -9), (200, 38, (26, 0), -8)):
+for f, lean, hd, tw in ((1, 36, (30, -4), -8), (40, 40, (34, 2), -10), (70, 30, (5, 25), -6), (100, 42, (36, -2), -12), (150, 40, (34, 4), -9), (200, 38, (30, 0), -8)):   # 70: glances up and round (face to the lens)
     bomber_hunch(f, lean, hd, twist=tw)
-# shoe-holding left hand and match hand: placed relative to the right ankle (evaluated after the feet are keyed)
+# v009: the sneaker (heel to his right, fuse hanging out of the heel sole) rests across his raised left palm in front of
+# his chest; his right hand strikes a match on the sole (f14-28) and holds the flame under the heel to the fuse.
+SHOE_HAND = {}
+def lhand_pt(f, rise=0.0):
+    return V((BX + 0.00, BY + 0.30, 0.95 + rise))
+for f, rise in ((1, -0.10), (20, 0.0), (40, 0.02), (90, 0.03), (150, 0.02), (200, 0.03), (260, 0.02), (330, 0.03), (372, 0.02)):
+    SHOE_HAND[f] = lhand_pt(f, rise)
+    hand(bom, "L", f, SHOE_HAND[f], (-0.3, 1.0, 0.1), (0, 0, 1), pole=(BX - 0.55, BY - 0.25, 0.65), grip=0.5)
+def fuse_end(f):
+    k = max(k_ for k_ in SHOE_HAND if k_ <= f); return SHOE_HAND[k] + V((0.21, 0.10, -0.055))   # = 04's shoe-in-hand placement
 def shoe_pt(f, dx=0.0, dy=0.0, dz=0.0):
-    a = wpos(bom, "foot.R", f); return a + V((dx, dy, dz))
-for f in (1, 40, 90, 150, 200, 260, 330, 372):
-    a = shoe_pt(f)
-    hand(bom, "L", f, a + V((-0.03, 0.17, 0.07)), (0.2, 0.8, -0.5), (1, 0, 0), pole=(BX - 0.6, BY - 0.2, 0.6), grip=0.55)   # holds the toe, in front of the shin
-# right hand: strike (f10-28 swipe along the box held in the left hand), then hold the match flame to the tongue
-strike = [(1, V((0.10, 0.02, 0.16))), (14, V((0.06, 0.06, 0.14))), (22, V((0.13, -0.04, 0.12))), (30, V((0.07, 0.10, 0.13))),
-          (60, V((0.03, 0.07, 0.20))), (90, V((0.02, 0.08, 0.18))), (120, V((0.04, 0.06, 0.19))), (150, V((0.02, 0.09, 0.18))),
-          (200, V((0.03, 0.07, 0.19))), (260, V((0.03, 0.08, 0.18))), (330, V((0.02, 0.08, 0.19))), (372, V((0.03, 0.07, 0.18))),
-          (400, V((0.06, 0.02, 0.20)))]
+    return fuse_end(f) + V((dx, dy, dz))
+strike = [(1, V((0.06, -0.04, -0.10))), (14, V((0.02, 0.0, 0.02))), (22, V((-0.08, 0.0, 0.03))), (30, V((0.04, -0.02, -0.08))),
+          (60, V((0.03, -0.02, -0.09))), (90, V((0.02, -0.03, -0.08))), (120, V((0.04, -0.02, -0.09))), (150, V((0.03, -0.03, -0.08))),
+          (200, V((0.03, -0.02, -0.09))), (260, V((0.03, -0.03, -0.08))), (330, V((0.02, -0.02, -0.09))), (372, V((0.03, -0.02, -0.08))),
+          (400, V((0.06, -0.02, -0.02)))]
 for f, o in strike:
-    a = shoe_pt(f)
-    hand(bom, "R", f, a + o, (-0.5, 0.5, -0.4), (0, 0, -1), pole=(BX + 0.6, BY - 0.3, 0.7), grip=0.8, pose="pinch")
+    hand(bom, "R", f, fuse_end(f) + o, (-0.4, 0.4, 0.8), (0, -1, 0), pole=(BX + 0.6, BY - 0.3, 0.7), grip=0.8, pose="pinch")
 # beat 2 (199-372): keeps trying, glances up once (~300), back down
 for f, lean, hd, tw in ((260, 40, (32, -5), -10), (300, 34, (12, 10), -6), (330, 40, (30, 0), -10), (372, 39, (28, 2), -9)):
     bomber_hunch(f, lean, hd, twist=tw)
@@ -146,7 +153,7 @@ for f, lean, hd, tw in ((260, 40, (32, -5), -10), (300, 34, (12, 10), -6), (330,
 bomber_hunch(395, 22, (-8, 35), twist=10)
 bomber_hunch(420, 18, (-10, 40), twist=14)
 hand(bom, "R", 420, shoe_pt(420) + V((0.08, 0.0, 0.25)), (0, 0.4, 0.6), (0, -1, 0), pole=(BX + 0.6, BY - 0.3, 0.7), grip=0.8, pose="pinch")
-hand(bom, "L", 420, shoe_pt(420) + V((-0.03, 0.17, 0.07)), (0.2, 0.8, -0.5), (1, 0, 0), pole=(BX - 0.6, BY - 0.2, 0.6), grip=0.55)
+hand(bom, "L", 420, lhand_pt(420, 0.0), (-0.3, 1.0, 0.1), (0, 0, 1), pole=(BX - 0.55, BY - 0.25, 0.65), grip=0.5)
 # beat 4 (481-654): lunges up, grabbed, dragged out into the aisle, pinned face-down (head toward +Y)
 bom.key_root(450, V((BX + 0.05, BY - 0.02, 0.57)), yaw=FWD, flex=8, side=0); bom.key_spine(450, flex=20, twist=15, head=(-5, 30))
 bom.key_foot("R", 450, V((BX + 0.13, BY + 0.42)), FWD, 0, 0); bom.key_foot("L", 450, V((BX - 0.12, BY + 0.44)), FWD, 0, 0)

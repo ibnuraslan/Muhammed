@@ -53,7 +53,7 @@ for layer in ad.action.layers:
                 if fc.data_path == "view_settings.exposure":
                     for kp in fc.keyframe_points:
                         f = kp.co.x
-                        kp.co.y = 0.9 if f < 1159 else (0.0 if f < 1249 else (0.35 if f < 1393 else -0.4))
+                        kp.co.y = 0.9 if f < 1159 else (0.35 if f < 1393 else -0.4)   # v009: sky 1159-1392 (shot at 1215-1370)
                         kp.handle_left.y = kp.handle_right.y = kp.co.y
                     fc.update()
 # airport: lift the terminal (clean, bright)
@@ -62,5 +62,16 @@ for o in O:
 M["CeilingWhite"].node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.8, 0.82, 0.85, 1)
 # no film blur on the farm either
 sc.render.use_motion_blur = False
+# v009: the steward's short02 hair read near-white under the cabin light (and as a different man); darken it to near-black
+for o_ in bpy.data.objects:
+    if o_.name in ("Steward.short02",):
+        for m_ in o_.data.materials:
+            nt_ = m_.node_tree
+            for nd in list(nt_.nodes):
+                if nd.type == 'TEX_IMAGE' and nd.image and "diffuse" in nd.image.name.lower():
+                    for lk in list(nd.outputs['Color'].links):
+                        mx = nt_.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'
+                        mx.inputs['Factor'].default_value = 1.0; mx.inputs['B'].default_value = (0.16, 0.12, 0.10, 1)
+                        nt_.links.new(nd.outputs['Color'], mx.inputs['A']); nt_.links.new(mx.outputs['Result'], lk.to_socket)
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("V003_LOOK_SAVED", OUT)
