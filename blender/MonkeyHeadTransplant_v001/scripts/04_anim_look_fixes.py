@@ -53,6 +53,11 @@ for m in bpy.data.materials:
             lw.inputs["Blend"].default_value = 0.22
             pw = nt.nodes.new("ShaderNodeMath"); pw.operation = "POWER"; pw.inputs[1].default_value = 2.0
             nt.links.new(lw.outputs["Facing"], pw.inputs[0]); nt.links.new(pw.outputs[0], lk.inputs[0])
+            # v013: back faces add no rim (the overlapping inner shells read as a mess)
+            gm_ = nt.nodes.new("ShaderNodeNewGeometry"); inv_ = nt.nodes.new("ShaderNodeMath"); inv_.operation = "SUBTRACT"; inv_.inputs[0].default_value = 1.0
+            nt.links.new(gm_.outputs["Backfacing"], inv_.inputs[1])
+            mul_ = nt.nodes.new("ShaderNodeMath"); mul_.operation = "MULTIPLY"; nt.links.new(lk.outputs[0], mul_.inputs[0]); nt.links.new(inv_.outputs[0], mul_.inputs[1])
+            nt.links.new(mul_.outputs[0], n.inputs["Strength"])
         if n.type == "BSDF_TRANSPARENT" and n.inputs["Color"].default_value[1] > 0.95 and n.inputs["Color"].default_value[0] < 0.75:
             n.inputs["Color"].default_value = (0.93, 0.98, 1.0, 1)
 # spine: cream, and slimmer toward the neck end (cervical part was bulky)

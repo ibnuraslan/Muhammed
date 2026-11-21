@@ -86,7 +86,14 @@ print("A_UP", A_UP)
 def rev_of(a): return ((a + math.pi) % (2 * math.pi)) / (2 * math.pi)
 CH = D["Chair"].location.copy()
 SEAT = 0.409
-M_CHAIR = Matrix.Translation(CH + V(0.0, 0.26, SEAT + 0.022)) @ Matrix.Rotation(math.radians(-7), 4, "X") @ Matrix.Rotation(math.radians(5), 4, "Y")
+M_CHAIR = Matrix.Translation(CH + V(0.0, 0.25, SEAT + 0.022)) @ Matrix.Rotation(math.radians(-11), 4, "X") @ Matrix.Rotation(math.radians(5), 4, "Y")
+bpy.context.view_layer.update()
+_hit = sc.ray_cast(bpy.context.evaluated_depsgraph_get(), CH + V(0, 0.12, 2.0), V(0, 0, -1))
+_seat = _hit[1].z if (_hit[0] and _hit[4].name.startswith("Chair")) else SEAT
+_bB = D["MK_BodyB"]; _loc = M_LIE2.inverted() @ _bB.matrix_world
+_zmin = min((M_CHAIR @ (_loc @ v.co)).z for v in _bB.data.vertices)
+M_CHAIR = Matrix.Translation(V(0, 0, _seat + 0.003 - _zmin)) @ M_CHAIR
+print("CHAIR plant: seat", round(_seat, 3), "was lowest", round(_zmin, 3))
 print("NA", NA, "NB", NB, "FB", FB)
 # monkey B root: table 2 -> chair while the x-ray void hides the world (camera rides along rigidly)
 W0, W1 = 1068, 1172
@@ -138,9 +145,9 @@ for i, s_ in enumerate(st):
     hide_keys(s_, [(1, True), (max(2, t_on), False)])
 print("STITCH up", len(_up))
 hide_keys(D["Seam"], [(1, True), (392, False)])
-hide_keys(D["Collar_Head"], [(1, True), (256, False), (366, True)])
+hide_keys(D["Collar_Head"], [(1, True), (256, False), (350, True)])
 hide_keys(D["Collar_BodyA"], [(1, True), (256, False)])
-hide_keys(D["Collar_BodyB"], [(1, False), (366, True)])
+hide_keys(D["Collar_BodyB"], [(1, False), (350, True)])
 
 # ------------------------------------------------------------------ eyes: closed (sedated) until beat 4, flicker, open, blinks; gaze; ears
 LIDS = {s: (D["LidUp_" + s], D["LidLo_" + s]) for s in "LR"}
@@ -270,11 +277,11 @@ for m in all_mats_with("Fade_T2"):
     for f, v in ((1, 1.0), (1022, 1.0), (1034, 0.0), (1770, 0.0)): node_key(m, "Fade_T2", f, v)
 for m in all_mats_with("Fade_Corner"):
     for f, v in ((1, 1.0), (1016, 1.0), (1018, 0.0), (1188, 0.0), (1212, 1.0)): node_key(m, "Fade_Corner", f, v)
-for f, v in ((1, 0.0), (1020, 0.0), (1034, 1.0), (1188, 1.0), (1210, 0.0)): node_key("M_XR_Void", "VoidOn", f, v)
+for f, v in ((1, 0.0), (1008, 0.0), (1040, 1.0), (1188, 1.0), (1210, 0.0)): node_key("M_XR_Void", "VoidOn", f, v)
 for m in all_mats_with("XRay"):
-    for f, v in ((1, 0.0), (1030, 0.0), (1046, 1.0), (1185, 1.0), (1205, 0.0)): node_key(m, "XRay", f, v)
+    for f, v in ((1, 0.0), (1014, 0.0), (1046, 1.0), (1185, 1.0), (1205, 0.0)): node_key(m, "XRay", f, v)
 for o in D:
-    if o.get("xray"): hide_keys(o, [(1, True), (1030, False), (1206, True)])
+    if o.get("xray"): hide_keys(o, [(1, True), (1014, False), (1206, True)])
 # pulse runs from the brain down the head cord and stops at the gap (twice)
 pulse = D["XR_Pulse"]; bb = D["XR_Brain"].location + V(0, 0, -0.022) + V(-0.385, -0.923, 0).normalized() * 0.005
 gap = NC + V(0, 0, 0.022)
@@ -337,7 +344,7 @@ def hand(H, s, f, W, d, n, elbow_out=0.35, yaw=0.0):
 def hang(H, s, f, pos, yaw, fwd=0.0):
     sx = 1 if s == "L" else -1
     Rz = Matrix.Rotation(math.radians(yaw), 3, "Z")
-    W = V(pos.x, pos.y, 0) + Rz @ V(sx * 0.31, -fwd - 0.05, 0) + V(0, 0, H.root_head.z * 0.9)
+    W = V(pos.x, pos.y, 0) + Rz @ V(sx * 0.28, -fwd - 0.13, 0) + V(0, 0, H.root_head.z * 0.97)
     hand(H, s, f, W, V(0, 0, -1) + Rz @ V(0, -0.15, 0), Rz @ V(-sx, 0, 0), 0.45, yaw)
 
 # Surgeon: S0 in front of table 1 / S1 in front of table 2
@@ -355,7 +362,7 @@ def AWAY(p):   # horizontal unit vector from the surgeon's chest toward p (keeps
 # ---- v008d: the marker pen lives in the right hand (tripod grip), tip on the skin along the dashed line; left palm steadies the head
 _hw1 = head_world(1); _hv = [_hw1 @ v.co for v in head.data.vertices]
 _zt = max(p.z for p in _hv); _top = [p for p in _hv if p.z > _zt - 0.012]
-_c = sum(_top, V(0, 0, 0)) / len(_top); STEADY_W = min(_hv, key=lambda p: (p - _c).length)
+_top = [p for p in _hv if p.z > _zt - 0.03]; STEADY_W = max(_top, key=lambda p: (p - NA).length)   # v013: crown/back of the head, far from the neck line
 PEN_HALF = 0.082                                         # origin -> tip end (MarkerPenTip at local -Z)
 PEN_REST_O = V(-0.2, -0.16, 0.925); T_REST = PEN_REST_O - V(PEN_HALF, 0, 0); U_REST = V(1, 0, 0)
 U_DRAW = V(0.05, -0.45, 1.0).normalized()
@@ -517,7 +524,7 @@ for f in list(range(672, 1040, 6)):
         for s in "LR": hand(SURG, s, f, pos + Matrix.Rotation(math.radians(Y1), 3, "Z") @ V((0.19 if s == "L" else -0.19), -0.26, 0) + V(0, 0, 1.02), Matrix.Rotation(math.radians(Y1), 3, "Z") @ V(0, -1, -0.35), V(0, 0, 1), 0.3, Y1)
 # beats 7-9: recovery corner. Surgeon beside the chair waves a hand in front of the monkey (no reaction), then clipboard at the monitor
 S3 = V(1.44, 1.16, 0); Y3 = yaw_to(S3, CH + V(0, 0.2, 0))
-S4 = V(2.6, 0.6, 0); Y4 = yaw_to(S4, V(3.05, 0.95, 0))
+S4 = V(2.62, 0.40, 0); Y4 = yaw_to(S4, V(3.05, 0.95, 0))
 YS = yaw_to(S4, S4 + V(-0.92, 0.40, 0))      # v013 ending: half toward the camera, half toward the monkey (monkey on his right)
 YS = Y4 + ((YS - Y4 + 180.0) % 360.0 - 180.0)    # turn the short way
 board = D["Forceps"]
@@ -755,11 +762,11 @@ for f in list(range(400, 672, 6)):
     up_ = V(0, -0.55, 0.85).normalized()                        # tools lean back toward the surgeon
     for tool, s_, off_a, arc_ in ((nh, "R", 0.0, 0.012 * math.sin(2 * math.pi * ph)), (fcp, "L", -0.6, 0.0)):
         sp_ = neck_ring(M_LIE2, a + off_a, 0.078) + V(0, 0, arc_)
-        dir_ = (up_ + V(0.15, 0, 0)).normalized() if s_ == "R" else V(-0.55, -0.65, 0.5).normalized()
+        dir_ = (up_ + V(0.15, 0, 0)).normalized() if s_ == "R" else V(-0.45, -0.5, 0.75).normalized()
         tool.location = sp_ + dir_ * 0.075
         tool.rotation_quaternion = dir_.to_track_quat("Z", "Y"); tool.keyframe_insert("location", frame=f); tool.keyframe_insert("rotation_quaternion", frame=f)
         bpy.context.view_layer.update()
-        C = sp_ + dir_ * (0.12 if s_ == "R" else 0.09); side_ = dir_.cross(V(0, 0, 1)).normalized()
+        C = sp_ + dir_ * (0.14 if s_ == "R" else 0.12); side_ = dir_.cross(V(0, 0, 1)).normalized()
         TOOL_C[(tool.name, f)] = (s_, C - tool.location)
         try: TOOL_LOG.append(grip_object(SURG.r.o, s_, f, tool, C, -side_ if s_ == "R" else side_))
         except Exception as e: print("TOOLFAIL", f, s_, e)
@@ -785,31 +792,31 @@ K = [
  (1,    V(0.35, 0.95, 1.72), V(-0.3, -0.35, 1.2), 24, UPW, "W"),
  (61,   V(0.45, 0.30, 1.62), NA + V(-0.05, -0.15, 0.05), 28, UPW, "W"),
  (121,  V(0.42, 0.42, 1.62), NA + V(-0.05, -0.12, 0.08), 32, UPW, "W"),
- (181,  NA + V(0.30, 0.30, 0.78), NA + V(-0.04, -0.06, 0.0), 32, UPW, "W"),
+ (181,  NA + V(0.45, 0.42, 0.66), NA + V(-0.04, -0.10, 0.12), 28, UPW, "W"),
  (241,  V(0.28, 0.62, 1.82), V(-0.18, -0.18, 1.08), 26, UPW, "W"),
- (290,  V(0.0, 0.85, 2.12), V(-0.05, -0.1, 1.0), 28, UPW, "W"),
- (330,  V(0.3, 0.8, 2.12), V(0.25, -0.1, 1.0), 28, UPW, "W"),
+ (290,  V(0.15, 1.45, 1.62), V(0.0, -0.25, 1.2), 30, UPW, "W"),
+ (330,  V(0.45, 1.40, 1.62), V(0.25, -0.25, 1.2), 30, UPW, "W"),
  (365,  V(0.95, 0.15, 1.45), NBp, 30, UPW, "W"),
- (420,  NBp + V(0.5, 0.1, 0.55), NBp, 75, UPW, "W"),
- (480,  NBp + V(0.52, 0.06, 0.38), NBp, 75, UPW, "W"),
- (540,  NBp + V(0.32, 0.18, 0.32), NBp, 75, UPW, "W"),
- (600,  NBp + V(0.42, 0.06, 0.06), NBp + V(0, 0, 0.03), 70, UPW, "W"),
- (650,  NBp + V(0.36, -0.16, 0.12), NBp + V(0.02, -0.02, 0.0), 60, UPW, "W"),
- (700,  FBp + FWW * 0.32 + V(0, -0.18, 0.08), FBp, 40, V(0, -0.6, 0.8), "W"),
- (760,  FBp + FWW * 0.24 + V(0, -0.08, 0.05), FBp, 52, V(0, -1, 0.05), "W"),
- (820,  FBp + FWW * 0.13 + V(0, -0.02, 0.02), FBp, 70, V(0, -1, 0.05), "W"),
- (880,  FBp + FWW * 0.18 + V(0, 0.06, 0.06), FBp, 55, V(0, -1, 0.05), "W"),
- (930,  FBp + FWW * 0.16 + V(0, 0.16, 0.12), FBp, 45, V(0, -1, 0.05), "W"),
- (975,  FBp + V(0.06, 0.14, 0.25), FBp + V(-0.02, 0.05, 0), 38, V(0, -1, 0.4), "W"),
- (1005, NBp + V(0.0, 0.02, 0.33), NBp + V(0, 0.03, 0), 34, V(0, -1, 0), "W"),
- (1030, NBp + V(0.0, 0.03, 0.22), NBp + V(0, 0.03, 0), 34, V(0, -1, 0), "W"),
+ (420,  NBp + V(0.75, 0.2, 0.75), NBp + V(0, 0, 0.06), 40, UPW, "W"),
+ (480,  NBp + V(0.78, 0.12, 0.55), NBp + V(0, 0, 0.06), 40, UPW, "W"),
+ (540,  NBp + V(0.55, 0.3, 0.5), NBp + V(0, 0, 0.06), 40, UPW, "W"),
+ (600,  NBp + V(0.65, 0.12, 0.22), NBp + V(0, 0, 0.05), 40, UPW, "W"),
+ (650,  NBp + V(0.55, -0.25, 0.25), NBp + V(0.02, -0.02, 0.03), 40, UPW, "W"),
+ (700,  FBp + FWW * 0.36 + V(0, -0.18, 0.12), FBp, 38, UPW, "W"),
+ (760,  FBp + FWW * 0.36 + V(0, -0.1, 0.10), FBp, 40, UPW, "W"),
+ (820,  FBp + FWW * 0.30 + V(0, -0.04, 0.07), FBp, 42, UPW, "W"),
+ (880,  FBp + FWW * 0.32 + V(0, 0.06, 0.09), FBp, 42, UPW, "W"),
+ (930,  FBp + FWW * 0.30 + V(0, 0.16, 0.14), FBp, 40, UPW, "W"),
+ (975,  FBp + V(0.10, 0.20, 0.36), FBp + V(-0.02, 0.05, 0), 35, UPW, "W"),
+ (1005, NBp + V(0.05, -0.05, 0.45), NBp + V(0, 0.03, 0.03), 34, UPW, "W"),
+ (1030, NBp + V(0.04, -0.02, 0.32), NBp + V(0, 0.03, 0.02), 34, UPW, "W"),
  (1064, V(0.10, -1.02, 0.46), V(-0.03, -0.30, 0.30), 32, V(0, 0, 1), "B"),
  (1190, V(0.04, -0.80, 0.43), V(-0.03, -0.30, 0.30), 32, V(0, 0, 1), "B"),
- (1250, CH + V(-0.6, -1.35, 0.62), CH + V(0, 0.25, 0.62), 24, UPW, "W"),
- (1320, CH + V(0.35, -1.45, 0.85), CH + V(0.05, 0.2, 0.66), 26, UPW, "W"),
+ (1250, CH + V(0.0, -1.4, 0.62), CH + V(0.1, 0.25, 0.6), 26, UPW, "W"),
+ (1320, CH + V(0.35, -1.45, 0.85), CH + V(0.12, 0.2, 0.66), 26, UPW, "W"),
  (1380, V(2.85, -0.42, 1.08), V(2.95, 0.7, 0.95), 30, UPW, "W"),
- (1440, SCR + V(0.20, -0.42, 0.05), SCR, 45, UPW, "W"),
- (1500, SCR + V(0.16, -0.36, 0.05), SCR, 55, UPW, "W"),
+ (1440, SCR + V(0.20, -0.62, 0.06), SCR, 40, UPW, "W"),
+ (1500, SCR + V(0.16, -0.55, 0.05), SCR, 42, UPW, "W"),
  (1515, SCR + V(0.32, -0.80, 0.15), SCR + V(0.12, 0, -0.02), 36, UPW, "W"),
  (1530, V(2.75, -0.95, 1.5), V(2.6, 0.85, 1.0), 26, UPW, "W"),
  (1560, END_A + END_D * 1.75, END_A, 35, UPW, "W"),      # v013: push in on the monkey with the surgeon checking it
@@ -939,6 +946,89 @@ for o in D:
     set_const(o)
     if o.type == "LIGHT": o.visible_camera = False; o.visible_glossy = False
 sc.frame_set(1)
+# ---- v013 acceptance-list fixes
+# (9, 16) one fur colour: body B is no longer hue-shifted ginger (head and body match in every shot)
+_gm = bpy.data.materials.get("M_MonkeyGinger")
+if _gm:
+    for n in _gm.node_tree.nodes:
+        if n.type == "HUE_SAT": n.inputs["Hue"].default_value = 0.5; n.inputs["Saturation"].default_value = 1.0; n.inputs["Value"].default_value = 1.0
+        if n.type == "MIX" and getattr(n, "blend_type", "") == "MULTIPLY": n.inputs["Factor"].default_value = 0.0
+# (23) dark natural nails: saturated red texture areas (the painted nails) -> dark horn
+for _mn in ("M_MonkeyPale", "M_MonkeyGinger", "M_MonkeyHead"):
+    _m = bpy.data.materials.get(_mn)
+    if not _m: continue
+    _nt = _m.node_tree; _p = next((n for n in _nt.nodes if n.type == "BSDF_PRINCIPLED"), None)
+    if not _p or not _p.inputs["Base Color"].links: continue
+    _src = _p.inputs["Base Color"].links[0].from_socket
+    _sp = _nt.nodes.new("ShaderNodeSeparateColor"); _sp.mode = "HSV"; _nt.links.new(_src, _sp.inputs[0])
+    def _mth(op, a, b):
+        n = _nt.nodes.new("ShaderNodeMath"); n.operation = op
+        (_nt.links.new(a, n.inputs[0]) if not isinstance(a, float) else n.inputs[0].__setattr__("default_value", a))
+        (_nt.links.new(b, n.inputs[1]) if not isinstance(b, float) else n.inputs[1].__setattr__("default_value", b))
+        return n.outputs[0]
+    _hm = _mth("MAXIMUM", _mth("LESS_THAN", _sp.outputs[0], 0.045), _mth("GREATER_THAN", _sp.outputs[0], 0.95))
+    _mask = _mth("MULTIPLY", _mth("MULTIPLY", _hm, _mth("GREATER_THAN", _sp.outputs[1], 0.70)), _mth("GREATER_THAN", _sp.outputs[2], 0.25))
+    _mx = _nt.nodes.new("ShaderNodeMix"); _mx.data_type = "RGBA"; _nt.links.new(_mask, _mx.inputs["Factor"])
+    _nt.links.new(_src, _mx.inputs["A"]); _mx.inputs["B"].default_value = (0.07, 0.05, 0.04, 1); _nt.links.new(_mx.outputs["Result"], _p.inputs["Base Color"])
+# (14, C) staples flush in the skin across the incision (were hovering pins)
+from mathutils.bvhtree import BVHTree as _BV
+sc.frame_set(700); _dg = bpy.context.evaluated_depsgraph_get(); _vs, _ps = [], []
+for _o in (D["MK_BodyB"], D["MK_Head"]):
+    _e = _o.evaluated_get(_dg); _me = _e.to_mesh(); _n0 = len(_vs)
+    _vs += [_e.matrix_world @ v.co for v in _me.vertices]; _ps += [tuple(_n0 + i for i in p_.vertices) for p_ in _me.polygons]; _e.to_mesh_clear()
+_bvh = _BV.FromPolygons(_vs, _ps); _nst = 0
+for _o in [o for o in D if o.name.startswith("Stitch_")]:
+    _mw = _o.matrix_world.copy(); _pp = _mw.translation; _nr = _mw.col[1].xyz.normalized()
+    _h = _bvh.ray_cast(_pp + _nr * 0.03, -_nr, 0.06)
+    if _h[0] is not None:
+        _o.matrix_world = Matrix.Translation(_h[0] - _nr * 0.0004) @ _mw.to_3x3().to_4x4(); _nst += 1
+print("STITCHES flush", _nst)
+# (22) the chair monkey keeps a gauze bandage over the stitched seam; (24) gentle breathing
+if "Collar_BodyB" in D:
+    _bd = D["Collar_BodyB"].copy(); _bd.data = D["Collar_BodyB"].data.copy(); _bd.name = "NeckBandage"; sc.collection.objects.link(_bd)
+    _bd.animation_data_clear(); _bd.scale = _bd.scale * 1.04
+    hide_keys(_bd, [(1, True), (1206, False)])
+_bb = D["MK_BodyB"]
+for f in range(1210, 1771, 15):
+    k_ = 1.0 + 0.004 * math.sin(2 * math.pi * (f - 1210) / 90.0); _bb.delta_scale = (k_, k_, k_); _bb.keyframe_insert("delta_scale", frame=f)
+# (21) x-ray: small red nerve pulse (no white sphere), smooth spine and vertebrae, shaded brain
+if "XR_Pulse" in D:
+    D["XR_Pulse"].scale = (0.7, 0.7, 0.7)
+    _pm = bpy.data.materials.get("M_XR_Pulse"); _pb = next(n for n in _pm.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
+    _pb.inputs["Emission Color"].default_value = (1.0, 0.25, 0.3, 1); _pb.inputs["Emission Strength"].default_value = 6.0; _pb.inputs["Base Color"].default_value = (1.0, 0.3, 0.35, 1)
+for _o in D:
+    if _o.type == "MESH" and (_o.get("xray") or _o.name.startswith("XR_Spine")) and _o.name != "XR_Void":
+        for p_ in _o.data.polygons: p_.use_smooth = True
+        if len(_o.data.vertices) < 20000 and "XRsmooth" not in _o.modifiers: _o.modifiers.new("XRsmooth", "SUBSURF").levels = 2
+_brm = bpy.data.materials.get("M_XR_Brain")
+if _brm:
+    _bp = next(n for n in _brm.node_tree.nodes if n.type == "BSDF_PRINCIPLED"); _bp.inputs["Emission Strength"].default_value = 2.5
+# (B) no spinning palms: keep every quaternion track on the shorter path (sign flips made hands spin)
+def _channelbags(act):
+    for L in getattr(act, "layers", []):
+        for st in L.strips:
+            for cb in getattr(st, "channelbags", []): yield cb
+_nflip = 0
+for act in bpy.data.actions:
+    for cb in _channelbags(act):
+        groups = {}
+        for fc in cb.fcurves:
+            if fc.data_path.endswith("rotation_quaternion"): groups.setdefault(fc.data_path, {})[fc.array_index] = fc
+        for dp, fcs in groups.items():
+            if len(fcs) != 4: continue
+            frames = sorted({kp.co.x for kp in fcs[0].keyframe_points})
+            kmap = [{kp.co.x: kp for kp in fcs[i].keyframe_points} for i in range(4)]
+            prev = None
+            for fr in frames:
+                if not all(fr in kmap[i] for i in range(4)): continue
+                q = [kmap[i][fr].co.y for i in range(4)]
+                if prev is not None and sum(a * b for a, b in zip(prev, q)) < 0:
+                    for i in range(4):
+                        kp = kmap[i][fr]; kp.co.y = -kp.co.y; kp.handle_left.y = -kp.handle_left.y; kp.handle_right.y = -kp.handle_right.y
+                    q = [-x for x in q]; _nflip += 1
+                prev = q
+            for i in range(4): fcs[i].update()
+print("QUAT flips fixed", _nflip)
 _NO_SAVE = True; exec(open(os.path.join(HERE, "eye_fix.py")).read())   # v013: real eyes (LESSONS 3)
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("ANIM_SAVED", OUT)
