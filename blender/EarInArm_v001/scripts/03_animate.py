@@ -125,7 +125,7 @@ for k, ang in enumerate((25, -25)):
 band = tapes[0]
 for o in [pad] + tapes:
     for c in list(o.users_collection): c.objects.unlink(o)
-    C_PROP.objects.link(o); key_vis(o, 1, True); key_vis(o, 900, False)
+    C_PROP.objects.link(o); key_vis(o, 1, False)   # v012: no dressing - the healed earless site shows
 
 def pat_up(f, face=None, head=(0, 0, 0), spine=(6, 0, 0)):
     PAT.key_body(f, SEAT, pitch=-8, spine=spine, head=head, legs=LEGS)
@@ -136,24 +136,22 @@ ARM_L_REST = ((0.32, -0.12, 0.77), (0, -1, -0.15), (0, 0, -1))
 EARHAND_W = EAR_C + Vector((0.055, 0.035, -0.304 - 0.115))   # seated: head is 0.304 lower than rest
 ARM_L_BOARD = ((0.58, -0.25, 1.0), (0.7, -0.71, -0.06), (0, 0, 1))   # v012: elbow bent ~35 deg, palm up   # v009k: elbow slightly bent, palm up (straight arm read as a T-pose)   # palm up on the arm board (tilt frame)
 # beat 1: shock. Head jolts back, hand flies up toward the dressing, then settles
-pat_up(1, head=(0, -8, 0)); pat_up(18, head=(-6, -12, 3), spine=(2, 0, 0)); pat_up(40, head=(-10, -18, 4), spine=(-2, 2, 0))
-pat_up(80, head=(-4, -22, 6), spine=(4, 3, 4)); pat_up(126, head=(-2, -16, 4), spine=(6, 2, 2)); pat_up(165, head=(0, -4, 0))
-pat_up(215, head=(0, -2, 0), spine=(6, 0, 0)); pat_up(238, head=(0, 22, -4), spine=(7, 0, 0)); pat_up(262, head=(0, 24, -4), spine=(6, 0, 0))   # v012: glances at the surgeon
+pat_up(1, head=(2, -10, 0)); pat_up(18, head=(0, -14, 2), spine=(4, 0, 0)); pat_up(40, head=(2, -18, 3), spine=(5, 1, 0))   # v012: head level, worried, no stare at the ceiling
+pat_up(80, head=(2, -8, 2), spine=(6, 2, 2)); pat_up(126, head=(2, 14, -2), spine=(6, 2, 2)); pat_up(165, head=(2, 10, -2))   # turns to the surgeon
+pat_up(215, head=(0, -2, 0), spine=(6, 0, 0)); pat_up(238, head=(4, -6, 0), spine=(7, 0, 0)); pat_up(262, head=(6, -4, 0), spine=(6, 0, 0))   # looks down at his chest   # v012: glances at the surgeon
 pat_up(290, head=(0, 0, 0), spine=(7.5, 0, 0)); pat_up(320, head=(2, 2, 0))
 for f, a in ((1, ARM_L_REST), (22, ARM_L_REST)): PAT.key_hand("L", f, *a)
 ALARM_L = Vector((0.13, -0.3, 1.04))
-for f, dz in ((44, 0.0), (70, -0.012), (110, 0.012)):
-    PAT.key_hand("L", f, ALARM_L + Vector((0, 0, dz)), (-0.1, -0.3, 1.0), (0, -1, 0.2))
+for f in (44, 110): PAT.key_hand("L", f, ARM_L_REST[0], ARM_L_REST[1], ARM_L_REST[2])   # v012: hands rest on the armrests
 PAT.key_hand("L", 150, ARM_L_REST[0], ARM_L_REST[1], ARM_L_REST[2])   # v012: forearm on the armrest, where the surgeon examines it
 PAT.key_hand("L", 380, ARM_L_REST[0], ARM_L_REST[1], ARM_L_REST[2])
 PAT.key_hand("L", 470, *ARM_L_BOARD); PAT.key_hand("L", B["b9"] + 15, *ARM_L_BOARD)
 for f in (1, 16, 175, 300, B["b9"]): PAT.key_hand("R", f, *ARM_R)
 ALARM = Vector((-0.12, -0.3, 1.02))
-for f, dz in ((38, 0.0), (70, -0.015), (112, 0.01)):
-    PAT.key_hand("R", f, ALARM + Vector((0, 0, dz)), (0.1, -0.3, 1.0), (0, -1, 0.2))
-PAT.key_hand("R", 140, ALARM + Vector((-0.08, 0.06, -0.14)), (0.1, -0.5, -0.4), (0, 0, -1))   # v009d: settles on the thigh, not into it
-HP(PAT, "L", "relaxed", 1); HP(PAT, "L", "open_alarm", 50); HP(PAT, "L", "open_alarm", 112); HP(PAT, "L", "relaxed", 150); HP(PAT, "L", "relaxed", 470)
-HP(PAT, "R", "relaxed", 1); HP(PAT, "R", "open_alarm", 38); HP(PAT, "R", "open_alarm", 112); HP(PAT, "R", "relaxed", 150)
+for f in (38, 112): PAT.key_hand("R", f, *ARM_R)
+PAT.key_hand("R", 140, *ARM_R)   # v009d: settles on the thigh, not into it
+HP(PAT, "L", "relaxed", 1); HP(PAT, "L", "relaxed", 50); HP(PAT, "L", "relaxed", 112); HP(PAT, "L", "relaxed", 150); HP(PAT, "L", "relaxed", 470)
+HP(PAT, "R", "relaxed", 1); HP(PAT, "R", "relaxed", 38); HP(PAT, "R", "relaxed", 112); HP(PAT, "R", "relaxed", 150)
 N0 = FACE_NEUTRAL()
 PAT.face(1, **dict(N0, eye_left_opened_up=0.4, eye_right_opened_up=0.4))
 SHOCK = dict(N0, eye_left_opened_up=1, eye_right_opened_up=1, eyebrows_left_up=1, eyebrows_right_up=1, eyebrows_left_inner_up=0.8,
@@ -163,7 +161,7 @@ SLEEP = dict(N0, eye_left_closure=1, eye_right_closure=1)
 WORRY = dict(N0, eyebrows_left_inner_up=0.5, eyebrows_right_inner_up=0.5)
 def blink(f, base):
     PAT.face(f - 4, **base); PAT.face(f, **dict(base, eye_left_closure=1, eye_right_closure=1)); PAT.face(f + 5, **base)
-for f in (190, 232, 268): blink(f, WORRY)   # v012: the worried close-up is alive (blinks, glance, breath)
+for f in (24, 70, 118, 190, 232, 268): blink(f, WORRY)   # v012: the worried close-up is alive (blinks, glance, breath)
 PAT.face(340, **dict(N0, eye_left_slit=0.3, eye_right_slit=0.3)); PAT.face(430, **SLEEP); PAT.face(560, **SLEEP)
 CALM = dict(N0, eye_left_slit=0.15, eye_right_slit=0.15)
 PAT.face(600, **CALM)   # v012: awake and relaxed on the arm board (not a stiff sleeper)
@@ -235,10 +233,11 @@ ch_cl = CL.copy(); ch_cl.data = CL.data.copy(); ch_cl.animation_data_clear(); ch
 attach_bone(ch_cl, PAT, "spine02", Matrix.Translation(PIECE_REST) @ Matrix.Scale(CH_S, 4))
 for f, v in ((1, 0.0), (185, 0.0), (238, 1.0)):
     ch_cl.data.bevel_factor_end = v; ch_cl.data.keyframe_insert("bevel_factor_end", frame=f)
-for o in (ch_th, ch_pc, ch_cl): key_vis(o, 1, False)   # v009i: no x-ray chest, the inside is never shown
+for o in (ch_th, ch_pc, ch_cl): key_vis(o, 1, False); key_vis(o, 156, True)   # v012: the rib cutaway is back (client: the rib harvest must show)
+key_vis(ch_th, 300, False); key_vis(ch_pc, 255, False); key_vis(ch_cl, 260, False)
 ev_at(200); CHEST_PIECE_W = ch_pc.matrix_world.translation.copy(); print("CHEST_PIECE_W", CHEST_PIECE_W)
 carry = bpy.data.objects.new("Chest_Piece_Carry", CP.data); C_PROP.objects.link(carry); carry.rotation_mode = 'XYZ'
-key_vis(carry, 1, False)   # v009i: the piece is already on the tray (insert at 156)
+key_vis(carry, 1, False); key_vis(carry, 255, True); key_vis(carry, 335, False)   # v012: the cut piece in the forceps
 for o in list(bpy.data.collections["Studio_Ribs"].objects) + list(bpy.data.collections["Studio_Tissue"].objects):
     o.hide_render = True; o.hide_viewport = True
 
@@ -313,18 +312,19 @@ def sh(f, s, W, d, n, pole=None, tip_mode=False):
     SUR.key_hand(s, f, W, d, n, pole)
 # beat 1: hands together in front, then R hand to the patient's chest on "A surgeon takes"
 CHEST = pat_world(130, (0.08, -0.16, 1.02))
-for f in (1, 60, 100):   # v012: hands stay in front of his own chest until they go to the forearm (no low reach)
+for f in (1, 60):   # v012: hands stay in front of his own chest until they go to the forearm (no low reach)
     ev_at(f); c = SUR.wpos("spine03")
     fwd = Matrix.Rotation(R_(yA), 3, 'Z') @ Vector((0, -1, 0))
     sh(f, "L", c + fwd * 0.22 + Vector((0.05, 0, 0.02)), fwd + Vector((0, 0, -0.3)), Vector((0, 0, 1)).cross(fwd))   # v012: at his own chest height
     sh(f, "R", c + fwd * 0.24 + Vector((-0.02, 0, 0.04)), fwd + Vector((0, 0, -0.3)), -Vector((0, 0, 1)).cross(fwd))
-pass   # v012: hands on the forearm (03b)
-pass   # v012: hands on the forearm (03b)
-pass   # v012: hands on the forearm (03b)
-pass   # v012: hands on the forearm (03b)
+sh(100, "L", CHEST + Vector((0.12, -0.19, 0.05)), (-0.6, 0.6, -0.4), (0.4, -0.5, 0.6))
+sh(128, "L", CHEST + Vector((0.05, -0.135, 0.0)), (-0.6, 0.6, -0.3), (0.4, -0.6, 0.5))
+sh(175, "L", CHEST + Vector((0.06, -0.14, 0.0)), (-0.6, 0.6, -0.3), (0.4, -0.6, 0.5))
+sh(215, "L", CHEST + Vector((0.18, -0.22, -0.15)), (-0.3, 0.3, -0.9), (0, 0, -1))
 # beat 2: forceps go into the x-rayed chest, free the cartilage piece and carry it to the tray (keys re-aimed + tip-solved below)
 PCW = CHEST_PIECE_W   # world point of the cartilage piece in the patient's chest (patient upright 1..350)
-for f, tip in ((334, BLK + Vector((0.0, 0.0, 0.012))), (339, BLK + Vector((0.02, 0.04, 0.06)))):
+for f, tip in ((200, PCW + Vector((0.05, -0.12, 0.08))), (225, PCW + Vector((0.0, -0.01, 0.0))), (250, PCW), (268, PCW + Vector((0.0, -0.06, 0.04))),
+               (334, BLK + Vector((0.0, 0.0, 0.012))), (339, BLK + Vector((0.02, 0.04, 0.06)))):
     sh(f, "R", tip, (0, 0, 0), (0, 0, 1), tip_mode=True)
 # v009d: while he walks, both hands are keyed relative to his body every 4 frames (in front of the chest, below it),
 # so the IK arms never trail behind the torso or pass through it
@@ -556,10 +556,9 @@ TRAY_TOP = TRAY.z + 0.006
 blk.location = Vector((BLK.x, BLK.y, TRAY_TOP)); blk.rotation_euler = (0, 0, R_(90))
 for f, s_ in ((343, (1, 1, 1)), (390, (0.95, 0.95, 0.7)), (430, (0.9, 0.9, 0.42)), (468, (0.85, 0.85, 0.15))):
     blk.scale = s_; blk.keyframe_insert("scale", frame=f)
-key_vis(blk, 1, False); key_vis(blk, 156, True); key_vis(blk, 472, False)
-key_vis(ear_real, 1, False); key_vis(ear_real, 370, True)
-ear_real.scale = (0.85, 0.85, 0.3); ear_real.keyframe_insert("scale", frame=370)
-ear_real.scale = (1, 1, 1); ear_real.keyframe_insert("scale", frame=468)
+key_vis(blk, 1, False); key_vis(blk, 335, True); key_vis(blk, 411, False)   # v012: one model per shot (block, then the carved ear after the cut)
+key_vis(ear_real, 1, False); key_vis(ear_real, 411, True)
+ear_real.scale = (1, 1, 1)   # v012: one model, one size (it grew out of the block before)
 M_SHAV = M_CART
 for i in range(28):
     bpy.ops.mesh.primitive_torus_add(major_radius=random.uniform(0.003, 0.006), minor_radius=0.0012, major_segments=10, minor_segments=4)
@@ -569,7 +568,7 @@ for i in range(28):
     f0 = 350 + i * 7; land = TRAY + Vector((random.uniform(-0.1, 0.12), random.uniform(-0.15, 0.13), 0.009))
     st = BLK + Vector((random.uniform(-0.02, 0.02), random.uniform(-0.03, 0.03), 0.015))
     apex = st.lerp(land, 0.5) + Vector((0, 0, random.uniform(0.05, 0.12)))
-    key_vis(t, 1, False); key_vis(t, f0, True)
+    key_vis(t, 1, False)   # v012: no shavings (they read as floating white rings)
     for j in range(0, 19, 3):
         u = j / 18; p = (1 - u) ** 2 * st + 2 * (1 - u) * u * apex + u * u * land
         t.location = p; t.rotation_euler = (u * 9 + i, u * 6, i); t.keyframe_insert("location", frame=f0 + j); t.keyframe_insert("rotation_euler", frame=f0 + j)
@@ -615,7 +614,7 @@ patch.parent = pr; patch.parent_type = 'BONE'; patch.parent_bone = "lowerarm01.L
 patch.matrix_parent_inverse = Matrix.Identity(4)
 patch.matrix_world = Mp
 patch.matrix_parent_inverse = (pr.matrix_world @ LA.matrix @ Matrix.Translation((0, LA.length, 0))).inverted() @ Mp @ patch.matrix_basis.inverted() if False else patch.matrix_parent_inverse
-key_vis(patch, 1, False); key_vis(patch, 300, True)   # v009i: the bump stays (no x-ray)
+key_vis(patch, 1, False); key_vis(patch, 300, True); key_vis(patch, 871, False); key_vis(patch, 1046, True)   # v012: x-ray close-ups show the ear inside (871-1045)
 # copy the forearm's skin UVs onto the patch (nearest body vertex at the reclined pose) so it samples the skin right under it
 from mathutils.kdtree import KDTree as _KD
 ev_at(600); _dg = bpy.context.evaluated_depsgraph_get(); _pe = PAT.body.evaluated_get(_dg); _pm_ = _pe.to_mesh(); _mw = PAT.body.matrix_world
@@ -745,7 +744,7 @@ for f in list(range(1, B["end"] + 1, 2)) + [B["end"]]:
         keymat(kd, f, Matrix.Translation((Lw + Rw_) / 2 + Vector((0, 0, 0.03))) @ Matrix.Rotation(R_(-200 + 90), 4, 'Z'))
     else:
         keymat(kd, f, Matrix.Translation(TRAY + Vector((-0.6, 1.6, 0.02)) + Vector((1.9 - 1.05 - 0.25, 1.4 - TRAY.y - 1.6, 0.0))))
-key_vis(nh, 1, False); key_vis(nh, 1500, True); key_vis(forc, 1, False); key_vis(forc, 296, True); key_vis(forc, 1503, False)   # v012: no forceps at the patient in beats 1-2   # v009d: no tool left in the temple / by the head
+key_vis(nh, 1, False); key_vis(nh, 1500, True); key_vis(forc, 1, True); key_vis(forc, 1503, False)   # v012: no forceps at the patient in beats 1-2   # v009d: no tool left in the temple / by the head
 # ear_real only on the tray; hidden once lifted (ear_arm takes over). ear_arm hidden before 566, swapped for ear_new at 1150
 key_vis(ear_real, 566, False)
 key_vis(ear_arm, 1, False); key_vis(ear_arm, 566, True); key_vis(ear_arm, 1150, False)

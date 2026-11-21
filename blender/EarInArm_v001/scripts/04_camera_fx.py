@@ -115,9 +115,9 @@ def xray(name, parent, r0, r1, keys, objs, static=None):
             mx2 = nt_.nodes.new("ShaderNodeMixShader"); mx2.inputs[0].default_value = 0.2; nt_.links.new(tr_.outputs[0], mx2.inputs[1]); nt_.links.new(ad_.outputs[0], mx2.inputs[2])
             mx_ = nt_.nodes.new("ShaderNodeMixShader"); nt_.links.new(amt.outputs[0], mx_.inputs[0]); nt_.links.new(src, mx_.inputs[1]); nt_.links.new(mx2.outputs[0], mx_.inputs[2])
             nt_.links.new(mx_.outputs[0], outn.inputs["Surface"])
-xray("Xray_Center", OB["Arm_Pocket"], 0.025, 0.05, ((1, 0.0), (1770, 0.0)), [OB["Patient.body"]])   # v009d: gentler, no hollow crater
+xray("Xray_Center", OB["Arm_Pocket"], 0.025, 0.05, ((1, 0.0), (870, 0.0), (871, 0.5), (960, 0.5), (961, 0.8), (1045, 0.8), (1046, 0.0)), [OB["Patient.body"]])   # v009d: gentler, no hollow crater
 # chest x-ray (beat 2): body and tee go glassy over the rib cage while the cartilage is harvested
-xray("Xray_Chest", OB["Chest_Thorax"], 0.2, 0.25, ((1, 0.0), (1770, 0.0)), [OB["Patient.male_casualsuit06"]], static=V(0.0, -0.038, 1.013))   # v009d: only the tee over the chest (world centre: he sits still 140-346), jeans stay opaque   # the whole tee turns x-ray glass
+xray("Xray_Chest", OB["Chest_Thorax"], 0.2, 0.25, ((1, 0.0), (155, 0.0), (156, 0.92), (299, 0.92), (300, 0.0)), [OB["Patient.male_casualsuit06"]], static=V(0.0, -0.038, 1.013))   # v009d: only the tee over the chest (world centre: he sits still 140-346), jeans stay opaque   # the whole tee turns x-ray glass
 # v009d: the body under the tee was deleted by the clothes mask, so the glass tee showed an empty box with the head on top
 # and a ball-jointed arm beside it. During the x-ray the real torso skin is kept and goes glassy around the rib cage.
 _pm = OB["Patient.body"].modifiers["Delete.male_casualsuit06"]
@@ -127,9 +127,9 @@ _gl = _pb.vertex_groups.get("Delete.legs") or _pb.vertex_groups.new(name="Delete
 _gl.add([v.index for v in _pb.data.vertices if v.co.z < _pz and any(x.group == _g.index and x.weight > 0.5 for x in v.groups)], 1.0, 'REPLACE')
 _ml = _pb.modifiers.new("Delete.legs", 'MASK'); _ml.vertex_group = "Delete.legs"; _ml.invert_vertex_group = _pm.invert_vertex_group
 while _pb.modifiers.find("Delete.legs") > _pb.modifiers.find("Delete.male_casualsuit06") + 1: _pb.modifiers.move(_pb.modifiers.find("Delete.legs"), _pb.modifiers.find("Delete.legs") - 1)
-for f_, v_ in ((1, True), (1770, True)):   # v009i: no chest x-ray, the torso stays under the tee
+for f_, v_ in ((1, True), (155, True), (156, False), (299, False), (300, True)):   # v012: the torso skin shows only for the rib cutaway
     _pm.show_render = v_; _pm.keyframe_insert("show_render", frame=f_)   # render only: the checks switch masks off in the viewport
-xray("Xray_ChestSkin", OB["Chest_Thorax"], 0.15, 0.22, ((1, 0.0), (1770, 0.0)), [OB["Patient.body"]])
+xray("Xray_ChestSkin", OB["Chest_Thorax"], 0.15, 0.22, ((1, 0.0), (155, 0.0), (156, 0.9), (299, 0.9), (300, 0.0)), [OB["Patient.body"]])
 # heartbeat pulse of the glow on the patch
 # ================================================================== world + OR lights + render settings
 w = bpy.data.worlds.get("World") or bpy.data.worlds.new("World"); sc.world = w; w.use_nodes = True
@@ -177,39 +177,30 @@ def PB(pos, tgt, d):   # v009c: pull the camera back d metres along its view lin
     return tgt + (pos - tgt).normalized() * ((pos - tgt).length + d)
 
 SEGS = [
-  [  # OR, one continuous move: beat 1 shock -> x-ray of the chest (beat 2) -> follow the cartilage to the tray -> carving ...
-    # v009d: the opening move goes round the FRONT of the surgeon and over his head (it used to pass through it at f43-81),
-    # the dressing is seen from the front-left (face profile + bandage, not the back of the head), then wide on the chest
-    (1, V(1.75, -0.35, 1.5), FACE1 + V(0.2, -0.25, -0.15), 22), (30, V(1.25, -0.12, 1.5), FACE1, 32), (45, V(0.62, -0.62, 2.08), FACE1, 34), (60, V(0.02, -0.92, 1.42), FACE1, 40),
-    (76, V(0.15, -1.15, 1.95), FACE1.lerp(EAR1, 0.5), 38)],
-  [  # v009j: clean cut - side two-shot (the camera went round behind his cap)
-    (77, V(-0.55, -1.5, 1.66), V(0.28, -0.22, 1.3), 40), (155, V(-0.47, -1.42, 1.64), V(0.28, -0.22, 1.3), 42)],   # v012: waist-up two-shot, his hands examine the patient's forearm (no lap in frame)
-  [  # v009i: insert - the harvested rib cartilage already on the tray (the see-through x-ray chest is gone, client)
-    (156, BLK + V(0.05, -0.3, 0.3), BLK + V(0, 0, 0.0), 44), (215, BLK + V(0.03, -0.16, 0.15), BLK + V(0, 0, 0.0), 50)],
-  [  # v009j: clean cut - the two of them while the surgeon finishes at the chest (insert cut to 1 s)
-    (216, FACE1 + V(0.03, -0.78, 0.02), FACE1 + V(0, 0, -0.04), 40), (295, FACE1 + V(0.0, -0.52, 0.02), FACE1 + V(0, 0, -0.03), 46)],   # v012: slow push-in   # v009k: his worried face (the two-shot showed the surgeon's knee between his legs)
-  [ (296, V(1.32, -1.28, 1.62), PC.lerp(BLK, 0.5) + V(0, 0, 0.32), 28), (306, V(1.3, -1.25, 1.62), PC.lerp(BLK, 0.6) + V(0, 0, 0.3), 28),
-    (322, V(0.85, -1.45, 1.58), BLK + V(0, 0, 0.22), 32),
-    # v009i: tray at chest height from his front: his masked face in the top third, looking down at his hands (no headless torso)
-    (362, BLK + V(-0.12, -0.62, 0.26), BLK + V(-0.04, 0.16, 0.24), 34), (455, BLK + V(-0.08, -0.6, 0.25), BLK + V(-0.04, 0.16, 0.24), 34)],
-  [  # v009j: clean cut - the carved ear on the tray, push-in
-    (456, BLK + V(0.04, -0.26, 0.26), BLK + V(0, 0, 0.0), 46), (520, BLK + V(0.03, -0.17, 0.17), BLK + V(0, 0, 0.0), 50)],
-  [ (521, BLK + V(0.0, -0.8, 0.3), BLK + V(-0.04, 0.22, 0.32), 32), (565, BLK + V(0.05, -0.84, 0.32), BLK + V(-0.02, 0.24, 0.34), 30),
-    # v009i: the walk to the arm from his outer side, then from the patient's foot side as he comes to the arm; at the arm a two-shot:
-    # the patient's head at left, the arm on the board, the surgeon's face at right (no lone arm, no gloves in the lens)
-    (579, BLK + V(0.06, -0.85, 0.32), BLK + V(-0.02, 0.24, 0.36), 30)],
-  [  # v009i: clean cut - he walks toward the camera from the tray and turns to the arm
-    (580, V(2.1, 1.35, 1.5), V(1.3, 0.05, 1.3), 28), (606, V(2.08, 1.35, 1.5), V(1.35, 0.42, 1.32), 28)],
+  [  # v012: beat 1 - the two of them, both whole from the waist up, slow push to the patient's worried face (healed earless side to camera)
+    (1, V(-0.1, -2.25, 1.6), V(0.34, -0.3, 1.3), 31), (76, V(-0.06, -2.15, 1.58), V(0.32, -0.28, 1.3), 33)],
+  [  # v012: clean cut - waist-up two-shot, the surgeon's hand comes to the patient's chest
+    (77, V(-0.55, -1.5, 1.66), V(0.28, -0.22, 1.3), 40), (155, V(-0.47, -1.42, 1.64), V(0.28, -0.22, 1.3), 42)],
+  [  # v012: clean cut - the rib cutaway, chest-up with his face: the ribcage shows through glassy skin, the cut line glows,
+     # the forceps take the cartilage out of the rib (client: the rib harvest must be shown)
+    (156, PC + V(0.06, -0.78, 0.3), PC + V(0.0, 0.0, 0.14), 34), (300, PC + V(0.02, -0.62, 0.26), PC + V(0.0, 0.0, 0.12), 38)],
+  [  # v012: clean cut - he takes the piece to the tray (chest-up, no legs), then carves it
+    (301, V(1.32, -1.28, 1.62), PC.lerp(BLK, 0.6) + V(0, 0, 0.3), 28), (322, V(0.85, -1.45, 1.58), BLK + V(0, 0, 0.22), 32),
+    (362, BLK + V(-0.12, -0.62, 0.26), BLK + V(-0.04, 0.16, 0.24), 34), (410, BLK + V(-0.08, -0.6, 0.25), BLK + V(-0.04, 0.16, 0.24), 34)],
+  [  # v012: clean cut - the carved ear on the tray (one model), push-in
+    (411, BLK + V(0.04, -0.26, 0.26), BLK + V(0, 0, 0.0), 46), (470, BLK + V(0.03, -0.17, 0.17), BLK + V(0, 0, 0.0), 50)],
+  [ (471, BLK + V(0.0, -0.8, 0.3), BLK + V(-0.04, 0.22, 0.32), 32), (579, BLK + V(0.06, -0.85, 0.32), BLK + V(-0.02, 0.24, 0.36), 30)],
   [  # v009i: clean cut - the arm two-shot
-    (607, V(0.4, -0.92, 1.4), V(0.4, 0.42, 1.22), 26), (633, V(0.45, -0.88, 1.38), V(0.5, 0.5, 1.22), 28),
+    (580, V(0.4, -0.92, 1.4), V(0.4, 0.42, 1.22), 26), (633, V(0.45, -0.88, 1.38), V(0.5, 0.5, 1.22), 28),
     (680, V(0.36, -0.86, 1.35), V(0.3, 0.32, 1.17), 28), (730, V(0.35, -0.8, 1.5), V(0.3, 0.32, 1.17), 30),
     (760, V(0.35, -0.78, 1.52), V(0.3, 0.3, 1.16), 31), (795, V(0.35, -0.78, 1.52), V(0.3, 0.3, 1.16), 31)],
-  [  # v009i: clean cut - the ear growing reads as a clear bump under the skin, with a gentle push-in (no glassy x-ray skin)
-    (796, INC + V(0.08, -0.14, 0.42), INC + V(0, 0, 0.0), 40), (880, INC + V(0.06, -0.1, 0.3), INC + V(0, 0, 0.0), 44)],
-  [  # v009i: clean cut - time passes: the patient asleep, the surgeon waiting beside the arm (faces)
-    (881, V(1.35, 0.0, 1.6), V(0.45, 0.45, 1.15), 28), (958, V(1.3, 0.04, 1.58), V(0.45, 0.45, 1.15), 30)],
-  [  # v009j: clean cut - the patient asleep while the ear grows, slow push-in
-    (959, V(0.45, -0.3, 1.45), V(0.0, 0.38, 1.3), 38), (1062, V(0.38, -0.2, 1.42), V(0.0, 0.38, 1.3), 44)],
+  [  # v012: the ear grows - time passes in three close-ups of the forearm: 1) the skin bulges
+    (796, INC + V(0.08, -0.16, 0.36), INC, 40), (870, INC + V(0.06, -0.12, 0.3), INC, 44)],
+  [  # 2) the cartilage ear shape shows under the (glassy) skin
+    (871, INC + V(-0.06, -0.14, 0.3), INC, 46), (960, INC + V(-0.05, -0.11, 0.26), INC, 50)],
+  [  # 3) a recognisable pink ear in the forearm, then the patient (awake, relaxed) looks at it
+    (961, INC + V(0.1, -0.1, 0.26), INC, 50), (1010, INC + V(0.08, -0.09, 0.24), INC, 54)],
+  [ (1011, V(0.4, -0.92, 1.4), V(0.3, 0.32, 1.17), 28), (1062, V(0.38, -0.86, 1.4), V(0.3, 0.32, 1.17), 30)],
   [ (1071, INC + V(0.25, -0.8, 0.5), INC + V(-0.02, 0.12, 0.2), 34), (1130, INC + V(0.3, -0.82, 0.48), INC + V(-0.02, 0.12, 0.2), 34),
     (1180, INC + V(0.32, -0.82, 0.46), INC + V(-0.02, 0.12, 0.2), 34), (1240, INC + V(0.25, -0.75, 0.18), INC + V(-0.02, 0.1, 0.3), 32), (1266, V(0.6, -0.8, 1.32), V(0.4, 0.42, 1.3), 26), (1300, V(0.6, -0.78, 1.5), V(0.4, 0.45, 1.24), 26),
     (1330, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.2), 26), (1340, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.2), 26), (1345, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.22), 26)],
@@ -225,7 +216,7 @@ SEGS = [
     (1601, EAR_W + V(-0.22, -0.92, 0.28), EAR_W + V(0.16, 0.12, 0.06), 30), (1650, EAR_W + V(-0.24, -0.95, 0.27), EAR_W + V(0.12, 0.1, 0.05), 30),
     (1665, V(-0.05, -0.62, 1.66), V(0.02, 0.3, 1.28), 32), (1690, V(0.55, -0.85, 1.52), FACE9, 32),
     # v009i: end on a medium shot with the NEW ear to camera, his fingertips on it, the nurse beside him at his left shoulder
-    (1720, EAR9 + V(0.72, -0.95, 0.06), EAR9.lerp(FACE9, 0.3) + V(0.2, 0.14, -0.04), 28), (1770, EAR9 + V(0.68, -0.9, 0.06), EAR9.lerp(FACE9, 0.3) + V(0.2, 0.14, -0.04), 29)],
+    (1720, EAR9 + V(0.72, -0.95, 0.06), EAR9.lerp(FACE9, 0.3) + V(0.2, 0.14, -0.04), 28), (1740, EAR9 + V(0.6, -0.8, 0.05), EAR9.lerp(FACE9, 0.3) + V(0.12, 0.1, -0.03), 32), (1770, EAR9 + V(0.34, -0.5, 0.04), EAR9.lerp(FACE9, 0.15), 40)],   # v012: ends close on the grafted ear
 ]
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.lens = 30; cam_d.sensor_fit = 'AUTO'; cam_d.clip_start = 0.004; cam_d.clip_end = 60
 cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 4.0

@@ -80,8 +80,8 @@ hm = OB["Surgeon.short02"].data.materials[0].copy(); hm.name = "Patient.hair"; p
 nb = OB["Nurse.bob02"]; nb.hide_render = False; nb.hide_viewport = False
 sw = nb.modifiers.new("close", 'SHRINKWRAP'); sw.target = OB["Nurse.body"]; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.wrap_mode = 'OUTSIDE_SURFACE'; sw.offset = 0.008
 while nb.modifiers.find("close") > nb.modifiers.find("SUBSURF") > -1 and nb.modifiers.find("close") > 1: nb.modifiers.move(nb.modifiers.find("close"), nb.modifiers.find("close") - 1)
-for cap, k in ((OB["Surgeon_Cap"], 1.06), (OB["Nurse_Cap"], 1.08)):   # caps sit over the hair, not through it
-    cap.data.transform(Matrix.Scale(k, 4))
+for cap in (OB["Surgeon_Cap"], OB["Nurse_Cap"]):   # v012: a fitted cap, not a balloon: smaller and flatter, hair shows below, eyes clear
+    cap.data.transform(Matrix.Diagonal((0.9, 0.78, 0.9, 1.0)))
 
 # ---------------------------------------------------------------- ear dressing -> soft skin-toned ear shape close to the head
 pad = OB["Bandage_Pad"]; en = OB["Ear_New"]
@@ -185,5 +185,62 @@ poster("V12_PosterL2", (-2.535, 0.55, 1.78), 0.44, 0.6, 0, 5, (0.55, 0.3, 0.6), 
 rail = mat("Rail", (0.36, 0.52, 0.58), rough=0.5)
 box("V12_RailB", (1.65, 2.54, 1.0), (2.7, 0.03, 0.06), rail, 0); box("V12_RailR", (2.94, 0.2, 1.0), (0.03, 2.4, 0.06), rail)
 box("V12_RailL", (-2.54, 0.0, 1.0), (0.03, 5.0, 0.06), rail)
+# ---------------------------------------------------------------- tailored scrubs: hide the boxy clothes shells (shoulder hump, tube
+# arms); the bodies already wear the scrub top / trousers materials, so the garments follow the body. Folds via a fabric bump.
+for n in ("Surgeon.male_casualsuit06", "Nurse.female_sportsuit01"):
+    OB[n].hide_render = True; OB[n].hide_viewport = True
+def torso_material(rig, ob, m):
+    """every torso, shoulder, upper-arm (sleeve) and lower-neck polygon wears the scrub top (no bare shoulders)"""
+    bones = {b.name.lower() for b in rig.data.bones}; gi = {g.index: g.name.lower() for g in ob.vertex_groups if g.name.lower() in bones}
+    if m.name not in [x.name for x in ob.data.materials if x]: ob.data.materials.append(m)
+    idx = [x.name if x else "" for x in ob.data.materials].index(m.name)
+    nz = rig.data.bones["neck01"].head_local.z + 0.015
+    TOP = ("spine", "clavicle", "shoulder", "breast", "pectoral", "upperarm01", "upperarm02")
+    n = 0
+    for p in ob.data.polygons:
+        cur = ob.data.materials[p.material_index]
+        if cur and ("Glove" in cur.name or "Trousers" in cur.name): continue
+        ok = True
+        for vi in p.vertices:
+            v = ob.data.vertices[vi]; gs = [x for x in v.groups if x.group in gi]
+            if not gs: ok = False; break
+            dom = gi[max(gs, key=lambda x: x.weight).group]
+            if not (any(dom.startswith(k) for k in TOP) or (dom.startswith("neck") and v.co.z < nz)): ok = False; break
+        if ok: p.material_index = idx; n += 1
+    return n
+scrubS = next(m for m in OB["Surgeon.body"].data.materials if m and "casualsuit" in m.name)
+print("TORSO", torso_material(SUR, OB["Surgeon.body"], scrubS), torso_material(NUR, OB["Nurse.body"], bpy.data.materials["NurseTop"]))
+# the carved ear on the tray reads as a skin-toned ear (helix and lobe), not white paper
+ec = OB.get("Ear_Cartilage")
+if ec:
+    ec.data.materials.clear(); ec.data.materials.append(mat("CarvedEarSkin", (0.86, 0.62, 0.52), rough=0.45, sss=0.3))
+def fabric(m, scale=18.0, strength=0.35):
+    if not m or not m.use_nodes: return
+    nt = m.node_tree; b = next((n for n in nt.nodes if n.type == "BSDF_PRINCIPLED"), None)
+    if b is None or b.inputs["Normal"].is_linked: return
+    tc = nt.nodes.new("ShaderNodeTexCoord"); nz = nt.nodes.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = scale
+    nz.inputs["Detail"].default_value = 3.0; wv = nt.nodes.new("ShaderNodeTexWave"); wv.inputs["Scale"].default_value = scale * 0.4
+    wv.inputs["Distortion"].default_value = 6.0; mx = nt.nodes.new("ShaderNodeMath"); mx.operation = 'ADD'
+    bp = nt.nodes.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = strength; bp.inputs["Distance"].default_value = 0.004
+    nt.links.new(tc.outputs["Object"], nz.inputs["Vector"]); nt.links.new(tc.outputs["Object"], wv.inputs["Vector"])
+    nt.links.new(nz.outputs["Fac"], mx.inputs[0]); nt.links.new(wv.outputs["Fac"], mx.inputs[1]); nt.links.new(mx.outputs[0], bp.inputs["Height"])
+    nt.links.new(bp.outputs["Normal"], b.inputs["Normal"])
+for mn in ("NurseTop", "NurseTrousers", "SurgeonTrousers"):
+    fabric(bpy.data.materials.get(mn))
+for i, m in enumerate(OB["Surgeon.body"].data.materials):
+    if m and "casualsuit" in m.name: fabric(m)
+pt = OB["Patient.male_casualsuit06"].data.materials[0]
+pg_ = next((n for n in pt.node_tree.nodes if n.type == "GROUP"), None)
+if pg_ is None: fabric(pt, scale=14.0, strength=0.45)
+else:   # MPFB clothes material: put the bump on the group's output side via a wrapper BSDF input if present
+    for k in ("Bump strength", "Normal strength"):
+        if k in pg_.inputs: pg_.inputs[k].default_value = 0.6
+# the ear in the forearm turns from cartilage to living pink skin over the growth close-ups (progression)
+ea = OB.get("Ear_InArm")
+if ea:
+    gm = mat("EarInArmGrow", (0.9, 0.86, 0.8), rough=0.45, sss=0.2); ea.data.materials.clear(); ea.data.materials.append(gm)
+    bc = gm.node_tree.nodes["Principled BSDF"].inputs["Base Color"]
+    for f, c in ((1, (0.9, 0.86, 0.8)), (871, (0.9, 0.86, 0.8)), (960, (0.84, 0.62, 0.55)), (1010, (0.8, 0.5, 0.42))):
+        bc.default_value = (*c, 1); bc.keyframe_insert("default_value", frame=f)
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("LOOKS_DONE")

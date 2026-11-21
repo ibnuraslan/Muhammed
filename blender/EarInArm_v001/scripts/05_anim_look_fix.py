@@ -54,5 +54,9 @@ for _o in [o for o in bpy.data.objects if o.name.startswith("OR_CabGlass")]:
 # v012: warmer light (the clinic read bare and grey)
 for _n, _c in (("OR_Key0", (1.0, 0.88, 0.74)), ("OR_Key1", (1.0, 0.86, 0.7)), ("OR_Key2", (1.0, 0.92, 0.82)), ("OR_Key3", (1.0, 0.9, 0.8)), ("OR_SurgSpot", (1.0, 0.95, 0.86))):
     if _n in bpy.data.objects: bpy.data.objects[_n].data.color = _c
+# v012: motivated three-point light (key from the surgical lamp side, softer cool fill, warm rim) and less motion blur
+for _n, _e in (("OR_Key0", 1.15), ("OR_Key1", 1.25), ("OR_Key2", 0.6), ("OR_Key3", 1.3)):
+    if _n in bpy.data.objects: bpy.data.objects[_n].data.energy *= _e
+bpy.context.scene.render.motion_blur_shutter = 0.2
 print("ANIMFIX_DONE")
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)
