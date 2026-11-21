@@ -1,0 +1,107 @@
+[
+ {
+  "shot": 1,
+  "first": 1,
+  "last": 54
+ },
+ {
+  "shot": 2,
+  "first": 55,
+  "last": 96
+ },
+ {
+  "shot": 3,
+  "first": 97,
+  "last": 140
+ },
+ {
+  "shot": 4,
+  "first": 141,
+  "last": 168
+ },
+ {
+  "shot": 5,
+  "first": 169,
+  "last": 222
+ },
+ {
+  "shot": 6,
+  "first": 223,
+  "last": 276
+ },
+ {
+  "shot": 7,
+  "first": 277,
+  "last": 353
+ },
+ {
+  "shot": 8,
+  "first": 354,
+  "last": 432
+ },
+ {
+  "shot": 9,
+  "first": 433,
+  "last": 496
+ },
+ {
+  "shot": 10,
+  "first": 497,
+  "last": 551
+ },
+ {
+  "shot": 11,
+  "first": 552,
+  "last": 602
+ },
+ {
+  "shot": 12,
+  "first": 603,
+  "last": 674
+ },
+ {
+  "shot": 13,
+  "first": 675,
+  "last": 754
+ },
+ {
+  "shot": 14,
+  "first": 755,
+  "last": 830
+ },
+ {
+  "shot": 15,
+  "first": 831,
+  "last": 890
+ },
+ {
+  "shot": 16,
+  "first": 891,
+  "last": 940
+ },
+ {
+  "shot": 17,
+  "first": 941,
+  "last": 1038
+ },
+ {
+  "shot": 18,
+  "first": 1039,
+  "last": 1092
+ },
+ {
+  "shot": 19,
+  "first": 1093,
+  "last": 1136
+ },
+ {
+  "shot": 20,
+  "first": 1137,
+  "last": 1212
+ },
+ {
+  "shot": 21,
+  "first": 1213,
+  "last": 1311
+ }
+]
