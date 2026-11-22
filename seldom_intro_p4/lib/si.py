@@ -167,7 +167,7 @@ def paint_logo(m, proj, wear=0.45, wet=0.0, fade=0.85):
     # only within the slab |z| < 0.03 in logo space (so the back of the crate is clean)
     sep = nt.nodes.new("ShaderNodeSeparateXYZ"); nt.links.new(mp.outputs["Vector"], sep.inputs[0])
     ab = nt.nodes.new("ShaderNodeMath"); ab.operation = 'ABSOLUTE'; nt.links.new(sep.outputs[2], ab.inputs[0])
-    lt = nt.nodes.new("ShaderNodeMath"); lt.operation = 'LESS_THAN'; lt.inputs[1].default_value = 0.03; nt.links.new(ab.outputs[0], lt.inputs[0])
+    lt = nt.nodes.new("ShaderNodeMath"); lt.operation = "LESS_THAN"; lt.inputs[1].default_value = 0.5; nt.links.new(ab.outputs[0], lt.inputs[0])
     wn = nt.nodes.new("ShaderNodeTexNoise"); wn.inputs["Scale"].default_value = 14.0; wn.inputs["Detail"].default_value = 10; wn.inputs["Roughness"].default_value = 0.7
     nt.links.new(tc.outputs["Object"], wn.inputs["Vector"])
     wr = nt.nodes.new("ShaderNodeMapRange"); wr.inputs[1].default_value = wear - 0.08; wr.inputs[2].default_value = wear + 0.08

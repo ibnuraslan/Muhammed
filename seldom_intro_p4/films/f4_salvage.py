@@ -58,7 +58,7 @@ def mud_material(name, wipe):
     gt = nt.nodes.new("ShaderNodeMath"); gt.operation = 'GREATER_THAN'; nt.links.new(e.outputs[0], gt.inputs[0]); nt.links.new(wv.outputs[0], gt.inputs[1])
     # patchy: some mud stays in the plank seams even after the wipe
     pn = nt.nodes.new("ShaderNodeTexNoise"); pn.inputs["Scale"].default_value = 6; nt.links.new(tc.outputs["Object"], pn.inputs["Vector"])
-    pr = nt.nodes.new("ShaderNodeMapRange"); pr.inputs[1].default_value = 0.35; pr.inputs[2].default_value = 0.6; pr.inputs[3].default_value = 0.1
+    pr = nt.nodes.new("ShaderNodeMapRange"); pr.inputs[1].default_value = 0.35; pr.inputs[2].default_value = 0.6; pr.inputs[3].default_value = 0.0; pr.inputs[4].default_value = 0.2
     nt.links.new(pn.outputs["Fac"], pr.inputs[0])
     mx = nt.nodes.new("ShaderNodeMath"); mx.operation = 'MAXIMUM'; nt.links.new(gt.outputs[0], mx.inputs[0]); nt.links.new(pr.outputs[0], mx.inputs[1])
     tr = nt.nodes.new("ShaderNodeBsdfTransparent"); ms = nt.nodes.new("ShaderNodeMixShader")
@@ -76,7 +76,7 @@ def crate(g, M, wipe=-1.0, mud=True):
     nb = 5; bh = CH / nb
     for s in (-1, 1):
         for k in range(nb):
-            o = ship.box("crate_board", (0, s * (CD / 2 - 0.011), bh * (k + 0.5)), (CW, 0.022, bh - 0.006), pm if s < 0 else g["crate"], bevel=0.003)
+            o = ship.box("crate_board", (0, s * (CD / 2 - 0.011), bh * (k + 0.5)), (CW, 0.022, bh - 0.0025), pm if s < 0 else g["crate"], bevel=0.0012)
             parts.append(o)
         for k in range(nb):
             parts.append(ship.box("crate_board", (s * (CW / 2 - 0.011), 0, bh * (k + 0.5)), (0.022, CD - 0.044, bh - 0.006), g["crate"], bevel=0.003))
