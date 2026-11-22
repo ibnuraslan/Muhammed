@@ -378,7 +378,7 @@ def blink_keys():
             pb.rotation_quaternion = Quaternion(V((1, 0, 0)), math.radians(22 * LID)); pb.keyframe_insert("rotation_quaternion", frame=fb)
 # hands: palms flat on the box sides, fingers forward along the sides, thumbs over the top edge
 GY = ENV("GY", "0.052"); GZ = ENV("GZ", "-0.020"); FD_UP = ENV("FDUP", "0.12"); SKIN = ENV("SKIN", "0.050")
-HANDP = {"L": (-0.3, -0.6, 0.03, 0.060), "R": (0.2, -0.6, 0.03, 0.045)}
+HANDP = {"L": (0.0, 0.12, 0.040, 0.0475), "R": (0.0, 0.12, 0.040, 0.0475)}
 HAND_FR = list(range(1, F_END + 1, 2)) + [F_END]
 SKINF = {(s, f): HANDP[s][3] for s in "LR" for f in HAND_FR}
 def key_hands(f, only=None):
@@ -388,7 +388,7 @@ def key_hands(f, only=None):
         out, up, gy, _ = HANDP[s]
         pp = M @ V((sx * BW / 2, gy, GZ)); nrm = Rb @ V((-sx, 0, 0)); fd = Rb @ V((sx * out, -1.0, up))
         place_hand(man, s, f, pp, nrm, fd, skin=SKINF[(s, f)])
-        pole = M @ V((sx * 0.75, 0.30, -0.30))
+        pole = M @ V((sx * 0.42, 0.45, -0.40))
         pb = R.PB["Pole_elbow." + s]; nme = "Pole_elbow." + s
         pb.location = R.rest(nme).to_3x3().inverted() @ (pole - R.BN[nme].head_local); pb.keyframe_insert("location", frame=f)
 for f in HAND_FR:
@@ -399,16 +399,15 @@ HANDV = {s: [v.index for v in body.data.vertices if any(g.weight > 0.3 and GI.ge
 def hand_contact(f, s):
     sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get(); Bi = box_M(f).inverted(); sx = 1 if s == "L" else -1
     e = body.evaluated_get(dg); me = e.to_mesh(); M = Bi @ e.matrix_world; pen = 0.0; gap = 9.0
-    if len(me.vertices) == len(body.data.vertices):
-        for i in HANDV[s]:
-            l = M @ me.vertices[i].co
+    for v in me.vertices:
+        if not any(g.weight > 0.3 and GI.get(g.group, "").endswith("." + s) and GI[g.group].startswith(("finger", "metacarpal", "wrist")) for g in v.groups): continue
+        if True:
+            l = M @ v.co
             if abs(l.y) < BD / 2 and abs(l.z) < BH / 2:
                 d = sx * l.x - BW / 2
                 if d < 0: pen = max(pen, -d)
                 else: gap = min(gap, d)
     e.to_mesh_clear(); return pen, gap
-for mm in body.modifiers:
-    if mm.type in ("SUBSURF", "MASK"): mm.show_viewport = False
 CONTACT = {}
 for it in range(4):
     nfix = 0
@@ -421,8 +420,6 @@ for it in range(4):
                 key_hands(f, only=s); nfix += 1
     print("CONTACT pass", it, "fixed", nfix, flush=True)
     if not nfix: break
-for mm in body.modifiers:
-    if mm.type in ("SUBSURF", "MASK"): mm.show_viewport = True
 print("CONTACT worst pen mm", round(max(v[0] for v in CONTACT.values()) * 1000, 1), "worst gap mm", round(max(v[1] for v in CONTACT.values() if v[1] < 9) * 1000, 1))
 blink_keys()
 for f in (1, F_END):
