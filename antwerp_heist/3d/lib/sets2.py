@@ -605,7 +605,8 @@ def garage(hour="night"):
     so = rp.modifiers.new("t", "SOLIDIFY"); so.thickness = 0.2; so.offset = -1
     for sx in (-1, 1):
         box("g_ramp_wall", (sx * 2.9, GY0 - RL / 2, 1.0), (0.2, RL, 3.4), conc)
-    box("g_ramp_roof", (0, GY0 - 2.0, GZ + 0.45), (5.8, 4.0, 0.3), slab)
+    box("g_ramp_roof", (0, GY0 - 2.0, GZ + 1.35), (5.8, 4.0, 0.3), slab)          # 2.3 m clear over the rising ramp
+    box("g_ramp_header", (0, GY0 - 0.05, GZ + 0.6), (5.8, 0.3, 1.2), slab)
     # columns, bays, wheel stops
     cols = []
     for ix in range(-2, 3):
