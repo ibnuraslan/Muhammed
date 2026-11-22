@@ -59,4 +59,14 @@ for _n, _e in (("OR_Key0", 1.15), ("OR_Key1", 1.25), ("OR_Key2", 0.6), ("OR_Key3
     if _n in bpy.data.objects: bpy.data.objects[_n].data.energy *= _e
 bpy.context.scene.render.motion_blur_shutter = 0.2
 print("ANIMFIX_DONE")
+# v012b: the vessel web hid the ear's shape in the growth close-ups; show the ear clearly (cartilage shape first),
+# then only a few thin vessels once it has turned pink (stage 3)
+for o in bpy.data.objects:
+    if o.name.startswith("SB_Vessel"):
+        if o.animation_data: o.animation_data_clear()
+        i = int(o.name[9:] or 0); keep = False   # v012b: none (they read as a red scribble over the ear)
+        o.hide_render = True; o.keyframe_insert("hide_render", frame=1)
+        if keep:
+            o.hide_render = False; o.keyframe_insert("hide_render", frame=990)
+            o.hide_render = True; o.keyframe_insert("hide_render", frame=1046)
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)

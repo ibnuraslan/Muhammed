@@ -242,5 +242,18 @@ if ea:
     bc = gm.node_tree.nodes["Principled BSDF"].inputs["Base Color"]
     for f, c in ((1, (0.9, 0.86, 0.8)), (871, (0.9, 0.86, 0.8)), (960, (0.84, 0.62, 0.55)), (1010, (0.8, 0.5, 0.42))):
         bc.default_value = (*c, 1); bc.keyframe_insert("default_value", frame=f)
+# v012b: harvested rib cartilage reads as living tissue (pearly ivory-pink, SSS, glossy), not white paper; block smoothed
+cm = bpy.data.materials.get("Cartilage")
+if cm and cm.node_tree:
+    pb = next(n for n in cm.node_tree.nodes if n.type == 'BSDF_PRINCIPLED')
+    pb.inputs["Base Color"].default_value = (0.9, 0.74, 0.66, 1); pb.inputs["Roughness"].default_value = 0.32
+    pb.inputs["Subsurface Weight"].default_value = 0.4; pb.inputs["Subsurface Radius"].default_value = (0.6, 0.3, 0.2)
+    pb.inputs["Subsurface Scale"].default_value = 0.01
+for n in ("Cart_Block", "Chest_Piece_Carry"):
+    o = bpy.data.objects.get(n)
+    if o and o.type == 'MESH':
+        for p_ in o.data.polygons: p_.use_smooth = True
+        if not any(m.type == 'SUBSURF' for m in o.modifiers):
+            sm = o.modifiers.new("Smooth", 'SUBSURF'); sm.levels = sm.render_levels = 2
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("LOOKS_DONE")

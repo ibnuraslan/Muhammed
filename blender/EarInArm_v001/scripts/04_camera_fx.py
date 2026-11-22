@@ -26,12 +26,12 @@ for o in bpy.data.collections["Studio_Tissue"].objects: o.hide_render = True; o.
 earB = OB["Ear_InArm"]
 # material: cartilage -> pink skin, a wipe across the ear (object Z) keyed 860..1040
 m = bpy.data.materials.new("SB_EarGrow"); m.use_nodes = True; nt = m.node_tree; nt.nodes.remove(nt.nodes["Principled BSDF"])
-cart = nt.nodes.new("ShaderNodeBsdfPrincipled"); cart.inputs["Base Color"].default_value = (0.86, 0.88, 0.9, 1); cart.inputs["Roughness"].default_value = 0.3
+cart = nt.nodes.new("ShaderNodeBsdfPrincipled"); cart.inputs["Base Color"].default_value = (0.92, 0.84, 0.78, 1); cart.inputs["Roughness"].default_value = 0.3
 cart.inputs["Subsurface Weight"].default_value = 0.35; cart.inputs["Subsurface Scale"].default_value = 0.01; cart.inputs["Coat Weight"].default_value = 0.4
 skin = nt.nodes.new("ShaderNodeBsdfPrincipled"); skin.inputs["Base Color"].default_value = (0.78, 0.45, 0.4, 1); skin.inputs["Roughness"].default_value = 0.45
 skin.inputs["Subsurface Weight"].default_value = 0.35; skin.inputs["Subsurface Scale"].default_value = 0.01
 tc = nt.nodes.new("ShaderNodeTexCoord"); sep = nt.nodes.new("ShaderNodeSeparateXYZ"); nt.links.new(tc.outputs["Object"], sep.inputs[0])
-noi = nt.nodes.new("ShaderNodeTexNoise"); noi.inputs["Scale"].default_value = 80.0; nt.links.new(tc.outputs["Object"], noi.inputs["Vector"])
+noi = nt.nodes.new("ShaderNodeTexNoise"); noi.inputs["Scale"].default_value = 6.0   # v012b: a soft wipe, not red squiggles; nt.links.new(tc.outputs["Object"], noi.inputs["Vector"])
 add = nt.nodes.new("ShaderNodeMath"); add.operation = 'MULTIPLY_ADD'; add.inputs[1].default_value = 0.012
 nt.links.new(noi.outputs["Fac"], add.inputs[0]); nt.links.new(sep.outputs["Z"], add.inputs[2])
 thr = nt.nodes.new("ShaderNodeMath"); thr.operation = 'GREATER_THAN'; nt.links.new(add.outputs[0], thr.inputs[0])
@@ -90,7 +90,7 @@ print("ARM_VESSELS", nv)
 
 
 # the forearm skin itself goes glassy around the pocket (x-ray), keyed 790-815 on, 1040-1066 off
-def xray(name, parent, r0, r1, keys, objs, static=None):
+def xray(name, parent, r0, r1, keys, objs, static=None, clear=0.2):
     xr = bpy.data.objects.new(name, None); bpy.data.collections["Props"].objects.link(xr); xr.parent = parent; xr.location = (0, 0, 0)
     bpy.context.view_layer.update(); ps_ = parent.matrix_world.to_scale().x; xr.scale = (1 / ps_,) * 3   # object coords in metres
     for ob_ in objs:
@@ -112,10 +112,10 @@ def xray(name, parent, r0, r1, keys, objs, static=None):
             em_ = nt_.nodes.new("ShaderNodeEmission"); em_.inputs["Color"].default_value = (0.4, 0.75, 1.0, 1); em_.inputs["Strength"].default_value = 0.4
             ad_ = nt_.nodes.new("ShaderNodeAddShader"); nt_.links.new(gl_.outputs[0], ad_.inputs[0]); nt_.links.new(em_.outputs[0], ad_.inputs[1])
             tr_ = nt_.nodes.new("ShaderNodeBsdfTransparent")
-            mx2 = nt_.nodes.new("ShaderNodeMixShader"); mx2.inputs[0].default_value = 0.2; nt_.links.new(tr_.outputs[0], mx2.inputs[1]); nt_.links.new(ad_.outputs[0], mx2.inputs[2])
+            mx2 = nt_.nodes.new("ShaderNodeMixShader"); mx2.inputs[0].default_value = clear; nt_.links.new(tr_.outputs[0], mx2.inputs[1]); nt_.links.new(ad_.outputs[0], mx2.inputs[2])
             mx_ = nt_.nodes.new("ShaderNodeMixShader"); nt_.links.new(amt.outputs[0], mx_.inputs[0]); nt_.links.new(src, mx_.inputs[1]); nt_.links.new(mx2.outputs[0], mx_.inputs[2])
             nt_.links.new(mx_.outputs[0], outn.inputs["Surface"])
-xray("Xray_Center", OB["Arm_Pocket"], 0.025, 0.05, ((1, 0.0), (870, 0.0), (871, 0.5), (960, 0.5), (961, 0.8), (1045, 0.8), (1046, 0.0)), [OB["Patient.body"]])   # v009d: gentler, no hollow crater
+xray("Xray_Center", OB["Arm_Pocket"], 0.05, 0.075, ((1, 0.0), (870, 0.0), (871, 0.75), (960, 0.85), (961, 0.95), (1045, 0.95), (1046, 0.0)), [OB["Patient.body"]], clear=0.6)   # v012b: clearer window, the ear shape reads through the skin and grows stronger   # v009d: gentler, no hollow crater
 # chest x-ray (beat 2): body and tee go glassy over the rib cage while the cartilage is harvested
 xray("Xray_Chest", OB["Chest_Thorax"], 0.2, 0.25, ((1, 0.0), (155, 0.0), (156, 0.92), (299, 0.92), (300, 0.0)), [OB["Patient.male_casualsuit06"]], static=V(0.0, -0.038, 1.013))   # v009d: only the tee over the chest (world centre: he sits still 140-346), jeans stay opaque   # the whole tee turns x-ray glass
 # v009d: the body under the tee was deleted by the clothes mask, so the glass tee showed an empty box with the head on top

@@ -129,12 +129,13 @@ for o in [pad] + tapes:
 
 def pat_up(f, face=None, head=(0, 0, 0), spine=(6, 0, 0)):
     PAT.key_body(f, SEAT, pitch=-8, spine=spine, head=head, legs=LEGS)
-def pat_rec(f, head=(8, -18, 4), breath=0.0):   # v009d: less head turn (client: neck over-stretched)
-    PAT.key_body(f, SEAT, pitch=-10, spine=(2 + breath, 0, 0), head=head, legs=LEGS)
+def pat_rec(f, head=(8, -18, 4), breath=0.0):
+    head = (head[0] + 14, head[1], head[2])   # v012b: reclined rig, chin down so he looks at his arm, not the ceiling   # v009d: less head turn (client: neck over-stretched)
+    PAT.key_body(f, SEAT, pitch=-10, spine=(6 + breath, 0, 0), head=head, legs=LEGS)
 ARM_R = ((-0.32, -0.12, 0.77), (0, -1, -0.15), (0, 0, -1))
 ARM_L_REST = ((0.32, -0.12, 0.77), (0, -1, -0.15), (0, 0, -1))
 EARHAND_W = EAR_C + Vector((0.055, 0.035, -0.304 - 0.115))   # seated: head is 0.304 lower than rest
-ARM_L_BOARD = ((0.58, -0.25, 1.0), (0.7, -0.71, -0.06), (0, 0, 1))   # v012: elbow bent ~35 deg, palm up   # v009k: elbow slightly bent, palm up (straight arm read as a T-pose)   # palm up on the arm board (tilt frame)
+ARM_L_BOARD = ((0.58, -0.25, 1.0), (0.456, -0.849, -0.267), (0.91, 0.289, 0.198))   # v012b: fingers along the sloped board in world space (rig is tilted 0.6 rad), hand flat   # v012: elbow bent ~35 deg, palm up   # v009k: elbow slightly bent, palm up (straight arm read as a T-pose)   # palm up on the arm board (tilt frame)
 # beat 1: shock. Head jolts back, hand flies up toward the dressing, then settles
 pat_up(1, head=(2, -10, 0)); pat_up(18, head=(0, -14, 2), spine=(4, 0, 0)); pat_up(40, head=(2, -18, 3), spine=(5, 1, 0))   # v012: head level, worried, no stare at the ceiling
 pat_up(80, head=(2, -8, 2), spine=(6, 2, 2)); pat_up(126, head=(2, 14, -2), spine=(6, 2, 2)); pat_up(165, head=(2, 10, -2))   # turns to the surgeon
@@ -717,7 +718,7 @@ for f in list(range(1, B["end"] + 1, 2)) + [B["end"]]:
     if 255 <= f <= 335:
         keymat(carry, f, Matrix.Translation(tip) @ forc.matrix_world.to_3x3().normalized().to_4x4() @ Matrix.Scale(CH_S, 4))
     # the carved ear: on the tray until 566, in forceps 566..700, in the pocket 700..1120, forceps 1120..1440, head after
-    pocket = patch.matrix_world @ Matrix.Translation((0, 0, -0.013)) @ Matrix.Rotation(R_(-90), 4, 'X') @ Matrix.Scale(0.6, 4)   # v009d: under the skin, fits the forearm
+    pocket = patch.matrix_world @ Matrix.Translation((0, 0, -0.011)) @ Matrix.Rotation(R_(90), 4, 'X') @ Matrix.Scale(0.7, 4)   # v012b: front of the ear faces out of the skin (its back read as a blank oval)   # v009d: under the skin, fits the forearm
     Rf = forc.matrix_world.to_quaternion().to_matrix().to_4x4()
     if f < 566:
         Me = ear_real.matrix_world.copy() if f >= 540 else None
