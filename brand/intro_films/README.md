@@ -21,7 +21,7 @@ The 'o' counters are transparent in the art, so the surface underneath (paper, b
   * 5: Deveau, as the projectionist.
   * 6: Deveau with a cap, gloves and a head torch, as the researcher. The script says "she", but the shared cast has no woman dressed for the polar cold, so he is a man for now. Flag it if this matters.
   * 7: Briggs, as the photographer.
-  * 8: Sarah, bonnet off, as the archivist.
+  * 8: Sarah, bonnet off, as the archivist, in a dark navy dress with a bottle-green knitted shawl worn like a cardigan.
 * `tools/mh_from_mpfb.py` builds `assets/makehuman` from the preinstalled MPFB, the MakeHuman CC0 system assets and the
   `makehuman` PyPI wheel. The proxy blocks download.tuxfamily.org, so the MH 1.x rig is converted from MPFB's
   standard rig; it gives the same bones and joint names.

@@ -187,7 +187,10 @@ def plate_and_file(center):
 
 
 def archivist(pose, M, look):
-    s = W.Sarah(name="Archivist", bonnet=False, shawl=True)
+    class Archivist(W.Sarah):
+        DRESS = (0.022, 0.026, 0.04)     # dark navy wool day dress (reads as fabric, not skin, under the warm lamp)
+        SHAWL = (0.035, 0.06, 0.04)      # bottle-green knitted shawl worn like a cardigan
+    s = Archivist(name="Archivist", bonnet=False, shawl=True)
     h = s.h; Mi = M.inverted()
     ex = pose(s, h, Mi) or {}
     s.finish(look_at=look, place=M, density=float(os.environ.get("HAIR", "0.7")))
@@ -227,7 +230,7 @@ elif SHOT in (2, 3):
     M = I.yaw(I.facing((1, -0.08)), base)
     archivist(pose2, M, DRAWER_FRONT)
     if SHOT == 2:
-        C.camera(Vector((-0.45, slot.y - 1.75, 1.35)), Vector((slot.x - 0.3, slot.y - 0.05, 1.25)), lens=35, fstop=2.4)
+        C.camera(Vector((-0.5, slot.y - 1.55, 1.5)), Vector((slot.x - 0.38, slot.y - 0.05, 1.42)), lens=40, fstop=2.4)   # waist-up
         C.finish(I.out("f8_k2_stuck"), cine={"exposure": 0.3, "sat": 1.05})
     else:
         C.camera(Vector((base.x - 0.42, base.y + 0.38, 1.72)), DRAWER_FRONT - FACE * 0.18 + Vector((0, 0, -0.03)), lens=38, fstop=2.8)
