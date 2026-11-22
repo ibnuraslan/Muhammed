@@ -197,9 +197,9 @@ def T12():
 
 def T13():
     A = ST.vault_complex("night", gate_angle=95)
-    m = MD.DOnorio(night=True); st = AC.Stand(m, (-0.3, -2.9), 90)
+    m = MD.DOnorio(night=True); st = AC.Stand(m, (0.3, -3.2), 90)
     sh = st.M @ m.h.bone_head("upperarm01.R")
-    hp = V((-0.3, -2.5, 1.15))
+    hp = V((0.3, -2.8, 1.15))
     st.hand("R", hp + V((0.06, 0, 0)), elbow=(0.7, 0.3, -0.8), grip=0.7)
     st.hand("L", hp + V((-0.06, 0, -0.02)), elbow=(0.7, 0.3, -0.8), grip=0.7)
     st.head_to(hp, share=0.8)
@@ -211,8 +211,8 @@ def T13():
     k2.location = pll + V((0, 0.0, 0.03)); k2.rotation_euler = (0, math.radians(-90), 0)
     AC.fit_clear(k1, [o for o in m.objects if o.type == 'MESH'], V((0, 0, 1)))
     AC.fit_clear(k2, [o for o in m.objects if o.type == 'MESH'], V((0, 0, 1)))
-    ST.light_spot("key_torch", (0.4, -3.4, 1.9), hp, 50, angle=35, color=(1.0, 0.9, 0.75))
-    return dict(a=((0.25, -3.55, 1.72), tuple(hp)), b=((0.18, -3.4, 1.65), tuple(hp)), lens=40, fstop=2.8, focus=hp,
+    ST.light_spot("key_torch", (1.0, -3.7, 1.9), hp, 50, angle=35, color=(1.0, 0.9, 0.75))
+    return dict(a=((0.85, -3.85, 1.72), tuple(hp)), b=((0.78, -3.7, 1.65), tuple(hp)), lens=40, fstop=2.8, focus=hp,
                 hand_ok=("key",), cine=dict(exposure=0.5))
 
 
