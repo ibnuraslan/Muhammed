@@ -83,8 +83,8 @@ def check(shot, limit=60, hand_ok=("oar", "tiller", "doll", "Sophia", "letter", 
                 if n == 0:
                     continue
                 # only the hand itself can grip (body mesh within HAND_R of a wrist/knuckle); clothing only at the cuff
-                ra = HAND_R if a.name.endswith("_body") else 0.07
-                rb = HAND_R if b.name.endswith("_body") else 0.07
+                ra = HAND_R if a.name.endswith(("_body", "_gloves")) else 0.07     # a glove is the hand
+                rb = HAND_R if b.name.endswith(("_body", "_gloves")) else 0.07
                 grip = _in_hands(a, pairs, r=ra) or ("person" in b and _in_hands(b, pairs, first=False, r=rb))
                 allowed = limit if any(k in b.name or k in b.get("person", "") for k in hand_ok) else 4
                 import numpy as np

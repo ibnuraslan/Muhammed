@@ -122,13 +122,13 @@ def T07():
 def T08():
     A = ST.vault_complex("night", gate_angle=0)
     c = crew(); y_end = -WALL - ST.CY
-    for i, (n, x, y) in enumerate((("Finotto", 0.3, y_end + 1.0), ("Leonardo", -0.35, y_end + 0.2), ("DOnorio", 0.25, y_end - 0.35))):
-        z = 0.0 if y > y_end else 0.18 * (1 + int((y_end - y) / 0.28))
+    for i, (n, x, y) in enumerate((("Finotto", 0.3, y_end + 2.6), ("Leonardo", -0.35, y_end + 1.6), ("DOnorio", 0.25, y_end + 0.6))):
+        z = 0.0
         st = AC.Stand(c[n], (x, y, z), 90); st.walk(0.2 + 0.3 * i)
         pl = torch_pose(st, "R", (0, -2.0, 0.6))
         st.finish(density=HAIR, floor_z=z)
         pl(f"torch_{n}", 45)
-    return dict(a=((-0.25, y_end - 2.2, 2.6), (0.1, -2.0, 0.9)), b=((-0.2, y_end - 1.8, 2.45), (0.1, -2.0, 0.9)), lens=28,
+    return dict(a=((-0.25, y_end - 1.5, 2.5), (0.1, -2.0, 0.9)), b=((-0.2, y_end - 1.1, 2.35), (0.1, -2.0, 0.9)), lens=26,
                 hand_ok=("torch", "stair"), cine=dict(exposure=0.6))
 
 
