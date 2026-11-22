@@ -122,7 +122,7 @@ def office_chair(name, loc, yaw, seat_h=0.445):
 def table(name, c, size, top_mat, leg_mat, h=0.76):
     root = bpy.data.objects.new(name, None); bpy.context.scene.collection.objects.link(root)
     parts = [box(name + "_top", (0, 0, h - 0.02), (size[0], size[1], 0.04), top_mat, bevel=0.006),
-             box(name + "_apron", (0, 0, h - 0.08), (size[0] - 0.12, size[1] - 0.12, 0.08), top_mat)]
+             box(name + "_apron", (0, 0, h - 0.07), (size[0] - 0.2, size[1] - 0.2, 0.06), top_mat)]
     for sx in (-1, 1):
         for sy in (-1, 1):
             parts.append(box(name + "_leg", (sx * (size[0] / 2 - 0.06), sy * (size[1] / 2 - 0.06), (h - 0.04) / 2), (0.05, 0.05, h - 0.04), leg_mat))
@@ -447,7 +447,7 @@ def turin_flat(hour="evening"):
     A["table_top"] = Vector((0, 0.2, 0.76))
     seat = flat("rush", (0.35, 0.22, 0.1), 0.85); fr = flat("chair_wood", (0.12, 0.06, 0.03), 0.6)
     A["seats"] = {}
-    for nm, (x, y, yaw) in {"W": (-1.1, 0.2, 0), "E": (1.1, 0.2, 180), "S": (0.1, -0.65, 90)}.items():
+    for nm, (x, y, yaw) in {"W": (-1.27, 0.2, 0), "E": (1.27, 0.2, 180), "S": (0.1, -0.82, 90)}.items():
         chair("t_chair_" + nm, (x, y, 0), yaw, seat, fr)
         A["seats"][nm] = (Vector((x, y, 0.46)), yaw)
     S.cyl("pendant_cord", (0, 0.2, RZ), (0, 0.2, 1.75), 0.004, mat=flat("cord", (0.02, 0.02, 0.02), 0.5), verts=6)
