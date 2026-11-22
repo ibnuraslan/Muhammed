@@ -292,7 +292,7 @@ def S28():
 def S29():
     A = ST.vault_complex("night")
     cops = []
-    for i, (x, y, hd) in enumerate(((0.35, -7.0, 92), (-0.45, -7.5, 86))):
+    for i, (x, y, hd) in enumerate(((0.35, -6.75, 92), (-0.45, -7.25, 86))):
         m = MD.Police(name=f"Police{i}"); st = AC.Stand(m, (x, y), hd)
         st.hand("R", (x - 0.05 * (1 if i else -1), y + 0.42, 1.25), elbow=(0.6, 0.3, -0.8), grip=1.0)
         st.head_to((0, -2.2, 1.3), share=0.6)
