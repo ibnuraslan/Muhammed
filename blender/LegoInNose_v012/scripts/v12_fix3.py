@@ -34,9 +34,13 @@ for f in list(range(1478, 1587, 6)) + [1586]:
     sc.frame_set(f)
     side = W(M, "clavicle.R") - W(M, "clavicle.L"); side.z = 0; side.normalize()
     along = W(M, "neck01") - W(M, "pelvis.L"); along.z = 0; along.normalize()
-    tgt = {"L": W(M, "spine01") - side * 0.09 + z * 0.15, "R": (W(M, "pelvis.L") + W(M, "pelvis.R")) / 2 + side * 0.07 + along * 0.06 + z * 0.15}
+    tgt = {"L": W(M, "spine01") - side * 0.09 + z * 0.27, "R": (W(M, "pelvis.L") + W(M, "pelvis.R")) / 2 + side * 0.07 + along * 0.06 + z * 0.25}   # on the belly surface (clip scan)
+    if f >= 1562:   # sitting up: palms on the blanket beside his hips
+        pc = (W(M, "pelvis.L") + W(M, "pelvis.R")) / 2
+        tgt = {"L": pc - side * 0.24 - along * 0.12, "R": pc + side * 0.24 - along * 0.12}
+        for k_ in tgt: tgt[k_].z = 0.705
     for s, sg in (("L", -1), ("R", 1)):
-        place_hand(M, s, f, tgt[s], -z, (-side * sg + along * 0.3).normalized())
+        place_hand(M, s, f, tgt[s], -z, (-side * sg + along * 0.3).normalized() if f < 1562 else -along)
         pole = M.pose.bones["Pole_elbow." + s]; m = pole.matrix.copy()
         m.translation = M.matrix_world.inverted() @ (W(M, "upperarm01." + s) + side * (0.35 * sg) - along * 0.2 - z * 0.05); pole.matrix = m; vl.update()
         pole.keyframe_insert("location", frame=f, group=pole.name)
@@ -73,6 +77,13 @@ for f in list(range(496, 576, 4)) + [575]:
     side = Vector((-fwd.y, fwd.x, 0)); a = eyes * 0.6 + pinch() * 0.4
     CAM.location = eyes + fwd * 0.62 + side * 0.12; CAM.location.z = eyes.z + 0.01; CAM.keyframe_insert("location", frame=f)
     AIM.location = a; AIM.keyframe_insert("location", frame=f); CAM.data.lens = 40; CAM.data.keyframe_insert("lens", frame=f)
+# 3c. phone off his knee (body_prop_cross 1269-1291): 2.5 cm up
+PH = bpy.data.objects["Prop_Phone"]
+for fc in fcs(PH):
+    if fc.data_path == "location" and fc.array_index == 2:
+        for k in fc.keyframe_points:
+            if 1266 <= k.co.x <= 1292: k.co.y += 0.025; k.handle_left.y += 0.025; k.handle_right.y += 0.025
+        fc.update()
 # 4. DOF
 dof = CAM.data.dof
 for f, v in ((354, dof.aperture_fstop), (355, 16.0), (390, 16.0), (391, dof.aperture_fstop)):
