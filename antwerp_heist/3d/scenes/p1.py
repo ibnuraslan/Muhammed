@@ -73,7 +73,7 @@ def S07():
     A = S2.security_room("alarm")
     m = MD.Operator(); se = AC.Seated(m, (0.2, 0.15, 0.47), 90)
     for sd, x in (("L", -0.05), ("R", 0.45)):
-        se.hand(sd, (x + 0.0, 0.86, 0.81), elbow=(0.7, 0.3, -0.7), curl=20)
+        se.hand(sd, (x + 0.0, 0.88, 0.835), elbow=(0.7, 0.3, -0.7), curl=20)
     se.head_to((0.0, 2.0, 1.5), share=0.7)
     se.finish(look=(0, 2.0, 1.4), density=HAIR)
     return dict(a=((-1.0, -1.5, 1.6), (0.15, 2.0, 1.45)), b=((-0.75, -1.15, 1.55), (0.15, 2.0, 1.45)), lens=28,
@@ -97,8 +97,8 @@ def S09():
 def S10():
     A = S2.office("leasing")
     mg = MD.Manager(); se = AC.Seated(mg, A["seat_behind"], -90)
-    se.hand("R", (0.15, A["desk_y"] - 0.25, 0.81), elbow=(0.7, 0.3, -0.7), curl=20)
-    se.hand("L", (-0.25, A["desk_y"] - 0.2, 0.81), elbow=(0.7, 0.3, -0.7), curl=24)
+    se.hand("R", (0.15, A["desk_y"] - 0.25, 0.835), elbow=(0.7, 0.3, -0.7), curl=20)
+    se.hand("L", (-0.25, A["desk_y"] - 0.2, 0.835), elbow=(0.7, 0.3, -0.7), curl=24)
     se.head_to((0.15, -0.3, 1.2), share=0.6)
     se.finish(look=(0.15, -0.3, 1.25), density=HAIR)
     le = MD.Leonardo(); sv = AC.Seated(le, A["seat_visitor"], 90, lean=4)
@@ -134,12 +134,12 @@ def S13():
     A = S2.office("leasing")
     dy = A["desk_y"]; k = A["keys"]
     mg = MD.Manager(); se = AC.Seated(mg, A["seat_behind"], -90, lean=14)
-    se.hand("R", (k.x + 0.03, k.y + 0.06, 0.815), elbow=(0.7, 0.3, -0.7), curl=16)
-    se.hand("L", (-0.3, dy + 0.0, 0.815), elbow=(0.7, 0.3, -0.7), curl=24)
+    se.hand("R", (k.x + 0.03, k.y + 0.06, 0.835), elbow=(0.7, 0.3, -0.7), curl=16)
+    se.hand("L", (-0.3, dy + 0.0, 0.835), elbow=(0.7, 0.3, -0.7), curl=24)
     se.head_to(k, share=0.8)
     se.finish(look=k, density=HAIR)
     le = MD.Leonardo(); sv = AC.Seated(le, A["seat_visitor"], 90, lean=12)
-    sv.hand("R", (0.25, dy - 0.42, 0.815), elbow=(0.7, 0.3, -0.7), curl=24)
+    sv.hand("R", (0.25, dy - 0.42, 0.835), elbow=(0.7, 0.3, -0.7), curl=24)
     sv.head_to(k, share=0.8)
     sv.finish(look=k, density=HAIR)
     return dict(a=((0.1, 0.5, 2.55), (0.08, 0.42, 0.79)), b=((0.08, 0.42, 2.38), (0.08, 0.38, 0.79)), lens=26,
@@ -214,7 +214,7 @@ def S21():
     m = MD.Guard(); se = AC.Seated(m, (0.2, 0.15, 0.47), 90)
     b = A["gate_button"]
     se.hand("R", (b.x + 0.02, b.y - 0.03, b.z + 0.025), elbow=(0.7, 0.3, -0.7), curl=30)
-    se.hand("L", (0.45, 0.86, 0.81), elbow=(0.7, 0.3, -0.7), curl=20)
+    se.hand("L", (0.45, 0.88, 0.835), elbow=(0.7, 0.3, -0.7), curl=20)
     se.head_to((0.0, 1.9, 1.62), share=0.7)
     se.finish(look=(0.0, 1.9, 1.62), density=HAIR)
     return dict(a=((-0.65, -1.2, 1.62), (0.0, 1.95, 1.45)), b=((-0.45, -0.9, 1.58), (0.0, 1.95, 1.5)), lens=32,
@@ -304,7 +304,7 @@ def S29():
 def S30():
     A = S2.security_room("building")
     g = MD.Guard(); se = AC.Seated(g, (0.2, 0.15, 0.47), 90)
-    se.hand("L", (-0.05, 0.86, 0.81), elbow=(0.7, 0.3, -0.7), curl=20); se.hand("R", (0.45, 0.86, 0.81), elbow=(0.7, 0.3, -0.7), curl=20)
+    se.hand("L", (-0.05, 0.88, 0.835), elbow=(0.7, 0.3, -0.7), curl=20); se.hand("R", (0.45, 0.88, 0.835), elbow=(0.7, 0.3, -0.7), curl=20)
     se.head_to((0.0, 1.9, 1.5), share=0.6); se.finish(look=(0, 1.9, 1.5), density=HAIR)
     m = MD.Leonardo(); st = AC.Stand(m, (-2.95, -0.85), 15); st.head_to((0.2, 0.4, 1.3), share=0.6)
     st.finish(look=(0.2, 0.4, 1.3), density=HAIR)
@@ -403,8 +403,8 @@ def S37():
     A = S2.office("leonardo")
     m = MD.Leonardo(); se = AC.Seated(m, A["seat_behind"], -90, lean=10)
     dy = A["desk_y"]
-    se.hand("R", (0.25, dy - 0.15, 0.815), elbow=(0.7, 0.3, -0.7), curl=24)
-    se.hand("L", (-0.25, dy - 0.15, 0.815), elbow=(0.7, 0.3, -0.7), curl=24)
+    se.hand("R", (0.25, dy - 0.15, 0.835), elbow=(0.7, 0.3, -0.7), curl=24)
+    se.hand("L", (-0.25, dy - 0.15, 0.835), elbow=(0.7, 0.3, -0.7), curl=24)
     se.head_to((0, -2.0, 1.0), share=0.5)
     se.finish(look=(0, -2, 1.0), density=HAIR)
     return dict(a=((0.62, 1.98, 1.55), (-0.2, -1.6, 0.9)), b=((0.5, 1.98, 1.48), (-0.25, -1.6, 0.9)), lens=26,

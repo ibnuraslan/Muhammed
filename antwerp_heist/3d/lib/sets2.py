@@ -100,6 +100,25 @@ def chair(name, loc, yaw, mat_seat, mat_frame, seat_h=0.46, back=True):
     return root
 
 
+def office_chair(name, loc, yaw, seat_h=0.445):
+    """Swivel office chair: padded seat (top at seat_h, 1 cm under the sitter's seat point), tall padded back,
+    gas column on a five-star base. Faces yaw (deg, 0 = +x)."""
+    up = flat(name + "_uph", (0.05, 0.04, 0.035), 0.75); mt = flat(name + "_metal", (0.05, 0.05, 0.055), 0.35, metal=0.8)
+    root = bpy.data.objects.new(name, None); bpy.context.scene.collection.objects.link(root)
+    parts = [box(name + "_seat", (0.02, 0, seat_h - 0.04), (0.46, 0.46, 0.08), up, bevel=0.025),
+             box(name + "_back", (-0.24, 0, seat_h + 0.3), (0.07, 0.44, 0.5), up, bevel=0.03),
+             S.cyl(name + "_spine", (-0.24, 0, seat_h - 0.05), (-0.22, 0, seat_h + 0.06), 0.02, mat=mt, verts=10),
+             S.cyl(name + "_column", (0, 0, 0.08), (0, 0, seat_h - 0.08), 0.025, mat=mt, verts=16)]
+    for k in range(5):
+        a = 2 * math.pi * k / 5
+        parts.append(S.cyl(name + "_leg", (0, 0, 0.08), (0.3 * math.cos(a), 0.3 * math.sin(a), 0.05), 0.016, mat=mt, verts=8))
+        parts.append(S.cyl(name + "_castor", (0.3 * math.cos(a), 0.3 * math.sin(a), 0.05), (0.3 * math.cos(a), 0.3 * math.sin(a), 0.0), 0.022, mat=mt, verts=10))
+    for o in parts:
+        o.parent = root
+    root.location = loc; root.rotation_euler = (0, 0, math.radians(yaw))
+    return root
+
+
 def table(name, c, size, top_mat, leg_mat, h=0.76):
     root = bpy.data.objects.new(name, None); bpy.context.scene.collection.objects.link(root)
     parts = [box(name + "_top", (0, 0, h - 0.02), (size[0], size[1], 0.04), top_mat, bevel=0.006),
@@ -203,7 +222,7 @@ def office(kind="leonardo", hour="day"):
     desk_y = 0.75
     _ph("metal_office_desk", (0.0, desk_y, 0.0), rot_z=math.radians(180))
     A["desk_top"] = Vector((0, desk_y, 0.79)); A["desk_y"] = desk_y
-    _ph("modern_arm_chair_01", (0.0, desk_y + 0.85, 0.0), rot_z=math.radians(180))
+    office_chair("boss_chair", (0.0, desk_y + 0.8, 0.0), -90)
     A["seat_behind"] = Vector((0, desk_y + 0.8, 0.46)); A["face_behind"] = -90.0        # faces -y (toward the door)
     A["seat_visitor"] = Vector((0.15, desk_y - 1.05, 0.46)); A["face_visitor"] = 90.0
     chair("visitor_chair", (0.15, desk_y - 1.05, 0), 90, flat("vchair_seat", (0.15, 0.08, 0.05), 0.6), flat("vchair_frame", (0.05, 0.05, 0.05), 0.3, 0.7))
@@ -290,8 +309,8 @@ def security_room(kind="building", screen_images=None):
     for i in range(6):
         box("console_btn", (-0.4 + i * 0.09, RY - 1.2, 0.795), (0.04, 0.04, 0.012), ledg if i % 3 else ledr)
     A["gate_button"] = Vector((-0.4, RY - 1.2, 0.8))
-    _ph("modern_arm_chair_01", (0.2, RY - 1.85, 0.0), rot_z=0.0)
-    A["seat"] = Vector((0.2, RY - 1.75, 0.46)); A["face"] = 90.0
+    office_chair("sec_chair", (0.2, 0.15, 0.0), 90)
+    A["seat"] = Vector((0.2, 0.15, 0.47)); A["face"] = 90.0
     phone("sec_phone", (0.85, RY - 1.0, 0.79), yaw=180)
     # VCR rack on the right wall: time-lapse recorders and stacked tapes
     rack = steel_paint("rack", (0.06, 0.06, 0.065), 0.5)
