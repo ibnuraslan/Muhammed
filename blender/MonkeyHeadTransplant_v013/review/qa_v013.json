@@ -1,0 +1,1140 @@
+{
+ "frames": {
+  "1": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "199": [
+   [
+    "CLAW",
+    "Surgeon.L curl 30"
+   ],
+   [
+    "FAN",
+    "Surgeon.L fingers fanned 28 deg (index vs little)"
+   ]
+  ],
+  "247": [
+   [
+    "CLAW",
+    "Surgeon.L curl 49"
+   ]
+  ],
+  "271": [
+   [
+    "CLAW",
+    "Surgeon.L curl 48"
+   ]
+  ],
+  "325": [
+   [
+    "CLAW",
+    "Surgeon.L curl 68"
+   ]
+  ],
+  "337": [
+   [
+    "CLAW",
+    "Surgeon.L curl 31"
+   ],
+   [
+    "FAN",
+    "Surgeon.L fingers fanned 44 deg (index vs little)"
+   ]
+  ],
+  "361": [
+   [
+    "CLAW",
+    "Surgeon.L curl 31"
+   ],
+   [
+    "FAN",
+    "Surgeon.L fingers fanned 50 deg (index vs little)"
+   ]
+  ],
+  "619": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "625": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "631": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "637": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "643": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "649": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "655": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "661": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "667": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "673": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "685": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "691": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "697": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "709": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "715": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "721": [
+   [
+    "CLAW",
+    "Anaes.R curl 72"
+   ]
+  ],
+  "871": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "877": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "883": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "943": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "955": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "961": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 24 deg"
+   ]
+  ],
+  "967": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 56 deg"
+   ]
+  ],
+  "973": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "979": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "985": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "991": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "997": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "1003": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "1009": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 72 deg"
+   ]
+  ],
+  "1015": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 62 deg"
+   ]
+  ],
+  "1021": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 50 deg"
+   ]
+  ],
+  "1027": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 39 deg"
+   ]
+  ],
+  "1033": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 27 deg"
+   ]
+  ],
+  "1039": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1045": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1051": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1057": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1063": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1069": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1075": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1081": [
+   [
+    "FILL",
+    "hair / top of head 46%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1087": [
+   [
+    "FILL",
+    "hair / top of head 40%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1093": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1099": [
+   [
+    "FILL",
+    "hair / top of head 38%"
+   ]
+  ],
+  "1105": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1111": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1117": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1177": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1183": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1207": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1219": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1255": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1279": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1285": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1291": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1297": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1303": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1309": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1315": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1321": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1327": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1333": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1339": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1345": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1351": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1357": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1363": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1369": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1375": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1381": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1387": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1393": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1399": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1465": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 0.8 cm with no hand on it (nearest finger 249 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 9.6 cm with no hand on it (nearest finger 253 cm)"
+   ]
+  ],
+  "1471": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 1.1 cm with no hand on it (nearest finger 255 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 9.8 cm with no hand on it (nearest finger 255 cm)"
+   ]
+  ],
+  "1477": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 1.3 cm with no hand on it (nearest finger 257 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 8.1 cm with no hand on it (nearest finger 259 cm)"
+   ]
+  ],
+  "1483": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 1.5 cm with no hand on it (nearest finger 258 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 5.2 cm with no hand on it (nearest finger 260 cm)"
+   ]
+  ],
+  "1489": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 1.7 cm with no hand on it (nearest finger 258 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 1.8 cm with no hand on it (nearest finger 261 cm)"
+   ]
+  ],
+  "1495": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 1.9 cm with no hand on it (nearest finger 260 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 1.5 cm with no hand on it (nearest finger 260 cm)"
+   ]
+  ],
+  "1501": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.1 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 4.4 cm with no hand on it (nearest finger 260 cm)"
+   ]
+  ],
+  "1507": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.2 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 6.6 cm with no hand on it (nearest finger 255 cm)"
+   ]
+  ],
+  "1519": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.5 cm with no hand on it (nearest finger 261 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 9.2 cm with no hand on it (nearest finger 260 cm)"
+   ]
+  ],
+  "1525": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.6 cm with no hand on it (nearest finger 261 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 9.7 cm with no hand on it (nearest finger 257 cm)"
+   ]
+  ],
+  "1531": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.6 cm with no hand on it (nearest finger 259 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 10.0 cm with no hand on it (nearest finger 262 cm)"
+   ]
+  ],
+  "964": [
+   [
+    "ROLL",
+    "horizon tilted 40 deg"
+   ]
+  ],
+  "970": [
+   [
+    "ROLL",
+    "horizon tilted 69 deg"
+   ]
+  ],
+  "976": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "982": [
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "988": [
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "994": [
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "1000": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "1006": [
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "1012": [
+   [
+    "ROLL",
+    "horizon tilted 67 deg"
+   ]
+  ],
+  "1018": [
+   [
+    "ROLL",
+    "horizon tilted 56 deg"
+   ]
+  ],
+  "1024": [
+   [
+    "ROLL",
+    "horizon tilted 44 deg"
+   ]
+  ],
+  "1030": [
+   [
+    "ROLL",
+    "horizon tilted 33 deg"
+   ]
+  ],
+  "1036": [
+   [
+    "ROLL",
+    "horizon tilted 22 deg"
+   ]
+  ],
+  "1453": [
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 2.8 cm with no hand on it (nearest finger 231 cm)"
+   ]
+  ],
+  "1459": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 0.5 cm with no hand on it (nearest finger 241 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 7.2 cm with no hand on it (nearest finger 239 cm)"
+   ]
+  ],
+  "1513": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.4 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 8.2 cm with no hand on it (nearest finger 262 cm)"
+   ]
+  ],
+  "1537": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.7 cm with no hand on it (nearest finger 258 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 10.0 cm with no hand on it (nearest finger 256 cm)"
+   ]
+  ],
+  "1543": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.7 cm with no hand on it (nearest finger 258 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 10.0 cm with no hand on it (nearest finger 261 cm)"
+   ]
+  ],
+  "1549": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.7 cm with no hand on it (nearest finger 261 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 9.9 cm with no hand on it (nearest finger 258 cm)"
+   ]
+  ],
+  "1555": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.7 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 9.9 cm with no hand on it (nearest finger 260 cm)"
+   ]
+  ],
+  "1561": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.7 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 9.9 cm with no hand on it (nearest finger 261 cm)"
+   ]
+  ],
+  "1567": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.7 cm with no hand on it (nearest finger 261 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 10.0 cm with no hand on it (nearest finger 260 cm)"
+   ]
+  ],
+  "1573": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.7 cm with no hand on it (nearest finger 261 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 10.0 cm with no hand on it (nearest finger 262 cm)"
+   ]
+  ],
+  "1579": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.6 cm with no hand on it (nearest finger 259 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 9.9 cm with no hand on it (nearest finger 260 cm)"
+   ]
+  ],
+  "1585": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.5 cm with no hand on it (nearest finger 258 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 9.7 cm with no hand on it (nearest finger 258 cm)"
+   ]
+  ],
+  "1591": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.4 cm with no hand on it (nearest finger 258 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 9.0 cm with no hand on it (nearest finger 262 cm)"
+   ]
+  ],
+  "1597": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.3 cm with no hand on it (nearest finger 260 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 7.9 cm with no hand on it (nearest finger 259 cm)"
+   ]
+  ],
+  "1603": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.2 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 6.2 cm with no hand on it (nearest finger 256 cm)"
+   ]
+  ],
+  "1609": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 2.0 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 3.9 cm with no hand on it (nearest finger 257 cm)"
+   ]
+  ],
+  "1615": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 1.8 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 0.9 cm with no hand on it (nearest finger 258 cm)"
+   ]
+  ],
+  "1621": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 1.7 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 2.5 cm with no hand on it (nearest finger 257 cm)"
+   ]
+  ],
+  "1627": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 1.4 cm with no hand on it (nearest finger 255 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 5.8 cm with no hand on it (nearest finger 250 cm)"
+   ]
+  ],
+  "1633": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 1.2 cm with no hand on it (nearest finger 249 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 8.5 cm with no hand on it (nearest finger 250 cm)"
+   ]
+  ],
+  "1639": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 1.0 cm with no hand on it (nearest finger 240 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 9.9 cm with no hand on it (nearest finger 236 cm)"
+   ]
+  ],
+  "1645": [
+   [
+    "PROPMOVE",
+    "ClockHandHour moves 0.7 cm with no hand on it (nearest finger 236 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 9.4 cm with no hand on it (nearest finger 239 cm)"
+   ]
+  ],
+  "1651": [
+   [
+    "PROPMOVE",
+    "ClockHandMin moves 6.6 cm with no hand on it (nearest finger 235 cm)"
+   ]
+  ],
+  "211": [
+   [
+    "FAN",
+    "Surgeon.L fingers fanned 34 deg (index vs little)"
+   ],
+   [
+    "FAN",
+    "Surgeon.R fingers fanned 35 deg (index vs little)"
+   ]
+  ],
+  "241": [
+   [
+    "FAN",
+    "Surgeon.R fingers fanned 31 deg (index vs little)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 90,
+  "CLAW": 7,
+  "FILL": 22,
+  "ROLL": 26,
+  "PROPMOVE": 66,
+  "FAN": 6
+ }
+}
