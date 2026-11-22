@@ -77,6 +77,8 @@ class _Base:
             for k, v in list(self.attached):
                 k.location.z += dz
             self.M = Matrix.Translation((0, 0, dz)) @ self.M
+        if getattr(self, "seat_top", None) is not None:
+            self._rest_on_seat()
         for prop, local in self.attached_pending:
             prop.matrix_world = self.M @ local
         bpy.context.view_layer.update()
@@ -86,6 +88,23 @@ class _Base:
 
     attached = ()
     attached_pending = ()
+
+    def _rest_on_seat(self, margin=0.016):
+        """Seated: cloth that hangs below the seat top over the seat footprint (jacket skirts, trouser seat) is lifted
+        to lie on it, like real cloth resting on a chair."""
+        import numpy as np
+        c = self.seat_xy; r = 0.36; z0 = self.seat_top + margin
+        for o in self.m.objects:
+            if o.type != 'MESH' or not any(k in o.name for k in ("jacket", "trousers", "shirt", "tie")):
+                continue
+            me = o.data; co = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", co); co = co.reshape(-1, 3)
+            M = np.array(o.matrix_world); w = co @ M[:3, :3].T + M[:3, 3]
+            sel = (np.hypot(w[:, 0] - c[0], w[:, 1] - c[1]) < r) & (w[:, 2] < z0) & (w[:, 2] > z0 - 0.25)
+            if not sel.any():
+                continue
+            w[sel, 2] = z0
+            Mi = np.linalg.inv(M); co = w @ Mi[:3, :3].T + Mi[:3, 3]
+            me.vertices.foreach_set("co", co.astype(np.float32).ravel()); me.update()
 
     def attach(self, prop, local_matrix):
         """Place a prop given in the rig frame (e.g. a phone at the ear) once the man is placed."""
@@ -173,6 +192,8 @@ class Stand(_Base):
 class Seated(_Base):
     def __init__(self, m, seat, heading, feet=None, lean=8.0, twist=0.0, knees_out=0.12):
         self.m = m
+        self.seat_top = seat[2] - 0.01; self.seat_xy = (seat[0], seat[1])
+        seat = (seat[0], seat[1], seat[2] + 0.015)
         self.s = SP.Seat(m, seat, heading)
         self.M = self.s.M; self.Mi = self.s.Mi
         h = m.h
