@@ -23,7 +23,10 @@ def cotton(name, color, rough=0.75, weave=1600.0):
 
 
 def leather_jacket(name, color):
-    m = D.leather_material(name, color=color, rough=0.48, wet=0.15)
+    """Worn, matte leather (a glossy brown leather reads as skin under warm practicals)."""
+    m = D.leather_material(name, color=color, rough=0.72, wet=0.0)
+    p = m.node_tree.nodes["Principled BSDF"]; p.inputs['Subsurface Weight'].default_value = 0.0
+    p.inputs['Sheen Weight'].default_value = 0.25
     return m
 
 
@@ -106,7 +109,8 @@ class ModernMan(W._Woman):
             vee = (y < -0.04) & (z > vz) & (np.abs(x - cx) < 0.012 + (z - vz) * 0.42)
             jk &= ~vee
             if self.JACKET in ("leather",):
-                mat = leather_jacket(self.name + "_jacket", self.JACKET_COL)
+                # matte suede / worn leather (glossy leather read as skin under warm light): a dense fabric shader
+                mat = W.cloth(self.name + "_jacket", self.JACKET_COL, rough=0.82, sheen=0.15, weave=1800, bump=0.15)
             else:
                 mat = W.cloth(self.name + "_jacket", self.JACKET_COL, rough=0.82, weave=520, sheen=0.25)
             off = {"blazer": 0.012, "leather": 0.014, "bomber": 0.02, "coat": 0.016}[self.JACKET]
@@ -245,7 +249,7 @@ class DOnorio(ModernMan):
     EXTRA = {"targets/head/head-age-incr": 0.3}
     SKIN = dict(base=(0.45, 0.28, 0.19), weather=0.3)
     HAIR = (0.92, 0.2); HAIR_LEN = (0.03, 0.05); HAIRLINE = 0.006
-    SHIRT = (0.06, 0.06, 0.065); JACKET = "leather"; JACKET_COL = (0.045, 0.026, 0.016)
+    SHIRT = (0.06, 0.06, 0.065); JACKET = "leather"; JACKET_COL = (0.03, 0.022, 0.018)
     TROUSERS = (0.015, 0.015, 0.017); SHOES = (0.012, 0.01, 0.01)
 
     def __init__(self, name="DOnorio", night=False, **kw):

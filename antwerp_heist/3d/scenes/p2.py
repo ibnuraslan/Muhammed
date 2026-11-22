@@ -231,7 +231,7 @@ def T15():
     A = ST.vault_complex("night", gate_angle=95)
     d = A["dial"]
     # a pinhole camera concealed in the ceiling fitting above the door, aimed at the dial
-    cam = V((0.55, -WALL - 1.15, ST.CZ - 0.06))
+    cam = V((-0.45, -WALL - 1.15, ST.CZ - 0.06))
     blk = ST.flat("pinhole_body", (0.02, 0.02, 0.022), 0.4)
     ST.box("pinhole_cam", cam, (0.05, 0.04, 0.035), blk, bevel=0.004)
     import ship as SH
@@ -239,8 +239,8 @@ def T15():
     S2.ripple_bands(cam + V((-0.03, 0.02, -0.025)), (d - cam), (0.06,), width=0.07, strength=2.5, alpha=0.5)
     ST.light_point("pinhole_fill", cam + V((0.25, -0.35, -0.3)), 6, (1.0, 0.8, 0.55), radius=0.1)
     ST.light_spot("door_torch", (0.8, -3.0, 1.8), d, 120, angle=30, color=(1.0, 0.85, 0.65))
-    return dict(a=(tuple(cam + V((0.6, -0.9, -0.35))), tuple(cam)), b=(tuple(cam + V((0.5, -0.8, -0.3))), tuple(cam.lerp(d, 0.25))),
-                lens=35, fstop=2.8, focus=cam, cine=dict(exposure=1.8))
+    return dict(a=((0.4, -1.3, 2.0), tuple(cam)), b=((0.35, -1.35, 1.98), tuple(cam.lerp(d, 0.2))),
+                lens=35, fstop=2.8, focus=cam, cine=dict(exposure=0.3))
 
 
 def T16():
@@ -254,7 +254,7 @@ def T17():
     mc = A["mag_contact"]
     S2.ripple_bands(mc + V((0, -0.02, -0.025)), (0, -1, 0), (0.06,), width=0.08, strength=2.5, alpha=0.5)
     ST.light_spot("contact_torch", (mc.x + 0.6, mc.y - 1.2, mc.z - 0.6), mc, 90, angle=25, color=(1.0, 0.85, 0.65))
-    return dict(a=(tuple(mc + V((0.45, -0.75, -0.2))), tuple(mc + V((0, 0, -0.02)))), b=(tuple(mc + V((0.38, -0.65, -0.17))), tuple(mc + V((0, 0, -0.02)))),
+    return dict(a=(tuple(mc + V((0.35, -0.7, 0.28))), tuple(mc + V((0, 0, -0.02)))), b=(tuple(mc + V((0.3, -0.6, 0.24))), tuple(mc + V((0, 0, -0.02)))),
                 lens=35, fstop=5.6, focus=mc, cine=dict(exposure=1.8))
 
 
@@ -378,7 +378,7 @@ def T27():
     _tabletop((0.05, 0.05, 0.06))
     for i in range(7):
         c = PR.cash_bundle(f"cash{i}", (0.5, 0.4, 0.58) if i % 2 else (0.35, 0.5, 0.36))
-        c.location = (-0.15 + (i % 4) * 0.1, -0.06 + (i // 4) * 0.12, 0.0); c.rotation_euler = (0, 0, math.radians(8 * (i % 3) - 6))
+        c.location = (-0.24 + (i % 4) * 0.16, -0.06 + (i // 4) * 0.12, 0.0); c.rotation_euler = (0, 0, math.radians(8 * (i % 3) - 6))
     return dict(a=((0.25, -0.35, 0.22), (0, 0, 0.0)), b=((0.2, -0.3, 0.18), (0, 0, 0.0)), lens=50, fstop=4.0, focus=(0, 0, 0))
 
 
