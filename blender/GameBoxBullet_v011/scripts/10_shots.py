@@ -89,7 +89,7 @@ BEATS = [(1, "A stray bullet"), (51, "ripped through"), (97, "the wall of his ho
          (941, "It stopped halfway through"), (1039, "buried inside the box"), (1137, "His game collection"), (1213, "just saved his life")]
 F_FIRE = 10      # muzzle flash ("stray" @13)
 F_WALL = 99      # nose meets the siding ("wall" @97)
-F_DRY = 143      # nose leaves the drywall into the room
+F_DRY = 141      # nose leaves the drywall into the room
 F_HIT = 519      # nose meets the box cover ("slammed" @519)
 F_STOP = 962     # bullet at rest, halfway ("stopped" @948)
 
@@ -476,7 +476,7 @@ HITW = box_M(F_HIT) @ HIT_L
 print("HIT world", HITW)
 def line_pt(y):   # straight line from the muzzle to the impact point
     t = (y - MUZ.y) / (HITW.y - MUZ.y); return MUZ.lerp(HITW, t)
-pre = pchip([(F_FIRE, MUZ.y + 0.02), (F_FIRE + 6, -29.2), (54, -24.0), (56, -22.6), (96, -0.55), (F_WALL, 0.0), (120, 0.08), (F_DRY, 0.16),
+pre = pchip([(F_FIRE, MUZ.y + 0.02), (F_FIRE + 6, -29.2), (54, -24.0), (56, -22.6), (96, -1.9), (F_WALL, 0.0), (120, 0.08), (F_DRY, 0.16),
              (168, 0.42), (222, 0.86), (276, 1.27), (350, 1.80), (420, 2.30), (496, 2.80), (F_HIT, HITW.y)])
 depth = pchip([(F_HIT, 0.0), (560, 0.003), (602, 0.005), (675, 0.008), (700, 0.013), (735, 0.029), (754, 0.037), (790, 0.050), (830, 0.063),
                (860, 0.070), (891, 0.0755), (940, 0.0835), (F_STOP, 0.085), (F_END, 0.085)])
@@ -545,12 +545,12 @@ def ballistic(o, p0, v0, f0, f1, grav=0.4, drag=0.8, spin=6.0, floor=None, step=
         kf(o, "location", f); kf(o, "rotation_quaternion", f)
         if landed or f - f0 > 520: break
 HOLE = V((0, 0, 1.47))
-for i in range(44):    # outside: siding splinters and paint chips kick back out of the entry hole
-    o = piece("Splinter_out_%02d" % i, (random.uniform(0.004, 0.014), random.uniform(0.002, 0.004), random.uniform(0.012, 0.05)), random.choice([M_chip, M_chip, M_splinter]))
+for i in range(80):    # outside: siding splinters and paint chips kick back out of the entry hole
+    o = piece("Splinter_out_%02d" % i, (random.uniform(0.006, 0.02), random.uniform(0.002, 0.005), random.uniform(0.015, 0.06)), random.choice([M_chip, M_chip, M_splinter]))
     a = random.uniform(0, 6.28); r = random.uniform(0.01, 0.06)
     p0 = HOLE + V((r * math.cos(a), -0.03, r * math.sin(a)))
     v0 = V((math.cos(a) * random.uniform(0.3, 1.2), -random.uniform(0.6, 1.8), math.sin(a) * random.uniform(0.3, 1.2) + 0.3))
-    ballistic(o, p0, v0, F_WALL + random.randint(0, 3), 160, grav=2.5, drag=0.6, spin=10)
+    ballistic(o, p0, v0, F_WALL + random.randint(0, 3), 160, grav=1.2, drag=1.6, spin=10)
 for i in range(4):
     pass
 for i in range(70):    # inside: drywall chunks, splinters and insulation fluff burst into the room
@@ -614,7 +614,7 @@ def page_material(name, base, line, period):
 M_pages = page_material("M_sec_pages", hexc("#FBF6E6"), hexc("#B9AE92"), 0.0016)
 M_artpages = page_material("M_sec_artpages", hexc("#FFF8EC"), hexc("#C9B9A0"), 0.0022)
 M_bookcover = P("M_sec_bookcover", hexc("#2BB3A3"), 0.5)
-M_disc = P("M_sec_disc", (0.85, 0.88, 0.95), 0.08, metal=1.0)
+M_disc = P("M_sec_disc", (0.80, 0.90, 1.0), 0.15, metal=0.0, emit=(0.55, 0.8, 1.0), ew=1.2)
 M_shell = P("M_sec_shell", hexc("#0E1A45"), 0.35, coat=0.4)
 SHELL = 0.004
 y = -BD / 2; LAYY = {}
@@ -644,9 +644,9 @@ def cross(yl):
 GAP = 0.013
 for dn, dy_ in DISCS.items():
     fh = cross(dy_)
-    whole = sec(box("Sec_" + dn, C_SEC, -BW / 2, 0.0004, dy_ - 0.0007, dy_ + 0.0007, HIT_L.z - DISC_R, HIT_L.z + DISC_R, M_disc))
-    lo = sec(box("Sec_" + dn + "_lo", C_SEC, -BW / 2, 0.0004, dy_ - 0.0007, dy_ + 0.0007, HIT_L.z - DISC_R, HIT_L.z - GAP, M_disc))
-    hi = sec(box("Sec_" + dn + "_hi", C_SEC, -BW / 2, 0.0004, dy_ - 0.0007, dy_ + 0.0007, HIT_L.z + GAP, HIT_L.z + DISC_R, M_disc))
+    whole = sec(box("Sec_" + dn, C_SEC, -BW / 2, 0.0004, dy_ - 0.0012, dy_ + 0.0012, HIT_L.z - DISC_R, HIT_L.z + DISC_R, M_disc))
+    lo = sec(box("Sec_" + dn + "_lo", C_SEC, -BW / 2, 0.0004, dy_ - 0.0012, dy_ + 0.0012, HIT_L.z - DISC_R, HIT_L.z - GAP, M_disc))
+    hi = sec(box("Sec_" + dn + "_hi", C_SEC, -BW / 2, 0.0004, dy_ - 0.0012, dy_ + 0.0012, HIT_L.z + GAP, HIT_L.z + DISC_R, M_disc))
     hide_key(whole, [(1, True), (fh, False)]); hide_key(lo, [(1, False), (fh, True)]); hide_key(hi, [(1, False), (fh, True)])
     for i in range(14):   # shards blow out of the gap (toward the camera side and up/down), spinning, in slow motion
         bm = bmesh.new(); s_ = random.uniform(0.0015, 0.004)
@@ -759,7 +759,7 @@ def s2a(f, t):
     b = bul(f); c = b + V((0.20, -0.17, 0.035)); a = b + V((0.0, 0.03, 0.0)); return c, a, 55, 16.0, (b - c).length
 SHOTS.append((55, 96, s2a))
 # S2b outside the wall: static, the bullet punches the siding, splinters and dust kick back
-SHOTS.append((97, 140, shot_static(V((1.55, -2.55, 1.42)), V((-0.05, 0.0, 1.48)), 42, 8.0)))
+SHOTS.append((97, 140, shot_static(V((1.55, -2.55, 1.42)), V((-0.02, 0.0, 1.47)), 70, 8.0)))
 # S2c inside the room: static, the drywall bursts and the bullet comes through
 SHOTS.append((141, 168, shot_static(V((1.45, 1.85, 1.50)), V((0.05, 0.30, 1.46)), 40, 8.0)))
 # S3a bullet POV: behind and beside the bullet, the man ahead holding his box (approach path)
@@ -793,7 +793,7 @@ def s_sec(dist, lens, track, zoff=0.0, yoff=0.0):
     def fn(f, t):
         nose_y = -BD / 2 + depth(f)
         ty = lerp(-BD / 2 + 0.02, nose_y, track) + yoff
-        a = secw(V((0.0, ty, HIT_L.z + zoff))); c = a + V((dist, -0.03, 0.02)); return c, a, lens, 11.0, dist
+        a = secw(V((0.0, ty, HIT_L.z + zoff))); c = a + V((dist * 0.87, -dist * 0.48, 0.03)); return c, a, lens, 11.0, dist
     return fn
 SHOTS.append((675, 754, s_sec(0.34, 50, 1.0, 0.0, -0.005)))
 # S8a cross-section: layer by layer (pages), energy rings
@@ -807,11 +807,11 @@ SHOTS.append((891, 940, s_sec(0.36, 50, 1.0, 0.0, -0.012)))
 # S9 cross-section: it stops halfway; slow push in on the whole section
 def s9(f, t):
     a = secw(V((0.0, 0.0, 0.0))); a = a.lerp(secw(V((0.0, -BD / 2 + depth(F_STOP) - 0.01, HIT_L.z))), 0.5 * t)
-    d = lerp(0.62, 0.44, smooth(t)); c = a + V((d, -0.05, 0.04)); return c, a, 50, 11.0, d
+    d = lerp(0.46, 0.34, smooth(t)); c = a + V((d * 0.87, -d * 0.48, 0.05)); return c, a, 50, 11.0, d
 SHOTS.append((941, 1038, s9))
 # S10a buried: macro into the hole, the bullet's base deep inside, cracks round it
 def s10a(f, t):
-    c = box_pt(f, HIT_L + V((0.012, -0.16 + 0.03 * t, 0.010))); a = box_pt(f, HIT_L + V((0.0, 0.02, 0.0))); return c, a, 60, 16.0, (a - c).length
+    c = box_pt(f, HIT_L + V((0.02, -0.30 + 0.06 * t, 0.015))); a = box_pt(f, HIT_L + V((0.0, 0.02, 0.0))); return c, a, 60, 16.0, (a - c).length
 SHOTS.append((1039, 1092, s10a))
 # S10b he tilts the box up and peers into the hole
 def s10b(f, t):
