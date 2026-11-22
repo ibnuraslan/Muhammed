@@ -57,7 +57,7 @@ def mats():
                   cable=flat("cable_grey", (0.12, 0.12, 0.13), 0.5), cable2=flat("cable_black", (0.02, 0.02, 0.02), 0.4),
                   red=flat("ext_red", (0.5, 0.02, 0.015), 0.25, coat=0.6), blk=flat("ext_black", (0.015, 0.015, 0.015), 0.5),
                   vent=brushed("vent", (0.45, 0.45, 0.44), 0.5), white=flat("sign_white", (0.8, 0.8, 0.78), 0.4),
-                  green=emit("sign_green", (0.05, 0.65, 0.25), 1.2), redsign=flat("sign_red", (0.6, 0.03, 0.02), 0.4),
+                  green=emit("sign_green", (0.05, 0.55, 0.22), 0.5), redsign=flat("sign_red", (0.6, 0.03, 0.02), 0.4),
                   dome=flat("dome_smoke", (0.02, 0.02, 0.025), 0.05), domebase=flat("dome_base", (0.75, 0.74, 0.7), 0.4),
                   grey_box=flat("elec_box", (0.42, 0.42, 0.4), 0.45))
     return _M

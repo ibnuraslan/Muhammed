@@ -502,7 +502,7 @@ def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), ga
     DT.vent((CX - 0.005, -5.6, 2.25), (-1, 0, 0), 0.45, 0.22)
     DT.extinguisher((-CX + 0.005, -2.75, 0.12), (1, 0, 0))
     DT.sign((CX - 0.005, -1.75, 1.6), (-1, 0, 0), kind="notice", w=0.3, h=0.21)
-    DT.sign((0, y_end + 0.03, 2.2), (0, 1, 0), kind="exit")
+    DT.sign((CX - 0.005, y_end + 0.6, 2.25), (-1, 0, 0), kind="exit", w=0.26, h=0.13)
     DT.cctv_dome((0.3, -4.4, CZ)); DT.cctv_dome((VX - 0.6, 0.6, VZ)); DT.cctv_dome((-VX + 0.6, VY - 0.6, VZ))
     DT.elec_box((CX - 0.005, -6.6, 1.3), (-1, 0, 0))
     for x in (-1.6, 1.6):
@@ -560,6 +560,13 @@ def _vault_leaf(paint, steel, brass):
     part(S.cyl("vault_dial_ring", (dx, -t, dz), (dx, -t - 0.012, dz), 0.075, mat=steel, verts=48))
     part(S.cyl("vault_dial", (dx, -t - 0.012, dz), (dx, -t - 0.04, dz), 0.055, mat=flat("dial_black", (0.02, 0.02, 0.02), 0.3), verts=48))
     part(S.cyl("vault_dial_knob", (dx, -t - 0.04, dz), (dx, -t - 0.07, dz), 0.022, mat=steel, verts=24))
+    white = flat("dial_marks", (0.85, 0.83, 0.78), 0.4)
+    for k in range(100):                      # 0-99 graduations, every tenth long
+        a_ = 2 * math.pi * k / 100; L_ = 0.012 if k % 10 == 0 else 0.006
+        r0 = 0.053 - L_
+        part(box("dial_tick", (dx + math.sin(a_) * (r0 + L_ / 2), -t - 0.0405, dz + math.cos(a_) * (r0 + L_ / 2)),
+                 (0.0012 if k % 10 else 0.002, 0.0008, L_), white, rot=(0, -a_, 0)))
+    part(box("dial_index", (dx, -t - 0.0125, dz + 0.068), (0.004, 0.002, 0.012), flat("index_red", (0.6, 0.03, 0.02), 0.4)))
     part(S.cyl("vault_keylock", (dx, -t, 0.7), (dx, -t - 0.01, 0.7), 0.03, mat=brass, verts=32))
     part(box("vault_keyslot", (dx, -t - 0.012, 0.7), (0.006, 0.004, 0.03), flat("slot", (0, 0, 0), 0.5)))
     return leaf

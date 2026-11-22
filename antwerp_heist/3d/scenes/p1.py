@@ -146,7 +146,7 @@ def S13():
     sv.hand("R", (0.25, dy - 0.42, 0.835), elbow=(0.7, 0.3, -0.7), curl=24)
     sv.head_to(k, share=0.8)
     sv.finish(look=k, density=HAIR)
-    return dict(a=((1.75, 0.35, 2.35), (0.0, 0.55, 0.85)), b=((1.6, 0.4, 2.25), (0.0, 0.5, 0.85)), lens=24,
+    return dict(a=((-1.75, 0.35, 2.35), (0.0, 0.55, 0.85)), b=((-1.6, 0.4, 2.25), (0.0, 0.5, 0.85)), lens=24,
                 hand_ok=("chair", "Chair", "desk", "Desk", "key", "torus", "Torus", "card"))
 
 
@@ -268,8 +268,8 @@ def S26():
     d = A["dial"]; k = A["keylock"]
     ST.light_spot("dial_spot", (d.x + 0.7, d.y - 1.0, d.z + 0.6), d, 260, angle=28, color=(1.0, 0.74, 0.5))
     ST.light_point("dial_rim", (d.x - 0.5, d.y - 0.6, d.z + 0.4), 15, (0.6, 0.7, 1.0), radius=0.1)
-    return dict(a=(tuple(d + V((0.22, -0.32, 0.06))), tuple(d)), b=(tuple(d + V((0.2, -0.3, -0.25))), tuple(k)), lens=50,
-                fstop=2.8, focus=d.lerp(k, 0.4), cine=dict(exposure=1.0))
+    return dict(a=(tuple(d + V((0.24, -0.34, 0.08))), tuple(d)), b=(tuple(d + V((0.16, -0.26, 0.02))), tuple(d)), lens=50,
+                fstop=2.8, focus=d, cine=dict(exposure=1.0))
 
 
 def S27():
@@ -416,7 +416,7 @@ def S37():
     se.head_to((0, -2.0, 1.0), share=0.5)
     se.finish(look=(0, -2, 1.0), density=HAIR)
     ST.light_point("desk_glow", (-0.4, A["desk_y"] - 0.2, 1.25), 40, (1.0, 0.8, 0.55), radius=0.15)
-    return dict(cine=dict(exposure=0.6), a=((0.62, 1.98, 1.55), (-0.2, -1.6, 0.9)), b=((0.5, 1.98, 1.48), (-0.25, -1.6, 0.9)), lens=26,
+    return dict(cine=dict(exposure=0.6), a=((-0.6, 1.98, 1.55), (0.15, -1.6, 0.9)), b=((-0.5, 1.98, 1.48), (0.2, -1.6, 0.9)), lens=26,
                 hand_ok=("desk", "Desk", "chair", "Chair", "paper", "blueprint"))
 
 
