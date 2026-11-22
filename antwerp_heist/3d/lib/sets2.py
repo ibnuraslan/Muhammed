@@ -302,7 +302,7 @@ def security_room(kind="building", screen_images=None):
             screens.append(s); k += 1
     A["screens"] = screens
     # console desk
-    box("console", (0, RY - 1.05, 0.38), (2.4, 0.7, 0.76), steel_paint("console_paint", (0.2, 0.19, 0.17), 0.45))
+    box("console", (0, RY - 0.88, 0.38), (2.4, 0.36, 0.76), steel_paint("console_paint", (0.2, 0.19, 0.17), 0.45))   # knee/toe space under the top
     box("console_top", (0, RY - 1.05, 0.775), (2.45, 0.75, 0.03), flat("console_top", (0.08, 0.075, 0.07), 0.35))
     # buttons / gate release on the console: a row of lit push buttons
     ledg = emit("btn_green", (0.1, 1.0, 0.25), 8); ledr = emit("btn_red", (1.0, 0.1, 0.05), 8)
