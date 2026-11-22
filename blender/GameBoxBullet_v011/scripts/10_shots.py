@@ -378,7 +378,7 @@ def blink_keys():
             pb.rotation_quaternion = Quaternion(V((1, 0, 0)), math.radians(22 * LID)); pb.keyframe_insert("rotation_quaternion", frame=fb)
 # hands: palms flat on the box sides, fingers forward along the sides, thumbs over the top edge
 GY = ENV("GY", "0.052"); GZ = ENV("GZ", "-0.020"); FD_UP = ENV("FDUP", "0.12"); SKIN = ENV("SKIN", "0.050")
-HANDP = {"L": (0.0, 0.12, 0.040, 0.0475), "R": (0.0, 0.12, 0.040, 0.0475)}
+HANDP = {"L": (0.0, 0.12, 0.055, 0.0475), "R": (0.0, 0.12, 0.055, 0.0475)}
 HAND_FR = list(range(1, F_END + 1, 2)) + [F_END]
 SKINF = {(s, f): HANDP[s][3] for s in "LR" for f in HAND_FR}
 def key_hands(f, only=None):
@@ -442,7 +442,7 @@ MUZ = V((0.0, -30.3, 1.47))           # muzzle: on the bullet line (wall hole at
 M_gun = P("M_gun", (0.025, 0.025, 0.028), 0.45, metal=0.3)
 gun = bpy.data.objects.new("Gun", None); C_EXT.objects.link(gun)
 # plain toy-like silhouette only: a slide block, a grip block, a guard loop. No mechanism detail.
-parts = [((-0.012, 0.012, -0.17, 0.0, -0.016, 0.016)), ((-0.011, 0.011, -0.165, -0.115, -0.11, -0.016))]
+parts = [((-0.012, 0.012, -0.17, 0.0, -0.004, 0.026)), ((-0.011, 0.011, -0.165, -0.115, -0.11, -0.016))]
 for i, (x0, x1, y0, y1, z0, z1) in enumerate(parts):
     o = box("Gun_part%d" % i, C_EXT, x0, x1, y0, y1, z0, z1, M_gun, 0.003); o.parent = gun
     if i == 1: o.rotation_euler.x = math.radians(-14)
@@ -841,11 +841,10 @@ SHOTS.append((891, 940, s_sec(0.36, 50, 1.0, 0.0, -0.012)))
 def s9(f, t):
     a = secw(V((0.0, 0.0, 0.0))); a = a.lerp(secw(V((0.0, -BD / 2 + depth(F_STOP) - 0.01, HIT_L.z))), 0.5 * t)
     d = lerp(0.46, 0.34, smooth(t)); c = a + V((d * 0.87, -d * 0.48, 0.05)); return c, a, 50, 11.0, d
-SHOTS.append((941, 1038, s9))
+SHOTS.append((941, 1092, s9))
 # S10a buried: macro into the hole, the bullet's base deep inside, cracks round it
 def s10a(f, t):
     c = box_pt(f, HIT_L + V((0.02, -0.30 + 0.06 * t, 0.015))); a = box_pt(f, HIT_L + V((0.0, 0.02, 0.0))); return c, a, 60, 16.0, (a - c).length
-SHOTS.append((1039, 1092, s10a))
 # S10b he tilts the box up and peers into the hole
 def s10b(f, t):
     hd = head_pt(f); bc = box_pt(f); a = hd.lerp(bc, 0.55); c = a + V((0.55, -0.72, 0.06)); return c, a, 36, 8.0, (a - c).length
