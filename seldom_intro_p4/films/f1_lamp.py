@@ -24,10 +24,10 @@ def mats():
     g = {}
     g["iron"] = ship.paint("lr_iron", (0.035, 0.04, 0.038), rough=0.5, grime=0.5, scale=10, chips=0.3, under=(0.25, 0.1, 0.05))
     g["iron"].node_tree.nodes["Principled BSDF"].inputs["Metallic"].default_value = 0.6
-    g["cream"] = ship.paint("lr_cream", (0.55, 0.48, 0.36), rough=0.45, grime=0.6, scale=6, chips=0.2, under=(0.2, 0.1, 0.05))
-    g["green"] = ship.paint("lr_green", (0.02, 0.07, 0.04), rough=0.35, grime=0.2, scale=3, chips=0.12, under=(0.5, 0.36, 0.14))
+    g["cream"] = p4.mat("lr_cream", (0.24, 0.2, 0.15), rough=0.55)
+    g["green"] = ship.paint("lr_green", (0.02, 0.07, 0.04), rough=0.35, grime=0.2, scale=3, chips=0.02, under=(0.5, 0.36, 0.14))
     g["brass"] = D.brass_material("lr_brass")
-    g["floor"] = ship.paint("lr_floor", (0.05, 0.045, 0.04), rough=0.55, grime=0.8, scale=3, chips=0.5, under=(0.3, 0.12, 0.05))
+    g["floor"] = ship.paint("lr_floor", (0.05, 0.045, 0.04), rough=0.55, grime=0.4, scale=2, chips=0.05, under=(0.3, 0.12, 0.05))
     g["floor"].node_tree.nodes["Principled BSDF"].inputs["Metallic"].default_value = 0.4
     gl = bpy.data.materials.new("lr_storm_glass"); gl.use_nodes = True; nt = gl.node_tree
     b = nt.nodes["Principled BSDF"]; b.inputs["Transmission Weight"].default_value = 1.0; b.inputs["Roughness"].default_value = 0.02
@@ -39,6 +39,10 @@ def mats():
     bm = nt.nodes.new("ShaderNodeBump"); bm.inputs["Strength"].default_value = 0.25
     nt.links.new(nz.outputs["Fac"], bm.inputs["Height"]); nt.links.new(bm.outputs["Normal"], b.inputs["Normal"])
     g["glass"] = gl
+    lg = bpy.data.materials.new("lr_lens_glass"); lg.use_nodes = True; b = lg.node_tree.nodes["Principled BSDF"]
+    b.inputs["Base Color"].default_value = (1.0, 0.97, 0.9, 1); b.inputs["Transmission Weight"].default_value = 1.0
+    b.inputs["Roughness"].default_value = 0.04; b.inputs["IOR"].default_value = 1.52
+    g["lens_glass"] = lg
     return g
 
 
@@ -83,7 +87,10 @@ def lens(g, rot=0.0):
             n = m.name
             if "base_unit" in n or "stem" in n or "beam" in n:
                 o.data.materials[i] = g["green"]
-            if "prism" in n or "fresnel" in n or "glass" in n:
+            elif "strut" in n or "drum" in n or "wheel" in n or "cog" in n or "bolt" in n:
+                o.data.materials[i] = g["brass"]
+            if "prism" in n or "fresnel" in n or "glass" in n or "structure" in n:
+                o.data.materials[i] = g["lens_glass"]
                 o.visible_shadow = False                 # the lamp's light gets out through the optic
     return r, ms
 
@@ -133,8 +140,6 @@ def room(g):
         v.select = v.co.z < 0
     bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.delete(type='VERT'); bpy.ops.object.mode_set(mode='OBJECT')
     dome.data.materials.append(g["cream"]); dome.modifiers.new("s", "SOLIDIFY").thickness = 0.03
-    # the lens stands on a low iron plinth ring; a rail round it
-    ship.cyl("lr_rail_post", (0.9, 0.9, 0), (0.9, 0.9, 0.95), 0.02, mat=g["brass"], verts=10)
 
 
 def storm_world():
@@ -149,7 +154,8 @@ def storm_world():
     e = cr.elements.new(0.8); e.color = (0.004, 0.006, 0.011, 1)
     nt.links.new(sep.outputs[2], rmp.inputs[0]); nt.links.new(rmp.outputs[0], bg.inputs[0]); bg.inputs[1].default_value = 1.0
     # cold moonlight through the cloud from one side
-    p4.light('AREA', "moon_fill", 220, (0.55, 0.68, 1.0), loc=(-6, 3, 5), target=(0, 0, 1.4), size=6)
+    ml = p4.light('AREA', "moon_fill", 220, (0.55, 0.68, 1.0), loc=(-6, 3, 5), target=(0, 0, 1.4), size=6)
+    ml.visible_camera = False; ml.visible_glossy = False; ml.visible_transmission = False
 
 
 def haze(d=0.015):
@@ -181,7 +187,7 @@ def hurricane(loc, rot=0.0, lit=True):
         fl.scale = (1, 1, 2.2); fl.data.materials.append(fm); fl.visible_shadow = False
         for o in ms:                                    # its glass chimney must not shadow its own flame
             o.visible_shadow = False
-        p4.light('POINT', "lantern_light", 18, (1.0, 0.6, 0.28), loc=f + Vector((0, 0, 0.02)), size=0.02)
+        p4.light('POINT', "lantern_light", 35, (1.0, 0.6, 0.28), loc=f + Vector((0, 0, 0.02)), size=0.02)
     return r, ms
 
 
@@ -247,10 +253,10 @@ def build(shot, t, out):
     lr, lms = lens(g, rot=0.0)
     lamp_flame()
     beams(rot + {"B": 0.2, "C": 0.3, "D": 1.2 + 1.9 * E(t)}.get(shot, 0))
-    haze(0.012)
+    haze(0.004)
     wipe = {"B": -1.0, "C": -PLATE_W / 2 + PLATE_W * E(t), "D": 1.0, "LOGO": 1.0}[shot]
     pl, pM = plate_on_pedestal(wipe)
-    hurricane(Vector((0.95, 0.55, 0.0)), rot=0.4)
+    hurricane(Vector((0.62, -0.62, 0.0)), rot=0.4)
     u = {"B": 0.1, "C": E(t), "D": 1.0}.get(shot, 1.0)
     look = pM @ Vector((0, 0, 0))
     if shot in ("B", "C"):
@@ -270,15 +276,15 @@ def build(shot, t, out):
             P.grip(h, "R", 0.6)
         dv, M = si.person("briggs", (BASE_X + 0.72, -0.05), 180, leanback, look, wet=0.45)
     if shot == "B":       # medium over his shoulder: lens fills the frame, prisms throw light
-        c = Vector((BASE_X + 1.55, -0.95, 1.25)) + Vector((-0.1, 0.05, 0.0)) * E(t)
-        si.cam(c, (0.0, 0.05, 0.85), lens=32, fstop=4.0, focus=(c - Vector((BASE_X + 0.3, 0, 0.5))).length)
+        c = Vector((1.55, 0.9, 0.95)) + Vector((-0.08, -0.04, 0.0)) * E(t)
+        si.cam(c, (0.0, -0.1, 1.2), lens=20, fstop=4.0, focus=(c - Vector((BASE_X + 0.3, 0, 0.5))).length)
     elif shot == "C":     # close over his right shoulder: the rag drags across the plate
-        c = Vector((BASE_X + 0.95, -0.42, 0.78)) + Vector((-0.06, 0.04, -0.02)) * E(t)
+        c = Vector((1.3, 0.38, 1.22)) + Vector((-0.06, -0.03, -0.03)) * E(t)
         tgt = pM @ Vector((0, 0, 0))
-        si.cam(c, tgt, lens=50, fstop=2.8, focus=(c - tgt).length)
+        si.cam(c, tgt, lens=60, fstop=2.8, focus=(c - tgt).length)
     elif shot == "D":     # locked off: him and the plate, the beam sweeping over him
-        c = Vector((BASE_X + 1.9, 0.75, 0.95))
-        si.cam(c, (BASE_X + 0.15, -0.05, 0.45), lens=35, fstop=4.0, focus=(c - Vector((BASE_X, 0, PLATE_Z))).length)
+        c = Vector((1.42, 1.25, 0.95))
+        si.cam(c, (BASE_X + 0.25, -0.1, 0.86), lens=22, fstop=4.0, focus=(c - Vector((BASE_X, 0, PLATE_Z))).length)
     elif shot == "LOGO":  # logo check: straight on, close, plate clean
         tgt = pM @ Vector((0, 0, 0)); c = tgt + Vector((0.62, 0.0, 0.02))
         p4.light('AREA', "check_key", 4, (1.0, 0.97, 0.92), loc=tgt + Vector((0.6, -0.35, 0.4)), target=tgt, size=0.6)
@@ -316,7 +322,7 @@ def stair(g, t, out):
     # slit window with rain, cold light
     wa = math.radians(150); wc = Vector((math.cos(wa) * (R + 0.34), math.sin(wa) * (R + 0.34), 2.6))
     ship.box("window_glass", wc, (0.02, 0.32, 0.9), g["glass"], rot=(0, 0, wa))
-    p4.light('AREA', "window_moon", 60, (0.55, 0.68, 1.0), loc=wc + Vector((math.cos(wa), math.sin(wa), 0)) * 0.3, target=(0, 0, 1.6), size=0.4)
+    p4.light('AREA', "window_moon", 160, (0.55, 0.68, 1.0), loc=wc + Vector((math.cos(wa), math.sin(wa), 0)) * 0.3, target=(0, 0, 1.6), size=0.4)
     p4.world_color((0.002, 0.003, 0.005))
     # the keeper on the stair: on tread k, climbing (left foot up a step), lantern in the left hand, right on the rail
     k = 5 + int(round(2 * E(t)))
@@ -343,6 +349,7 @@ def stair(g, t, out):
     if not si.CAMDUMP:
         w = M @ Vector(dv.wrist_rest["L"]) + Vector((0, 0, dz))
         hurricane(w - Vector((0, 0, 0.36)), rot=a)
-    c = Vector((math.cos(a - 1.1) * 0.9, math.sin(a - 1.1) * 0.9, 0.35))
-    si.cam(c, pos + Vector((0, 0, 1.6)) + Vector((0, 0, 0.6)) * E(t), lens=22, fstop=5.6, focus=(c - pos).length)
+    ac = a - 4.3 * step_a
+    c = Vector((math.cos(ac) * 1.05, math.sin(ac) * 1.05, (k - 3) * rise + 0.75)) + Vector((0, 0, 0.12)) * E(t)
+    si.cam(c, pos + Vector((0, 0, 1.5)), lens=18, fstop=5.6, focus=(c - pos).length)
     si.finish(out, sat=1.05, exposure=0.0, bloom=0.4, clip_ok=("lantern", "handrail", "tread", "baluster"))

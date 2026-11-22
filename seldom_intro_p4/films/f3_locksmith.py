@@ -16,7 +16,7 @@ FRONT_Y = -SD / 2
 HINGE = Vector((-SW / 2 + 0.03, FRONT_Y, 0))
 DIAL = Vector((0.08, FRONT_Y - DOOR_T + 0.002, PL + 0.66))
 HANDLE = Vector((0.24, FRONT_Y - DOOR_T + 0.002, PL + 0.5))
-PLAQUE_W = 0.17
+PLAQUE_W = 0.2
 SHOTS = dict(A=(0.0, 3.5), B=(3.5, 7.0), C=(7.0, 10.0), D=(10.0, 13.0))
 LANTERN_UID = "46528337bec34fa49f2c71577efc7bc0"
 
@@ -83,7 +83,7 @@ def safe(g, door=0.0):
     for o in dr:
         o.matrix_world = Mh @ o.matrix_world
     # the plaque on the velvet (a real enamel plate, lying flat, tilted a little)
-    Mp = Matrix.Translation((0.04, -0.06, z0 + wt + 0.0165)) @ Matrix.Rotation(-0.08, 4, 'Z')
+    Mp = Matrix.Translation((0.1, -0.1, z0 + wt + 0.0165)) @ Matrix.Rotation(-0.12, 4, 'Z')
     em = si.enamel_material("plaque_enamel", ground=(0.006, 0.008, 0.014), chip=0.15, grime=0.15)
     pl = si.plate("seldom_plaque", Mp, PLAQUE_W, thick=0.004, mat=em, margin=0.1, screws=4)
     return Mp
@@ -96,11 +96,14 @@ def vault(g):
     ship.box("sf_wall_right", (2.2, -1, 1.6), (0.3, 6, 3.2), g["brick"])
     ship.box("sf_ceiling", (0, -1, 3.25), (6, 6, 0.1), g["brick"])
     p4.world_color((0.0008, 0.0008, 0.001))
+    # cold light falling in from the vault doorway behind the camera (stair well), high and soft
+    fl = p4.light('AREA', "doorway", 90, (0.62, 0.72, 1.0), loc=(0.6, -3.6, 2.6), target=(0, -0.3, 0.6), size=1.2)
+    fl.visible_camera = False
     # dust in the air (a faint volume; the lantern beam shows in it)
     bpy.ops.mesh.primitive_cube_add(size=1, location=(0, -1.0, 1.5)); v = bpy.context.active_object; v.name = "sf_dust"
     v.scale = (3.8, 3.8, 3.0)
     m = bpy.data.materials.new("sf_dust_m"); m.use_nodes = True; nt = m.node_tree; nt.nodes.remove(nt.nodes["Principled BSDF"])
-    vs = nt.nodes.new("ShaderNodeVolumeScatter"); vs.inputs["Density"].default_value = 0.05; vs.inputs["Anisotropy"].default_value = 0.6
+    vs = nt.nodes.new("ShaderNodeVolumeScatter"); vs.inputs["Density"].default_value = 0.012; vs.inputs["Anisotropy"].default_value = 0.6
     nt.links.new(vs.outputs[0], nt.nodes["Material Output"].inputs["Volume"]); v.data.materials.append(m)
     # floating dust motes (tiny spheres, a few hundred)
     rng = random.Random(9); dm = p4.mat("mote", (0.7, 0.62, 0.5), rough=0.9)
@@ -120,8 +123,8 @@ def dark_lantern(loc, aim):
     fm = p4.mat("lantern_flame", (1, 0.6, 0.2), emit=(1.0, 0.5, 0.15), strength=40)
     bpy.ops.mesh.primitive_uv_sphere_add(radius=0.008, location=f); fl = bpy.context.active_object; fl.name = "lantern_flame"
     fl.scale = (1, 1, 2.2); fl.data.materials.append(fm); fl.visible_shadow = False
-    p4.light('POINT', "lantern_glow", 10, (1.0, 0.6, 0.28), loc=f + Vector((0, 0, 0.02)), size=0.02)
-    p4.light('SPOT', "lantern_beam", 260, (1.0, 0.68, 0.38), loc=f + Vector((0, 0, 0.02)), target=aim, size=0.03, spot=34, blend=0.5)
+    p4.light('POINT', "lantern_glow", 28, (1.0, 0.6, 0.28), loc=f + Vector((0, 0, 0.02)), size=0.02)
+    p4.light('SPOT', "lantern_beam", 700, (1.0, 0.68, 0.38), loc=f + Vector((0, 0, 0.02)), target=aim, size=0.03, spot=34, blend=0.5)
 
 
 def pose_listen(h, dv, M, Mi):
@@ -172,17 +175,17 @@ def build(shot, t, out):
     Mp = safe(g, door)
     pos = (0.12, FRONT_Y - 0.62)
     if shot in ("A", "B"):
-        dark_lantern(Vector((0.55, FRONT_Y - 0.45, 0.0)), DIAL + Vector((-0.05, 0, 0.0)))
+        dark_lantern(Vector((0.66, FRONT_Y - 0.3, 0.0)), DIAL + Vector((-0.05, 0, 0.0)))
         dv, M = si.person("deveau", pos, 90, pose_listen, DIAL, wet=0.0)
         stethoscope(dv, M)
         if shot == "A":
-            c = Vector((1.65, -2.45, 0.55)) + Vector((-0.12, 0.1, 0.0)) * E(t)
-            si.cam(c, (0.0, FRONT_Y - 0.2, 0.62), lens=30, fstop=4.0)
+            c = Vector((1.55, -0.95, 0.85)) + Vector((-0.1, 0.0, 0.0)) * E(t)
+            si.cam(c, (-0.05, FRONT_Y - 0.38, 0.72), lens=24, fstop=4.0)
         else:      # close on the dial, over his right shoulder (his hand and shoulder in frame)
             c = Vector((0.58, FRONT_Y - 0.62, 0.95)) + Vector((-0.03, 0.03, 0)) * E(t)
             si.cam(c, DIAL + Vector((-0.02, -0.07, 0)), lens=55, fstop=2.4)
     elif shot == "C":
-        dark_lantern(Vector((0.55, FRONT_Y - 0.45, 0.0)), DIAL + Vector((-0.05, 0, 0.0)))
+        dark_lantern(Vector((0.66, FRONT_Y - 0.3, 0.0)), DIAL + Vector((-0.05, 0, 0.0)))
         hz = HINGE + (Matrix.Rotation(math.radians(-door), 3, 'Z') @ Vector((HANDLE.x - HINGE.x, -DOOR_T - 0.06, 0)))
         hz.z = HANDLE.z - 0.09
         def haul(h, dv, M, Mi):
@@ -194,22 +197,23 @@ def build(shot, t, out):
             P.hand_reach(h, "L", Mi @ Vector((pos[0] - 0.25, pos[1] - 0.02, 0.62)), elbow=(0.7, 0.2, -0.7), hand_dir=Vector((0.1, -0.4, -0.9)))
             P.rest_hand(h, "L", curl=30)
         dv, M = si.person("deveau", pos, 90, haul, DIAL, wet=0.0)
-        c = Vector((-1.1, -2.0, 0.95)); si.cam(c, (0.05, FRONT_Y - 0.2, 0.6), lens=35, fstop=4.0)
+        c = Vector((1.45, -1.3, 0.95)); si.cam(c, (-0.05, FRONT_Y - 0.25, 0.62), lens=26, fstop=4.0)
     elif shot in ("D", "LOGO"):
         if shot == "D":
             # he holds the lantern up, its beam into the safe, looking in
             def look_in(h, dv, M, Mi):
-                si.kneel(h, down="L", lean=26, drop=0.42, fwd=0.36)
-                P.head(h, pitch=26, yaw=0, tilt=-3); dv.lids(0.3); dv.brow_knit(0.2)
-                P.hand_reach(h, "R", Mi @ Vector((0.33, FRONT_Y - 0.28, 0.72)), elbow=(-0.8, 0.2, -0.6), hand_dir=Vector((0.1, 0.1, -1)))
-                P.grip(h, "R", 1.0)
-                P.hand_reach(h, "L", Mi @ Vector((-SW / 2 - 0.02, FRONT_Y - 0.04, 0.6)), elbow=(0.8, 0.2, -0.5), hand_dir=Vector((0.3, 0.9, 0.0)))
-                P.rest_hand(h, "L", curl=35)
+                si.kneel(h, down="L", lean=12, drop=0.42, fwd=0.36)
+                P.head(h, pitch=34, yaw=8, tilt=-3); dv.lids(0.3); dv.brow_knit(0.2)
+                P.hand_reach(h, "L", Mi @ Vector((-0.1, FRONT_Y - 0.27, 1.0)), elbow=(0.8, 0.2, -0.6), hand_dir=Vector((-0.1, 0.1, -1)))
+                P.grip(h, "L", 1.0)
+                knee = h.bone_head("lowerleg01.R")
+                P.hand_reach(h, "R", knee + Vector((0.02, -0.03, 0.1)), elbow=(-0.7, 0.4, -0.2), hand_dir=Vector((0.2, -0.6, -0.8)))
+                P.rest_hand(h, "R", curl=35)
             dv, M = si.person("deveau", pos, 90, look_in, Mp @ Vector((0, 0, 0)), wet=0.0)
-            lt = Vector((0.33, FRONT_Y - 0.28, 0.72 - 0.33 - 0.08))
+            lt = si.palm(dv, M, "L") - Vector((0, 0, 0.34)) if not si.CAMDUMP else Vector((-0.1, FRONT_Y - 0.27, 0.6))
             dark_lantern(lt, Mp @ Vector((0, 0, 0)))
-            c = Vector((0.55, FRONT_Y - 1.05, 1.22)); tgt = Mp @ Vector((0, 0, 0))
-            si.cam(c, tgt + Vector((0, 0, 0.12)), lens=40, fstop=3.2, focus=(c - tgt).length)
+            c = Vector((0.68, FRONT_Y - 0.52, 1.4)); tgt = Mp @ Vector((0, 0, 0))
+            si.cam(c, tgt + Vector((0.04, -0.02, 0.1)), lens=34, fstop=3.2, focus=(c - tgt).length)
         else:
             dark_lantern(Vector((0.4, FRONT_Y - 0.5, 0.0)), Mp @ Vector((0, 0, 0)))
             tgt = Mp @ Vector((0, 0, 0)); c = tgt + Vector((0.0, -0.33, 0.3))

@@ -12,6 +12,9 @@ out = a[3] if len(a) > 3 else os.path.join(HERE, "..", "out", "key", f"{film}_{s
 mod = importlib.import_module({"f1": "f1_lamp", "f2": "f2_letters", "f3": "f3_locksmith", "f4": "f4_salvage"}[film])
 _orig = si.C.render_setup
 def rs(*k, **kw):
-    sc = _orig(*k, **kw); sc.render.resolution_percentage = int(os.environ.get("PCT", "50")); return sc
+    sc = _orig(*k, **kw); sc.render.resolution_percentage = int(os.environ.get("PCT", "50"))
+    if os.environ.get("SPP"):
+        sc.cycles.samples = int(os.environ["SPP"])
+    return sc
 si.C.render_setup = rs
 mod.build(shot, t, os.path.abspath(out))

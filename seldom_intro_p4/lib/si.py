@@ -193,17 +193,19 @@ def plate(name, M, w, thick=0.003, mat=None, margin=0.12, screws=4, screw_mat=No
 def settle(dv, z_floor, gap=0.002, kind=("boot", "shoe", "Body", "trouser", "body")):
     """Move the person so their lowest point (boots, or a knee on the floor) rests at z_floor."""
     dg = bpy.context.evaluated_depsgraph_get()
-    lo = 1e9
+    lo = 1e9; per = {}
     for o in dv.objects:
-        if o.type != 'MESH' or o.hide_render:
+        if o.type != 'MESH' or o.hide_render or o.name.endswith("_body"):     # the body carries unskinned helper verts
             continue
         oe = o.evaluated_get(dg); me = oe.to_mesh(); mw = oe.matrix_world
         for v in me.vertices:
             z = (mw @ v.co).z
+            per[o.name] = min(per.get(o.name, 1e9), z)
             if z < lo:
                 lo = z
         oe.to_mesh_clear()
     dz = z_floor + gap - lo
+    print("SETTLE", round(lo, 3), round(dz, 3), [o.name for o in dv.objects if o.parent is None][:8], flush=True)
     for o in dv.objects:
         if o.parent is None:
             o.matrix_world = Matrix.Translation((0, 0, dz)) @ o.matrix_world
@@ -219,20 +221,50 @@ def person(kind, pos, ang_deg, pose, look, floor_z=0.0, hair=1.0, **kw):
         return None, M
     if kind == "sarah":
         import women as W
-        dv = W.Sarah(bonnet=False, shawl=kw.get("shawl", True))
+        dv = W.Sarah(bonnet=False, shawl=kw.get("shawl", False))
     elif kind == "briggs":
-        dv = BG.Briggs(wet=kw.get("wet", 0.1), cap=kw.get("cap", False))
+        cls = type("BriggsSB", (BG.Briggs,), {"ASSET_BOOTS": False}) if kw.get("sea_boots") else BG.Briggs
+        dv = cls(wet=kw.get("wet", 0.1), cap=kw.get("cap", False))
     else:
-        dv = D.Deveau(wet=kw.get("wet", 0.1), cap=kw.get("cap", False))
+        cls = type("DeveauSB", (D.Deveau,), {"ASSET_BOOTS": False}) if kw.get("sea_boots") else D.Deveau
+        dv = cls(wet=kw.get("wet", 0.1), cap=kw.get("cap", False))
     h = dv.h; Mi = M.inverted()
     if ANIM:
         ACTORS.append(dict(kind=kind, dv=dv, M=M, pose=pose, look=Vector(look), hair=hair, floor_z=floor_z))
         return dv, M
     pose(h, dv, M, Mi)
-    dv.finish(look_at=Vector(look), place=M, density=hair)
-    if kw.get("settle", True):
-        settle(dv, floor_z)
+    dark_insides(dv)
+    dv.finish(look_at=Vector(look), place=M, density=hair * float(os.environ.get("HAIR", "1")))
+    dv.dz = settle(dv, floor_z) if kw.get("settle", True) else 0.0
     return dv, M
+
+
+def dark_insides(dv):
+    """Kneeling opens the boot shafts: their inner (back-facing) surfaces read as a dark hollow, not lit leather."""
+    done = set()
+    for o in dv.objects:
+        if o.type != 'MESH' or "boot" not in o.name.lower():
+            continue
+        for sl in o.material_slots:
+            m = sl.material
+            if not m or m.name in done or not m.node_tree:
+                continue
+            done.add(m.name); nt = m.node_tree
+            bs = [n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED']
+            if not bs:
+                continue
+            bs = bs[0]; out = [n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL'][0]
+            src = out.inputs["Surface"].links[0].from_socket if out.inputs["Surface"].links else bs.outputs[0]
+            geo = nt.nodes.new("ShaderNodeNewGeometry")
+            dk = nt.nodes.new("ShaderNodeBsdfDiffuse"); dk.inputs["Color"].default_value = (0.008, 0.006, 0.005, 1)
+            mx = nt.nodes.new("ShaderNodeMixShader")
+            nt.links.new(geo.outputs["Backfacing"], mx.inputs[0]); nt.links.new(src, mx.inputs[1]); nt.links.new(dk.outputs[0], mx.inputs[2])
+            nt.links.new(mx.outputs[0], out.inputs["Surface"])
+
+
+def palm(dv, M, side):
+    """World position of the palm (the wrist bone's tail) after finish/settle."""
+    return M @ Vector(dv.wrist_rest[side]) + Vector((0, 0, getattr(dv, "dz", 0.0)))
 
 
 def leg_ik(h, s, ankle, pole):
@@ -251,6 +283,11 @@ def leg_ik(h, s, ankle, pole):
     h.aim(f"lowerleg01.{s}", T2 - E); h.aim(f"lowerleg02.{s}", T2 - E)
 
 
+def b_len(h, s, part):
+    b = h.arm.data.bones
+    return b[f"{part}01.{s}"].length + b[f"{part}02.{s}"].length
+
+
 def kneel(h, down="R", lean=10, drop=0.40, fwd=0.42, spread=0.05):
     """One knee on the floor (down side), the other foot planted ahead with its knee up. Rig space (faces -Y).
     The pelvis stays put; the legs fold as if the floor were `drop` higher, then settle() lowers the body."""
@@ -258,10 +295,17 @@ def kneel(h, down="R", lean=10, drop=0.40, fwd=0.42, spread=0.05):
     zf = drop                                                   # the kneeling floor, in rig space
     hd = h.bone_head(f"upperleg01.{down}"); hu = h.bone_head(f"upperleg01.{up}")
     sd = 1 if hd.x > 0 else -1; su = -sd
-    leg_ik(h, down, Vector((hd.x + sd * spread, hd.y + 0.36, zf + 0.10)), (0, -1, -0.15))   # knee down, shin back
+    # kneeling leg: thigh near vertical to a knee on the floor, shin back and rising a little to the ankle
+    thigh = b_len(h, down, "upperleg"); shin = b_len(h, down, "lowerleg")
+    kz = zf + 0.055
+    ky = hd.y + math.sqrt(max(0.0, thigh ** 2 - (hd.z - kz) ** 2)) * 0.35
+    ky = hd.y - math.sqrt(max(0.0, thigh ** 2 - (hd.z - kz) ** 2 - 0.0))
+    knee = Vector((hd.x + sd * spread, ky, kz))
+    ankle = knee + Vector((0, shin * math.cos(math.radians(14)), shin * math.sin(math.radians(14))))
+    leg_ik(h, down, ankle, (0, -1, -0.2))
+    h.aim(f"foot.{down}", Vector((0, 0.25, -1)))                # toes tucked under, on the floor
     leg_ik(h, up, Vector((hu.x + su * spread, hu.y - fwd, zf + 0.09)), (0, -1, 0.4))        # foot ahead, knee up
     h.aim(f"foot.{up}", Vector((0, -1, -0.12)))
-    h.aim(f"foot.{down}", Vector((0, 0.35, -1)))                # toes tucked under, on the floor
     for b_, k in (("spine04", 0.3), ("spine03", 0.35), ("spine02", 0.35)):
         h.rot(b_, (1, 0, 0), lean * k)
 
@@ -272,6 +316,8 @@ def cam(loc, tgt, lens=35, fstop=None, focus=None, roll=0.0):
     if CAMDUMP:
         import json
         json.dump(CAMS[-1], open(CAMDUMP, "w")); sys.exit(0)
+    if os.environ.get("NODOF"):
+        fstop = None
     return C.camera(tuple(loc), tuple(tgt), lens=lens, fstop=fstop, focus=focus, roll=roll)
 
 

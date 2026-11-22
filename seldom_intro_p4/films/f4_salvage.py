@@ -58,7 +58,7 @@ def mud_material(name, wipe):
     gt = nt.nodes.new("ShaderNodeMath"); gt.operation = 'GREATER_THAN'; nt.links.new(e.outputs[0], gt.inputs[0]); nt.links.new(wv.outputs[0], gt.inputs[1])
     # patchy: some mud stays in the plank seams even after the wipe
     pn = nt.nodes.new("ShaderNodeTexNoise"); pn.inputs["Scale"].default_value = 6; nt.links.new(tc.outputs["Object"], pn.inputs["Vector"])
-    pr = nt.nodes.new("ShaderNodeMapRange"); pr.inputs[1].default_value = 0.35; pr.inputs[2].default_value = 0.6; pr.inputs[3].default_value = 0.25
+    pr = nt.nodes.new("ShaderNodeMapRange"); pr.inputs[1].default_value = 0.35; pr.inputs[2].default_value = 0.6; pr.inputs[3].default_value = 0.1
     nt.links.new(pn.outputs["Fac"], pr.inputs[0])
     mx = nt.nodes.new("ShaderNodeMath"); mx.operation = 'MAXIMUM'; nt.links.new(gt.outputs[0], mx.inputs[0]); nt.links.new(pr.outputs[0], mx.inputs[1])
     tr = nt.nodes.new("ShaderNodeBsdfTransparent"); ms = nt.nodes.new("ShaderNodeMixShader")
@@ -108,8 +108,8 @@ def quay(g):
     ship.box("hb_quay_wall", (0, EDGE_Y + 0.25, QUAY_Z / 2 - 1.5), (30, 0.5, QUAY_Z + 3.0), g["stone"])
     ship.box("hb_coping", (0, EDGE_Y + 0.25, QUAY_Z + 0.06), (30, 0.55, 0.12), g["stone"], bevel=0.02)
     # an iron bollard and a coil of rope by the edge
-    ship.cyl("hb_bollard", (1.6, 0.7, QUAY_Z), (1.6, 0.7, QUAY_Z + 0.55), 0.15, 0.12, mat=g["iron"], verts=24)
-    ship.cyl("hb_bollard_cap", (1.6, 0.7, QUAY_Z + 0.55), (1.6, 0.7, QUAY_Z + 0.62), 0.19, mat=g["iron"], verts=24)
+    ship.cyl("hb_bollard", (3.3, 0.7, QUAY_Z), (3.3, 0.7, QUAY_Z + 0.55), 0.15, 0.12, mat=g["iron"], verts=24)
+    ship.cyl("hb_bollard_cap", (3.3, 0.7, QUAY_Z + 0.55), (3.3, 0.7, QUAY_Z + 0.62), 0.19, mat=g["iron"], verts=24)
     rope = ship.tarred_rope("hb_rope")
     for k in range(5):
         r = 0.32 - 0.03 * k
@@ -187,8 +187,8 @@ def build(shot, t, out):
                 P.rest_hand(h, "R", curl=10)
                 P.arm_down(h, "L", out=0.12, fwd=0.04, bend=14); P.rest_hand(h, "L", curl=26)
             dv, M = si.person("deveau", pos, 260, signal, hook + Vector((0, 0, 1.5)), floor_z=QUAY_Z, wet=0.5, cap=True)
-            c = Vector((6.5, 7.5, QUAY_Z + 2.2)) + Vector((-0.4, -0.3, 0)) * E(t)
-            si.cam(c, (0.0, -0.6, QUAY_Z + 0.4), lens=32, fstop=5.6)
+            c = Vector((5.8, -4.2, QUAY_Z + 0.6)) + Vector((-0.4, 0.2, 0)) * E(t)
+            si.cam(c, (0.4, -0.2, 1.75), lens=28, fstop=5.6)
         else:
             hk = cx + Vector((CW / 2 + 0.02, -0.15, CH * 0.6))
             def steady(h, dv, M, Mi):
@@ -201,8 +201,8 @@ def build(shot, t, out):
             dv, M = si.person("deveau", (pos[0], pos[1] - 0.25), 245, steady, hk, floor_z=QUAY_Z, wet=0.5, cap=True)
             ship.cyl("hb_boathook", pos3 + (pos3 - hk).normalized() * 0.5, hk, 0.018, mat=g["timber"], verts=10)
             ship.cyl("hb_boathook_iron", hk, hk + (hk - pos3).normalized() * 0.12, 0.012, mat=g["iron"], verts=10)
-            c = Vector((1.9, -0.25, QUAY_Z + 0.25)) + Vector((-0.15, 0.05, 0.1)) * E(t)
-            si.cam(c, cx + Vector((0, 0, CH)), lens=28, fstop=4.0)
+            c = Vector((3.3, 2.8, QUAY_Z + 1.55)) + Vector((-0.15, -0.05, 0.05)) * E(t)
+            si.cam(c, Vector((0.75, -0.35, QUAY_Z + 0.55)), lens=24, fstop=4.0)
     else:
         Mc = Matrix.Translation(LANDED) @ Matrix.Rotation(0.1, 4, 'Z')
         crate(g, Mc, wipe=wipe)
