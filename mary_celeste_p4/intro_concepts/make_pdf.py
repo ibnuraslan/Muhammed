@@ -132,8 +132,8 @@ def build(path):
     st.append(Spacer(1, 6))
     if os.path.exists(logo):
         from PIL import Image as PI
-        im = PI.open(logo).crop((300, 780, 1620, 1140)); cpath = os.path.join(HERE, "logo_crop.png"); im.save(cpath)
-        st.append(Image(cpath, width=70 * mm, height=70 * mm * 360 / 1320))
+        im = PI.open(logo).crop((300, 790, 1675, 1210)); cpath = os.path.join(HERE, "logo_crop.png"); im.save(cpath)
+        st.append(Image(cpath, width=70 * mm, height=70 * mm * 420 / 1375))
     st.append(Spacer(1, 6))
     for t in ["Each intro is a short scene, 11-14 s, with a tiny story: one person doing one real action that ends in a discovery.",
               "The logo is never animated. It is a physical object in the scene (enamel, stencil, letterpress, film leader, paint, emboss) "
