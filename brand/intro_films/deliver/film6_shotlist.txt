@@ -1,0 +1,6 @@
+Seldom intro 6: Ice Station  (288 frames, 12.0 s, 24 fps, 2560x1440)
+
+S01  frames 1-72  (3.0 s)  Wide: head torch through the blizzard toward the buried shape
+S02  frames 73-156  (3.5 s)  Medium low: kneeling, digging with the ice axe
+S03  frames 157-228  (3.0 s)  Close over his shoulder: the glove brushes the drum's flank
+S04  frames 229-288  (2.5 s)  Hold: the painted logo in the torch beam, breath clouding
