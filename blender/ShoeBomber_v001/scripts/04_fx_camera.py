@@ -457,17 +457,15 @@ P = lambda x, y, z: V((x, y, z))
 CAB = [[
     # ONE continuous camera (client spec). The cam_search framings are key poses; holds are repeated keys and
     # moves between them are 20-40 f with Catmull ease, routed over the seat backs (z >= 1.6) where a straight move would cross a row.
-    # beat 1: his face over the shoe and the match
-    # v006e: opens on a medium shot of him in his seat, face visible, bent over his shoe (over the row-4 seat back)
-    (1,   V((-0.94, 1.00, 1.35)), bp("Bomber", "head", 1, (0, 0, -0.15)), 30),
-    (88,  V((-0.94, 1.00, 1.35)), bp("Bomber", "head", 88, (0, 0, -0.15)), 30),
-    # <= 1 s closer on the match and his face (f/8)
-    (108, V((-0.96, 0.55, 1.36)), (op("Match_Flame", 108) * 0.25 + bp("Bomber", "head", 108, (0, 0, 0.04)) * 0.75), 32),
-    (150, V((-0.96, 0.55, 1.36)), (op("Match_Flame", 150) * 0.25 + bp("Bomber", "head", 150, (0, 0, 0.04)) * 0.75), 32),
-    (182, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 182, (0, 0.2, -0.3)), 26),
-    (199, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 199, (0, 0.2, -0.3)), 26),
-    # beat 2: travel up the aisle above head height to the attendant walking down it, dolly back ahead of her, push to her eyes
-    (216, V((0.02, 2.40, 1.70)), bp("Attendant", "head", 216, (0, 0, -0.1)), 26),
+    # v009 beat 1: medium on his face with the sneaker held up and the match struck, then closer on the flame at the fuse
+    (1,   V((-0.94, 1.00, 1.45)), V((-1.35, 0.25, 1.05)), 28),
+    (95,  V((-0.96, 0.94, 1.43)), V((-1.35, 0.26, 1.04)), 30),
+], [
+    (97,  V((-1.00, 0.75, 1.25)), V((-1.25, 0.38, 0.95)), 26),
+    (197, V((-1.02, 0.68, 1.22)), V((-1.25, 0.37, 0.96)), 28),
+], [
+    # beat 2: cut to the attendant walking down the aisle toward the lens
+    (199, P(0.064, 4.198, 1.041), bp("Attendant", "head", 199, (0, 0, -0.1)), 28),
     (232, P(0.064, 4.198, 1.041), bp("Attendant", "head", 232, (0, 0, -0.1)), 28),
     (244, P(0.064, 4.198, 1.041), bp("Attendant", "head", 244, (0, 0, -0.1)), 28),
     (265, bp("Attendant", "spine03", 265, (0.04, -1.5, 0.15)), bp("Attendant", "head", 265, (0, 0, -0.25)), 28),

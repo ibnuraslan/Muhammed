@@ -26,7 +26,7 @@ def setup(name):
     R = make_human_ctrl(o)
     h = Human(R); h.name = name
     return h
-HN = ["Bomber", "Attendant", "Steward", "PaxA", "PaxB", "PaxC", "PaxD", "Traveller", "Officer", "Sleeper1", "Sleeper2", "Sleeper3", "Sleeper4"]
+HN = ["Bomber", "Attendant", "Steward", "PaxA", "PaxB", "PaxC", "PaxD", "Traveller", "Officer", "Sleeper1", "Sleeper2", "Sleeper3", "Sleeper4", "AirPaxA", "AirPaxB"]
 HS = {n: setup(n) for n in HN}
 print("RIGS_READY")
 
@@ -203,14 +203,18 @@ def swing(h, path, f0, f1, facing_y=-1, step=10, amp=0.11, period=36):
     for f in range(f0, f1 + 1, step):
         p = path(f); ph = math.sin((f - f0) / period * 2 * math.pi)
         for s_, sg in (("L", 1), ("R", -1)):
-            side = sg * (1 if facing_y < 0 else -1) * 0.19     # v006d: arms hang close to the thighs (no "mannequin" arms)
-            hand(h, s_, f, V((p.x + side, p.y + facing_y * (0.03 + sg * ph * amp), 0.80)), (0, facing_y * 0.15, -1), (-side, 0, 0),
-                 pole=(p.x + side * 1.6, p.y - facing_y * 0.6, 1.05), grip=0.3)    # elbows point back
+            side = sg * (1 if facing_y < 0 else -1) * 0.17
+            # v009: elbows visibly bent (hands at hip height, a little forward) and a fuller opposite-arm swing
+            sw = sg * ph * amp * 1.6
+            hand(h, s_, f, V((p.x + side, p.y + facing_y * (0.08 + sw), 0.90 + 0.03 * abs(sw) / max(amp, 1e-3))),
+                 (0, facing_y * 0.55, -0.85), (-side, 0, 0),
+                 pole=(p.x + side * 1.8, p.y - facing_y * 0.7, 1.0), grip=0.35)    # elbows point back
 TROLLEY = bpy.data.objects["Trolley"]
 TROLLEY.location = V((0, 8.55, 0.52)); TROLLEY.keyframe_insert("location", frame=1)      # parked in the forward galley
 swing(att, apath, 170, 318)
 # stop + sniff + turn
 stand(att, 330, apath(318), 0, spine=(-6, 0, 0), head=(-14, 0))           # nose up, sniff
+hand(att, "R", 340, V((-0.10, 2.86, 1.32)), (0.4, -0.3, 0.6), (0, -1, 0), grip=0.4)   # v009: hand to her nose as she smells it (no static hold)
 stand(att, 350, apath(318), 0, spine=(-4, 0, 0), head=(-10, -20))
 stand(att, 372, V((0.0, 2.8, 0)), -25, spine=(4, -20, 0), head=(6, -25))   # turns toward row 3 (to her right)
 hand(att, "L", 330, V((0.22, 2.85, 0.88)), (0, 0, -1), (-1, 0, 0), grip=0.3)
@@ -453,13 +457,13 @@ for f, sp, hd in ((1560, 5, (5, 10)), (1590, 0, (0, 30)), (1620, -2, (-3, 35))):
     hand(trav, "R", f, TP + V((0.29, 0.10, 0.95)), (0, 0.2, -1), (-1, 0, 0), grip=0.3)
     hand(trav, "L", f, TP + V((-0.29, 0.10, 0.95)), (0, 0.2, -1), (1, 0, 0), grip=0.3)
 # tray rides the belt into the tunnel
-for f, x in ((1, -0.85), (1462, -0.85), (1620, 1.4)):   # v006f: rides from the cut at 1462
+for f, x in ((1, -0.85), (1506, -0.85), (1690, 1.9)):   # v009: every tray rides together from 1506 (belt starts)
     TRAY.location = AX + V((x, 0.0, 0.80)); TRAY.keyframe_insert("location", frame=f)
 for o in bpy.data.objects:
     if o.name.startswith("Tray_") and o.name != "Tray_1":
         x0 = o.location.x
-        for f in (1, 1393): o.location.x = x0; o.keyframe_insert("location", frame=f)
-        o.location.x = x0 + 1.8; o.keyframe_insert("location", frame=END)
+        for f in (1, 1506): o.location.x = x0; o.keyframe_insert("location", frame=f)
+        o.location.x = x0 + 2.75; o.keyframe_insert("location", frame=1690)
 # officer at the monitor, leaning, head moving
 for f in range(1, END + 1, 40):
     stand(off, f, AX + V((4.5, 2.05, 0)), 0, spine=(18 + 3 * math.sin(f * 0.05), 0, 0), head=(15, 8 * math.sin(f * 0.03)))
@@ -477,25 +481,23 @@ def teleport_keys(h, f):
                         if int(round(kp.co.x)) == f: kp.interpolation = 'CONSTANT'
 for h in (pc, pd):
     for f in (1068,): pass
-wpath = catmull([(1381, AX + V((-6.0, -3.2, 0))), (1500, AX + V((-1.5, -3.0, 0))), (1620, AX + V((3.0, -2.9, 0)))])
-sit(pc, 1380, SX["D"], BY, z=0.58, spine=(25, 35, 0), head=(20, 25))
-pc.walk(wpath, lambda f: -90.0, 1381, END, stride=0.7)
-for f in range(1381, END + 1, 20):
-    p = wpath(f)
-    for s in "LR":
-        sg = -1 if s == "L" else 1
-        hand(pc, s, f, V((p.x - 0.0, p.y + sg * 0.22 * (1 if True else 1), 0.82)), (0, 0, -1), (sg, 0, 0), grip=0.3)
-sit(pd, 1380, SX["A"], ROW(4), z=0.6, spine=(5, 60, 0), head=(5, 60))
-QP = AX + V((-3.0, -1.3, 0))
-for f in range(1381, END + 1, 40):
-    stand(pd, f, QP, FWD - 90 + 10 * math.sin(f * 0.02), spine=(3, 0, 0), head=(5, 20 * math.sin(f * 0.03)))
-    hand(pd, "R", f, QP + V((0.0, -0.31, 0.86)), (0, 0, -1), (1, 0, 0), grip=0.3)
-    hand(pd, "L", f, QP + V((0.0, 0.31, 0.86)), (0, 0, -1), (-1, 0, 0), grip=0.3)
-for h in (pa, pb, stw, att):
-    for b_ in ("root", "IK_foot.L", "IK_foot.R", "IK_hand.L", "IK_hand.R", "Pole_knee.L", "Pole_knee.R"):
-        pass
-for h in (pc, pd):
-    teleport_keys(h, 1380)
+# v009 (director: no cabin cast re-used at the airport): two new passengers in socks carry their sneakers flat on
+# their palms and set them into the trays beside the traveller (the payoff: everyone takes their shoes off)
+apa, apb = HS["AirPaxA"], HS["AirPaxB"]
+AIRPAX = ((apa, AX + V((-0.10, -0.78, 0)), 1436, 1462), (apb, AX + V((0.65, -0.80, 0)), 1474, 1500))
+for h, P0, f_down, f_rel in AIRPAX:
+    for f in (1, 1381):
+        stand(h, f, P0 + V((0, -0.05, 0)), FWD, spine=(4, 0, 0), head=(12, 0))
+    for f, sp, hd in ((1393, 6, (14, 0)), (1415, 8, (16, 6)), (f_down - 8, 14, (24, 0)), (f_down, 26, (30, 0)), (f_rel, 26, (30, 0)),
+                      (f_rel + 22, 8, (10, -8)), (1560, 6, (6, 10)), (1640, 5, (4, -12)), (END, 5, (6, 8))):
+        stand(h, f, P0, FWD, spine=(sp, 0, 0), head=hd, stance=0.06)
+    # palms up, a sneaker on each hand in front of her/him; down over the tray; let go; hands back to the sides
+    for f, y, z in ((1, -0.55, 0.95), (1393, -0.55, 0.95), (1415, -0.52, 0.97), (f_down - 8, -0.40, 1.00), (f_down, -0.05, 0.93), (f_rel, -0.05, 0.92)):
+        for s_, sg in (("L", -1), ("R", 1)):
+            hand(h, s_, f, V((P0.x + sg * 0.13, P0.y - y * 0 + (y + 0.75), z)), (sg * -0.2, 1.0, 0.1), (0, 0, 1), grip=0.45)
+    for f in (f_rel + 22, END):
+        for s_, sg in (("L", -1), ("R", 1)):
+            hand(h, s_, f, V((P0.x + sg * 0.20, P0.y + 0.08, 0.90)), (0, 0.4, -1), (-sg, 0, 0), grip=0.3)
 print("AIRPORT_DONE")
 
 
@@ -517,15 +519,6 @@ tt = bpy.data.objects["TrayTable"]; t0 = tt.location.copy()
 for f, p_, r in ((1, t0, (0, 0, 0)), (512, t0, (0, 0, 0)), (522, t0 + V((0.25, 0.25, 0.25)), (40, 30, 60)), (532, V((0.15, 0.95, 0.5)), (120, 70, 140)),
                  (540, V((0.22, 1.25, 0.03)), (180, 85, 200)), (548, V((0.26, 1.32, 0.012)), (180, 90, 215))):
     tt.location = p_; tt.rotation_euler = [math.radians(v) for v in r]; tt.keyframe_insert("location", frame=f); tt.keyframe_insert("rotation_euler", frame=f)
-# airport queue: four cabin cast members become travellers in line once the cabin is gone (switch hidden in the cloud dive)
-QUEUE = ((pa, AX + V((-3.6, -2.1, 0)), 90), (pb, AX + V((-4.4, -2.15, 0)), 95), (stw, AX + V((-5.4, -2.0, 0)), 85), (att, AX + V((-6.2, -2.1, 0)), 92))
-for h, qp, yaw in QUEUE:
-    ev(1380)
-    for f in range(1381, END + 1, 30):
-        stand(h, f, qp + V(((f - 1381) * 0.0012, 0, 0)), yaw + 6 * math.sin(f * 0.02), spine=(4, 0, 0), head=(5, 25 * math.sin(f * 0.015 + qp.x)))
-        for s_ in "LR":
-            sg = -1 if s_ == "L" else 1
-            hand(h, s_, f, qp + V((sg * 0.05, sg * -0.31, 0.88)), (0, 0, -1), (0, sg, 0), grip=0.35)
 # ================================================================== reach fix: slide bodies so keyed hand targets are actually reached
 def key_frames(h, bone):
     ad = h.r.o.animation_data; out = set()
@@ -564,6 +557,7 @@ for h, a_, b_ in ((att, 420, 1068), (pa, 440, 1068), (pb, 440, 1068)):
 reach_fix(stw, 540, 1068, maxd=0.15)
 reach_fix(off, 1393, END, feet=False, maxd=0.2)
 reach_fix(trav, 1393, END, feet=False, maxd=0.25)
+for h_ in (apa, apb): reach_fix(h_, 1393, END, feet=False, maxd=0.25)
 for h in (pa, pb, stw, att):
     # hold the last cabin pose until 1380, then jump (constant)
     ad = h.r.o.animation_data
