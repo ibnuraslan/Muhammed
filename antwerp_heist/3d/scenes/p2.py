@@ -66,7 +66,7 @@ def T02():
     p = M @ V((-DW + 0.12, -0.37, 1.1))
     g = MD.Guard(); st = AC.Stand(g, (p + nout * 0.62).to_tuple()[:2], math.degrees(math.atan2(-nout.y, -nout.x)), lean=8)
     for sd, dz in (("L", 0.12), ("R", -0.1)):
-        st.hand(sd, p + nout * 0.03 + V((0, 0, dz)), elbow=(0.6, 0.3, -0.8), curl=12)
+        st.hand(sd, p + nout * 0.065 + V((0, 0, dz)), elbow=(0.6, 0.3, -0.8), curl=8)
     st.finish(look=p, density=HAIR)
     return dict(a=((-0.75, -3.4, 1.65), (0.3, -1.2, 1.2)), b=((-0.65, -3.05, 1.62), (0.3, -1.2, 1.2)), lens=28,
                 hand_ok=("vault",))
