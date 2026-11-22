@@ -40,9 +40,13 @@ palm · 41 camera above the counter · 42 the brick rides rigidly on his palm, v
 red brick in his open palm · 44 strand hair.
 
 ## Checks (final package)
-See `body_prop_cross.json`, `limb_check.json`, `qa_check.json`, `clip_scan.json`, and the summary in the director message.
+- `clip_scan.json`: BAD_RANGES [] (no hand/forearm inside a body).
+- `body_prop_cross.json` (vanity, basin, blanket, mattress, phone, inhaler parts, tissue, tweezer arms): 0 visible crossings.
+- `limb_check.json`: LC_COUNTS PROPHEAD 9, ARMBODY 520 (resting/holding contacts; reviewed in the pages).
+- `qa_check.json`: EMPTY 88, INSIDE 2, FILL 1, CAMJUMP 10 (the intended hard cuts), PROPMOVE 116 (props carried in hands).
 
 ## Known limits
 - Mom's walk (801–846) still reads a little stiff/bow-legged.
 - The tub bricks are ray-settled (straight drop), not physics-simulated; a few rest tilted on another brick's corner.
 - In some bed frames his shoulder shows next to the gown.
+- Brick tip: 3.5 mm of the 1x2 red brick shows; deeper pokes through the child nose mesh.
