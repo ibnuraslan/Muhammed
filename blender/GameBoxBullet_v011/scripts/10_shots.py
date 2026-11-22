@@ -391,6 +391,9 @@ def key_hands(f, only=None):
         pole = M @ V((sx * 0.42, 0.45, -0.40))
         pb = R.PB["Pole_elbow." + s]; nme = "Pole_elbow." + s
         pb.location = R.rest(nme).to_3x3().inverted() @ (pole - R.BN[nme].head_local); pb.keyframe_insert("location", frame=f)
+for f in (1, F_END):
+    for s in "LR":
+        apply_pose(man, s, "flat_palm", f)
 for f in HAND_FR:
     key_hands(f)
 # contact pass: measure the hand skin against the box side at every keyed frame, re-place until it sits 1-3 mm off
@@ -422,9 +425,6 @@ for it in range(4):
     if not nfix: break
 print("CONTACT worst pen mm", round(max(v[0] for v in CONTACT.values()) * 1000, 1), "worst gap mm", round(max(v[1] for v in CONTACT.values() if v[1] < 9) * 1000, 1))
 blink_keys()
-for f in (1, F_END):
-    for s in "LR":
-        apply_pose(man, s, "flat_palm", f)
 bpy.ops.object.mode_set(mode='OBJECT')
 
 # ================================================================== shooter (who fires): generic man across the street
