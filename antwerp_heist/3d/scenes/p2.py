@@ -260,12 +260,12 @@ def T17():
 def T18():
     A = ST.vault_complex("night", gate_angle=95, contacts="bypassed")
     mc = A["mag_contact"]
-    m = MD.DOnorio(night=True); st = AC.Stand(m, (mc.x + 0.1, mc.y - 0.55), 95)
-    st.hand("R", mc + V((0.07, -0.05, -0.02)), elbow=(0.7, 0.3, -0.9), curl=20)
-    st.hand("L", mc + V((-0.08, -0.05, -0.04)), elbow=(0.7, 0.3, -0.9), curl=20)
+    m = MD.DOnorio(night=True); st = AC.Stand(m, (mc.x - 0.2, mc.y - 0.62), 75)
+    st.hand("R", mc + V((0.06, -0.1, -0.02)), elbow=(0.7, 0.3, -0.9), curl=20)
+    st.hand("L", mc + V((-0.09, -0.1, -0.04)), elbow=(0.7, 0.3, -0.9), curl=20)
     st.head_to(mc, share=0.8); st.finish(look=mc, density=HAIR)
     ST.light_spot("contact_torch", (mc.x + 0.9, mc.y - 1.3, 1.4), mc, 120, angle=30, color=(1.0, 0.85, 0.65))
-    return dict(a=((mc.x + 0.55, mc.y - 1.25, 1.95), tuple(mc)), b=((mc.x + 0.48, mc.y - 1.1, 1.92), tuple(mc)), lens=35,
+    return dict(a=((mc.x + 0.75, mc.y - 1.35, 1.95), tuple(mc)), b=((mc.x + 0.68, mc.y - 1.2, 1.92), tuple(mc)), lens=32,
                 fstop=3.2, focus=mc, hand_ok=("bypass", "magcontact", "doorwall", "vframe"), cine=dict(exposure=0.6))
 
 
