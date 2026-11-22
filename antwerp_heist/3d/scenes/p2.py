@@ -286,15 +286,16 @@ def T19():
 def T20():
     A = ST.vault_complex("night", gate_angle=95, contacts="bypassed", door_angle=92, taped=True)
     ld = A["light_detector"]
-    lad = PR.stepladder("ladder", 1.3); lad.location = (ld.x + 0.0, ld.y - 0.35, 0); bpy.context.view_layer.update()
-    m = MD.Finotto(night=True); st = AC.Stand(m, (ld.x, ld.y - 0.42, 0.78), 90)
-    st.hand("R", ld + V((0.04, -0.02, -0.06)), elbow=(0.7, 0.3, -0.9), curl=10)
-    st.hand("L", ld + V((-0.05, -0.04, -0.07)), elbow=(0.7, 0.3, -0.9), curl=10)
-    st.head_to(ld, share=0.8); st.finish(look=ld, density=HAIR, floor_z=0.78)
-    tr = PR.tape_roll(); tr.location = (ld.x + 0.25, ld.y - 0.4, 1.31)
+    stepm = ST.steel_paint("step_box", (0.35, 0.3, 0.2), 0.5)
+    ST.box("step_box", (ld.x, ld.y - 0.38, 0.2), (0.6, 0.45, 0.4), stepm, bevel=0.01)      # a sturdy step box
+    m = MD.Finotto(night=True); st = AC.Stand(m, (ld.x, ld.y - 0.38, 0.4), 90)
+    st.hand("R", ld + V((0.05, -0.03, -0.12)), elbow=(0.7, 0.3, -0.9), curl=10)
+    st.hand("L", ld + V((-0.06, -0.05, -0.13)), elbow=(0.7, 0.3, -0.9), curl=10)
+    st.head_to(ld, share=0.6); st.finish(look=ld, density=HAIR, floor_z=0.4)
+    tr = PR.tape_roll(); tr.location = (ld.x + 0.24, ld.y - 0.5, 0.432)
     t = PR.torch("torch_floor", energy=80); t.location = (0.8, 1.0, 0.03); t.rotation_euler = dirq(ld - V((0.8, 1.0, 0.03)))
     return dict(a=((1.6, 0.4, 0.9), tuple(ld + V((0, 0, -0.5)))), b=((1.45, 0.55, 0.95), tuple(ld + V((0, 0, -0.45)))), lens=26,
-                hand_ok=("light_detector", "tape", "ladder"), cine=dict(exposure=0.6))
+                hand_ok=("light_detector", "tape", "step_box"), cine=dict(exposure=0.6))
 
 
 def T21():
