@@ -59,8 +59,8 @@ def S04():
 
 def S05():
     ST.vault_complex("wreck", seed=7)
-    return dict(a=((-1.55, 1.15, 0.13), (-2.6, 2.9, 0.03)), b=((-1.25, 1.6, 0.13), (-2.4, 3.3, 0.03)), lens=35,
-                fstop=2.2, focus=(-2.0, 2.1, 0.02))
+    return dict(a=((-0.6, 1.0, 0.22), (-1.9, 2.6, 0.02)), b=((-0.35, 1.25, 0.2), (-1.7, 2.9, 0.02)), lens=28,
+                fstop=4.0, focus=(-1.5, 2.3, 0.02))
 
 
 # ============================================================================ L3  the alarm says secure
@@ -146,7 +146,7 @@ def S13():
     sv.hand("R", (0.25, dy - 0.42, 0.835), elbow=(0.7, 0.3, -0.7), curl=24)
     sv.head_to(k, share=0.8)
     sv.finish(look=k, density=HAIR)
-    return dict(a=((0.1, 0.5, 2.55), (0.08, 0.42, 0.79)), b=((0.08, 0.42, 2.38), (0.08, 0.38, 0.79)), lens=26,
+    return dict(a=((1.75, 0.35, 2.35), (0.0, 0.55, 0.85)), b=((1.6, 0.4, 2.25), (0.0, 0.5, 0.85)), lens=24,
                 hand_ok=("chair", "Chair", "desk", "Desk", "key", "torus", "Torus", "card"))
 
 
@@ -193,7 +193,7 @@ def S17():
 # ============================================================================ L9  how the vault works
 def S18():
     A = S2.maquette()
-    S2.ripple_bands(A["vault"] + V((0, -0.035, 0)), (0, -1, 0), (0.05, 0.075, 0.1), width=0.012, strength=4.0, alpha=0.45)
+    S2.ripple_bands(A["vault"] + V((0, -0.035, 0)), (0, -1, 0), (0.075,), width=0.07, strength=3.5, alpha=0.5)
     return dict(a=((-0.5, -0.55, 0.3), (0.02, 0.0, 0.07)), b=((-0.22, -0.62, 0.2), (0.03, 0.0, 0.04)), lens=35,
                 fstop=5.6, focus=A["vault"])
 
@@ -266,7 +266,8 @@ def S25():
 def S26():
     A = ST.vault_complex("night")
     d = A["dial"]; k = A["keylock"]
-    ST.light_spot("dial_spot", (d.x + 0.6, d.y - 1.2, d.z + 0.8), d, 90, angle=25, color=(1.0, 0.72, 0.45))
+    ST.light_spot("dial_spot", (d.x + 0.7, d.y - 1.0, d.z + 0.6), d, 260, angle=28, color=(1.0, 0.74, 0.5))
+    ST.light_point("dial_rim", (d.x - 0.5, d.y - 0.6, d.z + 0.4), 15, (0.6, 0.7, 1.0), radius=0.1)
     return dict(a=(tuple(d + V((0.22, -0.32, 0.06))), tuple(d)), b=(tuple(d + V((0.2, -0.3, -0.25))), tuple(k)), lens=50,
                 fstop=2.8, focus=d.lerp(k, 0.4), cine=dict(exposure=1.0))
 
@@ -274,8 +275,8 @@ def S26():
 def S27():
     A = ST.vault_complex("night")
     for p in A["pirs"]:
-        S2.ripple_bands(p + V((0, -0.06, -0.06)), (0, -1, -0.6), (0.25, 0.45, 0.7), width=0.07, strength=2.5, alpha=0.4)
-    S2.ripple_bands(A["light_detector"] + V((0, 0, -0.01)), (0, 0, -1), (0.18, 0.34, 0.52), width=0.06, strength=2.5, alpha=0.45)
+        S2.ripple_bands(p + V((0, -0.06, -0.06)), (0, -1, -0.6), (0.42,), width=0.55, strength=2.2, alpha=0.42)
+    S2.ripple_bands(A["light_detector"] + V((0, 0, -0.01)), (0, 0, -1), (0.32,), width=0.42, strength=2.2, alpha=0.45)
     ST.light_point("vault_dim", (0, 2.0, 2.2), 18, (1.0, 0.6, 0.35), radius=0.3)
     return dict(a=((1.9, 0.55, 1.3), (-0.7, 3.8, 1.55)), b=((1.55, 0.8, 1.25), (-0.7, 3.8, 1.6)), lens=24, cine=dict(exposure=0.4))
 
@@ -283,7 +284,7 @@ def S27():
 def S28():
     A = ST.vault_complex("night")
     sp = A["seismic"][0]
-    S2.ripple_bands(sp + V((0.01, 0, 0)), (1, 0, 0), (0.14, 0.26, 0.4), width=0.05, strength=2.5, alpha=0.45)
+    S2.ripple_bands(sp + V((0.01, 0, 0)), (1, 0, 0), (0.24,), width=0.3, strength=2.2, alpha=0.45)
     ST.light_point("wall_dim", (-2.2, 1.0, 2.2), 6, (1.0, 0.6, 0.35), radius=0.2)
     return dict(a=((-2.15, 1.05, 2.0), (-3.0, 0.25, 2.25)), b=((-2.3, 0.85, 2.05), (-3.0, 0.25, 2.28)), lens=35,
                 cine=dict(exposure=0.4))
@@ -414,7 +415,8 @@ def S37():
     se.hand("L", (-0.25, dy - 0.15, 0.835), elbow=(0.7, 0.3, -0.7), curl=24)
     se.head_to((0, -2.0, 1.0), share=0.5)
     se.finish(look=(0, -2, 1.0), density=HAIR)
-    return dict(a=((0.62, 1.98, 1.55), (-0.2, -1.6, 0.9)), b=((0.5, 1.98, 1.48), (-0.25, -1.6, 0.9)), lens=26,
+    ST.light_point("desk_glow", (-0.4, A["desk_y"] - 0.2, 1.25), 40, (1.0, 0.8, 0.55), radius=0.15)
+    return dict(cine=dict(exposure=0.6), a=((0.62, 1.98, 1.55), (-0.2, -1.6, 0.9)), b=((0.5, 1.98, 1.48), (-0.25, -1.6, 0.9)), lens=26,
                 hand_ok=("desk", "Desk", "chair", "Chair", "paper", "blueprint"))
 
 

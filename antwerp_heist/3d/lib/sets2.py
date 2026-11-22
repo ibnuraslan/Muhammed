@@ -189,7 +189,8 @@ def office(kind="leonardo", hour="day"):
     A = {}
     RX, RY, RZ = 2.5, 2.1, 2.75
     carpet = tex("dirty_carpet", 1.5, tint=(0.55, 0.32, 0.22) if kind == "leonardo" else (0.3, 0.32, 0.38), name="carpet")
-    wall = enamel("office_wall", (0.5, 0.44, 0.36) if kind == "leonardo" else (0.46, 0.44, 0.4), rough=0.85, var=0.08, scale=2)
+    import detail as DT
+    wall = DT.wall_paint("office_wall", (0.52, 0.48, 0.42) if kind == "leonardo" else (0.48, 0.47, 0.44), rough=0.85, scuff=0.5)
     ceil = flat("office_ceil", (0.45, 0.43, 0.4), 0.9)
     box("off_floor", (0, 0, -0.05), (2 * RX + 0.4, 2 * RY + 0.4, 0.1), carpet)
     box("off_ceil", (0, 0, RZ + 0.05), (2 * RX + 0.4, 2 * RY + 0.4, 0.1), ceil)
@@ -227,9 +228,9 @@ def office(kind="leonardo", hour="day"):
     A["seat_visitor"] = Vector((0.15, desk_y - 1.05, 0.46)); A["face_visitor"] = 90.0
     chair("visitor_chair", (0.15, desk_y - 1.05, 0), 90, flat("vchair_seat", (0.15, 0.08, 0.05), 0.6), flat("vchair_frame", (0.05, 0.05, 0.05), 0.3, 0.7))
     _ph("drawer_cabinet", (RX - 0.3, -0.6, 0), rot_z=math.radians(90))
-    _ph("desk_lamp_arm_01", (-0.75, desk_y + 0.1, 0.79), rot_z=math.radians(200))
-    phone("desk_phone", (0.65, desk_y + 0.1, 0.79), yaw=200)
-    A["lamp"] = Vector((-0.75, desk_y - 0.2, 1.2))
+    _ph("desk_lamp_arm_01", (0.8, desk_y + 0.15, 0.79), rot_z=math.radians(160))
+    phone("desk_phone", (-0.7, desk_y + 0.1, 0.79), yaw=160)
+    A["lamp"] = Vector((0.75, desk_y - 0.15, 1.2))
     pm = paper_mat()
     for i, (x, y, r) in enumerate([(0.25, desk_y - 0.1, 0.1), (0.33, desk_y - 0.05, -0.2), (-0.3, desk_y + 0.05, 0.3)]):
         box("desk_paper", (x, y, 0.792), (0.21, 0.297, 0.0012), pm, rot=(0, 0, r))
@@ -257,7 +258,7 @@ def office(kind="leonardo", hour="day"):
     l = bpy.data.lights.new("off_sun", 'SUN'); l.energy = 3.2 if sun else 0.0; l.color = (1.0, 0.82, 0.6); l.angle = math.radians(1.5)
     so = bpy.data.objects.new("off_sun", l); bpy.context.scene.collection.objects.link(so)
     so.rotation_euler = (math.radians(62), 0, math.radians(200)); A["sun"] = so
-    light_point("lamp_bulb", (-0.68, desk_y - 0.1, 1.15), 18 if sun else 35, (1.0, 0.7, 0.42), radius=0.03)
+    light_point("lamp_bulb", (0.68, desk_y - 0.1, 1.15), 18 if sun else 35, (1.0, 0.7, 0.42), radius=0.03)
     # sky beyond the window
     w = world((0.55, 0.62, 0.72) if sun else (0.03, 0.04, 0.07), 0.22)
     A["window"] = Vector((0, RY, 1.6)); A["door"] = Vector((-1.6, -RY, 1.0)); A["RX"] = RX; A["RY"] = RY
@@ -273,7 +274,8 @@ def security_room(kind="building", screen_images=None):
     RX, RY, RZ = 2.6, 2.2, 2.7
     alarm = kind == "alarm"
     floor = tex("floor_tiles_06" if not alarm else "rubber_tiles", 1.2, tint=(0.5, 0.45, 0.38) if not alarm else (0.25, 0.27, 0.3), name="sec_floor")
-    wall = enamel("sec_wall", (0.36, 0.33, 0.28) if not alarm else (0.18, 0.2, 0.22), rough=0.85, var=0.1)
+    import detail as DT
+    wall = DT.wall_paint("sec_wall", (0.42, 0.4, 0.36) if not alarm else (0.2, 0.21, 0.22), rough=0.85)
     box("sec_floor", (0, 0, -0.05), (2 * RX + 0.4, 2 * RY + 0.4, 0.1), floor)
     box("sec_ceil", (0, 0, RZ + 0.05), (2 * RX + 0.4, 2 * RY + 0.4, 0.1), flat("sec_ceil", (0.3, 0.3, 0.29), 0.9))
     box("sec_wall_back", (0, RY + 0.1, RZ / 2), (2 * RX + 0.4, 0.2, RZ), wall)
@@ -359,34 +361,71 @@ def exterior(hour="dawn"):
     the street is y < 0. hour: "dawn" (the Monday morning) | "day" (2000)."""
     import look
     A = {}
-    stone = enamel("dc_stone", (0.62, 0.55, 0.45), rough=0.8, var=0.12, scale=0.3)
-    glassd = flat("dc_glass", (0.12, 0.15, 0.17), 0.08, metal=0.5)
-    frame = flat("dc_frame", (0.1, 0.1, 0.1), 0.35, metal=0.8)
-    L = 60.0; H_ = 24.0
-    box("dc_block", (0, 6, H_ / 2 + 4.0), (L, 12, H_), stone)
-    for iz in range(7):
-        z = 5.2 + iz * 3.3
-        box("dc_ribbon", (0, -0.03, z), (L - 2, 0.1, 1.6), glassd)
-        box("dc_band", (0, -0.12, z - 1.0), (L - 1.5, 0.25, 0.25), stone)
-        for ix in range(-14, 15):
-            box("dc_mullion", (ix * 2.0, -0.1, z), (0.08, 0.1, 1.6), frame)
-    # ground floor: recessed glazed entrance and a canopy
-    box("dc_base_l", (-17.0, 3.0, 2.0), (26, 6, 4.0), stone); box("dc_base_r", (17.0, 3.0, 2.0), (26, 6, 4.0), stone)
-    box("dc_entr_back", (0, 3.6, 2.0), (8.0, 0.2, 4.0), glassd)
-    for ix in range(-4, 5):
-        box("dc_entr_mull", (ix * 1.0, 3.45, 1.6), (0.06, 0.08, 3.2), frame)
-    box("dc_canopy", (0, -0.6, 3.6), (9.0, 3.0, 0.25), frame)
-    box("dc_entr_floor", (0, 1.6, 0.02), (8, 4.0, 0.04), tex("granite_tile", 1.0, tint=(0.6, 0.55, 0.5), name="entr_floor"))
-    warm = emit("dc_lobby_glow", (1.0, 0.75, 0.45), 3.0)
-    box("dc_lobby_glow", (0, 3.75, 1.8), (7.8, 0.02, 3.4), warm)
+    import detail as DT
+    conc = DT.wall_paint("dc_precast", (0.56, 0.53, 0.48), rough=0.88, scuff=0.0, z_dirty=0.6)
+    conc2 = DT.wall_paint("dc_precast_dark", (0.36, 0.34, 0.31), rough=0.9, scuff=0.0, z_dirty=0.6)
+    glassd = flat("dc_glass", (0.1, 0.12, 0.13), 0.06, metal=0.5)
+    frame = flat("dc_frame", (0.09, 0.085, 0.08), 0.35, metal=0.8)
+    L = 56.0; floors = 8; fh = 3.2; z0 = 4.4
+    H_ = floors * fh
+    # body behind the precast skin (windows recessed 0.35 m)
+    box("dc_core", (0, 6.4, z0 + H_ / 2), (L, 12, H_), conc2)
+    box("dc_glass_plane", (0, 0.36, z0 + H_ / 2), (L - 1, 0.05, H_), glassd)
+    for f in range(floors + 1):
+        z = z0 + f * fh
+        # precast spandrel band: chamfered, heavy 1970s horizontal
+        box("dc_spandrel", (0, 0.0, z - 0.45), (L + 0.6, 0.7, 0.9), conc, bevel=0.04)
+    # vertical fins every 1.8 m (the facade rhythm), deeper at the corners
+    nf = int(L / 1.8)
+    for k in range(nf + 1):
+        x = -L / 2 + k * (L / nf)
+        d = 0.9 if k in (0, nf) else 0.55
+        box("dc_fin", (x, 0.1 - d / 2 + 0.35, z0 + H_ / 2), (0.28, d, H_ + 0.1), conc, bevel=0.03)
+        # window mullions between fins
+        box("dc_mullion", (x + L / nf / 2, 0.33, z0 + H_ / 2), (0.05, 0.06, H_), frame)
+    box("dc_roof_edge", (0, 0.1, z0 + H_ + 0.3), (L + 0.8, 0.9, 0.6), conc, bevel=0.04)
+    # ground floor: recessed glazed lobby behind square pilotis
+    box("dc_gf_back", (0, 4.0, z0 / 2), (L, 0.3, z0), conc2)
+    box("dc_gf_glass", (0, 3.8, 1.7), (14.0, 0.06, 3.4), glassd)
+    for ix in range(-7, 8):
+        box("dc_gf_mull", (ix * 1.0, 3.75, 1.7), (0.05, 0.08, 3.4), frame)
+    for k in range(-6, 7):
+        box("dc_pilotis", (k * (L / 13), 0.35, z0 / 2), (0.7, 0.7, z0), conc, bevel=0.03)
+    box("dc_gf_soffit", (0, 2.0, z0 - 0.15), (L, 4.0, 0.3), conc2)
+    box("dc_entr_floor", (0, 2.0, 0.02), (L, 4.0, 0.04), tex("granite_tile", 1.0, tint=(0.6, 0.55, 0.5), name="entr_floor"))
+    warm = emit("dc_lobby_glow", (1.0, 0.78, 0.5), 3.0)
+    box("dc_lobby_glow", (0, 3.9, 1.8), (13.8, 0.02, 3.3), warm)
+    for x in (-4.0, 0.0, 4.0):
+        light_point("soffit_light", (x, 1.8, z0 - 0.35), 120, (1.0, 0.8, 0.55), radius=0.2)
+    # neighbours: brick and stone houses either side
+    nb = tex("red_brick_03", 3.0, tint=(0.7, 0.55, 0.45), name="nb_brick")
+    for sx in (-1, 1):
+        box("neighbour", (sx * (L / 2 + 6), 5.5, 8.0), (12, 11, 16), nb)
+        for j in range(4):
+            for k in range(3):
+                box("nb_win", (sx * (L / 2 + 2.5 + k * 3.2), -0.02, 2.5 + j * 3.4), (1.2, 0.1, 1.8), flat("nb_win", (0.06, 0.07, 0.08), 0.1))
+    # security: steel anti-ram posts with reflective bands along the kerb, a guard cabin, barrier, planters
+    post = steel_paint("sec_post", (0.06, 0.065, 0.07), 0.4); refl = flat("reflect", (0.75, 0.72, 0.6), 0.3, metal=0.4)
+    for ix in range(-14, 15):
+        x = ix * 1.6
+        S.cyl("sec_post", (x, -4.55, 0), (x, -4.55, 1.05), 0.11, mat=post, verts=20)
+        S.cyl("sec_post_band", (x, -4.55, 0.82), (x, -4.55, 0.9), 0.113, mat=refl, verts=20)
+        S.cyl("sec_post_cap", (x, -4.55, 1.05), (x, -4.55, 1.09), 0.09, mat=post, verts=20)
+    box("guard_cabin", (-14.0, -3.0, 1.3), (2.2, 1.8, 2.6), steel_paint("cabin", (0.25, 0.27, 0.27), 0.5), bevel=0.04)
+    box("guard_cabin_win", (-14.0, -3.92, 1.6), (1.6, 0.04, 0.9), emit("cabin_glow", (1.0, 0.82, 0.6), 1.5))
+    box("barrier_arm", (-10.5, -4.0, 1.0), (5.0, 0.08, 0.08), flat("barrier", (0.7, 0.05, 0.04), 0.4))
+    for x in (-7.0, 7.0, 18.0, -20.0):
+        box("planter", (x, -1.6, 0.3), (1.6, 1.0, 0.6), conc, bevel=0.03)
+        box("planter_soil", (x, -1.6, 0.6), (1.5, 0.9, 0.02), flat("soil", (0.05, 0.035, 0.02), 0.9))
+        for k in range(5):
+            bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=0.25, location=(x - 0.5 + k * 0.25, -1.6 + (k % 2) * 0.2 - 0.1, 0.8))
+            bpy.context.active_object.data.materials.append(flat("shrub", (0.06, 0.12, 0.04), 0.8))
+    DT.sign((-9.0, -0.0, 3.2), (0, -1, 0), kind="notice", w=0.6, h=0.4)
     # pavement, kerb, street, bollards, lamp posts
     box("pavement", (0, -2.5, -0.05), (L + 40, 5.0, 0.1), tex("concrete_pavers", 1.2, tint=(0.6, 0.55, 0.5), name="pavers"))
     box("kerb", (0, -5.05, 0.0), (L + 40, 0.2, 0.15), flat("kerb", (0.35, 0.34, 0.32), 0.7))
     box("street", (0, -10.0, -0.12), (L + 80, 10.0, 0.1), tex("asphalt_02", 3.0, tint=(0.55, 0.52, 0.5), name="asphalt"))
     box("pavement2", (0, -17.5, -0.05), (L + 40, 5.0, 0.1), tex("concrete_pavers", 1.2, tint=(0.6, 0.55, 0.5), name="pavers2"))
-    bol = steel_paint("bollard", (0.08, 0.08, 0.09), 0.4)
-    for ix in range(-12, 13):
-        S.cyl("bollard", (ix * 2.2, -4.6, 0), (ix * 2.2, -4.6, 0.9), 0.1, mat=bol, verts=20)
     lampm = steel_paint("lamppost", (0.05, 0.06, 0.06), 0.45)
     for ix in (-20, 0, 20):
         S.cyl("lamppost", (ix, -4.8, 0), (ix, -4.8, 6.5), 0.08, mat=lampm, verts=16)
@@ -408,7 +447,7 @@ def exterior(hour="dawn"):
     else:
         import os as _os
         look.day_light("low_sun", azim=float(_os.environ.get("DAY_AZIM", "300")), elev=48, sky="blue", exposure=1.0)
-    A["entrance"] = Vector((0, 1.0, 0)); A["door"] = Vector((0, 3.4, 1.2))
+    A["entrance"] = Vector((0, 1.0, 0)); A["door"] = Vector((0, 3.8, 1.2))
     return A
 
 
@@ -418,8 +457,9 @@ def turin_flat(hour="evening"):
     pendant lamp; by the second window a jeweller's bench (Leonardo's trade). Room x in [-3, 3], y in [-2.5, 2.5]."""
     A = {}
     RX, RY, RZ = 3.0, 2.5, 3.1
-    floor = tex("terracotta_floor_tiles", 1.0, tint=(0.85, 0.6, 0.45), name="cotto")
-    plaster = enamel("ochre", (0.55, 0.33, 0.14), rough=0.9, var=0.22, scale=1.0)
+    import detail as DT
+    floor = tex("terracotta_floor_tiles", 1.0, tint=(0.68, 0.55, 0.46), name="cotto")
+    plaster = DT.wall_paint("t_plaster", (0.56, 0.52, 0.45), rough=0.88, scuff=0.4)
     box("t_floor", (0, 0, -0.05), (2 * RX + 0.4, 2 * RY + 0.4, 0.1), floor)
     box("t_ceil", (0, 0, RZ + 0.05), (2 * RX + 0.4, 2 * RY + 0.4, 0.1), flat("t_ceil", (0.45, 0.4, 0.33), 0.9))
     for sg in (1, -1):
@@ -433,7 +473,7 @@ def turin_flat(hour="evening"):
     for x in wins:
         box("t_win_sill", (x, RY + 0.1, WZ0 / 2), (WW, 0.2, WZ0), plaster)
         box("t_win_head", (x, RY + 0.1, (WZ1 + RZ) / 2), (WW, 0.2, RZ - WZ1), plaster)
-    green = enamel("shutter_green", (0.06, 0.16, 0.08), rough=0.6, var=0.15)
+    green = enamel("shutter_green", (0.13, 0.16, 0.13), rough=0.6, var=0.15)
     wood = tex("wood_table_worn", 1.0, tint=(0.75, 0.55, 0.38), name="t_wood")
     for x in wins:
         # shutters folded half open outside, louvres
@@ -442,7 +482,7 @@ def turin_flat(hour="evening"):
             box("shutter", (px, RY + 0.34, (WZ0 + WZ1) / 2), (0.25, 0.03, WZ1 - WZ0), green, rot=(0, 0, math.radians(sg * 60)))
         box("t_win_frame", (x, RY + 0.02, (WZ0 + WZ1) / 2), (WW, 0.06, 0.05), wood)
     # the city beyond: warm evening haze
-    box("t_far", (0, RY + 12, 6), (40, 0.5, 20), tex("yellow_plaster", 3.0, tint=(0.9, 0.65, 0.4), name="t_far"))
+    box("t_far", (0, RY + 12, 6), (40, 0.5, 20), tex("yellow_plaster", 3.0, tint=(0.72, 0.64, 0.56), name="t_far"))
     # kitchen table under a pendant lamp; chairs
     table("t_table", (0, 0.2, 0), (1.6, 0.9), wood, wood)
     A["table_top"] = Vector((0, 0.2, 0.76))
@@ -455,7 +495,7 @@ def turin_flat(hour="evening"):
     shade = flat("shade", (0.3, 0.12, 0.05), 0.5)
     S.cyl("pendant_shade", (0, 0.2, 1.75), (0, 0.2, 1.55), 0.06, 0.24, mat=shade, verts=32, caps=False)
     box("pendant_bulb", (0, 0.2, 1.6), (0.05, 0.05, 0.05), emit("bulb", (1.0, 0.7, 0.4), 40))
-    light_point("pendant", (0, 0.2, 1.55), 120, (1.0, 0.68, 0.4), radius=0.05)
+    light_point("pendant", (0, 0.2, 1.55), 120, (1.0, 0.78, 0.55), radius=0.05)
     A["lamp"] = Vector((0, 0.2, 1.55))
     # jeweller's bench by the right window
     bx = 1.6; by = RY - 0.45
@@ -475,8 +515,8 @@ def turin_flat(hour="evening"):
     # evening light through the windows
     for x in wins:
         light_area("t_window", (x, RY + 0.6, 1.8), (x - 0.3, -1.0, 0.6), 1.0, 160 if hour == "evening" else 400,
-                   (1.0, 0.62, 0.35) if hour == "evening" else (1.0, 0.9, 0.78), size_y=1.6)
-    world((0.25, 0.18, 0.12), 0.25)
+                   (1.0, 0.76, 0.56) if hour == "evening" else (1.0, 0.92, 0.82), size_y=1.6)
+    world((0.2, 0.18, 0.16), 0.25)
     A["RX"] = RX; A["RY"] = RY; A["windows"] = wins
     return A
 

@@ -264,11 +264,12 @@ def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), ga
     lights_on = state in ("day", "wreck", "heist")
     door_open = state in ("day", "wreck", "heist")
     # materials
-    concrete = enamel("vault_wall_paint", (0.3, 0.22, 0.15), rough=0.75, var=0.25, scale=1.5)
+    import detail as DT
+    concrete = DT.wall_paint("vault_wall_paint", (0.4, 0.37, 0.32), rough=0.78)
     floor_m = tex("large_grey_tiles" if True else "terrazzo_tiles", 0.7, tint=(0.72, 0.64, 0.54), name="vault_floor")
     corr_floor = tex("concrete_floor_painted", 0.9, tint=(0.55, 0.48, 0.4), name="corr_floor")
     ceil_m = flat("ceiling", (0.32, 0.3, 0.27), 0.9)
-    box_paint = steel_paint("box_paint", (0.6, 0.56, 0.48), rough=0.35, wear=0.15)      # pale champagne steel enamel
+    box_paint = brushed("box_steel", (0.62, 0.6, 0.56), rough=0.3)                       # brushed stainless box doors
     frame_paint = steel_paint("box_frame", (0.22, 0.2, 0.17), rough=0.45, wear=0.2)
     cavity_m = flat("cavity", (0.06, 0.055, 0.05), 0.6, metal=0.3)
     brass = gold("brass_plate", (0.62, 0.45, 0.2)); brass.node_tree.nodes["Principled BSDF"].inputs['Roughness'].default_value = 0.35
@@ -353,6 +354,7 @@ def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), ga
         idx = list(range(len(cells))); rng.shuffle(idx)
         open_set = set(idx[:forced if wreck else int(forced * debris)])
     A["open_cells"] = []; A["cells"] = cells
+    num_m = flat("engraved", (0.02, 0.018, 0.015), 0.5)
     for (esg, ec, er) in extra_open:
         for i, cl in enumerate(cells):
             if cl[0] == "side" and cl[1] == esg and cl[2] == ec and cl[3] == er:
@@ -380,6 +382,7 @@ def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), ga
         else:
             d = dr.copy(); col.objects.link(d)
             d.matrix_world = Matrix.Translation(org) @ R
+        DT.number_text(str(i + 1), d.matrix_world @ Matrix.Translation((w * 0.3, -0.0145, h * 0.3)), size=0.016, mat=num_m)
     for t in (door_t, door_b, cav_t, cav_b, tray_t):
         pass                                             # templates are not linked into the scene
 
@@ -423,7 +426,7 @@ def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), ga
     y_end = -WALL - CY
     box("corr_floor", (0, (-WALL + y_end) / 2, -0.05), (2 * CX + 0.2, CY + 0.2, 0.1), corr_floor)
     box("corr_ceil", (0, (-WALL + y_end) / 2, CZ + 0.05), (2 * CX + 0.2, CY + 0.2, 0.1), ceil_m)
-    cw = enamel("corr_wall_paint", (0.42, 0.33, 0.22), rough=0.8, var=0.3, scale=1.2)
+    cw = DT.wall_paint("corr_wall_paint", (0.5, 0.48, 0.43), rough=0.8)
     # left wall with the cupboard-room door at y = -3.4
     KY = -3.6
     box("corr_wall_R", (CX + 0.1, (-WALL + y_end) / 2, CZ / 2), (0.2, CY + 0.2, CZ), cw)
@@ -489,6 +492,23 @@ def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), ga
     S.cyl("handrail", (CX - 0.05, y_end - 0.2, 0.95), (CX - 0.05, y_end - 3.4, 3.0), 0.02, mat=steel, verts=12)
     A["stairs_bottom"] = Vector((0, y_end - 0.1, 0)); A["corr_end"] = Vector((0, y_end, 0))
 
+    # ---- dressing: dado, skirting, cable tray, vents, extinguisher, signs, CCTV domes, electrical box
+    dado = DT.wall_paint("corr_dado_paint", (0.2, 0.22, 0.23), rough=0.55)
+    for sx, ya, yb in ((CX - 0.004, -WALL, y_end), (-CX + 0.004, -WALL, KY + 0.45), (-CX + 0.004, KY - 0.45, y_end)):
+        box("corr_dado_panel", (sx, (ya + yb) / 2, 0.55), (0.008, abs(yb - ya), 1.1), dado)
+        DT.skirting((sx, ya, 0), (sx, yb, 0), (-1 if sx > 0 else 1, 0, 0))
+    DT.cable_tray((CX - 0.25, -WALL - 0.2), (CX - 0.25, y_end + 0.2), CZ - 0.32, n_cables=6)
+    DT.vent((-CX + 0.005, -1.2, 2.25), (1, 0, 0), 0.45, 0.22)
+    DT.vent((CX - 0.005, -5.6, 2.25), (-1, 0, 0), 0.45, 0.22)
+    DT.extinguisher((-CX + 0.005, -2.75, 0.12), (1, 0, 0))
+    DT.sign((CX - 0.005, -1.75, 1.6), (-1, 0, 0), kind="notice", w=0.3, h=0.21)
+    DT.sign((0, y_end + 0.03, 2.2), (0, 1, 0), kind="exit")
+    DT.cctv_dome((0.3, -4.4, CZ)); DT.cctv_dome((VX - 0.6, 0.6, VZ)); DT.cctv_dome((-VX + 0.6, VY - 0.6, VZ))
+    DT.elec_box((CX - 0.005, -6.6, 1.3), (-1, 0, 0))
+    for x in (-1.6, 1.6):
+        DT.vent((x, VY / 2, VZ - 0.005), (0, 0, -1), 0.5, 0.3)
+    for sg in (1, -1):
+        DT.skirting((sg * (VX - 0.004), -0.0, 0), (sg * (VX - 0.004), y0, 0), (-sg, 0, 0))
     # ---- lights
     lum_on = emit("fluor_on", (1.0, 0.86, 0.66), 9.0)
     lum_off = flat("fluor_off", (0.6, 0.6, 0.58), 0.3)
