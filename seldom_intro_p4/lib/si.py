@@ -77,6 +77,7 @@ def logo_image():
         if im.filepath and os.path.basename(im.filepath) == os.path.basename(LOGO):
             return im
     im = bpy.data.images.load(LOGO); im.alpha_mode = 'STRAIGHT'
+    im.name = "seldom_logo_alpha"          # "alpha" in the name: the farm export keeps it a PNG with its alpha
     return im
 
 

@@ -235,15 +235,15 @@ def build(shot, t, out):
     mechanism(shot)
     pos = (0.12, FRONT_Y - 0.62)
     if shot in ("A", "B"):
-        dark_lantern(Vector((0.66, FRONT_Y - 0.3, 0.0)), DIAL + Vector((-0.05, 0, 0.0)))
+        dark_lantern(Vector((-0.5, FRONT_Y - 0.42, 0.0)), DIAL + Vector((0.0, 0, 0.0)))
         dv, M = si.person("deveau", pos, 90, pose_listen, DIAL, wet=0.0)
         steth_once(dv, M)
         if shot == "A":
             c = Vector((1.55, -0.95, 0.85)) + Vector((-0.1, 0.0, 0.0)) * E(t)
             si.cam(c, (-0.05, FRONT_Y - 0.38, 0.72), lens=24, fstop=4.0)
         else:      # close on the dial, over his right shoulder (his hand and shoulder in frame)
-            c = Vector((0.58, FRONT_Y - 0.62, 0.95)) + Vector((-0.03, 0.03, 0)) * E(t)
-            si.cam(c, DIAL + Vector((-0.02, -0.07, 0)), lens=55, fstop=2.4)
+            c = Vector((0.62, FRONT_Y - 0.34, 0.86)) + Vector((-0.04, 0.0, -0.02)) * E(t)
+            si.cam(c, DIAL + Vector((-0.06, -0.06, 0.0)), lens=40, fstop=2.4)
     elif shot == "C":
         dark_lantern(Vector((0.66, FRONT_Y - 0.3, 0.0)), DIAL + Vector((-0.05, 0, 0.0)))
 
