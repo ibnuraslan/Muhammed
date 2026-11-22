@@ -33,14 +33,14 @@ def torch_pose(st, side, aim, reach=0.42):
 
 def bag_pose(st, side):
     """Holdall carried by its straps at arm's length; returns a placer for after finish()."""
-    st.arm_down(side, out=0.2, fwd=0.02, bend=6)
+    st.arm_down(side, out=0.34, fwd=0.02, bend=6)
     import poses as P
     P.grip(st.m.h, side, 0.9)
     def place(name, full=0.8):
         b = PR.holdall(name, full=full); bpy.context.view_layer.update()
         p = st.palm(side); sg = 1 if side == "L" else -1
         out = (st.M.to_3x3() @ V((sg, 0, 0))).normalized()
-        b.location = p + out * 0.06 - V((0, 0, 0.19 + 0.14 * full + 0.04))
+        b.location = p + out * 0.17 - V((0, 0, 0.19 + 0.14 * full + 0.04))
         b.rotation_euler = (0, 0, math.atan2(out.y, out.x) + math.pi / 2)
         return b
     return place
