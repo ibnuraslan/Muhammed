@@ -58,7 +58,7 @@ box("AnaMach_MonBody", (0.42, 0.22, 0.32), (ax, ay - 0.02, 1.28), CREAM)
 box("AnaMach_MonScreen", (0.34, 0.01, 0.24), (ax, ay + 0.095, 1.28), SCREEN, bevel=0.0)
 for k, dx in enumerate((-0.5, -0.62)):
     cyl("Gas_%d" % k, 0.085, 0.95, (ax + dx, ay + 0.05, 0.48), GAS_BLUE if k == 0 else GAS_GREEN)
-    cyl("GasCap_%d" % k, 0.04, 0.08, (ax + dx, ay + 0.05, 0.99), STEEL)
+    cyl("GasValve_%d" % k, 0.04, 0.08, (ax + dx, ay + 0.05, 0.99), STEEL)
 for sx in (-1, 1):
     for sy in (-1, 1):
         cyl("AnaMach_Wheel%d%d" % (sx + 1, sy + 1), 0.035, 0.03, (ax + sx * 0.3, ay + sy * 0.2, 0.035), DARK, rot=(0, math.radians(90), 0))
@@ -102,7 +102,7 @@ for k, z in enumerate((0.25, 0.45, 0.65, 0.85)):
     box("CrashCart_Handle%d" % k, (0.3, 0.02, 0.015), (cx0, cy0 - 0.255, z + 0.04), STEEL, bevel=0.0)
 box("CrashCart_Top", (0.64, 0.52, 0.03), (cx0, cy0, 1.015), STEEL, bevel=0.002)
 cyl("O2_Cyl", 0.08, 1.0, (1.75, 2.45, 0.5), GAS_GREEN)
-cyl("O2_Cap", 0.035, 0.09, (1.75, 2.45, 1.04), STEEL)
+cyl("O2_Valve", 0.035, 0.09, (1.75, 2.45, 1.04), STEEL)
 
 # 6. warmer, motivated light: an overhead warm key on the tables and a warm practical-side key in the recovery corner
 def area(name, loc, tgt, size, energy, color):

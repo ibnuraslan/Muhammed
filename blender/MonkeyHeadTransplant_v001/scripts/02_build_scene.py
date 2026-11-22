@@ -688,12 +688,28 @@ for nm in ("Surgeon", "Nurse", "Anaes"):
     _ctx = bpy.data.textures.get("TX_CapFolds") or bpy.data.textures.new("TX_CapFolds", "CLOUDS"); _ctx.noise_scale = 0.025
     _cd = cap.modifiers.new("folds", "DISPLACE"); _cd.texture = _ctx; _cd.strength = 0.004
     cap.modifiers.new("s", "SOLIDIFY").thickness = 0.002
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.1, segments=32, ring_count=16)
+    # v013b: fitted surgical mask (the old curved plate sat inside the face and showed as a strip): nose bridge to under the
+    # chin, cheek to cheek, every vertex ray-cast onto the face and sitting 5 mm outside it, soft folds; rides the head bone
+    MC = V(cx, nose.y + 0.11, nose.z - 0.035)
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.15, segments=128, ring_count=96, location=MC)
     mask = bpy.context.active_object; mask.name = nm + "_Mask"
     bm = bmesh.new(); bm.from_mesh(mask.data)
-    bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.y > -0.045 or v.co.z > 0.03 or v.co.z < -0.07], context="VERTS"); bm.to_mesh(mask.data); bm.free()
-    mask.data.materials.append(M_mask); mask.modifiers.new("s", "SOLIDIFY").thickness = 0.003; bpy.ops.object.shade_smooth()
-    mask.location = V(cx, nose.y + 0.079, nose.z + 0.006); mask.scale = (0.82, 1.0, 0.95)
+    def _mtop(x_): return nose.z + 0.022 - 2.2 * x_ * x_
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.y > -0.02 or abs(v.co.x) > 0.072
+                               or MC.z + v.co.z > _mtop(v.co.x) or MC.z + v.co.z < nose.z - 0.10], context="VERTS")
+    _miss = 0
+    for v in bm.verts:
+        w_ = MC + v.co; ax_ = V(MC.x, MC.y, w_.z); d_ = (ax_ - w_).normalized()
+        hit = _hbvh.ray_cast(w_, d_, 0.3)
+        if hit[0] is not None: v.co = hit[0] - d_ * 0.005 - MC
+        else: _miss += 1
+    bmesh.ops.smooth_vert(bm, verts=[v for v in bm.verts if v.is_boundary], factor=0.5, use_axis_x=True, use_axis_y=False, use_axis_z=True)
+    bm.to_mesh(mask.data); bm.free()
+    mask.data.materials.append(M_mask); bpy.ops.object.shade_smooth()
+    _mtx = bpy.data.textures.get("TX_MaskPleats") or bpy.data.textures.new("TX_MaskPleats", "CLOUDS"); _mtx.noise_scale = 0.02
+    _md = mask.modifiers.new("pleats", "DISPLACE"); _md.texture = _mtx; _md.strength = 0.0025
+    mask.modifiers.new("s", "SOLIDIFY").thickness = 0.002
+    print("MASKFIT", nm, len(mask.data.vertices), "verts, missed", _miss)
     for o in (mask,):
         M = o.matrix_world.copy(); o.parent = rig; o.parent_type = "BONE"; o.parent_bone = "head"
         bpy.context.view_layer.update(); o.matrix_world = M
@@ -801,7 +817,7 @@ for nm in ("Surgeon", "Nurse", "Anaes"):
         if dom.startswith("upperleg") and (body.matrix_world @ v.co).z < Hh * 0.50: continue
         if (body.matrix_world @ v.co).z > Hh * 0.835 and not dom.startswith(("clavicle", "shoulder", "upperarm", "lowerarm")): continue   # nothing above the collar (face-muscle groups)
         _keep.add(v.index)
-    for part, ids, off, mat_, folds in (("_GownTop", _keep, 0.02, M_cap, 0.008), ("_Gloves", _hand, 0.0022, M_glove, 0.0)):
+    for part, ids, off, mat_, folds in (("_GownTop", _keep, 0.028, M_cap, 0.010), ("_Gloves", _hand, 0.0022, M_glove, 0.0)):
         g_ = body.copy(); g_.data = body.data.copy(); g_.name = nm + part; col.objects.link(g_)
         for md_ in list(g_.modifiers):
             if md_.type != "ARMATURE": g_.modifiers.remove(md_)
@@ -810,6 +826,8 @@ for nm in ("Surgeon", "Nurse", "Anaes"):
         g_.data.materials.clear(); g_.data.materials.append(mat_)
         for p_ in g_.data.polygons: p_.material_index = 0; p_.use_smooth = True
         d1 = g_.modifiers.new("out", "DISPLACE"); d1.strength = off; d1.mid_level = 0.0
+        if folds:   # v013b: cloth, not skin - smooth away the chest/abdomen anatomy the body copy carries
+            sm_ = g_.modifiers.new("cloth", "SMOOTH"); sm_.factor = 1.0; sm_.iterations = 12
         if folds:
             ftx = bpy.data.textures.get("TX_GownFolds") or bpy.data.textures.new("TX_GownFolds", "CLOUDS"); ftx.noise_scale = 0.045; ftx.noise_depth = 2
             d2 = g_.modifiers.new("folds", "DISPLACE"); d2.texture = ftx; d2.strength = folds
@@ -818,5 +836,22 @@ for nm in ("Surgeon", "Nurse", "Anaes"):
         g_.modifiers.new("sol", "SOLIDIFY").thickness = 0.003 if folds else 0.0008
         g_.modifiers.new("sub", "SUBSURF").levels = 1
         print("FITTED", g_.name, len(g_.data.vertices), [m.type for m in g_.modifiers])
+    # v013b: the loose scrub suit poked through the fitted gown top everywhere -> keep only its trousers (the gown top and
+    # skirt cover the cut from 0.50H up), and un-hide the body torso the suit used to mask so the collar gap shows skin, not a hole
+    _suit = next((o_ for o_ in bpy.data.objects if o_.name.startswith(nm + ".") and "casualsuit" in o_.name), None)
+    if _suit:
+        _sg = {g.index: g.name for g in _suit.vertex_groups}
+        _UP = ("clavicle", "shoulder", "upperarm", "lowerarm", "wrist", "finger", "metacarpal", "spine", "neck", "breast", "pectoral", "head")
+        bm = bmesh.new(); bm.from_mesh(_suit.data); dl_ = bm.verts.layers.deform.active; _del = []
+        for bv in bm.verts:
+            z_ = (_suit.matrix_world @ bv.co).z; dom = ""
+            if dl_ is not None and bv[dl_]:
+                gi_ = max(bv[dl_].items(), key=lambda t: t[1])[0]; dom = _sg.get(gi_, "")
+            if z_ > Hh * 0.56 or dom.startswith(_UP): _del.append(bv)
+        bmesh.ops.delete(bm, geom=_del, context="VERTS"); bm.to_mesh(_suit.data); bm.free()
+        mvg = body.vertex_groups.get("Delete." + _suit.name.split(".", 1)[1])
+        if mvg:
+            mvg.remove([i for i in _keep if (body.matrix_world @ body.data.vertices[i].co).z > Hh * 0.56])
+        print("SUITCUT", _suit.name, len(_del), "deleted;", len(_suit.data.vertices), "left; mask", mvg.name if mvg else None)
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("SAVED", OUT)
