@@ -43,6 +43,15 @@ class _Base:
         else:
             P.rest_hand(h, side, curl)
 
+    def grip(self, side, center, bar_dir, radius=0.012, over=None, elbow=(0.7, 0.4, -0.6)):
+        """Close a hand round a bar (sitpose.Seat.grip_bar's solver, for a standing man). Returns the palm gap (m)."""
+        fake = SP.Seat.__new__(SP.Seat); fake.p = self.m; fake.M = self.M; fake.Mi = self.Mi
+        if over is None:
+            hip = self.M @ H.hip_mid(self.m.h) if hasattr(H, "hip_mid") else self.M @ SP.hip_mid(self.m.h)
+            o = hip - Vector(center); o.z = 0
+            over = o.normalized() if o.length > 1e-4 else Vector((0, -1, 0))
+        return fake.grip_bar(side, center, bar_dir, radius=radius, over=over, elbow=elbow)
+
     def palm(self, side):
         return self.M @ P.palm_point(self.m.h, side)
 

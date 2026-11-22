@@ -468,6 +468,7 @@ def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), ga
     gate.matrix_world = Matrix.Translation((-gate_w / 2, gy, 0)) @ Matrix.Rotation(math.radians(-gate_angle), 4, 'Z')
     bpy.context.view_layer.update()
     A["gate_handle"] = gate.matrix_world @ Vector((gate_w - 0.1, -0.05, 1.05))
+    A["gate_bar"] = gate.matrix_world @ Vector((0.65, 0.0, 1.3)); A["gate_bar_dir"] = gate.matrix_world.to_3x3() @ Vector((0, 0, 1))
     A["grille_y"] = gy; A["grille_lock"] = A["gate_handle"]
     # camera over the grille (looking at whoever stands outside it) + intercom panel
     try:

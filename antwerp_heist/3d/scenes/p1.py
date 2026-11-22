@@ -229,7 +229,8 @@ def S22():
     A = ST.vault_complex("day", gate_angle=38)
     g = A["gate_handle"]
     m = MD.Leonardo(); st = AC.Stand(m, (g.x - 0.05, g.y - 0.5), 80)
-    st.hand("R", g + V((0.0, -0.02, 0.0)), elbow=(0.7, 0.3, -0.8), grip=0.9)
+    gb = A["gate_bar"]
+    gap = st.grip("R", gb, (0, 0, 1), radius=0.011)
     st.head_to((0, 0, 1.2), share=0.5)
     st.finish(look=(0, 0, 1.2), density=HAIR)
     return dict(a=((1.0, -3.3, 1.4), (-0.1, -2.2, 1.1)), b=((0.92, -3.05, 1.4), (-0.1, -2.2, 1.1)), lens=30,
