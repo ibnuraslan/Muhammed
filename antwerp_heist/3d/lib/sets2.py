@@ -252,14 +252,14 @@ def office(kind="leonardo", hour="day"):
     box("off_door", (-1.6, -RY + 0.02, 1.0), (0.9, 0.04, 2.05), enamel("door_wood", (0.22, 0.12, 0.06), rough=0.5))
     # light: daylight through the window (the key), ceiling panel off, desk lamp warm
     sun = hour == "day"
-    light_area("win_key", (0, RY + 0.8, 1.7), (0, -1, 0.8), 4.5, 900 if sun else 120, (1.0, 0.92, 0.8) if sun else (0.5, 0.6, 0.9),
+    light_area("win_key", (0, RY + 0.8, 1.7), (0, -1, 0.8), 4.5, 380 if sun else 120, (1.0, 0.92, 0.8) if sun else (0.5, 0.6, 0.9),
                size_y=1.6)
     l = bpy.data.lights.new("off_sun", 'SUN'); l.energy = 3.2 if sun else 0.0; l.color = (1.0, 0.82, 0.6); l.angle = math.radians(1.5)
     so = bpy.data.objects.new("off_sun", l); bpy.context.scene.collection.objects.link(so)
     so.rotation_euler = (math.radians(62), 0, math.radians(200)); A["sun"] = so
     light_point("lamp_bulb", (-0.68, desk_y - 0.1, 1.15), 18 if sun else 35, (1.0, 0.7, 0.42), radius=0.03)
     # sky beyond the window
-    w = world((0.55, 0.62, 0.72) if sun else (0.03, 0.04, 0.07), 0.6)
+    w = world((0.55, 0.62, 0.72) if sun else (0.03, 0.04, 0.07), 0.22)
     A["window"] = Vector((0, RY, 1.6)); A["door"] = Vector((-1.6, -RY, 1.0)); A["RX"] = RX; A["RY"] = RY
     return A
 
@@ -359,8 +359,8 @@ def exterior(hour="dawn"):
     the street is y < 0. hour: "dawn" (the Monday morning) | "day" (2000)."""
     import look
     A = {}
-    stone = tex("concrete_tile_facade", 2.0, tint=(0.82, 0.76, 0.66), name="dc_stone")
-    glassd = flat("dc_glass", (0.05, 0.06, 0.07), 0.05, metal=0.6)
+    stone = enamel("dc_stone", (0.62, 0.55, 0.45), rough=0.8, var=0.12, scale=0.3)
+    glassd = flat("dc_glass", (0.12, 0.15, 0.17), 0.08, metal=0.5)
     frame = flat("dc_frame", (0.1, 0.1, 0.1), 0.35, metal=0.8)
     L = 60.0; H_ = 24.0
     box("dc_block", (0, 6, H_ / 2 + 4.0), (L, 12, H_), stone)
@@ -377,7 +377,7 @@ def exterior(hour="dawn"):
         box("dc_entr_mull", (ix * 1.0, 3.45, 1.6), (0.06, 0.08, 3.2), frame)
     box("dc_canopy", (0, -0.6, 3.6), (9.0, 3.0, 0.25), frame)
     box("dc_entr_floor", (0, 1.6, 0.02), (8, 4.0, 0.04), tex("granite_tile", 1.0, tint=(0.6, 0.55, 0.5), name="entr_floor"))
-    warm = emit("dc_lobby_glow", (1.0, 0.75, 0.45), 3.0 if hour == "dawn" else 1.2)
+    warm = emit("dc_lobby_glow", (1.0, 0.75, 0.45), 3.0)
     box("dc_lobby_glow", (0, 3.75, 1.8), (7.8, 0.02, 3.4), warm)
     # pavement, kerb, street, bollards, lamp posts
     box("pavement", (0, -2.5, -0.05), (L + 40, 5.0, 0.1), tex("concrete_pavers", 1.2, tint=(0.6, 0.55, 0.5), name="pavers"))
@@ -406,7 +406,8 @@ def exterior(hour="dawn"):
     if hour == "dawn":
         look.day_light("dusk", azim=120)
     else:
-        look.day_light("low_sun", azim=210, elev=28)
+        import os as _os
+        look.day_light("low_sun", azim=float(_os.environ.get("DAY_AZIM", "300")), elev=48, sky="blue", exposure=1.0)
     A["entrance"] = Vector((0, 1.0, 0)); A["door"] = Vector((0, 3.4, 1.2))
     return A
 

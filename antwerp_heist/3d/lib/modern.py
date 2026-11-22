@@ -215,7 +215,7 @@ class Leonardo(ModernMan):
     MUSCLE = 0.5; WEIGHT = 0.78; HEIGHT = 0.42
     EXTRA = {"targets/head/head-age-incr": 0.4, "targets/neck/neck-scale-horiz-incr": 0.3}
     SKIN = dict(base=(0.5, 0.31, 0.21), weather=0.35)
-    HAIR = (0.35, 0.1); HAIR_LEN = (0.018, 0.035); HAIRLINE = 0.018; CROWN = 0.0
+    HAIR = (0.6, 0.12); HAIR_LEN = (0.018, 0.035); HAIRLINE = 0.018; CROWN = 0.0
     SHIRT = (0.42, 0.52, 0.66); JACKET = "blazer"; JACKET_COL = (0.018, 0.024, 0.05)
     TROUSERS = (0.09, 0.09, 0.095); SHOES = (0.07, 0.035, 0.015)
 

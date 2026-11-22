@@ -502,7 +502,8 @@ def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), ga
             light_area("corr_light", (0, y, CZ - 0.06), (0, y, 0), 0.18, 55, (1.0, 0.8, 0.58), size_y=1.2)
     if not lights_on:
         # night: a single caged night light by the stairs and a green exit sign; LEDs on the sensors
-        light_point("night_light", (CX - 0.12, -WALL - CY + 0.3, 2.2), 7, (1.0, 0.6, 0.3), radius=0.04)
+        light_point("night_light", (CX - 0.12, -WALL - CY + 0.3, 2.2), 40, (1.0, 0.6, 0.3), radius=0.04)
+        light_point("door_night_light", (-CX + 0.15, -WALL - 0.9, 2.3), 12, (1.0, 0.62, 0.32), radius=0.05)
         box("exit_sign", (0, -WALL - CY + 0.05, 2.35), (0.3, 0.02, 0.12), emit("exit_green", (0.1, 1.0, 0.35), 6))
         light_point("exit_glow", (0, -WALL - CY + 0.2, 2.3), 1.2, (0.2, 1.0, 0.4), radius=0.1)
     world((0.01, 0.01, 0.012), 0.5)

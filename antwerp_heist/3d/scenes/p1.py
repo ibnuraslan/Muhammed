@@ -95,7 +95,7 @@ def S09():
     S2.exterior("day")
     m = MD.Leonardo(); st = AC.Stand(m, (-1.1, -2.4), 88); st.walk(0.6)
     st.finish(look=(0, 3, 1.6), density=HAIR)
-    return dict(a=((-4.2, -12.0, 1.6), (-0.3, 0.0, 2.4)), b=((-3.7, -11.0, 1.6), (-0.4, 0.0, 2.3)), lens=35)
+    return dict(a=((-6.5, -14.5, 1.5), (0.5, 0.0, 6.5)), b=((-5.8, -13.4, 1.5), (0.4, 0.0, 6.2)), lens=22)
 
 
 def S10():
@@ -127,7 +127,7 @@ def S12():
     stool((seat.x, seat.y, 0), h=0.6)
     m = MD.Leonardo(); se = AC.Seated(m, (seat.x, seat.y, 0.6), 90, lean=18)
     se.hand("L", (b.x - 0.16, b.y - 0.26, 0.99), elbow=(0.8, 0.1, -0.6), curl=26)
-    se.hand("R", (b.x + 0.08, b.y - 0.12, 1.12), elbow=(0.7, 0.2, -0.9), grip=0.6)
+    se.hand("R", (b.x + 0.02, b.y - 0.3, 1.02), elbow=(0.8, 0.1, -0.8), grip=0.6)
     se.head_to((b.x + 0.05, b.y - 0.05, 1.0), share=0.8)
     se.finish(look=(b.x + 0.05, b.y - 0.05, 0.95), density=HAIR)
     return dict(a=((2.45, 0.45, 1.5), (1.5, 2.15, 1.0)), b=((2.3, 0.7, 1.45), (1.5, 2.15, 1.0)), lens=35,
@@ -228,7 +228,8 @@ def S21():
 def S22():
     A = ST.vault_complex("day", gate_angle=38)
     g = A["gate_handle"]
-    m = MD.Leonardo(); st = AC.Stand(m, (g.x - 0.05, g.y - 0.5), 80)
+    gb0 = A["gate_bar"]
+    m = MD.Leonardo(); st = AC.Stand(m, (gb0.x - 0.12, gb0.y - 0.36), 75)
     gb = A["gate_bar"]
     gap = st.grip("R", gb, (0, 0, 1), radius=0.011)
     st.head_to((0, 0, 1.2), share=0.5)
@@ -259,15 +260,15 @@ def S24():
 def S25():
     ST.vault_complex("night")
     return dict(a=((0.0, -5.6, 1.5), (0.0, -0.6, 1.0)), b=((0.0, -4.7, 1.45), (0.0, -0.6, 1.0)), lens=28,
-                cine=dict(exposure=0.6))
+                cine=dict(exposure=1.3))
 
 
 def S26():
     A = ST.vault_complex("night")
     d = A["dial"]; k = A["keylock"]
-    ST.light_spot("dial_spot", (d.x + 0.6, d.y - 1.2, d.z + 0.8), d, 25, angle=25, color=(1.0, 0.72, 0.45))
+    ST.light_spot("dial_spot", (d.x + 0.6, d.y - 1.2, d.z + 0.8), d, 90, angle=25, color=(1.0, 0.72, 0.45))
     return dict(a=(tuple(d + V((0.22, -0.32, 0.06))), tuple(d)), b=(tuple(d + V((0.2, -0.3, -0.25))), tuple(k)), lens=50,
-                fstop=2.8, focus=d.lerp(k, 0.4), cine=dict(exposure=0.5))
+                fstop=2.8, focus=d.lerp(k, 0.4), cine=dict(exposure=1.0))
 
 
 def S27():
@@ -366,11 +367,11 @@ def S33():
 def S34():
     A = S2.turin_flat("evening")
     t = A["table_top"]
-    pnl = PR.alarm_panel(); pnl.location = (t.x - 0.52, t.y, t.z + 0.001); pnl.rotation_euler = (0, 0, math.radians(90))
+    pnl = PR.alarm_panel(); pnl.location = (t.x - 0.42, t.y, t.z + 0.001); pnl.rotation_euler = (0, 0, math.radians(90))
     m = MD.DOnorio(); seat, yaw = A["seats"]["W"]
     se = AC.Seated(m, seat, yaw, lean=16)
-    se.hand("L", (t.x - 0.66, t.y + 0.15, t.z + 0.075), elbow=(0.8, 0.2, -0.6), curl=26)
-    se.hand("R", (t.x - 0.56, t.y - 0.06, t.z + 0.095), elbow=(0.8, 0.2, -0.6), grip=0.5)
+    se.hand("L", (t.x - 0.72, t.y + 0.2, t.z + 0.11), elbow=(0.9, 0.1, -0.5), curl=26)
+    se.hand("R", (t.x - 0.72, t.y - 0.2, t.z + 0.11), elbow=(0.9, 0.1, -0.5), curl=26)
     se.head_to((t.x - 0.52, t.y, t.z), share=0.8)
     se.finish(look=(t.x - 0.52, t.y, t.z), density=HAIR)
     return dict(a=((-0.75, -1.65, 1.42), (-0.85, 0.25, 1.0)), b=((-0.62, -1.42, 1.4), (-0.85, 0.25, 1.0)), lens=35,
@@ -395,9 +396,9 @@ def S36():
         m = cls(); se = AC.Seated(m, seat, yaw, lean=14)
         f = V((math.cos(math.radians(yaw)), math.sin(math.radians(yaw)), 0)); sdv = V((-f.y, f.x, 0))
         base = seat + f * 0.55
-        base = seat + f * 0.62
-        se.hand("L", (base + sdv * 0.16).to_tuple()[:2] + (t.z + 0.065,), elbow=(0.8, 0.2, -0.6), curl=24)
-        se.hand("R", (base - sdv * 0.16).to_tuple()[:2] + (t.z + 0.065,), elbow=(0.8, 0.2, -0.6), curl=24)
+        base = seat + f * 0.52
+        se.hand("L", (base + sdv * 0.16).to_tuple()[:2] + (t.z + 0.11,), elbow=(0.9, 0.1, -0.5), curl=24)
+        se.hand("R", (base - sdv * 0.16).to_tuple()[:2] + (t.z + 0.11,), elbow=(0.9, 0.1, -0.5), curl=24)
         se.head_to(t, share=0.8)
         se.finish(look=t, density=HAIR)
     return dict(a=((0.95, -1.5, 2.75), (0.0, 0.2, 0.8)), b=((0.72, -1.2, 2.62), (0.0, 0.2, 0.8)), lens=26,
