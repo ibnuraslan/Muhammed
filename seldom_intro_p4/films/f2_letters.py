@@ -158,9 +158,13 @@ def parcel(g, opened=0.0, cut=False):
     bpy.ops.mesh.primitive_grid_add(x_subdivisions=60, y_subdivisions=44, size=1, location=c + Vector((0, 0, h - 0.012)))
     ts = bpy.context.active_object; ts.name = "parcel_tissue"; ts.scale = (w * 0.98, d * 0.98, 1)
     bpy.ops.object.transform_apply(scale=True)
-    tx = bpy.data.textures.new("tissue_crinkle", 'VORONOI'); tx.noise_scale = 0.012
+    tx = bpy.data.textures.new("tissue_crinkle", 'CLOUDS'); tx.noise_scale = 0.02; tx.noise_depth = 3
+    sub = ts.modifiers.new("sub", "SUBSURF"); sub.levels = sub.render_levels = 2
     dm = ts.modifiers.new("crinkle", "DISPLACE"); dm.texture = tx; dm.strength = 0.004; dm.mid_level = 0.0
+    sm = ts.modifiers.new("smooth", "SMOOTH"); sm.iterations = 4; sm.factor = 0.8
     ts.data.materials.append(g["tissue"]); out.append(ts)
+    for p_ in ts.data.polygons:
+        p_.use_smooth = True
     # the card: real cotton board, 1.2 mm, bevelled, the logo letterpressed
     M = Matrix.Translation(c + Vector((0.0, 0.0, h - 0.004))) @ Matrix.Rotation(0.06, 4, 'Z')
     card = si.plate("seldom_card", M, CARD_W, thick=0.0012, mat=si.paper_print_material("card_print"), margin=0.1, screws=0,
@@ -248,8 +252,8 @@ def build(shot, t, out):
             for s_, dx in (("L", -0.11), ("R", 0.11)):
                 sg = H.SIDE[s_]
                 pw = ctr + R @ Vector((dx * 1.15, 0, 0.035))
-                P.hand_reach(h, s_, Mi @ pw, elbow=(0.8 * sg, 0.3, -0.6), hand_dir=Vector((-0.6 * sg, -0.3, 0.2)))
-                P.rest_hand(h, s_, curl=30)
+                P.hand_reach(h, s_, Mi @ (pw + R @ Vector((sg * 0.035, 0, 0.0))), elbow=(0.8 * sg, 0.3, -0.6), hand_dir=Vector((-0.5 * sg, -0.35, 0.1)))
+                P.grip(h, s_, 0.45)                            # fingers wrap the parcel's sides
         dv, M = si.person("sarah", pos, face, lift_parcel, (pos[0], -0.32, TABLE_Z + 0.3))
         root, strings, loose = closed_parcel(g)
         for o in loose:

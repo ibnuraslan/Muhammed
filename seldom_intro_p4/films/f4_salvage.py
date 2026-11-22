@@ -226,7 +226,7 @@ def build(shot, t, out):
             c = Vector((5.8, -4.2, QUAY_Z + 0.6)) + Vector((-0.4, 0.2, 0)) * E(t)
             si.cam(c, (0.4, -0.2, 1.75), lens=28, fstop=5.6)
         else:
-            pos3 = Vector((pos[0], pos[1] - 0.25, QUAY_Z + 1.1))
+            pos3 = Vector((pos[0] + 0.25, pos[1] - 0.05, QUAY_Z + 1.05))      # the pole held out to his right
 
             def hook_end(T):
                 Mc, cx = crate_path("B", T)
@@ -238,7 +238,7 @@ def build(shot, t, out):
                 dv.lids(0.3); dv.brow_knit(0.8)
                 P.hand_reach(h, "L", Mi @ (pos3 + d * 0.0), elbow=(0.7, 0.4, -0.5)); P.grip(h, "L", 1.0)
                 P.hand_reach(h, "R", Mi @ (pos3 + d * 0.3), elbow=(-0.7, 0.4, -0.5)); P.grip(h, "R", 1.0)
-            dv, M = si.person("deveau", (pos[0], pos[1] - 0.25), 245, steady, hook_end(0.5), floor_z=QUAY_Z, wet=0.5, cap=True)
+            dv, M = si.person("deveau", (pos[0], pos[1] + 0.05), 245, steady, hook_end(0.5), floor_z=QUAY_Z, wet=0.5, cap=True)
             L = 2.6
             pole = ship.cyl("hb_boathook", (0, 0, 0), (0, 0, L), 0.018, mat=g["timber"], verts=10)
             tip = ship.cyl("hb_boathook_iron", (0, 0, L), (0, 0, L + 0.12), 0.012, mat=g["iron"], verts=10)
@@ -250,14 +250,14 @@ def build(shot, t, out):
             def _(tt, frame):
                 if dv is None:
                     return
-                a_ = si.hand(dv, M, "L"); b_ = si.hand(dv, M, "R")
-                d = (b_ - a_).normalized()
-                q = d.to_track_quat('Z', 'Y')
+                a_ = si.hand(dv, M, "L")
                 hk = hook_end(tt)
-                Lr = (hk - a_).length + 0.3                     # the iron at the crate's side
-                si.place(bh, Matrix.Translation(a_ - d * 0.3) @ q.to_matrix().to_4x4() @ Matrix.Diagonal((1, 1, Lr / L, 1)), frame)
-            c = Vector((3.3, 2.8, QUAY_Z + 1.55)) + Vector((-0.15, -0.05, 0.05)) * E(t)
-            si.cam(c, Vector((0.75, -0.35, QUAY_Z + 0.55)), lens=24, fstop=4.0)
+                d = (hk - a_).normalized()
+                q = d.to_track_quat('Z', 'Y')
+                Lr = (hk - a_).length + 0.08                     # the iron at the crate's side
+                si.place(bh, Matrix.Translation(a_ - d * 0.08) @ q.to_matrix().to_4x4() @ Matrix.Diagonal((1, 1, Lr / L, 1)), frame)
+            c = Vector((3.6, -0.6, QUAY_Z + 1.3)) + Vector((-0.12, 0.05, 0.03)) * E(t)
+            si.cam(c, Vector((0.95, -0.3, QUAY_Z + 0.75)), lens=24, fstop=4.0)
     else:
         Mc = Matrix.Translation(LANDED) @ Matrix.Rotation(0.1, 4, 'Z')
         crate(g, Mc, wipe=-1.0 if shot == "C" else 1.0)
@@ -274,6 +274,7 @@ def build(shot, t, out):
             def wipe_pose(h, dv, M, Mi):
                 x = sleeve_x(si.T)
                 si.kneel(h, down="R", lean=24, drop=0.42, fwd=0.40)
+                Mi = si.kmi(Mi)                                        # targets below are world points
                 P.head(h, pitch=24, yaw=-6, tilt=0); dv.lids(0.4); dv.brow_knit(0.7)
                 P.hand_reach(h, "R", Mi @ (Mc @ Vector((x, -CD / 2 - 0.07, CH * 0.5))), elbow=(-0.6, 0.3, -0.7), hand_dir=Vector((-0.6, -0.2, -0.7)))
                 P.rest_hand(h, "R", curl=50)
@@ -284,20 +285,21 @@ def build(shot, t, out):
             @si.dyn
             def _(tt, frame):
                 si.set_value(mudw, sleeve_x(tt) + 0.05, frame)
-            c = Mc @ Vector((1.15, -1.55, 1.2)); si.cam(c, front + Vector((-0.1, 0, 0.05)), lens=32, fstop=3.2)
+            c = Mc @ Vector((1.3, -0.85, 1.05)); si.cam(c, front + Vector((-0.1, -0.05, 0.0)), lens=30, fstop=3.2)
         elif shot == "D":
             def look_back(h, dv, M, Mi):
                 u = si.ease(min(1.0, si.T / 0.5))                         # he turns his head to the water
                 si.kneel(h, down="R", lean=6, drop=0.42, fwd=0.40)
+                Mi = si.kmi(Mi)                                        # targets below are world points
                 P.head(h, pitch=8 - 10 * u, yaw=-55 * u, tilt=0); dv.lids(0.2); dv.brow_knit(0.9)
-                P.hand_reach(h, "R", Mi @ (Mc @ Vector((0.05, -CD / 2 - 0.04, CH * 0.55))), elbow=(-0.6, 0.3, -0.7), hand_dir=Vector((-0.2, 0.3, -0.9)))
+                P.hand_reach(h, "R", Mi @ (Mc @ Vector((0.12, -CD / 2 - 0.04, CH * 0.62))), elbow=(-0.6, 0.3, -0.7), hand_dir=Vector((-0.2, 0.3, -0.9)))
                 P.rest_hand(h, "R", curl=25)
                 knee = h.bone_head("lowerleg01.L")
                 P.hand_reach(h, "L", knee + Vector((0.0, -0.03, 0.1)), elbow=(0.7, 0.4, -0.2), hand_dir=Vector((-0.2, -0.6, -0.8)))
                 P.rest_hand(h, "L", curl=35)
-            dv, M = si.person("deveau", tuple(Mc @ Vector((0.62, -CD / 2 - 0.55, 0)))[:2], 100, look_back, Vector((0.5, -8, 0.3)), floor_z=QUAY_Z, wet=0.5, cap=True)
-            c = Mc @ Vector((-0.5, -2.1, 0.75)) + Vector((0.15, 0.4, 0.0)) * E(t)
-            si.cam(c, front + Vector((0.2, 0, 0.1)), lens=35, fstop=4.0)
+            dv, M = si.person("deveau", tuple(Mc @ Vector((0.72, -CD / 2 - 0.66, 0)))[:2], 100, look_back, Vector((0.5, -8, 0.3)), floor_z=QUAY_Z, wet=0.5, cap=True)
+            c = Mc @ Vector((-1.25, -2.4, 0.95)) + Vector((0.15, 0.35, 0.0)) * E(t)
+            si.cam(c, front + Vector((0.3, -0.2, 0.15)), lens=30, fstop=4.0)
         else:
             c = front + Vector((0.05, -1.15, 0.05))
             p4.light('AREA', "check_key", 25, (1.0, 0.97, 0.92), loc=front + Vector((0.6, -1.0, 0.8)), target=front, size=0.8)

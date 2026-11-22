@@ -255,6 +255,9 @@ def settle(dv, z_floor, gap=0.002, kind=("boot", "shoe", "Body", "trouser", "bod
         if o.parent is None:
             o.matrix_world = Matrix.Translation((0, 0, dz)) @ o.matrix_world
     bpy.context.view_layer.update()
+    for o in dv.objects:                                   # the clipping check's grip test follows the hands down
+        if "hands" in o:
+            hd = list(o["hands"]); o["hands"] = [c + (dz if k % 3 == 2 else 0.0) for k, c in enumerate(hd)]
     return dz
 
 
@@ -278,13 +281,25 @@ def person(kind, pos, ang_deg, pose, look, floor_z=0.0, hair=1.0, **kw):
     if ANIM:
         ACTORS.append(dict(kind=kind, dv=dv, M=M, pose=pose, look=Vector(look), hair=hair, floor_z=floor_z,
                            settle=kw.get("settle", True)))
-        dark_insides(dv)
+        dark_insides(dv); soft_skin(dv)
         return dv, M
     pose(h, dv, M, Mi)
-    dark_insides(dv)
+    dark_insides(dv); soft_skin(dv)
     dv.finish(look_at=Vector(look), place=M, density=hair * float(os.environ.get("HAIR", "1")))
     dv.dz = settle(dv, floor_z) if kw.get("settle", True) else 0.0
     return dv, M
+
+
+def soft_skin(dv, weight=0.2, radius=(0.7, 0.45, 0.35)):
+    """Gentler skin subsurface (as P1 S02): a hand in shade or against a warm lamp otherwise glows deep red."""
+    for o in dv.objects:
+        for sl in getattr(o, "material_slots", []):
+            m = sl.material
+            if m and "skin" in m.name.lower() and m.node_tree:
+                for n in m.node_tree.nodes:
+                    if n.type == 'BSDF_PRINCIPLED':
+                        n.inputs['Subsurface Weight'].default_value = weight
+                        n.inputs['Subsurface Radius'].default_value = radius
 
 
 def dark_insides(dv):
@@ -313,6 +328,14 @@ def dark_insides(dv):
 def palm(dv, M, side):
     """World position of the palm (the wrist bone's tail) after finish/settle."""
     return M @ Vector(dv.wrist_rest[side]) + Vector((0, 0, getattr(dv, "dz", 0.0)))
+
+
+KDZ = 0.345        # how far kneel() + settle() lower the body (measured): world hand targets are lifted by this
+
+
+def kmi(Mi):
+    """World -> rig for a kneeling pose: the rig is posed standing-high and lowered by KDZ afterwards."""
+    return Mi @ Matrix.Translation((0, 0, KDZ))
 
 
 def leg_ik(h, s, ankle, pole):

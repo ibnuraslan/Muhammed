@@ -227,6 +227,7 @@ def pose_kneel_wipe(plate_M, u, lantern_at=None):
     """Kneeling on the right knee, facing the plate; right hand pushes the rag across it (u: 0..1 along x)."""
     def f(h, dv, M, Mi):
         si.kneel(h, down="R", lean=18, drop=0.42, fwd=0.40)
+        Mi = si.kmi(Mi)                                        # targets below are world points
         P.head(h, pitch=18, yaw=4, tilt=3)
         dv.lids(0.35); dv.brow_knit(0.6)
         x = -PLATE_W / 2 + 0.04 + (PLATE_W - 0.08) * u
@@ -295,6 +296,7 @@ def build(shot, t, out):
         def wiping(h, dv, M, Mi):
             u = si.ease(si.T) if shot == "C" else si.T
             si.kneel(h, down="R", lean=18, drop=0.42, fwd=0.40)
+            Mi = si.kmi(Mi)                                        # targets below are world points
             P.head(h, pitch=18, yaw=4, tilt=3)
             dv.lids(0.35); dv.brow_knit(0.6)
             rw = rag_at(u)
@@ -316,6 +318,7 @@ def build(shot, t, out):
         def leanback(h, dv, M, Mi):
             u = si.ease(min(1.0, si.T * 1.6))                     # he sits back on his heel, then holds
             si.kneel(h, down="R", lean=18 - 16 * u, drop=0.42, fwd=0.40)
+            Mi = si.kmi(Mi)                                        # targets below are world points
             P.head(h, pitch=18 - 4 * u, yaw=2, tilt=1); dv.lids(0.3 - 0.2 * u); dv.brow_knit(0.6 + 0.3 * u)
             knee = h.bone_head("lowerleg01.L")
             P.hand_reach(h, "L", knee + Vector((-0.02, -0.03, 0.10)), elbow=(0.7, 0.4, -0.2), hand_dir=Vector((-0.2, -0.6, -0.8)))
