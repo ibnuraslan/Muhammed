@@ -1,0 +1,19 @@
+SELDOM INTRO FILMS 1-4 (Lamp Room, Dead Letters, The Locksmith, Salvage) - credits and licences
+
+Logo: the official Seldom wordmark, brand/seldom_logo.png (branch claude/killer-in-house), used unchanged as a texture
+      (enamel / letterpress / stencil paint). Not redrawn, not 3D text.
+
+People: shared cast (mary_celeste_3d/lib: deveau.py, briggs.py, women.py) built on MakeHuman 1.x data (CC0).
+
+Sketchfab models (CC Attribution 4.0):
+  "Lighthouse 1st Order Fresnel Lens" by darryldmps
+      https://sketchfab.com/3d-models/lighthouse-1st-order-fresnel-lens-a5678ee7b33c4966ae289f06f6180565
+  "Vintage Brass Hurricane Lantern - Unlit" by Galaxy Abundant
+      https://sketchfab.com/3d-models/vintage-brass-hurricane-lantern-unlit-46528337bec34fa49f2c71577efc7bc0
+  "Old Victorian Rubber Stamp" by Lux87
+      https://sketchfab.com/3d-models/old-victorian-rubber-stamp-be402a8d73c74fd6b9ca5acc057a208d
+
+Poly Haven (CC0): vintage_oil_lamp, kloppenheim_06_puresky, textures oak_veneer_01, dark_wooden_planks,
+  brown_planks_05, painted_plaster_wall, seaworn_sandstone_brick, slate_floor, cobblestone_floor_04, weathered_planks.
+
+Everything else (lantern room, spiral stair, pigeon-holes, parcel, safe, vault, quay, crane, crate) is modelled in code here.
