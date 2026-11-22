@@ -169,19 +169,39 @@ def parcel(g, opened=0.0, cut=False):
     return out, M
 
 
-def pose_stamp(phase, lift):
-    """Standing at the table, leaning in; right hand holds the stamp (up `lift` m), left hand flat on the letters."""
-    def f(h, dv, M, Mi):
-        P.stand(h, lean=5, weight="L", twist=-3)
-        P.head(h, pitch=38, yaw=-6, tilt=2)
-        dv.lids(0.55); dv.brow_knit(0.2)
-        tgt = Mi @ Vector((0.18, -0.02, TABLE_Z + 0.06 + lift))
-        P.hand_reach(h, "R", tgt, elbow=(-0.7, 0.4, -0.6), hand_dir=Vector((0, -0.25, -1)))
-        P.grip(h, "R", 1.0)
-        tl = Mi @ Vector((-0.18, -0.05, TABLE_Z + 0.035))
-        P.hand_reach(h, "L", tl, elbow=(0.7, 0.4, -0.5), hand_dir=Vector((-0.1, -0.9, -0.4)))
-        P.rest_hand(h, "L", curl=28)
-    return f
+def group(name, objs, origin):
+    """Parent objects to an empty at `origin` (world), keeping their placement; returns the empty."""
+    e = bpy.data.objects.new(name, None); bpy.context.scene.collection.objects.link(e)
+    e.matrix_world = Matrix.Translation(origin)
+    bpy.context.view_layer.update()
+    for o in objs:
+        mw = o.matrix_world.copy(); o.parent = e; o.matrix_parent_inverse = e.matrix_world.inverted(); o.matrix_world = mw
+    return e
+
+
+def closed_parcel(g):
+    """The parcel as one movable group (root at its bottom centre); returns (root, strings, loose cut ends)."""
+    objs = parcel(g, cut=False)
+    strings = [o for o in objs if o.name.startswith("parcel_string")]
+    c = PARCEL
+    loose = [ship.rope("parcel_string_loose", [c + Vector((0.13, 0.0, 0.071)), c + Vector((0.17, -0.03, 0.06)), c + Vector((0.2, -0.05, 0.03)),
+                                                c + Vector((0.21, -0.06, 0.0016))], 0.0015, g["string"]),
+             ship.rope("parcel_string_loose", [c + Vector((-0.02, -0.086, 0.071)), c + Vector((-0.04, -0.12, 0.04)), c + Vector((-0.05, -0.15, 0.0016))],
+                       0.0015, g["string"])]
+    root = group("parcel_root", objs + loose, c)
+    return root, strings, loose
+
+
+def scissors(g):
+    """Steel scissors (two blades on a pivot, bow handles), as a group; local +X = blade tips, origin = the bows."""
+    st = p4.mat("scissor_steel", (0.55, 0.55, 0.56), rough=0.25, metal=1.0)
+    parts = []
+    for sg in (1, -1):
+        parts.append(ship.box("scissor_blade", (0.09, sg * 0.003, 0.0), (0.11, 0.008, 0.0016), st, rot=(0, 0, sg * 0.06)))
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.012, minor_radius=0.0025, location=(0.0, sg * 0.014, 0.0))
+        o = bpy.context.active_object; o.name = "scissor_bow"; o.data.materials.append(st); parts.append(o)
+    parts.append(ship.cyl("scissor_pivot", (0.035, 0, -0.002), (0.035, 0, 0.002), 0.003, mat=st, verts=12))
+    return group("scissors", parts, Vector((0, 0, 0)))
 
 
 def build(shot, t, out):
@@ -189,72 +209,114 @@ def build(shot, t, out):
     si.C.render_setup(samples=64, noise=0.03, bounces=8)
     g = mats(); room(g); envelopes(g)
     lamp((-0.55, 0.22, TABLE_Z))
-    # her place: behind the table (+Y side), facing -Y toward camera side? No: she faces +Y? She stands at the
-    # front edge (-Y), facing the pigeon-holes behind the table (+Y).
-    pos = (0.12, -TABLE[1] / 2 - 0.22)
+    pos = (0.12, -TABLE[1] / 2 - 0.22)          # she stands at the front edge, facing the pigeon-holes (+Y)
     face = 90
     look = (0.15, 0.0, TABLE_Z)
     if shot == "A":
-        lift = 0.10 * abs(math.sin(math.pi * 2.0 * t))                 # stamping rhythm
-        dv, M = si.person("sarah", pos, face, pose_stamp(t, lift), look)
-        if not si.CAMDUMP:
-            stamp_prop(Matrix.Translation(si.palm(dv, M, "R") - Vector((0, 0, 0.085))) @ Matrix.Rotation(0.3, 4, 'Z'))
+        def stamping(h, dv, M, Mi):
+            lift = 0.10 * abs(math.sin(math.pi * 2.0 * si.T * 1.5))            # the stamping rhythm, 3 strokes
+            P.stand(h, lean=5, weight="L", twist=-3)
+            P.head(h, pitch=38, yaw=-6, tilt=2)
+            dv.lids(0.55); dv.brow_knit(0.2)
+            P.hand_reach(h, "R", Mi @ Vector((0.18 + pos[0] - 0.12, -0.02, TABLE_Z + 0.06 + lift)), elbow=(-0.7, 0.4, -0.6), hand_dir=Vector((0, -0.25, -1)))
+            P.grip(h, "R", 1.0)
+            P.hand_reach(h, "L", Mi @ Vector((-0.18, -0.05, TABLE_Z + 0.035)), elbow=(0.7, 0.4, -0.5), hand_dir=Vector((-0.1, -0.9, -0.4)))
+            P.rest_hand(h, "L", curl=28)
+        dv, M = si.person("sarah", pos, face, stamping, look)
+        stp, _ = stamp_prop(Matrix())
+
+        @si.dyn
+        def _(tt, frame):
+            if dv is not None:
+                si.place(stp, Matrix.Translation(si.hand(dv, M, "R") - Vector((0, 0, 0.085))) @ Matrix.Rotation(0.3, 4, 'Z'), frame)
         parcel(g)
         c = Vector((-2.6, -3.3, 2.9)) + Vector((0.3, 0.2, -0.1)) * E(t)          # wide, high angle
         si.cam(c, (0.0, 0.3, 1.2), lens=28, fstop=5.6)
     elif shot == "B":
+        def held(T):
+            """She lifts it off the table (to 0.4), then turns it over in her hands looking for an address."""
+            u = si.ease(min(1.0, T / 0.4))
+            ctr = PARCEL.lerp(Vector((pos[0], -0.32, TABLE_Z + 0.235)), u)
+            rot = 0.25 * u + 0.5 * si.ease(max(0.0, (T - 0.45) / 0.55))
+            return ctr, rot
+
         def lift_parcel(h, dv, M, Mi):
-            P.stand(h, lean=6, weight="R", twist=2); P.head(h, pitch=22, yaw=0, tilt=-4)
-            dv.lids(0.3); dv.brow_knit(1.0)
-            for s, dx in (("L", -0.11), ("R", 0.11)):
-                sg = H.SIDE[s]
-                P.hand_reach(h, s, Mi @ (Vector((pos[0] + dx * 1.15, -0.32, TABLE_Z + 0.27))), elbow=(0.8 * sg, 0.3, -0.6),
-                             hand_dir=Vector((-0.6 * sg, -0.3, 0.2)))
-                P.rest_hand(h, s, curl=30)
+            ctr, rot = held(si.T)
+            P.stand(h, lean=6, weight="R", twist=2); P.head(h, pitch=22 + 14 * (1 - min(1.0, si.T / 0.4)), yaw=0, tilt=-4)
+            dv.lids(0.3); dv.brow_knit(0.4 + 0.6 * min(1.0, si.T / 0.5))
+            R = Matrix.Rotation(rot, 3, 'Z')
+            for s_, dx in (("L", -0.11), ("R", 0.11)):
+                sg = H.SIDE[s_]
+                pw = ctr + R @ Vector((dx * 1.15, 0, 0.035))
+                P.hand_reach(h, s_, Mi @ pw, elbow=(0.8 * sg, 0.3, -0.6), hand_dir=Vector((-0.6 * sg, -0.3, 0.2)))
+                P.rest_hand(h, s_, curl=30)
         dv, M = si.person("sarah", pos, face, lift_parcel, (pos[0], -0.32, TABLE_Z + 0.3))
-        # the parcel held between her palms, turned a little
-        PAR = Vector((pos[0], -0.32, TABLE_Z + 0.27 - 0.035))
-        globals()["PARCEL"] = PAR
-        ps = parcel(g)
-        for o in ps:
-            o.matrix_world = Matrix.Translation(PAR) @ Matrix.Rotation(0.25, 4, 'Z') @ Matrix.Translation(-PAR) @ o.matrix_world
-        globals()["PARCEL"] = Vector((0.02, -0.17, TABLE_Z))
+        root, strings, loose = closed_parcel(g)
+        for o in loose:
+            o.hide_render = True
+
+        @si.dyn
+        def _(tt, frame):
+            ctr, rot = held(tt)
+            si.place(root, Matrix.Translation(ctr) @ Matrix.Rotation(rot, 4, 'Z'), frame)
         c = Vector((0.95, 0.95, 1.42))                                         # medium, across the table, side-lit
         si.cam(c, (pos[0] - 0.05, pos[1] + 0.05, 1.22), lens=40, fstop=2.8)
     elif shot == "C":
-        cut = t > 0.3
+        TCUT = 0.55
+        knot = PARCEL + Vector((0.0, 0.0, 0.072))
+
         def cutting(h, dv, M, Mi):
+            u = si.ease(min(1.0, si.T / TCUT))                                # the blades come in to the knot and close
             P.stand(h, lean=5, weight="L", twist=0); P.head(h, pitch=45, yaw=0, tilt=0)
             dv.lids(0.6); dv.brow_knit(0.7)
             P.hand_reach(h, "L", Mi @ (PARCEL + Vector((-0.09, -0.02, 0.08))), elbow=(0.7, 0.3, -0.6), hand_dir=Vector((0.3, -0.5, -0.8)))
             P.rest_hand(h, "L", curl=18)
-            P.hand_reach(h, "R", Mi @ (PARCEL + Vector((0.1, -0.06, 0.09))), elbow=(-0.7, 0.3, -0.6), hand_dir=Vector((-0.4, 0.2, -0.6)))
+            hw = knot + Vector((0.2 - 0.1 * u, -0.1 + 0.03 * u, 0.06 - 0.03 * u))
+            if si.T > TCUT:                                                  # after the snip: the hand draws back
+                hw = hw + Vector((0.05, -0.04, 0.03)) * si.ease(min(1.0, (si.T - TCUT) / 0.3))
+            P.hand_reach(h, "R", Mi @ hw, elbow=(-0.7, 0.3, -0.6), hand_dir=Vector((-0.4, 0.2, -0.6)))
             P.grip(h, "R", 0.7)
         dv, M = si.person("sarah", pos, face, cutting, PARCEL)
-        if E(t) < 0.6:
-            parcel(g, cut=cut)
-        else:
-            parcel(g, opened=(E(t) - 0.6) / 0.4)
-        c = Vector((pos[0] + 0.45, pos[1] - 0.25, 1.38)) + Vector((-0.05, 0.08, -0.05)) * E(t)   # over her right shoulder
-        si.cam(c, PARCEL + Vector((0, 0, 0.04)), lens=50, fstop=2.8)
+        root, strings, loose = closed_parcel(g)
+        sc_ = scissors(g)
+
+        @si.dyn
+        def _(tt, frame):
+            cut = tt > TCUT
+            for o in strings:
+                o.hide_render = cut; si.key(o, "hide_render", frame=frame)
+            for o in loose:
+                o.hide_render = not cut; si.key(o, "hide_render", frame=frame)
+            if dv is not None:
+                hp = si.hand(dv, M, "R")
+                aim = (knot - hp); aim.z = 0
+                q = aim.to_track_quat('X', 'Z')
+                si.place(sc_, Matrix.Translation(hp + Vector((0, 0, -0.01))) @ q.to_matrix().to_4x4(), frame)
+        c = Vector((pos[0] + 0.36, pos[1] - 0.12, 1.66)) + Vector((-0.03, 0.05, -0.04)) * E(t)   # over her right shoulder
+        si.cam(c, PARCEL + Vector((0.03, 0, 0.04)), lens=40, fstop=2.8)
     elif shot in ("D", "LOGO"):
         res = parcel(g, opened=1.0)
         cardM = res[1]
         if shot == "D":
             def frozen(h, dv, M, Mi):
+                u = si.ease(min(1.0, si.T / 0.35))                            # the stamp hand stops, held up
                 P.stand(h, lean=4, weight="L", twist=-3); P.head(h, pitch=40, yaw=-4, tilt=2)
                 dv.lids(0.4); dv.brow_knit(0.0)
-                P.hand_reach(h, "R", Mi @ Vector((0.42, -0.25, TABLE_Z + 0.24)), elbow=(-0.7, 0.4, -0.6), hand_dir=Vector((0, -0.3, -1)))
+                P.hand_reach(h, "R", Mi @ Vector((0.42, -0.25, TABLE_Z + 0.12 + 0.12 * u)), elbow=(-0.7, 0.4, -0.6), hand_dir=Vector((0, -0.3, -1)))
                 P.grip(h, "R", 1.0)
                 P.hand_reach(h, "L", Mi @ Vector((pos[0] - 0.24, -TABLE[1] / 2 + 0.1, TABLE_Z + 0.03)), elbow=(0.7, 0.4, -0.5), hand_dir=Vector((-0.1, -0.9, -0.4)))
                 P.rest_hand(h, "L", curl=30)
             dv, M = si.person("sarah", pos, face, frozen, PARCEL)
-            if not si.CAMDUMP:
-                stamp_prop(Matrix.Translation(si.palm(dv, M, "R") - Vector((0, 0, 0.085))) @ Matrix.Rotation(0.3, 4, 'Z'))
+            stp, _ = stamp_prop(Matrix())
+
+            @si.dyn
+            def _(tt, frame):
+                if dv is not None:
+                    si.place(stp, Matrix.Translation(si.hand(dv, M, "R") - Vector((0, 0, 0.085))) @ Matrix.Rotation(0.3, 4, 'Z'), frame)
             c = Vector((-0.28, -0.98, 1.78)); si.cam(c, PARCEL + Vector((0.06, 0.0, 0.03)), lens=42, fstop=4.0,
                                                              focus=(c - PARCEL).length)
         else:
             tgt = cardM @ Vector((0, 0, 0)); c = tgt + Vector((0.0, -0.02, 0.38))
             p4.light('AREA', "check_key", 4, (1.0, 0.97, 0.92), loc=tgt + Vector((0.3, -0.3, 0.5)), target=tgt, size=0.5)
             si.cam(c, tgt, lens=60, fstop=8.0)
-    si.finish(out, sat=1.08, bloom=0.4, clip_ok=("stamp", "parcel", "dl_env", "dl_table", "card", "tissue"))
+    si.finish(out, sat=1.08, bloom=0.4, clip_ok=("stamp", "parcel", "dl_env", "dl_table", "card", "tissue", "scissor"))

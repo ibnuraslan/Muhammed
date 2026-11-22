@@ -24,7 +24,7 @@ def mats():
     g = {}
     g["iron"] = ship.paint("lr_iron", (0.035, 0.04, 0.038), rough=0.5, grime=0.5, scale=10, chips=0.3, under=(0.25, 0.1, 0.05))
     g["iron"].node_tree.nodes["Principled BSDF"].inputs["Metallic"].default_value = 0.6
-    g["cream"] = p4.mat("lr_cream", (0.24, 0.2, 0.15), rough=0.55)
+    g["cream"] = p4.mat("lr_cream", (0.12, 0.1, 0.075), rough=0.55)
     g["green"] = ship.paint("lr_green", (0.02, 0.07, 0.04), rough=0.35, grime=0.2, scale=3, chips=0.02, under=(0.5, 0.36, 0.14))
     g["brass"] = D.brass_material("lr_brass")
     g["floor"] = ship.paint("lr_floor", (0.05, 0.045, 0.04), rough=0.55, grime=0.4, scale=2, chips=0.05, under=(0.3, 0.12, 0.05))
@@ -159,8 +159,8 @@ def storm_world():
 
 
 def haze(d=0.015):
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 0, 2.0)); v = bpy.context.active_object; v.name = "lr_haze"
-    v.scale = (2 * R_ROOM - 0.3, 2 * R_ROOM - 0.3, 3.8)
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 0, 1.9)); v = bpy.context.active_object; v.name = "lr_haze"
+    v.scale = (2 * R_ROOM - 0.3, 2 * R_ROOM - 0.3, 4.0)                 # from below the floor (no surface near people)
     m = bpy.data.materials.new("lr_haze_m"); m.use_nodes = True; nt = m.node_tree
     nt.nodes.remove(nt.nodes["Principled BSDF"])
     vs = nt.nodes.new("ShaderNodeVolumeScatter"); vs.inputs["Density"].default_value = d; vs.inputs["Anisotropy"].default_value = 0.5
@@ -171,23 +171,22 @@ def haze(d=0.015):
 
 
 def hurricane(loc, rot=0.0, lit=True):
+    """The keeper's storm lantern (CC-BY scan), lit: its flame and light are parented to it, so it moves as one."""
     r, ms = skfab.model(LANTERN_UID, height=0.33, name="lantern")
-    if "_dec" not in r:
-        for o in ms:
-            if len(o.data.polygons) > 20000:
-                dm = o.modifiers.new("dec", "DECIMATE"); dm.ratio = 0.12
-    r.matrix_world = Matrix.Translation(loc) @ Matrix.Rotation(rot, 4, 'Z')
     for o in ms:
-        o.visible_shadow = True
+        if len(o.data.polygons) > 20000:
+            dm = o.modifiers.new("dec", "DECIMATE"); dm.ratio = 0.12
+        o.visible_shadow = False                         # its glass chimney must not shadow its own flame
+    r.matrix_world = Matrix()
     if lit:
-        bpy.context.view_layer.update()
-        f = Vector(loc) + Vector((0, 0, 0.15))
+        f = Vector((0, 0, 0.15))
         fm = p4.mat("lantern_flame", (1, 0.6, 0.2), emit=(1.0, 0.5, 0.15), strength=40)
         bpy.ops.mesh.primitive_uv_sphere_add(radius=0.008, location=f); fl = bpy.context.active_object; fl.name = "lantern_flame"
         fl.scale = (1, 1, 2.2); fl.data.materials.append(fm); fl.visible_shadow = False
-        for o in ms:                                    # its glass chimney must not shadow its own flame
-            o.visible_shadow = False
-        p4.light('POINT', "lantern_light", 35, (1.0, 0.6, 0.28), loc=f + Vector((0, 0, 0.02)), size=0.02)
+        lt = p4.light('POINT', "lantern_light", 35, (1.0, 0.6, 0.28), loc=f + Vector((0, 0, 0.02)), size=0.02)
+        for o in (fl, lt):
+            o.parent = r
+    r.matrix_world = Matrix.Translation(loc) @ Matrix.Rotation(rot, 4, 'Z')
     return r, ms
 
 
@@ -242,33 +241,82 @@ def pose_kneel_wipe(plate_M, u, lantern_at=None):
     return f
 
 
+OPTIC = ("Object_10", "Object_2", "Object_9")          # the turning optic (prisms, frame, bull's-eye panels)
+TURN = math.radians(9)                                   # optic turns 9 deg/s (clockwork), in every shot of the room
+SHOT_T0 = dict(A=0.0, B=3.0, C=6.0, D=9.0, LOGO=12.0)
+
+
+def turning(lms, beam_lights, t0, dur):
+    """The clockwork turns the optic; the two beams turn with it (keyed per frame)."""
+    base = {o.name: o.matrix_world.copy() for o in lms if any(o.name.startswith(n) for n in OPTIC)}
+    objs = [o for o in lms if o.name in base]
+    z = 1.75 * K
+
+    @si.dyn
+    def _(t, frame):
+        a = TURN * (t0 + t * dur) + math.radians(-35)
+        R = Matrix.Rotation(a, 4, 'Z')
+        for o in objs:
+            si.place(o, R @ base[o.name], frame)
+        for k, L in enumerate(beam_lights):
+            d = Vector((math.cos(a + k * math.pi), math.sin(a + k * math.pi), -0.02))
+            q = d.to_track_quat('-Z', 'Y')
+            L.matrix_world = Matrix.Translation((0, 0, z)) @ q.to_matrix().to_4x4()
+            if frame is not None:
+                L.rotation_mode = 'XYZ'; L.keyframe_insert("location", frame=frame); L.keyframe_insert("rotation_euler", frame=frame)
+
+
 def build(shot, t, out):
     sc = si.C.render_setup(samples=64, noise=0.03, bounces=8)
     E = si.ease
     g = mats()
     if shot == "A":
         return stair(g, t, out)
-    rot = math.radians(-35 + (40 if shot == "D" else 12) * t + {"B": 0, "C": 8, "D": 20}.get(shot, 0))
     room(g); storm_world()
     lr, lms = lens(g, rot=0.0)
     lamp_flame()
-    beams(rot + {"B": 0.2, "C": 0.3, "D": 1.2 + 1.9 * E(t)}.get(shot, 0))
+    bl = beams(0.0)
+    t0 = SHOT_T0[shot]; dur = 3.0
+    turning(lms, bl, t0, dur)
     haze(0.004)
-    wipe = {"B": -1.0, "C": -PLATE_W / 2 + PLATE_W * E(t), "D": 1.0, "LOGO": 1.0}[shot]
-    pl, pM = plate_on_pedestal(wipe)
+    pl, pM = plate_on_pedestal(-1.0 if shot == "B" else 1.0)
+    salt_wipe = bpy.data.materials["salt"].node_tree.nodes["WIPE"].outputs[0]
     hurricane(Vector((0.62, -0.62, 0.0)), rot=0.4)
-    u = {"B": 0.1, "C": E(t), "D": 1.0}.get(shot, 1.0)
     look = pM @ Vector((0, 0, 0))
     if shot in ("B", "C"):
-        dv, M = si.person("briggs", (BASE_X + 0.62, -0.05), 180, pose_kneel_wipe(pM, u if shot == "C" else 0.0), look, wet=0.45)
-        hand = dv.h
-        # the rag sits in his right palm against the plate
-        x = -PLATE_W / 2 + 0.04 + (PLATE_W - 0.08) * (u if shot == "C" else 0.0)
-        rag(pM @ Vector((x, 0.005, 0.028)))
+        def rag_at(u):
+            """B: small circles on the housing above the plate; C: one stroke across the plate (u = E(T))."""
+            if shot == "B":
+                a = 2 * math.pi * 1.3 * u
+                return pM @ Vector((0.03 * math.cos(a), 0.085 + 0.025 * math.sin(a), 0.028))
+            x = -PLATE_W / 2 + 0.04 + (PLATE_W - 0.08) * u
+            return pM @ Vector((x, 0.005, 0.028))
+
+        def wiping(h, dv, M, Mi):
+            u = si.ease(si.T) if shot == "C" else si.T
+            si.kneel(h, down="R", lean=18, drop=0.42, fwd=0.40)
+            P.head(h, pitch=18, yaw=4, tilt=3)
+            dv.lids(0.35); dv.brow_knit(0.6)
+            rw = rag_at(u)
+            P.hand_reach(h, "R", Mi @ (rw + Vector((0.06, 0, 0.0))), elbow=(-0.8, 0.3, -0.6), hand_dir=Vector((-0.15, -0.9, 0.25)))
+            P.rest_hand(h, "R", curl=40)
+            knee = h.bone_head("lowerleg01.L")
+            P.hand_reach(h, "L", knee + Vector((-0.02, -0.04, 0.10)), elbow=(0.7, 0.4, -0.2), hand_dir=Vector((-0.2, -0.6, -0.8)))
+            P.rest_hand(h, "L", curl=35)
+        dv, M = si.person("briggs", (BASE_X + 0.62, -0.05), 180, wiping, look, wet=0.45)
+        rg = rag(Vector((0, 0, 0)))
+
+        @si.dyn
+        def _(t, frame):
+            u = si.ease(t) if shot == "C" else t
+            si.place(rg, Matrix.Translation(rag_at(u)), frame)
+            if shot == "C":
+                si.set_value(salt_wipe, -PLATE_W / 2 + (PLATE_W + 0.02) * u, frame)
     elif shot == "D":
         def leanback(h, dv, M, Mi):
-            si.kneel(h, down="R", lean=2, drop=0.42, fwd=0.40)
-            P.head(h, pitch=14, yaw=2, tilt=1); dv.lids(0.1); dv.brow_knit(0.9)
+            u = si.ease(min(1.0, si.T * 1.6))                     # he sits back on his heel, then holds
+            si.kneel(h, down="R", lean=18 - 16 * u, drop=0.42, fwd=0.40)
+            P.head(h, pitch=18 - 4 * u, yaw=2, tilt=1); dv.lids(0.3 - 0.2 * u); dv.brow_knit(0.6 + 0.3 * u)
             knee = h.bone_head("lowerleg01.L")
             P.hand_reach(h, "L", knee + Vector((-0.02, -0.03, 0.10)), elbow=(0.7, 0.4, -0.2), hand_dir=Vector((-0.2, -0.6, -0.8)))
             P.rest_hand(h, "L", curl=35)
@@ -293,63 +341,79 @@ def build(shot, t, out):
 
 
 # ----------------------------------------------------------------------------- shot A: the spiral stair
+R_ST = 1.55; RISE = 0.19; STEP_A = math.radians(22); K0 = 5; STEPS = 2.0
+R_WALK = R_ST * 0.62
+
+
+def stair_root(t):
+    """The keeper's root on the spiral after climbing STEPS * t steps from tread K0 (rig frame: faces the way up)."""
+    s = K0 + STEPS * t
+    a = s * STEP_A
+    pos = Vector((math.cos(a) * R_WALK, math.sin(a) * R_WALK, (s + 1) * RISE + 0.0125))
+    return Matrix.Translation(pos) @ Matrix.Rotation(a + math.pi, 4, 'Z'), a, pos     # rig -Y along the tangent
+
+
 def stair(g, t, out):
-    """Inside the tower: a cast-iron spiral stair round a central column, whitewashed brick walls, rain at a
-    slit window. Wide, low, looking up; the keeper climbs with the storm lantern, his other hand on the rail."""
+    """Inside the tower: a cast-iron spiral stair round a central column, whitewashed walls, rain at a slit window.
+    The camera follows low behind; the keeper climbs two steps with the storm lantern, his other hand on the rail."""
     E = si.ease
-    R = 1.55; rise = 0.19; step_a = math.radians(22)
-    wall = ship.wood("painted_plaster_wall", 1.2, tint=(0.75, 0.7, 0.6), name="tower_wall") if False else None
+    R = R_ST; rise = RISE; step_a = STEP_A
     import ph
     wm = ph.texture("painted_plaster_wall") if hasattr(ph, "texture") else p4.mat("tower_wall", (0.5, 0.47, 0.4), 0.9)
     bpy.ops.mesh.primitive_cylinder_add(vertices=64, radius=R + 0.35, depth=9, location=(0, 0, 4.0)); tw = bpy.context.active_object
     tw.name = "tower_wall"; tw.data.materials.append(wm)
-    for p_ in tw.data.polygons:
-        p_.flip() if False else None
     bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.flip_normals(); bpy.ops.object.mode_set(mode='OBJECT')
     ship.cyl("stair_floor", (0, 0, -0.1), (0, 0, 0.0), R + 0.4, mat=g["floor"], verts=48)
     ship.cyl("stair_column", (0, 0, 0), (0, 0, 8.5), 0.09, mat=g["iron"], verts=16)
-    treads = []
     for k in range(40):
         a = k * step_a; z = (k + 1) * rise
         c = Vector((math.cos(a) * (R / 2 + 0.05), math.sin(a) * (R / 2 + 0.05), z))
-        o = ship.box("tread", c, (R - 0.12, 0.30, 0.025), g["iron"], rot=(0, 0, a), bevel=0.005)
-        treads.append(o)
-        # baluster at the outer end
+        ship.box("tread", c, (R - 0.12, 0.30, 0.025), g["iron"], rot=(0, 0, a), bevel=0.005)
         q = Vector((math.cos(a) * (R - 0.04), math.sin(a) * (R - 0.04), z))
         ship.cyl("baluster", q, q + Vector((0, 0, 0.88)), 0.011, mat=g["iron"], verts=8)
     pts = [Vector((math.cos(k * step_a / 4) * (R - 0.04), math.sin(k * step_a / 4) * (R - 0.04), (k / 4 + 1) * rise + 0.9)) for k in range(160)]
     ship.rope("handrail", pts, 0.02, g["brass"])
-    # slit window with rain, cold light
     wa = math.radians(150); wc = Vector((math.cos(wa) * (R + 0.34), math.sin(wa) * (R + 0.34), 2.6))
     ship.box("window_glass", wc, (0.02, 0.32, 0.9), g["glass"], rot=(0, 0, wa))
     p4.light('AREA', "window_moon", 160, (0.55, 0.68, 1.0), loc=wc + Vector((math.cos(wa), math.sin(wa), 0)) * 0.3, target=(0, 0, 1.6), size=0.4)
     p4.world_color((0.002, 0.003, 0.005))
-    # the keeper on the stair: on tread k, climbing (left foot up a step), lantern in the left hand, right on the rail
-    k = 5 + int(round(2 * E(t)))
-    a = k * step_a
-    pos = Vector((math.cos(a) * (R * 0.62), math.sin(a) * (R * 0.62), (k + 1) * rise + 0.0125))
-    facing = math.degrees(a) + 90                                         # tangent, going up (counter-clockwise)
-    rail_pt = Vector((math.cos(a + 0.18) * (R - 0.04), math.sin(a + 0.18) * (R - 0.04), (k + 1 + 0.8) * rise + 0.9))
+    d = R_WALK * step_a                                                    # tread to tread along his path
 
     def climb(h, dv, M, Mi):
-        P.stand(h, lean=10, weight="R", twist=-6)
-        # left leg up onto the next tread
-        hip = h.bone_head("upperleg01.L")
-        si.leg_ik(h, "L", Vector((hip.x, hip.y - 0.22, rise + 0.08)), (0, -1, 0.3))
-        h.aim("foot.L", Vector((0, -1, -0.15)))
+        """Gait on the stair: each step the trailing foot swings up past the planted one onto the next tread."""
+        s = STEPS * si.T; k = int(min(s, STEPS - 1e-6)); p = s - k
+        lead, trail = ("L", "R") if k % 2 == 0 else ("R", "L")
+        q = si.ease(p)
+        P.stand(h, lean=10, weight=lead, twist=-4)
+        for side, rel in ((trail, Vector((0.0, d * p, -rise * p))),
+                          (lead, Vector((0.0, d - 2 * d * q + d * p, -rise + 2 * rise * q - rise * p)) + Vector((0, 0, 0.09 * math.sin(math.pi * q))))):
+            hp = h.bone_head(f"upperleg01.{side}")
+            si.leg_ik(h, side, Vector((hp.x * 0.85, rel.y - 0.05, rel.z + 0.09)), (0, -1, 0.3))
+            h.aim(f"foot.{side}", Vector((0, -1, -0.15)))
         P.head(h, pitch=-12, yaw=-8, tilt=0)
         dv.lids(0.0); dv.brow_knit(0.5)
-        P.hand_reach(h, "R", Mi @ rail_pt + Vector((0, 0, 0.035)), elbow=(-0.8, 0.4, -0.4), hand_dir=Vector((0.2, -0.8, -0.3)))
+        Mt, a, pos = stair_root(si.T)
+        Mti = Mt.inverted()
+        rail_pt = Vector((math.cos(a + 0.22) * (R - 0.04), math.sin(a + 0.22) * (R - 0.04), (K0 + STEPS * si.T + 1 + 1.0) * rise + 0.9))
+        P.hand_reach(h, "R", Mti @ rail_pt + Vector((0, 0, 0.035)), elbow=(-0.8, 0.4, -0.4), hand_dir=Vector((0.2, -0.8, -0.3)))
         P.grip(h, "R", 0.9)
         P.hand_reach(h, "L", Vector((0.32, -0.12, 0.85)), elbow=(0.6, 0.2, -1), hand_dir=Vector((0.1, -0.1, -1)))
         P.grip(h, "L", 1.0)
-    dv, M = si.person("briggs", (pos.x, pos.y), facing, climb, pos + Vector((0, 0, 4)), floor_z=pos.z, wet=0.6, settle=False)
-    # rest his right foot on the tread (settle onto it); the lantern's bail hangs from his left fist
-    dz = si.settle(dv, pos.z) if not si.CAMDUMP else 0.0
-    if not si.CAMDUMP:
-        w = M @ Vector(dv.wrist_rest["L"]) + Vector((0, 0, dz))
-        hurricane(w - Vector((0, 0, 0.36)), rot=a)
-    ac = a - 4.3 * step_a
-    c = Vector((math.cos(ac) * 1.05, math.sin(ac) * 1.05, (k - 3) * rise + 0.75)) + Vector((0, 0, 0.12)) * E(t)
-    si.cam(c, pos + Vector((0, 0, 1.5)), lens=18, fstop=5.6, focus=(c - pos).length)
+    M0, a0, pos0 = stair_root(si.T)
+    facing = math.degrees(a0 + math.pi) - 90
+    dv, M = si.person("briggs", (pos0.x, pos0.y), facing, climb, pos0 + Vector((0, 0, 4)), floor_z=pos0.z, wet=0.6, settle=False)
+    lant, _ = hurricane(Vector((0, 0, 0)), rot=0.0)
+
+    @si.dyn
+    def _(tt, frame):
+        Mt, a, pos = stair_root(tt)
+        if si.ANIM and dv is not None:                     # the whole rig climbs (meshes ride its armature)
+            si.place(dv.h.arm, Mt, frame)
+        if dv is not None:
+            si.place(lant, Matrix.Translation(si.hand(dv, M, "L") - Vector((0, 0, 0.36))) @ Matrix.Rotation(a, 4, 'Z'), frame)
+    M_c, ac_, pc = stair_root(0.0)
+    ac = ac_ - 4.3 * step_a
+    c = Vector((math.cos(ac) * 1.05, math.sin(ac) * 1.05, pc.z - 2 * rise + 0.75)) + Vector((0, 0, STEPS * rise * 0.8)) * E(t)
+    Mt, a_, pt = stair_root(t)
+    si.cam(c, pt + Vector((0, 0, 1.5)), lens=18, fstop=5.6, focus=(c - pt).length)
     si.finish(out, sat=1.05, exposure=0.0, bloom=0.4, clip_ok=("lantern", "handrail", "tread", "baluster"))

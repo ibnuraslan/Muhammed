@@ -120,27 +120,44 @@ def quay(g):
         ship.cyl("hb_pile", (x, EDGE_Y - 0.12, -3), (x, EDGE_Y - 0.12, QUAY_Z + 0.35), 0.13, mat=g["timber"], verts=12)
 
 
-def crane(g, hook):
-    """A hand/steam dockside crane: cast-iron pillar, timber jib with iron ties, a chain to the hook."""
+TOP = Vector((0.15, -1.1, QUAY_Z + 3.4))          # the jib head sheave, over the water
+
+
+def crane(g):
+    """A dockside crane: cast-iron pillar and house on the quay, a timber jib out over the water to TOP."""
     base = CRANE
     ship.cyl("hb_crane_pillar", base, base + Vector((0, 0, 1.4)), 0.35, 0.26, mat=g["iron"], verts=24)
     ship.box("hb_crane_house", base + Vector((0.45, 0.35, 0.75)), (1.1, 0.9, 1.5), g["timber"], bevel=0.02)
     ship.cyl("hb_crane_chimney", base + Vector((0.75, 0.55, 1.5)), base + Vector((0.75, 0.55, 2.6)), 0.08, mat=g["iron"], verts=12)
-    top = hook + Vector((0, 0, 2.3)); foot = base + Vector((0, 0, 1.2))
-    for s in (-1, 1):
-        off = Vector((-0.12, 0.12, 0)) * s
+    top = TOP; foot = base + Vector((0, 0, 1.2))
+    for s_ in (-1, 1):
+        off = Vector((-0.12, 0.12, 0)) * s_
         ship.cyl("hb_crane_jib", foot + off, top + off * 0.5, 0.09, 0.07, mat=g["timber"], verts=8)
     ship.cyl("hb_crane_tie", base + Vector((0, 0, 2.0)), top, 0.025, mat=g["iron"], verts=8)
     ship.cyl("hb_crane_sheave", top + Vector((-0.08, 0.08, 0)), top + Vector((0.08, -0.08, 0)), 0.16, mat=g["iron"], verts=24)
-    # chain: links as small tori along the fall
-    ch = g["chain"]
-    n = int((top.z - hook.z) / 0.06)
+
+
+def chain_fall(g, hook0, lowest_z):
+    """The chain from the sheave down to the hook: links for the longest fall, moved as one with the hook; links
+    that have gone up over the sheave are hidden (reeled in). Returns update(hook) for stills and keys."""
+    ch = g["chain"]; n = int((TOP.z - lowest_z) / 0.06) + 2
+    links = []
     for k in range(n):
-        p = top.lerp(hook + Vector((0, 0, 0.12)), (k + 0.5) / n)
+        p = Vector((TOP.x, TOP.y, lowest_z + 0.12 + 0.06 * k))
         bpy.ops.mesh.primitive_torus_add(major_radius=0.026, minor_radius=0.008, location=p, rotation=(0, math.pi / 2, (k % 2) * math.pi / 2),
                                          major_segments=12, minor_segments=6)
-        o = bpy.context.active_object; o.name = "hb_chain"; o.scale = (1, 1, 1.6); o.data.materials.append(ch)
-    ship.cyl("hb_hook", hook + Vector((0, 0, 0.12)), hook, 0.03, mat=g["iron"], verts=12)
+        o = bpy.context.active_object; o.name = "hb_chain"; o.scale = (1, 1, 1.6); o.data.materials.append(ch); links.append(o)
+    hk = ship.cyl("hb_hook", Vector((TOP.x, TOP.y, lowest_z + 0.12)), Vector((TOP.x, TOP.y, lowest_z)), 0.03, mat=g["iron"], verts=12)
+    import f2_letters as F2
+    root = F2.group("hb_fall", links + [hk], Vector((TOP.x, TOP.y, lowest_z)))
+    z0 = [o.matrix_world.translation.z for o in links]
+
+    def update(hook_z, frame=None):
+        dz = hook_z - lowest_z
+        si.place(root, Matrix.Translation((TOP.x, TOP.y, hook_z)), frame)
+        for o, z in zip(links, z0):
+            o.hide_render = z + dz > TOP.z - 0.05; si.key(o, "hide_render", frame=frame)
+    return update
 
 
 def slings(g, hook, Mc):
@@ -165,53 +182,97 @@ def harbour_world():
     ship.box("hb_far_hull", (-12, -38, 1.0), (16, 4, 3), tm)
 
 
+def crate_path(shot, T):
+    """Crate bottom-centre over the water (A: out of the water; B: up to swing in) and its slow turn."""
+    if shot == "A":
+        z = -0.35 + 1.05 * si.ease(T)
+    else:
+        z = 0.7 + 1.3 * si.ease(T)
+    cx = Vector((TOP.x, TOP.y, z))
+    return Matrix.Translation(cx) @ Matrix.Rotation(0.12 * math.sin(2.2 * T + (0.0 if shot == "A" else 2.2)), 4, 'Z'), cx
+
+
 def build(shot, t, out):
     E = si.ease
     si.C.render_setup(samples=64, noise=0.03, bounces=8)
-    g = mats(); quay(g); harbour_world()
+    g = mats(); quay(g); harbour_world(); crane(g)
     pos = (1.25, 0.9)
-    wipe = {"A": -1.0, "B": -1.0, "C": -CW / 2 + CW * E(t), "D": 1.0, "LOGO": 1.0}[shot]
     if shot in ("A", "B"):
-        rise = {"A": -0.3 + 1.0 * E(t), "B": 0.6 + 1.4 * E(t)}[shot]          # crate bottom height (water at 0)
-        cx = Vector((0.15, -1.1, rise))
-        hook = cx + Vector((0, 0, CH + 0.75))
-        Mc = Matrix.Translation(cx) @ Matrix.Rotation(0.12 * math.sin(4 * t), 4, 'Z')
-        crate(g, Mc, wipe=wipe); slings(g, hook, Mc); crane(g, hook)
-        if rise < 0.5:                                          # water pouring off it / the slough round it
-            sea.mist_puff("hb_slough", cx + Vector((0, 0, max(0.0, rise) + 0.1)), (0.9, 0.7, 0.25), density=0.4, seed=3)
+        root = crate(g, Matrix(), wipe=-1.0)
+        sl = []
+        for sx in (-1, 1):
+            for sy in (-1, 1):
+                c_ = Vector((sx * (CW / 2 - 0.03), sy * (CD / 2 - 0.03), CH + 0.01))
+                o = ship.rope("hb_sling", [Vector((0, 0, CH + 0.75)), c_], 0.008, g["chain"]); o.parent = root; sl.append(o)
+        fall = chain_fall(g, None, -0.35 + CH + 0.75)
+
+        @si.dyn
+        def _(tt, frame):
+            Mc, cx = crate_path(shot, tt)
+            si.place(root, Mc, frame)
+            fall(cx.z + CH + 0.75, frame)
         if shot == "A":
+            sea.mist_puff("hb_slough", Vector((TOP.x, TOP.y, 0.15)), (0.9, 0.7, 0.25), density=0.3, seed=3)
+
             def signal(h, dv, M, Mi):
+                a_ = 2 * math.pi * 1.5 * si.T                               # "take her up": the raised hand circles
                 P.stand(h, lean=-2, weight="L", twist=-4); P.head(h, pitch=-6, yaw=20, tilt=0)
                 dv.lids(0.1); dv.brow_knit(0.5)
-                P.hand_reach(h, "R", Vector((-0.35, -0.12, 1.85)), elbow=(-0.7, 0.4, -0.3), hand_dir=Vector((-0.1, -0.2, 1)))
+                P.hand_reach(h, "R", Vector((-0.35 + 0.06 * math.cos(a_), -0.12 + 0.06 * math.sin(a_), 1.85)), elbow=(-0.7, 0.4, -0.3),
+                             hand_dir=Vector((-0.1, -0.2, 1)))
                 P.rest_hand(h, "R", curl=10)
                 P.arm_down(h, "L", out=0.12, fwd=0.04, bend=14); P.rest_hand(h, "L", curl=26)
-            dv, M = si.person("deveau", pos, 260, signal, hook + Vector((0, 0, 1.5)), floor_z=QUAY_Z, wet=0.5, cap=True)
+            dv, M = si.person("deveau", pos, 260, signal, TOP, floor_z=QUAY_Z, wet=0.5, cap=True)
             c = Vector((5.8, -4.2, QUAY_Z + 0.6)) + Vector((-0.4, 0.2, 0)) * E(t)
             si.cam(c, (0.4, -0.2, 1.75), lens=28, fstop=5.6)
         else:
-            hk = cx + Vector((CW / 2 + 0.02, -0.15, CH * 0.6))
+            pos3 = Vector((pos[0], pos[1] - 0.25, QUAY_Z + 1.1))
+
+            def hook_end(T):
+                Mc, cx = crate_path("B", T)
+                return Mc @ Vector((CW / 2 + 0.02, -0.15, CH * 0.6))
+
             def steady(h, dv, M, Mi):
-                P.stand(h, lean=14, weight="R", twist=-8); P.head(h, pitch=18, yaw=-10, tilt=0)
+                hk = hook_end(si.T); d = (hk - pos3)
+                P.stand(h, lean=14, weight="R", twist=-8); P.head(h, pitch=18 - 14 * si.T, yaw=-10, tilt=0)
                 dv.lids(0.3); dv.brow_knit(0.8)
-                a = Mi @ (pos3 + (hk - pos3) * 0.38); b = Mi @ (pos3 + (hk - pos3) * 0.58)
-                P.hand_reach(h, "L", a, elbow=(0.7, 0.4, -0.5)); P.grip(h, "L", 1.0)
-                P.hand_reach(h, "R", b, elbow=(-0.7, 0.4, -0.5)); P.grip(h, "R", 1.0)
-            pos3 = Vector((pos[0], pos[1], QUAY_Z + 1.1))
-            dv, M = si.person("deveau", (pos[0], pos[1] - 0.25), 245, steady, hk, floor_z=QUAY_Z, wet=0.5, cap=True)
-            ship.cyl("hb_boathook", pos3 + (pos3 - hk).normalized() * 0.5, hk, 0.018, mat=g["timber"], verts=10)
-            ship.cyl("hb_boathook_iron", hk, hk + (hk - pos3).normalized() * 0.12, 0.012, mat=g["iron"], verts=10)
+                P.hand_reach(h, "L", Mi @ (pos3 + d * 0.0), elbow=(0.7, 0.4, -0.5)); P.grip(h, "L", 1.0)
+                P.hand_reach(h, "R", Mi @ (pos3 + d * 0.3), elbow=(-0.7, 0.4, -0.5)); P.grip(h, "R", 1.0)
+            dv, M = si.person("deveau", (pos[0], pos[1] - 0.25), 245, steady, hook_end(0.5), floor_z=QUAY_Z, wet=0.5, cap=True)
+            L = 2.6
+            pole = ship.cyl("hb_boathook", (0, 0, 0), (0, 0, L), 0.018, mat=g["timber"], verts=10)
+            tip = ship.cyl("hb_boathook_iron", (0, 0, L), (0, 0, L + 0.12), 0.012, mat=g["iron"], verts=10)
+            barb = ship.cyl("hb_boathook_barb", (0, 0, L + 0.05), (0.05, 0, L + 0.09), 0.008, mat=g["iron"], verts=8)
+            import f2_letters as F2
+            bh = F2.group("boathook", [pole, tip, barb], Vector((0, 0, 0)))
+
+            @si.dyn
+            def _(tt, frame):
+                if dv is None:
+                    return
+                a_ = si.hand(dv, M, "L"); b_ = si.hand(dv, M, "R")
+                d = (b_ - a_).normalized()
+                q = d.to_track_quat('Z', 'Y')
+                hk = hook_end(tt)
+                Lr = (hk - a_).length + 0.3                     # the iron at the crate's side
+                si.place(bh, Matrix.Translation(a_ - d * 0.3) @ q.to_matrix().to_4x4() @ Matrix.Diagonal((1, 1, Lr / L, 1)), frame)
             c = Vector((3.3, 2.8, QUAY_Z + 1.55)) + Vector((-0.15, -0.05, 0.05)) * E(t)
             si.cam(c, Vector((0.75, -0.35, QUAY_Z + 0.55)), lens=24, fstop=4.0)
     else:
         Mc = Matrix.Translation(LANDED) @ Matrix.Rotation(0.1, 4, 'Z')
-        crate(g, Mc, wipe=wipe)
-        hook = LANDED + Vector((0, 0, CH + 0.8))
-        crane(g, hook + Vector((0, 0, 0.6)))
+        crate(g, Mc, wipe=-1.0 if shot == "C" else 1.0)
+        mudw = bpy.data.materials["mud"].node_tree.nodes["WIPE"].outputs[0]
+        fall = chain_fall(g, None, LANDED.z + CH + 1.2)
+        fall(LANDED.z + CH + 1.2)
         front = Mc @ Vector((0, -CD / 2, CH * 0.5))
         if shot == "C":
-            x = -CW / 2 + 0.08 + (CW - 0.16) * E(t)
+            def sleeve_x(T):
+                """Two strokes of the sleeve: left to right, back, and across again lower."""
+                u = si.ease(T)
+                return -CW / 2 + 0.08 + (CW - 0.16) * u
+
             def wipe_pose(h, dv, M, Mi):
+                x = sleeve_x(si.T)
                 si.kneel(h, down="R", lean=24, drop=0.42, fwd=0.40)
                 P.head(h, pitch=24, yaw=-6, tilt=0); dv.lids(0.4); dv.brow_knit(0.7)
                 P.hand_reach(h, "R", Mi @ (Mc @ Vector((x, -CD / 2 - 0.07, CH * 0.5))), elbow=(-0.6, 0.3, -0.7), hand_dir=Vector((-0.6, -0.2, -0.7)))
@@ -219,11 +280,16 @@ def build(shot, t, out):
                 P.hand_reach(h, "L", Mi @ (Mc @ Vector((-CW / 2 - 0.02, -CD / 2 + 0.05, CH + 0.03))), elbow=(0.7, 0.3, -0.4))
                 P.rest_hand(h, "L", curl=20)
             dv, M = si.person("deveau", tuple(Mc @ Vector((0.1, -CD / 2 - 0.62, 0)))[:2], 100, wipe_pose, front, floor_z=QUAY_Z, wet=0.5, cap=True)
-            c = Mc @ Vector((0.75, -1.05, 0.95)); si.cam(c, front, lens=45, fstop=3.2)
+
+            @si.dyn
+            def _(tt, frame):
+                si.set_value(mudw, sleeve_x(tt) + 0.05, frame)
+            c = Mc @ Vector((1.15, -1.55, 1.2)); si.cam(c, front + Vector((-0.1, 0, 0.05)), lens=32, fstop=3.2)
         elif shot == "D":
             def look_back(h, dv, M, Mi):
+                u = si.ease(min(1.0, si.T / 0.5))                         # he turns his head to the water
                 si.kneel(h, down="R", lean=6, drop=0.42, fwd=0.40)
-                P.head(h, pitch=-2, yaw=-55, tilt=0); dv.lids(0.2); dv.brow_knit(0.9)
+                P.head(h, pitch=8 - 10 * u, yaw=-55 * u, tilt=0); dv.lids(0.2); dv.brow_knit(0.9)
                 P.hand_reach(h, "R", Mi @ (Mc @ Vector((0.05, -CD / 2 - 0.04, CH * 0.55))), elbow=(-0.6, 0.3, -0.7), hand_dir=Vector((-0.2, 0.3, -0.9)))
                 P.rest_hand(h, "R", curl=25)
                 knee = h.bone_head("lowerleg01.L")

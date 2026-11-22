@@ -17,4 +17,5 @@ def rs(*k, **kw):
         sc.cycles.samples = int(os.environ["SPP"])
     return sc
 si.C.render_setup = rs
+si.T = t
 mod.build(shot, t, os.path.abspath(out))

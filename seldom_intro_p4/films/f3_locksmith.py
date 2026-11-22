@@ -17,6 +17,7 @@ HINGE = Vector((-SW / 2 + 0.03, FRONT_Y, 0))
 DIAL = Vector((0.08, FRONT_Y - DOOR_T + 0.002, PL + 0.66))
 HANDLE = Vector((0.24, FRONT_Y - DOOR_T + 0.002, PL + 0.5))
 PLAQUE_W = 0.2
+SAFE = {}
 SHOTS = dict(A=(0.0, 3.5), B=(3.5, 7.0), C=(7.0, 10.0), D=(10.0, 13.0))
 LANTERN_UID = "46528337bec34fa49f2c71577efc7bc0"
 
@@ -67,21 +68,26 @@ def safe(g, door=0.0):
             dr.append(ship.box("sf_pinstripe", (cx, -DOOR_T - 0.0004, cz), (sx, 0.001, sz), g["gold"]))
     dx = DIAL.x - HINGE.x; hx = HANDLE.x - HINGE.x
     dr.append(ship.cyl("sf_dial_ring", (dx, -DOOR_T, DIAL.z), (dx, -DOOR_T - 0.012, DIAL.z), 0.075, mat=g["nickel"], verts=48))
-    dr.append(ship.cyl("sf_dial", (dx, -DOOR_T - 0.012, DIAL.z), (dx, -DOOR_T - 0.04, DIAL.z), 0.05, mat=g["nickel"], verts=48))
-    dr.append(ship.cyl("sf_dial_knob", (dx, -DOOR_T - 0.04, DIAL.z), (dx, -DOOR_T - 0.07, DIAL.z), 0.022, mat=g["steel"], verts=24))
-    for k in range(50):                                          # engraved graduations
-        a = 2 * math.pi * k / 50; L = 0.012 if k % 5 == 0 else 0.006
-        p = Vector((dx + 0.066 * math.cos(a), -DOOR_T - 0.0125, DIAL.z + 0.066 * math.sin(a)))
-        o = ship.box("sf_grad", p, (0.0012, 0.0008, L), p4.mat("sf_engr", (0.02, 0.02, 0.02), 0.5), rot=(0, -a + math.pi / 2, 0))
-        dr.append(o)
+    dial = []
+    dial.append(ship.cyl("sf_dial", (dx, -DOOR_T - 0.012, DIAL.z), (dx, -DOOR_T - 0.04, DIAL.z), 0.05, mat=g["nickel"], verts=48))
+    dial.append(ship.cyl("sf_dial_knob", (dx, -DOOR_T - 0.04, DIAL.z), (dx, -DOOR_T - 0.07, DIAL.z), 0.022, mat=g["steel"], verts=24))
+    for k in range(50):                                          # engraved graduations (on the turning dial)
+        a_ = 2 * math.pi * k / 50; L = 0.012 if k % 5 == 0 else 0.006
+        p = Vector((dx + 0.044 * math.cos(a_), -DOOR_T - 0.0405, DIAL.z + 0.044 * math.sin(a_)))
+        dial.append(ship.box("sf_grad", p, (0.0012, 0.0008, L * 0.6), p4.mat("sf_engr", (0.02, 0.02, 0.02), 0.5), rot=(0, -a_ + math.pi / 2, 0)))
+    dr.append(ship.box("sf_index", (dx, -DOOR_T - 0.0125, DIAL.z + 0.068), (0.004, 0.002, 0.01), g["gold"]))   # fixed index mark
     dr.append(ship.cyl("sf_handle_hub", (hx, -DOOR_T, HANDLE.z), (hx, -DOOR_T - 0.04, HANDLE.z), 0.028, mat=g["nickel"], verts=24))
-    hb = ship.box("sf_handle", (hx, -DOOR_T - 0.045, HANDLE.z - 0.07), (0.028, 0.02, 0.16), g["nickel"], bevel=0.006); dr.append(hb)
-    # bolts on the door's free edge (they slide back when it opens)
-    for bz in (0.25, 0.5, 0.75):
-        dr.append(ship.cyl("sf_bolt", (dw - 0.01, -DOOR_T / 2, z0 + SH * bz), (dw + (0.0 if door > 0 else 0.035), -DOOR_T / 2, z0 + SH * bz), 0.018, mat=g["steel"], verts=16))
-    Mh = Matrix.Translation(HINGE + Vector((0, 0, 0))) @ Matrix.Rotation(math.radians(-door), 4, 'Z')
-    for o in dr:
-        o.matrix_world = Mh @ o.matrix_world
+    hb = ship.box("sf_handle", (hx, -DOOR_T - 0.045, HANDLE.z - 0.07), (0.028, 0.02, 0.16), g["nickel"], bevel=0.006)
+    bolts = []
+    for bz in (0.25, 0.5, 0.75):                                 # bolts on the free edge: thrown (out) while locked
+        bolts.append(ship.cyl("sf_bolt", (dw - 0.01, -DOOR_T / 2, z0 + SH * bz), (dw + 0.035, -DOOR_T / 2, z0 + SH * bz), 0.018, mat=g["steel"], verts=16))
+    import f2_letters as F2
+    dial_root = F2.group("sf_dial_root", dial, Vector((dx, -DOOR_T, DIAL.z)))
+    handle_root = F2.group("sf_handle_root", [hb], Vector((hx, -DOOR_T, HANDLE.z)))
+    bolt_root = F2.group("sf_bolt_root", bolts, Vector((dw, -DOOR_T / 2, z0)))
+    door_root = F2.group("sf_door_root", dr + [dial_root, handle_root, bolt_root], Vector((0, 0, 0)))
+    door_root.matrix_world = Matrix.Translation(HINGE) @ Matrix.Rotation(math.radians(-door), 4, 'Z')
+    SAFE.update(door=door_root, dial=dial_root, handle=handle_root, bolts=bolt_root)
     # the plaque on the velvet (a real enamel plate, lying flat, tilted a little)
     Mp = Matrix.Translation((0.1, -0.1, z0 + wt + 0.0165)) @ Matrix.Rotation(-0.12, 4, 'Z')
     em = si.enamel_material("plaque_enamel", ground=(0.006, 0.008, 0.014), chip=0.15, grime=0.15)
@@ -100,8 +106,8 @@ def vault(g):
     fl = p4.light('AREA', "doorway", 90, (0.62, 0.72, 1.0), loc=(0.6, -3.6, 2.6), target=(0, -0.3, 0.6), size=1.2)
     fl.visible_camera = False
     # dust in the air (a faint volume; the lantern beam shows in it)
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(0, -1.0, 1.5)); v = bpy.context.active_object; v.name = "sf_dust"
-    v.scale = (3.8, 3.8, 3.0)
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(0, -1.0, 1.45)); v = bpy.context.active_object; v.name = "sf_dust"
+    v.scale = (3.4, 3.8, 3.1)                                           # from below the floor
     m = bpy.data.materials.new("sf_dust_m"); m.use_nodes = True; nt = m.node_tree; nt.nodes.remove(nt.nodes["Principled BSDF"])
     vs = nt.nodes.new("ShaderNodeVolumeScatter"); vs.inputs["Density"].default_value = 0.012; vs.inputs["Anisotropy"].default_value = 0.6
     nt.links.new(vs.outputs[0], nt.nodes["Material Output"].inputs["Volume"]); v.data.materials.append(m)
@@ -111,8 +117,8 @@ def vault(g):
     p4.boxes("sf_motes", items, dm)
 
 
-def dark_lantern(loc, aim):
-    """A tin bullseye lantern standing on the floor, its beam aimed at the safe."""
+def dark_lantern(loc, aim, group_it=False):
+    """The storm lantern, its beam aimed at `aim`. group_it: flame and lights parented to it (it is carried)."""
     r, ms = skfab.model(LANTERN_UID, height=0.3, name="lantern")
     for o in ms:
         if len(o.data.polygons) > 20000:
@@ -124,7 +130,13 @@ def dark_lantern(loc, aim):
     bpy.ops.mesh.primitive_uv_sphere_add(radius=0.008, location=f); fl = bpy.context.active_object; fl.name = "lantern_flame"
     fl.scale = (1, 1, 2.2); fl.data.materials.append(fm); fl.visible_shadow = False
     p4.light('POINT', "lantern_glow", 28, (1.0, 0.6, 0.28), loc=f + Vector((0, 0, 0.02)), size=0.02)
-    p4.light('SPOT', "lantern_beam", 700, (1.0, 0.68, 0.38), loc=f + Vector((0, 0, 0.02)), target=aim, size=0.03, spot=34, blend=0.5)
+    gl = p4.light('POINT', "lantern_glow", 28, (1.0, 0.6, 0.28), loc=f + Vector((0, 0, 0.02)), size=0.02) if False else None
+    bm = p4.light('SPOT', "lantern_beam", 700, (1.0, 0.68, 0.38), loc=f + Vector((0, 0, 0.02)), target=aim, size=0.03, spot=34, blend=0.5)
+    if group_it:
+        import f2_letters as F2
+        kids = [fl, bm] + [o for o in bpy.data.objects if o.name.startswith("lantern_glow") and o.parent is None]
+        return F2.group("lantern_carried", [r] + kids, Vector(loc))
+    return r
 
 
 def pose_listen(h, dv, M, Mi):
@@ -167,17 +179,65 @@ def stethoscope(dv, M):
     ship.cyl("steth_chestpiece", chest, chest - Vector((0, 0.018, 0)), 0.022, mat=met, verts=24)
 
 
+SHOT_T0 = dict(A=0.0, B=3.5, C=7.0, D=10.0, LOGO=13.0)
+SHOT_DUR = dict(A=3.5, B=3.5, C=3.0, D=3.0, LOGO=1.0)
+
+
+def mechanism(shot):
+    """Dial clicks round while he listens (A, B); in C the handle comes down, the bolts draw, the door swings."""
+    t0, dur = SHOT_T0[shot], SHOT_DUR[shot]
+    dial0 = {k: v for k, v in (("loc", SAFE["dial"].location.copy()),)}
+
+    def dial_angle(sec):                      # 10 clicks a second? no: a deliberate 1.5 clicks/s, 3.6 deg each
+        n = sec * 1.5; k = math.floor(n); f = n - k
+        return math.radians(3.6) * (k + si.ease(min(1.0, f / 0.35)))
+
+    @si.dyn
+    def _(t, frame):
+        sec = t0 + t * dur
+        if shot in ("A", "B"):
+            SAFE["dial"].rotation_euler = (0, dial_angle(sec), 0); si.key(SAFE["dial"], "rotation_euler", frame=frame)
+        if shot == "C":
+            u = si.ease(min(1.0, t / 0.3))                                     # handle down 70 deg
+            SAFE["handle"].rotation_euler = (0, math.radians(-70) * u, 0); si.key(SAFE["handle"], "rotation_euler", frame=frame)
+            b = si.ease(min(1.0, max(0.0, (t - 0.18) / 0.15)))                 # the bolts draw back (the thunk)
+            SAFE["bolts"].location.x = SAFE["bolts_x0"] - 0.035 * b; si.key(SAFE["bolts"], "location", frame=frame)
+            dang = 95 * si.ease(min(1.0, max(0.0, (t - 0.35) / 0.65)))
+            SAFE["door"].rotation_euler = (0, 0, math.radians(-dang)); si.key(SAFE["door"], "rotation_euler", frame=frame)
+    return dial_angle
+
+
+def door_angle(shot, t):
+    return {"A": 0.0, "B": 0.0, "C": 95 * si.ease(min(1.0, max(0.0, (t - 0.35) / 0.65))), "D": 100.0, "LOGO": 100.0}[shot]
+
+
+def steth_once(dv, M):
+    """Build the stethoscope once, on the first evaluated pose (still: now; animation: frame 1)."""
+    done = {}
+
+    @si.dyn
+    def _(t, frame):
+        if done or dv is None:
+            return
+        done[1] = True
+        stethoscope(dv, M)
+
+
 def build(shot, t, out):
     E = si.ease
     si.C.render_setup(samples=64, noise=0.03, bounces=8)
     g = mats(); vault(g)
-    door = {"A": 0.0, "B": 0.0, "C": 95 * E(min(1.0, max(0.0, (t - 0.35) / 0.65))), "D": 100.0, "LOGO": 100.0}[shot]
+    door = door_angle(shot, t)
     Mp = safe(g, door)
+    SAFE["bolts_x0"] = SAFE["bolts"].location.x
+    if shot in ("C", "D", "LOGO"):
+        SAFE["bolts"].location.x -= 0.035 * (1.0 if shot != "C" else E(min(1.0, max(0.0, (t - 0.18) / 0.15))))
+    mechanism(shot)
     pos = (0.12, FRONT_Y - 0.62)
     if shot in ("A", "B"):
         dark_lantern(Vector((0.66, FRONT_Y - 0.3, 0.0)), DIAL + Vector((-0.05, 0, 0.0)))
         dv, M = si.person("deveau", pos, 90, pose_listen, DIAL, wet=0.0)
-        stethoscope(dv, M)
+        steth_once(dv, M)
         if shot == "A":
             c = Vector((1.55, -0.95, 0.85)) + Vector((-0.1, 0.0, 0.0)) * E(t)
             si.cam(c, (-0.05, FRONT_Y - 0.38, 0.72), lens=24, fstop=4.0)
@@ -186,13 +246,18 @@ def build(shot, t, out):
             si.cam(c, DIAL + Vector((-0.02, -0.07, 0)), lens=55, fstop=2.4)
     elif shot == "C":
         dark_lantern(Vector((0.66, FRONT_Y - 0.3, 0.0)), DIAL + Vector((-0.05, 0, 0.0)))
-        hz = HINGE + (Matrix.Rotation(math.radians(-door), 3, 'Z') @ Vector((HANDLE.x - HINGE.x, -DOOR_T - 0.06, 0)))
-        hz.z = HANDLE.z - 0.09
+
+        def grip_point(T):
+            d = door_angle("C", T)
+            u = si.ease(min(1.0, T / 0.3))
+            loc = Matrix.Rotation(math.radians(-70) * u, 3, 'Y') @ Vector((0, -0.065, -0.11))   # down the handle, its end
+            return HINGE + Matrix.Rotation(math.radians(-d), 3, 'Z') @ (Vector((HANDLE.x - HINGE.x, -DOOR_T, HANDLE.z)) + loc)
+
         def haul(h, dv, M, Mi):
             si.kneel(h, down="L", lean=8, drop=0.42, fwd=0.36)
             P.stand(h, lean=0, weight="L", twist=10)
             P.head(h, pitch=8, yaw=-6, tilt=0); dv.lids(0.2); dv.brow_knit(0.9)
-            P.hand_reach(h, "R", Mi @ hz + Vector((0, 0, 0)), elbow=(-0.8, 0.3, -0.5), hand_dir=Vector((-0.2, -0.4, -0.9)))
+            P.hand_reach(h, "R", Mi @ grip_point(si.T), elbow=(-0.8, 0.3, -0.5), hand_dir=Vector((-0.2, -0.4, -0.9)))
             P.grip(h, "R", 1.0)
             P.hand_reach(h, "L", Mi @ Vector((pos[0] - 0.25, pos[1] - 0.02, 0.62)), elbow=(0.7, 0.2, -0.7), hand_dir=Vector((0.1, -0.4, -0.9)))
             P.rest_hand(h, "L", curl=30)
@@ -200,18 +265,23 @@ def build(shot, t, out):
         c = Vector((1.45, -1.3, 0.95)); si.cam(c, (-0.05, FRONT_Y - 0.25, 0.62), lens=26, fstop=4.0)
     elif shot in ("D", "LOGO"):
         if shot == "D":
-            # he holds the lantern up, its beam into the safe, looking in
             def look_in(h, dv, M, Mi):
+                u = si.ease(min(1.0, si.T / 0.5))                       # he brings the lantern up to look in
                 si.kneel(h, down="L", lean=12, drop=0.42, fwd=0.36)
-                P.head(h, pitch=34, yaw=8, tilt=-3); dv.lids(0.3); dv.brow_knit(0.2)
-                P.hand_reach(h, "L", Mi @ Vector((-0.1, FRONT_Y - 0.27, 1.0)), elbow=(0.8, 0.2, -0.6), hand_dir=Vector((-0.1, 0.1, -1)))
+                P.head(h, pitch=26 + 8 * u, yaw=8, tilt=-3); dv.lids(0.3); dv.brow_knit(0.2)
+                P.hand_reach(h, "L", Mi @ Vector((-0.1, FRONT_Y - 0.27 - 0.08 * (1 - u), 0.82 + 0.18 * u)), elbow=(0.8, 0.2, -0.6),
+                             hand_dir=Vector((-0.1, 0.1, -1)))
                 P.grip(h, "L", 1.0)
                 knee = h.bone_head("lowerleg01.R")
                 P.hand_reach(h, "R", knee + Vector((0.02, -0.03, 0.1)), elbow=(-0.7, 0.4, -0.2), hand_dir=Vector((0.2, -0.6, -0.8)))
                 P.rest_hand(h, "R", curl=35)
             dv, M = si.person("deveau", pos, 90, look_in, Mp @ Vector((0, 0, 0)), wet=0.0)
-            lt = si.palm(dv, M, "L") - Vector((0, 0, 0.34)) if not si.CAMDUMP else Vector((-0.1, FRONT_Y - 0.27, 0.6))
-            dark_lantern(lt, Mp @ Vector((0, 0, 0)))
+            lroot = dark_lantern(Vector((0, 0, 0)), Mp @ Vector((0, 0, 0)), group_it=True)
+
+            @si.dyn
+            def _(tt, frame):
+                if dv is not None:
+                    si.place(lroot, Matrix.Translation(si.hand(dv, M, "L") - Vector((0, 0, 0.34))), frame)
             c = Vector((0.68, FRONT_Y - 0.52, 1.4)); tgt = Mp @ Vector((0, 0, 0))
             si.cam(c, tgt + Vector((0.04, -0.02, 0.1)), lens=34, fstop=3.2, focus=(c - tgt).length)
         else:

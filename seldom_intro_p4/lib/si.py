@@ -22,6 +22,50 @@ ease = p4.ease
 ANIM = os.environ.get("ANIM")
 CAMDUMP = os.environ.get("CAMDUMP")
 CAMS = []; ACTORS = []; GRADE = {}
+T = 0.0          # shot time 0..1: poses and props read it (stills: the requested t; animation: set per key)
+DYN = []         # callbacks f(t, frame): move/animate props; frame is None for a still (no keys)
+PEOPLE = []      # (dv, M) of everyone in the shot
+
+
+def dyn(fn):
+    """Register a time-dependent prop update. Stills call it once at T; the animation pass keys it every frame."""
+    DYN.append(fn)
+    return fn
+
+
+def run_dyn(t, frame=None):
+    for fn in DYN:
+        fn(t, frame)
+
+
+def key(obj, *paths, frame=None):
+    if frame is None:
+        return
+    for p_ in paths:
+        obj.keyframe_insert(p_, frame=frame)
+
+
+def place(obj, Mw, frame=None):
+    """Set an object's world matrix (no parent) and key loc/rot/scale on `frame`."""
+    obj.matrix_world = Mw
+    if frame is not None:
+        obj.rotation_mode = 'XYZ'
+        obj.keyframe_insert("location", frame=frame); obj.keyframe_insert("rotation_euler", frame=frame)
+        obj.keyframe_insert("scale", frame=frame)
+
+
+def set_value(node_socket, v, frame=None):
+    node_socket.default_value = v
+    if frame is not None:
+        node_socket.keyframe_insert("default_value", frame=frame)
+
+
+def hand(dv, M, side):
+    """World palm position now: from the live rig in the animation pass, from the baked pose in a still."""
+    if ANIM:
+        arm = dv.h.arm; pb = arm.pose.bones[f"wrist.{side}"]
+        return arm.matrix_world @ pb.tail
+    return palm(dv, M, side)
 
 
 def lerp(a, b, t):
@@ -229,8 +273,11 @@ def person(kind, pos, ang_deg, pose, look, floor_z=0.0, hair=1.0, **kw):
         cls = type("DeveauSB", (D.Deveau,), {"ASSET_BOOTS": False}) if kw.get("sea_boots") else D.Deveau
         dv = cls(wet=kw.get("wet", 0.1), cap=kw.get("cap", False))
     h = dv.h; Mi = M.inverted()
+    PEOPLE.append((dv, M))
     if ANIM:
-        ACTORS.append(dict(kind=kind, dv=dv, M=M, pose=pose, look=Vector(look), hair=hair, floor_z=floor_z))
+        ACTORS.append(dict(kind=kind, dv=dv, M=M, pose=pose, look=Vector(look), hair=hair, floor_z=floor_z,
+                           settle=kw.get("settle", True)))
+        dark_insides(dv)
         return dv, M
     pose(h, dv, M, Mi)
     dark_insides(dv)
@@ -322,8 +369,10 @@ def cam(loc, tgt, lens=35, fstop=None, focus=None, roll=0.0):
 
 
 def finish(out, sat=1.0, exposure=0.0, bloom=0.3, clip_ok=()):
+    GRADE["clip_ok"] = tuple(clip_ok) + ("floor",)
     if ANIM:
         GRADE.update(sat=sat, exposure=exposure, bloom=bloom); return
+    run_dyn(T, None)
     if os.environ.get("CLIPONLY"):
         import clipcheck
         clipcheck.OUT = os.path.join(ROOT, "out", "clip")
