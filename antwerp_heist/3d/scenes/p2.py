@@ -326,7 +326,7 @@ def T23():
     ST.clear_floor([(VXp(), tgt.y)], 0.8)
     m = MD.DOnorio(night=True); st = AC.Stand(m, (tgt.x - 0.6, tgt.y + 0.05), 0, lean=6)
     st.hand("R", tgt + V((-0.33, 0.0, -0.02)), elbow=(0.7, 0.3, -0.8), grip=0.9)
-    st.hand("L", tgt + V((-0.12, -0.02, 0.02)), elbow=(0.7, 0.3, -0.8), grip=0.9)
+    st.hand("L", tgt + V((-0.17, -0.02, 0.02)), elbow=(0.7, 0.3, -0.8), grip=0.9)
     st.head_to(tgt, share=0.8); st.finish(look=tgt, density=HAIR)
     tl = PR.forcing_tool(); tl.location = st.palm("R"); tl.rotation_euler = (0, 0, 0)
     d = tgt - st.palm("R"); tl.rotation_euler = (0, -math.atan2(d.z, math.hypot(d.x, d.y)), math.atan2(d.y, d.x))
