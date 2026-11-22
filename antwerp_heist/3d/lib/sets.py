@@ -410,13 +410,14 @@ def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), ga
     if contacts == "bypassed":
         # the crew unscrewed both halves, kept them face to face (still 'closed') and fixed them on a small aluminium
         # plate taped to the wall beside the frame: the door can now open while the alarm reads 'shut'
-        mc1.location = (-DW / 2 - 0.28, -WALL - 0.03, DH - 0.2)
+        BX, BZ = -0.1, DH + 0.3                     # on the wall above the door head (room to stand under it)
+        mc1.location = (BX, -WALL - 0.03, BZ + 0.01)
         alu = flat("alu_plate", (0.6, 0.6, 0.6), 0.35, metal=0.9); tape = flat("duct_tape", (0.32, 0.32, 0.33), 0.6)
-        box("bypass_plate", (-DW / 2 - 0.28, -WALL - 0.008, DH - 0.21), (0.16, 0.006, 0.09), alu)
-        box("magcontact_door", (-DW / 2 - 0.28, -WALL - 0.03, DH - 0.226), (0.09, 0.025, 0.02), white_plastic, bevel=0.003)
+        box("bypass_plate", (BX, -WALL - 0.008, BZ), (0.16, 0.006, 0.09), alu)
+        box("magcontact_door", (BX, -WALL - 0.03, BZ - 0.016), (0.09, 0.025, 0.02), white_plastic, bevel=0.003)
         for dz in (0.03, -0.06):
-            box("bypass_tape", (-DW / 2 - 0.28, -WALL - 0.006, DH - 0.21 + dz), (0.2, 0.003, 0.035), tape)
-        S.cyl("contact_wire", (-DW / 2 - 0.2, -WALL - 0.02, DH - 0.2), (-DW / 2 + 0.1, -WALL - 0.02, DH + 0.03), 0.002,
+            box("bypass_tape", (BX, -WALL - 0.006, BZ + dz), (0.2, 0.003, 0.035), tape)
+        S.cyl("contact_wire", (BX + 0.08, -WALL - 0.02, BZ), (-DW / 2 + 0.1, -WALL - 0.02, DH + 0.03), 0.002,
               mat=flat("wire_white", (0.8, 0.8, 0.78), 0.5), verts=6)
         A["mag_contact"] = Vector(mc1.location)
     elif not door_open:
@@ -549,6 +550,10 @@ def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), ga
         # night: a single caged night light by the stairs and a green exit sign; LEDs on the sensors
         light_point("night_light", (CX - 0.12, -WALL - CY + 0.3, 2.2), 40, (1.0, 0.6, 0.3), radius=0.04)
         light_point("door_night_light", (-CX + 0.15, -WALL - 0.9, 2.3), 12, (1.0, 0.62, 0.32), radius=0.05)
+        # soft bounce of the crew's torches / the night light off the pale walls (keeps night shots readable)
+        light_area("night_bounce_corr", (0, -3.0, CZ - 0.1), (0, -3.0, 0), 1.6, 35, (1.0, 0.75, 0.5), size_y=5.0)
+        light_area("night_bounce_vault", (0, VY / 2, VZ - 0.1), (0, VY / 2, 0), 3.0, 25, (1.0, 0.72, 0.48), size_y=3.0)
+        light_area("night_bounce_cup", (-CX - 1.2, -3.6, CZ - 0.1), (-CX - 1.2, -3.6, 0), 1.2, 15, (1.0, 0.75, 0.5))
         box("exit_sign", (0, -WALL - CY + 0.05, 2.35), (0.3, 0.02, 0.12), emit("exit_green", (0.1, 1.0, 0.35), 6))
         light_point("exit_glow", (0, -WALL - CY + 0.2, 2.3), 1.2, (0.2, 1.0, 0.4), radius=0.1)
     world((0.01, 0.01, 0.012), 0.5)

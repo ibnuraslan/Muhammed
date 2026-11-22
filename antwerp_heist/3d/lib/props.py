@@ -42,7 +42,7 @@ def badge(name="badge"):
     return _root(name, parts)
 
 
-def torch(name="torch", on=True, energy=40.0):
+def torch(name="torch", on=True, energy=150.0):
     """Police torch: black aluminium body, lit lens, a spot light along local -y. Origin at the grip."""
     m = flat(name + "_body", (0.02, 0.02, 0.022), 0.35, metal=0.6)
     parts = [S.cyl(name + "_body", (0, 0.06, 0), (0, -0.14, 0), 0.016, mat=m, verts=16),
@@ -161,7 +161,7 @@ def gold_bar(name="gold_bar", big=False):
 def cash_bundle(name="cash", color=(0.55, 0.45, 0.6)):
     """A strapped bundle of 100 euro-sized notes (14 x 7.5 x 1.1 cm) with a paper band."""
     n = flat(name + "_notes", color, 0.8)
-    parts = [box(name + "_stack", (0, 0, 0.0055), (0.14, 0.075, 0.011), n, bevel=0.0015),
+    parts = [box(name + "_stack", (0, 0, 0.0055), (0.14, 0.075, 0.011), n),
              box(name + "_band", (0, 0, 0.0055), (0.03, 0.0765, 0.0115), flat(name + "_band", (0.85, 0.82, 0.72), 0.7))]
     return _root(name, parts)
 

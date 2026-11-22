@@ -72,9 +72,11 @@ class _Base:
             if o.type != 'MESH' or not any(k in o.name for k in (("_body", "sole", "heel", "boot", "shoe", "trousers") if getattr(self, "ground_all", False) else ("sole", "heel", "boot", "shoe"))):
                 continue
             oe = o.evaluated_get(dg); me = oe.to_mesh()
-            if len(me.vertices):
+            if len(me.vertices) and len(me.polygons):
                 co = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", co)
                 co = co.reshape(-1, 3); M = np.array(oe.matrix_world)
+                me.calc_loop_triangles(); tv = np.empty(len(me.loop_triangles) * 3, np.int32); me.loop_triangles.foreach_get("vertices", tv)
+                co = co[np.unique(tv)]                                    # surface vertices only (no loose helpers)
                 W_ = co @ M[:3, :3].T + M[:3, 3]
                 if floor_fn is not None:          # sloped floor: height above the local surface
                     z = float((W_[:, 2] - np.array([floor_fn(y) for y in W_[:, 1]]) + floor_z).min())

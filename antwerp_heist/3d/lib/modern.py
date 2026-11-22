@@ -50,6 +50,16 @@ class ModernMan(W._Woman):
             self.GLOVES = True
         super().__init__(name, years, wet=0.0, seated=seated, bonnet=False, shawl=False)
         self._scalp_tint()
+        self._drop_helpers()
+
+    def _drop_helpers(self, n_body=13380):
+        """MakeHuman's base mesh carries helper geometry after vertex 13380 (joint cubes, tights, skirt): it hides
+        inside the legs when standing but pokes out (below floors, through chairs) in kneeling or sitting poses.
+        Delete the helper FACES (vertices stay, so every per-vertex array keeps its indexing)."""
+        import bmesh
+        me = self.h.body.data; bm = bmesh.new(); bm.from_mesh(me)
+        kill = [f for f in bm.faces if any(v.index >= n_body for v in f.verts)]
+        bmesh.ops.delete(bm, geom=kill, context='FACES_ONLY'); bm.to_mesh(me); bm.free(); me.update()
 
     BOOT_TOP = 0.075          # procedural low shoes (deveau._sea_boots): welt, sole, heel, short shaft under the trouser hem
 
@@ -235,7 +245,7 @@ class DOnorio(ModernMan):
     EXTRA = {"targets/head/head-age-incr": 0.3}
     SKIN = dict(base=(0.45, 0.28, 0.19), weather=0.3)
     HAIR = (0.92, 0.2); HAIR_LEN = (0.03, 0.05); HAIRLINE = 0.006
-    SHIRT = (0.06, 0.06, 0.065); JACKET = "leather"; JACKET_COL = (0.11, 0.055, 0.025)
+    SHIRT = (0.06, 0.06, 0.065); JACKET = "leather"; JACKET_COL = (0.045, 0.026, 0.016)
     TROUSERS = (0.015, 0.015, 0.017); SHOES = (0.012, 0.01, 0.01)
 
     def __init__(self, name="DOnorio", night=False, **kw):

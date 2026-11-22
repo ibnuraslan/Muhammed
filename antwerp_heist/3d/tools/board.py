@@ -4,7 +4,7 @@ import os, sys, json, textwrap, glob
 from PIL import Image, ImageDraw, ImageFont
 D = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 PART = sys.argv[1]; p = PART.lower()
-SHOTS = sorted(glob.glob(os.path.join(D, "shots", PART, "S*.json")))
+SHOTS = sorted(glob.glob(os.path.join(D, "shots", PART, "[A-Z][0-9]*.json")))
 info = [json.load(open(f)) for f in SHOTS]
 F = lambda s, b=False: ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans%s.ttf" % ("-Bold" if b else ""), s)
 OUT = os.path.join(D, "review", p); os.makedirs(OUT, exist_ok=True)

@@ -55,7 +55,7 @@ def T01():
     S2.exterior("dawn")
     for i, (x, y, hd) in enumerate(((-6.0, -3.2, -100), (-4.8, -3.6, -95))):
         t = MD.Trader(i); st = AC.Stand(t, (x, y), hd); st.walk(0.2 + 0.4 * i); st.finish(density=HAIR)
-    return dict(a=((-2.0, -2.0, 1.55), (-5.5, -9.0, 1.2)), b=((-2.2, -2.4, 1.55), (-5.5, -9.5, 1.2)), lens=30)
+    return dict(a=((-5.1, 0.6, 1.6), (-5.6, -12.0, 1.1)), b=((-5.15, 0.2, 1.6), (-5.6, -12.0, 1.1)), lens=32)
 
 
 def T02():
@@ -64,9 +64,9 @@ def T02():
     M = leaf.matrix_world
     nout = (M.to_3x3() @ V((0, -1, 0))).normalized()
     p = M @ V((-DW + 0.12, -0.37, 1.1))
-    g = MD.Guard(); st = AC.Stand(g, (p + nout * 0.62).to_tuple()[:2], math.degrees(math.atan2(-nout.y, -nout.x)), lean=8)
+    g = MD.Guard(); st = AC.Stand(g, (p + nout * 0.5).to_tuple()[:2], math.degrees(math.atan2(-nout.y, -nout.x)), lean=8)
     for sd, dz in (("L", 0.12), ("R", -0.1)):
-        st.hand(sd, p + nout * 0.065 + V((0, 0, dz)), elbow=(0.6, 0.3, -0.8), curl=8)
+        st.hand(sd, p + nout * 0.11 + V((0, 0, dz)), elbow=(0.6, 0.3, -0.8), curl=6)
     st.finish(look=p, density=HAIR)
     return dict(a=((-0.75, -3.4, 1.65), (0.3, -1.2, 1.2)), b=((-0.65, -3.05, 1.62), (0.3, -1.2, 1.2)), lens=28,
                 hand_ok=("vault",))
@@ -80,7 +80,7 @@ def T03():
 # ============================================================================ L18 hours inside, no alarm
 def T04():
     S2.security_room("building", night=True)
-    return dict(a=((-1.2, -1.6, 1.5), (0.2, 1.6, 1.1)), b=((-0.9, -1.2, 1.45), (0.2, 1.6, 1.1)), lens=26, cine=dict(exposure=0.5))
+    return dict(a=((-1.2, -1.6, 1.5), (0.2, 1.6, 1.1)), b=((-0.9, -1.2, 1.45), (0.2, 1.6, 1.1)), lens=26, cine=dict(exposure=1.6))
 
 
 # ============================================================================ L19 the night of the 15th, the garage
@@ -115,7 +115,7 @@ def T07():
         if pl:
             pl("holdall_" + n, full=0.2)
     return dict(a=((0.2, -3.0, 1.55), (2.8, 6.5, 1.1)), b=((0.4, -2.3, 1.55), (2.9, 6.5, 1.1)), lens=30, hand_ok=("holdall",),
-                cine=dict(exposure=0.3))
+                cine=dict(exposure=1.4))
 
 
 # ============================================================================ L20 down toward the vault
@@ -127,7 +127,7 @@ def T08():
         st = AC.Stand(c[n], (x, y, z), 90); st.walk(0.2 + 0.3 * i)
         pl = torch_pose(st, "R", (0, -2.0, 0.6))
         st.finish(density=HAIR, floor_z=z)
-        pl(f"torch_{n}", 45)
+        pl(f"torch_{n}", 135)
     return dict(a=((-0.25, y_end - 1.5, 2.5), (0.1, -2.0, 0.9)), b=((-0.2, y_end - 1.1, 2.35), (0.1, -2.0, 0.9)), lens=26,
                 hand_ok=("torch", "stair"), cine=dict(exposure=0.6))
 
@@ -138,18 +138,18 @@ def T09():
     c = crew(("DOnorio", "Finotto"))
     for i, (n, x, y) in enumerate((("DOnorio", 0.25, -3.3), ("Finotto", -0.3, -4.1))):
         st = AC.Stand(c[n], (x, y), 92); st.walk(0.3 + 0.4 * i); pl = torch_pose(st, "R", (0, -1.0, 0.8))
-        st.finish(density=HAIR); pl(f"torch_{n}", 45)
+        st.finish(density=HAIR); pl(f"torch_{n}", 135)
     cc = A["cctv"]
     ST.box("cctv_led", cc + V((0.06, -0.2, -0.04)), (0.01, 0.01, 0.01), ST.emit("rec_led", (1.0, 0.05, 0.02), 40))
-    return dict(a=(tuple(cc + V((0.25, 0.35, 0.12))), (0.0, -4.5, 1.0)), b=(tuple(cc + V((0.2, 0.3, 0.1))), (0.0, -4.0, 1.0)), lens=24,
-                hand_ok=("torch",), cine=dict(exposure=0.6))
+    return dict(a=((-0.55, -1.75, 2.3), (0.1, -4.6, 1.1)), b=((-0.5, -1.85, 2.28), (0.1, -4.4, 1.1)), lens=24,
+                hand_ok=("torch",), cine=dict(exposure=1.7))
 
 
 def T10():
     A = S2.security_room("building", night=True)
     v = A["vcr"]
     return dict(a=((0.9, -0.25, 1.3), tuple(v + V((0, 0, 0.15)))), b=((1.35, -0.55, 1.2), tuple(v + V((0, 0, 0.25)))), lens=35,
-                fstop=3.2, focus=v, cine=dict(exposure=0.6))
+                fstop=3.2, focus=v, cine=dict(exposure=1.7))
 
 
 # ============================================================================ L22 first, the steel door
@@ -160,9 +160,9 @@ def T11():
     for n, x, y, hd in pos:
         st = AC.Stand(c[n], (x, y), hd); pl = torch_pose(st, "R", (0.0, -WALL - 0.3, 1.3))
         st.head_to((0, -WALL, 1.4), share=0.6)
-        st.finish(density=HAIR); pl(f"torch_{n}", 70)
+        st.finish(density=HAIR); pl(f"torch_{n}", 210)
     return dict(a=((0.15, -4.1, 1.7), (0.0, -0.6, 1.1)), b=((0.1, -3.6, 1.68), (0.0, -0.6, 1.1)), lens=30, hand_ok=("torch",),
-                cine=dict(exposure=0.4))
+                cine=dict(exposure=1.5))
 
 
 # ============================================================================ L23 the key, the combination
@@ -190,9 +190,9 @@ def T12():
     st.hand("R", hook + V((0.06, -0.02, -0.04)), elbow=(0.6, 0.3, -0.8), grip=0.5)
     pl = torch_pose(st, "L", hook)
     st.head_to(hook, share=0.7)
-    st.finish(look=hook, density=HAIR); pl("torch_D", 50)
+    st.finish(look=hook, density=HAIR); pl("torch_D", 160)
     return dict(a=((kc.x + 1.55, kc.y + 0.5, 1.75), tuple(hook + V((0.2, 0, -0.1)))), b=((kc.x + 1.4, kc.y + 0.4, 1.72), tuple(hook + V((0.2, 0, -0.1)))),
-                lens=30, hand_ok=("torch", "key", "cab"), cine=dict(exposure=0.6))
+                lens=30, hand_ok=("torch", "key", "cab"), cine=dict(exposure=1.7))
 
 
 def T13():
@@ -212,8 +212,8 @@ def T13():
     AC.fit_clear(k1, [o for o in m.objects if o.type == 'MESH'], V((0, 0, 1)))
     AC.fit_clear(k2, [o for o in m.objects if o.type == 'MESH'], V((0, 0, 1)))
     ST.light_spot("key_torch", (1.0, -3.7, 1.9), hp, 50, angle=35, color=(1.0, 0.9, 0.75))
-    return dict(a=((0.85, -3.85, 1.72), tuple(hp)), b=((0.78, -3.7, 1.65), tuple(hp)), lens=40, fstop=2.8, focus=hp,
-                hand_ok=("key",), cine=dict(exposure=0.5))
+    return dict(a=((1.0, -4.15, 1.8), tuple(hp)), b=((0.95, -4.0, 1.75), tuple(hp)), lens=30, fstop=4.0, focus=hp,
+                hand_ok=("key",), cine=dict(exposure=1.6))
 
 
 def T14():
@@ -222,9 +222,9 @@ def T14():
     m = MD.Finotto(night=True); st = AC.Stand(m, (d.x - 0.1, d.y - 0.58), 95)
     st.hand("R", d + V((0.02, -0.14, -0.04)), elbow=(0.7, 0.3, -0.8), grip=0.35)
     pl = torch_pose(st, "L", d)
-    st.head_to(d, share=0.8); st.finish(look=d, density=HAIR); pl("torch_F", 50)
+    st.head_to(d, share=0.8); st.finish(look=d, density=HAIR); pl("torch_F", 160)
     return dict(a=((d.x + 0.55, d.y - 1.0, 1.75), tuple(d)), b=((d.x + 0.45, d.y - 0.85, 1.7), tuple(d)), lens=40, fstop=2.8, focus=d,
-                hand_ok=("torch", "vault_dial", "vault"), cine=dict(exposure=0.6))
+                hand_ok=("torch", "vault_dial", "vault"), cine=dict(exposure=1.7))
 
 
 def T15():
@@ -237,14 +237,15 @@ def T15():
     import ship as SH
     SH.cyl("pinhole_lens", cam + V((-0.02, 0.012, -0.012)), cam + V((-0.026, 0.02, -0.02)), 0.006, mat=ST.flat("lens", (0.0, 0.0, 0.0), 0.05), verts=16)
     S2.ripple_bands(cam + V((-0.03, 0.02, -0.025)), (d - cam), (0.06,), width=0.07, strength=2.5, alpha=0.5)
+    ST.light_point("pinhole_fill", cam + V((0.25, -0.35, -0.3)), 6, (1.0, 0.8, 0.55), radius=0.1)
     ST.light_spot("door_torch", (0.8, -3.0, 1.8), d, 120, angle=30, color=(1.0, 0.85, 0.65))
     return dict(a=(tuple(cam + V((0.6, -0.9, -0.35))), tuple(cam)), b=(tuple(cam + V((0.5, -0.8, -0.3))), tuple(cam.lerp(d, 0.25))),
-                lens=35, fstop=2.8, focus=cam, cine=dict(exposure=0.7))
+                lens=35, fstop=2.8, focus=cam, cine=dict(exposure=1.8))
 
 
 def T16():
     ST.vault_complex("night", gate_angle=95)
-    return dict(a=((-0.4, -6.4, 1.55), (0.0, -0.6, 1.2)), b=((-0.35, -5.8, 1.55), (0.0, -0.6, 1.2)), lens=32, cine=dict(exposure=0.9))
+    return dict(a=((-0.4, -6.4, 1.55), (0.0, -0.6, 1.2)), b=((-0.35, -5.8, 1.55), (0.0, -0.6, 1.2)), lens=32, cine=dict(exposure=2.0))
 
 
 # ============================================================================ L24-25 the magnetic contacts
@@ -253,20 +254,20 @@ def T17():
     mc = A["mag_contact"]
     S2.ripple_bands(mc + V((0, -0.02, -0.025)), (0, -1, 0), (0.06,), width=0.08, strength=2.5, alpha=0.5)
     ST.light_spot("contact_torch", (mc.x + 0.6, mc.y - 1.2, mc.z - 0.6), mc, 90, angle=25, color=(1.0, 0.85, 0.65))
-    return dict(a=(tuple(mc + V((0.3, -0.5, -0.12))), tuple(mc + V((0, 0, -0.02)))), b=(tuple(mc + V((0.24, -0.42, -0.1))), tuple(mc + V((0, 0, -0.02)))),
-                lens=50, fstop=2.8, focus=mc, cine=dict(exposure=0.7))
+    return dict(a=(tuple(mc + V((0.45, -0.75, -0.2))), tuple(mc + V((0, 0, -0.02)))), b=(tuple(mc + V((0.38, -0.65, -0.17))), tuple(mc + V((0, 0, -0.02)))),
+                lens=35, fstop=5.6, focus=mc, cine=dict(exposure=1.8))
 
 
 def T18():
     A = ST.vault_complex("night", gate_angle=95, contacts="bypassed")
     mc = A["mag_contact"]
-    m = MD.DOnorio(night=True); st = AC.Stand(m, (mc.x - 0.2, mc.y - 0.62), 75)
-    st.hand("R", mc + V((0.06, -0.1, -0.02)), elbow=(0.7, 0.3, -0.9), curl=20)
-    st.hand("L", mc + V((-0.09, -0.1, -0.04)), elbow=(0.7, 0.3, -0.9), curl=20)
+    m = MD.DOnorio(night=True); st = AC.Stand(m, (mc.x, mc.y - 0.78), 90, lean=-3)
+    st.hand("R", mc + V((0.08, -0.11, -0.05)), elbow=(0.8, 0.2, -0.8), curl=20)
+    st.hand("L", mc + V((-0.09, -0.11, -0.06)), elbow=(0.8, 0.2, -0.8), curl=20)
     st.head_to(mc, share=0.8); st.finish(look=mc, density=HAIR)
     ST.light_spot("contact_torch", (mc.x + 0.9, mc.y - 1.3, 1.4), mc, 120, angle=30, color=(1.0, 0.85, 0.65))
-    return dict(a=((mc.x + 0.75, mc.y - 1.35, 1.95), tuple(mc)), b=((mc.x + 0.68, mc.y - 1.2, 1.92), tuple(mc)), lens=32,
-                fstop=3.2, focus=mc, hand_ok=("bypass", "magcontact", "doorwall", "vframe"), cine=dict(exposure=0.6))
+    return dict(a=((mc.x + 0.85, mc.y - 1.9, 1.75), tuple(mc)), b=((mc.x + 0.75, mc.y - 1.75, 1.75), tuple(mc)), lens=30,
+                fstop=3.2, focus=mc, hand_ok=("bypass", "magcontact", "doorwall", "vframe"), cine=dict(exposure=1.7))
 
 
 def T19():
@@ -279,7 +280,7 @@ def T19():
     st.arm_down("L"); st.finish(look=hub, density=HAIR)
     ST.light_point("corr_torchlight", (-0.5, -2.6, 1.5), 25, (1.0, 0.85, 0.65), radius=0.2)
     return dict(a=((-0.75, -3.3, 1.6), (0.2, -1.2, 1.2)), b=((-0.6, -2.95, 1.58), (0.2, -1.1, 1.2)), lens=28,
-                hand_ok=("vault_spoke", "vault"), cine=dict(exposure=0.6))
+                hand_ok=("vault_spoke", "vault"), cine=dict(exposure=1.7))
 
 
 # ============================================================================ L26-27 sensors blinded, lights on
@@ -289,13 +290,13 @@ def T20():
     stepm = ST.steel_paint("step_box", (0.35, 0.3, 0.2), 0.5)
     ST.box("step_box", (ld.x, ld.y - 0.38, 0.2), (0.6, 0.45, 0.4), stepm, bevel=0.01)      # a sturdy step box
     m = MD.Finotto(night=True); st = AC.Stand(m, (ld.x, ld.y - 0.38, 0.4), 90)
-    st.hand("R", ld + V((0.05, -0.03, -0.12)), elbow=(0.7, 0.3, -0.9), curl=10)
-    st.hand("L", ld + V((-0.06, -0.05, -0.13)), elbow=(0.7, 0.3, -0.9), curl=10)
+    st.hand("R", ld + V((0.06, -0.04, -0.19)), elbow=(0.7, 0.3, -0.9), curl=10)
+    st.hand("L", ld + V((-0.07, -0.06, -0.2)), elbow=(0.7, 0.3, -0.9), curl=10)
     st.head_to(ld, share=0.6); st.finish(look=ld, density=HAIR, floor_z=0.4)
     tr = PR.tape_roll(); tr.location = (ld.x + 0.24, ld.y - 0.5, 0.432)
     t = PR.torch("torch_floor", energy=80); t.location = (0.8, 1.0, 0.03); t.rotation_euler = dirq(ld - V((0.8, 1.0, 0.03)))
     return dict(a=((1.6, 0.4, 0.9), tuple(ld + V((0, 0, -0.5)))), b=((1.45, 0.55, 0.95), tuple(ld + V((0, 0, -0.45)))), lens=26,
-                hand_ok=("light_detector", "tape", "step_box"), cine=dict(exposure=0.6))
+                hand_ok=("light_detector", "tape", "step_box"), cine=dict(exposure=1.7))
 
 
 def T21():
@@ -303,7 +304,7 @@ def T21():
     p = A["pirs"][1]
     ST.light_spot("pir_torch", (p.x - 1.2, p.y - 1.4, 1.3), p, 90, angle=25, color=(1.0, 0.85, 0.65))
     return dict(a=(tuple(p + V((-0.7, -0.8, -0.5))), tuple(p)), b=(tuple(p + V((-0.55, -0.65, -0.42))), tuple(p)), lens=45,
-                fstop=2.8, focus=p, cine=dict(exposure=0.7))
+                fstop=2.8, focus=p, cine=dict(exposure=1.8))
 
 
 def T22():
@@ -345,8 +346,8 @@ def T24():
     if tool:
         bpy.context.view_layer.update()
         hd = tool.matrix_world @ V((0.33, 0, 0))
-        out = dict(out, a=(tuple(hd + V((-0.35, -0.42, 0.22))), tuple(hd)), b=(tuple(hd + V((-0.3, -0.36, 0.18))), tuple(hd)), lens=45,
-                   fstop=2.8, focus=hd)
+        out = dict(out, a=(tuple(hd + V((-1.0, -0.55, 0.5))), tuple(hd)), b=(tuple(hd + V((-0.92, -0.5, 0.46))), tuple(hd)), lens=35,
+                   fstop=3.2, focus=hd)
     return out
 
 
@@ -443,7 +444,7 @@ def T32():
     st.head_to(v, share=0.7); st.finish(look=v, density=HAIR); pl("bag_tapes", 0.6)
     ST.light_spot("vcr_torch", (v.x - 1.4, v.y - 1.0, 1.9), v, 60, angle=40, color=(1.0, 0.85, 0.65))
     return dict(a=((v.x - 1.8, v.y - 0.9, 1.65), tuple(v + V((-0.4, 0, -0.1)))), b=((v.x - 1.6, v.y - 0.75, 1.62), tuple(v + V((-0.4, 0, -0.1)))),
-                lens=30, hand_ok=("vcr", "bag"), cine=dict(exposure=0.6))
+                lens=30, hand_ok=("vcr", "bag"), cine=dict(exposure=1.7))
 
 
 def T33():
@@ -484,14 +485,14 @@ def T36():
 
 def T37():
     A = ST.vault_complex("wreck", contacts="bypassed", taped=True)
-    ST.clear_floor([(-2.1, 2.6), (-1.5, 2.6), (-1.75, 3.2), (-1.4, 3.45)], 0.75)
-    t = MD.Trader(2); sf = AC.SitFloor(t, (-2.2, 2.6), 0, back_lean=-12); sf.finish(density=HAIR)
-    t2 = MD.Trader(4); kn = AC.Kneel(t2, (-1.8, 3.2), 210, lean=20)
+    ST.clear_floor([(-1.6, 1.5), (-2.2, 1.5), (-1.75, 2.1), (-1.5, 2.45)], 0.75)
+    t = MD.Trader(2); sf = AC.SitFloor(t, (-1.6, 1.5), 180, back_lean=-12); sf.finish(density=HAIR)
+    t2 = MD.Trader(4); kn = AC.Kneel(t2, (-1.75, 2.1), -100, lean=20)
     bpy.context.view_layer.update()
     sh = sf.M @ t.h.bone_head("upperarm01.R")
     kn.hand("R", sh + V((0.05, -0.02, 0.06)), elbow=(0.7, 0.3, -0.8), curl=20)
     kn.finish(density=HAIR)
-    return dict(a=((-0.6, 0.6, 1.25), (-2.3, 2.6, 0.5)), b=((-0.75, 0.8, 1.2), (-2.3, 2.6, 0.5)), lens=30,
+    return dict(a=((0.35, 1.15, 1.3), (-1.8, 1.7, 0.5)), b=((0.2, 1.2, 1.25), (-1.8, 1.7, 0.5)), lens=30,
                 hand_ok=("Trader2", "Trader4"))
 
 
