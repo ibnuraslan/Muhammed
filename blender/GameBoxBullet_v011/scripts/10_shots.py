@@ -117,7 +117,7 @@ def chest_y(zw):
     return min(ys)
 BOX_Z = 1.45
 CHEST = chest_y(BOX_Z)
-BOX_C = V((0.0, CHEST - 0.004 - BD / 2, BOX_Z))
+BOX_C = V((0.0, CHEST - 0.012 - BD / 2, BOX_Z))
 print("BOX_C", BOX_C, "chest", CHEST)
 
 # ------------------------------------------------------------------ box motion (world)
@@ -307,7 +307,7 @@ def man_state(f):
     up = sm(395, 430, f) * (1 - sm(F_HIT + 40, F_HIT + 90, f)); hp -= 20 * up; hy -= 6 * up
     if f > F_HIT:   # impact: pushed back, head snaps back then forward
         v = (f - F_HIT) / 60.0
-        dy += shove(f) * 0.9; dz -= 0.015 * (1 - math.exp(-v * 3)) * math.exp(-v * 0.5); flex -= 6 * (1 - math.exp(-v * 4)) * math.exp(-v * 0.6)
+        dy += shove(f); dz -= 0.015 * (1 - math.exp(-v * 3)) * math.exp(-v * 0.5); flex -= 6 * (1 - math.exp(-v * 4)) * math.exp(-v * 0.6)
         hp -= 10 * math.exp(-v * 2.5) * (1 - math.exp(-v * 12))
     # stares down at the cracking box, small shakes of disbelief, heavy breaths
     dn = sm(600, 640, f) * (1 - sm(1140, 1175, f)); hp += 14 * dn
@@ -377,7 +377,7 @@ def blink_keys():
                 pb.rotation_quaternion = q; pb.keyframe_insert("rotation_quaternion", frame=ff)
             pb.rotation_quaternion = Quaternion(V((1, 0, 0)), math.radians(22 * LID)); pb.keyframe_insert("rotation_quaternion", frame=fb)
 # hands: palms flat on the box sides, fingers forward along the sides, thumbs over the top edge
-GY = ENV("GY", "0.040"); GZ = ENV("GZ", "-0.020"); FD_UP = ENV("FDUP", "0.12"); SKIN = ENV("SKIN", "0.011")
+GY = ENV("GY", "0.040"); GZ = ENV("GZ", "-0.020"); FD_UP = ENV("FDUP", "0.12"); SKIN = ENV("SKIN", "0.0475")
 def key_hands(f):
     M = box_M(f); Rb = M.to_3x3()
     for s, sx in (("L", 1), ("R", -1)):
@@ -433,20 +433,20 @@ for f in (1, F_END):
         HS.key_foot(s, f, xy, 180.0 + (8 if s == "L" else -12))
 for f in range(1, 80, 2):
     k = max(0.0, f - F_FIRE); jolt = (1 - math.exp(-k / 2.0)) * math.exp(-k / 12.0) if f >= F_FIRE else 0.0
-    HS.key_spine(f, flex=-2 - 3 * jolt, twist=-12, side=0.0, head=(4 - 4 * jolt, -14))
-HS.key_spine(F_END, flex=-2, twist=-12, side=0.0, head=(4, -14))
-for f in range(1, 80, 2):
+    HS.key_spine(f, flex=-2 - 3 * jolt, twist=-5, side=0.0, head=(4 - 4 * jolt, -8))
+HS.key_spine(F_END, flex=-2, twist=-5, side=0.0, head=(4, -8))
+for f in list(range(1, 80, 3)) + [80]:
     G = gun_M(f); Rg = G.to_3x3()
-    place_hand(shooter, "R", f, G @ (GRIP_L + V((0.02, -0.01, 0.0))), Rg @ V((-1, 0, 0)), Rg @ V((-0.2, 1.0, -0.25)), skin=0.012)
     pb = RS.PB["Pole_elbow.R"]; pole = G @ V((0.25, -0.40, -0.45))
     pb.location = RS.rest("Pole_elbow.R").to_3x3().inverted() @ (pole - RS.BN["Pole_elbow.R"].head_local); pb.keyframe_insert("location", frame=f)
+    grip_object(shooter, "R", f, bpy.data.objects["Gun_part1"], G @ V((0.011, -0.151, -0.027)), Rg @ V((-1, 0, 0)), finger_dir=Rg @ V((0, 1, 0)))
 for c in RS.PB["lowerarm02.L"].constraints:
     if c.type == "IK": c.mute = True
 for c in RS.PB["wrist.L"].constraints:
     if c.type == "COPY_ROTATION": c.mute = True
 for f in (1, F_END):
     RS.key_rot("upperarm01.L", f, [("Y", 40), ("X", 5)])
-    apply_pose(shooter, "L", "relaxed", f); apply_pose(shooter, "R", "power_fist", f)
+    apply_pose(shooter, "L", "relaxed", f)
 bpy.ops.object.mode_set(mode='OBJECT')
 # muzzle flash: a short star of light for 3 frames, then a small smoke puff
 M_flash = bpy.data.materials.new("M_flash"); M_flash.use_nodes = True; nt = M_flash.node_tree; nt.nodes.clear()
