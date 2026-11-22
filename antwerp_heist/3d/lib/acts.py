@@ -69,7 +69,7 @@ class _Base:
         dg = bpy.context.evaluated_depsgraph_get()
         low = None
         for o in self.m.objects:
-            if o.type != 'MESH' or not (getattr(self, "ground_all", False) or any(k in o.name for k in ("sole", "heel", "boot", "shoe"))):
+            if o.type != 'MESH' or not any(k in o.name for k in (("_body", "sole", "heel", "boot", "shoe", "trousers") if getattr(self, "ground_all", False) else ("sole", "heel", "boot", "shoe"))):
                 continue
             oe = o.evaluated_get(dg); me = oe.to_mesh()
             if len(me.vertices):
@@ -92,6 +92,12 @@ class _Base:
             self.M = Matrix.Translation((0, 0, dz)) @ self.M
         if getattr(self, "seat_top", None) is not None:
             self._rest_on_seat()
+        if getattr(self, "ground_all", False):          # coat skirts and jacket hems lie on the floor, never through it
+            bpy.context.view_layer.update()
+            hip = self.M @ H_hip(self.m.h)
+            self.seat_top = floor_z - 0.004; self.seat_xy = (hip.x, hip.y)
+            self._rest_on_seat(margin=0.012, r=1.2, depth=0.6)
+            self.seat_top = None
         for prop, local in self.attached_pending:
             prop.matrix_world = self.M @ local
         bpy.context.view_layer.update()
@@ -102,17 +108,17 @@ class _Base:
     attached = ()
     attached_pending = ()
 
-    def _rest_on_seat(self, margin=0.016):
+    def _rest_on_seat(self, margin=0.016, r=0.36, depth=0.25):
         """Seated: cloth that hangs below the seat top over the seat footprint (jacket skirts, trouser seat) is lifted
         to lie on it, like real cloth resting on a chair."""
         import numpy as np
-        c = self.seat_xy; r = 0.36; z0 = self.seat_top + margin
+        c = self.seat_xy; z0 = self.seat_top + margin
         for o in self.m.objects:
             if o.type != 'MESH' or not any(k in o.name for k in ("jacket", "trousers", "shirt", "tie")):
                 continue
             me = o.data; co = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", co); co = co.reshape(-1, 3)
             M = np.array(o.matrix_world); w = co @ M[:3, :3].T + M[:3, 3]
-            sel = (np.hypot(w[:, 0] - c[0], w[:, 1] - c[1]) < r) & (w[:, 2] < z0) & (w[:, 2] > z0 - 0.25)
+            sel = (np.hypot(w[:, 0] - c[0], w[:, 1] - c[1]) < r) & (w[:, 2] < z0) & (w[:, 2] > z0 - depth)
             if not sel.any():
                 continue
             w[sel, 2] = z0

@@ -484,9 +484,9 @@ def T36():
 
 def T37():
     A = ST.vault_complex("wreck", contacts="bypassed", taped=True)
-    ST.clear_floor([(-2.45, 2.6), (-1.95, 2.3)], 0.75)
-    t = MD.Trader(2); sf = AC.SitFloor(t, (-2.55, 2.6), 0, back_lean=-22); sf.finish(density=HAIR)
-    t2 = MD.Trader(4); kn = AC.Kneel(t2, (-1.95, 2.25), 150, lean=20)
+    ST.clear_floor([(-2.1, 2.6), (-1.5, 2.6), (-1.75, 3.2), (-1.4, 3.45)], 0.75)
+    t = MD.Trader(2); sf = AC.SitFloor(t, (-2.2, 2.6), 0, back_lean=-12); sf.finish(density=HAIR)
+    t2 = MD.Trader(4); kn = AC.Kneel(t2, (-1.8, 3.2), 210, lean=20)
     bpy.context.view_layer.update()
     sh = sf.M @ t.h.bone_head("upperarm01.R")
     kn.hand("R", sh + V((0.05, -0.02, 0.06)), elbow=(0.7, 0.3, -0.8), curl=20)
