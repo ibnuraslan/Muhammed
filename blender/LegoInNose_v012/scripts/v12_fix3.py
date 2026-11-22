@@ -57,7 +57,7 @@ newk = {}
 for f in list(range(496, 576, 4)) + [575]:          # key every 4 frames (the old keys were sparse)
     sc.frame_set(f); hd = W(B, "head"); eyes = (W(B, "eye.L") + W(B, "eye.R")) / 2
     fwd = eyes - hd; fwd.z = 0; fwd.normalize()
-    tgt = eyes + fwd * 0.20 - z * 0.06                  # in front of his face, just below eye level
+    side_ = Vector((-fwd.y, fwd.x, 0)); tgt = eyes + fwd * 0.24 - z * 0.12 + side_ * 0.07   # in front of his chin, off to his right: his face stays clear
     hand = W(B, "IK_hand.R"); w = min(1.0, (f - 496) / 8.0, (575 - f) / 8.0)
     newk[f] = [c.evaluate(f) for c in cf]; d = T @ ((tgt - hand) * w)
     newk[f] = [newk[f][i] + d[i] for i in range(3)]
