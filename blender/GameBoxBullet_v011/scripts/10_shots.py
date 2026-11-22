@@ -117,7 +117,7 @@ def chest_y(zw):
     return min(ys)
 BOX_Z = 1.45
 CHEST = chest_y(BOX_Z)
-BOX_C = V((0.0, CHEST - 0.012 - BD / 2, BOX_Z))
+BOX_C = V((0.0, CHEST - 0.032 - BD / 2, BOX_Z))
 print("BOX_C", BOX_C, "chest", CHEST)
 
 # ------------------------------------------------------------------ box motion (world)
@@ -377,17 +377,53 @@ def blink_keys():
                 pb.rotation_quaternion = q; pb.keyframe_insert("rotation_quaternion", frame=ff)
             pb.rotation_quaternion = Quaternion(V((1, 0, 0)), math.radians(22 * LID)); pb.keyframe_insert("rotation_quaternion", frame=fb)
 # hands: palms flat on the box sides, fingers forward along the sides, thumbs over the top edge
-GY = ENV("GY", "0.040"); GZ = ENV("GZ", "-0.020"); FD_UP = ENV("FDUP", "0.12"); SKIN = ENV("SKIN", "0.0475")
-def key_hands(f):
+GY = ENV("GY", "0.052"); GZ = ENV("GZ", "-0.020"); FD_UP = ENV("FDUP", "0.12"); SKIN = ENV("SKIN", "0.050")
+HANDP = {"L": (-0.3, -0.6, 0.03, 0.060), "R": (0.2, -0.6, 0.03, 0.045)}
+HAND_FR = list(range(1, F_END + 1, 2)) + [F_END]
+SKINF = {(s, f): HANDP[s][3] for s in "LR" for f in HAND_FR}
+def key_hands(f, only=None):
     M = box_M(f); Rb = M.to_3x3()
     for s, sx in (("L", 1), ("R", -1)):
-        pp = M @ V((sx * BW / 2, GY, GZ)); nrm = Rb @ V((-sx, 0, 0)); fd = Rb @ V((0, -1.0, FD_UP))
-        place_hand(man, s, f, pp, nrm, fd, skin=SKIN)
-        pole = M @ V((sx * 0.42, 0.45, -0.40))
+        if only and s != only: continue
+        out, up, gy, _ = HANDP[s]
+        pp = M @ V((sx * BW / 2, gy, GZ)); nrm = Rb @ V((-sx, 0, 0)); fd = Rb @ V((sx * out, -1.0, up))
+        place_hand(man, s, f, pp, nrm, fd, skin=SKINF[(s, f)])
+        pole = M @ V((sx * 0.75, 0.30, -0.30))
         pb = R.PB["Pole_elbow." + s]; nme = "Pole_elbow." + s
         pb.location = R.rest(nme).to_3x3().inverted() @ (pole - R.BN[nme].head_local); pb.keyframe_insert("location", frame=f)
-for f in list(range(1, F_END + 1, 2)) + [F_END]:
+for f in HAND_FR:
     key_hands(f)
+# contact pass: measure the hand skin against the box side at every keyed frame, re-place until it sits 1-3 mm off
+GI = {g.index: g.name for g in body.vertex_groups}
+HANDV = {s: [v.index for v in body.data.vertices if any(g.weight > 0.3 and GI.get(g.group, "").endswith("." + s) and GI[g.group].startswith(("finger", "metacarpal", "wrist")) for g in v.groups)] for s in "LR"}
+def hand_contact(f, s):
+    sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get(); Bi = box_M(f).inverted(); sx = 1 if s == "L" else -1
+    e = body.evaluated_get(dg); me = e.to_mesh(); M = Bi @ e.matrix_world; pen = 0.0; gap = 9.0
+    if len(me.vertices) == len(body.data.vertices):
+        for i in HANDV[s]:
+            l = M @ me.vertices[i].co
+            if abs(l.y) < BD / 2 and abs(l.z) < BH / 2:
+                d = sx * l.x - BW / 2
+                if d < 0: pen = max(pen, -d)
+                else: gap = min(gap, d)
+    e.to_mesh_clear(); return pen, gap
+for mm in body.modifiers:
+    if mm.type in ("SUBSURF", "MASK"): mm.show_viewport = False
+CONTACT = {}
+for it in range(4):
+    nfix = 0
+    for f in HAND_FR:
+        for s in "LR":
+            pen, gap = hand_contact(f, s)
+            CONTACT[(s, f)] = (pen, gap)
+            if pen > 0.0005 or gap > 0.004:
+                SKINF[(s, f)] += (pen + 0.0015) if pen > 0.0005 else -(gap - 0.0015)
+                key_hands(f, only=s); nfix += 1
+    print("CONTACT pass", it, "fixed", nfix, flush=True)
+    if not nfix: break
+for mm in body.modifiers:
+    if mm.type in ("SUBSURF", "MASK"): mm.show_viewport = True
+print("CONTACT worst pen mm", round(max(v[0] for v in CONTACT.values()) * 1000, 1), "worst gap mm", round(max(v[1] for v in CONTACT.values() if v[1] < 9) * 1000, 1))
 blink_keys()
 for f in (1, F_END):
     for s in "LR":
@@ -439,7 +475,7 @@ for f in list(range(1, 80, 3)) + [80]:
     G = gun_M(f); Rg = G.to_3x3()
     pb = RS.PB["Pole_elbow.R"]; pole = G @ V((0.25, -0.40, -0.45))
     pb.location = RS.rest("Pole_elbow.R").to_3x3().inverted() @ (pole - RS.BN["Pole_elbow.R"].head_local); pb.keyframe_insert("location", frame=f)
-    grip_object(shooter, "R", f, bpy.data.objects["Gun_part1"], G @ V((0.011, -0.151, -0.027)), Rg @ V((-1, 0, 0)), finger_dir=Rg @ V((0, 1, 0)))
+    grip_object(shooter, "R", f, bpy.data.objects["Gun_part1"], G @ V((0.011, -0.146, -0.046)), Rg @ V((-1, 0, 0)), finger_dir=Rg @ V((0, 1, 0)))
 for c in RS.PB["lowerarm02.L"].constraints:
     if c.type == "IK": c.mute = True
 for c in RS.PB["wrist.L"].constraints:
