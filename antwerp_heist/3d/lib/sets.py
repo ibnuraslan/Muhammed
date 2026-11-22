@@ -256,13 +256,14 @@ def _paper_mesh(name, w, l, mat, bend=0.02, seed=0):
 
 
 # ----------------------------------------------------------------------------- the vault complex
-def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), gate_angle=None, tray_out=0.18):
+def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), gate_angle=None, tray_out=0.18,
+                  lights=None, door_angle=None, contacts="normal", taped=False):
     rng = random.Random(seed)
     A = {}
     col = bpy.context.scene.collection
     wreck = state == "wreck"; night = state == "night"; heist = state == "heist"
-    lights_on = state in ("day", "wreck", "heist")
-    door_open = state in ("day", "wreck", "heist")
+    lights_on = state in ("day", "wreck", "heist") if lights is None else lights
+    door_open = state in ("day", "wreck", "heist") if door_angle is None else door_angle > 0.5
     # materials
     import detail as DT
     concrete = DT.wall_paint("vault_wall_paint", (0.4, 0.37, 0.32), rough=0.78)
@@ -352,7 +353,7 @@ def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), ga
     open_set = set()
     if wreck or heist:
         idx = list(range(len(cells))); rng.shuffle(idx)
-        open_set = set(idx[:forced if wreck else int(forced * debris)])
+        open_set = set(idx[:forced])
     A["open_cells"] = []; A["cells"] = cells
     num_m = flat("engraved", (0.02, 0.018, 0.015), 0.5)
     for (esg, ec, er) in extra_open:
@@ -391,7 +392,7 @@ def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), ga
     hinge = Vector((DW / 2 + 0.03, -WALL - 0.02, 0))
     ang = 0.0
     if door_open:
-        ang = 92.0
+        ang = 92.0 if door_angle is None else door_angle
     leaf.matrix_world = Matrix.Translation(hinge) @ Matrix.Rotation(math.radians(ang), 4, 'Z')
     A["vault_door"] = leaf; A["door_hinge"] = hinge
     bpy.context.view_layer.update()
@@ -406,7 +407,19 @@ def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), ga
     # magnetic door contact: one half on the frame head, the other on the door leaf top
     mc1 = box("magcontact_frame", (-DW / 2 + 0.15, -WALL - 0.035, DH + 0.03), (0.09, 0.025, 0.02), white_plastic, bevel=0.003)
     A["mag_contact"] = Vector(mc1.location)
-    if not door_open:
+    if contacts == "bypassed":
+        # the crew unscrewed both halves, kept them face to face (still 'closed') and fixed them on a small aluminium
+        # plate taped to the wall beside the frame: the door can now open while the alarm reads 'shut'
+        mc1.location = (-DW / 2 - 0.28, -WALL - 0.03, DH - 0.2)
+        alu = flat("alu_plate", (0.6, 0.6, 0.6), 0.35, metal=0.9); tape = flat("duct_tape", (0.32, 0.32, 0.33), 0.6)
+        box("bypass_plate", (-DW / 2 - 0.28, -WALL - 0.008, DH - 0.21), (0.16, 0.006, 0.09), alu)
+        box("magcontact_door", (-DW / 2 - 0.28, -WALL - 0.03, DH - 0.226), (0.09, 0.025, 0.02), white_plastic, bevel=0.003)
+        for dz in (0.03, -0.06):
+            box("bypass_tape", (-DW / 2 - 0.28, -WALL - 0.006, DH - 0.21 + dz), (0.2, 0.003, 0.035), tape)
+        S.cyl("contact_wire", (-DW / 2 - 0.2, -WALL - 0.02, DH - 0.2), (-DW / 2 + 0.1, -WALL - 0.02, DH + 0.03), 0.002,
+              mat=flat("wire_white", (0.8, 0.8, 0.78), 0.5), verts=6)
+        A["mag_contact"] = Vector(mc1.location)
+    elif not door_open:
         box("magcontact_door", (-DW / 2 + 0.15, -WALL - 0.035, DH - 0.012), (0.09, 0.025, 0.02), white_plastic, bevel=0.003)
     # light detector on the vault ceiling (photocell), PIR in the far corners, seismic/heat plates on the walls
     ld = box("light_detector", (0, VY * 0.45, VZ - 0.03), (0.08, 0.08, 0.04), white_plastic, bevel=0.005)
@@ -418,6 +431,18 @@ def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), ga
         o = box("pir", p, (0.1, 0.1, 0.13), white_plastic, bevel=0.02, rot=(0, 0, math.radians(45 * sx)))
         b = box("pir_led", p + Vector((-sx * 0.04, -0.04, -0.04)), (0.008, 0.008, 0.008), led_r if not night else led_r)
         A["pirs"].append(p)
+    if taped:
+        tape = flat("duct_tape2", (0.3, 0.3, 0.31), 0.55)
+        for dx in (-0.025, 0.0, 0.025):
+            box("tape_strip", (dx, VY * 0.45, VZ - 0.064), (0.03, 0.12, 0.002), tape, rot=(0, 0, 0.1))
+        bagm = bpy.data.materials.new("polythene"); bagm.use_nodes = True; bp = bagm.node_tree.nodes["Principled BSDF"]
+        bp.inputs['Base Color'].default_value = (0.85, 0.85, 0.82, 1); bp.inputs['Roughness'].default_value = 0.35
+        bp.inputs['Transmission Weight'].default_value = 0.6; bp.inputs['Alpha'].default_value = 0.9
+        for p in A["pirs"]:
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=10, radius=0.1, location=p + Vector((0, 0, -0.02)))
+            o = bpy.context.active_object; o.name = "pir_bag"; o.scale = (1.0, 1.0, 1.25); o.data.materials.append(bagm)
+            d = o.modifiers.new("Crumple", "DISPLACE"); t = bpy.data.textures.new("crumple", "CLOUDS"); t.noise_scale = 0.05; d.texture = t; d.strength = 0.015
+            bpy.ops.object.shade_smooth()
     A["seismic"] = []
     for p in ((-VX + 0.004, 0.25, 2.3), (VX - 0.004, 0.25, 2.3)):
         box("seismic_plate", p, (0.008, 0.12, 0.12), white_plastic, bevel=0.003); A["seismic"].append(Vector(p))
@@ -570,6 +595,18 @@ def _vault_leaf(paint, steel, brass):
     part(S.cyl("vault_keylock", (dx, -t, 0.7), (dx, -t - 0.01, 0.7), 0.03, mat=brass, verts=32))
     part(box("vault_keyslot", (dx, -t - 0.012, 0.7), (0.006, 0.004, 0.03), flat("slot", (0, 0, 0), 0.5)))
     return leaf
+
+
+def clear_floor(points, radius=0.6):
+    """Remove floor debris (papers, trays, boxes, rings, gems) within `radius` of each point (x, y): nobody kneels
+    or stands on top of a paper in our shots, so no prop ever passes through a person."""
+    pts = [Vector((p[0], p[1], 0)) for p in points]
+    for o in list(bpy.data.objects):
+        if not o.name.startswith(("tpl_", "tray_side", "Torus", "Icosphere")) or o.location.z > 0.4:
+            continue
+        q = Vector((o.location.x, o.location.y, 0))
+        if any((q - p).length < radius for p in pts):
+            bpy.data.objects.remove(o)
 
 
 def _strew(A, rng, steel, tray_t, amount=1.0):

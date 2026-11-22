@@ -69,7 +69,7 @@ class _Base:
         dg = bpy.context.evaluated_depsgraph_get()
         low = None
         for o in self.m.objects:
-            if o.type != 'MESH' or not any(k in o.name for k in ("sole", "heel", "boot", "shoe")):
+            if o.type != 'MESH' or not (getattr(self, "ground_all", False) or any(k in o.name for k in ("sole", "heel", "boot", "shoe"))):
                 continue
             oe = o.evaluated_get(dg); me = oe.to_mesh()
             if len(me.vertices):
@@ -78,7 +78,7 @@ class _Base:
                 z = (co @ M[:3, :3].T + M[:3, 3])[:, 2].min()
                 low = z if low is None else min(low, z)
             oe.to_mesh_clear()
-        if low is not None and low < floor_z + 0.0015 and low > floor_z - 0.08:
+        if low is not None and low < floor_z + 0.0015 and low > floor_z - 0.3:
             dz = floor_z + 0.0015 - low
             for o in self.m.objects:
                 if o.parent is None:
@@ -283,3 +283,80 @@ def fit_clear(prop, others, axis, lo=-0.03, hi=0.04, step=0.0015):
     bpy.context.view_layer.update()
     print(f"FIT {prop.name}: offset {best[0] * 1000:.1f} mm, overlaps {best[1]}")
     return best
+
+
+class Kneel(_Base):
+    ground_all = True
+    """Kneeling on both knees (sorting things on the floor): knees on the floor in front of the hips, shins flat
+    behind, toes tucked; torso leaning over the work. sit_back=True sits back toward the heels."""
+    def __init__(self, m, knees, heading, lean=30.0, sit_back=False):
+        self.m = m; h = m.h
+        H.reset_pose(h)
+        f = Vector((math.cos(math.radians(heading)), math.sin(math.radians(heading)), 0))
+        # rig placement: put the hips over the knees (rig frame: faces -Y); compute after posing the legs
+        self.M = place_matrix((0, 0, 0), heading); self.Mi = self.M.inverted()
+        hip = H_hip(h)
+        thigh = h.arm.data.bones["upperleg01.L"].length + h.arm.data.bones["upperleg02.L"].length
+        shin = h.arm.data.bones["lowerleg01.L"].length + h.arm.data.bones["lowerleg02.L"].length
+        back = 0.55 if sit_back else 0.12                 # how far the thigh leans back from vertical (rad-ish)
+        for sd, sg in (("L", 1), ("R", -1)):
+            th = Vector((0.06 * sg, -math.sin(back) * -1 * 0.0 - 0.12, -1)).normalized()
+            th = Vector((0.07 * sg, -0.15 + (0.35 if sit_back else 0.0), -1)).normalized()
+            h.aim(f"upperleg01.{sd}", th); h.aim(f"upperleg02.{sd}", th)
+            sh = Vector((0.0, 1.0, 0.04)).normalized()            # shin runs back along the floor (+Y in rig)
+            h.aim(f"lowerleg01.{sd}", sh); h.aim(f"lowerleg02.{sd}", sh)
+            h.aim(f"foot.{sd}", Vector((0.0, 0.25, -1.0)))
+        for b, k in (("spine05", 0.15), ("spine04", 0.25), ("spine03", 0.3), ("spine02", 0.3)):
+            h.rot(b, (1, 0, 0), lean * k)
+        bpy.context.view_layer.update()
+        # knee height: knee joint sits ~5 cm above the floor (kneecap + cloth); place the rig so that is true
+        kL = h.bone_head("lowerleg01.L"); kR = h.bone_head("lowerleg01.R"); kc = (kL + kR) / 2
+        target = Vector((knees[0], knees[1], 0.055))
+        R = Matrix.Rotation(math.radians(heading + 90.0), 4, 'Z')
+        self.M = Matrix.Translation(target - R.to_3x3() @ kc) @ R; self.Mi = self.M.inverted()
+        for sd in ("L", "R"):
+            self.arm_down(sd)
+        m.lids(0.4)
+
+
+class SitFloor(_Base):
+    ground_all = True
+    """Sitting on the floor (collapsed, fainted): legs out in front, knees soft, back against a wall or another
+    person's support, head dropped. back_lean in degrees (0 = upright)."""
+    def __init__(self, m, hips, heading, back_lean=-18.0, head_drop=25.0):
+        self.m = m; h = m.h
+        H.reset_pose(h)
+        for sd, sg in (("L", 1), ("R", -1)):
+            th = Vector((0.12 * sg, -1.0, -0.12)).normalized()
+            h.aim(f"upperleg01.{sd}", th); h.aim(f"upperleg02.{sd}", th)
+            sh = Vector((0.08 * sg, -1.0, -0.35)).normalized()
+            h.aim(f"lowerleg01.{sd}", sh); h.aim(f"lowerleg02.{sd}", sh)
+            h.aim(f"foot.{sd}", Vector((0.15 * sg, -0.4, 1.0)))
+        for b, k in (("spine05", 0.2), ("spine04", 0.25), ("spine03", 0.3), ("spine02", 0.25)):
+            h.rot(b, (1, 0, 0), back_lean * k)
+        P.head(h, pitch=head_drop, yaw=8, tilt=10)
+        bpy.context.view_layer.update()
+        hip = H_hip(h)
+        R = Matrix.Rotation(math.radians(heading + 90.0), 4, 'Z')
+        self.M = Matrix.Translation(Vector((hips[0], hips[1], 0.1)) - R.to_3x3() @ hip) @ R; self.Mi = self.M.inverted()
+        for sd in ("L", "R"):
+            self.arm_down(sd, out=0.25, fwd=0.2, bend=30)
+        m.lids(1.0)
+
+
+def H_hip(h):
+    return (h.bone_head("upperleg01.L") + h.bone_head("upperleg01.R")) / 2
+
+
+def hands_to_face(st, side="both"):
+    """Grief: hands up over the face, elbows in, head bowed (always shot from behind or in silhouette)."""
+    h = st.m.h
+    P.head(h, pitch=28, yaw=0)
+    bpy.context.view_layer.update()
+    hc = h.bone_head("head") + Vector((0, -0.11, 0.02))
+    for sd, sg in (("L", 1), ("R", -1)):
+        if side != "both" and sd != side:
+            continue
+        P.hand_reach(h, sd, hc + Vector((0.035 * sg, -0.02, -0.06)), elbow=Vector((0.25 * sg, -0.5, -1.0)))
+        h.aim(f"wrist.{sd}", Vector((-0.25 * sg, -0.25, 1.0)))
+        P.rest_hand(h, sd, 25)

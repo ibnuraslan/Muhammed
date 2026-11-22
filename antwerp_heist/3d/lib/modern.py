@@ -323,5 +323,27 @@ class Operator(ModernMan):
         super().__init__(name, years=33, **kw)
 
 
+class Trader(ModernMan):
+    """Diamond traders on the Monday (several, varied): suits and coats in greys, browns and navies; one in a
+    Hasidic black coat and hat brim is NOT used (no hats on the rig); distinct by build and colour only."""
+    VARIANTS = [
+        dict(MUSCLE=0.45, WEIGHT=0.7, HEIGHT=0.45, HAIR=(0.3, 0.1), HAIRLINE=0.02, SHIRT=(0.8, 0.8, 0.78), TIE=(0.05, 0.08, 0.2),
+             JACKET="coat", JACKET_COL=(0.12, 0.1, 0.08), TROUSERS=(0.1, 0.09, 0.08)),
+        dict(MUSCLE=0.5, WEIGHT=0.45, HEIGHT=0.62, HAIR=(0.95, 0.2), SHIRT=(0.55, 0.62, 0.72), TIE=None,
+             JACKET="blazer", JACKET_COL=(0.14, 0.14, 0.15), TROUSERS=(0.14, 0.14, 0.15)),
+        dict(MUSCLE=0.5, WEIGHT=0.6, HEIGHT=0.52, HAIR=(0.7, 0.35), FACIAL="beard", SHIRT=(0.85, 0.85, 0.83), TIE=None,
+             JACKET="coat", JACKET_COL=(0.015, 0.015, 0.02), TROUSERS=(0.02, 0.02, 0.025)),
+        dict(MUSCLE=0.4, WEIGHT=0.55, HEIGHT=0.48, HAIR=(0.15, 0.05), HAIRLINE=0.025, SHIRT=(0.7, 0.66, 0.6), TIE=(0.3, 0.05, 0.04),
+             JACKET="blazer", JACKET_COL=(0.2, 0.15, 0.1), TROUSERS=(0.18, 0.15, 0.12)),
+        dict(MUSCLE=0.55, WEIGHT=0.5, HEIGHT=0.58, HAIR=(0.85, 0.3), SHIRT=(0.3, 0.3, 0.35), TIE=None,
+             JACKET="leather", JACKET_COL=(0.04, 0.03, 0.025), TROUSERS=(0.05, 0.06, 0.1)),
+    ]
+
+    def __init__(self, k=0, **kw):
+        for a, v in self.VARIANTS[k % len(self.VARIANTS)].items():
+            setattr(self, a, v)
+        super().__init__(f"Trader{k}", years=40 + 6 * (k % 4), **kw)
+
+
 CAST = {"Leonardo": Leonardo, "DOnorio": DOnorio, "Finotto": Finotto, "Guard": Guard, "Porter": Porter, "Investigator": Investigator,
         "Manager": Manager, "Police": Police, "Operator": Operator}

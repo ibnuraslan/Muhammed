@@ -92,3 +92,93 @@ def mobile(name="mobile"):
     parts = [box(name + "_body", (0, 0, 0), (0.018, 0.046, 0.11), b, bevel=0.007),
              box(name + "_screen", (0.0092, 0, 0.022), (0.001, 0.03, 0.03), emit(name + "_scr", (0.4, 0.8, 0.5), 2.0))]
     return _root(name, parts)
+
+
+def holdall(name="holdall", color=(0.03, 0.03, 0.035), full=0.7, open_=True):
+    """Nylon holdall (60 x 30 x 30 cm), soft: a rounded box sagging with its load, two strap handles, a zip line;
+    open_=True leaves the top gaping. Origin on the floor at its centre."""
+    import bmesh
+    m = flat(name + "_nylon", color, 0.55); m.node_tree.nodes["Principled BSDF"].inputs['Sheen Weight'].default_value = 0.4
+    h = 0.18 + 0.14 * full
+    body = box(name + "_body", (0, 0, h / 2), (0.6, 0.3, h), m, bevel=0.06)
+    body.modifiers["Bevel"].segments = 4
+    sm = body.modifiers.new("Sag", "SIMPLE_DEFORM"); sm.deform_method = 'BEND'; sm.angle = math.radians(8); sm.deform_axis = 'Y'
+    parts = [body]
+    for sx in (-0.12, 0.12):
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.1, minor_radius=0.008, location=(sx, 0, h + 0.0),
+                                         rotation=(math.pi / 2, 0, math.pi / 2))
+        t = bpy.context.active_object; t.name = name + "_strap"; t.scale = (1.0, 0.55, 1.0); t.data.materials.append(m); parts.append(t)
+    if open_:
+        parts.append(box(name + "_mouth", (0, 0, h - 0.004), (0.42, 0.12, 0.008), flat(name + "_dark", (0.005, 0.005, 0.005), 0.9)))
+    return _root(name, parts)
+
+
+def tape_roll(name="tape"):
+    m = flat(name + "_grey", (0.32, 0.32, 0.33), 0.55)
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.045, minor_radius=0.018, location=(0, 0, 0))
+    t = bpy.context.active_object; t.name = name + "_roll"; t.scale = (1, 1, 1.4); t.data.materials.append(m)
+    return _root(name, [t])
+
+
+def stepladder(name="ladder", h=1.6):
+    """Aluminium stepladder (A-frame), steps every 25 cm. Origin on the floor centre; front faces -y."""
+    al = flat(name + "_alu", (0.62, 0.62, 0.6), 0.35, metal=0.9)
+    parts = []
+    sp = 0.32
+    for sx in (-0.22, 0.22):
+        parts.append(S.cyl(name + "_rail", (sx, -sp / 2, 0), (sx, -0.04, h), 0.016, mat=al, verts=8))
+        parts.append(S.cyl(name + "_back", (sx, sp / 2 + 0.1, 0), (sx, 0.02, h), 0.014, mat=al, verts=8))
+    k = 1
+    while k * 0.26 < h - 0.1:
+        z = k * 0.26; y = -sp / 2 + (sp / 2 - 0.04) * z / h
+        parts.append(box(name + "_step", (0, y - 0.02, z), (0.46, 0.09, 0.025), al)); k += 1
+    parts.append(box(name + "_top", (0, -0.01, h + 0.01), (0.48, 0.16, 0.03), flat(name + "_cap", (0.55, 0.06, 0.04), 0.5)))
+    A = _root(name, parts); A["top_z"] = h + 0.025; A["steps"] = k - 1
+    return A
+
+
+def forcing_tool(name="tool"):
+    """The crew's box-opening tool: a 45 cm hardened steel lever with a hooked, chisel-edged head that bites behind
+    the lock, and a taped grip. Origin at the grip centre, head along +x."""
+    st = flat(name + "_steel", (0.15, 0.15, 0.16), 0.32, metal=0.95); tp = flat(name + "_tape", (0.05, 0.05, 0.05), 0.7)
+    parts = [S.cyl(name + "_shaft", (-0.1, 0, 0), (0.3, 0, 0), 0.011, mat=st, verts=12),
+             S.cyl(name + "_grip", (-0.12, 0, 0), (0.06, 0, 0), 0.016, mat=tp, verts=12),
+             box(name + "_head", (0.33, 0, 0.012), (0.05, 0.022, 0.04), st, rot=(0, math.radians(-25), 0)),
+             box(name + "_hook", (0.355, 0, -0.012), (0.03, 0.02, 0.014), st)]
+    return _root(name, parts)
+
+
+def gold_bar(name="gold_bar", big=False):
+    """1 kg bar (11.6 x 5.3 x 0.9 cm) or a 12.5 kg 'good delivery' bar; trapezoid section."""
+    au = gold(name + "_au", (0.95, 0.66, 0.24))
+    L_, W_, H_ = (0.255, 0.075, 0.04) if big else (0.116, 0.053, 0.009)
+    o = box(name, (0, 0, H_ / 2), (L_, W_, H_), au, bevel=H_ * 0.25)
+    o.modifiers.new("Taper", "SIMPLE_DEFORM").deform_method = 'TAPER'
+    o.modifiers["Taper"].factor = -0.25; o.modifiers["Taper"].deform_axis = 'Z'
+    return o
+
+
+def cash_bundle(name="cash", color=(0.55, 0.45, 0.6)):
+    """A strapped bundle of 100 euro-sized notes (14 x 7.5 x 1.1 cm) with a paper band."""
+    n = flat(name + "_notes", color, 0.8)
+    parts = [box(name + "_stack", (0, 0, 0.0055), (0.14, 0.075, 0.011), n, bevel=0.0015),
+             box(name + "_band", (0, 0, 0.0055), (0.03, 0.0765, 0.0115), flat(name + "_band", (0.85, 0.82, 0.72), 0.7))]
+    return _root(name, parts)
+
+
+def diamonds(name="diamonds", n=40, spread=0.06, seed=2):
+    """Loose brilliants (2-8 mm) on whatever they lie on: real refractive gems."""
+    import random as _r
+    from sets import gem
+    rng = _r.Random(seed); g = gem(name + "_mat"); parts = []
+    for i in range(n):
+        r = rng.uniform(0.0015, 0.004)
+        bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=r, radius2=r * 0.55, depth=r * 0.45,
+                                        location=(rng.gauss(0, spread), rng.gauss(0, spread), r * 0.25))
+        a = bpy.context.active_object
+        bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=r, radius2=0.0, depth=r * 0.9,
+                                        location=(a.location.x, a.location.y, a.location.z - r * 0.65), rotation=(math.pi, 0, 0))
+        b = bpy.context.active_object
+        for o in (a, b):
+            o.data.materials.append(g); o.rotation_euler.z = rng.uniform(0, 6.28); parts.append(o)
+    return _root(name, parts)

@@ -266,7 +266,7 @@ def office(kind="leonardo", hour="day"):
 
 
 # ----------------------------------------------------------------------------- security room (+ lobby door)
-def security_room(kind="building", screen_images=None):
+def security_room(kind="building", screen_images=None, night=False):
     """kind "building": the Diamond Center's security room upstairs: a wall of CCTV monitors over a console, the
     VCR rack recording every camera (the recordings stay in the building), a door to the lobby with a badge
     reader. kind "alarm": the alarm company's monitoring centre (night shift): consoles, a status board."""
@@ -339,9 +339,11 @@ def security_room(kind="building", screen_images=None):
     box("badge_led", (-RX - 0.23, -1.52, 1.25), (0.006, 0.012, 0.006), ledg)
     A["badge_reader"] = Vector((-RX - 0.23, -1.52, 1.2)); A["lobby_door"] = Vector((-RX - 0.1, -0.9, 1.0))
     # light
-    if not alarm:
+    if not alarm and not night:
         light_area("sec_ceiling", (0, 0, RZ - 0.05), (0, 0, 0), 1.2, 160, (1.0, 0.85, 0.65))
         light_area("lobby_light", (-RX - 2.5, -0.9, 3.15), (-RX - 2.5, -0.9, 0), 2.0, 420, (1.0, 0.88, 0.7))
+    elif night:
+        light_area("lobby_night", (-RX - 2.5, -0.9, 3.15), (-RX - 2.5, -0.9, 0), 1.0, 60, (1.0, 0.7, 0.45))
     else:
         # status board on the back wall above the monitors: a grid of lamps, all green
         for i in range(10):
@@ -572,3 +574,152 @@ def maquette():
     world((0.02, 0.018, 0.016), 0.4)
     A["scale"] = s
     return A
+
+
+# ----------------------------------------------------------------------------- the underground garage
+def garage(hour="night"):
+    """The Diamond Center's underground garage (one level down): 22 x 16 m under a 2.5 m slab on a 5 m column grid,
+    painted bays, cars under covers, pipes and a cable tray under the slab, a ramp rising toward the street at -y,
+    the stairwell door (with its exit sign) at +y. Night: one tube in three on, sodium light spilling down the ramp."""
+    import detail as DT, look
+    A = {}
+    GX, GY0, GY1, GZ = 11.0, -8.0, 8.0, 2.5
+    floor = tex("garage_floor", 1.6, tint=(0.55, 0.53, 0.5), name="garage_floor")
+    conc = DT.wall_paint("garage_conc", (0.46, 0.45, 0.42), rough=0.9, scuff=0.6, z_dirty=0.5)
+    slab = DT.wall_paint("garage_slab", (0.38, 0.37, 0.35), rough=0.92, scuff=0.0)
+    yellow = flat("bay_paint", (0.75, 0.6, 0.08), 0.6); white = flat("line_white", (0.75, 0.75, 0.72), 0.6)
+    box("g_floor", (0, 0, -0.05), (2 * GX, GY1 - GY0, 0.1), floor)
+    box("g_slab", (0, 0, GZ + 0.15), (2 * GX, GY1 - GY0, 0.3), slab)
+    for sx in (-1, 1):
+        box("g_wall", (sx * (GX + 0.1), 0, GZ / 2), (0.2, GY1 - GY0, GZ), conc)
+    box("g_wall_back", (0, GY1 + 0.1, GZ / 2), (2 * GX, 0.2, GZ), conc)
+    # front wall with the ramp opening (x in [-2.8, 2.8]) and the ramp rising to the street
+    for sx in (-1, 1):
+        box("g_wall_front", (sx * (GX + 2.8) / 2, GY0 - 0.1, GZ / 2), (GX - 2.8, 0.2, GZ), conc)
+    RL = 10.0
+    bpy.ops.mesh.primitive_plane_add(size=1)
+    rp = bpy.context.active_object; rp.name = "g_ramp"; rp.scale = (5.6, RL, 1)
+    bpy.ops.object.transform_apply(scale=True)
+    rp.scale = (1.0, math.hypot(RL, 3.0) / RL, 1.0)
+    rp.location = (0, GY0 - RL / 2, 1.5); rp.rotation_euler = (-math.atan2(3.0, RL), 0, 0); rp.data.materials.append(floor)
+    so = rp.modifiers.new("t", "SOLIDIFY"); so.thickness = 0.2; so.offset = -1
+    for sx in (-1, 1):
+        box("g_ramp_wall", (sx * 2.9, GY0 - RL / 2, 1.0), (0.2, RL, 3.4), conc)
+    box("g_ramp_roof", (0, GY0 - 2.0, GZ + 0.45), (5.8, 4.0, 0.3), slab)
+    # columns, bays, wheel stops
+    cols = []
+    for ix in range(-2, 3):
+        for iy in range(-1, 2):
+            x, y = ix * 5.0, iy * 5.0
+            if abs(x) < 3 and iy == -1:
+                continue
+            box("g_column", (x, y, GZ / 2), (0.45, 0.45, GZ), conc, bevel=0.01)
+            box("g_column_band", (x, y, 0.5), (0.47, 0.47, 1.0), yellow)
+            cols.append(Vector((x, y)))
+    A["columns"] = cols
+    for side in (-1, 1):
+        for k in range(8):
+            x = side * (GX - 2.6); y = GY0 + 1.6 + k * 1.75
+            box("bay_line", (x, y, 0.002), (5.0, 0.08, 0.004), white)
+            box("wheel_stop", (side * (GX - 0.6), y + 0.9, 0.06), (0.15, 1.2, 0.12), yellow)
+    box("aisle_arrow", (0, 2.0, 0.002), (0.25, 1.6, 0.004), white)
+    # cars under covers in some bays (front toward the aisle)
+    for side, k in ((-1, 0), (-1, 2), (-1, 3), (-1, 6), (1, 1), (1, 4), (1, 5), (1, 7)):
+        _ph("covered_car", (side * (GX - 2.6), GY0 + 2.48 + k * 1.75, 0), rot_z=math.radians(90 if side < 0 else -90))
+    # services under the slab
+    DT.cable_tray((-GX + 0.6, GY0 + 0.5), (-GX + 0.6, GY1 - 0.5), GZ - 0.35, n_cables=5)
+    pipe = flat("pipe_red", (0.35, 0.04, 0.03), 0.5, coat=0.3); pipe2 = flat("pipe_grey", (0.35, 0.35, 0.36), 0.4, metal=0.5)
+    S.cyl("g_sprinkler_main", (-GX, 3.0, GZ - 0.2), (GX, 3.0, GZ - 0.2), 0.06, mat=pipe, verts=16)
+    S.cyl("g_sprinkler_main2", (-GX, -3.0, GZ - 0.2), (GX, -3.0, GZ - 0.2), 0.06, mat=pipe, verts=16)
+    S.cyl("g_duct", (GX - 1.0, GY0, GZ - 0.25), (GX - 1.0, GY1, GZ - 0.25), 0.18, mat=pipe2, verts=20)
+    for x in range(-10, 11, 2):
+        for y in (3.0, -3.0):
+            S.cyl("sprinkler_head", (x, y, GZ - 0.26), (x, y, GZ - 0.32), 0.012, mat=pipe2, verts=8)
+    # stairwell door at the back with exit sign, extinguisher, signage
+    door = steel_paint("g_door", (0.12, 0.2, 0.28), 0.45)
+    box("g_stair_door", (3.5, GY1 - 0.03, 1.02), (1.0, 0.06, 2.05), door)
+    box("g_door_frame", (3.5, GY1 - 0.02, 1.06), (1.15, 0.04, 2.15), flat("frame", (0.1, 0.1, 0.1), 0.4))
+    box("g_door_bar", (3.5, GY1 - 0.08, 1.0), (0.8, 0.04, 0.04), brushed())
+    DT.sign((3.5, GY1 - 0.005, 2.3), (0, -1, 0), kind="exit")
+    DT.extinguisher((2.2, GY1 - 0.005, 0.12), (0, -1, 0))
+    DT.sign((-2.0, GY1 - 0.005, 1.6), (0, -1, 0), kind="notice", w=0.5, h=0.35)
+    A["stair_door"] = Vector((3.5, GY1 - 0.1, 0))
+    # lights: tube fittings on a grid; at night one in three burns
+    on = emit("g_tube_on", (1.0, 0.92, 0.75), 8.0); off = flat("g_tube_off", (0.55, 0.55, 0.52), 0.4)
+    k = 0
+    for ix in range(-2, 3):
+        for iy in (-5.5, -0.5, 4.5):
+            x = ix * 5.0 + 2.5 if ix < 2 else ix * 5.0 - 2.5
+            lit = (k % 3 == 0) or hour != "night"
+            box("g_tube", (x, iy, GZ - 0.04), (0.12, 1.4, 0.06), on if lit else off)
+            if lit:
+                light_area("g_tube_light", (x, iy, GZ - 0.09), (x, iy, 0), 0.12, 260, (1.0, 0.9, 0.72), size_y=1.4)
+            k += 1
+    # sodium street light spilling down the ramp
+    light_area("ramp_spill", (0, GY0 - RL + 1.0, 4.5), (0, GY0, 0), 4.0, 900 if hour == "night" else 3000, (1.0, 0.6, 0.28))
+    box("street_glow", (0, GY0 - RL - 0.5, 3.0), (6.0, 0.1, 4.0), emit("street_glow", (1.0, 0.55, 0.25), 1.2))
+    world((0.01, 0.01, 0.01), 0.2)
+    A["ramp_top"] = Vector((0, GY0 - RL + 0.5, 3.0)); A["ramp_foot"] = Vector((0, GY0 + 0.5, 0)); A["GY0"] = GY0; A["GY1"] = GY1
+    return A
+
+
+# ----------------------------------------------------------------------------- the diamond district (maquette)
+def district():
+    """A planner's model of the diamond district (~1:500) on a dark table: a ring of city blocks, the three short
+    streets of the district inside it (Hoveniersstraat, Schupstraat, Rijfstraat) with their gates, the Diamond Center
+    block, and the garage ramp opening onto an outside street. Returns anchors: the district streets (for the soft
+    orange band that marks police control) and the garage entrance."""
+    A = {}
+    card = flat("d_card", (0.78, 0.75, 0.68), 0.7); street = flat("d_street", (0.18, 0.17, 0.16), 0.8)
+    dc = flat("d_dc", (0.45, 0.43, 0.4), 0.6)
+    box("d_table", (0, 0, -0.03), (2.6, 1.8, 0.06), flat("d_table", (0.03, 0.025, 0.02), 0.4))
+    box("d_base", (0, 0, 0.005), (1.4, 1.0, 0.01), street)
+    s = 1 / 500.0
+    rng = random.Random(4)
+    # blocks on a skewed grid; the district streets run through the middle
+    blocks = []
+    for ix in range(-3, 4):
+        for iy in range(-2, 3):
+            cx, cy = ix * 0.19, iy * 0.19
+            if abs(iy) == 0 and abs(ix) <= 1:
+                continue                      # Hoveniersstraat corridor
+            w = 0.15 + rng.uniform(-0.01, 0.01); h = 0.02 + rng.uniform(0, 0.04)
+            o = box("d_block", (cx, cy, 0.01 + h / 2), (w, 0.15, h), card, bevel=0.002); blocks.append(o)
+    # the Diamond Center: a tall slab on the north side of the district street
+    box("d_dc_block", (0.0, 0.12, 0.01 + 0.06), (0.13, 0.06, 0.12), dc, bevel=0.002)
+    box("d_dc_low", (0.0, 0.16, 0.01 + 0.012), (0.16, 0.06, 0.024), dc)
+    A["dc"] = Vector((0.0, 0.12, 0.08))
+    # district streets (pedestrian, gated): the corridor along y = 0 and two cross streets
+    A["district_streets"] = [((-0.28, 0.0), (0.28, 0.0)), ((-0.095, -0.0), (-0.095, 0.2)), ((0.095, -0.2), (0.095, 0.0))]
+    gate = flat("d_gate", (0.08, 0.08, 0.08), 0.4)
+    for (a, b) in A["district_streets"]:
+        for p in (a, b):
+            box("d_gate_post", (p[0], p[1], 0.016), (0.01, 0.01, 0.012), gate)
+    # garage ramp: opening onto the outer street behind the DC block (north), outside the district
+    A["garage_entrance"] = Vector((0.0, 0.29, 0.012))
+    box("d_ramp", (0.0, 0.25, 0.008), (0.03, 0.06, 0.004), flat("d_ramp", (0.08, 0.08, 0.08), 0.7))
+    light_spot("d_key", (-0.7, -0.8, 1.0), (0, 0, 0), 120, angle=45, color=(1.0, 0.85, 0.65), radius=0.2)
+    light_area("d_rim", (0.7, 0.8, 0.6), (0, 0, 0), 0.8, 10, (0.7, 0.8, 1.0))
+    world((0.02, 0.018, 0.016), 0.4)
+    return A
+
+
+def soft_strip(p0, p1, z, width, color=(1.0, 0.45, 0.12), strength=2.5, alpha=0.5, name="band_strip"):
+    """One filled soft orange band along a line (fades across its width): the house way to mark an area."""
+    a, b = Vector((p0[0], p0[1], z)), Vector((p1[0], p1[1], z))
+    mat = bpy.data.materials.new(name + "_mat"); mat.use_nodes = True; N = mat.node_tree.nodes; L = mat.node_tree.links
+    N.remove(N["Principled BSDF"])
+    tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['UV'], sep.inputs[0])
+    m1 = N.new("ShaderNodeMath"); m1.operation = 'SUBTRACT'; m1.inputs[1].default_value = 0.5; L.new(sep.outputs['Y'], m1.inputs[0])
+    m2 = N.new("ShaderNodeMath"); m2.operation = 'ABSOLUTE'; L.new(m1.outputs[0], m2.inputs[0])
+    m3 = N.new("ShaderNodeMapRange"); m3.inputs['From Max'].default_value = 0.5; m3.inputs['To Min'].default_value = alpha
+    m3.inputs['To Max'].default_value = 0.0; L.new(m2.outputs[0], m3.inputs['Value'])
+    e = N.new("ShaderNodeEmission"); e.inputs['Color'].default_value = (*color, 1); e.inputs['Strength'].default_value = strength
+    tr = N.new("ShaderNodeBsdfTransparent"); mx = N.new("ShaderNodeMixShader")
+    L.new(m3.outputs[0], mx.inputs[0]); L.new(tr.outputs[0], mx.inputs[1]); L.new(e.outputs[0], mx.inputs[2])
+    L.new(mx.outputs[0], N["Material Output"].inputs['Surface'])
+    d = b - a; ln = d.length; yaw = math.atan2(d.y, d.x)
+    bpy.ops.mesh.primitive_plane_add(size=1, location=(a + b) / 2)
+    o = bpy.context.active_object; o.name = name; o.scale = (ln + width, width, 1); o.rotation_euler = (0, 0, yaw)
+    o.data.materials.append(mat); o.visible_shadow = False
+    return o
