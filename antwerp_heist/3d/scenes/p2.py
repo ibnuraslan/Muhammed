@@ -177,7 +177,7 @@ def _cupboard(A):
         ST.box("cab_side", (x0, kc.y + sg * 0.25, kc.z), (0.14, 0.02, 0.6), cab)
     for sz in (1, -1):
         ST.box("cab_tb", (x0, kc.y, kc.z + sz * 0.3), (0.14, 0.5, 0.02), cab)
-    ST.box("cab_door", (x0 + 0.17, kc.y - 0.25, kc.z), (0.02, 0.5, 0.6), cab, rot=(0, 0, math.radians(70)))
+    ST.box("cab_door", (x0 - 0.03, kc.y - 0.53, kc.z), (0.02, 0.5, 0.6), cab)          # swung right back against the wall
     hook = V((x0 - 0.03, kc.y - 0.05, kc.z + 0.18)); ST.box("cab_hook", hook, (0.04, 0.008, 0.008), ST.brushed())
     return kc, hook
 
