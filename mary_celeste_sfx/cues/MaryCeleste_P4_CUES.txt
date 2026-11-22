@@ -1,0 +1,105 @@
+Mary Celeste P4 - SFX cue sheet (mm:ss.ss, from 00:00 of the part; 48 kHz)
+
+AMBIENCE BEDS by shot (dB relative; crossfaded at cuts)
+  00:00.00  S01  [quay] harbour, hawser, wind_light, sea_calm
+  00:02.54  S02  [quay] harbour, hawser, wind_light, sea_calm
+  00:04.83  S03  [deck_dusk] sea_calm, wind_light, rigging, hull
+  00:09.96  S05  [cutaway] hold, drone
+  00:18.33  S06  [hold] hold, lamp
+  00:22.38  S07  [sea_dusk] sea_calm, wind_light, bowwash, rigging
+  00:30.62  S08  [sea_found] sea_calm, wind_mid, flog
+  00:33.58  S09  [deck_day] sea_calm, wind_mid, rigging, hull, flog
+  00:37.25  S10  [deck_day] sea_calm, wind_mid, rigging, hull, flog
+  00:41.21  S11  [studio] room, lamp
+  00:44.58  S12  [studio] room, lamp
+  00:52.88  S13  [hold] hold, lamp
+  00:56.42  S14  [hold] hold, lamp
+  00:58.88  S15  [deck_found] sea_calm, wind_mid, flog, rigging
+  01:02.38  S16  [deck_day] sea_calm, wind_mid, rigging, hull, flog
+  01:06.96  S17  [deck_day] sea_calm, wind_mid, rigging, hull, flog
+  01:10.71  S18  [hold_ny] hold, harbour
+  01:15.50  S19  [studio] room, lamp
+  01:24.42  S20  [xray] drone, room
+  01:28.46  S21  [night] sea_calm, wind_mid, rain, hull, flame
+  01:34.67  S22  [deck_found] sea_calm, wind_mid, flog, rigging
+  01:38.38  S23  [studio] room, lamp
+  01:43.29  S24  [studio] room, lamp
+  01:45.62  S25  [studio] room, lamp
+  01:48.08  S26  [studio] room, lamp
+  01:52.50  S27  [studio] room, lamp
+  01:59.83  S28  [studio] room, lamp
+  02:01.29  S29  [dawn] sea_calm, wind_light, gulls_far, hull
+  02:07.00  S30  [storm] sea_heavy, wind_storm, rain_heavy, hull
+  02:09.33  S31  [night_mcu] sea_heavy, wind_storm, rain_heavy, hull, flame
+  02:15.25  S32  [cutaway] hold, drone
+  02:21.46  S33  [dawn] sea_calm, wind_light, gulls_far, hull
+  02:29.54  S34  [studio] room, lamp
+  02:32.88  S35  [deck_day] sea_calm, wind_mid, rigging, hull, flog
+  02:36.79  S36  [deck_found] sea_calm, wind_mid, flog, rigging
+
+SILENCES (beds pulled down before a reveal)
+  00:29.70 - 00:30.65  beds -20 dB
+  01:59.30 - 01:59.95  beds -40 dB
+
+SPOT EFFECTS
+  00:00.00  S01  cart (dur=5.5)
+  00:00.40  S01  gull
+  00:02.79  S02  barrel knock2
+  00:03.59  S02  chalk X
+  00:06.33  S03  wind gust (dur=3.0)
+  00:10.56  S05  trickle (dur=7.0)
+  00:12.16  S05  creak (kind=hull)
+  00:15.56  S05  creak (kind=hawser)
+  00:18.33  S06  flame (dur=4.0)
+  00:18.93  S06  lantern creak
+  00:20.73  S06  lantern creak
+  00:23.18  S07  whump
+  00:24.88  S07  creak (kind=rope)
+  00:26.88  S07  whump
+  00:34.58  S09  sniff
+  00:37.55  S10  boot
+  00:38.95  S10  wood tap
+  00:39.55  S10  wood tap
+  00:41.61  S11  wood set
+  00:42.71  S11  wood set
+  00:46.38  S12  drip (into=wood)
+  00:49.98  S12  drip (into=wood)
+  00:53.38  S13  drip
+  00:54.67  S13  drip
+  00:55.88  S13  drip
+  00:56.52  S14  creak (kind=hull)
+  00:57.32  S14  slosh (dur=2.0)
+  00:59.17  S15  wind gust (dur=3.0)
+  01:02.38  S16  footsteps (times=[0.0, 0.55])
+  01:03.98  S16  head turn
+  01:08.46  S17  iron clank
+  01:10.71  S18  hammers (dur=4.8)
+  01:11.51  S18  saw (dur=3.6)
+  01:16.70  S19  paper
+  01:21.30  S19  paper (dur=0.6)
+  01:24.62  S20  grit (dur=1.6)
+  01:26.82  S20  valve slap
+  01:27.62  S20  grit (dur=0.6)
+  01:29.06  S21  rod scrape (dur=3.8)
+  01:33.06  S21  iron clank
+  01:39.38  S23  chalk tap
+  01:39.67  S23  chalk tap
+  01:43.49  S24  paper (dur=1.0)
+  01:46.12  S25  pin tap
+  01:46.38  S25  pulse
+  01:48.58  S26  pin tap
+  01:48.83  S26  pulse
+  01:52.70  S27  wind gust (dur=5.5)
+  01:52.90  S27  nib (dur=6.0)
+  01:59.95  S28  stop click
+  02:07.30  S30  wave slam
+  02:08.60  S30  wave slam
+  02:09.63  S31  line hands (dur=1.9)
+  02:11.73  S31  drip (into=wood)
+  02:12.43  S31  drip (into=wood)
+  02:13.33  S31  drip (into=wood)
+  02:16.75  S32  slosh (dur=4.5, muffle=400)
+  02:26.66  S33  breath
+  02:33.18  S35  line hands (dur=1.0)
+  02:34.18  S35  drip (into=wood)
+  02:35.07  S35  drip (into=wood)

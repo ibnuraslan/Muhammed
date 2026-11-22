@@ -1,0 +1,21 @@
+Mary Celeste - sound effects and ambience - CREDITS / LICENCES
+
+All sound effects and ambience beds in MaryCeleste_P*_SFX.wav and _MIX.wav were SYNTHESISED from scratch
+(filtered noise, oscillators, physical-model resonators: stick-slip creaks, damped wood/metal modes, bubble drips,
+granular rustle/rain, procedural sea and wind) by the production's own Python scripts (sfxlib.py / engine.py).
+No third-party recordings or sample libraries are used, so no attribution is required and there are no
+Content ID / monetisation restrictions. The production can treat them as its own work (or release as CC0).
+
+Voice-over: vo/MaryCeleste_PartN_VO.mp3 (Edmund), branch claude/mary-celeste-vo - production asset.
+Music: none (added by the editor).
+
+Sound list (all source = synthesised in-house, licence = own work / CC0):
+ beds: sea (calm, heavy), wind (light, mid, storm with rigging whistle), rigging rope creaks and block knocks,
+       hull creaks, hawser creaks, harbour (lapping, distant gulls, quay murmur), hold room tone (muffled sea, creaks),
+       study room tone, lamp hiss, low drone (explainers), rain (light, heavy), flogging canvas, bow wash,
+       distant gulls, lantern flame
+ spots: cart on cobbles, gull, hollow barrel knock, chalk X / chalk tap, liquid trickle, flame flutter,
+       lantern bail creak, sails filling, sniff, boot on deck, wood tap, wood set on wood, drips (water, wood),
+       creaks, slosh, wind gust, footsteps, cloth/head turn, iron clank, distant hammers, saw, paper turn,
+       grit crunch, leather valve slap, iron rod scraping in bore, wave slam, rope line through hands,
+       brass pin tap, map pulse, pen nib scratch, model stop click, breath

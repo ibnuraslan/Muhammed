@@ -1,0 +1,162 @@
+Mary Celeste P1 - SFX cue sheet (mm:ss.ss, from 00:00 of the part; 48 kHz)
+
+AMBIENCE BEDS by shot (dB relative; crossfaded at cuts)
+  00:00.00  S01  [sea_low] sea_calm, wind_light, flog, hull, laps
+  00:01.50  S02  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
+  00:04.25  S03  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
+  00:05.75  S04  [cabin] hold, drips, hull, sea_calm, wind_mid
+  00:07.79  S05  [cabin] hold, drips, hull
+  00:11.38  S06  [cabin] hold, drips, hull
+  00:12.88  S07  [cabin] hold, drips, hull
+  00:17.08  S08  [cabin] hold, drips, hull
+  00:19.12  S09  [cabin] hold, drips, hull
+  00:21.21  S10  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
+  00:26.04  S11  [deck_mc] sea_calm, wind_mid, rigging, hull, flog, laps
+  00:29.79  S12  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
+  00:32.42  S13  [sea_low] sea_calm, wind_light, flog, hull, laps
+  00:35.04  S14  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
+  00:36.83  S15  [sea_wide] sea_calm, wind_mid, bowwash, flog, rigging
+  00:39.88  S16  [cabin] hold, drips, hull
+  00:41.17  S16b [cabin] hold, drips, hull
+  00:43.00  S17  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
+  00:47.88  S18  [sea_dg] sea_calm, wind_mid, bowwash, rigging
+  00:51.04  S19  [dg_cabin] hold, hull, lamp
+  00:54.25  S20  [sea_dg] sea_calm, wind_mid, bowwash, rigging
+  00:56.88  S21  [dg_deck] sea_calm, wind_mid, rigging, hull, bowwash
+  00:59.50  S22  [dg_deck] sea_calm, wind_mid, rigging, hull, bowwash
+  01:02.54  S23  [dg_deck] sea_calm, wind_mid, rigging, hull, bowwash
+  01:05.92  S24  [dg_deck] sea_calm, wind_mid, rigging, hull, bowwash
+  01:06.88  S25  [sea_dg] sea_calm, wind_mid, bowwash, rigging
+  01:09.88  S26  [dg_deck] sea_calm, wind_mid, rigging, hull, bowwash
+  01:13.96  S27  [sea_far] sea_calm, wind_mid
+  01:15.67  S28  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
+  01:18.58  S29  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
+  01:22.17  S30  [sea_low] sea_calm, wind_light, flog, hull, laps
+  01:25.29  S31  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
+  01:28.12  S32  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
+  01:30.92  S33  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
+  01:33.25  S34  [galley] hold, drips, laps
+  01:36.12  S35  [galley] hold, drips, laps
+  01:39.12  S36  [galley] hold, drips, laps
+  01:42.25  S37  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
+  01:45.17  S38  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
+  01:47.08  S39  [sea_low] sea_calm, wind_light, flog, hull, laps, bowwash
+  01:49.29  S40  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
+  01:51.12  S41  [sea_wide] sea_calm, wind_mid, bowwash, flog, rigging
+  01:54.04  S42  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
+  01:57.17  S43  [studio] room, lamp
+  02:01.04  S44  [cabin] hold, drips, hull
+  02:04.92  S45  [cabin] hold, drips, hull, lamp
+  02:08.42  S46  [cabin] hold, drips, hull, lamp
+  02:11.54  S47  [cabin] hold, drips, hull, lamp
+  02:13.54  S48  [cabin] hold, drips, hull, lamp
+  02:17.12  S49  [cabin] hold, drips, hull, lamp
+  02:20.62  S50  [cabin] hold, drips, hull, lamp
+  02:23.79  S51  [studio] room, lamp
+  02:29.96  S52  [studio] room, lamp
+  02:33.62  S53  [studio] room, lamp, drone
+
+SILENCES (beds pulled down before a reveal)
+  00:18.62 - 00:19.40  beds -30 dB
+  01:13.40 - 01:14.50  beds -24 dB
+  01:44.60 - 01:45.45  beds -26 dB
+
+NOTE: S23 Morehouse calling down and S26 the crew's hail are voices, so they are NOT synthesised. Add a real recorded shout there if you want one (the wind gust at S26 is placed to carry it).
+
+SPOT EFFECTS
+  00:00.20  S01  knock (f0=560, dec=0.03)
+  00:00.90  S01  knock (f0=520, dec=0.03)
+  00:01.50  S02  water slap
+  00:01.95  S02  boot
+  00:02.50  S02  hand slap
+  00:04.25  S03  footsteps (times=[0.0, 0.45, 0.9])
+  00:04.85  S03  creak (kind=rope)
+  00:05.85  S04  ladder (steps=3)
+  00:08.09  S05  drip
+  00:08.59  S05  lantern creak
+  00:09.69  S05  hull groan
+  00:10.39  S05  drip
+  00:11.62  S06  lantern creak
+  00:12.38  S06  drip
+  00:13.38  S07  lantern creak
+  00:14.47  S07  breath
+  00:15.68  S07  hull groan
+  00:17.28  S08  lantern creak
+  00:17.98  S08  foot water
+  00:19.41  S09  drip
+  00:20.43  S09  hull groan
+  00:20.73  S09  drip
+  00:21.61  S10  water slap
+  00:22.81  S10  creak (kind=rope)
+  00:24.21  S10  wood tap
+  00:26.44  S11  water slap
+  00:28.24  S11  water slap
+  00:29.79  S12  wind gust (dur=2.2)
+  00:30.69  S12  wood tap
+  00:31.39  S12  wood tap
+  00:32.42  S13  oars (dur=2.7)
+  00:35.34  S14  boot
+  00:35.74  S14  hand slap
+  00:36.24  S14  hull knock
+  00:37.23  S15  whump
+  00:38.43  S15  creak (kind=hull)
+  00:40.08  S16  lantern creak
+  00:40.58  S16  drip
+  00:41.57  S16b drip
+  00:42.17  S16b creak (kind=hull)
+  00:43.80  S17  creak (kind=rope)
+  00:45.60  S17  creak (kind=rope)
+  00:48.27  S18  whump
+  00:51.34  S19  nib (dur=2.6)
+  00:53.04  S19  lantern creak
+  00:54.95  S20  creak (kind=hull)
+  00:57.17  S21  wheel (dur=1.6)
+  01:03.94  S23  ladder (steps=3, gap=0.35)
+  01:05.92  S24  wheel (dur=0.95, spin=True)
+  01:06.07  S24  chain (dur=0.8)
+  01:07.17  S25  whump
+  01:08.08  S25  whump
+  01:11.28  S26  wind gust (dur=2.6)
+  01:15.97  S28  whump
+  01:16.97  S28  creak (kind=rope)
+  01:22.17  S30  oars (dur=3.1)
+  01:23.67  S30  water slap
+  01:25.39  S31  footsteps (times=[0.0, 0.5, 1.0])
+  01:26.79  S31  glass (dur=0.6)
+  01:28.42  S32  glass (dur=0.9)
+  01:29.53  S32  card tick
+  01:31.52  S33  wood scrape
+  01:33.35  S34  slosh (dur=2.6, muffle=1500)
+  01:34.25  S34  pot roll
+  01:35.55  S34  drip
+  01:36.53  S35  water slap
+  01:37.92  S35  water slap
+  01:39.62  S36  iron scrape (dur=1.2)
+  01:40.92  S36  slosh (dur=1.2, muffle=1200)
+  01:42.45  S37  line hands (dur=1.8)
+  01:43.95  S37  wood tap
+  01:44.55  S37  splash below
+  01:45.49  S38  drip (into=wood)
+  01:46.17  S38  drip (into=wood)
+  01:46.47  S38  line hands (dur=0.5)
+  01:47.88  S39  creak (kind=hull)
+  01:49.49  S40  mast creak
+  01:51.62  S41  whump
+  01:54.64  S42  creak (kind=rope)
+  01:55.84  S42  breath
+  01:57.47  S43  paper (dur=1.0)
+  01:59.57  S43  pin tap
+  02:01.24  S44  door latch
+  02:02.34  S44  footsteps (times=[0.0, 0.5])
+  02:03.54  S44  lantern creak
+  02:06.42  S45  creak (kind=hull)
+  02:09.02  S46  page
+  02:12.04  S47  chalk tap
+  02:13.94  S48  breath
+  02:15.04  S48  creak (kind=hull)
+  02:15.94  S48  brush
+  02:17.43  S49  paper (dur=0.4)
+  02:21.03  S50  chalk scrape (dur=0.9)
+  02:26.39  S51  pin tap
+  02:30.06  S52  whoosh (dur=2.0)
+  02:32.66  S52  pin tap
