@@ -295,6 +295,7 @@ class Kneel(_Base):
     behind, toes tucked; torso leaning over the work. sit_back=True sits back toward the heels."""
     def __init__(self, m, knees, heading, lean=30.0, sit_back=False):
         self.m = m; h = m.h
+        m.asset_boots = True          # keep the fitted shoe shell (the lofted street shoe assumes an upright leg)
         H.reset_pose(h)
         f = Vector((math.cos(math.radians(heading)), math.sin(math.radians(heading)), 0))
         # rig placement: put the hips over the knees (rig frame: faces -Y); compute after posing the legs
@@ -329,6 +330,7 @@ class SitFloor(_Base):
     person's support, head dropped. back_lean in degrees (0 = upright)."""
     def __init__(self, m, hips, heading, back_lean=-18.0, head_drop=25.0):
         self.m = m; h = m.h
+        m.asset_boots = True
         H.reset_pose(h)
         for sd, sg in (("L", 1), ("R", -1)):
             th = Vector((0.12 * sg, -1.0, -0.12)).normalized()

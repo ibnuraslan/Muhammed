@@ -397,7 +397,7 @@ def T28():
 # ============================================================================ L30 sorting; bags have a limit
 def T29():
     A = ST.vault_complex("heist", forced=80, debris=0.6, contacts="bypassed", taped=True)
-    ST.clear_floor([(0.0, 2.2), (0.9, 2.6), (-0.6, 1.2)], 0.75)
+    ST.clear_floor([(0.0, 2.2), (-0.4, 2.2), (0.9, 2.6), (1.3, 3.1), (-0.6, 1.2), (0.35, 1.75), (-0.8, 2.7)], 0.75)
     c = crew()
     k1 = AC.Kneel(c["Leonardo"], (0.0, 2.2), 0, lean=38)
     k1.hand("L", (0.35, 2.05, 0.06), elbow=(0.7, 0.3, -0.8), curl=30); k1.hand("R", (0.35, 2.35, 0.06), elbow=(0.7, 0.3, -0.8), curl=30)
@@ -406,8 +406,8 @@ def T29():
     k2.hand("L", (0.6, 2.5, 0.06), elbow=(0.7, 0.3, -0.8), curl=30); k2.hand("R", (0.75, 2.35, 0.06), elbow=(0.7, 0.3, -0.8), curl=30)
     k2.finish(density=HAIR)
     st = AC.Stand(c["Finotto"], (-0.6, 1.2), 30); pl = bag_pose(st, "R"); st.finish(density=HAIR); pl("bag_F", 0.9)
-    for i, (x, y) in enumerate(((0.5, 2.25), (0.62, 2.6))):
-        b = PR.holdall(f"bag{i}", full=0.5 + 0.3 * i); b.location = (x + 0.2, y + 0.3, 0)
+    for i, (x, y) in enumerate(((0.35, 1.7), (-0.85, 2.75))):
+        b = PR.holdall(f"bag{i}", full=0.5 + 0.3 * i); b.location = (x, y, 0)
     for i in range(5):
         cb = PR.cash_bundle(f"sorted{i}"); cb.location = (0.42 + 0.06 * i, 2.15 + 0.03 * (i % 2), 0.001)
     return dict(a=((-1.4, 0.4, 1.55), (0.4, 2.4, 0.4)), b=((-1.2, 0.55, 1.5), (0.4, 2.4, 0.4)), lens=28,
