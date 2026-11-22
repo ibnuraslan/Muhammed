@@ -1,0 +1,4737 @@
+{
+ "frames": {
+  "55": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 7.34 m, 45 deg in one frame (neighbours 0.60 m, 0 deg)"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 185.2 cm with no hand on it (nearest finger 698 cm)"
+   ]
+  ],
+  "61": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 373.9 cm with no hand on it (nearest finger 1072 cm)"
+   ]
+  ],
+  "67": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 319.8 cm with no hand on it (nearest finger 1392 cm)"
+   ]
+  ],
+  "73": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 295.3 cm with no hand on it (nearest finger 1636 cm)"
+   ]
+  ],
+  "79": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 284.9 cm with no hand on it (nearest finger 1351 cm)"
+   ]
+  ],
+  "85": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 288.6 cm with no hand on it (nearest finger 1062 cm)"
+   ]
+  ],
+  "91": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 306.6 cm with no hand on it (nearest finger 756 cm)"
+   ]
+  ],
+  "97": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Wall_siding.003 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "103": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Wall_siding.003 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 118.1 cm with no hand on it (nearest finger 283 cm)"
+   ]
+  ],
+  "109": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Wall_siding.003 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 2.4 cm with no hand on it (nearest finger 281 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_0 moves 2.4 cm with no hand on it (nearest finger 292 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_1 moves 2.0 cm with no hand on it (nearest finger 292 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_2 moves 1.2 cm with no hand on it (nearest finger 291 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_00 moves 7.6 cm with no hand on it (nearest finger 297 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_01 moves 13.7 cm with no hand on it (nearest finger 313 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_02 moves 13.2 cm with no hand on it (nearest finger 316 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_03 moves 13.8 cm with no hand on it (nearest finger 319 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_04 moves 14.4 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_05 moves 9.4 cm with no hand on it (nearest finger 308 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_06 moves 10.0 cm with no hand on it (nearest finger 308 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_07 moves 13.3 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_08 moves 10.7 cm with no hand on it (nearest finger 306 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_09 moves 10.7 cm with no hand on it (nearest finger 308 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_10 moves 7.7 cm with no hand on it (nearest finger 302 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_11 moves 10.4 cm with no hand on it (nearest finger 308 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_12 moves 15.3 cm with no hand on it (nearest finger 318 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_13 moves 11.4 cm with no hand on it (nearest finger 310 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_14 moves 12.9 cm with no hand on it (nearest finger 314 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_15 moves 12.3 cm with no hand on it (nearest finger 310 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_16 moves 9.7 cm with no hand on it (nearest finger 304 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_17 moves 7.7 cm with no hand on it (nearest finger 304 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_18 moves 8.1 cm with no hand on it (nearest finger 306 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_19 moves 10.0 cm with no hand on it (nearest finger 299 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_20 moves 10.5 cm with no hand on it (nearest finger 309 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_21 moves 13.3 cm with no hand on it (nearest finger 316 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_22 moves 8.0 cm with no hand on it (nearest finger 302 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_23 moves 7.8 cm with no hand on it (nearest finger 299 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_24 moves 7.8 cm with no hand on it (nearest finger 298 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_25 moves 13.3 cm with no hand on it (nearest finger 314 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_26 moves 13.9 cm with no hand on it (nearest finger 319 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_27 moves 9.3 cm with no hand on it (nearest finger 302 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_28 moves 13.7 cm with no hand on it (nearest finger 313 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_29 moves 13.2 cm with no hand on it (nearest finger 315 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_30 moves 11.0 cm with no hand on it (nearest finger 310 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_31 moves 10.2 cm with no hand on it (nearest finger 310 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_32 moves 11.5 cm with no hand on it (nearest finger 308 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_33 moves 9.9 cm with no hand on it (nearest finger 307 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_34 moves 12.0 cm with no hand on it (nearest finger 313 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_35 moves 8.0 cm with no hand on it (nearest finger 301 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_36 moves 15.2 cm with no hand on it (nearest finger 319 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_37 moves 10.3 cm with no hand on it (nearest finger 311 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_38 moves 11.8 cm with no hand on it (nearest finger 313 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_39 moves 12.0 cm with no hand on it (nearest finger 308 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_40 moves 13.7 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_41 moves 10.6 cm with no hand on it (nearest finger 308 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_42 moves 7.8 cm with no hand on it (nearest finger 304 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_43 moves 8.9 cm with no hand on it (nearest finger 303 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_44 moves 7.9 cm with no hand on it (nearest finger 302 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_45 moves 7.7 cm with no hand on it (nearest finger 304 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_46 moves 11.3 cm with no hand on it (nearest finger 312 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_47 moves 14.1 cm with no hand on it (nearest finger 319 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_48 moves 15.2 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_49 moves 12.8 cm with no hand on it (nearest finger 311 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_50 moves 13.3 cm with no hand on it (nearest finger 316 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_51 moves 14.0 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_52 moves 9.8 cm with no hand on it (nearest finger 305 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_53 moves 10.4 cm with no hand on it (nearest finger 307 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_54 moves 11.1 cm with no hand on it (nearest finger 310 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_55 moves 9.2 cm with no hand on it (nearest finger 301 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_56 moves 12.2 cm with no hand on it (nearest finger 310 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_57 moves 9.3 cm with no hand on it (nearest finger 304 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_58 moves 9.4 cm with no hand on it (nearest finger 307 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_59 moves 15.3 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_60 moves 8.7 cm with no hand on it (nearest finger 305 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_61 moves 10.9 cm with no hand on it (nearest finger 308 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_62 moves 11.6 cm with no hand on it (nearest finger 310 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_63 moves 13.5 cm with no hand on it (nearest finger 318 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_64 moves 12.1 cm with no hand on it (nearest finger 313 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_65 moves 8.0 cm with no hand on it (nearest finger 302 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_66 moves 14.7 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_67 moves 11.1 cm with no hand on it (nearest finger 312 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_68 moves 10.1 cm with no hand on it (nearest finger 305 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_69 moves 8.2 cm with no hand on it (nearest finger 301 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_70 moves 10.9 cm with no hand on it (nearest finger 309 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_71 moves 5.4 cm with no hand on it (nearest finger 298 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_72 moves 12.8 cm with no hand on it (nearest finger 313 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_73 moves 10.3 cm with no hand on it (nearest finger 308 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_74 moves 8.3 cm with no hand on it (nearest finger 300 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_75 moves 14.5 cm with no hand on it (nearest finger 318 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_76 moves 7.9 cm with no hand on it (nearest finger 302 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_77 moves 7.6 cm with no hand on it (nearest finger 300 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_78 moves 8.2 cm with no hand on it (nearest finger 299 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_79 moves 10.2 cm with no hand on it (nearest finger 302 cm)"
+   ]
+  ],
+  "115": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Wall_siding.003 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 1.1 cm with no hand on it (nearest finger 280 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_0 moves 3.8 cm with no hand on it (nearest finger 294 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_1 moves 3.7 cm with no hand on it (nearest finger 294 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_2 moves 3.1 cm with no hand on it (nearest finger 293 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_00 moves 8.5 cm with no hand on it (nearest finger 301 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_01 moves 11.2 cm with no hand on it (nearest finger 323 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_02 moves 11.5 cm with no hand on it (nearest finger 327 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_03 moves 11.0 cm with no hand on it (nearest finger 330 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_04 moves 13.3 cm with no hand on it (nearest finger 329 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_05 moves 9.4 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_06 moves 7.8 cm with no hand on it (nearest finger 315 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_07 moves 11.1 cm with no hand on it (nearest finger 327 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_08 moves 8.1 cm with no hand on it (nearest finger 313 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_09 moves 10.5 cm with no hand on it (nearest finger 316 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_10 moves 8.0 cm with no hand on it (nearest finger 308 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_11 moves 9.3 cm with no hand on it (nearest finger 316 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_12 moves 12.8 cm with no hand on it (nearest finger 329 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_13 moves 11.9 cm with no hand on it (nearest finger 321 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_14 moves 10.6 cm with no hand on it (nearest finger 324 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_15 moves 9.9 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_16 moves 7.1 cm with no hand on it (nearest finger 310 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_17 moves 7.1 cm with no hand on it (nearest finger 311 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_18 moves 7.1 cm with no hand on it (nearest finger 312 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_19 moves 8.4 cm with no hand on it (nearest finger 303 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_20 moves 8.1 cm with no hand on it (nearest finger 316 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_21 moves 12.3 cm with no hand on it (nearest finger 328 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_22 moves 8.6 cm with no hand on it (nearest finger 308 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_23 moves 5.7 cm with no hand on it (nearest finger 303 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_24 moves 7.8 cm with no hand on it (nearest finger 301 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_25 moves 10.6 cm with no hand on it (nearest finger 323 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_26 moves 11.3 cm with no hand on it (nearest finger 330 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_27 moves 7.1 cm with no hand on it (nearest finger 308 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_28 moves 12.3 cm with no hand on it (nearest finger 324 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_29 moves 11.0 cm with no hand on it (nearest finger 326 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_30 moves 9.4 cm with no hand on it (nearest finger 319 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_31 moves 8.8 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_32 moves 10.5 cm with no hand on it (nearest finger 316 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_33 moves 8.7 cm with no hand on it (nearest finger 315 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_34 moves 12.0 cm with no hand on it (nearest finger 324 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_35 moves 5.7 cm with no hand on it (nearest finger 305 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_36 moves 12.7 cm with no hand on it (nearest finger 330 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_37 moves 8.8 cm with no hand on it (nearest finger 319 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_38 moves 10.2 cm with no hand on it (nearest finger 322 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_39 moves 11.1 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_40 moves 11.3 cm with no hand on it (nearest finger 328 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_41 moves 11.1 cm with no hand on it (nearest finger 318 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_42 moves 7.8 cm with no hand on it (nearest finger 310 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_43 moves 8.7 cm with no hand on it (nearest finger 309 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_44 moves 7.0 cm with no hand on it (nearest finger 308 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_45 moves 7.9 cm with no hand on it (nearest finger 312 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_46 moves 10.0 cm with no hand on it (nearest finger 321 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_47 moves 11.3 cm with no hand on it (nearest finger 330 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_48 moves 12.4 cm with no hand on it (nearest finger 329 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_49 moves 13.4 cm with no hand on it (nearest finger 322 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_50 moves 11.3 cm with no hand on it (nearest finger 327 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_51 moves 10.9 cm with no hand on it (nearest finger 328 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_52 moves 8.0 cm with no hand on it (nearest finger 311 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_53 moves 9.2 cm with no hand on it (nearest finger 314 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_54 moves 11.1 cm with no hand on it (nearest finger 320 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_55 moves 8.5 cm with no hand on it (nearest finger 307 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_56 moves 10.6 cm with no hand on it (nearest finger 319 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_57 moves 9.2 cm with no hand on it (nearest finger 311 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_58 moves 8.2 cm with no hand on it (nearest finger 313 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_59 moves 13.0 cm with no hand on it (nearest finger 328 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_60 moves 9.0 cm with no hand on it (nearest finger 313 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_61 moves 9.6 cm with no hand on it (nearest finger 315 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_62 moves 9.7 cm with no hand on it (nearest finger 318 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_63 moves 10.8 cm with no hand on it (nearest finger 329 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_64 moves 10.2 cm with no hand on it (nearest finger 323 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_65 moves 8.2 cm with no hand on it (nearest finger 308 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_66 moves 11.4 cm with no hand on it (nearest finger 328 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_67 moves 11.3 cm with no hand on it (nearest finger 323 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_68 moves 7.9 cm with no hand on it (nearest finger 311 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_69 moves 7.0 cm with no hand on it (nearest finger 305 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_70 moves 9.2 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_71 moves 5.9 cm with no hand on it (nearest finger 303 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_72 moves 12.7 cm with no hand on it (nearest finger 325 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_73 moves 9.3 cm with no hand on it (nearest finger 316 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_74 moves 6.1 cm with no hand on it (nearest finger 304 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_75 moves 12.2 cm with no hand on it (nearest finger 329 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_76 moves 8.6 cm with no hand on it (nearest finger 309 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_77 moves 6.7 cm with no hand on it (nearest finger 305 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_78 moves 7.7 cm with no hand on it (nearest finger 304 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_79 moves 9.4 cm with no hand on it (nearest finger 309 cm)"
+   ]
+  ],
+  "121": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Wall_siding.003 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 1.7 cm with no hand on it (nearest finger 279 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_0 moves 4.4 cm with no hand on it (nearest finger 297 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_1 moves 4.6 cm with no hand on it (nearest finger 296 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_2 moves 4.2 cm with no hand on it (nearest finger 295 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_00 moves 8.3 cm with no hand on it (nearest finger 306 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_01 moves 9.8 cm with no hand on it (nearest finger 330 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_02 moves 10.2 cm with no hand on it (nearest finger 338 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_03 moves 9.3 cm with no hand on it (nearest finger 339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_05 moves 8.6 cm with no hand on it (nearest finger 324 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_06 moves 6.5 cm with no hand on it (nearest finger 321 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_08 moves 6.3 cm with no hand on it (nearest finger 319 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_09 moves 9.6 cm with no hand on it (nearest finger 324 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_10 moves 7.6 cm with no hand on it (nearest finger 315 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_11 moves 8.4 cm with no hand on it (nearest finger 323 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_12 moves 11.2 cm with no hand on it (nearest finger 338 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_13 moves 10.8 cm with no hand on it (nearest finger 331 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_14 moves 8.8 cm with no hand on it (nearest finger 333 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_15 moves 8.4 cm with no hand on it (nearest finger 324 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_16 moves 5.4 cm with no hand on it (nearest finger 315 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_17 moves 6.0 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_18 moves 6.6 cm with no hand on it (nearest finger 318 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_19 moves 7.5 cm with no hand on it (nearest finger 307 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_20 moves 6.5 cm with no hand on it (nearest finger 323 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_21 moves 10.3 cm with no hand on it (nearest finger 338 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_22 moves 8.1 cm with no hand on it (nearest finger 313 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_23 moves 4.4 cm with no hand on it (nearest finger 307 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_24 moves 7.2 cm with no hand on it (nearest finger 305 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_25 moves 8.9 cm with no hand on it (nearest finger 332 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_26 moves 9.6 cm with no hand on it (nearest finger 340 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_27 moves 5.2 cm with no hand on it (nearest finger 313 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_28 moves 11.2 cm with no hand on it (nearest finger 333 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_29 moves 9.3 cm with no hand on it (nearest finger 336 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_30 moves 8.1 cm with no hand on it (nearest finger 326 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_31 moves 8.1 cm with no hand on it (nearest finger 324 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_32 moves 9.7 cm with no hand on it (nearest finger 324 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_33 moves 8.1 cm with no hand on it (nearest finger 322 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_34 moves 10.4 cm with no hand on it (nearest finger 334 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_35 moves 4.1 cm with no hand on it (nearest finger 308 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_36 moves 11.2 cm with no hand on it (nearest finger 340 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_37 moves 7.9 cm with no hand on it (nearest finger 327 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_39 moves 9.2 cm with no hand on it (nearest finger 325 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_40 moves 9.5 cm with no hand on it (nearest finger 338 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_41 moves 10.1 cm with no hand on it (nearest finger 326 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_42 moves 7.3 cm with no hand on it (nearest finger 316 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_43 moves 7.3 cm with no hand on it (nearest finger 315 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_44 moves 6.6 cm with no hand on it (nearest finger 313 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_45 moves 7.1 cm with no hand on it (nearest finger 318 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_46 moves 9.0 cm with no hand on it (nearest finger 329 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_47 moves 9.6 cm with no hand on it (nearest finger 340 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_48 moves 10.2 cm with no hand on it (nearest finger 340 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_49 moves 12.2 cm with no hand on it (nearest finger 332 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_50 moves 10.1 cm with no hand on it (nearest finger 337 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_51 moves 8.8 cm with no hand on it (nearest finger 336 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_52 moves 6.6 cm with no hand on it (nearest finger 316 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_53 moves 8.6 cm with no hand on it (nearest finger 321 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_55 moves 8.0 cm with no hand on it (nearest finger 312 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_56 moves 9.3 cm with no hand on it (nearest finger 328 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_57 moves 7.9 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_58 moves 7.6 cm with no hand on it (nearest finger 319 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_60 moves 8.2 cm with no hand on it (nearest finger 320 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_61 moves 8.7 cm with no hand on it (nearest finger 322 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_62 moves 8.2 cm with no hand on it (nearest finger 326 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_63 moves 9.0 cm with no hand on it (nearest finger 338 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_64 moves 8.7 cm with no hand on it (nearest finger 331 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_65 moves 7.8 cm with no hand on it (nearest finger 314 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_66 moves 9.2 cm with no hand on it (nearest finger 337 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_67 moves 10.1 cm with no hand on it (nearest finger 334 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_68 moves 6.1 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_69 moves 5.4 cm with no hand on it (nearest finger 310 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_70 moves 7.9 cm with no hand on it (nearest finger 325 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_71 moves 5.7 cm with no hand on it (nearest finger 307 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_72 moves 11.0 cm with no hand on it (nearest finger 335 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_73 moves 8.6 cm with no hand on it (nearest finger 324 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_74 moves 4.6 cm with no hand on it (nearest finger 308 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_75 moves 10.8 cm with no hand on it (nearest finger 339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_76 moves 8.2 cm with no hand on it (nearest finger 315 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_77 moves 6.2 cm with no hand on it (nearest finger 310 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_78 moves 7.3 cm with no hand on it (nearest finger 308 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_79 moves 7.3 cm with no hand on it (nearest finger 315 cm)"
+   ]
+  ],
+  "127": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Wall_siding.003 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 2.1 cm with no hand on it (nearest finger 277 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_0 moves 4.4 cm with no hand on it (nearest finger 300 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_1 moves 4.9 cm with no hand on it (nearest finger 299 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_2 moves 4.7 cm with no hand on it (nearest finger 298 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_00 moves 8.2 cm with no hand on it (nearest finger 310 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_01 moves 8.7 cm with no hand on it (nearest finger 337 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_02 moves 9.2 cm with no hand on it (nearest finger 346 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_03 moves 8.0 cm with no hand on it (nearest finger 347 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_05 moves 8.0 cm with no hand on it (nearest finger 331 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_06 moves 5.6 cm with no hand on it (nearest finger 327 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_08 moves 5.1 cm with no hand on it (nearest finger 323 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_10 moves 7.3 cm with no hand on it (nearest finger 321 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_11 moves 7.8 cm with no hand on it (nearest finger 329 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_12 moves 9.9 cm with no hand on it (nearest finger 346 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_13 moves 9.9 cm with no hand on it (nearest finger 340 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_14 moves 7.4 cm with no hand on it (nearest finger 341 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_15 moves 7.3 cm with no hand on it (nearest finger 330 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_16 moves 4.2 cm with no hand on it (nearest finger 320 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_17 moves 5.3 cm with no hand on it (nearest finger 323 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_18 moves 6.4 cm with no hand on it (nearest finger 323 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_19 moves 7.0 cm with no hand on it (nearest finger 311 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_20 moves 5.5 cm with no hand on it (nearest finger 329 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_21 moves 8.6 cm with no hand on it (nearest finger 347 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_22 moves 7.7 cm with no hand on it (nearest finger 318 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_23 moves 3.6 cm with no hand on it (nearest finger 310 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_24 moves 6.8 cm with no hand on it (nearest finger 309 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_25 moves 7.6 cm with no hand on it (nearest finger 339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_26 moves 8.3 cm with no hand on it (nearest finger 348 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_27 moves 3.9 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_28 moves 10.4 cm with no hand on it (nearest finger 342 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_29 moves 7.9 cm with no hand on it (nearest finger 345 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_30 moves 7.3 cm with no hand on it (nearest finger 332 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_31 moves 7.6 cm with no hand on it (nearest finger 330 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_32 moves 9.2 cm with no hand on it (nearest finger 331 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_33 moves 7.8 cm with no hand on it (nearest finger 327 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_34 moves 9.1 cm with no hand on it (nearest finger 343 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_35 moves 3.1 cm with no hand on it (nearest finger 311 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_36 moves 10.1 cm with no hand on it (nearest finger 349 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_37 moves 7.3 cm with no hand on it (nearest finger 334 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_39 moves 7.7 cm with no hand on it (nearest finger 332 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_40 moves 8.0 cm with no hand on it (nearest finger 346 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_41 moves 9.3 cm with no hand on it (nearest finger 334 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_42 moves 7.0 cm with no hand on it (nearest finger 321 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_43 moves 6.3 cm with no hand on it (nearest finger 321 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_44 moves 6.5 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_45 moves 6.6 cm with no hand on it (nearest finger 324 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_47 moves 8.3 cm with no hand on it (nearest finger 348 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_48 moves 8.4 cm with no hand on it (nearest finger 349 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_51 moves 7.2 cm with no hand on it (nearest finger 343 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_52 moves 5.6 cm with no hand on it (nearest finger 321 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_53 moves 8.2 cm with no hand on it (nearest finger 329 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_55 moves 7.7 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_56 moves 8.4 cm with no hand on it (nearest finger 337 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_58 moves 7.3 cm with no hand on it (nearest finger 325 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_60 moves 7.6 cm with no hand on it (nearest finger 327 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_61 moves 8.0 cm with no hand on it (nearest finger 327 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_62 moves 7.1 cm with no hand on it (nearest finger 333 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_64 moves 7.7 cm with no hand on it (nearest finger 339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_65 moves 7.5 cm with no hand on it (nearest finger 318 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_66 moves 7.5 cm with no hand on it (nearest finger 345 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_67 moves 9.0 cm with no hand on it (nearest finger 341 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_68 moves 4.8 cm with no hand on it (nearest finger 322 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_69 moves 4.0 cm with no hand on it (nearest finger 315 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_70 moves 6.9 cm with no hand on it (nearest finger 332 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_71 moves 5.7 cm with no hand on it (nearest finger 311 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_72 moves 9.5 cm with no hand on it (nearest finger 344 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_73 moves 8.0 cm with no hand on it (nearest finger 331 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_74 moves 3.7 cm with no hand on it (nearest finger 311 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_75 moves 9.8 cm with no hand on it (nearest finger 347 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_76 moves 7.9 cm with no hand on it (nearest finger 321 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_77 moves 5.9 cm with no hand on it (nearest finger 314 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_78 moves 7.1 cm with no hand on it (nearest finger 312 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_79 moves 5.5 cm with no hand on it (nearest finger 321 cm)"
+   ]
+  ],
+  "133": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Wall_siding.003 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 2.1 cm with no hand on it (nearest finger 276 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_0 moves 3.7 cm with no hand on it (nearest finger 302 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_1 moves 4.3 cm with no hand on it (nearest finger 302 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_2 moves 4.4 cm with no hand on it (nearest finger 301 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_00 moves 8.0 cm with no hand on it (nearest finger 315 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_01 moves 7.9 cm with no hand on it (nearest finger 343 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_02 moves 8.4 cm with no hand on it (nearest finger 352 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_03 moves 7.1 cm with no hand on it (nearest finger 354 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_05 moves 7.6 cm with no hand on it (nearest finger 337 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_08 moves 4.3 cm with no hand on it (nearest finger 327 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_10 moves 7.2 cm with no hand on it (nearest finger 327 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_11 moves 7.4 cm with no hand on it (nearest finger 334 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_12 moves 9.0 cm with no hand on it (nearest finger 354 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_13 moves 9.2 cm with no hand on it (nearest finger 348 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_14 moves 6.4 cm with no hand on it (nearest finger 347 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_15 moves 6.6 cm with no hand on it (nearest finger 335 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_16 moves 3.5 cm with no hand on it (nearest finger 324 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_17 moves 5.0 cm with no hand on it (nearest finger 328 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_18 moves 6.3 cm with no hand on it (nearest finger 328 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_19 moves 6.6 cm with no hand on it (nearest finger 314 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_20 moves 4.8 cm with no hand on it (nearest finger 335 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_21 moves 7.4 cm with no hand on it (nearest finger 355 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_22 moves 7.5 cm with no hand on it (nearest finger 323 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_23 moves 3.3 cm with no hand on it (nearest finger 313 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_24 moves 6.6 cm with no hand on it (nearest finger 312 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_25 moves 6.6 cm with no hand on it (nearest finger 345 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_27 moves 3.1 cm with no hand on it (nearest finger 320 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_28 moves 9.7 cm with no hand on it (nearest finger 349 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_29 moves 6.9 cm with no hand on it (nearest finger 352 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_30 moves 6.7 cm with no hand on it (nearest finger 338 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_32 moves 8.8 cm with no hand on it (nearest finger 339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_33 moves 7.5 cm with no hand on it (nearest finger 332 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_34 moves 8.2 cm with no hand on it (nearest finger 351 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_35 moves 2.6 cm with no hand on it (nearest finger 314 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_36 moves 9.2 cm with no hand on it (nearest finger 358 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_37 moves 7.0 cm with no hand on it (nearest finger 339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_39 moves 6.7 cm with no hand on it (nearest finger 339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_40 moves 7.0 cm with no hand on it (nearest finger 352 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_41 moves 8.7 cm with no hand on it (nearest finger 342 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_42 moves 6.8 cm with no hand on it (nearest finger 325 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_44 moves 6.4 cm with no hand on it (nearest finger 321 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_45 moves 6.3 cm with no hand on it (nearest finger 329 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_47 moves 7.3 cm with no hand on it (nearest finger 355 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_53 moves 7.9 cm with no hand on it (nearest finger 335 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_55 moves 7.5 cm with no hand on it (nearest finger 323 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_56 moves 7.8 cm with no hand on it (nearest finger 344 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_58 moves 7.1 cm with no hand on it (nearest finger 330 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_60 moves 7.2 cm with no hand on it (nearest finger 333 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_61 moves 7.5 cm with no hand on it (nearest finger 333 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_62 moves 6.4 cm with no hand on it (nearest finger 338 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_64 moves 6.9 cm with no hand on it (nearest finger 346 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_65 moves 7.4 cm with no hand on it (nearest finger 323 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_66 moves 6.3 cm with no hand on it (nearest finger 352 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_68 moves 4.0 cm with no hand on it (nearest finger 326 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_69 moves 3.2 cm with no hand on it (nearest finger 318 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_70 moves 6.3 cm with no hand on it (nearest finger 338 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_71 moves 5.7 cm with no hand on it (nearest finger 315 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_72 moves 8.4 cm with no hand on it (nearest finger 352 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_73 moves 7.7 cm with no hand on it (nearest finger 337 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_74 moves 3.2 cm with no hand on it (nearest finger 314 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_75 moves 9.0 cm with no hand on it (nearest finger 354 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_76 moves 7.6 cm with no hand on it (nearest finger 326 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_77 moves 5.8 cm with no hand on it (nearest finger 319 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_78 moves 7.0 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_79 moves 4.2 cm with no hand on it (nearest finger 326 cm)"
+   ]
+  ],
+  "139": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Wall_siding.003 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 2.5 cm with no hand on it (nearest finger 274 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_0 moves 2.9 cm with no hand on it (nearest finger 304 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_1 moves 3.4 cm with no hand on it (nearest finger 304 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_2 moves 3.6 cm with no hand on it (nearest finger 303 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_00 moves 7.9 cm with no hand on it (nearest finger 320 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_01 moves 7.3 cm with no hand on it (nearest finger 348 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_02 moves 7.9 cm with no hand on it (nearest finger 358 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_05 moves 7.4 cm with no hand on it (nearest finger 343 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_08 moves 4.0 cm with no hand on it (nearest finger 330 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_10 moves 7.1 cm with no hand on it (nearest finger 331 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_11 moves 7.2 cm with no hand on it (nearest finger 339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_12 moves 8.3 cm with no hand on it (nearest finger 361 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_13 moves 8.7 cm with no hand on it (nearest finger 355 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_14 moves 5.8 cm with no hand on it (nearest finger 353 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_15 moves 6.2 cm with no hand on it (nearest finger 340 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_16 moves 3.3 cm with no hand on it (nearest finger 327 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_17 moves 4.9 cm with no hand on it (nearest finger 331 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_18 moves 6.3 cm with no hand on it (nearest finger 332 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_19 moves 6.5 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_21 moves 6.4 cm with no hand on it (nearest finger 361 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_23 moves 3.4 cm with no hand on it (nearest finger 316 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_24 moves 6.5 cm with no hand on it (nearest finger 315 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_25 moves 6.1 cm with no hand on it (nearest finger 351 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_27 moves 2.8 cm with no hand on it (nearest finger 323 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_28 moves 9.2 cm with no hand on it (nearest finger 355 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_30 moves 6.4 cm with no hand on it (nearest finger 343 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_33 moves 7.4 cm with no hand on it (nearest finger 337 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_34 moves 7.5 cm with no hand on it (nearest finger 358 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_35 moves 2.8 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_36 moves 8.6 cm with no hand on it (nearest finger 364 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_37 moves 6.8 cm with no hand on it (nearest finger 344 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_39 moves 6.0 cm with no hand on it (nearest finger 343 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_40 moves 6.3 cm with no hand on it (nearest finger 358 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_41 moves 8.3 cm with no hand on it (nearest finger 348 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_44 moves 6.4 cm with no hand on it (nearest finger 324 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_45 moves 6.1 cm with no hand on it (nearest finger 334 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_47 moves 6.7 cm with no hand on it (nearest finger 361 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_53 moves 7.7 cm with no hand on it (nearest finger 339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_55 moves 7.4 cm with no hand on it (nearest finger 327 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_56 moves 7.3 cm with no hand on it (nearest finger 348 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_58 moves 7.1 cm with no hand on it (nearest finger 335 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_60 moves 6.9 cm with no hand on it (nearest finger 339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_61 moves 7.2 cm with no hand on it (nearest finger 338 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_62 moves 5.9 cm with no hand on it (nearest finger 343 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_64 moves 6.5 cm with no hand on it (nearest finger 352 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_65 moves 7.3 cm with no hand on it (nearest finger 327 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_66 moves 5.4 cm with no hand on it (nearest finger 358 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_68 moves 3.6 cm with no hand on it (nearest finger 330 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_69 moves 2.9 cm with no hand on it (nearest finger 321 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_70 moves 6.0 cm with no hand on it (nearest finger 343 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_71 moves 5.9 cm with no hand on it (nearest finger 318 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_72 moves 7.6 cm with no hand on it (nearest finger 359 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_73 moves 7.4 cm with no hand on it (nearest finger 343 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_74 moves 3.3 cm with no hand on it (nearest finger 317 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_75 moves 8.5 cm with no hand on it (nearest finger 361 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_76 moves 7.5 cm with no hand on it (nearest finger 331 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_77 moves 5.8 cm with no hand on it (nearest finger 321 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_78 moves 7.0 cm with no hand on it (nearest finger 321 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_79 moves 3.3 cm with no hand on it (nearest finger 330 cm)"
+   ]
+  ],
+  "145": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Wall_drywall.003 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 3.7 cm with no hand on it (nearest finger 271 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_0 moves 2.2 cm with no hand on it (nearest finger 306 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_1 moves 2.6 cm with no hand on it (nearest finger 306 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_2 moves 2.8 cm with no hand on it (nearest finger 305 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_00 moves 7.9 cm with no hand on it (nearest finger 323 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_03 moves 6.1 cm with no hand on it (nearest finger 366 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_04 moves 6.2 cm with no hand on it (nearest finger 368 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_05 moves 7.2 cm with no hand on it (nearest finger 347 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_06 moves 4.9 cm with no hand on it (nearest finger 338 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_07 moves 7.5 cm with no hand on it (nearest finger 362 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_09 moves 7.6 cm with no hand on it (nearest finger 348 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_10 moves 7.1 cm with no hand on it (nearest finger 334 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_16 moves 3.5 cm with no hand on it (nearest finger 329 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_17 moves 5.0 cm with no hand on it (nearest finger 335 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_18 moves 6.4 cm with no hand on it (nearest finger 337 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_20 moves 4.5 cm with no hand on it (nearest finger 341 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_22 moves 7.3 cm with no hand on it (nearest finger 331 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_23 moves 3.7 cm with no hand on it (nearest finger 318 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_26 moves 6.3 cm with no hand on it (nearest finger 369 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_27 moves 3.0 cm with no hand on it (nearest finger 326 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_28 moves 8.9 cm with no hand on it (nearest finger 361 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_29 moves 6.0 cm with no hand on it (nearest finger 362 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_31 moves 7.0 cm with no hand on it (nearest finger 344 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_32 moves 8.3 cm with no hand on it (nearest finger 348 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_33 moves 7.3 cm with no hand on it (nearest finger 341 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_35 moves 3.2 cm with no hand on it (nearest finger 319 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_37 moves 6.7 cm with no hand on it (nearest finger 348 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_38 moves 7.0 cm with no hand on it (nearest finger 353 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_42 moves 6.8 cm with no hand on it (nearest finger 332 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_43 moves 5.2 cm with no hand on it (nearest finger 331 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_44 moves 6.5 cm with no hand on it (nearest finger 327 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_45 moves 6.1 cm with no hand on it (nearest finger 338 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_46 moves 7.3 cm with no hand on it (nearest finger 353 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_48 moves 5.5 cm with no hand on it (nearest finger 367 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_49 moves 9.1 cm with no hand on it (nearest finger 362 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_50 moves 7.8 cm with no hand on it (nearest finger 364 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_51 moves 4.9 cm with no hand on it (nearest finger 360 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_52 moves 4.8 cm with no hand on it (nearest finger 330 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_53 moves 7.6 cm with no hand on it (nearest finger 343 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_54 moves 6.8 cm with no hand on it (nearest finger 355 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_57 moves 5.8 cm with no hand on it (nearest finger 334 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_58 moves 7.1 cm with no hand on it (nearest finger 339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_59 moves 8.7 cm with no hand on it (nearest finger 366 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_60 moves 6.8 cm with no hand on it (nearest finger 345 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_63 moves 5.9 cm with no hand on it (nearest finger 363 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_65 moves 7.3 cm with no hand on it (nearest finger 330 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_66 moves 5.0 cm with no hand on it (nearest finger 363 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_67 moves 7.4 cm with no hand on it (nearest finger 360 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_68 moves 3.7 cm with no hand on it (nearest finger 333 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_69 moves 3.1 cm with no hand on it (nearest finger 325 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_71 moves 6.0 cm with no hand on it (nearest finger 320 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_73 moves 7.3 cm with no hand on it (nearest finger 347 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_74 moves 3.6 cm with no hand on it (nearest finger 318 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_76 moves 7.4 cm with no hand on it (nearest finger 335 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_77 moves 5.9 cm with no hand on it (nearest finger 323 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_78 moves 7.0 cm with no hand on it (nearest finger 325 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_79 moves 3.1 cm with no hand on it (nearest finger 332 cm)"
+   ]
+  ],
+  "151": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Wall_drywall.003 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 5.5 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_00 moves 9.4 cm with no hand on it (nearest finger 270 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_02 moves 6.4 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_03 moves 7.2 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_04 moves 9.2 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_05 moves 8.7 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_08 moves 5.5 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_11 moves 8.8 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_12 moves 6.9 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_14 moves 7.2 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_17 moves 6.5 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_24 moves 6.2 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_25 moves 8.4 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_28 moves 8.8 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_29 moves 5.6 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_31 moves 3.0 cm with no hand on it (nearest finger 270 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_32 moves 8.8 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_37 moves 9.2 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_38 moves 6.7 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_40 moves 7.2 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_41 moves 5.6 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_42 moves 8.3 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_45 moves 6.7 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_49 moves 5.9 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_51 moves 8.1 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_53 moves 9.2 cm with no hand on it (nearest finger 270 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_55 moves 8.6 cm with no hand on it (nearest finger 270 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_58 moves 7.3 cm with no hand on it (nearest finger 270 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_60 moves 6.7 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_62 moves 7.6 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_63 moves 5.7 cm with no hand on it (nearest finger 270 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_69 moves 5.5 cm with no hand on it (nearest finger 270 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_in_0 moves 0.6 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_0 moves 1.7 cm with no hand on it (nearest finger 307 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_1 moves 2.0 cm with no hand on it (nearest finger 307 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_2 moves 2.1 cm with no hand on it (nearest finger 307 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_06 moves 5.7 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_13 moves 6.1 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_15 moves 6.8 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_18 moves 9.1 cm with no hand on it (nearest finger 270 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_23 moves 9.0 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_26 moves 7.3 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_27 moves 4.8 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_30 moves 3.2 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_48 moves 7.8 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_54 moves 4.7 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_56 moves 3.9 cm with no hand on it (nearest finger 270 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_57 moves 6.1 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_64 moves 9.2 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_67 moves 10.4 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_68 moves 5.0 cm with no hand on it (nearest finger 270 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_01 moves 6.3 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_07 moves 7.0 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_09 moves 7.8 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_10 moves 9.0 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_16 moves 4.2 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_19 moves 6.5 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_20 moves 3.5 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_21 moves 5.9 cm with no hand on it (nearest finger 263 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_22 moves 9.0 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_33 moves 3.3 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_34 moves 11.3 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_35 moves 7.1 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_36 moves 6.7 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_39 moves 9.9 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_43 moves 6.7 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_44 moves 6.7 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_46 moves 6.7 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_47 moves 3.7 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_50 moves 7.6 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_52 moves 6.1 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_59 moves 8.8 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_61 moves 9.0 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_65 moves 9.0 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_66 moves 9.4 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_00 moves 7.9 cm with no hand on it (nearest finger 325 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_03 moves 6.0 cm with no hand on it (nearest finger 371 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_04 moves 5.9 cm with no hand on it (nearest finger 371 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_05 moves 7.2 cm with no hand on it (nearest finger 351 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_06 moves 5.1 cm with no hand on it (nearest finger 339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_07 moves 7.3 cm with no hand on it (nearest finger 366 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_09 moves 7.4 cm with no hand on it (nearest finger 352 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_10 moves 7.1 cm with no hand on it (nearest finger 337 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_16 moves 3.9 cm with no hand on it (nearest finger 331 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_17 moves 5.2 cm with no hand on it (nearest finger 338 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_18 moves 6.5 cm with no hand on it (nearest finger 341 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_20 moves 4.7 cm with no hand on it (nearest finger 343 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_22 moves 7.3 cm with no hand on it (nearest finger 333 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_23 moves 4.2 cm with no hand on it (nearest finger 320 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_26 moves 6.2 cm with no hand on it (nearest finger 373 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_27 moves 3.4 cm with no hand on it (nearest finger 327 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_28 moves 8.6 cm with no hand on it (nearest finger 366 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_29 moves 5.9 cm with no hand on it (nearest finger 366 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_31 moves 7.0 cm with no hand on it (nearest finger 346 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_32 moves 8.1 cm with no hand on it (nearest finger 351 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_33 moves 7.3 cm with no hand on it (nearest finger 345 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_35 moves 3.8 cm with no hand on it (nearest finger 321 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_37 moves 6.7 cm with no hand on it (nearest finger 352 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_38 moves 6.9 cm with no hand on it (nearest finger 357 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_42 moves 6.9 cm with no hand on it (nearest finger 334 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_43 moves 5.3 cm with no hand on it (nearest finger 333 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_44 moves 6.7 cm with no hand on it (nearest finger 331 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_45 moves 6.2 cm with no hand on it (nearest finger 340 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_46 moves 7.2 cm with no hand on it (nearest finger 356 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_48 moves 5.2 cm with no hand on it (nearest finger 371 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_49 moves 8.8 cm with no hand on it (nearest finger 367 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_50 moves 7.6 cm with no hand on it (nearest finger 368 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_51 moves 4.9 cm with no hand on it (nearest finger 363 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_52 moves 4.9 cm with no hand on it (nearest finger 332 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_53 moves 7.6 cm with no hand on it (nearest finger 346 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_54 moves 6.6 cm with no hand on it (nearest finger 358 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_57 moves 5.8 cm with no hand on it (nearest finger 337 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_58 moves 7.2 cm with no hand on it (nearest finger 344 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_59 moves 8.4 cm with no hand on it (nearest finger 371 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_60 moves 6.8 cm with no hand on it (nearest finger 349 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_63 moves 5.8 cm with no hand on it (nearest finger 366 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_65 moves 7.3 cm with no hand on it (nearest finger 332 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_67 moves 7.2 cm with no hand on it (nearest finger 364 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_68 moves 3.9 cm with no hand on it (nearest finger 337 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_69 moves 3.5 cm with no hand on it (nearest finger 327 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_71 moves 6.2 cm with no hand on it (nearest finger 323 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_73 moves 7.2 cm with no hand on it (nearest finger 350 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_74 moves 4.0 cm with no hand on it (nearest finger 319 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_76 moves 7.4 cm with no hand on it (nearest finger 339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_77 moves 6.1 cm with no hand on it (nearest finger 324 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_78 moves 7.1 cm with no hand on it (nearest finger 328 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_79 moves 3.2 cm with no hand on it (nearest finger 335 cm)"
+   ]
+  ],
+  "157": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Wall_drywall.003 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 6.4 cm with no hand on it (nearest finger 259 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_00 moves 9.3 cm with no hand on it (nearest finger 271 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_02 moves 5.6 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_03 moves 7.4 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_04 moves 8.8 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_05 moves 7.3 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_08 moves 4.3 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_11 moves 6.8 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_12 moves 5.2 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_14 moves 7.6 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_17 moves 4.8 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_24 moves 6.5 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_25 moves 8.5 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_28 moves 7.8 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_29 moves 4.7 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_31 moves 1.7 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_32 moves 7.8 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_37 moves 9.5 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_38 moves 6.8 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_40 moves 7.2 cm with no hand on it (nearest finger 263 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_41 moves 6.7 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_42 moves 8.7 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_45 moves 7.1 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_49 moves 7.1 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_51 moves 8.5 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_53 moves 7.9 cm with no hand on it (nearest finger 270 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_55 moves 7.9 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_58 moves 6.3 cm with no hand on it (nearest finger 270 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_60 moves 6.0 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_62 moves 7.7 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_63 moves 6.5 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_69 moves 4.6 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_in_0 moves 1.0 cm with no hand on it (nearest finger 263 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_in_1 moves 0.8 cm with no hand on it (nearest finger 260 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_in_2 moves 0.7 cm with no hand on it (nearest finger 255 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_in_3 moves 0.7 cm with no hand on it (nearest finger 252 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_0 moves 1.3 cm with no hand on it (nearest finger 307 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_1 moves 1.6 cm with no hand on it (nearest finger 307 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_2 moves 1.6 cm with no hand on it (nearest finger 307 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_06 moves 5.0 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_13 moves 4.1 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_15 moves 6.4 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_18 moves 8.1 cm with no hand on it (nearest finger 270 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_23 moves 9.8 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_26 moves 5.8 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_27 moves 3.1 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_30 moves 1.9 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_48 moves 6.9 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_54 moves 3.5 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_56 moves 2.4 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_57 moves 6.5 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_64 moves 9.4 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_67 moves 9.8 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_68 moves 4.1 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_01 moves 6.1 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_07 moves 5.3 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_09 moves 6.1 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_10 moves 9.6 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_16 moves 3.1 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_19 moves 6.9 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_20 moves 2.5 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_21 moves 6.8 cm with no hand on it (nearest finger 261 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_22 moves 7.8 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_33 moves 2.2 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_34 moves 10.0 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_35 moves 6.5 cm with no hand on it (nearest finger 263 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_36 moves 7.4 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_39 moves 9.1 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_43 moves 5.7 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_44 moves 6.0 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_46 moves 8.1 cm with no hand on it (nearest finger 263 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_47 moves 2.8 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_50 moves 7.7 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_52 moves 5.7 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_59 moves 7.2 cm with no hand on it (nearest finger 263 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_61 moves 7.5 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_65 moves 9.2 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_66 moves 8.0 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_00 moves 8.2 cm with no hand on it (nearest finger 328 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_04 moves 6.1 cm with no hand on it (nearest finger 375 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_05 moves 7.7 cm with no hand on it (nearest finger 354 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_06 moves 5.6 cm with no hand on it (nearest finger 341 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_07 moves 7.6 cm with no hand on it (nearest finger 369 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_09 moves 7.9 cm with no hand on it (nearest finger 356 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_10 moves 7.7 cm with no hand on it (nearest finger 340 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_16 moves 4.5 cm with no hand on it (nearest finger 332 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_17 moves 5.9 cm with no hand on it (nearest finger 341 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_18 moves 7.0 cm with no hand on it (nearest finger 343 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_20 moves 5.3 cm with no hand on it (nearest finger 345 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_22 moves 7.6 cm with no hand on it (nearest finger 336 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_23 moves 4.9 cm with no hand on it (nearest finger 321 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_26 moves 6.5 cm with no hand on it (nearest finger 376 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_27 moves 3.9 cm with no hand on it (nearest finger 328 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_28 moves 8.4 cm with no hand on it (nearest finger 370 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_29 moves 5.9 cm with no hand on it (nearest finger 369 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_31 moves 7.4 cm with no hand on it (nearest finger 349 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_32 moves 8.0 cm with no hand on it (nearest finger 355 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_33 moves 7.7 cm with no hand on it (nearest finger 349 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_35 moves 4.5 cm with no hand on it (nearest finger 322 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_37 moves 7.1 cm with no hand on it (nearest finger 355 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_38 moves 6.8 cm with no hand on it (nearest finger 360 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_42 moves 7.5 cm with no hand on it (nearest finger 337 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_43 moves 5.7 cm with no hand on it (nearest finger 335 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_45 moves 6.7 cm with no hand on it (nearest finger 343 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_46 moves 7.2 cm with no hand on it (nearest finger 359 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_48 moves 5.1 cm with no hand on it (nearest finger 373 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_49 moves 8.9 cm with no hand on it (nearest finger 372 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_50 moves 7.8 cm with no hand on it (nearest finger 372 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_51 moves 5.2 cm with no hand on it (nearest finger 366 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_52 moves 5.2 cm with no hand on it (nearest finger 334 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_53 moves 7.9 cm with no hand on it (nearest finger 349 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_54 moves 6.9 cm with no hand on it (nearest finger 361 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_57 moves 6.2 cm with no hand on it (nearest finger 339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_59 moves 8.5 cm with no hand on it (nearest finger 375 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_60 moves 7.2 cm with no hand on it (nearest finger 351 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_63 moves 6.1 cm with no hand on it (nearest finger 369 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_65 moves 7.9 cm with no hand on it (nearest finger 335 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_67 moves 7.4 cm with no hand on it (nearest finger 368 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_68 moves 4.3 cm with no hand on it (nearest finger 339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_69 moves 4.3 cm with no hand on it (nearest finger 328 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_71 moves 6.7 cm with no hand on it (nearest finger 326 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_73 moves 7.2 cm with no hand on it (nearest finger 353 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_74 moves 4.7 cm with no hand on it (nearest finger 320 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_76 moves 7.8 cm with no hand on it (nearest finger 342 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_77 moves 6.2 cm with no hand on it (nearest finger 326 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_79 moves 3.8 cm with no hand on it (nearest finger 336 cm)"
+   ]
+  ],
+  "163": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Wall_drywall.003 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 6.5 cm with no hand on it (nearest finger 252 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_00 moves 9.3 cm with no hand on it (nearest finger 272 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_02 moves 5.3 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_03 moves 7.2 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_04 moves 8.6 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_05 moves 6.8 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_08 moves 3.9 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_11 moves 5.4 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_12 moves 4.2 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_14 moves 7.9 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_17 moves 3.8 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_24 moves 6.4 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_25 moves 7.7 cm with no hand on it (nearest finger 263 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_28 moves 7.4 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_29 moves 4.4 cm with no hand on it (nearest finger 259 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_31 moves 0.9 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_32 moves 7.2 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_37 moves 8.8 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_38 moves 6.6 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_40 moves 7.4 cm with no hand on it (nearest finger 261 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_41 moves 7.1 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_42 moves 8.1 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_45 moves 7.5 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_49 moves 7.4 cm with no hand on it (nearest finger 263 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_51 moves 8.4 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_53 moves 7.2 cm with no hand on it (nearest finger 270 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_55 moves 7.6 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_58 moves 5.8 cm with no hand on it (nearest finger 270 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_60 moves 6.0 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_62 moves 8.0 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_63 moves 6.6 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Drywall_chunk_69 moves 4.4 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_in_0 moves 1.3 cm with no hand on it (nearest finger 261 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_in_1 moves 1.1 cm with no hand on it (nearest finger 258 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_in_2 moves 1.1 cm with no hand on it (nearest finger 253 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_in_3 moves 1.3 cm with no hand on it (nearest finger 250 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_0 moves 1.1 cm with no hand on it (nearest finger 307 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_1 moves 1.3 cm with no hand on it (nearest finger 307 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_out_2 moves 1.3 cm with no hand on it (nearest finger 307 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_06 moves 4.0 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_13 moves 2.8 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_15 moves 5.6 cm with no hand on it (nearest finger 263 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_18 moves 7.7 cm with no hand on it (nearest finger 271 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_23 moves 9.4 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_26 moves 4.9 cm with no hand on it (nearest finger 263 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_27 moves 2.4 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_30 moves 2.1 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_48 moves 6.5 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_54 moves 3.2 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_56 moves 1.0 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_57 moves 7.0 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_64 moves 8.9 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_67 moves 9.4 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Fluff_68 moves 3.1 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_01 moves 5.3 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_07 moves 4.4 cm with no hand on it (nearest finger 263 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_09 moves 5.3 cm with no hand on it (nearest finger 261 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_10 moves 9.1 cm with no hand on it (nearest finger 261 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_16 moves 2.0 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_19 moves 7.3 cm with no hand on it (nearest finger 260 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_20 moves 1.8 cm with no hand on it (nearest finger 263 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_21 moves 7.1 cm with no hand on it (nearest finger 259 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_22 moves 7.1 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_33 moves 2.2 cm with no hand on it (nearest finger 266 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_34 moves 9.5 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_35 moves 5.4 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_36 moves 7.6 cm with no hand on it (nearest finger 268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_39 moves 8.7 cm with no hand on it (nearest finger 267 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_43 moves 5.3 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_44 moves 5.2 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_46 moves 8.4 cm with no hand on it (nearest finger 261 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_47 moves 2.5 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_50 moves 7.9 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_52 moves 5.2 cm with no hand on it (nearest finger 263 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_59 moves 6.2 cm with no hand on it (nearest finger 262 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_61 moves 6.8 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_65 moves 8.4 cm with no hand on it (nearest finger 263 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_in_66 moves 7.4 cm with no hand on it (nearest finger 265 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_00 moves 2.2 cm with no hand on it (nearest finger 328 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_05 moves 0.6 cm with no hand on it (nearest finger 353 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_06 moves 1.5 cm with no hand on it (nearest finger 341 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_07 moves 2.0 cm with no hand on it (nearest finger 369 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_09 moves 0.6 cm with no hand on it (nearest finger 356 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_10 moves 0.6 cm with no hand on it (nearest finger 340 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_16 moves 1.3 cm with no hand on it (nearest finger 331 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_18 moves 1.9 cm with no hand on it (nearest finger 343 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_20 moves 1.4 cm with no hand on it (nearest finger 345 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_22 moves 2.0 cm with no hand on it (nearest finger 336 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_23 moves 1.3 cm with no hand on it (nearest finger 322 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_26 moves 1.7 cm with no hand on it (nearest finger 376 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_27 moves 2.1 cm with no hand on it (nearest finger 328 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_28 moves 4.1 cm with no hand on it (nearest finger 372 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_29 moves 3.0 cm with no hand on it (nearest finger 370 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_31 moves 1.9 cm with no hand on it (nearest finger 349 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_32 moves 4.0 cm with no hand on it (nearest finger 356 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_33 moves 2.0 cm with no hand on it (nearest finger 349 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_35 moves 1.3 cm with no hand on it (nearest finger 322 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_37 moves 1.9 cm with no hand on it (nearest finger 355 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_38 moves 3.4 cm with no hand on it (nearest finger 361 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_42 moves 0.6 cm with no hand on it (nearest finger 337 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_43 moves 1.5 cm with no hand on it (nearest finger 335 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_45 moves 1.8 cm with no hand on it (nearest finger 343 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_46 moves 3.6 cm with no hand on it (nearest finger 360 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_48 moves 2.6 cm with no hand on it (nearest finger 374 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_49 moves 2.3 cm with no hand on it (nearest finger 372 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_50 moves 2.0 cm with no hand on it (nearest finger 373 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_51 moves 1.4 cm with no hand on it (nearest finger 366 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_52 moves 2.7 cm with no hand on it (nearest finger 334 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_53 moves 2.1 cm with no hand on it (nearest finger 349 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_54 moves 1.8 cm with no hand on it (nearest finger 362 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_57 moves 1.7 cm with no hand on it (nearest finger 339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_59 moves 2.2 cm with no hand on it (nearest finger 376 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_60 moves 1.9 cm with no hand on it (nearest finger 352 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_63 moves 1.6 cm with no hand on it (nearest finger 370 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_65 moves 0.6 cm with no hand on it (nearest finger 334 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_67 moves 1.9 cm with no hand on it (nearest finger 368 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_68 moves 2.3 cm with no hand on it (nearest finger 339 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_71 moves 1.8 cm with no hand on it (nearest finger 326 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_73 moves 3.6 cm with no hand on it (nearest finger 354 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_74 moves 1.3 cm with no hand on it (nearest finger 320 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_76 moves 2.0 cm with no hand on it (nearest finger 343 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_77 moves 3.2 cm with no hand on it (nearest finger 326 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Splinter_out_79 moves 1.1 cm with no hand on it (nearest finger 336 cm)"
+   ]
+  ],
+  "433": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 0.31 m, 49 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 4.3 cm with no hand on it (nearest finger 47 cm)"
+   ]
+  ],
+  "439": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 4.4 cm with no hand on it (nearest finger 44 cm)"
+   ]
+  ],
+  "445": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 4.4 cm with no hand on it (nearest finger 40 cm)"
+   ]
+  ],
+  "451": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 4.4 cm with no hand on it (nearest finger 37 cm)"
+   ]
+  ],
+  "457": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 4.3 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "463": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 4.2 cm with no hand on it (nearest finger 31 cm)"
+   ]
+  ],
+  "469": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 4.1 cm with no hand on it (nearest finger 27 cm)"
+   ]
+  ],
+  "475": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 3.8 cm with no hand on it (nearest finger 24 cm)"
+   ]
+  ],
+  "481": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 3.6 cm with no hand on it (nearest finger 22 cm)"
+   ]
+  ],
+  "487": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 3.3 cm with no hand on it (nearest finger 20 cm)"
+   ]
+  ],
+  "493": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 2.9 cm with no hand on it (nearest finger 18 cm)"
+   ]
+  ],
+  "679": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "685": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "691": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "697": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "703": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "709": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "715": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "721": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "727": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "733": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "739": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "745": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "751": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "757": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "763": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "769": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "775": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "781": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "787": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "793": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "799": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "805": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "811": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "817": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "823": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "829": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "895": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "901": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "907": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "913": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "919": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "925": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "931": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "937": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "943": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "949": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "955": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "961": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "967": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "973": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "979": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "985": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "991": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "997": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1003": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1009": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1015": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1021": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1027": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1033": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1039": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1045": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1051": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1057": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1063": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1069": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1075": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1081": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1087": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "141": [
+   [
+    "CAMJUMP",
+    "cut: 4.40 m, 106 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "169": [
+   [
+    "CAMJUMP",
+    "cut: 2.18 m, 135 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 5.8 cm with no hand on it (nearest finger 245 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Dust_in_3 moves 1.6 cm with no hand on it (nearest finger 247 cm)"
+   ]
+  ],
+  "223": [
+   [
+    "CAMJUMP",
+    "cut: 1.51 m, 26 deg in one frame (neighbours 0.01 m, 0 deg)"
+   ]
+  ],
+  "277": [
+   [
+    "CAMJUMP",
+    "cut: 0.69 m, 41 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "354": [
+   [
+    "CAMJUMP",
+    "cut: 0.27 m, 7 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "497": [
+   [
+    "CAMJUMP",
+    "cut: 0.74 m, 13 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "552": [
+   [
+    "CAMJUMP",
+    "cut: 0.96 m, 60 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "603": [
+   [
+    "CAMJUMP",
+    "cut: 0.35 m, 21 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "675": [
+   [
+    "CAMJUMP",
+    "cut: 55.70 m, 56 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "831": [
+   [
+    "CAMJUMP",
+    "cut: 56.00 m, 84 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "891": [
+   [
+    "CAMJUMP",
+    "cut: 55.93 m, 80 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1093": [
+   [
+    "CAMJUMP",
+    "cut: 55.36 m, 24 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1213": [
+   [
+    "CAMJUMP",
+    "cut: 0.72 m, 45 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "19": [
+   [
+    "PROPMOVE",
+    "Dust_smoke_gun moves 4.6 cm with no hand on it (nearest finger 19 cm)"
+   ]
+  ],
+  "25": [
+   [
+    "PROPMOVE",
+    "Dust_smoke_gun moves 6.6 cm with no hand on it (nearest finger 22 cm)"
+   ]
+  ],
+  "31": [
+   [
+    "PROPMOVE",
+    "Dust_smoke_gun moves 5.0 cm with no hand on it (nearest finger 24 cm)"
+   ]
+  ],
+  "175": [
+   [
+    "PROPMOVE",
+    "Bullet moves 5.2 cm with no hand on it (nearest finger 240 cm)"
+   ]
+  ],
+  "181": [
+   [
+    "PROPMOVE",
+    "Bullet moves 5.1 cm with no hand on it (nearest finger 234 cm)"
+   ]
+  ],
+  "187": [
+   [
+    "PROPMOVE",
+    "Bullet moves 5.0 cm with no hand on it (nearest finger 229 cm)"
+   ]
+  ],
+  "193": [
+   [
+    "PROPMOVE",
+    "Bullet moves 4.9 cm with no hand on it (nearest finger 224 cm)"
+   ]
+  ],
+  "199": [
+   [
+    "PROPMOVE",
+    "Bullet moves 4.8 cm with no hand on it (nearest finger 219 cm)"
+   ]
+  ],
+  "205": [
+   [
+    "PROPMOVE",
+    "Bullet moves 4.8 cm with no hand on it (nearest finger 214 cm)"
+   ]
+  ],
+  "211": [
+   [
+    "PROPMOVE",
+    "Bullet moves 4.7 cm with no hand on it (nearest finger 209 cm)"
+   ]
+  ],
+  "217": [
+   [
+    "PROPMOVE",
+    "Bullet moves 4.7 cm with no hand on it (nearest finger 205 cm)"
+   ]
+  ],
+  "499": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.6 cm with no hand on it (nearest finger 17 cm)"
+   ]
+  ],
+  "505": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.7 cm with no hand on it (nearest finger 16 cm)"
+   ]
+  ],
+  "511": [
+   [
+    "PROPMOVE",
+    "Bullet moves 2.3 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "517": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.3 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "523": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.5 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "529": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.4 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "535": [
+   [
+    "PROPMOVE",
+    "Bullet moves 0.8 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "1153": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.0 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "1159": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.2 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "1165": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.4 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "1171": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.3 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "1177": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.0 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "1183": [
+   [
+    "PROPMOVE",
+    "Bullet moves 0.5 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "1243": [
+   [
+    "PROPMOVE",
+    "Bullet moves 0.7 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "1249": [
+   [
+    "PROPMOVE",
+    "Bullet moves 0.7 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "1255": [
+   [
+    "PROPMOVE",
+    "Bullet moves 0.7 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "1261": [
+   [
+    "PROPMOVE",
+    "Bullet moves 0.6 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 176,
+  "CAMJUMP": 15,
+  "PROPMOVE": 926
+ }
+}

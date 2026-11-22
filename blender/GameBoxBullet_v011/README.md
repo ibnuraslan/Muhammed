@@ -63,10 +63,11 @@ Eyes: a camera-only catchlight (a small light, glossy only) rides with the camer
 - clip_scan: **0 bad ranges**.
 - limb_check (step 2): only `Gamer arm.L/R inside own torso (2 pts)` remains. These are the shoulder-joint points of the upper arm while the arms reach forward to the box. Nothing passes through the body on screen.
 - body_prop_cross (step 3, Box_body, Box_cover, Gun parts): hits remain on the middle fingertips touching the box side (4 skin edges per frame), and the shooter's thumb on the pistol slide in shot 1 (1–54, seen from 2 m). There are no palm or arm crossings.
-- qa_check: EMPTY on the bullet, wall and cross-section shots (intended: no character), FILL on the box close-up, PROPMOVE for the flying bullet and debris, and CAMJUMP at the 19 intended hard cuts.
+- qa_check: EMPTY on the bullet, wall and cross-section shots (intended: no character in them), PROPMOVE for the flying bullet and debris, and CAMJUMP at the hard cuts (15 of the 19 fall on a sampled frame). FILL: 0.
 
 ## Known issues
 - Frames 1–54: the shooter's thumb tip overlaps the top of the pistol slide by a few mm (only ~40 px at review size).
 - Shots 7, 10 and 12: the middle fingertip rests on the box side with the skin touching (0–2 mm).
-- 433–470: the start of shot 9 is the bullet against the bare bedroom wall before the box enters the frame (~0.6 s).
 - The shooter's face is generic MPFB in profile and small in the frame.
+- 941–1092: the cross-section holds 2.5 s. The bullet stops at f962, shards settle and the camera pushes in slowly, so nothing else moves on screen in the last ~1.5 s.
+- Shot 9 is the bullet against a plain wall until the box enters frame right.
