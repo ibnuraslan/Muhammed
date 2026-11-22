@@ -209,7 +209,7 @@ if SHOT in (1, 2, 3):
         C.camera(Vector((-1.45, 0.75, 1.42)), Vector((-0.45, 0.68, 1.42)), lens=35, fstop=2.4)
         C.finish(I.out("f7_k2_rock"), cine={"exposure": 0.5, "sat": 1.05})
     else:
-        C.camera(DEV + Vector((0.08, -0.32, 0.72)), DEV + Vector((0.0, 0.0, -0.01)), lens=40, fstop=4.0)
+        C.camera(DEV + Vector((0.42, -0.95, 1.05)), DEV + Vector((0.0, -0.02, -0.01)), lens=32, fstop=4.0)   # over his right shoulder
         C.finish(I.out("f7_k3_tray"), cine={"exposure": 0.55, "sat": 1.05})
 else:
     # the hold: he has pegged the print on the line and switched on the white bench lamp; it drips
@@ -233,5 +233,5 @@ else:
     M = I.yaw(0, (X + 0.32, -0.42, 0))      # as rendered: he turns from the line toward the lamp
     photographer(pose_line, M, Vector((X, 0.1, LINE_Z - 0.1)))
     lamp = I.spot("white_lamp", (X - 0.6, -0.9, 2.3), (X, 0.1, LINE_Z - 0.1), 90, (1.0, 0.92, 0.8), size_deg=40, blend=0.5, radius=0.04)
-    C.camera(Vector((X - 0.42, -0.62, LINE_Z - 0.14)), Vector((X + 0.02, 0.1, LINE_Z - 0.11)), lens=40, fstop=3.2)
+    C.camera(Vector((X - 0.75, -1.45, LINE_Z - 0.32)), Vector((X + 0.12, 0.05, LINE_Z - 0.2)), lens=32, fstop=3.2)
     C.finish(I.out("f7_k4_logo"), cine={"exposure": 0.3, "sat": 1.1})

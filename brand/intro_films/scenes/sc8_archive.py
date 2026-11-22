@@ -187,7 +187,7 @@ def plate_and_file(center):
 
 
 def archivist(pose, M, look):
-    s = W.Sarah(name="Archivist", bonnet=False, shawl=False)
+    s = W.Sarah(name="Archivist", bonnet=False, shawl=True)
     h = s.h; Mi = M.inverted()
     ex = pose(s, h, Mi) or {}
     s.finish(look_at=look, place=M, density=float(os.environ.get("HAIR", "0.7")))

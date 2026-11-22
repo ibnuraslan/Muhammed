@@ -257,7 +257,7 @@ if SHOT == 2:
     M = I.yaw(I.facing((1, 0.12)), (-0.66, -0.45, 0))
     projectionist(pose2, M, lens + Vector((0, -0.4, 0.1)))
     I.area("rim", (-1.5, 0.3, 2.3), (-0.6, -0.4, 1.4), 12, (0.7, 0.8, 1.0), 0.8)
-    C.camera(Vector((0.05, -0.03, 1.7)), Vector((-0.42, -0.62, 1.3)), lens=17, fstop=2.8)
+    C.camera(Vector((-0.5, -2.05, 1.5)), Vector((-0.5, -0.45, 1.35)), lens=30, fstop=2.8)   # side-lit profile from his right
     C.finish(I.out("f5_k2_booth"), cine={"exposure": 0.05, "sat": 1.05})
 elif SHOT == 3:
     def pose3(pj, h, Mi):
