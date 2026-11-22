@@ -21,8 +21,12 @@ def _cast(cls, night=False, **kw):
 
 
 def stool(loc, h=0.62, name="stool"):
-    return S2.chair(name, loc, 0, ST.flat(name + "_seat", (0.12, 0.07, 0.04), 0.6), ST.flat(name + "_leg", (0.05, 0.05, 0.05), 0.4, 0.7),
-                    seat_h=h, back=False)
+    """Round workshop stool: wooden seat (r 0.17) on a steel centre column and a ring foot (legs stay clear of the thighs)."""
+    import ship as SH
+    wood = ST.flat(name + "_seat", (0.12, 0.07, 0.04), 0.6); st = ST.flat(name + "_leg", (0.05, 0.05, 0.05), 0.4, 0.7)
+    SH.cyl(name + "_seat", (loc[0], loc[1], h - 0.035), (loc[0], loc[1], h), 0.17, mat=wood, verts=32)
+    SH.cyl(name + "_column", (loc[0], loc[1], 0.02), (loc[0], loc[1], h - 0.035), 0.025, mat=st, verts=12)
+    SH.cyl(name + "_foot", (loc[0], loc[1], 0.0), (loc[0], loc[1], 0.02), 0.2, mat=st, verts=32)
 
 
 # ============================================================================ L1  Monday morning
@@ -122,7 +126,7 @@ def S12():
     b = A["bench"]; seat = A["bench_seat"]
     stool((seat.x, seat.y, 0), h=0.6)
     m = MD.Leonardo(); se = AC.Seated(m, (seat.x, seat.y, 0.6), 90, lean=18)
-    se.hand("L", (b.x - 0.12, b.y - 0.2, 0.96), elbow=(0.7, 0.3, -0.7), curl=26)
+    se.hand("L", (b.x - 0.16, b.y - 0.26, 0.99), elbow=(0.8, 0.1, -0.6), curl=26)
     se.hand("R", (b.x + 0.08, b.y - 0.12, 1.12), elbow=(0.7, 0.2, -0.9), grip=0.6)
     se.head_to((b.x + 0.05, b.y - 0.05, 1.0), share=0.8)
     se.finish(look=(b.x + 0.05, b.y - 0.05, 0.95), density=HAIR)
