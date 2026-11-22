@@ -367,7 +367,7 @@ def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), ga
             # forced door: wrenched round its hinge (pried at the lock side, often bent a little)
             ang = rng.uniform(70, 125)
             if i in A.get("extra_cells", []):
-                ang = 105.0
+                ang = 165.0
                 # the renter's tray drawn part-way out of its cell
                 tr = tray_t.copy(); col.objects.link(tr)
                 tr.matrix_world = Matrix.Translation(org) @ R @ Matrix.Translation((0.02, -tray_out, -h / 2 + 0.03))
