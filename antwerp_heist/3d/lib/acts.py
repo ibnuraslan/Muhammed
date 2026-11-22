@@ -61,7 +61,7 @@ class _Base:
     def arm_down(self, side, out=0.16, fwd=0.05, bend=14):
         P.arm_down(self.m.h, side, out=out, fwd=fwd, bend=bend); P.rest_hand(self.m.h, side, 28)
 
-    def finish(self, look=None, density=0.6, hair=True, floor_z=0.0):
+    def finish(self, look=None, density=0.6, hair=True, floor_z=0.0, floor_fn=None):
         self.m.finish(look_at=look, place=self.M, density=density, hair=hair)
         # feet on the floor: lift him so the lowest sole/heel sits 1.5 mm above floor_z (no sinking into the floor)
         import numpy as np
@@ -75,7 +75,11 @@ class _Base:
             if len(me.vertices):
                 co = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", co)
                 co = co.reshape(-1, 3); M = np.array(oe.matrix_world)
-                z = (co @ M[:3, :3].T + M[:3, 3])[:, 2].min()
+                W_ = co @ M[:3, :3].T + M[:3, 3]
+                if floor_fn is not None:          # sloped floor: height above the local surface
+                    z = float((W_[:, 2] - np.array([floor_fn(y) for y in W_[:, 1]]) + floor_z).min())
+                else:
+                    z = W_[:, 2].min()
                 low = z if low is None else min(low, z)
             oe.to_mesh_clear()
         if low is not None and low < floor_z + 0.0015 and low > floor_z - 0.3:

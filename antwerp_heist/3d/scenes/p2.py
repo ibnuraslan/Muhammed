@@ -91,7 +91,7 @@ def T05():
     for i, (n, x, y) in enumerate((("Leonardo", -0.6, GY0 - 3.0), ("DOnorio", 0.55, GY0 - 4.3), ("Finotto", -0.2, GY0 - 5.8))):
         z = 3.0 * (GY0 - y) / 10.0 * 0 + max(0.0, (GY0 - y)) * 0.3
         st = AC.Stand(c[n], (x, y, z), 90); st.walk(0.15 + 0.3 * i)
-        st.finish(density=HAIR, floor_z=z)
+        st.finish(density=HAIR, floor_z=0.0, floor_fn=lambda yy: max(0.0, (GY0 - yy) * 0.3))
     return dict(a=((0.4, GY0 - 9.0, 4.1), (0.0, GY0 + 2.0, 0.8)), b=((0.35, GY0 - 8.5, 3.9), (0.0, GY0 + 2.0, 0.8)), lens=28,
                 cine=dict(exposure=0.4), hand_ok=("ramp",))
 
@@ -451,7 +451,7 @@ def T33():
     for i, (n, x, y) in enumerate((("Finotto", 0.4, GY0 - 4.5), ("DOnorio", -0.5, GY0 - 3.1), ("Leonardo", 0.1, GY0 - 1.6))):
         z = max(0.0, (GY0 - y)) * 0.3
         st = AC.Stand(c[n], (x, y, z), -90); st.walk(0.2 + 0.3 * i)
-        pl = bag_pose(st, "R"); st.finish(density=HAIR, floor_z=z); pl(f"bag_{n}", 0.9)
+        pl = bag_pose(st, "R"); st.finish(density=HAIR, floor_z=0.0, floor_fn=lambda yy: max(0.0, (GY0 - yy) * 0.3)); pl(f"bag_{n}", 0.9)
     return dict(a=((0.2, GY0 + 4.0, 1.4), (0.0, GY0 - 8.0, 2.6)), b=((0.15, GY0 + 3.2, 1.4), (0.0, GY0 - 8.0, 2.6)), lens=30,
                 hand_ok=("bag", "ramp"), cine=dict(exposure=0.4))
 
