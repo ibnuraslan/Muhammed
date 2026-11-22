@@ -220,7 +220,7 @@ def T14():
     A = ST.vault_complex("night", gate_angle=95)
     d = A["dial"]
     m = MD.Finotto(night=True); st = AC.Stand(m, (d.x - 0.1, d.y - 0.58), 95)
-    st.hand("R", d + V((0.01, -0.09, -0.03)), elbow=(0.7, 0.3, -0.8), grip=0.45)
+    st.hand("R", d + V((0.02, -0.14, -0.04)), elbow=(0.7, 0.3, -0.8), grip=0.35)
     pl = torch_pose(st, "L", d)
     st.head_to(d, share=0.8); st.finish(look=d, density=HAIR); pl("torch_F", 50)
     return dict(a=((d.x + 0.55, d.y - 1.0, 1.75), tuple(d)), b=((d.x + 0.45, d.y - 0.85, 1.7), tuple(d)), lens=40, fstop=2.8, focus=d,
