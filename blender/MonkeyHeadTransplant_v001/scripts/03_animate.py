@@ -502,7 +502,7 @@ print("HEADGRIPS", len(GRIP_LOG), list(GRIP_LOG.items())[:2])
 # beat 3: stitching 400-665 - right hand needle holder arcs in at each stitch, left hand forceps holds the edge
 stitch_ang = [2 * math.pi * i / len(st) for i in range(len(st))]
 for f in list(range(403, 672, 3)):
-    pose(SURG, f, S1, Y1, flex=26, twist=-3, headr=(30, -4))   # v013b: less lean (cap was over the seam, hand at his face)
+    pose(SURG, f, S1, Y1, flex=14, twist=-3, headr=(36, -4))   # v013b: less lean (cap was over the seam, hand at his face)
     k = min((f - 395) // 26, len(STITCH_ORDER) - 1); ph = ((f - 395) % 26) / 26.0
     a = stitch_ang[STITCH_ORDER[k]] + 0.12
     seam_pt = neck_ring(M_LIE2, a, 0.074)
@@ -525,9 +525,11 @@ for f in list(range(672, 1040, 6)):
 # beats 7-9: recovery corner. Surgeon beside the chair waves a hand in front of the monkey (no reaction), then clipboard at the monitor
 for _o in [o for o in D if o.name.startswith("Lamp2_") and o.parent is None]:
     _o.location += V(-0.45, 0.40, 0)      # v013b: floor lamp moved back to clear the surgeon's mark at the monkey's left-rear
+for _o in [o for o in D if o.name.startswith("Mayo_") and o.parent is None]:
+    _o.location += V(0.30, -0.28, 0)      # v013b: instrument stand moved out of the eye-macro camera path (camera was inside the tray)
 S3 = V(1.64, 1.22, 0); Y3 = yaw_to(S3, M_CHAIR @ EYEMID)   # v013b: at the monkey's left side, stays here to the end (never in the monitor shot)
 S4 = V(2.62, 0.40, 0); Y4 = yaw_to(S4, V(3.05, 0.95, 0))
-END_EM = M_CHAIR @ EYEMID; END_DIR = V(0.68, -0.73, 0.16).normalized()   # ending camera direction from the monkey: front-right, surgeon behind-left
+END_EM = M_CHAIR @ EYEMID; END_DIR = V(0.68, -0.73, 0.05).normalized()   # ending camera direction from the monkey: front-right, surgeon behind-left
 END_CAM = END_EM + END_DIR * 1.6
 YS = yaw_to(S3, END_EM.lerp(END_CAM, 0.55))      # v013b ending: three-quarters to camera, monkey on his left
 YS = Y3 + ((YS - Y3 + 180.0) % 360.0 - 180.0)    # turn the short way
@@ -558,7 +560,7 @@ for f in list(range(1190, 1771, 3)):
         pos = S3.lerp(S4, u); yw = Y3 + (Y4 - Y3) * u
         if f >= 1540:   # v013b ending: turns three-quarters to camera and checks the monkey with the near hand
             ut = max(0.0, min(1.0, (f - 1540) / 40.0)); yw = Y3 + (YS - Y3) * smooth(ut)
-            pose(SURG, f, S3, yw, flex=14 + 10 * smooth((f - 1560) / 40.0), headr=(26, 0), crouch=0.03, step=(S3, Y3, S3, YS, ut))
+            pose(SURG, f, S3, yw, flex=10 + 8 * smooth((f - 1560) / 40.0), headr=(26 - 16 * smooth(ut), 0), crouch=0.03, step=(S3, Y3, S3, YS, ut))   # head comes up: face readable
             Rz = Matrix.Rotation(math.radians(yw), 3, "Z")
             Em = END_EM; to_s = (S3 - Em); to_s.z = 0; to_s.normalize(); tang = V(-to_s.y, to_s.x, 0)
             fw = Rz @ V(0, -1, 0); tm = Em - S3; gs = "L" if (fw.x * tm.y - fw.y * tm.x) > 0 else "R"; os_ = "R" if gs == "L" else "L"
@@ -796,19 +798,20 @@ UPW = V(0, 0, 1)
 # (frame, pos, aim, lens, up, space)   space 'W' world, 'B' monkey-B model space
 END_A = END_EM * 0.80 + (S3 + V(0, 0, 1.50)) * 0.20 + V(0, 0, -0.02); END_D = END_DIR
 K = [
- (1,    V(0.35, 0.95, 1.95), V(-0.3, -0.35, 1.15), 24, UPW, "W"),
- (61,   V(0.45, 0.30, 1.85), NA + V(-0.05, -0.15, 0.05), 28, UPW, "W"),
+ (1,    V(0.35, 0.95, 1.72), V(-0.3, -0.35, 1.2), 24, UPW, "W"),
+ (61,   V(0.45, 0.30, 1.62), NA + V(-0.05, -0.15, 0.05), 28, UPW, "W"),
  (121,  V(0.42, 0.42, 1.62), NA + V(-0.05, -0.12, 0.08), 32, UPW, "W"),
  (181,  NA + V(0.45, 0.42, 0.66), NA + V(-0.04, -0.10, 0.12), 28, UPW, "W"),
  (241,  V(0.28, 0.62, 1.82), V(-0.18, -0.18, 1.08), 26, UPW, "W"),
- (290,  V(0.32, 0.66, 1.84), V(-0.12, -0.18, 1.08), 26, UPW, "W"),
- (330,  V(0.45, 0.62, 1.80), V(0.3, -0.18, 1.05), 26, UPW, "W"),
+ (290,  V(0.32, 0.72, 1.60), V(-0.12, -0.18, 1.12), 26, UPW, "W"),
+ (330,  V(0.45, 0.68, 1.58), V(0.3, -0.18, 1.10), 26, UPW, "W"),
  (365,  V(0.95, 0.15, 1.45), NBp, 30, UPW, "W"),
  (420,  NBp + V(0.30, 0.85, 0.55), NBp + V(0, -0.05, 0.08), 40, UPW, "W"),   # v013b: from the far side, surgeon faces camera
  (480,  NBp + V(0.15, 0.88, 0.45), NBp + V(0, -0.05, 0.08), 40, UPW, "W"),
  (540,  NBp + V(0.35, 0.80, 0.42), NBp + V(0, -0.05, 0.08), 40, UPW, "W"),
- (600,  NBp + V(0.45, 0.70, 0.50), NBp + V(0, -0.12, 0.18), 40, UPW, "W"),
- (650,  NBp + V(0.55, 0.60, 0.50), NBp + V(0, -0.15, 0.20), 40, UPW, "W"),
+ (600,  NBp + V(0.20, 0.72, 0.50), NBp + V(0, -0.12, 0.18), 40, UPW, "W"),   # clear of the IV pole
+ (650,  NBp + V(0.22, 0.58, 0.64), NBp + V(0, -0.18, 0.26), 38, UPW, "W"),
+ (676,  NBp + V(0.45, 0.0, 0.62), NBp + V(0.05, -0.10, 0.05), 38, UPW, "W"),   # over the top to the face side
  (700,  FBp + FWW * 0.36 + V(0, -0.18, 0.12), FBp, 38, UPW, "W"),
  (760,  FBp + FWW * 0.36 + V(0, -0.1, 0.10), FBp, 40, UPW, "W"),
  (820,  FBp + FWW * 0.30 + V(0, -0.04, 0.07), FBp, 42, UPW, "W"),
