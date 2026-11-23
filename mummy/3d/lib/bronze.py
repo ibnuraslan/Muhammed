@@ -94,7 +94,7 @@ def village(smoke_on=True, scale=1.75):
         bpy.context.view_layer.update()
         top = max((m_.matrix_world @ Vector(c)).z for m_ in root.children_recursive if m_.type == 'MESH' for c in m_.bound_box)
         if smoke_on:
-            smoke((hx, hy, top - 0.6), radius=0.9, height=12.0, density=1.6 + 0.3 * i, name=f"smoke{i}")
+            smoke((hx, hy, top - 0.6), radius=0.9, height=12.0, density=6.0 + 1.0 * i, name=f"smoke{i}")
     if smoke_on:
         ground_mist((0, 0, float(U.surface(0, 0))))
     return out
