@@ -200,8 +200,8 @@ SEGS = [
     (961, INC + V(0.1, -0.1, 0.26), INC, 50), (1010, INC + V(0.08, -0.09, 0.24), INC, 54)],
   [ (1011, V(0.42, -1.25, 1.7), V(0.4, 0.28, 1.12), 28), (1062, V(0.4, -1.18, 1.68), V(0.4, 0.28, 1.12), 30)],
   [ (1071, INC + V(-0.06, -0.3, 0.2), INC + V(0.0, 0.0, 0.03), 44), (1130, INC + V(-0.05, -0.28, 0.19), INC + V(0.0, 0.0, 0.03), 46),
-    (1180, INC + V(-0.05, -0.28, 0.2), INC + V(0.0, 0.0, 0.06), 46), (1240, INC + V(-0.04, -0.3, 0.22), INC + V(0.0, 0.02, 0.09), 44)],
-  [ (1241, V(0.6, -0.8, 1.32), V(0.4, 0.42, 1.3), 26), (1266, V(0.6, -0.8, 1.32), V(0.4, 0.42, 1.3), 26),   # v014: hard cut from the lift-out close-up to the wide (the swoop showed the forceps retracting) (1300, V(0.6, -0.78, 1.5), V(0.4, 0.45, 1.24), 26),   # v014: 1071-1240 lower, from the patient's side (his face above his hands)
+    (1180, INC + V(-0.05, -0.28, 0.2), INC + V(0.0, 0.0, 0.06), 46), (1229, INC + V(-0.04, -0.3, 0.22), INC + V(0.0, 0.02, 0.09), 44)],
+  [ (1230, V(0.6, -0.8, 1.32), V(0.4, 0.42, 1.3), 26), (1266, V(0.6, -0.8, 1.32), V(0.4, 0.42, 1.3), 26),   # v014: hard cut from the lift-out close-up to the wide (the swoop showed the forceps retracting) (1300, V(0.6, -0.78, 1.5), V(0.4, 0.45, 1.24), 26),   # v014: 1071-1240 lower, from the patient's side (his face above his hands)
     (1330, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.2), 26), (1340, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.2), 26), (1345, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.22), 26)],
   [  # v009i: clean cut - medium profile of his head with the new ear to camera; the surgeon's glove and forceps at the ear, his face at right
     (1346, EAR_W + V(-0.22, -0.92, 0.28), EAR_W + V(0.16, 0.12, 0.06), 30), (1379, EAR_W + V(-0.21, -0.9, 0.28), EAR_W + V(0.16, 0.12, 0.06), 30)],
