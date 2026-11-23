@@ -17,7 +17,7 @@ import dig as G
 
 
 class Director(MD.ModernMan):
-    TROUSER_EASE = 1.12; TROUSER_EXTRA = 0.012
+    TROUSER_EASE = 1.18; TROUSER_EXTRA = 0.02
     GENDER = 1.0; MUSCLE = 0.5; WEIGHT = 0.5; HEIGHT = 0.72
     HAIR = (0.78, 0.04); HAIR_LEN = (0.01, 0.02); HAIRLINE = 0.012
     SHIRT = (0.35, 0.38, 0.42); JACKET = "coat"; JACKET_COL = (0.05, 0.055, 0.035)
@@ -28,7 +28,7 @@ class Director(MD.ModernMan):
 
 
 class DiggerA(MD.ModernMan):
-    TROUSER_EASE = 1.12; TROUSER_EXTRA = 0.012
+    TROUSER_EASE = 1.18; TROUSER_EXTRA = 0.02
     GENDER = 0.0; MUSCLE = 0.45; WEIGHT = 0.45; HEIGHT = 0.42
     HAIR = (0.75, 0.45); HAIR_LEN = (0.03, 0.06)
     SHIRT = (0.5, 0.5, 0.48); JACKET = "bomber"; JACKET_COL = (0.03, 0.08, 0.05)
@@ -39,7 +39,7 @@ class DiggerA(MD.ModernMan):
 
 
 class DiggerB(MD.ModernMan):
-    TROUSER_EASE = 1.12; TROUSER_EXTRA = 0.012
+    TROUSER_EASE = 1.18; TROUSER_EXTRA = 0.02
     GENDER = 1.0; MUSCLE = 0.55; WEIGHT = 0.5; HEIGHT = 0.55
     HAIR = (0.08, 0.04); HAIR_LEN = (0.015, 0.03)
     SHIRT = (0.2, 0.2, 0.22); JACKET = "bomber"; JACKET_COL = (0.32, 0.03, 0.025)
@@ -50,7 +50,7 @@ class DiggerB(MD.ModernMan):
 
 
 class DiggerC(MD.ModernMan):
-    TROUSER_EASE = 1.12; TROUSER_EXTRA = 0.012
+    TROUSER_EASE = 1.18; TROUSER_EXTRA = 0.02
     GENDER = 1.0; MUSCLE = 0.5; WEIGHT = 0.55; HEIGHT = 0.5
     HAIR = (0.55, 0.3); HAIR_LEN = (0.01, 0.025); FACIAL = "stubble"
     SHIRT = (0.3, 0.3, 0.3); JACKET = None; SWEATER = (0.02, 0.03, 0.07)
@@ -61,7 +61,7 @@ class DiggerC(MD.ModernMan):
 
 
 class Osteologist(MD.ModernMan):
-    TROUSER_EASE = 1.12; TROUSER_EXTRA = 0.012
+    TROUSER_EASE = 1.18; TROUSER_EXTRA = 0.02
     GENDER = 0.0; MUSCLE = 0.45; WEIGHT = 0.45; HEIGHT = 0.45
     HAIR = (0.22, 0.12); HAIR_LEN = (0.035, 0.07)
     SHIRT = (0.4, 0.5, 0.65); JACKET = "labcoat"; JACKET_COL = (0.8, 0.8, 0.78)
