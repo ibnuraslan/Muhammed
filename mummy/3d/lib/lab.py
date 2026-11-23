@@ -34,8 +34,9 @@ def velvet(x0, x1, y0, y1, z, name="velvet"):
     sub = o.modifiers.new("sub", "SUBSURF"); sub.subdivision_type = 'SIMPLE'; sub.levels = 5; sub.render_levels = 5
     d = o.modifiers.new("folds", "DISPLACE"); t = bpy.data.textures.new("velvetfold", "CLOUDS"); t.noise_scale = 0.12
     d.texture = t; d.strength = 0.006; d.mid_level = 0.0
-    m = _mat("velvet", (0.006, 0.006, 0.007), rough=0.95, sheen=1.0)
-    m.node_tree.nodes["Principled BSDF"].inputs['Sheen Roughness'].default_value = 0.35
+    m = _mat("velvet", (0.004, 0.004, 0.005), rough=0.95, sheen=0.35)
+    m.node_tree.nodes["Principled BSDF"].inputs['Sheen Roughness'].default_value = 0.4
+    m.node_tree.nodes["Principled BSDF"].inputs['Sheen Tint'].default_value = (0.25, 0.25, 0.28, 1)
     o.data.materials.append(m)
     return o
 

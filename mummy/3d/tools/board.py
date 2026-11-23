@@ -16,7 +16,7 @@ cols = 6; tw, th = 420, 236; pad = 8; cap = 44
 rows = (len(info) + cols - 1) // cols
 sheet = Image.new("RGB", (cols * (tw + pad) + pad, 90 + rows * (th + cap + pad)), (14, 13, 12))
 d = ImageDraw.Draw(sheet)
-d.text((pad + 4, 22), f"They Stole $100 Million. Then Threw Away the Evidence.  ·  Part {PART[1:]}  ·  {len(info)} shots  ·  {total:.0f} s (pre-VO timing)", font=F(30, True), fill=(235, 205, 150))
+d.text((pad + 4, 22), f"The Mummy Made From Three Different People  ·  Part {PART[1:]}  ·  {len(info)} shots  ·  {total:.0f} s (pre-VO timing)", font=F(30, True), fill=(235, 205, 150))
 for k, i in enumerate(info):
     x = pad + (k % cols) * (tw + pad); y = 90 + (k // cols) * (th + cap + pad)
     sheet.paste(img(i["shot"]).resize((tw, th)), (x, y))
@@ -28,15 +28,15 @@ sheet.save(os.path.join(OUT, f"{PART}_contact_sheet.jpg"), quality=90)
 W, Hh = 2480, 1754
 pages = []
 cov = Image.new("RGB", (W, Hh), (14, 13, 12)); d = ImageDraw.Draw(cov)
-d.text((120, 120), "They Stole $100 Million.", font=F(96, True), fill=(240, 210, 150))
-d.text((120, 240), "Then Threw Away the Evidence.", font=F(96, True), fill=(240, 210, 150))
+d.text((120, 120), "The Mummy Made From", font=F(96, True), fill=(240, 210, 150))
+d.text((120, 240), "Three Different People", font=F(96, True), fill=(240, 210, 150))
 d.text((120, 400), f"Part {PART[1:]}  —  storyboard (real 3D frames, low samples)", font=F(48), fill=(220, 215, 205))
 lines = [f"{len(info)} shots · {total:.0f} s before VO timing · 2560x1440 · 24 fps · Cycles · Atrium look",
          "All shots built in Blender (sets, cast, props); clipcheck 0 clips on every shot.",
          "Faces: no close-ups (backs, over-the-shoulder, profiles in half shadow, silhouettes).",
          "Camera carries the motion; nothing moves by itself. No burned-in text (cards added in CapCut).",
-         "Cast: Leonardo (stocky, grey swept-back hair, navy blazer) · D'Onorio (tall, lean, suede jacket)",
-         "Finotto (broad, cropped hair, olive knit sweater) · detectives Peys & De Bruycker · Van Camp · lab technicians · judges."]
+         "2001 team: director (dark waxed coat) · digger A (green fleece) · digger B (red waterproof) · digger C (navy knit) · osteologist (lab coat).",
+         "Bones: posable anatomy skeletons (Sketchfab CC-BY), cranium with healed upper jaw + separate toothed mandible scan."]
 for k, t in enumerate(lines):
     d.text((120, 540 + k * 70), t, font=F(36), fill=(200, 195, 185))
 cov.paste(sheet.resize((W - 240, int((W - 240) * sheet.height / sheet.width))).crop((0, 0, W - 240, Hh - 1000)), (120, 980))

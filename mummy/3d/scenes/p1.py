@@ -89,7 +89,7 @@ def _cork_ring(x, y, z, r=0.07):
     return o
 
 
-def lab_skull(inverted=True, with_jaw=False, lamp_energy=55.0):
+def lab_skull(inverted=True, with_jaw=False, lamp_energy=22.0):
     A = LB.room(window_light=0.8, lamp=True, lamp_at=(0.45, 0.6), lamp_target=(-0.05, 0.35), lamp_energy=lamp_energy)
     LB.velvet(-0.6, 0.6, 0.0, 0.75, LB.TOP)
     cr = B.hero_cranium(healed=True, tone="A")
@@ -120,13 +120,13 @@ def S06():
     """The cranium upside down on its ring: slow orbit to the smooth healed ridge where the back teeth were."""
     L = lab_skull(inverted=True)
     c = Vector((0.0, 0.35, LB.TOP + 0.13))
-    return dict(a=((-0.32, 0.02, LB.TOP + 0.36), tuple(c)), b=((0.05, -0.12, LB.TOP + 0.38), tuple(c)), lens=70,
-                fstop=4.0, focus=tuple(c), cine=dict(exposure=0.1))
+    return dict(a=((-0.6, -0.12, LB.TOP + 0.5), tuple(c)), b=((-0.15, -0.38, LB.TOP + 0.48), tuple(c)), lens=55,
+                fstop=5.6, focus=tuple(c))
 
 
 def S07():
     """The mandible: macro along the worn molar crowns (lateral slide)."""
-    A = LB.room(window_light=0.7, lamp=True, lamp_at=(0.4, 0.62), lamp_target=(0.0, 0.3), lamp_energy=45)
+    A = LB.room(window_light=0.7, lamp=True, lamp_at=(0.4, 0.62), lamp_target=(0.0, 0.3), lamp_energy=20)
     LB.velvet(-0.6, 0.6, 0.0, 0.75, LB.TOP)
     md = B.hero_mandible(tone="B")
     import numpy as np
@@ -147,7 +147,7 @@ def S08():
 
 def lab_body(osteo=True):
     """The post-cranial skeleton laid out supine on the bench (no skull: the head is from someone else)."""
-    A = LB.room(window_light=1.0, lamp=True, lamp_at=(-0.2, 0.62), lamp_target=(0.3, 0.35), lamp_energy=50)
+    A = LB.room(window_light=1.0, lamp=True, lamp_at=(-0.2, 0.62), lamp_target=(0.3, 0.35), lamp_energy=24)
     LB.velvet(-1.15, 1.2, 0.0, 0.78, LB.TOP)
     sk = B.Skeleton("M", "C", name="Third")
     sk.remove("skull", "mandible")
@@ -360,7 +360,7 @@ def S26():
 
 def S27():
     """Lab macro: the healed upper jaw - smooth bone where the chewing teeth were."""
-    L = lab_skull(inverted=True, lamp_energy=40)
+    L = lab_skull(inverted=True, lamp_energy=18)
     cr = L["cr"]
     import numpy as np
     co = np.array([cr.matrix_world @ v.co for v in cr.data.vertices])
@@ -372,7 +372,7 @@ def S27():
 
 def S28():
     """The lower molars: wear facets polished by teeth that met them."""
-    A = LB.room(window_light=0.6, lamp=True, lamp_at=(0.35, 0.6), lamp_target=(0.0, 0.3), lamp_energy=40)
+    A = LB.room(window_light=0.6, lamp=True, lamp_at=(0.35, 0.6), lamp_target=(0.0, 0.3), lamp_energy=18)
     LB.velvet(-0.6, 0.6, 0.0, 0.75, LB.TOP)
     md = B.hero_mandible(tone="B")
     import numpy as np
@@ -411,7 +411,7 @@ def S30():
 
 def S31():
     """Three parts, three men: skull, jaw and thigh bone laid apart on the velvet. Overhead push."""
-    A = LB.room(window_light=0.8, lamp=True, lamp_at=(0.0, 0.66), lamp_target=(0.0, 0.35), lamp_energy=55)
+    A = LB.room(window_light=0.8, lamp=True, lamp_at=(0.0, 0.66), lamp_target=(0.0, 0.35), lamp_energy=24)
     LB.velvet(-0.8, 0.8, 0.0, 0.78, LB.TOP)
     import numpy as np
     cr = B.hero_cranium(healed=True, tone="A")
