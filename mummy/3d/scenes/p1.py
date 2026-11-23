@@ -406,19 +406,35 @@ def S28():
 
 
 def S29():
-    """The jaw offered up to the skull: the lower teeth meet nothing. Slow push."""
+    """The jaw offered up under the skull on foam blocks: its teeth meet a toothless upper jaw. Slow push, side-on."""
     L = lab_skull(inverted=False, with_jaw=True)
     cr, md = L["cr"], L["md"]
     import numpy as np
+    lift = 0.085
+    foam = bpy.data.materials.new("foam"); foam.use_nodes = True
+    foam.node_tree.nodes["Principled BSDF"].inputs['Base Color'].default_value = (0.05, 0.05, 0.055, 1)
+    foam.node_tree.nodes["Principled BSDF"].inputs['Roughness'].default_value = 0.95
+    for o in bpy.data.objects:
+        if o.name.startswith("corkring"):
+            o.location.z += lift
+    cr.location.z += lift
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(cr.location.x, cr.location.y + 0.03, LB.TOP + lift / 2)); fb = bpy.context.active_object
+    fb.scale = (0.12, 0.1, lift); fb.data.materials.append(foam); fb.name = "foamblock"
+    bpy.context.view_layer.update()
     co = np.array([cr.matrix_world @ v.co for v in cr.data.vertices])
     front = co[co[:, 1] < co[:, 1].min() + 0.05]
-    zt = front[:, 2].min()
+    zt = float(front[:, 2].min()); yf = float(co[:, 1].min())
     mco = np.array([v.co for v in md.data.vertices])
     md.rotation_euler = (0, 0, 0)
-    md.location = (cr.location.x, cr.location.y + 0.012, zt - mco[:, 2].max() - 0.004)
-    c = Vector((cr.location.x, cr.location.y, zt))
-    return dict(a=(tuple(c + Vector((0.3, -0.2, 0.06))), tuple(c)), b=(tuple(c + Vector((0.22, -0.13, 0.04))), tuple(c)), lens=70,
-                fstop=4.0, focus=tuple(c))
+    md.location = (cr.location.x - (mco[:, 0].min() + mco[:, 0].max()) / 2,
+                   yf + 0.006 - mco[:, 1].min(), zt - 0.003 - mco[:, 2].max())
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(md.location.x, md.location.y + 0.0, LB.TOP + (zt - 0.003 - (mco[:, 2].max() - mco[:, 2].min()) - LB.TOP) / 2))
+    fb2 = bpy.context.active_object; fb2.name = "foamblock2"; fb2.data.materials.append(foam)
+    hgt = max(0.004, zt - 0.003 - (mco[:, 2].max() - mco[:, 2].min()) - LB.TOP)
+    fb2.scale = (0.05, 0.04, hgt); fb2.location.z = LB.TOP + hgt / 2
+    c = Vector((cr.location.x, yf + 0.04, zt))
+    return dict(a=(tuple(c + Vector((0.42, -0.14, 0.03))), tuple(c)), b=(tuple(c + Vector((0.3, -0.1, 0.02))), tuple(c)), lens=60,
+                fstop=5.6, focus=tuple(c), cine=dict(exposure=-0.1))
 
 
 def S30():
