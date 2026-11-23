@@ -75,15 +75,13 @@ def S04():
 
 
 def S05():
-    """Macro: the skull in the ground; slow push, focus on the teeth."""
+    """Macro: the skull in the ground, from above the open side of the grave; slow push, focus on the face."""
     T, sk = site("day", grass_at=None, kit=False, sun_az=215)
     sp = sk["B1"].part_centre("skull")
-    d = Vector((-0.75, -0.35, 0.0)).normalized()
-    a = sp + d * 1.5 + Vector((0, 0, 0.8)); b = sp + d * 1.2 + Vector((0, 0, 0.62))
+    d = Vector((0.55, -0.7, 0.0)).normalized()
+    a = sp + d * 1.1 + Vector((0, 0, 1.0)); b = sp + d * 0.85 + Vector((0, 0, 0.8))
     return dict(a=(tuple(a), tuple(sp)), b=(tuple(b), tuple(sp)), lens=70, fstop=4.0, focus=tuple(sp))
 
-
-# ============================================================================ the lab: skull, jaw, the third man
 def _cork_ring(x, y, z, r=0.05):
     bpy.ops.mesh.primitive_torus_add(major_radius=r, minor_radius=0.012, location=(x, y, z + 0.012))
     o = bpy.context.active_object; o.name = "corkring"
@@ -380,8 +378,8 @@ def S26():
     """Macro in the grave: the jaw under the skull of the first body; rack from skull to jaw."""
     T, sk = site("day", grass_at=None, kit=False, sun_az=215)
     sp = sk["B1"].part_centre("skull"); jp = sk["B1"].part_centre("mandible")
-    d = Vector((-0.55, -0.65, 0)).normalized()
-    return dict(a=(tuple(sp + d * 1.4 + Vector((0, 0, 0.7))), tuple(sp)), b=(tuple(jp + d * 1.1 + Vector((0, 0, 0.55))), tuple(jp)),
+    d = Vector((0.6, -0.65, 0)).normalized()
+    return dict(a=(tuple(sp + d * 1.4 + Vector((0, 0, 1.0))), tuple(sp)), b=(tuple(jp + d * 1.1 + Vector((0, 0, 0.8))), tuple(jp)),
                 lens=85, fstop=2.8, focus=tuple(jp))
 
 
