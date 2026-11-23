@@ -1,0 +1,17 @@
+BellyFat hand audit: step 2, 154 frames, 1540 hand-checks
+
+HAND_IN_HAND        0
+HAND_IN_BODY        1   e.g. f1219 Woman L hand: 5 verts inside the body
+                 frames [1219]
+HAND_IN_CLOTHES     0
+HAND_IN_OTHER       0
+WRIST_BEND          0
+
+by character:
+  Woman     {'HAND_IN_BODY': 1}
+  ShopperA  {'HAND_IN_BODY': 0}
+  ShopperB  {'HAND_IN_BODY': 0}
+  Stocker   {'HAND_IN_BODY': 0}
+  ShopperC  {'HAND_IN_BODY': 0}
+
+TOTAL 1

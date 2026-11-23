@@ -59,7 +59,7 @@ for f, a in ((1, 0), (IMPACT, 0), (IMPACT + 4, 5), (180, 4), (1147, 4), (1230, 2
 def blink(rig, f):
     for s in "LR":
         bn = "orbicularis03." + s
-        if bn not in rig.pose.bones: continue
+        if bn not in rig.PB: continue
         for ff, ang in ((f - 3, 0), (f, 1), (f + 4, 0)):
             rig.key_rot(bn, ff, [("X", 22 * ang)])
 for f in (20, 160, 1170, 1250): blink(WR, f)
@@ -67,42 +67,44 @@ for f in (20, 160, 1170, 1250): blink(WR, f)
 # hands ---------------------------------------------------------------
 def hand(s, f, p, d, n, pole): WH.key_hand(s, f, wpt(*p), Vector(d), Vector(n), wpt(*pole))
 # left: holds the box palm-up in front of her chest (cup), lets go at the hit, then presses flat on the wound, lifts to look, rests
-LH = [(1, (0.30, 0.17, 1.08), (0.35, 0.45, 0.2), (0, 0, 1), (-0.25, 0.65, 0.9)), (88, (0.30, 0.17, 1.08), (0.35, 0.45, 0.2), (0, 0, 1), (-0.25, 0.65, 0.9)),
-      (IMPACT + 6, (0.27, 0.22, 1.12), (0.4, 0.3, -0.2), (0, 0, 1), (-0.25, 0.65, 0.95)),
-      (125, (0.34, 0.12, 0.98), (0.1, -0.9, 0.3), (-1, 0, 0), (0.1, 0.75, 1.0)), (1185, (0.34, 0.12, 0.98), (0.1, -0.9, 0.3), (-1, 0, 0), (0.1, 0.75, 1.0)),
-      (1200, (0.40, 0.16, 0.96), (0.1, -0.9, 0.3), (-1, 0, 0), (0.1, 0.75, 1.0)), (1225, (0.40, 0.16, 0.96), (0.1, -0.9, 0.3), (-1, 0, 0), (0.1, 0.75, 1.0)),
-      (1255, (0.35, 0.18, 0.94), (0.1, -0.9, 0.3), (-1, 0, 0), (0.1, 0.75, 1.0)), (1273, (0.35, 0.18, 0.94), (0.1, -0.9, 0.3), (-1, 0, 0), (0.1, 0.75, 1.0))]
+LH = [(1, (0.30, 0.17, 1.08), (0.35, 0.45, 0.2), (0, 0, 1), (-0.2, 0.9, 0.7)), (88, (0.30, 0.17, 1.08), (0.35, 0.45, 0.2), (0, 0, 1), (-0.2, 0.9, 0.7)),
+      (IMPACT + 6, (0.31, 0.32, 1.06), (0.4, 0.3, -0.2), (0, 0, 1), (-0.15, 0.95, 0.95)),
+      (IMPACT + 18, (0.42, 0.20, 1.02), (0.1, -0.9, 0.3), (-1, 0, 0), (0.05, 0.95, 1.05)),
+      (125, (0.34, 0.12, 0.98), (0.1, -0.9, 0.3), (-1, 0, 0), (0.05, 0.95, 1.05))]
 for k in LH: hand("L", *k)
 # right: carries the basket by its handle (hanging), drops it on the hit, then rests open by her side
-RHK = [(1, (0.06, -0.24, 0.80), (0.1, 0, -1), (0, -1, 0), (-0.3, -0.6, 1.0)), (IMPACT + 8, (0.07, -0.24, 0.80), (0.1, 0, -1), (0, -1, 0), (-0.3, -0.6, 1.0)),
-       (IMPACT + 18, (0.14, -0.30, 0.86), (0.3, -0.2, -0.9), (0, -1, 0), (-0.3, -0.6, 1.0)), (180, (0.12, -0.30, 0.84), (0.2, -0.1, -1), (0, -1, 0), (-0.3, -0.6, 1.0)),
-       (1273, (0.10, -0.29, 0.83), (0.2, -0.1, -1), (0, -1, 0), (-0.3, -0.6, 1.0))]
+RHK = [(1, (0.10, -0.34, 0.86), (0.2, -0.1, -1), (0, -1, 0), (-0.3, -0.85, 1.0)), (40, (0.12, -0.345, 0.865), (0.2, -0.1, -1), (0, -1, 0), (-0.3, -0.85, 1.0)),
+       (IMPACT, (0.11, -0.34, 0.86), (0.2, -0.1, -1), (0, -1, 0), (-0.3, -0.85, 1.0)),
+       (IMPACT + 12, (0.16, -0.37, 0.92), (0.3, -0.2, -0.9), (0, -1, 0), (-0.3, -0.85, 1.0)), (180, (0.12, -0.35, 0.86), (0.2, -0.1, -1), (0, -1, 0), (-0.3, -0.85, 1.0)),
+       (1210, (0.12, -0.35, 0.86), (0.2, -0.1, -1), (0, -1, 0), (-0.3, -0.85, 1.0)), (1273, (0.13, -0.355, 0.87), (0.2, -0.1, -1), (0, -1, 0), (-0.3, -0.85, 1.0))]
 for k in RHK: hand("R", *k)
-for f, p in ((1, "cup_hold"), (88, "cup_hold"), (IMPACT + 6, "open_alarm"), (118, "flat_palm"), (1185, "flat_palm"), (1200, "relaxed"), (1225, "relaxed"), (1255, "flat_palm"), (1273, "flat_palm")):
+for f, p in ((IMPACT + 6, "open_alarm"), (118, "flat_palm"), (1160, "flat_palm"), (1172, "relaxed"), (1222, "relaxed"), (1245, "flat_palm"), (1273, "flat_palm")):
     apply_pose(W, "L", p, f)
-for f, p in ((1, "wrap_grip"), (IMPACT + 8, "wrap_grip"), (IMPACT + 14, "open_alarm"), (180, "relaxed"), (1273, "relaxed")):
+for f, p in ((1, "relaxed"), (IMPACT, "relaxed"), (IMPACT + 10, "open_alarm"), (150, "relaxed"), (1273, "relaxed")):
     apply_pose(W, "R", p, f)
 
-# the box (our logo on its front) rests ON her left palm until the hit, then falls to the floor
-def palm_frame(rig, s, f):
-    sc.frame_set(f); pb = rig.pose.bones; mw = rig.matrix_world
-    wr = mw @ pb["wrist." + s].head; k3 = mw @ pb["finger3-1." + s].head; k2 = mw @ pb["finger2-1." + s].head; k5 = mw @ pb["finger5-1." + s].head
-    d = (k3 - wr).normalized(); a = (k2 - k5).normalized(); n = d.cross(a) if s == "L" else a.cross(d); n = (n - d * n.dot(d)).normalized()
-    return wr.lerp(k3, 0.75), d, n
-pbox = bpy.data.objects["PickBox"]
-for f in list(range(1, IMPACT + 7, 2)):
-    c, d, n = palm_frame(W, "L", f)
-    up = n if n.z > 0 else -n
-    cam_dir = Vector((1.0, -0.8, 0.0)).normalized()                 # logo face toward the shot-A camera
-    yb = -(cam_dir - up * cam_dir.dot(up)).normalized(); xb = yb.cross(up).normalized(); yb = up.cross(xb)
-    M = Matrix((xb, yb, up)).transposed().to_4x4(); M.translation = c + up * (0.012 + 0.1)
-    pbox.matrix_world = M; pbox.keyframe_insert("location", frame=f); pbox.keyframe_insert("rotation_euler", frame=f)
-p0 = pbox.location.copy(); r0 = pbox.rotation_euler.copy()
-for f, dp, rr in ((IMPACT + 14, (0.05, 0.03, -0.45), (0.5, 0.2, 0.2)), (IMPACT + 22, (0.1, 0.05, -1.0), (1.2, 0.4, 0.3)), (IMPACT + 26, (0.11, 0.06, -0.96), (1.45, 0.45, 0.35)),
-                  (IMPACT + 30, (0.12, 0.06, -1.0), (1.5708, 0.45, 0.35))):
-    pbox.location = (p0.x + dp[0], p0.y + dp[1], 0.075 if dp[2] <= -0.99 else p0.z + dp[2]); pbox.rotation_euler = (r0.x + rr[0], r0.y + rr[1], r0.z + rr[2])
+# the box (our logo on its front) stands on her left palm in front of her chest; grip_object closes the fingers on it
+_bx = bmesh.new(); bmesh.ops.create_cube(_bx, size=1.0)
+for v in _bx.verts: v.co = Vector((v.co.x * 0.15, v.co.y * 0.06, v.co.z * 0.2))
+bmesh.ops.bevel(_bx, geom=list(_bx.edges) + list(_bx.verts), offset=0.003, segments=1, affect='EDGES')
+pme = bpy.data.meshes.new("PickBox"); _bx.to_mesh(pme); _bx.free()
+pme.uv_layers.new(name="UVMap"); pme.materials.append(bpy.data.materials["M_pack08"])
+pbox = bpy.data.objects.new("PickBox", pme); bpy.data.collections["REAL"].objects.link(pbox)
+BC = wpt(0.39, 0.15, 1.16)
+_d = Vector((1.4, -0.3)) - BC.xy; BYAW = math.atan2(_d.x, -_d.y)            # front face (local -y) toward the shot-A camera
+BROT = (Matrix.Rotation(BYAW, 3, 'Z') @ Matrix.Rotation(math.radians(-6), 3, 'X') @ Matrix.Rotation(math.radians(28), 3, "Y")).to_euler('XYZ')
+for f in (1, 30, 60, 88, IMPACT + 2):
+    bob = 0.003 * math.sin(2 * math.pi * T(f) / 1.4)
+    pbox.location = BC + Vector((0, 0, bob)); pbox.rotation_euler = BROT
     pbox.keyframe_insert("location", frame=f); pbox.keyframe_insert("rotation_euler", frame=f)
-pbox.keyframe_insert("location", frame=FEND); pbox.keyframe_insert("rotation_euler", frame=FEND)
+for f in (1, 30, 60, 88):
+    sc.frame_set(f); Mb_ = pbox.matrix_world; bot = Mb_ @ Vector((0.06, 0, -0.1))
+    rep = grip_object(W, "L", f, pbox, bot, (Mb_.to_3x3() @ Vector((0, 0, 1))).normalized(), finger_dir=(Mb_.to_3x3() @ Vector((-1, 0, 0))).normalized())
+    print("GRIP_BOX", f, rep)
+for f, dp, rr, z in ((IMPACT + 5, (0.06, 0.02, -0.09), (0.15, 0.05, 0.05), None), (IMPACT + 12, (0.12, 0.02, -0.40), (0.6, 0.15, 0.2), None), (IMPACT + 20, (0.16, 0.03, 0), (1.5708, 0.3, 0.3), 0.032),
+                     (IMPACT + 24, (0.17, 0.03, 0), (1.5708, 0.32, 0.3), 0.05), (IMPACT + 28, (0.18, 0.03, 0), (1.5708, 0.33, 0.3), 0.032), (FEND, (0.18, 0.03, 0), (1.5708, 0.33, 0.3), 0.032)):
+    pbox.location = (BC.x + dp[0], BC.y + dp[1], z if z is not None else BC.z + dp[2]); pbox.rotation_euler = (BROT.x + rr[0], BROT.y + rr[1], BROT.z + rr[2])
+    pbox.keyframe_insert("location", frame=f); pbox.keyframe_insert("rotation_euler", frame=f)
 
 # basket with carry handle; its top bar sits in her curled right hand; dropped at the hit
 bk = bpy.data.objects["Basket"]
@@ -122,15 +124,31 @@ _wr = _mw @ _pb["wrist.R"].head; _k3 = _mw @ _pb["finger3-1.R"].head
 _kax = (_mw @ _pb["finger5-1.R"].head) - (_mw @ _pb["finger2-1.R"].head)
 _nrm = (_k3 - _wr).cross(_kax).normalized()
 if _nrm.dot((_mw @ _pb["finger1-3.R"].tail) - _wr) < 0: _nrm = -_nrm
-_grip = _wr.lerp(_k3, 0.85) + _nrm * 0.022
+_hook = [_mw @ _pb['finger%d-%d.R' % (k, j)].head for k in (2, 3, 4, 5) for j in (1, 2, 3)] + [_mw @ _pb['finger%d-3.R' % k].tail for k in (2, 3, 4, 5)]
+_grip = sum(_hook, Vector()) / len(_hook)
+# fine-tune: the bar (7 mm radius, along the knuckle axis) sits where the curled finger bones clear it best (finger ~8 mm thick)
+_ax = _kax.normalized(); _fs = []
+for k in (2, 3, 4, 5):
+    for j in (1, 2, 3):
+        _h = _mw @ _pb['finger%d-%d.R' % (k, j)].head; _t = _mw @ _pb['finger%d-%d.R' % (k, j)].tail
+        _fs += [_h.lerp(_t, u) for u in (0.0, 0.5, 1.0)]
+_pal = [_mw @ _pb['metacarpal%d.R' % k].tail for k in (1, 2, 3, 4) if 'metacarpal%d.R' % k in _pb]
+def _pen(c):
+    e = 0.0
+    for q in _fs + _pal:
+        d = q - c; d = d - _ax * d.dot(_ax); e += max(0.0, 0.0155 - d.length) ** 2
+    return e
+_best = (_pen(_grip), _grip)
+for i in range(-6, 7):
+    for j in range(-6, 7):
+        for k in range(-6, 7):
+            c = _grip + Vector((i, j, k)) * 0.003; c = c - _ax * (c - _grip).dot(_ax); v = _pen(c)
+            if v < _best[0] - 1e-12 or (abs(v - _best[0]) < 1e-12 and (c - _grip).length < (_best[1] - _grip).length): _best = (v, c)
+print("BAR", _pen(_grip), _best[0], (_best[1] - _grip).length); _grip = _best[1]
 _bkM = Matrix.Translation(_grip) @ Matrix.Rotation(math.atan2(_kax.y, _kax.x), 4, 'Z') @ Matrix.Translation((0, 0, -0.27))
 OFF = wristM(1).inverted() @ _bkM
-for f in list(range(1, IMPACT + 9, 2)):
-    M = wristM(f) @ OFF; bk.location = M.translation; bk.rotation_euler = M.to_euler()
-    bk.keyframe_insert("location", frame=f); bk.keyframe_insert("rotation_euler", frame=f)
-b0 = bk.location.copy(); e0 = bk.rotation_euler.copy()
-for f, z, rx in ((IMPACT + 18, 0.30, 0.25), (IMPACT + 24, 0.101, 0.0), (IMPACT + 28, 0.115, 0.04), (IMPACT + 32, 0.101, 0.0), (FEND, 0.101, 0.0)):
-    bk.location = (b0.x + 0.04, b0.y - 0.04, z); bk.rotation_euler = (rx, 0, e0.z); bk.keyframe_insert("location", frame=f); bk.keyframe_insert("rotation_euler", frame=f)
+for f in (1, FEND):
+    bk.location = (POS.x + 0.30, POS.y - 0.47, 0.101); bk.rotation_euler = (0, 0, 0.15); bk.keyframe_insert("location", frame=f); bk.keyframe_insert("rotation_euler", frame=f)
 # our logo: white on the basket's long sides, dark on the box front (in-scene, flat to camera in shot A)
 def logo_decal(name, img, parent, loc, rot, width):
     im = bpy.data.images.load(os.path.join(HERE, "..", "assets", "tex", img)); im.pack()
@@ -166,9 +184,9 @@ STK = bpy.data.objects["Stocker"]; SR = make_human_ctrl(STK); SH = Human(SR); ST
 spos = Vector((-7.4, -0.55, 0))
 for s_ in "LR":
     for f in (1, FEND): SH.key_foot(s_, f, SH.foot_xy(s_, spos, 0.0), 0.0)
-_b = bmesh.new(); bmesh.ops.create_cube(_b, size=1.0)
-for v in _b.verts: v.co = Vector((v.co.x * 0.34, v.co.y * 0.22, v.co.z * 0.24))
-cme = bpy.data.meshes.new("Carton"); _b.to_mesh(cme); _b.free(); cme.materials.append(bpy.data.materials["M_pack05"])
+_bx = bmesh.new(); bmesh.ops.create_cube(_bx, size=1.0)
+for v in _bx.verts: v.co = Vector((v.co.x * 0.34, v.co.y * 0.22, v.co.z * 0.24))
+cme = bpy.data.meshes.new("Carton"); _bx.to_mesh(cme); _bx.free(); cme.materials.append(bpy.data.materials["M_pack05"])
 carton = bpy.data.objects.new("Carton", cme); bpy.data.collections["REAL"].objects.link(carton)
 for f, fl, tw, hy, cz in ((1, 8, 0, -10, 1.02), (60, 12, -4, -14, 1.08), (120, 6, 10, 30, 1.0), (1147, 4, 14, 40, 0.98), (FEND, 3, 16, 44, 0.98)):
     SH.key_root(f, Vector((spos.x, spos.y, SH.root_head.z - 0.015)), yaw=0.0, flex=fl * 0.3); SH.key_spine(f, flex=fl, twist=tw, head=(-6 + fl * 0.5, hy))
@@ -177,7 +195,7 @@ for f, fl, tw, hy, cz in ((1, 8, 0, -10, 1.02), (60, 12, -4, -14, 1.08), (120, 6
         SH.key_hand(s_, f, c + Vector((sx * 0.2, 0.02, -0.02)), Vector((-sx * 0.3, -1, 0.1)), Vector((-sx, 0, 0)), Vector((spos.x + sx * 0.5, spos.y + 0.3, 1.0)))
 for s in "LR": apply_pose(STK, s, "flat_palm", 1); apply_pose(STK, s, "flat_palm", FEND)
 SCo = bpy.data.objects["ShopperC"]; CR_ = make_human_ctrl(SCo); CH = Human(CR_); add_hand_limits(SCo)
-cpos = Vector((-2.1, -0.5, 0))
+cpos = Vector((-2.1, 0.62, 0))
 for s_ in "LR":
     for f in (1, FEND): CH.key_foot(s_, f, CH.foot_xy(s_, cpos, 0.0), 0.0)
 for f, tw, hy, hp in ((1, 0, -10, 12), (60, 4, -4, 16), (110, 22, 45, 0), (1147, 28, 55, -2), (FEND, 30, 58, -2)):
@@ -218,12 +236,60 @@ for f, dd in ((IMPACT - 1, 0.0), (IMPACT, 0.0), (IMPACT + 5, 0.012), (IMPACT + 9
 wm = tee.modifiers.new("Dimple", 'WARP'); wm.object_from = imp; wm.object_to = we_to; wm.falloff_radius = 0.035; wm.falloff_type = 'SMOOTH'
 wv = tee.modifiers.new("Ripple", 'WAVE'); wv.start_position_object = imp; wv.use_normal = True; wv.use_x = wv.use_y = True
 wv.height = 0.003; wv.width = 0.03; wv.narrowness = 1.2; wv.speed = 0.006; wv.time_offset = IMPACT; wv.lifetime = 50; wv.damping_time = 35; wv.falloff_radius = 0.2
-th = bpy.data.objects["TeeHole"]; th.parent = imp; th.matrix_parent_inverse = Matrix.Identity(4)
+th = bpy.data.objects["TeeHole"]
+# shirt hole that reads on navy fabric: near-black core, pale frayed fibre ring (no blood)
+thm = bpy.data.materials.new("M_TeeHole"); thm.use_nodes = True; tn = thm.node_tree; TN = tn.nodes; TL = tn.links
+tb_ = TN["Principled BSDF"]; tco = TN.new("ShaderNodeTexCoord"); tln = TN.new("ShaderNodeVectorMath"); tln.operation = 'LENGTH'
+TL.new(tco.outputs["Object"], tln.inputs[0])
+tnz = TN.new("ShaderNodeTexNoise"); tnz.inputs["Scale"].default_value = 60.0; TL.new(tco.outputs["Object"], tnz.inputs["Vector"])
+tad = TN.new("ShaderNodeMath"); tad.operation = 'MULTIPLY_ADD'; tad.inputs[1].default_value = 0.06; tad.inputs[2].default_value = -0.03
+TL.new(tnz.outputs["Fac"], tad.inputs[0]); tsum = TN.new("ShaderNodeMath"); tsum.operation = 'ADD'; TL.new(tln.outputs["Value"], tsum.inputs[0]); TL.new(tad.outputs[0], tsum.inputs[1])
+trp = TN.new("ShaderNodeValToRGB"); TL.new(tsum.outputs[0], trp.inputs["Fac"]); cr_ = trp.color_ramp
+cr_.elements[0].position = 0.0; cr_.elements[0].color = (0.01, 0.008, 0.008, 1); cr_.elements[1].position = 0.2; cr_.elements[1].color = (0.0, 0.0, 0.0, 0)
+e1 = cr_.elements.new(0.095); e1.color = (0.015, 0.01, 0.01, 1); e2 = cr_.elements.new(0.11); e2.color = (0.55, 0.58, 0.68, 1); e3 = cr_.elements.new(0.17); e3.color = (0.42, 0.46, 0.58, 1)
+TL.new(trp.outputs["Color"], tb_.inputs["Base Color"]); TL.new(trp.outputs["Alpha"], tb_.inputs["Alpha"]); tb_.inputs["Roughness"].default_value = 0.9
+th.data = th.data.copy(); th.data.materials.clear(); th.data.materials.append(thm)
+th.parent = imp; th.matrix_parent_inverse = Matrix.Identity(4)
 th.location = (-0.0015 / S * 0 - 0.001, 0, 0); th.rotation_euler = (0, 0, 0)
 th.scale = (S, 1e-4, 1e-4); th.keyframe_insert("scale", frame=1); th.keyframe_insert("scale", frame=IMPACT + 9)
-th.scale = (S, S * 0.55, S * 0.55); th.keyframe_insert("scale", frame=IMPACT + 12); th.keyframe_insert("scale", frame=FEND)
+th.scale = (S, S * 2.0, S * 2.0); th.keyframe_insert("scale", frame=IMPACT + 12); th.keyframe_insert("scale", frame=FEND)
 # the hole decal mesh sits at x = -0.065 macro units; at real scale that is -1.6 mm (just outside the shirt): keep it
 
+from mathutils.bvhtree import BVHTree as _BVH
+_body = bpy.data.objects["Woman.body"]; _gi = {g.index: g.name for g in _body.vertex_groups if g.name in W.data.bones}
+_HL = [v.index for v in _body.data.vertices
+       if any(g.weight > 0.5 and _gi.get(g.group, "").startswith(("finger", "metacarpal")) and _gi[g.group].endswith(".L") for g in v.groups)]
+_ARM = {v.index for v in _body.data.vertices
+        if max(((g.weight, _gi.get(g.group, "")) for g in v.groups if g.group in _gi), default=(0, ""))[1].startswith(("upperarm", "lowerarm", "wrist", "finger", "metacarpal", "shoulder", "clavicle"))}
+for _m in _body.modifiers:
+    if _m.type != 'ARMATURE': _m.show_viewport = False
+def _hits(dg):
+    e = _body.evaluated_get(dg); me = e.to_mesh(); mw = _body.matrix_world
+    V = [mw @ v.co for v in me.vertices]; Pp = [tuple(p.vertices) for p in me.polygons]; e.to_mesh_clear()
+    tb = _BVH.FromPolygons(V, [p for p in Pp if not any(i in _ARM for i in p)])
+    et = tee.evaluated_get(dg); mt = et.to_mesh(); tv = [tee.matrix_world @ v.co for v in mt.vertices]; tp = [tuple(p.vertices) for p in mt.polygons]; et.to_mesh_clear()
+    tt = _BVH.FromPolygons(tv, tp); n = 0
+    for i in _HL:
+        q = V[i]
+        for t in (tb, tt):
+            loc, nr, _i, d = t.find_nearest(q, 0.05)
+            if loc is not None and d > 0.003 and (q - loc).dot(nr) < 0: n += 1; break
+    return n
+def settle(f, nrm):
+    pb = W.pose.bones["IK_hand.L"]; step = W.data.bones["IK_hand.L"].matrix_local.to_3x3().inverted() @ (W.matrix_world.inverted().to_3x3() @ (nrm * 0.004))
+    for it in range(20):
+        sc.frame_set(f); h = _hits(bpy.context.evaluated_depsgraph_get())
+        if h <= 2: break
+        pb.location = pb.location + step; pb.keyframe_insert("location", frame=f, group=pb.name)
+    print("SETTLE", f, it, h)
+def wound(f, lift=0.0, dz=0.0, dy=0.0):
+    sc.frame_set(f); c = imp.matrix_world.translation.copy(); n = (imp.matrix_world.to_3x3() @ Vector((-1, 0, 0))).normalized()
+    place_hand(W, "L", f, c + n * lift + Vector((0, 0.015 + dy, dz)), -n, Vector((0, -1, 0.35)).normalized(), skin=0.02)
+    settle(f, n)
+for f, lift, dz, dy in ((125, 0.0, 0.0, 0), (135, 0.0, 0.0, 0), (150, 0.0, 0.0, 0), (165, 0.0, 0.0, 0), (172, 0.0, 0.0, 0), (180, 0.0, 0.0, 0), (1147, 0.0, 0.0, 0), (1158, 0.0, 0.0, 0),
+                        (1172, 0.07, -0.08, 0.06), (1205, 0.07, -0.09, 0.06), (1222, 0.06, -0.10, 0.07), (1245, 0.0, 0.03, 0), (1273, 0.0, 0.03, 0)):
+    wound(f, lift, dz, dy)
+for _m in _body.modifiers: _m.show_viewport = True
 # ================================================================== bullet: through the shop window, down the aisle, into her shirt
 bul = bpy.data.objects["Bullet"]; bul.rotation_mode = 'QUATERNION'
 XWIN = 12.0
@@ -231,7 +297,7 @@ def bullet_store(f):
     """tip position (world) for the store shots"""
     if f <= 72: x = XWIN + 0.25 - (f - 37) * 0.20           # through the glass at f38, flying down the aisle (12 m/s, slowed for the eye)
     else:
-        u = min(1.0, (f - 73) / (IMPACT - 73)); x = P.x + 0.35 * (1 - u) + 0.006 * max(0, f - IMPACT) * 0  # slow-motion close-up approach
+        u = min(1.0, (f - 73) / (IMPACT - 73)); x = P.x + 0.16 * (1 - u)  # slow-motion close-up approach
     return Vector((x, P.y, P.z))
 spin = 0.0
 for f in range(1, FEND + 1):
@@ -410,7 +476,7 @@ def face_pt(f):
 def macro_cam(f, tgt_off, az, el, dist):
     d = D(f); tg = Vector((d, 0, 0)) + Vector(tgt_off)
     cp = tg + dist * Vector((math.cos(math.radians(el)) * math.cos(math.radians(az)), math.cos(math.radians(el)) * math.sin(math.radians(az)), math.sin(math.radians(el))))
-    return MR @ cp, MR @ tg, MR.to_3x3() @ Vector((0, 0, 1)), dist * S
+    return MR @ cp, MR @ tg, (MR.to_3x3() @ Vector((-1, 0, 0))).normalized(), dist * S
 def lin(a, b, u): return a + (b - a) * u
 def sm(u): return u * u * (3 - 2 * u)
 def shot_cam(f):
@@ -420,19 +486,19 @@ def shot_cam(f):
     if name == "A_shop":     # medium on her, face and the box (logo) readable; slow push
         tg = face_pt(f).lerp(wpt(0.3, 0.17, 1.15), 0.45); cp = lin(Vector((1.55, -0.35, 1.42)), Vector((1.3, -0.22, 1.38)), u); return cp, tg, Vector((0, 0, 1)), 35, 8.0
     if name == "B_flight":   # rides beside the bullet from the cracked window down the aisle; bullet sharp and big
-        tip = bullet_store(f); cp = tip + Vector((0.10, -0.16, 0.035)); return cp, tip + Vector((-0.02, 0, 0)), Vector((0, 0, 1)), 40, 11.0
+        tip = bullet_store(f); cp = tip + Vector((0.07, -0.10, 0.025)); return cp, tip + Vector((-0.02, 0, 0)), Vector((0, 0, 1)), 40, 22.0
     if name == "C_impact":   # side close of her belly: the bullet arrives and hits the shirt, impact point in frame and sharp
-        tg = P + Vector((0.11, 0, 0.01)); cp = lin(P + Vector((0.16, -0.48, 0.06)), P + Vector((0.13, -0.42, 0.05)), u); return cp, tg, Vector((0, 0, 1)), 45, 11.0
+        tg = P + Vector((0.03, 0, 0.015)); cp = lin(P + Vector((0.20, -0.17, -0.02)), P + Vector((0.175, -0.145, -0.015)), u); return cp, tg, Vector((0, 0, 1)), 30, 11.0
     if name == "D_react":    # front three-quarter medium: she folds, drops the basket and box, hand to her stomach, face readable
         tg = face_pt(f).lerp(wpt(0.2, 0.0, 1.0), 0.45); cp = lin(Vector((1.7, -0.55, 1.35)), Vector((1.55, -0.45, 1.3)), u); return cp, tg, Vector((0, 0, 1)), 32, 8.0
     if name == "O_wound":    # front 3/4: she lifts her hand and looks down at the small hole in her shirt (wound and her face in frame)
         tg = face_pt(f).lerp(P, 0.5); cp = lin(Vector((1.25, -0.3, 1.25)), Vector((1.12, -0.25, 1.22)), u); return cp, tg, Vector((0, 0, 1)), 35, 8.0
     if name == "P_relief":   # she straightens, breathes out and looks up: she is fine (shopper A comes to help behind her)
         tg = face_pt(f) + Vector((0, 0, -0.08)); cp = lin(Vector((1.25, -0.2, 1.45)), Vector((1.08, -0.12, 1.47)), u); return cp, tg, Vector((0, 0, 1)), 40, 8.0
-    MAC = {"E1_pierce": ((0.35, 0, 0), (98, 92), (8, 6), (4.0, 3.4), 45), "E2_fat": ((0.2, 0, 0), (62, 72), (14, 10), (3.3, 3.0), 45),
-           "F1_layers": ((0.0, 0, 0), (105, 98), (-8, -4), (3.2, 3.0), 45), "F2_cushion": ((-0.3, 0, 0), (132, 122), (12, 10), (3.4, 3.2), 45),
-           "G_muscle": ((0.25, 0, 0), (84, 90), (6, 4), (2.9, 2.7), 45), "H1_slow": ((0.3, 0, 0), (62, 74), (10, 8), (3.3, 3.1), 45),
-           "H2_stop": ((0.55, 0, 0), (100, 96), (18, 14), (4.4, 4.1), 42), "H3_organs": ((0.45, 0, 0), (80, 86), (-12, -8), (3.8, 3.3), 45)}
+    MAC = {"E1_pierce": ((0.15, 0, 0), (98, 92), (8, 6), (4.0, 3.4), 45), "E2_fat": ((0.3, 0, 0), (62, 72), (14, 10), (3.3, 3.0), 45),
+           "F1_layers": ((0.3, 0, 0), (105, 98), (-8, -4), (3.2, 3.0), 45), "F2_cushion": ((0.2, 0, 0), (132, 122), (12, 10), (3.4, 3.2), 45),
+           "G_muscle": ((0.3, 0, 0), (84, 90), (6, 4), (2.9, 2.7), 45), "H1_slow": ((0.3, 0, 0), (62, 74), (10, 8), (3.3, 3.1), 45),
+           "H2_stop": ((0.2, 0, 0), (100, 96), (18, 14), (4.4, 4.1), 42), "H3_organs": ((0.4, 0, 0), (80, 86), (-12, -8), (3.8, 3.3), 45)}
     off, az, el, ds, lens = MAC[name]
     cp, tg, up, dw = macro_cam(f, off, lin(*az, u), lin(*el, u), lin(*ds, u))
     return cp, tg, up, lens, 11.0
@@ -460,6 +526,33 @@ for a in bpy.data.actions:          # hard cuts: no interpolation between frames
 cl = bpy.data.lights.new("Catchlight", 'POINT'); cl.energy = 3.0; cl.shadow_soft_size = 0.02
 clo = bpy.data.objects.new("Catchlight", cl); sc.collection.objects.link(clo); clo.parent = cam; clo.location = (0.05, 0.08, 0)
 clo.visible_diffuse = False; clo.visible_transmission = False; clo.visible_volume_scatter = False
+sc.frame_set(1240); dg = bpy.context.evaluated_depsgraph_get()
+cam_p = cam.matrix_world.translation.copy(); fr = cd.view_frame(scene=sc); Mc = cam.matrix_world
+def scr(u, v):   # u, v in 0..1 (0,0 bottom-left)
+    tl, bl, br = Mc @ fr[3], Mc @ fr[2], Mc @ fr[1]   # view_frame order: top-right, bottom-right, bottom-left, top-left
+    return (bl + (br - bl) * u + (tl - bl) * v - cam_p).normalized()
+LB = None
+for u, v in ((0.82, 0.78), (0.8, 0.7), (0.85, 0.85), (0.15, 0.78)):
+    hit, loc, nrm, idx, ob, _m = sc.ray_cast(dg, cam_p, scr(u, v))
+    if hit and ob.name.startswith("Shelf") or (hit and abs(nrm.y) > 0.8 and loc.y > 0.9):
+        LB = loc; print("LOGOBOX hit", ob.name, loc, (u, v)); break
+if LB is not None:
+    base = None
+    for dy in (-0.05, -0.02, 0.0, 0.03, 0.06):
+        h2, l2, n2, *_r = sc.ray_cast(dg, Vector((LB.x, LB.y + dy, LB.z + 0.05)), Vector((0, 0, -1)))
+        if h2 and n2.z > 0.8 and LB.z - l2.z < 0.45: base = (l2, dy); break
+    if base:
+        l2, dy = base; W_, D_, H_ = 0.22, 0.05, 0.27
+        _bx = bmesh.new(); bmesh.ops.create_cube(_bx, size=1.0)
+        for v in _bx.verts: v.co = Vector((v.co.x * W_, v.co.y * D_, v.co.z * H_ + H_ / 2))
+        bmesh.ops.bevel(_bx, geom=list(_bx.edges) + list(_bx.verts), offset=0.003, segments=1, affect='EDGES')
+        lme = bpy.data.meshes.new("LogoShelfBox"); _bx.to_mesh(lme); _bx.free(); lme.materials.append(bpy.data.materials["M_pack08"])
+        lbox = bpy.data.objects.new("LogoShelfBox", lme); bpy.data.collections["REAL"].objects.link(lbox)
+        to_cam = Vector((cam_p.x - l2.x, cam_p.y - l2.y, 0)).normalized(); yaw = math.atan2(to_cam.y, to_cam.x) + math.pi / 2
+        lbox.location = (l2.x, l2.y - D_ * 0.9, l2.z + 0.002); lbox.rotation_euler = (0, 0, yaw)
+        logo_decal("LogoShelf", "DaKrasFilms_logo_dark.png", lbox, (0, -D_ / 2 - 0.0015, H_ * 0.55), (0, 0, 0), 0.2)
+        for o_ in (lbox, bpy.data.objects["LogoShelf"]): key_vis(o_, is_real)
+        print("LOGOBOX at", lbox.location, math.degrees(yaw))
 json.dump([{"beat": b, "frame": f, "first_words": w} for b, f, w in BEATS], open(os.path.join(HERE, "..", "beats.json"), "w"), indent=1)
 json.dump(CAMLOG, open(os.path.join(HERE, "..", "camlog.json"), "w"))
 sc.frame_set(1)

@@ -1,0 +1,3777 @@
+{
+ "frames": {
+  "37": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 11.04 m, 13 deg in one frame (neighbours 0.20 m, 0 deg)"
+   ]
+  ],
+  "43": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 120.0 cm with no hand on it (nearest finger 1058 cm)"
+   ]
+  ],
+  "49": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 120.0 cm with no hand on it (nearest finger 938 cm)"
+   ]
+  ],
+  "55": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 120.0 cm with no hand on it (nearest finger 818 cm)"
+   ]
+  ],
+  "61": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 120.0 cm with no hand on it (nearest finger 698 cm)"
+   ]
+  ],
+  "67": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bullet moves 120.0 cm with no hand on it (nearest finger 578 cm)"
+   ]
+  ],
+  "181": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 60.49 m, 104 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "187": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "193": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "199": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "205": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "211": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "217": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "223": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "229": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "235": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "241": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "247": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "253": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "259": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "265": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "271": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "277": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "283": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "289": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "295": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "301": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "307": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "313": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "319": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "325": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "331": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "337": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "343": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "349": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "355": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "361": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "367": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "373": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "379": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "385": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "391": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "397": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "403": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "409": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "415": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "421": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "427": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "433": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "439": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "445": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "451": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "457": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "463": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "469": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "475": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "481": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "487": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "493": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "499": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "505": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "511": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "517": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "523": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "529": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "535": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "541": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "547": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "553": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "559": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "565": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "571": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "577": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "583": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "589": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "595": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "601": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "607": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "613": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "619": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "625": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "631": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "637": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "643": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "649": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "655": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "661": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "667": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "673": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "679": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "685": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "691": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "697": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "703": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "709": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "715": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "721": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "727": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "733": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "739": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "745": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "751": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "757": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "763": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "769": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "775": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "781": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "787": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "793": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "799": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "805": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "811": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "817": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "823": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "829": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "835": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "841": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "847": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "853": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "859": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "865": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "871": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "877": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "883": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "889": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "895": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "901": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "907": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "913": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "919": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "925": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "931": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "937": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "943": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "949": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "955": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "961": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 72 deg"
+   ]
+  ],
+  "967": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 72 deg"
+   ]
+  ],
+  "973": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 72 deg"
+   ]
+  ],
+  "979": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 72 deg"
+   ]
+  ],
+  "985": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 72 deg"
+   ]
+  ],
+  "991": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 73 deg"
+   ]
+  ],
+  "997": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 73 deg"
+   ]
+  ],
+  "1003": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 73 deg"
+   ]
+  ],
+  "1009": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "1015": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "1021": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "1027": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "1033": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "1039": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "1045": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "1051": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "1057": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "1063": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "1069": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "1075": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "1081": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "1087": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "1093": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "1099": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "1105": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "1111": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "1117": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "1123": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "1129": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "1135": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "1141": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "73": [
+   [
+    "CAMJUMP",
+    "cut: 4.86 m, 19 deg in one frame (neighbours 0.20 m, 0 deg)"
+   ]
+  ],
+  "121": [
+   [
+    "CAMJUMP",
+    "cut: 1.56 m, 17 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1147": [
+   [
+    "CAMJUMP",
+    "cut: 60.35 m, 102 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1207": [
+   [
+    "CAMJUMP",
+    "cut: 0.27 m, 7 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "184": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "190": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "196": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "202": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "208": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "214": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "220": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "226": [
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "232": [
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "238": [
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "244": [
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "250": [
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "256": [
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "262": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "268": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "274": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "280": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "286": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "292": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "298": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "304": [
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "310": [
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "316": [
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "322": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "328": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "334": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "340": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "346": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "352": [
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "358": [
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "364": [
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "370": [
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "376": [
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "382": [
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "388": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "394": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "400": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "406": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "412": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "418": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "424": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "430": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "436": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "442": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "448": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "454": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "460": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "466": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "472": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "478": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "484": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "490": [
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "496": [
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "502": [
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "508": [
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "514": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "520": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "526": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "532": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "538": [
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "544": [
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "550": [
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "556": [
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "562": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "568": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "574": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "580": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "586": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "592": [
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "598": [
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "604": [
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "610": [
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "616": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "622": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "628": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "634": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "640": [
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "646": [
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "652": [
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "658": [
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "664": [
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "670": [
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "676": [
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "682": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "688": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "694": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "700": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "706": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "712": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "718": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "724": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "730": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "736": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "742": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "748": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "754": [
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "760": [
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "766": [
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "772": [
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "778": [
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "784": [
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "790": [
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "796": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "802": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "808": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "814": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "820": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "826": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "832": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "838": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "844": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "850": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "856": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "862": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "868": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "874": [
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "880": [
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "886": [
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "892": [
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "898": [
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "904": [
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "910": [
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "916": [
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "922": [
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "928": [
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "934": [
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "940": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "946": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "952": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "958": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "964": [
+   [
+    "ROLL",
+    "horizon tilted 72 deg"
+   ]
+  ],
+  "970": [
+   [
+    "ROLL",
+    "horizon tilted 72 deg"
+   ]
+  ],
+  "976": [
+   [
+    "ROLL",
+    "horizon tilted 72 deg"
+   ]
+  ],
+  "982": [
+   [
+    "ROLL",
+    "horizon tilted 72 deg"
+   ]
+  ],
+  "988": [
+   [
+    "ROLL",
+    "horizon tilted 73 deg"
+   ]
+  ],
+  "994": [
+   [
+    "ROLL",
+    "horizon tilted 73 deg"
+   ]
+  ],
+  "1000": [
+   [
+    "ROLL",
+    "horizon tilted 73 deg"
+   ]
+  ],
+  "1006": [
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "1012": [
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "1018": [
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "1024": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "1030": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "1036": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "1042": [
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "1048": [
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "1054": [
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "1060": [
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "1066": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "1072": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "1078": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "1084": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "1090": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "1096": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "1102": [
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "1108": [
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "1114": [
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "1120": [
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "1126": [
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "1132": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "1138": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "1144": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "79": [
+   [
+    "PROPMOVE",
+    "Bullet moves 5.6 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "85": [
+   [
+    "PROPMOVE",
+    "Bullet moves 5.6 cm with no hand on it (nearest finger 17 cm)"
+   ]
+  ],
+  "91": [
+   [
+    "PROPMOVE",
+    "Bullet moves 4.7 cm with no hand on it (nearest finger 24 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 328,
+  "FILL": 110,
+  "CAMJUMP": 6,
+  "ROLL": 322,
+  "PROPMOVE": 8
+ }
+}

@@ -1,0 +1,967 @@
+{
+ "frames": {
+  "1": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "3": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "5": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "7": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "9": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "11": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "13": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "15": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "17": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "19": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "21": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "23": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "25": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "27": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "29": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "31": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "33": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "35": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "73": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "75": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "77": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "79": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "81": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "83": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "85": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "87": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "89": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "91": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "93": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "95": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "97": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "99": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "101": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "103": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "105": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "107": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "109": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "111": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "113": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "115": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "117": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "119": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "121": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "123": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "125": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "127": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "129": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "131": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "133": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "135": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "137": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "139": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "141": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "143": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "145": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "147": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "149": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "151": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "153": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "155": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "157": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "159": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "161": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "163": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "165": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "167": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "169": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "171": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "173": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "175": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "177": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "179": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1147": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1149": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1151": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1153": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1155": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1157": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1159": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1161": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1163": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1165": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1167": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1169": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1171": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1173": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1175": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1177": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1179": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1181": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1183": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1185": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1187": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1189": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1191": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1193": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1195": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1197": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1199": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1201": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1203": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1205": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1207": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1209": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1211": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1213": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1215": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1217": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1219": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1221": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1223": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1225": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1227": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1229": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1231": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1233": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1235": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1237": [
+   [
+    "ARMBODY",
+    "Woman arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1239": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1241": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1243": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1245": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1247": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1249": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1251": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1253": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1255": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1257": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1259": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1261": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1263": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1265": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1267": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1269": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1271": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1273": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (3 pts)"
+   ]
+  ]
+ },
+ "counts": {
+  "ARMBODY": 172
+ }
+}
