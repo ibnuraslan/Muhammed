@@ -380,8 +380,8 @@ def S26():
     T, sk = site("day", grass_at=None, kit=False, sun_az=215)
     sp = sk["B1"].part_centre("skull"); jp = sk["B1"].part_centre("mandible")
     # near-overhead, distinct from S05's oblique: down onto the skull, drifting to the jaw beneath it
-    return dict(a=(tuple(sp + Vector((-0.12, -0.18, 0.75))), tuple(sp)), b=(tuple(jp + Vector((-0.06, -0.12, 0.6))), tuple(jp)),
-                lens=85, fstop=4.0, focus=tuple(jp))
+    return dict(a=(tuple(sp + Vector((-0.25, -0.35, 1.5))), tuple(sp)), b=(tuple(jp + Vector((-0.18, -0.28, 1.3))), tuple(jp)),
+                lens=70, fstop=5.6, focus=tuple(jp))
 
 
 def S27():
