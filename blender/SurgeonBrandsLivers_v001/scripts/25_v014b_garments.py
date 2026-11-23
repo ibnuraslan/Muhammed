@@ -101,7 +101,7 @@ def build(rig_name, kind, mat, src_vis, sleeve="short", ease=0.03, name=None):
             z = z0 + (zt - z0) * k / NZ; c = cy_at(z); row = []
             Ar, Fr, Br = A, Fd, Bd
             if z > zarm:                                                   # above the armpit: follow the shoulders/upper chest
-                sz = section(co, dom, z, ("spine", "clavicle", "shoulder", "breast", "pectoral", "neck"), c, xl + 0.07)
+                sz = section(co, dom, z, ("spine", "clavicle", "breast", "pectoral", "neck"), c, xl - 0.01)
                 if sz:
                     u_ = min(1.0, (z - zarm) / 0.05)
                     Ar = A + (sz[0] + 0.012 - A) * u_; Br = Bd + (sz[2] + 0.012 - Bd) * u_
@@ -112,10 +112,11 @@ def build(rig_name, kind, mat, src_vis, sleeve="short", ease=0.03, name=None):
                 row.append(bm.verts.new((Ar * sx, c + d * cyv, z)))
             rows.append(row)
         ring_faces(rows)
-        cut = [f for f in bm.faces if (lambda c_: c_.y < cy_at(c_.z) - 0.02 and c_.z > neck.z - (0.12 - 1.4 * abs(c_.x)))(f.calc_center_median())]
+        inV = lambda c_: c_.y < cy_at(c_.z) - 0.02 and c_.z > neck.z - (0.12 - 1.4 * abs(c_.x))
+        cut = [f for f in bm.faces if sum(1 for v in f.verts if inV(v.co)) >= 2]
         bmesh.ops.delete(bm, geom=cut, context='FACES')
         bmesh.ops.delete(bm, geom=[v for v in bm.verts if not v.link_faces], context='VERTS')
-        for it in range(14):                                            # smooth the V-neck edge
+        for it in range(40):                                            # smooth the V-neck edge
             newp = {}
             for v in [v for v in bm.verts if v.is_boundary and v.co.z > zarm]:
                 nb = [e.other_vert(v) for e in v.link_edges if e.is_boundary]
@@ -186,7 +187,7 @@ def build(rig_name, kind, mat, src_vis, sleeve="short", ease=0.03, name=None):
     return ob
 
 
-def yoke(rig_name, mat, src_vis, sleeve="short", off=0.012, name=None):
+def yoke(rig_name, mat, src_vis, sleeve="short", off=0.012, name=None, torso=False):
     r = OB[rig_name]; body = OB[rig_name + ".body"]; BN = r.data.bones; BONES = set(BN.keys())
     co = rest_body(r, body)
     ob = body.copy(); ob.data = body.data.copy(); ob.name = name or (rig_name + ".Yoke"); bpy.data.collections["Collection"].objects.link(ob)
@@ -215,7 +216,12 @@ def yoke(rig_name, mat, src_vis, sleeve="short", off=0.012, name=None):
                 s_ = d[-1]; a, b = BN["lowerarm02." + s_].head_local, BN["lowerarm02." + s_].tail_local
                 if (c - a).dot(b - a) / (b - a).length_squared > 0.8: continue
             keep.add(v.index); continue
-        if d.startswith(("shoulder", "clavicle")) and abs(c.x) > abs(BN["upperarm01.L"].head_local.x) - 0.03:
+        if torso and d.startswith(("spine", "pelvis", "breast", "pectoral", "root", "clavicle", "shoulder", "neck01")):
+            hipz = (BN["upperleg01.L"].head_local.z + BN["upperleg01.R"].head_local.z) / 2
+            if c.z < hipz - 0.06 or d.startswith("neck01") or c.z > neck.z + 0.005: continue
+            if c.y < neck.y - 0.02 and c.z > neck.z - (0.07 - 1.3 * abs(c.x)): continue        # open collar
+            keep.add(v.index); continue
+        if sleeve == "short" and d.startswith(("shoulder", "clavicle")) and abs(c.x) > abs(BN["upperarm01.L"].head_local.x) - 0.03:
             keep.add(v.index)                                                     # shoulder cap joins sleeve to body
     for v in ob.data.vertices: v.co = co[v.index]
     bm = bmesh.new(); bm.from_mesh(ob.data); bm.verts.ensure_lookup_table()
@@ -259,14 +265,14 @@ def hide_under(rig_name, vis_src, sleeve="short", tag="UnderCloth"):
             if n in BONES and g.weight > best[0]: best = (g.weight, n)
         d = best[1]; c = co[v.index]
         if d is None: continue
-        if d.startswith(("spine", "pelvis", "breast", "pectoral", "root", "upperleg", "lowerleg", "clavicle", "shoulder")):
+        if d.startswith(("spine", "pelvis", "breast", "pectoral", "root", "upperleg", "lowerleg")):
             if c.z > neck.z - 0.02: continue
-            if c.y < neck.y - 0.03 and c.z > neck.z - (0.10 - 1.4 * abs(c.x)): continue           # V-neck skin stays
+            if c.y < neck.y + 0.01 and c.z > neck.z - (0.16 - 1.2 * abs(c.x)): continue           # V-neck skin stays (no hole edge)
             if c.z < ank + 0.07: continue
             sel.append(v.index)
         elif d.startswith("upperarm") and sleeve == "short":
             s_ = d[-1]; a, b = BN["upperarm01." + s_].head_local, BN["upperarm02." + s_].tail_local
-            if (c - a).dot(b - a) / (b - a).length_squared < 0.42: sel.append(v.index)
+            if (c - a).dot(b - a) / (b - a).length_squared < 0.22: sel.append(v.index)
         elif d.startswith(("upperarm", "lowerarm")) and sleeve == "long":
             s_ = d[-1]; a, b = BN["upperarm01." + s_].head_local, BN["wrist." + s_].head_local
             if (c - a).dot(b - a) / (b - a).length_squared < 0.9: sel.append(v.index)
@@ -296,7 +302,7 @@ for nm, (rgb, suit) in SCRUB.items():
 # defendant: shirt + tie + trousers (no jacket)
 suit = OB["Surgeon1.male_elegantsuit01"]
 msh = fabric("DefShirt", (0.72, 0.76, 0.82), rough=0.7)
-shirt = build("Surgeon1", "Top", msh, suit, "long", 0.022, name="Surgeon1.Shirt"); yoke("Surgeon1", msh, suit, "long", 0.008, name="Surgeon1.ShirtYoke")
+shirt = yoke("Surgeon1", msh, suit, "long", 0.010, name="Surgeon1.Shirt", torso=True)   # fitted dress shirt
 hide_under("Surgeon1", suit, "long", tag="UnderShirt")
 trs = build("Surgeon1", "Trousers", fabric("DefTrousers", (0.10, 0.10, 0.13)), suit, "long", 0.025, name="Surgeon1.Slacks")
 r = OB["Surgeon1"]; BN = r.data.bones
