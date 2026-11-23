@@ -85,9 +85,9 @@ def U07():
     kn = _vancamp_kneel(A)
     bo = A["bag_open"]
     for i in range(5):
-        d = PR.document(f"dpaper{i}", 0.06, 0.1, seed=i, lines=0, color=(0.88, 0.88, 0.84))
+        d = PR.document(f"dpaper{i}", 0.1, 0.068, seed=i, kind="briefke", folds=0, color=(0.88, 0.88, 0.84))
         d.location = (bo.x - 0.1 + i * 0.05, bo.y - 0.42 + (i % 2) * 0.05, 0.012 + 0.001 * i); d.rotation_euler = (0, 0, 0.4 * i)
-    env = PR.document("envelope", 0.23, 0.16, seed=7, lines=4, color=(0.62, 0.48, 0.3)); env.location = (bo.x + 0.15, bo.y - 0.5, 0.012)
+    env = PR.document("envelope", 0.23, 0.16, seed=7, lines=0, folds=0, color=(0.62, 0.48, 0.3)); env.location = (bo.x + 0.15, bo.y - 0.5, 0.012)
     return dict(a=((0.45, bo.y - 1.25, 1.05), (bo.x + 0.02, bo.y - 0.45, 0.05)), b=((0.38, bo.y - 1.15, 1.0), (bo.x + 0.02, bo.y - 0.45, 0.05)),
                 lens=35, fstop=3.2, focus=(bo.x, bo.y - 0.45, 0.05), hand_ok=("trashbag", "w_paper", "dpaper", "envelope"))
 
@@ -104,11 +104,11 @@ def _techs(A, n=2):
 
 def _bench_items(A):
     b = A["bench"]; xs = A["markers_x"]
-    PR.document("doc1", seed=1).location = (xs[0], b.y + 0.05, b.z + 0.001)
+    PR.document("doc1", seed=1, kind="form").location = (xs[0], b.y + 0.05, b.z + 0.001)
     PR.document("doc_torn", torn=True, seed=2).location = (xs[1], b.y + 0.02, b.z + 0.001)
     PR.receipt("rcpt", seed=3).location = (xs[2], b.y + 0.05, b.z + 0.001)
     for k in range(4):
-        PR.document(f"dpap{k}", 0.06, 0.1, seed=10 + k, lines=0).location = (xs[3] - 0.08 + k * 0.05, b.y + 0.05 + (k % 2) * 0.06, b.z + 0.001)
+        PR.document(f"dpap{k}", 0.1, 0.068, seed=10 + k, kind="briefke", folds=0).location = (xs[3] - 0.08 + k * 0.05, b.y + 0.05 + (k % 2) * 0.06, b.z + 0.001)
     S3.sandwich("sandwich", loc=(xs[4], b.y + 0.05, b.z + 0.001), rz=0.3)
     PR.sf_put(S3.EVIDENCE_BAG, (xs[5], b.y + 0.05, b.z + 0.001), width=0.25, rz=1.57) if True else None
     PR.document("doc_torn2", torn=True, seed=5).location = (xs[6], b.y + 0.02, b.z + 0.001)
@@ -123,17 +123,19 @@ def U08():
 def U09():
     A = S3.lab(); _bench_items(A); b = A["bench"]; x = A["markers_x"][1]
     return dict(a=((x - 0.35, b.y - 0.45, b.z + 0.32), (x + 0.2, b.y + 0.02, b.z)), b=((x - 0.3, b.y - 0.4, b.z + 0.28), (x + 0.3, b.y + 0.02, b.z)),
-                lens=40, fstop=3.2, focus=(x + 0.2, b.y, b.z))
+                lens=40, fstop=3.2, focus=(x + 0.2, b.y, b.z), cine=dict(exposure=-0.7))
 
 
 def U10():
     A = S3.lab(); b = A["bench"]
-    PR.document("dpaper_open", 0.12, 0.16, seed=3, lines=0).location = (0, b.y, b.z + 0.001)
-    dz = PR.brilliants("trace", n=14, spread=0.012, seed=8); dz.location = (0, b.y, b.z + 0.002); dz.scale = (0.5, 0.5, 0.5)
-    lp = PR.loupe(); lp.location = (0.07, b.y - 0.04, b.z + 0.02); lp.rotation_euler = (math.radians(90), 0, 0.5)
-    ST.light_point("lab_spark", (0.15, b.y - 0.2, b.z + 0.25), 8, (1.0, 0.97, 0.92), radius=0.005)
-    return dict(a=((-0.12, b.y - 0.22, b.z + 0.14), (0, b.y, b.z)), b=((-0.09, b.y - 0.18, b.z + 0.11), (0, b.y, b.z)), lens=60,
-                fstop=4.0, focus=(0, b.y, b.z))
+    PR.document("dpaper_open", 0.15, 0.1025, seed=3, kind="briefke", folds=0).location = (0, b.y, b.z + 0.001)
+    dz = PR.brilliants("trace", n=22, spread=0.02, seed=8); dz.location = (-0.01, b.y + 0.005, b.z + 0.0016)   # the gem dust left in the paper
+    lp = PR.loupe(); lp.location = (0.095, b.y - 0.035, b.z + 0.012); lp.rotation_euler = (0, 0, 0.5)
+    ST.light_area("dust_soft", (0.05, b.y + 0.25, b.z + 0.45), (0, b.y, b.z), 0.5, 12, (1.0, 0.97, 0.92))
+    for k, (x, y, z) in enumerate(((0.25, -0.25, 0.4), (-0.2, 0.3, 0.35), (0.05, -0.4, 0.3))):
+        ST.light_point(f"lab_spark{k}", (x, b.y + y, b.z + z), 10, (1.0, 0.97, 0.92), radius=0.004)
+    return dict(a=((-0.09, b.y - 0.16, b.z + 0.13), (0.02, b.y, b.z)), b=((-0.07, b.y - 0.13, b.z + 0.11), (0.02, b.y, b.z)), lens=55,
+                fstop=6.3, focus=(0.0, b.y, b.z), cine=dict(exposure=-0.9))
 
 
 def U11():
@@ -174,7 +176,7 @@ def U13():
 def U14():
     A = S3.lab(); c = _lightbox_scene(A, seed=12)
     return dict(a=((c.x - 0.25, c.y - 0.3, c.z + 0.3), tuple(c)), b=((c.x - 0.2, c.y - 0.25, c.z + 0.26), tuple(c + V((0.05, 0, 0)))), lens=45,
-                fstop=4.0, focus=c)
+                fstop=4.0, focus=c, cine=dict(exposure=-0.7))
 
 
 def U15():
@@ -192,12 +194,16 @@ def U16():
             bpy.data.objects.remove(o)
     mg = MD.Manager(); se = AC.Seated(mg, A["seat_behind"], -90, lean=12)
     se.hand("R", (0.1, A["desk_y"] - 0.2, 0.86), elbow=(0.9, 0.2, -0.5), curl=20); se.hand("L", (-0.25, A["desk_y"] + 0.22, 0.875), elbow=(0.9, 0.2, -0.5), curl=24)
+    se.head_to((0.1, A["desk_y"] - 0.25, 0.79), share=1.0)        # head bowed over the file: no face to camera
     se.finish(density=HAIR)
-    PR.document("lease_file", 0.24, 0.32, seed=21).location = (0.1, A["desk_y"] - 0.25, 0.793)
+    PR.document("lease_file", 0.21, 0.297, seed=21, kind="form").location = (0.1, A["desk_y"] - 0.25, 0.793)
     d = MD.DeBruycker(); st = AC.Stand(d, (0.15, A["desk_y"] - 1.05), 90, lean=8); st.hand("R", (0.12, A["desk_y"] - 0.38, 0.84), elbow=(0.8, 0.2, -0.6), curl=20)
     st.head_to((0.1, A["desk_y"] - 0.25, 0.8), share=0.7); st.finish(density=HAIR)
-    return dict(a=((-0.6, A["desk_y"] - 2.1, 1.7), (0.1, A["desk_y"] + 0.4, 1.0)), b=((-0.5, A["desk_y"] - 1.95, 1.68), (0.1, A["desk_y"] + 0.4, 1.0)),
-                lens=28, hand_ok=("desk", "Desk", "chair", "lease_file"))
+    for o in bpy.data.objects:                       # the manager against the window: a silhouette, no fill on his face
+        if o.type == 'LIGHT' and o.name.startswith("lamp_bulb"):
+            o.data.energy *= 0.2
+    return dict(a=((-0.6, A["desk_y"] - 2.1, 1.85), (0.1, A["desk_y"] + 0.4, 0.95)), b=((-0.5, A["desk_y"] - 1.95, 1.83), (0.1, A["desk_y"] + 0.4, 0.95)),
+                lens=28, hand_ok=("desk", "Desk", "chair", "lease_file"), cine=dict(exposure=-0.5))
 
 
 # ============================================================================ L9 Turin
@@ -223,16 +229,41 @@ def U19():
     A = S3.lab(); b = A["bench"]
     r = PR.receipt("rcpt_hero", 0.22, seed=5); r.location = (0, b.y, b.z + 0.001); r.rotation_euler = (0, 0, 0.25)
     return dict(a=((-0.18, b.y - 0.3, b.z + 0.25), (0, b.y, b.z)), b=((-0.14, b.y - 0.25, b.z + 0.2), (0.02, b.y + 0.04, b.z)), lens=45,
-                fstop=3.2, focus=(0, b.y, b.z))
+                fstop=3.2, focus=(0, b.y, b.z), cine=dict(exposure=-0.7))
 
 
 def U20():
     A = S3.supermarket(); c = A["checkout"]
     m = MD.Finotto(); st = AC.Stand(m, (c.x + 0.1, c.y + 0.62), -90); st.hand("R", c + V((0.15, 0.25, 0.04)), elbow=(0.8, 0.2, -0.6), curl=26)
     st.finish(density=HAIR)
-    cam = (2.4, -3.4, 2.85)
-    return dict(a=(cam, (c.x, c.y + 0.4, 0.8)), b=((2.35, -3.35, 2.85), (c.x, c.y + 0.45, 0.8)), lens=18, cine=dict(sat=0.6),
-                extra=[dict(name="super_cctv", loc=cam, tgt=(c.x, c.y + 0.4, 0.8), lens=18)], hand_ok=("checkout", "belt"))
+    # 1) the shop's ceiling camera records the checkout (rendered now, shown on the monitor below and in U21)
+    sc = bpy.context.scene; os.makedirs(EXTRA, exist_ok=True); path = os.path.join(EXTRA, "super_cctv.png")
+    cd = bpy.data.cameras.new("cctv_cam"); cd.lens = 20; co = bpy.data.objects.new("cctv_cam", cd); sc.collection.objects.link(co)
+    co.location = (c.x + 1.7, c.y - 1.35, 2.75)
+    co.rotation_euler = (V((c.x, c.y + 0.45, 0.9)) - co.location).to_track_quat('-Z', 'Y').to_euler()
+    keep = (sc.camera, sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage, sc.cycles.samples, sc.render.filepath)
+    sc.camera = co; sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = 960, 540, 100
+    sc.cycles.samples = 48; sc.render.filepath = path
+    bpy.ops.render.render(write_still=True)
+    sc.camera, sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage, sc.cycles.samples, sc.render.filepath = keep
+    bpy.data.objects.remove(co)
+    for o in list(bpy.data.objects):                 # move the shop far away; the police watch the recording
+        if o.parent is None:
+            o.location.x += 100.0
+    # 2) the recording on a CCTV monitor in the building's security room
+    ST.box("view_floor", (0, 0, -0.05), (6, 6, 0.1), ST.flat("view_floor", (0.08, 0.07, 0.06), 0.8))
+    ST.box("view_wall", (0, 1.2, 1.5), (6, 0.2, 3.0), ST.flat("view_wall", (0.22, 0.2, 0.18), 0.85))
+    ST.box("view_desk", (0, 0.6, 0.73), (1.6, 0.8, 0.04), ST.flat("view_desk", (0.12, 0.09, 0.07), 0.5))
+    plast = ST.flat("crt_plastic", (0.16, 0.155, 0.15), 0.45)
+    ST.box("crt_body", (0, 0.78, 1.0), (0.44, 0.36, 0.42), plast, bevel=0.02)           # a 14-inch CCTV monitor
+    ST.box("crt_back", (0, 0.98, 0.99), (0.3, 0.2, 0.3), plast, bevel=0.03)
+    scr = S2.plane("crt_view", (0, 0.565, 1.02), (0.36, 0.27), S2.cctv_mat("cctv_play", path, 1.15), rot=(math.radians(90), 0, 0))
+    ST.box("vcr_deck", (0, 0.72, 0.79), (0.43, 0.32, 0.08), ST.flat("vcr_deck", (0.06, 0.06, 0.065), 0.4))
+    ST.box("vcr_led", (0.15, 0.555, 0.8), (0.006, 0.002, 0.004), ST.emit("vcr_led", (0.1, 1.0, 0.2), 20))
+    ST.light_area("view_room", (0.6, -0.8, 2.4), (0, 0.6, 0.8), 1.2, 25, (1.0, 0.82, 0.6))
+    ST.world((0.02, 0.02, 0.02), 0.2)
+    p = V((0, 0.565, 1.02))
+    return dict(a=((0.32, -0.38, 1.12), tuple(p)), b=((0.25, -0.3, 1.1), tuple(p)), lens=40, fstop=4.0, focus=tuple(p))
 
 
 def U21():
@@ -300,9 +331,12 @@ def U28():
     A = S2.office("leasing")
     mg = MD.Manager(); se = AC.Seated(mg, A["seat_behind"], -90); desk_hands(se, A["desk_y"], fwd=-0.25); se.head_to((0.15, -0.3, 1.2), share=0.6); se.finish(density=HAIR)
     le = MD.Leonardo(); sv = AC.Seated(le, A["seat_visitor"], 90, lean=4); sv.head_to((0, 1.55, 1.25), share=0.6); sv.finish(density=HAIR)
-    dy = A["desk_y"]   # side-on across the desk: two profiles against the window, faces in half shadow
-    return dict(a=((-1.9, dy + 0.15, 1.3), (0.3, dy, 1.05)), b=((-1.8, dy + 0.2, 1.3), (0.3, dy, 1.05)), lens=30, fstop=4.0, focus=(0, dy, 1.1),
-                hand_ok=("chair", "Chair", "desk", "Desk"))
+    for o in bpy.data.objects:                       # the manager is a silhouette against the window; Leonardo's back to us
+        if o.type == 'LIGHT' and o.name.startswith("lamp_bulb"):
+            o.data.energy *= 0.15
+    dy = A["desk_y"]
+    return dict(a=((0.55, dy - 2.0, 1.45), (-0.05, dy + 0.9, 1.15)), b=((0.48, dy - 1.9, 1.45), (-0.05, dy + 0.9, 1.15)), lens=30,
+                fstop=4.0, focus=(0, dy + 0.6, 1.1), hand_ok=("chair", "Chair", "desk", "Desk"), cine=dict(exposure=-0.7))
 
 
 def U29():
@@ -332,12 +366,13 @@ def U30():
 def U31():
     ST.world((0.5, 0.5, 0.5), 0.12)
     rg = PR.rug("rug_close", 1.0, 1.0, color=(0.2, 0.075, 0.055))
-    dz = PR.brilliants("carpet_gems", n=10, spread=0.03, seed=14); dz.location = (0, 0, 0.0125)     # resting on the pile
+    dz = PR.brilliants("carpet_gems", n=9, spread=0.018, seed=14); dz.location = (0, 0, 0.0125)     # resting on the pile
     ST.light_spot("rug_key", (-0.4, -0.5, 0.6), (0, 0, 0), 25, angle=35, color=(1.0, 0.9, 0.75), radius=0.01)
     ST.light_area("rug_soft", (0.1, 0.2, 0.5), (0, 0, 0), 0.6, 6, (1.0, 0.97, 0.92))           # a broad source for the facets to mirror
-    for k, (x, y, z) in enumerate(((0.3, -0.3, 0.4), (-0.2, 0.35, 0.35))):
-        ST.light_point(f"rug_spark{k}", (x, y, z), 10, (1, 0.97, 0.92), radius=0.004)
-    return dict(a=((-0.1, -0.18, 0.1), (0, 0, 0.0)), b=((-0.07, -0.14, 0.08), (0, 0, 0.0)), lens=60, fstop=4.0, focus=(0, 0, 0.005), cine=dict(exposure=-1.3))
+    for k, (x, y, z) in enumerate(((0.3, -0.3, 0.5), (-0.2, 0.35, 0.45), (0.05, -0.45, 0.35), (0.4, 0.2, 0.3))):   # P2 hero sparkle rig
+        ST.light_point(f"rug_spark{k}", (x, y, z), 12, (1.0, 0.97, 0.92), radius=0.004)
+    return dict(a=((-0.07, -0.12, 0.085), (0, 0, 0.012)), b=((-0.055, -0.1, 0.07), (0, 0, 0.012)), lens=60, fstop=9.0, focus=(0, 0, 0.013),
+                cine=dict(exposure=-1.0))
 
 
 def U32():
@@ -376,8 +411,9 @@ def U35():
     m = MD.Leonardo(); se = AC.Seated(m, seat, yaw, lean=10)
     se.hand("L", (-0.42, 0.12, 0.835), elbow=(0.9, 0.2, -0.5), curl=24); se.hand("R", (-0.38, -0.12, 0.835), elbow=(0.9, 0.2, -0.5), curl=24)
     se.head_to((0.8, 0.0, 1.2), share=0.5); se.finish(density=HAIR)
-    return dict(a=((-0.9, -1.4, 1.35), (-0.8, 0.0, 1.15)), b=((-0.8, -1.25, 1.33), (-0.8, 0.0, 1.15)), lens=40, fstop=2.8, focus=(-0.8, 0, 1.2),
-                hand_ok=("iv_table", "iv_chair"), cine=dict(exposure=0.2))
+    # from behind his shoulder, toward the interviewer's empty side of the table: the back of his head against the lamp
+    return dict(a=((-1.75, -0.75, 1.45), (0.5, 0.15, 1.05)), b=((-1.7, -0.65, 1.44), (0.5, 0.15, 1.05)), lens=32,
+                hand_ok=("iv_table", "iv_chair"), cine=dict(exposure=0.0))
 
 
 def U36():
@@ -421,7 +457,8 @@ def U39():
 
 def U40():
     ST.vault_complex("wreck", contacts="bypassed", taped=True)
-    return dict(a=((1.6, 0.6, 1.4), (1.5, 1.2, 2.5)), b=((1.6, 0.6, 1.4), (0.0, 1.8, 2.5)), lens=24)
+    # inside the vault looking back at the open door: the ceiling lights burning over the forced boxes
+    return dict(a=((0.9, 4.0, 1.05), (-0.05, 0.2, 1.75)), b=((0.8, 3.85, 1.0), (-0.05, 0.2, 1.8)), lens=20)
 
 
 def U41():
@@ -440,12 +477,15 @@ def U42():
 # ============================================================================ L20 what explains it all
 def U43():
     A = ST.vault_complex("wreck", contacts="bypassed", taped=True); ld = A["light_detector"]
-    return dict(a=((ld.x + 0.5, ld.y - 0.6, 1.6), tuple(ld)), b=((ld.x + 0.4, ld.y - 0.5, 1.7), tuple(ld)), lens=45, fstop=2.8, focus=ld)
+    # the taped detector on the ceiling in the foreground, the open vault door behind it
+    # from inside the door passage (its jambs and head frame the view) up to the taped detector on the vault ceiling
+    return dict(a=((0.12, -0.42, 1.62), tuple(ld + V((0, 0, -0.12)))), b=((0.1, -0.3, 1.66), tuple(ld + V((0, 0, -0.12)))), lens=75, fstop=4.0, focus=ld)
 
 
 def U44():
     A = ST.vault_complex("wreck", contacts="bypassed", taped=True); mc = A["mag_contact"]
-    return dict(a=((mc.x + 0.6, mc.y - 1.1, 1.75), tuple(mc)), b=((mc.x + 0.5, mc.y - 0.95, 1.8), tuple(mc)), lens=40, fstop=3.2, focus=mc)
+    # from the corridor: the open vault door and, above its head, the plate holding the two contacts together
+    return dict(a=((-0.65, -1.95, 1.55), (-0.1, -0.55, 2.0)), b=((-0.6, -1.85, 1.57), (-0.1, -0.55, 2.02)), lens=26, fstop=4.0, focus=mc)
 
 
 def U45():

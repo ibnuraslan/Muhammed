@@ -1,3 +1,4 @@
+import os
 """Hand props for the Antwerp shots, modelled to real size. Each returns its root object (origin = grip point)."""
 import math
 import bpy
@@ -269,38 +270,81 @@ USD_LOOSE = "7e54bc39435f459a921370caa7e21090"      # "A stack of 100 dollar bil
 RING_CARAT = "378f6df2c4f444399b83db2037258470"      # "The Ring: 1 carat", Evanz, CC-BY
 
 
-def document(name="doc", w=0.21, h=0.297, torn=False, seed=0, lines=22, color=(0.86, 0.85, 0.8)):
-    """A printed page (rows of grey type as thin bars, no legible words) - torn=True gives it a ragged edge and
-    leaves only a scrap. Origin at its centre, lying flat."""
+DOCS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets_gen", "docs")   # tools/gen_docs.py
+
+
+def doc_mat(name, kind, seed, color=(0.86, 0.85, 0.8)):
+    """Paper with printed content (generated texture: generic wording, no real names) and a faint fibre bump."""
+    path = os.path.join(DOCS, f"{kind}_{(seed % 3) + 1}.jpg") if kind else None
+    m = paper_mat(name, color)
+    if path and os.path.exists(path):
+        N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+        t = N.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(path, check_existing=True); t.extension = 'EXTEND'
+        uv = N.new("ShaderNodeUVMap"); L.new(uv.outputs['UV'], t.inputs['Vector'])
+        L.new(t.outputs['Color'], p.inputs['Base Color'])
+    return m
+
+
+def _uv_planar(me, x0, x1, y0, y1):
+    uvl = me.uv_layers.new(name="UVMap")
+    for lp in me.loops:
+        co = me.vertices[lp.vertex_index].co
+        uvl.data[lp.index].uv = ((co.x - x0) / (x1 - x0), (co.y - y0) / (y1 - y0))
+
+
+def document(name="doc", w=0.21, h=0.297, torn=False, seed=0, lines=22, color=(0.86, 0.85, 0.8), kind=None, folds=None, curl=0.0):
+    """A printed page lying flat, origin at its centre. The print is a generated texture (kind: "form", "letter",
+    "receipt", "briefke"; default "letter" when lines > 0, blank when lines == 0). folds: number of creases across the
+    length (a letter folded in thirds keeps 2 soft ridges); curl lifts the ends (thermal receipts). torn=True leaves a
+    ragged scrap showing part of the page."""
     import random as _r, bmesh
     rng = _r.Random(seed)
-    pm = paper_mat(name + "_paper", color); ink = flat(name + "_ink", (0.12, 0.12, 0.13), 0.7)
+    if kind is None:
+        kind = "letter" if lines > 0 else None
+    pm = doc_mat(name + "_paper", kind, seed, color)
     bm = bmesh.new()
     if torn:
         pts = []
-        n = 24
+        n = 28
         for k in range(n):
             a = 2 * math.pi * k / n
-            rr = rng.uniform(0.75, 1.0)
+            rr = rng.uniform(0.72, 1.0)
             pts.append((math.cos(a) * w / 2 * rr, math.sin(a) * h / 2 * rr * 0.6, 0))
         f = bm.faces.new([bm.verts.new(p) for p in pts])
+        bmesh.ops.triangulate(bm, faces=[f])
+        me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+        # the scrap shows a piece of a full page (A4 = 0.21 x 0.297 m) at a random place
+        ox, oy = rng.uniform(-0.04, 0.04), rng.uniform(-0.09, 0.09)
+        _uv_planar(me, ox - 0.105, ox + 0.105, oy - 0.1485, oy + 0.1485)
     else:
-        f = bm.faces.new([bm.verts.new(p) for p in ((-w / 2, -h / 2, 0), (w / 2, -h / 2, 0), (w / 2, h / 2, 0), (-w / 2, h / 2, 0))])
-    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+        nx, ny = 8, 24
+        vs = [[bm.verts.new((-w / 2 + w * i / nx, -h / 2 + h * j / ny, 0)) for i in range(nx + 1)] for j in range(ny + 1)]
+        for j in range(ny):
+            for i in range(nx):
+                bm.faces.new((vs[j][i], vs[j][i + 1], vs[j + 1][i + 1], vs[j + 1][i]))
+        nf = (2 if h > 0.25 else 1) if folds is None else folds
+        for row in vs:
+            for v in row:
+                y = v.co.y; z = 0.0
+                for k in range(1, nf + 1):
+                    yf = -h / 2 + h * k / (nf + 1); d = abs(y - yf)
+                    z += (0.0035 if k % 2 else -0.0015) * max(0.0, 1 - d / (h / (2 * (nf + 1)))) ** 1.5
+                if curl:
+                    z += curl * (abs(y) / (h / 2)) ** 3
+                v.co.z = max(z, 0.0) + 0.0003
+        me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+        _uv_planar(me, -w / 2, w / 2, -h / 2, h / 2)
+    for pl in me.polygons:
+        pl.use_smooth = True
     o = bpy.data.objects.new(name, me); bpy.context.scene.collection.objects.link(o); me.materials.append(pm)
-    so = o.modifiers.new("t", "SOLIDIFY"); so.thickness = 0.0006
-    parts = [o]
-    hh = h * (0.6 if torn else 1.0)
-    for k in range(lines):
-        y = -hh / 2 + 0.02 + k * (hh - 0.04) / max(1, lines - 1)
-        lw = w * rng.uniform(0.45, 0.8) * (0.7 if torn else 1.0)
-        parts.append(box(name + "_line", (-w * 0.05, y, 0.0008), (lw, 0.0035, 0.0002), ink))
-    return _root(name, parts)
+    so = o.modifiers.new("t", "SOLIDIFY"); so.thickness = 0.0004; so.offset = 1.0
+    return _root(name, [o])
 
 
 def receipt(name="receipt", length=0.2, seed=1):
-    """A supermarket till receipt: narrow thermal paper strip, curled, columns of faint type."""
-    return document(name, w=0.08, h=length, torn=False, seed=seed, lines=26, color=(0.9, 0.9, 0.87))
+    w = length * 600 / 1168                         # the printed strip's proportions
+    """A supermarket till receipt: narrow thermal paper strip with printed items and total, ends curling up, one crease."""
+    return document(name, w=w, h=length, seed=seed, kind="receipt", color=(0.95, 0.95, 0.93), folds=1, curl=0.012)
 
 
 def fax(name="fax"):

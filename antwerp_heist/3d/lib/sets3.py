@@ -327,6 +327,18 @@ def supermarket():
     box("checkout", (-1.0, -1.5, 0.45), (2.2, 0.7, 0.9), steel_paint("checkout", (0.25, 0.3, 0.35), 0.4))
     box("belt", (-1.2, -1.5, 0.905), (1.6, 0.5, 0.01), flat("belt", (0.03, 0.03, 0.03), 0.6))
     A["checkout"] = Vector((-1.0, -1.5, 0.92))
+    # walls, a second lane, the till and the shopping on the belt
+    wall = flat("sm_wall", (0.62, 0.6, 0.56), 0.8)
+    for sg in (1, -1):
+        box("sm_wall_x", (sg * 7.0, 0, 1.5), (0.2, 10, 3.0), wall); box("sm_wall_y", (0, sg * 5.0, 1.5), (14, 0.2, 3.0), wall)
+    box("checkout2", (2.0, -1.5, 0.45), (2.2, 0.7, 0.9), steel_paint("checkout", (0.25, 0.3, 0.35), 0.4))
+    box("belt2", (1.8, -1.5, 0.905), (1.6, 0.5, 0.01), flat("belt", (0.03, 0.03, 0.03), 0.6))
+    for x in (-0.05, 2.95):
+        box("till", (x, -1.62, 1.05), (0.32, 0.28, 0.24), flat("till", (0.12, 0.12, 0.13), 0.5))
+        box("till_screen", (x, -1.48, 1.25), (0.26, 0.04, 0.18), flat("till_scr", (0.05, 0.06, 0.06), 0.3), rot=(math.radians(-15), 0, 0))
+        box("bag_rack", (x + 0.35, -1.95, 0.75), (0.5, 0.3, 0.04), steel_paint("rack", (0.5, 0.5, 0.5), 0.4))
+    for k, (dx, sz) in enumerate(((-1.75, (0.12, 0.08, 0.2)), (-1.5, (0.08, 0.08, 0.12)), (-1.3, (0.3, 0.06, 0.06)), (-1.1, (0.15, 0.1, 0.07)))):
+        box("shopping", (dx, -1.5, 0.91 + sz[2] / 2), sz, flat(f"prod{k % 6}", cols[k % len(cols)], 0.5))
     for x in (-4, 0, 4):
         box("sm_strip", (x, 0.0, 3.0), (0.15, 8.0, 0.04), emit("sm_strip", (1.0, 0.97, 0.9), 8))
         light_area("sm_light", (x, 0.0, 2.95), (x, 0.0, 0), 0.15, 400, (1.0, 0.97, 0.9), size_y=8.0)

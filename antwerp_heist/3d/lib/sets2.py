@@ -39,6 +39,30 @@ def image_mat(name, path, strength=1.0, emissive=True):
     return m
 
 
+def cctv_mat(name, path, strength=1.8):
+    """A CCTV monitor showing a recorded picture: grey, contrasty, grainy, with scan lines (no on-screen text)."""
+    m = bpy.data.materials.new(name); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links
+    N.remove(N["Principled BSDF"])
+    tc = N.new("ShaderNodeTexCoord")
+    t = N.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(path, check_existing=True)
+    bw = N.new("ShaderNodeRGBToBW"); L.new(t.outputs['Color'], bw.inputs['Color'])
+    ct = N.new("ShaderNodeMapRange"); ct.inputs['From Min'].default_value = 0.08; ct.inputs['From Max'].default_value = 0.75
+    L.new(bw.outputs['Val'], ct.inputs['Value'])
+    gr = N.new("ShaderNodeTexNoise"); gr.inputs['Scale'].default_value = 900; gr.inputs['Detail'].default_value = 0
+    L.new(tc.outputs['UV'], gr.inputs['Vector'])
+    mix = N.new("ShaderNodeMix"); mix.data_type = 'FLOAT'; mix.inputs['Factor'].default_value = 0.22
+    L.new(ct.outputs['Result'], mix.inputs['A']); L.new(gr.outputs['Fac'], mix.inputs['B'])
+    wv = N.new("ShaderNodeTexWave"); wv.wave_type = 'BANDS'; wv.bands_direction = 'Y'; wv.inputs['Scale'].default_value = 60
+    L.new(tc.outputs['UV'], wv.inputs['Vector'])
+    sl = N.new("ShaderNodeMapRange"); sl.inputs['To Min'].default_value = 0.78; L.new(wv.outputs['Fac'], sl.inputs['Value'])
+    mul = N.new("ShaderNodeMath"); mul.operation = 'MULTIPLY'; L.new(mix.outputs['Result'], mul.inputs[0]); L.new(sl.outputs['Result'], mul.inputs[1])
+    tint = N.new("ShaderNodeMix"); tint.data_type = 'RGBA'; tint.blend_type = 'MULTIPLY'; tint.inputs['Factor'].default_value = 1.0
+    L.new(mul.outputs['Value'], tint.inputs['A']); tint.inputs['B'].default_value = (0.86, 0.95, 0.9, 1)
+    e = N.new("ShaderNodeEmission"); e.inputs['Strength'].default_value = strength
+    L.new(tint.outputs['Result'], e.inputs['Color']); L.new(e.outputs[0], N["Material Output"].inputs['Surface'])
+    return m
+
+
 def crt_mat(name, tint=(0.35, 0.45, 0.4), strength=2.5, scale=3.0, seed=0.0):
     """A CCTV monitor showing a grey-green camera picture (noise + scan lines), for monitors far from camera."""
     m = bpy.data.materials.new(name); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links

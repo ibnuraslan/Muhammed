@@ -137,9 +137,10 @@ class ModernMan(W._Woman):
         hide |= shoe
         # jacket
         if self.JACKET:
-            low = {"blazer": m["hip"] - 0.015, "leather": m["hip"] - 0.015, "bomber": m["hip"] - 0.03, "coat": m["hip"] - 0.015}[self.JACKET]
+            JK = "coat" if self.JACKET == "labcoat" else self.JACKET      # a lab coat is a coat, cut straight
+            low = {"blazer": m["hip"] - 0.015, "leather": m["hip"] - 0.015, "bomber": m["hip"] - 0.03, "coat": m["hip"] - 0.015}[JK]
             jk = u & (wh < 0.2) & (whand < 0.04) & (z > low) & (z < m["neck"] + 0.01 * hs) & (dist_wrist > 0.035)
-            vz = {"blazer": m["hip"] + 0.22, "coat": m["hip"] + 0.3, "leather": m["neck"] - 0.14, "bomber": m["neck"] - 0.06}[self.JACKET]
+            vz = {"blazer": m["hip"] + 0.22, "coat": m["hip"] + 0.3, "leather": m["neck"] - 0.14, "bomber": m["neck"] - 0.06}[JK]
             cx = float(co[u, 0].mean())
             vee = (y < -0.04) & (z > vz) & (np.abs(x - cx) < 0.012 + (z - vz) * 0.42)
             jk &= ~vee
@@ -148,7 +149,7 @@ class ModernMan(W._Woman):
                 mat = W.cloth(self.name + "_jacket", self.JACKET_COL, rough=0.82, sheen=0.15, weave=1800, bump=0.15)
             else:
                 mat = W.cloth(self.name + "_jacket", self.JACKET_COL, rough=0.7 if self.JACKET == "bomber" else 0.82, weave=520, sheen=0.25, bump=0.5 if self.JACKET == "bomber" else 0.25)
-            off = {"blazer": 0.012, "leather": 0.014, "bomber": 0.02, "coat": 0.016}[self.JACKET]
+            off = {"blazer": 0.012, "leather": 0.014, "bomber": 0.02, "coat": 0.016}[JK]
             self.jacket, jv = self._shell("jacket", jk, off, mat, solid=0.004, displace=0.004 if self.JACKET == "bomber" else 0.002,
                                           drape=40 if self.JACKET == "bomber" else 10)
             # the body of the jacket hangs from the shoulders: no pecs, abs or shoulder blades under the cloth
@@ -156,9 +157,11 @@ class ModernMan(W._Woman):
             self._loosen(self.jacket, m, ease=1.04 if self.JACKET != "bomber" else 1.07, extra=0.003, mask=arm_w < 0.2, single=True)
             jr = self.jacket.modifiers.new("Relax", "SMOOTH"); jr.factor = 0.5; jr.iterations = 10    # no step at the loosened panel's edge
             self.jacket.modifiers.move(self.jacket.modifiers.find("Relax"), 0)
-            drop = {"blazer": 0.14, "leather": 0.08, "bomber": 0.0, "coat": 0.5}[self.JACKET]
+            drop = {"blazer": 0.14, "leather": 0.08, "bomber": 0.0, "coat": 0.5}[JK] if self.JACKET != "labcoat" else 0.4
             if drop:
-                self._hem(self.jacket, m["hip"], drop=drop * hs, flare=0.03 if self.JACKET != "coat" else 0.06)
+                self._hem(self.jacket, m["hip"], drop=drop * hs, flare={"coat": 0.06, "labcoat": 0.01}.get(self.JACKET, 0.03))
+            if self.JACKET == "labcoat":
+                self._split(self.jacket, cx, m["hip"] + 0.02, m["hip"] - 0.16 * hs)
             if self.JACKET != "bomber":
                 self._collar(self.jacket)
             else:
@@ -188,6 +191,20 @@ class ModernMan(W._Woman):
             hide |= gl
         self._orient_all()
         self._hide_skin(hide)
+
+    def _split(self, o, cx, front_top, back_top):
+        """A lab coat hangs open: a front opening from the waist button down through the hem, and a centre back vent."""
+        import bmesh
+        bm = bmesh.new(); bm.from_mesh(o.data)
+        kill = []
+        for f in bm.faces:
+            c = f.calc_center_median()
+            if abs(c.x - cx) < 0.022 and c.y < -0.02 and c.z < front_top:
+                kill.append(f)
+            elif abs(c.x - cx) < 0.009 and c.y > 0.02 and c.z < back_top:
+                kill.append(f)
+        bmesh.ops.delete(bm, geom=kill, context='FACES')
+        bm.to_mesh(o.data); bm.free(); o.data.update()
 
     def _orient_all(self):
         """Garment shells must have consistent, outward normals: a patch wound the other way pushes its crease/fold
@@ -577,7 +594,7 @@ class LabTech(ModernMan):
     """Forensic technician: white lab coat over a pale shirt, dark trousers; blue nitrile gloves."""
     MUSCLE = 0.45; WEIGHT = 0.5; HEIGHT = 0.52
     HAIR = (0.75, 0.3); HAIR_LEN = (0.01, 0.02)
-    SHIRT = (0.6, 0.65, 0.7); JACKET = "coat"; JACKET_COL = (0.78, 0.78, 0.76)
+    SHIRT = (0.6, 0.65, 0.7); JACKET = "labcoat"; JACKET_COL = (0.78, 0.78, 0.76)
     TROUSERS = (0.05, 0.05, 0.06); GLOVES = True; GLOVE_COL = (0.08, 0.2, 0.6)
 
     def __init__(self, name="LabTech", **kw):
