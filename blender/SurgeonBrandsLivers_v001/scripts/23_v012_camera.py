@@ -29,8 +29,8 @@ SHOTS = [
     (136, 200, (0.40, -0.20, 1.72), (0.37, -0.20, 1.70), fixed((CX - 0.03, CY - 0.16, SKZ + 0.14)), 30, 5.6),  # S2a foot end: his face, hand, the liver
     (201, 275, (CX + 0.30, CY + 0.01, SKZ + 0.26), (CX + 0.27, CY + 0.01, SKZ + 0.24), letters((0, 0, 0)), 55, 8.0),  # S2b the beam burns S B (legible)
     (276, 429, (0.32, 0.62, 1.78), (0.28, 0.56, 1.74), fixed((CX - 0.02, CY - 0.22, SKZ + 0.18)), 26, 5.6),  # S3 closing + stitching
-    (430, 520, (-0.05, 0.42, 1.62), (-0.08, 0.38, 1.62), bone("Surgeon1", "head", (0, 0, -0.02)), 70, 5.6),  # S4a face close-up: mask comes down (no arm path in frame)
-    (521, 570, (0.12, 0.78, 1.52), (0.06, 0.68, 1.55), bone("Surgeon1", "spine01", (0, 0, 0.12)), 30, 5.6),  # S4b hands at rest, smirk
+    (430, 496, (-0.05, 0.42, 1.62), (-0.07, 0.39, 1.62), bone("Surgeon1", "head", (0, 0, -0.02)), 70, 5.6),  # S4a face close-up: mask comes down
+    (497, 570, (0.12, 0.78, 1.52), (0.06, 0.68, 1.55), bone("Surgeon1", "spine01", (0, 0, 0.12)), 30, 5.6),  # S4b medium: mask at the chin, hands to rest, smirk
     (571, 640, (1.45, -1.85, 1.72), (1.45, -1.92, 1.72), mix(fixed((3.46, -0.9, 1.55)), bone("Surgeon1", "head"), 0.6), 30, 5.6),  # S5 chest-up
     (641, 775, (5.05, -1.60, 1.45), (5.15, -1.40, 1.32), bone("Patient", "spine01", (0, 0, 0.08)), 30, 5.6),  # S6 home
     (776, 915, (0.15, 6.40, 1.62), (0.22, 5.10, 1.60), mix(bone("Patient", "head"), bone("Nurse", "head"), 0.45), 24, 5.6),  # S7 bed + doctor
