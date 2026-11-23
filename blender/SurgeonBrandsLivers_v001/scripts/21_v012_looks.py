@@ -156,6 +156,30 @@ for nm, rgb in CAPC.items():
     me.materials.append(cap_fabric(nm + "_CapFabric", rgb))
     cap.data = me
     for mo in list(cap.modifiers): cap.modifiers.remove(mo)
+    # hair under the cap is masked out (only the hairline below the cap edge shows; nothing pokes through)
+    hairs = [h for h in set(bpy.data.objects[nm].children) if h.type == 'MESH' and h.name.split(".")[-1].startswith(("short", "ponytail", "bob", "braid", "long", "afro"))]
+    for h in hairs:
+        sd = [m for m in h.modifiers if m.type == 'SUBSURF']
+        for m in sd: m.show_viewport = False
+        hv2 = h.hide_viewport; h.hide_viewport = False
+        bpy.context.view_layer.update(); dg2 = bpy.context.evaluated_depsgraph_get(); eh = h.evaluated_get(dg2); hm = eh.to_mesh()
+        Mi2 = cap.matrix_world.inverted() @ h.matrix_world; under = []
+        if len(hm.vertices) == len(h.data.vertices):
+            for v in hm.vertices:
+                q = Mi2 @ v.co; ph = math.atan2(q.x, -(q.y - cy))
+                ze = -0.02375 + 0.0625 * math.cos(ph) - 0.01375 * math.cos(2 * ph)
+                if q.z > ze + 0.004: under.append(v.index)
+        eh.to_mesh_clear(); h.hide_viewport = hv2
+        for m in sd: m.show_viewport = True
+        g = h.vertex_groups.new(name="UnderCap"); g.add(under, 1.0, 'REPLACE')
+        mm = h.modifiers.new("UnderCap", 'MASK'); mm.vertex_group = "UnderCap"; mm.invert_vertex_group = True
+        h.modifiers.move(h.modifiers.find("UnderCap"), 0)
+        cfc = [fc for fc in VL.fcurves(cap) if fc.data_path == "hide_render"]      # only while the cap is worn
+        if cfc:
+            for kp in cfc[0].keyframe_points:
+                mm.show_render = not bool(kp.co.y); h.keyframe_insert('modifiers["%s"].show_render' % mm.name, frame=int(kp.co.x))
+            VL.constant(h)
+        print("HAIR masked under cap", h.name, len(under), "of", len(h.data.vertices))
     tx = bpy.data.textures.new(nm + "_CapWrinkle", 'CLOUDS'); tx.noise_scale = 0.035
     d = cap.modifiers.new("Wrinkle", 'DISPLACE'); d.texture = tx; d.strength = 0.010; d.texture_coords = 'LOCAL'
     # hug the head: every vertex goes to the nearest head-surface point + 1.6 cm (hair room), sampled where visible
@@ -175,6 +199,30 @@ for nm, rgb in CAPC.items():
         k += 0.003 * math.sin(ph * 31) * t ** 6                                  # gathered elastic band
         dv = v.co - loc
         v.co = loc + (dv.normalized() if dv.length > 1e-5 else nrm) * k
+    # hair under the cap is masked out (only the hairline below the cap edge shows; nothing pokes through)
+    hairs = [h for h in set(bpy.data.objects[nm].children) if h.type == 'MESH' and h.name.split(".")[-1].startswith(("short", "ponytail", "bob", "braid", "long", "afro"))]
+    for h in hairs:
+        sd = [m for m in h.modifiers if m.type == 'SUBSURF']
+        for m in sd: m.show_viewport = False
+        hv2 = h.hide_viewport; h.hide_viewport = False
+        bpy.context.view_layer.update(); dg2 = bpy.context.evaluated_depsgraph_get(); eh = h.evaluated_get(dg2); hm = eh.to_mesh()
+        Mi2 = cap.matrix_world.inverted() @ h.matrix_world; under = []
+        if len(hm.vertices) == len(h.data.vertices):
+            for v in hm.vertices:
+                q = Mi2 @ v.co; ph = math.atan2(q.x, -(q.y - cy))
+                ze = -0.02375 + 0.0625 * math.cos(ph) - 0.01375 * math.cos(2 * ph)
+                if q.z > ze + 0.004: under.append(v.index)
+        eh.to_mesh_clear(); h.hide_viewport = hv2
+        for m in sd: m.show_viewport = True
+        g = h.vertex_groups.new(name="UnderCap"); g.add(under, 1.0, 'REPLACE')
+        mm = h.modifiers.new("UnderCap", 'MASK'); mm.vertex_group = "UnderCap"; mm.invert_vertex_group = True
+        h.modifiers.move(h.modifiers.find("UnderCap"), 0)
+        cfc = [fc for fc in VL.fcurves(cap) if fc.data_path == "hide_render"]      # only while the cap is worn
+        if cfc:
+            for kp in cfc[0].keyframe_points:
+                mm.show_render = not bool(kp.co.y); h.keyframe_insert('modifiers["%s"].show_render' % mm.name, frame=int(kp.co.x))
+            VL.constant(h)
+        print("HAIR masked under cap", h.name, len(under), "of", len(h.data.vertices))
     tx = bpy.data.textures.new(nm + "_CapWrinkle", 'CLOUDS'); tx.noise_scale = 0.03
     d = cap.modifiers.new("Wrinkle", 'DISPLACE'); d.texture = tx; d.strength = 0.008; d.texture_coords = 'LOCAL'
     so = cap.modifiers.new("t", 'SOLIDIFY'); so.thickness = 0.002

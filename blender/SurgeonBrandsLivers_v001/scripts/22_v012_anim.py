@@ -314,17 +314,19 @@ blink(s2, 1216, dict(wide=0.6, brow=0.75, jaw=3))
 eyes(s2, 1176, 0, -6); eyes(s2, 1192, 0, -10); eyes(s2, 1200, 5, -4); eyes(s2, 1210, -4, -2); eyes(s2, 1226, 2, -8); eyes(s2, 1240, 0, -8)
 
 # =================================================================== S11: hearing - hands rest on the lectern
+for o in OB:                                          # lectern 15 cm further from him (his body was inside it)
+    if o.name.startswith(("HEAR_Lectern",)) and o.parent is None: o.location.x -= 0.15
+bpy.context.view_layer.update()
 lt = OB["HEAR_LecternTop"]; lz = max((lt.matrix_world @ Vector(c)).z for c in lt.bound_box)
 lxmax = max((lt.matrix_world @ Vector(c)).x for c in lt.bound_box)
-for f in range(1241, 1446, 4):
+clear_bones(s1, ["IK_hand.L", "IK_hand.R", "Pole_elbow.L", "Pole_elbow.R"], 1236, 1450)
+for f in (1236, 1300, 1340, 1380, 1420, 1450):        # both hands rest on the lectern top (a slight weight shift only)
     ev(f)
     for s, sy in (("L", 0.20), ("R", -0.20)):
-        g = 0.0
-        if s == "R": g = smooth((f - 1318) / 14.0) * (1 - smooth((f - 1352) / 16.0))     # one open-hand gesture, then back down
-        if s == "L": g = 0.6 * smooth((f - 1392) / 12.0) * (1 - smooth((f - 1414) / 14.0))
-        p = V(lxmax - 0.07, sy, lz + 0.004) + V(-0.04, 0, 0.10) * g
-        HP["place_hand"](s1, s, f, p, (V(0, 0, -1) + V(-1, 0, 0) * g).normalized(), V(-1, -0.25 if s == "L" else 0.25, 0).normalized(), skin=0.012)
-        HP["apply_pose"](s1, s, "relaxed" if g < 0.3 else "open_alarm", f)
+        sh_ = 0.01 * math.sin(f / 25.0) * (1 if s == "L" else -1)
+        p = V(lxmax - 0.07 + sh_, sy, lz + 0.004)
+        HP["place_hand"](s1, s, f, p, V(0, 0, -1), V(-1, -0.25 if s == "L" else 0.25, 0).normalized(), skin=0.012)
+        HP["apply_pose"](s1, s, "relaxed", f)
         sh = W(s1, "upperarm01." + s); pole = sh + V(0.35, 0.25 * (1 if s == "L" else -1), -0.35)
         pbp = s1.pose.bones["Pole_elbow." + s]; pbp.location = s1.data.bones["Pole_elbow." + s].matrix_local.to_3x3().inverted() @ (pole - s1.data.bones["Pole_elbow." + s].head_local)
         pbp.keyframe_insert("location", frame=f, group=pbp.name)
@@ -334,6 +336,7 @@ blink(s1, 1280, dict(wide=0.28, brow=0.1)); blink(s1, 1390, dict(wide=0.2, brow=
 
 # =================================================================== S12: the judge grips the gavel and strikes the block
 ja = OB["PanelA"]; gv = OB["Gavel"]; blk = OB["Gavel_src_4"]
+VL.key_hide(OB["HEAR_Glass.001"], [])          # no glass in front of the judge's block (it never moves either)
 ev(1); G0 = gv.matrix_world.copy()                       # where it lies on the desk
 VL.clear_keys(gv, ("location", "rotation_quaternion", "rotation_euler"))
 gv.rotation_mode = 'QUATERNION'; gv.matrix_world = G0; ev(1446)
@@ -428,12 +431,13 @@ st.matrix_world = S0; st.keyframe_insert("location", frame=1); st.keyframe_inser
 # red X (no text): two crossed ink bars printed where the stamp came down
 for o in [OB["StampMark"]] + list(OB["StampMark"].children): VL.key_hide(o, [])
 M_INK = bpy.data.materials.new("StampInk"); M_INK.use_nodes = True
-bi = M_INK.node_tree.nodes["Principled BSDF"]; bi.inputs["Base Color"].default_value = (0.75, 0.02, 0.02, 1); bi.inputs["Roughness"].default_value = 0.6
+bi = M_INK.node_tree.nodes["Principled BSDF"]; bi.inputs["Base Color"].default_value = (0.55, 0.0, 0.0, 1); bi.inputs["Roughness"].default_value = 0.5
+bi.inputs["Emission Color"].default_value = (0.6, 0.0, 0.0, 1); bi.inputs["Emission Strength"].default_value = 0.4
 pz = (press @ S0.inverted() @ Matrix.Translation(sbc)).translation
 for a in (45, -45):
     bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.0); me = bpy.data.meshes.new("RedX"); bm.to_mesh(me); bm.free()
     ob = OB.new("RedX", me); bpy.data.collections["Hearing_Set"].objects.link(ob); me.materials.append(M_INK)
-    ob.scale = (0.105, 0.017, 0.0008); ob.rotation_euler = (0, 0, R_(a)); ob.location = V(pz.x, pz.y, ctop + 0.0007)
+    ob.scale = (0.11, 0.022, 0.0008); ob.rotation_euler = (0, 0, R_(a)); ob.location = V(pz.x, pz.y, ctop + 0.0007)
     VL.key_hide(ob, [(1617, 1700)])
 for f, kw in ((1576, dict(wide=0.3)), (1600, dict(wide=0.3, brow=-0.2)), (1616, dict(wide=0.25, brow=-0.3, jaw=2)), (1644, dict(wide=0.3, smile=0.1))):
     face(cl, f, **kw)
