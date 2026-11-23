@@ -407,7 +407,7 @@ SCANS = {
 }
 
 
-def burial_scan(key="B1", rot=None, skirt=0.45):
+def burial_scan(key="B1", rot=None, skirt=0.0):
     import bones as B
     uid, cen, sc, cut, skull = SCANS[key]
     px, py, a, b, dep, ang = U.PITS[key]
@@ -424,13 +424,13 @@ def burial_scan(key="B1", rot=None, skirt=0.45):
     x = co[:, 0] * c - co[:, 1] * s; y = co[:, 0] * s + co[:, 1] * c
     floor_z = float(U.surface(px + 2.2 * math.cos(rot + 1.2), py + 2.2 * math.sin(rot + 1.2)))  # house floor beside the pit
     co[:, 0] = x + px; co[:, 1] = y + py
-    co[:, 2] += floor_z + 0.012 - co[:, 2].max()
+    co[:, 2] += floor_z + 0.004 - co[:, 2].max()
     me.vertices.foreach_set("co", co.ravel()); me.update()
     # skirt: from every open edge of the scan outward and up to the floor level
     bm = bmesh.new(); bm.from_mesh(me)
-    bnd = [e for e in bm.edges if e.is_boundary]
+    bnd = [e for e in bm.edges if e.is_boundary] if skirt > 0 else []
     rr = lambda v: math.hypot(v.co.x - px, v.co.y - py)
-    rmax = max(max(rr(v) for v in e.verts) for e in bnd)
+    rmax = max([max(rr(v) for v in e.verts) for e in bnd] or [1.0])
     bnd = [e for e in bnd if min(rr(v) for v in e.verts) > 0.72 * rmax]          # the outer rim only
     outer = {}
     for e in bnd:
