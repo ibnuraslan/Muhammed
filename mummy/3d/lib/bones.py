@@ -26,14 +26,14 @@ MANDIBLE = "2667ab0d436840f58a82da7cefb8b5be"
 SCALE = 1.70 / 15.9
 
 TONES = {   # base, darker stain
-    "A": ((0.50, 0.40, 0.27), (0.24, 0.17, 0.10)),
-    "B": ((0.55, 0.46, 0.33), (0.30, 0.22, 0.13)),
-    "C": ((0.46, 0.36, 0.24), (0.21, 0.15, 0.08)),
-    "D": ((0.52, 0.44, 0.33), (0.28, 0.22, 0.15)),
+    "A": ((0.42, 0.33, 0.22), (0.17, 0.12, 0.07)),
+    "B": ((0.47, 0.39, 0.28), (0.22, 0.16, 0.10)),
+    "C": ((0.38, 0.29, 0.19), (0.15, 0.10, 0.06)),
+    "D": ((0.44, 0.37, 0.27), (0.20, 0.16, 0.11)),
 }
 
 
-def bone_material(tone="A", name=None, dirt=1.0):
+def bone_material(tone="A", name=None, dirt=1.0, sand=0.0):
     base, stain = TONES[tone] if isinstance(tone, str) else tone
     m = bpy.data.materials.new(name or f"Bone_{tone}"); m.use_nodes = True
     nt = m.node_tree; N = nt.nodes; L = nt.links; p = N["Principled BSDF"]
@@ -55,7 +55,21 @@ def bone_material(tone="A", name=None, dirt=1.0):
     # fine speckle (grain of the cortex)
     sp = N.new("ShaderNodeMix"); sp.data_type = 'RGBA'; sp.blend_type = 'OVERLAY'; sp.inputs['Factor'].default_value = 0.25
     L.new(mx.outputs[2], sp.inputs[6]); L.new(n2.outputs['Color'], sp.inputs[7])
-    L.new(sp.outputs[2], p.inputs['Base Color'])
+    col = sp.outputs[2]
+    if sand > 0:      # sand still lying on the upper surfaces (in the ground): mask by world-up normal and noise
+        sep = N.new("ShaderNodeSeparateXYZ"); L.new(geo.outputs['Normal'], sep.inputs[0])
+        up = N.new("ShaderNodeMapRange"); up.inputs['From Min'].default_value = 0.35; up.inputs['From Max'].default_value = 0.85
+        L.new(sep.outputs['Z'], up.inputs['Value'])
+        n3 = N.new("ShaderNodeTexNoise"); n3.inputs['Scale'].default_value = 60; n3.inputs['Detail'].default_value = 8
+        L.new(tc.outputs['Object'], n3.inputs['Vector'])
+        br = N.new("ShaderNodeMapRange"); br.inputs['From Min'].default_value = 0.45; br.inputs['From Max'].default_value = 0.6
+        L.new(n3.outputs['Fac'], br.inputs['Value'])
+        mk = N.new("ShaderNodeMath"); mk.operation = 'MULTIPLY'; L.new(up.outputs[0], mk.inputs[0]); L.new(br.outputs[0], mk.inputs[1])
+        mk2 = N.new("ShaderNodeMath"); mk2.operation = 'MULTIPLY'; mk2.inputs[1].default_value = sand; L.new(mk.outputs[0], mk2.inputs[0])
+        sm = N.new("ShaderNodeMix"); sm.data_type = 'RGBA'; L.new(mk2.outputs[0], sm.inputs['Factor'])
+        L.new(col, sm.inputs[6]); sm.inputs[7].default_value = (0.5, 0.42, 0.3, 1)
+        col = sm.outputs[2]
+    L.new(col, p.inputs['Base Color'])
     p.inputs['Roughness'].default_value = 0.72
     p.inputs['Subsurface Weight'].default_value = 0.08
     p.inputs['Subsurface Radius'].default_value = (0.6, 0.4, 0.25); p.inputs['Subsurface Scale'].default_value = 0.004
@@ -149,7 +163,7 @@ PIVOT = {   # rest-pose joint centres (ZBrush units)
 
 
 class Skeleton:
-    def __init__(self, sex="M", tone="A", name=None):
+    def __init__(self, sex="M", tone="A", name=None, sand=0.0):
         self.name = name or f"Skel{sex}{tone}"
         uid = MALE if sex == "M" else FEMALE
         before = set(bpy.data.objects)
@@ -166,7 +180,7 @@ class Skeleton:
             idx = np.where(lab == k)[0]
             P = co[idx]; lo, hi = P.min(0), P.max(0)
             seg_of_vert[idx] = _classify((lo + hi) / 2, hi - lo, len(idx))
-        self.mat = bone_material(tone, name=self.name + "_bone")
+        self.mat = bone_material(tone, name=self.name + "_bone", sand=sand)
         self.parts = {}
         # one object per segment (geometry in rest-pose world units, scaled to metres, origin at its pivot)
         fv = np.empty(sum(len(p.vertices) for p in me.polygons), np.int32)
@@ -262,6 +276,11 @@ class Skeleton:
 
     def objects(self):
         return list(self.parts.values())
+
+    def centre(self):
+        import numpy as np
+        P = np.concatenate([np.array([o.matrix_world @ v.co for v in o.data.vertices[:]]) for o in self.parts.values()])
+        return Vector(((P.min(0) + P.max(0)) / 2).tolist()), Vector((P.max(0) - P.min(0)).tolist())
 
     def world_pivot(self, seg):
         return self.parts[seg].matrix_world.translation.copy()

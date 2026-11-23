@@ -157,7 +157,7 @@ def burial(key="B1", sex="M", tone="A", heading=None, side="R", arms="face", kne
     """Crouched skeleton in its pit. swap = {"skull": Skeleton, "pelvis": Skeleton ...} to build a composite."""
     import bones as B
     px, py, a, b, dep, ang = U.PITS[key]
-    sk = B.Skeleton(sex, tone, name=key).pose_crouched(side=side, arms=arms)
+    sk = B.Skeleton(sex, tone, name=key, sand=0.85).pose_crouched(side=side, arms=arms)
     if knee_missing:
         sk.remove("patellaL")
     sk.place((px, py, H(px, py)), heading=heading if heading is not None else ang + 180, sink=0.01, ground_fn=H)

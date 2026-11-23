@@ -56,9 +56,10 @@ def S02():
 
 def S03():
     """Top-down over the grave: the crouched skeleton in the sand, slowly turning."""
-    site("overcast", grass_at=None, kit=False)
-    return dict(a=((-1.62, 8.62, 5.3), (-1.8, 8.92, 3.2)), b=((-2.0, 9.15, 4.75), (-1.8, 8.92, 3.2)), lens=35,
-                fstop=4.0, focus=(-1.8, 8.92, 3.3))
+    T, sk = site("golden", grass_at=None, kit=False, sun_az=215)
+    c, size = sk["B1"].centre(); z = c.z
+    return dict(a=((c.x + 0.25, c.y - 0.35, z + 2.3), (c.x, c.y, z)), b=((c.x - 0.3, c.y + 0.25, z + 1.85), (c.x, c.y, z)), lens=35,
+                fstop=4.0, focus=(c.x, c.y, z))
 
 
 def S04():
@@ -192,9 +193,10 @@ def S10():
 # ============================================================================ "...arranged to look like one" / another body
 def S11():
     """High overhead of the crouched figure: one body - slow rise."""
-    site("overcast", grass_at=None, kit=False)
-    return dict(a=((-1.7, 8.8, 4.45), (-1.8, 8.92, 3.25)), b=((-1.55, 8.7, 7.2), (-1.8, 8.95, 3.25)), lens=32,
-                fstop=5.6, focus=(-1.8, 8.92, 3.3))
+    T, sk = site("overcast", grass_at=None, kit=False)
+    c, size = sk["B1"].centre()
+    return dict(a=((c.x + 0.1, c.y - 0.12, c.z + 1.3), (c.x, c.y, c.z)), b=((c.x + 0.25, c.y - 0.2, c.z + 4.0), (c.x, c.y, c.z)), lens=32,
+                fstop=5.6, focus=(c.x, c.y, c.z))
 
 
 def S12():
@@ -343,10 +345,10 @@ def S24():
 
 def S25():
     """The second body, top-down: tightly curled."""
-    site("overcast", grass_at=None, kit=False)
-    px, py = U.PITS["B2"][:2]; z = G.H(px, py)
-    return dict(a=((px + 0.25, py - 0.3, z + 2.2), (px, py, z)), b=((px - 0.15, py + 0.2, z + 1.8), (px, py, z)), lens=35,
-                fstop=4.0, focus=(px, py, z + 0.05))
+    T, sk = site("overcast", grass_at=None, kit=False)
+    c, size = sk["B2"].centre()
+    return dict(a=((c.x + 0.25, c.y - 0.3, c.z + 2.1), (c.x, c.y, c.z)), b=((c.x - 0.15, c.y + 0.2, c.z + 1.7), (c.x, c.y, c.z)), lens=35,
+                fstop=4.0, focus=(c.x, c.y, c.z))
 
 
 def S26():
