@@ -37,7 +37,7 @@ SHOTS = [
     (1061, 1175, (0.50, 0.02, 1.62), (0.16, -0.02, 1.44), lambda f: obj("LiverRig", (0, 0.16, 0.12))(f).lerp(letters()(f), ease(min(1.0, max(0.0, (f - 1080) / 80.0)))), 32, 5.6),   # wide (her body, hands) -> push in to the letters  # S9 foot end: her hands lift the branded liver
     (1176, 1240, (-0.22, -0.72, 1.62), (-0.24, -0.66, 1.62), bone("Surgeon2", "head", (0, 0, 0.05)), 70, 5.6),  # S10 her face
     (1241, 1310, (-9.05, -0.22, 1.58), (-9.12, -0.12, 1.57), bone("PanelA", "neck01", (0, 0, -0.02)), 42, 5.6),  # S11a medium on the judge speaking (nobody at the frame edge)
-    (1311, 1445, (-7.95, -0.40, 1.58), (-7.90, -0.35, 1.58), bone("Surgeon1", "head", (0, 0, -0.04)), 62, 5.6),  # S11b defendant, face the focus
+    (1311, 1445, (-7.95, -0.40, 1.58), (-7.90, -0.35, 1.58), bone("Surgeon1", "head", (0, 0, -0.10)), 55, 5.6),  # S11b defendant, face + upper chest
     (1446, 1575, (-9.20, -0.95, 1.55), (-9.24, -0.90, 1.53), fixed((-10.15, -0.05, 1.36)), 30, 5.6),  # S12 gavel
     (1576, 1644, (-9.25, -1.55, 1.62), (-9.45, -1.42, 1.55), fixed((-10.15, -1.15, 1.30)), 32, 5.6),  # S13 stamp
 ]

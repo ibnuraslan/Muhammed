@@ -293,18 +293,19 @@ for nm, (rgb, suit) in SCRUB.items():
     # visibility source = the v013 scrub pieces (they carry the shot visibility); then hide them for good
     vis_src = OB.get(nm + ".ScrubTop") or src
     mt = fabric(nm + "ClothTop", rgb, print_dots=(nm == "Surgeon2"))
+    slv = "long" if nm == "Surgeon1" else "short"                       # v014c: Surgeon1 long sleeves to the wrist, one mesh with the top
     if nm in ("Nurse", "Surgeon1", "Anaesth"):                           # v014b: soft fitted top follows the arms (no gap, no pad)
-        yoke(nm, mt, vis_src, "short", 0.016, name=nm + ".ClothTop", torso=True)
+        yoke(nm, mt, vis_src, slv, 0.016, name=nm + ".ClothTop", torso=True)
     else:
         build(nm, "Top", mt, vis_src, "short", 0.032); yoke(nm, mt, vis_src, "short", 0.012)
-    hide_under(nm, vis_src, "short")
+    hide_under(nm, vis_src, slv)
     build(nm, "Trousers", fabric(nm + "ClothTrousers", tuple(c * 0.75 for c in rgb)), vis_src, "short", 0.03)
     for o in (OB.get(nm + ".ScrubTop"), OB.get(nm + ".ScrubTrousers")):
         if o: VL.key_hide(o, [])
 # defendant: shirt + tie + trousers (no jacket)
 suit = OB["Surgeon1.male_elegantsuit01"]
-msh = fabric("DefShirt", (0.72, 0.76, 0.82), rough=0.7)
-shirt = yoke("Surgeon1", msh, suit, "long", 0.010, name="Surgeon1.Shirt", torso=True)   # fitted dress shirt
+msh = fabric("DefSweater", (0.07, 0.08, 0.11), rough=0.9)                  # v014c: dark plain fitted sweater, no volume
+shirt = yoke("Surgeon1", msh, suit, "long", 0.005, name="Surgeon1.Shirt", torso=True)
 hide_under("Surgeon1", suit, "long", tag="UnderShirt")
 trs = build("Surgeon1", "Trousers", fabric("DefTrousers", (0.10, 0.10, 0.13)), suit, "long", 0.025, name="Surgeon1.Slacks")
 r = OB["Surgeon1"]; BN = r.data.bones
@@ -328,6 +329,7 @@ so = tie.modifiers.new("t", 'SOLIDIFY'); so.thickness = 0.003
 VL.clear_keys(tie, ("hide_render",))
 for kp in [f for f in VL.fcurves(suit) if f.data_path == "hide_render"][0].keyframe_points:
     tie.hide_render = bool(kp.co.y); tie.keyframe_insert("hide_render", frame=int(kp.co.x))
+VL.key_hide(tie, [])                                                    # v014c: plain sweater, no tie
 VL.constant(tie, ("hide_render",))
 VL.key_hide(suit, [])
 bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=True)
