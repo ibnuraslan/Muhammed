@@ -379,9 +379,9 @@ def S26():
     """Macro in the grave: the jaw under the skull of the first body; rack from skull to jaw."""
     T, sk = site("day", grass_at=None, kit=False, sun_az=215)
     sp = sk["B1"].part_centre("skull"); jp = sk["B1"].part_centre("mandible")
-    d = Vector((0.6, -0.65, 0)).normalized()
-    return dict(a=(tuple(sp + d * 1.4 + Vector((0, 0, 1.0))), tuple(sp)), b=(tuple(jp + d * 1.1 + Vector((0, 0, 0.8))), tuple(jp)),
-                lens=85, fstop=2.8, focus=tuple(jp))
+    # near-overhead, distinct from S05's oblique: down onto the skull, drifting to the jaw beneath it
+    return dict(a=(tuple(sp + Vector((-0.12, -0.18, 0.75))), tuple(sp)), b=(tuple(jp + Vector((-0.06, -0.12, 0.6))), tuple(jp)),
+                lens=85, fstop=4.0, focus=tuple(jp))
 
 
 def S27():
