@@ -78,7 +78,7 @@ def swing_arms(name, f0, f1, yaw_fn, phase_fn, amp=0.13, step=2):
         for s, sg in (("L", 1), ("R", -1)):
             out = -rt if s == "L" else rt
             sh = W(r, "upperarm01." + s)
-            Wp = sh + V(0, 0, -0.50) + fwd * (0.05 + amp * math.sin(ph) * sg) + out * 0.05
+            Wp = sh + V(0, 0, -0.48) + fwd * (0.06 + amp * math.sin(ph) * sg) + out * 0.11
             d = (V(0, 0, -1) + fwd * 0.25).normalized(); n = -out
             pole = sh + V(0, 0, -0.30) - fwd * 0.4 + out * 0.15
             Hm.key_hand(s, f, Wp, d, n, pole)
@@ -335,9 +335,15 @@ for f, kw in ((1241, dict(wide=0.3, brow=-0.2)), (1300, dict(wide=0.25, brow=0.3
 blink(s1, 1280, dict(wide=0.28, brow=0.1)); blink(s1, 1390, dict(wide=0.2, brow=0.4))
 
 # =================================================================== S12: the judge grips the gavel and strikes the block
+# desk top ended behind the seated panel (their bodies went through it): back edge now in front of them
+dt = OB["HEAR_DeskTop"]; mwi = dt.matrix_world.inverted()
+for v in dt.data.vertices:
+    w = dt.matrix_world @ v.co
+    if w.x < -10.24: w.x = -10.24; v.co = mwi @ w
+dt.data.update()
 ja = OB["PanelA"]; gv = OB["Gavel"]; blk = OB["Gavel_src_4"]
 VL.key_hide(OB["HEAR_Glass.001"], [])          # no glass in front of the judge's block (it never moves either)
-ev(1); G0 = gv.matrix_world.copy()                       # where it lies on the desk
+ev(1); G0 = Matrix.Translation(V(0.10, 0, 0)) @ gv.matrix_world.copy()   # on the desk (moved forward with the trimmed desk edge)
 VL.clear_keys(gv, ("location", "rotation_quaternion", "rotation_euler"))
 gv.rotation_mode = 'QUATERNION'; gv.matrix_world = G0; ev(1446)
 head_pts = [o.matrix_world @ Vector(c) for o in (OB["Gavel_src_0"], OB["Gavel_src_1"], OB["Gavel_src_2"]) for c in o.bound_box]

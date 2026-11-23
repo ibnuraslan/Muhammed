@@ -197,7 +197,7 @@ for sgn in (-1, 1):
     ob.rotation_euler = (0, 0, 0 if sgn > 0 else math.pi)
     ob.rotation_euler.y = math.radians(90); ob.rotation_euler.x = 0
     ob.matrix_world = Matrix.Translation(ob.location) @ Matrix.Rotation(0 if sgn > 0 else math.pi, 4, 'Z') @ Matrix.Rotation(math.radians(90), 4, 'Y') @ Matrix.Rotation(math.radians(90), 4, 'Z')
-    key_hide(ob, [OR_OPEN1, OR_OPEN2])
+    key_hide(ob, [])          # v012: read as tall grey plates on screen; the open cavity reads without them
 
 # ---------------------------------------------------------------- liver group moved into the cavity
 sc.frame_set(200)
