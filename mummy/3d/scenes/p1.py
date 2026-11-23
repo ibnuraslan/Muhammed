@@ -437,11 +437,65 @@ def S29():
                 fstop=5.6, focus=tuple(c), cine=dict(exposure=-0.1))
 
 
+def _glass(name="glass"):
+    m = bpy.data.materials.new(name); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
+    p.inputs['Transmission Weight'].default_value = 1.0; p.inputs['Roughness'].default_value = 0.05; p.inputs['IOR'].default_value = 1.5
+    return m
+
+
+def _plain(name, col, rough=0.5, metal=0.0):
+    m = bpy.data.materials.new(name); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
+    p.inputs['Base Color'].default_value = (*col, 1); p.inputs['Roughness'].default_value = rough; p.inputs['Metallic'].default_value = metal
+    return m
+
+
+def lab_femur(x=0.05, y=0.36, yaw=8):
+    sk = B.Skeleton("M", "C", name="Leg")
+    for s_ in list(sk.parts):
+        if s_ != "femurR":
+            sk.remove(s_)
+    fe = sk.parts["femurR"]
+    sk.root.rotation_euler = (0, math.radians(90), math.radians(yaw))
+    bpy.context.view_layer.update()
+    import numpy as np
+    W = np.array([fe.matrix_world @ v.co for v in fe.data.vertices])
+    sk.root.location = Vector((x - W[:, 0].mean(), y - W[:, 1].mean(), LB.TOP + 0.004 - W[:, 2].min()))
+    bpy.context.view_layer.update()
+    W = np.array([fe.matrix_world @ v.co for v in fe.data.vertices])
+    return fe, W
+
+
 def S30():
-    """Sampling for isotopes: the osteologist at the bench with the femur, sample tubes in a rack (from behind)."""
-    L = lab_body(osteo=True)
-    return dict(a=((0.95, -1.4, 1.55), (0.0, 0.35, LB.TOP + 0.05)), b=((0.75, -1.2, 1.5), (0.05, 0.35, LB.TOP + 0.05)), lens=35,
-                fstop=3.5, focus=(0.1, 0.0, 1.2), hand_ok=("bench", "velvet", "Third"))
+    """Sampling for isotopes: a fresh drill hole in the thigh bone, a little heap of bone powder, sample tubes in a rack,
+    the drill laid down beside it. Slow slider under the lamp."""
+    A = LB.room(window_light=0.35, lamp=True, lamp_at=(0.3, 0.62), lamp_target=(0.05, 0.34), lamp_energy=22)
+    LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
+    import numpy as np
+    fe, W = lab_femur()
+    mid = W[np.abs(W[:, 0] - W[:, 0].mean()) < 0.02]
+    hole = Vector((float(W[:, 0].mean()), float(mid[:, 1].mean()), float(mid[:, 2].max())))
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.0045, depth=0.006, location=hole + Vector((0, 0, -0.001)))
+    h = bpy.context.active_object; h.name = "drillhole"; h.data.materials.append(_plain("hole", (0.03, 0.02, 0.012), 0.9))
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.012, location=(hole.x + 0.03, hole.y - 0.05, LB.TOP + 0.002))
+    pw = bpy.context.active_object; pw.scale = (1, 1, 0.3); pw.name = "bonepowder"; pw.data.materials.append(_plain("powder", (0.7, 0.62, 0.5), 0.95))
+    # tube rack with capped sample tubes
+    rack = _plain("rack", (0.85, 0.85, 0.82), 0.4); cap = _plain("cap", (0.05, 0.25, 0.55), 0.4); gl = _glass()
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(hole.x + 0.18, hole.y + 0.12, LB.TOP + 0.02)); rk = bpy.context.active_object
+    rk.scale = (0.14, 0.04, 0.04); rk.data.materials.append(rack); rk.name = "rack"
+    for k in range(5):
+        tx = hole.x + 0.125 + k * 0.026
+        bpy.ops.mesh.primitive_cylinder_add(radius=0.0075, depth=0.07, location=(tx, hole.y + 0.12, LB.TOP + 0.05)); t = bpy.context.active_object
+        t.data.materials.append(gl); t.name = "tube"
+        bpy.ops.mesh.primitive_cylinder_add(radius=0.0085, depth=0.012, location=(tx, hole.y + 0.12, LB.TOP + 0.09)); c = bpy.context.active_object
+        c.data.materials.append(cap); c.name = "tubecap"
+    # the drill handpiece and its burr, laid on the velvet
+    steel = _plain("drillsteel", (0.6, 0.6, 0.62), 0.3, 1.0)
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.009, depth=0.15, location=(hole.x - 0.08, hole.y - 0.1, LB.TOP + 0.01)); d = bpy.context.active_object
+    d.rotation_euler = (0, math.radians(90), math.radians(-30)); d.data.materials.append(steel); d.name = "drill"
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.0015, depth=0.03, location=(hole.x - 0.015, hole.y - 0.137, LB.TOP + 0.01)); bu = bpy.context.active_object
+    bu.rotation_euler = (0, math.radians(90), math.radians(-30)); bu.data.materials.append(steel); bu.name = "burr"
+    return dict(a=(tuple(hole + Vector((-0.28, -0.3, 0.16))), tuple(hole)), b=(tuple(hole + Vector((-0.14, -0.34, 0.15))), tuple(hole + Vector((0.04, 0.02, 0)))),
+                lens=60, fstop=3.2, focus=tuple(hole), cine=dict(exposure=-0.1))
 
 
 def S31():
@@ -509,7 +563,7 @@ PLAN = [  # shot, VO paragraph (1-based), seconds (first estimate at 140 wpm; re
     ("S27", 13, 5.0, "Lab macro: the healed upper jaw, smooth bone where the molars were"),
     ("S28", 13, 4.5, "The lower molars: wear facets from teeth that met them"),
     ("S29", 14, 3.5, "The jaw offered up to the skull: its teeth meet nothing"),
-    ("S30", 15, 6.0, "Sampling for isotopes at the bench (osteologist from behind)"),
+    ("S30", 15, 6.0, "Sampling for isotopes: a drill hole in the thigh bone, bone powder, sample tubes"),
     ("S31", 15, 4.5, "Skull, jaw and thigh bone laid apart: three men"),
     ("S32", 16, 6.5, "The grave at last light: the head of one man above the body of another"),
 ]
