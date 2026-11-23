@@ -450,7 +450,7 @@ def S30():
     fe, W = lab_femur()
     mid = W[np.abs(W[:, 0] - W[:, 0].mean()) < 0.02]
     hole = Vector((float(W[:, 0].mean()), float(mid[:, 1].mean()), float(mid[:, 2].max())))
-    bpy.ops.mesh.primitive_cylinder_add(radius=0.0045, depth=0.006, location=hole + Vector((0, 0, -0.001)))
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.0045, depth=0.006, location=hole + Vector((0, 0, -0.0034)))
     h = bpy.context.active_object; h.name = "drillhole"; h.data.materials.append(_plain("hole", (0.03, 0.02, 0.012), 0.9))
     bpy.ops.mesh.primitive_uv_sphere_add(radius=0.012, location=(hole.x + 0.03, hole.y - 0.05, LB.TOP + 0.002))
     pw = bpy.context.active_object; pw.scale = (1, 1, 0.3); pw.name = "bonepowder"; pw.data.materials.append(_plain("powder", (0.7, 0.62, 0.5), 0.95))
