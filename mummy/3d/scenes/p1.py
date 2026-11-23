@@ -125,16 +125,18 @@ def S06():
 
 
 def S07():
-    """The mandible: macro along the worn molar crowns (lateral slide)."""
-    A = LB.room(window_light=0.7, lamp=True, lamp_at=(0.4, 0.62), lamp_target=(0.0, 0.3), lamp_energy=20)
+    """The mandible on black velvet, teeth up: a slow arc from above; every lower tooth still in place."""
+    A = LB.room(window_light=0.4, lamp=True, lamp_at=(0.4, 0.62), lamp_target=(0.0, 0.3), lamp_energy=20)
     LB.velvet(-0.6, 0.6, 0.0, 0.75, LB.TOP)
     md = B.hero_mandible(tone="B")
     import numpy as np
     co = np.array([v.co for v in md.data.vertices])
     md.location = (0.0, 0.32, LB.TOP + 0.003 - co[:, 2].min()); md.rotation_euler = (0, 0, math.radians(15))
-    t = Vector((0.0, 0.32, LB.TOP + 0.05))
-    return dict(a=((-0.2, 0.08, LB.TOP + 0.12), tuple(t + Vector((-0.03, 0, 0)))), b=((0.14, 0.06, LB.TOP + 0.12), tuple(t + Vector((0.03, 0, 0)))),
-                lens=100, fstop=4.0, focus=tuple(t))
+    bpy.context.view_layer.update()
+    W = np.array([md.matrix_world @ v.co for v in md.data.vertices])
+    t = Vector(((W.min(0) + W.max(0)) / 2).tolist())
+    return dict(a=(tuple(t + Vector((-0.22, -0.28, 0.3))), tuple(t)), b=(tuple(t + Vector((0.08, -0.33, 0.28))), tuple(t)),
+                lens=70, fstop=5.6, focus=tuple(t), cine=dict(exposure=-0.1))
 
 
 def S08():
