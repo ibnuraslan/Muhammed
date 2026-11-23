@@ -44,7 +44,7 @@ def mat(name):
         m = ph.texture("weathered_planks", scale=1.0, name="plank")
     elif name == "canvas":
         m = bpy.data.materials.new("canvas"); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
-        p.inputs['Base Color'].default_value = (0.42, 0.44, 0.36, 1); p.inputs['Roughness'].default_value = 0.85
+        p.inputs['Base Color'].default_value = (0.07, 0.1, 0.06, 1); p.inputs['Roughness'].default_value = 0.85
         p.inputs['Sheen Weight'].default_value = 0.3
         p.inputs['Transmission Weight'].default_value = 0.0
     elif name == "pole_red":
@@ -363,7 +363,7 @@ def kit(people=False, seed=3):
     D = U.DIG
     out = {}
     out["spoil"] = spoil_heap(D["x1"] + 8.5, 1.0, 6.0, 9.0, 2.2)
-    out["marquee"] = marquee(-D["x0"] * 0 - 18.0, 14.0, rot=0.2)
+    out["marquee"] = marquee(-24.0, 27.0, rot=0.5)
     # string lines along the trench edge, pegs at the corners, a ranging pole at each corner
     zc = H(D["x0"] - 0.5, D["y0"] - 0.5)
     corners = [(D["x0"] - 0.35, D["y0"] - 0.35), (D["x1"] + 0.35, D["y0"] - 0.35), (D["x1"] + 0.35, D["y1"] + 0.35), (D["x0"] - 0.35, D["y1"] + 0.35)]
