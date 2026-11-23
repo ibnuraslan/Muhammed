@@ -212,7 +212,7 @@ def courtroom():
     box("c_panel_back", (0, RY - 0.02, 1.6), (2 * RX, 0.04, 3.2), oak)
     # the bench: a raised platform and a long desk for three judges
     box("c_dais", (0, RY - 1.4, 0.25), (6.0, 2.6, 0.5), oak)
-    box("c_bench_desk", (0, RY - 2.2, 1.05), (5.6, 0.6, 1.1), oak, bevel=0.01)
+    box("c_bench_desk", (0, RY - 2.4, 1.05), (5.6, 0.6, 1.1), oak, bevel=0.01)
     A["judges"] = [Vector((x, RY - 1.6, 0.5)) for x in (-1.4, 0.0, 1.4)]
     for x in (-1.4, 0.0, 1.4):
         S2.chair(f"judge_chair{x}", (x, RY - 1.35, 0.5), -90, flat("chair_leather", (0.15, 0.04, 0.03), 0.5), flat("chair_wood", (0.12, 0.07, 0.04), 0.5), seat_h=0.47)

@@ -156,7 +156,7 @@ def _lightbox_scene(A, seed=2):
     b2 = A["bench2"]
     lb = PR.lightbox(); lb.location = (0.6, b2.y - 0.1, b2.z)
     for k in range(4):
-        d = PR.document(f"scrap{k}", 0.1, 0.12, torn=True, seed=seed + k)
+        d = PR.document(f"scrap{k}", 0.1, 0.12, torn=True, seed=seed + k, lines=7)
         d.location = (0.45 + (k % 2) * 0.11, b2.y - 0.15 + (k // 2) * 0.09, b2.z + 0.053); d.rotation_euler = (0, 0, 0.15 * (k - 1.5))
     return V((0.6, b2.y - 0.1, b2.z + 0.06))
 
@@ -316,7 +316,7 @@ def U29():
 # ============================================================================ L15 the apartment, the links
 def U30():
     A = S2.turin_flat("day")
-    rg = PR.rug(); rg.location = (0.0, -1.2, 0.0)
+    rg = PR.rug(color=(0.2, 0.075, 0.055)); rg.location = (0.0, -1.2, 0.0)
     for o in list(bpy.data.objects):
         if o.name.startswith("t_chair_S"):
             bpy.data.objects.remove(o)
@@ -326,18 +326,18 @@ def U30():
         kn.hand("R", (x + 0.35 * math.cos(math.radians(hd)) + 0.1, y + 0.35 * math.sin(math.radians(hd)), 0.06), elbow=(0.8, 0.2, -0.6), curl=30)
         kn.finish(density=HAIR, floor_z=0.01)
     t = PR.torch("t_torch", energy=120); t.location = (0.0, -1.6, 0.03); t.rotation_euler = (0, 0, math.radians(-90))
-    return dict(a=((-1.9, -2.2, 1.75), (0.0, -1.1, 0.2)), b=((-1.7, -2.05, 1.7), (0.0, -1.1, 0.2)), lens=28, hand_ok=("rug",))
+    return dict(a=((-1.85, -2.2, 2.2), (0.1, -1.05, 0.45)), b=((-1.75, -2.1, 2.15), (0.1, -1.05, 0.45)), lens=20, hand_ok=("rug",))
 
 
 def U31():
-    ST.world((0.5, 0.5, 0.5), 0.35)
-    rg = PR.rug("rug_close", 1.0, 1.0)
+    ST.world((0.5, 0.5, 0.5), 0.12)
+    rg = PR.rug("rug_close", 1.0, 1.0, color=(0.2, 0.075, 0.055))
     dz = PR.brilliants("carpet_gems", n=10, spread=0.03, seed=14); dz.location = (0, 0, 0.0125)     # resting on the pile
     ST.light_spot("rug_key", (-0.4, -0.5, 0.6), (0, 0, 0), 25, angle=35, color=(1.0, 0.9, 0.75), radius=0.01)
     ST.light_area("rug_soft", (0.1, 0.2, 0.5), (0, 0, 0), 0.6, 6, (1.0, 0.97, 0.92))           # a broad source for the facets to mirror
     for k, (x, y, z) in enumerate(((0.3, -0.3, 0.4), (-0.2, 0.35, 0.35))):
         ST.light_point(f"rug_spark{k}", (x, y, z), 10, (1, 0.97, 0.92), radius=0.004)
-    return dict(a=((-0.1, -0.18, 0.1), (0, 0, 0.0)), b=((-0.07, -0.14, 0.08), (0, 0, 0.0)), lens=60, fstop=4.0, focus=(0, 0, 0.005))
+    return dict(a=((-0.1, -0.18, 0.1), (0, 0, 0.0)), b=((-0.07, -0.14, 0.08), (0, 0, 0.0)), lens=60, fstop=4.0, focus=(0, 0, 0.005), cine=dict(exposure=-1.3))
 
 
 def U32():
@@ -356,6 +356,7 @@ def U33():
     A = S3.courtroom()
     for i, p in enumerate(A["judges"]):
         m = MD.Judge(name=f"Judge{i}"); se = AC.Seated(m, V((p.x, p.y + 0.25, 0.97)), -90, lean=6, floor=0.5); se.finish(density=HAIR, floor_z=0.5)
+        se._rest_on_seat(margin=0.016, r=0.55, depth=0.35)          # robe over the chair seat
     le = MD.Leonardo(); st = AC.Stand(le, (A["dock"].x, A["dock"].y), 90); st.hands_front(); st.finish(density=HAIR)
     return dict(a=((0.5, -1.6, 1.75), (0.0, 5.0, 1.6)), b=((0.45, -1.2, 1.72), (0.0, 5.0, 1.6)), lens=28, hand_ok=("chair",))
 

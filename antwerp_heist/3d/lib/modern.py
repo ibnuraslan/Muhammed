@@ -154,6 +154,8 @@ class ModernMan(W._Woman):
             # the body of the jacket hangs from the shoulders: no pecs, abs or shoulder blades under the cloth
             src = np.array(self.jacket["src_verts"]); arm_w = warm[src]
             self._loosen(self.jacket, m, ease=1.04 if self.JACKET != "bomber" else 1.07, extra=0.003, mask=arm_w < 0.2, single=True)
+            jr = self.jacket.modifiers.new("Relax", "SMOOTH"); jr.factor = 0.5; jr.iterations = 10    # no step at the loosened panel's edge
+            self.jacket.modifiers.move(self.jacket.modifiers.find("Relax"), 0)
             drop = {"blazer": 0.14, "leather": 0.08, "bomber": 0.0, "coat": 0.5}[self.JACKET]
             if drop:
                 self._hem(self.jacket, m["hip"], drop=drop * hs, flare=0.03 if self.JACKET != "coat" else 0.06)
@@ -184,37 +186,90 @@ class ModernMan(W._Woman):
             self.gloves, _ = self._shell("gloves", gl, 0.0025, D.leather_material(self.name + "_gloves", color=self.GLOVE_COL, rough=0.5, wet=0.1),
                                          solid=0.0012)
             hide |= gl
+        self._orient_all()
         self._hide_skin(hide)
 
-    def _cover(self, outer, inners, margin=0.009):
-        """Layering: wherever an under-layer (shirt, trousers) sits outside the outer garment at rest, push the outer
-        cloth out over it so nothing shows through (margin covers the outer shell's displace and thickness)."""
+    def _orient_all(self):
+        """Garment shells must have consistent, outward normals: a patch wound the other way pushes its crease/fold
+        displacement and thickness INTO the body, letting the layer beneath show through."""
+        import bmesh
         from mathutils.bvhtree import BVHTree
         bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
-        mw = outer.matrix_world; mwi = mw.inverted()
-        for inn in [o for o in inners if o is not None]:
-            solid = [md for md in inn.modifiers if md.type == 'SOLIDIFY' and md.show_viewport]
-            for md in solid:                      # the outward cloth surface only (no inner shell faces with inward normals)
+        body = BVHTree.FromObject(self.h.body, dg)
+        for o in list(self.h.parts):
+            if o is None or o.type != 'MESH' or o == self.h.body or not o.name.startswith(self.name + "_") or "hair" in o.name or "eye" in o.name:
+                continue
+            bm = bmesh.new(); bm.from_mesh(o.data)
+            bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+            mw = o.matrix_world; score = 0.0
+            for f in list(bm.faces)[::7]:
+                c = mw @ f.calc_center_median(); hit = body.find_nearest(c)
+                if hit[0] is not None:
+                    score += (mw.to_3x3() @ f.normal).dot(c - hit[0])
+            if score < 0:
+                for f in bm.faces:
+                    f.normal_flip()
+            bm.to_mesh(o.data); bm.free(); o.data.update()
+
+    def _cover(self, outer, inners, margin=0.009, under=0.007, trust_normals=False):
+        """Layering: (1) wherever an under-layer (shirt, trousers) sits outside the outer garment, push the outer cloth
+        out over it; (2) under-layer points still outside the outer cloth as finally rendered (folds, subsurf) are
+        drawn in under it. Normals are oriented away from the body (mesh normals are not reliable on shells)."""
+        from mathutils.bvhtree import BVHTree
+
+        def bvh_of(o, drop_solid=True):
+            sol = [md for md in o.modifiers if md.type == 'SOLIDIFY' and md.show_viewport] if drop_solid else []
+            for md in sol:
                 md.show_viewport = False
             bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
-            ev = inn.evaluated_get(dg); me = ev.to_mesh()
-            for md in solid:
+            e = o.evaluated_get(dg); me = e.to_mesh(); me.transform(o.matrix_world)
+            t = BVHTree.FromPolygons([v.co.copy() for v in me.vertices], [tuple(p.vertices) for p in me.polygons])
+            e.to_mesh_clear()
+            for md in sol:
                 md.show_viewport = True
-            me.transform(inn.matrix_world)
-            bvh = BVHTree.FromPolygons([v.co.copy() for v in me.vertices], [tuple(p.vertices) for p in me.polygons])
-            ev.to_mesh_clear()
-            moved = 0
+            return t
+
+        for o in [outer] + [o for o in inners if o is not None]:     # judge layering as rendered (render subdivision)
+            for md in o.modifiers:
+                if md.type == 'SUBSURF':
+                    md.levels = md.render_levels
+        body = None if trust_normals else bvh_of(self.h.body, False)   # after posing the skin under clothes is gone
+
+        def outward(pnt, nrm):
+            if body is None:
+                return nrm                        # garments were oriented outward at build time (_orient_all)
+            b = body.find_nearest(pnt)
+            if b[0] is not None and nrm.dot(pnt - b[0]) < 0:
+                return -nrm
+            return nrm
+
+        mw = outer.matrix_world; mwi = mw.inverted()
+        inn_l = [o for o in inners if o is not None]
+        for inn in inn_l:
+            t = bvh_of(inn); moved = 0
             for v in outer.data.vertices:
                 w = mw @ v.co
-                hit = bvh.find_nearest(w, 0.05)
+                hit = t.find_nearest(w, 0.05)
                 if hit[0] is None:
                     continue
-                pnt, nrm = hit[0], hit[1]
-                d = (w - pnt).dot(nrm)
+                n = outward(hit[0], hit[1]); d = (w - hit[0]).dot(n)
                 if d < margin:
-                    v.co = mwi @ (w + nrm * (margin - d)); moved += 1
+                    v.co = mwi @ (w + n * (margin - d)); moved += 1
             outer.data.update()
             print("COVER", outer.name, "over", inn.name, moved)
+        ob = bvh_of(outer)
+        for inn in inn_l:
+            iw, iwi = inn.matrix_world, inn.matrix_world.inverted(); pulled = 0
+            for v in inn.data.vertices:
+                w = iw @ v.co
+                hit = ob.find_nearest(w, 0.03)
+                if hit[0] is None:
+                    continue
+                n = outward(hit[0], hit[1]); d = (w - hit[0]).dot(n)
+                if d > -under:
+                    v.co = iwi @ (w - n * (d + under)); pulled += 1
+            inn.data.update()
+            print("UNDER", inn.name, "under", outer.name, pulled)
 
     def _loosen(self, o, m, ease=1.06, extra=0.004, bin_h=0.02, mask=None, single=False):
         """Cloth hangs, it does not cling: in 2 cm height bands, push every vertex of each leg (one band for both legs

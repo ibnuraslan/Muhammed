@@ -65,7 +65,7 @@ class _Base:
         self.m.finish(look_at=look, place=self.M, density=density, hair=hair)
         jk = getattr(self.m, "jacket", None)                 # layering after posing: no trousers/shirt through the coat
         if jk is not None and hasattr(self.m, "_cover"):
-            self.m._cover(jk, [getattr(self.m, "shirt", None), getattr(self.m, "trousers", None)])
+            self.m._cover(jk, [getattr(self.m, "shirt", None), getattr(self.m, "trousers", None)], trust_normals=True)
         # feet on the floor: lift him so the lowest sole/heel sits 1.5 mm above floor_z (no sinking into the floor)
         import numpy as np
         bpy.context.view_layer.update()

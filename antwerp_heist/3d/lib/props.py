@@ -335,10 +335,11 @@ def rug(name="rug", w=2.4, h=1.7, color=(0.35, 0.12, 0.08)):
     N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
     nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 900; nz.inputs['Detail'].default_value = 4
     b = N.new("ShaderNodeBump"); b.inputs['Strength'].default_value = 0.9; L.new(nz.outputs['Fac'], b.inputs['Height']); L.new(b.outputs['Normal'], p.inputs['Normal'])
-    br = N.new("ShaderNodeTexBrick"); br.inputs['Scale'].default_value = 1.6; br.inputs['Color1'].default_value = (*color, 1)   # a quiet woven panel pattern
-    br.inputs['Color2'].default_value = (color[0] * 0.85, color[1] * 0.9, color[2] * 1.1, 1)
-    br.inputs['Mortar'].default_value = (color[0] * 1.5, color[1] * 1.4, color[2] * 1.2, 1); br.inputs['Mortar Size'].default_value = 0.006
-    tc = N.new("ShaderNodeTexCoord"); L.new(tc.outputs['Object'], br.inputs['Vector']); L.new(br.outputs['Color'], p.inputs['Base Color'])
+    # wool colour with a soft mottle (no tiles): noise mixed between two close tones
+    mt = N.new("ShaderNodeTexNoise"); mt.inputs['Scale'].default_value = 6; mt.inputs['Detail'].default_value = 3
+    ramp = N.new("ShaderNodeValToRGB"); ramp.color_ramp.elements[0].color = (color[0] * 0.8, color[1] * 0.8, color[2] * 0.85, 1)
+    ramp.color_ramp.elements[1].color = (color[0] * 1.1, color[1] * 1.05, color[2], 1)
+    L.new(mt.outputs['Fac'], ramp.inputs['Fac']); L.new(ramp.outputs['Color'], p.inputs['Base Color'])
     p.inputs['Sheen Weight'].default_value = 0.6
     o = box(name, (0, 0, 0.006), (w, h, 0.012), m)
     return o

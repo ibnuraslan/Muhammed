@@ -403,7 +403,7 @@ class Deveau:
         r2 = bmesh.ops.extrude_edge_only(bm, edges=ne)
         for v in [g for g in r2["geom"] if isinstance(g, bmesh.types.BMVert)]:
             d = Vector((v.co.x - c.x, v.co.y - c.y, 0)).normalized()
-            v.co += d * 0.038 - Vector((0, 0, 0.03))        # turned down: lies flat on the shoulders
+            v.co += d * 0.022 - Vector((0, 0, 0.016))       # turned down: a modest collar lying on the shoulders
         bm.to_mesh(me); bm.free(); me.update()
         # new vertices take the weights of their nearest neighbours already in the groups
         self._fill_weights(o)
