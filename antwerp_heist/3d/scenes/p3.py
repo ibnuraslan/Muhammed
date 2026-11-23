@@ -46,7 +46,7 @@ def U03():
     A = S2.office("leasing")
     m = MD.Peys(); se = AC.Seated(m, A["seat_behind"], -90, lean=10)
     se.hand("L", (-0.7, A["desk_y"] + 0.12, 0.88), elbow=(0.9, 0.2, -0.5), curl=30)     # hand on the ringing desk phone
-    se.hand("R", (0.2, A["desk_y"] + 0.27, 0.835), elbow=(0.9, 0.2, -0.5), curl=24)
+    se.hand("R", (0.2, A["desk_y"] + 0.27, 0.87), elbow=(0.9, 0.2, -0.5), curl=24)
     se.head_to((-0.7, A["desk_y"] + 0.1, 0.8), share=0.6); se.finish(density=HAIR)
     return dict(a=((0.45, 2.0, 1.55), (-0.5, 0.6, 0.9)), b=((0.4, 1.98, 1.5), (-0.5, 0.6, 0.9)), lens=28,
                 hand_ok=("desk_phone", "desk", "Desk", "chair"))
@@ -98,8 +98,8 @@ def _techs(A, n=2):
     b = A["bench"]
     for i, x in enumerate((-0.7, 0.7)[:n]):
         m = MD.LabTech(name=f"LabTech{i}"); st = AC.Stand(m, (x, b.y - 0.78), 90, lean=12)
-        st.hand("L", (x - 0.15, b.y - 0.25, 0.95), elbow=(0.8, 0.2, -0.6), curl=26)
-        st.hand("R", (x + 0.15, b.y - 0.2, 0.95), elbow=(0.8, 0.2, -0.6), curl=26)
+        st.hand("L", (x - 0.15, b.y - 0.25, 0.975), elbow=(0.8, 0.2, -0.6), curl=26)
+        st.hand("R", (x + 0.15, b.y - 0.2, 0.975), elbow=(0.8, 0.2, -0.6), curl=26)
         st.head_to(b + V((x, 0, 0)), share=0.8); st.finish(density=HAIR)
 
 
@@ -289,7 +289,7 @@ def U27():
     A = S2.office("leasing")
     mg = MD.Manager(); se = AC.Seated(mg, A["seat_behind"], -90, lean=10)
     se.hand("L", (-0.66, A["desk_y"] + 0.07, 0.88), elbow=(0.9, 0.2, -0.5), curl=30)   # dialling the desk phone
-    se.hand("R", (0.2, A["desk_y"] + 0.27, 0.835), elbow=(0.9, 0.2, -0.5), curl=24)
+    se.hand("R", (0.2, A["desk_y"] + 0.27, 0.87), elbow=(0.9, 0.2, -0.5), curl=24)
     se.head_to((-0.7, A["desk_y"] + 0.1, 0.8), share=0.6); se.finish(density=HAIR)
     return dict(a=((0.5, 2.0, 1.5), (-0.55, 0.6, 0.9)), b=((0.45, 1.98, 1.47), (-0.55, 0.6, 0.9)), lens=30, hand_ok=("desk_phone", "desk", "Desk", "chair"))
 
