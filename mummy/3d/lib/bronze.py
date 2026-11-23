@@ -25,41 +25,46 @@ def _mat(name, col, rough=0.8, emit=None, strength=0.0):
     return m
 
 
-def smoke(center, radius=1.2, height=7.0, density=0.35, name="smoke"):
-    """A slow column of peat smoke: noise-broken volume, thinning with height, drifting east."""
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(center[0] + height * 0.25, center[1], center[2] + height / 2))
-    o = bpy.context.active_object; o.name = name; o.scale = (radius * 2 + height * 0.5, radius * 2, height)
-    m = bpy.data.materials.new(name); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links
-    N.remove(N["Principled BSDF"])
-    tc = N.new("ShaderNodeTexCoord")
-    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 3.0; nz.inputs['Detail'].default_value = 6
-    L.new(tc.outputs['Generated'], nz.inputs['Vector'])
-    sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Generated'], sep.inputs[0])
-    # plume axis leans east with height: distance from (x = 0.2 + 0.6 z, y = 0.5) in generated coords
-    ax = N.new("ShaderNodeMath"); ax.operation = 'MULTIPLY_ADD'; ax.inputs[1].default_value = 0.55; ax.inputs[2].default_value = 0.18
-    L.new(sep.outputs['Z'], ax.inputs[0])
-    dx = N.new("ShaderNodeMath"); dx.operation = 'SUBTRACT'; L.new(sep.outputs['X'], dx.inputs[0]); L.new(ax.outputs[0], dx.inputs[1])
-    dy = N.new("ShaderNodeMath"); dy.operation = 'SUBTRACT'; dy.inputs[1].default_value = 0.5; L.new(sep.outputs['Y'], dy.inputs[0])
-    vx = N.new("ShaderNodeCombineXYZ"); L.new(dx.outputs[0], vx.inputs[0]); L.new(dy.outputs[0], vx.inputs[1])
-    ln = N.new("ShaderNodeVectorMath"); ln.operation = 'LENGTH'; L.new(vx.outputs[0], ln.inputs[0])
-    wid = N.new("ShaderNodeMath"); wid.operation = 'MULTIPLY_ADD'; wid.inputs[1].default_value = 0.22; wid.inputs[2].default_value = 0.08
-    L.new(sep.outputs['Z'], wid.inputs[0])
-    r = N.new("ShaderNodeMath"); r.operation = 'DIVIDE'; L.new(ln.outputs['Value'], r.inputs[0]); L.new(wid.outputs[0], r.inputs[1])
-    core = N.new("ShaderNodeMapRange"); core.inputs['From Min'].default_value = 1.0; core.inputs['From Max'].default_value = 0.2
-    L.new(r.outputs[0], core.inputs['Value'])
-    fade = N.new("ShaderNodeMapRange"); fade.inputs['From Min'].default_value = 1.0; fade.inputs['From Max'].default_value = 0.0
-    fade.inputs['To Min'].default_value = 0.0; fade.inputs['To Max'].default_value = 1.0
-    L.new(sep.outputs['Z'], fade.inputs['Value'])
-    br = N.new("ShaderNodeMapRange"); br.inputs['From Min'].default_value = 0.35; br.inputs['From Max'].default_value = 0.75
-    L.new(nz.outputs['Fac'], br.inputs['Value'])
-    m1 = N.new("ShaderNodeMath"); m1.operation = 'MULTIPLY'; L.new(core.outputs[0], m1.inputs[0]); L.new(fade.outputs[0], m1.inputs[1])
-    m2 = N.new("ShaderNodeMath"); m2.operation = 'MULTIPLY'; L.new(m1.outputs[0], m2.inputs[0]); L.new(br.outputs[0], m2.inputs[1])
-    m3 = N.new("ShaderNodeMath"); m3.operation = 'MULTIPLY'; m3.inputs[1].default_value = density; L.new(m2.outputs[0], m3.inputs[0])
-    v = N.new("ShaderNodeVolumePrincipled"); v.inputs['Color'].default_value = (0.62, 0.6, 0.58, 1); v.inputs['Anisotropy'].default_value = 0.45
-    L.new(m3.outputs[0], v.inputs['Density'])
-    L.new(v.outputs[0], N["Material Output"].inputs['Volume'])
+def smoke(base, height=14.0, drift=(0.45, 0.12), r0=0.35, grow=0.24, density=1.2, name="smoke"):
+    """Peat smoke seeping from a thatched roof: a volumetric plume (world-space) that leans downwind, widens as it rises,
+    breaks up into wisps and thins out. base = the smoke hole / roof apex."""
+    bx, by, bz = base
+    L_ = height; dx, dy = drift
+    lo = Vector((bx - 2.5, by - 2.5 - 0.2 * L_, bz - 0.5)); hi = Vector((bx + dx * L_ + r0 + grow * L_ + 2, by + dy * L_ + r0 + grow * L_ + 2.5, bz + L_))
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(lo + hi) / 2); o = bpy.context.active_object; o.name = name
+    o.scale = hi - lo
+    m = bpy.data.materials.new(name); m.use_nodes = True; N = m.node_tree.nodes; Lk = m.node_tree.links; N.remove(N["Principled BSDF"])
+    geo = N.new("ShaderNodeNewGeometry"); sp = N.new("ShaderNodeSeparateXYZ"); Lk.new(geo.outputs['Position'], sp.inputs[0])
+    def math(op, a, b=None, v=None):
+        n = N.new("ShaderNodeMath"); n.operation = op
+        (Lk.new(a, n.inputs[0]) if not isinstance(a, (int, float)) else setattr(n.inputs[0], 'default_value', a))
+        if b is not None:
+            (Lk.new(b, n.inputs[1]) if not isinstance(b, (int, float)) else setattr(n.inputs[1], 'default_value', b))
+        return n.outputs[0]
+    dz = math('MAXIMUM', math('SUBTRACT', sp.outputs['Z'], bz), 0.0)
+    ax = math('ADD', math('MULTIPLY', dz, dx), bx); ay = math('ADD', math('MULTIPLY', dz, dy), by)
+    # wobble the axis with low-frequency noise (wind gusts)
+    nzw = N.new("ShaderNodeTexNoise"); nzw.inputs['Scale'].default_value = 0.12; Lk.new(geo.outputs['Position'], nzw.inputs['Vector'])
+    wob = math('MULTIPLY', math('SUBTRACT', nzw.outputs['Fac'], 0.5), math('MULTIPLY', dz, 0.35))
+    ex = math('SUBTRACT', sp.outputs['X'], math('ADD', ax, wob)); ey = math('SUBTRACT', sp.outputs['Y'], ay)
+    dist = math('SQRT', math('ADD', math('MULTIPLY', ex, ex), math('MULTIPLY', ey, ey)))
+    rad = math('ADD', math('MULTIPLY', dz, grow), r0)
+    q = math('DIVIDE', dist, rad)
+    core = N.new("ShaderNodeMapRange"); core.interpolation_type = 'SMOOTHSTEP'
+    core.inputs['From Min'].default_value = 1.0; core.inputs['From Max'].default_value = 0.15; Lk.new(q, core.inputs['Value'])
+    fade = N.new("ShaderNodeMapRange"); fade.inputs['From Min'].default_value = L_; fade.inputs['From Max'].default_value = 0.0
+    Lk.new(dz, fade.inputs['Value'])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 0.9; nz.inputs['Detail'].default_value = 7; nz.inputs['Roughness'].default_value = 0.6
+    Lk.new(geo.outputs['Position'], nz.inputs['Vector'])
+    wisp = N.new("ShaderNodeMapRange"); wisp.inputs['From Min'].default_value = 0.38; wisp.inputs['From Max'].default_value = 0.72
+    Lk.new(nz.outputs['Fac'], wisp.inputs['Value'])
+    # thinner as it spreads (mass conserved-ish)
+    thin = math('DIVIDE', 1.0, math('ADD', math('MULTIPLY', dz, 0.35), 1.0))
+    d = math('MULTIPLY', math('MULTIPLY', math('MULTIPLY', core.outputs[0], fade.outputs[0]), wisp.outputs[0]), thin)
+    d = math('MULTIPLY', d, density)
+    v = N.new("ShaderNodeVolumePrincipled"); v.inputs['Color'].default_value = (0.78, 0.76, 0.74, 1); v.inputs['Anisotropy'].default_value = 0.5
+    Lk.new(d, v.inputs['Density']); Lk.new(v.outputs[0], N["Material Output"].inputs['Volume'])
     o.data.materials.append(m)
-    o.visible_shadow = True
     return o
 
 
@@ -74,12 +79,13 @@ def _strip_ground(ms, centre=(0.13, 1.98), r_keep=4.6, z_cut=0.05):
         for f in bm.faces:
             c = M @ f.calc_center_median()
             r = math.hypot(c.x - centre[0], c.y - centre[1])
-            if (r > r_keep and c.z < z_cut + (r - r_keep) * 0.0) or (r > r_keep + 0.6):
+            if (r > r_keep and c.z < z_cut + (r - r_keep) * 0.0) or (r > r_keep + 0.6) or c.z < 0.25:
                 kill.append(f)
         bmesh.ops.delete(bm, geom=kill, context='FACES'); bm.to_mesh(o.data); bm.free()
 
 
-DOOR_ROT = 35.0           # rotation that turns the reconstruction's doorway to face east (+x)
+DOOR_ROT = 35.0
+WALL_H = 0.95             # drystone wall base under the thatch           # rotation that turns the reconstruction's doorway to face east (+x)
 
 
 def roof_weights(apex, r_eave, z_eave, n=14, seed=0, meshes=()):
@@ -125,6 +131,71 @@ def roof_weights(apex, r_eave, z_eave, n=14, seed=0, meshes=()):
         G.stone(tuple(pts[-1] + Vector((0, 0, -0.08))), (0.22, 0.16, 0.18), rot_z=a, seed=rng.randrange(10), flat=0.85)
 
 
+def drystone_wall(hx, hy, r, z0, h=WALL_H if False else 0.95, seed=0, door=1.15):
+    """Low drystone wall ring under the eaves, flat stones in courses, an opening facing east with two upright jambs."""
+    rng = random.Random(seed)
+    courses = int(h / 0.16)
+    for c in range(courses):
+        n = int(2 * math.pi * r / 0.42)
+        for k in range(n):
+            a = 2 * math.pi * (k + 0.5 * (c % 2)) / n
+            if abs(((math.degrees(a) + 180) % 360) - 180) < math.degrees(door / 2 / r) + 4:
+                continue
+            sz = rng.uniform(0.34, 0.52)
+            px, py = hx + (r + rng.uniform(-0.04, 0.04)) * math.cos(a), hy + (r + rng.uniform(-0.04, 0.04)) * math.sin(a)
+            G.stone((px, py, z0 + 0.07 + c * 0.155), (sz, sz * rng.uniform(0.55, 0.8), sz * 0.36), rot_z=a + math.pi / 2 + rng.uniform(-0.2, 0.2),
+                    seed=rng.randrange(10), tilt=(rng.uniform(-0.08, 0.08), rng.uniform(-0.08, 0.08)))
+    for sgn in (-1, 1):
+        a = sgn * door / 2 / r
+        G.stone((hx + r * math.cos(a), hy + r * math.sin(a), z0 + h / 2), (0.28, 0.2, h * 0.55), rot_z=a, seed=3 + sgn, flat=0.95)
+    G.stone((hx + r + 0.5, hy, z0 + 0.02), (0.6, door * 0.8, 0.07), seed=5, flat=0.3)      # threshold slab
+
+
+def trodden(hx, hy, r, z0, seed=0):
+    """Trampled ground: a ring of bare earth round the house and a worn path east from the door (alpha decals)."""
+    mud = bpy.data.materials.get("trodden")
+    if mud is None:
+        mud = ph.texture("dense_sand", scale=0.8, name="trodden", tint=(0.78, 0.66, 0.5))
+        nt = mud.node_tree; N = nt.nodes; Lk = nt.links; p = [n for n in N if n.type == 'BSDF_PRINCIPLED'][0]
+        tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); Lk.new(tc.outputs['UV'], sep.inputs[0])
+        nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 6; nz.inputs['Detail'].default_value = 6; Lk.new(tc.outputs['Object'], nz.inputs['Vector'])
+        gx = N.new("ShaderNodeMath"); gx.operation = 'PINGPONG'; gx.inputs[1].default_value = 0.5
+        Lk.new(sep.outputs['Y'], gx.inputs[0])
+        e = N.new("ShaderNodeMapRange"); e.inputs['From Min'].default_value = 0.0; e.inputs['From Max'].default_value = 0.3; Lk.new(gx.outputs[0], e.inputs['Value'])
+        a_ = N.new("ShaderNodeMath"); a_.operation = 'MULTIPLY'; Lk.new(e.outputs[0], a_.inputs[0])
+        nb = N.new("ShaderNodeMapRange"); nb.inputs['From Min'].default_value = 0.35; nb.inputs['From Max'].default_value = 0.6; Lk.new(nz.outputs['Fac'], nb.inputs['Value'])
+        Lk.new(nb.outputs[0], a_.inputs[1]); Lk.new(a_.outputs[0], p.inputs['Alpha'])
+    # ring
+    bm = bmesh.new(); segs = 64; ri, ro = r + 0.1, r + 1.4
+    vi = []; vo = []
+    for k in range(segs + 1):
+        a = 2 * math.pi * k / segs
+        for rr, lst in ((ri, vi), (ro, vo)):
+            x, y = hx + rr * math.cos(a), hy + rr * math.sin(a)
+            lst.append(bm.verts.new((x, y, float(U.surface(x, y)) + 0.025)))
+    uvs = []
+    for k in range(segs):
+        f = bm.faces.new((vi[k], vi[k + 1], vo[k + 1], vo[k])); uvs.append((f, k))
+    uv = bm.loops.layers.uv.new("UVMap")
+    for f, k in uvs:
+        for l in f.loops:
+            l[uv].uv = (k / segs, 0.0 if l.vert in vi else 1.0)
+    me = bpy.data.meshes.new("trodden"); bm.to_mesh(me); bm.free(); me.materials.append(mud)
+    o = bpy.data.objects.new("trodden", me); bpy.context.scene.collection.objects.link(o)
+    # worn path east from the door
+    bm = bmesh.new(); uvl = bm.loops.layers.uv.new("UVMap"); L_ = 9.0; w = 0.5; n = 20
+    rows = []
+    for k in range(n + 1):
+        t = k / n; x = hx + r + 0.4 + t * L_; y = hy + 0.6 * math.sin(t * 3 + seed)
+        rows.append([bm.verts.new((x, y + sgn * w, float(U.surface(x, y + sgn * w)) + 0.03)) for sgn in (-1, 1)])
+    for k in range(n):
+        f = bm.faces.new((rows[k][0], rows[k + 1][0], rows[k + 1][1], rows[k][1]))
+        for l in f.loops:
+            l[uvl].uv = (k / n, 0.0 if l.vert in (rows[k][0], rows[k + 1][0]) else 1.0)
+    me = bpy.data.meshes.new("path"); bm.to_mesh(me); bm.free(); me.materials.append(mud)
+    o = bpy.data.objects.new("path", me); bpy.context.scene.collection.objects.link(o)
+
+
 def village(smoke_on=True, scale=1.75):
     out = []
     for i, (hx, hy, r) in enumerate(U.HOUSES):
@@ -135,8 +206,19 @@ def village(smoke_on=True, scale=1.75):
         for c in root.children:
             c.location -= Vector((0.13, 1.98, 0))
         s = scale * r / 4.5
-        root.scale = (s, s, s); root.location = (hx, hy, z - 0.3); root.rotation_euler = (0, 0, math.radians(DOOR_ROT + 8 * i))
+        root.scale = (s, s, s); root.location = (hx, hy, z + WALL_H - 0.35); root.rotation_euler = (0, 0, math.radians(DOOR_ROT + 8 * i))
         out.append(root)
+        bpy.context.view_layer.update()
+        msw = [m_ for m_ in root.children_recursive if m_.type == 'MESH']
+        def _wv(m_):
+            co_ = np.empty(len(m_.data.vertices) * 3, np.float32); m_.data.vertices.foreach_get("co", co_)
+            M_ = np.array(m_.matrix_world); return co_.reshape(-1, 3) @ M_[:3, :3].T + M_[:3, 3]
+        Vw = np.concatenate([_wv(m_) for m_ in msw])
+        zb = z + WALL_H
+        eave = Vw[(Vw[:, 2] > zb + 0.3) & (Vw[:, 2] < zb + 1.2)]          # the thatch just above the wall top
+        r_eave = float(np.percentile(np.hypot(eave[:, 0] - hx, eave[:, 1] - hy), 85)) * 0.97 if len(eave) else 4.0
+        drystone_wall(hx, hy, r_eave, z, seed=i)
+        trodden(hx, hy, r_eave, z, seed=i)
         bpy.context.view_layer.update()
         top = max((m_.matrix_world @ Vector(c)).z for m_ in root.children_recursive if m_.type == 'MESH' for c in m_.bound_box)
         ms_ = [m_ for m_ in root.children_recursive if m_.type == 'MESH']
@@ -144,7 +226,7 @@ def village(smoke_on=True, scale=1.75):
         half = float((P[:, 0].max() - P[:, 0].min() + P[:, 1].max() - P[:, 1].min()) / 4)
         roof_weights(Vector((hx, hy, top)), half * 0.98, z + 0.75, n=14, seed=i, meshes=ms_)
         if smoke_on:
-            smoke((hx, hy, top - 0.6), radius=0.9, height=12.0, density=6.0 + 1.0 * i, name=f"smoke{i}")
+            smoke((hx, hy, top - 0.5), height=18.0, r0=0.6, grow=0.36, density=4.0 + 0.6 * i, name=f"smoke{i}")
     if smoke_on:
         ground_mist((0, 0, float(U.surface(0, 0))))
     return out
