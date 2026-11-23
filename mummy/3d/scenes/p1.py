@@ -248,7 +248,7 @@ def S15():
 def S16():
     """The north section in raking light: crisp bands of pale shell sand and dark occupation floors, tagged nails at the
     layer boundaries. Slow slider along the face."""
-    site("golden", grass_at=(2, 18), grass_r=8, kit=False, burials=False, sun_az=188)
+    site("golden", grass_at=(2, 18), grass_r=8, kit=False, burials=False, sun_az=188, focus=(2.5, 15.0), core=2.5)
     y = U.DIG["y1"]
     G.section_tags(y, 0.6, 4.6)
     z = G.H(2.6, y - 1.6)
@@ -258,7 +258,7 @@ def S16():
 
 def S17():
     """A digger cleaning the lower section face with a trowel, seen from behind-left; the strata fill the frame."""
-    site("golden", grass_at=(4, 18), grass_r=8, kit=False, burials=False, sun_az=192)
+    site("golden", grass_at=(4, 18), grass_r=8, kit=False, burials=False, sun_az=192, focus=(4.0, 15.0), core=2.5)
     y = U.DIG["y1"]
     K.kneel_trowel(K.DiggerA, (4.2, y - 1.7), 92, work=(4.25, y - 1.12), density=HAIR)
     z = G.H(4.2, y - 1.7)
@@ -298,7 +298,7 @@ def _ard_marks(cx, cy, w=2.6, n=11, seed=1):
 
 def S18():
     """Ard marks scored into the old ground surface, picked out by the low raking sun. Low push across them."""
-    site("golden", grass_at=None, kit=False, burials=False, sun_az=172)
+    site("golden", grass_at=None, kit=False, burials=False, sun_az=172, focus=(6.8, -3.0), core=2.5)
     _ard_marks(6.8, -3.0)
     z = G.H(6.8, -3.0)
     return dict(a=((9.0, -3.2, z + 0.6), (6.6, -3.0, z)), b=((8.3, -3.1, z + 0.4), (6.4, -3.0, z)), lens=35,
