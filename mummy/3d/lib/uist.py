@@ -576,7 +576,7 @@ def cloud_shadows(center=(0, 0), size=4000.0, height=900.0, cover=0.45, seed=2):
     m = bpy.data.materials.new("cloudshadow"); m.use_nodes = True; nt = m.node_tree; N = nt.nodes; L = nt.links
     p = N["Principled BSDF"]
     tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 4.0; nz.inputs['Detail'].default_value = 5
-    nz.inputs['W'].default_value = seed; nz.noise_dimensions = '4D'
+    nz.noise_dimensions = '4D'; nz.inputs['W'].default_value = seed
     L.new(tc.outputs['Generated'], nz.inputs['Vector'])
     mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 1 - cover; mr.inputs['From Max'].default_value = 1 - cover + 0.12
     L.new(nz.outputs['Fac'], mr.inputs['Value']); L.new(mr.outputs[0], p.inputs['Alpha'])
