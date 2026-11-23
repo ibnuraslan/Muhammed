@@ -384,7 +384,7 @@ def keymat(o, f, M):
 for f in sorted(set([f for f in range(1, 1501, 2) if f <= 331 or 566 <= f <= 1500]) | set(range(1086, 1352))):   # v014: every frame through the lift-out (even frames kept stale keys)
     sc.frame_set(f)
     Rw = (SUR.matrix_world @ SUR.pose.bones["wrist.R"].matrix).to_3x3().normalized().to_4x4(); PP = Matrix.Translation(pinch_pt(SUR, "R"))
-    if 1088 <= f <= 1252:   # v014: during the lift-out the forceps continue the shoulder->hand line, so the tip lands on the ear
+    if 1088 <= f <= 1300:   # v014: during the lift-out the forceps continue the shoulder->hand line, so the tip lands on the ear
         _K = ((1100, (0, 0, 0.06)), (1125, (0, 0, 0)), (1145, (0, 0, 0)), (1180, (0, 0, 0.06)), (1220, (0, 0.02, 0.08)), (1240, (0, 0.03, 0.09)))
         _ff = min(max(f, 1100), 1240)
         for (a_, va), (b_, vb) in zip(_K, _K[1:]):
@@ -393,11 +393,12 @@ for f in sorted(set([f for f in range(1, 1501, 2) if f <= 331 or 566 <= f <= 150
         x_ = y_.cross(Vector((0, 0, 1))).normalized(); z_ = x_.cross(y_)
         Raim = Matrix((x_, y_, z_)).transposed().to_4x4()
         k_ = max(1.0, min(2.4, ln_ / 0.09))   # the shafts reach the ear (the hand is out of the close-up)
+        if f > 1240: _w = min(1.0, (f - 1240) / 60.0); _w = _w * _w * (3 - 2 * _w); k_ = k_ + (1.0 - k_) * _w   # v014: eased back to normal length (it snapped)
         keymat(FORC, f, PP @ Raim @ Matrix.Diagonal((1.0, k_, 1.0, 1.0)) @ Matrix.Translation((0, -0.04, 0)))
         FORC.keyframe_insert("scale", frame=f)
     else:
         keymat(FORC, f, PP @ Rw @ Matrix.Rotation(math.radians(FORC.get("tilt_deg", 0.0)), 4, 'X') @ Matrix.Translation((0, -0.04, 0)))
-        if f in (1086, 1254): FORC.scale = (1, 1, 1); FORC.keyframe_insert("scale", frame=f)
+        if f in (1086, 1302): FORC.scale = (1, 1, 1); FORC.keyframe_insert("scale", frame=f)
     tip = FORC.matrix_world @ Vector((0, 0.13, 0)); Rf = FORC.matrix_world.to_quaternion().to_matrix().to_4x4()
     if CARRY and 255 <= f <= 335:
         sc_ = CARRY.matrix_world.to_scale()[0]; keymat(CARRY, f, Matrix.Translation(tip) @ FORC.matrix_world.to_3x3().normalized().to_4x4() @ Matrix.Scale(sc_, 4))
