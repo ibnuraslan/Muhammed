@@ -387,7 +387,7 @@ bm2 = bul.copy(); bm2.data = bul.data; bm2.animation_data_clear(); bm2.name = "B
 bpy.data.collections["MACRO"].objects.link(bm2); bm2.parent = root; bm2.matrix_parent_inverse = Matrix.Identity(4)
 bm2.rotation_mode = 'XYZ'; bm2.scale = (1, 1, 1)
 # tip depth (macro units) per VO frame: touches the shirt 130, dimple, pierces 183, fast through fat (2 s), slows through fascia and muscle, stops 945
-DK = [(101, -0.9), (130, 0.0), (183, 0.28), (200, 0.5), (330, 1.5), (450, 3.2), (580, 4.0), (714, 4.5), (828, 5.0), (900, 5.22), (945, 5.3), (1273, 5.3)]
+DK = [(101, -0.9), (130, 0.0), (183, 0.28), (200, 0.5), (330, 1.5), (450, 3.2), (580, 4.0), (714, 4.5), (828, 4.9), (880, 5.08), (915, 5.2), (940, 5.28), (952, 5.31), (1273, 5.31)]
 Dfn = pchip(DK)
 def D(f): return Dfn(f)
 for f in range(95, 1010):
@@ -442,7 +442,7 @@ def vel(f): return (D(f + 2) - D(f - 2)) / 4 * FPS
 tipctl = bpy.data.objects["TipCtl"]
 for f in range(95, 1012, 2):
     e = min(1.0, max(0.0, vel(f) / 1.0)) if f > 186 else 0.0
-    wob = (math.exp(-(f - 945) / 90.0) if f > 945 else 0.0) + (0.35 * math.exp(-(f - 186) / 50.0) if f > 186 else 0.0)
+    wob = (math.exp(-(f - 952) / 90.0) if f > 952 else 0.0) + (0.35 * math.exp(-(f - 186) / 50.0) if f > 186 else 0.0)
     tipctl.location = (D(f), e, wob); tipctl.keyframe_insert("location", frame=f)
 # no rings at all (director): delete every ring object
 for o in [o for o in bpy.data.objects if o.name.startswith("M_Ring")]: bpy.data.objects.remove(o, do_unlink=True)
