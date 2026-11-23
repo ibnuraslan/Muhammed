@@ -1,0 +1,1222 @@
+{
+ "frames": {
+  "1": [
+   [
+    "BACKHEAD",
+    "Woman"
+   ]
+  ],
+  "181": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 60.32 m, 98 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "187": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "193": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "199": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "205": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "211": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "217": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "223": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "229": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "235": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "241": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "247": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "253": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "259": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "265": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "271": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "277": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "283": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "289": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "295": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "301": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "307": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "313": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "319": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "325": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "331": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "337": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "343": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "349": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "355": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "361": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "367": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "373": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "379": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "385": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "391": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "397": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "403": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "409": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "415": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "49": [
+   [
+    "CAMJUMP",
+    "cut: 7.01 m, 137 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "421": [
+   [
+    "CAMJUMP",
+    "cut: 60.84 m, 119 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "641": [
+   [
+    "CAMJUMP",
+    "cut: 1.45 m, 34 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "861": [
+   [
+    "CAMJUMP",
+    "cut: 1.62 m, 53 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1147": [
+   [
+    "CAMJUMP",
+    "cut: 1.20 m, 44 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "184": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "190": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "196": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "202": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "208": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "214": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "220": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "226": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "232": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "238": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "244": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "250": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "256": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "262": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "268": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "274": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "280": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "286": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "292": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "298": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "304": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "310": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "316": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "322": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "328": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "334": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "340": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "346": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "352": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "358": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "364": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "370": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "376": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "382": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "388": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "394": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "400": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "406": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "412": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "418": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "25": [
+   [
+    "PROPMOVE",
+    "Shard00 moves 6.8 cm with no hand on it (nearest finger 1151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard01 moves 5.3 cm with no hand on it (nearest finger 1152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard02 moves 6.6 cm with no hand on it (nearest finger 1151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard03 moves 5.0 cm with no hand on it (nearest finger 1153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard04 moves 4.3 cm with no hand on it (nearest finger 1153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard05 moves 6.8 cm with no hand on it (nearest finger 1151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard06 moves 7.3 cm with no hand on it (nearest finger 1150 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard07 moves 8.0 cm with no hand on it (nearest finger 1149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard08 moves 7.4 cm with no hand on it (nearest finger 1149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard09 moves 4.9 cm with no hand on it (nearest finger 1153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard10 moves 8.0 cm with no hand on it (nearest finger 1149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard11 moves 5.3 cm with no hand on it (nearest finger 1152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard12 moves 3.2 cm with no hand on it (nearest finger 1154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard13 moves 2.9 cm with no hand on it (nearest finger 1154 cm)"
+   ]
+  ],
+  "31": [
+   [
+    "PROPMOVE",
+    "Shard00 moves 24.8 cm with no hand on it (nearest finger 1131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard01 moves 18.6 cm with no hand on it (nearest finger 1135 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard02 moves 24.0 cm with no hand on it (nearest finger 1133 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard03 moves 17.6 cm with no hand on it (nearest finger 1139 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard04 moves 16.8 cm with no hand on it (nearest finger 1142 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard05 moves 25.1 cm with no hand on it (nearest finger 1132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard06 moves 26.3 cm with no hand on it (nearest finger 1126 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard07 moves 28.4 cm with no hand on it (nearest finger 1123 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard08 moves 25.8 cm with no hand on it (nearest finger 1124 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard09 moves 17.1 cm with no hand on it (nearest finger 1141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard10 moves 28.3 cm with no hand on it (nearest finger 1124 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard11 moves 19.7 cm with no hand on it (nearest finger 1138 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard12 moves 11.7 cm with no hand on it (nearest finger 1144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard13 moves 11.4 cm with no hand on it (nearest finger 1145 cm)"
+   ]
+  ],
+  "37": [
+   [
+    "PROPMOVE",
+    "Shard00 moves 42.1 cm with no hand on it (nearest finger 1100 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard01 moves 30.4 cm with no hand on it (nearest finger 1109 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard02 moves 40.3 cm with no hand on it (nearest finger 1105 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard03 moves 27.7 cm with no hand on it (nearest finger 1118 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard04 moves 31.3 cm with no hand on it (nearest finger 1124 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard05 moves 43.4 cm with no hand on it (nearest finger 1103 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard06 moves 43.6 cm with no hand on it (nearest finger 1090 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard07 moves 46.1 cm with no hand on it (nearest finger 1084 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard08 moves 40.3 cm with no hand on it (nearest finger 1084 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard09 moves 27.3 cm with no hand on it (nearest finger 1122 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard10 moves 45.9 cm with no hand on it (nearest finger 1084 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard11 moves 35.0 cm with no hand on it (nearest finger 1115 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard12 moves 20.1 cm with no hand on it (nearest finger 1129 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard13 moves 22.5 cm with no hand on it (nearest finger 1132 cm)"
+   ]
+  ],
+  "43": [
+   [
+    "PROPMOVE",
+    "Shard00 moves 60.6 cm with no hand on it (nearest finger 1065 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard01 moves 41.8 cm with no hand on it (nearest finger 1078 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard02 moves 57.7 cm with no hand on it (nearest finger 1072 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard03 moves 35.6 cm with no hand on it (nearest finger 1093 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard04 moves 49.4 cm with no hand on it (nearest finger 1104 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard05 moves 62.9 cm with no hand on it (nearest finger 1069 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard06 moves 61.2 cm with no hand on it (nearest finger 1046 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard07 moves 63.2 cm with no hand on it (nearest finger 1036 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard08 moves 51.3 cm with no hand on it (nearest finger 1036 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard09 moves 36.2 cm with no hand on it (nearest finger 1099 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard10 moves 62.9 cm with no hand on it (nearest finger 1037 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard11 moves 53.0 cm with no hand on it (nearest finger 1089 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard12 moves 29.9 cm with no hand on it (nearest finger 1111 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shard13 moves 38.4 cm with no hand on it (nearest finger 1116 cm)"
+   ]
+  ],
+  "79": [
+   [
+    "PROPMOVE",
+    "PickBox moves 6.5 cm with no hand on it (nearest finger 3 cm)"
+   ]
+  ],
+  "85": [
+   [
+    "PROPMOVE",
+    "PickBox moves 3.4 cm with no hand on it (nearest finger 3 cm)"
+   ]
+  ],
+  "103": [
+   [
+    "PROPMOVE",
+    "PickBox moves 0.5 cm with no hand on it (nearest finger 3 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "BACKHEAD": 1,
+  "EMPTY": 80,
+  "FILL": 30,
+  "CAMJUMP": 6,
+  "ROLL": 80,
+  "PROPMOVE": 59
+ }
+}
