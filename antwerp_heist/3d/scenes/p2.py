@@ -561,3 +561,11 @@ PLAN = [
     ("T38", 18, 5.0, "Rising pull-back over the wreck: a hundred million dollars"),
 ]
 SHOTS = {sid: dict(fn=globals()[sid], dur=d, vo=VO[ln - 1], line=ln, desc=desc) for sid, ln, d, desc in PLAN}
+
+# timed to the narration (tools/vo_align.py + tools/shot_timing.py): the VO decides each shot's length
+_TJ = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "timing", "P2_shots.json")
+if os.path.exists(_TJ):
+    import json as _json
+    for _s, _v in _json.load(open(_TJ))["shots"].items():
+        if _s in SHOTS:
+            SHOTS[_s]["dur"] = _v["dur"]

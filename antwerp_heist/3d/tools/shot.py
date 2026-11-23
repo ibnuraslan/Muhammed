@@ -64,6 +64,17 @@ shots_dir = os.path.join(ROOT, "shots", PART); os.makedirs(shots_dir, exist_ok=T
 info = dict(shot=SID, part=PART, dur=spec["dur"], frames=N, vo=spec.get("vo", ""), desc=spec.get("desc", ""),
             clips=len(bad), build_s=round(time.time() - t0, 1))
 sc["shot_info"] = json.dumps(info)
+FINAL = bool(os.environ.get("FINAL"))
+if FINAL:          # FARM_DELIVERY_RULES: 2560x1440 @ 24 fps, Cycles 64 spp adaptive + OIDN, motion blur
+    sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = 2560, 1440, 100
+    sc.cycles.samples = 64; sc.cycles.use_adaptive_sampling = True; sc.cycles.adaptive_threshold = 0.01
+    sc.cycles.use_denoising = True
+    try:
+        sc.cycles.denoiser = 'OPENIMAGEDENOISE'
+    except Exception:
+        pass
+    sc.render.use_motion_blur = True; sc.render.motion_blur_shutter = 0.5
+    sc.render.fps = FPS; sc.render.fps_base = 1.0
 blend = os.path.join(shots_dir, SID + ".blend")
 bpy.ops.file.make_paths_relative() if bpy.data.filepath else None
 bpy.ops.wm.save_as_mainfile(filepath=blend, compress=True)
@@ -72,6 +83,9 @@ if not os.environ.get("NORENDER"):
     which = os.environ.get("FRAME", "mid")
     f = {"first": 1, "last": N}.get(which, max(1, N // 2))
     sc.frame_set(f)
+    if FINAL:      # the saved .blend keeps the farm settings; the board frame is a quick preview
+        sc.render.resolution_percentage = 25; sc.cycles.samples = 24; sc.cycles.adaptive_threshold = 0.06
+        sc.render.use_motion_blur = False
     out = os.path.join(ROOT, "out", PART.lower(), "board", SID + ".png"); os.makedirs(os.path.dirname(out), exist_ok=True)
     sc.render.filepath = out
     bpy.ops.render.render(write_still=True)

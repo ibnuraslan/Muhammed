@@ -5,6 +5,7 @@ import math, os
 import bpy
 from mathutils import Vector, Matrix
 import sets as ST, sets2 as S2, sets3 as S3, modern as MD, acts as AC, props as PR
+import ship as S
 
 HAIR = float(os.environ.get("HAIR", "0.6"))
 V = Vector
@@ -116,7 +117,9 @@ def _bench_items(A):
 
 def U08():
     A = S3.lab(); _bench_items(A); _techs(A)
-    return dict(a=((0.2, -2.8, 2.0), (0.0, -0.6, 0.95)), b=((0.3, -2.7, 1.95), (0.0, -0.6, 0.95)), lens=24,
+    ST.haze_box("lab_haze", (0, 0, 1.4), (8.0, 6.0, 2.8), density=0.006, aniso=0.5)
+    # a slow track along the bench behind the two technicians, under the pendant pools
+    return dict(a=((-0.9, -2.75, 1.95), (0.1, -0.6, 0.95)), b=((0.4, -2.7, 1.9), (0.3, -0.6, 0.95)), lens=26,
                 hand_ok=("bench", "evidence_paper"))
 
 
@@ -153,7 +156,23 @@ def U11():
 # ============================================================================ L6 robbery rubbish + ordinary lives
 def U12():
     A = S3.lab(); _bench_items(A); b = A["bench"]
-    return dict(a=((0.0, b.y - 0.05, 2.65), (0.0, b.y, b.z)), b=((0.25, b.y - 0.05, 2.55), (0.25, b.y, b.z)), lens=24)
+    # the rest of what came out of the bags, laid out item by item: video tapes, tape rolls, a bottle, gloves, receipts
+    vhs = ST.flat("vhs_black", (0.03, 0.03, 0.035), 0.4); lab = ST.flat("vhs_label", (0.85, 0.84, 0.8), 0.6)
+    for k in range(3):
+        x = -1.25 + k * 0.2
+        ST.box("vhs", (x, b.y - 0.18, b.z + 0.013), (0.188, 0.104, 0.025), vhs, rot=(0, 0, 0.15 * k))
+        ST.box("vhs_lbl", (x, b.y - 0.18, b.z + 0.0262), (0.08, 0.06, 0.0005), lab, rot=(0, 0, 0.15 * k))
+    for k in range(2):
+        tr = PR.tape_roll(); tr.location = (0.25 + 0.14 * k, b.y - 0.22, b.z + 0.001)
+    S.cyl("bottle", (1.15, b.y - 0.2, b.z + 0.035), (1.45, b.y - 0.14, b.z + 0.035), 0.035, mat=ST.flat("bottle_glass", (0.2, 0.35, 0.25), 0.05, metal=0.0), verts=20)
+    glove = ST.flat("latex", (0.85, 0.8, 0.65), 0.5)
+    for k in range(2):
+        ST.box("glove", (-0.05 + 0.09 * k, b.y + 0.22, b.z + 0.005), (0.09, 0.2, 0.01), glove, bevel=0.004, rot=(0, 0, 0.4 - 0.5 * k))
+    for k in range(2):
+        r = PR.receipt(f"rcpt_b{k}", 0.18, seed=7 + k); r.location = (-0.75 + 0.12 * k, b.y + 0.2, b.z + 0.001); r.rotation_euler = (0, 0, 0.3 - 0.4 * k)
+    # high over the bench, tracking along the rows: the robbery's rubbish beside the household waste, each with its marker
+    return dict(a=((-1.45, b.y - 0.95, 1.8), (-0.75, b.y + 0.05, b.z)), b=((0.35, b.y - 0.95, 1.78), (1.05, b.y + 0.05, b.z)), lens=30,
+                fstop=4.5, focus=(-0.2, b.y, b.z), cine=dict(exposure=-0.6))
 
 
 # ============================================================================ L7 the torn document, the names
@@ -196,13 +215,13 @@ def U16():
         if o.name.startswith("visitor_chair"):
             bpy.data.objects.remove(o)
     mg = MD.Manager(); se = AC.Seated(mg, A["seat_behind"], -90, lean=12)
-    se.hand("R", (0.1, A["desk_y"] - 0.2, 0.86), elbow=(0.9, 0.2, -0.5), curl=20); se.hand("L", (-0.25, A["desk_y"] + 0.22, 0.875), elbow=(0.9, 0.2, -0.5), curl=24)
+    se.hand("L", (0.1, A["desk_y"] - 0.2, 0.86), elbow=(0.9, 0.2, -0.5), curl=20); se.hand("R", (-0.25, A["desk_y"] + 0.22, 0.875), elbow=(0.9, 0.2, -0.5), curl=24)
     se.head_to((0.1, A["desk_y"] - 0.25, 0.79), share=1.0)        # head bowed over the file: no face to camera
     se.finish(density=HAIR)
     PR.document("lease_file", 0.21, 0.297, seed=21, kind="form").location = (0.1, A["desk_y"] - 0.25, 0.793)
     d = MD.DeBruycker(); st = AC.Stand(d, (0.15, A["desk_y"] - 1.05), 90, lean=8); st.hand("R", (0.12, A["desk_y"] - 0.38, 0.84), elbow=(0.8, 0.2, -0.6), curl=20)
     st.head_to((0.1, A["desk_y"] - 0.25, 0.8), share=0.7); st.finish(density=HAIR)
-    return dict(a=((-0.6, A["desk_y"] - 2.1, 1.85), (0.1, A["desk_y"] + 0.4, 0.95)), b=((-0.5, A["desk_y"] - 1.95, 1.83), (0.1, A["desk_y"] + 0.4, 0.95)),
+    return dict(a=((-0.55, A["desk_y"] - 1.75, 2.3), (0.1, A["desk_y"] + 0.3, 0.8)), b=((-0.45, A["desk_y"] - 1.6, 2.25), (0.1, A["desk_y"] + 0.3, 0.8)),
                 lens=28, hand_ok=("desk", "Desk", "chair", "lease_file"))
 
 
@@ -555,3 +574,11 @@ PLAN = [
     ("U46", 21, 7.0, "The rubbish beside the road; pull back to the motorway"),
 ]
 SHOTS = {sid: dict(fn=globals()[sid], dur=d, vo=VO[ln - 1], line=ln, desc=desc) for sid, ln, d, desc in PLAN}
+
+# timed to the narration (tools/vo_align.py + tools/shot_timing.py): the VO decides each shot's length
+_TJ = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "timing", "P3_shots.json")
+if os.path.exists(_TJ):
+    import json as _json
+    for _s, _v in _json.load(open(_TJ))["shots"].items():
+        if _s in SHOTS:
+            SHOTS[_s]["dur"] = _v["dur"]

@@ -35,7 +35,7 @@ def S01():
     import city
     city.district("dawn", skip=[(-65, 65, -40, 25)])
     city.dress_street(A, "dawn", haze=0.0)
-    ST.haze_box("aerial_haze", (0, 0, 30), (700, 700, 60), density=0.0016, aniso=0.5, color=(0.85, 0.88, 1.0))
+    ST.haze_box("aerial_haze", (0, 0, 30), (700, 700, 60), density=0.0006, aniso=0.5, color=(0.85, 0.88, 1.0))
     # blue hour over the diamond district: the drone pushes in and down toward the Diamond Center
     return dict(a=((-150.0, -230.0, 120.0), (0.0, 5.0, 8.0)), b=((-62.0, -105.0, 48.0), (0.0, 4.0, 10.0)), lens=30)
 
@@ -202,7 +202,11 @@ def S16():
     st.hand("L", tf + V((0.03, -0.14, 0.03)), elbow=(0.7, 0.3, -0.8), grip=0.7)
     st.head_to(tf, share=0.7)
     st.finish(look=tf, density=HAIR)
-    return dict(a=((-1.15, 3.45, 1.68), (-2.85, 2.0, 1.15)), b=((-1.3, 3.25, 1.64), (-2.85, 2.05, 1.15)), lens=35,
+    # light: the fluorescent over his row as a hard top-key on the brushed doors, a little dust in the air
+    ST.light_area("tray_key", (-2.2, tf.y - 0.1, 2.35), (-2.7, tf.y, 1.0), 0.5, 120, (1.0, 0.88, 0.7))
+    ST.haze_box("vault_haze", (0, 2.3, 1.25), (6.0, 4.6, 2.45), density=0.004, aniso=0.6, color=(1.0, 0.94, 0.86))
+    # low along the wall of boxes, sliding past: the steel doors recede, Leonardo draws his tray out (back three-quarter)
+    return dict(a=((-0.55, tf.y + 1.75, 0.95), (-2.75, tf.y - 0.35, 1.3)), b=((-0.8, tf.y + 1.25, 1.0), (-2.75, tf.y - 0.2, 1.28)), lens=28,
                 fstop=3.2, focus=tf, hand_ok=("tray", "cavity", "boxdoor"))
 
 
@@ -217,8 +221,9 @@ def S17():
 def S18():
     A = S2.maquette()
     S2.ripple_bands(A["vault"] + V((0, -0.035, 0)), (0, -1, 0), (0.075,), width=0.07, strength=3.5, alpha=0.5)
-    return dict(a=((-0.5, -0.55, 0.3), (0.02, 0.0, 0.07)), b=((-0.22, -0.62, 0.2), (0.03, 0.0, 0.04)), lens=35,
-                fstop=5.6, focus=A["vault"])
+    # a slow descent: from above the roofline down the cut face to the warm vault two floors under the street
+    return dict(a=((-0.36, -0.62, 0.14), (0.03, 0.0, 0.05)), b=((-0.16, -0.44, 0.035), (0.035, 0.0, 0.02)), lens=40,
+                fstop=6.3, focus=A["vault"])
 
 
 def S19():
@@ -237,11 +242,13 @@ def S20():
 
 def S21():
     img = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "out", "p1", "extra", "cctv_S20.png")
-    A = S2.security_room("building", screen_images=[None, img if os.path.exists(img) else None])
+    A = S2.security_room("building")
+    if os.path.exists(img):                      # the grille camera's picture, grey and grainy, on the middle monitor
+        scr = A["screens"][1]; scr.data.materials.clear(); scr.data.materials.append(S2.cctv_mat("cctv_grille", img, 1.3))
     m = MD.Guard(); se = AC.Seated(m, (0.2, 0.15, 0.47), 90)
     b = A["gate_button"]
-    se.hand("R", (b.x + 0.02, b.y - 0.03, b.z + 0.025), elbow=(0.7, 0.3, -0.7), curl=30)
-    se.hand("L", (0.45, 0.88, 0.835), elbow=(0.7, 0.3, -0.7), curl=20)
+    se.hand("L", (b.x + 0.02, b.y - 0.03, b.z + 0.025), elbow=(0.7, 0.3, -0.7), curl=30)     # the release button is on his left
+    se.hand("R", (0.45, 0.88, 0.835), elbow=(0.7, 0.3, -0.7), curl=20)
     se.head_to((0.0, 1.9, 1.62), share=0.7)
     se.finish(look=(0.0, 1.9, 1.62), density=HAIR)
     return dict(a=((-0.65, -1.2, 1.62), (0.0, 1.95, 1.45)), b=((-0.45, -0.9, 1.58), (0.0, 1.95, 1.5)), lens=32,
@@ -484,3 +491,11 @@ PLAN = [  # (shot, VO line 1-based, duration s, description)
     ("S37", 16, 7.0, "His office, months on: Leonardo at the desk (from behind)"),
 ]
 SHOTS = {sid: dict(fn=globals()[sid], dur=d, vo=VO[ln - 1], line=ln, desc=desc) for sid, ln, d, desc in PLAN}
+
+# timed to the narration (tools/vo_align.py + tools/shot_timing.py): the VO decides each shot's length
+_TJ = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "timing", "P1_shots.json")
+if os.path.exists(_TJ):
+    import json as _json
+    for _s, _v in _json.load(open(_TJ))["shots"].items():
+        if _s in SHOTS:
+            SHOTS[_s]["dur"] = _v["dur"]

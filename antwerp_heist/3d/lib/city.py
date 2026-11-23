@@ -205,7 +205,7 @@ def district(hour="dawn", seed=11, R=4, skip=None):
     night = hour in ("dawn", "dusk", "night")
     bases = [tex("red_brick_03", 3.0, tint=t, name=f"th_brick{k}") for k, t in enumerate(((0.75, 0.55, 0.45), (0.62, 0.42, 0.33), (0.85, 0.7, 0.6)))] \
         + [DT.wall_paint(f"th_render{k}", c, rough=0.85, scuff=0.0, z_dirty=0.5) for k, c in enumerate(((0.62, 0.58, 0.5), (0.48, 0.45, 0.4)))]
-    fronts = [facade_mat(f"th_front{k}", b, lit_frac=0.22, night=night) for k, b in enumerate(bases)]
+    fronts = [facade_mat(f"th_front{k}", b, lit_frac=0.12, night=night) for k, b in enumerate(bases)]
     mats = fronts + [flat("th_slate", (0.06, 0.065, 0.075), 0.55), flat("th_stone", (0.55, 0.52, 0.46), 0.8)]
     BX, BY, ST = 46.0, 38.0, 14.0
     bm = bmesh.new()

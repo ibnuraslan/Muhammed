@@ -1,0 +1,229 @@
+{
+ "part": "P1",
+ "fps": 24,
+ "frames": 3945,
+ "shots": {
+  "S01": {
+   "start": 1,
+   "frames": 100,
+   "dur": 4.167,
+   "line": 1
+  },
+  "S02": {
+   "start": 101,
+   "frames": 72,
+   "dur": 3.0,
+   "line": 1
+  },
+  "S03": {
+   "start": 173,
+   "frames": 103,
+   "dur": 4.292,
+   "line": 2
+  },
+  "S04": {
+   "start": 276,
+   "frames": 138,
+   "dur": 5.75,
+   "line": 2
+  },
+  "S05": {
+   "start": 414,
+   "frames": 103,
+   "dur": 4.292,
+   "line": 2
+  },
+  "S06": {
+   "start": 517,
+   "frames": 96,
+   "dur": 4.0,
+   "line": 3
+  },
+  "S07": {
+   "start": 613,
+   "frames": 97,
+   "dur": 4.042,
+   "line": 3
+  },
+  "S08": {
+   "start": 710,
+   "frames": 73,
+   "dur": 3.042,
+   "line": 4
+  },
+  "S09": {
+   "start": 783,
+   "frames": 72,
+   "dur": 3.0,
+   "line": 5
+  },
+  "S10": {
+   "start": 855,
+   "frames": 72,
+   "dur": 3.0,
+   "line": 5
+  },
+  "S11": {
+   "start": 927,
+   "frames": 130,
+   "dur": 5.417,
+   "line": 6
+  },
+  "S12": {
+   "start": 1057,
+   "frames": 94,
+   "dur": 3.917,
+   "line": 6
+  },
+  "S13": {
+   "start": 1151,
+   "frames": 95,
+   "dur": 3.958,
+   "line": 6
+  },
+  "S14": {
+   "start": 1246,
+   "frames": 80,
+   "dur": 3.333,
+   "line": 7
+  },
+  "S15": {
+   "start": 1326,
+   "frames": 79,
+   "dur": 3.292,
+   "line": 7
+  },
+  "S16": {
+   "start": 1405,
+   "frames": 91,
+   "dur": 3.792,
+   "line": 7
+  },
+  "S17": {
+   "start": 1496,
+   "frames": 113,
+   "dur": 4.708,
+   "line": 8
+  },
+  "S18": {
+   "start": 1609,
+   "frames": 129,
+   "dur": 5.375,
+   "line": 9
+  },
+  "S19": {
+   "start": 1738,
+   "frames": 76,
+   "dur": 3.167,
+   "line": 9
+  },
+  "S20": {
+   "start": 1814,
+   "frames": 65,
+   "dur": 2.708,
+   "line": 9
+  },
+  "S21": {
+   "start": 1879,
+   "frames": 75,
+   "dur": 3.125,
+   "line": 9
+  },
+  "S22": {
+   "start": 1954,
+   "frames": 65,
+   "dur": 2.708,
+   "line": 9
+  },
+  "S23": {
+   "start": 2019,
+   "frames": 108,
+   "dur": 4.5,
+   "line": 10
+  },
+  "S24": {
+   "start": 2127,
+   "frames": 136,
+   "dur": 5.667,
+   "line": 10
+  },
+  "S25": {
+   "start": 2263,
+   "frames": 76,
+   "dur": 3.167,
+   "line": 11
+  },
+  "S26": {
+   "start": 2339,
+   "frames": 77,
+   "dur": 3.208,
+   "line": 11
+  },
+  "S27": {
+   "start": 2416,
+   "frames": 86,
+   "dur": 3.583,
+   "line": 11
+  },
+  "S28": {
+   "start": 2502,
+   "frames": 67,
+   "dur": 2.792,
+   "line": 11
+  },
+  "S29": {
+   "start": 2569,
+   "frames": 186,
+   "dur": 7.75,
+   "line": 12
+  },
+  "S30": {
+   "start": 2755,
+   "frames": 93,
+   "dur": 3.875,
+   "line": 13
+  },
+  "S31": {
+   "start": 2848,
+   "frames": 180,
+   "dur": 7.5,
+   "line": 14
+  },
+  "S32": {
+   "start": 3028,
+   "frames": 135,
+   "dur": 5.625,
+   "line": 14
+  },
+  "S33": {
+   "start": 3163,
+   "frames": 210,
+   "dur": 8.75,
+   "line": 14
+  },
+  "S34": {
+   "start": 3373,
+   "frames": 138,
+   "dur": 5.75,
+   "line": 15
+  },
+  "S35": {
+   "start": 3511,
+   "frames": 110,
+   "dur": 4.583,
+   "line": 15
+  },
+  "S36": {
+   "start": 3621,
+   "frames": 165,
+   "dur": 6.875,
+   "line": 15
+  },
+  "S37": {
+   "start": 3786,
+   "frames": 160,
+   "dur": 6.667,
+   "line": 16
+  }
+ }
+}

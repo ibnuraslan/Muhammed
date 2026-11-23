@@ -330,12 +330,12 @@ def security_room(kind="building", screen_images=None, night=False):
     k = 0
     for row, z in enumerate((1.07, 1.6)):
         for col_, x in enumerate((-0.72, 0.0, 0.72)):
-            root, ms = _ph("Television_01", (x, RY - 0.3, z), rot_z=math.radians(180))
+            root, ms = _ph("Television_01", (x, RY - 0.3, z), rot_z=0.0)        # screen toward the room
             if screen_images and k < len(screen_images) and screen_images[k]:
                 sm = image_mat(f"screen{k}", screen_images[k], 2.2)
             else:
                 sm = crt_mat(f"screen{k}", tint=(0.36, 0.46, 0.4) if not alarm else (0.3, 0.42, 0.55), seed=k * 1.7)
-            s = plane(f"crt_screen{k}", (x, RY - 0.3 - 0.215, z + 0.235), (0.43, 0.33), sm, rot=(math.radians(90), 0, 0))
+            s = plane(f"crt_screen{k}", (x - 0.065, RY - 0.3 - 0.214, z + 0.262), (0.4, 0.31), sm, rot=(math.radians(90), 0, 0))
             screens.append(s); k += 1
     A["screens"] = screens
     # console desk
@@ -611,6 +611,37 @@ def maquette():
     A["vault"] = Vector((vx, 0, b2 + 1.2 * s)); A["street"] = Vector((0, -D_ / 2, zg)); A["top"] = Vector((0, 0, zg + floors * fh))
     # tiny cars and street level in front
     box("maq_street", (0, -D_ / 2 - 0.1, zg - 0.002), (W_ + 0.12, 0.2, 0.004), flat("maq_street", (0.2, 0.2, 0.2), 0.8))
+    # an architect's model, not a block: acrylic glazing on the uncut faces, white massing of the neighbours, a street
+    # with model trees and cars, scale figures in the vault, the garage ramp
+    acr = bpy.data.materials.new("acrylic"); acr.use_nodes = True; ap = acr.node_tree.nodes["Principled BSDF"]
+    ap.inputs['Transmission Weight'].default_value = 1.0; ap.inputs['Roughness'].default_value = 0.08; ap.inputs['IOR'].default_value = 1.49
+    ap.inputs['Base Color'].default_value = (0.85, 0.92, 0.95, 1)
+    for x in (-W_ / 2 - 0.0015, W_ / 2 + 0.0015):
+        box("maq_acrylic", (x, 0, zg + floors * fh / 2), (0.0015, D_, floors * fh), acr)
+    mass = flat("maq_mass", (0.86, 0.84, 0.8), 0.75)
+    import random as _r
+    rng = _r.Random(2)
+    for sx in (-1, 1):
+        for k in range(3):
+            w = rng.uniform(0.07, 0.11); h = rng.uniform(0.1, 0.2)
+            x = sx * (W_ / 2 + 0.09 + k * 0.12)
+            box("maq_neighbour", (x, 0.02, zg + h / 2), (w, D_ * 0.9, h), mass)
+    tree = flat("maq_tree", (0.35, 0.45, 0.3), 0.8); stick = flat("maq_stick", (0.6, 0.55, 0.45), 0.6)
+    for k in range(9):
+        x = -0.45 + k * 0.11
+        S.cyl("maq_trunk", (x, -D_ / 2 - 0.19, zg), (x, -D_ / 2 - 0.19, zg + 0.035), 0.0015, mat=stick, verts=6)
+        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=0.014, location=(x, -D_ / 2 - 0.19, zg + 0.045))
+        bpy.context.active_object.data.materials.append(tree)
+    carm = [flat(f"maq_car{k}", c, 0.4) for k, c in enumerate(((0.7, 0.1, 0.08), (0.15, 0.2, 0.4), (0.8, 0.8, 0.78), (0.1, 0.1, 0.1)))]
+    for k, x in enumerate((-0.33, -0.21, 0.12, 0.27, 0.38)):
+        box("maq_car", (x, -D_ / 2 - 0.08 - (k % 2) * 0.05, zg + 0.008), (0.045, 0.018, 0.014), carm[k % 4], bevel=0.003)
+    fig = flat("maq_figure", (0.9, 0.9, 0.88), 0.6)
+    for k, (dx, dy) in enumerate(((-0.012, 0.005), (0.008, -0.006), (0.018, 0.01))):
+        S.cyl("maq_fig", (vx + dx, dy, b2 + 0.003), (vx + dx, dy, b2 + 0.016), 0.0018, mat=fig, verts=8)
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=8, ring_count=6, radius=0.0022, location=(vx + dx, dy, b2 + 0.0185))
+        bpy.context.active_object.data.materials.append(fig)
+    for k in range(6):                         # the garage ramp down to level -1, in steps of card
+        box("maq_ramp", (-0.09, -D_ / 2 + 0.01 + k * 0.012, zg - k * 0.005), (0.06, 0.013, 0.003), card)
     # a lamp over the model (warm key) and a cool rim
     light_spot("maq_key", (-0.5, -0.7, 0.9), (0, 0, 0.1), 60, angle=40, color=(1.0, 0.85, 0.65), radius=0.15)
     light_area("maq_rim", (0.6, 0.6, 0.5), (0, 0, 0.1), 0.6, 8, (0.7, 0.8, 1.0))

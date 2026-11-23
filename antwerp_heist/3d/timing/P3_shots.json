@@ -1,0 +1,283 @@
+{
+ "part": "P3",
+ "fps": 24,
+ "frames": 4680,
+ "shots": {
+  "U01": {
+   "start": 1,
+   "frames": 143,
+   "dur": 5.958,
+   "line": 1
+  },
+  "U02": {
+   "start": 144,
+   "frames": 112,
+   "dur": 4.667,
+   "line": 1
+  },
+  "U03": {
+   "start": 256,
+   "frames": 57,
+   "dur": 2.375,
+   "line": 2
+  },
+  "U04": {
+   "start": 313,
+   "frames": 77,
+   "dur": 3.208,
+   "line": 2
+  },
+  "U05": {
+   "start": 390,
+   "frames": 132,
+   "dur": 5.5,
+   "line": 3
+  },
+  "U06": {
+   "start": 522,
+   "frames": 149,
+   "dur": 6.208,
+   "line": 3
+  },
+  "U07": {
+   "start": 671,
+   "frames": 114,
+   "dur": 4.75,
+   "line": 4
+  },
+  "U08": {
+   "start": 785,
+   "frames": 86,
+   "dur": 3.583,
+   "line": 5
+  },
+  "U09": {
+   "start": 871,
+   "frames": 58,
+   "dur": 2.417,
+   "line": 5
+  },
+  "U10": {
+   "start": 929,
+   "frames": 57,
+   "dur": 2.375,
+   "line": 5
+  },
+  "U11": {
+   "start": 986,
+   "frames": 67,
+   "dur": 2.792,
+   "line": 5
+  },
+  "U12": {
+   "start": 1053,
+   "frames": 160,
+   "dur": 6.667,
+   "line": 6
+  },
+  "U13": {
+   "start": 1213,
+   "frames": 109,
+   "dur": 4.542,
+   "line": 7
+  },
+  "U14": {
+   "start": 1322,
+   "frames": 95,
+   "dur": 3.958,
+   "line": 7
+  },
+  "U15": {
+   "start": 1417,
+   "frames": 95,
+   "dur": 3.958,
+   "line": 7
+  },
+  "U16": {
+   "start": 1512,
+   "frames": 46,
+   "dur": 1.917,
+   "line": 8
+  },
+  "U17": {
+   "start": 1558,
+   "frames": 79,
+   "dur": 3.292,
+   "line": 9
+  },
+  "U18": {
+   "start": 1637,
+   "frames": 119,
+   "dur": 4.958,
+   "line": 9
+  },
+  "U19": {
+   "start": 1756,
+   "frames": 73,
+   "dur": 3.042,
+   "line": 10
+  },
+  "U20": {
+   "start": 1829,
+   "frames": 86,
+   "dur": 3.583,
+   "line": 10
+  },
+  "U21": {
+   "start": 1915,
+   "frames": 85,
+   "dur": 3.542,
+   "line": 10
+  },
+  "U22": {
+   "start": 2000,
+   "frames": 96,
+   "dur": 4.0,
+   "line": 11
+  },
+  "U23": {
+   "start": 2096,
+   "frames": 82,
+   "dur": 3.417,
+   "line": 11
+  },
+  "U24": {
+   "start": 2178,
+   "frames": 118,
+   "dur": 4.917,
+   "line": 12
+  },
+  "U25": {
+   "start": 2296,
+   "frames": 114,
+   "dur": 4.75,
+   "line": 13
+  },
+  "U26": {
+   "start": 2410,
+   "frames": 134,
+   "dur": 5.583,
+   "line": 13
+  },
+  "U27": {
+   "start": 2544,
+   "frames": 38,
+   "dur": 1.583,
+   "line": 14
+  },
+  "U28": {
+   "start": 2582,
+   "frames": 44,
+   "dur": 1.833,
+   "line": 14
+  },
+  "U29": {
+   "start": 2626,
+   "frames": 38,
+   "dur": 1.583,
+   "line": 14
+  },
+  "U30": {
+   "start": 2664,
+   "frames": 93,
+   "dur": 3.875,
+   "line": 15
+  },
+  "U31": {
+   "start": 2757,
+   "frames": 70,
+   "dur": 2.917,
+   "line": 15
+  },
+  "U32": {
+   "start": 2827,
+   "frames": 105,
+   "dur": 4.375,
+   "line": 15
+  },
+  "U33": {
+   "start": 2932,
+   "frames": 128,
+   "dur": 5.333,
+   "line": 16
+  },
+  "U34": {
+   "start": 3060,
+   "frames": 99,
+   "dur": 4.125,
+   "line": 16
+  },
+  "U35": {
+   "start": 3159,
+   "frames": 119,
+   "dur": 4.958,
+   "line": 17
+  },
+  "U36": {
+   "start": 3278,
+   "frames": 79,
+   "dur": 3.292,
+   "line": 17
+  },
+  "U37": {
+   "start": 3357,
+   "frames": 119,
+   "dur": 4.958,
+   "line": 17
+  },
+  "U38": {
+   "start": 3476,
+   "frames": 79,
+   "dur": 3.292,
+   "line": 17
+  },
+  "U39": {
+   "start": 3555,
+   "frames": 167,
+   "dur": 6.958,
+   "line": 18
+  },
+  "U40": {
+   "start": 3722,
+   "frames": 125,
+   "dur": 5.208,
+   "line": 18
+  },
+  "U41": {
+   "start": 3847,
+   "frames": 125,
+   "dur": 5.208,
+   "line": 18
+  },
+  "U42": {
+   "start": 3972,
+   "frames": 101,
+   "dur": 4.208,
+   "line": 19
+  },
+  "U43": {
+   "start": 4073,
+   "frames": 130,
+   "dur": 5.417,
+   "line": 20
+  },
+  "U44": {
+   "start": 4203,
+   "frames": 129,
+   "dur": 5.375,
+   "line": 20
+  },
+  "U45": {
+   "start": 4332,
+   "frames": 130,
+   "dur": 5.417,
+   "line": 20
+  },
+  "U46": {
+   "start": 4462,
+   "frames": 219,
+   "dur": 9.125,
+   "line": 21
+  }
+ }
+}

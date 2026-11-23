@@ -178,8 +178,17 @@ def lab():
     # light: cool overhead panels, a warm task lamp over the evidence
     for x in (-2.0, 0.0, 2.0):
         box("lab_panel", (x, 0.4, RZ - 0.02), (1.2, 0.6, 0.03), emit("lab_panel", (0.9, 0.95, 1.0), 6))
-        light_area("lab_light", (x, 0.4, RZ - 0.06), (x, 0.4, 0), 1.2, 75, (0.92, 0.96, 1.0), size_y=0.6)
+        light_area("lab_light", (x, 0.4, RZ - 0.06), (x, 0.4, 0), 1.2, 38, (0.92, 0.96, 1.0), size_y=0.6)
     light_spot("task_lamp", (0.3, -1.3, 1.6), A["bench"], 30, angle=60, color=(1.0, 0.82, 0.6), radius=0.08)
+    # pendant task lights low over the evidence bench: pools of light on the paper, the room falling off around them
+    shade = flat("lab_shade", (0.2, 0.22, 0.22), 0.35, metal=0.6); glow = emit("lab_pendant_glow", (1.0, 0.95, 0.88), 8.0)
+    for x in (-1.2, 0.0, 1.2):
+        S.cyl("lab_pendant_rod", (x, -0.6, RZ), (x, -0.6, 1.85), 0.006, mat=shade, verts=6)
+        bpy.ops.mesh.primitive_cone_add(vertices=24, radius1=0.2, radius2=0.05, depth=0.16, location=(x, -0.6, 1.78))
+        bpy.context.active_object.data.materials.append(shade)
+        bpy.ops.mesh.primitive_circle_add(vertices=24, radius=0.19, fill_type='NGON', location=(x, -0.6, 1.70))
+        bpy.context.active_object.data.materials.append(glow)
+        light_spot("lab_pendant", (x, -0.6, 1.68), (x, -0.6, 0.9), 160, angle=75, color=(1.0, 0.95, 0.88), radius=0.12)
     world((0.02, 0.02, 0.02), 0.3)
     return A
 
