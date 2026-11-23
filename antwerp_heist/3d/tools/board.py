@@ -35,8 +35,8 @@ lines = [f"{len(info)} shots · {total:.0f} s before VO timing · 2560x1440 · 2
          "All shots built in Blender (sets, cast, props); clipcheck 0 clips on every shot.",
          "Faces: no close-ups (backs, over-the-shoulder, profiles in half shadow, silhouettes).",
          "Camera carries the motion; nothing moves by itself. No burned-in text (cards added in CapCut).",
-         "Cast: Leonardo (stocky, grey swept-back hair, navy blazer) · D'Onorio (tall, lean, leather jacket)",
-         "Finotto (broad, cropped hair, olive bomber) · building manager · guard · investigator · police."]
+         "Cast: Leonardo (stocky, grey swept-back hair, navy blazer) · D'Onorio (tall, lean, suede jacket)",
+         "Finotto (broad, cropped hair, olive knit sweater) · detectives Peys & De Bruycker · Van Camp · lab technicians · judges."]
 for k, t in enumerate(lines):
     d.text((120, 540 + k * 70), t, font=F(36), fill=(200, 195, 185))
 cov.paste(sheet.resize((W - 240, int((W - 240) * sheet.height / sheet.width))).crop((0, 0, W - 240, Hh - 1000)), (120, 980))
