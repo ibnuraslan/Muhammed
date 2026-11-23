@@ -174,22 +174,22 @@ for f, hr_, hl_ in ((495, (BX + 0.62, BY + 0.38, 1.02), (BX + 0.05, BY + 0.58, 0
     hand(bom, "R", f, hr_, (0.3, 1, -0.2), (0, 0, -1), grip=0.4)
     hand(bom, "L", f, hl_, (0, 1, -0.6), (0, 0, -1), grip=0.25)
 # 580: hits the floor (impact, slight bounce at 590), pinned at 600+
-for f, z, fl in ((578, 0.27, 92), (586, 0.31, 90), (596, 0.27, 91), (654, 0.27, 91), (700, 0.265, 91), (768, 0.265, 91)):
+for f, z, fl in ((578, 0.31, 92), (586, 0.34, 90), (596, 0.31, 91), (654, 0.31, 91), (700, 0.305, 91), (768, 0.305, 91)):   # v009: body rests on the carpet, not in it
     bom.key_root(f, V((0.0, BY + 0.75, z)), yaw=FWD, flex=fl, side=0)
     bom.key_spine(f, flex=-2, twist=-5, head=(-6, 34) if f < 700 else ((-6, 36) if f == 700 else (-6, 38)))   # v006f: face turned sideways toward the left-side camera, not into the carpet
     bom.key_foot("L", f, V((-0.11, BY - 0.25)), FWD, 0.03, -75); bom.key_foot("R", f, V((0.11, BY - 0.27)), FWD, 0.03, -75)
 # struggle wiggle while pinned (beat 4 end, beat 5 start), then limp (sedated ~ 720)
 for f in range(600, 721, 12):
     w = 1.0 if f < 690 else max(0.0, (720 - f) / 30)
-    bom.key_root(f, V((0.0 + 0.03 * w * math.sin(f), BY + 0.75, 0.27 + 0.02 * w * abs(math.sin(f * 0.7)))), yaw=FWD + 4 * w * math.sin(f * 0.5), flex=91, side=6 * w * math.sin(f * 0.9))
+    bom.key_root(f, V((0.0 + 0.03 * w * math.sin(f), BY + 0.75, 0.31 + 0.02 * w * abs(math.sin(f * 0.7)))), yaw=FWD + 4 * w * math.sin(f * 0.5), flex=91, side=6 * w * math.sin(f * 0.9))
     bom.key_spine(f, flex=-2 + 4 * w * math.sin(f * 0.3), twist=-5 + 8 * w * math.sin(f * 0.6), head=(-6, 34 + 4 * (1 - w)))
 # arms when pinned: left arm twisted behind his back (held by PaxB), right arm out forward on the floor (held by attendant / injected)
 for f in (582, 654, 720, 768, 830, 1068):
-    hand(bom, "L", f, V((-0.30, BY + 0.55, 0.08)), (0, -1, 0), (0, 0, -1), pole=(-0.6, BY + 0.9, 0.4), grip=0.3)
+    hand(bom, "L", f, V((-0.30, BY + 0.55, 0.16)), (0, -1, 0), (0, 0, -1), pole=(-0.6, BY + 0.9, 0.5), grip=0.3)
     hand(bom, "R", f, V((0.16, BY + 1.50, 0.34 if f < 720 else 0.30)), (0.05, 0.8, 0.3), (0, 0, -1), pole=(0.6, BY + 1.0, 0.5), grip=0.6 if f < 720 else 0.15)
 # after sedation he lies still; tiny breathing
 for f in range(780, 1069, 30):
-    bom.key_root(f, V((0.0, BY + 0.75, 0.265 + 0.004 * math.sin(f * 0.1))), yaw=FWD, flex=91, side=0)
+    bom.key_root(f, V((0.0, BY + 0.75, 0.305 + 0.004 * math.sin(f * 0.1))), yaw=FWD, flex=91, side=0)
     bom.key_spine(f, flex=-2, twist=-5, head=(-6, 38))
     bom.key_foot("L", f, V((-0.11, BY - 0.25)), FWD, 0.03, -75); bom.key_foot("R", f, V((0.11, BY - 0.27)), FWD, 0.03, -75)
 print("BOMBER_DONE")
@@ -300,8 +300,8 @@ for f in (585, 654, 720, 768):
     pa.key_root(f, V((-0.05 + dx, BY + 0.05, 0.58)), yaw=FWD + 20, flex=10)
     pa.key_spine(f, flex=60 if f < 720 else 45, twist=5, head=(-15, 0) if 640 <= f < 720 else (20, 0) if f < 720 else (10, 20))   # v006d: head up at the 655 beat
     pa.key_foot("L", f, V((-0.25 + dx, BY - 0.35)), FWD + 20, 0.02, -65); pa.key_foot("R", f, V((0.12 + dx, BY - 0.40)), FWD + 20, 0.02, -65)
-    hand(pa, "L", f, V((-0.10, BY + 1.05, 0.55)), (0.1, 1, -0.4), (0, 0, -1), grip=0.25)
-    hand(pa, "R", f, V((0.12, BY + 1.0, 0.55)), (-0.1, 1, -0.4), (0, 0, -1), grip=0.25)
+    hand(pa, "L", f, V((-0.10, BY + 1.05, 0.62)), (0.1, 1, -0.4), (0, 0, -1), grip=0.25)
+    hand(pa, "R", f, V((0.12, BY + 1.0, 0.62)), (-0.1, 1, -0.4), (0, 0, -1), grip=0.25)
 
 # ---------------------------------------------------------------- PAX B (2C behind, aisle seat; stands, pins the left arm / legs)
 for f in range(1, 470, 20):
@@ -444,18 +444,18 @@ print("CONVEYORS", [(o.name, tuple(round(v, 2) for v in o.dimensions)) for o in 
 TRAY = bpy.data.objects["Tray_1"]
 ev(1430); trf = wpos(trav, "foot.R", 1430)
 SHOE_PICK = V((trf.x + 0.02, trf.y - 0.04, 0.19))
-hand(trav, "R", 1393, TP + V((0.29, 0.10, 0.95)), (0, 0.3, -1), (-1, 0, 0), grip=0.3)
-hand(trav, "L", 1393, TP + V((-0.29, 0.10, 0.95)), (0, 0.3, -1), (1, 0, 0), grip=0.3)
+hand(trav, "R", 1393, TP + V((0.22, 0.05, 0.84)), (0, 0.15, -1), (-1, 0, 0), grip=0.3)
+hand(trav, "L", 1393, TP + V((-0.22, 0.05, 0.84)), (0, 0.15, -1), (1, 0, 0), grip=0.3)
 hand(trav, "L", 1440, TP + V((-0.12, 0.42, 0.82)), (0, 1, -0.5), (0, 0, -1), grip=0.3)          # steadies on the belt edge
 for f in (1460, 1535):
-    hand(trav, "R", f, TP + V((0.29, 0.10, 0.95)), (0, 0.2, -1), (-1, 0, 0), grip=0.3)
-    hand(trav, "L", f, TP + V((-0.29, 0.10, 0.95)), (0, 0.2, -1), (1, 0, 0), grip=0.3)
+    hand(trav, "R", f, TP + V((0.22, 0.05, 0.84)), (0, 0.15, -1), (-1, 0, 0), grip=0.3)
+    hand(trav, "L", f, TP + V((-0.22, 0.05, 0.84)), (0, 0.15, -1), (1, 0, 0), grip=0.3)
 print("SHOE_PICK", SHOE_PICK)
 # straightens in socks, watches the tray roll into the X-ray, small shrug (1560-1620)
-for f, sp, hd in ((1560, 5, (5, 10)), (1590, 0, (0, 30)), (1620, -2, (-3, 35))):
+for f, sp, hd in ((1560, 5, (5, 10)), (1590, 0, (0, 30)), (1620, -2, (-3, 35)), (1660, 4, (8, 10)), (1695, 0, (-2, -10)), (1730, 2, (2, 5))):
     stand(trav, f, TP, FWD, spine=(sp, 0, 0), head=hd)
-    hand(trav, "R", f, TP + V((0.29, 0.10, 0.95)), (0, 0.2, -1), (-1, 0, 0), grip=0.3)
-    hand(trav, "L", f, TP + V((-0.29, 0.10, 0.95)), (0, 0.2, -1), (1, 0, 0), grip=0.3)
+    hand(trav, "R", f, TP + V((0.22, 0.05, 0.84)), (0, 0.15, -1), (-1, 0, 0), grip=0.3)
+    hand(trav, "L", f, TP + V((-0.22, 0.05, 0.84)), (0, 0.15, -1), (1, 0, 0), grip=0.3)
 # tray rides the belt into the tunnel
 for f, x in ((1, -0.85), (1506, -0.85), (1690, 1.9)):   # v009: every tray rides together from 1506 (belt starts)
     TRAY.location = AX + V((x, 0.0, 0.80)); TRAY.keyframe_insert("location", frame=f)
@@ -484,7 +484,7 @@ for h in (pc, pd):
 # v009 (director: no cabin cast re-used at the airport): two new passengers in socks carry their sneakers flat on
 # their palms and set them into the trays beside the traveller (the payoff: everyone takes their shoes off)
 apa, apb = HS["AirPaxA"], HS["AirPaxB"]
-AIRPAX = ((apa, AX + V((-0.10, -0.78, 0)), 1436, 1462), (apb, AX + V((0.65, -0.80, 0)), 1474, 1500))
+AIRPAX = ((apa, AX + V((-0.10, -0.78, 0)), 1470, 1482), (apb, AX + V((0.65, -0.80, 0)), 1486, 1498))
 for h, P0, f_down, f_rel in AIRPAX:
     for f in (1, 1381):
         stand(h, f, P0 + V((0, -0.05, 0)), FWD, spine=(4, 0, 0), head=(12, 0))

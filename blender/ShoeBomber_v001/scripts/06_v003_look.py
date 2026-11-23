@@ -18,7 +18,7 @@ nt.nodes["Principled BSDF"].inputs["Emission Strength"].default_value = 0.55
 O["StudioCyanRim"].data.color = (0.75, 0.95, 1.0)
 # putty: clean, smooth, stylised mid grey
 pm = M["Putty"]; b = pm.node_tree.nodes["Principled BSDF"]
-b.inputs["Base Color"].default_value = (0.62, 0.58, 0.50, 1); b.inputs["Roughness"].default_value = 0.6   # v006e: light clay, reads against the cut sole
+b.inputs["Base Color"].default_value = (0.42, 0.40, 0.34, 1); b.inputs["Roughness"].default_value = 0.7   # v009: grey putty block (was a white egg)
 for n in pm.node_tree.nodes:
     if n.type == 'BUMP': n.inputs["Strength"].default_value = 0.05
 for o in O:
@@ -64,14 +64,14 @@ M["CeilingWhite"].node_tree.nodes["Principled BSDF"].inputs["Base Color"].defaul
 sc.render.use_motion_blur = False
 # v009: the steward's short02 hair read near-white under the cabin light (and as a different man); darken it to near-black
 for o_ in bpy.data.objects:
-    if o_.name in ("Steward.short02",):
+    if o_.name in ("Steward.short02", "Attendant.ponytail01"):
         for m_ in o_.data.materials:
             nt_ = m_.node_tree
             for nd in list(nt_.nodes):
                 if nd.type == 'TEX_IMAGE' and nd.image and "diffuse" in nd.image.name.lower():
                     for lk in list(nd.outputs['Color'].links):
                         mx = nt_.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'
-                        mx.inputs['Factor'].default_value = 1.0; mx.inputs['B'].default_value = (0.16, 0.12, 0.10, 1)
+                        mx.inputs['Factor'].default_value = 1.0; mx.inputs['B'].default_value = (0.16, 0.12, 0.10, 1) if 'Steward' in o_.name else (0.45, 0.33, 0.27, 1)   # v009: ponytail stays dark auburn under warm light
                         nt_.links.new(nd.outputs['Color'], mx.inputs['A']); nt_.links.new(mx.outputs['Result'], lk.to_socket)
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("V003_LOOK_SAVED", OUT)

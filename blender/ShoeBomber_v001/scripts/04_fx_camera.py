@@ -158,6 +158,7 @@ for s, hs in (("L", "L"), ("R", "R")):
         ct.cons.append(c)
     ct.done()
 
+exec(open(os.path.join(os.path.dirname(L.__file__), "04_airpax.py")).read())   # v009 payoff passengers
 for s_ in "LR":
     fo = O["Fuse_Shoe_" + s_]
     for f, h in (((1, False), (480, False), (481, True), (877, True), (878, False)) if s_ == "R" else ((1, True), (877, True), (878, False))):
@@ -324,6 +325,7 @@ for k, s in enumerate(("L", "R")):
         zmin = min((base.matrix_world @ V(c)).z for c in base.bound_box); base.location.z -= zmin - 0.003
         up.location = (0.13, -0.02, -0.047); up.rotation_euler = (0, 0, math.radians(12))
         sl = O["Slab_Shoe_" + s]; sl.parent = base; sl.matrix_parent_inverse = Matrix.Identity(4); sl.location = (0, 0.0, 0.058)
+        sl.modifiers.clear(); sl.scale = (1.15, 1.10, 0.75)     # v009: flat block in the sole, no subsurf egg
         # the cut face of the sole: light rubber, so the section reads as a section
         mc = bpy.data.materials.new("SoleCut"); mc.use_nodes = True
         mc.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.42, 0.40, 0.37, 1)
@@ -480,15 +482,12 @@ CAB = [[
     (428, P(-0.732, 0.846, 1.116), bp("Attendant", "head", 428, (0, 0, -0.1)), 28),
     (446, P(-0.817, 1.19, 1.077), bp("Attendant", "head", 446, (0, 0, -0.1)), 28),
     (455, P(-0.817, 1.19, 1.077), bp("Attendant", "head", 455, (0, 0, -0.1)), 28),
-    # beat 4: up over the seat backs and down into the aisle on PaxA as he lunges (reached by 481)
-    (468, V((-0.55, 1.05, 1.85)), bp("PaxA", "head", 468), 24),   # v006d rule 3: high and clear of PaxA's head
-    (481, P(0.154, -0.254, 1.057), bp("PaxA", "head", 481), 28),
-    (508, P(0.154, -0.254, 1.057), bp("PaxA", "head", 508), 28),
-    (521, V((-0.37, 0.39, 1.68)), bp("Attendant", "head", 521, (0, 0, -0.1)), 28),
-    (534, P(-0.892, 1.042, 1.143), bp("Attendant", "head", 534, (0, 0, -0.1)), 28),
-    (540, P(-0.892, 1.042, 1.143), bp("Attendant", "head", 540, (0, 0, -0.1)), 28),
-    (556, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 556, (0, 0, -0.1)), 28),
-    (566, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 566, (0, 0, -0.1)), 28),
+], [
+    # v009 (director 8-12): the grab and the drag into the aisle as ONE readable shot from the aisle ahead of row 3 at seated
+    # eye height: his face, the attendant (side-on, holding his wrist), PaxA rising beside him; nobody between lens and action
+    (457, V((0.12, 1.60, 1.32)), V((-0.70, 0.25, 0.98)), 24),
+    (520, V((0.10, 1.55, 1.30)), V((-0.55, 0.30, 0.90)), 24),
+    (566, V((0.06, 1.50, 1.26)), V((-0.30, 0.50, 0.60)), 24),
     # v006f (director): the pin and the sedation at SEATED EYE HEIGHT from the aisle side. The four empty seats 04B/C, 05B/C
     # behind the lens are struck for this shot (580-776). Faces: the attendant at his head, PaxA over his back, the steward
     # kneeling opposite and facing us; the bomber's face turned sideways toward us on the carpet.
@@ -524,18 +523,20 @@ SEG4 = [
     (1440, AX + V((-0.95, 0.40, 1.55)), bp("Traveller", "head", 1440, (0, 0, -0.35)), 26),
     (1459, AX + V((-0.631, 0.306, 1.315)), bp("Traveller", "head", 1459), 28),
 ], [
-    # v006f (director): both sneakers already in the tray, riding the belt toward the X-ray (no hands)
-    (1462, AX + V((-0.50, -0.95, 1.30)), op("Tray_1", 1462, (0.0, 0.0, 0.05)), 30),   # 0.7 m clear of him
-    (1527, AX + V((0.10, -0.95, 1.30)), op("Tray_1", 1527, (0.0, 0.0, 0.05)), 30),
+    # v009 (director 22): the payoff -- across the belt, the passengers in socks set their sneakers in the trays
+    (1461, AX + V((0.25, 1.05, 1.45)), AX + V((0.05, -0.60, 0.98)), 22),
+    (1532, AX + V((0.15, 1.05, 1.42)), AX + V((0.05, -0.60, 0.96)), 22),
 ], [
-    (1529, AX + V((-1.219, 0.39, 1.492)), bp("Traveller", "head", 1529), 28),
-    (1537, AX + V((-1.219, 0.39, 1.492)), bp("Traveller", "head", 1537), 28),
-    (1562, AX + V((-1.9, 0.10, 1.45)), bp("Traveller", "head", 1562, (0, 0, -0.3)), 30),
-    (1585, AX + V((-1.5, 0.15, 1.55)), bp("Traveller", "head", 1580, (0, 0, -0.25)), 32),
-    (END, AX + V((-1.35, 0.05, 1.50)), bp("Traveller", "head", END, (0, 0, -0.15)), 40),
+    # the traveller in his socks watches the trays roll into the X-ray
+    (1534, AX + V((-1.219, 0.39, 1.492)), bp("Traveller", "head", 1534, (0, 0, -0.1)), 28),
+    (1640, AX + V((-1.50, 0.20, 1.50)), bp("Traveller", "head", 1640, (0, 0, -0.30)), 30),
+], [
+    # end on his face, head well inside the frame (director 23/24)
+    (1642, AX + V((-1.45, 0.05, 1.52)), bp("Traveller", "head", 1642, (0, 0, -0.25)), 34),
+    (END, AX + V((-1.38, 0.08, 1.52)), bp("Traveller", "head", END, (0, 0, -0.22)), 36),
 ]
 CUTS = {seg[-1][0] for seg in CAB}
-SEG4S = list(SEG4)      # v006e: the airport is three shots joined by cuts
+SEG4S = list(SEG4)      # v009: four airport shots joined by cuts
 for seg in CAB + [SEG2, SEG3] + SEG4S:
     fc = catmull([(f, c) for f, c, a, l in seg]); fa = catmull([(f, a) for f, c, a, l in seg]); fl_ = catmull([(f, float(l)) for f, c, a, l in seg])
     f0, f1 = seg[0][0], seg[-1][0]

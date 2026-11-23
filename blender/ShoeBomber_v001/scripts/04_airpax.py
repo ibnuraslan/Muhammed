@@ -1,7 +1,7 @@
 """v009 airport payoff (exec'd from 04_fx_camera.py, shares its namespace: O, bone_w, Carry, foot_mask, V, Matrix, sc, AX).
 Two passengers in socks carry a sneaker flat on each palm, set them into a tray (released over the tray, they settle onto
 its floor), and the tray rides the belt toward the X-ray with the traveller's tray from 1506."""
-AIRPAX = (("AirPaxA", "Tray_2", 1462), ("AirPaxB", "Tray_3", 1500))
+AIRPAX = (("AirPaxA", "Tray_2", 1482), ("AirPaxB", "Tray_3", 1498))
 for nm, tray_nm, f_rel in AIRPAX:
     rig = O[nm]
     for s_ in "LR":
