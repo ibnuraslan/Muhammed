@@ -155,7 +155,7 @@ def lab_body(osteo=True):
     """The post-cranial skeleton laid out supine on the bench (no skull: the head is from someone else)."""
     A = LB.room(window_light=1.0, lamp=True, lamp_at=(-0.2, 0.62), lamp_target=(0.3, 0.35), lamp_energy=24)
     LB.velvet(-1.15, 1.2, 0.0, 0.78, LB.TOP)
-    sk = B.Skeleton("M", "C", name="Third")
+    sk = B.Skeleton("M", "C", name="Third", sand=0.5)
     sk.remove("skull", "mandible")
     sk.root.rotation_euler = (math.radians(-90), 0, math.radians(-90))
     bpy.context.view_layer.update()
@@ -166,7 +166,7 @@ def lab_body(osteo=True):
     xs = [(o.matrix_world @ v.co).x for o in sk.parts.values() for v in o.data.vertices[:]]
     sk.root.location = (-(min(xs) + max(xs)) / 2, 0.38, LB.TOP + 0.004 - zmin)
     bpy.context.view_layer.update()
-    sk.settle(lambda x, y: LB.TOP + 0.004, sink=0.0, keep=0.08)      # every bone rests on the velvet
+    sk.settle(lambda x, y: LB.TOP + 0.004, sink=0.0, keep=0.55)      # every bone rests on the velvet
     out = dict(A=A, sk=sk)
     if osteo:
         import acts as AC
@@ -181,11 +181,10 @@ def lab_body(osteo=True):
 
 
 def S09():
-    """The rest of the skeleton laid out on the bench under the lamp: dolly low along it from the feet to the ribs."""
+    """The rest of the skeleton on the bench under the lamp: low, shallow-focus dolly from the knees up to the pelvis."""
     lab_body(osteo=False)
-    return dict(a=((-1.25, -0.25, LB.TOP + 0.28), (-0.6, 0.38, LB.TOP + 0.05)), b=((-0.45, -0.35, LB.TOP + 0.3), (0.25, 0.38, LB.TOP + 0.06)), lens=35,
-                fstop=3.5, focus=(-0.2, 0.38, LB.TOP + 0.05), cine=dict(exposure=-0.1))
-
+    return dict(a=((-0.95, -0.2, LB.TOP + 0.2), (-0.35, 0.38, LB.TOP + 0.05)), b=((-0.45, -0.3, LB.TOP + 0.22), (0.1, 0.38, LB.TOP + 0.05)), lens=50,
+                fstop=2.8, focus=(-0.15, 0.38, LB.TOP + 0.05), cine=dict(exposure=-0.15))
 
 def S10():
     """Pelvis and femur under the lamp: the body belongs to a third man."""
