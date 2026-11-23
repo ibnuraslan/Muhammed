@@ -1,0 +1,80 @@
+# Batch 2: instructions for each Connect chat
+
+Your launch message gives `{NN}` (e.g. B07), `{SLUG}` and `{BR}`. You are **Connect{NN}** and you build one film. The director is session `session_01XfwPSmLbHQF2WV66wM8mt5`. Do not message the client.
+
+## Read first, in order
+1. `blender/briefs/batch2/{NN}_{SLUG}.md`: your film's beats, risky shots and reference sheet.
+2. `blender/pipeline/CONNECT_BRIEF_v2.md`: how we build, the logo rules and the old-style rule. **Mandatory.**
+3. `blender/LESSONS_LEARNED.md`, all of it, especially section 1 (every fault the client rejected) and section 8 (final-round faults).
+4. `blender/STYLE_ANIMATED.md` (the look) and `blender/PRODUCTION_RULES.md` (the quality bar).
+5. Finished examples to copy patterns from: `blender/CaveRescue_v010/` and `blender/ToucanBeak_v009/`, both built straight to the VO. The scripts are on branches `claude/connect23-cave-rescue` and `claude/connect28-toucan-beak`.
+
+## Setup
+- Blender: `/opt/blender/blender-5.2.2-linux-x64/blender`. If it's missing, run `bash blender/pipeline/setup_env.sh`.
+- Rendering is CPU only, in Cycles.
+- Work on branch `claude/connect{NN}-{BR}`, in folder `blender/{SLUG}_v001/`. Push only there. No pull requests.
+
+## Phase 1: now (no VO yet)
+Build everything that does not depend on exact timing:
+1. **`PLAN.md`**: one row per beat, giving:
+   - the shots (1–2.5 s each, hard cuts)
+   - who is in each shot and what they physically do
+   - the camera position
+   - where the DA KRAS FILMS logo goes (1–2 places)
+   - for every risky shot, the simplest safe staging (see your film brief)
+2. **Sets, characters and props.** Use real models first (`pipeline/find_models.py`, Poly Haven). For MPFB humans:
+   - apply the eye fix
+   - open the elbow limit per character
+   - relaxed hands with neutral wrists
+   - clothes in non-skin colours
+3. **Animate each beat's action at 1× as its own clip**, about 30% longer than you expect the beat to be, so it can be trimmed to the VO later without stretching.
+4. **Cameras for every shot.** Check the first and last frame of each one: nothing in the lens, the face readable, eyes clear.
+5. **Before P1, check every contact:** run `pipeline/body_prop_cross.py` with every held or touched prop (glasses, cans, tools, rods, rails, seats). Look at the **first, middle and last frame of every shot** at 540×960. Nothing may cross anything: no hand through glass, no rod through a hand, no body through a wall or seat. If a contact is risky, frame the hand out or drop the prop (LESSONS §2.15).
+6. **Checkpoint P1:** push, then send the director one message with:
+   - `PLAN.md`
+   - a still sheet with **3 frames per shot (first, middle, last)** at 540×960, Cycles 8 samples
+   - the `body_prop_cross` result
+   - anything you're unsure about
+
+   Then **stop and wait for the VO**. Fix any director notes that arrive meanwhile.
+
+## Phase 2: when the director sends the VO and our script
+1. Run `pipeline/transcribe.py` on the VO. Beat frame = `1 + round(seconds × 60)`. `frame_end` is about 0.5 s after the last word.
+2. Lay out the shots to those frames. Trim the clips; never time-stretch character animation.
+3. Run the checks (`clip_scan`, `qa_check`, `limb_check`, `body_prop_cross`) on the packed file.
+4. Render the full preview with `pipeline/preview.py` (every 5th frame) from the exact package, and watch every page yourself.
+5. Push `blender/{SLUG}_v002/` with:
+   - the .blend (under 95 MB, all textures packed)
+   - the VO mp3
+   - `beats.json`
+   - `review/preview.mp4`
+   - README.md, SETTINGS.md and CREDITS.md
+
+   Then send the director one message.
+6. **Fix rounds:** fix everything in one rebuild. Re-render only the changed ranges, splice them into the preview, and push `v002b`, `c`, …. Don't push script-only micro-tweaks. When the director says APPROVED, stop.
+
+## Hard limits
+- No full or high-resolution renders, and no paid services.
+- Don't download the reference video. Work from its still sheet, and **match its shots closely** (except old-style references).
+- On-screen text: none, except our logo.
+- Characters:
+  - Generic characters only, never a real person's likeness.
+  - Real victims and children: treat them respectfully, with no distress close-ups. Deaths happen off-screen or with a cut.
+- Anatomy is clean and colour-coded. No gore and no blood sprays. Violence is shown as impact, not wounds.
+- No weapon or explosive construction detail.
+
+## Wave-1 P1 lessons (B01–B10, Nov 16): check these before you send P1
+Every one of these cost a wave-1 chat an extra round. Look for them on your 3-frame sheet yourself first:
+- **Floating props.** A grip that reports 0 mm can still render the prop 10–20 cm off the hand (Child Of inverse or the prop's origin not at its centre). Judge the grip from the rendered frame, not the numbers.
+- **Headless or cut framing on the first or last frame.** A head cut by the top edge, a person half out at the side, a logo cut by the edge.
+- **Faces.** Fringes over an eye (part them). Black-hole eyes (eye fix plus catchlight on every character, including extras). A face hidden under a cap or hat, or back-only views for a whole shot. Faces pressed into walls. Two heads merging.
+- **Bodies.** A-pose or T-pose arms, stiff spread "claw" fingers, mannequin walks (arms must swing), extras standing in a straight row facing camera like a police lineup. Bare torsos and skin-tight one-colour suits read as mannequins: dress people properly.
+- **Empty or flat backgrounds.** Sky-gradient backdrops behind interiors, grey bands under cutaways, black window voids. Build the room.
+- **Static shots.** Three near-identical frames means a frozen shot. Add an action or a camera move.
+- **Continuity.** The same animal or person must keep the same colour and model from shot to shot.
+- **Physics.** No props flying where they wouldn't (e.g. drums arcing through the sky); no objects cut by the ground plane.
+- **Process.** No script-only micro-pushes. Fix everything, then push ONE commit with the 540×960 3-frame sheet plus body_prop_cross, and send one message.
+
+## Speed (client deadline: all 37 films within 2 days)
+- P1 within about 3 hours of launch. Keep sets simple and reuse finished assets from other films in the repo.
+- When the VO arrives, Phase 2 has priority over polish: a clean, watched preview within about 3 hours.
