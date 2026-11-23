@@ -88,9 +88,10 @@ def T05():
     A = S2.garage("night")
     rt = A["ramp_top"]; GY0 = A["GY0"]
     c = crew()
-    for i, (n, x, y) in enumerate((("Leonardo", -0.6, GY0 - 3.0), ("DOnorio", 0.55, GY0 - 4.3), ("Finotto", -0.2, GY0 - 5.8))):
-        z = 3.0 * (GY0 - y) / 10.0 * 0 + max(0.0, (GY0 - y)) * 0.3
-        st = AC.Stand(c[n], (x, y, z), 90); st.walk(0.15 + 0.3 * i)
+    for i, (n, x, y) in enumerate((("Leonardo", 0.05, GY0 - 2.4), ("DOnorio", 0.95, GY0 - 4.0), ("Finotto", -0.9, GY0 - 5.4))):
+        z = max(0.0, (GY0 - y)) * 0.3                 # three men spread across the ramp, each readable, arms at their sides
+        st = AC.Stand(c[n], (x, y, z), 90); st.walk(0.15 + 0.3 * i, stride=18)
+        st.arm_down("L", out=0.14, fwd=0.03); st.arm_down("R", out=0.14, fwd=0.03)
         st.finish(density=HAIR, floor_z=0.0, floor_fn=lambda yy: max(0.0, (GY0 - yy) * 0.3))
     return dict(a=((0.4, GY0 - 9.0, 4.1), (0.0, GY0 + 2.0, 0.8)), b=((0.35, GY0 - 8.5, 3.9), (0.0, GY0 + 2.0, 0.8)), lens=28,
                 cine=dict(exposure=0.4), hand_ok=("ramp",))
@@ -444,17 +445,17 @@ def T31():
 def T32():
     A = S2.security_room("building", night=True)
     v = A["vcr"]
-    m = MD.Finotto(night=True); st = AC.Stand(m, (v.x - 0.6, v.y - 0.05), 0)
-    st.hand("R", v + V((-0.06, 0.05, 0.05)), elbow=(0.7, 0.3, -0.8), grip=0.6)
+    m = MD.Finotto(night=True); st = AC.Stand(m, (v.x - 0.4, v.y + 0.24), 4)
+    st.hand("R", v + V((-0.095, 0.0, 0.05)), elbow=(0.5, 0.4, -0.9), grip=0.5)   # relaxed bent arm, hand resting on the recorder
     pl = bag_pose(st, "L")
-    st.head_to(v, share=0.7); st.finish(look=v, density=HAIR); pl("bag_tapes", 0.6)
-    ST.light_area("vcr_soft", (v.x - 1.2, v.y - 0.9, 2.0), v, 1.2, 90, (1.0, 0.84, 0.62))           # soft: no hard shadow edges on the sweater
+    st.head_to(v + V((0.3, 0.35, 0.0)), share=0.4); st.finish(density=HAIR); pl("bag_tapes", 0.6)   # face kept turned away from camera
     for o in bpy.data.objects:                       # the monitor glow is a broad bounce: no hard arm shadows on the sweater
         if o.type == 'LIGHT' and o.name.startswith("screen_glow"):
             o.data.use_shadow = False
-    ST.light_area("cam_fill", (v.x - 0.9, v.y - 1.15, 1.5), (v.x - 0.4, v.y + 0.1, 1.3), 1.5, 70, (1.0, 0.86, 0.66))   # fill from the camera side
-    return dict(a=((v.x - 0.6, v.y - 1.22, 1.6), (v.x - 0.25, v.y + 0.05, 1.3)), b=((v.x - 0.5, v.y - 1.2, 1.58), (v.x - 0.25, v.y + 0.05, 1.3)), lens=30,
-                hand_ok=("vcr", "bag"), cine=dict(exposure=0.4))
+    ST.light_area("vcr_soft", (v.x - 1.0, v.y + 0.6, 2.1), v, 1.2, 45, (1.0, 0.84, 0.62))
+    # medium shot from behind and to his left: whole head in frame, face turned away to the recorder
+    return dict(a=((v.x - 1.3, v.y - 1.15, 1.58), (v.x - 0.15, v.y + 0.1, 1.25)), b=((v.x - 1.24, v.y - 1.12, 1.56), (v.x - 0.15, v.y + 0.1, 1.25)), lens=22,
+                hand_ok=("vcr", "bag"), cine=dict(exposure=0.2))
 
 
 def T33():
