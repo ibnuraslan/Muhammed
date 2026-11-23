@@ -18,6 +18,8 @@ PKG = os.path.join(ROOT, "pkg", PART)
 T = json.load(open(os.path.join(ROOT, "timing", f"{PART}_shots.json")))
 ORDER = sorted(T["shots"], key=lambda s: T["shots"][s]["start"])
 MAXTEX = 2048
+if bpy:
+    bpy.context.preferences.filepaths.save_version = 0      # no .blend1 backups in the delivery
 
 
 def shots_step():
@@ -59,6 +61,21 @@ def shots_step():
                 else:
                     shutil.copy2(ap, dst)
             img.filepath = "//../textures/" + name
+        # one colour pipeline for MASTER: a shot's view exposure moves into its compositor (Exposure node right after
+        # the render) and the view exposure goes to 0 - identical image, and MASTER can copy one setting for all
+        sc = bpy.context.scene; ev = sc.view_settings.exposure
+        if abs(ev) > 1e-6:
+            nt = getattr(sc, "compositing_node_group", None) or getattr(sc, "node_tree", None)
+            outn = next((n for n in nt.nodes if n.bl_idname in ("NodeGroupOutput", "CompositorNodeComposite")), None) if nt else None
+            if outn is None or not outn.inputs[0].links:
+                raise RuntimeError(f"{sid}: view exposure {ev} but no compositor to carry it")
+            # at the very end of the grade: the same linear multiply the view exposure applied after compositing
+            lk = outn.inputs[0].links[0]; src = lk.from_socket; nt.links.remove(lk)
+            ex = nt.nodes.new("CompositorNodeExposure"); ex.location = (outn.location.x - 200, outn.location.y - 200)
+            ex.inputs[1].default_value = ev
+            nt.links.new(src, ex.inputs[0]); nt.links.new(ex.outputs[0], outn.inputs[0])
+            sc.view_settings.exposure = 0.0
+            print("EXPOSURE", sid, ev, "-> compositor")
         out = os.path.join(PKG, "shots", sid + ".blend")
         bpy.ops.wm.save_as_mainfile(filepath=out, compress=True, relative_remap=False)
         print("PKG", sid, os.path.getsize(out) // 1024, "KB")

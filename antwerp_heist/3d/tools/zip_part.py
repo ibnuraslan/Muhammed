@@ -16,6 +16,8 @@ def files():
     out = []
     for dp, dn, fn in os.walk(PKG):
         for f in fn:
+            if f.endswith((".blend1", ".blend2")):
+                continue
             p = os.path.join(dp, f); out.append((os.path.relpath(p, PKG), os.path.getsize(p)))
     return out
 
@@ -60,7 +62,7 @@ def test_step():
     T = json.load(open(os.path.join(ROOT, "timing", f"{PART}_shots.json"))); N = T["frames"]
     script = f'''
 import bpy, os, sys
-sc = bpy.data.scenes["MASTER"]; bpy.context.window_scene = sc if bpy.context.window else None
+sc = bpy.data.scenes["MASTER"]
 bad = []
 for lib in bpy.data.libraries:
     if not os.path.exists(bpy.path.abspath(lib.filepath)): bad.append(("lib", lib.filepath))
@@ -82,8 +84,8 @@ for f in (1, {N} // 2, {N}):
 '''
     sp = os.path.join(tmp, "_test.py"); open(sp, "w").write(script)
     r = subprocess.run(["blender", "-b", os.path.join(tmp, "MASTER.blend"), "--python", sp], capture_output=True, text=True)
-    for l in r.stdout.splitlines():
-        if l.startswith(("LIBS", "MISSING", "TESTFRAME", "Error", "Traceback")):
+    for l in (r.stdout + r.stderr).splitlines():
+        if l.startswith(("LIBS", "MISSING", "TESTFRAME", "Error", "Traceback")) or "Error" in l:
             print(l)
     print("unzipped", sum(os.path.getsize(os.path.join(dp, f)) for dp, _, fn in os.walk(tmp) for f in fn) >> 20, "MB from", len(zips), "zips")
 
