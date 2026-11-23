@@ -75,6 +75,12 @@ def hair_on(rig, src, name, scale=1.0, lift=0.0, wrap=0.006):
     o.modifiers.new("sm", 'SUBSURF').levels = 1
     return o
 ph = hair_on(PAT, OB["Surgeon.short02"], "Patient.hair", scale=1.0, wrap=0.005)
+# v013: cut the hair away around both ears (it formed "earmuff" discs and hid the grafted ear)
+import bmesh
+_bm = bmesh.new(); _bm.from_mesh(ph.data)
+_ec = Vector((0.0797, -0.0457, 1.6741))
+_kill = [v for v in _bm.verts if abs(v.co.x) > 0.05 and ((v.co.y - _ec.y) / 0.045) ** 2 + ((v.co.z - _ec.z) / 0.05) ** 2 < 1.0]
+bmesh.ops.delete(_bm, geom=_kill, context='VERTS'); _bm.to_mesh(ph.data); _bm.free(); print("HAIR_EARCUT", len(_kill))
 hm = OB["Surgeon.short02"].data.materials[0].copy(); hm.name = "Patient.hair"; ph.data.materials.clear(); ph.data.materials.append(hm)
 # the nurse's own bob, shown again under her cap (03c hid it); kept close to the head so it sits under the cap
 nb = OB["Nurse.bob02"]; nb.hide_render = False; nb.hide_viewport = False
@@ -213,7 +219,7 @@ print("TORSO", torso_material(SUR, OB["Surgeon.body"], scrubS), torso_material(N
 # the carved ear on the tray reads as a skin-toned ear (helix and lobe), not white paper
 ec = OB.get("Ear_Cartilage")
 if ec:
-    ec.data.materials.clear(); ec.data.materials.append(mat("CarvedEarSkin", (0.86, 0.62, 0.52), rough=0.45, sss=0.3))
+    ec.data.materials.clear(); ec.data.materials.append(bpy.data.materials["Cartilage"])   # v013: the carved ear is the same ivory cartilage as the block and the ear in the arm (one look, no model pop)
 def fabric(m, scale=18.0, strength=0.35):
     if not m or not m.use_nodes: return
     nt = m.node_tree; b = next((n for n in nt.nodes if n.type == "BSDF_PRINCIPLED"), None)
@@ -242,6 +248,10 @@ if ea:
     bc = gm.node_tree.nodes["Principled BSDF"].inputs["Base Color"]
     for f, c in ((1, (0.9, 0.86, 0.8)), (871, (0.9, 0.86, 0.8)), (960, (0.84, 0.62, 0.55)), (1010, (0.8, 0.5, 0.42))):
         bc.default_value = (*c, 1); bc.keyframe_insert("default_value", frame=f)
+# v013: the grafted ear matches the end of the in-arm wipe (living pink skin), not a dark brown blob; no stray source ear
+es = bpy.data.materials.get("EarSkin")
+if es: next(n for n in es.node_tree.nodes if n.type == 'BSDF_PRINCIPLED').inputs["Base Color"].default_value = (0.8, 0.5, 0.42, 1)
+if OB.get("Ear_Src"): OB["Ear_Src"].hide_render = True; OB["Ear_Src"].hide_viewport = True
 # v012b: harvested rib cartilage reads as living tissue (pearly ivory-pink, SSS, glossy), not white paper; block smoothed
 cm = bpy.data.materials.get("Cartilage")
 if cm and cm.node_tree:

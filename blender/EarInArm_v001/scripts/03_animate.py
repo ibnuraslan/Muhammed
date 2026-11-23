@@ -260,7 +260,7 @@ def walk(P, a, b, f0, f1, yaw0, yaw1, stride=0.55):
 
 SA_ = Vector((0.45, -0.58)); yA = yaw_to(Vector((0.05, -0.1)) - SA_)
 ST = Vector((1.05, -0.32)); yT = 0.0   # v009d: 8 cm further from the tray (his forearms folded into his belly)
-SB_ = Vector((INC.x - 0.02, INC.y + 0.42)); yB = 0.0
+SB_ = Vector((INC.x + 0.44, INC.y + 0.2)); yB = yaw_to(INC.to_2d() - SB_)   # v013: on the outer side of the arm board, facing the incision (from behind the elbow both forearms crossed the patient's arm)
 SC_ = Vector((EAR_W.x + 0.46, EAR_W.y + 0.22));   # v009i: 16 cm further back so a front-outer camera sees the ear   # v009e: right beside the head on the ear side (his arm passed the headrest)
 _old_SC = Vector((EAR_W.x + 0.42, EAR_W.y + 0.3));   # v009d: beside the head on the ear side (was behind the skull: hand hidden, cap into the head)
 _unused = Vector((EAR_W.x + 0.22, EAR_W.y + 0.5)); yC = yaw_to(EAR_W.to_2d() - Vector((EAR_W.x + 0.22, EAR_W.y + 0.5)))
@@ -339,9 +339,11 @@ def carry_key(f, s, off, d_local=(0, -1, -0.6), n_local=None):
     SUR.key_hand(s, f, W, d, n)
 CARRY_R = (0.10, 0.30, -0.12); CARRY_L = (-0.26, 0.12, -0.32)   # v009e: L at his side (it reached toward the patient's knee)   # v009d: L clear of his hip
 for f in range(276, 330, 4):
-    carry_key(f, "R", CARRY_R); carry_key(f, "L", CARRY_L, (0.0, -1, -1.5))
-for f in range(572, 652, 4):
-    carry_key(f, "R", CARRY_R); carry_key(f, "L", CARRY_L, (0.0, -1, -1.5))
+    _sw = math.sin(2 * math.pi * (f - 276) / 40.0)
+    carry_key(f, "R", CARRY_R); carry_key(f, "L", (CARRY_L[0], CARRY_L[1] + 0.09 * _sw, CARRY_L[2] + 0.03 * abs(_sw)), (0.0, -1, -1.5))
+for f in range(572, 652, 4):   # v013: the free L arm swings with the walk, elbow bent (was locked straight)
+    _sw = math.sin(2 * math.pi * (f - 572) / 40.0)
+    carry_key(f, "R", CARRY_R); carry_key(f, "L", (CARRY_L[0], CARRY_L[1] + 0.09 * _sw, CARRY_L[2] + 0.03 * abs(_sw)), (0.0, -1, -1.5))
 for f in range(1300, 1360, 4):   # v009d: ear carried in front of the chest from the arm to the head (ends before he faces the head)
     carry_key(f, "R", (0.12, 0.2, 0.0)); carry_key(f, "L", CARRY_L, (0.0, -1, -1.5))   # v009f: R in front of his own chest (it wrapped across the patient's shoulder)
 # beat 3: carving at the tray. L holds the block, R draws the scalpel over it in strokes
@@ -718,7 +720,7 @@ for f in list(range(1, B["end"] + 1, 2)) + [B["end"]]:
     if 255 <= f <= 335:
         keymat(carry, f, Matrix.Translation(tip) @ forc.matrix_world.to_3x3().normalized().to_4x4() @ Matrix.Scale(CH_S, 4))
     # the carved ear: on the tray until 566, in forceps 566..700, in the pocket 700..1120, forceps 1120..1440, head after
-    pocket = patch.matrix_world @ Matrix.Translation((0, 0, -0.011)) @ Matrix.Rotation(R_(90), 4, 'X') @ Matrix.Scale(0.7, 4)   # v012b: front of the ear faces out of the skin (its back read as a blank oval)   # v009d: under the skin, fits the forearm
+    pocket = patch.matrix_world @ Matrix.Translation((0, 0, -0.011 + 0.026 * smoothstep(955, 965, f))) @ Matrix.Rotation(R_(90), 4, 'X') @ Matrix.Scale(0.7, 4)   # v013: stage 3 the ear stands up as a relief on the forearm skin   # v012b: front of the ear faces out
     Rf = forc.matrix_world.to_quaternion().to_matrix().to_4x4()
     if f < 566:
         Me = ear_real.matrix_world.copy() if f >= 540 else None

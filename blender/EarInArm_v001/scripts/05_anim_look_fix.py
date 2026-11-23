@@ -57,7 +57,7 @@ for _n, _c in (("OR_Key0", (1.0, 0.88, 0.74)), ("OR_Key1", (1.0, 0.86, 0.7)), ("
 # v012: motivated three-point light (key from the surgical lamp side, softer cool fill, warm rim) and less motion blur
 for _n, _e in (("OR_Key0", 1.15), ("OR_Key1", 1.25), ("OR_Key2", 0.6), ("OR_Key3", 1.3)):
     if _n in bpy.data.objects: bpy.data.objects[_n].data.energy *= _e
-bpy.context.scene.render.motion_blur_shutter = 0.2
+bpy.context.scene.render.motion_blur_shutter = 0.2; bpy.context.scene.render.use_motion_blur = False   # v013: no motion blur (director: heavy blur everywhere)
 print("ANIMFIX_DONE")
 # v012b: the vessel web hid the ear's shape in the growth close-ups; show the ear clearly (cartilage shape first),
 # then only a few thin vessels once it has turned pink (stage 3)

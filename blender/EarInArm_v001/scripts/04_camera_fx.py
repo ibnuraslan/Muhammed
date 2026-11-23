@@ -35,7 +35,7 @@ noi = nt.nodes.new("ShaderNodeTexNoise"); noi.inputs["Scale"].default_value = 6.
 add = nt.nodes.new("ShaderNodeMath"); add.operation = 'MULTIPLY_ADD'; add.inputs[1].default_value = 0.012
 nt.links.new(noi.outputs["Fac"], add.inputs[0]); nt.links.new(sep.outputs["Z"], add.inputs[2])
 thr = nt.nodes.new("ShaderNodeMath"); thr.operation = 'GREATER_THAN'; nt.links.new(add.outputs[0], thr.inputs[0])
-for f, v in ((1, 0.05), (860, 0.05), (1040, -0.05)):
+for f, v in ((1, 0.05), (860, 0.05), (958, -0.05)):   # v013: pink skin by stage 3
     thr.inputs[1].default_value = v; thr.inputs[1].keyframe_insert("default_value", frame=f)
 mx = nt.nodes.new("ShaderNodeMixShader"); nt.links.new(thr.outputs[0], mx.inputs[0]); nt.links.new(cart.outputs[0], mx.inputs[1]); nt.links.new(skin.outputs[0], mx.inputs[2])
 nt.links.new(mx.outputs[0], nt.nodes["Material Output"].inputs["Surface"])
@@ -115,7 +115,7 @@ def xray(name, parent, r0, r1, keys, objs, static=None, clear=0.2):
             mx2 = nt_.nodes.new("ShaderNodeMixShader"); mx2.inputs[0].default_value = clear; nt_.links.new(tr_.outputs[0], mx2.inputs[1]); nt_.links.new(ad_.outputs[0], mx2.inputs[2])
             mx_ = nt_.nodes.new("ShaderNodeMixShader"); nt_.links.new(amt.outputs[0], mx_.inputs[0]); nt_.links.new(src, mx_.inputs[1]); nt_.links.new(mx2.outputs[0], mx_.inputs[2])
             nt_.links.new(mx_.outputs[0], outn.inputs["Surface"])
-xray("Xray_Center", OB["Arm_Pocket"], 0.05, 0.075, ((1, 0.0), (870, 0.0), (871, 0.75), (960, 0.85), (961, 0.95), (1045, 0.95), (1046, 0.0)), [OB["Patient.body"]], clear=0.6)   # v012b: clearer window, the ear shape reads through the skin and grows stronger   # v009d: gentler, no hollow crater
+xray("Xray_Center", OB["Arm_Pocket"], 0.05, 0.075, ((1, 0.0), (870, 0.0), (871, 0.75), (960, 0.85), (961, 0.0), (1046, 0.0)), [OB["Patient.body"]], clear=0.6)   # v012b: clearer window, the ear shape reads through the skin and grows stronger   # v009d: gentler, no hollow crater
 # chest x-ray (beat 2): body and tee go glassy over the rib cage while the cartilage is harvested
 xray("Xray_Chest", OB["Chest_Thorax"], 0.2, 0.25, ((1, 0.0), (155, 0.0), (156, 0.92), (299, 0.92), (300, 0.0)), [OB["Patient.male_casualsuit06"]], static=V(0.0, -0.038, 1.013))   # v009d: only the tee over the chest (world centre: he sits still 140-346), jeans stay opaque   # the whole tee turns x-ray glass
 # v009d: the body under the tee was deleted by the clothes mask, so the glass tee showed an empty box with the head on top
@@ -191,27 +191,25 @@ SEGS = [
     (411, BLK + V(0.04, -0.26, 0.26), BLK + V(0, 0, 0.0), 46), (470, BLK + V(0.03, -0.17, 0.17), BLK + V(0, 0, 0.0), 50)],
   [ (471, BLK + V(0.0, -0.8, 0.3), BLK + V(-0.04, 0.22, 0.32), 32), (579, BLK + V(0.06, -0.85, 0.32), BLK + V(-0.02, 0.24, 0.36), 30)],
   [  # v009i: clean cut - the arm two-shot
-    (580, V(0.4, -0.92, 1.4), V(0.4, 0.42, 1.22), 26), (633, V(0.45, -0.88, 1.38), V(0.5, 0.5, 1.22), 28),
-    (680, V(0.36, -0.86, 1.35), V(0.3, 0.32, 1.17), 28), (730, V(0.35, -0.8, 1.5), V(0.3, 0.32, 1.17), 30),
-    (760, V(0.35, -0.78, 1.52), V(0.3, 0.3, 1.16), 31), (795, V(0.35, -0.78, 1.52), V(0.3, 0.3, 1.16), 31)],
+    (580, V(0.42, -1.32, 1.72), V(0.42, 0.28, 1.12), 27), (680, V(0.4, -1.25, 1.7), V(0.4, 0.28, 1.12), 28), (795, V(0.38, -1.15, 1.68), V(0.38, 0.28, 1.12), 30)],   # v013: higher and further back: his head in frame, no knee in the lens, the surgeon at the outer side of the board
   [  # v012: the ear grows - time passes in three close-ups of the forearm: 1) the skin bulges
     (796, INC + V(0.08, -0.16, 0.36), INC, 40), (870, INC + V(0.06, -0.12, 0.3), INC, 44)],
   [  # 2) the cartilage ear shape shows under the (glassy) skin
     (871, INC + V(-0.06, -0.14, 0.3), INC, 46), (960, INC + V(-0.05, -0.11, 0.26), INC, 50)],
   [  # 3) a recognisable pink ear in the forearm, then the patient (awake, relaxed) looks at it
     (961, INC + V(0.1, -0.1, 0.26), INC, 50), (1010, INC + V(0.08, -0.09, 0.24), INC, 54)],
-  [ (1011, V(0.4, -0.92, 1.4), V(0.3, 0.32, 1.17), 28), (1062, V(0.38, -0.86, 1.4), V(0.3, 0.32, 1.17), 30)],
+  [ (1011, V(0.42, -1.25, 1.7), V(0.4, 0.28, 1.12), 28), (1062, V(0.4, -1.18, 1.68), V(0.4, 0.28, 1.12), 30)],
   [ (1071, INC + V(0.25, -0.8, 0.5), INC + V(-0.02, 0.12, 0.2), 34), (1130, INC + V(0.3, -0.82, 0.48), INC + V(-0.02, 0.12, 0.2), 34),
     (1180, INC + V(0.32, -0.82, 0.46), INC + V(-0.02, 0.12, 0.2), 34), (1240, INC + V(0.25, -0.75, 0.18), INC + V(-0.02, 0.1, 0.3), 32), (1266, V(0.6, -0.8, 1.32), V(0.4, 0.42, 1.3), 26), (1300, V(0.6, -0.78, 1.5), V(0.4, 0.45, 1.24), 26),
     (1330, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.2), 26), (1340, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.2), 26), (1345, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.22), 26)],
   [  # v009i: clean cut - medium profile of his head with the new ear to camera; the surgeon's glove and forceps at the ear, his face at right
     (1346, EAR_W + V(-0.22, -0.92, 0.28), EAR_W + V(0.16, 0.12, 0.06), 30), (1379, EAR_W + V(-0.21, -0.9, 0.28), EAR_W + V(0.16, 0.12, 0.06), 30)],
   [  # v009k: one sharp medium profile (1.5 s) while the ear is set in place, the camera further back (no glove near the lens)
-    (1380, EAR_W + V(0.66, -0.9, 0.2), EAR_W + V(0.1, 0.08, 0.04), 44), (1470, EAR_W + V(0.62, -0.86, 0.2), EAR_W + V(0.1, 0.08, 0.04), 46)],
+    (1380, EAR_W + V(0.5, -0.66, 0.16), EAR_W + V(0.03, 0.03, 0.02), 50), (1470, EAR_W + V(0.44, -0.6, 0.15), EAR_W + V(0.02, 0.02, 0.02), 56)],
   [  # v009i: clean cut - the two faces while the join glows
     (1471, EAR_W + V(-0.22, -0.92, 0.28), EAR_W + V(0.16, 0.12, 0.06), 30), (1500, EAR_W + V(-0.2, -0.88, 0.27), EAR_W + V(0.16, 0.12, 0.06), 30)],
   [  # v009i: clean cut - the stitching on the ear in profile
-    (1501, EAR_W + V(0.62, -0.86, 0.2), EAR_W + V(0.1, 0.08, 0.04), 46), (1600, EAR_W + V(0.6, -0.84, 0.2), EAR_W + V(0.1, 0.08, 0.04), 47)],
+    (1501, EAR_W + V(0.46, -0.62, 0.16), EAR_W + V(0.03, 0.03, 0.02), 54), (1600, EAR_W + V(0.42, -0.58, 0.15), EAR_W + V(0.02, 0.02, 0.02), 58)],
   [  # v009i: clean cut - faces as he finishes and steps back; then the chair rises
     (1601, EAR_W + V(-0.22, -0.92, 0.28), EAR_W + V(0.16, 0.12, 0.06), 30), (1650, EAR_W + V(-0.24, -0.95, 0.27), EAR_W + V(0.12, 0.1, 0.05), 30),
     (1665, V(-0.05, -0.62, 1.66), V(0.02, 0.3, 1.28), 32), (1690, V(0.55, -0.85, 1.52), FACE9, 32),
@@ -254,6 +252,9 @@ for f in range(840, 1252, 4):   # v009g: x-ray macro at f/16 or more (it was sof
 for f in range(1346, 1652, 4):   # v009k: the head and ear shots sharp (f/8 or more)
     ev_at(f); dist = (cam.matrix_world.translation - aim.matrix_world.translation).length
     cam_d.dof.aperture_fstop = max(8.0, min(22.0, 2.8 * 0.9 / max(dist, 0.02))); cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
+for f in range(156, 580, 4):   # v013: the x-ray chest, tray carving and scalpel macro sharp (f/11 or more; they read as a blur)
+    ev_at(f); dist = (cam.matrix_world.translation - aim.matrix_world.translation).length
+    cam_d.dof.aperture_fstop = max(11.0, min(22.0, 2.8 * 0.9 / max(dist, 0.02))); cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
 for idb in (cam, aim, cam_d): stepped(idb, set(JUMPS))
 # surgical spot follows the working area
 for f, tgt in ((1, V(0.05, -0.1, 1.3)), (330, BLK), (600, INC), (1300, INC), (1400, EAR_W), (1640, EAR_W), (1720, FACE9)):
