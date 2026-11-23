@@ -240,8 +240,8 @@ def build(shot, t, out):
         def held(T):
             """She lifts it off the table (to 0.4), then turns it over in her hands looking for an address."""
             u = si.ease(min(1.0, T / 0.4))
-            ctr = PARCEL.lerp(Vector((pos[0], -0.32, TABLE_Z + 0.235)), u)
-            rot = 0.25 * u + 0.5 * si.ease(max(0.0, (T - 0.45) / 0.55))
+            ctr = PARCEL.lerp(Vector((pos[0], -0.22, TABLE_Z + 0.25)), u)
+            rot = 0.15 * u + 0.25 * si.ease(max(0.0, (T - 0.45) / 0.55))
             return ctr, rot
 
         def lift_parcel(h, dv, M, Mi):

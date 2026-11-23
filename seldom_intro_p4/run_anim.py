@@ -125,8 +125,18 @@ if si.ACTORS:
     import clipcheck
     clipcheck.OUT = os.path.join(HERE, "out", "clip_anim")
     bad = 0
+    def live_hands():
+        """The grip test follows the live hands (wrist + knuckles) on this frame."""
+        for ac in si.ACTORS:
+            arm = ac["dv"].h.arm; pb = arm.pose.bones; hd = []
+            for sd in ("L", "R"):
+                for b in (f"wrist.{sd}", f"metacarpal3.{sd}", f"finger3-2.{sd}", f"finger1-2.{sd}"):
+                    if b in pb:
+                        hd += list(arm.matrix_world @ pb[b].head)
+            for o in ac["dv"].objects:
+                o["hands"] = hd
     for f in sorted({1, max(1, NF // 2), NF}):
-        sc.frame_set(f)
+        sc.frame_set(f); bpy.context.view_layer.update(); live_hands()
         bad += len(clipcheck.check(f"{SID}_f{f:04d}", hand_ok=gr.get("clip_ok", ("floor",))))
     print(f"CLIPRESULT {SID} {bad}", flush=True)
     sc.frame_set(1)
@@ -141,6 +151,10 @@ out = os.path.join(HERE, "out", "frames", SID); os.makedirs(out, exist_ok=True)
 sc.render.filepath = os.path.join(out, "f")
 if os.environ.get("PCT"):
     sc.render.resolution_percentage = int(os.environ["PCT"])
+if os.environ.get("SPP"):                                  # cheap previews
+    sc.cycles.samples = int(os.environ["SPP"]); sc.cycles.adaptive_threshold = 0.1
+    sc.render.use_motion_blur = False
+sc.render.image_settings.file_format = 'JPEG' if os.environ.get("SPP") else sc.render.image_settings.file_format
 fr = os.environ.get("FRAMES")
 if fr:
     for f in [int(x) for x in fr.split(",")]:
