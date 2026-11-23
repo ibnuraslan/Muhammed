@@ -37,6 +37,8 @@ def mat(name):
         m = ph.texture("dense_sand", scale=1.4, name="fill", tint=(0.82, 0.72, 0.56))
     elif name == "skirt":                     # trowelled pit edge between the scanned grave and the trench floor
         m = ph.texture("dense_sand", scale=0.9, name="skirt", tint=(0.78, 0.7, 0.55))
+    elif name == "gravefloor":
+        m = ph.texture("dense_sand", scale=1.6, name="gravefloor", tint=(0.95, 0.9, 0.8))
     elif name == "rubber":
         m = bpy.data.materials.new("rubber"); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
         p.inputs['Base Color'].default_value = (0.012, 0.012, 0.012, 1); p.inputs['Roughness'].default_value = 0.55
@@ -400,6 +402,7 @@ def lift(st, dz):
 
 # ----------------------------------------------------------------------------- photogrammetry graves (real excavated
 # crouched burials, Sketchfab CC-BY) set into the north-house pits, joined to the trench floor by a sand skirt
+STRIP = {"B1": (-0.163, -0.136, -0.016, 0.06, -0.1099)}      # scan-unit box (x0, x1, y0, y1, z above which to cut)
 SCANS = {
     # key: (uid, scan-unit centre of the body, scale to metres, cut faces with x < cut (scan units), skull (scan units))
     "B1": ("4e02811d415943d39715c131acb387a7", (-0.102, 0.026), 11.0, None, (-0.09, 0.072)),
@@ -418,6 +421,15 @@ def burial_scan(key="B1", rot=None, skirt=0.0):
         bm = bmesh.new(); bm.from_mesh(me)
         bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.calc_center_median().x < cut], context='FACES')
         bm.to_mesh(me); bm.free()
+    strip = STRIP.get(key)
+    patch = None
+    if strip:                     # grave goods in the source scan (pots) do not belong at Cladh Hallan: cut them out
+        x0, x1, y0, y1, zc = strip
+        bm = bmesh.new(); bm.from_mesh(me)
+        kill = [f for f in bm.faces if x0 < f.calc_center_median().x < x1 and y0 < f.calc_center_median().y < y1
+                and f.calc_center_median().z > zc]
+        bmesh.ops.delete(bm, geom=kill, context='FACES'); bm.to_mesh(me); bm.free()
+        patch = (x0, x1, y0, y1)
     co = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", co); co = co.reshape(-1, 3)
     co[:, 0] -= cen[0]; co[:, 1] -= cen[1]; co *= sc
     c, s = math.cos(rot), math.sin(rot)
@@ -426,6 +438,24 @@ def burial_scan(key="B1", rot=None, skirt=0.0):
     co[:, 0] = x + px; co[:, 1] = y + py
     co[:, 2] += floor_z + 0.004 - co[:, 2].max()
     me.vertices.foreach_set("co", co.ravel()); me.update()
+    # warm the scan toward the pale machair shell sand
+    for m in me.materials:
+        if m and m.use_nodes and "warmed" not in m:
+            N = m.node_tree.nodes; Lk = m.node_tree.links; p = [n for n in N if n.type == 'BSDF_PRINCIPLED']
+            if p and p[0].inputs['Base Color'].links:
+                src = p[0].inputs['Base Color'].links[0].from_socket
+                mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
+                Lk.new(src, mx.inputs[6]); mx.inputs[7].default_value = (1.12, 1.0, 0.82, 1); Lk.new(mx.outputs[2], p[0].inputs['Base Color'])
+            m["warmed"] = True
+    if patch:                     # floor patch where the pots stood (scan floor level, same sand)
+        x0, x1, y0, y1 = patch
+        zf = float(np.percentile(co[:, 2], 30))
+        corners = [((xx - cen[0]) * sc, (yy - cen[1]) * sc) for xx, yy in ((x0, y0), (x1, y0), (x1, y1), (x0, y1))]
+        V = [(X * c - Y * s + px, X * s + Y * c + py, zf + 0.002) for X, Y in corners]
+        pm = bpy.data.meshes.new("gravepatch"); pm.from_pydata(V, [], [(0, 1, 2, 3)]); pm.update(); pm.materials.append(mat("gravefloor"))
+        po = bpy.data.objects.new("gravepatch", pm); link(po)
+        sub = po.modifiers.new("s", "SUBSURF"); sub.subdivision_type = 'SIMPLE'; sub.levels = 4; sub.render_levels = 4
+        dsp = po.modifiers.new("d", "DISPLACE"); t = bpy.data.textures.new("gp", "CLOUDS"); t.noise_scale = 0.05; dsp.texture = t; dsp.strength = 0.012
     # skirt: from every open edge of the scan outward and up to the floor level
     bm = bmesh.new(); bm.from_mesh(me)
     bnd = [e for e in bm.edges if e.is_boundary] if skirt > 0 else []

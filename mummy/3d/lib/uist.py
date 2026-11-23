@@ -300,7 +300,7 @@ def ground_material(fog=None, grass_tint=(0.22, 0.27, 0.09)):
     steep = fac(nsep.outputs['Z'], 0.75, 0.45)
     face = mul(iscut, steep)
     floor_col = _n(nt, "ShaderNodeMix", data_type='RGBA', blend_type='MULTIPLY'); floor_col.inputs['Factor'].default_value = 1
-    L.new(sand["Diffuse"].outputs['Color'], floor_col.inputs[6]); floor_col.inputs[7].default_value = (0.8, 0.75, 0.66, 1)
+    L.new(sand["Diffuse"].outputs['Color'], floor_col.inputs[6]); floor_col.inputs[7].default_value = (0.74, 0.71, 0.66, 1)
     occ = _n(nt, "ShaderNodeTexNoise"); occ.inputs['Scale'].default_value = 0.35; occ.inputs['Detail'].default_value = 6
     occ.inputs['Roughness'].default_value = 0.65; L.new(tc.outputs['Object'], occ.inputs['Vector'])
     occr = ramp(occ.outputs['Fac'], [(0.38, (1.0, 1.0, 1.0)), (0.5, (0.78, 0.72, 0.62)), (0.62, (0.42, 0.36, 0.3)), (0.7, (0.3, 0.26, 0.22))])
