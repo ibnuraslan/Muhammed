@@ -1,0 +1,17 @@
+BellyFat hand audit: step 1, 1123 frames, 11230 hand-checks
+
+HAND_IN_HAND        0
+HAND_IN_BODY        0
+HAND_IN_CLOTHES     0
+HAND_IN_OTHER       0
+WRIST_BEND          7   e.g. f1180 Woman R wrist 75 deg; f1181 Woman R wrist 78 deg; f1182 Woman R wrist 83 deg; f1183 Woman R wrist 90 deg; f1184 Woman R wrist 84 deg
+                 frames [1180, 1181, 1182, 1183, 1184, 1185, 1186]
+
+by character:
+  Woman     {'WRIST_BEND': 7}
+  ShopperA  {'WRIST_BEND': 0}
+  ShopperB  {'WRIST_BEND': 0}
+  Stocker   {'WRIST_BEND': 0}
+  ShopperC  {'WRIST_BEND': 0}
+
+TOTAL 7
