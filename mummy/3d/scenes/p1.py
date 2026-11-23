@@ -39,19 +39,21 @@ def team(*who):
 
 # ============================================================================ "Beneath a house in Scotland..."
 def S01():
-    """Drone: in low over the Atlantic swell, across the white surf and the marram dunes; the dig appears ahead."""
+    """Drone: in low over the Atlantic swell, across the white surf and the marram dunes; the dig appears ahead.
+    Low sun from the north-west (left), so the dunes are rim-lit and throw long shadows toward the lens."""
     U.CUT = True
-    site("golden", grass_at=None, focus=(-190, -60), core=8.0, n=900, kit=True, burials=False, sun_az=200)
-    return dict(a=((-430, -250, 38), (-160, -40, 2)), b=((-170, -95, 46), (0, 0, 3)), lens=24,
-                cine=dict(exposure=0.1))
+    T, sk = site("golden", grass_at=None, focus=(-190, -60), core=8.0, n=900, kit=True, burials=False, sun_az=150)
+    U.scatter(T["terrain"], (-185, -70), 110, density=5.0, zone=(45, 160), scale=(1.2, 2.2), seed=4, name="MarramS01", avoid_cut=False)
+    return dict(a=((-420, -260, 34), (-150, -40, 2)), b=((-175, -100, 40), (0, 0, 3)), lens=24, cine=dict(exposure=0.05))
 
 
 def S02():
-    """Crane down over the trench lip: string line, ranging pole, the north house ring, two diggers at the graves."""
-    site("golden", grass_at=(9, -2), grass_r=22, sun_az=200)
+    """Crane down past the machair grass on the trench lip: the north house, two diggers at the graves (backs)."""
+    site("golden", grass_at=(12.5, 3.5), grass_r=7, sun_az=200)
     team("A", "B")
-    return dict(a=((15.5, -3.5, 10.5), (-0.6, 9.2, 3.3)), b=((11.5, 1.5, 6.6), (-0.8, 9.4, 3.3)), lens=30,
-                fstop=5.6, focus=(-0.8, 9.2, 3.4), hand_ok=OK)
+    z = G.H(12, 3)
+    return dict(a=((12.6, 2.6, z + 2.6), (-0.8, 9.4, 3.3)), b=((11.9, 3.3, z + 0.9), (-0.8, 9.6, 3.4)), lens=35,
+                fstop=4.0, focus=(-0.8, 9.4, 3.4), hand_ok=OK)
 
 
 def S03():
@@ -179,10 +181,10 @@ def lab_body(osteo=True):
 
 
 def S09():
-    """The rest of the skeleton on the bench; the osteologist bent over it (back to camera). Dolly along the bench."""
-    lab_body(osteo=True)
-    return dict(a=((-1.6, -1.55, 1.55), (-0.4, 0.38, LB.TOP + 0.05)), b=((-0.9, -1.75, 1.6), (0.15, 0.38, LB.TOP + 0.05)), lens=35,
-                fstop=4.0, focus=(0.0, 0.3, 1.1), hand_ok=("bench", "velvet", "Third"))
+    """The rest of the skeleton laid out on the bench under the lamp: dolly low along it from the feet to the ribs."""
+    lab_body(osteo=False)
+    return dict(a=((-1.25, -0.25, LB.TOP + 0.28), (-0.6, 0.38, LB.TOP + 0.05)), b=((-0.45, -0.35, LB.TOP + 0.3), (0.25, 0.38, LB.TOP + 0.06)), lens=35,
+                fstop=3.5, focus=(-0.2, 0.38, LB.TOP + 0.05), cine=dict(exposure=-0.1))
 
 
 def S10():
@@ -221,12 +223,14 @@ def S13():
 
 
 def S14():
-    """The site at work: marquee, spoil heap, barrows; diggers in the trench (all with their backs to us). Crane up."""
-    site("day", grass_at=(10, -16), grass_r=24)
+    """The site at work in 2001: low across the machair grass, the trench, diggers (backs), spoil heap and barrows. Crane up."""
+    site("day", grass_at=(14, -18), grass_r=10)
     team("A", "B")
     K.stand(K.DiggerC, (13.4, -6.3), 25, look=(14.5, -5.8, 5.0), density=HAIR, hands="front")
     K.stand(K.Director, (11.6, 2.2), 175, look=(-1, 9, 3.5), density=HAIR)
-    return dict(a=((16.5, -27, 5.6), (1, 3, 3.6)), b=((16.5, -25.5, 12.5), (1, 4, 3.4)), lens=26, hand_ok=OK + ("sieve",))
+    z = G.H(15, -19)
+    return dict(a=((15.5, -19.5, z + 0.6), (2, 4, 3.8)), b=((15.0, -18.8, z + 4.2), (1, 4, 3.4)), lens=28, fstop=8.0, focus=(4, 0, 3.6),
+                hand_ok=OK + ("sieve",))
 
 
 def S15():
@@ -542,7 +546,7 @@ PLAN = [  # shot, VO paragraph (1-based), seconds (first estimate at 140 wpm; re
     ("S06", 4, 4.5, "Lab: cranium upside down on a cork ring; orbit to the healed ridge where the molars were"),
     ("S07", 4, 4.0, "Lab: the mandible, worn molars still in place (macro slide)"),
     ("S08", 5, 3.5, "Skull and jaw side by side: they do not belong together"),
-    ("S09", 6, 4.0, "Lab: the post-cranial skeleton on the bench, osteologist bent over it (back to camera)"),
+    ("S09", 6, 4.0, "Lab: the rest of the skeleton on the bench under the lamp; dolly along it"),
     ("S10", 6, 3.5, "Pelvis and femur under the lamp: a third man"),
     ("S11", 7, 3.5, "Overhead of the crouched figure: one body"),
     ("S12", 7, 4.0, "Pan across the house floor to the second grave"),
