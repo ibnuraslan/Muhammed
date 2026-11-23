@@ -279,6 +279,7 @@ class Skeleton:
             low = float(W[:, 2].min()) - g
             if low > 0.005:
                 o.location.z -= (1 - keep) * low + sink * 0.5
+        bpy.context.view_layer.update()
 
     def remove(self, *segs):
         for s in segs:
