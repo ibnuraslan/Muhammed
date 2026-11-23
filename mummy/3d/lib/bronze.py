@@ -222,6 +222,12 @@ def interior(fire=1.0, door_sun=0.0, hx=0.3, hy=0.0, r=4.6, seed=5):
     kill = [f for f in bm.faces if (roof.matrix_world @ f.calc_center_median()).z < 2.3 and
             abs((roof.matrix_world @ f.calc_center_median()).y - hy) < 0.75 and (roof.matrix_world @ f.calc_center_median()).x > hx]
     bmesh.ops.delete(bm, geom=kill, context='FACES'); bm.to_mesh(roof.data); bm.free()
+    # door frame: two timber jambs and a lintel set into the wall at the east entrance
+    for dy in (-0.62, 0.62):
+        bpy.ops.mesh.primitive_cylinder_add(radius=0.1, depth=1.9, location=(hx + r + 0.15, hy + dy, 0.95)); j = bpy.context.active_object
+        j.rotation_euler = (rng.uniform(-0.03, 0.03), rng.uniform(-0.03, 0.03), 0); j.data.materials.append(wood); j.name = "doorjamb"
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.11, depth=1.6, location=(hx + r + 0.15, hy, 1.88)); li = bpy.context.active_object
+    li.rotation_euler = (math.pi / 2, 0, 0); li.data.materials.append(wood); li.name = "lintel"
     # hearth and fire
     hcx, hcy = hx + 0.2, hy
     G.hearth.__globals__  # (uses dig.H for the excavation; build a local hearth instead)
@@ -259,7 +265,7 @@ def interior(fire=1.0, door_sun=0.0, hx=0.3, hy=0.0, r=4.6, seed=5):
     # room smoke haze (light from the door and the fire reads in the air)
     bpy.ops.mesh.primitive_cylinder_add(radius=r, depth=5.5, location=(hx, hy, 2.75)); hz = bpy.context.active_object; hz.name = "roomhaze"
     hm = bpy.data.materials.new("roomhaze"); hm.use_nodes = True; N = hm.node_tree.nodes; Lk = hm.node_tree.links; N.remove(N["Principled BSDF"])
-    vv = N.new("ShaderNodeVolumePrincipled"); vv.inputs['Density'].default_value = 0.006; vv.inputs['Anisotropy'].default_value = 0.5
+    vv = N.new("ShaderNodeVolumePrincipled"); vv.inputs['Density'].default_value = 0.012; vv.inputs['Anisotropy'].default_value = 0.5
     vv.inputs['Color'].default_value = (0.7, 0.66, 0.62, 1)
     Lk.new(vv.outputs[0], N["Material Output"].inputs['Volume']); hz.data.materials.append(hm)
     # door light: the morning outside (sun through the east doorway) and sky fill
