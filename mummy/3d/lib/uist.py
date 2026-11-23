@@ -257,7 +257,7 @@ def ground_material(fog=None, grass_tint=(0.22, 0.27, 0.09)):
     L.new(sand["Diffuse"].outputs['Color'], tint_sand.inputs[6]); tint_sand.inputs[7].default_value = (1.25, 1.18, 1.02, 1)   # pale shell sand
     c = mixc(dry, wsand["Diffuse"].outputs['Color'], tint_sand.outputs[2])
     marram = _n(nt, "ShaderNodeMix", data_type='RGBA', blend_type='MULTIPLY'); marram.inputs['Factor'].default_value = 1
-    L.new(grass["Diffuse"].outputs['Color'], marram.inputs[6]); marram.inputs[7].default_value = (1.0, 0.98, 0.55, 1)       # straw-green marram
+    L.new(grass["Diffuse"].outputs['Color'], marram.inputs[6]); marram.inputs[7].default_value = (0.82, 0.9, 0.6, 1)       # straw-green marram
     patch = fac(nz2.outputs['Fac'], 0.30, 0.44)
     dune_col = mixc(patch, tint_sand.outputs[2], marram.outputs[2])
     c = mixc(dune, c, dune_col)
@@ -473,11 +473,11 @@ def scatter(target, center, radius, density=40.0, zone=(150, 1e9), scale=(0.7, 1
 # ----------------------------------------------------------------------------- light
 MOODS = {
     #           HDRI                                 hdri str  lamp elev  sun azim  lamp energy colour          fog colour
-    "golden":   ("belfast_sunset_puresky",             0.85,     6.0,     196,      4.5, (1.0, 0.6, 0.34),  (0.50, 0.44, 0.42)),
+    "golden":   ("belfast_sunset_puresky",             0.45,     6.0,     196,      8.0, (1.0, 0.6, 0.34),  (0.50, 0.44, 0.42)),
     "overcast": ("overcast_soil_puresky",              1.1,      30.0,    220,      0.0, (1.0, 0.95, 0.9),  (0.52, 0.55, 0.58)),
-    "dawn":     ("qwantani_dawn_puresky",              0.8,      6.0,      10,      3.0, (1.0, 0.68, 0.45), (0.50, 0.46, 0.48)),
-    "dusk":     ("qwantani_dusk_2_puresky",            0.6,      3.0,     185,      1.2, (1.0, 0.5, 0.28),  (0.30, 0.27, 0.30)),
-    "day":      ("kloofendal_48d_partly_cloudy_puresky", 1.0,   38.0,     225,      3.2, (1.0, 0.93, 0.85), (0.52, 0.58, 0.66)),
+    "dawn":     ("qwantani_dawn_puresky",              0.5,      6.0,      10,      5.5, (1.0, 0.68, 0.45), (0.50, 0.46, 0.48)),
+    "dusk":     ("qwantani_dusk_2_puresky",            0.4,      3.0,     185,      2.2, (1.0, 0.5, 0.28),  (0.30, 0.27, 0.30)),
+    "day":      ("kloofendal_48d_partly_cloudy_puresky", 0.7,   30.0,     225,      4.8, (1.0, 0.93, 0.85), (0.52, 0.58, 0.66)),
 }
 
 
