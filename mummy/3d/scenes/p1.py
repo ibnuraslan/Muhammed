@@ -64,7 +64,7 @@ def S03():
 
 def S04():
     """Low slider along the body at bone level: knees drawn up, hands at the face, the skull."""
-    T, sk = site("golden", grass_at=None, kit=False, sun_az=205)
+    T, sk = site("day", grass_at=None, kit=False, sun_az=215)
     sp = sk["B1"].part_centre("skull"); fp = sk["B1"].part_centre("femurL")
     return dict(a=((-0.75, 8.05, 3.55), tuple(fp)), b=((-1.05, 9.55, 3.55), tuple(sp)), lens=50,
                 fstop=2.8, focus=tuple((sp + fp) / 2))
@@ -72,11 +72,11 @@ def S04():
 
 def S05():
     """Macro: the skull in the ground; slow push, focus on the teeth."""
-    T, sk = site("golden", grass_at=None, kit=False, sun_az=205)
+    T, sk = site("day", grass_at=None, kit=False, sun_az=215)
     sp = sk["B1"].part_centre("skull")
     d = Vector((0.55, -0.6, 0.0)).normalized()
-    a = sp + d * 0.85 + Vector((0, 0, 0.3)); b = sp + d * 0.62 + Vector((0, 0, 0.2))
-    return dict(a=(tuple(a), tuple(sp)), b=(tuple(b), tuple(sp)), lens=85, fstop=4.0, focus=tuple(sp))
+    a = sp + d * 1.5 + Vector((0, 0, 0.8)); b = sp + d * 1.2 + Vector((0, 0, 0.62))
+    return dict(a=(tuple(a), tuple(sp)), b=(tuple(b), tuple(sp)), lens=70, fstop=4.0, focus=tuple(sp))
 
 
 # ============================================================================ the lab: skull, jaw, the third man
@@ -366,10 +366,10 @@ def S25():
 
 def S26():
     """Macro in the grave: the jaw under the skull of the first body; rack from skull to jaw."""
-    T, sk = site("golden", grass_at=None, kit=False, sun_az=210)
+    T, sk = site("day", grass_at=None, kit=False, sun_az=215)
     sp = sk["B1"].part_centre("skull"); jp = sk["B1"].part_centre("mandible")
     d = Vector((0.6, -0.4, 0)).normalized()
-    return dict(a=(tuple(sp + d * 0.8 + Vector((0, 0, 0.28))), tuple(sp)), b=(tuple(jp + d * 0.6 + Vector((0, 0, 0.2))), tuple(jp)),
+    return dict(a=(tuple(sp + d * 1.4 + Vector((0, 0, 0.7))), tuple(sp)), b=(tuple(jp + d * 1.1 + Vector((0, 0, 0.55))), tuple(jp)),
                 lens=85, fstop=2.8, focus=tuple(jp))
 
 
