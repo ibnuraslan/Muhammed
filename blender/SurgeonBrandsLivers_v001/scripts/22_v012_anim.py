@@ -226,6 +226,16 @@ for f in range(430, 571, 2):
     HP["place_hand"](s1, "L", f, PL, (-(sh["L"] - sh["R"]).normalized()), (fw + V(0, 0, -0.5 * (1 - kL))).normalized(), skin=0.02)
     put_pole(s1, "L", f, sh["L"] + V(0, 0, -0.40) + fw * 0.05 + (sh["L"] - sh["R"]).normalized() * 0.5)
     HP["apply_pose"](s1, "R", "pinch" if 450 <= f <= 505 else "relaxed", f); HP["apply_pose"](s1, "L", "relaxed", f)
+# v014f: at the cut to the medium shot (497) his hands are already at rest - hold the frame-521 pose over 497-520
+HB_ = ["IK_hand.L", "IK_hand.R", "Pole_elbow.L", "Pole_elbow.R"] + [pb.name for pb in s1.pose.bones if pb.name.startswith(("finger", "metacarpal"))]
+ev(521); rest_ = {n: (s1.pose.bones[n].location.copy(), s1.pose.bones[n].rotation_quaternion.copy()) for n in HB_}
+ev(496); pre_ = {n: (s1.pose.bones[n].location.copy(), s1.pose.bones[n].rotation_quaternion.copy()) for n in HB_}
+clear_bones(s1, HB_, 496, 521)
+for n in HB_:
+    pb = s1.pose.bones[n]
+    for f_, (l_, q_) in ((496, pre_[n]), (497, rest_[n]), (520, rest_[n]), (521, rest_[n])):
+        pb.location = l_; pb.rotation_quaternion = q_
+        pb.keyframe_insert("location", frame=f_, group=n); pb.keyframe_insert("rotation_quaternion", frame=f_, group=n)
 # head acting after the mask is down: a glance at the patient, a look up, a slight nod
 R1 = AL["Rig"](s1)
 clear_bones(s1, ["head", "neck02"], 500, 570)
