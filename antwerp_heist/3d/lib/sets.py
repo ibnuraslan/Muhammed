@@ -434,7 +434,7 @@ def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), ga
         A["pirs"].append(p)
     if taped:
         # one broad strip of silver-grey duct tape across the eye, its ends pressed up the detector's sides
-        tape = flat("duct_tape2", (0.42, 0.42, 0.44), 0.32, metal=0.35)
+        tape = flat("duct_tape2", (0.34, 0.35, 0.37), 0.55, metal=0.65)     # matte silver-grey duct tape
         ty = VY * 0.45
         box("tape_strip", (0, ty, VZ - 0.0645), (0.05, 0.1, 0.0015), tape, bevel=0.0006, rot=(0, 0, 0.12))
         for sg in (1, -1):

@@ -480,9 +480,11 @@ def U42():
 # ============================================================================ L20 what explains it all
 def U43():
     A = ST.vault_complex("wreck", contacts="bypassed", taped=True); ld = A["light_detector"]
-    ST.light_point("tape_glint", (0.35, ld.y - 0.45, 1.9), 15, (1.0, 0.93, 0.82), radius=0.01)   # the tape's edges catch it
-    # close under the taped detector, looking back toward the door: the door head a sliver at the bottom of frame
-    return dict(a=((0.1, 2.45, 2.02), (0.05, 1.45, 2.56)), b=((0.1, 2.42, 2.03), (0.05, 1.42, 2.57)), lens=16, fstop=5.6, focus=ld)
+    # a raking light skimming the ceiling picks out the tape's matte silver and its edges
+    ST.light_area("tape_rake", (ld.x + 0.45, ld.y + 0.05, ld.z + 0.01), tuple(ld), 0.08, 6, (1.0, 0.94, 0.85))
+    # really close under the detector: it fills ~40% of the frame, the tape strip across its sensor face
+    return dict(a=((ld.x + 0.1, ld.y - 0.3, ld.z - 0.24), tuple(ld)), b=((ld.x + 0.09, ld.y - 0.28, ld.z - 0.23), tuple(ld)), lens=50,
+                fstop=5.6, focus=ld)
 
 
 def U44():
