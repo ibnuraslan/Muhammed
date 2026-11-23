@@ -147,7 +147,7 @@ def S08():
     """Skull and jaw side by side: the jaw does not belong to this head. Pull back."""
     L = lab_skull(inverted=False, with_jaw=True)
     c = Vector((0.1, 0.33, LB.TOP + 0.07))
-    return dict(a=((0.05, -0.1, LB.TOP + 0.12), tuple(c)), b=((0.1, -0.38, LB.TOP + 0.22), tuple(c)), lens=60,
+    return dict(a=((0.05, -0.1, LB.TOP + 0.12), tuple(c)), b=((0.1, -0.38, LB.TOP + 0.22), tuple(c)), lens=45,
                 fstop=4.0, focus=tuple(c))
 
 
