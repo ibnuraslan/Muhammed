@@ -343,8 +343,8 @@ def S22():
 def S23():
     """Back to 2001: the same house floor in the trench - revetment ring and hearth. Crane down."""
     U.CUT = True
-    site("overcast", grass_at=None, kit=True, burials=False)
-    return dict(a=((7.5, -7.5, 10.5), (0.6, 0.0, 3.4)), b=((5.2, -4.6, 6.2), (0.6, 0.0, 3.3)), lens=28)
+    site("golden", grass_at=(9, -9), grass_r=14, kit=True, burials=True, sun_az=205)
+    return dict(a=((9.5, -9.0, 9.5), (0.6, 0.5, 3.4)), b=((6.6, -6.0, 5.6), (0.6, 0.5, 3.3)), lens=28, fstop=8.0, focus=(0.6, 0.0, 3.3))
 
 
 # ============================================================================ "Under the northern house are the two adults."
