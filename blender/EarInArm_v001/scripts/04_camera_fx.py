@@ -195,7 +195,7 @@ SEGS = [
   [  # v012: the ear grows - time passes in three close-ups of the forearm: 1) the skin bulges
     (796, INC + V(0.08, -0.16, 0.36), INC, 40), (870, INC + V(0.06, -0.12, 0.3), INC, 44)],
   [  # 2) the cartilage ear shape shows under the (glassy) skin
-    (871, INC + V(-0.06, -0.14, 0.3), INC, 46), (960, INC + V(-0.05, -0.11, 0.26), INC, 50)],
+    (871, INC + V(0.12, -0.16, 0.28), INC, 50), (960, INC + V(0.1, -0.13, 0.25), INC, 54)   # v014: from the other side, the waiting forceps hand out of frame],
   [  # 3) a recognisable pink ear in the forearm, then the patient (awake, relaxed) looks at it
     (961, INC + V(0.1, -0.1, 0.26), INC, 50), (1010, INC + V(0.08, -0.09, 0.24), INC, 54)],
   [ (1011, V(0.42, -1.25, 1.7), V(0.4, 0.28, 1.12), 28), (1062, V(0.4, -1.18, 1.68), V(0.4, 0.28, 1.12), 30)],

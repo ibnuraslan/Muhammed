@@ -248,7 +248,7 @@ def yaw_to(v):
     return math.degrees(math.atan2(v.x, -v.y))
 def stand(P, f, pos, yaw, flex=0.0, crouch=0.0, spine=(0, 0, 0), head=(0, 0, 0), side=0.0):
     p = Vector(pos)
-    P.key_body(f, Vector((p.x, p.y, P.root_head.z - 0.004 - 0.4 * crouch)), yaw=yaw, pitch=flex * 0.4, spine=spine, head=head)
+    P.key_body(f, Vector((p.x, p.y, P.root_head.z + 0.012 + 0.0 * crouch)), yaw=yaw, pitch=flex * 0.4, spine=spine, head=head)
     H = Human(P.R)
     for s in "LR":
         H.key_foot(s, f, H.foot_xy(s, Vector((p.x, p.y, 0)), yaw), yaw)
@@ -282,7 +282,7 @@ stand(SUR, 566, ST, yT, spine=(18, 0, 0)); P1_ = Vector((1.36, 0.7)); h1_ = unwr
 walk(SUR, ST, P1_, 567, 625, yT, h1_, stride=0.45); walk(SUR, P1_, SB_, 626, 660, h1_, yB_W, stride=0.4)   # v009d: faces where he walks
 for f in range(662, 1309, 60):
     _up = smoothstep(770, 800, f) * (1 - smoothstep(1040, 1070, f))   # v009d: stands up while the ear grows (his cap was in the x-ray camera)
-    _bw = 22 if f < 1100 else 12; _hw = 30 if f < 1100 else 18   # v009i: less bowed for the lift-out (the lifted ear came up to his face)
+    _bw = 12; _hw = 26 if f < 1100 else 18   # v014: upright at the board (bowed 22 deg read as a squat)   # v009i: less bowed for the lift-out (the lifted ear came up to his face)
     stand(SUR, f, SB_, yB, spine=((_bw - (_bw - 6) * _up) + 2 * math.sin(f * 0.05), 0, 2 * math.sin(f * 0.07)), head=(_hw - (_hw - 16) * _up, 0, 0), crouch=0.04 * (1 - _up))
 walk(SUR, SB_, SC_, 1312, 1370, yB, yC + 360 if False else yC - 0.0 if abs(yB - yC) < 180 else yC + 360, stride=0.3)
 for f in [1371] + list(range(1420, B["b9"], 50)):

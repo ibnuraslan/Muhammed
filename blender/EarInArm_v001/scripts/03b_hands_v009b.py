@@ -65,7 +65,7 @@ for f in FORC_F:
 for f in (130, 290): lock(SUR, "L", f)
 for f in range(136, 280, 12):
     sc.frame_set(f); tip = FORC.matrix_world @ Vector((0, 0.13, 0))
-    p, n = surf(TEE, tip + Vector((0.17, -0.01, 0.11)))
+    p, n = surf(TEE, tip + Vector((0.1, -0.06, 0.15)))   # v014: on the upper front of the chest (on the flank it stuck out past the outline)
     place_hand(SUR, "L", f, p, -n, Vector((0, 0, 1)) - n * n.z, skin=0.002); apply_pose(SUR, "L", "flat_palm", f)   # v014: palm ON the tee (it hovered 1.4 cm off)
 apply_pose(SUR, "L", "relaxed", 290)
 
@@ -90,7 +90,7 @@ def hang(s_, f, side_sign):
     sc.frame_set(f); shL = SUR.matrix_world @ SUR.pose.bones["upperarm01.L"].head; shR = SUR.matrix_world @ SUR.pose.bones["upperarm01.R"].head
     right = shR - shL; right.z = 0; right.normalize(); fwd = Vector((0, 0, 1)).cross(right)
     sh_ = shR if s_ == "R" else shL
-    W = sh_ + right * (0.05 * side_sign) + fwd * 0.16 + Vector((0, 0, -0.5))   # v012: relaxed bent elbows
+    W = sh_ + right * (0.08 * side_sign) + fwd * (0.06 if 796 <= f <= 1052 else 0.16) + Vector((0, 0, -0.58 if 796 <= f <= 1052 else -0.5))   # v014: while he waits at the board the forceps hand rests low at his side (it hung in the close-ups)   # v012: relaxed bent elbows
     pb = SUR.pose.bones["IK_hand." + s_]; d_ = SUR.matrix_world.inverted() @ W - (SUR.matrix_world.inverted() @ (SUR.matrix_world @ pb.head))
     pb.location = pb.location + SUR.data.bones["IK_hand." + s_].matrix_local.to_3x3().inverted() @ d_
     pb.keyframe_insert("location", frame=f, group=pb.name)
@@ -98,15 +98,15 @@ for f in range(796, 1052, 32): hang("R", f, 1.0)   # the forceps hand waits at h
 lock(SUR, "L", 1290); lock(SUR, "L", 1672)
 for f in range(1300, 1664, 12): hang("L", f, -1.0)
 # v009j: he feels the bump with two fingers (881-958), then the hand goes back to his side
-lock(SUR, "L", 870); lock(SUR, "L", 968)
+lock(SUR, "L", 860); lock(SUR, "L", 968)
 _pa = OB["Arm_Pocket"]
-for f in range(884, 960, 6):
+for f in range(870, 960, 6):
     sc.frame_set(f); c = _pa.matrix_world.translation.copy()
     ax = (_pa.matrix_world.to_3x3() @ Vector((1, 0, 0))).normalized()
     shl = SUR.matrix_world @ SUR.pose.bones["upperarm01.L"].head; fd = c - shl; fd.z = 0; fd.normalize()
     p, n = surf(BODY[PAT], c + ax * (0.012 * math.sin(f * 0.25)) + Vector((0, 0, 0.03)))
     place_hand(SUR, "L", f, p + fd * -0.07, -n, fd, skin=0.0)   # v014: fingertips on the skin (hovered)
-for f in (884, 958): apply_pose(SUR, "L", "point", f, spread=0)   # v009e: free hand at his side while he works at the head
+for f in (870, 958): apply_pose(SUR, "L", "point", f, spread=0)   # v009e: free hand at his side while he works at the head
 for f in [f_ for f_ in range(796, 1052, 32) if not 860 <= f_ <= 975]:   # v009j: not while he feels the bump
     sc.frame_set(f); shL = SUR.matrix_world @ SUR.pose.bones["upperarm01.L"].head; shR = SUR.matrix_world @ SUR.pose.bones["upperarm01.R"].head
     right = shR - shL; right.z = 0; right.normalize(); fwd = Vector((0, 0, 1)).cross(right)
