@@ -62,7 +62,7 @@ def check(shot, limit=60, hand_ok=("oar", "tiller", "doll", "Sophia", "letter", 
     tolerance for coplanar touching)."""
     bpy.context.view_layer.update()
     dg = bpy.context.evaluated_depsgraph_get()
-    meshes = [o for o in bpy.data.objects if o.type == 'MESH' and not o.hide_render and not o.name.startswith(SKIP_PREFIX)]
+    meshes = [o for o in bpy.data.objects if o.type == "MESH" and not o.hide_render and not o.name.startswith(SKIP_PREFIX) and "haze" not in o.name]
     people = {}
     for o in meshes:
         if "person" in o:

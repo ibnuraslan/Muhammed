@@ -130,7 +130,7 @@ def light_area(name, loc, target, size, energy, color=(1, 0.9, 0.78), shape='REC
         l.spread = math.radians(spread)
     o = bpy.data.objects.new(name, l); bpy.context.scene.collection.objects.link(o); o.location = loc
     o.rotation_euler = (Vector(target) - Vector(loc)).to_track_quat('-Z', 'Y').to_euler()
-    o.visible_camera = False
+    o.visible_camera = False; o.visible_transmission = False      # never seen through glass (a window key would read as a white panel)
     return o
 
 
@@ -680,3 +680,15 @@ def _strew(A, rng, steel, tray_t, amount=1.0):
     for i in range(int(60 * k)):
         p = floor_pt(); drop(g, p, rng.uniform(0, 6.28), z=0.003)
     A["debris"] = n
+
+
+def haze_box(name, center, size, density=0.02, aniso=0.55, color=(1.0, 0.96, 0.9)):
+    """Light in the air: a volume-scatter box (dust/haze) so key beams read as shafts. Keep density low (0.005-0.05)."""
+    bpy.ops.mesh.primitive_cube_add(size=1, location=center)
+    o = bpy.context.active_object; o.name = name; o.scale = size
+    m = bpy.data.materials.new(name + "_vol"); m.use_nodes = True; N = m.node_tree.nodes; N.remove(N["Principled BSDF"])
+    vs = N.new("ShaderNodeVolumeScatter"); vs.inputs['Density'].default_value = density; vs.inputs['Anisotropy'].default_value = aniso
+    vs.inputs['Color'].default_value = (*color, 1)
+    m.node_tree.links.new(vs.outputs[0], N["Material Output"].inputs['Volume']); o.data.materials.append(m)
+    o.visible_shadow = False
+    return o

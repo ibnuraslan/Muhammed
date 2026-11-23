@@ -21,6 +21,24 @@ def place_matrix(feet, heading):
         Matrix.Rotation(math.radians(heading + 90.0), 4, 'Z')
 
 
+def _fcurves(obj):
+    act = obj.animation_data.action if obj.animation_data else None
+    if act is None:
+        return []
+    if hasattr(act, "fcurves"):
+        return list(act.fcurves)
+    out = []
+    for layer in act.layers:
+        for strip in layer.strips:
+            for cb in strip.channelbags:
+                out += list(cb.fcurves)
+    return out
+
+
+WALK_BONES = [f"{b}.{sd}" for b in ("upperleg01", "lowerleg01", "foot", "upperarm01", "lowerarm01") for sd in "LR"] + \
+    ["spine01", "spine03", "spine05", "head"]
+
+
 class _Base:
     def local(self, w):
         return self.Mi @ Vector(w)
@@ -35,6 +53,7 @@ class _Base:
     def hand(self, side, world, elbow=(0.6, 0.2, -0.8), grip=0.0, hand_dir=None, curl=26):
         """Wrist to a world point; elbow pole in the rig frame (x toward his own side), hand_dir a world direction."""
         h = self.m.h; sg = H.SIDE[side]
+        self._targets()[side] = self.local(world)
         el = Vector((elbow[0] * sg, elbow[1], elbow[2]))
         hd = (self.Mi.to_3x3() @ Vector(hand_dir)).normalized() if hand_dir is not None else None
         P.hand_reach(h, side, self.local(world), elbow=el, hand_dir=hd)
@@ -45,6 +64,7 @@ class _Base:
 
     def grip(self, side, center, bar_dir, radius=0.012, over=None, elbow=(0.7, 0.4, -0.6)):
         """Close a hand round a bar (sitpose.Seat.grip_bar's solver, for a standing man). Returns the palm gap (m)."""
+        self._targets()[side] = self.local(center)
         fake = SP.Seat.__new__(SP.Seat); fake.p = self.m; fake.M = self.M; fake.Mi = self.Mi
         if over is None:
             hip = self.M @ H.hip_mid(self.m.h) if hasattr(H, "hip_mid") else self.M @ SP.hip_mid(self.m.h)
@@ -61,7 +81,83 @@ class _Base:
     def arm_down(self, side, out=0.16, fwd=0.05, bend=14):
         P.arm_down(self.m.h, side, out=out, fwd=fwd, bend=bend); P.rest_hand(self.m.h, side, 28)
 
+    def _targets(self):
+        if "_ht" not in self.__dict__:
+            self._ht = {}
+        return self._ht
+
+    allow_cross = False
+
+    def check_hands(self):
+        """House rule: hands never cross. With both hands placed, the left hand must stay on his left of the right hand
+        (body frame), and the two must not meet unless they share a grip (allow_cross for a deliberate exception)."""
+        t = self._targets()
+        if "L" in t and "R" in t and not self.allow_cross:
+            d = (t["L"].x - t["R"].x) * H.SIDE["L"]
+            if d < 0.02:
+                raise RuntimeError(f"HANDCROSS {self.m.name}: left hand {t['L'].x:+.2f} vs right {t['R'].x:+.2f} (body frame) - hands crossed or touching")
+
+    def _finish_walk(self, density, hair, floor_z, floor_fn):
+        """Animated walk (Stand.walk_anim): unbaked rig; ONE cycle of the planted-foot walk is keyed and looped (Cycles
+        modifier); the root is carried forward at exactly the stride speed (no sliding) and lifted each frame by the
+        cycle's own ground-contact table so the lowest sole touches the floor."""
+        w = self._walk; h = self.m.h; arm = h.arm
+        H.reset_pose(h)
+        rest = {b: (arm.pose.bones[b].head.copy(), arm.pose.bones[b].tail.copy()) for b in ("foot.L", "foot.R")}
+        hip0 = arm.pose.bones["upperleg01.L"].head.copy()
+        floor0 = min(v.co.z for v in h.body.data.vertices)
+        leg = (hip0 - rest["foot.L"][0]).length
+        mw0 = arm.matrix_world.copy()
+        self.m.finish(look_at=None, place=self.M, density=density, hair=hair, bake=False)
+        if (arm.matrix_world.translation - mw0.translation).length < 1e-6 and arm.parent is None:
+            arm.matrix_world = self.M @ mw0                 # the rig carries its (unbaked, parented) meshes
+            bpy.context.view_layer.update()
+        base = arm.matrix_world.copy(); sz = base.to_scale().z
+        fwd = (base.to_3x3() @ Vector((0, -1, 0))); fwd.z = 0; fwd.normalize()
+        fps = w["fps"]; C = max(8, int(round(w["cadence"] * fps))); cad = C / fps
+        v = 2 * leg * math.sin(math.radians(w["stride"])) / (cad / 2) * sz      # m/s, matched to the planted foot
+        for pb in arm.pose.bones:
+            pb.rotation_mode = 'QUATERNION'
+        arm.matrix_world = Matrix.Identity(4); bpy.context.view_layer.update()   # pose in the rig's own frame
+        # floor slope along the walk (a ramp): each foot's contact is judged against the floor under that foot
+        if floor_fn is not None:
+            y0 = base.translation.y
+            slope = (floor_fn(y0 + 0.05) - floor_fn(y0 - 0.05)) / 0.1
+        else:
+            slope = 0.0
+        R3 = base.to_3x3()
+        lift = []
+        for k in range(C + 1):                      # one full cycle (last key = first: seamless loop)
+            self._walk_pose(w["phase0"] + k / C)
+            need = -1e9
+            for b in ("foot.L", "foot.R"):
+                pb = arm.pose.bones[b]
+                toe = pb.tail + (pb.tail - pb.head).normalized() * 0.1           # toe tip beyond the ball of the foot
+                for pnt, rz in ((pb.head, rest[b][0].z), (pb.tail, rest[b][1].z), (toe, rest[b][1].z)):
+                    sole = pnt.z - (rz - floor0)
+                    fl = floor0 + slope * (R3 @ pnt).y / max(sz, 1e-6)
+                    need = max(need, fl - sole)
+            lift.append(need * sz + (0.012 if slope else 0.0))
+            moving = arm.pose.bones if k == 0 else [arm.pose.bones[n] for n in WALK_BONES if n in arm.pose.bones]
+            for pb in moving:
+                pb.keyframe_insert("rotation_quaternion", frame=1 + k); pb.keyframe_insert("location", frame=1 + k)
+        for fc in _fcurves(arm):
+            if fc.data_path.startswith("pose.bones"):
+                fc.modifiers.new('CYCLES')
+        arm.matrix_world = base; bpy.context.view_layer.update()
+        for f in range(1, w["N"] + 1):
+            t = (f - 1) / fps
+            pos = base.translation + fwd * v * t
+            fz = floor_fn(pos.y) if floor_fn is not None else floor_z
+            arm.location = Vector((pos.x, pos.y, fz + lift[(f - 1) % C] + 0.002))
+            arm.keyframe_insert("location", frame=f)
+        bpy.context.scene.frame_set(max(1, w["N"] // 2))
+        return self.m
+
     def finish(self, look=None, density=0.6, hair=True, floor_z=0.0, floor_fn=None):
+        self.check_hands()
+        if getattr(self, "_walk", None):
+            return self._finish_walk(density, hair, floor_z, floor_fn)
         self.m.finish(look_at=look, place=self.M, density=density, hair=hair)
         jk = getattr(self.m, "jacket", None)                 # layering after posing: no trousers/shirt through the coat
         if jk is not None and hasattr(self.m, "_cover"):
@@ -143,6 +239,34 @@ class Stand(_Base):
         for sd in ("L", "R"):
             self.arm_down(sd)
         m.lids(0.15)
+
+    def walk_anim(self, N, stride=17.0, cadence=1.08, phase0=0.0, arm_swing=15.0, fps=24, carry=None):
+        """A real walk over the shot's N frames (see _Base._finish_walk): feet planted, no sliding.
+        carry: "L"/"R" - that arm hangs straight down gripping a bag's straps (no swing); see carry_bag()."""
+        self._walk = dict(N=N, stride=stride, cadence=cadence, phase0=phase0, arm_swing=arm_swing, fps=fps, carry=carry)
+        self._walk_pose(phase0)
+
+    def _walk_pose(self, phase):
+        w = self._walk; h = self.m.h
+        H.pose_walk_planted(h, phase, w["stride"], w["arm_swing"])
+        if w.get("carry"):
+            P.arm_down(h, w["carry"], out=0.3, fwd=0.02, bend=5); P.grip(h, w["carry"], 0.9)
+
+    def carry_bag(self, side, make_bag, full=0.8):
+        """After finish(): a bag hung from the carrying hand, parented to the wrist bone so it travels with the walk."""
+        h = self.m.h; arm = h.arm
+        bpy.context.view_layer.update()
+        b = make_bag(); pal = self.M @ P.palm_point(h, side) if not getattr(self, "_walk", None) else None
+        bone = arm.pose.bones[f"wrist.{side}"]
+        wrist = arm.matrix_world @ bone.tail
+        sg = 1 if side == "L" else -1
+        out = (arm.matrix_world.to_3x3() @ Vector((sg, 0, 0))); out.z = 0; out.normalize()
+        b.location = wrist + out * 0.15 - Vector((0, 0, 0.19 + 0.14 * full + 0.07))
+        b.rotation_euler = (0, 0, math.atan2(out.y, out.x) + math.pi / 2)
+        bpy.context.view_layer.update(); mw = b.matrix_world.copy()
+        b.parent = arm; b.parent_type = 'BONE'; b.parent_bone = f"wrist.{side}"
+        b.matrix_world = mw
+        return b
 
     def walk(self, phase=0.25, stride=24):
         """A step caught mid-stride (static: used only from behind / through foreground, as the house rules say)."""
@@ -319,9 +443,9 @@ class Kneel(_Base):
             th = Vector((0.06 * sg, -math.sin(back) * -1 * 0.0 - 0.12, -1)).normalized()
             th = Vector((0.07 * sg, -0.15 + (0.35 if sit_back else 0.0), -1)).normalized()
             h.aim(f"upperleg01.{sd}", th); h.aim(f"upperleg02.{sd}", th)
-            sh = Vector((0.0, 1.0, 0.04)).normalized()            # shin runs back along the floor (+Y in rig)
+            sh = Vector((0.0, 1.0, -0.035)).normalized()          # shin lies back along the floor (+Y in rig), weight on it
             h.aim(f"lowerleg01.{sd}", sh); h.aim(f"lowerleg02.{sd}", sh)
-            h.aim(f"foot.{sd}", Vector((0.0, 0.25, -1.0)))
+            h.aim(f"foot.{sd}", Vector((0.0, 1.0, -0.12)).normalized())   # instep flat on the floor, soles up (no toe stilts)
         for b, k in (("spine05", 0.15), ("spine04", 0.25), ("spine03", 0.3), ("spine02", 0.3)):
             h.rot(b, (1, 0, 0), lean * k)
         bpy.context.view_layer.update()

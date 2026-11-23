@@ -536,7 +536,7 @@ class Deveau:
                     self.h.rot(b, ax, d * amount)
 
     # ------------------------------------------------------------------ after posing
-    def finish(self, look_at=None, lids=0.0, hair=True, density=1.0, place=None):
+    def finish(self, look_at=None, lids=0.0, hair=True, density=1.0, place=None, bake=True):
         """Bake the pose, grow hair, aim the eyes, then move him to `place` (a world Matrix).
         look_at is in world space (after placing)."""
         h = self.h
@@ -549,13 +549,14 @@ class Deveau:
         self.head_R = head_R
         for b in self.button_objs + h.eyes:
             mw = b.matrix_world.copy(); b.parent = None; b.matrix_world = mw
-        H.bake_pose(h)
-        if look_at is not None:
+        if bake:
+            H.bake_pose(h)
+        if look_at is not None and bake:
             for e in h.eyes:
                 d = (Vector(look_at) - e.location).normalized()
                 e.rotation_mode = 'QUATERNION'; e.rotation_quaternion = (-d).to_track_quat('Y', 'Z')
         self._corneas()
-        if not self.asset_boots:
+        if not self.asset_boots and bake:            # animated (unbaked) people keep their skinned shoe shells
             self._sea_boots()
         if hair:
             self._grow_all(density)

@@ -8,7 +8,7 @@ from mathutils import Vector, Matrix
 import ship as S
 import ph
 from sets import (flat, emit, enamel, steel_paint, brushed, tex, paper_mat, gold, box, light_area, light_point,
-                  light_spot, world, _bm_obj)
+                  light_spot, world, _bm_obj, haze_box)
 
 
 def _ph(aid, loc, rot_z=0.0, scale=1.0):
@@ -231,6 +231,10 @@ def office(kind="leonardo", hour="day"):
         box("off_mullion", (x, RY + 0.02, (WZ0 + WZ1) / 2), (0.06, 0.08, WZ1 - WZ0), alu)
     glass = bpy.data.materials.new("win_glass"); glass.use_nodes = True; gp = glass.node_tree.nodes["Principled BSDF"]
     gp.inputs['Transmission Weight'].default_value = 1.0; gp.inputs['Roughness'].default_value = 0.02; gp.inputs['IOR'].default_value = 1.05
+    GN = glass.node_tree.nodes; GL = glass.node_tree.links          # sunlight passes the pane (shadow rays see it as clear)
+    lp_ = GN.new("ShaderNodeLightPath"); tr_ = GN.new("ShaderNodeBsdfTransparent"); mx_ = GN.new("ShaderNodeMixShader")
+    GL.new(lp_.outputs['Is Shadow Ray'], mx_.inputs[0]); GL.new(gp.outputs[0], mx_.inputs[1]); GL.new(tr_.outputs[0], mx_.inputs[2])
+    GL.new(mx_.outputs[0], GN["Material Output"].inputs['Surface'])
     box("off_glass", (0, RY + 0.03, (WZ0 + WZ1) / 2), (2 * RX, 0.008, WZ1 - WZ0), glass)
     box("off_sill_board", (0, RY - 0.08, WZ0 + 0.01), (2 * RX, 0.22, 0.03), flat("sill", (0.3, 0.28, 0.25), 0.4))
     slat = flat("slat", (0.62, 0.56, 0.46), 0.5)
@@ -275,16 +279,23 @@ def office(kind="leonardo", hour="day"):
         A["keys"] = Vector((0.06, desk_y - 0.33, 0.795))
     # door (to the corridor) with frame
     box("off_door", (-1.6, -RY + 0.02, 1.0), (0.9, 0.04, 2.05), enamel("door_wood", (0.22, 0.12, 0.06), rough=0.5))
-    # light: daylight through the window (the key), ceiling panel off, desk lamp warm
+    # light design: soft daylight through the window as the key, the ceiling fluorescents on (an office at work: the room
+    # is never a black cave against a white window), a warm desk lamp as the practical. The window sits ~1.5 stops over
+    # the room, not 5.
     sun = hour == "day"
-    light_area("win_key", (0, RY + 0.8, 1.7), (0, -1, 0.8), 4.5, 380 if sun else 120, (1.0, 0.92, 0.8) if sun else (0.5, 0.6, 0.9),
+    light_area("win_key", (0, RY + 0.6, 1.7), (0, -1, 0.9), 4.5, 170 if sun else 60, (1.0, 0.93, 0.84) if sun else (0.5, 0.6, 0.9),
                size_y=1.6)
-    l = bpy.data.lights.new("off_sun", 'SUN'); l.energy = 3.2 if sun else 0.0; l.color = (1.0, 0.82, 0.6); l.angle = math.radians(1.5)
+    light_area("win_bounce", (0, RY - 0.3, 0.3), (0, -0.5, 1.4), 3.5, 35 if sun else 8, (1.0, 0.86, 0.7), size_y=0.6)   # sill/floor bounce
+    panel = emit("ceil_panel", (1.0, 0.95, 0.86), 0.6 if sun else 4.0)
+    for x, y in ((-1.1, -0.6), (1.1, -0.6), (0.0, 0.9)):
+        box("ceil_fluo", (x, y, RZ - 0.008), (1.2, 0.6, 0.012), panel)
+        light_area("ceil_light", (x, y, RZ - 0.03), (x, y, 0), 1.0, 14 if sun else 110, (1.0, 0.92, 0.8), size_y=0.5)
+    l = bpy.data.lights.new("off_sun", 'SUN'); l.energy = 2.2 if sun else 0.0; l.color = (1.0, 0.84, 0.64); l.angle = math.radians(1.5)
     so = bpy.data.objects.new("off_sun", l); bpy.context.scene.collection.objects.link(so)
-    so.rotation_euler = (math.radians(62), 0, math.radians(200)); A["sun"] = so
+    so.rotation_euler = (math.radians(58), 0, math.radians(15)); A["sun"] = so     # behind the office: sunlit facade across the street, soft sky light inside
     light_point("lamp_bulb", (0.68, desk_y - 0.1, 1.15), 18 if sun else 35, (1.0, 0.7, 0.42), radius=0.03)
     # sky beyond the window
-    w = world((0.55, 0.62, 0.72) if sun else (0.03, 0.04, 0.07), 0.22)
+    w = world((0.5, 0.58, 0.7) if sun else (0.03, 0.04, 0.07), 0.5 if sun else 0.07)
     A["window"] = Vector((0, RY, 1.6)); A["door"] = Vector((-1.6, -RY, 1.0)); A["RX"] = RX; A["RY"] = RY
     return A
 
@@ -459,7 +470,7 @@ def exterior(hour="dawn"):
     for ix in (-20, 0, 20):
         S.cyl("lamppost", (ix, -4.8, 0), (ix, -4.8, 6.5), 0.08, mat=lampm, verts=16)
         box("lamphead", (ix, -5.6, 6.5), (0.4, 1.6, 0.15), lampm)
-        if hour == "dawn":
+        if hour in ("dawn", "night"):
             box("lamp_glass", (ix, -5.8, 6.41), (0.3, 0.6, 0.02), emit("sodium", (1.0, 0.55, 0.2), 25))
             light_spot("street_lamp", (ix, -5.8, 6.35), (ix, -6.0, 0), 900, angle=110, color=(1.0, 0.55, 0.22), radius=0.2)
     # houses opposite: brick terraces
@@ -470,8 +481,13 @@ def exterior(hour="dawn"):
         for k in range(3):
             for j in range(int(h // 3.2)):
                 box("opp_win", (ix * 7.5 - 2.2 + k * 2.2, -19.95, 2.0 + j * 3.2), (1.1, 0.1, 1.6),
-                    emit("opp_win_lit", (1.0, 0.72, 0.42), 2.0) if (hour == "dawn" and (ix + j + k) % 4 == 0) else flat("opp_win", (0.05, 0.06, 0.07), 0.1))
-    if hour == "dawn":
+                    emit("opp_win_lit", (1.0, 0.72, 0.42), 2.0) if (hour in ("dawn", "night") and (ix + j + k) % 4 == 0) else flat("opp_win", (0.05, 0.06, 0.07), 0.1))
+    if hour == "night":
+        import city
+        city.sky("night")
+        moon = bpy.data.lights.new("moon", 'SUN'); moon.energy = 0.06; moon.color = (0.55, 0.65, 1.0)
+        mo = bpy.data.objects.new("moon", moon); bpy.context.scene.collection.objects.link(mo); mo.rotation_euler = (math.radians(50), 0, math.radians(200))
+    elif hour == "dawn":
         look.day_light("dusk", azim=120)
     else:
         import os as _os
@@ -673,7 +689,7 @@ def garage(hour="night"):
     DT.sign((-2.0, GY1 - 0.005, 1.6), (0, -1, 0), kind="notice", w=0.5, h=0.35)
     A["stair_door"] = Vector((3.5, GY1 - 0.1, 0))
     # lights: tube fittings on a grid; at night one in three burns
-    on = emit("g_tube_on", (1.0, 0.92, 0.75), 8.0); off = flat("g_tube_off", (0.55, 0.55, 0.52), 0.4)
+    on = emit("g_tube_on", (0.84, 1.0, 0.9), 9.0); off = flat("g_tube_off", (0.55, 0.55, 0.52), 0.4)   # cool fluorescent vs warm sodium
     k = 0
     for ix in range(-2, 3):
         for iy in (-5.5, -0.5, 4.5):
@@ -681,12 +697,36 @@ def garage(hour="night"):
             lit = (k % 3 == 0) or hour != "night"
             box("g_tube", (x, iy, GZ - 0.04), (0.12, 1.4, 0.06), on if lit else off)
             if lit:
-                light_area("g_tube_light", (x, iy, GZ - 0.09), (x, iy, 0), 0.12, 260, (1.0, 0.9, 0.72), size_y=1.4)
+                light_area("g_tube_light", (x, iy, GZ - 0.09), (x, iy, 0), 0.12, 300, (0.82, 1.0, 0.9), size_y=1.4)
             k += 1
+    # ramp dressing: a striped height bar on chains, bulkhead lamps (one buzzing on), conduit, painted arrows, a hump
+    stripe_y = flat("hb_yellow", (0.8, 0.62, 0.05), 0.5); stripe_k = flat("hb_black", (0.02, 0.02, 0.02), 0.5)
+    for k in range(8):
+        box("height_bar", (-2.45 + k * 0.7, GY0 + 0.45, 2.24), (0.7, 0.08, 0.12), stripe_y if k % 2 == 0 else stripe_k)
+    for sx in (-1, 1):
+        S.cyl("hb_chain", (sx * 2.6, GY0 + 0.45, 2.3), (sx * 2.6, GY0 + 0.45, GZ - 0.02), 0.006, mat=brushed(), verts=6)
+    bulk = flat("bulkhead", (0.2, 0.2, 0.2), 0.4); bglow = emit("bulk_glow", (1.0, 0.85, 0.6), 6.0)
+    for k, (sx, d) in enumerate(((-1, 2.0), (1, 5.0), (-1, 8.0))):
+        y = GY0 - d; z = 1.8 + d * 0.3
+        box("bulkhead", (sx * 2.76, y, z), (0.08, 0.32, 0.2), bulk, bevel=0.02)
+        box("bulkhead_glass", (sx * 2.71, y, z), (0.02, 0.26, 0.14), bglow if k != 2 else flat("bulk_dead", (0.3, 0.3, 0.28), 0.3))
+        if k != 2:
+            light_point("bulkhead_light", (sx * 2.62, y, z), 35, (1.0, 0.8, 0.55), radius=0.06)
+    cond = flat("conduit", (0.45, 0.45, 0.46), 0.4, metal=0.6)
+    for sx in (-1, 1):
+        S.cyl("conduit", (sx * 2.77, GY0 + 0.2, 2.25), (sx * 2.77, GY0 - RL, 2.25 + RL * 0.3), 0.022, mat=cond, verts=10)
+    for k in range(3):
+        y = GY0 - 2.5 - k * 3.0
+        box("ramp_arrow", (0.9, y, (GY0 - y) * 0.3 + 0.012), (0.22, 1.0, 0.004), white, rot=(-math.atan2(3.0, RL), 0, 0))
+    box("speed_hump", (0, GY0 - 0.6, 0.03), (5.4, 0.35, 0.06), stripe_y, bevel=0.02)
     # sodium street light spilling down the ramp
-    light_area("ramp_spill", (0, GY0 - RL + 1.0, 4.5), (0, GY0, 0), 4.0, 900 if hour == "night" else 3000, (1.0, 0.6, 0.28))
+    light_area("ramp_spill", (0, GY0 - RL + 1.0, 4.5), (0, GY0, 0), 4.0, 600 if hour == "night" else 3000, (1.0, 0.6, 0.28))
     box("street_glow", (0, GY0 - RL - 0.5, 3.0), (6.0, 0.1, 4.0), emit("street_glow", (1.0, 0.55, 0.25), 1.2))
     world((0.01, 0.01, 0.01), 0.2)
+    # oil stains and damp patches on the floor (glossy where wet), and the dust in the air that makes beams read
+    import city
+    city.wet_patches(floor, wet=0.6, scale=0.5)
+    haze_box("garage_haze", (0, (GY0 + GY1) / 2 - 4, 2.0), (2 * GX, GY1 - GY0 + 10, 4.5), density=0.012, aniso=0.6, color=(1.0, 0.95, 0.9))
     A["ramp_top"] = Vector((0, GY0 - RL + 0.5, 3.0)); A["ramp_foot"] = Vector((0, GY0 + 0.5, 0)); A["GY0"] = GY0; A["GY1"] = GY1
     return A
 

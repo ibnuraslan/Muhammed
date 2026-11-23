@@ -31,9 +31,13 @@ def stool(loc, h=0.62, name="stool"):
 
 # ============================================================================ L1  Monday morning
 def S01():
-    S2.exterior("dawn")
-    return dict(a=((-9.0, -14.5, 1.35), (1.5, 2.0, 6.5)), b=((-7.2, -13.2, 1.45), (1.5, 2.0, 6.8)), lens=24,
-                cine=dict(exposure=0.2))
+    A = S2.exterior("dawn")
+    import city
+    city.district("dawn", skip=[(-65, 65, -40, 25)])
+    city.dress_street(A, "dawn", haze=0.0)
+    ST.haze_box("aerial_haze", (0, 0, 30), (700, 700, 60), density=0.0016, aniso=0.5, color=(0.85, 0.88, 1.0))
+    # blue hour over the diamond district: the drone pushes in and down toward the Diamond Center
+    return dict(a=((-150.0, -230.0, 120.0), (0.0, 5.0, 8.0)), b=((-62.0, -105.0, 48.0), (0.0, 4.0, 10.0)), lens=30)
 
 
 def S02():
@@ -101,10 +105,10 @@ def S09():
 def S10():
     A = S2.office("leasing")
     mg = MD.Manager(); se = AC.Seated(mg, A["seat_behind"], -90)
-    se.hand("R", (0.15, A["desk_y"] - 0.25, 0.835), elbow=(0.7, 0.3, -0.7), curl=20)
-    se.hand("L", (-0.25, A["desk_y"] - 0.2, 0.835), elbow=(0.7, 0.3, -0.7), curl=24)
-    se.head_to((0.15, -0.3, 1.2), share=0.6)
-    se.finish(look=(0.15, -0.3, 1.25), density=HAIR)
+    se.hand("L", (0.14, A["desk_y"] + 0.02, 0.815), elbow=(0.9, 0.2, -0.5), curl=22)      # forearms on the desk, hands on the form
+    se.hand("R", (-0.14, A["desk_y"] + 0.05, 0.815), elbow=(0.9, 0.2, -0.5), curl=26)
+    se.head_to((0.0, A["desk_y"] + 0.3, 0.75), share=1.0)                                 # head bowed over the tenant form as they talk
+    se.finish(density=HAIR)
     le = MD.Leonardo(); sv = AC.Seated(le, A["seat_visitor"], 90, lean=4)
     sv.head_to((0, 1.55, 1.25), share=0.6)
     sv.finish(look=(0, 1.55, 1.25), density=HAIR)
@@ -118,7 +122,7 @@ def S11():
     m = MD.Leonardo(); st = AC.Stand(m, (1.2, 1.7), 92); st.head_to((1.0, 6.0, 1.2), share=0.5)
     st.finish(look=(1.0, 8, 1.0), density=HAIR)
     return dict(a=((-0.55, 1.15, 1.65), (1.25, 1.75, 1.58)), b=((-0.3, 1.3, 1.64), (1.25, 1.75, 1.58)), lens=40,
-                fstop=2.8, focus=(1.2, 1.7, 1.6), cine=dict(exposure=-0.2))
+                fstop=2.8, focus=(1.2, 1.7, 1.6))
 
 
 def S12():
@@ -138,8 +142,8 @@ def S13():
     A = S2.office("leasing")
     dy = A["desk_y"]; k = A["keys"]
     mg = MD.Manager(); se = AC.Seated(mg, A["seat_behind"], -90, lean=14)
-    se.hand("R", (k.x + 0.03, k.y + 0.06, 0.835), elbow=(0.7, 0.3, -0.7), curl=16)
-    se.hand("L", (-0.3, dy + 0.0, 0.835), elbow=(0.7, 0.3, -0.7), curl=24)
+    se.hand("L", (k.x + 0.03, k.y + 0.06, 0.86), elbow=(0.7, 0.3, -0.7), curl=16)      # his left slides the keys across
+    se.hand("R", (-0.3, dy + 0.0, 0.86), elbow=(0.7, 0.3, -0.7), curl=24)
     se.head_to(k, share=0.8)
     se.finish(look=k, density=HAIR)
     le = MD.Leonardo(); sv = AC.Seated(le, A["seat_visitor"], 90, lean=12)
@@ -153,9 +157,28 @@ def S13():
 # ============================================================================ L7  tenant, access, a box
 def S14():
     A = S2.office("leonardo")
-    m = MD.Leonardo(); st = AC.Stand(m, (-1.05, 1.7), 90); st.head_to((-1.2, 8.0, -3.0), share=0.6)
-    st.finish(look=(-1.2, 8, -3), density=HAIR)
-    return dict(a=((-0.35, -0.65, 1.62), (-1.15, 2.6, 1.35)), b=((-0.45, -0.3, 1.6), (-1.15, 2.6, 1.35)), lens=30)
+    RY = A["RY"]
+    # beyond the glass: the low roofline of the district far off (no near facade), so a low sun rakes into the room
+    for o in list(bpy.data.objects):
+        if o.name.startswith("far_"):
+            bpy.data.objects.remove(o)
+    import random as _r
+    rng = _r.Random(4); brick = ST.flat("sky_bldg", (0.42, 0.33, 0.27), 0.85); stone = ST.flat("sky_bldg2", (0.55, 0.52, 0.47), 0.8)
+    winm = ST.flat("sky_win", (0.05, 0.06, 0.07), 0.2, metal=0.3)
+    for k in range(26):
+        x = rng.uniform(-160, 160); y = RY + rng.uniform(150, 320); h = rng.uniform(4, 22) + 14; w = rng.uniform(12, 30)
+        d_ = rng.uniform(10, 18)
+        ST.box("skyline", (x, y, h / 2 - 14), (w, d_, h), brick if k % 3 else stone)   # street level is 14 m below the office
+        for r in range(int((h - 2) // 3.2)):
+            ST.box("skyline_win", (x, y - d_ / 2 - 0.06, -14 + 2 + r * 3.2), (w * 0.85, 0.1, 1.3), winm)
+    ST.box("street_level", (0, RY + 200, -14.05), (700, 420, 0.1), ST.flat("roofs_ground", (0.2, 0.19, 0.18), 0.9))
+    sun = A["sun"]; sun.data.energy = 4.5; sun.data.angle = math.radians(0.6)
+    sun.rotation_euler = V((0.4, -1.0, -0.3)).normalized().to_track_quat('-Z', 'Y').to_euler()   # low afternoon sun in through the blinds
+    ST.haze_box("office_haze", (0, 0, 1.4), (5.0, 4.2, 2.75), density=0.03, aniso=0.6, color=(1.0, 0.9, 0.78))
+    m = MD.Leonardo(); st = AC.Stand(m, (-1.05, 1.7), 90); st.head_to((-1.6, 8.0, 1.2), share=0.6)
+    st.finish(density=HAIR)
+    # slow push in from behind as the sun cuts through the slats
+    return dict(a=((0.25, -1.1, 1.5), (-1.05, 2.4, 1.45)), b=((-0.35, 0.15, 1.55), (-1.1, 2.4, 1.5)), lens=30, fstop=4.0, focus=(-1.05, 1.7, 1.5))
 
 
 def S15():
@@ -361,7 +384,7 @@ def S33():
     m = MD.Leonardo(); ln = AC.Lean(m, (-0.2, -0.12), 90, {"L": (-0.48, dy - 0.3, 0.79), "R": (0.08, dy - 0.3, 0.79)}, lean=30)
     ln.finish(look=A["blueprint"], density=HAIR)
     return dict(a=((-1.05, -1.45, 1.8), (-0.15, 0.7, 0.9)), b=((-0.85, -1.15, 1.72), (-0.15, 0.72, 0.88)), lens=30,
-                hand_ok=("desk", "Desk", "blueprint", "paper"), cine=dict(exposure=0.3))
+                hand_ok=("desk", "Desk", "blueprint", "paper"))
 
 
 # ============================================================================ L15 the crew
@@ -416,7 +439,7 @@ def S37():
     se.head_to((0, 0.6, 0.8), share=0.7)
     se.finish(look=(0, -2, 1.0), density=HAIR)
     ST.light_point("desk_glow", (-0.4, A["desk_y"] - 0.2, 1.25), 40, (1.0, 0.8, 0.55), radius=0.15)
-    return dict(cine=dict(exposure=0.6), a=((-0.32, 2.05, 1.58), (0.1, 0.2, 0.85)), b=((-0.28, 2.02, 1.54), (0.1, 0.2, 0.85)), lens=26,
+    return dict(a=((-0.32, 2.05, 1.58), (0.1, 0.2, 0.85)), b=((-0.28, 2.02, 1.54), (0.1, 0.2, 0.85)), lens=26,
                 hand_ok=("desk", "Desk", "chair", "Chair", "paper", "blueprint"))
 
 

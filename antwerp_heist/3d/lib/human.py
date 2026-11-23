@@ -694,3 +694,32 @@ def ik2(h, b1, b2, target, pole):
     p = Vector(pole); p = (p - u * p.dot(u)).normalized()
     E = S + u * (a * cosA) + p * (a * sinA)
     h.aim(b1, E - S); h.aim(b2, S + u * d - E)
+
+
+def pose_walk_planted(h, phase, stride=18.0, arm_swing=16.0):
+    """Walk cycle for animation (phase in [0,1), body walks toward -Y). Each leg spends half the cycle planted: the
+    thigh sweeps LINEARLY from +stride to -stride so the planted foot moves back at constant speed (matched by the
+    root motion: no foot sliding), the foot kept flat; the other half it swings through with knee lift and toe-off."""
+    reset_pose(h)
+    for sd, sg in SIDE.items():
+        u = (phase + (0.0 if sd == "L" else 0.5)) % 1.0
+        if u < 0.5:                                   # stance
+            hip = stride * (1.0 - 4.0 * u); knee = 5.0 + 4.0 * math.sin(math.pi * u * 2.0)
+            foot = hip - knee
+        else:                                         # swing
+            s = (u - 0.5) / 0.5
+            hip = -stride + 2.0 * stride * (0.5 - 0.5 * math.cos(math.pi * s))
+            knee = 5.0 + 48.0 * math.sin(math.pi * min(1.0, s * 1.15)) ** 1.2
+            foot = hip - knee * 0.55 + 12.0 * math.sin(math.pi * s)
+        h.rot(f"upperleg01.{sd}", (1, 0, 0), -hip)
+        h.rot(f"lowerleg01.{sd}", (1, 0, 0), knee)
+        h.rot(f"foot.{sd}", (1, 0, 0), foot)
+        a = arm_swing * math.sin(2 * math.pi * (u + 0.5) - math.pi / 2)        # opposite arm swings with the leg
+        h.rot(f"upperarm01.{sd}", (1, 0, 0), -a)
+        h.rot(f"lowerarm01.{sd}", (1, 0, 0), -14 - 8 * max(0.0, math.sin(2 * math.pi * u)))
+    ph = 2 * math.pi * phase
+    h.rot("spine03", (0, 0, 1), 4 * math.sin(ph)); h.rot("spine05", (1, 0, 0), -4)
+    h.rot("spine01", (0, 0, 1), -3 * math.sin(ph)); h.rot("head", (1, 0, 0), -3)
+    for sd, sg in SIDE.items():
+        h.rot(f"upperarm01.{sd}", (0, 1, 0), sg * 42)          # arms hang close to the body
+    fingers_curl(h, 22)

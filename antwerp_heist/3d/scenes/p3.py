@@ -202,11 +202,8 @@ def U16():
     PR.document("lease_file", 0.21, 0.297, seed=21, kind="form").location = (0.1, A["desk_y"] - 0.25, 0.793)
     d = MD.DeBruycker(); st = AC.Stand(d, (0.15, A["desk_y"] - 1.05), 90, lean=8); st.hand("R", (0.12, A["desk_y"] - 0.38, 0.84), elbow=(0.8, 0.2, -0.6), curl=20)
     st.head_to((0.1, A["desk_y"] - 0.25, 0.8), share=0.7); st.finish(density=HAIR)
-    for o in bpy.data.objects:                       # the manager against the window: a silhouette, no fill on his face
-        if o.type == 'LIGHT' and o.name.startswith("lamp_bulb"):
-            o.data.energy *= 0.2
     return dict(a=((-0.6, A["desk_y"] - 2.1, 1.85), (0.1, A["desk_y"] + 0.4, 0.95)), b=((-0.5, A["desk_y"] - 1.95, 1.83), (0.1, A["desk_y"] + 0.4, 0.95)),
-                lens=28, hand_ok=("desk", "Desk", "chair", "lease_file"), cine=dict(exposure=-0.5))
+                lens=28, hand_ok=("desk", "Desk", "chair", "lease_file"))
 
 
 # ============================================================================ L9 Turin
@@ -332,14 +329,11 @@ def U27():
 
 def U28():
     A = S2.office("leasing")
-    mg = MD.Manager(); se = AC.Seated(mg, A["seat_behind"], -90); desk_hands(se, A["desk_y"], fwd=-0.25); se.head_to((0.15, -0.3, 1.2), share=0.6); se.finish(density=HAIR)
+    mg = MD.Manager(); se = AC.Seated(mg, A["seat_behind"], -90); desk_hands(se, A["desk_y"], fwd=-0.25); se.head_to((0.0, A["desk_y"] + 0.15, 0.79), share=1.0); se.finish(density=HAIR)   # eyes on the file while he talks
     le = MD.Leonardo(); sv = AC.Seated(le, A["seat_visitor"], 90, lean=4); sv.head_to((0, 1.55, 1.25), share=0.6); sv.finish(density=HAIR)
-    for o in bpy.data.objects:                       # the manager is a silhouette against the window; Leonardo's back to us
-        if o.type == 'LIGHT' and o.name.startswith("lamp_bulb"):
-            o.data.energy *= 0.15
     dy = A["desk_y"]
     return dict(a=((0.55, dy - 2.0, 1.45), (-0.05, dy + 0.9, 1.15)), b=((0.48, dy - 1.9, 1.45), (-0.05, dy + 0.9, 1.15)), lens=30,
-                fstop=4.0, focus=(0, dy + 0.6, 1.1), hand_ok=("chair", "Chair", "desk", "Desk"), cine=dict(exposure=-0.7))
+                fstop=4.0, focus=(0, dy + 0.6, 1.1), hand_ok=("chair", "Chair", "desk", "Desk"))
 
 
 def U29():
@@ -425,7 +419,7 @@ def U36():
         if o.name.startswith(("blueprint",)):
             bpy.data.objects.remove(o)
     m = MD.Trader(2); st = AC.Stand(m, (0.9, 1.55), 90); st.hands_front(); st.finish(density=HAIR)
-    return dict(a=((-0.6, -1.2, 1.55), (0.9, 2.0, 1.4)), b=((-0.45, -1.0, 1.55), (0.9, 2.0, 1.4)), lens=30, cine=dict(exposure=-0.3))
+    return dict(a=((-0.6, -1.2, 1.55), (0.9, 2.0, 1.4)), b=((-0.45, -1.0, 1.55), (0.9, 2.0, 1.4)), lens=30)
 
 
 def U37():
@@ -454,8 +448,7 @@ def U39():
         m = cls(); se = AC.Seated(m, A["seat_behind"], hd, lean=12); desk_hands(se, A["desk_y"]); se.head_to((0, A["desk_y"], 0.8), share=0.7); se.finish(density=HAIR)
         se._rest_on_seat(margin=0.016, r=0.55, depth=0.35)          # coat skirt over the chair seat, not through it
     PR.document("report", 0.21, 0.3, seed=41).location = (0.0, A["desk_y"] + 0.05, 0.793)
-    return dict(a=((-0.5, 2.0, 1.55), (0.1, 0.5, 0.85)), b=((-0.45, 1.98, 1.52), (0.1, 0.5, 0.85)), lens=26, hand_ok=("desk", "Desk", "chair", "report"),
-                cine=dict(exposure=0.3))
+    return dict(a=((-0.5, 2.0, 1.55), (0.1, 0.5, 0.85)), b=((-0.45, 1.98, 1.52), (0.1, 0.5, 0.85)), lens=26, hand_ok=("desk", "Desk", "chair", "report"))
 
 
 def U40():

@@ -73,11 +73,12 @@ def T02():
 
 
 def T03():
-    S2.exterior("dawn")
-    return dict(a=((12.0, -12.0, 1.4), (-2.0, 0.0, 3.0)), b=((10.5, -11.5, 1.4), (-2.0, 0.0, 3.0)), lens=24, cine=dict(exposure=0.0))
-
-
-# ============================================================================ L18 hours inside, no alarm
+    A = S2.exterior("night")
+    import city
+    city.dress_street(A, "night")
+    # low along the wet street between parked cars, sliding slowly toward the Diamond Center's entrance
+    return dict(a=((25.0, -9.4, 1.0), (-4.0, -2.5, 2.0)), b=((20.5, -9.2, 1.05), (-4.0, -2.5, 2.0)), lens=30, fstop=5.6,
+                focus=(2.0, -3.0, 1.5))
 def T04():
     S2.security_room("building", night=True)
     return dict(a=((-1.2, -1.6, 1.5), (0.2, 1.6, 1.1)), b=((-0.9, -1.2, 1.45), (0.2, 1.6, 1.1)), lens=26, cine=dict(exposure=1.6))
@@ -88,13 +89,14 @@ def T05():
     A = S2.garage("night")
     rt = A["ramp_top"]; GY0 = A["GY0"]
     c = crew()
-    for i, (n, x, y) in enumerate((("Leonardo", 0.05, GY0 - 2.4), ("DOnorio", 0.95, GY0 - 4.0), ("Finotto", -0.9, GY0 - 5.4))):
-        z = max(0.0, (GY0 - y)) * 0.3                 # three men spread across the ramp, each readable, arms at their sides
-        st = AC.Stand(c[n], (x, y, z), 90); st.walk(0.15 + 0.3 * i, stride=18)
-        st.arm_down("L", out=0.14, fwd=0.03); st.arm_down("R", out=0.14, fwd=0.03)
-        st.finish(density=HAIR, floor_z=0.0, floor_fn=lambda yy: max(0.0, (GY0 - yy) * 0.3))
-    return dict(a=((0.4, GY0 - 9.0, 4.1), (0.0, GY0 + 2.0, 0.8)), b=((0.35, GY0 - 8.5, 3.9), (0.0, GY0 + 2.0, 0.8)), lens=28,
-                cine=dict(exposure=0.4), hand_ok=("ramp",))
+    ramp = lambda yy: max(0.0, (GY0 - yy) * 0.3)
+    for i, (n, x, y) in enumerate((("Leonardo", 0.05, GY0 - 4.6), ("DOnorio", 0.95, GY0 - 6.1), ("Finotto", -0.9, GY0 - 7.4))):
+        st = AC.Stand(c[n], (x, y, ramp(y)), 90)
+        st.walk_anim(220, stride=16.0 + i, cadence=1.05 + 0.04 * i, phase0=0.17 + 0.31 * i)       # real walk cycles, out of step
+        st.finish(density=HAIR, floor_z=0.0, floor_fn=ramp)
+    # the camera follows them down, a few metres behind and above
+    return dict(a=((0.4, GY0 - 10.6, 4.6), (0.0, GY0 - 1.0, 1.0)), b=((0.3, GY0 - 7.4, 3.4), (0.0, GY0 + 2.5, 0.8)), lens=28,
+                hand_ok=("ramp",))
 
 
 def T06():
@@ -461,20 +463,24 @@ def T32():
 def T33():
     A = S2.garage("night")
     GY0 = A["GY0"]; c = crew()
-    for i, (n, x, y) in enumerate((("Finotto", 0.4, GY0 - 4.5), ("DOnorio", -0.5, GY0 - 3.1), ("Leonardo", 0.1, GY0 - 1.6))):
-        z = max(0.0, (GY0 - y)) * 0.3
-        st = AC.Stand(c[n], (x, y, z), -90); st.walk(0.2 + 0.3 * i)
-        pl = bag_pose(st, "R"); st.finish(density=HAIR, floor_z=0.0, floor_fn=lambda yy: max(0.0, (GY0 - yy) * 0.3)); pl(f"bag_{n}", 0.9)
-    return dict(a=((0.2, GY0 + 4.0, 1.4), (0.0, GY0 - 8.0, 2.6)), b=((0.15, GY0 + 3.2, 1.4), (0.0, GY0 - 8.0, 2.6)), lens=30,
-                hand_ok=("bag", "ramp"), cine=dict(exposure=0.4))
+    ramp = lambda yy: max(0.0, (GY0 - yy) * 0.3)
+    for i, (n, x, y) in enumerate((("Finotto", 0.45, GY0 - 1.2), ("DOnorio", -0.55, GY0 + 0.4), ("Leonardo", 0.15, GY0 + 1.9))):
+        st = AC.Stand(c[n], (x, y, ramp(y)), -90)
+        st.walk_anim(220, stride=15.0 + i, cadence=1.12 + 0.03 * i, phase0=0.4 * i, carry="R")   # heavy bags: shorter steps
+        st.finish(density=HAIR, floor_z=0.0, floor_fn=ramp)
+        st.carry_bag("R", lambda n=n: PR.holdall(f"bag_{n}", full=0.9), full=0.9)
+    # from the garage floor, low, as they climb toward the sodium-lit street: silhouettes against the spill
+    return dict(a=((0.2, GY0 + 5.2, 1.2), (0.0, GY0 - 8.0, 2.4)), b=((0.15, GY0 + 3.9, 1.25), (0.0, GY0 - 8.0, 2.6)), lens=30,
+                hand_ok=("bag", "ramp"))
 
 
 def T34():
-    S2.exterior("dawn")
-    return dict(a=((-3.0, -8.5, 1.1), (-0.5, 1.0, 1.6)), b=((-2.6, -7.8, 1.1), (-0.5, 1.0, 1.6)), lens=28)
-
-
-# ============================================================================ L33 Monday: the traders
+    A = S2.exterior("dawn")
+    import city
+    city.dress_street(A, "dawn", haze=0.01)
+    # Sunday morning, grey and wet, nobody about: a slow push along the kerb toward the entrance
+    return dict(a=((-14.0, -6.2, 0.75), (2.0, -1.0, 1.6)), b=((-11.0, -6.0, 0.8), (2.0, -1.0, 1.6)), lens=30, fstop=5.6,
+                focus=(0.0, -1.5, 1.5))
 def T35():
     A = ST.vault_complex("wreck", contacts="bypassed", taped=True)
     spots = ((-2.2, 1.6, 180), (-2.25, 3.2, 175), (1.5, 4.0, 60), (2.3, 2.0, 0))
