@@ -409,14 +409,12 @@ lxmax = max((lt.matrix_world @ Vector(c)).x for c in lt.bound_box)
 clear_bones(s1, ["IK_hand.L", "IK_hand.R", "Pole_elbow.L", "Pole_elbow.R"], 1236, 1450)
 for f in (1236, 1300, 1340, 1380, 1420, 1450):        # both hands rest on the lectern top (a slight weight shift only)
     ev(f)
-    for s, sy in (("L", 0.20), ("R", -0.20)):
-        sh_ = 0.01 * math.sin(f / 25.0) * (1 if s == "L" else -1)
-        p = V(lxmax + 0.01 + sh_ * 0.5, sy * 0.75, lz + 0.004)            # v014b: on the near edge, close to him
-        hit = lt.ray_cast(lt.matrix_world.inverted() @ (p + V(0, 0, 0.5)), lt.matrix_world.inverted().to_3x3() @ V(0, 0, -1))
-        if hit[0]: p.z = (lt.matrix_world @ hit[1]).z + 0.014
-        HP["place_hand"](s1, s, f, p, V(0, 0, -1), V(-1, -0.25 if s == "L" else 0.25, 0).normalized(), skin=0.012)
+    for s, sy in (("L", 0.20), ("R", -0.20)):                        # v014d: arms hang relaxed at his sides
+        sh = W(s1, "upperarm01." + s); out = V(0, 1 if s == "L" else -1, 0)
+        p = sh + V(0.05, 0, -0.52) + out * 0.06
+        HP["place_hand"](s1, s, f, p, -out, V(0, 0, -1), skin=0.02)
         HP["apply_pose"](s1, s, "relaxed", f)
-        sh = W(s1, "upperarm01." + s); pole = sh + V(0.35, 0.25 * (1 if s == "L" else -1), -0.35)
+        pole = sh + V(-0.30, 0, -0.30) + out * 0.10
         pbp = s1.pose.bones["Pole_elbow." + s]; pbp.location = s1.data.bones["Pole_elbow." + s].matrix_local.to_3x3().inverted() @ (pole - s1.data.bones["Pole_elbow." + s].head_local)
         pbp.keyframe_insert("location", frame=f, group=pbp.name)
 for f, kw in ((1241, dict(wide=0.3, brow=-0.2)), (1300, dict(wide=0.25, brow=0.3, jaw=3)), (1360, dict(wide=0.2, brow=0.4)), (1445, dict(wide=0.2, brow=0.2))):

@@ -304,7 +304,10 @@ for nm, (rgb, suit) in SCRUB.items():
         if o: VL.key_hide(o, [])
 # defendant: shirt + tie + trousers (no jacket)
 suit = OB["Surgeon1.male_elegantsuit01"]
-msh = fabric("DefSweater", (0.07, 0.08, 0.11), rough=0.9)                  # v014c: dark plain fitted sweater, no volume
+msh = fabric("DefSweater", (0.012, 0.016, 0.035), rough=0.6)
+msh.node_tree.nodes["Principled BSDF"].inputs["Sheen Weight"].default_value = 0.0      # no grey sheen: reads truly dark
+_b = msh.node_tree.nodes["Principled BSDF"]; _b.inputs["Specular IOR Level"].default_value = 0.15; _b.inputs["Roughness"].default_value = 0.85
+for _l in list(_b.inputs["Roughness"].links): msh.node_tree.links.remove(_l)                  # v014c: dark plain fitted sweater, no volume
 shirt = yoke("Surgeon1", msh, suit, "long", 0.005, name="Surgeon1.Shirt", torso=True)
 hide_under("Surgeon1", suit, "long", tag="UnderShirt")
 trs = build("Surgeon1", "Trousers", fabric("DefTrousers", (0.10, 0.10, 0.13)), suit, "long", 0.025, name="Surgeon1.Slacks")
