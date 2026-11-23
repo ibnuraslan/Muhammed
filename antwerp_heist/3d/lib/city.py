@@ -133,8 +133,14 @@ def facade_mat(name, base, lit_frac=0.25, night=True, period=(1.9, 3.2)):
     # random per window cell
     cc = N.new("ShaderNodeCombineXYZ"); L.new(ch, cc.inputs['X']); L.new(cv, cc.inputs['Y'])
     wn = N.new("ShaderNodeTexWhiteNoise"); wn.noise_dimensions = '3D'; L.new(cc.outputs[0], wn.inputs['Vector'])
-    litc = N.new("ShaderNodeMath"); litc.operation = 'LESS_THAN'; litc.inputs[1].default_value = lit_frac if night else 0.0
-    L.new(wn.outputs['Value'], litc.inputs[0])
+    # whole buildings differ: a slow noise over the city scales how many of a facade's windows are lit
+    bn = N.new("ShaderNodeTexNoise"); bn.inputs['Scale'].default_value = 0.06; bn.inputs['Detail'].default_value = 1
+    L.new(geo.outputs['Position'], bn.inputs['Vector'])
+    bsq = N.new("ShaderNodeMath"); bsq.operation = 'POWER'; bsq.inputs[1].default_value = 3.0; L.new(bn.outputs['Fac'], bsq.inputs[0])
+    thr = N.new("ShaderNodeMath"); thr.operation = 'MULTIPLY'; thr.inputs[1].default_value = (lit_frac * 3.0) if night else 0.0
+    L.new(bsq.outputs[0], thr.inputs[0])
+    litc = N.new("ShaderNodeMath"); litc.operation = 'LESS_THAN'
+    L.new(wn.outputs['Value'], litc.inputs[0]); L.new(thr.outputs[0], litc.inputs[1])
     litw = N.new("ShaderNodeMath"); litw.operation = 'MULTIPLY'; L.new(litc.outputs[0], litw.inputs[0]); L.new(w3.outputs[0], litw.inputs[1])
     # base colour -> glass where windows
     old = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
@@ -178,20 +184,42 @@ def _add_roof(bm, c, sx, sy, h, along_x, mi):
 
 
 def townhouse_row(bm, x0, y0, length, facing, rng, nfront, depth=10.0, base_z=0.0):
-    """A terrace of narrow Antwerp houses along a street edge (5-9 m wide, 3-6 floors, gabled slate roofs) added to
-    the district mesh. facing: the street side (unit x or y)."""
+    """A terrace along a street edge added to the district mesh: narrow Antwerp houses (5-9 m, 3-6 floors) with
+    varied roofs - ridge along the street, or a gable to the street (plain or Flemish stepped), chimneys - and now
+    and then a post-war block with a flat roof and parapet. facing: the street side (unit x or y)."""
     fx, fy = facing
     ax = Vector((-fy, fx, 0)); nrm = Vector((fx, fy, 0))
+    n_slate, n_stone, n_tile = nfront, nfront + 1, nfront + 2
     s = 0.0
     while s < length - 4:
-        w = min(rng.uniform(5.0, 9.0), length - s)
-        floors = rng.choice((3, 4, 4, 5, 5, 6)); h = floors * 3.2 + 0.6
+        modern = rng.random() < 0.06
+        w = min(rng.uniform(14.0, 24.0) if modern else rng.uniform(5.0, 9.0), length - s)
+        floors = rng.choice((6, 7, 8, 9, 11)) if modern else rng.choice((3, 4, 4, 5, 5, 6))
+        h = floors * 3.2 + 0.6
         c = Vector((x0, y0, base_z)) + ax * (s + w / 2) - nrm * (depth / 2)
         sx = abs(ax.x) * w + abs(nrm.x) * depth; sy = abs(ax.y) * w + abs(nrm.y) * depth
         _add_box(bm, (c.x, c.y, base_z + h / 2), (sx, sy, h), rng.randrange(nfront))
-        _add_roof(bm, (c.x, c.y, base_z + h), sx, sy, rng.uniform(2.6, 4.6), abs(ax.x) > 0.5, nfront)
-        cp = c + nrm * (depth / 2 + 0.12)
-        _add_box(bm, (cp.x, cp.y, base_z + h - 0.15), (abs(ax.x) * w + abs(nrm.x) * 0.3, abs(ax.y) * w + abs(nrm.y) * 0.3, 0.3), nfront + 1)
+        top = base_z + h
+        if modern:                                   # flat roof, parapet, a plant room
+            for k in (-1, 1):
+                p_ = c + nrm * k * (depth / 2 - 0.15)
+                _add_box(bm, (p_.x, p_.y, top + 0.5), (abs(ax.x) * w + abs(nrm.x) * 0.3, abs(ax.y) * w + abs(nrm.y) * 0.3, 1.0), n_stone)
+            _add_box(bm, (c.x, c.y, top + 1.3), (sx * 0.3, sy * 0.4, 2.6), n_stone)
+        else:
+            gable = rng.random() < 0.45                # ridge runs back from the street: a gable faces it
+            rh = rng.uniform(3.0, 5.5) if gable else rng.uniform(2.4, 4.6)
+            along_x = (abs(ax.x) > 0.5) != gable
+            _add_roof(bm, (c.x, c.y, top), sx, sy, rh, along_x, n_tile if rng.random() < 0.35 else n_slate)
+            if gable and rng.random() < 0.55:          # Flemish stepped gable on the street front
+                steps = 4; fp = c + nrm * (depth / 2 + 0.05)
+                for k in range(steps):
+                    ww = w * (1 - (k + 0.5) / steps); zz = top + rh * k / steps
+                    _add_box(bm, (fp.x, fp.y, zz + rh / steps / 2 + 0.25), (abs(ax.x) * ww + abs(nrm.x) * 0.35, abs(ax.y) * ww + abs(nrm.y) * 0.35, rh / steps + 0.5), rng.randrange(nfront))
+            if rng.random() < 0.7:                     # chimney
+                cp = c + ax * rng.uniform(-w / 3, w / 3) - nrm * rng.uniform(-1.5, 1.5)
+                _add_box(bm, (cp.x, cp.y, top + rh * 0.6 + 0.6), (0.6, 0.6, 1.4), n_stone)
+            cp = c + nrm * (depth / 2 + 0.12)
+            _add_box(bm, (cp.x, cp.y, top - 0.15), (abs(ax.x) * w + abs(nrm.x) * 0.3, abs(ax.y) * w + abs(nrm.y) * 0.3, 0.3), n_stone)
         s += w
 
 
@@ -206,7 +234,8 @@ def district(hour="dawn", seed=11, R=4, skip=None):
     bases = [tex("red_brick_03", 3.0, tint=t, name=f"th_brick{k}") for k, t in enumerate(((0.75, 0.55, 0.45), (0.62, 0.42, 0.33), (0.85, 0.7, 0.6)))] \
         + [DT.wall_paint(f"th_render{k}", c, rough=0.85, scuff=0.0, z_dirty=0.5) for k, c in enumerate(((0.62, 0.58, 0.5), (0.48, 0.45, 0.4)))]
     fronts = [facade_mat(f"th_front{k}", b, lit_frac=0.12, night=night) for k, b in enumerate(bases)]
-    mats = fronts + [flat("th_slate", (0.06, 0.065, 0.075), 0.55), flat("th_stone", (0.55, 0.52, 0.46), 0.8)]
+    mats = fronts + [flat("th_slate", (0.06, 0.065, 0.075), 0.55), flat("th_stone", (0.55, 0.52, 0.46), 0.8),
+                     flat("th_tile", (0.32, 0.12, 0.07), 0.7)]
     BX, BY, ST = 46.0, 38.0, 14.0
     bm = bmesh.new()
     skip = skip or []
@@ -222,8 +251,10 @@ def district(hour="dawn", seed=11, R=4, skip=None):
             townhouse_row(bm, x1, y1, BX, (0, 1), rng, n)
             townhouse_row(bm, x1, y0 + 10, BY - 20, (1, 0), rng, n)
             townhouse_row(bm, x0, y1 - 10, BY - 20, (-1, 0), rng, n)
-            for k in range(3):
-                lamps.append((x0 + 8 + k * 15, y0 - 3.0))
+            for k in range(3):                       # lamps along both sides of the streets round the block
+                lamps.append((x0 + 8 + k * 15, y0 - 3.0)); lamps.append((x0 + 8 + k * 15, y1 + 3.0))
+            for k in range(2):
+                lamps.append((x0 - 3.0, y0 + 9 + k * 18)); lamps.append((x1 + 3.0, y0 + 9 + k * 18))
     o = _bm_obj_link("district", bm, mats)
     asphalt = tex("asphalt_02", 6.0, tint=(0.4, 0.38, 0.37), name="city_asphalt")
     box("city_ground", (0, 0, -0.13), (2 * R * (BX + ST) + 300, 2 * R * (BY + ST) + 300, 0.1), asphalt)
@@ -234,8 +265,58 @@ def district(hour="dawn", seed=11, R=4, skip=None):
             _add_box(lm, (lx, ly - 0.6, 7.0), (0.35, 1.3, 0.14), 1)
         _bm_obj_link("city_lamps", lm, [steel_paint("city_lamp", (0.05, 0.06, 0.06), 0.45), emit("city_sodium", (1.0, 0.6, 0.25), 30)])
         for lx, ly in lamps:
-            light_point("city_lamp_light", (lx, ly - 0.8, 6.8), 650, (1.0, 0.6, 0.26), radius=0.25)
-    return dict(BX=BX, BY=BY, ST=ST, obj=o)
+            if math.hypot(lx, ly) < 140:              # real light near the centre; further out the heads glow only
+                light_point("city_lamp_light", (lx, ly - 0.8, 6.8), 650, (1.0, 0.6, 0.26), radius=0.25)
+    return dict(BX=BX, BY=BY, ST=ST, obj=o, lamps=lamps)
+
+
+def centraal(loc=(-150.0, 150.0, 0.0)):
+    """Antwerp-Centraal beside the diamond district: the domed stone station hall and the iron-and-glass train shed
+    (the district's landmark seen from the air)."""
+    import bmesh
+    stone = flat("cs_stone", (0.62, 0.58, 0.5), 0.8); slate = flat("cs_dome", (0.12, 0.14, 0.15), 0.4, metal=0.3)
+    glass = bpy.data.materials.new("cs_glass"); glass.use_nodes = True; gp = glass.node_tree.nodes["Principled BSDF"]
+    gp.inputs['Base Color'].default_value = (0.25, 0.3, 0.32, 1); gp.inputs['Roughness'].default_value = 0.15; gp.inputs['Metallic'].default_value = 0.6
+    x, y, z = loc
+    box("cs_hall", (x, y, z + 14), (60, 40, 28), stone)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=17, location=(x, y, z + 28))
+    d = bpy.context.active_object; d.name = "cs_dome"; d.scale = (1, 1, 1.3); d.data.materials.append(slate)
+    for k in (-1, 1):
+        box("cs_tower", (x + k * 26, y - 16, z + 22), (8, 8, 44), stone)
+        bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=5, depth=10, location=(x + k * 26, y - 16, z + 49))
+        bpy.context.active_object.data.materials.append(slate)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=33, depth=180, location=(x, y + 110, z + 10), rotation=(math.radians(90), 0, 0))
+    sh = bpy.context.active_object; sh.name = "cs_shed"; sh.scale = (1.0, 0.75, 1.0); sh.data.materials.append(glass)
+    box("cs_tracks_bed", (x, y + 110, z + 0.05), (64, 180, 0.2), flat("ballast", (0.18, 0.17, 0.16), 0.9))
+    glow = emit("cs_warm", (1.0, 0.75, 0.45), 2.0)
+    box("cs_glow", (x, y - 20.1, z + 12), (40, 0.2, 10), glow)
+
+
+def car_lights(lamps, n=50, seed=4, frames=240, speed=10.0):
+    """Moving traffic at dawn from the air: pairs of headlights / tail-lights sliding along the streets (keyed, so the
+    motion blur streaks them). Positions follow the lamp lines (the streets)."""
+    rng = random.Random(seed)
+    head = emit("car_head", (1.0, 0.93, 0.8), 40); tail = emit("car_tail", (1.0, 0.08, 0.04), 30)
+    for k in range(n):
+        lx, ly = rng.choice(lamps)
+        along_x = rng.random() < 0.5; d = rng.choice((-1, 1))
+        y_lane = ly + (1.5 if d > 0 else -1.5) * (1 if along_x else 0)
+        x_lane = lx + (0 if along_x else (2.5 if d > 0 else -2.5))
+        o = bpy.data.objects.new("traffic", None); bpy.context.scene.collection.objects.link(o)
+        for sgn, m in ((1, head), (-1, tail)):
+            b = box("traffic_light", (sgn * 2.1 * (1 if along_x else 0), sgn * 2.1 * (0 if along_x else 1), 0.7),
+                    (0.3 if along_x else 1.4, 1.4 if along_x else 0.3, 0.12), m)
+            b.parent = o
+        o.rotation_euler = (0, 0, 0 if d > 0 else math.pi)
+        p0 = Vector((x_lane, y_lane, 0)); v = Vector((d, 0, 0)) if along_x else Vector((0, d, 0))
+        o.location = p0; o.keyframe_insert("location", frame=1)
+        o.location = p0 + v * speed * frames / 24.0; o.keyframe_insert("location", frame=frames)
+        if o.animation_data and o.animation_data.action:
+            import acts
+            for fc in acts._fcurves(o):
+                for kp in fc.keyframe_points:
+                    kp.interpolation = 'LINEAR'
+
 
 
 def _bm_obj_link(name, bm, mats):
@@ -335,12 +416,12 @@ def dress_street(A, hour="night", wet=True, cars=True, seed=5, haze=0.006):
     # parked cars: kerbside along both pavements
     if cars:
         specs = [(AUDI, None, 4.5), (GOLF, None, 4.0)]      # the pack's cars sit diagonally in their file: axis-clean models only
-        spots = [(x, -14.0) for x in (-26, -19.5, -12, 9, 16.5, 24)] + [(x, -6.15) for x in (-23, -17.5, 13, 18.5, 31)]
+        spots = [(x, -14.0) for x in (-26, -19, -12, 9, 16.5, 24)] + [(x, -6.15) for x in (-24, -17, 12.0, 19.0, 31)]   # >= 6.5 m apart
         for k, (x, y) in enumerate(spots):
             uid, part, ln = specs[k % len(specs)]
             try:
                 before = set(bpy.data.materials)
-                c = _car(uid, (x + rng.uniform(-0.4, 0.4), y, -0.07), math.pi if (k + (y > -10)) % 2 else 0.0, length=ln, pack_part=part)
+                c = _car(uid, (x + rng.uniform(-0.25, 0.25), y, -0.07), math.pi if (k + (y > -10)) % 2 else 0.0, length=ln, pack_part=part)
                 paint = [(0.08, 0.1, 0.16), (0.35, 0.03, 0.03), (0.5, 0.5, 0.52), (0.04, 0.04, 0.045), (0.12, 0.22, 0.14), (0.6, 0.58, 0.52)][k % 6]
                 for o in c.children_recursive:              # vary the paint so the street isn't one model repeated
                     for sl in getattr(o, "material_slots", []):

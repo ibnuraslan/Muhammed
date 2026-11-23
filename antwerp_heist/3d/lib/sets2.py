@@ -283,19 +283,24 @@ def office(kind="leonardo", hour="day"):
     # is never a black cave against a white window), a warm desk lamp as the practical. The window sits ~1.5 stops over
     # the room, not 5.
     sun = hour == "day"
-    light_area("win_key", (0, RY + 0.6, 1.7), (0, -1, 0.9), 4.5, 170 if sun else 60, (1.0, 0.93, 0.84) if sun else (0.5, 0.6, 0.9),
-               size_y=1.6)
-    light_area("win_bounce", (0, RY - 0.3, 0.3), (0, -0.5, 1.4), 3.5, 35 if sun else 8, (1.0, 0.86, 0.7), size_y=0.6)   # sill/floor bounce
-    panel = emit("ceil_panel", (1.0, 0.95, 0.86), 0.6 if sun else 4.0)
+    # mood: a warm low window key raking in, the sky's cool fill, the ceiling tubes off by day so the room falls
+    # off into its corners; a little dust in the window light
+    light_area("win_key", (0.9, RY + 0.6, 1.5), (-0.4, -1, 0.8), 3.0, 260 if sun else 60, (1.0, 0.8, 0.58) if sun else (0.5, 0.6, 0.9),
+               size_y=1.2)
+    light_area("win_bounce", (0, RY - 0.3, 0.3), (0, -0.5, 1.4), 3.5, 10 if sun else 8, (1.0, 0.86, 0.7), size_y=0.6)   # sill/floor bounce
+    if sun:
+        haze_box("office_haze", (0, RY - 1.0, 1.5), (2 * RX, 2.2, 2.6), density=0.018, aniso=0.6, color=(1.0, 0.92, 0.82))
+    panel = emit("ceil_panel", (1.0, 0.95, 0.86), 0.05 if sun else 4.0)
     for x, y in ((-1.1, -0.6), (1.1, -0.6), (0.0, 0.9)):
         box("ceil_fluo", (x, y, RZ - 0.008), (1.2, 0.6, 0.012), panel)
-        light_area("ceil_light", (x, y, RZ - 0.03), (x, y, 0), 1.0, 14 if sun else 110, (1.0, 0.92, 0.8), size_y=0.5)
+        if not sun:
+            light_area("ceil_light", (x, y, RZ - 0.03), (x, y, 0), 1.0, 110, (1.0, 0.92, 0.8), size_y=0.5)
     l = bpy.data.lights.new("off_sun", 'SUN'); l.energy = 2.2 if sun else 0.0; l.color = (1.0, 0.84, 0.64); l.angle = math.radians(1.5)
     so = bpy.data.objects.new("off_sun", l); bpy.context.scene.collection.objects.link(so)
     so.rotation_euler = (math.radians(58), 0, math.radians(15)); A["sun"] = so     # behind the office: sunlit facade across the street, soft sky light inside
     light_point("lamp_bulb", (0.68, desk_y - 0.1, 1.15), 18 if sun else 35, (1.0, 0.7, 0.42), radius=0.03)
     # sky beyond the window
-    w = world((0.5, 0.58, 0.7) if sun else (0.03, 0.04, 0.07), 0.5 if sun else 0.07)
+    w = world((0.42, 0.52, 0.75) if sun else (0.03, 0.04, 0.07), 0.3 if sun else 0.07)      # cool sky fill
     A["window"] = Vector((0, RY, 1.6)); A["door"] = Vector((-1.6, -RY, 1.0)); A["RX"] = RX; A["RY"] = RY
     return A
 
@@ -604,10 +609,17 @@ def maquette():
     vx, vw, vd = 0.04, 6 * s, 4.6 * s
     box("maq_vault_floor", (vx, 0.0, b2 + 0.002), (vw, vd, 0.002), flat("vault_floor_m", (0.55, 0.45, 0.32), 0.6))
     for (cx, cy, sx, sy) in ((vx - vw / 2, 0, 0.004, vd), (vx + vw / 2, 0, 0.004, vd), (vx, vd / 2, vw, 0.004)):
-        box("maq_vault_wall", (cx, cy, b2 + 1.25 * s), (sx, sy, 2.5 * s), flat("maq_vault_wall", (0.62, 0.42, 0.22), 0.5))
-    glow = emit("maq_vault_glow", (1.0, 0.62, 0.3), 6.0)
-    box("maq_vault_light", (vx, 0.0, b2 + 2.4 * s), (vw * 0.8, vd * 0.6, 0.001), glow)
-    light_point("maq_vault_lamp", (vx, -0.01, b2 + 2.0 * s), 0.5, (1.0, 0.6, 0.3), radius=0.005)
+        box("maq_vault_wall", (cx, cy, b2 + 1.25 * s), (sx, sy, 2.5 * s), flat("maq_vault_wall", (0.52, 0.51, 0.48), 0.7))
+    # the vault reads as the vault: its walls lined with tiny steel boxes, lit from inside (warm but not a blob)
+    steel_m = flat("maq_boxes", (0.6, 0.6, 0.62), 0.35, metal=0.8); seam = flat("maq_seam", (0.15, 0.15, 0.16), 0.5)
+    for (cx, cy, sx, sy) in ((vx - vw / 2 + 0.003, 0, 0.001, vd * 0.95), (vx + vw / 2 - 0.003, 0, 0.001, vd * 0.95), (vx, vd / 2 - 0.003, vw * 0.95, 0.001)):
+        box("maq_box_wall", (cx, cy, b2 + 1.0 * s), (sx, sy, 1.8 * s), steel_m)
+        n = 8
+        for r in range(1, 5):
+            box("maq_box_seam", (cx, cy, b2 + 0.1 * s + r * 0.36 * s), (max(sx, 0.0012), max(sy, 0.0012), 0.0006), seam)
+    box("maq_vault_door", (vx - vw / 2 + 0.012, -vd / 2 + 0.002, b2 + 1.0 * s), (0.016, 0.003, 2.0 * s), flat("maq_door", (0.3, 0.3, 0.32), 0.3, metal=0.9))
+    box("maq_vault_light", (vx, 0.0, b2 + 2.45 * s), (vw * 0.5, vd * 0.15, 0.0008), emit("maq_vault_glow", (1.0, 0.85, 0.65), 3.0))
+    light_point("maq_vault_lamp", (vx, -0.005, b2 + 2.2 * s), 0.45, (1.0, 0.85, 0.65), radius=0.003)
     A["vault"] = Vector((vx, 0, b2 + 1.2 * s)); A["street"] = Vector((0, -D_ / 2, zg)); A["top"] = Vector((0, 0, zg + floors * fh))
     # tiny cars and street level in front
     box("maq_street", (0, -D_ / 2 - 0.1, zg - 0.002), (W_ + 0.12, 0.2, 0.004), flat("maq_street", (0.2, 0.2, 0.2), 0.8))
@@ -626,15 +638,6 @@ def maquette():
             w = rng.uniform(0.07, 0.11); h = rng.uniform(0.1, 0.2)
             x = sx * (W_ / 2 + 0.09 + k * 0.12)
             box("maq_neighbour", (x, 0.02, zg + h / 2), (w, D_ * 0.9, h), mass)
-    tree = flat("maq_tree", (0.35, 0.45, 0.3), 0.8); stick = flat("maq_stick", (0.6, 0.55, 0.45), 0.6)
-    for k in range(9):
-        x = -0.45 + k * 0.11
-        S.cyl("maq_trunk", (x, -D_ / 2 - 0.19, zg), (x, -D_ / 2 - 0.19, zg + 0.035), 0.0015, mat=stick, verts=6)
-        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=0.014, location=(x, -D_ / 2 - 0.19, zg + 0.045))
-        bpy.context.active_object.data.materials.append(tree)
-    carm = [flat(f"maq_car{k}", c, 0.4) for k, c in enumerate(((0.7, 0.1, 0.08), (0.15, 0.2, 0.4), (0.8, 0.8, 0.78), (0.1, 0.1, 0.1)))]
-    for k, x in enumerate((-0.33, -0.21, 0.12, 0.27, 0.38)):
-        box("maq_car", (x, -D_ / 2 - 0.08 - (k % 2) * 0.05, zg + 0.008), (0.045, 0.018, 0.014), carm[k % 4], bevel=0.003)
     fig = flat("maq_figure", (0.9, 0.9, 0.88), 0.6)
     for k, (dx, dy) in enumerate(((-0.012, 0.005), (0.008, -0.006), (0.018, 0.01))):
         S.cyl("maq_fig", (vx + dx, dy, b2 + 0.003), (vx + dx, dy, b2 + 0.016), 0.0018, mat=fig, verts=8)

@@ -33,11 +33,20 @@ def stool(loc, h=0.62, name="stool"):
 def S01():
     A = S2.exterior("dawn")
     import city
-    city.district("dawn", skip=[(-65, 65, -40, 25)])
+    D = city.district("dawn", R=5, skip=[(-30, 30, -40, 25), (50, 200, 120, 360)])
+    city.centraal((120.0, 190.0, 0.0))                         # the station dome beside the diamond district
+    city.car_lights(D["lamps"], n=70, frames=240)              # early traffic, streaking in the motion blur
     city.dress_street(A, "dawn", haze=0.0)
-    ST.haze_box("aerial_haze", (0, 0, 30), (700, 700, 60), density=0.0006, aniso=0.5, color=(0.85, 0.88, 1.0))
-    # blue hour over the diamond district: the drone pushes in and down toward the Diamond Center
-    return dict(a=((-150.0, -230.0, 120.0), (0.0, 5.0, 8.0)), b=((-62.0, -105.0, 48.0), (0.0, 4.0, 10.0)), lens=30)
+    # the Diamond Center itself: office lights coming on behind its ribbon windows, cool against the warm houses
+    g = bpy.data.objects.get("dc_glass_plane")
+    if g:
+        base = ST.flat("dc_glass_base", (0.03, 0.035, 0.04), 0.1, metal=0.4)
+        fm = city.facade_mat("dc_offices", base, lit_frac=0.35, night=True, period=(1.8, 3.2))
+        g.data.materials.clear(); g.data.materials.append(fm)
+    ST.haze_box("aerial_haze", (0, 0, 40), (1400, 1400, 80), density=0.00035, aniso=0.45, color=(0.7, 0.78, 1.0))
+    # blue hour over the diamond district: the drone glides in and down toward the Diamond Center
+    return dict(a=((-170.0, -260.0, 115.0), (0.0, 10.0, 12.0)), b=((-75.0, -128.0, 52.0), (0.0, 6.0, 12.0)), lens=32,
+                cine=dict(exposure=-0.5))
 
 
 def S02():
@@ -112,7 +121,8 @@ def S10():
     le = MD.Leonardo(); sv = AC.Seated(le, A["seat_visitor"], 90, lean=4)
     sv.head_to((0, 1.55, 1.25), share=0.6)
     sv.finish(look=(0, 1.55, 1.25), density=HAIR)
-    return dict(a=((-0.5, -1.3, 2.15), (0.05, 1.3, 0.85)), b=((-0.42, -1.12, 2.1), (0.05, 1.3, 0.85)), lens=30,
+    # low over Leonardo's shoulder, long lens: the manager against the window, his face in the shadow side
+    return dict(a=((0.31, -1.15, 1.27), (-0.02, 1.6, 1.15)), b=((0.29, -1.02, 1.27), (-0.02, 1.6, 1.15)), lens=40,
                 fstop=3.5, focus=(0, 1.5, 1.1), hand_ok=("chair", "Chair", "desk", "Desk"))
 
 
@@ -150,7 +160,9 @@ def S13():
     sv.hand("R", (0.25, dy - 0.42, 0.835), elbow=(0.7, 0.3, -0.7), curl=24)
     sv.head_to(k, share=0.8)
     sv.finish(look=k, density=HAIR)
-    return dict(a=((-1.75, 0.35, 2.35), (0.0, 0.55, 0.85)), b=((-1.6, 0.4, 2.25), (0.0, 0.5, 0.85)), lens=24,
+    # over the manager's shoulder, tight on the desk: the keys and the card slide across under his hand
+    return dict(a=((0.35, dy + 1.25, 1.6), (k.x, k.y - 0.05, 0.8)), b=((0.3, dy + 1.15, 1.52), (k.x, k.y - 0.08, 0.8)), lens=45,
+                fstop=3.2, focus=k,
                 hand_ok=("chair", "Chair", "desk", "Desk", "key", "torus", "Torus", "card"))
 
 
@@ -215,9 +227,11 @@ def S17():
 # ============================================================================ L9  how the vault works
 def S18():
     A = S2.maquette()
-    S2.ripple_bands(A["vault"] + V((0, -0.035, 0)), (0, -1, 0), (0.075,), width=0.07, strength=3.5, alpha=0.5)
+    for o in list(bpy.data.objects):                 # the section is read straight on: no street slab in front of the cut
+        if o.name.startswith("maq_street"):
+            bpy.data.objects.remove(o)
     # a slow descent: from above the roofline down the cut face to the warm vault two floors under the street
-    return dict(a=((-0.36, -0.62, 0.14), (0.03, 0.0, 0.05)), b=((-0.16, -0.44, 0.035), (0.035, 0.0, 0.02)), lens=40,
+    return dict(a=((-0.12, -0.75, 0.2), (0.02, 0.0, 0.08)), b=((-0.02, -0.5, 0.06), (0.035, 0.0, 0.03)), lens=35,
                 fstop=6.3, focus=A["vault"])
 
 

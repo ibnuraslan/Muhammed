@@ -222,7 +222,8 @@ def U16():
     PR.document("lease_file", 0.21, 0.297, seed=21, kind="form").location = (0.1, A["desk_y"] - 0.25, 0.793)
     d = MD.DeBruycker(); st = AC.Stand(d, (0.15, A["desk_y"] - 1.05), 90, lean=8); st.hand("R", (0.12, A["desk_y"] - 0.38, 0.84), elbow=(0.8, 0.2, -0.6), curl=20)
     st.head_to((0.1, A["desk_y"] - 0.25, 0.8), share=0.7); st.finish(density=HAIR)
-    return dict(a=((-0.55, A["desk_y"] - 1.75, 2.3), (0.1, A["desk_y"] + 0.3, 0.8)), b=((-0.45, A["desk_y"] - 1.6, 2.25), (0.1, A["desk_y"] + 0.3, 0.8)),
+    # from behind the manager, high: his hands opening the tenant's file; De Bruycker across the desk only to the chest
+    return dict(a=((0.45, A["desk_y"] + 1.55, 1.95), (0.05, A["desk_y"] - 0.35, 0.85)), b=((0.38, A["desk_y"] + 1.45, 1.9), (0.05, A["desk_y"] - 0.4, 0.85)),
                 lens=28, hand_ok=("desk", "Desk", "chair", "lease_file"))
 
 
@@ -365,7 +366,8 @@ def U28():
     mg = MD.Manager(); se = AC.Seated(mg, A["seat_behind"], -90); desk_hands(se, A["desk_y"], fwd=-0.25); se.head_to((0.0, A["desk_y"] + 0.15, 0.79), share=1.0); se.finish(density=HAIR)   # eyes on the file while he talks
     le = MD.Leonardo(); sv = AC.Seated(le, A["seat_visitor"], 90, lean=4); sv.head_to((0, 1.55, 1.25), share=0.6); sv.finish(density=HAIR)
     dy = A["desk_y"]
-    return dict(a=((0.55, dy - 2.0, 2.15), (-0.05, dy + 0.8, 0.85)), b=((0.48, dy - 1.9, 2.1), (-0.05, dy + 0.8, 0.85)), lens=30,
+    # from outside, through the glass: the manager's back to us, Leonardo hidden behind him, the street in the pane
+    return dict(a=((0.1, A["RY"] + 2.6, 1.42), (0.12, dy - 1.0, 1.2)), b=((0.12, A["RY"] + 2.3, 1.42), (0.12, dy - 1.0, 1.2)), lens=50,
                 fstop=4.0, focus=(0, dy + 0.6, 1.1), hand_ok=("chair", "Chair", "desk", "Desk"))
 
 
