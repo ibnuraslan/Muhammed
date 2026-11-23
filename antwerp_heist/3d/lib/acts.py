@@ -94,7 +94,7 @@ class _Base:
         t = self._targets()
         if "L" in t and "R" in t and not self.allow_cross:
             d = (t["L"].x - t["R"].x) * H.SIDE["L"]
-            if d < 0.02:
+            if d < -0.015 or (t["L"] - t["R"]).length < 0.05:
                 raise RuntimeError(f"HANDCROSS {self.m.name}: left hand {t['L'].x:+.2f} vs right {t['R'].x:+.2f} (body frame) - hands crossed or touching")
 
     def _finish_walk(self, density, hair, floor_z, floor_fn):
@@ -119,25 +119,18 @@ class _Base:
         for pb in arm.pose.bones:
             pb.rotation_mode = 'QUATERNION'
         arm.matrix_world = Matrix.Identity(4); bpy.context.view_layer.update()   # pose in the rig's own frame
-        # floor slope along the walk (a ramp): each foot's contact is judged against the floor under that foot
-        if floor_fn is not None:
-            y0 = base.translation.y
-            slope = (floor_fn(y0 + 0.05) - floor_fn(y0 - 0.05)) / 0.1
-        else:
-            slope = 0.0
         R3 = base.to_3x3()
-        lift = []
+        feet = []                                   # per cycle key: (world offset of each sole point, its height above the sole)
         for k in range(C + 1):                      # one full cycle (last key = first: seamless loop)
             self._walk_pose(w["phase0"] + k / C)
-            need = -1e9
+            pts = []
             for b in ("foot.L", "foot.R"):
                 pb = arm.pose.bones[b]
                 toe = pb.tail + (pb.tail - pb.head).normalized() * 0.1           # toe tip beyond the ball of the foot
                 for pnt, rz in ((pb.head, rest[b][0].z), (pb.tail, rest[b][1].z), (toe, rest[b][1].z)):
-                    sole = pnt.z - (rz - floor0)
-                    fl = floor0 + slope * (R3 @ pnt).y / max(sz, 1e-6)
-                    need = max(need, fl - sole)
-            lift.append(need * sz + (0.012 if slope else 0.0))
+                    sole = pnt.copy(); sole.z -= (rz - floor0)
+                    pts.append(R3 @ sole)
+            feet.append(pts)
             moving = arm.pose.bones if k == 0 else [arm.pose.bones[n] for n in WALK_BONES if n in arm.pose.bones]
             for pb in moving:
                 pb.keyframe_insert("rotation_quaternion", frame=1 + k); pb.keyframe_insert("location", frame=1 + k)
@@ -145,11 +138,13 @@ class _Base:
             if fc.data_path.startswith("pose.bones"):
                 fc.modifiers.new('CYCLES')
         arm.matrix_world = base; bpy.context.view_layer.update()
+        ffn = floor_fn if floor_fn is not None else (lambda yy: floor_z)
         for f in range(1, w["N"] + 1):
             t = (f - 1) / fps
             pos = base.translation + fwd * v * t
-            fz = floor_fn(pos.y) if floor_fn is not None else floor_z
-            arm.location = Vector((pos.x, pos.y, fz + lift[(f - 1) % C] + 0.002))
+            # lift the rig until every sole point clears the floor actually under it (flat, ramp, or the change between)
+            z = max(ffn(pos.y + q.y) - q.z for q in feet[(f - 1) % C])
+            arm.location = Vector((pos.x, pos.y, z + 0.004))
             arm.keyframe_insert("location", frame=f)
         bpy.context.scene.frame_set(max(1, w["N"] // 2))
         return self.m

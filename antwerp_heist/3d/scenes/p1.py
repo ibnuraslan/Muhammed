@@ -441,8 +441,8 @@ def S37():
     A = S2.office("leonardo")
     m = MD.Leonardo(); se = AC.Seated(m, A["seat_behind"], -90, lean=10)
     dy = A["desk_y"]
-    se.hand("R", (0.2, dy + 0.27, 0.84), elbow=(0.9, 0.2, -0.5), curl=24)
-    se.hand("L", (-0.2, dy + 0.27, 0.84), elbow=(0.9, 0.2, -0.5), curl=24)
+    se.hand("L", (0.2, dy + 0.27, 0.84), elbow=(0.9, 0.2, -0.5), curl=24)
+    se.hand("R", (-0.2, dy + 0.27, 0.84), elbow=(0.9, 0.2, -0.5), curl=24)
     se.head_to((0, 0.6, 0.8), share=0.7)
     se.finish(look=(0, -2, 1.0), density=HAIR)
     ST.light_point("desk_glow", (-0.4, A["desk_y"] - 0.2, 1.25), 40, (1.0, 0.8, 0.55), radius=0.15)
