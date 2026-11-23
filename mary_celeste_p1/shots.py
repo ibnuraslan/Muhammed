@@ -964,16 +964,19 @@ def s38():
     u = (hz + Vector((0, 0, math.sqrt(max(L * L - hz.length ** 2, 0.01))))).normalized()
     top = bottom + u * L
     to_me = Vector(((Mp @ Vector((0, 0, 1.3))) - top).to_2d().normalized().to_3d())
-    grip_w = top - u * 0.04 + to_me * 0.075 + Vector((0, 0, 0.03))   # wrist just behind the rod head: the fist closes on it
+    grip_w = top - u * 0.04 + to_me * 0.145 + Vector((0, 0, 0.03))   # wrist just behind the rod head: the fist closes on it
     def pose(dv, Mx):
-        Cw.stand_relaxed(dv, pitch=26, yaw=-8, lean=8)
-        Cw.hands_on(dv, Mx, right_w=grip_w, left_w=None, elbow_r=(-0.8, 0.3, -0.6), grip=True)
+        Cw.stand_relaxed(dv, pitch=50, yaw=-14, lean=10)     # head down to the depth mark: face turned to the deck
+        Cw.hands_on(dv, Mx, right_w=grip_w, left_w=None, elbow_r=(-0.8, 0.3, -0.6), grip=False, curl=0)
+        P.grip(dv.h, "R", 1.0)                               # fist fully closed round the rod head
+        for k in (2, 3):
+            dv.h.rot(f"finger1-{k}.R", (1, 0, 0), 45)          # thumb folded over the fingers
         P.arm_down(dv.h, "L", out=0.1, fwd=0.05, bend=14); P.rest_hand(dv.h, "L", curl=26)
     person("deveau", Mp, pose, look_w=bottom + u * (3.5 * ft))
     wet = ship.paint("rod_wet", (0.08, 0.07, 0.065), rough=0.18, grime=0.1, wet=1.0, scale=8)
     dry = ship.paint("rod_dry", (0.62, 0.6, 0.55), rough=0.8, grime=0.3, scale=12)      # chalked, so the wet line shows
     mark = bottom + u * (3.5 * ft)
-    ship.cyl("rod_wet", bottom, mark, 0.011, mat=wet, verts=14); ship.cyl("rod_dry", mark, top, 0.011, mat=dry, verts=14)
+    ship.cyl("rod_wet", bottom, mark, 0.011, mat=wet, verts=14); ship.cyl("rod_dry", mark, top + u * 0.10, 0.011, mat=dry, verts=14)   # through the fist
     notch = E.principled("notch", (0.6, 0.55, 0.45), rough=0.5, metal=0.5)
     for k in range(1, 5):
         q = bottom + u * (k * ft)
