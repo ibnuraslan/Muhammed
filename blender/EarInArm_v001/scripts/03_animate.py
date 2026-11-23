@@ -260,7 +260,8 @@ def walk(P, a, b, f0, f1, yaw0, yaw1, stride=0.55):
 
 SA_ = Vector((0.62, -0.2)); yA = yaw_to(Vector((0.05, -0.1)) - SA_)   # v014: beside the patient (profile to camera, his mask reads from the first frame; he faced away before)
 ST = Vector((1.05, -0.32)); yT = 0.0   # v009d: 8 cm further from the tray (his forearms folded into his belly)
-SB_ = Vector((INC.x + 0.44, INC.y + 0.2)); yB = yaw_to(INC.to_2d() - SB_)   # v013: on the outer side of the arm board, facing the incision (from behind the elbow both forearms crossed the patient's arm)
+SB_ = Vector((INC.x + 0.34, INC.y + 0.17));   # v014: 10 cm closer (upright, the lift-out was out of reach)
+_SB_unused = Vector((INC.x + 0.44, INC.y + 0.2)); yB = yaw_to(INC.to_2d() - SB_)   # v013: on the outer side of the arm board, facing the incision (from behind the elbow both forearms crossed the patient's arm)
 SC_ = Vector((EAR_W.x + 0.46, EAR_W.y + 0.22));   # v009i: 16 cm further back so a front-outer camera sees the ear   # v009e: right beside the head on the ear side (his arm passed the headrest)
 _old_SC = Vector((EAR_W.x + 0.42, EAR_W.y + 0.3));   # v009d: beside the head on the ear side (was behind the skull: hand hidden, cap into the head)
 _unused = Vector((EAR_W.x + 0.22, EAR_W.y + 0.5)); yC = yaw_to(EAR_W.to_2d() - Vector((EAR_W.x + 0.22, EAR_W.y + 0.5)))
@@ -282,7 +283,7 @@ stand(SUR, 566, ST, yT, spine=(18, 0, 0)); P1_ = Vector((1.36, 0.7)); h1_ = unwr
 walk(SUR, ST, P1_, 567, 625, yT, h1_, stride=0.45); walk(SUR, P1_, SB_, 626, 660, h1_, yB_W, stride=0.4)   # v009d: faces where he walks
 for f in range(662, 1309, 60):
     _up = smoothstep(770, 800, f) * (1 - smoothstep(1040, 1070, f))   # v009d: stands up while the ear grows (his cap was in the x-ray camera)
-    _bw = 12; _hw = 26 if f < 1100 else 18   # v014: upright at the board (bowed 22 deg read as a squat)   # v009i: less bowed for the lift-out (the lifted ear came up to his face)
+    _bw = 28 if 1080 <= f <= 1210 else 12; _hw = 26 if f < 1100 else 22   # v014: leans in only for the lift-out   # v014: upright at the board (bowed 22 deg read as a squat)   # v009i: less bowed for the lift-out (the lifted ear came up to his face)
     stand(SUR, f, SB_, yB, spine=((_bw - (_bw - 6) * _up) + 2 * math.sin(f * 0.05), 0, 2 * math.sin(f * 0.07)), head=(_hw - (_hw - 16) * _up, 0, 0), crouch=0.04 * (1 - _up))
 walk(SUR, SB_, SC_, 1312, 1370, yB, yC + 360 if False else yC - 0.0 if abs(yB - yC) < 180 else yC + 360, stride=0.3)
 for f in [1371] + list(range(1420, B["b9"], 50)):
@@ -374,10 +375,14 @@ sh(700, "L", INC + Vector((0.1, 0.11, 0.05)), (-0.4, -1, -0.6), (-0, -0.4, 1))
 sh(775, "L", INC + Vector((0.12, 0.16, 0.1)), (-0.4, -1, -0.4), (-0, -0.4, 1))
 # beat 6: reopen and lift the ear out
 sh(1063, "R", INC + Vector((-0.08, 0.2, 0.03)), (0.2, -1, -0.5), (-0, -0.4, 1))   # v009i: low by the arm (forceps came up to his face)
-sh(1120, "R", INC + Vector((-0.07, 0.12, 0.07)), (0.3, -1, -0.6), (-0, -0.4, 1))   # v009i: low over the arm, well below his face
-sh(1160, "R", INC + Vector((-0.1, 0.1, 0.08)), (0.3, -1, -0.6), (-0, -0.4, 1))
-sh(1200, "R", INC + Vector((-0.1, 0.1, 0.1)), (0.3, -1, -0.6), (-0, -0.4, 1))
-sh(1240, "R", INC + Vector((-0.1, 0.12, 0.1)), (0.2, -1, -0.4), (-0, -0.3, 1))   # v009i: the lifted ear stays below his face
+# v014: the forceps tip comes down onto the ear standing on the forearm, grips it (1125-1145) and lifts it out low
+_EA = INC + Vector((0, 0, 0.016))
+sh(1100, "R", _EA + Vector((0, 0, 0.06)), (0, 0, 0), (0, 0, 1), tip_mode=True)
+sh(1125, "R", _EA, (0, 0, 0), (0, 0, 1), tip_mode=True)
+sh(1145, "R", _EA, (0, 0, 0), (0, 0, 1), tip_mode=True)
+sh(1180, "R", _EA + Vector((0, 0, 0.06)), (0, 0, 0), (0, 0, 1), tip_mode=True)
+sh(1220, "R", _EA + Vector((0, 0.02, 0.08)), (0, 0, 0), (0, 0, 1), tip_mode=True)
+sh(1240, "R", _EA + Vector((0, 0.03, 0.09)), (0, 0, 0), (0, 0, 1), tip_mode=True)
 sh(1252, "R", INC + Vector((0.07, 0.27, -0.04)), (0.2, -1, -0.6), (-0, -0.3, 1))   # v009f: the ear comes straight back to him, low over the arm (not by her chin on screen)
 sh(1063, "L", INC + Vector((0.12, 0.16, 0.1)), (-0.4, -1, -0.4), (-0, -0.4, 1))
 sh(1110, "L", INC + Vector((0.1, 0.11, 0.05)), (-0.4, -1, -0.6), (-0, -0.4, 1))
@@ -726,11 +731,17 @@ for f in list(range(1, B["end"] + 1, 2)) + [B["end"]]:
         Me = ear_real.matrix_world.copy() if f >= 540 else None
     if 566 <= f < 712:
         keymat(ear_arm, f, Matrix.Translation(tip) @ Rf @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(-90), 4, 'X') @ Matrix.Scale(0.85, 4))
-    elif 712 <= f < 1150:
+    elif 712 <= f < 1145:
         u = smoothstep(712, 760, f); keymat(ear_arm, f, pocket)
+    elif 1145 <= f < 1346:   # v014: the forceps close on the ear in the forearm and lift it out - one model, no swap until the cut at 1346
+        Mf_ = Matrix.Translation(tip) @ Rf @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(-90), 4, 'X') @ Matrix.Scale(0.85, 4)
+        u_ = smoothstep(1145, 1175, f)
+        sc_ = 0.7 + 0.15 * u_
+        Mi_ = Matrix.Translation(pocket.translation.lerp(Mf_.translation, u_)) @ pocket.to_quaternion().slerp(Mf_.to_quaternion(), u_).to_matrix().to_4x4() @ Matrix.Scale(sc_, 4)
+        keymat(ear_arm, f, Mi_)
     else:
         keymat(ear_arm, f, pocket)
-    if 1150 <= f < 1440:
+    if 1346 <= f < 1440:
         Mt_ = Matrix.Translation(tip) @ Rf @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(-90), 4, 'X') @ Matrix.Scale(1.0, 4)
         if f >= 1404:   # v009d: the ear is lowered from the forceps onto the head (it used to snap 15 cm at 1440)
             Hm_ = pr.matrix_world @ PAT.R.PB["head"].matrix @ HEAD_REST.inverted(); Mh_ = Hm_ @ EAR_ON_HEAD_REST; u_ = smoothstep(1404, 1440, f)
@@ -750,7 +761,7 @@ for f in list(range(1, B["end"] + 1, 2)) + [B["end"]]:
 key_vis(nh, 1, False); key_vis(nh, 1500, True); key_vis(forc, 1, True); key_vis(forc, 1503, False)   # v012: no forceps at the patient in beats 1-2   # v009d: no tool left in the temple / by the head
 # ear_real only on the tray; hidden once lifted (ear_arm takes over). ear_arm hidden before 566, swapped for ear_new at 1150
 key_vis(ear_real, 566, False)
-key_vis(ear_arm, 1, False); key_vis(ear_arm, 566, True); key_vis(ear_arm, 1150, False)
+key_vis(ear_arm, 1, False); key_vis(ear_arm, 566, True); key_vis(ear_arm, 1346, False)   # v014: the forearm ear is the one lifted out; the grafted-ear model takes over at the cut
 # cartilage -> pink while in the arm: ear_arm material is cartilage, ear_new pink
 for m, v in FAST: m.show_viewport = v
 # Ear_InArm should sit in the forceps exactly where Ear_Cartilage lay (566): snap the first frames

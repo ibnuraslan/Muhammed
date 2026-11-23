@@ -62,10 +62,11 @@ for f in FORC_F:
     elif f >= 1300: apply_pose(SUR, "R", "pinch", f, amount=0.8)
 
 # ---------------------------------------------------------------- 1. rib harvest: L flat on the chest beside the forceps (chest-up framing)
-for f in (130, 290): lock(SUR, "L", f)
-for f in range(136, 280, 12):
-    sc.frame_set(f); tip = FORC.matrix_world @ Vector((0, 0.13, 0))
-    p, n = surf(TEE, tip + Vector((0.1, -0.06, 0.15)))   # v014: on the upper front of the chest (on the flank it stuck out past the outline)
+for f in (128, 290): lock(SUR, "L", f)
+sc.frame_set(250); _cp = FORC.matrix_world @ Vector((0, 0.13, 0)) + Vector((0.1, -0.06, 0.15))   # v014: one fixed point on the upper chest (the tip-relative target started in front of the chest)
+for f in range(140, 280, 6):
+    sc.frame_set(f)
+    p, n = surf(TEE, _cp)   # v014: on the upper front of the chest (on the flank it stuck out past the outline)
     place_hand(SUR, "L", f, p, -n, Vector((0, 0, 1)) - n * n.z, skin=0.002); apply_pose(SUR, "L", "flat_palm", f)   # v014: palm ON the tee (it hovered 1.4 cm off)
 apply_pose(SUR, "L", "relaxed", 290)
 
@@ -342,22 +343,73 @@ def nh_held():
     return M
 for f in range(1501, 1687, 2):   # same (odd) frames as the bake in 03_animate.py, so the keys replace it
     sc.frame_set(f); NH.matrix_world = nh_held(); NH.keyframe_insert("location", frame=f); NH.keyframe_insert("rotation_euler", frame=f)
+# v014: during the lift-out the free L hand steadies the patient's forearm, palm on the skin beside the ear (it floated)
+lock(SUR, "L", 1084); lock(SUR, "L", 1262)
+_pa2 = OB["Arm_Pocket"]
+for f in range(1090, 1256, 8):
+    sc.frame_set(f); c = _pa2.matrix_world.translation.copy()
+    ax = (_pa2.matrix_world.to_3x3() @ Vector((1, 0, 0))).normalized()
+    p, n = surf(BODY[PAT], c + ax * 0.16 + Vector((0, 0, 0.03)))   # v014: further down the forearm, out of the lift-out close-up
+    shl = SUR.matrix_world @ SUR.pose.bones["upperarm01.L"].head; fd = p - shl; fd.z = 0; fd.normalize()
+    place_hand(SUR, "L", f, p, -n, fd, skin=0.002); apply_pose(SUR, "L", "flat_palm", f)
+# v014: closed-loop tip placement for the lift-out - the forceps tip lands ON the forearm ear (it worked 10-15 cm above it)
+def _ftip(f):
+    sc.frame_set(f - 1); sc.frame_set(f)   # v014: frame_set on the current frame does not re-evaluate
+    Rw_ = (SUR.matrix_world @ SUR.pose.bones["wrist.R"].matrix).to_3x3().normalized().to_4x4(); PP_ = Matrix.Translation(pinch_pt(SUR, "R"))
+    M_ = PP_ @ Rw_ @ Matrix.Rotation(math.radians(FORC.get("tilt_deg", 0.0)), 4, 'X') @ Matrix.Translation((0, -0.04, 0))
+    return M_ @ Vector((0, 0.13, 0))
+_crw = SUR.pose.bones["wrist.R"].constraints["Copy Rotation"]   # v014: the hand keeps its keyed orientation during the lift-out (pinch offset stable)
+for f_, v_ in ((1085, 0.0), (1095, 1.0), (1250, 1.0), (1262, 0.0)):
+    _crw.influence = v_; _crw.keyframe_insert("influence", frame=f_)
+_crw.influence = 0.0
+sc.frame_set(1125); _ear0 = OB["Ear_InArm"].matrix_world.translation.copy() + Vector((0, 0, 0.004))
+_pbR = SUR.pose.bones["IK_hand.R"]
+for f, off in ((1100, (0, 0, 0.06)), (1125, (0, 0, 0)), (1145, (0, 0, 0)), (1180, (0, 0, 0.06)), (1220, (0, 0.02, 0.08)), (1240, (0, 0.03, 0.09))):
+    tgt = _ear0 + Vector(off)
+    for it in range(40):
+        sc.frame_set(f - 1); sc.frame_set(f)
+        shR_ = SUR.matrix_world @ SUR.pose.bones["upperarm01.R"].head; aim_ = (tgt - shR_).normalized()
+        d_ = ((tgt - aim_ * 0.09) - pinch_pt(SUR, "R")) * 0.3
+        M_ = _pbR.matrix.copy(); M_.translation = M_.translation + SUR.matrix_world.inverted().to_3x3() @ d_
+        _pbR.matrix = M_; bpy.context.view_layer.update()
+        _pbR.keyframe_insert("location", frame=f, group=_pbR.name); _pbR.keyframe_insert("rotation_quaternion" if _pbR.rotation_mode == 'QUATERNION' else "rotation_euler", frame=f, group=_pbR.name)
+    sc.frame_set(f - 1); sc.frame_set(f); shR_ = SUR.matrix_world @ SUR.pose.bones["upperarm01.R"].head
+    LOG.append(("liftout_pinch", f, round(((tgt - (tgt - shR_).normalized() * 0.09) - pinch_pt(SUR, "R")).length, 4)))
 # re-bake the forceps (and what rides in it) from the final hand, so the closed pinch stays on the shafts
 from mathutils import Matrix
 def R_(d): return math.radians(d)
 CARRY = OB.get("Chest_Piece_Carry"); EAR_ARM = OB["Ear_InArm"]
 def keymat(o, f, M):
     o.matrix_world = M; o.keyframe_insert("location", frame=f); o.keyframe_insert("rotation_euler", frame=f)
-for f in [f for f in range(1, 1501, 2) if f <= 331 or 566 <= f <= 1500]:
+for f in sorted(set([f for f in range(1, 1501, 2) if f <= 331 or 566 <= f <= 1500]) | set(range(1086, 1352))):   # v014: every frame through the lift-out (even frames kept stale keys)
     sc.frame_set(f)
     Rw = (SUR.matrix_world @ SUR.pose.bones["wrist.R"].matrix).to_3x3().normalized().to_4x4(); PP = Matrix.Translation(pinch_pt(SUR, "R"))
-    keymat(FORC, f, PP @ Rw @ Matrix.Rotation(math.radians(FORC.get("tilt_deg", 0.0)), 4, 'X') @ Matrix.Translation((0, -0.04, 0)))
+    if 1088 <= f <= 1252:   # v014: during the lift-out the forceps continue the shoulder->hand line, so the tip lands on the ear
+        _K = ((1100, (0, 0, 0.06)), (1125, (0, 0, 0)), (1145, (0, 0, 0)), (1180, (0, 0, 0.06)), (1220, (0, 0.02, 0.08)), (1240, (0, 0.03, 0.09)))
+        _ff = min(max(f, 1100), 1240)
+        for (a_, va), (b_, vb) in zip(_K, _K[1:]):
+            if a_ <= _ff <= b_: _t = (_ff - a_) / (b_ - a_); tgt_ = _ear0 + Vector(va).lerp(Vector(vb), _t); break
+        y_ = (tgt_ - PP.translation); ln_ = y_.length; y_.normalize()
+        x_ = y_.cross(Vector((0, 0, 1))).normalized(); z_ = x_.cross(y_)
+        Raim = Matrix((x_, y_, z_)).transposed().to_4x4()
+        k_ = max(1.0, min(2.4, ln_ / 0.09))   # the shafts reach the ear (the hand is out of the close-up)
+        keymat(FORC, f, PP @ Raim @ Matrix.Diagonal((1.0, k_, 1.0, 1.0)) @ Matrix.Translation((0, -0.04, 0)))
+        FORC.keyframe_insert("scale", frame=f)
+    else:
+        keymat(FORC, f, PP @ Rw @ Matrix.Rotation(math.radians(FORC.get("tilt_deg", 0.0)), 4, 'X') @ Matrix.Translation((0, -0.04, 0)))
+        if f in (1086, 1254): FORC.scale = (1, 1, 1); FORC.keyframe_insert("scale", frame=f)
     tip = FORC.matrix_world @ Vector((0, 0.13, 0)); Rf = FORC.matrix_world.to_quaternion().to_matrix().to_4x4()
     if CARRY and 255 <= f <= 335:
         sc_ = CARRY.matrix_world.to_scale()[0]; keymat(CARRY, f, Matrix.Translation(tip) @ FORC.matrix_world.to_3x3().normalized().to_4x4() @ Matrix.Scale(sc_, 4))
     if 566 <= f < 712:
         keymat(EAR_ARM, f, Matrix.Translation(tip) @ Rf @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(-90), 4, 'X') @ Matrix.Scale(0.85, 4))
-    if 1150 <= f < 1404:   # from 1404 the ear is lowered onto the head (keys from 03_animate.py are kept)
+    if 1145 <= f < 1346:   # v014: the forearm ear is gripped by the forceps and lifted out (blend from the pocket, then rides the tip)
+        _pk = OB["Arm_Pocket"].matrix_world @ Matrix.Translation((0, 0, 0.015)) @ Matrix.Rotation(R_(90), 4, 'X')
+        _mf = Matrix.Translation(tip) @ Rf @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(-90), 4, 'X')
+        _u = max(0.0, min(1.0, (f - 1145) / 30.0)); _u = _u * _u * (3 - 2 * _u)
+        _m = Matrix.Translation(_pk.translation.lerp(_mf.translation, _u)) @ _pk.to_quaternion().slerp(_mf.to_quaternion(), _u).to_matrix().to_4x4()
+        EAR_ARM.matrix_world = _m @ Matrix.Scale(0.7 + 0.15 * _u, 4); EAR_ARM.keyframe_insert("location", frame=f); EAR_ARM.keyframe_insert("rotation_euler", frame=f); EAR_ARM.keyframe_insert("scale", frame=f)
+    if 1346 <= f < 1404:   # from 1404 the ear is lowered onto the head (keys from 03_animate.py are kept)
         keymat(EAR_NEW, f, Matrix.Translation(tip) @ Rf @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(-90), 4, 'X') @ Matrix.Scale(1.0, 4))
 for m, v in FAST: m.show_viewport = v
 for l in LOG: print("HANDS", l)

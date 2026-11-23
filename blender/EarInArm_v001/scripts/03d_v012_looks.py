@@ -4,7 +4,7 @@
 # 2. The ear dressing (white gauze disc, read as headphones) becomes a soft skin-toned ear shape close to the head.
 # 4. Staff: real hair under the caps (the nurse was bald), scrub top and trousers in different shades.
 # 6. Set: warm wall paint, warmer lights, posters (no text), a tall cabinet, a sink unit, a wall clock, a chair rail.
-import bpy, sys, bmesh, math
+import bpy, bmesh, sys, bmesh, math
 from mathutils import Vector, Matrix
 OUT = sys.argv[sys.argv.index("--") + 1]
 OB = bpy.data.objects; sc = bpy.context.scene
@@ -88,10 +88,35 @@ sw = nb.modifiers.new("close", 'SHRINKWRAP'); sw.target = OB["Nurse.body"]; sw.w
 while nb.modifiers.find("close") > nb.modifiers.find("SUBSURF") > -1 and nb.modifiers.find("close") > 1: nb.modifiers.move(nb.modifiers.find("close"), nb.modifiers.find("close") - 1)
 for cap in (OB["Surgeon_Cap"], OB["Nurse_Cap"]):   # v012: a fitted cap, not a balloon: smaller and flatter, hair shows below, eyes clear
     cap.data.transform(Matrix.Diagonal((0.9, 0.78, 0.9, 1.0)))
-    # v014: soft cloth, not a dome - gathered folds (radial waves), a slight droop at the back, a stitched brim band
-    ctex = bpy.data.textures.new(cap.name + "_folds", 'WOOD'); ctex.wood_type = 'BANDNOISE'; ctex.noise_basis_2 = 'SIN'; ctex.turbulence = 2.0; ctex.noise_scale = 0.05
-    sd = cap.modifiers.new("subd", 'SUBSURF'); sd.levels = sd.render_levels = 2
-    dsp = cap.modifiers.new("folds", 'DISPLACE'); dsp.texture = ctex; dsp.strength = 0.0025; dsp.mid_level = 0.5; dsp.texture_coords = 'LOCAL'
+    # v014b: a modelled bouffant cloth cap instead of a dome: fuller crown, gathered elastic band with pleats, soft puckers
+    vs_ = [v.co.copy() for v in cap.data.vertices]
+    mn_ = Vector([min(v[k] for v in vs_) for k in range(3)]); mx_ = Vector([max(v[k] for v in vs_) for k in range(3)])
+    c_ = (mn_ + mx_) / 2; r_ = (mx_ - mn_) / 2
+    up_ = max(range(3), key=lambda k: abs(sum(v[k] - c_[k] for v in vs_)))   # the axis the dome bulges along
+    sgn_ = -1.0 if sum(v[up_] - c_[up_] for v in vs_) > 0 else 1.0   # v014: crown away from the head (it came out as an upturned bowl)
+    ax_ = [k for k in range(3) if k != up_]
+    bm_ = bmesh.new(); bmesh.ops.create_uvsphere(bm_, u_segments=64, v_segments=24, radius=1.0)
+    bmesh.ops.delete(bm_, geom=[v for v in bm_.verts if v.co.z < -0.25], context='VERTS')
+    for v in bm_.verts:
+        th = math.atan2(v.co.y, v.co.x); h = (v.co.z + 0.25) / 1.25            # 0 at the band, 1 at the crown
+        band = max(0.0, 1.0 - h / 0.18)                                       # gathered elastic near the edge
+        puff = 1.0 + 0.1 * math.sin(math.pi * min(1.0, h * 1.4)) + 0.025 * math.sin(th * 5 + h * 7) * (1 - band)
+        pleat = 1.0 - 0.06 * band + 0.022 * band * math.sin(th * 28)
+        k = puff * pleat
+        x, y, z = v.co.x * k, v.co.y * k, v.co.z * (1.0 + 0.04 * math.sin(th * 3))
+        o3 = [0.0, 0.0, 0.0]
+        o3[ax_[0]] = c_[ax_[0]] + x * r_[ax_[0]] * 1.04; o3[ax_[1]] = c_[ax_[1]] + y * r_[ax_[1]] * 1.04
+        o3[up_] = (mn_[up_] if sgn_ > 0 else mx_[up_]) + sgn_ * (z + 0.25) / 1.25 * (2 * r_[up_]) * 1.02
+        v.co = Vector(o3)
+    bmesh.ops.recalc_face_normals(bm_, faces=bm_.faces)
+    mats_ = list(cap.data.materials); me_ = bpy.data.meshes.new(cap.name + "_bouffant"); bm_.to_mesh(me_); bm_.free()
+    for m_ in mats_: me_.materials.append(m_)
+    for p_ in me_.polygons: p_.use_smooth = True
+    old_ = cap.data; cap.data = me_
+    sd = cap.modifiers.new("subd", 'SUBSURF'); sd.levels = sd.render_levels = 1
+    if not any(m.type == 'SOLIDIFY' for m in cap.modifiers):
+        so = cap.modifiers.new("cloth", 'SOLIDIFY'); so.thickness = 0.002
+    print("CAP_BOUFFANT", cap.name, len(me_.vertices), up_, sgn_)
 
 
 # ---------------------------------------------------------------- ear dressing -> soft skin-toned ear shape close to the head
