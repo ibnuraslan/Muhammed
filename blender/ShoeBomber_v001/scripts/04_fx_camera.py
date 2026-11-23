@@ -158,7 +158,6 @@ for s, hs in (("L", "L"), ("R", "R")):
         ct.cons.append(c)
     ct.done()
 
-exec(open(os.path.join(os.path.dirname(L.__file__), "04_airpax.py")).read())   # v009 payoff passengers
 for s_ in "LR":
     fo = O["Fuse_Shoe_" + s_]
     for f, h in (((1, False), (480, False), (481, True), (877, True), (878, False)) if s_ == "R" else ((1, True), (877, True), (878, False))):
@@ -196,6 +195,7 @@ def foot_mask(rig_name, s_, on_until):
 foot_mask("Bomber", "L", 877)
 foot_mask("Bomber", "R", 1)          # v009: right sneaker is off from the start (sock shows)
 foot_mask("Traveller", "R", 1440)
+exec(open(os.path.join(os.path.dirname(L.__file__), "04_airpax.py")).read())   # v009 payoff passengers
 shirt = O["Bomber.male_casualsuit05"]
 cs_ = shirt.modifiers.new("CorrectiveSmooth", 'CORRECTIVE_SMOOTH'); cs_.factor = 0.9; cs_.iterations = 12; cs_.rest_source = 'ORCO'
 pants = O.get("Bomber.male_casualsuit05")
