@@ -21,7 +21,7 @@ import sf
 
 MALE = "665890c542be433fb18ef235cf987cef"
 FEMALE = "5f28b52cab3e439490727e0aede55a6b"
-CRANIUM = "85c233c994a346bc92823d09e02cc56c"
+CRANIUM = "32a69b1fc0ba45a2ac2d91889657407f"          # real cranium scan (jagake, CC-BY), face toward -y
 MANDIBLE = "2667ab0d436840f58a82da7cefb8b5be"
 SCALE = 1.70 / 15.9
 
@@ -347,30 +347,58 @@ def hero_cranium(healed=True, length=0.19, tone="A", name="Cranium"):
     me = o.data
     co = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", co); co = co.reshape(-1, 3)
     # source: face +x, up +z. Rotate -90 about z so the face looks -y.
-    R = np.array([[0, 1, 0], [-1, 0, 0], [0, 0, 1]], np.float32)
-    co = co @ R.T
+    if CRANIUM == "85c233c994a346bc92823d09e02cc56c":     # the old model faced +x
+        R = np.array([[0, 1, 0], [-1, 0, 0], [0, 0, 1]], np.float32)
+        co = co @ R.T
     lo, hi = co.min(0), co.max(0)
     s = length / (hi[1] - lo[1])
     co = (co - (lo + hi) / 2) * s
     if healed:
         co = _heal_maxilla(co)
     me.vertices.foreach_set("co", co.ravel()); me.update()
+    if healed and _HEALED and len(_HEALED[0]):
+        bm = bmesh.new(); bm.from_mesh(me); bm.verts.ensure_lookup_table()
+        vs = [bm.verts[i] for i in _HEALED[0].tolist()]
+        ring = set(vs)
+        for v in vs:
+            for e in v.link_edges:
+                ring.add(e.other_vert(v))
+        ring = list(ring)
+        for _ in range(20):
+            bmesh.ops.smooth_vert(bm, verts=ring, factor=0.7, use_axis_x=True, use_axis_y=True, use_axis_z=True)
+        vset = set(_HEALED[0].tolist())
+        bad = [f for f in bm.faces if any(v.index in vset for v in f.verts)]
+        bmesh.ops.recalc_face_normals(bm, faces=bad)
+        for f in bad:
+            f.smooth = True
+        bm.to_mesh(me); bm.free(); me.update()
     o.data.materials.clear(); o.data.materials.append(bone_material(tone, name=name + "_bone"))
     o["bone"] = True
     return o
 
 
-def _heal_maxilla(co, keep=0.021, crown=0.0085):
-    """Behind the canines, flatten every upper crown into the alveolar bone: a smooth, resorbed ridge (teeth lost years
-    before death). keep: distance (m) behind the incisor tips that stays toothed (incisors + canines)."""
-    z = co[:, 2]; y = co[:, 1]
+def _heal_maxilla(co, keep=0.021, crown=0.0085, reach=0.068, band=0.003, squash=0.03):
+    """Behind the canines, pull each upper crown back up toward the bone (band by band along the curve of the arch, within
+    the tooth row only): the teeth are gone and the margin has rounded over. Vertices keep their order (no coplanar
+    sheets); hero_cranium then smooths the area lightly."""
+    z = co[:, 2]; y = co[:, 1]; ax = np.abs(co[:, 0] - np.median(co[:, 0]))
     front = y.min()
-    face = y < front + 0.07                         # the dental arch lies in the front 7 cm
-    zocc = float(np.percentile(z[face], 0.2))       # occlusal plane (lowest crowns)
-    sel = face & (y > front + keep) & (z < zocc + crown)
-    ridge = zocc + crown
-    co[sel, 2] = ridge + (co[sel, 2] - ridge) * 0.05
+    arch = (ax > 0.008) & (ax < 0.042)
+    mark = np.zeros(len(co), bool)
+    yb = front + keep
+    while yb < front + reach:
+        sel = (y >= yb) & (y < yb + band) & arch
+        if sel.any():
+            tip = float(np.percentile(z[sel], 0.5)); ridge = tip + crown
+            low = sel & (z < ridge)
+            co[low, 2] = ridge + (co[low, 2] - ridge) * squash
+            mark |= low
+        yb += band
+    _HEALED.clear(); _HEALED.append(np.where(mark)[0])
     return co
+
+
+_HEALED = []
 
 
 def hero_mandible(length=0.105, tone="B", name="Mandible"):
