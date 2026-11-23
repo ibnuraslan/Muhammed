@@ -386,8 +386,8 @@ def S27():
     co = np.array([cr.matrix_world @ v.co for v in cr.data.vertices])
     top = co[co[:, 2] > co[:, 2].max() - 0.03]                    # the tooth row (now facing up)
     c = Vector(top.mean(0))
-    return dict(a=(tuple(c + Vector((-0.16, -0.12, 0.1))), tuple(c)), b=(tuple(c + Vector((-0.1, -0.15, 0.08))), tuple(c)), lens=100,
-                fstop=5.6, focus=tuple(c))
+    return dict(a=(tuple(c + Vector((-0.3, -0.22, 0.2))), tuple(c)), b=(tuple(c + Vector((-0.2, -0.27, 0.17))), tuple(c)), lens=85,
+                fstop=8.0, focus=tuple(c), cine=dict(exposure=-0.1))
 
 
 def S28():
