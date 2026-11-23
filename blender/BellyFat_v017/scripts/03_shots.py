@@ -370,7 +370,8 @@ def onbelly(sd, f, dy, dz, fdir, air=0.004, pose="flat_palm"):
 RB = (-0.075, 0.0, (0.0, 0.85, 0.5))         # right hand beside the hole (lower, her right): the hole stays visible
 LB_ = (0.10, 0.01, (0.0, -0.75, 0.6))         # left hand above-left of it
 hand("R", 106, (0.38, -0.27, 1.02), (0.4, 0.5, -0.2), (0, 1, 0), (-0.3, -0.8, 1.0))   # swings round in front, clear of her body
-for f in [116, 140, 155, 168, 180] + list(range(331, 961, 30)) + [960]: onbelly("R", f, *RB)
+hand("R", 112, (0.41, -0.22, 1.02), (0.3, 0.6, -0.2), (0, 1, 0), (-0.3, -0.8, 1.0))   # eased 3 cm forward of her body (f110-118)
+for f in [118, 140, 155, 168, 180] + list(range(331, 961, 30)) + [960]: onbelly("R", f, *RB)
 # left hand: holds the box, opens (drop at 120), comes to her belly
 apply_pose(W, "L", "cup_hold", REL, amount=0.35, spread=0); apply_pose(W, "L", "open_alarm", REL + 6, amount=0.7, spread=0); apply_pose(W, "L", "open_alarm", 123, amount=0.6, spread=0)
 _pn = "Pole_elbow.L"; _ppb = WH.r.PB[_pn]; _ppb.location = WH.r.rest(_pn).to_3x3().inverted() @ (wpt(0.0, 0.95, 1.05) - WH.r.BN[_pn].head_local); _ppb.keyframe_insert("location", frame=136, group=_pn)   # elbow pole for the belly hold
@@ -692,7 +693,7 @@ def shot_cam(f):
         sc.frame_set(f); c_ = imp.matrix_world.translation.copy(); n_ = (imp.matrix_world.to_3x3() @ Vector((-1, 0, 0))).normalized()
         tg = c_.lerp(face_pt(f), 0.4); cp = c_ + n_ * lin(0.62, 0.50, u) + Vector((0.12, -0.1, 0.2)); return cp, tg, Vector((0, 0, 1)), 36, 8.0
     if name == "P_wince":    # her face as she pulls it out (off screen): wince, looks down
-        tg = face_pt(f) + Vector((0, 0, -0.04)); cp = lin(Vector((0.85, -0.2, 1.55)), Vector((0.78, -0.18, 1.55)), u); return cp, tg, Vector((0, 0, 1)), 45, 8.0
+        tg = face_pt(f) + Vector((0, 0, -0.04)); cp = lin(Vector((0.68, -0.15, 1.28)), Vector((0.62, -0.14, 1.28)), u); return cp, tg, Vector((0, 0, 1)), 40, 8.0   # below her eye line, looking up at her face
     if name == "P_bullet":   # insert: the bullet between her fingertips, her face looking down at it above
         # one INSERT from her reach to the hole, through the pinch and pull-out, to her looking at the bullet (tracks her index fingertip)
         bp = Vector((0, 0, 0))

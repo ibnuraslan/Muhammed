@@ -10,7 +10,7 @@ I read these values back from `BellyFat_v017_60fps.blend` opened in factory-star
 | Resolution | 1080 × 1920 at 100 % |
 | Frame rate | 60 fps (fps_base 1.0) |
 | Frame range | **1–1273**, step 1 (21.2 s). This is the v010 range, built straight to the VO. |
-| Camera | One camera, `CAM_Film`, keyed on every frame. It makes **hard cuts** between 12 shots (no blends); the cross-section is one continuous push. Lens, clip start, focus distance, f-stop and DOF on/off are keyed per frame. In the macro shots the clip start is set to 55 % of the subject distance, so nothing can block the lens. |
+| Camera | One camera, `CAM_Film`, keyed on every frame. It makes **hard cuts** between 13 shots (no blends); the cross-section is one continuous push. Lens, clip start, focus distance, f-stop and DOF on/off are keyed per frame. In the macro shots the clip start is set to 55 % of the subject distance, so nothing can block the lens. |
 | Samples | 48, adaptive; noise threshold 0.05 |
 | Denoising | On (OpenImageDenoise) |
 | Light paths | Max 8, diffuse 3, glossy 3, transmission 8, transparent 8. Caustics off. Persistent data on. |
@@ -27,15 +27,15 @@ I read these values back from `BellyFat_v017_60fps.blend` opened in factory-star
 | 1–30 | W: medium on the shop window from inside: it cracks and shatters, the bullet streaks through | store |
 | 31–58 | F: her face, startled by the crash | store |
 | 59–140 | H: face and belly: the bullet streaks in (impact frame 72), the shirt dents, her body jolts, she staggers and drops the box (visible fall to the floor) | store |
-| 141–180 | L: closer; she looks down at her stomach, hands on it | store |
+| 141–180 | L: closer; she looks down at her stomach, right hand on it, left hand at her side | store |
 | 181–330 | One continuous push into the cross-section: nose-first bullet, pierces shirt and skin, stops in the fat (frame 278), fat jiggles under a still-pushing camera | macro |
-| 331–520 | R1: medium down the aisle; she is bent in pain, a shopper reacts behind her; slow push | store |
+| 331–520 | R1: medium down the aisle; she is bent in pain (right hand flat on her belly), a shopper reacts behind her; slow push | store |
 | 521–760 | R2: her face and hands; slow arc and push | store |
 | 761–960 | R3: two-shot; the shopper walks over to her | store |
-| 961–1146 | R4: she lifts her hand off and looks at the hole | store |
-| 1147–1192 | P: she feels the hole and pulls the bullet out | store |
-| 1193–1216 | P_bullet: insert of the bullet between her fingertips, her eyes on it | store |
-| 1217–1273 | P_face: relief: eyes close on the breath out, then a smile; held end | store |
+| 961–1100 | R4: she lifts her hand off and looks at the hole | store |
+| 1101–1185 | P_wince: her face (from below her eye line) as she pulls the bullet out off screen: wince, looking down | store |
+| 1186–1216 | P_bullet: insert of the bullet held up between her fingertips, her eyes on it | store |
+| 1217–1273 | P_face: relief: long exhale, head back, eyes close and reopen, small smile; held end | store |
 
 The store objects render in frames 1–180 and 331–1273, and the MACRO collection renders in 181–330. The switches are constant `hide_render` keys on hard cuts.
 
@@ -45,6 +45,7 @@ The store objects render in frames 1–180 and 331–1273, and the MACRO collect
 - **215**: the bullet at the shirt and skin.
 - **300**: the bullet stopped in the fat.
 - **850**: the two-shot with the helper.
+- **1140**: her face, wincing.
 - **1205**: the bullet in her fingers.
 - **1265**: the relief ending: her face, eyes and catchlight.
 
