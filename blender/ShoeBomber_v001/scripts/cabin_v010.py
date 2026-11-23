@@ -95,14 +95,14 @@ for f in (786, 1068):
 print("BOMBER_DONE")
 
 # ---------------------------------------------------------------- ATTENDANT
-def swing(h, path, f0, f1, facing_y=-1, step=8, amp=0.22, period=36):
+def swing(h, path, f0, f1, facing_y=-1, step=8, amp=0.17, period=36):
     """v010: natural walk arms -- elbows bent ~45 deg, hands close to the hips, opposite-arm swing fore/aft"""
     for f in range(f0, f1 + 1, step):
         p = path(f); ph = math.sin((f - f0) / period * 2 * math.pi)
         for s_, sg in (("L", 1), ("R", -1)):
             side = sg * (1 if facing_y < 0 else -1) * 0.155
             sw = sg * ph * amp
-            hand(h, s_, f, V((p.x + side, p.y + facing_y * (0.14 + sw), 0.98 + 0.35 * abs(sw))),
+            hand(h, s_, f, V((p.x + side, p.y + facing_y * (0.12 + sw), 0.95 + 0.20 * abs(sw))),
                  (0, facing_y * 0.75, -0.65), (-side, 0, 0),
                  pole=(p.x + side * 2.2, p.y - facing_y * 0.6, 0.95), grip=0.35)
 apath = catmull([(170, V((0.0, 7.9, 0))), (230, V((0.0, 5.6, 0))), (300, V((0.0, 3.0, 0))), (318, V((0.0, 2.85, 0)))])
@@ -235,10 +235,10 @@ hand(pb, "R", 876, hl + V((0.07, -0.05, 0.06)), (-0.3, 1, -0.6), (-1, 0, 0), gri
 hand(pb, "L", 896, hl + V((-0.08, -0.30, 0.08)), (0.3, 1, -0.2), (1, 0, 0), grip=0.75, pose="wrap_grip")      # pulled off backward
 hand(pb, "R", 896, hl + V((0.07, -0.29, 0.10)), (-0.3, 1, -0.4), (-1, 0, 0), grip=0.75, pose="wrap_grip")
 SH_UP = V((KN.x + 0.20, KN.y + 0.34, 0.92))      # where he holds it up (sole toward +Y, the camera)
-for f, o, tw in ((930, V((0, -0.02, -0.06)), 0), (960, V((0.0, 0.02, 0.12)), 1), (990, V((-0.08, 0.04, 0.02)), -1), (1015, V((0.04, 0.05, 0.14)), 2),
-                  (1045, V((0.0, 0.03, 0.06)), -1), (1068, V((0.02, 0.03, 0.08)), 0)):
+for f, o, tw in ((930, V((0, -0.02, -0.06)), 0), (960, V((0.04, 0.02, 0.04)), 1), (990, V((0.06, 0.04, -0.02)), -1), (1015, V((0.08, 0.05, 0.05)), 2),
+                  (1045, V((0.05, 0.03, 0.02)), -1), (1068, V((0.06, 0.03, 0.03)), 0)):
     hand(pb, "R", f, SH_UP + o + V((0.09, -0.02, -0.08)), (-0.5, 0.2, 0.8), (-1, 0, 0.2 * tw), pole=(0.6, KN.y, 0.8), grip=0.75, pose="wrap_grip")
-    hand(pb, "L", f, SH_UP + o + V((-0.07, -0.03, 0.09)), (0.5, 0.1, 0.7), (1, 0, 0.2 * tw), pole=(-0.6, KN.y, 0.8), grip=0.6)
+    hand(pb, "L", f, V((KN.x - 0.14, KN.y + 0.16, 0.66)), (0, 0.6, -0.8), (0, 0, -1), pole=(-0.6, KN.y, 0.8), grip=0.3)   # one-handed: left hand on his thigh (face stays clear)
 
 # ---------------------------------------------------------------- STEWARD (forward galley; brings the syringe at 600-650, stays to watch)
 for f in range(1, 600, 40):

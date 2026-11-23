@@ -32,13 +32,20 @@ cd = bpy.data.materials.get("CloudDeck")
 if cd:
     for n in cd.node_tree.nodes:
         if n.type == 'VALTORGB':
-            n.color_ramp.elements[0].color = (0.82, 0.82, 0.82, 1)     # deck mostly opaque: no brown ground through the gaps
             for e in n.color_ramp.elements[1:]:
                 v = sum(e.color[:3]) / 3
                 e.color = (v * 0.97, v * 0.985, v, e.color[3])
         if n.type == 'BSDF_PRINCIPLED':
             if not n.inputs["Base Color"].is_linked: n.inputs["Base Color"].default_value = (0.92, 0.93, 0.95, 1)
             n.inputs["Subsurface Weight"].default_value = 0.0      # its red-default SSS radius tinted the deck pink-brown
+# the floor under the decks (seen through their gaps) was brown-pink: cool blue-grey cloud shadow instead
+cf = bpy.data.materials.get("CloudFloorMat")
+if cf and cf.use_nodes:
+    for n in cf.node_tree.nodes:
+        for inp in n.inputs:
+            if inp.name in ("Color", "Base Color", "Emission Color") and not inp.is_linked and hasattr(inp.default_value, "__len__"):
+                inp.default_value = (0.50, 0.56, 0.66, 1)
+            if inp.name == "Subsurface Weight": inp.default_value = 0.0
 # any other warm-tinted sky materials (cloud banks, haze) -> neutral
 for mname in ("CloudBank", "Haze", "SkyHaze"):
     m = bpy.data.materials.get(mname)
@@ -55,7 +62,7 @@ if ad and ad.action:
             for cb in strip.channelbags:
                 for fc in list(cb.fcurves):
                     if fc.data_path == "view_settings.exposure": cb.fcurves.remove(fc)
-for f, ex in ((1, 0.9), (1158, 0.9), (1159, -0.5), (1392, -0.5), (1393, -0.4), (sc.frame_end, -0.4)):
+for f, ex in ((1, 0.9), (1158, 0.9), (1159, -1.0), (1392, -1.0), (1393, -0.4), (sc.frame_end, -0.4)):
     sc.view_settings.exposure = ex; sc.view_settings.keyframe_insert("exposure", frame=f)
 ad = sc.animation_data
 for layer in ad.action.layers:
