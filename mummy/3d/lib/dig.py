@@ -402,6 +402,7 @@ def lift(st, dz):
 
 # ----------------------------------------------------------------------------- photogrammetry graves (real excavated
 # crouched burials, Sketchfab CC-BY) set into the north-house pits, joined to the trench floor by a sand skirt
+SINK = {"B2": -0.24}                                          # scan surface below the floor; the floor overlaps its edges
 PRE = {"B2": (-90.0, (0.2, 0.74, 0.22, 0.88))}                  # rotate X, then crop (fractions of x, y extent)
 STRIP = {"B1": (-0.163, -0.136, -0.016, 0.06, -0.1099)}      # scan-unit box (x0, x1, y0, y1, z above which to cut)
 SCANS = {
@@ -411,7 +412,7 @@ SCANS = {
 }
 
 
-def burial_scan(key="B1", rot=None, skirt=0.12):
+def burial_scan(key="B1", rot=None, skirt=0.0):
     import bones as B
     uid, cen, sc, cut, skull = SCANS[key]
     px, py, a, b, dep, ang = U.PITS[key]
@@ -426,7 +427,8 @@ def burial_scan(key="B1", rot=None, skirt=0.12):
         lo, hi = co0.min(0), co0.max(0); ext = hi - lo
         x0 = lo[0] + crop[0] * ext[0]; x1 = lo[0] + crop[1] * ext[0]; y0 = lo[1] + crop[2] * ext[1]; y1 = lo[1] + crop[3] * ext[1]
         bm = bmesh.new(); bm.from_mesh(me)
-        bmesh.ops.delete(bm, geom=[f for f in bm.faces if not (x0 < f.calc_center_median().x < x1 and y0 < f.calc_center_median().y < y1)], context='FACES')
+        bmesh.ops.delete(bm, geom=[f for f in bm.faces if not (x0 < f.calc_center_median().x < x1 and y0 < f.calc_center_median().y < y1)
+                                    or max(e.calc_length() for e in f.edges) > 0.012], context="FACES")   # drop stretched edge polygons
         bm.to_mesh(me); bm.free()
     if cut is not None:
         bm = bmesh.new(); bm.from_mesh(me)
@@ -449,7 +451,7 @@ def burial_scan(key="B1", rot=None, skirt=0.12):
     x = co[:, 0] * c - co[:, 1] * s; y = co[:, 0] * s + co[:, 1] * c
     floor_z = float(U.surface(px + 2.2 * math.cos(rot + 1.2), py + 2.2 * math.sin(rot + 1.2)))  # house floor beside the pit
     co[:, 0] = x + px; co[:, 1] = y + py
-    co[:, 2] += floor_z + 0.004 - co[:, 2].max()
+    co[:, 2] += floor_z + SINK.get(key, 0.004) - co[:, 2].max()
     me.vertices.foreach_set("co", co.ravel()); me.update()
     # warm the scan toward the pale machair shell sand
     for m in me.materials:
@@ -491,7 +493,7 @@ def burial_scan(key="B1", rot=None, skirt=0.12):
             pass
     nm = len(me.materials)
     for f in sk_faces:
-        f.material_index = nm
+        f.material_index = nm; f.smooth = False
     bm.to_mesh(me); bm.free()
     me.materials.append(mat("skirt"))
     o["grave"] = key

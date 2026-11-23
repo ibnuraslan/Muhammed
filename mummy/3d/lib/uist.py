@@ -21,7 +21,7 @@ DIG = dict(x0=-9.0, x1=10.0, y0=-15.5, y1=16.0, depth=1.6)     # open-area excav
 HOUSES = [(0.0, -9.2, 4.3), (0.3, 0.0, 4.6), (0.0, 9.6, 4.4)]
 HOUSE_SINK = 0.32         # house floors are sunk into the sand below the excavated surface
 # grave pits under the north house floor: (x, y, half-length, half-width, depth, angle deg). B1 = the man, B2 = the second adult
-PITS = {"B1": (-1.8, 8.9, 0.86, 0.95, 0.5, 20.0), "B2": (-0.3, 11.4, 0.44, 0.52, 0.3, -15.0),
+PITS = {"B1": (-1.8, 8.9, 0.86, 0.95, 0.5, 20.0), "B2": (-0.3, 11.4, 0.35, 0.45, 0.62, -15.0),
         "KNEE": (3.2, 14.6, 0.45, 0.38, 0.28, 0.0)}        # knee pit: outside the house, ~5 m from B2
 
 
