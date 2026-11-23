@@ -4,3 +4,4 @@ __pycache__/
 assets/makehuman/
 assets/sketchfab/
 shots/
+*.glb
