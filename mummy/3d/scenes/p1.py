@@ -1,0 +1,481 @@
+"""Part 1 (mummy/vo/MUMMY_P1_VO.txt): "Beneath a house in Scotland..." -> "...given that head someone else's jaw."  32 shots.
+
+Each shot builds its set and cast and returns the camera move:
+    dict(a=(loc, target), b=(loc, target), lens=, fstop=, focus=, cine=, hand_ok=)
+House rules: no face toward the lens (backs, silhouettes, profiles in shadow); every hand belongs to a person in
+frame; camera carries the motion; clipcheck 0; light is motivated (sun/sky, firelight, lab lamp and window).
+"""
+import math, os
+import bpy
+from mathutils import Vector
+import uist as U, dig as G, cast as K, bones as B, lab as LB, bronze as BR
+
+HAIR = float(os.environ.get("HAIR", "0.5"))
+OK = ("trowel", "Uist", "fill", "tubby")
+
+
+def site(mood="golden", grass_at=(0, 0), grass_r=26, focus=(0, 0), kit=True, burials=True, n=820, core=4.0, sun_az=None,
+         grass_density=300):
+    T = U.island(mood, grass_at=grass_at, grass_r=grass_r, n=n, core=core, focus=focus, sun_az=sun_az, grass_density=grass_density)
+    G.houses()
+    if kit:
+        G.kit()
+    sk = {}
+    if burials:
+        sk["B1"] = G.burial("B1", "M", "A")
+        sk["B2"] = G.burial("B2", "M", "C", side="L")
+    return T, sk
+
+
+def team(*who):
+    """The 2001 team in the north house, all facing away from the south-east (where the cameras are)."""
+    out = []
+    if "A" in who:
+        out.append(K.kneel_trowel(K.DiggerA, (-1.0, 8.15), 128, work=(-1.45, 8.62), density=HAIR))
+    if "B" in who:
+        out.append(K.kneel_trowel(K.DiggerB, (0.35, 10.45), 140, work=(-0.1, 10.95), density=HAIR))
+    return out
+
+
+# ============================================================================ "Beneath a house in Scotland..."
+def S01():
+    """Drone: in low over the Atlantic swell, across the white surf and the marram dunes; the dig appears ahead."""
+    U.CUT = True
+    site("golden", grass_at=None, focus=(-190, -60), core=8.0, n=900, kit=True, burials=False, sun_az=200)
+    return dict(a=((-430, -250, 38), (-160, -40, 2)), b=((-170, -95, 46), (0, 0, 3)), lens=24,
+                cine=dict(exposure=0.1))
+
+
+def S02():
+    """Crane down over the trench lip: string line, ranging pole, the north house ring, two diggers at the graves."""
+    site("golden", grass_at=(9, -2), grass_r=22, sun_az=200)
+    team("A", "B")
+    return dict(a=((15.5, -3.5, 10.5), (-0.6, 9.2, 3.3)), b=((11.5, 1.5, 6.6), (-0.8, 9.4, 3.3)), lens=30,
+                fstop=5.6, focus=(-0.8, 9.2, 3.4), hand_ok=OK)
+
+
+def S03():
+    """Top-down over the grave: the crouched skeleton in the sand, slowly turning."""
+    site("overcast", grass_at=None, kit=False)
+    return dict(a=((-1.62, 8.62, 5.3), (-1.8, 8.92, 3.2)), b=((-2.0, 9.15, 4.75), (-1.8, 8.92, 3.2)), lens=35,
+                fstop=4.0, focus=(-1.8, 8.92, 3.3))
+
+
+def S04():
+    """Low slider along the body at bone level: knees drawn up, hands at the face, the skull."""
+    T, sk = site("golden", grass_at=None, kit=False, sun_az=205)
+    sp = sk["B1"].world_pivot("skull"); fp = sk["B1"].world_pivot("femurL")
+    return dict(a=((-0.75, 8.05, 3.55), tuple(fp)), b=((-1.05, 9.55, 3.55), tuple(sp)), lens=50,
+                fstop=2.8, focus=tuple((sp + fp) / 2))
+
+
+def S05():
+    """Macro: the skull in the ground; rack from the orbit to the teeth."""
+    T, sk = site("golden", grass_at=None, kit=False, sun_az=205)
+    sp = sk["B1"].world_pivot("skull")
+    d = Vector((0.55, -0.5, 0.0)).normalized()
+    a = sp + d * 0.55 + Vector((0, 0, 0.16)); b = sp + d * 0.32 + Vector((0, 0, 0.1))
+    return dict(a=(tuple(a), tuple(sp)), b=(tuple(b), tuple(sp + Vector((0, 0, -0.02)))), lens=85,
+                fstop=2.8, focus=tuple(sp))
+
+
+# ============================================================================ the lab: skull, jaw, the third man
+def _cork_ring(x, y, z, r=0.07):
+    bpy.ops.mesh.primitive_torus_add(major_radius=r, minor_radius=0.018, location=(x, y, z + 0.018))
+    o = bpy.context.active_object; o.name = "corkring"
+    m = bpy.data.materials.new("cork"); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
+    p.inputs['Base Color'].default_value = (0.32, 0.2, 0.11, 1); p.inputs['Roughness'].default_value = 0.9
+    o.data.materials.append(m)
+    return o
+
+
+def lab_skull(inverted=True, with_jaw=False, lamp_energy=55.0):
+    A = LB.room(window_light=0.8, lamp=True, lamp_at=(0.45, 0.6), lamp_target=(-0.05, 0.35), lamp_energy=lamp_energy)
+    LB.velvet(-0.6, 0.6, 0.0, 0.75, LB.TOP)
+    cr = B.hero_cranium(healed=True, tone="A")
+    if inverted:                     # resting upside down on a cork ring: the palate and the tooth row face up
+        _cork_ring(0.0, 0.35, LB.TOP)
+        cr.rotation_euler = (math.pi, 0, math.radians(200))
+        bpy.context.view_layer.update()
+        import numpy as np
+        co = np.array([cr.matrix_world @ v.co for v in cr.data.vertices[:]])
+        cr.location = (0.0, 0.35, LB.TOP + 0.03 - co[:, 2].min() + cr.location.z)
+    else:
+        _cork_ring(0.0, 0.35, LB.TOP)
+        bpy.context.view_layer.update()
+        import numpy as np
+        co = np.array([v.co for v in cr.data.vertices])
+        cr.location = (0.0, 0.35, LB.TOP + 0.026 - co[:, 2].min() * 0.92)
+    out = dict(cr=cr, A=A)
+    if with_jaw:
+        md = B.hero_mandible(tone="B")
+        import numpy as np
+        co = np.array([v.co for v in md.data.vertices])
+        md.location = (0.2, 0.3, LB.TOP + 0.004 - co[:, 2].min()); md.rotation_euler = (0, 0, math.radians(-25))
+        out["md"] = md
+    return out
+
+
+def S06():
+    """The cranium upside down on its ring: slow orbit to the smooth healed ridge where the back teeth were."""
+    L = lab_skull(inverted=True)
+    c = Vector((0.0, 0.35, LB.TOP + 0.13))
+    return dict(a=((-0.32, 0.02, LB.TOP + 0.36), tuple(c)), b=((0.05, -0.12, LB.TOP + 0.38), tuple(c)), lens=70,
+                fstop=4.0, focus=tuple(c), cine=dict(exposure=0.1))
+
+
+def S07():
+    """The mandible: macro along the worn molar crowns (lateral slide)."""
+    A = LB.room(window_light=0.7, lamp=True, lamp_at=(0.4, 0.62), lamp_target=(0.0, 0.3), lamp_energy=45)
+    LB.velvet(-0.6, 0.6, 0.0, 0.75, LB.TOP)
+    md = B.hero_mandible(tone="B")
+    import numpy as np
+    co = np.array([v.co for v in md.data.vertices])
+    md.location = (0.0, 0.32, LB.TOP + 0.003 - co[:, 2].min()); md.rotation_euler = (0, 0, math.radians(15))
+    t = Vector((0.0, 0.32, LB.TOP + 0.05))
+    return dict(a=((-0.2, 0.08, LB.TOP + 0.12), tuple(t + Vector((-0.03, 0, 0)))), b=((0.14, 0.06, LB.TOP + 0.12), tuple(t + Vector((0.03, 0, 0)))),
+                lens=100, fstop=4.0, focus=tuple(t))
+
+
+def S08():
+    """Skull and jaw side by side: the jaw does not belong to this head. Pull back."""
+    L = lab_skull(inverted=False, with_jaw=True)
+    c = Vector((0.1, 0.33, LB.TOP + 0.07))
+    return dict(a=((0.05, -0.1, LB.TOP + 0.12), tuple(c)), b=((0.1, -0.38, LB.TOP + 0.22), tuple(c)), lens=60,
+                fstop=4.0, focus=tuple(c))
+
+
+def lab_body(osteo=True):
+    """The post-cranial skeleton laid out supine on the bench (no skull: the head is from someone else)."""
+    A = LB.room(window_light=1.0, lamp=True, lamp_at=(-0.2, 0.62), lamp_target=(0.3, 0.35), lamp_energy=50)
+    LB.velvet(-1.15, 1.2, 0.0, 0.78, LB.TOP)
+    sk = B.Skeleton("M", "C", name="Third")
+    sk.remove("skull", "mandible")
+    sk.root.rotation_euler = (math.radians(-90), 0, math.radians(-90))
+    bpy.context.view_layer.update()
+    sk.root.location = (0.0, 0.38, 0)
+    bpy.context.view_layer.update()
+    import numpy as np
+    zmin = min((o.matrix_world @ v.co).z for o in sk.parts.values() for v in o.data.vertices[:])
+    xs = [(o.matrix_world @ v.co).x for o in sk.parts.values() for v in o.data.vertices[:]]
+    sk.root.location = (-(min(xs) + max(xs)) / 2, 0.38, LB.TOP + 0.004 - zmin)
+    out = dict(A=A, sk=sk)
+    if osteo:
+        import acts as AC
+        m = K.Osteologist()
+        st = AC.Stand(m, (0.15, -0.42), 90, lean=12)
+        st.hand("L", (-0.05, 0.12, LB.TOP + 0.02), elbow=(0.6, 0.2, -0.8), curl=18)
+        st.hand("R", (0.32, 0.18, LB.TOP + 0.03), elbow=(0.6, 0.2, -0.8), curl=24)
+        st.head_to((0.1, 0.4, LB.TOP), share=0.9)
+        st.finish(look=(0.1, 0.4, LB.TOP), density=HAIR)
+        out["st"] = st
+    return out
+
+
+def S09():
+    """The rest of the skeleton on the bench; the osteologist bent over it (back to camera). Dolly along the bench."""
+    lab_body(osteo=True)
+    return dict(a=((-1.6, -1.55, 1.55), (-0.4, 0.38, LB.TOP + 0.05)), b=((-0.9, -1.75, 1.6), (0.15, 0.38, LB.TOP + 0.05)), lens=35,
+                fstop=4.0, focus=(0.0, 0.3, 1.1), hand_ok=("bench", "velvet", "Third"))
+
+
+def S10():
+    """Pelvis and femur under the lamp: the body belongs to a third man."""
+    L = lab_body(osteo=False)
+    sk = L["sk"]
+    p = sk.world_pivot("pelvis"); f = sk.world_pivot("femurR")
+    t = (p + f) / 2 + Vector((0, 0, 0.03))
+    return dict(a=(tuple(t + Vector((-0.12, -0.55, 0.28))), tuple(t)), b=(tuple(t + Vector((0.06, -0.38, 0.2))), tuple(t)), lens=60,
+                fstop=3.5, focus=tuple(t))
+
+
+# ============================================================================ "...arranged to look like one" / another body
+def S11():
+    """High overhead of the crouched figure: one body - slow rise."""
+    site("overcast", grass_at=None, kit=False)
+    return dict(a=((-1.7, 8.8, 4.45), (-1.8, 8.92, 3.25)), b=((-1.55, 8.7, 7.2), (-1.8, 8.95, 3.25)), lens=32,
+                fstop=5.6, focus=(-1.8, 8.92, 3.3))
+
+
+def S12():
+    """Pan off the first grave across the house floor to the second burial."""
+    site("overcast", grass_at=None, kit=True)
+    p1 = U.PITS["B1"]; p2 = U.PITS["B2"]
+    z = G.H(p1[0], p1[1])
+    return dict(a=((-3.9, 6.6, z + 1.35), (p1[0], p1[1], z)), b=((-3.7, 6.9, z + 1.4), (p2[0], p2[1], z)), lens=35,
+                fstop=5.6, focus=(p2[0], p2[1], z))
+
+
+# ============================================================================ "It's 2001..."
+def S13():
+    """Wide drone: South Uist's Atlantic coast, surf, machair strips, lochans, the hills behind."""
+    site("golden", grass_at=None, focus=(-230, -200), core=10.0, n=900, kit=False, burials=False, sun_az=195)
+    return dict(a=((-470, -560, 190), (-120, 120, 0)), b=((-430, -470, 175), (-90, 150, 0)), lens=26)
+
+
+def S14():
+    """The site at work: marquee, spoil heap, barrows; diggers in the trench (all with their backs to us). Crane up."""
+    site("day", grass_at=(10, -16), grass_r=24)
+    team("A", "B")
+    K.stand(K.DiggerC, (13.4, -6.3), 25, look=(14.5, -5.8, 5.0), density=HAIR, hands="front")
+    K.stand(K.Director, (11.6, 2.2), 175, look=(-1, 9, 3.5), density=HAIR)
+    return dict(a=((16.5, -27, 5.6), (1, 3, 3.6)), b=((16.5, -25.5, 12.5), (1, 4, 3.4)), lens=26, hand_ok=OK + ("sieve",))
+
+
+def S15():
+    """The director on the lip of the trench, from behind, looking over the north house."""
+    site("day", grass_at=(13, 2), grass_r=16)
+    team("A", "B")
+    st = K.stand(K.Director, (11.6, 2.2), 168, look=(-1, 9, 3.5), density=HAIR)
+    z = G.H(11.6, 2.2)
+    return dict(a=((15.8, 3.6, z + 1.75), (-1.0, 8.0, z - 0.6)), b=((14.6, 3.3, z + 1.75), (-1.0, 8.4, z - 0.8)), lens=40,
+                fstop=4.0, focus=(11.6, 2.2, z + 1.6), hand_ok=OK)
+
+
+# ============================================================================ "Sand has buried layers..."
+def S16():
+    """The north section: pale shell sand banded with dark floors. Crane down the face in raking light."""
+    site("golden", grass_at=(2, 18), grass_r=8, kit=False, burials=False, sun_az=192)
+    y = U.DIG["y1"]
+    return dict(a=((1.2, y - 2.6, 5.4), (2.6, y, 4.4)), b=((1.6, y - 2.2, 3.85), (2.6, y, 3.85)), lens=32,
+                fstop=5.6, focus=(2.6, y, 4.2))
+
+
+def S17():
+    """A digger cleaning the section with a trowel - from behind, the trowel's edge on the sand."""
+    site("golden", grass_at=(4, 18), grass_r=8, kit=False, burials=False, sun_az=192)
+    y = U.DIG["y1"]
+    K.kneel_trowel(K.DiggerA, (4.2, y - 0.95), 92, work=(4.25, y - 0.28), density=HAIR)
+    z = G.H(4.2, y - 1)
+    return dict(a=((5.25, y - 2.4, z + 1.1), (4.15, y - 0.2, z + 0.25)), b=((4.85, y - 2.25, z + 1.05), (4.05, y - 0.2, z + 0.3)), lens=40,
+                fstop=3.5, focus=(4.2, y - 0.4, z + 0.4), hand_ok=OK)
+
+
+def _ard_marks(cx, cy, w=2.4, n=9, seed=1):
+    """Criss-cross ard furrows: dark thin bands of ploughsoil cut into the pale sand, two directions."""
+    import random
+    rng = random.Random(seed)
+    m = bpy.data.materials.new("ard"); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
+    p.inputs['Base Color'].default_value = (0.13, 0.1, 0.07, 1); p.inputs['Roughness'].default_value = 0.95
+    for d, ang in ((0, 0.12), (1, 1.52)):
+        for k in range(n):
+            off = (k - n / 2) * w / n + rng.uniform(-0.05, 0.05)
+            c, s = math.cos(ang), math.sin(ang)
+            x = cx - s * off; y = cy + c * off
+            z = G.H(x, y)
+            bpy.ops.mesh.primitive_plane_add(size=1, location=(x, y, z + 0.003)); o = bpy.context.active_object
+            o.scale = (w * rng.uniform(0.7, 1.0), rng.uniform(0.035, 0.06), 1); o.rotation_euler.z = ang; o.name = "ard"
+            sub = o.modifiers.new("s", "SUBSURF"); sub.subdivision_type = 'SIMPLE'; sub.levels = 3; sub.render_levels = 3
+            dsp = o.modifiers.new("w", "DISPLACE"); t = bpy.data.textures.new("ardw", "CLOUDS"); t.noise_scale = 0.3
+            dsp.texture = t; dsp.strength = 0.004; dsp.direction = 'Z'
+            o.data.materials.append(m)
+
+
+def S18():
+    """Ard marks scored in the old ground surface; push in low across them."""
+    site("golden", grass_at=None, kit=False, burials=False, sun_az=200)
+    _ard_marks(6.8, -3.0)
+    z = G.H(6.8, -3.0)
+    return dict(a=((8.6, -4.9, z + 0.75), (6.6, -2.8, z)), b=((7.9, -4.1, z + 0.45), (6.5, -2.7, z)), lens=35,
+                fstop=4.0, focus=(6.8, -3.0, z))
+
+
+# ============================================================================ "Later, they built houses over it."
+def bronze_site(mood="dawn", grass_r=40, focus=(0, 0)):
+    U.CUT = False
+    T = U.island(mood, grass_at=(0, 0), grass_r=grass_r, n=820, core=4.0, focus=focus, grass_density=220)
+    BR.village(smoke_on=True)
+    return T
+
+
+def S19():
+    """Dawn: the three roundhouses on the machair, roofs touching, smoke rising. Drone arc."""
+    bronze_site("dawn")
+    return dict(a=((42, -30, 17), (0, 0, 4.5)), b=((30, -38, 13), (0, 1, 4.0)), lens=28, cine=dict(exposure=0.1))
+
+
+def S20():
+    """Top-down: three thatched roofs in a row. Rise."""
+    bronze_site("dawn")
+    return dict(a=((4.0, -0.3, 24), (0.3, 0.2, 0)), b=((4.4, -0.2, 40), (0.3, 0.3, 0)), lens=28)
+
+
+def S21():
+    """Inside, looking east: the low sun through the doorway lays a long bar of light across the floor."""
+    U.CUT = False
+    BR.interior(fire=0.6, door_sun=1.0)
+    return dict(a=((-2.3, 0.6, 1.35), (4.9, 0.0, 0.9)), b=((-0.9, 0.35, 1.25), (4.9, 0.0, 0.85)), lens=24,
+                fstop=4.0, focus=(4.9, 0, 0.9), cine=dict(exposure=0.25))
+
+
+def S22():
+    """The hearth: a man kneels at the fire (silhouette, back to us); pots, quern, smoke in the air. Slow dolly."""
+    U.CUT = False
+    R = BR.interior(fire=1.0, door_sun=0.4)
+    import acts as AC
+    m = BR.Islander()
+    hx, hy = R["hearth"]
+    st = AC.Kneel(m, (hx - 1.05, hy + 0.62), -30, lean=40, sit_back=True)
+    st.hand("R", (hx - 0.62, hy + 0.36, 0.12), elbow=(0.6, 0.2, -0.8), curl=30)
+    st.hand("L", (hx - 0.85, hy + 0.2, 0.42), elbow=(0.6, 0.3, -0.8), curl=20)
+    st.head_to((hx, hy, 0.3), share=0.8)
+    st.finish(look=(hx, hy, 0.3), density=HAIR)
+    return dict(a=((hx - 3.1, hy + 1.85, 1.25), (hx + 0.1, hy, 0.45)), b=((hx - 2.6, hy + 1.45, 1.15), (hx + 0.1, hy, 0.45)), lens=35,
+                fstop=2.8, focus=(hx - 1.0, hy + 0.6, 0.8), cine=dict(exposure=0.2), hand_ok=("floor", "stone"))
+
+
+# ============================================================================ "Floor after floor has survived beneath the sand."
+def S23():
+    """Back to 2001: the same house floor in the trench - revetment ring and hearth. Crane down."""
+    U.CUT = True
+    site("overcast", grass_at=None, kit=True, burials=False)
+    return dict(a=((7.5, -7.5, 10.5), (0.6, 0.0, 3.4)), b=((5.2, -4.6, 6.2), (0.6, 0.0, 3.3)), lens=28)
+
+
+# ============================================================================ "Under the northern house are the two adults."
+def S24():
+    """Crane in over the north house to the two graves side by side (overcast)."""
+    U.CUT = True
+    site("overcast", grass_at=None, kit=True)
+    return dict(a=((3.6, 4.2, 7.2), (-1.1, 10.0, 3.3)), b=((1.6, 6.4, 5.3), (-1.1, 10.1, 3.3)), lens=30,
+                fstop=5.6, focus=(-1.1, 10.0, 3.3))
+
+
+def S25():
+    """The second body, top-down: tightly curled."""
+    site("overcast", grass_at=None, kit=False)
+    px, py = U.PITS["B2"][:2]; z = G.H(px, py)
+    return dict(a=((px + 0.25, py - 0.3, z + 2.2), (px, py, z)), b=((px - 0.15, py + 0.2, z + 1.8), (px, py, z)), lens=35,
+                fstop=4.0, focus=(px, py, z + 0.05))
+
+
+def S26():
+    """Macro in the grave: the jaw under the skull of the first body; rack from skull to jaw."""
+    T, sk = site("golden", grass_at=None, kit=False, sun_az=210)
+    sp = sk["B1"].world_pivot("skull"); jp = sk["B1"].world_pivot("mandible")
+    d = Vector((0.6, -0.4, 0)).normalized()
+    return dict(a=(tuple(sp + d * 0.42 + Vector((0, 0, 0.14))), tuple(sp)), b=(tuple(jp + d * 0.32 + Vector((0, 0, 0.1))), tuple(jp)),
+                lens=85, fstop=2.8, focus=tuple(jp))
+
+
+def S27():
+    """Lab macro: the healed upper jaw - smooth bone where the chewing teeth were."""
+    L = lab_skull(inverted=True, lamp_energy=40)
+    cr = L["cr"]
+    import numpy as np
+    co = np.array([cr.matrix_world @ v.co for v in cr.data.vertices])
+    top = co[co[:, 2] > co[:, 2].max() - 0.03]                    # the tooth row (now facing up)
+    c = Vector(top.mean(0))
+    return dict(a=(tuple(c + Vector((-0.16, -0.12, 0.1))), tuple(c)), b=(tuple(c + Vector((-0.1, -0.15, 0.08))), tuple(c)), lens=100,
+                fstop=5.6, focus=tuple(c))
+
+
+def S28():
+    """The lower molars: wear facets polished by teeth that met them."""
+    A = LB.room(window_light=0.6, lamp=True, lamp_at=(0.35, 0.6), lamp_target=(0.0, 0.3), lamp_energy=40)
+    LB.velvet(-0.6, 0.6, 0.0, 0.75, LB.TOP)
+    md = B.hero_mandible(tone="B")
+    import numpy as np
+    co = np.array([v.co for v in md.data.vertices])
+    md.location = (0.0, 0.32, LB.TOP + 0.003 - co[:, 2].min()); md.rotation_euler = (0, 0, math.radians(-70))
+    bpy.context.view_layer.update()
+    W = np.array([md.matrix_world @ v.co for v in md.data.vertices])
+    top = W[W[:, 2] > W[:, 2].max() - 0.012]
+    c = Vector(top.mean(0))
+    return dict(a=(tuple(c + Vector((-0.12, -0.09, 0.06))), tuple(c)), b=(tuple(c + Vector((-0.08, -0.1, 0.05))), tuple(c)), lens=100,
+                fstop=5.6, focus=tuple(c))
+
+
+def S29():
+    """The jaw offered up to the skull: the lower teeth meet nothing. Slow push."""
+    L = lab_skull(inverted=False, with_jaw=True)
+    cr, md = L["cr"], L["md"]
+    import numpy as np
+    co = np.array([cr.matrix_world @ v.co for v in cr.data.vertices])
+    front = co[co[:, 1] < co[:, 1].min() + 0.05]
+    zt = front[:, 2].min()
+    mco = np.array([v.co for v in md.data.vertices])
+    md.rotation_euler = (0, 0, 0)
+    md.location = (cr.location.x, cr.location.y + 0.012, zt - mco[:, 2].max() - 0.004)
+    c = Vector((cr.location.x, cr.location.y, zt))
+    return dict(a=(tuple(c + Vector((0.3, -0.2, 0.06))), tuple(c)), b=(tuple(c + Vector((0.22, -0.13, 0.04))), tuple(c)), lens=70,
+                fstop=4.0, focus=tuple(c))
+
+
+def S30():
+    """Sampling for isotopes: the osteologist at the bench with the femur, sample tubes in a rack (from behind)."""
+    L = lab_body(osteo=True)
+    return dict(a=((0.95, -1.4, 1.55), (0.0, 0.35, LB.TOP + 0.05)), b=((0.75, -1.2, 1.5), (0.05, 0.35, LB.TOP + 0.05)), lens=35,
+                fstop=3.5, focus=(0.1, 0.0, 1.2), hand_ok=("bench", "velvet", "Third"))
+
+
+def S31():
+    """Three parts, three men: skull, jaw and thigh bone laid apart on the velvet. Overhead push."""
+    A = LB.room(window_light=0.8, lamp=True, lamp_at=(0.0, 0.66), lamp_target=(0.0, 0.35), lamp_energy=55)
+    LB.velvet(-0.8, 0.8, 0.0, 0.78, LB.TOP)
+    import numpy as np
+    cr = B.hero_cranium(healed=True, tone="A")
+    co = np.array([v.co for v in cr.data.vertices]); cr.location = (-0.42, 0.38, LB.TOP + 0.004 - co[:, 2].min() * 0.97)
+    cr.rotation_euler = (0, 0, math.radians(-30))
+    md = B.hero_mandible(tone="B")
+    co = np.array([v.co for v in md.data.vertices]); md.location = (-0.08, 0.36, LB.TOP + 0.003 - co[:, 2].min())
+    md.rotation_euler = (0, 0, math.radians(-20))
+    sk = B.Skeleton("M", "C", name="Leg")
+    for s in list(sk.parts):
+        if s != "femurR":
+            sk.remove(s)
+    fe = sk.parts["femurR"]
+    sk.root.rotation_euler = (0, math.radians(90), math.radians(8))
+    bpy.context.view_layer.update()
+    W = np.array([fe.matrix_world @ v.co for v in fe.data.vertices])
+    sk.root.location = Vector((0.4 - W[:, 0].mean(), 0.38 - W[:, 1].mean(), LB.TOP + 0.004 - W[:, 2].min()))
+    return dict(a=((0.0, 0.05, LB.TOP + 0.95), (0.0, 0.38, LB.TOP)), b=((0.0, 0.18, LB.TOP + 0.7), (0.0, 0.38, LB.TOP)), lens=35,
+                fstop=5.6, focus=(0.0, 0.38, LB.TOP + 0.04))
+
+
+def S32():
+    """Back in the grave at last light: the head of one man above the body of another. Slow push to the skull."""
+    T, sk = site("dusk", grass_at=None, kit=False, sun_az=200)
+    sp = sk["B1"].world_pivot("skull"); tp = sk["B1"].world_pivot("thorax")
+    return dict(a=(tuple(tp + Vector((0.9, -0.9, 0.55))), tuple((sp + tp) / 2)), b=(tuple(tp + Vector((0.55, -0.6, 0.35))), tuple(sp)), lens=50,
+                fstop=2.8, focus=tuple(sp), cine=dict(exposure=0.3))
+
+
+VO = [l.strip() for l in open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "vo", "MUMMY_P1_VO.txt"),
+                               encoding="utf-8").read().split("\n") if l.strip()]
+
+PLAN = [  # shot, VO paragraph (1-based), seconds (first estimate at 140 wpm; re-timed to the recorded VO), description
+    ("S01", 1, 6.5, "Drone in over the Atlantic surf and dunes to the dig on the machair (golden hour)"),
+    ("S02", 1, 5.0, "Crane down over the trench lip to the north house: two diggers at the graves (backs)"),
+    ("S03", 1, 4.0, "Top-down: the crouched skeleton in its grave, knees to chest"),
+    ("S04", 2, 4.5, "Low slider along the body at bone level, raking sun"),
+    ("S05", 3, 3.5, "Macro on the skull in the ground"),
+    ("S06", 4, 4.5, "Lab: cranium upside down on a cork ring; orbit to the healed ridge where the molars were"),
+    ("S07", 4, 4.0, "Lab: the mandible, worn molars still in place (macro slide)"),
+    ("S08", 5, 3.5, "Skull and jaw side by side: they do not belong together"),
+    ("S09", 6, 4.0, "Lab: the post-cranial skeleton on the bench, osteologist bent over it (back to camera)"),
+    ("S10", 6, 3.5, "Pelvis and femur under the lamp: a third man"),
+    ("S11", 7, 3.5, "Overhead of the crouched figure: one body"),
+    ("S12", 7, 4.0, "Pan across the house floor to the second grave"),
+    ("S13", 8, 6.0, "Wide drone: South Uist's west coast, surf, machair, lochans, hills"),
+    ("S14", 8, 5.0, "The site in 2001: marquee, spoil, barrows, diggers in the trench; crane up"),
+    ("S15", 8, 4.0, "The director at the trench edge, from behind"),
+    ("S16", 9, 5.0, "The section face: shell sand banded with dark floors; crane down"),
+    ("S17", 9, 4.5, "A digger cleans the section with a trowel (from behind)"),
+    ("S18", 9, 5.0, "Ard marks in the old ground surface"),
+    ("S19", 9, 4.5, "Dawn: the three roundhouses on the machair, smoke rising (drone arc)"),
+    ("S20", 10, 4.0, "Top-down onto the three conjoined roofs"),
+    ("S21", 10, 4.0, "Inside: sunrise through the east doorway, a bar of light on the floor"),
+    ("S22", 10, 6.0, "The hearth: a man kneels at the fire (silhouette); pots, quern, smoke"),
+    ("S23", 10, 5.0, "2001 again: the same house floor in the trench; crane down"),
+    ("S24", 11, 3.5, "Crane in over the north house to the two graves"),
+    ("S25", 12, 4.5, "The second body from above: tightly curled"),
+    ("S26", 12, 3.5, "Macro in the grave: skull and jaw of the first body"),
+    ("S27", 13, 5.0, "Lab macro: the healed upper jaw, smooth bone where the molars were"),
+    ("S28", 13, 4.5, "The lower molars: wear facets from teeth that met them"),
+    ("S29", 14, 3.5, "The jaw offered up to the skull: its teeth meet nothing"),
+    ("S30", 15, 6.0, "Sampling for isotopes at the bench (osteologist from behind)"),
+    ("S31", 15, 4.5, "Skull, jaw and thigh bone laid apart: three men"),
+    ("S32", 16, 6.5, "The grave at last light: the head of one man above the body of another"),
+]
+SHOTS = {sid: dict(fn=globals()[sid], dur=d, vo=VO[min(ln, len(VO)) - 1], line=ln, desc=desc) for sid, ln, d, desc in PLAN}
