@@ -8,7 +8,7 @@ sc = bpy.context.scene
 w = sc.world; nt = w.node_tree; N = nt.nodes; Lk = nt.links
 bg = N["WorldBG"]; mix = N["Mix"]
 # lighting branch: the old mix, desaturated
-hs = N.new("ShaderNodeHueSaturation"); hs.inputs["Saturation"].default_value = 0.25
+hs = N.new("ShaderNodeHueSaturation"); hs.inputs["Saturation"].default_value = 0.0
 Lk.new(mix.outputs["Result"], hs.inputs["Color"])
 bg_light = N.new("ShaderNodeBackground"); bg_light.inputs["Strength"].default_value = bg.inputs["Strength"].default_value
 Lk.new(hs.outputs["Color"], bg_light.inputs["Color"])
@@ -26,7 +26,7 @@ Lk.new(bg_light.outputs["Background"], ms.inputs[1]); Lk.new(bg_cam.outputs["Bac
 Lk.new(ms.outputs["Shader"], N["World Output"].inputs["Surface"])
 # sun: white daylight
 for o in bpy.data.objects:
-    if o.type == 'LIGHT' and o.data.type == 'SUN': o.data.color = (1.0, 0.97, 0.92)
+    if o.type == 'LIGHT' and o.data.type == 'SUN': o.data.color = (1.0, 1.0, 1.0)
 # cloud deck: white tops, soft grey shadows (no pink)
 cd = bpy.data.materials.get("CloudDeck")
 if cd:

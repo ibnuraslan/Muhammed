@@ -72,7 +72,7 @@ for f in (1702, 1714):      # hands on his hips (facing +X: his left is +Y)
         hand(trav, s, f, TEND + V((0.02, sg * 0.19, 0.98)), (0.4, -sg * 0.5, -0.6), (0, -sg, 0), pole=(TEND.x - 0.1, TEND.y + sg * 0.6, 1.15), grip=0.3)
 for f in (1720, END):      # palms-up shrug in front of him
     for s, sg in (("L", 1), ("R", -1)):
-        hand(trav, s, f, TEND + V((0.30, sg * 0.22, 1.00)), (0.7, sg * 0.4, 0.1), (0, 0, 1), pole=(TEND.x - 0.2, TEND.y + sg * 0.5, 0.9), grip=0.2)
+        hand(trav, s, f, TEND + V((0.20, sg * 0.40, 1.02)), (0.4, sg * 0.9, 0.1), (0, 0, 1), pole=(TEND.x - 0.2, TEND.y + sg * 0.5, 0.9), grip=0.2)
 # trays ride the belt into the tunnel together from 1506
 TRAY = bpy.data.objects["Tray_1"]
 for o in bpy.data.objects:

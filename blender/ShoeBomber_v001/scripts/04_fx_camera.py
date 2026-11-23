@@ -101,10 +101,10 @@ def attach_rest(ob, rig, bone, f, offset):
 
 # ------------------------------------------------------------------ bomber's sneakers -> attendant's hands (beat 6)
 bom, att, stw, trav = RIG["Bomber"], RIG["Attendant"], RIG["Steward"], RIG["Traveller"]
-SHOE_LAP = V((-0.46, 0.24, 0.685)); SEAT4D = V((0.44, 0.98, 0.47)); WRISTS = V((-0.02, 0.50, 0.37))   # = cabin_v010.py
+SHOE_LAP = V((-0.46, 0.34, 0.69)); SEAT4D = V((0.44, 0.98, 0.47)); WRISTS = V((-0.02, 0.50, 0.37))   # = cabin_v010.py
 # v010 (director 1): the fuse pokes out of the shoe's collar opening behind the tongue, 7 cm above it, bent toward the aisle
-_fc = O["Fuse_Shoe_R"].data; _fc.bevel_depth = 0.0045
-for _i, _p in enumerate([V((0.0, 0.075, 0.09)), V((0.0, 0.050, 0.172)), V((-0.030, 0.030, 0.235))]):
+_fc = O["Fuse_Shoe_R"].data; _fc.bevel_depth = 0.006
+for _i, _p in enumerate([V((0.0, 0.075, 0.09)), V((0.0, 0.045, 0.172)), V((-0.050, -0.020, 0.230))]):
     _bp = _fc.splines[0].bezier_points[_i]; _bp.co = _p; _bp.handle_left_type = _bp.handle_right_type = 'AUTO'
 for s, hs in (("L", "L"), ("R", "R")):
     shoe = O["Shoe_" + s]

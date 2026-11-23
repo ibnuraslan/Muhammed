@@ -11,8 +11,8 @@
 #   S8 868-1068          PaxB pulls the left shoe off his foot and holds it up to look at it
 BX, BY = SX["C"], ROW(3)
 PAX_A_X = SX["B"]
-SHOE_LAP = V((BX + 0.0, BY + 0.24, 0.685))          # sneaker on his lap: sole-bottom centre (04 parks it here, toe +Y)
-FUSE_TIP = SHOE_LAP + V((0.03, -0.03, 0.235))        # fuse out of the tongue, bending toward the aisle (= 04's fuse curve)
+SHOE_LAP = V((BX + 0.0, BY + 0.34, 0.69))          # sneaker on his lap: sole-bottom centre (04 parks it here, toe +Y)
+FUSE_TIP = SHOE_LAP + V((0.05, 0.02, 0.23))        # fuse out of the tongue, bending toward the aisle (= 04's fuse curve)
 SEAT4D = V((0.44, 0.98, 0.47))                       # where the attendant sets the shoe down (empty seat 4D cushion)
 PIN_ROOT = V((0.0, BY + 0.75, 0.31))
 WRISTS = V((-0.02, BY + 0.50, 0.37))                 # his wrists, strapped behind his back (S7 on)
@@ -24,7 +24,7 @@ def bomber_seat(f, lean=6, head=(30, 0), twist=0):
     bom.key_foot("L", f, V((BX - 0.11, BY + 0.37)), FWD, 0, 0)
     bom.key_foot("R", f, V((BX + 0.11, BY + 0.36)), FWD, 0, 0)
 # head: (pitch down, yaw); he watches the fuse, glances up the aisle at 70 and 300, freezes when caught (395)
-for f, lean, hd, tw in ((1, 10, (34, 4), 0), (40, 12, (36, 6), 2), (62, 6, (6, -12), 0), (80, 6, (4, -14), 0), (100, 12, (34, 4), 2),
+for f, lean, hd, tw in ((1, 4, (34, 4), 0), (40, 5, (36, 6), 2), (62, 6, (6, -12), 0), (80, 6, (4, -14), 0), (100, 12, (34, 4), 2),
                         (150, 11, (36, 2), 0), (200, 12, (34, 4), 2), (260, 12, (36, 2), 0), (290, 6, (6, -10), 0), (310, 6, (4, -14), 0),
                         (330, 12, (34, 2), 0), (372, 12, (34, 4), 2), (392, 2, (-6, -30), -6), (430, 0, (-8, -34), -8), (462, 4, (8, -20), -4)):
     bomber_seat(f, lean, hd, tw)
@@ -230,7 +230,7 @@ hand(pb, "L", 876, hl + V((-0.08, -0.06, 0.04)), (0.3, 1, -0.4), (1, 0, 0), grip
 hand(pb, "R", 876, hl + V((0.07, -0.05, 0.06)), (-0.3, 1, -0.6), (-1, 0, 0), grip=0.75, pose="wrap_grip")
 hand(pb, "L", 896, hl + V((-0.08, -0.30, 0.08)), (0.3, 1, -0.2), (1, 0, 0), grip=0.75, pose="wrap_grip")      # pulled off backward
 hand(pb, "R", 896, hl + V((0.07, -0.29, 0.10)), (-0.3, 1, -0.4), (-1, 0, 0), grip=0.75, pose="wrap_grip")
-SH_UP = V((KN.x + 0.10, KN.y + 0.36, 0.98))      # where he holds it up (sole toward +Y, the camera)
+SH_UP = V((KN.x + 0.20, KN.y + 0.34, 0.92))      # where he holds it up (sole toward +Y, the camera)
 for f, o, tw in ((930, V((0, -0.02, -0.06)), 0), (960, V((0, 0, 0)), 0), (1000, V((0.03, 0.02, 0.02)), 1), (1030, V((-0.02, 0.0, 0.0)), -1), (1068, V((0.0, 0.0, 0.01)), 0)):
     hand(pb, "R", f, SH_UP + o + V((0.09, -0.02, -0.08)), (-0.5, 0.2, 0.8), (-1, 0, 0.2 * tw), pole=(0.6, KN.y, 0.8), grip=0.75, pose="wrap_grip")
     hand(pb, "L", f, SH_UP + o + V((-0.07, -0.03, 0.09)), (0.5, 0.1, 0.7), (1, 0, 0.2 * tw), pole=(-0.6, KN.y, 0.8), grip=0.6)
