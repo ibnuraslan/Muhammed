@@ -384,16 +384,17 @@ def S26():
 
 
 def S27():
-    """Lab macro: the healed upper jaw - smooth bone where the chewing teeth were."""
-    L = lab_skull(inverted=True, lamp_energy=18)
+    """Lab, side-on at tooth level: the front teeth are there, then the bone runs on smooth and rounded where the chewing
+    teeth were - sockets healed over years before death. Slow push along the jaw line."""
+    L = lab_skull(inverted=False, lamp_energy=18)
     cr = L["cr"]
     import numpy as np
     co = np.array([cr.matrix_world @ v.co for v in cr.data.vertices])
-    top = co[co[:, 2] > co[:, 2].max() - 0.03]                    # the tooth row (now facing up)
-    c = Vector(top.mean(0))
-    return dict(a=(tuple(c + Vector((-0.3, -0.22, 0.2))), tuple(c)), b=(tuple(c + Vector((-0.2, -0.27, 0.17))), tuple(c)), lens=85,
-                fstop=8.0, focus=tuple(c), cine=dict(exposure=-0.1))
-
+    front = co[co[:, 1] < co[:, 1].min() + 0.075]
+    zt = float(np.percentile(front[:, 2], 1)); yf = float(co[:, 1].min())
+    c = Vector((float(cr.location.x), yf + 0.04, zt + 0.012))
+    return dict(a=(tuple(c + Vector((0.34, -0.06, 0.0))), tuple(c)), b=(tuple(c + Vector((0.26, -0.02, 0.005))), tuple(c + Vector((0, 0.01, 0)))),
+                lens=85, fstop=8.0, focus=tuple(c), cine=dict(exposure=-0.1))
 
 def S28():
     """The lower molars: wear facets from teeth that met them. Tighter than S07, slow slide across the tooth row."""
