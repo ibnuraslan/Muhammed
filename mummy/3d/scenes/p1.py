@@ -210,7 +210,7 @@ def S12():
     site("overcast", grass_at=None, kit=True)
     p1 = U.PITS["B1"]; p2 = U.PITS["B2"]
     z = G.H(p1[0], p1[1])
-    return dict(a=((-3.9, 6.6, z + 1.35), (p1[0], p1[1], z)), b=((-3.7, 6.9, z + 1.4), (p2[0], p2[1], z)), lens=35,
+    return dict(a=((-3.6, 6.9, z + 2.3), (p1[0], p1[1], z - 0.3)), b=((-3.4, 7.3, z + 2.4), (p2[0], p2[1], z - 0.3)), lens=35,
                 fstop=5.6, focus=(p2[0], p2[1], z))
 
 
