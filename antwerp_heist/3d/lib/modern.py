@@ -452,6 +452,85 @@ class Operator(ModernMan):
         super().__init__(name, years=33, **kw)
 
 
+class DeBruycker(ModernMan):
+    """Detective Agim De Bruycker (lead investigator): solid build, short dark-grey hair, moustache, tan raincoat over
+    a grey suit."""
+    MUSCLE = 0.55; WEIGHT = 0.62; HEIGHT = 0.55
+    HAIR = (0.45, 0.1); HAIR_LEN = (0.008, 0.016); HAIRLINE = 0.01; FACIAL = "moustache"
+    SHIRT = (0.75, 0.75, 0.72); TIE = (0.12, 0.1, 0.08); JACKET = "coat"; JACKET_COL = (0.3, 0.24, 0.15)
+    TROUSERS = (0.1, 0.1, 0.105); SHOES = (0.02, 0.015, 0.01)
+
+    def __init__(self, name="DeBruycker", **kw):
+        super().__init__(name, years=45, **kw)
+
+
+class Peys(ModernMan):
+    """Detective Patrick Peys: tall and lean, dark brown hair, navy wool jacket, open-necked blue shirt."""
+    MUSCLE = 0.5; WEIGHT = 0.42; HEIGHT = 0.66
+    HAIR = (0.88, 0.3); HAIR_LEN = (0.012, 0.025)
+    SHIRT = (0.35, 0.45, 0.6); JACKET = "blazer"; JACKET_COL = (0.02, 0.03, 0.07)
+    TROUSERS = (0.06, 0.06, 0.07); SHOES = (0.015, 0.012, 0.01)
+
+    def __init__(self, name="Peys", **kw):
+        super().__init__(name, years=38, **kw)
+
+
+class VanCamp(ModernMan):
+    """August Van Camp, the man who checks the woods for illegal dumping: older, wiry, grey hair, a green waxed
+    field jacket over a brown sweater, corduroy trousers, rubber-soled boots."""
+    MUSCLE = 0.5; WEIGHT = 0.4; HEIGHT = 0.5
+    HAIR = (0.15, 0.04); HAIR_LEN = (0.01, 0.02); HAIRLINE = 0.016; FACIAL = "stubble"
+    SHIRT = (0.12, 0.08, 0.05); JACKET = "coat"; JACKET_COL = (0.07, 0.085, 0.04)
+    TROUSERS = (0.12, 0.08, 0.045); SHOES = (0.03, 0.025, 0.015)
+
+    def __init__(self, name="VanCamp", **kw):
+        super().__init__(name, years=60, **kw)
+
+
+class LabTech(ModernMan):
+    """Forensic technician: white lab coat over a pale shirt, dark trousers; blue nitrile gloves."""
+    MUSCLE = 0.45; WEIGHT = 0.5; HEIGHT = 0.52
+    HAIR = (0.75, 0.3); HAIR_LEN = (0.01, 0.02)
+    SHIRT = (0.6, 0.65, 0.7); JACKET = "coat"; JACKET_COL = (0.78, 0.78, 0.76)
+    TROUSERS = (0.05, 0.05, 0.06); GLOVES = True; GLOVE_COL = (0.08, 0.2, 0.6)
+
+    def __init__(self, name="LabTech", **kw):
+        super().__init__(name, years=34, **kw)
+
+
+class Judge(ModernMan):
+    """A judge of the Antwerp court (2005): black robe (long), white bands at the neck."""
+    MUSCLE = 0.45; WEIGHT = 0.6; HEIGHT = 0.5
+    HAIR = (0.25, 0.05); HAIR_LEN = (0.01, 0.02); HAIRLINE = 0.02
+    SHIRT = (0.85, 0.85, 0.83); TIE = (0.85, 0.85, 0.83); JACKET = "coat"; JACKET_COL = (0.012, 0.012, 0.014)
+    TROUSERS = (0.02, 0.02, 0.02)
+
+    def __init__(self, name="Judge", **kw):
+        super().__init__(name, years=58, **kw)
+
+
+class TurinOfficer(ModernMan):
+    """Polizia di Stato officer in Turin: dark blue uniform jacket, light blue shirt, dark hair."""
+    MUSCLE = 0.6; WEIGHT = 0.55; HEIGHT = 0.55
+    HAIR = (0.92, 0.2); HAIR_LEN = (0.008, 0.016)
+    SHIRT = (0.5, 0.62, 0.78); TIE = (0.02, 0.03, 0.08); JACKET = "blazer"; JACKET_COL = (0.015, 0.025, 0.07)
+    TROUSERS = (0.015, 0.025, 0.07)
+
+    def __init__(self, name="TurinOfficer", **kw):
+        super().__init__(name, years=42, **kw)
+
+
+class Speedy(ModernMan):
+    """The third accomplice in the dock (2005): short, round, black hair, grey jacket."""
+    MUSCLE = 0.45; WEIGHT = 0.75; HEIGHT = 0.4
+    HAIR = (0.95, 0.15); HAIR_LEN = (0.01, 0.02)
+    SHIRT = (0.7, 0.72, 0.75); JACKET = "blazer"; JACKET_COL = (0.18, 0.18, 0.19)
+    TROUSERS = (0.08, 0.08, 0.09)
+
+    def __init__(self, name="Speedy", **kw):
+        super().__init__(name, years=48, **kw)
+
+
 class Trader(ModernMan):
     """Diamond traders on the Monday (several, varied): suits and coats in greys, browns and navies; one in a
     Hasidic black coat and hat brim is NOT used (no hats on the rig); distinct by build and colour only."""
@@ -475,4 +554,5 @@ class Trader(ModernMan):
 
 
 CAST = {"Leonardo": Leonardo, "DOnorio": DOnorio, "Finotto": Finotto, "Guard": Guard, "Porter": Porter, "Investigator": Investigator,
-        "Manager": Manager, "Police": Police, "Operator": Operator}
+        "Manager": Manager, "Police": Police, "Operator": Operator, "DeBruycker": DeBruycker, "Peys": Peys,
+        "VanCamp": VanCamp, "LabTech": LabTech, "Judge": Judge, "TurinOfficer": TurinOfficer, "Speedy": Speedy}

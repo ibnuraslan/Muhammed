@@ -267,3 +267,77 @@ RING_DIAMOND = "5a03949eea904d6989f87aaf5d172722"    # "Ring, Gold with Diamond"
 USD_STACKS = "1ef927f0bd924a62883f0dd026d80f40"     # "Stacks of US dollar bills", Chenzoss, CC-BY (strapped $100 stacks)
 USD_LOOSE = "7e54bc39435f459a921370caa7e21090"      # "A stack of 100 dollar bills.", hocza, CC-BY (loose spill)
 RING_CARAT = "378f6df2c4f444399b83db2037258470"      # "The Ring: 1 carat", Evanz, CC-BY
+
+
+def document(name="doc", w=0.21, h=0.297, torn=False, seed=0, lines=22, color=(0.86, 0.85, 0.8)):
+    """A printed page (rows of grey type as thin bars, no legible words) - torn=True gives it a ragged edge and
+    leaves only a scrap. Origin at its centre, lying flat."""
+    import random as _r, bmesh
+    rng = _r.Random(seed)
+    pm = paper_mat(name + "_paper", color); ink = flat(name + "_ink", (0.12, 0.12, 0.13), 0.7)
+    bm = bmesh.new()
+    if torn:
+        pts = []
+        n = 24
+        for k in range(n):
+            a = 2 * math.pi * k / n
+            rr = rng.uniform(0.75, 1.0)
+            pts.append((math.cos(a) * w / 2 * rr, math.sin(a) * h / 2 * rr * 0.6, 0))
+        f = bm.faces.new([bm.verts.new(p) for p in pts])
+    else:
+        f = bm.faces.new([bm.verts.new(p) for p in ((-w / 2, -h / 2, 0), (w / 2, -h / 2, 0), (w / 2, h / 2, 0), (-w / 2, h / 2, 0))])
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    o = bpy.data.objects.new(name, me); bpy.context.scene.collection.objects.link(o); me.materials.append(pm)
+    so = o.modifiers.new("t", "SOLIDIFY"); so.thickness = 0.0006
+    parts = [o]
+    hh = h * (0.6 if torn else 1.0)
+    for k in range(lines):
+        y = -hh / 2 + 0.02 + k * (hh - 0.04) / max(1, lines - 1)
+        lw = w * rng.uniform(0.45, 0.8) * (0.7 if torn else 1.0)
+        parts.append(box(name + "_line", (-w * 0.05, y, 0.0008), (lw, 0.0035, 0.0002), ink))
+    return _root(name, parts)
+
+
+def receipt(name="receipt", length=0.2, seed=1):
+    """A supermarket till receipt: narrow thermal paper strip, curled, columns of faint type."""
+    return document(name, w=0.08, h=length, torn=False, seed=seed, lines=26, color=(0.9, 0.9, 0.87))
+
+
+def fax(name="fax"):
+    """A 1990s office fax machine with a page curling out of it."""
+    body = flat(name + "_body", (0.75, 0.74, 0.7), 0.4)
+    parts = [box(name + "_body", (0, 0, 0.06), (0.32, 0.28, 0.12), body, bevel=0.02),
+             box(name + "_keys", (0.08, -0.08, 0.121), (0.1, 0.08, 0.004), flat(name + "_keys", (0.2, 0.2, 0.2), 0.5)),
+             box(name + "_screen", (-0.05, -0.1, 0.121), (0.08, 0.025, 0.003), emit(name + "_lcd", (0.4, 0.6, 0.3), 1.0))]
+    pg = document(name + "_page", 0.21, 0.2, seed=4); pg.location = (0, 0.15, 0.13); pg.rotation_euler = (math.radians(-35), 0, 0)
+    parts.append(pg)
+    return _root(name, parts)
+
+
+def lightbox(name="lightbox", w=0.6, h=0.45):
+    m = emit(name + "_glow", (1.0, 0.98, 0.94), 4.0)
+    parts = [box(name + "_frame", (0, 0, 0.025), (w + 0.04, h + 0.04, 0.05), flat(name + "_frame", (0.2, 0.2, 0.2), 0.4)),
+             box(name + "_panel", (0, 0, 0.0505), (w, h, 0.002), m)]
+    return _root(name, parts)
+
+
+def swab(name="swab"):
+    """A DNA swab: thin plastic shaft with a cotton tip; origin at the grip end, tip along +x."""
+    parts = [S.cyl(name + "_shaft", (0, 0, 0), (0.15, 0, 0), 0.0015, mat=flat(name + "_shaft", (0.9, 0.9, 0.9), 0.3), verts=8)]
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.004, location=(0.155, 0, 0))
+    t = bpy.context.active_object; t.scale = (2.0, 1, 1); t.data.materials.append(flat(name + "_cotton", (0.95, 0.95, 0.93), 0.95)); parts.append(t)
+    return _root(name, parts)
+
+
+def rug(name="rug", w=2.4, h=1.7, color=(0.35, 0.12, 0.08)):
+    """A thick wool rug (pile shown with a strong bump and a little displacement)."""
+    m = flat(name + "_wool", color, 0.95)
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 900; nz.inputs['Detail'].default_value = 4
+    b = N.new("ShaderNodeBump"); b.inputs['Strength'].default_value = 0.9; L.new(nz.outputs['Fac'], b.inputs['Height']); L.new(b.outputs['Normal'], p.inputs['Normal'])
+    br = N.new("ShaderNodeTexBrick"); br.inputs['Scale'].default_value = 4; br.inputs['Color1'].default_value = (*color, 1)
+    br.inputs['Color2'].default_value = (color[0] * 0.6, color[1] * 0.8, color[2] * 1.4, 1); br.inputs['Mortar'].default_value = (0.6, 0.5, 0.35, 1)
+    tc = N.new("ShaderNodeTexCoord"); L.new(tc.outputs['Object'], br.inputs['Vector']); L.new(br.outputs['Color'], p.inputs['Base Color'])
+    p.inputs['Sheen Weight'].default_value = 0.6
+    o = box(name, (0, 0, 0.006), (w, h, 0.012), m)
+    return o
