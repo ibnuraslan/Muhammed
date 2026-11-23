@@ -93,6 +93,7 @@ def _cut(x, y):
     D = DIG
     ex = np.minimum(x - D["x0"], D["x1"] - x); ey = np.minimum(y - D["y0"], D["y1"] - y)
     e = np.minimum(ex, ey)                          # distance inside the edge (m)
+    e = e + 0.018 * fbm(x / 0.22 + y / 0.22, (x - y) / 0.3, 3, seed=61)   # trowelled face: slightly uneven
     wall = _smooth(-0.02, 0.10, e)                  # near-vertical section faces (10 cm run)
     floor_var = 0.03 * fbm(x / 1.6, y / 1.6, 3, seed=17) + 0.008 * fbm(x / 0.35, y / 0.35, 2, seed=18)
     depth = D["depth"] + floor_var
@@ -199,11 +200,11 @@ def fog_wrap(m, color=(0.62, 0.66, 0.7), density=0.0011, max_fac=0.85):
 
 
 STRATA = [  # (depth below surface m, colour) top-down: turf, blown shell sand, occupation floors, ploughsoil, burial horizon
-    (0.00, (0.06, 0.05, 0.03)), (0.07, (0.08, 0.06, 0.04)), (0.085, (0.78, 0.72, 0.58)), (0.30, (0.82, 0.76, 0.62)),
-    (0.315, (0.09, 0.07, 0.05)), (0.36, (0.10, 0.08, 0.06)), (0.375, (0.76, 0.70, 0.56)), (0.58, (0.80, 0.74, 0.60)),
-    (0.595, (0.14, 0.11, 0.08)), (0.66, (0.05, 0.04, 0.03)), (0.675, (0.74, 0.68, 0.55)), (0.89, (0.78, 0.72, 0.58)),
-    (0.905, (0.20, 0.15, 0.10)), (0.96, (0.22, 0.17, 0.11)), (0.975, (0.80, 0.74, 0.60)), (1.15, (0.82, 0.76, 0.62)),
-    (1.165, (0.11, 0.09, 0.06)), (1.26, (0.07, 0.06, 0.04)), (1.275, (0.72, 0.65, 0.52)), (1.52, (0.75, 0.68, 0.55)),
+    (0.00, (0.06, 0.05, 0.03)), (0.07, (0.08, 0.06, 0.04)), (0.085, (0.6, 0.54, 0.42)), (0.30, (0.64, 0.57, 0.44)),
+    (0.315, (0.09, 0.07, 0.05)), (0.36, (0.10, 0.08, 0.06)), (0.375, (0.58, 0.52, 0.4)), (0.58, (0.62, 0.55, 0.43)),
+    (0.595, (0.14, 0.11, 0.08)), (0.66, (0.05, 0.04, 0.03)), (0.675, (0.56, 0.5, 0.39)), (0.89, (0.6, 0.53, 0.41)),
+    (0.905, (0.20, 0.15, 0.10)), (0.96, (0.22, 0.17, 0.11)), (0.975, (0.61, 0.55, 0.43)), (1.15, (0.63, 0.56, 0.44)),
+    (1.165, (0.11, 0.09, 0.06)), (1.26, (0.07, 0.06, 0.04)), (1.275, (0.55, 0.49, 0.38)), (1.52, (0.57, 0.5, 0.39)),
     (1.535, (0.30, 0.24, 0.17)), (1.8, (0.24, 0.19, 0.13)),
 ]
 
@@ -227,6 +228,8 @@ def ground_material(fog=None, grass_tint=(0.22, 0.27, 0.09)):
     marr = _tex_set(nt, "withered_grass", mapping(0.3))
     wsand = _tex_set(nt, "damp_beach_sand", mapping(0.4))
     soil = _tex_set(nt, "excavated_soil_wall", mapping(0.6))
+    soilf = _tex_set(nt, "excavated_soil_wall", mapping(2.6))      # fine soil relief for the section faces
+    csand = _tex_set(nt, "coast_sand_01", mapping(3.2))            # grainy shell sand
     # large-scale breakup noise
     nz = _n(nt, "ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 0.02; nz.inputs['Detail'].default_value = 6
     L.new(tc.outputs['Object'], nz.inputs['Vector'])
@@ -303,6 +306,42 @@ def ground_material(fog=None, grass_tint=(0.22, 0.27, 0.09)):
     st.color_ramp.interpolation = 'LINEAR'
     grain = _n(nt, "ShaderNodeMix", data_type='RGBA', blend_type='SOFT_LIGHT'); grain.inputs['Factor'].default_value = 0.12
     L.new(st.outputs['Color'], grain.inputs[6]); L.new(soil["Diffuse"].outputs['Color'], grain.inputs[7])
+    # real soil: sand grain, crushed shell fragments, charcoal flecks in the dark floors, damp patches
+    gn = _n(nt, "ShaderNodeTexNoise"); gn.inputs['Scale'].default_value = 420; gn.inputs['Detail'].default_value = 2
+    L.new(geo.outputs['Position'], gn.inputs['Vector'])
+    gr1 = _n(nt, "ShaderNodeMix", data_type='RGBA', blend_type='OVERLAY'); gr1.inputs['Factor'].default_value = 0.6
+    L.new(grain.outputs[2], gr1.inputs[6]); L.new(csand["Diffuse"].outputs['Color'], gr1.inputs[7])
+    gr2 = _n(nt, "ShaderNodeMix", data_type='RGBA', blend_type='OVERLAY'); gr2.inputs['Factor'].default_value = 0.35
+    L.new(gr1.outputs[2], gr2.inputs[6]); L.new(gn.outputs['Color'], gr2.inputs[7])
+    vs = _n(nt, "ShaderNodeTexVoronoi"); vs.inputs['Scale'].default_value = 140; vs.inputs['Randomness'].default_value = 1.0
+    L.new(geo.outputs['Position'], vs.inputs['Vector'])
+    shell = _n(nt, "ShaderNodeMapRange"); shell.inputs['From Min'].default_value = 0.16; shell.inputs['From Max'].default_value = 0.1
+    L.new(vs.outputs['Distance'], shell.inputs['Value'])
+    lum = _n(nt, "ShaderNodeRGBToBW"); L.new(st.outputs['Color'], lum.inputs[0])
+    pale = _n(nt, "ShaderNodeMapRange"); pale.inputs['From Min'].default_value = 0.25; pale.inputs['From Max'].default_value = 0.45
+    L.new(lum.outputs[0], pale.inputs['Value'])
+    shm = _n(nt, "ShaderNodeMath", operation='MULTIPLY'); L.new(shell.outputs[0], shm.inputs[0]); L.new(pale.outputs[0], shm.inputs[1])
+    c_sh = _n(nt, "ShaderNodeMix", data_type='RGBA'); L.new(shm.outputs[0], c_sh.inputs['Factor'])
+    L.new(gr2.outputs[2], c_sh.inputs[6]); c_sh.inputs[7].default_value = (0.95, 0.92, 0.86, 1)
+    vc = _n(nt, "ShaderNodeTexVoronoi"); vc.inputs['Scale'].default_value = 90; vc.inputs['Randomness'].default_value = 1.0
+    L.new(geo.outputs['Position'], vc.inputs['Vector'])
+    char = _n(nt, "ShaderNodeMapRange"); char.inputs['From Min'].default_value = 0.18; char.inputs['From Max'].default_value = 0.1
+    L.new(vc.outputs['Distance'], char.inputs['Value'])
+    darkm = _n(nt, "ShaderNodeMapRange"); darkm.inputs['From Min'].default_value = 0.3; darkm.inputs['From Max'].default_value = 0.15
+    L.new(lum.outputs[0], darkm.inputs['Value'])
+    chm = _n(nt, "ShaderNodeMath", operation='MULTIPLY'); L.new(char.outputs[0], chm.inputs[0]); L.new(darkm.outputs[0], chm.inputs[1])
+    c_ch = _n(nt, "ShaderNodeMix", data_type='RGBA'); L.new(chm.outputs[0], c_ch.inputs['Factor'])
+    L.new(c_sh.outputs[2], c_ch.inputs[6]); c_ch.inputs[7].default_value = (0.01, 0.01, 0.01, 1)
+    wet = _n(nt, "ShaderNodeTexNoise"); wet.inputs['Scale'].default_value = 1.4; wet.inputs['Detail'].default_value = 4
+    L.new(geo.outputs['Position'], wet.inputs['Vector'])
+    wetm = _n(nt, "ShaderNodeMapRange"); wetm.inputs['From Min'].default_value = 0.45; wetm.inputs['From Max'].default_value = 0.7
+    wetm.inputs['To Min'].default_value = 1.0; wetm.inputs['To Max'].default_value = 0.72; L.new(wet.outputs['Fac'], wetm.inputs['Value'])
+    c_w = _n(nt, "ShaderNodeMix", data_type='RGBA', blend_type='MULTIPLY'); c_w.inputs['Factor'].default_value = 1.0
+    L.new(c_ch.outputs[2], c_w.inputs[6]); cc = _n(nt, "ShaderNodeCombineXYZ")
+    for k in range(3):
+        L.new(wetm.outputs[0], cc.inputs[k])
+    L.new(cc.outputs[0], c_w.inputs[7])
+    grain = c_w   # downstream uses grain.outputs[2]
     iscut = fac(cut.outputs['Fac'], 0.01, 0.06)
     steep = fac(nsep.outputs['Z'], 0.75, 0.45)
     face = mul(iscut, steep)

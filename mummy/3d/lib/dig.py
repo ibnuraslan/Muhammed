@@ -530,6 +530,18 @@ def burial_scan(key="B1", rot=None, skirt=0.0):
     co[:, 0] = x + px; co[:, 1] = y + py
     co[:, 2] += floor_z + SINK.get(key, 0.004) - co[:, 2].max()
     me.vertices.foreach_set("co", co.ravel()); me.update()
+    # drop every scan face outside the cut in the trench floor (its outer walls would poke through as pale streaks)
+    if key in U.PIT_CUT:
+        du, ca, cb = U.PIT_CUT[key]
+        cxp, cyp = px + du * c, py + du * s
+        bm = bmesh.new(); bm.from_mesh(me)
+        kill = []
+        for f in bm.faces:
+            q = f.calc_center_median()
+            uu = ((q.x - cxp) * c + (q.y - cyp) * s) / ca; vv = (-(q.x - cxp) * s + (q.y - cyp) * c) / cb
+            if math.hypot(uu, vv) > 0.95 and q.z > floor_z - 0.12:
+                kill.append(f)
+        bmesh.ops.delete(bm, geom=kill, context='FACES'); bm.to_mesh(me); bm.free()
     # warm the scan toward the pale machair shell sand
     for m in me.materials:
         if m and m.use_nodes and "warmed" not in m:
@@ -625,3 +637,73 @@ def section_tags(y_face, x0, x1, n=7, seed=8):
         tg.scale = (0.03, 0.003, 0.05); tg.rotation_euler = (rng.uniform(-0.15, 0.15), 0, rng.uniform(-0.2, 0.2)); tg.data.materials.append(al); tg.name = "tag"
         out.append(tg)
     return out
+
+
+def _face_y(x, z, y_face):
+    """y of the section face at (x, depth z): step in from the trench edge until the ground drops below z."""
+    for step in range(260):
+        yy = y_face - 0.01 * step
+        if float(U.surface(x, yy)) < z - 0.002:
+            return yy + 0.01
+    return y_face - 1.0
+
+
+def section_dressing(y_face, x0, x1, n_stones=30, n_roots=26, seed=12):
+    """Stones bedded in the section face (half proud of it) and fine roots hanging from the turf line."""
+    rng = random.Random(seed)
+    for k in range(n_stones):
+        x = rng.uniform(x0, x1); dd = rng.uniform(0.15, 1.5); z = U.SITE_Z - dd
+        yy = _face_y(x, z, y_face)
+        s = rng.uniform(0.03, 0.11)
+        stone((x, yy - s * 0.15, z), (s, s * rng.uniform(0.6, 0.9), s * rng.uniform(0.5, 0.8)), rot_z=rng.uniform(0, 6), seed=rng.randrange(10),
+              tilt=(rng.uniform(-0.5, 0.5), rng.uniform(-0.5, 0.5)))
+    root = bpy.data.materials.new("roots"); root.use_nodes = True; p = root.node_tree.nodes["Principled BSDF"]
+    p.inputs['Base Color'].default_value = (0.07, 0.05, 0.03, 1); p.inputs['Roughness'].default_value = 0.8
+    for k in range(n_roots):
+        x = rng.uniform(x0, x1); z0 = U.SITE_Z - 0.04
+        yy = _face_y(x, z0 - 0.02, y_face)
+        L = rng.uniform(0.08, 0.35); pts = []
+        for j in range(9):
+            t = j / 8
+            pts.append(Vector((x + 0.015 * math.sin(t * 7 + k), yy - 0.006 - 0.02 * t * rng.random(), z0 - L * t)))
+        cu = bpy.data.curves.new("root", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = rng.uniform(0.0008, 0.002)
+        sp = cu.splines.new('POLY'); sp.points.add(len(pts) - 1)
+        for i, p_ in enumerate(pts):
+            sp.points[i].co = (*p_, 1)
+        o = bpy.data.objects.new("root", cu); link(o); cu.materials.append(root)
+
+
+SECTION_SCAN = "ae929d64bedf4568bc68e73894b69394"      # Silchester Baths 2021 Trench 2 Section 1 (UoR-Archaeology, CC-BY)
+
+
+def section_scan(y_face, x_center=2.6, tint=(1.15, 1.05, 0.88)):
+    """A real photogrammetry trench section set in as the lower face of the north section (below the step):
+    long axis along x, the recorded face looking south into the trench, top at the step level."""
+    import bones as B
+    o = B._import(SECTION_SCAN); o.name = "sectionscan"; me = o.data
+    co = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", co); co = co.reshape(-1, 3)
+    c0 = co.mean(0); xy = co[:, :2] - c0[:2]
+    u, s_, vt = np.linalg.svd(xy, full_matrices=False); ax = vt[0]
+    ang = math.atan2(ax[1], ax[0])
+    # face direction: area-weighted mean horizontal normal
+    nrm = np.zeros(3)
+    for p in me.polygons:
+        nrm += np.array(p.normal) * p.area
+    R = Matrix.Rotation(-ang, 4, 'Z')
+    n2 = R.to_3x3() @ Vector((nrm[0], nrm[1], 0))
+    flip = Matrix.Rotation(math.pi, 4, 'Z') if n2.y > 0 else Matrix.Identity(4)        # face must look -y
+    me.transform(Matrix.Translation(Vector((0, 0, 0))) @ flip @ R @ Matrix.Translation(-Vector(c0.tolist())))
+    co = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", co); co = co.reshape(-1, 3)
+    step_z = U.SITE_Z - U.DIG["depth"] * 0.55
+    lo, hi = co.min(0), co.max(0)
+    # face plane = the front (min-y) 10th percentile of the surface; put it just in front of the terrain's lower face
+    yf = float(np.percentile(co[:, 1], 85))            # put (nearly) the whole recorded face in front of the terrain face
+    o.location = (x_center - (lo[0] + hi[0]) / 2, y_face - 1.02 - yf, step_z + 0.02 - hi[2])
+    for m in me.materials:
+        if m and m.use_nodes:
+            N = m.node_tree.nodes; Lk = m.node_tree.links; p = [n for n in N if n.type == 'BSDF_PRINCIPLED']
+            if p and p[0].inputs['Base Color'].links:
+                src = p[0].inputs['Base Color'].links[0].from_socket
+                mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
+                Lk.new(src, mx.inputs[6]); mx.inputs[7].default_value = (*tint, 1); Lk.new(mx.outputs[2], p[0].inputs['Base Color'])
+    return o

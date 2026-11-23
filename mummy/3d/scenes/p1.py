@@ -248,21 +248,22 @@ def S15():
 def S16():
     """The north section in raking light: crisp bands of pale shell sand and dark occupation floors, tagged nails at the
     layer boundaries. Slow slider along the face."""
-    site("golden", grass_at=(2, 18), grass_r=8, kit=False, burials=False, sun_az=188, focus=(2.5, 15.0), core=2.5)
+    site("day", grass_at=(2, 18), grass_r=8, kit=False, burials=False, sun_az=178, focus=(2.5, 15.0), core=2.5)
     y = U.DIG["y1"]
-    G.section_tags(y, 0.6, 4.6)
+    G.section_scan(y, x_center=2.6)
     z = G.H(2.6, y - 1.6)
-    return dict(a=((0.6, y - 2.35, z + 0.75), (1.6, y - 0.9, z + 0.6)), b=((3.0, y - 2.35, z + 0.75), (4.0, y - 0.9, z + 0.6)), lens=40,
-                fstop=8.0, focus=(2.6, y - 1.05, z + 0.6))
+    return dict(a=((0.9, y - 2.25, z + 0.45), (1.7, y - 1.1, z + 0.32)), b=((3.1, y - 2.25, z + 0.45), (3.9, y - 1.1, z + 0.32)), lens=40,
+                fstop=8.0, focus=(2.6, y - 1.15, z + 0.32))
 
 
 def S17():
     """A digger cleaning the lower section face with a trowel, seen from behind-left; the strata fill the frame."""
-    site("golden", grass_at=(4, 18), grass_r=8, kit=False, burials=False, sun_az=192, focus=(4.0, 15.0), core=2.5)
+    site("day", grass_at=(4, 18), grass_r=8, kit=False, burials=False, sun_az=178, focus=(4.0, 15.0), core=2.5)
     y = U.DIG["y1"]
-    K.kneel_trowel(K.DiggerA, (4.2, y - 1.7), 92, work=(4.25, y - 1.12), density=HAIR)
+    K.kneel_trowel(K.DiggerA, (4.2, y - 2.35), 92, work=(4.25, y - 1.7), density=HAIR)
+    G.section_scan(y, x_center=4.2)
     z = G.H(4.2, y - 1.7)
-    return dict(a=((5.3, y - 3.0, z + 2.3), (4.1, y - 1.05, z + 0.35)), b=((5.0, y - 2.8, z + 2.2), (4.05, y - 1.05, z + 0.35)), lens=35,
+    return dict(a=((4.9, y - 3.6, z + 1.9), (4.1, y - 1.25, z + 0.35)), b=((4.65, y - 3.4, z + 1.8), (4.05, y - 1.25, z + 0.35)), lens=35,
                 fstop=4.0, focus=(4.2, y - 1.3, z + 0.5), hand_ok=OK)
 
 
