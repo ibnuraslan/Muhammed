@@ -12,12 +12,14 @@ hs = N.new("ShaderNodeHueSaturation"); hs.inputs["Saturation"].default_value = 0
 Lk.new(mix.outputs["Result"], hs.inputs["Color"])
 bg_light = N.new("ShaderNodeBackground"); bg_light.inputs["Strength"].default_value = bg.inputs["Strength"].default_value
 Lk.new(hs.outputs["Color"], bg_light.inputs["Color"])
-# camera branch: blue sky
-sky = N.new("ShaderNodeTexSky"); sky.sky_type = 'PREETHAM'; sky.turbidity = 2.2
-sky.sun_direction = (0.3, -0.5, 0.81)
-bg_cam = N.new("ShaderNodeBackground"); bg_cam.inputs["Strength"].default_value = 0.55
-sat = N.new("ShaderNodeHueSaturation"); sat.inputs["Saturation"].default_value = 1.6; sat.inputs["Value"].default_value = 0.9
-Lk.new(sky.outputs["Color"], sat.inputs["Color"]); Lk.new(sat.outputs["Color"], bg_cam.inputs["Color"])
+# camera branch: clean blue daytime gradient (horizon pale blue -> deep blue zenith), no pink anywhere
+tcw = N.new("ShaderNodeTexCoord"); sepw = N.new("ShaderNodeSeparateXYZ"); mr = N.new("ShaderNodeMapRange")
+mr.inputs["From Min"].default_value = 0.0; mr.inputs["From Max"].default_value = 0.55
+rp = N.new("ShaderNodeValToRGB")
+rp.color_ramp.elements[0].color = (0.60, 0.75, 0.93, 1); rp.color_ramp.elements[1].color = (0.10, 0.30, 0.76, 1)
+Lk.new(tcw.outputs["Generated"], sepw.inputs[0]); Lk.new(sepw.outputs["Z"], mr.inputs["Value"]); Lk.new(mr.outputs["Result"], rp.inputs["Fac"])
+bg_cam = N.new("ShaderNodeBackground"); bg_cam.inputs["Strength"].default_value = 1.0
+Lk.new(rp.outputs["Color"], bg_cam.inputs["Color"])
 lp = N.new("ShaderNodeLightPath"); ms = N.new("ShaderNodeMixShader")
 Lk.new(lp.outputs["Is Camera Ray"], ms.inputs["Fac"])
 Lk.new(bg_light.outputs["Background"], ms.inputs[1]); Lk.new(bg_cam.outputs["Background"], ms.inputs[2])
@@ -31,8 +33,8 @@ if cd:
     for n in cd.node_tree.nodes:
         if n.type == 'VALTORGB':
             for e in n.color_ramp.elements:
-                v = sum(e.color[:3]) / 3; g = 0.55 + 0.45 * v
-                e.color = (g * 0.97, g * 0.98, g, e.color[3])
+                v = sum(e.color[:3]) / 3
+                e.color = (v * 0.97, v * 0.985, v, e.color[3])
         if n.type == 'BSDF_PRINCIPLED' and not n.inputs["Base Color"].is_linked:
             n.inputs["Base Color"].default_value = (0.92, 0.93, 0.95, 1)
 # any other warm-tinted sky materials (cloud banks, haze) -> neutral

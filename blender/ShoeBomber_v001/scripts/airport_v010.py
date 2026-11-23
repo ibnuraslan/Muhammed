@@ -67,11 +67,12 @@ for f in range(1604, 1691, 6):      # arm swing walking along +X (his left = +Y)
              pole=(p_.x - 0.6, p_.y + sg * 0.35, 0.95), grip=0.3)
 for f, sp, hd, sd in ((1702, 6, (8, 0), 0), (1708, 24, (34, 0), 0), (1716, 4, (0, -5), 0), (1722, 2, (-6, 0), 2), (END, 2, (-4, 4), 0)):
     stand(trav, f, TEND, 90, spine=(sp, 0, sd), head=hd)
-for f, sh in ((1702, 0.0), (1712, 0.0), (1718, 0.06), (1724, 0.0), (END, 0.0)):    # shrug: hands turn out, shoulders up
-    for s, sg in (("L", -1), ("R", 1)):
-        # facing +X: his left is +Y
-        hand(trav, s, f, TEND + V((0.10, -sg * 0.20, 0.95 + sh)), (0.3, -sg * 0.3, -0.8), (0, sg, 0) if sh else (0, sg, 0),
-             pole=(TEND.x - 0.5, TEND.y - sg * 0.55, 0.95), grip=0.25)
+for f in (1702, 1714):      # hands on his hips (facing +X: his left is +Y)
+    for s, sg in (("L", 1), ("R", -1)):
+        hand(trav, s, f, TEND + V((0.02, sg * 0.19, 0.98)), (0.4, -sg * 0.5, -0.6), (0, -sg, 0), pole=(TEND.x - 0.1, TEND.y + sg * 0.6, 1.15), grip=0.3)
+for f in (1720, END):      # palms-up shrug in front of him
+    for s, sg in (("L", 1), ("R", -1)):
+        hand(trav, s, f, TEND + V((0.30, sg * 0.22, 1.00)), (0.7, sg * 0.4, 0.1), (0, 0, 1), pole=(TEND.x - 0.2, TEND.y + sg * 0.5, 0.9), grip=0.2)
 # trays ride the belt into the tunnel together from 1506
 TRAY = bpy.data.objects["Tray_1"]
 for o in bpy.data.objects:

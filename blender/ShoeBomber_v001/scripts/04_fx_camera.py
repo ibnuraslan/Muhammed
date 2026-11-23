@@ -238,7 +238,7 @@ for f, h in ((1, True), (599, True), (600, False), (740, False), (741, True)):
 constant_at(sy, set(range(0, END + 1)), "hide_render")
 # v010 (director 16): restraint -- a webbing strap looped round his wrists behind his back by PaxA (776-852)
 bpy.ops.mesh.primitive_torus_add(major_radius=0.05, minor_radius=0.006, major_segments=40, minor_segments=8, location=(0, 0, 0))
-strap = bpy.context.active_object; strap.name = "Strap"; L.set_mat(strap, L.mat("StrapWebbing", (0.05, 0.055, 0.07), 0.6))
+strap = bpy.context.active_object; strap.name = "Strap"; L.set_mat(strap, L.mat("StrapWebbing", (0.85, 0.38, 0.04), 0.6))
 for p_ in strap.data.polygons: p_.use_smooth = True
 strap.rotation_euler = (0, math.radians(90), math.radians(8))
 for f, s_, dz in ((1, 0.001, 0.0), (775, 0.001, 0.10), (776, 1.7, 0.10), (790, 1.6, 0.02), (820, 1.3, 0.0), (852, 1.0, 0.0), (1068, 1.0, 0.0)):
@@ -340,8 +340,8 @@ for k, s in enumerate(("L", "R")):
         sl = bpy.data.objects.new("Slab_Shoe_L", me2); sole.users_collection[0].objects.link(sl)
         rm_ = sl.modifiers.new("rm", 'REMESH'); rm_.mode = 'SMOOTH'; rm_.octree_depth = 6; rm_.use_smooth_shade = True
         tx = bpy.data.textures.new("PuttyLumps", 'CLOUDS'); tx.noise_scale = 0.02
-        dp = sl.modifiers.new("lumps", 'DISPLACE'); dp.texture = tx; dp.strength = 0.004; dp.mid_level = 0.5
-        pm_ = L.mat("ChargePutty", (0.78, 0.72, 0.56), 0.9); sl.data.materials.append(pm_)
+        dp = sl.modifiers.new("lumps", 'DISPLACE'); dp.texture = tx; dp.strength = 0.006; dp.mid_level = 0.5
+        pm_ = L.mat("ChargePutty", (0.62, 0.60, 0.52), 0.9); sl.data.materials.append(pm_)
         sl.parent = sole
         # cord from the mass out over the heel rim (the same cord as the fuse in the cabin)
         hy = max(p.y for p in hull)
@@ -358,8 +358,11 @@ for k, s in enumerate(("L", "R")):
         bm = _bm.new(); bm.from_mesh(upp.data)
         _bm.ops.bisect_plane(bm, geom=bm.verts[:] + bm.edges[:] + bm.faces[:], plane_co=(0, 0, 0.034), plane_no=(0, 0, 1), clear_inner=True)
         bm.to_mesh(upp.data); bm.free()
-        sole.location = V((0.0, 3.60, 0.004)); sole.rotation_euler = (0, 0, math.radians(160))
-        upp.location = V((0.16, 3.58, 0.055)); upp.rotation_euler = (math.radians(0), math.radians(-90), math.radians(170))
+        sole.location = V((0.0, 3.60, 0.004)); sole.rotation_euler = (0, 0, math.radians(90))     # toe toward +X
+        # the upper sits on the sole hinged open at the toe (heel lifted 55 deg): the shoe reads as one shoe, opened up
+        piv = V((c2.x, min(p.y for p in hull), 0.034))
+        upp.parent = sole; upp.matrix_parent_inverse = Matrix.Identity(4)
+        upp.matrix_basis = Matrix.Translation(piv) @ Matrix.Rotation(math.radians(55), 4, 'X') @ Matrix.Translation(-piv)
         for f, h in ((1, True), (1068, True), (1069, False), (1158, False), (1159, True)):
             for ob_ in (sole, sl, fz, upp):
                 ob_.hide_render = h; ob_.keyframe_insert("hide_render", frame=f)
@@ -495,8 +498,8 @@ CAB = [[
 ], [
     # S6 (director 7-8): takedown, pin + sedation, level, from above seat 2D (clear of PaxB's head): the attendant and the
     # steward face the lens, the bomber face-down in the aisle
-    (562, V((0.45, -1.55, 1.85)), V((-0.05, 1.00, 0.50)), 24),
-    (768, V((0.45, -1.52, 1.85)), V((-0.05, 1.05, 0.48)), 25),
+    (562, V((0.50, -1.50, 2.00)), V((-0.05, 1.00, 0.42)), 24),
+    (768, V((0.50, -1.48, 2.00)), V((-0.05, 1.05, 0.42)), 25),
 ], [
     # S7 (director 16): restraint -- PaxA straps his wrists behind his back (from above empty seat 4D)
     (769, V((0.50, 1.05, 1.55)), V((-0.22, 0.32, 0.68)), 24),
@@ -624,6 +627,13 @@ for nm_ in [n for n in [o.name for o in O] if n.startswith(("Conveyor_", "Xray",
     o_.users_collection[0].objects.link(c_); c_.location = o_.matrix_world.translation + V((0, 3.4, 0))
     for ch in o_.children:
         cch = ch.copy(); cch.parent = c_; o_.users_collection[0].objects.link(cch)
+# v010: the airport tray bags were built at the cabin origin (a box in the aisle in every cabin shot): put them in trays 0 and 4
+for nm_, tr_ in (("TrayBag_0", "Tray_0"), ("TrayBag_2", "Tray_4"), ("TrayBag_3", None)):
+    b_ = O.get(nm_)
+    if not b_: continue
+    if tr_ is None:
+        b_.hide_render = True; b_.location = AX + V((0, -30, -5)); continue
+    b_.parent = O[tr_]; b_.matrix_parent_inverse = Matrix.Identity(4); b_.location = (0, 0, 0.04)
 # v010 (director 3, 7, 15): dual-quaternion skinning on every body + garment (no puffed shoulders), and matte hair (no
 # grey sheen that read as a different head between shots)
 for ob in O:

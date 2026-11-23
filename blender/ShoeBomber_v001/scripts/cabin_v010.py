@@ -210,26 +210,26 @@ for f in (508, 524, 542):   # bear hug from behind: arms round his chest
     hand(pb, "R", f, ch + V((0.08, 0.10, 0.02)), (-1, 0.3, 0), (0, 1, 0), pole=(0.6, BY - 0.6, 1.0), grip=0.6)
     hand(pb, "L", f, ch + V((-0.12, 0.08, -0.02)), (1, 0.3, 0), (0, 1, 0), pole=(-0.6, BY - 0.6, 1.0), grip=0.6)
 # goes down with him: kneels astride his legs at y -0.45, hands pressing on his lower back / thighs
-KB = V((0.0, BY - 0.56, 0.55))
-for f, fl, hd in ((566, 40, (10, 0)), (582, 45, (12, 0)), (654, 42, (15, 0)), (768, 45, (20, 0)), (856, 45, (18, 0))):
+KB = V((0.0, BY - 0.72, 0.45))       # low, leaning in: his head stays under the pin camera's line
+for f, fl, hd in ((566, 50, (10, 0)), (582, 58, (12, 0)), (654, 56, (15, 0)), (768, 58, (20, 0)), (856, 58, (18, 0))):
     pb.key_root(f, KB, yaw=FWD, flex=10)
     pb.key_spine(f, flex=fl, twist=0, head=hd)
     pb.key_foot("L", f, V((KB.x - 0.14, KB.y - 0.42)), FWD, 0.02, -65); pb.key_foot("R", f, V((KB.x + 0.14, KB.y - 0.42)), FWD, 0.02, -65)
-    hand(pb, "L", f, V((-0.10, BY + 0.10, 0.42)), (0, 1, -0.5), (0, 0, -1), grip=0.3)
-    hand(pb, "R", f, V((0.10, BY + 0.10, 0.42)), (0, 1, -0.5), (0, 0, -1), grip=0.3)
+    hand(pb, "L", f, V((-0.10, BY - 0.02, 0.36)), (0, 1, -0.5), (0, 0, -1), grip=0.3)
+    hand(pb, "R", f, V((0.10, BY - 0.02, 0.36)), (0, 1, -0.5), (0, 0, -1), grip=0.3)
 # S8 (868-1068): kneels behind his feet; pulls the LEFT sneaker off (874-900), lifts it and holds it up to look at it
-KN = V((0.04, BY - 0.86, 0.55))
-for f, fl, hd in ((866, 34, (25, 0)), (900, 30, (20, 0)), (930, 8, (10, 0)), (960, 4, (6, -4)), (1000, 2, (2, 6)), (1030, 4, (-4, -10)), (1068, 4, (-2, -12))):
+KN = V((0.04, BY - 0.72, 0.50))
+for f, fl, hd in ((866, 62, (25, 0)), (900, 55, (20, 0)), (930, 8, (10, 0)), (960, 4, (6, -4)), (1000, 2, (2, 6)), (1030, 4, (-4, -10)), (1068, 4, (-2, -12))):
     pb.key_root(f, KN, yaw=FWD, flex=8 if f < 930 else 2)
     pb.key_spine(f, flex=fl, twist=0, head=hd)
     pb.key_foot("L", f, V((KN.x - 0.14, KN.y - 0.40)), FWD, 0.02, -65); pb.key_foot("R", f, V((KN.x + 0.14, KN.y - 0.40)), FWD, 0.02, -65)
-ev(874); hl = wpos(bom, "foot.L", 874)
-hand(pb, "L", 868, hl + V((-0.07, -0.10, 0.10)), (0.3, 1, -0.4), (1, 0, 0), grip=0.4)
-hand(pb, "R", 868, hl + V((0.07, -0.10, 0.10)), (-0.3, 1, -0.4), (-1, 0, 0), grip=0.4)
-hand(pb, "L", 876, hl + V((-0.06, -0.12, 0.08)), (0.3, 1, -0.4), (1, 0, 0), grip=0.75, pose="wrap_grip")      # grips heel + collar
-hand(pb, "R", 876, hl + V((0.06, -0.06, 0.12)), (-0.3, 1, -0.6), (-1, 0, 0), grip=0.75, pose="wrap_grip")
-hand(pb, "L", 896, hl + V((-0.06, -0.34, 0.12)), (0.3, 1, -0.2), (1, 0, 0), grip=0.75, pose="wrap_grip")      # pulled off backward
-hand(pb, "R", 896, hl + V((0.06, -0.28, 0.16)), (-0.3, 1, -0.4), (-1, 0, 0), grip=0.75, pose="wrap_grip")
+hl = V((-0.10, BY - 0.14, 0.19))   # the left sneaker on his foot (measured: sole-centre, pinned pose)
+hand(pb, "L", 868, hl + V((-0.10, -0.12, 0.10)), (0.3, 1, -0.4), (1, 0, 0), grip=0.4)
+hand(pb, "R", 868, hl + V((0.10, -0.12, 0.12)), (-0.3, 1, -0.4), (-1, 0, 0), grip=0.4)
+hand(pb, "L", 876, hl + V((-0.08, -0.06, 0.04)), (0.3, 1, -0.4), (1, 0, 0), grip=0.75, pose="wrap_grip")      # grips heel + collar
+hand(pb, "R", 876, hl + V((0.07, -0.05, 0.06)), (-0.3, 1, -0.6), (-1, 0, 0), grip=0.75, pose="wrap_grip")
+hand(pb, "L", 896, hl + V((-0.08, -0.30, 0.08)), (0.3, 1, -0.2), (1, 0, 0), grip=0.75, pose="wrap_grip")      # pulled off backward
+hand(pb, "R", 896, hl + V((0.07, -0.29, 0.10)), (-0.3, 1, -0.4), (-1, 0, 0), grip=0.75, pose="wrap_grip")
 SH_UP = V((KN.x + 0.10, KN.y + 0.36, 0.98))      # where he holds it up (sole toward +Y, the camera)
 for f, o, tw in ((930, V((0, -0.02, -0.06)), 0), (960, V((0, 0, 0)), 0), (1000, V((0.03, 0.02, 0.02)), 1), (1030, V((-0.02, 0.0, 0.0)), -1), (1068, V((0.0, 0.0, 0.01)), 0)):
     hand(pb, "R", f, SH_UP + o + V((0.09, -0.02, -0.08)), (-0.5, 0.2, 0.8), (-1, 0, 0.2 * tw), pole=(0.6, KN.y, 0.8), grip=0.75, pose="wrap_grip")
