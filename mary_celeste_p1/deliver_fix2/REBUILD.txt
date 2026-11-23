@@ -1,0 +1,2 @@
+Rebuild: cat MaryCeleste_P1_FIXES.zip.part00 MaryCeleste_P1_FIXES.zip.part01 > MaryCeleste_P1_FIXES.zip
+Verify:  sha256sum -c SHA256SUMS   (first line = the whole zip)
