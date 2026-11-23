@@ -202,21 +202,29 @@ for f in range(430, 571, 2):
     side = {s: hip[s] + fw * 0.10 + (sh[s] - sh["L" if s == "R" else "R"]).normalized() * 0.07 + V(0, 0, 0.02) for s in "LR"}
     waist = (hip["L"] + hip["R"]) / 2 + fw * 0.33 + V(0, 0, 0.12)
     edge = mk.matrix_world @ edge_l
+    def drape_pt(sv):
+        q = W(s1, "upperarm01." + sv) + fw * 0.30; q.z = 2.0
+        h_ = OB["DrapeFit"].ray_cast(OB["DrapeFit"].matrix_world.inverted() @ q, OB["DrapeFit"].matrix_world.inverted().to_3x3() @ V(0, 0, -1))
+        z_ = (OB["DrapeFit"].matrix_world @ h_[1]).z if h_[0] else 1.08
+        return V(q.x, q.y, z_ + 0.004)
+    drapeR, drapeL = drape_pt("R"), drape_pt("L")
     # right hand
     if f <= 446: P = side["R"].lerp(edge + fw * 0.04 - V(0, 0, 0.12), smooth((f - 430) / 16.0))
     elif f <= 462: P = (edge + fw * 0.04 - V(0, 0, 0.12)).lerp(edge + fw * 0.02, smooth((f - 446) / 16.0))
     elif f <= 505: P = edge + fw * 0.02
-    elif f <= 522: P = (edge + fw * 0.02).lerp(waist + V(-0.03, 0, 0), smooth((f - 505) / 17.0))
-    else: P = waist + V(-0.03, 0, 0.01 * math.sin(f / 6.0))
+    elif f <= 525: P = (edge + fw * 0.10).lerp(drapeR, smooth((f - 505) / 20.0))
+    else: P = drapeR + V(0, 0, 0.004 * math.sin(f / 7.0))
     d = (V(0, 0, 1) + fw * 0.3).normalized() if 446 < f <= 505 else (fw + V(0, 0, -0.3)).normalized()
     n = (-fw).normalized() if 446 < f <= 505 else V(0, 0, -1)
     HP["place_hand"](s1, "R", f, P, n, d, skin=0.02)
-    put_pole(s1, "R", f, sh["R"] + V(0, 0, -0.35) - fw * 0.2 + (sh["R"] - sh["L"]).normalized() * 0.35)
+    up_ = smooth((f - 436) / 14.0) * (1 - smooth((f - 505) / 16.0))
+    put_pole(s1, "R", f, sh["R"] + V(0, 0, -0.35 + 0.25 * up_) + fw * (-0.2 + 0.7 * up_) + (sh["R"] - sh["L"]).normalized() * 0.4)
     # left hand: at his side, then meets the right glove cuff (peeling it) from 524
-    PL = side["L"] if f < 512 else side["L"].lerp(waist + V(0.06, 0, 0.03), smooth((f - 512) / 14.0))
-    HP["place_hand"](s1, "L", f, PL, (V(0, 0, -1) if f >= 520 else -(sh["L"] - sh["R"]).normalized()), (fw + V(0, 0, -0.5 if f < 520 else 0)).normalized(), skin=0.02)
+    kL = smooth((f - 512) / 16.0)
+    PL = side["L"].lerp(drapeL, kL)
+    HP["place_hand"](s1, "L", f, PL, (-(sh["L"] - sh["R"]).normalized()).lerp(V(0, 0, -1), kL).normalized(), (fw + V(0, 0, -0.5 * (1 - kL))).normalized(), skin=0.012)
     put_pole(s1, "L", f, sh["L"] + V(0, 0, -0.35) - fw * 0.2 + (sh["L"] - sh["R"]).normalized() * 0.35)
-    HP["apply_pose"](s1, "R", "pinch" if 450 <= f <= 505 else "relaxed", f); HP["apply_pose"](s1, "L", "pinch" if f >= 524 else "relaxed", f)
+    HP["apply_pose"](s1, "R", "pinch" if 450 <= f <= 505 else "relaxed", f); HP["apply_pose"](s1, "L", "relaxed", f)
 # head acting after the mask is down: a glance at the patient, a look up, a slight nod
 R1 = AL["Rig"](s1)
 clear_bones(s1, ["head", "neck02"], 500, 570)
@@ -361,10 +369,10 @@ for f in range(1040, 1263, 2):
     HP["place_hand"](s2, "L", f, pl, nl, (M.to_3x3() @ V(0.15, -1, 0)).normalized(), skin=0.002)
     HP["apply_pose"](s2, "R", "cup_hold", f); HP["apply_pose"](s2, "L", "cup_hold", f)
 # =================================================================== S10: her eyes widen (no frozen stare)
-for f, kw in ((1150, dict(wide=0.3)), (1176, dict(wide=0.32, brow=0.2)), (1190, dict(wide=0.36, brow=0.7, jaw=2)), (1205, dict(wide=0.33, brow=0.6, jaw=1)),
-              (1240, dict(wide=0.3, brow=0.45, jaw=1))):
+for f, kw in ((1150, dict(wide=0.3)), (1176, dict(wide=0.32, brow=0.2)), (1190, dict(wide=0.3, brow=0.7, jaw=2)), (1205, dict(wide=0.27, brow=0.6, jaw=1)),
+              (1240, dict(wide=0.25, brow=0.45, jaw=1))):
     face(s2, f, **kw)
-blink(s2, 1200, dict(wide=0.45, brow=0.65, jaw=1)); blink(s2, 1228, dict(wide=0.4, brow=0.5, jaw=1))
+blink(s2, 1200, dict(wide=0.28, brow=0.65, jaw=1)); blink(s2, 1228, dict(wide=0.25, brow=0.5, jaw=1))
 eyes(s2, 1176, 0, -6); eyes(s2, 1192, 0, -10); eyes(s2, 1200, 5, -4); eyes(s2, 1210, -4, -2); eyes(s2, 1226, 2, -8); eyes(s2, 1240, 0, -8)
 
 # =================================================================== S11: hearing - hands rest on the lectern
@@ -517,6 +525,20 @@ for o in rig_objs("Surgeon2"):
             fc.update()
 s2b = lambda f: V(2.42, 6.05, 0).lerp(V(2.42, 3.85, 0), smooth((f - 776) / 139.0) * 0.3 + 0.7 * (f - 776) / 139.0)
 walk("Surgeon2", s2b, 776, 915, stride=0.62, amp=0.11, out_k=0.08)
+clear_bones(s2, ["IK_hand.L", "IK_hand.R", "Pole_elbow.L", "Pole_elbow.R"], 985, 1039)
+for f in range(986, 1040, 3):
+    ev(f); s2sh = {sv: W(s2, "upperarm01." + sv) for sv in "LR"}; fw2 = V(0, -1, 0)
+    for sv in "LR":
+        q = s2sh[sv] + fw2 * 0.28; q.z = 2.0
+        h_ = OB["DrapeFit"].ray_cast(OB["DrapeFit"].matrix_world.inverted() @ q, OB["DrapeFit"].matrix_world.inverted().to_3x3() @ V(0, 0, -1))
+        tgt = V(q.x, q.y, ((OB["DrapeFit"].matrix_world @ h_[1]).z if h_[0] else 1.05) + 0.004)
+        k = smooth((f - 986) / 24.0); hang = s2sh[sv] + V(0, 0, -0.5) + fw2 * 0.08
+        HP["place_hand"](s2, sv, f, hang.lerp(tgt, k), V(0, 0, -1), (fw2 + V(0, 0, -0.6 * (1 - k))).normalized(), skin=0.012)
+        HP["apply_pose"](s2, sv, "relaxed", f)
+        oo = (s2sh[sv] - s2sh["L" if sv == "R" else "R"]).normalized()
+        pbp = s2.pose.bones["Pole_elbow." + sv]; pole = s2sh[sv] + V(0, 0, -0.3) - fw2 * 0.3 + oo * 0.3
+        pbp.location = s2.data.bones["Pole_elbow." + sv].matrix_local.to_3x3().inverted() @ (pole - s2.data.bones["Pole_elbow." + sv].head_local)
+        pbp.keyframe_insert("location", frame=f, group=pbp.name)
 swing_arms("Surgeon2", 916, 984, s2yaw, lambda f: dd[min(len(dd) - 1, f - 879)] / 0.7, amp=0.10)   # re-key from the cut (no hands sliding from the corridor)
 for f, kw in ((776, dict(wide=0.3, brow=0.2)), (840, dict(wide=0.3, brow=0.3)), (915, dict(wide=0.3, brow=0.2))):
     face(s2, f, **kw)
