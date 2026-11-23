@@ -101,66 +101,36 @@ def attach_rest(ob, rig, bone, f, offset):
 
 # ------------------------------------------------------------------ bomber's sneakers -> attendant's hands (beat 6)
 bom, att, stw, trav = RIG["Bomber"], RIG["Attendant"], RIG["Steward"], RIG["Traveller"]
+SHOE_LAP = V((-0.46, 0.24, 0.685)); SEAT4D = V((0.44, 0.98, 0.47)); WRISTS = V((-0.02, 0.50, 0.37))   # = cabin_v010.py
+# v010 (director 1): the fuse pokes out of the shoe's collar opening behind the tongue, 7 cm above it, bent toward the aisle
+_fc = O["Fuse_Shoe_R"].data; _fc.bevel_depth = 0.0045
+for _i, _p in enumerate([V((0.0, 0.075, 0.09)), V((0.0, 0.050, 0.172)), V((-0.030, 0.030, 0.235))]):
+    _bp = _fc.splines[0].bezier_points[_i]; _bp.co = _p; _bp.handle_left_type = _bp.handle_right_type = 'AUTO'
 for s, hs in (("L", "L"), ("R", "R")):
     shoe = O["Shoe_" + s]
     offs = shoe_on_foot(bom, s)
     cr = Carry(shoe)
     if s == "R":
-        # v009: his right sneaker is OFF from the start, resting across his raised left palm (toe left, heel and fuse to
-        # his right); knocked out of his hand when he is grabbed (481) it drops to the carpet in his row
-        Wl = bone_w(bom, "wrist.L", 20)
-        Mshoe = Matrix.Translation(Wl.translation + V((0.12, 0.08, 0.02))) @ Matrix.Rotation(math.radians(90), 4, 'Z')
-        cr.hold(bom, "wrist.L", 1, Mshoe)
-        cr.cons[-1].inverse_matrix = Wl.inverted() @ Mshoe
-        cr.free(481)
+        # v010 (director 1, 9): his right sneaker lies on his lap (toe forward, sole on his thighs, his left hand gripping
+        # the collar); the attendant takes it with her hand (466) and sets it down on empty seat 4D (490)
+        Mlap = Matrix.Translation(SHOE_LAP) @ Matrix.Rotation(math.pi, 4, 'Z')
+        cr.free(1, Mlap)
+        cr.hold(att, "wrist.R", 466)
+        cr.free(490)
         cr.done()
-        park = bpy.data.objects["Park_%s_481" % shoe.name]; sc.frame_set(480)
+        park = bpy.data.objects["Park_%s_490" % shoe.name]; sc.frame_set(489)
         Mw = shoe.matrix_world.copy(); zmin = min((Mw @ V(c)).z for c in shoe.bound_box)
-        park.keyframe_insert("location", frame=481); park.keyframe_insert("rotation_euler", frame=481)
-        park.location = park.location + V((0.05, 0.08, -max(0.0, zmin - 0.003))); park.rotation_euler.z += math.radians(25)
+        park.keyframe_insert("location", frame=490); park.keyframe_insert("rotation_euler", frame=490)
+        park.location = V((SEAT4D.x, SEAT4D.y, SEAT4D.z + 0.004)); park.rotation_euler = (0, 0, math.radians(75))   # upright on the cushion
         park.keyframe_insert("location", frame=496); park.keyframe_insert("rotation_euler", frame=496)
     else:
         cr.hold(bom, "foot." + s, 1, attach_rest(shoe, bom, "foot." + s, 1, offs))
-        cr.hold(RIG["PaxB"], "wrist." + hs, 878)    # v006d: PaxB grasps the heel; the shoe leaves the foot with his hand
-        cr.free(930)                                # set down on the carpet: released, then settles the last few cm (no pop)
+        cr.hold(RIG["PaxB"], "wrist.R", 876)    # v010: PaxB grips heel + collar and pulls it off; holds it up to look (no set-down)
         cr.done()
-        park = bpy.data.objects["Park_%s_930" % shoe.name]; sc.frame_set(929)
-        Mw = shoe.matrix_world.copy(); zmin = min((Mw @ V(c)).z for c in shoe.bound_box)
-        park.keyframe_insert("location", frame=930)
-        park.location = park.location - V((0, 0, max(0.0, zmin - 0.003))); park.keyframe_insert("location", frame=938)
-    # traveller's pair
-    ts = O["Shoe_%s_Trav" % s]
-    ct = Carry(ts)
-    offs_t = shoe_on_foot(trav, s)
-    ct.hold(trav, "foot." + s, 1, attach_rest(ts, trav, "foot." + s, 1, offs_t))
-    if s == "R":
-        ct.free(1441)                          # he steps out of it: it stays on the floor
-        tray = O["Tray_1"]
-        ct.hold_tray = True
-        # v006f (director): no hand carry. From the cut at 1462 the sneaker is already in the tray beside the other one,
-        # riding the belt toward the X-ray (tray is an object: a park-at-tray Child Of)
-        sc.frame_set(1462); Mtr = tray.matrix_world.copy()
-        c = ts.constraints.new('CHILD_OF'); c.target = tray
-        Mdrop = Matrix.Translation(Mtr.translation + V((0.0, 0.075, 0.02))) @ Matrix.Rotation(math.radians(90), 4, 'Z')
-        c.inverse_matrix = Mtr.inverted() @ Mdrop
-        o_ = ct.cons[-1]
-        o_.influence = 1.0; o_.keyframe_insert("influence", frame=1461); o_.influence = 0.0; o_.keyframe_insert("influence", frame=1462)
-        c.influence = 0.0; c.keyframe_insert("influence", frame=1461); c.influence = 1.0; c.keyframe_insert("influence", frame=1462)
-        ct.cons.append(c)
-    else:
-        # left shoe: already off, sitting in the tray from the start of beat 9
-        sc.frame_set(1393); tray = O["Tray_1"]; Mtr = tray.matrix_world.copy()
-        c = ts.constraints.new('CHILD_OF'); c.target = tray
-        c.inverse_matrix = Mtr.inverted() @ (Matrix.Translation(Mtr.translation + V((0.0, -0.075, 0.02))) @ Matrix.Rotation(math.radians(90), 4, 'Z'))
-        for o_ in ct.cons:
-            o_.influence = 0.0; o_.keyframe_insert("influence", frame=1)
-        c.influence = 1.0; c.keyframe_insert("influence", frame=1)
-        ct.cons.append(c)
-    ct.done()
 
 for s_ in "LR":
     fo = O["Fuse_Shoe_" + s_]
-    for f, h in (((1, False), (480, False), (481, True), (877, True), (878, False)) if s_ == "R" else ((1, True), (877, True), (878, False))):
+    for f, h in (((1, False), (1068, False)) if s_ == "R" else ((1, True), (877, True), (878, False))):
         fo.hide_render = h; fo.keyframe_insert("hide_render", frame=f)   # v009: his right shoe's fuse shows while he lights it
     constant_at(fo, set(range(0, END + 1)))
 # v006d: the fuselage shell's bottom sat ~0.18 m above the carpet and hid shins and feet; flatten it onto the carpet
@@ -194,7 +164,6 @@ def foot_mask(rig_name, s_, on_until):
     print("MASK", rig_name, s_, len(sel))
 foot_mask("Bomber", "L", 877)
 foot_mask("Bomber", "R", 1)          # v009: right sneaker is off from the start (sock shows)
-foot_mask("Traveller", "R", 1440)
 exec(open(os.path.join(os.path.dirname(L.__file__), "04_airpax.py")).read())   # v009 payoff passengers
 shirt = O["Bomber.male_casualsuit05"]
 cs_ = shirt.modifiers.new("CorrectiveSmooth", 'CORRECTIVE_SMOOTH'); cs_.factor = 0.9; cs_.iterations = 12; cs_.rest_source = 'ORCO'
@@ -214,13 +183,13 @@ Rm = d.to_track_quat('Z', 'Y').to_matrix().to_4x4()
 _Mm = Matrix.Translation(tip - d * 0.012) @ Rm
 cm.hold(bom, "wrist.R", 1, _Mm)
 cm.cons[-1].inverse_matrix = bone_w(bom, "wrist.R", 30).inverted() @ _Mm
-cm.free(486)                                  # knocked out of his fingers: falls to the floor
+cm.free(466)                                  # v010: he drops it when she takes the shoe
 cm.done()
 # fall: park target animated down to the carpet
-park = bpy.data.objects.get("Park_Match_486")
+park = bpy.data.objects.get("Park_Match_466")
 if park:
     p0 = park.matrix_world.translation.copy()
-    for f, p, r in ((486, p0, 0), (500, V((p0.x + 0.1, p0.y + 0.05, 0.3)), 90), (510, V((p0.x + 0.15, p0.y + 0.08, 0.004)), 180)):
+    for f, p, r in ((466, p0, 0), (476, V((p0.x + 0.05, p0.y + 0.05, 0.40)), 90), (484, V((p0.x + 0.08, p0.y + 0.06, 0.004)), 180)):
         park.location = p; park.rotation_euler = (math.radians(r * 0.5), 0, math.radians(r)); park.keyframe_insert("location", frame=f); park.keyframe_insert("rotation_euler", frame=f)
 cb_ = Carry(mbox)
 lw = bone_w(bom, "wrist.L", 1)
@@ -236,8 +205,8 @@ cl = fl.constraints.new('COPY_LOCATION'); cl.target = O["Match_Head"]
 fl.delta_location = (0, 0, 0.0)
 flight.parent = None; cl2 = flight.constraints.new('COPY_LOCATION'); cl2.target = O["Match_Head"]; flight.delta_location = (0, 0, 0.03)
 for f in range(1, END + 1, 3):
-    on = 28 <= f < 486
-    if f < 28 or f >= 486:
+    on = 28 <= f < 466
+    if f < 28 or f >= 466:
         s = 0.0
     else:
         s = 1.0 + 0.25 * math.sin(f * 1.7) + 0.15 * random.uniform(-1, 1)
@@ -259,12 +228,25 @@ ax = max(range(3), key=lambda i: ext[i])          # long axis
 long_axis = [V((1, 0, 0)), V((0, 1, 0)), V((0, 0, 1))][ax]
 Rq = long_axis.rotation_difference(V((-0.5, 0, -0.85)).normalized()).to_matrix().to_4x4()
 pos = (bone_w(stw, "finger3-1.R", 640).translation + wr.translation) / 2
-hide_before = 560
-cs.hold(stw, "wrist.R", 640, Matrix.Translation(pos) @ Rq)
+sc.frame_set(640); wr = bone_w(stw, "wrist.R", 640); pos = (bone_w(stw, "finger3-1.R", 640).translation + wr.translation) / 2
+cs.hold(stw, "wrist.R", 600, Matrix.Translation(pos) @ Rq)
+cs.cons[-1].inverse_matrix = wr.inverted() @ (Matrix.Translation(pos) @ Rq)
+cs.hold(att, "wrist.R", 652)
 cs.done()
-for f, h in ((1, True), (639, True), (640, False), (900, False), (901, True)):
+for f, h in ((1, True), (599, True), (600, False), (740, False), (741, True)):
     sy.hide_render = h; sy.keyframe_insert("hide_render", frame=f)
 constant_at(sy, set(range(0, END + 1)), "hide_render")
+# v010 (director 16): restraint -- a webbing strap looped round his wrists behind his back by PaxA (776-852)
+bpy.ops.mesh.primitive_torus_add(major_radius=0.05, minor_radius=0.006, major_segments=40, minor_segments=8, location=(0, 0, 0))
+strap = bpy.context.active_object; strap.name = "Strap"; L.set_mat(strap, L.mat("StrapWebbing", (0.05, 0.055, 0.07), 0.6))
+for p_ in strap.data.polygons: p_.use_smooth = True
+strap.rotation_euler = (0, math.radians(90), math.radians(8))
+for f, s_, dz in ((1, 0.001, 0.0), (775, 0.001, 0.10), (776, 1.7, 0.10), (790, 1.6, 0.02), (820, 1.3, 0.0), (852, 1.0, 0.0), (1068, 1.0, 0.0)):
+    strap.scale = (s_, s_, 3.0 * min(1.0, s_ * 10)); strap.location = WRISTS + V((0, 0, dz))
+    strap.keyframe_insert("scale", frame=f); strap.keyframe_insert("location", frame=f)
+for f, h in ((1, True), (775, True), (776, False)):
+    strap.hide_render = h; strap.keyframe_insert("hide_render", frame=f)
+constant_at(strap, {1, 775}, "hide_render")
 
 # ------------------------------------------------------------------ tray table drop + cup tumble (beat 4 impact)
 tt = O["TrayTable"]; cup = O["Cup"]
@@ -322,32 +304,66 @@ for k, s in enumerate(("L", "R")):
     for c in list(base.constraints): base.constraints.remove(c)
     up = split(base, 0.05)
     CUT[s] = (base, up)
-    if s == "L":   # v006e: resting on the cabin aisle floor, upper lifted to show the sole's insides
-        # v006e-2: the sole lies open on the aisle carpet, well behind PaxB; the cut-off upper rests beside it on the carpet
-        base.rotation_euler = (0, 0, math.radians(160)); base.location = V((0.0, 3.60, 0.0))   # v006f: forward aisle, seat rows all round; bpy.context.view_layer.update()
-        zmin = min((base.matrix_world @ V(c)).z for c in base.bound_box); base.location.z -= zmin - 0.003
-        up.location = (0.13, -0.02, -0.047); up.rotation_euler = (0, 0, math.radians(12))
-        sl = O["Slab_Shoe_" + s]; sl.parent = base; sl.matrix_parent_inverse = Matrix.Identity(4); sl.location = (0, 0.0, 0.058)
-        sl.modifiers.clear(); sl.scale = (1.15, 1.10, 0.75)     # v009: flat block in the sole, no subsurf egg
-        # the cut face of the sole: light rubber, so the section reads as a section
-        mc = bpy.data.materials.new("SoleCut"); mc.use_nodes = True
-        mc.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.42, 0.40, 0.37, 1)
-        mc.node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value = 0.8
-        for ob_ in (base, up):
-            ob_.data.materials.append(mc); mi = len(ob_.data.materials) - 1
-            for pl in ob_.data.polygons:
-                if abs(pl.normal.z) > 0.9 and abs(pl.center.z - 0.05) < 0.004: pl.material_index = mi
-        # a plain cord from the end of the slab, lying on the cut face (prop only, no detail)
-        cu = bpy.data.curves.new("Fuse_Studio_L", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0028; cu.bevel_resolution = 2
+    if s == "L":   # v010 (director 11): a clean open sole -- outsole tray with a cavity, the explosive mass filling it, the cord
+        import bmesh as _bm
+        from mathutils.geometry import convex_hull_2d
+        for o_ in (base, up): o_.hide_render = True; o_.location = SXS + V((5, 5, -50))   # the old bisected pieces are not used
+        src = O["Shoe_L"].data
+        pts = [v.co for v in src.vertices if v.co.z < 0.02]
+        hull = [pts[k].to_2d() for k in convex_hull_2d([p.to_2d() for p in pts])]
+        c2 = sum(hull, V((0, 0))) / len(hull)
+        def ring(scale, z): return [V((c2.x + (p.x - c2.x) * scale, c2.y + (p.y - c2.y) * scale, z)) for p in hull]
+        bm = _bm.new()
+        outer_b = [bm.verts.new(p) for p in ring(1.0, 0.0)]; outer_t = [bm.verts.new(p) for p in ring(1.0, 0.034)]
+        inner_t = [bm.verts.new(p) for p in ring(0.80, 0.034)]; inner_b = [bm.verts.new(p) for p in ring(0.80, 0.010)]
+        n_ = len(hull)
+        bm.faces.new(list(reversed(outer_b)))
+        for k in range(n_):
+            k2 = (k + 1) % n_
+            bm.faces.new((outer_b[k], outer_b[k2], outer_t[k2], outer_t[k]))     # outer wall
+            bm.faces.new((outer_t[k], outer_t[k2], inner_t[k2], inner_t[k]))     # rim
+            bm.faces.new((inner_t[k], inner_t[k2], inner_b[k2], inner_b[k]))     # cavity wall
+        bm.faces.new(inner_b)                                                     # cavity floor
+        me = bpy.data.meshes.new("OpenSole"); bm.to_mesh(me); bm.free()
+        sole = bpy.data.objects.new("OpenSole_L", me); base.users_collection[0].objects.link(sole)
+        sole.data.materials.append(L.mat("SoleRubber", (0.80, 0.79, 0.76), 0.7))
+        # the explosive: a lumpy putty mass filling the cavity (no other detail)
+        bm = _bm.new()
+        pb_ = [bm.verts.new(p) for p in ring(0.74, 0.011)]; pt_ = [bm.verts.new(p) for p in ring(0.70, 0.036)]
+        bm.faces.new(list(reversed(pb_))); bm.faces.new(pt_)
+        for k in range(n_):
+            k2 = (k + 1) % n_; bm.faces.new((pb_[k], pb_[k2], pt_[k2], pt_[k]))
+        me2 = bpy.data.meshes.new("Charge"); bm.to_mesh(me2); bm.free()
+        old = O.get("Slab_Shoe_L")
+        if old: old.name = "Slab_Shoe_L_old"; old.hide_render = True; old.location = SXS + V((5, 5, -50))
+        for o_ in [o for o in O if o.name.startswith("SlabOutline_Shoe_L")]: o_.hide_render = True; o_.location = SXS + V((5, 5, -50))
+        sl = bpy.data.objects.new("Slab_Shoe_L", me2); sole.users_collection[0].objects.link(sl)
+        rm_ = sl.modifiers.new("rm", 'REMESH'); rm_.mode = 'SMOOTH'; rm_.octree_depth = 6; rm_.use_smooth_shade = True
+        tx = bpy.data.textures.new("PuttyLumps", 'CLOUDS'); tx.noise_scale = 0.02
+        dp = sl.modifiers.new("lumps", 'DISPLACE'); dp.texture = tx; dp.strength = 0.004; dp.mid_level = 0.5
+        pm_ = L.mat("ChargePutty", (0.78, 0.72, 0.56), 0.9); sl.data.materials.append(pm_)
+        sl.parent = sole
+        # cord from the mass out over the heel rim (the same cord as the fuse in the cabin)
+        hy = max(p.y for p in hull)
+        cu = bpy.data.curves.new("Fuse_Studio_L", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0045; cu.bevel_resolution = 2
         spn = cu.splines.new('BEZIER'); spn.bezier_points.add(2)
-        for bp_, co in zip(spn.bezier_points, ((0.0, 0.080, 0.066), (0.012, 0.105, 0.064), (0.020, 0.128, 0.060))):
+        for bp_, co in zip(spn.bezier_points, ((c2.x, hy - 0.05, 0.034), (c2.x + 0.005, hy - 0.005, 0.040), (c2.x + 0.03, hy + 0.05, 0.004))):
             bp_.co = co; bp_.handle_left_type = bp_.handle_right_type = 'AUTO'
-        fz = bpy.data.objects.new("Fuse_Studio_L", cu); base.users_collection[0].objects.link(fz); fz.parent = base
+        fz = bpy.data.objects.new("Fuse_Studio_L", cu); sole.users_collection[0].objects.link(fz); fz.parent = sole
         cu.materials.append(bpy.data.materials["FuseCord"])
+        # the sneaker it came out of (sole removed): lying on its side beside it, open bottom turned away from the lens
+        upp = O["Shoe_L"].copy(); upp.data = O["Shoe_L"].data.copy(); upp.name = "Upper_Open_L"
+        upp.animation_data_clear(); [upp.constraints.remove(c_) for c_ in list(upp.constraints)]
+        sole.users_collection[0].objects.link(upp)
+        bm = _bm.new(); bm.from_mesh(upp.data)
+        _bm.ops.bisect_plane(bm, geom=bm.verts[:] + bm.edges[:] + bm.faces[:], plane_co=(0, 0, 0.034), plane_no=(0, 0, 1), clear_inner=True)
+        bm.to_mesh(upp.data); bm.free()
+        sole.location = V((0.0, 3.60, 0.004)); sole.rotation_euler = (0, 0, math.radians(160))
+        upp.location = V((0.16, 3.58, 0.055)); upp.rotation_euler = (math.radians(0), math.radians(-90), math.radians(170))
         for f, h in ((1, True), (1068, True), (1069, False), (1158, False), (1159, True)):
-            for ob_ in (base, up, sl, fz):
+            for ob_ in (sole, sl, fz, upp):
                 ob_.hide_render = h; ob_.keyframe_insert("hide_render", frame=f)
-        for ob_ in (base, up, sl, fz): constant_at(ob_, set(range(0, END + 1)))
+        for ob_ in (sole, sl, fz, upp): constant_at(ob_, set(range(0, END + 1)))
     else:
         base.location = SXS + V((0.12, 0.0, 1.15))
 rim = O["StudioCyanRim"].data
@@ -433,12 +449,6 @@ for f, ex in ((1, 0.3), (1158, 0.3), (1159, 0.0), (1392, 0.0), (1393, -1.0), (EN
     sc.view_settings.exposure = ex; sc.view_settings.keyframe_insert("exposure", frame=f)
 constant_at(sc, {1158, 1392})
 
-# v006f: the pin and sedation are shot at seated eye height from the left; the four empty seats behind that lens are struck for the cut (580-776)
-for o in bpy.data.objects:
-    if any(o.name.endswith(k) for k in ("_04B", "_04C", "_05B", "_05C")):
-        for f, h in ((1, False), (579, False), (580, True), (776, True), (777, False)):
-            o.hide_render = h; o.keyframe_insert("hide_render", frame=f)
-        constant_at(o, set(range(0, END + 1)))
 # ------------------------------------------------------------------ ONE camera
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.sensor_fit = 'AUTO'; cam_d.clip_start = 0.01; cam_d.clip_end = 6000
 cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 8.0   # v006e: f/8 (director)
@@ -460,55 +470,42 @@ def op(name, f, off=(0, 0, 0)):
 # character fills the frame, nothing in front of the lens) by scripts/cam_search.py
 P = lambda x, y, z: V((x, y, z))
 CAB = [[
-    # ONE continuous camera (client spec). The cam_search framings are key poses; holds are repeated keys and
-    # moves between them are 20-40 f with Catmull ease, routed over the seat backs (z >= 1.6) where a straight move would cross a row.
-    # v009 beat 1: medium on his face with the sneaker held up and the match struck, then closer on the flame at the fuse
-    (1,   V((-0.94, 1.00, 1.45)), V((-1.35, 0.25, 1.05)), 28),
-    (95,  V((-0.96, 0.94, 1.43)), V((-1.35, 0.26, 1.04)), 30),
+    # v010 (director 1-2): S1 medium -- him in aisle seat 3C, the sneaker on his lap, match to the fuse (from over seat 4D)
+    (1,   V((0.34, 1.05, 1.45)), V((-0.44, 0.20, 0.98)), 26),
+    (95,  V((0.33, 1.02, 1.44)), V((-0.44, 0.21, 0.97)), 27),
 ], [
-    (97,  V((-1.00, 0.75, 1.25)), V((-1.25, 0.38, 0.95)), 26),
-    (197, V((-1.02, 0.68, 1.22)), V((-1.25, 0.37, 0.96)), 28),
+    # S2 closer: chin-to-head with the shoe, his hands and the flame at the fuse
+    (97,  V((0.20, 0.86, 1.30)), V((-0.43, 0.20, 1.03)), 27),
+    (197, V((0.19, 0.83, 1.29)), V((-0.43, 0.20, 1.03)), 28),
 ], [
-    # beat 2: cut to the attendant walking down the aisle toward the lens
-    (199, P(0.064, 4.198, 1.041), bp("Attendant", "head", 199, (0, 0, -0.1)), 28),
-    (232, P(0.064, 4.198, 1.041), bp("Attendant", "head", 232, (0, 0, -0.1)), 28),
-    (244, P(0.064, 4.198, 1.041), bp("Attendant", "head", 244, (0, 0, -0.1)), 28),
-    (265, bp("Attendant", "spine03", 265, (0.04, -1.5, 0.15)), bp("Attendant", "head", 265, (0, 0, -0.25)), 28),
-    (300, bp("Attendant", "spine03", 300, (0.05, -1.3, 0.35)), bp("Attendant", "head", 300, (0, 0, -0.1)), 30),
-    (330, V((0.16, 1.80, 1.50)), bp("Attendant", "head", 330, (0, 0, -0.05)), 42),
-    (373, V((0.02, 1.95, 1.46)), bp("Attendant", "head", 373, (0, -0.02, -0.02)), 52),
-    # beat 3: dolly back down the aisle ahead of her, drift over to the seat row as she reaches his row and catches him
-    (386, P(-0.052, 1.264, 1.035), bp("Attendant", "head", 386, (0, 0, -0.1)), 34),
-    (398, P(-0.089, 0.589, 1.046), bp("Attendant", "head", 398, (0, 0, -0.1)), 28),
-    (408, V((-0.40, 0.72, 1.40)), bp("Attendant", "head", 408, (0, 0, -0.1)), 28),   # v006d: over the seat backs
-    (418, P(-0.732, 0.846, 1.116), bp("Attendant", "head", 418, (0, 0, -0.1)), 28),
-    (428, P(-0.732, 0.846, 1.116), bp("Attendant", "head", 428, (0, 0, -0.1)), 28),
-    (446, P(-0.817, 1.19, 1.077), bp("Attendant", "head", 446, (0, 0, -0.1)), 28),
-    (455, P(-0.817, 1.19, 1.077), bp("Attendant", "head", 455, (0, 0, -0.1)), 28),
+    # S3 (director 3-4): the attendant walks down the aisle; the camera retreats ahead of her, 1.75 m from her face
+    (199, bp("Attendant", "head", 199, (0, -1.75, 0.02)), bp("Attendant", "head", 199, (0, 0, -0.18)), 30),
+    (240, bp("Attendant", "head", 240, (0, -1.75, 0.02)), bp("Attendant", "head", 240, (0, 0, -0.18)), 30),
+    (280, bp("Attendant", "head", 280, (0, -1.75, 0.02)), bp("Attendant", "head", 280, (0, 0, -0.18)), 30),
+    (318, bp("Attendant", "head", 318, (0, -1.75, 0.02)), bp("Attendant", "head", 318, (0, 0, -0.15)), 30),
+    (372, bp("Attendant", "head", 318, (0.03, -1.78, 0.02)), bp("Attendant", "head", 372, (0, 0, -0.12)), 32),
 ], [
-    # v009 (director 8-12): the grab and the drag into the aisle as ONE readable shot from the aisle ahead of row 3 at seated
-    # eye height: his face, the attendant (side-on, holding his wrist), PaxA rising beside him; nobody between lens and action
-    (457, V((0.12, 1.60, 1.32)), V((-0.70, 0.25, 0.98)), 24),
-    (520, V((0.10, 1.55, 1.30)), V((-0.55, 0.30, 0.90)), 24),
-    (535, V((0.12, 1.75, 1.40)), V((-0.40, 0.55, 0.85)), 24),
-    # v009 fix: she backs into the aisle toward the lens -- the camera retreats and rises to look over her head
-    (550, V((0.18, 2.30, 1.65)), V((-0.20, 0.85, 0.65)), 22),
-    (566, V((0.20, 2.55, 1.72)), V((-0.15, 1.05, 0.50)), 22),
-    # v006f (director): the pin and the sedation at SEATED EYE HEIGHT from the aisle side. The four empty seats 04B/C, 05B/C
-    # behind the lens are struck for this shot (580-776). Faces: the attendant at his head, PaxA over his back, the steward
-    # kneeling opposite and facing us; the bomber's face turned sideways toward us on the carpet.
+    # S4 (director 5): from the aisle behind him -- she arrives, palm out ("stop!"), and takes the shoe off his lap
+    (373, V((0.12, -1.55, 1.52)), V((-0.12, 0.60, 1.02)), 28),
+    (467, V((0.12, -1.48, 1.50)), V((-0.16, 0.45, 0.92)), 28),
 ], [
-    (580, V((-0.95, 1.30, 1.10)), V((0.25, 1.25, 0.45)), 22),
-    (680, V((-0.92, 1.30, 1.10)), V((0.25, 1.25, 0.48)), 22),
-    (776, V((-0.85, 1.32, 1.12)), V((0.22, 1.28, 0.52)), 24),
+    # S5 (director 6): the tackle in the aisle, from forward and above (level), >= 1.5 m from everyone
+    (468, V((0.04, 3.00, 1.95)), V((-0.10, 0.50, 0.95)), 26),
+    (561, V((0.04, 3.00, 1.95)), V((-0.05, 0.70, 0.80)), 26),
 ], [
-    # beat 6: PaxA steps back to his seat (seen across the rows)
-    (778, V((-0.80, 1.25, 1.60)), bp("PaxB", "head", 852, (0, 0, -0.1)), 24),
-    (862, V((-0.80, 1.25, 1.60)), bp("PaxB", "head", 852, (0, 0, -0.1)), 24),
+    # S6 (director 7-8): takedown, pin + sedation, level, from above seat 2D (clear of PaxB's head): the attendant and the
+    # steward face the lens, the bomber face-down in the aisle
+    (562, V((0.45, -1.55, 1.85)), V((-0.05, 1.00, 0.50)), 24),
+    (768, V((0.45, -1.52, 1.85)), V((-0.05, 1.05, 0.48)), 25),
 ], [
-    # v006f (director): PaxB from the front at kneeling-eye height in the aisle, his face as he pulls the shoes off
-    (866, V((0.15, 0.45, 0.95)), V((0.10, -0.75, 0.55)), 26),
-    (1068, V((0.14, 0.38, 0.93)), V((0.10, -0.75, 0.57)), 28),
+    # S7 (director 16): restraint -- PaxA straps his wrists behind his back (from above empty seat 4D)
+    (769, V((0.50, 1.05, 1.55)), V((-0.22, 0.32, 0.68)), 24),
+    (866, V((0.49, 1.03, 1.55)), V((-0.22, 0.32, 0.66)), 25),
+], [
+    # S8 (director 9-10): PaxB face-on pulls the left sneaker off his foot and holds it up to look at it
+    (868, V((0.13, 0.62, 1.30)), V((0.06, -0.62, 0.62)), 28),
+    (930, V((0.13, 0.66, 1.38)), V((0.10, -0.55, 0.92)), 30),
+    (1068, V((0.13, 0.70, 1.40)), V((0.12, -0.55, 0.96)), 32),
   ]]
 # studio: out of the black, pulling back from shoe L; orbit as they split; low 3/4; pull back into the cloud wipe
 SEG2 = [   # v006e: beat 7 -- ONE cut-open shoe resting on the cabin aisle floor, slow push to the charge in the sole (1.5 s)
@@ -519,27 +516,30 @@ SEG2 = [   # v006e: beat 7 -- ONE cut-open shoe resting on the cabin aisle floor
 ]
 # sky: from the cloud next to a cabin window, back along the wing, huge pull-out, tilt down into the deck
 SEG3 = [
-    # v009 (director): 2.6 s, the whole airliner sharp over the cloud deck, a slow arc beside it (no haze, no fly-through)
-    (1215, KX + V((40.0, 34.0, 15.0)), KX + V((0.0, 0.0, -1.0)), 40),
-    (1370, KX + V((26.0, 44.0, 12.0)), KX + V((-2.0, 0.0, -1.0)), 40),
+    # v010 (director 12): blue sky, sharp, moving -- the camera sweeps past the airliner's nose and swings round its side
+    (1215, KX + V((48.0, 10.0, 8.0)), KX + V((4.0, 0.0, 0.0)), 35),
+    (1290, KX + V((36.0, 34.0, 12.0)), KX + V((0.0, 0.0, 0.0)), 38),
+    (1370, KX + V((10.0, 48.0, 14.0)), KX + V((-4.0, 0.0, 0.0)), 40),
 ]
 # airport: dropping through the skylight -> crane to belt level -> dolly with the tray -> settle on the traveller in socks
 SEG4 = [
-    (1393, AX + V((-1.15, 1.25, 2.55)), bp("Traveller", "head", 1393, (0, 0, -0.3)), 24),
-    (1440, AX + V((-0.95, 0.40, 1.55)), bp("Traveller", "head", 1440, (0, 0, -0.35)), 26),
-    (1459, AX + V((-0.631, 0.306, 1.315)), bp("Traveller", "head", 1459), 28),
+    # v010 (director 13): A1 across the belt, face-on: the traveller (socks) sets his sneakers in the tray -- head with headroom
+    (1393, AX + V((-0.62, 1.55, 1.55)), AX + V((-1.05, -0.35, 1.08)), 28),
+    (1459, AX + V((-0.66, 1.50, 1.52)), AX + V((-1.00, -0.30, 1.00)), 30),
 ], [
-    # v009 (director 22): the payoff -- across the belt, the passengers in socks set their sneakers in the trays
-    (1461, AX + V((0.25, 1.05, 1.45)), AX + V((0.05, -0.60, 0.98)), 22),
-    (1532, AX + V((0.15, 1.05, 1.42)), AX + V((0.05, -0.60, 0.96)), 22),
+    # A2 (director 14, the payoff): both passengers set their sneakers flat in their trays
+    (1461, AX + V((0.30, 1.60, 1.60)), AX + V((0.28, -0.45, 1.00)), 24),
+    (1532, AX + V((0.34, 1.55, 1.58)), AX + V((0.32, -0.45, 0.98)), 25),
 ], [
-    # the traveller in his socks watches the trays roll into the X-ray
-    (1534, AX + V((-1.219, 0.39, 1.492)), bp("Traveller", "head", 1534, (0, 0, -0.1)), 28),
-    (1640, AX + V((-1.50, 0.20, 1.50)), bp("Traveller", "head", 1640, (0, 0, -0.30)), 30),
+    # A3: the trays roll into the X-ray; the traveller watches beyond the belt
+    (1534, AX + V((-0.40, 1.60, 1.45)), AX + V((-0.30, -0.20, 0.95)), 26),
+    (1640, AX + V((0.90, 1.55, 1.45)), AX + V((1.50, -0.20, 0.92)), 26),
 ], [
-    # end on his face, head well inside the frame (director 23/24)
-    (1642, AX + V((-1.45, 0.05, 1.52)), bp("Traveller", "head", 1642, (0, 0, -0.25)), 34),
-    (END, AX + V((-1.38, 0.08, 1.52)), bp("Traveller", "head", END, (0, 0, -0.22)), 36),
+    # A4 (director 15): he walks toward the lens in his socks, stops, looks down at them, shrugs -- chest-up, headroom
+    (1642, bp("Traveller", "head", 1642, (1.90, -0.12, -0.05)), bp("Traveller", "head", 1642, (0, 0, -0.28)), 32),
+    (1670, bp("Traveller", "head", 1670, (1.85, -0.12, -0.05)), bp("Traveller", "head", 1670, (0, 0, -0.28)), 32),
+    (1698, bp("Traveller", "head", 1698, (1.70, -0.12, -0.05)), bp("Traveller", "head", 1698, (0, 0, -0.28)), 33),
+    (END,  bp("Traveller", "head", 1698, (1.62, -0.12, -0.05)), bp("Traveller", "head", 1698, (0, 0, -0.25)), 34),
 ]
 CUTS = {seg[-1][0] for seg in CAB}
 SEG4S = list(SEG4)      # v009: four airport shots joined by cuts
@@ -580,7 +580,8 @@ cy.samples = 48; cy.adaptive_threshold = 0.05; cy.use_denoising = True; cy.denoi
 cy.max_bounces = 8; cy.diffuse_bounces = 3; cy.glossy_bounces = 3; cy.transmission_bounces = 8; cy.transparent_max_bounces = 8
 cy.caustics_reflective = cy.caustics_refractive = False
 cy.volume_step_rate = 4.0; cy.volume_max_steps = 256     # cloud banks only; keeps preview + farm cost sane
-r.use_motion_blur = True; r.motion_blur_shutter = 0.5; r.use_persistent_data = True
+r.use_motion_blur = False;   # v010 (director 12): sharp frames
+r.use_persistent_data = True
 r.image_settings.file_format = 'PNG'; r.image_settings.color_mode = 'RGB'; r.image_settings.compression = 15
 # hide the human rigs' rest-pose doubles: nothing to hide; remove the scratch temp cameras if any
 for o in list(bpy.data.objects):
@@ -600,5 +601,44 @@ for ob in [o for o in O if o.type == 'MESH' and o.name.endswith(".body")]:
     kill = [v for v in bm.verts if any(k in gi and w > 0.5 for k, w in v[dl].items())]
     bmesh.ops.delete(bm, geom=kill, context='VERTS'); bm.to_mesh(ob.data); bm.free(); ob.data.update()
     print("HELPERS_STRIPPED", ob.name, len(kill))
+# v010 (director 13): the terminal is dressed -- apron + terminal buildings outside the glass (no blank/pink void), end and back
+# walls with plain panels, benches, a second (empty) security lane; no text or logos anywhere
+A_ = "Airport"
+L.add_box("Apron", (300, 160, 0.05), AX + V((0, 90, -0.06)), L.mat("ApronTarmac", (0.20, 0.21, 0.22), 0.85), A_)
+for k_, (x_, w_, h_) in enumerate(((-60, 70, 14), (25, 60, 10), (95, 50, 18))):
+    L.add_box("FarTerminal_%d" % k_, (w_, 12, h_), AX + V((x_, 150, h_ / 2)), L.mat("FarTerminal", (0.62, 0.64, 0.66), 0.6), A_)
+panel = L.mat("WallPanel", (0.80, 0.80, 0.78), 0.5); trim_ = L.mat("WallTrim", (0.30, 0.32, 0.36), 0.4)
+for nm_, loc_, size_ in (("EndWallW", (-14, 0, 3.5), (0.2, 18, 7)), ("EndWallE", (14, 0, 3.5), (0.2, 18, 7)), ("BackWall", (0, -9.0, 3.5), (28, 0.2, 7))):
+    L.add_box(nm_, size_, AX + V(loc_), panel, A_)
+for k_ in range(-6, 7):
+    L.add_box("BackWallJoint_%d" % k_, (0.04, 0.05, 7), AX + V((k_ * 2.0, -8.88, 3.5)), trim_, A_)
+    L.add_box("EndWallJointW_%d" % k_, (0.05, 0.04, 7), AX + V((-13.88, k_ * 1.4, 3.5)), trim_, A_)
+    L.add_box("EndWallJointE_%d" % k_, (0.05, 0.04, 7), AX + V((13.88, k_ * 1.4, 3.5)), trim_, A_)
+for k_ in range(4):
+    L.add_box("Bench_%d" % k_, (1.8, 0.5, 0.45), AX + V((-6 + k_ * 3.5, -7.6, 0.225)), trim_, A_, bevel=0.03)
+for nm_ in [n for n in [o.name for o in O] if n.startswith(("Conveyor_", "Xray", "Curtain_", "Tray_"))]:
+    o_ = O[nm_]
+    if o_.parent is not None: continue
+    c_ = o_.copy(); c_.name = nm_ + "_lane2"; c_.animation_data_clear()
+    for cc in list(c_.constraints): c_.constraints.remove(cc)
+    o_.users_collection[0].objects.link(c_); c_.location = o_.matrix_world.translation + V((0, 3.4, 0))
+    for ch in o_.children:
+        cch = ch.copy(); cch.parent = c_; o_.users_collection[0].objects.link(cch)
+# v010 (director 3, 7, 15): dual-quaternion skinning on every body + garment (no puffed shoulders), and matte hair (no
+# grey sheen that read as a different head between shots)
+for ob in O:
+    for m in ob.modifiers:
+        if m.type == 'ARMATURE': m.use_deform_preserve_volume = True
+HAIRS = ("short02", "short04", "ponytail01", "long01", "afro01", "bob01", "bob02")
+for ob in O:
+    if ob.type == 'MESH' and any(ob.name.endswith("." + h) for h in HAIRS):
+        for mt in ob.data.materials:
+            if not mt or not mt.use_nodes: continue
+            for n in mt.node_tree.nodes:
+                if n.type == 'BSDF_PRINCIPLED':
+                    if "Specular IOR Level" in n.inputs: n.inputs["Specular IOR Level"].default_value = 0.12
+                    n.inputs["Roughness"].default_value = 0.8
+                    if "Coat Weight" in n.inputs: n.inputs["Coat Weight"].default_value = 0.0
+                    if "Sheen Weight" in n.inputs: n.inputs["Sheen Weight"].default_value = 0.0
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("FILM_SAVED", OUT)
