@@ -21,7 +21,7 @@ BEATS = [(1, 1, "A stray bullet struck her"), (2, 73, "right in the stomach"), (
          (5, 715, "And by the time it reached deeper tissue"), (6, 829, "the bullet had lost most of its force"), (7, 1147, "saving her life")]
 # shots (first frame, last frame, name). Hard cuts between store shots; the cross-section is ONE continuous push.
 SHOTS = [(1, 30, "W_window"), (31, 58, "F_face"), (59, 140, "H_hit"), (141, 180, "L_look"), (181, 330, "M_cut"),
-         (331, 520, "R1_medium"), (521, 760, "R2_close"), (761, 960, "R3_help"), (961, 1146, "R4_hole"), (1147, 1192, "P_relief"), (1193, 1216, "P_bullet"), (1217, 1273, "P_face")]
+         (331, 520, "R1_medium"), (521, 760, "R2_close"), (761, 960, "R3_help"), (961, 1060, "R4_hole"), (1061, 1146, "R5_feel"), (1147, 1192, "P_relief"), (1193, 1216, "P_bullet"), (1217, 1273, "P_face")]
 REAL_RANGES = [(1, 180), (331, 1273)]
 def is_real(f): return any(a <= f <= b for a, b in REAL_RANGES)
 def kq(obj, bone, f, axis, deg):
@@ -76,7 +76,7 @@ for f, g in GAZE:
 FACE = [(1, -6, 0, 0, 0), (8, -6, 0, 0, 0), (12, 7, 0, 2, 5), (30, 4, 0, 4, 3), (IMPACT, 2, 0, 4, 2),
         (IMPACT + 4, -12, 14, 26, 5), (110, -10, 12, 24, 3), (180, -10, 12, 22, 3), (331, -11, 13, 24, 3), (520, -9, 11, 20, 2.5),
         (760, -10, 12, 22, 3), (830, -6, 6, 12, 2.5), (990, -8, 8, 12, 2), (1146, -8, 8, 10, 2), (1170, -6, 6, 6, 2.5),
-        (1195, 0, 2, 0, 3), (1212, -6, 10, -22, 4), (1230, -8, 13, -44, 1), (1238, -8, 13, -46, 0.5), (1243, -27, 8, -50, 0.3), (1254, -27, 8, -50, 0.3), (1260, -6, 14, -62, 0.3), (1273, -6, 14, -62, 0.3)]   # relief: eyes close on the breath out, then a smile
+        (1195, 0, 2, 0, 3), (1212, -6, 10, -22, 4), (1230, -8, 13, -44, 1), (1238, -8, 13, -46, 0.5), (1240, -20, 4, -50, 0.3), (1248, -20, 4, -54, 0.3), (1255, -6, 14, -62, 0.3), (1273, -6, 14, -62, 0.3)]   # relief: eyes close on the breath out, then a smile
 for f, ul, ll, mc, jw in FACE:
     for s_, sg in (("L", 1), ("R", -1)):
         kq(W, "orbicularis03." + s_, f, (1, 0, 0), ul); kq(W, "orbicularis04." + s_, f, (1, 0, 0), ll); kq(W, "oris07." + s_, f, (0, 0, 1), mc * sg)
@@ -379,9 +379,9 @@ onbelly("L", 138, *LB_, air=0.05); onbelly("L", 145, *LB_, air=0.025)      # app
 for f in [152, 165, 180] + list(range(331, 1146, 30)) + [1146, 1180, 1210, 1240, 1273]: onbelly("L", f, *LB_)
 # R4: she takes her right hand off and looks at the hole; the arm hangs relaxed with a bent elbow, fingers together
 hand("R", 978, (0.36, -0.22, 1.02), (0.5, 0.2, -0.3), (0, 1, 0), (-0.3, -0.7, 1.0))
-for f in (992, 1060, 1140):
+for f in (992, 1040):
     hand("R", f, (0.25, -0.24, 1.0), (0.62, 0.15, -0.72), (0, 1, 0), (-0.3, -0.7, 1.0))
-for f, p_, a in ((978, "relaxed", 0.6), (992, "relaxed", 1.0), (1140, "relaxed", 1.0)): apply_pose(W, "R", p_, f, amount=a, spread=0)
+for f, p_, a in ((978, "relaxed", 0.6), (992, "relaxed", 1.0), (1040, "relaxed", 1.0)): apply_pose(W, "R", p_, f, amount=a, spread=0)
 # P: she pinches the bullet out of the hole, lifts it to her face and looks at it (relief)
 def pinch_at(f, target):
     apply_pose(W, "R", "pinch", f, amount=0.6)
@@ -392,7 +392,7 @@ def pinch_at(f, target):
         ik.keyframe_insert("location", frame=f, group=ik.name)
 def hole(f):
     sc.frame_set(f); return imp.matrix_world.translation.copy(), (imp.matrix_world.to_3x3() @ Vector((-1, 0, 0))).normalized()
-for f, out_ in ((1154, 0.03), (1164, 0.006), (1170, 0.008), (1178, 0.07)):
+for f, out_ in ((1075, 0.10), (1095, 0.035), (1115, 0.02), (1135, 0.03), (1154, 0.03), (1164, 0.006), (1170, 0.008), (1178, 0.07)):   # she reaches to the hole, feels it, then pinches the bullet out
     c, n = hole(f); place_hand(W, "R", f, c + n * (out_ + 0.03) + Vector((0, -0.02, -0.02)), -n, Vector((0, 0.3, -1)).normalized(), skin=0.0)
     pinch_at(f, c + n * out_)
 for f, pp_ in ((1187, wpt(0.36, -0.10, 1.04)), (1196, wpt(0.34, -0.10, 1.09)), (1238, wpt(0.34, -0.10, 1.10)), (1273, wpt(0.33, -0.11, 1.08))):
@@ -609,7 +609,7 @@ def key_vis(o, visible_fn):
             o.keyframe_insert("hide_render", frame=f); o.keyframe_insert("hide_viewport", frame=f); prev = v
 _bulvis = lambda f: (5 <= f <= 16) or (63 <= f <= IMPACT)
 for o in REALO:
-    if o.name == "BulletStreak": key_vis(o, _bulvis); continue
+    if o.name in ("BulletStreak", "Trail"): key_vis(o, _bulvis); continue
     key_vis(o, (lambda f: False) if (o.name == "Carton" or o.name.startswith("Stocker") or o.name == "Cart") else is_real)
 for o in MACO: key_vis(o, lambda f: not is_real(f))
 for a in bpy.data.actions:
@@ -661,6 +661,9 @@ def shot_cam(f):
     if name == "P_relief":   # she pulls the bullet out, looks at it, relief, nods to the helper; held end frame
         uu = sm(min(1.0, (f - f0) / 98.0)); tg = face_pt(min(f, 1245)).lerp(wpt(0.3, -0.06, 1.2), 0.35)
         cp = lin(Vector((1.1, -0.35, 1.32)), Vector((0.98, -0.28, 1.38)), uu); return cp, tg, Vector((0, 0, 1)), 32, 8.0
+    if name == "R5_feel":    # insert: her fingers find the hole in her shirt; her face looking down above it
+        sc.frame_set(f); c_ = imp.matrix_world.translation.copy(); n_ = (imp.matrix_world.to_3x3() @ Vector((-1, 0, 0))).normalized()
+        tg = c_.lerp(face_pt(f), 0.4); cp = c_ + n_ * lin(0.62, 0.50, u) + Vector((0.12, -0.1, 0.2)); return cp, tg, Vector((0, 0, 1)), 36, 8.0
     if name == "P_bullet":   # insert: the bullet between her fingertips, her face looking down at it above
         sc.frame_set(f); bp = hb.matrix_world.translation.copy(); fp = face_pt(f)
         tg = bp.lerp(fp, 0.33); cp = bp + Vector((0.32, -0.17, 0.07)) + Vector((-0.02, 0.01, 0.01)) * u; return cp, tg, Vector((0, 0, 1)), 50, 8.0
