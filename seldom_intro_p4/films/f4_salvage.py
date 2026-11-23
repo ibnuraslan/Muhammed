@@ -299,7 +299,7 @@ def build(shot, t, out):
                 P.rest_hand(h, "L", curl=35)
             dv, M = si.person("deveau", tuple(Mc @ Vector((0.72, -CD / 2 - 0.66, 0)))[:2], 100, look_back, Vector((0.5, -8, 0.3)), floor_z=QUAY_Z, wet=0.5, cap=True)
             c = Mc @ Vector((-1.25, -2.4, 0.95)) + Vector((0.15, 0.35, 0.0)) * E(t)
-            si.cam(c, front + Vector((0.3, -0.2, 0.15)), lens=30, fstop=4.0)
+            si.cam(c, front + Vector((0.35, -0.25, 0.45)), lens=26, fstop=4.0)
         else:
             c = front + Vector((0.05, -1.15, 0.05))
             p4.light('AREA', "check_key", 25, (1.0, 0.97, 0.92), loc=front + Vector((0.6, -1.0, 0.8)), target=front, size=0.8)

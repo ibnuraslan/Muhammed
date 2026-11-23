@@ -288,7 +288,7 @@ def build(shot, t, out):
                     P.rest_hand(h, sd, curl=35)
             dv, M = si.person("deveau", pos, 90, look_in, Mp @ Vector((0, 0, 0)), wet=0.0)
             dark_lantern(Vector((0.46, FRONT_Y - 0.16, 0.0)), Mp @ Vector((0, 0, 0)))    # set down on the floor, beam in
-            c = Vector((0.68, FRONT_Y - 0.52, 1.4)); tgt = Mp @ Vector((0, 0, 0))
+            c = Vector((0.92, FRONT_Y - 1.2, 1.7)); tgt = Mp @ Vector((0, 0, 0))
             si.cam(c, tgt + Vector((0.04, -0.02, 0.1)), lens=34, fstop=3.2, focus=(c - tgt).length)
         else:
             dark_lantern(Vector((0.4, FRONT_Y - 0.5, 0.0)), Mp @ Vector((0, 0, 0)))
