@@ -402,11 +402,12 @@ def lift(st, dz):
 
 # ----------------------------------------------------------------------------- photogrammetry graves (real excavated
 # crouched burials, Sketchfab CC-BY) set into the north-house pits, joined to the trench floor by a sand skirt
+PRE = {"B2": (-90.0, (0.2, 0.74, 0.22, 0.88))}                  # rotate X, then crop (fractions of x, y extent)
 STRIP = {"B1": (-0.163, -0.136, -0.016, 0.06, -0.1099)}      # scan-unit box (x0, x1, y0, y1, z above which to cut)
 SCANS = {
     # key: (uid, scan-unit centre of the body, scale to metres, cut faces with x < cut (scan units), skull (scan units))
     "B1": ("4e02811d415943d39715c131acb387a7", (-0.102, 0.026), 11.0, None, (-0.09, 0.072)),
-    "B2": ("f3f11436536c407fb2d0b5e6386544d9", (0.0, 0.0), 0.8, None, None),
+    "B2": ("ca9276bb80ec476f98f3cc8e7d37b96b", None, 1.25, None, None),
 }
 
 
@@ -417,6 +418,16 @@ def burial_scan(key="B1", rot=None, skirt=0.12):
     rot = math.radians(ang if rot is None else rot)
     o = B._import(uid); o.name = "grave_" + key
     me = o.data
+    pre = PRE.get(key)
+    if pre:                      # scans captured standing up (photo slabs): lay flat, then keep only the crop box
+        rx, crop = pre
+        me.transform(Matrix.Rotation(math.radians(rx), 4, 'X'))
+        co0 = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", co0); co0 = co0.reshape(-1, 3)
+        lo, hi = co0.min(0), co0.max(0); ext = hi - lo
+        x0 = lo[0] + crop[0] * ext[0]; x1 = lo[0] + crop[1] * ext[0]; y0 = lo[1] + crop[2] * ext[1]; y1 = lo[1] + crop[3] * ext[1]
+        bm = bmesh.new(); bm.from_mesh(me)
+        bmesh.ops.delete(bm, geom=[f for f in bm.faces if not (x0 < f.calc_center_median().x < x1 and y0 < f.calc_center_median().y < y1)], context='FACES')
+        bm.to_mesh(me); bm.free()
     if cut is not None:
         bm = bmesh.new(); bm.from_mesh(me)
         bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.calc_center_median().x < cut], context='FACES')
@@ -431,6 +442,8 @@ def burial_scan(key="B1", rot=None, skirt=0.12):
         bmesh.ops.delete(bm, geom=kill, context='FACES'); bm.to_mesh(me); bm.free()
         patch = (x0, x1, y0, y1)
     co = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", co); co = co.reshape(-1, 3)
+    if cen is None:
+        cen = tuple(((co.min(0) + co.max(0)) / 2)[:2])
     co[:, 0] -= cen[0]; co[:, 1] -= cen[1]; co *= sc
     c, s = math.cos(rot), math.sin(rot)
     x = co[:, 0] * c - co[:, 1] * s; y = co[:, 0] * s + co[:, 1] * c
