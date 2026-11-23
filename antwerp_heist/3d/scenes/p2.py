@@ -353,7 +353,10 @@ def T24():
 
 # ============================================================================ L29 diamonds, gold, cash, jewellery
 def _tabletop(color=(0.18, 0.02, 0.04), sparkle=False):
-    ST.world((0.01, 0.01, 0.01), 0.15)
+    if sparkle:                     # stones refract their surroundings: a soft light studio, not a black void
+        w = ST.world((0.75, 0.74, 0.72), 0.9)
+    else:
+        ST.world((0.01, 0.01, 0.01), 0.15)
     ST.box("velvet_tray", (0, 0, -0.01), (0.6, 0.4, 0.02), ST.velvet("tray_velvet", color))
     ST.box("steel_floor", (0, 0, -0.03), (3, 3, 0.02), ST.flat("dark", (0.04, 0.035, 0.03), 0.5))
     ST.light_spot("hero_key", (-0.4, -0.5, 0.7), (0, 0, 0), 70, angle=30, color=(1.0, 0.9, 0.74), radius=0.02 if sparkle else 0.05)
@@ -415,7 +418,7 @@ def T29():
         b = PR.holdall(f"bag{i}", full=0.5 + 0.3 * i); b.location = (x, y, 0)
     for i in range(5):
         cb = PR.cash_bundle(f"sorted{i}"); cb.location = (0.42 + 0.06 * i, 2.15 + 0.03 * (i % 2), 0.001)
-    return dict(a=((-1.4, 0.4, 1.55), (0.4, 2.4, 0.4)), b=((-1.2, 0.55, 1.5), (0.4, 2.4, 0.4)), lens=28,
+    return dict(a=((-1.1, 0.0, 2.15), (0.45, 2.45, 0.25)), b=((-0.95, 0.15, 2.1), (0.45, 2.45, 0.25)), lens=26,
                 hand_ok=("holdall", "bag", "sorted", "cash", "floor"))
 
 
@@ -446,9 +449,9 @@ def T32():
     st.hand("R", v + V((-0.06, 0.05, 0.05)), elbow=(0.7, 0.3, -0.8), grip=0.6)
     pl = bag_pose(st, "L")
     st.head_to(v, share=0.7); st.finish(look=v, density=HAIR); pl("bag_tapes", 0.6)
-    ST.light_spot("vcr_torch", (v.x - 1.4, v.y - 1.0, 1.9), v, 60, angle=40, color=(1.0, 0.85, 0.65))
-    return dict(a=((v.x - 1.8, v.y - 0.9, 1.65), tuple(v + V((-0.4, 0, -0.1)))), b=((v.x - 1.6, v.y - 0.75, 1.62), tuple(v + V((-0.4, 0, -0.1)))),
-                lens=30, hand_ok=("vcr", "bag"), cine=dict(exposure=1.7))
+    ST.light_spot("vcr_torch", (0.6, -1.7, 2.3), v, 160, angle=40, color=(1.0, 0.84, 0.62))
+    return dict(a=((0.15, -1.95, 1.95), (v.x - 0.25, v.y + 0.05, 1.45)), b=((0.28, -1.9, 1.92), (v.x - 0.25, v.y + 0.05, 1.45)), lens_b=None, lens=34,
+                hand_ok=("vcr", "bag"), cine=dict(exposure=0.4))
 
 
 def T33():

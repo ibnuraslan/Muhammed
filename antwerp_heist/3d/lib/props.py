@@ -201,29 +201,27 @@ def fire_glass(name="diamond_fire"):
 
 
 def brilliant(name="brilliant", d=0.006, mat=None):
-    """A round brilliant cut (girdle diameter d): table 57 %, crown 34.5 deg with bezel and star facets, pavilion
-    40.75 deg to a culet; 8-fold symmetry, flat-shaded so every facet flashes. Origin at the girdle centre."""
+    """A round brilliant (girdle diameter d) as the closed convex hull of its real proportions: table 57 %,
+    crown 34.5 deg (bezel + star points), 16-point girdle with a little thickness, pavilion 40.75 deg (main + lower
+    girdle points) to a culet. Flat shaded so every facet flashes. Origin at the girdle centre, table up."""
     import bmesh
     r = d / 2; t = 0.57 * r
-    hc = math.tan(math.radians(34.5)) * (r - t)            # crown height
-    hp = math.tan(math.radians(40.75)) * r                 # pavilion depth
-    bm = bmesh.new()
-    G = [bm.verts.new((r * math.cos(2 * math.pi * k / 16), r * math.sin(2 * math.pi * k / 16), 0)) for k in range(16)]
-    T = [bm.verts.new((t * math.cos(2 * math.pi * k / 8 + math.pi / 8), t * math.sin(2 * math.pi * k / 8 + math.pi / 8), hc)) for k in range(8)]
-    B = [bm.verts.new(((r * 0.9) * math.cos(2 * math.pi * k / 8), (r * 0.9) * math.sin(2 * math.pi * k / 8), hc * 0.45)) for k in range(8)]
-    P = [bm.verts.new(((r * 0.45) * math.cos(2 * math.pi * k / 8), (r * 0.45) * math.sin(2 * math.pi * k / 8), -hp * 0.55)) for k in range(8)]
-    cul = bm.verts.new((0, 0, -hp))
-    bm.faces.new(T)                                                   # table
+    hc = math.tan(math.radians(34.5)) * (r - t); hp = math.tan(math.radians(40.75)) * r; gt = 0.02 * d
+    pts = []
+    for k in range(16):
+        a = 2 * math.pi * k / 16
+        pts += [(r * math.cos(a), r * math.sin(a), gt / 2), (r * math.cos(a), r * math.sin(a), -gt / 2)]
     for k in range(8):
-        g0, g1, g2 = G[2 * k], G[2 * k + 1], G[(2 * k + 2) % 16]
-        b0, b1 = B[k], B[(k + 1) % 8]; t0 = T[k]
-        bm.faces.new((g0, g1, b0)); bm.faces.new((g1, g2, b1))       # upper girdle facets
-        bm.faces.new((g1, b1, t0, b0))                                # bezel (kite)
-        bm.faces.new((b0, t0, T[(k - 1) % 8]))                        # star
-        p0 = P[k]
-        bm.faces.new((g0, p0, G[(2 * k - 1) % 16])) if False else None
-        bm.faces.new((g0, g1, p0)); bm.faces.new((g1, g2, P[(k + 1) % 8], p0))
-        bm.faces.new((p0, P[(k + 1) % 8], cul))
+        a = 2 * math.pi * k / 8 + math.pi / 8
+        pts.append((t * math.cos(a), t * math.sin(a), hc + gt / 2))                                     # table
+        a2 = 2 * math.pi * k / 8
+        pts.append((0.8 * r * math.cos(a2), 0.8 * r * math.sin(a2), gt / 2 + hc * (1 - (0.8 * r - t) / (r - t)) * 0.98))  # bezel
+        pts.append((0.5 * r * math.cos(a2), 0.5 * r * math.sin(a2), -gt / 2 - hp * 0.5))                # pavilion mains
+    pts.append((0, 0, -gt / 2 - hp))                                                                     # culet
+    bm = bmesh.new()
+    for p_ in pts:
+        bm.verts.new(p_)
+    bmesh.ops.convex_hull(bm, input=bm.verts)
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new(name, me); bpy.context.scene.collection.objects.link(o)
@@ -231,7 +229,7 @@ def brilliant(name="brilliant", d=0.006, mat=None):
     return o
 
 
-def brilliants(name="diamonds", n=40, spread=0.05, seed=2, table_up=0.6):
+def brilliants(name="diamonds", n=40, spread=0.05, seed=2, table_up=0.85):
     """Loose brilliants (2-9 mm) lying on a surface: most on their pavilion side (tilted, as stones fall), some
     table-down; one shared fire material."""
     import random as _r
@@ -240,10 +238,10 @@ def brilliants(name="diamonds", n=40, spread=0.05, seed=2, table_up=0.6):
         d = rng.choice((0.0025, 0.003, 0.004, 0.005, 0.0065, 0.009)) * rng.uniform(0.9, 1.1)
         o = brilliant(f"{name}_{i}", d, mat)
         x, y = rng.gauss(0, spread), rng.gauss(0, spread)
-        if rng.random() < table_up:            # resting on a pavilion facet: tilted ~49 deg, girdle edge on the cloth
-            tilt = math.radians(49); o.rotation_euler = (tilt, 0, rng.uniform(0, 6.28)); z = d * 0.32
-        else:                                  # table down
-            o.rotation_euler = (math.pi, 0, rng.uniform(0, 6.28)); z = math.tan(math.radians(34.5)) * (d / 2) * 0.43
+        if rng.random() < table_up:            # table up, as a dealer lays stones out on a paper (culet set into the fold)
+            o.rotation_euler = (rng.uniform(-0.12, 0.12), rng.uniform(-0.12, 0.12), rng.uniform(0, 6.28)); z = d * 0.42
+        else:                                  # tipped on its side
+            o.rotation_euler = (math.radians(70), 0, rng.uniform(0, 6.28)); z = d * 0.42
         o.location = (x, y, z); parts.append(o)
     return _root(name, parts)
 

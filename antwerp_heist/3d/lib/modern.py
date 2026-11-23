@@ -18,6 +18,11 @@ import deveau as D
 import women as W
 
 
+def S_box(name, c, size, mat):
+    import ship
+    return ship.box(name, c, size, mat)
+
+
 def cotton(name, color, rough=0.75, weave=1600.0):
     return W.cloth(name, color, rough=rough, sheen=0.25, weave=weave, bump=0.12)
 
@@ -100,7 +105,7 @@ class ModernMan(W._Woman):
         # loose work trousers: stand off the leg, bridge the seat (no gluteal shape), deeper folds
         self.trousers, _ = self._shell("trousers", trous, 0.011, W.cloth(self.name + "_trousers", self.TROUSERS, rough=0.82, weave=900, sheen=0.15),
                                        solid=0.002, displace=0.0075, drape=60, flare=tflare)
-        self._loosen(self.trousers, m, ease=1.06, extra=0.004)
+        self._loosen(self.trousers, m, ease=1.09, extra=0.005)
         hide |= trous
         # shoes: deveau._sea_boots builds them in finish() (low, BOOT_TOP); the foot skin under them is hidden
         shoe = u & (z < m["ankle"] + 0.03) & (wfoot > 0.3)
@@ -109,7 +114,7 @@ class ModernMan(W._Woman):
         hide |= shoe
         # jacket
         if self.JACKET:
-            low = {"blazer": m["hip"] - 0.015, "leather": m["hip"] - 0.015, "bomber": m["hip"] + 0.04, "coat": m["hip"] - 0.015}[self.JACKET]
+            low = {"blazer": m["hip"] - 0.015, "leather": m["hip"] - 0.015, "bomber": m["hip"] - 0.03, "coat": m["hip"] - 0.015}[self.JACKET]
             jk = u & (wh < 0.2) & (whand < 0.04) & (z > low) & (z < m["neck"] + 0.01 * hs) & (dist_wrist > 0.035)
             vz = {"blazer": m["hip"] + 0.22, "coat": m["hip"] + 0.3, "leather": m["neck"] - 0.14, "bomber": m["neck"] - 0.06}[self.JACKET]
             cx = float(co[u, 0].mean())
@@ -119,14 +124,34 @@ class ModernMan(W._Woman):
                 # matte suede / worn leather (glossy leather read as skin under warm light): a dense fabric shader
                 mat = W.cloth(self.name + "_jacket", self.JACKET_COL, rough=0.82, sheen=0.15, weave=1800, bump=0.15)
             else:
-                mat = W.cloth(self.name + "_jacket", self.JACKET_COL, rough=0.82, weave=520, sheen=0.25)
+                mat = W.cloth(self.name + "_jacket", self.JACKET_COL, rough=0.7 if self.JACKET == "bomber" else 0.82, weave=520, sheen=0.25, bump=0.5 if self.JACKET == "bomber" else 0.25)
             off = {"blazer": 0.012, "leather": 0.014, "bomber": 0.02, "coat": 0.016}[self.JACKET]
-            self.jacket, jv = self._shell("jacket", jk, off, mat, solid=0.004, displace=0.002, drape=10)
+            self.jacket, jv = self._shell("jacket", jk, off, mat, solid=0.004, displace=0.004 if self.JACKET == "bomber" else 0.002,
+                                          drape=40 if self.JACKET == "bomber" else 10)
+            # the body of the jacket hangs from the shoulders: no pecs, abs or shoulder blades under the cloth
+            src = np.array(self.jacket["src_verts"]); arm_w = warm[src]
+            self._loosen(self.jacket, m, ease=1.04 if self.JACKET != "bomber" else 1.07, extra=0.003, mask=arm_w < 0.2, single=True)
             drop = {"blazer": 0.14, "leather": 0.08, "bomber": 0.0, "coat": 0.5}[self.JACKET]
             if drop:
                 self._hem(self.jacket, m["hip"], drop=drop * hs, flare=0.03 if self.JACKET != "coat" else 0.06)
             if self.JACKET != "bomber":
                 self._collar(self.jacket)
+            else:
+                # bomber details: ribbed knit waistband, cuffs and collar band (darker), a centre-front zip
+                knit = W.cloth(self.name + "_rib", tuple(c * 0.55 for c in self.JACKET_COL), rough=0.9, sheen=0.3, weave=700, knit=True)
+                wb = jk & (z < low + 0.07)
+                self._shell("waistband", wb, off + 0.006, knit, solid=0.004, drape=6)
+                cf = jk & (dist_wrist < 0.11)
+                self._shell("cuffs", cf, off + 0.005, knit, solid=0.004, drape=4)
+                cb = u & (wh < 0.6) & (whand < 0.05) & (z > m["neck"] - 0.03) & (z < m["neck"] + 0.04 * hs)
+                self._shell("collarband", cb, off + 0.008, knit, solid=0.004, drape=6)
+                zipm = D.brass_material(self.name + "_zip")
+                fr = co[jk & (np.abs(x - float(co[u, 0].mean())) < 0.008) & (y < -0.03)]
+                if len(fr) > 4:
+                    zt, zb_ = fr[:, 2].max(), fr[:, 2].min(); yy = fr[:, 1].min() - off - 0.004
+                    zipo = S_box(self.name + "_zip", (float(co[u, 0].mean()), yy, (zt + zb_) / 2), (0.006, 0.004, zt - zb_), zipm)
+                    self.h.rig.skin(zipo, self.h.W[[int(np.argmin(np.linalg.norm(self.rest_co - np.array(p_), axis=1))) for p_ in [v.co[:] for v in zipo.data.vertices]]])
+                    self.h.parts.append(zipo)
             self._folds(self.jacket)
             hide |= jk
         # gloves: thin leather shells over the hands (night work; also keeps prints off the boxes)
@@ -137,7 +162,7 @@ class ModernMan(W._Woman):
             hide |= gl
         self._hide_skin(hide)
 
-    def _loosen(self, o, m, ease=1.06, extra=0.004, bin_h=0.02):
+    def _loosen(self, o, m, ease=1.06, extra=0.004, bin_h=0.02, mask=None, single=False):
         """Cloth hangs, it does not cling: in 2 cm height bands, push every vertex of each leg (one band for both legs
         above the crotch) out to the convex outline of that band, then add ease. Fills the seat cleft and the backs of
         the knees, so trousers read as loose work trousers."""
@@ -157,11 +182,12 @@ class ModernMan(W._Woman):
             return np.array(lo[:-1] + up[:-1])
         me = o.data; co = np.array([v.co[:] for v in me.vertices]); out = co.copy()
         cx = float(self.rest_co[self.used, 0].mean())
-        crotch = m["hip"] - 0.09
+        crotch = m["hip"] - 0.2              # one band for both legs down past the seat (no cleft between the cheeks)
         zb = np.floor(co[:, 2] / bin_h).astype(int)
+        ok = np.ones(len(co), bool) if mask is None else np.concatenate([mask, np.zeros(len(co) - len(mask), bool)])
         for b in np.unique(zb):
-            for side in ((0,) if b * bin_h > crotch else (1, -1)):
-                sel = (zb == b) & ((side == 0) | (np.sign(co[:, 0] - cx) == side))
+            for side in ((0,) if (single or b * bin_h > crotch) else (1, -1)):
+                sel = ok & (zb == b) & ((side == 0) | (np.sign(co[:, 0] - cx) == side))
                 idx = np.nonzero(sel)[0]
                 if len(idx) < 6:
                     continue
@@ -316,12 +342,12 @@ class DOnorio(ModernMan):
 class Finotto(ModernMan):
     """Ferdinando Finotto (~50): the heavy. Broad and muscular, close-cropped grey hair, stubble, a dark olive
     bomber jacket over a grey sweatshirt, dark jeans, black work shoes."""
-    MUSCLE = 0.9; WEIGHT = 0.7; HEIGHT = 0.58
+    MUSCLE = 0.75; WEIGHT = 0.72; HEIGHT = 0.58
     EXTRA = {"targets/neck/neck-scale-horiz-incr": 0.6, "targets/head/head-age-incr": 0.2}
     SKIN = dict(base=(0.5, 0.3, 0.2), weather=0.45)
     HAIR = (0.5, 0.12); HAIR_N = 140000; HAIR_LEN = (0.004, 0.008); HAIRLINE = 0.004; FACIAL = "stubble"
-    SHIRT = (0.2, 0.2, 0.2); JACKET = "bomber"; JACKET_COL = (0.06, 0.07, 0.035)
-    TROUSERS = (0.03, 0.04, 0.07); SHOES = (0.01, 0.01, 0.01)
+    SHIRT = (0.2, 0.2, 0.2); JACKET = "bomber"; JACKET_COL = (0.032, 0.038, 0.018)
+    TROUSERS = (0.03, 0.03, 0.032); SHOES = (0.01, 0.01, 0.01)        # charcoal work trousers
 
     def __init__(self, name="Finotto", night=False, **kw):
         super().__init__(name, years=50, night=night, **kw)
