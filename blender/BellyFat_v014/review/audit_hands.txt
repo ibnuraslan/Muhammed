@@ -1,0 +1,19 @@
+BellyFat hand audit: step 2, 562 frames, 5620 hand-checks
+
+HAND_IN_HAND        0
+HAND_IN_BODY        6   e.g. f87 Woman R hand: 4 verts inside the body; f151 Woman R hand: 5 verts inside the body; f153 Woman R hand: 7 verts inside the body; f157 Woman R hand: 4 verts inside the body; f1165 Woman R hand: 4 verts inside the body
+                 frames [87, 151, 153, 157, 1165, 1169]
+HAND_IN_CLOTHES     1   e.g. f1165 Woman R hand: 5 verts inside Woman.female_casualsuit01
+                 frames [1165]
+HAND_IN_OTHER       0
+WRIST_BEND         21   e.g. f27 ShopperC R wrist 78 deg; f29 ShopperC R wrist 78 deg; f133 ShopperC R wrist 75 deg; f135 ShopperC R wrist 76 deg; f137 ShopperC R wrist 77 deg
+                 frames [27, 29, 133, 135, 137, 139, 141, 143, 145, 147, 149, 151, 153, 155, 157, 159, 161, 163, 1181, 1183, 1185]
+
+by character:
+  Woman     {'WRIST_BEND': 3, 'HAND_IN_BODY': 6, 'HAND_IN_CLOTHES': 1}
+  ShopperA  {'WRIST_BEND': 0, 'HAND_IN_BODY': 0, 'HAND_IN_CLOTHES': 0}
+  ShopperB  {'WRIST_BEND': 0, 'HAND_IN_BODY': 0, 'HAND_IN_CLOTHES': 0}
+  Stocker   {'WRIST_BEND': 0, 'HAND_IN_BODY': 0, 'HAND_IN_CLOTHES': 0}
+  ShopperC  {'WRIST_BEND': 18, 'HAND_IN_BODY': 0, 'HAND_IN_CLOTHES': 0}
+
+TOTAL 28

@@ -1,0 +1,260 @@
+{
+"visible_frames": [
+1165,
+1167,
+1169,
+1171,
+1173,
+1175,
+1177,
+1179,
+1181,
+1183,
+1185,
+1187,
+1189,
+1191,
+1193,
+1195,
+1197,
+1199,
+1201,
+1203,
+1205,
+1207,
+1209,
+1211,
+1213,
+1215
+],
+"frames": {
+"1165": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20,
+"spine03|BulletInHand|VIS": 1,
+"spine04|BulletInHand|VIS": 1
+},
+"1167": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20,
+"spine03|BulletInHand|VIS": 1,
+"spine04|BulletInHand|VIS": 1
+},
+"1169": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20,
+"spine03|BulletInHand|VIS": 1,
+"spine04|BulletInHand|VIS": 1
+},
+"1171": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20,
+"spine03|BulletInHand|VIS": 1,
+"spine04|BulletInHand|VIS": 1
+},
+"1173": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1175": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1177": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1179": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1181": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1183": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1185": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1187": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1189": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1191": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1193": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1195": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1197": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1199": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1201": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1203": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1205": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1207": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1209": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1211": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1213": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1215": {
+"finger2-3.R|BulletInHand|VIS": 25,
+"finger1-3.R|BulletInHand|VIS": 20
+},
+"1217": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1219": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1221": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1223": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1225": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1227": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1229": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1231": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1233": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1235": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1237": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1239": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1241": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1243": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1245": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1247": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1249": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1251": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1253": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1255": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1257": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1259": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1261": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1263": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1265": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1267": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1269": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1271": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+},
+"1273": {
+"finger2-3.R|BulletInHand|off": 25,
+"finger1-3.R|BulletInHand|off": 20
+}
+}
+}
