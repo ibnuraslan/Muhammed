@@ -448,8 +448,12 @@ def T32():
     st.hand("R", v + V((-0.06, 0.05, 0.05)), elbow=(0.7, 0.3, -0.8), grip=0.6)
     pl = bag_pose(st, "L")
     st.head_to(v, share=0.7); st.finish(look=v, density=HAIR); pl("bag_tapes", 0.6)
-    ST.light_spot("vcr_torch", (0.6, -1.7, 2.3), v, 160, angle=40, color=(1.0, 0.84, 0.62), radius=0.35)
-    return dict(a=((0.15, -1.95, 1.95), (v.x - 0.25, v.y + 0.05, 1.45)), b=((0.28, -1.9, 1.92), (v.x - 0.25, v.y + 0.05, 1.45)), lens_b=None, lens=34,
+    ST.light_area("vcr_soft", (v.x - 1.2, v.y - 0.9, 2.0), v, 1.2, 90, (1.0, 0.84, 0.62))           # soft: no hard shadow edges on the sweater
+    for o in bpy.data.objects:                       # the monitor glow is a broad bounce: no hard arm shadows on the sweater
+        if o.type == 'LIGHT' and o.name.startswith("screen_glow"):
+            o.data.use_shadow = False
+    ST.light_area("cam_fill", (v.x - 0.9, v.y - 1.15, 1.5), (v.x - 0.4, v.y + 0.1, 1.3), 1.5, 70, (1.0, 0.86, 0.66))   # fill from the camera side
+    return dict(a=((v.x - 0.6, v.y - 1.22, 1.6), (v.x - 0.25, v.y + 0.05, 1.3)), b=((v.x - 0.5, v.y - 1.2, 1.58), (v.x - 0.25, v.y + 0.05, 1.3)), lens=30,
                 hand_ok=("vcr", "bag"), cine=dict(exposure=0.4))
 
 

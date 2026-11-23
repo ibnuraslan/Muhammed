@@ -92,16 +92,14 @@ class ModernMan(W._Woman):
             hem = m["hip"] - 0.03
             shirt = u & (wh < 0.5) & (whand < 0.12) & (z > hem) & (z < m["neck"] + 0.02 * hs) & (dist_wrist > 0.03)
             knit = W.cloth(self.name + "_sweater", self.SWEATER, rough=0.92, sheen=0.35, weave=650, bump=0.35, knit=True)
-            self.shirt, sv = self._shell("sweater", shirt, 0.014, knit, solid=0.004, displace=0.0, drape=40)
-            src = np.array(self.shirt["src_verts"])
-            self._loosen(self.shirt, m, ease=1.02, extra=0.002, mask=warm[src] < 0.45, single=True)
-            sm = self.shirt.modifiers.new("Relax", "SMOOTH"); sm.factor = 0.6; sm.iterations = 8      # no step where torso meets sleeve
+            self.shirt, sv = self._shell("sweater", shirt, 0.016, knit, solid=0.004, displace=0.0, drape=70)
+            # one even knit surface: heavy drape bridges the muscles, a relax pass evens it (no torso/sleeve split)
+            sm = self.shirt.modifiers.new("Relax", "SMOOTH"); sm.factor = 0.5; sm.iterations = 12
             self.shirt.modifiers.move(self.shirt.modifiers.find("Relax"), 0)
             self._straight_hem(self.shirt, hem + 0.002)
             rib = W.cloth(self.name + "_rib", tuple(c * 0.8 for c in self.SWEATER), rough=0.95, sheen=0.3, weave=900, knit=True)
             band = u & (z > hem) & (z < hem + 0.06) & (wh < 0.5) & (whand < 0.12) & (warm < 0.2)
-            o_, _ = self._shell("sweater_hem", band, 0.02, rib, solid=0.004, drape=10)
-            src2 = np.array(o_["src_verts"]); self._loosen(o_, m, ease=1.06, extra=0.005, mask=np.ones(len(src2), bool), single=True)
+            o_, _ = self._shell("sweater_hem", band, 0.021, rib, solid=0.004, drape=70)
             self._straight_hem(o_, hem + 0.002)
             cuff = u & (dist_wrist > 0.03) & (dist_wrist < 0.1) & (whand < 0.12)
             self._shell("sweater_cuffs", cuff, 0.019, rib, solid=0.004, drape=6)
@@ -129,6 +127,8 @@ class ModernMan(W._Woman):
         self.trousers, _ = self._shell("trousers", trous, 0.011, W.cloth(self.name + "_trousers", self.TROUSERS, rough=0.82, weave=900, sheen=0.15),
                                        solid=0.002, displace=0.0075, drape=60, flare=tflare)
         self._loosen(self.trousers, m, ease=1.04, extra=0.004)
+        tr = self.trousers.modifiers.new("Relax", "SMOOTH"); tr.factor = 0.5; tr.iterations = 10     # even hang, no lumps
+        self.trousers.modifiers.move(self.trousers.modifiers.find("Relax"), 0)
         hide |= trous
         # shoes: deveau._sea_boots builds them in finish() (low, BOOT_TOP); the foot skin under them is hidden
         shoe = u & (z < m["ankle"] + 0.03) & (wfoot > 0.3)
@@ -205,7 +205,7 @@ class ModernMan(W._Woman):
             return np.array(lo[:-1] + up[:-1])
         me = o.data; co = np.array([v.co[:] for v in me.vertices]); out = co.copy()
         cx = float(self.rest_co[self.used, 0].mean())
-        crotch = m["hip"] - 0.2              # one band for both legs down past the seat (no cleft between the cheeks)
+        crotch = m["hip"] - 0.13             # one band for both legs over the seat (no cleft), separate legs below
         zb = np.floor(co[:, 2] / bin_h).astype(int)
         ok = np.ones(len(co), bool) if mask is None else np.concatenate([mask, np.zeros(len(co) - len(mask), bool)])
         for b in np.unique(zb):
