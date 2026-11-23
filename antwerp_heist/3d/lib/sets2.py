@@ -350,7 +350,10 @@ def security_room(kind="building", screen_images=None, night=False):
             for j in range(3):
                 box("status_lamp", (-1.0 + i * 0.22, RY - 0.02, 2.1 + j * 0.15), (0.06, 0.01, 0.06), ledg)
         light_area("alarm_ceiling", (0, -0.5, RZ - 0.05), (0, -0.5, 0), 1.0, 40, (0.8, 0.85, 1.0))
-    light_area("screen_glow", (0, RY - 0.7, 1.35), (0, -2, 1.1), 1.8, 25 if not alarm else 40, (0.6, 0.85, 0.75), size_y=0.9)
+    light_area("screen_glow", (0, RY - 0.7, 1.35), (0, -2, 1.1), 1.8, 140 if night else (25 if not alarm else 40), (0.6, 0.85, 0.75), size_y=0.9)
+    if night:                                   # the monitors are the room's light at night: their glow on the console, chair and rack
+        light_area("screen_glow_low", (0, RY - 0.75, 1.0), (0, 0, 0.5), 1.6, 60, (0.55, 0.8, 0.72), size_y=0.6)
+        light_area("screen_glow_rack", (RX - 1.2, -0.9, 1.4), (RX - 0.3, -0.9, 1.0), 0.6, 25, (0.6, 0.85, 0.75))
     world((0.01, 0.01, 0.01), 0.3)
     A["RX"] = RX; A["RY"] = RY
     return A

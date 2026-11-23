@@ -91,9 +91,16 @@ class ModernMan(W._Woman):
                                       solid=0.002)
         # trousers: waist to the shoe, a slight break at the hem
         trous = u & (z < m["hip"] + 0.12) & (z > m["ankle"] + 0.01) & (wfoot < 0.6) & (whand < 0.05)
-        self.trousers, _ = self._shell("trousers", trous, 0.007, W.cloth(self.name + "_trousers", self.TROUSERS, rough=0.8, weave=900, sheen=0.15),
-                                       solid=0.002, displace=0.004, drape=30,
-                                       flare=lambda b: np.clip((m["hip"] - 0.04 - b[:, 2]) / 0.12, 0, 1) * 0.007 + np.clip((m["knee"] + 0.1 - b[:, 2]) / 0.45, 0, 1) * 0.014)
+        yc = float(co[u & (np.abs(z - m["hip"]) < 0.05), 1].mean())
+        def tflare(b):
+            seat = np.clip(1 - np.abs(b[:, 2] - (m["hip"] - 0.08)) / 0.17, 0, 1) * np.clip((b[:, 1] - yc) / 0.06, 0, 1) * 0.02
+            thigh = np.clip((m["hip"] - 0.02 - b[:, 2]) / 0.12, 0, 1) * 0.01
+            leg = np.clip((m["knee"] + 0.1 - b[:, 2]) / 0.45, 0, 1) * 0.012
+            return seat + thigh + leg
+        # loose work trousers: stand off the leg, bridge the seat (no gluteal shape), deeper folds
+        self.trousers, _ = self._shell("trousers", trous, 0.011, W.cloth(self.name + "_trousers", self.TROUSERS, rough=0.82, weave=900, sheen=0.15),
+                                       solid=0.002, displace=0.0075, drape=60, flare=tflare)
+        self._loosen(self.trousers, m, ease=1.06, extra=0.004)
         hide |= trous
         # shoes: deveau._sea_boots builds them in finish() (low, BOOT_TOP); the foot skin under them is hidden
         shoe = u & (z < m["ankle"] + 0.03) & (wfoot > 0.3)
@@ -129,6 +136,56 @@ class ModernMan(W._Woman):
                                          solid=0.0012)
             hide |= gl
         self._hide_skin(hide)
+
+    def _loosen(self, o, m, ease=1.06, extra=0.004, bin_h=0.02):
+        """Cloth hangs, it does not cling: in 2 cm height bands, push every vertex of each leg (one band for both legs
+        above the crotch) out to the convex outline of that band, then add ease. Fills the seat cleft and the backs of
+        the knees, so trousers read as loose work trousers."""
+        def hull2(P):
+            pts = sorted(map(tuple, P))
+            def cross(o, a, b):
+                return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+            lo, up = [], []
+            for p in pts:
+                while len(lo) >= 2 and cross(lo[-2], lo[-1], p) <= 0:
+                    lo.pop()
+                lo.append(p)
+            for p in reversed(pts):
+                while len(up) >= 2 and cross(up[-2], up[-1], p) <= 0:
+                    up.pop()
+                up.append(p)
+            return np.array(lo[:-1] + up[:-1])
+        me = o.data; co = np.array([v.co[:] for v in me.vertices]); out = co.copy()
+        cx = float(self.rest_co[self.used, 0].mean())
+        crotch = m["hip"] - 0.09
+        zb = np.floor(co[:, 2] / bin_h).astype(int)
+        for b in np.unique(zb):
+            for side in ((0,) if b * bin_h > crotch else (1, -1)):
+                sel = (zb == b) & ((side == 0) | (np.sign(co[:, 0] - cx) == side))
+                idx = np.nonzero(sel)[0]
+                if len(idx) < 6:
+                    continue
+                P2 = co[idx, :2]; c = P2.mean(0)
+                H2 = hull2(P2)
+                if len(H2) < 3:
+                    continue
+                for i in idx:
+                    d = co[i, :2] - c; L = np.linalg.norm(d)
+                    if L < 1e-6:
+                        continue
+                    u = d / L
+                    # distance from c to the hull boundary along u: max over hull edges of the ray intersection
+                    best = L
+                    for k in range(len(H2)):
+                        a1, a2 = H2[k] - c, H2[(k + 1) % len(H2)] - c
+                        e = a2 - a1; den = u[0] * e[1] - u[1] * e[0]
+                        if abs(den) < 1e-9:
+                            continue
+                        t = (a1[0] * e[1] - a1[1] * e[0]) / den; s_ = (a1[0] * u[1] - a1[1] * u[0]) / den
+                        if t > 0 and -1e-6 <= s_ <= 1 + 1e-6:
+                            best = max(best, t)
+                    out[i, :2] = c + u * (best * ease + extra)
+        me.vertices.foreach_set("co", out.astype(np.float32).ravel()); me.update()
 
     def _sea_boots(self):
         """Low modern shoes in SHOES colour (deveau's lofted boot with a short shaft hidden by the trouser hem)."""

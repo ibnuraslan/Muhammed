@@ -141,7 +141,7 @@ def T09():
         st.finish(density=HAIR); pl(f"torch_{n}", 135)
     cc = A["cctv"]
     ST.box("cctv_led", cc + V((0.06, -0.2, -0.04)), (0.01, 0.01, 0.01), ST.emit("rec_led", (1.0, 0.05, 0.02), 40))
-    return dict(a=((-0.55, -1.75, 2.3), (0.1, -4.6, 1.1)), b=((-0.5, -1.85, 2.28), (0.1, -4.4, 1.1)), lens=24,
+    return dict(a=((0.35, -6.4, 1.85), (-0.55, -2.3, 2.1)), b=((0.3, -6.0, 1.85), (-0.55, -2.3, 2.15)), lens=26,
                 hand_ok=("torch",), cine=dict(exposure=1.7))
 
 
@@ -352,47 +352,51 @@ def T24():
 
 
 # ============================================================================ L29 diamonds, gold, cash, jewellery
-def _tabletop(color=(0.18, 0.02, 0.04)):
-    ST.world((0.01, 0.01, 0.01), 0.2)
+def _tabletop(color=(0.18, 0.02, 0.04), sparkle=False):
+    ST.world((0.01, 0.01, 0.01), 0.15)
     ST.box("velvet_tray", (0, 0, -0.01), (0.6, 0.4, 0.02), ST.velvet("tray_velvet", color))
     ST.box("steel_floor", (0, 0, -0.03), (3, 3, 0.02), ST.flat("dark", (0.04, 0.035, 0.03), 0.5))
-    ST.light_spot("hero_key", (-0.4, -0.5, 0.7), (0, 0, 0), 60, angle=30, color=(1.0, 0.88, 0.7), radius=0.03)
+    ST.light_spot("hero_key", (-0.4, -0.5, 0.7), (0, 0, 0), 70, angle=30, color=(1.0, 0.9, 0.74), radius=0.02 if sparkle else 0.05)
     ST.light_area("hero_rim", (0.5, 0.5, 0.4), (0, 0, 0), 0.4, 15, (0.8, 0.85, 1.0))
+    if sparkle:                     # small hard points: each facet throws a flash and a little fire
+        for k, (x, y, z) in enumerate(((0.3, -0.3, 0.5), (-0.2, 0.35, 0.45), (0.05, -0.45, 0.35), (0.4, 0.2, 0.3))):
+            ST.light_point(f"spark{k}", (x, y, z), 12, (1.0, 0.97, 0.92), radius=0.004)
 
 
 def T25():
-    _tabletop((0.02, 0.03, 0.12)); PR.diamonds("dia", n=70, spread=0.05)
-    return dict(a=((-0.12, -0.22, 0.16), (0, 0, 0.0)), b=((-0.08, -0.18, 0.13), (0, 0, 0.0)), lens=60, fstop=4.0, focus=(0, 0, 0))
+    _tabletop((0.01, 0.015, 0.06), sparkle=True)
+    ST.box("diamond_paper", (0.01, 0.0, 0.0004), (0.16, 0.11, 0.0008), ST.paper_mat("briefke", (0.85, 0.84, 0.8)), rot=(0, 0, 0.15))
+    PR.brilliants("dia", n=60, spread=0.035)
+    return dict(a=((-0.1, -0.2, 0.13), (0, 0, 0.0)), b=((-0.07, -0.16, 0.1), (0, 0, 0.0)), lens=60, fstop=5.6, focus=(0, 0, 0))
 
 
 def T26():
-    _tabletop((0.15, 0.02, 0.02))
-    for i in range(6):
-        b = PR.gold_bar(f"bar{i}"); b.location = (-0.12 + (i % 3) * 0.12, -0.04 + (i // 3) * 0.07, 0.0)
-    for i in range(3):
-        b = PR.gold_bar(f"bar_t{i}"); b.location = (-0.06 + i * 0.12, 0.0, 0.0095); b.rotation_euler = (0, 0, math.radians(90))
-    return dict(a=((-0.25, -0.35, 0.2), (0, 0, 0.0)), b=((-0.2, -0.3, 0.17), (0, 0, 0.0)), lens=55, fstop=4.0, focus=(0, 0, 0))
+    _tabletop((0.06, 0.01, 0.01))
+    PR.sf_put(PR.GOLD_BARS, (0.02, 0.0, 0.0), width=0.15, rz=0.3)
+    PR.sf_put(PR.GOLD_BAR, (-0.12, -0.04, 0.0), width=0.116, rz=-0.2)
+    PR.sf_put(PR.GOLD_BAR, (0.15, -0.07, 0.0), width=0.116, rz=0.6)
+    return dict(a=((-0.25, -0.33, 0.2), (0, 0, 0.02)), b=((-0.2, -0.29, 0.17), (0, 0, 0.02)), lens=50, fstop=5.6, focus=(0, 0, 0.02))
 
 
 def T27():
-    _tabletop((0.05, 0.05, 0.06))
-    for i in range(7):
-        c = PR.cash_bundle(f"cash{i}", (0.5, 0.4, 0.58) if i % 2 else (0.35, 0.5, 0.36))
-        c.location = (-0.24 + (i % 4) * 0.16, -0.06 + (i // 4) * 0.12, 0.0); c.rotation_euler = (0, 0, math.radians(8 * (i % 3) - 6))
-    return dict(a=((0.25, -0.35, 0.22), (0, 0, 0.0)), b=((0.2, -0.3, 0.18), (0, 0, 0.0)), lens=50, fstop=4.0, focus=(0, 0, 0))
+    _tabletop((0.03, 0.03, 0.035))
+    for k, (x, y, rz) in enumerate(((-0.14, -0.05, 0.1), (0.03, -0.06, -0.15), (0.18, -0.02, 0.3), (-0.07, 0.08, 0.5), (0.1, 0.09, -0.4))):
+        PR.sf_put(PR.EURO_STACK, (x, y, 0.0), width=0.16, rz=rz)
+    PR.sf_put(PR.EURO_STACK, (0.0, 0.01, 0.026), width=0.16, rz=1.2)
+    return dict(a=((0.28, -0.36, 0.24), (0, 0, 0.01)), b=((0.22, -0.31, 0.2), (0, 0, 0.01)), lens=45, fstop=5.6, focus=(0, 0, 0.01))
 
 
 def T28():
-    _tabletop((0.12, 0.0, 0.03))
-    au = ST.gold()
-    for i in range(9):
-        bpy.ops.mesh.primitive_torus_add(major_radius=0.01, minor_radius=0.0018, location=(-0.08 + (i % 3) * 0.06, -0.05 + (i // 3) * 0.05, 0.0018))
-        bpy.context.active_object.data.materials.append(au)
-    for i in range(3):
-        bpy.ops.mesh.primitive_torus_add(major_radius=0.035, minor_radius=0.003, location=(0.12, -0.06 + i * 0.07, 0.003))
-        bpy.context.active_object.data.materials.append(au)
-    PR.diamonds("dia_j", n=20, spread=0.03, seed=5)
-    return dict(a=((-0.22, -0.28, 0.18), (0.02, 0, 0.0)), b=((-0.18, -0.24, 0.15), (0.02, 0, 0.0)), lens=55, fstop=4.0, focus=(0, 0, 0))
+    _tabletop((0.09, 0.0, 0.02), sparkle=True)
+    for k, (x, y, rz, uid) in enumerate(((-0.06, -0.03, 0.2, PR.RING_DIAMOND), (0.03, 0.03, 1.1, PR.RING_CARAT), (0.08, -0.05, 2.0, PR.RING_DIAMOND),
+                                          (-0.02, 0.06, 0.7, PR.RING_CARAT), (0.12, 0.04, 2.6, PR.RING_DIAMOND))):
+        if uid == PR.RING_CARAT:
+            o = PR.sf_put(uid, (x, y, 0.0), height=0.022, rz=rz); o.rotation_euler.x = math.radians(90)
+            bpy.context.view_layer.update()
+        else:
+            PR.sf_put(uid, (x, y, 0.0), width=0.024, rz=rz)
+    PR.brilliants("dia_j", n=18, spread=0.04, seed=5)
+    return dict(a=((-0.2, -0.24, 0.15), (0.02, 0, 0.0)), b=((-0.16, -0.2, 0.12), (0.02, 0, 0.0)), lens=60, fstop=5.6, focus=(0.02, 0, 0.0))
 
 
 # ============================================================================ L30 sorting; bags have a limit
@@ -489,8 +493,8 @@ def T37():
     t = MD.Trader(2); sf = AC.SitFloor(t, (-1.6, 1.5), 180, back_lean=-12); sf.finish(density=HAIR)
     t2 = MD.Trader(4); kn = AC.Kneel(t2, (-1.75, 2.1), -100, lean=20)
     bpy.context.view_layer.update()
-    sh = sf.M @ t.h.bone_head("upperarm01.R")
-    kn.hand("R", sh + V((0.05, -0.02, 0.06)), elbow=(0.7, 0.3, -0.8), curl=20)
+    knee = sf.M @ t.h.bone_head("lowerleg01.L")
+    kn.hand("R", knee + V((0.0, 0.0, 0.11)), elbow=(0.5, 0.2, -1.0), curl=28)
     kn.finish(density=HAIR)
     return dict(a=((0.35, 1.15, 1.3), (-1.8, 1.7, 0.5)), b=((0.2, 1.2, 1.25), (-1.8, 1.7, 0.5)), lens=30,
                 hand_ok=("Trader2", "Trader4"))

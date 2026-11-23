@@ -182,3 +182,88 @@ def diamonds(name="diamonds", n=40, spread=0.06, seed=2):
         for o in (a, b):
             o.data.materials.append(g); o.rotation_euler.z = rng.uniform(0, 6.28); parts.append(o)
     return _root(name, parts)
+
+
+def fire_glass(name="diamond_fire"):
+    """Diamond: three clear glass BSDFs at IOR 2.407 / 2.419 / 2.451 (red / green / blue), summed per channel:
+    real dispersion (fire), near-zero roughness."""
+    m = bpy.data.materials.new(name); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links
+    N.remove(N["Principled BSDF"])
+    add1 = N.new("ShaderNodeAddShader"); add2 = N.new("ShaderNodeAddShader")
+    gs = []
+    for ior, col in ((2.407, (1, 0, 0)), (2.419, (0, 1, 0)), (2.451, (0, 0, 1))):
+        g = N.new("ShaderNodeBsdfGlass"); g.inputs['IOR'].default_value = ior; g.inputs['Roughness'].default_value = 0.0
+        g.inputs['Color'].default_value = (*col, 1); gs.append(g)
+    L.new(gs[0].outputs[0], add1.inputs[0]); L.new(gs[1].outputs[0], add1.inputs[1])
+    L.new(add1.outputs[0], add2.inputs[0]); L.new(gs[2].outputs[0], add2.inputs[1])
+    L.new(add2.outputs[0], N["Material Output"].inputs['Surface'])
+    return m
+
+
+def brilliant(name="brilliant", d=0.006, mat=None):
+    """A round brilliant cut (girdle diameter d): table 57 %, crown 34.5 deg with bezel and star facets, pavilion
+    40.75 deg to a culet; 8-fold symmetry, flat-shaded so every facet flashes. Origin at the girdle centre."""
+    import bmesh
+    r = d / 2; t = 0.57 * r
+    hc = math.tan(math.radians(34.5)) * (r - t)            # crown height
+    hp = math.tan(math.radians(40.75)) * r                 # pavilion depth
+    bm = bmesh.new()
+    G = [bm.verts.new((r * math.cos(2 * math.pi * k / 16), r * math.sin(2 * math.pi * k / 16), 0)) for k in range(16)]
+    T = [bm.verts.new((t * math.cos(2 * math.pi * k / 8 + math.pi / 8), t * math.sin(2 * math.pi * k / 8 + math.pi / 8), hc)) for k in range(8)]
+    B = [bm.verts.new(((r * 0.9) * math.cos(2 * math.pi * k / 8), (r * 0.9) * math.sin(2 * math.pi * k / 8), hc * 0.45)) for k in range(8)]
+    P = [bm.verts.new(((r * 0.45) * math.cos(2 * math.pi * k / 8), (r * 0.45) * math.sin(2 * math.pi * k / 8), -hp * 0.55)) for k in range(8)]
+    cul = bm.verts.new((0, 0, -hp))
+    bm.faces.new(T)                                                   # table
+    for k in range(8):
+        g0, g1, g2 = G[2 * k], G[2 * k + 1], G[(2 * k + 2) % 16]
+        b0, b1 = B[k], B[(k + 1) % 8]; t0 = T[k]
+        bm.faces.new((g0, g1, b0)); bm.faces.new((g1, g2, b1))       # upper girdle facets
+        bm.faces.new((g1, b1, t0, b0))                                # bezel (kite)
+        bm.faces.new((b0, t0, T[(k - 1) % 8]))                        # star
+        p0 = P[k]
+        bm.faces.new((g0, p0, G[(2 * k - 1) % 16])) if False else None
+        bm.faces.new((g0, g1, p0)); bm.faces.new((g1, g2, P[(k + 1) % 8], p0))
+        bm.faces.new((p0, P[(k + 1) % 8], cul))
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    o = bpy.data.objects.new(name, me); bpy.context.scene.collection.objects.link(o)
+    me.materials.append(mat or fire_glass())
+    return o
+
+
+def brilliants(name="diamonds", n=40, spread=0.05, seed=2, table_up=0.6):
+    """Loose brilliants (2-9 mm) lying on a surface: most on their pavilion side (tilted, as stones fall), some
+    table-down; one shared fire material."""
+    import random as _r
+    rng = _r.Random(seed); mat = fire_glass(name + "_fire"); parts = []
+    for i in range(n):
+        d = rng.choice((0.0025, 0.003, 0.004, 0.005, 0.0065, 0.009)) * rng.uniform(0.9, 1.1)
+        o = brilliant(f"{name}_{i}", d, mat)
+        x, y = rng.gauss(0, spread), rng.gauss(0, spread)
+        if rng.random() < table_up:            # resting on a pavilion facet: tilted ~49 deg, girdle edge on the cloth
+            tilt = math.radians(49); o.rotation_euler = (tilt, 0, rng.uniform(0, 6.28)); z = d * 0.32
+        else:                                  # table down
+            o.rotation_euler = (math.pi, 0, rng.uniform(0, 6.28)); z = math.tan(math.radians(34.5)) * (d / 2) * 0.43
+        o.location = (x, y, z); parts.append(o)
+    return _root(name, parts)
+
+
+def sf_put(uid, loc, width=None, height=None, rz=0.0, name=None):
+    """Import a vetted Sketchfab model (lib/sf.py) scaled to a real size and set on the surface at loc."""
+    import sf, ph
+    from mathutils import Vector as _V
+    r, ms = sf.model(uid, loc=(0, 0, 0), rot_z=rz)
+    lo, hi = ph.bounds(ms)
+    s = (width / max(hi.x - lo.x, hi.y - lo.y)) if width else (height / (hi.z - lo.z))
+    r.scale = (s, s, s); bpy.context.view_layer.update(); lo, hi = ph.bounds(ms)
+    r.location = _V(loc) - _V(((lo.x + hi.x) / 2, (lo.y + hi.y) / 2, lo.z)) + _V((0, 0, loc[2] if len(loc) > 2 else 0))
+    if name:
+        r.name = name
+    return r
+
+
+EURO_STACK = "23603d130e684401be3ed7c482c3076e"      # "#Euro Banknote Stack Tied With Rubber", Dakta.Grower.Nzl, CC-BY
+GOLD_BAR = "87e4e0a9da7f4c8a9561a932d09279bd"        # "gold bar", alex.yefremov, CC-BY
+GOLD_BARS = "0d1ff6b3e6d045cba78889caf7f5bc6e"       # "Fine Gold Bar", incg5764, CC-BY
+RING_DIAMOND = "5a03949eea904d6989f87aaf5d172722"    # "Ring, Gold with Diamond", lucasjosemone, CC-BY
+RING_CARAT = "378f6df2c4f444399b83db2037258470"      # "The Ring: 1 carat", Evanz, CC-BY
