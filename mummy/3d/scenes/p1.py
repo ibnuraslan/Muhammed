@@ -58,7 +58,7 @@ def S02():
 
 def S03():
     """Top-down over the grave: the crouched skeleton in the sand, slowly turning."""
-    T, sk = site("golden", grass_at=None, kit=False, sun_az=215)
+    T, sk = site("day", grass_at=None, kit=False, sun_az=215)
     c, size = sk["B1"].centre(); z = c.z
     return dict(a=((c.x + 0.25, c.y - 0.35, z + 2.3), (c.x, c.y, z)), b=((c.x - 0.3, c.y + 0.25, z + 1.85), (c.x, c.y, z)), lens=35,
                 fstop=4.0, focus=(c.x, c.y, z))
