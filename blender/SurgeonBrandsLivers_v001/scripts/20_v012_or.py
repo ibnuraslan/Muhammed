@@ -49,6 +49,13 @@ for n in ("Drape", "AbdomenSkin", "Incision"):
 for o in bpy.data.objects:
     if o.name.startswith("Suture"): key_hide(o, [])
 
+# she rested ~2 cm into the table pad: lifted 2.5 cm while she is on the table
+PRo = bpy.data.objects["Patient"]
+for f, dz in ((0, 0.025), (601, 0.0), (1000, 0.025), (1263, 0.0)):
+    PRo.delta_location = (0, 0, dz); PRo.keyframe_insert("delta_location", frame=f)
+for fc in fcurves(PRo):
+    if fc.data_path == "delta_location":
+        for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
 _vp = {mm.name: mm.show_viewport for mm in pb_.modifiers}
 for mm in pb_.modifiers:
     if mm.name.startswith("Delete."): mm.show_viewport = False
@@ -80,7 +87,7 @@ for i, x in enumerate(xs):
         z = PAD + 0.006
         if abs(y) <= 0.27 and x <= 1.05:
             bt = body_top(x, y)
-            if bt is not None: z = max(z, bt + 0.016)
+            if bt is not None: z = max(z, bt + 0.024)
         H[i, j] = z
 H0 = H.copy()
 for it in range(60):                       # sheet bridges the hollows (between arms and torso, between the legs)
