@@ -34,7 +34,7 @@ def key_hide(ob, spans, total=(0, 1700)):
         if fc.data_path == "hide_render":
             for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
 
-OR_OPEN1 = (0, 280)            # branding (S1, S2)
+OR_OPEN1 = (0, 318)            # branding (S1, S2) and the closing beat (276-318)
 OR_OPEN2 = (1000, 1262)        # second surgery (reveal + eyes)
 OR_TABLE = [(0, 600), (1000, 1262)]   # patient on the table
 
@@ -189,6 +189,16 @@ for v in me.vertices:
 cav = bpy.data.objects.new("Cavity", me); bpy.data.collections["OR_Set"].objects.link(cav)
 for mm in (M_EDGE, M_FAT, M_WALL): me.materials.append(mm)
 key_hide(cav, [OR_OPEN1, OR_OPEN2])
+
+# ---------------------------------------------------------------- v013: the wound is seen closing (276-318) before the stitches
+cpiv = bpy.data.objects.new("CavityClose", None); bpy.data.collections["OR_Set"].objects.link(cpiv)
+cpiv.location = V(CX, CY, SKZ); bpy.context.view_layer.update()
+mw_ = cav.matrix_world.copy(); cav.parent = cpiv; cav.matrix_parent_inverse = cpiv.matrix_world.inverted(); cav.matrix_world = mw_
+for f, sx in ((0, 1.0), (280, 1.0), (316, 0.03)):
+    cpiv.scale = (sx, 1, 1); cpiv.keyframe_insert("scale", frame=f)
+    cut.scale = (max(sx, 0.001), 1, 1); cut.keyframe_insert("scale", frame=f)
+for f, sx in ((OR_OPEN2[0], 1.0),):
+    cpiv.scale = (sx, 1, 1); cpiv.keyframe_insert("scale", frame=f); cut.scale = (sx, 1, 1); cut.keyframe_insert("scale", frame=f)
 # retractor blades hooked over the long sides
 M_STEEL = bpy.data.materials.new("Retractor"); M_STEEL.use_nodes = True
 bs = M_STEEL.node_tree.nodes["Principled BSDF"]; bs.inputs["Metallic"].default_value = 1; bs.inputs["Roughness"].default_value = 0.25
@@ -233,7 +243,15 @@ for n in ("StudioDome", "StudioMembrane", "Studio_Key", "Studio_Rim", "Studio_Fi
     o = bpy.data.objects.get(n)
     if o: key_hide(o, [])
 for o in bpy.data.objects:
-    if o.name.startswith("Smoke_"): key_hide(o, [])
+    if o.name.startswith(("Smoke_", "Spark_")): key_hide(o, [])           # v013: no floating sparks
+for n in ("EtherDrape", "EtherBar", "EtherPost", "EtherPost.001"):        # v013: no screen hiding her head
+    o = bpy.data.objects.get(n)
+    if o: key_hide(o, [])
+for o in bpy.data.objects["ArgonPen_Studio"].children_recursive:        # v013: dark pen, so the glove reads as one hand
+    if o.type == 'MESH' and not o.name.endswith("Tip"):
+        m = bpy.data.materials.new("PenDark"); m.use_nodes = True
+        b = m.node_tree.nodes["Principled BSDF"]; b.inputs["Base Color"].default_value = (0.05, 0.06, 0.08, 1); b.inputs["Roughness"].default_value = 0.35
+        o.data.materials.clear(); o.data.materials.append(m)
 GH = bpy.data.objects["GloveHands"]
 for o in [GH] + list(GH.children_recursive): key_hide(o, [])
 # the old OR pen (replaced by the one pen that brands)

@@ -68,7 +68,7 @@ def restrict_vis(ob, spans):
 def rig_objs(name):
     r = OB[name]; return [r] + [c for c in r.children_recursive]
 
-def swing_arms(name, f0, f1, yaw_fn, phase_fn, amp=0.13, step=2):
+def swing_arms(name, f0, f1, yaw_fn, phase_fn, amp=0.15, step=2, out_k=0.09):
     """relaxed walking arms: elbows bent, opposite to the legs, hands near the thighs"""
     r = OB[name]; Hm = human(name)
     clear_bones(r, ["IK_hand.L", "IK_hand.R", "Pole_elbow.L", "Pole_elbow.R"], f0, f1)
@@ -78,7 +78,7 @@ def swing_arms(name, f0, f1, yaw_fn, phase_fn, amp=0.13, step=2):
         for s, sg in (("L", 1), ("R", -1)):
             out = -rt if s == "L" else rt
             sh = W(r, "upperarm01." + s)
-            Wp = sh + V(0, 0, -0.48) + fwd * (0.06 + amp * math.sin(ph) * sg) + out * 0.11
+            Wp = sh + V(0, 0, -0.47) + fwd * (0.07 + amp * math.sin(ph) * sg) + out * out_k
             d = (V(0, 0, -1) + fwd * 0.25).normalized(); n = -out
             pole = sh + V(0, 0, -0.30) - fwd * 0.4 + out * 0.15
             Hm.key_hand(s, f, Wp, d, n, pole)
@@ -90,7 +90,7 @@ def hold_pose(r, bones, f):
     for n in bones:
         pb = r.pose.bones[n]
         pb.keyframe_insert("location", frame=f, group=n); pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
-def walk(name, path, f0, f1, stride=0.68, lean=5.0):
+def walk(name, path, f0, f1, stride=0.68, lean=5.0, out_k=0.09, amp=0.15):
     r = OB[name]; Hm = human(name)
     hold_pose(r, body_bones(), f0 - 1)
     clear_bones(r, body_bones(), f0, f1)
@@ -101,11 +101,11 @@ def walk(name, path, f0, f1, stride=0.68, lean=5.0):
     frames = list(range(f0, f1 + 1)); dist = [0.0]
     for a_, b_ in zip(frames, frames[1:]): dist.append(dist[-1] + (path(b_) - path(a_)).to_2d().length)
     phase = lambda f: dist[min(len(dist) - 1, max(0, f - f0))] / stride
-    swing_arms(name, f0, f1, yaw, phase)
+    swing_arms(name, f0, f1, yaw, phase, amp=amp, out_k=out_k)
     return yaw
 
 # =================================================================== S3: stitching the closed incision (276-429)
-INC_SPAN = [(281, 600)]
+INC_SPAN = [(318, 600)]
 s1 = OB["Surgeon1"]
 def body_top(x, y):
     return SKZ + 0.0   # flat enough across 20 cm of the upper abdomen at this scale; refined below by ray cast
@@ -134,14 +134,14 @@ for i in range(N):
 inc = OB.new("IncisionNew", cu); bpy.data.collections["OR_Set"].objects.link(inc); cu.materials.append(M_INC)
 VL.key_hide(inc, INC_SPAN)
 NST = 7; STY = [Y0 + 0.012 + (Y1 - Y0 - 0.024) * k / (NST - 1) for k in range(NST)]
-ST_F = [276 - 20, 276 - 2] + [296 + 22 * k for k in range(NST - 2)]       # two already in at the cut, then one every 22 frames
+ST_F = [318, 322] + [338 + 19 * k for k in range(NST - 2)]       # v013: the wound closes 276-318, then the stitches go in
 for k, y in enumerate(STY):
     cu = bpy.data.curves.new("Stitch", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0009
     sp = cu.splines.new('POLY'); pts = [V(CX - 0.009, y, 0), V(CX - 0.004, y + 0.001, 0.0025), V(CX + 0.004, y + 0.001, 0.0025), V(CX + 0.009, y, 0)]
     sp.points.add(len(pts) - 1)
     for p_, c_ in zip(sp.points, pts): p_.co = (c_.x, c_.y, skin(c_.x, c_.y) + c_.z, 1)
     ob = OB.new("Stitch", cu); bpy.data.collections["OR_Set"].objects.link(ob); cu.materials.append(M_SUT)
-    VL.key_hide(ob, [(max(281, ST_F[k]), 600)])
+    VL.key_hide(ob, [(max(318, ST_F[k]), 600)])
 # needle-driver tip path: for each new stitch, in at one lip, under, out of the other, pull the thread up
 nd = OB["NeedleDriver"]
 def nd_tip(f):
@@ -183,6 +183,45 @@ for f, kw in ((430, dict(wide=0.3)), (470, dict(wide=0.35, brow=0.1)), (500, dic
               (540, dict(smile=0.9, wide=0.15, brow=0.2)), (570, dict(smile=0.8, wide=0.2, brow=0.25))):
     face(s1, f, **kw)
 blink(s1, 455, dict(wide=0.33, brow=0.05)); blink(s1, 528, dict(smile=0.85, wide=0.18, brow=0.25))
+# v013: his right arm lifts from his side to the mask edge (no popping), follows it down, then both hands peel the gloves
+clear_bones(s1, ["IK_hand.L", "IK_hand.R", "Pole_elbow.L", "Pole_elbow.R"], 430, 570)
+ev(462); mvs = [(mk.matrix_world @ v.co, v.index) for v in mk.data.vertices]
+ymed = sorted(p.y for p, i in mvs)[len(mvs) // 2]
+edge_i = min([(p.z, i) for p, i in mvs if p.y > ymed])[1]; edge_l = mk.data.vertices[edge_i].co.copy()
+def s1_fwd(f):
+    ev(f); M = s1.matrix_world @ s1.pose.bones["spine02"].matrix; return (M.to_3x3() @ V(0, 0, 1)).normalized()
+def put_pole(r, s, f, pole):
+    pbp = r.pose.bones["Pole_elbow." + s]; pbp.location = r.data.bones["Pole_elbow." + s].matrix_local.to_3x3().inverted() @ (pole - r.data.bones["Pole_elbow." + s].head_local)
+    pbp.keyframe_insert("location", frame=f, group=pbp.name)
+for f in range(430, 571, 2):
+    ev(f); sh = {s: W(s1, "upperarm01." + s) for s in "LR"}
+    hip = {s: W(s1, "upperleg01." + s) for s in "LR"}
+    fw = (W(s1, "spine02") - W(s1, "spine04")).cross(sh["L"] - sh["R"]).normalized()
+    if fw.dot(V(0, 1, 0)) < 0: fw = -fw
+    fw.z = 0; fw.normalize()
+    side = {s: hip[s] + fw * 0.10 + (sh[s] - sh["L" if s == "R" else "R"]).normalized() * 0.07 + V(0, 0, 0.02) for s in "LR"}
+    waist = (hip["L"] + hip["R"]) / 2 + fw * 0.33 + V(0, 0, 0.12)
+    edge = mk.matrix_world @ edge_l
+    # right hand
+    if f <= 446: P = side["R"].lerp(edge + fw * 0.04 - V(0, 0, 0.12), smooth((f - 430) / 16.0))
+    elif f <= 462: P = (edge + fw * 0.04 - V(0, 0, 0.12)).lerp(edge + fw * 0.02, smooth((f - 446) / 16.0))
+    elif f <= 505: P = edge + fw * 0.02
+    elif f <= 522: P = (edge + fw * 0.02).lerp(waist + V(-0.03, 0, 0), smooth((f - 505) / 17.0))
+    else: P = waist + V(-0.03, 0, 0.01 * math.sin(f / 6.0))
+    d = (V(0, 0, 1) + fw * 0.3).normalized() if 446 < f <= 505 else (fw + V(0, 0, -0.3)).normalized()
+    n = (-fw).normalized() if 446 < f <= 505 else V(0, 0, -1)
+    HP["place_hand"](s1, "R", f, P, n, d, skin=0.02)
+    put_pole(s1, "R", f, sh["R"] + V(0, 0, -0.35) - fw * 0.2 + (sh["R"] - sh["L"]).normalized() * 0.35)
+    # left hand: at his side, then meets the right glove cuff (peeling it) from 524
+    PL = side["L"] if f < 512 else side["L"].lerp(waist + V(0.06, 0, 0.03), smooth((f - 512) / 14.0))
+    HP["place_hand"](s1, "L", f, PL, (V(0, 0, -1) if f >= 520 else -(sh["L"] - sh["R"]).normalized()), (fw + V(0, 0, -0.5 if f < 520 else 0)).normalized(), skin=0.02)
+    put_pole(s1, "L", f, sh["L"] + V(0, 0, -0.35) - fw * 0.2 + (sh["L"] - sh["R"]).normalized() * 0.35)
+    HP["apply_pose"](s1, "R", "pinch" if 450 <= f <= 505 else "relaxed", f); HP["apply_pose"](s1, "L", "pinch" if f >= 524 else "relaxed", f)
+# head acting after the mask is down: a glance at the patient, a look up, a slight nod
+R1 = AL["Rig"](s1)
+clear_bones(s1, ["head", "neck02"], 500, 570)
+for f, yaw, pit in ((500, 0, 0), (516, 16, 8), (532, 14, 6), (548, -6, -4), (560, -4, 4), (570, -6, -2)):
+    R1.key_rot("head", f, [("X", pit * 0.6), ("Z", yaw * 0.6)]); R1.key_rot("neck02", f, [("X", pit * 0.4), ("Z", yaw * 0.4)])
 eyes(s1, 500, 0, 0); eyes(s1, 512, 8, 0); eyes(s1, 535, 8, 0); eyes(s1, 548, -4, 0); eyes(s1, 570, -4, 0)
 
 # =================================================================== S5: a week later - he walks past the calendar (571-640)
@@ -192,13 +231,24 @@ face(s1, 571, smile=0.4, wide=0.3); face(s1, 640, smile=0.5, wide=0.3); blink(s1
 for o in rig_objs("Surgeon1"):
     if o.type in ('MESH', 'CURVE', 'ARMATURE'): restrict_vis(o, [(0, 640), (1176, 1700)])
 for o in (OB["Surgeon1_Cap"], OB["Surgeon1_Mask"]) + tuple(OB["Surgeon1_Mask"].children): restrict_vis(o, [(0, 640)])
-# the calendar flips during this shot only (pages 571-640)
+# the calendar flips during this shot only (pages 571-640); v013: each sheet hides only after its flip ends (no pop)
+for k in range(8):
+    pg = OB.get("CalPage_%d" % k); pp = OB.get("CalPaper_%d" % k)
+    if not pg or not pp: continue
+    rf = [f for f in VL.fcurves(pg) if f.data_path == "rotation_euler" and len(f.keyframe_points)]
+    if not rf: continue
+    endf = int(max(kp.co.x for f in rf for kp in f.keyframe_points))
+    for fc in VL.fcurves(pp):
+        if fc.data_path == "hide_render":
+            for kp in fc.keyframe_points:
+                if kp.co.y > 0.5 and kp.co.x > 10: kp.co.x = endf + 1
+            fc.update()
 
 # =================================================================== S6: the woman walks in, the pain hits (641-775)
 pt = OB["Patient"]; HW = human("Patient")
 P0, P1 = V(6.45, 1.05, 0), V(5.85, -0.30, 0)
 wpath = lambda f: P0.lerp(P1, smooth((f - 641) / 62.0) * 0.6 + 0.4 * (f - 641) / 62.0)
-yaw_w = walk("Patient", wpath, 641, 703, stride=0.62, lean=4)
+yaw_w = walk("Patient", wpath, 641, 703, stride=0.62, lean=4, out_k=0.055, amp=0.13)
 clear_bones(pt, body_bones(), 704, 775)
 y0 = yaw_w(703); yr = R_(y0); fwd = V(math.sin(yr), -math.cos(yr), 0); rt = V(-math.cos(yr), -math.sin(yr), 0)
 for s in "LR":
@@ -217,14 +267,18 @@ for f in range(704, 776, 3):
     k = smooth((f - 704) / 22.0)
     if f <= 726:
         sh = W(pt, "upperarm01.R"); r_side = (sh + V(0, 0, -0.5) + fwd * 0.05 + rt * 0.05).lerp(r_side, k)
-    HP["place_hand"](pt, "R", f, r_side, (-fwd + rt * 0.2).normalized(), (-rt + V(0, 0, -0.4)).normalized(), skin=0.025)
+    HP["place_hand"](pt, "R", f, r_side, (-(fwd * 0.85 + rt * 0.5)).normalized(), (-rt * 0.8 + V(0, 0, -0.6)).normalized(), skin=0.02)
     HP["apply_pose"](pt, "R", "cup_hold", f)
     thL = W(pt, "upperleg02.L").lerp(W(pt, "lowerleg01.L"), 0.55) + fwd * 0.07
     shL = W(pt, "upperarm01.L"); l_pt = (shL + V(0, 0, -0.5) + fwd * 0.05 - rt * 0.05).lerp(thL, smooth((f - 712) / 30.0))
     HP["place_hand"](pt, "L", f, l_pt, (-fwd + V(0, 0, -0.5)).normalized(), V(0, 0, -1), skin=0.02)
+    for s_, o_ in (("L", -rt), ("R", rt)):
+        shp = W(pt, "upperarm01." + s_); pole = shp + V(0, 0, -0.30) - fwd * 0.35 + o_ * 0.20
+        pbp = pt.pose.bones["Pole_elbow." + s_]; pbp.location = pt.data.bones["Pole_elbow." + s_].matrix_local.to_3x3().inverted() @ (pole - pt.data.bones["Pole_elbow." + s_].head_local)
+        pbp.keyframe_insert("location", frame=f, group=pbp.name)
     HP["apply_pose"](pt, "L", "relaxed", f)
-for f, kw in ((641, dict(wide=0.3)), (700, dict(wide=0.3)), (716, dict(wide=0.5, brow=0.6, jaw=6)), (740, dict(close=0.45, brow=0.7, jaw=8)),
-              (775, dict(close=0.5, brow=0.7, jaw=6))):
+for f, kw in ((641, dict(wide=0.3)), (700, dict(wide=0.3)), (712, dict(wide=0.45, brow=0.5, jaw=2, smile=-0.3)), (730, dict(close=0.45, brow=-0.5, jaw=2, smile=-0.6)),
+              (750, dict(close=0.6, brow=-0.6, jaw=1.5, smile=-0.7)), (775, dict(close=0.55, brow=-0.5, jaw=2, smile=-0.6))):
     face(pt, f, **kw)
 blink(pt, 672, dict(wide=0.3))
 # liver glow INSIDE her abdomen: shirt and skin light up from a point inside her right upper belly
@@ -303,14 +357,14 @@ for f in range(1040, 1263, 2):
     nr = (M.to_3x3() @ V(0.55, 0, 0.8)).normalized(); nl = (M.to_3x3() @ V(0, -0.55, 0.8)).normalized()
     pr = pr + V(-0.05, 0.06, 0.10) * appr; pl = pl + V(0.03, 0.08, 0.10) * appr
     ev(f)
-    HP["place_hand"](s2, "R", f, pr, nr, (M.to_3x3() @ V(1, 0.15, 0)).normalized(), skin=0.014)
-    HP["place_hand"](s2, "L", f, pl, nl, (M.to_3x3() @ V(0.15, -1, 0)).normalized(), skin=0.014)
+    HP["place_hand"](s2, "R", f, pr, nr, (M.to_3x3() @ V(1, 0.15, 0)).normalized(), skin=0.002)
+    HP["place_hand"](s2, "L", f, pl, nl, (M.to_3x3() @ V(0.15, -1, 0)).normalized(), skin=0.002)
     HP["apply_pose"](s2, "R", "cup_hold", f); HP["apply_pose"](s2, "L", "cup_hold", f)
 # =================================================================== S10: her eyes widen (no frozen stare)
-for f, kw in ((1150, dict(wide=0.3)), (1176, dict(wide=0.35, brow=0.2)), (1188, dict(wide=0.7, brow=0.9, jaw=3)), (1205, dict(wide=0.65, brow=0.8, jaw=4)),
-              (1240, dict(wide=0.55, brow=0.6, jaw=2))):
+for f, kw in ((1150, dict(wide=0.3)), (1176, dict(wide=0.32, brow=0.2)), (1190, dict(wide=0.36, brow=0.7, jaw=2)), (1205, dict(wide=0.33, brow=0.6, jaw=1)),
+              (1240, dict(wide=0.3, brow=0.45, jaw=1))):
     face(s2, f, **kw)
-blink(s2, 1216, dict(wide=0.6, brow=0.75, jaw=3))
+blink(s2, 1200, dict(wide=0.45, brow=0.65, jaw=1)); blink(s2, 1228, dict(wide=0.4, brow=0.5, jaw=1))
 eyes(s2, 1176, 0, -6); eyes(s2, 1192, 0, -10); eyes(s2, 1200, 5, -4); eyes(s2, 1210, -4, -2); eyes(s2, 1226, 2, -8); eyes(s2, 1240, 0, -8)
 
 # =================================================================== S11: hearing - hands rest on the lectern
@@ -325,6 +379,8 @@ for f in (1236, 1300, 1340, 1380, 1420, 1450):        # both hands rest on the l
     for s, sy in (("L", 0.20), ("R", -0.20)):
         sh_ = 0.01 * math.sin(f / 25.0) * (1 if s == "L" else -1)
         p = V(lxmax - 0.07 + sh_, sy, lz + 0.004)
+        hit = lt.ray_cast(lt.matrix_world.inverted() @ (p + V(0, 0, 0.5)), lt.matrix_world.inverted().to_3x3() @ V(0, 0, -1))
+        if hit[0]: p.z = (lt.matrix_world @ hit[1]).z + 0.006
         HP["place_hand"](s1, s, f, p, V(0, 0, -1), V(-1, -0.25 if s == "L" else 0.25, 0).normalized(), skin=0.012)
         HP["apply_pose"](s1, s, "relaxed", f)
         sh = W(s1, "upperarm01." + s); pole = sh + V(0.35, 0.25 * (1 if s == "L" else -1), -0.35)
@@ -405,7 +461,7 @@ bpts = [OB["StampBase"].matrix_world @ Vector(c) for c in OB["StampBase"].bound_
 press = Matrix.Translation(V(cc.x - sbc.x + 0.01, cc.y - sbc.y, ctop - sbot + 0.0015)) @ S0
 up = lambda M, h: Matrix.Translation(V(0, 0, h)) @ M
 SP = 1592
-SK = [(SP, S0), (1602, up(S0, 0.09)), (1610, up(press, 0.06)), (1616, press), (1620, press), (1627, up(press, 0.07)), (1636, up(Matrix.Translation(V(0.02, -0.14, 0)) @ press, 0.07)), (1644, up(Matrix.Translation(V(0.02, -0.15, 0)) @ press, 0.065))]
+SK = [(SP, S0), (1602, up(S0, 0.09)), (1610, up(press, 0.06)), (1616, press), (1620, press), (1627, up(press, 0.06)), (1634, up(Matrix.Translation(V(0.02, -0.15, 0)) @ press, 0.05)), (1640, Matrix.Translation(V(0.02, -0.15, -0.0015)) @ press), (1644, Matrix.Translation(V(0.02, -0.15, -0.0015)) @ press)]   # v013: set down beside the certificate
 def smat(f):
     if f <= SP: return S0
     for (fa, Ma), (fb, Mb) in zip(SK, SK[1:]):
@@ -449,6 +505,50 @@ for f, kw in ((1576, dict(wide=0.3)), (1600, dict(wide=0.3, brow=-0.2)), (1616, 
     face(cl, f, **kw)
 blink(cl, 1585, dict(wide=0.3)); blink(cl, 1636, dict(wide=0.3, smile=0.1))
 eyes(cl, 1576, 0, -8); eyes(cl, 1600, -6, -14); eyes(cl, 1630, 0, -12); eyes(cl, 1644, 4, -2)
+
+
+# =================================================================== v013 extras
+# bed shot: the second surgeon walks beside the bed, attending her (visible from the bed shot on)
+for o in rig_objs("Surgeon2"):
+    for fc in VL.fcurves(o):
+        if fc.data_path == "hide_render":
+            for kp in fc.keyframe_points:
+                if 870 <= kp.co.x <= 880 and kp.co.y < 0.5: kp.co.x = 776
+            fc.update()
+s2b = lambda f: V(2.42, 6.05, 0).lerp(V(2.42, 3.85, 0), smooth((f - 776) / 139.0) * 0.3 + 0.7 * (f - 776) / 139.0)
+walk("Surgeon2", s2b, 776, 915, stride=0.62, amp=0.11, out_k=0.08)
+swing_arms("Surgeon2", 916, 984, s2yaw, lambda f: dd[min(len(dd) - 1, f - 879)] / 0.7, amp=0.10)   # re-key from the cut (no hands sliding from the corridor)
+for f, kw in ((776, dict(wide=0.3, brow=0.2)), (840, dict(wide=0.3, brow=0.3)), (915, dict(wide=0.3, brow=0.2))):
+    face(s2, f, **kw)
+blink(s2, 812, dict(wide=0.3, brow=0.25)); eyes(s2, 776, 18, -12); eyes(s2, 850, 10, -10); eyes(s2, 900, 0, -4)
+# hearing wide: the panel talks / reacts
+RP = {n: AL["Rig"](OB[n]) for n in ("PanelA", "PanelB", "PanelC")}
+for f in range(1241, 1311, 6):
+    face(OB["PanelA"], f, wide=0.3, brow=-0.2, jaw=(4 if (f // 6) % 2 else 0.5))
+for n, ph in (("PanelB", 0.0), ("PanelC", 1.3)):
+    clear_bones(OB[n], ["head"], 1236, 1312)
+    for f in range(1241, 1312, 10):
+        RP[n].key_rot("head", f, [("X", 6 * math.sin(f / 9.0 + ph)), ("Z", 8 * math.sin(f / 14.0 + ph))])
+blink(OB["PanelB"], 1262, dict(wide=0.3)); blink(OB["PanelC"], 1290, dict(wide=0.3)); blink(OB["PanelA"], 1276, dict(wide=0.3, brow=-0.2))
+# defendant admits it: he speaks (jaw), brows, blinks, small head moves
+for f in range(1311, 1446, 5):
+    face(s1, f, wide=0.28, brow=0.25 + 0.15 * math.sin(f / 11.0), jaw=(5 if (f // 5) % 2 else 1), smile=0.15 * math.sin(f / 17.0))
+blink(s1, 1330, dict(wide=0.28, brow=0.3)); blink(s1, 1372, dict(wide=0.28, brow=0.3)); blink(s1, 1418, dict(wide=0.28, brow=0.3))
+clear_bones(s1, ["head", "neck02"], 1311, 1445)
+for f in range(1311, 1446, 15):
+    R1.key_rot("head", f, [("X", -4 + 5 * math.sin(f / 13.0)), ("Z", 7 * math.sin(f / 21.0))])
+# one liver graphic behind him (not a repeated row)
+for k in (0, 2, 3, 4):
+    g_ = OB.get("GhostLiver_%d" % k)
+    if g_: VL.key_hide(g_, [])
+# the judge's left hand lies flat on the desk (no hovering hand)
+clear_bones(ja, ["IK_hand.L", "Pole_elbow.L"], 1440, 1580)
+dtop = max((dt.matrix_world @ v.co).z for v in dt.data.vertices)
+for f in (1440, 1500, 1580):
+    ev(f); HP["place_hand"](ja, "L", f, V(-10.08, 0.24, dtop), V(0, 0, -1), V(1, 0.1, 0).normalized(), skin=0.012); HP["apply_pose"](ja, "L", "relaxed", f)
+# no glass in front of the clerk's camera
+for n in ("HEAR_Glass", "HEAR_Glass.002"):
+    if OB.get(n): VL.key_hide(OB[n], [])
 
 bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=True)
 print("ANIM_DONE", OUT)

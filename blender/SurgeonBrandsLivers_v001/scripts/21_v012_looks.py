@@ -121,14 +121,110 @@ add_asset("PanelB", "hair/ponytail01/ponytail01.mhclo", "Hair")
 add_asset("Surgeon2", "hair/ponytail01/ponytail01.mhclo", "Hair")
 add_asset("Nurse", "hair/short04/short04.mhclo", "Hair")
 add_asset("Anaesth", "hair/short01/short01.mhclo", "Hair")
-h1 = bpy.data.objects["Surgeon1.short02"]; VL.clear_keys(h1, ("hide_render",)); h1.hide_render = False
+remove("Surgeon1.short02")                                      # v013: read as helmet hair
+add_asset("Surgeon1", "hair/short04/short04.mhclo", "Hair")
 
-# ------------------------------------------------------------------ Surgeon 2: loose two-piece scrubs
-s2 = bpy.data.objects["Surgeon2.female_casualsuit01"]
-two_piece(s2, "Surgeon2", fabric("S2Top", (0.10, 0.20, 0.52), 70, 0.85, 0.35), fabric("S2Trousers", (0.06, 0.12, 0.34), 70, 0.85, 0.35), 0.012)
-for nm, rgb in (("Surgeon1", (0.10, 0.42, 0.40)), ("Nurse", (0.12, 0.30, 0.50)), ("Anaesth", (0.18, 0.38, 0.20))):
-    ob = bpy.data.objects[nm + ".male_casualsuit01"]
-    two_piece(ob, nm, fabric(nm + "Top", rgb, 70, 0.85, 0.35), fabric(nm + "Trousers", tuple(c * 0.8 for c in rgb), 70, 0.85, 0.35), 0.010)
+# ------------------------------------------------------------------ v013: real scrubs - a top and trousers built from each body
+# (the MPFB suits read as one-piece onesies). Each garment is the person's own body surface, cut to the garment's shape
+# (short sleeves, V-neck, top hem hanging over the trouser waist, trousers to the ankle), pushed out so it hangs loose,
+# with folds; it deforms with the same skin weights.
+import bmesh as _bm
+DEFB = None
+def dominant(v, idx, bones):
+    best = (0.0, None)
+    for g in v.groups:
+        n = idx.get(g.group, "")
+        if g.weight > best[0] and n in bones: best = (g.weight, n)
+    return best[1]
+def scrub_piece(rig_name, kind, mat, off, hide_src):
+    r = bpy.data.objects[rig_name]; body = bpy.data.objects[rig_name + ".body"]; BN = r.data.bones
+    ob = body.copy(); ob.data = body.data.copy(); ob.name = rig_name + ".Scrub" + kind
+    bpy.data.collections["Collection"].objects.link(ob)
+    for m in list(ob.modifiers): ob.modifiers.remove(m)
+    if ob.animation_data: ob.animation_data_clear()
+    if ob.data.shape_keys:
+        for o in bpy.context.selected_objects: o.select_set(False)
+        bpy.context.view_layer.objects.active = ob; ob.select_set(True)
+        bpy.ops.object.shape_key_remove(all=True, apply_mix=True)
+    idx = {g.index: g.name for g in ob.vertex_groups}; BONES = set(r.data.bones.keys())
+    bodyg = ob.vertex_groups.get("body")
+    waist = (BN["spine05"].head_local.z + BN["spine04"].head_local.z) / 2
+    neck = BN["neck01"].head_local; ua2 = {s: (BN["upperarm02." + s].head_local, BN["upperarm02." + s].tail_local) for s in "LR"}
+    ank = {s: BN["foot." + s].head_local.z for s in "LR"}
+    keep = set()
+    for v in ob.data.vertices:
+        if bodyg is not None and not any(g.group == bodyg.index and g.weight > 0.5 for g in v.groups): continue
+        d = dominant(v, idx, BONES)
+        if d is None: continue
+        c = v.co
+        if kind == "Top":
+            if d.startswith(("spine", "clavicle", "shoulder", "breast", "pectoral", "upperarm01", "pelvis", "neck01")) or d.startswith("upperarm02"):
+                if c.z < waist - 0.075: continue
+                if d.startswith("upperarm02"):
+                    s = d[-1]; a, b = ua2[s]; t = (c - a).dot(b - a) / max((b - a).length_squared, 1e-6)
+                    if t > 0.35: continue
+                if d.startswith("neck01") or c.z > neck.z + 0.005: continue
+                vdepth = 0.11 - 1.3 * abs(c.x)           # V-neck at the front
+                if c.y < neck.y - 0.02 and c.z > neck.z - vdepth: continue
+                keep.add(v.index)
+        else:
+            if d.startswith(("pelvis", "upperleg", "lowerleg", "spine05", "spine04", "root")):
+                if c.z > waist + 0.02: continue
+                if c.z < min(ank.values()) + 0.03: continue
+                keep.add(v.index)
+    bm = _bm.new(); bm.from_mesh(ob.data); bm.verts.ensure_lookup_table()
+    dl = bm.verts.layers.deform.verify()
+    def dominant_bm(v):
+        best = (0.0, None)
+        for gi, w in v[dl].items():
+            n = idx.get(gi, "")
+            if w > best[0] and n in BONES: best = (w, n)
+        return best[1]
+    _bm.ops.delete(bm, geom=[v for v in bm.verts if v.index not in keep], context='VERTS')
+    for it in range(12):                                  # clean hems: smooth the open edges (no saw-tooth V-neck or sleeve)
+        bnd = [v for v in bm.verts if v.is_boundary]
+        newp = {}
+        for v in bnd:
+            nb = [e.other_vert(v) for e in v.link_edges if e.is_boundary]
+            if len(nb) == 2: newp[v] = v.co * 0.4 + (nb[0].co + nb[1].co) * 0.3
+        for v, p_ in newp.items(): v.co = p_
+    bm.normal_update()
+    for v in bm.verts:
+        k = off
+        if kind == "Top" and v.co.z < waist + 0.02: k = off * 1.6        # hem hangs out over the trousers
+        if kind == "Top" and v[dl] is not None:                          # no ballooned shoulders
+            dn = dominant_bm(v)
+            if dn and dn.startswith(("clavicle", "shoulder", "upperarm")): k = off * 0.55
+        v.co = v.co + v.normal * k
+    bm.to_mesh(ob.data); bm.free()
+    ob.data.materials.clear(); ob.data.materials.append(mat)
+    for p in ob.data.polygons: p.material_index = 0; p.use_smooth = True
+    am = ob.modifiers.new("Armature", 'ARMATURE'); am.object = r
+    tx = bpy.data.textures.get("ScrubFolds") or bpy.data.textures.new("ScrubFolds", 'CLOUDS'); tx.noise_scale = 0.05
+    dsp = ob.modifiers.new("Folds", 'DISPLACE'); dsp.texture = tx; dsp.strength = 0.007; dsp.texture_coords = 'LOCAL'
+    ob.modifiers.move(ob.modifiers.find("Folds"), 0)
+    so = ob.modifiers.new("Cloth", 'SOLIDIFY'); so.thickness = 0.003; so.offset = 1.0
+    cs = ob.modifiers.new("Smooth", 'CORRECTIVE_SMOOTH'); cs.factor = 0.5; cs.iterations = 3
+    sd = ob.modifiers.new("Subdivision", 'SUBSURF'); sd.levels = 0; sd.render_levels = 1
+    copy_vis(hide_src, ob)
+    print("SCRUB", ob.name, len(ob.data.vertices))
+    return ob
+SCRUBS = {"Surgeon1": ("male_casualsuit01", (0.10, 0.42, 0.40)), "Surgeon2": ("female_casualsuit01", (0.10, 0.20, 0.52)),
+          "Nurse": ("male_casualsuit01", (0.12, 0.30, 0.50)), "Anaesth": ("male_casualsuit01", (0.18, 0.38, 0.20))}
+for nm, (suit, rgb) in SCRUBS.items():
+    old = bpy.data.objects[nm + "." + suit]
+    scrub_piece(nm, "Top", fabric(nm + "ScrubTop", rgb, 70, 0.85, 0.35, 0.35), 0.016, old)
+    scrub_piece(nm, "Trousers", fabric(nm + "ScrubTrousers", tuple(c * 0.72 for c in rgb), 70, 0.85, 0.35, 0.35), 0.013, old)
+    old.hide_render = True; VL.clear_keys(old, ("hide_render",)); old.hide_render = True
+    b = bpy.data.objects[nm + ".body"]; mk_ = b.modifiers.get("Delete." + suit)
+    if mk_:
+        VL.clear_keys(b, ('modifiers["Delete.%s"]' % suit,)); mk_.show_render = mk_.show_viewport = False
+# gloves: violet nitrile, clearly a glove (not white pieces against the white pen)
+for m in bpy.data.materials:
+    if m.name.startswith("Glove_") and m.node_tree:
+        for n in m.node_tree.nodes:
+            if n.type == 'BSDF_PRINCIPLED' and abs(n.inputs["Coat Weight"].default_value - 0.25) < 1e-3:
+                n.inputs["Base Color"].default_value = (0.22, 0.20, 0.62, 1); n.inputs["Roughness"].default_value = 0.45
 
 def cap_fabric(name, rgb):
     """printed cotton: small light dots on the colour, weave bump, sheen"""
@@ -244,9 +340,24 @@ for nm, rgb in CAPC.items():
     so = cap.modifiers.new("t", 'SOLIDIFY'); so.thickness = 0.002
     sub = cap.modifiers.new("s", 'SUBSURF'); sub.levels = 1; sub.render_levels = 1
 
-# ------------------------------------------------------------------ masks: Surgeon 2's sized to the face
-mk = bpy.data.objects["Surgeon2_Mask"]
-mk.scale = (0.93, 0.93, 0.93)
+# ------------------------------------------------------------------ v013 masks: pleated masks conformed to each face (no box)
+from mathutils.bvhtree import BVHTree as _BVH
+for nm, fr in (("Surgeon1", 1), ("Surgeon2", 1100), ("Nurse", 1), ("Anaesth", 1)):
+    mk = bpy.data.objects[nm + "_Mask"]; body = bpy.data.objects[nm + ".body"]
+    hv = body.hide_viewport; body.hide_viewport = False
+    sc.frame_set(fr); bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
+    ev = body.evaluated_get(dg); bme = ev.to_mesh(); Mi = mk.matrix_world.inverted() @ body.matrix_world
+    tree = _BVH.FromPolygons([Mi @ v.co for v in bme.vertices], [tuple(p.vertices) for p in bme.polygons]); ev.to_mesh_clear(); body.hide_viewport = hv
+    me = mk.data; zs = [v.co.z for v in me.vertices]; z0, z1 = min(zs), max(zs)
+    for v in me.vertices:
+        loc, nrm, i, d = tree.find_nearest(v.co, 0.06)
+        if loc is None: continue
+        t = (v.co.z - z0) / max(z1 - z0, 1e-4)
+        k = 0.006 + 0.004 * math.sin(math.pi * t) + 0.0015 * math.sin(t * 3 * math.pi * 2)   # pleats, fuller over the mouth
+        dv = v.co - loc
+        v.co = loc + (dv.normalized() if dv.length > 1e-5 else nrm) * k
+    mk.scale = (1, 1, 1)
+    print("MASK conformed", mk.name)
 
 # ------------------------------------------------------------------ eyes
 if "EnhancedEye" in bpy.data.node_groups:

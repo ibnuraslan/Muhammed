@@ -21,20 +21,20 @@ def fixed(p): return lambda f: V(*p)
 def mix(a, b, t): return lambda f: a(f).lerp(b(f), t)
 # (first, last, cam_start, cam_end, aim_fn, lens, fstop)
 SHOTS = [
-    (1, 135, (0.30, 0.78, 1.78), (0.22, 0.70, 1.74), fixed((-0.30, -0.28, 1.30)), 28, 5.6),          # S1 surgeon at the open patient
-    (136, 275, (0.02, -0.08, 1.45), (-0.02, -0.06, 1.41), fixed((CX, CY, SKZ - 0.01)), 38, 8.0),    # S2 argon beam brands the liver in the body
-    (276, 429, (0.20, 0.40, 1.60), (0.16, 0.36, 1.58), fixed((CX, CY - 0.06, SKZ + 0.03)), 30, 5.6), # S3 stitching
-    (430, 570, (0.06, 0.52, 1.63), (0.00, 0.44, 1.62), bone("Surgeon1", "head", (0, 0, -0.06)), 40, 5.6),   # S4 mask down, smirk
+    (1, 135, (0.45, 0.85, 1.85), (0.38, 0.78, 1.80), fixed((-0.45, -0.22, 1.22)), 24, 5.6),         # S1 surgeon, the open patient, her head
+    (136, 275, (-0.22, 0.46, 1.44), (-0.26, 0.42, 1.42), fixed((CX, CY - 0.06, SKZ)), 40, 8.0),     # S2 his gripping hand + the beam, from her left side
+    (276, 429, (0.32, 0.62, 1.78), (0.28, 0.56, 1.74), fixed((CX - 0.02, CY - 0.22, SKZ + 0.18)), 26, 5.6),  # S3 closing + stitching, his face in frame
+    (430, 570, (0.12, 0.78, 1.52), (0.06, 0.68, 1.55), bone("Surgeon1", "spine01", (0, 0, 0.12)), 30, 5.6),  # S4 arm lifts, mask down, acting
     (571, 640, (1.50, -1.80, 1.60), (1.55, -1.85, 1.58), mix(fixed((3.46, -0.9, 1.52)), bone("Surgeon1", "neck01"), 0.55), 26, 5.6),  # S5 week later
     (641, 775, (5.05, -1.60, 1.45), (5.15, -1.40, 1.32), bone("Patient", "spine01", (0, 0, 0.08)), 30, 5.6),  # S6 home
-    (776, 915, (0.15, 6.40, 1.62), (0.25, 4.40, 1.58), mix(bone("Patient", "head"), bone("Nurse", "head"), 0.45), 24, 5.6),  # S7 bed in
-    (916, 1060, (0.45, -0.40, 1.55), (0.28, -0.28, 1.55), bone("Surgeon2", "neck01", (0, 0, -0.05)), 30, 5.6),  # S8 new doctor
-    (1061, 1175, (0.24, -0.12, 1.56), (0.20, -0.10, 1.52), obj("LiverRig", (0, 0, 0.03)), 35, 8.0),  # S9 liver lifted
+    (776, 915, (0.15, 6.40, 1.62), (0.25, 4.40, 1.58), mix(bone("Patient", "head"), bone("Nurse", "head"), 0.45), 24, 5.6),  # S7 bed + doctor
+    (916, 1060, (0.45, -0.40, 1.42), (0.30, -0.30, 1.40), bone("Surgeon2", "head", (0, 0, -0.10)), 30, 5.6),  # S8 new doctor, face under the cap
+    (1061, 1175, (0.02, -0.82, 1.62), (0.0, -0.76, 1.60), fixed((CX, CY + 0.18, SKZ + 0.16)), 30, 5.6),  # S9 her hands lift the liver, her body
     (1176, 1240, (-0.22, -0.72, 1.62), (-0.24, -0.62, 1.62), bone("Surgeon2", "head", (0, 0, -0.03)), 48, 5.6),  # S10 her eyes
-    (1241, 1310, (-5.35, 0.65, 1.82), (-5.45, 0.58, 1.80), fixed((-9.00, -0.25, 1.38)), 26, 5.6),  # S11a hearing wide
+    (1241, 1310, (-8.20, -1.60, 1.62), (-8.25, -1.50, 1.60), fixed((-10.30, 0.10, 1.45)), 30, 5.6),  # S11a the panel's faces
     (1311, 1445, (-8.00, -0.55, 1.58), (-7.90, -0.45, 1.58), bone("Surgeon1", "spine01", (0, 0, 0.05)), 32, 5.6),  # S11b defendant
     (1446, 1575, (-9.20, -0.95, 1.55), (-9.24, -0.90, 1.53), fixed((-10.15, -0.05, 1.36)), 30, 5.6),  # S12 gavel
-    (1576, 1644, (-9.25, -1.55, 1.62), (-9.30, -1.50, 1.60), fixed((-10.15, -1.12, 1.33)), 32, 5.6),  # S13 stamp
+    (1576, 1644, (-9.25, -1.55, 1.62), (-9.45, -1.42, 1.55), fixed((-10.15, -1.15, 1.30)), 32, 5.6),  # S13 stamp, push in to the red X
 ]
 for o in (cam, aim):
     if o.animation_data: o.animation_data_clear()
