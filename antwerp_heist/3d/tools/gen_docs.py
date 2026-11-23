@@ -141,7 +141,62 @@ def briefke(seed):
     im.save(os.path.join(D, f"briefke_{seed}.jpg"), quality=88)
 
 
+def faxcover(seed):
+    """Telefax cover sheet, Antwerp federal judicial police -> Turin police headquarters (institutions only)."""
+    rng = random.Random(seed)
+    W, H = 1240, 1754
+    im = paper(W, H, (242, 241, 236), rng, 4); d = ImageDraw.Draw(im)
+    ink = (22, 22, 28)
+    d.rectangle((90, 90, W - 90, 300), outline=ink, width=5)
+    d.text((130, 120), "TELEFAX", font=F(SERIFB, 120), fill=ink)
+    d.text((780, 150), "DRINGEND", font=F(SERIFB, 54), fill=(150, 30, 35)); d.text((780, 215), "URGENTE", font=F(SERIFB, 54), fill=(150, 30, 35))
+    y = 360
+    for lab, val in (("Aan / A / To", "QUESTURA DI TORINO - Squadra Mobile"), ("Fax", "0039 011 558 ...."),
+                     ("Van / Da / From", "Federale Gerechtelijke Politie - Antwerpen"), ("Datum", "19.02.2003   11:42"),
+                     ("Betreft / Oggetto", "Verzoek identificatie - richiesta di identificazione"), ("Pagina's / Pagine", "4 (incl. deze)")):
+        d.text((110, y), lab, font=F(SERIF, 34), fill=ink); d.text((470, y), val, font=F(COUR, 32), fill=ink)
+        d.line((460, y + 44, W - 110, y + 44), fill=(120, 120, 120), width=1); y += 74
+    y += 40
+    body = ("In het kader van het onderzoek naar de inbraak in de kluis van het diamantcentrum verzoeken wij u om "
+            "inlichtingen over de huurder van een kantoor in het gebouw, afkomstig uit Turijn. Bijgevoegd: kopie "
+            "huurovereenkomst, kopie identiteitsdocument, vingerafdrukken. Graag spoedig antwoord.").split()
+    line = ""
+    for wd in body:
+        if d.textlength(line + " " + wd, font=F(SERIF, 32)) > W - 240:
+            d.text((110, y), line.strip(), font=F(SERIF, 32), fill=ink); y += 46; line = ""
+        line += " " + wd
+    d.text((110, y), line.strip(), font=F(SERIF, 32), fill=ink); y += 120
+    d.line((110, y + 60, 560, y + 60), fill=ink, width=2); d.text((110, y + 70), "Handtekening", font=F(SERIF, 28), fill=ink)
+    d.line([(140 + i * 22, y + 40 + rng.randrange(-18, 18)) for i in range(16)], fill=(20, 30, 90), width=3)
+    im = im.filter(ImageFilter.GaussianBlur(0.5))
+    im.save(os.path.join(D, f"faxcover_{seed}.jpg"), quality=88)
+
+
+def lcd():
+    im = Image.new("RGB", (640, 120), (60, 78, 40)); d = ImageDraw.Draw(im)
+    f = F(MONOB, 44)
+    d.text((18, 8), "TX  TORINO", font=f, fill=(12, 18, 8)); d.text((18, 62), "0039011558..  P01", font=f, fill=(12, 18, 8))
+    im.save(os.path.join(D, "fax_lcd.jpg"), quality=92)
+
+
+def cards():
+    """Index cards for the investigation board (labels in Dutch, place names only)."""
+    for k, (t1, t2) in enumerate((("KLUIS", "Diamantcentrum -2"), ("AFVAL  E19", "bos - Vilvoorde"), ("APPARTEMENT", "Torino"),
+                                   ("DNA", "broodje / salami"), ("KASTICKET", "supermarkt - camera"), ("HUUR", "kantoor + kluis"))):
+        im = Image.new("RGB", (900, 560), (238, 234, 222)); d = ImageDraw.Draw(im)
+        d.line((0, 120, 900, 120), fill=(200, 60, 60), width=4)
+        for y in range(180, 560, 56):
+            d.line((0, y, 900, y), fill=(150, 180, 210), width=2)
+        d.text((40, 24), t1, font=F(SERIFB, 76), fill=(25, 25, 35))
+        d.text((40, 160), t2, font=F(COUR, 52), fill=(20, 30, 110))
+        im.filter(ImageFilter.GaussianBlur(0.6)).save(os.path.join(D, f"card_{k + 1}.jpg"), quality=88)
+
+
 if __name__ == "__main__":
+    cards()
+    for s_ in range(1, 4):
+        faxcover(s_)
+    lcd()
     for s in range(1, 4):
         receipt(s); form(s); letter(s); briefke(s)
     print(sorted(os.listdir(D)))

@@ -353,13 +353,41 @@ def receipt(name="receipt", length=0.2, seed=1):
     return document(name, w=w, h=length, seed=seed, kind="receipt", color=(0.95, 0.95, 0.93), folds=1, curl=0.012)
 
 
-def fax(name="fax"):
-    """A 1990s office fax machine with a page curling out of it."""
-    body = flat(name + "_body", (0.75, 0.74, 0.7), 0.4)
-    parts = [box(name + "_body", (0, 0, 0.06), (0.32, 0.28, 0.12), body, bevel=0.02),
-             box(name + "_keys", (0.08, -0.08, 0.121), (0.1, 0.08, 0.004), flat(name + "_keys", (0.2, 0.2, 0.2), 0.5)),
-             box(name + "_screen", (-0.05, -0.1, 0.121), (0.08, 0.025, 0.003), emit(name + "_lcd", (0.4, 0.6, 0.3), 1.0))]
-    pg = document(name + "_page", 0.21, 0.2, seed=4); pg.location = (0, 0.15, 0.13); pg.rotation_euler = (math.radians(-35), 0, 0)
+def fax(name="fax", page_kind="faxcover", fed=0.55):
+    """A late-1990s office fax/phone: grey body, sloped paper feeder at the back with a cover sheet being drawn in
+    (fed: fraction of the page already inside), a backlit green LCD (diegetic text), keypad, handset on the side.
+    Origin at the base centre; the user faces -y."""
+    import os as _os
+    body = flat(name + "_body", (0.72, 0.71, 0.67), 0.42); dark = flat(name + "_dark", (0.12, 0.12, 0.13), 0.5)
+    parts = [box(name + "_body", (0, 0, 0.055), (0.34, 0.3, 0.11), body, bevel=0.018),
+             box(name + "_deck", (0, -0.05, 0.112), (0.3, 0.16, 0.008), dark, bevel=0.003),
+             box(name + "_feeder", (0, 0.11, 0.15), (0.24, 0.12, 0.006), body, rot=(math.radians(-38), 0, 0)),
+             box(name + "_slot", (0, 0.06, 0.118), (0.23, 0.012, 0.006), flat(name + "_slot", (0.02, 0.02, 0.02), 0.6)),
+             box(name + "_out", (0, -0.17, 0.03), (0.22, 0.06, 0.004), body, rot=(math.radians(12), 0, 0)),
+             box(name + "_handset", (0.19, 0.0, 0.08), (0.05, 0.22, 0.05), dark, bevel=0.02)]
+    lcdp = _os.path.join(DOCS, "fax_lcd.jpg")
+    lm = bpy.data.materials.new(name + "_lcd"); lm.use_nodes = True; N = lm.node_tree.nodes; L = lm.node_tree.links
+    pp = N["Principled BSDF"]
+    if _os.path.exists(lcdp):
+        t = N.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(lcdp, check_existing=True)
+        L.new(t.outputs['Color'], pp.inputs['Base Color']); L.new(t.outputs['Color'], pp.inputs['Emission Color'])
+    pp.inputs['Emission Strength'].default_value = 1.6; pp.inputs['Roughness'].default_value = 0.15
+    bpy.ops.mesh.primitive_plane_add(size=1, location=(-0.06, -0.085, 0.1175))
+    lc = bpy.context.active_object; lc.name = name + "_lcd"; lc.scale = (0.12, 0.028, 1); lc.data.materials.append(lm); parts.append(lc)
+    keym = flat(name + "_key", (0.82, 0.82, 0.8), 0.4)
+    for r in range(4):
+        for c in range(3):
+            parts.append(box(name + "_btn", (0.06 + c * 0.022, -0.1 + r * 0.02, 0.118), (0.016, 0.014, 0.006), keym, bevel=0.002))
+    # the cover sheet on the feeder, its lower part already drawn into the slot
+    h = 0.297 * (1 - fed)
+    pg = document(name + "_page", 0.21, h, seed=1, kind=page_kind, folds=0)
+    pg.location = (0, 0.06 + math.cos(math.radians(38)) * h / 2, 0.12 + math.sin(math.radians(38)) * h / 2 + 0.006)
+    pg.rotation_euler = (math.radians(38), 0, 0)
+    # show the TOP of the cover sheet (header + address), not a squashed whole page
+    me = pg.children[0].data if pg.children else None
+    if me and me.uv_layers:
+        for d in me.uv_layers[0].data:
+            d.uv.y = 1.0 - (1.0 - d.uv.y) * (1 - fed)
     parts.append(pg)
     return _root(name, parts)
 

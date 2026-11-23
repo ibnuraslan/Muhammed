@@ -209,9 +209,22 @@ def U16():
 # ============================================================================ L9 Turin
 def U17():
     A = S2.office("leasing")
-    fx = PR.fax(); fx.location = (-0.55, A["desk_y"] + 0.05, 0.79); fx.rotation_euler = (0, 0, math.radians(180))
-    return dict(a=((-0.1, A["desk_y"] - 0.75, 1.15), (-0.55, A["desk_y"], 0.92)), b=((-0.15, A["desk_y"] - 0.6, 1.1), (-0.55, A["desk_y"], 0.92)), lens=40,
-                fstop=3.2, focus=(-0.55, A["desk_y"], 0.92))
+    for o in list(bpy.data.objects):
+        if o.name.startswith(("key", "access_card", "file_closed", "Torus", "desk_paper")):
+            bpy.data.objects.remove(o)
+    dy = A["desk_y"]
+    fx = PR.fax(); fx.location = (0.25, dy - 0.05, 0.79)                    # the investigator faces -y... the fax faces him
+    fx.rotation_euler = (0, 0, math.radians(180))
+    for k in range(3):
+        d = PR.document(f"to_send{k}", 0.21, 0.297, seed=21 + k, kind="form" if k else "letter"); d.location = (-0.15 + 0.01 * k, dy - 0.05 + 0.01 * k, 0.792 + 0.001 * k)
+    m = MD.Peys(); se = AC.Seated(m, A["seat_behind"], -90, lean=16)
+    se.hand("L", (0.2, dy - 0.13, 1.0), elbow=(0.8, 0.3, -0.6), curl=10)               # his left hand steadies the sheet going in
+    se.hand("R", (-0.12, dy + 0.02, 0.885), elbow=(0.9, 0.2, -0.5), curl=24)            # his right on the rest of the file
+    se.head_to((0.25, dy - 0.05, 0.9), share=0.9); se.finish(density=HAIR)
+    p = V((0.25, dy - 0.05, 0.92))
+    # over his left shoulder: the TELEFAX to the Questura di Torino going in, the LCD reading TORINO
+    return dict(a=((0.38, dy + 1.3, 1.62), tuple(p)), b=((0.34, dy + 1.18, 1.58), tuple(p)), lens=45, fstop=3.5, focus=tuple(p),
+                hand_ok=("desk", "Desk", "chair", "fax", "to_send"))
 
 
 def U18():
@@ -373,14 +386,15 @@ def U31():
 
 
 def U32():
-    prints = [img("p2/board/T31.png"), img("p3/board/U12.png"), img("p3/board/U31.png"), img("p1/board/S33.png"), img("p3/board/U07.png")]
-    prints = [p for p in prints if p] or [img("p1/board/S04.png")]
-    A = S3.evidence_wall(prints)
-    pins = A["pins"]
-    for a_, b_ in zip(pins, pins[1:]):
-        o = S2.soft_strip((a_.x, a_.z), (b_.x, b_.z), 0, 0.03, alpha=0.6)
-        o.rotation_euler = (math.radians(90), 0, o.rotation_euler.z); o.location = ((a_.x + b_.x) / 2, 1.448, (a_.z + b_.z) / 2)
-    return dict(a=((-0.6, -0.9, 1.65), tuple(A["board"])), b=((-0.4, -0.7, 1.62), tuple(A["board"])), lens=32)
+    order = ["p3/board/U01.png", "p3/board/U06.png", "p3/board/U30.png", "p3/board/U11.png", "p3/board/U20.png", "p1/board/S13.png", "p3/board/U19.png"]
+    prints = [img(r) for r in order]
+    prints = [p for p in prints if p]
+    A = S3.evidence_wall(prints, links=((0, 1), (1, 2), (0, 2), (1, 3), (2, 4), (0, 5), (1, 6)))
+    b = A["board"]
+    # a slow drift along the wool from the vault print toward the apartment: the case closing
+    return dict(a=((-1.55, -0.45, 1.8), (-0.25, 1.47, 1.62)), b=((-1.0, -0.15, 1.74), (0.25, 1.47, 1.6)), lens=30, fstop=5.6,
+                focus=(0.0, 1.47, 1.75))
+
 
 
 # ============================================================================ L16 2005: the sentences
@@ -389,19 +403,31 @@ def U33():
     for i, p in enumerate(A["judges"]):
         m = MD.Judge(name=f"Judge{i}"); se = AC.Seated(m, V((p.x, p.y + 0.25, 0.97)), -90, lean=6, floor=0.5); se.finish(density=HAIR, floor_z=0.5)
         se._rest_on_seat(margin=0.016, r=0.55, depth=0.35)          # robe over the chair seat
-    le = MD.Leonardo(); st = AC.Stand(le, (A["dock"].x, A["dock"].y), 90); st.hands_front(); st.finish(density=HAIR)
-    return dict(a=((0.5, -1.6, 1.75), (0.0, 5.0, 1.6)), b=((0.45, -1.2, 1.72), (0.0, 5.0, 1.6)), lens=28, hand_ok=("chair",))
+    d = A["dock"]
+    le = MD.Leonardo(); st = AC.Stand(le, (d.x, d.y), 90); st.hands_front(); st.finish(density=HAIR)
+    for k, sx in enumerate((-0.85, 0.85)):                           # two officers flank the dock
+        po = MD.Police(name=f"Police{k}"); sp = AC.Stand(po, (d.x + sx, d.y + 0.1), 90); sp.finish(density=HAIR)
+    for k, (x, y) in enumerate(((-2.4, -1.5), (-3.4, -2.7), (2.6, -1.5), (3.2, -2.7))):   # the public, from behind
+        t = MD.Trader(k); se = AC.Seated(t, V((x, y, 0.49)), 90, lean=4); se.finish(density=HAIR); se._rest_on_seat(margin=0.016, r=0.6, depth=0.35)
+    # from the back of the public gallery, a slow push over their heads toward the dock and the bench in the shafts
+    return dict(a=((0.6, -6.2, 2.35), (0.0, 3.0, 1.55)), b=((0.4, -4.6, 2.05), (0.0, 3.0, 1.55)), lens=30, fstop=5.6,
+                focus=(0.0, 1.35, 1.5), hand_ok=("chair", "c_pew"))
 
 
 def U34():
     A = S3.courtroom()
+    d = A["dock"]
+    ST.box("c_dock_bench", (d.x, d.y + 0.35, 0.22), (2.2, 0.42, 0.44), ST.flat("dock_bench", (0.3, 0.2, 0.12), 0.6))
     who = (MD.DOnorio, MD.Finotto, MD.Speedy)
     for i, cls in enumerate(who):
-        p = V((-4.4 + i * 0.85, -1.5, 0.47)); m = cls(); se = AC.Seated(m, p, 90, lean=6); se.finish(density=HAIR)
-    return dict(a=((-2.4, -3.6, 1.55), (-3.6, 0.0, 1.0)), b=((-2.5, -3.35, 1.52), (-3.6, 0.0, 1.0)), lens=32, hand_ok=("c_pew",))
-
-
-# ============================================================================ L17 his other story
+        m = cls(); se = AC.Seated(m, V((d.x - 0.65 + i * 0.65, d.y + 0.35, 0.455)), 90, lean=8); se.finish(density=HAIR)
+    po = MD.Police(name="PoliceD"); sp = AC.Stand(po, (d.x + 1.62, d.y + 0.35), 95); sp.finish(density=HAIR)
+    for i, p in enumerate(A["judges"]):
+        m = MD.Judge(name=f"Judge{i}"); se = AC.Seated(m, V((p.x, p.y + 0.25, 0.97)), -90, lean=6, floor=0.5); se.finish(density=HAIR, floor_z=0.5)
+        se._rest_on_seat(margin=0.016, r=0.55, depth=0.35)
+    # low, from behind and to the side of the dock: three backs, the bench beyond in the window light
+    return dict(a=((-2.3, -1.2, 1.35), (0.2, 2.6, 1.2)), b=((-2.05, -0.9, 1.32), (0.3, 2.6, 1.2)), lens=30, fstop=4.0,
+                focus=(d.x, d.y + 0.35, 1.1), hand_ok=("c_pew", "dock_bench", "chair"))
 def U35():
     A = S3.interview()
     seat, yaw = A["seats"]["L"]

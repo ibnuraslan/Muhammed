@@ -5,7 +5,7 @@ import bpy
 from mathutils import Vector, Matrix
 import ship as S
 import ph
-from sets import flat, emit, enamel, steel_paint, brushed, tex, paper_mat, gold, box, light_area, light_point, light_spot, world
+from sets import flat, emit, enamel, steel_paint, brushed, tex, paper_mat, gold, box, light_area, light_point, light_spot, world, haze_box
 import sets2 as S2
 
 
@@ -227,12 +227,48 @@ def courtroom():
             box("c_pew_seat", (sx, y, 0.45), (4.0, 0.45, 0.05), oak)
             box("c_pew_back", (sx, y - 0.22, 0.75), (4.0, 0.05, 0.6), oak)
     A["pews"] = [Vector((sx, -1.5 - k * 1.2, 0.47)) for k in range(4) for sx in (-3.0, 3.0)]
-    # tall windows on the left wall: light
+    # tall windows on the left wall: the sky beyond, stone surrounds and iron glazing bars; the sun comes through the
+    # bars as slanting shafts in the dusty air (spot just inside each window, behind its bars)
+    sky_m = emit("c_window", (0.95, 0.96, 1.0), 3.0); bar_m = flat("c_glazing_bar", (0.06, 0.06, 0.06), 0.5, metal=0.5)
+    stone = flat("c_stone", (0.62, 0.58, 0.5), 0.8)
     for k in range(3):
         y = -4.0 + k * 3.5
-        box("c_window", (-RX + 0.01, y, 3.2), (0.02, 1.6, 3.0), emit("c_window", (1.0, 0.95, 0.88), 2.5))
-        light_area("c_win_light", (-RX + 0.3, y, 3.2), (0, y, 0.5), 2.0, 900, (1.0, 0.93, 0.82), size_y=3.0)
-    light_area("c_fill", (2.0, -3.0, RZ - 0.2), (0, 0, 0), 3.0, 120, (1.0, 0.88, 0.72))
+        box("c_window", (-RX + 0.01, y, 3.2), (0.02, 1.6, 3.0), sky_m)
+        box("c_win_surround", (-RX + 0.06, y, 1.62), (0.1, 1.9, 0.16), stone)
+        box("c_win_surround", (-RX + 0.06, y, 4.78), (0.1, 1.9, 0.16), stone)
+        for dz in range(1, 6):
+            box("c_glazing_bar", (-RX + 0.06, y, 1.7 + dz * 0.5), (0.03, 1.6, 0.025), bar_m)
+        for dy in (-0.4, 0.0, 0.4):
+            box("c_glazing_bar", (-RX + 0.06, y + dy, 3.2), (0.03, 0.025, 3.0), bar_m)
+        light_spot("c_sun", (-RX + 0.03, y - 0.6, 4.4), (-RX + 4.2, y + 1.6, 0.0), 6000, angle=60, color=(1.0, 0.86, 0.66), radius=0.02)
+        light_area("c_win_light", (-RX + 0.4, y, 3.2), (0, y, 0.5), 2.0, 110, (0.85, 0.9, 1.0), size_y=3.0)   # sky fill
+    # a beamed ceiling and pendant lamps (on, warm)
+    for k in range(-3, 4):
+        box("c_beam", (0, k * 2.0, RZ - 0.15), (2 * RX, 0.25, 0.3), oak)
+    pend = emit("c_pendant", (1.0, 0.82, 0.58), 6.0)
+    for x in (-3.0, 0.0, 3.0):
+        for y in (-3.5, 1.0):
+            S.cyl("c_pendant_rod", (x, y, RZ), (x, y, 3.6), 0.008, mat=bar_m, verts=6)
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=10, radius=0.17, location=(x, y, 3.5))
+            bpy.context.active_object.data.materials.append(pend)
+            light_point("c_pendant_light", (x, y, 3.45), 40, (1.0, 0.78, 0.52), radius=0.15)
+    # the bench furniture: green bankers' lamps, microphones, files; the clerk's desk and the lawyers' tables
+    lampg = flat("bankers_green", (0.02, 0.22, 0.08), 0.15, coat=0.8); brass = gold("c_brass", (0.7, 0.52, 0.25))
+    for x in (-1.4, 0.0, 1.4):
+        box("c_lamp_shade", (x + 0.35, RY - 2.55, 1.72), (0.36, 0.14, 0.07), lampg, bevel=0.02)
+        S.cyl("c_lamp_stem", (x + 0.35, RY - 2.5, 1.6), (x + 0.35, RY - 2.5, 1.7), 0.01, mat=brass, verts=8)
+        light_point("c_bench_lamp", (x + 0.35, RY - 2.55, 1.66), 12, (1.0, 0.8, 0.5), radius=0.04)
+        S.cyl("c_mic", (x - 0.2, RY - 2.5, 1.6), (x - 0.25, RY - 2.7, 1.85), 0.006, mat=bar_m, verts=6)
+        box("c_file", (x - 0.05, RY - 2.55, 1.61), (0.32, 0.24, 0.03), flat("c_file", (0.45, 0.35, 0.18), 0.6), rot=(0, 0, 0.1))
+    import props as PR
+    for k, (x, y, w) in enumerate(((-2.6, 2.6, 2.0), (2.6, 2.6, 2.0), (0.0, RY - 4.0, 1.6))):
+        box("c_table", (x, y, 0.74), (w, 0.8, 0.05), oak, bevel=0.01)
+        box("c_table_front", (x, y - 0.38, 0.38), (w, 0.04, 0.7), oak)
+        for j in range(3):
+            d = PR.document(f"c_doc{k}{j}", 0.21, 0.297, seed=40 + 3 * k + j, kind="form" if j % 2 else "letter")
+            d.location = (x - w / 3 + j * w / 3 + 0.05, y + 0.05, 0.768); d.rotation_euler = (0, 0, 0.1 * (j - 1))
+    A["lawyer_tables"] = [Vector((-2.6, 2.6, 0)), Vector((2.6, 2.6, 0))]
+    haze_box("court_haze", (0, 0, RZ / 2), (2 * RX, 2 * RY, RZ), density=0.02, aniso=0.6, color=(1.0, 0.95, 0.88))
     world((0.04, 0.035, 0.03), 0.3)
     return A
 
@@ -347,23 +383,71 @@ def supermarket():
 
 
 # ----------------------------------------------------------------------------- the evidence wall
-def evidence_wall(images):
-    """A cork board in the detectives' office with prints pinned up (images: list of image paths) and soft orange
-    bands linking them (the house's way of drawing a connection)."""
-    import detail as DT
+def evidence_wall(images, links=((0, 1), (1, 2), (0, 2), (1, 3), (2, 4)), cards=True):
+    """The investigators' board: a real cork board on the office wall with photographic prints (white borders, pinned,
+    slightly askew), index cards, red push-pins and red wool strung pin to pin (sagging under its own weight) to
+    link the evidence. images: list of image paths (0 vault, 1 rubbish, 2 apartment, ...). Lit by a desk lamp below
+    and the window. Returns pins (one per print), board centre, and the yarn objects."""
+    import detail as DT, random as _r
+    import props as PR
+    rng = _r.Random(3)
     A = {}
     box("ew_floor", (0, 0, -0.05), (6, 5, 0.1), tex("dirty_carpet", 1.5, tint=(0.35, 0.33, 0.32), name="ew_carpet"))
     box("ew_wall", (0, 1.6, 1.5), (6, 0.2, 3), DT.wall_paint("ew_wall", (0.5, 0.48, 0.44), rough=0.85))
-    box("ew_cork", (0, 1.48, 1.55), (2.4, 0.03, 1.3), tex("cork" if False else "wood_table_worn", 2.0, tint=(0.75, 0.52, 0.3), name="cork"))
+    box("ew_ceil", (0, 0, 3.0), (6, 5, 0.1), flat("ew_ceil", (0.45, 0.44, 0.42), 0.9))
+    # cork: a fine brown granular board in an aluminium frame
+    cork = flat("cork", (0.5, 0.33, 0.18), 0.95)
+    N = cork.node_tree.nodes; L = cork.node_tree.links; p = N["Principled BSDF"]
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 420; nz.inputs['Detail'].default_value = 3
+    cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.32, 0.19, 0.09, 1); cr.color_ramp.elements[1].color = (0.62, 0.43, 0.24, 1)
+    L.new(nz.outputs['Fac'], cr.inputs['Fac']); L.new(cr.outputs['Color'], p.inputs['Base Color'])
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.5; L.new(nz.outputs['Fac'], bp.inputs['Height']); L.new(bp.outputs['Normal'], p.inputs['Normal'])
+    W, Hh, Z = 2.6, 1.35, 1.6
+    box("ew_cork", (0, 1.485, Z), (W, 0.025, Hh), cork)
+    alu = flat("ew_frame", (0.55, 0.55, 0.56), 0.35, metal=0.9)
+    for sz in (1, -1):
+        box("ew_frame", (0, 1.47, Z + sz * (Hh / 2 + 0.015)), (W + 0.06, 0.04, 0.03), alu)
+        box("ew_frame", (sz * (W / 2 + 0.015), 1.47, Z), (0.03, 0.04, Hh + 0.06), alu)
+    pinm = flat("pin_red", (0.65, 0.03, 0.02), 0.25, coat=0.5); pinmetal = brushed()
+    def pin(at):
+        S.cyl("pin_shaft", (at.x, 1.472, at.z), (at.x, 1.458, at.z), 0.0012, mat=pinmetal, verts=6)
+        S.cyl("pin_head", (at.x, 1.458, at.z), (at.x, 1.444, at.z), 0.006, mat=pinm, verts=12)
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.0065, location=(at.x, 1.443, at.z))
+        bpy.context.active_object.data.materials.append(pinm)
+        return Vector((at.x, 1.452, at.z))
+    slots = [(-0.85, Z + 0.3), (0.05, Z + 0.38), (0.9, Z + 0.25), (-0.45, Z - 0.3), (0.55, Z - 0.33), (-1.05, Z - 0.38), (1.08, Z - 0.35)]
+    border = flat("print_border", (0.9, 0.89, 0.86), 0.45)
     pins = []
-    xs = [(-0.8, 1.75), (0.0, 1.85), (0.8, 1.7), (-0.4, 1.25), (0.45, 1.25)]
-    for i, img in enumerate(images[:len(xs)]):
-        x, z = xs[i]
-        m = S2.image_mat(f"print{i}", img, emissive=False)
-        o = S2.plane(f"print{i}", (x, 1.462, z), (0.5, 0.28), m, rot=(math.radians(90), 0, 0))
-        box("pin", (x, 1.455, z + 0.13), (0.012, 0.012, 0.012), flat("pin_red", (0.6, 0.03, 0.02), 0.3))
-        pins.append(Vector((x, 1.455, z + 0.13)))
-    A["pins"] = pins; A["board"] = Vector((0, 1.46, 1.55))
-    light_spot("ew_lamp", (0.6, -0.8, 2.4), A["board"], 260, angle=55, color=(1.0, 0.86, 0.64), radius=0.1)
-    world((0.02, 0.02, 0.02), 0.2)
+    for k, path in enumerate(images[:len(slots)]):
+        x, z = slots[k]; tilt = rng.uniform(-4, 4)
+        w, h = (0.42, 0.29)
+        R = (math.radians(90), math.radians(tilt), 0)
+        box(f"print_border{k}", (x, 1.4705, z), (w + 0.03, 0.0015, h + 0.03), border, rot=(0, math.radians(tilt), 0))
+        S2.plane(f"print{k}", (x, 1.469, z), (w, h), S2.image_mat(f"print_img{k}", path, emissive=False), rot=R)
+        pins.append(pin(Vector((x, 0, z + h / 2 - 0.02))))
+    if cards:
+        import os as _os
+        for k, (x, z) in enumerate(((-0.82, Z + 0.02), (0.08, Z + 0.08), (0.92, Z - 0.02), (-0.1, Z - 0.52), (0.6, Z - 0.05), (-0.5, Z - 0.03))):
+            cp = _os.path.join(PR.DOCS, f"card_{k + 1}.jpg")
+            if not _os.path.exists(cp):
+                continue
+            S2.plane(f"card{k}", (x, 1.4685, z), (0.15, 0.093), S2.image_mat(f"card_img{k}", cp, emissive=False),
+                     rot=(math.radians(90), math.radians(rng.uniform(-6, 6)), 0))
+            pin(Vector((x, 0, z + 0.035)))
+    # red wool, pin to pin, sagging a little (a short catenary of straight pieces)
+    wool = flat("red_wool", (0.55, 0.02, 0.02), 0.85)
+    yarns = []
+    for a_, b_ in links:
+        if a_ >= len(pins) or b_ >= len(pins):
+            continue
+        pa, pb = pins[a_], pins[b_]; n = 10; d = (pb - pa).length; sag = 0.012 + 0.02 * d
+        pts = [pa.lerp(pb, t / n) - Vector((0, 0, sag * 4 * (t / n) * (1 - t / n))) for t in range(n + 1)]
+        for q0, q1 in zip(pts, pts[1:]):
+            yarns.append(S.cyl("red_yarn", (q0.x, 1.446, q0.z), (q1.x, 1.446, q1.z), 0.0016, mat=wool, verts=6))
+    A["pins"] = pins; A["board"] = Vector((0, 1.47, Z)); A["yarns"] = yarns
+    # a desk under the board with the lamp that lights it from below; the room lit by the window to the side
+    box("ew_desk", (0.2, 1.0, 0.74), (1.6, 0.8, 0.04), flat("ew_desk", (0.2, 0.16, 0.12), 0.5))
+    light_spot("ew_lamp", (0.75, 1.05, 1.05), (0.1, 1.48, Z + 0.1), 120, angle=70, color=(1.0, 0.8, 0.55), radius=0.04)
+    light_area("ew_window", (-3.0, 0.2, 1.8), (0, 1.4, 1.5), 1.6, 140, (0.75, 0.85, 1.0))
+    world((0.02, 0.02, 0.025), 0.2)
     return A
