@@ -169,6 +169,7 @@ def _tex_set(nt, aid, vec, res="2k"):
     for key, path in mp.items():
         t = nt.nodes.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(path, check_existing=True)
         t.image.colorspace_settings.name = 'sRGB' if key == "Diffuse" else 'Non-Color'
+        t.projection = 'BOX'; t.projection_blend = 0.25            # no vertical stretching on section faces
         nt.links.new(vec, t.inputs['Vector']); r[key] = t
     return r
 
