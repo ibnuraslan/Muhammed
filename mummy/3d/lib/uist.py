@@ -21,7 +21,7 @@ DIG = dict(x0=-9.0, x1=10.0, y0=-15.5, y1=16.0, depth=1.6)     # open-area excav
 HOUSES = [(0.0, -9.2, 4.3), (0.3, 0.0, 4.6), (0.0, 9.6, 4.4)]
 HOUSE_SINK = 0.32         # house floors are sunk into the sand below the excavated surface
 # grave pits under the north house floor: (x, y, half-length, half-width, depth, angle deg). B1 = the man, B2 = the second adult
-PIT_CUT = {"B1": (0.2, 0.6, 0.95), "B2": (-0.19, 0.57, 0.9)}   # (offset along the pit axis, a, b): hides the pot corner
+PIT_CUT = {"B1": (0.24, 0.66, 1.0), "B2": (-0.23, 0.62, 0.95)}   # (offset along the pit axis, a, b): hides the pot corner
 PITS = {"B1": (-1.8, 8.9, 0.86, 0.95, 0.5, 20.0), "B2": (-0.3, 11.6, 0.82, 0.9, 0.5, 150.0),
         "KNEE": (3.2, 14.6, 0.45, 0.38, 0.28, 0.0)}        # knee pit: outside the house, ~5 m from B2
 
@@ -109,7 +109,7 @@ def _cut(x, y):
             px, py = px + du * c, py + du * s_
         u = ((x - px) * c + (y - py) * s_) / a; v = (-(x - px) * s_ + (y - py) * c) / b
         e = np.hypot(u, v)
-        bowl = (1 - _smooth(0.97, 1.02, e)) if key in ("B1", "B2") else (1 - _smooth(0.55, 1.0, e))   # scanned graves: cut to fit
+        bowl = (1 - _smooth(0.86, 1.03, e)) if key in ("B1", "B2") else (1 - _smooth(0.55, 1.0, e))   # scanned graves: cut to fit
         dd = dd + wall * dep * bowl
     return np.maximum(dd, 0)
 
