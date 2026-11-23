@@ -633,7 +633,12 @@ for nm_, tr_ in (("TrayBag_0", "Tray_0"), ("TrayBag_2", "Tray_4"), ("TrayBag_3",
     if not b_: continue
     if tr_ is None:
         b_.hide_render = True; b_.location = AX + V((0, -30, -5)); continue
-    b_.parent = O[tr_]; b_.matrix_parent_inverse = Matrix.Identity(4); b_.location = (0, 0, 0.04)
+    t_ = O[tr_]; sc.frame_set(1)
+    ctr = sum((t_.matrix_world @ V(c) for c in t_.bound_box), V((0, 0, 0))) / 8.0    # tray meshes carry their offset in the mesh
+    b_.parent = t_; b_.matrix_parent_inverse = t_.matrix_world.inverted(); b_.location = ctr + V((0, 0, 0.06))
+# v010: carry-on bags 4C (in the bomber's legroom, at his feet) and 2D (aisle-side foreground of the aft shots) removed
+for nm_ in ("Bag_4C", "Bag_2D"):
+    if O.get(nm_): O[nm_].hide_render = True; O[nm_].location.z -= 50
 # v010 (director 3, 7, 15): dual-quaternion skinning on every body + garment (no puffed shoulders), and matte hair (no
 # grey sheen that read as a different head between shots)
 for ob in O:

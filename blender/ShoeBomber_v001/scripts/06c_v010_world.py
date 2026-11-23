@@ -35,8 +35,9 @@ if cd:
             for e in n.color_ramp.elements:
                 v = sum(e.color[:3]) / 3
                 e.color = (v * 0.97, v * 0.985, v, e.color[3])
-        if n.type == 'BSDF_PRINCIPLED' and not n.inputs["Base Color"].is_linked:
-            n.inputs["Base Color"].default_value = (0.92, 0.93, 0.95, 1)
+        if n.type == 'BSDF_PRINCIPLED':
+            if not n.inputs["Base Color"].is_linked: n.inputs["Base Color"].default_value = (0.92, 0.93, 0.95, 1)
+            n.inputs["Subsurface Weight"].default_value = 0.0      # its red-default SSS radius tinted the deck pink-brown
 # any other warm-tinted sky materials (cloud banks, haze) -> neutral
 for mname in ("CloudBank", "Haze", "SkyHaze"):
     m = bpy.data.materials.get(mname)

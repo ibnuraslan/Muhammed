@@ -33,10 +33,12 @@ GRIP_L = SHOE_LAP + V((-0.075, -0.05, 0.10))
 for f in (1, 100, 200, 300, 372, 440, 462):
     hand(bom, "L", f, GRIP_L, (0.55, 0.15, -0.6), (1, 0, 0), pole=(BX - 0.45, BY - 0.15, 0.70), grip=0.75, pose="wrap_grip")
 # right hand: strikes the match on the sole edge (14-26), lights (28), brings the flame to the fuse tip and holds it
-strike = [(1, V((0.16, -0.08, -0.12))), (12, V((0.13, 0.02, -0.16))), (20, V((0.13, 0.14, -0.15))), (26, V((0.15, 0.10, -0.08))),
-          (36, V((0.09, -0.04, -0.07))), (60, V((0.08, -0.05, -0.08))), (90, V((0.09, -0.04, -0.07))), (130, V((0.08, -0.05, -0.08))),
-          (170, V((0.09, -0.04, -0.07))), (220, V((0.08, -0.05, -0.08))), (280, V((0.09, -0.04, -0.07))), (340, V((0.08, -0.05, -0.08))),
-          (380, V((0.09, -0.04, -0.07))), (400, V((0.14, -0.06, 0.02))), (440, V((0.15, -0.06, 0.03)))]
+# v010: the hand stays BEHIND the fuse (toward his body, -Y) and a little below, so the match reaches forward to the fuse
+# tip and the flame + fuse read in front of his fingers from the aisle cameras
+strike = [(1, V((0.16, -0.10, -0.12))), (12, V((0.13, -0.02, -0.16))), (20, V((0.13, 0.10, -0.15))), (26, V((0.12, 0.02, -0.08))),
+          (36, V((0.03, -0.11, -0.05))), (60, V((0.02, -0.12, -0.06))), (90, V((0.03, -0.11, -0.05))), (130, V((0.02, -0.12, -0.06))),
+          (170, V((0.03, -0.11, -0.05))), (220, V((0.02, -0.12, -0.06))), (280, V((0.03, -0.11, -0.05))), (340, V((0.02, -0.12, -0.06))),
+          (380, V((0.03, -0.11, -0.05))), (400, V((0.10, -0.10, 0.02))), (440, V((0.12, -0.08, 0.03)))]
 for f, o in strike:
     hand(bom, "R", f, FUSE_TIP + o, (-0.45, 0.35, 0.75), (0, -1, 0), pole=(BX + 0.55, BY - 0.30, 0.75), grip=0.8, pose="pinch")
 # 466: she takes the shoe; his hands follow it a little, then he lunges up into the aisle after it
