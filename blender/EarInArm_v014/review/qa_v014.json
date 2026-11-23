@@ -1,0 +1,879 @@
+{
+ "frames": {
+  "391": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1183": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ],
+   [
+    "PROPMOVE",
+    "Ear_New moves 20.3 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "1189": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ],
+   [
+    "PROPMOVE",
+    "Ear_New moves 25.9 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "1195": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ],
+   [
+    "PROPMOVE",
+    "Ear_New moves 9.3 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "1201": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ],
+   [
+    "PROPMOVE",
+    "Ear_New moves 14.3 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "1207": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ],
+   [
+    "PROPMOVE",
+    "Ear_New moves 1.5 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "1213": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ],
+   [
+    "PROPMOVE",
+    "Ear_New moves 2.4 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "1219": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ],
+   [
+    "PROPMOVE",
+    "Ear_New moves 2.0 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "1225": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1231": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1237": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1243": [
+   [
+    "FILL",
+    "hair / top of head 36%"
+   ]
+  ],
+  "1267": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 0.72 m, 53 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1273": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1279": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1285": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1291": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1297": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1303": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1309": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1315": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1321": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1327": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1333": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1339": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1345": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1351": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1357": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1363": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1369": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1375": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1381": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1387": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1555": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1561": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1567": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "67": [
+   [
+    "CAMJUMP",
+    "cut: 0.82 m, 22 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "135": [
+   [
+    "CAMJUMP",
+    "cut: 0.87 m, 36 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "264": [
+   [
+    "CAMJUMP",
+    "cut: 1.40 m, 37 deg in one frame (neighbours 0.03 m, 2 deg)"
+   ]
+  ],
+  "351": [
+   [
+    "CAMJUMP",
+    "cut: 0.36 m, 46 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "395": [
+   [
+    "CAMJUMP",
+    "cut: 0.64 m, 46 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "477": [
+   [
+    "CAMJUMP",
+    "cut: 0.94 m, 23 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "668": [
+   [
+    "CAMJUMP",
+    "cut: 1.19 m, 50 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "861": [
+   [
+    "CAMJUMP",
+    "cut: 1.38 m, 58 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "915": [
+   [
+    "CAMJUMP",
+    "cut: 1.12 m, 14 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1058": [
+   [
+    "CAMJUMP",
+    "cut: 0.67 m, 27 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1156": [
+   [
+    "CAMJUMP",
+    "cut: 0.79 m, 35 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1181": [
+   [
+    "CAMJUMP",
+    "cut: 0.76 m, 54 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1246": [
+   [
+    "CAMJUMP",
+    "cut: 0.74 m, 54 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1392": [
+   [
+    "CAMJUMP",
+    "cut: 0.74 m, 54 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "25": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "49": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "73": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "97": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "121": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "247": [
+   [
+    "PROPMOVE",
+    "Chest_Piece_Carry moves 6.1 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "265": [
+   [
+    "PROPMOVE",
+    "Chest_Piece_Carry moves 9.5 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "271": [
+   [
+    "PROPMOVE",
+    "Chest_Piece_Carry moves 10.4 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "277": [
+   [
+    "PROPMOVE",
+    "Chest_Piece_Carry moves 11.5 cm with no hand on it (nearest finger 3 cm)"
+   ]
+  ],
+  "283": [
+   [
+    "PROPMOVE",
+    "Chest_Piece_Carry moves 6.7 cm with no hand on it (nearest finger 3 cm)"
+   ]
+  ],
+  "313": [
+   [
+    "ATTACH",
+    "Surgeon_FaceMask is 40.0 cm off Nurse's skin (median)"
+   ]
+  ],
+  "337": [
+   [
+    "ATTACH",
+    "Surgeon_FaceMask is 39.6 cm off Nurse's skin (median)"
+   ]
+  ],
+  "409": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon_FaceMask is 40.6 cm off Nurse's skin (median)"
+   ]
+  ],
+  "433": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon_FaceMask is 40.7 cm off Nurse's skin (median)"
+   ]
+  ],
+  "457": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "529": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 46.0 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "535": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 37.8 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "541": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 67.4 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "547": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 21.4 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "553": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 10.2 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "559": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 1.4 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "565": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 3.6 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "571": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 1.4 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "577": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 3.9 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "583": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 14.3 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "589": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 16.0 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "595": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 35.2 cm with no hand on it (nearest finger 10 cm)"
+   ]
+  ],
+  "601": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "625": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "649": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "817": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 2.1 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "865": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "889": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "913": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "991": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 1.1 cm with no hand on it (nearest finger 9 cm)"
+   ]
+  ],
+  "997": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 1.4 cm with no hand on it (nearest finger 10 cm)"
+   ]
+  ],
+  "1003": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 1.8 cm with no hand on it (nearest finger 10 cm)"
+   ]
+  ],
+  "1015": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 1.4 cm with no hand on it (nearest finger 10 cm)"
+   ]
+  ],
+  "1021": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 1.6 cm with no hand on it (nearest finger 10 cm)"
+   ]
+  ],
+  "1027": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 0.7 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "1033": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 0.8 cm with no hand on it (nearest finger 11 cm)"
+   ]
+  ],
+  "1039": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 0.7 cm with no hand on it (nearest finger 11 cm)"
+   ]
+  ],
+  "1045": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 0.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "1051": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 0.6 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "1057": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 1.0 cm with no hand on it (nearest finger 11 cm)"
+   ]
+  ],
+  "1063": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 2.6 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "1069": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 5.4 cm with no hand on it (nearest finger 12 cm)"
+   ]
+  ],
+  "1075": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 3.6 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "1081": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 10.6 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "1087": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 8.1 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "1093": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 17.9 cm with no hand on it (nearest finger 3 cm)"
+   ]
+  ],
+  "1099": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 3.8 cm with no hand on it (nearest finger 3 cm)"
+   ]
+  ],
+  "1105": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 6.2 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "1111": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 6.5 cm with no hand on it (nearest finger 3 cm)"
+   ]
+  ],
+  "1117": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 1.6 cm with no hand on it (nearest finger 3 cm)"
+   ]
+  ],
+  "1123": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 21.4 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "1129": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 2.4 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "1135": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 2.7 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "1141": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 7.4 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "1147": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 9.2 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "1153": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 4.1 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "1159": [
+   [
+    "PROPMOVE",
+    "Ear_New moves 583.6 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "1165": [
+   [
+    "PROPMOVE",
+    "Ear_New moves 7.4 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "1171": [
+   [
+    "PROPMOVE",
+    "Ear_New moves 16.4 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "1177": [
+   [
+    "PROPMOVE",
+    "Ear_New moves 12.7 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "1249": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "1393": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "1417": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "1441": [
+   [
+    "ATTACH",
+    "Surgeon_Cap is 4.1 cm off Surgeon's skin (median)"
+   ]
+  ],
+  "1465": [
+   [
+    "PROPMOVE",
+    "Ear_New moves 1.7 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "1471": [
+   [
+    "PROPMOVE",
+    "Ear_New moves 3.4 cm with no hand on it (nearest finger 38 cm)"
+   ]
+  ],
+  "1477": [
+   [
+    "PROPMOVE",
+    "Ear_New moves 4.7 cm with no hand on it (nearest finger 43 cm)"
+   ]
+  ],
+  "1483": [
+   [
+    "PROPMOVE",
+    "Ear_New moves 5.6 cm with no hand on it (nearest finger 49 cm)"
+   ]
+  ],
+  "1489": [
+   [
+    "PROPMOVE",
+    "Ear_New moves 6.0 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1495": [
+   [
+    "PROPMOVE",
+    "Ear_New moves 6.1 cm with no hand on it (nearest finger 47 cm)"
+   ]
+  ],
+  "1501": [
+   [
+    "PROPMOVE",
+    "Ear_New moves 5.7 cm with no hand on it (nearest finger 49 cm)"
+   ]
+  ],
+  "1507": [
+   [
+    "PROPMOVE",
+    "Ear_New moves 4.9 cm with no hand on it (nearest finger 49 cm)"
+   ]
+  ],
+  "1513": [
+   [
+    "PROPMOVE",
+    "Ear_New moves 3.6 cm with no hand on it (nearest finger 48 cm)"
+   ]
+  ],
+  "1519": [
+   [
+    "PROPMOVE",
+    "Ear_New moves 1.9 cm with no hand on it (nearest finger 47 cm)"
+   ]
+  ],
+  "1531": [
+   [
+    "PROPMOVE",
+    "Ear_New moves 0.8 cm with no hand on it (nearest finger 27 cm)"
+   ]
+  ],
+  "1537": [
+   [
+    "PROPMOVE",
+    "Ear_New moves 1.0 cm with no hand on it (nearest finger 10 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 1,
+  "FILL": 35,
+  "CAMJUMP": 15,
+  "ATTACH": 32,
+  "PROPMOVE": 68
+ }
+}

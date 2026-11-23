@@ -1,15 +1,15 @@
-# EarInArm_v013: fixes for the director's v012 notes and the client's rejection of v011 (synced to your voiceover)
+# EarInArm_v014: fixes for the director's v012 notes and the client's rejection of v011 (synced to your voiceover)
 
-This is built from Connect01's EarInArm scripts (`../EarInArm_v001/scripts/`), with the v013 fixes below. It is retimed to the same voiceover and timing as v011 (`../briefs/sync/01.anchors.json`, frames **1–1572**). v011 is untouched.
+This is built from Connect01's EarInArm scripts (`../EarInArm_v001/scripts/`), with the v014 fixes below. It is retimed to the same voiceover and timing as v011 (`../briefs/sync/01.anchors.json`, frames **1–1572**). v011 is untouched.
 
-- `EarInArm_v013_60fps.blend`: the self-contained scene, with every texture packed.
-- `EarInArm_v013_VO.mp3`: the voiceover, the same recording as v011. It is also packed into the .blend as the scene's sound strip.
+- `EarInArm_v014_60fps.blend`: the self-contained scene, with every texture packed.
+- `EarInArm_v014_VO.mp3`: the voiceover, the same recording as v011. It is also packed into the .blend as the scene's sound strip.
 - `beats.json`: beat start frames on the VO: 1, 109, 301, 463, 649, 907, 1129, 1267, 1447; end 1572.
 - `SETTINGS.md` (render settings) and `CREDITS.md`.
 - `review/preview.mp4`: a 270×480 preview rendered from this exact package, every 5th frame at 12 fps (real time), with the frame number in the corner and the VO.
 - `review/*.json`: qa_check, clip_scan, limb_check, cam_clear and body_prop_cross on this package.
 
-## v013 vs v011 (client rejection)
+## v014 vs v011 (client rejection)
 1. **Patient:**
    - He has real short MPFB hair: short02, rebound to his head bone and shrinkwrapped to the scalp. He is not bald.
    - His skin is warmer and natural, with dark brown irises, the eye fix and a camera catchlight on every character.
@@ -31,7 +31,7 @@ This is built from Connect01's EarInArm scripts (`../EarInArm_v001/scripts/`), w
    - Framed posters on three walls (abstract colour, no text).
    - A tall blue-and-white cabinet, a sink unit with a steel basin and tap, a wall clock, and a chair rail round the room.
 
-## v013 vs v011: client flags A–F and the 36-point list
+## v014 vs v011: client flags A–F and the 36-point list
 - **A. Rib → ear story:**
   - A chest-up x-ray cutaway of the ribcage, with his face in frame and blinking. The forceps free a cartilage piece from the rib.
   - The piece is carried to the tray and carved: the cartilage is pearly ivory-pink tissue, smoothed, not white paper.
@@ -56,7 +56,7 @@ This is built from Connect01's EarInArm scripts (`../EarInArm_v001/scripts/`), w
 - **3 / 4:** short hair, warm skin with SSS, dark irises with catchlights, and blinks in every patient shot.
 - **7 / 11:** fitted, smaller caps over the hair, and tailored two-tone scrubs.
 
-## v013 vs v012 (director's 17 faults)
+## v014 vs v012 (director's 17 faults)
 - **14 / 15 / 16, the ear on the head:**
   - The patient's hair is cut away around both ears. It formed "earmuff" discs and hid the grafted ear.
   - The graft is filmed closer. The ear arrives in the forceps, is set on the head and stays visible through the stitching to the end.
@@ -73,6 +73,18 @@ This is built from Connect01's EarInArm scripts (`../EarInArm_v001/scripts/`), w
 - **8:** the board arm rests with a bent elbow and the hand flat (v012b).
 - **6 / 17:** the tray and macro shots are at f/11+, and motion blur is off.
 - **Opening:** the surgeon no longer drifts away from his own glove (v012b fix).
+
+## v014 vs v013 (director's open items)
+- **1. Wardrobe:**
+  - The patient wears a separate white cotton tee with a straight hem over denim jeans. There is no onesie running into the crotch.
+  - The caps are modelled cloth bouffants with a gathered, pleated band, not domes.
+- **2. Hands touch what they work on:**
+  - In the x-ray the palm lies flat on the upper chest from the first frame.
+  - In the forearm close-ups the fingertips rest on the bump.
+  - In the lift-out the forceps close on the ear standing on the forearm and lift it out (one model, baked every frame). The other glove steadies the arm.
+- **3. Mask:** in the opening the surgeon stands beside the patient in profile, so his mask reads from frame 1.
+- **12. Wrist near the face:** the lift-out is a close-up of the forearm and ear, with his face clear of his hands.
+- **13. Stance:** the hips are raised and the bow reduced, so he stands upright at the board. He leans in only for the grip.
 
 ## Frame mapping
 The times in the rejection notes match the v011 shots when read as 30 frames per second of the 60 fps file (e.g. 4.5–5.2 s ≈ v011 frames 135–157 = the forearm two-shot; 7.1–9.7 s = the worried close-up; ~11 s = the nurse at the tray; 21–25 s = the arm on the board). Each fix was checked on that shot, and also on the shots at the same times read at 60 fps.
