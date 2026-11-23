@@ -652,7 +652,7 @@ def s19():
     def pose(dv, Mx):
         H.pose_sit(dv.h, lean=16, hands="knees")
         P.head(dv.h, pitch=32)
-        Cw.hands_on(dv, Mx, left_w=t + Vector((0.06, 0.09, 0.15)), right_w=t + Vector((-0.12, 0.09, 0.15)),
+        Cw.hands_on(dv, Mx, left_w=t + Vector((0.06, 0.09, 0.15)), right_w=t + Vector((-0.26, 0.09, 0.15)),
                     elbow_l=(0.8, 0.5, -0.6), elbow_r=(-0.8, 0.5, -0.6), grip=False, curl=30)
     # seat height: the stool top ~0.45
     dv = person("deveau", M, pose, look_w=t + Vector((-0.1, 0.02, 0.05)), seat=True)
@@ -963,9 +963,11 @@ def s38():
     hz = Vector((head_xy.x - bottom.x, head_xy.y - bottom.y, 0.0)); L = 4.4 * ft
     u = (hz + Vector((0, 0, math.sqrt(max(L * L - hz.length ** 2, 0.01))))).normalized()
     top = bottom + u * L
+    to_me = Vector(((Mp @ Vector((0, 0, 1.3))) - top).to_2d().normalized().to_3d())
+    grip_w = top - u * 0.04 + to_me * 0.075 + Vector((0, 0, 0.03))   # wrist just behind the rod head: the fist closes on it
     def pose(dv, Mx):
         Cw.stand_relaxed(dv, pitch=26, yaw=-8, lean=8)
-        Cw.hands_on(dv, Mx, right_w=top + Vector((0, 0, 0.075)), left_w=None, elbow_r=(-0.8, 0.3, -0.6), grip=False, curl=30)
+        Cw.hands_on(dv, Mx, right_w=grip_w, left_w=None, elbow_r=(-0.8, 0.3, -0.6), grip=True)
         P.arm_down(dv.h, "L", out=0.1, fwd=0.05, bend=14); P.rest_hand(dv.h, "L", curl=26)
     person("deveau", Mp, pose, look_w=bottom + u * (3.5 * ft))
     wet = ship.paint("rod_wet", (0.08, 0.07, 0.065), rough=0.18, grime=0.1, wet=1.0, scale=8)
@@ -978,8 +980,9 @@ def s38():
         ship.cyl("rod_mark", q - u * 0.003, q + u * 0.003, 0.0118, mat=notch, verts=14)
     rope = mc["mats"]["rope"]
     ship.rope("sounding_line", [top - Vector((0, 0, 0.02)), top + Vector((0.05, 0.06, -0.12)), top + Vector((0.12, 0.2, -0.7)), S.deck_point(M, x0 - 0.3, y0 + 0.2, 0.02)], 0.005, rope)
-    c = Mp @ Vector((-1.5, -1.0, 1.15))                # side-on from his right, chest-down: the rod and both hands
-    E.camera(c, mark + Vector((0, 0, 0.05)), lens=35, fstop=3.5, focus=(mark - c).length)
+    c = Mp @ Vector((-1.5, -1.0, 1.15))                # side-on from his right: the original framing (head in frame)
+    aim = Mp @ Vector((-0.2, -0.42, 0.18 + 3.5 * ft + 0.05))
+    E.camera(c, aim, lens=35, fstop=3.5, focus=(aim - c).length)
 
 
 @shot("S39", "The hull looks in good shape.", 2.2,
