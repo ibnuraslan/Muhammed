@@ -38,7 +38,7 @@ def mat(name):
     elif name == "skirt":                     # trowelled pit edge between the scanned grave and the trench floor
         m = ph.texture("dense_sand", scale=0.9, name="skirt", tint=(0.78, 0.7, 0.55))
     elif name == "gravefloor":
-        m = ph.texture("dense_sand", scale=1.6, name="gravefloor", tint=(0.95, 0.9, 0.8))
+        m = ph.texture("dense_sand", scale=1.6, name="gravefloor", tint=(0.86, 0.8, 0.68))
     elif name == "rubber":
         m = bpy.data.materials.new("rubber"); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
         p.inputs['Base Color'].default_value = (0.012, 0.012, 0.012, 1); p.inputs['Roughness'].default_value = 0.55
@@ -46,7 +46,8 @@ def mat(name):
         m = ph.texture("weathered_planks", scale=1.0, name="plank")
     elif name == "canvas":
         m = bpy.data.materials.new("canvas"); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
-        p.inputs['Base Color'].default_value = (0.07, 0.1, 0.06, 1); p.inputs['Roughness'].default_value = 0.85
+        p.inputs['Base Color'].default_value = (0.78, 0.77, 0.72, 1); p.inputs['Roughness'].default_value = 0.85
+        p.inputs['Subsurface Weight'].default_value = 0.15; p.inputs['Subsurface Radius'].default_value = (0.3, 0.3, 0.3); p.inputs['Subsurface Scale'].default_value = 0.01
         p.inputs['Sheen Weight'].default_value = 0.3
         p.inputs['Transmission Weight'].default_value = 0.0
     elif name == "pole_red":
@@ -58,6 +59,9 @@ def mat(name):
         mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(st.outputs[0], mx.inputs['Factor'])
         mx.inputs[6].default_value = (0.5, 0.02, 0.015, 1); mx.inputs[7].default_value = (0.75, 0.74, 0.7, 1)
         L.new(mx.outputs[2], p.inputs['Base Color']); p.inputs['Roughness'].default_value = 0.5
+    elif name == "rope":
+        m = bpy.data.materials.new("rope"); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
+        p.inputs['Base Color'].default_value = (0.7, 0.66, 0.55, 1); p.inputs['Roughness'].default_value = 0.8
     elif name == "string":
         m = bpy.data.materials.new("string"); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
         p.inputs['Base Color'].default_value = (0.55, 0.42, 0.05, 1); p.inputs['Roughness'].default_value = 0.6
@@ -342,22 +346,83 @@ def sieve(x, y, rot=0.0):
     return parts
 
 
-def marquee(cx, cy, w=5.0, d=4.0, h=2.2, ridge=3.0, rot=0.0):
-    """Ridge tent / site marquee (canvas over a frame), open on the side facing the trench."""
+def _guy(p0, p1, sag=0.03, r=0.004, m=None):
+    """A guy rope from p0 (tent) to p1 (peg) with a slight sag, and the peg."""
+    v = Vector(p1) - Vector(p0); n = 10
+    pts = [Vector(p0) + v * (k / n) - Vector((0, 0, sag * 4 * (k / n) * (1 - k / n))) for k in range(n + 1)]
+    cu = bpy.data.curves.new("guy", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = r
+    sp = cu.splines.new('POLY'); sp.points.add(len(pts) - 1)
+    for i, p in enumerate(pts):
+        sp.points[i].co = (*p, 1)
+    o = bpy.data.objects.new("guyrope", cu); link(o); cu.materials.append(m or mat("rope"))
+    peg((p1[0], p1[1]), z=p1[2] - 0.05)
+    return o
+
+
+def marquee(cx, cy, w=6.0, d=4.2, h=2.1, ridge=3.1, rot=0.0):
+    """White canvas frame marquee: four walls (front rolled up), pitched roof, sagging canvas, guy ropes to pegs."""
     z = H(cx, cy)
+    R = Matrix.Rotation(rot, 4, 'Z')
+    def W(p):
+        return Matrix.Translation((cx, cy, z)) @ R @ Vector(p)
     V = [(-w / 2, -d / 2, 0), (w / 2, -d / 2, 0), (w / 2, d / 2, 0), (-w / 2, d / 2, 0),
          (-w / 2, -d / 2, h), (w / 2, -d / 2, h), (w / 2, d / 2, h), (-w / 2, d / 2, h), (-w / 2, 0, ridge), (w / 2, 0, ridge)]
-    F = [(0, 1, 5, 4), (3, 7, 6, 2), (4, 5, 9, 8), (7, 8, 9, 6), (0, 4, 8, 7, 3), (1, 2, 6, 9, 5)]
-    F = [f for k, f in enumerate(F) if k != 0]        # front (south) wall open
+    F = [(3, 7, 6, 2), (4, 5, 9, 8), (7, 8, 9, 6), (0, 4, 8, 7, 3), (1, 2, 6, 9, 5)]   # front (south) wall open
     me = bpy.data.meshes.new("marquee"); me.from_pydata(V, [], F); me.update()
     me.materials.append(mat("canvas"))
     o = bpy.data.objects.new("marquee", me); link(o)
     o.location = (cx, cy, z); o.rotation_euler.z = rot
-    sub = o.modifiers.new("sub", "SUBSURF"); sub.subdivision_type = 'SIMPLE'; sub.levels = 4; sub.render_levels = 4
-    dsp = o.modifiers.new("sag", "DISPLACE"); t = bpy.data.textures.new("canvas", "CLOUDS"); t.noise_scale = 0.8
-    dsp.texture = t; dsp.strength = 0.04
+    sub = o.modifiers.new("sub", "SUBSURF"); sub.subdivision_type = 'SIMPLE'; sub.levels = 5; sub.render_levels = 5
+    dsp = o.modifiers.new("sag", "DISPLACE"); t = bpy.data.textures.new("canvas", "CLOUDS"); t.noise_scale = 0.6
+    dsp.texture = t; dsp.strength = 0.05
     sol = o.modifiers.new("th", "SOLIDIFY"); sol.thickness = 0.004
+    # front wall rolled up under the eave; poles at the corners and the open front
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.09, depth=w, location=W((0, -d / 2, h - 0.08))); rl = bpy.context.active_object
+    rl.rotation_euler = (0, math.pi / 2, rot); rl.data.materials.append(mat("canvas")); rl.name = "rolledwall"
+    for px in (-w / 2, -w / 6, w / 6, w / 2):
+        bpy.ops.mesh.primitive_cylinder_add(radius=0.025, depth=h, location=W((px, -d / 2, h / 2))); p = bpy.context.active_object
+        p.data.materials.append(mat("steel")); p.name = "tentpole"
+    # guy ropes from the eaves, 1.6 m out
+    for px in (-w / 2, -w / 6, w / 6, w / 2):
+        for sy in (-1, 1):
+            e = W((px, sy * d / 2, h)); g = W((px, sy * (d / 2 + 1.6), 0))
+            g.z = H(g.x, g.y) + 0.06
+            _guy(e, g)
+    for sy in (-1, 1):
+        for sx in (-1, 1):
+            e = W((sx * w / 2, sy * d / 2, h)); g = W((sx * (w / 2 + 1.4), sy * d / 2, 0)); g.z = H(g.x, g.y) + 0.06
+            _guy(e, g)
     return o
+
+
+def site_hut(cx, cy, rot=0.0, w=6.0, d=2.6, h=2.6):
+    """Site cabin (portakabin): painted steel box on blocks, windows, door, two steps."""
+    z = H(cx, cy) + 0.15
+    R = Matrix.Rotation(rot, 4, 'Z')
+    def W(p):
+        return Matrix.Translation((cx, cy, z)) @ R @ Vector(p)
+    body = bpy.data.materials.new("hutpaint"); body.use_nodes = True; bp = body.node_tree.nodes["Principled BSDF"]
+    bp.inputs['Base Color'].default_value = (0.14, 0.2, 0.16, 1); bp.inputs['Roughness'].default_value = 0.6
+    glass = bpy.data.materials.new("hutglass"); glass.use_nodes = True; gp = glass.node_tree.nodes["Principled BSDF"]
+    gp.inputs['Base Color'].default_value = (0.02, 0.025, 0.03, 1); gp.inputs['Roughness'].default_value = 0.05
+    bpy.ops.mesh.primitive_cube_add(size=1, location=W((0, 0, h / 2))); b = bpy.context.active_object
+    b.scale = (w, d, h); b.rotation_euler.z = rot; b.data.materials.append(body); b.name = "sitehut"
+    bv = b.modifiers.new("bev", "BEVEL"); bv.width = 0.03; bv.segments = 2
+    # corrugation: wave bump on the walls
+    nt = body.node_tree; wv = nt.nodes.new("ShaderNodeTexWave"); wv.inputs['Scale'].default_value = 30
+    tc = nt.nodes.new("ShaderNodeTexCoord"); nt.links.new(tc.outputs['Object'], wv.inputs['Vector'])
+    bm_ = nt.nodes.new("ShaderNodeBump"); bm_.inputs['Strength'].default_value = 0.3; nt.links.new(wv.outputs['Fac'], bm_.inputs['Height'])
+    nt.links.new(bm_.outputs['Normal'], bp.inputs['Normal'])
+    for k, px in enumerate((-2.0, -0.7, 1.6)):
+        bpy.ops.mesh.primitive_cube_add(size=1, location=W((px, -d / 2 - 0.01, h * 0.62))); wdw = bpy.context.active_object
+        wdw.scale = (0.9 if k != 2 else 0.85, 0.02, 0.7 if k != 2 else 1.9); wdw.rotation_euler.z = rot
+        if k == 2:
+            wdw.location = W((px, -d / 2 - 0.01, 0.98))
+        wdw.data.materials.append(glass); wdw.name = "hutwindow"
+    for k in range(2):
+        bpy.ops.mesh.primitive_cube_add(size=1, location=W((1.6, -d / 2 - 0.25 - 0.25 * k, -0.15 + 0.11 * (1 - k)))); st = bpy.context.active_object
+        st.scale = (1.0, 0.28, 0.1); st.rotation_euler.z = rot; st.data.materials.append(mat("plank")); st.name = "hutstep"
+    return b
 
 
 def kit(people=False, seed=3):
@@ -365,7 +430,16 @@ def kit(people=False, seed=3):
     D = U.DIG
     out = {}
     out["spoil"] = spoil_heap(D["x1"] + 8.5, 1.0, 6.0, 9.0, 2.2)
-    out["marquee"] = marquee(-24.0, 27.0, rot=0.5)
+    out["marquee"] = marquee(-17.0, 22.0, rot=0.35)
+    out["hut"] = site_hut(-22.0, 10.0, rot=1.75)
+    out["spoil2"] = spoil_heap(-15.0, -20.0, 5.0, 4.0, 1.6)
+    # string grid across the north house (planning grid, 1 m squares) on pins at the trench floor
+    gx0, gy0 = -4.0, -4.0
+    for k in range(10):
+        zz = H(gx0 + k, gy0) + 0.15
+        string_line((gx0 + k, gy0, H(gx0 + k, gy0) + 0.15), (gx0 + k, gy0 + 9, H(gx0 + k, gy0 + 9) + 0.15), sag=0.005)
+    for k in range(10):
+        string_line((gx0, gy0 + k, H(gx0, gy0 + k) + 0.15), (gx0 + 9, gy0 + k, H(gx0 + 9, gy0 + k) + 0.15), sag=0.005)
     # string lines along the trench edge, pegs at the corners, a ranging pole at each corner
     zc = H(D["x0"] - 0.5, D["y0"] - 0.5)
     corners = [(D["x0"] - 0.35, D["y0"] - 0.35), (D["x1"] + 0.35, D["y0"] - 0.35), (D["x1"] + 0.35, D["y1"] + 0.35), (D["x0"] - 0.35, D["y1"] + 0.35)]
@@ -402,13 +476,14 @@ def lift(st, dz):
 
 # ----------------------------------------------------------------------------- photogrammetry graves (real excavated
 # crouched burials, Sketchfab CC-BY) set into the north-house pits, joined to the trench floor by a sand skirt
-SINK = {"B2": -0.24}                                          # scan surface below the floor; the floor overlaps its edges
-PRE = {"B2": (-90.0, (0.2, 0.74, 0.22, 0.88))}                  # rotate X, then crop (fractions of x, y extent)
-STRIP = {"B1": (-0.163, -0.136, -0.016, 0.06, -0.1099)}      # scan-unit box (x0, x1, y0, y1, z above which to cut)
+SINK = {"B1": -0.02, "B2": -0.02}                                          # scan surface below the floor; the floor overlaps its edges
+PRE = {}
+MIRROR = {"B2"}                                                # B2: the same type of grave, mirrored and turned                  # rotate X, then crop (fractions of x, y extent)
+STRIP = {"B1": (-0.163, -0.136, -0.016, 0.06, -0.1099), "B2": (-0.163, -0.136, -0.016, 0.06, -0.1099)}      # scan-unit box (x0, x1, y0, y1, z above which to cut)
 SCANS = {
     # key: (uid, scan-unit centre of the body, scale to metres, cut faces with x < cut (scan units), skull (scan units))
     "B1": ("4e02811d415943d39715c131acb387a7", (-0.102, 0.026), 11.0, None, (-0.09, 0.072)),
-    "B2": ("ca9276bb80ec476f98f3cc8e7d37b96b", None, 1.25, None, None),
+    "B2": ("4e02811d415943d39715c131acb387a7", (-0.102, 0.026), 10.4, None, (-0.09, 0.072)),
 }
 
 
@@ -447,6 +522,8 @@ def burial_scan(key="B1", rot=None, skirt=0.0):
     if cen is None:
         cen = tuple(((co.min(0) + co.max(0)) / 2)[:2])
     co[:, 0] -= cen[0]; co[:, 1] -= cen[1]; co *= sc
+    if key in MIRROR:
+        co[:, 0] *= -1
     c, s = math.cos(rot), math.sin(rot)
     x = co[:, 0] * c - co[:, 1] * s; y = co[:, 0] * s + co[:, 1] * c
     floor_z = float(U.surface(px + 2.2 * math.cos(rot + 1.2), py + 2.2 * math.sin(rot + 1.2)))  # house floor beside the pit
@@ -465,7 +542,7 @@ def burial_scan(key="B1", rot=None, skirt=0.0):
     if patch:                     # floor patch where the pots stood (scan floor level, same sand)
         x0, x1, y0, y1 = patch
         zf = float(np.percentile(co[:, 2], 30))
-        corners = [((xx - cen[0]) * sc, (yy - cen[1]) * sc) for xx, yy in ((x0, y0), (x1, y0), (x1, y1), (x0, y1))]
+        corners = [((xx - cen[0]) * sc * (-1 if key in MIRROR else 1), (yy - cen[1]) * sc) for xx, yy in ((x0, y0), (x1, y0), (x1, y1), (x0, y1))]
         V = [(X * c - Y * s + px, X * s + Y * c + py, zf + 0.002) for X, Y in corners]
         pm = bpy.data.meshes.new("gravepatch"); pm.from_pydata(V, [], [(0, 1, 2, 3)]); pm.update(); pm.materials.append(mat("gravefloor"))
         po = bpy.data.objects.new("gravepatch", pm); link(po)
@@ -498,7 +575,7 @@ def burial_scan(key="B1", rot=None, skirt=0.0):
     me.materials.append(mat("skirt"))
     o["grave"] = key
     def w(pt):
-        X = (pt[0] - cen[0]) * sc; Y = (pt[1] - cen[1]) * sc
+        X = (pt[0] - cen[0]) * sc * (-1 if key in MIRROR else 1); Y = (pt[1] - cen[1]) * sc
         return Vector((X * c - Y * s + px, X * s + Y * c + py, floor_z - 0.25))
     info = dict(obj=o, centre=Vector((px, py, floor_z - 0.3)), floor=floor_z,
                 skull=(w(skull) if skull else Vector((px, py, floor_z - 0.3))))
@@ -524,3 +601,27 @@ class Grave:
         return c.copy()
 
     world_pivot = part_centre
+
+
+def section_tags(y_face, x0, x1, n=7, seed=8):
+    """Nails with blank aluminium tags pushed into the section at the layer boundaries (as on a recorded section)."""
+    rng = random.Random(seed)
+    al = bpy.data.materials.new("tagalu"); al.use_nodes = True; p = al.node_tree.nodes["Principled BSDF"]
+    p.inputs['Base Color'].default_value = (0.75, 0.76, 0.78, 1); p.inputs['Metallic'].default_value = 1.0; p.inputs['Roughness'].default_value = 0.35
+    depths = [d for d, _ in U.STRATA if 0.25 < d < 1.5][::2]
+    out = []
+    for k in range(n):
+        x = x0 + (x1 - x0) * (k + 0.5) / n + rng.uniform(-0.2, 0.2)
+        dd = depths[k % len(depths)] + rng.uniform(-0.01, 0.01)
+        z = U.SITE_Z - dd
+        # the face sits at y_face minus the bench offsets: find it by stepping in from the edge
+        yy = y_face
+        for step in range(200):
+            if float(U.surface(x, yy - 0.01 * step)) < z - 0.002:
+                yy = yy - 0.01 * step + 0.01; break
+        bpy.ops.mesh.primitive_cylinder_add(radius=0.0025, depth=0.09, location=(x, yy - 0.03, z)); nl = bpy.context.active_object
+        nl.rotation_euler = (math.pi / 2, 0, 0); nl.data.materials.append(mat("steel")); nl.name = "tagnail"
+        bpy.ops.mesh.primitive_cube_add(size=1, location=(x + 0.012, yy - 0.075, z - 0.03)); tg = bpy.context.active_object
+        tg.scale = (0.03, 0.003, 0.05); tg.rotation_euler = (rng.uniform(-0.15, 0.15), 0, rng.uniform(-0.2, 0.2)); tg.data.materials.append(al); tg.name = "tag"
+        out.append(tg)
+    return out

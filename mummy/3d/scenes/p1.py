@@ -39,20 +39,22 @@ def team(*who):
 
 # ============================================================================ "Beneath a house in Scotland..."
 def S01():
-    """Drone: in low over the Atlantic swell, across the white surf and the marram dunes; the dig appears ahead.
-    Low sun from the north-west (left), so the dunes are rim-lit and throw long shadows toward the lens."""
+    """Drone: in low over the Atlantic swell and the spray over the breakers, across the rocks, tide pools and marram dunes;
+    cloud shadows drift over the machair; the dig appears ahead. Low sun from the north-west rim-lights the dunes."""
     U.CUT = True
     T, sk = site("golden", grass_at=None, focus=(-190, -60), core=8.0, n=900, kit=True, burials=False, sun_az=150)
     U.scatter(T["terrain"], (-185, -70), 110, density=5.0, zone=(45, 160), scale=(1.2, 2.2), seed=4, name="MarramS01", avoid_cut=False)
+    U.coast_rocks(-450, 250, n=60); U.surf_mist(-450, 250); U.cloud_shadows((0, 0), cover=0.4)
     return dict(a=((-420, -260, 34), (-150, -40, 2)), b=((-175, -100, 40), (0, 0, 3)), lens=24, cine=dict(exposure=0.05))
 
 
 def S02():
-    """Crane down past the machair grass on the trench lip: the north house, two diggers at the graves (backs)."""
-    site("golden", grass_at=(12.5, 3.5), grass_r=7, sun_az=200)
+    """Low golden light, crane down past the marram on the trench lip: the north house, two diggers at the graves;
+    the white marquee, site cabin and spoil heap beyond, long shadows across the trench."""
+    site("golden", grass_at=(12.5, 3.5), grass_r=7, sun_az=205)
     team("A", "B")
     z = G.H(12, 3)
-    return dict(a=((12.6, 2.6, z + 2.6), (-0.8, 9.4, 3.3)), b=((11.9, 3.3, z + 0.9), (-0.8, 9.6, 3.4)), lens=35,
+    return dict(a=((12.6, 2.4, z + 3.2), (-1.5, 10.0, 3.6)), b=((11.9, 3.2, z + 1.0), (-1.3, 10.2, 3.7)), lens=32,
                 fstop=4.0, focus=(-0.8, 9.4, 3.4), hand_ok=OK)
 
 
@@ -216,25 +218,28 @@ def S12():
 
 # ============================================================================ "It's 2001..."
 def S13():
-    """Wide drone: South Uist's Atlantic coast, surf, machair strips, lochans, the hills behind."""
+    """Wide drone: South Uist's Atlantic coast - surf and spray, rocks and tide pools, machair strips, lochans, cloud shadows
+    crossing toward the hills."""
     site("golden", grass_at=None, focus=(-230, -200), core=10.0, n=900, kit=False, burials=False, sun_az=195)
+    U.coast_rocks(-900, 300, n=90, seed=5); U.surf_mist(-900, 300); U.cloud_shadows((0, 0), cover=0.45, seed=5)
     return dict(a=((-470, -560, 190), (-120, 120, 0)), b=((-430, -470, 175), (-90, 150, 0)), lens=26)
 
 
 def S14():
-    """The site at work in 2001: low across the machair grass, the trench, diggers (backs), spoil heap and barrows. Crane up."""
-    site("day", grass_at=(14, -18), grass_r=10)
+    """The 2001 dig at golden hour: crane up from the marram past the ranging pole - the trench with diggers (backs), the
+    sieve, barrows and spoil heap, the white marquee with its guy ropes and the site cabin; long shadows."""
+    site("golden", grass_at=(14, -18), grass_r=10, sun_az=200)
     team("A", "B")
     K.stand(K.DiggerC, (13.4, -6.3), 25, look=(14.5, -5.8, 5.0), density=HAIR, hands="front")
     K.stand(K.Director, (11.6, 2.2), 175, look=(-1, 9, 3.5), density=HAIR)
     z = G.H(15, -19)
-    return dict(a=((15.5, -19.5, z + 0.6), (2, 4, 3.8)), b=((15.0, -18.8, z + 4.2), (1, 4, 3.4)), lens=28, fstop=8.0, focus=(4, 0, 3.6),
+    return dict(a=((16.5, -21.0, z + 0.8), (0, 5, 3.8)), b=((15.8, -20.0, z + 5.0), (-1, 5, 3.4)), lens=26, fstop=8.0, focus=(4, 0, 3.6),
                 hand_ok=OK + ("sieve",))
 
 
 def S15():
-    """The director on the lip of the trench, from behind, looking over the north house."""
-    site("day", grass_at=(13, 2), grass_r=16)
+    """The director on the trench lip, from behind, rim-lit by the low sun; the north house and the diggers below him."""
+    site("golden", grass_at=(13, 2), grass_r=16, sun_az=200)
     team("A", "B")
     st = K.stand(K.Director, (11.6, 2.2), 168, look=(-1, 9, 3.5), density=HAIR)
     z = G.H(11.6, 2.2)
@@ -242,13 +247,15 @@ def S15():
                 fstop=4.0, focus=(11.6, 2.2, z + 1.6), hand_ok=OK)
 
 
-# ============================================================================ "Sand has buried layers..."
 def S16():
-    """The north section: pale shell sand banded with dark floors. Crane down the face in raking light."""
-    site("golden", grass_at=(2, 18), grass_r=8, kit=False, burials=False, sun_az=192)
+    """The north section in raking light: crisp bands of pale shell sand and dark occupation floors, tagged nails at the
+    layer boundaries. Slow slider along the face."""
+    site("golden", grass_at=(2, 18), grass_r=8, kit=False, burials=False, sun_az=188)
     y = U.DIG["y1"]
-    return dict(a=((1.2, y - 2.6, 5.4), (2.6, y, 4.4)), b=((1.6, y - 2.2, 3.85), (2.6, y, 3.85)), lens=32,
-                fstop=5.6, focus=(2.6, y, 4.2))
+    G.section_tags(y, 0.6, 4.6)
+    z = G.H(2.6, y - 1.6)
+    return dict(a=((0.6, y - 2.35, z + 0.75), (1.6, y - 0.9, z + 0.6)), b=((3.0, y - 2.35, z + 0.75), (4.0, y - 0.9, z + 0.6)), lens=40,
+                fstop=8.0, focus=(2.6, y - 1.05, z + 0.6))
 
 
 def S17():
@@ -292,15 +299,14 @@ def _ard_marks(cx, cy, w=2.6, n=11, seed=1):
 
 
 def S18():
-    """Ard marks scored in the old ground surface; push in low across them."""
-    site("golden", grass_at=None, kit=False, burials=False, sun_az=200)
+    """Ard marks scored into the old ground surface, picked out by the low raking sun. Low push across them."""
+    site("golden", grass_at=None, kit=False, burials=False, sun_az=172)
     _ard_marks(6.8, -3.0)
     z = G.H(6.8, -3.0)
-    return dict(a=((8.6, -4.9, z + 0.75), (6.6, -2.8, z)), b=((7.9, -4.1, z + 0.45), (6.5, -2.7, z)), lens=35,
-                fstop=4.0, focus=(6.8, -3.0, z))
+    return dict(a=((9.0, -3.2, z + 0.6), (6.6, -3.0, z)), b=((8.3, -3.1, z + 0.4), (6.4, -3.0, z)), lens=35,
+                fstop=8.0, focus=(6.8, -3.0, z))
 
 
-# ============================================================================ "Later, they built houses over it."
 def bronze_site(mood="dawn", grass_r=40, focus=(0, 0)):
     U.CUT = False
     T = U.island(mood, grass_at=(0, 0), grass_r=grass_r, n=820, core=4.0, focus=focus, grass_density=220)
@@ -315,9 +321,10 @@ def S19():
 
 
 def S20():
-    """Top-down: three thatched roofs in a row. Rise."""
+    """Low drone pass across the three conjoined roofs at dawn: roped and stone-weighted thatch, peat smoke drifting,
+    the doorways turned to the sunrise."""
     bronze_site("dawn")
-    return dict(a=((4.0, -0.3, 24), (0.3, 0.2, 0)), b=((4.4, -0.2, 40), (0.3, 0.3, 0)), lens=28)
+    return dict(a=((36, 12, 17), (0, 0, 5.5)), b=((30, 4, 14), (0, 0.5, 5.0)), lens=26, cine=dict(exposure=0.1))
 
 
 def S21():
@@ -465,13 +472,14 @@ def S30():
     pw = bpy.context.active_object; pw.scale = (1, 1, 0.3); pw.name = "bonepowder"; pw.data.materials.append(_plain("powder", (0.7, 0.62, 0.5), 0.95))
     # tube rack with capped sample tubes
     rack = _plain("rack", (0.85, 0.85, 0.82), 0.4); cap = _plain("cap", (0.05, 0.25, 0.55), 0.4); gl = _glass()
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(hole.x + 0.18, hole.y + 0.12, LB.TOP + 0.02)); rk = bpy.context.active_object
+    rx, ry = hole.x + 0.16, hole.y + 0.26
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(rx, ry, LB.TOP + 0.02)); rk = bpy.context.active_object
     rk.scale = (0.14, 0.04, 0.04); rk.data.materials.append(rack); rk.name = "rack"
     for k in range(5):
-        tx = hole.x + 0.125 + k * 0.026
-        bpy.ops.mesh.primitive_cylinder_add(radius=0.0075, depth=0.07, location=(tx, hole.y + 0.12, LB.TOP + 0.05)); t = bpy.context.active_object
+        tx = rx - 0.052 + k * 0.026
+        bpy.ops.mesh.primitive_cylinder_add(radius=0.0075, depth=0.07, location=(tx, ry, LB.TOP + 0.05)); t = bpy.context.active_object
         t.data.materials.append(gl); t.name = "tube"
-        bpy.ops.mesh.primitive_cylinder_add(radius=0.0085, depth=0.012, location=(tx, hole.y + 0.12, LB.TOP + 0.09)); c = bpy.context.active_object
+        bpy.ops.mesh.primitive_cylinder_add(radius=0.0085, depth=0.012, location=(tx, ry, LB.TOP + 0.09)); c = bpy.context.active_object
         c.data.materials.append(cap); c.name = "tubecap"
     # the drill handpiece and its burr, laid on the velvet
     steel = _plain("drillsteel", (0.6, 0.6, 0.62), 0.3, 1.0)
@@ -479,8 +487,8 @@ def S30():
     d.rotation_euler = (0, math.radians(90), math.radians(-30)); d.data.materials.append(steel); d.name = "drill"
     bpy.ops.mesh.primitive_cylinder_add(radius=0.0015, depth=0.03, location=(hole.x - 0.015, hole.y - 0.137, LB.TOP + 0.01)); bu = bpy.context.active_object
     bu.rotation_euler = (0, math.radians(90), math.radians(-30)); bu.data.materials.append(steel); bu.name = "burr"
-    return dict(a=(tuple(hole + Vector((-0.28, -0.3, 0.16))), tuple(hole)), b=(tuple(hole + Vector((-0.14, -0.34, 0.15))), tuple(hole + Vector((0.04, 0.02, 0)))),
-                lens=60, fstop=3.2, focus=tuple(hole), cine=dict(exposure=-0.1))
+    return dict(a=(tuple(hole + Vector((-0.2, -0.24, 0.13))), tuple(hole + Vector((0.03, 0.06, 0)))), b=(tuple(hole + Vector((-0.1, -0.26, 0.12))), tuple(hole + Vector((0.05, 0.08, 0)))),
+                lens=50, fstop=4.0, focus=tuple(hole), cine=dict(exposure=-0.1))
 
 
 def S31():
@@ -529,7 +537,7 @@ PLAN = [  # shot, VO paragraph (1-based), seconds (first estimate at 140 wpm; re
     ("S17", 9, 4.5, "A digger cleans the section with a trowel (from behind)"),
     ("S18", 9, 5.0, "Ard marks in the old ground surface"),
     ("S19", 9, 4.5, "Dawn: the three roundhouses on the machair, smoke rising (drone arc)"),
-    ("S20", 10, 4.0, "Top-down onto the three conjoined roofs"),
+    ("S20", 10, 4.0, "Low drone pass over the three conjoined roofs: roped, stone-weighted thatch, peat smoke"),
     ("S21", 10, 4.0, "Inside: sunrise through the east doorway, a bar of light on the floor"),
     ("S22", 10, 6.0, "The hearth: a man kneels at the fire (silhouette); pots, quern, smoke"),
     ("S23", 10, 5.0, "2001 again: the same house floor in the trench; crane down"),

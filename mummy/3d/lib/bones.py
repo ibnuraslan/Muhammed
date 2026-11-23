@@ -372,9 +372,59 @@ def hero_cranium(healed=True, length=0.19, tone="A", name="Cranium"):
         for f in bad:
             f.smooth = True
         bm.to_mesh(me); bm.free(); me.update()
-    o.data.materials.clear(); o.data.materials.append(bone_material(tone, name=name + "_bone"))
+        ridge_mesh(o, co, _HEALED[0])
+    o.data.materials.clear(); o.data.materials.append(bone_material(tone, name=name + "_bone", dirt=0.3))
+    for r_ in RIDGES:
+        r_.data.materials.clear(); r_.data.materials.append(o.data.materials[0])
+    RIDGES.clear()
     o["bone"] = True
     return o
+
+
+def ridge_mesh(cr, co, idx, rw=0.0058, rh=0.0042):
+    """The healed alveolar ridge: a smooth rounded bar of bone swept along each side of the arch over the squashed
+    crowns (which sit inside it), joined to the bone above. Added to the cranium mesh."""
+    P = co[idx]
+    if len(P) < 20:
+        return
+    mx = float(np.median(co[:, 0]))
+    for sgn in (-1, 1):
+        S = P[(P[:, 0] - mx) * sgn > 0]
+        if len(S) < 10:
+            continue
+        ys = np.linspace(S[:, 1].min(), S[:, 1].max(), 16)
+        path = []
+        for k in range(len(ys) - 1):
+            b = S[(S[:, 1] >= ys[k]) & (S[:, 1] < ys[k + 1])]
+            if len(b):
+                path.append((float(b[:, 0].mean()), float((ys[k] + ys[k + 1]) / 2), float(b[:, 2].max())))
+        if len(path) < 3:
+            continue
+        bm = bmesh.new(); rings = []; segs = 14
+        for k, (x, y, z) in enumerate(path):
+            t = min(k, len(path) - 2); d = Vector(path[t + 1]) - Vector(path[t]); d.z = 0; d.normalize()
+            side = Vector((d.y, -d.x, 0))
+            taper = min(1.0, 0.35 + 0.65 * min(k, len(path) - 1 - k) / 2.0)
+            ring = []
+            for j in range(segs):
+                a = 2 * math.pi * j / segs
+                v = Vector((x, y, z + 0.0005)) + side * math.cos(a) * rw * taper + Vector((0, 0, -1)) * math.sin(a) * rh * taper
+                ring.append(bm.verts.new(v))
+            rings.append(ring)
+        for r0, r1 in zip(rings, rings[1:]):
+            for j in range(segs):
+                bm.faces.new((r0[j], r0[(j + 1) % segs], r1[(j + 1) % segs], r1[j]))
+        bm.faces.new(rings[0][::-1]); bm.faces.new(rings[-1])
+        for f in bm.faces:
+            f.smooth = True
+        me2 = bpy.data.meshes.new("ridge"); bm.to_mesh(me2); bm.free()
+        o2 = bpy.data.objects.new("ridge", me2); bpy.context.scene.collection.objects.link(o2)
+        sub = o2.modifiers.new("s", "SUBSURF"); sub.levels = 2; sub.render_levels = 2
+        o2.parent = cr; o2["bone"] = True
+        RIDGES.append(o2)
+
+
+RIDGES = []
 
 
 def _heal_maxilla(co, keep=0.021, crown=0.0085, reach=0.068, band=0.003, squash=0.03):

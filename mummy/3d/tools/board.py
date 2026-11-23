@@ -21,7 +21,6 @@ for k, i in enumerate(info):
     x = pad + (k % cols) * (tw + pad); y = 90 + (k // cols) * (th + cap + pad)
     sheet.paste(img(i["shot"]).resize((tw, th)), (x, y))
     d.text((x + 4, y + th + 4), f"{i['shot']}  {i['dur']:.1f}s", font=F(17, True), fill=(240, 200, 120))
-    d.text((x + 4, y + th + 24), textwrap.shorten(i["desc"], 52), font=F(14), fill=(200, 195, 185))
 sheet.save(os.path.join(OUT, f"{PART}_contact_sheet.jpg"), quality=90)
 
 # PDF pages (A4 landscape-ish 3508x2480 @300dpi -> use 2480x1754 @212)
@@ -49,10 +48,12 @@ for s in range(0, len(info), per):
         x = 80 + (k % 2) * (iw + 120); y = 120 + (k // 2) * (ih + 200)
         pg.paste(img(i["shot"]).resize((iw, ih)), (x, y))
         d.text((x, y + ih + 10), f"{i['shot']}   {i['dur']:.1f} s   ·   clips {i['clips']}", font=F(30, True), fill=(240, 200, 120))
-        d.text((x, y + ih + 52), textwrap.shorten(i["desc"], 70), font=F(26), fill=(220, 215, 205))
-        vo = textwrap.wrap("VO: " + i["vo"], 78)[:3]
+        ds = textwrap.wrap(i["desc"], 74)[:2]
+        for j, t in enumerate(ds):
+            d.text((x, y + ih + 50 + j * 30), t, font=F(25), fill=(220, 215, 205))
+        vo = textwrap.wrap("VO: " + i["vo"], 82)[:3]
         for j, t in enumerate(vo):
-            d.text((x, y + ih + 92 + j * 32), t, font=F(23), fill=(160, 158, 150))
+            d.text((x, y + ih + 112 + j * 30), t, font=F(22), fill=(160, 158, 150))
     pages.append(pg)
 pdf = os.path.join(OUT, f"{PART}_storyboard.pdf")
 pages[0].save(pdf, save_all=True, append_images=pages[1:], resolution=212, quality=88)

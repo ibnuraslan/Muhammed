@@ -10,7 +10,7 @@ so close-ups in the trench and aerials over the coast use the same mesh (no seam
 import math, os
 import numpy as np
 import bpy
-from mathutils import Vector
+from mathutils import Vector, Matrix
 import ph
 
 COAST_X = -260.0          # mean waterline
@@ -21,7 +21,7 @@ DIG = dict(x0=-9.0, x1=10.0, y0=-15.5, y1=16.0, depth=1.6)     # open-area excav
 HOUSES = [(0.0, -9.2, 4.3), (0.3, 0.0, 4.6), (0.0, 9.6, 4.4)]
 HOUSE_SINK = 0.32         # house floors are sunk into the sand below the excavated surface
 # grave pits under the north house floor: (x, y, half-length, half-width, depth, angle deg). B1 = the man, B2 = the second adult
-PITS = {"B1": (-1.8, 8.9, 0.86, 0.95, 0.5, 20.0), "B2": (-0.3, 11.4, 0.35, 0.45, 0.62, -15.0),
+PITS = {"B1": (-1.8, 8.9, 0.86, 0.95, 0.5, 20.0), "B2": (-0.3, 11.6, 0.82, 0.9, 0.5, 150.0),
         "KNEE": (3.2, 14.6, 0.45, 0.38, 0.28, 0.0)}        # knee pit: outside the house, ~5 m from B2
 
 
@@ -195,10 +195,12 @@ def fog_wrap(m, color=(0.62, 0.66, 0.7), density=0.0011, max_fac=0.85):
 
 
 STRATA = [  # (depth below surface m, colour) top-down: turf, blown shell sand, occupation floors, ploughsoil, burial horizon
-    (0.00, (0.10, 0.09, 0.05)), (0.06, (0.16, 0.13, 0.08)), (0.10, (0.62, 0.56, 0.44)), (0.32, (0.70, 0.64, 0.51)),
-    (0.36, (0.20, 0.16, 0.11)), (0.40, (0.64, 0.58, 0.46)), (0.62, (0.26, 0.21, 0.15)), (0.66, (0.12, 0.10, 0.08)),
-    (0.70, (0.58, 0.52, 0.41)), (0.92, (0.30, 0.24, 0.17)), (0.97, (0.66, 0.60, 0.48)), (1.18, (0.22, 0.18, 0.13)),
-    (1.24, (0.15, 0.12, 0.09)), (1.30, (0.55, 0.48, 0.37)), (1.55, (0.36, 0.29, 0.20)), (1.80, (0.60, 0.54, 0.43)),
+    (0.00, (0.06, 0.05, 0.03)), (0.07, (0.08, 0.06, 0.04)), (0.085, (0.78, 0.72, 0.58)), (0.30, (0.82, 0.76, 0.62)),
+    (0.315, (0.09, 0.07, 0.05)), (0.36, (0.10, 0.08, 0.06)), (0.375, (0.76, 0.70, 0.56)), (0.58, (0.80, 0.74, 0.60)),
+    (0.595, (0.14, 0.11, 0.08)), (0.66, (0.05, 0.04, 0.03)), (0.675, (0.74, 0.68, 0.55)), (0.89, (0.78, 0.72, 0.58)),
+    (0.905, (0.20, 0.15, 0.10)), (0.96, (0.22, 0.17, 0.11)), (0.975, (0.80, 0.74, 0.60)), (1.15, (0.82, 0.76, 0.62)),
+    (1.165, (0.11, 0.09, 0.06)), (1.26, (0.07, 0.06, 0.04)), (1.275, (0.72, 0.65, 0.52)), (1.52, (0.75, 0.68, 0.55)),
+    (1.535, (0.30, 0.24, 0.17)), (1.8, (0.62, 0.56, 0.45)),
 ]
 
 
@@ -288,13 +290,13 @@ def ground_material(fog=None, grass_tint=(0.22, 0.27, 0.09)):
     zrel = _n(nt, "ShaderNodeMath", operation='SUBTRACT'); zrel.inputs[0].default_value = SITE_Z
     warp = _n(nt, "ShaderNodeTexNoise"); warp.inputs['Scale'].default_value = 0.9; warp.inputs['Detail'].default_value = 4
     L.new(tc.outputs['Object'], warp.inputs['Vector'])
-    zw = _n(nt, "ShaderNodeMath", operation='MULTIPLY_ADD'); L.new(warp.outputs['Fac'], zw.inputs[0]); zw.inputs[1].default_value = 0.09
+    zw = _n(nt, "ShaderNodeMath", operation='MULTIPLY_ADD'); L.new(warp.outputs['Fac'], zw.inputs[0]); zw.inputs[1].default_value = 0.05
     L.new(sep.outputs['Z'], zw.inputs[2])
     L.new(zw.outputs[0], zrel.inputs[1])
     stmax = STRATA[-1][0]
     zn = _n(nt, "ShaderNodeMath", operation='DIVIDE'); L.new(zrel.outputs[0], zn.inputs[0]); zn.inputs[1].default_value = stmax
     st = ramp(zn.outputs[0], [(dd / stmax, col) for dd, col in STRATA])
-    st.color_ramp.interpolation = 'EASE'
+    st.color_ramp.interpolation = 'LINEAR'
     grain = _n(nt, "ShaderNodeMix", data_type='RGBA', blend_type='SOFT_LIGHT'); grain.inputs['Factor'].default_value = 0.12
     L.new(st.outputs['Color'], grain.inputs[6]); L.new(soil["Diffuse"].outputs['Color'], grain.inputs[7])
     iscut = fac(cut.outputs['Fac'], 0.01, 0.06)
@@ -526,3 +528,74 @@ def island(mood="golden", grass_at=None, grass_r=30.0, n=900, sun_az=None, fog_d
         scatter(t, grass_at, grass_r, density=grass_density, zone=(150, 1e9), scale=(0.22, 0.42), seed=1, name="Machair")
         scatter(t, grass_at, grass_r, density=grass_density * 0.6, zone=(50, 150), scale=(1.1, 1.9), seed=2, name="Marram")
     return dict(terrain=t, sea=s, far=far, surf=sf, light=Lh, h=lambda x, y: float(surface(x, y)), fog=fog)
+
+
+# ----------------------------------------------------------------------------- coast detail
+def coast_rocks(y0=-700, y1=500, n=70, seed=3):
+    """Gneiss outcrops and boulders along the waterline (Poly Haven coast rocks), and tide pools among them."""
+    import random
+    rng = random.Random(seed)
+    srcs = []
+    for aid in ("coast_rocks_01", "coast_rocks_02", "coast_rocks_05", "coast_land_rocks_02"):
+        try:
+            root, ms = ph.model(aid, loc=(0, 0, -900)); srcs.append((root, ms))
+        except Exception as ex:
+            print("rock", aid, ex)
+    if not srcs:
+        return []
+    out = []
+    for k in range(n):
+        y = rng.uniform(y0, y1); x = float(coast_x(y)) + rng.uniform(-25, 18)
+        root, ms = srcs[k % len(srcs)]
+        for m in ms:
+            o = m.copy(); bpy.context.scene.collection.objects.link(o); o.parent = None
+            s_ = rng.uniform(1.5, 5.0)
+            o.matrix_world = Matrix.Translation((x, y, float(surface(x, y)) - 0.4 * s_)) @ Matrix.Rotation(rng.uniform(0, 6.3), 4, 'Z') @ Matrix.Scale(s_, 4)
+            out.append(o)
+    for root, ms in srcs:
+        for m in ms:
+            m.hide_render = True
+    # tide pools: small sky-reflecting water patches on the lower beach
+    m = bpy.data.materials.get("Loch")
+    for k in range(40):
+        y = rng.uniform(y0, y1); x = float(coast_x(y)) + rng.uniform(2, 20)
+        bpy.ops.mesh.primitive_circle_add(vertices=24, radius=rng.uniform(1.0, 4.0), fill_type='NGON', location=(x, y, float(surface(x, y)) + 0.03))
+        o = bpy.context.active_object; o.scale = (1, rng.uniform(0.4, 0.8), 1); o.rotation_euler.z = rng.uniform(0, 3.14); o.name = "tidepool"
+        if m:
+            o.data.materials.append(m)
+    return out
+
+
+def cloud_shadows(center=(0, 0), size=4000.0, height=900.0, cover=0.45, seed=2):
+    """Big cloud shadows drifting over the machair: a shadow-only plane high up, alpha from noise (invisible to camera)."""
+    bpy.ops.mesh.primitive_plane_add(size=size, location=(center[0], center[1], height)); o = bpy.context.active_object; o.name = "cloudshadow"
+    m = bpy.data.materials.new("cloudshadow"); m.use_nodes = True; nt = m.node_tree; N = nt.nodes; L = nt.links
+    p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 4.0; nz.inputs['Detail'].default_value = 5
+    nz.inputs['W'].default_value = seed; nz.noise_dimensions = '4D'
+    L.new(tc.outputs['Generated'], nz.inputs['Vector'])
+    mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 1 - cover; mr.inputs['From Max'].default_value = 1 - cover + 0.12
+    L.new(nz.outputs['Fac'], mr.inputs['Value']); L.new(mr.outputs[0], p.inputs['Alpha'])
+    o.data.materials.append(m)
+    o.visible_camera = False; o.visible_glossy = False; o.visible_diffuse = False; o.visible_transmission = False
+    o.visible_volume_scatter = False
+    return o
+
+
+def surf_mist(y0=-700, y1=500, width=50.0, height=9.0, density=0.012):
+    """Sea spray hanging over the breakers: a long thin volume along the waterline."""
+    ym = (y0 + y1) / 2; xm = float(coast_x(ym)) - width * 0.4
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(xm, ym, height / 2 - 0.5)); o = bpy.context.active_object; o.name = "surfmist"
+    o.scale = (width, y1 - y0, height)
+    m = bpy.data.materials.new("surfmist"); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; N.remove(N["Principled BSDF"])
+    tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Generated'], sep.inputs[0])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 25; nz.inputs['Detail'].default_value = 4; L.new(tc.outputs['Generated'], nz.inputs['Vector'])
+    fz = N.new("ShaderNodeMapRange"); fz.inputs['From Min'].default_value = 0.0; fz.inputs['From Max'].default_value = 1.0
+    fz.inputs['To Min'].default_value = 1.0; fz.inputs['To Max'].default_value = 0.0; L.new(sep.outputs['Z'], fz.inputs['Value'])
+    br = N.new("ShaderNodeMapRange"); br.inputs['From Min'].default_value = 0.4; br.inputs['From Max'].default_value = 0.65; L.new(nz.outputs['Fac'], br.inputs['Value'])
+    m1 = N.new("ShaderNodeMath"); m1.operation = 'MULTIPLY'; L.new(fz.outputs[0], m1.inputs[0]); L.new(br.outputs[0], m1.inputs[1])
+    m2 = N.new("ShaderNodeMath"); m2.operation = 'MULTIPLY'; m2.inputs[1].default_value = density; L.new(m1.outputs[0], m2.inputs[0])
+    v = N.new("ShaderNodeVolumePrincipled"); v.inputs['Color'].default_value = (0.9, 0.9, 0.92, 1); v.inputs['Anisotropy'].default_value = 0.6
+    L.new(m2.outputs[0], v.inputs['Density']); L.new(v.outputs[0], N["Material Output"].inputs['Volume'])
+    o.data.materials.append(m); o.visible_shadow = False
+    return o

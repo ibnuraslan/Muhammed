@@ -79,6 +79,52 @@ def _strip_ground(ms, centre=(0.13, 1.98), r_keep=4.6, z_cut=0.05):
         bmesh.ops.delete(bm, geom=kill, context='FACES'); bm.to_mesh(o.data); bm.free()
 
 
+DOOR_ROT = 35.0           # rotation that turns the reconstruction's doorway to face east (+x)
+
+
+def roof_weights(apex, r_eave, z_eave, n=14, seed=0, meshes=()):
+    """Heather ropes draped over the thatch (each point dropped onto the roof by ray cast), weighted at the eave with a
+    slung stone (Hebridean thatch)."""
+    from mathutils.bvhtree import BVHTree
+    rng = random.Random(seed)
+    rope = _mat("heatherrope", (0.16, 0.12, 0.08), 0.9)
+    dg = bpy.context.evaluated_depsgraph_get()
+    trees = [BVHTree.FromObject(m, dg) for m in meshes]
+    # BVHTree.FromObject is in object space: carry matrices
+    mats = [m.matrix_world.copy() for m in meshes]
+    def drop(x, y):
+        best = None
+        for t, M in zip(trees, mats):
+            Mi = M.inverted()
+            o = Mi @ Vector((x, y, apex.z + 3)); d = (Mi.to_3x3() @ Vector((0, 0, -1))).normalized()
+            hit = t.ray_cast(o, d)
+            if hit[0] is not None:
+                w = M @ hit[0]; nw = (M.to_3x3() @ hit[1]).normalized()
+                if best is None or w.z > best[0].z:
+                    best = (w, nw)
+        return best
+    for k in range(n):
+        a = 2 * math.pi * k / n + rng.uniform(-0.05, 0.05)
+        pts = []
+        for j in range(15):
+            t = 0.08 + 0.92 * j / 14
+            x = apex.x + r_eave * t * math.cos(a); y = apex.y + r_eave * t * math.sin(a)
+            h = drop(x, y)
+            if h is None:
+                break
+            pts.append(h[0] + h[1] * 0.03)
+        if len(pts) < 4:
+            continue
+        e = pts[-1]
+        pts.append(e + Vector((math.cos(a), math.sin(a), 0)) * 0.08 + Vector((0, 0, -0.4)))
+        cu = bpy.data.curves.new("roofrope", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.014
+        sp = cu.splines.new('POLY'); sp.points.add(len(pts) - 1)
+        for i, p in enumerate(pts):
+            sp.points[i].co = (*p, 1)
+        o = bpy.data.objects.new("roofrope", cu); bpy.context.scene.collection.objects.link(o); cu.materials.append(rope)
+        G.stone(tuple(pts[-1] + Vector((0, 0, -0.08))), (0.22, 0.16, 0.18), rot_z=a, seed=rng.randrange(10), flat=0.85)
+
+
 def village(smoke_on=True, scale=1.75):
     out = []
     for i, (hx, hy, r) in enumerate(U.HOUSES):
@@ -89,10 +135,14 @@ def village(smoke_on=True, scale=1.75):
         for c in root.children:
             c.location -= Vector((0.13, 1.98, 0))
         s = scale * r / 4.5
-        root.scale = (s, s, s); root.location = (hx, hy, z - 0.3); root.rotation_euler = (0, 0, math.radians(i * 23))
+        root.scale = (s, s, s); root.location = (hx, hy, z - 0.3); root.rotation_euler = (0, 0, math.radians(DOOR_ROT + 8 * i))
         out.append(root)
         bpy.context.view_layer.update()
         top = max((m_.matrix_world @ Vector(c)).z for m_ in root.children_recursive if m_.type == 'MESH' for c in m_.bound_box)
+        ms_ = [m_ for m_ in root.children_recursive if m_.type == 'MESH']
+        P = np.array([m_.matrix_world @ Vector(c) for m_ in ms_ for c in m_.bound_box])
+        half = float((P[:, 0].max() - P[:, 0].min() + P[:, 1].max() - P[:, 1].min()) / 4)
+        roof_weights(Vector((hx, hy, top)), half * 0.98, z + 0.75, n=14, seed=i, meshes=ms_)
         if smoke_on:
             smoke((hx, hy, top - 0.6), radius=0.9, height=12.0, density=6.0 + 1.0 * i, name=f"smoke{i}")
     if smoke_on:
