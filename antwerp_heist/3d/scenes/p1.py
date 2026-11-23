@@ -162,16 +162,11 @@ def S14():
     for o in list(bpy.data.objects):
         if o.name.startswith("far_"):
             bpy.data.objects.remove(o)
-    import random as _r
-    rng = _r.Random(4); brick = ST.flat("sky_bldg", (0.42, 0.33, 0.27), 0.85); stone = ST.flat("sky_bldg2", (0.55, 0.52, 0.47), 0.8)
-    winm = ST.flat("sky_win", (0.05, 0.06, 0.07), 0.2, metal=0.3)
-    for k in range(26):
-        x = rng.uniform(-160, 160); y = RY + rng.uniform(150, 320); h = rng.uniform(4, 22) + 14; w = rng.uniform(12, 30)
-        d_ = rng.uniform(10, 18)
-        ST.box("skyline", (x, y, h / 2 - 14), (w, d_, h), brick if k % 3 else stone)   # street level is 14 m below the office
-        for r in range(int((h - 2) // 3.2)):
-            ST.box("skyline_win", (x, y - d_ / 2 - 0.06, -14 + 2 + r * 3.2), (w * 0.85, 0.1, 1.3), winm)
-    ST.box("street_level", (0, RY + 200, -14.05), (700, 420, 0.1), ST.flat("roofs_ground", (0.2, 0.19, 0.18), 0.9))
+    import city                                       # the district's roofs below and beyond (14 m down, across the street)
+    city.district("day", R=3, skip=[(-25, 25, -60, 20)])
+    for o in list(bpy.data.objects):
+        if o.name in ("district", "city_ground"):
+            o.location.y += RY + 120; o.location.z -= 26.0
     sun = A["sun"]; sun.data.energy = 4.5; sun.data.angle = math.radians(0.6)
     sun.rotation_euler = V((0.4, -1.0, -0.3)).normalized().to_track_quat('-Z', 'Y').to_euler()   # low afternoon sun in through the blinds
     ST.haze_box("office_haze", (0, 0, 1.4), (5.0, 4.2, 2.75), density=0.03, aniso=0.6, color=(1.0, 0.9, 0.78))

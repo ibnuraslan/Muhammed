@@ -78,7 +78,7 @@ def T03():
     city.dress_street(A, "night")
     # low along the wet street between parked cars, sliding slowly toward the Diamond Center's entrance
     return dict(a=((25.0, -9.4, 1.0), (-4.0, -2.5, 2.0)), b=((20.5, -9.2, 1.05), (-4.0, -2.5, 2.0)), lens=30, fstop=5.6,
-                focus=(2.0, -3.0, 1.5))
+                focus=(2.0, -3.0, 1.5), cine=dict(exposure=1.1))
 def T04():
     S2.security_room("building", night=True)
     return dict(a=((-1.2, -1.6, 1.5), (0.2, 1.6, 1.1)), b=((-0.9, -1.2, 1.45), (0.2, 1.6, 1.1)), lens=26, cine=dict(exposure=1.6))
@@ -95,7 +95,7 @@ def T05():
         st.walk_anim(220, stride=16.0 + i, cadence=1.05 + 0.04 * i, phase0=0.17 + 0.31 * i)       # real walk cycles, out of step
         st.finish(density=HAIR, floor_z=0.0, floor_fn=ramp)
     # the camera follows them down, a few metres behind and above
-    return dict(a=((0.4, GY0 - 10.6, 4.6), (0.0, GY0 - 1.0, 1.0)), b=((0.3, GY0 - 7.4, 3.4), (0.0, GY0 + 2.5, 0.8)), lens=28,
+    return dict(a=((0.4, GY0 - 9.3, 4.2), (0.0, GY0 - 1.0, 1.0)), b=((0.3, GY0 - 7.0, 3.3), (0.0, GY0 + 2.5, 0.8)), lens=26,
                 hand_ok=("ramp",))
 
 

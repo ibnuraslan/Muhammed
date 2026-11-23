@@ -16,7 +16,7 @@ cols = 6; tw, th = 420, 236; pad = 8; cap = 44
 rows = (len(info) + cols - 1) // cols
 sheet = Image.new("RGB", (cols * (tw + pad) + pad, 90 + rows * (th + cap + pad)), (14, 13, 12))
 d = ImageDraw.Draw(sheet)
-d.text((pad + 4, 22), f"They Stole $100 Million. Then Threw Away the Evidence.  ·  Part {PART[1:]}  ·  {len(info)} shots  ·  {total:.0f} s (pre-VO timing)", font=F(30, True), fill=(235, 205, 150))
+d.text((pad + 4, 22), f"They Stole $100 Million. Then Threw Away the Evidence.  ·  Part {PART[1:]}  ·  {len(info)} shots  ·  {total:.0f} s, timed to the VO", font=F(30, True), fill=(235, 205, 150))
 for k, i in enumerate(info):
     x = pad + (k % cols) * (tw + pad); y = 90 + (k // cols) * (th + cap + pad)
     sheet.paste(img(i["shot"]).resize((tw, th)), (x, y))
@@ -31,7 +31,7 @@ cov = Image.new("RGB", (W, Hh), (14, 13, 12)); d = ImageDraw.Draw(cov)
 d.text((120, 120), "They Stole $100 Million.", font=F(96, True), fill=(240, 210, 150))
 d.text((120, 240), "Then Threw Away the Evidence.", font=F(96, True), fill=(240, 210, 150))
 d.text((120, 400), f"Part {PART[1:]}  —  storyboard (real 3D frames, low samples)", font=F(48), fill=(220, 215, 205))
-lines = [f"{len(info)} shots · {total:.0f} s before VO timing · 2560x1440 · 24 fps · Cycles · Atrium look",
+lines = [f"{len(info)} shots · {total:.0f} s timed to the narration · 2560x1440 · 24 fps · Cycles · Atrium look",
          "All shots built in Blender (sets, cast, props); clipcheck 0 clips on every shot.",
          "Faces: no close-ups (backs, over-the-shoulder, profiles in half shadow, silhouettes).",
          "Camera carries the motion; nothing moves by itself. No burned-in text (cards added in CapCut).",

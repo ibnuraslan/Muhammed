@@ -386,8 +386,9 @@ def U30():
             bpy.data.objects.remove(o)
     for cls, (x, y, hd) in ((MD.DeBruycker, (-0.5, -1.3, 20)), (MD.TurinOfficer, (0.6, -1.0, 200))):
         m = cls(); kn = AC.Kneel(m, (x, y), hd, lean=40)
-        kn.hand("L", (x + 0.35 * math.cos(math.radians(hd)) - 0.1, y + 0.35 * math.sin(math.radians(hd)), 0.06), elbow=(0.8, 0.2, -0.6), curl=30)
-        kn.hand("R", (x + 0.35 * math.cos(math.radians(hd)) + 0.1, y + 0.35 * math.sin(math.radians(hd)), 0.06), elbow=(0.8, 0.2, -0.6), curl=30)
+        fx, fy = math.cos(math.radians(hd)), math.sin(math.radians(hd)); lx, ly = -fy, fx        # his front and his left
+        kn.hand("L", (x + 0.35 * fx + 0.12 * lx, y + 0.35 * fy + 0.12 * ly, 0.06), elbow=(0.8, 0.2, -0.6), curl=30)
+        kn.hand("R", (x + 0.35 * fx - 0.12 * lx, y + 0.35 * fy - 0.12 * ly, 0.06), elbow=(0.8, 0.2, -0.6), curl=30)
         kn.finish(density=HAIR, floor_z=0.01)
     t = PR.torch("t_torch", energy=120); t.location = (0.0, -1.6, 0.03); t.rotation_euler = (0, 0, math.radians(-90))
     return dict(a=((-1.85, -2.2, 2.2), (0.1, -1.05, 0.45)), b=((-1.75, -2.1, 2.15), (0.1, -1.05, 0.45)), lens=20, hand_ok=("rug",))

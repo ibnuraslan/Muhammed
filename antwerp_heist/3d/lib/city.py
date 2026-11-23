@@ -334,13 +334,22 @@ def dress_street(A, hour="night", wet=True, cars=True, seed=5, haze=0.006):
             o.data.materials.clear(); o.data.materials.append(litm)
     # parked cars: kerbside along both pavements
     if cars:
-        specs = [(AUDI, None, 4.5), (GOLF, None, 4.0), (CAR_PACK, "Hatchback", 4.1), (CAR_PACK, "Sedan", 4.6),
-                 (CAR_PACK, "Wagon", 4.7), (CAR_PACK, "Compact", 3.9), (CAR_PACK, "minivan", 4.7)]
+        specs = [(AUDI, None, 4.5), (GOLF, None, 4.0)]      # the pack's cars sit diagonally in their file: axis-clean models only
         spots = [(x, -14.0) for x in (-26, -19.5, -12, 9, 16.5, 24)] + [(x, -6.15) for x in (-23, -17.5, 13, 18.5, 31)]
         for k, (x, y) in enumerate(spots):
             uid, part, ln = specs[k % len(specs)]
             try:
-                _car(uid, (x + rng.uniform(-0.4, 0.4), y, -0.07), math.pi if (k + (y > -10)) % 2 else 0.0, length=ln, pack_part=part)
+                before = set(bpy.data.materials)
+                c = _car(uid, (x + rng.uniform(-0.4, 0.4), y, -0.07), math.pi if (k + (y > -10)) % 2 else 0.0, length=ln, pack_part=part)
+                paint = [(0.08, 0.1, 0.16), (0.35, 0.03, 0.03), (0.5, 0.5, 0.52), (0.04, 0.04, 0.045), (0.12, 0.22, 0.14), (0.6, 0.58, 0.52)][k % 6]
+                for o in c.children_recursive:              # vary the paint so the street isn't one model repeated
+                    for sl in getattr(o, "material_slots", []):
+                        m = sl.material
+                        if m and m.node_tree and m not in before:
+                            pb = m.node_tree.nodes.get("Principled BSDF")
+                            if pb and pb.inputs['Metallic'].default_value > 0.3 or (m.name.lower().find("body") >= 0 or m.name.lower().find("paint") >= 0):
+                                if pb and not pb.inputs['Base Color'].links:
+                                    pb.inputs['Base Color'].default_value = (*paint, 1)
             except Exception as e:
                 print("car", e)
     # street furniture: bins, a bike rack with bikes as simple frames, a tram stop sign
