@@ -176,6 +176,7 @@ class ModernMan(W._Woman):
                     self.h.rig.skin(zipo, self.h.W[[int(np.argmin(np.linalg.norm(self.rest_co - np.array(p_), axis=1))) for p_ in [v.co[:] for v in zipo.data.vertices]]])
                     self.h.parts.append(zipo)
             self._folds(self.jacket)
+            self._cover(self.jacket, [getattr(self, "shirt", None), getattr(self, "trousers", None)])
             hide |= jk
         # gloves: thin leather shells over the hands (night work; also keeps prints off the boxes)
         if self.GLOVES:
@@ -184,6 +185,36 @@ class ModernMan(W._Woman):
                                          solid=0.0012)
             hide |= gl
         self._hide_skin(hide)
+
+    def _cover(self, outer, inners, margin=0.009):
+        """Layering: wherever an under-layer (shirt, trousers) sits outside the outer garment at rest, push the outer
+        cloth out over it so nothing shows through (margin covers the outer shell's displace and thickness)."""
+        from mathutils.bvhtree import BVHTree
+        bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
+        mw = outer.matrix_world; mwi = mw.inverted()
+        for inn in [o for o in inners if o is not None]:
+            solid = [md for md in inn.modifiers if md.type == 'SOLIDIFY' and md.show_viewport]
+            for md in solid:                      # the outward cloth surface only (no inner shell faces with inward normals)
+                md.show_viewport = False
+            bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
+            ev = inn.evaluated_get(dg); me = ev.to_mesh()
+            for md in solid:
+                md.show_viewport = True
+            me.transform(inn.matrix_world)
+            bvh = BVHTree.FromPolygons([v.co.copy() for v in me.vertices], [tuple(p.vertices) for p in me.polygons])
+            ev.to_mesh_clear()
+            moved = 0
+            for v in outer.data.vertices:
+                w = mw @ v.co
+                hit = bvh.find_nearest(w, 0.05)
+                if hit[0] is None:
+                    continue
+                pnt, nrm = hit[0], hit[1]
+                d = (w - pnt).dot(nrm)
+                if d < margin:
+                    v.co = mwi @ (w + nrm * (margin - d)); moved += 1
+            outer.data.update()
+            print("COVER", outer.name, "over", inn.name, moved)
 
     def _loosen(self, o, m, ease=1.06, extra=0.004, bin_h=0.02, mask=None, single=False):
         """Cloth hangs, it does not cling: in 2 cm height bands, push every vertex of each leg (one band for both legs

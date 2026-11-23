@@ -17,7 +17,7 @@ def img(rel):
     return p if os.path.exists(p) else None
 
 
-def desk_hands(se, dy, z=0.835, spread=0.2, fwd=0.27):
+def desk_hands(se, dy, z=0.875, spread=0.2, fwd=0.22):
     se.hand("R", (spread, dy + fwd, z), elbow=(0.9, 0.2, -0.5), curl=24)
     se.hand("L", (-spread, dy + fwd, z), elbow=(0.9, 0.2, -0.5), curl=24)
 
@@ -37,8 +37,7 @@ def U02():
         if o.name.startswith(("vhs",)):
             bpy.data.objects.remove(o)                 # the tapes are gone
     v = A["vcr"]
-    return dict(a=((0.8, -0.2, 1.75), (v.x + 0.05, v.y, 1.85)), b=((1.15, -0.45, 1.7), (v.x + 0.05, v.y, 1.88)), lens=32,
-                fstop=3.2, focus=v + V((0, 0, 0.9)))
+    return dict(a=((v.x - 1.3, v.y - 1.12, 1.6), (v.x, v.y, 1.2)), b=((v.x - 1.22, v.y - 1.08, 1.58), (v.x, v.y, 1.2)), lens=26)
 
 
 # ============================================================================ L2 a call about rubbish
@@ -117,7 +116,7 @@ def _bench_items(A):
 
 def U08():
     A = S3.lab(); _bench_items(A); _techs(A)
-    return dict(a=((0.2, -3.2, 2.0), (0.0, -0.6, 0.95)), b=((0.3, -2.9, 1.95), (0.0, -0.6, 0.95)), lens=26,
+    return dict(a=((0.2, -2.8, 2.0), (0.0, -0.6, 0.95)), b=((0.3, -2.7, 1.95), (0.0, -0.6, 0.95)), lens=24,
                 hand_ok=("bench", "evidence_paper"))
 
 
@@ -168,7 +167,7 @@ def U13():
     st.hand("L", c + V((-0.14, -0.1, 0.04)), elbow=(0.8, 0.2, -0.6), curl=20)
     st.hand("R", c + V((0.12, -0.05, 0.04)), elbow=(0.8, 0.2, -0.6), curl=30)
     st.head_to(c, share=0.8); st.finish(density=HAIR)
-    return dict(a=((c.x + 0.65, c.y - 1.05, 1.75), tuple(c)), b=((c.x + 0.55, c.y - 0.95, 1.7), tuple(c)), lens=32, fstop=3.2, focus=c,
+    return dict(a=((c.x + 0.95, c.y - 1.85, 1.8), tuple(c + V((0, -0.2, 0.2)))), b=((c.x + 0.85, c.y - 1.75, 1.78), tuple(c + V((0, -0.2, 0.2)))), lens=28, fstop=4.0, focus=c,
                 hand_ok=("lightbox", "scrap"))
 
 
@@ -188,8 +187,11 @@ def U15():
 # ============================================================================ L8 one of its tenants
 def U16():
     A = S2.office("leasing")
+    for o in list(bpy.data.objects):                 # De Bruycker stands where the visitor chair was
+        if o.name.startswith("visitor_chair"):
+            bpy.data.objects.remove(o)
     mg = MD.Manager(); se = AC.Seated(mg, A["seat_behind"], -90, lean=12)
-    se.hand("R", (0.1, A["desk_y"] - 0.2, 0.835), elbow=(0.9, 0.2, -0.5), curl=20); se.hand("L", (-0.25, A["desk_y"] + 0.27, 0.835), elbow=(0.9, 0.2, -0.5), curl=24)
+    se.hand("R", (0.1, A["desk_y"] - 0.2, 0.86), elbow=(0.9, 0.2, -0.5), curl=20); se.hand("L", (-0.25, A["desk_y"] + 0.22, 0.875), elbow=(0.9, 0.2, -0.5), curl=24)
     se.finish(density=HAIR)
     PR.document("lease_file", 0.24, 0.32, seed=21).location = (0.1, A["desk_y"] - 0.25, 0.793)
     d = MD.DeBruycker(); st = AC.Stand(d, (0.15, A["desk_y"] - 1.05), 90, lean=8); st.hand("R", (0.12, A["desk_y"] - 0.38, 0.84), elbow=(0.8, 0.2, -0.6), curl=20)
@@ -253,7 +255,7 @@ def U22():
     st.hand("L", (-0.18, b.y - 0.2, 0.95), elbow=(0.8, 0.2, -0.6), curl=26)
     st.head_to((0.1, b.y, b.z), share=0.8); st.finish(density=HAIR)
     bpy.context.view_layer.update(); p = st.palm("R"); sw.location = p; sw.rotation_euler = (0, math.radians(30), math.radians(70))
-    return dict(a=((0.75, b.y - 1.0, 1.55), (0.1, b.y, b.z + 0.05)), b=((0.65, b.y - 0.9, 1.5), (0.1, b.y, b.z + 0.05)), lens=35, fstop=3.2,
+    return dict(a=((0.95, b.y - 1.9, 1.75), (0.05, b.y - 0.25, 1.1)), b=((0.85, b.y - 1.8, 1.72), (0.05, b.y - 0.25, 1.1)), lens=28, fstop=4.0,
                 focus=(0.1, b.y, b.z), hand_ok=("swab", "bench", "evidence_paper"))
 
 
@@ -274,15 +276,15 @@ def U25():
     m = MD.Leonardo(); st = AC.Stand(m, (r.x - 0.6, r.y - 0.05), 2)
     st.hand("R", (r.x - 0.1, r.y, r.z - 0.02), elbow=(0.7, 0.3, -0.8), grip=0.55); st.head_to(r, share=0.6); st.finish(look=r, density=HAIR)
     bd = PR.badge(); bpy.context.view_layer.update(); bd.location = r + V((-0.04, 0, 0)); bd.rotation_euler = (0, 0, math.radians(90))
-    return dict(a=((r.x - 1.2, r.y + 1.3, 1.5), (r.x - 0.2, r.y, 1.25)), b=((r.x - 1.1, r.y + 1.15, 1.48), (r.x - 0.2, r.y, 1.25)), lens=32,
+    return dict(a=((r.x - 1.75, r.y + 0.75, 1.6), (r.x - 0.15, r.y, 1.25)), b=((r.x - 1.65, r.y + 0.68, 1.58), (r.x - 0.15, r.y, 1.25)), lens=30,
                 hand_ok=("badge",))
 
 
 def U26():
     A = S2.security_room("building")
-    g = MD.Guard(); st = AC.Stand(g, (-0.8, 0.6), 200); st.hands_front(); st.head_to((-3.4, -0.9, 1.6), share=0.6); st.finish(density=HAIR)
+    g = MD.Guard(); st = AC.Stand(g, (-0.8, 0.42), 200); st.hands_front(); st.head_to((-3.4, -0.9, 1.6), share=0.6); st.finish(density=HAIR)
     le = MD.Leonardo(); s2 = AC.Stand(le, (-3.6, -1.0), 0); s2.finish(density=HAIR)
-    return dict(a=((-0.35, 1.25, 1.7), (-3.0, -0.9, 1.3)), b=((-0.3, 1.15, 1.68), (-3.0, -0.9, 1.3)), lens=35)
+    return dict(a=((0.1, 1.45, 1.75), (-3.0, -0.8, 1.2)), b=((0.05, 1.38, 1.74), (-3.0, -0.8, 1.2)), lens=26)
 
 
 def U27():
@@ -306,7 +308,8 @@ def U29():
     A = S2.security_room("building")
     for i, (x, y) in enumerate(((-4.1, -0.6), (-4.6, -1.3))):
         m = MD.Police(name=f"Police{i}"); st = AC.Stand(m, (x, y), 0); st.walk(0.3 + 0.4 * i); st.finish(density=HAIR)
-    return dict(a=((-1.2, -0.3, 1.6), (-4.5, -0.9, 1.3)), b=((-1.4, -0.4, 1.6), (-4.5, -0.9, 1.3)), lens=30)
+    # from behind and to the side as they come in: backs and shoulders, faces turned away into the lobby
+    return dict(a=((-5.9, -2.3, 1.65), (-2.8, -0.4, 1.25)), b=((-5.75, -2.2, 1.64), (-2.6, -0.35, 1.25)), lens=28)
 
 
 # ============================================================================ L15 the apartment, the links
@@ -320,16 +323,17 @@ def U30():
         m = cls(); kn = AC.Kneel(m, (x, y), hd, lean=40)
         kn.hand("L", (x + 0.35 * math.cos(math.radians(hd)) - 0.1, y + 0.35 * math.sin(math.radians(hd)), 0.06), elbow=(0.8, 0.2, -0.6), curl=30)
         kn.hand("R", (x + 0.35 * math.cos(math.radians(hd)) + 0.1, y + 0.35 * math.sin(math.radians(hd)), 0.06), elbow=(0.8, 0.2, -0.6), curl=30)
-        kn.finish(density=HAIR)
+        kn.finish(density=HAIR, floor_z=0.01)
     t = PR.torch("t_torch", energy=120); t.location = (0.0, -1.6, 0.03); t.rotation_euler = (0, 0, math.radians(-90))
     return dict(a=((-1.9, -2.2, 1.75), (0.0, -1.1, 0.2)), b=((-1.7, -2.05, 1.7), (0.0, -1.1, 0.2)), lens=28, hand_ok=("rug",))
 
 
 def U31():
-    ST.world((0.6, 0.6, 0.6), 0.6)
+    ST.world((0.5, 0.5, 0.5), 0.35)
     rg = PR.rug("rug_close", 1.0, 1.0)
-    dz = PR.brilliants("carpet_gems", n=10, spread=0.03, seed=14); dz.location = (0, 0, 0.008)
-    ST.light_spot("rug_key", (-0.4, -0.5, 0.6), (0, 0, 0), 80, angle=35, color=(1.0, 0.9, 0.75), radius=0.01)
+    dz = PR.brilliants("carpet_gems", n=10, spread=0.03, seed=14); dz.location = (0, 0, 0.0125)     # resting on the pile
+    ST.light_spot("rug_key", (-0.4, -0.5, 0.6), (0, 0, 0), 25, angle=35, color=(1.0, 0.9, 0.75), radius=0.01)
+    ST.light_area("rug_soft", (0.1, 0.2, 0.5), (0, 0, 0), 0.6, 6, (1.0, 0.97, 0.92))           # a broad source for the facets to mirror
     for k, (x, y, z) in enumerate(((0.3, -0.3, 0.4), (-0.2, 0.35, 0.35))):
         ST.light_point(f"rug_spark{k}", (x, y, z), 10, (1, 0.97, 0.92), radius=0.004)
     return dict(a=((-0.1, -0.18, 0.1), (0, 0, 0.0)), b=((-0.07, -0.14, 0.08), (0, 0, 0.0)), lens=60, fstop=4.0, focus=(0, 0, 0.005))
@@ -350,7 +354,7 @@ def U32():
 def U33():
     A = S3.courtroom()
     for i, p in enumerate(A["judges"]):
-        m = MD.Judge(name=f"Judge{i}"); se = AC.Seated(m, p + V((0, 0, 0.47)), -90, lean=6); se.finish(density=HAIR)
+        m = MD.Judge(name=f"Judge{i}"); se = AC.Seated(m, V((p.x, p.y + 0.25, 0.97)), -90, lean=6, floor=0.5); se.finish(density=HAIR, floor_z=0.5)
     le = MD.Leonardo(); st = AC.Stand(le, (A["dock"].x, A["dock"].y), 90); st.hands_front(); st.finish(density=HAIR)
     return dict(a=((0.5, -1.6, 1.75), (0.0, 5.0, 1.6)), b=((0.45, -1.2, 1.72), (0.0, 5.0, 1.6)), lens=28, hand_ok=("chair",))
 
@@ -368,7 +372,7 @@ def U35():
     A = S3.interview()
     seat, yaw = A["seats"]["L"]
     m = MD.Leonardo(); se = AC.Seated(m, seat, yaw, lean=10)
-    se.hand("L", (-0.42, 0.12, 0.8), elbow=(0.9, 0.2, -0.5), curl=24); se.hand("R", (-0.38, -0.12, 0.8), elbow=(0.9, 0.2, -0.5), curl=24)
+    se.hand("L", (-0.42, 0.12, 0.835), elbow=(0.9, 0.2, -0.5), curl=24); se.hand("R", (-0.38, -0.12, 0.835), elbow=(0.9, 0.2, -0.5), curl=24)
     se.head_to((0.8, 0.0, 1.2), share=0.5); se.finish(density=HAIR)
     return dict(a=((-0.9, -1.4, 1.35), (-0.8, 0.0, 1.15)), b=((-0.8, -1.25, 1.33), (-0.8, 0.0, 1.15)), lens=40, fstop=2.8, focus=(-0.8, 0, 1.2),
                 hand_ok=("iv_table", "iv_chair"), cine=dict(exposure=0.2))
@@ -379,7 +383,7 @@ def U36():
     for o in list(bpy.data.objects):
         if o.name.startswith(("blueprint",)):
             bpy.data.objects.remove(o)
-    m = MD.Trader(2); st = AC.Stand(m, (0.9, 1.75), 90); st.hands_front(); st.finish(density=HAIR)
+    m = MD.Trader(2); st = AC.Stand(m, (0.9, 1.55), 90); st.hands_front(); st.finish(density=HAIR)
     return dict(a=((-0.6, -1.2, 1.55), (0.9, 2.0, 1.4)), b=((-0.45, -1.0, 1.55), (0.9, 2.0, 1.4)), lens=30, cine=dict(exposure=-0.3))
 
 
@@ -397,6 +401,8 @@ def U38():
     PR.sf_put(PR.USD_LOOSE, (0.1, -0.02, 0.0), width=0.15, rz=-0.4)
     dz = PR.brilliants("few", n=6, spread=0.02, seed=3); dz.location = (0.0, -0.08, 0.0)
     ST.light_spot("small_key", (-0.4, -0.5, 0.7), (0, 0, 0), 60, angle=30, color=(1.0, 0.88, 0.7), radius=0.03)
+    ST.light_area("small_soft", (0.15, 0.25, 0.5), (0, 0, 0), 0.6, 8, (1.0, 0.95, 0.88))       # a broad source for the facets to mirror
+    dz.location.z = 0.001
     return dict(a=((-0.2, -0.32, 0.22), (0.02, 0, 0.0)), b=((-0.15, -0.27, 0.18), (0.02, 0, 0.0)), lens=50, fstop=5.6, focus=(0.02, 0, 0))
 
 
@@ -405,6 +411,7 @@ def U39():
     A = S2.office("leasing", hour="night")
     for cls, (x, hd) in ((MD.DeBruycker, (-0.25, -90)),):
         m = cls(); se = AC.Seated(m, A["seat_behind"], hd, lean=12); desk_hands(se, A["desk_y"]); se.head_to((0, A["desk_y"], 0.8), share=0.7); se.finish(density=HAIR)
+        se._rest_on_seat(margin=0.016, r=0.55, depth=0.35)          # coat skirt over the chair seat, not through it
     PR.document("report", 0.21, 0.3, seed=41).location = (0.0, A["desk_y"] + 0.05, 0.793)
     return dict(a=((-0.5, 2.0, 1.55), (0.1, 0.5, 0.85)), b=((-0.45, 1.98, 1.52), (0.1, 0.5, 0.85)), lens=26, hand_ok=("desk", "Desk", "chair", "report"),
                 cine=dict(exposure=0.3))

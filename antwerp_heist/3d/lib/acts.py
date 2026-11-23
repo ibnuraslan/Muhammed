@@ -63,6 +63,9 @@ class _Base:
 
     def finish(self, look=None, density=0.6, hair=True, floor_z=0.0, floor_fn=None):
         self.m.finish(look_at=look, place=self.M, density=density, hair=hair)
+        jk = getattr(self.m, "jacket", None)                 # layering after posing: no trousers/shirt through the coat
+        if jk is not None and hasattr(self.m, "_cover"):
+            self.m._cover(jk, [getattr(self.m, "shirt", None), getattr(self.m, "trousers", None)])
         # feet on the floor: lift him so the lowest sole/heel sits 1.5 mm above floor_z (no sinking into the floor)
         import numpy as np
         bpy.context.view_layer.update()
@@ -211,7 +214,7 @@ class Stand(_Base):
 
 
 class Seated(_Base):
-    def __init__(self, m, seat, heading, feet=None, lean=8.0, twist=0.0, knees_out=0.12):
+    def __init__(self, m, seat, heading, feet=None, lean=8.0, twist=0.0, knees_out=0.12, floor=0.0):
         self.m = m
         self.seat_top = seat[2] - 0.01; self.seat_xy = (seat[0], seat[1])
         seat = (seat[0], seat[1], seat[2] + 0.015)
@@ -225,8 +228,8 @@ class Seated(_Base):
             feet = {"L": s + f * 0.42 + sd * 0.13 * -1 + Vector((0, 0, -s.z + 0.08)),
                     "R": s + f * 0.42 + sd * 0.13 + Vector((0, 0, -s.z + 0.08))}
             # left foot is on the character's left: sd points to his left when he faces f
-            feet = {"L": s + f * 0.42 + sd * 0.14 + Vector((0, 0, -s.z + 0.08)),
-                    "R": s + f * 0.42 - sd * 0.14 + Vector((0, 0, -s.z + 0.08))}
+            feet = {"L": s + f * 0.42 + sd * 0.14 + Vector((0, 0, -s.z + floor + 0.08)),
+                    "R": s + f * 0.42 - sd * 0.14 + Vector((0, 0, -s.z + floor + 0.08))}
         self.s.legs(feet, knees_out=knees_out)
         self.s.lean(fwd=lean, twist=twist)
         for sd in ("L", "R"):

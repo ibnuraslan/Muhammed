@@ -178,8 +178,8 @@ def lab():
     # light: cool overhead panels, a warm task lamp over the evidence
     for x in (-2.0, 0.0, 2.0):
         box("lab_panel", (x, 0.4, RZ - 0.02), (1.2, 0.6, 0.03), emit("lab_panel", (0.9, 0.95, 1.0), 6))
-        light_area("lab_light", (x, 0.4, RZ - 0.06), (x, 0.4, 0), 1.2, 180, (0.92, 0.96, 1.0), size_y=0.6)
-    light_spot("task_lamp", (0.3, -1.3, 1.6), A["bench"], 120, angle=60, color=(1.0, 0.82, 0.6), radius=0.08)
+        light_area("lab_light", (x, 0.4, RZ - 0.06), (x, 0.4, 0), 1.2, 75, (0.92, 0.96, 1.0), size_y=0.6)
+    light_spot("task_lamp", (0.3, -1.3, 1.6), A["bench"], 30, angle=60, color=(1.0, 0.82, 0.6), radius=0.08)
     world((0.02, 0.02, 0.02), 0.3)
     return A
 
