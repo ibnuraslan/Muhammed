@@ -1,0 +1,234 @@
+{
+"visible_frames": [
+1,
+3,
+5,
+7,
+9,
+11,
+13,
+15,
+17,
+19,
+21,
+23,
+25,
+27,
+29,
+31,
+33,
+35,
+37,
+39,
+53,
+55,
+57,
+59,
+61,
+63,
+65,
+67,
+69,
+71,
+73,
+75,
+77,
+79,
+81,
+83,
+85,
+87,
+89
+],
+"frames": {
+"1": {
+"lowerarm01.L|PickBox|VIS": 3,
+"lowerarm02.L|PickBox|VIS": 2
+},
+"3": {
+"lowerarm01.L|PickBox|VIS": 3,
+"lowerarm02.L|PickBox|VIS": 2
+},
+"5": {
+"lowerarm01.L|PickBox|VIS": 3,
+"lowerarm02.L|PickBox|VIS": 2
+},
+"7": {
+"lowerarm01.L|PickBox|VIS": 4,
+"lowerarm02.L|PickBox|VIS": 2
+},
+"9": {
+"lowerarm01.L|PickBox|VIS": 4,
+"lowerarm02.L|PickBox|VIS": 2
+},
+"11": {
+"lowerarm02.L|PickBox|VIS": 3,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"13": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"15": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"17": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"19": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"21": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"23": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"25": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"27": {
+"lowerarm02.L|PickBox|VIS": 3,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"29": {
+"lowerarm02.L|PickBox|VIS": 3,
+"lowerarm01.L|PickBox|VIS": 4
+},
+"31": {
+"lowerarm01.L|PickBox|VIS": 4,
+"lowerarm02.L|PickBox|VIS": 2
+},
+"33": {
+"lowerarm01.L|PickBox|VIS": 4,
+"lowerarm02.L|PickBox|VIS": 2
+},
+"35": {
+"lowerarm01.L|PickBox|VIS": 3,
+"lowerarm02.L|PickBox|VIS": 2
+},
+"37": {
+"lowerarm01.L|PickBox|VIS": 3,
+"lowerarm02.L|PickBox|VIS": 2
+},
+"39": {
+"lowerarm01.L|PickBox|VIS": 3,
+"lowerarm02.L|PickBox|VIS": 1
+},
+"41": {
+"lowerarm01.L|PickBox|off": 3,
+"lowerarm02.L|PickBox|off": 1
+},
+"43": {
+"lowerarm01.L|PickBox|off": 3,
+"lowerarm02.L|PickBox|off": 2
+},
+"45": {
+"lowerarm01.L|PickBox|off": 3,
+"lowerarm02.L|PickBox|off": 2
+},
+"47": {
+"lowerarm01.L|PickBox|off": 3,
+"lowerarm02.L|PickBox|off": 2
+},
+"49": {
+"lowerarm01.L|PickBox|off": 4,
+"lowerarm02.L|PickBox|off": 2
+},
+"51": {
+"lowerarm01.L|PickBox|off": 4,
+"lowerarm02.L|PickBox|off": 2
+},
+"53": {
+"lowerarm02.L|PickBox|VIS": 3,
+"lowerarm01.L|PickBox|VIS": 4
+},
+"55": {
+"lowerarm02.L|PickBox|VIS": 3,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"57": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"59": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"61": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"63": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"65": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"67": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"69": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"71": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"73": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"75": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"77": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"79": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"81": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"83": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"85": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"87": {
+"lowerarm02.L|PickBox|VIS": 3,
+"lowerarm01.L|PickBox|VIS": 5
+},
+"89": {
+"lowerarm02.L|PickBox|VIS": 5,
+"lowerarm01.L|PickBox|VIS": 3
+},
+"91": {
+"finger1-2.L|PickBox|off": 17,
+"finger1-1.L|PickBox|off": 5,
+"metacarpal1.L|PickBox|off": 5
+},
+"93": {
+"finger1-2.L|PickBox|off": 20,
+"finger1-3.L|PickBox|off": 13
+}
+}
+}
