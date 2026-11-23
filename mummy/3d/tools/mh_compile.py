@@ -54,11 +54,12 @@ def compile_mhclo(path, out_dir):
         elif mode == "v" and len(w) == 1 and w[0].isdigit():
             refs.append([int(w[0])] * 3); ws.append([1.0, 0, 0]); offs.append([0, 0, 0])
         elif mode == "d":
-            for x in w:
-                if "-" in x:
-                    a, b = x.split("-"); dele += list(range(int(a), int(b) + 1))
-                elif x.isdigit():
-                    dele.append(int(x))
+            import re
+            txt = " ".join(w)
+            for a, b in re.findall(r"(\d+)\s*-\s*(\d+)", txt):
+                dele += list(range(int(a), int(b) + 1))
+            txt = re.sub(r"(\d+)\s*-\s*(\d+)", " ", txt)
+            dele += [int(x) for x in txt.split() if x.isdigit()]
     name = os.path.splitext(os.path.basename(path))[0]
     os.makedirs(out_dir, exist_ok=True)
     o = read_obj(os.path.join(os.path.dirname(path), obj))

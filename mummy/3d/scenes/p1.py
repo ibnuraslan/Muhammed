@@ -247,33 +247,43 @@ def S16():
 
 
 def S17():
-    """A digger cleaning the section with a trowel - from behind, the trowel's edge on the sand."""
+    """A digger cleaning the lower section face with a trowel, seen from behind-left; the strata fill the frame."""
     site("golden", grass_at=(4, 18), grass_r=8, kit=False, burials=False, sun_az=192)
     y = U.DIG["y1"]
-    K.kneel_trowel(K.DiggerA, (4.2, y - 0.95), 92, work=(4.25, y - 0.28), density=HAIR)
-    z = G.H(4.2, y - 1)
-    return dict(a=((5.25, y - 2.4, z + 1.1), (4.15, y - 0.2, z + 0.25)), b=((4.85, y - 2.25, z + 1.05), (4.05, y - 0.2, z + 0.3)), lens=40,
-                fstop=3.5, focus=(4.2, y - 0.4, z + 0.4), hand_ok=OK)
+    K.kneel_trowel(K.DiggerA, (4.2, y - 1.7), 92, work=(4.25, y - 1.12), density=HAIR)
+    z = G.H(4.2, y - 1.7)
+    return dict(a=((6.3, y - 3.6, z + 1.55), (3.9, y - 0.9, z + 0.55)), b=((5.8, y - 3.3, z + 1.45), (3.8, y - 0.9, z + 0.55)), lens=35,
+                fstop=4.0, focus=(4.2, y - 1.3, z + 0.5), hand_ok=OK)
 
 
-def _ard_marks(cx, cy, w=2.4, n=9, seed=1):
-    """Criss-cross ard furrows: dark thin bands of ploughsoil cut into the pale sand, two directions."""
+def _ard_marks(cx, cy, w=2.6, n=11, seed=1):
+    """Criss-cross ard furrows: soft, broken, dark sandy bands in the paler sand, two crossing directions."""
     import random
     rng = random.Random(seed)
-    m = bpy.data.materials.new("ard"); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
-    p.inputs['Base Color'].default_value = (0.13, 0.1, 0.07, 1); p.inputs['Roughness'].default_value = 0.95
-    for d, ang in ((0, 0.12), (1, 1.52)):
+    m = bpy.data.materials.new("ard"); m.use_nodes = True; nt = m.node_tree; N = nt.nodes; Lk = nt.links
+    p = N["Principled BSDF"]; p.inputs['Base Color'].default_value = (0.16, 0.12, 0.08, 1); p.inputs['Roughness'].default_value = 0.95
+    uv = N.new("ShaderNodeUVMap"); sp = N.new("ShaderNodeSeparateXYZ"); Lk.new(uv.outputs[0], sp.inputs[0])
+    d = N.new("ShaderNodeMath"); d.operation = 'SUBTRACT'; d.inputs[1].default_value = 0.5; Lk.new(sp.outputs['Y'], d.inputs[0])
+    ab = N.new("ShaderNodeMath"); ab.operation = 'ABSOLUTE'; Lk.new(d.outputs[0], ab.inputs[0])
+    edge = N.new("ShaderNodeMapRange"); edge.inputs['From Min'].default_value = 0.5; edge.inputs['From Max'].default_value = 0.1
+    Lk.new(ab.outputs[0], edge.inputs['Value'])
+    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 3.5; nz.inputs['Detail'].default_value = 8
+    Lk.new(tc.outputs['Object'], nz.inputs['Vector'])
+    br = N.new("ShaderNodeMapRange"); br.inputs['From Min'].default_value = 0.35; br.inputs['From Max'].default_value = 0.65
+    Lk.new(nz.outputs['Fac'], br.inputs['Value'])
+    al = N.new("ShaderNodeMath"); al.operation = 'MULTIPLY'; Lk.new(edge.outputs[0], al.inputs[0]); Lk.new(br.outputs[0], al.inputs[1])
+    al2 = N.new("ShaderNodeMath"); al2.operation = 'MULTIPLY'; al2.inputs[1].default_value = 0.75; Lk.new(al.outputs[0], al2.inputs[0])
+    Lk.new(al2.outputs[0], p.inputs['Alpha'])
+    for dirn, ang in ((0, 0.12), (1, 1.5)):
         for k in range(n):
-            off = (k - n / 2) * w / n + rng.uniform(-0.05, 0.05)
-            c, s = math.cos(ang), math.sin(ang)
-            x = cx - s * off; y = cy + c * off
-            z = G.H(x, y)
-            bpy.ops.mesh.primitive_plane_add(size=1, location=(x, y, z + 0.003)); o = bpy.context.active_object
-            o.scale = (w * rng.uniform(0.7, 1.0), rng.uniform(0.035, 0.06), 1); o.rotation_euler.z = ang; o.name = "ard"
-            sub = o.modifiers.new("s", "SUBSURF"); sub.subdivision_type = 'SIMPLE'; sub.levels = 3; sub.render_levels = 3
-            dsp = o.modifiers.new("w", "DISPLACE"); t = bpy.data.textures.new("ardw", "CLOUDS"); t.noise_scale = 0.3
-            dsp.texture = t; dsp.strength = 0.004; dsp.direction = 'Z'
-            o.data.materials.append(m)
+            off = (k - n / 2) * w / n + rng.uniform(-0.08, 0.08)
+            a = ang + rng.uniform(-0.06, 0.06)
+            c, s_ = math.cos(a), math.sin(a)
+            along = rng.uniform(-0.4, 0.4)
+            x = cx - s_ * off + c * along; y = cy + c * off + s_ * along
+            bpy.ops.mesh.primitive_plane_add(size=1, location=(x, y, G.H(x, y) + 0.002)); o = bpy.context.active_object
+            o.scale = (w * rng.uniform(0.45, 0.9), rng.uniform(0.05, 0.11), 1); o.rotation_euler.z = a; o.name = "ard"
+            o.data.materials.append(m); o.visible_shadow = False
 
 
 def S18():

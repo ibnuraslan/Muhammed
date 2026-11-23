@@ -49,6 +49,7 @@ class ModernMan(W._Woman):
     JACKET = "blazer"; JACKET_COL = (0.03, 0.035, 0.06)
     TROUSERS = (0.05, 0.05, 0.055); SHOES = (0.03, 0.02, 0.012)
     GLOVES = False; GLOVE_COL = (0.012, 0.012, 0.012)
+    ASSET_BOOTS = True          # fitted leather boots (stay on in kneeling/sitting poses)
 
     def __init__(self, name, years=45, night=False, seated=False, **kw):
         self.night = night
@@ -126,7 +127,7 @@ class ModernMan(W._Woman):
         # loose work trousers: stand off the leg, bridge the seat (no gluteal shape), deeper folds
         self.trousers, _ = self._shell("trousers", trous, 0.011, W.cloth(self.name + "_trousers", self.TROUSERS, rough=0.82, weave=900, sheen=0.15),
                                        solid=0.002, displace=0.0075, drape=60, flare=tflare)
-        self._loosen(self.trousers, m, ease=1.04, extra=0.004)
+        self._loosen(self.trousers, m, ease=getattr(self, 'TROUSER_EASE', 1.04), extra=getattr(self, 'TROUSER_EXTRA', 0.004))
         tr = self.trousers.modifiers.new("Relax", "SMOOTH"); tr.factor = 0.5; tr.iterations = 10     # even hang, no lumps
         self.trousers.modifiers.move(self.trousers.modifiers.find("Relax"), 0)
         hide |= trous
