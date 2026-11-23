@@ -117,6 +117,20 @@ def relaxed(pitch=0.0, yaw=0.0, lean=3, weight="L", brow=0.0, lids=0.0):
     return f
 
 
+def door_exterior(a):
+    """Outside the galley door: the real sky (the shots' HDRI, not a flat card) and the sea beyond the bulwark."""
+    import ph, sea
+    for n in ("sky_out",):
+        o = bpy.data.objects.get(n)
+        if o:
+            bpy.data.objects.remove(o, do_unlink=True)
+    ph.world_hdri(E.SKY_HDRI, strength=0.8, res="4k")
+    d = a["door"]
+    w = S.water_mat()
+    sea.ocean(size=120, res=12, scale=2.4, chop=1.7, wind=15.0, repeat=1, foam=0.24, mat=w, loc=(d.x - 60, d.y + 60, -2.3), time=11.0)
+    sea.far_sea(140, mat=w, center=(d.x - 60, d.y), z=-2.35)
+
+
 def soft_skin(dv, weight=0.2, radius=(0.7, 0.45, 0.35)):
     """Gentler subsurface on this character's skin: a hand in shade with the sun behind it otherwise glows deep red."""
     for o in dv.objects:
@@ -156,7 +170,7 @@ def crew_in_boat(b, rowers=(0, 1), cox="deveau", look=None):
                 # the wrist sits just past the end of the loom, the fist closed on its last few inches (no sleeve on the wood)
                 grip = lambda hd: Bm @ (hd[0] + (hd[0] - hd[2]).normalized() * 0.075 + Vector((0, 0, 0.043)))
                 hL, hR = sorted(handles, key=lambda h: -h[0].y)
-                Cw.hands_on(dv, Mx, left_w=grip(hR), right_w=grip(hL), elbow_l=(0.8, 0.0, -0.6), elbow_r=(-0.8, 0.0, -0.6))
+                Cw.hands_on(dv, Mx, left_w=grip(hL), right_w=grip(hR), elbow_l=(0.8, 0.0, -0.6), elbow_r=(-0.8, 0.0, -0.6))
         person(who, Mp, row, look_w=look, density=0.35, seat=True)
     Mp = Bm @ Matrix.Translation((-SB.LB / 2 + 0.5, 0, SB.GUN - SB.DEPTH + 0.115)) @ Matrix.Rotation(math.radians(90), 4, 'Z')
     def cx(dv, Mx):
@@ -638,7 +652,7 @@ def s19():
     def pose(dv, Mx):
         H.pose_sit(dv.h, lean=16, hands="knees")
         P.head(dv.h, pitch=32)
-        Cw.hands_on(dv, Mx, left_w=t + Vector((0.2, 0.1, 0.15)), right_w=t + Vector((-0.05, 0.06, 0.15)),
+        Cw.hands_on(dv, Mx, left_w=t + Vector((0.06, 0.09, 0.15)), right_w=t + Vector((-0.12, 0.09, 0.15)),
                     elbow_l=(0.8, 0.5, -0.6), elbow_r=(-0.8, 0.5, -0.6), grip=False, curl=30)
     # seat height: the stool top ~0.45
     dv = person("deveau", M, pose, look_w=t + Vector((-0.1, 0.02, 0.05)), seat=True)
@@ -848,7 +862,7 @@ def s32():
       ["wind", "hatch cover scrape"])
 def s33():
     import explain as X
-    mc, _ = mc_at_sea(heel=2.0)
+    mc, _ = mc_at_sea(heel=2.0, cut=False)          # seen from high above: keep the whole sea
     M = mc["M"]
     for k, (x, y, r) in enumerate(((ship.FORE_X + 2.6, 0, 1.25), (-ship.L / 2 + 9.3, -1.5, 0.8))):
         soft_band(M, x, y, r, r, name=f"hatchband{k}", z=0.03)
@@ -878,6 +892,7 @@ def s35():
     a = I.galley()
     I.lantern((0.6, 0.9, 1.75), energy=70)
     s = a["sill"]
+    door_exterior(a)
     c = Vector((s.x + 0.9, s.y - 0.55, 0.42))
     E.camera(c, Vector((s.x, s.y + 0.05, 0.3)), lens=45, fstop=2.8)
 
@@ -942,23 +957,27 @@ def s38():
     x0, y0 = px + 0.3, -1.95                            # by the pumps, clear of the main hatch
     Mp = S.deck_place(M, x0, y0, heading_to(x0, y0, x0 + 1.0, -2.2))
     ft = 0.3048
-    # the rod hangs from his right fist by its top; left hand steadies it lower down
-    top = Mp @ Vector((-0.2, -0.42, 1.52)); bottom = top - Vector((0, 0, 4.4 * ft))
+    # the rod stands on the deck; his right hand rests on its head at chest height, the left arm hangs relaxed
+    # the rod leans toward him from the deck, its head at chest height under his resting hand
+    bottom = Mp @ Vector((-0.30, -0.92, 0.012)); head_xy = Mp @ Vector((-0.18, -0.40, 0.0))
+    hz = Vector((head_xy.x - bottom.x, head_xy.y - bottom.y, 0.0)); L = 4.4 * ft
+    u = (hz + Vector((0, 0, math.sqrt(max(L * L - hz.length ** 2, 0.01))))).normalized()
+    top = bottom + u * L
     def pose(dv, Mx):
         Cw.stand_relaxed(dv, pitch=26, yaw=-8, lean=8)
-        Cw.hands_on(dv, Mx, right_w=top + Vector((0, 0, 0.02)), left_w=None, elbow_r=(-0.8, 0.3, -0.6), grip=True)
-        P.arm_down(dv.h, "L", out=0.1, fwd=0.05, bend=14); P.rest_hand(dv.h, "L", curl=26)   # one fist holds the rod up
-    person("deveau", Mp, pose, look_w=bottom + Vector((0, 0, 3.5 * ft)))
+        Cw.hands_on(dv, Mx, right_w=top + Vector((0, 0, 0.075)), left_w=None, elbow_r=(-0.8, 0.3, -0.6), grip=False, curl=30)
+        P.arm_down(dv.h, "L", out=0.1, fwd=0.05, bend=14); P.rest_hand(dv.h, "L", curl=26)
+    person("deveau", Mp, pose, look_w=bottom + u * (3.5 * ft))
     wet = ship.paint("rod_wet", (0.08, 0.07, 0.065), rough=0.18, grime=0.1, wet=1.0, scale=8)
     dry = ship.paint("rod_dry", (0.62, 0.6, 0.55), rough=0.8, grime=0.3, scale=12)      # chalked, so the wet line shows
-    mark = bottom + Vector((0, 0, 3.5 * ft))
-    ship.cyl("rod_wet", bottom, mark, 0.011, mat=wet, verts=14); ship.cyl("rod_dry", mark, top - Vector((0, 0, 0.07)), 0.011, mat=dry, verts=14)
+    mark = bottom + u * (3.5 * ft)
+    ship.cyl("rod_wet", bottom, mark, 0.011, mat=wet, verts=14); ship.cyl("rod_dry", mark, top, 0.011, mat=dry, verts=14)
     notch = E.principled("notch", (0.6, 0.55, 0.45), rough=0.5, metal=0.5)
     for k in range(1, 5):
-        q = bottom + Vector((0, 0, k * ft))
-        ship.cyl("rod_mark", q - Vector((0, 0, 0.003)), q + Vector((0, 0, 0.003)), 0.0118, mat=notch, verts=14)
+        q = bottom + u * (k * ft)
+        ship.cyl("rod_mark", q - u * 0.003, q + u * 0.003, 0.0118, mat=notch, verts=14)
     rope = mc["mats"]["rope"]
-    ship.rope("sounding_line", [top - Vector((0, 0, 0.07)), top + Vector((0, 0, 0.06)), top + Vector((0.05, 0.1, 0.25)), S.deck_point(M, x0 - 0.3, y0 + 0.2, 0.02)], 0.005, rope)
+    ship.rope("sounding_line", [top - Vector((0, 0, 0.02)), top + Vector((0.05, 0.06, -0.12)), top + Vector((0.12, 0.2, -0.7)), S.deck_point(M, x0 - 0.3, y0 + 0.2, 0.02)], 0.005, rope)
     c = Mp @ Vector((-1.5, -1.0, 1.15))                # side-on from his right, chest-down: the rod and both hands
     E.camera(c, mark + Vector((0, 0, 0.05)), lens=35, fstop=3.5, focus=(mark - c).length)
 
