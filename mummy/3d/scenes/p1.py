@@ -262,7 +262,7 @@ def S17():
     y = U.DIG["y1"]
     K.kneel_trowel(K.DiggerA, (4.2, y - 1.7), 92, work=(4.25, y - 1.12), density=HAIR)
     z = G.H(4.2, y - 1.7)
-    return dict(a=((4.75, y - 3.7, z + 1.6), (4.0, y - 0.9, z + 0.55)), b=((4.45, y - 3.4, z + 1.5), (3.95, y - 0.9, z + 0.55)), lens=35,
+    return dict(a=((5.3, y - 3.0, z + 2.3), (4.1, y - 1.05, z + 0.35)), b=((5.0, y - 2.8, z + 2.2), (4.05, y - 1.05, z + 0.35)), lens=35,
                 fstop=4.0, focus=(4.2, y - 1.3, z + 0.5), hand_ok=OK)
 
 
