@@ -271,8 +271,7 @@ def hide_under(rig_name, vis_src, sleeve="short", tag="UnderCloth"):
             if c.z < ank + 0.07: continue
             sel.append(v.index)
         elif d.startswith("upperarm") and sleeve == "short":
-            s_ = d[-1]; a, b = BN["upperarm01." + s_].head_local, BN["upperarm02." + s_].tail_local
-            if (c - a).dot(b - a) / (b - a).length_squared < 0.22: sel.append(v.index)
+            pass                                                         # v014b: arm skin stays (no gap can show a hole)
         elif d.startswith(("upperarm", "lowerarm")) and sleeve == "long":
             s_ = d[-1]; a, b = BN["upperarm01." + s_].head_local, BN["wrist." + s_].head_local
             if (c - a).dot(b - a) / (b - a).length_squared < 0.9: sel.append(v.index)
@@ -294,7 +293,10 @@ for nm, (rgb, suit) in SCRUB.items():
     # visibility source = the v013 scrub pieces (they carry the shot visibility); then hide them for good
     vis_src = OB.get(nm + ".ScrubTop") or src
     mt = fabric(nm + "ClothTop", rgb, print_dots=(nm == "Surgeon2"))
-    build(nm, "Top", mt, vis_src, "short", 0.032); yoke(nm, mt, vis_src, "short", 0.012)
+    if nm in ("Nurse", "Surgeon1", "Anaesth"):                           # v014b: soft fitted top follows the arms (no gap, no pad)
+        yoke(nm, mt, vis_src, "short", 0.016, name=nm + ".ClothTop", torso=True)
+    else:
+        build(nm, "Top", mt, vis_src, "short", 0.032); yoke(nm, mt, vis_src, "short", 0.012)
     hide_under(nm, vis_src, "short")
     build(nm, "Trousers", fabric(nm + "ClothTrousers", tuple(c * 0.75 for c in rgb)), vis_src, "short", 0.03)
     for o in (OB.get(nm + ".ScrubTop"), OB.get(nm + ".ScrubTrousers")):

@@ -251,7 +251,7 @@ for k in range(7):
 pt = OB["Patient"]; HW = human("Patient")
 P0, P1 = V(6.45, 1.05, 0), V(5.85, -0.30, 0)
 wpath = lambda f: P0.lerp(P1, smooth((f - 641) / 62.0) * 0.6 + 0.4 * (f - 641) / 62.0)
-yaw_w = walk("Patient", wpath, 641, 703, stride=0.62, lean=4, out_k=0.075, amp=0.13)
+yaw_w = walk("Patient", wpath, 641, 703, stride=0.62, lean=4, out_k=0.11, amp=0.13)
 clear_bones(pt, body_bones(), 704, 775)
 y0 = yaw_w(703); yr = R_(y0); fwd = V(math.sin(yr), -math.cos(yr), 0); rt = V(-math.cos(yr), -math.sin(yr), 0)
 for s in "LR":
@@ -276,7 +276,7 @@ for f in list(range(704, 776, 3)) + [775]:
     if okh and f > 712 and ((so.matrix_world @ loch) - r_side).length < 0.08: r_side = r_side.lerp(so.matrix_world @ loch, min(1.0, k * 1.2))
     HP["place_hand"](pt, "R", f, r_side, nrm_in, (-rt * 0.8 + V(0, 0, -0.6)).normalized(), skin=0.016)
     HP["apply_pose"](pt, "R", "cup_hold", f)
-    thL = W(pt, "upperleg02.L").lerp(W(pt, "lowerleg01.L"), 0.55) + fwd * 0.07 - rt * 0.07
+    thL = W(pt, "upperleg02.L").lerp(W(pt, "lowerleg01.L"), 0.55) + fwd * 0.09 - rt * 0.10
     shL = W(pt, "upperarm01.L"); l_pt = (shL + V(0, 0, -0.5) + fwd * 0.05 - rt * 0.05).lerp(thL, smooth((f - 712) / 30.0))
     HP["place_hand"](pt, "L", f, l_pt, (-fwd + V(0, 0, -0.5)).normalized(), V(0, 0, -1), skin=0.02)
     for s_, o_ in (("L", -rt), ("R", rt)):
@@ -411,7 +411,7 @@ for f in (1236, 1300, 1340, 1380, 1420, 1450):        # both hands rest on the l
     ev(f)
     for s, sy in (("L", 0.20), ("R", -0.20)):
         sh_ = 0.01 * math.sin(f / 25.0) * (1 if s == "L" else -1)
-        p = V(lxmax - 0.04 + sh_, sy * 0.85, lz + 0.004)
+        p = V(lxmax + 0.01 + sh_ * 0.5, sy * 0.75, lz + 0.004)            # v014b: on the near edge, close to him
         hit = lt.ray_cast(lt.matrix_world.inverted() @ (p + V(0, 0, 0.5)), lt.matrix_world.inverted().to_3x3() @ V(0, 0, -1))
         if hit[0]: p.z = (lt.matrix_world @ hit[1]).z + 0.014
         HP["place_hand"](s1, s, f, p, V(0, 0, -1), V(-1, -0.25 if s == "L" else 0.25, 0).normalized(), skin=0.012)
@@ -550,7 +550,7 @@ for o in rig_objs("Surgeon2"):
                 if 870 <= kp.co.x <= 880 and kp.co.y < 0.5: kp.co.x = 776
             fc.update()
 s2b = lambda f: V(2.42, 6.05, 0).lerp(V(2.42, 3.85, 0), smooth((f - 776) / 139.0) * 0.3 + 0.7 * (f - 776) / 139.0)
-walk("Surgeon2", s2b, 776, 915, stride=0.62, amp=0.11, out_k=0.08)
+walk("Surgeon2", s2b, 776, 915, stride=0.62, amp=0.11, out_k=0.14)
 clear_bones(s2, ["IK_hand.L", "IK_hand.R", "Pole_elbow.L", "Pole_elbow.R"], 985, 1039)
 for f in range(986, 1040, 3):
     ev(f); s2sh = {sv: W(s2, "upperarm01." + sv) for sv in "LR"}; fw2 = V(0, -1, 0)
@@ -565,7 +565,7 @@ for f in range(986, 1040, 3):
         pbp = s2.pose.bones["Pole_elbow." + sv]; pole = s2sh[sv] + V(0, 0, -0.3) - fw2 * 0.3 + oo * 0.3
         pbp.location = s2.data.bones["Pole_elbow." + sv].matrix_local.to_3x3().inverted() @ (pole - s2.data.bones["Pole_elbow." + sv].head_local)
         pbp.keyframe_insert("location", frame=f, group=pbp.name)
-swing_arms("Surgeon2", 916, 984, s2yaw, lambda f: dd[min(len(dd) - 1, f - 879)] / 0.7, amp=0.10)   # re-key from the cut (no hands sliding from the corridor)
+swing_arms("Surgeon2", 916, 984, s2yaw, lambda f: dd[min(len(dd) - 1, f - 879)] / 0.7, amp=0.10, out_k=0.14)   # re-key from the cut (no hands sliding from the corridor)
 for f, kw in ((776, dict(wide=0.3, brow=0.2)), (840, dict(wide=0.3, brow=0.3)), (915, dict(wide=0.3, brow=0.2))):
     face(s2, f, **kw)
 blink(s2, 812, dict(wide=0.3, brow=0.25)); eyes(s2, 776, 18, -12); eyes(s2, 850, 10, -10); eyes(s2, 900, 0, -4)
