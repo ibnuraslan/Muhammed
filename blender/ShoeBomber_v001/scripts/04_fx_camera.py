@@ -198,6 +198,9 @@ foot_mask("Traveller", "R", 1440)
 exec(open(os.path.join(os.path.dirname(L.__file__), "04_airpax.py")).read())   # v009 payoff passengers
 shirt = O["Bomber.male_casualsuit05"]
 cs_ = shirt.modifiers.new("CorrectiveSmooth", 'CORRECTIVE_SMOOTH'); cs_.factor = 0.9; cs_.iterations = 12; cs_.rest_source = 'ORCO'
+_ts = O.get("Traveller.male_casualsuit01")   # v009 fix (director 21): his shirt shoulders ballooned at the airport
+if _ts:
+    _c = _ts.modifiers.new("CorrectiveSmooth", 'CORRECTIVE_SMOOTH'); _c.factor = 1.0; _c.iterations = 20; _c.rest_source = 'ORCO'
 pants = O.get("Bomber.male_casualsuit05")
 # ------------------------------------------------------------------ match + matchbox (bomber's hands), drops in the tackle
 match = O["Match"]; mbox = O["Matchbox"]
@@ -487,7 +490,10 @@ CAB = [[
     # eye height: his face, the attendant (side-on, holding his wrist), PaxA rising beside him; nobody between lens and action
     (457, V((0.12, 1.60, 1.32)), V((-0.70, 0.25, 0.98)), 24),
     (520, V((0.10, 1.55, 1.30)), V((-0.55, 0.30, 0.90)), 24),
-    (566, V((0.06, 1.50, 1.26)), V((-0.30, 0.50, 0.60)), 24),
+    (535, V((0.12, 1.75, 1.40)), V((-0.40, 0.55, 0.85)), 24),
+    # v009 fix: she backs into the aisle toward the lens -- the camera retreats and rises to look over her head
+    (550, V((0.18, 2.30, 1.65)), V((-0.20, 0.85, 0.65)), 22),
+    (566, V((0.20, 2.55, 1.72)), V((-0.15, 1.05, 0.50)), 22),
     # v006f (director): the pin and the sedation at SEATED EYE HEIGHT from the aisle side. The four empty seats 04B/C, 05B/C
     # behind the lens are struck for this shot (580-776). Faces: the attendant at his head, PaxA over his back, the steward
     # kneeling opposite and facing us; the bomber's face turned sideways toward us on the carpet.
