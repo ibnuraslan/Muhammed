@@ -65,19 +65,18 @@ def S03():
 def S04():
     """Low slider along the body at bone level: knees drawn up, hands at the face, the skull."""
     T, sk = site("golden", grass_at=None, kit=False, sun_az=205)
-    sp = sk["B1"].world_pivot("skull"); fp = sk["B1"].world_pivot("femurL")
+    sp = sk["B1"].part_centre("skull"); fp = sk["B1"].part_centre("femurL")
     return dict(a=((-0.75, 8.05, 3.55), tuple(fp)), b=((-1.05, 9.55, 3.55), tuple(sp)), lens=50,
                 fstop=2.8, focus=tuple((sp + fp) / 2))
 
 
 def S05():
-    """Macro: the skull in the ground; rack from the orbit to the teeth."""
+    """Macro: the skull in the ground; slow push, focus on the teeth."""
     T, sk = site("golden", grass_at=None, kit=False, sun_az=205)
-    sp = sk["B1"].world_pivot("skull")
-    d = Vector((0.55, -0.5, 0.0)).normalized()
-    a = sp + d * 0.55 + Vector((0, 0, 0.16)); b = sp + d * 0.32 + Vector((0, 0, 0.1))
-    return dict(a=(tuple(a), tuple(sp)), b=(tuple(b), tuple(sp + Vector((0, 0, -0.02)))), lens=85,
-                fstop=2.8, focus=tuple(sp))
+    sp = sk["B1"].part_centre("skull")
+    d = Vector((0.55, -0.6, 0.0)).normalized()
+    a = sp + d * 0.85 + Vector((0, 0, 0.3)); b = sp + d * 0.62 + Vector((0, 0, 0.2))
+    return dict(a=(tuple(a), tuple(sp)), b=(tuple(b), tuple(sp)), lens=85, fstop=4.0, focus=tuple(sp))
 
 
 # ============================================================================ the lab: skull, jaw, the third man
@@ -354,9 +353,9 @@ def S25():
 def S26():
     """Macro in the grave: the jaw under the skull of the first body; rack from skull to jaw."""
     T, sk = site("golden", grass_at=None, kit=False, sun_az=210)
-    sp = sk["B1"].world_pivot("skull"); jp = sk["B1"].world_pivot("mandible")
+    sp = sk["B1"].part_centre("skull"); jp = sk["B1"].part_centre("mandible")
     d = Vector((0.6, -0.4, 0)).normalized()
-    return dict(a=(tuple(sp + d * 0.42 + Vector((0, 0, 0.14))), tuple(sp)), b=(tuple(jp + d * 0.32 + Vector((0, 0, 0.1))), tuple(jp)),
+    return dict(a=(tuple(sp + d * 0.8 + Vector((0, 0, 0.28))), tuple(sp)), b=(tuple(jp + d * 0.6 + Vector((0, 0, 0.2))), tuple(jp)),
                 lens=85, fstop=2.8, focus=tuple(jp))
 
 
@@ -438,7 +437,7 @@ def S31():
 def S32():
     """Back in the grave at last light: the head of one man above the body of another. Slow push to the skull."""
     T, sk = site("dusk", grass_at=None, kit=False, sun_az=200)
-    sp = sk["B1"].world_pivot("skull"); tp = sk["B1"].world_pivot("thorax")
+    sp = sk["B1"].part_centre("skull"); tp = sk["B1"].part_centre("thorax")
     return dict(a=(tuple(tp + Vector((0.9, -0.9, 0.55))), tuple((sp + tp) / 2)), b=(tuple(tp + Vector((0.55, -0.6, 0.35))), tuple(sp)), lens=50,
                 fstop=2.8, focus=tuple(sp), cine=dict(exposure=0.3))
 

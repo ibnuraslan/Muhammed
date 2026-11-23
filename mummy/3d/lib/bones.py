@@ -300,6 +300,11 @@ class Skeleton:
         P = np.concatenate([np.array([o.matrix_world @ v.co for v in o.data.vertices[:]]) for o in self.parts.values()])
         return Vector(((P.min(0) + P.max(0)) / 2).tolist()), Vector((P.max(0) - P.min(0)).tolist())
 
+    def part_centre(self, seg):
+        import numpy as np
+        o = self.parts[seg]; P = np.array([o.matrix_world @ v.co for v in o.data.vertices[:]])
+        return Vector(((P.min(0) + P.max(0)) / 2).tolist())
+
     def world_pivot(self, seg):
         return self.parts[seg].matrix_world.translation.copy()
 
