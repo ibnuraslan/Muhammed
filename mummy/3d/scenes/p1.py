@@ -219,7 +219,7 @@ def S13():
     """Wide drone: South Uist's Atlantic coast - surf and spray, rocks and tide pools, machair strips, lochans, cloud shadows
     crossing toward the hills."""
     site("golden", grass_at=None, focus=(-230, -200), core=10.0, n=900, kit=False, burials=False, sun_az=195)
-    U.coast_rocks(-600, 200, n=36, seed=5); U.surf_mist(-700, 300); U.cloud_shadows((0, 0), cover=0.45, seed=5)
+    U.cloud_shadows((0, 0), cover=0.45, seed=5)
     return dict(a=((-470, -560, 190), (-120, 120, 0)), b=((-430, -470, 175), (-90, 150, 0)), lens=26)
 
 
