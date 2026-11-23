@@ -7,7 +7,7 @@ frame; camera carries the motion; clipcheck 0; light is motivated (sun/sky, fire
 """
 import math, os
 import bpy
-from mathutils import Vector
+from mathutils import Vector, Matrix
 import uist as U, dig as G, cast as K, bones as B, lab as LB, bronze as BR
 
 HAIR = float(os.environ.get("HAIR", "0.5"))
@@ -435,7 +435,16 @@ def lab_femur(x=0.05, y=0.36, yaw=8):
     bpy.context.view_layer.update()
     import numpy as np
     W = np.array([fe.matrix_world @ v.co for v in fe.data.vertices])
-    sk.root.location = Vector((x - W[:, 0].mean(), y - W[:, 1].mean(), LB.TOP + 0.004 - W[:, 2].min()))
+    # lay it flat: level the long axis (the shaft rests on the cloth, both ends down)
+    c0 = W.mean(0); u, sv, vt = np.linalg.svd(W - c0, full_matrices=False); ax = Vector(vt[0].tolist())
+    if ax.z < 0:
+        ax = -ax
+    flat = Vector((ax.x, ax.y, 0)).normalized()
+    R = ax.rotation_difference(flat).to_matrix().to_4x4()
+    sk.root.matrix_world = Matrix.Translation(Vector(c0.tolist())) @ R @ Matrix.Translation(-Vector(c0.tolist())) @ sk.root.matrix_world
+    bpy.context.view_layer.update()
+    W = np.array([fe.matrix_world @ v.co for v in fe.data.vertices])
+    sk.root.location += Vector((x - W[:, 0].mean(), y - W[:, 1].mean(), LB.TOP + 0.004 - W[:, 2].min()))
     bpy.context.view_layer.update()
     W = np.array([fe.matrix_world @ v.co for v in fe.data.vertices])
     return fe, W
@@ -475,28 +484,19 @@ def S30():
 
 
 def S31():
-    """Three parts, three men: skull, jaw and thigh bone laid apart on the velvet. Overhead push."""
-    A = LB.room(window_light=0.8, lamp=True, lamp_at=(0.0, 0.66), lamp_target=(0.0, 0.35), lamp_energy=24)
+    """Three parts, three men: skull, jaw and thigh bone laid apart on the velvet. Low slider in the lamp pool."""
+    A = LB.room(window_light=0.3, lamp=True, lamp_at=(0.0, 0.66), lamp_target=(0.0, 0.35), lamp_energy=26)
     LB.velvet(-0.8, 0.8, 0.0, 0.78, LB.TOP)
     import numpy as np
     cr = B.hero_cranium(healed=True, tone="A")
-    co = np.array([v.co for v in cr.data.vertices]); cr.location = (-0.42, 0.38, LB.TOP + 0.004 - co[:, 2].min() * 0.97)
-    cr.rotation_euler = (0, 0, math.radians(-30))
+    co = np.array([v.co for v in cr.data.vertices]); cr.location = (-0.36, 0.42, LB.TOP + 0.004 - co[:, 2].min() * 0.97)
+    cr.rotation_euler = (0, 0, math.radians(-25))
     md = B.hero_mandible(tone="B")
-    co = np.array([v.co for v in md.data.vertices]); md.location = (-0.08, 0.36, LB.TOP + 0.003 - co[:, 2].min())
+    co = np.array([v.co for v in md.data.vertices]); md.location = (-0.06, 0.36, LB.TOP + 0.003 - co[:, 2].min())
     md.rotation_euler = (0, 0, math.radians(-20))
-    sk = B.Skeleton("M", "C", name="Leg")
-    for s in list(sk.parts):
-        if s != "femurR":
-            sk.remove(s)
-    fe = sk.parts["femurR"]
-    sk.root.rotation_euler = (0, math.radians(90), math.radians(8))
-    bpy.context.view_layer.update()
-    W = np.array([fe.matrix_world @ v.co for v in fe.data.vertices])
-    sk.root.location = Vector((0.4 - W[:, 0].mean(), 0.38 - W[:, 1].mean(), LB.TOP + 0.004 - W[:, 2].min()))
-    return dict(a=((-0.62, -0.42, LB.TOP + 0.32), (0.05, 0.37, LB.TOP + 0.04)), b=((-0.42, -0.5, LB.TOP + 0.3), (0.08, 0.37, LB.TOP + 0.04)), lens=32,
-                fstop=4.0, focus=(-0.08, 0.36, LB.TOP + 0.03))
-
+    lab_femur(x=0.3, y=0.38, yaw=12)
+    return dict(a=((-0.45, -0.32, LB.TOP + 0.22), (0.0, 0.38, LB.TOP + 0.05)), b=((-0.25, -0.38, LB.TOP + 0.2), (0.04, 0.38, LB.TOP + 0.05)), lens=35,
+                fstop=4.0, focus=(-0.06, 0.36, LB.TOP + 0.03), cine=dict(exposure=-0.1))
 
 def S32():
     """Back in the grave at last light: the head of one man above the body of another. Slow push to the skull."""
