@@ -406,7 +406,7 @@ for f in sorted(set([f for f in range(1, 1501, 2) if f <= 331 or 566 <= f <= 150
         keymat(EAR_ARM, f, Matrix.Translation(tip) @ Rf @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(-90), 4, 'X') @ Matrix.Scale(0.85, 4))
     if 1145 <= f < 1346:   # v014: the forearm ear is gripped by the forceps and lifted out (blend from the pocket, then rides the tip)
         _pk = OB["Arm_Pocket"].matrix_world @ Matrix.Translation((0, 0, 0.015)) @ Matrix.Rotation(R_(90), 4, 'X')
-        _mf = Matrix.Translation(tip) @ Rf @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(-90), 4, 'X')
+        _mf = Matrix.Translation(tip) @ Rf @ Matrix.Translation((0, 0.018, 0)) @ Matrix.Rotation(R_(-90), 4, 'X')   # v014: the ear's edge sits in the jaws (3 cm left a gap)
         _u = max(0.0, min(1.0, (f - 1145) / 30.0)); _u = _u * _u * (3 - 2 * _u)
         _m = Matrix.Translation(_pk.translation.lerp(_mf.translation, _u)) @ _pk.to_quaternion().slerp(_mf.to_quaternion(), _u).to_matrix().to_4x4()
         EAR_ARM.matrix_world = _m @ Matrix.Scale(0.7 + 0.15 * _u, 4); EAR_ARM.keyframe_insert("location", frame=f); EAR_ARM.keyframe_insert("rotation_euler", frame=f); EAR_ARM.keyframe_insert("scale", frame=f)
