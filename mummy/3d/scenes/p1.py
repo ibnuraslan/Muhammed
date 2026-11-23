@@ -320,7 +320,7 @@ def S22():
     st.hand("L", (hx - 0.85, hy + 0.2, 0.42), elbow=(0.6, 0.3, -0.8), curl=20)
     st.head_to((hx, hy, 0.3), share=0.8)
     st.finish(look=(hx, hy, 0.3), density=HAIR)
-    return dict(a=((hx - 3.1, hy + 1.85, 1.25), (hx + 0.1, hy, 0.45)), b=((hx - 2.6, hy + 1.45, 1.15), (hx + 0.1, hy, 0.45)), lens=35,
+    return dict(a=((hx - 3.3, hy + 2.3, 0.72), (hx + 0.1, hy, 0.5)), b=((hx - 2.8, hy + 1.85, 0.68), (hx + 0.1, hy, 0.5)), lens=32,
                 fstop=2.8, focus=(hx - 1.0, hy + 0.6, 0.8), cine=dict(exposure=0.2), hand_ok=("floor", "stone"))
 
 

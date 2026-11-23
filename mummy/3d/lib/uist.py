@@ -407,7 +407,8 @@ def grass_collection():
     return col
 
 
-def scatter(target, center, radius, density=40.0, zone=(150, 1e9), scale=(0.7, 1.3), seed=0, name="Grass", avoid_cut=True):
+def scatter(target, center, radius, density=40.0, zone=(150, 1e9), scale=(0.7, 1.3), seed=0, name="Grass", avoid_cut=None):
+    avoid_cut = CUT if avoid_cut is None else avoid_cut
     """Instance grass on `target` within `radius` of `center` (x, y) where inland distance is in `zone`."""
     col = grass_collection()
     ng = bpy.data.node_groups.new(name, 'GeometryNodeTree')

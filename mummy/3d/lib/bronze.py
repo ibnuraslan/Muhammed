@@ -63,15 +63,36 @@ def smoke(center, radius=1.2, height=7.0, density=0.35, name="smoke"):
     return o
 
 
-def village(smoke_on=True, scale=0.92):
+def _strip_ground(ms, centre=(0.13, 1.98), r_keep=4.6, z_cut=0.05):
+    """The reconstruction scan carries its own patch of turf: delete scan faces low down outside the house."""
+    for o in ms:
+        if o.name.startswith("Object_2"):          # an untextured fill plane
+            bpy.data.objects.remove(o); continue
+        bm = bmesh.new(); bm.from_mesh(o.data)
+        M = o.matrix_world
+        kill = []
+        for f in bm.faces:
+            c = M @ f.calc_center_median()
+            r = math.hypot(c.x - centre[0], c.y - centre[1])
+            if (r > r_keep and c.z < z_cut + (r - r_keep) * 0.0) or (r > r_keep + 0.6):
+                kill.append(f)
+        bmesh.ops.delete(bm, geom=kill, context='FACES'); bm.to_mesh(o.data); bm.free()
+
+
+def village(smoke_on=True, scale=1.75):
     out = []
     for i, (hx, hy, r) in enumerate(U.HOUSES):
         z = float(U.surface(hx, hy))
-        root, ms = sf.model(ROUNDHOUSE, loc=(hx, hy, z - 0.35), rot_z=math.radians(0 + i * 37))
-        root.scale = (scale * r / 4.5,) * 3
+        root, ms = sf.model(ROUNDHOUSE, loc=(0, 0, 0), rot_z=0)
+        _strip_ground(ms)
+        # recentre the house on its own footprint, then place it (rotated so the doorway faces east)
+        for c in root.children:
+            c.location -= Vector((0.13, 1.98, 0))
+        s = scale * r / 4.5
+        root.scale = (s, s, s); root.location = (hx, hy, z - 0.3); root.rotation_euler = (0, 0, math.radians(i * 23))
         out.append(root)
         if smoke_on:
-            smoke((hx, hy, z + 4.2), radius=1.0, height=9.0, density=0.18 + 0.05 * i, name=f"smoke{i}")
+            smoke((hx, hy, z + 5.0 * s), radius=1.0, height=10.0, density=0.55 + 0.1 * i, name=f"smoke{i}")
     return out
 
 
@@ -125,15 +146,32 @@ def interior(fire=1.0, door_sun=0.0, hx=0.3, hy=0.0, r=4.6, seed=5):
     sub = f.modifiers.new("sub", "SUBSURF"); sub.subdivision_type = 'SIMPLE'; sub.levels = 4; sub.render_levels = 4
     d = f.modifiers.new("d", "DISPLACE"); t = bpy.data.textures.new("floorlump", "CLOUDS"); t.noise_scale = 0.4; d.texture = t; d.strength = 0.015
     # revetment wall: courses of stone round the sunken floor (0.9 m), doorway east
-    for c in range(6):
-        n = int(2 * math.pi * r / 0.5)
+    for c in range(7):
+        n = int(2 * math.pi * r / 0.36)
         for k in range(n):
             a = 2 * math.pi * k / n + (0.5 * (c % 2)) * 2 * math.pi / n
             if math.degrees(a) % 360 < 11 or math.degrees(a) % 360 > 349:
                 continue
-            s = rng.uniform(0.38, 0.55)
-            G.stone((hx + (r + 0.12) * math.cos(a), hy + (r + 0.12) * math.sin(a), 0.07 + c * 0.15), (s, s * 0.6, s * 0.36),
-                    rot_z=a + math.pi / 2 + rng.uniform(-0.15, 0.15), seed=rng.randrange(10), tilt=(rng.uniform(-0.06, 0.06), 0))
+            s = rng.uniform(0.25, 0.6)
+            a2 = a + rng.uniform(-0.03, 0.03)
+            G.stone((hx + (r + 0.12 + rng.uniform(-0.04, 0.04)) * math.cos(a2), hy + (r + 0.12) * math.sin(a2), 0.06 + c * 0.13 + rng.uniform(-0.03, 0.03)),
+                    (s, s * rng.uniform(0.5, 0.8), s * rng.uniform(0.3, 0.55)),
+                    rot_z=a2 + math.pi / 2 + rng.uniform(-0.25, 0.25), seed=rng.randrange(10), tilt=(rng.uniform(-0.12, 0.12), rng.uniform(-0.12, 0.12)))
+    # turf-and-earth wall core behind the stone facing (no gaps to the sky), open at the east door
+    earth = ph.texture("brown_mud_02", scale=1.5, name="turfwall", tint=(0.45, 0.38, 0.3))
+    bm = bmesh.new(); segs = 96; rr = r + 0.38; top = 1.35
+    ring0 = []; ring1 = []
+    for k in range(segs + 1):
+        a = 2 * math.pi * k / segs
+        ring0.append(bm.verts.new((hx + rr * math.cos(a), hy + rr * math.sin(a), -0.05)))
+        ring1.append(bm.verts.new((hx + rr * math.cos(a), hy + rr * math.sin(a), top)))
+    for k in range(segs):
+        mid = math.degrees(2 * math.pi * (k + 0.5) / segs) % 360
+        if mid < 11 or mid > 349:
+            continue
+        bm.faces.new((ring0[k], ring0[k + 1], ring1[k + 1], ring1[k]))
+    me = bpy.data.meshes.new("earthwall"); bm.to_mesh(me); bm.free(); me.materials.append(earth)
+    ew = bpy.data.objects.new("earthwall", me); bpy.context.scene.collection.objects.link(ew)
     # posts, ring beam, rafters to the apex, thatch cone (inside face)
     wood = ph.texture("bark_brown_02", scale=3.0, name="postbark", tint=(0.6, 0.5, 0.42))
     for k in range(9):
@@ -141,7 +179,7 @@ def interior(fire=1.0, door_sun=0.0, hx=0.3, hy=0.0, r=4.6, seed=5):
         px, py = hx + 3.2 * math.cos(a), hy + 3.2 * math.sin(a)
         bpy.ops.mesh.primitive_cylinder_add(radius=0.09, depth=2.6, location=(px, py, 1.3)); p = bpy.context.active_object
         p.rotation_euler = (rng.uniform(-0.02, 0.02), rng.uniform(-0.02, 0.02), 0); p.data.materials.append(wood); p.name = "post"
-    apex = Vector((hx, hy, 6.2)); eave_z = 1.0
+    apex = Vector((hx, hy, 6.2)); eave_z = 1.2
     for k in range(28):
         a = 2 * math.pi * k / 28
         b = Vector((hx + (r + 0.3) * math.cos(a), hy + (r + 0.3) * math.sin(a), eave_z))
@@ -156,7 +194,10 @@ def interior(fire=1.0, door_sun=0.0, hx=0.3, hy=0.0, r=4.6, seed=5):
     # door: a gap in the roof/wall east, light from outside
     bpy.ops.mesh.primitive_cube_add(size=1, location=(hx + r + 0.3, hy, 0.9)); cut = bpy.context.active_object
     cut.scale = (1.4, 1.2, 1.8); cut.display_type = 'WIRE'; cut.hide_render = True; cut.name = "doorcut"
-    bo = roof.modifiers.new("door", "BOOLEAN"); bo.object = cut; bo.operation = 'DIFFERENCE'
+    bm = bmesh.new(); bm.from_mesh(roof.data)
+    kill = [f for f in bm.faces if (roof.matrix_world @ f.calc_center_median()).z < 2.3 and
+            abs((roof.matrix_world @ f.calc_center_median()).y - hy) < 0.75 and (roof.matrix_world @ f.calc_center_median()).x > hx]
+    bmesh.ops.delete(bm, geom=kill, context='FACES'); bm.to_mesh(roof.data); bm.free()
     # hearth and fire
     hcx, hcy = hx + 0.2, hy
     G.hearth.__globals__  # (uses dig.H for the excavation; build a local hearth instead)
@@ -167,7 +208,7 @@ def interior(fire=1.0, door_sun=0.0, hx=0.3, hy=0.0, r=4.6, seed=5):
         a = 2 * math.pi * k / 11
         G.stone((hcx + 0.72 * math.cos(a), hcy + 0.56 * math.sin(a), 0.06), (0.26, 0.09, 0.15), rot_z=a + math.pi / 2, seed=k, flat=0.9)
     # peat fire: a heap of glowing peat blocks with flame volume and the fire light
-    peat = _mat("peatfire", (0.05, 0.03, 0.02), 0.9, emit=(1.0, 0.32, 0.08), strength=2.5 * fire)
+    peat = _mat("peatfire", (0.05, 0.03, 0.02), 0.9, emit=(1.0, 0.32, 0.08), strength=1.2 * fire)
     for k in range(9):
         a = 2 * math.pi * k / 9
         bpy.ops.mesh.primitive_cube_add(size=1, location=(hcx + 0.17 * math.cos(a), hcy + 0.13 * math.sin(a), 0.06 + 0.03 * (k % 3)))
@@ -181,30 +222,30 @@ def interior(fire=1.0, door_sun=0.0, hx=0.3, hy=0.0, r=4.6, seed=5):
     gz = N.new("ShaderNodeMapRange"); gz.inputs['From Min'].default_value = 1.0; gz.inputs['From Max'].default_value = 0.0; Lk.new(sep.outputs['Z'], gz.inputs['Value'])
     mm = N.new("ShaderNodeMath"); mm.operation = 'MULTIPLY'; Lk.new(nz.outputs['Fac'], mm.inputs[0]); Lk.new(gz.outputs[0], mm.inputs[1])
     th = N.new("ShaderNodeMapRange"); th.inputs['From Min'].default_value = 0.35; th.inputs['From Max'].default_value = 0.7
-    th.inputs['To Max'].default_value = 25.0 * fire; Lk.new(mm.outputs[0], th.inputs['Value'])
+    th.inputs['To Max'].default_value = 8.0 * fire; Lk.new(mm.outputs[0], th.inputs['Value'])
     v = N.new("ShaderNodeVolumePrincipled"); v.inputs['Density'].default_value = 0.0
     v.inputs['Blackbody Tint'].default_value = (1, 1, 1, 1); v.inputs['Temperature'].default_value = 1300
     Lk.new(th.outputs[0], v.inputs['Blackbody Intensity'])
     Lk.new(v.outputs[0], N["Material Output"].inputs['Volume'])
     bpy.ops.mesh.primitive_uv_sphere_add(radius=0.25, location=(hcx, hcy, 0.3)); fl = bpy.context.active_object
     fl.scale = (1, 1, 1.6); fl.data.materials.append(flame); fl.name = "flame"; fl.visible_shadow = False
-    fd = bpy.data.lights.new("firelight", 'POINT'); fd.energy = 420 * fire; fd.color = (1.0, 0.52, 0.2); fd.shadow_soft_size = 0.25
+    fd = bpy.data.lights.new("firelight", 'POINT'); fd.energy = 140 * fire; fd.color = (1.0, 0.52, 0.2); fd.shadow_soft_size = 0.25
     fo = bpy.data.objects.new("firelight", fd); bpy.context.scene.collection.objects.link(fo); fo.location = (hcx, hcy, 0.45)
     out["fire"] = fo; out["hearth"] = (hcx, hcy)
     # room smoke haze (light from the door and the fire reads in the air)
     bpy.ops.mesh.primitive_cylinder_add(radius=r, depth=5.5, location=(hx, hy, 2.75)); hz = bpy.context.active_object; hz.name = "roomhaze"
     hm = bpy.data.materials.new("roomhaze"); hm.use_nodes = True; N = hm.node_tree.nodes; Lk = hm.node_tree.links; N.remove(N["Principled BSDF"])
-    vv = N.new("ShaderNodeVolumePrincipled"); vv.inputs['Density'].default_value = 0.035; vv.inputs['Anisotropy'].default_value = 0.5
+    vv = N.new("ShaderNodeVolumePrincipled"); vv.inputs['Density'].default_value = 0.006; vv.inputs['Anisotropy'].default_value = 0.5
     vv.inputs['Color'].default_value = (0.7, 0.66, 0.62, 1)
     Lk.new(vv.outputs[0], N["Material Output"].inputs['Volume']); hz.data.materials.append(hm)
     # door light: the morning outside (sun through the east doorway) and sky fill
-    w = bpy.data.worlds.new("dawnout"); bpy.context.scene.world = w; w.use_nodes = True
-    w.node_tree.nodes["Background"].inputs['Color'].default_value = (0.55, 0.6, 0.7, 1); w.node_tree.nodes["Background"].inputs['Strength'].default_value = 0.4
-    dl = bpy.data.lights.new("doorsky", 'AREA'); dl.size = 1.2; dl.shape = 'RECTANGLE'; dl.size_y = 1.7; dl.energy = 220; dl.color = (0.7, 0.78, 0.95)
+    U.light("dawn")["sun"].hide_render = True          # the dawn sky outside the door (its sun is the doorsun below)
+    bpy.context.scene.world.node_tree.nodes["Background"].inputs['Strength'].default_value = 0.5
+    dl = bpy.data.lights.new("doorsky", 'AREA'); dl.size = 1.2; dl.shape = 'RECTANGLE'; dl.size_y = 1.7; dl.energy = 60; dl.color = (0.7, 0.78, 0.95)
     do = bpy.data.objects.new("doorsky", dl); bpy.context.scene.collection.objects.link(do)
     do.location = (hx + r + 0.9, hy, 0.95); do.rotation_euler = (0, math.radians(-90), 0); do.visible_camera = False
     if door_sun > 0:
-        sd = bpy.data.lights.new("doorsun", 'SUN'); sd.energy = 6.0 * door_sun; sd.color = (1.0, 0.66, 0.4); sd.angle = math.radians(0.8)
+        sd = bpy.data.lights.new("doorsun", 'SUN'); sd.energy = 4.0 * door_sun; sd.color = (1.0, 0.66, 0.4); sd.angle = math.radians(0.8)
         so = bpy.data.objects.new("doorsun", sd); bpy.context.scene.collection.objects.link(so)
         so.rotation_euler = (Vector((-1, 0, -0.12))).to_track_quat('-Z', 'Y').to_euler()
         out["sun"] = so
