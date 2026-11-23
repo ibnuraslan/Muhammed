@@ -19,8 +19,9 @@ def img(rel):
 
 
 def desk_hands(se, dy, z=0.875, spread=0.2, fwd=0.22):
-    se.hand("R", (spread, dy + fwd, z), elbow=(0.9, 0.2, -0.5), curl=24)
-    se.hand("L", (-spread, dy + fwd, z), elbow=(0.9, 0.2, -0.5), curl=24)
+    # seated behind the desk facing the door (-y): his left hand is on +x
+    se.hand("L", (spread, dy + fwd, z), elbow=(0.9, 0.2, -0.5), curl=24)
+    se.hand("R", (-spread, dy + fwd, z), elbow=(0.9, 0.2, -0.5), curl=24)
 
 
 # ============================================================================ L1 a room full of evidence
@@ -45,8 +46,8 @@ def U02():
 def U03():
     A = S2.office("leasing")
     m = MD.Peys(); se = AC.Seated(m, A["seat_behind"], -90, lean=10)
-    se.hand("L", (-0.7, A["desk_y"] + 0.12, 0.88), elbow=(0.9, 0.2, -0.5), curl=30)     # hand on the ringing desk phone
-    se.hand("R", (0.2, A["desk_y"] + 0.27, 0.87), elbow=(0.9, 0.2, -0.5), curl=24)
+    se.hand("R", (-0.7, A["desk_y"] + 0.12, 0.88), elbow=(0.9, 0.2, -0.5), curl=30)     # his right hand on the ringing phone
+    se.hand("L", (0.2, A["desk_y"] + 0.27, 0.87), elbow=(0.9, 0.2, -0.5), curl=24)
     se.head_to((-0.7, A["desk_y"] + 0.1, 0.8), share=0.6); se.finish(density=HAIR)
     return dict(a=((0.45, 2.0, 1.55), (-0.5, 0.6, 0.9)), b=((0.4, 1.98, 1.5), (-0.5, 0.6, 0.9)), lens=28,
                 hand_ok=("desk_phone", "desk", "Desk", "chair"))
@@ -353,8 +354,8 @@ def U26():
 def U27():
     A = S2.office("leasing")
     mg = MD.Manager(); se = AC.Seated(mg, A["seat_behind"], -90, lean=10)
-    se.hand("L", (-0.66, A["desk_y"] + 0.07, 0.88), elbow=(0.9, 0.2, -0.5), curl=30)   # dialling the desk phone
-    se.hand("R", (0.2, A["desk_y"] + 0.27, 0.87), elbow=(0.9, 0.2, -0.5), curl=24)
+    se.hand("R", (-0.66, A["desk_y"] + 0.07, 0.88), elbow=(0.9, 0.2, -0.5), curl=30)   # dialling the desk phone
+    se.hand("L", (0.2, A["desk_y"] + 0.27, 0.87), elbow=(0.9, 0.2, -0.5), curl=24)
     se.head_to((-0.7, A["desk_y"] + 0.1, 0.8), share=0.6); se.finish(density=HAIR)
     return dict(a=((0.5, 2.0, 1.5), (-0.55, 0.6, 0.9)), b=((0.45, 1.98, 1.47), (-0.55, 0.6, 0.9)), lens=30, hand_ok=("desk_phone", "desk", "Desk", "chair"))
 

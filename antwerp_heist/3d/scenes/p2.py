@@ -413,7 +413,7 @@ def T29():
     k1.hand("L", (0.35, 2.35, 0.06), elbow=(0.7, 0.3, -0.8), curl=30); k1.hand("R", (0.35, 2.05, 0.06), elbow=(0.7, 0.3, -0.8), curl=30)
     k1.finish(density=HAIR)
     k2 = AC.Kneel(c["DOnorio"], (0.95, 2.75), 225, lean=34)
-    k2.hand("L", (0.6, 2.5, 0.06), elbow=(0.7, 0.3, -0.8), curl=30); k2.hand("R", (0.75, 2.35, 0.06), elbow=(0.7, 0.3, -0.8), curl=30)
+    k2.hand("R", (0.6, 2.5, 0.06), elbow=(0.7, 0.3, -0.8), curl=30); k2.hand("L", (0.75, 2.35, 0.06), elbow=(0.7, 0.3, -0.8), curl=30)
     k2.finish(density=HAIR)
     st = AC.Stand(c["Finotto"], (-0.6, 1.2), 30); pl = bag_pose(st, "R"); st.finish(density=HAIR); pl("bag_F", 0.9)
     for i, (x, y) in enumerate(((0.35, 1.7), (-0.85, 2.75))):
