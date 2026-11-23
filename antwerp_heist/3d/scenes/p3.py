@@ -300,7 +300,8 @@ def U28():
     A = S2.office("leasing")
     mg = MD.Manager(); se = AC.Seated(mg, A["seat_behind"], -90); desk_hands(se, A["desk_y"], fwd=-0.25); se.head_to((0.15, -0.3, 1.2), share=0.6); se.finish(density=HAIR)
     le = MD.Leonardo(); sv = AC.Seated(le, A["seat_visitor"], 90, lean=4); sv.head_to((0, 1.55, 1.25), share=0.6); sv.finish(density=HAIR)
-    return dict(a=((-0.5, -1.3, 1.45), (0.05, 1.4, 1.1)), b=((-0.42, -1.12, 1.45), (0.05, 1.4, 1.1)), lens=30, fstop=3.5, focus=(0, 1.5, 1.1),
+    dy = A["desk_y"]   # side-on across the desk: two profiles against the window, faces in half shadow
+    return dict(a=((-1.9, dy + 0.15, 1.3), (0.3, dy, 1.05)), b=((-1.8, dy + 0.2, 1.3), (0.3, dy, 1.05)), lens=30, fstop=4.0, focus=(0, dy, 1.1),
                 hand_ok=("chair", "Chair", "desk", "Desk"))
 
 
