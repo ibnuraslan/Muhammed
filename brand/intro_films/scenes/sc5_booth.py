@@ -91,7 +91,10 @@ def projector(base, face=+1):
     film = I.principled("film", (0.03, 0.025, 0.02), 0.25)
     ship.box("film_up", (bx - 0.16, by + 0.08, bz + 1.38), (0.002, 0.035, 0.4), film)
     I.area("lamphouse_spill", (bx - 0.4, by - 0.55, bz + 1.2), (bx - 1.5, by - 0.4, bz + 1.4), 28, (1.0, 0.72, 0.42), 0.25)
-    return lens0 + Vector((0, 0.27, 0)), lev0 + Vector((-0.17, 0, 0.13))
+    for nm in ("lens_barrel", "lens_ring"):                    # the lens must not shadow its own beam
+        for o in bpy.data.objects:
+            if o.name.startswith(nm): o.visible_shadow = False
+    return lens0 + Vector((0, 0.30, 0)), lev0 + Vector((-0.17, 0, 0.13))
 
 
 def projection(lens, target, energy=1500):
@@ -118,10 +121,15 @@ def projection(lens, target, energy=1500):
 
 # ----------------------------------------------------------------------------- the projectionist
 def projectionist(pose, M, look):
-    pj = D.Deveau(name="Projectionist", years=44, wet=0.0)
+    class Projectionist(D.Deveau):
+        HAIR_COLOR = (0.62, 0.3); BEARD_COLOR = (0.55, 0.28)     # lighter sandy-brown: strands read, not a black patch
+    pj = Projectionist(name="Projectionist", years=44, wet=0.0)
     h = pj.h; Mi = M.inverted()
     targets = pose(pj, h, Mi)
-    pj.finish(look_at=look, place=M, density=float(os.environ.get("HAIR", "0.7")))
+    pj.finish(look_at=look, place=M, density=max(1.0, float(os.environ.get("HAIR", "0.7"))))
+    for o in [x for x in pj.hair_objs if x is not None]:       # clean-shaven projectionist: no beard/moustache strands
+        if any(k in o.name.lower() for k in ("beard", "moust", "stache")):
+            bpy.data.objects.remove(o, do_unlink=True)
     return pj, targets
 
 
@@ -146,7 +154,7 @@ if SHOT == 1:
             P.grip(h, side, 0.55)
         pj.lids(0.5)
         return dict(can_local=Vector((0, -0.37, z + 0.0)))
-    M = I.yaw(I.facing((-0.75, -1.0)), (0.35, 2.85, 0))
+    M = I.yaw(I.facing((0.95, -0.25)), (0.35, 2.85, 0))     # 3/4 away from camera, face in shadow
     pj, t = projectionist(pose1, M, None)
     can_w = M @ t["can_local"]
     film_can("the_can", (can_w.x, can_w.y, can_w.z - 0.03), label_on=False, dusty=1)
@@ -257,6 +265,7 @@ if SHOT == 2:
     M = I.yaw(I.facing((1, 0.12)), (-0.66, -0.45, 0))
     projectionist(pose2, M, lens + Vector((0, -0.4, 0.1)))
     I.area("rim", (-1.5, 0.3, 2.3), (-0.6, -0.4, 1.4), 12, (0.7, 0.8, 1.0), 0.8)
+    I.area("beard_rim", (0.1, -1.1, 1.7), (-0.6, -0.45, 1.45), 6, (1.0, 0.75, 0.5), 0.3)   # lamphouse kick on the jaw
     C.camera(Vector((-0.5, -2.05, 1.5)), Vector((-0.5, -0.45, 1.35)), lens=30, fstop=2.8)   # side-lit profile from his right
     C.finish(I.out("f5_k2_booth"), cine={"exposure": 0.05, "sat": 1.05})
 elif SHOT == 3:

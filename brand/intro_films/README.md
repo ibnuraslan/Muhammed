@@ -18,7 +18,7 @@ The 'o' counters are transparent in the art, so the surface underneath (paper, b
 ## Cast and lib
 * Scenes run inside `mary_celeste_3d/` from `claude/mary-celeste-3d`: copy `scenes/*` into its `scenes/` and `assets/*` into its `assets/`.
 * Cast:
-  * 5: Deveau, as the projectionist.
+  * 5: Deveau's body, clean-shaven with lighter hair, as the projectionist.
   * 6: Deveau with a cap, gloves and a head torch, as the researcher. The script says "she", but the shared cast has no woman dressed for the polar cold, so he is a man for now. Flag it if this matters.
   * 7: Briggs, as the photographer.
   * 8: Sarah, bonnet off, as the archivist, in a dark navy dress with a bottle-green knitted shawl worn like a cardigan.

@@ -190,7 +190,7 @@ if SHOT in (1, 2, 3):
         P.stand(h, lean=22, weight="L", twist=-4)
         P.head(h, pitch=36, yaw=-4)
         # right hand: the tongs, tips at the near edge of the print in the developer
-        grip_w = DEV + Vector((0.06, -0.24, 0.17))
+        grip_w = DEV + Vector((0.2, -0.3, 0.2))
         P.hand_reach(h, "R", Mi @ grip_w, elbow=(-0.6, 0.6, -0.5))
         h.aim("wrist.R", (Mi.to_3x3() @ Vector((0.1, 0.8, -0.6))).normalized()); P.grip(h, "R", 0.7)
         # left hand: rocking the developer tray by its corner
@@ -201,12 +201,12 @@ if SHOT in (1, 2, 3):
         return dict(grip_w=grip_w)
     M = I.yaw(180, (DEV.x - 0.02, DEV.y - 0.72, 0))
     ph_, ex = photographer(pose_tray, M, DEV)
-    tongs(DEV + Vector((0.03, -0.09, -0.005)), ex["grip_w"] + Vector((0, 0.02, -0.02)))
+    tongs(DEV + Vector((0.13, -0.1, -0.005)), ex["grip_w"] + Vector((0, 0.02, -0.02)))   # gripping the print corner, clear of the art
     if SHOT == 1:
         C.camera(Vector((1.55, -1.35, 1.75)), Vector((-0.35, 0.95, 1.05)), lens=22, fstop=2.8)
         C.finish(I.out("f7_k1_darkroom"), cine={"exposure": 0.45, "sat": 1.05})
     elif SHOT == 2:
-        C.camera(Vector((-1.45, 0.75, 1.42)), Vector((-0.45, 0.68, 1.42)), lens=35, fstop=2.4)
+        C.camera(Vector((-1.82, -0.35, 1.55)), Vector((-0.35, 0.9, 1.1)), lens=24, fstop=2.8)   # wider: him, the trays, the safelight
         C.finish(I.out("f7_k2_rock"), cine={"exposure": 0.5, "sat": 1.05})
     else:
         C.camera(DEV + Vector((0.42, -0.95, 1.05)), DEV + Vector((0.0, -0.02, -0.01)), lens=32, fstop=4.0)   # over his right shoulder
@@ -224,14 +224,14 @@ else:
         P.stand(h, lean=0, weight="R")
         P.head(h, pitch=-12, yaw=6)
         # his right hand still at the peg he has just pressed shut
-        peg = Vector((X + 0.08, 0.1, LINE_Z - 0.02))
+        peg = Vector((X + 0.2, 0.1, LINE_Z - 0.02))      # his hand has let go of the peg, clear of the print
         P.hand_reach(h, "R", Mi @ (peg + Vector((0.03, -0.05, -0.06))), elbow=(-0.5, 0.4, -0.8))
         h.aim("wrist.R", (Mi.to_3x3() @ Vector((-0.2, 0.5, 0.85))).normalized()); P.grip(h, "R", 0.6)
         P.arm_down(h, "L", out=0.12, fwd=0.05, bend=15); P.rest_hand(h, "L")
         ph_.lids(0.2)
         return {}
-    M = I.yaw(0, (X + 0.32, -0.42, 0))      # as rendered: he turns from the line toward the lamp
+    M = I.yaw(180, (X + 0.3, -0.38, 0))     # facing the line, his back to camera
     photographer(pose_line, M, Vector((X, 0.1, LINE_Z - 0.1)))
-    lamp = I.spot("white_lamp", (X - 0.6, -0.9, 2.3), (X, 0.1, LINE_Z - 0.1), 90, (1.0, 0.92, 0.8), size_deg=40, blend=0.5, radius=0.04)
-    C.camera(Vector((X - 0.75, -1.45, LINE_Z - 0.32)), Vector((X + 0.12, 0.05, LINE_Z - 0.2)), lens=32, fstop=3.2)
+    lamp = I.spot("white_lamp", (X - 0.5, -0.6, 2.35), (X, 0.1, LINE_Z - 0.115), 60, (1.0, 0.92, 0.8), size_deg=11, blend=0.25, radius=0.01)   # a tight inspection lamp on the print only
+    C.camera(Vector((X - 0.45, -1.35, LINE_Z - 0.18)), Vector((X + 0.02, 0.1, LINE_Z - 0.12)), lens=35, fstop=3.2)   # behind his right shoulder
     C.finish(I.out("f7_k4_logo"), cine={"exposure": 0.3, "sat": 1.1})
