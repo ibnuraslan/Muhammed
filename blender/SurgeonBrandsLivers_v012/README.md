@@ -26,7 +26,7 @@ Scripts: `blender/SurgeonBrandsLivers_v001/scripts/build_v012.sh` runs `20_v012_
 1. Caps are soft cloth bouffant caps (folds, gathered band, printed cotton). Hair shows below the edge at the forehead, temples and nape. Hair under the cap is masked so nothing pokes through.
 2. His arm bends naturally. The pen is gripped in a pinch, solved from his own forearm (wrist limits respected), and its tip is at the liver.
 3. The branding is shown inside the open patient (no skin close-up, no studio).
-4. The patient's whole body lies on the table, under a drape fitted to her body by ray casting, with an abdominal window, an open cavity, retractors and the liver in place. Her head with the anaesthesia mask is visible.
+4. The patient's whole body lies on the table, under a drape fitted to her body by ray casting, with an abdominal window, an open cavity and the liver in place. Her head with the anaesthesia mask is visible.
 5. One liver, one material, always inside the body (branding and reveal). The studio and its lights are gone, so there is no colour flicker.
 6. The S and B burn (the original burn mask) in sync with the pen tip. A blue argon beam and sparks show while burning.
 7. 276–429 is one shot. The incision runs across the body in every frame of that shot.

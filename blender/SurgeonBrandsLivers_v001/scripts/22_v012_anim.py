@@ -314,8 +314,8 @@ blink(s2, 1216, dict(wide=0.6, brow=0.75, jaw=3))
 eyes(s2, 1176, 0, -6); eyes(s2, 1192, 0, -10); eyes(s2, 1200, 5, -4); eyes(s2, 1210, -4, -2); eyes(s2, 1226, 2, -8); eyes(s2, 1240, 0, -8)
 
 # =================================================================== S11: hearing - hands rest on the lectern
-for o in OB:                                          # lectern 23 cm further from him (his body was inside it)
-    if o.name.startswith(("HEAR_Lectern",)) and o.parent is None: o.location.x -= 0.23
+for o in OB:                                          # lectern 15 cm further from him (his body was inside it)
+    if o.name.startswith(("HEAR_Lectern",)) and o.parent is None: o.location.x -= 0.15
 bpy.context.view_layer.update()
 lt = OB["HEAR_LecternTop"]; lz = max((lt.matrix_world @ Vector(c)).z for c in lt.bound_box)
 lxmax = max((lt.matrix_world @ Vector(c)).x for c in lt.bound_box)

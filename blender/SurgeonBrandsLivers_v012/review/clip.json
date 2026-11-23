@@ -1,0 +1,644 @@
+{
+ "frames": {
+  "61": {
+   "Patient": {
+    "self": 0,
+    "clothes": 0,
+    "other": 126
+   }
+  },
+  "67": {
+   "Patient": {
+    "self": 0,
+    "clothes": 0,
+    "other": 132
+   },
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "73": {
+   "Patient": {
+    "self": 0,
+    "clothes": 0,
+    "other": 151
+   },
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "79": {
+   "Patient": {
+    "self": 0,
+    "clothes": 0,
+    "other": 178
+   },
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "85": {
+   "Patient": {
+    "self": 0,
+    "clothes": 0,
+    "other": 199
+   },
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "91": {
+   "Patient": {
+    "self": 0,
+    "clothes": 0,
+    "other": 262
+   },
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "97": {
+   "Patient": {
+    "self": 0,
+    "clothes": 0,
+    "other": 86
+   },
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 51
+   }
+  },
+  "103": {
+   "Patient": {
+    "self": 0,
+    "clothes": 0,
+    "other": 92
+   },
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 57
+   }
+  },
+  "109": {
+   "Patient": {
+    "self": 0,
+    "clothes": 0,
+    "other": 111
+   },
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 59
+   }
+  },
+  "115": {
+   "Patient": {
+    "self": 0,
+    "clothes": 0,
+    "other": 136
+   },
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 49
+   }
+  },
+  "121": {
+   "Patient": {
+    "self": 0,
+    "clothes": 0,
+    "other": 313
+   },
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 88
+   }
+  },
+  "127": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 131
+   }
+  },
+  "133": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 195
+   }
+  },
+  "139": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 499
+   }
+  },
+  "145": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 753
+   }
+  },
+  "151": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 771
+   }
+  },
+  "157": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1477
+   }
+  },
+  "163": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1225
+   }
+  },
+  "169": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1236
+   }
+  },
+  "175": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1439
+   }
+  },
+  "181": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1413
+   }
+  },
+  "187": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 902
+   }
+  },
+  "193": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1367
+   }
+  },
+  "199": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1318
+   }
+  },
+  "205": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 694
+   }
+  },
+  "211": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 799
+   }
+  },
+  "217": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 686
+   }
+  },
+  "223": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 829
+   }
+  },
+  "229": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 720
+   }
+  },
+  "235": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 594
+   }
+  },
+  "241": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 795
+   }
+  },
+  "247": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 824
+   }
+  },
+  "253": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 853
+   }
+  },
+  "259": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 495
+   }
+  },
+  "265": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 792
+   }
+  },
+  "271": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 594
+   }
+  },
+  "277": {
+   "Patient": {
+    "self": 0,
+    "clothes": 0,
+    "other": 207
+   },
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1134
+   }
+  },
+  "283": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 610
+   }
+  },
+  "289": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 683
+   }
+  },
+  "295": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 760
+   }
+  },
+  "301": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 520
+   }
+  },
+  "307": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 728
+   }
+  },
+  "313": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 301
+   }
+  },
+  "319": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 243
+   }
+  },
+  "325": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 884
+   }
+  },
+  "331": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 749
+   }
+  },
+  "337": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 506
+   }
+  },
+  "343": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 909
+   }
+  },
+  "349": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1179
+   }
+  },
+  "355": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 771
+   }
+  },
+  "361": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 307
+   }
+  },
+  "367": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 307
+   }
+  },
+  "373": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 268
+   }
+  },
+  "379": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 95
+   }
+  },
+  "385": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 112
+   }
+  },
+  "391": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 34
+   }
+  },
+  "397": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 13
+   }
+  },
+  "409": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "415": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "421": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 293
+   }
+  },
+  "427": {
+   "Surgeon1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 580
+   }
+  },
+  "499": {
+   "Surgeon1": {
+    "self": 50,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "979": {
+   "Surgeon2": {
+    "self": 90,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1063": {
+   "Surgeon2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 733
+   }
+  },
+  "1069": {
+   "Surgeon2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 413
+   }
+  },
+  "1075": {
+   "Surgeon2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 561
+   }
+  },
+  "1081": {
+   "Surgeon2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1100
+   }
+  },
+  "1087": {
+   "Surgeon2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1118
+   }
+  },
+  "1093": {
+   "Surgeon2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1138
+   }
+  },
+  "1099": {
+   "Surgeon2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 595
+   }
+  },
+  "1105": {
+   "Surgeon2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 806
+   }
+  },
+  "1111": {
+   "Surgeon2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1359
+   }
+  },
+  "1117": {
+   "Surgeon2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1451
+   }
+  },
+  "1123": {
+   "Surgeon2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1234
+   }
+  },
+  "1129": {
+   "Surgeon2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1062
+   }
+  },
+  "1135": {
+   "Surgeon2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1025
+   }
+  },
+  "1141": {
+   "Surgeon2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 996
+   }
+  },
+  "1147": {
+   "Surgeon2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1004
+   }
+  },
+  "1153": {
+   "Surgeon2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1011
+   }
+  },
+  "1159": {
+   "Surgeon2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 50
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   61,
+   391
+  ],
+  [
+   421,
+   427
+  ],
+  [
+   499,
+   499
+  ],
+  [
+   979,
+   979
+  ],
+  [
+   1063,
+   1159
+  ]
+ ],
+ "fps": 60
+}
