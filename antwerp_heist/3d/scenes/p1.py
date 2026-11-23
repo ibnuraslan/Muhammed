@@ -226,13 +226,12 @@ def S17():
 
 # ============================================================================ L9  how the vault works
 def S18():
-    A = S2.maquette()
-    for o in list(bpy.data.objects):                 # the section is read straight on: no street slab in front of the cut
-        if o.name.startswith("maq_street"):
-            bpy.data.objects.remove(o)
-    # a slow descent: from above the roofline down the cut face to the warm vault two floors under the street
-    return dict(a=((-0.12, -0.75, 0.2), (0.02, 0.0, 0.08)), b=((-0.02, -0.5, 0.06), (0.035, 0.0, 0.03)), lens=35,
-                fstop=6.3, focus=A["vault"])
+    A = S2.cutaway()
+    v = A["vault"]
+    # a documentary cut-away: the camera sinks slowly down the cut face, past the lit offices and the street,
+    # to the vault two floors underground
+    return dict(a=((-3.0, -26.0, 13.0), (0.0, 7.0, 9.0)), b=((-1.5, -17.0, -3.0), (0.0, 7.0, -5.6)), lens=32,
+                fstop=8.0, focus=tuple(v), cine=dict(exposure=0.8))
 
 
 def S19():

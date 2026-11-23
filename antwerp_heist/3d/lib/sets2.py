@@ -825,3 +825,104 @@ def soft_strip(p0, p1, z, width, color=(1.0, 0.45, 0.12), strength=2.5, alpha=0.
     o = bpy.context.active_object; o.name = name; o.scale = (ln + width, width, 1); o.rotation_euler = (0, 0, yaw)
     o.data.materials.append(mat); o.visible_shadow = False
     return o
+
+
+# ----------------------------------------------------------------------------- the building cut open (full scale)
+def cutaway():
+    """The Diamond Center sliced open along its street front, at full scale, for a documentary cut-away: eight office
+    floors (concrete slabs with raw cut faces, furnished offices, a few lit), the street faint on top, earth cut back
+    round the two basements - the garage (-1) and the vault (-2), whose walls of steel boxes glow warm. Dark around.
+    The cut plane is y = 0; the camera looks from -y."""
+    import detail as DT, random as _r
+    rng = _r.Random(8)
+    A = {}
+    W, D, FH, NF = 30.0, 14.0, 3.3, 8
+    conc = tex("concrete_wall_008", 2.0, tint=(0.62, 0.6, 0.57), name="cut_concrete")
+    cutface = flat("cut_face_concrete", (0.42, 0.41, 0.39), 0.9)
+    brick = tex("red_brick_03", 2.5, tint=(0.75, 0.55, 0.45), name="cut_brick")
+    plaster = DT.wall_paint("cut_office_wall", (0.62, 0.6, 0.55), rough=0.85, scuff=0.2)
+    carpet = tex("dirty_carpet", 1.5, tint=(0.35, 0.35, 0.4), name="cut_carpet")
+    earth = tex("brown_mud_02" if False else "forest_ground_04", 3.0, tint=(0.3, 0.24, 0.18), name="cut_earth")
+    glass = flat("cut_glass", (0.08, 0.1, 0.12), 0.05, metal=0.5)
+    desk_m = flat("cut_desk", (0.45, 0.42, 0.38), 0.5); chair_m = flat("cut_chair", (0.06, 0.06, 0.07), 0.6)
+    cab_m = steel_paint("cut_cabinet", (0.55, 0.55, 0.52), 0.45)
+    tube = emit("cut_tube", (0.9, 0.97, 1.0), 6.0); warm = emit("cut_warm", (1.0, 0.72, 0.42), 5.0)
+    # earth and street
+    for sx in (-1, 1):
+        box("cut_earth", (sx * (W / 2 + 15), D / 2, -3.6), (30, D + 4, 7.2), earth)
+    box("cut_earth_floor", (0, D / 2, -7.6), (W + 60, D + 4, 0.8), earth)
+    # street level: only its cut edge and the lamps either side (nothing in front of the section)
+    for sx in (-1, 1):
+        box("cut_street", (sx * (W / 2 + 15), D / 2, 0.05), (30, D + 4, 0.1), tex("asphalt_02", 3.0, tint=(0.35, 0.34, 0.33), name="cut_asphalt"))
+    box("cut_street_edge", (0, 0.02, 0.05), (W + 60, 0.04, 0.1), emit("cut_street_line", (1.0, 0.6, 0.3), 1.5))
+    for x in (-26, -19, 19, 26):
+        S.cyl("cut_lamppost", (x, 1.0, 0.1), (x, 1.0, 6.0), 0.08, mat=steel_paint("cut_lp", (0.05, 0.05, 0.05), 0.4), verts=10)
+        box("cut_lamphead", (x, 0.4, 6.0), (0.35, 1.2, 0.12), emit("cut_sodium", (1.0, 0.55, 0.22), 18))
+        light_point("cut_street_light", (x, 0.2, 5.8), 400, (1.0, 0.55, 0.24), radius=0.2)
+    # slabs (cut faces toward camera), back wall, side walls; basements -1 and -2
+    levels = [-2, -1] + list(range(NF))
+    for L in levels:
+        z = L * FH
+        box("cut_slab", (0, D / 2, z - 0.15), (W, D, 0.3), conc)
+        box("cut_slab_face", (0, 0.01, z - 0.15), (W, 0.02, 0.3), cutface)
+        box("cut_back_wall", (0, D + 0.15, z + FH / 2), (W, 0.3, FH), brick if L >= 0 else conc)
+        for sx in (-1, 1):
+            box("cut_side_wall", (sx * (W / 2 + 0.15), D / 2, z + FH / 2), (0.3, D, FH), conc)
+            box("cut_side_face", (sx * (W / 2 + 0.15), 0.01, z + FH / 2), (0.3, 0.02, FH), cutface)
+    box("cut_roof", (0, D / 2, NF * FH - 0.15), (W, D, 0.3), conc)
+    # offices: plastered back wall with windows (night outside), desks, chairs, cabinets, partitions; some floors lit
+    for f in range(NF):
+        z = f * FH
+        box("cut_office_back", (0, D - 0.02, z + FH / 2), (W, 0.04, FH), plaster)
+        for k in range(7):
+            box("cut_window", (-12 + k * 4, D - 0.05, z + 1.7), (2.2, 0.04, 1.4), glass)
+        box("cut_carpet", (0, D / 2, z + 0.005), (W - 0.6, D - 0.6, 0.01), carpet)
+        lit = f in (0, 1, 3, 4, 6) or rng.random() < 0.3
+        for k in range(6):
+            x = -12 + k * 4.8
+            for row, y in enumerate((4.0, 8.5)):
+                box("cut_desk", (x, y, z + 0.74), (1.6, 0.8, 0.04), desk_m)
+                box("cut_desk_leg", (x, y, z + 0.37), (1.5, 0.05, 0.72), desk_m)
+                box("cut_chair", (x, y - 0.75, z + 0.45), (0.5, 0.5, 0.08), chair_m)
+                box("cut_chair_back", (x, y - 1.0, z + 0.8), (0.48, 0.06, 0.6), chair_m)
+                if rng.random() < 0.6:
+                    box("cut_monitor", (x + 0.3, y + 0.15, z + 0.95), (0.42, 0.35, 0.32), flat("cut_crt", (0.75, 0.73, 0.68), 0.5))
+            box("cut_partition", (x + 2.4, 6.2, z + 0.7), (0.06, 6.0, 1.4), flat("cut_part", (0.35, 0.37, 0.4), 0.8))
+            box("cut_cabinet", (x, D - 0.6, z + 0.65), (1.0, 0.6, 1.3), cab_m)
+        for x in (-9, 0, 9):
+            box("cut_ceiling_light", (x, D / 2, z + FH - 0.32), (1.2, 0.3, 0.03), tube if lit else flat("cut_tube_off", (0.6, 0.6, 0.58), 0.4))
+            if lit:
+                light_area("cut_office_light", (x, D / 2, z + FH - 0.36), (x, D / 2, z), 1.2, 260, (0.92, 0.97, 1.0), size_y=0.3)
+    # level -1: the garage - columns, bays, a couple of cars under covers, tube light
+    zg = -FH
+    for x in (-10, 0, 10):
+        box("cut_column", (x, D / 2, zg + FH / 2), (0.45, 0.45, FH), conc)
+    for k, x in enumerate((-12, -5, 6)):
+        _ph("covered_car", (x, 7.0, zg), rot_z=math.radians(90))
+    for x in (-8, 4):
+        box("cut_garage_tube", (x, D / 2, zg + FH - 0.32), (0.12, 1.4, 0.05), tube)
+        light_area("cut_garage_light", (x, D / 2, zg + FH - 0.36), (x, D / 2, zg), 0.12, 160, (0.85, 1.0, 0.9), size_y=1.4)
+    # level -2: the vault - three walls of numbered steel boxes, the open steel door to the side, warm light
+    zv = -2 * FH; vx0, vx1, vy1 = -6.0, 6.0, 11.0
+    steel = brushed("cut_box_steel", (0.62, 0.6, 0.56), rough=0.3); seam = flat("cut_box_seam", (0.08, 0.08, 0.08), 0.5)
+    brass = gold("cut_brass", (0.72, 0.55, 0.28))
+    box("cut_vault_floor", (0, (vy1 + 1) / 2, zv + 0.01), (vx1 - vx0, vy1 - 1, 0.02), flat("cut_vault_floor", (0.45, 0.4, 0.33), 0.6))
+    for (cx, cy, sx, sy, nx) in ((0, vy1, vx1 - vx0, 0.3, 20), (vx0, (vy1 + 1) / 2, 0.3, vy1 - 1, 16), (vx1, (vy1 + 1) / 2, 0.3, vy1 - 1, 16)):
+        box("cut_vault_bank", (cx, cy, zv + 1.3), (sx, sy, 2.6), steel)
+        for r in range(1, 8):                                      # rows of box doors (seams) with brass number plates
+            box("cut_vault_seam_h", (cx, cy, zv + 0.15 + r * 0.33), (max(sx, 0.32) if sx > 1 else 0.32, max(sy, 0.32) if sy > 1 else 0.32, 0.012), seam)
+        n = nx
+        for c in range(n + 1):
+            t = c / n
+            px = cx - sx / 2 + t * sx if sx > 1 else cx
+            py = cy - sy / 2 + t * sy if sy > 1 else cy
+            box("cut_vault_seam_v", (px, py, zv + 1.3), (0.012 if sx > 1 else 0.32, 0.012 if sy > 1 else 0.32, 2.4), seam)
+    box("cut_vault_door", (vx1 + 1.4, 1.2, zv + 1.0), (0.4, 1.4, 2.0), flat("cut_door_steel", (0.35, 0.36, 0.38), 0.3, metal=0.9))
+    for x in (-3, 0, 3):
+        box("cut_vault_tube", (x, 6.0, zv + FH - 0.32), (1.2, 0.2, 0.04), warm)
+        light_area("cut_vault_light", (x, 6.0, zv + FH - 0.36), (x, 6.0, zv), 1.2, 260, (1.0, 0.74, 0.45), size_y=0.3)
+    # a soft cool fill from the camera side so the cut faces of the slabs read in the dark
+    light_area("cut_fill", (0, -30, 8), (0, D / 2, 4), 20, 1800, (0.6, 0.7, 0.9), size_y=30)
+    A["vault"] = Vector((0, 6.0, zv + 1.2)); A["FH"] = FH; A["top"] = Vector((0, D / 2, NF * FH))
+    world((0.01, 0.012, 0.016), 0.4)
+    return A
