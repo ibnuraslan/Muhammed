@@ -246,7 +246,7 @@ for f in range(1, 281):
     sc.frame_set(f); TIP[f] = pen.matrix_world.translation.copy() + V(0, 0, 0.009)   # 9 mm stand-off: the argon beam
 gap = VL.hold_path("Surgeon1", "R", pen, 1, 280, lambda f: TIP[f], 60, head_clear=0.22)
 print("PEN hold gap cm", round(gap * 100, 2))
-for o in [pen] + list(pen.children_recursive): VL.key_hide(o, [(0, 280)])
+for o in [pen] + list(pen.children_recursive): VL.key_hide(o, [] if o.name.endswith('Cable') else [(0, 280)])
 # argon beam: blue plasma cone from the tip to the liver, on while burning (BurnProgress 141-282)
 bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=False, segments=12, radius1=0.0007, radius2=0.0028, depth=0.010)
 bmesh.ops.translate(bm, verts=bm.verts, vec=(0, 0, -0.005))

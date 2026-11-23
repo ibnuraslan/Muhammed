@@ -5,7 +5,7 @@ blender -b in.blend --python 21_v012_looks.py -- <out.blend>
   forehead, temples and nape. Every OR person now has hair.
 - The woman (Patient): real clothes at home - a mustard knit top and blue jeans (two garments, seam at the waist,
   slightly loose) - and a ponytail with the face clear. Same hair in every scene.
-- The clerk (PanelB): braided hair, nothing over the eyes.
+- The clerk (PanelB): hair tied back, nothing over the eyes.
 - Surgeon 2: loose two-piece scrubs (top + darker trousers), soft cap.
 - Eyes: batch-2 eye fix (cornea as straight transparency) + a camera-only catchlight."""
 import sys, os, math
@@ -76,7 +76,7 @@ def body_mask_for(rig_name, clothes_ob, like=None):
     body = bpy.data.objects[rig_name + ".body"]
     gname = "Delete." + clothes_ob.name.split(".", 1)[1]
     if gname not in body.vertex_groups: print("no delete group", gname); return
-    m = body.modifiers.new(gname, 'MASK'); m.vertex_group = gname; m.invert_vertex_group = True
+    m = body.modifiers.get(gname) or body.modifiers.new(gname, 'MASK'); m.vertex_group = gname; m.invert_vertex_group = True
     if like:
         for fc in VL.fcurves(body):
             if fc.data_path == 'modifiers["%s"].show_render' % like:
@@ -97,9 +97,9 @@ VL.clear_keys(bpy.data.objects["Patient.body"], ('modifiers["Delete.female_casua
 m = bpy.data.objects["Patient.body"].modifiers.get("Delete.female_casualsuit02")
 if m: bpy.data.objects["Patient.body"].modifiers.remove(m)
 
-# ------------------------------------------------------------------ clerk: braid, face clear
+# ------------------------------------------------------------------ clerk: hair tied back (ponytail), face clear
 remove("PanelB.bob01")
-add_asset("PanelB", "hair/braid01/braid01.mhclo", "Hair")
+add_asset("PanelB", "hair/ponytail01/ponytail01.mhclo", "Hair")
 
 # ------------------------------------------------------------------ OR staff: hair under the caps
 add_asset("Surgeon2", "hair/ponytail01/ponytail01.mhclo", "Hair")

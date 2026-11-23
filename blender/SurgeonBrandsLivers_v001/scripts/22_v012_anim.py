@@ -84,8 +84,15 @@ def swing_arms(name, f0, f1, yaw_fn, phase_fn, amp=0.13, step=2):
             Hm.key_hand(s, f, Wp, d, n, pole)
         HP["apply_pose"](r, "L", "relaxed", f); HP["apply_pose"](r, "R", "relaxed", f)
 
+def hold_pose(r, bones, f):
+    """key the evaluated pose of `bones` at f (so nothing drifts into the next shot's motion)"""
+    ev(f)
+    for n in bones:
+        pb = r.pose.bones[n]
+        pb.keyframe_insert("location", frame=f, group=n); pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
 def walk(name, path, f0, f1, stride=0.68, lean=5.0):
     r = OB[name]; Hm = human(name)
+    hold_pose(r, body_bones(), f0 - 1)
     clear_bones(r, body_bones(), f0, f1)
     def yaw(f):
         a, b = path(max(f0, f - 2)), path(min(f1, f + 2)); d = b - a
@@ -198,7 +205,7 @@ for s in "LR":
     xy = HW.foot_xy(s, V(P1.x, P1.y, 0), y0)
     for f in (704, 775): HW.key_foot(s, f, xy, y0)
 rz = HW.root_head.z
-for f, dz, fl, hd in ((704, 0.0, 6, 0), (716, -0.02, 14, -4), (730, -0.05, 30, -14), (750, -0.07, 38, -22), (775, -0.07, 40, -24)):
+for f, dz, fl, hd in ((704, 0.0, 6, 0), (716, -0.02, 14, -4), (730, -0.05, 28, -18), (750, -0.07, 34, -32), (775, -0.07, 35, -36)):
     HW.key_root(f, V(P1.x, P1.y, rz + dz) - fwd * 0.02 * (fl / 40), yaw=y0, flex=fl * 0.35)
     HW.key_spine(f, flex=fl, twist=-4 * (fl / 40), side=4 * (fl / 40), head=(hd, 6 * fl / 40))
 # hands: right hand presses her right side over the liver (on the shirt), left hand on her left thigh
@@ -242,6 +249,18 @@ def add_glow(mat):
 for m in set(OB["Patient.female_casualsuit01"].data.materials):
     if m.name.startswith("WomanTop"): add_glow(m)
 VL.key_hide(OB["XRayLiver_Home"], [])
+
+# =================================================================== S7: patient already on the bed at the cut (776)
+ev(782); bed_pose = {pb.name: (pb.location.copy(), pb.rotation_quaternion.copy()) for pb in pt.pose.bones}
+for pb in pt.pose.bones:
+    l_, q_ = bed_pose[pb.name]; pb.location = l_; pb.rotation_quaternion = q_
+    pb.keyframe_insert("location", frame=776, group=pb.name); pb.keyframe_insert("rotation_quaternion", frame=776, group=pb.name)
+for o in rig_objs("Patient"):
+    for fc in VL.fcurves(o):
+        if fc.data_path == "hide_render" or ("show_render" in fc.data_path):
+            for kp in fc.keyframe_points:
+                if kp.co.x == 782: kp.co.x = 776
+            fc.update()
 
 # =================================================================== S8: new doctor's walk gets swinging arms; anaesthetist calm
 s2 = OB["Surgeon2"]
@@ -299,11 +318,11 @@ lt = OB["HEAR_LecternTop"]; lz = max((lt.matrix_world @ Vector(c)).z for c in lt
 lxmax = max((lt.matrix_world @ Vector(c)).x for c in lt.bound_box)
 for f in range(1241, 1446, 4):
     ev(f)
-    for s, sy in (("L", 0.17), ("R", -0.17)):
+    for s, sy in (("L", 0.20), ("R", -0.20)):
         g = 0.0
         if s == "R": g = smooth((f - 1318) / 14.0) * (1 - smooth((f - 1352) / 16.0))     # one open-hand gesture, then back down
         if s == "L": g = 0.6 * smooth((f - 1392) / 12.0) * (1 - smooth((f - 1414) / 14.0))
-        p = V(lxmax - 0.12, sy, lz + 0.004) + V(-0.04, 0, 0.10) * g
+        p = V(lxmax - 0.07, sy, lz + 0.004) + V(-0.04, 0, 0.10) * g
         HP["place_hand"](s1, s, f, p, (V(0, 0, -1) + V(-1, 0, 0) * g).normalized(), V(-1, -0.25 if s == "L" else 0.25, 0).normalized(), skin=0.012)
         HP["apply_pose"](s1, s, "relaxed" if g < 0.3 else "open_alarm", f)
         sh = W(s1, "upperarm01." + s); pole = sh + V(0.35, 0.25 * (1 if s == "L" else -1), -0.35)
@@ -315,8 +334,9 @@ blink(s1, 1280, dict(wide=0.28, brow=0.1)); blink(s1, 1390, dict(wide=0.2, brow=
 
 # =================================================================== S12: the judge grips the gavel and strikes the block
 ja = OB["PanelA"]; gv = OB["Gavel"]; blk = OB["Gavel_src_4"]
+ev(1); G0 = gv.matrix_world.copy()                       # where it lies on the desk
 VL.clear_keys(gv, ("location", "rotation_quaternion", "rotation_euler"))
-ev(1446); gv.rotation_mode = 'QUATERNION'; G0 = gv.matrix_world.copy()
+gv.rotation_mode = 'QUATERNION'; gv.matrix_world = G0; ev(1446)
 head_pts = [o.matrix_world @ Vector(c) for o in (OB["Gavel_src_0"], OB["Gavel_src_1"], OB["Gavel_src_2"]) for c in o.bound_box]
 hc = sum(head_pts, Vector()) / len(head_pts); hbot = min(p.z for p in head_pts)
 bpts = [blk.matrix_world @ Vector(c) for c in blk.bound_box]; btop = max(p.z for p in bpts); bc = sum(bpts, Vector()) / 8
@@ -365,8 +385,12 @@ blink(ja, 1470, dict(wide=0.3, brow=-0.3))
 
 # =================================================================== S13: the clerk stamps a red X
 cl = OB["PanelB"]; st = OB["Stamp"]
+ev(1); S0 = st.matrix_world.copy()                       # where it stands on the desk
 VL.clear_keys(st, ("location", "rotation_euler", "rotation_quaternion"))
-st.rotation_mode = 'QUATERNION'; ev(1576); S0 = st.matrix_world.copy()
+st.rotation_mode = 'QUATERNION'; st.matrix_world = S0; ev(1576)
+for o in OB:
+    if o.name.startswith(("Certificate", "CertLine", "CertSeal", "CertBorder")) and o.parent is None: o.location += V(0.05, -0.20, 0)
+bpy.context.view_layer.update()
 cert = OB["Certificate"]; cpts = [cert.matrix_world @ Vector(c) for c in cert.bound_box]; cc = sum(cpts, Vector()) / 8; ctop = max(p.z for p in cpts)
 bpts = [OB["StampBase"].matrix_world @ Vector(c) for c in OB["StampBase"].bound_box]; sbot = min(p.z for p in bpts); sbc = sum(bpts, Vector()) / 8
 press = Matrix.Translation(V(cc.x - sbc.x + 0.01, cc.y - sbc.y, ctop - sbot + 0.0015)) @ S0
@@ -383,7 +407,8 @@ def smat(f):
 hpts = [OB["StampHandle"].matrix_world @ Vector(c) for c in OB["StampHandle"].bound_box]; hcen = sum(hpts, Vector()) / 8
 clear_bones(cl, ["IK_hand.R", "Pole_elbow.R"], 1560, 1700)
 ev(SP)
-HP["grip_object"](cl, "R", SP, OB["StampHandle"], hcen, V(0, 0, -1) * 0.3 + (hcen - W(cl, "upperarm01.R")).normalized() * 0.7)
+ap = hcen - W(cl, "upperarm01.R"); ap.z = 0
+HP["grip_object"](cl, "R", SP, OB["StampHandle"], hcen, ap.normalized())
 ev(SP); Hs = S0.inverted() @ (cl.matrix_world @ cl.pose.bones["IK_hand.R"].matrix)
 fing = {pb.name: pb.rotation_quaternion.copy() for pb in cl.pose.bones if pb.name.startswith("finger") and pb.name.endswith(".R")}
 ev(1576); restS = (cl.matrix_world @ cl.pose.bones["IK_hand.R"].matrix).copy()
