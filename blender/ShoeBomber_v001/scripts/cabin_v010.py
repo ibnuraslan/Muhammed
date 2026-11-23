@@ -95,14 +95,14 @@ for f in (786, 1068):
 print("BOMBER_DONE")
 
 # ---------------------------------------------------------------- ATTENDANT
-def swing(h, path, f0, f1, facing_y=-1, step=8, amp=0.13, period=36):
+def swing(h, path, f0, f1, facing_y=-1, step=8, amp=0.22, period=36):
     """v010: natural walk arms -- elbows bent ~45 deg, hands close to the hips, opposite-arm swing fore/aft"""
     for f in range(f0, f1 + 1, step):
         p = path(f); ph = math.sin((f - f0) / period * 2 * math.pi)
         for s_, sg in (("L", 1), ("R", -1)):
             side = sg * (1 if facing_y < 0 else -1) * 0.155
             sw = sg * ph * amp
-            hand(h, s_, f, V((p.x + side, p.y + facing_y * (0.10 + sw), 0.93 + 0.25 * abs(sw))),
+            hand(h, s_, f, V((p.x + side, p.y + facing_y * (0.14 + sw), 0.98 + 0.35 * abs(sw))),
                  (0, facing_y * 0.75, -0.65), (-side, 0, 0),
                  pole=(p.x + side * 2.2, p.y - facing_y * 0.6, 0.95), grip=0.35)
 apath = catmull([(170, V((0.0, 7.9, 0))), (230, V((0.0, 5.6, 0))), (300, V((0.0, 3.0, 0))), (318, V((0.0, 2.85, 0)))])
@@ -171,12 +171,14 @@ for s in "LR":
         rest_arm(pa, s, f, V((PAX_A_X, BY, 0.56)), grip=0.25)
 sit(pa, 476, PAX_A_X, BY, flex=4, spine=(6, 25, 0), head=(0, 40))      # wakes, looks at the commotion
 # 490-545: half up in his row, grabs the bomber's left arm and pulls it back
-stand(pa, 500, V((PAX_A_X + 0.10, BY + 0.30, 0)), FWD + 50, flex=8, spine=(20, 15, 0), head=(5, 10), crouch=0.30)
+sit(pa, 494, (PAX_A_X + BX) / 2, BY, flex=4, spine=(10, 25, 0), head=(0, 35))
+sit(pa, 502, BX, BY, flex=4, spine=(16, 35, 0), head=(0, 30))      # slides into 3C as the bomber leaves it
 for f in (508, 524, 542):
     ev(f); el = wpos(bom, "lowerarm01.L", f)
-    hand(pa, "R", f, el + V((-0.02, 0.0, 0.04)), (1, 0.2, -0.2), (0, 0, -1), pole=(PAX_A_X + 0.2, BY - 0.2, 1.0), grip=0.75, pose="wrap_grip")
-    hand(pa, "L", f, el + V((-0.10, -0.08, 0.02)), (1, 0.0, -0.2), (0, 0, -1), pole=(PAX_A_X, BY - 0.3, 0.9), grip=0.75, pose="wrap_grip")
-stand(pa, 542, V((PAX_A_X + 0.20, BY + 0.32, 0)), FWD + 60, flex=10, spine=(26, 10, 0), head=(10, 0), crouch=0.32)
+    hand(pa, "R", f, el + V((-0.02, 0.0, 0.04)), (1, 0.2, -0.2), (0, 0, -1), pole=(BX - 0.2, BY - 0.3, 1.0), grip=0.75, pose="wrap_grip")
+    hand(pa, "L", f, el + V((-0.10, -0.08, 0.02)), (1, 0.0, -0.2), (0, 0, -1), pole=(BX - 0.3, BY - 0.3, 0.9), grip=0.75, pose="wrap_grip")
+sit(pa, 524, BX, BY, flex=4, spine=(22, 40, 0), head=(5, 25))
+sit(pa, 542, BX, BY, flex=4, spine=(26, 42, 0), head=(8, 25))
 # 560-1068: kneels on seat 3C (cushion z ~0.47) facing the aisle (+X), pinning/strapping his wrists behind his back
 KA = V((BX + 0.02, BY + 0.10, 0.78))
 for f, fl, hd in ((578, 52, (20, 0)), (654, 48, (22, 0)), (700, 45, (-8, 0)), (768, 50, (24, 0)), (866, 50, (24, 0)), (868, 8, (5, 10)), (900, 6, (5, 10)), (1068, 6, (5, 15))):
@@ -221,7 +223,7 @@ for f, fl, hd in ((566, 50, (10, 0)), (582, 58, (12, 0)), (654, 56, (15, 0)), (7
     hand(pb, "R", f, V((0.10, BY - 0.02, 0.36)), (0, 1, -0.5), (0, 0, -1), grip=0.3)
 # S8 (868-1068): kneels behind his feet; pulls the LEFT sneaker off (874-900), lifts it and holds it up to look at it
 KN = V((0.04, BY - 0.72, 0.50))
-for f, fl, hd in ((866, 62, (25, 0)), (900, 55, (20, 0)), (930, 8, (10, 0)), (960, 4, (6, -4)), (1000, 2, (2, 6)), (1030, 4, (-4, -10)), (1068, 4, (-2, -12))):
+for f, fl, hd in ((866, 62, (25, 0)), (900, 55, (20, 0)), (930, 8, (14, 8)), (960, 4, (16, 12)), (990, 6, (2, -38)), (1015, 4, (18, 10)), (1045, 2, (-6, 0)), (1068, 2, (-6, 6))):
     pb.key_root(f, KN, yaw=FWD, flex=8 if f < 930 else 2)
     pb.key_spine(f, flex=fl, twist=0, head=hd)
     pb.key_foot("L", f, V((KN.x - 0.14, KN.y - 0.40)), FWD, 0.02, -65); pb.key_foot("R", f, V((KN.x + 0.14, KN.y - 0.40)), FWD, 0.02, -65)
@@ -233,7 +235,8 @@ hand(pb, "R", 876, hl + V((0.07, -0.05, 0.06)), (-0.3, 1, -0.6), (-1, 0, 0), gri
 hand(pb, "L", 896, hl + V((-0.08, -0.30, 0.08)), (0.3, 1, -0.2), (1, 0, 0), grip=0.75, pose="wrap_grip")      # pulled off backward
 hand(pb, "R", 896, hl + V((0.07, -0.29, 0.10)), (-0.3, 1, -0.4), (-1, 0, 0), grip=0.75, pose="wrap_grip")
 SH_UP = V((KN.x + 0.20, KN.y + 0.34, 0.92))      # where he holds it up (sole toward +Y, the camera)
-for f, o, tw in ((930, V((0, -0.02, -0.06)), 0), (960, V((0, 0, 0)), 0), (1000, V((0.03, 0.02, 0.02)), 1), (1030, V((-0.02, 0.0, 0.0)), -1), (1068, V((0.0, 0.0, 0.01)), 0)):
+for f, o, tw in ((930, V((0, -0.02, -0.06)), 0), (960, V((0.0, 0.02, 0.12)), 1), (990, V((-0.08, 0.04, 0.02)), -1), (1015, V((0.04, 0.05, 0.14)), 2),
+                  (1045, V((0.0, 0.03, 0.06)), -1), (1068, V((0.02, 0.03, 0.08)), 0)):
     hand(pb, "R", f, SH_UP + o + V((0.09, -0.02, -0.08)), (-0.5, 0.2, 0.8), (-1, 0, 0.2 * tw), pole=(0.6, KN.y, 0.8), grip=0.75, pose="wrap_grip")
     hand(pb, "L", f, SH_UP + o + V((-0.07, -0.03, 0.09)), (0.5, 0.1, 0.7), (1, 0, 0.2 * tw), pole=(-0.6, KN.y, 0.8), grip=0.6)
 

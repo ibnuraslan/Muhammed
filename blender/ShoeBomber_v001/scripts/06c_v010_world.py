@@ -16,7 +16,7 @@ Lk.new(hs.outputs["Color"], bg_light.inputs["Color"])
 tcw = N.new("ShaderNodeTexCoord"); sepw = N.new("ShaderNodeSeparateXYZ"); mr = N.new("ShaderNodeMapRange")
 mr.inputs["From Min"].default_value = 0.0; mr.inputs["From Max"].default_value = 0.55
 rp = N.new("ShaderNodeValToRGB")
-rp.color_ramp.elements[0].color = (0.60, 0.75, 0.93, 1); rp.color_ramp.elements[1].color = (0.10, 0.30, 0.76, 1)
+rp.color_ramp.elements[0].color = (0.50, 0.70, 0.95, 1); rp.color_ramp.elements[1].color = (0.05, 0.22, 0.72, 1)
 Lk.new(tcw.outputs["Generated"], sepw.inputs[0]); Lk.new(sepw.outputs["Z"], mr.inputs["Value"]); Lk.new(mr.outputs["Result"], rp.inputs["Fac"])
 bg_cam = N.new("ShaderNodeBackground"); bg_cam.inputs["Strength"].default_value = 1.0
 Lk.new(rp.outputs["Color"], bg_cam.inputs["Color"])
@@ -32,7 +32,8 @@ cd = bpy.data.materials.get("CloudDeck")
 if cd:
     for n in cd.node_tree.nodes:
         if n.type == 'VALTORGB':
-            for e in n.color_ramp.elements:
+            n.color_ramp.elements[0].color = (0.82, 0.82, 0.82, 1)     # deck mostly opaque: no brown ground through the gaps
+            for e in n.color_ramp.elements[1:]:
                 v = sum(e.color[:3]) / 3
                 e.color = (v * 0.97, v * 0.985, v, e.color[3])
         if n.type == 'BSDF_PRINCIPLED':
