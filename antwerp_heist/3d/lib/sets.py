@@ -433,9 +433,12 @@ def vault_complex(state="day", seed=7, forced=109, debris=1.0, extra_open=(), ga
         b = box("pir_led", p + Vector((-sx * 0.04, -0.04, -0.04)), (0.008, 0.008, 0.008), led_r if not night else led_r)
         A["pirs"].append(p)
     if taped:
-        tape = flat("duct_tape2", (0.3, 0.3, 0.31), 0.55)
-        for dx in (-0.025, 0.0, 0.025):
-            box("tape_strip", (dx, VY * 0.45, VZ - 0.064), (0.03, 0.12, 0.002), tape, rot=(0, 0, 0.1))
+        # one broad strip of silver-grey duct tape across the eye, its ends pressed up the detector's sides
+        tape = flat("duct_tape2", (0.42, 0.42, 0.44), 0.32, metal=0.35)
+        ty = VY * 0.45
+        box("tape_strip", (0, ty, VZ - 0.0645), (0.05, 0.1, 0.0015), tape, bevel=0.0006, rot=(0, 0, 0.12))
+        for sg in (1, -1):
+            box("tape_strip_end", (-sg * 0.0061, ty + sg * 0.0505, VZ - 0.052), (0.05, 0.0015, 0.026), tape, bevel=0.0006, rot=(0, 0, 0.12))
         bagm = bpy.data.materials.new("polythene"); bagm.use_nodes = True; bp = bagm.node_tree.nodes["Principled BSDF"]
         bp.inputs['Base Color'].default_value = (0.85, 0.85, 0.82, 1); bp.inputs['Roughness'].default_value = 0.35
         bp.inputs['Transmission Weight'].default_value = 0.6; bp.inputs['Alpha'].default_value = 0.9

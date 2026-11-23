@@ -159,7 +159,7 @@ class ModernMan(W._Woman):
             self.jacket.modifiers.move(self.jacket.modifiers.find("Relax"), 0)
             drop = {"blazer": 0.14, "leather": 0.08, "bomber": 0.0, "coat": 0.5}[JK] if self.JACKET != "labcoat" else 0.4
             if drop:
-                self._hem(self.jacket, m["hip"], drop=drop * hs, flare={"coat": 0.06, "labcoat": 0.01}.get(self.JACKET, 0.03))
+                self._hem(self.jacket, m["hip"], drop=drop * hs, flare={"coat": 0.06, "labcoat": -0.015}.get(self.JACKET, 0.03))
             if self.JACKET == "labcoat":
                 self._split(self.jacket, cx, m["hip"] + 0.02, m["hip"] - 0.16 * hs)
             if self.JACKET != "bomber":

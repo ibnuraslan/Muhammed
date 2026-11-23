@@ -81,8 +81,14 @@ def loupe(name="loupe"):
     m = flat(name + "_black", (0.02, 0.02, 0.02), 0.4)
     glass = bpy.data.materials.new(name + "_glass"); glass.use_nodes = True
     g = glass.node_tree.nodes["Principled BSDF"]; g.inputs['Transmission Weight'].default_value = 1.0; g.inputs['Roughness'].default_value = 0.0
-    parts = [S.cyl(name + "_barrel", (0, 0, 0), (0, -0.018, 0), 0.013, 0.011, mat=m, verts=24),
-             S.cyl(name + "_lens", (0, -0.006, 0), (0, -0.009, 0), 0.0115, mat=glass, verts=24)]
+    chrome = brushed()
+    parts = [S.cyl(name + "_barrel", (0, 0, 0), (0, -0.018, 0), 0.013, 0.011, mat=m, verts=32)]
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.0128, minor_radius=0.0017, major_segments=40, minor_segments=10,
+                                     location=(0, 0.0005, 0), rotation=(math.radians(90), 0, 0))
+    rim = bpy.context.active_object; rim.name = name + "_rim"; rim.data.materials.append(chrome); parts.append(rim)   # polished rim
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=0.0125, location=(0, -0.001, 0))
+    ln = bpy.context.active_object; ln.name = name + "_lens"; ln.scale = (1, 0.22, 1); ln.data.materials.append(glass); parts.append(ln)
+    bpy.ops.object.shade_smooth()
     return _root(name, parts)
 
 

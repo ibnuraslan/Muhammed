@@ -128,14 +128,17 @@ def U09():
 
 def U10():
     A = S3.lab(); b = A["bench"]
-    PR.document("dpaper_open", 0.15, 0.1025, seed=3, kind="briefke", folds=0).location = (0, b.y, b.z + 0.001)
-    dz = PR.brilliants("trace", n=22, spread=0.02, seed=8); dz.location = (-0.01, b.y + 0.005, b.z + 0.0016)   # the gem dust left in the paper
-    lp = PR.loupe(); lp.location = (0.095, b.y - 0.035, b.z + 0.012); lp.rotation_euler = (0, 0, 0.5)
-    ST.light_area("dust_soft", (0.05, b.y + 0.25, b.z + 0.45), (0, b.y, b.z), 0.5, 12, (1.0, 0.97, 0.92))
-    for k, (x, y, z) in enumerate(((0.25, -0.25, 0.4), (-0.2, 0.3, 0.35), (0.05, -0.4, 0.3))):
-        ST.light_point(f"lab_spark{k}", (x, b.y + y, b.z + z), 10, (1.0, 0.97, 0.92), radius=0.004)
-    return dict(a=((-0.09, b.y - 0.16, b.z + 0.13), (0.02, b.y, b.z)), b=((-0.07, b.y - 0.13, b.z + 0.11), (0.02, b.y, b.z)), lens=55,
-                fstop=6.3, focus=(0.0, b.y, b.z), cine=dict(exposure=-0.9))
+    o = V((0, b.y, b.z))
+    ST.box("gem_pad", o + V((0.0, 0.0, 0.002)), (0.16, 0.12, 0.004), ST.velvet("gem_pad_velvet", (0.005, 0.006, 0.022)))   # the lab's dark gem pad
+    dp = PR.document("dpaper_open", 0.15, 0.1025, seed=3, kind="briefke", folds=0); dp.location = o + V((-0.075, 0.055, 0.0045)); dp.rotation_euler = (0, 0, 0.3)
+    dz = PR.brilliants("trace", n=9, spread=0.016, seed=14); dz.location = o + V((0.0, 0.0, 0.0042))     # the U31 / P2 brilliants
+    lp = PR.loupe(); lp.location = o + V((0.045, -0.006, 0.0045 + 0.0145)); lp.rotation_euler = (math.radians(20), 0, math.radians(144))   # on its side, lens to camera
+    ST.light_spot("dust_key", tuple(o + V((-0.4, -0.5, 0.6))), tuple(o), 25, angle=35, color=(1.0, 0.9, 0.75), radius=0.01)
+    ST.light_area("dust_soft", tuple(o + V((0.1, 0.2, 0.5))), tuple(o), 0.6, 6, (1.0, 0.97, 0.92))
+    for k, (x, y, z) in enumerate(((0.3, -0.3, 0.5), (-0.2, 0.35, 0.45), (0.05, -0.45, 0.35), (0.4, 0.2, 0.3))):   # P2 hero sparkle rig
+        ST.light_point(f"lab_spark{k}", tuple(o + V((x, y, z))), 12, (1.0, 0.97, 0.92), radius=0.004)
+    return dict(a=(tuple(o + V((-0.075, -0.15, 0.1))), tuple(o + V((0.01, 0, 0.005)))), b=(tuple(o + V((-0.06, -0.125, 0.085))), tuple(o + V((0.01, 0, 0.005)))),
+                lens=55, fstop=8.0, focus=tuple(o + V((0, 0, 0.006))), cine=dict(exposure=-1.0))
 
 
 def U11():
@@ -477,9 +480,9 @@ def U42():
 # ============================================================================ L20 what explains it all
 def U43():
     A = ST.vault_complex("wreck", contacts="bypassed", taped=True); ld = A["light_detector"]
-    # the taped detector on the ceiling in the foreground, the open vault door behind it
-    # from inside the door passage (its jambs and head frame the view) up to the taped detector on the vault ceiling
-    return dict(a=((0.12, -0.42, 1.62), tuple(ld + V((0, 0, -0.12)))), b=((0.1, -0.3, 1.66), tuple(ld + V((0, 0, -0.12)))), lens=75, fstop=4.0, focus=ld)
+    ST.light_point("tape_glint", (0.35, ld.y - 0.45, 1.9), 15, (1.0, 0.93, 0.82), radius=0.01)   # the tape's edges catch it
+    # close under the taped detector, looking back toward the door: the door head a sliver at the bottom of frame
+    return dict(a=((0.1, 2.45, 2.02), (0.05, 1.45, 2.56)), b=((0.1, 2.42, 2.03), (0.05, 1.42, 2.57)), lens=16, fstop=5.6, focus=ld)
 
 
 def U44():
