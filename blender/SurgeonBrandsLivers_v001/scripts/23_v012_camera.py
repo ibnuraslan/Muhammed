@@ -36,7 +36,7 @@ SHOTS = [
     (916, 1060, track("Surgeon2", "head", (1.15, -0.85, 0.02)), None, bone("Surgeon2", "spine01", (0, 0, 0.16)), 30, 5.6),  # S8 tracks her, side-front
     (1061, 1175, (0.50, 0.02, 1.62), (0.16, -0.02, 1.44), lambda f: obj("LiverRig", (0, 0.16, 0.12))(f).lerp(letters()(f), ease(min(1.0, max(0.0, (f - 1080) / 80.0)))), 32, 5.6),   # wide (her body, hands) -> push in to the letters  # S9 foot end: her hands lift the branded liver
     (1176, 1240, (-0.22, -0.72, 1.62), (-0.24, -0.66, 1.62), bone("Surgeon2", "head", (0, 0, 0.05)), 70, 5.6),  # S10 her face
-    (1241, 1310, (-7.50, -0.35, 1.72), (-7.62, -0.30, 1.70), fixed((-10.35, 0.0, 1.45)), 20, 5.6),  # S11a all three panel faces
+    (1241, 1310, (-8.70, -1.75, 1.66), (-8.95, -1.05, 1.62), fixed((-10.35, -0.15, 1.45)), 22, 5.6),  # S11a closer, dolly past the panel (faces, action)
     (1311, 1445, (-8.00, -0.55, 1.50), (-7.92, -0.47, 1.50), bone("Surgeon1", "neck01", (0, 0, -0.14)), 32, 5.6),  # S11b defendant, level
     (1446, 1575, (-9.20, -0.95, 1.55), (-9.24, -0.90, 1.53), fixed((-10.15, -0.05, 1.36)), 30, 5.6),  # S12 gavel
     (1576, 1644, (-9.25, -1.55, 1.62), (-9.45, -1.42, 1.55), fixed((-10.15, -1.15, 1.30)), 32, 5.6),  # S13 stamp

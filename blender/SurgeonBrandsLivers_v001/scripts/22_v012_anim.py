@@ -80,7 +80,7 @@ def swing_arms(name, f0, f1, yaw_fn, phase_fn, amp=0.15, step=2, out_k=0.09):
             sh = W(r, "upperarm01." + s)
             Wp = sh + V(0, 0, -0.47) + fwd * (0.07 + amp * math.sin(ph) * sg) + out * out_k
             d = (V(0, 0, -1) + fwd * 0.25).normalized(); n = -out
-            pole = sh + V(0, 0, -0.30) - fwd * 0.4 + out * 0.15
+            pole = sh + V(0, 0, -0.30) - fwd * 0.4 + out * 0.30
             Hm.key_hand(s, f, Wp, d, n, pole)
         HP["apply_pose"](r, "L", "relaxed", f); HP["apply_pose"](r, "R", "relaxed", f)
 
@@ -251,7 +251,7 @@ for k in range(7):
 pt = OB["Patient"]; HW = human("Patient")
 P0, P1 = V(6.45, 1.05, 0), V(5.85, -0.30, 0)
 wpath = lambda f: P0.lerp(P1, smooth((f - 641) / 62.0) * 0.6 + 0.4 * (f - 641) / 62.0)
-yaw_w = walk("Patient", wpath, 641, 703, stride=0.62, lean=4, out_k=0.0, amp=0.13)
+yaw_w = walk("Patient", wpath, 641, 703, stride=0.62, lean=4, out_k=0.075, amp=0.13)
 clear_bones(pt, body_bones(), 704, 775)
 y0 = yaw_w(703); yr = R_(y0); fwd = V(math.sin(yr), -math.cos(yr), 0); rt = V(-math.cos(yr), -math.sin(yr), 0)
 for s in "LR":
@@ -276,11 +276,11 @@ for f in list(range(704, 776, 3)) + [775]:
     if okh and f > 712 and ((so.matrix_world @ loch) - r_side).length < 0.08: r_side = r_side.lerp(so.matrix_world @ loch, min(1.0, k * 1.2))
     HP["place_hand"](pt, "R", f, r_side, nrm_in, (-rt * 0.8 + V(0, 0, -0.6)).normalized(), skin=0.016)
     HP["apply_pose"](pt, "R", "cup_hold", f)
-    thL = W(pt, "upperleg02.L").lerp(W(pt, "lowerleg01.L"), 0.55) + fwd * 0.07
+    thL = W(pt, "upperleg02.L").lerp(W(pt, "lowerleg01.L"), 0.55) + fwd * 0.07 - rt * 0.07
     shL = W(pt, "upperarm01.L"); l_pt = (shL + V(0, 0, -0.5) + fwd * 0.05 - rt * 0.05).lerp(thL, smooth((f - 712) / 30.0))
     HP["place_hand"](pt, "L", f, l_pt, (-fwd + V(0, 0, -0.5)).normalized(), V(0, 0, -1), skin=0.02)
     for s_, o_ in (("L", -rt), ("R", rt)):
-        shp = W(pt, "upperarm01." + s_); pole = shp + V(0, 0, -0.30) - fwd * 0.35 + o_ * 0.20
+        shp = W(pt, "upperarm01." + s_); pole = shp + V(0, 0, -0.20) - fwd * 0.30 + o_ * 0.45
         pbp = pt.pose.bones["Pole_elbow." + s_]; pbp.location = pt.data.bones["Pole_elbow." + s_].matrix_local.to_3x3().inverted() @ (pole - pt.data.bones["Pole_elbow." + s_].head_local)
         pbp.keyframe_insert("location", frame=f, group=pbp.name)
     HP["apply_pose"](pt, "L", "relaxed", f)
