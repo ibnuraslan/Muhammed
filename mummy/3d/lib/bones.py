@@ -260,7 +260,25 @@ class Skeleton:
             zmin = min(zmin, float((W[:, 2] - g).min()))
         self.root.location.z -= zmin + sink
         bpy.context.view_layer.update()
+        self.settle(ground_fn or (lambda x, y: loc[2]), sink)
         return self
+
+    def settle(self, ground_fn, sink=0.01, keep=0.22):
+        """Decomposition and the weight of the fill: every bone drops toward the grave floor (the upper limbs come to
+        rest on the lower ones instead of hanging in the air). Unparents the bones, keeping their orientation."""
+        import numpy as np
+        bpy.context.view_layer.update()
+        for o in list(self.parts.values()):
+            mw = o.matrix_world.copy(); o.parent = None; o.matrix_world = mw
+        bpy.context.view_layer.update()
+        for o in self.parts.values():
+            M = np.array(o.matrix_world)
+            co = np.empty(len(o.data.vertices) * 3, np.float32); o.data.vertices.foreach_get("co", co)
+            W = co.reshape(-1, 3) @ M[:3, :3].T + M[:3, 3]
+            c = W.mean(0); g = ground_fn(float(c[0]), float(c[1]))
+            low = float(W[:, 2].min()) - g
+            if low > 0.005:
+                o.location.z -= (1 - keep) * low + sink * 0.5
 
     def remove(self, *segs):
         for s in segs:
