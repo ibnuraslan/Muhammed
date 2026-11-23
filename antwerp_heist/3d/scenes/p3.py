@@ -367,7 +367,7 @@ def U28():
     le = MD.Leonardo(); sv = AC.Seated(le, A["seat_visitor"], 90, lean=4); sv.head_to((0, 1.55, 1.25), share=0.6); sv.finish(density=HAIR)
     dy = A["desk_y"]
     # from outside, through the glass: the manager's back to us, Leonardo hidden behind him, the street in the pane
-    return dict(a=((0.1, A["RY"] + 2.6, 1.42), (0.12, dy - 1.0, 1.2)), b=((0.12, A["RY"] + 2.3, 1.42), (0.12, dy - 1.0, 1.2)), lens=50,
+    return dict(a=((-0.27, A["RY"] + 2.6, 1.33), (0.15, dy - 1.05, 1.22)), b=((-0.24, A["RY"] + 2.3, 1.33), (0.15, dy - 1.05, 1.22)), lens=50,
                 fstop=4.0, focus=(0, dy + 0.6, 1.1), hand_ok=("chair", "Chair", "desk", "Desk"))
 
 
