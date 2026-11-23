@@ -155,7 +155,7 @@ def trodden(hx, hy, r, z0, seed=0):
     """Trampled ground: a ring of bare earth round the house and a worn path east from the door (alpha decals)."""
     mud = bpy.data.materials.get("trodden")
     if mud is None:
-        mud = ph.texture("dense_sand", scale=0.8, name="trodden", tint=(0.78, 0.66, 0.5))
+        mud = ph.texture("dense_sand", scale=0.8, name="trodden", tint=(1.05, 0.92, 0.72))
         nt = mud.node_tree; N = nt.nodes; Lk = nt.links; p = [n for n in N if n.type == 'BSDF_PRINCIPLED'][0]
         tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); Lk.new(tc.outputs['UV'], sep.inputs[0])
         nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 6; nz.inputs['Detail'].default_value = 6; Lk.new(tc.outputs['Object'], nz.inputs['Vector'])
@@ -226,7 +226,7 @@ def village(smoke_on=True, scale=1.75):
         half = float((P[:, 0].max() - P[:, 0].min() + P[:, 1].max() - P[:, 1].min()) / 4)
         roof_weights(Vector((hx, hy, top)), half * 0.98, z + 0.75, n=14, seed=i, meshes=ms_)
         if smoke_on:
-            smoke((hx, hy, top - 0.5), height=18.0, r0=0.6, grow=0.36, density=4.0 + 0.6 * i, name=f"smoke{i}")
+            smoke((hx, hy, top - 1.6), height=20.0, drift=(0.75, 0.18), r0=1.5, grow=0.5, density=1.6 + 0.3 * i, name=f"smoke{i}")
     if smoke_on:
         ground_mist((0, 0, float(U.surface(0, 0))))
     return out
