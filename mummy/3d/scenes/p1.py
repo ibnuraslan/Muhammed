@@ -518,8 +518,8 @@ def S31():
     bpy.context.view_layer.update()
     W = np.array([fe.matrix_world @ v.co for v in fe.data.vertices])
     sk.root.location = Vector((0.4 - W[:, 0].mean(), 0.38 - W[:, 1].mean(), LB.TOP + 0.004 - W[:, 2].min()))
-    return dict(a=((0.0, 0.05, LB.TOP + 0.95), (0.0, 0.38, LB.TOP)), b=((0.0, 0.18, LB.TOP + 0.7), (0.0, 0.38, LB.TOP)), lens=35,
-                fstop=5.6, focus=(0.0, 0.38, LB.TOP + 0.04))
+    return dict(a=((-0.62, -0.42, LB.TOP + 0.32), (0.05, 0.37, LB.TOP + 0.04)), b=((-0.42, -0.5, LB.TOP + 0.3), (0.08, 0.37, LB.TOP + 0.04)), lens=32,
+                fstop=4.0, focus=(-0.08, 0.36, LB.TOP + 0.03))
 
 
 def S32():
