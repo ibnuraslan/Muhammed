@@ -356,7 +356,7 @@ def S23():
 def S24():
     """Crane in over the north house to the two graves side by side (overcast)."""
     U.CUT = True
-    site("overcast", grass_at=None, kit=True)
+    site("golden", grass_at=None, kit=True, sun_az=205)
     return dict(a=((3.6, 4.2, 7.2), (-1.1, 10.0, 3.3)), b=((1.6, 6.4, 5.3), (-1.1, 10.1, 3.3)), lens=30,
                 fstop=5.6, focus=(-1.1, 10.0, 3.3))
 
