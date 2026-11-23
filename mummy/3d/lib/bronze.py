@@ -91,9 +91,33 @@ def village(smoke_on=True, scale=1.75):
         s = scale * r / 4.5
         root.scale = (s, s, s); root.location = (hx, hy, z - 0.3); root.rotation_euler = (0, 0, math.radians(i * 23))
         out.append(root)
+        bpy.context.view_layer.update()
+        top = max((m_.matrix_world @ Vector(c)).z for m_ in root.children_recursive if m_.type == 'MESH' for c in m_.bound_box)
         if smoke_on:
-            smoke((hx, hy, z + 5.0 * s), radius=1.0, height=10.0, density=0.55 + 0.1 * i, name=f"smoke{i}")
+            smoke((hx, hy, top - 0.6), radius=0.9, height=12.0, density=1.6 + 0.3 * i, name=f"smoke{i}")
+    if smoke_on:
+        ground_mist((0, 0, float(U.surface(0, 0))))
     return out
+
+
+def ground_mist(c, size=(160, 160, 3.0), density=0.035):
+    """Dawn mist lying on the machair: a shallow noise-broken volume, thickest at the ground."""
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(c[0], c[1], c[2] + size[2] / 2 - 0.3)); o = bpy.context.active_object
+    o.name = "groundmist"; o.scale = size
+    m = bpy.data.materials.new("mist"); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; N.remove(N["Principled BSDF"])
+    tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Generated'], sep.inputs[0])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 6; nz.inputs['Detail'].default_value = 4
+    L.new(tc.outputs['Generated'], nz.inputs['Vector'])
+    fz = N.new("ShaderNodeMapRange"); fz.inputs['From Min'].default_value = 0.0; fz.inputs['From Max'].default_value = 1.0
+    fz.inputs['To Min'].default_value = 1.0; fz.inputs['To Max'].default_value = 0.0; L.new(sep.outputs['Z'], fz.inputs['Value'])
+    br = N.new("ShaderNodeMapRange"); br.inputs['From Min'].default_value = 0.4; br.inputs['From Max'].default_value = 0.7
+    L.new(nz.outputs['Fac'], br.inputs['Value'])
+    m1 = N.new("ShaderNodeMath"); m1.operation = 'MULTIPLY'; L.new(fz.outputs[0], m1.inputs[0]); L.new(br.outputs[0], m1.inputs[1])
+    m2 = N.new("ShaderNodeMath"); m2.operation = 'MULTIPLY'; m2.inputs[1].default_value = density; L.new(m1.outputs[0], m2.inputs[0])
+    v = N.new("ShaderNodeVolumePrincipled"); v.inputs['Color'].default_value = (0.85, 0.82, 0.8, 1); v.inputs['Anisotropy'].default_value = 0.6
+    L.new(m2.outputs[0], v.inputs['Density']); L.new(v.outputs[0], N["Material Output"].inputs['Volume'])
+    o.data.materials.append(m); o.visible_shadow = False
+    return o
 
 
 # ----------------------------------------------------------------------------- interior
