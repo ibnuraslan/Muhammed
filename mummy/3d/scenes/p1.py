@@ -22,8 +22,8 @@ def site(mood="golden", grass_at=(0, 0), grass_r=26, focus=(0, 0), kit=True, bur
         G.kit()
     sk = {}
     if burials:
-        sk["B1"] = G.burial("B1", "M", "A")
-        sk["B2"] = G.burial("B2", "M", "C", side="L")
+        sk["B1"] = G.Grave(G.burial_scan("B1"))
+        sk["B2"] = G.Grave(G.burial_scan("B2"))
     return T, sk
 
 

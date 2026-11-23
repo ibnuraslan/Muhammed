@@ -35,6 +35,8 @@ def mat(name):
         m = ph.texture("brown_mud_dry", scale=1.2, name="burnt", tint=(0.9, 0.45, 0.28))
     elif name == "fill":                      # grave fill: darker, damp, slightly humic sand, trowelled
         m = ph.texture("dense_sand", scale=1.4, name="fill", tint=(0.82, 0.72, 0.56))
+    elif name == "skirt":                     # trowelled pit edge between the scanned grave and the trench floor
+        m = ph.texture("dense_sand", scale=0.9, name="skirt", tint=(0.78, 0.7, 0.55))
     elif name == "rubber":
         m = bpy.data.materials.new("rubber"); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
         p.inputs['Base Color'].default_value = (0.012, 0.012, 0.012, 1); p.inputs['Roughness'].default_value = 0.55
@@ -394,3 +396,86 @@ def lift(st, dz):
     for k, v in list(getattr(st, "attached", ())):
         k.location.z += dz
     bpy.context.view_layer.update()
+
+
+# ----------------------------------------------------------------------------- photogrammetry graves (real excavated
+# crouched burials, Sketchfab CC-BY) set into the north-house pits, joined to the trench floor by a sand skirt
+SCANS = {
+    # key: (uid, scan-unit centre of the body, scale to metres, cut faces with x < cut (scan units), skull (scan units))
+    "B1": ("4e02811d415943d39715c131acb387a7", (-0.102, 0.026), 11.0, None, (-0.09, 0.072)),
+    "B2": ("f3f11436536c407fb2d0b5e6386544d9", (0.0, 0.0), 0.8, None, None),
+}
+
+
+def burial_scan(key="B1", rot=None, skirt=0.45):
+    import bones as B
+    uid, cen, sc, cut, skull = SCANS[key]
+    px, py, a, b, dep, ang = U.PITS[key]
+    rot = math.radians(ang if rot is None else rot)
+    o = B._import(uid); o.name = "grave_" + key
+    me = o.data
+    if cut is not None:
+        bm = bmesh.new(); bm.from_mesh(me)
+        bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.calc_center_median().x < cut], context='FACES')
+        bm.to_mesh(me); bm.free()
+    co = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", co); co = co.reshape(-1, 3)
+    co[:, 0] -= cen[0]; co[:, 1] -= cen[1]; co *= sc
+    c, s = math.cos(rot), math.sin(rot)
+    x = co[:, 0] * c - co[:, 1] * s; y = co[:, 0] * s + co[:, 1] * c
+    floor_z = float(U.surface(px + 2.2 * math.cos(rot + 1.2), py + 2.2 * math.sin(rot + 1.2)))  # house floor beside the pit
+    co[:, 0] = x + px; co[:, 1] = y + py
+    co[:, 2] += floor_z + 0.012 - co[:, 2].max()
+    me.vertices.foreach_set("co", co.ravel()); me.update()
+    # skirt: from every open edge of the scan outward and up to the floor level
+    bm = bmesh.new(); bm.from_mesh(me)
+    bnd = [e for e in bm.edges if e.is_boundary]
+    rr = lambda v: math.hypot(v.co.x - px, v.co.y - py)
+    rmax = max(max(rr(v) for v in e.verts) for e in bnd)
+    bnd = [e for e in bnd if min(rr(v) for v in e.verts) > 0.72 * rmax]          # the outer rim only
+    outer = {}
+    for e in bnd:
+        for v in e.verts:
+            if v.index not in outer:
+                d = Vector((v.co.x - px, v.co.y - py, 0)); d = d.normalized() if d.length > 1e-6 else Vector((1, 0, 0))
+                outer[v.index] = bm.verts.new((v.co.x + d.x * skirt, v.co.y + d.y * skirt, floor_z + 0.004))
+    bm.verts.ensure_lookup_table()
+    sk_faces = []
+    for e in bnd:
+        v0, v1 = e.verts
+        try:
+            sk_faces.append(bm.faces.new((v0, v1, outer[v1.index], outer[v0.index])))
+        except ValueError:
+            pass
+    nm = len(me.materials)
+    for f in sk_faces:
+        f.material_index = nm
+    bm.to_mesh(me); bm.free()
+    me.materials.append(mat("skirt"))
+    o["grave"] = key
+    def w(pt):
+        X = (pt[0] - cen[0]) * sc; Y = (pt[1] - cen[1]) * sc
+        return Vector((X * c - Y * s + px, X * s + Y * c + py, floor_z - 0.25))
+    info = dict(obj=o, centre=Vector((px, py, floor_z - 0.3)), floor=floor_z,
+                skull=(w(skull) if skull else Vector((px, py, floor_z - 0.3))))
+    return info
+
+
+class Grave:
+    """Adapter so shots can ask a scanned grave for centre() / part_centre(seg) like a posed Skeleton."""
+    def __init__(self, info):
+        self.info = info
+
+    def centre(self):
+        return self.info["centre"].copy(), Vector((1.2, 1.0, 0.3))
+
+    def part_centre(self, seg):
+        c = self.info["centre"]; k = self.info["skull"]
+        if seg in ("skull", "mandible"):
+            return k + (Vector((0, 0, -0.03)) if seg == "mandible" else Vector((0, 0, 0)))
+        if seg in ("thorax",):
+            return c.lerp(k, 0.45)
+        if seg.startswith("femur"):
+            return c.lerp(k, -0.35)
+        return c.copy()
+
+    world_pivot = part_centre

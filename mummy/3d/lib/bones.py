@@ -317,11 +317,21 @@ def _import(uid):
     bpy.ops.import_scene.gltf(filepath=sf.fetch(uid))
     new = [o for o in bpy.data.objects if o not in before]
     bpy.context.view_layer.update()
-    bm = bmesh.new()
+    bm = bmesh.new(); mats = []
     for o in new:
         if o.type == 'MESH':
-            m2 = o.data.copy(); m2.transform(o.matrix_world); bm.from_mesh(m2); bpy.data.meshes.remove(m2)
+            m2 = o.data.copy(); m2.transform(o.matrix_world)
+            remap = []
+            for m in m2.materials:
+                if m not in mats:
+                    mats.append(m)
+                remap.append(mats.index(m))
+            for p in m2.polygons:
+                p.material_index = remap[p.material_index] if remap else 0
+            bm.from_mesh(m2); bpy.data.meshes.remove(m2)
     me = bpy.data.meshes.new(uid[:8]); bm.to_mesh(me); bm.free()
+    for m in mats:
+        me.materials.append(m)
     for poly in me.polygons:
         poly.use_smooth = True
     for o in new:
