@@ -365,7 +365,7 @@ def U28():
     mg = MD.Manager(); se = AC.Seated(mg, A["seat_behind"], -90); desk_hands(se, A["desk_y"], fwd=-0.25); se.head_to((0.0, A["desk_y"] + 0.15, 0.79), share=1.0); se.finish(density=HAIR)   # eyes on the file while he talks
     le = MD.Leonardo(); sv = AC.Seated(le, A["seat_visitor"], 90, lean=4); sv.head_to((0, 1.55, 1.25), share=0.6); sv.finish(density=HAIR)
     dy = A["desk_y"]
-    return dict(a=((0.55, dy - 2.0, 1.45), (-0.05, dy + 0.9, 1.15)), b=((0.48, dy - 1.9, 1.45), (-0.05, dy + 0.9, 1.15)), lens=30,
+    return dict(a=((0.55, dy - 2.0, 2.15), (-0.05, dy + 0.8, 0.85)), b=((0.48, dy - 1.9, 2.1), (-0.05, dy + 0.8, 0.85)), lens=30,
                 fstop=4.0, focus=(0, dy + 0.6, 1.1), hand_ok=("chair", "Chair", "desk", "Desk"))
 
 

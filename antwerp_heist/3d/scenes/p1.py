@@ -112,7 +112,7 @@ def S10():
     le = MD.Leonardo(); sv = AC.Seated(le, A["seat_visitor"], 90, lean=4)
     sv.head_to((0, 1.55, 1.25), share=0.6)
     sv.finish(look=(0, 1.55, 1.25), density=HAIR)
-    return dict(a=((-0.5, -1.3, 1.45), (0.05, 1.4, 1.1)), b=((-0.42, -1.12, 1.45), (0.05, 1.4, 1.1)), lens=30,
+    return dict(a=((-0.5, -1.3, 2.15), (0.05, 1.3, 0.85)), b=((-0.42, -1.12, 2.1), (0.05, 1.3, 0.85)), lens=30,
                 fstop=3.5, focus=(0, 1.5, 1.1), hand_ok=("chair", "Chair", "desk", "Desk"))
 
 
