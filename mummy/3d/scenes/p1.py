@@ -76,7 +76,7 @@ def S05():
     """Macro: the skull in the ground; slow push, focus on the teeth."""
     T, sk = site("day", grass_at=None, kit=False, sun_az=215)
     sp = sk["B1"].part_centre("skull")
-    d = Vector((0.55, -0.6, 0.0)).normalized()
+    d = Vector((-0.75, -0.35, 0.0)).normalized()
     a = sp + d * 1.5 + Vector((0, 0, 0.8)); b = sp + d * 1.2 + Vector((0, 0, 0.62))
     return dict(a=(tuple(a), tuple(sp)), b=(tuple(b), tuple(sp)), lens=70, fstop=4.0, focus=tuple(sp))
 
