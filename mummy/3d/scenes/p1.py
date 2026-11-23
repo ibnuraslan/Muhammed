@@ -330,13 +330,13 @@ def S22():
     import acts as AC
     m = BR.Islander()
     hx, hy = R["hearth"]
-    st = AC.Kneel(m, (hx - 1.05, hy + 0.62), -30, lean=40, sit_back=True)
-    st.hand("R", (hx - 0.62, hy + 0.36, 0.12), elbow=(0.6, 0.2, -0.8), curl=30)
-    st.hand("L", (hx - 0.85, hy + 0.2, 0.42), elbow=(0.6, 0.3, -0.8), curl=20)
+    st = AC.Kneel(m, (hx - 1.1, hy + 0.55), -24, lean=40, sit_back=True)
+    st.hand("R", (hx - 0.62, hy + 0.3, 0.12), elbow=(0.6, 0.2, -0.8), curl=30)
+    st.hand("L", (hx - 0.9, hy + 0.15, 0.42), elbow=(0.6, 0.3, -0.8), curl=20)
     st.head_to((hx, hy, 0.3), share=0.8)
     st.finish(look=(hx, hy, 0.3), density=HAIR)
-    return dict(a=((hx - 3.3, hy + 2.3, 0.72), (hx + 0.1, hy, 0.5)), b=((hx - 2.8, hy + 1.85, 0.68), (hx + 0.1, hy, 0.5)), lens=32,
-                fstop=2.8, focus=(hx - 1.0, hy + 0.6, 0.8), cine=dict(exposure=0.2), hand_ok=("floor", "stone"))
+    return dict(a=((hx - 2.55, hy - 1.45, 0.78), (hx - 0.3, hy + 0.2, 0.5)), b=((hx - 2.2, hy - 1.15, 0.72), (hx - 0.3, hy + 0.2, 0.5)), lens=32,
+                fstop=2.8, focus=(hx - 1.0, hy + 0.5, 0.7), cine=dict(exposure=0.2), hand_ok=("floor", "stone"))
 
 
 # ============================================================================ "Floor after floor has survived beneath the sand."
