@@ -1,0 +1,308 @@
+{
+ "frames": {
+  "163": {
+   "Attendant": {
+    "self": 462,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "175": {
+   "Attendant": {
+    "self": 121,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "229": {
+   "Attendant": {
+    "self": 301,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "397": {
+   "PaxA": {
+    "self": 208,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "415": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 481
+   }
+  },
+  "421": {
+   "PaxA": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "433": {
+   "PaxA": {
+    "self": 92,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "439": {
+   "PaxA": {
+    "self": 289,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "445": {
+   "PaxA": {
+    "self": 70,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "499": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 34
+   }
+  },
+  "505": {
+   "Bomber": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "541": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "547": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 163
+   }
+  },
+  "553": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 8
+   }
+  },
+  "559": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 83
+   }
+  },
+  "565": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 28
+   }
+  },
+  "571": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 98
+   }
+  },
+  "577": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 28
+   }
+  },
+  "583": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 79
+   }
+  },
+  "589": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 109
+   }
+  },
+  "601": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 72
+   }
+  },
+  "607": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 22
+   }
+  },
+  "769": {
+   "PaxB": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "847": {
+   "PaxB": {
+    "self": 30,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1135": {
+   "Traveller": {
+    "self": 22,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1141": {
+   "Traveller": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1147": {
+   "Traveller": {
+    "self": 148,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1153": {
+   "Traveller": {
+    "self": 160,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1195": {
+   "Traveller": {
+    "self": 15,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1255": {
+   "AirPaxB": {
+    "self": 162,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1261": {
+   "AirPaxB": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1267": {
+   "AirPaxB": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1273": {
+   "AirPaxB": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1297": {
+   "Traveller": {
+    "self": 18,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1303": {
+   "Traveller": {
+    "self": 13,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1309": {
+   "Traveller": {
+    "self": 11,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1315": {
+   "Traveller": {
+    "self": 10,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   163,
+   175
+  ],
+  [
+   229,
+   229
+  ],
+  [
+   397,
+   397
+  ],
+  [
+   415,
+   415
+  ],
+  [
+   433,
+   445
+  ],
+  [
+   499,
+   499
+  ],
+  [
+   547,
+   601
+  ],
+  [
+   847,
+   847
+  ],
+  [
+   1147,
+   1153
+  ],
+  [
+   1255,
+   1255
+  ]
+ ],
+ "fps": 60
+}

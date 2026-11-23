@@ -1,0 +1,1186 @@
+{
+ "frames": {
+  "157": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 3.69 m, 144 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "163": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "169": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "265": [
+   [
+    "FACEPRESS",
+    "Attendant.R hand on face"
+   ]
+  ],
+  "421": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "PROPMOVE",
+    "Cup moves 21.9 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_L moves 17.6 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_2 moves 1.5 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_3 moves 7.6 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 12.5 cm with no hand on it (nearest finger 36 cm)"
+   ]
+  ],
+  "433": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "FACEPRESS",
+    "PaxA.R hand on face"
+   ],
+   [
+    "PROPMOVE",
+    "Cup moves 1.0 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_L moves 20.4 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 6.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "871": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 2.31 m, 178 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "877": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "883": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "889": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "895": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "901": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "907": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "913": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "919": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "925": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "931": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "937": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "943": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "949": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "955": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "961": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "967": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "973": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "979": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 2054.33 m, 136 deg in one frame (neighbours 0.07 m, 0 deg)"
+   ]
+  ],
+  "985": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "991": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "997": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1003": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1009": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1015": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1021": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1027": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1033": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1039": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1045": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1051": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1057": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1063": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1069": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1075": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1081": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1087": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1093": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1099": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1105": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1111": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1117": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1123": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1129": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1207": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1213": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1219": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1231": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_L_AirPaxA moves 73.1 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_R_AirPaxA moves 62.5 cm with no hand on it (nearest finger 54 cm)"
+   ]
+  ],
+  "1237": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1243": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_L_AirPaxB moves 36.4 cm with no hand on it (nearest finger 19 cm)"
+   ]
+  ],
+  "77": [
+   [
+    "CAMJUMP",
+    "cut: 0.27 m, 9 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "355": [
+   [
+    "CAMJUMP",
+    "cut: 1.05 m, 79 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_0 moves 10.4 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_1 moves 7.8 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_2 moves 3.1 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_3 moves 2.8 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 8.8 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_5 moves 13.5 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_6 moves 16.6 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_7 moves 17.6 cm with no hand on it (nearest finger 41 cm)"
+   ]
+  ],
+  "449": [
+   [
+    "CAMJUMP",
+    "cut: 1.81 m, 101 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "633": [
+   [
+    "CAMJUMP",
+    "cut: 0.49 m, 58 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "705": [
+   [
+    "CAMJUMP",
+    "cut: 1.40 m, 33 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1135": [
+   [
+    "CAMJUMP",
+    "cut: 2450.24 m, 36 deg in one frame (neighbours 0.10 m, 0 deg)"
+   ]
+  ],
+  "1203": [
+   [
+    "CAMJUMP",
+    "cut: 1.16 m, 43 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1276": [
+   [
+    "CAMJUMP",
+    "cut: 1.52 m, 10 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "55": [
+   [
+    "PROPMOVE",
+    "Smoke_0 moves 9.3 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "61": [
+   [
+    "PROPMOVE",
+    "Smoke_0 moves 10.8 cm with no hand on it (nearest finger 16 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_1 moves 8.7 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "67": [
+   [
+    "PROPMOVE",
+    "Smoke_1 moves 10.6 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "73": [
+   [
+    "PROPMOVE",
+    "Smoke_2 moves 10.1 cm with no hand on it (nearest finger 11 cm)"
+   ]
+  ],
+  "79": [
+   [
+    "PROPMOVE",
+    "Smoke_3 moves 9.4 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "97": [
+   [
+    "PROPMOVE",
+    "Smoke_5 moves 10.1 cm with no hand on it (nearest finger 9 cm)"
+   ]
+  ],
+  "103": [
+   [
+    "PROPMOVE",
+    "Smoke_6 moves 8.7 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "121": [
+   [
+    "PROPMOVE",
+    "Smoke_0 moves 5.8 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "127": [
+   [
+    "PROPMOVE",
+    "Smoke_0 moves 8.2 cm with no hand on it (nearest finger 9 cm)"
+   ]
+  ],
+  "133": [
+   [
+    "PROPMOVE",
+    "Smoke_0 moves 10.0 cm with no hand on it (nearest finger 16 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_1 moves 7.2 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "139": [
+   [
+    "PROPMOVE",
+    "Smoke_1 moves 9.5 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_2 moves 6.0 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_3 moves 115.6 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "145": [
+   [
+    "PROPMOVE",
+    "Smoke_2 moves 8.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_3 moves 4.3 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 105.0 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "151": [
+   [
+    "PROPMOVE",
+    "Smoke_3 moves 7.7 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 14.6 cm with no hand on it (nearest finger 3 cm)"
+   ]
+  ],
+  "343": [
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 13.5 cm with no hand on it (nearest finger 25 cm)"
+   ]
+  ],
+  "349": [
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 11.6 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_5 moves 15.1 cm with no hand on it (nearest finger 24 cm)"
+   ]
+  ],
+  "361": [
+   [
+    "PROPMOVE",
+    "Smoke_0 moves 11.5 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_1 moves 10.0 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_2 moves 6.6 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_3 moves 123.4 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 5.3 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_5 moves 11.1 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_6 moves 15.4 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_7 moves 17.8 cm with no hand on it (nearest finger 38 cm)"
+   ]
+  ],
+  "367": [
+   [
+    "PROPMOVE",
+    "Smoke_0 moves 12.0 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_1 moves 11.5 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_2 moves 9.3 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 117.2 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_5 moves 7.8 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_6 moves 13.3 cm with no hand on it (nearest finger 48 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_7 moves 17.1 cm with no hand on it (nearest finger 56 cm)"
+   ]
+  ],
+  "373": [
+   [
+    "PROPMOVE",
+    "Smoke_0 moves 11.8 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_1 moves 12.4 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_2 moves 11.4 cm with no hand on it (nearest finger 16 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_3 moves 8.4 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TrayTable moves 0.9 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "379": [
+   [
+    "PROPMOVE",
+    "Match moves 11.8 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_0 moves 11.3 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_1 moves 13.0 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_2 moves 13.0 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 7.2 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TrayTable moves 0.7 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "385": [
+   [
+    "PROPMOVE",
+    "Match moves 33.4 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_L moves 4.8 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_1 moves 12.5 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_2 moves 13.7 cm with no hand on it (nearest finger 21 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_3 moves 13.2 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TrayTable moves 0.5 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "391": [
+   [
+    "PROPMOVE",
+    "Match moves 37.1 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_L moves 9.1 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_1 moves 11.2 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_2 moves 13.5 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_3 moves 14.3 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 13.0 cm with no hand on it (nearest finger 10 cm)"
+   ]
+  ],
+  "397": [
+   [
+    "PROPMOVE",
+    "Match moves 9.7 cm with no hand on it (nearest finger 80 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_L moves 13.6 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_2 moves 12.7 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_3 moves 14.5 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 14.6 cm with no hand on it (nearest finger 16 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TrayTable moves 1.1 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "403": [
+   [
+    "PROPMOVE",
+    "Shoe_L moves 17.0 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_2 moves 11.0 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_3 moves 14.0 cm with no hand on it (nearest finger 21 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 15.4 cm with no hand on it (nearest finger 20 cm)"
+   ]
+  ],
+  "409": [
+   [
+    "PROPMOVE",
+    "Cup moves 10.3 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_L moves 19.1 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_3 moves 12.7 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 15.3 cm with no hand on it (nearest finger 27 cm)"
+   ]
+  ],
+  "415": [
+   [
+    "PROPMOVE",
+    "Cup moves 53.3 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_L moves 18.9 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_3 moves 10.5 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 14.3 cm with no hand on it (nearest finger 30 cm)"
+   ]
+  ],
+  "427": [
+   [
+    "PROPMOVE",
+    "Cup moves 7.3 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_L moves 18.3 cm with no hand on it (nearest finger 21 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_3 moves 3.8 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 9.8 cm with no hand on it (nearest finger 40 cm)"
+   ]
+  ],
+  "439": [
+   [
+    "PROPMOVE",
+    "Shoe_L moves 19.3 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 1.9 cm with no hand on it (nearest finger 55 cm)"
+   ]
+  ],
+  "445": [
+   [
+    "PROPMOVE",
+    "Shoe_L moves 11.3 cm with no hand on it (nearest finger 12 cm)"
+   ]
+  ],
+  "511": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 2.1 cm with no hand on it (nearest finger 57 cm)"
+   ]
+  ],
+  "517": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 2.2 cm with no hand on it (nearest finger 60 cm)"
+   ]
+  ],
+  "523": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 2.3 cm with no hand on it (nearest finger 62 cm)"
+   ]
+  ],
+  "529": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 2.4 cm with no hand on it (nearest finger 63 cm)"
+   ]
+  ],
+  "535": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 2.5 cm with no hand on it (nearest finger 64 cm)"
+   ]
+  ],
+  "541": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 2.7 cm with no hand on it (nearest finger 65 cm)"
+   ]
+  ],
+  "547": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 2.8 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "553": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 2.9 cm with no hand on it (nearest finger 73 cm)"
+   ]
+  ],
+  "559": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 3.1 cm with no hand on it (nearest finger 75 cm)"
+   ]
+  ],
+  "565": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 3.2 cm with no hand on it (nearest finger 75 cm)"
+   ]
+  ],
+  "571": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 3.4 cm with no hand on it (nearest finger 73 cm)"
+   ]
+  ],
+  "577": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 3.5 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "583": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 3.7 cm with no hand on it (nearest finger 66 cm)"
+   ]
+  ],
+  "589": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 3.9 cm with no hand on it (nearest finger 68 cm)"
+   ]
+  ],
+  "595": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 4.1 cm with no hand on it (nearest finger 70 cm)"
+   ]
+  ],
+  "601": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 4.3 cm with no hand on it (nearest finger 71 cm)"
+   ]
+  ],
+  "607": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 4.5 cm with no hand on it (nearest finger 72 cm)"
+   ]
+  ],
+  "613": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 4.7 cm with no hand on it (nearest finger 73 cm)"
+   ]
+  ],
+  "619": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 4.9 cm with no hand on it (nearest finger 73 cm)"
+   ]
+  ],
+  "625": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 5.1 cm with no hand on it (nearest finger 73 cm)"
+   ]
+  ],
+  "631": [
+   [
+    "PROPMOVE",
+    "TrayTable moves 6.9 cm with no hand on it (nearest finger 78 cm)"
+   ]
+  ],
+  "721": [
+   [
+    "PROPMOVE",
+    "Shoe_L moves 6.4 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "763": [
+   [
+    "PROPMOVE",
+    "Shoe_L moves 7.4 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "1171": [
+   [
+    "PROPMOVE",
+    "Shoe_R_Trav moves 2.3 cm with no hand on it (nearest finger 56 cm)"
+   ]
+  ],
+  "1177": [
+   [
+    "PROPMOVE",
+    "Shoe_R_Trav moves 8.7 cm with no hand on it (nearest finger 53 cm)"
+   ]
+  ],
+  "1249": [
+   [
+    "PROPMOVE",
+    "Shoe_L_AirPaxB moves 36.3 cm with no hand on it (nearest finger 48 cm)"
+   ]
+  ],
+  "1255": [
+   [
+    "PROPMOVE",
+    "Shoe_L_AirPaxA moves 1.1 cm with no hand on it (nearest finger 74 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_L_AirPaxB moves 1.1 cm with no hand on it (nearest finger 48 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_R_AirPaxA moves 1.1 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Tray_2 moves 1.1 cm with no hand on it (nearest finger 45 cm)"
+   ]
+  ],
+  "1261": [
+   [
+    "PROPMOVE",
+    "Shoe_L_AirPaxA moves 2.8 cm with no hand on it (nearest finger 73 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_L_AirPaxB moves 2.8 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_R_AirPaxA moves 2.8 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Tray_2 moves 2.8 cm with no hand on it (nearest finger 45 cm)"
+   ]
+  ],
+  "1267": [
+   [
+    "PROPMOVE",
+    "Shoe_L_AirPaxA moves 4.3 cm with no hand on it (nearest finger 72 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_L_AirPaxB moves 4.3 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_R_AirPaxA moves 4.3 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Tray_2 moves 4.3 cm with no hand on it (nearest finger 45 cm)"
+   ]
+  ],
+  "1273": [
+   [
+    "PROPMOVE",
+    "Shoe_L_AirPaxA moves 5.7 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_L_AirPaxB moves 5.7 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shoe_R_AirPaxA moves 5.7 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Tray_2 moves 5.7 cm with no hand on it (nearest finger 45 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 73,
+  "FACEPRESS": 2,
+  "CAMJUMP": 11,
+  "PROPMOVE": 147
+ }
+}
