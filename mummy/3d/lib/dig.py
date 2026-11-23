@@ -479,7 +479,7 @@ def lift(st, dz):
 SINK = {"B1": -0.02, "B2": -0.02}                                          # scan surface below the floor; the floor overlaps its edges
 PRE = {}
 MIRROR = {"B2"}                                                # B2: the same type of grave, mirrored and turned                  # rotate X, then crop (fractions of x, y extent)
-STRIP = {"B1": (-0.163, -0.136, -0.016, 0.06, -0.1099), "B2": (-0.163, -0.136, -0.016, 0.06, -0.1099)}      # scan-unit box (x0, x1, y0, y1, z above which to cut)
+STRIP = {}      # scan-unit box (x0, x1, y0, y1, z above which to cut)
 SCANS = {
     # key: (uid, scan-unit centre of the body, scale to metres, cut faces with x < cut (scan units), skull (scan units))
     "B1": ("4e02811d415943d39715c131acb387a7", (-0.102, 0.026), 11.0, None, (-0.09, 0.072)),
