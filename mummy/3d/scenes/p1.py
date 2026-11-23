@@ -106,6 +106,7 @@ def lab_skull(inverted=True, with_jaw=False, lamp_energy=22.0):
         import numpy as np
         co = np.array([v.co for v in cr.data.vertices])
         cr.location = (0.0, 0.35, LB.TOP + 0.026 - co[:, 2].min() * 0.92)
+    bpy.context.view_layer.update()
     out = dict(cr=cr, A=A)
     if with_jaw:
         md = B.hero_mandible(tone="B")
@@ -113,6 +114,7 @@ def lab_skull(inverted=True, with_jaw=False, lamp_energy=22.0):
         co = np.array([v.co for v in md.data.vertices])
         md.location = (0.2, 0.3, LB.TOP + 0.004 - co[:, 2].min()); md.rotation_euler = (0, 0, math.radians(-25))
         out["md"] = md
+    bpy.context.view_layer.update()
     return out
 
 
