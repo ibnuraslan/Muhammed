@@ -155,7 +155,7 @@ def trodden(hx, hy, r, z0, seed=0):
     """Trampled ground: a ring of bare earth round the house and a worn path east from the door (alpha decals)."""
     mud = bpy.data.materials.get("trodden")
     if mud is None:
-        mud = ph.texture("dense_sand", scale=0.8, name="trodden", tint=(1.05, 0.92, 0.72))
+        mud = ph.texture("dense_sand", scale=0.8, name="trodden", tint=(1.5, 1.3, 1.0))
         nt = mud.node_tree; N = nt.nodes; Lk = nt.links; p = [n for n in N if n.type == 'BSDF_PRINCIPLED'][0]
         tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); Lk.new(tc.outputs['UV'], sep.inputs[0])
         nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 6; nz.inputs['Detail'].default_value = 6; Lk.new(tc.outputs['Object'], nz.inputs['Vector'])
@@ -183,7 +183,7 @@ def trodden(hx, hy, r, z0, seed=0):
     me = bpy.data.meshes.new("trodden"); bm.to_mesh(me); bm.free(); me.materials.append(mud)
     o = bpy.data.objects.new("trodden", me); bpy.context.scene.collection.objects.link(o)
     # worn path east from the door
-    bm = bmesh.new(); uvl = bm.loops.layers.uv.new("UVMap"); L_ = 9.0; w = 0.5; n = 20
+    bm = bmesh.new(); uvl = bm.loops.layers.uv.new("UVMap"); L_ = 7.0; w = 0.7; n = 20
     rows = []
     for k in range(n + 1):
         t = k / n; x = hx + r + 0.4 + t * L_; y = hy + 0.6 * math.sin(t * 3 + seed)
@@ -226,7 +226,7 @@ def village(smoke_on=True, scale=1.75):
         half = float((P[:, 0].max() - P[:, 0].min() + P[:, 1].max() - P[:, 1].min()) / 4)
         roof_weights(Vector((hx, hy, top)), half * 0.98, z + 0.75, n=14, seed=i, meshes=ms_)
         if smoke_on:
-            smoke((hx, hy, top - 1.6), height=20.0, drift=(0.75, 0.18), r0=1.5, grow=0.5, density=1.6 + 0.3 * i, name=f"smoke{i}")
+            smoke((hx, hy, top - 1.6), height=20.0, drift=(0.75, 0.18), r0=1.5, grow=0.5, density=3.2 + 0.5 * i, name=f"smoke{i}")
     if smoke_on:
         ground_mist((0, 0, float(U.surface(0, 0))))
     return out
