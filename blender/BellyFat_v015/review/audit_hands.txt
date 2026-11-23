@@ -1,0 +1,20 @@
+BellyFat hand audit: step 1, 1123 frames, 11230 hand-checks
+
+HAND_IN_HAND        4   e.g. f1092 Woman L hand: 5 verts in the other hand; f1094 Woman L hand: 4 verts in the other hand; f1166 Woman R hand: 5 verts in the other hand; f1176 Woman L hand: 4 verts in the other hand
+                 frames [1092, 1094, 1166, 1176]
+HAND_IN_BODY       11   e.g. f22 ShopperB R hand: 8 verts inside the body; f22 ShopperC R hand: 7 verts inside the body; f87 Woman R hand: 4 verts inside the body; f151 Woman R hand: 5 verts inside the body; f152 Woman R hand: 7 verts inside the body
+                 frames [22, 87, 151, 152, 153, 154, 157, 1164, 1165, 1169]
+HAND_IN_CLOTHES     3   e.g. f1164 Woman R hand: 5 verts inside Woman.female_casualsuit01; f1165 Woman R hand: 5 verts inside Woman.female_casualsuit01; f1166 Woman R hand: 5 verts inside Woman.female_casualsuit01
+                 frames [1164, 1165, 1166]
+HAND_IN_OTHER       0
+WRIST_BEND         41   e.g. f27 ShopperC R wrist 78 deg; f28 ShopperC R wrist 88 deg; f29 ShopperC R wrist 78 deg; f133 ShopperC R wrist 75 deg; f134 ShopperC R wrist 76 deg
+                 frames [27, 28, 29, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 1180, 1181, 1182, 1183, 1184, 1185, 1186]
+
+by character:
+  Woman     {'HAND_IN_BODY': 9, 'WRIST_BEND': 7, 'HAND_IN_HAND': 4, 'HAND_IN_CLOTHES': 3}
+  ShopperA  {'HAND_IN_BODY': 0, 'WRIST_BEND': 0, 'HAND_IN_HAND': 0, 'HAND_IN_CLOTHES': 0}
+  ShopperB  {'HAND_IN_BODY': 1, 'WRIST_BEND': 0, 'HAND_IN_HAND': 0, 'HAND_IN_CLOTHES': 0}
+  Stocker   {'HAND_IN_BODY': 0, 'WRIST_BEND': 0, 'HAND_IN_HAND': 0, 'HAND_IN_CLOTHES': 0}
+  ShopperC  {'HAND_IN_BODY': 1, 'WRIST_BEND': 34, 'HAND_IN_HAND': 0, 'HAND_IN_CLOTHES': 0}
+
+TOTAL 59

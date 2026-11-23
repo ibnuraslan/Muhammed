@@ -1,0 +1,157 @@
+{
+ "frames": {
+  "82": {
+   "Woman": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "83": {
+   "Woman": {
+    "self": 7,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "84": {
+   "Woman": {
+    "self": 39,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "85": {
+   "Woman": {
+    "self": 140,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "86": {
+   "Woman": {
+    "self": 196,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "87": {
+   "Woman": {
+    "self": 160,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "88": {
+   "Woman": {
+    "self": 80,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "89": {
+   "Woman": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "114": {
+   "Woman": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "115": {
+   "Woman": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "116": {
+   "Woman": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "117": {
+   "Woman": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "118": {
+   "Woman": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "119": {
+   "Woman": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "120": {
+   "Woman": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "121": {
+   "Woman": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "122": {
+   "Woman": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "123": {
+   "Woman": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "394": {
+   "ShopperC": {
+    "self": 28,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "395": {
+   "ShopperC": {
+    "self": 114,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 1,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   84,
+   88
+  ],
+  [
+   394,
+   395
+  ]
+ ],
+ "fps": 60
+}
