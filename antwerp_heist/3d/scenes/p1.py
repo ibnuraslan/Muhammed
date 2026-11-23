@@ -452,7 +452,7 @@ def S37():
 
 VO = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "vo", "ANTWERP_P1_VO.txt")).read().splitlines()
 PLAN = [  # (shot, VO line 1-based, duration s, description)
-    ("S01", 1, 5.5, "EXT dawn: the Diamond Center, slow push across the street"),
+    ("S01", 1, 5.5, "Aerial, blue hour: the drone pushes in over the diamond district to the Diamond Center"),
     ("S02", 1, 4.0, "A man walks down the corridor toward the vault (from behind, off the stairs)"),
     ("S03", 2, 4.5, "OTS: the grille and the steel door stand open, lights on"),
     ("S04", 2, 6.0, "The vault: forced boxes on every wall, slow lateral track"),
@@ -465,11 +465,11 @@ PLAN = [  # (shot, VO line 1-based, duration s, description)
     ("S11", 6, 5.5, "Leonardo at the window, profile in half shadow (name card)"),
     ("S12", 6, 4.0, "Turin: Leonardo at his jeweller's bench (OTS)"),
     ("S13", 6, 4.0, "Top-down: keys and an access card slide across the desk; the file stays shut"),
-    ("S14", 7, 3.5, "His office: Leonardo at the window (from behind)"),
+    ("S14", 7, 3.5, "His office: Leonardo at the window, low sun through the blinds (from behind, slow push)"),
     ("S15", 7, 3.5, "The badge reader turns green"),
-    ("S16", 7, 4.0, "The vault by day: Leonardo draws out his tray (from behind)"),
+    ("S16", 7, 4.0, "The vault by day: Leonardo draws out his tray (low dolly along the box wall, from behind)"),
     ("S17", 8, 4.5, "Leonardo in the aisle between the boxes, slow push"),
-    ("S18", 9, 6.0, "Maquette: the building cut open, two floors underground, the vault"),
+    ("S18", 9, 6.0, "Architect's cut-away model: two floors underground, the warm vault (descending move)"),
     ("S19", 9, 3.5, "Business hours: the steel door open, the grille shut"),
     ("S20", 9, 3.0, "At the grille, Leonardo looks up into the camera (from behind)"),
     ("S21", 9, 3.5, "Upstairs a guard sees him on the monitor and releases the grille"),
