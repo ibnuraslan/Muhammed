@@ -76,7 +76,7 @@ for f, g in GAZE:
 FACE = [(1, -6, 0, 0, 0), (8, -6, 0, 0, 0), (12, 7, 0, 2, 5), (30, 4, 0, 4, 3), (IMPACT, 2, 0, 4, 2),
         (IMPACT + 4, -12, 14, 26, 5), (110, -10, 12, 24, 3), (180, -10, 12, 22, 3), (331, -11, 13, 24, 3), (520, -9, 11, 20, 2.5),
         (760, -10, 12, 22, 3), (830, -6, 6, 12, 2.5), (990, -8, 8, 12, 2), (1146, -8, 8, 10, 2), (1170, -6, 6, 6, 2.5),
-        (1195, 0, 2, 0, 3), (1212, -6, 10, -22, 4), (1230, -8, 13, -44, 1), (1238, -8, 13, -46, 0.5), (1240, -20, 4, -50, 0.3), (1248, -20, 4, -54, 0.3), (1255, -6, 14, -62, 0.3), (1273, -6, 14, -62, 0.3)]   # relief: eyes close on the breath out, then a smile
+        (1195, 0, 2, 0, 3), (1212, -3, 4, -22, 2), (1230, -2, 5, -44, 1), (1236, -2, 5, -46, 0.5), (1241, -17, 3, -50, 0.2), (1249, -17, 3, -54, 0.2), (1255, -2, 6, -62, 0), (1273, -2, 6, -62, 0)]   # relief: eyes close on the breath out, then a smile
 for f, ul, ll, mc, jw in FACE:
     for s_, sg in (("L", 1), ("R", -1)):
         kq(W, "orbicularis03." + s_, f, (1, 0, 0), ul); kq(W, "orbicularis04." + s_, f, (1, 0, 0), ll); kq(W, "oris07." + s_, f, (0, 0, 1), mc * sg)
@@ -508,8 +508,12 @@ _c, _n = imp.matrix_world.translation.copy(), (imp.matrix_world.to_3x3() @ Vecto
 _xa = -_n; _ya = _xa.cross(Vector((0, 0, 1))).normalized(); _za = _xa.cross(_ya)
 _B0 = Matrix((_xa, _ya, _za)).transposed().to_4x4(); _B0.translation = _pp - _xa * 0.004; _B0 = _B0 @ Matrix.Diagonal((1.3 * S, 1.3 * S, 1.3 * S, 1))   # base in her fingers, nose still in the hole
 _OFFB = wristR(1164).inverted() @ _B0
+sc.frame_set(1200); _pp2 = (_Mw @ _pbn["finger1-3.R"].tail + _Mw @ _pbn["finger2-3.R"].tail) / 2
+_xu = Vector((0.35, -0.2, 1)).normalized(); _yu = _xu.cross(Vector((1, 0, 0))).normalized(); _zu = _xu.cross(_yu)
+_B1 = Matrix((_xu, _yu, _zu)).transposed().to_4x4(); _B1.translation = _pp2 + _xu * 0.002; _B1 = _B1 @ Matrix.Diagonal((1.3 * S, 1.3 * S, 1.3 * S, 1))   # nose up out of her pinch (the insert from the cut at 1193)
+_OFFB2 = wristR(1200).inverted() @ _B1
 for f in range(1164, FEND + 1):
-    hb.matrix_world = wristR(f) @ _OFFB; hb.keyframe_insert("location", frame=f); hb.keyframe_insert("rotation_euler", frame=f); hb.keyframe_insert("scale", frame=f)
+    hb.matrix_world = wristR(f) @ (_OFFB if f < 1193 else _OFFB2); hb.keyframe_insert("location", frame=f); hb.keyframe_insert("rotation_euler", frame=f); hb.keyframe_insert("scale", frame=f)
 hb.scale = (0, 0, 0); hb.keyframe_insert("scale", frame=1); hb.keyframe_insert("scale", frame=1163)
 bm2.rotation_mode = 'XYZ'; bm2.scale = (1, 1, 1)
 # tip depth (macro units) per VO frame: touches the shirt 130, dimple, pierces 183, fast through fat (2 s), slows through fascia and muscle, stops 945
