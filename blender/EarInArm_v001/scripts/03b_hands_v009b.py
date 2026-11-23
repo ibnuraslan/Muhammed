@@ -66,7 +66,7 @@ for f in (130, 290): lock(SUR, "L", f)
 for f in range(136, 280, 12):
     sc.frame_set(f); tip = FORC.matrix_world @ Vector((0, 0.13, 0))
     p, n = surf(TEE, tip + Vector((0.17, -0.01, 0.11)))
-    place_hand(SUR, "L", f, p, -n, Vector((0, 0, 1)) - n * n.z, skin=0.014); apply_pose(SUR, "L", "flat_palm", f)
+    place_hand(SUR, "L", f, p, -n, Vector((0, 0, 1)) - n * n.z, skin=0.002); apply_pose(SUR, "L", "flat_palm", f)   # v014: palm ON the tee (it hovered 1.4 cm off)
 apply_pose(SUR, "L", "relaxed", 290)
 
 # ---------------------------------------------------------------- 2. over the tray (9.0-9.5 s): L pinches the carved ear, R flat on the tray edge
@@ -105,7 +105,7 @@ for f in range(884, 960, 6):
     ax = (_pa.matrix_world.to_3x3() @ Vector((1, 0, 0))).normalized()
     shl = SUR.matrix_world @ SUR.pose.bones["upperarm01.L"].head; fd = c - shl; fd.z = 0; fd.normalize()
     p, n = surf(BODY[PAT], c + ax * (0.012 * math.sin(f * 0.25)) + Vector((0, 0, 0.03)))
-    place_hand(SUR, "L", f, p + fd * -0.07, -n, fd, skin=0.012)
+    place_hand(SUR, "L", f, p + fd * -0.07, -n, fd, skin=0.0)   # v014: fingertips on the skin (hovered)
 for f in (884, 958): apply_pose(SUR, "L", "point", f, spread=0)   # v009e: free hand at his side while he works at the head
 for f in [f_ for f_ in range(796, 1052, 32) if not 860 <= f_ <= 975]:   # v009j: not while he feels the bump
     sc.frame_set(f); shL = SUR.matrix_world @ SUR.pose.bones["upperarm01.L"].head; shR = SUR.matrix_world @ SUR.pose.bones["upperarm01.R"].head

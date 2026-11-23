@@ -88,6 +88,11 @@ sw = nb.modifiers.new("close", 'SHRINKWRAP'); sw.target = OB["Nurse.body"]; sw.w
 while nb.modifiers.find("close") > nb.modifiers.find("SUBSURF") > -1 and nb.modifiers.find("close") > 1: nb.modifiers.move(nb.modifiers.find("close"), nb.modifiers.find("close") - 1)
 for cap in (OB["Surgeon_Cap"], OB["Nurse_Cap"]):   # v012: a fitted cap, not a balloon: smaller and flatter, hair shows below, eyes clear
     cap.data.transform(Matrix.Diagonal((0.9, 0.78, 0.9, 1.0)))
+    # v014: soft cloth, not a dome - gathered folds (radial waves), a slight droop at the back, a stitched brim band
+    ctex = bpy.data.textures.new(cap.name + "_folds", 'WOOD'); ctex.wood_type = 'BANDNOISE'; ctex.noise_basis_2 = 'SIN'; ctex.turbulence = 2.0; ctex.noise_scale = 0.05
+    sd = cap.modifiers.new("subd", 'SUBSURF'); sd.levels = sd.render_levels = 2
+    dsp = cap.modifiers.new("folds", 'DISPLACE'); dsp.texture = ctex; dsp.strength = 0.0025; dsp.mid_level = 0.5; dsp.texture_coords = 'LOCAL'
+
 
 # ---------------------------------------------------------------- ear dressing -> soft skin-toned ear shape close to the head
 pad = OB["Bandage_Pad"]; en = OB["Ear_New"]
@@ -231,6 +236,8 @@ def fabric(m, scale=18.0, strength=0.35):
     nt.links.new(tc.outputs["Object"], nz.inputs["Vector"]); nt.links.new(tc.outputs["Object"], wv.inputs["Vector"])
     nt.links.new(nz.outputs["Fac"], mx.inputs[0]); nt.links.new(wv.outputs["Fac"], mx.inputs[1]); nt.links.new(mx.outputs[0], bp.inputs["Height"])
     nt.links.new(bp.outputs["Normal"], b.inputs["Normal"])
+for cap in (OB["Surgeon_Cap"], OB["Nurse_Cap"]):   # v014: cloth weave + folds on the caps
+    if cap.data.materials and cap.data.materials[0]: fabric(cap.data.materials[0], scale=30.0, strength=0.6)
 for mn in ("NurseTop", "NurseTrousers", "SurgeonTrousers"):
     fabric(bpy.data.materials.get(mn))
 for i, m in enumerate(OB["Surgeon.body"].data.materials):
@@ -241,6 +248,31 @@ if pg_ is None: fabric(pt, scale=14.0, strength=0.45)
 else:   # MPFB clothes material: put the bump on the group's output side via a wrapper BSDF input if present
     for k in ("Bump strength", "Normal strength"):
         if k in pg_.inputs: pg_.inputs[k].default_value = 0.6
+# v014: the patient's suit is split into two garments - a white cotton tee whose hem sits over the jeans' waistband,
+# and blue denim jeans (the one-piece texture ran the tee down into the crotch like a onesie)
+_ps = OB["Patient.male_casualsuit06"]
+denim = mat("PatientDenim", (0.07, 0.13, 0.26), rough=0.85); fabric(denim, scale=40.0, strength=0.5)
+tee = mat("PatientTee", (0.82, 0.82, 0.8), rough=0.9); fabric(tee, scale=10.0, strength=0.55)
+print("PATIENT_JEANS", legs_material(PAT, _ps, denim))
+_ti = len(_ps.data.materials); _ps.data.materials.append(tee)
+_di = next(i for i, m in enumerate(_ps.data.materials) if m and m.name == "PatientDenim")
+_bones = {b.name.lower() for b in PAT.data.bones}; _gi = {g.index: g.name.lower() for g in _ps.vertex_groups if g.name.lower() in _bones}
+_nt = 0
+for p_ in _ps.data.polygons:
+    if p_.material_index == _di: continue
+    zs = [_ps.data.vertices[v].co.z for v in p_.vertices]
+    p_.material_index = _ti; _nt += 1
+# v014: everything below the hips is denim (the tee mesh hung down into a V between the legs); a straight hem just below the waist
+for p_ in _ps.data.polygons:
+    if p_.center.z < 0.985: p_.material_index = _di
+    elif p_.material_index == _di and p_.center.z > 1.0: p_.material_index = _ti
+# hem: tee faces whose lowest vertex is within 4 cm above the jeans' top become tee (overhang), so the hem crosses the waistband
+_dz = [ _ps.data.vertices[v].co.z for p_ in _ps.data.polygons if p_.material_index == _di for v in p_.vertices]
+_top = sorted(_dz)[int(len(_dz) * 0.995)] if _dz else 0
+for p_ in _ps.data.polygons:
+    if p_.material_index == _di and min(_ps.data.vertices[v].co.z for v in p_.vertices) > _top - 0.035 and p_.center.z > 0.95:
+        p_.material_index = _ti
+print("PATIENT_TEE", _nt, "top", round(_top, 3))
 # the ear in the forearm turns from cartilage to living pink skin over the growth close-ups (progression)
 ea = OB.get("Ear_InArm")
 if ea:

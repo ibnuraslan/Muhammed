@@ -248,7 +248,7 @@ def yaw_to(v):
     return math.degrees(math.atan2(v.x, -v.y))
 def stand(P, f, pos, yaw, flex=0.0, crouch=0.0, spine=(0, 0, 0), head=(0, 0, 0), side=0.0):
     p = Vector(pos)
-    P.key_body(f, Vector((p.x, p.y, P.root_head.z - 0.02 - crouch)), yaw=yaw, pitch=flex * 0.4, spine=spine, head=head)
+    P.key_body(f, Vector((p.x, p.y, P.root_head.z - 0.004 - 0.4 * crouch)), yaw=yaw, pitch=flex * 0.4, spine=spine, head=head)
     H = Human(P.R)
     for s in "LR":
         H.key_foot(s, f, H.foot_xy(s, Vector((p.x, p.y, 0)), yaw), yaw)
@@ -258,7 +258,7 @@ def walk(P, a, b, f0, f1, yaw0, yaw1, stride=0.55):
     yawf = lambda f: yaw0 + (yaw1 - yaw0) * smooth((f - f0) / (f1 - f0))
     H.walk(path, yawf, f0, f1, stride=stride, lift=0.07, bob=0.015, crouch=0.03, lean=4.0, step=2)
 
-SA_ = Vector((0.45, -0.58)); yA = yaw_to(Vector((0.05, -0.1)) - SA_)
+SA_ = Vector((0.62, -0.2)); yA = yaw_to(Vector((0.05, -0.1)) - SA_)   # v014: beside the patient (profile to camera, his mask reads from the first frame; he faced away before)
 ST = Vector((1.05, -0.32)); yT = 0.0   # v009d: 8 cm further from the tray (his forearms folded into his belly)
 SB_ = Vector((INC.x + 0.44, INC.y + 0.2)); yB = yaw_to(INC.to_2d() - SB_)   # v013: on the outer side of the arm board, facing the incision (from behind the elbow both forearms crossed the patient's arm)
 SC_ = Vector((EAR_W.x + 0.46, EAR_W.y + 0.22));   # v009i: 16 cm further back so a front-outer camera sees the ear   # v009e: right beside the head on the ear side (his arm passed the headrest)
