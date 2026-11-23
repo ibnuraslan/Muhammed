@@ -21,7 +21,7 @@ def _box(name, c, s, m):
     return o
 
 
-def _mat(name, col, rough=0.6, metal=0.0, sheen=0.0):
+def _mat(name, col, rough=0.6, metal=0.0, sheen=0.0, emit=None):
     m = bpy.data.materials.new(name); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
     p.inputs['Base Color'].default_value = (*col, 1); p.inputs['Roughness'].default_value = rough
     p.inputs['Metallic'].default_value = metal; p.inputs['Sheen Weight'].default_value = sheen
@@ -43,7 +43,7 @@ def velvet(x0, x1, y0, y1, z, name="velvet"):
 
 def room(window_light=1.0, lamp=True, lamp_at=(0.35, 0.55), lamp_target=(0.0, 0.35), lamp_energy=60.0, shelves=True):
     out = {}
-    wall = ph.texture("painted_plaster_wall", scale=1.2, name="labwall", tint=(0.55, 0.58, 0.6))
+    wall = ph.texture("painted_plaster_wall", scale=1.2, name="labwall", tint=(0.3, 0.33, 0.34))
     floor = ph.texture("concrete_floor_worn_001", scale=1.0, name="labfloor", tint=(0.45, 0.45, 0.45))
     wood = ph.texture("wood_table_worn", scale=1.5, name="benchwood", tint=(0.7, 0.62, 0.55))
     steel = _mat("labsteel", (0.4, 0.4, 0.42), rough=0.35, metal=1.0)
@@ -94,6 +94,9 @@ def room(window_light=1.0, lamp=True, lamp_at=(0.35, 0.55), lamp_target=(0.0, 0.
     if lamp:
         try:
             root, ms = ph.model("desk_lamp_arm_01", loc=(lamp_at[0], 0.72, TOP), rot_z=math.radians(200))
+            dark = _mat("lampmetal", (0.02, 0.025, 0.022), rough=0.35, metal=0.6)
+            for o in ms:
+                o.data.materials.clear(); o.data.materials.append(dark)
             out["lamp_obj"] = root
         except Exception as ex:
             print("lamp model:", ex)
@@ -131,6 +134,14 @@ def room(window_light=1.0, lamp=True, lamp_at=(0.35, 0.55), lamp_target=(0.0, 0.
                     xx += w
             for x in (sx - 0.95, sx + 0.95):
                 _box("upright", (x, 1.2 - D + 0.35, 1.2), (0.03, 0.5, 2.4), steel)
+    # warm practicals deep in the room (out-of-focus pools of light between the shelves)
+    for k, (px, py) in enumerate(((-2.6, 1.2 - D + 1.4), (2.2, 1.2 - D + 1.1), (-0.4, 1.2 - D + 0.9))):
+        bpy.ops.mesh.primitive_uv_sphere_add(radius=0.05, location=(px, py, 2.3 - 0.4 * k)); b = bpy.context.active_object
+        b.name = "practical"; b.data.materials.append(_mat("bulb", (1, 0.8, 0.55), emit=None))
+        bm = b.data.materials[0].node_tree.nodes["Principled BSDF"]
+        bm.inputs['Emission Color'].default_value = (1.0, 0.72, 0.42, 1); bm.inputs['Emission Strength'].default_value = 40
+        d = bpy.data.lights.new("practical", 'POINT'); d.energy = 25; d.color = (1.0, 0.7, 0.45); d.shadow_soft_size = 0.05
+        lo = bpy.data.objects.new("practical", d); bpy.context.scene.collection.objects.link(lo); lo.location = b.location
     w = bpy.data.worlds.new("labworld"); bpy.context.scene.world = w; w.use_nodes = True
     w.node_tree.nodes["Background"].inputs['Color'].default_value = (0.02, 0.022, 0.025, 1)
     w.node_tree.nodes["Background"].inputs['Strength'].default_value = 0.3

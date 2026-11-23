@@ -80,17 +80,17 @@ def S05():
 
 
 # ============================================================================ the lab: skull, jaw, the third man
-def _cork_ring(x, y, z, r=0.07):
-    bpy.ops.mesh.primitive_torus_add(major_radius=r, minor_radius=0.018, location=(x, y, z + 0.018))
+def _cork_ring(x, y, z, r=0.05):
+    bpy.ops.mesh.primitive_torus_add(major_radius=r, minor_radius=0.012, location=(x, y, z + 0.012))
     o = bpy.context.active_object; o.name = "corkring"
     m = bpy.data.materials.new("cork"); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
-    p.inputs['Base Color'].default_value = (0.32, 0.2, 0.11, 1); p.inputs['Roughness'].default_value = 0.9
+    p.inputs['Base Color'].default_value = (0.12, 0.07, 0.035, 1); p.inputs['Roughness'].default_value = 0.95
     o.data.materials.append(m)
     return o
 
 
 def lab_skull(inverted=True, with_jaw=False, lamp_energy=22.0):
-    A = LB.room(window_light=0.8, lamp=True, lamp_at=(0.45, 0.6), lamp_target=(-0.05, 0.35), lamp_energy=lamp_energy)
+    A = LB.room(window_light=0.45, lamp=True, lamp_at=(0.45, 0.6), lamp_target=(-0.05, 0.35), lamp_energy=lamp_energy)
     LB.velvet(-0.6, 0.6, 0.0, 0.75, LB.TOP)
     cr = B.hero_cranium(healed=True, tone="A")
     if inverted:                     # resting upside down on a cork ring: the palate and the tooth row face up
@@ -120,8 +120,8 @@ def S06():
     """The cranium upside down on its ring: slow orbit to the smooth healed ridge where the back teeth were."""
     L = lab_skull(inverted=True)
     c = Vector((0.0, 0.35, LB.TOP + 0.13))
-    return dict(a=((-0.6, -0.12, LB.TOP + 0.5), tuple(c)), b=((-0.15, -0.38, LB.TOP + 0.48), tuple(c)), lens=55,
-                fstop=5.6, focus=tuple(c))
+    return dict(a=((-0.42, 0.05, LB.TOP + 0.55), tuple(c)), b=((-0.18, -0.12, LB.TOP + 0.6), tuple(c)), lens=60,
+                fstop=4.0, focus=tuple(c), cine=dict(exposure=-0.1))
 
 
 def S07():
