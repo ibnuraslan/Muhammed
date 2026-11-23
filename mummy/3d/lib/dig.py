@@ -410,7 +410,7 @@ SCANS = {
 }
 
 
-def burial_scan(key="B1", rot=None, skirt=0.0):
+def burial_scan(key="B1", rot=None, skirt=0.12):
     import bones as B
     uid, cen, sc, cut, skull = SCANS[key]
     px, py, a, b, dep, ang = U.PITS[key]
@@ -445,7 +445,7 @@ def burial_scan(key="B1", rot=None, skirt=0.0):
             if p and p[0].inputs['Base Color'].links:
                 src = p[0].inputs['Base Color'].links[0].from_socket
                 mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
-                Lk.new(src, mx.inputs[6]); mx.inputs[7].default_value = (1.12, 1.0, 0.82, 1); Lk.new(mx.outputs[2], p[0].inputs['Base Color'])
+                Lk.new(src, mx.inputs[6]); mx.inputs[7].default_value = (1.4, 1.18, 0.86, 1); Lk.new(mx.outputs[2], p[0].inputs['Base Color'])
             m["warmed"] = True
     if patch:                     # floor patch where the pots stood (scan floor level, same sand)
         x0, x1, y0, y1 = patch
