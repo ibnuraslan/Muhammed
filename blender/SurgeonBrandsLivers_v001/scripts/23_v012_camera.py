@@ -20,21 +20,26 @@ def obj(o, off=(0, 0, 0)):
 def fixed(p): return lambda f: V(*p)
 def mix(a, b, t): return lambda f: a(f).lerp(b(f), t)
 # (first, last, cam_start, cam_end, aim_fn, lens, fstop)
+def track(rig, b, off):
+    return lambda f: (OB[rig].matrix_world @ OB[rig].pose.bones[b].head) + V(*off)
+def letters(off=(0, 0, 0)):
+    return lambda f: OB["BrandSB"].matrix_world.translation + V(*off)
 SHOTS = [
-    (1, 135, (0.45, 0.85, 1.85), (0.38, 0.78, 1.80), fixed((-0.45, -0.22, 1.22)), 24, 5.6),         # S1 surgeon, the open patient, her head
-    (136, 275, (-0.22, 0.46, 1.44), (-0.26, 0.42, 1.42), fixed((CX, CY - 0.06, SKZ)), 40, 8.0),     # S2 his gripping hand + the beam, from her left side
-    (276, 429, (0.32, 0.62, 1.78), (0.28, 0.56, 1.74), fixed((CX - 0.02, CY - 0.22, SKZ + 0.18)), 26, 5.6),  # S3 closing + stitching, his face in frame
-    (430, 570, (0.12, 0.78, 1.52), (0.06, 0.68, 1.55), bone("Surgeon1", "spine01", (0, 0, 0.12)), 30, 5.6),  # S4 arm lifts, mask down, acting
-    (571, 640, (1.50, -1.80, 1.60), (1.55, -1.85, 1.58), mix(fixed((3.46, -0.9, 1.52)), bone("Surgeon1", "neck01"), 0.55), 26, 5.6),  # S5 week later
+    (1, 135, (0.10, 0.62, 1.55), (0.06, 0.56, 1.53), fixed((-0.38, -0.20, 1.20)), 28, 5.6),        # S1 closer, below the lamps: surgeon, pen, her head + body
+    (136, 200, (0.40, -0.20, 1.72), (0.37, -0.20, 1.70), fixed((CX - 0.03, CY - 0.16, SKZ + 0.14)), 30, 5.6),  # S2a foot end: his face, hand, the liver
+    (201, 275, (CX + 0.30, CY + 0.01, SKZ + 0.26), (CX + 0.27, CY + 0.01, SKZ + 0.24), letters((0, 0, 0)), 55, 8.0),  # S2b the beam burns S B (legible)
+    (276, 429, (0.32, 0.62, 1.78), (0.28, 0.56, 1.74), fixed((CX - 0.02, CY - 0.22, SKZ + 0.18)), 26, 5.6),  # S3 closing + stitching
+    (430, 570, (0.12, 0.78, 1.52), (0.06, 0.68, 1.55), bone("Surgeon1", "spine01", (0, 0, 0.12)), 30, 5.6),  # S4 arm lift, mask down, acting
+    (571, 640, (1.45, -1.85, 1.72), (1.45, -1.92, 1.72), mix(fixed((3.46, -0.9, 1.55)), bone("Surgeon1", "head"), 0.6), 30, 5.6),  # S5 chest-up
     (641, 775, (5.05, -1.60, 1.45), (5.15, -1.40, 1.32), bone("Patient", "spine01", (0, 0, 0.08)), 30, 5.6),  # S6 home
-    (776, 915, (0.15, 6.40, 1.62), (0.25, 4.40, 1.58), mix(bone("Patient", "head"), bone("Nurse", "head"), 0.45), 24, 5.6),  # S7 bed + doctor
-    (916, 1060, (0.45, -0.40, 1.42), (0.30, -0.30, 1.40), bone("Surgeon2", "head", (0, 0, -0.10)), 30, 5.6),  # S8 new doctor, face under the cap
-    (1061, 1175, (0.02, -0.82, 1.62), (0.0, -0.76, 1.60), fixed((CX, CY + 0.18, SKZ + 0.16)), 30, 5.6),  # S9 her hands lift the liver, her body
-    (1176, 1240, (-0.22, -0.72, 1.62), (-0.24, -0.62, 1.62), bone("Surgeon2", "head", (0, 0, -0.03)), 48, 5.6),  # S10 her eyes
-    (1241, 1310, (-8.20, -1.60, 1.62), (-8.25, -1.50, 1.60), fixed((-10.30, 0.10, 1.45)), 30, 5.6),  # S11a the panel's faces
-    (1311, 1445, (-8.00, -0.55, 1.58), (-7.90, -0.45, 1.58), bone("Surgeon1", "spine01", (0, 0, 0.05)), 32, 5.6),  # S11b defendant
+    (776, 915, (0.15, 6.40, 1.62), (0.22, 5.10, 1.60), mix(bone("Patient", "head"), bone("Nurse", "head"), 0.45), 24, 5.6),  # S7 bed + doctor
+    (916, 1060, track("Surgeon2", "head", (1.15, -0.85, 0.02)), None, bone("Surgeon2", "spine01", (0, 0, 0.16)), 30, 5.6),  # S8 tracks her, side-front
+    (1061, 1175, (0.32, 0.12, 1.66), (0.28, 0.10, 1.63), obj("LiverRig", (0, 0, 0.03)), 35, 8.0),  # S9 foot end: her hands lift the branded liver
+    (1176, 1240, (-0.22, -0.72, 1.60), (-0.24, -0.66, 1.60), bone("Surgeon2", "head", (0, 0, 0.0)), 70, 5.6),  # S10 her face
+    (1241, 1310, (-7.50, -0.35, 1.72), (-7.62, -0.30, 1.70), fixed((-10.35, 0.0, 1.45)), 20, 5.6),  # S11a all three panel faces
+    (1311, 1445, (-8.00, -0.55, 1.50), (-7.92, -0.47, 1.50), bone("Surgeon1", "neck01", (0, 0, -0.14)), 32, 5.6),  # S11b defendant, level
     (1446, 1575, (-9.20, -0.95, 1.55), (-9.24, -0.90, 1.53), fixed((-10.15, -0.05, 1.36)), 30, 5.6),  # S12 gavel
-    (1576, 1644, (-9.25, -1.55, 1.62), (-9.45, -1.42, 1.55), fixed((-10.15, -1.15, 1.30)), 32, 5.6),  # S13 stamp, push in to the red X
+    (1576, 1644, (-9.25, -1.55, 1.62), (-9.45, -1.42, 1.55), fixed((-10.15, -1.15, 1.30)), 32, 5.6),  # S13 stamp
 ]
 for o in (cam, aim):
     if o.animation_data: o.animation_data_clear()
@@ -45,7 +50,7 @@ for a, b, c0, c1, aimf, lens, fs in SHOTS:
     for f in list(range(a, b + 1, 3)) + [b]:
         sc.frame_set(f)
         u = (f - a) / max(1, b - a)
-        cam.location = V(*c0).lerp(V(*c1), ease(u)); cam.keyframe_insert("location", frame=f)
+        cam.location = c0(f) if callable(c0) else V(*c0).lerp(V(*c1), ease(u)); cam.keyframe_insert("location", frame=f)
         aim.location = aimf(f); aim.keyframe_insert("location", frame=f)
         cam.data.lens = lens; cam.data.keyframe_insert("lens", frame=f)
         cam.data.dof.aperture_fstop = fs; cam.data.dof.keyframe_insert("aperture_fstop", frame=f)

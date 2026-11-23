@@ -105,7 +105,7 @@ def walk(name, path, f0, f1, stride=0.68, lean=5.0, out_k=0.09, amp=0.15):
     return yaw
 
 # =================================================================== S3: stitching the closed incision (276-429)
-INC_SPAN = [(318, 600)]
+INC_SPAN = [(352, 600)]
 s1 = OB["Surgeon1"]
 def body_top(x, y):
     return SKZ + 0.0   # flat enough across 20 cm of the upper abdomen at this scale; refined below by ray cast
@@ -134,25 +134,25 @@ for i in range(N):
 inc = OB.new("IncisionNew", cu); bpy.data.collections["OR_Set"].objects.link(inc); cu.materials.append(M_INC)
 VL.key_hide(inc, INC_SPAN)
 NST = 7; STY = [Y0 + 0.012 + (Y1 - Y0 - 0.024) * k / (NST - 1) for k in range(NST)]
-ST_F = [318, 322] + [338 + 19 * k for k in range(NST - 2)]       # v013: the wound closes 276-318, then the stitches go in
+ST_F = [354, 358] + [370 + 11 * k for k in range(NST - 2)]       # v014: the wound closes 280-360, then the stitches go in
 for k, y in enumerate(STY):
     cu = bpy.data.curves.new("Stitch", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0009
     sp = cu.splines.new('POLY'); pts = [V(CX - 0.009, y, 0), V(CX - 0.004, y + 0.001, 0.0025), V(CX + 0.004, y + 0.001, 0.0025), V(CX + 0.009, y, 0)]
     sp.points.add(len(pts) - 1)
     for p_, c_ in zip(sp.points, pts): p_.co = (c_.x, c_.y, skin(c_.x, c_.y) + c_.z, 1)
     ob = OB.new("Stitch", cu); bpy.data.collections["OR_Set"].objects.link(ob); cu.materials.append(M_SUT)
-    VL.key_hide(ob, [(max(318, ST_F[k]), 600)])
+    VL.key_hide(ob, [(max(352, ST_F[k]), 600)])
 # needle-driver tip path: for each new stitch, in at one lip, under, out of the other, pull the thread up
 nd = OB["NeedleDriver"]
 def nd_tip(f):
     for k in range(2, NST):
-        a, b = ST_F[k] - 22, ST_F[k]
+        a, b = ST_F[k] - 11, ST_F[k]
         if a <= f <= b:
-            u = (f - a) / (b - a); y = STY[k]
+            u = (f - a) / max(1, b - a); y = STY[k]
             P = [V(CX - 0.02, y - 0.004, 0.025), V(CX - 0.009, y, 0.002), V(CX + 0.009, y, 0.002), V(CX + 0.02, y + 0.004, 0.03), V(CX + 0.01, STY[min(k + 1, NST - 1)] - 0.004, 0.045)]
             t = u * (len(P) - 1); i = min(int(t), len(P) - 2); w = smooth(t - i)
             p = P[i].lerp(P[i + 1], w); return V(p.x, p.y, skin(p.x, p.y) + p.z)
-    if f < ST_F[2] - 22:
+    if f < ST_F[2] - 11:
         p = V(CX - 0.02, STY[2] - 0.004, 0.035); return V(p.x, p.y, skin(p.x, p.y) + p.z)
     p = V(CX + 0.01, STY[-1] + 0.01, 0.05 + 0.002 * (f - ST_F[-1])); return V(p.x, p.y, skin(p.x, p.y) + p.z)
 for f in range(276, 430):
@@ -199,7 +199,7 @@ for f in range(430, 571, 2):
     fw = (W(s1, "spine02") - W(s1, "spine04")).cross(sh["L"] - sh["R"]).normalized()
     if fw.dot(V(0, 1, 0)) < 0: fw = -fw
     fw.z = 0; fw.normalize()
-    side = {s: hip[s] + fw * 0.10 + (sh[s] - sh["L" if s == "R" else "R"]).normalized() * 0.07 + V(0, 0, 0.02) for s in "LR"}
+    side = {s: hip[s] + fw * 0.14 + (sh[s] - sh["L" if s == "R" else "R"]).normalized() * 0.11 + V(0, 0, 0.04) for s in "LR"}
     waist = (hip["L"] + hip["R"]) / 2 + fw * 0.33 + V(0, 0, 0.12)
     edge = mk.matrix_world @ edge_l
     def drape_pt(sv):
@@ -208,22 +208,23 @@ for f in range(430, 571, 2):
         z_ = (OB["DrapeFit"].matrix_world @ h_[1]).z if h_[0] else 1.08
         return V(q.x, q.y, z_ + 0.004)
     drapeR, drapeL = drape_pt("R"), drape_pt("L")
+    belly = (hip["L"] + hip["R"]) / 2 + fw * 0.42 + V(0, 0, 0.12) + (sh["R"] - sh["L"]).normalized() * 0.05
     # right hand
     if f <= 446: P = side["R"].lerp(edge + fw * 0.04 - V(0, 0, 0.12), smooth((f - 430) / 16.0))
-    elif f <= 462: P = (edge + fw * 0.04 - V(0, 0, 0.12)).lerp(edge + fw * 0.02, smooth((f - 446) / 16.0))
-    elif f <= 505: P = edge + fw * 0.02
-    elif f <= 525: P = (edge + fw * 0.10).lerp(drapeR, smooth((f - 505) / 20.0))
-    else: P = drapeR + V(0, 0, 0.004 * math.sin(f / 7.0))
+    elif f <= 462: P = (edge + fw * 0.04 - V(0, 0, 0.12)).lerp(edge + fw * 0.07 - V(0, 0, 0.012), smooth((f - 446) / 16.0))
+    elif f <= 505: P = edge + fw * 0.07 - V(0, 0, 0.012)
+    elif f <= 525: P = (edge + fw * 0.10).lerp(belly + V(0, 0, 0), smooth((f - 505) / 20.0))
+    else: P = belly + V(0.01 * math.sin(f / 9.0), 0, 0.012 * math.sin(f / 6.0))
     d = (V(0, 0, 1) + fw * 0.3).normalized() if 446 < f <= 505 else (fw + V(0, 0, -0.3)).normalized()
     n = (-fw).normalized() if 446 < f <= 505 else V(0, 0, -1)
     HP["place_hand"](s1, "R", f, P, n, d, skin=0.02)
     up_ = smooth((f - 436) / 14.0) * (1 - smooth((f - 505) / 16.0))
-    put_pole(s1, "R", f, sh["R"] + V(0, 0, -0.35 + 0.25 * up_) + fw * (-0.2 + 0.7 * up_) + (sh["R"] - sh["L"]).normalized() * 0.4)
+    put_pole(s1, "R", f, sh["R"] + V(0, 0, -0.35 + 0.25 * up_) + fw * (0.05 + 0.45 * up_) + (sh["R"] - sh["L"]).normalized() * 0.5)
     # left hand: at his side, then meets the right glove cuff (peeling it) from 524
     kL = smooth((f - 512) / 16.0)
-    PL = side["L"].lerp(drapeL, kL)
-    HP["place_hand"](s1, "L", f, PL, (-(sh["L"] - sh["R"]).normalized()).lerp(V(0, 0, -1), kL).normalized(), (fw + V(0, 0, -0.5 * (1 - kL))).normalized(), skin=0.012)
-    put_pole(s1, "L", f, sh["L"] + V(0, 0, -0.35) - fw * 0.2 + (sh["L"] - sh["R"]).normalized() * 0.35)
+    PL = side["L"].lerp(belly + (sh["L"] - sh["R"]).normalized() * 0.09 + V(0, 0, -0.01), kL)   # left hand meets the right glove cuff
+    HP["place_hand"](s1, "L", f, PL, (-(sh["L"] - sh["R"]).normalized()), (fw + V(0, 0, -0.5 * (1 - kL))).normalized(), skin=0.02)
+    put_pole(s1, "L", f, sh["L"] + V(0, 0, -0.40) + fw * 0.05 + (sh["L"] - sh["R"]).normalized() * 0.5)
     HP["apply_pose"](s1, "R", "pinch" if 450 <= f <= 505 else "relaxed", f); HP["apply_pose"](s1, "L", "relaxed", f)
 # head acting after the mask is down: a glance at the patient, a look up, a slight nod
 R1 = AL["Rig"](s1)
@@ -239,24 +240,18 @@ face(s1, 571, smile=0.4, wide=0.3); face(s1, 640, smile=0.5, wide=0.3); blink(s1
 for o in rig_objs("Surgeon1"):
     if o.type in ('MESH', 'CURVE', 'ARMATURE'): restrict_vis(o, [(0, 640), (1176, 1700)])
 for o in (OB["Surgeon1_Cap"], OB["Surgeon1_Mask"]) + tuple(OB["Surgeon1_Mask"].children): restrict_vis(o, [(0, 640)])
-# the calendar flips during this shot only (pages 571-640); v013: each sheet hides only after its flip ends (no pop)
-for k in range(8):
-    pg = OB.get("CalPage_%d" % k); pp = OB.get("CalPaper_%d" % k)
-    if not pg or not pp: continue
-    rf = [f for f in VL.fcurves(pg) if f.data_path == "rotation_euler" and len(f.keyframe_points)]
-    if not rf: continue
-    endf = int(max(kp.co.x for f in rf for kp in f.keyframe_points))
-    for fc in VL.fcurves(pp):
-        if fc.data_path == "hide_render":
-            for kp in fc.keyframe_points:
-                if kp.co.y > 0.5 and kp.co.x > 10: kp.co.x = endf + 1
-            fc.update()
+# v014: the calendar does not flip (sheets flapped/popped); it shows the later week
+for k in range(7):
+    for nm_ in ("CalPage_%d" % k, "CalPaper_%d" % k):
+        if OB.get(nm_): VL.key_hide(OB[nm_], [])
+        for c_ in (OB[nm_].children_recursive if OB.get(nm_) else []): VL.key_hide(c_, [])
+
 
 # =================================================================== S6: the woman walks in, the pain hits (641-775)
 pt = OB["Patient"]; HW = human("Patient")
 P0, P1 = V(6.45, 1.05, 0), V(5.85, -0.30, 0)
 wpath = lambda f: P0.lerp(P1, smooth((f - 641) / 62.0) * 0.6 + 0.4 * (f - 641) / 62.0)
-yaw_w = walk("Patient", wpath, 641, 703, stride=0.62, lean=4, out_k=0.055, amp=0.13)
+yaw_w = walk("Patient", wpath, 641, 703, stride=0.62, lean=4, out_k=0.0, amp=0.13)
 clear_bones(pt, body_bones(), 704, 775)
 y0 = yaw_w(703); yr = R_(y0); fwd = V(math.sin(yr), -math.cos(yr), 0); rt = V(-math.cos(yr), -math.sin(yr), 0)
 for s in "LR":
@@ -267,7 +262,7 @@ for f, dz, fl, hd in ((704, 0.0, 6, 0), (716, -0.02, 14, -4), (730, -0.05, 28, -
     HW.key_root(f, V(P1.x, P1.y, rz + dz) - fwd * 0.02 * (fl / 40), yaw=y0, flex=fl * 0.35)
     HW.key_spine(f, flex=fl, twist=-4 * (fl / 40), side=4 * (fl / 40), head=(hd, 6 * fl / 40))
 # hands: right hand presses her right side over the liver (on the shirt), left hand on her left thigh
-for f in range(704, 776, 3):
+for f in list(range(704, 776, 3)) + [775]:
     ev(f)
     sp2 = W(pt, "spine02"); r_side = sp2 + rt * 0.075 + fwd * 0.10 + V(0, 0, -0.02)
     hit = None
@@ -275,7 +270,11 @@ for f in range(704, 776, 3):
     k = smooth((f - 704) / 22.0)
     if f <= 726:
         sh = W(pt, "upperarm01.R"); r_side = (sh + V(0, 0, -0.5) + fwd * 0.05 + rt * 0.05).lerp(r_side, k)
-    HP["place_hand"](pt, "R", f, r_side, (-(fwd * 0.85 + rt * 0.5)).normalized(), (-rt * 0.8 + V(0, 0, -0.6)).normalized(), skin=0.02)
+    nrm_in = (-(fwd * 0.85 + rt * 0.5)).normalized()
+    dgw = bpy.context.evaluated_depsgraph_get(); ew = so.evaluated_get(dgw); Mi_ = so.matrix_world.inverted()
+    okh, loch, nh, ih = ew.ray_cast(Mi_ @ (r_side - nrm_in * 0.25), Mi_.to_3x3() @ nrm_in, distance=0.5)
+    if okh and f > 712 and ((so.matrix_world @ loch) - r_side).length < 0.08: r_side = r_side.lerp(so.matrix_world @ loch, min(1.0, k * 1.2))
+    HP["place_hand"](pt, "R", f, r_side, nrm_in, (-rt * 0.8 + V(0, 0, -0.6)).normalized(), skin=0.016)
     HP["apply_pose"](pt, "R", "cup_hold", f)
     thL = W(pt, "upperleg02.L").lerp(W(pt, "lowerleg01.L"), 0.55) + fwd * 0.07
     shL = W(pt, "upperarm01.L"); l_pt = (shL + V(0, 0, -0.5) + fwd * 0.05 - rt * 0.05).lerp(thL, smooth((f - 712) / 30.0))
@@ -306,7 +305,7 @@ def add_glow(mat):
     ml = N.new("ShaderNodeMath"); ml.operation = 'MULTIPLY'; L.new(mr.outputs[0], ml.inputs[0]); ml.name = "GlowAmt"
     L.new(ml.outputs[0], em.inputs[1])
     ad = N.new("ShaderNodeAddShader"); L.new(src, ad.inputs[0]); L.new(em.outputs[0], ad.inputs[1]); L.new(ad.outputs[0], out.inputs['Surface'])
-    for f, v in ((0, 0.0), (700, 0.0), (712, 2.5), (726, 1.2), (742, 3.0), (758, 1.6), (775, 3.0)):
+    for f, v in ((0, 0.0), (676, 0.0), (700, 0.6), (716, 1.6), (732, 2.2), (748, 1.7), (762, 2.6), (775, 2.4)):
         ml.inputs[1].default_value = v; ml.inputs[1].keyframe_insert("default_value", frame=f)
 for m in set(OB["Patient.female_casualsuit01"].data.materials):
     if m.name.startswith("WomanTop"): add_glow(m)
@@ -317,12 +316,35 @@ ev(782); bed_pose = {pb.name: (pb.location.copy(), pb.rotation_quaternion.copy()
 for pb in pt.pose.bones:
     l_, q_ = bed_pose[pb.name]; pb.location = l_; pb.rotation_quaternion = q_
     pb.keyframe_insert("location", frame=776, group=pb.name); pb.keyframe_insert("rotation_quaternion", frame=776, group=pb.name)
-for o in rig_objs("Patient"):
-    for fc in VL.fcurves(o):
-        if fc.data_path == "hide_render" or ("show_render" in fc.data_path):
-            for kp in fc.keyframe_points:
-                if kp.co.x == 782: kp.co.x = 776
-            fc.update()
+clear_bones(pt, [pb.name for pb in pt.pose.bones], 777, 781)            # no in-between keys: on the bed from 776
+VL.clear_keys(pt, ("delta_location",), 770, 790)
+home = OB["Patient.female_casualsuit01"]; VL.key_hide(home, [(610, 1052)])        # her own top and jeans in bed too
+c06 = OB.get("Patient.male_casualsuit06")
+if c06: VL.key_hide(c06, [])
+pbm = OB["Patient.body"]
+for mn in ("Delete.male_casualsuit06",):
+    mm_ = pbm.modifiers.get(mn)
+    if mm_: VL.clear_keys(pbm, ('modifiers["%s"]' % mn,)); mm_.show_render = mm_.show_viewport = False
+for mm_ in pbm.modifiers:
+    if mm_.name.startswith("Delete.female_casualsuit01"):
+        VL.clear_keys(pbm, ('modifiers["%s"]' % mm_.name,))
+        for f_, on_ in ((0, False), (610, True), (1053, False)):
+            mm_.show_render = on_; pbm.keyframe_insert('modifiers["%s"].show_render' % mm_.name, frame=f_)
+VL.constant(pbm)
+for o in (OB["Patient.ponytail01"], OB.get("Patient.shoes01")):
+    if o: VL.key_hide(o, [(0, 1700)]) if o.name.endswith("ponytail01") else VL.key_hide(o, [(610, 1052)])
+# 12: the nurse walks clear of the bed end and her hands grip the head-board rail
+nu = OB["Nurse"]; br = OB["BedRig"]
+for f_, dy in ((0, 0.0), (776, 0.16), (916, 0.0)):
+    nu.delta_location = (0, dy, 0); nu.keyframe_insert("delta_location", frame=f_)
+VL.constant(nu, ("delta_location",))
+clear_bones(nu, ["IK_hand.L", "IK_hand.R"], 776, 915)
+for f in range(776, 916, 3):
+    ev(f)
+    for s_, sx in (("L", -0.22), ("R", 0.22)):
+        rail = br.matrix_world @ V(sx, 0.985, 0.85)
+        HP["place_hand"](nu, s_, f, rail + V(0, 0.01, 0.012), V(0, -0.5, -0.85).normalized(), V(0, -1, -0.4).normalized(), skin=0.01)
+        HP["apply_pose"](nu, s_, "wrap_grip", f)
 
 # =================================================================== S8: new doctor's walk gets swinging arms; anaesthetist calm
 s2 = OB["Surgeon2"]
@@ -373,6 +395,9 @@ for f, kw in ((1150, dict(wide=0.3)), (1176, dict(wide=0.32, brow=0.2)), (1190, 
               (1240, dict(wide=0.25, brow=0.45, jaw=1))):
     face(s2, f, **kw)
 blink(s2, 1200, dict(wide=0.28, brow=0.65, jaw=1)); blink(s2, 1228, dict(wide=0.25, brow=0.5, jaw=1))
+R2 = AL["Rig"](s2); clear_bones(s2, ["head", "neck02"], 1176, 1240)
+for f_, p_, y_ in ((1176, 10, 0), (1190, -4, 3), (1206, -6, -5), (1222, -2, 4), (1240, 2, 0)):
+    R2.key_rot("head", f_, [("X", p_ * 0.6), ("Z", y_)]); R2.key_rot("neck02", f_, [("X", p_ * 0.4)])
 eyes(s2, 1176, 0, -6); eyes(s2, 1192, 0, -10); eyes(s2, 1200, 5, -4); eyes(s2, 1210, -4, -2); eyes(s2, 1226, 2, -8); eyes(s2, 1240, 0, -8)
 
 # =================================================================== S11: hearing - hands rest on the lectern
@@ -386,9 +411,9 @@ for f in (1236, 1300, 1340, 1380, 1420, 1450):        # both hands rest on the l
     ev(f)
     for s, sy in (("L", 0.20), ("R", -0.20)):
         sh_ = 0.01 * math.sin(f / 25.0) * (1 if s == "L" else -1)
-        p = V(lxmax - 0.07 + sh_, sy, lz + 0.004)
+        p = V(lxmax - 0.04 + sh_, sy * 0.85, lz + 0.004)
         hit = lt.ray_cast(lt.matrix_world.inverted() @ (p + V(0, 0, 0.5)), lt.matrix_world.inverted().to_3x3() @ V(0, 0, -1))
-        if hit[0]: p.z = (lt.matrix_world @ hit[1]).z + 0.006
+        if hit[0]: p.z = (lt.matrix_world @ hit[1]).z + 0.014
         HP["place_hand"](s1, s, f, p, V(0, 0, -1), V(-1, -0.25 if s == "L" else 0.25, 0).normalized(), skin=0.012)
         HP["apply_pose"](s1, s, "relaxed", f)
         sh = W(s1, "upperarm01." + s); pole = sh + V(0.35, 0.25 * (1 if s == "L" else -1), -0.35)
@@ -408,6 +433,7 @@ dt.data.update()
 ja = OB["PanelA"]; gv = OB["Gavel"]; blk = OB["Gavel_src_4"]
 VL.key_hide(OB["HEAR_Glass.001"], [])          # no glass in front of the judge's block (it never moves either)
 ev(1); G0 = Matrix.Translation(V(0.10, 0, 0)) @ gv.matrix_world.copy()   # on the desk (moved forward with the trimmed desk edge)
+_gp = G0.translation.copy(); G0 = Matrix.Translation(_gp + V(0.04, -0.06, 0)) @ Matrix.Rotation(R_(65), 4, 'Z') @ Matrix.Translation(-_gp) @ G0   # v014: handle across his grip
 VL.clear_keys(gv, ("location", "rotation_quaternion", "rotation_euler"))
 gv.rotation_mode = 'QUATERNION'; gv.matrix_world = G0; ev(1446)
 head_pts = [o.matrix_world @ Vector(c) for o in (OB["Gavel_src_0"], OB["Gavel_src_1"], OB["Gavel_src_2"]) for c in o.bound_box]
@@ -508,7 +534,7 @@ for a in (45, -45):
     bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.0); me = bpy.data.meshes.new("RedX"); bm.to_mesh(me); bm.free()
     ob = OB.new("RedX", me); bpy.data.collections["Hearing_Set"].objects.link(ob); me.materials.append(M_INK)
     ob.scale = (0.11, 0.022, 0.0008); ob.rotation_euler = (0, 0, R_(a)); ob.location = V(pz.x, pz.y, ctop + 0.0007)
-    VL.key_hide(ob, [(1617, 1700)])
+    VL.key_hide(ob, [(1619, 1700)])
 for f, kw in ((1576, dict(wide=0.3)), (1600, dict(wide=0.3, brow=-0.2)), (1616, dict(wide=0.25, brow=-0.3, jaw=2)), (1644, dict(wide=0.3, smile=0.1))):
     face(cl, f, **kw)
 blink(cl, 1585, dict(wide=0.3)); blink(cl, 1636, dict(wide=0.3, smile=0.1))
@@ -531,7 +557,7 @@ for f in range(986, 1040, 3):
     for sv in "LR":
         q = s2sh[sv] + fw2 * 0.28; q.z = 2.0
         h_ = OB["DrapeFit"].ray_cast(OB["DrapeFit"].matrix_world.inverted() @ q, OB["DrapeFit"].matrix_world.inverted().to_3x3() @ V(0, 0, -1))
-        tgt = V(q.x, q.y, ((OB["DrapeFit"].matrix_world @ h_[1]).z if h_[0] else 1.05) + 0.004)
+        tgt = V(q.x, q.y, ((OB["DrapeFit"].matrix_world @ h_[1]).z if h_[0] else 1.05) + 0.012)
         k = smooth((f - 986) / 24.0); hang = s2sh[sv] + V(0, 0, -0.5) + fw2 * 0.08
         HP["place_hand"](s2, sv, f, hang.lerp(tgt, k), V(0, 0, -1), (fw2 + V(0, 0, -0.6 * (1 - k))).normalized(), skin=0.012)
         HP["apply_pose"](s2, sv, "relaxed", f)

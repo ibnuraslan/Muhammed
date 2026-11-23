@@ -194,7 +194,8 @@ def scrub_piece(rig_name, kind, mat, off, hide_src):
         if kind == "Top" and v.co.z < waist + 0.02: k = off * 1.6        # hem hangs out over the trousers
         if kind == "Top" and v[dl] is not None:                          # no ballooned shoulders
             dn = dominant_bm(v)
-            if dn and dn.startswith(("clavicle", "shoulder", "upperarm")): k = off * 0.55
+            if dn and dn.startswith(("clavicle", "shoulder", "upperarm")): k = off * 0.6
+            if rig_name == "Surgeon2" and dn and dn.startswith(("breast", "pectoral")): k = off * 1.6   # fabric spans her chest (no body-hugging read)
         v.co = v.co + v.normal * k
     bm.to_mesh(ob.data); bm.free()
     ob.data.materials.clear(); ob.data.materials.append(mat)
@@ -213,8 +214,8 @@ SCRUBS = {"Surgeon1": ("male_casualsuit01", (0.10, 0.42, 0.40)), "Surgeon2": ("f
           "Nurse": ("male_casualsuit01", (0.12, 0.30, 0.50)), "Anaesth": ("male_casualsuit01", (0.18, 0.38, 0.20))}
 for nm, (suit, rgb) in SCRUBS.items():
     old = bpy.data.objects[nm + "." + suit]
-    scrub_piece(nm, "Top", fabric(nm + "ScrubTop", rgb, 70, 0.85, 0.35, 0.35), 0.016, old)
-    scrub_piece(nm, "Trousers", fabric(nm + "ScrubTrousers", tuple(c * 0.72 for c in rgb), 70, 0.85, 0.35, 0.35), 0.013, old)
+    scrub_piece(nm, "Top", fabric(nm + "ScrubTop", rgb, 70, 0.85, 0.35, 0.35), 0.012, old)
+    scrub_piece(nm, "Trousers", fabric(nm + "ScrubTrousers", tuple(c * 0.72 for c in rgb), 70, 0.85, 0.35, 0.35), 0.016, old)
     old.hide_render = True; VL.clear_keys(old, ("hide_render",)); old.hide_render = True
     b = bpy.data.objects[nm + ".body"]; mk_ = b.modifiers.get("Delete." + suit)
     if mk_:
@@ -307,7 +308,7 @@ for nm, rgb in CAPC.items():
         if v.index == 0: ph, t = 0.0, 0.0
         else: ph, t = 2 * math.pi * ((v.index - 1) % NP) / NP, ((v.index - 1) // NP + 1) / NT
         k = 0.015 + 0.006 * max(0.0, v.co.z / max(rz, 1e-3))                    # fuller on top (bouffant)
-        k += 0.008 * max(0.0, math.sin(ph * 9 + 3.0 * t)) * math.sin(math.pi * min(1.0, t * 1.1))   # soft folds from the crown
+        k += 0.013 * max(0.0, math.sin(ph * 7 + 3.0 * t)) * math.sin(math.pi * min(1.0, t * 1.1)) + 0.005 * math.sin(ph * 17) * t   # soft folds from the crown
         k += 0.003 * math.sin(ph * 31) * t ** 6                                  # gathered elastic band
         dv = v.co - loc
         v.co = loc + (dv.normalized() if dv.length > 1e-5 else nrm) * k

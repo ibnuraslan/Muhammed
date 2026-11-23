@@ -34,7 +34,7 @@ def key_hide(ob, spans, total=(0, 1700)):
         if fc.data_path == "hide_render":
             for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
 
-OR_OPEN1 = (0, 318)            # branding (S1, S2) and the closing beat (276-318)
+OR_OPEN1 = (0, 362)            # branding (S1, S2) and the closing beat (276-360)
 OR_OPEN2 = (1000, 1262)        # second surgery (reveal + eyes)
 OR_TABLE = [(0, 600), (1000, 1262)]   # patient on the table
 
@@ -87,10 +87,10 @@ for i, x in enumerate(xs):
         z = PAD + 0.006
         if abs(y) <= 0.27 and x <= 1.05:
             bt = body_top(x, y)
-            if bt is not None: z = max(z, bt + 0.024)
+            if bt is not None: z = max(z, bt + 0.013)          # v014: lower, the body shape reads
         H[i, j] = z
 H0 = H.copy()
-for it in range(60):                       # sheet bridges the hollows (between arms and torso, between the legs)
+for it in range(25):                       # sheet bridges the hollows (between arms and torso, between the legs)
     P = np.pad(H, 1, mode='edge')
     avg = (P[:-2, 1:-1] + P[2:, 1:-1] + P[1:-1, :-2] + P[1:-1, 2:]) / 4
     H = np.maximum(H0, avg - 0.0012)
@@ -109,7 +109,7 @@ for i, x in enumerate(xs):
 for i in range(len(xs) - 1):
     for j in range(len(ys) - 1):
         cx_, cy_ = (xs[i] + xs[i + 1]) / 2, (ys[j] + ys[j + 1]) / 2
-        if CX - CB - 0.012 < cx_ < CX + WX and abs(cy_ - CY) < WY: continue
+        if CX - CB - 0.012 < cx_ < CX + WX and CY - WY - 0.07 < cy_ < CY + WY: continue   # v014: open toward his side
         bm.faces.new((vv[i, j], vv[i + 1, j], vv[i + 1, j + 1], vv[i, j + 1]))
 for v in [v for v in bm.verts if not v.link_faces]: bm.verts.remove(v)
 me = bpy.data.meshes.new("DrapeFit"); bm.to_mesh(me); bm.free()
@@ -194,7 +194,7 @@ key_hide(cav, [OR_OPEN1, OR_OPEN2])
 cpiv = bpy.data.objects.new("CavityClose", None); bpy.data.collections["OR_Set"].objects.link(cpiv)
 cpiv.location = V(CX, CY, SKZ); bpy.context.view_layer.update()
 mw_ = cav.matrix_world.copy(); cav.parent = cpiv; cav.matrix_parent_inverse = cpiv.matrix_world.inverted(); cav.matrix_world = mw_
-for f, sx in ((0, 1.0), (280, 1.0), (316, 0.03)):
+for f, sx in ((0, 1.0), (280, 1.0), (360, 0.03)):
     cpiv.scale = (sx, 1, 1); cpiv.keyframe_insert("scale", frame=f)
     cut.scale = (max(sx, 0.001), 1, 1); cut.keyframe_insert("scale", frame=f)
 for f, sx in ((OR_OPEN2[0], 1.0),):
