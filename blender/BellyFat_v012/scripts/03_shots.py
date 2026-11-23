@@ -299,7 +299,7 @@ def hip(f):
     place_hand(W, "R", f, c, -n, Vector((0.45, 0, -1)).normalized(), skin=0.015); settle(f, n, "R")
 def rbelly(f):
     sc.frame_set(f); c = imp.matrix_world.translation.copy(); n = (imp.matrix_world.to_3x3() @ Vector((-1, 0, 0))).normalized()
-    place_hand(W, "R", f, c + Vector((0, -0.115, -0.09)), -n, Vector((0.0, 0.5, -0.85)).normalized(), skin=0.02); settle(f, n, "R")
+    place_hand(W, "R", f, c + Vector((0, -0.135, -0.03)), -n, Vector((0.0, 0.5, -0.85)).normalized(), skin=0.02); settle(f, n, "R")
 apply_pose(W, "R", "relaxed", 1); apply_pose(W, "R", "relaxed", IMPACT)
 hand("R", IMPACT + 5, (0.42, -0.27, 1.08), (0.4, -0.2, 0.3), (0, 1, 0), (-0.35, -0.9, 1.05)); apply_pose(W, "R", "open_alarm", IMPACT + 5)
 apply_pose(W, "R", "flat_palm", 1006)
@@ -323,7 +323,7 @@ bul = bpy.data.objects["Bullet"]; bul.rotation_mode = 'QUATERNION'
 XWIN = 12.0
 def bullet_store(f):
     """tip position (world) for the store shots"""
-    if f <= 52: x = XWIN + 0.3 - (f - 41) * 0.075                          # punches through the glass at f45 (slow motion)
+    if f <= 52: x = XWIN + 0.0 - (f - 41) * 0.05                          # punches through the glass at f41 (slow motion), crack spreading
     else:
         u = (f - 53) / (IMPACT - 53); x = (XWIN + 0.3 - 11 * 0.075) + (P.x - (XWIN + 0.3 - 11 * 0.075)) * min(1.0, u ** 0.85)
     return Vector((x, P.y, P.z))
@@ -364,7 +364,7 @@ _c = bmesh.new(); bmesh.ops.create_circle(_c, cap_ends=True, segments=48, radius
 cme2 = bpy.data.meshes.new("Crack"); _c.to_mesh(cme2); _c.free(); cme2.materials.append(cm)
 crack = bpy.data.objects.new("WindowCrack", cme2); bpy.data.collections["REAL"].objects.link(crack)
 crack.location = (XWIN - 0.012, P.y, P.z); crack.rotation_euler = (0, math.radians(-90), 0)
-for f, s_ in ((1, 0.001), (44, 0.001), (46, 0.55), (51, 1.0), (FEND, 1.0)):
+for f, s_ in ((1, 0.001), (40, 0.001), (41, 0.45), (44, 0.75), (50, 1.0), (FEND, 1.0)):
     crack.scale = (s_, s_, s_); crack.keyframe_insert("scale", frame=f)
 # glass sparkle: a few tiny shards that fly off the hole, keyed
 shm = bpy.data.materials.new("M_shard"); shm.use_nodes = True; shm.node_tree.nodes["Principled BSDF"].inputs["Transmission Weight"].default_value = 1.0
@@ -514,12 +514,12 @@ def shot_cam(f):
     if name == "A_shop":     # medium-close: her face and the logo box she is reading; slow push
         tg = face_pt(f).lerp(BC, 0.4); cp = lin(Vector((1.05, -0.28, 1.42)), Vector((0.95, -0.22, 1.40)), u); return cp, tg, Vector((0, 0, 1)), 35, 8.0
     if name == "W_window":   # the origin: the bullet punches through the shop window (crack star, shards), coming toward us
-        tip = bullet_store(f); cp = Vector((XWIN - 0.85, P.y - 0.2, P.z + 0.04)); tg = Vector((XWIN, P.y, P.z)).lerp(tip, min(1.0, max(0.0, (f - 44) / 4)))
+        tip = bullet_store(f); cp = Vector((XWIN - 0.85, P.y - 0.2, P.z + 0.04)); tg = Vector((XWIN, P.y, P.z)).lerp(tip, 0.35 * min(1.0, max(0.0, (f - 41) / 8)))
         return cp, tg, Vector((0, 0, 1)), 50, 22.0
     if name == "B_track":    # behind the bullet down the aisle: bullet big in the foreground, she is ahead in frame; it hits her stomach
         tip = bullet_store(f); stop_x = P.x + 0.42
         cx = max(tip.x, stop_x); k = 1.0 + 0.3 * u                               # the camera lags a little: the bullet pulls ahead in frame
-        cp = Vector((cx + 0.13 * k, P.y - 0.01 * k, P.z + 0.028 * k))
+        cp = Vector((cx + 0.13 * k, P.y - 0.032 * k, P.z + 0.0))
         tg = Vector((min(cx, tip.x + 0.0) - 0.6, P.y, P.z)) if tip.x > stop_x else P + Vector((0.0, 0, 0.01))
         return cp, tg, Vector((0, 0, 1)), 40, 22.0
     if name == "D_react":    # front three-quarter, slightly low so her lowered face is seen; hand on the wound, other hand on her hip
