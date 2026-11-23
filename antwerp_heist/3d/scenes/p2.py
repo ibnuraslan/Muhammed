@@ -383,11 +383,10 @@ def T26():
 
 def T27():
     _tabletop((0.03, 0.03, 0.035))
-    for k, (x, y, rz) in enumerate(((-0.14, -0.05, 0.1), (0.03, -0.06, -0.15), (0.18, -0.02, 0.3), (-0.07, 0.08, 0.5), (0.1, 0.09, -0.4))):
-        PR.sf_put(PR.EURO_STACK, (x, y, 0.0), width=0.16, rz=rz)
-    PR.sf_put(PR.EURO_STACK, (0.0, 0.01, 0.026), width=0.16, rz=1.2)
-    return dict(a=((0.28, -0.36, 0.24), (0, 0, 0.01)), b=((0.22, -0.31, 0.2), (0, 0, 0.01)), lens=45, fstop=5.6, focus=(0, 0, 0.01))
-
+    PR.sf_put(PR.USD_STACKS, (0.02, 0.02, 0.0), width=0.2, rz=0.25)
+    PR.sf_put(PR.USD_STACKS, (-0.17, -0.06, 0.0), width=0.18, rz=-0.5)
+    PR.sf_put(PR.USD_LOOSE, (0.17, -0.08, 0.0), width=0.18, rz=0.9)
+    return dict(a=((0.28, -0.4, 0.26), (0, 0, 0.03)), b=((0.22, -0.35, 0.22), (0, 0, 0.03)), lens=40, fstop=5.6, focus=(0, 0, 0.03))
 
 def T28():
     _tabletop((0.09, 0.0, 0.02), sparkle=True)
@@ -449,7 +448,7 @@ def T32():
     st.hand("R", v + V((-0.06, 0.05, 0.05)), elbow=(0.7, 0.3, -0.8), grip=0.6)
     pl = bag_pose(st, "L")
     st.head_to(v, share=0.7); st.finish(look=v, density=HAIR); pl("bag_tapes", 0.6)
-    ST.light_spot("vcr_torch", (0.6, -1.7, 2.3), v, 160, angle=40, color=(1.0, 0.84, 0.62))
+    ST.light_spot("vcr_torch", (0.6, -1.7, 2.3), v, 160, angle=40, color=(1.0, 0.84, 0.62), radius=0.35)
     return dict(a=((0.15, -1.95, 1.95), (v.x - 0.25, v.y + 0.05, 1.45)), b=((0.28, -1.9, 1.92), (v.x - 0.25, v.y + 0.05, 1.45)), lens_b=None, lens=34,
                 hand_ok=("vcr", "bag"), cine=dict(exposure=0.4))
 

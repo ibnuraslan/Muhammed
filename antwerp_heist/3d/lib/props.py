@@ -264,4 +264,6 @@ EURO_STACK = "23603d130e684401be3ed7c482c3076e"      # "#Euro Banknote Stack Tie
 GOLD_BAR = "87e4e0a9da7f4c8a9561a932d09279bd"        # "gold bar", alex.yefremov, CC-BY
 GOLD_BARS = "0d1ff6b3e6d045cba78889caf7f5bc6e"       # "Fine Gold Bar", incg5764, CC-BY
 RING_DIAMOND = "5a03949eea904d6989f87aaf5d172722"    # "Ring, Gold with Diamond", lucasjosemone, CC-BY
+USD_STACKS = "1ef927f0bd924a62883f0dd026d80f40"     # "Stacks of US dollar bills", Chenzoss, CC-BY (strapped $100 stacks)
+USD_LOOSE = "7e54bc39435f459a921370caa7e21090"      # "A stack of 100 dollar bills.", hocza, CC-BY (loose spill)
 RING_CARAT = "378f6df2c4f444399b83db2037258470"      # "The Ring: 1 carat", Evanz, CC-BY

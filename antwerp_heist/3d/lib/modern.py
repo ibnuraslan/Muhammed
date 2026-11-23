@@ -45,7 +45,7 @@ class ModernMan(W._Woman):
     FACIAL = None         # None | "stubble" | "moustache" | "beard"
     BEARD = (0.8, 0.25)
     # wardrobe
-    SHIRT = (0.55, 0.6, 0.68); TIE = None
+    SHIRT = (0.55, 0.6, 0.68); TIE = None; SWEATER = None
     JACKET = "blazer"; JACKET_COL = (0.03, 0.035, 0.06)
     TROUSERS = (0.05, 0.05, 0.055); SHOES = (0.03, 0.02, 0.012)
     GLOVES = False; GLOVE_COL = (0.012, 0.012, 0.012)
@@ -86,7 +86,30 @@ class ModernMan(W._Woman):
         hide = np.zeros(len(u), bool)
         # shirt: torso and arms to the wrist, a collar band at the neck
         shirt = u & (wh < 0.5) & (whand < 0.12) & (z > m["hip"] - 0.05) & (z < m["neck"] + 0.03 * hs)
-        self.shirt, _ = self._shell("shirt", shirt, 0.004, cotton(self.name + "_shirt", self.SHIRT), solid=0.0015, displace=0.0015)
+        if self.SWEATER:
+            # chunky knit sweater: stands off the body, hangs straight from the shoulders, a straight ribbed hem at the hip,
+            # ribbed cuffs and a crew neck
+            hem = m["hip"] - 0.03
+            shirt = u & (wh < 0.5) & (whand < 0.12) & (z > hem) & (z < m["neck"] + 0.02 * hs) & (dist_wrist > 0.03)
+            knit = W.cloth(self.name + "_sweater", self.SWEATER, rough=0.92, sheen=0.35, weave=650, bump=0.35, knit=True)
+            self.shirt, sv = self._shell("sweater", shirt, 0.014, knit, solid=0.004, displace=0.0, drape=40)
+            src = np.array(self.shirt["src_verts"])
+            self._loosen(self.shirt, m, ease=1.02, extra=0.002, mask=warm[src] < 0.45, single=True)
+            sm = self.shirt.modifiers.new("Relax", "SMOOTH"); sm.factor = 0.6; sm.iterations = 8      # no step where torso meets sleeve
+            self.shirt.modifiers.move(self.shirt.modifiers.find("Relax"), 0)
+            self._straight_hem(self.shirt, hem + 0.002)
+            rib = W.cloth(self.name + "_rib", tuple(c * 0.8 for c in self.SWEATER), rough=0.95, sheen=0.3, weave=900, knit=True)
+            band = u & (z > hem) & (z < hem + 0.06) & (wh < 0.5) & (whand < 0.12) & (warm < 0.2)
+            o_, _ = self._shell("sweater_hem", band, 0.02, rib, solid=0.004, drape=10)
+            src2 = np.array(o_["src_verts"]); self._loosen(o_, m, ease=1.06, extra=0.005, mask=np.ones(len(src2), bool), single=True)
+            self._straight_hem(o_, hem + 0.002)
+            cuff = u & (dist_wrist > 0.03) & (dist_wrist < 0.1) & (whand < 0.12)
+            self._shell("sweater_cuffs", cuff, 0.019, rib, solid=0.004, drape=6)
+            neck = u & (z > m["neck"] - 0.02) & (z < m["neck"] + 0.03 * hs) & (wh < 0.6) & (whand < 0.05)
+            self._shell("sweater_neck", neck, 0.019, rib, solid=0.004, drape=6)
+            hide |= shirt
+        else:
+            self.shirt, _ = self._shell("shirt", shirt, 0.004, cotton(self.name + "_shirt", self.SHIRT), solid=0.0015, displace=0.0015)
         hide |= shirt
         if self.TIE:
             front = co[:, 0] - float(co[u, 0].mean())
@@ -98,14 +121,14 @@ class ModernMan(W._Woman):
         trous = u & (z < m["hip"] + 0.12) & (z > m["ankle"] + 0.01) & (wfoot < 0.6) & (whand < 0.05)
         yc = float(co[u & (np.abs(z - m["hip"]) < 0.05), 1].mean())
         def tflare(b):
-            seat = np.clip(1 - np.abs(b[:, 2] - (m["hip"] - 0.08)) / 0.17, 0, 1) * np.clip((b[:, 1] - yc) / 0.06, 0, 1) * 0.02
+            seat = np.clip(1 - np.abs(b[:, 2] - (m["hip"] - 0.08)) / 0.17, 0, 1) * np.clip((b[:, 1] - yc) / 0.06, 0, 1) * 0.006
             thigh = np.clip((m["hip"] - 0.02 - b[:, 2]) / 0.12, 0, 1) * 0.01
             leg = np.clip((m["knee"] + 0.1 - b[:, 2]) / 0.45, 0, 1) * 0.012
             return seat + thigh + leg
         # loose work trousers: stand off the leg, bridge the seat (no gluteal shape), deeper folds
         self.trousers, _ = self._shell("trousers", trous, 0.011, W.cloth(self.name + "_trousers", self.TROUSERS, rough=0.82, weave=900, sheen=0.15),
                                        solid=0.002, displace=0.0075, drape=60, flare=tflare)
-        self._loosen(self.trousers, m, ease=1.09, extra=0.005)
+        self._loosen(self.trousers, m, ease=1.04, extra=0.004)
         hide |= trous
         # shoes: deveau._sea_boots builds them in finish() (low, BOOT_TOP); the foot skin under them is hidden
         shoe = u & (z < m["ankle"] + 0.03) & (wfoot > 0.3)
@@ -212,6 +235,15 @@ class ModernMan(W._Woman):
                             best = max(best, t)
                     out[i, :2] = c + u * (best * ease + extra)
         me.vertices.foreach_set("co", out.astype(np.float32).ravel()); me.update()
+
+    def _straight_hem(self, o, z_hem, band=0.025):
+        """Snap the bottom edge of a garment to one height (a straight machine-sewn hem, never a ragged triangle edge)."""
+        import bmesh
+        me = o.data; bm = bmesh.new(); bm.from_mesh(me)
+        for v in bm.verts:
+            if v.is_boundary and v.co.z < z_hem + band:
+                v.co.z = z_hem
+        bm.to_mesh(me); bm.free(); me.update()
 
     def _sea_boots(self):
         """Low modern shoes in SHOES colour (deveau's lofted boot with a short shaft hidden by the trouser hem)."""
@@ -346,7 +378,7 @@ class Finotto(ModernMan):
     EXTRA = {"targets/neck/neck-scale-horiz-incr": 0.6, "targets/head/head-age-incr": 0.2}
     SKIN = dict(base=(0.5, 0.3, 0.2), weather=0.45)
     HAIR = (0.5, 0.12); HAIR_N = 140000; HAIR_LEN = (0.004, 0.008); HAIRLINE = 0.004; FACIAL = "stubble"
-    SHIRT = (0.2, 0.2, 0.2); JACKET = "bomber"; JACKET_COL = (0.032, 0.038, 0.018)
+    SHIRT = (0.2, 0.2, 0.2); JACKET = None; SWEATER = (0.045, 0.05, 0.025)      # olive knit crew-neck sweater
     TROUSERS = (0.03, 0.03, 0.032); SHOES = (0.01, 0.01, 0.01)        # charcoal work trousers
 
     def __init__(self, name="Finotto", night=False, **kw):
