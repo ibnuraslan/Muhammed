@@ -161,6 +161,8 @@ def lab_body(osteo=True):
     zmin = min((o.matrix_world @ v.co).z for o in sk.parts.values() for v in o.data.vertices[:])
     xs = [(o.matrix_world @ v.co).x for o in sk.parts.values() for v in o.data.vertices[:]]
     sk.root.location = (-(min(xs) + max(xs)) / 2, 0.38, LB.TOP + 0.004 - zmin)
+    bpy.context.view_layer.update()
+    sk.settle(lambda x, y: LB.TOP + 0.004, sink=0.0, keep=0.08)      # every bone rests on the velvet
     out = dict(A=A, sk=sk)
     if osteo:
         import acts as AC

@@ -72,7 +72,7 @@ def room(window_light=1.0, lamp=True, lamp_at=(0.35, 0.55), lamp_target=(0.0, 0.
     bpy.ops.mesh.primitive_plane_add(size=1, location=(0, y + 2.0, 1.8)); sk = bpy.context.active_object
     sk.scale = (9, 4, 1); sk.rotation_euler.x = math.pi / 2; sk.name = "window_sky"
     em = _mat("skyem", (0, 0, 0)); N = em.node_tree.nodes; Lk = em.node_tree.links
-    e = N.new("ShaderNodeEmission"); e.inputs['Color'].default_value = (0.62, 0.7, 0.82, 1); e.inputs['Strength'].default_value = 6.0 * window_light
+    e = N.new("ShaderNodeEmission"); e.inputs['Color'].default_value = (0.62, 0.7, 0.82, 1); e.inputs['Strength'].default_value = 2.2 * window_light
     Lk.new(e.outputs[0], N["Material Output"].inputs['Surface']); sk.data.materials.append(em)
     sk.visible_shadow = False
     # soft daylight through the windows (area lights just inside the glass, invisible to camera)
