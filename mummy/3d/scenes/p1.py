@@ -396,9 +396,11 @@ def S28():
     co = np.array([v.co for v in md.data.vertices])
     md.location = (0.0, 0.32, LB.TOP + 0.003 - co[:, 2].min()); md.rotation_euler = (0, 0, math.radians(-70))
     bpy.context.view_layer.update()
-    W = np.array([md.matrix_world @ v.co for v in md.data.vertices])
-    top = W[W[:, 2] > W[:, 2].max() - 0.012]
-    c = Vector(top.mean(0))
+    L_ = np.array([v.co for v in md.data.vertices])
+    body = L_[:, 1] < L_[:, 1].min() + 0.6 * np.ptp(L_[:, 1])            # the tooth-bearing body (chin -> molars)
+    zt = L_[body, 2].max()
+    teeth = body & (L_[:, 2] > zt - 0.008) & (L_[:, 1] > L_[:, 1].min() + 0.03)     # premolar/molar crowns
+    c = md.matrix_world @ Vector(L_[teeth].mean(0).tolist())
     return dict(a=(tuple(c + Vector((-0.12, -0.09, 0.06))), tuple(c)), b=(tuple(c + Vector((-0.08, -0.1, 0.05))), tuple(c)), lens=100,
                 fstop=5.6, focus=tuple(c))
 
