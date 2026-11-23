@@ -399,7 +399,7 @@ bpts = [OB["StampBase"].matrix_world @ Vector(c) for c in OB["StampBase"].bound_
 press = Matrix.Translation(V(cc.x - sbc.x + 0.01, cc.y - sbc.y, ctop - sbot + 0.0015)) @ S0
 up = lambda M, h: Matrix.Translation(V(0, 0, h)) @ M
 SP = 1592
-SK = [(SP, S0), (1602, up(S0, 0.09)), (1610, up(press, 0.06)), (1616, press), (1621, press), (1630, up(press, 0.07)), (1644, up(Matrix.Translation(V(0.03, -0.12, 0)) @ press, 0.06))]
+SK = [(SP, S0), (1602, up(S0, 0.09)), (1610, up(press, 0.06)), (1616, press), (1620, press), (1627, up(press, 0.07)), (1636, up(Matrix.Translation(V(0.02, -0.14, 0)) @ press, 0.07)), (1644, up(Matrix.Translation(V(0.02, -0.15, 0)) @ press, 0.065))]
 def smat(f):
     if f <= SP: return S0
     for (fa, Ma), (fb, Mb) in zip(SK, SK[1:]):
