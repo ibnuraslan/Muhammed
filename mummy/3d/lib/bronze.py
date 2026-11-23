@@ -238,7 +238,7 @@ def interior(fire=1.0, door_sun=0.0, hx=0.3, hy=0.0, r=4.6, seed=5):
         a = 2 * math.pi * k / 11
         G.stone((hcx + 0.72 * math.cos(a), hcy + 0.56 * math.sin(a), 0.06), (0.26, 0.09, 0.15), rot_z=a + math.pi / 2, seed=k, flat=0.9)
     # peat fire: a heap of glowing peat blocks with flame volume and the fire light
-    peat = _mat("peatfire", (0.05, 0.03, 0.02), 0.9, emit=(1.0, 0.32, 0.08), strength=1.2 * fire)
+    peat = _mat("peatfire", (0.05, 0.03, 0.02), 0.9, emit=(1.0, 0.32, 0.08), strength=3.0 * fire)
     for k in range(9):
         a = 2 * math.pi * k / 9
         bpy.ops.mesh.primitive_cube_add(size=1, location=(hcx + 0.17 * math.cos(a), hcy + 0.13 * math.sin(a), 0.06 + 0.03 * (k % 3)))
@@ -251,8 +251,8 @@ def interior(fire=1.0, door_sun=0.0, hx=0.3, hy=0.0, r=4.6, seed=5):
     sep = N.new("ShaderNodeSeparateXYZ"); Lk.new(tc.outputs['Generated'], sep.inputs[0])
     gz = N.new("ShaderNodeMapRange"); gz.inputs['From Min'].default_value = 1.0; gz.inputs['From Max'].default_value = 0.0; Lk.new(sep.outputs['Z'], gz.inputs['Value'])
     mm = N.new("ShaderNodeMath"); mm.operation = 'MULTIPLY'; Lk.new(nz.outputs['Fac'], mm.inputs[0]); Lk.new(gz.outputs[0], mm.inputs[1])
-    th = N.new("ShaderNodeMapRange"); th.inputs['From Min'].default_value = 0.35; th.inputs['From Max'].default_value = 0.7
-    th.inputs['To Max'].default_value = 8.0 * fire; Lk.new(mm.outputs[0], th.inputs['Value'])
+    th = N.new("ShaderNodeMapRange"); th.inputs['From Min'].default_value = 0.12; th.inputs['From Max'].default_value = 0.5
+    th.inputs['To Max'].default_value = 22.0 * fire; Lk.new(mm.outputs[0], th.inputs['Value'])
     v = N.new("ShaderNodeVolumePrincipled"); v.inputs['Density'].default_value = 0.0
     v.inputs['Blackbody Tint'].default_value = (1, 1, 1, 1); v.inputs['Temperature'].default_value = 1300
     Lk.new(th.outputs[0], v.inputs['Blackbody Intensity'])
@@ -260,7 +260,7 @@ def interior(fire=1.0, door_sun=0.0, hx=0.3, hy=0.0, r=4.6, seed=5):
     bpy.ops.mesh.primitive_uv_sphere_add(radius=0.25, location=(hcx, hcy, 0.3)); fl = bpy.context.active_object
     fl.scale = (1, 1, 1.6); fl.data.materials.append(flame); fl.name = "flame"; fl.visible_shadow = False
     fd = bpy.data.lights.new("firelight", 'POINT'); fd.energy = 140 * fire; fd.color = (1.0, 0.52, 0.2); fd.shadow_soft_size = 0.25
-    fo = bpy.data.objects.new("firelight", fd); bpy.context.scene.collection.objects.link(fo); fo.location = (hcx, hcy, 0.45)
+    fo = bpy.data.objects.new("firelight", fd); bpy.context.scene.collection.objects.link(fo); fo.location = (hcx, hcy, 0.75)
     out["fire"] = fo; out["hearth"] = (hcx, hcy)
     # room smoke haze (light from the door and the fire reads in the air)
     bpy.ops.mesh.primitive_cylinder_add(radius=r, depth=5.5, location=(hx, hy, 2.75)); hz = bpy.context.active_object; hz.name = "roomhaze"
