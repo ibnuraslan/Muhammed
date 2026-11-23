@@ -391,22 +391,18 @@ def S27():
 
 
 def S28():
-    """The lower molars: wear facets polished by teeth that met them."""
-    A = LB.room(window_light=0.6, lamp=True, lamp_at=(0.35, 0.6), lamp_target=(0.0, 0.3), lamp_energy=18)
+    """The lower molars: wear facets from teeth that met them. Tighter than S07, slow slide across the tooth row."""
+    A = LB.room(window_light=0.4, lamp=True, lamp_at=(0.4, 0.62), lamp_target=(0.0, 0.3), lamp_energy=20)
     LB.velvet(-0.6, 0.6, 0.0, 0.75, LB.TOP)
     md = B.hero_mandible(tone="B")
     import numpy as np
     co = np.array([v.co for v in md.data.vertices])
-    md.location = (0.0, 0.32, LB.TOP + 0.003 - co[:, 2].min()); md.rotation_euler = (0, 0, math.radians(-70))
+    md.location = (0.0, 0.32, LB.TOP + 0.003 - co[:, 2].min()); md.rotation_euler = (0, 0, math.radians(15))
     bpy.context.view_layer.update()
-    L_ = np.array([v.co for v in md.data.vertices])
-    body = L_[:, 1] < L_[:, 1].min() + 0.6 * np.ptp(L_[:, 1])            # the tooth-bearing body (chin -> molars)
-    zt = L_[body, 2].max()
-    teeth = body & (L_[:, 2] > zt - 0.008) & (L_[:, 1] > L_[:, 1].min() + 0.03)     # premolar/molar crowns
-    c = md.matrix_world @ Vector(L_[teeth].mean(0).tolist())
-    return dict(a=(tuple(c + Vector((-0.12, -0.09, 0.06))), tuple(c)), b=(tuple(c + Vector((-0.08, -0.1, 0.05))), tuple(c)), lens=100,
-                fstop=5.6, focus=tuple(c))
-
+    W = np.array([md.matrix_world @ v.co for v in md.data.vertices])
+    t = Vector(((W.min(0) + W.max(0)) / 2).tolist()) + Vector((0, -0.02, -0.01))
+    return dict(a=(tuple(t + Vector((-0.17, -0.17, 0.17))), tuple(t)), b=(tuple(t + Vector((0.02, -0.2, 0.16))), tuple(t)),
+                lens=85, fstop=8.0, focus=tuple(t), cine=dict(exposure=-0.1))
 
 def S29():
     """The jaw offered up under the skull on foam blocks: its teeth meet a toothless upper jaw. Slow push, side-on."""
