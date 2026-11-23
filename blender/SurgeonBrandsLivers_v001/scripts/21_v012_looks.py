@@ -97,6 +97,22 @@ VL.clear_keys(bpy.data.objects["Patient.body"], ('modifiers["Delete.female_casua
 m = bpy.data.objects["Patient.body"].modifiers.get("Delete.female_casualsuit02")
 if m: bpy.data.objects["Patient.body"].modifiers.remove(m)
 
+# her ponytail lies under her head on the table: the tail (below the pad top) is masked while she is on the table
+sc.frame_set(200); bpy.context.view_layer.update(); dgp = bpy.context.evaluated_depsgraph_get()
+sd = [m for m in hair.modifiers if m.type == 'SUBSURF']
+for m in sd: m.show_viewport = False
+bpy.context.view_layer.update(); dgp = bpy.context.evaluated_depsgraph_get(); eh = hair.evaluated_get(dgp); hm = eh.to_mesh()
+low = [v.index for v in hm.vertices if (hair.matrix_world @ v.co).z < 0.957] if len(hm.vertices) == len(hair.data.vertices) else []
+eh.to_mesh_clear()
+for m in sd: m.show_viewport = True
+g = hair.vertex_groups.new(name="OnTable"); g.add(low, 1.0, 'REPLACE')
+mt = hair.modifiers.new("OnTable", 'MASK'); mt.vertex_group = "OnTable"; mt.invert_vertex_group = True
+hair.modifiers.move(hair.modifiers.find("OnTable"), 0)
+for f, on in ((0, True), (601, False), (1000, True), (1263, False)):
+    mt.show_render = on; hair.keyframe_insert('modifiers["OnTable"].show_render', frame=f)
+VL.constant(hair)
+print("PONYTAIL masked on the table", len(low))
+
 # ------------------------------------------------------------------ clerk: hair tied back (ponytail), face clear
 remove("PanelB.bob01")
 add_asset("PanelB", "hair/ponytail01/ponytail01.mhclo", "Hair")
