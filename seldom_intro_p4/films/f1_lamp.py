@@ -16,7 +16,7 @@ BASE_X = 0.207 * K                                  # pedestal (base unit) half-
 PLATE_Z = 0.25 * K
 PLATE_W = 0.34
 R_ROOM = 2.15
-SHOTS = dict(A=(0.0, 3.0), B=(3.0, 6.0), C=(6.0, 9.0), D=(9.0, 12.0))
+SHOTS = dict(A=(0.0, 3.0), B=(3.0, 6.0), C=(6.0, 9.0), D=(9.0, 12.0), LOGO=(12.0, 14.5))   # ends on a clean logo hold
 FLOOR = 0.0
 
 

@@ -12,7 +12,7 @@ import si, p4, ship, ph, skfab, poses as P, human as H, deveau as D
 STAMP_UID = "be402a8d73c74fd6b9ca5acc057a208d"       # "Old Victorian Rubber Stamp" (CC BY)
 TABLE_Z = 0.80
 TABLE = (3.2, 0.95)                                  # long sorting table, along X, centred at origin
-SHOTS = dict(A=(0.0, 3.0), B=(3.0, 6.0), C=(6.0, 9.0), D=(9.0, 11.0))
+SHOTS = dict(A=(0.0, 3.0), B=(3.0, 6.0), C=(6.0, 9.0), D=(9.0, 11.0), LOGO=(11.0, 13.5))   # ends on a clean logo hold
 PARCEL = Vector((0.02, -0.17, TABLE_Z))              # where the parcel lies (front of the clerk)
 CARD_W = 0.15
 

@@ -13,7 +13,7 @@ QUAY_Z = 1.6                    # quay top above the water
 EDGE_Y = 0.0                    # quay edge (water at y < 0)
 CW, CD, CH = 0.9, 0.62, 0.6     # crate
 CRANE = Vector((-1.6, 1.4, QUAY_Z))
-SHOTS = dict(A=(0.0, 3.0), B=(3.0, 6.0), C=(6.0, 9.5), D=(9.5, 12.0))
+SHOTS = dict(A=(0.0, 3.0), B=(3.0, 6.0), C=(6.0, 9.5), D=(9.5, 12.0), LOGO=(12.0, 14.5))   # ends on a clean logo hold
 LANDED = Vector((0.15, 1.15, QUAY_Z))       # crate centre-bottom when set down on the stones
 
 

@@ -70,6 +70,12 @@ BUILT = {
          "The stencilled logo shows on the wet planks; he turns to look back at the water. HOLD on the crate.",
          "A ship's bell somewhere in the mist.")],
 }[F]
+BUILT.append({                                 # every film ends on a clean, readable 2.5 s hold of the logo
+ "f1": ("Straight on, close: the cleaned maker's plate.", "LOGO HOLD: the Seldom wordmark on the plate, still; the beam light passes.", "Foghorn tail fading, optic tick."),
+ "f2": ("Straight down, close: the card on the tissue.", "LOGO HOLD: the Seldom wordmark on the letterpress card, still.", "Room tone, one clock tick."),
+ "f3": ("Straight on, close: the enamel plaque on the velvet.", "LOGO HOLD: the Seldom wordmark on the plaque, still, lantern light.", "Near silence, a low settle of the door."),
+ "f4": ("Straight on, close: the stencil on the crate side.", "LOGO HOLD: the Seldom wordmark stencilled on the wet planks, still.", "Drips, distant ship's bell."),
+}[F])
 
 rows = []; start = 0
 for k, (key, (t0, t1)) in enumerate(sorted(SHOTS.items(), key=lambda kv: kv[1][0])):

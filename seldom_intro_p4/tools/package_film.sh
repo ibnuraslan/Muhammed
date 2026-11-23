@@ -7,7 +7,7 @@ D=$(cd "$(dirname "$0")/.." && pwd); B=${BLENDER:-/opt/blender/blender-5.2.2-lin
 F=$1; NAME=$(python3 -c "print({'f1':'01_lamp_room','f2':'02_dead_letters','f3':'03_the_locksmith','f4':'04_salvage'}['$F'])")
 EXP=$D/out/farm/export_$F; PKG=$D/out/farm/seldom_intro_$NAME
 mkdir -p "$EXP" "$PKG/shots" "$D/out/logs"
-for s in ${SHOTS:-A B C D}; do
+for s in ${SHOTS:-A B C D LOGO}; do
   EXPORT="$EXP" "$B" -b --factory-startup -P "$D/run_anim.py" -- $F $s > "$D/out/logs/export_$F$s.log" 2>&1 || true
   echo "$F$s $(grep -E 'CLIPRESULT|SETTLE|ABORT|Traceback|Error:|EXPORTED' "$D/out/logs/export_$F$s.log" | grep -v CUEW | tr '\n' ' ')"
   "$B" -b "$EXP/shots/$F$s.blend" -P "$D/../mary_celeste_p4/tools/pack_shot.py" -- "$PKG/shots/$F$s.blend" 2>&1 | grep -E "PACKED|Error" | grep -v CUEW

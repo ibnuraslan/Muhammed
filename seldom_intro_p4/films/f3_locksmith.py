@@ -18,7 +18,7 @@ DIAL = Vector((0.08, FRONT_Y - DOOR_T + 0.002, PL + 0.66))
 HANDLE = Vector((0.24, FRONT_Y - DOOR_T + 0.002, PL + 0.5))
 PLAQUE_W = 0.2
 SAFE = {}
-SHOTS = dict(A=(0.0, 3.5), B=(3.5, 7.0), C=(7.0, 10.0), D=(10.0, 13.0))
+SHOTS = dict(A=(0.0, 3.5), B=(3.5, 7.0), C=(7.0, 10.0), D=(10.0, 13.0), LOGO=(13.0, 15.5))   # ends on a clean logo hold
 LANTERN_UID = "46528337bec34fa49f2c71577efc7bc0"
 
 
@@ -187,7 +187,7 @@ def stethoscope(dv, M):
 
 
 SHOT_T0 = dict(A=0.0, B=3.5, C=7.0, D=10.0, LOGO=13.0)
-SHOT_DUR = dict(A=3.5, B=3.5, C=3.0, D=3.0, LOGO=1.0)
+SHOT_DUR = dict(A=3.5, B=3.5, C=3.0, D=3.0, LOGO=2.5)
 
 
 def mechanism(shot):
