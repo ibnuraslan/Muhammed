@@ -355,7 +355,7 @@ def _guy(p0, p1, sag=0.03, r=0.004, m=None):
     for i, p in enumerate(pts):
         sp.points[i].co = (*p, 1)
     o = bpy.data.objects.new("guyrope", cu); link(o); cu.materials.append(m or mat("rope"))
-    peg((p1[0], p1[1]), z=p1[2] - 0.05)
+    peg(p1[0], p1[1], z=p1[2] - 0.05)
     return o
 
 
