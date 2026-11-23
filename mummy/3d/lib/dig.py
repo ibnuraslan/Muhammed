@@ -542,7 +542,8 @@ def burial_scan(key="B1", rot=None, skirt=0.0):
             e_ = math.hypot(uu, vv)
             if e_ > 0.95 and q.z > floor_z - 0.12:
                 kill.append(f)
-            elif e_ > 0.78 and abs(f.normal.z) > 0.7 and q.z > float(U.surface(q.x, q.y)) + 0.005:
+            elif (e_ > 0.78 and abs(f.normal.z) > 0.7 and q.z > float(U.surface(q.x, q.y)) + 0.005) or \
+                    (e_ > 0.88 and q.z > float(U.surface(q.x, q.y)) + 0.01):
                 kill.append(f)        # flat scan floor lying over the terrain's pit wall (a pale plate at the rim)
         bmesh.ops.delete(bm, geom=kill, context='FACES'); bm.to_mesh(me); bm.free()
     # warm the scan toward the pale machair shell sand
