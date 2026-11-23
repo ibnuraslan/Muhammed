@@ -181,6 +181,57 @@ def scrub_piece(rig_name, kind, mat, off, hide_src):
             if w > best[0] and n in BONES: best = (w, n)
         return best[1]
     _bm.ops.delete(bm, geom=[v for v in bm.verts if v.index not in keep], context='VERTS')
+    # v014: loose fit. The top hangs straight down from the chest (boxy, no waist or bust read); trouser legs are
+    # loose tubes round each leg's axis. Rest-pose (upright) coordinates; weights unchanged, so it still deforms.
+    spz = {n: BN[n].head_local for n in ("spine05", "spine04", "spine03", "spine02", "spine01") if n in BN}
+    zs_ = sorted((p_.z, p_.y) for p_ in spz.values())
+    def cy_at(z):
+        if z <= zs_[0][0]: return zs_[0][1]
+        for (z0, y0), (z1, y1) in zip(zs_, zs_[1:]):
+            if z0 <= z <= z1: return y0 + (y1 - y0) * (z - z0) / max(z1 - z0, 1e-6)
+        return zs_[-1][1]
+    if kind == "Top":
+        tor = [v for v in bm.verts if (dominant_bm(v) or "").startswith(("spine", "pelvis", "breast", "pectoral"))]
+        z_lo, z_hi = BN["spine02"].head_local.z - 0.02, BN["spine01"].head_local.z + 0.03
+        front_ = [v for v in tor if z_lo < v.co.z < z_hi and abs(v.co.x) < 0.12]
+        zc = min(front_, key=lambda v: v.co.y - cy_at(v.co.z)).co.z if front_ else BN["spine02"].head_local.z   # bust / chest apex
+        band = [v for v in tor if abs(v.co.z - zc) < 0.05]
+        if band:
+            a_ = max(abs(v.co.x) for v in band) + 0.01
+            bf = max(cy_at(v.co.z) - v.co.y for v in band) + 0.01; bb = max(v.co.y - cy_at(v.co.z) for v in band) + 0.01
+            for v in tor:
+                front_up = (v.co.y - cy_at(v.co.z)) < 0 and v.co.z < zc + 0.11
+                if v.co.z >= zc and not front_up: continue
+                t = min(1.0, (zc - v.co.z) / 0.06) if v.co.z < zc else min(1.0, max(0.0, 1.0 - (v.co.z - zc - 0.05) / 0.06))
+                c_ = cy_at(v.co.z); dx, dy = v.co.x, v.co.y - c_
+                b_ = bf if dy < 0 else bb
+                rn = math.sqrt((dx / a_) ** 2 + (dy / b_) ** 2)
+                if rn < 1.0 and rn > 1e-4:
+                    k_ = 1.0 + (1.0 / rn - 1.0) * t
+                    v.co.x = dx * k_; v.co.y = c_ + dy * k_
+    else:
+        zh = (BN["upperleg01.L"].head_local.z + BN["upperleg01.R"].head_local.z) / 2
+        seat = [v for v in bm.verts if (dominant_bm(v) or "").startswith(("pelvis", "spine05", "spine04", "root", "upperleg01"))]
+        hb = [v for v in seat if abs(v.co.z - zh) < 0.05]
+        if hb:
+            ah = max(abs(v.co.x) for v in hb) + 0.015
+            bfh = max(cy_at(v.co.z) - v.co.y for v in hb) + 0.015; bbh = max(v.co.y - cy_at(v.co.z) for v in hb) + 0.015
+            for v in seat:
+                c_ = cy_at(v.co.z); dx, dy = v.co.x, v.co.y - c_
+                if abs(dx) < 0.07 and v.co.z < zh - 0.03: continue                 # leave the inner leg / crotch to the leg tubes
+                b_ = bfh if dy < 0 else bbh
+                rn = math.sqrt((dx / ah) ** 2 + (dy / b_) ** 2)
+                if 1e-4 < rn < 1.0: v.co.x = dx / rn; v.co.y = c_ + dy / rn
+        for v in bm.verts:
+            d_ = dominant_bm(v) or ""
+            if not d_.startswith(("upperleg", "lowerleg")): continue
+            sd = d_[-1]
+            a0 = BN["upperleg01." + sd].head_local; a1 = BN["foot." + sd].head_local
+            ax = (a1 - a0); L_ = ax.length; ax = ax / L_
+            t = max(0.0, min(1.0, (v.co - a0).dot(ax) / L_)); pa = a0 + ax * (t * L_)
+            rv = v.co - pa; rv = rv - ax * rv.dot(ax); rr_ = rv.length
+            rmin = 0.088 - 0.022 * t
+            if 1e-4 < rr_ < rmin: v.co = pa + rv * (rmin / rr_) + ax * (v.co - pa).dot(ax)
     for it in range(12):                                  # clean hems: smooth the open edges (no saw-tooth V-neck or sleeve)
         bnd = [v for v in bm.verts if v.is_boundary]
         newp = {}
@@ -195,7 +246,6 @@ def scrub_piece(rig_name, kind, mat, off, hide_src):
         if kind == "Top" and v[dl] is not None:                          # no ballooned shoulders
             dn = dominant_bm(v)
             if dn and dn.startswith(("clavicle", "shoulder", "upperarm")): k = off * 0.6
-            if rig_name == "Surgeon2" and dn and dn.startswith(("breast", "pectoral")): k = off * 1.6   # fabric spans her chest (no body-hugging read)
         v.co = v.co + v.normal * k
     bm.to_mesh(ob.data); bm.free()
     ob.data.materials.clear(); ob.data.materials.append(mat)
@@ -341,6 +391,10 @@ for nm, rgb in CAPC.items():
     so = cap.modifiers.new("t", 'SOLIDIFY'); so.thickness = 0.002
     sub = cap.modifiers.new("s", 'SUBSURF'); sub.levels = 1; sub.render_levels = 1
 
+# v014: her scrub top is a small print (breaks up the shading; no body read)
+_st = bpy.data.objects.get("Surgeon2.ScrubTop")
+if _st:
+    _st.data.materials.clear(); _st.data.materials.append(cap_fabric("Surgeon2ScrubPrint", (0.10, 0.20, 0.52)))
 # ------------------------------------------------------------------ v013 masks: pleated masks conformed to each face (no box)
 from mathutils.bvhtree import BVHTree as _BVH
 for nm, fr in (("Surgeon1", 1), ("Surgeon2", 1100), ("Nurse", 1), ("Anaesth", 1)):

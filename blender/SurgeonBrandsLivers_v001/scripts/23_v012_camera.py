@@ -34,8 +34,8 @@ SHOTS = [
     (641, 775, (5.05, -1.60, 1.45), (5.15, -1.40, 1.32), bone("Patient", "spine01", (0, 0, 0.08)), 30, 5.6),  # S6 home
     (776, 915, (0.15, 6.40, 1.62), (0.22, 5.10, 1.60), mix(bone("Patient", "head"), bone("Nurse", "head"), 0.45), 24, 5.6),  # S7 bed + doctor
     (916, 1060, track("Surgeon2", "head", (1.15, -0.85, 0.02)), None, bone("Surgeon2", "spine01", (0, 0, 0.16)), 30, 5.6),  # S8 tracks her, side-front
-    (1061, 1175, (0.32, 0.12, 1.66), (0.28, 0.10, 1.63), obj("LiverRig", (0, 0, 0.03)), 35, 8.0),  # S9 foot end: her hands lift the branded liver
-    (1176, 1240, (-0.22, -0.72, 1.60), (-0.24, -0.66, 1.60), bone("Surgeon2", "head", (0, 0, 0.0)), 70, 5.6),  # S10 her face
+    (1061, 1175, (0.50, 0.02, 1.62), (0.16, -0.02, 1.44), lambda f: obj("LiverRig", (0, 0.16, 0.12))(f).lerp(letters()(f), ease(min(1.0, max(0.0, (f - 1080) / 80.0)))), 32, 5.6),   # wide (her body, hands) -> push in to the letters  # S9 foot end: her hands lift the branded liver
+    (1176, 1240, (-0.22, -0.72, 1.62), (-0.24, -0.66, 1.62), bone("Surgeon2", "head", (0, 0, 0.05)), 70, 5.6),  # S10 her face
     (1241, 1310, (-7.50, -0.35, 1.72), (-7.62, -0.30, 1.70), fixed((-10.35, 0.0, 1.45)), 20, 5.6),  # S11a all three panel faces
     (1311, 1445, (-8.00, -0.55, 1.50), (-7.92, -0.47, 1.50), bone("Surgeon1", "neck01", (0, 0, -0.14)), 32, 5.6),  # S11b defendant, level
     (1446, 1575, (-9.20, -0.95, 1.55), (-9.24, -0.90, 1.53), fixed((-10.15, -0.05, 1.36)), 30, 5.6),  # S12 gavel
