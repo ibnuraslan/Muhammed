@@ -266,7 +266,7 @@ def _ard_marks(cx, cy, w=2.6, n=11, seed=1):
     import random
     rng = random.Random(seed)
     m = bpy.data.materials.new("ard"); m.use_nodes = True; nt = m.node_tree; N = nt.nodes; Lk = nt.links
-    p = N["Principled BSDF"]; p.inputs['Base Color'].default_value = (0.16, 0.12, 0.08, 1); p.inputs['Roughness'].default_value = 0.95
+    p = N["Principled BSDF"]; p.inputs['Base Color'].default_value = (0.07, 0.05, 0.035, 1); p.inputs['Roughness'].default_value = 0.95
     uv = N.new("ShaderNodeUVMap"); sp = N.new("ShaderNodeSeparateXYZ"); Lk.new(uv.outputs[0], sp.inputs[0])
     d = N.new("ShaderNodeMath"); d.operation = 'SUBTRACT'; d.inputs[1].default_value = 0.5; Lk.new(sp.outputs['Y'], d.inputs[0])
     ab = N.new("ShaderNodeMath"); ab.operation = 'ABSOLUTE'; Lk.new(d.outputs[0], ab.inputs[0])
@@ -277,7 +277,7 @@ def _ard_marks(cx, cy, w=2.6, n=11, seed=1):
     br = N.new("ShaderNodeMapRange"); br.inputs['From Min'].default_value = 0.35; br.inputs['From Max'].default_value = 0.65
     Lk.new(nz.outputs['Fac'], br.inputs['Value'])
     al = N.new("ShaderNodeMath"); al.operation = 'MULTIPLY'; Lk.new(edge.outputs[0], al.inputs[0]); Lk.new(br.outputs[0], al.inputs[1])
-    al2 = N.new("ShaderNodeMath"); al2.operation = 'MULTIPLY'; al2.inputs[1].default_value = 0.75; Lk.new(al.outputs[0], al2.inputs[0])
+    al2 = N.new("ShaderNodeMath"); al2.operation = 'MULTIPLY'; al2.inputs[1].default_value = 1.0; Lk.new(al.outputs[0], al2.inputs[0])
     Lk.new(al2.outputs[0], p.inputs['Alpha'])
     for dirn, ang in ((0, 0.12), (1, 1.5)):
         for k in range(n):

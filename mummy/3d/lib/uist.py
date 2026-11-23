@@ -311,7 +311,7 @@ def ground_material(fog=None, grass_tint=(0.22, 0.27, 0.09)):
     c = mixc(face, c, grain.outputs[2])
     L.new(c, p.inputs['Base Color'])
     # normals: sand/grass/soil normal maps by zone
-    nm = _n(nt, "ShaderNodeNormalMap"); nm.inputs['Strength'].default_value = 0.8
+    nm = _n(nt, "ShaderNodeNormalMap"); nm.inputs['Strength'].default_value = 0.35
     nmix = mixc(mach, sand["nor_gl"].outputs['Color'], grass["nor_gl"].outputs['Color'])
     nmix = mixc(face, nmix, sand["nor_gl"].outputs['Color'])
     L.new(nmix, nm.inputs['Color']); L.new(nm.outputs[0], p.inputs['Normal'])
