@@ -294,7 +294,7 @@ def ground_material(fog=None, grass_tint=(0.22, 0.27, 0.09)):
     zn = _n(nt, "ShaderNodeMath", operation='DIVIDE'); L.new(zrel.outputs[0], zn.inputs[0]); zn.inputs[1].default_value = stmax
     st = ramp(zn.outputs[0], [(dd / stmax, col) for dd, col in STRATA])
     st.color_ramp.interpolation = 'EASE'
-    grain = _n(nt, "ShaderNodeMix", data_type='RGBA', blend_type='OVERLAY'); grain.inputs['Factor'].default_value = 0.35
+    grain = _n(nt, "ShaderNodeMix", data_type='RGBA', blend_type='SOFT_LIGHT'); grain.inputs['Factor'].default_value = 0.12
     L.new(st.outputs['Color'], grain.inputs[6]); L.new(soil["Diffuse"].outputs['Color'], grain.inputs[7])
     iscut = fac(cut.outputs['Fac'], 0.01, 0.06)
     steep = fac(nsep.outputs['Z'], 0.75, 0.45)
@@ -312,7 +312,7 @@ def ground_material(fog=None, grass_tint=(0.22, 0.27, 0.09)):
     # normals: sand/grass/soil normal maps by zone
     nm = _n(nt, "ShaderNodeNormalMap"); nm.inputs['Strength'].default_value = 0.8
     nmix = mixc(mach, sand["nor_gl"].outputs['Color'], grass["nor_gl"].outputs['Color'])
-    nmix = mixc(face, nmix, soil["nor_gl"].outputs['Color'])
+    nmix = mixc(face, nmix, sand["nor_gl"].outputs['Color'])
     L.new(nmix, nm.inputs['Color']); L.new(nm.outputs[0], p.inputs['Normal'])
     rough = mixc(dry, (0.35, 0.35, 0.35), (0.92, 0.92, 0.92))
     L.new(rough, p.inputs['Roughness'])
