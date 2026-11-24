@@ -149,7 +149,7 @@ class ModernMan(W._Woman):
                 # matte suede / worn leather (glossy leather read as skin under warm light): a dense fabric shader
                 mat = W.cloth(self.name + "_jacket", self.JACKET_COL, rough=0.82, sheen=0.15, weave=1800, bump=0.15)
             else:
-                mat = W.cloth(self.name + "_jacket", self.JACKET_COL, rough=0.55 if self.JACKET == "cagoule" else (0.7 if self.JACKET == "bomber" else 0.82), weave=520, sheen=0.25, bump=0.5 if self.JACKET == "bomber" else 0.25)
+                mat = W.cloth(self.name + "_jacket", self.JACKET_COL, rough=0.88 if self.JACKET == "cagoule" else (0.7 if self.JACKET == "bomber" else 0.82), weave=520, sheen=0.25, bump=0.5 if self.JACKET == "bomber" else 0.25)
             if self.JACKET == "cagoule":            # waterproof smock: big soft creases and a faint sheen, never a smooth shell
                 N_ = mat.node_tree.nodes; L_ = mat.node_tree.links; p_ = N_["Principled BSDF"]
                 tc_ = N_.new("ShaderNodeTexCoord"); mp_ = N_.new("ShaderNodeMapping"); mp_.inputs['Scale'].default_value = (1.0, 1.0, 0.45)
@@ -157,18 +157,18 @@ class ModernMan(W._Woman):
                 nz_ = N_.new("ShaderNodeTexNoise"); nz_.inputs['Scale'].default_value = 7.0; nz_.inputs['Detail'].default_value = 4
                 nz_.inputs['Distortion'].default_value = 1.5; L_.new(mp_.outputs[0], nz_.inputs['Vector'])
                 rg_ = N_.new("ShaderNodeMath"); rg_.operation = 'PINGPONG'; rg_.inputs[1].default_value = 0.5; L_.new(nz_.outputs['Fac'], rg_.inputs[0])
-                bp_ = N_.new("ShaderNodeBump"); bp_.inputs['Strength'].default_value = 0.35; bp_.inputs['Distance'].default_value = 0.02
+                bp_ = N_.new("ShaderNodeBump"); bp_.inputs['Strength'].default_value = 0.9; bp_.inputs['Distance'].default_value = 0.03
                 L_.new(rg_.outputs[0], bp_.inputs['Height'])
                 if p_.inputs['Normal'].links:
                     L_.new(p_.inputs['Normal'].links[0].from_socket, bp_.inputs['Normal'])
                 L_.new(bp_.outputs['Normal'], p_.inputs['Normal'])
-                p_.inputs['Coat Weight'].default_value = 0.15
+                p_.inputs['Coat Weight'].default_value = 0.0; p_.inputs['Roughness'].default_value = 0.88; p_.inputs['Sheen Weight'].default_value = 0.35
             off = {"blazer": 0.012, "leather": 0.014, "bomber": 0.02, "coat": 0.016}[JK]
             self.jacket, jv = self._shell("jacket", jk, off, mat, solid=0.004, displace={"bomber": 0.004, "cagoule": 0.007}.get(self.JACKET, 0.002),
                                           drape={"bomber": 40, "cagoule": 45}.get(self.JACKET, 10))
             # the body of the jacket hangs from the shoulders: no pecs, abs or shoulder blades under the cloth
             src = np.array(self.jacket["src_verts"]); arm_w = warm[src]
-            self._loosen(self.jacket, m, ease={"bomber": 1.07, "cagoule": 1.09}.get(self.JACKET, 1.04), extra=0.003, mask=arm_w < 0.2, single=True)
+            self._loosen(self.jacket, m, ease={"bomber": 1.07, "cagoule": 1.2}.get(self.JACKET, 1.04), extra=0.003, mask=arm_w < 0.2, single=True)
             jr = self.jacket.modifiers.new("Relax", "SMOOTH"); jr.factor = 0.5; jr.iterations = 10    # no step at the loosened panel's edge
             self.jacket.modifiers.move(self.jacket.modifiers.find("Relax"), 0)
             drop = {"blazer": 0.14, "leather": 0.08, "bomber": 0.0, "coat": 0.5}[JK] if self.JACKET not in ("labcoat", "cagoule") else {"labcoat": 0.4, "cagoule": 0.13}[self.JACKET]
