@@ -36,16 +36,17 @@ F_GRIP, F_LIFT0, F_LIFT1, F_LAND0, F_SEAT, F_REL = 85, 120, 175, 290, 330, 352
 def head_M(f):
     """world matrix of the donor head at frame f: on A, lifted, carried in an arc, lowered onto B's neck"""
     pA, pB = MA.translation, MB.translation
-    q = MA.to_quaternion()
+    qA, qB = MA.to_quaternion(), MB.to_quaternion()
+    q = qA.slerp(qB, ss(F_LIFT1, F_LAND0, f))
     if f <= F_LIFT0: return MA.copy()
     if f >= F_SEAT: return MB.copy()
     if f <= F_LIFT1:                                  # straight up off the neck (7 cm), tiny forward tilt
-        u = ss(F_LIFT0, F_LIFT1, f); p = pA + V(0, 0, 0.03 * u); tilt = 2 * u
+        u = ss(F_LIFT0, F_LIFT1, f); p = pA + V(0, 0, 0.06 * u); tilt = 2 * u
     elif f <= F_LAND0:                                # carried across in an arc (peak +12 cm)
         u = ss(F_LIFT1, F_LAND0, f)
-        p = pA.lerp(pB, u) + V(0, 0, 0.03 + 0.015 * math.sin(math.pi * u)); tilt = 2 - 1.0 * math.sin(math.pi * u)
+        p = pA.lerp(pB, u) + V(0, 0, 0.06 + 0.015 * math.sin(math.pi * u)); tilt = 2 - 1.0 * math.sin(math.pi * u)
     else:                                             # lowered straight down onto the neck, settles
-        u = ss(F_LAND0, F_SEAT, f); p = pB + V(0, 0, 0.03 * (1 - u)); tilt = 2 * (1 - u)
+        u = ss(F_LAND0, F_SEAT, f); p = pB + V(0, 0, 0.06 * (1 - u)); tilt = 2 * (1 - u)
     R_ = Quaternion((1, 0, 0), math.radians(tilt)) @ q
     return Matrix.Translation(p) @ R_.to_matrix().to_4x4()
 for f in range(1, 1657):
@@ -443,9 +444,11 @@ hit = BV_B.ray_cast(MB.translation + V(0.12, -0.07, 0.75), V(0, 0, -1), 1.0) if 
 sc.frame_set(1100)
 BVB = bvh_world(bodyB)
 cands = []
+_RB = Matrix.Rotation(math.radians(35), 3, 'Z'); _o0 = V(0.27, 0.412, 0)
 for xx in (0.33, 0.35, 0.37, 0.39):
     for yy in (0.12, 0.16, 0.20, 0.24):
-        h_ = BVB.ray_cast(V(xx, yy, 1.8), V(0, 0, -1), 1.5)
+        _q = _RB @ (V(xx, yy, 0) - _o0) + V(MB.translation.x, MB.translation.y, 0)
+        h_ = BVB.ray_cast(V(_q.x, _q.y, 1.8), V(0, 0, -1), 1.5)
         if h_[0] is not None and h_[1].normalized().z > 0.6: cands.append((h_[0].z, h_[0], h_[1].normalized()))
 cands.sort(key=lambda c: -c[0]); SH_P, SH_N = cands[0][1], cands[0][2]
 print("SHOULDER contact", tuple(round(v, 3) for v in SH_P), tuple(round(v, 2) for v in SH_N))

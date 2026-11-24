@@ -21,3 +21,15 @@ This is a work-in-progress copy of `04_animate.py`. The delivered package was bu
 ## Next step
 - Hand-key the stitching arm interactively. Alternatively, restage the stitch on the side of the neck facing the surgeon, with the monkey's seat turned 30–40° toward him.
 - Raise the carry so the forearms clear the monkey bodies.
+
+## Seat-rotation restage (director-approved): audit not clean, so I stopped
+Changes in this pass:
+- Recipient B, its seat and its backrest turned 35° toward the surgeon. The neck seam now faces him.
+- The head slerps into the new orientation during the carry.
+- The lift is raised to 6 cm for forearm clearance.
+- Note: these WIP copies sit one folder deeper than `scripts/`. To run them, copy them back into `scripts/`; that's how I ran them. From here, their path to `pipeline/` and to `camera_keys.json` is wrong.
+
+Audit results (every frame):
+- **Stitching (450–580):** the ring-grip fingers are still up to 50 mm inside body B. Rotating the seat didn't help; the posed hand still ends up on the shoulder.
+- **Carry:** fingertips are inside the head at frames 282–291 (up to 26 mm). The right forearm is up to 22 mm inside body A at frames 212–223.
+- **Beat 7 (1108–1310):** the hand on the shoulder has fingers inside the rotated body, up to 40 mm.
