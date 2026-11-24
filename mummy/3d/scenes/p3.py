@@ -50,7 +50,7 @@ def knee_pieces(sk, side="L", keep_femur=0.09, keep_tibia=0.07, keep="near"):
     bpy.context.view_layer.update()
     kj = sk.world_pivot("shank" + side)                          # knee joint
     out = []
-    for seg, keep in (("femur" + side, keep_femur), ("shank" + side, keep_tibia)):
+    for seg, klen in (("femur" + side, keep_femur), ("shank" + side, keep_tibia)):
         o = sk.parts[seg]
         o.data = o.data.copy()                                    # skeletons share mesh data: cut a private copy
         Mi = o.matrix_world.inverted()
@@ -59,12 +59,18 @@ def knee_pieces(sk, side="L", keep_femur=0.09, keep_tibia=0.07, keep="near"):
         d = np.linalg.norm(co - np.array(kj), axis=1)
         far = co[np.argmax(d)]
         axis = (Vector(far.tolist()) - kj).normalized()            # along the bone away from the knee
-        cut_w = kj + axis * keep
+        cut_w = kj + axis * klen
         rng = random.Random(len(seg))
         nrm_w = (axis + Vector((rng.uniform(-0.25, 0.25), rng.uniform(-0.25, 0.25), rng.uniform(-0.2, 0.2)))).normalized()
-        res = bmesh.ops.bisect_plane(bm, geom=bm.verts[:] + bm.edges[:] + bm.faces[:], plane_co=Mi @ cut_w,
-                                     plane_no=(Mi.to_3x3() @ nrm_w).normalized(), clear_outer=(keep == "near"), clear_inner=(keep != "near"))
-        bmesh.ops.contextual_create(bm, geom=[e for e in res['geom_cut'] if isinstance(e, bmesh.types.BMEdge)])
+        pc = Mi @ cut_w; pn = (Mi.to_3x3() @ nrm_w).normalized()
+        res = bmesh.ops.bisect_plane(bm, geom=bm.verts[:] + bm.edges[:] + bm.faces[:], plane_co=pc, plane_no=pn)
+        # delete the unwanted side ourselves (world-side test is unambiguous): near = toward the knee joint
+        sgn = 1.0 if keep == "near" else -1.0
+        kill = [v for v in bm.verts if sgn * (v.co - pc).dot(pn) > 1e-6]
+        bmesh.ops.delete(bm, geom=kill, context='VERTS')
+        edges = [e for e in bm.edges if e.is_boundary]
+        if edges:
+            bmesh.ops.holes_fill(bm, edges=edges, sides=0) if False else bmesh.ops.contextual_create(bm, geom=edges)
         bm.to_mesh(o.data); bm.free(); o.data.update()
         out.append(o)
     if keep == "near":
