@@ -207,48 +207,76 @@ def S04():
 
 # ============================================================================ "Above the buried remains, people ground grain..."
 def S05():
-    """Working materials: in the doorway light, a hide pegged out on the floor with a bone scraper lying on it, a red
-    deer antler and a few bone points beside it. Slow push."""
+    """Working materials: a hide laced into a wooden stretching frame leaning against the house wall by the door, a bone
+    scraper and antler on the floor below it, raking light from the doorway across the skin. Slow push."""
     U.CUT = False
     R = BR.interior(fire=0.6, door_sun=1.0)
     hx, hy = 0.3, 0.0
-    px, py = hx + 3.75, hy + 0.05
-    hide = _plain("rawhide", (0.42, 0.3, 0.18), 0.7)
-    # an animal skin: an irregular outline with the leg flaps, stretched out between pegs, cockled and uneven
-    bpy.ops.mesh.primitive_grid_add(x_subdivisions=48, y_subdivisions=48, size=1.0, location=(px, py, 0.015)); hd = bpy.context.active_object
+    fx, fy = hx + 3.3, hy - 1.75                      # beside the door, against the wall, between the posts
+    lean = math.radians(18); yaw = math.radians(-60)
+    Rm = Matrix.Rotation(yaw, 3, 'Z') @ Matrix.Rotation(-lean, 3, 'X')
+    base = Vector((fx, fy, 0.0))
+    wood = bpy.data.materials.get("postbark") or ph.texture("bark_brown_02", scale=3.0, name="postbark", tint=(0.6, 0.5, 0.42))
+    W_, H_ = 1.05, 1.35
+    def frame_pole(p0, p1, r=0.025):
+        d = p1 - p0
+        bpy.ops.mesh.primitive_cylinder_add(radius=r, depth=d.length + 0.12, location=tuple((p0 + p1) / 2)); o = bpy.context.active_object
+        o.rotation_euler = d.to_track_quat('Z', 'Y').to_euler(); o.data.materials.append(wood); o.name = "stretchframe"
+    corners = [base + Rm @ Vector((sx * W_ / 2, 0, h)) for sx, h in ((-1, 0.05), (1, 0.05), (1, H_), (-1, H_))]
+    for k in range(4):
+        frame_pole(corners[k], corners[(k + 1) % 4])
+    # the hide: an animal outline inside the frame, laced to it, cockled and stretched
+    bpy.ops.mesh.primitive_grid_add(x_subdivisions=48, y_subdivisions=48, size=1.0, location=(0, 0, 0)); hd = bpy.context.active_object
     bm_ = bmesh.new(); bm_.from_mesh(hd.data)
     def keep(x, y):
-        a = math.atan2(y, x); r = math.hypot(x / 0.48, y / 0.36)
-        lim = 1.0 + 0.1 * math.sin(3 * a + 0.5) + 0.22 * max(0.0, math.cos(4 * a)) ** 6     # four leg flaps
-        return r < lim
+        a = math.atan2(y, x); r = math.hypot(x / 0.42, y / 0.5)
+        return r < 1.0 + 0.08 * math.sin(3 * a + 0.5) + 0.2 * max(0.0, math.cos(4 * a)) ** 6
     bmesh.ops.delete(bm_, geom=[v for v in bm_.verts if not keep(v.co.x, v.co.y)], context='VERTS')
+    for v in bm_.verts:
+        v.co = Vector((v.co.x, 0.0, v.co.y))
     bm_.to_mesh(hd.data); bm_.free()
+    hd.matrix_world = Matrix.Translation(base + Rm @ Vector((0, 0.01, H_ / 2 + 0.03))) @ Rm.to_4x4()
+    hide = _plain("rawhide2", (0.45, 0.32, 0.19), 0.65)
+    N = hide.node_tree.nodes; Lk = hide.node_tree.links; pr = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 40; nz.inputs['Detail'].default_value = 10
+    Lk.new(tc.outputs['Object'], nz.inputs['Vector']); bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.6
+    Lk.new(nz.outputs['Fac'], bp.inputs['Height']); Lk.new(bp.outputs['Normal'], pr.inputs['Normal'])
+    vn = N.new("ShaderNodeTexNoise"); vn.inputs['Scale'].default_value = 4; Lk.new(tc.outputs['Object'], vn.inputs['Vector'])
+    mr = N.new("ShaderNodeMapRange"); mr.inputs['To Min'].default_value = 0.6; mr.inputs['To Max'].default_value = 1.15; Lk.new(vn.outputs['Fac'], mr.inputs['Value'])
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
+    mx.inputs[6].default_value = (0.45, 0.32, 0.19, 1); cc = N.new("ShaderNodeCombineXYZ")
+    for k in range(3):
+        Lk.new(mr.outputs[0], cc.inputs[k])
+    Lk.new(cc.outputs[0], mx.inputs[7]); Lk.new(mx.outputs[2], pr.inputs['Base Color'])
+    pr.inputs['Subsurface Weight'].default_value = 0.15
     hd.data.materials.append(hide); hd.name = "hide"
-    dp = hd.modifiers.new("d", "DISPLACE"); tt = bpy.data.textures.new("hidewrinkle", "CLOUDS"); tt.noise_scale = 0.08; dp.texture = tt; dp.strength = 0.025
     for p_ in hd.data.polygons:
         p_.use_smooth = True
-    N = hide.node_tree.nodes; Lk = hide.node_tree.links; pr = N["Principled BSDF"]
-    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 30; nz.inputs['Detail'].default_value = 8
-    Lk.new(tc.outputs['Object'], nz.inputs['Vector']); bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.5
-    Lk.new(nz.outputs['Fac'], bp.inputs['Height']); Lk.new(bp.outputs['Normal'], pr.inputs['Normal'])
-    wood = bpy.data.materials.get("postbark") or _plain("peg", (0.25, 0.18, 0.1), 0.8)
-    for sx in (-1, 1):                                   # pegs at the corners
-        for sy in (-1, 1):
-            bpy.ops.mesh.primitive_cone_add(radius1=0.012, radius2=0.006, depth=0.08, location=(px + sx * 0.43, py + sy * 0.33, 0.03)); pg = bpy.context.active_object
-            pg.data.materials.append(wood); pg.name = "peg"
-    bonemat = B.bone_material("C", dirt=0.6, sand=0.2) if hasattr(B, "bone_material") else _plain("bonetool", (0.7, 0.62, 0.5), 0.6)
-    bpy.ops.mesh.primitive_cylinder_add(radius=0.012, depth=0.18, location=(px + 0.05, py - 0.05, 0.05)); sc = bpy.context.active_object
-    sc.rotation_euler = (0, math.radians(90), 0.4); sc.scale = (1.0, 1.7, 1.0); sc.data.materials.append(bonemat); sc.name = "scraper"
-    for k in range(4):                                   # bone points
-        bpy.ops.mesh.primitive_cone_add(radius1=0.005, radius2=0.0, depth=0.09, location=(px - 0.62, py - 0.3 + k * 0.05, 0.008)); bp = bpy.context.active_object
-        bp.rotation_euler = (0, math.radians(90), 0.1 * k); bp.data.materials.append(bonemat); bp.name = "bonepoint"
+    dp = hd.modifiers.new("d", "DISPLACE"); tt = bpy.data.textures.new("hidecockle", "CLOUDS"); tt.noise_scale = 0.07; dp.texture = tt; dp.strength = 0.018
+    # lacing: short cords from the hide's edge to the frame poles
+    lace = _plain("lace", (0.2, 0.14, 0.08), 0.85)
+    for k in range(16):
+        a = 2 * math.pi * k / 16
+        e = Vector((0.4 * math.cos(a), 0, 0.48 * math.sin(a)))
+        fpt = Vector((max(-W_ / 2, min(W_ / 2, e.x * 1.4)), 0, max(0.05, min(H_, H_ / 2 + 0.03 + e.z * 1.4))))
+        p0 = base + Rm @ (e + Vector((0, 0, H_ / 2 + 0.03))); p1 = base + Rm @ fpt
+        d = p1 - p0
+        if d.length < 0.02:
+            continue
+        bpy.ops.mesh.primitive_cylinder_add(radius=0.003, depth=d.length, location=tuple((p0 + p1) / 2)); lc = bpy.context.active_object
+        lc.rotation_euler = d.to_track_quat('Z', 'Y').to_euler(); lc.data.materials.append(lace); lc.name = "lacing"
+    bone = _plain("bonetool", (0.68, 0.6, 0.48), 0.6)
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.013, depth=0.2, location=(fx - 0.35, fy + 0.45, 0.014)); sc = bpy.context.active_object
+    sc.rotation_euler = (0, math.radians(90), 0.6); sc.scale = (1.0, 1.6, 1.0); sc.data.materials.append(bone); sc.name = "scraper"
     ant = _plain("antler", (0.42, 0.34, 0.24), 0.7)
-    for k, (dx, dy, l, a) in enumerate(((0.0, 0.0, 0.45, 0.0), (0.12, 0.05, 0.18, 0.7), (0.25, 0.02, 0.16, -0.6))):
-        bpy.ops.mesh.primitive_cone_add(radius1=0.02 - 0.005 * k, radius2=0.006, depth=l, location=(px - 0.7 + dx + l / 2, py + 0.35 + dy, 0.02)); an = bpy.context.active_object
+    for k, (dx, dy, l, a) in enumerate(((0.0, 0.0, 0.45, 0.3), (0.12, 0.08, 0.18, 1.0), (0.24, 0.05, 0.16, -0.3))):
+        bpy.ops.mesh.primitive_cone_add(radius1=0.02 - 0.005 * k, radius2=0.006, depth=l, location=(fx - 0.75 + dx, fy + 0.6 + dy, 0.02)); an = bpy.context.active_object
         an.rotation_euler = (0, math.radians(90), a); an.data.materials.append(ant); an.name = "antler"
-    t = Vector((px - 0.1, py, 0.03))
-    return dict(a=((px - 1.3, py - 1.0, 0.75), tuple(t)), b=((px - 1.05, py - 0.8, 0.65), tuple(t)), lens=35,
-                fstop=4.0, focus=tuple(t), cine=dict(exposure=0.35), hand_ok=("floor",))
+    c = base + Rm @ Vector((0, 0, H_ / 2))
+    _spot((c.x + 1.2, c.y + 1.6, 1.0), tuple(c), 420, size=0.3, color=(1.0, 0.9, 0.75), spot=35)    # raking light from the door
+    fwd = Rm @ Vector((0, -1, 0))
+    return dict(a=(tuple(c + fwd * 2.0 + Vector((-0.5, 0, 0.1))), tuple(c)), b=(tuple(c + fwd * 1.6 + Vector((-0.35, 0, 0.1))), tuple(c)), lens=35,
+                fstop=4.0, focus=tuple(c), cine=dict(exposure=0.3), hand_ok=("floor",))
 
 
 def S06():
@@ -318,10 +346,13 @@ def S11():
 
 
 def S12():
-    """DNA: the suited scientist at the cabinet (from behind), hands in at the sample racks, the violet accent."""
-    d = p3.S11()
-    d.update(a=((-0.55, 0.15, 1.75), (0.05, 1.55, 0.95)), b=((-0.45, 0.25, 1.7), (0.05, 1.58, 0.95)))
-    return d
+    """DNA: the clean-room cabinet glowing in the dark lab, the sample racks inside, the room empty. Slow push."""
+    p3.clean_room(uv=0.25)
+    for o in bpy.data.objects:
+        if o.type == 'LIGHT' and o.name.startswith("ceil"):
+            o.data.energy = 4
+    return dict(a=((1.9, -1.4, 1.5), (0.0, 1.5, 1.0)), b=((1.55, -1.0, 1.45), (0.0, 1.5, 1.0)), lens=32, fstop=4.0, focus=(0, 1.5, 1.0),
+                cine=dict(exposure=-0.1))
 
 
 # ============================================================================ "Then the broken knee reconnects a body to a place outside the house..."
@@ -332,8 +363,9 @@ def S13():
     kp = Vector(o["knee"])
     b2 = Vector((U.PITS["B2"][0], U.PITS["B2"][1], G.H(U.PITS["B2"][0], U.PITS["B2"][1])))
     m = (kp + b2) / 2
-    return dict(a=(tuple(kp + Vector((0.6, -0.9, 1.2))), tuple(kp)), b=(tuple(m + Vector((1.6, -2.4, 4.4))), tuple(m)), lens=30,
-                fstop=8.0, focus=tuple(m), cine=dict(exposure=0.1))
+    # daylight crane: from above the knee pit, rising over the house wall to the grave inside
+    return dict(a=(tuple(kp + Vector((0.5, -1.4, 1.9))), tuple(kp)), b=(tuple(b2 + Vector((1.2, -3.2, 3.6))), tuple(b2)), lens=28,
+                fstop=11.0, focus=tuple(m), cine=dict(exposure=0.15))
 
 
 # ============================================================================ "The discovery also gives researchers a way to look..."
@@ -386,18 +418,13 @@ def S17():
 
 
 def S18():
-    """A researcher at the microscope (from behind), a slide from the tray on the stage. Push past the shoulder."""
+    """At the microscope: close on the stage, a thin section of bone on its slide under the objective, the lamp below
+    lighting it through; the tray of slides beside. No one in shot. Slow push to the stage."""
     d = p2.S12()
     slide_tray((-0.3, 0.3, LB.TOP + 0.002), n_x=3, n_y=3)
-    import acts as AC
-    m = K.OsteologistNeat("Osteologist")
-    st = AC.Stand(m, (0.05, -0.35), 90, lean=22)
-    st.hand("L", (-0.05, 0.3, LB.TOP + 0.03), elbow=(0.6, 0.2, -0.8), curl=18)
-    st.hand("R", (0.07, 0.32, LB.TOP + 0.05), elbow=(0.6, 0.2, -0.8), curl=18)
-    st.head_to((0.0, 0.42, LB.TOP + 0.3), share=0.8); st.finish(look=(0.0, 0.42, LB.TOP + 0.3), density=1.0)
-    t = Vector((0.0, 0.42, LB.TOP + 0.2))
-    return dict(a=((0.55, -1.05, LB.TOP + 0.75), tuple(t)), b=((0.45, -0.85, LB.TOP + 0.7), tuple(t)), lens=35, fstop=4.0, focus=tuple(t),
-                cine=dict(exposure=0.0), hand_ok=("slide", "slidetray", "velvet", "bench"))
+    t = Vector((0.0, 0.42, LB.TOP + 0.12))
+    return dict(a=((-0.3, 0.05, LB.TOP + 0.22), tuple(t)), b=((-0.22, 0.12, LB.TOP + 0.19), tuple(t)), lens=50, fstop=4.0, focus=tuple(t),
+                cine=dict(exposure=-0.05))
 
 
 # ============================================================================ "It suggests the practice extended beyond this island..."
@@ -420,13 +447,26 @@ def S20():
 
 
 def S21():
-    """Others may have used wetlands: the wrapped body sinking in a bog pool, the sky in the dark water. High and still."""
-    M = p2._bog_scene("dawn", sun_az=120)
+    """Others may have used wetlands: from the peat bank at dusk, the wrapped body half-sunk in the brown pool, the sky
+    reflected round it. Slow push."""
+    M = p2._bog_scene("dusk", sun_az=95)
     wz = M["water_z"]
     bx, by = p2._pool_spot(M, margin=0.45)
-    P2.crouched_bundle((bx, by, wz - 0.16), rot=math.radians(20), seed=5)
-    return dict(a=((bx + 2.2, by - 2.6, wz + 3.2), (bx, by, wz)), b=((bx + 1.8, by - 2.1, wz + 2.6), (bx, by, wz)), lens=35,
-                fstop=5.6, focus=(bx, by, wz), cine=dict(exposure=0.25))
+    P2.crouched_bundle((bx, by, wz - 0.17), rot=math.radians(70), seed=5)
+    best = None
+    for r in np.linspace(1.2, 3.5, 12):
+        for a in np.linspace(math.radians(200), math.radians(340), 15):
+            x, y = bx + r * math.cos(a), by + r * math.sin(a)
+            if all(P2.moor_height(M, x + dx, y + dy) > wz + 0.12 for dx in (-0.3, 0, 0.3) for dy in (-0.3, 0, 0.3)):
+                if best is None or r < best[0]:
+                    best = (r, x, y, a)
+    if best is None:
+        best = (2.5, bx, by - 2.5, math.radians(270))
+    r, cx, cy, a = best
+    back = Vector((math.cos(a), math.sin(a), 0)) * 0.7
+    cz = P2.moor_height(M, cx, cy)
+    c0 = Vector((cx, cy, cz + 1.1)) + back; c1 = Vector((cx, cy, cz + 0.95)) + back * 0.3
+    return dict(a=(tuple(c0), (bx, by, wz)), b=(tuple(c1), (bx, by, wz)), lens=40, fstop=4.0, focus=(bx, by, wz), cine=dict(exposure=0.35))
 
 
 # ============================================================================ "The implication reaches into collections already excavated..."
@@ -549,20 +589,20 @@ PLAN = [  # shot, VO paragraph (1-based), seconds, description
     ("S02", 1, 5.0, "Floors renewed: the section through the house floors"),
     ("S03", 1, 5.0, "Grinding grain: the saddle quern, meal and grain"),
     ("S04", 1, 4.5, "Sleeping and storage: sheepskins, baskets, pots"),
-    ("S05", 2, 5.0, "Working materials: a pegged hide, bone tools, antler"),
+    ("S05", 2, 5.0, "Working materials: a hide laced in a stretching frame"),
     ("S06", 2, 5.0, "The excavated house floor and hearth"),
     ("S07", 3, 6.0, "Abandonment: roofless stone rings filling with sand"),
     ("S08", 3, 5.0, "Wind streaming sand over the dunes"),
     ("S09", 4, 5.0, "The excavation: trowelling beside a skeleton"),
     ("S10", 4, 4.5, "Teeth: a jaw beside a skull it does not fit"),
     ("S11", 4, 4.0, "Chemistry: the accelerator hall"),
-    ("S12", 4, 4.0, "DNA: the suited scientist at the cabinet"),
+    ("S12", 4, 4.0, "DNA: the clean-room cabinet glowing in the dark lab"),
     ("S13", 5, 5.5, "The knee pit outside the house, and the grave"),
     ("S14", 6, 5.0, "A museum store: the long aisle of boxes"),
     ("S15", 7, 5.5, "A skeleton in its archive box"),
     ("S16", 7, 5.0, "Under the microscope: well-preserved bone"),
     ("S17", 8, 5.0, "Thirty-six samples: a tray of thin sections"),
-    ("S18", 8, 5.0, "A researcher at the microscope"),
+    ("S18", 8, 5.0, "The microscope stage with a thin section"),
     ("S19", 9, 5.0, "Beyond the island: the long coast from above"),
     ("S20", 9, 5.5, "Drying the dead: a body on a platform over a peat fire"),
     ("S21", 9, 5.0, "Wetlands: a body sinking in a bog pool"),

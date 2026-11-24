@@ -158,23 +158,24 @@ def S06():
 
 # ============================================================================ "...the bones cannot tell us what the people called these figures..."
 def S07():
-    """The osteologist at the bench (from behind, over the shoulder), the skeleton under the lamp - the evidence stops
-    at the bones. Short neat hair, white lab coat. Slow push past the shoulder."""
+    """The evidence stops at the bones: the skeleton laid out on the bench under the lamp in the darkened lab, a hand lens
+    and calipers set down beside it, no one there. Slow push along it."""
     L = p1.lab_body(osteo=False)
-    import acts as AC
-
-    m = K.OsteologistNeat("Osteologist")
-    st = AC.Stand(m, (0.15, -0.42), 90, lean=14)
-    st.hand("L", (-0.05, 0.12, LB.TOP + 0.02), elbow=(0.6, 0.2, -0.8), curl=18)
-    st.hand("R", (0.32, 0.18, LB.TOP + 0.03), elbow=(0.6, 0.2, -0.8), curl=24)
-    st.head_to((0.1, 0.4, LB.TOP), share=0.9)
-    st.finish(look=(0.1, 0.4, LB.TOP), density=1.0)
     for o in bpy.data.objects:
         if o.type == 'LIGHT' and o.data.type in ('SUN', 'AREA') and "lamp" not in o.name.lower():
             o.data.energy *= 0.3
-    t = Vector((0.05, 0.38, LB.TOP + 0.05))
-    return dict(a=((0.62, -1.15, LB.TOP + 0.95), tuple(t)), b=((0.5, -0.95, LB.TOP + 0.85), tuple(t)), lens=35,
-                fstop=4.0, focus=tuple(t), cine=dict(exposure=0.1), hand_ok=p1.OK)
+    steel = P2._brushed("calsteel", (0.7, 0.71, 0.72), 0.25)
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.035, depth=0.006, location=(0.42, 0.18, LB.TOP + 0.004)); ln = bpy.context.active_object
+    ln.data.materials.append(_glass("lensglass")); ln.name = "handlens"
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.037, minor_radius=0.004, location=(0.42, 0.18, LB.TOP + 0.005)); rm = bpy.context.active_object
+    rm.data.materials.append(_plain("lensrim", (0.03, 0.03, 0.03), 0.4)); rm.name = "handlens"
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(0.48, 0.12, LB.TOP + 0.004)); hd = bpy.context.active_object
+    hd.scale = (0.12, 0.012, 0.006); hd.rotation_euler.z = -0.6; hd.data.materials.append(_plain("lenshandle", (0.05, 0.04, 0.03), 0.6)); hd.name = "handlens"
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(0.3, 0.1, LB.TOP + 0.003)); cl = bpy.context.active_object
+    cl.scale = (0.2, 0.012, 0.004); cl.rotation_euler.z = 0.25; cl.data.materials.append(steel); cl.name = "calipers"
+    t = Vector((0.0, 0.38, LB.TOP + 0.05))
+    return dict(a=((0.75, -0.55, LB.TOP + 0.55), tuple(t)), b=((0.55, -0.45, LB.TOP + 0.5), tuple(t + Vector((-0.15, 0, 0)))), lens=35,
+                fstop=4.0, focus=tuple(t), cine=dict(exposure=0.1))
 
 
 def S08():
@@ -241,7 +242,7 @@ def S11():
     bpy.context.view_layer.update()
     W = np.array([o.matrix_world @ v.co for v in o.data.vertices])
     top = W[np.argmax(W @ np.array(n))]
-    tgt = hit + n * 0.12                                   # head and neck of the femur stand clear of the hide
+    tgt = hit + n * 0.15                                   # head and neck of the femur stand well clear of the hide
     sk.root.location += Vector((tgt.x - top[0], tgt.y - top[1], tgt.z - top[2]))
     bpy.context.view_layer.update()
     # the split: a dark ragged gap in the hide round the bone, with lifted torn lips
@@ -251,11 +252,10 @@ def S11():
     dg_ = gp.modifiers.new("rag", "DISPLACE"); tr = bpy.data.textures.new("ragged", "CLOUDS"); tr.noise_scale = 0.015; dg_.texture = tr; dg_.strength = 0.01
     hx, hy = R["hearth"]
     _spot((hx - 0.2, hy + 0.2, 0.8), tuple(tgt), 420, size=0.2, color=(1.0, 0.6, 0.28), spot=25)
-    perp = n.cross(Vector((0, 0, 1)))
-    perp = perp.normalized() if perp.length > 0.1 else Vector((1, 0, 0))
-    cam = hit + n * 0.08 + perp * 0.42 + Vector((0, 0, 0.12))          # side-on: the ball of the head on its neck in profile
-    side = perp
-    return dict(a=(tuple(cam), tuple(hit + n * 0.06)), b=(tuple(cam - side * 0.06), tuple(hit + n * 0.06)), lens=50,
+    # medium shot: the whole crouched bundle on its hurdle, the split and the bone end at a readable scale
+    cam = c + Vector((math.cos(math.radians(-20)), math.sin(math.radians(-20)), 0)) * 1.25 + Vector((0, 0, 0.75))
+    side = Vector((1, 0, 0))
+    return dict(a=(tuple(cam), tuple((c + hit) / 2)), b=(tuple(cam - (cam - c).normalized() * 0.15), tuple((c + hit) / 2)), lens=40,
                 fstop=4.0, focus=tuple(tgt), cine=dict(exposure=0.6, sat=0.85), hand_ok=("floor", "bundle"))
 
 
@@ -275,8 +275,8 @@ def S12():
     hx, hy = R["hearth"]
     _spot((hx - 0.2, hy + 0.2, 0.8), tuple(t), 140, size=0.2, color=(1.0, 0.55, 0.22), spot=30)
     along = Vector((math.cos(rot), math.sin(rot), 0)); side = Vector((math.cos(rot - math.pi / 2), math.sin(rot - math.pi / 2), 0))
-    cam = t + side * 0.55 + along * 0.3 + Vector((0, 0, 0.35))       # the cords across the body, knots and wraps together
-    return dict(a=(tuple(cam), tuple(t)), b=(tuple(cam - side * 0.06), tuple(t)), lens=55,
+    cam = c + side * 1.2 + along * 0.35 + Vector((0, 0, 0.8))         # medium: the whole bundle, the fresh cords pale against the dark hide
+    return dict(a=(tuple(cam), tuple(c)), b=(tuple(cam - side * 0.15), tuple(c)), lens=40,
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor",))
 
 
@@ -356,7 +356,7 @@ PLAN = [  # shot, VO paragraph (1-based), seconds, description
     ("S04", 2, 4.5, "The dark skull alone in the light, the other parts dim"),
     ("S05", 3, 5.0, "Dusk: kin gathered at the house doorway"),
     ("S06", 3, 4.5, "The body raised on a stone platform with pots beside it"),
-    ("S07", 4, 4.0, "The osteologist at the bench, over the shoulder"),
+    ("S07", 4, 4.0, "The skeleton on the bench, lens and calipers beside it"),
     ("S08", 4, 4.5, "The skull in darkness, raking light across the brow"),
     ("S09", 5, 4.5, "Three racks of sample tubes in the clean room"),
     ("S10", 6, 5.0, "Three bones in three pools of light, gaps of shadow"),
