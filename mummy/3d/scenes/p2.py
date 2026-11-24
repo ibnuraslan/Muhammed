@@ -467,8 +467,8 @@ def _cotton(M, center, radius, n=2500, seed=1):
     me = bpy.data.meshes.new("cotton"); bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new("cottongrass", me); bpy.context.scene.collection.objects.link(o)
     me.materials.append(_plain("stem", (0.12, 0.1, 0.04), 0.8))
-    w = _plain("tuft", (0.9, 0.9, 0.88), 0.9); w.node_tree.nodes["Principled BSDF"].inputs['Subsurface Weight'].default_value = 0.4
-    w.node_tree.nodes["Principled BSDF"].inputs['Sheen Weight'].default_value = 1.0
+    w = _plain("tuft", (0.66, 0.65, 0.62), 0.95); w.node_tree.nodes["Principled BSDF"].inputs['Subsurface Weight'].default_value = 0.2
+    w.node_tree.nodes["Principled BSDF"].inputs['Sheen Weight'].default_value = 0.25
     me.materials.append(w)
     return o
 
