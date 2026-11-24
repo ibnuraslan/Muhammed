@@ -60,6 +60,10 @@ def _crem_pit(c, r=0.24, n=200, charcoal=110):
     bpy.ops.mesh.primitive_grid_add(x_subdivisions=60, y_subdivisions=60, size=2.2 * r, location=(x, y, z + 0.012)); pt = bpy.context.active_object
     bm_ = bmesh.new(); bm_.from_mesh(pt.data)
     bmesh.ops.delete(bm_, geom=[v for v in bm_.verts if v.co.xy.length > r * (1 + 0.08 * math.sin(7 * math.atan2(v.co.y, v.co.x)))], context='VERTS')
+    for v in bm_.verts:                       # the rim dips under the surrounding ground: a soft, irregular pit edge
+        t_ = v.co.xy.length / r
+        if t_ > 0.75:
+            v.co.z -= 0.03 * (t_ - 0.75) / 0.25
     bm_.to_mesh(pt.data); bm_.free()
     pt.data.materials.append(bpy.data.materials.get("pitfill") or ph.texture("brown_mud_02", scale=6.0, name="pitfill", tint=(0.34, 0.27, 0.2)))
     pt.name = "pitfloor"
