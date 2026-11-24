@@ -576,6 +576,9 @@ def _night_pit():
     for f in bm.faces:
         f.normal_flip()
     bm.to_mesh(pit.data); bm.free()
+    # the ground is not really dug out: a dark earth disc inside the rim reads as the opening (and as the pit floor)
+    bpy.ops.mesh.primitive_circle_add(vertices=48, radius=0.56, fill_type='NGON', location=(kx, ky, z + 0.012)); hole = bpy.context.active_object
+    hole.scale = (1.45, 1.0, 1.0); hole.name = "pitfloor"; hole.data.materials.append(_plain("pitearth", (0.035, 0.027, 0.02), 0.95))
     G.spoil_heap(kx + 0.2, ky + 1.6, 0.9, 0.6, 0.38)          # upcast on the far side, clear of where they stand
     # pole torch: a flame on a stake, a warm point light
     bpy.ops.mesh.primitive_cylinder_add(radius=0.02, depth=1.6, location=(kx - 1.3, ky + 0.6, z + 0.8)); st = bpy.context.active_object
@@ -584,6 +587,13 @@ def _night_pit():
     fl.scale = (0.8, 0.8, 1.6); fl.data.materials.append(P2._mat("flame", (0, 0, 0), 0.5, emit=(1.0, 0.45, 0.1), strength=40)); fl.name = "torchflame"
     d = bpy.data.lights.new("torch", 'POINT'); d.energy = 220; d.color = (1.0, 0.55, 0.2); d.shadow_soft_size = 0.12
     lo = bpy.data.objects.new("torch", d); bpy.context.scene.collection.objects.link(lo); lo.location = (kx - 1.3, ky + 0.6, z + 1.65)
+    # a second torch stuck in the ground on the near side: front light on the hurdle and the body
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.02, depth=1.5, location=(kx - 1.9, ky - 1.8, z + 0.75)); st2 = bpy.context.active_object
+    st2.data.materials.append(_plain("stake", (0.12, 0.08, 0.05), 0.8)); st2.name = "torchstake"
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.08, location=(kx - 1.9, ky - 1.8, z + 1.58)); fl2 = bpy.context.active_object
+    fl2.scale = (0.8, 0.8, 1.6); fl2.data.materials.append(bpy.data.materials["flame"]); fl2.name = "torchflame"
+    d2 = bpy.data.lights.new("torch2", 'POINT'); d2.energy = 160; d2.color = (1.0, 0.55, 0.2); d2.shadow_soft_size = 0.12
+    l2 = bpy.data.objects.new("torch2", d2); bpy.context.scene.collection.objects.link(l2); l2.location = (kx - 1.9, ky - 1.8, z + 1.55)
     return Vector((kx, ky, z))
 
 
@@ -640,9 +650,9 @@ def S33():
             skk.remove(s_)
     bpy.context.view_layer.update()
     W = np.concatenate([np.array([o.matrix_world @ v.co for v in o.data.vertices]) for o in pcs]); cc = W.mean(0)
-    skk.root.location += Vector((c.x - cc[0], c.y - cc[1], c.z - 0.56 - W[:, 2].min()))
+    skk.root.location += Vector((c.x - cc[0], c.y - cc[1], c.z + 0.012 - W[:, 2].min()))
     bpy.context.view_layer.update()
-    k = Vector((c.x, c.y, c.z - 0.5))
+    k = Vector((c.x, c.y, c.z + 0.03))
     return dict(a=(tuple(k + Vector((0.2, -0.7, 1.6))), tuple(k)), b=(tuple(k + Vector((0.1, -0.4, 1.0))), tuple(k)), lens=40,
                 fstop=4.0, focus=tuple(k), cine=dict(exposure=0.45))
 
