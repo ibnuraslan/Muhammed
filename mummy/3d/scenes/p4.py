@@ -136,8 +136,8 @@ def pyre(c, rng_seed=3):
     fv.scale = (1.9, 1.9, 2.5); fv.name = "pyreflame"
     m = bpy.data.materials.new("pyrefire"); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; N.remove(N["Principled BSDF"])
     tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Generated'], sep.inputs[0])
-    mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (2.2, 2.2, 0.7); L.new(tc.outputs['Generated'], mp.inputs['Vector'])
-    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 3.5; nz.inputs['Detail'].default_value = 8; nz.inputs['Roughness'].default_value = 0.6
+    mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (6.0, 6.0, 1.4); L.new(tc.outputs['Generated'], mp.inputs['Vector'])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 2.5; nz.inputs['Detail'].default_value = 8; nz.inputs['Roughness'].default_value = 0.6
     nz.inputs['Distortion'].default_value = 2.5; L.new(mp.outputs[0], nz.inputs['Vector'])
     cz_ = N.new("ShaderNodeCombineXYZ"); L.new(sep.outputs['X'], cz_.inputs['X']); L.new(sep.outputs['Y'], cz_.inputs['Y'])
     rx = N.new("ShaderNodeVectorMath"); rx.operation = 'DISTANCE'; rx.inputs[1].default_value = (0.5, 0.5, 0.0); L.new(cz_.outputs[0], rx.inputs[0])
@@ -155,7 +155,10 @@ def pyre(c, rng_seed=3):
     a1 = N.new("ShaderNodeMath"); a1.operation = 'MULTIPLY'; L.new(a0.outputs[0], a1.inputs[0]); L.new(lo_.outputs[0], a1.inputs[1])
     tmp = N.new("ShaderNodeMapRange"); tmp.inputs['To Min'].default_value = 2100; tmp.inputs['To Max'].default_value = 1150; L.new(sep.outputs['Z'], tmp.inputs['Value'])
     bb = N.new("ShaderNodeBlackbody"); L.new(tmp.outputs[0], bb.inputs['Temperature'])
-    em = N.new("ShaderNodeMath"); em.operation = 'MULTIPLY'; em.inputs[1].default_value = 3.0; L.new(a1.outputs[0], em.inputs[0])
+    fl_ = N.new("ShaderNodeMapRange"); fl_.inputs['From Min'].default_value = 0.35; fl_.inputs['From Max'].default_value = 0.7
+    fl_.inputs['To Min'].default_value = 0.15; fl_.inputs['To Max'].default_value = 1.0; L.new(nz.outputs['Fac'], fl_.inputs['Value'])
+    a3 = N.new("ShaderNodeMath"); a3.operation = 'MULTIPLY'; L.new(a1.outputs[0], a3.inputs[0]); L.new(fl_.outputs[0], a3.inputs[1])
+    em = N.new("ShaderNodeMath"); em.operation = 'MULTIPLY'; em.inputs[1].default_value = 4.0; L.new(a3.outputs[0], em.inputs[0])
     v = N.new("ShaderNodeVolumePrincipled")
     L.new(bb.outputs[0], v.inputs['Emission Color']); L.new(em.outputs[0], v.inputs['Emission Strength'])
     dd = N.new("ShaderNodeMath"); dd.operation = 'MULTIPLY'; dd.inputs[1].default_value = 0.4; L.new(a1.outputs[0], dd.inputs[0]); L.new(dd.outputs[0], v.inputs['Density'])
