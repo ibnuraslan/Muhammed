@@ -292,11 +292,11 @@ def S15():
     rng = random.Random(3)
     for k, (seg, x, y) in enumerate((("femurL", -0.15, 1.05), ("femurR", -0.12, 0.92), ("shankL", 0.12, 1.08), ("upperarmR", 0.15, 0.93))):
         sk, W = p3.lab_part(seg, sex="M", tone="C", x=x, y=y, yaw=rng.uniform(-8, 8), name=f"Boxed{k}")
-        dz = top + 0.009 - float(W[:, 2].min()) - LB.TOP
+        dz = top + 0.009 - float(W[:, 2].min())
         sk.root.location.z += dz
     _spot((-0.4, 0.4, top + 0.9), (0, 1.0, top), 80, size=0.1, color=(1.0, 0.92, 0.82), spot=40)
     t = Vector((0, 1.0, top + 0.03))
-    return dict(a=(tuple(t + Vector((0.0, -0.55, 0.6))), tuple(t)), b=(tuple(t + Vector((0.08, -0.42, 0.5))), tuple(t)), lens=35,
+    return dict(a=(tuple(t + Vector((0.0, -0.7, 0.75))), tuple(t)), b=(tuple(t + Vector((0.08, -0.58, 0.65))), tuple(t)), lens=35,
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=0.0))
 
 
