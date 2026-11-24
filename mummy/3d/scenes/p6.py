@@ -172,18 +172,25 @@ def S03():
     for k in range(900):                            # meal and grains scattered round and on the quern
         a = rng.uniform(0, 6.28); r = abs(rng.gauss(0, 0.16)) + 0.05
         x, y = qx + r * math.cos(a) * 1.5, qy + r * math.sin(a)
-        s_ = rng.uniform(0.0015, 0.0035)
+        s_ = rng.uniform(0.0025, 0.0045)
         vs = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=s_)['verts']
         for v in vs:
             v.co = Vector((v.co.x * 1.6, v.co.y, v.co.z * 0.7)) + Vector((x, y, 0.004))
     me = bpy.data.meshes.new("grains"); bm.to_mesh(me); bm.free()
     go = bpy.data.objects.new("grains", me); bpy.context.scene.collection.objects.link(go); me.materials.append(grain)
-    bpy.ops.mesh.primitive_circle_add(vertices=40, radius=0.22, fill_type='NGON', location=(qx + 0.05, qy - 0.02, 0.006)); fl = bpy.context.active_object
-    fl.scale = (1.6, 1.0, 1.0); fl.data.materials.append(meal); fl.name = "mealdust"
-    dd = fl.modifiers.new("d", "DISPLACE"); tt = bpy.data.textures.new("mealpatch", "CLOUDS"); tt.noise_scale = 0.05; dd.texture = tt; dd.strength = 0.004
+    bm = bmesh.new()                                # meal: a dusting of fine flakes, densest at the quern's lower end
+    for k in range(4000):
+        a = rng.uniform(0, 6.28); r = abs(rng.gauss(0, 0.09))
+        x, y = qx + 0.12 + r * math.cos(a) * 1.4, qy + r * math.sin(a)
+        s_ = rng.uniform(0.0008, 0.002)
+        vs = bmesh.ops.create_icosphere(bm, subdivisions=0, radius=s_)['verts']
+        for v in vs:
+            v.co = Vector((v.co.x, v.co.y, v.co.z * 0.4)) + Vector((x, y, 0.003))
+    me2 = bpy.data.meshes.new("meal"); bm.to_mesh(me2); bm.free()
+    mo = bpy.data.objects.new("meal", me2); bpy.context.scene.collection.objects.link(mo); me2.materials.append(meal)
     BR.pot(qx + 0.55, qy + 0.35, 0.0, h=0.26, r=0.15, seed=31)
     _spot((qx + 2.4, qy + 0.3, 1.3), (qx, qy, 0.1), 160, size=0.6, color=(1.0, 0.92, 0.8), spot=40)     # daylight from the door
-    return dict(a=((qx + 0.75, qy - 0.85, 0.65), (qx, qy, 0.08)), b=((qx + 0.6, qy - 0.68, 0.55), (qx, qy, 0.08)), lens=35,
+    return dict(a=((qx + 0.85, qy - 0.95, 0.55), (qx + 0.1, qy, 0.06)), b=((qx + 0.7, qy - 0.78, 0.48), (qx + 0.1, qy, 0.06)), lens=35,
                 fstop=4.0, focus=(qx, qy, 0.1), cine=dict(exposure=0.45), hand_ok=("floor",))
 
 
