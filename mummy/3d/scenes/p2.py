@@ -119,7 +119,9 @@ def _bone_detail(obj):
             Lk.new(p.inputs['Base Color'].links[0].from_socket, mx.inputs[6])
         else:
             mx.inputs[6].default_value = p.inputs['Base Color'].default_value
-        mx.inputs[7].default_value = (0.32, 0.22, 0.12, 1); Lk.new(mx.outputs[2], p.inputs['Base Color'])
+        mx.inputs[7].default_value = (0.32, 0.22, 0.12, 1)
+        hs = N.new("ShaderNodeHueSaturation"); hs.inputs['Saturation'].default_value = 0.55; hs.inputs['Value'].default_value = 1.08
+        Lk.new(mx.outputs[2], hs.inputs['Color']); Lk.new(hs.outputs[0], p.inputs['Base Color'])          # ivory-grey bone, not tan
         p.inputs['Roughness'].default_value = 0.8
         if 'Subsurface Weight' in p.inputs:
             p.inputs['Subsurface Weight'].default_value = 0.0      # SSS made it read as flesh
