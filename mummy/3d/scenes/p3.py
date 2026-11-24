@@ -44,7 +44,7 @@ def lab_part(seg, sex="F", tone="C", x=0.0, y=0.38, yaw=0.0, name=None, keep=())
     return sk, W
 
 
-def knee_pieces(sk, side="L", keep_femur=0.09, keep_tibia=0.07):
+def knee_pieces(sk, side="L", keep_femur=0.09, keep_tibia=0.07, keep="near"):
     """Cut the knee out of a skeleton: the distal end of the femur (condyles), the patella and the tibial plateau,
     as separate broken pieces (dry, straight-ish breaks). Returns the three objects; the rest of those bones is deleted."""
     bpy.context.view_layer.update()
@@ -62,11 +62,14 @@ def knee_pieces(sk, side="L", keep_femur=0.09, keep_tibia=0.07):
         rng = random.Random(len(seg))
         nrm_w = (axis + Vector((rng.uniform(-0.25, 0.25), rng.uniform(-0.25, 0.25), rng.uniform(-0.2, 0.2)))).normalized()
         res = bmesh.ops.bisect_plane(bm, geom=bm.verts[:] + bm.edges[:] + bm.faces[:], plane_co=Mi @ cut_w,
-                                     plane_no=(Mi.to_3x3() @ nrm_w).normalized(), clear_outer=True)
+                                     plane_no=(Mi.to_3x3() @ nrm_w).normalized(), clear_outer=(keep == "near"), clear_inner=(keep != "near"))
         bmesh.ops.contextual_create(bm, geom=[e for e in res['geom_cut'] if isinstance(e, bmesh.types.BMEdge)])
         bm.to_mesh(o.data); bm.free(); o.data.update()
         out.append(o)
-    out.append(sk.parts["patella" + side])
+    if keep == "near":
+        out.append(sk.parts["patella" + side])
+    else:
+        sk.remove("patella" + side)
     return out
 
 
@@ -429,25 +432,33 @@ def S24():
 
 # ============================================================================ "The broken surfaces match."
 def S25():
-    """Lab: the knee pieces laid against the broken end of the leg bones - the break lines meet. Slow push to the join."""
-    A = LB.room(window_light=0.3, lamp=True, lamp_at=(0.3, 0.62), lamp_target=(0.0, 0.38), lamp_energy=24)
+    """Lab: the broken knee pieces from the pit laid against the broken ends of the leg bones - the break lines meet,
+    a hairline apart. Slow push along the join under a raking lamp."""
+    A = LB.room(window_light=0.2, lamp=True, lamp_at=(0.35, 0.62), lamp_target=(0.0, 0.38), lamp_energy=18)
     LB.velvet(-0.8, 0.8, 0.0, 0.78, LB.TOP)
-    sk = B.Skeleton("M", "C", name="Leg")
-    for s_ in list(sk.parts):
-        if s_ not in ("femurL", "patellaL", "shankL"):
-            sk.remove(s_)
-    sk.root.rotation_euler = (0, math.radians(90), 0)
-    bpy.context.view_layer.update()
-    objs = list(sk.parts.values())
+    legs = []
+    for nm, keep in (("Shafts", "far"), ("Pieces", "near")):
+        sk = B.Skeleton("M", "C", name=nm)
+        for s_ in list(sk.parts):
+            if s_ not in ("femurL", "patellaL", "shankL"):
+                sk.remove(s_)
+        sk.root.rotation_euler = (math.radians(-90), 0, math.radians(-90))
+        bpy.context.view_layer.update()
+        knee_pieces(sk, keep=keep)
+        legs.append(sk)
+    objs = [o for sk in legs for o in sk.parts.values()]
     W = np.concatenate([np.array([o.matrix_world @ v.co for v in o.data.vertices]) for o in objs])
-    sk.root.location += Vector((-W[:, 0].mean(), 0.4 - W[:, 1].mean(), LB.TOP + 0.004 - W[:, 2].min()))
+    off = Vector((-W[:, 0].mean(), 0.4 - W[:, 1].mean(), LB.TOP + 0.004 - W[:, 2].min()))
+    for sk in legs:
+        sk.root.location += off
+    legs[1].root.location += Vector((0.0, -0.006, 0.004))      # the pit pieces a hairline off the breaks
     bpy.context.view_layer.update()
-    sk.settle(lambda x, y: LB.TOP + 0.004, sink=0.0, keep=0.55)
     for o in objs:
         p2._bone_detail(o)
-    k = sk.world_pivot("shankL")
-    return dict(a=(tuple(k + Vector((-0.22, -0.3, 0.22))), tuple(k)), b=(tuple(k + Vector((-0.1, -0.22, 0.14))), tuple(k)), lens=60,
-                fstop=4.0, focus=tuple(k), cine=dict(exposure=-0.05))
+    _spot((-0.6, 0.15, LB.TOP + 0.25), (0.0, 0.4, LB.TOP + 0.03), 60, size=0.04, spot=30)
+    k = legs[0].world_pivot("shankL")
+    return dict(a=(tuple(k + Vector((-0.12, -0.42, 0.3))), tuple(k)), b=(tuple(k + Vector((0.04, -0.4, 0.26))), tuple(k)), lens=55,
+                fstop=5.6, focus=tuple(k), cine=dict(exposure=-0.05))
 
 
 def S26():
