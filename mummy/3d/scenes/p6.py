@@ -365,7 +365,7 @@ def S13():
     b2 = Vector((U.PITS["B2"][0], U.PITS["B2"][1], G.H(U.PITS["B2"][0], U.PITS["B2"][1])))
     m = (kp + b2) / 2
     # daylight crane: from above the knee pit, rising over the house wall to the grave inside
-    return dict(a=(tuple(kp + Vector((0.5, -1.4, 1.9))), tuple(kp)), b=(tuple(b2 + Vector((1.2, -3.2, 3.6))), tuple(b2)), lens=28,
+    return dict(a=(tuple(kp + Vector((0.3, -1.0, 1.6))), tuple(kp)), b=(tuple(m + Vector((1.0, -3.4, 5.2))), tuple(m)), lens=28,
                 fstop=11.0, focus=tuple(m), cine=dict(exposure=0.15))
 
 
