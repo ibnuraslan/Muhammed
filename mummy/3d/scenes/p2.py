@@ -369,8 +369,8 @@ def S18():
     fe, W = p1.lab_femur()
     end = W[W[:, 0] > np.percentile(W[:, 0], 90)]
     t = Vector(end.mean(0).tolist())
-    return dict(a=(tuple(t + Vector((0.05, -0.22, 0.1))), tuple(t)), b=(tuple(t + Vector((0.16, -0.18, 0.1))), tuple(t)), lens=70,
-                fstop=4.0, focus=tuple(t), cine=dict(exposure=-0.1))
+    return dict(a=(tuple(t + Vector((-0.12, -0.3, 0.26))), tuple(t + Vector((-0.05, 0, 0)))), b=(tuple(t + Vector((0.02, -0.32, 0.24))), tuple(t + Vector((-0.04, 0, 0)))), lens=50,
+                fstop=5.6, focus=tuple(t), cine=dict(exposure=-0.1))
 
 
 def S19():
