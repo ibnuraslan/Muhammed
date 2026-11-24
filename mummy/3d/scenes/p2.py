@@ -414,19 +414,21 @@ def _cotton(M, center, radius, n=2500, seed=1):
     """Cotton grass: thin stems with white tufts, scattered over the moor (one joined mesh)."""
     rng = random.Random(seed)
     bm = bmesh.new()
+    patches = [(center[0] + radius * math.sqrt(rng.random()) * math.cos(t_), center[1] + radius * math.sqrt(rng.random()) * math.sin(t_))
+               for t_ in [rng.uniform(0, 6.283) for _ in range(max(6, n // 120))]]
     for k in range(n):
-        a = rng.uniform(0, 6.283); r = radius * math.sqrt(rng.random())
-        x, y = center[0] + r * math.cos(a), center[1] + r * math.sin(a)
+        px_, py_ = rng.choice(patches); a = rng.uniform(0, 6.283); r = 2.2 * math.sqrt(rng.random())
+        x, y = px_ + r * math.cos(a), py_ + r * math.sin(a)
         z = P2.moor_height(M, x, y)
         if z < M.get("water_z", -9) + 0.03 or _clear(M, x, y):
             continue
-        h = rng.uniform(0.25, 0.45); lean = Vector((rng.uniform(-0.06, 0.06), rng.uniform(-0.06, 0.06), 0))
+        h = rng.uniform(0.16, 0.3); lean = Vector((rng.uniform(-0.05, 0.05) + 0.04, rng.uniform(-0.04, 0.04), 0))     # leaning in the wind
         st = bmesh.ops.create_cone(bm, cap_ends=False, segments=4, radius1=0.0025, radius2=0.0015, depth=h)['verts']
         for v in st:
             v.co = Vector((x, y, z + h / 2)) + v.co + lean * ((v.co.z + h / 2) / h)
-        hd = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=rng.uniform(0.018, 0.028))['verts']
+        hd = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=rng.uniform(0.011, 0.016))['verts']
         for v in hd:
-            v.co = Vector((x, y, z + h)) + lean + Vector((v.co.x, v.co.y, v.co.z * 1.4))
+            v.co = Vector((x, y, z + h)) + lean + Vector((v.co.x * 0.9, v.co.y * 0.9, v.co.z * 1.7 + 0.01))
         for f in {f for v in hd for f in v.link_faces}:
             f.material_index = 1
     me = bpy.data.meshes.new("cotton"); bm.to_mesh(me); bm.free()
@@ -443,12 +445,19 @@ def _heather(M, center, radius, n=500, seed=2):
     src = _single("109204e9a5c74ec390f374ac62e92196", height=0.35, name="heather_src", hide=True)
     for m in src.data.materials:                  # the scan is in full pink flower: take it to late-season brown
         N = m.node_tree.nodes; Lk = m.node_tree.links; p = [n for n in N if n.type == 'BSDF_PRINCIPLED']
-        if p and p[0].inputs['Base Color'].links:
-            sc_ = p[0].inputs['Base Color'].links[0].from_socket
-            hs = N.new("ShaderNodeHueSaturation"); hs.inputs['Saturation'].default_value = 0.35; hs.inputs['Value'].default_value = 0.55
-            Lk.new(sc_, hs.inputs['Color'])
-            mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
-            Lk.new(hs.outputs[0], mx.inputs[6]); mx.inputs[7].default_value = (0.75, 0.55, 0.4, 1); Lk.new(mx.outputs[2], p[0].inputs['Base Color'])
+        if not p:
+            continue
+        p = p[0]; bc = p.inputs['Base Color']
+        if "Flower" in m.name:
+            for l_ in list(bc.links):
+                Lk.remove(l_)
+            bc.default_value = (0.16, 0.09, 0.08, 1)        # spent, rusty flower heads
+        elif bc.links:
+            sc_ = bc.links[0].from_socket
+            hs = N.new("ShaderNodeHueSaturation"); hs.inputs['Saturation'].default_value = 0.45; hs.inputs['Value'].default_value = 0.5
+            Lk.new(sc_, hs.inputs['Color']); Lk.new(hs.outputs[0], bc)
+        else:
+            c_ = bc.default_value; bc.default_value = (c_[0] * 0.4 + 0.04, c_[1] * 0.4 + 0.035, c_[2] * 0.3 + 0.02, 1)
     rng = random.Random(seed)
     col = bpy.data.collections.new("heather"); bpy.context.scene.collection.children.link(col)
     for k in range(n):
@@ -520,7 +529,7 @@ def S22():
     poses = ((0.0, 0.0, 92, "L", (x0, y0 + 3.0)), (-1.0, -0.3, 112, "R", (x0 + 1.3, y0 - 0.6)))
     for i, (dx, dy, hd, wt, look) in enumerate(poses):
         m = BR.Islander(name=f"Islander{i}")
-        zf = P2.moor_height(M, x0 + dx, y0 + dy)
+        zf = max(P2.moor_height(M, x0 + dx + ex, y0 + dy + ey) for ex in (-0.15, 0, 0.15) for ey in (-0.2, 0, 0.2)) + 0.01
         st = AC.Stand(m, (x0 + dx, y0 + dy), hd, weight=wt, lean=4 + 6 * i)
         lz = P2.moor_height(M, *look) - zf
         st.head_to((look[0], look[1], lz), share=0.8)

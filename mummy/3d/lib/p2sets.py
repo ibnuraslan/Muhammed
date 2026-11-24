@@ -313,8 +313,35 @@ def peat_moor(center=(0.0, 0.0), size=220.0, n=420, seed=4, pools=True):
     pc.inputs[6].default_value = (0.04, 0.026, 0.014, 1); pc.inputs[7].default_value = (0.075, 0.048, 0.026, 1)
     fin = N.new("ShaderNodeMix"); fin.data_type = 'RGBA'; L.new(steep.outputs[0], fin.inputs['Factor'])
     L.new(rp.outputs['Color'], fin.inputs[6]); L.new(pc.outputs[2], fin.inputs[7])
-    L.new(fin.outputs[2], p.inputs['Base Color']); p.inputs['Roughness'].default_value = 0.85
-    bm_ = N.new("ShaderNodeBump"); bm_.inputs['Strength'].default_value = 0.4; L.new(nz2.outputs['Fac'], bm_.inputs['Height']); L.new(bm_.outputs['Normal'], p.inputs['Normal'])
+    # photographic detail: withered moor grass, and wet peat mud in the low ground, modulating the procedural tones
+    import os
+    PH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "polyhaven")
+    def img(path, color=True, scale=0.6):
+        mp_ = N.new("ShaderNodeMapping"); mp_.inputs['Scale'].default_value = (scale, scale, scale); L.new(tc.outputs['Object'], mp_.inputs['Vector'])
+        t = N.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(path, check_existing=True); t.projection = 'BOX'; t.projection_blend = 0.3
+        t.image.colorspace_settings.name = 'sRGB' if color else 'Non-Color'; L.new(mp_.outputs[0], t.inputs['Vector']); return t
+    try:
+        g_d = img(os.path.join(PH, "withered_grass", "withered_grass_diff_2k.jpg"))
+        g_n = img(os.path.join(PH, "withered_grass", "withered_grass_nor_gl_2k.jpg"), False)
+        m_d = img(os.path.join(PH, "brown_mud_02", "brown_mud_02_diff_2k.jpg"), scale=0.4)
+        low = N.new("ShaderNodeMapRange"); low.inputs['From Min'].default_value = float(np.percentile(Z, 22)); low.inputs['From Max'].default_value = float(np.percentile(Z, 9))
+        L.new(ps.outputs['Z'], low.inputs['Value'])
+        surf = N.new("ShaderNodeMix"); surf.data_type = 'RGBA'; L.new(low.outputs[0], surf.inputs['Factor'])
+        L.new(g_d.outputs['Color'], surf.inputs[6]); L.new(m_d.outputs['Color'], surf.inputs[7])
+        mul = N.new("ShaderNodeMix"); mul.data_type = 'RGBA'; mul.blend_type = 'MULTIPLY'; mul.inputs['Factor'].default_value = 1.0
+        L.new(fin.outputs[2], mul.inputs[6]); L.new(surf.outputs[2], mul.inputs[7])
+        br = N.new("ShaderNodeMath"); br.operation = 'MULTIPLY'; br.inputs[1].default_value = 3.2
+        gain = N.new("ShaderNodeMix"); gain.data_type = 'RGBA'; gain.blend_type = 'MULTIPLY'; gain.inputs['Factor'].default_value = 1.0
+        L.new(mul.outputs[2], gain.inputs[6]); gain.inputs[7].default_value = (3.2, 3.0, 2.8, 1)
+        L.new(gain.outputs[2], p.inputs['Base Color'])
+        nm = N.new("ShaderNodeNormalMap"); nm.inputs['Strength'].default_value = 0.8; L.new(g_n.outputs['Color'], nm.inputs['Color'])
+        wet = N.new("ShaderNodeMapRange"); wet.inputs['To Min'].default_value = 0.85; wet.inputs['To Max'].default_value = 0.35
+        L.new(low.outputs[0], wet.inputs['Value']); L.new(wet.outputs[0], p.inputs['Roughness'])
+        bm_ = N.new("ShaderNodeBump"); bm_.inputs['Strength'].default_value = 0.3; L.new(nz2.outputs['Fac'], bm_.inputs['Height'])
+        L.new(nm.outputs[0], bm_.inputs['Normal']); L.new(bm_.outputs['Normal'], p.inputs['Normal'])
+    except Exception as ex:
+        print("moor textures:", ex)
+        L.new(fin.outputs[2], p.inputs['Base Color']); p.inputs['Roughness'].default_value = 0.85
     o.data.materials.append(m)
     # the moor runs on to the horizon: a big skirt plane just under the edge, same ground
     zf = float(np.percentile(Z, 30)) - 0.05; hi_ = size / 2 - 0.5; ho = 4000.0
@@ -346,8 +373,9 @@ def bundle(loc, rot=0.0, length=0.95, girth=0.44, seed=0):
     """A body drawn up and wrapped in a hide, bound with rope: an irregular soft bundle (nothing of the body shows)."""
     rng = random.Random(seed)
     bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, radius=0.5, location=loc); o = bpy.context.active_object
-    o.name = "bundle"; o.scale = (length / 2 / 0.5 * 0.5 * 2, girth, girth * 0.75); o.rotation_euler.z = rot
-    d = o.modifiers.new("lumps", "DISPLACE"); t = bpy.data.textures.new("bundlelump", "CLOUDS"); t.noise_scale = 0.5; d.texture = t; d.strength = 0.05
+    o.name = "bundle"; o.scale = (length, girth, girth * 0.62); o.rotation_euler = (rng.uniform(-0.05, 0.05), 0, rot)
+    d = o.modifiers.new("lumps", "DISPLACE"); t = bpy.data.textures.new("bundlelump", "CLOUDS"); t.noise_scale = 0.22; d.texture = t; d.strength = 0.08
+    d2 = o.modifiers.new("folds", "DISPLACE"); t2 = bpy.data.textures.new("bundlefold", "WOOD"); t2.wood_type = 'BANDNOISE'; t2.noise_scale = 0.08; t2.turbulence = 8; d2.texture = t2; d2.strength = 0.015
     hide = ph.texture("leather_white", scale=2.0, name="hide", tint=(0.42, 0.3, 0.18)) if False else _mat("hide", (0.13, 0.085, 0.05), 0.8)
     hn = hide.node_tree.nodes; hl = hide.node_tree.links; hp = hn["Principled BSDF"]
     tc = hn.new("ShaderNodeTexCoord"); nz = hn.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 12; nz.inputs['Detail'].default_value = 10
@@ -356,8 +384,8 @@ def bundle(loc, rot=0.0, length=0.95, girth=0.44, seed=0):
     hp.inputs['Sheen Weight'].default_value = 0.08
     o.data.materials.append(hide)
     rope = _mat("rope2", (0.18, 0.13, 0.08), 0.9)
-    for k in range(5):
-        u = -0.32 + k * 0.16 + rng.uniform(-0.02, 0.02)
+    for k in range(3):
+        u = -0.25 + k * 0.25 + rng.uniform(-0.02, 0.02)
         f = math.sqrt(max(0.05, 1 - (u / 0.5) ** 2))            # the bundle narrows toward its ends
         bpy.ops.mesh.primitive_torus_add(major_radius=girth * 0.5 * f + 0.008, minor_radius=0.011, location=loc); r = bpy.context.active_object
         r.scale = (0.76, 1, 1); r.rotation_euler = (0, math.pi / 2, rot)
