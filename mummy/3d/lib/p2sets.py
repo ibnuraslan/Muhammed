@@ -439,14 +439,16 @@ def _peat_material(name="peat"):
     m = bpy.data.materials.new(name); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
     tc = N.new("ShaderNodeTexCoord")
     # strata: horizontal bands (world-ish Z of the object), gently wavy
-    wv = N.new("ShaderNodeTexWave"); wv.bands_direction = 'Z'; wv.inputs['Scale'].default_value = 2.2; wv.inputs['Distortion'].default_value = 2.5
-    wv.inputs['Detail'].default_value = 3; L.new(tc.outputs['Object'], wv.inputs['Vector'])
+    wv = N.new("ShaderNodeTexWave"); wv.bands_direction = 'Z'; wv.inputs['Scale'].default_value = 1.1; wv.inputs['Distortion'].default_value = 7.0
+    wv.inputs['Detail'].default_value = 5; wv.inputs['Detail Roughness'].default_value = 0.7; L.new(tc.outputs['Object'], wv.inputs['Vector'])
+    nzs = N.new("ShaderNodeTexNoise"); nzs.inputs['Scale'].default_value = 2.5; nzs.inputs['Detail'].default_value = 6; L.new(tc.outputs['Object'], nzs.inputs['Vector'])
+    blend = N.new("ShaderNodeMix"); blend.inputs['Factor'].default_value = 0.45; L.new(wv.outputs['Fac'], blend.inputs[2]); L.new(nzs.outputs['Fac'], blend.inputs[3])
     rp = N.new("ShaderNodeValToRGB"); el = rp.color_ramp.elements
     el[0].position = 0.2; el[0].color = (0.025, 0.017, 0.01, 1)
     e = el.new(0.45); e.color = (0.07, 0.042, 0.022, 1)
     e = el.new(0.7); e.color = (0.12, 0.065, 0.032, 1)
     el[-1].position = 0.9; el[-1].color = (0.05, 0.03, 0.016, 1)
-    L.new(wv.outputs['Fac'], rp.inputs['Fac'])
+    L.new(blend.outputs[0], rp.inputs['Fac'])
     # fibres: noise stretched along the face, fine and horizontal (sedge and moss remains)
     mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (3.0, 3.0, 25.0); L.new(tc.outputs['Object'], mp.inputs['Vector'])
     fb = N.new("ShaderNodeTexNoise"); fb.inputs['Scale'].default_value = 3.0; fb.inputs['Detail'].default_value = 10; fb.inputs['Roughness'].default_value = 0.7
