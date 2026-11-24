@@ -365,8 +365,9 @@ def S21():
 def S22():
     """The store again, from the far end: rows of boxes going back into the dark. Slow lateral move across the aisle end."""
     L_ = store_room(lights=(0, 2, 4))
-    return dict(a=((-0.5, L_ + 0.8, 1.2), (0.3, 0.0, 1.1)), b=((0.5, L_ + 0.8, 1.2), (-0.3, 0.0, 1.1)), lens=32, fstop=4.0,
-                focus=(0, L_ - 2, 1.1), cine=dict(exposure=0.2))
+    # low and close along one shelf face: box after box receding into the dark, shallow focus
+    return dict(a=((-0.35, 1.2, 0.55), (-1.0, 6.0, 0.95)), b=((-0.3, 2.4, 0.6), (-1.0, 7.5, 0.95)), lens=35, fstop=2.8,
+                focus=(-0.9, 3.0, 0.9), cine=dict(exposure=0.2))
 
 
 def S23():
