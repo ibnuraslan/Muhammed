@@ -123,7 +123,7 @@ def _trabecular(name="trabecular"):
 def _knee_mats(o, sand=0.5):
     """Aged knee-piece materials: stained, pored, root-etched bone; the broken faces (slot 1) spongy trabecular bone."""
     o.data.materials.clear(); o.data.materials.append(B.bone_material("C", dirt=1.0, sand=sand))
-    p2._bone_detail(o); _old_bone(o, stain=0.6)
+    p2._bone_detail(o); _old_bone(o, stain=0.8)
     for mt in o.data.materials:                            # a harder, crisper bone surface: stronger pores and grain
         for n in mt.node_tree.nodes:
             if n.type == 'BUMP':
