@@ -28,7 +28,7 @@ def _mat(name, col, rough=0.6, metal=0.0, emit=None, strength=0.0):
 def microscope_field(kind="human", size=1.0, attack=None):
     """A thin section seen in transmitted light: emission shader (light passing through the slide), built at the
     origin on z = 0, radius `size`. Returns the section object; a field-stop ring (black) sits just above it."""
-    attack = attack if attack is not None else (0.12 if kind == "human" else 0.85)
+    attack = attack if attack is not None else (0.12 if kind == "human" else 0.55)
     bpy.ops.mesh.primitive_circle_add(vertices=128, radius=size, fill_type='NGON', location=(0, 0, 0)); o = bpy.context.active_object
     o.name = "section_" + kind
     m = bpy.data.materials.new("histo_" + kind); m.use_nodes = True; nt = m.node_tree; N = nt.nodes; L = nt.links
@@ -43,10 +43,10 @@ def microscope_field(kind="human", size=1.0, attack=None):
     L.new(wv.outputs[0], vor.inputs['Vector'])
     d = vor.outputs['Distance']
     # lamellae: concentric rings round each canal
-    ring = N.new("ShaderNodeMath"); ring.operation = 'MULTIPLY'; ring.inputs[1].default_value = 60.0; L.new(d, ring.inputs[0])
+    ring = N.new("ShaderNodeMath"); ring.operation = 'MULTIPLY'; ring.inputs[1].default_value = 95.0; L.new(d, ring.inputs[0])
     sn = N.new("ShaderNodeMath"); sn.operation = 'SINE'; L.new(ring.outputs[0], sn.inputs[0])
     ringc = N.new("ShaderNodeMapRange"); ringc.inputs['From Min'].default_value = -1; ringc.inputs['From Max'].default_value = 1
-    ringc.inputs['To Min'].default_value = 0.62; ringc.inputs['To Max'].default_value = 1.0; L.new(sn.outputs[0], ringc.inputs['Value'])
+    ringc.inputs['To Min'].default_value = 0.74; ringc.inputs['To Max'].default_value = 1.0; L.new(sn.outputs[0], ringc.inputs['Value'])
     # Haversian canal (dark hole) and the cement line at the osteon edge
     canal = N.new("ShaderNodeMapRange"); canal.inputs['From Min'].default_value = 0.09; canal.inputs['From Max'].default_value = 0.14
     canal.inputs['To Min'].default_value = 0.03; canal.inputs['To Max'].default_value = 1.0; L.new(d, canal.inputs['Value'])
@@ -65,7 +65,7 @@ def microscope_field(kind="human", size=1.0, attack=None):
     bt = N.new("ShaderNodeTexNoise"); bt.inputs['Scale'].default_value = 14; bt.inputs['Detail'].default_value = 8; bt.inputs['Roughness'].default_value = 0.75
     L.new(mp.outputs[0], bt.inputs['Vector'])
     bz = N.new("ShaderNodeTexNoise"); bz.inputs['Scale'].default_value = 3.0; bz.inputs['Detail'].default_value = 4; L.new(mp.outputs[0], bz.inputs['Vector'])
-    zone = N.new("ShaderNodeMapRange"); zone.inputs['From Min'].default_value = 1.0 - attack; zone.inputs['From Max'].default_value = 1.0 - attack + 0.12
+    zone = N.new("ShaderNodeMapRange"); zone.inputs['From Min'].default_value = 1.0 - attack; zone.inputs['From Max'].default_value = 1.0 - attack + 0.05
     L.new(bz.outputs['Fac'], zone.inputs['Value'])
     if kind == "human":                  # attack only in a thin band at one edge of the section
         sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Object'], sep.inputs[0])

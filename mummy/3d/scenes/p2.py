@@ -477,7 +477,7 @@ def moor(mood="overcast", size=220.0, n=420, cotton=(0, 0, 30, 2500), heather=(0
 
 def S21():
     """Aerial: the peat moor inland - black pools, cut peat banks, mist lying in the hollows. Drone drift."""
-    M = moor("dusk", size=420, n=520, cotton=(0, 0, 60, 2500), heather=(0, 0, 60, 500), mist=0.03)
+    M = moor("dusk", size=420, n=480, cotton=None, heather=None, mist=0.03)      # from 70 m up, tufts are sub-pixel
     return dict(a=((-120, -150, 70), (0, 10, 0)), b=((-90, -140, 62), (15, 15, 0)), lens=28, cine=dict(exposure=0.3))
 
 

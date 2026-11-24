@@ -138,7 +138,7 @@ class ModernMan(W._Woman):
         hide |= shoe
         # jacket
         if self.JACKET:
-            JK = "coat" if self.JACKET == "labcoat" else self.JACKET      # a lab coat is a coat, cut straight
+            JK = "coat" if self.JACKET in ("labcoat", "cagoule") else self.JACKET      # a lab coat / waterproof smock is cut like a coat
             low = {"blazer": m["hip"] - 0.015, "leather": m["hip"] - 0.015, "bomber": m["hip"] - 0.03, "coat": m["hip"] - 0.015}[JK]
             jk = u & (wh < 0.2) & (whand < 0.04) & (z > low) & (z < m["neck"] + 0.01 * hs) & (dist_wrist > 0.035)
             vz = {"blazer": m["hip"] + 0.22, "coat": m["hip"] + 0.3, "leather": m["neck"] - 0.14, "bomber": m["neck"] - 0.06}[JK]
@@ -149,7 +149,7 @@ class ModernMan(W._Woman):
                 # matte suede / worn leather (glossy leather read as skin under warm light): a dense fabric shader
                 mat = W.cloth(self.name + "_jacket", self.JACKET_COL, rough=0.82, sheen=0.15, weave=1800, bump=0.15)
             else:
-                mat = W.cloth(self.name + "_jacket", self.JACKET_COL, rough=0.7 if self.JACKET == "bomber" else 0.82, weave=520, sheen=0.25, bump=0.5 if self.JACKET == "bomber" else 0.25)
+                mat = W.cloth(self.name + "_jacket", self.JACKET_COL, rough=0.55 if self.JACKET == "cagoule" else (0.7 if self.JACKET == "bomber" else 0.82), weave=520, sheen=0.25, bump=0.5 if self.JACKET == "bomber" else 0.25)
             off = {"blazer": 0.012, "leather": 0.014, "bomber": 0.02, "coat": 0.016}[JK]
             self.jacket, jv = self._shell("jacket", jk, off, mat, solid=0.004, displace=0.004 if self.JACKET == "bomber" else 0.002,
                                           drape=40 if self.JACKET == "bomber" else 10)
@@ -158,9 +158,9 @@ class ModernMan(W._Woman):
             self._loosen(self.jacket, m, ease=1.04 if self.JACKET != "bomber" else 1.07, extra=0.003, mask=arm_w < 0.2, single=True)
             jr = self.jacket.modifiers.new("Relax", "SMOOTH"); jr.factor = 0.5; jr.iterations = 10    # no step at the loosened panel's edge
             self.jacket.modifiers.move(self.jacket.modifiers.find("Relax"), 0)
-            drop = {"blazer": 0.14, "leather": 0.08, "bomber": 0.0, "coat": 0.5}[JK] if self.JACKET != "labcoat" else 0.4
+            drop = {"blazer": 0.14, "leather": 0.08, "bomber": 0.0, "coat": 0.5}[JK] if self.JACKET not in ("labcoat", "cagoule") else {"labcoat": 0.4, "cagoule": 0.2}[self.JACKET]
             if drop:
-                self._hem(self.jacket, m["hip"], drop=drop * hs, flare={"coat": 0.06, "labcoat": -0.015}.get(self.JACKET, 0.03))
+                self._hem(self.jacket, m["hip"], drop=drop * hs, flare={"coat": 0.06, "labcoat": -0.015, "cagoule": 0.07}.get(self.JACKET, 0.03))
             if self.JACKET == "labcoat":
                 self._split(self.jacket, cx, m["hip"] + 0.02, m["hip"] - 0.16 * hs)
             if self.JACKET != "bomber":
