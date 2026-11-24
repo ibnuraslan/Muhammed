@@ -162,7 +162,7 @@ def S03():
 
 def S04():
     """The three parts on one long dark bench, each in its own pool of light, far apart. Lateral track."""
-    A = LB.room(window_light=0.12, lamp=False)
+    A = LB.room(window_light=0.03, lamp=False)
     LB.velvet(-2.0, 2.0, 0.0, 0.78, LB.TOP)
     cr = B.hero_cranium(healed=True, tone="A")
     co = np.array([v.co for v in cr.data.vertices]); cr.location = (-1.25, 0.4, LB.TOP + 0.004 - co[:, 2].min() * 0.97)
@@ -174,8 +174,9 @@ def S04():
     for x in (-1.25, 0.0, 1.25):
         _spot((x - 0.1, 0.3, LB.TOP + 1.4), (x, 0.38, LB.TOP), 70, size=0.08, spot=22)
     _haze((0, 0, 1.6), (9, 6, 3.2), density=0.02, color=(0.95, 0.9, 0.85))
-    return dict(a=((-1.6, -1.2, LB.TOP + 0.4), (-0.6, 0.38, LB.TOP + 0.05)), b=((0.6, -1.25, LB.TOP + 0.4), (0.6, 0.38, LB.TOP + 0.05)), lens=35,
-                fstop=5.6, focus=(0.0, 0.38, LB.TOP), cine=dict(exposure=0.0))
+    # low along the bench: skull near, jaw in the middle, thigh bone far - three pools receding into the dark
+    return dict(a=((-2.25, -0.32, LB.TOP + 0.26), (0.6, 0.42, LB.TOP + 0.02)), b=((-2.1, -0.42, LB.TOP + 0.28), (0.9, 0.42, LB.TOP + 0.02)), lens=40,
+                fstop=5.6, focus=(0.0, 0.38, LB.TOP), cine=dict(exposure=0.1))
 
 
 def S05():
