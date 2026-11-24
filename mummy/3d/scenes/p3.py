@@ -534,8 +534,20 @@ def _night_pit():
     U.CUT = False
     T = U.island("dusk", grass_at=(3, 14), grass_r=14, n=820, core=4.0, grass_density=220)
     BR.village(smoke_on=False)
-    kx, ky = U.PITS["KNEE"][0] + 1.5, U.PITS["KNEE"][1] + 3.0
+    kx, ky = 19.0, 3.0                                    # open machair east of the houses
     z = float(U.surface(kx, ky))
+    # night: the sky down to a deep blue glow, a weak cold moon instead of the sun
+    w = bpy.context.scene.world
+    for n in w.node_tree.nodes:
+        if n.type == 'BACKGROUND':
+            n.inputs['Strength'].default_value *= 0.06
+    for o in bpy.data.objects:
+        if o.type == 'LIGHT' and o.data.type == 'SUN':
+            o.data.energy = 0.08; o.data.color = (0.6, 0.7, 1.0)
+    # a raised rim of upcast earth round the hole
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.62, minor_radius=0.12, location=(kx, ky, z + 0.02)); rim = bpy.context.active_object
+    rim.scale = (1.45, 1.0, 0.6); rim.name = "pitrim"; rim.data.materials.append(G.mat("sand"))
+    d_ = rim.modifiers.new("d", "DISPLACE"); t_ = bpy.data.textures.new("rimlump", "CLOUDS"); t_.noise_scale = 0.15; d_.texture = t_; d_.strength = 0.05
     # an open pit with a heap of sand beside it
     bpy.ops.mesh.primitive_cylinder_add(radius=0.55, depth=0.6, location=(kx, ky, z - 0.28)); pit = bpy.context.active_object
     pit.scale = (1.5, 1.0, 1.0); pit.data.materials.append(_plain("pitdark", (0.03, 0.025, 0.02), 0.95)); pit.name = "openpit"
@@ -564,8 +576,8 @@ def S31():
     for sd, dx in (("L", 0.25), ("R", 0.5)):
         st2.hand(sd, (c.x + dx, c.y - 0.25, -0.05), elbow=(0.6, 0.2, -0.8), curl=30)
     st2.head_to((c.x + 0.3, c.y, -0.3), share=0.8); st2.finish(look=(c.x + 0.3, c.y, -0.3), density=HAIR); G.lift(st2, c.z)
-    return dict(a=((c.x + 0.4, c.y - 4.2, c.z + 1.4), (c.x + 0.2, c.y, c.z + 0.2)), b=((c.x + 0.35, c.y - 3.5, c.z + 1.3), (c.x + 0.2, c.y, c.z + 0.2)),
-                lens=35, fstop=2.8, focus=(c.x + 0.2, c.y - 0.6, c.z + 0.6), cine=dict(exposure=0.4), hand_ok=("openpit", "Uist"))
+    return dict(a=((c.x + 0.6, c.y - 2.6, c.z + 2.6), (c.x + 0.2, c.y + 0.1, c.z)), b=((c.x + 0.5, c.y - 2.2, c.z + 2.4), (c.x + 0.2, c.y + 0.1, c.z)),
+                lens=32, fstop=2.8, focus=(c.x + 0.2, c.y - 0.3, c.z + 0.3), cine=dict(exposure=0.6), hand_ok=("openpit", "Uist", "pitrim"))
 
 
 def S32():
