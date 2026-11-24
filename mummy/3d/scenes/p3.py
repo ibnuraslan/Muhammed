@@ -814,6 +814,28 @@ def S30():
 
 
 # ============================================================================ "In the team's later reconstruction..."
+def _night_islander(i):
+    """The two islanders for the night scenes, same people and costume as P2 (dark tunic, beard / pale tunic) but with
+    the hair cropped close and dense, so the heads read at true size by torchlight instead of as round puffs."""
+    import modern as MD
+    if i == 0:
+        class _N(MD.ModernMan):
+            GENDER = 1.0; MUSCLE = 0.6; WEIGHT = 0.45; HEIGHT = 0.45
+            HAIR = (0.18, 0.06); HAIR_LEN = (0.018, 0.035); FACIAL = "beard"
+            SHIRT = (0.2, 0.16, 0.1); JACKET = "coat"; JACKET_COL = (0.16, 0.11, 0.06)
+            TROUSERS = (0.12, 0.09, 0.06); SHOES = (0.08, 0.05, 0.03)
+            TROUSER_EASE = 1.3; TROUSER_EXTRA = 0.03
+        return _N("Islander0", years=34)
+
+    class _M(MD.ModernMan):
+        GENDER = 0.0; MUSCLE = 0.4; WEIGHT = 0.35; HEIGHT = 0.4
+        HAIR = (0.45, 0.25); HAIR_LEN = (0.025, 0.045)
+        SHIRT = (0.12, 0.1, 0.07); JACKET = "coat"; JACKET_COL = (0.13, 0.11, 0.075)
+        TROUSERS = (0.16, 0.13, 0.09); SHOES = (0.08, 0.05, 0.03)
+        TROUSER_EASE = 1.3; TROUSER_EXTRA = 0.03
+    return _M("Islander1", years=24)
+
+
 def _hide_under(outer, inners):
     """Delete the parts of skinned under-layers that end up inside a static outer garment (never visible): each inner's
     posed vertices are tested against the outer's rendered surface; faces wholly inside are removed from the base mesh."""
@@ -1002,12 +1024,12 @@ def S31():
     zk = max(float(U.surface(c.x + ex, c.y - 0.85 + ey)) for ex in (-0.8, 0, 0.8) for ey in (-0.2, 0, 0.2)) + 0.06
     sts = []
     for i, x0 in enumerate((-0.62, 0.62)):
-        m = BR.Islander(name="Islander0") if i == 0 else p2._islander2()
+        m = _night_islander(i)
         st = AC.Kneel(m, (c.x + x0, c.y - 0.82), 90, lean=62, sit_back=True)
         for sd, dx in (("L", -0.2), ("R", 0.2)):
             st.grip(sd, (c.x + x0 + dx, py, pz + c.z - zk), (1, 0, 0), radius=0.03)
-        st.head_to((c.x + x0, c.y, -0.4), share=0.8); st.finish(look=(c.x + x0, c.y, -0.4), density=HAIR)
-        G.lift(st, zk); _hood_cloak(st, col=(0.085, 0.065, 0.045) if i == 0 else (0.16, 0.13, 0.09)); sts.append(st)
+        st.head_to((c.x + x0, c.y, -0.4), share=0.8); st.finish(look=(c.x + x0, c.y, -0.4), density=1.0)
+        G.lift(st, zk); sts.append(st)
     return dict(a=((c.x + 1.9, c.y - 3.3, c.z + 2.9), (c.x + 0.1, c.y + 0.1, c.z - 0.25)), b=((c.x + 1.6, c.y - 2.9, c.z + 2.7), (c.x + 0.1, c.y + 0.1, c.z - 0.25)),
                 lens=32, fstop=2.8, focus=(c.x, c.y - 0.4, c.z), cine=dict(exposure=0.6), hand_ok=("openpit", "Uist", "pitrim", "hurdle", "bundle"))
 
@@ -1030,14 +1052,13 @@ def S32():
     poles = sorted([o for o in bpy.data.objects if o.name.startswith("hurdlepole")], key=lambda o: o.matrix_world.translation.y)
     pc = poles[0].matrix_world.translation.copy()
     for i, x0 in enumerate((-0.5, 0.5)):
-        m = BR.Islander(name=f"Islander{i}") if i == 0 else p2._islander2()
+        m = _night_islander(i)
         f = (c.x + x0, pc.y - 0.72)
         zf = max(float(U.surface(f[0] + ex, f[1] + ey)) for ex in (-0.15, 0.15) for ey in (-0.15, 0.15))
         st = AC.Haul(m, f, 90, knee=40, lean=34, weight="L" if i == 0 else "R")
         for sd, dx in (("L", -0.22), ("R", 0.22)):
             st.grip(sd, (c.x + x0 + dx, pc.y, pc.z - zf), (1, 0, 0), radius=0.03)
-        st.head_to((c.x + x0, c.y + 0.5, 0.3), share=0.6); st.finish(look=(c.x + x0, c.y + 0.5, 0.3), density=HAIR); G.lift(st, zf)
-        _hood_cloak(st, col=(0.085, 0.065, 0.045) if i == 0 else (0.16, 0.13, 0.09))
+        st.head_to((c.x + x0, c.y + 0.5, 0.3), share=0.6); st.finish(look=(c.x + x0, c.y + 0.5, 0.3), density=1.0); G.lift(st, zf)
     return dict(a=((c.x + 2.6, c.y - 3.4, c.z + 1.15), (c.x, c.y, c.z + 0.5)), b=((c.x + 2.3, c.y - 3.0, c.z + 1.1), (c.x, c.y, c.z + 0.5)),
                 lens=32, fstop=2.8, focus=(c.x, pc.y, c.z + 0.6), cine=dict(exposure=0.45), hand_ok=("hurdle", "bundle"))
 

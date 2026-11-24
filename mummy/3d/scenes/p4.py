@@ -218,11 +218,10 @@ def S09():
     pyre(c)
     import acts as AC
     for i, (dx, dy, hd) in enumerate(((6.2, -8.4, 125), (7.6, -7.6, 130))):
-        m = BR.Islander(name=f"Islander{i}") if i == 0 else p2._islander2()
+        m = p3._night_islander(i)
         f = (c[0] + dx, c[1] + dy); zf = float(U.surface(*f))
         st = AC.Stand(m, f, hd, lean=4)
-        st.finish(look=(c[0], c[1], c[2] + 1.2 - zf), density=HAIR); G.lift(st, zf)
-        p3._hood_cloak(st, col=(0.085, 0.065, 0.045) if i == 0 else (0.16, 0.13, 0.09))      # mourners hooded
+        st.finish(look=(c[0], c[1], c[2] + 1.2 - zf), density=1.0); G.lift(st, zf)
     return dict(a=((c[0] + 13.5, c[1] - 14.5, c[2] + 1.9), (c[0], c[1], c[2] + 1.4)), b=((c[0] + 12.5, c[1] - 13.5, c[2] + 1.85), (c[0], c[1], c[2] + 1.5)),
                 lens=45, fstop=5.6, focus=(c[0] + 6.9, c[1] - 8.0, c[2] + 1.2), cine=dict(exposure=0.25))
 
