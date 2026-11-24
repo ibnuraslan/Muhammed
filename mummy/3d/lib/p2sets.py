@@ -579,3 +579,78 @@ def hurdle(loc, rot=0.0, length=2.0, width=0.9, seed=0):
         bpy.ops.mesh.primitive_cylinder_add(radius=0.011, depth=width + 0.08, location=(0, 0, 0)); r = bpy.context.active_object
         r.matrix_world = T @ R @ Matrix.Translation((x, 0, 0.03 + 0.012 * (1 if k % 2 else -1))) @ Matrix.Rotation(math.pi / 2, 4, 'X')
         r.data.materials.append(wood); r.name = "hurdlerod"
+
+
+def _cord_ring(body, loc, axis_rot, R, mat, name="bundlerope", thick=0.011, knot=True):
+    """A cord bound tight round `body`: a ring shrink-wrapped onto its surface, with a knot on top."""
+    bpy.ops.mesh.primitive_torus_add(major_radius=R, minor_radius=thick, major_segments=64, minor_segments=8, location=loc); r = bpy.context.active_object
+    r.rotation_euler = axis_rot; r.name = name; r.data.materials.append(mat)
+    sw = r.modifiers.new("hug", "SHRINKWRAP"); sw.target = body; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.offset = thick * 0.6
+    tw = r.modifiers.new("twist", "DISPLACE"); tt = bpy.data.textures.get("cordtwist") or bpy.data.textures.new("cordtwist", "CLOUDS")
+    tt.noise_scale = 0.008; tw.texture = tt; tw.strength = 0.003
+    if knot:
+        bpy.context.view_layer.update()
+        dg = bpy.context.evaluated_depsgraph_get(); re = r.evaluated_get(dg); me = re.to_mesh()
+        top = max((re.matrix_world @ v.co for v in me.vertices), key=lambda p: p.z); re.to_mesh_clear()
+        bpy.ops.mesh.primitive_uv_sphere_add(radius=thick * 2.2, location=top); k = bpy.context.active_object
+        k.scale = (1.4, 1.0, 0.8); k.data.materials.append(mat); k.name = name + "knot"
+        for s_ in (-1, 1):                                   # the two loose ends
+            bpy.ops.mesh.primitive_cylinder_add(radius=thick * 0.8, depth=0.05, location=top + Vector((0.02 * s_, 0.02, 0.0))); e = bpy.context.active_object
+            e.rotation_euler = (math.radians(70), 0, math.radians(30 * s_)); e.data.materials.append(mat); e.name = name + "end"
+    return r
+
+
+def crouched_bundle(loc, rot=0.0, seed=0, cords=4, cord_col=(0.16, 0.11, 0.07)):
+    """A body drawn up tight, knees to chest, lying on its side, sewn into a hide and bound with cord: the shape
+    of a curled human under the wrapping - the head, the curve of the back, the knees and folded shins."""
+    rng = random.Random(seed)
+    mb = bpy.data.metaballs.new("crouchmb"); mb.resolution = 0.025; mb.render_resolution = 0.018; mb.threshold = 0.6
+    ob = bpy.data.objects.new("crouchmb", mb); bpy.context.scene.collection.objects.link(ob)
+    def el(co, r, sc=(1, 1, 1), typ='ELLIPSOID'):
+        e = mb.elements.new(); e.type = typ; e.co = co; e.radius = r; e.size_x, e.size_y, e.size_z = sc
+    # local frame: body length along x (head at +x), back toward +y, knees toward -y, lying on its side (z up)
+    el((0.36, 0.04, 0.02), 0.16, (0.95, 0.9, 0.85))                # head, tucked down
+    el((0.12, 0.07, 0.0), 0.26, (1.25, 0.85, 0.75))                # chest and the curved back
+    el((-0.16, 0.06, 0.0), 0.24, (0.9, 0.95, 0.8))                 # pelvis
+    el((0.0, -0.12, 0.0), 0.2, (1.35, 0.6, 0.7))                   # thighs drawn up to the chest
+    el((0.16, -0.24, 0.0), 0.13, (0.7, 0.8, 0.85))                 # the knees
+    el((-0.06, -0.26, -0.02), 0.15, (1.3, 0.55, 0.6))              # shins folded back
+    el((-0.24, -0.2, -0.02), 0.12, (0.8, 0.9, 0.6))                # feet against the buttocks
+    el((0.24, -0.08, 0.04), 0.12, (0.9, 0.6, 0.6))                 # arms folded in front, hands at the face
+    bpy.context.view_layer.update()
+    bpy.ops.object.select_all(action='DESELECT'); ob.select_set(True); bpy.context.view_layer.objects.active = ob
+    bpy.ops.object.convert(target='MESH')
+    o = bpy.context.active_object; o.name = "bundle"
+    for p_ in o.data.polygons:
+        p_.use_smooth = True
+    d = o.modifiers.new("lumps", "DISPLACE"); t = bpy.data.textures.new("crouchlump", "CLOUDS"); t.noise_scale = 0.12; d.texture = t; d.strength = 0.025
+    d2 = o.modifiers.new("folds", "DISPLACE"); t2 = bpy.data.textures.new("crouchfold", "WOOD"); t2.wood_type = 'BANDNOISE'; t2.noise_scale = 0.09; t2.turbulence = 6
+    d2.texture = t2; d2.strength = 0.008
+    hide = bpy.data.materials.get("hide2")
+    if hide is None:
+        hide = _mat("hide2", (0.11, 0.07, 0.04), 0.75)
+        hn = hide.node_tree.nodes; hl = hide.node_tree.links; hp = hn["Principled BSDF"]
+        tc = hn.new("ShaderNodeTexCoord"); nz = hn.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 14; nz.inputs['Detail'].default_value = 10
+        hl.new(tc.outputs['Object'], nz.inputs['Vector'])
+        cr = hn.new("ShaderNodeMapRange"); cr.inputs['To Min'].default_value = 0.6; cr.inputs['To Max'].default_value = 1.2; hl.new(nz.outputs['Fac'], cr.inputs['Value'])
+        mx = hn.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
+        mx.inputs[6].default_value = (0.11, 0.07, 0.04, 1); cc = hn.new("ShaderNodeCombineXYZ")
+        for k in range(3):
+            hl.new(cr.outputs[0], cc.inputs[k])
+        hl.new(cc.outputs[0], mx.inputs[7]); hl.new(mx.outputs[2], hp.inputs['Base Color'])
+        bmp = hn.new("ShaderNodeBump"); bmp.inputs['Strength'].default_value = 0.55; hl.new(nz.outputs['Fac'], bmp.inputs['Height']); hl.new(bmp.outputs['Normal'], hp.inputs['Normal'])
+        hp.inputs['Sheen Weight'].default_value = 0.12
+    o.data.materials.append(hide)
+    o.location = loc; o.rotation_euler = (0, 0, rot)
+    bpy.context.view_layer.update()
+    # sit it on its base: lowest point at loc.z
+    zmin = min((o.matrix_world @ v.co).z for v in o.data.vertices)
+    o.location.z += loc[2] - zmin
+    bpy.context.view_layer.update()
+    rope = bpy.data.materials.get("cord_%.2f" % cord_col[0]) or _mat("cord_%.2f" % cord_col[0], cord_col, 0.9)
+    R = Matrix.Rotation(rot, 3, 'Z')
+    for k in range(cords):
+        u = -0.22 + k * 0.42 / max(1, cords - 1) + rng.uniform(-0.02, 0.02)
+        c = o.matrix_world @ Vector((u, -0.03, 0.0))
+        _cord_ring(o, c, (0, math.pi / 2, rot), 0.42, rope)
+    return o

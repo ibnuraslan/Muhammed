@@ -27,8 +27,10 @@ def _house_bundle(fire=1.0, moon=0.0, at=(-2.35, 0.86), rot=70, door_sun=0.0, ra
             G.stone((bx + (k - 3) * 0.28, by + random.Random(k).uniform(-0.05, 0.05), 0.07), (0.34, 0.8, 0.14), rot_z=math.radians(rot) + 0.05 * k, seed=k, flat=0.9)
         z0 = 0.16
     P2.hurdle((bx, by, z0), rot=math.radians(rot), length=1.8, width=0.75)
-    P2.bundle((bx, by, z0 + 0.2), rot=math.radians(rot), length=0.95, girth=0.42)
-    return R, Vector((bx, by, z0 + 0.22))
+    bo = P2.crouched_bundle((bx, by, z0 + 0.04), rot=math.radians(rot), seed=1)
+    bpy.context.view_layer.update()
+    W = np.array([bo.matrix_world @ v.co for v in bo.data.vertices])
+    return R, Vector((bx, by, float(W[:, 2].mean())))
 
 
 def _kneeler(i, name, knees, heading, look, lean=12, var=0, hands=None):
@@ -156,15 +158,25 @@ def S06():
 
 # ============================================================================ "...the bones cannot tell us what the people called these figures..."
 def S07():
-    """The osteologist at the bench (from behind, over the shoulder), the skeleton under the lamp - the
-    evidence stops at the bones. Slow push past the shoulder."""
-    L = p1.lab_body(osteo=True)
+    """The osteologist at the bench (from behind, over the shoulder), the skeleton under the lamp - the evidence stops
+    at the bones. Short neat hair, white lab coat. Slow push past the shoulder."""
+    L = p1.lab_body(osteo=False)
+    import acts as AC
+
+    class _Osteo(K.Osteologist):
+        HAIR = (0.35, 0.15); HAIR_N = 150000; HAIR_LEN = (0.012, 0.024); HAIR_LIFT = 0.0012; CURL = 0.05
+    m = _Osteo("Osteologist")
+    st = AC.Stand(m, (0.15, -0.42), 90, lean=14)
+    st.hand("L", (-0.05, 0.12, LB.TOP + 0.02), elbow=(0.6, 0.2, -0.8), curl=18)
+    st.hand("R", (0.32, 0.18, LB.TOP + 0.03), elbow=(0.6, 0.2, -0.8), curl=24)
+    st.head_to((0.1, 0.4, LB.TOP), share=0.9)
+    st.finish(look=(0.1, 0.4, LB.TOP), density=1.0)
     for o in bpy.data.objects:
         if o.type == 'LIGHT' and o.data.type in ('SUN', 'AREA') and "lamp" not in o.name.lower():
-            o.data.energy *= 0.15
-    t = Vector((0.0, 0.38, LB.TOP + 0.05))
-    return dict(a=((0.55, -0.95, LB.TOP + 0.85), tuple(t)), b=((0.42, -0.78, LB.TOP + 0.75), tuple(t)), lens=35,
-                fstop=4.0, focus=tuple(t), cine=dict(exposure=0.1), hand_ok=p1.OK if hasattr(p1, "OK") else ())
+            o.data.energy *= 0.3
+    t = Vector((0.05, 0.38, LB.TOP + 0.05))
+    return dict(a=((0.62, -1.15, LB.TOP + 0.95), tuple(t)), b=((0.5, -0.95, LB.TOP + 0.85), tuple(t)), lens=35,
+                fstop=4.0, focus=tuple(t), cine=dict(exposure=0.1), hand_ok=p1.OK)
 
 
 def S08():
@@ -191,61 +203,83 @@ def S09():
 
 
 def S10():
-    """Three bones, three pools of light in the dark, wide gaps of shadow between them: separate people - related or
-    not, the tests cannot say. High, still, slow descent."""
+    """Related or not, the tests cannot say: low across the bench at velvet level, the three parts in a line receding
+    into the dark, each with its capped sample tube beside it - red by the skull, blue by the arm, yellow by the ribs.
+    Long lens, focus on the middle one."""
     cs = _three_parts(lit=True)
-    m = (cs[0] + cs[2]) / 2
-    return dict(a=((m.x, m.y - 0.55, LB.TOP + 1.05), tuple(m)), b=((m.x, m.y - 0.42, LB.TOP + 0.85), tuple(m)), lens=35,
-                fstop=5.6, focus=tuple(m), cine=dict(exposure=0.0))
+    for c, col in zip(cs, ((0.85, 0.2, 0.1), (0.15, 0.45, 0.8), (0.9, 0.8, 0.2))):
+        p3._microtube(c.x + 0.07, c.y - 0.12, LB.TOP + 0.002, cap=col)
+    near = cs[2]
+    return dict(a=((near.x + 0.55, near.y - 0.28, LB.TOP + 0.06), tuple(cs[0])), b=((near.x + 0.5, near.y - 0.24, LB.TOP + 0.07), tuple(cs[0])),
+                lens=85, fstop=2.8, focus=tuple(cs[1]), cine=dict(exposure=0.05))
 
 
 # ============================================================================ "Another possibility is more practical..."
+def _surface_hit(o, local_xy, up=1.0):
+    """Ray from above onto object `o` at a point given in its local xy: returns (world point, world normal)."""
+    bpy.context.view_layer.update()
+    dg = bpy.context.evaluated_depsgraph_get()
+    org = o.matrix_world @ Vector((local_xy[0], local_xy[1], 2.0))
+    ok, loc, nrm, idx = o.evaluated_get(dg).ray_cast(o.matrix_world.inverted() @ org, Vector((0, 0, -1)))
+    if not ok:
+        return o.matrix_world @ Vector((local_xy[0], local_xy[1], 0.2)), Vector((0, 0, 1))
+    return o.matrix_world @ loc, (o.matrix_world.to_3x3() @ nrm).normalized()
+
+
 def S11():
-    """Damage: close on the wrapped body - the old hide split along a fold, a dark bone end showing through. Firelight."""
+    """Damage: close on the wrapped body - the dark hide split open over the hip, and the head of a thigh bone pushing
+    out through the gap. Firelight, sharp focus on the bone."""
     R, c = _house_bundle(fire=1.0, moon=0.2)
+    bo = bpy.data.objects["bundle"]
+    hit, n = _surface_hit(bo, (-0.14, 0.02))
+    n = (n + Vector((0, 0, 0.6))).normalized()
     sk = B.Skeleton("M", "C", name="Exposed")
     for s_ in list(sk.parts):
-        if s_ != "forearmL":
+        if s_ != "femurL":
             sk.remove(s_)
-    o = sk.parts["forearmL"]; p3._knee_mats(o, sand=0.5)
-    sd = math.radians(70 - 90)                                     # across the bundle, toward the camera side
-    sk.root.rotation_euler = (0, math.radians(80), sd)
+    o = sk.parts["femurL"]; p3._knee_mats(o, sand=0.4)
+    sk.root.rotation_euler = Vector((0, 0, 1)).rotation_difference(n).to_euler()
     bpy.context.view_layer.update()
-    W = np.array([o.matrix_world @ v.co for v in o.data.vertices]); cc = W.mean(0)
-    side = Vector((math.cos(sd), math.sin(sd), 0))
-    mid = c + side * 0.2 + Vector((0, 0, 0.0))                     # half inside the wrapping, half out through the split
-    sk.root.location += Vector((mid.x - cc[0], mid.y - cc[1], mid.z - cc[2]))
+    W = np.array([o.matrix_world @ v.co for v in o.data.vertices])
+    top = W[np.argmax(W @ np.array(n))]
+    tgt = hit + n * 0.065                                  # the femoral head stands 6-7 cm out of the hide
+    sk.root.location += Vector((tgt.x - top[0], tgt.y - top[1], tgt.z - top[2]))
     bpy.context.view_layer.update()
-    # the split in the hide: a dark ragged gap where the bone comes out
-    bpy.ops.mesh.primitive_circle_add(vertices=24, radius=0.06, fill_type='NGON', location=tuple(c + side * 0.205)); sp = bpy.context.active_object
-    sp.rotation_euler = (math.radians(90), 0, sd + math.radians(90)); sp.scale = (1.0, 0.55, 1.0); sp.name = "hidesplit"
-    sp.data.materials.append(_plain("hidegap", (0.012, 0.008, 0.005), 0.95))
-    t = c + side * 0.3
-    along = Vector((math.cos(math.radians(70)), math.sin(math.radians(70)), 0))
-    cam = t + along * 0.65 + side * 0.3 + Vector((0, 0, 0.3))         # from along the bundle: the bone seen lengthwise
-    return dict(a=(tuple(cam), tuple(t)), b=(tuple(cam - along * 0.12), tuple(t)), lens=50,
-                fstop=2.8, focus=tuple(t), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor", "bundle"))
+    # the split: a dark ragged gap in the hide round the bone, with lifted torn lips
+    q = Vector((0, 0, 1)).rotation_difference(n)
+    bpy.ops.mesh.primitive_circle_add(vertices=28, radius=0.055, fill_type='NGON', location=tuple(hit + n * 0.003)); gp = bpy.context.active_object
+    gp.rotation_euler = q.to_euler(); gp.scale = (1.0, 0.62, 1.0); gp.name = "hidesplit"; gp.data.materials.append(_plain("hidegap", (0.008, 0.005, 0.003), 0.95))
+    dg_ = gp.modifiers.new("rag", "DISPLACE"); tr = bpy.data.textures.new("ragged", "CLOUDS"); tr.noise_scale = 0.015; dg_.texture = tr; dg_.strength = 0.01
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.058, minor_radius=0.009, location=tuple(hit + n * 0.004)); lp = bpy.context.active_object
+    lp.rotation_euler = q.to_euler(); lp.scale = (1.0, 0.62, 1.0); lp.name = "hidelip"; lp.data.materials.append(bo.data.materials[0])
+    dl = lp.modifiers.new("rag", "DISPLACE"); dl.texture = tr; dl.strength = 0.012
+    hx, hy = R["hearth"]
+    _spot((hx - 0.2, hy + 0.2, 0.8), tuple(tgt), 160, size=0.2, color=(1.0, 0.55, 0.22), spot=30)
+    side = Vector((n.x, n.y, 0)).normalized() if Vector((n.x, n.y, 0)).length > 0.1 else Vector((1, 0, 0))
+    cam = tgt + side * 0.32 + Vector((0, 0, 0.18)) + Vector((-side.y, side.x, 0)) * 0.12
+    return dict(a=(tuple(cam), tuple(tgt)), b=(tuple(cam - side * 0.06), tuple(tgt)), lens=60,
+                fstop=4.0, focus=tuple(tgt), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor", "bundle"))
 
 
 def S12():
-    """Repair: a fresh pale cord bound round the old darkened hide, beside the worn ropes - the body mended. Close, firelit."""
+    """Repair: fresh pale cord bound tight over the old dark hide beside the worn ropes - wraps and knots, close and
+    firelit."""
     R, c = _house_bundle(fire=1.0, moon=0.2)
-    along = Vector((math.cos(math.radians(70)), math.sin(math.radians(70)), 0)); sd = math.radians(70 - 90)
-    side = Vector((math.cos(sd), math.sin(sd), 0))
-    cord = _plain("freshcord", (0.55, 0.45, 0.3), 0.85)
-    for k, off in enumerate((-0.12, -0.08)):
-        bpy.ops.mesh.primitive_torus_add(major_radius=0.2, minor_radius=0.009, location=tuple(c + along * off + Vector((0, 0, 0.0))))
-        t_ = bpy.context.active_object; t_.name = "freshcord"
-        t_.rotation_euler = (math.radians(90), 0, math.radians(70) + math.pi / 2); t_.scale = (1.0, 0.66, 1.0)
-        t_.data.materials.append(cord)
-        dp = t_.modifiers.new("d", "DISPLACE"); tt = bpy.data.textures.get("cordtwist") or bpy.data.textures.new("cordtwist", "CLOUDS")
-        tt.noise_scale = 0.01; dp.texture = tt; dp.strength = 0.004
-    t = c - along * 0.1 + side * 0.12
+    bo = bpy.data.objects["bundle"]
+    cord = _plain("freshcord", (0.62, 0.52, 0.36), 0.85)
+    rot = math.radians(70)
+    for k, u in enumerate((0.05, 0.085, 0.12)):
+        cc = bo.matrix_world @ Vector((u, -0.03, 0.0))
+        P2._cord_ring(bo, cc, (0, math.pi / 2, rot), 0.42, cord, name="freshcord", thick=0.008, knot=(k == 1))
+    bpy.context.view_layer.update()
+    kn = [o for o in bpy.data.objects if o.name.startswith("freshcordknot")]
+    t = kn[0].location.copy() if kn else c
     hx, hy = R["hearth"]
-    _spot((hx - 0.2, hy + 0.2, 0.7), tuple(t), 90, size=0.3, color=(1.0, 0.55, 0.22), spot=35)
-    cam = t + side * 0.55 - along * 0.35 + Vector((0, 0, 0.35))
-    return dict(a=(tuple(cam), tuple(t)), b=(tuple(cam - side * 0.12), tuple(t)), lens=50,
-                fstop=2.8, focus=tuple(t), cine=dict(exposure=0.5, sat=0.85), hand_ok=("floor",))
+    _spot((hx - 0.2, hy + 0.2, 0.8), tuple(t), 140, size=0.2, color=(1.0, 0.55, 0.22), spot=30)
+    along = Vector((math.cos(rot), math.sin(rot), 0)); side = Vector((math.cos(rot - math.pi / 2), math.sin(rot - math.pi / 2), 0))
+    cam = t + side * 0.3 + along * 0.18 + Vector((0, 0, 0.22))
+    return dict(a=(tuple(cam), tuple(t)), b=(tuple(cam - side * 0.06), tuple(t)), lens=55,
+                fstop=4.0, focus=tuple(t), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor",))
 
 
 def S13():
@@ -297,15 +331,19 @@ def S17():
     w = bpy.context.scene.world
     for n in w.node_tree.nodes:
         if n.type == 'BACKGROUND':
-            n.inputs['Strength'].default_value *= 0.12
+            n.inputs['Strength'].default_value *= 0.25
     for o in bpy.data.objects:
         if o.type == 'LIGHT' and o.data.type == 'SUN':
-            o.data.energy = 0.35; o.data.color = (0.6, 0.7, 1.0)
+            o.data.energy = 1.4; o.data.color = (0.55, 0.66, 1.0)   # a bright moon on the thatch
     for hx, hy, r in U.HOUSES:                        # hearth glow spilling out of each east doorway
         z = float(U.surface(hx + r * 1.75, hy))
         d = bpy.data.lights.new("doorglow", 'AREA'); d.size = 1.0; d.size_y = 1.4; d.shape = 'RECTANGLE'; d.energy = 90; d.color = (1.0, 0.5, 0.18)
         lo = bpy.data.objects.new("doorglow", d); bpy.context.scene.collection.objects.link(lo)
         lo.location = (hx + r * 1.75 + 0.25, hy, z + 0.8); lo.rotation_euler = (0, math.radians(90), 0)
+        sp = bpy.data.lights.new("doorspill", 'SPOT'); sp.energy = 260; sp.color = (1.0, 0.5, 0.18); sp.spot_size = math.radians(70); sp.spot_blend = 0.7
+        so = bpy.data.objects.new("doorspill", sp); bpy.context.scene.collection.objects.link(so)
+        so.location = (hx + r * 1.75 - 0.2, hy, z + 1.2)                           # firelight spilling out over the ground
+        so.rotation_euler = (Vector((1.0, 0, -0.7))).to_track_quat('-Z', 'Y').to_euler()
     return dict(a=((20, -12, 4.5), (0, 0, 3.6)), b=((30, -20, 8.5), (0, 0, 3.0)), lens=32, fstop=5.6, focus=(0, 0, 2), cine=dict(exposure=0.6))
 
 
