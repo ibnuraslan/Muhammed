@@ -207,3 +207,14 @@ and was caught only by watching. New films start from `pipeline/CONNECT_BRIEF_v2
   - For one file, use a blobless bare clone (`git clone --filter=blob:none --bare`) plus `git show <commit>:<path>`, never a full fetch of a 10 GB branch.
   - Never `find -name "*.blend*" -delete`: it also deleted the `*.blend.anchors.json` sync records.
 - **Keep the sync record of every delivered film** (`blender/briefs/sync/NN.anchors.json`), so previews and retimes can be rebuilt later.
+
+## Lesson from the MonkeyHeadTransplant rebuild (Nov 2026): stage contact work so it can be reached before building
+- Before animating any hand work (stitching, tool grips, carrying a body part), check that it is REACHABLE.
+  The hand, wrist and forearm must reach the work point with at least 1 cm clearance from every body, including the patient's shoulders and the carrier's own torso.
+- Work points directly above a body (for example a neck seam on a seated figure) are a trap: the tool hand ends up inside the shoulders.
+  Stage it from the start so the work faces the surgeon with open space around it: patient reclined or lying, work at chest height, surgeon facing it.
+- Ring-handled instruments (needle holders, scissors, hemostats) need a hand-keyed ring grip.
+  If the pose library doesn't have one, show the instrument held at the far end of the shaft, clear of the body, or use a different tool.
+- Run the hand-vs-body and finger-vs-head audits on the BLOCKING pass, before lighting and polish.
+  If they fail, change the staging, not the IK.
+- Ray-test tool tips and fingers against the body mesh AND the hair cards.
