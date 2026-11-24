@@ -262,11 +262,11 @@ def S12():
 # ============================================================================ "Then the broken knee reconnects a body to a place outside the house..."
 def S13():
     """Outside the house: the small knee pit beyond the house wall in the trench - high, the two places in one frame."""
-    T, sk = p1.site("golden", grass_at=None, kit=False, burials=True, sun_az=205)
-    kp = Vector((U.PITS["KNEE"][0], U.PITS["KNEE"][1], G.H(U.PITS["KNEE"][0], U.PITS["KNEE"][1])))
+    o = p3._knee_pit(kneel=False)                     # the pit with the knee pieces in it
+    kp = Vector(o["knee"])
     b2 = Vector((U.PITS["B2"][0], U.PITS["B2"][1], G.H(U.PITS["B2"][0], U.PITS["B2"][1])))
     m = (kp + b2) / 2
-    return dict(a=(tuple(kp + Vector((1.5, -1.8, 2.2))), tuple(kp)), b=(tuple(m + Vector((2.2, -3.0, 4.2))), tuple(m)), lens=30,
+    return dict(a=(tuple(kp + Vector((0.6, -0.9, 1.2))), tuple(kp)), b=(tuple(m + Vector((1.6, -2.4, 4.4))), tuple(m)), lens=30,
                 fstop=8.0, focus=tuple(m), cine=dict(exposure=0.1))
 
 
