@@ -251,12 +251,12 @@ def S11():
     gp.rotation_euler = q.to_euler(); gp.scale = (1.0, 0.62, 1.0); gp.name = "hidesplit"; gp.data.materials.append(_plain("hidegap", (0.008, 0.005, 0.003), 0.95))
     dg_ = gp.modifiers.new("rag", "DISPLACE"); tr = bpy.data.textures.new("ragged", "CLOUDS"); tr.noise_scale = 0.015; dg_.texture = tr; dg_.strength = 0.01
     hx, hy = R["hearth"]
-    _spot((hx - 0.2, hy + 0.2, 0.8), tuple(tgt), 420, size=0.2, color=(1.0, 0.6, 0.28), spot=25)
+    _spot((hx - 0.2, hy + 0.2, 0.8), tuple(tgt), 45, size=0.3, color=(1.0, 0.6, 0.28), spot=25)
     # medium shot: the whole crouched bundle on its hurdle, the split and the bone end at a readable scale
-    cam = c + Vector((math.cos(math.radians(-20)), math.sin(math.radians(-20)), 0)) * 1.25 + Vector((0, 0, 0.75))
+    cam = c + Vector((math.cos(math.radians(-20)), math.sin(math.radians(-20)), 0)) * 1.45 + Vector((0, 0, 0.42))
     side = Vector((1, 0, 0))
     return dict(a=(tuple(cam), tuple((c + hit) / 2)), b=(tuple(cam - (cam - c).normalized() * 0.15), tuple((c + hit) / 2)), lens=40,
-                fstop=4.0, focus=tuple(tgt), cine=dict(exposure=0.6, sat=0.85), hand_ok=("floor", "bundle"))
+                fstop=4.0, focus=tuple(tgt), cine=dict(exposure=0.1, sat=0.9), hand_ok=("floor", "bundle"))
 
 
 def S12():
@@ -275,9 +275,9 @@ def S12():
     hx, hy = R["hearth"]
     _spot((hx - 0.2, hy + 0.2, 0.8), tuple(t), 140, size=0.2, color=(1.0, 0.55, 0.22), spot=30)
     along = Vector((math.cos(rot), math.sin(rot), 0)); side = Vector((math.cos(rot - math.pi / 2), math.sin(rot - math.pi / 2), 0))
-    cam = c + side * 1.2 + along * 0.35 + Vector((0, 0, 0.8))         # medium: the whole bundle, the fresh cords pale against the dark hide
+    cam = c + side * 1.2 + along * 0.35 + Vector((0, 0, 0.45))         # medium: the whole bundle, the fresh cords pale against the dark hide
     return dict(a=(tuple(cam), tuple(c)), b=(tuple(cam - side * 0.15), tuple(c)), lens=40,
-                fstop=4.0, focus=tuple(t), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor",))
+                fstop=4.0, focus=tuple(t), cine=dict(exposure=0.2, sat=0.85), hand_ok=("floor",))
 
 
 def S13():
