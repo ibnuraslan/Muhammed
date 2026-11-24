@@ -699,7 +699,7 @@ def _belt(st, col=(0.07, 0.045, 0.025)):
         if o.name.startswith(st.m.name + "_jacket") and o.type == 'MESH':
             dg = bpy.context.evaluated_depsgraph_get(); oe = o.evaluated_get(dg)
             W = np.array([oe.matrix_world @ v.co for v in oe.data.vertices])
-            band = W[np.abs(W[:, 2] - c.z) < 0.02]
+            band = W[np.abs(W[:, 2] - c.z) < 0.045]          # the whole height the belt covers
             if len(band) > 8:
                 ctr = band.mean(0)
                 # an elliptical ring that follows the tunic's own cross-section, standing just outside it
