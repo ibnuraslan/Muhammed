@@ -297,12 +297,12 @@ def _embers(m, strength):
     N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
     tc = N.new("ShaderNodeTexCoord")
     vo = N.new("ShaderNodeTexVoronoi"); vo.feature = 'DISTANCE_TO_EDGE'; vo.inputs['Scale'].default_value = 40; L.new(tc.outputs['Object'], vo.inputs['Vector'])
-    cr = N.new("ShaderNodeMapRange"); cr.inputs['From Min'].default_value = 0.0; cr.inputs['From Max'].default_value = 0.06
+    cr = N.new("ShaderNodeMapRange"); cr.inputs['From Min'].default_value = 0.0; cr.inputs['From Max'].default_value = 0.018
     cr.inputs['To Min'].default_value = 1.0; cr.inputs['To Max'].default_value = 0.0; L.new(vo.outputs['Distance'], cr.inputs['Value'])
     nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 8; L.new(tc.outputs['Object'], nz.inputs['Vector'])
-    hp = N.new("ShaderNodeMapRange"); hp.inputs['From Min'].default_value = 0.64; hp.inputs['From Max'].default_value = 0.74; L.new(nz.outputs['Fac'], hp.inputs['Value'])
+    hp = N.new("ShaderNodeMapRange"); hp.inputs['From Min'].default_value = 0.7; hp.inputs['From Max'].default_value = 0.78; L.new(nz.outputs['Fac'], hp.inputs['Value'])
     mx = N.new("ShaderNodeMath"); mx.operation = 'MAXIMUM'; L.new(cr.outputs[0], mx.inputs[0]); L.new(hp.outputs[0], mx.inputs[1])
-    st = N.new("ShaderNodeMath"); st.operation = 'MULTIPLY'; st.inputs[1].default_value = 2.2 * strength; L.new(mx.outputs[0], st.inputs[0])
+    st = N.new("ShaderNodeMath"); st.operation = 'MULTIPLY'; st.inputs[1].default_value = 3.0 * strength; L.new(mx.outputs[0], st.inputs[0])
     p.inputs['Emission Color'].default_value = (1.0, 0.3, 0.05, 1); L.new(st.outputs[0], p.inputs['Emission Strength'])
 
 
