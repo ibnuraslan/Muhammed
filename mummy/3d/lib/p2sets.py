@@ -604,10 +604,10 @@ def crouched_bundle(loc, rot=0.0, seed=0, cords=4, cord_col=(0.16, 0.11, 0.07)):
     """A body drawn up tight, knees to chest, lying on its side, sewn into a hide and bound with cord: the shape
     of a curled human under the wrapping - the head, the curve of the back, the knees and folded shins."""
     rng = random.Random(seed)
-    mb = bpy.data.metaballs.new("crouchmb"); mb.resolution = 0.025; mb.render_resolution = 0.018; mb.threshold = 0.6
+    mb = bpy.data.metaballs.new("crouchmb"); mb.resolution = 0.02; mb.render_resolution = 0.02; mb.threshold = 0.35
     ob = bpy.data.objects.new("crouchmb", mb); bpy.context.scene.collection.objects.link(ob)
     def el(co, r, sc=(1, 1, 1), typ='ELLIPSOID'):
-        e = mb.elements.new(); e.type = typ; e.co = co; e.radius = r; e.size_x, e.size_y, e.size_z = sc
+        e = mb.elements.new(); e.type = typ; e.co = co; e.radius = r * 1.25; e.stiffness = 1.4; e.size_x, e.size_y, e.size_z = sc
     # local frame: body length along x (head at +x), back toward +y, knees toward -y, lying on its side (z up)
     el((0.36, 0.04, 0.02), 0.16, (0.95, 0.9, 0.85))                # head, tucked down
     el((0.12, 0.07, 0.0), 0.26, (1.25, 0.85, 0.75))                # chest and the curved back
@@ -621,8 +621,10 @@ def crouched_bundle(loc, rot=0.0, seed=0, cords=4, cord_col=(0.16, 0.11, 0.07)):
     bpy.ops.object.select_all(action='DESELECT'); ob.select_set(True); bpy.context.view_layer.objects.active = ob
     bpy.ops.object.convert(target='MESH')
     o = bpy.context.active_object; o.name = "bundle"
+    o.data.materials.clear()
     for p_ in o.data.polygons:
-        p_.use_smooth = True
+        p_.use_smooth = True; p_.material_index = 0
+    sm = o.modifiers.new("soften", "SMOOTH"); sm.factor = 1.0; sm.iterations = 12      # one continuous wrapped form, not balls
     d = o.modifiers.new("lumps", "DISPLACE"); t = bpy.data.textures.new("crouchlump", "CLOUDS"); t.noise_scale = 0.12; d.texture = t; d.strength = 0.025
     d2 = o.modifiers.new("folds", "DISPLACE"); t2 = bpy.data.textures.new("crouchfold", "WOOD"); t2.wood_type = 'BANDNOISE'; t2.noise_scale = 0.09; t2.turbulence = 6
     d2.texture = t2; d2.strength = 0.008
