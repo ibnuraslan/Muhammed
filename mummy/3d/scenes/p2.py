@@ -872,7 +872,7 @@ def S25():
     st.finish(look=(blade.x, blade.y, blade.z - zf), density=HAIR)
     G.lift(st, zf)
     for o in (sh, bl, tf):
-        o.location.x += 0.03                                  # the shaft clear of his body
+        o.location.x += 0.06                                  # the shaft clear of his body
     for o in [o for o in bpy.data.objects if o.name.startswith("groundmist")]:
         bpy.data.objects.remove(o)                                 # no ground mist down in the cutting
     return dict(a=((x0 + 1.4, fy - 3.3, zf + 1.6), (x0 + 0.1, yb, zf + 0.85)), b=((x0 + 1.2, fy - 2.8, zf + 1.55), (x0 + 0.1, yb, zf + 0.85)), lens=32,
