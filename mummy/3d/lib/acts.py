@@ -63,6 +63,8 @@ class _Base:
 
     def finish(self, look=None, density=0.6, hair=True, floor_z=0.0, floor_fn=None):
         self.m.finish(look_at=look, place=self.M, density=density, hair=hair)
+        if getattr(self, "kneeling", False):
+            self._slacken()
         jk = getattr(self.m, "jacket", None)                 # layering after posing: no trousers/shirt through the coat
         if jk is not None and hasattr(self.m, "_cover"):
             self.m._cover(jk, [getattr(self.m, "shirt", None), getattr(self.m, "trousers", None)], trust_normals=True)
@@ -109,6 +111,17 @@ class _Base:
         for prop, axis in getattr(self, "fit_pending", []):
             fit_clear(prop, [o for o in self.m.objects if o.type == 'MESH'], (self.M.to_3x3() @ Vector(axis)).normalized())
         return self.m
+
+    def _slacken(self):
+        """Kneeling pulls skinned trousers tight over the seat and thighs; cloth would go slack instead. After the
+        armature: smooth away the body's form, stand the cloth off along its normals, and break it into soft folds."""
+        tr = getattr(self.m, "trousers", None)
+        if tr is None:
+            return
+        sm = tr.modifiers.new("slack_smooth", "SMOOTH"); sm.factor = 0.7; sm.iterations = 14
+        d = tr.modifiers.new("slack_off", "DISPLACE"); d.mid_level = 0.0; d.strength = 0.012
+        t = bpy.data.textures.new(self.m.name + "_slackfold", "CLOUDS"); t.noise_scale = 0.07; t.noise_depth = 2
+        d2 = tr.modifiers.new("slack_fold", "DISPLACE"); d2.texture = t; d2.strength = 0.012; d2.mid_level = 0.5
 
     attached = ()
     attached_pending = ()
@@ -321,6 +334,8 @@ class Kneel(_Base):
     ground_all = True
     """Kneeling on both knees (sorting things on the floor): knees on the floor in front of the hips, shins flat
     behind, toes tucked; torso leaning over the work. sit_back=True sits back toward the heels."""
+    kneeling = True
+
     def __init__(self, m, knees, heading, lean=30.0, sit_back=False):
         self.m = m; h = m.h
         m.asset_boots = True          # keep the fitted shoe shell (the lofted street shoe assumes an upright leg)

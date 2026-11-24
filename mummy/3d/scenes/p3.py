@@ -73,7 +73,9 @@ def knee_pieces(sk, side="L", keep_femur=0.09, keep_tibia=0.07, keep="near"):
             cr_ = bmesh.ops.contextual_create(bm, geom=edges)
             caps = [f for f in cr_.get("faces", [])]
             if caps:
-                bmesh.ops.poke(bm, faces=caps)                       # a fan of triangles: the break face can be roughened
+                pk = bmesh.ops.poke(bm, faces=caps)                  # a fan of triangles: the break face can be roughened
+                for f in pk.get("faces", []):
+                    f.material_index = 1; f.smooth = False          # broken face: trabecular bone, crisp
             bmesh.ops.recalc_face_normals(bm, faces=bm.faces[:])
         # a dry break is jagged, not sawn: push every vertex near the cut along the plane normal by a noise field taken
         # in WORLD space - both sides of the same break (pieces and shafts) get the same displacement, so they interlock
@@ -94,6 +96,35 @@ def knee_pieces(sk, side="L", keep_femur=0.09, keep_tibia=0.07, keep="near"):
     else:
         sk.remove("patella" + side)
     return out
+
+
+def _trabecular(name="trabecular"):
+    """The broken face of a long bone: spongy trabecular bone - a lattice of pale struts round dark pores, with a
+    thin dense cortical rim - stained like the rest of the bone."""
+    m = bpy.data.materials.get(name)
+    if m:
+        return m
+    m = bpy.data.materials.new(name); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord")
+    v1 = N.new("ShaderNodeTexVoronoi"); v1.feature = 'DISTANCE_TO_EDGE'; v1.inputs['Scale'].default_value = 420; L.new(tc.outputs['Object'], v1.inputs['Vector'])
+    v2 = N.new("ShaderNodeTexVoronoi"); v2.feature = 'DISTANCE_TO_EDGE'; v2.inputs['Scale'].default_value = 170; L.new(tc.outputs['Object'], v2.inputs['Vector'])
+    mn = N.new("ShaderNodeMath"); mn.operation = 'MINIMUM'; L.new(v1.outputs['Distance'], mn.inputs[0]); L.new(v2.outputs['Distance'], mn.inputs[1])
+    st = N.new("ShaderNodeMapRange"); st.inputs['From Min'].default_value = 0.02; st.inputs['From Max'].default_value = 0.09
+    st.inputs['To Min'].default_value = 1.0; st.inputs['To Max'].default_value = 0.0; L.new(mn.outputs[0], st.inputs['Value'])   # 1 on struts
+    col = N.new("ShaderNodeMix"); col.data_type = 'RGBA'; L.new(st.outputs[0], col.inputs['Factor'])
+    col.inputs[6].default_value = (0.05, 0.035, 0.02, 1); col.inputs[7].default_value = (0.55, 0.45, 0.32, 1)
+    L.new(col.outputs[2], p.inputs['Base Color'])
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 1.0; bp.inputs['Distance'].default_value = 0.0015
+    L.new(st.outputs[0], bp.inputs['Height']); L.new(bp.outputs['Normal'], p.inputs['Normal'])
+    p.inputs['Roughness'].default_value = 0.9
+    return m
+
+
+def _knee_mats(o, sand=0.5):
+    """Aged knee-piece materials: stained, pored, root-etched bone; the broken faces (slot 1) spongy trabecular bone."""
+    o.data.materials.clear(); o.data.materials.append(B.bone_material("C", dirt=1.0, sand=sand))
+    p2._bone_detail(o); _old_bone(o, stain=0.6)
+    o.data.materials.append(_trabecular())
 
 
 def _tube(x, y, z, cap=(0.05, 0.25, 0.55)):
@@ -589,6 +620,8 @@ def S20():
     sk.pose_crouched(tight=1.0, side="R")                  # lying on its right side: the broken left leg uppermost
     sk.place((gx, gy, z), heading=30, ground_fn=lambda x, y: G.H(x, y) + 0.003)
     knee_pieces(sk, side="L", keep="far")                  # the left knee is gone: femur and shin end in breaks
+    for o_ in sk.parts.values():                           # the same long-buried brown bone as the other grave shots
+        _knee_mats(o_, sand=0.6)
     bpy.context.view_layer.update()
     kj = sk.world_pivot("shankL")
     t = Vector((kj.x, kj.y, kj.z))
@@ -639,7 +672,7 @@ def _knee_pit(kneel=True):
     skk.root.location += Vector((kx - c[0], ky - c[1], zf - 0.015 - W[:, 2].min()))      # bedded a little into the sand
     bpy.context.view_layer.update()
     for o in pcs:
-        o.data.materials.clear(); o.data.materials.append(B.bone_material("C", dirt=1.0, sand=0.7)); _old_bone(o, stain=0.55)
+        _knee_mats(o, sand=0.7)
     out = dict(knee=Vector((kx, ky, zf + 0.03)), pieces=pcs)
     if kneel:
         out["st"] = K.kneel_trowel(K.DiggerB, (kx + 0.15, ky - 0.75), 95, work=(kx + 0.05, ky - 0.25), density=HAIR)
@@ -696,7 +729,7 @@ def S25():
     legs[1].root.location += Vector((0.0, -0.003, 0.002))      # the pit pieces a hairline off the breaks
     bpy.context.view_layer.update()
     for o in objs:
-        o.data.materials.clear(); o.data.materials.append(B.bone_material("C", dirt=1.0, sand=0.35)); _old_bone(o, stain=0.55)
+        _knee_mats(o, sand=0.35)
     _spot((-0.6, 0.15, LB.TOP + 0.25), (0.0, 0.4, LB.TOP + 0.03), 60, size=0.04, spot=30)
     k = legs[0].world_pivot("shankL")
     return dict(a=(tuple(k + Vector((-0.12, -0.42, 0.3))), tuple(k)), b=(tuple(k + Vector((0.04, -0.4, 0.26))), tuple(k)), lens=55,
@@ -761,6 +794,61 @@ def S30():
 
 
 # ============================================================================ "In the team's later reconstruction..."
+def _hood_cloak(st, col=(0.085, 0.065, 0.045), seed=0):
+    """A Bronze Age hooded wool cloak-cape over a posed islander: the head, neck, shoulders and upper chest of the posed
+    body (by bone weight), lifted well off it and softened into heavy wool, open at the face. Replaces the strand hair
+    (which read as round puffs by torchlight)."""
+    m = st.m
+    dg = bpy.context.evaluated_depsgraph_get()
+    body = bpy.data.objects.get(m.name + "_body")
+    if body is None:
+        return None
+    keys = ("head", "neck", "spine01", "spine02", "clavicle", "shoulder01", "breast", "pectoral", "levator", "trapez")
+    gi = {g.index for g in body.vertex_groups if any(k in g.name.lower() for k in keys)}
+    wsel = np.array([sum(g.weight for g in v.groups if g.group in gi) > 0.3 for v in body.data.vertices])
+    be = body.evaluated_get(dg); me = be.to_mesh()
+    if len(me.vertices) != len(wsel):
+        be.to_mesh_clear(); return None
+    hd = m.h.bone_head("head")                    # world (the rig is placed and lifted by now)
+    eyes = [o for o in bpy.data.objects if o.name.startswith(m.name + "_eye")]
+    fwd = ((sum((o.matrix_world.translation for o in eyes), Vector()) / len(eyes)) - hd).normalized() if eyes else Vector((0, -1, 0))
+    bm = bmesh.new(); bm.from_mesh(me); bm.transform(be.matrix_world); bm.verts.ensure_lookup_table(); bm.normal_update()
+    be.to_mesh_clear()
+    drop = []
+    for f in bm.faces:
+        if not all(wsel[v.index] for v in f.verts):
+            drop.append(f); continue
+        c = f.calc_center_median()
+        if (c - hd).dot(fwd) > 0.035 and f.normal.dot(fwd) > 0.3:        # the face opening
+            drop.append(f)
+    bmesh.ops.delete(bm, geom=drop, context='FACES')
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if not v.link_faces], context='VERTS')
+    bm.normal_update()
+    for v in bm.verts:
+        v.co += v.normal * 0.05
+    cm = bpy.data.meshes.new(m.name + "_cloak"); bm.to_mesh(cm); bm.free()
+    co = bpy.data.objects.new(m.name + "_cloak", cm); bpy.context.scene.collection.objects.link(co)
+    wool = bpy.data.materials.get("cloakwool")
+    if wool is None:
+        wool = _plain("cloakwool", col, 0.95)
+        N = wool.node_tree.nodes; L = wool.node_tree.links; pr = N["Principled BSDF"]
+        tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 260; nz.inputs['Detail'].default_value = 8
+        L.new(tc.outputs['Object'], nz.inputs['Vector']); bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.35
+        L.new(nz.outputs['Fac'], bp.inputs['Height']); L.new(bp.outputs['Normal'], pr.inputs['Normal'])
+        if 'Sheen Weight' in pr.inputs:
+            pr.inputs['Sheen Weight'].default_value = 0.4
+    cm.materials.append(wool)
+    for pg in cm.polygons:
+        pg.use_smooth = True
+    sm = co.modifiers.new("soft", "SMOOTH"); sm.factor = 0.5; sm.iterations = 6
+    so = co.modifiers.new("thick", "SOLIDIFY"); so.thickness = 0.008; so.offset = 1.0
+    t = bpy.data.textures.new(m.name + "_cloakfold", "CLOUDS"); t.noise_scale = 0.09
+    d = co.modifiers.new("folds", "DISPLACE"); d.texture = t; d.strength = 0.012
+    for o in [o for o in bpy.data.objects if o.name.startswith(m.name + "_hair")]:
+        bpy.data.objects.remove(o)
+    return co
+
+
 def _night_pit():
     """Bronze Age night on the machair: the earlier grave dug open, torchlight from a pole torch; returns the pit centre."""
     U.CUT = False
@@ -835,7 +923,7 @@ def S31():
         for sd, dx in (("L", -0.2), ("R", 0.2)):
             st.grip(sd, (c.x + x0 + dx, py, pz + c.z - zk), (1, 0, 0), radius=0.03)
         st.head_to((c.x + x0, c.y, -0.4), share=0.8); st.finish(look=(c.x + x0, c.y, -0.4), density=HAIR)
-        G.lift(st, zk); sts.append(st)
+        G.lift(st, zk); _hood_cloak(st, col=(0.085, 0.065, 0.045) if i == 0 else (0.16, 0.13, 0.09)); sts.append(st)
     return dict(a=((c.x + 1.9, c.y - 3.3, c.z + 2.9), (c.x + 0.1, c.y + 0.1, c.z - 0.25)), b=((c.x + 1.6, c.y - 2.9, c.z + 2.7), (c.x + 0.1, c.y + 0.1, c.z - 0.25)),
                 lens=32, fstop=2.8, focus=(c.x, c.y - 0.4, c.z), cine=dict(exposure=0.6), hand_ok=("openpit", "Uist", "pitrim", "hurdle", "bundle"))
 
@@ -865,6 +953,7 @@ def S32():
         for sd, dx in (("L", -0.22), ("R", 0.22)):
             st.grip(sd, (c.x + x0 + dx, pc.y, pc.z - zf), (1, 0, 0), radius=0.03)
         st.head_to((c.x + x0, c.y + 0.5, 0.3), share=0.6); st.finish(look=(c.x + x0, c.y + 0.5, 0.3), density=HAIR); G.lift(st, zf)
+        _hood_cloak(st, col=(0.085, 0.065, 0.045) if i == 0 else (0.16, 0.13, 0.09))
     return dict(a=((c.x + 2.6, c.y - 3.4, c.z + 1.15), (c.x, c.y, c.z + 0.5)), b=((c.x + 2.3, c.y - 3.0, c.z + 1.1), (c.x, c.y, c.z + 0.5)),
                 lens=32, fstop=2.8, focus=(c.x, pc.y, c.z + 0.6), cine=dict(exposure=0.45), hand_ok=("hurdle", "bundle"))
 
