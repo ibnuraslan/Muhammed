@@ -275,7 +275,8 @@ def S07():
     y = U.DIG["y1"]
     G.section_scan(y, x_center=4.6)
     z = G.H(4.6, y - 1.6)
-    return dict(a=((3.3, y - 2.05, z + 0.5), (4.6, y - 1.02, z + 0.38)), b=((3.55, y - 1.95, z + 0.48), (4.85, y - 1.02, z + 0.38)), lens=35,
+    # ~55 deg to the face: the whole frame lands on the real section (its end and the trench walls stay out of shot)
+    return dict(a=((3.85, y - 2.0, z + 0.45), (4.55, y - 1.02, z + 0.36)), b=((4.05, y - 1.95, z + 0.44), (4.75, y - 1.02, z + 0.36)), lens=45,
                 fstop=5.6, focus=(4.4, y - 1.05, z + 0.3))
 
 
