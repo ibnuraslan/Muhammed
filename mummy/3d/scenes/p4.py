@@ -249,8 +249,8 @@ def S11():
 
 # ============================================================================ "Later, someone dug down into those graves."
 def S12():
-    """Night: digging down into the old graves by torchlight (from behind)."""
-    return p3.S31()
+    """Night: the old grave dug open by torchlight - sand walls, the floor of the pit (no figures; S03 has them)."""
+    return p3.S33()
 
 
 # ============================================================================ "In one case, a house had been built with its hearth directly over a child's cremation..."

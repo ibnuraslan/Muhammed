@@ -296,7 +296,7 @@ def _embers(m, strength):
     """Glowing peat: emission only in a network of cracks and hot patches, the block faces stay dark."""
     N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
     tc = N.new("ShaderNodeTexCoord")
-    vo = N.new("ShaderNodeTexVoronoi"); vo.feature = 'DISTANCE_TO_EDGE'; vo.inputs['Scale'].default_value = 40; L.new(tc.outputs['Object'], vo.inputs['Vector'])
+    vo = N.new("ShaderNodeTexVoronoi"); vo.feature = 'DISTANCE_TO_EDGE'; vo.inputs['Scale'].default_value = 5; L.new(tc.outputs['Object'], vo.inputs['Vector'])
     cr = N.new("ShaderNodeMapRange"); cr.inputs['From Min'].default_value = 0.0; cr.inputs['From Max'].default_value = 0.018
     cr.inputs['To Min'].default_value = 1.0; cr.inputs['To Max'].default_value = 0.0; L.new(vo.outputs['Distance'], cr.inputs['Value'])
     nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 8; L.new(tc.outputs['Object'], nz.inputs['Vector'])
