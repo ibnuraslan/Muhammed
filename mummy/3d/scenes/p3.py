@@ -637,7 +637,7 @@ def S34():
     U.island("dawn", grass_at=(6, -4), grass_r=24, n=820, core=4.0, grass_density=220)
     BR.village(smoke_on=True)
     import acts as AC
-    hx, hy = 9.0, -6.0
+    hx, hy = 17.5, -9.5                     # out on the machair, walking toward the houses
     zc = float(U.surface(hx, hy))
     P2.hurdle((hx, hy, zc + 0.78), rot=math.radians(150), length=1.8, width=0.75)
     P2.bundle((hx, hy, zc + 0.98), rot=math.radians(150), length=0.95, girth=0.42)
@@ -653,7 +653,7 @@ def S34():
             w = Vector((hx, hy, zc + 0.78)) + d * (sg * 0.72) + s * (sgn * 0.37)
             st.hand(sd, (w.x, w.y, w.z - zf), elbow=(0.6, 0.2, -0.8), grip=0.85)
         st.finish(look=(hx + d.x * 6, hy + d.y * 6, 1.6), density=HAIR); G.lift(st, zf)
-    return dict(a=((hx + 4.5, hy - 2.5, zc + 1.4), (hx - 3, hy + 2, zc + 1.0)), b=((hx + 3.6, hy - 1.8, zc + 1.4), (hx - 4, hy + 2.5, zc + 1.0)),
+    return dict(a=((hx + 6.5, hy - 1.6, zc + 1.7), (hx - 6, hy + 4, zc + 1.4)), b=((hx + 5.4, hy - 1.0, zc + 1.65), (hx - 7, hy + 4.5, zc + 1.4)),
                 lens=32, fstop=4.0, focus=(hx, hy, zc + 1.0), cine=dict(exposure=0.3), hand_ok=("hurdle", "bundle"))
 
 
