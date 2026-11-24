@@ -230,7 +230,7 @@ def S11():
     out through the gap. Firelight, sharp focus on the bone."""
     R, c = _house_bundle(fire=1.0, moon=0.2)
     bo = bpy.data.objects["bundle"]
-    hit, n = _surface_hit(bo, (-0.14, 0.02))
+    hit, n = _surface_hit(bo, (-0.3, 0.08))            # over the hip, between the cords
     n = (n + Vector((0, 0, 0.6))).normalized()
     sk = B.Skeleton("M", "C", name="Exposed")
     for s_ in list(sk.parts):
