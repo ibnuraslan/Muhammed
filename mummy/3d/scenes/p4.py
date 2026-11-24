@@ -41,7 +41,7 @@ def _calcined(name="calcined"):
     return m
 
 
-def cremation(center, radius=0.12, n=90, seed=1, charcoal=40):
+def cremation(center, radius=0.12, n=90, seed=1, charcoal=40, flat=False):
     """A small heap of cremated bone fragments with charcoal in a little pit: angular, warped, cracked pieces."""
     rng = random.Random(seed)
     cx, cy, cz = center
@@ -87,6 +87,12 @@ def cremation(center, radius=0.12, n=90, seed=1, charcoal=40):
         vs = [grid[key] for key in grid]
         Rm = Matrix.Rotation(rng.uniform(0, 6.3), 3, 'Z') @ Matrix.Rotation(rng.uniform(-0.6, 0.6), 3, 'Y') @ \
             (Matrix.Rotation(math.pi, 3, 'Y') if rng.random() < 0.5 else Matrix.Identity(3))
+        if flat:                                                     # laid out on a surface: resting, not heaped
+            Rm = Matrix.Rotation(rng.uniform(0, 6.3), 3, 'Z') @ (Matrix.Rotation(math.pi, 3, 'Y') if rng.random() < 0.5 else Matrix.Identity(3))
+            pts = [Rm @ v.co for v in vs]; zmin = min(p_.z for p_ in pts)
+            for v, p_ in zip(vs, pts):
+                v.co = p_ + Vector((x, y, cz - zmin + 0.0005))
+            continue
         h = (radius - r) * 0.45 * rng.uniform(0.3, 1.0)
         for v in vs:
             v.co = Rm @ v.co + Vector((x, y, cz + h + R * 0.1))       # half bedded in the fill
@@ -255,7 +261,7 @@ def S11():
     """Cremated bone in the lab: white, grey and black fragments, crazed and warped by fire, on the velvet. Slider."""
     A = LB.room(window_light=0.3, lamp=True, lamp_at=(0.3, 0.62), lamp_target=(0.0, 0.36), lamp_energy=22)
     LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
-    cremation((0.0, 0.36, LB.TOP + 0.002), radius=0.1, n=70, charcoal=0)
+    cremation((0.0, 0.36, LB.TOP + 0.001), radius=0.1, n=80, charcoal=0, flat=True)
     t = Vector((0.0, 0.36, LB.TOP + 0.01))
     return dict(a=(tuple(t + Vector((-0.18, -0.22, 0.16))), tuple(t)), b=(tuple(t + Vector((-0.05, -0.26, 0.15))), tuple(t)), lens=60,
                 fstop=5.6, focus=tuple(t), cine=dict(exposure=-0.05))
@@ -326,10 +332,10 @@ def S17():
     T, sk = p1.site("golden", grass_at=None, kit=False, burials=True, sun_az=200)
     rng = random.Random(17)
     for k in range(11):
-        x, y = rng.uniform(-0.9, 0.9), rng.uniform(-0.6, 0.6)
+        x, y = -1.5 + rng.uniform(-0.6, 0.6), -0.4 + rng.uniform(-0.45, 0.45)      # clear of the hearth kerb
         z = G.H(x, y)
         sk2 = B.Skeleton("M", "C", name=f"Scatter{k}")
-        keep = rng.choice(["forearmL", "patellaL", "handR", "footL", "femurL", "shankR", "mandible", "upperarmR"])
+        keep = rng.choice(["forearmL", "patellaL", "femurL", "shankR", "mandible", "upperarmR", "forearmR"])
         for s_ in list(sk2.parts):
             if s_ != keep:
                 sk2.remove(s_)
@@ -338,8 +344,9 @@ def S17():
         sk2.root.rotation_euler = (math.radians(90), 0, rng.uniform(0, 6.3)); bpy.context.view_layer.update()
         Wv = np.array([o.matrix_world @ v.co for v in o.data.vertices]); c = Wv.mean(0)
         sk2.root.location += Vector((x - c[0], y - c[1], z - 0.004 - Wv[:, 2].min()))
-    return dict(a=((-1.4, -1.5, G.H(0, 0) + 0.75), (0, 0, G.H(0, 0))), b=((-0.7, -1.8, G.H(0, 0) + 0.7), (0.4, 0.2, G.H(0, 0))), lens=32,
-                fstop=5.6, focus=(0, 0, G.H(0, 0)), cine=dict(exposure=0.1))
+    zc = G.H(-1.5, -0.4)
+    return dict(a=((-2.6, -1.8, zc + 0.7), (-1.5, -0.4, zc)), b=((-2.1, -2.0, zc + 0.65), (-1.2, -0.3, zc)), lens=32,
+                fstop=5.6, focus=(-1.5, -0.4, zc), cine=dict(exposure=0.1))
 
 
 # ============================================================================ "The two assembled bodies belong to a place..."
