@@ -557,7 +557,7 @@ def _night_pit():
             n.inputs['Strength'].default_value *= 0.06
     for o in bpy.data.objects:
         if o.type == 'LIGHT' and o.data.type == 'SUN':
-            o.data.energy = 0.08; o.data.color = (0.6, 0.7, 1.0)
+            o.data.energy = 0.3; o.data.color = (0.6, 0.7, 1.0)
     # a raised rim of upcast earth round the hole
     bpy.ops.mesh.primitive_torus_add(major_radius=0.62, minor_radius=0.12, location=(kx, ky, z + 0.02)); rim = bpy.context.active_object
     rim.scale = (1.45, 1.0, 0.6); rim.name = "pitrim"; rim.data.materials.append(G.mat("sand"))
