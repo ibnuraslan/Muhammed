@@ -31,10 +31,7 @@ The later grip attempts (v014 `scripts/wip_round3`, `wip_round4`) failed the con
 | `beats.json`, `CREDITS.md` | Synced beat frames and credits |
 | `scripts/` | The build: `01_base` → `02_surgeon` → `03_layout` → `04_animate` (uses `camera_keys.json` and `layout.json`) → `pipeline/package_for_farm` |
 
-## Watched-preview notes (v015 preview)
-These are side effects of the cap shift. The monkey's face stays in frame in all of them.
-- **21–24 s:** the surgeon is mostly at or off the left edge of the monitor shot.
-- **22.0–22.6 s:** his raised arm enters at the left edge, with little of his body in frame.
-- **26–27.6 s (ending):** he is half-cropped at the left edge.
-
-If any of this matters, the fix is to re-aim camera keys 1267, 1360, 1447, 1560 and 1656 about 15 cm to the left. That would need one more preview.
+## Watched-preview notes (final v015 preview)
+- **Camera keys 1267–1656 re-aimed** (the director's request). From 20 s to the end, the surgeon is fully in frame and both his face and the monkey's face are in frame.
+- **The framing is wider than check 1.** The monitor sits at the right edge from 21 to 24 s.
+- **From about 24 s, the donor monkey's headless body shows at the left edge of the frame.** Its neck cap is skin-toned and there is no gore. Tightening the lens on keys 1447–1656 would crop it, at the cost of cutting into the surgeon.
