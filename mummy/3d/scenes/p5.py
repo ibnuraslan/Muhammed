@@ -92,7 +92,7 @@ def S03():
         kn = (hx + dx, hy + dy)
         hd = math.degrees(math.atan2(c.y - kn[1], c.x - kn[0]))
         _kneeler(k % 2, f"Kin{k}", kn, hd, look, lean=10, var=k)
-    return dict(a=((hx + 2.9, hy - 2.1, 1.55), (c.x, c.y, 0.4)), b=((hx + 2.5, hy - 1.8, 1.45), (c.x, c.y, 0.4)), lens=32,
+    return dict(a=((hx + 2.6, hy - 2.6, 2.3), (c.x, c.y, 0.3)), b=((hx + 2.3, hy - 2.3, 2.15), (c.x, c.y, 0.3)), lens=30,
                 fstop=2.8, focus=(hx, hy, 0.4), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor",))
 
 
