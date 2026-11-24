@@ -816,13 +816,13 @@ def S32():
     pc = poles[0].matrix_world.translation.copy()
     for i, x0 in enumerate((-0.5, 0.5)):
         m = BR.Islander(name=f"Islander{i}") if i == 0 else p2._islander2()
-        f = (c.x + x0, pc.y - 0.5)
+        f = (c.x + x0, pc.y - 0.6)
         zf = max(float(U.surface(f[0] + ex, f[1] + ey)) for ex in (-0.15, 0.15) for ey in (-0.15, 0.15))
-        st = AC.Haul(m, f, 90, knee=30, lean=30, weight="L" if i == 0 else "R")
+        st = AC.Haul(m, f, 90, knee=40, lean=34, weight="L" if i == 0 else "R")
         for sd, dx in (("L", -0.22), ("R", 0.22)):
             st.grip(sd, (c.x + x0 + dx, pc.y, pc.z - zf), (1, 0, 0), radius=0.03)
         st.head_to((c.x + x0, c.y + 0.5, 0.3), share=0.6); st.finish(look=(c.x + x0, c.y + 0.5, 0.3), density=HAIR); G.lift(st, zf)
-    return dict(a=((c.x + 0.6, c.y - 3.9, c.z + 0.95), (c.x, c.y, c.z + 0.6)), b=((c.x + 0.5, c.y - 3.3, c.z + 0.9), (c.x, c.y, c.z + 0.6)),
+    return dict(a=((c.x + 2.6, c.y - 3.4, c.z + 1.15), (c.x, c.y, c.z + 0.5)), b=((c.x + 2.3, c.y - 3.0, c.z + 1.1), (c.x, c.y, c.z + 0.5)),
                 lens=32, fstop=2.8, focus=(c.x, pc.y, c.z + 0.6), cine=dict(exposure=0.45), hand_ok=("hurdle", "bundle"))
 
 
