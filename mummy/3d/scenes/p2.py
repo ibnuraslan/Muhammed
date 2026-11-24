@@ -254,7 +254,8 @@ def S11():
     ext = co.max(0) - co.min(0)
     s_ = 2.2 / max(ext[0], ext[1]); o.scale = (s_, s_, s_)
     rr = np.maximum(np.abs(co[:, 0]) / (ext[0] / 2), np.abs(co[:, 1]) / (ext[1] / 2))
-    zc = float(np.percentile(co[rr > 0.9, 2], 35)) * s_          # the trench floor meets the scan near its edge
+    zc = float(np.percentile(co[:, 2], 2)) * s_ - 0.02        # a floor under everything (only seen past the scan's edge)
+    zs = float(np.percentile(co[np.abs(co[:, 0]) < ext[0] * 0.25, 2], 50)) * s_      # the burial itself
     # warm the soil toward the machair sand
     for m in o.data.materials:
         N = m.node_tree.nodes; Lk = m.node_tree.links; p = [n for n in N if n.type == 'BSDF_PRINCIPLED']
@@ -265,8 +266,8 @@ def S11():
     # the surrounding trench floor, the scan edges sink into it
     sand = ph.texture("dense_sand", scale=1.2, name="trenchsand", tint=(0.55, 0.48, 0.4))
     bpy.ops.mesh.primitive_plane_add(size=12, location=(0, 0, zc)); g = bpy.context.active_object; g.data.materials.append(sand)
-    return dict(a=((0.1, -0.35, zc + 2.0), (0.0, 0.0, zc - 0.05)), b=((-0.1, 0.15, zc + 1.7), (0.0, 0.05, zc - 0.05)), lens=35,
-                fstop=8.0, focus=(0, 0, zc), cine=dict(exposure=0.1))
+    return dict(a=((0.08, -0.3, zs + 1.9), (0.0, 0.0, zs)), b=((-0.08, 0.12, zs + 1.65), (0.0, 0.05, zs)), lens=45,
+                fstop=8.0, focus=(0, 0, zs), cine=dict(exposure=0.1))
 
 
 # ============================================================================ "The team looks inside the bones."

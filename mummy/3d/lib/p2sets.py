@@ -238,16 +238,20 @@ def ams_hall(length=16.0, seed=3):
         _box2("standfoot", (xs, 0, 0.02), (0.3, 0.6, 0.04), yellow, 0.005)
         xs += 1.8
     # electronics racks along the +y wall, indicator LEDs; cable trays overhead with cable bundles
-    for k in range(int((length + 10) / 0.62)):
-        rx = -9 + k * 0.62
-        _box2("rack", (rx, W / 2 - 0.75, 1.0), (0.6, 0.8, 2.0), rackp, 0.01)
-        for j in range(rng.randint(3, 9)):
-            col = rng.choice([(1.0, 0.25, 0.05), (0.2, 1.0, 0.3), (0.3, 0.6, 1.0), (1.0, 0.75, 0.2)])
-            bpy.ops.mesh.primitive_cube_add(size=1, location=(rx + rng.uniform(-0.25, 0.25), W / 2 - 1.152, rng.uniform(0.4, 1.9)))
-            e = bpy.context.active_object; e.scale = (0.008, 0.002, 0.006); e.name = "led"
-            mm = bpy.data.materials.get(f"led{col}") or _mat(f"led{col}", (0, 0, 0), 0.3, emit=col, strength=40)
-            e.data.materials.append(mm)
-        _box2("rackface", (rx, W / 2 - 1.151, 1.0), (0.56, 0.002, 1.9), _paint("rackface", (0.18, 0.18, 0.19), 0.4) if k == 0 else bpy.data.materials["rackface"], 0)
+    for sgn in (1, -1):
+        for k in range(int((length + 10) / 0.62)):
+            rx = -9 + k * 0.62
+            if sgn < 0 and rng.random() < 0.25:
+                continue                                   # gaps on the far wall: doors, a desk, open floor
+            _box2("rack", (rx, sgn * (W / 2 - 0.75), 1.0), (0.6, 0.8, 2.0), rackp, 0.01)
+            fy = sgn * (W / 2 - 1.152)
+            for j in range(rng.randint(3, 9)):
+                col = rng.choice([(1.0, 0.25, 0.05), (0.2, 1.0, 0.3), (0.3, 0.6, 1.0), (1.0, 0.75, 0.2)])
+                bpy.ops.mesh.primitive_cube_add(size=1, location=(rx + rng.uniform(-0.25, 0.25), fy, rng.uniform(0.4, 1.9)))
+                e = bpy.context.active_object; e.scale = (0.008, 0.002, 0.006); e.name = "led"
+                mm = bpy.data.materials.get(f"led{col}") or _mat(f"led{col}", (0, 0, 0), 0.3, emit=col, strength=40)
+                e.data.materials.append(mm)
+            _box2("rackface", (rx, sgn * (W / 2 - 1.151), 1.0), (0.56, 0.002, 1.9), bpy.data.materials.get("rackface") or _paint("rackface", (0.18, 0.18, 0.19), 0.4), 0)
     for ty in (-1.3, 1.6):
         _box2("tray", (length / 2 - 6, ty, 3.0), (length + 24, 0.45, 0.06), ssd, 0.005)
         for c in range(9):
