@@ -34,12 +34,25 @@ with open(os.path.join(OUT, base + ".csv"), "w", encoding="utf-8") as fc, open(o
         fc.write(f'{o["shot"]},{a},{b},{o["frames"]},{tc(a)},{tc(b)},{o["frames"] / 24:.2f},{o["para"]},"{desc.get(o["shot"], "")}","{vo}"\n')
         ft.write(f'{o["shot"]}  frames {a:5d}-{b:5d}  {tc(a)} - {tc(b)}  ({o["frames"] / 24:.2f} s)  VO para {o["para"]}\n    {desc.get(o["shot"], "")}\n')
 
+# --- textures: re-encode big JPEGs (q90; normal maps q93) - visually identical at render, about half the bytes
+from PIL import Image
+for f in sorted(os.listdir(os.path.join(PKG, "tex"))):
+    p = os.path.join(PKG, "tex", f)
+    if f.lower().endswith((".jpg", ".jpeg")) and os.path.getsize(p) > 1_500_000 and not os.path.exists(p + ".q"):
+        q = 93 if "_nor" in f.lower() else 90
+        im = Image.open(p); im.load()
+        tmp = p + ".tmp.jpg"; im.save(tmp, quality=q, subsampling=0 if "_nor" in f.lower() else 2)
+        if os.path.getsize(tmp) < os.path.getsize(p):
+            os.replace(tmp, p)
+        else:
+            os.remove(tmp)
+
 # --- zips: MASTER.blend + README in zip 1, then shots and textures packed by size
 files = []
 for d, _, fs in os.walk(PKG):
     for f in fs:
         p = os.path.join(d, f); rel = os.path.relpath(p, PKG)
-        if rel.startswith("frames") or rel.endswith(".blend1"):
+        if rel.startswith("frames") or rel.endswith((".blend1", ".tmp.jpg")) or rel.startswith(("TESTMASTER", "CCMASTER")):
             continue
         files.append((rel, os.path.getsize(p)))
 first = [f for f in files if f[0] in ("MASTER.blend", "README_RENDER.txt")]
