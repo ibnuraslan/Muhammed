@@ -11,16 +11,20 @@ args = sys.argv[sys.argv.index("--") + 1:]
 PART, PKG = args[0], os.path.abspath(args[1])
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 tim = json.load(open(os.path.join(ROOT, "vo", PART + "_timing.json")))
+ONLY = set(filter(None, os.environ.get("ONLY", "").split(",")))      # test builds: only these strips, at their real frames
+NAME = os.environ.get("MASTERNAME", "MASTER.blend")
 bpy.ops.wm.read_factory_settings(use_empty=True)
 master = bpy.context.scene
 master.name = "MASTER"
-bpy.ops.wm.save_as_mainfile(filepath=os.path.join(PKG, "MASTER.blend"))     # so the library paths can be relative
+bpy.ops.wm.save_as_mainfile(filepath=os.path.join(PKG, NAME))     # so the library paths can be relative
 se = master.sequence_editor_create()
 strips = se.strips if hasattr(se, "strips") else se.sequences
 frame = 1
 first = None
 for o in tim["shots"]:
     sid = o["shot"]
+    if ONLY and sid not in ONLY:
+        frame += o["frames"]; continue
     path = os.path.join(PKG, "shots", sid + ".blend")
     with bpy.data.libraries.load(path, link=True, relative=True) as (src, dst):
         dst.scenes = [n for n in src.scenes if n == sid] or src.scenes[:1]
@@ -66,7 +70,7 @@ master.sequencer_colorspace_settings.name = first.sequencer_colorspace_settings.
 # a scene camera (never used for the picture: the sequencer drives the render)
 cam = bpy.data.objects.new("MasterCam", bpy.data.cameras.new("MasterCam"))
 master.collection.objects.link(cam); master.camera = cam
-bpy.ops.wm.save_as_mainfile(filepath=os.path.join(PKG, "MASTER.blend"), compress=True, relative_remap=True)
-print("[master] saved", os.path.join(PKG, "MASTER.blend"), "frames 1 -", master.frame_end,
+bpy.ops.wm.save_as_mainfile(filepath=os.path.join(PKG, NAME), compress=True, relative_remap=True)
+print("[master] saved", os.path.join(PKG, NAME), "frames 1 -", master.frame_end,
       "| view", vs.view_transform, vs.look, vs.exposure, vs.gamma, master.display_settings.display_device,
       master.sequencer_colorspace_settings.name, flush=True)
