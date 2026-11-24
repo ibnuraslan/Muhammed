@@ -835,7 +835,7 @@ def _hood_cloak(st, col=(0.085, 0.065, 0.045), seed=0):
         md.show_viewport = True
     if len(me.vertices) != len(wsel):
         print("cloak: vertex mismatch", len(me.vertices), len(wsel)); bpy.data.meshes.remove(me); return None
-    hd = m.h.bone_head("head")                    # world (the rig is placed and lifted by now)
+    hd = (m.h.bone_head("head") + m.h.bone_tail("head")) / 2      # mid-skull, world (the rig is placed and lifted)
     eyes = [o for o in bpy.data.objects if o.name.startswith(m.name + "_eye")]
     fwd = ((sum((o.matrix_world.translation for o in eyes), Vector()) / len(eyes)) - hd).normalized() if eyes else Vector((0, -1, 0))
     bm = bmesh.new(); bm.from_mesh(me); bm.transform(mw); bm.verts.ensure_lookup_table(); bm.normal_update()
