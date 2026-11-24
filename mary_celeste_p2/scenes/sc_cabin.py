@@ -32,13 +32,25 @@ def briggs_writing(pause=False, expr=None):
     Mw = seated(b, 1, lift=0.0, back=-0.06)
     Mi = Mw.inverted()
     paper = SET["letter"] + Vector((0.0, 0.02, 0.0))
-    A.write(b.h, Mi, paper, side="R", other_on_table=SET["letter"] + Vector((-0.2, 0.06, 0)), lean=14,
-            head_pitch=(6 if pause else 28))
+    A.write(b.h, Mi, paper, side="R", other_on_table=None, lean=14, head_pitch=(6 if pause else 28))
+    top = SET["letter"].z + 0.0015                       # the sheet's surface (it lies on the cloth)
+    # the pen hand: the side of the hand rests on the page (not through it, not above it)
+    def pen_hand(dz):
+        P.hand_reach(b.h, "R", Mi @ paper + Vector((-0.02, 0.06, 0.075 + dz)), elbow=(-0.9, 0.4, 0.45))
+        b.h.aim("wrist.R", Vector((0.35, -0.8, -0.45))); A.pen_grip(b.h, "R")
+    A.settle_hand(b.h, "R", pen_hand, Mw, top, gap=0.001)
+    # left hand flat on the near-left corner of the letter, steadying it, on his own side (+X): no crossing, no floating
+    lh = SET["letter"] + Vector((0.13, 0.17, 0.0))
+    def left_hand(dz):
+        P.hand_reach(b.h, "L", Mi @ lh + Vector((0, 0.03, 0.05 + dz)), elbow=(0.9, 0.5, 0.45))
+        b.h.aim("wrist.L", Vector((0.1, -0.97, -0.2)))      # palm down, fingers forward, fingertips on the table
+        P.rest_hand(b.h, "L", curl=8)
+    A.settle_hand(b.h, "L", left_hand, Mw, SET["table"].z + 0.003, gap=0.0015)   # on the cloth, beside the sheet
     if pause:
         b.lids(0.3)
     b.finish_live(place=Mw, density=HAIR)
     b.look(paper if not pause else T + Vector((-1.6, -1.4, 0.75)))
-    cabin.pen("pen", b, "R")
+    cabin.pen("pen", b, "R", surface_z=(None if pause else SET["letter"].z + 0.0015))
     return b
 
 
@@ -80,7 +92,7 @@ def white_maquette():
 cine = {"sat": 1.06, "exposure": -0.05}
 
 if SHOT in ("02", "03", "11"):
-    SET = cabin.build("warm", letter_side=1)
+    SET = cabin.build("warm", letter_side=1, second_sheet=(SHOT == "11"))
     b = briggs_writing(pause=(SHOT == "11"), expr=({"mouth-corner-puller": 0.25, "eyebrows-left-inner-up": 0.4,
                                                      "eyebrows-right-inner-up": 0.4} if SHOT == "11" else None))
     head = b.h.bone_head("head")

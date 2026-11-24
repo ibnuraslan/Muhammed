@@ -176,7 +176,7 @@ def sheet(name, c, w, d, mat, rot=0.0, curl=0.004):
 
 
 # ----------------------------------------------------------------------------- build
-def build(mood="warm", letter_side=1, wet=0.0, lamp_on=True, skylight=1.0, organ=True, letters=True, family=True, slate=False,
+def build(mood="warm", letter_side=1, second_sheet=True, wet=0.0, lamp_on=True, skylight=1.0, organ=True, letters=True, family=True, slate=False,
           chrono="full", maquette=False, slate_at=(-0.1, -0.08)):
     """mood: warm (New York morning), night (evening, lamp only), dawn (25 Nov), cold (Deveau, 4 Dec)."""
     A = {}
@@ -325,9 +325,11 @@ def build(mood="warm", letter_side=1, wet=0.0, lamp_on=True, skylight=1.0, organ
     rug.modifiers.new("t", "SOLIDIFY").thickness = 0.006
     # ---- the letter, inkwell and pen on the table
     if letters:
-        A["letter"] = Vector((tx - 0.1, ty + 0.16 * letter_side, tz + 0.001))
+        # the cloth's top is at tz + 0.003: the sheets lie ON it (they were placed under it and sank through)
+        A["letter"] = Vector((tx - 0.1, ty + 0.16 * letter_side, tz + 0.0045))
         sheet("letter", A["letter"], 0.2, 0.25, paper_material("letter"), rot=0.12)
-        sheet("letter2", A["letter"] + Vector((-0.24, 0.06, -0.0004)), 0.2, 0.25, paper_material("letter_b", lines=22), rot=-0.25)
+        if second_sheet:
+            sheet("letter2", A["letter"] + Vector((-0.24, 0.06, -0.0005)), 0.2, 0.25, paper_material("letter_b", lines=22), rot=-0.25)
         A["inkwell"] = _inkwell(A["letter"] + Vector((0.22, 0.05 * letter_side, 0)), br)
     if slate:
         A["slate"] = _slate(Vector((tx + slate_at[0], ty + slate_at[1], tz)), mahog)
@@ -517,7 +519,7 @@ def _light(mood, A, skylight):
     S.area("Bounce", Vector((TABLE.x, TABLE.y, 0.2)), Vector((TABLE.x, TABLE.y, 1.6)), 8, size=1.2, color=(1, 0.7, 0.45))
 
 
-def pen(name, hand_person, side="R"):
+def pen(name, hand_person, side="R", surface_z=None):
     """A dip pen held in the pinch of thumb and index: wooden holder, steel nib; parented to the wrist bone."""
     import poses as P
     h = hand_person.h
@@ -526,7 +528,11 @@ def pen(name, hand_person, side="R"):
     th = h.bone_tail(f"finger1-3.{side}")
     grip = t1.lerp(th, 0.5)
     d = (grip - w).normalized()
-    tip = grip + (d + Vector((0, 0, -0.9))).normalized() * 0.03
+    u = (d + Vector((0, 0, -0.9))).normalized()
+    reach = 0.03
+    if surface_z is not None and u.z < -0.2:            # the nib point just touches the page: not above it, not through
+        reach = min(0.06, max(0.008, (surface_z + 0.0004 - grip.z) / u.z - 0.012))
+    tip = grip + u * reach
     top = grip - (tip - grip).normalized() * 0.13 + Vector((0, 0, 0.02))
     o = cyl(name, top, tip, 0.0045, plain("penholder", (0.08, 0.035, 0.015), rough=0.35, coat=0.5), r1=0.0035, verts=12)
     n = cyl(name + "_nib", tip, tip + (tip - top).normalized() * 0.012, 0.003, plain("nib", (0.2, 0.2, 0.22), rough=0.2, metal=1.0), r1=0.0003, verts=10)

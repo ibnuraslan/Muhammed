@@ -124,3 +124,92 @@ def feet_to_floor(h, Mw, floor_z=0.0, tries=None):
                 toe = Mw @ h.bone_tail(f"foot.{sd}")
                 if toe.z - floor_z < 0.03:
                     break
+
+
+def hand_low(h, side, Mw):
+    """Lowest world z of the skin of one hand (vertices weighted to its wrist / finger / metacarpal bones), posed."""
+    import bpy, numpy as np
+    body = h.body
+    names = [g.name for g in body.vertex_groups if g.name.endswith("." + side) and
+             g.name.split(".")[0].startswith(("wrist", "finger", "metacarpal"))]
+    gi = {body.vertex_groups[n].index for n in names}
+    idx = [v.index for v in body.data.vertices if any(g.group in gi and g.weight > 0.5 for g in v.groups)]
+    sub = [m for m in body.modifiers if m.type == 'SUBSURF']
+    for m in sub:
+        m.show_viewport = False
+    bpy.context.view_layer.update()
+    dg = bpy.context.evaluated_depsgraph_get()
+    oe = body.evaluated_get(dg); me = oe.to_mesh()
+    z = min((Mw @ (oe.matrix_world @ me.vertices[i].co)).z for i in idx)
+    oe.to_mesh_clear()
+    for m in sub:
+        m.show_viewport = True
+    return z
+
+
+def settle_hand(h, side, pose_fn, Mw, surface_z, gap=0.002, tries=5):
+    """pose_fn(dz) poses the hand with its target raised by dz (rig frame); find dz so the hand's lowest skin point
+    rests `gap` above surface_z (world): touching, not floating, not through."""
+    dz = 0.0
+    for _ in range(tries):
+        pose_fn(dz)
+        err = hand_low(h, side, Mw) - (surface_z + gap)
+        if abs(err) < 0.0015:
+            break
+        dz -= err
+    return dz
+
+
+def _hand_pts(h, side, Mw):
+    import bpy, numpy as np
+    body = h.body
+    if not hasattr(h, "_hidx"):
+        h._hidx = {}
+    if side not in h._hidx:
+        gi = {g.index for g in body.vertex_groups if g.name.endswith("." + side) and
+              g.name.split(".")[0].startswith(("wrist", "finger", "metacarpal"))}
+        th = {g.index for g in body.vertex_groups if g.name.endswith("." + side) and g.name.startswith("finger1")}
+        h._hidx[side] = ([v.index for v in body.data.vertices if any(g.group in gi and g.weight > 0.5 for g in v.groups)],
+                         [v.index for v in body.data.vertices if any(g.group in th and g.weight > 0.5 for g in v.groups)])
+    idx, tidx = h._hidx[side]
+    sub = [m for m in body.modifiers if m.type == 'SUBSURF']
+    for m in sub:
+        m.show_viewport = False
+    bpy.context.view_layer.update()
+    dg = bpy.context.evaluated_depsgraph_get()
+    oe = body.evaluated_get(dg); me = oe.to_mesh()
+    co = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", co); co = co.reshape(-1, 3)
+    oe.to_mesh_clear()
+    for m in sub:
+        m.show_viewport = True
+    return co[idx], co[tidx]
+
+
+def flat_hand(h, side, thumb_dir, fwd=(0, -1), pitches=(-0.45, -0.3, -0.18, -0.08, 0.0, 0.1, 0.2, 0.32, 0.45),
+              rolls=range(-180, 180, 15)):
+    """Lay the hand flat: search the wrist's pitch (aim along fwd, rig frame) and its roll about its own axis for the
+    pose whose hand skin is flattest (least height), palm down with the thumb toward thumb_dir. Fingers posed first."""
+    import os
+    import numpy as np
+    pb = h.arm.pose.bones[f"wrist.{side}"]
+    best = None
+    for pz in pitches:
+        h.aim(f"wrist.{side}", Vector((fwd[0], fwd[1], pz)))
+        base = pb.matrix_basis.copy()
+        for deg in rolls:
+            pb.matrix_basis = base
+            ax = (h.bone_tail(f"wrist.{side}") - h.bone_head(f"wrist.{side}")).normalized()
+            h.rot(f"wrist.{side}", ax, deg)
+            Pp, T = _hand_pts(h, side, Matrix.Identity(4))
+            span = float(Pp[:, 2].max() - Pp[:, 2].min())
+            t = T.mean(0) - Pp.mean(0)
+            ok = float(np.dot(t[:2], np.array(thumb_dir[:2]))) > 0
+            score = span + (0 if ok else 1.0)
+            if best is None or score < best[0]:
+                best = (score, pz, deg, pb.matrix_basis.copy())
+    pb.matrix_basis = best[3]
+    import bpy
+    bpy.context.view_layer.update()
+    if os.environ.get("FLATDBG"):
+        print("FLATBEST", round(best[0], 4), best[1], best[2], flush=True)
+    return best[:3]
