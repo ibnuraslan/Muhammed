@@ -108,7 +108,7 @@ def S01():
     U.CUT = False
     R = BR.interior(fire=0.7, door_sun=0.0)
     hx, hy = R["hearth"]
-    for k, (dx, rot) in enumerate(((-1.6, 80), (-0.7, 95), (0.3, 70))):
+    for k, (dx, rot) in enumerate(((-1.75, 88), (-0.7, 92), (0.35, 86))):
         P2.hurdle((hx + dx, hy + 1.7, 0.03), rot=math.radians(rot), length=1.6, width=0.7, seed=k)
         P2.bundle((hx + dx, hy + 1.7, 0.22), rot=math.radians(rot), length=0.85 + 0.1 * k, girth=0.4, seed=k)
     return dict(a=((hx - 2.3, hy - 0.6, 0.9), (hx - 0.6, hy + 1.7, 0.2)), b=((hx - 1.8, hy - 0.2, 0.8), (hx - 0.6, hy + 1.7, 0.2)), lens=32,
