@@ -518,8 +518,8 @@ def S27():
     p2._bone_detail(fem)
     W = np.array([fem.matrix_world @ v.co for v in fem.data.vertices]); t = Vector(((W.min(0) + W.max(0)) / 2).tolist())
     _spot((t.x - 0.6, t.y + 0.2, t.z + 0.1), tuple(t), 60, size=0.02, spot=22)
-    return dict(a=(tuple(t + Vector((0.18, -0.16, 0.1))), tuple(t)), b=(tuple(t + Vector((0.1, -0.2, 0.09))), tuple(t)), lens=85,
-                fstop=8.0, focus=tuple(t), cine=dict(exposure=0.05))
+    return dict(a=(tuple(t + Vector((0.3, -0.32, 0.22))), tuple(t)), b=(tuple(t + Vector((0.2, -0.36, 0.2))), tuple(t)), lens=60,
+                fstop=8.0, focus=tuple(t), cine=dict(exposure=0.1))
 
 
 def S28():
