@@ -26,80 +26,128 @@ def _mat(name, col, rough=0.6, metal=0.0, emit=None, strength=0.0):
 
 # ----------------------------------------------------------------------------- the microscope field
 def microscope_field(kind="human", size=1.0, attack=None):
-    """A thin section seen in transmitted light: emission shader (light passing through the slide), built at the
-    origin on z = 0, radius `size`. Returns the section object; a field-stop ring (black) sits just above it."""
-    attack = attack if attack is not None else (0.12 if kind == "human" else 0.55)
+    """Ground thin section of cortical bone in brightfield (undecalcified, unstained, amber): osteons built in polar
+    coordinates round each Haversian canal - concentric lamellae, radiating canaliculi, osteocyte lacunae elongated
+    along the lamellae, scalloped cement lines; interstitial lamellae between. kind="animal": Wedl-type bacterial
+    tunnelling - meandering, branching dark tunnels cutting through the lamellae in foci, brown-stained around them,
+    plus clusters of small round 'linear longitudinal' tunnel sections. kind="human": intact, only a thin damaged rim
+    at one edge (attack > 0). Vignette and a black circular field stop as seen down the eyepiece. Emission (light
+    passing through the slide); built at the origin on z = 0, radius `size`."""
+    attack = attack if attack is not None else (0.12 if kind == "human" else 0.42)
     bpy.ops.mesh.primitive_circle_add(vertices=128, radius=size, fill_type='NGON', location=(0, 0, 0)); o = bpy.context.active_object
     o.name = "section_" + kind
     m = bpy.data.materials.new("histo_" + kind); m.use_nodes = True; nt = m.node_tree; N = nt.nodes; L = nt.links
     N.remove(N["Principled BSDF"])
-    tc = N.new("ShaderNodeTexCoord")
-    mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (5.0, 5.0, 5.0); L.new(tc.outputs['Object'], mp.inputs['Vector'])
-    # warp the osteon lattice so it is organic
-    wn = N.new("ShaderNodeTexNoise"); wn.inputs['Scale'].default_value = 1.5; wn.inputs['Detail'].default_value = 3; L.new(mp.outputs[0], wn.inputs['Vector'])
-    wv = N.new("ShaderNodeVectorMath"); wv.operation = 'MULTIPLY_ADD'; wv.inputs[1].default_value = (0.35, 0.35, 0.0)
-    L.new(wn.outputs['Color'], wv.inputs[0]); L.new(mp.outputs[0], wv.inputs[2])
-    vor = N.new("ShaderNodeTexVoronoi"); vor.inputs['Scale'].default_value = 1.0; vor.inputs['Randomness'].default_value = 0.85
-    L.new(wv.outputs[0], vor.inputs['Vector'])
-    d = vor.outputs['Distance']
-    # lamellae: concentric rings round each canal
-    ring = N.new("ShaderNodeMath"); ring.operation = 'MULTIPLY'; ring.inputs[1].default_value = 95.0; L.new(d, ring.inputs[0])
-    sn = N.new("ShaderNodeMath"); sn.operation = 'SINE'; L.new(ring.outputs[0], sn.inputs[0])
-    ringc = N.new("ShaderNodeMapRange"); ringc.inputs['From Min'].default_value = -1; ringc.inputs['From Max'].default_value = 1
-    ringc.inputs['To Min'].default_value = 0.74; ringc.inputs['To Max'].default_value = 1.0; L.new(sn.outputs[0], ringc.inputs['Value'])
-    # Haversian canal (dark hole) and the cement line at the osteon edge
-    canal = N.new("ShaderNodeMapRange"); canal.inputs['From Min'].default_value = 0.09; canal.inputs['From Max'].default_value = 0.14
-    canal.inputs['To Min'].default_value = 0.03; canal.inputs['To Max'].default_value = 1.0; L.new(d, canal.inputs['Value'])
-    vor2 = N.new("ShaderNodeTexVoronoi"); vor2.feature = 'DISTANCE_TO_EDGE'; vor2.inputs['Scale'].default_value = 1.0; vor2.inputs['Randomness'].default_value = 0.85
-    L.new(wv.outputs[0], vor2.inputs['Vector'])
-    cem = N.new("ShaderNodeMapRange"); cem.inputs['From Min'].default_value = 0.0; cem.inputs['From Max'].default_value = 0.025
-    cem.inputs['To Min'].default_value = 0.3; cem.inputs['To Max'].default_value = 1.0; L.new(vor2.outputs['Distance'], cem.inputs['Value'])
-    # canaliculi / lacunae: fine dark specks
-    lac = N.new("ShaderNodeTexVoronoi"); lac.inputs['Scale'].default_value = 16; L.new(wv.outputs[0], lac.inputs['Vector'])
-    lacm = N.new("ShaderNodeMapRange"); lacm.inputs['From Min'].default_value = 0.08; lacm.inputs['From Max'].default_value = 0.16
-    lacm.inputs['To Min'].default_value = 0.25; lacm.inputs['To Max'].default_value = 1.0; L.new(lac.outputs['Distance'], lacm.inputs['Value'])
-    def mul(a, b):
-        n = N.new("ShaderNodeMath"); n.operation = 'MULTIPLY'; L.new(a, n.inputs[0]); L.new(b, n.inputs[1]); return n.outputs[0]
-    trans = mul(mul(mul(ringc.outputs[0], canal.outputs[0]), cem.outputs[0]), lacm.outputs[0])
-    # bacterial tunnelling (Wedl / non-Wedl foci): dark, spongy, brown patches; for the human bone only near the edge
-    bt = N.new("ShaderNodeTexNoise"); bt.inputs['Scale'].default_value = 14; bt.inputs['Detail'].default_value = 8; bt.inputs['Roughness'].default_value = 0.75
-    L.new(mp.outputs[0], bt.inputs['Vector'])
-    bz = N.new("ShaderNodeTexNoise"); bz.inputs['Scale'].default_value = 3.0; bz.inputs['Detail'].default_value = 4; L.new(mp.outputs[0], bz.inputs['Vector'])
-    zone = N.new("ShaderNodeMapRange"); zone.inputs['From Min'].default_value = 1.0 - attack; zone.inputs['From Max'].default_value = 1.0 - attack + 0.05
-    L.new(bz.outputs['Fac'], zone.inputs['Value'])
-    if kind == "human":                  # attack only in a thin band at one edge of the section
-        sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Object'], sep.inputs[0])
-        edge = N.new("ShaderNodeMapRange"); edge.inputs['From Min'].default_value = size * 0.62; edge.inputs['From Max'].default_value = size * 0.82
-        L.new(sep.outputs['X'], edge.inputs['Value'])
-        zone_o = edge.outputs[0] if attack > 0 else mul(zone.outputs[0], edge.outputs[0])   # a thin damaged rim only
-    else:
-        zone_o = zone.outputs[0]
-    spong = N.new("ShaderNodeMapRange"); spong.inputs['From Min'].default_value = 0.38; spong.inputs['From Max'].default_value = 0.5
-    L.new(bt.outputs['Fac'], spong.inputs['Value'])
-    dmg = mul(zone_o, spong.outputs[0])
-    col = N.new("ShaderNodeMix"); col.data_type = 'RGBA'; L.new(dmg, col.inputs['Factor'])
-    col.inputs[6].default_value = (0.95, 0.66, 0.34, 1); col.inputs[7].default_value = (0.08, 0.05, 0.03, 1)    # stained bone / brown tunnels
-    tcol = N.new("ShaderNodeMix"); tcol.data_type = 'RGBA'; tcol.blend_type = 'MULTIPLY'; tcol.inputs['Factor'].default_value = 1.0
-    L.new(col.outputs[2], tcol.inputs[6]); cc = N.new("ShaderNodeCombineXYZ")
+    def node(t, **kw):
+        n = N.new(t)
+        for k, v in kw.items():
+            if k.startswith("in_"):
+                n.inputs[k[3:].replace("_", " ")].default_value = v
+            else:
+                setattr(n, k, v)
+        return n
+    def math(op, a, b=None, clamp=False):
+        n = N.new("ShaderNodeMath"); n.operation = op; n.use_clamp = clamp
+        (L.new(a, n.inputs[0]) if not isinstance(a, (int, float)) else setattr(n.inputs[0], 'default_value', a))
+        if b is not None:
+            (L.new(b, n.inputs[1]) if not isinstance(b, (int, float)) else setattr(n.inputs[1], 'default_value', b))
+        return n.outputs[0]
+    def mrange(v, a, b, lo=0.0, hi=1.0, smooth=True):
+        n = N.new("ShaderNodeMapRange"); n.interpolation_type = 'SMOOTHSTEP' if smooth else 'LINEAR'
+        n.inputs['From Min'].default_value = a; n.inputs['From Max'].default_value = b
+        n.inputs['To Min'].default_value = lo; n.inputs['To Max'].default_value = hi; L.new(v, n.inputs['Value']); return n.outputs[0]
+    tc = node("ShaderNodeTexCoord")
+    P0 = tc.outputs['Object']
+    sc = node("ShaderNodeVectorMath", operation='SCALE'); sc.inputs['Scale'].default_value = 3.4; L.new(P0, sc.inputs[0])
+    wn = node("ShaderNodeTexNoise", in_Scale=0.9, in_Detail=3.0); L.new(sc.outputs[0], wn.inputs['Vector'])
+    wv = node("ShaderNodeVectorMath", operation='MULTIPLY_ADD'); wv.inputs[1].default_value = (0.28, 0.28, 0.0)
+    L.new(wn.outputs['Color'], wv.inputs[0]); L.new(sc.outputs[0], wv.inputs[2]); P = wv.outputs[0]
+    vor = node("ShaderNodeTexVoronoi", in_Scale=1.0, in_Randomness=0.8); L.new(P, vor.inputs['Vector'])
+    vedge = node("ShaderNodeTexVoronoi", feature='DISTANCE_TO_EDGE', in_Scale=1.0, in_Randomness=0.8); L.new(P, vedge.inputs['Vector'])
+    rel = node("ShaderNodeVectorMath", operation='SUBTRACT'); L.new(P, rel.inputs[0]); L.new(vor.outputs['Position'], rel.inputs[1])
+    sep = node("ShaderNodeSeparateXYZ"); L.new(rel.outputs[0], sep.inputs[0])
+    r = vor.outputs['Distance']
+    th = math('ARCTAN2', sep.outputs['Y'], sep.outputs['X'])
+    # each osteon is a circle round its canal; its radius varies cell to cell (Voronoi cell colour)
+    cr = node("ShaderNodeSeparateColor"); L.new(vor.outputs['Color'], cr.inputs[0])
+    R = math('ADD', math('MULTIPLY', cr.outputs[0], 0.22), 0.5)
+    rn = math('DIVIDE', r, R)                                        # 0 at canal centre .. 1 at the cement line
+    inside = mrange(rn, 0.99, 1.0, 1.0, 0.0, smooth=False)
+    # concentric lamellae (7-8 per osteon), round
+    lam_o = mrange(math('SINE', math('MULTIPLY', rn, 47.0)), -1.0, 1.0, 0.62, 1.0, smooth=False)
+    # interstitial lamellae between osteons: fragments of older systems, bands running across
+    iw = node("ShaderNodeTexWave", in_Scale=6.0, in_Distortion=5.0, in_Detail=3.0); L.new(P, iw.inputs['Vector'])
+    lam_i = mrange(iw.outputs['Fac'], 0.0, 1.0, 0.7, 0.95, smooth=False)
+    lamm = node("ShaderNodeMix"); L.new(inside, lamm.inputs['Factor']); L.new(lam_i, lamm.inputs[2]); L.new(lam_o, lamm.inputs[3])
+    lam = lamm.outputs[0]
+    # Haversian canal: dark lumen with a thin bright rim
+    canal = math('MAXIMUM', math('MULTIPLY', mrange(rn, 0.15, 0.19, 0.08, 1.0), mrange(rn, 0.19, 0.24, 1.15, 1.0)), math('SUBTRACT', 1.0, inside))
+    # cement line: a thin dark ring at the osteon edge
+    cem = mrange(math('ABSOLUTE', math('SUBTRACT', rn, 1.0)), 0.0, 0.045, 0.4, 1.0)
+    # canaliculi: fine radial dark lines, wavy, only inside the osteon past the canal
+    tn = node("ShaderNodeTexNoise", in_Scale=14.0, in_Detail=2.0); L.new(P, tn.inputs['Vector'])
+    thw = math('ADD', math('MULTIPLY', th, 40.0), math('MULTIPLY', tn.outputs['Fac'], 5.0))
+    cl = mrange(math('ABSOLUTE', math('SINE', thw)), 0.0, 0.09, 0.6, 1.0)
+    clf = math('MAXIMUM', cl, math('SUBTRACT', 1.0, inside))
+    clf = math('MAXIMUM', clf, mrange(rn, 0.2, 0.28, 1.0, 0.0))
+    # osteocyte lacunae: Voronoi in (arc length, radius): small dark ellipses lying along the lamellae
+    arc = math('MULTIPLY', th, math('MULTIPLY', rn, 7.0))
+    pv = node("ShaderNodeCombineXYZ"); L.new(arc, pv.inputs['X']); L.new(math('MULTIPLY', rn, 15.0), pv.inputs['Y'])
+    lv = node("ShaderNodeTexVoronoi", in_Scale=1.0, in_Randomness=0.75); L.new(pv.outputs[0], lv.inputs['Vector'])
+    lac = mrange(lv.outputs['Distance'], 0.1, 0.17, 0.12, 1.0)
+    lac = math('MAXIMUM', lac, mrange(rn, 0.0, 0.22, 1.0, 0.0))
+    lac = math('MAXIMUM', lac, math('SUBTRACT', 1.0, inside))
+    struct = math('MULTIPLY', math('MULTIPLY', math('MULTIPLY', lam, canal), math('MULTIPLY', clf, lac)), cem)
+    # bacterial attack: Wedl-type meandering branching tunnels (ridges of a distorted noise), dense in foci,
+    # brown staining round them, and clusters of small round 'linear longitudinal' tunnel sections
+    wd = node("ShaderNodeTexNoise", in_Scale=13.0, in_Detail=6.0, in_Roughness=0.55, in_Distortion=1.8); L.new(P0, wd.inputs['Vector'])
+    ridge = math('ABSOLUTE', math('SUBTRACT', wd.outputs['Fac'], 0.5))
+    tun = mrange(ridge, 0.0, 0.035, 1.0, 0.0)
+    wd2 = node("ShaderNodeTexNoise", in_Scale=30.0, in_Detail=4.0, in_Distortion=2.5); L.new(P0, wd2.inputs['Vector'])
+    tun2 = mrange(math('ABSOLUTE', math('SUBTRACT', wd2.outputs['Fac'], 0.5)), 0.0, 0.03, 1.0, 0.0)
+    ll = node("ShaderNodeTexVoronoi", in_Scale=90.0, in_Randomness=1.0); L.new(P0, ll.inputs['Vector'])
+    llt = mrange(ll.outputs['Distance'], 0.12, 0.2, 1.0, 0.0)
+    zn = node("ShaderNodeTexNoise", in_Scale=2.2, in_Detail=3.0); L.new(P0, zn.inputs['Vector'])
+    foci = mrange(zn.outputs['Fac'], 1.0 - attack - 0.04, 1.0 - attack + 0.06)
+    if kind == "human":
+        sx = node("ShaderNodeSeparateXYZ"); L.new(P0, sx.inputs[0])
+        rim = mrange(sx.outputs['X'], size * 0.6, size * 0.8)
+        foci = rim if attack > 0 else math('MULTIPLY', foci, 0.0)
+    dens = math('MAXIMUM', math('MAXIMUM', tun, math('MULTIPLY', tun2, 0.8)), math('MULTIPLY', llt, 0.7))
+    dmg = math('MULTIPLY', dens, foci)
+    stain = math('MULTIPLY', foci, 0.55)
+    # colour: unstained ground section in brightfield - warm amber bone on a pale field
+    base = node("ShaderNodeMix", data_type='RGBA'); L.new(stain, base.inputs['Factor'])
+    base.inputs[6].default_value = (0.93, 0.8, 0.56, 1); base.inputs[7].default_value = (0.55, 0.36, 0.16, 1)
+    sv = node("ShaderNodeCombineXYZ")
     for k in range(3):
-        L.new(trans, cc.inputs[k])
-    L.new(cc.outputs[0], tcol.inputs[7])
-    em = N.new("ShaderNodeEmission"); em.inputs['Strength'].default_value = 0.85; L.new(tcol.outputs[2], em.inputs['Color'])
+        L.new(struct, sv.inputs[k])
+    col = node("ShaderNodeMix", data_type='RGBA', blend_type='MULTIPLY'); col.inputs['Factor'].default_value = 1.0
+    L.new(base.outputs[2], col.inputs[6]); L.new(sv.outputs[0], col.inputs[7])
+    dk = node("ShaderNodeMix", data_type='RGBA'); L.new(dmg, dk.inputs['Factor']); L.new(col.outputs[2], dk.inputs[6])
+    dk.inputs[7].default_value = (0.07, 0.04, 0.02, 1)
+    # vignette toward the field stop
+    ln = node("ShaderNodeVectorMath", operation='LENGTH'); L.new(P0, ln.inputs[0])
+    vig = mrange(ln.outputs['Value'], size * 0.35, size * 0.92, 1.0, 0.55)
+    vg = node("ShaderNodeMix", data_type='RGBA', blend_type='MULTIPLY'); vg.inputs['Factor'].default_value = 1.0
+    L.new(dk.outputs[2], vg.inputs[6]); vc = node("ShaderNodeCombineXYZ")
+    for k in range(3):
+        L.new(vig, vc.inputs[k])
+    L.new(vc.outputs[0], vg.inputs[7])
+    em = node("ShaderNodeEmission", in_Strength=1.0); L.new(vg.outputs[2], em.inputs['Color'])
     L.new(em.outputs[0], N["Material Output"].inputs['Surface'])
     o.data.materials.append(m)
-    # field stop: black annulus over the edge, and a dark world
-    bpy.ops.mesh.primitive_circle_add(vertices=128, radius=size * 3, fill_type='NGON', location=(0, 0, 0.002)); fs = bpy.context.active_object
-    fs.name = "fieldstop"; bm = bmesh.new(); bm.from_mesh(fs.data)
-    bmesh.ops.delete(bm, geom=[f for f in bm.faces], context='FACES_ONLY'); bm.to_mesh(fs.data); bm.free()
-    bm = bmesh.new()
-    segs = 128; inner = []; outer = []
+    # field stop: black annulus over the edge, and a black world
+    bm = bmesh.new(); segs = 160; inner = []; outer = []
     for k in range(segs):
-        a = 2 * math.pi * k / segs
-        inner.append(bm.verts.new((size * 0.92 * math.cos(a), size * 0.92 * math.sin(a), 0.002)))
-        outer.append(bm.verts.new((size * 3 * math.cos(a), size * 3 * math.sin(a), 0.002)))
+        a = 2 * math.pi * k / segs if False else 2 * 3.141592653589793 * k / segs
+        import math as _m
+        inner.append(bm.verts.new((size * 0.92 * _m.cos(a), size * 0.92 * _m.sin(a), 0.002)))
+        outer.append(bm.verts.new((size * 4 * _m.cos(a), size * 4 * _m.sin(a), 0.002)))
     for k in range(segs):
         bm.faces.new((inner[k], inner[(k + 1) % segs], outer[(k + 1) % segs], outer[k]))
-    bm.to_mesh(fs.data); bm.free()
+    me = bpy.data.meshes.new("fieldstop"); bm.to_mesh(me); bm.free()
+    fs = bpy.data.objects.new("fieldstop", me); bpy.context.scene.collection.objects.link(fs)
     fs.data.materials.append(_mat("fieldstop", (0, 0, 0), 1.0))
     w = bpy.data.worlds.new("void"); bpy.context.scene.world = w; w.use_nodes = True
     w.node_tree.nodes["Background"].inputs['Color'].default_value = (0, 0, 0, 1)

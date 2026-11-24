@@ -367,27 +367,28 @@ def S12():
 
 def _field(kind, attack=None):
     P2.microscope_field(kind, size=1.0, attack=attack)
-    return dict(lens=50, cine=dict(exposure=-0.2, sat=1.05))
+    return dict(lens=50, cine=dict(exposure=-0.1, sat=1.0))
 
 
 def S13():
-    """Down the microscope: a cross-section of bone in transmitted light - osteons, rings round their canals. Slow drift."""
+    """Down the microscope: a ground section of bone in brightfield - osteons, lamellae round each canal, canaliculi,
+    lacunae; the round field of view. Slow drift."""
     d = _field("human", attack=0.0)
-    d.update(a=((-0.12, -0.08, 2.05), (-0.12, -0.08, 0)), b=((0.06, 0.02, 1.95), (0.06, 0.02, 0)))
+    d.update(a=((-0.12, -0.06, 3.7), (-0.12, -0.06, 0)), b=((0.05, 0.03, 3.45), (0.05, 0.03, 0)))
     return d
 
 
 def S14():
-    """An animal bone from the same ground: the section riddled with dark bacterial tunnelling. Drift."""
+    """An animal bone from the same ground: Wedl tunnels branching through the lamellae in foci, stained brown. Drift."""
     d = _field("animal")
-    d.update(a=((0.1, -0.12, 2.0), (0.1, -0.12, 0)), b=((-0.05, 0.04, 1.9), (-0.05, 0.04, 0)))
+    d.update(a=((0.12, -0.1, 3.6), (0.12, -0.1, 0)), b=((-0.04, 0.05, 3.35), (-0.04, 0.05, 0)))
     return d
 
 
 def S15():
-    """Back to the human bone: clean rings, only a thin band of damage at the edge. Drift toward the edge."""
+    """Back to the human bone: intact osteons, only a thin band of tunnelling at the outer edge. Drift toward it."""
     d = _field("human")
-    d.update(a=((0.1, 0.0, 2.0), (0.1, 0.0, 0)), b=((0.5, 0.05, 1.45), (0.5, 0.05, 0)))
+    d.update(a=((0.0, 0.0, 3.6), (0.0, 0.0, 0)), b=((0.35, 0.03, 3.1), (0.35, 0.03, 0)))
     return d
 
 
