@@ -377,7 +377,7 @@ def S13():
     # daylight crane: from behind the knee pit outside the wall, rising to look over the wall to the grave inside
     d = Vector((b2.x - kp.x, b2.y - kp.y, 0)).normalized()
     sd = Vector((-d.y, d.x, 0))
-    return dict(a=(tuple(kp - d * 1.3 + sd * 0.4 + Vector((0, 0, 1.3))), tuple(kp + d * 0.9)), b=(tuple(kp - d * 1.6 + sd * 0.5 + Vector((0, 0, 2.6))), tuple(kp * 0.35 + b2 * 0.65)),
+    return dict(a=(tuple(kp - d * 1.1 - sd * 0.4 + Vector((0, 0, 1.4))), tuple(kp + d * 0.2)), b=(tuple(kp - d * 1.6 - sd * 0.5 + Vector((0, 0, 2.6))), tuple(kp * 0.35 + b2 * 0.65)),
                 lens=28, fstop=11.0, focus=tuple(m), cine=dict(exposure=0.15))
 
 
