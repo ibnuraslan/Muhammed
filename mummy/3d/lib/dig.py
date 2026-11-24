@@ -314,8 +314,12 @@ def wheelbarrow(x, y, rot=0.0):
 def spoil_heap(cx, cy, sx=7.0, sy=5.0, h=1.9):
     n = 64
     xs = np.linspace(-1, 1, n); X, Y = np.meshgrid(xs, xs)
-    r = np.hypot(X, Y)
-    Z = h * np.clip(1 - r ** 1.6, 0, 1) ** 0.8 * (1 + 0.08 * U.fbm(X * 4, Y * 4, 3, seed=55))
+    ang = np.arctan2(Y, X)
+    # an irregular outline (barrow loads tipped off a plank run) and a lumpy, tipped surface, not a smooth dome
+    rim = 1 + 0.22 * U.fbm(np.cos(ang) * 1.5 + cx * 0.1, np.sin(ang) * 1.5 + cy * 0.1, 3, seed=57)
+    r = np.hypot(X, Y) / rim
+    Z = h * np.clip(1 - r ** 1.6, 0, 1) ** 0.8
+    Z = Z * (1 + 0.18 * U.fbm(X * 5, Y * 5, 4, seed=55)) + 0.12 * h * np.clip(1 - r, 0, 1) * U.fbm(X * 14, Y * 14, 3, seed=56)
     V = []
     for j in range(n):
         for i in range(n):
@@ -325,7 +329,26 @@ def spoil_heap(cx, cy, sx=7.0, sy=5.0, h=1.9):
     me = bpy.data.meshes.new("spoil"); me.from_pydata(V, [], F); me.update()
     for p in me.polygons:
         p.use_smooth = True
-    me.materials.append(mat("sand"))
+    sp = bpy.data.materials.get("spoil")
+    if sp is None:                    # tipped spoil: pale shell sand mixed with darker occupation soil and stones
+        sp = mat("sand").copy(); sp.name = "spoil"
+        Nn = sp.node_tree.nodes; Lk = sp.node_tree.links; pp = [n for n in Nn if n.type == 'BSDF_PRINCIPLED'][0]
+        tc = Nn.new("ShaderNodeTexCoord"); nz = Nn.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 1.4; nz.inputs['Detail'].default_value = 6
+        Lk.new(tc.outputs['Object'], nz.inputs['Vector'])
+        mr = Nn.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.45; mr.inputs['From Max'].default_value = 0.65; Lk.new(nz.outputs['Fac'], mr.inputs['Value'])
+        mx = Nn.new("ShaderNodeMix"); mx.data_type = 'RGBA'; Lk.new(mr.outputs[0], mx.inputs['Factor'])
+        if pp.inputs['Base Color'].links:
+            Lk.new(pp.inputs['Base Color'].links[0].from_socket, mx.inputs[6])
+        else:
+            mx.inputs[6].default_value = pp.inputs['Base Color'].default_value
+        mx.inputs[7].default_value = (0.2, 0.15, 0.1, 1); Lk.new(mx.outputs[2], pp.inputs['Base Color'])
+        vo = Nn.new("ShaderNodeTexVoronoi"); vo.inputs['Scale'].default_value = 9; Lk.new(tc.outputs['Object'], vo.inputs['Vector'])
+        bp = Nn.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.5; bp.inputs['Distance'].default_value = 0.05
+        Lk.new(vo.outputs['Distance'], bp.inputs['Height'])
+        if pp.inputs['Normal'].links:
+            Lk.new(pp.inputs['Normal'].links[0].from_socket, bp.inputs['Normal'])
+        Lk.new(bp.outputs['Normal'], pp.inputs['Normal'])
+    me.materials.append(sp)
     o = bpy.data.objects.new("spoil", me); link(o)
     return o
 

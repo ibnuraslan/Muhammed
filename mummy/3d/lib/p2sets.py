@@ -432,45 +432,91 @@ def peat_moor(center=(0.0, 0.0), size=220.0, n=420, seed=4, pools=True):
     return out
 
 
-def peat_face(M, x0=-30.0, x1=30.0, seed=5, center=(0.0, 0.0)):
-    """The cut peat bank as its own finely divided surface: a spade-cut face (vertical slabs, slight overhang lips,
-    blocky irregularity) carrying a real soil-wall photo taken dark and fibrous, just in front of the terrain step."""
+def _peat_material(name="peat"):
+    m = bpy.data.materials.get(name)
+    if m:
+        return m
+    m = bpy.data.materials.new(name); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord")
+    # strata: horizontal bands (world-ish Z of the object), gently wavy
+    wv = N.new("ShaderNodeTexWave"); wv.bands_direction = 'Z'; wv.inputs['Scale'].default_value = 2.2; wv.inputs['Distortion'].default_value = 2.5
+    wv.inputs['Detail'].default_value = 3; L.new(tc.outputs['Object'], wv.inputs['Vector'])
+    rp = N.new("ShaderNodeValToRGB"); el = rp.color_ramp.elements
+    el[0].position = 0.2; el[0].color = (0.025, 0.017, 0.01, 1)
+    e = el.new(0.45); e.color = (0.07, 0.042, 0.022, 1)
+    e = el.new(0.7); e.color = (0.12, 0.065, 0.032, 1)
+    el[1].position = 0.9; el[1].color = (0.05, 0.03, 0.016, 1)
+    L.new(wv.outputs['Fac'], rp.inputs['Fac'])
+    # fibres: noise stretched along the face, fine and horizontal (sedge and moss remains)
+    mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (6.0, 6.0, 90.0); L.new(tc.outputs['Object'], mp.inputs['Vector'])
+    fb = N.new("ShaderNodeTexNoise"); fb.inputs['Scale'].default_value = 3.0; fb.inputs['Detail'].default_value = 10; fb.inputs['Roughness'].default_value = 0.7
+    L.new(mp.outputs[0], fb.inputs['Vector'])
+    fm = N.new("ShaderNodeMapRange"); fm.inputs['To Min'].default_value = 0.65; fm.inputs['To Max'].default_value = 1.35; L.new(fb.outputs['Fac'], fm.inputs['Value'])
+    mul = N.new("ShaderNodeMix"); mul.data_type = 'RGBA'; mul.blend_type = 'MULTIPLY'; mul.inputs['Factor'].default_value = 1.0
+    L.new(rp.outputs['Color'], mul.inputs[6]); cc = N.new("ShaderNodeCombineXYZ")
+    for k in range(3):
+        L.new(fm.outputs[0], cc.inputs[k])
+    L.new(cc.outputs[0], mul.inputs[7]); L.new(mul.outputs[2], p.inputs['Base Color'])
+    # rootlets: thin pale threads
+    rt = N.new("ShaderNodeTexNoise"); rt.inputs['Scale'].default_value = 9; rt.inputs['Distortion'].default_value = 3; L.new(tc.outputs['Object'], rt.inputs['Vector'])
+    rr = N.new("ShaderNodeMath"); rr.operation = 'ABSOLUTE'
+    rs = N.new("ShaderNodeMath"); rs.operation = 'SUBTRACT'; rs.inputs[1].default_value = 0.5; L.new(rt.outputs['Fac'], rs.inputs[0]); L.new(rs.outputs[0], rr.inputs[0])
+    rmask = N.new("ShaderNodeMapRange"); rmask.inputs['From Min'].default_value = 0.0; rmask.inputs['From Max'].default_value = 0.012
+    rmask.inputs['To Min'].default_value = 0.55; rmask.inputs['To Max'].default_value = 0.0; L.new(rr.outputs[0], rmask.inputs['Value'])
+    rmix = N.new("ShaderNodeMix"); rmix.data_type = 'RGBA'; L.new(rmask.outputs[0], rmix.inputs['Factor'])
+    L.new(mul.outputs[2], rmix.inputs[6]); rmix.inputs[7].default_value = (0.3, 0.22, 0.14, 1); L.new(rmix.outputs[2], p.inputs['Base Color'])
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.6; bp.inputs['Distance'].default_value = 0.01; L.new(fb.outputs['Fac'], bp.inputs['Height'])
+    L.new(bp.outputs['Normal'], p.inputs['Normal'])
+    p.inputs['Roughness'].default_value = 0.55; p.inputs['Specular IOR Level'].default_value = 0.6     # damp sheen
+    return m
+
+
+def peat_face(M, x0=-30.0, x1=30.0, seed=5, center=(0.0, 0.0), stack_at=2.0):
+    """A crisp spade-cut peat bank: flat vertical facets ~25 cm wide (one per spade cut, each at its own small angle),
+    cut in two spits with a narrow ledge between, sharp top edge under an overhanging turf lip; layered fibrous peat.
+    A rickle of cut peats is stacked to dry on the bank top."""
     from uist import fbm
-    import os
-    nx, nz = 600, 40
+    rng = random.Random(seed)
+    nx, nz = 520, 34
     xs = np.linspace(x0, x1, nx)
     yb = 6.0 + 0.6 * fbm(xs / 8, 0, 2, seed=9) + center[1]
+    blk = 0.25; tilt = {}
     V = []; F = []
     for i, x in enumerate(xs):
+        k = int(math.floor(x / blk))
+        if k not in tilt:
+            tilt[k] = (rng.uniform(-0.025, 0.025), rng.uniform(-0.04, 0.04))
+        off, ang = tilt[k]
+        u = x / blk - k - 0.5
         zb = moor_height(M, x, yb[i] - 0.6, center); zt = moor_height(M, x, yb[i] + 0.5, center)
         for j in range(nz):
-            t = j / (nz - 1); z = zb - 0.08 + (zt - zb + 0.1) * t
-            cut = 0.03 * math.sin(x * 9.0 + 2 * math.sin(x * 1.3)) + 0.02 * float(fbm(x * 2.0, z * 3.0, 3, seed=seed))   # spade strokes
-            lip = 0.04 * max(0.0, t - 0.85) / 0.15                                                                     # turf overhang
-            V.append((x + center[0], yb[i] - 0.3 - cut - lip, z))
+            t = j / (nz - 1); z = zb - 0.06 + (zt - zb + 0.08) * t
+            ledge = 0.07 if t < 0.48 else 0.0                     # lower spit cut a little further out
+            lip = 0.035 * max(0.0, t - 0.9) / 0.1
+            V.append((x + center[0], yb[i] - 0.3 - ledge - off - ang * u * blk - lip, z))
     for i in range(nx - 1):
         for j in range(nz - 1):
             a_ = i * nz + j; F.append((a_, a_ + nz, a_ + nz + 1, a_ + 1))
     me = bpy.data.meshes.new("peatface"); me.from_pydata(V, [], F); me.update()
-    for p_ in me.polygons:
-        p_.use_smooth = True
     o = bpy.data.objects.new("peatface", me); bpy.context.scene.collection.objects.link(o)
-    m = bpy.data.materials.new("peatface"); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
-    sw = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "polyhaven", "excavated_soil_wall")
-    tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (0.9, 0.9, 0.9); L.new(tc.outputs['Object'], mp.inputs['Vector'])
-    def img(key, color):
-        f = [f for f in os.listdir(sw) if key in f][0]
-        t = N.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(os.path.join(sw, f), check_existing=True); t.projection = 'BOX'; t.projection_blend = 0.2
-        t.image.colorspace_settings.name = 'sRGB' if color else 'Non-Color'; L.new(mp.outputs[0], t.inputs['Vector']); return t
-    d = img("diff", True); nr = img("nor_gl", False)
-    dk = N.new("ShaderNodeMix"); dk.data_type = 'RGBA'; dk.blend_type = 'MULTIPLY'; dk.inputs['Factor'].default_value = 1.0
-    L.new(d.outputs['Color'], dk.inputs[6]); dk.inputs[7].default_value = (0.26, 0.17, 0.11, 1); L.new(dk.outputs[2], p.inputs['Base Color'])
-    nm = N.new("ShaderNodeNormalMap"); nm.inputs['Strength'].default_value = 1.2; L.new(nr.outputs['Color'], nm.inputs['Color']); L.new(nm.outputs[0], p.inputs['Normal'])
-    # wet seep toward the foot of the face
-    sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Object'], sep.inputs[0])
-    wr = N.new("ShaderNodeMapRange"); wr.inputs['From Min'].default_value = float(M.get("water_z", 0)) + 0.05; wr.inputs['From Max'].default_value = float(M.get("water_z", 0)) + 0.6
-    wr.inputs['To Min'].default_value = 0.2; wr.inputs['To Max'].default_value = 0.8; L.new(sep.outputs['Z'], wr.inputs['Value']); L.new(wr.outputs[0], p.inputs['Roughness'])
-    o.data.materials.append(m)
+    pm = _peat_material(); me.materials.append(pm)
+    # cut peats stacked to dry (a rickle): rows of bricks laid crosswise, smaller toward the top
+    if stack_at is not None:
+        sx = stack_at; i0 = int(np.argmin(np.abs(xs - sx))); sy = float(yb[i0]) + 0.9
+        zt = moor_height(M, sx, sy, center)
+        for layer in range(5):
+            n = 6 - layer
+            for k in range(n):
+                cross = layer % 2
+                bx = sx + (k - (n - 1) / 2) * (0.14 if cross else 0.3) + rng.uniform(-0.02, 0.02)
+                by = sy + rng.uniform(-0.03, 0.03)
+                bpy.ops.mesh.primitive_cube_add(size=1, location=(bx + center[0], by, zt + 0.05 + layer * 0.085)); b_ = bpy.context.active_object
+                b_.scale = (0.28, 0.12, 0.08) if not cross else (0.12, 0.28, 0.08)
+                b_.rotation_euler = (rng.uniform(-0.08, 0.08), rng.uniform(-0.08, 0.08), rng.uniform(-0.15, 0.15))
+                bv = b_.modifiers.new("b", "BEVEL"); bv.width = 0.012; bv.segments = 2
+                dd = b_.modifiers.new("d", "DISPLACE"); tt = bpy.data.textures.get("peatlump") or bpy.data.textures.new("peatlump", "CLOUDS")
+                tt.noise_scale = 0.05; dd.texture = tt; dd.strength = 0.01
+                b_.data.materials.append(pm); b_.name = "peatbrick"
     return o
 
 

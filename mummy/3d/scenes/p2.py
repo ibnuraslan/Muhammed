@@ -220,10 +220,10 @@ def S04():
     md.rotation_euler = (0, 0, math.radians(-15))
     p1.lab_femur(x=1.25, y=0.38, yaw=12)
     for x in (-1.25, 0.0, 1.25):
-        _spot((x - 0.1, 0.3, LB.TOP + 1.4), (x, 0.38, LB.TOP), 150, size=0.08, spot=22)
+        _spot((x - 0.1, 0.3, LB.TOP + 1.4), (x, 0.38, LB.TOP), 420, size=0.1, spot=24)
     _haze((0, 0, 1.6), (9, 6, 3.2), density=0.02, color=(0.95, 0.9, 0.85))
     # low along the bench: skull near, jaw in the middle, thigh bone far - three pools receding into the dark
-    return dict(a=((-2.75, -0.5, LB.TOP + 0.3), (0.4, 0.42, LB.TOP + 0.02)), b=((-2.6, -0.6, LB.TOP + 0.32), (0.7, 0.42, LB.TOP + 0.02)), lens=40,
+    return dict(a=((-2.7, -0.45, LB.TOP + 0.3), (0.3, 0.42, LB.TOP + 0.02)), b=((-1.9, -0.5, LB.TOP + 0.3), (1.0, 0.42, LB.TOP + 0.02)), lens=40,
                 fstop=5.6, focus=(0.0, 0.38, LB.TOP), cine=dict(exposure=0.1))
 
 
@@ -414,14 +414,11 @@ def S17():
 
 # ============================================================================ "...the skin and other soft tissues have disappeared."
 def S18():
-    """Clean bone: the end of the thigh bone, smooth, no tissue. Slider in the lamp."""
-    A = LB.room(window_light=0.3, lamp=True, lamp_at=(0.5, 0.6), lamp_target=(0.2, 0.36), lamp_energy=20)
-    LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
-    fe, W = p1.lab_femur(); _bone_detail(fe)
-    end = W[W[:, 0] > np.percentile(W[:, 0], 90)]
-    t = Vector(end.mean(0).tolist())
-    return dict(a=(tuple(t + Vector((-0.12, -0.3, 0.26))), tuple(t + Vector((-0.05, 0, 0)))), b=(tuple(t + Vector((0.02, -0.32, 0.24))), tuple(t + Vector((-0.04, 0, 0)))), lens=50,
-                fstop=5.6, focus=tuple(t), cine=dict(exposure=-0.1))
+    """No skin, no tissue: the whole skeleton laid out on the lab bench, seen from straight above; a slow slide from the
+    feet up the legs and the pelvis."""
+    L = p1.lab_body(osteo=False)
+    return dict(a=((-0.55, 0.38, LB.TOP + 0.95), (-0.55, 0.39, LB.TOP)), b=((0.05, 0.38, LB.TOP + 0.95), (0.05, 0.39, LB.TOP)), lens=40,
+                fstop=5.6, focus=(0.0, 0.38, LB.TOP), cine=dict(exposure=-0.05))
 
 
 def S19():
@@ -653,9 +650,18 @@ def S21():
                 v.co = Vector((x + vx * math.cos(ang) - vy * math.sin(ang), y + vx * math.sin(ang) + vy * math.cos(ang), z + 0.01 * k))
     me = bpy.data.meshes.new("bogpools"); bm.to_mesh(me); bm.free(); me.materials.append(loch)
     po = bpy.data.objects.new("bogpools", me); bpy.context.scene.collection.objects.link(po)
+    # peat hags: eroded dark peat banks standing up between the pools, ragged tops, black cut sides
+    peat = P2._peat_material(); tex = bpy.data.textures.new("hag", "CLOUDS"); tex.noise_scale = 3.0
+    for k in range(140):
+        x = rng.uniform(940, 1580); y = rng.uniform(-380, 500); z = float(U.surface(x, y))
+        bpy.ops.mesh.primitive_cube_add(size=1, location=(x, y, z + 0.4)); hg = bpy.context.active_object
+        hg.scale = (rng.uniform(5, 22), rng.uniform(2.5, 8), rng.uniform(1.0, 2.0)); hg.rotation_euler.z = rng.uniform(0, 3.14)
+        sd = hg.modifiers.new("s", "SUBSURF"); sd.levels = 3; sd.render_levels = 3; sd.subdivision_type = 'SIMPLE'
+        dd = hg.modifiers.new("d", "DISPLACE"); dd.texture = tex; dd.strength = 1.4; dd.texture_coords = 'GLOBAL'
+        hg.data.materials.append(peat); hg.name = "peathag"
     BR.ground_mist((1150, 0, float(U.surface(1150, 0))), size=(1400, 1600, 14.0), density=0.012)
     z0 = float(U.surface(900, -330))
-    return dict(a=((900, -340, z0 + 75), (1450, 120, z0)), b=((970, -310, z0 + 70), (1510, 140, z0)), lens=30, cine=dict(exposure=0.3))
+    return dict(a=((900, -340, z0 + 38), (1300, 60, z0)), b=((990, -280, z0 + 34), (1380, 110, z0)), lens=28, cine=dict(exposure=0.35))
 
 
 def _bog_scene(mood="dusk", sun_az=None, setup=None):
@@ -683,46 +689,94 @@ def _pool_edge(M, near=(0.0, -1.0)):
     return best[1:]
 
 
+def _islander2(name="Islander1"):
+    """The second islander: slighter, long fair-brown hair, an undyed pale wool tunic (long), belted."""
+    import modern as MD
+
+    class _J(MD.ModernMan):
+        GENDER = 0.0; MUSCLE = 0.4; WEIGHT = 0.35; HEIGHT = 0.4
+        HAIR = (0.45, 0.25); HAIR_LEN = (0.12, 0.2)
+        SHIRT = (0.42, 0.38, 0.3); JACKET = "coat"; JACKET_COL = (0.42, 0.37, 0.28)
+        TROUSERS = (0.16, 0.13, 0.09); SHOES = (0.08, 0.05, 0.03)
+        TROUSER_EASE = 1.3; TROUSER_EXTRA = 0.03
+    return _J(name, years=24)
+
+
+def _belt(st, col=(0.07, 0.045, 0.025)):
+    """A leather belt round the tunic at the waist (from the rig's lower spine)."""
+    h = st.m.h
+    for b in ("spine04", "spine05", "spine03"):
+        if b in h.arm.pose.bones:
+            c = st.M @ h.bone_head(b); break
+    else:
+        return None
+    zs = []
+    for o in bpy.data.objects:
+        if o.name.startswith(st.m.name + "_jacket") and o.type == 'MESH':
+            dg = bpy.context.evaluated_depsgraph_get(); oe = o.evaluated_get(dg)
+            W = np.array([oe.matrix_world @ v.co for v in oe.data.vertices])
+            band = W[np.abs(W[:, 2] - c.z) < 0.02]
+            if len(band) > 8:
+                ctr = band.mean(0); rad = float(np.percentile(np.hypot(band[:, 0] - ctr[0], band[:, 1] - ctr[1]), 90)) + 0.006
+                bpy.ops.mesh.primitive_torus_add(major_radius=rad, minor_radius=0.012, location=(ctr[0], ctr[1], c.z)); t = bpy.context.active_object
+                t.scale = (1.0, 0.8, 1.6); t.name = st.m.name + "_belt"; t.data.materials.append(_plain("belt", col, 0.6))
+                return t
+    return None
+
+
 def S22():
-    """Bronze Age, dusk: two islanders (backs to us, against the last light) at the edge of a black bog pool, a body
-    wrapped in a hide on a wattle hurdle at their feet. Slow push."""
+    """Bronze Age, dusk, from behind against the last light: two islanders lowering the hurdle into a black bog pool -
+    one kneeling at the edge gripping the near end of a pole, the other on the bank above, knees bent, bracing it; the
+    hide-wrapped body bound on the hurdle tipping down toward the water. Slow push."""
     spot = {}
     def setup(M):
         x0, y0, z0 = _pool_edge(M); spot.update(x=x0, y=y0, z=z0)
-        M["clear"] = [(x0, y0, 1.0), (x0 - 1.0, y0 - 0.3, 0.8), (x0 + 1.3, y0 - 0.6, 1.3)]
+        M["clear"] = [(x0, y0, 1.6), (x0, y0 + 1.2, 1.2)]
     M = _bog_scene("dusk", sun_az=95, setup=setup)
-    x0, y0, z0 = spot["x"], spot["y"], spot["z"]
+    x0, y0, z0 = spot["x"], spot["y"], spot["z"]; wz = M["water_z"]
     import acts as AC
-    poses = ((0.0, 0.0, 92, "L", (x0, y0 + 3.0)), (-1.0, -0.3, 112, "R", (x0 + 1.3, y0 - 0.6)))
-    for i, (dx, dy, hd, wt, look) in enumerate(poses):
-        m = BR.Islander(name=f"Islander{i}")
-        zf = max(P2.moor_height(M, x0 + dx + ex, y0 + dy + ey) for ex in (-0.15, 0, 0.15) for ey in (-0.2, 0, 0.2)) + 0.01
-        st = AC.Stand(m, (x0 + dx, y0 + dy), hd, weight=wt, lean=4 + 6 * i)
-        lz = P2.moor_height(M, *look) - zf
-        st.head_to((look[0], look[1], lz), share=0.8)
-        st.finish(look=(look[0], look[1], lz), density=HAIR)
-        G.lift(st, zf)
-        if i == 1:                                   # not twins: the second wears a lighter, greyer cloth
-            for o in bpy.data.objects:
-                if o.name.startswith(f"Islander{i}_") and o.type == 'MESH' and any(k in o.name for k in ("jacket", "coat", "shirt", "trousers")):
-                    for j, ms in enumerate(o.data.materials):
-                        if ms:
-                            mc = ms.copy(); o.data.materials[j] = mc
-                            pp = [n for n in mc.node_tree.nodes if n.type == 'BSDF_PRINCIPLED']
-                            if pp:
-                                mixn = mc.node_tree.nodes.new("ShaderNodeMix"); mixn.data_type = 'RGBA'; mixn.blend_type = 'MULTIPLY'
-                                mixn.inputs['Factor'].default_value = 1.0; mixn.inputs[7].default_value = (0.85, 0.95, 1.0, 1)
-                                if pp[0].inputs['Base Color'].links:
-                                    mc.node_tree.links.new(pp[0].inputs['Base Color'].links[0].from_socket, mixn.inputs[6])
-                                else:
-                                    mixn.inputs[6].default_value = pp[0].inputs['Base Color'].default_value
-                                mc.node_tree.links.new(mixn.outputs[2], pp[0].inputs['Base Color'])
-    hx, hy = x0 + 1.3, y0 - 0.6
-    hz = P2.moor_height(M, hx, hy)
-    P2.hurdle((hx, hy, hz + 0.01), rot=math.radians(75))
-    P2.bundle((hx, hy, hz + 0.25), rot=math.radians(75))
-    return dict(a=((x0 - 1.4, y0 - 6.0, z0 + 1.3), (x0 + 0.3, y0 + 2.0, z0 + 0.9)), b=((x0 - 1.1, y0 - 5.0, z0 + 1.25), (x0 + 0.3, y0 + 2.0, z0 + 0.9)),
-                lens=32, fstop=4.0, focus=(x0, y0, z0 + 1.0), cine=dict(exposure=0.25), hand_ok=("moor", "hurdle"))
+    # the hurdle: long axis running out into the pool (+y), near end on the bank edge, far end dipping into the water
+    Lh, Wh = 2.0, 0.9
+    hx, hy = x0, y0 + 0.2 + Lh / 2
+    z_near = z0 + 0.32; z_far = wz - 0.05
+    tilt = math.atan2(z_near - z_far, Lh)
+    piv = bpy.data.objects.new("hurdle_rig", None); bpy.context.scene.collection.objects.link(piv); piv.location = (hx, hy, (z_near + z_far) / 2)
+    before = set(bpy.data.objects)
+    P2.hurdle((hx, hy, (z_near + z_far) / 2), rot=math.radians(90), length=Lh, width=Wh)
+    P2.bundle((hx, hy, (z_near + z_far) / 2 + 0.22), rot=math.radians(90))
+    bpy.context.view_layer.update()
+    for o in set(bpy.data.objects) - before:
+        mw = o.matrix_world.copy(); o.parent = piv; o.matrix_parent_inverse = piv.matrix_world.inverted()
+    piv.rotation_euler.x = -tilt
+    bpy.context.view_layer.update()
+    def pole(side, d):                        # a point on a pole, d metres from the near end
+        x = hx + side * Wh / 2
+        return Vector((x, hy - Lh / 2 + d, z_near - (z_near - z_far) * d / Lh + 0.03))
+    # islander 1: heavy-set, dark cloak - kneels behind the left pole end, both hands on it
+    m1 = BR.Islander(name="Islander0")
+    k1 = (hx - Wh / 2 - 0.05, hy - Lh / 2 - 0.55)
+    zk = max(P2.moor_height(M, k1[0] + ex, k1[1] + ey) for ex in (-0.2, 0, 0.2) for ey in (-0.3, 0, 0.3)) + 0.01
+    st1 = AC.Kneel(m1, k1, 90, lean=38, sit_back=True)
+    for sd, d in (("L", 0.12), ("R", 0.42)):
+        w = pole(-1, d) - Vector((0, 0, zk)); st1.hand(sd, w, elbow=(0.6, 0.2, -0.8), grip=0.85)
+    st1.head_to(tuple(pole(-1, 1.2) - Vector((0, 0, zk))), share=0.8)
+    st1.finish(look=tuple(pole(-1, 1.2) - Vector((0, 0, zk))), density=HAIR)
+    G.lift(st1, zk)
+    # islander 2: slighter, pale belted tunic, long hair - on the bank to the right, one foot forward, bent over the
+    # right pole, bracing it with both hands
+    m2 = _islander2()
+    f2 = (hx + Wh / 2 + 0.3, hy - Lh / 2 - 0.45)
+    zs = max(P2.moor_height(M, f2[0] + ex, f2[1] + ey) for ex in (-0.2, 0, 0.2) for ey in (-0.3, 0, 0.3)) + 0.01
+    st2 = AC.Stand(m2, f2, 100, weight="R", lean=40)
+    for sd, d in (("L", 0.3), ("R", 0.62)):
+        w = pole(1, d) - Vector((0, 0, zs)); st2.hand(sd, w, elbow=(0.6, 0.1, -0.8), grip=0.85)
+    st2.head_to(tuple(pole(1, 1.3) - Vector((0, 0, zs))), share=0.8)
+    st2.finish(look=tuple(pole(1, 1.3) - Vector((0, 0, zs))), density=HAIR)
+    G.lift(st2, zs)
+    st2.M = Matrix.Translation((0, 0, zs)) @ st2.M
+    _belt(st2)
+    return dict(a=((x0 + 0.6, y0 - 4.4, z0 + 1.5), (x0, y0 + 1.6, z0 + 0.5)), b=((x0 + 0.45, y0 - 3.6, z0 + 1.4), (x0, y0 + 1.6, z0 + 0.5)),
+                lens=35, fstop=4.0, focus=(x0, y0 + 0.3, z0 + 0.6), cine=dict(exposure=0.3), hand_ok=("moor", "hurdle", "bundle", "belt"))
 
 
 def _pool_spot(M, near=(0.0, 0.0), margin=0.6):
@@ -766,13 +820,18 @@ def _moss(M, px, py, wz, n=110, seed=23):
 
 
 def S23():
-    """The wrapped bundle lying half under the black water of a bog pool, sphagnum at the edge. Slow top-down drift."""
-    M = _bog_scene("dusk", sun_az=250)
-    wz = M["water_z"]
-    px, py = _pool_spot(M, margin=0.4)
-    P2.bundle((px, py, wz - 0.08), rot=math.radians(30))          # half under the black water
-    return dict(a=((px - 0.15, py - 0.25, wz + 2.4), (px, py, wz)), b=((px + 0.1, py - 0.05, wz + 2.1), (px + 0.05, py + 0.05, wz)), lens=24,
-                fstop=5.6, focus=(px, py, wz), cine=dict(exposure=0.35))
+    """From the peat bank, looking down and out over the pool at dusk: the hide-wrapped body half-sunk in the brown
+    water, the sky reflected round it; cotton grass and tussocks soft in the foreground. Slow push."""
+    spot = {}
+    def setup(M):
+        x0, y0, z0 = _pool_edge(M); spot.update(x=x0, y=y0, z=z0)
+        M["clear"] = [(x0, y0 + 1.9, 0.9)]
+    M = _bog_scene("dusk", sun_az=95, setup=setup)
+    x0, y0, z0 = spot["x"], spot["y"], spot["z"]; wz = M["water_z"]
+    bx, by = x0 + 0.2, y0 + 2.1
+    P2.bundle((bx, by, wz - 0.09), rot=math.radians(70))
+    return dict(a=((x0 - 0.9, y0 - 1.3, z0 + 1.15), (bx, by, wz)), b=((x0 - 0.6, y0 - 0.8, z0 + 1.0), (bx, by, wz)), lens=35,
+                fstop=4.0, focus=(bx, by, wz), cine=dict(exposure=0.35))
 
 
 def S24():
@@ -812,9 +871,10 @@ def S27():
 
 
 def S28():
-    """Pull back from the trench to the island at dusk: the dig on the machair, the dunes, the Atlantic beyond."""
-    p1.site("dusk", grass_at=(0, 0), grass_r=45, focus=(0, 0), core=6.0, n=900, kit=True, burials=False, sun_az=230)
-    return dict(a=((12, -14, 11), (0, 4, 3)), b=((70, -95, 48), (-40, 20, 0)), lens=28, cine=dict(exposure=0.3))
+    """Pull back from the trench to the island at dusk: low over the excavation (house rings, graves, baulks, spoil,
+    marquee, cabin), rising and pulling away until the dig is a scar on the machair, the dunes and the Atlantic beyond."""
+    p1.site("dusk", grass_at=(4, 0), grass_r=55, focus=(0, 0), core=6.0, n=900, kit=True, burials=True, sun_az=230, grass_density=260)
+    return dict(a=((9, -12, 9.5), (-1, 4, 3.6)), b=((95, -135, 70), (-60, 30, 0)), lens=28, cine=dict(exposure=0.3))
 
 
 VO = [l.strip() for l in open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "vo", "MUMMY_P2_VO.txt"),
@@ -838,7 +898,7 @@ PLAN = [  # shot, VO paragraph (1-based), seconds (at 133 wpm; re-timed to the r
     ("S15", 8, 5.0, "The human section: clean rings, a thin band of damage at the edge"),
     ("S16", 8, 5.0, "Macro along the thigh bone under the lamp"),
     ("S17", 9, 5.0, "The grave at dusk, slow push to the skull: mummified"),
-    ("S18", 10, 6.0, "Clean bone: the end of the thigh bone, no tissue left (slider)"),
+    ("S18", 10, 6.0, "No soft tissue left: the whole skeleton on the lab bench from above (slide)"),
     ("S19", 11, 5.0, "Acid-etched bone surface in grazing light"),
     ("S20", 11, 6.0, "Machair sand macro: crushed shell among the grains"),
     ("S21", 12, 5.0, "Aerial: the peat moor, black pools, peat banks, mist"),
