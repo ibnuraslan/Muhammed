@@ -277,7 +277,7 @@ def S17():
         d = bpy.data.lights.new("doorglow", 'AREA'); d.size = 1.0; d.size_y = 1.4; d.shape = 'RECTANGLE'; d.energy = 90; d.color = (1.0, 0.5, 0.18)
         lo = bpy.data.objects.new("doorglow", d); bpy.context.scene.collection.objects.link(lo)
         lo.location = (hx + r * 1.75 + 0.25, hy, z + 0.8); lo.rotation_euler = (0, math.radians(90), 0)
-    return dict(a=((22, -14, 6), (0, 0, 2)), b=((34, -24, 12), (0, 0, 1.5)), lens=32, fstop=5.6, focus=(0, 0, 2), cine=dict(exposure=0.6))
+    return dict(a=((20, -12, 4.5), (0, 0, 3.6)), b=((30, -20, 8.5), (0, 0, 3.0)), lens=32, fstop=5.6, focus=(0, 0, 2), cine=dict(exposure=0.6))
 
 
 # ----------------------------------------------------------------------------- plan
