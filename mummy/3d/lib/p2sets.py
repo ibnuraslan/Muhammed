@@ -315,8 +315,23 @@ def peat_moor(center=(0.0, 0.0), size=220.0, n=420, seed=4, pools=True):
     L.new(tc.outputs['Object'], band.inputs['Vector'])
     pc = N.new("ShaderNodeMix"); pc.data_type = 'RGBA'; L.new(band.outputs['Fac'], pc.inputs['Factor'])
     pc.inputs[6].default_value = (0.04, 0.026, 0.014, 1); pc.inputs[7].default_value = (0.075, 0.048, 0.026, 1)
+    # the cut face: a real excavated soil wall photograph, taken dark and fibrous-brown (peat), over the banding
+    import os as _os
+    _sw = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "assets", "polyhaven", "excavated_soil_wall")
+    _face = pc.outputs[2]
+    try:
+        _f = [f for f in _os.listdir(_sw) if "diff" in f][0]
+        mpw = N.new("ShaderNodeMapping"); mpw.inputs['Scale'].default_value = (0.7, 0.7, 0.7); L.new(tc.outputs['Object'], mpw.inputs['Vector'])
+        tw = N.new("ShaderNodeTexImage"); tw.image = bpy.data.images.load(_os.path.join(_sw, _f), check_existing=True); tw.projection = 'BOX'
+        tw.projection_blend = 0.3; L.new(mpw.outputs[0], tw.inputs['Vector'])
+        dk = N.new("ShaderNodeMix"); dk.data_type = 'RGBA'; dk.blend_type = 'MULTIPLY'; dk.inputs['Factor'].default_value = 1.0
+        L.new(tw.outputs['Color'], dk.inputs[6]); dk.inputs[7].default_value = (0.32, 0.22, 0.15, 1)
+        mb = N.new("ShaderNodeMix"); mb.data_type = 'RGBA'; mb.blend_type = 'OVERLAY'; mb.inputs['Factor'].default_value = 0.35
+        L.new(dk.outputs[2], mb.inputs[6]); L.new(pc.outputs[2], mb.inputs[7]); _face = mb.outputs[2]
+    except Exception as ex:
+        print("peat face texture:", ex)
     fin = N.new("ShaderNodeMix"); fin.data_type = 'RGBA'; L.new(steep.outputs[0], fin.inputs['Factor'])
-    L.new(rp.outputs['Color'], fin.inputs[6]); L.new(pc.outputs[2], fin.inputs[7])
+    L.new(rp.outputs['Color'], fin.inputs[6]); L.new(_face, fin.inputs[7])
     # photographic detail: withered moor grass, and wet peat mud in the low ground, modulating the procedural tones
     import os
     PH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "polyhaven")

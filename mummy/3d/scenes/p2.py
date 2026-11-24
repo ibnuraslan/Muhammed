@@ -440,7 +440,11 @@ def S20():
 
 # ============================================================================ "Elsewhere on South Uist, peat bogs..."
 def _clear(M, x, y):
-    return any(math.hypot(x - cx, y - cy) < cr for cx, cy, cr in M.get("clear", ()))
+    """Keep plants off cleared ground and off steep faces (the cut peat bank)."""
+    if any(math.hypot(x - cx, y - cy) < cr for cx, cy, cr in M.get("clear", ())):
+        return True
+    h = P2.moor_height
+    return max(abs(h(M, x + 0.15, y) - h(M, x - 0.15, y)), abs(h(M, x, y + 0.15) - h(M, x, y - 0.15))) > 0.12
 
 
 def _cotton(M, center, radius, n=2500, seed=1):
