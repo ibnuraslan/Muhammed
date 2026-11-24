@@ -343,7 +343,7 @@ def S17():
         so = bpy.data.objects.new("doorspill", sp); bpy.context.scene.collection.objects.link(so)
         so.location = (hx + r * 1.75 - 0.2, hy, z + 1.2)                           # firelight spilling out over the ground
         so.rotation_euler = (Vector((1.0, 0, -0.7))).to_track_quat('-Z', 'Y').to_euler()
-    return dict(a=((20, -12, 4.5), (0, 0, 3.6)), b=((30, -20, 8.5), (0, 0, 3.0)), lens=32, fstop=5.6, focus=(0, 0, 2), cine=dict(exposure=0.6))
+    return dict(a=((28, -17, 5.0), (0, 0, 3.4)), b=((38, -25, 9.0), (0, 0, 2.8)), lens=32, fstop=5.6, focus=(0, 0, 2), cine=dict(exposure=0.6))
 
 
 # ----------------------------------------------------------------------------- plan
