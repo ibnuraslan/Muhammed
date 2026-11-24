@@ -505,26 +505,16 @@ def S26():
 
 # ============================================================================ "The fractures tell the team something else."
 def S27():
-    """Macro on a dry break: the flat, chalky fracture face of the femur end in grazing light."""
-    A = LB.room(window_light=0.15, lamp=False)
-    LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
-    skk, pcs = _lying_knee()
-    for s_ in list(skk.parts):
-        if skk.parts[s_] not in pcs:
-            skk.remove(s_)
-    fem = pcs[0]
-    for s_ in list(skk.parts):
-        if skk.parts[s_] is not fem:
-            skk.remove(s_)
-    bpy.context.view_layer.update()
-    W = np.array([fem.matrix_world @ v.co for v in fem.data.vertices]); c = W.mean(0)
-    skk.root.location += Vector((-c[0], 0.38 - c[1], LB.TOP + 0.004 - W[:, 2].min()))
-    bpy.context.view_layer.update()
-    p2._bone_detail(fem)
-    W = np.array([fem.matrix_world @ v.co for v in fem.data.vertices]); t = Vector(((W.min(0) + W.max(0)) / 2).tolist())
-    _spot((t.x - 0.6, t.y + 0.2, t.z + 0.1), tuple(t), 60, size=0.02, spot=22)
-    return dict(a=(tuple(t + Vector((0.3, -0.32, 0.22))), tuple(t)), b=(tuple(t + Vector((0.2, -0.36, 0.2))), tuple(t)), lens=60,
-                fstop=8.0, focus=tuple(t), cine=dict(exposure=0.1))
+    """Macro on the dry break: the thigh bone's fracture line where the pit piece meets the shaft, in grazing light."""
+    d = S25()
+    sh = [o for o in bpy.data.objects if o.name.startswith("Shafts_femurL")][0]
+    W = np.array([sh.matrix_world @ v.co for v in sh.data.vertices])
+    kj = Vector(d["focus"])
+    near = W[np.argsort(np.linalg.norm(W - np.array(kj), axis=1))[:200]]          # the broken end of the shaft
+    t = Vector(near.mean(0).tolist())
+    _spot((t.x - 0.5, t.y - 0.25, t.z + 0.12), tuple(t), 70, size=0.02, spot=18)
+    return dict(a=(tuple(t + Vector((0.05, -0.2, 0.12))), tuple(t)), b=(tuple(t + Vector((-0.03, -0.2, 0.11))), tuple(t)), lens=85,
+                fstop=8.0, focus=tuple(t), cine=dict(exposure=0.0))
 
 
 def S28():
