@@ -528,9 +528,23 @@ def moor(mood="overcast", size=220.0, n=420, cotton=(0, 0, 30, 2500), heather=(0
 
 
 def S21():
-    """Aerial: the peat moor inland - black pools, cut peat banks, mist lying in the hollows. Drone drift."""
-    M = moor("dusk", size=420, n=480, cotton=None, heather=None, mist=0.03)      # from 70 m up, tufts are sub-pixel
-    return dict(a=((-120, -150, 70), (0, 10, 0)), b=((-90, -140, 62), (15, 15, 0)), lens=28, cine=dict(exposure=0.3))
+    """Aerial at dusk: inland from the machair, the peat moor running east to the hills - a scatter of black bog pools
+    and lochans holding the sky, mist lying in the hollows. Drone drift east."""
+    U.CUT = True
+    T = U.island("dusk", grass_at=None, n=900, focus=(1050, 0), core=14.0)
+    rng = random.Random(21)
+    loch = bpy.data.materials.get("Loch")
+    for k in range(160):                                   # bog pools: many small irregular black pools on the moor
+        x = rng.uniform(780, 1700); y = rng.uniform(-700, 700); r = rng.uniform(3, 22) * (1 + (rng.random() < 0.1) * 2)
+        z = float(U.surface(x, y)) + 0.25
+        bpy.ops.mesh.primitive_circle_add(vertices=24, radius=r, fill_type='NGON', location=(x, y, z)); o = bpy.context.active_object
+        o.scale = (1, rng.uniform(0.35, 0.9), 1); o.rotation_euler.z = rng.uniform(0, 3.14); o.name = "bogpool"
+        d = o.modifiers.new("rag", "DISPLACE"); t = bpy.data.textures.get("poolrag") or bpy.data.textures.new("poolrag", "CLOUDS")
+        t.noise_scale = 0.4; d.texture = t; d.strength = 0.0; d.direction = 'X'
+        o.data.materials.append(loch)
+    BR.ground_mist((1150, 0, float(U.surface(1150, 0))), size=(1400, 1600, 12.0), density=0.006)
+    z0 = float(U.surface(650, -400))
+    return dict(a=((640, -430, z0 + 150), (1450, 120, 25)), b=((720, -380, z0 + 135), (1520, 140, 25)), lens=30, cine=dict(exposure=0.3))
 
 
 def _bog_scene(mood="dusk", sun_az=None, setup=None):
