@@ -433,43 +433,24 @@ def peat_moor(center=(0.0, 0.0), size=220.0, n=420, seed=4, pools=True):
 
 
 def _peat_material(name="peat"):
+    """Cut peat: a real photo-texture of dark wet forest mud (Poly Haven), taken darker and browner, with soft
+    horizontal darkening (no procedural stripes) and a damp sheen."""
     m = bpy.data.materials.get(name)
     if m:
         return m
-    m = bpy.data.materials.new(name); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
-    tc = N.new("ShaderNodeTexCoord")
-    # strata: horizontal bands (world-ish Z of the object), gently wavy
-    wv = N.new("ShaderNodeTexWave"); wv.bands_direction = 'Z'; wv.inputs['Scale'].default_value = 1.1; wv.inputs['Distortion'].default_value = 7.0
-    wv.inputs['Detail'].default_value = 5; wv.inputs['Detail Roughness'].default_value = 0.7; L.new(tc.outputs['Object'], wv.inputs['Vector'])
-    nzs = N.new("ShaderNodeTexNoise"); nzs.inputs['Scale'].default_value = 2.5; nzs.inputs['Detail'].default_value = 6; L.new(tc.outputs['Object'], nzs.inputs['Vector'])
-    blend = N.new("ShaderNodeMix"); blend.inputs['Factor'].default_value = 0.45; L.new(wv.outputs['Fac'], blend.inputs[2]); L.new(nzs.outputs['Fac'], blend.inputs[3])
-    rp = N.new("ShaderNodeValToRGB"); el = rp.color_ramp.elements
-    el[0].position = 0.2; el[0].color = (0.025, 0.017, 0.01, 1)
-    e = el.new(0.45); e.color = (0.07, 0.042, 0.022, 1)
-    e = el.new(0.7); e.color = (0.12, 0.065, 0.032, 1)
-    el[-1].position = 0.9; el[-1].color = (0.05, 0.03, 0.016, 1)
-    L.new(blend.outputs[0], rp.inputs['Fac'])
-    # fibres: noise stretched along the face, fine and horizontal (sedge and moss remains)
-    mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (3.0, 3.0, 25.0); L.new(tc.outputs['Object'], mp.inputs['Vector'])
-    fb = N.new("ShaderNodeTexNoise"); fb.inputs['Scale'].default_value = 3.0; fb.inputs['Detail'].default_value = 10; fb.inputs['Roughness'].default_value = 0.7
-    L.new(mp.outputs[0], fb.inputs['Vector'])
-    fm = N.new("ShaderNodeMapRange"); fm.inputs['To Min'].default_value = 0.65; fm.inputs['To Max'].default_value = 1.35; L.new(fb.outputs['Fac'], fm.inputs['Value'])
-    mul = N.new("ShaderNodeMix"); mul.data_type = 'RGBA'; mul.blend_type = 'MULTIPLY'; mul.inputs['Factor'].default_value = 1.0
-    L.new(rp.outputs['Color'], mul.inputs[6]); cc = N.new("ShaderNodeCombineXYZ")
-    for k in range(3):
-        L.new(fm.outputs[0], cc.inputs[k])
-    L.new(cc.outputs[0], mul.inputs[7]); L.new(mul.outputs[2], p.inputs['Base Color'])
-    # rootlets: thin pale threads
-    rt = N.new("ShaderNodeTexNoise"); rt.inputs['Scale'].default_value = 9; rt.inputs['Distortion'].default_value = 3; L.new(tc.outputs['Object'], rt.inputs['Vector'])
-    rr = N.new("ShaderNodeMath"); rr.operation = 'ABSOLUTE'
-    rs = N.new("ShaderNodeMath"); rs.operation = 'SUBTRACT'; rs.inputs[1].default_value = 0.5; L.new(rt.outputs['Fac'], rs.inputs[0]); L.new(rs.outputs[0], rr.inputs[0])
-    rmask = N.new("ShaderNodeMapRange"); rmask.inputs['From Min'].default_value = 0.0; rmask.inputs['From Max'].default_value = 0.012
-    rmask.inputs['To Min'].default_value = 0.55; rmask.inputs['To Max'].default_value = 0.0; L.new(rr.outputs[0], rmask.inputs['Value'])
-    rmix = N.new("ShaderNodeMix"); rmix.data_type = 'RGBA'; L.new(rmask.outputs[0], rmix.inputs['Factor'])
-    L.new(mul.outputs[2], rmix.inputs[6]); rmix.inputs[7].default_value = (0.3, 0.22, 0.14, 1); L.new(rmix.outputs[2], p.inputs['Base Color'])
-    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.12; bp.inputs['Distance'].default_value = 0.004; L.new(fb.outputs['Fac'], bp.inputs['Height'])
-    L.new(bp.outputs['Normal'], p.inputs['Normal'])
-    p.inputs['Roughness'].default_value = 0.82; p.inputs['Specular IOR Level'].default_value = 0.3     # damp, not glossy
+    m = ph.texture("mud_forest", scale=1.2, name=name, tint=(0.42, 0.3, 0.2))
+    N = m.node_tree.nodes; L = m.node_tree.links; p = [n for n in N if n.type == 'BSDF_PRINCIPLED'][0]
+    if p.inputs['Base Color'].links:
+        src = p.inputs['Base Color'].links[0].from_socket
+        tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (0.6, 0.6, 3.0)
+        L.new(tc.outputs['Object'], mp.inputs['Vector'])
+        nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 1.5; nz.inputs['Detail'].default_value = 3; L.new(mp.outputs[0], nz.inputs['Vector'])
+        dk = N.new("ShaderNodeMapRange"); dk.inputs['To Min'].default_value = 0.55; dk.inputs['To Max'].default_value = 1.1; L.new(nz.outputs['Fac'], dk.inputs['Value'])
+        cc = N.new("ShaderNodeCombineXYZ")
+        for k in range(3):
+            L.new(dk.outputs[0], cc.inputs[k])
+        mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
+        L.new(src, mx.inputs[6]); L.new(cc.outputs[0], mx.inputs[7]); L.new(mx.outputs[2], p.inputs['Base Color'])
     return m
 
 

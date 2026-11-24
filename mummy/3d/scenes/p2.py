@@ -836,18 +836,35 @@ def S24():
 
 
 def S25():
-    """A cut peat bank, close and side-lit: the flat spade facets and the fibrous layered peat in hard raking light from
-    the side, the dusk sky along the top edge, water at the foot. Slow slide along the face."""
-    M = _bog_scene("dusk", sun_az=0)
-    P2.peat_face(M, -12, 12)
-    z = P2.moor_height(M, 0, 5.4)
-    yf = 5.6
-    # a hard raking key along the face from the left (low sun round the end of the bank)
-    d = bpy.data.lights.new("rake", 'AREA'); d.size = 1.2; d.energy = 420; d.color = (1.0, 0.88, 0.76)
-    lo = bpy.data.objects.new("rake", d); bpy.context.scene.collection.objects.link(lo); lo.location = (-5.0, yf - 0.6, z + 0.9)
-    lo.rotation_euler = (Vector((0.5, yf, z + 0.5)) - lo.location).to_track_quat('-Z', 'Y').to_euler()
-    return dict(a=((-0.8, yf - 1.25, z + 0.45), (0.4, yf, z + 0.75)), b=((-0.2, yf - 1.2, z + 0.45), (1.0, yf, z + 0.75)), lens=32,
-                fstop=5.6, focus=(0.2, yf - 0.2, z + 0.5), cine=dict(exposure=0.1))
+    """Peat cutting at dusk, from behind the cutter: an islander stands down in the cutting against the dark wet face,
+    lifting a freshly cut turf on the blade of his spade up onto the bank, where cut peats are stacked to dry."""
+    M = _bog_scene("dusk", sun_az=60)
+    x0 = 0.0
+    P2.peat_face(M, -12, 12, stack_at=x0 + 1.4)
+    import acts as AC
+    from uist import fbm
+    yb = 6.0 + 0.6 * float(fbm(x0 / 8, 0, 2, seed=9))
+    zt = P2.moor_height(M, x0, yb + 0.6); fy = yb - 1.0
+    zf = max(P2.moor_height(M, x0 + ex, fy + ey) for ex in (-0.2, 0, 0.2) for ey in (-0.25, 0, 0.25)) + 0.01
+    # the spade (a long ash shaft, narrow iron blade with a side wing), carrying a turf onto the bank top
+    blade = Vector((x0 + 0.25, yb - 0.05, zt + 0.06)); grip = Vector((x0 + 0.05, fy + 0.35, zf + 1.05))
+    ax = (blade - grip); L_ = ax.length; axn = ax.normalized()
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.018, depth=L_, location=(grip + blade) / 2); sh = bpy.context.active_object
+    sh.rotation_euler = axn.to_track_quat('Z', 'Y').to_euler(); sh.data.materials.append(_plain("ash", (0.3, 0.22, 0.13), 0.7)); sh.name = "spade"
+    bpy.ops.mesh.primitive_cube_add(size=1, location=blade); bl = bpy.context.active_object; bl.scale = (0.11, 0.2, 0.008)
+    bl.rotation_euler = (Vector((axn.x, axn.y, 0.0)).normalized()).to_track_quat('Y', 'Z').to_euler(); bl.data.materials.append(_plain("iron", (0.12, 0.1, 0.09), 0.5, 0.6)); bl.name = "spadeblade"
+    bpy.ops.mesh.primitive_cube_add(size=1, location=blade + Vector((0, 0, 0.055))); tf = bpy.context.active_object
+    tf.scale = (0.12, 0.28, 0.1); tf.rotation_euler = bl.rotation_euler; tf.data.materials.append(P2._peat_material()); tf.name = "turf"
+    bv = tf.modifiers.new("b", "BEVEL"); bv.width = 0.012; bv.segments = 2
+    m = BR.Islander(name="Cutter")
+    st = AC.Stand(m, (x0 - 0.05, fy), 90, weight="R", lean=14)
+    for sd, w in (("R", grip), ("L", grip + axn * 0.5)):
+        st.hand(sd, (w.x, w.y, w.z - zf), elbow=(0.6, 0.2, -0.8), grip=0.85)
+    st.head_to((blade.x, blade.y, blade.z - zf), share=0.8)
+    st.finish(look=(blade.x, blade.y, blade.z - zf), density=HAIR)
+    G.lift(st, zf)
+    return dict(a=((x0 - 1.1, fy - 2.6, zf + 1.6), (x0 + 0.3, yb, zf + 1.0)), b=((x0 - 0.8, fy - 2.1, zf + 1.55), (x0 + 0.3, yb, zf + 1.0)), lens=32,
+                fstop=4.0, focus=(x0, fy + 0.4, zf + 1.1), cine=dict(exposure=0.3), hand_ok=("spade", "moor", "peatface"))
 
 
 # ============================================================================ "Nobody has found a written instruction..."
