@@ -315,8 +315,8 @@ def S15():
         _spot((x - 0.1, 0.3, LB.TOP + 1.4), (x, 0.4, LB.TOP), 420, size=0.1, spot=24)
     f = bpy.data.lights.new("fill", 'AREA'); f.size = 4.5; f.size_y = 1.2; f.shape = 'RECTANGLE'; f.energy = 120; f.color = (0.75, 0.8, 0.9)
     fo = bpy.data.objects.new("fill", f); bpy.context.scene.collection.objects.link(fo); fo.location = (0.0, -0.4, LB.TOP + 1.6)
-    return dict(a=((-1.6, -0.9, LB.TOP + 0.5), (-0.6, 0.4, LB.TOP)), b=((0.4, -0.95, LB.TOP + 0.5), (0.9, 0.4, LB.TOP)), lens=35,
-                fstop=5.6, focus=(0.0, 0.4, LB.TOP), cine=dict(exposure=0.0))
+    return dict(a=((-2.6, -0.55, LB.TOP + 0.42), (0.3, 0.42, LB.TOP + 0.02)), b=((-1.9, -0.6, LB.TOP + 0.42), (1.0, 0.42, LB.TOP + 0.02)), lens=40,
+                fstop=5.6, focus=(0.0, 0.4, LB.TOP), cine=dict(exposure=-0.1))
 
 
 def S16():
