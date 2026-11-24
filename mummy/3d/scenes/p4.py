@@ -180,7 +180,7 @@ def pyre(c, rng_seed=3):
             tt.noise_scale = 0.12; dd.texture = tt; dd.strength = 0.02
     P2.bundle((cx, cy, cz + 1.75), rot=0.3, length=0.95, girth=0.42)
     BR.flames((cx, cy, cz), spread=1.0, n=48, top_z=1.55, low_z=(0.2, 1.4), top_share=0.55, h_top=(1.6, 3.2), h_low=(0.6, 1.4),
-              wid=(0.24, 0.42), strength=0.75, seed=rng_seed)
+              wid=(0.24, 0.42), strength=0.45, seed=rng_seed)
     # the ember bed and coals round the base, and sparks rising in the hot air
     emb = _plain("embers", (0.02, 0.01, 0.005), 0.8)
     pr = emb.node_tree.nodes["Principled BSDF"]; pr.inputs['Emission Color'].default_value = (1.0, 0.3, 0.05, 1); pr.inputs['Emission Strength'].default_value = 8.0
@@ -205,7 +205,7 @@ def pyre(c, rng_seed=3):
     me = bpy.data.meshes.new("sparks"); bm.to_mesh(me); bm.free()
     so = bpy.data.objects.new("sparks", me); bpy.context.scene.collection.objects.link(so); me.materials.append(spk); so.visible_shadow = False
     for k in range(5):
-        d = bpy.data.lights.new("pyre", 'POINT'); d.energy = 2600; d.color = (1.0, 0.5, 0.18); d.shadow_soft_size = 0.6
+        d = bpy.data.lights.new("pyre", 'POINT'); d.energy = 1100; d.color = (1.0, 0.5, 0.18); d.shadow_soft_size = 0.6
         lo = bpy.data.objects.new("pyre", d); bpy.context.scene.collection.objects.link(lo)
         lo.location = (cx + rng.uniform(-0.6, 0.6), cy + rng.uniform(-0.6, 0.6), cz + 0.8 + k * 0.45)
     BR.smoke((cx, cy, cz + 4.6), height=30.0, drift=(0.7, 0.2), r0=1.3, grow=0.6, density=4.0, name="pyresmoke")
