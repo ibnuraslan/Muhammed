@@ -415,6 +415,11 @@ def _suit_up(m, st=None):
     # smoothed into soft fabric - it covers the face (mask and goggles under it are never seen from behind)
     tyvek = _plain("tyvek", (0.9, 0.91, 0.92), 0.72)
     nz_ = neck_z - 0.06
+    # the head under the hood is never seen: drop the eyes and the body's head skin so nothing can poke through
+    hidden = [i for i, v in enumerate(me.vertices) if (be.matrix_world @ v.co).z > nz_ + 0.03]
+    same_topo = len(me.vertices) == len(body.data.vertices)
+    for o_ in [o_ for o_ in bpy.data.objects if o_.name.startswith(m.name + "_eye") or o_.name.startswith(m.name + "_cornea")]:
+        bpy.data.objects.remove(o_)
     bm = bmesh.new(); bm.from_mesh(me); bm.transform(be.matrix_world)
     bm.verts.ensure_lookup_table()
     drop = [f for f in bm.faces if min(v.co.z for v in f.verts) < nz_]
@@ -425,6 +430,9 @@ def _suit_up(m, st=None):
         v.co += v.normal * 0.03
     hm = bpy.data.meshes.new(m.name + "_hood"); bm.to_mesh(hm); bm.free()
     be.to_mesh_clear()
+    if same_topo and hidden:
+        bb = bmesh.new(); bb.from_mesh(body.data); bb.verts.ensure_lookup_table()
+        bmesh.ops.delete(bb, geom=[bb.verts[i] for i in hidden], context='VERTS'); bb.to_mesh(body.data); bb.free(); body.data.update()
     hd = bpy.data.objects.new(m.name + "_hood", hm); bpy.context.scene.collection.objects.link(hd); hm.materials.append(tyvek)
     for p_ in hm.polygons:
         p_.use_smooth = True
