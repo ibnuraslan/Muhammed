@@ -448,7 +448,7 @@ def _peat_material(name="peat"):
     el[1].position = 0.9; el[1].color = (0.05, 0.03, 0.016, 1)
     L.new(wv.outputs['Fac'], rp.inputs['Fac'])
     # fibres: noise stretched along the face, fine and horizontal (sedge and moss remains)
-    mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (6.0, 6.0, 90.0); L.new(tc.outputs['Object'], mp.inputs['Vector'])
+    mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (3.0, 3.0, 25.0); L.new(tc.outputs['Object'], mp.inputs['Vector'])
     fb = N.new("ShaderNodeTexNoise"); fb.inputs['Scale'].default_value = 3.0; fb.inputs['Detail'].default_value = 10; fb.inputs['Roughness'].default_value = 0.7
     L.new(mp.outputs[0], fb.inputs['Vector'])
     fm = N.new("ShaderNodeMapRange"); fm.inputs['To Min'].default_value = 0.65; fm.inputs['To Max'].default_value = 1.35; L.new(fb.outputs['Fac'], fm.inputs['Value'])
@@ -465,9 +465,9 @@ def _peat_material(name="peat"):
     rmask.inputs['To Min'].default_value = 0.55; rmask.inputs['To Max'].default_value = 0.0; L.new(rr.outputs[0], rmask.inputs['Value'])
     rmix = N.new("ShaderNodeMix"); rmix.data_type = 'RGBA'; L.new(rmask.outputs[0], rmix.inputs['Factor'])
     L.new(mul.outputs[2], rmix.inputs[6]); rmix.inputs[7].default_value = (0.3, 0.22, 0.14, 1); L.new(rmix.outputs[2], p.inputs['Base Color'])
-    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.6; bp.inputs['Distance'].default_value = 0.01; L.new(fb.outputs['Fac'], bp.inputs['Height'])
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.12; bp.inputs['Distance'].default_value = 0.004; L.new(fb.outputs['Fac'], bp.inputs['Height'])
     L.new(bp.outputs['Normal'], p.inputs['Normal'])
-    p.inputs['Roughness'].default_value = 0.55; p.inputs['Specular IOR Level'].default_value = 0.6     # damp sheen
+    p.inputs['Roughness'].default_value = 0.82; p.inputs['Specular IOR Level'].default_value = 0.3     # damp, not glossy
     return m
 
 
