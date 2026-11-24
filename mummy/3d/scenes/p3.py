@@ -927,7 +927,7 @@ def _night_pit():
     bpy.ops.mesh.primitive_cone_add(radius1=0.06, radius2=0.0, depth=0.26, location=(kx - 1.3, ky + 0.6, z + 1.72)); fl = bpy.context.active_object
     fl.data.materials.append(P2._mat("flame", (0, 0, 0), 0.5, emit=(1.0, 0.45, 0.1), strength=18)); fl.name = "torchflame"
     fd = fl.modifiers.new("lick", "DISPLACE"); ft = bpy.data.textures.new("flamelick", "CLOUDS"); ft.noise_scale = 0.05; fd.texture = ft; fd.strength = 0.03
-    d = bpy.data.lights.new("torch", 'POINT'); d.energy = 220; d.color = (1.0, 0.55, 0.2); d.shadow_soft_size = 0.12
+    d = bpy.data.lights.new("torch", 'POINT'); d.energy = 420; d.color = (1.0, 0.55, 0.2); d.shadow_soft_size = 0.12
     lo = bpy.data.objects.new("torch", d); bpy.context.scene.collection.objects.link(lo); lo.location = (kx - 1.3, ky + 0.6, z + 1.65)
     # a second torch stuck in the ground on the near side: front light on the hurdle and the body
     bpy.ops.mesh.primitive_cylinder_add(radius=0.02, depth=1.5, location=(kx - 1.9, ky - 1.8, z + 0.75)); st2 = bpy.context.active_object
