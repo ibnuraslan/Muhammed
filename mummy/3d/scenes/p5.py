@@ -136,7 +136,7 @@ def S06():
 
 # ============================================================================ "...the bones cannot tell us what the people called these figures..."
 def S07():
-    """The osteologist at the bench at night (from behind, over the shoulder), the skeleton under the lamp - the
+    """The osteologist at the bench (from behind, over the shoulder), the skeleton under the lamp - the
     evidence stops at the bones. Slow push past the shoulder."""
     L = p1.lab_body(osteo=True)
     for o in bpy.data.objects:
@@ -280,7 +280,7 @@ PLAN = [  # shot, VO paragraph (1-based), seconds, description
     ("S04", 2, 4.5, "The dark skull alone in the light, the other parts dim"),
     ("S05", 3, 5.0, "Dusk: kin gathered at the house doorway"),
     ("S06", 3, 4.5, "The body raised on a stone platform with pots beside it"),
-    ("S07", 4, 4.0, "The osteologist at the bench at night, over the shoulder"),
+    ("S07", 4, 4.0, "The osteologist at the bench, over the shoulder"),
     ("S08", 4, 4.5, "The skull in darkness, raking light across the brow"),
     ("S09", 5, 4.5, "Three racks of sample tubes in the clean room"),
     ("S10", 6, 5.0, "Three bones in three pools of light, gaps of shadow"),
