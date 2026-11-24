@@ -1,5 +1,7 @@
 # MonkeyHeadTransplant_v014
 
+> **STATUS: ON HOLD.** Check 3 failed. The needle-holder grip and the head-carry hands are not fixed yet (see `review/CHECK3.md`). Do not submit this file to the farm.
+
 This is a rebuild from scratch, done the same way as the EarInArm v015 rebuild. It keeps the v013 VO and timing: frames **1–1656** at 60 fps, 1080×1920, with one continuous camera and no cuts.
 
 Batch 1 rejected the earlier version. This rebuild fixes those faults:
