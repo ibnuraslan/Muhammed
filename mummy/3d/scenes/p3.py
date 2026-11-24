@@ -590,7 +590,8 @@ def S20():
     t = Vector((kj.x, kj.y, kj.z))
     th = sk.world_pivot("thorax"); aw = Vector((t.x - th.x, t.y - th.y, 0)).normalized()     # away from the body, past the knees
     sd = Vector((-aw.y, aw.x, 0))
-    return dict(a=(tuple(t + aw * 0.42 + sd * 0.2 + Vector((0, 0, 0.6))), tuple(t)), b=(tuple(t + aw * 0.3 + sd * 0.12 + Vector((0, 0, 0.45))), tuple(t)), lens=50,
+    fe = sk.world_pivot("femurL"); t = (t + fe) / 2                  # between hip and the missing knee: the whole left leg
+    return dict(a=(tuple(t + aw * 0.55 - sd * 0.35 + Vector((0, 0, 1.05))), tuple(t)), b=(tuple(t + aw * 0.45 - sd * 0.28 + Vector((0, 0, 0.85))), tuple(t)), lens=40,
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=0.05))
 
 
