@@ -24,9 +24,9 @@ def _calcined(name="calcined2"):
     at = N.new("ShaderNodeAttribute"); at.attribute_name = "frag"
     rp = N.new("ShaderNodeValToRGB"); el = rp.color_ramp.elements
     el[0].position = 0.0; el[0].color = (0.04, 0.035, 0.03, 1)
-    for pos, c in ((0.14, (0.16, 0.16, 0.17)), (0.3, (0.38, 0.42, 0.47)), (0.5, (0.62, 0.63, 0.63)), (0.7, (0.8, 0.78, 0.73))):
+    for pos, c in ((0.14, (0.16, 0.16, 0.17)), (0.3, (0.38, 0.42, 0.47)), (0.5, (0.52, 0.53, 0.54)), (0.7, (0.66, 0.64, 0.6))):
         e = el.new(pos); e.color = (*c, 1)
-    el[-1].position = 1.0; el[-1].color = (0.86, 0.84, 0.79, 1)
+    el[-1].position = 1.0; el[-1].color = (0.74, 0.72, 0.67, 1)
     L.new(at.outputs['Fac'], rp.inputs['Fac'])
     tc = N.new("ShaderNodeTexCoord")
     mo = N.new("ShaderNodeTexNoise"); mo.inputs['Scale'].default_value = 140; mo.inputs['Detail'].default_value = 6; L.new(tc.outputs['Object'], mo.inputs['Vector'])
@@ -37,9 +37,9 @@ def _calcined(name="calcined2"):
         L.new(mm.outputs[0], cc0.inputs[k])
     L.new(cc0.outputs[0], mx0.inputs[7])
     # checking: a net of thin dark cracks, 2-4 mm cells, plus a finer crazing
-    cr = N.new("ShaderNodeTexVoronoi"); cr.feature = 'DISTANCE_TO_EDGE'; cr.inputs['Scale'].default_value = 320; L.new(tc.outputs['Object'], cr.inputs['Vector'])
+    cr = N.new("ShaderNodeTexVoronoi"); cr.feature = 'DISTANCE_TO_EDGE'; cr.inputs['Scale'].default_value = 200; L.new(tc.outputs['Object'], cr.inputs['Vector'])
     cm = N.new("ShaderNodeMapRange"); cm.inputs['From Min'].default_value = 0.0; cm.inputs['From Max'].default_value = 0.03
-    cm.inputs['To Min'].default_value = 0.2; cm.inputs['To Max'].default_value = 1.0; L.new(cr.outputs['Distance'], cm.inputs['Value'])
+    cm.inputs['To Min'].default_value = 0.08; cm.inputs['To Max'].default_value = 1.0; L.new(cr.outputs['Distance'], cm.inputs['Value'])
     mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
     L.new(mx0.outputs[2], mx.inputs[6]); cc = N.new("ShaderNodeCombineXYZ")
     for k in range(3):
@@ -322,7 +322,7 @@ def S11():
     t = Vector((tx, ty, tz + 0.01))
     _spot((tx - 0.5, ty - 0.35, tz + 0.45), tuple(t), 60, size=0.08, spot=40)
     return dict(a=(tuple(t + Vector((-0.2, -0.32, 0.26))), tuple(t)), b=(tuple(t + Vector((0.05, -0.34, 0.25))), tuple(t)), lens=50,
-                fstop=5.6, focus=tuple(t), cine=dict(exposure=-0.05))
+                fstop=5.6, focus=tuple(t), cine=dict(exposure=-0.35))
 
 
 # ============================================================================ "Later, someone dug down into those graves."
