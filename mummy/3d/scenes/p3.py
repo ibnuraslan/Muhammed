@@ -650,12 +650,18 @@ def S23():
     """Outside the house: a digger (from behind) kneels at a small separate pit, trowelling; the house rings beyond."""
     o = _knee_pit()
     k = o["knee"]
-    # three-quarter over the right shoulder: the trowel at work in the pit, the house rings beyond
-    fl = float(G.H(k.x, k.y)); kf = Vector((k.x, k.y, fl))            # the trench floor the digger kneels on
-    # beside his right shoulder, a little behind the head line: down past the shoulder and trowel arm into the pit
-    # (his hips and legs stay behind the camera)
-    return dict(a=(tuple(kf + Vector((0.62, -0.92, 1.32))), tuple(kf + Vector((0.02, -0.15, 0)))), b=(tuple(kf + Vector((0.55, -0.85, 1.25))), tuple(kf + Vector((0.02, -0.1, 0)))), lens=28,
-                fstop=4.0, focus=tuple(k), hand_ok=p1.OK)
+    # over the right shoulder, from the digger's own rig: camera above and just behind his right shoulder, looking down
+    # past the trowel hand into the pit (hips and legs below and behind the frame)
+    st = o["st"]; h = st.m.h
+    shR = st.M @ h.bone_head("upperarm01.R"); shL = st.M @ h.bone_head("upperarm01.L")
+    hd = st.M @ h.bone_head("head")
+    rt = Vector((shR.x - shL.x, shR.y - shL.y, 0)).normalized()
+    hand = st.palm("R")
+    fw = Vector((hand.x - hd.x, hand.y - hd.y, 0)).normalized()
+    cam = shR + rt * 0.32 - fw * 0.12 + Vector((0, 0, 0.42))
+    tgt = hand + fw * 0.08
+    return dict(a=(tuple(cam), tuple(tgt)), b=(tuple(cam + fw * 0.06 - Vector((0, 0, 0.04))), tuple(tgt)), lens=28,
+                fstop=4.0, focus=tuple(hand), hand_ok=p1.OK)
 
 
 def S24():
