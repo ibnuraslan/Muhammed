@@ -124,6 +124,21 @@ def drying_platform(c):
     BR.smoke((cx, cy, cz + 0.2), height=8.0, drift=(0.8, 0.25), r0=0.35, grow=0.35, density=1.6, name="dryingsmoke")
 
 
+def _jaw(x, y, yaw_deg, tone="B", name="Jaw"):
+    """A lower jaw resting on the velvet in its natural orientation (on its base, teeth up). Returns its world verts."""
+    sk = B.Skeleton("M", tone, name=name)
+    for s_ in list(sk.parts):
+        if s_ != "mandible":
+            sk.remove(s_)
+    o = sk.parts["mandible"]; sk.root.rotation_euler = (0, 0, math.radians(yaw_deg))
+    bpy.context.view_layer.update()
+    W = np.array([o.matrix_world @ v.co for v in o.data.vertices]); c0 = W.mean(0)
+    sk.root.location += Vector((x - c0[0], y - c0[1], LB.TOP + 0.003 - W[:, 2].min()))
+    bpy.context.view_layer.update()
+    p3._knee_mats(o, sand=0.3)
+    return np.array([o.matrix_world @ v.co for v in o.data.vertices])
+
+
 # ============================================================================ "The houses continued to change..."
 def S01():
     """Daylight through the doorway into the middle house: the hearth, quern, pots, sheepskins - a lived-in room."""
@@ -270,7 +285,7 @@ def S10():
     cr = B.hero_cranium(healed=False, tone="D"); p3._old_bone(cr, stain=0.9, etch=0.45)
     co = np.array([v.co for v in cr.data.vertices]); cr.location = (-0.12, 0.42, LB.TOP + 0.004 - co[:, 2].min() * 0.97)
     cr.rotation_euler = (0, 0, math.radians(-35))
-    p3.lab_part("mandible", sex="M", tone="B", x=0.14, y=0.36, yaw=15, name="OtherJaw")
+    _jaw(0.16, 0.36, 200, tone="B", name="OtherJaw")
     t = Vector((0.02, 0.38, LB.TOP + 0.04))
     return dict(a=(tuple(t + Vector((0.1, -0.75, 0.32))), tuple(t)), b=(tuple(t + Vector((0.05, -0.62, 0.27))), tuple(t)), lens=45,
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=-0.05))
