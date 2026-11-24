@@ -636,10 +636,10 @@ def S21():
     rng = random.Random(21)
     loch = bpy.data.materials.get("Loch")
     bm = bmesh.new()
-    for c in range(80):                                    # bog pools in clusters of irregular, overlapping blobs
-        cx, cy = rng.uniform(760, 1700), rng.uniform(-700, 700)
+    for c in range(170):                                   # bog pools in clusters of irregular, overlapping blobs
+        cx, cy = rng.uniform(920, 1600), rng.uniform(-420, 520)
         for k in range(rng.randint(2, 7)):
-            x = cx + rng.gauss(0, 9); y = cy + rng.gauss(0, 6); r = rng.uniform(1.5, 8.0)
+            x = cx + rng.gauss(0, 10); y = cy + rng.gauss(0, 7); r = rng.uniform(2.5, 11.0)
             z = float(U.surface(x, y)) + 0.2
             ret = bmesh.ops.create_circle(bm, cap_ends=True, segments=18, radius=r)
             sx, sy, ang = rng.uniform(0.7, 1.3), rng.uniform(0.35, 0.8), rng.uniform(0, 3.14)
@@ -650,8 +650,8 @@ def S21():
     me = bpy.data.meshes.new("bogpools"); bm.to_mesh(me); bm.free(); me.materials.append(loch)
     po = bpy.data.objects.new("bogpools", me); bpy.context.scene.collection.objects.link(po)
     BR.ground_mist((1150, 0, float(U.surface(1150, 0))), size=(1400, 1600, 14.0), density=0.012)
-    z0 = float(U.surface(700, -300))
-    return dict(a=((700, -320, z0 + 70), (1450, 100, 30)), b=((780, -290, z0 + 64), (1520, 120, 30)), lens=30, cine=dict(exposure=0.3))
+    z0 = float(U.surface(900, -330))
+    return dict(a=((900, -340, z0 + 75), (1450, 120, z0)), b=((970, -310, z0 + 70), (1510, 140, z0)), lens=30, cine=dict(exposure=0.3))
 
 
 def _bog_scene(mood="dusk", sun_az=None, setup=None):
