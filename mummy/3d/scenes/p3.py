@@ -449,8 +449,8 @@ def S23():
     """Outside the house: a digger (from behind) kneels at a small separate pit, trowelling; the house rings beyond."""
     o = _knee_pit()
     k = o["knee"]
-    # over the digger's right shoulder, looking down into the pit (the seat is behind the lens, as in P1 S17)
-    return dict(a=(tuple(k + Vector((0.62, -1.2, 1.55))), tuple(k + Vector((-0.05, 0.1, 0)))), b=(tuple(k + Vector((0.55, -1.08, 1.45))), tuple(k)), lens=28,
+    # near-overhead: the small pit fills the frame, the digger's head, shoulders and trowel arm enter from the bottom edge
+    return dict(a=(tuple(k + Vector((0.35, -0.25, 2.6))), tuple(k + Vector((0.0, 0.05, 0)))), b=(tuple(k + Vector((0.3, -0.3, 2.3))), tuple(k)), lens=28,
                 fstop=4.0, focus=tuple(k), hand_ok=p1.OK)
 
 
