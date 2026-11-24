@@ -140,13 +140,16 @@ def pyre(c, rng_seed=3):
     rm2 = N.new("ShaderNodeMath"); rm2.operation = 'MAXIMUM'; rm2.inputs[1].default_value = 0.02; L.new(rm.outputs[0], rm2.inputs[0])
     rq = N.new("ShaderNodeMath"); rq.operation = 'DIVIDE'; L.new(rx.outputs['Value'], rq.inputs[0]); L.new(rm2.outputs[0], rq.inputs[1])
     # ragged edge: the noise pushes the boundary in and out
-    rn = N.new("ShaderNodeMath"); rn.operation = 'MULTIPLY_ADD'; rn.inputs[1].default_value = 1.1; L.new(nz.outputs['Fac'], rn.inputs[0]); L.new(rq.outputs[0], rn.inputs[2])
-    sh_ = N.new("ShaderNodeMapRange"); sh_.inputs['From Min'].default_value = 1.35; sh_.inputs['From Max'].default_value = 1.05; L.new(rn.outputs[0], sh_.inputs['Value'])
+    rn = N.new("ShaderNodeMath"); rn.operation = 'MULTIPLY_ADD'; rn.inputs[1].default_value = 2.2; L.new(nz.outputs['Fac'], rn.inputs[0]); L.new(rq.outputs[0], rn.inputs[2])
+    sh_ = N.new("ShaderNodeMapRange"); sh_.inputs['From Min'].default_value = 2.1; sh_.inputs['From Max'].default_value = 1.7; L.new(rn.outputs[0], sh_.inputs['Value'])
     lo_ = N.new("ShaderNodeMapRange"); lo_.inputs['From Min'].default_value = 0.0; lo_.inputs['From Max'].default_value = 0.06; L.new(sep.outputs['Z'], lo_.inputs['Value'])
-    a1 = N.new("ShaderNodeMath"); a1.operation = 'MULTIPLY'; L.new(sh_.outputs[0], a1.inputs[0]); L.new(lo_.outputs[0], a1.inputs[1])
+    tf = N.new("ShaderNodeMath"); tf.operation = 'SUBTRACT'; tf.inputs[0].default_value = 1.0; L.new(sep.outputs['Z'], tf.inputs[1])
+    tp = N.new("ShaderNodeMath"); tp.operation = 'POWER'; tp.inputs[1].default_value = 1.5; L.new(tf.outputs[0], tp.inputs[0])
+    a0 = N.new("ShaderNodeMath"); a0.operation = 'MULTIPLY'; L.new(sh_.outputs[0], a0.inputs[0]); L.new(tp.outputs[0], a0.inputs[1])
+    a1 = N.new("ShaderNodeMath"); a1.operation = 'MULTIPLY'; L.new(a0.outputs[0], a1.inputs[0]); L.new(lo_.outputs[0], a1.inputs[1])
     tmp = N.new("ShaderNodeMapRange"); tmp.inputs['To Min'].default_value = 2100; tmp.inputs['To Max'].default_value = 1150; L.new(sep.outputs['Z'], tmp.inputs['Value'])
     bb = N.new("ShaderNodeBlackbody"); L.new(tmp.outputs[0], bb.inputs['Temperature'])
-    em = N.new("ShaderNodeMath"); em.operation = 'MULTIPLY'; em.inputs[1].default_value = 9.0; L.new(a1.outputs[0], em.inputs[0])
+    em = N.new("ShaderNodeMath"); em.operation = 'MULTIPLY'; em.inputs[1].default_value = 3.0; L.new(a1.outputs[0], em.inputs[0])
     v = N.new("ShaderNodeVolumePrincipled")
     L.new(bb.outputs[0], v.inputs['Emission Color']); L.new(em.outputs[0], v.inputs['Emission Strength'])
     dd = N.new("ShaderNodeMath"); dd.operation = 'MULTIPLY'; dd.inputs[1].default_value = 0.4; L.new(a1.outputs[0], dd.inputs[0]); L.new(dd.outputs[0], v.inputs['Density'])
@@ -156,7 +159,7 @@ def pyre(c, rng_seed=3):
         d = bpy.data.lights.new("pyre", 'POINT'); d.energy = 900; d.color = (1.0, 0.5, 0.18); d.shadow_soft_size = 0.4
         lo = bpy.data.objects.new("pyre", d); bpy.context.scene.collection.objects.link(lo)
         lo.location = (cx + rng.uniform(-0.3, 0.3), cy + rng.uniform(-0.3, 0.3), cz + 0.6 + k * 0.35)
-    BR.smoke((cx, cy, cz + 2.4), height=22.0, drift=(0.6, 0.2), r0=0.7, grow=0.5, density=3.0, name="pyresmoke")
+    BR.smoke((cx, cy, cz + 2.9), height=22.0, drift=(0.6, 0.2), r0=0.7, grow=0.5, density=3.0, name="pyresmoke")
 
 
 # ============================================================================ "This changes the picture..."
