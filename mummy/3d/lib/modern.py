@@ -151,16 +151,16 @@ class ModernMan(W._Woman):
             else:
                 mat = W.cloth(self.name + "_jacket", self.JACKET_COL, rough=0.55 if self.JACKET == "cagoule" else (0.7 if self.JACKET == "bomber" else 0.82), weave=520, sheen=0.25, bump=0.5 if self.JACKET == "bomber" else 0.25)
             off = {"blazer": 0.012, "leather": 0.014, "bomber": 0.02, "coat": 0.016}[JK]
-            self.jacket, jv = self._shell("jacket", jk, off, mat, solid=0.004, displace=0.004 if self.JACKET == "bomber" else 0.002,
-                                          drape=40 if self.JACKET == "bomber" else 10)
+            self.jacket, jv = self._shell("jacket", jk, off, mat, solid=0.004, displace={"bomber": 0.004, "cagoule": 0.007}.get(self.JACKET, 0.002),
+                                          drape={"bomber": 40, "cagoule": 45}.get(self.JACKET, 10))
             # the body of the jacket hangs from the shoulders: no pecs, abs or shoulder blades under the cloth
             src = np.array(self.jacket["src_verts"]); arm_w = warm[src]
-            self._loosen(self.jacket, m, ease=1.04 if self.JACKET != "bomber" else 1.07, extra=0.003, mask=arm_w < 0.2, single=True)
+            self._loosen(self.jacket, m, ease={"bomber": 1.07, "cagoule": 1.09}.get(self.JACKET, 1.04), extra=0.003, mask=arm_w < 0.2, single=True)
             jr = self.jacket.modifiers.new("Relax", "SMOOTH"); jr.factor = 0.5; jr.iterations = 10    # no step at the loosened panel's edge
             self.jacket.modifiers.move(self.jacket.modifiers.find("Relax"), 0)
-            drop = {"blazer": 0.14, "leather": 0.08, "bomber": 0.0, "coat": 0.5}[JK] if self.JACKET not in ("labcoat", "cagoule") else {"labcoat": 0.4, "cagoule": 0.2}[self.JACKET]
+            drop = {"blazer": 0.14, "leather": 0.08, "bomber": 0.0, "coat": 0.5}[JK] if self.JACKET not in ("labcoat", "cagoule") else {"labcoat": 0.4, "cagoule": 0.13}[self.JACKET]
             if drop:
-                self._hem(self.jacket, m["hip"], drop=drop * hs, flare={"coat": 0.06, "labcoat": -0.015, "cagoule": 0.07}.get(self.JACKET, 0.03))
+                self._hem(self.jacket, m["hip"], drop=drop * hs, flare={"coat": 0.06, "labcoat": -0.015, "cagoule": -0.01}.get(self.JACKET, 0.03))
             if self.JACKET == "labcoat":
                 self._split(self.jacket, cx, m["hip"] + 0.02, m["hip"] - 0.16 * hs)
             if self.JACKET != "bomber":
