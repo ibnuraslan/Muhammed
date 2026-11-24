@@ -315,12 +315,14 @@ def S13():
 
 # ============================================================================ "The results are published in 2012."
 def S14():
-    """Sequencing lab at night: the instrument's status lights and flow-cell glow in the dark, a window of black glass.
-    Slow track (no screens, no text)."""
-    P2.ams_hall(length=6.0)
-    _haze((1, 0, 3), (16, 12, 6), density=0.01, color=(0.8, 0.88, 1.0))
-    return dict(a=((5.0, -2.8, 1.6), (-1.0, 0.0, 1.3)), b=((4.2, -2.5, 1.5), (-1.0, 0.0, 1.35)), lens=35, fstop=2.8, focus=(-0.6, 0, 1.35),
-                cine=dict(exposure=0.0))
+    """The lab at night, the work done: the UV cabinet almost dark, the side bench of instruments with their small
+    status lights glowing in the gloom. Slow glide along the bench (no screens, no text)."""
+    clean_room(uv=0.12)
+    for o in bpy.data.objects:
+        if o.type == 'LIGHT' and o.name.startswith("ceil"):
+            o.data.energy = 6
+    return dict(a=((1.6, -1.9, 1.35), (2.6, 0.9, 1.0)), b=((1.75, -1.2, 1.3), (2.6, 1.6, 1.0)), lens=35, fstop=2.8, focus=(2.6, 0.4, 1.05),
+                cine=dict(exposure=0.2))
 
 
 # ============================================================================ "The jaw, upper arm, and thigh come from different individuals."
