@@ -34,7 +34,7 @@ if mk:
 # ================================================================== the void bubble (camera-parented sphere, sky-blue gradient, camera rays only)
 cam_d = bpy.data.cameras.new("CAM_Film"); CAM = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(CAM); sc.camera = CAM
 AIM = bpy.data.objects.new("CAM_Film_Aim", None); sc.collection.objects.link(AIM)
-cam_d.sensor_fit = 'AUTO'; cam_d.sensor_width = 36; cam_d.dof.use_dof = True; cam_d.dof.focus_object = AIM; cam_d.dof.aperture_fstop = 14.0
+cam_d.sensor_fit = 'AUTO'; cam_d.sensor_width = 36; cam_d.dof.use_dof = True; cam_d.dof.focus_object = AIM; cam_d.dof.aperture_fstop = 22.0
 cam_d.clip_start = 0.004
 bpy.ops.mesh.primitive_uv_sphere_add(radius=1.0, segments=48, ring_count=24); VOID = bpy.context.active_object; VOID.name = "VoidBubble"
 VOID.data.flip_normals() if hasattr(VOID.data, "flip_normals") else None
@@ -46,7 +46,7 @@ out = nt.nodes["Material Output"]
 tc = nt.nodes.new("ShaderNodeTexCoord"); sep = nt.nodes.new("ShaderNodeSeparateXYZ"); nt.links.new(tc.outputs["Object"], sep.inputs[0])
 mr = nt.nodes.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = -0.7; mr.inputs["From Max"].default_value = 0.7
 nt.links.new(sep.outputs["Y"], mr.inputs["Value"])
-cr = nt.nodes.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.91, 0.97, 1.0, 1); cr.color_ramp.elements[1].color = (0.31, 0.76, 0.97, 1)
+cr = nt.nodes.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.10, 0.03, 0.30, 1); cr.color_ramp.elements[1].color = (0.0, 0.30, 0.55, 1)   # deep purple -> blue, no grey
 nt.links.new(mr.outputs["Result"], cr.inputs["Fac"])
 em = nt.nodes.new("ShaderNodeEmission"); nt.links.new(cr.outputs["Color"], em.inputs["Color"]); em.inputs["Strength"].default_value = 1.0
 tr = nt.nodes.new("ShaderNodeBsdfTransparent")
@@ -76,7 +76,11 @@ for f, e in ((1, 25), (1426, 25), (1432, 0)): key_light("BR_LampBulb", f, e)
 for f, e, c in ((1, 70, (0.80, 0.88, 1.0)), (1425, 70, (0.80, 0.88, 1.0)), (1460, 60, (0.45, 0.58, 1.0))): key_light("BR_Fill", f, e, c)
 shade = [m for m in bpy.data.materials if "lamp3fabtic" in m.name.lower() or "fabtic" in m.name.lower()]
 
-for f, e in ((1, -0.25), (1571, -0.25), (1572, -0.75), (END, -0.75)):
+# the hero brick glows a little while it is inside a head (x-ray reads), plain LEGO red once it is out in the bath light
+_rb = [n_ for n_ in bpy.data.materials["M_BrickRed"].node_tree.nodes if n_.type == "BSDF_PRINCIPLED"][0].inputs["Emission Strength"]
+for f, v in ((1, 0.45), (1806, 0.45), (1836, 0.06), (END, 0.06)):
+    _rb.default_value = v; _rb.keyframe_insert("default_value", frame=f)
+for f, e in ((1, -0.45), (1571, -0.45), (1572, -0.55), (END, -0.55)):
     sc.view_settings.exposure = e; sc.view_settings.keyframe_insert("exposure", frame=f)
 for fc in iter_fcurves(sc.animation_data.action):
     if 'exposure' in fc.data_path:
@@ -136,13 +140,13 @@ CAMK = [  # frame, camera position, aim point, lens  (world)
     (1,    lambda: bh(1) + P(0.36, -0.72, 0.22), lambda: bh(1).lerp(red_w(1), 0.42), 28),
     (24,   lambda: bh(24) + P(0.30, -0.60, 0.18), lambda: bh(24).lerp(red_w(24), 0.45), 30),
     (60,   lambda: bh(60) + P(-0.12, -0.40, 0.08), lambda: red_w(60).lerp(bh(60), 0.5), 36),
-    (98,   lambda: nb(98) + P(-0.11, -0.22, 0.06), lambda: red_w(98).lerp(nb(98), 0.5), 44),
+    (98,   lambda: nb(98) + P(-0.20, -0.15, 0.04), lambda: red_w(98).lerp(nb(98), 0.5), 44),
     (135,  lambda: red_w(135) + P(-0.02, -0.085, 0.01), lambda: red_w(135), 50),
     (175,  lambda: bh(175) + P(0.16, -0.38, 0.05), lambda: bh(175), 36),
     (215,  lambda: bh(215) + P(0.34, -0.66, 0.16), lambda: bh(215).lerp(yel_w(215), 0.45), 30),
     (242,  lambda: bh(242) + P(0.34, -0.60, 0.10), lambda: bh(242).lerp(yel_w(242), 0.45), 32),
     (282,  lambda: bh(282) + P(0.03, -0.40, 0.05), lambda: bh(282).lerp(yel_w(282), 0.4), 36),
-    (318,  lambda: bh(318) + P(-0.09, -0.34, 0.07), lambda: nb(318), 42),
+    (318,  lambda: bh(318) + P(-0.22, -0.26, 0.06), lambda: nb(318), 42),
     (360,  lambda: yel_w(360) + P(-0.03, -0.10, 0.02), lambda: yel_w(360).lerp(red_w(360), 0.5), 50),
     (420,  lambda: yel_w(420) + P(0.03, -0.09, 0.02), lambda: yel_w(420).lerp(red_w(420), 0.5), 50),
     (465,  lambda: yel_w(465) + P(-0.02, -0.08, 0.02), lambda: yel_w(465).lerp(red_w(465), 0.5), 52),
@@ -151,11 +155,14 @@ CAMK = [  # frame, camera position, aim point, lens  (world)
     (645,  lambda: yel_w(645) + P(-0.03, -0.10, 0.02), lambda: yel_w(645).lerp(red_w(645), 0.5), 50),
     (705,  lambda: yel_w(705) + P(0.04, -0.10, 0.03), lambda: yel_w(705).lerp(red_w(705), 0.5), 50),
     (765,  lambda: bh(765).lerp(mh(765), 0.4) + P(0.45, -0.95, 0.05), lambda: bh(765).lerp(mh(765), 0.45), 30),
-    (820,  lambda: bh(820).lerp(mh(820), 0.5) + P(0.02, -1.00, 0.16), lambda: bh(820).lerp(mh(820), 0.5), 28),
-    (858,  lambda: bh(858).lerp(mh(858), 0.5) + P(0.02, -0.98, 0.16), lambda: nb(858).lerp(mh(858), 0.5), 29),
-    (900,  lambda: bh(900).lerp(mh(900), 0.5) + P(0.02, -0.92, 0.10), lambda: yel_w(900).lerp(mh(900), 0.5), 30),
-    (945,  lambda: bh(945).lerp(mh(945), 0.5) + P(0.06, -0.80, 0.02), lambda: yel_w(945).lerp(mh(945), 0.5), 32),
-    (1005, lambda: bh(1005) + P(0.12, -0.34, 0.03), lambda: nb(1005), 40),
+    (790,  lambda: nb(790) + P(0.03, -0.30, 0.03), lambda: nb(790), 40),
+    (808,  lambda: nb(808) + P(0.06, -0.31, 0.02), lambda: nb(808), 40),
+    (830,  lambda: bh(830).lerp(mh(830), 0.45) + P(-0.36, -0.82, 0.06), lambda: bh(830).lerp(mh(830), 0.42), 27),
+    (858,  lambda: nb(858).lerp(mh(858), 0.45) + P(-0.30, -0.62, 0.04), lambda: nb(858).lerp(mh(858), 0.45), 30),
+    (892,  lambda: yel_w(892).lerp(mh(892), 0.35) + P(-0.24, -0.50, 0.03), lambda: yel_w(892).lerp(mh(892), 0.3), 34),
+    (925,  lambda: yel_w(925) + P(-0.07, -0.29, 0.02), lambda: yel_w(925), 42),
+    (962,  lambda: yel_w(962).lerp(mh(962), 0.3) + P(-0.28, -0.62, 0.06), lambda: yel_w(962).lerp(mh(962), 0.45), 30),
+    (1005, lambda: bh(1005) + P(-0.10, -0.34, 0.03), lambda: nb(1005), 40),
     (1060, lambda: bloc(1060, (0.03, -0.15, 0.05)), lambda: red_w(1060), 48),
     (1110, lambda: bloc(1110, (0.05, -0.15, 0.03)), lambda: red_w(1110), 46),
     (1150, lambda: bloc(1150, (-0.02, -0.12, 0.03)), lambda: red_w(1150), 48),
@@ -248,6 +255,10 @@ set_interp(CAM, 'LINEAR'); set_interp(AIM, 'LINEAR'); set_interp(cam_d, 'LINEAR'
 # within the void spans the camera may roll with the head (keep the image continuous): up axis from the nostril frame
 cl = bpy.data.lights.new("Catch", 'AREA'); cl.energy = 10.0; cl.size = 0.25; cl.color = (1, 0.97, 0.94)
 clo = bpy.data.objects.new("Catchlight", cl); sc.collection.objects.link(clo); clo.parent = CAM; clo.location = (0.0, 0.10, 0.0)
+# its strength follows the camera-subject distance (inverse square): a soft eye glint, never a blown-out macro
+for f in list(range(1, END + 1, 6)) + [END]:
+    fs(f); d_ = (CAM.matrix_world.translation - AIM.matrix_world.translation).length
+    cl.energy = max(0.15, min(8.0, 8.0 * (d_ / 0.8) ** 2)); cl.keyframe_insert("energy", frame=f)
 
 # ================================================================== audio, range, save
 sc.frame_start, sc.frame_end = 1, END

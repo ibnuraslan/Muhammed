@@ -218,7 +218,7 @@ for rig, col in ((BOY, (0.42, 0.28, 0.17)), (MAN, (0.42, 0.28, 0.17)), (MOM, (0.
         if c.type == 'MESH' and any(k in c.name.lower() for k in ("short", "bob", "pony", "eyebrow")):
             for m in c.data.materials: tint(m, col)
 for b in (BB, MB, NB):
-    for m in b.data.materials: tint(m, (1.0, 0.86, 0.76))
+    for m in b.data.materials: tint(m, (1.0, 0.80, 0.64))
 for rig in (BOY, MOM, MAN):     # clean white teeth (BATCH1 #5)
     for c in rig.children:
         if c.type == 'MESH' and "teeth" in c.name:
@@ -253,14 +253,14 @@ def wardrobe(rig, body, top_m, bot_m, hem_drop, top_off, bot_off, top_folds, bot
     mk = hide_under(body, cov_t | cov_b)
     return top, bot, mk
 
-boy_tee = stripes("M_BoyTop", (0.10, 0.36, 0.62), (0.92, 0.92, 0.88), scale=30.0)
-boy_trs = fabric("M_BoyTrousers", (0.16, 0.22, 0.30), scale=600)
+boy_tee = stripes("M_BoyTop", (0.95, 0.24, 0.01), (0.95, 0.86, 0.62), scale=30.0)
+boy_trs = fabric("M_BoyTrousers", (0.02, 0.24, 0.09), scale=600)
 wardrobe(BOY, BB, boy_tee, boy_trs, -0.025, 0.010, 0.006, 0.004, 0.003, "Boy")
-mom_top = fabric("M_MomTop", (0.20, 0.50, 0.42))
-mom_trs = fabric("M_MomTrousers", (0.10, 0.12, 0.20), scale=600)
+mom_top = fabric("M_MomTop", (0.72, 0.04, 0.26))
+mom_trs = fabric("M_MomTrousers", (0.03, 0.05, 0.22), scale=600)
 wardrobe(MOM, MB, mom_top, mom_trs, 0.0, 0.012, 0.007, 0.005, 0.004, "Mom")
-pj_top = fabric("M_PJTop", (0.36, 0.48, 0.70))
-pj_bot = fabric("M_PJTrousers", (0.20, 0.25, 0.42), scale=600)
+pj_top = fabric("M_PJTop", (0.92, 0.38, 0.03))
+pj_bot = fabric("M_PJTrousers", (0.40, 0.06, 0.02), scale=600)
 sock_m = fabric("M_Socks", (0.85, 0.85, 0.82), scale=500)
 for rig, body, col in ((BOY, BB, (0.90, 0.88, 0.80)), (MOM, MB, (0.25, 0.25, 0.30))):
     sm_ = fabric("M_Socks" + rig.name, col, scale=500)
@@ -327,12 +327,12 @@ def soften(o, sat=1.1, rough_min=0.4):
             if n.type == 'NORMAL_MAP': n.inputs["Strength"].default_value = 0.35
             if n.type == 'BUMP': n.inputs["Strength"].default_value = 0.3
 
-wall_m = mat("M_WallLR", (0.86, 0.80, 0.70), rough=0.75)
-wall_b = mat("M_WallBed", (0.55, 0.66, 0.78), rough=0.75)
+wall_m = mat("M_WallLR", (0.012, 0.24, 0.27), rough=0.75)
+wall_b = mat("M_WallBed", (0.03, 0.09, 0.55), rough=0.75)
 floor_m = mat("M_Wood", (0.52, 0.34, 0.20), rough=0.45, coat=0.25)
 nt = floor_m.node_tree; p = nt.nodes["Principled BSDF"]
 br = nt.nodes.new("ShaderNodeTexBrick"); br.inputs["Scale"].default_value = 2.0; br.offset = 0.5
-br.inputs["Color1"].default_value = (0.55, 0.36, 0.21, 1); br.inputs["Color2"].default_value = (0.46, 0.29, 0.17, 1)
+br.inputs["Color1"].default_value = (0.62, 0.26, 0.08, 1); br.inputs["Color2"].default_value = (0.50, 0.19, 0.05, 1)
 br.inputs["Mortar"].default_value = (0.30, 0.19, 0.11, 1); br.inputs["Mortar Size"].default_value = 0.003
 br.inputs["Brick Width"].default_value = 1.6; br.inputs["Row Height"].default_value = 0.16
 nt.links.new(br.outputs["Color"], p.inputs["Base Color"])
@@ -372,12 +372,12 @@ box("LR_WallLeft", (0.1, 7, 2.8), (-2.0, 0, 1.4), wall_m, bevel=0)
 box("LR_Skirt", (7, 0.03, 0.10), (0, 1.94, 0.05), white_m, bevel=0.004)
 box("LR_SkirtL", (0.03, 7, 0.10), (-1.94, 0, 0.05), white_m, bevel=0.004)
 window(0.6, 1.94, 1.45, 1.3, 1.1, 'X', "LR")
-frame_art("LR_Art1", (-0.9, 1.93, 1.55), (0.55, 0.70), (0.95, 0.62, 0.30))
-frame_art("LR_Art2", (-1.93, -0.3, 1.55), (0.70, 0.50), (0.36, 0.62, 0.75), rot_z=R_(90))
+frame_art("LR_Art1", (-0.9, 1.93, 1.55), (0.55, 0.70), (1.0, 0.42, 0.02))
+frame_art("LR_Art2", (-1.93, -0.3, 1.55), (0.70, 0.50), (0.85, 0.05, 0.35), rot_z=R_(90))
 rug_m = mat("M_Rug", (0.70, 0.32, 0.30), rough=0.9, sheen=0.4)
 nt = rug_m.node_tree; p = nt.nodes["Principled BSDF"]
 tc = nt.nodes.new("ShaderNodeTexCoord"); ch = nt.nodes.new("ShaderNodeTexChecker"); ch.inputs["Scale"].default_value = 7.0
-ch.inputs["Color1"].default_value = (0.62, 0.56, 0.48, 1); ch.inputs["Color2"].default_value = (0.70, 0.64, 0.56, 1)
+ch.inputs["Color1"].default_value = (0.03, 0.08, 0.48, 1); ch.inputs["Color2"].default_value = (0.05, 0.12, 0.58, 1)
 nt.links.new(tc.outputs["Object"], ch.inputs["Vector"]); nt.links.new(ch.outputs["Color"], p.inputs["Base Color"])
 box("LR_Rug", (2.4, 2.0, 0.012), (-0.1, 0.0, 0.006), rug_m, bevel=0.004)
 SOFA = imp(DL + "/sofa.glb", "Sofa", 1.95, axis=0); soften(SOFA)
@@ -387,9 +387,22 @@ for m_ in SOFA.data.materials:
         pp = m_.node_tree.nodes.get("Principled BSDF")
         if pp:
             for l_ in list(pp.inputs["Base Color"].links): m_.node_tree.links.remove(l_)
-            pp.inputs["Base Color"].default_value = (0.20, 0.33, 0.45, 1) if m_.name.startswith(("Fabric", "material")) else (0.30, 0.44, 0.56, 1)
+            pp.inputs["Base Color"].default_value = (0.24, 0.04, 0.42, 1) if m_.name.startswith(("Fabric", "material")) else (0.13, 0.02, 0.24, 1)
             for l_ in list(pp.inputs["Normal"].links): m_.node_tree.links.remove(l_)
 SOFA.location = (-1.45, 0.25, 0.0)
+# the black zebra shading on the sofa base: drop every texture input and rebuild clean outward normals
+for m_ in SOFA.data.materials:
+    if m_ and m_.use_nodes:
+        for pp in [n for n in m_.node_tree.nodes if n.type == 'BSDF_PRINCIPLED']:
+            for inp in pp.inputs:
+                for l_ in list(inp.links): m_.node_tree.links.remove(l_)
+_bi = [i for i, m_ in enumerate(SOFA.data.materials) if m_ and m_.name.lower().startswith("blanket")]
+_bm = bmesh.new(); _bm.from_mesh(SOFA.data)
+bmesh.ops.delete(_bm, geom=[f_ for f_ in _bm.faces if f_.material_index in _bi], context='FACES')   # the folded throw = the zebra shading
+bmesh.ops.remove_doubles(_bm, verts=_bm.verts, dist=0.002)   # duplicate shells z-fought into black shards
+bmesh.ops.recalc_face_normals(_bm, faces=_bm.faces); _bm.to_mesh(SOFA.data); _bm.free()
+if "custom_normal" in SOFA.data.attributes: SOFA.data.attributes.remove(SOFA.data.attributes["custom_normal"])
+for p_ in SOFA.data.polygons: p_.use_smooth = True
 side_m = mat("M_SideTable", (0.40, 0.26, 0.16), rough=0.4, coat=0.3)
 box("LR_SideTop", (0.42, 0.42, 0.03), (-1.5, -1.05, 0.55), side_m, bevel=0.01)
 for dx in (-0.17, 0.17):
@@ -436,17 +449,18 @@ def brick(name, nx, ny, material, stud=True):
     for p_ in o.data.polygons: p_.use_smooth = True
     return o
 
-RED = brick("BrickRed", 1, 1, mat("M_BrickRed", (0.85, 0.02, 0.01), rough=0.22, coat=0.6, emit=((1.0, 0.06, 0.03), 0.5)))          # the hero: one model all film
-YEL = brick("BrickYellow", 2, 1, mat("M_BrickYellow", (1.0, 0.72, 0.0), rough=0.22, coat=0.6, emit=((1.0, 0.75, 0.05), 0.4)))    # the larger one Mom removes
+RED = brick("BrickRed", 1, 1, mat("M_BrickRed", (0.50, 0.004, 0.001), rough=0.28, coat=0.25, emit=((1.0, 0.0, 0.0), 0.10)))
+[n_ for n_ in bpy.data.materials["M_BrickRed"].node_tree.nodes if n_.type == "BSDF_PRINCIPLED"][0].inputs["Specular IOR Level"].default_value = 0.3          # the hero: one model all film
+YEL = brick("BrickYellow", 2, 1, mat("M_BrickYellow", (1.0, 0.76, 0.0), rough=0.28, coat=0.25, emit=((1.0, 0.75, 0.0), 0.10)))    # the larger one Mom removes
 for o_ in (RED, YEL):
     try:
         bpy.context.view_layer.objects.active = o_; bpy.ops.object.shade_auto_smooth(angle=R_(35))
     except Exception: pass
-cols = {"blue": (0.04, 0.22, 0.75), "green": (0.05, 0.50, 0.15), "white": (0.92, 0.92, 0.90), "orange": (0.95, 0.35, 0.03),
-        "lime": (0.55, 0.75, 0.10), "azure": (0.15, 0.60, 0.90)}
+cols = {"blue": (0.0, 0.18, 0.85), "green": (0.0, 0.55, 0.10), "white": (0.92, 0.92, 0.90), "orange": (1.0, 0.30, 0.0),
+        "lime": (0.50, 0.85, 0.02), "azure": (0.02, 0.62, 1.0)}
 PM = {k: plastic("M_Brick_" + k, v) for k, v in cols.items()}
 # a toy tub (rounded plastic box) and loose bricks lying flat ON the rug, a small built house (stud-aligned, flush)
-tub_m = mat("M_Tub", (0.15, 0.55, 0.85), rough=0.3, coat=0.4)
+tub_m = mat("M_Tub", (0.02, 0.60, 0.15), rough=0.3, coat=0.4)
 bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.0)
 for v in bm.verts: v.co = Vector((v.co.x * 0.34, v.co.y * 0.24, (v.co.z + 0.5) * 0.14))
 top = [f for f in bm.faces if f.normal.z > 0.9]; bmesh.ops.delete(bm, geom=top, context='FACES_ONLY')
@@ -505,7 +519,7 @@ for m_ in TWZ.data.materials:
         pp = m_.node_tree.nodes.get("Principled BSDF")
         if pp: pp.inputs["Metallic"].default_value = 1.0; pp.inputs["Roughness"].default_value = 0.25
 print("TWEEZERS dims", [round(max(v.co[i] for v in TWZ.data.vertices)-min(v.co[i] for v in TWZ.data.vertices),4) for i in range(3)])
-book_m = mat("M_BookCover", (0.10, 0.20, 0.45), rough=0.5); page_m = mat("M_Pages", (0.95, 0.93, 0.86), rough=0.8)
+book_m = mat("M_BookCover", (0.0, 0.55, 0.60), rough=0.5); page_m = mat("M_Pages", (0.95, 0.93, 0.86), rough=0.8)
 BOOK = box("Book", (0.17, 0.24, 0.022), (0, 0, 0), book_m, bevel=0.003)
 pg = box("BookPages", (0.165, 0.23, 0.018), (0.004, 0, 0), page_m, bevel=0.001)
 bpy.ops.object.select_all(action='DESELECT'); pg.select_set(True); BOOK.select_set(True); bpy.context.view_layer.objects.active = BOOK; bpy.ops.object.join()
@@ -523,7 +537,7 @@ BED = imp(DL + "/bed.glb", "Bed", 2.05, axis=1); soften(BED)
 BED.location = at(0, 0.5, 0); BED.rotation_euler = (0, 0, R_(180))   # pillows toward +Y (the headboard wall)      # headboard toward +Y (checked/rotated in stage B against the mattress ray test)
 NSTAND = imp(DL + "/nightstand.glb", "Nightstand", 0.75, axis=2); soften(NSTAND)
 NSTAND.location = at(-0.85, 1.3, 0)
-box("BR_Rug", (1.4, 0.9, 0.01), at(0.0, -0.95, 0.005), mat("M_RugB", (0.85, 0.78, 0.62), rough=0.9, sheen=0.4), bevel=0.003)
+box("BR_Rug", (1.4, 0.9, 0.01), at(0.0, -0.95, 0.005), mat("M_RugB", (0.85, 0.40, 0.02), rough=0.9, sheen=0.4), bevel=0.003)
 # inhaler (blue actuator + steel canister + cap off), procedural, mouthpiece at local -Y, canister up +Z
 inh_m = mat("M_Inhaler", (0.15, 0.40, 0.85), rough=0.3, coat=0.3); can_m = mat("M_Canister", (0.78, 0.80, 0.83), rough=0.25, metal=1.0)
 body_ = box("Inhaler", (0.026, 0.022, 0.066), (0, 0, 0.033), inh_m, bevel=0.008, segs=4)
@@ -539,11 +553,11 @@ tis_m = mat("M_Tissue", (0.97, 0.97, 0.98), rough=0.9, sheen=0.3)
 box("TissueBox", (0.12, 0.22, 0.09), at(-0.92, 1.12, 0.0), mat("M_TissueBox", (0.40, 0.70, 0.75), rough=0.5), bevel=0.006)
 
 # ------------------------------------------------------------------ BATHROOM (x = +16)
-tile_m = mat("M_Tile", (0.48, 0.68, 0.74), rough=0.2, coat=0.5)
+tile_m = mat("M_Tile", (0.0, 0.40, 0.48), rough=0.2, coat=0.5)
 nt = tile_m.node_tree; p = nt.nodes["Principled BSDF"]
 br = nt.nodes.new("ShaderNodeTexBrick"); br.inputs["Scale"].default_value = 6.0; br.offset = 0.0
-br.inputs["Color1"].default_value = (0.48, 0.68, 0.74, 1); br.inputs["Color2"].default_value = (0.44, 0.64, 0.70, 1)
-br.inputs["Mortar"].default_value = (0.95, 0.97, 0.97, 1); br.inputs["Mortar Size"].default_value = 0.01
+br.inputs["Color1"].default_value = (0.0, 0.42, 0.50, 1); br.inputs["Color2"].default_value = (0.0, 0.36, 0.45, 1)
+br.inputs["Mortar"].default_value = (0.03, 0.52, 0.60, 1); br.inputs["Mortar Size"].default_value = 0.01
 br.inputs["Brick Width"].default_value = 1.0; br.inputs["Row Height"].default_value = 1.0
 nt.links.new(br.outputs["Color"], p.inputs["Base Color"])
 box("BA_Floor", (5, 5, 0.02), (BATH_X, 0, -0.01), tile_m, bevel=0)
@@ -562,14 +576,14 @@ b_ = TUBO.modifiers.new("bev", 'BEVEL'); b_.width = 0.02; b_.segments = 4; b_.li
 for p_ in me.polygons: p_.use_smooth = True
 TUBO.location = (BATH_X, 0.50, 0.0)
 box("BA_TubFloor", (1.55, 0.70, 0.06), (BATH_X, 0.50, 0.03), acr, bevel=0.01)
-tile2 = mat("M_TileAccent", (0.18, 0.50, 0.58), rough=0.25, coat=0.4)
+tile2 = mat("M_TileAccent", (0.12, 0.03, 0.42), rough=0.25, coat=0.4)
 nt = tile2.node_tree; p = nt.nodes["Principled BSDF"]
 br = nt.nodes.new("ShaderNodeTexBrick"); br.inputs["Scale"].default_value = 9.0; br.offset = 0.5
-br.inputs["Color1"].default_value = (0.18, 0.50, 0.58, 1); br.inputs["Color2"].default_value = (0.15, 0.45, 0.53, 1)
-br.inputs["Mortar"].default_value = (0.92, 0.95, 0.95, 1); br.inputs["Mortar Size"].default_value = 0.012
+br.inputs["Color1"].default_value = (0.13, 0.03, 0.44, 1); br.inputs["Color2"].default_value = (0.10, 0.02, 0.36, 1)
+br.inputs["Mortar"].default_value = (0.20, 0.07, 0.55, 1); br.inputs["Mortar Size"].default_value = 0.012
 nt.links.new(br.outputs["Color"], p.inputs["Base Color"])
 PONY = box("BA_PonyWall", (1.70, 0.10, 1.04), (BATH_X, 0.07, 0.52 + 0.52), tile2, bevel=0.012)
-box("BA_PonyCap", (1.74, 0.14, 0.03), (BATH_X, 0.07, 1.56), white_m, bevel=0.008)
+box("BA_PonyCap", (1.74, 0.14, 0.03), (BATH_X, 0.07, 1.56), mat("M_PonyCap", (0.01, 0.16, 0.20), rough=0.5), bevel=0.008)
 chrome = mat("M_Chrome", (0.90, 0.91, 0.93), rough=0.08, metal=1.0)
 cyl("BA_ShowerArm", 0.012, 0.30, (BATH_X - 0.40, 0.80, 2.10), chrome, rot=(R_(70), 0, 0))
 SHH = cyl("BA_ShowerHead", 0.085, 0.03, (BATH_X - 0.40, 0.66, 2.05), chrome, rot=(R_(-25), 0, 0), bevel=0.008)
@@ -577,7 +591,7 @@ cyl("BA_Rail", 0.01, 1.7, (BATH_X, 0.10, 2.15), chrome, rot=(0, R_(90), 0))
 for dx, h in ((-0.35, 1.25), (0.35, 1.25)):
     cyl("BA_Tap", 0.02, 0.10, (BATH_X + dx * 0.3, 0.88, 0.75), chrome, rot=(R_(90), 0, 0))
 # shower curtain gathered at the right end (opaque, folded)
-cur_m = stripes("M_Curtain", (0.95, 0.95, 0.96), (0.30, 0.62, 0.72), scale=6.0)
+cur_m = stripes("M_Curtain", (0.95, 0.90, 0.20), (0.0, 0.45, 0.80), scale=6.0)
 bpy.ops.mesh.primitive_plane_add(size=1, location=(BATH_X + 0.72, 0.30, 1.45))
 CUR = bpy.context.active_object; CUR.name = "BA_Curtain"; CUR.scale = (0.32, 1, 1.38); CUR.rotation_euler = (R_(90), 0, 0)
 bpy.ops.object.transform_apply(scale=True, rotation=True)
@@ -598,18 +612,31 @@ SKULL.data.materials.clear(); SKULL.data.materials.append(bone_m)
 for p_ in SKULL.data.polygons: p_.material_index = 0
 print("SKULL dims", tuple(round(d, 3) for d in SKULL.dimensions))
 
-# ------------------------------------------------------------------ look: AgX Punchy, bright, clean
-sc.view_settings.view_transform = 'AgX'
+# ------------------------------------------------------------------ look: Filmic High Contrast (keeps LEGO red red), punchy, clean
+sc.view_settings.view_transform = 'Filmic'
 sc.view_settings.exposure = -0.25
-try: sc.view_settings.look = 'AgX - Punchy'
+try: sc.view_settings.look = 'High Contrast'
 except Exception: pass
+sc.view_settings.use_curve_mapping = False   # Filmic High Contrast carries the contrast
+cm_ = sc.view_settings.curve_mapping; c_ = cm_.curves[3]
+c_.points[0].location = (0.0, 0.0); c_.points[1].location = (1.0, 1.0)
+c_.points.new(0.22, 0.17); c_.points.new(0.72, 0.79); cm_.update()
+# richer palette everywhere: saturate every non-skin base colour that is still neutral-ish
+import colorsys
+for m_ in bpy.data.materials:
+    if not m_.use_nodes or not m_.name.startswith("M_") or m_.name.startswith(("M_Skin", "M_Teeth", "M_Trim", "M_Pages", "M_Tissue", "M_Acrylic", "M_Chrome", "M_Canister", "M_Socks", "M_SkullBone")): continue
+    for n_ in m_.node_tree.nodes:
+        if n_.type == 'BSDF_PRINCIPLED' and not n_.inputs["Base Color"].is_linked:
+            r_, g_, b_, a_ = n_.inputs["Base Color"].default_value
+            h_, l_, s_ = colorsys.rgb_to_hls(r_, g_, b_)
+            if s_ > 0.05: n_.inputs["Base Color"].default_value = (*colorsys.hls_to_rgb(h_, l_, min(1.0, s_ * 1.25)), a_)
 sc.render.engine = 'CYCLES'
 sc.cycles.samples = 48; sc.cycles.adaptive_threshold = 0.05; sc.cycles.use_denoising = True
 sc.cycles.max_bounces = 8; sc.cycles.diffuse_bounces = 3; sc.cycles.glossy_bounces = 3; sc.cycles.transmission_bounces = 8
 sc.cycles.transparent_max_bounces = 32; sc.cycles.caustics_reflective = sc.cycles.caustics_refractive = False
 sc.render.use_motion_blur = False
 w = bpy.data.worlds.new("World"); sc.world = w; w.use_nodes = True
-w.node_tree.nodes["Background"].inputs["Color"].default_value = (0.75, 0.82, 0.90, 1)
+w.node_tree.nodes["Background"].inputs["Color"].default_value = (0.35, 0.55, 1.0, 1)
 w.node_tree.nodes["Background"].inputs["Strength"].default_value = 0.25
 
 def area(name, loc, power, size, col, target):
@@ -629,9 +656,9 @@ area("BR_Rim", (BED_X + 0.6, 1.4, 2.2), 70, 1.0, (0.95, 0.95, 1.0), (BED_X, 0.9,
 lp = bpy.data.lights.new("BR_LampBulb", 'POINT'); lp.energy = 25; lp.color = (1.0, 0.75, 0.45); lp.shadow_soft_size = 0.08
 lo = bpy.data.objects.new("BR_LampBulb", lp); bpy.context.collection.objects.link(lo); lo.location = (BED_X - 0.85, 1.3, 0.95)
 # bathroom: soft top light, front fill, warm rim
-area("BA_Top", (BATH_X, 0.0, 2.6), 38, 1.4, (1.0, 0.97, 0.94), (BATH_X, 0.2, 1.2))
-area("BA_Fill", (BATH_X - 0.6, -1.8, 1.6), 32, 1.8, (0.88, 0.94, 1.0), (BATH_X, 0.2, 1.4))
-area("BA_Rim", (BATH_X + 0.8, 0.8, 2.2), 40, 0.8, (1.0, 0.90, 0.78), (BATH_X, 0.2, 1.5))
+area("BA_Top", (BATH_X, 0.0, 2.6), 15, 1.4, (1.0, 0.97, 0.94), (BATH_X, 0.2, 1.2))
+area("BA_Fill", (BATH_X - 0.6, -1.8, 1.6), 14, 1.8, (0.88, 0.94, 1.0), (BATH_X, 0.2, 1.4))
+area("BA_Rim", (BATH_X + 0.8, 0.8, 2.2), 22, 0.8, (1.0, 0.90, 0.78), (BATH_X, 0.2, 1.5))
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("BUILD_OK", OUT)
 for r in (BOY, MOM, MAN):

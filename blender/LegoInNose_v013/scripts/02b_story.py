@@ -198,11 +198,11 @@ def make_xray(rig, body, dom, tag):
     geo = g.nodes.new("ShaderNodeNewGeometry")
     bf = g.nodes.new("ShaderNodeMath"); bf.operation = 'MULTIPLY'; g.links.new(geo.outputs["Backfacing"], bf.inputs[0]); g.links.new(gi.outputs["Mask"], bf.inputs[1])
     tr = g.nodes.new("ShaderNodeBsdfTransparent"); tr.inputs["Color"].default_value = (0.95, 0.98, 1.0, 1)
-    lw = g.nodes.new("ShaderNodeLayerWeight"); lw.inputs["Blend"].default_value = 0.22
-    em = g.nodes.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (0.45, 0.88, 1.0, 1); em.inputs["Strength"].default_value = 1.6
+    lw = g.nodes.new("ShaderNodeLayerWeight"); lw.inputs["Blend"].default_value = 0.14
+    em = g.nodes.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (0.45, 0.88, 1.0, 1); em.inputs["Strength"].default_value = 1.3
     rim = g.nodes.new("ShaderNodeMixShader"); g.links.new(lw.outputs["Facing"], rim.inputs["Fac"])
     g.links.new(tr.outputs["BSDF"], rim.inputs[1]); g.links.new(em.outputs["Emission"], rim.inputs[2])
-    bk = g.nodes.new("ShaderNodeEmission"); bk.inputs["Color"].default_value = (0.10, 0.30, 0.52, 1); bk.inputs["Strength"].default_value = 1.0
+    bk = g.nodes.new("ShaderNodeEmission"); bk.inputs["Color"].default_value = (0.0, 0.09, 0.12, 1); bk.inputs["Strength"].default_value = 0.8
     inner = g.nodes.new("ShaderNodeMixShader"); g.links.new(geo.outputs["Backfacing"], inner.inputs["Fac"])
     g.links.new(rim.outputs["Shader"], inner.inputs[1]); g.links.new(bk.outputs["Emission"], inner.inputs[2])
     mx_ = g.nodes.new("ShaderNodeMath"); mx_.operation = 'MAXIMUM'; g.links.new(m1.outputs[0], mx_.inputs[0]); g.links.new(bf.outputs[0], mx_.inputs[1])
@@ -306,10 +306,10 @@ ANAT_B = [PASS_B, SK_B]; ANAT_M = [PASS_M, SK_M]
 BOYHEAD = [(1, 18, 28), (22, 22, 32), (40, 12, 14), (60, 4, -2), (78, 0, -6), (95, 0, -14), (135, 0, -12), (150, -8, -4), (175, 8, 6),
            (194, 16, 22), (240, 22, 32), (270, 8, 8), (300, 0, -14), (335, 0, -12), (370, -12, -6), (420, -16, -10), (440, 0, -14),
            (470, 2, -10), (510, 8, 0), (545, 0, -12), (600, 0, -14), (640, 0, -6), (700, -10, -4), (730, 10, -6), (760, -30, -8),
-           (800, -62, -18), (860, -64, -20), (900, -56, -12), (940, -40, -6), (1000, -30, -2), (1060, -18, -4), (1140, -12, -4), (1300, -12, -4)]
+           (790, -6, -6), (812, 18, -14), (835, 30, -20), (860, 30, -22), (900, 26, -16), (940, 22, -10), (1000, 12, -4), (1060, -6, -4), (1140, -12, -4), (1300, -12, -4)]
 for f, yw, pt in BOYHEAD: key_head(PR, f, yw, pt)
 BOYSPINE = [(1, 10, 6, 8), (22, 16, 10, 10), (50, 6, 2, 2), (95, 2, 0, 0), (180, 6, 2, 2), (194, 10, 6, 6), (240, 16, 10, 10), (280, 4, 0, 0),
-            (500, 2, 0, 0), (560, 4, 0, 0), (700, 2, 0, 0), (780, 0, -12, -6), (820, 4, -20, -12), (900, 4, -18, -10), (1000, 2, -8, -2), (1300, 2, -8, -2)]
+            (500, 2, 0, 0), (560, 4, 0, 0), (700, 2, 0, 0), (780, 0, -8, -4), (800, 0, 0, 0), (830, -2, 10, 4), (900, -2, 10, 4), (1000, 2, 4, 0), (1300, 2, 2, 0)]
 for f, fl, tw, sd in BOYSPINE: key_spine(PR, f, flex=fl, twist=tw, side=sd)
 for f, fl in ((1, -4), (700, -4), (735, -7), (760, -4), (1300, -4)): boy_root(f, flex=fl)
 blinks(BOY, [70, 180, 262, 350, 430, 530, 620, 690, 790, 880, 960, 1030, 1110])
@@ -322,10 +322,10 @@ for f, kw in ((1, {}), (60, dict(brow=0.4)), (100, dict(brow=0.3, squint=0.3)), 
     key_face(BOY, f, **kw)
 
 # ================================================================== MOM acting: reading on the sofa, looks up, reaches, removes the yellow brick
-MOMHEAD = [(1, 0, 30), (300, 4, 32), (600, -4, 30), (760, 0, 26), (775, 18, -2), (820, 26, 4), (860, 28, 8), (900, 22, 0), (950, 8, -8), (1050, 14, 0), (1300, 14, 0)]
+MOMHEAD = [(1, 0, 30), (300, 4, 32), (600, -4, 30), (760, 0, 26), (775, 18, -2), (799, 22, 0)]
 for f, yw, pt in MOMHEAD: key_head(MR, f, yw, pt)
-MOMSPINE = [(1, 8, 0, 0), (760, 8, 0, 0), (790, 14, -8, 0), (830, 34, 12, 0), (880, 34, 12, 0), (930, 18, 4, 0), (990, 10, 0, 0), (1300, 10, 0, 0)]
-for f, fl, dx in ((1, 0, 0), (790, 0, 0), (830, 16, 0.05), (885, 16, 0.05), (940, 4, 0.0), (1300, 0, 0)): mom_root(f, dx=dx, flex=fl)
+MOMSPINE = [(1, 8, 0, 0), (760, 8, 0, 0), (790, 14, -8, 0), (799, 14, -8, 0)]
+for f, fl, dx in ((1, 0, 0), (790, 0, 0), (799, 0, 0)): mom_root(f, dx=dx, flex=fl)
 for f, fl, tw, sd in MOMSPINE: key_spine(MR, f, flex=fl, twist=tw, side=sd)
 blinks(MOM, [50, 210, 380, 560, 700, 790, 880, 1000, 1150])
 saccades(MR, 1, 1300, every=43, seed=3)
@@ -355,12 +355,10 @@ log("book lap", tuple(round(x, 3) for x in LAP), "tweezers seat z", round(tz, 3)
 def book_edge(s):
     sx = 1 if s == "L" else -1     # Mom faces +X: her left is +Y
     return BOOK.matrix_world @ Vector((0.0, 0.0, 0.022)) + Vector((0.0, sx * 0.075, 0))
-for f in (1, 300, 600, 760, 880):
+for f in (1, 300, 600, 760):
     rest_hand(MOM, MR, "R", f, book_edge("R"), Vector((0, 0, -1)), Vector((1, -0.25, -0.1)), pose="relaxed")
 for f in (1, 300, 600, 760):
     rest_hand(MOM, MR, "L", f, book_edge("L"), Vector((0, 0, -1)), Vector((1, 0.25, -0.1)), pose="relaxed")
-    rest_hand(MOM, MR, "R", f, book_edge("R"), Vector((0, 0, -1)), Vector((1, -0.25, -0.1)), pose="relaxed")
-for f in (1000, 1300):
     rest_hand(MOM, MR, "R", f, book_edge("R"), Vector((0, 0, -1)), Vector((1, -0.25, -0.1)), pose="relaxed")
 apply_pose(MOM, "L", "relaxed", 1)
 for f in (450,):   # page turn gesture: L hand lifts the page corner a little
@@ -413,13 +411,22 @@ def carry(obj, f, P, fdir, palm, Mfinal=None, pose="pinch", s="L"):
         M = Mfinal
     key_world_while_owned(obj, f, M)
 PALM_UP = Vector((0, 0.85, -0.5))
+POLE_IN = lambda: Vector((BX + 0.20, -0.16, -0.20))       # elbow down and a little out: relaxed arm
+def side_in(f):
+    fs(f); R = head_M(BOY, f).to_3x3().normalized(); return R @ Vector((-1, 0, 0)), R @ Vector((0, 1, 0)), R @ Vector((0, 0, 1))
+def fd_side(f, A_w, k=0.28):
+    sw, bw, uw = side_in(f); return (A_w * 0.9 + sw * k - bw * 0.6).normalized()      # fingers UP along the passage, tilted off the face, hand below-left
+def palm_side(f):
+    sw, bw, uw = side_in(f); return (sw * 0.7 + bw * 0.5).normalized()
+def pinch_end(M): return M @ Vector((0, 0, 0.0112))
 def brick_c_world(M): return M @ Vector((0, 0, 0.0048))
 carry(RED, 42, ahead_of_face(42, 0.30, 0.30, 0.10), Vector((0.1, -0.2, 1)), Vector((0, 0.9, 0.3)))
-carry(RED, 62, ahead_of_face(62, 0.22, 0.10, 0.12), Vector((-0.2, 0.3, 1)), Vector((-0.3, 1, -0.2)))
-carry(RED, 76, ahead_of_face(76, 0.18, 0.09, 0.07), Vector((-0.1, 0.4, 1)), Vector((-0.2, 1, -0.3)))
-for f, tb in ((95, -0.016), (104, -0.002), (112, 0.006)):
+POLE_L = POLE_IN
+carry(RED, 62, ahead_of_face(62, 0.20, 0.16, -0.06), Vector((-0.3, 0.3, 0.9)), Vector((-0.7, 0.6, 0)))
+carry(RED, 76, ahead_of_face(76, 0.14, 0.11, -0.02), Vector((-0.3, 0.35, 0.9)), Vector((-0.7, 0.6, 0)))
+for f, tb in ((95, -0.016), (104, -0.002), (112, 0.004)):
     M_ = ins(BOY, N_B, f, tb, "red"); A_w = -(M_.to_3x3() @ Vector((0, 0, 1))).normalized()
-    carry(RED, f, brick_c_world(M_), A_w, PALM_UP, Mfinal=M_)
+    carry(RED, f, pinch_end(M_), fd_side(f, A_w), palm_side(f), Mfinal=M_)
 owner_switch(RED, 113, BOY, "head", log)
 # index finger pushes it in (the brick moves with the fingertip on its stud end)
 RED_TB = [(113, 0.006), (124, 0.011), (134, 0.016)]
@@ -427,7 +434,7 @@ for f, tb in RED_TB: key_brick_head(RED, BOY, N_B, f, tb, "red")
 def push_finger(f, obj, s="L", back=0.0015):
     fs(f); z = (obj.matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized()
     P = stud_end(obj) + z * back
-    reach(BOY, PR, s, f, P, -z, PALM_UP, pose="point", pt=lambda r, s_: tip_of(r, s_, 2), pole=POLE_L())
+    reach(BOY, PR, s, f, P, fd_side(f, -z, 0.22), palm_side(f), pose="point", pt=lambda r, s_: tip_of(r, s_, 2), pole=POLE_L())
 for f, tb in RED_TB[1:]: push_finger(f, RED)
 push_finger(118, RED)
 # hand back down to the rug beside the pile (palm down, relaxed)
@@ -452,10 +459,10 @@ def ycarry(f, P, fdir, palm, Mfinal=None):
     else: M = Mfinal
     key_world_while_owned(YEL, f, M)
 ycarry(262, ahead_of_face(262, 0.30, 0.28, 0.10), Vector((0.1, -0.2, 1)), Vector((0, 0.9, 0.3)))
-ycarry(282, ahead_of_face(282, 0.18, 0.10, 0.02), Vector((0.0, 0.4, 1)), Vector((0, 1, -0.3)))
+ycarry(282, ahead_of_face(282, 0.14, 0.12, -0.03), Vector((-0.3, 0.35, 0.9)), Vector((-0.7, 0.6, 0)))
 for f, tb in ((300, -0.014), (318, -0.004), (330, 0.0025)):
     M_ = ins(BOY, N_B, f, tb, "yel"); A_w = -(M_.to_3x3() @ Vector((0, 0, 1))).normalized()
-    ycarry(f, brick_c_world(M_), A_w, PALM_UP, Mfinal=M_)
+    ycarry(f, pinch_end(M_), fd_side(f, A_w), palm_side(f), Mfinal=M_)
 owner_switch(YEL, 331, BOY, "head", log)
 key_brick_head(YEL, BOY, N_B, 331, 0.0025, "yel")
 reach(BOY, PR, "L", 352, ahead_of_face(352, 0.14, 0.15, 0.07), Vector((0.2, 0.2, 1)), Vector((0, 0.9, -0.3)), pose="relaxed",
@@ -504,46 +511,7 @@ key_brick_head(RED, BOY, N_B, 1000, 0.031, "red")
 key_brick_head(RED, BOY, N_B, 1030, 0.040, "red")     # relieved sniff: the small one slips deeper, unseen
 key_brick_head(RED, BOY, N_B, 1100, 0.040, "red")
 
-# ================================================================== MOM: tweezers from the seat -> the yellow brick -> out
-fs(790)
-TW0 = TWZ.matrix_world.copy(); TWZ.rotation_mode = 'QUATERNION'; key_basis(TWZ, 1, TW0)
-tw_len = max(v.co.y for v in TWZ.data.vertices); tw_tail = min(v.co.y for v in TWZ.data.vertices)
-TW_TIP = Vector((0, tw_len, 0))
-def tw_grip_pt(): return TWZ.matrix_world @ Vector((0, tw_tail * 0.15, 0))
-d_tw = (TW0.to_3x3() @ Vector((0, 1, 0))).normalized()
-reach(MOM, MR, "L", 776, tw_grip_pt() + Vector((0, 0, 0.08)), Vector((0.3, -0.3, -0.9)), Vector((0, 0, -1)), pose="relaxed")
-reach(MOM, MR, "L", 792, tw_grip_pt() + Vector((0, 0, 0.004)), d_tw, Vector((0, 0, -1)), pose="pinch")
-reach(MOM, MR, "L", 795, tw_grip_pt() + Vector((0, 0, 0.004)), d_tw, Vector((0, 0, -1)), pose="pinch")
-grab(MOM, "L", 796, TWZ)
-def tw_at(f, tip_world, axis_world):
-    """tweezers world matrix: tip at tip_world, long axis (+Y) along axis_world, arms vertical-ish"""
-    y = Vector(axis_world).normalized(); M = frame_from(y, Vector((0, 0, 1)) - y * 0.0, Vector((0, 0, 0)))
-    M.translation = Vector(tip_world) - M.to_3x3() @ TW_TIP; return M
-def yel_outer(f):
-    fs(f); return stud_end(YEL), (YEL.matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized()
-P_, z_ = yel_outer(820)
-place_prop(MR, 815, TWZ, tw_at(815, P_ - z_ * -0.10 + Vector((0, 0, -0.03)), -z_ + Vector((0, 0, 0.2))), pose="pinch")
-P_, z_ = yel_outer(840)
-place_prop(MR, 840, TWZ, tw_at(840, P_ + z_ * 0.025, -z_), pose="pinch")
-for f in (852, 858):
-    P_, z_ = yel_outer(f); place_prop(MR, f, TWZ, tw_at(f, P_ + z_ * 0.001, -z_), pose="pinch")
-owner_switch(YEL, 859, TWZ, None, log)
-for f, out in ((868, 0.006), (880, 0.018), (892, 0.040)):
-    fs(858); P_, z_ = yel_outer(858)
-    M858 = tw_at(858, P_ + z_ * 0.001, -z_)
-    Mh858 = head_M(BOY, 858); Mhf = head_M(BOY, f)
-    Mt = Mhf @ Mh858.inverted() @ Matrix.Translation(z_ * out) @ M858
-    place_prop(MR, f, TWZ, Mt, pose="pinch")
-# she lifts it to show him (in front of her face, tip up)
-def mom_face_pt(f, fwd, down, side):
-    fs(f); M = head_M(MOM, f); e = (MOM.data.bones["eye.L"].head_local + MOM.data.bones["eye.R"].head_local) / 2
-    return M @ (e + Vector((side, -fwd, -down)))
-place_prop(MR, 925, TWZ, tw_at(925, mom_face_pt(925, 0.24, 0.08, 0.10), Vector((0.4, -0.3, 1.0))), pose="pinch", pole=Vector((MOM_X + 0.1, MY + 0.45, 0.6)))
-place_prop(MR, 980, TWZ, tw_at(980, mom_face_pt(980, 0.25, 0.10, 0.11), Vector((0.4, -0.35, 1.0))), pose="pinch", pole=Vector((MOM_X + 0.1, MY + 0.45, 0.6)))
-fs(1000)
-kn = Wh(MOM, "lowerleg01.L"); kz = ray_down([O["Mom.trousers"]], kn.x - 0.04, kn.y)
-place_prop(MR, 1040, TWZ, tw_at(1040, Vector((kn.x + 0.06, kn.y - 0.02, kz + 0.05)), Vector((0.8, 0.2, 0.5))), pose="pinch")
-place_prop(MR, 1300, TWZ, tw_at(1300, Vector((kn.x + 0.06, kn.y - 0.02, kz + 0.05)), Vector((0.8, 0.2, 0.5))), pose="pinch")
+exec(open(HERE + "/02d_mom.py").read())
 
 XC_B = path_pt(N_B, 0.012) + Vector((0, 0.004, 0))
 XBEATS = [(66, 78, 150, 164), (294, 308, 730, 742), (843, 855, 905, 917), (1038, 1050, None, None)]

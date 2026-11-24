@@ -25,8 +25,8 @@ def dom_map(rig, body):
     return out
 DM = {n: dom_map(O[n], O[n + ".body"]) for n in CH}
 for n in CH:
-    for m in O[n + ".body"].modifiers:
-        if m.type in ('MASK', 'SUBSURF'): m.show_viewport = False
+    for m in list(O[n + ".body"].modifiers):
+        if m.type in ('MASK', 'SUBSURF'): O[n + ".body"].modifiers.remove(m)   # keyed toggles would override show_viewport
 def body_world(n):
     B = O[n + ".body"]; dg = bpy.context.evaluated_depsgraph_get(); me = B.evaluated_get(dg).to_mesh()
     co = [B.matrix_world @ v.co for v in me.vertices]; polys = [p.vertices[:] for p in me.polygons]

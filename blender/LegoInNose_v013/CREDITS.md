@@ -13,7 +13,7 @@ tweezers by Tanercan Tokkuyu · Bedside Table by Andre Lages
 | tweezers | Tanercan Tokkuyu | https://sketchfab.com/3d-models/482e865ae9a04ecaae876e220bda6d2b |
 | Bedside Table | Andre Lages | https://sketchfab.com/3d-models/3866f63e73504575a1a2959c232b3457 |
 
-Our changes: the sofa was recoloured (solid fabric), the skull got a clean x-ray bone material and was fitted inside each head, the tweezers were rescaled.
+Our changes: the sofa was recoloured (solid purple fabric), its throw blanket was removed and duplicate vertices merged, the skull got a clean x-ray bone material and was fitted inside each head, the tweezers were rescaled.
 
 ## CC0
 - The boy, Mom and the man: base mesh, rig, skins, hair, eyes are MakeHuman system assets (CC0), built with MPFB2.
