@@ -329,6 +329,8 @@ def spoil_heap(cx, cy, sx=7.0, sy=5.0, h=1.9):
     me = bpy.data.meshes.new("spoil"); me.from_pydata(V, [], F); me.update()
     for p in me.polygons:
         p.use_smooth = True
+    at = me.attributes.new("hgt", 'FLOAT', 'POINT')                     # height above the ground (turf creeps up the base)
+    at.data.foreach_set("value", np.maximum(Z, 0).ravel().astype(np.float32))
     sp = bpy.data.materials.get("spoil")
     if sp is None:                    # tipped spoil: pale shell sand mixed with darker occupation soil and stones
         sp = mat("sand").copy(); sp.name = "spoil"
@@ -341,7 +343,16 @@ def spoil_heap(cx, cy, sx=7.0, sy=5.0, h=1.9):
             Lk.new(pp.inputs['Base Color'].links[0].from_socket, mx.inputs[6])
         else:
             mx.inputs[6].default_value = pp.inputs['Base Color'].default_value
-        mx.inputs[7].default_value = (0.2, 0.15, 0.1, 1); Lk.new(mx.outputs[2], pp.inputs['Base Color'])
+        mx.inputs[7].default_value = (0.2, 0.15, 0.1, 1)
+        ha = Nn.new("ShaderNodeAttribute"); ha.attribute_name = "hgt"
+        gn = Nn.new("ShaderNodeTexNoise"); gn.inputs['Scale'].default_value = 3.0; gn.inputs['Detail'].default_value = 6; Lk.new(tc.outputs['Object'], gn.inputs['Vector'])
+        gh = Nn.new("ShaderNodeMath"); gh.operation = 'MULTIPLY_ADD'; Lk.new(gn.outputs['Fac'], gh.inputs[0]); gh.inputs[1].default_value = 0.5
+        Lk.new(ha.outputs['Fac'], gh.inputs[2])
+        gm = Nn.new("ShaderNodeMapRange"); gm.inputs['From Min'].default_value = 0.35; gm.inputs['From Max'].default_value = 0.6
+        gm.inputs['To Min'].default_value = 1.0; gm.inputs['To Max'].default_value = 0.0; Lk.new(gh.outputs[0], gm.inputs['Value'])
+        turf = Nn.new("ShaderNodeMix"); turf.data_type = 'RGBA'; Lk.new(gm.outputs[0], turf.inputs['Factor'])
+        Lk.new(mx.outputs[2], turf.inputs[6]); turf.inputs[7].default_value = (0.1, 0.13, 0.04, 1)
+        Lk.new(turf.outputs[2], pp.inputs['Base Color'])
         vo = Nn.new("ShaderNodeTexVoronoi"); vo.inputs['Scale'].default_value = 9; Lk.new(tc.outputs['Object'], vo.inputs['Vector'])
         bp = Nn.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.5; bp.inputs['Distance'].default_value = 0.05
         Lk.new(vo.outputs['Distance'], bp.inputs['Height'])

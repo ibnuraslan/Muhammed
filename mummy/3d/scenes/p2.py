@@ -222,6 +222,8 @@ def S04():
     for x in (-1.1, 0.0, 1.25):
         _spot((x - 0.1, 0.3, LB.TOP + 1.4), (x, 0.38, LB.TOP), 420, size=0.1, spot=24)
     _haze((0, 0, 1.6), (9, 6, 3.2), density=0.02, color=(0.95, 0.9, 0.85))
+    f = bpy.data.lights.new("fill", 'AREA'); f.shape = 'RECTANGLE'; f.size = 4.5; f.size_y = 1.2; f.energy = 140; f.color = (0.75, 0.8, 0.9)
+    fo = bpy.data.objects.new("fill", f); bpy.context.scene.collection.objects.link(fo); fo.location = (0.0, -0.4, LB.TOP + 1.6)   # soft top fill: the bench reads end to end
     # low along the bench: skull near, jaw in the middle, thigh bone far - three pools receding into the dark
     return dict(a=((-2.6, -0.55, LB.TOP + 0.42), (0.3, 0.42, LB.TOP + 0.02)), b=((-1.9, -0.6, LB.TOP + 0.42), (1.0, 0.42, LB.TOP + 0.02)), lens=40,
                 fstop=5.6, focus=(0.0, 0.38, LB.TOP), cine=dict(exposure=0.1))
@@ -414,10 +416,19 @@ def S17():
 
 # ============================================================================ "...the skin and other soft tissues have disappeared."
 def S18():
-    """No skin, no tissue: the whole skeleton laid out on the lab bench, seen from straight above; a slow slide from the
-    feet up the legs and the pelvis."""
-    L = p1.lab_body(osteo=False)
-    return dict(a=((-0.55, 0.38, LB.TOP + 0.95), (-0.55, 0.39, LB.TOP)), b=((0.05, 0.38, LB.TOP + 0.95), (0.05, 0.39, LB.TOP)), lens=40,
+    """No skin, no tissue: a complete skeleton laid out anatomically on the lab bench, skull to feet, under the lamp;
+    oblique high angle, slow slide from the feet toward the skull."""
+    A = LB.room(window_light=0.6, lamp=True, lamp_at=(0.0, 0.62), lamp_target=(0.0, 0.36), lamp_energy=30)
+    LB.velvet(-1.15, 1.2, 0.0, 0.78, LB.TOP)
+    sk = B.Skeleton("M", "C", name="Whole", sand=0.4)
+    sk.root.rotation_euler = (math.radians(-90), 0, math.radians(-90))
+    bpy.context.view_layer.update()
+    zmin = min((o.matrix_world @ v.co).z for o in sk.parts.values() for v in o.data.vertices[:])
+    xs = [(o.matrix_world @ v.co).x for o in sk.parts.values() for v in o.data.vertices[:]]
+    sk.root.location = (-(min(xs) + max(xs)) / 2, 0.38, LB.TOP + 0.004 - zmin)
+    bpy.context.view_layer.update()
+    sk.settle(lambda x, y: LB.TOP + 0.004, sink=0.0, keep=0.55)
+    return dict(a=((-1.05, -0.55, LB.TOP + 0.75), (-0.2, 0.38, LB.TOP)), b=((-0.55, -0.6, LB.TOP + 0.75), (0.3, 0.38, LB.TOP)), lens=32,
                 fstop=5.6, focus=(0.0, 0.38, LB.TOP), cine=dict(exposure=-0.05))
 
 
@@ -825,12 +836,18 @@ def S24():
 
 
 def S25():
-    """A cut peat bank: dark fibrous layers, water seeping at the foot. Slider along the face."""
-    M = _bog_scene("overcast")
+    """A cut peat bank, close and side-lit: the flat spade facets and the fibrous layered peat in hard raking light from
+    the side, the dusk sky along the top edge, water at the foot. Slow slide along the face."""
+    M = _bog_scene("dusk", sun_az=0)
     P2.peat_face(M, -12, 12)
     z = P2.moor_height(M, 0, 5.4)
-    return dict(a=((-1.5, 3.4, z + 0.5), (-0.5, 6.0, z + 0.5)), b=((1.0, 3.4, z + 0.5), (2.0, 6.0, z + 0.5)), lens=35,
-                fstop=5.6, focus=(0.5, 5.9, z + 0.5), cine=dict(exposure=0.0))
+    yf = 5.6
+    # a hard raking key along the face from the left (low sun round the end of the bank)
+    d = bpy.data.lights.new("rake", 'AREA'); d.size = 0.6; d.energy = 900; d.color = (1.0, 0.72, 0.5)
+    lo = bpy.data.objects.new("rake", d); bpy.context.scene.collection.objects.link(lo); lo.location = (-5.0, yf - 0.6, z + 0.9)
+    lo.rotation_euler = (Vector((0.5, yf, z + 0.5)) - lo.location).to_track_quat('-Z', 'Y').to_euler()
+    return dict(a=((-0.8, yf - 1.25, z + 0.45), (0.4, yf, z + 0.75)), b=((-0.2, yf - 1.2, z + 0.45), (1.0, yf, z + 0.75)), lens=32,
+                fstop=5.6, focus=(0.2, yf - 0.2, z + 0.5), cine=dict(exposure=0.1))
 
 
 # ============================================================================ "Nobody has found a written instruction..."
@@ -855,7 +872,7 @@ def S28():
     marquee, cabin), rising and pulling away until the dig is a scar on the machair, the dunes and the Atlantic beyond."""
     p1.site("dusk", grass_at=(4, 0), grass_r=55, focus=(0, 0), core=6.0, n=900, kit=True, burials=True, sun_az=230, grass_density=260)
     U.cloud_shadows((0, 0), cover=0.45, seed=7)          # light moving over the machair
-    return dict(a=((9, -12, 9.5), (-1, 4, 3.6)), b=((60, -88, 38), (-70, 40, 0)), lens=26, cine=dict(exposure=0.3))
+    return dict(a=((15.5, -6.0, 6.5), (-1, 6, 3.4)), b=((150, -260, 140), (-280, 120, 0)), lens=26, cine=dict(exposure=0.3))
 
 
 VO = [l.strip() for l in open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "vo", "MUMMY_P2_VO.txt"),
