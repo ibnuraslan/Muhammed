@@ -440,6 +440,41 @@ def _cotton(M, center, radius, n=2500, seed=1):
     return o
 
 
+def _tussocks(M, center, radius, n=5000, seed=3):
+    """Purple moor-grass / deer-grass tussocks: clumps of thin bleached blades, darker at the base (one joined mesh)."""
+    rng = random.Random(seed)
+    bm = bmesh.new()
+    for k in range(n):
+        a = rng.uniform(0, 6.283); r = radius * math.sqrt(rng.random())
+        x, y = center[0] + r * math.cos(a), center[1] + r * math.sin(a)
+        z = P2.moor_height(M, x, y)
+        if z < M.get("water_z", -9) + 0.02 or _clear(M, x, y):
+            continue
+        h0 = rng.uniform(0.18, 0.42); wind = Vector((0.05, 0.01, 0))
+        for b_ in range(rng.randint(7, 13)):
+            ang = rng.uniform(0, 6.283); sp = rng.uniform(0.0, 0.05); h = h0 * rng.uniform(0.6, 1.1)
+            base = Vector((x + sp * math.cos(ang), y + sp * math.sin(ang), z - 0.01))
+            out = Vector((math.cos(ang), math.sin(ang), 0)) * rng.uniform(0.05, 0.16) + wind
+            w = 0.004
+            side = Vector((-math.sin(ang), math.cos(ang), 0)) * w
+            pts = [base + out * (t * t) + Vector((0, 0, h * t)) for t in (0.0, 0.5, 1.0)]
+            v = [bm.verts.new(pts[0] - side), bm.verts.new(pts[0] + side), bm.verts.new(pts[1] + side * 0.7), bm.verts.new(pts[1] - side * 0.7), bm.verts.new(pts[2])]
+            bm.faces.new((v[0], v[1], v[2], v[3])); bm.faces.new((v[3], v[2], v[4]))
+    me = bpy.data.meshes.new("tussocks"); bm.to_mesh(me); bm.free()
+    o = bpy.data.objects.new("tussocks", me); bpy.context.scene.collection.objects.link(o)
+    m = bpy.data.materials.new("moorgrass"); m.use_nodes = True; N = m.node_tree.nodes; Lk = m.node_tree.links; p = N["Principled BSDF"]
+    geo = N.new("ShaderNodeNewGeometry"); sep = N.new("ShaderNodeSeparateXYZ"); Lk.new(geo.outputs['Position'], sep.inputs[0])
+    ob = N.new("ShaderNodeObjectInfo")
+    rnd = N.new("ShaderNodeTexNoise"); rnd.inputs['Scale'].default_value = 0.6; tc = N.new("ShaderNodeTexCoord"); Lk.new(tc.outputs['Object'], rnd.inputs['Vector'])
+    rp = N.new("ShaderNodeValToRGB"); el = rp.color_ramp.elements
+    el[0].position = 0.3; el[0].color = (0.16, 0.13, 0.07, 1); el[1].position = 0.7; el[1].color = (0.36, 0.3, 0.17, 1)
+    e = el.new(0.5); e.color = (0.24, 0.17, 0.09, 1)
+    Lk.new(rnd.outputs['Fac'], rp.inputs['Fac']); Lk.new(rp.outputs['Color'], p.inputs['Base Color'])
+    p.inputs['Roughness'].default_value = 0.7; p.inputs['Subsurface Weight'].default_value = 0.15
+    me.materials.append(m)
+    return o
+
+
 def _heather(M, center, radius, n=500, seed=2):
     """Heather clumps (real scan) instanced over the moor, out of the pools."""
     src = _single("109204e9a5c74ec390f374ac62e92196", height=0.35, name="heather_src", hide=True)
@@ -478,6 +513,7 @@ def moor(mood="overcast", size=220.0, n=420, cotton=(0, 0, 30, 2500), heather=(0
         setup(M)                     # e.g. choose where people stand and keep that ground clear
     if cotton:
         _cotton(M, cotton[:2], cotton[2], n=cotton[3])
+        _tussocks(M, cotton[:2], cotton[2], n=int(cotton[3] * 2.2))
     if heather:
         _heather(M, heather[:2], heather[2], n=heather[3])
     if mist:

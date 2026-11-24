@@ -335,7 +335,7 @@ def peat_moor(center=(0.0, 0.0), size=220.0, n=420, seed=4, pools=True):
         L.new(mul.outputs[2], gain.inputs[6]); gain.inputs[7].default_value = (3.2, 3.0, 2.8, 1)
         L.new(gain.outputs[2], p.inputs['Base Color'])
         nm = N.new("ShaderNodeNormalMap"); nm.inputs['Strength'].default_value = 0.8; L.new(g_n.outputs['Color'], nm.inputs['Color'])
-        wet = N.new("ShaderNodeMapRange"); wet.inputs['To Min'].default_value = 0.85; wet.inputs['To Max'].default_value = 0.35
+        wet = N.new("ShaderNodeMapRange"); wet.inputs['To Min'].default_value = 0.9; wet.inputs['To Max'].default_value = 0.62
         L.new(low.outputs[0], wet.inputs['Value']); L.new(wet.outputs[0], p.inputs['Roughness'])
         bm_ = N.new("ShaderNodeBump"); bm_.inputs['Strength'].default_value = 0.3; L.new(nz2.outputs['Fac'], bm_.inputs['Height'])
         L.new(nm.outputs[0], bm_.inputs['Normal']); L.new(bm_.outputs['Normal'], p.inputs['Normal'])
@@ -387,7 +387,7 @@ def bundle(loc, rot=0.0, length=0.95, girth=0.44, seed=0):
     for k in range(3):
         u = -0.25 + k * 0.25 + rng.uniform(-0.02, 0.02)
         f = math.sqrt(max(0.05, 1 - (u / 0.5) ** 2))            # the bundle narrows toward its ends
-        bpy.ops.mesh.primitive_torus_add(major_radius=girth * 0.5 * f + 0.008, minor_radius=0.011, location=loc); r = bpy.context.active_object
+        bpy.ops.mesh.primitive_torus_add(major_radius=girth * 0.5 * f * 0.93, minor_radius=0.012, location=loc); r = bpy.context.active_object
         r.scale = (0.76, 1, 1); r.rotation_euler = (0, math.pi / 2, rot)
         r.location = Vector(loc) + Matrix.Rotation(rot, 3, 'Z') @ Vector((u * length, 0, 0)); r.data.materials.append(rope); r.name = "bundlerope"
     return o
