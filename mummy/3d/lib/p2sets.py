@@ -632,13 +632,13 @@ def crouched_bundle(loc, rot=0.0, seed=0, cords=4, cord_col=(0.16, 0.11, 0.07)):
     d2.texture = t2; d2.strength = 0.008
     hide = bpy.data.materials.get("hide2")
     if hide is None:
-        hide = _mat("hide2", (0.11, 0.07, 0.04), 0.75)
+        hide = _mat("hide2", (0.06, 0.038, 0.022), 0.75)
         hn = hide.node_tree.nodes; hl = hide.node_tree.links; hp = hn["Principled BSDF"]
         tc = hn.new("ShaderNodeTexCoord"); nz = hn.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 14; nz.inputs['Detail'].default_value = 10
         hl.new(tc.outputs['Object'], nz.inputs['Vector'])
         cr = hn.new("ShaderNodeMapRange"); cr.inputs['To Min'].default_value = 0.6; cr.inputs['To Max'].default_value = 1.2; hl.new(nz.outputs['Fac'], cr.inputs['Value'])
         mx = hn.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
-        mx.inputs[6].default_value = (0.11, 0.07, 0.04, 1); cc = hn.new("ShaderNodeCombineXYZ")
+        mx.inputs[6].default_value = (0.06, 0.038, 0.022, 1); cc = hn.new("ShaderNodeCombineXYZ")
         for k in range(3):
             hl.new(cr.outputs[0], cc.inputs[k])
         hl.new(cc.outputs[0], mx.inputs[7]); hl.new(mx.outputs[2], hp.inputs['Base Color'])
