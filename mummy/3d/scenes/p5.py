@@ -254,7 +254,8 @@ def S16():
     hx, hy, r = U.HOUSES[2]
     a = math.atan2(c2.y - hy, c2.x - hx)
     wall = Vector((hx + r * math.cos(a), hy + r * math.sin(a), G.H(hx + (r - 0.3) * math.cos(a), hy + (r - 0.3) * math.sin(a)) + 0.3))
-    return dict(a=((c2.x - 1.6, c2.y - 1.4, c2.z + 0.45), tuple(c2)), b=((c2.x - 1.3, c2.y - 1.1, c2.z + 0.6), tuple(wall)), lens=28,
+    mw = (c2 + wall) / 2
+    return dict(a=((c2.x - 0.95, c2.y - 0.95, c2.z + 0.7), tuple(c2)), b=((c2.x - 0.8, c2.y - 0.8, c2.z + 0.85), tuple(mw)), lens=28,
                 fstop=5.6, focus=tuple(c2), cine=dict(exposure=0.2))
 
 
