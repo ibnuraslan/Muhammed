@@ -669,7 +669,7 @@ def _islander2(name="Islander1"):
     class _J(MD.ModernMan):
         GENDER = 0.0; MUSCLE = 0.4; WEIGHT = 0.35; HEIGHT = 0.4
         HAIR = (0.45, 0.25); HAIR_LEN = (0.12, 0.2)
-        SHIRT = (0.24, 0.2, 0.15); JACKET = "coat"; JACKET_COL = (0.25, 0.21, 0.15)
+        SHIRT = (0.12, 0.1, 0.07); JACKET = "coat"; JACKET_COL = (0.13, 0.11, 0.075)
         TROUSERS = (0.16, 0.13, 0.09); SHOES = (0.08, 0.05, 0.03)
         TROUSER_EASE = 1.3; TROUSER_EXTRA = 0.03
     return _J(name, years=24)
@@ -727,7 +727,7 @@ def S22():
         return Vector((x, hy - Lh / 2 + d, z_near - (z_near - z_far) * d / Lh + 0.03))
     # islander 1: heavy-set, dark cloak - kneels behind the left pole end, both hands on it
     m1 = BR.Islander(name="Islander0")
-    k1 = (hx - Wh / 2 - 0.05, hy - Lh / 2 - 0.55)
+    k1 = (hx - Wh / 2 - 0.08, hy - Lh / 2 - 0.72)
     zk = max(P2.moor_height(M, k1[0] + ex, k1[1] + ey) for ex in (-0.2, 0, 0.2) for ey in (-0.3, 0, 0.3)) + 0.01
     st1 = AC.Kneel(m1, k1, 90, lean=38, sit_back=True)
     for sd, d in (("L", 0.12), ("R", 0.42)):
@@ -741,10 +741,10 @@ def S22():
     f2 = (hx + Wh / 2 + 0.12, hy - Lh / 2 - 0.62)
     zs = max(P2.moor_height(M, f2[0] + ex, f2[1] + ey) for ex in (-0.2, 0, 0.2) for ey in (-0.3, 0, 0.3)) + 0.01
     palms = {"L": tuple(pole(1, 0.12) - Vector((0.03, 0, zs + 0.035))), "R": tuple(pole(1, 0.4) - Vector((-0.03, 0, zs + 0.035)))}
-    st2 = AC.Lean(m2, f2, 90, palms, lean=42)
+    st2 = AC.Lean(m2, f2, 90, palms, lean=68)
     st2.finish(look=tuple(pole(1, 1.3) - Vector((0, 0, zs))), density=HAIR)
     G.lift(st2, zs)
-    return dict(a=((x0 + 1.9, y0 - 3.9, z0 + 2.1), (x0, y0 + 1.4, z0 + 0.3)), b=((x0 + 1.6, y0 - 3.2, z0 + 1.95), (x0, y0 + 1.4, z0 + 0.3)),
+    return dict(a=((x0 + 1.4, y0 - 5.8, z0 + 0.95), (x0, y0 + 3.0, z0 + 0.75)), b=((x0 + 1.2, y0 - 4.9, z0 + 0.9), (x0, y0 + 3.0, z0 + 0.75)),
                 lens=35, fstop=4.0, focus=(x0, y0 + 0.3, z0 + 0.6), cine=dict(exposure=0.3), hand_ok=("moor", "hurdle", "bundle", "belt"))
 
 
