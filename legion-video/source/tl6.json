@@ -1,0 +1,1157 @@
+{
+"duration": 630.496,
+"shots": [
+{
+"shot": "station_wide",
+"text": "It is May, nineteen eighteen.",
+"start": 0.0,
+"vs": 0.48,
+"ve": 1.837,
+"end": 1.707
+},
+{
+"shot": "train_pass",
+"text": "At a railway station in Russia, a train carrying former prisoners of war passes a group of Czech and Slovak soldiers.",
+"start": 1.707,
+"vs": 1.957,
+"ve": 9.605,
+"end": 9.655
+},
+{
+"shot": "iron_throw",
+"text": "Someone throws a piece of iron from a carriage.",
+"start": 9.655,
+"vs": 9.905,
+"ve": 12.221,
+"end": 12.091
+},
+{
+"shot": "legionary_hit",
+"text": "It strikes a legionary, seriously injuring him.",
+"start": 12.091,
+"vs": 12.341,
+"ve": 14.994,
+"end": 14.864
+},
+{
+"shot": "stop_train",
+"text": "His comrades stop the train, find the man they believe responsible, and kill him.",
+"start": 14.864,
+"vs": 15.114,
+"ve": 19.952,
+"end": 20.002
+},
+{
+"shot": "arrest",
+"text": "Local Bolshevik authorities arrest several of the soldiers.",
+"start": 20.002,
+"vs": 20.252,
+"ve": 23.632,
+"end": 23.502
+},
+{
+"shot": "free_force",
+"text": "Their comrades respond by freeing them by force.",
+"start": 23.502,
+"vs": 23.752,
+"ve": 26.327,
+"end": 26.377
+},
+{
+"shot": "rail_battle",
+"text": "Within weeks, fighting spreads along thousands of kilometres of railway.",
+"start": 26.377,
+"vs": 26.627,
+"ve": 30.758,
+"end": 30.808
+},
+{
+"shot": "legion_closeup",
+"text": "The soldiers at the centre of it belong to the Czechoslovak Legion.",
+"start": 30.808,
+"vs": 31.058,
+"ve": 34.779,
+"end": 34.649
+},
+{
+"shot": "train_east:steppe",
+"text": "They are trying to cross Russia, and leave the country.",
+"start": 34.649,
+"vs": 34.899,
+"ve": 37.433,
+"end": 37.303
+},
+{
+"shot": "rail_battle:city",
+"text": "Instead, they will capture cities, and help transform the Russian Civil War.",
+"start": 37.303,
+"vs": 37.553,
+"ve": 41.862,
+"end": 41.912
+},
+{
+"shot": "legion_closeup:2",
+"text": "Their own country... does not yet exist.",
+"start": 41.912,
+"vs": 42.162,
+"ve": 44.258,
+"end": 44.308
+},
+{
+"shot": "graves_far",
+"text": "And when it finally does, many of them will still be stranded, on the other side of the world.",
+"start": 44.308,
+"vs": 44.558,
+"ve": 49.638,
+"end": 49.688
+},
+{
+"shot": "mobilize",
+"text": "Four years earlier, these men had no national army to join.",
+"start": 49.688,
+"vs": 49.938,
+"ve": 53.494,
+"end": 53.544
+},
+{
+"shot": "empire",
+"text": "The Czech lands belonged to the Austrian half of Austria-Hungary.",
+"start": 53.544,
+"vs": 53.794,
+"ve": 57.341,
+"end": 57.211
+},
+{
+"shot": "empire:2",
+"text": "Slovakia was governed within the Hungarian half.",
+"start": 57.211,
+"vs": 57.461,
+"ve": 59.992,
+"end": 59.862
+},
+{
+"shot": "mobilize:2",
+"text": "Their inhabitants were subjects of the Habsburg monarchy, and when the First World War began, many were called upon to fight for it.",
+"start": 59.862,
+"vs": 60.112,
+"ve": 67.476,
+"end": 67.526
+},
+{
+"shot": "exiles",
+"text": "But among Czechs and Slovaks abroad, some saw an opportunity.",
+"start": 67.526,
+"vs": 67.776,
+"ve": 71.419,
+"end": 71.469
+},
+{
+"shot": "exiles:2",
+"text": "If Austria-Hungary lost the war, its rulers might lose their grip on the peoples living beneath them.",
+"start": 71.469,
+"vs": 71.719,
+"ve": 77.723,
+"end": 77.593
+},
+{
+"shot": "diplomats",
+"text": "Independence could become possible, provided the victorious powers supported it.",
+"start": 77.593,
+"vs": 77.843,
+"ve": 82.374,
+"end": 82.424
+},
+{
+"shot": "legion_closeup:3",
+"text": "That support would have to be earned.",
+"start": 82.424,
+"vs": 82.674,
+"ve": 84.104,
+"end": 84.154
+},
+{
+"shot": "volunteers",
+"text": "In Russia, Czech emigrants volunteered to fight against Austria-Hungary.",
+"start": 84.154,
+"vs": 84.404,
+"ve": 88.431,
+"end": 88.301
+},
+{
+"shot": "recon",
+"text": "Their small formation initially served largely in reconnaissance, gathering intelligence and operating near enemy positions.",
+"start": 88.301,
+"vs": 88.551,
+"ve": 96.395,
+"end": 96.445
+},
+{
+"shot": "pow_camp",
+"text": "Recruiting from captured Austro-Hungarian soldiers gradually expanded its ranks.",
+"start": 96.445,
+"vs": 96.695,
+"ve": 101.601,
+"end": 101.651
+},
+{
+"shot": "pow_closeup",
+"text": "A prisoner could now volunteer to fight against the empire whose uniform he had worn.",
+"start": 101.651,
+"vs": 101.901,
+"ve": 107.053,
+"end": 106.923
+},
+{
+"shot": "pow_camp:2",
+"text": "It offered a way out of captivity, but also a dangerous commitment.",
+"start": 106.923,
+"vs": 107.173,
+"ve": 111.228,
+"end": 111.098
+},
+{
+"shot": "tribunal",
+"text": "Austria-Hungary regarded its citizens serving the enemy as traitors.",
+"start": 111.098,
+"vs": 111.348,
+"ve": 115.451,
+"end": 115.321
+},
+{
+"shot": "tribunal:2",
+"text": "Capture could mean execution.",
+"start": 115.321,
+"vs": 115.571,
+"ve": 117.043,
+"end": 117.093
+},
+{
+"shot": "masaryk",
+"text": "Meanwhile, independence leaders worked to turn military service into political influence.",
+"start": 117.093,
+"vs": 117.343,
+"ve": 122.665,
+"end": 122.715
+},
+{
+"shot": "masaryk:2",
+"text": "Tomash Masaryk and his colleagues needed the Allies to see Czechs and Slovaks as partners capable of building a state.",
+"start": 122.715,
+"vs": 122.965,
+"ve": 130.078,
+"end": 129.948
+},
+{
+"shot": "corps_parade",
+"text": "An army fighting on their side gave that argument substance.",
+"start": 129.948,
+"vs": 130.198,
+"ve": 133.587,
+"end": 133.637
+},
+{
+"shot": "diplomats:2",
+"text": "Every successful action offered evidence that their movement could contribute to victory.",
+"start": 133.637,
+"vs": 133.887,
+"ve": 138.789,
+"end": 138.839
+},
+{
+"shot": "army_collapse",
+"text": "But in nineteen seventeen, the Russian army around them began falling apart.",
+"start": 138.839,
+"vs": 139.089,
+"ve": 143.733,
+"end": 143.783
+},
+{
+"shot": "tsar_fall",
+"text": "The tsar abdicated.",
+"start": 143.783,
+"vs": 144.033,
+"ve": 145.196,
+"end": 145.066
+},
+{
+"shot": "army_collapse:2",
+"text": "Years of casualties, shortages, and frustration had undermined military discipline.",
+"start": 145.066,
+"vs": 145.316,
+"ve": 150.485,
+"end": 150.355
+},
+{
+"shot": "revolution:grey",
+"text": "Russia's new provisional government continued the war, even as increasing numbers of soldiers wanted it ended.",
+"start": 150.355,
+"vs": 150.605,
+"ve": 157.603,
+"end": 157.653
+},
+{
+"shot": "legion_closeup:4",
+"text": "That summer, the Czechoslovak brigade received an opportunity to prove itself.",
+"start": 157.653,
+"vs": 157.903,
+"ve": 162.38,
+"end": 162.43
+},
+{
+"shot": "zborov",
+"text": "On July the second, at Zuh-borov, its troops broke through Austro-Hungarian positions,",
+"start": 162.43,
+"vs": 162.68,
+"ve": 168.236,
+"end": 168.106
+},
+{
+"shot": "prisoners_march",
+"text": "and captured thousands of prisoners.",
+"start": 168.106,
+"vs": 168.356,
+"ve": 170.129,
+"end": 170.179
+},
+{
+"shot": "army_collapse:3",
+"text": "The wider Russian offensive failed.",
+"start": 170.179,
+"vs": 170.429,
+"ve": 172.109,
+"end": 171.979
+},
+{
+"shot": "volunteers:2",
+"text": "The brigade's success nevertheless attracted attention, and helped open the way for further recruitment.",
+"start": 171.979,
+"vs": 172.229,
+"ve": 178.21,
+"end": 178.26
+},
+{
+"shot": "corps_parade:2",
+"text": "The force expanded into an army corps.",
+"start": 178.26,
+"vs": 178.51,
+"ve": 180.502,
+"end": 180.372
+},
+{
+"shot": "corps_parade:3",
+"text": "By the end of nineteen seventeen, it numbered nearly forty thousand volunteers.",
+"start": 180.372,
+"vs": 180.622,
+"ve": 185.598,
+"end": 185.648
+},
+{
+"shot": "legion_closeup:5",
+"text": "Its leaders now possessed the military force they had wanted.",
+"start": 185.648,
+"vs": 185.898,
+"ve": 189.1,
+"end": 189.15
+},
+{
+"shot": "trench_empty",
+"text": "But they were about to lose the front on which it was supposed to fight.",
+"start": 189.15,
+"vs": 189.4,
+"ve": 192.903,
+"end": 192.953
+},
+{
+"shot": "revolution",
+"text": "The Bolsheviks seized power later that year, and moved to withdraw Russia from the war.",
+"start": 192.953,
+"vs": 193.203,
+"ve": 198.146,
+"end": 198.196
+},
+{
+"shot": "legion_closeup:6",
+"text": "For the legionaries, peace between Russia and Germany solved nothing.",
+"start": 198.196,
+"vs": 198.446,
+"ve": 202.191,
+"end": 202.061
+},
+{
+"shot": "empire:3",
+"text": "Austria-Hungary still existed.",
+"start": 202.061,
+"vs": 202.311,
+"ve": 203.918,
+"end": 203.788
+},
+{
+"shot": "exiles:3",
+"text": "Independence remained uncertain.",
+"start": 203.788,
+"vs": 204.038,
+"ve": 205.774,
+"end": 205.644
+},
+{
+"shot": "corps_parade:4",
+"text": "Their military usefulness depended on continuing the struggle alongside the Allies.",
+"start": 205.644,
+"vs": 205.894,
+"ve": 210.868,
+"end": 210.918
+},
+{
+"shot": "ship_sea:day",
+"text": "France offered a destination.",
+"start": 210.918,
+"vs": 211.168,
+"ve": 212.652,
+"end": 212.702
+},
+{
+"shot": "legion_closeup:7",
+"text": "Getting there was the problem.",
+"start": 212.702,
+"vs": 212.952,
+"ve": 214.192,
+"end": 214.242
+},
+{
+"shot": "trench_empty:2",
+"text": "Moving west meant confronting territory controlled by the Central Powers.",
+"start": 214.242,
+"vs": 214.492,
+"ve": 218.986,
+"end": 218.856
+},
+{
+"shot": "train_east:taiga",
+"text": "Instead, the proposed route ran east, across Russia, to the Pacific port of Vladivostok.",
+"start": 218.856,
+"vs": 219.106,
+"ve": 224.748,
+"end": 224.618
+},
+{
+"shot": "vladivostok",
+"text": "From there, ships could transport the troops onward toward France.",
+"start": 224.618,
+"vs": 224.868,
+"ve": 228.255,
+"end": 228.305
+},
+{
+"shot": "train_east:snow",
+"text": "The journey required moving an entire army across a country sliding into civil war.",
+"start": 228.305,
+"vs": 228.555,
+"ve": 233.785,
+"end": 233.835
+},
+{
+"shot": "kuitun",
+"text": "For the moment, an agreement made that seem possible.",
+"start": 233.835,
+"vs": 234.085,
+"ve": 236.89,
+"end": 236.94
+},
+{
+"shot": "rifles_surrender",
+"text": "The legionaries would leave, surrendering most of their weapons while retaining a limited armed guard.",
+"start": 236.94,
+"vs": 237.19,
+"ve": 243.117,
+"end": 243.167
+},
+{
+"shot": "kuitun:2",
+"text": "But the agreement rested on trust that neither side possessed.",
+"start": 243.167,
+"vs": 243.417,
+"ve": 246.628,
+"end": 246.678
+},
+{
+"shot": "arrest:2",
+"text": "Bolshevik authorities feared an armed force connected to the Allies travelling through their territory.",
+"start": 246.678,
+"vs": 246.928,
+"ve": 252.8,
+"end": 252.67
+},
+{
+"shot": "boxcar",
+"text": "The legionaries feared becoming helpless, if local authorities stopped honouring their passage.",
+"start": 252.67,
+"vs": 252.92,
+"ve": 258.332,
+"end": 258.382
+},
+{
+"shot": "hidden_weapons",
+"text": "Weapons were concealed aboard their trains.",
+"start": 258.382,
+"vs": 258.632,
+"ve": 260.69,
+"end": 260.74
+},
+{
+"shot": "train_east:steppe2",
+"text": "They began moving east, but slowly.",
+"start": 260.74,
+"vs": 260.99,
+"ve": 262.77,
+"end": 262.64
+},
+{
+"shot": "station_wide:2",
+"text": "Their units became separated across vast distances.",
+"start": 262.64,
+"vs": 262.89,
+"ve": 265.956,
+"end": 265.826
+},
+{
+"shot": "winter_sentry",
+"text": "Each delay left individual groups vulnerable, uncertain when the next train, or the next order, would arrive.",
+"start": 265.826,
+"vs": 266.076,
+"ve": 272.715,
+"end": 272.765
+},
+{
+"shot": "station_wide:3",
+"text": "Then came the violence at Chelyabinsk.",
+"start": 272.765,
+"vs": 273.015,
+"ve": 274.975,
+"end": 275.025
+},
+{
+"shot": "legion_closeup:8",
+"text": "The confrontation did not create the distrust.",
+"start": 275.025,
+"vs": 275.275,
+"ve": 277.737,
+"end": 277.607
+},
+{
+"shot": "free_force:2",
+"text": "It turned that distrust into armed resistance.",
+"start": 277.607,
+"vs": 277.857,
+"ve": 280.269,
+"end": 280.319
+},
+{
+"shot": "rifles_surrender:2",
+"text": "Orders for disarmament collided with the legionaries' determination to keep their weapons, and continue travelling.",
+"start": 280.319,
+"vs": 280.569,
+"ve": 287.232,
+"end": 287.102
+},
+{
+"shot": "rail_battle:2",
+"text": "Local clashes developed into a wider struggle.",
+"start": 287.102,
+"vs": 287.352,
+"ve": 289.947,
+"end": 289.997
+},
+{
+"shot": "train_east:steppe3",
+"text": "Being scattered across Russia initially looked like a disaster.",
+"start": 289.997,
+"vs": 290.247,
+"ve": 293.631,
+"end": 293.501
+},
+{
+"shot": "station_wide:4",
+"text": "No single position contained the whole Legion.",
+"start": 293.501,
+"vs": 293.751,
+"ve": 296.305,
+"end": 296.175
+},
+{
+"shot": "rail_battle:3",
+"text": "Units could be isolated and attacked separately.",
+"start": 296.175,
+"vs": 296.425,
+"ve": 298.932,
+"end": 298.982
+},
+{
+"shot": "junction",
+"text": "Yet that same dispersal placed experienced soldiers near stations and junctions across an enormous railway network.",
+"start": 298.982,
+"vs": 299.232,
+"ve": 306.653,
+"end": 306.703
+},
+{
+"shot": "junction:2",
+"text": "They began taking those positions.",
+"start": 306.703,
+"vs": 306.953,
+"ve": 308.728,
+"end": 308.778
+},
+{
+"shot": "station_wide:5",
+"text": "To free a train, they needed a station.",
+"start": 308.778,
+"vs": 309.028,
+"ve": 310.887,
+"end": 310.757
+},
+{
+"shot": "junction:3",
+"text": "To protect the station, they needed the surrounding approaches.",
+"start": 310.757,
+"vs": 311.007,
+"ve": 314.293,
+"end": 314.163
+},
+{
+"shot": "bridge_guard",
+"text": "To reach another stranded unit, they needed the track between them.",
+"start": 314.163,
+"vs": 314.413,
+"ve": 317.916,
+"end": 317.966
+},
+{
+"shot": "rail_battle:4",
+"text": "Their escape route became a battlefield.",
+"start": 317.966,
+"vs": 318.216,
+"ve": 320.278,
+"end": 320.328
+},
+{
+"shot": "rail_battle:city2",
+"text": "By the summer, Legion forces had helped seize major centres along the railway.",
+"start": 320.328,
+"vs": 320.578,
+"ve": 324.99,
+"end": 324.86
+},
+{
+"shot": "revolution:white",
+"text": "Anti-Bolshevik groups benefited from their advances, and established themselves where Soviet authority had been driven out.",
+"start": 324.86,
+"vs": 325.11,
+"ve": 332.505,
+"end": 332.555
+},
+{
+"shot": "kuitun:3",
+"text": "A dispute over passage had become part of a struggle over who would govern Russia.",
+"start": 332.555,
+"vs": 332.805,
+"ve": 337.512,
+"end": 337.562
+},
+{
+"shot": "train_east:taiga2",
+"text": "The railway explains how a comparatively small foreign army could matter so much.",
+"start": 337.562,
+"vs": 337.812,
+"ve": 342.819,
+"end": 342.869
+},
+{
+"shot": "train_east:snow2",
+"text": "Siberia was enormous.",
+"start": 342.869,
+"vs": 343.119,
+"ve": 344.451,
+"end": 344.321
+},
+{
+"shot": "winter_sentry:2",
+"text": "Occupying every settlement across that territory was beyond the Legion's strength.",
+"start": 344.321,
+"vs": 344.571,
+"ve": 349.504,
+"end": 349.554
+},
+{
+"shot": "junction:4",
+"text": "But controlling junctions and stations allowed troops to move, supplies to travel, and separated formations to support one another.",
+"start": 349.554,
+"vs": 349.804,
+"ve": 357.928,
+"end": 357.978
+},
+{
+"shot": "train_pass:2",
+"text": "The trains carried the army's ability to keep fighting.",
+"start": 357.978,
+"vs": 358.228,
+"ve": 361.064,
+"end": 361.114
+},
+{
+"shot": "bridge_guard:2",
+"text": "Lose a locomotive, a bridge, or a stretch of track, and the distance to safety could suddenly become impossible to cross.",
+"start": 361.114,
+"vs": 361.364,
+"ve": 368.772,
+"end": 368.822
+},
+{
+"shot": "legion_closeup:9",
+"text": "This also explains why the legionaries could win battles without securing their departure.",
+"start": 368.822,
+"vs": 369.072,
+"ve": 374.453,
+"end": 374.503
+},
+{
+"shot": "junction:5",
+"text": "Every advance created another position to defend.",
+"start": 374.503,
+"vs": 374.753,
+"ve": 377.441,
+"end": 377.311
+},
+{
+"shot": "bridge_guard:3",
+"text": "Every connection restored became a route that could be cut again.",
+"start": 377.311,
+"vs": 377.561,
+"ve": 380.875,
+"end": 380.925
+},
+{
+"shot": "diplomats:3",
+"text": "Their military success attracted powerful people who wanted them to stay.",
+"start": 380.925,
+"vs": 381.175,
+"ve": 385.53,
+"end": 385.58
+},
+{
+"shot": "diplomats:4",
+"text": "Allied leaders saw a force capable of resisting the Bolsheviks, and potentially helping rebuild a front against Germany.",
+"start": 385.58,
+"vs": 385.83,
+"ve": 393.13,
+"end": 393.0
+},
+{
+"shot": "intervention",
+"text": "Assistance for the Legion became entangled with wider plans for intervention.",
+"start": 393.0,
+"vs": 393.25,
+"ve": 397.68,
+"end": 397.73
+},
+{
+"shot": "intervention:2",
+"text": "The men who wanted passage out of Russia were being treated as a reason to send other armies in.",
+"start": 397.73,
+"vs": 397.98,
+"ve": 403.59,
+"end": 403.64
+},
+{
+"shot": "masaryk:3",
+"text": "Meanwhile, their reputation travelled much faster than their trains.",
+"start": 403.64,
+"vs": 403.89,
+"ve": 407.599,
+"end": 407.649
+},
+{
+"shot": "diplomats:5",
+"text": "Abroad, the existence of Czechoslovak forces strengthened the independence movement's claim to represent a nation already contributing to the Allied war effort.",
+"start": 407.649,
+"vs": 407.899,
+"ve": 417.352,
+"end": 417.402
+},
+{
+"shot": "corps_parade:5",
+"text": "Diplomats could point to soldiers fighting under their movement's authority.",
+"start": 417.402,
+"vs": 417.652,
+"ve": 421.512,
+"end": 421.382
+},
+{
+"shot": "exiles:4",
+"text": "Their proposed country had an organised force before it possessed internationally established borders.",
+"start": 421.382,
+"vs": 421.632,
+"ve": 427.705,
+"end": 427.755
+},
+{
+"shot": "diplomats:6",
+"text": "During nineteen eighteen, Allied recognition of the Czechoslovak leadership advanced.",
+"start": 427.755,
+"vs": 428.005,
+"ve": 433.113,
+"end": 433.163
+},
+{
+"shot": "empire:4",
+"text": "Then Austria-Hungary began disintegrating.",
+"start": 433.163,
+"vs": 433.413,
+"ve": 435.827,
+"end": 435.877
+},
+{
+"shot": "prague",
+"text": "On October the twenty-eighth, independence was proclaimed in Prague.",
+"start": 435.877,
+"vs": 436.127,
+"ve": 439.997,
+"end": 440.047
+},
+{
+"shot": "prague:2",
+"text": "The political objective that had justified the Legion's existence had finally been achieved.",
+"start": 440.047,
+"vs": 440.297,
+"ve": 445.858,
+"end": 445.728
+},
+{
+"shot": "prague:3",
+"text": "Czechoslovakia was becoming a state.",
+"start": 445.728,
+"vs": 445.978,
+"ve": 447.965,
+"end": 448.015
+},
+{
+"shot": "graves",
+"text": "But that changed the meaning of every further casualty in Russia.",
+"start": 448.015,
+"vs": 448.265,
+"ve": 451.848,
+"end": 451.898
+},
+{
+"shot": "legion_closeup:10",
+"text": "The men now had a homeland to return to.",
+"start": 451.898,
+"vs": 452.148,
+"ve": 454.185,
+"end": 454.055
+},
+{
+"shot": "winter_sentry:3",
+"text": "Why should they continue dying so far away from it?",
+"start": 454.055,
+"vs": 454.305,
+"ve": 456.976,
+"end": 457.026
+},
+{
+"shot": "armistice",
+"text": "In November, the fighting on the Western Front ended.",
+"start": 457.026,
+"vs": 457.276,
+"ve": 460.006,
+"end": 460.056
+},
+{
+"shot": "train_east:snow3",
+"text": "The original plan, to cross Siberia and reach France before the world war was over, had been overtaken by events.",
+"start": 460.056,
+"vs": 460.306,
+"ve": 467.432,
+"end": 467.482
+},
+{
+"shot": "train_pass:3",
+"text": "Yet an armistice in Europe could not move a stranded train.",
+"start": 467.482,
+"vs": 467.732,
+"ve": 470.981,
+"end": 470.851
+},
+{
+"shot": "prague:4",
+"text": "Nor could a declaration in Prague remove the armed forces between the legionaries and Vladivostok.",
+"start": 470.851,
+"vs": 471.101,
+"ve": 477.225,
+"end": 477.275
+},
+{
+"shot": "rail_battle:5",
+"text": "They remained caught in Russia's struggle.",
+"start": 477.275,
+"vs": 477.525,
+"ve": 479.283,
+"end": 479.333
+},
+{
+"shot": "revolution:white2",
+"text": "Their anti-Bolshevik partners were divided.",
+"start": 479.333,
+"vs": 479.583,
+"ve": 481.929,
+"end": 481.799
+},
+{
+"shot": "intervention:3",
+"text": "Allied promises and military assistance failed to produce the decisive results some had expected.",
+"start": 481.799,
+"vs": 482.049,
+"ve": 488.115,
+"end": 487.985
+},
+{
+"shot": "army_collapse:4",
+"text": "Exhaustion and losses weakened the Legion's willingness to keep fighting.",
+"start": 487.985,
+"vs": 488.235,
+"ve": 492.111,
+"end": 492.161
+},
+{
+"shot": "bridge_guard:4",
+"text": "Its role increasingly shifted toward guarding the railway, and keeping traffic moving.",
+"start": 492.161,
+"vs": 492.411,
+"ve": 497.465,
+"end": 497.515
+},
+{
+"shot": "junction:6",
+"text": "That sounded less demanding than a major offensive.",
+"start": 497.515,
+"vs": 497.765,
+"ve": 500.625,
+"end": 500.495
+},
+{
+"shot": "winter_sentry:4",
+"text": "It still meant defending the narrow route on which their departure depended.",
+"start": 500.495,
+"vs": 500.745,
+"ve": 504.831,
+"end": 504.881
+},
+{
+"shot": "prague:5",
+"text": "By nineteen nineteen, the country they had helped bring into existence was beginning its own political and military life.",
+"start": 504.881,
+"vs": 505.131,
+"ve": 512.105,
+"end": 512.155
+},
+{
+"shot": "winter_sentry:5",
+"text": "Many of its celebrated soldiers remained abroad, protecting tracks through Siberia.",
+"start": 512.155,
+"vs": 512.405,
+"ve": 517.723,
+"end": 517.773
+},
+{
+"shot": "revolution:white3",
+"text": "As the anti-Bolshevik armies suffered defeat, departure became more urgent.",
+"start": 517.773,
+"vs": 518.023,
+"ve": 522.887,
+"end": 522.937
+},
+{
+"shot": "legion_closeup:11",
+"text": "Remaining in Russia meant risking further entanglement in a cause increasingly distant from their own.",
+"start": 522.937,
+"vs": 523.187,
+"ve": 529.22,
+"end": 529.27
+},
+{
+"shot": "train_east:snow4",
+"text": "The Legion needed arrangements that would allow its remaining formations to reach the coast.",
+"start": 529.27,
+"vs": 529.52,
+"ve": 534.621,
+"end": 534.671
+},
+{
+"shot": "kuitun:4",
+"text": "In February, nineteen twenty, an agreement with Soviet authorities at Kooy-toon helped clear the way for their evacuation.",
+"start": 534.671,
+"vs": 534.921,
+"ve": 542.576,
+"end": 542.626
+},
+{
+"shot": "train_east:dawn",
+"text": "After years of changing commands, broken expectations, and fighting, the journey could finally move toward its end.",
+"start": 542.626,
+"vs": 542.876,
+"ve": 550.017,
+"end": 550.067
+},
+{
+"shot": "vladivostok:2",
+"text": "But reaching the ocean was only the last stage of their Russian ordeal.",
+"start": 550.067,
+"vs": 550.317,
+"ve": 554.326,
+"end": 554.376
+},
+{
+"shot": "evac_port",
+"text": "Ships still had to carry them home.",
+"start": 554.376,
+"vs": 554.626,
+"ve": 556.209,
+"end": 556.259
+},
+{
+"shot": "evac_port:2",
+"text": "Evacuation transports took soldiers and accompanying civilians out through Vladivostok.",
+"start": 556.259,
+"vs": 556.509,
+"ve": 562.084,
+"end": 561.954
+},
+{
+"shot": "ship_sea:dusk",
+"text": "The final legionary transport left in September, nineteen twenty, almost two years after Czechoslovakia declared independence.",
+"start": 561.954,
+"vs": 562.204,
+"ve": 570.594,
+"end": 570.644
+},
+{
+"shot": "ship_sea:night",
+"text": "Some men died, even during the sea journey.",
+"start": 570.644,
+"vs": 570.894,
+"ve": 573.244,
+"end": 573.114
+},
+{
+"shot": "graves:2",
+"text": "Their graves joined those scattered along the routes the Legion had travelled.",
+"start": 573.114,
+"vs": 573.364,
+"ve": 577.234,
+"end": 577.284
+},
+{
+"shot": "homecoming",
+"text": "The last evacuation transport reached Czechoslovak territory in November.",
+"start": 577.284,
+"vs": 577.534,
+"ve": 582.169,
+"end": 582.219
+},
+{
+"shot": "legion_closeup:12",
+"text": "The distance between independence and homecoming had been measured in years.",
+"start": 582.219,
+"vs": 582.469,
+"ve": 586.613,
+"end": 586.663
+},
+{
+"shot": "corps_parade:6",
+"text": "The Legion's story is often remembered through its victories:",
+"start": 586.663,
+"vs": 586.913,
+"ve": 590.133,
+"end": 590.003
+},
+{
+"shot": "pow_closeup:2",
+"text": "prisoners becoming soldiers,",
+"start": 590.003,
+"vs": 590.253,
+"ve": 591.784,
+"end": 591.654
+},
+{
+"shot": "rail_battle:city3",
+"text": "soldiers capturing cities,",
+"start": 591.654,
+"vs": 591.904,
+"ve": 593.364,
+"end": 593.234
+},
+{
+"shot": "train_east:snow5",
+"text": "and an army surviving a journey across Russia.",
+"start": 593.234,
+"vs": 593.484,
+"ve": 595.91,
+"end": 595.96
+},
+{
+"shot": "intervention:4",
+"text": "But those victories carried a strange consequence.",
+"start": 595.96,
+"vs": 596.21,
+"ve": 598.771,
+"end": 598.641
+},
+{
+"shot": "bridge_guard:5",
+"text": "The more useful the Legion became to other powers, the harder it became for its men to leave.",
+"start": 598.641,
+"vs": 598.891,
+"ve": 604.293,
+"end": 604.343
+},
+{
+"shot": "zborov:2",
+"text": "They had joined a war to help secure independence.",
+"start": 604.343,
+"vs": 604.593,
+"ve": 607.241,
+"end": 607.291
+},
+{
+"shot": "rail_battle:6",
+"text": "They had crossed into another war while trying to continue the first.",
+"start": 607.291,
+"vs": 607.541,
+"ve": 611.069,
+"end": 611.119
+},
+{
+"shot": "ship_sea:dusk2",
+"text": "And after their country finally appeared on the map, they still had to negotiate and fight for the chance to reach it.",
+"start": 611.119,
+"vs": 611.369,
+"ve": 617.639,
+"end": 617.689
+},
+{
+"shot": "homecoming:2",
+"text": "When the survivors returned, Czechoslovakia was no longer a political promise made by exiles abroad.",
+"start": 617.689,
+"vs": 617.939,
+"ve": 624.414,
+"end": 624.464
+},
+{
+"shot": "homecoming:3",
+"text": "It was the place where they could finally step off the train.",
+"start": 624.464,
+"vs": 624.714,
+"ve": 627.696,
+"end": 630.496
+}
+]
+}
