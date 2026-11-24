@@ -252,7 +252,7 @@ def S11():
     o = _single("d75c134c72a5408a9b66bd04170da311", name="animalburial")
     co = _level(o)
     ext = co.max(0) - co.min(0)
-    s_ = 2.2 / max(ext[0], ext[1]); o.scale = (s_, s_, s_)
+    s_ = 2.2 / max(ext[0], ext[1]); o.scale = (s_, s_, s_); o.rotation_euler.z = math.radians(-14)      # square to the frame
     rr = np.maximum(np.abs(co[:, 0]) / (ext[0] / 2), np.abs(co[:, 1]) / (ext[1] / 2))
     zc = float(np.percentile(co[:, 2], 2)) * s_ - 0.02        # a floor under everything (only seen past the scan's edge)
     zs = float(np.percentile(co[np.abs(co[:, 0]) < ext[0] * 0.25, 2], 50)) * s_      # the burial itself
@@ -264,9 +264,9 @@ def S11():
             mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
             Lk.new(src, mx.inputs[6]); mx.inputs[7].default_value = (1.6, 1.25, 0.8, 1); Lk.new(mx.outputs[2], p[0].inputs['Base Color'])
     # the surrounding trench floor, the scan edges sink into it
-    sand = ph.texture("dense_sand", scale=1.2, name="trenchsand", tint=(0.55, 0.48, 0.4))
+    sand = ph.texture("dense_sand", scale=1.2, name="trenchsand", tint=(0.36, 0.34, 0.31))
     bpy.ops.mesh.primitive_plane_add(size=12, location=(0, 0, zc)); g = bpy.context.active_object; g.data.materials.append(sand)
-    return dict(a=((0.08, -0.3, zs + 1.9), (0.0, 0.0, zs)), b=((-0.08, 0.12, zs + 1.65), (0.0, 0.05, zs)), lens=30,
+    return dict(a=((0.08, -0.3, zs + 1.9), (0.0, 0.0, zs)), b=((-0.08, 0.12, zs + 1.65), (0.0, 0.05, zs)), lens=38,
                 fstop=8.0, focus=(0, 0, zs), cine=dict(exposure=0.1))
 
 
