@@ -152,7 +152,7 @@ def S08():
     cs = _three_parts(lit=False)
     c = cs[0]
     _spot((c.x + 0.55, c.y + 0.05, c.z + 0.08), tuple(c), 60, size=0.02, color=(1.0, 0.86, 0.7), spot=12)
-    return dict(a=((c.x + 0.05, c.y - 0.34, c.z + 0.03), tuple(c)), b=((c.x - 0.05, c.y - 0.33, c.z + 0.04), tuple(c)), lens=85,
+    return dict(a=((c.x + 0.22, c.y - 0.62, c.z + 0.06), tuple(c)), b=((c.x + 0.12, c.y - 0.64, c.z + 0.07), tuple(c)), lens=70,
                 fstop=4.0, focus=tuple(c), cine=dict(exposure=-0.1))
 
 
