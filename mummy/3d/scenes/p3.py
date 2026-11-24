@@ -648,7 +648,9 @@ def S23():
     k = o["knee"]
     # three-quarter over the right shoulder: the trowel at work in the pit, the house rings beyond
     fl = float(G.H(k.x, k.y)); kf = Vector((k.x, k.y, fl))            # the trench floor the digger kneels on
-    return dict(a=(tuple(kf + Vector((1.35, -2.0, 2.05))), tuple(kf + Vector((-0.05, 0.15, 0)))), b=(tuple(kf + Vector((1.2, -1.8, 1.95))), tuple(kf + Vector((0, 0.1, 0)))), lens=35,
+    # beside his right shoulder, a little behind the head line: down past the shoulder and trowel arm into the pit
+    # (his hips and legs stay behind the camera)
+    return dict(a=(tuple(kf + Vector((0.62, -0.92, 1.32))), tuple(kf + Vector((0.02, -0.15, 0)))), b=(tuple(kf + Vector((0.55, -0.85, 1.25))), tuple(kf + Vector((0.02, -0.1, 0)))), lens=28,
                 fstop=4.0, focus=tuple(k), hand_ok=p1.OK)
 
 
