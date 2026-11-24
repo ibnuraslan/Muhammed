@@ -34,7 +34,7 @@ floor_m.node_tree.nodes["Principled BSDF"].inputs['Coat Weight'].default_value =
 ceil_m = S.flat("ceiling", (0.85, 0.85, 0.83), 0.8)
 wall_m = S.flat("front_wall", tuple(float(x) for x in E("WALLC", "0.05,0.2,0.48").split(",")), 0.7)
 door_steel = S.brushed("vault_steel", (0.8, 0.8, 0.8), rough=0.18)
-door_paint = S.steel_paint("vault_paint", (0.55, 0.57, 0.58), rough=0.3, wear=0.1)
+door_paint = S.steel_paint("vault_paint", (0.32, 0.34, 0.36), rough=0.3, wear=0.1)
 glow = S.emit("tube", (1.0, 0.88, 0.7), float(E("TUBE", "12")))
 
 # ---------------------------------------------------------------- the hall: floor, ceiling, light strips
@@ -104,7 +104,8 @@ bpy.ops.mesh.primitive_torus_add(major_radius=R_DOOR + 0.12, minor_radius=0.08, 
 tr = bpy.context.active_object; tr.name = "face_ring"; tr.scale = (1, 1, 0.5); tr.data.materials.append(door_steel)
 # floor outside (where the camera stands) and a sill across the opening
 S.box("ante_floor", (0, -WALLT - 4, -0.05), (14, 8, 0.1), floor_m)
-S.box("ante_ceiling", (0, -WALLT - 4, HZ + 1.8), (14, 8, 0.1), ceil_m)
+if False:
+    S.box("ante_ceiling", (0, -WALLT - 4, HZ + 1.8), (14, 8, 0.1), ceil_m)
 
 # ---------------------------------------------------------------- the round door, swung wide open toward camera
 TH = float(E("DOORT", "0.7"))
@@ -157,30 +158,6 @@ for dz in (-0.55, 0.55):
     S.box("hinge_arm", (HX - 0.25, -WALLT - 0.3, DZ + dz), (0.5, 0.18, 0.18), door_steel, bevel=0.02)
     part_ = None
 
-# ---------------------------------------------------------------- the tiny figure with a torch, from behind
-FY = float(E("FIG_Y", "11"))
-dark = S.flat("clothes", (0.03, 0.03, 0.035), 0.7)
-skin_hair = S.flat("hair", (0.02, 0.015, 0.012), 0.6)
-fig = bpy.data.objects.new("figure", None); col.objects.link(fig)
-def fp(o):
-    o.parent = fig; return o
-fp(SH.cyl("legL", (-0.09, 0, 0.0), (-0.1, 0, 0.88), 0.075, 0.085, mat=dark, verts=16))
-fp(SH.cyl("legR", (0.09, 0.04, 0.0), (0.1, 0, 0.88), 0.075, 0.085, mat=dark, verts=16))
-fp(SH.cyl("torso", (0, 0, 0.85), (0, 0, 1.45), 0.17, 0.2, mat=dark, verts=20))
-bpy.ops.mesh.primitive_uv_sphere_add(radius=0.115, location=(0, 0, 1.6)); h_ = bpy.context.active_object
-h_.data.materials.append(skin_hair); h_.scale = (0.9, 1.0, 1.1); fp(h_)
-fp(SH.cyl("armL", (-0.22, 0, 1.42), (-0.25, 0.02, 0.85), 0.05, mat=dark, verts=12))
-fp(SH.cyl("armR", (0.22, 0, 1.42), (0.28, -0.15 + 0.4, 1.1), 0.05, mat=dark, verts=12))   # torch arm raised forward
-fp(SH.cyl("torch", (0.28, 0.25, 1.1), (0.29, 0.42, 1.12), 0.025, mat=dark, verts=12))
-fig.location = (float(E("FIG_X", "0.15")), FY, 0)
-sp = bpy.data.lights.new("torch", 'SPOT'); sp.energy = float(E("TORCH_E", "150")); sp.spot_size = math.radians(30)
-sp.spot_blend = 0.5; sp.color = (1.0, 0.92, 0.75); sp.shadow_soft_size = 0.02
-so_ = bpy.data.objects.new("torch_l", sp); col.objects.link(so_)
-so_.location = fig.location + Vector((0.29, 0.45, 1.12))
-so_.rotation_euler = (Vector((0.6, 4.0, -1.0))).to_track_quat('-Z', 'Y').to_euler()
-bpy.ops.mesh.primitive_uv_sphere_add(radius=0.03, location=so_.location); bulb = bpy.context.active_object
-bulb.data.materials.append(S.emit("torch_glow", (1.0, 0.9, 0.7), 60))
-
 # ---------------------------------------------------------------- one diamond glinting in the foreground
 gem = PR.brilliant("hero_gem", float(E("GEM_D", "0.085")))
 GP = Vector((float(E("GEM_X", "-0.1")), float(E("GEM_Y", "-2.75")), 0.0))
@@ -192,17 +169,96 @@ for c_ in list(gem.users_collection):
     c_.objects.unlink(gem)
 gc.objects.link(gem); go.light_linking.receiver_collection = gc; go.visible_diffuse = False
 
-# ---------------------------------------------------------------- light: bright hall, soft daylight-white outside
-S.light_area("hall_fill", (0, HL * 0.3, HZ - 0.2), (0, HL * 0.3, 0), 2.0, float(E("HALL_E", "800")), color=(1, 0.85, 0.62),
-             size_y=HL * 0.5)
-S.light_area("ante_key", (-2.5, -5.0, 3.0), (0, -WALLT, 1.2), 4.0, float(E("KEY_E", "420")), color=(1.0, 0.96, 0.9))
-S.light_area("ante_fill", (2.5, -5.5, 2.0), (0, -WALLT, 1.0), 4.0, float(E("FILL_E", "220")), color=(0.92, 0.96, 1.0))
-S.world((0.8, 0.82, 0.85), float(E("WORLD", "0.25")))
+# ---------------------------------------------------------------- a real wall: thick concrete with relief
+import ph
+WT = E("WALLTEX", "concrete_wall_008")
+conc = S.tex(WT, 1.0, tint=tuple(float(x) for x in E("WALLTINT", "0.62,0.6,0.56").split(",")), name="vault_concrete")
+fw.data.materials.clear(); fw.data.materials.append(conc)
+fj = ph._files(WT)
+dinfo = fj["Displacement"]["2k"].get("png") or fj["Displacement"]["2k"].get("jpg")
+dpath = ph._get(dinfo["url"], os.path.join(ph.ROOT, WT, os.path.basename(dinfo["url"])))
+W_, H_ = 12.0, HZ + 3.0
+bpy.ops.mesh.primitive_grid_add(x_subdivisions=int(E("RGX", "480")), y_subdivisions=int(E("RGY", "240")), size=1,
+                                location=(0, -WALLT - 0.005, H_ / 2 - 0.05), rotation=(math.pi / 2, 0, 0))
+skin = bpy.context.active_object; skin.name = "wall_skin"; skin.scale = (W_, H_, 1)
+bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
+bm = bmesh.new(); bm.from_mesh(skin.data)
+cz = DZ - (H_ / 2 - 0.05)
+bmesh.ops.delete(bm, geom=[v for v in bm.verts if math.hypot(v.co.x, v.co.z - cz) < R_DOOR + 0.1], context='VERTS')
+bm.to_mesh(skin.data); bm.free()
+for pl in skin.data.polygons:
+    pl.use_smooth = True
+TILE = 2.5
+uvl = skin.data.uv_layers.new(name="UVMap")
+for lp in skin.data.loops:
+    co_ = skin.data.vertices[lp.vertex_index].co
+    uvl.data[lp.index].uv = (co_.x / TILE, co_.z / TILE)
+dt = bpy.data.textures.new("wall_disp", 'IMAGE'); dt.image = bpy.data.images.load(dpath); dt.image.colorspace_settings.name = 'Non-Color'
+dm = skin.modifiers.new("disp", "DISPLACE"); dm.texture = dt; dm.texture_coords = 'UV'; dm.direction = 'Y'
+dm.strength = -float(E("RELIEF", "0.05")); dm.mid_level = 0.0
+# the skin samples the colour maps with the same UVs as the height map
+skin_m = conc.copy(); skin_m.name = "vault_concrete_skin"; NN = skin_m.node_tree.nodes
+uvn = NN.new("ShaderNodeUVMap"); mp_ = NN["Mapping"]; mp_.inputs['Scale'].default_value = (1, 1, 1)
+skin_m.node_tree.links.new(uvn.outputs['UV'], mp_.inputs['Vector'])
+for n_ in NN:
+    if n_.type == 'TEX_IMAGE':
+        n_.projection = 'FLAT'
+skin.data.materials.append(skin_m)
+# poured-concrete pilasters either side and a steel lintel band: weight and depth
+for sx in (-1, 1):
+    S.box("pilaster", (sx * (R_DOOR + 1.0), -WALLT - 0.18, (HZ + 1.6) / 2), (0.55, 0.36, HZ + 1.6), conc, bevel=0.02)
+S.box("lintel", (0, -WALLT - 0.12, DZ + R_DOOR + 0.55), (2 * R_DOOR + 2.6, 0.24, 0.35), door_steel, bevel=0.01)
+# side walls and ceiling of the basement corridor outside the vault
+for sx in (-1, 1):
+    S.box("side_wall", (sx * 5.0, -WALLT - 4, (HZ + 1.6) / 2), (0.2, 8, HZ + 1.6), conc)
+S.box("ante_ceiling2", (0, -WALLT - 4, HZ + 1.65), (10.4, 8, 0.1), conc)
+cfloor = S.tex(E("FLOORTEX", "concrete_floor_worn_001"), 0.8, tint=(0.8, 0.78, 0.74), name="corridor_floor")
+cfloor.node_tree.nodes["Principled BSDF"].inputs['Coat Weight'].default_value = 0.25
+bpy.data.objects["ante_floor"].data.materials.clear(); bpy.data.objects["ante_floor"].data.materials.append(cfloor)
+
+# ---------------------------------------------------------------- the crew: five men crouching out with the loot
+import crew
+cloth = S.flat("crew_black", (0.008, 0.008, 0.009), 0.92)
+_pc = cloth.node_tree.nodes["Principled BSDF"]; _pc.inputs['Specular IOR Level'].default_value = 0.15
+_pc.inputs['Sheen Weight'].default_value = 0.6; _pc.inputs['Sheen Roughness'].default_value = 0.4
+nylon = (0.02, 0.02, 0.025)
+CREW = [  # x, y, heading (deg; 0 = facing -y / the camera), bag
+    (float(E("C0X", "-0.1")), -1.15, -58),
+    (-1.35, -1.75, -66),
+    (-2.45, -2.3, -72),
+    (-0.55, -3.0, -62),
+    (-3.5, -1.6, -78),
+]
+for i, (x, y, hd) in enumerate(CREW[:int(E("NCREW", "5"))]):
+    pv, arm_, ms_, hand_ = crew.thief(Vector((x, y, 0)), hd, jitter=6, seed=i, mat=cloth, name=f"thief{i}")
+    bag = PR.holdall(f"bag{i}", nylon, full=0.9, open_=(i % 2 == 0))
+    bpy.context.view_layer.update()
+    side = Matrix.Rotation(math.radians(hd), 3, 'Z') @ Vector((-0.16, 0, 0))     # out to his right, clear of the leg
+    bag.location = Vector((hand_.x, hand_.y, 0)) + side
+    bag.location.z = max(0.0, hand_.z - 0.32)
+    bag.rotation_euler.z = math.radians(hd + 90)
+    if i % 2 == 0:      # gold bars showing in the open bags
+        for k in range(3):
+            gb = PR.gold_bar(f"bag{i}_bar{k}", big=True); gb.parent = bag
+            gb.location = (-0.1 + 0.1 * k, 0, 0.27 + 0.01 * k); gb.rotation_euler = (0.25 * (k - 1), 0.2, 0.1 * k)
+# what they dropped on the way out: a trail of gold bars and diamonds to the door
+for k in range(int(E("NDROP", "7"))):
+    t = k / 6
+    p_ = Vector((0.4 - 1.4 * t + rng.uniform(-0.2, 0.2), -1.0 - 1.6 * t + rng.uniform(-0.15, 0.15), 0))
+    gb = PR.gold_bar(f"drop_bar{k}", big=True); gb.location = p_; gb.rotation_euler.z = rng.uniform(0, 3.14)
+
+S.light_area("door_spill", (0.0, 0.6, 1.3), (-1.2, -2.5, 0.2), 1.8, float(E("SPILL_E", "900")), color=(1.0, 0.72, 0.38))
+S.light_area("rim_left", (0.6, -0.6, 1.6), (-3.0, -2.2, 0.8), 1.0, float(E("RIML_E", "500")), color=(1.0, 0.7, 0.35))
+for wx in (-3.4, 3.4):      # grazing washes down the concrete (reveal its relief, keep the crew dark)
+    S.light_area("wall_wash", (wx, -WALLT - 0.35, HZ + 1.4), (wx, -WALLT - 0.05, 0.0), 1.2, float(E("WASH_E", "160")),
+                 color=(0.7, 0.85, 1.0), size_y=0.2)
+S.light_area("cool_fill", (-1.5, -5.5, 2.4), (0, -1.5, 0.6), 3.0, float(E("COOL_E", "50")), color=(0.55, 0.75, 1.0))
+S.world((0.25, 0.4, 0.5), float(E("WORLD", "0.25")))
 
 # ---------------------------------------------------------------- camera: low, wide, through the round door
-cam = Vector((float(E("CAMX", "-0.5")), float(E("CAMY", "-4.6")), float(E("CAMZ", "0.75"))))
-tgt = Vector((float(E("AX", "0.35")), float(E("AY", "4")), float(E("AZ", "1.15"))))
-C.camera(cam, tgt, lens=float(E("LENS", "20")), fstop=float(E("FSTOP", "8")), focus=(GP - cam).length * 1.6)
+cam = Vector((float(E("CAMX", "-0.9")), float(E("CAMY", "-7.0")), float(E("CAMZ", "0.95"))))
+tgt = Vector((float(E("AX", "-0.6")), float(E("AY", "4")), float(E("AZ", "1.3"))))
+C.camera(cam, tgt, lens=float(E("LENS", "25")), fstop=float(E("FSTOP", "8")), focus=(GP - cam).length * 1.6)
 
 if E("CLIP"):
     import clipcheck

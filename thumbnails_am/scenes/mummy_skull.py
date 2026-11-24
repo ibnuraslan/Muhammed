@@ -17,10 +17,14 @@ sc = T.res_setup(int(E("SPP", "256")), noise=0.01)
 
 # ---------------------------------------------------------------- table and wall
 wood = S.tex("wood_table_worn", 1.6, tint=(1.0, 0.78, 0.55), name="table_wood")
-S.box("table", (0, 0.3, -0.025), (4.0, 2.2, 0.05), wood)
-WALL = {"b1": (0.0, 0.33, 0.36), "b2": (0.02, 0.12, 0.5)}[V]
-wall = S.flat("wall", WALL, 0.85)
-S.box("wall", (0, 1.25, 1.0), (6.0, 0.05, 3.0), wall)
+BG = E("BG", "endless" if V == "b1" else "wall")
+if BG == "endless":
+    # no wall: the tabletop runs on out of focus into a soft coloured haze, no edge, no horizon line
+    S.box("table", (0, 15.0, -0.025), (40.0, 32.0, 0.05), wood)
+else:
+    S.box("table", (0, 0.3, -0.025), (4.0, 2.2, 0.05), wood)
+    WALL = {"b1": (0.0, 0.33, 0.36), "b2": (0.02, 0.12, 0.5)}[V]
+    S.box("wall", (0, 1.25, 1.0), (6.0, 0.05, 3.0), S.flat("wall", WALL, 0.85))
 
 # ---------------------------------------------------------------- skull and jaw
 cr_tone = ((0.62, 0.53, 0.40), (0.34, 0.27, 0.18))          # pale, clean cranium
@@ -68,6 +72,31 @@ try:
     ph.world_hdri(sky, strength=float(E("SKY_K", "0.6")), rot_z=math.radians(40), res="2k")
 except Exception as e:
     print("hdri", e); S.world((0.6, 0.7, 0.85), 0.6)
+if BG == "endless":
+    # what the camera sees beyond the table: a vertical gradient (camera rays only; the HDRI still lights the set)
+    wn = sc.world.node_tree; WN = wn.nodes; WL = wn.links
+    outw = [n for n in WN if n.type == 'OUTPUT_WORLD'][0]; bg_l = outw.inputs['Surface'].links[0].from_socket
+    lp = WN.new("ShaderNodeLightPath"); tc = WN.new("ShaderNodeTexCoord"); sp_ = WN.new("ShaderNodeSeparateXYZ")
+    WL.new(tc.outputs['Window'], sp_.inputs[0])
+    rmp = WN.new("ShaderNodeValToRGB"); WL.new(sp_.outputs['Y'], rmp.inputs['Fac'])
+    cols = [tuple(float(x) for x in E(k, d).split(",")) for k, d in
+            (("BG_LO", "1.0,0.62,0.32"), ("BG_MID", "0.35,0.75,0.78"), ("BG_HI", "0.02,0.32,0.45"))]
+    el = rmp.color_ramp.elements; el[0].position = 0.25; el[0].color = (*cols[0], 1); el[1].position = 1.0; el[1].color = (*cols[2], 1)
+    e3 = el.new(0.55); e3.color = (*cols[1], 1)
+    bgc = WN.new("ShaderNodeBackground"); bgc.inputs['Strength'].default_value = float(E("BG_K", "1.0"))
+    WL.new(rmp.outputs['Color'], bgc.inputs['Color'])
+    mx = WN.new("ShaderNodeMixShader"); WL.new(lp.outputs['Is Camera Ray'], mx.inputs[0])
+    WL.new(bg_l, mx.inputs[1]); WL.new(bgc.outputs[0], mx.inputs[2]); WL.new(mx.outputs[0], outw.inputs['Surface'])
+    # aerial haze over the far table so it melts into the gradient
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 16.5, 1.0)); hz = bpy.context.active_object; hz.scale = (40, 30, 2.4)
+    hm = bpy.data.materials.new("haze"); hm.use_nodes = True; HN = hm.node_tree.nodes; HN.remove(HN["Principled BSDF"])
+    va = HN.new("ShaderNodeVolumeAbsorption"); vs = HN.new("ShaderNodeVolumeScatter"); ad = HN.new("ShaderNodeAddShader")
+    dens = float(E("HAZE", "0.35"))
+    vs.inputs['Density'].default_value = dens; vs.inputs['Color'].default_value = (*cols[0], 1)
+    va.inputs['Density'].default_value = dens * 0.5; va.inputs['Color'].default_value = (*cols[0], 1)
+    hm.node_tree.links.new(vs.outputs[0], ad.inputs[0]); hm.node_tree.links.new(va.outputs[0], ad.inputs[1])
+    hm.node_tree.links.new(ad.outputs[0], HN["Material Output"].inputs['Volume']); hz.data.materials.append(hm)
+    hz.visible_shadow = False
 T.sun(float(E("SUN_AZ", "-160")), float(E("SUN_EL", "28")), energy=float(E("SUN_E", "4.5")), color=(1.0, 0.92, 0.8), angle=3)
 # soft fill from camera side so the shadow side of the bone stays clean
 T.area("fill", (-0.6, -1.4, 0.5), (SX, SY, 0.08), 1.2, float(E("FILL", "25")), color=(0.85, 0.92, 1.0))
