@@ -774,6 +774,7 @@ def S23():
 def S24():
     """Later: cold low sun on the same bog; the empty hurdle and its ropes laid out on the bank. Crane."""
     M = _bog_scene("dawn", sun_az=120)
+    P2.peat_face(M, -15, 15)
     z = P2.moor_height(M, 0, 7.5)
     P2.hurdle((0, 7.5, z + 0.02), rot=math.radians(10))
     return dict(a=((-2.5, 3.2, z + 1.0), (0, 7.5, z)), b=((-2.2, 3.6, z + 2.4), (0, 7.5, z)), lens=32,
@@ -783,6 +784,7 @@ def S24():
 def S25():
     """A cut peat bank: dark fibrous layers, water seeping at the foot. Slider along the face."""
     M = _bog_scene("overcast")
+    P2.peat_face(M, -12, 12)
     z = P2.moor_height(M, 0, 5.4)
     return dict(a=((-1.5, 3.4, z + 0.5), (-0.5, 6.0, z + 0.5)), b=((1.0, 3.4, z + 0.5), (2.0, 6.0, z + 0.5)), lens=35,
                 fstop=5.6, focus=(0.5, 5.9, z + 0.5))

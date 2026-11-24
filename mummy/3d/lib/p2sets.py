@@ -381,6 +381,48 @@ def peat_moor(center=(0.0, 0.0), size=220.0, n=420, seed=4, pools=True):
     return out
 
 
+def peat_face(M, x0=-30.0, x1=30.0, seed=5, center=(0.0, 0.0)):
+    """The cut peat bank as its own finely divided surface: a spade-cut face (vertical slabs, slight overhang lips,
+    blocky irregularity) carrying a real soil-wall photo taken dark and fibrous, just in front of the terrain step."""
+    from uist import fbm
+    import os
+    nx, nz = 600, 40
+    xs = np.linspace(x0, x1, nx)
+    yb = 6.0 + 0.6 * fbm(xs / 8, 0, 2, seed=9) + center[1]
+    V = []; F = []
+    for i, x in enumerate(xs):
+        zb = moor_height(M, x, yb[i] - 0.5, center); zt = moor_height(M, x, yb[i] + 0.5, center)
+        for j in range(nz):
+            t = j / (nz - 1); z = zb - 0.08 + (zt - zb + 0.1) * t
+            cut = 0.03 * math.sin(x * 9.0 + 2 * math.sin(x * 1.3)) + 0.02 * float(fbm(x * 2.0, z * 3.0, 3, seed=seed))   # spade strokes
+            lip = 0.04 * max(0.0, t - 0.85) / 0.15                                                                     # turf overhang
+            V.append((x + center[0], yb[i] - 0.02 - cut - lip, z))
+    for i in range(nx - 1):
+        for j in range(nz - 1):
+            a_ = i * nz + j; F.append((a_, a_ + nz, a_ + nz + 1, a_ + 1))
+    me = bpy.data.meshes.new("peatface"); me.from_pydata(V, [], F); me.update()
+    for p_ in me.polygons:
+        p_.use_smooth = True
+    o = bpy.data.objects.new("peatface", me); bpy.context.scene.collection.objects.link(o)
+    m = bpy.data.materials.new("peatface"); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    sw = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "polyhaven", "excavated_soil_wall")
+    tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (0.9, 0.9, 0.9); L.new(tc.outputs['Object'], mp.inputs['Vector'])
+    def img(key, color):
+        f = [f for f in os.listdir(sw) if key in f][0]
+        t = N.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(os.path.join(sw, f), check_existing=True); t.projection = 'BOX'; t.projection_blend = 0.2
+        t.image.colorspace_settings.name = 'sRGB' if color else 'Non-Color'; L.new(mp.outputs[0], t.inputs['Vector']); return t
+    d = img("diff", True); nr = img("nor_gl", False)
+    dk = N.new("ShaderNodeMix"); dk.data_type = 'RGBA'; dk.blend_type = 'MULTIPLY'; dk.inputs['Factor'].default_value = 1.0
+    L.new(d.outputs['Color'], dk.inputs[6]); dk.inputs[7].default_value = (0.38, 0.26, 0.17, 1); L.new(dk.outputs[2], p.inputs['Base Color'])
+    nm = N.new("ShaderNodeNormalMap"); nm.inputs['Strength'].default_value = 1.2; L.new(nr.outputs['Color'], nm.inputs['Color']); L.new(nm.outputs[0], p.inputs['Normal'])
+    # wet seep toward the foot of the face
+    sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Object'], sep.inputs[0])
+    wr = N.new("ShaderNodeMapRange"); wr.inputs['From Min'].default_value = float(M.get("water_z", 0)) + 0.05; wr.inputs['From Max'].default_value = float(M.get("water_z", 0)) + 0.6
+    wr.inputs['To Min'].default_value = 0.2; wr.inputs['To Max'].default_value = 0.8; L.new(sep.outputs['Z'], wr.inputs['Value']); L.new(wr.outputs[0], p.inputs['Roughness'])
+    o.data.materials.append(m)
+    return o
+
+
 def moor_height(M, x, y, center=(0.0, 0.0)):
     xs = M["xs"]; Z = M["Z"]
     i = int(np.clip(np.searchsorted(xs, x - center[0]), 1, len(xs) - 1)); j = int(np.clip(np.searchsorted(xs, y - center[1]), 1, len(xs) - 1))
