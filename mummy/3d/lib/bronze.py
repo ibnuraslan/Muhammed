@@ -409,7 +409,7 @@ def interior(fire=1.0, door_sun=0.0, hx=0.3, hy=0.0, r=4.6, seed=5, moon=0.0):
     if moon > 0:
         # night outside: the sky through the doorway is a cold blue glow, a low moon throws a pale shaft across the floor
         bpy.context.scene.world.node_tree.nodes["Background"].inputs['Strength'].default_value = 0.05
-        dl.energy = 45 * moon; dl.color = (0.45, 0.58, 1.0)
+        dl.energy = 160 * moon; dl.color = (0.42, 0.55, 1.0); dl.size = 2.0
         mn = bpy.data.lights.new("moon", 'SUN'); mn.energy = 0.9 * moon; mn.color = (0.55, 0.68, 1.0); mn.angle = math.radians(0.6)
         mo = bpy.data.objects.new("moon", mn); bpy.context.scene.collection.objects.link(mo)
         mo.rotation_euler = (Vector((-1, 0.15, -0.3))).to_track_quat('-Z', 'Y').to_euler()

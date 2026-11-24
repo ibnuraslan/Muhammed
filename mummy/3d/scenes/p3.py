@@ -131,7 +131,7 @@ def S01():
         P2.hurdle((hx + dx, hy + 1.7, 0.03), rot=math.radians(rot), length=1.6, width=0.7, seed=k)
         P2.bundle((hx + dx, hy + 1.7, 0.22), rot=math.radians(rot), length=0.85 + 0.1 * k, girth=0.4, seed=k)
     return dict(a=((hx - 2.3, hy - 0.6, 0.9), (hx - 0.6, hy + 1.7, 0.2)), b=((hx - 1.8, hy - 0.2, 0.8), (hx - 0.6, hy + 1.7, 0.2)), lens=32,
-                fstop=2.8, focus=(hx - 0.7, hy + 1.7, 0.25), cine=dict(exposure=0.55), hand_ok=("floor",))
+                fstop=2.8, focus=(hx - 0.7, hy + 1.7, 0.25), cine=dict(exposure=0.45, sat=0.8), hand_ok=("floor",))
 
 
 def S02():
@@ -715,7 +715,7 @@ def S30():
     P2.bundle((hx - 0.8, hy + 1.6, 0.23), rot=math.radians(80), length=0.95, girth=0.42)
     t = Vector((hx - 0.8, hy + 1.6, 0.25))
     return dict(a=(tuple(t + Vector((-1.3, -1.4, 0.6))), tuple(t)), b=(tuple(t + Vector((-0.8, -0.9, 0.45))), tuple(t)), lens=40,
-                fstop=2.8, focus=tuple(t), cine=dict(exposure=0.55), hand_ok=("floor",))
+                fstop=2.8, focus=tuple(t), cine=dict(exposure=0.45, sat=0.8), hand_ok=("floor",))
 
 
 # ============================================================================ "In the team's later reconstruction..."
