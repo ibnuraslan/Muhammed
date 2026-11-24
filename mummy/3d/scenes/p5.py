@@ -210,18 +210,24 @@ def S11():
 
 
 def S12():
-    """Repair: an islander kneels beside the bundle on the floor, binding a new cord round it (from above and behind,
-    over his shoulder; firelit)."""
+    """Repair: a fresh pale cord bound round the old darkened hide, beside the worn ropes - the body mended. Close, firelit."""
     R, c = _house_bundle(fire=1.0, moon=0.2)
-    sd = math.radians(70 - 90); side = Vector((math.cos(sd), math.sin(sd), 0)); along = Vector((math.cos(math.radians(70)), math.sin(math.radians(70)), 0))
-    kn = c + side * 0.95
-    hands = {"L": tuple(c + side * 0.18 + along * 0.12 + Vector((0, 0, 0.1))), "R": tuple(c + side * 0.2 - along * 0.1 + Vector((0, 0, 0.08)))}
-    _kneeler(0, "Mender", (kn.x, kn.y), math.degrees(sd) + 180, (c.x, c.y, c.z), lean=45, var=2, hands=hands)
-    hx, hy = R["hearth"]                                          # the fire's light falling on the bundle and his hands
-    _spot((hx - 0.2, hy + 0.2, 0.7), tuple(c + side * 0.2), 120, size=0.3, color=(1.0, 0.55, 0.22), spot=35)
-    cam = c + side * 0.55 + along * 0.15 + Vector((0, 0, 2.7))        # straight down: shoulders, arms, cord and bundle
-    return dict(a=(tuple(cam), tuple(c + side * 0.4)), b=(tuple(cam - Vector((0, 0, 0.25))), tuple(c + side * 0.38)), lens=35,
-                fstop=2.8, focus=tuple(c + side * 0.3), cine=dict(exposure=0.6, sat=0.85), hand_ok=("floor", "bundle", "hurdle"))
+    along = Vector((math.cos(math.radians(70)), math.sin(math.radians(70)), 0)); sd = math.radians(70 - 90)
+    side = Vector((math.cos(sd), math.sin(sd), 0))
+    cord = _plain("freshcord", (0.55, 0.45, 0.3), 0.85)
+    for k, off in enumerate((-0.12, -0.08)):
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.2, minor_radius=0.009, location=tuple(c + along * off + Vector((0, 0, 0.0))))
+        t_ = bpy.context.active_object; t_.name = "freshcord"
+        t_.rotation_euler = (math.radians(90), 0, math.radians(70) + math.pi / 2); t_.scale = (1.0, 0.66, 1.0)
+        t_.data.materials.append(cord)
+        dp = t_.modifiers.new("d", "DISPLACE"); tt = bpy.data.textures.get("cordtwist") or bpy.data.textures.new("cordtwist", "CLOUDS")
+        tt.noise_scale = 0.01; dp.texture = tt; dp.strength = 0.004
+    t = c - along * 0.1 + side * 0.12
+    hx, hy = R["hearth"]
+    _spot((hx - 0.2, hy + 0.2, 0.7), tuple(t), 90, size=0.3, color=(1.0, 0.55, 0.22), spot=35)
+    cam = t + side * 0.55 - along * 0.35 + Vector((0, 0, 0.35))
+    return dict(a=(tuple(cam), tuple(t)), b=(tuple(cam - side * 0.12), tuple(t)), lens=50,
+                fstop=2.8, focus=tuple(t), cine=dict(exposure=0.5, sat=0.85), hand_ok=("floor",))
 
 
 def S13():
@@ -301,7 +307,7 @@ PLAN = [  # shot, VO paragraph (1-based), seconds, description
     ("S09", 5, 4.5, "Three racks of sample tubes in the clean room"),
     ("S10", 6, 5.0, "Three bones in three pools of light, gaps of shadow"),
     ("S11", 7, 4.5, "Damage: the hide split, a bone end showing"),
-    ("S12", 7, 5.0, "Repair: an islander binding a new cord round the bundle"),
+    ("S12", 7, 5.0, "Repair: a fresh cord bound round the old hide"),
     ("S13", 7, 4.0, "The broken knee from above"),
     ("S14", 8, 5.0, "The mended ancestor in moonlight"),
     ("S15", 9, 5.0, "The two graves side by side at dusk"),
