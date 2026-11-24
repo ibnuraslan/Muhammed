@@ -818,15 +818,26 @@ def _moss(M, px, py, wz, n=110, seed=23):
 def S23():
     """From the peat bank, looking down and out over the pool at dusk: the hide-wrapped body half-sunk in the brown
     water, the sky reflected round it; cotton grass and tussocks soft in the foreground. Slow push."""
-    spot = {}
-    def setup(M):
-        x0, y0, z0 = _pool_edge(M); spot.update(x=x0, y=y0, z=z0)
-        M["clear"] = [(x0, y0 + 1.9, 0.9)]
-    M = _bog_scene("dusk", sun_az=95, setup=setup)
-    x0, y0, z0 = spot["x"], spot["y"], spot["z"]; wz = M["water_z"]
-    bx, by = x0 + 0.2, y0 + 2.1
+    M = _bog_scene("dusk", sun_az=95)
+    wz = M["water_z"]
+    bx, by = _pool_spot(M, margin=0.45)
     P2.bundle((bx, by, wz - 0.09), rot=math.radians(70))
-    return dict(a=((x0 - 0.9, y0 - 1.3, z0 + 1.15), (bx, by, wz)), b=((x0 - 0.6, y0 - 0.8, z0 + 1.0), (bx, by, wz)), lens=35,
+    # the bank: the firm ground nearest the bundle on its south side (so the low sun is ahead, over the water)
+    best = None
+    for r in np.linspace(1.2, 3.5, 12):
+        for a in np.linspace(math.radians(200), math.radians(340), 15):
+            x, y = bx + r * math.cos(a), by + r * math.sin(a)
+            if all(P2.moor_height(M, x + dx, y + dy) > wz + 0.12 for dx in (-0.3, 0, 0.3) for dy in (-0.3, 0, 0.3)):
+                if best is None or r < best[0]:
+                    best = (r, x, y, a)
+    if best is None:
+        best = (2.5, bx, by - 2.5, math.radians(270))
+    r, cx, cy, a = best
+    back = Vector((math.cos(a), math.sin(a), 0)) * 0.9
+    cz = P2.moor_height(M, cx, cy)
+    c0 = Vector((cx, cy, cz + 1.15)) + back
+    c1 = Vector((cx, cy, cz + 1.0)) + back * 0.4
+    return dict(a=(tuple(c0), (bx, by, wz)), b=(tuple(c1), (bx, by, wz)), lens=35,
                 fstop=4.0, focus=(bx, by, wz), cine=dict(exposure=0.35))
 
 
