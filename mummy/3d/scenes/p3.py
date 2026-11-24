@@ -715,7 +715,7 @@ PLAN = [  # shot, VO paragraph (1-based), seconds (at 133 wpm; re-timed to the r
     ("S11", 5, 6.0, "Ancient-DNA clean room: a suited scientist at the UV cabinet (from behind)"),
     ("S12", 5, 5.0, "Inside the cabinet: tubes of bone powder under violet UV"),
     ("S13", 5, 4.5, "A sample tube, sharp; the rack soft behind"),
-    ("S14", 6, 3.5, "Sequencing lab at night: status lights in the dark"),
+    ("S14", 6, 3.5, "The DNA lab at night, the work done: instrument lights in the dark"),
     ("S15", 7, 5.0, "Jaw, upper arm and thigh bone apart: three pools of light"),
     ("S16", 7, 4.0, "The skull alone in low light: no answer"),
     ("S17", 8, 5.5, "Track along the second skeleton, feet to head"),
