@@ -40,3 +40,21 @@
 - It must read in full, sharp and unobstructed, for at least 1.5 s, at least once. Two or three placements is better when the story allows.
 - No other brands, logos or readable text anywhere.
 - Note the logo frames in README.md/SETTINGS.md, and check them in the preview.
+
+## Fast to render, zero errors (mandatory for every package, client direction Nov 2026)
+Render speed. Keep the look and cut the waste:
+- Cycles adaptive sampling on, with noise threshold 0.03–0.05 and max samples about 64.
+- Denoiser: OpenImageDenoise, with albedo and normal passes.
+- Light paths: max bounces 6, diffuse 3, glossy 3, transmission 6, transparent 8–16 (raise only where a shot needs it), and caustics off.
+- Turn on Persistent Data.
+- Simplify: texture limit 2048 px, child particles capped, subdivision levels kept at render level 1–2.
+- No volumetrics, motion-blur-heavy effects or huge hair counts unless a shot truly needs them. Fake glows with emission instead of volumes.
+- Delete hidden and unused objects, materials and images before packing (`Purge`). The .blend should be under about 80 MB.
+- Target under 60 s per 1080x1920 frame on the farm, and note the measured time per test frame in SETTINGS.md.
+
+Zero-error checks. Run all of these on the EXACT file you deliver, before pushing:
+1. It opens with `blender --factory-startup -b file.blend`, with no errors or warnings in the console and no missing files (`bpy.data.libraries`, missing images, missing fonts).
+2. All external files are packed. Scripts must not need auto-run, and there are no driver or Python errors.
+3. Scene camera set, resolution 1080x1920 at 100%, 60 fps, correct frame range, PNG output path set, and the VO strip present.
+4. Render 3 test frames (start, middle, end) at full resolution from the packed file. None may be black, empty or pink (missing texture).
+5. Record the results in README.md as a "Render check: PASS" block. No package goes to the client without it.
