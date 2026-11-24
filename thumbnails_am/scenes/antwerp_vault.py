@@ -230,7 +230,7 @@ CREW = [  # x, y, heading (deg; 0 = facing -y / the camera), bag
     (-3.5, -1.6, -78),
 ]
 for i, (x, y, hd) in enumerate(CREW[:int(E("NCREW", "5"))]):
-    pv, arm_, ms_, hand_ = crew.thief(Vector((x, y, 0)), hd, jitter=6, seed=i, mat=cloth, name=f"thief{i}")
+    pv, arm_, ms_, hand_ = crew.thief(Vector((x, y, 0)), hd, jitter=5, seed=i, mat="darken", name=f"thief{i}")
     bag = PR.holdall(f"bag{i}", nylon, full=0.9, open_=(i % 2 == 0))
     bpy.context.view_layer.update()
     side = Matrix.Rotation(math.radians(hd), 3, 'Z') @ Vector((-0.16, 0, 0))     # out to his right, clear of the leg

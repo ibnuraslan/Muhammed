@@ -6,7 +6,7 @@ import bpy
 from mathutils import Vector
 import crew, sets as S
 sc = T.res_setup(16, noise=0.1); sc.render.resolution_percentage = 30
-p, arm, ms, hand = crew.thief(Vector((0, 0, 0)), 0, pose=eval(os.environ.get("POSE", "crew.CROUCH")))
+p, arm, ms, hand = crew.thief(Vector((0, 0, 0)), 0, pose=eval(os.environ.get("POSE", "crew.SNEAK")), mat="darken")
 print("HAND", hand)
 bpy.ops.mesh.primitive_uv_sphere_add(radius=0.05, location=hand)
 S.box("floor", (0, 0, -0.01), (6, 6, 0.02), S.flat("f", (0.5, 0.5, 0.5), 0.8))

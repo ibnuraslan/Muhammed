@@ -23,6 +23,14 @@ def _rot(arm, bone, axis, deg):
     bpy.context.view_layer.update()
 
 
+SNEAK = [  # a natural sneaking walk: knees soft, back bent, head up, bag hand low, free arm out for balance
+    ("spine_01_03", X, 20), ("spine_02_04", X, 12), ("spine_03_05", X, 6), ("neck_06", X, -18), ("head_07", X, -10),
+    ("upperleg_l_074", X, -48), ("lowerleg_l_075", X, 62), ("foot_l_076", X, -12),
+    ("upperleg_r_081", X, 12), ("lowerleg_r_082", X, 48), ("foot_r_083", X, -22),
+    ("upperarm_r_049", Y, -40), ("upperarm_r_049", X, -6), ("lowerarm_r_050", X, -6),
+    ("upperarm_l_024", Y, 30), ("upperarm_l_024", X, -30), ("lowerarm_l_025", X, -35),
+]
+
 CROUCH = [  # (bone, world axis, degrees): a low sneaking stride, left leg forward, right hand low with the bag
     ("spine_01_03", X, 26), ("spine_02_04", X, 16), ("spine_03_05", X, 8), ("neck_06", X, -28), ("head_07", X, -14),
     ("upperleg_l_074", X, -72), ("lowerleg_l_075", X, 100), ("foot_l_076", X, -25),
@@ -40,7 +48,7 @@ def load_template():
     return arm, new
 
 
-def thief(loc, heading_deg, pose=CROUCH, jitter=0.0, seed=0, mat=None, name="thief"):
+def thief(loc, heading_deg, pose=SNEAK, jitter=0.0, seed=0, mat=None, name="thief"):
     """Import a fresh copy, pose it, scale to 1.82 m, set it down at loc (feet on z = loc.z), turn to heading."""
     import random
     rng = random.Random(seed)
@@ -53,7 +61,22 @@ def thief(loc, heading_deg, pose=CROUCH, jitter=0.0, seed=0, mat=None, name="thi
         if b in arm.pose.bones:
             _rot(arm, b, ax, d + rng.uniform(-jitter, jitter))
     ms = [o for o in objs if o.type == 'MESH']
-    if mat is not None:
+    if mat == "darken":      # keep the real clothing (folds, seams, normal maps) but dye it all near-black
+        for o in ms:
+            for m in o.data.materials:
+                pm = m.node_tree.nodes.get("Principled BSDF")
+                if pm is None:
+                    continue
+                src = pm.inputs['Base Color'].links[0].from_socket if pm.inputs['Base Color'].links else None
+                mx = m.node_tree.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'
+                mx.inputs['Factor'].default_value = 1.0; mx.inputs[7].default_value = (0.05, 0.05, 0.055, 1)
+                if src is not None:
+                    m.node_tree.links.new(src, mx.inputs[6])
+                else:
+                    mx.inputs[6].default_value = pm.inputs['Base Color'].default_value
+                m.node_tree.links.new(mx.outputs[2], pm.inputs['Base Color'])
+                pm.inputs['Specular IOR Level'].default_value = 0.25
+    elif mat is not None:
         for o in ms:
             o.data.materials.clear(); o.data.materials.append(mat)
     # scale/heading/placement on the top-level object
@@ -82,4 +105,24 @@ def thief(loc, heading_deg, pose=CROUCH, jitter=0.0, seed=0, mat=None, name="thi
     bpy.context.view_layer.update()
     # where the right hand is (for the bag)
     hand = arm.matrix_world @ arm.pose.bones["hand_r_051"].head
+    # a knitted beanie on the head (child of the head bone), and the hands gloved by the near-black dye
+    hb = arm.pose.bones["head_07"]; base = arm.matrix_world @ hb.head
+    top = arm.matrix_world @ arm.pose.bones["head_end_08"].head
+    up = (top - base).normalized(); c = top - up * 0.095
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.108, location=c, segments=32, ring_count=16)
+    cap = bpy.context.active_object; cap.name = name + "_beanie"; cap.scale = (0.95, 1.05, 0.85)
+    cap.rotation_euler = up.to_track_quat('Z', 'Y').to_euler()
+    bm_ = cap.data
+    import bmesh as _bm
+    b = _bm.new(); b.from_mesh(bm_)
+    _bm.ops.delete(b, geom=[v for v in b.verts if v.co.z < -0.02], context='VERTS'); b.to_mesh(bm_); b.free()
+    sol = cap.modifiers.new("t", "SOLIDIFY"); sol.thickness = 0.012
+    for pl in bm_.polygons:
+        pl.use_smooth = True
+    knit = bpy.data.materials.new(name + "_knit"); knit.use_nodes = True; pk = knit.node_tree.nodes["Principled BSDF"]
+    pk.inputs['Base Color'].default_value = (0.012, 0.012, 0.014, 1); pk.inputs['Roughness'].default_value = 0.95
+    pk.inputs["Sheen Weight"].default_value = 0.3
+    bm_.materials.append(knit)
+    mwc = cap.matrix_world.copy(); cap.parent = arm; cap.parent_type = 'BONE'; cap.parent_bone = "head_07"
+    bpy.context.view_layer.update(); cap.matrix_world = mwc
     return pivot, arm, ms, hand
