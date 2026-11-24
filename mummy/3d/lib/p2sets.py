@@ -391,12 +391,12 @@ def peat_face(M, x0=-30.0, x1=30.0, seed=5, center=(0.0, 0.0)):
     yb = 6.0 + 0.6 * fbm(xs / 8, 0, 2, seed=9) + center[1]
     V = []; F = []
     for i, x in enumerate(xs):
-        zb = moor_height(M, x, yb[i] - 0.5, center); zt = moor_height(M, x, yb[i] + 0.5, center)
+        zb = moor_height(M, x, yb[i] - 0.6, center); zt = moor_height(M, x, yb[i] + 0.5, center)
         for j in range(nz):
             t = j / (nz - 1); z = zb - 0.08 + (zt - zb + 0.1) * t
             cut = 0.03 * math.sin(x * 9.0 + 2 * math.sin(x * 1.3)) + 0.02 * float(fbm(x * 2.0, z * 3.0, 3, seed=seed))   # spade strokes
             lip = 0.04 * max(0.0, t - 0.85) / 0.15                                                                     # turf overhang
-            V.append((x + center[0], yb[i] - 0.02 - cut - lip, z))
+            V.append((x + center[0], yb[i] - 0.3 - cut - lip, z))
     for i in range(nx - 1):
         for j in range(nz - 1):
             a_ = i * nz + j; F.append((a_, a_ + nz, a_ + nz + 1, a_ + 1))
@@ -413,7 +413,7 @@ def peat_face(M, x0=-30.0, x1=30.0, seed=5, center=(0.0, 0.0)):
         t.image.colorspace_settings.name = 'sRGB' if color else 'Non-Color'; L.new(mp.outputs[0], t.inputs['Vector']); return t
     d = img("diff", True); nr = img("nor_gl", False)
     dk = N.new("ShaderNodeMix"); dk.data_type = 'RGBA'; dk.blend_type = 'MULTIPLY'; dk.inputs['Factor'].default_value = 1.0
-    L.new(d.outputs['Color'], dk.inputs[6]); dk.inputs[7].default_value = (0.38, 0.26, 0.17, 1); L.new(dk.outputs[2], p.inputs['Base Color'])
+    L.new(d.outputs['Color'], dk.inputs[6]); dk.inputs[7].default_value = (0.26, 0.17, 0.11, 1); L.new(dk.outputs[2], p.inputs['Base Color'])
     nm = N.new("ShaderNodeNormalMap"); nm.inputs['Strength'].default_value = 1.2; L.new(nr.outputs['Color'], nm.inputs['Color']); L.new(nm.outputs[0], p.inputs['Normal'])
     # wet seep toward the foot of the face
     sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Object'], sep.inputs[0])
