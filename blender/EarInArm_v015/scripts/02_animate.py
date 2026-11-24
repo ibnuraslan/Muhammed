@@ -99,7 +99,7 @@ def twist_of(q):
     if t.magnitude < 1e-6: return 0.0
     t.normalize(); return 2 * math.atan2(t.y, t.w)
 
-def pose_hand_world(rig, s, fdir, palm_dir, f=1, share=0.8):
+def pose_hand_world(rig, s, fdir, palm_dir, f=1, share=0.5):
     """orient wrist: fingers along fdir, palm facing palm_dir (armature space). Twist shared with the forearm twist bone (R6)."""
     wr, B0, basis, palm = _rest_hand(rig, s)
     sign = _rest_palm_sign(rig, s, B0.col[2])
@@ -513,6 +513,11 @@ fs(1)
 def tray_top(x, y):
     hit, loc, n, i = TRAY.ray_cast(TRAY.matrix_world.inverted() @ Vector((x, y, 2.0)), TRAY.matrix_world.inverted().to_3x3() @ Vector((0, 0, -1)))
     return (TRAY.matrix_world @ loc).z if hit else TRAY.location.z + 0.004
+for m_ in TRAY.data.materials:
+    if m_ and m_.use_nodes and "Principled BSDF" in m_.node_tree.nodes:
+        pp_ = m_.node_tree.nodes["Principled BSDF"]
+        for l_ in list(pp_.inputs["Roughness"].links): m_.node_tree.links.remove(l_)
+        pp_.inputs["Roughness"].default_value = 0.5; pp_.inputs["Metallic"].default_value = 0.6
 TRAY_C = Vector((TRAY.location.x + 0.085, TRAY.location.y + 0.075, 0)); TRAY_C.z = tray_top(TRAY_C.x, TRAY_C.y)
 log("tray top", round(TRAY_C.z, 4))
 
@@ -551,8 +556,8 @@ upd()
 fs(185)
 L_sh = shoulder("L")
 hz = nk.z - 0.20
-front_y = min(p[1].y for p in chest_pts if abs(p[1].x + 0.05) < 0.03 and abs(p[1].z - hz) < 0.03)
-HARV = Vector((-0.05, front_y + 0.03, hz))
+front_y = min(p[1].y for p in chest_pts if abs(p[1].x + 0.085) < 0.03 and abs(p[1].z - hz) < 0.03)
+HARV = Vector((-0.085, front_y + 0.03, hz))
 hp_pts = eval_mesh_points(PB, lambda i: DOMP.get(i) in ("spine02", "spine03", "breast.R", "spine01"))
 near = min(hp_pts, key=lambda q: (Vector((q[1].x, 0, q[1].z)) - Vector((HARV.x, 0, HARV.z))).length)
 CHEST_N = near[2]; HARV = near[1] - CHEST_N * 0.018
@@ -625,7 +630,7 @@ apply_pose(DOC, "L", "pinch", 1); apply_pose(DOC, "R", "tripod", 1)
 kt(FORC, 185, Matrix.Translation(CHEST_N * 0.06 + Vector((0, 0, 0.02))) @ F_G1, "approach")
 kt(FORC, 212, F_G1, "grip hold")
 owner_switch(204, FORC)
-OUTC = Matrix.Translation(CHEST_N * 0.10 + Vector((0, 0, 0.06))) @ F_G1
+OUTC = Matrix.Translation(CHEST_N * 0.10 + Vector((-0.10, 0.04, -0.02))) @ F_G1
 kt(FORC, 238, OUTC, "out of chest")
 # drop pose on the tray: ear flat (face up), long axis pointing away from the surgeon
 away = (TRAY_C - shoulder("L")); away.z = 0; away.normalize()
@@ -648,7 +653,7 @@ fs(300)
 lobe_top = EAR.matrix_world @ Vector((0, -ear_half_y * 1.05, ear_bot_z * 0.55))
 F_ST = natural(FORC, lobe_top, down=0.62)
 kt(FORC, 306, Matrix.Translation(Vector((0, 0, 0.025))) @ F_ST, "steady approach")
-kt(FORC, 316, F_ST, "steady"); kt(FORC, 456, F_ST, "steady end")
+for f_ in (316, 346, 376, 406, 436, 456): kt(FORC, f_, F_ST, "steady")
 outline = []
 vs = EAR.data.vertices
 for k in range(24):
@@ -797,7 +802,7 @@ cut2 = curve_line("Incision2", ring, 0.0006, "M_Incision")
 cut2.data.bevel_factor_end = 0.0; cut2.data.keyframe_insert("bevel_factor_end", frame=924)
 cut2.data.bevel_factor_end = 1.0; cut2.data.keyframe_insert("bevel_factor_end", frame=983)
 fs(995)
-top_grip = EAR.matrix_world @ Vector((0, 0, ear_top_z * 0.86))
+top_grip = EAR.matrix_world @ Vector((-0.0175, 0, ear_top_z * 0.15))
 F_G3 = natural(FORC, top_grip, down=0.75)
 kt(FORC, 984, Matrix.Translation(ARM_N * 0.04) @ F_G3, "top approach")
 kt(FORC, 998, F_G3, "grip top")
@@ -834,21 +839,13 @@ PG3 = OFF3.inverted() @ TOOLS["Forceps"]["tip"]
 ear_follow(1036, 1171, E_HEAD, PG3, 90)
 owner_switch(1172, PAT, "head")
 
-kt(FORC, 1385, E_HEAD @ OFF3.inverted(), "hold during stitches")
-kt(FORC, 1405, Matrix.Translation(outw * 0.04 + Vector((0, 0, 0.03))) @ E_HEAD @ OFF3.inverted(), "release")
-ready(FORC, 1460, fwd=0.22, dz=-0.06); ready(FORC, 1572, fwd=0.21, dz=-0.07)
-key_mask(1160, SITE + outw * 0.004, 0.05); key_x(1166, 0.0); key_x(1182, 1.0); key_x(1238, 1.0); key_x(1258, 0.0)
-# vessel join: one vessel from the ear root, one from the scalp, meeting with a glow
-J = SITE + fwd_h * 0.006 - up_h * 0.006 + outw * 0.001
-va = curve_line("JoinEar", [J + outw * 0.004 + up_h * 0.012, J + outw * 0.002 + up_h * 0.006, J], 0.0007, "M_Vessel")
-vb = curve_line("JoinHead", [J - outw * 0.010 - fwd_h * 0.010, J - outw * 0.005 - fwd_h * 0.004, J], 0.0007, "M_Vessel")
-for ob, f0 in ((va, 1186), (vb, 1192)):
-    ob.data.bevel_factor_end = 0.0; ob.data.keyframe_insert("bevel_factor_end", frame=f0)
-    ob.data.bevel_factor_end = 1.0; ob.data.keyframe_insert("bevel_factor_end", frame=f0 + 36)
-gl = bpy.data.materials["M_Vessel"].node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
-for f, v in ((1, 0.4), (1224, 0.4), (1234, 4.0), (1248, 0.4)):
-    gl.default_value = v; gl.keyframe_insert("default_value", frame=f)
-
+kt(FORC, 1240, E_HEAD @ OFF3.inverted(), "hold while placing")
+kt(FORC, 1262, Matrix.Translation(outw * 0.05 + fwd_h * -0.03) @ E_HEAD @ OFF3.inverted(), "release")
+ready(FORC, 1340, fwd=0.22); ready(FORC, 1460, fwd=0.22, dz=0.01); ready(FORC, 1572, fwd=0.21, dz=0.0)
+skin_p.inputs["Emission Color"].default_value = (1.0, 0.35, 0.35, 1)
+ES = skin_p.inputs["Emission Strength"]
+for f_, v_ in ((1, 0.0), (1196, 0.0), (1218, 0.5), (1245, 0.0)):
+    ES.default_value = v_; ES.keyframe_insert("default_value", frame=f_)
 # R hand: scalpel back to the tray, needle holder up from the tray (both lie flat on the drape)
 def lie_on_tray(tool, cx, cy, yaw):
     vz = min(v.co.z for v in tool.data.vertices)
@@ -909,14 +906,14 @@ for k in range(len(seam) - 1):
 sut = curve_line("Suture", sut_pts, 0.00045, "M_Suture")
 sut.data.bevel_factor_end = 0.0; sut.data.keyframe_insert("bevel_factor_end", frame=1272)
 sut.data.bevel_factor_end = 1.0; sut.data.keyframe_insert("bevel_factor_end", frame=1272 + 21 * (len(seam) - 1))
-ready(NEED, 1470, fwd=0.22, dz=-0.06, dx=-0.05); ready(NEED, 1572, fwd=0.21, dz=-0.07, dx=-0.05)
+ready(NEED, 1470, fwd=0.22, dz=0.0, dx=-0.03); ready(NEED, 1572, fwd=0.21, dz=0.01, dx=-0.03)
 ready(SCAL, 1040, fwd=0.30) if False else None
 
 # stitches + join vessels ride on the head (Child Of head bone)
 fs(1172)
 for ob in (sut, inc, cut2):
     sw = ob.modifiers.new("skin", 'SHRINKWRAP'); sw.target = PB; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.offset = 0.0005
-for ob in (sut, va, vb):
+for ob in (sut,):
     c = ob.constraints.new('CHILD_OF'); c.target = PAT; c.subtarget = "head"
     c.inverse_matrix = (PAT.matrix_world @ PAT.pose.bones["head"].matrix).inverted()
 for ob in (inc, cut2):
@@ -960,7 +957,7 @@ for bone in ("risorius03.L", "risorius03.R", "levator05.L", "levator05.R", "oris
     sc_, ax, sg = corner_nudge(bone, 1455, 1)
     pb = PAT.pose.bones[bone]
     pb.rotation_quaternion = Quaternion(); pb.keyframe_insert("rotation_quaternion", frame=1462)
-    pb.rotation_quaternion = Quaternion(ax, math.radians(14 * sg)); pb.keyframe_insert("rotation_quaternion", frame=1500)
+    pb.rotation_quaternion = Quaternion(ax, math.radians(26 * sg)); pb.keyframe_insert("rotation_quaternion", frame=1500)
     pb.keyframe_insert("rotation_quaternion", frame=END)
 # patient's free (left) hand fingers: a small relaxed shift now and then (no pose snaps)
 for f in (1, 400, 800, 1200, END):
@@ -999,22 +996,22 @@ CAMK = [  # frame, camera position, aim point, lens
     (160,  P(-0.52, -0.88, 1.18), CH + P(-0.06, 0, 0.08), 32),
     (215,  P(-0.44, -0.84, 1.16), CH + P(-0.08, 0, 0.07), 32),
     (262,  P(-0.98, -0.66, 1.42), CH.lerp(TR, 0.6) + P(0, 0, 0.04), 32),
-    (310,  P(-1.30, -0.32, 1.50), TR + P(0.0, 0, 0.01), 34),
-    (380,  P(-1.40, -0.06, 1.50), TR + P(0.01, 0, 0.0), 36),
-    (450,  P(-1.26, -0.30, 1.52), TR.lerp(ARM, 0.4), 34),
+    (310,  P(-0.96, -0.52, 1.60), TR + P(0.0, 0, 0.0), 42),
+    (380,  P(-0.80, -0.50, 1.58), TR + P(0.01, 0, 0.0), 46),
+    (450,  P(-0.78, -0.55, 1.58), TR.lerp(ARM, 0.4), 40),
     (520,  P(-1.05, -0.56, 1.50), ARM + P(0, 0, 0.02), 36),
     (600,  P(-0.92, -0.50, 1.36), ARM + P(0, 0, 0.01), 40),
     (660,  P(-0.78, -0.40, 1.22), ARM, 44),
     (740,  P(-0.66, -0.34, 1.12), ARM, 48),
     (820,  P(-0.56, -0.30, 1.10), ARM, 48),
-    (900,  P(-0.68, -0.28, 1.16), ARM, 46),
-    (960,  P(-0.86, -0.30, 1.32), ARM + P(0, 0, 0.03), 40),
-    (1040, P(-0.90, -0.42, 1.42), ARM.lerp(SITE0, 0.35), 36),
-    (1110, P(-0.78, -0.58, 1.45), ARM.lerp(SITE0, 0.75), 36),
-    (1180, P(-0.56, -0.58, 1.34), SITE + P(0, 0, -0.02), 40),
-    (1260, P(-0.52, -0.50, 1.28), SITE + P(0, 0, -0.01), 40),
-    (1340, P(-0.56, -0.40, 1.22), SITE + P(0, 0, 0.0), 40),
-    (1430, P(-0.60, -0.56, 1.28), SITE + P(0, 0, -0.02), 38),
+    (900,  P(-0.60, -0.30, 1.26), ARM, 46),
+    (960,  P(-0.46, -0.30, 1.42), ARM + P(0, 0, 0.02), 40),
+    (1040, P(-0.50, -0.50, 1.44), ARM.lerp(SITE0, 0.35), 36),
+    (1110, P(-0.56, -0.66, 1.40), ARM.lerp(SITE0, 0.75), 38),
+    (1180, P(-0.42, -0.42, 1.34), SITE + P(0, 0, -0.01), 42),
+    (1260, P(-0.38, -0.36, 1.31), SITE + P(0, 0, -0.01), 42),
+    (1340, P(-0.42, -0.30, 1.26), SITE + P(0, 0, 0.0), 42),
+    (1430, P(-0.46, -0.46, 1.30), SITE + P(0, 0, -0.02), 40),
     (1500, P(-0.50, -0.96, 1.34), HEAD1.lerp(SITE0, 0.45) + P(0, 0, -0.06), 36),
     (1572, P(-0.30, -1.08, 1.38), HEAD1.lerp(SITE0, 0.30) + P(0, 0, -0.06), 36),
 ]
@@ -1044,6 +1041,30 @@ except Exception as e:
 for o in O:
     for m in getattr(o, "modifiers", []):
         if m.type == 'SUBSURF': m.show_viewport = True
+def quat_continuity(obj):
+    groups = {}
+    for fc in iter_fcurves(obj.animation_data.action):
+        if fc.data_path.endswith("rotation_quaternion"): groups.setdefault(fc.data_path, {})[fc.array_index] = fc
+    nfix = 0
+    for dp, ch in groups.items():
+        if len(ch) != 4: continue
+        frames = sorted({kp.co.x for kp in ch[0].keyframe_points})
+        def val(i, fr):
+            for kp in ch[i].keyframe_points:
+                if abs(kp.co.x - fr) < 1e-3: return kp
+        prev = None
+        for fr in frames:
+            kps = [val(i, fr) for i in range(4)]
+            if any(k is None for k in kps): continue
+            q = Quaternion([k.co.y for k in kps])
+            if prev is not None and prev.dot(q) < 0:
+                for k in kps:
+                    k.co.y = -k.co.y; k.handle_left.y = -k.handle_left.y; k.handle_right.y = -k.handle_right.y
+                q = -q; nfix += 1
+            prev = q
+        for c in ch.values(): c.update()
+    return nfix
+log("quat flips fixed", quat_continuity(DOC), quat_continuity(PAT))
 for f, n, lab, e in ERR:
     if e > 3.0: log("TIP_ERR", f, n, lab, e, "mm")
 log("tip errors: max", max(e for *_, e in ERR), "mm over", len(ERR), "keys")
