@@ -145,17 +145,31 @@ def S02():
 
 
 def S03():
-    """Grinding grain: a woman kneels at the saddle quern by the hearth, both hands on the rubbing stone (from behind)."""
+    """Grinding grain: the saddle quern by the hearth, the rubber stone on it, meal and husks spilled round it, a pot of
+    grain beside - daylight from the door across it. Slow push."""
     U.CUT = False
     R = BR.interior(fire=0.8, door_sun=0.6)
     hx, hy = 0.3, 0.0
     qx, qy = hx - 1.8, hy - 1.6                    # the quern placed by interior()
-    look = (qx, qy, 0.1)
-    hands = {"L": (qx - 0.06, qy + 0.05, 0.16), "R": (qx + 0.06, qy + 0.05, 0.16)}
-    p5._kneeler(0, "Grinder", (qx, qy - 0.55), 90, look, lean=48, var=3, hands=hands)
+    rng = random.Random(3)
+    meal = _plain("meal", (0.62, 0.55, 0.42), 0.95); grain = _plain("grain", (0.45, 0.34, 0.16), 0.7)
+    bm = bmesh.new()
+    for k in range(900):                            # meal and grains scattered round and on the quern
+        a = rng.uniform(0, 6.28); r = abs(rng.gauss(0, 0.16)) + 0.05
+        x, y = qx + r * math.cos(a) * 1.5, qy + r * math.sin(a)
+        s_ = rng.uniform(0.0015, 0.0035)
+        vs = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=s_)['verts']
+        for v in vs:
+            v.co = Vector((v.co.x * 1.6, v.co.y, v.co.z * 0.7)) + Vector((x, y, 0.004))
+    me = bpy.data.meshes.new("grains"); bm.to_mesh(me); bm.free()
+    go = bpy.data.objects.new("grains", me); bpy.context.scene.collection.objects.link(go); me.materials.append(grain)
+    bpy.ops.mesh.primitive_circle_add(vertices=40, radius=0.22, fill_type='NGON', location=(qx + 0.05, qy - 0.02, 0.006)); fl = bpy.context.active_object
+    fl.scale = (1.6, 1.0, 1.0); fl.data.materials.append(meal); fl.name = "mealdust"
+    dd = fl.modifiers.new("d", "DISPLACE"); tt = bpy.data.textures.new("mealpatch", "CLOUDS"); tt.noise_scale = 0.05; dd.texture = tt; dd.strength = 0.004
+    BR.pot(qx + 0.55, qy + 0.35, 0.0, h=0.26, r=0.15, seed=31)
     _spot((qx + 2.4, qy + 0.3, 1.3), (qx, qy, 0.1), 160, size=0.6, color=(1.0, 0.92, 0.8), spot=40)     # daylight from the door
-    return dict(a=((qx + 1.3, qy - 1.3, 1.6), (qx, qy, 0.12)), b=((qx + 1.1, qy - 1.1, 1.5), (qx, qy, 0.12)), lens=35,
-                fstop=4.0, focus=(qx, qy, 0.15), cine=dict(exposure=0.45), hand_ok=("floor", "quern", "saddle"))
+    return dict(a=((qx + 0.75, qy - 0.85, 0.65), (qx, qy, 0.08)), b=((qx + 0.6, qy - 0.68, 0.55), (qx, qy, 0.08)), lens=35,
+                fstop=4.0, focus=(qx, qy, 0.1), cine=dict(exposure=0.45), hand_ok=("floor",))
 
 
 def S04():
@@ -481,7 +495,7 @@ VO = [l.strip() for l in open(os.path.join(os.path.dirname(os.path.abspath(__fil
 PLAN = [  # shot, VO paragraph (1-based), seconds, description
     ("S01", 1, 5.0, "Daylight through the door: a lived-in roundhouse"),
     ("S02", 1, 5.0, "Floors renewed: the section through the house floors"),
-    ("S03", 1, 5.0, "Grinding grain at the saddle quern"),
+    ("S03", 1, 5.0, "Grinding grain: the saddle quern, meal and grain"),
     ("S04", 1, 4.5, "Sleeping and storage: sheepskins, baskets, pots"),
     ("S05", 2, 5.0, "Working materials: scraping a hide in the doorway light"),
     ("S06", 2, 5.0, "The excavated house floor and hearth"),
