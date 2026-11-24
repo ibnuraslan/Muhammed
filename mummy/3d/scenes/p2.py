@@ -733,7 +733,7 @@ def _pool_spot(M, near=(0.0, 0.0)):
     return (best[1], best[2]) if best else near
 
 
-def _moss(M, px, py, wz, n=36, seed=23):
+def _moss(M, px, py, wz, n=110, seed=23):
     """Sphagnum cushions round a pool margin: low lumpy mounds, green to rust-red, densely bumpy (capitula)."""
     rng = random.Random(seed)
     m = bpy.data.materials.get("sphagnum")
@@ -742,21 +742,21 @@ def _moss(M, px, py, wz, n=36, seed=23):
         tc = N.new("ShaderNodeTexCoord")
         nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 3.0; nz.inputs['Detail'].default_value = 5; Lk.new(tc.outputs['Object'], nz.inputs['Vector'])
         rp = N.new("ShaderNodeValToRGB"); el = rp.color_ramp.elements
-        el[0].position = 0.35; el[0].color = (0.09, 0.14, 0.03, 1); e = el.new(0.5); e.color = (0.18, 0.16, 0.04, 1)
-        el[1].position = 0.65; el[1].color = (0.22, 0.05, 0.03, 1)
+        el[0].position = 0.4; el[0].color = (0.05, 0.08, 0.02, 1); e = el.new(0.55); e.color = (0.1, 0.1, 0.03, 1)
+        el[1].position = 0.7; el[1].color = (0.12, 0.035, 0.02, 1)
         Lk.new(nz.outputs['Fac'], rp.inputs['Fac']); Lk.new(rp.outputs['Color'], p.inputs['Base Color'])
         vo = N.new("ShaderNodeTexVoronoi"); vo.inputs['Scale'].default_value = 160; Lk.new(tc.outputs['Object'], vo.inputs['Vector'])
         bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 1.0; bp.inputs['Distance'].default_value = 0.004
         Lk.new(vo.outputs['Distance'], bp.inputs['Height']); Lk.new(bp.outputs['Normal'], p.inputs['Normal'])
         p.inputs['Roughness'].default_value = 0.55; p.inputs['Subsurface Weight'].default_value = 0.1
     for k in range(n):
-        a = 2 * math.pi * k / n + rng.uniform(-0.1, 0.1); r = rng.uniform(0.75, 1.5)
+        a = rng.uniform(0, 6.283); r = rng.uniform(0.7, 1.7)
         x, y = px + r * math.cos(a), py + r * math.sin(a)
         z = max(P2.moor_height(M, x, y), wz - 0.02)
         bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1.0, location=(x, y, z - 0.03)); o = bpy.context.active_object
-        rr = rng.uniform(0.18, 0.4); o.scale = (rr * rng.uniform(0.8, 1.4), rr, rr * 0.28); o.rotation_euler.z = rng.uniform(0, 6.3); o.name = "moss"
+        rr = rng.uniform(0.08, 0.2); o.scale = (rr * rng.uniform(0.8, 1.5), rr, rr * 0.22); o.rotation_euler.z = rng.uniform(0, 6.3); o.name = "moss"
         d = o.modifiers.new("lump", "DISPLACE"); t = bpy.data.textures.get("mosslump") or bpy.data.textures.new("mosslump", "CLOUDS")
-        t.noise_scale = 0.3; d.texture = t; d.strength = 0.05
+        t.noise_scale = 0.06; d.texture = t; d.strength = 0.03
         o.data.materials.append(m)
 
 
@@ -765,7 +765,7 @@ def S23():
     M = _bog_scene("dusk", sun_az=250)
     wz = M["water_z"]
     px, py = _pool_spot(M)
-    P2.bundle((px, py, wz - 0.15), rot=math.radians(30))          # half under the black water
+    P2.bundle((px, py, wz - 0.03), rot=math.radians(30))          # half under the black water
     _moss(M, px, py, wz)
     return dict(a=((px - 0.15, py - 0.25, wz + 2.2), (px, py, wz)), b=((px + 0.1, py - 0.05, wz + 1.9), (px + 0.05, py + 0.05, wz)), lens=35,
                 fstop=5.6, focus=(px, py, wz), cine=dict(exposure=0.35))
