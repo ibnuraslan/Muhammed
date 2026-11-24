@@ -523,7 +523,7 @@ def islander_cropped(i, name=None, var=0, ease=1.3):
         class _N(MD.ModernMan):
             GENDER = 1.0; MUSCLE = dv(0.6); WEIGHT = dv(0.45); HEIGHT = dv(0.45)
             HAIR = (0.18, 0.06); HAIR_LEN = (0.018, 0.035); FACIAL = "beard"
-            SHIRT = (0.2, 0.16, 0.1); JACKET = "coat"; JACKET_COL = tint((0.16, 0.11, 0.06))
+            SHIRT = tint((0.11, 0.08, 0.05)) if var else (0.2, 0.16, 0.1); JACKET = "coat"; JACKET_COL = tint((0.16, 0.11, 0.06))
             TROUSERS = (0.12, 0.09, 0.06); SHOES = (0.08, 0.05, 0.03)
             TROUSER_EASE = ease; TROUSER_EXTRA = 0.03 if ease > 1.2 else 0.012
         return _N(name or "Islander0", years=34 + var * 3)
@@ -531,7 +531,7 @@ def islander_cropped(i, name=None, var=0, ease=1.3):
     class _M(MD.ModernMan):
         GENDER = 0.0; MUSCLE = dv(0.4); WEIGHT = dv(0.35); HEIGHT = dv(0.4)
         HAIR = (0.45, 0.25); HAIR_LEN = (0.025, 0.045)
-        SHIRT = (0.12, 0.1, 0.07); JACKET = "coat"; JACKET_COL = tint((0.13, 0.11, 0.075))
+        SHIRT = tint((0.09, 0.075, 0.05)) if var else (0.12, 0.1, 0.07); JACKET = "coat"; JACKET_COL = tint((0.13, 0.11, 0.075))
         TROUSERS = (0.16, 0.13, 0.09); SHOES = (0.08, 0.05, 0.03)
         TROUSER_EASE = ease; TROUSER_EXTRA = 0.03 if ease > 1.2 else 0.012
     return _M(name or "Islander1", years=24 + var * 4)

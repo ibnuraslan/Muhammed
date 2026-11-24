@@ -217,8 +217,8 @@ def S12():
     kn = c + side * 0.95
     hands = {"L": tuple(c + side * 0.18 + along * 0.12 + Vector((0, 0, 0.1))), "R": tuple(c + side * 0.2 - along * 0.1 + Vector((0, 0, 0.08)))}
     _kneeler(0, "Mender", (kn.x, kn.y), math.degrees(sd) + 180, (c.x, c.y, c.z), lean=45, var=2, hands=hands)
-    cam = c + side * 1.9 + along * 0.7 + Vector((0, 0, 1.95))
-    return dict(a=(tuple(cam), tuple(c + side * 0.25)), b=(tuple(cam - side * 0.2 - Vector((0, 0, 0.1))), tuple(c + side * 0.2)), lens=35,
+    cam = c + side * 0.55 + along * 0.15 + Vector((0, 0, 2.7))        # straight down: shoulders, arms, cord and bundle
+    return dict(a=(tuple(cam), tuple(c + side * 0.4)), b=(tuple(cam - Vector((0, 0, 0.25))), tuple(c + side * 0.38)), lens=35,
                 fstop=2.8, focus=tuple(c + side * 0.3), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor", "bundle", "hurdle"))
 
 
