@@ -150,6 +150,20 @@ class ModernMan(W._Woman):
                 mat = W.cloth(self.name + "_jacket", self.JACKET_COL, rough=0.82, sheen=0.15, weave=1800, bump=0.15)
             else:
                 mat = W.cloth(self.name + "_jacket", self.JACKET_COL, rough=0.55 if self.JACKET == "cagoule" else (0.7 if self.JACKET == "bomber" else 0.82), weave=520, sheen=0.25, bump=0.5 if self.JACKET == "bomber" else 0.25)
+            if self.JACKET == "cagoule":            # waterproof smock: big soft creases and a faint sheen, never a smooth shell
+                N_ = mat.node_tree.nodes; L_ = mat.node_tree.links; p_ = N_["Principled BSDF"]
+                tc_ = N_.new("ShaderNodeTexCoord"); mp_ = N_.new("ShaderNodeMapping"); mp_.inputs['Scale'].default_value = (14.0, 14.0, 4.0)
+                L_.new(tc_.outputs['Object'], mp_.inputs['Vector'])
+                wz = N_.new("ShaderNodeTexWave"); wz.inputs['Scale'].default_value = 1.6; wz.inputs['Distortion'].default_value = 6
+                wz.inputs['Detail'].default_value = 4; L_.new(mp_.outputs[0], wz.inputs['Vector'])
+                nz_ = N_.new("ShaderNodeTexNoise"); nz_.inputs['Scale'].default_value = 3.0; nz_.inputs['Detail'].default_value = 3; L_.new(mp_.outputs[0], nz_.inputs['Vector'])
+                mx_ = N_.new("ShaderNodeMath"); mx_.operation = 'MULTIPLY'; L_.new(wz.outputs['Fac'], mx_.inputs[0]); L_.new(nz_.outputs['Fac'], mx_.inputs[1])
+                bp_ = N_.new("ShaderNodeBump"); bp_.inputs['Strength'].default_value = 0.55; bp_.inputs['Distance'].default_value = 0.02
+                L_.new(mx_.outputs[0], bp_.inputs['Height'])
+                if p_.inputs['Normal'].links:
+                    L_.new(p_.inputs['Normal'].links[0].from_socket, bp_.inputs['Normal'])
+                L_.new(bp_.outputs['Normal'], p_.inputs['Normal'])
+                p_.inputs['Coat Weight'].default_value = 0.15
             off = {"blazer": 0.012, "leather": 0.014, "bomber": 0.02, "coat": 0.016}[JK]
             self.jacket, jv = self._shell("jacket", jk, off, mat, solid=0.004, displace={"bomber": 0.004, "cagoule": 0.007}.get(self.JACKET, 0.002),
                                           drape={"bomber": 40, "cagoule": 45}.get(self.JACKET, 10))
