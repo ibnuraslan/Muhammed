@@ -855,7 +855,7 @@ def S25():
     ro = bpy.data.objects.new("rake", rk); bpy.context.scene.collection.objects.link(ro); ro.location = (x0 + 3.2, yb - 0.8, zf + 1.1)
     ro.rotation_euler = (Vector((x0, yb, zf + 0.7)) - ro.location).to_track_quat('-Z', 'Y').to_euler()
     # the spade (a long ash shaft, narrow iron blade with a side wing), carrying a turf onto the bank top
-    blade = Vector((x0 + 0.25, yb - 0.05, zt + 0.06)); grip = Vector((x0 + 0.05, fy + 0.35, zf + 1.05))
+    blade = Vector((x0 + 0.25, yb - 0.05, zt + 0.06)); grip = Vector((x0 + 0.12, fy + 0.5, zf + 1.05))
     ax = (blade - grip); L_ = ax.length; axn = ax.normalized()
     bpy.ops.mesh.primitive_cylinder_add(radius=0.018, depth=L_, location=(grip + blade) / 2); sh = bpy.context.active_object
     sh.rotation_euler = axn.to_track_quat('Z', 'Y').to_euler(); sh.data.materials.append(_plain("ash", (0.3, 0.22, 0.13), 0.7)); sh.name = "spade"
@@ -871,7 +871,9 @@ def S25():
     st.head_to((blade.x, blade.y, blade.z - zf), share=0.8)
     st.finish(look=(blade.x, blade.y, blade.z - zf), density=HAIR)
     G.lift(st, zf)
-    return dict(a=((x0 + 1.9, fy - 2.3, zf + 1.65), (x0 + 0.1, yb, zf + 1.05)), b=((x0 + 1.6, fy - 1.8, zf + 1.6), (x0 + 0.1, yb, zf + 1.05)), lens=32,
+    for o in [o for o in bpy.data.objects if o.name.startswith("groundmist")]:
+        bpy.data.objects.remove(o)                                 # no ground mist down in the cutting
+    return dict(a=((x0 + 1.15, fy - 2.5, zf + 1.65), (x0 + 0.15, yb, zf + 1.05)), b=((x0 + 0.95, fy - 2.0, zf + 1.6), (x0 + 0.15, yb, zf + 1.05)), lens=32,
                 fstop=4.0, focus=(x0 + 0.1, fy + 0.4, zf + 1.1), cine=dict(exposure=0.35), hand_ok=("spade", "moor", "peatface", "cuttingfloor", "groundmist"))
 
 
