@@ -696,7 +696,7 @@ def _islander2(name="Islander1"):
     class _J(MD.ModernMan):
         GENDER = 0.0; MUSCLE = 0.4; WEIGHT = 0.35; HEIGHT = 0.4
         HAIR = (0.45, 0.25); HAIR_LEN = (0.12, 0.2)
-        SHIRT = (0.42, 0.38, 0.3); JACKET = "coat"; JACKET_COL = (0.42, 0.37, 0.28)
+        SHIRT = (0.24, 0.2, 0.15); JACKET = "coat"; JACKET_COL = (0.25, 0.21, 0.15)
         TROUSERS = (0.16, 0.13, 0.09); SHOES = (0.08, 0.05, 0.03)
         TROUSER_EASE = 1.3; TROUSER_EXTRA = 0.03
     return _J(name, years=24)
@@ -738,7 +738,7 @@ def S22():
     # the hurdle: long axis running out into the pool (+y), near end on the bank edge, far end dipping into the water
     Lh, Wh = 2.0, 0.9
     hx, hy = x0, y0 + 0.2 + Lh / 2
-    z_near = z0 + 0.32; z_far = wz - 0.05
+    z_near = z0 + 0.55; z_far = wz - 0.12
     tilt = math.atan2(z_near - z_far, Lh)
     piv = bpy.data.objects.new("hurdle_rig", None); bpy.context.scene.collection.objects.link(piv); piv.location = (hx, hy, (z_near + z_far) / 2)
     before = set(bpy.data.objects)
@@ -765,17 +765,13 @@ def S22():
     # islander 2: slighter, pale belted tunic, long hair - on the bank to the right, one foot forward, bent over the
     # right pole, bracing it with both hands
     m2 = _islander2()
-    f2 = (hx + Wh / 2 + 0.3, hy - Lh / 2 - 0.45)
+    f2 = (hx + Wh / 2 + 0.12, hy - Lh / 2 - 0.62)
     zs = max(P2.moor_height(M, f2[0] + ex, f2[1] + ey) for ex in (-0.2, 0, 0.2) for ey in (-0.3, 0, 0.3)) + 0.01
-    st2 = AC.Stand(m2, f2, 100, weight="R", lean=40)
-    for sd, d in (("L", 0.3), ("R", 0.62)):
-        w = pole(1, d) - Vector((0, 0, zs)); st2.hand(sd, w, elbow=(0.6, 0.1, -0.8), grip=0.85)
-    st2.head_to(tuple(pole(1, 1.3) - Vector((0, 0, zs))), share=0.8)
+    palms = {"L": tuple(pole(1, 0.12) - Vector((0.03, 0, zs + 0.035))), "R": tuple(pole(1, 0.4) - Vector((-0.03, 0, zs + 0.035)))}
+    st2 = AC.Lean(m2, f2, 90, palms, lean=42)
     st2.finish(look=tuple(pole(1, 1.3) - Vector((0, 0, zs))), density=HAIR)
     G.lift(st2, zs)
-    st2.M = Matrix.Translation((0, 0, zs)) @ st2.M
-    _belt(st2)
-    return dict(a=((x0 + 0.6, y0 - 4.4, z0 + 1.5), (x0, y0 + 1.6, z0 + 0.5)), b=((x0 + 0.45, y0 - 3.6, z0 + 1.4), (x0, y0 + 1.6, z0 + 0.5)),
+    return dict(a=((x0 + 1.9, y0 - 3.9, z0 + 2.1), (x0, y0 + 1.4, z0 + 0.3)), b=((x0 + 1.6, y0 - 3.2, z0 + 1.95), (x0, y0 + 1.4, z0 + 0.3)),
                 lens=35, fstop=4.0, focus=(x0, y0 + 0.3, z0 + 0.6), cine=dict(exposure=0.3), hand_ok=("moor", "hurdle", "bundle", "belt"))
 
 
