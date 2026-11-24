@@ -727,7 +727,7 @@ def S22():
         return Vector((x, hy - Lh / 2 + d, z_near - (z_near - z_far) * d / Lh + 0.03))
     # islander 1: heavy-set, dark cloak - kneels behind the left pole end, both hands on it
     m1 = BR.Islander(name="Islander0")
-    k1 = (hx - Wh / 2 - 0.08, hy - Lh / 2 - 0.72)
+    k1 = (hx - Wh / 2 - 0.3, hy - Lh / 2 - 0.62)
     zk = max(P2.moor_height(M, k1[0] + ex, k1[1] + ey) for ex in (-0.2, 0, 0.2) for ey in (-0.3, 0, 0.3)) + 0.01
     st1 = AC.Kneel(m1, k1, 90, lean=38, sit_back=True)
     for sd, d in (("L", 0.12), ("R", 0.42)):
