@@ -231,8 +231,14 @@ def S11():
     out through the gap. Firelight, sharp focus on the bone."""
     R, c = _house_bundle(fire=1.0, moon=0.2)
     bo = bpy.data.objects["bundle"]
-    hit, n = _surface_hit(bo, (-0.25, -0.1))           # over the hip on the room side, between the cords
-    n = (n + Vector((math.cos(math.radians(-20)), math.sin(math.radians(-20)), 0)) * 0.9 + Vector((0, 0, 0.3))).normalized()   # breaking out toward the room
+    room = Vector((math.cos(math.radians(-20)), math.sin(math.radians(-20)), 0)); ax = Vector((math.cos(math.radians(70)), math.sin(math.radians(70)), 0))
+    cam = c + room * 1.5 + Vector((0, 0, 0.85))           # from the room side, looking down onto the split
+    aim = c - ax * 0.12 + Vector((0, 0, 0.04))             # the hip, on the face turned to the camera
+    bpy.context.view_layer.update(); dg0 = bpy.context.evaluated_depsgraph_get(); Mi = bo.matrix_world.inverted()
+    ok, hl, hn, _ = bo.evaluated_get(dg0).ray_cast(Mi @ cam, (Mi.to_3x3() @ (aim - cam)).normalized())
+    hit = bo.matrix_world @ hl if ok else aim
+    n = (bo.matrix_world.to_3x3() @ hn).normalized() if ok else room
+    n = (n + (cam - hit).normalized() * 0.5).normalized()   # breaking out toward the room
     sk = B.Skeleton("M", "C", name="Exposed")
     for s_ in list(sk.parts):
         if s_ != "femurL":
@@ -242,18 +248,17 @@ def S11():
     bpy.context.view_layer.update()
     W = np.array([o.matrix_world @ v.co for v in o.data.vertices])
     top = W[np.argmax(W @ np.array(n))]
-    tgt = hit + n * 0.15                                   # head and neck of the femur stand well clear of the hide
+    tgt = hit + n * 0.12                                   # head and neck of the femur stand well clear of the hide
     sk.root.location += Vector((tgt.x - top[0], tgt.y - top[1], tgt.z - top[2]))
     bpy.context.view_layer.update()
     # the split: a dark ragged gap in the hide round the bone, with lifted torn lips
     q = Vector((0, 0, 1)).rotation_difference(n)
-    bpy.ops.mesh.primitive_circle_add(vertices=28, radius=0.055, fill_type='NGON', location=tuple(hit + n * 0.003)); gp = bpy.context.active_object
+    bpy.ops.mesh.primitive_circle_add(vertices=28, radius=0.07, fill_type='NGON', location=tuple(hit + n * 0.003)); gp = bpy.context.active_object
     gp.rotation_euler = q.to_euler(); gp.scale = (1.0, 0.62, 1.0); gp.name = "hidesplit"; gp.data.materials.append(_plain("hidegap", (0.008, 0.005, 0.003), 0.95))
     dg_ = gp.modifiers.new("rag", "DISPLACE"); tr = bpy.data.textures.new("ragged", "CLOUDS"); tr.noise_scale = 0.015; dg_.texture = tr; dg_.strength = 0.01
     hx, hy = R["hearth"]
-    _spot((hx - 0.2, hy + 0.2, 0.8), tuple(tgt), 45, size=0.3, color=(1.0, 0.6, 0.28), spot=25)
+    _spot((hx - 0.2, hy + 0.2, 0.8), tuple(tgt), 110, size=0.3, color=(1.0, 0.6, 0.28), spot=25)
     # medium shot: the whole crouched bundle on its hurdle, the split and the bone end at a readable scale
-    cam = c + Vector((math.cos(math.radians(-20)), math.sin(math.radians(-20)), 0)) * 1.5 + Vector((0, 0, 0.85))   # from the room side, looking down onto the split
     side = Vector((1, 0, 0))
     return dict(a=(tuple(cam), tuple(c * 0.7 + hit * 0.3)), b=(tuple(cam - (cam - c).normalized() * 0.15), tuple(c * 0.7 + hit * 0.3)), lens=40,
                 fstop=4.0, focus=tuple(tgt), cine=dict(exposure=0.1, sat=0.9), hand_ok=("floor", "bundle"))
