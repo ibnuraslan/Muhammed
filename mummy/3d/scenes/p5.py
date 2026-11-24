@@ -207,13 +207,16 @@ def S11():
 
 
 def S12():
-    """Repair: an islander kneels at the bundle on the floor, binding a new cord round it (from behind, firelit)."""
+    """Repair: an islander kneels beside the bundle on the floor, binding a new cord round it (from above and behind,
+    over his shoulder; firelit)."""
     R, c = _house_bundle(fire=1.0, moon=0.2)
-    kn = (c.x + 0.25, c.y - 0.75)
-    hands = {"L": (c.x - 0.05, c.y - 0.2, c.z + 0.12), "R": (c.x + 0.18, c.y - 0.22, c.z + 0.1)}
-    _kneeler(0, "Mender", kn, 90, (c.x, c.y, c.z), lean=42, var=0, hands=hands)
-    return dict(a=((kn[0] + 1.1, kn[1] - 1.5, 1.35), (c.x, c.y - 0.2, 0.3)), b=((kn[0] + 0.9, kn[1] - 1.25, 1.25), (c.x, c.y - 0.2, 0.3)), lens=35,
-                fstop=2.8, focus=(c.x, c.y - 0.3, 0.3), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor", "bundle", "hurdle"))
+    sd = math.radians(70 - 90); side = Vector((math.cos(sd), math.sin(sd), 0)); along = Vector((math.cos(math.radians(70)), math.sin(math.radians(70)), 0))
+    kn = c + side * 0.95
+    hands = {"L": tuple(c + side * 0.18 + along * 0.12 + Vector((0, 0, 0.1))), "R": tuple(c + side * 0.2 - along * 0.1 + Vector((0, 0, 0.08)))}
+    _kneeler(0, "Mender", (kn.x, kn.y), math.degrees(sd) + 180, (c.x, c.y, c.z), lean=45, var=2, hands=hands)
+    cam = c + side * 1.9 + along * 0.7 + Vector((0, 0, 1.95))
+    return dict(a=(tuple(cam), tuple(c + side * 0.25)), b=(tuple(cam - side * 0.2 - Vector((0, 0, 0.1))), tuple(c + side * 0.2)), lens=35,
+                fstop=2.8, focus=tuple(c + side * 0.3), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor", "bundle", "hurdle"))
 
 
 def S13():
