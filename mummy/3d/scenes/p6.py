@@ -340,6 +340,8 @@ def S15():
         sk, W = p3.lab_part(seg, sex="M", tone="C", x=x, y=y, yaw=rng.uniform(-8, 8), name=f"Boxed{k}")
         dz = top + 0.009 - float(W[:, 2].min())
         sk.root.location.z += dz
+        for o_ in sk.parts.values():
+            p3._knee_mats(o_, sand=0.4)                            # old excavated bone, not clean model bone
     _spot((-0.4, 0.4, top + 0.9), (0, 1.0, top), 80, size=0.1, color=(1.0, 0.92, 0.82), spot=40)
     t = Vector((0, 1.0, top + 0.03))
     return dict(a=(tuple(t + Vector((0.0, -0.7, 0.75))), tuple(t)), b=(tuple(t + Vector((0.08, -0.58, 0.65))), tuple(t)), lens=35,
