@@ -560,7 +560,7 @@ def bundle(loc, rot=0.0, length=0.95, girth=0.44, seed=0):
     for k in range(3):
         u = -0.25 + k * 0.25 + rng.uniform(-0.02, 0.02)
         f = math.sqrt(max(0.05, 1 - (u / 0.5) ** 2))            # the bundle narrows toward its ends
-        bpy.ops.mesh.primitive_torus_add(major_radius=girth * 0.5 * f * 0.93, minor_radius=0.012, location=loc); r = bpy.context.active_object
+        bpy.ops.mesh.primitive_torus_add(major_radius=girth * 0.5 * f * 0.84, minor_radius=0.012, location=loc); r = bpy.context.active_object
         r.scale = (0.76, 1, 1); r.rotation_euler = (0, math.pi / 2, rot)
         r.location = Vector(loc) + Matrix.Rotation(rot, 3, 'Z') @ Vector((u * length, 0, 0)); r.data.materials.append(rope); r.name = "bundlerope"
     return o
