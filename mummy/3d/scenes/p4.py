@@ -267,6 +267,7 @@ def S13():
 def S14():
     """Beneath it: the excavated hearth stones in the trench, and under them a small pit of cremated bone (section).
     Crane down to it."""
+    G.SCANNED = True                                          # scanned drystone: angular, lichened faces
     T, sk = p1.site("golden", grass_at=None, kit=False, burials=False, sun_az=200)
     hx, hy = U.HOUSES[1][0] + 0.4, U.HOUSES[1][1]              # the middle house's hearth (built by G.houses)
     z = G.H(hx, hy)
@@ -289,6 +290,7 @@ def S15():
 def S16():
     """Bones within the walls: a human forearm bone wedged between two courses of the house's stone revetment, seen
     from the house floor. Slow push."""
+    G.SCANNED = True                                          # scanned drystone: angular, lichened faces
     T, sk = p1.site("golden", grass_at=None, kit=False, burials=False, sun_az=200)
     hx, hy, r = U.HOUSES[1]
     a = math.radians(-60)
@@ -308,9 +310,11 @@ def S16():
     p3._knee_mats(o, sand=0.6)
     t = Vector((wx, wy, zj))
     inw = Vector((-math.cos(a), -math.sin(a), 0))
+    # low evening sun raking across the wall face from the house floor (motivated: the open trench, sun low in the west)
+    _spot(tuple(t + inw * 1.6 + Vector((-0.9, 0.4, 0.5))), tuple(t), 260, size=0.15, color=(1.0, 0.82, 0.62), spot=35)
     return dict(a=(tuple(t + inw * 0.75 + Vector((0.15, 0, 0.12))), tuple(t)),
-                b=(tuple(t + inw * 0.5 + Vector((0.08, 0, 0.08))), tuple(t)), lens=45, fstop=4.0, focus=tuple(t),
-                cine=dict(exposure=0.6))
+                b=(tuple(t + inw * 0.5 + Vector((0.08, 0, 0.08))), tuple(t)), lens=45, fstop=8.0, focus=tuple(t),
+                cine=dict(exposure=0.3))
 
 
 def S17():
@@ -330,9 +334,11 @@ def S17():
         sk2.root.rotation_euler = (math.radians(90), 0, rng.uniform(0, 6.3)); bpy.context.view_layer.update()
         Wv = np.array([o.matrix_world @ v.co for v in o.data.vertices]); c = Wv.mean(0)
         sk2.root.location += Vector((x - c[0], y - c[1], z - 0.004 - Wv[:, 2].min()))
+        p3._knee_mats(o, sand=0.6)                                 # the same stained burial bone as the graves
     zc = G.H(-1.5, -0.4)
-    return dict(a=((-2.6, -1.8, zc + 0.7), (-1.5, -0.4, zc)), b=((-2.1, -2.0, zc + 0.65), (-1.2, -0.3, zc)), lens=32,
-                fstop=5.6, focus=(-1.5, -0.4, zc), cine=dict(exposure=0.1))
+    _spot((-0.2, -2.6, zc + 1.2), (-1.5, -0.4, zc), 420, size=0.2, color=(1.0, 0.84, 0.66), spot=40)   # low golden sun raking the floor
+    return dict(a=((-2.4, -1.7, zc + 0.75), (-1.5, -0.4, zc)), b=((-2.0, -1.85, zc + 0.7), (-1.3, -0.35, zc)), lens=35,
+                fstop=8.0, focus=(-1.45, -0.4, zc), cine=dict(exposure=0.35))
 
 
 # ============================================================================ "The two assembled bodies belong to a place..."

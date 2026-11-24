@@ -103,8 +103,45 @@ def _stone_mesh(seed, flat=0.55):
     return me
 
 
+SCANNED = False             # True: stones are photo-scanned rocks (Poly Haven, CC0) - angular, lichened faces
+_SCAN_MESHES = []
+
+
+def _scan_meshes():
+    """Photo-scanned rocks, each baked to its own mesh, centred and normalised to a 1 m box (keeps its scan material)."""
+    import ph
+    out = []
+    for aid in ("rock_moss_set_01", "rock_moss_set_02", "namaqualand_stones_01"):
+        try:
+            root, ms = ph.model(aid)
+        except Exception as ex:
+            print("scan rocks", aid, ex); continue
+        bpy.context.view_layer.update()
+        for o in ms:
+            me = o.data.copy(); me.transform(o.matrix_world)
+            co = np.array([v.co[:] for v in me.vertices])
+            if len(co) < 50:
+                continue
+            lo, hi = co.min(0), co.max(0); c = (lo + hi) / 2; d = np.maximum(hi - lo, 1e-4)
+            me.transform(Matrix.Diagonal((1 / d[0], 1 / d[1], 1 / d[2], 1.0)) @ Matrix.Translation(Vector(-c)))
+            me.name = f"scanrock_{aid}_{len(out)}"; out.append(me)
+        for o in ms + [root]:
+            bpy.data.objects.remove(o)
+    return out
+
+
 def stone(loc, size, rot_z=0.0, seed=None, flat=0.55, tilt=(0, 0)):
-    global _STONE_MESHES
+    global _STONE_MESHES, _SCAN_MESHES
+    if SCANNED:
+        if not _SCAN_MESHES:
+            _SCAN_MESHES = _scan_meshes()
+        if _SCAN_MESHES:
+            me = _SCAN_MESHES[(seed if seed is not None else random.randrange(1000)) % len(_SCAN_MESHES)]
+            o = bpy.data.objects.new("stone", me); link(o)
+            o.location = loc; o.rotation_euler = (tilt[0], tilt[1], rot_z)
+            sz = size if isinstance(size, (tuple, list)) else (size, size * 0.7, size * flat)
+            o.scale = sz
+            return o
     if not _STONE_MESHES:
         _STONE_MESHES = [_stone_mesh(s, f) for s, f in zip(range(10), (0.6, 0.75, 0.55, 0.8, 0.65, 0.6, 0.78, 0.55, 0.7, 0.62))]
     me = _STONE_MESHES[(seed if seed is not None else random.randrange(1000)) % len(_STONE_MESHES)]
