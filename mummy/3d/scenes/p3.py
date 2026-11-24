@@ -129,6 +129,8 @@ def _knee_mats(o, sand=0.5):
             if n.type == 'BUMP':
                 n.inputs['Strength'].default_value = min(1.0, n.inputs['Strength'].default_value * 1.6)
                 n.inputs['Distance'].default_value *= 1.8
+            if n.type == 'HUE_SAT' and abs(n.inputs['Saturation'].default_value - 0.55) < 1e-3:
+                n.inputs['Saturation'].default_value = 1.0; n.inputs['Value'].default_value = 0.92   # keep the burial brown
     o.data.materials.append(_trabecular())
 
 
