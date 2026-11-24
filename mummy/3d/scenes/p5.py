@@ -208,8 +208,9 @@ def S10():
     for c, col in zip(cs, ((0.85, 0.2, 0.1), (0.15, 0.45, 0.8), (0.9, 0.8, 0.2))):
         p3._microtube(c.x + 0.07, c.y - 0.12, LB.TOP + 0.002, cap=col)
     near = cs[2]
-    return dict(a=((near.x + 0.55, near.y - 0.28, LB.TOP + 0.06), tuple(cs[0])), b=((near.x + 0.5, near.y - 0.24, LB.TOP + 0.07), tuple(cs[0])),
-                lens=85, fstop=2.8, focus=tuple(cs[1]), cine=dict(exposure=0.05))
+    mid = cs[1]
+    return dict(a=((near.x + 0.45, near.y - 0.62, LB.TOP + 0.14), tuple(mid)), b=((near.x + 0.4, near.y - 0.56, LB.TOP + 0.13), tuple(mid)),
+                lens=60, fstop=5.6, focus=tuple(mid), cine=dict(exposure=0.05))
 
 
 # ============================================================================ "Another possibility is more practical..."
