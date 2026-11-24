@@ -125,13 +125,13 @@ def S01():
     """Bronze Age, inside the roundhouse by firelight: three wrapped bundles on hurdles laid side by side in the gloom,
     the fire low. Slow push between them."""
     U.CUT = False
-    R = BR.interior(fire=0.7, door_sun=0.0)
+    R = BR.interior(fire=1.0, door_sun=0.0, moon=1.0)
     hx, hy = R["hearth"]
     for k, (dx, rot) in enumerate(((-1.75, 88), (-0.7, 92), (0.35, 86))):
         P2.hurdle((hx + dx, hy + 1.7, 0.03), rot=math.radians(rot), length=1.6, width=0.7, seed=k)
         P2.bundle((hx + dx, hy + 1.7, 0.22), rot=math.radians(rot), length=0.85 + 0.1 * k, girth=0.4, seed=k)
     return dict(a=((hx - 2.3, hy - 0.6, 0.9), (hx - 0.6, hy + 1.7, 0.2)), b=((hx - 1.8, hy - 0.2, 0.8), (hx - 0.6, hy + 1.7, 0.2)), lens=32,
-                fstop=2.8, focus=(hx - 0.7, hy + 1.7, 0.25), cine=dict(exposure=0.25), hand_ok=("floor",))
+                fstop=2.8, focus=(hx - 0.7, hy + 1.7, 0.25), cine=dict(exposure=0.55), hand_ok=("floor",))
 
 
 def S02():
@@ -162,11 +162,59 @@ def S04():
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=-0.05))
 
 
+def _old_bone(obj, stain=0.8):
+    """Long-buried bone: deep brown mineral staining in blotches, surface erosion, and dendritic root etching (pale
+    branching grooves where rootlets dissolved the surface)."""
+    for i, m0 in enumerate(obj.data.materials):
+        if not m0 or not m0.use_nodes:
+            continue
+        m = m0.copy(); obj.data.materials[i] = m
+        N = m.node_tree.nodes; Lk = m.node_tree.links; p = [n for n in N if n.type == 'BSDF_PRINCIPLED']
+        if not p:
+            continue
+        p = p[0]; tc = N.new("ShaderNodeTexCoord")
+        src = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
+        # staining: blotchy dark brown
+        st = N.new("ShaderNodeTexNoise"); st.inputs['Scale'].default_value = 9; st.inputs['Detail'].default_value = 8; Lk.new(tc.outputs['Object'], st.inputs['Vector'])
+        sm = N.new("ShaderNodeMapRange"); sm.inputs['From Min'].default_value = 0.38; sm.inputs['From Max'].default_value = 0.66
+        sm.inputs['To Min'].default_value = 0.35 * stain; sm.inputs['To Max'].default_value = 0.95 * stain; Lk.new(st.outputs['Fac'], sm.inputs['Value'])
+        mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; Lk.new(sm.outputs[0], mx.inputs['Factor'])
+        if src:
+            Lk.new(src, mx.inputs[6])
+        else:
+            mx.inputs[6].default_value = p.inputs['Base Color'].default_value
+        mx.inputs[7].default_value = (0.36, 0.24, 0.13, 1)
+        # root etching: thin branching channels (voronoi cell edges on warped coordinates)
+        wn = N.new("ShaderNodeTexNoise"); wn.inputs['Scale'].default_value = 18; wn.inputs['Detail'].default_value = 3; Lk.new(tc.outputs['Object'], wn.inputs['Vector'])
+        wm = N.new("ShaderNodeMix"); wm.data_type = 'VECTOR'; wm.inputs['Factor'].default_value = 0.12
+        Lk.new(tc.outputs['Object'], wm.inputs[4]); Lk.new(wn.outputs['Color'], wm.inputs[5])
+        ve = N.new("ShaderNodeTexVoronoi"); ve.feature = 'DISTANCE_TO_EDGE'; ve.inputs['Scale'].default_value = 55; Lk.new(wm.outputs[1], ve.inputs['Vector'])
+        rl = N.new("ShaderNodeMapRange"); rl.inputs['From Min'].default_value = 0.0; rl.inputs['From Max'].default_value = 0.035
+        rl.inputs['To Min'].default_value = 1.0; rl.inputs['To Max'].default_value = 0.0; Lk.new(ve.outputs['Distance'], rl.inputs['Value'])
+        mk = N.new("ShaderNodeTexNoise"); mk.inputs['Scale'].default_value = 6; Lk.new(tc.outputs['Object'], mk.inputs['Vector'])
+        mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.48; mr.inputs['From Max'].default_value = 0.58; Lk.new(mk.outputs['Fac'], mr.inputs['Value'])
+        root = N.new("ShaderNodeMath"); root.operation = 'MULTIPLY'; Lk.new(rl.outputs[0], root.inputs[0]); Lk.new(mr.outputs[0], root.inputs[1])
+        rc = N.new("ShaderNodeMix"); rc.data_type = 'RGBA'; Lk.new(root.outputs[0], rc.inputs['Factor']); Lk.new(mx.outputs[2], rc.inputs[6])
+        rc.inputs[7].default_value = (0.62, 0.52, 0.38, 1)
+        hs = N.new("ShaderNodeHueSaturation"); hs.inputs['Value'].default_value = 0.8; Lk.new(rc.outputs[2], hs.inputs['Color'])
+        Lk.new(hs.outputs[0], p.inputs['Base Color'])
+        # erosion pitting plus the etched grooves in the bump
+        er = N.new("ShaderNodeTexNoise"); er.inputs['Scale'].default_value = 160; er.inputs['Detail'].default_value = 10; Lk.new(tc.outputs['Object'], er.inputs['Vector'])
+        hh = N.new("ShaderNodeMath"); hh.operation = 'MULTIPLY_ADD'; hh.inputs[1].default_value = -0.8; Lk.new(root.outputs[0], hh.inputs[0]); Lk.new(er.outputs['Fac'], hh.inputs[2])
+        bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.7; bp.inputs['Distance'].default_value = 0.0012; Lk.new(hh.outputs[0], bp.inputs['Height'])
+        if p.inputs['Normal'].links:
+            Lk.new(p.inputs['Normal'].links[0].from_socket, bp.inputs['Normal'])
+        Lk.new(bp.outputs['Normal'], p.inputs['Normal'])
+        p.inputs['Roughness'].default_value = 0.85
+        if 'Subsurface Weight' in p.inputs:
+            p.inputs['Subsurface Weight'].default_value = 0.0
+
+
 def S05():
     """The head: a male cranium, heavier brow ridges and mastoids, darker and more stained than the pelvis. Slow slide."""
     A = LB.room(window_light=0.3, lamp=True, lamp_at=(0.4, 0.62), lamp_target=(0.0, 0.36), lamp_energy=22)
     LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
-    cr = B.hero_cranium(healed=False, tone="D")
+    cr = B.hero_cranium(healed=False, tone="D"); _old_bone(cr)
     co = np.array([v.co for v in cr.data.vertices]); cr.location = (0.0, 0.36, LB.TOP + 0.004 - co[:, 2].min() * 0.97)
     cr.rotation_euler = (0, 0, math.radians(-60))
     p1._cork_ring(0.0, 0.36, LB.TOP)
@@ -180,7 +228,7 @@ def S06():
     A = LB.room(window_light=0.3, lamp=True, lamp_at=(0.0, 0.62), lamp_target=(0.0, 0.36), lamp_energy=26)
     LB.velvet(-0.8, 0.8, 0.0, 0.78, LB.TOP)
     lab_part("pelvis", sex="F", tone="C", x=0.22, y=0.4, yaw=90)
-    cr = B.hero_cranium(healed=False, tone="D")
+    cr = B.hero_cranium(healed=False, tone="D"); _old_bone(cr)
     co = np.array([v.co for v in cr.data.vertices]); cr.location = (-0.22, 0.4, LB.TOP + 0.004 - co[:, 2].min() * 0.97)
     cr.rotation_euler = (0, 0, math.radians(-30))
     c = Vector((0.0, 0.4, LB.TOP + 0.06))
@@ -236,6 +284,52 @@ def S10():
 
 
 # ============================================================================ "Ancient DNA is damaged and difficult to recover..."
+def _pp(name="polyprop"):
+    m = bpy.data.materials.get(name)
+    if m:
+        return m
+    m = bpy.data.materials.new(name); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
+    p.inputs['Base Color'].default_value = (0.92, 0.92, 0.9, 1); p.inputs['Transmission Weight'].default_value = 0.85
+    p.inputs['Roughness'].default_value = 0.28; p.inputs['IOR'].default_value = 1.49
+    return m
+
+
+def _microtube(x, y, z, cap=(0.15, 0.45, 0.8), powder=True, open_=False):
+    """A 1.5 ml microcentrifuge tube standing in a rack: conical polypropylene body, ribbed collar, hinged snap cap."""
+    prof = [(0.0, 0.0), (0.0018, 0.001), (0.0045, 0.012), (0.0052, 0.022), (0.0054, 0.037), (0.0062, 0.038), (0.0062, 0.041),
+            (0.0056, 0.041), (0.0048, 0.040), (0.0046, 0.024), (0.0038, 0.012), (0.0014, 0.0015), (0.0, 0.0015)]
+    o = BR._lathe2("microtube", prof, _pp(), (x, y, z), segs=28)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=28, radius=0.0058, depth=0.004, location=(x, y, z + 0.043)); c = bpy.context.active_object
+    c.data.materials.append(_plain(f"cap{cap}", cap, 0.35)); c.name = "tubecap"
+    if open_:
+        c.location = (x + 0.006, y, z + 0.047); c.rotation_euler.y = math.radians(-100)
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(x + 0.0062, y, z + 0.042)); hg = bpy.context.active_object
+    hg.scale = (0.004, 0.003, 0.0012); hg.data.materials.append(c.data.materials[0]); hg.name = "tubehinge"
+    if powder:
+        bpy.ops.mesh.primitive_cone_add(vertices=20, radius1=0.0012, radius2=0.0036, depth=0.008, location=(x, y, z + 0.0055)); pw = bpy.context.active_object
+        pw.data.materials.append(_plain("bonepowder", (0.82, 0.78, 0.7), 0.95)); pw.name = "tubepowder"
+    return o
+
+
+def _rack(x, y, z, nx=6, ny=4, pitch=0.013, col=(0.15, 0.35, 0.75)):
+    """A perforated tube rack (blue polypropylene) and tubes in some of its holes; returns tube positions."""
+    m = _plain(f"rack{col}", col, 0.45)
+    w, d = nx * pitch + 0.01, ny * pitch + 0.01
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(x, y, z + 0.03)); top = bpy.context.active_object
+    top.scale = (w, d, 0.003); top.data.materials.append(m); top.name = "rack"
+    for sx in (-1, 1):
+        bpy.ops.mesh.primitive_cube_add(size=1, location=(x + sx * w / 2, y, z + 0.015)); leg = bpy.context.active_object
+        leg.scale = (0.003, d, 0.03); leg.data.materials.append(m); leg.name = "rack"
+    pos = []
+    for i in range(nx):
+        for j in range(ny):
+            px = x - (nx - 1) * pitch / 2 + i * pitch; py = y - (ny - 1) * pitch / 2 + j * pitch
+            bpy.ops.mesh.primitive_cylinder_add(vertices=16, radius=0.0042, depth=0.0034, location=(px, py, z + 0.0302)); hole = bpy.context.active_object
+            hole.data.materials.append(_plain("holedark", (0.01, 0.01, 0.015), 0.5)); hole.name = "rackhole"
+            pos.append((px, py))
+    return pos
+
+
 def clean_room(uv=1.0):
     """Ancient-DNA clean room: white walls, a laminar-flow cabinet with a glass sash and violet UV tubes, racks of capped
     tubes, a pipette on its stand; cold overhead light."""
@@ -243,7 +337,7 @@ def clean_room(uv=1.0):
     for loc, sc in (((0, 2.0, 1.5), (8, 0.1, 3)), ((-3.5, 0, 1.5), (0.1, 6, 3)), ((3.5, 0, 1.5), (0.1, 6, 3)), ((0, 0, 3.0), (8, 6, 0.1))):
         bpy.ops.mesh.primitive_cube_add(size=1, location=loc); o = bpy.context.active_object; o.scale = sc; o.data.materials.append(white)
     bpy.ops.mesh.primitive_plane_add(size=10, location=(0, 0, 0)); f = bpy.context.active_object; f.data.materials.append(_plain("cleanfloor", (0.18, 0.2, 0.22), 0.3))
-    steel = p2._plain("cabsteel", (0.7, 0.7, 0.72), 0.3, 1.0) if hasattr(p2, "_plain") else _plain("cabsteel", (0.7, 0.7, 0.72), 0.3, 1.0)
+    steel = P2._brushed("cabsteel", (0.62, 0.63, 0.65), 0.3)
     # cabinet body
     for loc, sc in (((0, 1.55, 0.45), (1.6, 0.8, 0.9)), ((0, 1.55, 1.75), (1.6, 0.8, 0.5)), ((-0.79, 1.55, 1.25), (0.04, 0.8, 0.6)), ((0.79, 1.55, 1.25), (0.04, 0.8, 0.6)),
                     ((0, 1.93, 1.25), (1.6, 0.04, 0.6))):
@@ -254,17 +348,22 @@ def clean_room(uv=1.0):
     for xx in (-0.4, 0.4):
         bpy.ops.mesh.primitive_cylinder_add(radius=0.012, depth=0.6, location=(xx, 1.6, 1.48)); tb = bpy.context.active_object
         tb.rotation_euler.y = math.pi / 2; tb.name = "uvtube"
-        tb.data.materials.append(P2._mat("uvglow", (0, 0, 0), 0.4, emit=(0.45, 0.2, 1.0), strength=60 * uv))
-    d = bpy.data.lights.new("uv", 'AREA'); d.size = 1.3; d.size_y = 0.5; d.shape = 'RECTANGLE'; d.energy = 90 * uv; d.color = (0.5, 0.3, 1.0)
+        tb.data.materials.append(P2._mat("uvglow", (0, 0, 0), 0.4, emit=(0.45, 0.2, 1.0), strength=25 * uv))
+    d = bpy.data.lights.new("uv", 'AREA'); d.size = 1.3; d.size_y = 0.5; d.shape = 'RECTANGLE'; d.energy = 22 * uv; d.color = (0.5, 0.3, 1.0)
+    wl = bpy.data.lights.new("cabwhite", 'AREA'); wl.size = 1.3; wl.size_y = 0.4; wl.shape = 'RECTANGLE'; wl.energy = 45; wl.color = (0.92, 0.96, 1.0)
+    wo = bpy.data.objects.new("cabwhite", wl); bpy.context.scene.collection.objects.link(wo); wo.location = (0, 1.45, 1.46)
     lo = bpy.data.objects.new("uv", d); bpy.context.scene.collection.objects.link(lo); lo.location = (0, 1.6, 1.45)
-    # work surface items: tube racks, a pipette on its stand, a bone-powder tube
-    rack = _plain("rack", (0.85, 0.85, 0.82), 0.4)
-    for rx in (-0.35, 0.25):
-        bpy.ops.mesh.primitive_cube_add(size=1, location=(rx, 1.6, 0.92)); r_ = bpy.context.active_object; r_.scale = (0.2, 0.08, 0.04); r_.data.materials.append(rack)
-        for k in range(6):
-            _tube(rx - 0.075 + k * 0.03, 1.6, 0.94, cap=(0.9, 0.9, 0.88) if k % 2 else (0.1, 0.35, 0.65))
-    bpy.ops.mesh.primitive_cylinder_add(radius=0.012, depth=0.22, location=(0.0, 1.7, 1.05)); pp = bpy.context.active_object
-    pp.rotation_euler.x = math.radians(12); pp.data.materials.append(_plain("pipette", (0.85, 0.85, 0.85), 0.4)); pp.name = "pipette"
+    # work surface: two racks of 1.5 ml tubes, an open tube, a pipette with a tip on its stand
+    for rx, col in ((-0.3, (0.15, 0.35, 0.75)), (0.22, (0.85, 0.85, 0.82))):
+        pos = _rack(rx, 1.6, 0.9, col=col)
+        rng_ = random.Random(int(rx * 100))
+        for k, (px, py) in enumerate(pos):
+            if rng_.random() < 0.6:
+                _microtube(px, py, 0.913, cap=rng_.choice([(0.15, 0.45, 0.8), (0.9, 0.9, 0.88), (0.85, 0.2, 0.1)]), open_=(k == 9))
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.011, depth=0.17, location=(0.0, 1.72, 1.03)); pp = bpy.context.active_object
+    pp.rotation_euler.x = math.radians(10); pp.data.materials.append(_plain("pipette", (0.85, 0.86, 0.86), 0.4)); pp.name = "pipette"
+    bpy.ops.mesh.primitive_cone_add(radius1=0.0012, radius2=0.004, depth=0.05, location=(0.0, 1.705, 0.925)); tip = bpy.context.active_object
+    tip.rotation_euler.x = math.radians(10); tip.data.materials.append(_pp()); tip.name = "pipettetip"
     for xx in (-1.5, 1.5):
         dd = bpy.data.lights.new("ceil", 'AREA'); dd.size = 1.2; dd.energy = 35; dd.color = (0.8, 0.88, 1.0)
         oo = bpy.data.objects.new("ceil", dd); bpy.context.scene.collection.objects.link(oo); oo.location = (xx, 0.2, 2.9)
@@ -518,8 +617,8 @@ def S23():
     """Outside the house: a digger (from behind) kneels at a small separate pit, trowelling; the house rings beyond."""
     o = _knee_pit()
     k = o["knee"]
-    # near-overhead: the small pit fills the frame, the digger's head, shoulders and trowel arm enter from the bottom edge
-    return dict(a=(tuple(k + Vector((0.35, -0.25, 2.6))), tuple(k + Vector((0.0, 0.05, 0)))), b=(tuple(k + Vector((0.3, -0.3, 2.3))), tuple(k)), lens=28,
+    # three-quarter over the right shoulder: the trowel at work in the pit, the house rings beyond
+    return dict(a=(tuple(k + Vector((0.95, -1.55, 1.25))), tuple(k + Vector((-0.05, 0.1, 0)))), b=(tuple(k + Vector((0.8, -1.35, 1.15))), tuple(k)), lens=35,
                 fstop=4.0, focus=tuple(k), hand_ok=p1.OK)
 
 
@@ -610,13 +709,13 @@ def S29():
 def S30():
     """An old body that kept its tissue: a dried, wrapped bundle on a hurdle in the dim roundhouse, firelight. Push."""
     U.CUT = False
-    R = BR.interior(fire=0.6, door_sun=0.0)
+    R = BR.interior(fire=1.0, door_sun=0.0, moon=1.0)
     hx, hy = R["hearth"]
     P2.hurdle((hx - 0.8, hy + 1.6, 0.03), rot=math.radians(80), length=1.8, width=0.75)
     P2.bundle((hx - 0.8, hy + 1.6, 0.23), rot=math.radians(80), length=0.95, girth=0.42)
     t = Vector((hx - 0.8, hy + 1.6, 0.25))
     return dict(a=(tuple(t + Vector((-1.3, -1.4, 0.6))), tuple(t)), b=(tuple(t + Vector((-0.8, -0.9, 0.45))), tuple(t)), lens=40,
-                fstop=2.8, focus=tuple(t), cine=dict(exposure=0.25), hand_ok=("floor",))
+                fstop=2.8, focus=tuple(t), cine=dict(exposure=0.55), hand_ok=("floor",))
 
 
 # ============================================================================ "In the team's later reconstruction..."
@@ -637,7 +736,7 @@ def _night_pit():
             o.data.energy = 0.3; o.data.color = (0.6, 0.7, 1.0)
     # a raised rim of upcast earth round the hole
     bpy.ops.mesh.primitive_torus_add(major_radius=0.62, minor_radius=0.12, location=(kx, ky, z + 0.02)); rim = bpy.context.active_object
-    rim.scale = (1.45, 1.0, 0.6); rim.name = "pitrim"; rim.data.materials.append(G.mat("sand"))
+    rim.scale = (1.9, 1.0, 0.6); rim.name = "pitrim"; rim.data.materials.append(G.mat("sand"))
     d_ = rim.modifiers.new("d", "DISPLACE"); t_ = bpy.data.textures.new("rimlump", "CLOUDS"); t_.noise_scale = 0.15; d_.texture = t_; d_.strength = 0.05
     # an open pit with a heap of sand beside it
     bpy.ops.mesh.primitive_cylinder_add(radius=0.55, depth=0.6, location=(kx, ky, z - 0.28)); pit = bpy.context.active_object
@@ -647,10 +746,19 @@ def _night_pit():
     for f in bm.faces:
         f.normal_flip()
     bm.to_mesh(pit.data); bm.free()
-    # the ground is not really dug out: a dark earth disc inside the rim reads as the opening (and as the pit floor)
-    bpy.ops.mesh.primitive_circle_add(vertices=48, radius=0.56, fill_type='NGON', location=(kx, ky, z + 0.012)); hole = bpy.context.active_object
-    hole.scale = (1.45, 1.0, 1.0); hole.name = "pitfloor"; hole.data.materials.append(_plain("pitearth", (0.035, 0.027, 0.02), 0.95))
-    G.spoil_heap(kx + 0.2, ky + 1.6, 0.9, 0.6, 0.38)          # upcast on the far side, clear of where they stand
+    # cut the hole in the ground itself: drop the terrain faces inside the pit outline so the sand walls show
+    ter = bpy.data.objects["Uist"]; me = ter.data
+    pc = np.zeros(len(me.polygons) * 3, np.float32); me.polygons.foreach_get("center", pc); pc = pc.reshape(-1, 3)
+    ins = ((pc[:, 0] - kx) / 1.12) ** 2 + ((pc[:, 1] - ky) / 0.58) ** 2 < 1.0
+    bm = bmesh.new(); bm.from_mesh(me); bm.faces.ensure_lookup_table()
+    bmesh.ops.delete(bm, geom=[bm.faces[i] for i in np.nonzero(ins)[0]], context='FACES_ONLY')
+    bm.to_mesh(me); bm.free()
+    pit.scale = (2.06, 1.07, 1.0)                              # walls just outside the cut edge
+    # loose sand and a few stones on the floor
+    for j in range(7):
+        a_ = random.uniform(0, 6.28); r_ = random.uniform(0.1, 0.6)
+        G.stone((kx + r_ * 1.3 * math.cos(a_), ky + r_ * 0.8 * math.sin(a_), z - 0.57), (0.06, 0.05, 0.03), seed=j, flat=0.5)
+    G.spoil_heap(kx + 0.2, ky + 1.75, 0.9, 0.6, 0.38)          # upcast on the far side, clear of where they stand
     # pole torch: a flame on a stake, a warm point light
     bpy.ops.mesh.primitive_cylinder_add(radius=0.02, depth=1.6, location=(kx - 1.3, ky + 0.6, z + 0.8)); st = bpy.context.active_object
     st.data.materials.append(_plain("stake", (0.12, 0.08, 0.05), 0.8)); st.name = "torchstake"
@@ -669,47 +777,53 @@ def _night_pit():
 
 
 def S31():
-    """Night: two islanders kneel at the opened grave, reaching down into it by torchlight (from behind). Slow push."""
+    """Night: two islanders kneel on the lip of the opened grave and take hold of the hurdle the body lies on, ready to
+    lift - hands closed on the near pole, backs to us, torchlight on the sand walls. Slow push."""
     c = _night_pit()
     import acts as AC
-    m1 = BR.Islander(name="Islander0")
-    st1 = AC.Kneel(m1, (c.x - 0.25, c.y - 0.95), 90, lean=50, sit_back=True)
-    for sd, dx in (("L", -0.3), ("R", 0.0)):
-        st1.hand(sd, (c.x + dx, c.y - 0.25, -0.05), elbow=(0.6, 0.2, -0.8), curl=30)
-    st1.head_to((c.x, c.y, -0.3), share=0.8); st1.finish(look=(c.x, c.y, -0.3), density=HAIR)
-    G.lift(st1, max(float(U.surface(c.x - 0.25 + ex, c.y - 0.95 + ey)) for ex in (-0.2, 0, 0.2) for ey in (-0.3, 0, 0.3)) + 0.01)
-    m2 = p2._islander2()
-    st2 = AC.Kneel(m2, (c.x + 0.75, c.y - 0.85), 105, lean=45, sit_back=True)
-    for sd, dx in (("L", 0.25), ("R", 0.5)):
-        st2.hand(sd, (c.x + dx, c.y - 0.25, -0.05), elbow=(0.6, 0.2, -0.8), curl=30)
-    st2.head_to((c.x + 0.3, c.y, -0.3), share=0.8); st2.finish(look=(c.x + 0.3, c.y, -0.3), density=HAIR)
-    G.lift(st2, max(float(U.surface(c.x + 0.75 + ex, c.y - 0.85 + ey)) for ex in (-0.2, 0, 0.2) for ey in (-0.3, 0, 0.3)) + 0.01)
-    return dict(a=((c.x + 0.6, c.y - 2.6, c.z + 2.6), (c.x + 0.2, c.y + 0.1, c.z)), b=((c.x + 0.5, c.y - 2.2, c.z + 2.4), (c.x + 0.2, c.y + 0.1, c.z)),
-                lens=32, fstop=2.8, focus=(c.x + 0.2, c.y - 0.3, c.z + 0.3), cine=dict(exposure=0.6), hand_ok=("openpit", "Uist", "pitrim"))
+    P2.hurdle((c.x, c.y, c.z - 0.2), rot=0.0, length=1.8, width=0.75)
+    P2.bundle((c.x, c.y, c.z - 0.0), rot=0.0, length=0.95, girth=0.42)
+    py = c.y - 0.375; pz = -0.2 + 0.03                        # near pole, in the kneelers' ground frame
+    zk = max(float(U.surface(c.x + ex, c.y - 0.85 + ey)) for ex in (-0.8, 0, 0.8) for ey in (-0.2, 0, 0.2)) + 0.06
+    sts = []
+    for i, x0 in enumerate((-0.45, 0.45)):
+        m = BR.Islander(name="Islander0") if i == 0 else p2._islander2()
+        st = AC.Kneel(m, (c.x + x0, c.y - 0.82), 90, lean=62, sit_back=True)
+        for sd, dx in (("L", -0.2), ("R", 0.2)):
+            st.grip(sd, (c.x + x0 + dx, py, pz + c.z - zk), (1, 0, 0), radius=0.03)
+        st.head_to((c.x + x0, c.y, -0.4), share=0.8); st.finish(look=(c.x + x0, c.y, -0.4), density=HAIR)
+        G.lift(st, zk); sts.append(st)
+    return dict(a=((c.x + 0.7, c.y - 3.0, c.z + 2.1), (c.x + 0.1, c.y + 0.05, c.z - 0.2)), b=((c.x + 0.55, c.y - 2.5, c.z + 1.95), (c.x + 0.1, c.y + 0.05, c.z - 0.2)),
+                lens=32, fstop=2.8, focus=(c.x, c.y - 0.4, c.z), cine=dict(exposure=0.6), hand_ok=("openpit", "Uist", "pitrim", "hurdle", "bundle"))
 
 
 def S32():
-    """They lift the preserved body out on its hurdle, silhouetted against the torch. Low angle."""
+    """They haul the preserved body up out of the grave on its hurdle: both on the near side, knees bent, hands closed
+    on the pole, the far edge still in the pit. From behind, the torch beyond them. Low angle."""
     c = _night_pit()
     import acts as AC
-    piv = bpy.data.objects.new("hurdle_rig", None); bpy.context.scene.collection.objects.link(piv); piv.location = (c.x, c.y - 0.2, c.z + 0.55)
+    hc = Vector((c.x, c.y - 0.05, c.z + 0.42))
+    piv = bpy.data.objects.new("hurdle_rig", None); bpy.context.scene.collection.objects.link(piv); piv.location = hc
     before = set(bpy.data.objects)
-    P2.hurdle((c.x, c.y - 0.2, c.z + 0.55), rot=0.0, length=1.8, width=0.75)
-    P2.bundle((c.x, c.y - 0.2, c.z + 0.75), rot=0.0, length=0.95, girth=0.42)
+    P2.hurdle(tuple(hc), rot=0.0, length=1.8, width=0.75)
+    P2.bundle(tuple(hc + Vector((0, 0, 0.2))), rot=0.0, length=0.95, girth=0.42)
     bpy.context.view_layer.update()
     for o in set(bpy.data.objects) - before:
         o.parent = piv; o.matrix_parent_inverse = piv.matrix_world.inverted()
-    for i, (dx, hd) in enumerate(((-1.25, 0), (1.25, 180))):
+    piv.rotation_euler.x = math.radians(-22)                  # near edge up, far edge still down in the grave
+    bpy.context.view_layer.update()
+    poles = sorted([o for o in bpy.data.objects if o.name.startswith("hurdlepole")], key=lambda o: o.matrix_world.translation.y)
+    pc = poles[0].matrix_world.translation.copy()
+    for i, x0 in enumerate((-0.5, 0.5)):
         m = BR.Islander(name=f"Islander{i}") if i == 0 else p2._islander2()
-        f = (c.x + dx * 1.05, c.y - 0.2)
-        zf = float(U.surface(*f))
-        px = c.x + dx * 0.72
-        palms = {"L": (px, c.y - 0.2 + (0.37 if hd == 0 else -0.37), c.z + 0.55 - zf + 0.03 - 0.035),
-                 "R": (px, c.y - 0.2 - (0.37 if hd == 0 else -0.37), c.z + 0.55 - zf + 0.03 - 0.035)}
-        st = AC.Lean(m, f, hd, palms, lean=35)
-        st.finish(look=(c.x, c.y - 0.2, 0.6), density=HAIR); G.lift(st, zf)
-    return dict(a=((c.x + 0.3, c.y - 4.0, c.z + 0.5), (c.x, c.y, c.z + 0.9)), b=((c.x + 0.25, c.y - 3.4, c.z + 0.55), (c.x, c.y, c.z + 0.9)),
-                lens=32, fstop=2.8, focus=(c.x, c.y - 0.2, c.z + 0.8), cine=dict(exposure=0.4), hand_ok=("hurdle", "bundle"))
+        f = (c.x + x0, pc.y - 0.5)
+        zf = max(float(U.surface(f[0] + ex, f[1] + ey)) for ex in (-0.15, 0.15) for ey in (-0.15, 0.15))
+        st = AC.Haul(m, f, 90, knee=30, lean=30, weight="L" if i == 0 else "R")
+        for sd, dx in (("L", -0.22), ("R", 0.22)):
+            st.grip(sd, (c.x + x0 + dx, pc.y, pc.z - zf), (1, 0, 0), radius=0.03)
+        st.head_to((c.x + x0, c.y + 0.5, 0.3), share=0.6); st.finish(look=(c.x + x0, c.y + 0.5, 0.3), density=HAIR); G.lift(st, zf)
+    return dict(a=((c.x + 0.6, c.y - 3.9, c.z + 0.95), (c.x, c.y, c.z + 0.6)), b=((c.x + 0.5, c.y - 3.3, c.z + 0.9), (c.x, c.y, c.z + 0.6)),
+                lens=32, fstop=2.8, focus=(c.x, pc.y, c.z + 0.6), cine=dict(exposure=0.45), hand_ok=("hurdle", "bundle"))
 
 
 def S33():

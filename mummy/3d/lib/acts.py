@@ -213,6 +213,23 @@ class Stand(_Base):
             P.rest_hand(h, sd, 34)
 
 
+class Haul(Stand):
+    """Lifting a load from low: feet apart, both knees bent, back inclined, weight down through the heels. The rig is
+    lowered by the height the bent legs lose so the soles stay on the ground."""
+    def __init__(self, m, feet, heading, knee=32.0, lean=28.0, weight="L"):
+        Stand.__init__(self, m, feet, heading, weight=weight, lean=lean)
+        h = m.h
+        f0 = min(h.bone_head(f"foot.{sd}").z for sd in ("L", "R"))
+        for sd in ("L", "R"):
+            k = 1.0 if sd == weight else 0.85
+            h.rot(f"upperleg01.{sd}", (0, 0, 1), (3 if sd == "L" else -3))        # feet a little apart
+            h.rot(f"upperleg01.{sd}", (1, 0, 0), -knee * k)
+            h.rot(f"lowerleg01.{sd}", (1, 0, 0), 2 * knee * k)
+            h.rot(f"foot.{sd}", (1, 0, 0), -knee * k)
+        f1 = min(h.bone_head(f"foot.{sd}").z for sd in ("L", "R"))
+        self.M = Matrix.Translation((0, 0, -(f1 - f0))) @ self.M; self.Mi = self.M.inverted()
+
+
 class Seated(_Base):
     def __init__(self, m, seat, heading, feet=None, lean=8.0, twist=0.0, knees_out=0.12, floor=0.0):
         self.m = m
