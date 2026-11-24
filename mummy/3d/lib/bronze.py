@@ -292,6 +292,20 @@ def saddle_quern(x, y, z, rot=0.0):
     return base, mul
 
 
+def _embers(m, strength):
+    """Glowing peat: emission only in a network of cracks and hot patches, the block faces stay dark."""
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord")
+    vo = N.new("ShaderNodeTexVoronoi"); vo.feature = 'DISTANCE_TO_EDGE'; vo.inputs['Scale'].default_value = 40; L.new(tc.outputs['Object'], vo.inputs['Vector'])
+    cr = N.new("ShaderNodeMapRange"); cr.inputs['From Min'].default_value = 0.0; cr.inputs['From Max'].default_value = 0.06
+    cr.inputs['To Min'].default_value = 1.0; cr.inputs['To Max'].default_value = 0.0; L.new(vo.outputs['Distance'], cr.inputs['Value'])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 8; L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    hp = N.new("ShaderNodeMapRange"); hp.inputs['From Min'].default_value = 0.5; hp.inputs['From Max'].default_value = 0.7; L.new(nz.outputs['Fac'], hp.inputs['Value'])
+    mx = N.new("ShaderNodeMath"); mx.operation = 'MAXIMUM'; L.new(cr.outputs[0], mx.inputs[0]); L.new(hp.outputs[0], mx.inputs[1])
+    st = N.new("ShaderNodeMath"); st.operation = 'MULTIPLY'; st.inputs[1].default_value = 6.0 * strength; L.new(mx.outputs[0], st.inputs[0])
+    p.inputs['Emission Color'].default_value = (1.0, 0.3, 0.05, 1); L.new(st.outputs[0], p.inputs['Emission Strength'])
+
+
 def interior(fire=1.0, door_sun=0.0, hx=0.3, hy=0.0, r=4.6, seed=5, moon=0.0):
     """Built at the middle house centre (hx, hy) on a flat floor z = 0 (its own set, not the excavation terrain)."""
     rng = random.Random(seed)
@@ -370,27 +384,15 @@ def interior(fire=1.0, door_sun=0.0, hx=0.3, hy=0.0, r=4.6, seed=5, moon=0.0):
         a = 2 * math.pi * k / 11
         G.stone((hcx + 0.72 * math.cos(a), hcy + 0.56 * math.sin(a), 0.06), (0.26, 0.09, 0.15), rot_z=a + math.pi / 2, seed=k, flat=0.9)
     # peat fire: a heap of glowing peat blocks with flame volume and the fire light
-    peat = _mat("peatfire", (0.05, 0.03, 0.02), 0.9, emit=(1.0, 0.32, 0.08), strength=3.0 * fire)
+    peat = _mat("peatfire", (0.035, 0.022, 0.015), 0.9)            # dark peat blocks; the glow is in their cracks (below)
+    _embers(peat, 0.9 * fire)
     for k in range(9):
         a = 2 * math.pi * k / 9
         bpy.ops.mesh.primitive_cube_add(size=1, location=(hcx + 0.17 * math.cos(a), hcy + 0.13 * math.sin(a), 0.06 + 0.03 * (k % 3)))
         pb = bpy.context.active_object; pb.scale = (0.16, 0.08, 0.07); pb.rotation_euler = (rng.uniform(-0.5, 0.5), rng.uniform(-0.5, 0.5), a)
         pb.data.materials.append(peat); pb.name = "peat"
-    flame = bpy.data.materials.new("flame"); flame.use_nodes = True; N = flame.node_tree.nodes; Lk = flame.node_tree.links
-    N.remove(N["Principled BSDF"])
-    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 4; nz.inputs['Detail'].default_value = 5
-    Lk.new(tc.outputs['Generated'], nz.inputs['Vector'])
-    sep = N.new("ShaderNodeSeparateXYZ"); Lk.new(tc.outputs['Generated'], sep.inputs[0])
-    gz = N.new("ShaderNodeMapRange"); gz.inputs['From Min'].default_value = 1.0; gz.inputs['From Max'].default_value = 0.0; Lk.new(sep.outputs['Z'], gz.inputs['Value'])
-    mm = N.new("ShaderNodeMath"); mm.operation = 'MULTIPLY'; Lk.new(nz.outputs['Fac'], mm.inputs[0]); Lk.new(gz.outputs[0], mm.inputs[1])
-    th = N.new("ShaderNodeMapRange"); th.inputs['From Min'].default_value = 0.12; th.inputs['From Max'].default_value = 0.5
-    th.inputs['To Max'].default_value = 22.0 * fire; Lk.new(mm.outputs[0], th.inputs['Value'])
-    v = N.new("ShaderNodeVolumePrincipled"); v.inputs['Density'].default_value = 0.0
-    v.inputs['Blackbody Tint'].default_value = (1, 1, 1, 1); v.inputs['Temperature'].default_value = 1300
-    Lk.new(th.outputs[0], v.inputs['Blackbody Intensity'])
-    Lk.new(v.outputs[0], N["Material Output"].inputs['Volume'])
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.25, location=(hcx, hcy, 0.3)); fl = bpy.context.active_object
-    fl.scale = (1, 1, 1.6); fl.data.materials.append(flame); fl.name = "flame"; fl.visible_shadow = False
+    flames((hcx, hcy, 0.0), spread=0.16, n=9, top_z=0.08, low_z=(0.04, 0.1), top_share=0.6, h_top=(0.22, 0.42), h_low=(0.12, 0.22),
+           wid=(0.06, 0.1), strength=1.2 * fire, seed=11)
     fd = bpy.data.lights.new("firelight", 'POINT'); fd.energy = 140 * fire; fd.color = (1.0, 0.52, 0.2); fd.shadow_soft_size = 0.25
     fo = bpy.data.objects.new("firelight", fd); bpy.context.scene.collection.objects.link(fo); fo.location = (hcx, hcy, 0.75)
     out["fire"] = fo; out["hearth"] = (hcx, hcy)
@@ -455,3 +457,52 @@ class Islander(object):
             SHIRT = (0.2, 0.16, 0.1); JACKET = "coat"; JACKET_COL = (0.16, 0.11, 0.06)
             TROUSERS = (0.12, 0.09, 0.06); SHOES = (0.08, 0.05, 0.03)
         return _I(name, years=34, **kw)
+
+
+def flames(center, spread=0.65, n=26, top_z=0.95, low_z=(0.15, 0.8), top_share=0.65, h_top=(0.7, 1.5), h_low=(0.35, 0.7),
+           wid=(0.16, 0.3), strength=1.0, seed=3):
+    """Fire as many separate tongues (stretched emissive volumes), each a cone of turbulent flame, hottest at its root,
+    ragged at the edges, with its own noise seed; together a ragged blaze. Returns the tongue objects."""
+    rng = random.Random(seed)
+    cx, cy, cz = center
+    m = bpy.data.materials.get("firetongue%.2f" % strength)
+    if m is None:
+        m = bpy.data.materials.new("firetongue"); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; N.remove(N["Principled BSDF"])
+        tc = N.new("ShaderNodeTexCoord"); oi = N.new("ShaderNodeObjectInfo"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Object'], sep.inputs[0])
+        z01 = N.new("ShaderNodeMapRange"); z01.inputs['From Min'].default_value = -1.0; z01.inputs['From Max'].default_value = 1.0; L.new(sep.outputs['Z'], z01.inputs['Value'])
+        cxy = N.new("ShaderNodeCombineXYZ"); L.new(sep.outputs['X'], cxy.inputs['X']); L.new(sep.outputs['Y'], cxy.inputs['Y'])
+        rad = N.new("ShaderNodeVectorMath"); rad.operation = 'LENGTH'; L.new(cxy.outputs[0], rad.inputs[0])
+        alw = N.new("ShaderNodeMath"); alw.operation = 'MULTIPLY_ADD'; alw.inputs[1].default_value = -0.9; alw.inputs[2].default_value = 1.0; L.new(z01.outputs[0], alw.inputs[0])
+        alw2 = N.new("ShaderNodeMath"); alw2.operation = 'MAXIMUM'; alw2.inputs[1].default_value = 0.04; L.new(alw.outputs[0], alw2.inputs[0])
+        rq = N.new("ShaderNodeMath"); rq.operation = 'DIVIDE'; L.new(rad.outputs[0], rq.inputs[0]); L.new(alw2.outputs[0], rq.inputs[1])
+        mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (2.2, 2.2, 0.8); L.new(tc.outputs['Object'], mp.inputs['Vector'])
+        nz = N.new("ShaderNodeTexNoise"); nz.noise_dimensions = '4D'; nz.inputs['Scale'].default_value = 2.2; nz.inputs['Detail'].default_value = 6
+        nz.inputs['Distortion'].default_value = 1.5; L.new(mp.outputs[0], nz.inputs['Vector'])
+        wr = N.new("ShaderNodeMath"); wr.operation = 'MULTIPLY'; wr.inputs[1].default_value = 50.0; L.new(oi.outputs['Random'], wr.inputs[0]); L.new(wr.outputs[0], nz.inputs['W'])
+        rn = N.new("ShaderNodeMath"); rn.operation = 'MULTIPLY_ADD'; rn.inputs[1].default_value = 1.4; L.new(nz.outputs['Fac'], rn.inputs[0]); L.new(rq.outputs[0], rn.inputs[2])
+        sh_ = N.new("ShaderNodeMapRange"); sh_.inputs['From Min'].default_value = 1.75; sh_.inputs['From Max'].default_value = 1.2; L.new(rn.outputs[0], sh_.inputs['Value'])
+        tf = N.new("ShaderNodeMath"); tf.operation = 'SUBTRACT'; tf.inputs[0].default_value = 1.0; L.new(z01.outputs[0], tf.inputs[1])
+        tp = N.new("ShaderNodeMath"); tp.operation = 'POWER'; tp.inputs[1].default_value = 1.3; L.new(tf.outputs[0], tp.inputs[0])
+        a1 = N.new("ShaderNodeMath"); a1.operation = 'MULTIPLY'; L.new(sh_.outputs[0], a1.inputs[0]); L.new(tp.outputs[0], a1.inputs[1])
+        bb = N.new("ShaderNodeValToRGB"); L.new(z01.outputs[0], bb.inputs['Fac'])         # yellow-orange root to deep orange tips
+        ce = bb.color_ramp.elements; ce[0].position = 0.0; ce[0].color = (1.0, 0.62, 0.16, 1)
+        c2 = ce.new(0.45); c2.color = (1.0, 0.38, 0.06, 1); ce[-1].position = 1.0; ce[-1].color = (0.7, 0.14, 0.02, 1)
+        em = N.new("ShaderNodeMath"); em.operation = 'MULTIPLY'; em.inputs[1].default_value = 1.6 * strength; L.new(a1.outputs[0], em.inputs[0])
+        v = N.new("ShaderNodeVolumePrincipled")
+        L.new(bb.outputs['Color'], v.inputs['Emission Color']); L.new(em.outputs[0], v.inputs['Emission Strength'])
+        dd = N.new("ShaderNodeMath"); dd.operation = 'MULTIPLY'; dd.inputs[1].default_value = 0.08; L.new(a1.outputs[0], dd.inputs[0]); L.new(dd.outputs[0], v.inputs['Density'])
+        v.inputs['Color'].default_value = (0.0, 0.0, 0.0, 1)                # no lit haze inside the flame (it read pink)
+        L.new(v.outputs[0], N["Material Output"].inputs['Volume'])
+        m.name = "firetongue%.2f" % strength
+    out = []
+    for k in range(n):
+        top = rng.random() < top_share
+        px = cx + rng.uniform(-spread, spread); py = cy + rng.uniform(-spread, spread)
+        base = cz + (top_z if top else rng.uniform(*low_z))
+        hgt = rng.uniform(*h_top) if top else rng.uniform(*h_low)
+        w = rng.uniform(*wid)
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=1.0, location=(px, py, base + hgt * 0.9))
+        fv = bpy.context.active_object; fv.name = "flame"; fv.visible_shadow = False
+        fv.scale = (w, w, hgt); fv.rotation_euler = (rng.uniform(-0.15, 0.15), rng.uniform(-0.15, 0.15), rng.uniform(0, 6.3))
+        fv.data.materials.append(m); out.append(fv)
+    return out

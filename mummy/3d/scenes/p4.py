@@ -130,44 +130,7 @@ def pyre(c, rng_seed=3):
             bpy.ops.mesh.primitive_cylinder_add(radius=0.07, depth=1.6, location=loc); lg = bpy.context.active_object
             lg.rotation_euler = rot; lg.data.materials.append(wood); lg.name = "log"
     P2.bundle((cx, cy, cz + 1.05), rot=0.3, length=0.95, girth=0.42)
-    # flames: many separate tongues (stretched emissive volumes) rising from all over the crib - each a cone of
-    # turbulent fire, hottest at its root, ragged at the edges, with its own noise seed; together a ragged blaze
-    m = bpy.data.materials.new("pyrefire"); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; N.remove(N["Principled BSDF"])
-    tc = N.new("ShaderNodeTexCoord"); oi = N.new("ShaderNodeObjectInfo"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Object'], sep.inputs[0])
-    z01 = N.new("ShaderNodeMapRange"); z01.inputs['From Min'].default_value = -1.0; z01.inputs['From Max'].default_value = 1.0; L.new(sep.outputs['Z'], z01.inputs['Value'])
-    cxy = N.new("ShaderNodeCombineXYZ"); L.new(sep.outputs['X'], cxy.inputs['X']); L.new(sep.outputs['Y'], cxy.inputs['Y'])
-    rad = N.new("ShaderNodeVectorMath"); rad.operation = 'LENGTH'; L.new(cxy.outputs[0], rad.inputs[0])
-    alw = N.new("ShaderNodeMath"); alw.operation = 'MULTIPLY_ADD'; alw.inputs[1].default_value = -0.9; alw.inputs[2].default_value = 1.0; L.new(z01.outputs[0], alw.inputs[0])
-    alw2 = N.new("ShaderNodeMath"); alw2.operation = 'MAXIMUM'; alw2.inputs[1].default_value = 0.04; L.new(alw.outputs[0], alw2.inputs[0])
-    rq = N.new("ShaderNodeMath"); rq.operation = 'DIVIDE'; L.new(rad.outputs[0], rq.inputs[0]); L.new(alw2.outputs[0], rq.inputs[1])
-    mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (2.2, 2.2, 0.8); L.new(tc.outputs['Object'], mp.inputs['Vector'])
-    nz = N.new("ShaderNodeTexNoise"); nz.noise_dimensions = '4D'; nz.inputs['Scale'].default_value = 2.2; nz.inputs['Detail'].default_value = 6
-    nz.inputs['Distortion'].default_value = 1.5; L.new(mp.outputs[0], nz.inputs['Vector'])
-    wr = N.new("ShaderNodeMath"); wr.operation = 'MULTIPLY'; wr.inputs[1].default_value = 50.0; L.new(oi.outputs['Random'], wr.inputs[0]); L.new(wr.outputs[0], nz.inputs['W'])
-    rn = N.new("ShaderNodeMath"); rn.operation = 'MULTIPLY_ADD'; rn.inputs[1].default_value = 1.4; L.new(nz.outputs['Fac'], rn.inputs[0]); L.new(rq.outputs[0], rn.inputs[2])
-    sh_ = N.new("ShaderNodeMapRange"); sh_.inputs['From Min'].default_value = 1.75; sh_.inputs['From Max'].default_value = 1.2; L.new(rn.outputs[0], sh_.inputs['Value'])
-    tf = N.new("ShaderNodeMath"); tf.operation = 'SUBTRACT'; tf.inputs[0].default_value = 1.0; L.new(z01.outputs[0], tf.inputs[1])
-    tp = N.new("ShaderNodeMath"); tp.operation = 'POWER'; tp.inputs[1].default_value = 1.3; L.new(tf.outputs[0], tp.inputs[0])
-    a1 = N.new("ShaderNodeMath"); a1.operation = 'MULTIPLY'; L.new(sh_.outputs[0], a1.inputs[0]); L.new(tp.outputs[0], a1.inputs[1])
-    bb = N.new("ShaderNodeValToRGB"); L.new(z01.outputs[0], bb.inputs['Fac'])         # yellow-orange root to deep orange tips
-    ce = bb.color_ramp.elements; ce[0].position = 0.0; ce[0].color = (1.0, 0.62, 0.16, 1)
-    c2 = ce.new(0.45); c2.color = (1.0, 0.38, 0.06, 1); ce[-1].position = 1.0; ce[-1].color = (0.7, 0.14, 0.02, 1)
-    em = N.new("ShaderNodeMath"); em.operation = 'MULTIPLY'; em.inputs[1].default_value = 1.6; L.new(a1.outputs[0], em.inputs[0])
-    v = N.new("ShaderNodeVolumePrincipled")
-    L.new(bb.outputs['Color'], v.inputs['Emission Color']); L.new(em.outputs[0], v.inputs['Emission Strength'])
-    dd = N.new("ShaderNodeMath"); dd.operation = 'MULTIPLY'; dd.inputs[1].default_value = 0.08; L.new(a1.outputs[0], dd.inputs[0]); L.new(dd.outputs[0], v.inputs['Density'])
-    v.inputs['Color'].default_value = (0.0, 0.0, 0.0, 1)                # no lit haze inside the flame (it read pink)
-    L.new(v.outputs[0], N["Material Output"].inputs['Volume'])
-    for k in range(26):
-        top = rng.random() < 0.65
-        px = cx + rng.uniform(-0.65, 0.65); py = cy + rng.uniform(-0.65, 0.65)
-        base = cz + (0.95 if top else rng.uniform(0.15, 0.8))
-        hgt = rng.uniform(0.7, 1.5) if top else rng.uniform(0.35, 0.7)
-        wid = rng.uniform(0.16, 0.3)
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=1.0, location=(px, py, base + hgt * 0.9))
-        fv = bpy.context.active_object; fv.name = "pyreflame"
-        fv.scale = (wid, wid, hgt); fv.rotation_euler = (rng.uniform(-0.15, 0.15), rng.uniform(-0.15, 0.15), rng.uniform(0, 6.3))
-        fv.data.materials.append(m)
+    BR.flames((cx, cy, cz), spread=0.65, n=26, top_z=0.95, seed=rng_seed)
     for k in range(3):
         d = bpy.data.lights.new("pyre", 'POINT'); d.energy = 900; d.color = (1.0, 0.5, 0.18); d.shadow_soft_size = 0.4
         lo = bpy.data.objects.new("pyre", d); bpy.context.scene.collection.objects.link(lo)
