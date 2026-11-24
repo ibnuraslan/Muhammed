@@ -213,17 +213,17 @@ def S04():
             bpy.data.objects.remove(o)
     LB.velvet(-2.0, 2.0, 0.0, 0.78, LB.TOP)
     cr = B.hero_cranium(healed=True, tone="A")
-    co = np.array([v.co for v in cr.data.vertices]); cr.location = (-1.25, 0.4, LB.TOP + 0.004 - co[:, 2].min() * 0.97)
+    co = np.array([v.co for v in cr.data.vertices]); cr.location = (-1.1, 0.42, LB.TOP + 0.004 - co[:, 2].min() * 0.97)
     cr.rotation_euler = (0, 0, math.radians(-30))
     md = B.hero_mandible(tone="B")
     co = np.array([v.co for v in md.data.vertices]); md.location = (0.0, 0.38, LB.TOP + 0.003 - co[:, 2].min())
     md.rotation_euler = (0, 0, math.radians(-15))
-    p1.lab_femur(x=1.25, y=0.38, yaw=12)
-    for x in (-1.25, 0.0, 1.25):
+    p1.lab_femur(x=1.25, y=0.4, yaw=75)
+    for x in (-1.1, 0.0, 1.25):
         _spot((x - 0.1, 0.3, LB.TOP + 1.4), (x, 0.38, LB.TOP), 420, size=0.1, spot=24)
     _haze((0, 0, 1.6), (9, 6, 3.2), density=0.02, color=(0.95, 0.9, 0.85))
     # low along the bench: skull near, jaw in the middle, thigh bone far - three pools receding into the dark
-    return dict(a=((-2.7, -0.45, LB.TOP + 0.3), (0.3, 0.42, LB.TOP + 0.02)), b=((-1.9, -0.5, LB.TOP + 0.3), (1.0, 0.42, LB.TOP + 0.02)), lens=40,
+    return dict(a=((-2.6, -0.55, LB.TOP + 0.42), (0.3, 0.42, LB.TOP + 0.02)), b=((-1.9, -0.6, LB.TOP + 0.42), (1.0, 0.42, LB.TOP + 0.02)), lens=40,
                 fstop=5.6, focus=(0.0, 0.38, LB.TOP), cine=dict(exposure=0.1))
 
 
