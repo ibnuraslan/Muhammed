@@ -407,16 +407,26 @@ def _suit_up(m, st=None):
     h = m.h
     hc = np.array(h.arm.matrix_world @ h.bone_head("head")) if False else None
     neck_z = float((st.M @ h.bone_head("head")).z) - 0.03 if st is not None else float(np.percentile(W[:, 2], 87))
-    head = W[W[:, 2] > neck_z]
-    c = (head.min(0) + head.max(0)) / 2; ext = (head.max(0) - head.min(0)) / 2
-    be.to_mesh_clear()
+    # the hood follows the head itself: the head-and-neck skin of the posed body, lifted off it along the normals,
+    # smoothed into soft fabric - it covers the face (mask and goggles under it are never seen from behind)
     tyvek = _plain("tyvek", (0.9, 0.91, 0.92), 0.72)
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, radius=1.0, location=tuple(c + np.array([0, 0, 0.01])))
-    hd = bpy.context.active_object; hd.name = m.name + "_hood"
-    hd.scale = tuple(ext * np.array([1.22, 1.22, 1.12]) + 0.012); hd.data.materials.append(tyvek)
-    for p_ in hd.data.polygons:
+    nz_ = neck_z - 0.06
+    bm = bmesh.new(); bm.from_mesh(me); bm.transform(be.matrix_world)
+    bm.verts.ensure_lookup_table()
+    drop = [f for f in bm.faces if min(v.co.z for v in f.verts) < nz_]
+    bmesh.ops.delete(bm, geom=drop, context='FACES')
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if not v.link_faces], context='VERTS')
+    bm.normal_update()
+    for v in bm.verts:
+        v.co += v.normal * 0.03
+    hm = bpy.data.meshes.new(m.name + "_hood"); bm.to_mesh(hm); bm.free()
+    be.to_mesh_clear()
+    hd = bpy.data.objects.new(m.name + "_hood", hm); bpy.context.scene.collection.objects.link(hd); hm.materials.append(tyvek)
+    for p_ in hm.polygons:
         p_.use_smooth = True
-    d = hd.modifiers.new("folds", "DISPLACE"); t = bpy.data.textures.new("hoodfold", "CLOUDS"); t.noise_scale = 0.06; d.texture = t; d.strength = 0.008
+    sm = hd.modifiers.new("soft", "SMOOTH"); sm.factor = 0.5; sm.iterations = 5
+    so = hd.modifiers.new("thick", "SOLIDIFY"); so.thickness = 0.004; so.offset = 1.0
+    d = hd.modifiers.new("folds", "DISPLACE"); t = bpy.data.textures.new("hoodfold", "CLOUDS"); t.noise_scale = 0.05; d.texture = t; d.strength = 0.006
     # gloves: hand faces of the body get a purple nitrile material
     glove = _plain("nitrile", (0.32, 0.28, 0.72), 0.45)
     body.data.materials.append(glove); gi = len(body.data.materials) - 1
