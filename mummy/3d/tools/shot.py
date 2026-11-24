@@ -2,6 +2,7 @@
 
     blender -b --python tools/shot.py -- P1 S04            # build, check, save, render the middle frame
     env: PREVIEW=0.25 (board) | SPP | HAIR (strand density) | NORENDER=1 | FRAME=mid|first|last
+         FINAL=1: length from vo/<PART>_timing.json, 2560x1440, 64 spp adaptive + OIDN, motion blur, textures 2K
 """
 import os, sys, json, math, time
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -23,7 +24,17 @@ sc.name = SID
 t0 = time.time()
 cam_spec = spec["fn"]()
 N = int(round(spec["dur"] * FPS))
+TIMING = os.path.join(ROOT, "vo", PART + "_timing.json")
+if os.environ.get("FINAL") and os.path.exists(TIMING):           # cut to the recorded VO
+    N = next(o["frames"] for o in json.load(open(TIMING))["shots"] if o["shot"] == SID)
 sc.frame_start = 1; sc.frame_end = N
+if os.environ.get("FINAL"):                                       # farm settings (FARM_DELIVERY_RULES.md 4)
+    sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = 2560, 1440, 100
+    sc.cycles.samples = 64; sc.cycles.use_adaptive_sampling = True; sc.cycles.use_denoising = True
+    sc.cycles.denoiser = 'OPENIMAGEDENOISE'
+    sc.render.use_motion_blur = True
+    sc.cycles.texture_limit_render = '2048'; sc.cycles.texture_limit = '2048'
+    sc.render.film_transparent = False
 
 
 def camera_move(cs, N):

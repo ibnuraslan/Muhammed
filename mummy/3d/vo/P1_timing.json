@@ -1,0 +1,199 @@
+{
+ "fps": 24,
+ "frames_total": 3198,
+ "vo_seconds": 133.25,
+ "shots": [
+  {
+   "shot": "S01",
+   "para": 1,
+   "start": 1,
+   "frames": 76
+  },
+  {
+   "shot": "S02",
+   "para": 1,
+   "start": 77,
+   "frames": 58
+  },
+  {
+   "shot": "S03",
+   "para": 1,
+   "start": 135,
+   "frames": 47
+  },
+  {
+   "shot": "S04",
+   "para": 2,
+   "start": 182,
+   "frames": 83
+  },
+  {
+   "shot": "S05",
+   "para": 3,
+   "start": 265,
+   "frames": 74
+  },
+  {
+   "shot": "S06",
+   "para": 4,
+   "start": 339,
+   "frames": 99
+  },
+  {
+   "shot": "S07",
+   "para": 4,
+   "start": 438,
+   "frames": 89
+  },
+  {
+   "shot": "S08",
+   "para": 5,
+   "start": 527,
+   "frames": 57
+  },
+  {
+   "shot": "S09",
+   "para": 6,
+   "start": 584,
+   "frames": 72
+  },
+  {
+   "shot": "S10",
+   "para": 6,
+   "start": 656,
+   "frames": 63
+  },
+  {
+   "shot": "S11",
+   "para": 7,
+   "start": 719,
+   "frames": 78
+  },
+  {
+   "shot": "S12",
+   "para": 7,
+   "start": 797,
+   "frames": 89
+  },
+  {
+   "shot": "S13",
+   "para": 8,
+   "start": 886,
+   "frames": 111
+  },
+  {
+   "shot": "S14",
+   "para": 8,
+   "start": 997,
+   "frames": 92
+  },
+  {
+   "shot": "S15",
+   "para": 8,
+   "start": 1089,
+   "frames": 74
+  },
+  {
+   "shot": "S16",
+   "para": 9,
+   "start": 1163,
+   "frames": 105
+  },
+  {
+   "shot": "S17",
+   "para": 9,
+   "start": 1268,
+   "frames": 94
+  },
+  {
+   "shot": "S18",
+   "para": 9,
+   "start": 1362,
+   "frames": 105
+  },
+  {
+   "shot": "S19",
+   "para": 9,
+   "start": 1467,
+   "frames": 94
+  },
+  {
+   "shot": "S20",
+   "para": 10,
+   "start": 1561,
+   "frames": 84
+  },
+  {
+   "shot": "S21",
+   "para": 10,
+   "start": 1645,
+   "frames": 83
+  },
+  {
+   "shot": "S22",
+   "para": 10,
+   "start": 1728,
+   "frames": 124
+  },
+  {
+   "shot": "S23",
+   "para": 10,
+   "start": 1852,
+   "frames": 104
+  },
+  {
+   "shot": "S24",
+   "para": 11,
+   "start": 1956,
+   "frames": 76
+  },
+  {
+   "shot": "S25",
+   "para": 12,
+   "start": 2032,
+   "frames": 135
+  },
+  {
+   "shot": "S26",
+   "para": 12,
+   "start": 2167,
+   "frames": 104
+  },
+  {
+   "shot": "S27",
+   "para": 13,
+   "start": 2271,
+   "frames": 167
+  },
+  {
+   "shot": "S28",
+   "para": 13,
+   "start": 2438,
+   "frames": 150
+  },
+  {
+   "shot": "S29",
+   "para": 14,
+   "start": 2588,
+   "frames": 101
+  },
+  {
+   "shot": "S30",
+   "para": 15,
+   "start": 2689,
+   "frames": 181
+  },
+  {
+   "shot": "S31",
+   "para": 15,
+   "start": 2870,
+   "frames": 136
+  },
+  {
+   "shot": "S32",
+   "para": 16,
+   "start": 3006,
+   "frames": 193
+  }
+ ]
+}
