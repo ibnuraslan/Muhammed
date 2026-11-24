@@ -724,12 +724,13 @@ def S22():
                 lens=32, fstop=4.0, focus=(x0, y0, z0 + 1.0), cine=dict(exposure=0.25), hand_ok=("moor", "hurdle"))
 
 
-def _pool_spot(M, near=(0.0, 0.0)):
+def _pool_spot(M, near=(0.0, 0.0), margin=0.6):
     """The centre of open water nearest `near`: low ground at least 0.6 m from any bank."""
     wz = M["water_z"]; best = None
     for x in np.linspace(-10, 10, 81):
         for y in np.linspace(-10, 5, 61):
-            if all(P2.moor_height(M, x + dx, y + dy) < wz - 0.04 for dx in (-0.6, 0, 0.6) for dy in (-0.6, 0, 0.6)):
+            if all(P2.moor_height(M, x + dx, y + dy) < wz - 0.04 for dx in (-margin, 0, margin) for dy in (-margin, 0, margin)) and \
+                    any(P2.moor_height(M, x + dx, y + dy) > wz + 0.05 for dx in (-1.4, 0, 1.4) for dy in (-1.4, 0, 1.4)):
                 d = math.hypot(x - near[0], y - near[1])
                 if best is None or d < best[0]:
                     best = (d, x, y)
@@ -767,9 +768,8 @@ def S23():
     """The wrapped bundle lying half under the black water of a bog pool, sphagnum at the edge. Slow top-down drift."""
     M = _bog_scene("dusk", sun_az=250)
     wz = M["water_z"]
-    px, py = _pool_spot(M)
-    P2.bundle((px, py, wz - 0.03), rot=math.radians(30))          # half under the black water
-    _moss(M, px, py, wz)
+    px, py = _pool_spot(M, margin=0.4)
+    P2.bundle((px, py, wz - 0.08), rot=math.radians(30))          # half under the black water
     return dict(a=((px - 0.15, py - 0.25, wz + 2.4), (px, py, wz)), b=((px + 0.1, py - 0.05, wz + 2.1), (px + 0.05, py + 0.05, wz)), lens=24,
                 fstop=5.6, focus=(px, py, wz), cine=dict(exposure=0.35))
 
