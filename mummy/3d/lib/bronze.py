@@ -415,11 +415,11 @@ def interior(fire=1.0, door_sun=0.0, hx=0.3, hy=0.0, r=4.6, seed=5, moon=0.0):
         mo.rotation_euler = (Vector((-1, 0.15, -0.3))).to_track_quat('-Z', 'Y').to_euler()
         out["moon"] = mo
         # moonlight entering by the doorway: a cold spill just inside the door, angled down across the floor
-        ms = bpy.data.lights.new("moonspill", 'SPOT'); ms.energy = 700 * moon; ms.color = (0.5, 0.62, 1.0)
+        ms = bpy.data.lights.new("moonspill", 'SPOT'); ms.energy = 2600 * moon; ms.color = (0.5, 0.62, 1.0)
         ms.spot_size = math.radians(70); ms.spot_blend = 0.6; ms.shadow_soft_size = 0.5
         mso = bpy.data.objects.new("moonspill", ms); bpy.context.scene.collection.objects.link(mso)
         mso.location = (hx + r - 0.2, hy, 1.5)
-        mso.rotation_euler = (Vector((-1.0, 0.25, -0.45))).to_track_quat('-Z', 'Y').to_euler()
+        mso.rotation_euler = (Vector((-1.0, 0.37, -0.28))).to_track_quat('-Z', 'Y').to_euler()
     if door_sun > 0:
         sd = bpy.data.lights.new("doorsun", 'SUN'); sd.energy = 4.0 * door_sun; sd.color = (1.0, 0.66, 0.4); sd.angle = math.radians(0.8)
         so = bpy.data.objects.new("doorsun", sd); bpy.context.scene.collection.objects.link(so)
