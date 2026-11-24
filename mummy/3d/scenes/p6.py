@@ -214,10 +214,23 @@ def S05():
     hx, hy = 0.3, 0.0
     px, py = hx + 3.75, hy + 0.05
     hide = _plain("rawhide", (0.42, 0.3, 0.18), 0.7)
-    bpy.ops.mesh.primitive_plane_add(size=1, location=(px, py, 0.02)); hd = bpy.context.active_object
-    hd.scale = (0.9, 0.7, 1); hd.data.materials.append(hide); hd.name = "hide"
-    dd = hd.modifiers.new("s", "SUBSURF"); dd.subdivision_type = 'SIMPLE'; dd.levels = 3
-    dp = hd.modifiers.new("d", "DISPLACE"); tt = bpy.data.textures.new("hidewrinkle", "CLOUDS"); tt.noise_scale = 0.12; dp.texture = tt; dp.strength = 0.02
+    # an animal skin: an irregular outline with the leg flaps, stretched out between pegs, cockled and uneven
+    bpy.ops.mesh.primitive_grid_add(x_subdivisions=48, y_subdivisions=48, size=1.0, location=(px, py, 0.015)); hd = bpy.context.active_object
+    bm_ = bmesh.new(); bm_.from_mesh(hd.data)
+    def keep(x, y):
+        a = math.atan2(y, x); r = math.hypot(x / 0.48, y / 0.36)
+        lim = 1.0 + 0.1 * math.sin(3 * a + 0.5) + 0.22 * max(0.0, math.cos(4 * a)) ** 6     # four leg flaps
+        return r < lim
+    bmesh.ops.delete(bm_, geom=[v for v in bm_.verts if not keep(v.co.x, v.co.y)], context='VERTS')
+    bm_.to_mesh(hd.data); bm_.free()
+    hd.data.materials.append(hide); hd.name = "hide"
+    dp = hd.modifiers.new("d", "DISPLACE"); tt = bpy.data.textures.new("hidewrinkle", "CLOUDS"); tt.noise_scale = 0.08; dp.texture = tt; dp.strength = 0.025
+    for p_ in hd.data.polygons:
+        p_.use_smooth = True
+    N = hide.node_tree.nodes; Lk = hide.node_tree.links; pr = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 30; nz.inputs['Detail'].default_value = 8
+    Lk.new(tc.outputs['Object'], nz.inputs['Vector']); bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.5
+    Lk.new(nz.outputs['Fac'], bp.inputs['Height']); Lk.new(bp.outputs['Normal'], pr.inputs['Normal'])
     wood = bpy.data.materials.get("postbark") or _plain("peg", (0.25, 0.18, 0.1), 0.8)
     for sx in (-1, 1):                                   # pegs at the corners
         for sy in (-1, 1):
