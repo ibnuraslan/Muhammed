@@ -94,8 +94,8 @@ BODY = [
     (1300,  0.10, 11, 7, 14, 6, 34, 0.02),
     (1400,  0.10, 11, 7, 15, 5, 36, 0.02),
     (1470,  0.09, 12, 7, 10, 16, 10, 0.02),
-    (1560,  0.09, 12, 7, 6, 15, 4, 0.025),
-    (1656,  0.09, 12, 7, 5, 17, 3, 0.03),
+    (1560,  0.09, 13, 8, 9, 22, 7, 0.025),
+    (1656,  0.09, 14, 8, 8, 26, 5, 0.03),
 ]
 rest_z = Hm.root_head.z
 for (f, hx, rf, sf, tw, hp, hy, dip) in BODY:
@@ -151,7 +151,7 @@ for s, sx in (("L", 1), ("R", -1)):
 def grip_world(s, f, out=0.0, up=0.0):
     M = head_M(f); p, n = GRIP[s]
     pw = M @ p; nw = (M.to_3x3() @ n).normalized()
-    fd = V(0, 0.4, 1.0); fd = (fd - nw * fd.dot(nw)).normalized()
+    fd = V(0, 0.05, 1.0); fd = (fd - nw * fd.dot(nw)).normalized()
     return pw + nw * out + V(0, 0, up), -nw, fd
 def place_grip(s, f, out=0.0, up=0.0, skin=0.013):
     pw, pn, fd = grip_world(s, f, out, up)
@@ -181,7 +181,7 @@ for s in "LR":
     GSKIN[s] = sk + 0.008; print("GRIP SKIN", s, round(sk, 3), "pen mm", round(pen * 1000, 1))
 for s in "LR":
     sk = GSKIN[s]
-    place_grip(s, 1, out=0.09, up=-0.08, skin=sk); apply_pose(rig, s, "relaxed", 1)
+    place_grip(s, 1, out=0.15, up=0.0, skin=sk); apply_pose(rig, s, "relaxed", 1)
     place_grip(s, 45, out=0.07, up=0.01, skin=sk); apply_pose(rig, s, "open_alarm", 45, amount=0.6)
     place_grip(s, F_GRIP, skin=sk); apply_pose(rig, s, "shield", F_GRIP)
     for f in range(F_GRIP + 2, F_REL, 2):
@@ -190,13 +190,14 @@ for s in "LR":
     place_grip(s, F_REL + 20, out=0.07, up=0.02, skin=sk); apply_pose(rig, s, "open_alarm", F_REL + 20, amount=0.6)
     place_grip(s, F_REL + 34, out=0.12, up=0.10, skin=sk); apply_pose(rig, s, "relaxed", F_REL + 34)
 # ---- right hand: down to the table edge and stays there (idle shifts)
-for f, dx in ((415, 0.0), (470, 0.0), (540, 0.005), (600, 0.0), (700, 0.01), (950, 0.0), (1250, 0.015), (1656, 0.0)):
+place_hand(rig, "R", 400, V(-0.30, 0.64, 1.18), V(1, 0, 0), V(0, -0.3, -1).normalized(), skin=0.0); apply_pose(rig, "R", "relaxed", 400)
+for f, dx in ((418, 0.0), (470, 0.0), (540, 0.005), (600, 0.0), (700, 0.01), (950, 0.0), (1250, 0.015), (1656, 0.0)):
     rest_hand("R", f, dx=dx)
 # ======================================================================== needle holder: pick up, stitch, put down
 nh = D.objects["NeedleHolder"]; NH_REST = Matrix(L["nh_rest"])
 shank = D.objects["NH_Shank1"]
-F_NHG, F_NHR = 430, 645
-grip_pt = NH_REST @ V(0.0, -0.035, 0.0)
+F_NHG, F_NHR = 430, 700
+grip_pt = NH_REST @ V(0.0, -0.066, 0.0)
 sc.frame_set(397)
 place_hand(rig, "L", 397, grip_pt + V(-0.02, 0.06, 0.20), V(0, 0, -1), (NH_REST.to_3x3() @ V(0, 1, 0)).normalized(), skin=0.03)
 sc.frame_set(408)
@@ -210,14 +211,14 @@ if _fd.dot(grip_pt - _sh) < 0: _fd = -_fd
 rep = grip_object(rig, "L", F_NHG, shank, grip_pt, V(0, 0, -1), finger_dir=_fd, grip="wrap")
 print("NH GRIP report", rep)
 sc.frame_set(F_NHG)
-def key_fingers(f, rots):
-    for n, q in rots.items():
-        pb = R.PB[n]; pb.rotation_quaternion = q; pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
+apply_pose(rig, "L", "wrap_grip", F_NHG, amount=0.85); sc.frame_set(F_NHG)
 GRIP_IK = ikM("L"); GRIP_FINGERS = {n: R.PB[n].rotation_quaternion.copy() for n in R.PB.keys() if n.startswith("finger") and n.endswith(".L")}
 _tuck = _pose_rots(rig, "L", "shield")
 for n in list(GRIP_FINGERS):
-    if n.startswith("finger1-"): GRIP_FINGERS[n] = _tuck[n].copy()        # thumb lies along the index, never sticks out
-key_fingers(F_NHG, GRIP_FINGERS)
+    if n.startswith("finger1-"): GRIP_FINGERS[n] = _tuck[n].copy()        # thumb lies along the shaft, never sticks out
+def key_fingers(f, rots):
+    for n, q in rots.items():
+        pb = R.PB[n]; pb.rotation_quaternion = q; pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
 co = nh.constraints.new('CHILD_OF'); co.name = "HeldBy"; co.target = rig; co.subtarget = "wrist.L"
 sc.frame_set(F_NHG); bpy.context.view_layer.update()
 WR_G = rig.matrix_world @ R.PB["wrist.L"].matrix
@@ -272,12 +273,12 @@ idx = [sc_.index(next(t for t in sc_ if t[0] == st[0])) for st in STITCH]
 print("STITCH facing", [round(sc_[i][3], 2) for i in idx])
 # incision line: a thin dark-pink line flat on the skin all round the neck
 INC = D.materials.new("V_Incision"); INC.use_nodes = True
-pI = INC.node_tree.nodes["Principled BSDF"]; pI.inputs["Base Color"].default_value = (0.25, 0.04, 0.05, 1); pI.inputs["Roughness"].default_value = 0.45
+pI = INC.node_tree.nodes["Principled BSDF"]; pI.inputs["Base Color"].default_value = (0.42, 0.08, 0.10, 1); pI.inputs["Roughness"].default_value = 0.45
 THR = D.materials.new("V_Thread"); THR.use_nodes = True
 pT = THR.node_tree.nodes["Principled BSDF"]; pT.inputs["Base Color"].default_value = (0.03, 0.05, 0.16, 1); pT.inputs["Roughness"].default_value = 0.35
 col = D.collections["V14"]
-cu = D.curves.new("NeckIncision", "CURVE"); cu.dimensions = '3D'; cu.bevel_depth = 0.0005; cu.bevel_resolution = 2
-sp = cu.splines.new('POLY'); pts = [surf(p)[0] + surf(p)[1] * 0.0002 for (_, p, n) in ring]; sp.points.add(len(pts) - 1)
+cu = D.curves.new("NeckIncision", "CURVE"); cu.dimensions = '3D'; cu.bevel_depth = 0.0009; cu.bevel_resolution = 2
+sp = cu.splines.new('POLY'); pts = [surf(p)[0] + surf(p)[1] * 0.0004 for (_, p, n) in ring]; sp.points.add(len(pts) - 1)
 for k, q in enumerate(pts): sp.points[k].co = (*q, 1)
 sp.use_cyclic_u = True; cu.materials.append(INC)
 inc = D.objects.new("NeckIncision", cu); col.objects.link(inc)
@@ -369,7 +370,7 @@ for o in stitch_objs[len(STITCH):]:
     D.objects.remove(o, do_unlink=True)
 stitch_objs = stitch_objs[:len(STITCH)]
 F_ST0 = 470; STEP = 30
-key_ik("L", F_NHG + 16, Matrix.Translation(V(0, 0, 0.12)) @ GRIP_IK); key_fingers(F_NHG + 16, GRIP_FINGERS)
+key_ik("L", F_NHG + 16, Matrix.Translation(V(0, 0, 0.09)) @ GRIP_IK); key_fingers(F_NHG + 16, GRIP_FINGERS)
 errs = []
 p0, n0 = STITCH[0][1], STITCH[0][2]
 WP = [(F_ST0 - 18, p0 + n0 * 0.08 + V(0, 0, 0.03), n0)]
@@ -382,7 +383,7 @@ for i, (phi, p, n) in enumerate(STITCH):
     key_vis(o, 1, False); key_vis(o, f0 + 6, True)
 pl, nl = STITCH[-1][1], STITCH[-1][2]
 WP.append((F_ST0 + len(STITCH) * STEP + 8, pl + nl * 0.05 + V(0, 0.03, 0.02), nl))
-WP.append((F_ST0 + len(STITCH) * STEP + 20, pl + nl * 0.09 + V(0, 0.08, 0.06), nl))
+WP.append((F_ST0 + len(STITCH) * STEP + 22, pl + nl * 0.09 + V(0, 0.10, 0.08), nl))
 for (fa, pa, na), (fb, pb_, nb) in zip(WP, WP[1:]):
     for f in range(fa, fb, 2):
         u = (f - fa) / (fb - fa)
@@ -398,7 +399,7 @@ key_ik("L", F_NHR, GRIP_IK); key_fingers(F_NHR, GRIP_FINGERS)
 sc.frame_set(F_NHR + 18)
 place_hand(rig, "L", F_NHR + 18, grip_pt + V(0, 0.02, 0.08), V(0, 0, -1), (NH_REST.to_3x3() @ V(0, 1, 0)).normalized(), skin=0.03)
 apply_pose(rig, "L", "relaxed", F_NHR + 18)
-rest_hand("L", 700)
+rest_hand("L", 745)
 # body pose must match at pick-up and put-down (identical wrist => holder lands exactly on its rest pose)
 # ---- beat 5: left index finger moves beside the monkey's face (no contact); the eyes follow it
 FACE = MB.translation + (MB.to_3x3() @ (HC_local - V(0, 0, 0)))
@@ -435,7 +436,7 @@ def lids(f, openness):
     for o in LO: o.rotation_euler.x = LO_C + (LO_O - LO_C) * openness; o.keyframe_insert("rotation_euler", index=0, frame=f)
 for f, op in ((1, 0), (690, 0), (697, 0.35), (704, 0.05), (716, 0.55), (724, 0.2), (742, 0.85), (760, 1.0),
               (798, 1.0), (803, 0.0), (809, 1.0), (1000, 1.0), (1005, 0.0), (1011, 1.0), (1196, 1.0), (1201, 0.0), (1207, 1.0),
-              (1380, 1.0), (1385, 0.0), (1391, 1.0), (1500, 1.0), (1508, 0.1), (1520, 0.8), (1580, 0.7), (1630, 0.35), (1656, 0.28)):
+              (1380, 1.0), (1385, 0.0), (1391, 1.0), (1500, 1.0), (1508, 0.1), (1520, 0.8), (1580, 0.75), (1640, 0.45), (1656, 0.42)):
     lids(f, op)
 mh = D.materials["M_MonkeyHead"].node_tree.nodes
 def gaze(f, x, z=0.0):
@@ -599,7 +600,7 @@ if ecg:
 # ======================================================================== light dims at the end
 sc.view_settings.exposure = -0.25; sc.view_settings.keyframe_insert("exposure", frame=1)
 sc.view_settings.keyframe_insert("exposure", frame=1470)
-sc.view_settings.exposure = -0.95; sc.view_settings.keyframe_insert("exposure", frame=1656)
+sc.view_settings.exposure = -0.75; sc.view_settings.keyframe_insert("exposure", frame=1656)
 # ======================================================================== camera: one move, keyed framings, monotone spline
 CAMK = json.load(open(os.path.join(HERE, "camera_keys.json")))
 def pchip1(xs, ys):

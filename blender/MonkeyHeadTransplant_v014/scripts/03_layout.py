@@ -147,8 +147,7 @@ def needle_holder():
 nh = needle_holder()
 for k, yy in enumerate((-0.072, 0.03)):
     bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 0, 0))
-    rb = link(bpy.context.active_object); rb.name = "NH_Rest%d" % k; rb.scale = (0.05, 0.012, 0.03); rb.data.materials.append(STEEL)
-    rb["local_y"] = yy
+    rb = link(bpy.context.active_object); rb.name = "NH_Rest%d" % k; rb.data.materials.append(STEEL); rb["local_y"] = yy
 nh.matrix_world = Matrix.Translation((0.64, 0.35, tz + 0.012 + 0.03 + 0.0035)) @ Matrix.Rotation(math.radians(160), 4, 'Z')
 for k in (0, 1):
     rb = D.objects["NH_Rest%d" % k]
@@ -193,7 +192,7 @@ for o in D.objects:
     if o.name.startswith("IV_") and o.parent is None: o.location.x += 0.55; o.location.y += 0.55
 for n in ("Mayo_Instruments", "Instruments"):
     o = D.objects.get(n)
-    if o: o.hide_render = o.hide_viewport = True     # standing instrument racks read as floating tools
+    if o: o.hide_render = o.hide_viewport = True
 lr = D.objects.get("Lamp_Root")
 if lr: lr.location.z += 0.4                          # dome lamp higher: out of the top of frame
 # ---------------------------------------------------------------- x-ray anatomy (hidden until the x-ray beat)
