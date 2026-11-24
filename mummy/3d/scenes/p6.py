@@ -98,9 +98,10 @@ def ruin(hx, hy, r, sand=0.55, seed=0):
     """A roundhouse after abandonment: the low stone wall ring, roof gone, sand blown in and heaped against it."""
     z0 = float(U.surface(hx, hy)) - 0.2
     BR.drystone_wall(hx, hy, r, z0, h=0.7, seed=seed)
-    for k in range(5):
+    G.spoil_heap(hx, hy, r * 1.5, r * 1.4, sand)                        # the interior filled with blown sand
+    for k in range(6):
         a = random.Random(seed + k).uniform(0, 6.28)
-        G.spoil_heap(hx + (r - 0.6) * math.cos(a), hy + (r - 0.6) * math.sin(a), 1.6, 1.2, sand)
+        G.spoil_heap(hx + (r + 0.6) * math.cos(a), hy + (r + 0.6) * math.sin(a), 2.6, 1.6, sand * 0.8)   # drifts banked against the wall
 
 
 def drying_platform(c):
@@ -201,9 +202,9 @@ def S06():
 def S07():
     """Abandonment: the roofless stone rings of the houses, half full of blown sand, marram on the drifts. Dusk crane."""
     U.CUT = False
-    U.island("dusk", grass_at=(0, 0), grass_r=30, n=820, core=4.0, grass_density=260, sun_az=215)
+    U.island("dusk", grass_at=(30, 0), grass_r=14, n=820, core=4.0, grass_density=200, sun_az=215)   # bare sand round the ruins
     for k, (hx, hy, r) in enumerate(U.HOUSES):
-        ruin(hx, hy, r * 1.0, sand=0.55, seed=k)
+        ruin(hx, hy, r * 1.75, sand=0.6, seed=k)
     z = float(U.surface(0, 0))
     p2._sand_drift((0, 0, z), size=(60, 60, 0.6), density=1.0)
     return dict(a=((14, -10, z + 2.5), (0, 0, z)), b=((16, -12, z + 6.0), (0, 0, z)), lens=28, fstop=5.6, focus=(0, 0, z), cine=dict(exposure=0.3))
