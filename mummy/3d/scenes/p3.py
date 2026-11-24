@@ -578,15 +578,15 @@ def S19():
 
 # ============================================================================ "The second skeleton is missing part of its left knee."
 def S20():
-    """The missing knee, close: the second body's legs drawn up, lying on its left side; the right leg crosses over a
-    left leg that stops short at a dry break where the knee should be. Slow push along the legs."""
+    """The missing knee, close: the second body's legs drawn up; the uppermost (left) leg stops short at dry breaks -
+    thigh bone and shin end with a gap where the knee should be. Slow push from above."""
     T, sk0 = p1.site("day", grass_at=None, kit=False, burials=True, sun_az=215)
     gx, gy = -4.2, 3.4                                     # a clear patch of the house floor
     z = G.H(gx, gy)
     bpy.ops.mesh.primitive_circle_add(vertices=48, radius=0.85, fill_type='NGON', location=(gx, gy, z + 0.003)); fl = bpy.context.active_object
     fl.scale = (1.0, 0.7, 1.0); fl.data.materials.append(G.mat("gravefloor")); fl.name = "gravefloor_patch"
     sk = B.Skeleton("M", "C", name="Second", sand=0.6)
-    sk.pose_crouched(tight=1.0, side="L")
+    sk.pose_crouched(tight=1.0, side="R")                  # lying on its right side: the broken left leg uppermost
     sk.place((gx, gy, z), heading=30, ground_fn=lambda x, y: G.H(x, y) + 0.003)
     knee_pieces(sk, side="L", keep="far")                  # the left knee is gone: femur and shin end in breaks
     bpy.context.view_layer.update()
@@ -595,7 +595,7 @@ def S20():
     th = sk.world_pivot("thorax"); aw = Vector((t.x - th.x, t.y - th.y, 0)).normalized()     # away from the body, past the knees
     sd = Vector((-aw.y, aw.x, 0))
     # low, in front of the drawn-up knees: the right knee on top, intact; under it the left leg ends in breaks
-    return dict(a=(tuple(t + aw * 0.6 + sd * 0.12 + Vector((0, 0, 0.22))), tuple(t)), b=(tuple(t + aw * 0.45 + sd * 0.08 + Vector((0, 0, 0.18))), tuple(t)), lens=45,
+    return dict(a=(tuple(t + aw * 0.3 + sd * 0.15 + Vector((0, 0, 0.75))), tuple(t)), b=(tuple(t + aw * 0.22 + sd * 0.1 + Vector((0, 0, 0.58))), tuple(t)), lens=45,
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=0.05))
 
 
