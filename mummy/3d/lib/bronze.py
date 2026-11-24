@@ -384,13 +384,17 @@ def interior(fire=1.0, door_sun=0.0, hx=0.3, hy=0.0, r=4.6, seed=5, moon=0.0):
         a = 2 * math.pi * k / 11
         G.stone((hcx + 0.72 * math.cos(a), hcy + 0.56 * math.sin(a), 0.06), (0.26, 0.09, 0.15), rot_z=a + math.pi / 2, seed=k, flat=0.9)
     # peat fire: a heap of glowing peat blocks with flame volume and the fire light
-    peat = _mat("peatfire", (0.035, 0.022, 0.015), 0.9)            # dark peat blocks; the glow is in their cracks (below)
+    peat = _mat("peatfire", (0.012, 0.008, 0.006), 0.95)            # dark peat blocks; the glow is in their cracks (below)
     _embers(peat, 0.9 * fire)
     for k in range(9):
         a = 2 * math.pi * k / 9
         bpy.ops.mesh.primitive_cube_add(size=1, location=(hcx + 0.17 * math.cos(a), hcy + 0.13 * math.sin(a), 0.06 + 0.03 * (k % 3)))
         pb = bpy.context.active_object; pb.scale = (0.16, 0.08, 0.07); pb.rotation_euler = (rng.uniform(-0.5, 0.5), rng.uniform(-0.5, 0.5), a)
         pb.data.materials.append(peat); pb.name = "peat"
+        bv = pb.modifiers.new("b", "BEVEL"); bv.width = 0.012; bv.segments = 2
+        ds = pb.modifiers.new("s", "SUBSURF"); ds.levels = 2; ds.render_levels = 2; ds.subdivision_type = 'SIMPLE'
+        dd = pb.modifiers.new("d", "DISPLACE"); tt = bpy.data.textures.get("peatlump") or bpy.data.textures.new("peatlump", "CLOUDS")
+        tt.noise_scale = 0.03; dd.texture = tt; dd.strength = 0.012
     flames((hcx, hcy, 0.0), spread=0.18, n=14, top_z=0.1, low_z=(0.05, 0.12), top_share=0.6, h_top=(0.35, 0.6), h_low=(0.18, 0.3),
            wid=(0.07, 0.12), strength=1.5 * fire, seed=11)
     fd = bpy.data.lights.new("firelight", 'POINT'); fd.energy = 140 * fire; fd.color = (1.0, 0.52, 0.2); fd.shadow_soft_size = 0.25
