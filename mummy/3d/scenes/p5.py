@@ -15,7 +15,7 @@ _plain, _glass, _spot, _haze = p1._plain, p1._glass, p2._spot, p2._haze
 
 
 # ----------------------------------------------------------------------------- helpers
-def _house_bundle(fire=1.0, moon=0.0, at=(-2.9, 0.0), rot=90, door_sun=0.0, raised=False):
+def _house_bundle(fire=1.0, moon=0.0, at=(-2.35, 0.86), rot=70, door_sun=0.0, raised=False):   # between two posts
     """Inside the middle roundhouse: the wrapped body on its hurdle at the back (west) wall. Returns (R, bundle centre)."""
     U.CUT = False
     R = BR.interior(fire=fire, door_sun=door_sun, moon=moon)
