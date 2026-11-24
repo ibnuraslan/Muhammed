@@ -50,7 +50,7 @@ def _three_parts(lit=True):
     of a third tone. Returns their centres."""
     A = LB.room(window_light=0.12, lamp=False)
     LB.velvet(-0.9, 0.9, 0.0, 0.78, LB.TOP)
-    cr = B.hero_cranium(healed=False, tone="D"); p3._old_bone(cr, stain=1.0)
+    cr = B.hero_cranium(healed=False, tone="D"); p3._old_bone(cr, stain=1.0, etch=0.45)
     co = np.array([v.co for v in cr.data.vertices]); cr.location = (-0.3, 0.4, LB.TOP + 0.004 - co[:, 2].min() * 0.97)
     cr.rotation_euler = (0, 0, math.radians(-25))
     p3.lab_part("upperarmR", sex="M", tone="A", x=0.0, y=0.4, yaw=10, name="ArmPart")
@@ -101,8 +101,8 @@ def S04():
     cs = _three_parts(lit=False)
     _spot((cs[0].x - 0.3, cs[0].y - 0.3, cs[0].z + 0.6), tuple(cs[0]), 45, size=0.04, color=(1.0, 0.88, 0.74), spot=14)
     _spot((0.2, 0.0, LB.TOP + 0.8), (0.2, 0.4, LB.TOP), 6, size=0.3, color=(0.7, 0.78, 1.0), spot=60)
-    return dict(a=((cs[0].x + 0.35, cs[0].y - 0.45, cs[0].z + 0.18), tuple(cs[0])), b=((cs[0].x + 0.25, cs[0].y - 0.34, cs[0].z + 0.15), tuple(cs[0])),
-                lens=60, fstop=2.8, focus=tuple(cs[0]), cine=dict(exposure=0.0))
+    return dict(a=((cs[0].x + 0.5, cs[0].y - 0.75, cs[0].z + 0.22), tuple(cs[0] + Vector((0.12, 0, 0)))), b=((cs[0].x + 0.42, cs[0].y - 0.62, cs[0].z + 0.2), tuple(cs[0] + Vector((0.08, 0, 0)))),
+                lens=50, fstop=2.8, focus=tuple(cs[0]), cine=dict(exposure=0.0))
 
 
 # ============================================================================ "If ancestry helped establish who belonged..."

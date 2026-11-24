@@ -204,7 +204,7 @@ def S04():
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=-0.05))
 
 
-def _old_bone(obj, stain=0.8):
+def _old_bone(obj, stain=0.8, etch=1.0):
     """Long-buried bone: deep brown mineral staining in blotches, surface erosion, and dendritic root etching (pale
     branching grooves where rootlets dissolved the surface)."""
     for i, m0 in enumerate(obj.data.materials):
@@ -235,7 +235,8 @@ def _old_bone(obj, stain=0.8):
         rl.inputs['To Min'].default_value = 1.0; rl.inputs['To Max'].default_value = 0.0; Lk.new(ve.outputs['Distance'], rl.inputs['Value'])
         mk = N.new("ShaderNodeTexNoise"); mk.inputs['Scale'].default_value = 6; Lk.new(tc.outputs['Object'], mk.inputs['Vector'])
         mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.52; mr.inputs['From Max'].default_value = 0.6; Lk.new(mk.outputs['Fac'], mr.inputs['Value'])
-        root = N.new("ShaderNodeMath"); root.operation = 'MULTIPLY'; Lk.new(rl.outputs[0], root.inputs[0]); Lk.new(mr.outputs[0], root.inputs[1])
+        root0 = N.new("ShaderNodeMath"); root0.operation = 'MULTIPLY'; Lk.new(rl.outputs[0], root0.inputs[0]); Lk.new(mr.outputs[0], root0.inputs[1])
+        root = N.new("ShaderNodeMath"); root.operation = 'MULTIPLY'; root.inputs[1].default_value = etch; Lk.new(root0.outputs[0], root.inputs[0])
         rc = N.new("ShaderNodeMix"); rc.data_type = 'RGBA'; Lk.new(root.outputs[0], rc.inputs['Factor']); Lk.new(mx.outputs[2], rc.inputs[6])
         rc.inputs[7].default_value = (0.56, 0.47, 0.34, 1)
         hs = N.new("ShaderNodeHueSaturation"); hs.inputs['Value'].default_value = 0.8; Lk.new(rc.outputs[2], hs.inputs['Color'])
