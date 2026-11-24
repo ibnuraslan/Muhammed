@@ -242,7 +242,7 @@ def S15():
     T, sk = p1.site("dusk", grass_at=None, kit=False, sun_az=205)
     c1, _ = sk["B1"].centre(); c2, _ = sk["B2"].centre()
     m = (c1 + c2) / 2
-    return dict(a=((m.x + 1.0, m.y - 2.2, m.z + 3.6), tuple(m)), b=((m.x + 0.7, m.y - 1.6, m.z + 2.7), tuple(m)), lens=32,
+    return dict(a=((m.x + 0.8, m.y - 2.6, m.z + 4.6), tuple(m)), b=((m.x + 0.6, m.y - 2.0, m.z + 3.7), tuple(m)), lens=30,
                 fstop=5.6, focus=tuple(m), cine=dict(exposure=0.35))
 
 
