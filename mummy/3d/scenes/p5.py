@@ -153,8 +153,8 @@ def S08():
     """The skull in darkness, one hard raking light across the eye socket and brow: what did they call this person?"""
     cs = _three_parts(lit=False)
     c = cs[0]
-    _spot((c.x + 0.55, c.y + 0.05, c.z + 0.08), tuple(c), 60, size=0.02, color=(1.0, 0.86, 0.7), spot=12)
-    return dict(a=((c.x + 0.22, c.y - 0.62, c.z + 0.06), tuple(c)), b=((c.x + 0.12, c.y - 0.64, c.z + 0.07), tuple(c)), lens=70,
+    _spot((c.x - 0.55, c.y - 0.1, c.z + 0.1), tuple(c), 60, size=0.02, color=(1.0, 0.86, 0.7), spot=12)   # raking across the brow
+    return dict(a=((c.x - 0.28, c.y - 0.58, c.z + 0.06), tuple(c)), b=((c.x - 0.18, c.y - 0.62, c.z + 0.07), tuple(c)), lens=70,
                 fstop=4.0, focus=tuple(c), cine=dict(exposure=-0.1))
 
 
