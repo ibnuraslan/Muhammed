@@ -776,7 +776,7 @@ def S24():
     M = _bog_scene("dawn", sun_az=120)
     z = P2.moor_height(M, 0, 7.5)
     P2.hurdle((0, 7.5, z + 0.02), rot=math.radians(10))
-    return dict(a=((-2.5, 2.0, z + 0.4), (0, 7.5, z)), b=((-2.2, 2.4, z + 2.0), (0, 7.5, z)), lens=32,
+    return dict(a=((-2.5, 3.2, z + 1.0), (0, 7.5, z)), b=((-2.2, 3.6, z + 2.4), (0, 7.5, z)), lens=32,
                 fstop=5.6, focus=(0, 7.5, z), cine=dict(exposure=0.2))
 
 
