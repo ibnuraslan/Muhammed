@@ -124,6 +124,11 @@ def _knee_mats(o, sand=0.5):
     """Aged knee-piece materials: stained, pored, root-etched bone; the broken faces (slot 1) spongy trabecular bone."""
     o.data.materials.clear(); o.data.materials.append(B.bone_material("C", dirt=1.0, sand=sand))
     p2._bone_detail(o); _old_bone(o, stain=0.6)
+    for mt in o.data.materials:                            # a harder, crisper bone surface: stronger pores and grain
+        for n in mt.node_tree.nodes:
+            if n.type == 'BUMP':
+                n.inputs['Strength'].default_value = min(1.0, n.inputs['Strength'].default_value * 1.6)
+                n.inputs['Distance'].default_value *= 1.8
     o.data.materials.append(_trabecular())
 
 
@@ -726,7 +731,20 @@ def S25():
     off = Vector((-W[:, 0].mean(), 0.4 - W[:, 1].mean(), LB.TOP + 0.004 - W[:, 2].min()))
     for sk in legs:
         sk.root.location += off
-    legs[1].root.location += Vector((0.0, -0.003, 0.002))      # the pit pieces a hairline off the breaks
+    legs[1].root.location += Vector((0.0, -0.003, 0.002))
+    bpy.context.view_layer.update()
+    # open each break by a centimetre so the spongy broken faces and the matching jagged edges both read
+    kc = Vector(np.concatenate([np.array([o.matrix_world @ v.co for v in o.data.vertices]) for o in legs[1].parts.values()]).mean(0).tolist())
+    moves = []
+    for nm in ("femurL", "shankL"):
+        o = legs[0].parts.get(nm)
+        if o is not None:
+            cc = Vector(np.array([o.matrix_world @ v.co for v in o.data.vertices]).mean(0).tolist())
+            d = (cc - kc); d.z = 0
+            moves.append((o, o.matrix_world.copy(), Matrix.Translation(d.normalized() * 0.011)))
+    for o, mw, T in moves:                                   # in world space (the shin is parented to the thigh)
+        o.matrix_world = T @ mw
+        bpy.context.view_layer.update()      # the pit pieces a hairline off the breaks
     bpy.context.view_layer.update()
     for o in objs:
         _knee_mats(o, sand=0.35)
