@@ -701,9 +701,21 @@ def _belt(st, col=(0.07, 0.045, 0.025)):
             W = np.array([oe.matrix_world @ v.co for v in oe.data.vertices])
             band = W[np.abs(W[:, 2] - c.z) < 0.02]
             if len(band) > 8:
-                ctr = band.mean(0); rad = float(np.percentile(np.hypot(band[:, 0] - ctr[0], band[:, 1] - ctr[1]), 90)) + 0.006
-                bpy.ops.mesh.primitive_torus_add(major_radius=rad, minor_radius=0.012, location=(ctr[0], ctr[1], c.z)); t = bpy.context.active_object
-                t.scale = (1.0, 0.8, 1.6); t.name = st.m.name + "_belt"; t.data.materials.append(_plain("belt", col, 0.6))
+                ctr = band.mean(0)
+                # an elliptical ring that follows the tunic's own cross-section, standing just outside it
+                dx = band[:, 0] - ctr[0]; dy = band[:, 1] - ctr[1]
+                rx = float(np.percentile(np.abs(dx), 99)) + 0.014; ry = float(np.percentile(np.abs(dy), 99)) + 0.014
+                bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=0.012, major_segments=64, location=(ctr[0], ctr[1], c.z)); t = bpy.context.active_object
+                t.scale = (rx, ry, 1.0); t.name = st.m.name + "_belt"; t.data.materials.append(_plain("belt", col, 0.6))
+                bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+                bm_ = bmesh.new(); bm_.from_mesh(t.data)                 # keep the band's own thickness after the scale
+                for v in bm_.verts:
+                    q = Vector((v.co.x / rx, v.co.y / ry, 0)); r_ = q.length
+                    if r_ > 1e-6:
+                        d = (r_ - 1.0) * min(rx, ry)
+                        v.co.x = q.x / r_ * (rx + d); v.co.y = q.y / r_ * (ry + d)
+                    v.co.z *= 1.6
+                bm_.to_mesh(t.data); bm_.free()
                 return t
     return None
 
