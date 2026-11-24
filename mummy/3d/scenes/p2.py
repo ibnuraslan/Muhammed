@@ -338,7 +338,7 @@ def S14():
 def S15():
     """Back to the human bone: clean rings, only a thin band of damage at the edge. Drift toward the edge."""
     d = _field("human")
-    d.update(a=((0.0, 0.0, 2.05), (0.0, 0.0, 0)), b=((0.32, 0.0, 1.6), (0.32, 0.0, 0)))
+    d.update(a=((0.1, 0.0, 2.0), (0.1, 0.0, 0)), b=((0.5, 0.05, 1.45), (0.5, 0.05, 0)))
     return d
 
 

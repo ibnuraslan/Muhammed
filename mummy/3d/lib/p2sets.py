@@ -71,7 +71,7 @@ def microscope_field(kind="human", size=1.0, attack=None):
         sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Object'], sep.inputs[0])
         edge = N.new("ShaderNodeMapRange"); edge.inputs['From Min'].default_value = size * 0.62; edge.inputs['From Max'].default_value = size * 0.82
         L.new(sep.outputs['X'], edge.inputs['Value'])
-        zone_o = mul(zone.outputs[0], edge.outputs[0])
+        zone_o = edge.outputs[0] if attack > 0 else mul(zone.outputs[0], edge.outputs[0])   # a thin damaged rim only
     else:
         zone_o = zone.outputs[0]
     spong = N.new("ShaderNodeMapRange"); spong.inputs['From Min'].default_value = 0.38; spong.inputs['From Max'].default_value = 0.5
