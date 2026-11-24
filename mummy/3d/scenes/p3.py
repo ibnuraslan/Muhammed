@@ -322,8 +322,12 @@ def S14():
     for o in bpy.data.objects:
         if o.type == 'LIGHT' and o.name.startswith("ceil"):
             o.data.energy = 6
-    return dict(a=((1.6, -1.9, 1.35), (2.6, 0.9, 1.0)), b=((1.75, -1.2, 1.3), (2.6, 1.6, 1.0)), lens=35, fstop=2.8, focus=(2.6, 0.4, 1.05),
-                cine=dict(exposure=0.2))
+    # the finished samples: the rack of capped tubes in the darkened cabinet, one cold strip light left on
+    d = bpy.data.lights.new("strip", 'AREA'); d.shape = 'RECTANGLE'; d.size = 1.2; d.size_y = 0.08; d.energy = 25; d.color = (0.85, 0.92, 1.0)
+    lo = bpy.data.objects.new("strip", d); bpy.context.scene.collection.objects.link(lo); lo.location = (0.0, 1.45, 1.45)
+    t = Vector((0.25, 1.6, 0.98))
+    return dict(a=(tuple(t + Vector((-0.45, -0.7, 0.3))), tuple(t)), b=(tuple(t + Vector((-0.3, -0.5, 0.2))), tuple(t)), lens=50, fstop=2.8, focus=tuple(t),
+                cine=dict(exposure=0.1))
 
 
 # ============================================================================ "The jaw, upper arm, and thigh come from different individuals."
