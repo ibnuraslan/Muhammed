@@ -117,9 +117,9 @@ def S05():
     door = Vector((hx + r * 1.75 + 0.4, hy, float(U.surface(hx + r * 1.75 + 0.4, hy))))
     for k, (dx, dy) in enumerate(((2.2, -0.9), (2.6, 0.5), (3.4, -0.2), (3.0, 1.4), (3.9, -1.3))):
         f = (door.x + dx, door.y + dy); zf = float(U.surface(*f))
-        m = BR.islander_cropped(k % 2, name=f"Kin{k}", var=k + 1)
+        m = BR.islander_cropped(k % 2, name=f"Kin{k}", var=k + 1, ease=1.1)      # standing: tunic hangs straight
         st = AC.Stand(m, f, 180 + random.Random(k).uniform(-12, 12), lean=4, weight="L" if k % 2 else "R")
-        st.finish(look=(door.x, door.y, door.z + 1.0 - zf), density=1.0); G.lift(st, zf)
+        st.finish(look=(door.x, door.y, door.z + 1.0 - zf), density=1.0); G.lift(st, zf + 0.012)      # boots on the trodden path
     return dict(a=((door.x + 9.0, door.y - 2.6, door.z + 1.7), (door.x, door.y, door.z + 1.0)), b=((door.x + 7.6, door.y - 2.0, door.z + 1.6), (door.x, door.y, door.z + 1.0)),
                 lens=35, fstop=4.0, focus=(door.x + 3.0, door.y, door.z + 1.1), cine=dict(exposure=0.3))
 

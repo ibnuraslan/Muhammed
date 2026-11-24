@@ -289,7 +289,7 @@ def S09():
     # five mourners on the near side, spread out in a loose arc 9-12 m from the fire, backs to us
     spots = ((5.8, -9.0, 120), (8.2, -7.4, 128), (3.2, -10.6, 112), (10.4, -5.0, 136), (1.2, -11.8, 105))
     for k, (dx, dy, hd) in enumerate(spots):
-        m = BR.islander_cropped(k % 2, name=f"Mourner{k}", var=k)
+        m = BR.islander_cropped(k % 2, name=f"Mourner{k}", var=k, ease=1.1)
         f = (c[0] + dx, c[1] + dy); zf = float(U.surface(*f))
         hd = math.degrees(math.atan2(-dy, -dx)) + (k - 2) * 3          # facing the fire
         st = AC.Stand(m, f, hd, lean=4 + 3 * (k % 2), weight="L" if k % 2 else "R")
