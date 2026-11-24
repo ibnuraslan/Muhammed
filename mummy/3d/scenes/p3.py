@@ -943,7 +943,7 @@ PLAN = [  # shot, VO paragraph (1-based), seconds (at 133 wpm; re-timed to the r
     ("S17", 8, 5.5, "Track along the second skeleton, feet to head"),
     ("S18", 9, 5.0, "Crane up from both graves to the whole house floor at dusk"),
     ("S19", 10, 4.5, "The roundhouses at dusk: six lives"),
-    ("S20", 11, 6.0, "Close: the right leg crossed over a left leg that stops at a dry break"),
+    ("S20", 11, 6.0, "Close from above: the uppermost left leg ends in dry breaks where the knee should be"),
     ("S21", 12, 7.0, "The legs in the grave from the other side, slow slider"),
     ("S23", 13, 4.0, "Outside the house: a digger at a small separate pit (from behind)"),
     ("S24", 13, 3.5, "In the pit: pieces of a human knee"),
