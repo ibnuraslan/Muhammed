@@ -1,0 +1,115 @@
+{
+ "fps": 24,
+ "frames_total": 2049,
+ "vo_seconds": 85.394,
+ "shots": [
+  {
+   "shot": "S01",
+   "para": 1,
+   "start": 1,
+   "frames": 87
+  },
+  {
+   "shot": "S02",
+   "para": 1,
+   "start": 88,
+   "frames": 57
+  },
+  {
+   "shot": "S03",
+   "para": 1,
+   "start": 145,
+   "frames": 58
+  },
+  {
+   "shot": "S04",
+   "para": 1,
+   "start": 203,
+   "frames": 58
+  },
+  {
+   "shot": "S05",
+   "para": 1,
+   "start": 261,
+   "frames": 96
+  },
+  {
+   "shot": "S06",
+   "para": 2,
+   "start": 357,
+   "frames": 193
+  },
+  {
+   "shot": "S07",
+   "para": 2,
+   "start": 550,
+   "frames": 213
+  },
+  {
+   "shot": "S08",
+   "para": 3,
+   "start": 763,
+   "frames": 89
+  },
+  {
+   "shot": "S09",
+   "para": 4,
+   "start": 852,
+   "frames": 109
+  },
+  {
+   "shot": "S10",
+   "para": 4,
+   "start": 961,
+   "frames": 83
+  },
+  {
+   "shot": "S11",
+   "para": 4,
+   "start": 1044,
+   "frames": 73
+  },
+  {
+   "shot": "S12",
+   "para": 5,
+   "start": 1117,
+   "frames": 88
+  },
+  {
+   "shot": "S13",
+   "para": 6,
+   "start": 1205,
+   "frames": 102
+  },
+  {
+   "shot": "S14",
+   "para": 6,
+   "start": 1307,
+   "frames": 113
+  },
+  {
+   "shot": "S15",
+   "para": 6,
+   "start": 1420,
+   "frames": 102
+  },
+  {
+   "shot": "S16",
+   "para": 7,
+   "start": 1522,
+   "frames": 169
+  },
+  {
+   "shot": "S17",
+   "para": 7,
+   "start": 1691,
+   "frames": 169
+  },
+  {
+   "shot": "S18",
+   "para": 8,
+   "start": 1860,
+   "frames": 190
+  }
+ ]
+}
