@@ -162,8 +162,10 @@ def S04():
     U.CUT = False
     R = BR.interior(fire=0.7, door_sun=0.5)
     hx, hy = 0.3, 0.0
-    return dict(a=((hx - 0.3, hy + 0.6, 0.9), (hx - 1.2, hy + 2.8, 0.2)), b=((hx + 0.3, hy + 0.7, 0.9), (hx - 0.6, hy + 2.9, 0.2)), lens=32,
-                fstop=2.8, focus=(hx - 1.0, hy + 2.8, 0.2), cine=dict(exposure=0.35), hand_ok=("floor",))
+    t = Vector((hx - 2.3, hy + 1.6, 0.2))                         # the pots and the basket against the north-west wall
+    _spot((hx + 1.0, hy - 0.4, 1.6), tuple(t), 260, size=0.8, color=(1.0, 0.9, 0.78), spot=45)      # daylight carried in from the door
+    return dict(a=((hx - 0.4, hy + 0.1, 1.05), tuple(t)), b=((hx - 0.7, hy + 0.35, 1.0), tuple(t)), lens=32,
+                fstop=2.8, focus=tuple(t), cine=dict(exposure=0.45), hand_ok=("floor",))
 
 
 # ============================================================================ "Above the buried remains, people ground grain..."
