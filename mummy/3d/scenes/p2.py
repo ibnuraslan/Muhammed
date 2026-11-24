@@ -52,7 +52,7 @@ def _vial(x, y, z, h=0.055, r=0.011, fill=0.25):
     bpy.ops.mesh.primitive_cylinder_add(radius=r * 1.08, depth=h * 0.22, location=(x, y, z + h + h * 0.1)); c = bpy.context.active_object
     c.data.materials.append(_plain("vialcap", (0.02, 0.02, 0.022), 0.45)); c.name = "vialcap"
     bpy.ops.mesh.primitive_cylinder_add(radius=r * 0.85, depth=h * fill, location=(x, y, z + 0.002 + h * fill / 2)); p = bpy.context.active_object
-    p.data.materials.append(_plain("vialpowder", (0.62, 0.55, 0.45), 0.95)); p.name = "vialpowder"
+    p.data.materials.append(_plain("vialpowder", (0.85, 0.78, 0.66), 0.95)); p.name = "vialpowder"
     return v
 
 
@@ -123,8 +123,8 @@ def _etch(obj, strength=1.0):
 def S01():
     """Lab at night: a bone sample in a small glass vial in the lamp pool; the skull soft behind. Slow push."""
     L = p1.lab_skull(inverted=False, lamp_energy=18)
-    _vial(-0.16, 0.2, LB.TOP)
-    t = Vector((-0.16, 0.2, LB.TOP + 0.035))
+    _vial(-0.1, 0.27, LB.TOP)
+    t = Vector((-0.1, 0.27, LB.TOP + 0.035))
     return dict(a=((-0.36, -0.22, LB.TOP + 0.12), tuple(t + Vector((0.04, 0.05, 0)))), b=((-0.27, -0.08, LB.TOP + 0.09), tuple(t + Vector((0.03, 0.04, 0)))),
                 lens=60, fstop=2.0, focus=tuple(t), cine=dict(exposure=-0.15))
 
@@ -152,10 +152,11 @@ def S03():
     """The accelerator hall: a long stainless beamline in blue half-dark, magnets, the sample wheel at the ion source.
     Low dolly along the beamline."""
     H = P2.ams_hall()
-    _haze((7, 0, 3), (30, 12, 6), density=0.012, color=(0.8, 0.88, 1.0))
+    _haze((2, 0, 4), (40, 14, 8), density=0.018, color=(0.8, 0.88, 1.0))
     z = H["beam_z"]
-    return dict(a=((13.5, -1.1, z + 0.35), (2.0, 0.0, z)), b=((10.0, -1.0, z + 0.3), (-0.5, 0.0, z + 0.05)), lens=28,
-                fstop=4.0, focus=(6.0, 0, z), cine=dict(exposure=0.2))
+    _spot((-4.0, -3.0, 6.5), (-5.5, 0, z), 900, size=0.4, color=(0.75, 0.85, 1.0), spot=35)      # a pool on the tank
+    return dict(a=((12.5, -0.95, z + 0.28), (-4.0, 0.0, z + 0.25)), b=((8.8, -0.9, z + 0.24), (-5.0, 0.0, z + 0.35)), lens=30,
+                fstop=4.0, focus=(4.0, 0, z), cine=dict(exposure=0.1))
 
 
 def S04():
@@ -232,40 +233,59 @@ def S10():
                 fstop=4.0, focus=tuple(m))
 
 
-def S11():
-    """Contrast: an animal skeleton excavated from the same kind of sand (a real trench scan), top-down drift."""
-    U.light("overcast")
-    o = _single("1a0f03e879b64088bb556978bc4b84ed", name="sheeptrench")
+def _level(o):
+    """Rotate a photogrammetry patch so its flattest principal axis is vertical (z up), base back at z = 0."""
     co = np.empty(len(o.data.vertices) * 3, np.float32); o.data.vertices.foreach_get("co", co); co = co.reshape(-1, 3)
+    c0 = co.mean(0); u, sv, vt = np.linalg.svd((co - c0)[::max(1, len(co) // 20000)], full_matrices=False)
+    n = vt[2] if vt[2][2] > 0 else -vt[2]
+    R = np.array(Vector(n.tolist()).rotation_difference(Vector((0, 0, 1))).to_matrix())
+    co = (co - c0) @ R.T
+    co[:, 2] -= co[:, 2].min(); co[:, 0] -= (co[:, 0].min() + co[:, 0].max()) / 2; co[:, 1] -= (co[:, 1].min() + co[:, 1].max()) / 2
+    o.data.vertices.foreach_set("co", co.ravel()); o.data.update()
+    return co
+
+
+def S11():
+    """Contrast: an animal from the same kind of ground, excavated (a real burial scan): the skeleton has come apart as
+    the body rotted. Top-down drift in flat overcast light."""
+    U.light("overcast")
+    o = _single("d75c134c72a5408a9b66bd04170da311", name="animalburial")
+    co = _level(o)
     ext = co.max(0) - co.min(0)
-    # scale: the trench scan to ~3 m across (a sheep about 1 m long)
-    s = 3.0 / max(ext[0], ext[1]); o.scale = (s, s, s)
-    bpy.context.view_layer.update()
-    h = ext[2] * s
-    return dict(a=((0.15, -0.35, h + 2.4), (0.0, 0.0, h * 0.3)), b=((-0.1, 0.25, h + 2.1), (0.0, 0.1, h * 0.3)), lens=35,
-                fstop=8.0, focus=(0, 0, h * 0.3), cine=dict(exposure=0.1))
+    s_ = 2.2 / max(ext[0], ext[1]); o.scale = (s_, s_, s_)
+    zc = float(np.percentile(co[:, 2], 70)) * s_
+    # warm the soil toward the machair sand
+    for m in o.data.materials:
+        N = m.node_tree.nodes; Lk = m.node_tree.links; p = [n for n in N if n.type == 'BSDF_PRINCIPLED']
+        if p and p[0].inputs['Base Color'].links:
+            src = p[0].inputs['Base Color'].links[0].from_socket
+            mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
+            Lk.new(src, mx.inputs[6]); mx.inputs[7].default_value = (1.35, 1.15, 0.85, 1); Lk.new(mx.outputs[2], p[0].inputs['Base Color'])
+    # the surrounding trench floor, the scan edges sink into it
+    sand = ph.texture("dense_sand", scale=1.2, name="trenchsand", tint=(0.78, 0.68, 0.55))
+    bpy.ops.mesh.primitive_plane_add(size=12, location=(0, 0, zc)); g = bpy.context.active_object; g.data.materials.append(sand)
+    return dict(a=((0.1, -0.35, zc + 2.0), (0.0, 0.0, zc - 0.05)), b=((-0.1, 0.15, zc + 1.7), (0.0, 0.05, zc - 0.05)), lens=35,
+                fstop=8.0, focus=(0, 0, zc), cine=dict(exposure=0.1))
 
 
 # ============================================================================ "The team looks inside the bones."
 def S12():
-    """Lab: a compound microscope under the lamp, a box of thin sections beside it. Push to the stage."""
+    """Lab: a binocular microscope under the lamp, a box of thin sections and one slide out beside it. Push to the stage."""
     A = LB.room(window_light=0.3, lamp=True, lamp_at=(0.45, 0.62), lamp_target=(0.0, 0.38), lamp_energy=16)
-    mc = _single("dfb9849f5af049f6a945de6e7e0001d9", height=0.38, name="compound")
-    mc.location = (0.0, 0.4, LB.TOP); mc.rotation_euler.z = math.radians(160)
-    # slide box with glass slides standing in their slots (no labels)
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(-0.24, 0.3, LB.TOP + 0.02)); bx = bpy.context.active_object
+    mc = _single("2435e338bf7541a4b919e53df50eeeea", height=0.42, name="compound")
+    mc.location = (0.0, 0.42, LB.TOP); mc.rotation_euler.z = math.radians(200)
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(-0.26, 0.3, LB.TOP + 0.02)); bx = bpy.context.active_object
     bx.scale = (0.09, 0.08, 0.04); bx.data.materials.append(_plain("slidebox", (0.05, 0.05, 0.05), 0.5)); bx.name = "slidebox"
     gl = _glass("slideglass")
     for k in range(9):
-        bpy.ops.mesh.primitive_cube_add(size=1, location=(-0.275 + k * 0.009, 0.3, LB.TOP + 0.04)); sl = bpy.context.active_object
+        bpy.ops.mesh.primitive_cube_add(size=1, location=(-0.295 + k * 0.009, 0.3, LB.TOP + 0.04)); sl = bpy.context.active_object
         sl.scale = (0.0012, 0.075, 0.026); sl.data.materials.append(gl); sl.name = "slide"
-    # one slide out on the bench: a section (thin amber disc) under its coverslip
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(-0.12, 0.22, LB.TOP + 0.001)); s1 = bpy.context.active_object
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(-0.14, 0.24, LB.TOP + 0.001)); s1 = bpy.context.active_object
     s1.scale = (0.075, 0.026, 0.0012); s1.data.materials.append(gl); s1.name = "slide"
-    bpy.ops.mesh.primitive_cylinder_add(radius=0.008, depth=0.0004, location=(-0.12, 0.22, LB.TOP + 0.0018)); d = bpy.context.active_object
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.008, depth=0.0004, location=(-0.14, 0.24, LB.TOP + 0.0018)); d = bpy.context.active_object
     d.data.materials.append(_plain("section", (0.55, 0.38, 0.18), 0.4)); d.name = "section"
-    t = Vector((0.0, 0.4, LB.TOP + 0.14))
-    return dict(a=((-0.55, -0.45, LB.TOP + 0.35), tuple(t)), b=((-0.32, -0.2, LB.TOP + 0.26), tuple(t + Vector((0, 0, -0.02)))), lens=45,
+    t = Vector((0.0, 0.42, LB.TOP + 0.17))
+    return dict(a=((-0.7, -0.45, LB.TOP + 0.38), tuple(t)), b=((-0.45, -0.22, LB.TOP + 0.3), tuple(t + Vector((0, 0, -0.03)))), lens=45,
                 fstop=2.8, focus=tuple(t), cine=dict(exposure=-0.1))
 
 
@@ -340,38 +360,55 @@ def S19():
 def S20():
     """The machair sand close up: crushed shell, white, pink and grey, among the quartz grains. Low push in the sun."""
     U.light("golden", sun_az=190)
-    sand = ph.texture("dense_sand", scale=6.0, name="macrosand", tint=(1.2, 1.1, 0.95))
+    sand = ph.texture("dense_sand", scale=30.0, name="macrosand", tint=(1.2, 1.1, 0.95))
     bpy.ops.mesh.primitive_plane_add(size=1.2, location=(0, 0, 0)); g = bpy.context.active_object; g.data.materials.append(sand)
     sub = g.modifiers.new("s", "SUBSURF"); sub.levels = 5; sub.render_levels = 5; sub.subdivision_type = 'SIMPLE'
-    d = g.modifiers.new("d", "DISPLACE"); t = bpy.data.textures.new("ripple", "CLOUDS"); t.noise_scale = 0.08; d.texture = t; d.strength = 0.012
+    d = g.modifiers.new("d", "DISPLACE"); t = bpy.data.textures.new("ripple", "CLOUDS"); t.noise_scale = 0.08; d.texture = t; d.strength = 0.003
     rng = random.Random(7)
-    cols = [(0.85, 0.82, 0.76), (0.8, 0.62, 0.58), (0.6, 0.6, 0.6), (0.9, 0.86, 0.8), (0.55, 0.42, 0.35)]
-    mats = [_plain(f"shell{i}", c, 0.35) for i, c in enumerate(cols)]
+    cols = [(0.88, 0.85, 0.8), (0.82, 0.6, 0.55), (0.62, 0.6, 0.58), (0.92, 0.88, 0.82), (0.55, 0.42, 0.35), (0.75, 0.66, 0.5)]
+    mats = [_plain(f"shell{i}", c, 0.3) for i, c in enumerate(cols)]
     for m in mats:
-        m.node_tree.nodes["Principled BSDF"].inputs['Coat Weight'].default_value = 0.3
+        pp = m.node_tree.nodes["Principled BSDF"]; pp.inputs['Coat Weight'].default_value = 0.4; pp.inputs['Subsurface Weight'].default_value = 0.2
     bm = bmesh.new()
-    for k in range(1400):
-        r = rng.uniform(0.0015, 0.007) if rng.random() < 0.9 else rng.uniform(0.008, 0.016)
-        x, y = rng.uniform(-0.3, 0.3), rng.uniform(-0.3, 0.3)
-        ret = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=r)
-        vs = ret['verts']
-        sx, sy, sz = rng.uniform(0.8, 1.6), rng.uniform(0.6, 1.2), rng.uniform(0.15, 0.4)       # flat curved flakes
-        R = Matrix.Rotation(rng.uniform(0, 6.3), 3, 'Z') @ Matrix.Rotation(rng.uniform(-0.5, 0.5), 3, 'X')
-        mi = rng.randrange(len(mats))
+    for k in range(2200):                       # curved shell flakes: pieces of thin spherical caps, ribbed
+        big = rng.random() < 0.08
+        r = rng.uniform(0.004, 0.009) if big else rng.uniform(0.0012, 0.004)
+        x, y = rng.uniform(-0.25, 0.25), rng.uniform(-0.25, 0.25)
+        ret = bmesh.ops.create_grid(bm, x_segments=5, y_segments=5, size=r)
+        vs = ret['verts']; R = Matrix.Rotation(rng.uniform(0, 6.3), 3, 'Z') @ Matrix.Rotation(rng.uniform(-0.6, 0.6), 3, 'X')
+        curv = rng.uniform(0.5, 1.6) / r; mi = rng.randrange(len(mats)); sy = rng.uniform(0.5, 1.0)
         for v in vs:
-            p = Vector((v.co.x * sx, v.co.y * sy, v.co.z * sz + (v.co.x ** 2) * 40 * sz))
-            v.co = R @ p + Vector((x, y, 0.001))
+            px_, py_ = v.co.x, v.co.y * sy
+            pz = -curv * (px_ ** 2 + py_ ** 2) * 0.5 + 0.06 * r * math.sin(px_ / r * 9)     # cap + growth ribs
+            v.co = R @ Vector((px_, py_, pz)) + Vector((x, y, 0.0008 + r * 0.3))
         for f in {f for v in vs for f in v.link_faces}:
-            f.material_index = mi
+            f.material_index = mi; f.smooth = True
     me = bpy.data.meshes.new("shells"); bm.to_mesh(me); bm.free()
     sh = bpy.data.objects.new("shells", me); bpy.context.scene.collection.objects.link(sh)
     for m in mats:
         me.materials.append(m)
-    return dict(a=((0.0, -0.32, 0.12), (0.0, 0.02, 0.0)), b=((0.0, -0.2, 0.08), (0.0, 0.04, 0.0)), lens=60,
-                fstop=4.0, focus=(0.0, -0.02, 0.0), cine=dict(exposure=0.0))
+    sol = sh.modifiers.new("t", "SOLIDIFY"); sol.thickness = 0.0004
+    # quartz grains
+    bm = bmesh.new()
+    for k in range(6000):
+        r = rng.uniform(0.0003, 0.0011); x, y = rng.uniform(-0.25, 0.25), rng.uniform(-0.25, 0.25)
+        vs = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=r)['verts']
+        sc_ = Vector((rng.uniform(0.7, 1.3), rng.uniform(0.7, 1.3), rng.uniform(0.6, 1.0)))
+        for v in vs:
+            v.co = Vector((v.co.x * sc_.x, v.co.y * sc_.y, v.co.z * sc_.z)) + Vector((x, y, r * 0.5))
+    gme = bpy.data.meshes.new("grains"); bm.to_mesh(gme); bm.free()
+    gr = bpy.data.objects.new("grains", gme); bpy.context.scene.collection.objects.link(gr)
+    q = _plain("quartz", (0.75, 0.68, 0.55), 0.35); q.node_tree.nodes["Principled BSDF"].inputs['Transmission Weight'].default_value = 0.3
+    gme.materials.append(q)
+    return dict(a=((0.0, -0.11, 0.045), (0.0, 0.02, 0.0)), b=((0.0, -0.08, 0.035), (0.0, 0.03, 0.0)), lens=60,
+                fstop=5.6, focus=(0.0, -0.03, 0.0), cine=dict(exposure=0.0))
 
 
 # ============================================================================ "Elsewhere on South Uist, peat bogs..."
+def _clear(M, x, y):
+    return any(math.hypot(x - cx, y - cy) < cr for cx, cy, cr in M.get("clear", ()))
+
+
 def _cotton(M, center, radius, n=2500, seed=1):
     """Cotton grass: thin stems with white tufts, scattered over the moor (one joined mesh)."""
     rng = random.Random(seed)
@@ -380,7 +417,7 @@ def _cotton(M, center, radius, n=2500, seed=1):
         a = rng.uniform(0, 6.283); r = radius * math.sqrt(rng.random())
         x, y = center[0] + r * math.cos(a), center[1] + r * math.sin(a)
         z = P2.moor_height(M, x, y)
-        if z < M.get("water_z", -9) + 0.03:
+        if z < M.get("water_z", -9) + 0.03 or _clear(M, x, y):
             continue
         h = rng.uniform(0.25, 0.45); lean = Vector((rng.uniform(-0.06, 0.06), rng.uniform(-0.06, 0.06), 0))
         st = bmesh.ops.create_cone(bm, cap_ends=False, segments=4, radius1=0.0025, radius2=0.0015, depth=h)['verts']
@@ -403,22 +440,32 @@ def _cotton(M, center, radius, n=2500, seed=1):
 def _heather(M, center, radius, n=500, seed=2):
     """Heather clumps (real scan) instanced over the moor, out of the pools."""
     src = _single("109204e9a5c74ec390f374ac62e92196", height=0.35, name="heather_src", hide=True)
+    for m in src.data.materials:                  # the scan is in full pink flower: take it to late-season brown
+        N = m.node_tree.nodes; Lk = m.node_tree.links; p = [n for n in N if n.type == 'BSDF_PRINCIPLED']
+        if p and p[0].inputs['Base Color'].links:
+            sc_ = p[0].inputs['Base Color'].links[0].from_socket
+            hs = N.new("ShaderNodeHueSaturation"); hs.inputs['Saturation'].default_value = 0.35; hs.inputs['Value'].default_value = 0.55
+            Lk.new(sc_, hs.inputs['Color'])
+            mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
+            Lk.new(hs.outputs[0], mx.inputs[6]); mx.inputs[7].default_value = (0.75, 0.55, 0.4, 1); Lk.new(mx.outputs[2], p[0].inputs['Base Color'])
     rng = random.Random(seed)
     col = bpy.data.collections.new("heather"); bpy.context.scene.collection.children.link(col)
     for k in range(n):
         a = rng.uniform(0, 6.283); r = radius * math.sqrt(rng.random())
         x, y = center[0] + r * math.cos(a), center[1] + r * math.sin(a)
         z = P2.moor_height(M, x, y)
-        if z < M.get("water_z", -9) + 0.05:
+        if z < M.get("water_z", -9) + 0.05 or _clear(M, x, y):
             continue
         o = bpy.data.objects.new("heather", src.data); col.objects.link(o)
         s = rng.uniform(0.6, 1.5); o.scale = (s, s, s * rng.uniform(0.7, 1.1)); o.location = (x, y, z - 0.04); o.rotation_euler.z = rng.uniform(0, 6.3)
     return col
 
 
-def moor(mood="overcast", size=220.0, n=420, cotton=(0, 0, 30, 2500), heather=(0, 0, 25, 400), mist=0.03, sun_az=None):
+def moor(mood="overcast", size=220.0, n=420, cotton=(0, 0, 30, 2500), heather=(0, 0, 25, 400), mist=0.03, sun_az=None, setup=None):
     Lh = U.light(mood, sun_az)
     M = P2.peat_moor(size=size, n=n)
+    if setup:
+        setup(M)                     # e.g. choose where people stand and keep that ground clear
     if cotton:
         _cotton(M, cotton[:2], cotton[2], n=cotton[3])
     if heather:
@@ -434,39 +481,71 @@ def S21():
     return dict(a=((-120, -150, 70), (0, 10, 0)), b=((-90, -140, 62), (15, 15, 0)), lens=28, cine=dict(exposure=0.3))
 
 
-def _bog_scene(mood="dusk", sun_az=None):
-    M = moor(mood, size=80, n=560, cotton=(0, 0, 18, 2500), heather=(0, 0, 18, 300), mist=0.02, sun_az=sun_az)
+def _bog_scene(mood="dusk", sun_az=None, setup=None):
+    M = moor(mood, size=80, n=560, cotton=(0, 0, 18, 2500), heather=(0, 0, 18, 300), mist=0.02, sun_az=sun_az, setup=setup)
     # a black pool in front of the bank at (0, 3): carve the terrain down and set water there
     return M
 
 
-def S22():
-    """Bronze Age, dusk: two islanders (backs to us) at the edge of a black bog pool, a wrapped body on a hurdle beside
-    them. Slow push."""
-    M = _bog_scene("dusk", sun_az=250)
-    wz = M["water_z"]
-    # find a standing spot on firm ground near the pool edge
-    pts = []
-    for x in np.linspace(-6, 6, 49):
-        for y in np.linspace(-6, 4, 41):
+def _pool_edge(M, near=(0.0, -1.0)):
+    """A firm standing spot with open black water 1.5-3.5 m ahead of it (+y)."""
+    wz = M["water_z"]; best = None
+    for x in np.linspace(-8, 8, 65):
+        for y in np.linspace(-8, 3, 45):
             z = P2.moor_height(M, x, y)
-            if wz + 0.05 < z < wz + 0.18:
-                pts.append((abs(x) + abs(y + 1), x, y, z))
-    pts.sort(); _, x0, y0, z0 = pts[0]
+            if z < wz + 0.12:
+                continue
+            firm = all(P2.moor_height(M, x + dx, y + dy) > wz + 0.08 for dx in (-1.2, 0, 1.2) for dy in (-0.8, 0, 0.5))
+            wet = sum(P2.moor_height(M, x + dx, y + dy) < wz for dx in (-1, 0, 1) for dy in (1.5, 2.5, 3.5))
+            if firm and wet >= 5:
+                sc_ = abs(x - near[0]) + abs(y - near[1]) - wet * 0.3
+                if best is None or sc_ < best[0]:
+                    best = (sc_, x, y, z)
+    if best is None:
+        return 0.0, 0.0, P2.moor_height(M, 0, 0)
+    return best[1:]
+
+
+def S22():
+    """Bronze Age, dusk: two islanders (backs to us, against the last light) at the edge of a black bog pool, a body
+    wrapped in a hide on a wattle hurdle at their feet. Slow push."""
+    spot = {}
+    def setup(M):
+        x0, y0, z0 = _pool_edge(M); spot.update(x=x0, y=y0, z=z0)
+        M["clear"] = [(x0, y0, 1.0), (x0 - 1.0, y0 - 0.3, 0.8), (x0 + 1.3, y0 - 0.6, 1.3)]
+    M = _bog_scene("dusk", sun_az=95, setup=setup)
+    x0, y0, z0 = spot["x"], spot["y"], spot["z"]
     import acts as AC
-    out = []
-    for i, (dx, dy, hd) in enumerate(((0.0, 0.0, 95), (-0.9, -0.25, 100))):
+    poses = ((0.0, 0.0, 92, "L", (x0, y0 + 3.0)), (-1.0, -0.3, 112, "R", (x0 + 1.3, y0 - 0.6)))
+    for i, (dx, dy, hd, wt, look) in enumerate(poses):
         m = BR.Islander(name=f"Islander{i}")
-        st = AC.Stand(m, (x0 + dx, y0 + dy), hd, lean=6)
-        st.head_to((x0 + dx, y0 + dy + 3, 0.2), share=0.8)
-        st.finish(look=(x0 + dx, y0 + dy + 3, 0.2), density=HAIR)
-        G.lift(st, P2.moor_height(M, x0 + dx, y0 + dy))
-        out.append(st)
-    hz = P2.moor_height(M, x0 + 1.4, y0 - 0.5)
-    P2.hurdle((x0 + 1.4, y0 - 0.5, hz), rot=math.radians(80))
-    P2.bundle((x0 + 1.4, y0 - 0.5, hz + 0.2), rot=math.radians(80))
-    return dict(a=((x0 - 1.0, y0 - 5.5, z0 + 1.5), (x0 + 0.5, y0 + 1.5, z0 + 0.6)), b=((x0 - 0.7, y0 - 4.6, z0 + 1.45), (x0 + 0.5, y0 + 1.5, z0 + 0.6)),
-                lens=32, fstop=4.0, focus=(x0, y0, z0 + 1.0), cine=dict(exposure=0.35), hand_ok=("moor", "hurdle"))
+        zf = P2.moor_height(M, x0 + dx, y0 + dy)
+        st = AC.Stand(m, (x0 + dx, y0 + dy), hd, weight=wt, lean=4 + 6 * i)
+        lz = P2.moor_height(M, *look) - zf
+        st.head_to((look[0], look[1], lz), share=0.8)
+        st.finish(look=(look[0], look[1], lz), density=HAIR)
+        G.lift(st, zf)
+        if i == 1:                                   # not twins: the second wears a lighter, greyer cloth
+            for o in bpy.data.objects:
+                if o.name.startswith(f"Islander{i}_") and o.type == 'MESH' and any(k in o.name for k in ("jacket", "coat", "shirt", "trousers")):
+                    for j, ms in enumerate(o.data.materials):
+                        if ms:
+                            mc = ms.copy(); o.data.materials[j] = mc
+                            pp = [n for n in mc.node_tree.nodes if n.type == 'BSDF_PRINCIPLED']
+                            if pp:
+                                mixn = mc.node_tree.nodes.new("ShaderNodeMix"); mixn.data_type = 'RGBA'; mixn.blend_type = 'MULTIPLY'
+                                mixn.inputs['Factor'].default_value = 1.0; mixn.inputs[7].default_value = (0.85, 0.95, 1.0, 1)
+                                if pp[0].inputs['Base Color'].links:
+                                    mc.node_tree.links.new(pp[0].inputs['Base Color'].links[0].from_socket, mixn.inputs[6])
+                                else:
+                                    mixn.inputs[6].default_value = pp[0].inputs['Base Color'].default_value
+                                mc.node_tree.links.new(mixn.outputs[2], pp[0].inputs['Base Color'])
+    hx, hy = x0 + 1.3, y0 - 0.6
+    hz = P2.moor_height(M, hx, hy)
+    P2.hurdle((hx, hy, hz + 0.01), rot=math.radians(75))
+    P2.bundle((hx, hy, hz + 0.25), rot=math.radians(75))
+    return dict(a=((x0 - 1.4, y0 - 6.0, z0 + 1.3), (x0 + 0.3, y0 + 2.0, z0 + 0.9)), b=((x0 - 1.1, y0 - 5.0, z0 + 1.25), (x0 + 0.3, y0 + 2.0, z0 + 0.9)),
+                lens=32, fstop=4.0, focus=(x0, y0, z0 + 1.0), cine=dict(exposure=0.25), hand_ok=("moor", "hurdle"))
 
 
 def S23():

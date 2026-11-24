@@ -46,25 +46,25 @@ def microscope_field(kind="human", size=1.0, attack=None):
     ring = N.new("ShaderNodeMath"); ring.operation = 'MULTIPLY'; ring.inputs[1].default_value = 60.0; L.new(d, ring.inputs[0])
     sn = N.new("ShaderNodeMath"); sn.operation = 'SINE'; L.new(ring.outputs[0], sn.inputs[0])
     ringc = N.new("ShaderNodeMapRange"); ringc.inputs['From Min'].default_value = -1; ringc.inputs['From Max'].default_value = 1
-    ringc.inputs['To Min'].default_value = 0.82; ringc.inputs['To Max'].default_value = 1.0; L.new(sn.outputs[0], ringc.inputs['Value'])
+    ringc.inputs['To Min'].default_value = 0.62; ringc.inputs['To Max'].default_value = 1.0; L.new(sn.outputs[0], ringc.inputs['Value'])
     # Haversian canal (dark hole) and the cement line at the osteon edge
-    canal = N.new("ShaderNodeMapRange"); canal.inputs['From Min'].default_value = 0.05; canal.inputs['From Max'].default_value = 0.08
-    canal.inputs['To Min'].default_value = 0.08; canal.inputs['To Max'].default_value = 1.0; L.new(d, canal.inputs['Value'])
+    canal = N.new("ShaderNodeMapRange"); canal.inputs['From Min'].default_value = 0.09; canal.inputs['From Max'].default_value = 0.14
+    canal.inputs['To Min'].default_value = 0.03; canal.inputs['To Max'].default_value = 1.0; L.new(d, canal.inputs['Value'])
     vor2 = N.new("ShaderNodeTexVoronoi"); vor2.feature = 'DISTANCE_TO_EDGE'; vor2.inputs['Scale'].default_value = 1.0; vor2.inputs['Randomness'].default_value = 0.85
     L.new(wv.outputs[0], vor2.inputs['Vector'])
     cem = N.new("ShaderNodeMapRange"); cem.inputs['From Min'].default_value = 0.0; cem.inputs['From Max'].default_value = 0.025
-    cem.inputs['To Min'].default_value = 0.55; cem.inputs['To Max'].default_value = 1.0; L.new(vor2.outputs['Distance'], cem.inputs['Value'])
+    cem.inputs['To Min'].default_value = 0.3; cem.inputs['To Max'].default_value = 1.0; L.new(vor2.outputs['Distance'], cem.inputs['Value'])
     # canaliculi / lacunae: fine dark specks
-    lac = N.new("ShaderNodeTexVoronoi"); lac.inputs['Scale'].default_value = 40; L.new(wv.outputs[0], lac.inputs['Vector'])
-    lacm = N.new("ShaderNodeMapRange"); lacm.inputs['From Min'].default_value = 0.06; lacm.inputs['From Max'].default_value = 0.12
-    lacm.inputs['To Min'].default_value = 0.6; lacm.inputs['To Max'].default_value = 1.0; L.new(lac.outputs['Distance'], lacm.inputs['Value'])
+    lac = N.new("ShaderNodeTexVoronoi"); lac.inputs['Scale'].default_value = 16; L.new(wv.outputs[0], lac.inputs['Vector'])
+    lacm = N.new("ShaderNodeMapRange"); lacm.inputs['From Min'].default_value = 0.08; lacm.inputs['From Max'].default_value = 0.16
+    lacm.inputs['To Min'].default_value = 0.25; lacm.inputs['To Max'].default_value = 1.0; L.new(lac.outputs['Distance'], lacm.inputs['Value'])
     def mul(a, b):
         n = N.new("ShaderNodeMath"); n.operation = 'MULTIPLY'; L.new(a, n.inputs[0]); L.new(b, n.inputs[1]); return n.outputs[0]
     trans = mul(mul(mul(ringc.outputs[0], canal.outputs[0]), cem.outputs[0]), lacm.outputs[0])
     # bacterial tunnelling (Wedl / non-Wedl foci): dark, spongy, brown patches; for the human bone only near the edge
-    bt = N.new("ShaderNodeTexNoise"); bt.inputs['Scale'].default_value = 30; bt.inputs['Detail'].default_value = 8; bt.inputs['Roughness'].default_value = 0.75
+    bt = N.new("ShaderNodeTexNoise"); bt.inputs['Scale'].default_value = 14; bt.inputs['Detail'].default_value = 8; bt.inputs['Roughness'].default_value = 0.75
     L.new(mp.outputs[0], bt.inputs['Vector'])
-    bz = N.new("ShaderNodeTexNoise"); bz.inputs['Scale'].default_value = 2.0; bz.inputs['Detail'].default_value = 4; L.new(mp.outputs[0], bz.inputs['Vector'])
+    bz = N.new("ShaderNodeTexNoise"); bz.inputs['Scale'].default_value = 3.0; bz.inputs['Detail'].default_value = 4; L.new(mp.outputs[0], bz.inputs['Vector'])
     zone = N.new("ShaderNodeMapRange"); zone.inputs['From Min'].default_value = 1.0 - attack; zone.inputs['From Max'].default_value = 1.0 - attack + 0.12
     L.new(bz.outputs['Fac'], zone.inputs['Value'])
     if kind == "human":                  # attack only in a thin band at one edge of the section
@@ -74,17 +74,17 @@ def microscope_field(kind="human", size=1.0, attack=None):
         zone_o = mul(zone.outputs[0], edge.outputs[0])
     else:
         zone_o = zone.outputs[0]
-    spong = N.new("ShaderNodeMapRange"); spong.inputs['From Min'].default_value = 0.45; spong.inputs['From Max'].default_value = 0.62
+    spong = N.new("ShaderNodeMapRange"); spong.inputs['From Min'].default_value = 0.38; spong.inputs['From Max'].default_value = 0.5
     L.new(bt.outputs['Fac'], spong.inputs['Value'])
     dmg = mul(zone_o, spong.outputs[0])
     col = N.new("ShaderNodeMix"); col.data_type = 'RGBA'; L.new(dmg, col.inputs['Factor'])
-    col.inputs[6].default_value = (1.0, 0.86, 0.62, 1); col.inputs[7].default_value = (0.08, 0.05, 0.03, 1)    # stained bone / brown tunnels
+    col.inputs[6].default_value = (0.95, 0.66, 0.34, 1); col.inputs[7].default_value = (0.08, 0.05, 0.03, 1)    # stained bone / brown tunnels
     tcol = N.new("ShaderNodeMix"); tcol.data_type = 'RGBA'; tcol.blend_type = 'MULTIPLY'; tcol.inputs['Factor'].default_value = 1.0
     L.new(col.outputs[2], tcol.inputs[6]); cc = N.new("ShaderNodeCombineXYZ")
     for k in range(3):
         L.new(trans, cc.inputs[k])
     L.new(cc.outputs[0], tcol.inputs[7])
-    em = N.new("ShaderNodeEmission"); em.inputs['Strength'].default_value = 2.2; L.new(tcol.outputs[2], em.inputs['Color'])
+    em = N.new("ShaderNodeEmission"); em.inputs['Strength'].default_value = 0.85; L.new(tcol.outputs[2], em.inputs['Color'])
     L.new(em.outputs[0], N["Material Output"].inputs['Surface'])
     o.data.materials.append(m)
     # field stop: black annulus over the edge, and a dark world
@@ -107,53 +107,166 @@ def microscope_field(kind="human", size=1.0, attack=None):
 
 
 # ----------------------------------------------------------------------------- AMS hall
-def ams_hall(length=16.0):
-    """Accelerator mass spectrometry hall: beamline along x at 1.3 m, magnets, ion source cabinet, cable trays."""
-    steel = _mat("ss", (0.62, 0.62, 0.64), 0.22, 1.0)
-    blue = _mat("magnetblue", (0.03, 0.12, 0.35), 0.4)
-    orange = _mat("magnetorange", (0.55, 0.2, 0.02), 0.45)
-    floor = ph.texture("concrete_floor_worn_001", scale=0.6, name="hallfloor", tint=(0.5, 0.5, 0.52))
-    wall = _mat("hallwall", (0.18, 0.19, 0.2), 0.8)
-    bpy.ops.mesh.primitive_plane_add(size=1, location=(length / 2, 0, 0)); f = bpy.context.active_object; f.scale = (length + 10, 14, 1); f.data.materials.append(floor)
-    for y in (-6, 6):
-        bpy.ops.mesh.primitive_cube_add(size=1, location=(length / 2, y, 3)); wl = bpy.context.active_object; wl.scale = (length + 10, 0.2, 6); wl.data.materials.append(wall)
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(length / 2, 0, 6)); c = bpy.context.active_object; c.scale = (length + 10, 12.2, 0.2); c.data.materials.append(wall)
-    # beamline: pipe with flanges, bellows, valves; magnets as boxes round it
-    bpy.ops.mesh.primitive_cylinder_add(radius=0.05, depth=length, location=(length / 2, 0, 1.3)); bl = bpy.context.active_object
-    bl.rotation_euler.y = math.pi / 2; bl.data.materials.append(steel); bl.name = "beamline"
-    for k in range(int(length / 0.8)):
-        x = 0.4 + k * 0.8
-        bpy.ops.mesh.primitive_cylinder_add(radius=0.09, depth=0.04, location=(x, 0, 1.3)); fl = bpy.context.active_object
-        fl.rotation_euler.y = math.pi / 2; fl.data.materials.append(steel); fl.name = "flange"
-    for x, col, sz in ((3.0, blue, (0.9, 0.8, 0.8)), (7.5, orange, (1.4, 1.1, 1.0)), (11.5, blue, (0.9, 0.8, 0.8))):
-        bpy.ops.mesh.primitive_cube_add(size=1, location=(x, 0, 1.3)); mg = bpy.context.active_object; mg.scale = sz; mg.data.materials.append(col)
-        bv = mg.modifiers.new("b", "BEVEL"); bv.width = 0.03; bv.segments = 2; mg.name = "magnet"
-    for x in np.arange(0.5, length, 1.6):
+def _brushed(name, col=(0.72, 0.72, 0.74), rough=0.28):
+    """Brushed stainless: anisotropic-looking streaks via stretched noise in roughness."""
+    m = bpy.data.materials.new(name); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    p.inputs['Base Color'].default_value = (*col, 1); p.inputs['Metallic'].default_value = 1.0
+    tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (2.0, 2.0, 220.0)
+    L.new(tc.outputs['Object'], mp.inputs['Vector'])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 6; nz.inputs['Detail'].default_value = 6; L.new(mp.outputs[0], nz.inputs['Vector'])
+    r = N.new("ShaderNodeMapRange"); r.inputs['To Min'].default_value = rough * 0.6; r.inputs['To Max'].default_value = rough * 1.5
+    L.new(nz.outputs['Fac'], r.inputs['Value']); L.new(r.outputs[0], p.inputs['Roughness'])
+    p.inputs['Anisotropic'].default_value = 0.6
+    return m
+
+
+def _paint(name, col, rough=0.45):
+    m = bpy.data.materials.new(name); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord")
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 9; nz.inputs['Detail'].default_value = 8; L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    c = N.new("ShaderNodeMix"); c.data_type = 'RGBA'; c.inputs['Factor'].default_value = 0.12; L.new(nz.outputs['Fac'], c.inputs['Factor'])
+    c.inputs[6].default_value = (*col, 1); c.inputs[7].default_value = (col[0] * 0.6, col[1] * 0.6, col[2] * 0.6, 1)
+    L.new(c.outputs[2], p.inputs['Base Color'])
+    r = N.new("ShaderNodeMapRange"); r.inputs['To Min'].default_value = rough * 0.8; r.inputs['To Max'].default_value = rough * 1.25
+    L.new(nz.outputs['Fac'], r.inputs['Value']); L.new(r.outputs[0], p.inputs['Roughness'])
+    p.inputs['Coat Weight'].default_value = 0.25
+    return m
+
+
+def _cyl(r, depth, loc, rot=(0, 0, 0), mat=None, name="part", verts=48, bevel=0.0):
+    bpy.ops.mesh.primitive_cylinder_add(vertices=verts, radius=r, depth=depth, location=loc); o = bpy.context.active_object
+    o.rotation_euler = rot; o.name = name
+    if mat:
+        o.data.materials.append(mat)
+    if bevel:
+        b = o.modifiers.new("b", "BEVEL"); b.width = bevel; b.segments = 2
+    for p_ in o.data.polygons:
+        p_.use_smooth = True
+    o.data.shade_smooth() if hasattr(o.data, "shade_smooth") else None
+    return o
+
+
+def _box2(name, c, s, mat, bevel=0.01):
+    bpy.ops.mesh.primitive_cube_add(size=1, location=c); o = bpy.context.active_object; o.scale = s; o.name = name
+    o.data.materials.append(mat)
+    if bevel:
+        b = o.modifiers.new("b", "BEVEL"); b.width = bevel; b.segments = 2
+    return o
+
+
+def ams_hall(length=16.0, seed=3):
+    """Accelerator mass spectrometry hall (tandem-accelerator type): the long pressure-vessel tank of the accelerator,
+    a stainless beamline on stands running out of it past a C-yoke analysing magnet and quadrupoles, flanges, bellows,
+    vacuum pumps and gauges, cable trays with bundled cables, racks of electronics with small indicator lights; a
+    concrete-walled hall lit by cold overhead fittings in haze. Beam axis along x at z = 1.3 m; the tank sits at x < 0."""
+    rng = random.Random(seed)
+    Z = 1.3
+    ss = _brushed("ss"); ssd = _brushed("ssdark", (0.4, 0.4, 0.42), 0.4)
+    tankp = _paint("tankpaint", (0.36, 0.5, 0.5), 0.4); red = _paint("magnetred", (0.42, 0.05, 0.03), 0.4)
+    blue = _paint("quadblue", (0.04, 0.12, 0.32), 0.38); copper = _paint("coil", (0.55, 0.25, 0.1), 0.3)
+    copper.node_tree.nodes["Principled BSDF"].inputs['Metallic'].default_value = 0.8
+    rackp = _paint("rack", (0.12, 0.12, 0.13), 0.55); yellow = _paint("yellowstand", (0.6, 0.45, 0.04), 0.5)
+    floor = ph.texture("concrete_floor_worn_001", scale=0.4, name="hallfloor", tint=(0.55, 0.56, 0.6))
+    wall = ph.texture("painted_plaster_wall", scale=0.25, name="hallwall", tint=(0.32, 0.34, 0.37))
+    W = 14.0
+    _box2("floor", (length / 2 - 6, 0, -0.05), (length + 30, W, 0.1), floor, 0)
+    for y in (-W / 2, W / 2):
+        _box2("wall", (length / 2 - 6, y, 4), (length + 30, 0.3, 8), wall, 0)
+    _box2("endwall", (length + 6, 0, 4), (0.3, W, 8), wall, 0)
+    _box2("ceiling", (length / 2 - 6, 0, 8), (length + 30, W, 0.3), wall, 0)
+    # the accelerator tank: a long horizontal pressure vessel with domed ends and a bolted girth flange
+    tl = 9.0; tr = 1.35; tx0 = -tl - 1.5
+    _cyl(tr, tl, (tx0 + tl / 2, 0, Z + 0.2), rot=(0, math.pi / 2, 0), mat=tankp, name="tank", verts=96)
+    for xe in (tx0, tx0 + tl):
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=64, ring_count=32, radius=tr, location=(xe, 0, Z + 0.2)); d = bpy.context.active_object
+        d.scale = (0.35, 1, 1); d.data.materials.append(tankp); d.name = "tankdome"
+        for p_ in d.data.polygons:
+            p_.use_smooth = True
+    for xg in (tx0 + tl * 0.5,):
+        _cyl(tr + 0.07, 0.16, (xg, 0, Z + 0.2), rot=(0, math.pi / 2, 0), mat=tankp, name="girth", verts=96)
+        for k in range(48):
+            a = 2 * math.pi * k / 48
+            _cyl(0.025, 0.2, (xg, (tr + 0.1) * math.cos(a), Z + 0.2 + (tr + 0.1) * math.sin(a)), rot=(0, math.pi / 2, 0), mat=ssd, name="bolt", verts=8)
+    for xs in (tx0 + 1.2, tx0 + tl - 1.2):                     # saddles
+        _box2("saddle", (xs, 0, 0.3), (0.5, 2.2, 0.6), yellow, 0.02)
+    # beamline from the tank exit to the far end, flanges every 0.9 m, bellows, gate valves
+    x0 = tx0 + tl + tr * 0.35
+    _cyl(0.05, length - x0 + 0.5, ((x0 + length) / 2, 0, Z), rot=(0, math.pi / 2, 0), mat=ss, name="beamline", verts=32)
+    x = x0 + 0.4
+    while x < length:
+        _cyl(0.1, 0.035, (x, 0, Z), rot=(0, math.pi / 2, 0), mat=ss, name="flange", verts=32)
+        for k in range(8):
+            a = 2 * math.pi * k / 8 + 0.2
+            _cyl(0.008, 0.06, (x, 0.08 * math.cos(a), Z + 0.08 * math.sin(a)), rot=(0, math.pi / 2, 0), mat=ssd, name="bolt", verts=6)
+        if rng.random() < 0.3:                                   # bellows
+            for j in range(7):
+                bpy.ops.mesh.primitive_torus_add(major_radius=0.065, minor_radius=0.012, location=(x + 0.08 + j * 0.03, 0, Z)); b = bpy.context.active_object
+                b.rotation_euler.y = math.pi / 2; b.data.materials.append(ss); b.name = "bellows"
+        x += 0.9
+    # gate valve + turbo pump + gauge clusters
+    for xv in (x0 + 1.6, x0 + 6.4, x0 + 11.0):
+        _box2("valve", (xv, 0, Z + 0.12), (0.16, 0.24, 0.42), ss, 0.01)
+        _cyl(0.05, 0.4, (xv, 0, Z + 0.5), mat=ss, name="actuator", verts=24)
+        _cyl(0.11, 0.3, (xv + 0.35, 0, Z - 0.3), mat=ssd, name="turbopump")
+        _cyl(0.05, 0.25, (xv + 0.35, 0, Z - 0.1), mat=ss, name="pumpneck", verts=24)
+        bpy.ops.mesh.primitive_cube_add(size=1, location=(xv + 0.35, 0.16, Z - 0.3)); g = bpy.context.active_object
+        g.scale = (0.08, 0.02, 0.05); g.data.materials.append(rackp); g.name = "gaugebox"
+        bpy.ops.mesh.primitive_cube_add(size=1, location=(xv + 0.35, 0.171, Z - 0.29)); e = bpy.context.active_object
+        e.scale = (0.035, 0.002, 0.012); e.name = "gaugeled"
+        e.data.materials.append(_mat("gaugeled", (0.0, 0.1, 0.0), 0.3, emit=(0.2, 1.0, 0.35), strength=25))
+    # the analysing magnet: C-yoke, red paint, copper coils
+    mx = x0 + 4.0
+    _box2("yokeback", (mx, -0.55, Z), (1.4, 0.35, 1.3), red, 0.03)
+    for zz in (Z + 0.42, Z - 0.42):
+        _box2("pole", (mx, -0.12, zz), (1.4, 0.55, 0.45), red, 0.03)
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.55, minor_radius=0.09, location=(mx, -0.12, zz - 0.0)); c = bpy.context.active_object
+        c.scale = (1.25, 0.6, 0.9); c.data.materials.append(copper); c.name = "coil"
+    _box2("magnetbase", (mx, -0.2, 0.3), (1.6, 1.2, 0.6), yellow, 0.02)
+    # quadrupole doublets (blue)
+    for qx in (x0 + 2.2, x0 + 7.6, x0 + 9.6):
+        _cyl(0.32, 0.45, (qx, 0, Z), rot=(0, math.pi / 2, 0), mat=blue, name="quad", verts=64, bevel=0.02)
+        for k in range(4):
+            a = math.pi / 4 + k * math.pi / 2
+            bpy.ops.mesh.primitive_torus_add(major_radius=0.1, minor_radius=0.035, location=(qx - 0.25, 0.2 * math.cos(a), Z + 0.2 * math.sin(a)))
+            c = bpy.context.active_object; c.rotation_euler.y = math.pi / 2; c.data.materials.append(copper); c.name = "quadcoil"
+    # stands under the beamline
+    xs = x0 + 0.8
+    while xs < length:
         for sy in (-1, 1):
-            bpy.ops.mesh.primitive_cylinder_add(radius=0.03, depth=1.25, location=(x, sy * 0.25, 0.62)); st = bpy.context.active_object
-            st.data.materials.append(steel); st.name = "stand"
-    # ion source cabinet (sample wheel behind a small window) at x = -1
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(-1.0, 0, 1.2)); cab = bpy.context.active_object; cab.scale = (1.6, 1.4, 2.4)
-    cab.data.materials.append(_mat("cabinet", (0.75, 0.75, 0.72), 0.5)); cab.name = "ionsource"
-    bpy.ops.mesh.primitive_cylinder_add(radius=0.18, depth=0.02, location=(-0.19, 0, 1.35)); wh = bpy.context.active_object
-    wh.rotation_euler.y = math.pi / 2; wh.data.materials.append(steel); wh.name = "samplewheel"
-    for k in range(12):
-        a = 2 * math.pi * k / 12
-        bpy.ops.mesh.primitive_cylinder_add(radius=0.012, depth=0.03, location=(-0.18, 0.13 * math.cos(a), 1.35 + 0.13 * math.sin(a)))
-        tg = bpy.context.active_object; tg.rotation_euler.y = math.pi / 2; tg.data.materials.append(_mat("target", (0.05, 0.05, 0.05), 0.3, 0.8)); tg.name = "target"
-    # cable tray overhead
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(length / 2, -1.6, 3.2)); tr = bpy.context.active_object; tr.scale = (length, 0.4, 0.08)
-    tr.data.materials.append(steel)
-    # practical lights: cold strips overhead, warm indicator glows on the magnets
-    for x in np.arange(1.0, length, 4.0):
-        d = bpy.data.lights.new("strip", 'AREA'); d.shape = 'RECTANGLE'; d.size = 1.6; d.size_y = 0.1; d.energy = 120; d.color = (0.75, 0.85, 1.0)
-        lo = bpy.data.objects.new("strip", d); bpy.context.scene.collection.objects.link(lo); lo.location = (x, 1.5, 5.6)
-    for x in (3.0, 7.5, 11.5):
-        bpy.ops.mesh.primitive_cube_add(size=1, location=(x, -0.5, 1.75)); ind = bpy.context.active_object; ind.scale = (0.05, 0.02, 0.03)
-        ind.data.materials.append(_mat("indicator", (0.1, 0.05, 0.0), 0.5, emit=(1.0, 0.5, 0.1), strength=30)); ind.name = "indicator"
+            _box2("standleg", (xs, sy * 0.22, (Z - 0.12) / 2), (0.05, 0.05, Z - 0.12), yellow, 0.005)
+        _box2("standtop", (xs, 0, Z - 0.12), (0.1, 0.55, 0.04), yellow, 0.005)
+        _box2("standfoot", (xs, 0, 0.02), (0.3, 0.6, 0.04), yellow, 0.005)
+        xs += 1.8
+    # electronics racks along the +y wall, indicator LEDs; cable trays overhead with cable bundles
+    for k in range(int((length + 10) / 0.62)):
+        rx = -9 + k * 0.62
+        _box2("rack", (rx, W / 2 - 0.75, 1.0), (0.6, 0.8, 2.0), rackp, 0.01)
+        for j in range(rng.randint(3, 9)):
+            col = rng.choice([(1.0, 0.25, 0.05), (0.2, 1.0, 0.3), (0.3, 0.6, 1.0), (1.0, 0.75, 0.2)])
+            bpy.ops.mesh.primitive_cube_add(size=1, location=(rx + rng.uniform(-0.25, 0.25), W / 2 - 1.152, rng.uniform(0.4, 1.9)))
+            e = bpy.context.active_object; e.scale = (0.008, 0.002, 0.006); e.name = "led"
+            mm = bpy.data.materials.get(f"led{col}") or _mat(f"led{col}", (0, 0, 0), 0.3, emit=col, strength=40)
+            e.data.materials.append(mm)
+        _box2("rackface", (rx, W / 2 - 1.151, 1.0), (0.56, 0.002, 1.9), _paint("rackface", (0.18, 0.18, 0.19), 0.4) if k == 0 else bpy.data.materials["rackface"], 0)
+    for ty in (-1.3, 1.6):
+        _box2("tray", (length / 2 - 6, ty, 3.0), (length + 24, 0.45, 0.06), ssd, 0.005)
+        for c in range(9):
+            _cyl(0.02, length + 24, (length / 2 - 6, ty - 0.18 + c * 0.045, 3.06), rot=(0, math.pi / 2, 0),
+                 mat=_paint(f"cable{c}", rng.choice([(0.02, 0.02, 0.02), (0.05, 0.05, 0.06), (0.3, 0.02, 0.01), (0.02, 0.05, 0.2)]), 0.5), name="cable", verts=10)
+        for xh in np.arange(-10, length + 6, 2.4):
+            _cyl(0.012, 4.9, (xh, ty, 5.5), mat=ssd, name="hanger", verts=8)
+    # overhead fittings: visible emissive strips + area lights; a pool on the tank; haze is added by the shot
+    for xf in np.arange(-12, length + 6, 3.2):
+        for yf in (-3.0, 3.0):
+            _box2("fitting", (xf, yf, 7.75), (1.5, 0.22, 0.08), rackp, 0)
+            bpy.ops.mesh.primitive_plane_add(size=1, location=(xf, yf, 7.705)); e = bpy.context.active_object
+            e.scale = (1.4, 0.16, 1); e.rotation_euler.x = math.pi; e.name = "tube"
+            e.data.materials.append(bpy.data.materials.get("tubeglow") or _mat("tubeglow", (0, 0, 0), 0.5, emit=(0.78, 0.88, 1.0), strength=12))
+            d = bpy.data.lights.new("fit", 'AREA'); d.shape = 'RECTANGLE'; d.size = 1.4; d.size_y = 0.15; d.energy = 160; d.color = (0.78, 0.88, 1.0)
+            lo = bpy.data.objects.new("fit", d); bpy.context.scene.collection.objects.link(lo); lo.location = (xf, yf, 7.6)
     w = bpy.data.worlds.new("hall"); bpy.context.scene.world = w; w.use_nodes = True
-    w.node_tree.nodes["Background"].inputs['Color'].default_value = (0.01, 0.012, 0.015, 1)
-    return dict(beam_z=1.3, length=length)
+    w.node_tree.nodes["Background"].inputs['Color'].default_value = (0.005, 0.006, 0.008, 1)
+    return dict(beam_z=Z, length=length, tank_x=(tx0, tx0 + tl), magnet_x=mx, x0=x0)
 
 
 # ----------------------------------------------------------------------------- the peat moor
@@ -194,10 +307,10 @@ def peat_moor(center=(0.0, 0.0), size=220.0, n=420, seed=4, pools=True):
     steep = N.new("ShaderNodeMapRange"); steep.inputs['From Min'].default_value = 0.7; steep.inputs['From Max'].default_value = 0.4
     L.new(sep.outputs['Z'], steep.inputs['Value'])
     ps = N.new("ShaderNodeSeparateXYZ"); L.new(geo.outputs['Position'], ps.inputs[0])
-    band = N.new("ShaderNodeTexWave"); band.bands_direction = 'Z'; band.inputs['Scale'].default_value = 3.0; band.inputs['Distortion'].default_value = 3
+    band = N.new("ShaderNodeTexWave"); band.bands_direction = 'Z'; band.inputs['Scale'].default_value = 5.0; band.inputs['Distortion'].default_value = 9; band.inputs['Detail'].default_value = 8; band.inputs['Detail Roughness'].default_value = 0.8
     L.new(tc.outputs['Object'], band.inputs['Vector'])
     pc = N.new("ShaderNodeMix"); pc.data_type = 'RGBA'; L.new(band.outputs['Fac'], pc.inputs['Factor'])
-    pc.inputs[6].default_value = (0.05, 0.03, 0.015, 1); pc.inputs[7].default_value = (0.11, 0.07, 0.035, 1)
+    pc.inputs[6].default_value = (0.04, 0.026, 0.014, 1); pc.inputs[7].default_value = (0.075, 0.048, 0.026, 1)
     fin = N.new("ShaderNodeMix"); fin.data_type = 'RGBA'; L.new(steep.outputs[0], fin.inputs['Factor'])
     L.new(rp.outputs['Color'], fin.inputs[6]); L.new(pc.outputs[2], fin.inputs[7])
     L.new(fin.outputs[2], p.inputs['Base Color']); p.inputs['Roughness'].default_value = 0.85
@@ -215,7 +328,7 @@ def peat_moor(center=(0.0, 0.0), size=220.0, n=420, seed=4, pools=True):
     out = dict(ground=o, Z=Z, xs=xs)
     if pools:
         water = _mat("bogwater", (0.004, 0.003, 0.002), 0.03)
-        lvl = float(np.percentile(Z, 18))
+        lvl = float(np.percentile(Z, 9))
         bpy.ops.mesh.primitive_plane_add(size=size, location=(center[0], center[1], lvl)); w = bpy.context.active_object; w.name = "bogpools"
         w.data.materials.append(water)
         out["water_z"] = lvl
@@ -229,24 +342,25 @@ def moor_height(M, x, y, center=(0.0, 0.0)):
 
 
 # ----------------------------------------------------------------------------- the wrapped dead
-def bundle(loc, rot=0.0, length=1.05, girth=0.32, seed=0):
+def bundle(loc, rot=0.0, length=0.95, girth=0.44, seed=0):
     """A body drawn up and wrapped in a hide, bound with rope: an irregular soft bundle (nothing of the body shows)."""
     rng = random.Random(seed)
     bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, radius=0.5, location=loc); o = bpy.context.active_object
     o.name = "bundle"; o.scale = (length / 2 / 0.5 * 0.5 * 2, girth, girth * 0.75); o.rotation_euler.z = rot
-    d = o.modifiers.new("lumps", "DISPLACE"); t = bpy.data.textures.new("bundlelump", "CLOUDS"); t.noise_scale = 0.5; d.texture = t; d.strength = 0.08
-    hide = ph.texture("leather_white", scale=2.0, name="hide", tint=(0.42, 0.3, 0.18)) if False else _mat("hide", (0.22, 0.14, 0.08), 0.75)
+    d = o.modifiers.new("lumps", "DISPLACE"); t = bpy.data.textures.new("bundlelump", "CLOUDS"); t.noise_scale = 0.5; d.texture = t; d.strength = 0.05
+    hide = ph.texture("leather_white", scale=2.0, name="hide", tint=(0.42, 0.3, 0.18)) if False else _mat("hide", (0.13, 0.085, 0.05), 0.8)
     hn = hide.node_tree.nodes; hl = hide.node_tree.links; hp = hn["Principled BSDF"]
     tc = hn.new("ShaderNodeTexCoord"); nz = hn.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 12; nz.inputs['Detail'].default_value = 10
     hl.new(tc.outputs['Object'], nz.inputs['Vector']); bmp = hn.new("ShaderNodeBump"); bmp.inputs['Strength'].default_value = 0.5
     hl.new(nz.outputs['Fac'], bmp.inputs['Height']); hl.new(bmp.outputs['Normal'], hp.inputs['Normal'])
-    hp.inputs['Sheen Weight'].default_value = 0.4
+    hp.inputs['Sheen Weight'].default_value = 0.08
     o.data.materials.append(hide)
     rope = _mat("rope2", (0.18, 0.13, 0.08), 0.9)
     for k in range(5):
-        u = -0.38 + k * 0.19 + rng.uniform(-0.03, 0.03)
-        bpy.ops.mesh.primitive_torus_add(major_radius=girth * 0.98, minor_radius=0.012, location=loc); r = bpy.context.active_object
-        r.scale = (1, 1, 0.78); r.rotation_euler = (0, math.pi / 2, rot)
+        u = -0.32 + k * 0.16 + rng.uniform(-0.02, 0.02)
+        f = math.sqrt(max(0.05, 1 - (u / 0.5) ** 2))            # the bundle narrows toward its ends
+        bpy.ops.mesh.primitive_torus_add(major_radius=girth * 0.5 * f + 0.008, minor_radius=0.011, location=loc); r = bpy.context.active_object
+        r.scale = (0.76, 1, 1); r.rotation_euler = (0, math.pi / 2, rot)
         r.location = Vector(loc) + Matrix.Rotation(rot, 3, 'Z') @ Vector((u * length, 0, 0)); r.data.materials.append(rope); r.name = "bundlerope"
     return o
 
@@ -254,7 +368,7 @@ def bundle(loc, rot=0.0, length=1.05, girth=0.32, seed=0):
 def hurdle(loc, rot=0.0, length=2.0, width=0.9, seed=0):
     """Wattle hurdle (carrying frame): two poles with woven hazel rods."""
     rng = random.Random(seed)
-    wood = _mat("hazel", (0.2, 0.13, 0.07), 0.8)
+    wood = bpy.data.materials.get("hazel") or ph.texture("bark_brown_02", scale=8.0, name="hazel", tint=(0.8, 0.7, 0.6))
     R = Matrix.Rotation(rot, 4, 'Z'); T = Matrix.Translation(Vector(loc))
     for sy in (-1, 1):
         bpy.ops.mesh.primitive_cylinder_add(radius=0.03, depth=length + 0.5, location=(0, 0, 0)); p = bpy.context.active_object
