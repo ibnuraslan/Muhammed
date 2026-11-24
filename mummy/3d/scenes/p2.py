@@ -854,7 +854,8 @@ def S28():
     """Pull back from the trench to the island at dusk: low over the excavation (house rings, graves, baulks, spoil,
     marquee, cabin), rising and pulling away until the dig is a scar on the machair, the dunes and the Atlantic beyond."""
     p1.site("dusk", grass_at=(4, 0), grass_r=55, focus=(0, 0), core=6.0, n=900, kit=True, burials=True, sun_az=230, grass_density=260)
-    return dict(a=((9, -12, 9.5), (-1, 4, 3.6)), b=((95, -135, 70), (-60, 30, 0)), lens=28, cine=dict(exposure=0.3))
+    U.cloud_shadows((0, 0), cover=0.45, seed=7)          # light moving over the machair
+    return dict(a=((9, -12, 9.5), (-1, 4, 3.6)), b=((60, -88, 38), (-70, 40, 0)), lens=26, cine=dict(exposure=0.3))
 
 
 VO = [l.strip() for l in open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "vo", "MUMMY_P2_VO.txt"),
