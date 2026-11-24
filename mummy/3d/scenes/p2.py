@@ -516,16 +516,16 @@ def _heather(M, center, radius, n=500, seed=2):
         if not p:
             continue
         p = p[0]; bc = p.inputs['Base Color']
-        if "Flower" in m.name:
+        if "flower" in m.name.lower() or "surface2" in m.name.lower():
             for l_ in list(bc.links):
                 Lk.remove(l_)
-            bc.default_value = (0.16, 0.09, 0.08, 1)        # spent, rusty flower heads
+            bc.default_value = (0.11, 0.065, 0.05, 1)       # spent, rusty flower heads
         elif bc.links:
             sc_ = bc.links[0].from_socket
-            hs = N.new("ShaderNodeHueSaturation"); hs.inputs['Saturation'].default_value = 0.45; hs.inputs['Value'].default_value = 0.5
+            hs = N.new("ShaderNodeHueSaturation"); hs.inputs['Saturation'].default_value = 0.3; hs.inputs['Value'].default_value = 0.45
             Lk.new(sc_, hs.inputs['Color']); Lk.new(hs.outputs[0], bc)
         else:
-            c_ = bc.default_value; bc.default_value = (c_[0] * 0.4 + 0.04, c_[1] * 0.4 + 0.035, c_[2] * 0.3 + 0.02, 1)
+            bc.default_value = (0.07, 0.055, 0.035, 1)
     rng = random.Random(seed)
     col = bpy.data.collections.new("heather"); bpy.context.scene.collection.children.link(col)
     for k in range(n):
@@ -670,13 +670,34 @@ def S22():
                 lens=32, fstop=4.0, focus=(x0, y0, z0 + 1.0), cine=dict(exposure=0.25), hand_ok=("moor", "hurdle"))
 
 
+def _pool_spot(M, near=(0.0, 0.0)):
+    """The centre of open water nearest `near`: low ground at least 0.6 m from any bank."""
+    wz = M["water_z"]; best = None
+    for x in np.linspace(-10, 10, 81):
+        for y in np.linspace(-10, 5, 61):
+            if all(P2.moor_height(M, x + dx, y + dy) < wz - 0.04 for dx in (-0.6, 0, 0.6) for dy in (-0.6, 0, 0.6)):
+                d = math.hypot(x - near[0], y - near[1])
+                if best is None or d < best[0]:
+                    best = (d, x, y)
+    return (best[1], best[2]) if best else near
+
+
 def S23():
-    """The wrapped bundle lying half under the black water among the sphagnum. Top-down drift."""
+    """The wrapped bundle lying half under the black water of a bog pool, sphagnum at the edge. Slow top-down drift."""
     M = _bog_scene("dusk", sun_az=250)
     wz = M["water_z"]
-    b = P2.bundle((0.4, 0.2, wz - 0.12), rot=math.radians(30))
-    return dict(a=((0.2, -0.2, wz + 2.6), (0.4, 0.2, wz)), b=((0.55, 0.35, wz + 2.3), (0.4, 0.25, wz)), lens=35,
-                fstop=5.6, focus=(0.4, 0.2, wz), cine=dict(exposure=0.35))
+    px, py = _pool_spot(M)
+    P2.bundle((px, py, wz - 0.06), rot=math.radians(30))
+    src = _single("047e3f4e9c5d460db7daf84e4f98ce36", height=0.08, name="sphagnum_src", hide=True)
+    rng = random.Random(23)
+    for k in range(160):                                   # sphagnum cushions at the pool margin
+        a = rng.uniform(0, 6.283); r = rng.uniform(0.6, 1.6)
+        x, y = px + r * math.cos(a), py + r * math.sin(a)
+        z = max(P2.moor_height(M, x, y), wz - 0.01)
+        o = bpy.data.objects.new("sphagnum", src.data); bpy.context.scene.collection.objects.link(o)
+        sc_ = rng.uniform(1.5, 3.5); o.scale = (sc_, sc_, sc_); o.location = (x, y, z - 0.01); o.rotation_euler.z = rng.uniform(0, 6.3)
+    return dict(a=((px - 0.15, py - 0.25, wz + 2.2), (px, py, wz)), b=((px + 0.1, py - 0.05, wz + 1.9), (px + 0.05, py + 0.05, wz)), lens=35,
+                fstop=5.6, focus=(px, py, wz), cine=dict(exposure=0.35))
 
 
 def S24():
