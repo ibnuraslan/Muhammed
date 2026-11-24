@@ -704,7 +704,7 @@ def _belt(st, col=(0.07, 0.045, 0.025)):
                 ctr = band.mean(0)
                 # an elliptical ring that follows the tunic's own cross-section, standing just outside it
                 dx = band[:, 0] - ctr[0]; dy = band[:, 1] - ctr[1]
-                rx = float(np.percentile(np.abs(dx), 99)) + 0.014; ry = float(np.percentile(np.abs(dy), 99)) + 0.014
+                rx = float(np.abs(dx).max()) + 0.02; ry = float(np.abs(dy).max()) + 0.02
                 bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=0.012, major_segments=64, location=(ctr[0], ctr[1], c.z)); t = bpy.context.active_object
                 t.scale = (rx, ry, 1.0); t.name = st.m.name + "_belt"; t.data.materials.append(_plain("belt", col, 0.6))
                 bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
