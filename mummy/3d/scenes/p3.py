@@ -265,9 +265,9 @@ def _cleansuit(name="Cleansuit"):
     import modern as MD
 
     class _C(MD.ModernMan):
-        GENDER = 0.2; MUSCLE = 0.4; WEIGHT = 0.3; HEIGHT = 0.5
-        HAIR = (0.25, 0.1); HAIR_LEN = (0.02, 0.04)
-        SHIRT = (0.85, 0.86, 0.86); JACKET = "coat"; JACKET_COL = (0.86, 0.87, 0.88)
+        GENDER = 1.0; MUSCLE = 0.4; WEIGHT = 0.3; HEIGHT = 0.5
+        HAIR = (0.25, 0.1); HAIR_LEN = (0.01, 0.02)
+        SHIRT = (0.85, 0.86, 0.86); JACKET = "cagoule"; JACKET_COL = (0.86, 0.87, 0.88)
         TROUSERS = (0.8, 0.81, 0.82); SHOES = (0.85, 0.85, 0.85)
         TROUSER_EASE = 1.35; TROUSER_EXTRA = 0.035
     return _C(name, years=33)
