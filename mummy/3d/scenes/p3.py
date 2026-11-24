@@ -294,7 +294,8 @@ def S11():
     st.hand("R", (0.15, 1.32, 1.0), elbow=(0.6, 0.2, -0.8), curl=20)
     st.head_to((0, 1.6, 0.95), share=0.8)
     st.finish(look=(0, 1.6, 0.95), density=HAIR)
-    return dict(a=((1.3, -2.2, 1.7), (-0.1, 1.3, 1.05)), b=((1.0, -1.6, 1.65), (-0.1, 1.3, 1.05)), lens=30,
+    # over the shoulder into the UV cabinet: hands at the tube racks, the violet light on the sash (waist out of frame)
+    return dict(a=((0.42, 0.05, 1.9), (-0.05, 1.55, 0.95)), b=((0.36, 0.18, 1.85), (-0.05, 1.58, 0.95)), lens=30,
                 fstop=2.8, focus=(0.0, 0.7, 1.3), cine=dict(exposure=0.1), hand_ok=("sash", "cabinet"))
 
 
