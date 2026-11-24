@@ -219,6 +219,10 @@ for rig, col in ((BOY, (0.42, 0.28, 0.17)), (MAN, (0.42, 0.28, 0.17)), (MOM, (0.
             for m in c.data.materials: tint(m, col)
 for b in (BB, MB, NB):
     for m in b.data.materials: tint(m, (1.0, 0.86, 0.76))
+for rig in (BOY, MOM, MAN):     # clean white teeth (BATCH1 #5)
+    for c in rig.children:
+        if c.type == 'MESH' and "teeth" in c.name:
+            for m in c.data.materials: tint(m, (1.5, 1.45, 1.4))
 
 def bl(rig, n): return rig.data.bones[n].head_local.copy()
 
@@ -384,8 +388,7 @@ for m_ in SOFA.data.materials:
         if pp:
             for l_ in list(pp.inputs["Base Color"].links): m_.node_tree.links.remove(l_)
             pp.inputs["Base Color"].default_value = (0.20, 0.33, 0.45, 1) if m_.name.startswith(("Fabric", "material")) else (0.30, 0.44, 0.56, 1)
-            for n_ in m_.node_tree.nodes:
-                if n_.type == 'NORMAL_MAP': n_.inputs["Strength"].default_value = 0.3
+            for l_ in list(pp.inputs["Normal"].links): m_.node_tree.links.remove(l_)
 SOFA.location = (-1.45, 0.25, 0.0)
 side_m = mat("M_SideTable", (0.40, 0.26, 0.16), rough=0.4, coat=0.3)
 box("LR_SideTop", (0.42, 0.42, 0.03), (-1.5, -1.05, 0.55), side_m, bevel=0.01)
@@ -433,7 +436,7 @@ def brick(name, nx, ny, material, stud=True):
     for p_ in o.data.polygons: p_.use_smooth = True
     return o
 
-RED = brick("BrickRed", 1, 1, mat("M_BrickRed", (0.85, 0.02, 0.01), rough=0.22, coat=0.6, emit=((1.0, 0.06, 0.03), 1.0)))          # the hero: one model all film
+RED = brick("BrickRed", 1, 1, mat("M_BrickRed", (0.85, 0.02, 0.01), rough=0.22, coat=0.6, emit=((1.0, 0.06, 0.03), 0.5)))          # the hero: one model all film
 YEL = brick("BrickYellow", 2, 1, mat("M_BrickYellow", (1.0, 0.72, 0.0), rough=0.22, coat=0.6, emit=((1.0, 0.75, 0.05), 0.4)))    # the larger one Mom removes
 for o_ in (RED, YEL):
     try:
@@ -502,7 +505,7 @@ for m_ in TWZ.data.materials:
         pp = m_.node_tree.nodes.get("Principled BSDF")
         if pp: pp.inputs["Metallic"].default_value = 1.0; pp.inputs["Roughness"].default_value = 0.25
 print("TWEEZERS dims", [round(max(v.co[i] for v in TWZ.data.vertices)-min(v.co[i] for v in TWZ.data.vertices),4) for i in range(3)])
-book_m = mat("M_BookCover", (0.85, 0.40, 0.25), rough=0.5); page_m = mat("M_Pages", (0.95, 0.93, 0.86), rough=0.8)
+book_m = mat("M_BookCover", (0.10, 0.20, 0.45), rough=0.5); page_m = mat("M_Pages", (0.95, 0.93, 0.86), rough=0.8)
 BOOK = box("Book", (0.17, 0.24, 0.022), (0, 0, 0), book_m, bevel=0.003)
 pg = box("BookPages", (0.165, 0.23, 0.018), (0.004, 0, 0), page_m, bevel=0.001)
 bpy.ops.object.select_all(action='DESELECT'); pg.select_set(True); BOOK.select_set(True); bpy.context.view_layer.objects.active = BOOK; bpy.ops.object.join()
@@ -597,7 +600,7 @@ print("SKULL dims", tuple(round(d, 3) for d in SKULL.dimensions))
 
 # ------------------------------------------------------------------ look: AgX Punchy, bright, clean
 sc.view_settings.view_transform = 'AgX'
-sc.view_settings.exposure = 0.0
+sc.view_settings.exposure = -0.25
 try: sc.view_settings.look = 'AgX - Punchy'
 except Exception: pass
 sc.render.engine = 'CYCLES'

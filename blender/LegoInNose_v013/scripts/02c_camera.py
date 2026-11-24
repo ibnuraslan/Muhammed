@@ -34,7 +34,7 @@ if mk:
 # ================================================================== the void bubble (camera-parented sphere, sky-blue gradient, camera rays only)
 cam_d = bpy.data.cameras.new("CAM_Film"); CAM = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(CAM); sc.camera = CAM
 AIM = bpy.data.objects.new("CAM_Film_Aim", None); sc.collection.objects.link(AIM)
-cam_d.sensor_fit = 'AUTO'; cam_d.sensor_width = 36; cam_d.dof.use_dof = True; cam_d.dof.focus_object = AIM; cam_d.dof.aperture_fstop = 9.0
+cam_d.sensor_fit = 'AUTO'; cam_d.sensor_width = 36; cam_d.dof.use_dof = True; cam_d.dof.focus_object = AIM; cam_d.dof.aperture_fstop = 14.0
 cam_d.clip_start = 0.004
 bpy.ops.mesh.primitive_uv_sphere_add(radius=1.0, segments=48, ring_count=24); VOID = bpy.context.active_object; VOID.name = "VoidBubble"
 VOID.data.flip_normals() if hasattr(VOID.data, "flip_normals") else None
@@ -76,7 +76,7 @@ for f, e in ((1, 25), (1426, 25), (1432, 0)): key_light("BR_LampBulb", f, e)
 for f, e, c in ((1, 70, (0.80, 0.88, 1.0)), (1425, 70, (0.80, 0.88, 1.0)), (1460, 60, (0.45, 0.58, 1.0))): key_light("BR_Fill", f, e, c)
 shade = [m for m in bpy.data.materials if "lamp3fabtic" in m.name.lower() or "fabtic" in m.name.lower()]
 
-for f, e in ((1, 0.0), (1571, 0.0), (1572, -0.45), (END, -0.45)):
+for f, e in ((1, -0.25), (1571, -0.25), (1572, -0.75), (END, -0.75)):
     sc.view_settings.exposure = e; sc.view_settings.keyframe_insert("exposure", frame=f)
 for fc in iter_fcurves(sc.animation_data.action):
     if 'exposure' in fc.data_path:
@@ -153,12 +153,12 @@ CAMK = [  # frame, camera position, aim point, lens  (world)
     (765,  lambda: bh(765).lerp(mh(765), 0.4) + P(0.45, -0.95, 0.05), lambda: bh(765).lerp(mh(765), 0.45), 30),
     (820,  lambda: bh(820).lerp(mh(820), 0.5) + P(0.02, -1.00, 0.16), lambda: bh(820).lerp(mh(820), 0.5), 28),
     (858,  lambda: bh(858).lerp(mh(858), 0.5) + P(0.02, -0.98, 0.16), lambda: nb(858).lerp(mh(858), 0.5), 29),
-    (900,  lambda: bh(900).lerp(mh(900), 0.5) + P(0.02, -0.92, 0.14), lambda: yel_w(900).lerp(mh(900), 0.5), 30),
-    (945,  lambda: bh(945).lerp(mh(945), 0.5) + P(0.06, -0.80, 0.10), lambda: yel_w(945).lerp(mh(945), 0.5), 32),
+    (900,  lambda: bh(900).lerp(mh(900), 0.5) + P(0.02, -0.92, 0.10), lambda: yel_w(900).lerp(mh(900), 0.5), 30),
+    (945,  lambda: bh(945).lerp(mh(945), 0.5) + P(0.06, -0.80, 0.02), lambda: yel_w(945).lerp(mh(945), 0.5), 32),
     (1005, lambda: bh(1005) + P(0.12, -0.34, 0.03), lambda: nb(1005), 40),
     (1060, lambda: bloc(1060, (0.03, -0.15, 0.05)), lambda: red_w(1060), 48),
-    (1110, lambda: red_w(1110) + (Gm(BOY, N_B, 1110).to_3x3() @ P(0.05, -0.07, 0.01)), lambda: red_w(1110), 50),
-    (1150, lambda: red_w(1150) + (Gm(BOY, N_B, 1150).to_3x3() @ P(-0.03, -0.075, 0.02)), lambda: red_w(1150), 50),
+    (1110, lambda: bloc(1110, (0.05, -0.15, 0.03)), lambda: red_w(1110), 46),
+    (1150, lambda: bloc(1150, (-0.02, -0.12, 0.03)), lambda: red_w(1150), 48),
     # void 1: nostril-frame (rides the boy, then the man after the swap)
     (1185, lambda: bloc(1185, (0.05, -0.08, 0.02)), lambda: red_w(1185), 46),
     (1210, lambda: bloc(1210, (0.12, -0.20, 0.06)), lambda: bloc(1210, (0, 0.04, 0.03)), 40),
@@ -183,8 +183,8 @@ CAMK = [  # frame, camera position, aim point, lens  (world)
     (1635, lambda: mhd(1635) + P(0.10, -0.46, -0.02), lambda: mhd(1635), 35),
     (1662, lambda: mhd(1662) + P(0.06, -0.40, -0.03), lambda: mn(1662), 38),
     (1695, lambda: mhd(1695) + P(-0.07, -0.38, -0.03), lambda: mn(1695), 40),
-    (1745, lambda: red_w(1745) + P(0.04, -0.12, 0.02), lambda: red_w(1745), 48),
-    (1800, lambda: red_w(1800) + P(0.03, -0.09, 0.0), lambda: red_w(1800), 50),
+    (1745, lambda: mn(1745) + P(0.04, -0.17, 0.02), lambda: red_w(1745), 46),
+    (1800, lambda: mn(1800) + P(-0.03, -0.16, 0.01), lambda: red_w(1800), 46),
     (1833, lambda: mhd(1833) + P(0.07, -0.30, -0.02), lambda: mn(1833).lerp(red_w(1846), 0.5), 40),
     (1850, lambda: mhd(1850) + P(0.05, -0.36, -0.02), lambda: red_w(1850).lerp(mhd(1850), 0.5), 40),
     (1895, lambda: red_w(1895) + P(0.02, -0.055, 0.035), lambda: red_w(1895).lerp(mhd(1895), 0.08), 40),

@@ -546,7 +546,7 @@ place_prop(MR, 1040, TWZ, tw_at(1040, Vector((kn.x + 0.06, kn.y - 0.02, kz + 0.0
 place_prop(MR, 1300, TWZ, tw_at(1300, Vector((kn.x + 0.06, kn.y - 0.02, kz + 0.05)), Vector((0.8, 0.2, 0.5))), pose="pinch")
 
 XC_B = path_pt(N_B, 0.012) + Vector((0, 0.004, 0))
-XBEATS = [(66, 78, 150, 164), (294, 308, 490, 502), (640, 652, 730, 742), (843, 855, 905, 917), (1038, 1050, None, None)]
+XBEATS = [(66, 78, 150, 164), (294, 308, 730, 742), (843, 855, 905, 917), (1038, 1050, None, None)]
 key_x(XB, 1, 0.0); anat_vis(ANAT_B, 1, False)
 for a0, a1, b0, b1 in XBEATS:
     key_x(XB, a0, 0.0); key_x(XB, a1, 1.0); anat_vis(ANAT_B, a1 - 4, True)
@@ -707,18 +707,22 @@ CAP_Z = 1.575
 def cap_pt(f, s):
     fs(f); sx = 1 if s == "L" else -1; c = Wh(MAN, "upperarm01." + s)
     return Vector((c.x + sx * 0.06, 0.07, CAP_Z))
-for f in (1700, 1850, 2036):     # left hand stays low behind the tiled wall (out of frame)
+for f in (1630,):     # left hand low behind the tiled wall until the nose blow
     rest_hand(MAN, NR, "L", f, chest_pt(f, 0.10, -0.36), Vector((0, 1, 0)), Vector((-0.3, 0, 1)), pose="relaxed")
-for f in (1640, 1745, 2036):
+for f in (1640, 2036):
     rest_hand(MAN, NR, "R", f, chest_pt(f, -0.10, -0.36), Vector((0, 1, 0)), Vector((0.3, 0, 1)), pose="relaxed")
 def ala_L(f):
-    """a point 3 mm off the outside of his LEFT nostril wing (the brick is in the right one)"""
+    """the pad of the left index rests on the outside of his LEFT nostril wing (the brick is in the right one)"""
     fs(f); M = head_M(MAN, f); tip = MAN_TIP
-    return M @ Vector((0.019, tip.y + 0.016, MAN_N.z + 0.004))
-for f in (1662, 1672, 1684, 1694, 1712):
-    fs(f); P_ = ala_L(f); d_ = (head_M(MAN, f).to_3x3() @ Vector((-0.6, 0.15, 0.75))).normalized()
-    reach(MAN, NR, "R", f, P_, d_, (head_M(MAN, f).to_3x3() @ Vector((1, 0, 0))).normalized(), pose="point",
-          pt=lambda r, s_: tip_of(r, s_, 2), pole=Vector((BATH_X - 0.45, SH_Y - 0.05, 1.0)))
+    return M @ Vector((0.021, tip.y + 0.018, MAN_N.z + 0.006))
+for f in (1700,):
+    rest_hand(MAN, NR, "L", f, chest_pt(f, 0.10, -0.36), Vector((0, 1, 0)), Vector((-0.3, 0, 1)), pose="relaxed")
+for f in (1664, 1672, 1684, 1694, 1708):
+    fs(f); P_ = ala_L(f); R3 = head_M(MAN, f).to_3x3()
+    reach(MAN, NR, "L", f, P_, (R3 @ Vector((-0.15, 0.1, 1.0))).normalized(), (R3 @ Vector((-1, 0, 0))).normalized(), pose="point",
+          pt=lambda r, s_: tip_of(r, s_, 2), pole=Vector((BATH_X + 0.45, SH_Y - 0.05, 1.0)))
+for f in (1735, 1850, 2036):
+    rest_hand(MAN, NR, "L", f, chest_pt(f, 0.10, -0.36), Vector((0, 1, 0)), Vector((-0.3, 0, 1)), pose="relaxed")
 # ================================================================== the bed/shower switch at TV (keys at TV-1 and TV only change in the hidden void)
 for f in (TV - 1,):
     for s in "LR":
