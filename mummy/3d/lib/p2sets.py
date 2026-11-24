@@ -336,7 +336,7 @@ def peat_moor(center=(0.0, 0.0), size=220.0, n=420, seed=4, pools=True):
         L.new(fin.outputs[2], mul.inputs[6]); L.new(surf.outputs[2], mul.inputs[7])
         br = N.new("ShaderNodeMath"); br.operation = 'MULTIPLY'; br.inputs[1].default_value = 3.2
         gain = N.new("ShaderNodeMix"); gain.data_type = 'RGBA'; gain.blend_type = 'MULTIPLY'; gain.inputs['Factor'].default_value = 1.0
-        L.new(mul.outputs[2], gain.inputs[6]); gain.inputs[7].default_value = (3.2, 3.0, 2.8, 1)
+        L.new(mul.outputs[2], gain.inputs[6]); gain.inputs[7].default_value = (2.0, 1.85, 1.7, 1)
         L.new(gain.outputs[2], p.inputs['Base Color'])
         nm = N.new("ShaderNodeNormalMap"); nm.inputs['Strength'].default_value = 0.8; L.new(g_n.outputs['Color'], nm.inputs['Color'])
         wet = N.new("ShaderNodeMapRange"); wet.inputs['To Min'].default_value = 0.9; wet.inputs['To Max'].default_value = 0.62

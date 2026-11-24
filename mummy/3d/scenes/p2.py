@@ -266,7 +266,7 @@ def S11():
     # the surrounding trench floor, the scan edges sink into it
     sand = ph.texture("dense_sand", scale=1.2, name="trenchsand", tint=(0.55, 0.48, 0.4))
     bpy.ops.mesh.primitive_plane_add(size=12, location=(0, 0, zc)); g = bpy.context.active_object; g.data.materials.append(sand)
-    return dict(a=((0.08, -0.3, zs + 1.9), (0.0, 0.0, zs)), b=((-0.08, 0.12, zs + 1.65), (0.0, 0.05, zs)), lens=45,
+    return dict(a=((0.08, -0.3, zs + 1.9), (0.0, 0.0, zs)), b=((-0.08, 0.12, zs + 1.65), (0.0, 0.05, zs)), lens=30,
                 fstop=8.0, focus=(0, 0, zs), cine=dict(exposure=0.1))
 
 
@@ -519,7 +519,7 @@ def moor(mood="overcast", size=220.0, n=420, cotton=(0, 0, 30, 2500), heather=(0
         setup(M)                     # e.g. choose where people stand and keep that ground clear
     if cotton:
         _cotton(M, cotton[:2], cotton[2], n=cotton[3])
-        _tussocks(M, cotton[:2], cotton[2], n=int(cotton[3] * 2.2))
+        _tussocks(M, cotton[:2], cotton[2], n=int(cotton[3] * 6))
     if heather:
         _heather(M, heather[:2], heather[2], n=heather[3])
     if mist:
