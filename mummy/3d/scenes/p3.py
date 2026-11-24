@@ -480,8 +480,8 @@ def S11():
 
 def S12():
     """Inside the cabinet under UV: capped tubes of bone powder in a rack, the pipette, violet glow. Macro slide."""
-    clean_room(uv=0.55)
-    return dict(a=((-0.5, 1.18, 1.07), (-0.3, 1.6, 0.94)), b=((-0.14, 1.18, 1.07), (0.04, 1.6, 0.94)), lens=60,
+    clean_room(uv=0.35)
+    return dict(a=((-0.52, 1.2, 1.06), (-0.36, 1.6, 0.94)), b=((-0.4, 1.2, 1.06), (-0.24, 1.6, 0.94)), lens=60,
                 fstop=4.0, focus=(-0.3, 1.6, 0.94), cine=dict(exposure=-0.5))
 
 
