@@ -223,6 +223,7 @@ def S08():
 # ============================================================================ "The excavation brings those bodies back into view..."
 def S09():
     """The excavation: a digger (from behind, over the shoulder) trowelling beside a crouched skeleton in its grave."""
+    G.SCANNED = True
     T, sk = p1.site("golden", grass_at=None, kit=True, burials=True, sun_az=205)
     c, _ = sk["B1"].centre()
     st = K.kneel_trowel(K.DiggerA, (c.x + 0.75, c.y - 0.85), 135, work=(c.x + 0.3, c.y - 0.35), density=HAIR)
@@ -262,6 +263,7 @@ def S12():
 # ============================================================================ "Then the broken knee reconnects a body to a place outside the house..."
 def S13():
     """Outside the house: the small knee pit beyond the house wall in the trench - high, the two places in one frame."""
+    G.SCANNED = True
     o = p3._knee_pit(kneel=False)                     # the pit with the knee pieces in it
     kp = Vector(o["knee"])
     b2 = Vector((U.PITS["B2"][0], U.PITS["B2"][1], G.H(U.PITS["B2"][0], U.PITS["B2"][1])))
@@ -372,6 +374,7 @@ def S22():
 
 def S23():
     """Cladh Hallan: the two graves under the house floor in the trench at golden hour, the diggers' kit at the edge."""
+    G.SCANNED = True
     T, sk = p1.site("golden", grass_at=None, kit=True, burials=True, sun_az=200)
     c1, _ = sk["B1"].centre(); c2, _ = sk["B2"].centre()
     m = (c1 + c2) / 2
@@ -402,6 +405,7 @@ def S24():
 
 def S25():
     """Their names are gone: the empty grave in the trench at dusk, the cut edges, a trowel left on the spoil."""
+    G.SCANNED = True
     T, sk = p1.site("dusk", grass_at=None, kit=True, burials=False, sun_az=210)
     b1 = Vector((U.PITS["B1"][0], U.PITS["B1"][1], G.H(U.PITS["B1"][0], U.PITS["B1"][1])))
     return dict(a=(tuple(b1 + Vector((1.4, -1.6, 1.3))), tuple(b1)), b=(tuple(b1 + Vector((1.0, -1.2, 1.0))), tuple(b1)), lens=32,
@@ -443,6 +447,7 @@ def S28():
 # ============================================================================ "More than three thousand years later..." / "...at least six."
 def S29():
     """They still look like individual people: the crouched skeleton in its grave in the last light. Slow push."""
+    G.SCANNED = True
     T, sk = p1.site("golden", grass_at=None, kit=False, burials=True, sun_az=200)
     g = sk["B2"]; c, _ = g.centre(); s = g.part_centre("skull")
     return dict(a=(tuple(c + Vector((1.0, -1.0, 1.1))), tuple(c)), b=(tuple(c + Vector((0.7, -0.7, 0.85))), tuple((c + s) / 2)), lens=35,
