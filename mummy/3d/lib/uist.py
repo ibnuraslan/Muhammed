@@ -374,6 +374,9 @@ def sea(fog=None, wind=9.0, choppy=1.2):
     o = SEA.ocean(size=200.0, res=20, scale=0.9, chop=choppy, wind=wind, seed=4, repeat=4, foam=0.35, mat=mat,
                   loc=(COAST_X - 300, 0, -0.05))
     far = SEA.far_sea(380.0, r1=12000.0, mat=mat, z=-0.08, center=(COAST_X - 300, 0))
+    # underlay: one flat sheet of the same water below the wave troughs, so no gap ever shows the dark seabed
+    bpy.ops.mesh.primitive_plane_add(size=1, location=(COAST_X - 6000, 0, -1.4)); under = bpy.context.active_object
+    under.scale = (11950, 24000, 1); under.name = "SeaUnderlay"; under.data.materials.append(far.data.materials[0])
     if fog:
         for oo in (o, far):
             fog_wrap(oo.data.materials[0], **fog)
