@@ -174,7 +174,7 @@ def S05():
     U.CUT = False
     R = BR.interior(fire=0.6, door_sun=1.0)
     hx, hy = 0.3, 0.0
-    px, py = hx + 3.2, hy - 0.9
+    px, py = hx + 3.75, hy + 0.05                         # in the doorway, outside the post ring
     hide = _plain("rawhide", (0.42, 0.3, 0.18), 0.7)
     bpy.ops.mesh.primitive_plane_add(size=1, location=(px, py, 0.02)); hd = bpy.context.active_object
     hd.scale = (0.9, 0.7, 1); hd.data.materials.append(hide); hd.name = "hide"
@@ -182,7 +182,7 @@ def S05():
     dp = hd.modifiers.new("d", "DISPLACE"); tt = bpy.data.textures.new("hidewrinkle", "CLOUDS"); tt.noise_scale = 0.12; dp.texture = tt; dp.strength = 0.02
     hands = {"L": (px - 0.1, py + 0.05, 0.06), "R": (px + 0.1, py + 0.08, 0.06)}
     p5._kneeler(0, "Scraper", (px - 0.05, py - 0.55), 90, (px, py, 0.0), lean=52, var=4, hands=hands)
-    return dict(a=((px - 1.1, py - 1.5, 1.4), (px, py, 0.05)), b=((px - 0.9, py - 1.25, 1.3), (px, py, 0.05)), lens=35,
+    return dict(a=((px - 0.7, py - 1.7, 1.45), (px, py, 0.05)), b=((px - 0.55, py - 1.45, 1.35), (px, py, 0.05)), lens=35,
                 fstop=2.8, focus=(px, py, 0.05), cine=dict(exposure=0.3), hand_ok=("floor", "hide"))
 
 
