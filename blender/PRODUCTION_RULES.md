@@ -33,3 +33,10 @@
 - **Use real assets first.** Search CC-BY or CC0 models (`pipeline/find_models.py`: skull, head sagittal section, nasal cavity, ear anatomy, liver, intestines, lungs, ribcage, muscles, cochlea, buildings, vehicles…) and Poly Haven scans. Build procedurally only when no real asset exists, and then sculpt or displace it until the shape is convincing (surfaced in the clean animated look).
 - **Cutaways and cross-sections** show correctly shaped anatomy in clean, colour-coded, glossy layers (see STYLE_ANIMATED.md), never wet or gory.
 - **Test:** pause any still. If a viewer could mistake it for a clay model, a toy or a diagram, it's a reject.
+
+## Logo placement (mandatory in every film, client reminder Nov 2026)
+- Every film carries the DA KRAS FILMS logo. Use the files in `blender/assets/brand/`: `DaKrasFilms_logo_dark.png` for light surfaces, `DaKrasFilms_logo_white.png` for dark ones.
+- Put it on a natural surface IN the scene: a T-shirt print, a box, a shop sign, a vehicle door, a banner or a mug. Never put it as a screen overlay.
+- It must read in full, sharp and unobstructed, for at least 1.5 s, at least once. Two or three placements is better when the story allows.
+- No other brands, logos or readable text anywhere.
+- Note the logo frames in README.md/SETTINGS.md, and check them in the preview.
