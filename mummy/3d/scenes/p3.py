@@ -815,25 +815,7 @@ def S30():
 
 # ============================================================================ "In the team's later reconstruction..."
 def _night_islander(i):
-    """The two islanders for the night scenes, same people and costume as P2 (dark tunic, beard / pale tunic) but with
-    the hair cropped close and dense, so the heads read at true size by torchlight instead of as round puffs."""
-    import modern as MD
-    if i == 0:
-        class _N(MD.ModernMan):
-            GENDER = 1.0; MUSCLE = 0.6; WEIGHT = 0.45; HEIGHT = 0.45
-            HAIR = (0.18, 0.06); HAIR_LEN = (0.018, 0.035); FACIAL = "beard"
-            SHIRT = (0.2, 0.16, 0.1); JACKET = "coat"; JACKET_COL = (0.16, 0.11, 0.06)
-            TROUSERS = (0.12, 0.09, 0.06); SHOES = (0.08, 0.05, 0.03)
-            TROUSER_EASE = 1.3; TROUSER_EXTRA = 0.03
-        return _N("Islander0", years=34)
-
-    class _M(MD.ModernMan):
-        GENDER = 0.0; MUSCLE = 0.4; WEIGHT = 0.35; HEIGHT = 0.4
-        HAIR = (0.45, 0.25); HAIR_LEN = (0.025, 0.045)
-        SHIRT = (0.12, 0.1, 0.07); JACKET = "coat"; JACKET_COL = (0.13, 0.11, 0.075)
-        TROUSERS = (0.16, 0.13, 0.09); SHOES = (0.08, 0.05, 0.03)
-        TROUSER_EASE = 1.3; TROUSER_EXTRA = 0.03
-    return _M("Islander1", years=24)
+    return BR.islander_cropped(i)
 
 
 def _hide_under(outer, inners):
@@ -1093,7 +1075,7 @@ def S34():
     d = Vector((math.cos(math.radians(150)), math.sin(math.radians(150)), 0))
     s = Vector((-d.y, d.x, 0))
     for i, sg in enumerate((1, -1)):
-        m = BR.Islander(name=f"Islander{i}") if i == 0 else p2._islander2()
+        m = BR.islander_cropped(i)
         f = Vector((hx, hy, 0)) + d * (sg * 1.1)
         zf = float(U.surface(f.x, f.y))
         st = AC.Stand(m, (f.x, f.y), 150, lean=4)
@@ -1101,7 +1083,7 @@ def S34():
         for sd, sgn in (("L", 1), ("R", -1)):
             w = Vector((hx, hy, zc + 0.78)) + d * (sg * 0.72) + s * (sgn * 0.37)
             st.hand(sd, (w.x, w.y, w.z - zf), elbow=(0.6, 0.2, -0.8), grip=0.85)
-        st.finish(look=(hx + d.x * 6, hy + d.y * 6, 1.6), density=HAIR); G.lift(st, zf)
+        st.finish(look=(hx + d.x * 6, hy + d.y * 6, 1.6), density=1.0); G.lift(st, zf)
     return dict(a=((hx + 6.5, hy - 1.6, zc + 1.7), (hx - 6, hy + 4, zc + 1.4)), b=((hx + 5.4, hy - 1.0, zc + 1.65), (hx - 7, hy + 4.5, zc + 1.4)),
                 lens=32, fstop=4.0, focus=(hx, hy, zc + 1.0), cine=dict(exposure=0.3), hand_ok=("hurdle", "bundle"))
 

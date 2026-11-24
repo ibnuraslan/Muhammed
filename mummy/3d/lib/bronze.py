@@ -510,3 +510,25 @@ def flames(center, spread=0.65, n=26, top_z=0.95, low_z=(0.15, 0.8), top_share=0
         fv.scale = (w, w, hgt); fv.rotation_euler = (rng.uniform(-0.15, 0.15), rng.uniform(-0.15, 0.15), rng.uniform(0, 6.3))
         fv.data.materials.append(m); out.append(fv)
     return out
+
+
+def islander_cropped(i):
+    """The two islanders for the night scenes, same people and costume as P2 (dark tunic, beard / pale tunic) but with
+    the hair cropped close and dense, so the heads read at true size by torchlight instead of as round puffs."""
+    import modern as MD
+    if i == 0:
+        class _N(MD.ModernMan):
+            GENDER = 1.0; MUSCLE = 0.6; WEIGHT = 0.45; HEIGHT = 0.45
+            HAIR = (0.18, 0.06); HAIR_LEN = (0.018, 0.035); FACIAL = "beard"
+            SHIRT = (0.2, 0.16, 0.1); JACKET = "coat"; JACKET_COL = (0.16, 0.11, 0.06)
+            TROUSERS = (0.12, 0.09, 0.06); SHOES = (0.08, 0.05, 0.03)
+            TROUSER_EASE = 1.3; TROUSER_EXTRA = 0.03
+        return _N("Islander0", years=34)
+
+    class _M(MD.ModernMan):
+        GENDER = 0.0; MUSCLE = 0.4; WEIGHT = 0.35; HEIGHT = 0.4
+        HAIR = (0.45, 0.25); HAIR_LEN = (0.025, 0.045)
+        SHIRT = (0.12, 0.1, 0.07); JACKET = "coat"; JACKET_COL = (0.13, 0.11, 0.075)
+        TROUSERS = (0.16, 0.13, 0.09); SHOES = (0.08, 0.05, 0.03)
+        TROUSER_EASE = 1.3; TROUSER_EXTRA = 0.03
+    return _M("Islander1", years=24)

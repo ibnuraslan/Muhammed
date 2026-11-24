@@ -205,8 +205,9 @@ def S07():
 # ============================================================================ "And the knee is part of a much wider pattern."
 def S08():
     """A wider pattern: crane up high over the excavation - the house rings, the graves, the knee pit outside."""
-    T, sk = p1.site("golden", grass_at=(10, 0), grass_r=30, kit=True, sun_az=200)
-    return dict(a=((8, -10, 9), (0, 6, 3)), b=((18, -26, 34), (0, 4, 3)), lens=28, fstop=8.0, focus=(0, 4, 3), cine=dict(exposure=0.1))
+    p1.site("dusk", grass_at=(4, 0), grass_r=55, focus=(0, 0), core=6.0, n=900, kit=True, burials=True, sun_az=230, grass_density=260)
+    U.cloud_shadows((0, 0), cover=0.45, seed=7)          # the approved P2 S28 dig-aerial look
+    return dict(a=((12.0, -9.0, 8.0), (-1, 6, 3.0)), b=((40, -60, 45), (-2, 5, 1.0)), lens=26, cine=dict(exposure=0.3))
 
 
 # ============================================================================ "Before the roundhouses existed, this ground held a cemetery."

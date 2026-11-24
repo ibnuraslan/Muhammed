@@ -737,23 +737,23 @@ def S22():
         x = hx + side * Wh / 2
         return Vector((x, hy - Lh / 2 + d, z_near - (z_near - z_far) * d / Lh + 0.03))
     # islander 1: heavy-set, dark cloak - kneels behind the left pole end, both hands on it
-    m1 = BR.Islander(name="Islander0")
+    m1 = BR.islander_cropped(0)
     k1 = (hx - Wh / 2 - 0.3, hy - Lh / 2 - 0.62)
     zk = max(P2.moor_height(M, k1[0] + ex, k1[1] + ey) for ex in (-0.2, 0, 0.2) for ey in (-0.3, 0, 0.3)) + 0.01
     st1 = AC.Kneel(m1, k1, 90, lean=38, sit_back=True)
     for sd, d in (("L", 0.12), ("R", 0.42)):
         w = pole(-1, d) - Vector((0, 0, zk)); st1.hand(sd, w, elbow=(0.6, 0.2, -0.8), grip=0.85)
     st1.head_to(tuple(pole(-1, 1.2) - Vector((0, 0, zk))), share=0.8)
-    st1.finish(look=tuple(pole(-1, 1.2) - Vector((0, 0, zk))), density=HAIR)
+    st1.finish(look=tuple(pole(-1, 1.2) - Vector((0, 0, zk))), density=1.0)
     G.lift(st1, zk)
     # islander 2: slighter, pale belted tunic, long hair - on the bank to the right, one foot forward, bent over the
     # right pole, bracing it with both hands
-    m2 = _islander2()
+    m2 = BR.islander_cropped(1)
     f2 = (hx + Wh / 2 + 0.12, hy - Lh / 2 - 0.62)
     zs = max(P2.moor_height(M, f2[0] + ex, f2[1] + ey) for ex in (-0.2, 0, 0.2) for ey in (-0.3, 0, 0.3)) + 0.01
     palms = {"L": tuple(pole(1, 0.12) - Vector((0.03, 0, zs + 0.035))), "R": tuple(pole(1, 0.4) - Vector((-0.03, 0, zs + 0.035)))}
     st2 = AC.Lean(m2, f2, 90, palms, lean=68)
-    st2.finish(look=tuple(pole(1, 1.3) - Vector((0, 0, zs))), density=HAIR)
+    st2.finish(look=tuple(pole(1, 1.3) - Vector((0, 0, zs))), density=1.0)
     G.lift(st2, zs)
     return dict(a=((x0 + 1.4, y0 - 5.8, z0 + 0.95), (x0, y0 + 3.0, z0 + 0.75)), b=((x0 + 1.2, y0 - 4.9, z0 + 0.9), (x0, y0 + 3.0, z0 + 0.75)),
                 lens=35, fstop=4.0, focus=(x0, y0 + 0.3, z0 + 0.6), cine=dict(exposure=0.3), hand_ok=("moor", "hurdle", "bundle", "belt"))
