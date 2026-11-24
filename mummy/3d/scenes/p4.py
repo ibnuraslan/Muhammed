@@ -49,7 +49,7 @@ def _crem_pit(c, r=0.24, n=200, charcoal=110):
     bm_ = bmesh.new(); bm_.from_mesh(pt.data)
     bmesh.ops.delete(bm_, geom=[v for v in bm_.verts if v.co.xy.length > r * (1 + 0.08 * math.sin(7 * math.atan2(v.co.y, v.co.x)))], context='VERTS')
     bm_.to_mesh(pt.data); bm_.free()
-    pt.data.materials.append(bpy.data.materials.get("pitfill") or ph.texture("brown_mud_02", scale=6.0, name="pitfill", tint=(0.32, 0.26, 0.2)))
+    pt.data.materials.append(bpy.data.materials.get("pitfill") or ph.texture("brown_mud_02", scale=6.0, name="pitfill", tint=(0.5, 0.4, 0.3)))
     pt.name = "pitfloor"
     dp = pt.modifiers.new("d", "DISPLACE"); dt = bpy.data.textures.new("pitlump", "CLOUDS"); dt.noise_scale = 0.03; dp.texture = dt; dp.strength = 0.005
     cremation((x, y, z + 0.012), radius=r * 0.62, n=n, charcoal=charcoal, flat=True)
@@ -281,7 +281,7 @@ def S15():
     hx, hy = U.HOUSES[1][0] + 0.4, U.HOUSES[1][1]
     t = Vector((hx + 0.62, hy - 0.42, G.H(hx + 0.62, hy - 0.42)))
     return dict(a=(tuple(t + Vector((0.25, -0.45, 0.42))), tuple(t)), b=(tuple(t + Vector((0.14, -0.28, 0.28))), tuple(t)), lens=45,
-                fstop=5.6, focus=tuple(t), cine=dict(exposure=-0.2))
+                fstop=5.6, focus=tuple(t), cine=dict(exposure=0.35))
 
 
 # ============================================================================ "People were returning to the dead across generations."
