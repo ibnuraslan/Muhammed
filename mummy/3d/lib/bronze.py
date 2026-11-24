@@ -518,7 +518,7 @@ def islander_cropped(i, name=None, var=0):
     import modern as MD
     rng = random.Random(var * 7 + i)
     dv = (lambda a: a + (rng.uniform(-0.12, 0.12) if var else 0.0))
-    tint = (lambda c: tuple(max(0.03, x * (rng.uniform(0.75, 1.25) if var else 1.0)) for x in c))
+    tint = (lambda c: tuple(max(0.03, x * (rng.uniform(0.6, 1.0) if var else 1.0)) for x in c))     # kin: darker wools
     if i == 0:
         class _N(MD.ModernMan):
             GENDER = 1.0; MUSCLE = dv(0.6); WEIGHT = dv(0.45); HEIGHT = dv(0.45)

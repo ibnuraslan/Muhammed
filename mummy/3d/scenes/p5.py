@@ -88,11 +88,11 @@ def S03():
     R, c = _house_bundle(fire=1.0, moon=0.4)
     hx, hy = R["hearth"]
     look = (c.x, c.y, 0.6)
-    for k, (dx, dy) in enumerate(((1.05, -0.75), (1.2, 0.55), (0.75, 1.15))):
+    for k, (dx, dy) in enumerate(((1.15, -1.0), (1.35, -0.1), (0.55, -1.6))):     # on the south-east side: the view past them stays open
         kn = (hx + dx, hy + dy)
         hd = math.degrees(math.atan2(c.y - kn[1], c.x - kn[0]))
         _kneeler(k % 2, f"Kin{k}", kn, hd, look, lean=10, var=k)
-    return dict(a=((hx + 3.0, hy - 0.3, 1.25), (c.x, c.y, 0.45)), b=((hx + 2.5, hy - 0.15, 1.15), (c.x, c.y, 0.45)), lens=32,
+    return dict(a=((hx + 2.9, hy - 2.1, 1.55), (c.x, c.y, 0.4)), b=((hx + 2.5, hy - 1.8, 1.45), (c.x, c.y, 0.4)), lens=32,
                 fstop=2.8, focus=(hx, hy, 0.4), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor",))
 
 
