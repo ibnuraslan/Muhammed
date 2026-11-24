@@ -193,13 +193,13 @@ def _old_bone(obj, stain=0.8):
         wm = N.new("ShaderNodeMix"); wm.data_type = 'VECTOR'; wm.inputs['Factor'].default_value = 0.12
         Lk.new(tc.outputs['Object'], wm.inputs[4]); Lk.new(wn.outputs['Color'], wm.inputs[5])
         ve = N.new("ShaderNodeTexVoronoi"); ve.feature = 'DISTANCE_TO_EDGE'; ve.inputs['Scale'].default_value = 55; Lk.new(wm.outputs[1], ve.inputs['Vector'])
-        rl = N.new("ShaderNodeMapRange"); rl.inputs['From Min'].default_value = 0.0; rl.inputs['From Max'].default_value = 0.035
+        rl = N.new("ShaderNodeMapRange"); rl.inputs['From Min'].default_value = 0.0; rl.inputs['From Max'].default_value = 0.02
         rl.inputs['To Min'].default_value = 1.0; rl.inputs['To Max'].default_value = 0.0; Lk.new(ve.outputs['Distance'], rl.inputs['Value'])
         mk = N.new("ShaderNodeTexNoise"); mk.inputs['Scale'].default_value = 6; Lk.new(tc.outputs['Object'], mk.inputs['Vector'])
-        mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.48; mr.inputs['From Max'].default_value = 0.58; Lk.new(mk.outputs['Fac'], mr.inputs['Value'])
+        mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.57; mr.inputs['From Max'].default_value = 0.63; Lk.new(mk.outputs['Fac'], mr.inputs['Value'])
         root = N.new("ShaderNodeMath"); root.operation = 'MULTIPLY'; Lk.new(rl.outputs[0], root.inputs[0]); Lk.new(mr.outputs[0], root.inputs[1])
         rc = N.new("ShaderNodeMix"); rc.data_type = 'RGBA'; Lk.new(root.outputs[0], rc.inputs['Factor']); Lk.new(mx.outputs[2], rc.inputs[6])
-        rc.inputs[7].default_value = (0.62, 0.52, 0.38, 1)
+        rc.inputs[7].default_value = (0.5, 0.42, 0.31, 1)
         hs = N.new("ShaderNodeHueSaturation"); hs.inputs['Value'].default_value = 0.8; Lk.new(rc.outputs[2], hs.inputs['Color'])
         Lk.new(hs.outputs[0], p.inputs['Base Color'])
         # erosion pitting plus the etched grooves in the bump
