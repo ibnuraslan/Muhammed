@@ -180,7 +180,7 @@ def pyre(c, rng_seed=3):
             tt.noise_scale = 0.12; dd.texture = tt; dd.strength = 0.02
     P2.bundle((cx, cy, cz + 1.75), rot=0.3, length=0.95, girth=0.42)
     BR.flames((cx, cy, cz), spread=1.0, n=48, top_z=1.55, low_z=(0.2, 1.4), top_share=0.55, h_top=(1.6, 3.2), h_low=(0.6, 1.4),
-              wid=(0.24, 0.42), strength=1.3, seed=rng_seed)
+              wid=(0.24, 0.42), strength=0.75, seed=rng_seed)
     # the ember bed and coals round the base, and sparks rising in the hot air
     emb = _plain("embers", (0.02, 0.01, 0.005), 0.8)
     pr = emb.node_tree.nodes["Principled BSDF"]; pr.inputs['Emission Color'].default_value = (1.0, 0.3, 0.05, 1); pr.inputs['Emission Strength'].default_value = 8.0
