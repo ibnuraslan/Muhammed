@@ -564,7 +564,12 @@ def _night_pit():
     d_ = rim.modifiers.new("d", "DISPLACE"); t_ = bpy.data.textures.new("rimlump", "CLOUDS"); t_.noise_scale = 0.15; d_.texture = t_; d_.strength = 0.05
     # an open pit with a heap of sand beside it
     bpy.ops.mesh.primitive_cylinder_add(radius=0.55, depth=0.6, location=(kx, ky, z - 0.28)); pit = bpy.context.active_object
-    pit.scale = (1.5, 1.0, 1.0); pit.data.materials.append(_plain("pitdark", (0.03, 0.025, 0.02), 0.95)); pit.name = "openpit"
+    pit.scale = (1.5, 1.0, 1.0); pit.data.materials.append(G.mat("sand")); pit.name = "openpit"
+    bm = bmesh.new(); bm.from_mesh(pit.data)                     # an open hole: no lid, walls and floor seen from inside
+    bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.normal.z > 0.9], context='FACES')
+    for f in bm.faces:
+        f.normal_flip()
+    bm.to_mesh(pit.data); bm.free()
     G.spoil_heap(kx + 0.2, ky + 1.6, 0.9, 0.6, 0.38)          # upcast on the far side, clear of where they stand
     # pole torch: a flame on a stake, a warm point light
     bpy.ops.mesh.primitive_cylinder_add(radius=0.02, depth=1.6, location=(kx - 1.3, ky + 0.6, z + 0.8)); st = bpy.context.active_object
@@ -584,12 +589,14 @@ def S31():
     st1 = AC.Kneel(m1, (c.x - 0.25, c.y - 0.95), 90, lean=50, sit_back=True)
     for sd, dx in (("L", -0.3), ("R", 0.0)):
         st1.hand(sd, (c.x + dx, c.y - 0.25, -0.05), elbow=(0.6, 0.2, -0.8), curl=30)
-    st1.head_to((c.x, c.y, -0.3), share=0.8); st1.finish(look=(c.x, c.y, -0.3), density=HAIR); G.lift(st1, c.z)
+    st1.head_to((c.x, c.y, -0.3), share=0.8); st1.finish(look=(c.x, c.y, -0.3), density=HAIR)
+    G.lift(st1, max(float(U.surface(c.x - 0.25 + ex, c.y - 0.95 + ey)) for ex in (-0.2, 0, 0.2) for ey in (-0.3, 0, 0.3)) + 0.01)
     m2 = p2._islander2()
     st2 = AC.Kneel(m2, (c.x + 0.75, c.y - 0.85), 105, lean=45, sit_back=True)
     for sd, dx in (("L", 0.25), ("R", 0.5)):
         st2.hand(sd, (c.x + dx, c.y - 0.25, -0.05), elbow=(0.6, 0.2, -0.8), curl=30)
-    st2.head_to((c.x + 0.3, c.y, -0.3), share=0.8); st2.finish(look=(c.x + 0.3, c.y, -0.3), density=HAIR); G.lift(st2, c.z)
+    st2.head_to((c.x + 0.3, c.y, -0.3), share=0.8); st2.finish(look=(c.x + 0.3, c.y, -0.3), density=HAIR)
+    G.lift(st2, max(float(U.surface(c.x + 0.75 + ex, c.y - 0.85 + ey)) for ex in (-0.2, 0, 0.2) for ey in (-0.3, 0, 0.3)) + 0.01)
     return dict(a=((c.x + 0.6, c.y - 2.6, c.z + 2.6), (c.x + 0.2, c.y + 0.1, c.z)), b=((c.x + 0.5, c.y - 2.2, c.z + 2.4), (c.x + 0.2, c.y + 0.1, c.z)),
                 lens=32, fstop=2.8, focus=(c.x + 0.2, c.y - 0.3, c.z + 0.3), cine=dict(exposure=0.6), hand_ok=("openpit", "Uist", "pitrim"))
 
@@ -629,16 +636,6 @@ def S33():
     W = np.concatenate([np.array([o.matrix_world @ v.co for v in o.data.vertices]) for o in pcs]); cc = W.mean(0)
     skk.root.location += Vector((c.x - cc[0], c.y - cc[1], c.z - 0.56 - W[:, 2].min()))
     bpy.context.view_layer.update()
-    pit = bpy.data.objects.get("openpit")
-    if pit:
-        pit.data.materials.clear(); pit.data.materials.append(G.mat("sand"))
-        for p_ in pit.data.polygons:
-            pass
-        bm = bmesh.new(); bm.from_mesh(pit.data)
-        bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.normal.z > 0.9], context='FACES')
-        for f in bm.faces:
-            f.normal_flip()
-        bm.to_mesh(pit.data); bm.free()
     k = Vector((c.x, c.y, c.z - 0.5))
     return dict(a=(tuple(k + Vector((0.2, -0.7, 1.6))), tuple(k)), b=(tuple(k + Vector((0.1, -0.4, 1.0))), tuple(k)), lens=40,
                 fstop=4.0, focus=tuple(k), cine=dict(exposure=0.45))
