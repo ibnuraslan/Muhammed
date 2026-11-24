@@ -93,7 +93,7 @@ def S03():
     look = (c.x, c.y, 0.6)
     def face(p):
         return math.degrees(math.atan2(c.y - p[1], c.x - p[0]))
-    for k, (kind, dx, dy) in enumerate((("elder", 1.15, -0.9), ("man", 1.35, -0.05))):
+    for k, (kind, dx, dy) in enumerate((("elder", 0.95, -0.95), ("man", 1.15, 0.05))):
         kn = (hx + dx, hy + dy)
         m = BR.villager(kind, f"Kin{k}", var=k, ease=1.3)
         st = AC.Kneel(m, kn, face(kn), lean=10, sit_back=True)
@@ -101,12 +101,12 @@ def S03():
         for sd, sg in (("L", -1), ("R", 1)):
             st.hand(sd, tuple(kk + f * 0.12 + sv * (0.12 * sg) + Vector((0, 0, 0.36))), elbow=(0.5, 0.1, -0.9), curl=24)
         st.head_to(look, share=0.9); st.finish(look=look, density=1.0)
-    for k, (kind, dx, dy) in enumerate((("woman", 2.1, -0.75), ("child", 2.05, -0.2))):
+    for k, (kind, dx, dy) in enumerate((("woman", 2.05, -1.25), ("child", 1.95, -0.45))):
         f_ = (hx + dx, hy + dy)
         m = BR.villager(kind, f"Kin{k + 2}", var=k + 2)
         st = AC.Stand(m, f_, face(f_), lean=2, weight="L")
         st.head_to(look, share=0.9); st.finish(look=look, density=1.0)
-    return dict(a=((hx + 3.4, hy - 2.2, 2.2), (c.x, c.y, 0.4)), b=((hx + 3.0, hy - 1.9, 2.05), (c.x, c.y, 0.4)), lens=30,
+    return dict(a=((hx + 2.9, hy - 1.9, 2.1), (c.x, c.y, 0.4)), b=((hx + 2.6, hy - 1.65, 2.0), (c.x, c.y, 0.4)), lens=28,
                 fstop=2.8, focus=(hx + 1.2, hy - 0.4, 0.6), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor",))
 
 
