@@ -270,7 +270,7 @@ def S14():
     hx, hy = U.HOUSES[1][0] + 0.4, U.HOUSES[1][1]              # the middle house's hearth (built by G.houses)
     z = G.H(hx, hy)
     _crem_pit((hx + 0.62, hy - 0.42, z), 0.2, n=150, charcoal=80)
-    t = Vector((hx + 0.3, hy - 0.15, z))
+    t = Vector((hx + 0.45, hy - 0.32, z))
     return dict(a=(tuple(t + Vector((0.9, -1.4, 1.6))), tuple(t)), b=(tuple(t + Vector((0.4, -0.7, 0.8))), tuple(t)), lens=40,
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=0.1))
 
