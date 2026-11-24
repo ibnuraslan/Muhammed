@@ -290,7 +290,7 @@ def _pp(name="polyprop"):
         return m
     m = bpy.data.materials.new(name); m.use_nodes = True; p = m.node_tree.nodes["Principled BSDF"]
     p.inputs['Base Color'].default_value = (0.92, 0.92, 0.9, 1); p.inputs['Transmission Weight'].default_value = 0.85
-    p.inputs['Roughness'].default_value = 0.28; p.inputs['IOR'].default_value = 1.49
+    p.inputs['Roughness'].default_value = 0.15; p.inputs['IOR'].default_value = 1.49
     return m
 
 
@@ -349,8 +349,8 @@ def clean_room(uv=1.0):
         bpy.ops.mesh.primitive_cylinder_add(radius=0.012, depth=0.6, location=(xx, 1.6, 1.48)); tb = bpy.context.active_object
         tb.rotation_euler.y = math.pi / 2; tb.name = "uvtube"
         tb.data.materials.append(P2._mat("uvglow", (0, 0, 0), 0.4, emit=(0.45, 0.2, 1.0), strength=25 * uv))
-    d = bpy.data.lights.new("uv", 'AREA'); d.size = 1.3; d.size_y = 0.5; d.shape = 'RECTANGLE'; d.energy = 22 * uv; d.color = (0.5, 0.3, 1.0)
-    wl = bpy.data.lights.new("cabwhite", 'AREA'); wl.size = 1.3; wl.size_y = 0.4; wl.shape = 'RECTANGLE'; wl.energy = 45; wl.color = (0.92, 0.96, 1.0)
+    d = bpy.data.lights.new("uv", 'AREA'); d.size = 1.3; d.size_y = 0.5; d.shape = 'RECTANGLE'; d.energy = 40 * uv; d.color = (0.5, 0.3, 1.0)
+    wl = bpy.data.lights.new("cabwhite", 'AREA'); wl.size = 1.3; wl.size_y = 0.4; wl.shape = 'RECTANGLE'; wl.energy = 8; wl.color = (0.92, 0.96, 1.0)
     wo = bpy.data.objects.new("cabwhite", wl); bpy.context.scene.collection.objects.link(wo); wo.location = (0, 1.45, 1.46)
     lo = bpy.data.objects.new("uv", d); bpy.context.scene.collection.objects.link(lo); lo.location = (0, 1.6, 1.45)
     # work surface: two racks of 1.5 ml tubes, an open tube, a pipette with a tip on its stand
@@ -459,8 +459,8 @@ def S11():
 def S12():
     """Inside the cabinet under UV: capped tubes of bone powder in a rack, the pipette, violet glow. Macro slide."""
     clean_room(uv=0.55)
-    return dict(a=((-0.55, 1.0, 1.2), (-0.35, 1.6, 0.97)), b=((-0.25, 1.0, 1.2), (-0.05, 1.6, 0.97)), lens=50,
-                fstop=4.0, focus=(-0.35, 1.6, 0.98), cine=dict(exposure=-0.3))
+    return dict(a=((-0.5, 1.18, 1.07), (-0.3, 1.6, 0.94)), b=((-0.14, 1.18, 1.07), (0.04, 1.6, 0.94)), lens=60,
+                fstop=4.0, focus=(-0.3, 1.6, 0.94), cine=dict(exposure=-0.5))
 
 
 def S13():
@@ -468,7 +468,7 @@ def S13():
     clean_room(uv=0.55)
     t = Vector((0.25 - 0.075 + 2 * 0.03, 1.6, 0.97))
     return dict(a=(tuple(t + Vector((-0.16, -0.5, 0.16))), tuple(t)), b=(tuple(t + Vector((-0.1, -0.4, 0.12))), tuple(t)), lens=70,
-                fstop=2.8, focus=tuple(t), cine=dict(exposure=-0.2))
+                fstop=2.8, focus=tuple(t), cine=dict(exposure=-0.5))
 
 
 # ============================================================================ "The results are published in 2012."
@@ -482,9 +482,13 @@ def S14():
     # the finished samples: the rack of capped tubes in the darkened cabinet, one cold strip light left on
     d = bpy.data.lights.new("strip", 'AREA'); d.shape = 'RECTANGLE'; d.size = 1.2; d.size_y = 0.08; d.energy = 25; d.color = (0.85, 0.92, 1.0)
     lo = bpy.data.objects.new("strip", d); bpy.context.scene.collection.objects.link(lo); lo.location = (0.0, 1.45, 1.45)
-    t = Vector((0.25, 1.6, 0.98))
-    return dict(a=(tuple(t + Vector((-0.45, -0.7, 0.3))), tuple(t)), b=(tuple(t + Vector((-0.3, -0.5, 0.2))), tuple(t)), lens=50, fstop=2.8, focus=tuple(t),
-                cine=dict(exposure=0.1))
+    for o in bpy.data.objects:
+        if o.type == 'LIGHT' and o.name.startswith("cabwhite"):
+            o.data.energy = 0.0
+    d.energy = 8
+    t = Vector((0.1, 1.5, 1.0))
+    return dict(a=((-2.3, -1.3, 1.55), tuple(t)), b=((-1.9, -1.5, 1.5), tuple(t + Vector((0.3, 0, 0)))), lens=32, fstop=4.0, focus=tuple(t),
+                cine=dict(exposure=-0.2))
 
 
 # ============================================================================ "The jaw, upper arm, and thigh come from different individuals."
@@ -618,7 +622,8 @@ def S23():
     o = _knee_pit()
     k = o["knee"]
     # three-quarter over the right shoulder: the trowel at work in the pit, the house rings beyond
-    return dict(a=(tuple(k + Vector((0.95, -1.55, 1.25))), tuple(k + Vector((-0.05, 0.1, 0)))), b=(tuple(k + Vector((0.8, -1.35, 1.15))), tuple(k)), lens=35,
+    fl = float(G.H(k.x, k.y)); kf = Vector((k.x, k.y, fl))            # the trench floor the digger kneels on
+    return dict(a=(tuple(kf + Vector((1.35, -2.0, 2.05))), tuple(kf + Vector((-0.05, 0.15, 0)))), b=(tuple(kf + Vector((1.2, -1.8, 1.95))), tuple(kf + Vector((0, 0.1, 0)))), lens=35,
                 fstop=4.0, focus=tuple(k), hand_ok=p1.OK)
 
 
