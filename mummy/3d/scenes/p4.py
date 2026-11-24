@@ -286,25 +286,29 @@ def S15():
 
 # ============================================================================ "People were returning to the dead across generations."
 def S16():
-    """Bones within the walls: a human bone fragment wedged among the stones of a house wall. Slow push."""
+    """Bones within the walls: a human forearm bone wedged between two courses of the house's stone revetment, seen
+    from the house floor. Slow push."""
     T, sk = p1.site("golden", grass_at=None, kit=False, burials=False, sun_az=200)
     hx, hy, r = U.HOUSES[1]
-    a = math.radians(-60); wx, wy = hx + (r - 0.2) * math.cos(a), hy + (r - 0.2) * math.sin(a)
-    z = G.H(wx, wy)
-    fe, W = None, None
+    a = math.radians(-60)
+    zf = G.H(hx + (r - 0.25) * math.cos(a), hy + (r - 0.25) * math.sin(a))
+    rr = r - 0.07                                            # the inner face of the wall stones
+    wx, wy = hx + rr * math.cos(a), hy + rr * math.sin(a)
     sk2 = B.Skeleton("M", "C", name="WallBone")
     for s_ in list(sk2.parts):
         if s_ != "forearmL":
             sk2.remove(s_)
     o = sk2.parts["forearmL"]
+    sk2.root.rotation_euler = (0, math.radians(90), a + math.pi / 2)        # lying along the course, in the joint
     bpy.context.view_layer.update()
     Wv = np.array([o.matrix_world @ v.co for v in o.data.vertices]); c = Wv.mean(0)
-    sk2.root.location += Vector((wx - c[0], wy - c[1], z + 0.22 - c[2]))
-    sk2.root.rotation_euler = (0, math.radians(80), a + math.pi / 2)
-    p2._bone_detail(o)
-    t = Vector((wx, wy, z + 0.22))
-    return dict(a=(tuple(t + Vector((0.55 * math.cos(a), 0.55 * math.sin(a), 0.25))), tuple(t)),
-                b=(tuple(t + Vector((0.4 * math.cos(a), 0.4 * math.sin(a), 0.2))), tuple(t)), lens=45, fstop=4.0, focus=tuple(t),
+    zj = zf + 0.08 + 0.14 * 1.5                               # the bed joint between the 2nd and 3rd course
+    sk2.root.location += Vector((wx - c[0], wy - c[1], zj - c[2]))
+    p3._knee_mats(o, sand=0.6)
+    t = Vector((wx, wy, zj))
+    inw = Vector((-math.cos(a), -math.sin(a), 0))
+    return dict(a=(tuple(t + inw * 0.75 + Vector((0.15, 0, 0.12))), tuple(t)),
+                b=(tuple(t + inw * 0.5 + Vector((0.08, 0, 0.08))), tuple(t)), lens=45, fstop=4.0, focus=tuple(t),
                 cine=dict(exposure=0.1))
 
 
