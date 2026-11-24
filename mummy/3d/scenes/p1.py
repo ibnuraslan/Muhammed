@@ -32,6 +32,7 @@ def team(*who):
     out = []
     if "A" in who:
         out.append(K.kneel_trowel(K.DiggerA, (-1.0, 8.15), 128, work=(-1.45, 8.62), density=HAIR))
+        G.lift(out[-1], 0.008)            # the shins rest on the sand ridge here: keep the trouser cloth on it, not in it
     if "B" in who:
         out.append(K.kneel_trowel(K.DiggerB, (1.05, 10.85), 165, work=(0.42, 11.05), density=HAIR))
     return out
