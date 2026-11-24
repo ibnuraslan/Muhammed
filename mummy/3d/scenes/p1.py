@@ -263,9 +263,9 @@ def S17():
     K.kneel_trowel(K.DiggerA, (4.2, y - 2.35), 92, work=(4.25, y - 1.7), density=HAIR)
     G.section_scan(y, x_center=4.2)
     z = G.H(4.2, y - 1.7)
-    # wide and high over her shoulder: the section is the subject, she is the scale and the action at its foot
-    return dict(a=((6.3, y - 4.9, z + 2.9), (3.7, y - 1.15, z + 0.45)), b=((5.9, y - 4.6, z + 2.75), (3.6, y - 1.15, z + 0.45)), lens=32,
-                fstop=5.6, focus=(4.2, y - 1.6, z + 0.45), hand_ok=OK)
+    # over her right shoulder, looking down past it onto the trowel and the section face (her seat is behind the lens)
+    return dict(a=((4.62, y - 2.72, z + 1.5), (4.15, y - 1.3, z + 0.32)), b=((4.55, y - 2.62, z + 1.42), (4.1, y - 1.25, z + 0.34)), lens=28,
+                fstop=4.0, focus=(4.25, y - 1.6, z + 0.2), hand_ok=OK)
 
 
 def _ard_marks(cx, cy, w=2.6, n=11, seed=1):
