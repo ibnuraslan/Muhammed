@@ -249,15 +249,12 @@ def S11():
     bpy.ops.mesh.primitive_circle_add(vertices=28, radius=0.055, fill_type='NGON', location=tuple(hit + n * 0.003)); gp = bpy.context.active_object
     gp.rotation_euler = q.to_euler(); gp.scale = (1.0, 0.62, 1.0); gp.name = "hidesplit"; gp.data.materials.append(_plain("hidegap", (0.008, 0.005, 0.003), 0.95))
     dg_ = gp.modifiers.new("rag", "DISPLACE"); tr = bpy.data.textures.new("ragged", "CLOUDS"); tr.noise_scale = 0.015; dg_.texture = tr; dg_.strength = 0.01
-    bpy.ops.mesh.primitive_torus_add(major_radius=0.058, minor_radius=0.009, location=tuple(hit + n * 0.004)); lp = bpy.context.active_object
-    lp.rotation_euler = q.to_euler(); lp.scale = (1.0, 0.62, 1.0); lp.name = "hidelip"; lp.data.materials.append(bo.data.materials[0])
-    dl = lp.modifiers.new("rag", "DISPLACE"); dl.texture = tr; dl.strength = 0.012
     hx, hy = R["hearth"]
-    _spot((hx - 0.2, hy + 0.2, 0.8), tuple(tgt), 160, size=0.2, color=(1.0, 0.55, 0.22), spot=30)
+    _spot((hx - 0.2, hy + 0.2, 0.8), tuple(tgt), 420, size=0.2, color=(1.0, 0.6, 0.28), spot=25)
     side = Vector((n.x, n.y, 0)).normalized() if Vector((n.x, n.y, 0)).length > 0.1 else Vector((1, 0, 0))
     cam = tgt + side * 0.62 + Vector((0, 0, 0.32)) + Vector((-side.y, side.x, 0)) * 0.22     # back enough to see the bone come out of the hide
     return dict(a=(tuple(cam), tuple(tgt - n * 0.03)), b=(tuple(cam - side * 0.08), tuple(tgt - n * 0.03)), lens=50,
-                fstop=4.0, focus=tuple(tgt), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor", "bundle"))
+                fstop=4.0, focus=tuple(tgt), cine=dict(exposure=0.6, sat=0.85), hand_ok=("floor", "bundle"))
 
 
 def S12():
