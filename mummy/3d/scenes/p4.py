@@ -14,30 +14,42 @@ _plain, _glass, _spot, _haze = p1._plain, p1._glass, p2._spot, p2._haze
 
 
 # ----------------------------------------------------------------------------- helpers
-def _calcined(name="calcined"):
-    """Cremated bone: chalky white to blue-grey and black-brown where it burned less, crazed with fine cracks."""
+def _calcined(name="calcined2"):
+    """Cremated bone: each fragment its own colour (attribute 'frag') from chalky white through blue-grey to near
+    black (less completely burnt), with a fine net of checking cracks and a dry, matte, slightly sugary surface."""
     m = bpy.data.materials.get(name)
     if m:
         return m
     m = bpy.data.materials.new(name); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
-    tc = N.new("ShaderNodeTexCoord")
-    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 18; nz.inputs['Detail'].default_value = 6; L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    at = N.new("ShaderNodeAttribute"); at.attribute_name = "frag"
     rp = N.new("ShaderNodeValToRGB"); el = rp.color_ramp.elements
-    el[0].position = 0.35; el[0].color = (0.06, 0.055, 0.05, 1)
-    e = el.new(0.47); e.color = (0.24, 0.25, 0.27, 1)
-    el[-1].position = 0.62; el[-1].color = (0.52, 0.5, 0.47, 1)
-    L.new(nz.outputs['Fac'], rp.inputs['Fac'])
-    cr = N.new("ShaderNodeTexVoronoi"); cr.feature = 'DISTANCE_TO_EDGE'; cr.inputs['Scale'].default_value = 220; L.new(tc.outputs['Object'], cr.inputs['Vector'])
-    cm = N.new("ShaderNodeMapRange"); cm.inputs['From Min'].default_value = 0.0; cm.inputs['From Max'].default_value = 0.04
-    cm.inputs['To Min'].default_value = 0.25; cm.inputs['To Max'].default_value = 1.0; L.new(cr.outputs['Distance'], cm.inputs['Value'])
+    el[0].position = 0.0; el[0].color = (0.04, 0.035, 0.03, 1)
+    for pos, c in ((0.14, (0.16, 0.16, 0.17)), (0.3, (0.38, 0.42, 0.47)), (0.5, (0.62, 0.63, 0.63)), (0.7, (0.8, 0.78, 0.73))):
+        e = el.new(pos); e.color = (*c, 1)
+    el[-1].position = 1.0; el[-1].color = (0.86, 0.84, 0.79, 1)
+    L.new(at.outputs['Fac'], rp.inputs['Fac'])
+    tc = N.new("ShaderNodeTexCoord")
+    mo = N.new("ShaderNodeTexNoise"); mo.inputs['Scale'].default_value = 140; mo.inputs['Detail'].default_value = 6; L.new(tc.outputs['Object'], mo.inputs['Vector'])
+    mm = N.new("ShaderNodeMapRange"); mm.inputs['To Min'].default_value = 0.78; mm.inputs['To Max'].default_value = 1.08; L.new(mo.outputs['Fac'], mm.inputs['Value'])
+    mx0 = N.new("ShaderNodeMix"); mx0.data_type = 'RGBA'; mx0.blend_type = 'MULTIPLY'; mx0.inputs['Factor'].default_value = 1.0
+    L.new(rp.outputs['Color'], mx0.inputs[6]); cc0 = N.new("ShaderNodeCombineXYZ")
+    for k in range(3):
+        L.new(mm.outputs[0], cc0.inputs[k])
+    L.new(cc0.outputs[0], mx0.inputs[7])
+    # checking: a net of thin dark cracks, 2-4 mm cells, plus a finer crazing
+    cr = N.new("ShaderNodeTexVoronoi"); cr.feature = 'DISTANCE_TO_EDGE'; cr.inputs['Scale'].default_value = 320; L.new(tc.outputs['Object'], cr.inputs['Vector'])
+    cm = N.new("ShaderNodeMapRange"); cm.inputs['From Min'].default_value = 0.0; cm.inputs['From Max'].default_value = 0.03
+    cm.inputs['To Min'].default_value = 0.2; cm.inputs['To Max'].default_value = 1.0; L.new(cr.outputs['Distance'], cm.inputs['Value'])
     mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
-    L.new(rp.outputs['Color'], mx.inputs[6]); cc = N.new("ShaderNodeCombineXYZ")
+    L.new(mx0.outputs[2], mx.inputs[6]); cc = N.new("ShaderNodeCombineXYZ")
     for k in range(3):
         L.new(cm.outputs[0], cc.inputs[k])
     L.new(cc.outputs[0], mx.inputs[7]); L.new(mx.outputs[2], p.inputs['Base Color'])
-    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.6; bp.inputs['Distance'].default_value = 0.0008
-    L.new(cr.outputs['Distance'], bp.inputs['Height']); L.new(bp.outputs['Normal'], p.inputs['Normal'])
-    p.inputs['Roughness'].default_value = 0.9
+    gr = N.new("ShaderNodeTexNoise"); gr.inputs['Scale'].default_value = 900; L.new(tc.outputs['Object'], gr.inputs['Vector'])
+    hh = N.new("ShaderNodeMath"); hh.operation = 'MULTIPLY_ADD'; hh.inputs[1].default_value = 0.3; L.new(gr.outputs['Fac'], hh.inputs[0]); L.new(cm.outputs[0], hh.inputs[2])
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.8; bp.inputs['Distance'].default_value = 0.0006
+    L.new(hh.outputs[0], bp.inputs['Height']); L.new(bp.outputs['Normal'], p.inputs['Normal'])
+    p.inputs['Roughness'].default_value = 0.93
     return m
 
 
@@ -49,108 +61,150 @@ def _crem_pit(c, r=0.24, n=200, charcoal=110):
     bm_ = bmesh.new(); bm_.from_mesh(pt.data)
     bmesh.ops.delete(bm_, geom=[v for v in bm_.verts if v.co.xy.length > r * (1 + 0.08 * math.sin(7 * math.atan2(v.co.y, v.co.x)))], context='VERTS')
     bm_.to_mesh(pt.data); bm_.free()
-    pt.data.materials.append(bpy.data.materials.get("pitfill") or ph.texture("brown_mud_02", scale=6.0, name="pitfill", tint=(0.5, 0.4, 0.3)))
+    pt.data.materials.append(bpy.data.materials.get("pitfill") or ph.texture("brown_mud_02", scale=6.0, name="pitfill", tint=(0.34, 0.27, 0.2)))
     pt.name = "pitfloor"
     dp = pt.modifiers.new("d", "DISPLACE"); dt = bpy.data.textures.new("pitlump", "CLOUDS"); dt.noise_scale = 0.03; dp.texture = dt; dp.strength = 0.005
-    cremation((x, y, z + 0.012), radius=r * 0.62, n=n, charcoal=charcoal, flat=True)
+    cremation((x, y, z + 0.012), radius=r * 0.7, n=n, charcoal=charcoal * 3, bury=0.55)
     return pt
 
 
-def cremation(center, radius=0.12, n=90, seed=1, charcoal=40, flat=False):
-    """A small heap of cremated bone fragments with charcoal in a little pit: angular, warped, cracked pieces."""
+def cremation(center, radius=0.12, n=90, seed=1, charcoal=40, flat=False, rect=None, size=(0.004, 0.016), bury=0.45, burnt=(0.0, 1.0)):
+    """Cremated bone: small irregular, warped fragments - angular chunks of compact bone and curved slivers of shaft
+    wall - each its own colour (white / blue-grey / black), with charcoal. In a pit they lie partly buried in the fill
+    (bury = fraction of their height below the surface); flat=True lays them out resting on a surface (lab).
+    rect=(w, d): spread over a rectangle instead of a disc."""
     rng = random.Random(seed)
     cx, cy, cz = center
     bm = bmesh.new()
+    fl = bm.verts.layers.float.new("frag")
     for k in range(n):
-        a = rng.uniform(0, 6.283); r = radius * math.sqrt(rng.random())
-        x, y = cx + r * math.cos(a), cy + r * math.sin(a)
-        big = rng.random() > 0.8
-        # a sliver of the wall of a long bone: a curved shell patch, warped and twisted by the heat, jagged at the ends
-        L = rng.uniform(0.006, 0.016) * (1.8 if big else 1.0)
-        R = rng.uniform(0.004, 0.009); t = R * rng.uniform(0.2, 0.35)
-        span = rng.uniform(0.7, 2.4); nu, nv = 5, 4
-        bend = rng.uniform(-14, 14); twist = rng.uniform(-0.6, 0.6)
-        ends = [[rng.uniform(-0.25, 0.25) * L / nv for _ in range(nu + 1)] for _ in range(2)]
-        grid = {}
-        for side, rr in (("o", R), ("i", R - t)):
-            for i in range(nu + 1):
-                for j in range(nv + 1):
-                    v = -L / 2 + L * j / nv
-                    if j == 0:
-                        v += ends[0][i]
-                    elif j == nv:
-                        v += ends[1][i]
-                    th = -span / 2 + span * i / nu + twist * v / L
-                    rj = rr * (1 + 0.08 * math.sin(3.1 * i + 1.7 * j + k))
-                    co = Vector((rj * math.cos(th), v, rj * math.sin(th) - R + bend * v * v))
-                    grid[side, i, j] = bm.verts.new(co)
-        def f(*vs):
-            try:
-                bm.faces.new(vs)
-            except ValueError:
-                pass
-        for i in range(nu):
+        if rect:
+            x, y = cx + rng.uniform(-rect[0] / 2, rect[0] / 2), cy + rng.uniform(-rect[1] / 2, rect[1] / 2); h = 0.0
+        else:
+            a = rng.uniform(0, 6.283); r = radius * math.sqrt(rng.random())
+            x, y = cx + r * math.cos(a), cy + r * math.sin(a); h = 0.0
+        sz = rng.uniform(*size) * (1.6 if rng.random() > 0.9 else 1.0)
+        if rng.random() < 0.6:
+            # an angular chunk: a jittered, flattened, slightly cupped polyhedron
+            vs = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=0.5)['verts']
+            ax, ay, az = sz * rng.uniform(0.8, 1.6), sz * rng.uniform(0.6, 1.0), sz * rng.uniform(0.3, 0.6)
+            cup = rng.uniform(-0.6, 0.6)
+            for v in vs:
+                q = v.co * rng.uniform(0.75, 1.2)
+                v.co = Vector((q.x * ax, q.y * ay, q.z * az + cup * az * (q.x * q.x + q.y * q.y)))
+        else:
+            # a curved sliver of shaft wall, warped and twisted by the fire, jagged ends
+            vs = []
+            L_ = sz * rng.uniform(1.2, 2.2); R = sz * rng.uniform(0.5, 0.9); t = R * rng.uniform(0.22, 0.35)
+            span = rng.uniform(0.7, 2.0); nu, nv = 4, 3; twist = rng.uniform(-0.6, 0.6); bend = rng.uniform(-10, 10)
+            grid = {}
+            for side, rr in (("o", R), ("i", R - t)):
+                for i in range(nu + 1):
+                    for j in range(nv + 1):
+                        v = -L_ / 2 + L_ * j / nv + (rng.uniform(-0.3, 0.3) * L_ / nv if j in (0, nv) else 0)
+                        th = -span / 2 + span * i / nu + twist * v / L_
+                        rj = rr * (1 + 0.1 * rng.uniform(-1, 1))
+                        grid[side, i, j] = bm.verts.new(Vector((rj * math.cos(th), v, rj * math.sin(th) - R + bend * v * v)))
+            def f(*q):
+                try:
+                    bm.faces.new(q)
+                except ValueError:
+                    pass
+            for i in range(nu):
+                for j in range(nv):
+                    f(grid["o", i, j], grid["o", i + 1, j], grid["o", i + 1, j + 1], grid["o", i, j + 1])
+                    f(grid["i", i, j + 1], grid["i", i + 1, j + 1], grid["i", i + 1, j], grid["i", i, j])
+            for i in range(nu):
+                f(grid["o", i, 0], grid["i", i, 0], grid["i", i + 1, 0], grid["o", i + 1, 0])
+                f(grid["o", i + 1, nv], grid["i", i + 1, nv], grid["i", i, nv], grid["o", i, nv])
             for j in range(nv):
-                f(grid["o", i, j], grid["o", i + 1, j], grid["o", i + 1, j + 1], grid["o", i, j + 1])
-                f(grid["i", i, j + 1], grid["i", i + 1, j + 1], grid["i", i + 1, j], grid["i", i, j])
-        for i in range(nu):
-            f(grid["o", i, 0], grid["i", i, 0], grid["i", i + 1, 0], grid["o", i + 1, 0])
-            f(grid["o", i + 1, nv], grid["i", i + 1, nv], grid["i", i, nv], grid["o", i, nv])
-        for j in range(nv):
-            f(grid["o", 0, j + 1], grid["i", 0, j + 1], grid["i", 0, j], grid["o", 0, j])
-            f(grid["o", nu, j], grid["i", nu, j], grid["i", nu, j + 1], grid["o", nu, j + 1])
-        vs = [grid[key] for key in grid]
-        Rm = Matrix.Rotation(rng.uniform(0, 6.3), 3, 'Z') @ Matrix.Rotation(rng.uniform(-0.6, 0.6), 3, 'Y') @ \
-            (Matrix.Rotation(math.pi, 3, 'Y') if rng.random() < 0.5 else Matrix.Identity(3))
-        if flat:                                                     # laid out on a surface: resting, not heaped
-            Rm = Matrix.Rotation(rng.uniform(0, 6.3), 3, 'Z') @ (Matrix.Rotation(math.pi, 3, 'Y') if rng.random() < 0.5 else Matrix.Identity(3))
-            pts = [Rm @ v.co for v in vs]; zmin = min(p_.z for p_ in pts)
-            for v, p_ in zip(vs, pts):
-                v.co = p_ + Vector((x, y, cz - zmin + 0.0005))
-            continue
-        h = (radius - r) * 0.45 * rng.uniform(0.3, 1.0)
-        for v in vs:
-            v.co = Rm @ v.co + Vector((x, y, cz + h + R * 0.1))       # half bedded in the fill
+                f(grid["o", 0, j + 1], grid["i", 0, j + 1], grid["i", 0, j], grid["o", 0, j])
+                f(grid["o", nu, j], grid["i", nu, j], grid["i", nu, j + 1], grid["o", nu, j + 1])
+            vs = list(grid.values())
+        burn = rng.uniform(*burnt)
+        Rm = Matrix.Rotation(rng.uniform(0, 6.3), 3, 'Z') @ Matrix.Rotation(rng.uniform(-0.5, 0.5), 3, 'Y') @ \
+            (Matrix.Rotation(math.pi, 3, 'X') if rng.random() < 0.5 else Matrix.Identity(3))
+        if flat:
+            Rm = Matrix.Rotation(rng.uniform(0, 6.3), 3, 'Z') @ (Matrix.Rotation(math.pi, 3, 'X') if rng.random() < 0.5 else Matrix.Identity(3))
+        pts = [Rm @ v.co for v in vs]; zmin = min(p_.z for p_ in pts); zmax = max(p_.z for p_ in pts)
+        dz = cz - zmin + 0.0004 - (0.0 if flat else rng.uniform(0.2, 1.0) * bury * (zmax - zmin))
+        for v, p_ in zip(vs, pts):
+            v.co = p_ + Vector((x, y, dz)); v[fl] = burn
     me = bpy.data.meshes.new("cremated"); bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new("cremated", me); bpy.context.scene.collection.objects.link(o); me.materials.append(_calcined())
-    bmesh_ok = me.polygons
     for pg in me.polygons:
-        pg.use_smooth = True
-    bv = o.modifiers.new("b", "BEVEL"); bv.width = 0.0005; bv.segments = 1
-    bm = bmesh.new()
-    for k in range(charcoal):
-        a = rng.uniform(0, 6.283); r = radius * 1.1 * math.sqrt(rng.random())
-        s = rng.uniform(0.0025, 0.007)
-        vs = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=s)['verts']
-        for v in vs:
-            v.co = Vector((v.co.x * rng.uniform(0.9, 1.5), v.co.y, v.co.z * 0.85)) + Vector((cx + r * math.cos(a), cy + r * math.sin(a), cz + s * 0.3))
-    me2 = bpy.data.meshes.new("charcoal"); bm.to_mesh(me2); bm.free()
-    o2 = bpy.data.objects.new("charcoal", me2); bpy.context.scene.collection.objects.link(o2)
-    me2.materials.append(_plain("charcoal", (0.015, 0.014, 0.013), 0.55))
+        pg.use_smooth = False
+    if charcoal:
+        bm = bmesh.new()
+        for k in range(charcoal):
+            if rect:
+                x, y = cx + rng.uniform(-rect[0] / 2, rect[0] / 2), cy + rng.uniform(-rect[1] / 2, rect[1] / 2)
+            else:
+                a = rng.uniform(0, 6.283); r = radius * 1.15 * math.sqrt(rng.random())
+                x, y = cx + r * math.cos(a), cy + r * math.sin(a)
+            s_ = rng.uniform(0.0015, 0.006)
+            vs = bmesh.ops.create_cube(bm, size=1.0)['verts']
+            Rm = Matrix.Rotation(rng.uniform(0, 6.3), 3, 'Z') @ Matrix.Rotation(rng.uniform(-0.6, 0.6), 3, 'X')
+            for v in vs:
+                q = Vector((v.co.x * s_ * rng.uniform(1.0, 2.2), v.co.y * s_ * rng.uniform(0.8, 1.4), v.co.z * s_ * rng.uniform(0.6, 1.0)))
+                v.co = Rm @ q + Vector((x, y, cz + s_ * rng.uniform(-0.3, 0.2)))
+        me2 = bpy.data.meshes.new("charcoal"); bm.to_mesh(me2); bm.free()
+        o2 = bpy.data.objects.new("charcoal", me2); bpy.context.scene.collection.objects.link(o2)
+        cm_ = _plain("charcoal", (0.012, 0.011, 0.01), 0.45)
+        me2.materials.append(cm_)
     return o
 
 
 def pyre(c, rng_seed=3):
-    """A funeral pyre: a crib of split logs, a wrapped body on top, burning: flames, embers glow, volumetric smoke."""
+    """A funeral pyre: a tall crib of split logs, the wrapped body on top, fully alight - tall flame tongues, a bed of
+    glowing embers and coals, sparks, a thick smoke column, strong firelight."""
     rng = random.Random(rng_seed)
     wood = bpy.data.materials.get("pyrewood") or ph.texture("bark_brown_02", scale=4.0, name="pyrewood", tint=(0.5, 0.42, 0.35))
+    char = _plain("charlog", (0.02, 0.016, 0.014), 0.7)
     cx, cy, cz = c
-    for layer in range(6):
-        for k in range(5):
-            off = (k - 2) * 0.3
+    for layer in range(9):
+        for k in range(6):
+            off = (k - 2.5) * 0.38 + rng.uniform(-0.04, 0.04)
+            z = cz + 0.1 + layer * 0.17
             if layer % 2 == 0:
-                loc = (cx + off, cy, cz + 0.08 + layer * 0.15); rot = (0, math.pi / 2, rng.uniform(-0.1, 0.1))
+                loc = (cx + off, cy, z); rot = (0, math.pi / 2, rng.uniform(-0.12, 0.12))
             else:
-                loc = (cx, cy + off, cz + 0.08 + layer * 0.15); rot = (math.pi / 2, 0, rng.uniform(-0.1, 0.1))
-            bpy.ops.mesh.primitive_cylinder_add(radius=0.07, depth=1.6, location=loc); lg = bpy.context.active_object
-            lg.rotation_euler = rot; lg.data.materials.append(wood); lg.name = "log"
-    P2.bundle((cx, cy, cz + 1.05), rot=0.3, length=0.95, girth=0.42)
-    BR.flames((cx, cy, cz), spread=0.65, n=26, top_z=0.95, seed=rng_seed)
-    for k in range(3):
-        d = bpy.data.lights.new("pyre", 'POINT'); d.energy = 900; d.color = (1.0, 0.5, 0.18); d.shadow_soft_size = 0.4
+                loc = (cx, cy + off, z); rot = (math.pi / 2, 0, rng.uniform(-0.12, 0.12))
+            bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=rng.uniform(0.07, 0.1), depth=rng.uniform(2.2, 2.6), location=loc); lg = bpy.context.active_object
+            lg.rotation_euler = rot; lg.data.materials.append(char if layer < 4 or rng.random() < 0.4 else wood); lg.name = "log"
+            dd = lg.modifiers.new("d", "DISPLACE"); tt = bpy.data.textures.get("logknots") or bpy.data.textures.new("logknots", "CLOUDS")
+            tt.noise_scale = 0.12; dd.texture = tt; dd.strength = 0.02
+    P2.bundle((cx, cy, cz + 1.75), rot=0.3, length=0.95, girth=0.42)
+    BR.flames((cx, cy, cz), spread=1.0, n=48, top_z=1.55, low_z=(0.2, 1.4), top_share=0.55, h_top=(1.6, 3.2), h_low=(0.6, 1.4),
+              wid=(0.24, 0.42), strength=1.3, seed=rng_seed)
+    # the ember bed and coals round the base, and sparks rising in the hot air
+    emb = _plain("embers", (0.02, 0.01, 0.005), 0.8)
+    pr = emb.node_tree.nodes["Principled BSDF"]; pr.inputs['Emission Color'].default_value = (1.0, 0.3, 0.05, 1); pr.inputs['Emission Strength'].default_value = 8.0
+    bm = bmesh.new()
+    for k in range(260):
+        a = rng.uniform(0, 6.283); r = rng.uniform(0.2, 1.7)
+        s_ = rng.uniform(0.02, 0.06)
+        vs = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=s_)['verts']
+        for v in vs:
+            v.co = Vector((v.co.x, v.co.y, v.co.z * 0.6)) + Vector((cx + r * math.cos(a), cy + r * math.sin(a), cz + 0.01))
+    me = bpy.data.meshes.new("embers"); bm.to_mesh(me); bm.free()
+    eo = bpy.data.objects.new("embers", me); bpy.context.scene.collection.objects.link(eo); me.materials.append(emb)
+    spk = _plain("sparks", (0, 0, 0), 0.5); sp = spk.node_tree.nodes["Principled BSDF"]
+    sp.inputs['Emission Color'].default_value = (1.0, 0.55, 0.15, 1); sp.inputs['Emission Strength'].default_value = 40.0
+    bm = bmesh.new()
+    for k in range(160):
+        h = rng.uniform(2.0, 7.0)
+        x = cx + rng.gauss(0, 0.5) + 0.12 * h; y = cy + rng.gauss(0, 0.5) + 0.04 * h
+        vs = bmesh.ops.create_icosphere(bm, subdivisions=0, radius=rng.uniform(0.008, 0.018))['verts']
+        for v in vs:
+            v.co = v.co + Vector((x, y, cz + h))
+    me = bpy.data.meshes.new("sparks"); bm.to_mesh(me); bm.free()
+    so = bpy.data.objects.new("sparks", me); bpy.context.scene.collection.objects.link(so); me.materials.append(spk); so.visible_shadow = False
+    for k in range(5):
+        d = bpy.data.lights.new("pyre", 'POINT'); d.energy = 2600; d.color = (1.0, 0.5, 0.18); d.shadow_soft_size = 0.6
         lo = bpy.data.objects.new("pyre", d); bpy.context.scene.collection.objects.link(lo)
-        lo.location = (cx + rng.uniform(-0.3, 0.3), cy + rng.uniform(-0.3, 0.3), cz + 0.6 + k * 0.35)
-    BR.smoke((cx, cy, cz + 3.6), height=22.0, drift=(0.6, 0.2), r0=0.7, grow=0.5, density=3.0, name="pyresmoke")
+        lo.location = (cx + rng.uniform(-0.6, 0.6), cy + rng.uniform(-0.6, 0.6), cz + 0.8 + k * 0.45)
+    BR.smoke((cx, cy, cz + 4.6), height=30.0, drift=(0.7, 0.2), r0=1.3, grow=0.6, density=4.0, name="pyresmoke")
 
 
 # ============================================================================ "This changes the picture..."
@@ -212,19 +266,23 @@ def S08():
 
 # ============================================================================ "Before the roundhouses existed, this ground held a cemetery."
 def S09():
-    """Before the houses: the open machair at dusk, a funeral pyre burning, two mourners far off (silhouettes)."""
+    """Before the houses: the open machair at dusk, a great funeral pyre burning, mourners standing back from it."""
     U.CUT = False
     U.island("dusk", grass_at=(10, -4), grass_r=30, n=820, core=4.0, grass_density=220, sun_az=200)
     c = (6.0, 2.0, float(U.surface(6.0, 2.0)))
     pyre(c)
     import acts as AC
-    for i, (dx, dy, hd) in enumerate(((6.2, -8.4, 125), (7.6, -7.6, 130))):
-        m = p3._night_islander(i)
+    # five mourners on the near side, spread out in a loose arc 9-12 m from the fire, backs to us
+    spots = ((5.8, -9.0, 120), (8.2, -7.4, 128), (3.2, -10.6, 112), (10.4, -5.0, 136), (1.2, -11.8, 105))
+    for k, (dx, dy, hd) in enumerate(spots):
+        m = BR.islander_cropped(k % 2, name=f"Mourner{k}", var=k)
         f = (c[0] + dx, c[1] + dy); zf = float(U.surface(*f))
-        st = AC.Stand(m, f, hd, lean=4)
-        st.finish(look=(c[0], c[1], c[2] + 1.2 - zf), density=1.0); G.lift(st, zf)
-    return dict(a=((c[0] + 13.5, c[1] - 14.5, c[2] + 1.9), (c[0], c[1], c[2] + 1.4)), b=((c[0] + 12.5, c[1] - 13.5, c[2] + 1.85), (c[0], c[1], c[2] + 1.5)),
-                lens=45, fstop=5.6, focus=(c[0] + 6.9, c[1] - 8.0, c[2] + 1.2), cine=dict(exposure=0.25))
+        hd = math.degrees(math.atan2(-dy, -dx)) + (k - 2) * 3          # facing the fire
+        st = AC.Stand(m, f, hd, lean=4 + 3 * (k % 2), weight="L" if k % 2 else "R")
+        st.head_to((c[0], c[1], c[2] + 1.6 - zf), share=0.6)
+        st.finish(look=(c[0], c[1], c[2] + 1.6 - zf), density=1.0); G.lift(st, zf)
+    return dict(a=((c[0] + 15.5, c[1] - 17.5, c[2] + 2.0), (c[0], c[1], c[2] + 2.0)), b=((c[0] + 14.0, c[1] - 16.0, c[2] + 1.9), (c[0], c[1], c[2] + 2.0)),
+                lens=40, fstop=5.6, focus=(c[0] + 6.0, c[1] - 9.0, c[2] + 1.2), cine=dict(exposure=0.2))
 
 
 def S10():
@@ -239,12 +297,31 @@ def S10():
 
 
 def S11():
-    """Cremated bone in the lab: white, grey and black fragments, crazed and warped by fire, on the velvet. Slider."""
+    """Cremated bone in the lab: a shallow steel tray divided into compartments, the fragments sorted by size - large
+    pieces of shaft and skull vault, medium chunks, small crumbs - white, blue-grey and black, crazed by the fire."""
     A = LB.room(window_light=0.3, lamp=True, lamp_at=(0.3, 0.62), lamp_target=(0.0, 0.36), lamp_energy=22)
     LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
-    cremation((0.0, 0.36, LB.TOP + 0.001), radius=0.1, n=80, charcoal=0, flat=True)
-    t = Vector((0.0, 0.36, LB.TOP + 0.01))
-    return dict(a=(tuple(t + Vector((-0.18, -0.22, 0.16))), tuple(t)), b=(tuple(t + Vector((-0.05, -0.26, 0.15))), tuple(t)), lens=60,
+    steel = P2._brushed("traysteel", (0.6, 0.61, 0.62), 0.35)
+    tx, ty, tz = 0.0, 0.36, LB.TOP + 0.002
+    W_, D_, H_ = 0.36, 0.24, 0.022
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(tx, ty, tz + 0.0015)); b_ = bpy.context.active_object
+    b_.scale = (W_, D_, 0.003); b_.data.materials.append(steel); b_.name = "tray"
+    walls = [((tx, ty - D_ / 2, tz + H_ / 2), (W_, 0.003, H_)), ((tx, ty + D_ / 2, tz + H_ / 2), (W_, 0.003, H_)),
+             ((tx - W_ / 2, ty, tz + H_ / 2), (0.003, D_, H_)), ((tx + W_ / 2, ty, tz + H_ / 2), (0.003, D_, H_)),
+             ((tx - W_ / 6, ty, tz + H_ / 2), (0.002, D_, H_ * 0.8)), ((tx + W_ / 6, ty, tz + H_ / 2), (0.002, D_, H_ * 0.8)),
+             ((tx, ty, tz + H_ / 2), (W_, 0.002, H_ * 0.8))]
+    for loc, sc in walls:
+        bpy.ops.mesh.primitive_cube_add(size=1, location=loc); w_ = bpy.context.active_object; w_.scale = sc
+        w_.data.materials.append(steel); w_.name = "tray"
+    # six compartments: sizes large -> small along x, the near row more burnt (blue-grey/black), the far row white
+    cw, cd = W_ / 3 - 0.012, D_ / 2 - 0.012
+    for col, (lo, hi, n) in enumerate(((0.016, 0.028, 16), (0.008, 0.015, 40), (0.003, 0.007, 120))):
+        for row, burnt in enumerate(((0.0, 0.5), (0.5, 1.0))):
+            cx_ = tx - W_ / 3 + col * W_ / 3; cy_ = ty - D_ / 4 + row * D_ / 2
+            cremation((cx_, cy_, tz + 0.003), n=n, seed=10 * col + row, charcoal=0, flat=True, rect=(cw, cd), size=(lo, hi), burnt=burnt)
+    t = Vector((tx, ty, tz + 0.01))
+    _spot((tx - 0.5, ty - 0.35, tz + 0.45), tuple(t), 60, size=0.08, spot=40)
+    return dict(a=(tuple(t + Vector((-0.2, -0.32, 0.26))), tuple(t)), b=(tuple(t + Vector((0.05, -0.34, 0.25))), tuple(t)), lens=50,
                 fstop=5.6, focus=tuple(t), cine=dict(exposure=-0.05))
 
 
