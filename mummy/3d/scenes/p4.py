@@ -21,11 +21,11 @@ def _calcined(name="calcined"):
         return m
     m = bpy.data.materials.new(name); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
     tc = N.new("ShaderNodeTexCoord")
-    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 60; nz.inputs['Detail'].default_value = 6; L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 35; nz.inputs['Detail'].default_value = 6; L.new(tc.outputs['Object'], nz.inputs['Vector'])
     rp = N.new("ShaderNodeValToRGB"); el = rp.color_ramp.elements
-    el[0].position = 0.3; el[0].color = (0.12, 0.11, 0.1, 1)
-    e = el.new(0.45); e.color = (0.45, 0.47, 0.5, 1)
-    el[-1].position = 0.65; el[-1].color = (0.82, 0.8, 0.76, 1)
+    el[0].position = 0.35; el[0].color = (0.06, 0.055, 0.05, 1)
+    e = el.new(0.47); e.color = (0.3, 0.31, 0.34, 1)
+    el[-1].position = 0.62; el[-1].color = (0.66, 0.64, 0.6, 1)
     L.new(nz.outputs['Fac'], rp.inputs['Fac'])
     cr = N.new("ShaderNodeTexVoronoi"); cr.feature = 'DISTANCE_TO_EDGE'; cr.inputs['Scale'].default_value = 220; L.new(tc.outputs['Object'], cr.inputs['Vector'])
     cm = N.new("ShaderNodeMapRange"); cm.inputs['From Min'].default_value = 0.0; cm.inputs['From Max'].default_value = 0.04
@@ -51,8 +51,8 @@ def cremation(center, radius=0.12, n=90, seed=1, charcoal=40):
         x, y = cx + r * math.cos(a), cy + r * math.sin(a)
         big = rng.random() > 0.8
         # a sliver of the wall of a long bone: a curved shell patch, warped and twisted by the heat, jagged at the ends
-        L = rng.uniform(0.008, 0.024) * (1.8 if big else 1.0)
-        R = rng.uniform(0.006, 0.013); t = R * rng.uniform(0.18, 0.3)
+        L = rng.uniform(0.006, 0.016) * (1.8 if big else 1.0)
+        R = rng.uniform(0.004, 0.009); t = R * rng.uniform(0.2, 0.35)
         span = rng.uniform(0.7, 2.4); nu, nv = 5, 4
         bend = rng.uniform(-14, 14); twist = rng.uniform(-0.6, 0.6)
         ends = [[rng.uniform(-0.25, 0.25) * L / nv for _ in range(nu + 1)] for _ in range(2)]
@@ -87,9 +87,9 @@ def cremation(center, radius=0.12, n=90, seed=1, charcoal=40):
         vs = [grid[key] for key in grid]
         Rm = Matrix.Rotation(rng.uniform(0, 6.3), 3, 'Z') @ Matrix.Rotation(rng.uniform(-0.6, 0.6), 3, 'Y') @ \
             (Matrix.Rotation(math.pi, 3, 'Y') if rng.random() < 0.5 else Matrix.Identity(3))
-        h = (radius - r) * 0.35
+        h = (radius - r) * 0.45 * rng.uniform(0.3, 1.0)
         for v in vs:
-            v.co = Rm @ v.co + Vector((x, y, cz + h + R * 0.6))
+            v.co = Rm @ v.co + Vector((x, y, cz + h + R * 0.1))       # half bedded in the fill
     me = bpy.data.meshes.new("cremated"); bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new("cremated", me); bpy.context.scene.collection.objects.link(o); me.materials.append(_calcined())
     bmesh_ok = me.polygons
@@ -238,11 +238,14 @@ def S09():
 def S10():
     """Small quantities of burnt bone into the earth: a little pit with cremated fragments and charcoal. Macro push."""
     U.CUT = False
-    U.island("overcast", grass_at=(6, 2), grass_r=4, n=820, core=3.0, focus=(6, 2), grass_density=260)
+    U.island("overcast", grass_at=(6.9, 2.6), grass_r=4, n=820, core=3.0, focus=(6, 2), grass_density=260)
     z = float(U.surface(6, 2))
-    bpy.ops.mesh.primitive_circle_add(vertices=40, radius=0.2, fill_type='NGON', location=(6, 2, z + 0.004)); pt = bpy.context.active_object
-    pt.data.materials.append(_plain("pitdark2", (0.06, 0.045, 0.03), 0.95)); pt.name = "pitfloor"
-    cremation((6, 2, z + 0.006), radius=0.14, n=120)
+    # the little pit: dark charcoal-stained fill, lumpy, its edge feathered into the sand
+    bpy.ops.mesh.primitive_circle_add(vertices=64, radius=0.24, fill_type='NGON', location=(6, 2, z + 0.004)); pt = bpy.context.active_object
+    pt.data.materials.append(ph.texture("brown_mud_02", scale=6.0, name="pitfill", tint=(0.32, 0.26, 0.2))); pt.name = "pitfloor"
+    sb = pt.modifiers.new("s", "SUBSURF"); sb.subdivision_type = 'SIMPLE'; sb.levels = 4; sb.render_levels = 4
+    dp = pt.modifiers.new("d", "DISPLACE"); dt = bpy.data.textures.new("pitlump", "CLOUDS"); dt.noise_scale = 0.03; dp.texture = dt; dp.strength = 0.008
+    cremation((6, 2, z + 0.006), radius=0.15, n=260, charcoal=110)
     t = Vector((6, 2, z + 0.01))
     return dict(a=(tuple(t + Vector((0.18, -0.3, 0.3))), tuple(t)), b=(tuple(t + Vector((0.1, -0.2, 0.2))), tuple(t)), lens=50,
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=0.1))
