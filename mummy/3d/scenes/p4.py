@@ -41,6 +41,21 @@ def _calcined(name="calcined"):
     return m
 
 
+def _crem_pit(c, r=0.24, n=200, charcoal=110):
+    """A small pit of cremated bone: dark charcoal-stained fill with a feathered irregular edge, the burnt fragments
+    and charcoal lying in it."""
+    x, y, z = c
+    bpy.ops.mesh.primitive_grid_add(x_subdivisions=60, y_subdivisions=60, size=2.2 * r, location=(x, y, z + 0.004)); pt = bpy.context.active_object
+    bm_ = bmesh.new(); bm_.from_mesh(pt.data)
+    bmesh.ops.delete(bm_, geom=[v for v in bm_.verts if v.co.xy.length > r * (1 + 0.08 * math.sin(7 * math.atan2(v.co.y, v.co.x)))], context='VERTS')
+    bm_.to_mesh(pt.data); bm_.free()
+    pt.data.materials.append(bpy.data.materials.get("pitfill") or ph.texture("brown_mud_02", scale=6.0, name="pitfill", tint=(0.32, 0.26, 0.2)))
+    pt.name = "pitfloor"
+    dp = pt.modifiers.new("d", "DISPLACE"); dt = bpy.data.textures.new("pitlump", "CLOUDS"); dt.noise_scale = 0.03; dp.texture = dt; dp.strength = 0.008
+    cremation((x, y, z + 0.004), radius=r * 0.62, n=n, charcoal=charcoal, flat=True)
+    return pt
+
+
 def cremation(center, radius=0.12, n=90, seed=1, charcoal=40, flat=False):
     """A small heap of cremated bone fragments with charcoal in a little pit: angular, warped, cracked pieces."""
     rng = random.Random(seed)
@@ -216,14 +231,7 @@ def S10():
     U.CUT = False
     U.island("overcast", grass_at=(9.0, 5.0), grass_r=2.5, n=820, core=3.0, focus=(6, 2), grass_density=260)
     z = float(U.surface(6, 2))
-    # the little pit: dark charcoal-stained fill, lumpy, its edge feathered into the sand
-    bpy.ops.mesh.primitive_grid_add(x_subdivisions=60, y_subdivisions=60, size=0.52, location=(6, 2, z + 0.004)); pt = bpy.context.active_object
-    bm_ = bmesh.new(); bm_.from_mesh(pt.data)
-    bmesh.ops.delete(bm_, geom=[v for v in bm_.verts if v.co.xy.length > 0.24 * (1 + 0.08 * math.sin(7 * math.atan2(v.co.y, v.co.x)))], context='VERTS')
-    bm_.to_mesh(pt.data); bm_.free()
-    pt.data.materials.append(ph.texture("brown_mud_02", scale=6.0, name="pitfill", tint=(0.32, 0.26, 0.2))); pt.name = "pitfloor"
-    dp = pt.modifiers.new("d", "DISPLACE"); dt = bpy.data.textures.new("pitlump", "CLOUDS"); dt.noise_scale = 0.03; dp.texture = dt; dp.strength = 0.008
-    cremation((6, 2, z + 0.004), radius=0.15, n=200, charcoal=110, flat=True)
+    _crem_pit((6, 2, z), 0.24)
     t = Vector((6, 2, z + 0.01))
     return dict(a=(tuple(t + Vector((0.18, -0.3, 0.3))), tuple(t)), b=(tuple(t + Vector((0.1, -0.2, 0.2))), tuple(t)), lens=50,
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=-0.45))
@@ -261,18 +269,19 @@ def S14():
     T, sk = p1.site("golden", grass_at=None, kit=False, burials=False, sun_az=200)
     hx, hy = U.HOUSES[1][0] + 0.4, U.HOUSES[1][1]              # the middle house's hearth (built by G.houses)
     z = G.H(hx, hy)
-    cremation((hx + 0.55, hy - 0.3, z + 0.005), radius=0.1, n=80)
-    bpy.ops.mesh.primitive_circle_add(vertices=40, radius=0.16, fill_type='NGON', location=(hx + 0.55, hy - 0.3, z + 0.003)); pt = bpy.context.active_object
-    pt.data.materials.append(_plain("pitdark3", (0.07, 0.05, 0.035), 0.95)); pt.name = "pitfloor"
+    _crem_pit((hx + 0.62, hy - 0.42, z), 0.2, n=150, charcoal=80)
     t = Vector((hx + 0.3, hy - 0.15, z))
     return dict(a=(tuple(t + Vector((0.9, -1.4, 1.6))), tuple(t)), b=(tuple(t + Vector((0.4, -0.7, 0.8))), tuple(t)), lens=40,
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=0.1))
 
 
 def S15():
-    """After the house came down: a pit dug through its old floor to reach the remains - the cut through the floor
-    layers in the section, the cremation at its base. Push."""
-    return S14()
+    """Close on the little cremation pit beside the hearth kerb: burnt bone and charcoal in its dark fill. Push in."""
+    d = S14()
+    hx, hy = U.HOUSES[1][0] + 0.4, U.HOUSES[1][1]
+    t = Vector((hx + 0.62, hy - 0.42, G.H(hx + 0.62, hy - 0.42)))
+    return dict(a=(tuple(t + Vector((0.25, -0.45, 0.42))), tuple(t)), b=(tuple(t + Vector((0.14, -0.28, 0.28))), tuple(t)), lens=45,
+                fstop=5.6, focus=tuple(t), cine=dict(exposure=-0.2))
 
 
 # ============================================================================ "People were returning to the dead across generations."
