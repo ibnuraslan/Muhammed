@@ -300,17 +300,17 @@ def S11():
 
 def S12():
     """Inside the cabinet under UV: capped tubes of bone powder in a rack, the pipette, violet glow. Macro slide."""
-    clean_room(uv=1.3)
-    return dict(a=((-0.45, 1.22, 1.08), (-0.3, 1.62, 0.95)), b=((-0.1, 1.22, 1.08), (0.05, 1.62, 0.95)), lens=50,
-                fstop=2.8, focus=(-0.25, 1.6, 0.97), cine=dict(exposure=0.0))
+    clean_room(uv=0.55)
+    return dict(a=((-0.55, 1.0, 1.2), (-0.35, 1.6, 0.97)), b=((-0.25, 1.0, 1.2), (-0.05, 1.6, 0.97)), lens=50,
+                fstop=4.0, focus=(-0.35, 1.6, 0.98), cine=dict(exposure=-0.3))
 
 
 def S13():
     """A sample tube in the cabinet with the bone powder at its tip, sharp; the rack soft behind. Push."""
-    clean_room(uv=1.2)
+    clean_room(uv=0.55)
     t = Vector((0.25 - 0.075 + 2 * 0.03, 1.6, 0.97))
-    return dict(a=(tuple(t + Vector((-0.12, -0.26, 0.08))), tuple(t)), b=(tuple(t + Vector((-0.06, -0.15, 0.05))), tuple(t)), lens=70,
-                fstop=2.0, focus=tuple(t), cine=dict(exposure=0.1))
+    return dict(a=(tuple(t + Vector((-0.16, -0.5, 0.16))), tuple(t)), b=(tuple(t + Vector((-0.1, -0.4, 0.12))), tuple(t)), lens=70,
+                fstop=2.8, focus=tuple(t), cine=dict(exposure=-0.2))
 
 
 # ============================================================================ "The results are published in 2012."
