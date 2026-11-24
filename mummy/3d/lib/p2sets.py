@@ -12,7 +12,7 @@
 import math, random
 import numpy as np
 import bpy, bmesh
-from mathutils import Vector, Matrix
+from mathutils import Euler, Vector, Matrix
 import ph
 
 
@@ -582,23 +582,56 @@ def hurdle(loc, rot=0.0, length=2.0, width=0.9, seed=0):
 
 
 def _cord_ring(body, loc, axis_rot, R, mat, name="bundlerope", thick=0.011, knot=True):
-    """A cord bound tight round `body`: a ring shrink-wrapped onto its surface, with a knot on top."""
-    # a round cord: a curve ring shrink-wrapped onto the body (on the spline, so the cord keeps its round section)
-    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'
-    sp = cu.splines.new('POLY'); n = 64; sp.points.add(n - 1); sp.use_cyclic_u = True      # many points: each one hugs the body
+    """A cord bound tight round `body`: the body's cross-section in the ring's plane is found by casting rays in from
+    a circle of radius R, and the cord follows its convex hull - drawn tight over hollows as a real binding is."""
+    from mathutils.bvhtree import BVHTree
+    bpy.context.view_layer.update()
+    dg = bpy.context.evaluated_depsgraph_get()
+    bvh = BVHTree.FromObject(body, dg); Mw = body.matrix_world; Mi = Mw.inverted()
+    Rm = Euler(axis_rot).to_matrix(); c = Vector(loc); u = Rm @ Vector((1, 0, 0)); v = Rm @ Vector((0, 1, 0))
+    pts = []
+    for k in range(96):
+        a = 2 * math.pi * k / 96
+        p = c + (u * math.cos(a) + v * math.sin(a)) * R
+        o_l = Mi @ p; d_l = (Mi.to_3x3() @ (c - p)).normalized()
+        hit, nrm, _, _ = bvh.ray_cast(o_l, d_l)
+        q = (Mw @ hit) if hit is not None else p
+        pts.append(((q - c).dot(u), (q - c).dot(v)))
+    pts = sorted(set(pts))
+    def cross(o, a, b):
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+    lo, hi = [], []
+    for p_ in pts:
+        while len(lo) >= 2 and cross(lo[-2], lo[-1], p_) <= 0:
+            lo.pop()
+        lo.append(p_)
+    for p_ in reversed(pts):
+        while len(hi) >= 2 and cross(hi[-2], hi[-1], p_) <= 0:
+            hi.pop()
+        hi.append(p_)
+    hull = lo[:-1] + hi[:-1]
+    # resample the hull evenly and push it out by the cord radius
+    segs = [(Vector(hull[i_]), Vector(hull[(i_ + 1) % len(hull)])) for i_ in range(len(hull))]
+    L = sum((b - a).length for a, b in segs); n = 80; out = []
     for k in range(n):
-        a = 2 * math.pi * k / n
-        sp.points[k].co = (R * math.cos(a), R * math.sin(a), 0.0, 1.0)
+        t = L * k / n
+        for a, b in segs:
+            l = (b - a).length
+            if t <= l or (a, b) == segs[-1]:
+                out.append(a + (b - a) * (t / max(l, 1e-6))); break
+            t -= l
+    cen = sum(out, Vector((0, 0))) / len(out)
+    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'
+    sp = cu.splines.new('POLY'); sp.points.add(n - 1); sp.use_cyclic_u = True
+    for k, q in enumerate(out):
+        q = q + (q - cen).normalized() * thick * 0.6
+        w = c + u * q.x + v * q.y
+        sp.points[k].co = (w.x, w.y, w.z, 1.0)
     r = bpy.data.objects.new(name, cu); bpy.context.scene.collection.objects.link(r)
-    r.location = loc; r.rotation_euler = axis_rot
     cu.bevel_depth = thick; cu.bevel_resolution = 3; cu.use_fill_caps = True
     cu.materials.append(mat)
-    sw = r.modifiers.new("hug", "SHRINKWRAP"); sw.target = body; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.offset = thick * 0.9
-    sw.use_apply_on_spline = True
     if knot:
-        bpy.context.view_layer.update()
-        dg = bpy.context.evaluated_depsgraph_get(); re = r.evaluated_get(dg); me = re.to_mesh()
-        top = max((re.matrix_world @ v.co for v in me.vertices), key=lambda p: p.z); re.to_mesh_clear()
+        top = max((Vector(p_.co[:3]) for p_ in sp.points), key=lambda p: p.z)
         bpy.ops.mesh.primitive_uv_sphere_add(radius=thick * 1.7, location=top); k = bpy.context.active_object
         k.scale = (1.4, 1.0, 0.8); k.data.materials.append(mat); k.name = name + "knot"
         for s_ in (-1, 1):                                   # the two loose ends
