@@ -1,0 +1,67 @@
+MUMMY P1 - CapCut shot list. One render: MASTER.blend scene MASTER frames 1-3198 (24 fps, 133.25 s = VO length).
+Lay the rendered frame sequence at 00:00:00:00 and the VO (MUMMY_P1_VO.mp3) at 00:00:00:00. Cuts below are already in the render.
+
+S01  frames     1-   76  00:00:00:00 - 00:00:03:03  (3.17 s)  VO para 1
+    Drone in over the Atlantic surf and dunes to the dig on the machair (golden hour)
+S02  frames    77-  134  00:00:03:04 - 00:00:05:13  (2.42 s)  VO para 1
+    Crane down over the trench lip to the north house: two diggers at the graves (backs)
+S03  frames   135-  181  00:00:05:14 - 00:00:07:12  (1.96 s)  VO para 1
+    Top-down: the crouched skeleton in its grave, knees to chest
+S04  frames   182-  264  00:00:07:13 - 00:00:10:23  (3.46 s)  VO para 2
+    Low slider along the body at bone level, raking sun
+S05  frames   265-  338  00:00:11:00 - 00:00:14:01  (3.08 s)  VO para 3
+    Macro on the skull in the ground
+S06  frames   339-  437  00:00:14:02 - 00:00:18:04  (4.12 s)  VO para 4
+    Lab: cranium upside down on a cork ring; orbit to the healed ridge where the molars were
+S07  frames   438-  526  00:00:18:05 - 00:00:21:21  (3.71 s)  VO para 4
+    Lab: the mandible, worn molars still in place (macro slide)
+S08  frames   527-  583  00:00:21:22 - 00:00:24:06  (2.38 s)  VO para 5
+    Skull and jaw side by side: they do not belong together
+S09  frames   584-  655  00:00:24:07 - 00:00:27:06  (3.00 s)  VO para 6
+    Lab: the rest of the skeleton on the bench under the lamp; dolly along it
+S10  frames   656-  718  00:00:27:07 - 00:00:29:21  (2.62 s)  VO para 6
+    Pelvis and femur under the lamp: a third man
+S11  frames   719-  796  00:00:29:22 - 00:00:33:03  (3.25 s)  VO para 7
+    Overhead of the crouched figure: one body
+S12  frames   797-  885  00:00:33:04 - 00:00:36:20  (3.71 s)  VO para 7
+    Pan across the house floor to the second grave
+S13  frames   886-  996  00:00:36:21 - 00:00:41:11  (4.62 s)  VO para 8
+    Wide drone: South Uist's west coast, surf, machair, lochans, hills
+S14  frames   997- 1088  00:00:41:12 - 00:00:45:07  (3.83 s)  VO para 8
+    The site in 2001: marquee, spoil, barrows, diggers in the trench; crane up
+S15  frames  1089- 1162  00:00:45:08 - 00:00:48:09  (3.08 s)  VO para 8
+    The director at the trench edge, from behind
+S16  frames  1163- 1267  00:00:48:10 - 00:00:52:18  (4.38 s)  VO para 9
+    The section face: shell sand banded with dark floors; crane down
+S17  frames  1268- 1361  00:00:52:19 - 00:00:56:16  (3.92 s)  VO para 9
+    A digger cleans the section with a trowel (from behind)
+S18  frames  1362- 1466  00:00:56:17 - 00:01:01:01  (4.38 s)  VO para 9
+    Ard marks in the old ground surface
+S19  frames  1467- 1560  00:01:01:02 - 00:01:04:23  (3.92 s)  VO para 9
+    Dawn: the three roundhouses on the machair, smoke rising (drone arc)
+S20  frames  1561- 1644  00:01:05:00 - 00:01:08:11  (3.50 s)  VO para 10
+    Low drone pass over the three conjoined roofs: roped, stone-weighted thatch, peat smoke
+S21  frames  1645- 1727  00:01:08:12 - 00:01:11:22  (3.46 s)  VO para 10
+    Inside: sunrise through the east doorway, a bar of light on the floor
+S22  frames  1728- 1851  00:01:11:23 - 00:01:17:02  (5.17 s)  VO para 10
+    The hearth: a man kneels at the fire (silhouette); pots, quern, smoke
+S23  frames  1852- 1955  00:01:17:03 - 00:01:21:10  (4.33 s)  VO para 10
+    2001 again: the same house floor in the trench; crane down
+S24  frames  1956- 2031  00:01:21:11 - 00:01:24:14  (3.17 s)  VO para 11
+    Crane in over the north house to the two graves
+S25  frames  2032- 2166  00:01:24:15 - 00:01:30:05  (5.62 s)  VO para 12
+    The second body from above: tightly curled
+S26  frames  2167- 2270  00:01:30:06 - 00:01:34:13  (4.33 s)  VO para 12
+    Macro in the grave: skull and jaw of the first body
+S27  frames  2271- 2437  00:01:34:14 - 00:01:41:12  (6.96 s)  VO para 13
+    Lab macro: the healed upper jaw, smooth bone where the molars were
+S28  frames  2438- 2587  00:01:41:13 - 00:01:47:18  (6.25 s)  VO para 13
+    The lower molars: wear facets from teeth that met them
+S29  frames  2588- 2688  00:01:47:19 - 00:01:51:23  (4.21 s)  VO para 14
+    The jaw offered up to the skull: its teeth meet nothing
+S30  frames  2689- 2869  00:01:52:00 - 00:01:59:12  (7.54 s)  VO para 15
+    Sampling for isotopes: a drill hole in the thigh bone, bone powder, sample tubes
+S31  frames  2870- 3005  00:01:59:13 - 00:02:05:04  (5.67 s)  VO para 15
+    Skull, jaw and thigh bone laid apart: three men
+S32  frames  3006- 3198  00:02:05:05 - 00:02:13:05  (8.04 s)  VO para 16
+    The grave at last light: the head of one man above the body of another
