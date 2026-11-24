@@ -295,6 +295,51 @@ def _cleansuit(name="Cleansuit"):
     return _C(name, years=33)
 
 
+def _suit_up(m, st=None):
+    """Clean-room suit details on a posed figure: a Tyvek hood enclosing the head (sized from the head itself, so it
+    cannot clip), purple nitrile gloves on the hands, and a smoother suit fabric (soft folds, no lumpy creases)."""
+    import numpy as np
+    dg = bpy.context.evaluated_depsgraph_get()
+    body = [o for o in bpy.data.objects if o.name == m.name + "_body"]
+    if not body:
+        return
+    body = body[0]; be = body.evaluated_get(dg); me = be.to_mesh()
+    W = np.array([be.matrix_world @ v.co for v in me.vertices])
+    h = m.h
+    hc = np.array(h.arm.matrix_world @ h.bone_head("head")) if False else None
+    neck_z = float((st.M @ h.bone_head("head")).z) - 0.03 if st is not None else float(np.percentile(W[:, 2], 87))
+    head = W[W[:, 2] > neck_z]
+    c = (head.min(0) + head.max(0)) / 2; ext = (head.max(0) - head.min(0)) / 2
+    be.to_mesh_clear()
+    tyvek = _plain("tyvek", (0.9, 0.91, 0.92), 0.72)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, radius=1.0, location=tuple(c + np.array([0, 0, 0.01])))
+    hd = bpy.context.active_object; hd.name = m.name + "_hood"
+    hd.scale = tuple(ext * np.array([1.22, 1.22, 1.12]) + 0.012); hd.data.materials.append(tyvek)
+    for p_ in hd.data.polygons:
+        p_.use_smooth = True
+    d = hd.modifiers.new("folds", "DISPLACE"); t = bpy.data.textures.new("hoodfold", "CLOUDS"); t.noise_scale = 0.06; d.texture = t; d.strength = 0.008
+    # gloves: hand faces of the body get a purple nitrile material
+    glove = _plain("nitrile", (0.32, 0.28, 0.72), 0.45)
+    body.data.materials.append(glove); gi = len(body.data.materials) - 1
+    groups = {g.index for g in body.vertex_groups if ("hand" in g.name.lower() or "finger" in g.name.lower() or "metacarpal" in g.name.lower() or "wrist" in g.name.lower())}
+    if groups:
+        hv = set()
+        for v in body.data.vertices:
+            if sum(g.weight for g in v.groups if g.group in groups) > 0.5:
+                hv.add(v.index)
+        for p_ in body.data.polygons:
+            if all(i in hv for i in p_.vertices):
+                p_.material_index = gi
+    # smoother suit: soften the crease bump on the smock
+    for o in bpy.data.objects:
+        if o.name.startswith(m.name + "_jacket"):
+            for mt in o.data.materials:
+                if mt:
+                    for n in mt.node_tree.nodes:
+                        if n.type == 'BUMP':
+                            n.inputs['Strength'].default_value = min(n.inputs['Strength'].default_value, 0.25)
+
+
 def S11():
     """The ancient-DNA clean room: a scientist in a full white suit and hood works at the UV cabinet, seen from behind;
     the violet light through the sash. Slow push."""
@@ -305,10 +350,11 @@ def S11():
     st.hand("L", (-0.18, 1.32, 0.98), elbow=(0.6, 0.2, -0.8), curl=20)
     st.hand("R", (0.15, 1.32, 1.0), elbow=(0.6, 0.2, -0.8), curl=20)
     st.head_to((0, 1.6, 0.95), share=0.8)
-    st.finish(look=(0, 1.6, 0.95), density=HAIR)
+    st.finish(look=(0, 1.6, 0.95), density=0.0, hair=False)
+    _suit_up(m, st)
     # over the shoulder into the UV cabinet: hands at the tube racks, the violet light on the sash (waist out of frame)
     return dict(a=((0.42, 0.05, 1.9), (-0.05, 1.55, 0.95)), b=((0.36, 0.18, 1.85), (-0.05, 1.58, 0.95)), lens=30,
-                fstop=2.8, focus=(0.0, 0.7, 1.3), cine=dict(exposure=0.1), hand_ok=("sash", "cabinet"))
+                fstop=2.8, focus=(0.0, 0.7, 1.3), cine=dict(exposure=0.1), hand_ok=("sash", "cabinet", "hood"))
 
 
 def S12():
