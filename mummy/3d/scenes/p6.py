@@ -212,8 +212,9 @@ def S05():
     U.CUT = False
     R = BR.interior(fire=0.6, door_sun=1.0)
     hx, hy = 0.3, 0.0
-    fx, fy = hx + 3.3, hy - 1.75                      # beside the door, against the wall, between the posts
-    lean = math.radians(18); yaw = math.radians(-60)
+    hc = R["hearth"]
+    fx, fy = hc[0] - 0.7, hc[1] + 1.7                 # standing in the open floor beyond the hearth, facing it
+    lean = math.radians(15); yaw = 0.0
     Rm = Matrix.Rotation(yaw, 3, 'Z') @ Matrix.Rotation(-lean, 3, 'X')
     base = Vector((fx, fy, 0.0))
     wood = bpy.data.materials.get("postbark") or ph.texture("bark_brown_02", scale=3.0, name="postbark", tint=(0.6, 0.5, 0.42))
@@ -275,9 +276,9 @@ def S05():
     c = base + Rm @ Vector((0, 0, H_ / 2))
     fwd = Rm @ Vector((0, -1, 0)); sd = Rm @ Vector((1, 0, 0))
     lp = c + sd * 1.7 + fwd * 0.45 + Vector((0, 0, 0.35))
-    _spot(tuple(lp), tuple(c), 260, size=0.25, color=(1.0, 0.88, 0.7), spot=40)    # raking light across the skin from the door side
-    return dict(a=(tuple(c + fwd * 2.3 - sd * 0.5 + Vector((0, 0, 0.1))), tuple(c)), b=(tuple(c + fwd * 1.9 - sd * 0.4 + Vector((0, 0, 0.1))), tuple(c)), lens=28,
-                fstop=4.0, focus=tuple(c), cine=dict(exposure=0.2), hand_ok=("floor",))
+    _spot(tuple(lp), tuple(c), 320, size=0.25, color=(1.0, 0.88, 0.7), spot=40)    # raking light across the skin from the door side
+    return dict(a=(tuple(c + fwd * 2.6 - sd * 0.7 + Vector((0, 0, 0.15))), tuple(c)), b=(tuple(c + fwd * 2.2 - sd * 0.55 + Vector((0, 0, 0.15))), tuple(c)), lens=28,
+                fstop=4.0, focus=tuple(c), cine=dict(exposure=0.5), hand_ok=("floor",))
 
 
 def S06():
@@ -352,7 +353,16 @@ def S12():
     for o in bpy.data.objects:
         if o.type == 'LIGHT' and o.name.startswith("ceil"):
             o.data.energy = 14
-    return dict(a=((1.3, -0.5, 1.45), (0.0, 1.5, 0.95)), b=((1.1, -0.2, 1.4), (0.0, 1.5, 0.95)), lens=35, fstop=4.0, focus=(0, 1.5, 1.0),
+    # more of the work laid out on the cabinet floor: a third rack, a sealed sample bag holding a bone fragment
+    for px, py in p3._rack(-0.55, 1.45, 0.9, nx=4, ny=3, col=(0.85, 0.85, 0.82))[:9]:
+        p3._microtube(px, py, 0.913, cap=(0.85, 0.2, 0.1))
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(0.45, 1.45, 0.905)); bg = bpy.context.active_object
+    bg.scale = (0.12, 0.16, 0.006); bg.rotation_euler.z = 0.3; bg.data.materials.append(_glass("bagfilm")); bg.name = "samplebag"
+    fr = B.bone_material(tone="C", name="fragbone", sand=0.4)
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=0.03, location=(0.45, 1.45, 0.91)); fg = bpy.context.active_object
+    fg.scale = (1.6, 0.8, 0.45); fg.data.materials.append(fr); fg.name = "bonefrag"
+    dp = fg.modifiers.new("d", "DISPLACE"); tx = bpy.data.textures.new("fragtex", "VORONOI"); tx.noise_scale = 0.02; dp.texture = tx; dp.strength = 0.01
+    return dict(a=((0.75, 0.35, 1.3), (0.0, 1.55, 0.95)), b=((0.55, 0.55, 1.25), (0.0, 1.55, 0.95)), lens=32, fstop=4.0, focus=(0, 1.5, 1.0),
                 cine=dict(exposure=-0.1))
 
 
@@ -424,7 +434,7 @@ def S18():
     d = p2.S12()
     slide_tray((-0.5, 0.12, LB.TOP + 0.002), n_x=3, n_y=3)
     t = Vector((-0.14, 0.24, LB.TOP + 0.004))      # the thin section on its slide, the microscope standing behind
-    return dict(a=((0.02, -0.2, LB.TOP + 0.16), tuple(t)), b=((-0.02, -0.12, LB.TOP + 0.13), tuple(t)), lens=50, fstop=2.8, focus=tuple(t),
+    return dict(a=((0.12, -0.42, LB.TOP + 0.3), tuple(t + Vector((0.06, 0.08, 0.07)))), b=((0.08, -0.32, LB.TOP + 0.26), tuple(t + Vector((0.06, 0.08, 0.06)))), lens=40, fstop=4.0, focus=tuple(t),
                 cine=dict(exposure=0.0))
 
 
