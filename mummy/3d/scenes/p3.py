@@ -213,10 +213,10 @@ def S10():
 def clean_room(uv=1.0):
     """Ancient-DNA clean room: white walls, a laminar-flow cabinet with a glass sash and violet UV tubes, racks of capped
     tubes, a pipette on its stand; cold overhead light."""
-    white = _plain("cleanwall", (0.78, 0.8, 0.82), 0.7)
+    white = _plain("cleanwall", (0.3, 0.33, 0.37), 0.6)
     for loc, sc in (((0, 2.0, 1.5), (8, 0.1, 3)), ((-3.5, 0, 1.5), (0.1, 6, 3)), ((3.5, 0, 1.5), (0.1, 6, 3)), ((0, 0, 3.0), (8, 6, 0.1))):
         bpy.ops.mesh.primitive_cube_add(size=1, location=loc); o = bpy.context.active_object; o.scale = sc; o.data.materials.append(white)
-    bpy.ops.mesh.primitive_plane_add(size=10, location=(0, 0, 0)); f = bpy.context.active_object; f.data.materials.append(_plain("cleanfloor", (0.5, 0.55, 0.58), 0.35))
+    bpy.ops.mesh.primitive_plane_add(size=10, location=(0, 0, 0)); f = bpy.context.active_object; f.data.materials.append(_plain("cleanfloor", (0.18, 0.2, 0.22), 0.3))
     steel = p2._plain("cabsteel", (0.7, 0.7, 0.72), 0.3, 1.0) if hasattr(p2, "_plain") else _plain("cabsteel", (0.7, 0.7, 0.72), 0.3, 1.0)
     # cabinet body
     for loc, sc in (((0, 1.55, 0.45), (1.6, 0.8, 0.9)), ((0, 1.55, 1.75), (1.6, 0.8, 0.5)), ((-0.79, 1.55, 1.25), (0.04, 0.8, 0.6)), ((0.79, 1.55, 1.25), (0.04, 0.8, 0.6)),
@@ -240,8 +240,18 @@ def clean_room(uv=1.0):
     bpy.ops.mesh.primitive_cylinder_add(radius=0.012, depth=0.22, location=(0.0, 1.7, 1.05)); pp = bpy.context.active_object
     pp.rotation_euler.x = math.radians(12); pp.data.materials.append(_plain("pipette", (0.85, 0.85, 0.85), 0.4)); pp.name = "pipette"
     for xx in (-1.5, 1.5):
-        dd = bpy.data.lights.new("ceil", 'AREA'); dd.size = 1.2; dd.energy = 220; dd.color = (0.92, 0.96, 1.0)
+        dd = bpy.data.lights.new("ceil", 'AREA'); dd.size = 1.2; dd.energy = 35; dd.color = (0.8, 0.88, 1.0)
         oo = bpy.data.objects.new("ceil", dd); bpy.context.scene.collection.objects.link(oo); oo.location = (xx, 0.2, 2.9)
+    # side benches with instruments in the gloom: centrifuge, thermal cycler, a fridge with a glowing panel, shelving
+    dark = _plain("instr", (0.12, 0.13, 0.14), 0.4); pale = _plain("instrpale", (0.55, 0.57, 0.6), 0.35)
+    for sx in (-1, 1):
+        bpy.ops.mesh.primitive_cube_add(size=1, location=(sx * 2.6, 0.6, 0.45)); bb = bpy.context.active_object; bb.scale = (1.4, 2.6, 0.9); bb.data.materials.append(dark)
+        for k, (yy, sz, mt) in enumerate(((-0.3, (0.45, 0.45, 0.32), pale), (0.4, (0.5, 0.38, 0.25), dark), (1.2, (0.35, 0.3, 0.22), pale))):
+            bpy.ops.mesh.primitive_cube_add(size=1, location=(sx * 2.6, yy, 0.9 + sz[2] / 2)); ib = bpy.context.active_object; ib.scale = sz
+            ib.data.materials.append(mt); bv = ib.modifiers.new("b", "BEVEL"); bv.width = 0.02; bv.segments = 2
+            bpy.ops.mesh.primitive_cube_add(size=1, location=(sx * (2.6 - sz[0] / 2 - 0.002), yy, 0.95 + sz[2] * 0.6)); led = bpy.context.active_object
+            led.scale = (0.004, 0.04, 0.012); led.data.materials.append(P2._mat(f"lcd{k}", (0, 0, 0), 0.3, emit=(0.3, 0.8, 1.0) if k != 1 else (0.3, 1.0, 0.4), strength=8))
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(-2.9, -1.6, 0.95)); fr = bpy.context.active_object; fr.scale = (0.75, 0.75, 1.9); fr.data.materials.append(pale)
     w = bpy.data.worlds.new("clean"); bpy.context.scene.world = w; w.use_nodes = True
     w.node_tree.nodes["Background"].inputs['Color'].default_value = (0.02, 0.02, 0.025, 1)
 
@@ -256,13 +266,9 @@ def S11():
     st.hand("L", (-0.18, 1.32, 0.98), elbow=(0.6, 0.2, -0.8), curl=20)
     st.hand("R", (0.15, 1.32, 1.0), elbow=(0.6, 0.2, -0.8), curl=20)
     st.head_to((0, 1.6, 0.95), share=0.8)
-    st.finish(look=(0, 1.6, 0.95), density=0.0, hair=False)
-    # hood over the head: a white cap
-    h = m.h; hc = st.M @ h.bone_head("head")
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.115, location=hc + Vector((0, 0, 0.09))); hd = bpy.context.active_object
-    hd.scale = (1.0, 1.1, 1.05); hd.name = "Cleansuit_hood"; hd.data.materials.append(_plain("tyvek", (0.88, 0.9, 0.9), 0.75))
-    return dict(a=((0.6, -1.4, 1.65), (0.0, 1.4, 1.1)), b=((0.45, -0.9, 1.6), (0.0, 1.4, 1.1)), lens=32,
-                fstop=2.8, focus=(0.0, 0.7, 1.3), cine=dict(exposure=0.0), hand_ok=("sash", "cabinet", "hood"))
+    st.finish(look=(0, 1.6, 0.95), density=HAIR)
+    return dict(a=((1.3, -2.2, 1.7), (-0.1, 1.3, 1.05)), b=((1.0, -1.6, 1.65), (-0.1, 1.3, 1.05)), lens=30,
+                fstop=2.8, focus=(0.0, 0.7, 1.3), cine=dict(exposure=0.1), hand_ok=("sash", "cabinet"))
 
 
 def S12():
