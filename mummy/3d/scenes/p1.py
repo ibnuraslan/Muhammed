@@ -264,7 +264,7 @@ def S17():
     G.section_scan(y, x_center=4.2)
     z = G.H(4.2, y - 1.7)
     # over her right shoulder, looking down past it onto the trowel and the section face (her seat is behind the lens)
-    return dict(a=((4.62, y - 2.72, z + 1.5), (4.15, y - 1.3, z + 0.32)), b=((4.55, y - 2.62, z + 1.42), (4.1, y - 1.25, z + 0.34)), lens=28,
+    return dict(a=((4.95, y - 2.75, z + 1.5), (4.3, y - 1.3, z + 0.32)), b=((4.88, y - 2.65, z + 1.42), (4.25, y - 1.25, z + 0.34)), lens=28,
                 fstop=4.0, focus=(4.25, y - 1.6, z + 0.2), hand_ok=OK)
 
 
