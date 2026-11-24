@@ -548,7 +548,7 @@ def bundle(loc, rot=0.0, length=0.95, girth=0.44, seed=0):
     o.name = "bundle"; o.scale = (length, girth, girth * 0.62); o.rotation_euler = (rng.uniform(-0.05, 0.05), 0, rot)
     d = o.modifiers.new("lumps", "DISPLACE"); t = bpy.data.textures.new("bundlelump", "CLOUDS"); t.noise_scale = 0.22; d.texture = t; d.strength = 0.08
     ss = o.modifiers.new("smooth", "SUBSURF"); ss.levels = 2; ss.render_levels = 2; o.modifiers.move(len(o.modifiers) - 1, 0)   # no facets
-    d2 = o.modifiers.new("folds", "DISPLACE"); t2 = bpy.data.textures.new("bundlefold", "WOOD"); t2.wood_type = 'BANDNOISE'; t2.noise_scale = 0.08; t2.turbulence = 8; d2.texture = t2; d2.strength = 0.015
+    d2 = o.modifiers.new("folds", "DISPLACE"); t2 = bpy.data.textures.new("bundlefold", "WOOD"); t2.wood_type = 'BANDNOISE'; t2.noise_scale = 0.12; t2.turbulence = 5; d2.texture = t2; d2.strength = 0.006
     hide = ph.texture("leather_white", scale=2.0, name="hide", tint=(0.42, 0.3, 0.18)) if False else _mat("hide", (0.13, 0.085, 0.05), 0.8)
     hn = hide.node_tree.nodes; hl = hide.node_tree.links; hp = hn["Principled BSDF"]
     tc = hn.new("ShaderNodeTexCoord"); nz = hn.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 12; nz.inputs['Detail'].default_value = 10
