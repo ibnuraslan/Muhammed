@@ -845,7 +845,15 @@ def S25():
     from uist import fbm
     yb = 6.0 + 0.6 * float(fbm(x0 / 8, 0, 2, seed=9))
     zt = P2.moor_height(M, x0, yb + 0.6); fy = yb - 1.0
-    zf = max(P2.moor_height(M, x0 + ex, fy + ey) for ex in (-0.2, 0, 0.2) for ey in (-0.25, 0, 0.25)) + 0.01
+    wz = M["water_z"]
+    zf = max(max(P2.moor_height(M, x0 + ex, fy + ey) for ex in (-0.2, 0, 0.2) for ey in (-0.25, 0, 0.25)), wz + 0.07) + 0.01
+    # the floor of the cutting: a slab of wet peat just above the water, where the cutter stands
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(x0, (fy + yb - 0.35) / 2 - 0.2, zf - 0.16)); fl = bpy.context.active_object
+    fl.scale = (2.6, (yb - 0.35) - fy + 1.0, 0.3); fl.name = "cuttingfloor"; fl.data.materials.append(P2._peat_material())
+    d_ = fl.modifiers.new("d", "DISPLACE"); t_ = bpy.data.textures.new("floorlump", "CLOUDS"); t_.noise_scale = 0.2; d_.texture = t_; d_.strength = 0.03
+    rk = bpy.data.lights.new("rake", 'AREA'); rk.size = 1.0; rk.energy = 380; rk.color = (1.0, 0.82, 0.62)
+    ro = bpy.data.objects.new("rake", rk); bpy.context.scene.collection.objects.link(ro); ro.location = (x0 + 3.2, yb - 0.8, zf + 1.1)
+    ro.rotation_euler = (Vector((x0, yb, zf + 0.7)) - ro.location).to_track_quat('-Z', 'Y').to_euler()
     # the spade (a long ash shaft, narrow iron blade with a side wing), carrying a turf onto the bank top
     blade = Vector((x0 + 0.25, yb - 0.05, zt + 0.06)); grip = Vector((x0 + 0.05, fy + 0.35, zf + 1.05))
     ax = (blade - grip); L_ = ax.length; axn = ax.normalized()
@@ -863,8 +871,8 @@ def S25():
     st.head_to((blade.x, blade.y, blade.z - zf), share=0.8)
     st.finish(look=(blade.x, blade.y, blade.z - zf), density=HAIR)
     G.lift(st, zf)
-    return dict(a=((x0 - 1.1, fy - 2.6, zf + 1.6), (x0 + 0.3, yb, zf + 1.0)), b=((x0 - 0.8, fy - 2.1, zf + 1.55), (x0 + 0.3, yb, zf + 1.0)), lens=32,
-                fstop=4.0, focus=(x0, fy + 0.4, zf + 1.1), cine=dict(exposure=0.3), hand_ok=("spade", "moor", "peatface"))
+    return dict(a=((x0 + 1.9, fy - 2.3, zf + 1.65), (x0 + 0.1, yb, zf + 1.05)), b=((x0 + 1.6, fy - 1.8, zf + 1.6), (x0 + 0.1, yb, zf + 1.05)), lens=32,
+                fstop=4.0, focus=(x0 + 0.1, fy + 0.4, zf + 1.1), cine=dict(exposure=0.35), hand_ok=("spade", "moor", "peatface", "cuttingfloor", "groundmist"))
 
 
 # ============================================================================ "Nobody has found a written instruction..."
