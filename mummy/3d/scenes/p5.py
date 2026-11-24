@@ -51,11 +51,11 @@ def _three_parts(lit=True):
     A = LB.room(window_light=0.12, lamp=False)
     LB.velvet(-0.9, 0.9, 0.0, 0.78, LB.TOP)
     cr = B.hero_cranium(healed=False, tone="D"); p3._old_bone(cr, stain=1.0)
-    co = np.array([v.co for v in cr.data.vertices]); cr.location = (-0.42, 0.4, LB.TOP + 0.004 - co[:, 2].min() * 0.97)
+    co = np.array([v.co for v in cr.data.vertices]); cr.location = (-0.3, 0.4, LB.TOP + 0.004 - co[:, 2].min() * 0.97)
     cr.rotation_euler = (0, 0, math.radians(-25))
     p3.lab_part("upperarmR", sex="M", tone="A", x=0.0, y=0.4, yaw=10, name="ArmPart")
-    p3.lab_part("thorax", sex="F", tone="C", x=0.45, y=0.42, yaw=90, name="TorsoPart")
-    cs = [Vector((-0.42, 0.4, LB.TOP + 0.08)), Vector((0.0, 0.4, LB.TOP + 0.02)), Vector((0.45, 0.42, LB.TOP + 0.06))]
+    p3.lab_part("thorax", sex="F", tone="C", x=0.33, y=0.42, yaw=90, name="TorsoPart")
+    cs = [Vector((-0.3, 0.4, LB.TOP + 0.08)), Vector((0.0, 0.4, LB.TOP + 0.02)), Vector((0.33, 0.42, LB.TOP + 0.06))]
     if lit:
         for c in cs:
             _spot((c.x - 0.15, c.y - 0.35, c.z + 0.7), tuple(c), 28, size=0.05, color=(1.0, 0.9, 0.78), spot=16)
@@ -78,8 +78,8 @@ def S02():
     bone, a rib cage - three people. Slow lateral slide across them."""
     cs = _three_parts()
     m = (cs[0] + cs[2]) / 2
-    return dict(a=((cs[0].x - 0.1, m.y - 0.75, LB.TOP + 0.42), tuple(cs[0])), b=((cs[2].x + 0.1, m.y - 0.75, LB.TOP + 0.42), tuple(cs[2])),
-                lens=50, fstop=4.0, focus=tuple(cs[1]), cine=dict(exposure=0.1))
+    return dict(a=((m.x - 0.18, m.y - 0.95, LB.TOP + 0.5), tuple(m - Vector((0.08, 0, 0)))), b=((m.x + 0.18, m.y - 0.95, LB.TOP + 0.5), tuple(m + Vector((0.08, 0, 0)))),
+                lens=40, fstop=4.0, focus=tuple(cs[1]), cine=dict(exposure=0.1))
 
 
 def S03():
