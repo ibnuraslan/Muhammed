@@ -584,9 +584,14 @@ def hurdle(loc, rot=0.0, length=2.0, width=0.9, seed=0):
 def _cord_ring(body, loc, axis_rot, R, mat, name="bundlerope", thick=0.011, knot=True):
     """A cord bound tight round `body`: a ring shrink-wrapped onto its surface, with a knot on top."""
     # a round cord: a curve ring shrink-wrapped onto the body (on the spline, so the cord keeps its round section)
-    bpy.ops.curve.primitive_bezier_circle_add(radius=R, location=loc); r = bpy.context.active_object
-    r.rotation_euler = axis_rot; r.name = name
-    cu = r.data; cu.bevel_depth = thick; cu.bevel_resolution = 3; cu.resolution_u = 24; cu.use_fill_caps = True
+    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'
+    sp = cu.splines.new('POLY'); n = 64; sp.points.add(n - 1); sp.use_cyclic_u = True      # many points: each one hugs the body
+    for k in range(n):
+        a = 2 * math.pi * k / n
+        sp.points[k].co = (R * math.cos(a), R * math.sin(a), 0.0, 1.0)
+    r = bpy.data.objects.new(name, cu); bpy.context.scene.collection.objects.link(r)
+    r.location = loc; r.rotation_euler = axis_rot
+    cu.bevel_depth = thick; cu.bevel_resolution = 3; cu.use_fill_caps = True
     cu.materials.append(mat)
     sw = r.modifiers.new("hug", "SHRINKWRAP"); sw.target = body; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.offset = thick * 0.9
     sw.use_apply_on_spline = True
