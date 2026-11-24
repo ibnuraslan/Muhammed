@@ -357,7 +357,7 @@ def S17():
     """The grave at dusk: slow push toward the skull. They had been mummified."""
     T, sk = p1.site("dusk", grass_at=None, kit=False, sun_az=210)
     s = sk["B2"].part_centre("skull"); t = sk["B2"].part_centre("thorax")
-    return dict(a=(tuple(t + Vector((-0.9, -1.0, 0.7))), tuple((s + t) / 2)), b=(tuple(t + Vector((-0.55, -0.62, 0.42))), tuple(s)), lens=45,
+    return dict(a=(tuple(t + Vector((-0.85, -0.95, 1.1))), tuple((s + t) / 2)), b=(tuple(t + Vector((-0.5, -0.58, 0.8))), tuple(s)), lens=45,
                 fstop=2.8, focus=tuple(s), cine=dict(exposure=0.35))
 
 
