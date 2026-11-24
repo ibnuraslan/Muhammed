@@ -309,7 +309,7 @@ def S16():
     inw = Vector((-math.cos(a), -math.sin(a), 0))
     return dict(a=(tuple(t + inw * 0.75 + Vector((0.15, 0, 0.12))), tuple(t)),
                 b=(tuple(t + inw * 0.5 + Vector((0.08, 0, 0.08))), tuple(t)), lens=45, fstop=4.0, focus=tuple(t),
-                cine=dict(exposure=0.1))
+                cine=dict(exposure=0.6))
 
 
 def S17():
