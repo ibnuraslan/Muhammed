@@ -130,10 +130,14 @@ SHOTS[84] = (t, lt, d) => { show('splain'); snowLook(); U.snowS.visible = true; 
 // 85 junctions let troops move, supplies travel, separated units meet
 SHOTS[85] = (t, lt, d) => { show('yard'); look('day', [0xd8dce0, .004], 1.6, 2.4, 0xfff0dc, [-40, 60, 30], [-900, 0, 0]); U.yT1.userData.update(0); U.after.forEach(m => m.position.y = -50); U.ysmoke.forEach(c => c.s.visible = false);
   U.boarders.forEach((m, i) => { const k = clamp((lt - i * .2) / 1.4), cx2 = -1 - (i % 3) * 8.6; at(m, cx2 + (i % 2) * .5, k < .6 ? .6 : lerp(.6, 1.7, clamp((k - .6) / .3)), lerp(-8.5, -1.0, k), facing([0, 1])); pose(m, t, { walk: k < 1, speed: 8, armR: k > .6 && k < .9 ? 2 : 0 }); if (k >= 1) m.position.y = -50; });
-  U.crates.forEach((c, i) => { const k = clamp((lt - 2.8 - i * .3) / 1.0); at(c, 20 + i * .7, k < .7 ? .6 : 1.75, lerp(-9, -1.2, k), i * .3); }); U.porters.forEach((m, i) => { const k = clamp((lt - 2.8 - i * .4) / 1.4); at(m, 20 + i * 1.4, .6, lerp(-9.5, -2.2, k), facing([0, 1])); pose(m, t, { walk: k < 1, speed: 7, armL: 1.1, armR: 1.1, elL: 1, elR: 1 }); });
+  U.yT1.position.y = 0; U.yT1.position.x = 10;
+  const PX = [-9.4, -8.6], pile = (i) => [-11.6 + (i % 2) * .6, .6 + Math.floor(i / 2) * .45, -2.7];
+  U.crates.forEach((c, i) => { if (i >= 2) { const p = pile(i - 2); at(c, p[0], p[1], p[2], .1 * i); } });
+  U.porters.forEach((m, i) => { const k = clamp((lt - 2.8 - i * .5) / 1.8); const x = lerp(PX[i] + 3, PX[i] - 1.2, k), z = lerp(-8.5, -3.0, k); at(m, x, .6, z, facing([-.25, 1])); pose(m, t, { walk: k < 1, speed: 7, armL: k < 1 ? 1.1 : .2, armR: k < 1 ? 1.1 : .2, elL: k < 1 ? 1 : .1, elR: k < 1 ? 1 : .1 });
+    const c = U.crates[i], dst = pile(4 + i); if (k < 1) at(c, x + .12, 1.28, z + .45, .2); else at(c, dst[0], dst[1], dst[2], .2); });
   const mk = clamp((lt - 5.6) / 1.6); U.yT2.position.x = lerp(80, 46, ease(clamp((lt - 5.0) / 1.5))); U.yT2.userData.update(-U.yT2.position.x); at(U.meet[0], 29.8 - (1 - mk) * 2.5, 0, 3, facing([1, 0])); at(U.meet[1], 31.2, 0, 3, facing([-1, 0])); U.meet.forEach((m, i) => pose(m, t, { walk: mk < 1 && i === 0, speed: 6, armR: mk >= 1 ? 1.1 : 0, elR: .3 }));
   if (lt < 2.8) { ct('yard', lt, 2.8, [8, 1.9, -9.8, -8, 1.8, -2], [6, 2.0, -10.2, -10, 1.8, -2], [36, 34]); overlay(c => M.label(c, 'TROOPS MOVE', 220, L.H - 100, 34, '#fff4e0', clamp(lt / .3))); return; }
-  if (lt < 5.6) { ct('yard', lt - 2.8, 2.8, [26, 1.4, -13, 20, 1.4, -4], [25, 1.5, -12.5, 20, 1.6, -3], [36, 34]); overlay(c => M.label(c, 'SUPPLIES TRAVEL', 260, L.H - 100, 34, '#fff4e0', clamp((lt - 2.8) / .3))); return; }
+  if (lt < 5.6) { ct('yard', lt - 2.8, 2.8, [-1, 1.8, -10.4, -12, 1.5, -2], [-2, 1.9, -10.6, -13, 1.5, -2], [36, 34]); overlay(c => M.label(c, 'SUPPLIES TRAVEL', 260, L.H - 100, 34, '#fff4e0', clamp((lt - 2.8) / .3))); return; }
   ct('yard', lt - 5.6, d - 5.6, [30.5, 1.6, 9.5, 30.5, 1.4, 3], [30.5, 1.55, 8.4, 30.5, 1.4, 3], [36, 32]); overlay(c => M.label(c, 'UNITS SUPPORT EACH OTHER', 340, L.H - 100, 34, '#fff4e0', clamp((lt - 5.6) / .3))); };
 // 86 the trains carried the army: an armored train thunders past the camera at wheel height
 SHOTS[86] = (t, lt, d) => { show('track'); look('autumn', [0xe0c8b0, .004], 1.4, 2.2, 0xffe0c0, [-40, 40, 60], [0, 0, 900]); U.dsmoke.visible = false; U.dfire.visible = false; U.bblast.userData.update(-1);
