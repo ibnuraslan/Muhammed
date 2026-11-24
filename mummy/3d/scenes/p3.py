@@ -828,16 +828,16 @@ def _hood_cloak(st, col=(0.085, 0.065, 0.045), seed=0):
     for md in off:
         md.show_viewport = False                      # posed but unmasked: one evaluated vertex per base vertex
     bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
-    be = body.evaluated_get(dg); me = be.to_mesh()
+    be = body.evaluated_get(dg); me = bpy.data.meshes.new_from_object(be); mw = be.matrix_world.copy()
     for md in off:
         md.show_viewport = True
     if len(me.vertices) != len(wsel):
-        print("cloak: vertex mismatch", len(me.vertices), len(wsel)); be.to_mesh_clear(); return None
+        print("cloak: vertex mismatch", len(me.vertices), len(wsel)); bpy.data.meshes.remove(me); return None
     hd = m.h.bone_head("head")                    # world (the rig is placed and lifted by now)
     eyes = [o for o in bpy.data.objects if o.name.startswith(m.name + "_eye")]
     fwd = ((sum((o.matrix_world.translation for o in eyes), Vector()) / len(eyes)) - hd).normalized() if eyes else Vector((0, -1, 0))
-    bm = bmesh.new(); bm.from_mesh(me); bm.transform(be.matrix_world); bm.verts.ensure_lookup_table(); bm.normal_update()
-    be.to_mesh_clear()
+    bm = bmesh.new(); bm.from_mesh(me); bm.transform(mw); bm.verts.ensure_lookup_table(); bm.normal_update()
+    bpy.data.meshes.remove(me)
     drop = []
     for f in bm.faces:
         if not all(wsel[v.index] for v in f.verts):
