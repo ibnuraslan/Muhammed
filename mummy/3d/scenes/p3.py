@@ -802,13 +802,19 @@ def _hood_cloak(st, col=(0.085, 0.065, 0.045), seed=0):
     dg = bpy.context.evaluated_depsgraph_get()
     body = bpy.data.objects.get(m.name + "_body")
     if body is None:
-        return None
+        print("cloak: no body for", m.name); return None
     keys = ("head", "neck", "spine01", "spine02", "clavicle", "shoulder01", "breast", "pectoral", "levator", "trapez")
     gi = {g.index for g in body.vertex_groups if any(k in g.name.lower() for k in keys)}
     wsel = np.array([sum(g.weight for g in v.groups if g.group in gi) > 0.3 for v in body.data.vertices])
+    off = [md for md in body.modifiers if md.type != 'ARMATURE' and md.show_viewport]
+    for md in off:
+        md.show_viewport = False                      # posed but unmasked: one evaluated vertex per base vertex
+    bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
     be = body.evaluated_get(dg); me = be.to_mesh()
+    for md in off:
+        md.show_viewport = True
     if len(me.vertices) != len(wsel):
-        be.to_mesh_clear(); return None
+        print("cloak: vertex mismatch", len(me.vertices), len(wsel)); be.to_mesh_clear(); return None
     hd = m.h.bone_head("head")                    # world (the rig is placed and lifted by now)
     eyes = [o for o in bpy.data.objects if o.name.startswith(m.name + "_eye")]
     fwd = ((sum((o.matrix_world.translation for o in eyes), Vector()) / len(eyes)) - hd).normalized() if eyes else Vector((0, -1, 0))
