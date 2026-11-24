@@ -814,6 +814,45 @@ def S30():
 
 
 # ============================================================================ "In the team's later reconstruction..."
+def _hide_under(outer, inners):
+    """Delete the parts of skinned under-layers that end up inside a static outer garment (never visible): each inner's
+    posed vertices are tested against the outer's rendered surface; faces wholly inside are removed from the base mesh."""
+    from mathutils.bvhtree import BVHTree
+    bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
+    oe = outer.evaluated_get(dg); om = oe.to_mesh(); om.transform(outer.matrix_world)
+    tree = BVHTree.FromPolygons([v.co.copy() for v in om.vertices], [tuple(p.vertices) for p in om.polygons])
+    # outward reference: the cloak was lifted off the body, so "inside" is toward the cloak's own centre line
+    cen = sum((v.co for v in om.vertices), Vector()) / max(1, len(om.vertices))
+    oe.to_mesh_clear()
+    for o in inners:
+        if o is None:
+            continue
+        off = [md for md in o.modifiers if md.type != 'ARMATURE' and md.show_viewport]
+        for md in off:
+            md.show_viewport = False
+        bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
+        e = o.evaluated_get(dg); me = bpy.data.meshes.new_from_object(e); mw = e.matrix_world.copy()
+        for md in off:
+            md.show_viewport = True
+        if len(me.vertices) != len(o.data.vertices):
+            bpy.data.meshes.remove(me); continue
+        inside = np.zeros(len(me.vertices), bool)
+        for i, v in enumerate(me.vertices):
+            p = mw @ v.co
+            loc, nrm, idx, dist = tree.find_nearest(p, 0.25)
+            if loc is None:
+                continue
+            n = nrm if nrm.dot(loc - cen) > 0 else -nrm          # cloak normal pointing away from the wearer
+            if (p - loc).dot(n) < 0.012:
+                inside[i] = True
+        bpy.data.meshes.remove(me)
+        bb = bmesh.new(); bb.from_mesh(o.data); bb.faces.ensure_lookup_table()
+        kill = [f for f in bb.faces if any(inside[v.index] for v in f.verts)]    # the faces crossing the hem go too
+        bmesh.ops.delete(bb, geom=kill, context='FACES')
+        bb.to_mesh(o.data); bb.free(); o.data.update()
+        print("hide_under", o.name, len(kill))
+
+
 def _hood_cloak(st, col=(0.085, 0.065, 0.045), seed=0):
     """A Bronze Age hooded wool cloak-cape over a posed islander: the head, neck, shoulders and upper chest of the posed
     body (by bone weight), lifted well off it and softened into heavy wool, open at the face. Replaces the strand hair
@@ -835,28 +874,37 @@ def _hood_cloak(st, col=(0.085, 0.065, 0.045), seed=0):
         md.show_viewport = True
     if len(me.vertices) != len(wsel):
         print("cloak: vertex mismatch", len(me.vertices), len(wsel)); bpy.data.meshes.remove(me); return None
-    hd = (m.h.bone_head("head") + m.h.bone_tail("head")) / 2      # mid-skull, world (the rig is placed and lifted)
+    hg_ = {g.index for g in body.vertex_groups if g.name.lower() == "head"}
+    hsel = np.array([sum(g.weight for g in v.groups if g.group in hg_) > 0.5 for v in body.data.vertices])
     eyes = [o for o in bpy.data.objects if o.name.startswith(m.name + "_eye")]
-    fwd = ((sum((o.matrix_world.translation for o in eyes), Vector()) / len(eyes)) - hd).normalized() if eyes else Vector((0, -1, 0))
+    if eyes:                                       # eye meshes are skinned (origin at the rig): use their posed vertices
+        pts = []
+        for o in eyes:
+            oe = o.evaluated_get(bpy.context.evaluated_depsgraph_get()); em = oe.to_mesh()
+            pts += [oe.matrix_world @ v.co for v in em.vertices]; oe.to_mesh_clear()
+        eyec = sum(pts, Vector()) / len(pts)
+    else:
+        eyec = None
     bm = bmesh.new(); bm.from_mesh(me); bm.transform(mw); bm.verts.ensure_lookup_table(); bm.normal_update()
+    hp = [v.co.copy() for v in bm.verts if hsel[v.index]]
+    hd = sum(hp, Vector()) / len(hp) if hp else Vector()   # mid-skull from the posed head skin (world)
+    fwd = (eyec - hd).normalized() if eyec is not None else Vector((0, -1, 0))
     bpy.data.meshes.remove(me)
     drop = []
     for f in bm.faces:
         if not all(wsel[v.index] for v in f.verts):
             drop.append(f); continue
-        c = f.calc_center_median()
-        if (c - hd).dot(fwd) > 0.0 and f.normal.dot(fwd) > 0.15:         # the face opening (eyes, brow, cheeks clear)
-            drop.append(f)
     # body skin hidden under the cloak (all of the selection except the face opening) is removed so nothing pokes through
     hide = set()
     for v in bm.verts:
-        if wsel[v.index] and not ((v.co - hd).dot(fwd) > -0.01 and v.normal.dot(fwd) > 0.1):
+        if wsel[v.index]:                    # closed hood (these figures are only ever seen from behind)
             hide.add(v.index)
     bmesh.ops.delete(bm, geom=drop, context='FACES')
     bmesh.ops.delete(bm, geom=[v for v in bm.verts if not v.link_faces], context='VERTS')
     bm.normal_update()
     for v in bm.verts:
-        v.co += v.normal * 0.07
+        v.co += v.normal * 0.1
+    print("cloak", m.name, "fwd", tuple(round(x, 2) for x in fwd), "eyes", len(eyes), "drop", len(drop), "hide", len(hide), "sel", int(wsel.sum()))
     if hide:
         bb = bmesh.new(); bb.from_mesh(body.data); bb.verts.ensure_lookup_table()
         bmesh.ops.delete(bb, geom=[bb.verts[i] for i in hide], context='VERTS'); bb.to_mesh(body.data); bb.free(); body.data.update()
@@ -874,11 +922,13 @@ def _hood_cloak(st, col=(0.085, 0.065, 0.045), seed=0):
     cm.materials.append(wool)
     for pg in cm.polygons:
         pg.use_smooth = True
-    sm = co.modifiers.new("soft", "SMOOTH"); sm.factor = 0.5; sm.iterations = 6
+    sm = co.modifiers.new("soft", "SMOOTH"); sm.factor = 0.4; sm.iterations = 4
     so = co.modifiers.new("thick", "SOLIDIFY"); so.thickness = 0.008; so.offset = 1.0
     t = bpy.data.textures.new(m.name + "_cloakfold", "CLOUDS"); t.noise_scale = 0.09
     d = co.modifiers.new("folds", "DISPLACE"); d.texture = t; d.strength = 0.012
-    for o in [o for o in bpy.data.objects if o.name.startswith(m.name + "_hair")]:
+    _hide_under(co, [bpy.data.objects.get(m.name + k) for k in ("_body", "_shirt", "_jacket")])
+    for o in [o for o in bpy.data.objects if o.name.startswith((m.name + "_hair", m.name + "_eye", m.name + "_cornea", m.name + "_brows",
+                                                                   m.name + "_beard", m.name + "_moustache", m.name + "_teeth", m.name + "_tongue"))]:
         bpy.data.objects.remove(o)
     return co
 
