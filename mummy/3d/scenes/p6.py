@@ -471,7 +471,7 @@ def S30():
     p1.site("dusk", grass_at=(4, 0), grass_r=55, focus=(0, 0), core=6.0, n=900, kit=True, burials=True, sun_az=230, grass_density=260)
     U.cloud_shadows((0, 0), cover=0.45, seed=11)
     b1 = Vector((U.PITS["B1"][0], U.PITS["B1"][1], G.H(U.PITS["B1"][0], U.PITS["B1"][1])))
-    return dict(a=(tuple(b1 + Vector((0.8, -1.2, 1.6))), tuple(b1)), b=((60, -90, 70), (-20, 30, 0)), lens=26, cine=dict(exposure=0.3))
+    return dict(a=(tuple(b1 + Vector((0.8, -1.2, 1.6))), tuple(b1)), b=((130, -220, 120), (-200, 90, 0)), lens=26, cine=dict(exposure=0.3))
 
 
 # ----------------------------------------------------------------------------- plan
