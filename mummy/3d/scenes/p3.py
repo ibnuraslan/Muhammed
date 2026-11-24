@@ -551,7 +551,7 @@ def _night_pit():
     # an open pit with a heap of sand beside it
     bpy.ops.mesh.primitive_cylinder_add(radius=0.55, depth=0.6, location=(kx, ky, z - 0.28)); pit = bpy.context.active_object
     pit.scale = (1.5, 1.0, 1.0); pit.data.materials.append(_plain("pitdark", (0.03, 0.025, 0.02), 0.95)); pit.name = "openpit"
-    G.spoil_heap(kx + 1.4, ky + 0.2, 0.8, 0.6, 0.35)
+    G.spoil_heap(kx + 0.2, ky + 1.6, 0.9, 0.6, 0.38)          # upcast on the far side, clear of where they stand
     # pole torch: a flame on a stake, a warm point light
     bpy.ops.mesh.primitive_cylinder_add(radius=0.02, depth=1.6, location=(kx - 1.3, ky + 0.6, z + 0.8)); st = bpy.context.active_object
     st.data.materials.append(_plain("stake", (0.12, 0.08, 0.05), 0.8)); st.name = "torchstake"
