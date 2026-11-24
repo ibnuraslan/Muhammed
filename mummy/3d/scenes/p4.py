@@ -21,11 +21,11 @@ def _calcined(name="calcined"):
         return m
     m = bpy.data.materials.new(name); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
     tc = N.new("ShaderNodeTexCoord")
-    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 35; nz.inputs['Detail'].default_value = 6; L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 18; nz.inputs['Detail'].default_value = 6; L.new(tc.outputs['Object'], nz.inputs['Vector'])
     rp = N.new("ShaderNodeValToRGB"); el = rp.color_ramp.elements
     el[0].position = 0.35; el[0].color = (0.06, 0.055, 0.05, 1)
-    e = el.new(0.47); e.color = (0.3, 0.31, 0.34, 1)
-    el[-1].position = 0.62; el[-1].color = (0.66, 0.64, 0.6, 1)
+    e = el.new(0.47); e.color = (0.24, 0.25, 0.27, 1)
+    el[-1].position = 0.62; el[-1].color = (0.52, 0.5, 0.47, 1)
     L.new(nz.outputs['Fac'], rp.inputs['Fac'])
     cr = N.new("ShaderNodeTexVoronoi"); cr.feature = 'DISTANCE_TO_EDGE'; cr.inputs['Scale'].default_value = 220; L.new(tc.outputs['Object'], cr.inputs['Vector'])
     cm = N.new("ShaderNodeMapRange"); cm.inputs['From Min'].default_value = 0.0; cm.inputs['From Max'].default_value = 0.04
@@ -244,14 +244,14 @@ def S09():
 def S10():
     """Small quantities of burnt bone into the earth: a little pit with cremated fragments and charcoal. Macro push."""
     U.CUT = False
-    U.island("overcast", grass_at=(6.9, 2.6), grass_r=4, n=820, core=3.0, focus=(6, 2), grass_density=260)
+    U.island("overcast", grass_at=(9.0, 5.0), grass_r=2.5, n=820, core=3.0, focus=(6, 2), grass_density=260)
     z = float(U.surface(6, 2))
     # the little pit: dark charcoal-stained fill, lumpy, its edge feathered into the sand
     bpy.ops.mesh.primitive_circle_add(vertices=64, radius=0.24, fill_type='NGON', location=(6, 2, z + 0.004)); pt = bpy.context.active_object
     pt.data.materials.append(ph.texture("brown_mud_02", scale=6.0, name="pitfill", tint=(0.32, 0.26, 0.2))); pt.name = "pitfloor"
     sb = pt.modifiers.new("s", "SUBSURF"); sb.subdivision_type = 'SIMPLE'; sb.levels = 4; sb.render_levels = 4
     dp = pt.modifiers.new("d", "DISPLACE"); dt = bpy.data.textures.new("pitlump", "CLOUDS"); dt.noise_scale = 0.03; dp.texture = dt; dp.strength = 0.008
-    cremation((6, 2, z + 0.006), radius=0.15, n=260, charcoal=110)
+    cremation((6, 2, z + 0.004), radius=0.15, n=200, charcoal=110, flat=True)
     t = Vector((6, 2, z + 0.01))
     return dict(a=(tuple(t + Vector((0.18, -0.3, 0.3))), tuple(t)), b=(tuple(t + Vector((0.1, -0.2, 0.2))), tuple(t)), lens=50,
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=0.1))
