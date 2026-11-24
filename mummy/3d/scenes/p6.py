@@ -226,15 +226,15 @@ def S05():
     for k in range(4):
         frame_pole(corners[k], corners[(k + 1) % 4])
     # the hide: an animal outline inside the frame, laced to it, cockled and stretched
-    bpy.ops.mesh.primitive_grid_add(x_subdivisions=48, y_subdivisions=48, size=1.0, location=(0, 0, 0)); hd = bpy.context.active_object
-    bm_ = bmesh.new(); bm_.from_mesh(hd.data)
-    def keep(x, y):
-        a = math.atan2(y, x); r = math.hypot(x / 0.42, y / 0.5)
-        return r < 1.0 + 0.08 * math.sin(3 * a + 0.5) + 0.2 * max(0.0, math.cos(4 * a)) ** 6
-    bmesh.ops.delete(bm_, geom=[v for v in bm_.verts if not keep(v.co.x, v.co.y)], context='VERTS')
-    for v in bm_.verts:
-        v.co = Vector((v.co.x, 0.0, v.co.y))
-    bm_.to_mesh(hd.data); bm_.free()
+    bm_ = bmesh.new(); ring = []
+    for k in range(72):
+        a = 2 * math.pi * k / 72
+        r = 1.0 + 0.08 * math.sin(3 * a + 0.5) + 0.2 * max(0.0, math.cos(4 * a)) ** 6
+        ring.append(bm_.verts.new((0.42 * r * math.cos(a), 0.0, 0.5 * r * math.sin(a))))
+    f_ = bm_.faces.new(ring); bmesh.ops.poke(bm_, faces=[f_])
+    me_ = bpy.data.meshes.new("hide"); bm_.to_mesh(me_); bm_.free()
+    hd = bpy.data.objects.new("hide", me_); bpy.context.scene.collection.objects.link(hd)
+    sub = hd.modifiers.new("s", "SUBSURF"); sub.subdivision_type = 'SIMPLE'; sub.levels = sub.render_levels = 5
     hd.matrix_world = Matrix.Translation(base + Rm @ Vector((0, 0.01, H_ / 2 + 0.03))) @ Rm.to_4x4()
     hide = _plain("rawhide2", (0.45, 0.32, 0.19), 0.65)
     N = hide.node_tree.nodes; Lk = hide.node_tree.links; pr = N["Principled BSDF"]
@@ -273,10 +273,11 @@ def S05():
         bpy.ops.mesh.primitive_cone_add(radius1=0.02 - 0.005 * k, radius2=0.006, depth=l, location=(fx - 0.75 + dx, fy + 0.6 + dy, 0.02)); an = bpy.context.active_object
         an.rotation_euler = (0, math.radians(90), a); an.data.materials.append(ant); an.name = "antler"
     c = base + Rm @ Vector((0, 0, H_ / 2))
-    _spot((c.x + 1.2, c.y + 1.6, 1.0), tuple(c), 420, size=0.3, color=(1.0, 0.9, 0.75), spot=35)    # raking light from the door
-    fwd = Rm @ Vector((0, -1, 0))
-    return dict(a=(tuple(c + fwd * 2.0 + Vector((-0.5, 0, 0.1))), tuple(c)), b=(tuple(c + fwd * 1.6 + Vector((-0.35, 0, 0.1))), tuple(c)), lens=35,
-                fstop=4.0, focus=tuple(c), cine=dict(exposure=0.3), hand_ok=("floor",))
+    fwd = Rm @ Vector((0, -1, 0)); sd = Rm @ Vector((1, 0, 0))
+    lp = c + sd * 1.7 + fwd * 0.45 + Vector((0, 0, 0.35))
+    _spot(tuple(lp), tuple(c), 260, size=0.25, color=(1.0, 0.88, 0.7), spot=40)    # raking light across the skin from the door side
+    return dict(a=(tuple(c + fwd * 2.3 - sd * 0.5 + Vector((0, 0, 0.1))), tuple(c)), b=(tuple(c + fwd * 1.9 - sd * 0.4 + Vector((0, 0, 0.1))), tuple(c)), lens=28,
+                fstop=4.0, focus=tuple(c), cine=dict(exposure=0.2), hand_ok=("floor",))
 
 
 def S06():
@@ -350,8 +351,8 @@ def S12():
     p3.clean_room(uv=0.25)
     for o in bpy.data.objects:
         if o.type == 'LIGHT' and o.name.startswith("ceil"):
-            o.data.energy = 4
-    return dict(a=((1.9, -1.4, 1.5), (0.0, 1.5, 1.0)), b=((1.55, -1.0, 1.45), (0.0, 1.5, 1.0)), lens=32, fstop=4.0, focus=(0, 1.5, 1.0),
+            o.data.energy = 14
+    return dict(a=((1.3, -0.5, 1.45), (0.0, 1.5, 0.95)), b=((1.1, -0.2, 1.4), (0.0, 1.5, 0.95)), lens=35, fstop=4.0, focus=(0, 1.5, 1.0),
                 cine=dict(exposure=-0.1))
 
 
@@ -418,13 +419,13 @@ def S17():
 
 
 def S18():
-    """At the microscope: close on the stage, a thin section of bone on its slide under the objective, the lamp below
-    lighting it through; the tray of slides beside. No one in shot. Slow push to the stage."""
+    """At the microscope: low across the bench to a thin section of bone on its slide, the microscope standing behind
+    under the lamp, the tray of slides beside. No one in shot. Slow push."""
     d = p2.S12()
-    slide_tray((-0.3, 0.3, LB.TOP + 0.002), n_x=3, n_y=3)
-    t = Vector((0.0, 0.42, LB.TOP + 0.12))
-    return dict(a=((-0.3, 0.05, LB.TOP + 0.22), tuple(t)), b=((-0.22, 0.12, LB.TOP + 0.19), tuple(t)), lens=50, fstop=4.0, focus=tuple(t),
-                cine=dict(exposure=-0.05))
+    slide_tray((-0.5, 0.12, LB.TOP + 0.002), n_x=3, n_y=3)
+    t = Vector((-0.14, 0.24, LB.TOP + 0.004))      # the thin section on its slide, the microscope standing behind
+    return dict(a=((0.02, -0.2, LB.TOP + 0.16), tuple(t)), b=((-0.02, -0.12, LB.TOP + 0.13), tuple(t)), lens=50, fstop=2.8, focus=tuple(t),
+                cine=dict(exposure=0.0))
 
 
 # ============================================================================ "It suggests the practice extended beyond this island..."
