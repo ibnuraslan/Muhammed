@@ -300,9 +300,9 @@ def _embers(m, strength):
     cr = N.new("ShaderNodeMapRange"); cr.inputs['From Min'].default_value = 0.0; cr.inputs['From Max'].default_value = 0.06
     cr.inputs['To Min'].default_value = 1.0; cr.inputs['To Max'].default_value = 0.0; L.new(vo.outputs['Distance'], cr.inputs['Value'])
     nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 8; L.new(tc.outputs['Object'], nz.inputs['Vector'])
-    hp = N.new("ShaderNodeMapRange"); hp.inputs['From Min'].default_value = 0.5; hp.inputs['From Max'].default_value = 0.7; L.new(nz.outputs['Fac'], hp.inputs['Value'])
+    hp = N.new("ShaderNodeMapRange"); hp.inputs['From Min'].default_value = 0.64; hp.inputs['From Max'].default_value = 0.74; L.new(nz.outputs['Fac'], hp.inputs['Value'])
     mx = N.new("ShaderNodeMath"); mx.operation = 'MAXIMUM'; L.new(cr.outputs[0], mx.inputs[0]); L.new(hp.outputs[0], mx.inputs[1])
-    st = N.new("ShaderNodeMath"); st.operation = 'MULTIPLY'; st.inputs[1].default_value = 6.0 * strength; L.new(mx.outputs[0], st.inputs[0])
+    st = N.new("ShaderNodeMath"); st.operation = 'MULTIPLY'; st.inputs[1].default_value = 2.2 * strength; L.new(mx.outputs[0], st.inputs[0])
     p.inputs['Emission Color'].default_value = (1.0, 0.3, 0.05, 1); L.new(st.outputs[0], p.inputs['Emission Strength'])
 
 
@@ -391,8 +391,8 @@ def interior(fire=1.0, door_sun=0.0, hx=0.3, hy=0.0, r=4.6, seed=5, moon=0.0):
         bpy.ops.mesh.primitive_cube_add(size=1, location=(hcx + 0.17 * math.cos(a), hcy + 0.13 * math.sin(a), 0.06 + 0.03 * (k % 3)))
         pb = bpy.context.active_object; pb.scale = (0.16, 0.08, 0.07); pb.rotation_euler = (rng.uniform(-0.5, 0.5), rng.uniform(-0.5, 0.5), a)
         pb.data.materials.append(peat); pb.name = "peat"
-    flames((hcx, hcy, 0.0), spread=0.16, n=9, top_z=0.08, low_z=(0.04, 0.1), top_share=0.6, h_top=(0.22, 0.42), h_low=(0.12, 0.22),
-           wid=(0.06, 0.1), strength=1.2 * fire, seed=11)
+    flames((hcx, hcy, 0.0), spread=0.18, n=14, top_z=0.1, low_z=(0.05, 0.12), top_share=0.6, h_top=(0.35, 0.6), h_low=(0.18, 0.3),
+           wid=(0.07, 0.12), strength=1.5 * fire, seed=11)
     fd = bpy.data.lights.new("firelight", 'POINT'); fd.energy = 140 * fire; fd.color = (1.0, 0.52, 0.2); fd.shadow_soft_size = 0.25
     fo = bpy.data.objects.new("firelight", fd); bpy.context.scene.collection.objects.link(fo); fo.location = (hcx, hcy, 0.75)
     out["fire"] = fo; out["hearth"] = (hcx, hcy)
