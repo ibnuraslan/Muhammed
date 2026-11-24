@@ -138,7 +138,7 @@ def S05():
         st = AC.Stand(m, f, 180 + random.Random(k).uniform(-12, 12), lean=4 if kinds[k] != "elder" else 9, weight="L" if k % 2 else "R")
         st.head_to((door.x, door.y, door.z + 1.0 - zf), share=0.9)
         st.finish(look=(door.x, door.y, door.z + 1.0 - zf), density=1.0)
-        bt = p2._belt(st) if kinds[k] in ("man", "elder") else None     # a leather belt round the tunic
+        bt = p2._belt(st) if kinds[k] == "man" else None     # a leather belt round the tunic (the stooped elder wears his loose)
         G.lift(st, zf)
         if bt is not None:
             bt.location.z += zf
@@ -241,7 +241,7 @@ def S11():
     bpy.context.view_layer.update()
     W = np.array([o.matrix_world @ v.co for v in o.data.vertices])
     top = W[np.argmax(W @ np.array(n))]
-    tgt = hit + n * 0.065                                  # the femoral head stands 6-7 cm out of the hide
+    tgt = hit + n * 0.12                                   # head and neck of the femur stand clear of the hide
     sk.root.location += Vector((tgt.x - top[0], tgt.y - top[1], tgt.z - top[2]))
     bpy.context.view_layer.update()
     # the split: a dark ragged gap in the hide round the bone, with lifted torn lips
@@ -251,9 +251,11 @@ def S11():
     dg_ = gp.modifiers.new("rag", "DISPLACE"); tr = bpy.data.textures.new("ragged", "CLOUDS"); tr.noise_scale = 0.015; dg_.texture = tr; dg_.strength = 0.01
     hx, hy = R["hearth"]
     _spot((hx - 0.2, hy + 0.2, 0.8), tuple(tgt), 420, size=0.2, color=(1.0, 0.6, 0.28), spot=25)
-    side = Vector((n.x, n.y, 0)).normalized() if Vector((n.x, n.y, 0)).length > 0.1 else Vector((1, 0, 0))
-    cam = tgt + side * 0.62 + Vector((0, 0, 0.32)) + Vector((-side.y, side.x, 0)) * 0.22     # back enough to see the bone come out of the hide
-    return dict(a=(tuple(cam), tuple(tgt - n * 0.03)), b=(tuple(cam - side * 0.08), tuple(tgt - n * 0.03)), lens=50,
+    perp = n.cross(Vector((0, 0, 1)))
+    perp = perp.normalized() if perp.length > 0.1 else Vector((1, 0, 0))
+    cam = hit + n * 0.08 + perp * 0.42 + Vector((0, 0, 0.12))          # side-on: the ball of the head on its neck in profile
+    side = perp
+    return dict(a=(tuple(cam), tuple(hit + n * 0.06)), b=(tuple(cam - side * 0.06), tuple(hit + n * 0.06)), lens=50,
                 fstop=4.0, focus=tuple(tgt), cine=dict(exposure=0.6, sat=0.85), hand_ok=("floor", "bundle"))
 
 
