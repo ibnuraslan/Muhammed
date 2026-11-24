@@ -739,10 +739,9 @@ def S27():
 
 
 def S28():
-    """Pull back from the trench to the island at dusk: the dig, the machair, the sea."""
-    p1.site("dusk", grass_at=None, focus=(0, 0), core=8.0, n=900, kit=True, burials=False, sun_az=230)
-    U.cloud_shadows((0, 0), cover=0.4)
-    return dict(a=((14, -16, 12), (0, 4, 3)), b=((120, -170, 90), (-40, 40, 0)), lens=28, cine=dict(exposure=0.3))
+    """Pull back from the trench to the island at dusk: the dig on the machair, the dunes, the Atlantic beyond."""
+    p1.site("dusk", grass_at=(0, 0), grass_r=45, focus=(0, 0), core=6.0, n=900, kit=True, burials=False, sun_az=230)
+    return dict(a=((12, -14, 11), (0, 4, 3)), b=((70, -95, 48), (-40, 20, 0)), lens=28, cine=dict(exposure=0.3))
 
 
 VO = [l.strip() for l in open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "vo", "MUMMY_P2_VO.txt"),
