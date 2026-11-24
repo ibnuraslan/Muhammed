@@ -706,7 +706,7 @@ def S24():
     """In the pit: the pieces of a human knee - the end of a thigh bone, the kneecap, the top of a shin - in the sand."""
     o = _knee_pit(kneel=False)
     k = o["knee"]
-    return dict(a=(tuple(k + Vector((0.35, -0.55, 0.65))), tuple(k)), b=(tuple(k + Vector((0.12, -0.6, 0.55))), tuple(k)), lens=45,
+    return dict(a=(tuple(k + Vector((0.22, -0.36, 0.42))), tuple(k)), b=(tuple(k + Vector((0.08, -0.4, 0.36))), tuple(k)), lens=50,
                 fstop=5.6, focus=tuple(k), cine=dict(exposure=0.1))
 
 
