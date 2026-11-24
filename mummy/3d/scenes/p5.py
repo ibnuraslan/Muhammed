@@ -83,17 +83,29 @@ def S02():
 
 
 def S03():
-    """The household at the hearth, seen from behind by the doorway: three islanders kneeling round the fire, and beyond
-    it, at the back wall, the wrapped ancestor on its hurdle. Slow push between them."""
+    """The household at the hearth, seen from behind by the doorway: an elder and a man kneeling at the fire, a woman in
+    her shawl standing behind them with a child at her side, all facing the wrapped ancestor at the back wall."""
+    import acts as AC
     R, c = _house_bundle(fire=1.0, moon=0.4)
     hx, hy = R["hearth"]
     look = (c.x, c.y, 0.6)
-    for k, (dx, dy) in enumerate(((1.15, -1.0), (1.35, -0.1), (0.55, -1.6))):     # on the south-east side: the view past them stays open
+    def face(p):
+        return math.degrees(math.atan2(c.y - p[1], c.x - p[0]))
+    for k, (kind, dx, dy) in enumerate((("elder", 1.15, -0.9), ("man", 1.35, -0.05))):
         kn = (hx + dx, hy + dy)
-        hd = math.degrees(math.atan2(c.y - kn[1], c.x - kn[0]))
-        _kneeler(k % 2, f"Kin{k}", kn, hd, look, lean=10, var=k)
-    return dict(a=((hx + 2.6, hy - 2.6, 2.3), (c.x, c.y, 0.3)), b=((hx + 2.3, hy - 2.3, 2.15), (c.x, c.y, 0.3)), lens=30,
-                fstop=2.8, focus=(hx, hy, 0.4), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor",))
+        m = BR.villager(kind, f"Kin{k}", var=k, ease=1.3)
+        st = AC.Kneel(m, kn, face(kn), lean=10, sit_back=True)
+        f = Vector((math.cos(math.radians(face(kn))), math.sin(math.radians(face(kn))), 0)); sv = Vector((f.y, -f.x, 0)); kk = Vector((kn[0], kn[1], 0))
+        for sd, sg in (("L", -1), ("R", 1)):
+            st.hand(sd, tuple(kk + f * 0.12 + sv * (0.12 * sg) + Vector((0, 0, 0.36))), elbow=(0.5, 0.1, -0.9), curl=24)
+        st.head_to(look, share=0.9); st.finish(look=look, density=1.0)
+    for k, (kind, dx, dy) in enumerate((("woman", 2.1, -0.75), ("child", 2.05, -0.2))):
+        f_ = (hx + dx, hy + dy)
+        m = BR.villager(kind, f"Kin{k + 2}", var=k + 2)
+        st = AC.Stand(m, f_, face(f_), lean=2, weight="L")
+        st.head_to(look, share=0.9); st.finish(look=look, density=1.0)
+    return dict(a=((hx + 3.4, hy - 2.2, 2.2), (c.x, c.y, 0.4)), b=((hx + 3.0, hy - 1.9, 2.05), (c.x, c.y, 0.4)), lens=30,
+                fstop=2.8, focus=(hx + 1.2, hy - 0.4, 0.6), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor",))
 
 
 def S04():
@@ -117,11 +129,17 @@ def S05():
     import acts as AC
     hx, hy, r = U.HOUSES[1]
     door = Vector((hx + r * 1.75 + 0.4, hy, float(U.surface(hx + r * 1.75 + 0.4, hy))))
-    for k, (dx, dy) in enumerate(((2.2, -0.9), (2.6, 0.5), (3.4, -0.2), (3.0, 1.4), (3.9, -1.3))):
+    kinds = ("man", "woman", "elder", "child", "man", "woman")
+    for k, (dx, dy) in enumerate(((2.2, -0.9), (2.6, 0.5), (3.4, -0.2), (3.1, 0.95), (3.9, -1.3), (4.2, 0.4))):
         f = (door.x + dx, door.y + dy); zf = float(U.surface(*f))
-        m = BR.islander_cropped(k % 2, name=f"Kin{k}", var=k + 1, ease=1.1)      # standing: tunic hangs straight
-        st = AC.Stand(m, f, 180 + random.Random(k).uniform(-12, 12), lean=4, weight="L" if k % 2 else "R")
-        st.finish(look=(door.x, door.y, door.z + 1.0 - zf), density=1.0); G.lift(st, zf)
+        m = BR.villager(kinds[k], f"Kin{k}", var=k + 1)
+        st = AC.Stand(m, f, 180 + random.Random(k).uniform(-12, 12), lean=4 if kinds[k] != "elder" else 9, weight="L" if k % 2 else "R")
+        st.head_to((door.x, door.y, door.z + 1.0 - zf), share=0.9)
+        st.finish(look=(door.x, door.y, door.z + 1.0 - zf), density=1.0)
+        bt = p2._belt(st) if kinds[k] in ("man", "elder") else None     # a leather belt round the tunic
+        G.lift(st, zf)
+        if bt is not None:
+            bt.location.z += zf
     return dict(a=((door.x + 9.0, door.y - 2.6, door.z + 1.7), (door.x, door.y, door.z + 1.0)), b=((door.x + 7.6, door.y - 2.0, door.z + 1.6), (door.x, door.y, door.z + 1.0)),
                 lens=35, fstop=4.0, focus=(door.x + 3.0, door.y, door.z + 1.1), cine=dict(exposure=0.3))
 

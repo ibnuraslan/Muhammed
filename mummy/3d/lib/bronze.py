@@ -535,3 +535,32 @@ def islander_cropped(i, name=None, var=0, ease=1.3):
         TROUSERS = (0.16, 0.13, 0.09); SHOES = (0.08, 0.05, 0.03)
         TROUSER_EASE = ease; TROUSER_EXTRA = 0.03 if ease > 1.2 else 0.012
     return _M(name or "Islander1", years=24 + var * 4)
+
+
+def villager(kind, name, var=0, ease=1.1):
+    """Bronze Age villagers for the household / gathering shots, always seen from behind or in silhouette.
+    kind: 'man' (long belted wool tunic, wrapped legs, hair to the collar), 'elder' (grey hair and beard, darker
+    tunic), 'woman' (long wool dress to the ground, a wool shawl wrapped round the shoulders, hair drawn back),
+    'child' (a short wool frock)."""
+    import modern as MD, women as W
+    rng = random.Random(var * 13 + len(kind))
+    tint = (lambda c: tuple(max(0.025, x * rng.uniform(0.75, 1.1)) for x in c))
+    if kind in ("man", "elder"):
+        old = kind == "elder"
+
+        class _V(MD.ModernMan):
+            GENDER = 1.0; MUSCLE = 0.5 if old else 0.6; WEIGHT = 0.4 + rng.uniform(-0.08, 0.1); HEIGHT = (0.4 if old else 0.48) + rng.uniform(-0.06, 0.06)
+            HAIR = (0.08, 0.02) if old else (0.25 + rng.uniform(0, 0.5), 0.1); HAIR_N = 160000; HAIR_LEN = (0.03, 0.055)
+            FACIAL = "beard"; BEARD = (0.08, 0.02) if old else (0.3, 0.1)
+            SHIRT = tint((0.1, 0.075, 0.05)); JACKET = "coat"; JACKET_COL = tint((0.09, 0.065, 0.04) if old else (0.15, 0.1, 0.055))
+            TROUSERS = tint((0.07, 0.055, 0.04)); SHOES = (0.07, 0.045, 0.025)
+            TROUSER_EASE = ease; TROUSER_EXTRA = 0.012
+        return _V(name, years=62 if old else 28 + var * 3)
+    if kind == "woman":
+        class _F(W.Sarah):
+            DRESS = tint((0.13, 0.1, 0.065)); SHAWL = tint((0.07, 0.05, 0.035)); HAIR = (0.4 + rng.uniform(0, 0.4), 0.3)
+        return _F(name=name, years=30 + var * 2, bonnet=False, shawl=True)
+
+    class _C(W.Sophia):
+        FROCK = tint((0.13, 0.095, 0.06)); PINAFORE = tint((0.13, 0.095, 0.06)); HAIR = (0.5, 0.3)
+    return _C(name=name, years=7)
