@@ -185,20 +185,35 @@ def S04():
 
 # ============================================================================ "Above the buried remains, people ground grain..."
 def S05():
-    """Working materials: an islander kneels at the doorway light scraping a stretched hide (from behind)."""
+    """Working materials: in the doorway light, a hide pegged out on the floor with a bone scraper lying on it, a red
+    deer antler and a few bone points beside it. Slow push."""
     U.CUT = False
     R = BR.interior(fire=0.6, door_sun=1.0)
     hx, hy = 0.3, 0.0
-    px, py = hx + 3.75, hy + 0.05                         # in the doorway, outside the post ring
+    px, py = hx + 3.75, hy + 0.05
     hide = _plain("rawhide", (0.42, 0.3, 0.18), 0.7)
     bpy.ops.mesh.primitive_plane_add(size=1, location=(px, py, 0.02)); hd = bpy.context.active_object
     hd.scale = (0.9, 0.7, 1); hd.data.materials.append(hide); hd.name = "hide"
     dd = hd.modifiers.new("s", "SUBSURF"); dd.subdivision_type = 'SIMPLE'; dd.levels = 3
     dp = hd.modifiers.new("d", "DISPLACE"); tt = bpy.data.textures.new("hidewrinkle", "CLOUDS"); tt.noise_scale = 0.12; dp.texture = tt; dp.strength = 0.02
-    hands = {"L": (px - 0.1, py + 0.05, 0.06), "R": (px + 0.1, py + 0.08, 0.06)}
-    p5._kneeler(0, "Scraper", (px - 0.05, py - 0.55), 90, (px, py, 0.0), lean=52, var=4, hands=hands)
-    return dict(a=((px - 0.7, py - 1.7, 1.45), (px, py, 0.05)), b=((px - 0.55, py - 1.45, 1.35), (px, py, 0.05)), lens=35,
-                fstop=2.8, focus=(px, py, 0.05), cine=dict(exposure=0.3), hand_ok=("floor", "hide"))
+    wood = bpy.data.materials.get("postbark") or _plain("peg", (0.25, 0.18, 0.1), 0.8)
+    for sx in (-1, 1):                                   # pegs at the corners
+        for sy in (-1, 1):
+            bpy.ops.mesh.primitive_cone_add(radius1=0.012, radius2=0.006, depth=0.08, location=(px + sx * 0.43, py + sy * 0.33, 0.03)); pg = bpy.context.active_object
+            pg.data.materials.append(wood); pg.name = "peg"
+    bonemat = B.bone_material("C", dirt=0.6, sand=0.2) if hasattr(B, "bone_material") else _plain("bonetool", (0.7, 0.62, 0.5), 0.6)
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.012, depth=0.18, location=(px + 0.05, py - 0.05, 0.05)); sc = bpy.context.active_object
+    sc.rotation_euler = (0, math.radians(90), 0.4); sc.scale = (1.0, 1.7, 1.0); sc.data.materials.append(bonemat); sc.name = "scraper"
+    for k in range(4):                                   # bone points
+        bpy.ops.mesh.primitive_cone_add(radius1=0.005, radius2=0.0, depth=0.09, location=(px - 0.62, py - 0.3 + k * 0.05, 0.008)); bp = bpy.context.active_object
+        bp.rotation_euler = (0, math.radians(90), 0.1 * k); bp.data.materials.append(bonemat); bp.name = "bonepoint"
+    ant = _plain("antler", (0.42, 0.34, 0.24), 0.7)
+    for k, (dx, dy, l, a) in enumerate(((0.0, 0.0, 0.45, 0.0), (0.12, 0.05, 0.18, 0.7), (0.25, 0.02, 0.16, -0.6))):
+        bpy.ops.mesh.primitive_cone_add(radius1=0.02 - 0.005 * k, radius2=0.006, depth=l, location=(px - 0.7 + dx + l / 2, py + 0.35 + dy, 0.02)); an = bpy.context.active_object
+        an.rotation_euler = (0, math.radians(90), a); an.data.materials.append(ant); an.name = "antler"
+    t = Vector((px - 0.1, py, 0.03))
+    return dict(a=((px - 1.3, py - 1.0, 0.75), tuple(t)), b=((px - 1.05, py - 0.8, 0.65), tuple(t)), lens=35,
+                fstop=4.0, focus=tuple(t), cine=dict(exposure=0.35), hand_ok=("floor",))
 
 
 def S06():
@@ -497,7 +512,7 @@ PLAN = [  # shot, VO paragraph (1-based), seconds, description
     ("S02", 1, 5.0, "Floors renewed: the section through the house floors"),
     ("S03", 1, 5.0, "Grinding grain: the saddle quern, meal and grain"),
     ("S04", 1, 4.5, "Sleeping and storage: sheepskins, baskets, pots"),
-    ("S05", 2, 5.0, "Working materials: scraping a hide in the doorway light"),
+    ("S05", 2, 5.0, "Working materials: a pegged hide, bone tools, antler"),
     ("S06", 2, 5.0, "The excavated house floor and hearth"),
     ("S07", 3, 6.0, "Abandonment: roofless stone rings filling with sand"),
     ("S08", 3, 5.0, "Wind streaming sand over the dunes"),
