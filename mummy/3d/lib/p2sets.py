@@ -487,7 +487,7 @@ def peat_face(M, x0=-30.0, x1=30.0, seed=5, center=(0.0, 0.0), stack_at=2.0):
     for i, x in enumerate(xs):
         k = int(math.floor(x / blk))
         if k not in tilt:
-            tilt[k] = (rng.uniform(-0.025, 0.025), rng.uniform(-0.04, 0.04))
+            tilt[k] = (rng.uniform(-0.012, 0.012), rng.uniform(-0.016, 0.016))
         off, ang = tilt[k]
         u = x / blk - k - 0.5
         zb = moor_height(M, x, yb[i] - 0.6, center); zt = moor_height(M, x, yb[i] + 0.5, center)

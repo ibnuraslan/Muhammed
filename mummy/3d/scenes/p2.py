@@ -843,7 +843,7 @@ def S25():
     z = P2.moor_height(M, 0, 5.4)
     yf = 5.6
     # a hard raking key along the face from the left (low sun round the end of the bank)
-    d = bpy.data.lights.new("rake", 'AREA'); d.size = 0.6; d.energy = 900; d.color = (1.0, 0.72, 0.5)
+    d = bpy.data.lights.new("rake", 'AREA'); d.size = 1.2; d.energy = 420; d.color = (1.0, 0.88, 0.76)
     lo = bpy.data.objects.new("rake", d); bpy.context.scene.collection.objects.link(lo); lo.location = (-5.0, yf - 0.6, z + 0.9)
     lo.rotation_euler = (Vector((0.5, yf, z + 0.5)) - lo.location).to_track_quat('-Z', 'Y').to_euler()
     return dict(a=((-0.8, yf - 1.25, z + 0.45), (0.4, yf, z + 0.75)), b=((-0.2, yf - 1.2, z + 0.45), (1.0, yf, z + 0.75)), lens=32,
