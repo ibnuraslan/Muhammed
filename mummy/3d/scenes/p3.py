@@ -843,13 +843,21 @@ def _hood_cloak(st, col=(0.085, 0.065, 0.045), seed=0):
         if not all(wsel[v.index] for v in f.verts):
             drop.append(f); continue
         c = f.calc_center_median()
-        if (c - hd).dot(fwd) > 0.035 and f.normal.dot(fwd) > 0.3:        # the face opening
+        if (c - hd).dot(fwd) > 0.0 and f.normal.dot(fwd) > 0.15:         # the face opening (eyes, brow, cheeks clear)
             drop.append(f)
+    # body skin hidden under the cloak (all of the selection except the face opening) is removed so nothing pokes through
+    hide = set()
+    for v in bm.verts:
+        if wsel[v.index] and not ((v.co - hd).dot(fwd) > -0.01 and v.normal.dot(fwd) > 0.1):
+            hide.add(v.index)
     bmesh.ops.delete(bm, geom=drop, context='FACES')
     bmesh.ops.delete(bm, geom=[v for v in bm.verts if not v.link_faces], context='VERTS')
     bm.normal_update()
     for v in bm.verts:
-        v.co += v.normal * 0.05
+        v.co += v.normal * 0.07
+    if hide:
+        bb = bmesh.new(); bb.from_mesh(body.data); bb.verts.ensure_lookup_table()
+        bmesh.ops.delete(bb, geom=[bb.verts[i] for i in hide], context='VERTS'); bb.to_mesh(body.data); bb.free(); body.data.update()
     cm = bpy.data.meshes.new(m.name + "_cloak"); bm.to_mesh(cm); bm.free()
     co = bpy.data.objects.new(m.name + "_cloak", cm); bpy.context.scene.collection.objects.link(co)
     wool = bpy.data.materials.get("cloakwool")
