@@ -174,7 +174,7 @@ def S07():
     bpy.ops.mesh.primitive_cube_add(size=1, location=(0.3, 0.1, LB.TOP + 0.003)); cl = bpy.context.active_object
     cl.scale = (0.2, 0.012, 0.004); cl.rotation_euler.z = 0.25; cl.data.materials.append(steel); cl.name = "calipers"
     t = Vector((0.0, 0.38, LB.TOP + 0.05))
-    return dict(a=((0.75, -0.55, LB.TOP + 0.55), tuple(t)), b=((0.55, -0.45, LB.TOP + 0.5), tuple(t + Vector((-0.15, 0, 0)))), lens=35,
+    return dict(a=((0.55, -1.75, LB.TOP + 0.95), tuple(t)), b=((0.4, -1.45, LB.TOP + 0.85), tuple(t)), lens=32,
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=0.1))
 
 
