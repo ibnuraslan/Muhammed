@@ -188,14 +188,21 @@ def S11():
         if s_ != "forearmL":
             sk.remove(s_)
     o = sk.parts["forearmL"]; p3._knee_mats(o, sand=0.5)
-    sk.root.rotation_euler = (0, math.radians(84), math.radians(90))
+    sd = math.radians(70 - 90)                                     # across the bundle, toward the camera side
+    sk.root.rotation_euler = (0, math.radians(80), sd)
     bpy.context.view_layer.update()
     W = np.array([o.matrix_world @ v.co for v in o.data.vertices]); cc = W.mean(0)
-    tip = Vector((c.x + 0.05, c.y - 0.42, c.z + 0.05))
-    sk.root.location += Vector((tip.x - cc[0], tip.y - cc[1], tip.z - cc[2]))
+    side = Vector((math.cos(sd), math.sin(sd), 0))
+    mid = c + side * 0.2 + Vector((0, 0, 0.0))                     # half inside the wrapping, half out through the split
+    sk.root.location += Vector((mid.x - cc[0], mid.y - cc[1], mid.z - cc[2]))
     bpy.context.view_layer.update()
-    t = Vector((c.x + 0.05, c.y - 0.45, c.z + 0.05))
-    return dict(a=((t.x + 0.55, t.y - 0.45, t.z + 0.25), tuple(t)), b=((t.x + 0.42, t.y - 0.36, t.z + 0.2), tuple(t)), lens=50,
+    # the split in the hide: a dark ragged gap where the bone comes out
+    bpy.ops.mesh.primitive_circle_add(vertices=24, radius=0.06, fill_type='NGON', location=tuple(c + side * 0.205)); sp = bpy.context.active_object
+    sp.rotation_euler = (math.radians(90), 0, sd + math.radians(90)); sp.scale = (1.0, 0.55, 1.0); sp.name = "hidesplit"
+    sp.data.materials.append(_plain("hidegap", (0.012, 0.008, 0.005), 0.95))
+    t = c + side * 0.3
+    cam = t + side * 0.6 + Vector((0.15, 0, 0.25))
+    return dict(a=(tuple(cam), tuple(t)), b=(tuple(cam - side * 0.12), tuple(t)), lens=50,
                 fstop=2.8, focus=tuple(t), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor", "bundle"))
 
 
