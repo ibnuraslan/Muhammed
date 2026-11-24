@@ -794,15 +794,16 @@ def _night_pit():
     # pole torch: a flame on a stake, a warm point light
     bpy.ops.mesh.primitive_cylinder_add(radius=0.02, depth=1.6, location=(kx - 1.3, ky + 0.6, z + 0.8)); st = bpy.context.active_object
     st.data.materials.append(_plain("stake", (0.12, 0.08, 0.05), 0.8)); st.name = "torchstake"
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.09, location=(kx - 1.3, ky + 0.6, z + 1.68)); fl = bpy.context.active_object
-    fl.scale = (0.8, 0.8, 1.6); fl.data.materials.append(P2._mat("flame", (0, 0, 0), 0.5, emit=(1.0, 0.45, 0.1), strength=40)); fl.name = "torchflame"
+    bpy.ops.mesh.primitive_cone_add(radius1=0.06, radius2=0.0, depth=0.26, location=(kx - 1.3, ky + 0.6, z + 1.72)); fl = bpy.context.active_object
+    fl.data.materials.append(P2._mat("flame", (0, 0, 0), 0.5, emit=(1.0, 0.45, 0.1), strength=18)); fl.name = "torchflame"
+    fd = fl.modifiers.new("lick", "DISPLACE"); ft = bpy.data.textures.new("flamelick", "CLOUDS"); ft.noise_scale = 0.05; fd.texture = ft; fd.strength = 0.03
     d = bpy.data.lights.new("torch", 'POINT'); d.energy = 220; d.color = (1.0, 0.55, 0.2); d.shadow_soft_size = 0.12
     lo = bpy.data.objects.new("torch", d); bpy.context.scene.collection.objects.link(lo); lo.location = (kx - 1.3, ky + 0.6, z + 1.65)
     # a second torch stuck in the ground on the near side: front light on the hurdle and the body
     bpy.ops.mesh.primitive_cylinder_add(radius=0.02, depth=1.5, location=(kx - 1.9, ky - 1.8, z + 0.75)); st2 = bpy.context.active_object
     st2.data.materials.append(_plain("stake", (0.12, 0.08, 0.05), 0.8)); st2.name = "torchstake"
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.08, location=(kx - 1.9, ky - 1.8, z + 1.58)); fl2 = bpy.context.active_object
-    fl2.scale = (0.8, 0.8, 1.6); fl2.data.materials.append(bpy.data.materials["flame"]); fl2.name = "torchflame"
+    bpy.ops.mesh.primitive_cone_add(radius1=0.055, radius2=0.0, depth=0.24, location=(kx - 1.9, ky - 1.8, z + 1.62)); fl2 = bpy.context.active_object
+    fl2.data.materials.append(bpy.data.materials["flame"]); fl2.name = "torchflame"
     d2 = bpy.data.lights.new("torch2", 'POINT'); d2.energy = 160; d2.color = (1.0, 0.55, 0.2); d2.shadow_soft_size = 0.12
     l2 = bpy.data.objects.new("torch2", d2); bpy.context.scene.collection.objects.link(l2); l2.location = (kx - 1.9, ky - 1.8, z + 1.55)
     return Vector((kx, ky, z))
@@ -848,7 +849,7 @@ def S32():
     pc = poles[0].matrix_world.translation.copy()
     for i, x0 in enumerate((-0.5, 0.5)):
         m = BR.Islander(name=f"Islander{i}") if i == 0 else p2._islander2()
-        f = (c.x + x0, pc.y - 0.6)
+        f = (c.x + x0, pc.y - 0.72)
         zf = max(float(U.surface(f[0] + ex, f[1] + ey)) for ex in (-0.15, 0.15) for ey in (-0.15, 0.15))
         st = AC.Haul(m, f, 90, knee=40, lean=34, weight="L" if i == 0 else "R")
         for sd, dx in (("L", -0.22), ("R", 0.22)):
