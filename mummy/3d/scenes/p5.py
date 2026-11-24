@@ -254,8 +254,8 @@ def S11():
     hx, hy = R["hearth"]
     _spot((hx - 0.2, hy + 0.2, 0.8), tuple(tgt), 160, size=0.2, color=(1.0, 0.55, 0.22), spot=30)
     side = Vector((n.x, n.y, 0)).normalized() if Vector((n.x, n.y, 0)).length > 0.1 else Vector((1, 0, 0))
-    cam = tgt + side * 0.32 + Vector((0, 0, 0.18)) + Vector((-side.y, side.x, 0)) * 0.12
-    return dict(a=(tuple(cam), tuple(tgt)), b=(tuple(cam - side * 0.06), tuple(tgt)), lens=60,
+    cam = tgt + side * 0.62 + Vector((0, 0, 0.32)) + Vector((-side.y, side.x, 0)) * 0.22     # back enough to see the bone come out of the hide
+    return dict(a=(tuple(cam), tuple(tgt - n * 0.03)), b=(tuple(cam - side * 0.08), tuple(tgt - n * 0.03)), lens=50,
                 fstop=4.0, focus=tuple(tgt), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor", "bundle"))
 
 
