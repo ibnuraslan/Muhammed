@@ -47,7 +47,7 @@ export async function build(cues) {
   // ---------- YARD (junction station, summer) ----------
   const yd = L.addSet('yard', -900, 0); L.ground(yd, 'dirt'); yd.add(L.track2(800, -400)); const y2 = L.track2(800, -400); y2.position.z = 6; yd.add(y2);
   const ys = L.station('НОВОНИКОЛАЕВСК', { wallTint: 0xd8c4a0 }); at(ys, 0, .6, -15.5); yd.add(ys); mesh(new THREE.BoxGeometry(80, .6, 6.2), pbr('old_wood_floor', [24, 2], { color: 0x9a8a78 }), [0, .3, -7.7], [0, 0, 0], yd); yd.add(L.forest(120, -400, 400, -200, -40, 221, false));
-  U.yT1 = L.train(5, { openIdx: [0, 1, 2, 3, 4] }); at(U.yT1, 10, 0, 0); yd.add(U.yT1); U.yT2 = L.train(5, { openIdx: [1, 3] }); at(U.yT2, 120, 0, 6, Math.PI); yd.add(U.yT2);
+  U.yT1 = L.train(5, { openIdx: [0, 1, 2, 3, 4] }); at(U.yT1, -29.2, 0, 0, Math.PI); yd.add(U.yT1); U.yT2 = L.train(5, { openIdx: [1, 3] }); at(U.yT2, 120, 0, 6, Math.PI); yd.add(U.yT2);
   U.boarders = [...Array(9)].map((_, i) => { const m = man({ u: i % 3 === 1 ? 'legionCap' : 'legion', seed: 2040 + i }); yd.add(m); return m; });
   U.crates = []; for (let i = 0; i < 6; i++) { const c = await model(i % 2 ? 'wooden_military_crate' : 'ammo_box'); yd.add(c); U.crates.push(c); }
   U.porters = [0, 1].map(i => { const m = man({ u: 'legion', seed: 2060 + i, rifle: false }); yd.add(m); return m; });
@@ -130,7 +130,7 @@ SHOTS[84] = (t, lt, d) => { show('splain'); snowLook(); U.snowS.visible = true; 
 // 85 junctions let troops move, supplies travel, separated units meet
 SHOTS[85] = (t, lt, d) => { show('yard'); look('day', [0xd8dce0, .004], 1.6, 2.4, 0xfff0dc, [-40, 60, 30], [-900, 0, 0]); U.yT1.userData.update(0); U.after.forEach(m => m.position.y = -50); U.ysmoke.forEach(c => c.s.visible = false);
   U.boarders.forEach((m, i) => { const k = clamp((lt - i * .2) / 1.4), cx2 = -1 - (i % 3) * 8.6; at(m, cx2 + (i % 2) * .5, k < .6 ? .6 : lerp(.6, 1.7, clamp((k - .6) / .3)), lerp(-8.5, -1.0, k), facing([0, 1])); pose(m, t, { walk: k < 1, speed: 8, armR: k > .6 && k < .9 ? 2 : 0 }); if (k >= 1) m.position.y = -50; });
-  U.yT1.position.y = 0; U.yT1.position.x = 10;
+  U.yT1.position.y = 0; U.yT1.position.x = -29.2; U.yT1.rotation.y = Math.PI;
   const PX = [-9.4, -8.6], pile = (i) => [-11.6 + (i % 2) * .6, .6 + Math.floor(i / 2) * .45, -2.7];
   U.crates.forEach((c, i) => { if (i >= 2) { const p = pile(i - 2); at(c, p[0], p[1], p[2], .1 * i); } });
   U.porters.forEach((m, i) => { const k = clamp((lt - 2.8 - i * .5) / 1.8); const x = lerp(PX[i] + 3, PX[i] - 1.2, k), z = lerp(-8.5, -3.0, k); at(m, x, .6, z, facing([-.25, 1])); pose(m, t, { walk: k < 1, speed: 7, armL: k < 1 ? 1.1 : .2, armR: k < 1 ? 1.1 : .2, elL: k < 1 ? 1 : .1, elR: k < 1 ? 1 : .1 });
@@ -154,7 +154,7 @@ SHOTS[88] = (t, lt, d) => { show('yard'); look('grey', [0xc8c8c4, .006], 1.3, 1.
   U.ysmoke.forEach((c, i) => { c.s.visible = true; c.s.userData.update(t + i, V3(c.x, 3, c.z)); });
   U.after.forEach((m, i) => { at(m, -6 + i * 1.8, .6, -7.8 - (i % 2) * .8, facing([0, 1]) + (i % 3 - 1) * .4); pose(m, t, { look: Math.sin(t * .3 + i) * .3, nod: .1 }); }); at(U.after[2], 6, 0, -.0, facing([1, 0])); pose(U.after[2], t, { look: 0 });
   if (lt < 3.0) ct('yard', lt, 3.0, [-14, 2.2, 6, 0, 1.4, -8], [-12, 2.0, 5, 2, 1.4, -8], [38, 36]); else ct('yard', lt - 3.0, d - 3.0, [4.6, 1.75, .6, 60, 1.2, 0], [4.8, 1.75, .5, 60, 1.2, 0], [34, 30]);
-  U.yT1.position.y = 0; U.yT2.position.y = 0; U.yT1.position.x = 10; U.yT2.position.x = 120; U.yT1.position.y = -50; U.yT2.position.y = -50; };
+  U.yT1.position.y = 0; U.yT2.position.y = 0; U.yT1.position.x = -29.2; U.yT2.position.x = 120; U.yT1.position.y = -50; U.yT2.position.y = -50; };
 // 89 every advance: a new position to defend (map)
 SHOTS[89] = (t, lt, d) => { OV.noGL = true; overlay((c, tt) => { const pr = RU_PROJ(); M.paper(c); M.baseLand(c, pr, { land: '#b8a888' }); drawRail(c, pr, 4); const n = 12;
   for (let i = 0; i < n; i++) { const k = clamp((lt - i * .18) / .25); if (k <= 0) continue; const [x, y] = railAt(pr, .05 + i * .075); c.save(); c.translate(x, y - 26); c.scale(k, k); c.fillStyle = '#f2f0ea'; c.strokeStyle = '#2a1a10'; c.lineWidth = 3; c.beginPath(); c.moveTo(0, -18); c.lineTo(15, -12); c.lineTo(13, 6); c.lineTo(0, 18); c.lineTo(-13, 6); c.lineTo(-15, -12); c.closePath(); c.fill(); c.stroke(); c.fillStyle = '#c8241c'; c.fillRect(-12, 0, 24, 8); c.restore(); }
