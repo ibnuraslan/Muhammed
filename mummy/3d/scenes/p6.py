@@ -188,11 +188,13 @@ def S05():
 
 def S06():
     """New floors over old: the excavated house floor in the trench, its hearth and the darker floor layers, raking sun."""
+    G.SCANNED = True                                          # scanned stone kerb and wall
     T, sk = p1.site("golden", grass_at=None, kit=False, burials=True, sun_az=205)
     hx, hy, r = U.HOUSES[1]
     z = G.H(hx, hy)
-    return dict(a=((hx + 3.2, hy - 3.4, z + 1.2), (hx, hy, z)), b=((hx + 2.4, hy - 2.6, z + 1.0), (hx, hy, z)), lens=28,
-                fstop=5.6, focus=(hx, hy, z), cine=dict(exposure=0.15))
+    hz = Vector((hx + 0.4, hy, z))
+    return dict(a=((hx + 1.7, hy - 1.5, z + 0.55), tuple(hz)), b=((hx + 1.3, hy - 1.15, z + 0.48), tuple(hz)), lens=30,
+                fstop=5.6, focus=tuple(hz), cine=dict(exposure=0.15))
 
 
 # ============================================================================ "By the time sand covered the settlement..."
