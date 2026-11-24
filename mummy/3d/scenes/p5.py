@@ -275,7 +275,7 @@ def S12():
     hx, hy = R["hearth"]
     _spot((hx - 0.2, hy + 0.2, 0.8), tuple(t), 140, size=0.2, color=(1.0, 0.55, 0.22), spot=30)
     along = Vector((math.cos(rot), math.sin(rot), 0)); side = Vector((math.cos(rot - math.pi / 2), math.sin(rot - math.pi / 2), 0))
-    cam = t + side * 0.3 + along * 0.18 + Vector((0, 0, 0.22))
+    cam = t + side * 0.55 + along * 0.3 + Vector((0, 0, 0.35))       # the cords across the body, knots and wraps together
     return dict(a=(tuple(cam), tuple(t)), b=(tuple(cam - side * 0.06), tuple(t)), lens=55,
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor",))
 

@@ -583,19 +583,21 @@ def hurdle(loc, rot=0.0, length=2.0, width=0.9, seed=0):
 
 def _cord_ring(body, loc, axis_rot, R, mat, name="bundlerope", thick=0.011, knot=True):
     """A cord bound tight round `body`: a ring shrink-wrapped onto its surface, with a knot on top."""
-    bpy.ops.mesh.primitive_torus_add(major_radius=R, minor_radius=thick, major_segments=64, minor_segments=8, location=loc); r = bpy.context.active_object
-    r.rotation_euler = axis_rot; r.name = name; r.data.materials.append(mat)
-    sw = r.modifiers.new("hug", "SHRINKWRAP"); sw.target = body; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.offset = thick * 0.6
-    tw = r.modifiers.new("twist", "DISPLACE"); tt = bpy.data.textures.get("cordtwist") or bpy.data.textures.new("cordtwist", "CLOUDS")
-    tt.noise_scale = 0.008; tw.texture = tt; tw.strength = 0.003
+    # a round cord: a curve ring shrink-wrapped onto the body (on the spline, so the cord keeps its round section)
+    bpy.ops.curve.primitive_bezier_circle_add(radius=R, location=loc); r = bpy.context.active_object
+    r.rotation_euler = axis_rot; r.name = name
+    cu = r.data; cu.bevel_depth = thick; cu.bevel_resolution = 3; cu.resolution_u = 24; cu.use_fill_caps = True
+    cu.materials.append(mat)
+    sw = r.modifiers.new("hug", "SHRINKWRAP"); sw.target = body; sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.offset = thick * 0.9
+    sw.use_apply_on_spline = True
     if knot:
         bpy.context.view_layer.update()
         dg = bpy.context.evaluated_depsgraph_get(); re = r.evaluated_get(dg); me = re.to_mesh()
         top = max((re.matrix_world @ v.co for v in me.vertices), key=lambda p: p.z); re.to_mesh_clear()
-        bpy.ops.mesh.primitive_uv_sphere_add(radius=thick * 2.2, location=top); k = bpy.context.active_object
+        bpy.ops.mesh.primitive_uv_sphere_add(radius=thick * 1.7, location=top); k = bpy.context.active_object
         k.scale = (1.4, 1.0, 0.8); k.data.materials.append(mat); k.name = name + "knot"
         for s_ in (-1, 1):                                   # the two loose ends
-            bpy.ops.mesh.primitive_cylinder_add(radius=thick * 0.8, depth=0.05, location=top + Vector((0.02 * s_, 0.02, 0.0))); e = bpy.context.active_object
+            bpy.ops.mesh.primitive_cylinder_add(radius=thick * 0.8, depth=0.04, location=top + Vector((0.015 * s_, 0.015, 0.0))); e = bpy.context.active_object
             e.rotation_euler = (math.radians(70), 0, math.radians(30 * s_)); e.data.materials.append(mat); e.name = name + "end"
     return r
 
