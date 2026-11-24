@@ -78,7 +78,7 @@ def slide_tray(c, n_x=6, n_y=6, mark=None):
     cx, cy, cz = c
     bpy.ops.mesh.primitive_cube_add(size=1, location=(cx, cy, cz + 0.006)); t = bpy.context.active_object
     t.scale = (n_x * 0.033 + 0.02, n_y * 0.08 + 0.02, 0.012); t.data.materials.append(_plain("slidetray", (0.32, 0.33, 0.35), 0.45)); t.name = "slidetray"
-    gl = _glass("slideglass"); rng = random.Random(15)
+    gl = _plain("slideglass2", (0.62, 0.66, 0.68), 0.12); rng = random.Random(15)       # glass over a pale tray: reads pale grey-green
     for i in range(n_x):
         for j in range(n_y):
             x = cx - (n_x - 1) * 0.033 / 2 + i * 0.033; y = cy - (n_y - 1) * 0.08 / 2 + j * 0.08
