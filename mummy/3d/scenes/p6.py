@@ -449,9 +449,10 @@ def S28():
     LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
     sk, W = p3.lab_part("upperarmR", sex="M", tone="A", x=0.0, y=0.4, yaw=-12, name="MovedArm")
     t = Vector(((W.min(0) + W.max(0)) / 2).tolist())
+    p3._knee_mats(sk.parts["upperarmR"], sand=0.2)              # aged bone, not a smooth pale limb
     _spot((t.x + 0.1, t.y - 0.5, t.z + 0.45), tuple(t), 45, size=0.04, color=(1.0, 0.9, 0.78), spot=18)
-    return dict(a=(tuple(t + Vector((-0.14, -0.36, 0.14))), tuple(t + Vector((-0.06, 0, 0)))), b=(tuple(t + Vector((0.12, -0.36, 0.14))), tuple(t + Vector((0.06, 0, 0)))),
-                lens=55, fstop=4.0, focus=tuple(t), cine=dict(exposure=-0.05))
+    return dict(a=(tuple(t + Vector((-0.1, -0.58, 0.26))), tuple(t + Vector((-0.04, 0, 0)))), b=(tuple(t + Vector((0.1, -0.58, 0.26))), tuple(t + Vector((0.04, 0, 0)))),
+                lens=45, fstop=4.0, focus=tuple(t), cine=dict(exposure=-0.05))
 
 
 # ============================================================================ "More than three thousand years later..." / "...at least six."
