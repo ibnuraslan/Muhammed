@@ -152,11 +152,11 @@ def S03():
     """The accelerator hall: a long stainless beamline in blue half-dark, magnets, the sample wheel at the ion source.
     Low dolly along the beamline."""
     H = P2.ams_hall()
-    _haze((2, 0, 4), (40, 14, 8), density=0.018, color=(0.8, 0.88, 1.0))
+    _haze((2, 0, 4), (40, 14, 8), density=0.006, color=(0.8, 0.88, 1.0))
     z = H["beam_z"]
     _spot((-4.0, -3.0, 6.5), (-5.5, 0, z), 900, size=0.4, color=(0.75, 0.85, 1.0), spot=35)      # a pool on the tank
-    return dict(a=((12.5, -0.95, z + 0.28), (-4.0, 0.0, z + 0.25)), b=((8.8, -0.9, z + 0.24), (-5.0, 0.0, z + 0.35)), lens=30,
-                fstop=4.0, focus=(4.0, 0, z), cine=dict(exposure=0.1))
+    return dict(a=((15.0, -1.7, z + 0.45), (-4.0, 0.0, z + 0.3)), b=((12.0, -1.6, z + 0.4), (-5.0, 0.0, z + 0.4)), lens=35,
+                fstop=4.0, focus=(6.0, 0, z), cine=dict(exposure=-0.2))
 
 
 def S04():
@@ -284,8 +284,8 @@ def S12():
     s1.scale = (0.075, 0.026, 0.0012); s1.data.materials.append(gl); s1.name = "slide"
     bpy.ops.mesh.primitive_cylinder_add(radius=0.008, depth=0.0004, location=(-0.14, 0.24, LB.TOP + 0.0018)); d = bpy.context.active_object
     d.data.materials.append(_plain("section", (0.55, 0.38, 0.18), 0.4)); d.name = "section"
-    t = Vector((0.0, 0.42, LB.TOP + 0.17))
-    return dict(a=((-0.7, -0.45, LB.TOP + 0.38), tuple(t)), b=((-0.45, -0.22, LB.TOP + 0.3), tuple(t + Vector((0, 0, -0.03)))), lens=45,
+    t = Vector((-0.08, 0.38, LB.TOP + 0.16))
+    return dict(a=((-0.95, -0.62, LB.TOP + 0.4), tuple(t)), b=((-0.75, -0.45, LB.TOP + 0.34), tuple(t + Vector((0.02, 0.02, -0.02)))), lens=40,
                 fstop=2.8, focus=tuple(t), cine=dict(exposure=-0.1))
 
 

@@ -162,12 +162,12 @@ def ams_hall(length=16.0, seed=3):
     rng = random.Random(seed)
     Z = 1.3
     ss = _brushed("ss"); ssd = _brushed("ssdark", (0.4, 0.4, 0.42), 0.4)
-    tankp = _paint("tankpaint", (0.36, 0.5, 0.5), 0.4); red = _paint("magnetred", (0.42, 0.05, 0.03), 0.4)
-    blue = _paint("quadblue", (0.04, 0.12, 0.32), 0.38); copper = _paint("coil", (0.55, 0.25, 0.1), 0.3)
+    tankp = _paint("tankpaint", (0.22, 0.3, 0.3), 0.4); red = _paint("magnetred", (0.28, 0.05, 0.035), 0.4)
+    blue = _paint("quadblue", (0.05, 0.09, 0.17), 0.38); copper = _paint("coil", (0.55, 0.25, 0.1), 0.3)
     copper.node_tree.nodes["Principled BSDF"].inputs['Metallic'].default_value = 0.8
-    rackp = _paint("rack", (0.12, 0.12, 0.13), 0.55); yellow = _paint("yellowstand", (0.6, 0.45, 0.04), 0.5)
+    rackp = _paint("rack", (0.12, 0.12, 0.13), 0.55); yellow = _paint("yellowstand", (0.38, 0.3, 0.06), 0.5)
     floor = ph.texture("concrete_floor_worn_001", scale=0.4, name="hallfloor", tint=(0.55, 0.56, 0.6))
-    wall = ph.texture("painted_plaster_wall", scale=0.25, name="hallwall", tint=(0.32, 0.34, 0.37))
+    wall = ph.texture("painted_plaster_wall", scale=0.25, name="hallwall", tint=(0.12, 0.13, 0.15))
     W = 14.0
     _box2("floor", (length / 2 - 6, 0, -0.05), (length + 30, W, 0.1), floor, 0)
     for y in (-W / 2, W / 2):
@@ -224,10 +224,10 @@ def ams_hall(length=16.0, seed=3):
     _box2("magnetbase", (mx, -0.2, 0.3), (1.6, 1.2, 0.6), yellow, 0.02)
     # quadrupole doublets (blue)
     for qx in (x0 + 2.2, x0 + 7.6, x0 + 9.6):
-        _cyl(0.32, 0.45, (qx, 0, Z), rot=(0, math.pi / 2, 0), mat=blue, name="quad", verts=64, bevel=0.02)
+        _cyl(0.2, 0.34, (qx, 0, Z), rot=(0, math.pi / 2, 0), mat=blue, name="quad", verts=64, bevel=0.02)
         for k in range(4):
             a = math.pi / 4 + k * math.pi / 2
-            bpy.ops.mesh.primitive_torus_add(major_radius=0.1, minor_radius=0.035, location=(qx - 0.25, 0.2 * math.cos(a), Z + 0.2 * math.sin(a)))
+            bpy.ops.mesh.primitive_torus_add(major_radius=0.06, minor_radius=0.022, location=(qx - 0.18, 0.12 * math.cos(a), Z + 0.12 * math.sin(a)))
             c = bpy.context.active_object; c.rotation_euler.y = math.pi / 2; c.data.materials.append(copper); c.name = "quadcoil"
     # stands under the beamline
     xs = x0 + 0.8
@@ -262,7 +262,7 @@ def ams_hall(length=16.0, seed=3):
             bpy.ops.mesh.primitive_plane_add(size=1, location=(xf, yf, 7.705)); e = bpy.context.active_object
             e.scale = (1.4, 0.16, 1); e.rotation_euler.x = math.pi; e.name = "tube"
             e.data.materials.append(bpy.data.materials.get("tubeglow") or _mat("tubeglow", (0, 0, 0), 0.5, emit=(0.78, 0.88, 1.0), strength=12))
-            d = bpy.data.lights.new("fit", 'AREA'); d.shape = 'RECTANGLE'; d.size = 1.4; d.size_y = 0.15; d.energy = 160; d.color = (0.78, 0.88, 1.0)
+            d = bpy.data.lights.new("fit", 'AREA'); d.shape = 'RECTANGLE'; d.size = 1.4; d.size_y = 0.15; d.energy = 55; d.color = (0.78, 0.88, 1.0)
             lo = bpy.data.objects.new("fit", d); bpy.context.scene.collection.objects.link(lo); lo.location = (xf, yf, 7.6)
     w = bpy.data.worlds.new("hall"); bpy.context.scene.world = w; w.use_nodes = True
     w.node_tree.nodes["Background"].inputs['Color'].default_value = (0.005, 0.006, 0.008, 1)
