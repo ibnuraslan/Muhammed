@@ -36,7 +36,7 @@ def _house_bundle(fire=1.0, moon=0.0, at=(-2.35, 0.86), rot=70, door_sun=0.0, ra
 def _kneeler(i, name, knees, heading, look, lean=12, var=0, hands=None):
     """An islander kneeling sitting back on the heels (from behind), hands resting on the thighs or at `hands`."""
     import acts as AC
-    m = BR.islander_cropped(i, name=name, var=var)
+    m = BR.villager("man" if i == 0 else "elder", name, var=var, ease=1.3)     # Bronze Age dress: belted wool tunic, wrapped legs
     st = AC.Kneel(m, knees, heading, lean=lean, sit_back=True)
     f = Vector((math.cos(math.radians(heading)), math.sin(math.radians(heading)), 0)); s = Vector((f.y, -f.x, 0))
     k = Vector((knees[0], knees[1], 0))

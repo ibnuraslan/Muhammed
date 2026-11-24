@@ -139,7 +139,7 @@ def S02():
     y = U.DIG["y1"]
     G.section_scan(y, x_center=3.2)
     z = G.H(3.2, y - 1.6)
-    return dict(a=((2.6, y - 1.9, z + 0.12), (3.2, y - 1.02, z + 0.15)), b=((2.7, y - 2.0, z + 0.7), (3.3, y - 1.02, z + 0.5)), lens=40,
+    return dict(a=((2.5, y - 2.0, z + 0.35), (3.2, y - 1.02, z + 0.45)), b=((2.6, y - 2.1, z + 0.85), (3.3, y - 1.02, z + 0.75)), lens=40,
                 fstop=5.6, focus=(3.2, y - 1.05, z + 0.3))
 
 
@@ -151,9 +151,10 @@ def S03():
     qx, qy = hx - 1.8, hy - 1.6                    # the quern placed by interior()
     look = (qx, qy, 0.1)
     hands = {"L": (qx - 0.06, qy + 0.05, 0.16), "R": (qx + 0.06, qy + 0.05, 0.16)}
-    p5._kneeler(1, "Grinder", (qx, qy - 0.55), 90, look, lean=48, var=3, hands=hands)
-    return dict(a=((qx + 0.9, qy - 1.6, 1.35), (qx, qy, 0.15)), b=((qx + 0.7, qy - 1.35, 1.25), (qx, qy, 0.15)), lens=35,
-                fstop=2.8, focus=(qx, qy, 0.15), cine=dict(exposure=0.35), hand_ok=("floor", "quern", "saddle"))
+    p5._kneeler(0, "Grinder", (qx, qy - 0.55), 90, look, lean=48, var=3, hands=hands)
+    _spot((qx + 2.4, qy + 0.3, 1.3), (qx, qy, 0.1), 160, size=0.6, color=(1.0, 0.92, 0.8), spot=40)     # daylight from the door
+    return dict(a=((qx + 1.3, qy - 1.3, 1.6), (qx, qy, 0.12)), b=((qx + 1.1, qy - 1.1, 1.5), (qx, qy, 0.12)), lens=35,
+                fstop=4.0, focus=(qx, qy, 0.15), cine=dict(exposure=0.45), hand_ok=("floor", "quern", "saddle"))
 
 
 def S04():
