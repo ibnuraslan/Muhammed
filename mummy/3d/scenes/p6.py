@@ -77,7 +77,7 @@ def slide_tray(c, n_x=6, n_y=6, mark=None):
     """A black slide tray of 36 thin sections: glass slides, each with a round ground section of bone on it."""
     cx, cy, cz = c
     bpy.ops.mesh.primitive_cube_add(size=1, location=(cx, cy, cz + 0.006)); t = bpy.context.active_object
-    t.scale = (n_x * 0.033 + 0.02, n_y * 0.08 + 0.02, 0.012); t.data.materials.append(_plain("slidetray", (0.02, 0.02, 0.022), 0.5)); t.name = "slidetray"
+    t.scale = (n_x * 0.033 + 0.02, n_y * 0.08 + 0.02, 0.012); t.data.materials.append(_plain("slidetray", (0.32, 0.33, 0.35), 0.45)); t.name = "slidetray"
     gl = _glass("slideglass"); rng = random.Random(15)
     for i in range(n_x):
         for j in range(n_y):
