@@ -440,6 +440,33 @@ def _peat_material(name="peat"):
         return m
     m = ph.texture("mud_forest", scale=1.2, name=name, tint=(0.42, 0.3, 0.2))
     N = m.node_tree.nodes; L = m.node_tree.links; p = [n for n in N if n.type == 'BSDF_PRINCIPLED'][0]
+    # break the tiling: warp the lookup coordinates with low-frequency noise ...
+    imgs = [n for n in N if n.type == 'TEX_IMAGE']
+    mp0 = imgs[0].inputs['Vector'].links[0].from_node
+    tcw = N.new("ShaderNodeTexCoord")
+    wn = N.new("ShaderNodeTexNoise"); wn.inputs['Scale'].default_value = 0.9; wn.inputs['Detail'].default_value = 2; L.new(tcw.outputs['Object'], wn.inputs['Vector'])
+    ws = N.new("ShaderNodeVectorMath"); ws.operation = 'MULTIPLY_ADD'; ws.inputs[1].default_value = (0.9, 0.9, 0.9); ws.inputs[2].default_value = (-0.45, -0.45, -0.45)
+    L.new(wn.outputs['Color'], ws.inputs[0])
+    wa = N.new("ShaderNodeVectorMath"); wa.operation = 'ADD'; L.new(mp0.outputs[0], wa.inputs[0]); L.new(ws.outputs[0], wa.inputs[1])
+    for t in imgs:
+        L.new(wa.outputs[0], t.inputs['Vector'])
+    # ... and blend in a second real mud photo at another scale and angle through a large soft mask
+    try:
+        m2 = ph.texture("brown_mud_02", scale=0.83, name=name + "_b")
+        im2 = [n for n in m2.node_tree.nodes if n.type == 'TEX_IMAGE' and n.image.colorspace_settings.name == 'sRGB'][0].image
+        mp2 = N.new("ShaderNodeMapping"); mp2.inputs['Scale'].default_value = (0.83, 0.83, 0.83); mp2.inputs['Rotation'].default_value = (0.3, 0.5, 0.9)
+        L.new(tcw.outputs['Object'], mp2.inputs['Vector'])
+        wb = N.new("ShaderNodeVectorMath"); wb.operation = 'ADD'; L.new(mp2.outputs[0], wb.inputs[0]); L.new(ws.outputs[0], wb.inputs[1])
+        t2 = N.new("ShaderNodeTexImage"); t2.image = im2; t2.projection = 'BOX'; t2.projection_blend = 0.2; L.new(wb.outputs[0], t2.inputs['Vector'])
+        tn = N.new("ShaderNodeMix"); tn.data_type = 'RGBA'; tn.blend_type = 'MULTIPLY'; tn.inputs['Factor'].default_value = 1.0
+        L.new(t2.outputs['Color'], tn.inputs[6]); tn.inputs[7].default_value = (0.36, 0.26, 0.18, 1)
+        mk = N.new("ShaderNodeTexNoise"); mk.inputs['Scale'].default_value = 0.7; mk.inputs['Detail'].default_value = 3; L.new(tcw.outputs['Object'], mk.inputs['Vector'])
+        mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.42; mr.inputs['From Max'].default_value = 0.6; L.new(mk.outputs['Fac'], mr.inputs['Value'])
+        src0 = p.inputs['Base Color'].links[0].from_socket
+        bl = N.new("ShaderNodeMix"); bl.data_type = 'RGBA'; L.new(mr.outputs[0], bl.inputs['Factor']); L.new(src0, bl.inputs[6]); L.new(tn.outputs[2], bl.inputs[7])
+        L.new(bl.outputs[2], p.inputs['Base Color'])
+    except Exception as ex:
+        print("peat blend", ex)
     if p.inputs['Base Color'].links:
         src = p.inputs['Base Color'].links[0].from_socket
         tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (0.6, 0.6, 3.0)

@@ -49,17 +49,53 @@ def cremation(center, radius=0.12, n=90, seed=1, charcoal=40):
     for k in range(n):
         a = rng.uniform(0, 6.283); r = radius * math.sqrt(rng.random())
         x, y = cx + r * math.cos(a), cy + r * math.sin(a)
-        s = rng.uniform(0.004, 0.016) if rng.random() < 0.85 else rng.uniform(0.018, 0.03)
-        vs = bmesh.ops.create_cube(bm, size=1.0)['verts']
-        sx, sy, sz = s * rng.uniform(1.0, 2.6), s * rng.uniform(0.5, 1.0), s * rng.uniform(0.25, 0.5)
-        R = Matrix.Rotation(rng.uniform(0, 6.3), 3, 'Z') @ Matrix.Rotation(rng.uniform(-0.5, 0.5), 3, 'X')
+        big = rng.random() > 0.8
+        # a sliver of the wall of a long bone: a curved shell patch, warped and twisted by the heat, jagged at the ends
+        L = rng.uniform(0.008, 0.024) * (1.8 if big else 1.0)
+        R = rng.uniform(0.006, 0.013); t = R * rng.uniform(0.18, 0.3)
+        span = rng.uniform(0.7, 2.4); nu, nv = 5, 4
+        bend = rng.uniform(-14, 14); twist = rng.uniform(-0.6, 0.6)
+        ends = [[rng.uniform(-0.25, 0.25) * L / nv for _ in range(nu + 1)] for _ in range(2)]
+        grid = {}
+        for side, rr in (("o", R), ("i", R - t)):
+            for i in range(nu + 1):
+                for j in range(nv + 1):
+                    v = -L / 2 + L * j / nv
+                    if j == 0:
+                        v += ends[0][i]
+                    elif j == nv:
+                        v += ends[1][i]
+                    th = -span / 2 + span * i / nu + twist * v / L
+                    rj = rr * (1 + 0.08 * math.sin(3.1 * i + 1.7 * j + k))
+                    co = Vector((rj * math.cos(th), v, rj * math.sin(th) - R + bend * v * v))
+                    grid[side, i, j] = bm.verts.new(co)
+        def f(*vs):
+            try:
+                bm.faces.new(vs)
+            except ValueError:
+                pass
+        for i in range(nu):
+            for j in range(nv):
+                f(grid["o", i, j], grid["o", i + 1, j], grid["o", i + 1, j + 1], grid["o", i, j + 1])
+                f(grid["i", i, j + 1], grid["i", i + 1, j + 1], grid["i", i + 1, j], grid["i", i, j])
+        for i in range(nu):
+            f(grid["o", i, 0], grid["i", i, 0], grid["i", i + 1, 0], grid["o", i + 1, 0])
+            f(grid["o", i + 1, nv], grid["i", i + 1, nv], grid["i", i, nv], grid["o", i, nv])
+        for j in range(nv):
+            f(grid["o", 0, j + 1], grid["i", 0, j + 1], grid["i", 0, j], grid["o", 0, j])
+            f(grid["o", nu, j], grid["i", nu, j], grid["i", nu, j + 1], grid["o", nu, j + 1])
+        vs = [grid[key] for key in grid]
+        Rm = Matrix.Rotation(rng.uniform(0, 6.3), 3, 'Z') @ Matrix.Rotation(rng.uniform(-0.6, 0.6), 3, 'Y') @ \
+            (Matrix.Rotation(math.pi, 3, 'Y') if rng.random() < 0.5 else Matrix.Identity(3))
         h = (radius - r) * 0.35
         for v in vs:
-            p = Vector((v.co.x * sx + rng.uniform(-0.2, 0.2) * sx, v.co.y * sy, v.co.z * sz + 0.5 * v.co.x ** 2 * sz))
-            v.co = R @ p + Vector((x, y, cz + h + sz * 0.3))
+            v.co = Rm @ v.co + Vector((x, y, cz + h + R * 0.6))
     me = bpy.data.meshes.new("cremated"); bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new("cremated", me); bpy.context.scene.collection.objects.link(o); me.materials.append(_calcined())
-    bv = o.modifiers.new("b", "BEVEL"); bv.width = 0.0008; bv.segments = 1
+    bmesh_ok = me.polygons
+    for pg in me.polygons:
+        pg.use_smooth = True
+    bv = o.modifiers.new("b", "BEVEL"); bv.width = 0.0005; bv.segments = 1
     bm = bmesh.new()
     for k in range(charcoal):
         a = rng.uniform(0, 6.283); r = radius * 1.1 * math.sqrt(rng.random())
@@ -88,27 +124,32 @@ def pyre(c, rng_seed=3):
             bpy.ops.mesh.primitive_cylinder_add(radius=0.07, depth=1.6, location=loc); lg = bpy.context.active_object
             lg.rotation_euler = rot; lg.data.materials.append(wood); lg.name = "log"
     P2.bundle((cx, cy, cz + 1.05), rot=0.3, length=0.95, girth=0.42)
-    # flames: an emissive turbulent volume, warm lights inside the crib
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(cx, cy, cz + 1.3)); fv = bpy.context.active_object
-    fv.scale = (1.7, 1.7, 2.4); fv.name = "pyreflame"
+    # flames: tongues of fire in an emissive volume - a cone of turbulent noise, stretched upward, narrowing with height,
+    # hottest (yellow) low in the crib, deep orange at the tips, ragged edges
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(cx, cy, cz + 1.25)); fv = bpy.context.active_object
+    fv.scale = (1.9, 1.9, 2.5); fv.name = "pyreflame"
     m = bpy.data.materials.new("pyrefire"); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; N.remove(N["Principled BSDF"])
     tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Generated'], sep.inputs[0])
-    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 3.0; nz.inputs['Detail'].default_value = 6; nz.inputs['Distortion'].default_value = 1.2
-    mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (1.0, 1.0, 0.45); L.new(tc.outputs['Generated'], mp.inputs['Vector']); L.new(mp.outputs[0], nz.inputs['Vector'])
-    fz = N.new("ShaderNodeMapRange"); fz.inputs['From Min'].default_value = 0.0; fz.inputs['From Max'].default_value = 0.85
-    fz.inputs['To Min'].default_value = 1.0; fz.inputs['To Max'].default_value = 0.0; L.new(sep.outputs['Z'], fz.inputs['Value'])
-    rx = N.new("ShaderNodeVectorMath"); rx.operation = 'DISTANCE'; rx.inputs[1].default_value = (0.5, 0.5, 0.0)
+    mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (2.2, 2.2, 0.7); L.new(tc.outputs['Generated'], mp.inputs['Vector'])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 3.5; nz.inputs['Detail'].default_value = 8; nz.inputs['Roughness'].default_value = 0.6
+    nz.inputs['Distortion'].default_value = 2.5; L.new(mp.outputs[0], nz.inputs['Vector'])
     cz_ = N.new("ShaderNodeCombineXYZ"); L.new(sep.outputs['X'], cz_.inputs['X']); L.new(sep.outputs['Y'], cz_.inputs['Y'])
-    L.new(cz_.outputs[0], rx.inputs[0])
-    rr = N.new("ShaderNodeMapRange"); rr.inputs['From Min'].default_value = 0.45; rr.inputs['From Max'].default_value = 0.15; L.new(rx.outputs['Value'], rr.inputs['Value'])
-    t = N.new("ShaderNodeMapRange"); t.inputs['From Min'].default_value = 0.45; t.inputs['From Max'].default_value = 0.7; L.new(nz.outputs['Fac'], t.inputs['Value'])
-    a1 = N.new("ShaderNodeMath"); a1.operation = 'MULTIPLY'; L.new(fz.outputs[0], a1.inputs[0]); L.new(rr.outputs[0], a1.inputs[1])
-    a2 = N.new("ShaderNodeMath"); a2.operation = 'MULTIPLY'; L.new(a1.outputs[0], a2.inputs[0]); L.new(t.outputs[0], a2.inputs[1])
-    bb = N.new("ShaderNodeBlackbody"); bb.inputs['Temperature'].default_value = 1500
-    em = N.new("ShaderNodeMath"); em.operation = 'MULTIPLY'; em.inputs[1].default_value = 30.0; L.new(a2.outputs[0], em.inputs[0])
-    v = N.new("ShaderNodeVolumePrincipled"); v.inputs['Density'].default_value = 0.0
+    rx = N.new("ShaderNodeVectorMath"); rx.operation = 'DISTANCE'; rx.inputs[1].default_value = (0.5, 0.5, 0.0); L.new(cz_.outputs[0], rx.inputs[0])
+    # allowed radius shrinks with height (a cone of fire): r_max = 0.42 * (1 - z)
+    rm = N.new("ShaderNodeMath"); rm.operation = 'MULTIPLY_ADD'; rm.inputs[1].default_value = -0.42; rm.inputs[2].default_value = 0.42; L.new(sep.outputs['Z'], rm.inputs[0])
+    rm2 = N.new("ShaderNodeMath"); rm2.operation = 'MAXIMUM'; rm2.inputs[1].default_value = 0.02; L.new(rm.outputs[0], rm2.inputs[0])
+    rq = N.new("ShaderNodeMath"); rq.operation = 'DIVIDE'; L.new(rx.outputs['Value'], rq.inputs[0]); L.new(rm2.outputs[0], rq.inputs[1])
+    # ragged edge: the noise pushes the boundary in and out
+    rn = N.new("ShaderNodeMath"); rn.operation = 'MULTIPLY_ADD'; rn.inputs[1].default_value = 1.1; L.new(nz.outputs['Fac'], rn.inputs[0]); L.new(rq.outputs[0], rn.inputs[2])
+    sh_ = N.new("ShaderNodeMapRange"); sh_.inputs['From Min'].default_value = 1.35; sh_.inputs['From Max'].default_value = 1.05; L.new(rn.outputs[0], sh_.inputs['Value'])
+    lo_ = N.new("ShaderNodeMapRange"); lo_.inputs['From Min'].default_value = 0.0; lo_.inputs['From Max'].default_value = 0.06; L.new(sep.outputs['Z'], lo_.inputs['Value'])
+    a1 = N.new("ShaderNodeMath"); a1.operation = 'MULTIPLY'; L.new(sh_.outputs[0], a1.inputs[0]); L.new(lo_.outputs[0], a1.inputs[1])
+    tmp = N.new("ShaderNodeMapRange"); tmp.inputs['To Min'].default_value = 2100; tmp.inputs['To Max'].default_value = 1150; L.new(sep.outputs['Z'], tmp.inputs['Value'])
+    bb = N.new("ShaderNodeBlackbody"); L.new(tmp.outputs[0], bb.inputs['Temperature'])
+    em = N.new("ShaderNodeMath"); em.operation = 'MULTIPLY'; em.inputs[1].default_value = 9.0; L.new(a1.outputs[0], em.inputs[0])
+    v = N.new("ShaderNodeVolumePrincipled")
     L.new(bb.outputs[0], v.inputs['Emission Color']); L.new(em.outputs[0], v.inputs['Emission Strength'])
-    dd = N.new("ShaderNodeMath"); dd.operation = 'MULTIPLY'; dd.inputs[1].default_value = 2.0; L.new(a2.outputs[0], dd.inputs[0]); L.new(dd.outputs[0], v.inputs['Density'])
+    dd = N.new("ShaderNodeMath"); dd.operation = 'MULTIPLY'; dd.inputs[1].default_value = 0.4; L.new(a1.outputs[0], dd.inputs[0]); L.new(dd.outputs[0], v.inputs['Density'])
     v.inputs['Color'].default_value = (0.1, 0.08, 0.07, 1)
     L.new(v.outputs[0], N["Material Output"].inputs['Volume']); fv.data.materials.append(m)
     for k in range(3):
@@ -182,13 +223,13 @@ def S09():
     c = (6.0, 2.0, float(U.surface(6.0, 2.0)))
     pyre(c)
     import acts as AC
-    for i, (dx, dy, hd) in enumerate(((3.0, -4.6, 120), (4.3, -4.1, 128))):
+    for i, (dx, dy, hd) in enumerate(((6.2, -8.4, 125), (7.6, -7.6, 130))):
         m = BR.Islander(name=f"Islander{i}") if i == 0 else p2._islander2()
         f = (c[0] + dx, c[1] + dy); zf = float(U.surface(*f))
         st = AC.Stand(m, f, hd, lean=4)
         st.finish(look=(c[0], c[1], c[2] + 1.2 - zf), density=HAIR); G.lift(st, zf)
-    return dict(a=((c[0] + 12, c[1] - 12, c[2] + 2.0), (c[0], c[1], c[2] + 1.4)), b=((c[0] + 10.5, c[1] - 10.5, c[2] + 1.9), (c[0], c[1], c[2] + 1.5)),
-                lens=40, fstop=5.6, focus=(c[0] + 3.5, c[1] - 4.3, c[2] + 1.2), cine=dict(exposure=0.25))
+    return dict(a=((c[0] + 13.5, c[1] - 14.5, c[2] + 1.9), (c[0], c[1], c[2] + 1.4)), b=((c[0] + 12.5, c[1] - 13.5, c[2] + 1.85), (c[0], c[1], c[2] + 1.5)),
+                lens=45, fstop=5.6, focus=(c[0] + 6.9, c[1] - 8.0, c[2] + 1.2), cine=dict(exposure=0.25))
 
 
 def S10():
@@ -278,11 +319,11 @@ def S17():
     """Under the floors: the house floor in the trench, scattered human bone in its make-up. Low slider."""
     T, sk = p1.site("golden", grass_at=None, kit=False, burials=True, sun_az=200)
     rng = random.Random(17)
-    for k in range(6):
-        x, y = rng.uniform(-2.5, 2.5), rng.uniform(-2.0, 2.0)
+    for k in range(11):
+        x, y = rng.uniform(-0.9, 0.9), rng.uniform(-0.6, 0.6)
         z = G.H(x, y)
         sk2 = B.Skeleton("M", "C", name=f"Scatter{k}")
-        keep = rng.choice(["forearmL", "patellaL", "handR", "footL"])
+        keep = rng.choice(["forearmL", "patellaL", "handR", "footL", "femurL", "shankR", "mandible", "upperarmR"])
         for s_ in list(sk2.parts):
             if s_ != keep:
                 sk2.remove(s_)
@@ -291,7 +332,7 @@ def S17():
         sk2.root.rotation_euler = (math.radians(90), 0, rng.uniform(0, 6.3)); bpy.context.view_layer.update()
         Wv = np.array([o.matrix_world @ v.co for v in o.data.vertices]); c = Wv.mean(0)
         sk2.root.location += Vector((x - c[0], y - c[1], z - 0.004 - Wv[:, 2].min()))
-    return dict(a=((-3.5, -2.8, G.H(0, 0) + 0.9), (0, 0, G.H(0, 0))), b=((-2.0, -3.2, G.H(0, 0) + 0.8), (1, 0.5, G.H(0, 0))), lens=32,
+    return dict(a=((-1.4, -1.5, G.H(0, 0) + 0.75), (0, 0, G.H(0, 0))), b=((-0.7, -1.8, G.H(0, 0) + 0.7), (0.4, 0.2, G.H(0, 0))), lens=32,
                 fstop=5.6, focus=(0, 0, G.H(0, 0)), cine=dict(exposure=0.1))
 
 

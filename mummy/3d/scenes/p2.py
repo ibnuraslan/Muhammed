@@ -855,7 +855,7 @@ def S25():
     ro = bpy.data.objects.new("rake", rk); bpy.context.scene.collection.objects.link(ro); ro.location = (x0 + 3.2, yb - 0.8, zf + 1.1)
     ro.rotation_euler = (Vector((x0, yb, zf + 0.7)) - ro.location).to_track_quat('-Z', 'Y').to_euler()
     # the spade (a long ash shaft, narrow iron blade with a side wing), carrying a turf onto the bank top
-    blade = Vector((x0 + 0.25, yb - 0.05, zt + 0.06)); grip = Vector((x0 + 0.12, fy + 0.5, zf + 1.05))
+    blade = Vector((x0 + 0.25, yb - 0.05, zt + 0.06)); grip = Vector((x0 + 0.12, fy + 0.45, zf + 0.9))
     ax = (blade - grip); L_ = ax.length; axn = ax.normalized()
     bpy.ops.mesh.primitive_cylinder_add(radius=0.018, depth=L_, location=(grip + blade) / 2); sh = bpy.context.active_object
     sh.rotation_euler = axn.to_track_quat('Z', 'Y').to_euler(); sh.data.materials.append(_plain("ash", (0.3, 0.22, 0.13), 0.7)); sh.name = "spade"
@@ -865,7 +865,7 @@ def S25():
     tf.scale = (0.12, 0.28, 0.1); tf.rotation_euler = bl.rotation_euler; tf.data.materials.append(P2._peat_material()); tf.name = "turf"
     bv = tf.modifiers.new("b", "BEVEL"); bv.width = 0.012; bv.segments = 2
     m = BR.Islander(name="Cutter")
-    st = AC.Stand(m, (x0 - 0.05, fy), 90, weight="R", lean=14)
+    st = AC.Haul(m, (x0 - 0.05, fy), 90, knee=24, lean=22, weight="R")       # knees bent, weight down behind the spade
     for sd, w in (("R", grip), ("L", grip + axn * 0.5)):
         st.hand(sd, (w.x, w.y, w.z - zf), elbow=(0.6, 0.2, -0.8), grip=0.85)
     st.head_to((blade.x, blade.y, blade.z - zf), share=0.8)
