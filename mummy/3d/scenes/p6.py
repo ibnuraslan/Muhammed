@@ -242,7 +242,7 @@ def S10():
     cr.rotation_euler = (0, 0, math.radians(-35))
     p3.lab_part("mandible", sex="M", tone="B", x=0.14, y=0.36, yaw=15, name="OtherJaw")
     t = Vector((0.02, 0.38, LB.TOP + 0.04))
-    return dict(a=(tuple(t + Vector((0.12, -0.45, 0.2))), tuple(t)), b=(tuple(t + Vector((0.06, -0.33, 0.15))), tuple(t)), lens=55,
+    return dict(a=(tuple(t + Vector((0.1, -0.75, 0.32))), tuple(t)), b=(tuple(t + Vector((0.05, -0.62, 0.27))), tuple(t)), lens=45,
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=-0.05))
 
 
