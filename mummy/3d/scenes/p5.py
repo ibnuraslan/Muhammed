@@ -248,7 +248,7 @@ def S11():
     bpy.context.view_layer.update()
     W = np.array([o.matrix_world @ v.co for v in o.data.vertices])
     top = W[np.argmax(W @ np.array(n))]
-    tgt = hit + n * 0.12                                   # head and neck of the femur stand well clear of the hide
+    tgt = hit + n * 0.17                                   # head and neck of the femur stand well clear of the hide
     sk.root.location += Vector((tgt.x - top[0], tgt.y - top[1], tgt.z - top[2]))
     bpy.context.view_layer.update()
     # the split: a dark ragged gap in the hide round the bone, with lifted torn lips
@@ -260,7 +260,7 @@ def S11():
     _spot((hx - 0.2, hy + 0.2, 0.8), tuple(tgt), 110, size=0.3, color=(1.0, 0.6, 0.28), spot=25)
     # medium shot: the whole crouched bundle on its hurdle, the split and the bone end at a readable scale
     side = Vector((1, 0, 0))
-    return dict(a=(tuple(cam), tuple(c * 0.7 + hit * 0.3)), b=(tuple(cam - (cam - c).normalized() * 0.15), tuple(c * 0.7 + hit * 0.3)), lens=40,
+    return dict(a=(tuple(cam), tuple(c * 0.5 + hit * 0.5)), b=(tuple(cam - (cam - c).normalized() * 0.15), tuple(c * 0.5 + hit * 0.5)), lens=50,
                 fstop=4.0, focus=tuple(tgt), cine=dict(exposure=0.1, sat=0.9), hand_ok=("floor", "bundle"))
 
 

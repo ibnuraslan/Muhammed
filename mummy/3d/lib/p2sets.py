@@ -664,13 +664,18 @@ def crouched_bundle(loc, rot=0.0, seed=0, cords=4, cord_col=(0.16, 0.11, 0.07)):
     o.data.materials.clear()
     for p_ in o.data.polygons:
         p_.use_smooth = True; p_.material_index = 0
-    sm = o.modifiers.new("soften", "SMOOTH"); sm.factor = 1.0; sm.iterations = 12      # one continuous wrapped form, not balls
+    sm = o.modifiers.new("soften", "SMOOTH"); sm.factor = 1.0; sm.iterations = 7       # one continuous wrapped form, the knees, shoulders and skull still showing through
     d = o.modifiers.new("lumps", "DISPLACE"); t = bpy.data.textures.new("crouchlump", "CLOUDS"); t.noise_scale = 0.12; d.texture = t; d.strength = 0.025
     d2 = o.modifiers.new("folds", "DISPLACE"); t2 = bpy.data.textures.new("crouchfold", "WOOD"); t2.wood_type = 'BANDNOISE'; t2.noise_scale = 0.09; t2.turbulence = 6
     d2.texture = t2; d2.strength = 0.008
+    # the hide drawn over the body: creases running between the knees, shoulders and skull, and fine wrinkles
+    d3 = o.modifiers.new("creases", "DISPLACE"); t3 = bpy.data.textures.new("crouchcrease", "MARBLE"); t3.marble_type = 'SHARPER'
+    t3.noise_scale = 0.07; t3.turbulence = 9; t3.noise_depth = 3; d3.texture = t3; d3.texture_coords = 'LOCAL'; d3.strength = 0.016; d3.mid_level = 0.6
+    d4 = o.modifiers.new("wrinkles", "DISPLACE"); t4 = bpy.data.textures.new("crouchwrinkle", "DISTORTED_NOISE"); t4.noise_scale = 0.035
+    t4.distortion = 2.5; d4.texture = t4; d4.texture_coords = 'LOCAL'; d4.strength = 0.007
     hide = bpy.data.materials.get("hide2")
     if hide is None:
-        hide = _mat("hide2", (0.06, 0.038, 0.022), 0.75)
+        hide = _mat("hide2", (0.06, 0.038, 0.022), 0.7)
         hn = hide.node_tree.nodes; hl = hide.node_tree.links; hp = hn["Principled BSDF"]
         tc = hn.new("ShaderNodeTexCoord"); nz = hn.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 14; nz.inputs['Detail'].default_value = 10
         hl.new(tc.outputs['Object'], nz.inputs['Vector'])
