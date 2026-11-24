@@ -379,10 +379,11 @@ def S19():
     LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
     fe, W = p1.lab_femur()
     _etch(fe)
-    t = Vector((float(W[:, 0].mean()) + 0.04, float(W[:, 1].mean()), float(W[:, 2].max()) - 0.008))
-    _spot((t.x - 0.7, t.y + 0.25, LB.TOP + 0.12), tuple(t), 40, size=0.02, spot=25)        # grazing light
-    return dict(a=(tuple(t + Vector((-0.1, -0.12, 0.05))), tuple(t)), b=(tuple(t + Vector((0.0, -0.13, 0.05))), tuple(t + Vector((0.03, 0, 0)))),
-                lens=100, fstop=5.6, focus=tuple(t), cine=dict(exposure=0.0))
+    xm = float(W[:, 0].mean()) + 0.03; mid = W[np.abs(W[:, 0] - xm) < 0.015]
+    t = Vector((xm, float(mid[:, 1].mean()), float(mid[:, 2].max()) - 0.003))
+    _spot((t.x - 0.5, t.y + 0.35, t.z + 0.06), tuple(t), 90, size=0.02, spot=20)        # grazing light across the surface
+    return dict(a=(tuple(t + Vector((-0.06, -0.13, 0.09))), tuple(t)), b=(tuple(t + Vector((0.02, -0.13, 0.09))), tuple(t + Vector((0.02, 0, 0)))),
+                lens=90, fstop=11.0, focus=tuple(t), cine=dict(exposure=0.05))
 
 
 def S20():
