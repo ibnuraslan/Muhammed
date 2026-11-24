@@ -163,9 +163,7 @@ def S07():
     L = p1.lab_body(osteo=False)
     import acts as AC
 
-    class _Osteo(K.Osteologist):
-        HAIR = (0.35, 0.15); HAIR_N = 150000; HAIR_LEN = (0.012, 0.024); HAIR_LIFT = 0.0012; CURL = 0.05
-    m = _Osteo("Osteologist")
+    m = K.OsteologistNeat("Osteologist")
     st = AC.Stand(m, (0.15, -0.42), 90, lean=14)
     st.hand("L", (-0.05, 0.12, LB.TOP + 0.02), elbow=(0.6, 0.2, -0.8), curl=18)
     st.hand("R", (0.32, 0.18, LB.TOP + 0.03), elbow=(0.6, 0.2, -0.8), curl=24)

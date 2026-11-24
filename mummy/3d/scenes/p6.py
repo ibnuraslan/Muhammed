@@ -322,11 +322,11 @@ def S18():
     d = p2.S12()
     slide_tray((-0.3, 0.3, LB.TOP + 0.002), n_x=3, n_y=3)
     import acts as AC
-    m = K.Osteologist()
+    m = K.OsteologistNeat("Osteologist")
     st = AC.Stand(m, (0.05, -0.35), 90, lean=22)
     st.hand("L", (-0.05, 0.3, LB.TOP + 0.03), elbow=(0.6, 0.2, -0.8), curl=18)
     st.hand("R", (0.07, 0.32, LB.TOP + 0.05), elbow=(0.6, 0.2, -0.8), curl=18)
-    st.head_to((0.0, 0.42, LB.TOP + 0.3), share=0.8); st.finish(look=(0.0, 0.42, LB.TOP + 0.3), density=HAIR)
+    st.head_to((0.0, 0.42, LB.TOP + 0.3), share=0.8); st.finish(look=(0.0, 0.42, LB.TOP + 0.3), density=1.0)
     t = Vector((0.0, 0.42, LB.TOP + 0.2))
     return dict(a=((0.55, -1.05, LB.TOP + 0.75), tuple(t)), b=((0.45, -0.85, LB.TOP + 0.7), tuple(t)), lens=35, fstop=4.0, focus=tuple(t),
                 cine=dict(exposure=0.0), hand_ok=("slide", "slidetray", "velvet", "bench"))

@@ -157,3 +157,8 @@ def attach_trowel(st, side="R"):
     for o in root.children_recursive:
         o.name = "trowel"
     return root
+
+
+class OsteologistNeat(Osteologist):
+    """The osteologist with short, neat, dense hair (the longer cut rendered as a puff and read as an oversized head)."""
+    HAIR = (0.35, 0.15); HAIR_N = 150000; HAIR_LEN = (0.012, 0.024); HAIR_LIFT = 0.0012; CURL = 0.05
