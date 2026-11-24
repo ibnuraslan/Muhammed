@@ -145,16 +145,35 @@ def needle_holder():
         mw = o.matrix_world.copy(); o.parent = root; o.matrix_world = mw
     return root
 nh = needle_holder()
-nh.matrix_world = Matrix.Translation((0.64, 0.35, tz + 0.012 + 0.0035)) @ Matrix.Rotation(math.radians(160), 4, 'Z')
+for k, yy in enumerate((-0.072, 0.03)):
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 0, 0))
+    rb = link(bpy.context.active_object); rb.name = "NH_Rest%d" % k; rb.scale = (0.05, 0.012, 0.03); rb.data.materials.append(STEEL)
+    rb["local_y"] = yy
+nh.matrix_world = Matrix.Translation((0.64, 0.35, tz + 0.012 + 0.03 + 0.0035)) @ Matrix.Rotation(math.radians(160), 4, 'Z')
+for k in (0, 1):
+    rb = D.objects["NH_Rest%d" % k]
+    rb.matrix_world = nh.matrix_world @ Matrix.Translation((0, rb["local_y"], -0.0035 - 0.015))
+    rb.scale = (0.05, 0.012, 0.03)
 L["nh_rest"] = [list(r) for r in nh.matrix_world]
 L["towel_z"] = tz + 0.012
 # ---------------------------------------------------------------- heart monitor cart beside the table (front-right of B)
-dx, dy = -2.1, -1.3
+dx, dy = -2.25, -0.10
 for o in D.objects:
     if o.name.startswith(("MonCart_", "Monitor", "ECG_Trace", "Beep_Lamp", "Scope_LabelPlate")) and o.parent is None:
         o.location.x += dx; o.location.y += dy
 lab = D.objects.get("Scope_LabelPlate")
 if lab: lab.hide_render = lab.hide_viewport = True          # no labels or text anywhere
+mon_o = D.objects["Monitor"]
+for sl in mon_o.material_slots:
+    m_ = sl.material
+    if not (m_ and m_.node_tree): continue
+    for n in list(m_.node_tree.nodes):
+        if n.type == 'TEX_IMAGE' and n.image and n.outputs[0].links:
+            px = n.image.pixels[:]; k_ = max(1, len(px) // 4 // 4000)
+            avg = [sum(px[i * 4 * k_ + c] for i in range(len(px) // 4 // k_)) / (len(px) // 4 // k_) for c in range(3)]
+            for l in list(n.outputs[0].links):
+                to = l.to_socket; m_.node_tree.links.remove(l)
+                if to.type == 'RGBA': to.default_value = (*avg, 1)
 dm = D.materials.get("basedecal")                              # the scope's printed decal text -> plain dark enamel
 if dm and dm.node_tree:
     for n in list(dm.node_tree.nodes):
@@ -172,7 +191,11 @@ for nm_, zc, hz in (("ScopeTextCover_T", mz1 - 0.022, 0.04), ("ScopeTextCover_B"
 # move the IV pole out of the camera's working space (back-right corner)
 for o in D.objects:
     if o.name.startswith("IV_") and o.parent is None: o.location.x += 0.55; o.location.y += 0.55
-# old Mayo stand + trolley: keep as background dressing, away from the table front
+for n in ("Mayo_Instruments", "Instruments"):
+    o = D.objects.get(n)
+    if o: o.hide_render = o.hide_viewport = True     # standing instrument racks read as floating tools
+lr = D.objects.get("Lamp_Root")
+if lr: lr.location.z += 0.4                          # dome lamp higher: out of the top of frame
 # ---------------------------------------------------------------- x-ray anatomy (hidden until the x-ray beat)
 XR = col
 brain = D.objects["XR_Brain"]; brain.parent = None
