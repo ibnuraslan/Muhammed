@@ -352,8 +352,9 @@ def S16():
     fe, W = p1.lab_femur()
     xm = float(W[:, 0].mean()); mid = W[np.abs(W[:, 0] - xm) < 0.015]
     t = Vector((xm, float(mid[:, 1].mean()), float(mid[:, 2].max()) - 0.004))
-    return dict(a=(tuple(t + Vector((-0.24, -0.15, 0.08))), tuple(t + Vector((0.03, 0, 0)))), b=(tuple(t + Vector((-0.17, -0.13, 0.065))), tuple(t + Vector((0.05, 0, 0)))),
-                lens=60, fstop=8.0, focus=tuple(t), cine=dict(exposure=-0.05))
+    # higher and wider: the whole bone on the velvet, both ends in frame, sliding along it
+    return dict(a=(tuple(t + Vector((-0.12, -0.42, 0.32))), tuple(t + Vector((-0.04, 0, -0.01)))), b=(tuple(t + Vector((0.06, -0.42, 0.32))), tuple(t + Vector((0.03, 0, -0.01)))),
+                lens=45, fstop=8.0, focus=tuple(t), cine=dict(exposure=-0.05))
 
 
 def S17():
