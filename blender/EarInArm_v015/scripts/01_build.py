@@ -313,11 +313,6 @@ for m in PB.data.materials:
     nt.links.new(ca.outputs["Color"], mr.inputs[0]); nt.links.new(mr.outputs[0], mx.inputs["Factor"])
     nt.links.new(src, mx.inputs["A"]); mx.inputs["B"].default_value = (0.80, 0.45, 0.42, 1)
     nt.links.new(mx.outputs["Result"], p.inputs["Base Color"])
-for c in PAT.children:
-    if c.type == 'MESH' and "short02" in c.name:
-        hm = c.data; bmh = bmesh.new(); bmh.from_mesh(hm)
-        kill = [v for v in bmh.verts if v.co.x < -0.05 and abs(v.co.z - cz) < 0.04 and abs(v.co.y - cy) < 0.045]
-        bmesh.ops.delete(bmh, geom=kill, context='VERTS'); bmh.to_mesh(hm); bmh.free()
 nose_tip = nose
 
 # ------------------------------------------------------------------ the room
