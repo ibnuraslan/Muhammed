@@ -381,22 +381,30 @@ def S22():
 
 
 # ============================================================================ "Outside the house, in a separate pit..."
+def _lying_knee(name="Knee"):
+    """A skeleton laid on its back (as in the lab), knee cut out; returns (skeleton, pieces)."""
+    skk = B.Skeleton("M", "C", name=name, sand=0.6)
+    skk.root.rotation_euler = (math.radians(-90), 0, math.radians(-90))
+    bpy.context.view_layer.update()
+    pcs = knee_pieces(skk)
+    return skk, pcs
+
+
 def _knee_pit(kneel=True):
-    T, sk = p1.site("golden", grass_at=(6, 18), grass_r=6, kit=False, burials=True, sun_az=200)
+    T, sk = p1.site("day", grass_at=(6, 18), grass_r=6, kit=False, burials=True, sun_az=210)
     kx, ky = U.PITS["KNEE"][0], U.PITS["KNEE"][1]
     zf = float(U.surface(kx, ky))
-    skk = B.Skeleton("M", "C", name="Knee")
-    pcs = knee_pieces(skk)
+    skk, pcs = _lying_knee()
     for s_ in list(skk.parts):
         if skk.parts[s_] not in pcs:
             skk.remove(s_)
     bpy.context.view_layer.update()
     W = np.concatenate([np.array([o.matrix_world @ v.co for v in o.data.vertices]) for o in pcs])
     c = W.mean(0)
-    skk.root.location += Vector((kx - c[0], ky - c[1], zf + 0.01 - W[:, 2].min()))
+    skk.root.location += Vector((kx - c[0], ky - c[1], zf - 0.015 - W[:, 2].min()))      # bedded a little into the sand
     bpy.context.view_layer.update()
     for o in pcs:
-        o.data.materials.clear(); o.data.materials.append(B.bone_material("C", dirt=1.0, sand=0.6))
+        p2._bone_detail(o)
     out = dict(knee=Vector((kx, ky, zf + 0.03)), pieces=pcs)
     if kneel:
         out["st"] = K.kneel_trowel(K.DiggerB, (kx + 0.15, ky - 0.75), 95, work=(kx + 0.05, ky - 0.25), density=HAIR)
@@ -457,8 +465,7 @@ def S27():
     """Macro on a dry break: the flat, chalky fracture face of the femur end in grazing light."""
     A = LB.room(window_light=0.15, lamp=False)
     LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
-    skk = B.Skeleton("M", "C", name="Knee")
-    pcs = knee_pieces(skk)
+    skk, pcs = _lying_knee()
     for s_ in list(skk.parts):
         if skk.parts[s_] not in pcs:
             skk.remove(s_)
@@ -577,8 +584,7 @@ def S32():
 def S33():
     """The empty grave by torchlight: in the bottom, the broken knee left behind. Slow descent."""
     c = _night_pit()
-    skk = B.Skeleton("M", "C", name="Knee")
-    pcs = knee_pieces(skk)
+    skk, pcs = _lying_knee()
     for s_ in list(skk.parts):
         if skk.parts[s_] not in pcs:
             skk.remove(s_)
