@@ -203,8 +203,9 @@ def S11():
     sp.rotation_euler = (math.radians(90), 0, sd + math.radians(90)); sp.scale = (1.0, 0.55, 1.0); sp.name = "hidesplit"
     sp.data.materials.append(_plain("hidegap", (0.012, 0.008, 0.005), 0.95))
     t = c + side * 0.3
-    cam = t + side * 0.6 + Vector((0.15, 0, 0.25))
-    return dict(a=(tuple(cam), tuple(t)), b=(tuple(cam - side * 0.12), tuple(t)), lens=50,
+    along = Vector((math.cos(math.radians(70)), math.sin(math.radians(70)), 0))
+    cam = t + along * 0.65 + side * 0.3 + Vector((0, 0, 0.3))         # from along the bundle: the bone seen lengthwise
+    return dict(a=(tuple(cam), tuple(t)), b=(tuple(cam - along * 0.12), tuple(t)), lens=50,
                 fstop=2.8, focus=tuple(t), cine=dict(exposure=0.45, sat=0.85), hand_ok=("floor", "bundle"))
 
 
