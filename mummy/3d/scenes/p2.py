@@ -724,7 +724,7 @@ def S25():
 # ============================================================================ "Nobody has found a written instruction..."
 def S26():
     """The empty moor at dusk, cotton grass in the wind, the pools holding the sky. Low drone drift."""
-    M = moor("dusk", size=220, n=500, cotton=(0, 0, 30, 6000), heather=(0, 0, 30, 500), mist=0.03, sun_az=250)
+    M = moor("dusk", size=220, n=460, cotton=(0, 0, 26, 3000), heather=(0, 0, 26, 250), mist=0.03, sun_az=250)
     z = P2.moor_height(M, 0, -10)
     return dict(a=((-10, -18, z + 1.6), (6, 20, z)), b=((-5, -16, z + 1.4), (10, 20, z)), lens=24, fstop=8.0, focus=(0, 0, z),
                 cine=dict(exposure=0.35))
