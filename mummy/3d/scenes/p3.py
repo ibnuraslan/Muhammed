@@ -736,7 +736,7 @@ def _night_pit():
             o.data.energy = 0.3; o.data.color = (0.6, 0.7, 1.0)
     # a raised rim of upcast earth round the hole
     bpy.ops.mesh.primitive_torus_add(major_radius=0.62, minor_radius=0.12, location=(kx, ky, z + 0.02)); rim = bpy.context.active_object
-    rim.scale = (1.9, 1.0, 0.6); rim.name = "pitrim"; rim.data.materials.append(G.mat("sand"))
+    rim.scale = (1.9, 1.0, 0.35); rim.name = "pitrim"; rim.data.materials.append(G.mat("sand"))
     d_ = rim.modifiers.new("d", "DISPLACE"); t_ = bpy.data.textures.new("rimlump", "CLOUDS"); t_.noise_scale = 0.15; d_.texture = t_; d_.strength = 0.05
     # an open pit with a heap of sand beside it
     bpy.ops.mesh.primitive_cylinder_add(radius=0.55, depth=0.6, location=(kx, ky, z - 0.28)); pit = bpy.context.active_object
@@ -786,14 +786,14 @@ def S31():
     py = c.y - 0.375; pz = -0.2 + 0.03                        # near pole, in the kneelers' ground frame
     zk = max(float(U.surface(c.x + ex, c.y - 0.85 + ey)) for ex in (-0.8, 0, 0.8) for ey in (-0.2, 0, 0.2)) + 0.06
     sts = []
-    for i, x0 in enumerate((-0.45, 0.45)):
+    for i, x0 in enumerate((-0.62, 0.62)):
         m = BR.Islander(name="Islander0") if i == 0 else p2._islander2()
         st = AC.Kneel(m, (c.x + x0, c.y - 0.82), 90, lean=62, sit_back=True)
         for sd, dx in (("L", -0.2), ("R", 0.2)):
             st.grip(sd, (c.x + x0 + dx, py, pz + c.z - zk), (1, 0, 0), radius=0.03)
         st.head_to((c.x + x0, c.y, -0.4), share=0.8); st.finish(look=(c.x + x0, c.y, -0.4), density=HAIR)
         G.lift(st, zk); sts.append(st)
-    return dict(a=((c.x + 0.7, c.y - 3.0, c.z + 2.1), (c.x + 0.1, c.y + 0.05, c.z - 0.2)), b=((c.x + 0.55, c.y - 2.5, c.z + 1.95), (c.x + 0.1, c.y + 0.05, c.z - 0.2)),
+    return dict(a=((c.x + 1.9, c.y - 3.3, c.z + 2.9), (c.x + 0.1, c.y + 0.1, c.z - 0.25)), b=((c.x + 1.6, c.y - 2.9, c.z + 2.7), (c.x + 0.1, c.y + 0.1, c.z - 0.25)),
                 lens=32, fstop=2.8, focus=(c.x, c.y - 0.4, c.z), cine=dict(exposure=0.6), hand_ok=("openpit", "Uist", "pitrim", "hurdle", "bundle"))
 
 
