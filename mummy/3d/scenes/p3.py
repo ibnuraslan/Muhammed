@@ -539,7 +539,7 @@ def S29():
     """In the knee pit: the kneecap still in place against the femur end, the joint held together. Close, low."""
     o = _knee_pit(kneel=False)
     k = o["knee"]
-    return dict(a=(tuple(k + Vector((-0.28, -0.22, 0.16))), tuple(k)), b=(tuple(k + Vector((-0.18, -0.28, 0.14))), tuple(k)), lens=70,
+    return dict(a=(tuple(k + Vector((-0.3, -0.38, 0.5))), tuple(k)), b=(tuple(k + Vector((-0.18, -0.4, 0.42))), tuple(k)), lens=60,
                 fstop=4.0, focus=tuple(k), cine=dict(exposure=0.1))
 
 
