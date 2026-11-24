@@ -622,7 +622,7 @@ def _knee_pit(kneel=True):
     skk.root.location += Vector((kx - c[0], ky - c[1], zf - 0.015 - W[:, 2].min()))      # bedded a little into the sand
     bpy.context.view_layer.update()
     for o in pcs:
-        o.data.materials.clear(); o.data.materials.append(B.bone_material("C", dirt=1.0, sand=0.7))
+        o.data.materials.clear(); o.data.materials.append(B.bone_material("C", dirt=1.0, sand=0.7)); _old_bone(o, stain=0.55)
     out = dict(knee=Vector((kx, ky, zf + 0.03)), pieces=pcs)
     if kneel:
         out["st"] = K.kneel_trowel(K.DiggerB, (kx + 0.15, ky - 0.75), 95, work=(kx + 0.05, ky - 0.25), density=HAIR)
@@ -671,7 +671,7 @@ def S25():
     legs[1].root.location += Vector((0.0, -0.006, 0.004))      # the pit pieces a hairline off the breaks
     bpy.context.view_layer.update()
     for o in objs:
-        o.data.materials.clear(); o.data.materials.append(B.bone_material("C", dirt=1.0, sand=0.35))
+        o.data.materials.clear(); o.data.materials.append(B.bone_material("C", dirt=1.0, sand=0.35)); _old_bone(o, stain=0.55)
     _spot((-0.6, 0.15, LB.TOP + 0.25), (0.0, 0.4, LB.TOP + 0.03), 60, size=0.04, spot=30)
     k = legs[0].world_pivot("shankL")
     return dict(a=(tuple(k + Vector((-0.12, -0.42, 0.3))), tuple(k)), b=(tuple(k + Vector((0.04, -0.4, 0.26))), tuple(k)), lens=55,
