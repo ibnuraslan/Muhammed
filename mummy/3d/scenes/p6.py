@@ -98,10 +98,10 @@ def ruin(hx, hy, r, sand=0.55, seed=0):
     """A roundhouse after abandonment: the low stone wall ring, roof gone, sand blown in and heaped against it."""
     z0 = float(U.surface(hx, hy)) - 0.2
     BR.drystone_wall(hx, hy, r, z0, h=0.7, seed=seed)
-    G.spoil_heap(hx, hy, r * 1.5, r * 1.4, sand)                        # the interior filled with blown sand
+    G.spoil_heap(hx, hy, r * 0.85, r * 0.8, sand * 0.8)                 # the interior half filled with blown sand
     for k in range(6):
         a = random.Random(seed + k).uniform(0, 6.28)
-        G.spoil_heap(hx + (r + 0.6) * math.cos(a), hy + (r + 0.6) * math.sin(a), 2.6, 1.6, sand * 0.8)   # drifts banked against the wall
+        G.spoil_heap(hx + (r + 0.9) * math.cos(a), hy + (r + 0.9) * math.sin(a), 1.8, 1.2, sand * 0.7)   # drifts banked against the wall
 
 
 def drying_platform(c):
