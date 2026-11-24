@@ -433,7 +433,7 @@ def _suit_up(m, st=None):
     # remove the head and upper neck skin by its bone weights (rest-pose mesh; topology of the evaluated one may differ)
     hg = {g.index for g in body.vertex_groups if any(k in g.name.lower() for k in ("head", "neck02", "neck03", "jaw", "eye", "ear", "tongue", "teeth", "levator", "orbicularis", "oris", "temporalis", "special"))}
     if hg:
-        kill = [v.index for v in body.data.vertices if sum(g.weight for g in v.groups if g.group in hg) > 0.35]
+        kill = [v.index for v in body.data.vertices if sum(g.weight for g in v.groups if g.group in hg) > 0.12]
         bb = bmesh.new(); bb.from_mesh(body.data); bb.verts.ensure_lookup_table()
         bmesh.ops.delete(bb, geom=[bb.verts[i] for i in kill], context='VERTS'); bb.to_mesh(body.data); bb.free(); body.data.update()
         print("hood: removed", len(kill), "head verts")
