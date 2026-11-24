@@ -92,6 +92,39 @@ def _haze(center, size, density=0.02, color=(0.9, 0.9, 0.92)):
     return o
 
 
+def _bone_detail(obj):
+    """Archaeological bone surface on the smooth femur model: fine pores, lengthwise grain, patchy darker staining."""
+    for i, m0 in enumerate(obj.data.materials):
+        if not m0 or not m0.use_nodes:
+            continue
+        m = m0.copy(); obj.data.materials[i] = m
+        N = m.node_tree.nodes; Lk = m.node_tree.links; p = [n for n in N if n.type == 'BSDF_PRINCIPLED']
+        if not p:
+            continue
+        p = p[0]; tc = N.new("ShaderNodeTexCoord")
+        mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (40.0, 40.0, 4.0); Lk.new(tc.outputs['Object'], mp.inputs['Vector'])
+        gr = N.new("ShaderNodeTexNoise"); gr.inputs['Scale'].default_value = 30; gr.inputs['Detail'].default_value = 10; Lk.new(mp.outputs[0], gr.inputs['Vector'])
+        po = N.new("ShaderNodeTexVoronoi"); po.inputs['Scale'].default_value = 1400; Lk.new(tc.outputs['Object'], po.inputs['Vector'])
+        pm = N.new("ShaderNodeMapRange"); pm.inputs['From Min'].default_value = 0.0; pm.inputs['From Max'].default_value = 0.25; Lk.new(po.outputs['Distance'], pm.inputs['Value'])
+        h = N.new("ShaderNodeMath"); h.operation = 'MULTIPLY'; Lk.new(gr.outputs['Fac'], h.inputs[0]); Lk.new(pm.outputs[0], h.inputs[1])
+        bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.6; bp.inputs['Distance'].default_value = 0.0008; Lk.new(h.outputs[0], bp.inputs['Height'])
+        if p.inputs['Normal'].links:
+            Lk.new(p.inputs['Normal'].links[0].from_socket, bp.inputs['Normal'])
+        Lk.new(bp.outputs['Normal'], p.inputs['Normal'])
+        st = N.new("ShaderNodeTexNoise"); st.inputs['Scale'].default_value = 14; st.inputs['Detail'].default_value = 6; Lk.new(tc.outputs['Object'], st.inputs['Vector'])
+        sm = N.new("ShaderNodeMapRange"); sm.inputs['From Min'].default_value = 0.45; sm.inputs['From Max'].default_value = 0.7
+        sm.inputs['To Min'].default_value = 0.0; sm.inputs['To Max'].default_value = 0.55; Lk.new(st.outputs['Fac'], sm.inputs['Value'])
+        mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; Lk.new(sm.outputs[0], mx.inputs['Factor'])
+        if p.inputs['Base Color'].links:
+            Lk.new(p.inputs['Base Color'].links[0].from_socket, mx.inputs[6])
+        else:
+            mx.inputs[6].default_value = p.inputs['Base Color'].default_value
+        mx.inputs[7].default_value = (0.32, 0.22, 0.12, 1); Lk.new(mx.outputs[2], p.inputs['Base Color'])
+        p.inputs['Roughness'].default_value = 0.8
+        if 'Subsurface Weight' in p.inputs:
+            p.inputs['Subsurface Weight'].default_value = 0.0      # SSS made it read as flesh
+
+
 def _etch(obj, strength=1.0):
     """Acid-etched bone surface: chalky, paler, pitted (mineral lost from the surface)."""
     for m in obj.data.materials:
@@ -135,7 +168,7 @@ def S02():
     A = LB.room(window_light=0.25, lamp=True, lamp_at=(0.3, 0.62), lamp_target=(0.05, 0.34), lamp_energy=14)
     _spot((-0.4, 0.1, LB.TOP + 1.1), (0.05, 0.35, LB.TOP), 160, size=0.3, color=(0.75, 0.85, 1.0), spot=50)
     LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
-    fe, W = p1.lab_femur()
+    fe, W = p1.lab_femur(); _bone_detail(fe)
     end = W[W[:, 0] > np.percentile(W[:, 0], 85)]
     cx = float(end[:, 0].mean()); cy = float(end[:, 1].mean())
     _boat(cx - 0.02, cy - 0.16, LB.TOP)
@@ -349,7 +382,7 @@ def S16():
     """The bone itself under the lamp: low macro push along the shaft of the thigh bone, the shaft running across frame."""
     A = LB.room(window_light=0.3, lamp=True, lamp_at=(0.3, 0.62), lamp_target=(0.05, 0.34), lamp_energy=20)
     LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
-    fe, W = p1.lab_femur()
+    fe, W = p1.lab_femur(); _bone_detail(fe)
     xm = float(W[:, 0].mean()); mid = W[np.abs(W[:, 0] - xm) < 0.015]
     t = Vector((xm, float(mid[:, 1].mean()), float(mid[:, 2].max()) - 0.004))
     # higher and wider: the whole bone on the velvet, both ends in frame, sliding along it
@@ -370,7 +403,7 @@ def S18():
     """Clean bone: the end of the thigh bone, smooth, no tissue. Slider in the lamp."""
     A = LB.room(window_light=0.3, lamp=True, lamp_at=(0.5, 0.6), lamp_target=(0.2, 0.36), lamp_energy=20)
     LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
-    fe, W = p1.lab_femur()
+    fe, W = p1.lab_femur(); _bone_detail(fe)
     end = W[W[:, 0] > np.percentile(W[:, 0], 90)]
     t = Vector(end.mean(0).tolist())
     return dict(a=(tuple(t + Vector((-0.12, -0.3, 0.26))), tuple(t + Vector((-0.05, 0, 0)))), b=(tuple(t + Vector((0.02, -0.32, 0.24))), tuple(t + Vector((-0.04, 0, 0)))), lens=50,
@@ -381,7 +414,7 @@ def S19():
     """Acid erosion: the bone surface pitted and chalky in a hard raking light. Slow slider."""
     A = LB.room(window_light=0.15, lamp=False)
     LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
-    fe, W = p1.lab_femur()
+    fe, W = p1.lab_femur(); _bone_detail(fe)
     _etch(fe)
     xm = float(W[:, 0].mean()) + 0.03; mid = W[np.abs(W[:, 0] - xm) < 0.015]
     t = Vector((xm, float(mid[:, 1].mean()), float(mid[:, 2].max()) - 0.003))
