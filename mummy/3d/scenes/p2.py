@@ -790,7 +790,7 @@ def S25():
     P2.peat_face(M, -12, 12)
     z = P2.moor_height(M, 0, 5.4)
     return dict(a=((-1.5, 3.4, z + 0.5), (-0.5, 6.0, z + 0.5)), b=((1.0, 3.4, z + 0.5), (2.0, 6.0, z + 0.5)), lens=35,
-                fstop=5.6, focus=(0.5, 5.9, z + 0.5))
+                fstop=5.6, focus=(0.5, 5.9, z + 0.5), cine=dict(exposure=0.45))
 
 
 # ============================================================================ "Nobody has found a written instruction..."
