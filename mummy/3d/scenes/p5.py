@@ -232,7 +232,7 @@ def S11():
     R, c = _house_bundle(fire=1.0, moon=0.2)
     bo = bpy.data.objects["bundle"]
     hit, n = _surface_hit(bo, (-0.25, -0.1))           # over the hip on the room side, between the cords
-    n = (n + Vector((0, 0, 0.6))).normalized()
+    n = (n + Vector((math.cos(math.radians(-20)), math.sin(math.radians(-20)), 0)) * 0.9 + Vector((0, 0, 0.3))).normalized()   # breaking out toward the room
     sk = B.Skeleton("M", "C", name="Exposed")
     for s_ in list(sk.parts):
         if s_ != "femurL":
@@ -253,7 +253,7 @@ def S11():
     hx, hy = R["hearth"]
     _spot((hx - 0.2, hy + 0.2, 0.8), tuple(tgt), 45, size=0.3, color=(1.0, 0.6, 0.28), spot=25)
     # medium shot: the whole crouched bundle on its hurdle, the split and the bone end at a readable scale
-    cam = c + Vector((math.cos(math.radians(-20)), math.sin(math.radians(-20)), 0)) * 1.6 + Vector((0, 0, 0.5))   # from the room side
+    cam = c + Vector((math.cos(math.radians(-20)), math.sin(math.radians(-20)), 0)) * 1.5 + Vector((0, 0, 0.85))   # from the room side, looking down onto the split
     side = Vector((1, 0, 0))
     return dict(a=(tuple(cam), tuple(c * 0.7 + hit * 0.3)), b=(tuple(cam - (cam - c).normalized() * 0.15), tuple(c * 0.7 + hit * 0.3)), lens=40,
                 fstop=4.0, focus=tuple(tgt), cine=dict(exposure=0.1, sat=0.9), hand_ok=("floor", "bundle"))
