@@ -426,10 +426,20 @@ def S27():
     """A jaw was chosen: the lower jaw on the velvet, the teeth catching the lamp. Slow slide."""
     A = LB.room(window_light=0.15, lamp=False)
     LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
-    sk, W = p3.lab_part("mandible", sex="M", tone="B", x=0.0, y=0.4, yaw=20, name="ChosenJaw")
+    sk = B.Skeleton("M", "B", name="ChosenJaw")                 # the jaw in its own orientation: resting on its base, teeth up
+    for s_ in list(sk.parts):
+        if s_ != "mandible":
+            sk.remove(s_)
+    o = sk.parts["mandible"]; sk.root.rotation_euler = (0, 0, math.radians(200))
+    bpy.context.view_layer.update()
+    W = np.array([o.matrix_world @ v.co for v in o.data.vertices]); c0 = W.mean(0)
+    sk.root.location += Vector((0.0 - c0[0], 0.4 - c0[1], LB.TOP + 0.003 - W[:, 2].min()))
+    bpy.context.view_layer.update()
+    p3._knee_mats(o, sand=0.3)
+    W = np.array([o.matrix_world @ v.co for v in o.data.vertices])
     t = Vector(((W.min(0) + W.max(0)) / 2).tolist())
     _spot((t.x - 0.4, t.y - 0.3, t.z + 0.35), tuple(t), 45, size=0.04, color=(1.0, 0.9, 0.78), spot=16)
-    return dict(a=(tuple(t + Vector((-0.12, -0.3, 0.12))), tuple(t)), b=(tuple(t + Vector((0.06, -0.31, 0.12))), tuple(t)), lens=60,
+    return dict(a=(tuple(t + Vector((-0.14, -0.38, 0.2))), tuple(t)), b=(tuple(t + Vector((0.08, -0.38, 0.2))), tuple(t)), lens=55,
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=-0.05))
 
 
