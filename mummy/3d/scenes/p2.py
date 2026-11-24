@@ -253,16 +253,17 @@ def S11():
     co = _level(o)
     ext = co.max(0) - co.min(0)
     s_ = 2.2 / max(ext[0], ext[1]); o.scale = (s_, s_, s_)
-    zc = float(np.percentile(co[:, 2], 70)) * s_
+    rr = np.maximum(np.abs(co[:, 0]) / (ext[0] / 2), np.abs(co[:, 1]) / (ext[1] / 2))
+    zc = float(np.percentile(co[rr > 0.9, 2], 35)) * s_          # the trench floor meets the scan near its edge
     # warm the soil toward the machair sand
     for m in o.data.materials:
         N = m.node_tree.nodes; Lk = m.node_tree.links; p = [n for n in N if n.type == 'BSDF_PRINCIPLED']
         if p and p[0].inputs['Base Color'].links:
             src = p[0].inputs['Base Color'].links[0].from_socket
             mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
-            Lk.new(src, mx.inputs[6]); mx.inputs[7].default_value = (1.35, 1.15, 0.85, 1); Lk.new(mx.outputs[2], p[0].inputs['Base Color'])
+            Lk.new(src, mx.inputs[6]); mx.inputs[7].default_value = (1.6, 1.25, 0.8, 1); Lk.new(mx.outputs[2], p[0].inputs['Base Color'])
     # the surrounding trench floor, the scan edges sink into it
-    sand = ph.texture("dense_sand", scale=1.2, name="trenchsand", tint=(0.78, 0.68, 0.55))
+    sand = ph.texture("dense_sand", scale=1.2, name="trenchsand", tint=(0.55, 0.48, 0.4))
     bpy.ops.mesh.primitive_plane_add(size=12, location=(0, 0, zc)); g = bpy.context.active_object; g.data.materials.append(sand)
     return dict(a=((0.1, -0.35, zc + 2.0), (0.0, 0.0, zc - 0.05)), b=((-0.1, 0.15, zc + 1.7), (0.0, 0.05, zc - 0.05)), lens=35,
                 fstop=8.0, focus=(0, 0, zc), cine=dict(exposure=0.1))
@@ -401,7 +402,7 @@ def S20():
     q = _plain("quartz", (0.75, 0.68, 0.55), 0.35); q.node_tree.nodes["Principled BSDF"].inputs['Transmission Weight'].default_value = 0.3
     gme.materials.append(q)
     return dict(a=((0.0, -0.11, 0.045), (0.0, 0.02, 0.0)), b=((0.0, -0.08, 0.035), (0.0, 0.03, 0.0)), lens=60,
-                fstop=5.6, focus=(0.0, -0.03, 0.0), cine=dict(exposure=0.0))
+                fstop=32.0, focus=(0.0, -0.02, 0.002), cine=dict(exposure=0.0))
 
 
 # ============================================================================ "Elsewhere on South Uist, peat bogs..."
