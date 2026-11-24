@@ -139,7 +139,16 @@ def _etch(obj, strength=1.0):
         nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 120; nz.inputs['Detail'].default_value = 8; Lk.new(tc.outputs['Object'], nz.inputs['Vector'])
         pit = N.new("ShaderNodeMapRange"); pit.inputs['From Min'].default_value = 0.0; pit.inputs['From Max'].default_value = 0.35
         Lk.new(vo.outputs['Distance'], pit.inputs['Value'])
-        h = N.new("ShaderNodeMath"); h.operation = 'MULTIPLY'; Lk.new(pit.outputs[0], h.inputs[0]); Lk.new(nz.outputs['Fac'], h.inputs[1])
+        # pits come in eroded patches, of mixed sizes, with smoother bone between
+        vo2 = N.new("ShaderNodeTexVoronoi"); vo2.inputs['Scale'].default_value = 320; Lk.new(tc.outputs['Object'], vo2.inputs['Vector'])
+        pit2 = N.new("ShaderNodeMapRange"); pit2.inputs['From Min'].default_value = 0.0; pit2.inputs['From Max'].default_value = 0.3
+        Lk.new(vo2.outputs['Distance'], pit2.inputs['Value'])
+        both = N.new("ShaderNodeMath"); both.operation = 'MINIMUM'; Lk.new(pit.outputs[0], both.inputs[0]); Lk.new(pit2.outputs[0], both.inputs[1])
+        patch = N.new("ShaderNodeTexNoise"); patch.inputs['Scale'].default_value = 25; patch.inputs['Detail'].default_value = 4; Lk.new(tc.outputs['Object'], patch.inputs['Vector'])
+        pmask = N.new("ShaderNodeMapRange"); pmask.inputs['From Min'].default_value = 0.5; pmask.inputs['From Max'].default_value = 0.62
+        pmask.inputs['To Min'].default_value = 1.0; pmask.inputs['To Max'].default_value = 0.0; Lk.new(patch.outputs['Fac'], pmask.inputs['Value'])
+        keep = N.new("ShaderNodeMath"); keep.operation = 'MAXIMUM'; Lk.new(both.outputs[0], keep.inputs[0]); Lk.new(pmask.outputs[0], keep.inputs[1])
+        h = N.new("ShaderNodeMath"); h.operation = 'MULTIPLY'; Lk.new(keep.outputs[0], h.inputs[0]); Lk.new(nz.outputs['Fac'], h.inputs[1])
         bm_ = N.new("ShaderNodeBump"); bm_.inputs['Strength'].default_value = 0.9 * strength; bm_.inputs['Distance'].default_value = 0.0006
         Lk.new(h.outputs[0], bm_.inputs['Height'])
         if p.inputs['Normal'].links:
@@ -149,6 +158,7 @@ def _etch(obj, strength=1.0):
             src = p.inputs['Base Color'].links[0].from_socket
             mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.inputs['Factor'].default_value = 0.35 * strength
             Lk.new(src, mx.inputs[6]); mx.inputs[7].default_value = (0.78, 0.72, 0.62, 1); Lk.new(mx.outputs[2], p.inputs['Base Color'])
+            Lk.new(patch.outputs['Fac'], mx.inputs['Factor'])          # chalky where eroded
         p.inputs['Roughness'].default_value = 0.95
 
 
