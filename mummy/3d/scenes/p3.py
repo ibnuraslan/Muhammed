@@ -468,7 +468,7 @@ def _suit_up(m, st=None):
 def S11():
     """The ancient-DNA clean room: a scientist in a full white suit and hood works at the UV cabinet, seen from behind;
     the violet light through the sash. Slow push."""
-    clean_room()
+    clean_room(uv=0.35)
     import acts as AC
     m = _cleansuit()
     st = AC.Stand(m, (0.0, 0.62), 90, lean=10)
