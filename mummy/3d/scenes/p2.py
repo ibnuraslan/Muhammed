@@ -527,24 +527,53 @@ def moor(mood="overcast", size=220.0, n=420, cotton=(0, 0, 30, 2500), heather=(0
     return M
 
 
+def _moor_tone(terrain):
+    """Replace the island material's flat moor colour with varied peat, heather, bleached grass and rusty sphagnum."""
+    if terrain is None:
+        return
+    for m in terrain.data.materials:
+        nt = m.node_tree
+        for n in nt.nodes:
+            if n.type == 'MIX' and n.data_type == 'RGBA' and not n.inputs[7].is_linked:
+                c = n.inputs[7].default_value
+                if abs(c[0] - 0.09) < 1e-3 and abs(c[1] - 0.075) < 1e-3:
+                    tc = nt.nodes.new("ShaderNodeTexCoord")
+                    nz = nt.nodes.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 0.012; nz.inputs['Detail'].default_value = 8
+                    nz.inputs['Roughness'].default_value = 0.65; nt.links.new(tc.outputs['Object'], nz.inputs['Vector'])
+                    rp = nt.nodes.new("ShaderNodeValToRGB"); el = rp.color_ramp.elements
+                    el[0].position = 0.35; el[0].color = (0.03, 0.025, 0.016, 1)
+                    e = el.new(0.47); e.color = (0.07, 0.05, 0.03, 1)
+                    e = el.new(0.56); e.color = (0.11, 0.05, 0.03, 1)
+                    el[1].position = 0.68; el[1].color = (0.15, 0.14, 0.08, 1)
+                    nt.links.new(nz.outputs['Fac'], rp.inputs['Fac']); nt.links.new(rp.outputs['Color'], n.inputs[7])
+                    return
+
+
 def S21():
     """Aerial at dusk: inland from the machair, the peat moor running east to the hills - a scatter of black bog pools
     and lochans holding the sky, mist lying in the hollows. Drone drift east."""
     U.CUT = True
     T = U.island("dusk", grass_at=None, n=900, focus=(1050, 0), core=14.0)
+    _moor_tone(T["terrain"] if isinstance(T, dict) and "terrain" in T else bpy.data.objects.get("Uist"))
     rng = random.Random(21)
     loch = bpy.data.materials.get("Loch")
-    for k in range(160):                                   # bog pools: many small irregular black pools on the moor
-        x = rng.uniform(780, 1700); y = rng.uniform(-700, 700); r = rng.uniform(3, 22) * (1 + (rng.random() < 0.1) * 2)
-        z = float(U.surface(x, y)) + 0.25
-        bpy.ops.mesh.primitive_circle_add(vertices=24, radius=r, fill_type='NGON', location=(x, y, z)); o = bpy.context.active_object
-        o.scale = (1, rng.uniform(0.35, 0.9), 1); o.rotation_euler.z = rng.uniform(0, 3.14); o.name = "bogpool"
-        d = o.modifiers.new("rag", "DISPLACE"); t = bpy.data.textures.get("poolrag") or bpy.data.textures.new("poolrag", "CLOUDS")
-        t.noise_scale = 0.4; d.texture = t; d.strength = 0.0; d.direction = 'X'
-        o.data.materials.append(loch)
-    BR.ground_mist((1150, 0, float(U.surface(1150, 0))), size=(1400, 1600, 12.0), density=0.006)
-    z0 = float(U.surface(650, -400))
-    return dict(a=((640, -430, z0 + 150), (1450, 120, 25)), b=((720, -380, z0 + 135), (1520, 140, 25)), lens=30, cine=dict(exposure=0.3))
+    bm = bmesh.new()
+    for c in range(80):                                    # bog pools in clusters of irregular, overlapping blobs
+        cx, cy = rng.uniform(760, 1700), rng.uniform(-700, 700)
+        for k in range(rng.randint(2, 7)):
+            x = cx + rng.gauss(0, 9); y = cy + rng.gauss(0, 6); r = rng.uniform(1.5, 8.0)
+            z = float(U.surface(x, y)) + 0.2
+            ret = bmesh.ops.create_circle(bm, cap_ends=True, segments=18, radius=r)
+            sx, sy, ang = rng.uniform(0.7, 1.3), rng.uniform(0.35, 0.8), rng.uniform(0, 3.14)
+            for v in ret['verts']:
+                w = 1 + 0.25 * math.sin(math.atan2(v.co.y, v.co.x) * rng.choice((2, 3, 5)) + k)
+                vx, vy = v.co.x * sx * w, v.co.y * sy * w
+                v.co = Vector((x + vx * math.cos(ang) - vy * math.sin(ang), y + vx * math.sin(ang) + vy * math.cos(ang), z + 0.01 * k))
+    me = bpy.data.meshes.new("bogpools"); bm.to_mesh(me); bm.free(); me.materials.append(loch)
+    po = bpy.data.objects.new("bogpools", me); bpy.context.scene.collection.objects.link(po)
+    BR.ground_mist((1150, 0, float(U.surface(1150, 0))), size=(1400, 1600, 14.0), density=0.012)
+    z0 = float(U.surface(700, -300))
+    return dict(a=((700, -320, z0 + 70), (1450, 100, 30)), b=((780, -290, z0 + 64), (1520, 120, 30)), lens=30, cine=dict(exposure=0.3))
 
 
 def _bog_scene(mood="dusk", sun_az=None, setup=None):
