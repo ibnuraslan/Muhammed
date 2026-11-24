@@ -133,7 +133,7 @@ def S02():
     """Sampling for radiocarbon: a small chip cut from the thigh bone, the dark drill dust in a weighing boat; cold bench
     light. Slider."""
     A = LB.room(window_light=0.25, lamp=True, lamp_at=(0.3, 0.62), lamp_target=(0.05, 0.34), lamp_energy=14)
-    _spot((-0.4, 0.1, LB.TOP + 1.1), (0.05, 0.35, LB.TOP), 60, size=0.3, color=(0.75, 0.85, 1.0), spot=50)
+    _spot((-0.4, 0.1, LB.TOP + 1.1), (0.05, 0.35, LB.TOP), 160, size=0.3, color=(0.75, 0.85, 1.0), spot=50)
     LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
     fe, W = p1.lab_femur()
     end = W[W[:, 0] > np.percentile(W[:, 0], 85)]
@@ -143,9 +143,10 @@ def S02():
     bpy.ops.mesh.primitive_cube_add(size=0.012, location=(cx + 0.06, cy - 0.11, LB.TOP + 0.004)); ch = bpy.context.active_object
     ch.scale = (1.2, 0.8, 0.45); ch.rotation_euler.z = 0.5; ch.name = "chip"; ch.data.materials.append(fe.data.materials[0])
     bv = ch.modifiers.new("b", "BEVEL"); bv.width = 0.0012
-    t = Vector((cx, cy - 0.1, LB.TOP + 0.01))
-    return dict(a=(tuple(t + Vector((-0.24, -0.22, 0.14))), tuple(t)), b=(tuple(t + Vector((-0.1, -0.29, 0.13))), tuple(t + Vector((0.02, 0, 0)))),
-                lens=60, fstop=3.5, focus=tuple(t), cine=dict(exposure=-0.1))
+    t = Vector((cx - 0.03, cy - 0.08, LB.TOP + 0.01))
+    f = Vector((cx - 0.02, cy - 0.16, LB.TOP + 0.004))            # the weighing boat
+    return dict(a=(tuple(t + Vector((-0.32, -0.34, 0.3))), tuple(t)), b=(tuple(t + Vector((-0.18, -0.4, 0.28))), tuple(t + Vector((0.02, 0, 0)))),
+                lens=50, fstop=5.6, focus=tuple(f), cine=dict(exposure=0.05))
 
 
 def S03():
