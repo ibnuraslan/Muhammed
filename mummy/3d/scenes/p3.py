@@ -52,6 +52,7 @@ def knee_pieces(sk, side="L", keep_femur=0.09, keep_tibia=0.07, keep="near"):
     out = []
     for seg, keep in (("femur" + side, keep_femur), ("shank" + side, keep_tibia)):
         o = sk.parts[seg]
+        o.data = o.data.copy()                                    # skeletons share mesh data: cut a private copy
         Mi = o.matrix_world.inverted()
         bm = bmesh.new(); bm.from_mesh(o.data)
         co = np.array([o.matrix_world @ v.co for v in bm.verts])
@@ -439,8 +440,8 @@ def S24():
     """In the pit: the pieces of a human knee - the end of a thigh bone, the kneecap, the top of a shin - in the sand."""
     o = _knee_pit(kneel=False)
     k = o["knee"]
-    return dict(a=(tuple(k + Vector((0.3, -0.35, 0.4))), tuple(k)), b=(tuple(k + Vector((0.1, -0.4, 0.32))), tuple(k)), lens=60,
-                fstop=4.0, focus=tuple(k), cine=dict(exposure=0.1))
+    return dict(a=(tuple(k + Vector((0.35, -0.55, 0.65))), tuple(k)), b=(tuple(k + Vector((0.12, -0.6, 0.55))), tuple(k)), lens=45,
+                fstop=5.6, focus=tuple(k), cine=dict(exposure=0.1))
 
 
 # ============================================================================ "The broken surfaces match."
