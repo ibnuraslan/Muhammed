@@ -22,15 +22,19 @@ def lab_part(seg, sex="F", tone="C", x=0.0, y=0.38, yaw=0.0, name=None, keep=())
         if s_ != seg and s_ not in keep:
             sk.remove(s_)
     objs = list(sk.parts.values())
-    sk.root.rotation_euler = (0, math.radians(90), math.radians(yaw))
-    bpy.context.view_layer.update()
-    W = np.concatenate([np.array([o.matrix_world @ v.co for v in o.data.vertices]) for o in objs])
-    c0 = W.mean(0); u, sv, vt = np.linalg.svd(W[::max(1, len(W) // 20000)] - c0, full_matrices=False)
-    ax = Vector(vt[0].tolist()); ax = ax if ax.z >= 0 else -ax
-    flat = Vector((ax.x, ax.y, 0)).normalized() if Vector((ax.x, ax.y, 0)).length > 1e-4 else Vector((1, 0, 0))
-    R = ax.rotation_difference(flat).to_matrix().to_4x4()
-    sk.root.matrix_world = Matrix.Translation(Vector(c0.tolist())) @ R @ Matrix.Translation(-Vector(c0.tolist())) @ sk.root.matrix_world
-    bpy.context.view_layer.update()
+    if seg == "pelvis":                       # lying as in a body on its back: the inlet faces up
+        sk.root.rotation_euler = (math.radians(-90), 0, math.radians(yaw - 90))
+        bpy.context.view_layer.update()
+    else:
+        sk.root.rotation_euler = (0, math.radians(90), math.radians(yaw))
+        bpy.context.view_layer.update()
+        W = np.concatenate([np.array([o.matrix_world @ v.co for v in o.data.vertices]) for o in objs])
+        c0 = W.mean(0); u, sv, vt = np.linalg.svd(W[::max(1, len(W) // 20000)] - c0, full_matrices=False)
+        ax = Vector(vt[0].tolist()); ax = ax if ax.z >= 0 else -ax
+        flat = Vector((ax.x, ax.y, 0)).normalized() if Vector((ax.x, ax.y, 0)).length > 1e-4 else Vector((1, 0, 0))
+        R = ax.rotation_difference(flat).to_matrix().to_4x4()
+        sk.root.matrix_world = Matrix.Translation(Vector(c0.tolist())) @ R @ Matrix.Translation(-Vector(c0.tolist())) @ sk.root.matrix_world
+        bpy.context.view_layer.update()
     W = np.concatenate([np.array([o.matrix_world @ v.co for v in o.data.vertices]) for o in objs])
     sk.root.location += Vector((x - W[:, 0].mean(), y - W[:, 1].mean(), LB.TOP + 0.004 - W[:, 2].min()))
     bpy.context.view_layer.update()
@@ -132,7 +136,7 @@ def S04():
     LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
     sk, W = lab_part("pelvis", sex="F", tone="C")
     t = Vector(((W.min(0) + W.max(0)) / 2).tolist())
-    return dict(a=(tuple(t + Vector((-0.3, -0.32, 0.32))), tuple(t)), b=(tuple(t + Vector((0.05, -0.42, 0.34))), tuple(t)), lens=50,
+    return dict(a=(tuple(t + Vector((-0.25, -0.3, 0.42))), tuple(t)), b=(tuple(t + Vector((0.08, -0.36, 0.42))), tuple(t)), lens=50,
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=-0.05))
 
 
