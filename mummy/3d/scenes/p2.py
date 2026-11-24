@@ -343,13 +343,14 @@ def S15():
 
 
 def S16():
-    """The bone itself under the lamp: macro push along the shaft of the thigh bone."""
+    """The bone itself under the lamp: low macro push along the shaft of the thigh bone, the shaft running across frame."""
     A = LB.room(window_light=0.3, lamp=True, lamp_at=(0.3, 0.62), lamp_target=(0.05, 0.34), lamp_energy=20)
     LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
     fe, W = p1.lab_femur()
-    t = Vector((float(W[:, 0].mean()), float(W[:, 1].mean()), float(W[:, 2].max()) - 0.01))
-    return dict(a=(tuple(t + Vector((-0.2, -0.16, 0.07))), tuple(t)), b=(tuple(t + Vector((-0.1, -0.13, 0.05))), tuple(t + Vector((0.03, 0, 0)))),
-                lens=85, fstop=4.0, focus=tuple(t), cine=dict(exposure=-0.1))
+    xm = float(W[:, 0].mean()); mid = W[np.abs(W[:, 0] - xm) < 0.015]
+    t = Vector((xm, float(mid[:, 1].mean()), float(mid[:, 2].max()) - 0.004))
+    return dict(a=(tuple(t + Vector((-0.24, -0.15, 0.08))), tuple(t + Vector((0.03, 0, 0)))), b=(tuple(t + Vector((-0.17, -0.13, 0.065))), tuple(t + Vector((0.05, 0, 0)))),
+                lens=60, fstop=8.0, focus=tuple(t), cine=dict(exposure=-0.05))
 
 
 def S17():
