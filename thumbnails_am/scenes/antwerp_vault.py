@@ -222,7 +222,7 @@ import crew
 cloth = S.flat("crew_black", (0.008, 0.008, 0.009), 0.92)
 _pc = cloth.node_tree.nodes["Principled BSDF"]; _pc.inputs['Specular IOR Level'].default_value = 0.15
 _pc.inputs['Sheen Weight'].default_value = 0.6; _pc.inputs['Sheen Roughness'].default_value = 0.4
-nylon = (0.02, 0.02, 0.025)
+nylon = (0.006, 0.006, 0.007)
 CREW = [  # x, y, heading (deg; 0 = facing -y / the camera), bag
     (float(E("C0X", "-0.1")), -1.15, -58),
     (-1.35, -1.75, -66),
