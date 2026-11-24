@@ -114,7 +114,7 @@ def drying_platform(c):
             bpy.ops.mesh.primitive_cylinder_add(radius=0.05, depth=1.9, location=(cx + dx, cy + dy, cz + 0.95)); p = bpy.context.active_object
             p.rotation_euler = (random.uniform(-0.04, 0.04), random.uniform(-0.04, 0.04), 0); p.data.materials.append(wood); p.name = "platformpost"
     P2.hurdle((cx, cy, cz + 1.55), rot=0.0, length=1.9, width=0.95)
-    P2.bundle((cx, cy, cz + 1.75), rot=0.0, length=0.95, girth=0.42)
+    P2.crouched_bundle((cx, cy, cz + 1.6), rot=0.0, seed=4)
     for k in range(9):
         a = 2 * math.pi * k / 9
         bpy.ops.mesh.primitive_cube_add(size=1, location=(cx + 0.15 * math.cos(a), cy + 0.12 * math.sin(a), cz + 0.05)); pb = bpy.context.active_object
@@ -356,7 +356,7 @@ def S21():
     M = p2._bog_scene("dawn", sun_az=120)
     wz = M["water_z"]
     bx, by = p2._pool_spot(M, margin=0.45)
-    P2.bundle((bx, by, wz - 0.12), rot=math.radians(20))
+    P2.crouched_bundle((bx, by, wz - 0.16), rot=math.radians(20), seed=5)
     return dict(a=((bx + 2.2, by - 2.6, wz + 3.2), (bx, by, wz)), b=((bx + 1.8, by - 2.1, wz + 2.6), (bx, by, wz)), lens=35,
                 fstop=5.6, focus=(bx, by, wz), cine=dict(exposure=0.25))
 
