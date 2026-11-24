@@ -10,7 +10,8 @@ P2 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, P2)
 import shots
 T = json.load(open(os.path.join(P2, "vo", "vo_timings.json")))
-OUT = os.path.join(ROOT, "MASTER.blend")
+ONLY = [x for x in os.environ.get("ONLY", "").split() if x]       # fix packages: only these shots, at their own frames
+OUT = os.path.join(ROOT, os.environ.get("OUTNAME", "MASTER.blend"))
 
 master = bpy.context.scene
 master.name = "MASTER"
@@ -19,6 +20,8 @@ for o in list(bpy.data.objects):
 bpy.ops.wm.save_as_mainfile(filepath=OUT)                 # saved first so library paths can be relative (//shots/...)
 ed = master.sequence_editor_create()
 for sid, *_ in shots.SHOTS:
+    if ONLY and sid not in ONLY:
+        continue
     path = os.path.join(ROOT, "shots", f"S{sid}.blend")
     with bpy.data.libraries.load(path, link=True, relative=True) as (src, dst):
         dst.scenes = [src.scenes[0]]
@@ -34,8 +37,9 @@ for sid, *_ in shots.SHOTS:
 cd = bpy.data.cameras.new("MASTER_cam"); cam = bpy.data.objects.new("MASTER_cam", cd)
 master.collection.objects.link(cam); master.camera = cam
 
-total = max(T[s]["start_frame"] + T[s]["frames"] - 1 for s in T)
-master.frame_start, master.frame_end = 1, total
+use = ONLY or list(T)
+total = max(T[s]["start_frame"] + T[s]["frames"] - 1 for s in use)
+master.frame_start, master.frame_end = min(T[s]["start_frame"] for s in use), total
 r = master.render
 r.engine = 'CYCLES'; r.resolution_x, r.resolution_y, r.resolution_percentage = 2560, 1440, 100
 r.fps = 24; r.fps_base = 1.0

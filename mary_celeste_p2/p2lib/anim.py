@@ -264,7 +264,7 @@ MOVES = {
 def camera_move(cam, move, handheld=0.0, seed=3):
     D = dur(); n = nframes()
     cam.rotation_mode = 'QUATERNION'
-    loc0 = cam.location.copy(); q0 = cam.matrix_world.to_quaternion()
+    loc0 = cam.matrix_world.translation.copy(); q0 = cam.matrix_world.to_quaternion()   # world: the camera may ride the ship
     fwd = q0 @ Vector((0, 0, -1)); right = q0 @ Vector((1, 0, 0)); up = q0 @ Vector((0, 1, 0))
     dof = cam.data.dof.use_dof
     dist = cam.data.dof.focus_distance if dof and cam.data.dof.focus_distance > 0 else 6.0
