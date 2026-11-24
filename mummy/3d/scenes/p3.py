@@ -139,7 +139,7 @@ def S04():
     LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
     sk, W = lab_part("pelvis", sex="F", tone="C")
     t = Vector(((W.min(0) + W.max(0)) / 2).tolist())
-    return dict(a=(tuple(t + Vector((-0.25, -0.3, 0.42))), tuple(t)), b=(tuple(t + Vector((0.08, -0.36, 0.42))), tuple(t)), lens=50,
+    return dict(a=(tuple(t + Vector((-0.38, -0.5, 0.6))), tuple(t)), b=(tuple(t + Vector((0.12, -0.6, 0.6))), tuple(t)), lens=40,
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=-0.05))
 
 
@@ -259,12 +259,25 @@ def clean_room(uv=1.0):
     w.node_tree.nodes["Background"].inputs['Color'].default_value = (0.02, 0.02, 0.025, 1)
 
 
+def _cleansuit(name="Cleansuit"):
+    """A clean-room worker: white long coat cut straight (no back vent), loose white trousers, slight build."""
+    import modern as MD
+
+    class _C(MD.ModernMan):
+        GENDER = 0.2; MUSCLE = 0.4; WEIGHT = 0.3; HEIGHT = 0.5
+        HAIR = (0.25, 0.1); HAIR_LEN = (0.02, 0.04)
+        SHIRT = (0.85, 0.86, 0.86); JACKET = "coat"; JACKET_COL = (0.86, 0.87, 0.88)
+        TROUSERS = (0.8, 0.81, 0.82); SHOES = (0.85, 0.85, 0.85)
+        TROUSER_EASE = 1.35; TROUSER_EXTRA = 0.035
+    return _C(name, years=33)
+
+
 def S11():
     """The ancient-DNA clean room: a scientist in a full white suit and hood works at the UV cabinet, seen from behind;
     the violet light through the sash. Slow push."""
     clean_room()
     import acts as AC
-    m = K.Osteologist(name="Cleansuit")
+    m = _cleansuit()
     st = AC.Stand(m, (0.0, 0.62), 90, lean=10)
     st.hand("L", (-0.18, 1.32, 0.98), elbow=(0.6, 0.2, -0.8), curl=20)
     st.hand("R", (0.15, 1.32, 1.0), elbow=(0.6, 0.2, -0.8), curl=20)
