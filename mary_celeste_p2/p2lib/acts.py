@@ -147,17 +147,47 @@ def hand_low(h, side, Mw):
     return z
 
 
-def settle_hand(h, side, pose_fn, Mw, surface_z, gap=0.002, tries=5):
+def settle_hand(h, side, pose_fn, Mw, surface_z, gap=0.002, tries=14):
     """pose_fn(dz) poses the hand with its target raised by dz (rig frame); find dz so the hand's lowest skin point
     rests `gap` above surface_z (world): touching, not floating, not through."""
-    dz = 0.0
-    for _ in range(tries):
+    import os
+    dz = 0.0; best = None
+    for i in range(tries):
         pose_fn(dz)
         err = hand_low(h, side, Mw) - (surface_z + gap)
-        if abs(err) < 0.0015:
+        if os.environ.get("SETTLEDBG"):
+            print("SETTLE", side, i, round(dz, 4), round(err, 4), flush=True)
+        if best is None or abs(err) < abs(best[1]):
+            best = (dz, err)
+        if abs(err) < 0.0012:
             break
-        dz -= err
-    return dz
+        dz -= 0.55 * err                 # damped: raising the target also moves the elbow and turns the hand
+    if abs(best[1]) >= 0.0012:
+        pose_fn(best[0])
+        # the arm solution jumps near contact: finish with the wrist alone (continuous), tilting the hand
+        # about its side axis until the lowest skin point meets the surface
+        import bpy
+        pb = h.arm.pose.bones[f"wrist.{side}"]; base = pb.matrix_basis.copy()
+        d = (h.bone_tail(f"wrist.{side}") - h.bone_head(f"wrist.{side}")).normalized()
+        ax = d.cross(Vector((0, 0, 1))).normalized()
+        cand = None
+        for step in range(0, 41):
+            for sgn in (1, -1):
+                deg = sgn * step * 0.5
+                pb.matrix_basis = base; bpy.context.view_layer.update()
+                if deg:
+                    h.rot(f"wrist.{side}", ax, deg)
+                e = hand_low(h, side, Mw) - (surface_z + gap)
+                if cand is None or abs(e) < abs(cand[1]):
+                    cand = (deg, e)
+            if abs(cand[1]) < 0.0012:
+                break
+        pb.matrix_basis = base; bpy.context.view_layer.update()
+        if cand[0]:
+            h.rot(f"wrist.{side}", ax, cand[0])
+        if os.environ.get("SETTLEDBG"):
+            print("SETTLE wrist", side, cand, flush=True)
+    return best[0]
 
 
 def _hand_pts(h, side, Mw):
@@ -213,3 +243,84 @@ def flat_hand(h, side, thumb_dir, fwd=(0, -1), pitches=(-0.45, -0.3, -0.18, -0.0
     if os.environ.get("FLATDBG"):
         print("FLATBEST", round(best[0], 4), best[1], best[2], flush=True)
     return best[:3]
+
+
+# palm normal of the MakeHuman hand in the wrist bone's own frame (measured: plane of the metacarpals, toward the curl)
+PALM_LOCAL = {"L": Vector((-0.886, 0.263, -0.382)), "R": Vector((0.886, 0.263, -0.382))}
+
+
+def orient_hand(h, side, fwd, palm):
+    """Turn the hand (wrist bone, rig frame) so it points along fwd (wrist -> knuckles) with the palm facing palm."""
+    import bpy
+    bpy.context.view_layer.update()
+    pb = h.arm.pose.bones[f"wrist.{side}"]
+    M0 = pb.matrix.copy(); R0 = M0.to_3x3().normalized(); head = M0.to_translation()
+    kn = [h.bone_head(f"finger{k}-1.{side}") for k in (2, 3, 4, 5) if f"finger{k}-1.{side}" in h.arm.pose.bones]
+    f_l = (R0.inverted() @ ((sum(kn, Vector()) / len(kn)) - head)).normalized()
+    n_l = PALM_LOCAL[side].normalized()
+    a2 = (n_l - f_l * n_l.dot(f_l)).normalized(); a3 = f_l.cross(a2)
+    b1 = Vector(fwd).normalized(); b2 = (Vector(palm) - b1 * Vector(palm).dot(b1)).normalized(); b3 = b1.cross(b2)
+    A = Matrix((f_l, a2, a3)).transposed(); B = Matrix((b1, b2, b3)).transposed()
+    R = B @ A.transposed()
+    pb.matrix = Matrix.Translation(head) @ R.to_4x4()
+    bpy.context.view_layer.update()
+
+
+def relaxed_flat(h, side, curl=6):
+    """Fingers almost straight, a little apart, thumb alongside: a hand at rest on a surface."""
+    sg = 1 if side == "L" else -1
+    for f in (2, 3, 4, 5):
+        for k, d in ((1, curl), (2, curl + 4), (3, curl + 2)):
+            b = f"finger{f}-{k}.{side}"
+            if b in h.arm.pose.bones:
+                h.rot(b, h.bone_tail(b) - h.bone_head(b), 0)      # no-op keeps API symmetrical
+    import poses as P
+    P.rest_hand(h, side, curl=curl)
+
+
+def pen_grip2(h, side):
+    """A writer's grip: thumb, index and middle finger meet on the pen; ring and little finger curled under."""
+    import poses as P
+    P.rest_hand(h, side, curl=0)
+    sg = 1 if side == "L" else -1
+    for k, d in ((1, 28), (2, 30), (3, 18)):
+        h.rot(f"finger2-{k}.{side}", (1, 0, 0), d)
+    for k, d in ((1, 38), (2, 40), (3, 25)):
+        h.rot(f"finger3-{k}.{side}", (1, 0, 0), d)
+    for f in (4, 5):
+        for k, d in ((1, 62), (2, 75), (3, 55)):
+            h.rot(f"finger{f}-{k}.{side}", (1, 0, 0), d)
+    h.rot(f"finger1-2.{side}", (0, 0, sg), 14); h.rot(f"finger1-3.{side}", (1, 0, 0), 12)
+
+
+def palm_normal(h, side):
+    import bpy
+    bpy.context.view_layer.update()
+    R = h.arm.pose.bones[f"wrist.{side}"].matrix.to_3x3().normalized()
+    return (R @ PALM_LOCAL[side]).normalized()
+
+
+def curl(h, bone, deg, palm):
+    """Bend a finger bone toward the palm by deg (about its own knuckle axis)."""
+    d = (h.bone_tail(bone) - h.bone_head(bone)).normalized()
+    ax = d.cross(palm)
+    if ax.length < 1e-4:
+        return
+    h.rot(bone, ax.normalized(), deg)
+
+
+def hand_shape(h, side, fingers, thumb=(0, 0, 0)):
+    """fingers: {2: (d1, d2, d3), 3: ..., 4: ..., 5: ...} curl per joint (deg) toward the palm, from the hand's
+    straight rest; thumb: curl of finger1-1..3."""
+    import poses as P
+    P.rest_hand(h, side, curl=0)
+    pn = palm_normal(h, side)
+    for f, ds in fingers.items():
+        for k, d in enumerate(ds, 1):
+            b = f"finger{f}-{k}.{side}"
+            if b in h.arm.pose.bones and d:
+                curl(h, b, d, pn)
+    for k, d in enumerate(thumb, 1):
+        b = f"finger1-{k}.{side}"
+        if b in h.arm.pose.bones and d:
+            curl(h, b, d, pn)

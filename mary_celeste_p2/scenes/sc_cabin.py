@@ -36,15 +36,17 @@ def briggs_writing(pause=False, expr=None):
     top = SET["letter"].z + 0.0015                       # the sheet's surface (it lies on the cloth)
     # the pen hand: the side of the hand rests on the page (not through it, not above it)
     def pen_hand(dz):
-        P.hand_reach(b.h, "R", Mi @ paper + Vector((-0.02, 0.06, 0.075 + dz)), elbow=(-0.9, 0.4, 0.45))
-        b.h.aim("wrist.R", Vector((0.35, -0.8, -0.45))); A.pen_grip(b.h, "R")
+        P.hand_reach(b.h, "R", Mi @ paper + Vector((-0.03, 0.07, 0.06 + dz)), elbow=(-0.9, 0.4, 0.45))
+        A.orient_hand(b.h, "R", (0.3, -0.85, -0.3), (0.5, 0.0, -0.87))   # pinky edge on the page, palm down-in
+        # writer's grip: thumb, index, middle meet on the pen; ring and little finger curled under, resting on the page
+        A.hand_shape(b.h, "R", {2: (30, 32, 18), 3: (40, 42, 25), 4: (62, 75, 50), 5: (65, 78, 50)}, thumb=(10, 20, 15))
     A.settle_hand(b.h, "R", pen_hand, Mw, top, gap=0.001)
     # left hand flat on the near-left corner of the letter, steadying it, on his own side (+X): no crossing, no floating
     lh = SET["letter"] + Vector((0.13, 0.17, 0.0))
     def left_hand(dz):
-        P.hand_reach(b.h, "L", Mi @ lh + Vector((0, 0.03, 0.05 + dz)), elbow=(0.9, 0.5, 0.45))
-        b.h.aim("wrist.L", Vector((0.1, -0.97, -0.2)))      # palm down, fingers forward, fingertips on the table
-        P.rest_hand(b.h, "L", curl=8)
+        P.hand_reach(b.h, "L", Mi @ lh + Vector((0, 0.03, 0.035 + dz)), elbow=(0.9, 0.5, 0.45))
+        A.orient_hand(b.h, "L", (0.05, -1.0, -0.08), (0.0, 0.0, -1.0))  # flat, palm down, fingers forward
+        A.hand_shape(b.h, "L", {2: (6, 8, 5), 3: (7, 9, 5), 4: (8, 10, 6), 5: (9, 11, 6)}, thumb=(0, 6, 4))
     A.settle_hand(b.h, "L", left_hand, Mw, SET["table"].z + 0.003, gap=0.0015)   # on the cloth, beside the sheet
     if pause:
         b.lids(0.3)
