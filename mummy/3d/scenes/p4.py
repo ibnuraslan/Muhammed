@@ -179,8 +179,18 @@ def pyre(c, rng_seed=3):
             dd = lg.modifiers.new("d", "DISPLACE"); tt = bpy.data.textures.get("logknots") or bpy.data.textures.new("logknots", "CLOUDS")
             tt.noise_scale = 0.12; dd.texture = tt; dd.strength = 0.02
     P2.bundle((cx, cy, cz + 1.75), rot=0.3, length=0.95, girth=0.42)
-    BR.flames((cx, cy, cz), spread=1.0, n=48, top_z=1.55, low_z=(0.2, 1.4), top_share=0.55, h_top=(1.6, 3.2), h_low=(0.6, 1.4),
-              wid=(0.24, 0.42), strength=0.45, seed=rng_seed)
+    tongues = BR.flames((cx, cy, cz), spread=1.0, n=48, top_z=1.55, low_z=(0.2, 1.4), top_share=0.55, h_top=(1.6, 3.2), h_low=(0.6, 1.4),
+                        wid=(0.24, 0.42), strength=0.3, seed=rng_seed)
+    if tongues:                         # a deeper, more saturated ramp so the tongues stay orange instead of blooming to gold
+        fm = tongues[0].data.materials[0].copy(); fm.name = "pyretongue"
+        for n_ in fm.node_tree.nodes:
+            if n_.type == 'VALTORGB':
+                el = n_.color_ramp.elements
+                el[0].color = (1.0, 0.42, 0.06, 1); el[-1].color = (0.5, 0.07, 0.01, 1)
+                for e in list(el)[1:-1]:
+                    e.color = (0.95, 0.22, 0.02, 1)
+        for t_ in tongues:
+            t_.data.materials[0] = fm
     # the ember bed and coals round the base, and sparks rising in the hot air
     emb = _plain("embers", (0.02, 0.01, 0.005), 0.8)
     pr = emb.node_tree.nodes["Principled BSDF"]; pr.inputs['Emission Color'].default_value = (1.0, 0.3, 0.05, 1); pr.inputs['Emission Strength'].default_value = 8.0
@@ -320,7 +330,7 @@ def S11():
     # six compartments: sizes large -> small along x, the near row more burnt (blue-grey/black), the far row white
     cw, cd = W_ / 3 - 0.012, D_ / 2 - 0.012
     for col, (lo, hi, n) in enumerate(((0.016, 0.028, 16), (0.008, 0.015, 40), (0.003, 0.007, 120))):
-        for row, burnt in enumerate(((0.0, 0.5), (0.5, 1.0))):
+        for row, burnt in enumerate(((0.0, 0.4), (0.2, 0.85))):          # more blue-grey and black, fewer white
             cx_ = tx - W_ / 3 + col * W_ / 3; cy_ = ty - D_ / 4 + row * D_ / 2
             cremation((cx_, cy_, tz + 0.003), n=n, seed=10 * col + row, charcoal=0, flat=True, rect=(cw, cd), size=(lo, hi), burnt=burnt)
     t = Vector((tx, ty, tz + 0.01))
