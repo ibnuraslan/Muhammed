@@ -430,9 +430,13 @@ def _suit_up(m, st=None):
         v.co += v.normal * 0.03
     hm = bpy.data.meshes.new(m.name + "_hood"); bm.to_mesh(hm); bm.free()
     be.to_mesh_clear()
-    if same_topo and hidden:
+    # remove the head and upper neck skin by its bone weights (rest-pose mesh; topology of the evaluated one may differ)
+    hg = {g.index for g in body.vertex_groups if any(k in g.name.lower() for k in ("head", "neck02", "neck03", "jaw", "eye", "ear", "tongue", "teeth", "levator", "orbicularis", "oris", "temporalis", "special"))}
+    if hg:
+        kill = [v.index for v in body.data.vertices if sum(g.weight for g in v.groups if g.group in hg) > 0.35]
         bb = bmesh.new(); bb.from_mesh(body.data); bb.verts.ensure_lookup_table()
-        bmesh.ops.delete(bb, geom=[bb.verts[i] for i in hidden], context='VERTS'); bb.to_mesh(body.data); bb.free(); body.data.update()
+        bmesh.ops.delete(bb, geom=[bb.verts[i] for i in kill], context='VERTS'); bb.to_mesh(body.data); bb.free(); body.data.update()
+        print("hood: removed", len(kill), "head verts")
     hd = bpy.data.objects.new(m.name + "_hood", hm); bpy.context.scene.collection.objects.link(hd); hm.materials.append(tyvek)
     for p_ in hm.polygons:
         p_.use_smooth = True
