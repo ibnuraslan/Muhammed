@@ -546,7 +546,7 @@ def bundle(loc, rot=0.0, length=0.95, girth=0.44, seed=0):
     rng = random.Random(seed)
     bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, radius=0.5, location=loc); o = bpy.context.active_object
     o.name = "bundle"; o.scale = (length, girth, girth * 0.62); o.rotation_euler = (rng.uniform(-0.05, 0.05), 0, rot)
-    d = o.modifiers.new("lumps", "DISPLACE"); t = bpy.data.textures.new("bundlelump", "CLOUDS"); t.noise_scale = 0.22; d.texture = t; d.strength = 0.08
+    d = o.modifiers.new("lumps", "DISPLACE"); t = bpy.data.textures.new("bundlelump", "CLOUDS"); t.noise_scale = 0.2; d.texture = t; d.strength = 0.12
     ss = o.modifiers.new("smooth", "SUBSURF"); ss.levels = 2; ss.render_levels = 2; o.modifiers.move(len(o.modifiers) - 1, 0)   # no facets
     d2 = o.modifiers.new("folds", "DISPLACE"); t2 = bpy.data.textures.new("bundlefold", "WOOD"); t2.wood_type = 'BANDNOISE'; t2.noise_scale = 0.12; t2.turbulence = 5; d2.texture = t2; d2.strength = 0.006
     hide = ph.texture("leather_white", scale=2.0, name="hide", tint=(0.42, 0.3, 0.18)) if False else _mat("hide", (0.13, 0.085, 0.05), 0.8)
@@ -560,7 +560,7 @@ def bundle(loc, rot=0.0, length=0.95, girth=0.44, seed=0):
     for k in range(3):
         u = -0.25 + k * 0.25 + rng.uniform(-0.02, 0.02)
         f = math.sqrt(max(0.05, 1 - (u / 0.5) ** 2))            # the bundle narrows toward its ends
-        bpy.ops.mesh.primitive_torus_add(major_radius=girth * 0.5 * f * 0.84, minor_radius=0.012, location=loc); r = bpy.context.active_object
+        bpy.ops.mesh.primitive_torus_add(major_radius=girth * 0.5 * f * 0.89, minor_radius=0.012, location=loc); r = bpy.context.active_object
         r.scale = (0.76, 1, 1); r.rotation_euler = (0, math.pi / 2, rot)
         r.location = Vector(loc) + Matrix.Rotation(rot, 3, 'Z') @ Vector((u * length, 0, 0)); r.data.materials.append(rope); r.name = "bundlerope"
     return o
