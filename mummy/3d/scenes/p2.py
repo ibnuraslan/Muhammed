@@ -372,10 +372,10 @@ def S20():
     for m in mats:
         pp = m.node_tree.nodes["Principled BSDF"]; pp.inputs['Coat Weight'].default_value = 0.4; pp.inputs['Subsurface Weight'].default_value = 0.2
     bm = bmesh.new()
-    for k in range(2200):                       # curved shell flakes: pieces of thin spherical caps, ribbed
+    for k in range(900):                        # curved shell flakes: pieces of thin spherical caps, ribbed
         big = rng.random() < 0.08
         r = rng.uniform(0.004, 0.009) if big else rng.uniform(0.0012, 0.004)
-        x, y = rng.uniform(-0.25, 0.25), rng.uniform(-0.25, 0.25)
+        x, y = rng.uniform(-0.09, 0.09), rng.uniform(-0.09, 0.22)
         ret = bmesh.ops.create_grid(bm, x_segments=5, y_segments=5, size=r)
         vs = ret['verts']; R = Matrix.Rotation(rng.uniform(0, 6.3), 3, 'Z') @ Matrix.Rotation(rng.uniform(-0.6, 0.6), 3, 'X')
         curv = rng.uniform(0.15, 0.8) / r; mi = rng.randrange(len(mats)); sy = rng.uniform(0.5, 1.0)
@@ -393,8 +393,8 @@ def S20():
     # quartz grains
     bm = bmesh.new()
     gcols = [(0.75, 0.68, 0.55), (0.55, 0.5, 0.42), (0.85, 0.8, 0.7), (0.4, 0.33, 0.25), (0.7, 0.55, 0.45)]
-    for k in range(22000):
-        r = rng.uniform(0.0003, 0.0012); x, y = rng.uniform(-0.25, 0.25), rng.uniform(-0.25, 0.25)
+    for k in range(16000):
+        r = rng.uniform(0.0003, 0.0012); x, y = rng.uniform(-0.09, 0.09), rng.uniform(-0.09, 0.22)
         vs = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=r)['verts']
         sc_ = Vector((rng.uniform(0.7, 1.3), rng.uniform(0.7, 1.3), rng.uniform(0.6, 1.0)))
         gi = rng.randrange(5)
