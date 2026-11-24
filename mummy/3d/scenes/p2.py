@@ -865,7 +865,7 @@ def S25():
     tf.scale = (0.12, 0.28, 0.1); tf.rotation_euler = bl.rotation_euler; tf.data.materials.append(P2._peat_material()); tf.name = "turf"
     bv = tf.modifiers.new("b", "BEVEL"); bv.width = 0.012; bv.segments = 2
     m = BR.Islander(name="Cutter")
-    st = AC.Haul(m, (x0 - 0.05, fy), 90, knee=24, lean=22, weight="R")       # knees bent, weight down behind the spade
+    st = AC.Haul(m, (x0 - 0.05, fy), 90, knee=36, lean=28, weight="R")       # knees bent, weight down behind the spade
     for sd, w in (("R", grip), ("L", grip + axn * 0.5)):
         st.hand(sd, (w.x, w.y, w.z - zf), elbow=(0.6, 0.2, -0.8), grip=0.85)
     st.head_to((blade.x, blade.y, blade.z - zf), share=0.8)
