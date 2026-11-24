@@ -501,12 +501,20 @@ def kt(tool, f, M, label=""):
 
 # body: feet planted, breathing + weight shift, lean and head look keyed per beat
 fs(1)
-for f in range(1, END + 1, 15):
+for f in sorted(set(list(range(1, END + 1, 15)) + [455, 476, 508, 522, 548])):
     ph = f / 60.0
     sway = -0.085 * smooth((f - 200) / 60.0) * (1 - smooth((f - 545) / 50.0)) - 0.05 * smooth((f - 1000) / 30.0) * (1 - smooth((f - 1090) / 40.0))
-    HD.key_root(f, Vector((sway + 0.006 * math.sin(ph * 2 * math.pi / 3.2), 0.066, 0.983 - 0.004 * (1 + math.sin(ph * 2 * math.pi / 4.0)))), flex=0)
-LEAN = [(1, 4, 0, 0, -12), (140, 4, 0, 0, -12), (185, 18, 10, 0, -20), (230, 18, -10, 0, -22), (262, 20, -26, -4, -24), (300, 22, -30, -4, -28),
-        (460, 22, -28, -4, -28), (490, 28, -12, 0, -30), (524, 26, -22, -3, -30), (560, 28, -6, 0, -30), (622, 30, -4, 0, -32), (665, 14, 0, 0, -18),
+    turn = pchip([(1, 0), (215, 0), (255, -34), (455, -34), (476, -12), (508, -12), (522, -30), (548, -30), (590, 0), (END, 0)])(f)
+    HD.key_root(f, Vector((sway + 0.006 * math.sin(ph * 2 * math.pi / 3.2), 0.066, 0.983 - 0.004 * (1 + math.sin(ph * 2 * math.pi / 4.0)))), yaw=turn, flex=0)
+# left elbow stays in FRONT of the torso while the left hand works across at the tray (pole forward-left, not behind)
+def key_pole(rig_ctrl, side, f, target):
+    n = "Pole_elbow." + side; pb = rig_ctrl.PB[n]
+    pb.location = (Vector((0, 0, 0)) if target is None else rig_ctrl.rest(n).to_3x3().inverted() @ (Vector(target) - rig_ctrl.BN[n].head_local))
+    pb.keyframe_insert("location", frame=f, group=n)
+for f_, t_ in ((1, None), (200, None), (236, (0.55, -0.55, 1.05)), (556, (0.55, -0.55, 1.05)), (590, None)):
+    key_pole(DR, "L", f_, t_)
+LEAN = [(1, 4, 0, 0, -12), (140, 4, 0, 0, -12), (185, 18, 10, 0, -20), (230, 18, -10, 0, -22), (262, 20, -8, -2, -24), (300, 22, -10, -2, -28),
+        (460, 22, -10, -2, -28), (490, 28, -4, 0, -30), (524, 26, -6, -1, -30), (560, 28, -6, 0, -30), (622, 30, -4, 0, -32), (665, 14, 0, 0, -18),
         (900, 14, 0, 0, -18), (945, 30, -4, 0, -32), (1016, 30, -2, 0, -32), (1052, 22, 4, 0, -24), (1150, 12, 14, 0, -12), (1420, 12, 14, 0, -12),
         (1480, 5, 6, 0, -6), (END, 4, 4, 0, -4)]
 def key_lean(f, flex, twist, side, hp, hy=None):
