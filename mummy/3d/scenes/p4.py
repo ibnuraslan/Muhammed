@@ -180,7 +180,7 @@ def S04():
 def S05():
     """Altered: the head and an arm set apart from the torso on the lab bench - substitutable parts. Lateral slide."""
     L = p1.lab_body(osteo=False)
-    cr = B.hero_cranium(healed=False, tone="D"); p3._old_bone(cr)          # the same older, darker head as P3 S05
+    cr = B.hero_cranium(healed=False, tone="D"); p3._old_bone(cr, stain=1.0)   # the same older, darker head as P3 S05
     co = np.array([v.co for v in cr.data.vertices]); cr.location = (0.95, 0.42, LB.TOP + 0.004 - co[:, 2].min() * 0.97)
     cr.rotation_euler = (0, 0, math.radians(-40))
     p3.lab_part("upperarmR", sex="M", tone="D", x=0.95, y=0.15, yaw=20)
