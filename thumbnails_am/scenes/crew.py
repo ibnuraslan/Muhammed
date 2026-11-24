@@ -120,8 +120,8 @@ def thief(loc, heading_deg, pose=SNEAK, jitter=0.0, seed=0, mat=None, name="thie
     for pl in bm_.polygons:
         pl.use_smooth = True
     knit = bpy.data.materials.new(name + "_knit"); knit.use_nodes = True; pk = knit.node_tree.nodes["Principled BSDF"]
-    pk.inputs['Base Color'].default_value = (0.012, 0.012, 0.014, 1); pk.inputs['Roughness'].default_value = 0.95
-    pk.inputs["Sheen Weight"].default_value = 0.3
+    pk.inputs['Base Color'].default_value = (0.004, 0.004, 0.005, 1); pk.inputs['Roughness'].default_value = 0.95
+    pk.inputs["Sheen Weight"].default_value = 0.0
     bm_.materials.append(knit)
     mwc = cap.matrix_world.copy(); cap.parent = arm; cap.parent_type = 'BONE'; cap.parent_bone = "head_07"
     bpy.context.view_layer.update(); cap.matrix_world = mwc

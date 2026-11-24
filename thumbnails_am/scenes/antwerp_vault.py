@@ -172,7 +172,7 @@ gc.objects.link(gem); go.light_linking.receiver_collection = gc; go.visible_diff
 # ---------------------------------------------------------------- a real wall: thick concrete with relief
 import ph
 WT = E("WALLTEX", "concrete_wall_008")
-conc = S.tex(WT, 1.0, tint=tuple(float(x) for x in E("WALLTINT", "0.62,0.6,0.56").split(",")), name="vault_concrete")
+conc = S.tex(WT, 1.0, tint=tuple(float(x) for x in E("WALLTINT", "0.38,0.5,0.54").split(",")), name="vault_concrete")
 fw.data.materials.clear(); fw.data.materials.append(conc)
 fj = ph._files(WT)
 dinfo = fj["Displacement"]["2k"].get("png") or fj["Displacement"]["2k"].get("jpg")
@@ -212,8 +212,9 @@ S.box("lintel", (0, -WALLT - 0.12, DZ + R_DOOR + 0.55), (2 * R_DOOR + 2.6, 0.24,
 for sx in (-1, 1):
     S.box("side_wall", (sx * 5.0, -WALLT - 4, (HZ + 1.6) / 2), (0.2, 8, HZ + 1.6), conc)
 S.box("ante_ceiling2", (0, -WALLT - 4, HZ + 1.65), (10.4, 8, 0.1), conc)
-cfloor = S.tex(E("FLOORTEX", "concrete_floor_worn_001"), 0.8, tint=(0.8, 0.78, 0.74), name="corridor_floor")
-cfloor.node_tree.nodes["Principled BSDF"].inputs['Coat Weight'].default_value = 0.25
+cfloor = S.tex(E("FLOORTEX", "concrete_floor_worn_001"), 0.8, tint=(0.42, 0.5, 0.54), name="corridor_floor")
+cfloor.node_tree.nodes["Principled BSDF"].inputs['Coat Weight'].default_value = 0.7
+cfloor.node_tree.nodes["Principled BSDF"].inputs['Coat Roughness'].default_value = 0.08
 bpy.data.objects["ante_floor"].data.materials.clear(); bpy.data.objects["ante_floor"].data.materials.append(cfloor)
 
 # ---------------------------------------------------------------- the crew: five men crouching out with the loot
@@ -237,23 +238,70 @@ for i, (x, y, hd) in enumerate(CREW[:int(E("NCREW", "5"))]):
     bag.location = Vector((hand_.x, hand_.y, 0)) + side
     bag.location.z = max(0.0, hand_.z - 0.32)
     bag.rotation_euler.z = math.radians(hd + 90)
+    for o_ in bag.children_recursive:
+        for m_ in (o_.data.materials if o_.type == 'MESH' else []):
+            pn = m_.node_tree.nodes.get("Principled BSDF")
+            if pn and "nylon" in m_.name:
+                pn.inputs['Sheen Weight'].default_value = 0.05; pn.inputs['Roughness'].default_value = 0.45
+    if i % 2 == 1:      # cash bundles poking out of the others
+        for k in range(3):
+            cb = PR.cash_bundle(f"bag{i}_cash{k}", color=(0.75, 0.42, 0.55) if k % 2 else (0.35, 0.62, 0.42)); cb.parent = bag
+            cb.location = (-0.1 + 0.1 * k, 0, 0.29); cb.rotation_euler = (0.3 * (k - 1), 0.25, 0.2 * k)
     if i % 2 == 0:      # gold bars showing in the open bags
         for k in range(3):
             gb = PR.gold_bar(f"bag{i}_bar{k}", big=True); gb.parent = bag
             gb.location = (-0.1 + 0.1 * k, 0, 0.27 + 0.01 * k); gb.rotation_euler = (0.25 * (k - 1), 0.2, 0.1 * k)
 # what they dropped on the way out: a trail of gold bars and diamonds to the door
-for k in range(int(E("NDROP", "7"))):
-    t = k / 6
-    p_ = Vector((0.4 - 1.4 * t + rng.uniform(-0.2, 0.2), -1.0 - 1.6 * t + rng.uniform(-0.15, 0.15), 0))
-    gb = PR.gold_bar(f"drop_bar{k}", big=True); gb.location = p_; gb.rotation_euler.z = rng.uniform(0, 3.14)
+fire = PR.fire_glass("trail_fire")
+gemc = bpy.data.collections.new("trail_gems"); col.children.link(gemc)
+for k in range(int(E("NDROP", "26"))):
+    t = rng.random()
+    p_ = Vector((0.5 - 2.6 * t + rng.uniform(-0.35, 0.35), -1.0 - 1.9 * t + rng.uniform(-0.3, 0.3), 0))
+    kind = k % 4
+    if kind == 0:
+        o_ = PR.gold_bar(f"drop_bar{k}", big=True); o_.location = p_; o_.rotation_euler.z = rng.uniform(0, 3.14)
+    elif kind == 1:
+        o_ = PR.cash_bundle(f"drop_cash{k}", color=(0.75, 0.42, 0.55) if k % 3 else (0.35, 0.62, 0.42))
+        o_.location = p_; o_.rotation_euler.z = rng.uniform(0, 3.14)
+    else:
+        d_ = rng.uniform(0.018, 0.03)
+        o_ = PR.brilliant(f"drop_gem{k}", d_, fire); o_.location = p_ + Vector((0, 0, d_ * 0.43))
+        o_.rotation_euler = (rng.uniform(-0.2, 0.2), rng.uniform(-0.2, 0.2), rng.uniform(0, 6.28))
+        for c_ in list(o_.users_collection):
+            c_.objects.unlink(o_)
+        gemc.objects.link(o_)
+gl2 = bpy.data.lights.new("trail_glint", 'POINT'); gl2.energy = float(E("TGLINT_E", "300")); gl2.shadow_soft_size = 0.02
+go2 = bpy.data.objects.new("trail_glint", gl2); col.objects.link(go2); go2.location = (-1.0, -4.5, 1.2)
+go2.light_linking.receiver_collection = gemc; go2.visible_diffuse = False
+
+# god rays: a haze in the corridor lit only by a beam from inside the vault, out through the round door
+bpy.ops.mesh.primitive_cube_add(size=1, location=(0, -WALLT - 4.1, (HZ + 1.6) / 2)); hz_ = bpy.context.active_object
+hz_.scale = (9.8, 8.0, HZ + 1.55); hz_.name = "corridor_haze"
+hm_ = bpy.data.materials.new("corridor_haze"); hm_.use_nodes = True; HN_ = hm_.node_tree.nodes; HN_.remove(HN_["Principled BSDF"])
+vs_ = HN_.new("ShaderNodeVolumeScatter"); vs_.inputs['Density'].default_value = float(E("HAZE", "0.01"))
+vs_.inputs['Anisotropy'].default_value = 0.65
+hm_.node_tree.links.new(vs_.outputs[0], HN_["Material Output"].inputs['Volume']); hz_.data.materials.append(hm_)
+hz_.visible_shadow = False
+bm_l = bpy.data.lights.new("beam", 'SPOT'); bm_l.energy = float(E("BEAM_E", "3500")); bm_l.spot_size = math.radians(38)
+bm_l.spot_blend = 0.3; bm_l.color = (1.0, 0.72, 0.36); bm_l.shadow_soft_size = 0.15
+bmo = bpy.data.objects.new("beam", bm_l); col.objects.link(bmo); bmo.location = (0.3, 2.5, DZ + 0.2)
+bmo.rotation_euler = (Vector((-1.2, -5.0, 0.4)) - bmo.location).to_track_quat('-Z', 'Y').to_euler()
 
 S.light_area("door_spill", (0.0, 0.6, 1.3), (-1.2, -2.5, 0.2), 1.8, float(E("SPILL_E", "900")), color=(1.0, 0.72, 0.38))
-S.light_area("rim_left", (0.6, -0.6, 1.6), (-3.0, -2.2, 0.8), 1.0, float(E("RIML_E", "500")), color=(1.0, 0.7, 0.35))
+S.light_area("rim_left", (0.6, -0.6, 1.6), (-3.0, -2.2, 0.8), 1.0, float(E("RIML_E", "0")), color=(1.0, 0.7, 0.35))
 for wx in (-3.4, 3.4):      # grazing washes down the concrete (reveal its relief, keep the crew dark)
-    S.light_area("wall_wash", (wx, -WALLT - 0.35, HZ + 1.4), (wx, -WALLT - 0.05, 0.0), 1.2, float(E("WASH_E", "160")),
-                 color=(0.7, 0.85, 1.0), size_y=0.2)
-S.light_area("cool_fill", (-1.5, -5.5, 2.4), (0, -1.5, 0.6), 3.0, float(E("COOL_E", "50")), color=(0.55, 0.75, 1.0))
-S.world((0.25, 0.4, 0.5), float(E("WORLD", "0.25")))
+    S.light_area("wall_wash", (wx, -WALLT - 0.35, HZ + 1.4), (wx, -WALLT - 0.05, 0.0), 1.2, float(E("WASH_E", "240")),
+                 color=(0.4, 0.8, 1.0), size_y=0.2)
+S.light_area("cool_fill", (-1.5, -5.5, 2.4), (0, -1.5, 0.6), 3.0, float(E("COOL_E", "50")), color=(0.35, 0.75, 0.95))
+S.world((0.15, 0.4, 0.5), float(E("WORLD", "0.25")))
+
+try:
+    sc.world.cycles_visibility.scatter = False
+except Exception as e_:
+    print('world vis', e_)
+for o_ in sc.objects:
+    if o_.type == 'LIGHT' and o_.name != 'beam':
+        o_.visible_volume_scatter = False
 
 # ---------------------------------------------------------------- camera: low, wide, through the round door
 cam = Vector((float(E("CAMX", "-0.9")), float(E("CAMY", "-7.0")), float(E("CAMZ", "0.95"))))
