@@ -179,13 +179,36 @@ def S04():
                 fstop=5.6, focus=(0.0, 0.38, LB.TOP), cine=dict(exposure=0.1))
 
 
+def _sand_drift(c, size=(60, 60, 0.7), density=0.9):
+    """Wind-blown sand: low, streaky streamers racing along the ground (noise stretched downwind along x)."""
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(c[0], c[1], c[2] + size[2] / 2 - 0.05)); o = bpy.context.active_object
+    o.name = "sanddrift"; o.scale = size
+    m = bpy.data.materials.new("sanddrift"); m.use_nodes = True; N = m.node_tree.nodes; L = m.node_tree.links; N.remove(N["Principled BSDF"])
+    tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Generated'], sep.inputs[0])
+    mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (3.0, 40.0, 14.0); L.new(tc.outputs['Generated'], mp.inputs['Vector'])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 1.5; nz.inputs['Detail'].default_value = 6; nz.inputs['Distortion'].default_value = 0.6
+    L.new(mp.outputs[0], nz.inputs['Vector'])
+    st = N.new("ShaderNodeMapRange"); st.inputs['From Min'].default_value = 0.52; st.inputs['From Max'].default_value = 0.7; L.new(nz.outputs['Fac'], st.inputs['Value'])
+    fz = N.new("ShaderNodeMapRange"); fz.inputs['From Min'].default_value = 0.0; fz.inputs['From Max'].default_value = 1.0
+    fz.inputs['To Min'].default_value = 1.0; fz.inputs['To Max'].default_value = 0.0; L.new(sep.outputs['Z'], fz.inputs['Value'])
+    p2 = N.new("ShaderNodeMath"); p2.operation = 'POWER'; p2.inputs[1].default_value = 2.5; L.new(fz.outputs[0], p2.inputs[0])
+    m1 = N.new("ShaderNodeMath"); m1.operation = 'MULTIPLY'; L.new(st.outputs[0], m1.inputs[0]); L.new(p2.outputs[0], m1.inputs[1])
+    m2 = N.new("ShaderNodeMath"); m2.operation = 'MULTIPLY'; m2.inputs[1].default_value = density; L.new(m1.outputs[0], m2.inputs[0])
+    v = N.new("ShaderNodeVolumePrincipled"); v.inputs['Color'].default_value = (0.85, 0.72, 0.52, 1); v.inputs['Anisotropy'].default_value = 0.5
+    L.new(m2.outputs[0], v.inputs['Density']); L.new(v.outputs[0], N["Material Output"].inputs['Volume'])
+    o.data.materials.append(m); o.visible_shadow = False
+    return o
+
+
 def S05():
-    """Time passing on the machair: sand blowing low across the burial ground at dusk, the graves filling. Slow crane."""
-    T, sk = p1.site("dusk", grass_at=(0, 6), grass_r=14, kit=False, sun_az=200)
-    BR.ground_mist((0, 6, float(U.surface(0, 6))), size=(60, 60, 1.2), density=0.08)
-    c = U.PITS["B1"]; z = G.H(c[0], c[1])
-    return dict(a=((4.5, 3.5, z + 0.5), (c[0], c[1] + 1.5, z - 0.3)), b=((4.2, 3.6, z + 1.6), (c[0], c[1] + 1.5, z - 0.4)), lens=28,
-                fstop=5.6, focus=(c[0], c[1], z), cine=dict(exposure=0.25))
+    """Time passing: the open machair over the burial ground before the houses, at dusk - wind driving streamers of sand
+    low across the turf, burying, layer on layer. Slow low crane."""
+    U.CUT = False
+    T = U.island("dusk", grass_at=(2, 4), grass_r=22, n=820, core=4.0, grass_density=260, sun_az=200)
+    z = float(U.surface(2, 4))
+    _sand_drift((2, 4, z), size=(70, 70, 0.7), density=1.2)
+    return dict(a=((10, -6, z + 0.3), (-8, 6, z + 0.25)), b=((9.5, -5.6, z + 0.75), (-8, 6, z + 0.2)), lens=28,
+                fstop=5.6, focus=(2, 2, z), cine=dict(exposure=0.3))
 
 
 def S06():
