@@ -755,8 +755,8 @@ def _moss(M, px, py, wz, n=110, seed=23):
     for k in range(n):
         a = rng.uniform(0, 6.283); r = rng.uniform(0.7, 1.7)
         x, y = px + r * math.cos(a), py + r * math.sin(a)
-        z = max(P2.moor_height(M, x, y), wz - 0.02)
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1.0, location=(x, y, z - 0.03)); o = bpy.context.active_object
+        z = max(P2.moor_height(M, x, y), wz + 0.01)
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1.0, location=(x, y, z - 0.005)); o = bpy.context.active_object
         rr = rng.uniform(0.08, 0.2); o.scale = (rr * rng.uniform(0.8, 1.5), rr, rr * 0.22); o.rotation_euler.z = rng.uniform(0, 6.3); o.name = "moss"
         d = o.modifiers.new("lump", "DISPLACE"); t = bpy.data.textures.get("mosslump") or bpy.data.textures.new("mosslump", "CLOUDS")
         t.noise_scale = 0.06; d.texture = t; d.strength = 0.03
@@ -770,7 +770,7 @@ def S23():
     px, py = _pool_spot(M)
     P2.bundle((px, py, wz - 0.03), rot=math.radians(30))          # half under the black water
     _moss(M, px, py, wz)
-    return dict(a=((px - 0.15, py - 0.25, wz + 2.2), (px, py, wz)), b=((px + 0.1, py - 0.05, wz + 1.9), (px + 0.05, py + 0.05, wz)), lens=35,
+    return dict(a=((px - 0.15, py - 0.25, wz + 2.4), (px, py, wz)), b=((px + 0.1, py - 0.05, wz + 2.1), (px + 0.05, py + 0.05, wz)), lens=24,
                 fstop=5.6, focus=(px, py, wz), cine=dict(exposure=0.35))
 
 

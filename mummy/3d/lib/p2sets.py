@@ -373,7 +373,10 @@ def peat_moor(center=(0.0, 0.0), size=220.0, n=420, seed=4, pools=True):
     far = bpy.data.objects.new("moorfar", fme); bpy.context.scene.collection.objects.link(far)
     out = dict(ground=o, Z=Z, xs=xs)
     if pools:
-        water = _mat("bogwater", (0.004, 0.003, 0.002), 0.03)
+        water = _mat("bogwater", (0.5, 0.32, 0.15), 0.04)          # peaty water: clear-ish but stained dark brown with depth
+        wp = water.node_tree.nodes["Principled BSDF"]; wp.inputs['Transmission Weight'].default_value = 1.0; wp.inputs['IOR'].default_value = 1.33
+        vv = water.node_tree.nodes.new("ShaderNodeVolumeAbsorption"); vv.inputs['Color'].default_value = (0.35, 0.16, 0.05, 1); vv.inputs['Density'].default_value = 9.0
+        water.node_tree.links.new(vv.outputs[0], water.node_tree.nodes["Material Output"].inputs['Volume'])
         lvl = float(np.percentile(Z, 9))
         bpy.ops.mesh.primitive_plane_add(size=size, location=(center[0], center[1], lvl)); w = bpy.context.active_object; w.name = "bogpools"
         w.data.materials.append(water)
