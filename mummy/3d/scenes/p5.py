@@ -231,7 +231,7 @@ def S11():
     out through the gap. Firelight, sharp focus on the bone."""
     R, c = _house_bundle(fire=1.0, moon=0.2)
     bo = bpy.data.objects["bundle"]
-    hit, n = _surface_hit(bo, (-0.3, 0.08))            # over the hip, between the cords
+    hit, n = _surface_hit(bo, (-0.25, -0.1))           # over the hip on the room side, between the cords
     n = (n + Vector((0, 0, 0.6))).normalized()
     sk = B.Skeleton("M", "C", name="Exposed")
     for s_ in list(sk.parts):
@@ -253,9 +253,9 @@ def S11():
     hx, hy = R["hearth"]
     _spot((hx - 0.2, hy + 0.2, 0.8), tuple(tgt), 45, size=0.3, color=(1.0, 0.6, 0.28), spot=25)
     # medium shot: the whole crouched bundle on its hurdle, the split and the bone end at a readable scale
-    cam = c + Vector((math.cos(math.radians(-20)), math.sin(math.radians(-20)), 0)) * 1.45 + Vector((0, 0, 0.42))
+    cam = c + Vector((math.cos(math.radians(-20)), math.sin(math.radians(-20)), 0)) * 1.6 + Vector((0, 0, 0.5))   # from the room side
     side = Vector((1, 0, 0))
-    return dict(a=(tuple(cam), tuple((c + hit) / 2)), b=(tuple(cam - (cam - c).normalized() * 0.15), tuple((c + hit) / 2)), lens=40,
+    return dict(a=(tuple(cam), tuple(c * 0.7 + hit * 0.3)), b=(tuple(cam - (cam - c).normalized() * 0.15), tuple(c * 0.7 + hit * 0.3)), lens=40,
                 fstop=4.0, focus=tuple(tgt), cine=dict(exposure=0.1, sat=0.9), hand_ok=("floor", "bundle"))
 
 
