@@ -172,23 +172,27 @@ def S06():
     co = np.array([v.co for v in cr.data.vertices]); cr.location = (-0.22, 0.4, LB.TOP + 0.004 - co[:, 2].min() * 0.97)
     cr.rotation_euler = (0, 0, math.radians(-30))
     c = Vector((0.0, 0.4, LB.TOP + 0.06))
-    return dict(a=((0.0, -0.05, LB.TOP + 0.14), tuple(c)), b=((0.0, -0.4, LB.TOP + 0.26), tuple(c)), lens=40,
+    return dict(a=((0.0, -0.3, LB.TOP + 0.2), tuple(c)), b=((0.0, -0.75, LB.TOP + 0.38), tuple(c)), lens=40,
                 fstop=4.0, focus=tuple(c), cine=dict(exposure=-0.05))
 
 
 # ============================================================================ "Researchers take samples from four places."
 def S07():
-    """The skull: a small sampling hole drilled at its base, the dust collected, capped tubes beside it."""
-    A = LB.room(window_light=0.3, lamp=True, lamp_at=(0.35, 0.62), lamp_target=(0.0, 0.36), lamp_energy=22)
-    LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
-    cr = B.hero_cranium(healed=False, tone="D")
-    co = np.array([v.co for v in cr.data.vertices]); cr.location = (0.0, 0.36, LB.TOP + 0.004 - co[:, 2].min() * 0.97)
-    cr.rotation_euler = (0, 0, math.radians(-120))
+    """The skull, upside down on its ring with the base turned up: a small hole drilled beside the foramen magnum into
+    the dense petrous bone, the dust collected; capped tubes beside it. Slow push."""
+    L = p1.lab_skull(inverted=True, lamp_energy=22)
+    cr = L["cr"]
+    bpy.context.view_layer.update()
+    W = np.array([cr.matrix_world @ v.co for v in cr.data.vertices])
+    top = W[W[:, 2] > np.percentile(W[:, 2], 97)]
+    hole = Vector((float(top[:, 0].mean()) + 0.025, float(top[:, 1].mean()), float(top[:, 2].mean())))
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.0045, depth=0.008, location=hole); h = bpy.context.active_object
+    h.name = "drillhole"; h.data.materials.append(_plain("hole", (0.03, 0.02, 0.012), 0.9))
     for k in range(3):
-        _tube(0.14 + k * 0.022, 0.5, LB.TOP, cap=(0.55, 0.1, 0.05))
-    c = Vector((0.03, 0.4, LB.TOP + 0.06))
-    return dict(a=((0.3, 0.0, LB.TOP + 0.14), tuple(c)), b=((0.22, -0.06, LB.TOP + 0.12), tuple(c)), lens=60,
-                fstop=4.0, focus=tuple(c), cine=dict(exposure=-0.1))
+        _tube(0.16 + k * 0.022, 0.5, LB.TOP, cap=(0.55, 0.1, 0.05))
+    c = Vector((0.04, 0.38, LB.TOP + 0.1))
+    return dict(a=((-0.25, -0.15, LB.TOP + 0.38), tuple(c)), b=((-0.15, -0.08, LB.TOP + 0.32), tuple(hole)), lens=50,
+                fstop=4.0, focus=tuple(hole), cine=dict(exposure=-0.1))
 
 
 def S08():
