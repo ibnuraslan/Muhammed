@@ -1,60 +1,60 @@
 Mary Celeste P1 - SFX cue sheet (mm:ss.ss, from 00:00 of the part; 48 kHz)
 
 AMBIENCE BEDS by shot (dB relative; crossfaded at cuts)
-  00:00.00  S01  [sea_low] sea_calm, wind_light, flog, hull, laps
-  00:01.50  S02  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
-  00:04.25  S03  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
-  00:05.75  S04  [cabin] hold, drips, hull, sea_calm, wind_mid
-  00:07.79  S05  [cabin] hold, drips, hull
-  00:11.38  S06  [cabin] hold, drips, hull
-  00:12.88  S07  [cabin] hold, drips, hull
-  00:17.08  S08  [cabin] hold, drips, hull
-  00:19.12  S09  [cabin] hold, drips, hull
-  00:21.21  S10  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
-  00:26.04  S11  [deck_mc] sea_calm, wind_mid, rigging, hull, flog, laps
-  00:29.79  S12  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
-  00:32.42  S13  [sea_low] sea_calm, wind_light, flog, hull, laps
-  00:35.04  S14  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
-  00:36.83  S15  [sea_wide] sea_calm, wind_mid, bowwash, flog, rigging
-  00:39.88  S16  [cabin] hold, drips, hull
-  00:41.17  S16b [cabin] hold, drips, hull
-  00:43.00  S17  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
-  00:47.88  S18  [sea_dg] sea_calm, wind_mid, bowwash, rigging
-  00:51.04  S19  [dg_cabin] hold, hull, lamp
-  00:54.25  S20  [sea_dg] sea_calm, wind_mid, bowwash, rigging
-  00:56.88  S21  [dg_deck] sea_calm, wind_mid, rigging, hull, bowwash
-  00:59.50  S22  [dg_deck] sea_calm, wind_mid, rigging, hull, bowwash
-  01:02.54  S23  [dg_deck] sea_calm, wind_mid, rigging, hull, bowwash
-  01:05.92  S24  [dg_deck] sea_calm, wind_mid, rigging, hull, bowwash
-  01:06.88  S25  [sea_dg] sea_calm, wind_mid, bowwash, rigging
-  01:09.88  S26  [dg_deck] sea_calm, wind_mid, rigging, hull, bowwash
-  01:13.96  S27  [sea_far] sea_calm, wind_mid
-  01:15.67  S28  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
-  01:18.58  S29  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
-  01:22.17  S30  [sea_low] sea_calm, wind_light, flog, hull, laps
-  01:25.29  S31  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
-  01:28.12  S32  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
-  01:30.92  S33  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
-  01:33.25  S34  [galley] hold, drips, laps
-  01:36.12  S35  [galley] hold, drips, laps
-  01:39.12  S36  [galley] hold, drips, laps
-  01:42.25  S37  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
-  01:45.17  S38  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
-  01:47.08  S39  [sea_low] sea_calm, wind_light, flog, hull, laps, bowwash
-  01:49.29  S40  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
-  01:51.12  S41  [sea_wide] sea_calm, wind_mid, bowwash, flog, rigging
-  01:54.04  S42  [deck_mc] sea_calm, wind_mid, rigging, hull, flog
-  01:57.17  S43  [studio] room, lamp
-  02:01.04  S44  [cabin] hold, drips, hull
-  02:04.92  S45  [cabin] hold, drips, hull, lamp
-  02:08.42  S46  [cabin] hold, drips, hull, lamp
-  02:11.54  S47  [cabin] hold, drips, hull, lamp
-  02:13.54  S48  [cabin] hold, drips, hull, lamp
-  02:17.12  S49  [cabin] hold, drips, hull, lamp
-  02:20.62  S50  [cabin] hold, drips, hull, lamp
-  02:23.79  S51  [studio] room, lamp
-  02:29.96  S52  [studio] room, lamp
-  02:33.62  S53  [studio] room, lamp, drone
+  00:00.00  S01  [sea_low] r_sea, r_laps, sea_calm, r_wind_soft, r_creak, flog
+  00:01.50  S02  [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  00:04.25  S03  [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  00:05.75  S04  [cabin] r_cabin, hold, r_drips, r_creak, sea_calm, wind_mid
+  00:07.79  S05  [cabin] r_cabin, hold, r_drips, r_creak
+  00:11.38  S06  [cabin] r_cabin, hold, r_drips, r_creak
+  00:12.88  S07  [cabin] r_cabin, hold, r_drips, r_creak
+  00:17.08  S08  [cabin] r_cabin, hold, r_drips, r_creak
+  00:19.12  S09  [cabin] r_cabin, hold, r_drips, r_creak
+  00:21.21  S10  [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  00:26.04  S11  [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging, laps
+  00:29.79  S12  [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  00:32.42  S13  [sea_low] r_sea, r_laps, sea_calm, r_wind_soft, r_creak, flog
+  00:35.04  S14  [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  00:36.83  S15  [sea_wide] r_sea, sea_calm, r_wind, r_flag, r_creak
+  00:39.88  S16  [cabin] r_cabin, hold, r_drips, r_creak
+  00:41.17  S16b [cabin] r_cabin, hold, r_drips, r_creak
+  00:43.00  S17  [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  00:47.88  S18  [sea_dg] r_sea, sea_calm, r_wind, r_flag, r_creak, rigging
+  00:51.04  S19  [dg_cabin] r_cabin, r_creak, r_lamp
+  00:54.25  S20  [sea_dg] r_sea, sea_calm, r_wind, r_flag, r_creak, rigging
+  00:56.88  S21  [dg_deck] r_sea, r_wind, r_creak, r_rope, r_flag, rigging
+  00:59.50  S22  [dg_deck] r_sea, r_wind, r_creak, r_rope, r_flag, rigging, wind_mid
+  01:02.54  S23  [dg_deck] r_sea, r_wind, r_creak, r_rope, r_flag, rigging
+  01:05.92  S24  [dg_deck] r_sea, r_wind, r_creak, r_rope, r_flag, rigging
+  01:06.88  S25  [sea_dg] r_sea, sea_calm, r_wind, r_flag, r_creak, rigging
+  01:09.88  S26  [dg_deck] r_sea, r_wind, r_creak, r_rope, r_flag, rigging
+  01:13.96  S27  [sea_far] r_sea_soft, sea_calm, r_wind
+  01:15.67  S28  [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging, flog
+  01:18.58  S29  [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging, flog, wind_mid
+  01:22.17  S30  [sea_low] r_sea, r_laps, sea_calm, r_wind_soft, r_creak, flog
+  01:25.29  S31  [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  01:28.12  S32  [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  01:30.92  S33  [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  01:33.25  S34  [galley] r_cabin, hold, r_drips, r_laps
+  01:36.12  S35  [galley] r_cabin, hold, r_drips, r_laps
+  01:39.12  S36  [galley] r_cabin, hold, r_drips, r_laps
+  01:42.25  S37  [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  01:45.17  S38  [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  01:47.08  S39  [sea_low] r_sea, r_laps, sea_calm, r_wind_soft, r_creak, flog, bowwash
+  01:49.29  S40  [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  01:51.12  S41  [sea_wide] r_sea, sea_calm, r_wind, r_flag, r_creak
+  01:54.04  S42  [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  01:57.17  S43  [studio] room, r_lamp, r_clock, r_drone
+  02:01.04  S44  [cabin] r_cabin, hold, r_drips, r_creak, drips
+  02:04.92  S45  [cabin] r_cabin, hold, r_drips, r_creak, drips, lamp
+  02:08.42  S46  [cabin] r_cabin, hold, r_drips, r_creak, drips, lamp
+  02:11.54  S47  [cabin] r_cabin, hold, r_drips, r_creak, drips, lamp
+  02:13.54  S48  [cabin] r_cabin, hold, r_drips, r_creak, drips, lamp
+  02:17.12  S49  [cabin] r_cabin, hold, r_drips, r_creak, drips, lamp
+  02:20.62  S50  [cabin] r_cabin, hold, r_drips, r_creak, drips, lamp
+  02:23.79  S51  [studio] room, r_lamp, r_clock, r_drone
+  02:29.96  S52  [studio] room, r_lamp, r_clock, r_drone
+  02:33.62  S53  [studio] room, r_lamp, r_clock, r_drone, drone, lamp
 
 SILENCES (beds pulled down before a reveal)
   00:18.62 - 00:19.40  beds -30 dB
@@ -83,6 +83,7 @@ SPOT EFFECTS
   00:15.68  S07  hull groan
   00:17.28  S08  lantern creak
   00:17.98  S08  foot water
+  00:19.38  S09  rec (src=boom_408141, pick=0, dur=6.0)
   00:19.41  S09  drip
   00:20.43  S09  hull groan
   00:20.73  S09  drip
@@ -117,6 +118,7 @@ SPOT EFFECTS
   01:07.17  S25  whump
   01:08.08  S25  whump
   01:11.28  S26  wind gust (dur=2.6)
+  01:14.11  S27  rec (src=boom_559529, pick=0, dur=6.0)
   01:15.97  S28  whump
   01:16.97  S28  creak (kind=rope)
   01:22.17  S30  oars (dur=3.1)
@@ -124,6 +126,7 @@ SPOT EFFECTS
   01:25.39  S31  footsteps (times=[0.0, 0.5, 1.0])
   01:26.79  S31  glass (dur=0.6)
   01:28.42  S32  glass (dur=0.9)
+  01:28.42  S32  rec (src=boom_177242, pick=0, dur=6.0)
   01:29.53  S32  card tick
   01:31.52  S33  wood scrape
   01:33.35  S34  slosh (dur=2.6, muffle=1500)
@@ -136,6 +139,7 @@ SPOT EFFECTS
   01:42.45  S37  line hands (dur=1.8)
   01:43.95  S37  wood tap
   01:44.55  S37  splash below
+  01:45.47  S38  rec (src=boom_408141, pick=0, dur=6.0)
   01:45.49  S38  drip (into=wood)
   01:46.17  S38  drip (into=wood)
   01:46.47  S38  line hands (dur=0.5)

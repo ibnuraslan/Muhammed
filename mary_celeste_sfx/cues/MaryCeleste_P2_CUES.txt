@@ -1,0 +1,136 @@
+Mary Celeste P2 - SFX cue sheet (mm:ss.ss, from 00:00 of the part; 48 kHz)
+
+AMBIENCE BEDS by shot (dB relative; crossfaded at cuts)
+  00:00.00  01   [harbour] r_harbour, r_harbour_b, r_laps, r_rope, r_gulls
+  00:05.04  02   [cabin_pier] r_cabin_calm, r_creak_b, r_harbour, r_lamp
+  00:07.83  03   [cabin_pier] r_cabin_calm, r_creak_b, r_harbour, r_lamp
+  00:10.42  04   [harbour] r_harbour, r_harbour_b, r_laps, r_rope, r_gulls
+  00:13.38  06   [harbour] r_harbour, r_harbour_b, r_laps, r_rope, r_gulls, r_creak, r_wind
+  00:18.21  07   [cabin_pier] r_cabin_calm, r_creak_b, r_harbour, r_lamp
+  00:21.17  08   [cabin_pier] r_cabin_calm, r_creak_b, r_harbour, r_lamp
+  00:22.96  09   [parlour] room, r_clock, r_wind_soft
+  00:26.46  10   [school] room, r_children, r_clock
+  00:28.71  11   [cabin_pier] r_cabin_calm, r_creak_b, r_harbour, r_lamp
+  00:31.88  12   [cabin_pier] r_cabin_calm, r_creak_b, r_harbour, r_lamp
+  00:33.83  13   [maquette] room, r_drone, r_wind_soft, r_harbour
+  00:36.25  14   [cabin_pier] r_cabin_calm, r_creak_b, r_harbour, r_lamp
+  00:42.96  15   [harbour] r_harbour, r_harbour_b, r_laps, r_rope, r_gulls
+  00:47.38  16   [hold_ny] hold, r_harbour, r_creak_b
+  00:50.29  17   [cabin_pier] r_cabin_calm, r_creak_b, r_harbour, r_lamp
+  00:54.17  18   [harbour] r_harbour, r_harbour_b, r_laps, r_rope, r_gulls
+  00:55.17  19   [cabin_pier] r_cabin_calm, r_creak_b, r_harbour, r_lamp
+  00:57.54  20   [harbour] r_harbour, r_harbour_b, r_laps, r_rope, r_gulls
+  01:00.62  21   [anchorage] r_sea_soft, r_laps, r_wind, r_gulls, r_creak, r_rope
+  01:03.12  22   [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  01:08.17  23   [cabin_dry] r_cabin_calm, r_creak, r_lamp, r_wind_soft
+  01:11.25  24   [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  01:13.79  25   [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  01:16.62  26   [sea_low] r_sea, r_laps, sea_calm, r_wind_soft, r_creak, flog
+  01:20.79  28   [dawn] r_sea_soft, sea_calm, r_wind_soft, gulls_far, r_creak, bowwash
+  01:25.38  29   [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  01:29.58  30   [cabin_dry] r_cabin_calm, r_creak, r_lamp
+  01:33.33  31   [cabin_dry] r_cabin_calm, r_creak, r_lamp
+  01:35.42  32   [cabin_dry] r_cabin_calm, r_creak, r_lamp
+  01:38.42  33   [sea_low] r_sea, r_laps, sea_calm, r_wind_soft, r_creak, flog, r_wind
+  01:42.04  34   [cabin] r_cabin, hold, r_drips, r_creak
+  01:48.75  35   [cabin] r_cabin, hold, r_drips, r_creak
+  01:50.42  36   [cabin_dry] r_cabin_calm, r_creak, r_lamp, r_clock
+  01:54.62  37   [deck_dusk] r_sea_soft, r_wind_soft, r_creak, r_rope, rigging
+  01:56.17  38   [cabin] r_cabin, hold, r_drips, r_creak
+  01:59.79  39   [cabin] r_cabin, hold, r_drips, r_creak
+  02:06.96  41   [maquette] room, r_drone, r_wind_soft, drone
+  02:14.54  42   [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  02:17.58  43   [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  02:24.00  44   [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  02:28.62  45   [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+
+SILENCES (beds pulled down before a reveal)
+  01:16.05 - 01:16.70  beds -18 dB
+  01:34.50 - 01:35.50  beds -26 dB
+  02:06.20 - 02:07.05  beds -18 dB
+
+SPOT EFFECTS
+  00:00.40  01   cart (dur=4.5)
+  00:01.60  01   rec (src=bell_31107, seg=True, dur=3.0)
+  00:02.80  01   gull
+  00:05.34  02   nib (dur=2.3)
+  00:06.44  02   rec (src=barrel_675975, dur=0.8, pick=rand)
+  00:07.83  03   nib (dur=1.5)
+  00:09.53  03   rec (src=glass_104815, start=0.0, dur=0.6)
+  00:09.78  03   nib (dur=0.6)
+  00:11.02  04   gull
+  00:12.22  04   creak (kind=hull)
+  00:14.18  06   creak (kind=rope)
+  00:15.97  06   creak (kind=rope)
+  00:19.51  07   rec (src=toddler_209210, start=0.0, dur=1.5)
+  00:20.41  07   creak (kind=hull)
+  00:21.47  08   rec (src=toddler_625686, start=0.0, dur=1.6)
+  00:22.07  08   rec (src=cloth_19291, start=0.0, dur=1.2)
+  00:26.76  10   chalk scrape (dur=0.6)
+  00:27.66  10   chalk scrape (dur=0.5)
+  00:28.71  11   nib (dur=0.5)
+  00:30.31  11   creak (kind=hull)
+  00:31.98  12   creak (kind=hull)
+  00:32.67  12   rec (src=breath_615223, start=0.0, dur=2.0)
+  00:36.45  14   ladder (steps=3, gap=0.5)
+  00:38.15  14   wood tap
+  00:38.55  14   rec (src=cloth_475440, seg=True, dur=2.0)
+  00:40.25  14   footsteps (times=[0.0, 0.5])
+  00:43.16  15   rec (src=rope_394222, seg=True, dur=3.0)
+  00:43.96  15   rec (src=rope_137711, seg=True, dur=1.5)
+  00:45.36  15   rec (src=barrel_810894, seg=True, dur=2.0)
+  00:47.67  16   rec (src=barrel_675975, dur=1.2, pick=rand)
+  00:48.67  16   rec (src=barrel_675975, dur=1.2, pick=rand)
+  00:49.58  16   wood set
+  00:50.29  17   nib (dur=0.9)
+  00:51.29  17   rec (src=barrel_675975, dur=1.2, pick=rand)
+  00:54.17  18   rec (src=hammer_535629, seg=True, dur=1.0)
+  00:55.27  19   rec (src=hammer_535629, seg=True, dur=2.2)
+  00:57.54  20   rec (src=steam_587171, seg=True, dur=3.0)
+  00:59.04  20   gull
+  01:00.83  21   rec (src=chain_477129, seg=True, dur=2.2)
+  01:02.23  21   rec (src=slosh_637974, dur=1.5, pick=rand)
+  01:03.52  22   wind gust (dur=3.0)
+  01:05.92  22   wind gust (dur=2.0)
+  01:08.47  23   nib (dur=2.4)
+  01:09.97  23   creak (kind=hull)
+  01:11.55  24   whump
+  01:12.75  24   creak (kind=rope)
+  01:14.29  25   paper (dur=0.8)
+  01:15.39  25   wind gust (dur=1.2)
+  01:16.62  26   oars (dur=4.0)
+  01:16.78  26   rec (src=boom_559529, pick=0, dur=6.0)
+  01:17.83  26   whump
+  01:26.38  29   creak (kind=rope)
+  01:29.88  30   chalk scrape (dur=1.0)
+  01:31.18  30   chalk scrape (dur=1.0)
+  01:33.53  31   chalk tap
+  01:34.43  31   rec (src=boom_408141, pick=0, dur=6.0)
+  01:36.82  32   creak (kind=hull)
+  01:39.02  33   water slap
+  01:43.04  34   rec (src=drawer_552153, start=0.0, dur=2.0)
+  01:45.44  34   rec (src=drawer_146805, start=0.0, dur=2.5)
+  01:47.24  34   slosh (dur=1.4)
+  01:49.05  35   knock (f0=1700, dec=0.012)
+  01:49.15  35   rec (src=boom_177242, pick=0, dur=6.0)
+  01:50.92  36   wheel (dur=1.6, spin=True)
+  01:55.33  37   knock (f0=2100, dec=0.01)
+  01:56.57  38   wood set
+  01:56.77  38   rec (src=boom_177242, pick=0, dur=6.0)
+  02:00.39  39   rec (src=drawer_552153, start=0.0, dur=2.0)
+  02:01.99  39   lantern creak
+  02:04.19  39   rec (src=cloth_475440, seg=True, dur=1.5)
+  02:10.06  41   pin tap
+  02:10.16  41   pulse
+  02:11.96  41   pin tap
+  02:12.06  41   pulse
+  02:13.46  41   pin tap
+  02:13.56  41   pulse
+  02:14.84  42   rec (src=slosh_637974, dur=2.5, pick=rand)
+  02:18.08  43   rec (src=rope_394222, seg=True, dur=3.0)
+  02:21.98  43   splash below
+  02:24.50  44   wood tap
+  02:25.20  44   wood tap
+  02:26.20  44   drip (into=wood)
+  02:27.00  44   drip (into=wood)
+  02:29.12  45   rec (src=pump_588629, seg=True, dur=2.5)

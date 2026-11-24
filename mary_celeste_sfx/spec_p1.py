@@ -4,18 +4,7 @@ DUCK_DB = 6.0
 SFX_IN_MIX_DB = -1.0
 FADE_OUT = 3.0
 
-LOC = {
-    "sea_low":  {"sea_calm": 0, "wind_light": -4, "flog": -12, "hull": -9, "laps": -8},
-    "sea_wide": {"sea_calm": 0, "wind_mid": -4, "bowwash": -6, "flog": -10, "rigging": -12},
-    "sea_far":  {"sea_calm": -2, "wind_mid": -4},
-    "sea_dg":   {"sea_calm": 0, "wind_mid": -3, "bowwash": -4, "rigging": -10},
-    "deck_mc":  {"sea_calm": -3, "wind_mid": -4, "rigging": -6, "hull": -7, "flog": -9},
-    "dg_deck":  {"sea_calm": -3, "wind_mid": -2, "rigging": -5, "hull": -7, "bowwash": -10},
-    "cabin":    {"hold": 0, "drips": -8, "hull": -14},
-    "galley":   {"hold": -1, "drips": -5, "laps": -10},
-    "dg_cabin": {"hold": -1, "hull": -10, "lamp": -28},
-    "studio":   {"room": 0, "lamp": -22},
-}
+from locs import LOC
 
 SHOTS = {
     "S01": dict(loc="sea_low", space="out", ev=[(0.2, "knock", {"f0": 560, "dec": 0.03}, -4, 0.4), (0.9, "knock", {"f0": 520, "dec": 0.03}, -6, 0.4)]),
@@ -81,3 +70,10 @@ SILENCE = [
 ]
 
 NOTES = ["S23 Morehouse calling down and S26 the crew's hail are voices, so they are NOT synthesised. Add a real recorded shout there if you want one (the wind gust at S26 is placed to carry it)."]
+
+HIT = lambda src, db_, t=0.0: (t, "rec", {"src": src, "pick": 0, "dur": 6.0}, db_, 0.0)
+SHOTS["S09"]["ev"].append(HIT("boom_408141", -12, 0.25))   # "He finds no one."
+SHOTS["S27"]["ev"].append(HIT("boom_559529", -10, 0.15))   # "Nobody answers."
+SHOTS["S38"]["ev"].append(HIT("boom_408141", -13, 0.3))    # "Three and a half feet."
+SHOTS["S32"]["ev"].append(HIT("boom_177242", -16, 0.3))    # the smashed compass
+SHOTS["S53"]["beds"]["r_drone"] = -6

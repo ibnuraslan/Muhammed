@@ -1,0 +1,87 @@
+Mary Celeste P5 - SFX cue sheet (mm:ss.ss, from 00:00 of the part; 48 kHz)
+
+AMBIENCE BEDS by shot (dB relative; crossfaded at cuts)
+  00:00.00  S01  [sea_low] r_sea, r_laps, sea_calm, r_wind_soft, r_creak, flog
+  00:03.96  S02  [sea_low] r_sea, r_laps, sea_calm, r_wind_soft, r_creak, flog
+  00:08.29  S03  [sea_low] r_sea, r_laps, sea_calm, r_wind_soft, r_creak, flog
+  00:11.21  S04  [sea_wide] r_sea, sea_calm, r_wind, r_flag, r_creak
+  00:14.42  S05  [sea_low] r_sea, r_laps, sea_calm, r_wind_soft, r_creak, flog
+  00:19.25  S06  [maquette] room, r_drone, r_wind_soft
+  00:24.04  S07  [sea_low] r_sea, r_laps, sea_calm, r_wind_soft, r_creak, flog, r_wind
+  00:25.58  S08  [sea_wide] r_sea, sea_calm, r_wind, r_flag, r_creak
+  00:28.04  S09  [cabin_dry] r_cabin_calm, r_creak, r_lamp, r_clock
+  00:32.88  S10  [cabin_dry] r_cabin_calm, r_creak, r_lamp, r_clock
+  00:37.58  S11  [cabin] r_cabin, hold, r_drips, r_creak
+  00:40.79  S12  [galley] r_cabin, hold, r_drips, r_laps
+  00:43.08  S13  [cabin] r_cabin, hold, r_drips, r_creak
+  00:46.21  S14  [cabin] r_cabin, hold, r_drips, r_creak
+  00:50.42  S15  [parlour] room, r_clock, r_fire, r_wind_soft
+  00:53.33  S16  [parlour] room, r_clock, r_fire, r_wind_soft
+  00:56.62  S17  [parlour] room, r_clock, r_fire, r_wind_soft
+  01:00.29  S18  [parlour] room, r_clock, r_fire, r_wind_soft
+  01:03.29  S19  [parlour] room, r_clock, r_fire, r_wind_soft
+  01:04.71  S20  [parlour] room, r_clock, r_fire, r_wind_soft
+  01:07.04  S21  [parlour] room
+  01:09.42  S22  [parlour] room, r_clock, r_fire, r_wind_soft
+  01:11.88  S23  [parlour] room, r_clock, r_fire, r_wind_soft
+  01:17.50  S24  [harbour] r_harbour, r_harbour_b, r_laps, r_rope, r_gulls
+  01:20.50  S25  [quay] r_harbour, r_laps, hawser, r_wind_soft, r_gulls
+  01:23.42  S26  [parlour] room, r_clock, r_fire, r_wind_soft
+  01:28.12  S27  [sea_sunset] r_sea_soft, sea_calm, r_wind_soft, drone
+  01:34.00  S28  [sea_sunset] r_sea_soft, sea_calm, r_wind_soft, drone
+
+SILENCES (beds pulled down before a reveal)
+  01:06.40 - 01:07.20  beds -24 dB
+
+SPOT EFFECTS
+  00:00.60  S01  creak (kind=rope)
+  00:01.50  S01  knock (f0=540, dec=0.03)
+  00:02.00  S01  hull knock
+  00:02.90  S01  knock (f0=500, dec=0.03)
+  00:05.16  S02  gull
+  00:06.56  S02  rec (src=toddler_209210, start=0.0, dur=1.5)
+  00:08.59  S03  rec (src=rope_137711, seg=True, dur=2.2)
+  00:10.19  S03  water slap
+  00:11.61  S04  creak (kind=hull)
+  00:12.01  S04  oars (dur=3.0)
+  00:14.42  S05  oars (dur=4.8)
+  00:15.42  S05  creak (kind=rope)
+  00:16.62  S05  rec (src=breath_569568, start=0.0, dur=2.5)
+  00:20.05  S06  pulse
+  00:21.85  S06  pulse
+  00:23.25  S06  pulse
+  00:24.04  S07  oars (dur=1.6)
+  00:25.68  S08  wind gust (dur=2.4)
+  00:26.88  S08  rec (src=boom_559529, pick=0, dur=6.0)
+  00:26.88  S08  wave slam
+  00:34.48  S10  rec (src=chair_475493, seg=True, dur=1.2)
+  00:37.98  S11  drip
+  00:38.78  S11  slosh (dur=1.6)
+  00:39.98  S11  lantern creak
+  00:40.89  S12  slosh (dur=2.6, muffle=1500)
+  00:40.98  S11  drip
+  00:41.69  S12  pot roll
+  00:43.58  S13  drip (into=wood)
+  00:44.68  S13  hull groan
+  00:46.28  S13  drip (into=wood)
+  00:46.61  S14  chalk scrape (dur=1.2)
+  00:48.71  S14  drip (into=wood)
+  00:53.73  S16  rec (src=tissue_320153, seg=True, dur=1.5)
+  00:55.13  S16  creak (kind=rope)
+  00:58.02  S17  rec (src=wax_759526, start=0.0, dur=1.3)
+  01:00.59  S18  rec (src=tissue_320153, seg=True, dur=1.8)
+  01:03.69  S19  wood set
+  01:03.74  S19  metal (f0=900, dec=0.3, strike=0.3)
+  01:05.11  S20  rec (src=tissue_320153, seg=True, dur=1.4)
+  01:07.24  S21  rec (src=boom_408141, pick=0, dur=6.0)
+  01:08.24  S21  rec (src=clock_125968, start=0.0, dur=0.6)
+  01:12.47  S23  paper (dur=0.8)
+  01:16.08  S23  rec (src=breath_615223, start=0.0, dur=2.5)
+  01:18.30  S24  rec (src=bell_353232, start=0.0, dur=2.9)
+  01:19.10  S24  gull
+  01:19.90  S24  creak (kind=rope)
+  01:20.80  S25  rec (src=barrel_810894, seg=True, dur=2.0)
+  01:22.70  S25  barrel knock2
+  01:24.02  S26  rec (src=cloth_475440, seg=True, dur=1.5)
+  01:26.42  S26  breath
+  01:32.12  S27  rec (src=boom_408141, pick=0, dur=6.0)

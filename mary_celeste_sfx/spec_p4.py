@@ -4,23 +4,7 @@ DUCK_DB = 6.0
 SFX_IN_MIX_DB = -1.0
 FADE_OUT = 3.0
 
-LOC = {
-    "quay":      {"harbour": 0, "hawser": -4, "wind_light": -12, "sea_calm": -16},
-    "deck_dusk": {"sea_calm": -3, "wind_light": -4, "rigging": -6, "hull": -5},
-    "deck_day":  {"sea_calm": -3, "wind_mid": -4, "rigging": -6, "hull": -6, "flog": -14},
-    "sea_dusk":  {"sea_calm": 0, "wind_light": -4, "bowwash": -6, "rigging": -14},
-    "sea_found": {"sea_calm": 0, "wind_mid": -3, "flog": -5},
-    "cutaway":   {"hold": -2, "drone": -6},
-    "hold":      {"hold": 0, "lamp": -30},
-    "hold_ny":   {"hold": -6, "harbour": -16},
-    "studio":    {"room": 0, "lamp": -22},
-    "xray":      {"drone": -4, "room": -8},
-    "night":     {"sea_calm": -3, "wind_mid": -3, "rain": -4, "hull": -6, "flame": -18},
-    "storm":     {"sea_heavy": 0, "wind_storm": -1, "rain_heavy": -4, "hull": -4},
-    "night_mcu": {"sea_heavy": -5, "wind_storm": -5, "rain_heavy": -7, "hull": -6, "flame": -16},
-    "dawn":      {"sea_calm": -2, "wind_light": -4, "gulls_far": -10, "hull": -10},
-    "deck_found": {"sea_calm": -4, "wind_mid": -5, "flog": -10, "rigging": -9},
-}
+from locs import LOC
 
 SHOTS = {
     "S01": dict(loc="quay", space="out", ev=[(0.0, "cart", {"dur": 5.5}, -2, -0.6), (0.4, "gull", {}, -6, 0.5)]),
@@ -69,3 +53,10 @@ SILENCE = [
     (29.7, 30.65, -20, 0.5),    # beat before "There are problems with that explanation." (S08)
     (119.30, 119.95, -40, 0.45),  # drift path complete -> silence -> "It could." (S28)
 ]
+
+HIT = lambda src, db_, t=0.0: (t, "rec", {"src": src, "pick": 0, "dur": 6.0}, db_, 0.0)
+SHOTS["S08"]["ev"].append(HIT("boom_559529", -11, 0.1))    # "There are problems with that explanation."
+SHOTS["S28"]["ev"].append(HIT("boom_408141", -14, 0.15))   # "It could."
+SHOTS["S30"]["ev"].append((0.1, "rec", {"src": "thunder_244053", "pick": 0, "dur": 8.0}, -3, -0.3))
+SHOTS["S21"]["ev"].append((2.5, "rec", {"src": "thunder_193170", "pick": 0, "dur": 6.0}, -12, 0.4))
+SHOTS["S36"].setdefault("beds", {})["r_drone"] = -10

@@ -7,6 +7,7 @@ import pyloudnorm as pyln
 from scipy import signal
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import sfxlib as L
+import rec as R
 
 SR, FPS = L.SR, 24
 
@@ -33,7 +34,112 @@ BEDS = {
     "laps": lambda N, r: L.bed_events(N, r, lambda q: L.sfx_slosh(q, q.uniform(0.4, 0.9), 1000), 1.5, (0.3, 1.0), 0.5),
     "flame": lambda N, r: np.stack([L.sfx_flame(r, N / SR), L.sfx_flame(r, N / SR)]),
 }
+def _rb(name, **kw):
+    return lambda N, r: R.loop_bed(N, r, name, **kw)
+
+
+BEDS.update({
+    "r_sea": _rb("sea_360631"), "r_sea_soft": _rb("sea_510900"), "r_cabin": _rb("sea_252670"),
+    "r_cabin_calm": _rb("sea_851577"), "r_moored": _rb("sea_265553"), "r_laps": _rb("sea_637206"),
+    "r_storm": _rb("storm_331435"), "r_wind": _rb("wind_459981"), "r_wind_soft": _rb("wind_167684"),
+    "r_wind_howl": _rb("wind_117513"), "r_creak": _rb("creak_195193"), "r_creak_b": _rb("creak_31574"),
+    "r_rope": _rb("rope_145721"), "r_flag": _rb("flag_154794"), "r_flag_hard": _rb("flag_451958"),
+    "r_harbour": _rb("harbour_208074"), "r_harbour_b": _rb("harbour_747493"), "r_gulls": _rb("harbour_468080"),
+    "r_rain": _rb("rain_200272"), "r_rain_b": _rb("rain_56311"), "r_fire": _rb("fire_532191"),
+    "r_clock": _rb("clock_237210", xf=0.05), "r_court": _rb("court_480728"), "r_murmur": _rb("court_438369"),
+    "r_children": _rb("children_188210"), "r_underwater": _rb("underwater_366159"), "r_drips": _rb("drip_177958"),
+    "r_lamp": _rb("lantern_159386"), "r_drone": _rb("drone_638914"), "r_drone_b": _rb("drone_332246"),
+    "r_oars": _rb("oars_234361"),
+})
+
+# synth event -> recorded layers: ([(src, shot kwargs, rel dB)], synth layer dB or None)
+ALIAS = {
+    "boot": ([("foot_164315", {"dur": 0.4}, 0)], -8),
+    "gull": ([("gulls_510917", {"dur": 1.8, "onset_kw": {"min_gap": 1.0}}, 0)], None),
+    "page": ([("page_136778", {"start": 0.0, "dur": 2.0}, 0)], None),
+    "paper": ([("page_320148", {"dur": 1.0, "onset_kw": {"min_gap": 0.8}}, 0)], -6),
+    "door_latch": ([("door_125957", {"start": 0.0, "dur": 3.7}, 0)], -8),
+    "chain": ([("chain_347837", {"dur": 1.2}, 0)], -8),
+    "nib": ([("quill_194905", "seg", 0)], -12),
+    "oars": ([("oars_588308", "seg", 0)], -6),
+    "breath": ([("breath_569568", {"start": 0.0, "dur": 3.0}, 0)], None),
+    "drip": ([("drip_119938", {"dur": 0.6, "onset_kw": {"min_gap": 0.3}}, 0)], -4),
+    "slosh": ([("slosh_235625", "seg", 0)], -6),
+    "wave_slam": ([("slosh_637974", {"dur": 2.5, "onset_kw": {"min_gap": 1.0}}, 0)], -2),
+    "creak": ([("creak_397620", {"dur": 1.6, "onset_kw": {"min_gap": 1.0, "thresh_db": 8}}, 0)], -4),
+    "hull_groan": ([("creak_31574", {"dur": 2.4, "onset_kw": {"min_gap": 1.5, "thresh_db": 8}}, 0)], -4),
+    "mast_creak": ([("creak_31574", {"dur": 1.8, "onset_kw": {"min_gap": 1.5, "thresh_db": 8}}, 0)], -4),
+    "whump": ([("flag_448975", {"dur": 1.0, "onset_kw": {"min_gap": 0.6}}, 0)], -2),
+    "wood_scrape": ([("door_672069", {"start": 0.0, "dur": 2.5}, 0)], -6),
+    "line_hands": ([("rope_137711", "seg", 0)], -6),
+    "wind_gust": ([("wind_97397", "seg", 0)], -6),
+    "splash_below": ([("slosh_382649", {"dur": 1.2, "onset_kw": {"min_gap": 0.8}}, 0)], -4),
+    "water_slap": ([("slosh_235625", {"dur": 1.0, "onset_kw": {"min_gap": 0.6}}, 0)], -4),
+    "hammers": ([("hammer_251434", "seg", -2)], -4),
+    "cart": ([("barrel_810894", "seg", -4)], 0),
+    "pot_roll": ([("barrel_810894", "seg", -6)], 0),
+}
 BED_REF_RMS_DB = -30.0
+
+
+def active_rms(m):
+    e = np.mean(m.reshape(m.shape[0] if m.ndim > 1 else 1, -1) ** 2, axis=0)
+    w = max(1, int(0.02 * SR))
+    k = len(e) // w
+    if k < 2:
+        return float(np.sqrt(np.mean(e)) + 1e-9)
+    f = e[:k * w].reshape(k, w).mean(1)
+    thr = np.percentile(f, 50)
+    return float(np.sqrt(np.mean(f[f >= thr])) + 1e-9)
+
+
+def rec_layer(src, kw, dur, r):
+    if kw == "seg":
+        x = R.load(src)
+        d = min(dur, x.shape[1] / SR - 0.1)
+        st = r.uniform(0, max(0.0, x.shape[1] / SR - d))
+        return R.shot(src, r, start=st, dur=d, fade=0.15)
+    return R.shot(src, r, **kw)
+
+
+def make_event(name, kw, r):
+    """returns (2, n) event audio, normalised to active RMS 1"""
+    if name == "rec":
+        kw = dict(kw)
+        src = kw.pop("src")
+        if kw.pop("seg", False):
+            m = rec_layer(src, "seg", kw.get("dur", 2.0), r)
+        else:
+            m = R.shot(src, r, **kw)
+        return m / active_rms(m)
+    if name == "footsteps":
+        times = kw["times"]
+        out = np.zeros((2, L.n_(max(times) + 0.6)), np.float32)
+        for t in times:
+            s = R.shot("foot_164315", r, dur=0.45)
+            s = s / active_rms(s) * r.uniform(0.7, 1.0)
+            L.add(out, s, L.n_(t))
+        syn = L.sfx_footsteps(r, times, kw.get("heavy", 1.0))
+        L.add(out, L.stereo(syn / active_rms(syn) * db(-9), 0), 0)
+        return out / active_rms(out)
+    fn = getattr(L, "sfx_" + name, None) or getattr(L, name)
+    syn = fn(r, **kw)
+    syn = L.stereo(syn / active_rms(syn), 0.0)
+    if name not in ALIAS:
+        return syn
+    layers, sdb = ALIAS[name]
+    dur = syn.shape[1] / SR
+    parts = []
+    for src, skw, rdb in layers:
+        x = rec_layer(src, skw, max(dur, 0.3), r)
+        parts.append(x / active_rms(x) * db(rdb))
+    n = max([p.shape[1] for p in parts] + ([syn.shape[1]] if sdb is not None else [0]))
+    out = np.zeros((2, n), np.float32)
+    for p in parts:
+        L.add(out, p, 0)
+    if sdb is not None:
+        L.add(out, syn * db(sdb), 0)
+    return out / active_rms(out)
 
 SPACES = {  # rt60, damping Hz, wet
     "out": (0.25, 6000, 0.06),
@@ -128,6 +234,8 @@ def render(spec_path, tim_path, vo_path, frames, outdir, tag):
             t2[k] = {"start": st, "frames": n}
             st += n
         tim = t2
+    elif "start_frame" in next(iter(tim.values())):  # P2 style: 1-based start_frame
+        tim = {k: {"start": v["start_frame"] - 1, "frames": v["frames"]} for k, v in tim.items()}
     N = int(round(frames / FPS * SR))
     T = N / SR
     order = sorted(tim, key=lambda k: tim[k]["start"])
@@ -137,7 +245,9 @@ def render(spec_path, tim_path, vo_path, frames, outdir, tag):
 
     for k in sp.SHOTS:
         for ev in sp.SHOTS[k].get("ev", []):
-            assert getattr(L, "sfx_" + ev[1], None) or getattr(L, ev[1], None), ev[1]
+            assert ev[1] in ("rec", "footsteps") or getattr(L, "sfx_" + ev[1], None) or getattr(L, ev[1], None), ev[1]
+            if ev[1] == "rec":
+                R.path(ev[2]["src"])
         assert k in tim, k
     # ---- beds
     used = sorted({b for k, a, e in shots for b in sp.LOC[sp.SHOTS[k]["loc"]]} | {b for k in sp.SHOTS for b in sp.SHOTS[k].get("beds", {})})
@@ -170,14 +280,15 @@ def render(spec_path, tim_path, vo_path, frames, outdir, tag):
             kw = ev[2] if len(ev) > 2 else {}
             gdb = ev[3] if len(ev) > 3 else 0
             pan = ev[4] if len(ev) > 4 else 0.0
-            fn = getattr(L, "sfx_" + name, None) or getattr(L, name)
-            m = fn(r, **kw)
+            m = make_event(name, kw, r)
             muffle = s.get("muffle")
             if muffle:
                 m = L.lp(m, muffle)
-            m = m / (np.sqrt(np.mean(m ** 2)) + 1e-9) * db(-24 + gdb)
+            m = m * db(-27 + gdb)
             ta = a + t
-            L.add(buses[ev[5] if len(ev) > 5 else space], L.stereo(m, pan, 0.5, r), L.n_(ta))
+            p = (pan + 1) / 2 * np.pi / 2
+            m = np.stack([m[0] * np.cos(p) * 1.414, m[1] * np.sin(p) * 1.414]).astype(np.float32)
+            L.add(buses[ev[5] if len(ev) > 5 else space], m, L.n_(ta))
             cues.append((ta, k, name.replace("_", " ") + (f" ({', '.join(f'{x}={y}' for x, y in kw.items())})" if kw else "")))
     ev_out = np.zeros((2, N), np.float32)
     for sname, x in buses.items():
@@ -198,6 +309,7 @@ def render(spec_path, tim_path, vo_path, frames, outdir, tag):
     k = L.n_(fo)
     stem[:, -k:] *= np.linspace(1, 0, k) ** 2
 
+    stem = signal.sosfiltfilt(signal.butter(2, 40, "highpass", fs=SR, output="sos"), stem, axis=1).astype(np.float32)
     meter = pyln.Meter(SR)
     lufs = meter.integrated_loudness(stem.T.astype(np.float64))
     stem *= db(-20.0 - lufs)
@@ -206,40 +318,43 @@ def render(spec_path, tim_path, vo_path, frames, outdir, tag):
     p_sfx = os.path.join(outdir, f"MaryCeleste_{tag}_SFX.wav")
     sf.write(p_sfx, stem.T, SR, subtype="PCM_24")
 
-    # ---- VO mix
-    vo_wav = os.path.join(outdir, "_vo48.wav")
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", vo_path, "-ar", str(SR), "-ac", "1", vo_wav], check=True)
-    vo, _ = sf.read(vo_wav, dtype="float32")
-    os.remove(vo_wav)
-    v = np.zeros(N, np.float32)
-    v[:min(N, len(vo))] = vo[:N]
-    vl = meter.integrated_loudness(v.astype(np.float64))
-    v *= db(-15.0 - vl)
-    # sidechain ducking from the VO envelope
-    env = np.sqrt(signal.lfilter([1 - np.exp(-1 / (0.03 * SR))], [1, -np.exp(-1 / (0.03 * SR))], v ** 2))
-    edb = 20 * np.log10(env + 1e-9)
-    amt = np.clip((edb + 50) / 12, 0, 1)
-    duck_db = getattr(sp, "DUCK_DB", 6.0)
-    gr = -duck_db * amt
-    # attack 60 ms, release 450 ms on the gain-reduction curve
-    from scipy.ndimage import maximum_filter1d
-    gr_hold = -maximum_filter1d(-gr, L.n_(0.25))
-    a_r = np.exp(-1 / (0.45 * SR))
-    sm = signal.lfilter([1 - a_r], [1, -a_r], gr_hold)
-    sm = np.minimum(sm, signal.lfilter([1 - np.exp(-1 / (0.06 * SR))], [1, -np.exp(-1 / (0.06 * SR))], gr_hold))
-    duck = db(sm).astype(np.float32)
-    sfx_in_mix = stem * duck * db(getattr(sp, "SFX_IN_MIX_DB", 0.0))
-    mix = sfx_in_mix + np.stack([v, v]) * 1.0
-    lm = meter.integrated_loudness(mix.T.astype(np.float64))
-    mix *= db(-14.0 - lm)
-    mix = true_peak_limit(mix, -1.0)
-    for _ in range(3):
+    p_mix = None
+    if not os.environ.get("NO_MIX"):
+        # ---- VO mix
+        vo_wav = os.path.join(outdir, "_vo48.wav")
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", vo_path, "-ar", str(SR), "-ac", "1", vo_wav], check=True)
+        vo, _ = sf.read(vo_wav, dtype="float32")
+        os.remove(vo_wav)
+        v = np.zeros(N, np.float32)
+        v[:min(N, len(vo))] = vo[:N]
+        vl = meter.integrated_loudness(v.astype(np.float64))
+        v *= db(-15.0 - vl)
+        # sidechain ducking from the VO envelope
+        env = np.sqrt(signal.lfilter([1 - np.exp(-1 / (0.03 * SR))], [1, -np.exp(-1 / (0.03 * SR))], v ** 2))
+        edb = 20 * np.log10(env + 1e-9)
+        amt = np.clip((edb + 50) / 12, 0, 1)
+        duck_db = getattr(sp, "DUCK_DB", 6.0)
+        gr = -duck_db * amt
+        # attack 60 ms, release 450 ms on the gain-reduction curve
+        from scipy.ndimage import maximum_filter1d
+        gr_hold = -maximum_filter1d(-gr, L.n_(0.25))
+        a_r = np.exp(-1 / (0.45 * SR))
+        sm = signal.lfilter([1 - a_r], [1, -a_r], gr_hold)
+        sm = np.minimum(sm, signal.lfilter([1 - np.exp(-1 / (0.06 * SR))], [1, -np.exp(-1 / (0.06 * SR))], gr_hold))
+        duck = db(sm).astype(np.float32)
+        sfx_in_mix = stem * duck * db(getattr(sp, "SFX_IN_MIX_DB", 0.0))
+        mix = sfx_in_mix + np.stack([v, v]) * 1.0
         lm = meter.integrated_loudness(mix.T.astype(np.float64))
-        if abs(lm + 14) < 0.15:
-            break
-        mix = true_peak_limit(mix * db(-14.0 - lm), -1.0)
-    p_mix = os.path.join(outdir, f"MaryCeleste_{tag}_MIX.wav")
-    sf.write(p_mix, mix.T, SR, subtype="PCM_24")
+        mix *= db(-14.0 - lm)
+        mix = true_peak_limit(mix, -1.0)
+        for _ in range(3):
+            lm = meter.integrated_loudness(mix.T.astype(np.float64))
+            if abs(lm + 14) < 0.15:
+                break
+            mix = true_peak_limit(mix * db(-14.0 - lm), -1.0)
+        p_mix = os.path.join(outdir, f"MaryCeleste_{tag}_MIX.wav")
+        sf.write(p_mix, mix.T, SR, subtype="PCM_24")
+
 
     # ---- cue sheet
     cues.sort()
@@ -263,7 +378,7 @@ def render(spec_path, tim_path, vo_path, frames, outdir, tag):
         fh.write("\nSPOT EFFECTS\n")
         for ta, k, name in cues:
             fh.write(f"  {tc(ta)}  {k:4s} {name}\n")
-    for p in (p_sfx, p_mix):
+    for p in [q for q in (p_sfx, p_mix) if q]:
         I, TP = measure_tp(p)
         print(os.path.basename(p), f"I={I} LUFS  TP={TP} dBTP  {os.path.getsize(p) / 1e6:.1f} MB  {sf.info(p).frames} samples")
 

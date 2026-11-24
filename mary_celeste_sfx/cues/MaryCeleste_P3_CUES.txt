@@ -1,0 +1,144 @@
+Mary Celeste P3 - SFX cue sheet (mm:ss.ss, from 00:00 of the part; 48 kHz)
+
+AMBIENCE BEDS by shot (dB relative; crossfaded at cuts)
+  00:00.00  p3_01 [dg_deck] r_sea, r_wind, r_creak, r_rope, r_flag, rigging
+  00:04.96  p3_02 [dg_deck] r_sea, r_wind, r_creak, r_rope, r_flag, rigging
+  00:07.04  p3_03 [dg_deck] r_sea, r_wind, r_creak, r_rope, r_flag, rigging
+  00:09.79  p3_04 [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  00:11.75  p3_05 [sea_low] r_sea, r_laps, sea_calm, r_wind_soft, r_creak, flog
+  00:14.88  p3_06 [cabin] r_cabin, hold, r_drips, r_creak
+  00:17.17  p3_07 [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  00:18.88  p3_08 [deck_mc] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  00:22.67  p3_09 [sea_wide] r_sea, sea_calm, r_wind, r_flag, r_creak, bowwash
+  00:24.04  p3_10 [studio] room, r_lamp, r_clock, r_drone
+  00:25.88  p3_11 [storm] r_storm, sea_heavy, wind_storm, r_rain_b, r_creak
+  00:27.88  p3_12 [storm] r_storm, sea_heavy, wind_storm, r_rain_b, r_creak
+  00:30.08  p3_13 [storm] r_storm, sea_heavy, wind_storm, r_rain_b, r_creak
+  00:32.29  p3_14 [anchorage] r_sea_soft, r_laps, r_wind, r_gulls, r_creak, r_rope
+  00:34.83  p3_15 [anchorage] r_sea_soft, r_laps, r_wind, r_gulls, r_creak, r_rope
+  00:36.58  p3_16 [harbour] r_harbour, r_harbour_b, r_laps, r_rope, r_gulls
+  00:40.54  p3_17 [harbour] r_harbour, r_harbour_b, r_laps, r_rope, r_gulls
+  00:43.38  p3_18 [office] room, r_harbour, r_clock, r_lamp
+  00:48.21  p3_19 [office] room, r_harbour, r_clock, r_lamp
+  00:51.12  p3_20 [office] room, r_harbour, r_clock, r_lamp
+  00:55.67  p3_21 [harbour] r_harbour, r_harbour_b, r_laps, r_rope, r_gulls
+  00:56.96  p3_22 [harbour] r_harbour, r_harbour_b, r_laps, r_rope, r_gulls
+  00:59.17  p3_23 [court] room, r_court, r_murmur, r_clock
+  01:03.08  p3_24 [court] room, r_court, r_murmur, r_clock
+  01:07.88  p3_25 [court] room, r_court, r_murmur, r_clock
+  01:12.50  p3_26 [court] room, r_court, r_murmur, r_clock
+  01:18.88  p3_27 [court_quiet] room, r_court, r_clock, r_drone
+  01:20.92  p3_28 [court_quiet] room, r_court, r_clock, r_drone
+  01:23.33  p3_29 [harbour] r_harbour, r_harbour_b, r_laps, r_rope, r_gulls
+  01:25.88  p3_29b [underwater] r_underwater, drone
+  01:29.79  p3_30 [underwater] r_underwater, drone
+  01:32.38  p3_31 [harbour] r_harbour, r_harbour_b, r_laps, r_rope, r_gulls
+  01:38.33  p3_32 [deck_found] r_sea_soft, r_wind, r_flag_hard, r_creak, r_rope, r_harbour
+  01:41.00  p3_33 [deck_found] r_sea_soft, r_wind, r_flag_hard, r_creak, r_rope, r_harbour, r_drone
+  01:44.71  p3_34 [cabin_dry] r_cabin_calm, r_creak, r_lamp
+  01:48.38  p3_35 [cabin_dry] r_cabin_calm, r_creak, r_lamp
+  01:52.12  p3_36 [cabin_dry] r_cabin_calm, r_creak, r_lamp
+  01:54.21  p3_37 [studio] room, r_lamp, r_clock, r_drone
+  01:57.58  p3_38 [studio] room, r_lamp, r_clock, r_drone
+  02:01.17  p3_39 [court] room, r_court, r_murmur, r_clock, r_rain
+  02:04.00  p3_40 [court] room, r_court, r_murmur, r_clock
+  02:07.38  p3_41 [court_quiet] room, r_court, r_clock, r_drone
+  02:10.00  p3_42 [harbour] r_harbour, r_harbour_b, r_laps, r_rope, r_gulls
+  02:15.25  p3_43 [sea_wide] r_sea, sea_calm, r_wind, r_flag, r_creak
+
+SILENCES (beds pulled down before a reveal)
+  01:56.80 - 01:58.90  beds -30 dB
+  02:06.60 - 02:07.45  beds -16 dB
+  01:19.20 - 01:22.90  beds -10 dB
+
+SPOT EFFECTS
+  00:01.40  p3_01 creak (kind=hull)
+  00:02.60  p3_01 footsteps (times=[0.0, 0.35])
+  00:05.46  p3_02 wood tap
+  00:06.06  p3_02 whump
+  00:07.14  p3_03 rec (src=rope_394222, seg=True, dur=2.0)
+  00:08.44  p3_03 footsteps (times=[0.0, 0.45, 0.9])
+  00:10.14  p3_04 boot
+  00:10.14  p3_04 rec (src=boom_408141, pick=0, dur=6.0)
+  00:11.95  p3_05 rec (src=rope_137711, seg=True, dur=1.2)
+  00:13.15  p3_05 wood set
+  00:13.85  p3_05 knock (f0=540, dec=0.03)
+  00:14.35  p3_05 water slap
+  00:15.18  p3_06 wood set
+  00:16.18  p3_06 knock (f0=1500, dec=0.015)
+  00:17.17  p3_07 rec (src=pump_580670, seg=True, dur=1.8)
+  00:17.87  p3_07 rec (src=slosh_382649, dur=1.0, pick=rand)
+  00:19.07  p3_08 rec (src=rope_394222, seg=True, dur=2.2)
+  00:21.07  p3_08 whump
+  00:21.77  p3_08 whump
+  00:24.24  p3_10 nib (dur=1.5)
+  00:25.98  p3_11 rec (src=thunder_244053, pick=0, dur=10.0)
+  00:26.27  p3_11 hull groan
+  00:26.88  p3_11 wave slam
+  00:28.18  p3_12 wheel (dur=1.8)
+  00:29.07  p3_12 creak (kind=hull)
+  00:30.78  p3_13 rec (src=thunder_399656, pick=0, dur=10.0)
+  00:31.68  p3_13 wave slam
+  00:32.89  p3_14 rec (src=chain_347837, seg=True, dur=1.5)
+  00:33.89  p3_14 gull
+  00:35.03  p3_15 gull
+  00:35.73  p3_15 rec (src=chain_347837, seg=True, dur=0.8)
+  00:36.98  p3_16 rec (src=bell_31107, seg=True, dur=3.4)
+  00:37.38  p3_16 gull
+  00:37.98  p3_16 rec (src=chain_477129, seg=True, dur=2.4)
+  00:40.94  p3_17 wood tap
+  00:41.54  p3_17 gull
+  00:41.74  p3_17 wood tap
+  00:42.54  p3_17 wood tap
+  00:43.67  p3_18 nib (dur=2.8)
+  00:44.77  p3_18 rec (src=breath_569568, start=0.0, dur=3.0)
+  00:45.77  p3_18 gull
+  00:46.88  p3_18 rec (src=chair_475493, seg=True, dur=1.2)
+  00:48.51  p3_19 rec (src=breath_615223, start=0.0, dur=2.5)
+  00:50.11  p3_19 rec (src=chair_159645, seg=True, dur=1.0)
+  00:51.12  p3_20 nib (dur=0.9)
+  00:53.73  p3_20 nib (dur=1.8)
+  00:55.72  p3_21 hull knock
+  00:56.27  p3_21 boot
+  00:56.62  p3_21 boot
+  00:57.26  p3_22 rec (src=hammer_173941, dur=0.7, pick=rand)
+  00:57.91  p3_22 rec (src=hammer_173941, dur=0.7, pick=rand)
+  00:58.56  p3_22 rec (src=hammer_173941, dur=0.7, pick=rand)
+  00:59.97  p3_23 rec (src=cloth_475440, seg=True, dur=1.5)
+  01:01.77  p3_23 rec (src=cough_743360, start=0.0, dur=1.1)
+  01:03.58  p3_24 nib (dur=3.5)
+  01:08.28  p3_25 nib (dur=3.6)
+  01:12.90  p3_26 rec (src=chair_475493, seg=True, dur=1.4)
+  01:14.20  p3_26 rec (src=cloth_475440, seg=True, dur=1.8)
+  01:16.10  p3_26 footsteps (times=[0.0, 0.6])
+  01:22.22  p3_28 rec (src=boom_559529, pick=0, dur=6.0)
+  01:23.63  p3_29 footsteps (times=[0.0, 0.5, 1.0, 1.5])
+  01:24.53  p3_29 gull
+  01:26.17  p3_29b rec (src=underwater_539822, seg=True, dur=2.5)
+  01:26.88  p3_29b grit (dur=2.4)
+  01:29.99  p3_30 rec (src=underwater_539822, seg=True, dur=1.8)
+  01:31.19  p3_30 wood tap
+  01:32.58  p3_31 nib (dur=1.2)
+  01:34.97  p3_31 gull
+  01:38.83  p3_32 thud (f0=90, dec=0.06)
+  01:39.13  p3_32 rec (src=cloth_19291, start=0.0, dur=1.5)
+  01:42.80  p3_33 breath
+  01:45.51  p3_34 iron scrape (dur=1.4)
+  01:45.61  p3_34 wood scrape
+  01:49.58  p3_35 rec (src=sword_320521, start=0.0, dur=3.0)
+  01:52.12  p3_36 rec (src=sword_581594, start=1.2, dur=1.6)
+  01:53.33  p3_36 drip (into=wood)
+  01:54.61  p3_37 chalk scrape (dur=1.2)
+  01:56.41  p3_37 rec (src=glass_104815, start=0.0, dur=1.0)
+  01:58.93  p3_38 rec (src=glass_104815, start=0.0, dur=1.0)
+  01:58.94  p3_38 wood set
+  01:59.18  p3_38 rec (src=boom_408141, pick=0, dur=6.0)
+  02:01.67  p3_39 nib (dur=2.0)
+  02:04.40  p3_40 paper (dur=1.0)
+  02:06.00  p3_40 paper (dur=0.7)
+  02:07.97  p3_41 rec (src=chair_159645, seg=True, dur=1.0)
+  02:10.30  p3_42 footsteps (times=[0.0, 0.5, 1.0])
+  02:11.90  p3_42 wood set
+  02:13.00  p3_42 wood set
+  02:15.75  p3_43 whump
+  02:16.85  p3_43 whump

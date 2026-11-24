@@ -1,21 +1,95 @@
-Mary Celeste - sound effects and ambience - CREDITS / LICENCES
+Mary Celeste - SFX and ambience - CREDITS / LICENCES
 
-All sound effects and ambience beds in MaryCeleste_P*_SFX.wav and _MIX.wav were SYNTHESISED from scratch
-(filtered noise, oscillators, physical-model resonators: stick-slip creaks, damped wood/metal modes, bubble drips,
-granular rustle/rain, procedural sea and wind) by the production's own Python scripts (sfxlib.py / engine.py).
-No third-party recordings or sample libraries are used, so no attribution is required and there are no
-Content ID / monetisation restrictions. The production can treat them as its own work (or release as CC0).
+1) Field recordings: all from Freesound.org and every one licensed Creative Commons 0 (CC0 1.0, public domain dedication).
+   CC0 needs no attribution and allows commercial use and YouTube monetisation. They are credited below anyway for transparency.
+   The CC0 licence of each sound was checked on its Freesound page at download time (24 Nov 2026).
 
-Voice-over: vo/MaryCeleste_PartN_VO.mp3 (Edmund), branch claude/mary-celeste-vo - production asset.
-Music: none (added by the editor).
+   barrel_675975      "S09-05 Wooden barrel drop; several.wav" by craigsmith - https://freesound.org/people/craigsmith/sounds/675975/ - CC0 1.0
+   barrel_810894      "Barrel rolling - Havoc Bazaar" by Vrymaa - https://freesound.org/people/Vrymaa/sounds/810894/ - CC0 1.0
+   bell_31107         "HF-Request Harbor Bell [remix]Glaneurdesonsriver.wav" by hello_flowers - https://freesound.org/people/hello_flowers/sounds/31107/ - CC0 1.0
+   bell_353232        "Ship Bell Two Chimes" by Sojan - https://freesound.org/people/Sojan/sounds/353232/ - CC0 1.0
+   boom_177242        "Cinematic Impact" by deleted_user_3277771 - https://freesound.org/people/deleted_user_3277771/sounds/177242/ - CC0 1.0
+   boom_408141        "Cinematic Low Pitch Impact" by Jofae - https://freesound.org/people/Jofae/sounds/408141/ - CC0 1.0
+   boom_559529        "Cinematic Boom" by Rizzard - https://freesound.org/people/Rizzard/sounds/559529/ - CC0 1.0
+   breath_569568      "Sigh - man - voice - breath in nose - breath out mouth.wav" by ValentinPetiteau - https://freesound.org/people/ValentinPetiteau/sounds/569568/ - CC0 1.0
+   breath_615223      "Long Sigh 1.wav" by EverydayEldritch - https://freesound.org/people/EverydayEldritch/sounds/615223/ - CC0 1.0
+   chain_347837       "anchor and chain.wav" by fennelliott - https://freesound.org/people/fennelliott/sounds/347837/ - CC0 1.0
+   chain_477129       "anchor raising" by mycompasstv - https://freesound.org/people/mycompasstv/sounds/477129/ - CC0 1.0
+   chair_159645       "CHAIR,_WOODEN_SQUEAKS2.wav" by rightpurdy - https://freesound.org/people/rightpurdy/sounds/159645/ - CC0 1.0
+   chair_475493       "Chair sitting_1(creak, wood).WAV" by o_ciz - https://freesound.org/people/o_ciz/sounds/475493/ - CC0 1.0
+   children_188210    "Group of children talking, murmur.wav" by SpliceSound - https://freesound.org/people/SpliceSound/sounds/188210/ - CC0 1.0
+   clock_125968       "Grandfather clock.wav" by Ryding - https://freesound.org/people/Ryding/sounds/125968/ - CC0 1.0
+   clock_237210       "Clock ticking" by Mortifreshman - https://freesound.org/people/Mortifreshman/sounds/237210/ - CC0 1.0
+   cloth_19291        "foley cloth rustle.wav" by martian - https://freesound.org/people/martian/sounds/19291/ - CC0 1.0
+   cloth_475440       "Cloth_1(rustle, fabric, clothes).WAV" by o_ciz - https://freesound.org/people/o_ciz/sounds/475440/ - CC0 1.0
+   cough_743360       "Strong Double Cough" by qubodup - https://freesound.org/people/qubodup/sounds/743360/ - CC0 1.0
+   court_438369       "G28-10-Indoor Crowd Murmur - Constant.wav" by craigsmith - https://freesound.org/people/craigsmith/sounds/438369/ - CC0 1.0
+   court_480728       "R08-48-Crowd in Reverberant Space.wav" by craigsmith - https://freesound.org/people/craigsmith/sounds/480728/ - CC0 1.0
+   creak_195193       "LargeWoodenShip.mp3" by PimFeijen - https://freesound.org/people/PimFeijen/sounds/195193/ - CC0 1.0
+   creak_31574        "ship_creak.mp3" by Walter_Odington - https://freesound.org/people/Walter_Odington/sounds/31574/ - CC0 1.0
+   creak_397620       "Wood Creaking.wav" by laft2k - https://freesound.org/people/laft2k/sounds/397620/ - CC0 1.0
+   door_125957        "Opening a creaking door" by Ryding - https://freesound.org/people/Ryding/sounds/125957/ - CC0 1.0
+   door_672069        "ancient-hatch.wav" by ilmari_freesound - https://freesound.org/people/ilmari_freesound/sounds/672069/ - CC0 1.0
+   drawer_146805      "Wood Chest Slid.3.wav" by kforetek - https://freesound.org/people/kforetek/sounds/146805/ - CC0 1.0
+   drawer_552153      "Drawer Opening & Closing" by quantumriver - https://freesound.org/people/quantumriver/sounds/552153/ - CC0 1.0
+   drip_119938        "Water Dripping on Water.aif" by ftpalad - https://freesound.org/people/ftpalad/sounds/119938/ - CC0 1.0
+   drip_177958        "Water Dripping in Cave.wav" by Sclolex - https://freesound.org/people/Sclolex/sounds/177958/ - CC0 1.0
+   drone_332246       "Drone - 15.12.2015" by cabled_mess - https://freesound.org/people/cabled_mess/sounds/332246/ - CC0 1.0
+   drone_638914       "Low Rumble - loopable ambiance" by lennartgreen - https://freesound.org/people/lennartgreen/sounds/638914/ - CC0 1.0
+   fire_532191        "Fire in the stove" by mcmikai - https://freesound.org/people/mcmikai/sounds/532191/ - CC0 1.0
+   flag_154794        "A flag flapping in the wind, at the small village of Assem Souk, in the High Atlas (Morocco)." by felix.blume - https://freesound.org/people/felix.blume/sounds/154794/ - CC0 1.0
+   flag_448975        "flag.wav" by GeorgeHopkins - https://freesound.org/people/GeorgeHopkins/sounds/448975/ - CC0 1.0
+   flag_451958        "flag flaps back and forth between 2 flags in high wind on mountain good crisp fabric detail.flac" by kyles - https://freesound.org/people/kyles/sounds/451958/ - CC0 1.0
+   foot_164315        "Footsteps on wooden flooring.wav" by Rickmk2 - https://freesound.org/people/Rickmk2/sounds/164315/ - CC0 1.0
+   glass_104815       "clinking glass.aiff" by TheWah - https://freesound.org/people/TheWah/sounds/104815/ - CC0 1.0
+   gulls_510917       "Seagulls_short.wav" by Lydmakeren - https://freesound.org/people/Lydmakeren/sounds/510917/ - CC0 1.0
+   hammer_173941      "wood hammer, gavel, knock, pound, jury, court.mp3" by JohnsonBrandEditing - https://freesound.org/people/JohnsonBrandEditing/sounds/173941/ - CC0 1.0
+   hammer_251434      "mlotek.wav" by colo777 - https://freesound.org/people/colo777/sounds/251434/ - CC0 1.0
+   hammer_535629      "Wooden mallet" by leo153 - https://freesound.org/people/leo153/sounds/535629/ - CC0 1.0
+   harbour_208074     "harbour, seagulls-48k.wav" by Further_Roman - https://freesound.org/people/Further_Roman/sounds/208074/ - CC0 1.0
+   harbour_468080     "Seagull Swarm at Port" by Kinoton - https://freesound.org/people/Kinoton/sounds/468080/ - CC0 1.0
+   harbour_747493     "wind in a dutch harbour - TB" by studio-nowhere - https://freesound.org/people/studio-nowhere/sounds/747493/ - CC0 1.0
+   lantern_159386     "Propane Lantern" by clairinski - https://freesound.org/people/clairinski/sounds/159386/ - CC0 1.0
+   oars_234361        "080101-rowing boat various paddles creak6-M.wav" by martian - https://freesound.org/people/martian/sounds/234361/ - CC0 1.0
+   oars_588308        "rowing boat rear wave.wav" by Fenodyrie - https://freesound.org/people/Fenodyrie/sounds/588308/ - CC0 1.0
+   page_136778        "Page Turn" by davidbain - https://freesound.org/people/davidbain/sounds/136778/ - CC0 1.0
+   page_320148        "Paper Sketchbook Page Flips 1" by OwlStorm - https://freesound.org/people/OwlStorm/sounds/320148/ - CC0 1.0
+   pump_580670        "old manual pump pumping water sound effect" by Garuda1982 - https://freesound.org/people/Garuda1982/sounds/580670/ - CC0 1.0
+   pump_588629        "HandWaterPump.wav" by Bent.B.C. - https://freesound.org/people/Bent.B.C./sounds/588629/ - CC0 1.0
+   quill_194905       "Quill pen writing on hard paper various speed.wav" by marcoman89 - https://freesound.org/people/marcoman89/sounds/194905/ - CC0 1.0
+   rain_200272        "Rain heavy 2 (rural)" by jmbphilmes - https://freesound.org/people/jmbphilmes/sounds/200272/ - CC0 1.0
+   rain_56311         "Rain_06.wav" by Q.K. - https://freesound.org/people/Q.K./sounds/56311/ - CC0 1.0
+   rope_137711        "ROPE_GOES_TIGHT.WAV" by dansotak - https://freesound.org/people/dansotak/sounds/137711/ - CC0 1.0
+   rope_145721        "Mooring Rope.wav" by Rmutt - https://freesound.org/people/Rmutt/sounds/145721/ - CC0 1.0
+   rope_394222        "Large rope pulley operated.wav" by mikewest - https://freesound.org/people/mikewest/sounds/394222/ - CC0 1.0
+   sea_252670         "Sailboat Sailing Interior 2" by AugustSandberg - https://freesound.org/people/AugustSandberg/sounds/252670/ - CC0 1.0
+   sea_265553         "Moored sailboat interior in strong breeze" by AugustSandberg - https://freesound.org/people/AugustSandberg/sounds/265553/ - CC0 1.0
+   sea_360631         "Sailing boat, bow wave (close perspective)" by Pfannkuchn - https://freesound.org/people/Pfannkuchn/sounds/360631/ - CC0 1.0
+   sea_510900         "Boat_waves.wav" by Lydmakeren - https://freesound.org/people/Lydmakeren/sounds/510900/ - CC0 1.0
+   sea_637206         "boat knocks fiberglass water laps on hull.flac" by kyles - https://freesound.org/people/kyles/sounds/637206/ - CC0 1.0
+   sea_851577         "Ammersee Sailboat Cabin ~ Gentle Lake Waves from Inside" by myLoop - https://freesound.org/people/myLoop/sounds/851577/ - CC0 1.0
+   slosh_235625       "Water Sloshing" by vmgraw - https://freesound.org/people/vmgraw/sounds/235625/ - CC0 1.0
+   slosh_382649       "Splashes In A Bathtub.wav" by bbrocer - https://freesound.org/people/bbrocer/sounds/382649/ - CC0 1.0
+   slosh_637974       "water splashes big hand slaps spray and wave.flac" by kyles - https://freesound.org/people/kyles/sounds/637974/ - CC0 1.0
+   steam_587171       "Running ship steam engine" by derplayer - https://freesound.org/people/derplayer/sounds/587171/ - CC0 1.0
+   storm_331435       "Storm at Sea" by Codeine - https://freesound.org/people/Codeine/sounds/331435/ - CC0 1.0
+   sword_320521       "Unsheathed blade" by deleted_user_2906614 - https://freesound.org/people/deleted_user_2906614/sounds/320521/ - CC0 1.0
+   sword_581594       "Sword draw unsheathe" by SamsterBirdies - https://freesound.org/people/SamsterBirdies/sounds/581594/ - CC0 1.0
+   thunder_193170     "thunder" by netaj - https://freesound.org/people/netaj/sounds/193170/ - CC0 1.0
+   thunder_244053     "Thunder.ogg" by lennyboy - https://freesound.org/people/lennyboy/sounds/244053/ - CC0 1.0
+   thunder_399656     "sfx_thunder blast.wav" by bajko - https://freesound.org/people/bajko/sounds/399656/ - CC0 1.0
+   tissue_320153      "Tissue Pull" by OwlStorm - https://freesound.org/people/OwlStorm/sounds/320153/ - CC0 1.0
+   toddler_209210     "Toddler's Laugh" by LanDub - https://freesound.org/people/LanDub/sounds/209210/ - CC0 1.0
+   toddler_625686     "Baby Toddler Laugh Giggle" by MLaudio - https://freesound.org/people/MLaudio/sounds/625686/ - CC0 1.0
+   underwater_366159  "Underwater [Loop] AMB.wav" by DCSFX - https://freesound.org/people/DCSFX/sounds/366159/ - CC0 1.0
+   underwater_539822  "Bubbles 002.wav" by ristooooo1 - https://freesound.org/people/ristooooo1/sounds/539822/ - CC0 1.0
+   wax_759526         "Wax seal" by Cerise_Virtuelle - https://freesound.org/people/Cerise_Virtuelle/sounds/759526/ - CC0 1.0
+   wind_117513        "winter wind 01c.aiff" by klangfabrik - https://freesound.org/people/klangfabrik/sounds/117513/ - CC0 1.0
+   wind_167684        "Strong wind blowing in the plain in Anatolia (Turkey)" by felix.blume - https://freesound.org/people/felix.blume/sounds/167684/ - CC0 1.0
+   wind_459981        "Strong Wind" by florianreichelt - https://freesound.org/people/florianreichelt/sounds/459981/ - CC0 1.0
+   wind_97397         "Wind strong JPN.wav" by jpnien - https://freesound.org/people/jpnien/sounds/97397/ - CC0 1.0
 
-Sound list (all source = synthesised in-house, licence = own work / CC0):
- beds: sea (calm, heavy), wind (light, mid, storm with rigging whistle), rigging rope creaks and block knocks,
-       hull creaks, hawser creaks, harbour (lapping, distant gulls, quay murmur), hold room tone (muffled sea, creaks),
-       study room tone, lamp hiss, low drone (explainers), rain (light, heavy), flogging canvas, bow wash,
-       distant gulls, lantern flame
- spots: cart on cobbles, gull, hollow barrel knock, chalk X / chalk tap, liquid trickle, flame flutter,
-       lantern bail creak, sails filling, sniff, boot on deck, wood tap, wood set on wood, drips (water, wood),
-       creaks, slosh, wind gust, footsteps, cloth/head turn, iron clank, distant hammers, saw, paper turn,
-       grit crunch, leather valve slap, iron rod scraping in bore, wave slam, rope line through hands,
-       brass pin tap, map pulse, pen nib scratch, model stop click, breath
+2) Synthesised layers (sea swell, wind, creak bodies, drips, chalk, nib, pins, pulses, drones, footstep and impact bodies, etc.)
+   were generated by the production's own code (sfxlib.py) and are the production's own work.
+
+Voice-over and music are not part of these files.

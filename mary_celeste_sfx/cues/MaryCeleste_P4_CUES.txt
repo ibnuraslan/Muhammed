@@ -1,41 +1,41 @@
 Mary Celeste P4 - SFX cue sheet (mm:ss.ss, from 00:00 of the part; 48 kHz)
 
 AMBIENCE BEDS by shot (dB relative; crossfaded at cuts)
-  00:00.00  S01  [quay] harbour, hawser, wind_light, sea_calm
-  00:02.54  S02  [quay] harbour, hawser, wind_light, sea_calm
-  00:04.83  S03  [deck_dusk] sea_calm, wind_light, rigging, hull
-  00:09.96  S05  [cutaway] hold, drone
-  00:18.33  S06  [hold] hold, lamp
-  00:22.38  S07  [sea_dusk] sea_calm, wind_light, bowwash, rigging
-  00:30.62  S08  [sea_found] sea_calm, wind_mid, flog
-  00:33.58  S09  [deck_day] sea_calm, wind_mid, rigging, hull, flog
-  00:37.25  S10  [deck_day] sea_calm, wind_mid, rigging, hull, flog
-  00:41.21  S11  [studio] room, lamp
-  00:44.58  S12  [studio] room, lamp
-  00:52.88  S13  [hold] hold, lamp
-  00:56.42  S14  [hold] hold, lamp
-  00:58.88  S15  [deck_found] sea_calm, wind_mid, flog, rigging
-  01:02.38  S16  [deck_day] sea_calm, wind_mid, rigging, hull, flog
-  01:06.96  S17  [deck_day] sea_calm, wind_mid, rigging, hull, flog
-  01:10.71  S18  [hold_ny] hold, harbour
-  01:15.50  S19  [studio] room, lamp
-  01:24.42  S20  [xray] drone, room
-  01:28.46  S21  [night] sea_calm, wind_mid, rain, hull, flame
-  01:34.67  S22  [deck_found] sea_calm, wind_mid, flog, rigging
-  01:38.38  S23  [studio] room, lamp
-  01:43.29  S24  [studio] room, lamp
-  01:45.62  S25  [studio] room, lamp
-  01:48.08  S26  [studio] room, lamp
-  01:52.50  S27  [studio] room, lamp
-  01:59.83  S28  [studio] room, lamp
-  02:01.29  S29  [dawn] sea_calm, wind_light, gulls_far, hull
-  02:07.00  S30  [storm] sea_heavy, wind_storm, rain_heavy, hull
-  02:09.33  S31  [night_mcu] sea_heavy, wind_storm, rain_heavy, hull, flame
-  02:15.25  S32  [cutaway] hold, drone
-  02:21.46  S33  [dawn] sea_calm, wind_light, gulls_far, hull
-  02:29.54  S34  [studio] room, lamp
-  02:32.88  S35  [deck_day] sea_calm, wind_mid, rigging, hull, flog
-  02:36.79  S36  [deck_found] sea_calm, wind_mid, flog, rigging
+  00:00.00  S01  [quay] r_harbour, r_laps, hawser, r_wind_soft, r_gulls
+  00:02.54  S02  [quay] r_harbour, r_laps, hawser, r_wind_soft, r_gulls
+  00:04.83  S03  [deck_dusk] r_sea_soft, r_wind_soft, r_creak, r_rope, rigging
+  00:09.96  S05  [cutaway] hold, r_drone, drone, r_creak_b
+  00:18.33  S06  [hold] hold, r_creak_b, r_drips, r_lamp
+  00:22.38  S07  [sea_dusk] r_sea, sea_calm, r_wind_soft, bowwash, r_creak
+  00:30.62  S08  [sea_found] r_sea_soft, sea_calm, r_wind, r_flag_hard, flog
+  00:33.58  S09  [deck_day] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  00:37.25  S10  [deck_day] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  00:41.21  S11  [studio] room, r_lamp, r_clock, r_drone
+  00:44.58  S12  [studio] room, r_lamp, r_clock, r_drone
+  00:52.88  S13  [hold] hold, r_creak_b, r_drips, r_lamp
+  00:56.42  S14  [hold] hold, r_creak_b, r_drips, r_lamp
+  00:58.88  S15  [deck_found] r_sea_soft, r_wind, r_flag_hard, r_creak, r_rope, wind_mid
+  01:02.38  S16  [deck_day] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  01:06.96  S17  [deck_day] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  01:10.71  S18  [hold_ny] hold, r_harbour, r_creak_b
+  01:15.50  S19  [studio] room, r_lamp, r_clock, r_drone
+  01:24.42  S20  [xray] r_drone, drone, room
+  01:28.46  S21  [night] r_sea_soft, r_wind, r_rain, r_creak, flame
+  01:34.67  S22  [deck_found] r_sea_soft, r_wind, r_flag_hard, r_creak, r_rope, rigging, flog
+  01:38.38  S23  [studio] room, r_lamp, r_clock, r_drone
+  01:43.29  S24  [studio] room, r_lamp, r_clock, r_drone
+  01:45.62  S25  [studio] room, r_lamp, r_clock, r_drone
+  01:48.08  S26  [studio] room, r_lamp, r_clock, r_drone
+  01:52.50  S27  [studio] room, r_lamp, r_clock, r_drone
+  01:59.83  S28  [studio] room, r_lamp, r_clock, r_drone, lamp
+  02:01.29  S29  [dawn] r_sea_soft, sea_calm, r_wind_soft, gulls_far, r_creak
+  02:07.00  S30  [storm] r_storm, sea_heavy, wind_storm, r_rain_b, r_creak
+  02:09.33  S31  [night_mcu] r_storm, r_rain_b, r_wind_howl, r_creak, flame
+  02:15.25  S32  [cutaway] hold, r_drone, drone, r_creak_b
+  02:21.46  S33  [dawn] r_sea_soft, sea_calm, r_wind_soft, gulls_far, r_creak
+  02:29.54  S34  [studio] room, r_lamp, r_clock, r_drone, lamp
+  02:32.88  S35  [deck_day] r_sea_soft, sea_calm, r_wind, r_creak, r_rope, r_flag, rigging
+  02:36.79  S36  [deck_found] r_sea_soft, r_wind, r_flag_hard, r_creak, r_rope, rigging, r_drone
 
 SILENCES (beds pulled down before a reveal)
   00:29.70 - 00:30.65  beds -20 dB
@@ -56,6 +56,7 @@ SPOT EFFECTS
   00:23.18  S07  whump
   00:24.88  S07  creak (kind=rope)
   00:26.88  S07  whump
+  00:30.73  S08  rec (src=boom_559529, pick=0, dur=6.0)
   00:34.58  S09  sniff
   00:37.55  S10  boot
   00:38.95  S10  wood tap
@@ -81,6 +82,7 @@ SPOT EFFECTS
   01:26.82  S20  valve slap
   01:27.62  S20  grit (dur=0.6)
   01:29.06  S21  rod scrape (dur=3.8)
+  01:30.96  S21  rec (src=thunder_193170, pick=0, dur=6.0)
   01:33.06  S21  iron clank
   01:39.38  S23  chalk tap
   01:39.67  S23  chalk tap
@@ -92,6 +94,8 @@ SPOT EFFECTS
   01:52.70  S27  wind gust (dur=5.5)
   01:52.90  S27  nib (dur=6.0)
   01:59.95  S28  stop click
+  01:59.98  S28  rec (src=boom_408141, pick=0, dur=6.0)
+  02:07.10  S30  rec (src=thunder_244053, pick=0, dur=8.0)
   02:07.30  S30  wave slam
   02:08.60  S30  wave slam
   02:09.63  S31  line hands (dur=1.9)
