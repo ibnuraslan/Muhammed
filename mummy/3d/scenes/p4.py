@@ -45,14 +45,14 @@ def _crem_pit(c, r=0.24, n=200, charcoal=110):
     """A small pit of cremated bone: dark charcoal-stained fill with a feathered irregular edge, the burnt fragments
     and charcoal lying in it."""
     x, y, z = c
-    bpy.ops.mesh.primitive_grid_add(x_subdivisions=60, y_subdivisions=60, size=2.2 * r, location=(x, y, z + 0.004)); pt = bpy.context.active_object
+    bpy.ops.mesh.primitive_grid_add(x_subdivisions=60, y_subdivisions=60, size=2.2 * r, location=(x, y, z + 0.012)); pt = bpy.context.active_object
     bm_ = bmesh.new(); bm_.from_mesh(pt.data)
     bmesh.ops.delete(bm_, geom=[v for v in bm_.verts if v.co.xy.length > r * (1 + 0.08 * math.sin(7 * math.atan2(v.co.y, v.co.x)))], context='VERTS')
     bm_.to_mesh(pt.data); bm_.free()
     pt.data.materials.append(bpy.data.materials.get("pitfill") or ph.texture("brown_mud_02", scale=6.0, name="pitfill", tint=(0.32, 0.26, 0.2)))
     pt.name = "pitfloor"
-    dp = pt.modifiers.new("d", "DISPLACE"); dt = bpy.data.textures.new("pitlump", "CLOUDS"); dt.noise_scale = 0.03; dp.texture = dt; dp.strength = 0.008
-    cremation((x, y, z + 0.004), radius=r * 0.62, n=n, charcoal=charcoal, flat=True)
+    dp = pt.modifiers.new("d", "DISPLACE"); dt = bpy.data.textures.new("pitlump", "CLOUDS"); dt.noise_scale = 0.03; dp.texture = dt; dp.strength = 0.005
+    cremation((x, y, z + 0.012), radius=r * 0.62, n=n, charcoal=charcoal, flat=True)
     return pt
 
 
