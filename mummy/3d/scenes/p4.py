@@ -105,10 +105,10 @@ def cremation(center, radius=0.12, n=90, seed=1, charcoal=40, flat=False):
     bm = bmesh.new()
     for k in range(charcoal):
         a = rng.uniform(0, 6.283); r = radius * 1.1 * math.sqrt(rng.random())
-        s = rng.uniform(0.004, 0.012)
+        s = rng.uniform(0.0025, 0.007)
         vs = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=s)['verts']
         for v in vs:
-            v.co = Vector((v.co.x * rng.uniform(0.8, 1.6), v.co.y, v.co.z * 0.6)) + Vector((cx + r * math.cos(a), cy + r * math.sin(a), cz + s * 0.3))
+            v.co = Vector((v.co.x * rng.uniform(0.9, 1.5), v.co.y, v.co.z * 0.85)) + Vector((cx + r * math.cos(a), cy + r * math.sin(a), cz + s * 0.3))
     me2 = bpy.data.meshes.new("charcoal"); bm.to_mesh(me2); bm.free()
     o2 = bpy.data.objects.new("charcoal", me2); bpy.context.scene.collection.objects.link(o2)
     me2.materials.append(_plain("charcoal", (0.015, 0.014, 0.013), 0.55))
@@ -254,14 +254,16 @@ def S10():
     U.island("overcast", grass_at=(9.0, 5.0), grass_r=2.5, n=820, core=3.0, focus=(6, 2), grass_density=260)
     z = float(U.surface(6, 2))
     # the little pit: dark charcoal-stained fill, lumpy, its edge feathered into the sand
-    bpy.ops.mesh.primitive_circle_add(vertices=64, radius=0.24, fill_type='NGON', location=(6, 2, z + 0.004)); pt = bpy.context.active_object
+    bpy.ops.mesh.primitive_grid_add(x_subdivisions=60, y_subdivisions=60, size=0.52, location=(6, 2, z + 0.004)); pt = bpy.context.active_object
+    bm_ = bmesh.new(); bm_.from_mesh(pt.data)
+    bmesh.ops.delete(bm_, geom=[v for v in bm_.verts if v.co.xy.length > 0.24 * (1 + 0.08 * math.sin(7 * math.atan2(v.co.y, v.co.x)))], context='VERTS')
+    bm_.to_mesh(pt.data); bm_.free()
     pt.data.materials.append(ph.texture("brown_mud_02", scale=6.0, name="pitfill", tint=(0.32, 0.26, 0.2))); pt.name = "pitfloor"
-    sb = pt.modifiers.new("s", "SUBSURF"); sb.subdivision_type = 'SIMPLE'; sb.levels = 4; sb.render_levels = 4
     dp = pt.modifiers.new("d", "DISPLACE"); dt = bpy.data.textures.new("pitlump", "CLOUDS"); dt.noise_scale = 0.03; dp.texture = dt; dp.strength = 0.008
     cremation((6, 2, z + 0.004), radius=0.15, n=200, charcoal=110, flat=True)
     t = Vector((6, 2, z + 0.01))
     return dict(a=(tuple(t + Vector((0.18, -0.3, 0.3))), tuple(t)), b=(tuple(t + Vector((0.1, -0.2, 0.2))), tuple(t)), lens=50,
-                fstop=4.0, focus=tuple(t), cine=dict(exposure=0.1))
+                fstop=4.0, focus=tuple(t), cine=dict(exposure=-0.45))
 
 
 def S11():
