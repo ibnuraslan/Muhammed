@@ -629,39 +629,12 @@ def _moor_tone(terrain):
 
 
 def S21():
-    """Aerial at dusk: inland from the machair, the peat moor running east to the hills - a scatter of black bog pools
-    and lochans holding the sky, mist lying in the hollows. Drone drift east."""
-    U.CUT = True
-    T = U.island("dusk", grass_at=None, n=900, focus=(1050, 0), core=14.0)
-    _moor_tone(T["terrain"] if isinstance(T, dict) and "terrain" in T else bpy.data.objects.get("Uist"))
-    rng = random.Random(21)
-    loch = bpy.data.materials.get("Loch")
-    bm = bmesh.new()
-    for c in range(170):                                   # bog pools in clusters of irregular, overlapping blobs
-        cx, cy = rng.uniform(920, 1600), rng.uniform(-420, 520)
-        for k in range(rng.randint(2, 7)):
-            x = cx + rng.gauss(0, 10); y = cy + rng.gauss(0, 7); r = rng.uniform(2.5, 11.0)
-            z = float(U.surface(x, y)) + 0.2
-            ret = bmesh.ops.create_circle(bm, cap_ends=True, segments=18, radius=r)
-            sx, sy, ang = rng.uniform(0.7, 1.3), rng.uniform(0.35, 0.8), rng.uniform(0, 3.14)
-            for v in ret['verts']:
-                w = 1 + 0.25 * math.sin(math.atan2(v.co.y, v.co.x) * rng.choice((2, 3, 5)) + k)
-                vx, vy = v.co.x * sx * w, v.co.y * sy * w
-                v.co = Vector((x + vx * math.cos(ang) - vy * math.sin(ang), y + vx * math.sin(ang) + vy * math.cos(ang), z + 0.01 * k))
-    me = bpy.data.meshes.new("bogpools"); bm.to_mesh(me); bm.free(); me.materials.append(loch)
-    po = bpy.data.objects.new("bogpools", me); bpy.context.scene.collection.objects.link(po)
-    # peat hags: eroded dark peat banks standing up between the pools, ragged tops, black cut sides
-    peat = P2._peat_material(); tex = bpy.data.textures.new("hag", "CLOUDS"); tex.noise_scale = 3.0
-    for k in range(140):
-        x = rng.uniform(940, 1580); y = rng.uniform(-380, 500); z = float(U.surface(x, y))
-        bpy.ops.mesh.primitive_cube_add(size=1, location=(x, y, z + 0.4)); hg = bpy.context.active_object
-        hg.scale = (rng.uniform(5, 22), rng.uniform(2.5, 8), rng.uniform(1.0, 2.0)); hg.rotation_euler.z = rng.uniform(0, 3.14)
-        sd = hg.modifiers.new("s", "SUBSURF"); sd.levels = 3; sd.render_levels = 3; sd.subdivision_type = 'SIMPLE'
-        dd = hg.modifiers.new("d", "DISPLACE"); dd.texture = tex; dd.strength = 1.4; dd.texture_coords = 'GLOBAL'
-        hg.data.materials.append(peat); hg.name = "peathag"
-    BR.ground_mist((1150, 0, float(U.surface(1150, 0))), size=(1400, 1600, 14.0), density=0.012)
-    z0 = float(U.surface(900, -330))
-    return dict(a=((900, -340, z0 + 38), (1300, 60, z0)), b=((990, -280, z0 + 34), (1380, 110, z0)), lens=28, cine=dict(exposure=0.35))
+    """Low drone over the peat moor at dusk: black pools holding the sky, a cut peat bank, tussocks and cotton grass,
+    mist lying in the hollows, gliding forward a few metres up."""
+    M = moor("dusk", size=220, n=480, cotton=(0, -10, 34, 3000), heather=(0, -10, 34, 250), mist=0.035, sun_az=95)
+    P2.peat_face(M, -40, 40, stack_at=-6.0)
+    z = P2.moor_height(M, 0, -30)
+    return dict(a=((-6, -38, z + 8.5), (2, 10, z - 1)), b=((-3, -26, z + 7.5), (4, 18, z - 1)), lens=26, cine=dict(exposure=0.35))
 
 
 def _bog_scene(mood="dusk", sun_az=None, setup=None):
