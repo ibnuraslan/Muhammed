@@ -875,7 +875,7 @@ def S25():
         o.location.x += 0.03                                  # the shaft clear of his body
     for o in [o for o in bpy.data.objects if o.name.startswith("groundmist")]:
         bpy.data.objects.remove(o)                                 # no ground mist down in the cutting
-    return dict(a=((x0 + 1.15, fy - 2.5, zf + 1.65), (x0 + 0.15, yb, zf + 1.05)), b=((x0 + 0.95, fy - 2.0, zf + 1.6), (x0 + 0.15, yb, zf + 1.05)), lens=32,
+    return dict(a=((x0 + 1.4, fy - 3.3, zf + 1.6), (x0 + 0.1, yb, zf + 0.85)), b=((x0 + 1.2, fy - 2.8, zf + 1.55), (x0 + 0.1, yb, zf + 0.85)), lens=32,
                 fstop=4.0, focus=(x0 + 0.1, fy + 0.4, zf + 1.1), cine=dict(exposure=0.35), hand_ok=("spade", "moor", "peatface", "cuttingfloor", "groundmist"))
 
 

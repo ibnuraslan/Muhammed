@@ -492,12 +492,16 @@ def peat_face(M, x0=-30.0, x1=30.0, seed=5, center=(0.0, 0.0), stack_at=2.0):
     yb = 6.0 + 0.6 * fbm(xs / 8, 0, 2, seed=9) + center[1]
     blk = 0.25; tilt = {}
     V = []; F = []
+    # spade cuts of uneven width, faint steps between them (not a regular grid)
+    edges_ = [x0 - 0.5]
+    while edges_[-1] < x1 + 0.5:
+        edges_.append(edges_[-1] + rng.uniform(0.16, 0.36))
+    for k in range(len(edges_)):
+        tilt[k] = (rng.uniform(-0.004, 0.004), rng.uniform(-0.008, 0.008))
     for i, x in enumerate(xs):
-        k = int(math.floor(x / blk))
-        if k not in tilt:
-            tilt[k] = (rng.uniform(-0.012, 0.012), rng.uniform(-0.016, 0.016))
+        k = int(np.searchsorted(edges_, x)) - 1
         off, ang = tilt[k]
-        u = x / blk - k - 0.5
+        w_ = edges_[k + 1] - edges_[k]; u = (x - edges_[k]) / w_ - 0.5; blk = w_
         zb = moor_height(M, x, yb[i] - 0.6, center); zt = moor_height(M, x, yb[i] + 0.5, center)
         for j in range(nz):
             t = j / (nz - 1); z = zb - 0.06 + (zt - zb + 0.08) * t
