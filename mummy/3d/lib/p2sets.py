@@ -349,7 +349,7 @@ def peat_moor(center=(0.0, 0.0), size=220.0, n=420, seed=4, pools=True):
     e = el.new(0.45); e.color = (0.09, 0.07, 0.03, 1)                     # heather brown
     e = el.new(0.55); e.color = (0.16, 0.06, 0.03, 1)                     # rust-red sphagnum
     e = el.new(0.65); e.color = (0.18, 0.17, 0.08, 1)                     # bleached moor grass
-    el[1].position = 0.8; el[1].color = (0.12, 0.14, 0.05, 1)             # green sphagnum
+    el[-1].position = 0.8; el[-1].color = (0.12, 0.14, 0.05, 1)             # green sphagnum
     mx = N.new("ShaderNodeMath"); mx.operation = 'MULTIPLY_ADD'; mx.inputs[1].default_value = 0.5
     L.new(nz2.outputs['Fac'], mx.inputs[0]); L.new(nz.outputs['Fac'], mx.inputs[2])
     sub = N.new("ShaderNodeMath"); sub.operation = 'SUBTRACT'; sub.inputs[1].default_value = 0.25; L.new(mx.outputs[0], sub.inputs[0])
@@ -445,7 +445,7 @@ def _peat_material(name="peat"):
     el[0].position = 0.2; el[0].color = (0.025, 0.017, 0.01, 1)
     e = el.new(0.45); e.color = (0.07, 0.042, 0.022, 1)
     e = el.new(0.7); e.color = (0.12, 0.065, 0.032, 1)
-    el[1].position = 0.9; el[1].color = (0.05, 0.03, 0.016, 1)
+    el[-1].position = 0.9; el[-1].color = (0.05, 0.03, 0.016, 1)
     L.new(wv.outputs['Fac'], rp.inputs['Fac'])
     # fibres: noise stretched along the face, fine and horizontal (sedge and moss remains)
     mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (3.0, 3.0, 25.0); L.new(tc.outputs['Object'], mp.inputs['Vector'])

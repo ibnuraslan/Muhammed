@@ -623,7 +623,7 @@ def _moor_tone(terrain):
                     el[0].position = 0.35; el[0].color = (0.03, 0.025, 0.016, 1)
                     e = el.new(0.47); e.color = (0.07, 0.05, 0.03, 1)
                     e = el.new(0.56); e.color = (0.11, 0.05, 0.03, 1)
-                    el[1].position = 0.68; el[1].color = (0.15, 0.14, 0.08, 1)
+                    el[-1].position = 0.68; el[-1].color = (0.15, 0.14, 0.08, 1)
                     nt.links.new(nz.outputs['Fac'], rp.inputs['Fac']); nt.links.new(rp.outputs['Color'], n.inputs[7])
                     return
 
@@ -771,7 +771,7 @@ def _moss(M, px, py, wz, n=110, seed=23):
         nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 3.0; nz.inputs['Detail'].default_value = 5; Lk.new(tc.outputs['Object'], nz.inputs['Vector'])
         rp = N.new("ShaderNodeValToRGB"); el = rp.color_ramp.elements
         el[0].position = 0.4; el[0].color = (0.05, 0.08, 0.02, 1); e = el.new(0.55); e.color = (0.1, 0.1, 0.03, 1)
-        el[1].position = 0.7; el[1].color = (0.12, 0.035, 0.02, 1)
+        el[-1].position = 0.7; el[-1].color = (0.12, 0.035, 0.02, 1)
         Lk.new(nz.outputs['Fac'], rp.inputs['Fac']); Lk.new(rp.outputs['Color'], p.inputs['Base Color'])
         vo = N.new("ShaderNodeTexVoronoi"); vo.inputs['Scale'].default_value = 160; Lk.new(tc.outputs['Object'], vo.inputs['Vector'])
         bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 1.0; bp.inputs['Distance'].default_value = 0.004
