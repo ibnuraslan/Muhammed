@@ -378,7 +378,7 @@ def S20():
         x, y = rng.uniform(-0.25, 0.25), rng.uniform(-0.25, 0.25)
         ret = bmesh.ops.create_grid(bm, x_segments=5, y_segments=5, size=r)
         vs = ret['verts']; R = Matrix.Rotation(rng.uniform(0, 6.3), 3, 'Z') @ Matrix.Rotation(rng.uniform(-0.6, 0.6), 3, 'X')
-        curv = rng.uniform(0.5, 1.6) / r; mi = rng.randrange(len(mats)); sy = rng.uniform(0.5, 1.0)
+        curv = rng.uniform(0.15, 0.8) / r; mi = rng.randrange(len(mats)); sy = rng.uniform(0.5, 1.0)
         for v in vs:
             px_, py_ = v.co.x, v.co.y * sy
             pz = -curv * (px_ ** 2 + py_ ** 2) * 0.5 + 0.06 * r * math.sin(px_ / r * 9)     # cap + growth ribs
@@ -392,16 +392,21 @@ def S20():
     sol = sh.modifiers.new("t", "SOLIDIFY"); sol.thickness = 0.0004
     # quartz grains
     bm = bmesh.new()
-    for k in range(6000):
-        r = rng.uniform(0.0003, 0.0011); x, y = rng.uniform(-0.25, 0.25), rng.uniform(-0.25, 0.25)
+    gcols = [(0.75, 0.68, 0.55), (0.55, 0.5, 0.42), (0.85, 0.8, 0.7), (0.4, 0.33, 0.25), (0.7, 0.55, 0.45)]
+    for k in range(22000):
+        r = rng.uniform(0.0003, 0.0012); x, y = rng.uniform(-0.25, 0.25), rng.uniform(-0.25, 0.25)
         vs = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=r)['verts']
         sc_ = Vector((rng.uniform(0.7, 1.3), rng.uniform(0.7, 1.3), rng.uniform(0.6, 1.0)))
+        gi = rng.randrange(5)
         for v in vs:
             v.co = Vector((v.co.x * sc_.x, v.co.y * sc_.y, v.co.z * sc_.z)) + Vector((x, y, r * 0.5))
+        for f in {f for v in vs for f in v.link_faces}:
+            f.material_index = gi
     gme = bpy.data.meshes.new("grains"); bm.to_mesh(gme); bm.free()
     gr = bpy.data.objects.new("grains", gme); bpy.context.scene.collection.objects.link(gr)
-    q = _plain("quartz", (0.75, 0.68, 0.55), 0.35); q.node_tree.nodes["Principled BSDF"].inputs['Transmission Weight'].default_value = 0.3
-    gme.materials.append(q)
+    for i, c_ in enumerate(gcols):
+        q = _plain(f"grain{i}", c_, 0.35); q.node_tree.nodes["Principled BSDF"].inputs['Transmission Weight'].default_value = 0.25 if i in (0, 2) else 0.0
+        gme.materials.append(q)
     return dict(a=((0.0, -0.11, 0.045), (0.0, 0.02, 0.0)), b=((0.0, -0.08, 0.035), (0.0, 0.03, 0.0)), lens=60,
                 fstop=32.0, focus=(0.0, -0.02, 0.002), cine=dict(exposure=0.0))
 
