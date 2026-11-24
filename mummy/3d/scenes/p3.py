@@ -138,7 +138,7 @@ def S04():
     """Lab: a female pelvis on the velvet, the wide pelvic inlet and sciatic notch in the lamp light. Slow orbit."""
     A = LB.room(window_light=0.3, lamp=True, lamp_at=(0.25, 0.62), lamp_target=(0.0, 0.38), lamp_energy=24)
     LB.velvet(-0.6, 0.7, 0.0, 0.78, LB.TOP)
-    sk, W = lab_part("pelvis", sex="F", tone="C")
+    sk, W = lab_part("pelvis", sex="F", tone="C", yaw=90)
     t = Vector(((W.min(0) + W.max(0)) / 2).tolist())
     return dict(a=(tuple(t + Vector((-0.38, -0.5, 0.6))), tuple(t)), b=(tuple(t + Vector((0.12, -0.6, 0.6))), tuple(t)), lens=40,
                 fstop=4.0, focus=tuple(t), cine=dict(exposure=-0.05))
@@ -161,7 +161,7 @@ def S06():
     """Head and pelvis side by side on the bench: the skull darker, older. Pull back between them."""
     A = LB.room(window_light=0.3, lamp=True, lamp_at=(0.0, 0.62), lamp_target=(0.0, 0.36), lamp_energy=26)
     LB.velvet(-0.8, 0.8, 0.0, 0.78, LB.TOP)
-    lab_part("pelvis", sex="F", tone="C", x=0.22, y=0.4)
+    lab_part("pelvis", sex="F", tone="C", x=0.22, y=0.4, yaw=90)
     cr = B.hero_cranium(healed=False, tone="D")
     co = np.array([v.co for v in cr.data.vertices]); cr.location = (-0.22, 0.4, LB.TOP + 0.004 - co[:, 2].min() * 0.97)
     cr.rotation_euler = (0, 0, math.radians(-30))
