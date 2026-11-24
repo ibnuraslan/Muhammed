@@ -61,6 +61,28 @@ def _sextant(person, M):
         cabin.attach(o, person, "wrist.R")
 
 
+def _sextant_at_eye(person, M, eye):
+    """A brass sextant held by its handle in the right hand, telescope to the right eye and level on the horizon:
+    the frame stands vertical below the scope, the arc at the bottom. Parented to the right wrist."""
+    br = cabin.brass(); dk = cabin.plain("sx_black", (0.02, 0.02, 0.02), rough=0.4)
+    fw = M.to_3x3() @ Vector((0, -1, 0)); sd = M.to_3x3() @ Vector((1, 0, 0)); up = Vector((0, 0, 1))
+    parts = []
+    e0 = eye + fw * 0.04
+    parts.append(ship.cyl("sx_scope", e0, e0 + fw * 0.12, 0.011, mat=dk, verts=14))
+    apex = e0 + fw * 0.06 - up * 0.02
+    arc_c = apex - up * 0.05
+    pts = [arc_c + fw * (0.15 * math.sin(a)) - up * (0.15 * math.cos(a)) for a in [math.radians(t) for t in range(-32, 33, 4)]]
+    parts.append(ship.rope("sx_arc", pts, 0.006, br))
+    for p in (pts[0], pts[-1], pts[len(pts) // 2]):
+        parts.append(ship.cyl("sx_frame", apex, p, 0.004, mat=br, verts=8))
+    parts.append(ship.cyl("sx_index", apex, pts[len(pts) // 2 + 3], 0.0035, mat=br, verts=8))
+    parts.append(ship.box("sx_mirror", tuple(apex + up * 0.015), (0.005, 0.03, 0.04), cabin.plain("mirror", (0.9, 0.9, 0.9), rough=0.02, metal=1.0)))
+    hd = apex - up * 0.1 - sd * 0.035
+    parts.append(ship.cyl("sx_handle", hd - sd * 0.0, hd - sd * 0.0 - up * 0.07, 0.012, mat=cabin.plain("sx_wood", (0.12, 0.06, 0.03), rough=0.5), verts=10))
+    for o in parts:
+        cabin.attach(o, person, "wrist.R")
+
+
 if SHOT in ("21", "22", "24", "25", "26", "27"):
     mood = {"21": "grey", "22": "grey", "24": "harbour", "25": "harbour", "26": "harbour", "27": "harbour"}[SHOT]
     sun_d = W.light(mood)
@@ -131,7 +153,9 @@ elif SHOT in ("28", "29", "33", "37"):  # 25 November, dawn: Santa Maria in view
     mc["root"].rotation_euler = (math.radians(-3), 0, math.radians(hd_deg))
     bpy.context.view_layer.update()
     SM = mc["root"].matrix_world.copy()
-    W.water(mood, hulls=(mc["hull"],), cut=(0.0, 0.0, ship.L / 2 - 0.4, ship.B / 2 - 0.15))
+    # no hull cut here: the cut is an axis-aligned world ellipse and this ship is turned to her heading, so it would
+    # open a hole in the sea beside her (seen through the rail gap in 33). Her hatches are shut: no water shows inside.
+    W.water(mood, hulls=(mc["hull"],), cut=None)
     isl = W.island_santa_maria(Vector((-9000, -9000, 0)) if SHOT != "37" else Vector((-40000, 0, 0)))
     if SHOT == "28":
         S.cam(SM @ Vector((14, -42, 3.2)), SM @ Vector((-4, 0, 7)), lens=30)
@@ -167,18 +191,35 @@ elif SHOT in ("28", "29", "33", "37"):  # 25 November, dawn: Santa Maria in view
     elif SHOT == "33":   # LOW: through the rail gap, open sea, the island far off, empty water (callback)
         g = SM @ Vector((-1.65, -(ship.B / 2), ship.zdeck(-1.65) + 0.5))
         S.cam(SM @ Vector((-1.7, 0.2, ship.zdeck(-1.7) + 1.25)), SM @ Vector((-1.7, -40, -1.5)), lens=24)
-    elif SHOT == "37":   # flashback, warm noon: Briggs takes a sight with the sextant
+    elif SHOT == "37":   # flashback, warm noon: Briggs takes a sight. Seen from behind his right shoulder (face hidden):
+        # the sextant in his right hand at his right eye, scope on the horizon; his left hand rests on the cap rail.
         b = cast.Briggs()
-        M = on_deck(-6.2, -2.8, 0, SM)
-        P.stand(b.h, weight="R", lean=-4)
-        P.head(b.h, pitch=-12, yaw=0)
-        eye = b.h.bone_head("head") + Vector((0.0, -0.11, 0.06))
-        P.hand_reach(b.h, "R", eye + Vector((-0.06, -0.12, -0.12)), elbow=(-0.9, 0.2, -0.6)); P.grip(b.h, "R", 0.8)
-        P.hand_reach(b.h, "L", eye + Vector((0.08, -0.2, -0.2)), elbow=(0.9, 0.2, -0.6)); P.grip(b.h, "L", 0.6)
+        x0 = -6.2
+        rail = None                                   # inner edge of the starboard cap rail at x0 (ray-cast, ship space)
+        dg = bpy.context.evaluated_depsgraph_get()
+        for k in range(60):
+            yl = -2.4 - 0.03 * k
+            hit = bpy.context.scene.ray_cast(dg, SM @ Vector((x0 + 0.3, yl, ship.zdeck(x0) + 2.0)), SM.to_3x3() @ Vector((0, 0, -1)), distance=3.0)
+            if hit[0] and "caprail" in hit[4].name:
+                rail = (SM.inverted() @ hit[1]); break
+        M = on_deck(x0, rail.y + 0.5, 0, SM)
+        Mi = M.inverted()
+        P.stand(b.h, weight="L", lean=-2)
+        P.head(b.h, pitch=2, yaw=0)
+        bpy.context.view_layer.update()
+        eye = b.h.bone_head("eye.R") if "eye.R" in b.h.arm.pose.bones else b.h.bone_head("head") + Vector((-0.032, -0.09, 0.07))
+        fw, up, sd = Vector((0, -1, 0)), Vector((0, 0, 1)), Vector((1, 0, 0))      # rig frame: forward, up, his left
+        grip = eye + fw * 0.10 - up * 0.13 - sd * 0.05                             # the sextant handle, under the scope
+        P.hand_reach(b.h, "R", grip, elbow=(-0.9, 0.15, -0.55)); P.grip(b.h, "R", 0.75)
+        rail_l = Mi @ (SM @ Vector((x0 + 0.28, rail.y - 0.04, rail.z + 0.035)))
+        P.hand_reach(b.h, "L", rail_l, elbow=(0.8, 0.3, -0.6))
+        b.h.aim("wrist.L", Vector((0.15, -0.95, -0.25))); P.rest_hand(b.h, "L", 12)
         b.finish_live(place=M, density=HAIR)
-        _sextant(b, M)
+        _sextant_at_eye(b, M, M @ eye)
+        b.look(M @ (eye + fw * 20.0))
         hd = b.h.bone_head("head")
-        S.cam(hd + (M.to_3x3() @ Vector((1.2, -1.6, -0.25))), hd + Vector((0, 0, -0.15)), lens=45, fstop=4.0)
+        R3 = M.to_3x3()
+        S.cam(hd + R3 @ Vector((-0.95, 1.75, 0.12)), hd + R3 @ Vector((0.15, -1.2, -0.25)), lens=35, fstop=4.0)
     cine = {"sat": 1.1, "exposure": 0.1}
 
 elif SHOT in ("42", "43", "44", "45"):   # 4 December: the ship as found (overcast), Deveau aboard
