@@ -70,7 +70,19 @@ def knee_pieces(sk, side="L", keep_femur=0.09, keep_tibia=0.07, keep="near"):
         bmesh.ops.delete(bm, geom=kill, context='VERTS')
         edges = [e for e in bm.edges if e.is_boundary]
         if edges:
-            bmesh.ops.holes_fill(bm, edges=edges, sides=0) if False else bmesh.ops.contextual_create(bm, geom=edges)
+            bmesh.ops.contextual_create(bm, geom=edges)
+        # a dry break is jagged, not sawn: push every vertex near the cut along the plane normal by a noise field taken
+        # in WORLD space - both sides of the same break (pieces and shafts) get the same displacement, so they interlock
+        from mathutils import noise as _nz
+        Mw = o.matrix_world
+        bmesh.ops.subdivide_edges(bm, edges=[e for e in bm.edges if all(abs((v.co - pc).dot(pn)) < 0.003 for v in e.verts)],
+                                  cuts=2, use_grid_fill=True)
+        for v in bm.verts:
+            dist = (v.co - pc).dot(pn)
+            if abs(dist) < 0.004:
+                w = Mw @ v.co
+                j = 0.006 * _nz.noise(w * 90.0) + 0.003 * _nz.noise(w * 260.0)
+                v.co = v.co + pn * (j - dist * 0.0)
         bm.to_mesh(o.data); bm.free(); o.data.update()
         out.append(o)
     if keep == "near":
@@ -391,11 +403,22 @@ def S19():
 
 # ============================================================================ "The second skeleton is missing part of its left knee."
 def S20():
-    """Macro in the second grave: the legs, one lying across the other, and the gap where the left knee should be."""
-    T, sk = p1.site("overcast", grass_at=None, kit=False)
-    c, _ = sk["B2"].centre(); s = sk["B2"].part_centre("skull"); k = c.lerp(s, -0.35)
-    return dict(a=(tuple(k + Vector((0.45, -0.5, 0.5))), tuple(k)), b=(tuple(k + Vector((0.25, -0.35, 0.35))), tuple(k)), lens=60,
-                fstop=4.0, focus=tuple(k))
+    """The missing knee, close: the second body's legs drawn up, lying on its left side; the right leg crosses over a
+    left leg that stops short at a dry break where the knee should be. Slow push along the legs."""
+    T, sk0 = p1.site("day", grass_at=None, kit=False, burials=True, sun_az=215)
+    gx, gy = -4.2, 3.4                                     # a clear patch of the house floor
+    z = G.H(gx, gy)
+    bpy.ops.mesh.primitive_circle_add(vertices=48, radius=0.85, fill_type='NGON', location=(gx, gy, z + 0.003)); fl = bpy.context.active_object
+    fl.scale = (1.0, 0.7, 1.0); fl.data.materials.append(G.mat("gravefloor")); fl.name = "gravefloor_patch"
+    sk = B.Skeleton("M", "C", name="Second", sand=0.6)
+    sk.pose_crouched(tight=1.0, side="L")
+    sk.place((gx, gy, z), heading=30, ground_fn=lambda x, y: G.H(x, y) + 0.003)
+    knee_pieces(sk, side="L", keep="far")                  # the left knee is gone: femur and shin end in breaks
+    bpy.context.view_layer.update()
+    kj = sk.world_pivot("shankL")
+    t = Vector((kj.x, kj.y, kj.z))
+    return dict(a=(tuple(t + Vector((0.35, -0.45, 0.42))), tuple(t)), b=(tuple(t + Vector((0.18, -0.32, 0.3))), tuple(t)), lens=50,
+                fstop=4.0, focus=tuple(t), cine=dict(exposure=0.05))
 
 
 def S21():
@@ -438,7 +461,7 @@ def _knee_pit(kneel=True):
     skk.root.location += Vector((kx - c[0], ky - c[1], zf - 0.015 - W[:, 2].min()))      # bedded a little into the sand
     bpy.context.view_layer.update()
     for o in pcs:
-        p2._bone_detail(o)
+        o.data.materials.clear(); o.data.materials.append(B.bone_material("C", dirt=1.0, sand=0.7))
     out = dict(knee=Vector((kx, ky, zf + 0.03)), pieces=pcs)
     if kneel:
         out["st"] = K.kneel_trowel(K.DiggerB, (kx + 0.15, ky - 0.75), 95, work=(kx + 0.05, ky - 0.25), density=HAIR)
@@ -486,7 +509,7 @@ def S25():
     legs[1].root.location += Vector((0.0, -0.006, 0.004))      # the pit pieces a hairline off the breaks
     bpy.context.view_layer.update()
     for o in objs:
-        p2._bone_detail(o)
+        o.data.materials.clear(); o.data.materials.append(B.bone_material("C", dirt=1.0, sand=0.35))
     _spot((-0.6, 0.15, LB.TOP + 0.25), (0.0, 0.4, LB.TOP + 0.03), 60, size=0.04, spot=30)
     k = legs[0].world_pivot("shankL")
     return dict(a=(tuple(k + Vector((-0.12, -0.42, 0.3))), tuple(k)), b=(tuple(k + Vector((0.04, -0.4, 0.26))), tuple(k)), lens=55,
@@ -717,9 +740,8 @@ PLAN = [  # shot, VO paragraph (1-based), seconds (at 133 wpm; re-timed to the r
     ("S17", 8, 5.5, "Track along the second skeleton, feet to head"),
     ("S18", 9, 5.0, "Crane up from both graves to the whole house floor at dusk"),
     ("S19", 10, 4.5, "The roundhouses at dusk: six lives"),
-    ("S20", 11, 5.0, "Macro: the crossed legs and the gap at the left knee"),
-    ("S21", 11, 4.5, "The legs from the other side: right over the incomplete left"),
-    ("S22", 12, 5.5, "Rack across the crossed legs to the break beneath"),
+    ("S20", 11, 6.0, "Close: the right leg crossed over a left leg that stops at a dry break"),
+    ("S21", 12, 7.0, "The legs in the grave from the other side, slow slider"),
     ("S23", 13, 4.0, "Outside the house: a digger at a small separate pit (from behind)"),
     ("S24", 13, 3.5, "In the pit: pieces of a human knee"),
     ("S25", 14, 3.0, "Lab: the knee pieces against the broken leg - the breaks meet"),
