@@ -70,13 +70,17 @@ def knee_pieces(sk, side="L", keep_femur=0.09, keep_tibia=0.07, keep="near"):
         bmesh.ops.delete(bm, geom=kill, context='VERTS')
         edges = [e for e in bm.edges if e.is_boundary]
         if edges:
-            bmesh.ops.contextual_create(bm, geom=edges)
+            cr_ = bmesh.ops.contextual_create(bm, geom=edges)
+            caps = [f for f in cr_.get("faces", [])]
+            if caps:
+                bmesh.ops.poke(bm, faces=caps)                       # a fan of triangles: the break face can be roughened
+            bmesh.ops.recalc_face_normals(bm, faces=bm.faces[:])
         # a dry break is jagged, not sawn: push every vertex near the cut along the plane normal by a noise field taken
         # in WORLD space - both sides of the same break (pieces and shafts) get the same displacement, so they interlock
         from mathutils import noise as _nz
         Mw = o.matrix_world
         bmesh.ops.subdivide_edges(bm, edges=[e for e in bm.edges if all(abs((v.co - pc).dot(pn)) < 0.003 for v in e.verts)],
-                                  cuts=2, use_grid_fill=True)
+                                  cuts=3, use_grid_fill=True)
         for v in bm.verts:
             dist = (v.co - pc).dot(pn)
             if abs(dist) < 0.004:
@@ -668,7 +672,7 @@ def S25():
     off = Vector((-W[:, 0].mean(), 0.4 - W[:, 1].mean(), LB.TOP + 0.004 - W[:, 2].min()))
     for sk in legs:
         sk.root.location += off
-    legs[1].root.location += Vector((0.0, -0.006, 0.004))      # the pit pieces a hairline off the breaks
+    legs[1].root.location += Vector((0.0, -0.003, 0.002))      # the pit pieces a hairline off the breaks
     bpy.context.view_layer.update()
     for o in objs:
         o.data.materials.clear(); o.data.materials.append(B.bone_material("C", dirt=1.0, sand=0.35)); _old_bone(o, stain=0.55)
