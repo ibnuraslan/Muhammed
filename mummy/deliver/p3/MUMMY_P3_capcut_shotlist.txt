@@ -1,0 +1,71 @@
+MUMMY P3 - CapCut shot list. One render: MASTER.blend scene MASTER frames 1-3862 (24 fps, 160.92 s = VO length).
+Lay the rendered frame sequence at 00:00:00:00 and the VO (MUMMY_P3_VO.mp3) at 00:00:00:00. Cuts below are already in the render.
+
+S01  frames     1-   67  00:00:00:00 - 00:00:02:18  (2.79 s)  VO para 1
+    Bronze Age roundhouse by firelight: three wrapped bundles on hurdles
+S02  frames    68-  121  00:00:02:19 - 00:00:05:00  (2.25 s)  VO para 1
+    The second grave from above at last light
+S03  frames   122-  209  00:00:05:01 - 00:00:08:16  (3.67 s)  VO para 2
+    Push in over the second skeleton toward its skull
+S04  frames   210-  308  00:00:08:17 - 00:00:12:19  (4.12 s)  VO para 3
+    Lab: a female pelvis under the lamp (orbit)
+S05  frames   309-  396  00:00:12:20 - 00:00:16:11  (3.67 s)  VO para 3
+    The male cranium, darker and stained
+S06  frames   397-  506  00:00:16:12 - 00:00:21:01  (4.58 s)  VO para 3
+    Head and pelvis side by side: the skull older
+S07  frames   507-  566  00:00:21:02 - 00:00:23:13  (2.50 s)  VO para 4
+    Sampling the skull: tubes beside it
+S08  frames   567-  617  00:00:23:14 - 00:00:25:16  (2.12 s)  VO para 4
+    Sampling the lower jaw
+S09  frames   618-  667  00:00:25:17 - 00:00:27:18  (2.08 s)  VO para 4
+    A drill hole in the upper arm bone
+S10  frames   668-  717  00:00:27:19 - 00:00:29:20  (2.08 s)  VO para 4
+    A drill hole in the thigh bone
+S11  frames   718-  854  00:00:29:21 - 00:00:35:13  (5.71 s)  VO para 5
+    Ancient-DNA clean room: a suited scientist at the UV cabinet (from behind)
+S12  frames   855-  968  00:00:35:14 - 00:00:40:07  (4.75 s)  VO para 5
+    Inside the cabinet: tubes of bone powder under violet UV
+S13  frames   969- 1071  00:00:40:08 - 00:00:44:14  (4.29 s)  VO para 5
+    A sample tube, sharp; the rack soft behind
+S14  frames  1072- 1147  00:00:44:15 - 00:00:47:18  (3.17 s)  VO para 6
+    The DNA lab at night, the work done: instrument lights in the dark
+S15  frames  1148- 1282  00:00:47:19 - 00:00:53:09  (5.62 s)  VO para 7
+    Jaw, upper arm and thigh bone apart: three pools of light
+S16  frames  1283- 1390  00:00:53:10 - 00:00:57:21  (4.50 s)  VO para 7
+    The skull alone in low light: no answer
+S17  frames  1391- 1693  00:00:57:22 - 00:01:10:12  (12.62 s)  VO para 8
+    Track along the second skeleton, feet to head
+S18  frames  1694- 1877  00:01:10:13 - 00:01:18:04  (7.67 s)  VO para 9
+    Crane up from both graves to the whole house floor at dusk
+S19  frames  1878- 1999  00:01:18:05 - 00:01:23:06  (5.08 s)  VO para 10
+    The roundhouses at dusk: six lives
+S20  frames  2000- 2352  00:01:23:07 - 00:01:37:23  (14.71 s)  VO para 11
+    Close from above: the uppermost left leg ends in dry breaks where the knee should be
+S21  frames  2353- 2579  00:01:38:00 - 00:01:47:10  (9.46 s)  VO para 12
+    The legs in the grave from the other side, slow slider
+S23  frames  2580- 2616  00:01:47:11 - 00:01:48:23  (1.54 s)  VO para 13
+    Outside the house: a digger at a small separate pit (from behind)
+S24  frames  2617- 2648  00:01:49:00 - 00:01:50:07  (1.33 s)  VO para 13
+    In the pit: pieces of a human knee
+S25  frames  2649- 2723  00:01:50:08 - 00:01:53:10  (3.12 s)  VO para 14
+    Lab: the knee pieces against the broken leg - the breaks meet
+S26  frames  2724- 2881  00:01:53:11 - 00:02:00:00  (6.58 s)  VO para 15
+    High over the trench: grave to knee pit, five metres
+S27  frames  2882- 3060  00:02:00:01 - 00:02:07:11  (7.46 s)  VO para 16
+    Macro: a dry, chalky fracture face in grazing light
+S28  frames  3061- 3202  00:02:07:12 - 00:02:13:09  (5.92 s)  VO para 16
+    Brittle bone: the shaft in raking light
+S29  frames  3203- 3281  00:02:13:10 - 00:02:16:16  (3.29 s)  VO para 17
+    In the pit: the kneecap still against the femur end
+S30  frames  3282- 3506  00:02:16:17 - 00:02:26:01  (9.38 s)  VO para 18
+    A dried, wrapped body on a hurdle in the dim roundhouse
+S31  frames  3507- 3606  00:02:26:02 - 00:02:30:05  (4.17 s)  VO para 19
+    Night: two islanders reach into an opened grave by torchlight
+S32  frames  3607- 3705  00:02:30:06 - 00:02:34:08  (4.12 s)  VO para 19
+    They lift the preserved body out on its hurdle (silhouettes)
+S33  frames  3706- 3794  00:02:34:09 - 00:02:38:01  (3.71 s)  VO para 19
+    The empty grave: the broken knee left behind
+S34  frames  3795- 3830  00:02:38:02 - 00:02:39:13  (1.50 s)  VO para 20
+    First light: they carry the body toward the roundhouse
+S35  frames  3831- 3862  00:02:39:14 - 00:02:40:21  (1.33 s)  VO para 20
+    The second grave at dusk, push to the crossed legs
