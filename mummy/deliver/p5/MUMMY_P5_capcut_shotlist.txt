@@ -1,0 +1,37 @@
+MUMMY P5 - CapCut shot list. One render: MASTER.blend scene MASTER frames 1-2330 (24 fps, 97.08 s = VO length).
+Lay the rendered frame sequence at 00:00:00:00 and the VO (MUMMY_P5_VO.mp3) at 00:00:00:00. Cuts below are already in the render.
+
+S01  frames     1-   46  00:00:00:00 - 00:00:01:21  (1.92 s)  VO para 1
+    Night: the wrapped body at the roundhouse back wall, low glide
+S02  frames    47-  158  00:00:01:22 - 00:00:06:13  (4.67 s)  VO para 2
+    Three parts of one figure in three pools of lamplight
+S03  frames   159-  259  00:00:06:14 - 00:00:10:18  (4.21 s)  VO para 2
+    The household kneeling at the hearth, the ancestor beyond
+S04  frames   260-  350  00:00:10:19 - 00:00:14:13  (3.79 s)  VO para 2
+    The dark skull alone in the light, the other parts dim
+S05  frames   351-  536  00:00:14:14 - 00:00:22:07  (7.75 s)  VO para 3
+    Dusk: kin gathered at the house doorway
+S06  frames   537-  703  00:00:22:08 - 00:00:29:06  (6.96 s)  VO para 3
+    The body raised on a stone platform with pots beside it
+S07  frames   704-  838  00:00:29:07 - 00:00:34:21  (5.62 s)  VO para 4
+    The skeleton on the bench, lens and calipers beside it
+S08  frames   839-  989  00:00:34:22 - 00:00:41:04  (6.29 s)  VO para 4
+    The skull in darkness, raking light across the brow
+S09  frames   990- 1358  00:00:41:05 - 00:00:56:13  (15.38 s)  VO para 5
+    Three racks of sample tubes in the clean room
+S10  frames  1359- 1483  00:00:56:14 - 00:01:01:18  (5.21 s)  VO para 6
+    Three bones in three pools of light, gaps of shadow
+S11  frames  1484- 1619  00:01:01:19 - 00:01:07:10  (5.67 s)  VO para 7
+    Damage: the hide split, a bone end showing
+S12  frames  1620- 1770  00:01:07:11 - 00:01:13:17  (6.29 s)  VO para 7
+    Repair: a fresh cord bound round the old hide
+S13  frames  1771- 1891  00:01:13:18 - 00:01:18:18  (5.04 s)  VO para 7
+    The broken knee from above
+S14  frames  1892- 2098  00:01:18:19 - 00:01:27:09  (8.62 s)  VO para 8
+    The mended ancestor in moonlight
+S15  frames  2099- 2172  00:01:27:10 - 00:01:30:11  (3.08 s)  VO para 9
+    The two graves side by side at dusk
+S16  frames  2173- 2240  00:01:30:12 - 00:01:33:07  (2.83 s)  VO para 9
+    Past the grave to the house wall built over it
+S17  frames  2241- 2330  00:01:33:08 - 00:01:37:01  (3.75 s)  VO para 9
+    Night over the village
