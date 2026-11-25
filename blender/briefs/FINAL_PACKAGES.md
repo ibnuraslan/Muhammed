@@ -95,3 +95,11 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | B02 | WhaleSwallow | `blender/WhaleSwallow_v005/` | **READY TO RENDER (frames 1–1715)**, watched moving |
 | B08 | BatBite | `blender/BatBite_v003/` | **READY TO RENDER (frames 1–1362)**, watched moving |
 | B09 | ScaldingCoffee | `blender/ScaldingCoffee_v003/` | **READY TO RENDER (frames 1–1808)**, watched moving |
+
+## Batch 1 rebuilds — READY (client-approved, logo + Render check PASS), branch claude/polish01-03
+| # | Film | Package | Frames |
+|---|---|---|---|
+| 01 | EarInArm | blender/EarInArm_v016/EarInArm_v016_60fps.blend | 1–1572 |
+| 02 | MonkeyHeadTransplant | blender/MonkeyHeadTransplant_v016/MonkeyHeadTransplant_v016_60fps.blend | 1–1656 |
+| 03 | LegoInNose | blender/LegoInNose_v014/LegoInNose_v014_60fps.blend | 1–2036 |
+| 04 | StanleyCup | already rendered by the client | — |
