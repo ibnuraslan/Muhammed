@@ -33,7 +33,7 @@ def seat_snap(H, ctrl, f, pos, yaw, trousers, seat_top, xy, r=0.12, flex=0.0):
 STOOL_TOP = 0.47
 P_SEAT = Vector((-0.45, 0.90, 0.56))
 fs(1)
-PZ = seat_snap(HP, PR, 1, P_SEAT, 0.0, O["Pris.trousers"], STOOL_TOP, (-0.45, 0.88))
+PZ = seat_snap(HP, PR, 1, P_SEAT, 0.0, O["Pris.male_casualsuit03"], STOOL_TOP, (-0.45, 0.88))
 P_SEAT.z = PZ
 FEET_S = {"L": Vector((-0.33, 0.47, PR.BN["foot.L"].head_local.z)), "R": Vector((-0.57, 0.47, PR.BN["foot.R"].head_local.z))}
 
@@ -487,8 +487,8 @@ for rig, ctrl, H, pos, yaw, s_ in ((VIS, VR, HV, Vector((SXX - 0.95, 3.05, 0.85)
     for f in (1623, 1700, END): fs(f); look_at(ctrl, f, Vector((SXX, -3.0, 1.6)) if f != 1700 else P_TOPS + Vector((0, 0, 1.6)), blend=0.8)
     for f in (1623, END): key_face(rig, f, smile=0.8, brow=0.5)
 # costume + hair for "years later" (switched inside the flash)
-for n in ("Pris.top", "Pris.trousers"): vis(O[n], 1, True); vis(O[n], 1623, False)
-for n in ("Pris.suittop", "Pris.suittrousers"): vis(O[n], 1, False); vis(O[n], 1623, True)
+for n in ("Pris.male_casualsuit03",): vis(O[n], 1, True); vis(O[n], 1623, False)
+for n in ("Pris.male_elegantsuit01",): vis(O[n], 1, False); vis(O[n], 1623, True)
 for c in PRIS.children:
     if c.type == 'MESH' and any(k in c.name.lower() for k in ("short", "eyebrow")):
         for m in c.data.materials:

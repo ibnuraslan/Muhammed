@@ -24,11 +24,14 @@ LOGO_DARK = "/home/user/Muhammed/blender/assets/brand/DaKrasFilms_logo_dark.png"
 # ================================================================== characters
 RACE = {"asian": 0.03, "caucasian": 0.92, "african": 0.05}
 PRIS, PB = human("Pris", 1.0, 0.45, RACE, "short02/short02.mhclo", "young_caucasian_male/young_caucasian_male.mhmat",
-                 "eyebrow001/eyebrow001.mhclo", height=0.55, weight=0.45, muscle=0.5)
+                 "eyebrow001/eyebrow001.mhclo", height=0.55, weight=0.45, muscle=0.5,
+                 clothes=["male_casualsuit03/male_casualsuit03.mhclo", "male_elegantsuit01/male_elegantsuit01.mhclo", "shoes03/shoes03.mhclo"])
 VIS, VB = human("Vis", 0.0, 0.45, {"asian": 0.05, "caucasian": 0.9, "african": 0.05}, "ponytail01/ponytail01.mhclo",
-                "young_caucasian_female/young_caucasian_female.mhmat", "eyebrow010/eyebrow010.mhclo", height=0.45, weight=0.45)
+                "young_caucasian_female/young_caucasian_female.mhmat", "eyebrow010/eyebrow010.mhclo", height=0.45, weight=0.45,
+                clothes=["female_elegantsuit01/female_elegantsuit01.mhclo", "shoes01/shoes01.mhclo"])
 SMITH, SB = human("Smith", 1.0, 0.62, RACE, "short01/short01.mhclo", "middleage_caucasian_male/middleage_caucasian_male.mhmat",
-                  "eyebrow002/eyebrow002.mhclo", height=0.5, weight=0.6, muscle=0.6)
+                  "eyebrow002/eyebrow002.mhclo", height=0.5, weight=0.6, muscle=0.6,
+                  clothes=["male_worksuit01/male_worksuit01.mhclo", "shoes03/shoes03.mhclo"])
 for r, b in ((PRIS, PB), (VIS, VB), (SMITH, SB)):
     bake_keys(b); eye_fix(r)
 eye_group_fix()
@@ -101,33 +104,9 @@ def shoes(rig, body, col, prefix):
     hide_under(body, cov, name="hide_shoes", rings=2)
     return sh
 
-# prisoner: indigo prison jacket + ochre-brown trousers; later (years on) a deep navy suit (switched in the flash)
-P_TOP, P_BOT, P_MK, P_COV = wardrobe(PRIS, PB, fabric("M_PrisJacket", (0.03, 0.06, 0.34)), fabric("M_PrisTrousers", (0.34, 0.15, 0.03), scale=600),
-                                     0.03, 0.013, 0.008, 0.005, 0.004, "Pris")
-S_TOP, S_BOT, _, _ = wardrobe(PRIS, PB, fabric("M_SuitCoat", (0.010, 0.010, 0.013)), fabric("M_SuitTrousers", (0.02, 0.05, 0.20), scale=600),
-                              0.30, 0.024, 0.014, 0.008, 0.004, "Suit", hide=False, collar=-0.005, thick=0.006)
-S_TOP.name = "Pris.suittop"; S_BOT.name = "Pris.suittrousers"
-shoes(PRIS, PB, (0.08, 0.04, 0.02), "Pris")
-V_TOP, V_BOT, _, _ = wardrobe(VIS, VB, fabric("M_VisCoat", (0.01, 0.30, 0.13)), fabric("M_VisTrousers", (0.30, 0.03, 0.17), scale=600),
-                              0.16, 0.024, 0.010, 0.009, 0.004, "Vis", collar=-0.01, thick=0.006)
-shoes(VIS, VB, (0.05, 0.02, 0.02), "Vis")
-SM_TOP, SM_BOT, _, _ = wardrobe(SMITH, SB, fabric("M_SmithShirt", (0.75, 0.40, 0.02)), fabric("M_SmithTrousers", (0.02, 0.17, 0.20), scale=600),
-                                0.02, 0.012, 0.008, 0.005, 0.004, "Smith")
-shoes(SMITH, SB, (0.10, 0.05, 0.02), "Smith")
-# extra smoothing on the tops: no chest or nipple shaping shows through
-for g_ in (P_TOP, S_TOP, SM_TOP, V_TOP):
-    sm_ = g_.modifiers.get("smooth"); sm_.factor = 1.0; sm_.iterations = 25
-    lap = g_.modifiers.new("lap", 'LAPLACIANSMOOTH'); lap.lambda_factor = 1.5; lap.iterations = 6; lap.use_volume_preserve = True
-    g_.modifiers.move(len(g_.modifiers) - 1, g_.modifiers.find("solid"))
-# leather apron over the shirt: the front half of a slightly larger shell (chest to knee)
-apron_m = mat("M_Apron", (0.36, 0.14, 0.04), rough=0.5, coat=0.2)
-hipS = bl(SMITH, "pelvis.L").z
-def apron_region(co, bn):
-    if bn is None or in_region(bn, HEADB + ARM + HANDS + ("foot", "toe", "clavicle", "shoulder")): return False
-    if co.y > -0.02 or co.z > 1.30 or co.z < 0.52: return False
-    if in_region(bn, ("lowerleg",)) and co.z < 0.52: return False
-    return abs(co.x) < 0.20
-APRON, _ = garment(SMITH, SB, "Smith.apron", apron_region, [((0, 0, 1.30), (0, 0, 1)), ((0, 0, 0.52), (0, 0, -1))], 0.024, apron_m, thick=0.004)
+# Clothes are REAL MakeHuman/MPFB garment assets (separate pieces with folds and volume; MPFB hides the body under them
+# with their delete groups): prisoner = striped shirt + jeans + boots, later the elegant suit (switched inside the flash);
+# visitor = striped blouse + skirt + shoes; locksmith = work overalls + boots.
 
 # ================================================================== materials for sets
 def brickmat(name, c1, c2, mortar, scale=3.0, bw=0.5, rh=0.25, msize=0.02, rough=0.8, bump=0.25, vertical=True):

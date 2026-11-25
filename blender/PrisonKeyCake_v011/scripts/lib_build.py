@@ -44,7 +44,7 @@ def stripes(name, c1, c2, scale=40.0):
 
 # ------------------------------------------------------------------ characters
 _EYE = json.load(open("/root/.config/blender/5.2/extensions/user_default/mpfb/data/settings/eye_settings.default.json"))
-def human(name, gender, age, race, hair, skin, eyebrow, height=0.5, muscle=0.5, weight=0.5, prop=0.6):
+def human(name, gender, age, race, hair, skin, eyebrow, height=0.5, muscle=0.5, weight=0.5, prop=0.6, clothes=()):
     info = HumanService._create_default_human_info_dict()
     info["name"] = name
     info["phenotype"] = {"gender": gender, "age": age, "muscle": muscle, "weight": weight, "proportions": prop,
@@ -53,7 +53,7 @@ def human(name, gender, age, race, hair, skin, eyebrow, height=0.5, muscle=0.5, 
     info["eyes"] = "high-poly/high-poly.mhclo"; info["eyebrows"] = eyebrow
     info["eyelashes"] = "eyelashes01/eyelashes01.mhclo"; info["teeth"] = "teeth_base/teeth_base.mhclo"
     info["tongue"] = "tongue01/tongue01.mhclo"; info["hair"] = hair
-    info["clothes"] = []
+    info["clothes"] = list(clothes)
     es = dict(_EYE); es["IrisMajorColor"] = [0.30, 0.17, 0.07, 1.0]; es["IrisMinorColor"] = [0.12, 0.07, 0.03, 1.0]
     info["eyes_material_settings"] = es
     info["skin_mhmat"] = skin; info["skin_material_type"] = "ENHANCED_SSS"; info["eyes_material_type"] = "PROCEDURAL_EYES"
