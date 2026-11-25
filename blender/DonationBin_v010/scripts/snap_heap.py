@@ -2,7 +2,7 @@
 # clothes / shoes below the heap surface lifts her root (window max + smoothing, so she never pops), and is re-keyed.
 _wparts = [O[n] for n in ("Woman.body", "Woman.top", "Woman.trousers")] + [c for c in O["Woman"].children if c.type == 'MESH' and ("shoes" in c.name or "ponytail" in c.name)]
 _dg_lifts = {}
-_F0, _F1 = 205, min(UNTIL, 2150)
+_F0, _F1 = 205, min(UNTIL, 2388)
 for f in range(_F0, _F1 + 1, 2):
     fs(f); dg = bpy.context.evaluated_depsgraph_get(); worst = 0.0
     for o in _wparts:
@@ -18,9 +18,8 @@ _fr = sorted(_dg_lifts)
 _mx = {f: max(_dg_lifts[g] for g in _fr if abs(g - f) <= 8) for f in _fr}
 _sm = {f: sum(_mx[g] for g in _fr if abs(g - f) <= 6) / len([g for g in _fr if abs(g - f) <= 6]) for f in _fr}
 _sm = {f: max(_sm[f], _dg_lifts[f]) for f in _fr}
-_c = W.c; _Rinv = _c.rest("root").to_3x3().inverted()
-for f in _fr:
-    if _sm[f] <= 0: continue
-    fs(f); pb = _c.PB["root"]
-    pb.location = pb.location + _Rinv @ Vector((0, 0, _sm[f])); pb.keyframe_insert("location", frame=f, group="root")
+_kk = [(f, _sm[f]) for f in _fr]
+_lift_f = pchip([(_F0 - 20, 0.0)] + _kk + [(_F1 + 20, 0.0)])
+W.lift = lambda f: max(0.0, _lift_f(f)) if _F0 - 20 <= f <= _F1 + 20 else 0.0
+W.bake(_F0 - 20, min(UNTIL, _F1 + 20))       # re-bake: the whole body (root AND the body-local hands/feet) rides up together
 log("heap snap: max lift %.1f mm, frames lifted %d" % (1000 * max(_sm.values()), sum(1 for v in _sm.values() if v > 0)))

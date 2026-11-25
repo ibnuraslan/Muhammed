@@ -188,7 +188,7 @@ def plane_uv(name, w, h, loc, rot, material, parent=None):
 # ================================================================== the bins
 BX0, BX1, BY0, BY1, BZ1 = -0.90, 0.90, -0.75, 0.75, 2.90
 T = 0.03
-CH = (-0.48, 0.48, 1.20, 1.75)     # chute x0 x1 z0 z1
+CH = (-0.48, 0.48, 1.20, 1.90)     # chute x0 x1 z0 z1
 CP = (-0.50, 0.50, 0.12, 1.10)     # cut panel x0 x1 z0 z1
 FLOOR = 0.12
 

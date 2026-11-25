@@ -61,7 +61,8 @@ class Actor:
         return tuple(catmull([(fr, v[i]) for fr, v in ks])(f) if len(ks) > 1 else ks[0][1][i] for i in range(len(ks[0][1])))
     # ---------------------------------------------------------------- body frame
     def body_M(self, f):
-        return Matrix.Translation(self.pos(f)) @ self.rot(f).to_matrix().to_4x4()
+        lift = self.lift(f) if getattr(self, "lift", None) else 0.0
+        return Matrix.Translation(self.pos(f) + Vector((0, 0, lift))) @ self.rot(f).to_matrix().to_4x4()
     def resolve(self, spec, f):
         """a hand/foot spec -> (point, normal, fdir) in world. spec: ('L', p, n, d) body-local | ('W', p, n, d) world | callable(f)"""
         if callable(spec): spec = spec(f)
