@@ -1,5 +1,30 @@
 # SurgeonBrandsLivers_v015: from-scratch rebuild, NOT READY (ON HOLD)
 
+## Restage round (director-approved): result FAIL. Current `review/preview.mp4` is this round.
+**Fixed this round:**
+- **Burn macro:** a clean pen-tip shot with the hand out of frame. "SB" is legible at frames 240-290 (the earlier pen fault was an axis bug in the joined pen mesh).
+- **Discovery:** "SB" is legible at frames 1020-1110.
+- **Clothes:** the patient's jeans are closed, the collars and cuffs are rolled edges, and the defendant wears a sweater.
+- **Logo and set:** the logo is readable at 10.1-13.3 s, and the hearing room has extra fill light.
+
+**Still failing (fresh harsh review), in seconds:**
+1. **Chest shaping on the male surgeon:**
+   - It shows on the scrubs at 5-9.4 s and on the sweater at 21-27.3 s.
+   - The sweater is light blue, not dark.
+   - The rest-pose chest flattening is not enough; the body itself has to be flattened.
+2. **Discovery macro, 16.9-18.5 s:** the second surgeon's fist sits in the top of the frame, and the probe does not visibly connect to it. Her forearm meets the drape at 16.5-16.9 s.
+3. **Surgeon 1's hair:** a hair or brow card shows through his forehead under the cap at 5-7 s.
+4. **Static holds and stiff poses:**
+   - holds at 7.75-9.4 s, 22.6-23.75 s and 25.4-27.3 s; the film ends mid-blink;
+   - stiff poses at 9.5 s, 10.1-10.75 s and 20.2-20.8 s.
+5. **Masks:** they are moulded to the face.
+6. **Patient and set:**
+   - a white pillow/blob reads as a sack at her head at 14.2-15 s;
+   - claw hands at 11-13 s and 15-16 s;
+   - the doubled-over pose is mild;
+   - dark corners at 9.9 s and in the hearing room.
+
+
 **Status: ON HOLD. Self-QC check 3 FAILED, and the two fix rounds allowed by the rebuild brief are used up.** No .blend is pushed, because none passed. `review/preview.mp4` is the check-3 preview: 270×480, every 5th frame, with the VO, rendered from the packed local build.
 
 ## What v015 is
