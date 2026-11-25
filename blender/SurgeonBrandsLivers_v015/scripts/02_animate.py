@@ -319,7 +319,7 @@ c_loc, _ = liver_surf(WORK.x, WORK.y)
 log("liver top at work point", None if c_loc is None else round(c_loc.z, 3), "skin", round(WORK.z, 3))
 
 # --- the letters "SB": strokes in a 2D frame on the liver (readable from the camera on her left side: x right, y up)
-LH = 0.046; LW = 0.030; GAP = 0.012
+LH = 0.034; LW = 0.024; GAP = 0.010
 def S_path():
     pts = []
     for k in range(37):
@@ -341,7 +341,13 @@ def B_path():
         a_ = math.pi * 0.5 - math.pi * k / 16.0
         pts.append((-0.5 * LW + 1.0 * LW * math.cos(a_), -0.25 * LH + 0.25 * LH * math.sin(a_)))
     return pts
-LET_C = Vector((WORK.x - 0.006, WORK.y - 0.004))
+best_ = None
+for gx_ in range(-8, 9):
+    for gy_ in range(-6, 7):
+        l_, _ = liver_surf(WORK.x + gx_ * 0.005, WORK.y + gy_ * 0.005)
+        if l_ is not None and (best_ is None or l_.z > best_.z): best_ = l_
+LET_C = Vector((best_.x, best_.y)) if best_ is not None else Vector((WORK.x, WORK.y))
+log("letters centred on the liver crest", tuple(round(x, 3) for x in LET_C))
 LETTERS = []
 char_m = mat("M_Char", (0.06, 0.03, 0.02), rough=0.8)
 nt = char_m.node_tree; pc = nt.nodes["Principled BSDF"]
@@ -351,8 +357,8 @@ def place_letter(name, path2d, cx):
     for (u, v) in path2d:
         x = LET_C.x + cx + u; y = LET_C.y + v
         loc, nrm = liver_surf(x, y)
-        pts3.append(loc - nrm * 0.0008 if loc is not None else Vector((x, y, WORK.z - 0.03)))
-    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0028; cu.bevel_resolution = 2
+        pts3.append(loc - nrm * 0.0011 if loc is not None else Vector((x, y, WORK.z - 0.03)))
+    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0022; cu.bevel_resolution = 2
     cu.use_fill_caps = True; cu.bevel_factor_mapping_end = 'SPLINE'
     sp = cu.splines.new('POLY'); sp.points.add(len(pts3) - 1)
     for p_, c_ in zip(sp.points, pts3): p_.co = (*c_, 1)
@@ -978,9 +984,9 @@ def LH(v): return sect("HOME", v)
 def LR(v): return sect("HEAR", v)
 F2 = sectM("OR2") @ (FACE2 if False else FACE2)
 FACE2W = FACE2  # already world (her rig is placed in OR2)
-LETC = Vector((-0.006, -0.004, -0.028))
+LETC = Vector((LET_C.x - WORK.x, LET_C.y - WORK.y, PS[0].z - WORK.z))
 CK = [  # frame, camera position, aim, lens, f-stop
-    (1,    WORK + Vector((-0.04, -0.72, 0.27)), WORK + Vector((0, 0.16, 0.27)), 35, 11),
+    (1,    WORK + Vector((-0.04, -0.82, 0.42)), WORK + Vector((0, 0.22, 0.30)), 35, 11),
     (34,   WORK + LETC + Vector((0.04, -0.30, 0.30)), WORK + LETC + Vector((0, 0.02, 0.0)), 45, 11),
     (62,   WORK + LETC + Vector((0.02, -0.19, 0.22)), WORK + LETC, 50, 11),
     (150,  WORK + LETC + Vector((-0.012, -0.17, 0.20)), WORK + LETC, 50, 11),

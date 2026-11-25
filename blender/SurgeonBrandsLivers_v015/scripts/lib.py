@@ -400,7 +400,7 @@ def wardrobe(rig, body, top_m, bot_m, sleeve, hem_drop, top_off, bot_off, top_fo
             s = "L" if co.x > 0 else "R"
             if plane_side(co, *arm_cut[s]) > 1e-5: return False
         return True
-    top, cov_t = garment(rig, body, prefix + ".top", top_region, cuts_top, top_off, top_m, folds=top_folds, fold_scale=0.12, relax=relax, hem_z=hip - 0.02)
+    top, cov_t = garment(rig, body, prefix + ".top", top_region, cuts_top, top_off, top_m, folds=top_folds, fold_scale=0.12, relax=relax * 2, hem_z=hip - 0.02)
     if top_only:
         if hide: hide_under(body, cov_t, name="hide_" + prefix)
         return top, None, cov_t
@@ -409,8 +409,10 @@ def wardrobe(rig, body, top_m, bot_m, sleeve, hem_drop, top_off, bot_off, top_fo
     def bot_region(co, bn):
         if bn is None:
             return ank["L"] < co.z < hip + 0.035 and abs(co.x) < 0.12
-        if in_region(bn, HEADB + ARM + ("spine03", "spine04", "spine05", "clavicle", "shoulder", "breast", "foot", "toe")): return False
+        if in_region(bn, HEADB + ARM + ("clavicle", "shoulder", "foot", "toe")): return False
         if plane_side(co, *cuts_bot[0]) > 1e-5 or plane_side(co, *cuts_bot[1]) > 1e-5: return False
+        if abs(co.x) < 0.08 and co.z > ank["L"] + 0.25: return True      # crotch / fly: always cloth
+        if in_region(bn, ("spine03", "spine04", "spine05", "breast")): return False
         return True
     bot, cov_b = garment(rig, body, prefix + ".trousers", bot_region, cuts_bot, bot_off, bot_m, folds=bot_folds, fold_scale=0.12, relax=relax)
     if hide: hide_under(body, cov_t | cov_b, name="hide_" + prefix)
