@@ -3,15 +3,15 @@ glass point (-0.22, -1.025, 1.16) flight m 0.833
 hole uv (0.6586, 0.7369) m per uv 1.205 1.434
 hole at 1137 (0.028, -0.275, 0.951) normal (-0.0, -0.99, -0.15)
 palm point (-0.052, -0.272, 0.961)
-palm reach err mm 380 12.8 lift mm 33.3
+palm reach err mm 380 12.8 lift mm 33.2
 right hand on belly: min bone-axis clearance to shirt (mm) 380 8.4
-palm reach err mm 1137 13.0 lift mm 33.3
+palm reach err mm 1137 13.0 lift mm 33.2
 right hand on belly: min bone-axis clearance to shirt (mm) 1137 8.5
-palm reach err mm 1205 9.2 lift mm 28.9
+palm reach err mm 1205 9.2 lift mm 28.8
 right hand on belly: min bone-axis clearance to shirt (mm) 1205 8.8
-palm reach err mm 1232 12.4 lift mm 31.3
+palm reach err mm 1232 12.4 lift mm 31.2
 right hand on belly: min bone-axis clearance to shirt (mm) 1232 8.8
-palm reach err mm 1273 10.6 lift mm 29.5
+palm reach err mm 1273 10.6 lift mm 29.4
 right hand on belly: min bone-axis clearance to shirt (mm) 1273 8.8
 camera keyed 1273
 quat flips fixed 0
