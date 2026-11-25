@@ -49,5 +49,5 @@ def grey_hair(o, col=(0.62, 0.62, 0.64)):
             p.inputs["Roughness"].default_value = 0.6
             p.inputs["Specular IOR Level"].default_value = 0.3
             for l in list(p.inputs["Normal"].links): nt.links.remove(l)
-grey_hair(HAIR_O, (0.36, 0.36, 0.38)); grey_hair(BROW_O, (0.40, 0.39, 0.39))
+grey_hair(HAIR_O, (0.21, 0.21, 0.23)); grey_hair(BROW_O, (0.40, 0.39, 0.39))
 print("CHAR", [c.name for c in COMP.children], [m.name + ":" + m.type for m in CB.modifiers])

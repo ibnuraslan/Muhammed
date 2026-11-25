@@ -324,7 +324,7 @@ to(cyl("CandleDish", 0.04, 0.008, ST + Vector((0.18, 0.12, 0.761)), gold, verts=
 
 # ================================================================== the brass rod and its clamp on the piano case
 brass = mat("M_Brass", (0.95, 0.62, 0.20), rough=0.22, metal=1.0)
-ROD_R = 0.0028; ROD_LEN = 0.92
+ROD_R = 0.0024; ROD_LEN = 0.92
 rod = cyl("Rod", ROD_R, ROD_LEN, (0, 0, ROD_LEN / 2), brass, verts=20, bevel=0.0012)
 bpy.ops.object.select_all(action='DESELECT'); rod.select_set(True); bpy.context.view_layer.objects.active = rod
 sc.cursor.location = (0, 0, 0); bpy.ops.object.origin_set(type='ORIGIN_CURSOR'); to(rod, C_PROPS)

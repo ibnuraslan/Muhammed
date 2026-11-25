@@ -90,6 +90,9 @@ for o in ears:
     o.data.flip_normals()
     o.matrix_world = Matrix.Identity(4); head_child(o); EARS[o.name[7:]] = o
 log("ear parts", sorted(EARS))
+for m_ in EARS["Canal"].data.materials:
+    for p_ in [n for n in m_.node_tree.nodes if n.type == 'BSDF_PRINCIPLED']:
+        if not p_.inputs["Base Color"].is_linked: p_.inputs["Base Color"].default_value = (0.80, 0.55, 0.42, 1)
 coch = EARS["Labyrinth"]
 cm_ = coch.data.materials[0].copy(); coch.data.materials[0] = cm_; cp_ = cm_.node_tree.nodes.get("Principled BSDF") or [n for n in cm_.node_tree.nodes if n.type == 'BSDF_PRINCIPLED'][0]
 cp_.inputs["Emission Color"].default_value = (1.0, 0.75, 0.2, 1); cp_.inputs["Emission Strength"].default_value = 0.0

@@ -82,8 +82,8 @@ for it in range(14):
     R.key_rot("jaw", 1, [("X", JSGN * JAW_OPEN)])
     g, zlo, zhi, ymin = incisal_gap()
     log("jaw", round(JAW_OPEN, 2), "deg gap mm", round(g * 1000, 2))
-    if abs(g - 0.0064) < 0.0003: break
-    JAW_OPEN = max(0.0, JAW_OPEN + (0.0064 - g) * 600.0)
+    if abs(g - 0.0055) < 0.0003: break
+    JAW_OPEN = max(0.0, JAW_OPEN + (0.0055 - g) * 600.0)
 GAP = incisal_gap()
 # bite point in HEAD space (between the incisal edges, 10 mm behind the front of the incisors)
 sc.frame_set(1)
