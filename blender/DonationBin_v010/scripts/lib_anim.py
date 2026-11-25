@@ -127,7 +127,10 @@ class Actor:
         # finger poses at the hand keys
         for fr, d in self.K:
             for s in "LR":
-                if "grip_" + s in d and f0 <= fr <= f1: apply_pose(rig, s, d["grip_" + s], fr)
+                if not (f0 <= fr <= f1): continue
+                if "grip_" + s in d: apply_pose(rig, s, d["grip_" + s], fr)
+                elif isinstance(d.get("hand_" + s), tuple) and d["hand_" + s][0] == 'W' and abs(Vector(d["hand_" + s][2]).z) < 0.5:
+                    apply_pose(rig, s, "flat_palm", fr)      # a palm ON a wall / the flap: straight fingers, never curled into the steel
         log("baked", self.name, f0, f1, len(frames), "frames")
 
 # ------------------------------------------------------------------ simple procedural walk (feet planted, arm swing via hand keys)

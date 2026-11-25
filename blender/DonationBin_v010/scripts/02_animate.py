@@ -72,7 +72,8 @@ FLAP_KEYS = [(1, FA), (115, FA)]       # extended below; FLAP_ANG(f) reads them
 def FLAP_ANG(f):
     ks = sorted(dict(FLAP_KEYS).items())
     return pchip([(k[0], k[1]) for k in ks])(f)
-W.key(1, hand_L=flap_hold(FA), grip_L="flat_palm"); W.key(115, hand_L=flap_hold(FA))
+SILL_L = WH((-0.22, BY0 - 0.010, CH[2] + 0.018 + 0.012), (0, 0, -1), (0, 1, -0.1))
+W.key(1, hand_L=SILL_L, grip_L="relaxed"); W.key(115, hand_L=SILL_L)
 
 # B (115-262): the shove. She pitches over the sill (pivot on her belly), the flap is pushed up by her back, she tumbles in
 S = Vector((0.0, BY0 - 0.06, CH[2] + 0.03))
@@ -199,19 +200,19 @@ def body_pts(obj_names):
     return pts
 WPARTS = ["Woman.body", "Woman.top", "Woman.trousers"] + [c.name for c in O["Woman"].children if "ponytail" in c.name or "shoes" in c.name]
 need = {}
-for f in range(116, 262, 2):
+for f in range(1, 262, 2):
     fs(f); pts = [p for p in body_pts(WPARTS) if abs(p.x) < 0.5 and p.y > BY0 - 0.02 and p.z > CH[2] - 0.05]
-    amin = FA if f < 150 else 0.0
+    amin = 0.0
     for p in pts:
         r = Vector((0, p.y - HINGE.y, p.z - HINGE.z))
         if r.length > FLAP_L + 0.03 or r.length < 0.02: continue
         ang = math.degrees(math.atan2(r.y, -r.z))         # angle of this body point around the hinge, from straight down
         amin = max(amin, min(88.0, ang + math.degrees(0.025 / max(r.length, 0.05))))
     need[f] = amin
-FLAP_KEYS[:] = [(1, FA), (115, FA)]
-last = 115; prev = FA
+FLAP_KEYS[:] = []
+last = 1; prev = 0.0
 for f in sorted(need):
-    a = max(need[f], prev)        # the flap never 'sucks back' onto her while she passes (it rests open until 256)
+    a = need[f] if f < 128 else max(need[f], prev)        # the flap never 'sucks back' onto her while she passes (it rests open until 256)
     FLAP_KEYS.append((f, a)); prev = a; last = f
 FLAP_KEYS[:] = [k for k in FLAP_KEYS if k[0] <= 256]
 a0 = FLAP_KEYS[-1][1]
@@ -222,12 +223,6 @@ FLAP_KEYS += fall
 for f in range(1, 300):
     FLAP.rotation_euler.x = R_(max(0.0, FLAP_ANG(f))); FLAP.keyframe_insert("rotation_euler", index=0, frame=f)
 log("flap keyed: hand-held 35 deg, pushed by her back, falls 256-287, bounce 291")
-
-# re-key the woman's left hand on the flap (she holds it at the flap's actual angle)
-for f in range(1, 128, 2):
-    fs(f); a = FLAP_ANG(f)
-    p_ = flap_pt(a, 0.25, -0.17); n_ = flap_in_normal(a)
-    place_hand(O["Woman"], "L", f, p_ - n_ * 0.009, n_, Vector((0, -math.sin(R_(a)), math.cos(R_(a)))), skin=0.024)
 
 exec(open(HERE + "/02c_fx_camera.py").read())
 open(OUT + ".log.txt", "w").write("\n".join(LOG))

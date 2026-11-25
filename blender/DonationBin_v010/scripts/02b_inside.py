@@ -3,6 +3,7 @@
 FI = BY0 + 0.012 + 0.009            # the flap's inner face (closed): y
 WI = BY0 + T                         # the front wall's inner face: y
 def hz(x, y): return heap(x, y)
+def hh(x, y): return heap(x, y) + 0.015
 def stand_at(x, y, bend=0.02): return Vector((x, y, max(hz(x - 0.1, y), hz(x + 0.1, y)) + 0.777 - bend))
 def feet_on_heap(A, f, x, y, dy_l=0.0, dy_r=0.0, tip=0.0, yaw=0.0):
     """both feet planted ON the heap around (x, y), toes toward the front wall (-Y) rotated by yaw"""
@@ -22,7 +23,7 @@ def on_wall_front(x, z, fd=(0, 0, 1)): return WH((x, WI + 0.012, z), (0, -1, 0),
 # D (451-673): she gets up (kneel, half-kneel, stand) and pushes the flap with both palms: it will not swing out
 K1 = Vector((0.0, 0.02, 0.0)); K1.z = hz(0, 0.02) + 0.43
 W.key(485, pos=K1, rot=Rf(FRONT, lean=12), spine=(10, 0, 0), head=(-10, 0, 0),
-      hand_L=WH((0.22, -0.20, hz(0.22, -0.20)), (0, 0, -1), (0, -1, 0)), hand_R=WH((-0.22, -0.20, hz(-0.22, -0.20)), (0, 0, -1), (0, -1, 0)),
+      hand_L=WH((0.22, -0.20, hh(0.22, -0.20)), (0, 0, -1), (0, -1, 0)), hand_R=WH((-0.22, -0.20, hh(-0.22, -0.20)), (0, 0, -1), (0, -1, 0)),
       foot_L=WH((0.10, 0.40, hz(0.10, 0.40) + 0.05), (0, -0.2, 1), (0, 1, -0.3)), foot_R=WH((-0.10, 0.40, hz(-0.10, 0.40) + 0.05), (0, -0.2, 1), (0, 1, -0.3)),
       knee_L=WH((0.2, -1.0, 0.3), (0, 0, 1), (0, 0, 1)), knee_R=WH((-0.2, -1.0, 0.3), (0, 0, 1), (0, 0, 1)), grip_L="relaxed", grip_R="relaxed")
 K2 = Vector((0.0, -0.05, 0.0)); K2.z = hz(0, -0.05) + 0.52
@@ -91,8 +92,8 @@ feet_on_heap(W, 1450, 0.02, -0.30)
 # H (1465-1753): three days: she sits, then lies curled on the clothes (head +X, facing the front wall)
 SIT2 = Vector((-0.02, 0.10, 0.0)); SIT2.z = hz(SIT2.x, SIT2.y) + 0.10
 W.key(1500, pos=SIT2, rot=Rb((0, 0.08, 1), FRONT), spine=(16, 0, 0), head=(5, 0, 0),
-      hand_R=WH((SIT2.x - 0.24, SIT2.y + 0.05, hz(SIT2.x - 0.24, SIT2.y + 0.05)), (0, 0, -1), (0, -1, 0)),
-      hand_L=WH((SIT2.x + 0.25, SIT2.y + 0.05, hz(SIT2.x + 0.25, SIT2.y + 0.05)), (0, 0, -1), (0, -1, 0)), grip_L="relaxed", grip_R="relaxed",
+      hand_R=WH((SIT2.x - 0.24, SIT2.y + 0.05, hh(SIT2.x - 0.24, SIT2.y + 0.05)), (0, 0, -1), (0, -1, 0)),
+      hand_L=WH((SIT2.x + 0.25, SIT2.y + 0.05, hh(SIT2.x + 0.25, SIT2.y + 0.05)), (0, 0, -1), (0, -1, 0)), grip_L="relaxed", grip_R="relaxed",
       foot_L=WH((SIT2.x + 0.12, SIT2.y - 0.42, hz(SIT2.x + 0.12, SIT2.y - 0.42) + 0.07), (0, 0, 1), (0, -1, 0)),
       foot_R=WH((SIT2.x - 0.12, SIT2.y - 0.40, hz(SIT2.x - 0.12, SIT2.y - 0.40) + 0.07), (0, 0, 1), (0, -1, 0)),
       knee_L=WH((SIT2.x + 0.25, SIT2.y - 0.9, 1.0), (0, 0, 1), (0, 0, 1)), knee_R=WH((SIT2.x - 0.25, SIT2.y - 0.9, 1.0), (0, 0, 1), (0, 0, 1)))
@@ -100,7 +101,7 @@ CURL = Vector((0.12, 0.14, 0.0)); CURL.z = hz(CURL.x, CURL.y) + 0.135
 Q_CURL = Rb((-1, 0, 0.12), (0, -1, 0.15))
 def curl_key(f, breath=0.0, head=(-8, 0, 0), face=None):
     kw = dict(pos=CURL + Vector((0, 0, 0.004 * breath)), rot=Q_CURL, spine=(48 + 2 * breath, 0, 0), head=head,
-              hand_R=WH((CURL.x - 0.42, CURL.y - 0.22, hz(CURL.x - 0.42, CURL.y - 0.22)), (0, 0, -1), (-1, -0.3, 0)),
+              hand_R=WH((CURL.x - 0.42, CURL.y - 0.22, hh(CURL.x - 0.42, CURL.y - 0.22)), (0, 0, -1), (-1, -0.3, 0)),
               hand_L=LH((0.02, -0.38, -0.05), (0, 0.3, -1), (0, -0.4, -1)),
               foot_L=LH((0.08, -0.38, -0.48), (0, 0.3, 1), (0, -1, 0)), foot_R=LH((-0.10, -0.42, -0.50), (0, 0.3, 1), (0, -1, 0)),
               knee_L=LH((0.20, -1.0, 0.0), (0, 0, 1), (0, 0, 1)), knee_R=LH((-0.20, -1.0, 0.0), (0, 0, 1), (0, 0, 1)))
@@ -121,8 +122,8 @@ SIT3 = Vector((0.0, 0.16, 0.0)); SIT3.z = hz(SIT3.x, SIT3.y) + 0.10
 def sit3(f, lean=0.0, head=(0, 0, 0), dy=0.0, face=None):
     p = SIT3 + Vector((0, dy, 0))
     kw = dict(pos=p, rot=Rb((0, 0.08 + math.sin(R_(-lean)) * 0.5, 1), FRONT), spine=(12 + lean, 0, 0), head=head,
-              hand_R=WH((p.x - 0.24, p.y + 0.05, hz(p.x - 0.24, p.y + 0.05)), (0, 0, -1), (0, -1, 0)),
-              hand_L=WH((p.x + 0.25, p.y + 0.05, hz(p.x + 0.25, p.y + 0.05)), (0, 0, -1), (0, -1, 0)), grip_L="relaxed", grip_R="relaxed",
+              hand_R=WH((p.x - 0.24, p.y + 0.05, hh(p.x - 0.24, p.y + 0.05)), (0, 0, -1), (0, -1, 0)),
+              hand_L=WH((p.x + 0.25, p.y + 0.05, hh(p.x + 0.25, p.y + 0.05)), (0, 0, -1), (0, -1, 0)), grip_L="relaxed", grip_R="relaxed",
               foot_L=WH((p.x + 0.12, p.y - 0.42, hz(p.x + 0.12, p.y - 0.42) + 0.07), (0, 0, 1), (0, -1, 0)),
               foot_R=WH((p.x - 0.12, p.y - 0.40, hz(p.x - 0.12, p.y - 0.40) + 0.07), (0, 0, 1), (0, -1, 0)),
               knee_L=WH((p.x + 0.25, p.y - 0.9, 1.0), (0, 0, 1), (0, 0, 1)), knee_R=WH((p.x - 0.25, p.y - 0.9, 1.0), (0, 0, 1), (0, 0, 1)))
@@ -134,7 +135,7 @@ sit3(1950, lean=-8, head=(-2, -8, 0))
 sit3(1975, lean=0, head=(-10, 0, 0), face=(0.15, 0.1, 0.8, 0.0))
 sit3(1993, lean=8, head=(-8, 0, 0))
 # K (1993-2388): she scoots forward on the clothes and sits IN the cut opening, feet out on the fallen panel
-EDGE = Vector((0.0, -0.58, 0.0)); EDGE.z = max(hz(0.0, -0.58), CP[2] + 0.02) + 0.10
+EDGE = Vector((0.0, -0.62, 0.0)); EDGE.z = max(hz(0.0, -0.58), CP[2] + 0.02) + 0.10
 def seat(f, p, lean, feet_y, head=(0, 0, 0), hands="heap", face=None, feet_z=None):
     kw = dict(pos=p, rot=Rb((0, math.sin(R_(lean)) * -1, 1), FRONT), spine=(12 + lean * 0.5, 0, 0), head=head)
     for s, sx in (("L", 1), ("R", -1)):
@@ -142,14 +143,14 @@ def seat(f, p, lean, feet_y, head=(0, 0, 0), hands="heap", face=None, feet_z=Non
         kw["foot_" + s] = WH((p.x + sx * 0.12, fy, fz), (0, 0, 1), (0, -1, 0))
         kw["knee_" + s] = WH((p.x + sx * 0.25, p.y - 0.9, 1.0), (0, 0, 1), (0, 0, 1))
         if hands == "heap":
-            kw["hand_" + s] = WH((p.x + sx * 0.25, p.y + 0.06, hz(p.x + sx * 0.25, p.y + 0.06)), (0, 0, -1), (0, -1, 0))
+            kw["hand_" + s] = WH((p.x + sx * 0.25, p.y + 0.06, hh(p.x + sx * 0.25, p.y + 0.06)), (0, 0, -1), (0, -1, 0))
     if face: kw["face"] = face
     W.key(f, **kw)
 seat(2020, SIT3 + Vector((0, -0.12, 0.0)), 10, -0.38, head=(-8, 0, 0))
 seat(2050, Vector((0.0, -0.20, hz(0, -0.20) + 0.10)), 14, -0.62)
-seat(2080, Vector((0.0, -0.38, hz(0, -0.38) + 0.10)), 14, -0.95, feet_z=CP[2] + 0.10)
+seat(2080, Vector((0.0, -0.38, hz(0, -0.38) + 0.10)), 30, -0.95, feet_z=CP[2] + 0.10, head=(25, 0, 0))
 PANEL_TOP = 0.10
-seat(2110, EDGE + Vector((0, 0.02, 0.0)), 16, -1.18, feet_z=PANEL_TOP + 0.064)
+seat(2110, EDGE + Vector((0, 0.02, 0.0)), 30, -1.18, feet_z=PANEL_TOP + 0.064, head=(20, 0, 0))
 seat(2140, EDGE, 18, -1.20, feet_z=PANEL_TOP + 0.064, hands=None, head=(-6, -10, 0))
 for s, sx in (("L", 1), ("R", -1)):   # forearms resting on her knees
     W.key(2140, **{"hand_" + s: LH((sx * 0.16, -0.52, 0.06), (0, 0.2, -1), (0, -1, -0.3)), "grip_" + s: "relaxed"})
@@ -189,7 +190,7 @@ for f, tw in ((1990, 0), (2100, 6), (2200, -4), (2300, 5), (2388, 0)):
     P.key(f, pos=BYST + Vector((0.01 * math.sin(f), 0, 0)), rot=Rf(BYF, side=2 * math.sin(f / 40)), spine=(2, tw, 0), head=(6, -tw, 0))
 
 # ==================================================================================== FIREFIGHTERS (placed while the panel is still closed)
-F1P = Vector((-0.92, -1.02, 0.0)); F1F = Vector((1, 0.15, 0)).normalized()
+F1P = Vector((-1.05, -1.32, 0.0)); F1F = Vector((1, 0.55, 0)).normalized()
 def kneel1(f, lean=10, head=(0, 0, 0), gesture=0.0):
     p = F1P + Vector((0, 0, 0.60))
     lf = Vector((-F1F.y, F1F.x, 0))                 # his left
