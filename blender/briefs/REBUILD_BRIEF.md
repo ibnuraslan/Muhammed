@@ -23,7 +23,12 @@ Reuse the VO and timing from the latest package of your film. Find it on the `cl
 - A face is in frame in every wider moment. No torso-only or crotch-centred frames, and no static holds over 1 s.
 - Deep, rich colour (AgX/Filmic high contrast, saturated sets, true primary props). Nothing plain or grey.
 - The DA KRAS FILMS logo sits naturally in the scene, readable for at least 1.5 s.
-- People: one model per character, real hair and faces, proper separate clothes, natural acting motion.
+- People: one model per character, real hair and faces, natural acting motion.
+- CLOTHING (the client's #1 rejection): use REAL loose garment assets from the MPFB/MakeHuman community clothes library (files.makehumancommunity.org).
+  - Separate tops and trousers with folds and volume away from the body, and the body hidden with delete groups.
+  - Flatten the chest and crotch shape keys before dressing.
+  - NEVER use shrinkwrapped or skin-tight body copies: they read as onesies, muscle suits or nudity.
+  - Arms bent 15–30° with idle motion. A lying patient's whole body is under a loose drape (no neck blocks).
 
 ## Contact rules (the cause of most rejections)
 - Stage every hand and tool contact so it can be reached with 1 cm or more of clearance from every body before animating.
