@@ -1,0 +1,59 @@
+MUMMY P2 - CapCut shot list. One render: MASTER.blend scene MASTER frames 1-3585 (24 fps, 149.38 s = VO length).
+Lay the rendered frame sequence at 00:00:00:00 and the VO (MUMMY_P2_VO.mp3) at 00:00:00:00. Cuts below are already in the render.
+
+S01  frames     1-  127  00:00:00:00 - 00:00:05:06  (5.29 s)  VO para 1
+    Lab at night: a bone sample in a glass vial; the skull soft behind (push)
+S02  frames   128-  192  00:00:05:07 - 00:00:07:23  (2.71 s)  VO para 2
+    Radiocarbon sampling: a chip from the thigh bone, drill dust in a weighing boat
+S03  frames   193-  272  00:00:08:00 - 00:00:11:07  (3.33 s)  VO para 2
+    The accelerator hall: dolly along the beamline in the half-dark
+S04  frames   273-  359  00:00:11:08 - 00:00:14:22  (3.62 s)  VO para 2
+    Skull, jaw and thigh bone far apart on one dark bench, each in its own pool of light
+S05  frames   360-  432  00:00:14:23 - 00:00:17:23  (3.04 s)  VO para 2
+    Time passing on the machair: sand blowing over the burial ground at dusk
+S06  frames   433-  511  00:00:18:00 - 00:00:21:06  (3.29 s)  VO para 2
+    Crane up the section from the grave level to the house floor
+S07  frames   512-  647  00:00:21:07 - 00:00:26:22  (5.67 s)  VO para 3
+    The dated layers in raking light (push along the section)
+S08  frames   648-  783  00:00:26:23 - 00:00:32:14  (5.67 s)  VO para 3
+    Bronze Age at dusk: drone descent toward the roundhouses
+S09  frames   784-  907  00:00:32:15 - 00:00:37:18  (5.17 s)  VO para 4
+    The crouched skeleton: joints still articulated (slider)
+S10  frames   908- 1052  00:00:37:19 - 00:00:43:19  (6.04 s)  VO para 5
+    Hands at the face, spine in order: macro pull back
+S11  frames  1053- 1196  00:00:43:20 - 00:00:49:19  (6.00 s)  VO para 5
+    An animal skeleton from the same sand, top-down
+S12  frames  1197- 1268  00:00:49:20 - 00:00:52:19  (3.00 s)  VO para 6
+    Lab: the microscope and a box of thin sections (push)
+S13  frames  1269- 1424  00:00:52:20 - 00:00:59:07  (6.50 s)  VO para 7
+    Down the microscope: a bone section, osteon rings in transmitted light
+S14  frames  1425- 1611  00:00:59:08 - 00:01:07:02  (7.79 s)  VO para 7
+    Animal bone section riddled with bacterial tunnels
+S15  frames  1612- 1784  00:01:07:03 - 00:01:14:07  (7.21 s)  VO para 8
+    The human section: clean rings, a thin band of damage at the edge
+S16  frames  1785- 1956  00:01:14:08 - 00:01:21:11  (7.17 s)  VO para 8
+    Macro along the thigh bone under the lamp
+S17  frames  1957- 2081  00:01:21:12 - 00:01:26:16  (5.21 s)  VO para 9
+    The grave at dusk, slow push to the skull: mummified
+S18  frames  2082- 2337  00:01:26:17 - 00:01:37:08  (10.67 s)  VO para 10
+    No soft tissue left: the whole skeleton on the lab bench from above (slide)
+S19  frames  2338- 2505  00:01:37:09 - 00:01:44:08  (7.00 s)  VO para 11
+    Acid-etched bone surface in grazing light
+S20  frames  2506- 2706  00:01:44:09 - 00:01:52:17  (8.38 s)  VO para 11
+    Machair sand macro: crushed shell among the grains
+S21  frames  2707- 2827  00:01:52:18 - 00:01:57:18  (5.04 s)  VO para 12
+    Aerial: the peat moor, black pools, peat banks, mist
+S22  frames  2828- 2948  00:01:57:19 - 00:02:02:19  (5.04 s)  VO para 13
+    Bronze Age dusk: two islanders (backs) at a bog pool, the wrapped body on a hurdle
+S23  frames  2949- 3048  00:02:02:20 - 00:02:06:23  (4.17 s)  VO para 13
+    The wrapped bundle half under the black water (top-down)
+S24  frames  3049- 3139  00:02:07:00 - 00:02:10:18  (3.79 s)  VO para 13
+    Cold dawn: the empty hurdle on the bank (crane)
+S25  frames  3140- 3240  00:02:10:19 - 00:02:14:23  (4.21 s)  VO para 13
+    A cut peat bank: dark layered peat (slider)
+S26  frames  3241- 3358  00:02:15:00 - 00:02:19:21  (4.92 s)  VO para 14
+    The empty moor at dusk, cotton grass, pools holding the sky
+S27  frames  3359- 3447  00:02:19:22 - 00:02:23:14  (3.71 s)  VO para 14
+    The skull in the lab under the lamp (push)
+S28  frames  3448- 3585  00:02:23:15 - 00:02:29:08  (5.75 s)  VO para 14
+    Pull back from the dig to the island at dusk

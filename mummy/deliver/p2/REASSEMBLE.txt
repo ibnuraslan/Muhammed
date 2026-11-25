@@ -1,0 +1,10 @@
+These .gitpartNN files are only git transport chunks (GitHub's 100 MB file limit), NOT archives.
+Rebuild each normal zip, then check it:
+
+  for z in $(ls *.gitpart00 | sed 's/.gitpart00$//'); do cat "$z".gitpart* > "$z"; done
+  sha256sum -c SHA256SUMS_zips.txt
+
+(Windows PowerShell:  Get-ChildItem *.gitpart00 | % { $z = $_.Name -replace '.gitpart00$',''; cmd /c "copy /b $z.gitpart* $z" } )
+
+Then hand the user the 3 normal MUMMY_P2_farm_*of3.zip files. Each opens alone with Windows "Extract All".
+Extract all zips into ONE folder -> upload the folder -> render MASTER.blend, scene MASTER, frames 1-3585.
