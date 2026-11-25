@@ -1,5 +1,24 @@
 # SurgeonBrandsLivers_v015: from-scratch rebuild, NOT READY (ON HOLD)
 
+## Client wardrobe round (latest): result FAIL. Current `review/preview.mp4` is this round.
+**Done this round:**
+- **Real garments:** MakeHuman community CC0 clothes fitted by MPFB.
+  - Scrubs: t-shirt and pants.
+  - Patient at home: fisherman sweater and jeans.
+  - Hearing: real suits.
+  - `scripts/fetch_assets.sh` installs them.
+- **Per-outfit body masks:** the body is hidden under each garment only while that garment is worn.
+- **Patient on the table:** she lies full-body, with her gown on the chest and arms above the drape.
+- **Jeans:** no crotch gap (checked in a 540x960 close render and in the preview).
+
+**Still failing (fresh harsh review), in seconds:**
+- **Drape:** it reads as boxy blocks over the legs, a hand shows through it (9.6 s, 14.2-15.9 s), and the 7.2-7.6 s close-up shows a flat skin slab.
+- **Waistbands:** trousers poke through the scrub-top hems at 4.7-4.9 s, 7.0-7.75 s and 16-16.9 s.
+- **Discovery macro, 17-18.5 s:** the fist sits in the top of the frame and the probe is not joined to it.
+- **Wardrobe look:** the scrub tee reads tight across the chest, and the suit reads inflated at the shoulders.
+- **Holds and ending:** static holds, and the film ends mid-blink.
+- **Smaller items:** the masks are boxy, the sweater reads plum rather than pink, and the judge's face is under-lit.
+
 ## Restage round (director-approved): result FAIL. Current `review/preview.mp4` is this round.
 **Fixed this round:**
 - **Burn macro:** a clean pen-tip shot with the hand out of frame. "SB" is legible at frames 240-290 (the earlier pen fault was an axis bug in the joined pen mesh).
