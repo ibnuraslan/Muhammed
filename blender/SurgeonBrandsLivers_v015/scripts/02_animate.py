@@ -140,11 +140,6 @@ key_vis([O["PatHome.top"], O["PatHome.trousers"]], F_PAT_OR2, False)
 key_vis([O["PatGown.top"]], 1, True); key_vis([O["PatGown.top"]], F_PAT_HOME, False); key_vis([O["PatGown.top"]], F_PAT_OR2, True)
 key_masks(PB, ("Hide.PatHome", "Delete.toigo_fisherman"), [(1, False), (F_PAT_HOME, True), (F_PAT_OR2, False)])
 key_masks(PB, ("Hide.PatGown", "Delete.joepal"), [(1, True), (F_PAT_HOME, False), (F_PAT_OR2, True)])
-gown = O["PatGown.top"]; gvg = gown.vertex_groups.new(name="gown_low")
-lowz = PAT.data.bones["neck01"].head_local.z - 0.13
-gvg.add([i for i, v in enumerate(gown.data.vertices) if v.co.z < lowz], 1.0, 'REPLACE')
-gm_ = gown.modifiers.new("gown_low", 'MASK'); gm_.vertex_group = "gown_low"; gm_.invert_vertex_group = True
-gown.modifiers.move(gown.modifiers.find("gown_low"), 1)
 shoes_p = part(PAT, "shoes01")
 key_vis([shoes_p], 1, False); key_vis([shoes_p], F_PAT_HOME, True); key_vis([shoes_p], F_PAT_OR2, False)
 
@@ -176,7 +171,7 @@ log("work point", tuple(round(x, 3) for x in WORK), "spine03", tuple(round(x, 3)
 WIN_HX, WIN_HY = 0.15, 0.11
 def drape():
     nx, ny = 200, 110
-    x0, x1 = TABLE_C.x - 1.0 - 0.05, (PAT.matrix_world @ PR.PB["neck01"].head).x - 0.07
+    x0, x1 = TABLE_C.x - 1.0 - 0.05, WORK.x + WIN_HX + 0.07
     y0, y1 = TABLE_C.y - 0.42, TABLE_C.y + 0.42
     tz = TABLE_TOP
     bm = bmesh.new(); grid = {}
@@ -189,7 +184,7 @@ def drape():
             if y > TABLE_C.y + 0.26: ey = y - (TABLE_C.y + 0.26); yy = TABLE_C.y + 0.26 + 0.03 + ey * 0.25
             xx = x if x >= TABLE_C.x - 1.0 else TABLE_C.x - 1.0 - 0.03 + ex * 0.25
             z, n_ = surf_z(min(max(xx, TABLE_C.x - 1.0), 9), min(max(yy, TABLE_C.y - 0.26), TABLE_C.y + 0.26))
-            top = max(tz + 0.012, (z + 0.034) if z is not None else tz + 0.012)
+            top = max(tz + 0.012, (z + 0.022) if z is not None else tz + 0.012)
             zz = top - min(0.30, ey * 1.0 + (-ex) * 1.0)
             jit = 0.004 * math.sin(x * 37 + y * 11) + 0.003 * math.sin(y * 53 - x * 7)
             grid[i, j] = bm.verts.new((xx + (0.01 * ey if False else 0), yy, zz + jit))
@@ -217,6 +212,21 @@ def drape():
     o.parent = STAGE
     return o
 DRAPE = drape()
+# the gown shows only above the drape edge (chest, shoulders, arms); under the drape and at the window it is masked
+gown = O["PatGown.top"]; fs(1)
+_gm = [m for m in gown.modifiers if m.type != 'ARMATURE' and m.show_viewport]
+for m in _gm: m.show_viewport = False
+upd()
+dg = bpy.context.evaluated_depsgraph_get(); ge = gown.evaluated_get(dg); gme = ge.to_mesh()
+gw = [gown.matrix_world @ v.co for v in gme.vertices]; ge.to_mesh_clear()
+for m in _gm: m.show_viewport = True
+assert len(gw) == len(gown.data.vertices)
+DRAPE_X1 = WORK.x + WIN_HX + 0.07
+gvg = gown.vertex_groups.new(name="under_drape")
+gvg.add([i for i, p_ in enumerate(gw) if p_.x < DRAPE_X1 + 0.015 or (abs(p_.x - WORK.x) < WIN_HX + 0.03 and abs(p_.y - WORK.y) < WIN_HY + 0.03)], 1.0, 'REPLACE')
+gm_ = gown.modifiers.new("under_drape", 'MASK'); gm_.vertex_group = "under_drape"; gm_.invert_vertex_group = True
+gown.modifiers.move(gown.modifiers.find("under_drape"), gown.modifiers.find("Armature") + 1 if gown.modifiers.find("Armature") >= 0 else 0)
+log("gown verts", len(gw), "masked", len(gvg.id_data.vertex_groups))
 
 # --- skin patch around the window with the incision opening (shape key "closed"), cavity wall, cavity floor
 skin_m = mat("M_SkinPatch", (0.86, 0.60, 0.48), rough=0.45, sss=0.15)
