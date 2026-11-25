@@ -127,7 +127,7 @@ key_vis([O["PatHome.top"], O["PatHome.trousers"]], 1, False); key_vis([O["PatHom
 key_vis([O["PatHome.top"], O["PatHome.trousers"]], F_PAT_OR2, False)
 key_vis([O["PatGown.top"]], 1, True); key_vis([O["PatGown.top"]], F_PAT_HOME, False); key_vis([O["PatGown.top"]], F_PAT_OR2, True)
 gown = O["PatGown.top"]; gvg = gown.vertex_groups.new(name="gown_low")
-lowz = PAT.data.bones["spine05"].head_local.z + 0.02
+lowz = PAT.data.bones["neck01"].head_local.z - 0.13
 gvg.add([i for i, v in enumerate(gown.data.vertices) if v.co.z < lowz], 1.0, 'REPLACE')
 gm_ = gown.modifiers.new("gown_low", 'MASK'); gm_.vertex_group = "gown_low"; gm_.invert_vertex_group = True
 gown.modifiers.move(gown.modifiers.find("gown_low"), 1)
@@ -203,7 +203,7 @@ tissue_m = mat("M_Tissue", (0.55, 0.06, 0.07), rough=0.25, coat=0.4)
 deep_m = mat("M_TissueDeep", (0.30, 0.03, 0.04), rough=0.3, coat=0.3)
 INC_HX, INC_HY = 0.105, 0.062
 def patch():
-    nx, ny = 40, 30
+    nx, ny = 96, 72
     bm = bmesh.new(); vs = {}
     for i in range(nx + 1):
         for j in range(ny + 1):
@@ -398,30 +398,15 @@ def tool_setup(rig, tool, side, pose, grip_y):
 EUL = [(x, y, z) for x in range(-40, 41, 10) for y in range(-30, 31, 15) for z in range(-24, 25, 12)]
 WANG = []; ERR = []
 def key_tool(tool, f, Tdes):
-    info = TOOLS[tool.name]; rig = info["rig"]; R = RIG[rig.name]; s = info["side"]; off = info["off"]; tipL = info["tip"]
-    tip = Tdes @ tipL; want_y = Tdes.to_3x3().col[1].normalized(); want_z = Tdes.to_3x3().col[2].normalized()
-    L2r = rig.data.bones["lowerarm02." + s].matrix_local; Wr = rig.data.bones["wrist." + s].matrix_local
-    MW = rig.matrix_world; MWi = MW.inverted()
-    Wdes = Tdes @ off.inverted(); R.key_world("IK_hand." + s, f, MWi @ Wdes)
-    err = 9.0
-    for it in range(10):
-        fs(f)
-        base = rig.pose.bones["lowerarm02." + s].matrix @ L2r.inverted() @ Wr
-        best = None
-        for (ex, ey, ez) in EUL:
-            q = Euler((math.radians(ex), math.radians(ey), math.radians(ez)), 'XYZ').to_matrix().to_4x4()
-            R3 = (MW @ base @ q @ off).to_3x3().normalized()
-            c = 1.5 * (1 - R3.col[1].normalized().dot(want_y)) + 0.2 * (1 - R3.col[2].normalized().dot(want_z)) + 0.00015 * (ex * ex + ey * ey + ez * ez)
-            if best is None or c < best[0]: best = (c, base @ q)
-        Wa = best[1].copy()
-        tip_now = (MW @ Wa @ off) @ tipL
-        Wa.translation = Wa.translation + MWi.to_3x3() @ (tip - tip_now)
-        R.key_world("IK_hand." + s, f, Wa)
-        fs(f)
-        tip_now = MW @ rig.pose.bones["wrist." + s].matrix @ off @ tipL; err = (tip - tip_now).length
-        if err < 0.0015: break
-    loc_ = (rig.pose.bones["lowerarm02." + s].matrix @ L2r.inverted() @ Wr).inverted() @ rig.pose.bones["wrist." + s].matrix
-    WANG.append((f, tool.name, [round(math.degrees(x)) for x in loc_.to_euler('XYZ')], round(err * 1000, 1)))
+    """prop-led: key the tool's world matrix exactly (tip on target), key IK_hand so the hand holds it with the set-up grip"""
+    info = TOOLS[tool.name]; rig = info["rig"]; R = RIG[rig.name]; s = info["side"]; off = info["off"]
+    for c in list(tool.constraints): tool.constraints.remove(c)
+    tool.matrix_world = Tdes
+    tool.keyframe_insert("location", frame=f); tool.keyframe_insert("rotation_euler", frame=f)
+    R.key_world("IK_hand." + s, f, rig.matrix_world.inverted() @ (Tdes @ off.inverted()))
+    fs(f)
+    tip_now = rig.matrix_world @ rig.pose.bones["wrist." + s].matrix @ off @ info["tip"]
+    err = ((Tdes @ info["tip"]) - tip_now).length
     ERR.append((f, tool.name, round(err * 1000, 1)))
     return err
 
@@ -559,15 +544,11 @@ for f in range(292, F_PUT + 1, 4):
     tip = start.lerp(end, u) + Vector((0, 0, 0.08 * math.sin(math.pi * u)))
     ydir = pen_dir(f).lerp(Vector((-0.2, -0.98, -0.05)).normalized(), u).normalized()
     key_tool(PEN, f, pen_frame(tip, ydir))
-fs(F_PUT); Mpen = PEN.matrix_world.copy()
-con = PEN.constraints["Hand"]
-con.influence = 1.0; con.keyframe_insert("influence", frame=F_PUT)
-con.influence = 0.0; con.keyframe_insert("influence", frame=F_PUT + 1)
+fs(F_PUT)
 # with the constraint off the pen's own transform must be that resting matrix (flat on the tray)
 Mrest = frame_from(Vector((-0.2, -0.98, 0)), Vector((0, 0, 1)), Vector((0, 0, 0)))
 Mrest.translation = TRAY_C + Vector((0.05, -0.04, 0.0105)) - Mrest.to_3x3() @ PEN_TIP
 PEN.matrix_world = Mrest; PEN.keyframe_insert("location", frame=F_PUT + 1); PEN.keyframe_insert("rotation_euler", frame=F_PUT + 1)
-fs(F_PUT - 1); PEN.matrix_world = Mpen if False else PEN.matrix_world
 log("pen put down at", F_PUT)
 
 # the cable: from the pen's back end down to the floor unit behind him (hooked to the pen)
@@ -593,6 +574,12 @@ def sterile(rig, s, f, lat=0.11, dz=-0.20, fwd=0.28):
     sx = 1 if s == "L" else -1
     p, face, latv = chest_front(rig, f, dz=dz, fwd=fwd, lat=sx * lat)
     hand_world(rig, s, f, p, Vector((0, 0, 1)) + face * 0.2, -face, pole=p + latv * sx * 0.35 + Vector((0, 0, -0.35)))
+def hang(rig, s, f, out=0.13, fwd=-0.05, down=0.10, palm_in=True):
+    sx = 1 if s == "L" else -1; fs(f); Mi = rig.matrix_world
+    wr = Wh(rig, "upperleg01." + s) + Mi.to_3x3() @ Vector((sx * (out + 0.04), fwd, -down - 0.05))
+    hand_world(rig, s, f, wr, Mi.to_3x3() @ Vector((0, -0.25, -1)), Mi.to_3x3() @ Vector((-sx, 0.2, 0)),
+               pole=Wh(rig, "upperarm01." + s) + Mi.to_3x3() @ Vector((sx * 0.45, 0.5, -0.3)))
+    apply_pose(rig, s, "relaxed", f)
 # while writing, the left hand rests flat on the drape at the patient's flank? no: sterile hold (fewest contacts)
 for f in (1, 120, 230, 300):
     sterile(DOC, "L", f, lat=0.14, dz=-0.30, fwd=0.30)
@@ -606,12 +593,11 @@ for i, f in enumerate(range(336, 421, 12)):
         hand_world(DOC, s, f, p, Vector((0, -0.5, -0.8)), Vector((0, 0, -1)), pole=p + Vector((sx * 0.4, 0.3, -0.2)))
         apply_pose(DOC, s, "pinch", f)
 for s in "LR":
-    for f in (440, 470):
-        sterile(DOC, s, f, lat=0.14, dz=-0.36, fwd=0.24); apply_pose(DOC, s, "relaxed", f)
+    for f in (432, 470):
+        hang(DOC, s, f, out=0.10, fwd=-0.03, down=0.06)
 # "acted like nothing had happened": hands drop to rest, a small shrug and a casual head tilt to the side
 for f in (474, 512, 540, F_S1_OUT - 1):
-    sterile(DOC, "L", f, lat=0.13, dz=-0.42, fwd=0.20); sterile(DOC, "R", f, lat=0.13, dz=-0.42, fwd=0.20)
-    apply_pose(DOC, "L", "relaxed", f); apply_pose(DOC, "R", "relaxed", f)
+    hang(DOC, "L", f, out=0.10, fwd=-0.03, down=0.06); hang(DOC, "R", f, out=0.10, fwd=-0.03, down=0.06)
 for bn in ("clavicle.L", "clavicle.R"):
     if bn in DR.PB:
         for f, ang in ((496, 0), (508, 9), (520, 9), (534, 0)):
@@ -633,7 +619,6 @@ for k in range(9):
 
 if STOP == "or1":
     bpy.ops.wm.save_as_mainfile(filepath=OUT); raise SystemExit
-const_interp(PEN)
 
 # ================================================================== FACES: blinks, smiles, pain, surprise, talk (numeric axis finding, no guessing)
 def lid_sign(rig, s):
@@ -723,7 +708,7 @@ def pat_home_pose(f, flex, knee, head, right_on=0.0, left_on=0.0, sway=0.0):
     for s, on in (("R", right_on), ("L", left_on)):
         sx = sx_[s]
         sh = Wh(PAT, "upperarm01." + s); Mi = PAT.matrix_world
-        hang = Wh(PAT, "pelvis." + s) + Mi.to_3x3() @ Vector((sx * 0.14, -0.04, -0.12))
+        hang = Wh(PAT, "upperleg01." + s) + Mi.to_3x3() @ Vector((sx * 0.17, -0.04, -0.16))
         if s == "R":
             # abdomen point in the spine04 bone frame (rest), 2.6 cm out from the skin: shirt (1.2 cm) + palm skin (1.4 cm)
             Mb = PAT.matrix_world @ PR.PB["spine04"].matrix @ PR.BN["spine04"].matrix_local.inverted()
@@ -841,12 +826,6 @@ for f in list(range(F_S1_OUT, END, 6)) + [END]:
 for s in "LR":
     for f in (F_S1_OUT, END):
         DR.key_world("IK_foot." + s, f, DR.rest("IK_foot." + s))
-def hang(rig, s, f, out=0.13, fwd=-0.05, down=0.10, palm_in=True):
-    sx = 1 if s == "L" else -1; fs(f); Mi = rig.matrix_world
-    wr = Wh(rig, "pelvis." + s) + Mi.to_3x3() @ Vector((sx * out, fwd, -down))
-    hand_world(rig, s, f, wr, Mi.to_3x3() @ Vector((0, -0.25, -1)), Mi.to_3x3() @ Vector((-sx, 0.2, 0)),
-               pole=Wh(rig, "upperarm01." + s) + Mi.to_3x3() @ Vector((sx * 0.45, 0.5, -0.3)))
-    apply_pose(rig, s, "relaxed", f)
 for f in (F_S1_OUT, 1290, 1372, 1400, 1470, 1520, 1560, END):
     hang(DOC, "L", f, out=0.12 if f < 1530 else 0.10)
 for f in (F_S1_OUT, 1290, 1400, 1470, 1520, 1560, END):
@@ -854,7 +833,7 @@ for f in (F_S1_OUT, 1290, 1400, 1470, 1520, 1560, END):
 # the open-palm admission gesture (right hand rises to waist height in front, palm up, 22 cm clear of the torso)
 for f, amt in ((1312, 0.6), (1330, 1.0), (1356, 1.0), (1372, 0.5)):
     fs(f); Mi = DOC.matrix_world
-    p0 = Wh(DOC, "pelvis.R") + Mi.to_3x3() @ Vector((-0.12, -0.05, -0.10))
+    p0 = Wh(DOC, "upperleg01.R") + Mi.to_3x3() @ Vector((-0.17, -0.05, -0.15))
     p1 = Wh(DOC, "spine03") + Mi.to_3x3() @ Vector((-0.16, -0.30, 0.02))
     wr = p0.lerp(p1, amt)
     hand_world(DOC, "R", f, wr, (Mi.to_3x3() @ Vector((0.25, -1, 0.1))).normalized(), (Mi.to_3x3() @ Vector((0, 0, 1))).lerp(Mi.to_3x3() @ Vector((1, 0, 0)), 1 - amt),
@@ -919,8 +898,10 @@ def gavel_at(head_c, tilt):
     yd = (toward * math.cos(R_(tilt)) + Vector((0, 0, math.sin(R_(tilt))))).normalized()
     M = frame_from(yd, Vector((0, 0, 1)), Vector((0, 0, 0))); M.translation = head_c; return M
 REST_HEAD = blk_top + Vector((0, 0, 0.032))          # head resting on the block (radius 3 cm)
-for f, dz, tilt in ((1, 0.0, -20), (1440, 0.0, -20), (1462, 0.03, -12), (1484, 0.20, 18), (1494, 0.22, 20), (1500, 0.0, -20), (1504, 0.012, -17), (1510, 0.0, -20), (1560, 0.0, -20), (END, 0.0, -20)):
-    key_tool(GAV, f, gavel_at(REST_HEAD + Vector((0, 0, dz)), tilt))
+GK = [(1, 0.0, -20), (1440, 0.0, -20), (1462, 0.03, -12), (1484, 0.20, 18), (1494, 0.22, 20), (1500, 0.0, -20), (1504, 0.012, -17), (1510, 0.0, -20), (1560, 0.0, -20), (END, 0.0, -20)]
+gdz = pchip([(k[0], k[1]) for k in GK]); gtl = pchip([(k[0], k[2]) for k in GK])
+for f in [1, 1200] + list(range(1430, 1570, 2)) + [END]:
+    key_tool(GAV, f, gavel_at(REST_HEAD + Vector((0, 0, max(0.0, gdz(f)))), gtl(f)))
 log("gavel keyed")
 jaw_talk(JUD, 1440, 1496, amp=8, seed=12)
 blinks(JUD, [200, 1300, 1452, 1530, 1600])
@@ -1009,8 +990,8 @@ CK = [  # frame, camera position, aim, lens, f-stop
     (1172, FACE2W + (sectM("OR2").to_3x3() @ Vector((0.06, -0.72, -0.05))), FACE2W + Vector((0, 0, -0.05)), 45, 8),
     (1198, Vector((0.0, -0.02, 1.55)), L2((0.0, 3.0, 1.45)), 32, 8),
     (1214, Vector((0.02, 0.0, 1.55)), LR((0.0, 3.0, 1.45)), 32, 8),
-    (1262, LR((0.10, 2.30, 1.55)), LR((0.9, 3.65, 1.40)), 32, 8),
-    (1322, LR((0.20, 2.75, 1.50)), LR((1.0, 3.62, 1.40)), 32, 8),
+    (1262, LR((0.10, 2.30, 1.62)), LR((0.95, 3.66, 1.55)), 40, 8),
+    (1322, LR((0.20, 2.75, 1.52)), LR((1.0, 3.64, 1.38)), 36, 8),
     (1372, LR((0.30, 2.95, 1.55)), LR((1.02, 3.66, 1.50)), 36, 8),
     (1426, LR((0.38, 3.08, 1.58)), LR((1.04, 3.68, 1.58)), 42, 8),
     (1440, LR((0.15, 3.05, 1.45)), LR((-1.05, 3.70, 1.18)), 35, 8),

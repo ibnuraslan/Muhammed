@@ -62,7 +62,7 @@ for r, t in hair_tints.items():
 # ---- wardrobe (R1: one joined mesh per garment, long sleeves, skin hidden under, contrasting colours, modest offsets)
 # Patient at home: magenta long-sleeve top + blue jeans; in theatre: a light patient gown (only the neckline shows above the drape)
 top_m = fabric("M_PatTop", (0.78, 0.06, 0.42)); jean_m = fabric("M_Jeans", (0.06, 0.16, 0.48), scale=500, bump=0.35)
-P_TOP, P_JEANS, cov1 = wardrobe(PAT, PB, top_m, jean_m, "long", 0.10, 0.012, 0.011, 0.006, 0.005, "PatHome", hide=False)
+P_TOP, P_JEANS, cov1 = wardrobe(PAT, PB, top_m, jean_m, "long", 0.01, 0.012, 0.011, 0.006, 0.005, "PatHome", hide=False)
 gown_m = fabric("M_Gown", (0.55, 0.78, 0.95), scale=300, bump=0.3)
 P_GOWN, _, cov2 = wardrobe(PAT, PB, gown_m, None, "short", 0.12, 0.013, 0.0, 0.006, 0.0, "PatGown", hide=False, top_only=True)
 hide_under(PB, cov1 | cov2, name="hide_pat")
