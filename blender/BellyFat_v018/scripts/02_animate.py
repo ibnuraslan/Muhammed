@@ -187,7 +187,7 @@ for f, s_ in ((1, 0.001), (30, 0.001), (31, 0.5), (33, 1.0)):
     CRACK.scale = (s_,) * 3; CRACK.keyframe_insert("scale", frame=f)
 vis(CRACK, 1, False); vis(CRACK, 30, True)
 # wound state: x energy, y ripple phase, z entry
-EN = pchip([(SWAP1, 1.0), (192, 0.9), (451, 0.7), (715, 0.45), (829, 0.25), (905, 0.10), (985, 0.0), (SWAP2, 0.0)])
+EN = pchip([(SWAP1, 1.0), (192, 0.9), (451, 0.7), (715, 0.50), (829, 0.32), (905, 0.15), (985, 0.0), (SWAP2, 0.0)])
 for f in list(range(SWAP1, SWAP2 + 1, 5)) + [SWAP2]:
     WCTL.location = (EN(f), 0.0, 0.0); WCTL.keyframe_insert("location", index=0, frame=f)
 for f, v in ((1, 0.0), (163, 0.0), (166, 1.0), (END, 1.0)):
@@ -304,7 +304,7 @@ log("palm point", tuple(round(x, 3) for x in PALM_P))
 def hand_on_belly(f, lift=0.0, skin=0.015):
     place_hand(WR, "R", f, PALM_P + PALM_N * lift, -PALM_N, FDIR, skin=skin)
     key_pole("R", f, Wh(WR, "upperarm01.R") + Vector((-0.40, 0.30, -0.30)))
-    apply_pose(WR, "R", "flat_palm", f)
+    apply_pose(WR, "R", "flat_palm", f, spread=0)
 # path: the hanging hand comes forward and up outside the hip, then settles flat (all inside the macro range)
 fs(260); sh = Wh(WR, "upperarm01.R")
 H.key_hand("R", 260, Vector((sh.x - 0.06, sh.y - 0.28, sh.z - 0.38)), Vector((0.5, -0.3, -0.8)).normalized(), Vector((0.4, 0.6, 0)).normalized(),
@@ -362,8 +362,8 @@ def orb(f, ang, dist, dz, aimz=0.0):
     a_ = math.radians(ang); return (lambda: zc(f) + P(math.sin(a_) * dist, -math.cos(a_) * dist, dz), lambda: zc(f) + P(0, 0, aimz))
 SEG_M = []
 for f, ang, dist, dz, az, ln in ((147, 10, 0.050, 0.006, -0.002, 50), (220, 0, 0.060, 0.008, 0.002, 50), (330, -14, 0.068, 0.004, -0.003, 48),
-                                 (451, -26, 0.078, 0.000, -0.006, 44), (580, -12, 0.082, -0.006, -0.008, 44), (715, 6, 0.084, -0.012, -0.011, 42),
-                                 (829, 18, 0.072, -0.006, -0.006, 46), (905, 24, 0.060, 0.000, -0.003, 50), (985, 20, 0.046, 0.002, 0.0, 54),
+                                 (451, -26, 0.078, 0.000, -0.006, 44), (580, -12, 0.082, -0.006, -0.008, 44), (715, -22, 0.086, -0.012, -0.011, 42),
+                                 (770, 0, 0.070, -0.008, -0.008, 46), (829, 26, 0.058, -0.004, -0.005, 50), (905, 24, 0.060, 0.000, -0.003, 50), (985, 20, 0.046, 0.002, 0.0, 54),
                                  (1032, 8, 0.082, -0.010, -0.015, 44), (1075, -6, 0.098, -0.016, -0.018, 42)):
     pf, af = orb(f, ang, dist, dz, az); SEG_M.append((f, pf, af, ln))
 SEG_M += [
@@ -376,10 +376,10 @@ def face_c(f): return head_c(f) + Vector((0, 0, -0.02))
 SEG_B = [
     (1137, lambda: HOLE_W + HOLE_N * 0.032 + Vector((0.012, 0, 0)), lambda: HOLE_W + Vector((0.012, 0, 0)), 40),
     (1146, lambda: HOLE_W + HOLE_N * 0.11 + Vector((0.03, 0, 0.03)), lambda: HOLE_W + Vector((0.015, 0, 0.03)), 34),
-    (1160, lambda: HOLE_W + Vector((0.06, -0.45, 0.17)), lambda: HOLE_W.lerp(face_c(1160), 0.40), 28),
-    (1180, lambda: P(0.12, -0.92, 1.18), lambda: HOLE_W.lerp(face_c(1180), 0.45), 25),
-    (1215, lambda: P(0.04, -0.92, 1.20), lambda: HOLE_W.lerp(face_c(1215), 0.44), 25),
-    (END,  lambda: P(-0.07, -0.92, 1.21), lambda: HOLE_W.lerp(face_c(END), 0.43), 25),
+    (1160, lambda: HOLE_W + Vector((0.06, -0.50, 0.12)), lambda: HOLE_W.lerp(face_c(1160), 0.50), 24),
+    (1180, lambda: P(0.12, -0.92, 1.15), lambda: HOLE_W.lerp(face_c(1180), 0.52), 24),
+    (1215, lambda: P(0.04, -0.92, 1.16), lambda: HOLE_W.lerp(face_c(1215), 0.53), 24),
+    (END,  lambda: P(-0.03, -0.92, 1.17), lambda: HOLE_W.lerp(face_c(END), 0.53), 24),
 ]
 def look_q(p, a, up=Vector((0, 0, 1))):
     zc_ = (p - a).normalized(); yc = (up - zc_ * up.dot(zc_)); yc = yc.normalized() if yc.length > 1e-6 else Vector((0, 1, 0))

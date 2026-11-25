@@ -24,7 +24,7 @@ out[blue] = np.clip(MAG[None] * (lum[blue] / ref)[:, None] ** 1.2, 0, 1)
 out[orange] = np.clip(np.array([1.0, 0.78, 0.10])[None] * (lum[orange] / np.median(lum[orange]))[:, None], 0, 1)
 # remove the MakeHuman print (grey ring + orange figure) on the front panel: flat fabric with light noise
 cx, cy, rad = 1622, 500, 175
-LX, LY = 1590, 470
+LX, LY = 1600, 455
 circ = (xx - cx) ** 2 + (yy - cy) ** 2 < rad ** 2
 rng = np.random.default_rng(3)
 fab = np.median(out[blue & ~circ], axis=0)
@@ -32,7 +32,7 @@ out[circ] = np.clip(fab[None] * (1 + 0.04 * rng.standard_normal((circ.sum(), 1))
 # the logo, text upright on the shirt (shirt up = +x in this UV layout), white
 lg = Image.open(LOGO).convert("RGBA").rotate(-90, expand=True)     # top of the text -> +x
 lw, lh = lg.size
-s = 430 / lh                                                          # 430 px across the chest
+s = 350 / lh                                                          # 430 px across the chest
 lg = lg.resize((int(lw * s), int(lh * s)), Image.LANCZOS)
 a = np.array(lg).astype(np.float32) / 255.0
 x0, y0 = LX - a.shape[1] // 2, LY - a.shape[0] // 2

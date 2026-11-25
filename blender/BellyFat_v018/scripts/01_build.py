@@ -313,10 +313,10 @@ canvas("HM_ArtA", (-0.35, 3.13, 1.65), (0.55, 0.75), (0.95, 0.70, 0.03), (0.85, 
 canvas("HM_ArtB", (0.40, 3.13, 1.70), (0.70, 0.55), (0.02, 0.35, 0.80), (0.98, 0.45, 0.05))
 canvas("HM_ArtC", (1.10, 3.13, 1.62), (0.40, 0.55), (0.65, 0.05, 0.35), (0.98, 0.85, 0.25))
 # a ceiling pendant (brass) and a floor lamp glow are faked with emissive shades
-bpy.ops.mesh.primitive_cone_add(vertices=48, radius1=0.24, radius2=0.06, depth=0.22, location=(0.0, 1.2, 2.35))
+bpy.ops.mesh.primitive_cone_add(vertices=48, radius1=0.24, radius2=0.06, depth=0.22, location=(0.95, 1.2, 2.35))
 PEND = bpy.context.active_object; PEND.name = "HM_Pendant"; PEND.data.materials.append(M_BRASS)
 sd = PEND.modifiers.new("so", 'SOLIDIFY'); sd.thickness = 0.004; bpy.ops.object.shade_smooth()
-cyl("HM_PendantCord", 0.004, 0.40, (0.0, 1.2, 2.55), M_TRIM)
+cyl("HM_PendantCord", 0.004, 0.40, (0.95, 1.2, 2.55), M_TRIM)
 
 # ---- exterior: a sky dome is the world; a garden hedge strip and a low wall at the terrace edge read as "outside"
 M_HEDGE = mat("M_Hedge", (0.05, 0.35, 0.05), rough=0.7)
