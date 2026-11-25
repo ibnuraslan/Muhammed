@@ -1,0 +1,39 @@
+MUMMY P4 - CapCut shot list. One render: MASTER.blend scene MASTER frames 1-2049 (24 fps, 85.38 s = VO length).
+Lay the rendered frame sequence at 00:00:00:00 and the VO (MUMMY_P4_VO.mp3) at 00:00:00:00. Cuts below are already in the render.
+
+S01  frames     1-   87  00:00:00:00 - 00:00:03:14  (3.62 s)  VO para 1
+    The second grave at dusk, pulling away
+S02  frames    88-  144  00:00:03:15 - 00:00:05:23  (2.38 s)  VO para 1
+    Preserved: the wrapped body in the roundhouse
+S03  frames   145-  202  00:00:06:00 - 00:00:08:09  (2.42 s)  VO para 1
+    Retrieved: the opened grave by torchlight
+S04  frames   203-  260  00:00:08:10 - 00:00:10:19  (2.42 s)  VO para 1
+    Buried again: carried to the houses at first light
+S05  frames   261-  356  00:00:10:20 - 00:00:14:19  (4.00 s)  VO para 1
+    Head and arm set apart from the torso on the lab bench
+S06  frames   357-  549  00:00:14:20 - 00:00:22:20  (8.04 s)  VO para 2
+    The broken knee connected to the body's leg
+S07  frames   550-  762  00:00:22:21 - 00:00:31:17  (8.88 s)  VO para 2
+    The composite skeleton in the grave, light fading
+S08  frames   763-  851  00:00:31:18 - 00:00:35:10  (3.71 s)  VO para 3
+    Crane up over the whole excavation: a wider pattern
+S09  frames   852-  960  00:00:35:11 - 00:00:39:23  (4.54 s)  VO para 4
+    Before the houses: a funeral pyre at dusk, mourners far off
+S10  frames   961- 1043  00:00:40:00 - 00:00:43:10  (3.46 s)  VO para 4
+    A small pit of cremated bone and charcoal
+S11  frames  1044- 1116  00:00:43:11 - 00:00:46:11  (3.04 s)  VO para 4
+    Cremated bone fragments in the lab
+S12  frames  1117- 1204  00:00:46:12 - 00:00:50:03  (3.67 s)  VO para 5
+    Digging down into the old graves by night
+S13  frames  1205- 1306  00:00:50:04 - 00:00:54:09  (4.25 s)  VO para 6
+    The hearth burning on the house floor
+S14  frames  1307- 1419  00:00:54:10 - 00:00:59:02  (4.71 s)  VO para 6
+    Beneath it: the hearth stones and a child's cremation pit
+S15  frames  1420- 1521  00:00:59:03 - 00:01:03:08  (4.25 s)  VO para 6
+    A pit dug through the old floor to reach the remains
+S16  frames  1522- 1690  00:01:03:09 - 00:01:10:09  (7.04 s)  VO para 7
+    A human bone wedged among the stones of a house wall
+S17  frames  1691- 1859  00:01:10:10 - 00:01:17:10  (7.04 s)  VO para 7
+    Scattered human bone in a house floor
+S18  frames  1860- 2049  00:01:17:11 - 00:01:25:08  (7.92 s)  VO para 8
+    The roundhouses at dusk: a place where the dead came back
