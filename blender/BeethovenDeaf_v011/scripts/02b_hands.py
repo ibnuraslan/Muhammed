@@ -87,11 +87,6 @@ def solve_finger(Hh, s, k, kobj, x0, ypref=-0.026):
         tz = key_top_z(kobj, lo.y) + 0.0003
         c = (pc.x - kx) ** 2 * 1.0 + (lo.z - tz) ** 2 * 6.0 + 0.04 * (pc.y - ypref) ** 2 + 20.0 * max(0.0, (-0.051 if k == 5 else -0.046) - pc.y) ** 2 + 20.0 * max(0.0, pc.y + 0.006) ** 2
         c += 1e-6 * sum(((xi - pi) / 30.0) ** 2 for xi, pi in zip(x, pref))
-        Mall = Hh.fkm(finger_rot(s, k, x, signs))
-        for j in (2, 3):                       # knuckles stay above the keys and clear of the black keys
-            jp = Mall["finger%d-%d.%s" % (k, j, s)].translation
-            c += 50.0 * max(0.0, 0.8057 + 0.009 - jp.z) ** 2
-            if jp.y < -0.050: c += 50.0 * max(0.0, 0.8177 + 0.010 - jp.z) ** 2 + 20.0 * (jp.y + 0.050) ** 2
         return c, lo, pc, tz
     x = list(x0); best = cost(x)
     step = [6.0] * len(x)
@@ -169,7 +164,7 @@ def key_moving(f):
     return False
 
 # ---------------------------------------------------------------- hand placement (IK) per frame
-PALM_H = 0.052; PALM_Y = {"L": 0.014, "R": 0.014}
+PALM_H = 0.052; PALM_Y = {"L": -0.026, "R": -0.026}
 def palm_target(s, f):
     fp_list = POS[s]
     base = position_at(s, f)[1]
