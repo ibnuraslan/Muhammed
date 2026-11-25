@@ -48,7 +48,7 @@ for m in [m for c in W.children if c.type == 'MESH' and "high-poly" in c.name fo
 for c in W.children:
     if c.type == 'MESH' and any(k in c.name.lower() for k in ("pony", "eyebrow")):
         for m in c.data.materials: tint(m, (0.30, 0.17, 0.10))
-for m in WB.data.materials: tint(m, (0.98, 0.74, 0.58))
+for m in WB.data.materials: tint(m, (0.92, 0.66, 0.50))
 for c in W.children:
     if c.type == 'MESH' and "teeth" in c.name:
         for m in c.data.materials: tint(m, (1.5, 1.45, 1.4))
@@ -338,7 +338,7 @@ def light(name, kind, energy, loc, rot=(0, 0, 0), size=1.0, color=(1, 1, 1), c=C
     o = bpy.data.objects.new(name, L); c.objects.link(o); o.location = loc; o.rotation_euler = rot
     return o
 light("HM_Sun", 'SUN', 4.5, (0, -5, 6), rot=(math.radians(52), 0, math.radians(-28)), color=(1.0, 0.93, 0.80))
-light("HM_RoomKey", 'AREA', 170, (0.6, -0.55, 2.4), rot=(math.radians(28), 0, math.radians(-15)), size=1.4, color=(1.0, 0.92, 0.84))
+light("HM_RoomKey", 'AREA', 130, (0.6, -0.55, 2.4), rot=(math.radians(28), 0, math.radians(-15)), size=1.4, color=(1.0, 0.92, 0.84))
 light("HM_RoomFill", 'AREA', 90, (-1.6, 0.8, 2.3), rot=(math.radians(35), math.radians(-35), 0), size=1.6, color=(0.95, 0.90, 1.0))
 light("HM_BackRim", 'AREA', 120, (0.9, 1.6, 2.2), rot=(math.radians(-40), 0, math.radians(160)), size=0.8, color=(1.0, 0.80, 0.60))
 light("HM_ExtFill", 'AREA', 400, (0, -4.5, 2.5), rot=(math.radians(80), 0, 0), size=4.0, color=(0.80, 0.90, 1.0))
@@ -360,7 +360,7 @@ def bullet():
     me = bpy.data.meshes.new("Bullet"); bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new("Bullet", me); sc.collection.objects.link(o)
     for p in me.polygons: p.use_smooth = True
-    m = mat("M_Bullet", (0.90, 0.33, 0.12), rough=0.24, metal=1.0, coat=0.3)
+    m = mat("M_Bullet", (0.92, 0.40, 0.14), rough=0.36, metal=0.85, coat=0.15)
     nt = m.node_tree; p = nt.nodes["Principled BSDF"]          # fine lathe rings on the jacket
     tc = nt.nodes.new("ShaderNodeTexCoord"); wv = nt.nodes.new("ShaderNodeTexWave"); wv.wave_type = 'RINGS'
     wv.inputs["Scale"].default_value = 900.0; wv.inputs["Distortion"].default_value = 0.5
@@ -653,7 +653,7 @@ emb = nt.nodes.new("ShaderNodeEmission"); emb.inputs["Strength"].default_value =
 nt.links.new(emb.outputs[0], nt.nodes["Material Output"].inputs["Surface"])
 BD.data.materials.append(bdm); to_col(BD, C_MACRO)
 # macro lights: soft high-key key from front-top-left, a fill from the right, a warm rim from above-behind
-light("MC_Key", 'AREA', 1.6, MX + Vector((-0.10, -0.18, 0.10)), rot=(math.radians(62), 0, math.radians(-28)), size=0.12, color=(1.0, 0.96, 0.92), c=C_MACRO)
+light("MC_Key", 'AREA', 1.15, MX + Vector((-0.10, -0.18, 0.10)), rot=(math.radians(62), 0, math.radians(-28)), size=0.12, color=(1.0, 0.96, 0.92), c=C_MACRO)
 light("MC_Fill", 'AREA', 0.8, MX + Vector((0.14, -0.16, -0.02)), rot=(math.radians(85), 0, math.radians(40)), size=0.15, color=(0.90, 0.95, 1.0), c=C_MACRO)
 light("MC_Top", 'AREA', 0.7, MX + Vector((0.0, 0.03, 0.12)), rot=(0, 0, 0), size=0.10, color=(1.0, 0.90, 0.80), c=C_MACRO)
 

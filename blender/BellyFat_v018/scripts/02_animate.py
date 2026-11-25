@@ -121,8 +121,7 @@ for f, sm, br, jaw, sq in ((1, 0.15, 0.0, 0.0, 0.0), (30, 0.15, 0.0, 0.0, 0.0), 
                            (1180, -0.2, 0.8, 0.30, 0.0), (1205, 0.0, 0.4, 0.15, 0.0), (1225, 0.1, 0.1, 0.2, 0.0),
                            (1245, 0.8, 0.3, 0.05, 0.15), (1273, 0.85, 0.3, 0.05, 0.15)):
     key_face(WR, f, smile=sm, brow=br, jaw=jaw, squint=sq)
-blinks(WR, [14, 96, 1150, 1190])
-eyes_closed(WR, 1208, 1234, ramp=7)
+blinks(WR, [14, 96, 1158])
 saccades(CT, 1, 128, every=36, amp=(1.5, 2.5), seed=4)
 saccades(CT, 1137, END, every=34, amp=(1.5, 2.5), seed=5)
 
@@ -166,7 +165,7 @@ for f in range(1, SWAP1):
     BUL.location = nose - BDIR * BL; BUL.rotation_quaternion = q
     BUL.keyframe_insert("location", frame=f); BUL.keyframe_insert("rotation_quaternion", frame=f)
 # macro: nose depth below the shirt top (m) on the VO beats; monotone (PCHIP) so it only ever slows
-ZN = pchip([(SWAP1, 0.004), (150, 0.0), (165, -0.0015), (192, -0.0060), (300, -0.0150), (451, -0.0245), (600, -0.0350),
+ZN = pchip([(SWAP1, 0.0005), (150, -0.0004), (165, -0.0015), (192, -0.0060), (300, -0.0150), (451, -0.0245), (600, -0.0350),
             (715, -0.0430), (829, -0.0476), (905, -0.0494), (960, -0.0502), (990, -0.0503), (SWAP2, -0.0503)])
 QM = Quaternion((1, 0, 0), math.pi)          # nose straight down (-Z)
 for f in range(SWAP1, END + 1):
@@ -179,9 +178,9 @@ set_interp(BUL, 'LINEAR')
 quat_continuity(BUL)
 # the air trail: long while it is fast outside, short in slow motion, gone at the shirt
 TRAIL.scale = (1, 1, 0.45)
-for f, L_ in ((1, 0.45), (30, 0.45), (32, 0.07), (120, 0.06), (128, 0.03), (131, 0.001)):
+for f, L_ in ((1, 0.45), (30, 0.45), (32, 0.05), (112, 0.04), (120, 0.02), (124, 0.001)):
     TRAIL.scale = (1, 1, L_); TRAIL.keyframe_insert("scale", frame=f)
-vis(TRAIL, 1, False); vis(TRAIL, 12, True); vis(TRAIL, 36, False)
+vis(TRAIL, 1, False); vis(TRAIL, 12, True); vis(TRAIL, 124, False)
 vis(BUL, 1, False); vis(BUL, 12, True)
 # glass crack spreads from the hole as the bullet passes (f30-33)
 for f, s_ in ((1, 0.001), (30, 0.001), (31, 0.5), (33, 1.0)):
@@ -305,7 +304,7 @@ log("palm point", tuple(round(x, 3) for x in PALM_P))
 def hand_on_belly(f, lift=0.0, skin=0.015):
     place_hand(WR, "R", f, PALM_P + PALM_N * lift, -PALM_N, FDIR, skin=skin)
     key_pole("R", f, Wh(WR, "upperarm01.R") + Vector((-0.40, 0.30, -0.30)))
-    apply_pose(WR, "R", "flat_palm", f); apply_pose(WR, "R", "relaxed", f, amount=0.15)
+    apply_pose(WR, "R", "flat_palm", f)
 # path: the hanging hand comes forward and up outside the hip, then settles flat (all inside the macro range)
 fs(260); sh = Wh(WR, "upperarm01.R")
 H.key_hand("R", 260, Vector((sh.x - 0.06, sh.y - 0.28, sh.z - 0.38)), Vector((0.5, -0.3, -0.8)).normalized(), Vector((0.4, 0.6, 0)).normalized(),
@@ -349,45 +348,38 @@ def chase(f, d, h, r, up_aim, reach):
     return (lambda: bpos(f) - BDIR * d + UP * h + RGT * r, lambda: bpos(f) + (BDIR + UP * up_aim) * reach)
 SEG_A = [
     (1,   lambda: P(0.42, -3.95, 1.32), lambda: P(-0.04, -0.55, 1.30), 26),
-    (26,  lambda: P(0.45, -3.20, 1.30), lambda: P(-0.04, -0.50, 1.28), 27),
-    (40,  lambda: P(0.50, -1.70, 1.28), lambda: P(0.05, -0.40, 1.25), 32),
-    (50,  lambda: P(0.38, -0.97, 1.22), lambda: P(-0.07, -0.30, 1.20), 30),
+    (26,  lambda: P(0.52, -3.20, 1.30), lambda: P(-0.02, -0.40, 1.30), 28),
+    (40,  lambda: P(0.62, -1.70, 1.30), lambda: P(0.0, -0.10, 1.30), 34),
+    (52,  lambda: P(0.45, -0.95, 1.24), lambda: P(-0.05, -0.20, 1.24), 30),
 ]
-for f, d, h, r, ua, rc, ln in ((66, 0.17, 0.040, 0.010, 0.22, 0.30, 28), (84, 0.11, 0.027, 0.006, 0.24, 0.30, 26),
-                               (100, 0.085, 0.020, 0.004, 0.30, 0.30, 26), (112, 0.055, -0.020, 0.004, 0.0, 0.012, 30),
+for f, h, r, d, w_, ln in ((72, 0.07, 0.15, 0.18, 0.38, 22), (86, 0.07, 0.12, 0.21, 0.36, 22), (100, 0.06, 0.09, 0.20, 0.34, 22)):
+    SEG_A.append((f, (lambda f=f, d=d, h=h, r=r: bpos(f) - BDIR * d + UP * h + RGT * r), (lambda f=f, w_=w_: bpos(f).lerp(head_c(f), w_)), ln))
+for f, d, h, r, ua, rc, ln in ((112, 0.070, -0.010, 0.035, 0.0, 0.012, 28),
                                (122, 0.036, -0.022, 0.0, 0.0, 0.009, 34), (128, 0.027, -0.020, 0.0, 0.0, 0.008, 38), (139, 0.021, -0.017, 0.0, 0.0, 0.008, 40)):
     pf, af = chase(f, d, h, r, ua, rc); SEG_A.append((f, pf, af, ln))
 def zc(f): return MX + Vector((0, 0, ZN(min(f, SWAP2)) + BL * 0.5))
-SEG_M = [
-    (147, lambda: zc(147) + P(0.010, -0.050, 0.006), lambda: zc(147) + P(0, 0, -0.002), 50),
-    (190, lambda: zc(190) + P(0.022, -0.075, 0.016), lambda: zc(190) + P(0, 0, 0.004), 50),
-    (250, lambda: zc(250) + P(0.004, -0.042, 0.002), lambda: zc(250), 52),
-    (320, lambda: zc(320) + P(-0.030, -0.060, -0.006), lambda: zc(320) + P(0, 0, -0.004), 50),
-    (400, lambda: zc(400) + P(-0.012, -0.090, 0.012), lambda: zc(400) + P(0, 0, -0.004), 44),
-    (451, lambda: zc(451) + P(0.006, -0.105, 0.004), lambda: zc(451) + P(0, 0, -0.008), 40),
-    (520, lambda: zc(520) + P(0.030, -0.070, -0.012), lambda: zc(520) + P(0, 0, -0.008), 44),
-    (590, lambda: zc(590) + P(0.010, -0.044, -0.002), lambda: zc(590) + P(0, 0, -0.003), 52),
-    (650, lambda: zc(650) + P(-0.026, -0.066, 0.010), lambda: zc(650) + P(0, 0, -0.006), 48),
-    (715, lambda: zc(715) + P(-0.010, -0.100, -0.018), lambda: zc(715) + P(0, 0, -0.012), 40),
-    (790, lambda: zc(790) + P(0.026, -0.070, -0.008), lambda: zc(790) + P(0, 0, -0.008), 46),
-    (860, lambda: zc(860) + P(0.008, -0.048, 0.006), lambda: zc(860) + P(0, 0, -0.002), 52),
-    (930, lambda: zc(930) + P(-0.030, -0.052, 0.004), lambda: zc(930), 54),
-    (985, lambda: zc(985) + P(0.004, -0.042, 0.002), lambda: zc(985), 56),
-    (1032, lambda: zc(1032) + P(0.024, -0.085, -0.012), lambda: zc(1032) + P(0, 0, -0.016), 44),
-    (1075, lambda: zc(1075) + P(-0.006, -0.100, -0.018), lambda: zc(1075) + P(0, 0, -0.019), 42),
-    (1100, lambda: MX + P(0.010, -0.085, -0.020), lambda: MX + P(0, 0, -0.022), 44),
-    (1118, lambda: MX + P(0.004, -0.055, -0.004), lambda: MX + P(0, 0, -0.006), 46),
-    (1131, lambda: MX + P(0.0, -0.034, 0.0), lambda: MX + P(0, 0, -0.003), 48),
-    (1136, lambda: MX + P(0.0, -0.030, 0.0), lambda: MX + P(0, 0, -0.003), 48),
+def orb(f, ang, dist, dz, aimz=0.0):
+    a_ = math.radians(ang); return (lambda: zc(f) + P(math.sin(a_) * dist, -math.cos(a_) * dist, dz), lambda: zc(f) + P(0, 0, aimz))
+SEG_M = []
+for f, ang, dist, dz, az, ln in ((147, 10, 0.050, 0.006, -0.002, 50), (220, 0, 0.060, 0.008, 0.002, 50), (330, -14, 0.068, 0.004, -0.003, 48),
+                                 (451, -26, 0.078, 0.000, -0.006, 44), (580, -12, 0.082, -0.006, -0.008, 44), (715, 6, 0.084, -0.012, -0.011, 42),
+                                 (829, 18, 0.072, -0.006, -0.006, 46), (905, 24, 0.060, 0.000, -0.003, 50), (985, 20, 0.046, 0.002, 0.0, 54),
+                                 (1032, 8, 0.082, -0.010, -0.015, 44), (1075, -6, 0.098, -0.016, -0.018, 42)):
+    pf, af = orb(f, ang, dist, dz, az); SEG_M.append((f, pf, af, ln))
+SEG_M += [
+    (1102, lambda: MX + P(-0.004, -0.088, -0.024), lambda: MX + P(0, 0, -0.026), 44),
+    (1120, lambda: MX + P(0.002, -0.055, -0.006), lambda: MX + P(0, 0, -0.008), 46),
+    (1133, lambda: MX + P(0.0, -0.034, 0.0), lambda: MX + P(0, 0, -0.003), 48),
+    (1136, lambda: MX + P(0.0, -0.031, 0.0), lambda: MX + P(0, 0, -0.003), 48),
 ]
 def face_c(f): return head_c(f) + Vector((0, 0, -0.02))
 SEG_B = [
-    (1137, lambda: HOLE_W + HOLE_N * 0.032, lambda: HOLE_W, 40),
-    (1146, lambda: HOLE_W + HOLE_N * 0.085 + UP * 0.02, lambda: HOLE_W + UP * 0.03, 36),
-    (1162, lambda: HOLE_W + Vector((0.05, -0.36, 0.14)), lambda: HOLE_W.lerp(face_c(1162), 0.40), 30),
-    (1182, lambda: P(0.12, -0.86, 1.20), lambda: HOLE_W.lerp(face_c(1182), 0.50), 29),
-    (1215, lambda: P(0.04, -0.88, 1.24), lambda: HOLE_W.lerp(face_c(1215), 0.48), 29),
-    (END,  lambda: P(-0.08, -0.88, 1.29), lambda: HOLE_W.lerp(face_c(END), 0.46), 28),
+    (1137, lambda: HOLE_W + HOLE_N * 0.032 + Vector((0.012, 0, 0)), lambda: HOLE_W + Vector((0.012, 0, 0)), 40),
+    (1146, lambda: HOLE_W + HOLE_N * 0.11 + Vector((0.03, 0, 0.03)), lambda: HOLE_W + Vector((0.015, 0, 0.03)), 34),
+    (1160, lambda: HOLE_W + Vector((0.06, -0.45, 0.17)), lambda: HOLE_W.lerp(face_c(1160), 0.40), 28),
+    (1180, lambda: P(0.12, -0.92, 1.18), lambda: HOLE_W.lerp(face_c(1180), 0.45), 25),
+    (1215, lambda: P(0.04, -0.92, 1.20), lambda: HOLE_W.lerp(face_c(1215), 0.44), 25),
+    (END,  lambda: P(-0.07, -0.92, 1.21), lambda: HOLE_W.lerp(face_c(END), 0.43), 25),
 ]
 def look_q(p, a, up=Vector((0, 0, 1))):
     zc_ = (p - a).normalized(); yc = (up - zc_ * up.dot(zc_)); yc = yc.normalized() if yc.length > 1e-6 else Vector((0, 1, 0))
@@ -433,7 +425,7 @@ cl = bpy.data.lights.new("Catch", 'AREA'); cl.energy = 4.0; cl.size = 0.25; cl.c
 clo = bpy.data.objects.new("Catchlight", cl); bpy.data.collections["HOME"].objects.link(clo); clo.parent = CAM; clo.location = (0.0, 0.10, 0.0)
 for f in list(range(1, END + 1, 6)) + [END]:
     fs(f); d_ = (CAM.matrix_world.translation - head_c(f)).length
-    cl.energy = max(0.2, min(5.0, 5.0 * (d_ / 0.9) ** 2)); cl.keyframe_insert("energy", frame=f)
+    cl.energy = max(0.1, min(2.0, 2.0 * (d_ / 0.9) ** 2)); cl.keyframe_insert("energy", frame=f)
 
 # ================================================================== the impact flash (camera-parented sphere, camera rays only)
 bpy.ops.mesh.primitive_uv_sphere_add(radius=1.0, segments=48, ring_count=24); FL = bpy.context.active_object; FL.name = "ImpactFlash"
@@ -462,9 +454,9 @@ FL.parent = CAM; FL.matrix_parent_inverse = Matrix.Identity(4); FL.location = (0
 for f, r_ in ((1, 0.042), (140, 0.042), (147, 0.075), (157, 0.075), (1120, 0.042), (END, 0.042)):
     FL.scale = (r_,) * 3; FL.keyframe_insert("scale", frame=f)
 VA = av.outputs[0]
-for f, a_ in ((1, 0.0), (127, 0.0), (133, 1.0), (147, 1.0), (157, 0.0), (1127, 0.0), (1134, 1.0), (1139, 1.0), (1147, 0.0), (END, 0.0)):
+for f, a_ in ((1, 0.0), (127, 0.0), (133, 1.0), (147, 1.0), (157, 0.0), (1130, 0.0), (1135, 1.0), (1139, 1.0), (1144, 0.0), (END, 0.0)):
     VA.default_value = a_; VA.keyframe_insert("default_value", frame=f)
-vis(FL, 1, False); vis(FL, 126, True); vis(FL, 158, False); vis(FL, 1126, True); vis(FL, 1148, False)
+vis(FL, 1, False); vis(FL, 126, True); vis(FL, 158, False); vis(FL, 1129, True); vis(FL, 1145, False)
 
 # ================================================================== set visibility (keyed hide_render + hide_viewport on every object)
 HOME = [o for o in bpy.data.collections["HOME"].all_objects]
