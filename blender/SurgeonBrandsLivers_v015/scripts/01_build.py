@@ -23,14 +23,22 @@ sc.frame_start, sc.frame_end = 1, 1644
 sc.render.resolution_x, sc.render.resolution_y = 1080, 1920
 
 # ================================================================== PEOPLE
+TSHIRT_M = "elvs_crude_t-shirt_male/elvs_crude_t-shirt_male.mhclo"; TSHIRT_F = "joepal_crude_t-shirt_female/joepal_crude_t-shirt_female.mhclo"
+SWEATER = "toigo_fisherman_sweater/toigo_fisherman_sweater.mhclo"; PANTS = "toigo_wool_pants/toigo_wool_pants.mhclo"
+CARGO = "cortu_cargo_pants/cortu_cargo_pants.mhclo"; SUIT = "toigo_male_suit_tie_and_jacket/toigo_male_suit_tie_and_jacket.mhclo"
+SUIT3 = "toigo_male_suit_3/toigo_male_suit_3.mhclo"
 PAT, PB = human("Patient", 0.0, 0.42, {"asian": 0.15, "caucasian": 0.75, "african": 0.10}, "ponytail01/ponytail01.mhclo",
-                "young_caucasian_female/young_caucasian_female.mhmat", "eyebrow010/eyebrow010.mhclo", height=0.68, weight=0.5, shoes="shoes01/shoes01.mhclo")
+                "young_caucasian_female/young_caucasian_female.mhmat", "eyebrow010/eyebrow010.mhclo", height=0.68, weight=0.45, shoes="shoes01/shoes01.mhclo",
+                clothes=[SWEATER, PANTS, TSHIRT_F], cup=0.3)
 DOC, DB = human("Surgeon", 1.0, 0.55, {"asian": 0.05, "caucasian": 0.90, "african": 0.05}, "short02/short02.mhclo",
-                "middleage_caucasian_male/middleage_caucasian_male.mhmat", "eyebrow004/eyebrow004.mhclo", height=0.55, muscle=0.35, shoes="shoes02/shoes02.mhclo")
+                "middleage_caucasian_male/middleage_caucasian_male.mhmat", "eyebrow004/eyebrow004.mhclo", height=0.55, muscle=0.25, weight=0.45, shoes="shoes02/shoes02.mhclo",
+                clothes=[TSHIRT_M, PANTS, SUIT])
 DOC2, DB2 = human("Surgeon2", 0.0, 0.5, {"asian": 0.05, "caucasian": 0.10, "african": 0.85}, "short04/short04.mhclo",
-                  "young_african_female/young_african_female.mhmat", "eyebrow007/eyebrow007.mhclo", height=0.5, shoes="shoes01/shoes01.mhclo")
+                  "young_african_female/young_african_female.mhmat", "eyebrow007/eyebrow007.mhclo", height=0.5, shoes="shoes01/shoes01.mhclo",
+                  clothes=[TSHIRT_F, CARGO], cup=0.3)
 JUD, JB = human("Judge", 1.0, 0.85, {"asian": 0.05, "caucasian": 0.15, "african": 0.80}, "short01/short01.mhclo",
-                "old_african_male/old_african_male.mhmat", "eyebrow001/eyebrow001.mhclo", height=0.5, weight=0.6, shoes="shoes02/shoes02.mhclo")
+                "old_african_male/old_african_male.mhmat", "eyebrow001/eyebrow001.mhclo", height=0.5, weight=0.6, muscle=0.3, shoes="shoes02/shoes02.mhclo",
+                clothes=[SUIT3])
 PEOPLE = ((PAT, PB), (DOC, DB), (DOC2, DB2), (JUD, JB))
 for r, b in PEOPLE:
     bake_keys(b); eye_fix(r)
@@ -59,37 +67,17 @@ for r, t in hair_tints.items():
         if c.type == 'MESH' and any(k in c.name for k in ("ponytail01", "short02", "short04", "eyebrow")):
             for m in c.data.materials: tint(m, t)
 
-# ---- wardrobe (R1: one joined mesh per garment, long sleeves, skin hidden under, contrasting colours, modest offsets)
-# Patient at home: magenta long-sleeve top + blue jeans; in theatre: a light patient gown (only the neckline shows above the drape)
-top_m = fabric("M_PatTop", (0.78, 0.06, 0.42)); jean_m = fabric("M_Jeans", (0.025, 0.05, 0.20), scale=500, bump=0.35)
-P_TOP, P_JEANS, cov1 = wardrobe(PAT, PB, top_m, jean_m, "long", 0.01, 0.012, 0.011, 0.006, 0.005, "PatHome", hide=False)
-gown_m = fabric("M_Gown", (0.55, 0.78, 0.95), scale=300, bump=0.3)
-P_GOWN, _, cov2 = wardrobe(PAT, PB, gown_m, None, "short", 0.12, 0.013, 0.0, 0.006, 0.0, "PatGown", hide=False, top_only=True)
-hide_under(PB, cov1 | cov2, name="hide_pat")
-
-# Surgeon 1 in theatre: teal scrubs, soft cap, mask, blue nitrile gloves. At the hearing: charcoal suit, white shirt, red tie.
-scrub1 = fabric("M_Scrub1", (0.02, 0.48, 0.52)); scrub1b = fabric("M_Scrub1Trs", (0.01, 0.20, 0.26), scale=700)
-S1_TOP, S1_TRS, c1 = wardrobe(DOC, DB, scrub1, scrub1b, "long", 0.03, 0.016, 0.014, 0.007, 0.006, "S1Scrub", hide=False, flat=True)
-suit_m = fabric("M_Sweater", (0.05, 0.10, 0.32), scale=260, bump=0.7, rough=0.85)
-S1_SUIT, S1_STRS, c2 = wardrobe(DOC, DB, suit_m, fabric("M_SuitTrs", (0.05, 0.055, 0.08), scale=1200, bump=0.15), "long", 0.02, 0.020, 0.012, 0.005, 0.005, "S1Suit", hide=False, neck_drop=0.015, neck_tilt=-0.6, flat=True)
-hide_under(DB, c1 | c2, name="hide_s1")
-shirt_m = mat("M_Shirt", (0.92, 0.93, 0.95), rough=0.6); tie_m = fabric("M_Tie", (0.70, 0.04, 0.06), scale=1500, rough=0.45)
-judge_suit = fabric("M_JudgeSuit", (0.05, 0.10, 0.30), scale=1200, bump=0.15, rough=0.6)
-
-def shirt_tie(top, rig, mats=(shirt_m, tie_m)):
-    """V of white shirt and a red tie on the front of the jacket (material split on the same one-piece garment)"""
-    neck = bl(rig, "neck01"); st = bl(rig, "spine03")
-    z0 = st.z + 0.02; z1 = neck.z
-    for m in mats: top.data.materials.append(m)
-    ishirt, itie = len(top.data.materials) - 2, len(top.data.materials) - 1
-    for p in top.data.polygons:
-        c = p.center
-        if c.y > neck.y - 0.03 or c.z < z0: continue
-        t = (c.z - z0) / max(0.01, z1 - z0)
-        half = 0.012 + 0.085 * max(0.0, t) ** 1.3
-        if abs(c.x) < 0.011 and c.z < z1 - 0.025: p.material_index = itie
-        elif abs(c.x) < half: p.material_index = ishirt
-
+# ---- wardrobe: REAL garments (MakeHuman community CC0 clothes), recoloured; body hidden under each with its own mask
+def cl(rig, key, newname):
+    o = part(rig, key); o.name = newname; return o
+P_TOP = cl(PAT, "fisherman_sweater", "PatHome.top"); P_JEANS = cl(PAT, "wool_pants", "PatHome.trousers"); P_GOWN = cl(PAT, "crude_t-shirt_female", "PatGown.top")
+colorize(P_TOP, (0.80, 0.05, 0.40)); colorize(P_JEANS, (0.04, 0.08, 0.32)); colorize(P_GOWN, (0.55, 0.78, 0.95))
+S1_TOP = cl(DOC, "crude_t-shirt_male", "S1Scrub.top"); S1_TRS = cl(DOC, "wool_pants", "S1Scrub.trousers"); S1_SUIT = cl(DOC, "suit_tie_and_jacket", "S1Suit.top")
+colorize(S1_TOP, (0.02, 0.50, 0.55)); colorize(S1_TRS, (0.02, 0.40, 0.46))
+S2_TOP = cl(DOC2, "crude_t-shirt_female", "S2Scrub.top"); S2_TRS = cl(DOC2, "cargo_pants", "S2Scrub.trousers")
+colorize(S2_TOP, (0.42, 0.08, 0.46)); colorize(S2_TRS, (0.34, 0.06, 0.38))
+for body, gar in ((PB, P_TOP), (PB, P_JEANS), (PB, P_GOWN), (DB, S1_TOP), (DB, S1_TRS), (DB, S1_SUIT), (DB2, S2_TOP), (DB2, S2_TRS), (JB, part(JUD, "suit_3"))):
+    hide_by_proximity(body, gar, "Hide." + gar.name)
 cap1_m = fabric("M_Cap1", (0.03, 0.52, 0.58), scale=400, bump=0.5); mask_m = fabric("M_Mask", (0.45, 0.72, 0.92), scale=45, bump=0.2)
 S1_CAP, S1_MASK, S1_CAPPL, S1_NOSE = cap_and_mask(DOC, DB, "S1", cap1_m, mask_m)
 glove_m = mat("M_Glove", (0.18, 0.30, 0.85), rough=0.38, coat=0.25)
@@ -107,17 +95,10 @@ S1_HAIR = part(DOC, "short02")
 S1_HAIR_CAP = S1_HAIR.copy(); S1_HAIR_CAP.data = S1_HAIR.data.copy(); S1_HAIR_CAP.name = "Surgeon.hair_under_cap"; sc.collection.objects.link(S1_HAIR_CAP)
 trim_hair(S1_HAIR_CAP, None, *S1_CAPPL)
 
-# Surgeon 2: plum scrubs, lilac cap, mask, gloves
-scrub2 = fabric("M_Scrub2", (0.40, 0.08, 0.42)); scrub2b = fabric("M_Scrub2Trs", (0.18, 0.03, 0.22), scale=700)
-S2_TOP, S2_TRS, c3 = wardrobe(DOC2, DB2, scrub2, scrub2b, "long", 0.09, 0.016, 0.014, 0.007, 0.006, "S2Scrub")
 cap2_m = fabric("M_Cap2", (0.62, 0.42, 0.85), scale=400, bump=0.5)
 S2_CAP, S2_MASK, S2_CAPPL, _ = cap_and_mask(DOC2, DB2, "S2", cap2_m, mask_m)
 S2_GLOVES = glove_shell(DOC2, DB2, "S2.gloves")
 h2 = part(DOC2, "short04"); trim_hair(h2, None, *S2_CAPPL)
-
-# Judge: navy suit, shirt, tie
-J_TOP, J_TRS, c4 = wardrobe(JUD, JB, judge_suit, fabric("M_JudgeTrs", (0.04, 0.07, 0.20), scale=1200, bump=0.15), "long", 0.11, 0.012, 0.012, 0.005, 0.005, "JSuit", neck_drop=0.015, neck_tilt=-0.6, flat=True)
-J_TOP.data.materials[0] = suit_material("M_SuitJ", JUD, (0.05, 0.10, 0.30), (0.92, 0.93, 0.95), (0.85, 0.62, 0.05))
 
 # ================================================================== SET: four sectors around the hub
 D = 5.6        # back wall distance

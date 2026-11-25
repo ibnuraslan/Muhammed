@@ -142,17 +142,17 @@ def curve_tube(name, pts, bevel, material, parent=None, res=6):
     return o
 
 # ------------------------------------------------------------------ characters (MPFB2, CC0 MakeHuman assets)
-def human(name, gender, age, race, hair, skin, eyebrow, height=0.5, muscle=0.5, weight=0.5, prop=0.6, shoes="shoes03/shoes03.mhclo"):
+def human(name, gender, age, race, hair, skin, eyebrow, height=0.5, muscle=0.5, weight=0.5, prop=0.6, shoes="shoes03/shoes03.mhclo", clothes=(), cup=0.5):
     from bl_ext.user_default.mpfb.services.humanservice import HumanService
     info = HumanService._create_default_human_info_dict()
     info["name"] = name
     info["phenotype"] = {"gender": gender, "age": age, "muscle": muscle, "weight": weight, "proportions": prop,
-                         "height": height, "cupsize": 0.5, "firmness": 0.5, "race": race}
+                         "height": height, "cupsize": cup, "firmness": 0.5, "race": race}
     info["rig"] = "default"
     info["eyes"] = "high-poly/high-poly.mhclo"; info["eyebrows"] = eyebrow
     info["eyelashes"] = "eyelashes01/eyelashes01.mhclo"; info["teeth"] = "teeth_base/teeth_base.mhclo"
     info["tongue"] = "tongue01/tongue01.mhclo"; info["hair"] = hair
-    info["clothes"] = [shoes] if shoes else []
+    info["clothes"] = list(clothes) + ([shoes] if shoes else [])
     info["skin_mhmat"] = skin; info["skin_material_type"] = "ENHANCED_SSS"; info["eyes_material_type"] = "PROCEDURAL_EYES"
     st = HumanService.get_default_deserialization_settings(); st["subdiv_levels"] = 1
     HumanService.deserialize_from_dict(info, st)
@@ -537,3 +537,43 @@ def suit_material(name, rig, jacket, shirt, tie):
     m2 = N.new("ShaderNodeMixShader"); L.new(tie, m2.inputs[0]); L.new(m1.outputs[0], m2.inputs[1]); L.new(pt.outputs[0], m2.inputs[2])
     L.new(m2.outputs[0], out.inputs["Surface"])
     return m
+
+
+# ------------------------------------------------------------------ real garments (MakeHuman community CC0 clothes, fitted by MPFB)
+def colorize(obj, rgb, gain=1.7):
+    """keep the garment texture's folds/weave as value, recolour it to rgb (deep, saturated wardrobe colours)"""
+    for m in obj.data.materials:
+        if not m or not m.use_nodes: continue
+        nt = m.node_tree
+        for p in [n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED']:
+            bc = p.inputs["Base Color"]
+            if bc.is_linked:
+                src = bc.links[0].from_socket
+                bw = nt.nodes.new("ShaderNodeRGBToBW"); nt.links.new(src, bw.inputs[0])
+                mul = nt.nodes.new("ShaderNodeMix"); mul.data_type = 'RGBA'; mul.blend_type = 'MULTIPLY'; mul.inputs["Factor"].default_value = 1.0
+                nt.links.new(bw.outputs[0], mul.inputs["A"]); mul.inputs["B"].default_value = (*[min(1.0, c * gain) for c in rgb], 1)
+                nt.links.new(mul.outputs["Result"], bc)
+            else:
+                bc.default_value = (*rgb, 1)
+            p.inputs["Roughness"].default_value = max(0.6, p.inputs["Roughness"].default_value)
+
+def hide_by_proximity(body, garment, name, dist=0.03, rings=2):
+    """body skin under a garment that has no MakeHuman delete group: masked (rest pose, eroded so hems keep skin)"""
+    from mathutils.bvhtree import BVHTree
+    gv = [v.co.copy() for v in garment.data.vertices]
+    bvh = BVHTree.FromPolygons(gv, [tuple(p.vertices) for p in garment.data.polygons])
+    gm_inv = garment.matrix_world.inverted() @ body.matrix_world
+    cov = set()
+    for v in body.data.vertices:
+        loc, nrm, _, d = bvh.find_nearest(gm_inv @ v.co)
+        if loc is not None and d < dist: cov.add(v.index)
+    me = body.data; nb = {i: set() for i in range(len(me.vertices))}
+    for e in me.edges:
+        a_, b_ = e.vertices; nb[a_].add(b_); nb[b_].add(a_)
+    for _ in range(rings):
+        cov = {i for i in cov if all(n in cov for n in nb[i])}
+    vg = body.vertex_groups.new(name=name); vg.add(list(cov), 1.0, 'REPLACE')
+    mk = body.modifiers.new(name, 'MASK'); mk.vertex_group = name; mk.invert_vertex_group = True
+    while body.modifiers.find(name) > body.modifiers.find("Armature") + 1:
+        i = body.modifiers.find(name); body.modifiers.move(i, i - 1)
+    return mk

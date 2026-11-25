@@ -49,6 +49,18 @@ def key_obj_matrix(o, f, M):
     o.keyframe_insert("location", frame=f); o.keyframe_insert("rotation_euler", frame=f)
 
 PAT, DOC, DOC2, JUD = O["Patient"], O["Surgeon"], O["Surgeon2"], O["Judge"]
+def key_masks(body, prefixes, keys):
+    """outfit-dependent body masks (each garment hides only the skin it covers while it is worn)"""
+    for m in body.modifiers:
+        if m.type == 'MASK' and m.name.startswith(prefixes):
+            for f, on in keys:
+                m.show_render = m.show_viewport = on
+                m.keyframe_insert("show_render", frame=f); m.keyframe_insert("show_viewport", frame=f)
+            fc_owner = body.animation_data.action if body.animation_data else None
+    if body.animation_data and body.animation_data.action:
+        for fc in iter_fcurves(body.animation_data.action):
+            if "modifiers" in fc.data_path:
+                for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
 PB, DB, DB2, JB = (part(r, ".body") for r in (PAT, DOC, DOC2, JUD))
 TABLE_TOP = sc["TABLE_TOP"]; TABLE_C = Vector(sc["TABLE_C"])
 STAGE = O["PATIENT_STAGE"]; LIV = O["Liver"]
@@ -96,7 +108,7 @@ LIE_T = Vector((TABLE_C.x + 0.12 - sp3.z, TABLE_C.y, TABLE_TOP + 0.004 + torso_b
 M_LIE_OR1 = Matrix.Translation(LIE_T) @ RLY.to_4x4()
 log("lying: torso_back", round(torso_back, 3), "head_back", round(head_back, 3), "T", tuple(round(x, 3) for x in LIE_T))
 PILLOW_TOP = LIE_T.z - head_back - 0.010
-pil = box("Table_Pillow", (0.30, 0.42, max(0.03, PILLOW_TOP - TABLE_TOP) + 0.02), (0, 0, 0), fabric("M_Pillow", (0.92, 0.95, 0.98), scale=300, bump=0.4), bevel=0.03, segs=4)
+pil = box("Table_Pillow", (0.30, 0.42, max(0.03, PILLOW_TOP - TABLE_TOP) + 0.02), (0, 0, 0), fabric("M_Pillow", (0.10, 0.35, 0.70), scale=300, bump=0.4), bevel=0.03, segs=4)
 pil.location = (LIE_T.x + 1.42 - 0.02, TABLE_C.y, TABLE_TOP + (PILLOW_TOP - TABLE_TOP) / 2 - 0.01 + 0.01); pil.parent = STAGE
 log("pillow thickness", round(PILLOW_TOP - TABLE_TOP, 3))
 
@@ -126,6 +138,8 @@ fs(1)
 key_vis([O["PatHome.top"], O["PatHome.trousers"]], 1, False); key_vis([O["PatHome.top"], O["PatHome.trousers"]], F_PAT_HOME, True)
 key_vis([O["PatHome.top"], O["PatHome.trousers"]], F_PAT_OR2, False)
 key_vis([O["PatGown.top"]], 1, True); key_vis([O["PatGown.top"]], F_PAT_HOME, False); key_vis([O["PatGown.top"]], F_PAT_OR2, True)
+key_masks(PB, ("Hide.PatHome", "Delete.toigo_fisherman"), [(1, False), (F_PAT_HOME, True), (F_PAT_OR2, False)])
+key_masks(PB, ("Hide.PatGown", "Delete.joepal"), [(1, True), (F_PAT_HOME, False), (F_PAT_OR2, True)])
 gown = O["PatGown.top"]; gvg = gown.vertex_groups.new(name="gown_low")
 lowz = PAT.data.bones["neck01"].head_local.z - 0.13
 gvg.add([i for i, v in enumerate(gown.data.vertices) if v.co.z < lowz], 1.0, 'REPLACE')
@@ -162,7 +176,7 @@ log("work point", tuple(round(x, 3) for x in WORK), "spine03", tuple(round(x, 3)
 WIN_HX, WIN_HY = 0.15, 0.11
 def drape():
     nx, ny = 200, 110
-    x0, x1 = TABLE_C.x - 1.0 - 0.05, s3.x + 0.17
+    x0, x1 = TABLE_C.x - 1.0 - 0.05, (PAT.matrix_world @ PR.PB["neck01"].head).x - 0.07
     y0, y1 = TABLE_C.y - 0.42, TABLE_C.y + 0.42
     tz = TABLE_TOP
     bm = bmesh.new(); grid = {}
@@ -446,8 +460,10 @@ const_interp(DOC)
 fs(1)
 # wardrobe switch: theatre -> suit at F_S1_OUT
 theatre = [O["S1Scrub.top"], O["S1Scrub.trousers"], O["S1.cap"], O["S1.mask"], O["S1.gloves"], O["Surgeon.hair_under_cap"]]
-hearing = [O["S1Suit.top"], O["S1Suit.trousers"], part(DOC, "short02")]
+hearing = [O["S1Suit.top"], part(DOC, "short02")]
 key_vis(theatre, 1, True); key_vis(hearing, 1, False); key_vis(theatre, F_S1_OUT, False); key_vis(hearing, F_S1_OUT, True)
+key_masks(DB, ("Hide.S1Scrub", "Delete.elvs"), [(1, True), (F_S1_OUT, False)])
+key_masks(DB, ("Hide.S1Suit", "Delete.toigo_male_suit"), [(1, False), (F_S1_OUT, True)])
 fs(1)
 tool_setup(DOC, PEN, "R", "tripod", -0.15)
 log("pen set up")
