@@ -69,9 +69,9 @@ hide_under(PB, cov1 | cov2, name="hide_pat")
 
 # Surgeon 1 in theatre: teal scrubs, soft cap, mask, blue nitrile gloves. At the hearing: charcoal suit, white shirt, red tie.
 scrub1 = fabric("M_Scrub1", (0.02, 0.48, 0.52)); scrub1b = fabric("M_Scrub1Trs", (0.01, 0.20, 0.26), scale=700)
-S1_TOP, S1_TRS, c1 = wardrobe(DOC, DB, scrub1, scrub1b, "long", 0.09, 0.016, 0.014, 0.007, 0.006, "S1Scrub", hide=False)
+S1_TOP, S1_TRS, c1 = wardrobe(DOC, DB, scrub1, scrub1b, "long", 0.03, 0.016, 0.014, 0.007, 0.006, "S1Scrub", hide=False, flat=True)
 suit_m = fabric("M_Sweater", (0.05, 0.10, 0.32), scale=260, bump=0.7, rough=0.85)
-S1_SUIT, S1_STRS, c2 = wardrobe(DOC, DB, suit_m, fabric("M_SuitTrs", (0.05, 0.055, 0.08), scale=1200, bump=0.15), "long", 0.11, 0.020, 0.012, 0.005, 0.005, "S1Suit", hide=False, neck_drop=0.015, neck_tilt=-0.6)
+S1_SUIT, S1_STRS, c2 = wardrobe(DOC, DB, suit_m, fabric("M_SuitTrs", (0.05, 0.055, 0.08), scale=1200, bump=0.15), "long", 0.02, 0.020, 0.012, 0.005, 0.005, "S1Suit", hide=False, neck_drop=0.015, neck_tilt=-0.6, flat=True)
 hide_under(DB, c1 | c2, name="hide_s1")
 shirt_m = mat("M_Shirt", (0.92, 0.93, 0.95), rough=0.6); tie_m = fabric("M_Tie", (0.70, 0.04, 0.06), scale=1500, rough=0.45)
 judge_suit = fabric("M_JudgeSuit", (0.05, 0.10, 0.30), scale=1200, bump=0.15, rough=0.6)
@@ -116,7 +116,7 @@ S2_GLOVES = glove_shell(DOC2, DB2, "S2.gloves")
 h2 = part(DOC2, "short04"); trim_hair(h2, None, *S2_CAPPL)
 
 # Judge: navy suit, shirt, tie
-J_TOP, J_TRS, c4 = wardrobe(JUD, JB, judge_suit, fabric("M_JudgeTrs", (0.04, 0.07, 0.20), scale=1200, bump=0.15), "long", 0.11, 0.012, 0.012, 0.005, 0.005, "JSuit", neck_drop=0.015, neck_tilt=-0.6)
+J_TOP, J_TRS, c4 = wardrobe(JUD, JB, judge_suit, fabric("M_JudgeTrs", (0.04, 0.07, 0.20), scale=1200, bump=0.15), "long", 0.11, 0.012, 0.012, 0.005, 0.005, "JSuit", neck_drop=0.015, neck_tilt=-0.6, flat=True)
 J_TOP.data.materials[0] = suit_material("M_SuitJ", JUD, (0.05, 0.10, 0.30), (0.92, 0.93, 0.95), (0.85, 0.62, 0.05))
 
 # ================================================================== SET: four sectors around the hub

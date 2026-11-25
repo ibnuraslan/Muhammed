@@ -386,6 +386,7 @@ def make_pen():
     for p_ in parts: p_.select_set(True)
     bpy.context.view_layer.objects.active = parts[0]; bpy.ops.object.join()
     o = bpy.context.active_object; o.name = "ArgonPen"
+    o.data.transform(Matrix.Translation(o.location)); o.location = (0, 0, 0)   # origin back at the build origin (tip at +0.101 Y)
     return o
 PEN = make_pen()
 PEN_TIP = Vector((0, 0.101, 0))
@@ -784,6 +785,7 @@ parts_ = [cyl("Pr_shaft", 0.0018, 0.12, (0, 0.05, 0), probe_m, rot=(R_(90), 0, 0
 bpy.ops.object.select_all(action='DESELECT')
 for p_ in parts_: p_.select_set(True)
 bpy.context.view_layer.objects.active = parts_[1]; bpy.ops.object.join(); PROBE = bpy.context.active_object; PROBE.name = "Probe"
+PROBE.data.transform(Matrix.Translation(PROBE.location)); PROBE.location = (0, 0, 0)
 tool_setup(DOC2, PROBE, "R", "tripod", -0.17)
 PROBE_TIP = TOOLS["Probe"]["tip"]
 WORK2 = sectM("OR2") @ WORK

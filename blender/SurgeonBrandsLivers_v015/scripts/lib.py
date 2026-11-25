@@ -185,7 +185,7 @@ HEADB = ("head", "jaw", "neck", "eye", "orbic", "oris", "levator", "risor", "tem
 def plane_side(co, p0, n):
     return (Vector(co) - Vector(p0)).dot(Vector(n))
 
-def rest_relax(g, body, offset, iters, hem_z=None, collar_above=None):
+def rest_relax(g, body, offset, iters, hem_z=None, collar_above=None, flatten_chest=None):
     """cloth drape in the rest pose: push out by `offset`, relax interior vertices (hems pinned) so the cloth bridges
     hollows instead of hugging anatomy, and keep at least 0.7*offset from the skin (BVH push-out)."""
     from mathutils.bvhtree import BVHTree
@@ -222,6 +222,15 @@ def rest_relax(g, body, offset, iters, hem_z=None, collar_above=None):
         co = new
         if it % 4 == 3: push()
     push()
+    if flatten_chest is not None:
+        z0, z1 = flatten_chest
+        band = [i for i in range(n) if z0 < co[i].z < z1 and abs(co[i].x) < 0.15 and co[i].y < 0]
+        if band:
+            ymin = min(co[i].y for i in band)
+            plane = ymin + 0.035
+            for i in band:
+                w = min(1.0, (co[i].z - z0) / 0.04, (z1 - co[i].z) / 0.04, (0.15 - abs(co[i].x)) / 0.04)
+                if co[i].y < plane: co[i].y = co[i].y + (plane - co[i].y) * max(0.0, w)
     for i, v in enumerate(vs): v.co = co[i]
     if collar_above is not None:
         add_rolled_edges(bm, collar_above)
@@ -247,7 +256,12 @@ def add_rolled_edges(bm, z_above, rad=0.0045, seg=6):
         if len(loop) > 8: loops.append(loop)
     for loop in loops:
         if sum(v.co.z for v in loop) / len(loop) < z_above: continue
-        n = len(loop); rings = []
+        n = len(loop)
+        for it in range(6):
+            new = [(loop[i - 1].co + loop[i].co * 2 + loop[(i + 1) % n].co) / 4 for i in range(n)]
+            for v, c in zip(loop, new): v.co = c
+        bm.normal_update()
+        rings = []
         for i, v in enumerate(loop):
             t = (loop[(i + 1) % n].co - loop[i - 1].co).normalized()
             nr = v.normal.copy(); nr = (nr - t * nr.dot(t)).normalized()
@@ -266,7 +280,7 @@ def add_rolled_edges(bm, z_above, rad=0.0045, seg=6):
                 try: bm.faces.new((r0[k], r0[(k + 1) % seg], r1[(k + 1) % seg], r1[k]))
                 except ValueError: pass
 
-def garment(rig, body, name, region, cuts, offset, material, thick=0.003, folds=0.0, fold_scale=0.07, subd=True, relax=0, hem_z=None):
+def garment(rig, body, name, region, cuts, offset, material, thick=0.003, folds=0.0, fold_scale=0.07, subd=True, relax=0, hem_z=None, flatten_chest=None):
     """R1: one joined garment = duplicate of the body, bisected along clean cut planes, region-filtered,
     pushed out along the normals after the Armature, solidified, smoothed, subdivided."""
     g = body.copy(); g.data = body.data.copy(); g.name = name; g.data.name = name
@@ -305,7 +319,7 @@ def garment(rig, body, name, region, cuts, offset, material, thick=0.003, folds=
     g.data.materials.clear(); g.data.materials.append(material)
     for p in g.data.polygons: p.use_smooth = True
     if relax:
-        rest_relax(g, body, offset, relax, hem_z=hem_z, collar_above=(hem_z if hem_z is not None else None))
+        rest_relax(g, body, offset, relax, hem_z=hem_z, collar_above=(hem_z if hem_z is not None else None), flatten_chest=flatten_chest)
         offset_rt = 0.0
     else:
         offset_rt = offset
@@ -378,7 +392,7 @@ def part(rig, key):
     return None
 
 def wardrobe(rig, body, top_m, bot_m, sleeve, hem_drop, top_off, bot_off, top_folds, bot_folds, prefix, neck_drop=0.012,
-             neck_tilt=-0.35, hide=True, top_only=False, bot_off_leg=None, vneck=0.0, relax=50):
+             neck_tilt=-0.35, hide=True, top_only=False, bot_off_leg=None, vneck=0.0, relax=50, flat=False):
     """top (long or short sleeves) + trousers, each ONE joined mesh (R1). Returns (top, trousers, covered_set)."""
     hip = bl(rig, "pelvis.L").z; neck = bl(rig, "neck01")
     cuts_top = [((0, 0, hip - hem_drop), (0, 0, -1)), ((0, neck.y, neck.z - neck_drop), (0, neck_tilt, 1))]
@@ -400,7 +414,7 @@ def wardrobe(rig, body, top_m, bot_m, sleeve, hem_drop, top_off, bot_off, top_fo
             s = "L" if co.x > 0 else "R"
             if plane_side(co, *arm_cut[s]) > 1e-5: return False
         return True
-    top, cov_t = garment(rig, body, prefix + ".top", top_region, cuts_top, top_off, top_m, folds=top_folds, fold_scale=0.12, relax=relax * 2, hem_z=hip - 0.02)
+    top, cov_t = garment(rig, body, prefix + ".top", top_region, cuts_top, top_off, top_m, folds=top_folds, fold_scale=0.12, relax=relax * 2, hem_z=hip - 0.02, flatten_chest=((bl(rig, "spine03").z + 0.02, neck.z - 0.07) if flat else None))
     if top_only:
         if hide: hide_under(body, cov_t, name="hide_" + prefix)
         return top, None, cov_t
