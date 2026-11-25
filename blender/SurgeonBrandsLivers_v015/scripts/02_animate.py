@@ -161,7 +161,7 @@ log("work point", tuple(round(x, 3) for x in WORK), "spine03", tuple(round(x, 3)
 # --- drape: a projected sheet over her body and the table, hanging at the table edges, with a window at the work point
 WIN_HX, WIN_HY = 0.15, 0.11
 def drape():
-    nx, ny = 130, 70
+    nx, ny = 200, 110
     x0, x1 = TABLE_C.x - 1.0 - 0.05, s3.x + 0.17
     y0, y1 = TABLE_C.y - 0.42, TABLE_C.y + 0.42
     tz = TABLE_TOP
@@ -186,6 +186,13 @@ def drape():
             if abs(dx) ** 4 + abs(dy) ** 4 < 1.0: continue
             bm.faces.new((grid[i, j], grid[i + 1, j], grid[i + 1, j + 1], grid[i, j + 1]))
     loose = [v for v in bm.verts if not v.link_faces]; bmesh.ops.delete(bm, geom=loose, context='VERTS')
+    for v in bm.verts:
+        if v.is_boundary and abs(v.co.x - WORK.x) < WIN_HX * 1.3 and abs(v.co.y - WORK.y) < WIN_HY * 1.3:
+            dx = (v.co.x - WORK.x) / WIN_HX; dy = (v.co.y - WORK.y) / WIN_HY
+            r = (abs(dx) ** 4 + abs(dy) ** 4) ** 0.25
+            if r > 1e-6:
+                v.co.x = WORK.x + dx / r * WIN_HX; v.co.y = WORK.y + dy / r * WIN_HY
+                z_, _ = surf_z(v.co.x, v.co.y); v.co.z = (z_ + 0.034) if z_ is not None else v.co.z
     me = bpy.data.meshes.new("Drape"); bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new("Drape", me); sc.collection.objects.link(o)
     for p in me.polygons: p.use_smooth = True
@@ -217,6 +224,11 @@ def patch():
             if (cx / INC_HX) ** 2 + (cy / INC_HY) ** 2 < 1.0: continue
             bm.faces.new((vs[i, j], vs[i + 1, j], vs[i + 1, j + 1], vs[i, j + 1]))
     loose = [v for v in bm.verts if not v.link_faces]; bmesh.ops.delete(bm, geom=loose, context='VERTS')
+    for v in bm.verts:
+        dx = (v.co.x - WORK.x) / INC_HX; dy = (v.co.y - WORK.y) / INC_HY; r = math.sqrt(dx * dx + dy * dy)
+        if v.is_boundary and r < 1.6 and r > 1e-6:
+            v.co.x = WORK.x + dx / r * INC_HX; v.co.y = WORK.y + dy / r * INC_HY
+            z_, _ = surf_z(v.co.x, v.co.y); v.co.z = (z_ if z_ is not None else WORK.z) + 0.003
     me = bpy.data.meshes.new("SkinPatch"); bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new("SkinPatch", me); sc.collection.objects.link(o); me.materials.append(skin_m)
     for p in me.polygons: p.use_smooth = True
@@ -358,7 +370,7 @@ if STOP == "abdomen":
 pen_body = mat("M_PenBody", (0.93, 0.94, 0.95), rough=0.3); pen_blue = mat("M_PenBlue", (0.05, 0.35, 0.95), rough=0.35, coat=0.3)
 def make_pen():
     parts = []
-    parts.append(cyl("Pen_body", 0.0062, 0.13, (0, -0.015, 0), pen_body, rot=(R_(90), 0, 0), verts=24))
+    parts.append(cyl("Pen_body", 0.0062, 0.25, (0, -0.075, 0), pen_body, rot=(R_(90), 0, 0), verts=24))
     parts.append(cyl("Pen_grip", 0.0068, 0.045, (0, 0.035, 0), pen_blue, rot=(R_(90), 0, 0), verts=24))
     bpy.ops.mesh.primitive_cone_add(radius1=0.0062, radius2=0.0022, depth=0.03, location=(0, 0.072, 0), rotation=(R_(-90), 0, 0), vertices=24)
     c = bpy.context.active_object; c.data.materials.append(pen_body); bpy.ops.object.shade_smooth(); parts.append(c)
@@ -429,7 +441,7 @@ theatre = [O["S1Scrub.top"], O["S1Scrub.trousers"], O["S1.cap"], O["S1.mask"], O
 hearing = [O["S1Suit.top"], O["S1Suit.trousers"], part(DOC, "short02")]
 key_vis(theatre, 1, True); key_vis(hearing, 1, False); key_vis(theatre, F_S1_OUT, False); key_vis(hearing, F_S1_OUT, True)
 fs(1)
-tool_setup(DOC, PEN, "R", "tripod", 0.0)
+tool_setup(DOC, PEN, "R", "tripod", -0.15)
 log("pen set up")
 
 # body: feet planted, lean over the patient while working, breathing + small sway
@@ -682,7 +694,7 @@ SMILE = {"risorius03.L": ((1, 0, 0.6), 14), "risorius03.R": ((-1, 0, 0.6), 14), 
 PAIN = {"risorius03.L": ((1, 0, -0.4), 12), "risorius03.R": ((-1, 0, -0.4), 12), "oris04.L": ((1, 0, -0.5), 8), "oris04.R": ((-1, 0, -0.5), 8)}
 fs(1)
 # surgeon 1: blinks; smug smile after the mask comes down (510-600), a slight one-sided lift
-blinks(DOC, [90, 260, 380, 455, 530, 700, 1260, 1380, 1470, 1560, 1615])
+blinks(DOC, [90, 260, 380, 455, 530, 700, 1260, 1380, 1470, 1560])
 
 eyes(DOC, 1, 600, seed=4)
 # patient: eyes closed in theatre (anaesthesia), open at home; pain squint at home
@@ -708,7 +720,7 @@ def pat_home_pose(f, flex, knee, head, right_on=0.0, left_on=0.0, sway=0.0):
     for s, on in (("R", right_on), ("L", left_on)):
         sx = sx_[s]
         sh = Wh(PAT, "upperarm01." + s); Mi = PAT.matrix_world
-        hang = Wh(PAT, "upperleg01." + s) + Mi.to_3x3() @ Vector((sx * 0.17, -0.04, -0.16))
+        hang = Wh(PAT, "upperleg01." + s) + Mi.to_3x3() @ Vector((sx * 0.10, -0.11, -0.13))
         if s == "R":
             # abdomen point in the spine04 bone frame (rest), 2.6 cm out from the skin: shirt (1.2 cm) + palm skin (1.4 cm)
             Mb = PAT.matrix_world @ PR.PB["spine04"].matrix @ PR.BN["spine04"].matrix_local.inverted()
@@ -761,12 +773,12 @@ for s in "LR":
 PROBE = None
 probe_m = bpy.data.materials["M_Steel"]
 parts_ = [cyl("Pr_shaft", 0.0018, 0.12, (0, 0.05, 0), probe_m, rot=(R_(90), 0, 0), verts=12),
-          cyl("Pr_handle", 0.0055, 0.10, (0, -0.06, 0), mat("M_ProbeGrip", (0.85, 0.85, 0.88), rough=0.3, metal=0.9), rot=(R_(90), 0, 0), verts=16),
+          cyl("Pr_handle", 0.0055, 0.22, (0, -0.12, 0), mat("M_ProbeGrip", (0.85, 0.85, 0.88), rough=0.3, metal=0.9), rot=(R_(90), 0, 0), verts=16),
           sphere("Pr_ball", 0.0024, (0, 0.11, 0), probe_m, segs=10)]
 bpy.ops.object.select_all(action='DESELECT')
 for p_ in parts_: p_.select_set(True)
 bpy.context.view_layer.objects.active = parts_[1]; bpy.ops.object.join(); PROBE = bpy.context.active_object; PROBE.name = "Probe"
-tool_setup(DOC2, PROBE, "R", "tripod", 0.0)
+tool_setup(DOC2, PROBE, "R", "tripod", -0.17)
 PROBE_TIP = TOOLS["Probe"]["tip"]
 WORK2 = sectM("OR2") @ WORK
 PS2 = [sectM("OR2") @ p_ for p_ in PS]; PB2 = [sectM("OR2") @ p_ for p_ in PBB]
@@ -816,7 +828,7 @@ HEAR = O["SECT_HEAR"]
 fs(1300)
 # defendant: standing, arms relaxed with a slight bend, one open-palm gesture as he admits, head bows at the verdict
 DEFH = [(F_S1_OUT, 0, 0), (1250, -2, 6), (1300, 4, 2), (1340, 8, -4), (1380, 2, 4), (1420, 6, 0), (1460, -2, 10), (1500, 0, 8), (1512, 4, 6),
-        (1540, 12, 2), (1580, 16, 0), (1620, 17, -2), (END, 17, -2)]
+        (1540, 14, 2), (1570, 20, 0), (1598, 6, -6), (1622, -4, -8), (END, -2, -8)]
 DEFL = [(F_S1_OUT, 2), (1300, 4), (1500, 3), (1540, 8), (1600, 12), (END, 12)]
 dp = pchip([(f, p) for f, p, _ in DEFH]); dy = pchip([(f, y) for f, _, y in DEFH]); dl = pchip(DEFL)
 for f in list(range(F_S1_OUT, END, 6)) + [END]:
@@ -827,9 +839,9 @@ for s in "LR":
     for f in (F_S1_OUT, END):
         DR.key_world("IK_foot." + s, f, DR.rest("IK_foot." + s))
 for f in (F_S1_OUT, 1290, 1372, 1400, 1470, 1520, 1560, END):
-    hang(DOC, "L", f, out=0.12 if f < 1530 else 0.10)
+    hang(DOC, "L", f, out=0.06, fwd=-0.10, down=0.04)
 for f in (F_S1_OUT, 1290, 1400, 1470, 1520, 1560, END):
-    hang(DOC, "R", f, out=0.12 if f < 1530 else 0.10)
+    hang(DOC, "R", f, out=0.06, fwd=-0.10, down=0.04)
 # the open-palm admission gesture (right hand rises to waist height in front, palm up, 22 cm clear of the torso)
 for f, amt in ((1312, 0.6), (1330, 1.0), (1356, 1.0), (1372, 0.5)):
     fs(f); Mi = DOC.matrix_world
@@ -907,6 +919,15 @@ jaw_talk(JUD, 1440, 1496, amp=8, seed=12)
 blinks(JUD, [200, 1300, 1452, 1530, 1600])
 eyes(JUD, 1183, END, step=45, seed=13)
 
+for s_ in "LR":
+    n_ = "orbicularis03." + s_; sg_ = lid_sign(DOC, s_); pb_ = DOC.pose.bones[n_]
+    for f_, ang_ in ((1612, 0), (1630, 20), (END, 22)):
+        pb_.rotation_quaternion = Quaternion((1, 0, 0), R_(ang_ * sg_)); pb_.keyframe_insert("rotation_quaternion", frame=f_, group=n_)
+# breathing-out shoulders on the final beat
+for bn in ("clavicle.L", "clavicle.R"):
+    if bn in DR.PB:
+        for f_, ang_ in ((1600, 0), (1618, 6), (1640, -3)):
+            DR.key_rot(bn, f_, [("X", ang_)])
 if STOP == "hear":
     bpy.ops.wm.save_as_mainfile(filepath=OUT); raise SystemExit
 
@@ -960,10 +981,11 @@ FACE2W = FACE2  # already world (her rig is placed in OR2)
 LETC = Vector((-0.006, -0.004, -0.028))
 CK = [  # frame, camera position, aim, lens, f-stop
     (1,    WORK + Vector((-0.04, -0.72, 0.27)), WORK + Vector((0, 0.16, 0.27)), 35, 11),
-    (120,  WORK + Vector((0.05, -0.62, 0.25)), WORK + Vector((0, 0.15, 0.24)), 35, 11),
-    (215,  WORK + Vector((0.02, -0.40, 0.24)), WORK + Vector((0, 0.10, 0.16)), 35, 11),
-    (240,  WORK + Vector((-0.01, -0.06, 0.31)), WORK + LETC, 50, 11),
-    (272,  WORK + Vector((-0.006, -0.05, 0.27)), WORK + LETC, 50, 11),
+    (34,   WORK + LETC + Vector((0.04, -0.30, 0.30)), WORK + LETC + Vector((0, 0.02, 0.0)), 45, 11),
+    (62,   WORK + LETC + Vector((0.02, -0.19, 0.22)), WORK + LETC, 50, 11),
+    (150,  WORK + LETC + Vector((-0.012, -0.17, 0.20)), WORK + LETC, 50, 11),
+    (240,  WORK + LETC + Vector((0.0, -0.15, 0.185)), WORK + LETC, 52, 11),
+    (270,  WORK + LETC + Vector((0.01, -0.20, 0.24)), WORK + LETC + Vector((0, 0.02, 0.01)), 50, 11),
     (305,  FACE1 + Vector((-0.10, -0.95, -0.16)), FACE1 + Vector((0, 0, -0.08)), 40, 8),
     (340,  FACE1 + Vector((0.16, -0.84, -0.20)), FACE1 + Vector((0, 0, -0.08)), 42, 8),
     (372,  FACE1 + Vector((0.0, -0.74, -0.26)), FACE1 + Vector((0, 0, -0.08)), 45, 8),
@@ -983,9 +1005,9 @@ CK = [  # frame, camera position, aim, lens, f-stop
     (852,  Vector((0.0, -0.02, 1.55)), L2((0.0, 3.0, 1.40)), 32, 8),
     (905,  L2((-0.45, 1.40, 1.65)), L2((-0.15, 2.9, 1.25)), 32, 8),
     (965,  sectM("OR2") @ (WORK + Vector((-0.25, -0.90, 0.50))), sectM("OR2") @ (WORK + Vector((0, 0.25, 0.28))), 35, 8),
-    (1030, sectM("OR2") @ (WORK + Vector((-0.04, -0.72, 0.27))), sectM("OR2") @ (WORK + Vector((0, 0.16, 0.27))), 35, 11),
-    (1068, sectM("OR2") @ (WORK + Vector((-0.01, -0.06, 0.31))), sectM("OR2") @ (WORK + LETC), 50, 11),
-    (1104, sectM("OR2") @ (WORK + Vector((-0.006, -0.05, 0.27))), sectM("OR2") @ (WORK + LETC), 50, 11),
+    (1030, sectM("OR2") @ (WORK + LETC + Vector((0.04, -0.30, 0.30))), sectM("OR2") @ (WORK + LETC + Vector((0, 0.02, 0.0))), 45, 11),
+    (1056, sectM("OR2") @ (WORK + LETC + Vector((0.02, -0.19, 0.22))), sectM("OR2") @ (WORK + LETC), 50, 11),
+    (1108, sectM("OR2") @ (WORK + LETC + Vector((-0.01, -0.16, 0.19))), sectM("OR2") @ (WORK + LETC), 52, 11),
     (1134, FACE2W + (sectM("OR2").to_3x3() @ Vector((-0.05, -0.85, -0.05))), FACE2W + Vector((0, 0, -0.05)), 45, 8),
     (1172, FACE2W + (sectM("OR2").to_3x3() @ Vector((0.06, -0.72, -0.05))), FACE2W + Vector((0, 0, -0.05)), 45, 8),
     (1198, Vector((0.0, -0.02, 1.55)), L2((0.0, 3.0, 1.45)), 32, 8),

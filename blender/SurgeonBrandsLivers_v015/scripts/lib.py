@@ -185,7 +185,7 @@ HEADB = ("head", "jaw", "neck", "eye", "orbic", "oris", "levator", "risor", "tem
 def plane_side(co, p0, n):
     return (Vector(co) - Vector(p0)).dot(Vector(n))
 
-def rest_relax(g, body, offset, iters, hem_z=None):
+def rest_relax(g, body, offset, iters, hem_z=None, collar_above=None):
     """cloth drape in the rest pose: push out by `offset`, relax interior vertices (hems pinned) so the cloth bridges
     hollows instead of hugging anatomy, and keep at least 0.7*offset from the skin (BVH push-out)."""
     from mathutils.bvhtree import BVHTree
@@ -209,7 +209,7 @@ def rest_relax(g, body, offset, iters, hem_z=None):
         for i in range(n):
             loc, nrm, _, d = bvh.find_nearest(co[i])
             if loc is None: continue
-            mn = offv[i] * 0.7
+            mn = offv[i] * 0.45
             if (co[i] - loc).dot(nrm) < mn: co[i] = loc + nrm * mn
     for it in range(iters):
         new = co[:]
@@ -223,7 +223,48 @@ def rest_relax(g, body, offset, iters, hem_z=None):
         if it % 4 == 3: push()
     push()
     for i, v in enumerate(vs): v.co = co[i]
+    if collar_above is not None:
+        add_rolled_edges(bm, collar_above)
     bm.to_mesh(g.data); bm.free()
+
+def add_rolled_edges(bm, z_above, rad=0.0045, seg=6):
+    """a rolled/ribbed edge (small tube) along every boundary loop above z_above: clean collars and cuffs; the tube
+    copies the skin weights of the edge vertex so it deforms with the garment"""
+    dl = bm.verts.layers.deform.active
+    bm.verts.ensure_lookup_table(); bm.normal_update()
+    bedges = [e for e in bm.edges if e.is_boundary]
+    adj = {}
+    for e in bedges:
+        a_, b_ = e.verts; adj.setdefault(a_, []).append(b_); adj.setdefault(b_, []).append(a_)
+    seen = set(); loops = []
+    for v0 in list(adj):
+        if v0 in seen: continue
+        loop = [v0]; seen.add(v0); prev = None; cur = v0
+        while True:
+            nx = [w for w in adj[cur] if w is not prev and w not in seen]
+            if not nx: break
+            prev, cur = cur, nx[0]; loop.append(cur); seen.add(cur)
+        if len(loop) > 8: loops.append(loop)
+    for loop in loops:
+        if sum(v.co.z for v in loop) / len(loop) < z_above: continue
+        n = len(loop); rings = []
+        for i, v in enumerate(loop):
+            t = (loop[(i + 1) % n].co - loop[i - 1].co).normalized()
+            nr = v.normal.copy(); nr = (nr - t * nr.dot(t)).normalized()
+            b = t.cross(nr)
+            ring = []
+            for k in range(seg):
+                a_ = 2 * math.pi * k / seg
+                nv = bm.verts.new(v.co + (nr * math.cos(a_) + b * math.sin(a_)) * rad + nr * rad * 0.4)
+                if dl is not None:
+                    for gi, w in v[dl].items(): nv[dl][gi] = w
+                ring.append(nv)
+            rings.append(ring)
+        for i in range(n):
+            r0, r1 = rings[i], rings[(i + 1) % n]
+            for k in range(seg):
+                try: bm.faces.new((r0[k], r0[(k + 1) % seg], r1[(k + 1) % seg], r1[k]))
+                except ValueError: pass
 
 def garment(rig, body, name, region, cuts, offset, material, thick=0.003, folds=0.0, fold_scale=0.07, subd=True, relax=0, hem_z=None):
     """R1: one joined garment = duplicate of the body, bisected along clean cut planes, region-filtered,
@@ -264,7 +305,7 @@ def garment(rig, body, name, region, cuts, offset, material, thick=0.003, folds=
     g.data.materials.clear(); g.data.materials.append(material)
     for p in g.data.polygons: p.use_smooth = True
     if relax:
-        rest_relax(g, body, offset, relax, hem_z=hem_z)
+        rest_relax(g, body, offset, relax, hem_z=hem_z, collar_above=(hem_z if hem_z is not None else None))
         offset_rt = 0.0
     else:
         offset_rt = offset
@@ -336,8 +377,8 @@ def part(rig, key):
         if c.type == 'MESH' and key in c.name: return c
     return None
 
-def wardrobe(rig, body, top_m, bot_m, sleeve, hem_drop, top_off, bot_off, top_folds, bot_folds, prefix, neck_drop=0.03,
-             neck_tilt=-0.35, hide=True, top_only=False, bot_off_leg=None, vneck=0.0, relax=30):
+def wardrobe(rig, body, top_m, bot_m, sleeve, hem_drop, top_off, bot_off, top_folds, bot_folds, prefix, neck_drop=0.012,
+             neck_tilt=-0.35, hide=True, top_only=False, bot_off_leg=None, vneck=0.0, relax=50):
     """top (long or short sleeves) + trousers, each ONE joined mesh (R1). Returns (top, trousers, covered_set)."""
     hip = bl(rig, "pelvis.L").z; neck = bl(rig, "neck01")
     cuts_top = [((0, 0, hip - hem_drop), (0, 0, -1)), ((0, neck.y, neck.z - neck_drop), (0, neck_tilt, 1))]

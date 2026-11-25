@@ -26,7 +26,7 @@ sc.render.resolution_x, sc.render.resolution_y = 1080, 1920
 PAT, PB = human("Patient", 0.0, 0.42, {"asian": 0.15, "caucasian": 0.75, "african": 0.10}, "ponytail01/ponytail01.mhclo",
                 "young_caucasian_female/young_caucasian_female.mhmat", "eyebrow010/eyebrow010.mhclo", height=0.68, weight=0.5, shoes="shoes01/shoes01.mhclo")
 DOC, DB = human("Surgeon", 1.0, 0.55, {"asian": 0.05, "caucasian": 0.90, "african": 0.05}, "short02/short02.mhclo",
-                "middleage_caucasian_male/middleage_caucasian_male.mhmat", "eyebrow004/eyebrow004.mhclo", height=0.55, muscle=0.55, shoes="shoes02/shoes02.mhclo")
+                "middleage_caucasian_male/middleage_caucasian_male.mhmat", "eyebrow004/eyebrow004.mhclo", height=0.55, muscle=0.35, shoes="shoes02/shoes02.mhclo")
 DOC2, DB2 = human("Surgeon2", 0.0, 0.5, {"asian": 0.05, "caucasian": 0.10, "african": 0.85}, "short04/short04.mhclo",
                   "young_african_female/young_african_female.mhmat", "eyebrow007/eyebrow007.mhclo", height=0.5, shoes="shoes01/shoes01.mhclo")
 JUD, JB = human("Judge", 1.0, 0.85, {"asian": 0.05, "caucasian": 0.15, "african": 0.80}, "short01/short01.mhclo",
@@ -61,7 +61,7 @@ for r, t in hair_tints.items():
 
 # ---- wardrobe (R1: one joined mesh per garment, long sleeves, skin hidden under, contrasting colours, modest offsets)
 # Patient at home: magenta long-sleeve top + blue jeans; in theatre: a light patient gown (only the neckline shows above the drape)
-top_m = fabric("M_PatTop", (0.78, 0.06, 0.42)); jean_m = fabric("M_Jeans", (0.06, 0.16, 0.48), scale=500, bump=0.35)
+top_m = fabric("M_PatTop", (0.78, 0.06, 0.42)); jean_m = fabric("M_Jeans", (0.025, 0.05, 0.20), scale=500, bump=0.35)
 P_TOP, P_JEANS, cov1 = wardrobe(PAT, PB, top_m, jean_m, "long", 0.01, 0.012, 0.011, 0.006, 0.005, "PatHome", hide=False)
 gown_m = fabric("M_Gown", (0.55, 0.78, 0.95), scale=300, bump=0.3)
 P_GOWN, _, cov2 = wardrobe(PAT, PB, gown_m, None, "short", 0.12, 0.013, 0.0, 0.006, 0.0, "PatGown", hide=False, top_only=True)
@@ -70,7 +70,7 @@ hide_under(PB, cov1 | cov2, name="hide_pat")
 # Surgeon 1 in theatre: teal scrubs, soft cap, mask, blue nitrile gloves. At the hearing: charcoal suit, white shirt, red tie.
 scrub1 = fabric("M_Scrub1", (0.02, 0.48, 0.52)); scrub1b = fabric("M_Scrub1Trs", (0.01, 0.20, 0.26), scale=700)
 S1_TOP, S1_TRS, c1 = wardrobe(DOC, DB, scrub1, scrub1b, "long", 0.09, 0.016, 0.014, 0.007, 0.006, "S1Scrub", hide=False)
-suit_m = fabric("M_Suit", (0.07, 0.08, 0.12), scale=1200, bump=0.15, rough=0.6)
+suit_m = fabric("M_Sweater", (0.05, 0.10, 0.32), scale=260, bump=0.7, rough=0.85)
 S1_SUIT, S1_STRS, c2 = wardrobe(DOC, DB, suit_m, fabric("M_SuitTrs", (0.05, 0.055, 0.08), scale=1200, bump=0.15), "long", 0.11, 0.012, 0.012, 0.005, 0.005, "S1Suit", hide=False, neck_drop=0.015, neck_tilt=-0.6)
 hide_under(DB, c1 | c2, name="hide_s1")
 shirt_m = mat("M_Shirt", (0.92, 0.93, 0.95), rough=0.6); tie_m = fabric("M_Tie", (0.70, 0.04, 0.06), scale=1500, rough=0.45)
@@ -89,7 +89,6 @@ def shirt_tie(top, rig, mats=(shirt_m, tie_m)):
         half = 0.012 + 0.085 * max(0.0, t) ** 1.3
         if abs(c.x) < 0.011 and c.z < z1 - 0.025: p.material_index = itie
         elif abs(c.x) < half: p.material_index = ishirt
-S1_SUIT.data.materials[0] = suit_material("M_SuitS1", DOC, (0.07, 0.08, 0.12), (0.92, 0.93, 0.95), (0.70, 0.04, 0.06))
 
 cap1_m = fabric("M_Cap1", (0.03, 0.52, 0.58), scale=400, bump=0.5); mask_m = fabric("M_Mask", (0.45, 0.72, 0.92), scale=45, bump=0.2)
 S1_CAP, S1_MASK, S1_CAPPL, S1_NOSE = cap_and_mask(DOC, DB, "S1", cap1_m, mask_m)
@@ -403,6 +402,9 @@ area("HOME_Win", (1.75, D - 0.4, 1.9), (0.3, 4.2, 1.0), 160, 1.2, (0.75, 0.88, 1
 area("HEAR_Key", (0.2, 1.6, 2.6), (0.4, 3.8, 1.3), 320, 1.6, (1.0, 0.90, 0.75), HEAR)
 area("HEAR_Fill", (-0.4, 2.4, 2.2), (-1.2, 3.7, 1.2), 160, 1.6, (1.0, 0.92, 0.82), HEAR)
 area("HEAR_Rim", (1.8, 5.0, 2.5), (1.0, 3.6, 1.5), 180, 1.2, (0.85, 0.92, 1.0), HEAR)
+area("HEAR_CornerR", (2.6, 4.4, 2.7), (3.0, 5.4, 1.2), 260, 1.6, (1.0, 0.88, 0.70), HEAR)
+area("HEAR_CornerL", (-2.2, 4.2, 2.7), (-3.0, 4.6, 1.2), 260, 1.6, (1.0, 0.88, 0.70), HEAR)
+area("HEAR_Ceil", (0.0, 3.6, 2.9), (0.0, 3.6, 0.0), 220, 2.5, (1.0, 0.95, 0.88), HEAR)
 
 sc["D"] = D; sc["TABLE_TOP"] = TABLE_TOP; sc["TABLE_C"] = list(TABLE_C)
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
