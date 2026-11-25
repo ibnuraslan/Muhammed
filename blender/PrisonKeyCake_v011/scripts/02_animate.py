@@ -217,7 +217,7 @@ def wrap_rel(rig, s, handle_local=Vector((0, 0, 0.25))):
     return Ww.inverted() @ M
 
 R_PRESS_P = press_rel(PRIS, "R"); R_PINCH_P = pinch_rel(PRIS, "R"); R_PINCH_PL = pinch_rel(PRIS, "L")
-R_PINCH_S = pinch_rel(SMITH, "L"); R_WRAP_S = None
+R_PINCH_S = pinch_rel(SMITH, "R"); R_WRAP_S = None
 R_WRAP_V = wrap_rel(VIS, "R")
 for r in (PRIS, VIS, SMITH): clear_keys_at(r, CAL)
 fs(1)

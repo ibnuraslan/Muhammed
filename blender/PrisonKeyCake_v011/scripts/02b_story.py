@@ -179,8 +179,8 @@ saccades(VR, 330, 805, every=40, seed=5); blinks(VIS, [360, 455, 590, 690, 770])
 log("S2 done")
 
 # ==================================================================================== S3  WORKSHOP (480-800): the pour, the copy, the cake
-S_POS = Vector((10.70, 0.25, 0)); S_YAW = 90.0
-idle_stand(HS, SR, 1, 805, S_POS, S_YAW, flex=6.0, seed=2.0)
+S_POS = Vector((10.80, 0.22, 0)); S_YAW = 90.0
+idle_stand(HS, SR, 1, 805, S_POS, S_YAW, flex=11.0, seed=2.0)
 for f in range(1, 806, 12):
     look_at(SR, f, Vector((11.40, 0.05, 0.98)) if f < 690 else Vector((11.25, 0.62, 0.98)), blend=0.8)
 PIVOT = CRUC.matrix_world.translation.copy()
@@ -216,26 +216,28 @@ for f in range(560, 616):
     STREAM.scale = (1, 1, d.length)
     for k in ("location", "rotation_quaternion", "scale"): STREAM.keyframe_insert(k, frame=f)
 # left hand: on the bench while pouring, then pinches the cooled key from the mould and pushes it into the cake
-for f in (1, 300, 560, 640):
+for f in (1, 300, 560, 640, 700, 760, 805):
     surface_hand(SR, "L", f, Vector((11.06, 0.55, 0.91)), Vector((1, 0.2, 0)), pole=Vector((10.7, 0.9, 0.8)))
 K_MOULD = KEY1.matrix_world.copy()
 K_IN_WS = CAKE_WS.matrix_world @ Matrix([list(r) for r in sc["KEY_IN_CAKE"]])
 K_PRE = Matrix.Translation(K_IN_WS.to_3x3() @ Vector((-0.07, 0, 0))) @ K_IN_WS
 K_LIFT = Matrix.Translation((0, 0, 0.10)) @ K_MOULD
-PL = Vector((10.75, 1.0, 0.85))
-for f, Kw in ((650, Matrix.Translation((0, 0, 0.05)) @ K_MOULD), (668, Matrix.Translation((0, 0, 0.004)) @ K_MOULD), (674, K_MOULD)):
-    key_prop_hand(SR, "L", f, Kw, R_PINCH_S, pose="pinch", pole=PL)
-own(KEY1, 675, SMITH, "wrist.L")
-R_K1S = actual_rel(SMITH, "L", KEY1, 675)
-for f, Kw in ((690, K_LIFT), (712, KM((11.16, 0.50, 1.02), K_IN_WS.col[0][:3], K_IN_WS.col[2][:3])), (722, K_PRE)):
-    key_prop_hand(SR, "L", f, Kw, R_K1S, pose="pinch", pole=PL)
+PL = Vector((10.80, -0.45, 0.85))
+for f in (640,):
+    surface_hand(SR, "R", f, Vector((11.05, 0.02, 0.91)), Vector((1, -0.2, 0)), pole=PL)
+for f, Kw in ((652, Matrix.Translation((0, 0, 0.05)) @ K_MOULD), (668, Matrix.Translation((0, 0, 0.004)) @ K_MOULD), (674, K_MOULD)):
+    key_prop_hand(SR, "R", f, Kw, R_PINCH_S, pose="pinch", pole=PL)
+own(KEY1, 675, SMITH, "wrist.R")
+R_K1S = actual_rel(SMITH, "R", KEY1, 675)
+for f, Kw in ((690, K_LIFT), (712, KM((11.10, 0.52, 1.02), K_IN_WS.col[0][:3], K_IN_WS.col[2][:3])), (722, K_PRE)):
+    key_prop_hand(SR, "R", f, Kw, R_K1S, pose="pinch", pole=PL)
 own(KEY1, 723)
 key_basis(KEY1, 748, K_IN_WS); set_interp(KEY1, 'BEZIER')
 for f in (735, 748):
     fs(f); Kw = interp_mats([(723, K_PRE), (748, K_IN_WS)], f)
-    key_prop_hand(SR, "L", f, Kw, R_K1S, pose="pinch", pole=PL)
-for f in (765, 805):
-    surface_hand(SR, "L", f, Vector((11.06, 0.55, 0.91)), Vector((1, 0.2, 0)), pose="relaxed", pole=Vector((10.7, 0.9, 0.8)))
+    key_prop_hand(SR, "R", f, Kw, R_K1S, pose="pinch", pole=PL)
+for f in (768, 805):
+    surface_hand(SR, "R", f, Vector((11.05, 0.02, 0.91)), Vector((1, -0.2, 0)), pose="relaxed", pole=PL)
 for f, sm, br in ((1, 0.0, -0.5), (560, 0.0, -0.6), (640, 0.2, 0.0), (700, 0.3, 0.2), (760, 0.6, 0.4), (805, 0.5, 0.3)):
     key_face(SMITH, f, smile=sm, brow=br)
 saccades(SR, 480, 805, every=45, seed=7); blinks(SMITH, [500, 630, 720, 790])
@@ -281,7 +283,7 @@ for f, Kw in ((882, K1_OUT), (905, K_LOOK), (925, K_LOOK), (950, K_LOCK_PRE), (9
     key_prop_hand(PR, "R", f, Kw, R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)))
 own(KEY1, 959)
 def jam(f):   # tries to turn it: it jams twice
-    return pchip([(959, 0.0), (972, 0.0), (980, 13.0), (988, 2.0), (996, 15.0), (1004, 0.0), (1010, 0.0)])(f)
+    return pchip([(959, 0.0), (970, 0.0), (978, 16.0), (984, -4.0), (991, 18.0), (998, -6.0), (1004, 14.0), (1010, 0.0)])(f)
 for f in range(959, 1011, 3):
     Kw = Matrix.Translation(K_LOCK_IN.translation) @ Matrix.Rotation(math.radians(jam(f)), 4, Vector((1, 0, 0))) @ \
         Matrix.Translation(-K_LOCK_IN.translation) @ (K_LOCK_IN if f >= 970 else interp_mats([(959, K_LOCK_PRE), (970, K_LOCK_IN)], f))
@@ -291,7 +293,7 @@ set_interp(KEY1, 'BEZIER')
 own(KEY1, 1012, PRIS, "wrist.R")
 for f, Kw in ((1026, K_LOCK_PRE), (1045, KM((1.02, 0.05, 1.05), (0.7, -0.3, -0.4), (0.3, 1, 0)))):
     key_prop_hand(PR, "R", f, Kw, R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)))
-hang_hand(PR, "R", 1060, bend=0.2, pose="pinch")
+key_prop_hand(PR, "R", 1060, KM((1.02, 0.12, 1.00), (0.7, -0.2, -0.5), (0.3, 1, 0)), R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)))
 for f in (800, 900, 1000, 1060):
     hang_hand(PR, "L", f, bend=0.15, swing=0.02)
 for f, tgt in ((800, (1.33, -0.32, 1.0)), (850, (1.30, -0.36, 0.98)), (890, "k"), (925, "k"), (940, (1.48, 0.34, 1.05)), (1008, (1.48, 0.34, 1.05)),
@@ -348,7 +350,7 @@ log("S6 done")
 cut(PRIS, 1236)
 idle_stand(HP, PR, 1237, 1338, P_DOOR, 90.0, flex=4.0, seed=1.3)
 vis(KEY2, 1, False); vis(KEY2, 1237, True)
-def turn(f): return pchip([(1237, 0.0), (1290, 0.0), (1318, 80.0), (1400, 80.0)])(f)
+def turn(f): return pchip([(1237, 0.0), (1292, 0.0), (1320, 90.0), (1400, 90.0)])(f)
 def k2_lock(f, ang):
     return Matrix.Translation(K_LOCK_IN.translation) @ Matrix.Rotation(math.radians(ang), 4, Vector((1, 0, 0))) @ Matrix.Translation(-K_LOCK_IN.translation) @ K_LOCK_IN
 own(KEY2, 1237)
@@ -378,13 +380,13 @@ def door_pt(obj, local_rest_world, f):
     fs(1); L = obj.matrix_world.inverted() @ Vector(local_rest_world); fs(f); return obj.matrix_world @ L
 # pull the key out, then the left hand pushes the door open
 own(KEY2, 1338, PRIS, "wrist.R")
-for f, Kw in ((1348, Matrix.Translation((-0.07, 0, 0)) @ k2_lock(1348, 80.0)),):
+for f, Kw in ((1348, Matrix.Translation((-0.07, 0, 0)) @ k2_lock(1348, 90.0)),):
     key_prop_hand(PR, "R", f, Kw, R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)))
 for f, ang in ((1, 0.0), (1346, 0.0), (1392, 100.0), (END, 100.0)):
     DOOR.rotation_euler = (0, 0, math.radians(ang)); DOOR.keyframe_insert("rotation_euler", frame=f)
 for f, ang in ((1, 0.0), (1456, 0.0), (1500, 75.0), (END, 75.0)):
     GATE1.rotation_euler = (0, 0, math.radians(ang)); GATE1.keyframe_insert("rotation_euler", frame=f)
-for f, ang in ((1, 0.0), (1543, 0.0), (1585, 95.0), (END, 95.0)):
+for f, ang in ((1, 85.0), (470, 85.0), (500, 0.0), (1543, 0.0), (1585, 92.0), (END, 92.0)):
     WICKET.rotation_euler = (0, 0, math.radians(ang)); WICKET.keyframe_insert("rotation_euler", frame=f)
 def push(ctrl, s_, obj, p_rest, f0, f1, nrm=(1, 0, 0)):
     for f in range(f0, f1 + 1, 3):
@@ -425,14 +427,14 @@ walk_arms(PR, WP3, 1560, 1622, sides="L", amp=0.08)
 for f in range(1600, 1623, 4): hang_hand(PR, "R", f, bend=0.25, pose="pinch")
 # looks back at the prison over his shoulder, then smiles at the open sky
 for f, tgt in ((1340, (1.6, 0.6, 1.3)), (1365, (2.4, 0.4, 1.5)), (1412, (2.53, 0.02, 1.05)), (1450, (2.53, 0.02, 1.05)), (1470, (3.5, 0.6, 1.6)),
-               (1540, (5.27, 0.6, 1.4)), (1562, (6.5, 0.5, 1.8)), (1590, (7.5, 0.3, 2.6)), (1600, (3.0, -0.6, 1.7)), (1614, (3.0, -0.6, 1.7)), (1622, (8.0, 0.3, 2.4))):
+               (1540, (5.27, 0.6, 1.4)), (1560, (6.5, 0.5, 1.8)), (1576, (3.5, -0.4, 1.7)), (1614, (3.0, -0.4, 1.7)), (1622, (3.0, -0.4, 1.7))):
     fs(f); look_at(PR, f, Vector(tgt), blend=0.9, limit=(95, 45))
-for f in range(1596, 1618, 6):
-    key_spine(PR, f, flex=2.0, twist=-18.0 * smoothstep((f - 1592) / 12.0))
+for f in range(1570, 1623, 6):
+    key_spine(PR, f, flex=2.0, twist=-22.0 * smoothstep((f - 1568) / 14.0))
 for f, sm, br in ((1340, 0.7, 0.6), (1420, 0.2, -0.2), (1450, 0.6, 0.4), (1540, 0.4, 0.2), (1600, 0.8, 0.6), (1622, 0.9, 0.6)):
     key_face(PRIS, f, smile=sm, brow=br)
 saccades(PR, 1340, 1622, every=50, seed=10); blinks(PRIS, [1375, 1488, 1570])
-vis(KEY2, 1623, False); vis(BASKET, 1623, False)
+vis(KEY2, 1623, False); vis(BASKET, 1, True); vis(BASKET, 1623, False)
 log("S8 done")
 
 # ==================================================================================== S9  STEPS, YEARS LATER (1623-1836)
@@ -447,14 +449,14 @@ def wave(ctrl, H, s_, f0, f1, f_down, f_end, per=34):
         fwd = (Wh(rig, "eye.L") + Wh(rig, "eye.R")) / 2 - Wh(rig, "head"); fwd.z = 0; fwd.normalize()
         lat = Vector((-fwd.y, fwd.x, 0)) * sg
         up = smoothstep((f - f0) / 22.0)
-        osc = math.sin(2 * math.pi * (f - f0) / per) * 0.07 * smoothstep((f - f0 - 15) / 10.0)
+        osc = math.sin(2 * math.pi * (f - f0) / per) * 0.11 * smoothstep((f - f0 - 15) / 10.0) * (1 - smoothstep((f - f_down + 25) / 20.0))
         Wp = sh.lerp(sh + lat * 0.22 + fwd * 0.10 + Vector((0, 0, 0.30)), up) + lat * osc
         d = (Vector((0, 0, 1)) * up + Vector((0, 0, -1)) * (1 - up) + lat * osc * 2).normalized()
         apply_pose(rig, s_, "flat_palm" if up > 0.5 else "relaxed", f)
         H.key_hand(s_, f, Wp, d, fwd, pole=sh + lat * 0.45 + Vector((0, 0, -0.35)) - fwd * 0.2)
-    for f in (f_down + 18, f_end):
+    for f in (f_down + 40, f_end):
         hang_hand(ctrl, s_, f, bend=0.15)
-wave(PR, HP, "R", 1640, 1790, 1782, END)
+wave(PR, HP, "R", 1640, 1790, 1765, END)
 for f in (1623, 1700, END): hang_hand(PR, "L", f, bend=0.15)
 for f, tgt in ((1623, (SXX, -3.0, 1.6)), (1700, (SXX - 0.8, -2.0, 1.4)), (1760, (SXX + 0.8, -2.0, 1.4)), (1800, (SXX, -3.5, 1.5)), (1818, (SXX, -3.5, 1.2)), (1828, (SXX, -3.5, 1.6)), (END, (SXX, -3.5, 1.6))):
     fs(f); look_at(PR, f, Vector(tgt), blend=0.9)
@@ -462,12 +464,12 @@ for f, sm, br in ((1623, 0.8, 0.6), (1700, 0.9, 0.7), (1800, 0.8, 0.5), (END, 0.
     key_face(PRIS, f, smile=sm, brow=br)
 blinks(PRIS, [1660, 1745])            # no blink after 1760: the film ends on an open-eyed nod
 saccades(PR, 1623, 1790, every=50, seed=11)
-for rig, ctrl, H, pos, yaw, s_ in ((VIS, VR, HV, Vector((SXX - 0.55, -0.35, 0)), 170.0, "L"), (SMITH, SR, HS, Vector((SXX + 1.00, -0.40, 0)), -165.0, "R")):
+for rig, ctrl, H, pos, yaw, s_ in ((VIS, VR, HV, Vector((SXX - 0.95, 3.05, 0.85)), -12.0, "L"), (SMITH, SR, HS, Vector((SXX + 1.00, 3.05, 0.85)), 12.0, "R")):
     idle_stand(H, ctrl, 1623, END, pos, yaw, flex=-2.0, step=10, seed=pos.x)
     wave(ctrl, H, s_, 1650 if rig is VIS else 1665, 1800, 1790 if rig is VIS else 1770, END, per=30)
     other = "R" if s_ == "L" else "L"
     for f in (1623, END): hang_hand(ctrl, other, f, bend=0.15)
-    for f in (1623, END): fs(f); look_at(ctrl, f, P_TOPS + Vector((0, 0, 1.6)), blend=0.9)
+    for f in (1623, 1700, END): fs(f); look_at(ctrl, f, Vector((SXX, -3.0, 1.6)) if f != 1700 else P_TOPS + Vector((0, 0, 1.6)), blend=0.8)
     for f in (1623, END): key_face(rig, f, smile=0.8, brow=0.5)
 # costume + hair for "years later" (switched inside the flash)
 for n in ("Pris.top", "Pris.trousers"): vis(O[n], 1, True); vis(O[n], 1623, False)
@@ -477,8 +479,9 @@ for c in PRIS.children:
         for m in c.data.materials:
             for nd in m.node_tree.nodes:
                 if nd.type == 'MIX' and nd.blend_type == 'MULTIPLY':
-                    for f, col in ((1, (0.20, 0.11, 0.06)), (1622, (0.20, 0.11, 0.06)), (1623, (0.62, 0.60, 0.58))):
-                        nd.inputs['B'].default_value = (*col, 1); nd.inputs['B'].keyframe_insert("default_value", frame=f)
+                    c0 = tuple(nd.inputs[7].default_value)
+                    for f, col in ((1, c0[:3]), (1622, c0[:3]), (1623, (0.85, 0.85, 0.85))):
+                        nd.inputs[7].default_value = (*col, 1); nd.inputs[7].keyframe_insert("default_value", frame=f)
                     for fc in iter_fcurves(m.node_tree.animation_data.action):
                         for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
 log("S9 done")

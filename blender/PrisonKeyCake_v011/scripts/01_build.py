@@ -33,7 +33,7 @@ for r, b in ((PRIS, PB), (VIS, VB), (SMITH, SB)):
     bake_keys(b); eye_fix(r)
 eye_group_fix()
 
-def flatten_chest(rig, body, keep=0.2):
+def flatten_chest(rig, body, keep=0.0):
     """male chest: push breast-weighted vertices back to the sternum plane BEFORE dressing (05 lesson)"""
     me = body.data
     gi = {body.vertex_groups[n].index for n in ("breast.L", "breast.R") if n in body.vertex_groups}
@@ -47,7 +47,7 @@ def flatten_chest(rig, body, keep=0.2):
         if w <= 0.02 or v.co.y > 0.02: continue
         lim = ster(v.co.z) + 0.10 * v.co.x * v.co.x / 0.04 * 0.25     # gentle curvature toward the sides
         if v.co.y < lim:
-            u = min(1.0, w * 1.6)
+            u = min(1.0, w * 2.5)
             target = lim + (v.co.y - lim) * keep
             v.co.y = v.co.y + (target - v.co.y) * u; n += 1
     me.update(); print("CHEST flattened", rig.name, n)
@@ -65,7 +65,7 @@ for rig in (PRIS, VIS, SMITH):
         if c.type == 'MESH' and "teeth" in c.name:
             for m in c.data.materials: tint(m, (1.5, 1.45, 1.4))
 
-def wardrobe(rig, body, top_m, bot_m, hem_drop, top_off, bot_off, top_folds, bot_folds, prefix, collar=0.03, hide=True):
+def wardrobe(rig, body, top_m, bot_m, hem_drop, top_off, bot_off, top_folds, bot_folds, prefix, collar=0.03, hide=True, thick=0.003):
     hip = bl(rig, "pelvis.L").z; neck = bl(rig, "neck01")
     cuts_top = [((0, 0, hip - hem_drop), (0, 0, -1)), ((0, neck.y, neck.z - collar), (0, -0.35, 1))]
     arm_cut = {}
@@ -80,7 +80,7 @@ def wardrobe(rig, body, top_m, bot_m, hem_drop, top_off, bot_off, top_folds, bot
             s = "L" if co.x > 0 else "R"
             if plane_side(co, *arm_cut[s]) > 1e-5: return False
         return True
-    top, cov_t = garment(rig, body, prefix + ".top", top_region, cuts_top, top_off, top_m, folds=top_folds)
+    top, cov_t = garment(rig, body, prefix + ".top", top_region, cuts_top, top_off, top_m, folds=top_folds, thick=thick)
     ank = {s: bl(rig, "foot." + s).z + 0.06 for s in "LR"}
     cuts_bot = [((0, 0, hip + 0.07), (0, 0, 1)), ((0, 0, ank["L"]), (0, 0, -1))]
     def bot_region(co, bn):
@@ -104,12 +104,12 @@ def shoes(rig, body, col, prefix):
 # prisoner: indigo prison jacket + ochre-brown trousers; later (years on) a deep navy suit (switched in the flash)
 P_TOP, P_BOT, P_MK, P_COV = wardrobe(PRIS, PB, fabric("M_PrisJacket", (0.03, 0.06, 0.34)), fabric("M_PrisTrousers", (0.34, 0.15, 0.03), scale=600),
                                      0.03, 0.013, 0.008, 0.005, 0.004, "Pris")
-S_TOP, S_BOT, _, _ = wardrobe(PRIS, PB, fabric("M_SuitCoat", (0.010, 0.010, 0.013)), fabric("M_SuitTrousers", (0.16, 0.07, 0.03), scale=600),
-                              0.10, 0.016, 0.009, 0.004, 0.003, "Suit", hide=False)
+S_TOP, S_BOT, _, _ = wardrobe(PRIS, PB, fabric("M_SuitCoat", (0.010, 0.010, 0.013)), fabric("M_SuitTrousers", (0.02, 0.05, 0.20), scale=600),
+                              0.30, 0.024, 0.014, 0.008, 0.004, "Suit", hide=False, collar=-0.005, thick=0.006)
 S_TOP.name = "Pris.suittop"; S_BOT.name = "Pris.suittrousers"
 shoes(PRIS, PB, (0.08, 0.04, 0.02), "Pris")
 V_TOP, V_BOT, _, _ = wardrobe(VIS, VB, fabric("M_VisCoat", (0.01, 0.30, 0.13)), fabric("M_VisTrousers", (0.30, 0.03, 0.17), scale=600),
-                              0.10, 0.014, 0.008, 0.005, 0.004, "Vis")
+                              0.16, 0.024, 0.010, 0.009, 0.004, "Vis", collar=-0.01, thick=0.006)
 shoes(VIS, VB, (0.05, 0.02, 0.02), "Vis")
 SM_TOP, SM_BOT, _, _ = wardrobe(SMITH, SB, fabric("M_SmithShirt", (0.75, 0.40, 0.02)), fabric("M_SmithTrousers", (0.02, 0.17, 0.20), scale=600),
                                 0.02, 0.012, 0.008, 0.005, 0.004, "Smith")
@@ -291,8 +291,8 @@ wax_m = mat("M_CandleWax", (0.95, 0.86, 0.62), rough=0.4, sss=0.3)
 CAND = cyl("Candle", 0.018, 0.14, (CANDLE_XY[0], CANDLE_XY[1], 0.79 + 0.07), wax_m, verts=24)
 set_origin(CAND, (CANDLE_XY[0], CANDLE_XY[1], 0.79)); C(CAND)
 WICK = bpy.data.objects.new("CandleWick", None); sc.collection.objects.link(WICK); WICK.location = (CANDLE_XY[0], CANDLE_XY[1], 0.79 + 0.14)
-fl_m = mat("M_Flame", (1.0, 0.6, 0.2), emit=((1.0, 0.45, 0.06), 6.0))
-bpy.ops.mesh.primitive_uv_sphere_add(radius=0.009, location=(0, 0, 0), segments=16, ring_count=8)
+fl_m = mat("M_Flame", (1.0, 0.35, 0.03), emit=((1.0, 0.32, 0.02), 3.0))
+bpy.ops.mesh.primitive_uv_sphere_add(radius=0.009, location=(0, 0, 0), segments=32, ring_count=16)
 FLAME = bpy.context.active_object; FLAME.name = "CandleFlame"
 for v in FLAME.data.vertices:
     z = v.co.z / 0.009; v.co.z = (z + 1) * 0.016; v.co.x *= (1.0 - 0.55 * max(0, z)); v.co.y *= (1.0 - 0.55 * max(0, z))
@@ -316,7 +316,7 @@ def make_key(name, material, ornate=True, L=0.072):
     bpy.ops.mesh.primitive_cylinder_add(radius=0.0034, depth=L, location=(0.0135 + L / 2, 0, 0), rotation=(0, R_(90), 0), vertices=16)
     parts.append(bpy.context.active_object)    # shaft
     bx = 0.0135 + L - 0.017
-    for (dx, w, h) in ((0.0, 0.016, 0.017), (0.004, 0.004, 0.006), (0.010, 0.004, 0.009)):
+    for (dx, w, h) in ((0.0, 0.016, 0.017),):
         bpy.ops.mesh.primitive_cube_add(size=1, location=(bx + 0.008, -0.0034 - h / 2 + (0 if dx == 0 else 0), 0))
         c = bpy.context.active_object
         if dx == 0: c.scale = (w, h, 0.0042)
@@ -337,7 +337,7 @@ def make_key(name, material, ornate=True, L=0.072):
     except Exception: pass
     return k
 MKEY = make_key("MasterKey", brass, ornate=True)
-copy_hot = mat("M_KeyCopy1", (0.78, 0.80, 0.84), rough=0.3, metal=1.0, emit=((1.0, 0.35, 0.03), 0.0))
+copy_hot = mat("M_KeyCopy1", (0.78, 0.80, 0.84), rough=0.3, metal=1.0, emit=((1.0, 0.22, 0.0), 0.0))
 KEY1 = make_key("KeyCopy1", copy_hot, ornate=False)
 KEY2 = make_key("KeyCopy2", mat("M_KeyCopy2", (0.80, 0.82, 0.86), rough=0.25, metal=1.0), ornate=False)
 print("KEY dims", tuple(round(d, 4) for d in MKEY.dimensions))
@@ -382,7 +382,7 @@ TIN2, WAX2 = make_tin("Mold2", (-0.50, 0.42, 0.76), imprint_key=MKEY, rot_z=R_(-
 C(TIN2)
 
 # ================================================================== cakes + baskets
-def make_cake(name, loc, cut=False):
+def make_cake(name, loc, cut=False, hollow=None):
     sponge = mat("M_Sponge", (0.80, 0.45, 0.13), rough=0.8)
     nt = sponge.node_tree; p = nt.nodes["Principled BSDF"]
     if not any(n.type == 'TEX_VORONOI' for n in nt.nodes):
@@ -397,12 +397,43 @@ def make_cake(name, loc, cut=False):
     parts = [body, top]
     for i in range(8):
         a = i * math.pi / 4
-        bpy.ops.mesh.primitive_uv_sphere_add(radius=0.011, location=(0.075 * math.cos(a), 0.075 * math.sin(a), 0.092), segments=16, ring_count=8)
+        bpy.ops.mesh.primitive_uv_sphere_add(radius=0.011, location=(0.075 * math.cos(a), 0.075 * math.sin(a), 0.092), segments=24, ring_count=12)
         c = bpy.context.active_object; c.data.materials.append(cherry); parts.append(c)
     bpy.ops.mesh.primitive_uv_sphere_add(radius=0.013, location=(0, 0, 0.093), segments=16, ring_count=8)
     c = bpy.context.active_object; c.data.materials.append(cherry); parts.append(c)
-    cake = join(parts, name)
-    if cut:   # a wedge removed facing local -Y (the side the camera sees in the cell after the turn)
+    if cut:
+        def in_wedge(p):   # wedge facing local -X, apex at x=+0.012, half-angle ~37 deg
+            return p.x < 0.012 and abs(p.y) < (0.012 - p.x) * 0.76
+        parts = [p for p in parts if p in (body, top) or not in_wedge(p.location)]
+        for p in [p for p in bpy.data.objects if p.name.startswith(name) and p not in parts and p.type == 'MESH' and p.name != name and not p.name.startswith(name + "_Icing")]:
+            pass
+    cake = join(parts, name) if not cut else None
+    if cut:
+        for part in (body, top):
+            bm = bmesh.new()
+            pts = [Vector((0.012, 0, -0.01)), Vector((-0.20, 0.16, -0.01)), Vector((-0.20, -0.16, -0.01))]
+            v_ = [bm.verts.new(q) for q in pts] + [bm.verts.new(q + Vector((0, 0, 0.14))) for q in pts]
+            bm.faces.new((v_[0], v_[1], v_[2])); bm.faces.new((v_[3], v_[5], v_[4]))
+            for a_, b_ in ((0, 1), (1, 2), (2, 0)): bm.faces.new((v_[a_], v_[b_], v_[b_ + 3], v_[a_ + 3]))
+            bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+            wm_ = bpy.data.meshes.new("wedge"); bm.to_mesh(wm_); bm.free(); wo = bpy.data.objects.new("wedge", wm_); sc.collection.objects.link(wo)
+            for md_ in list(part.modifiers):
+                bpy.context.view_layer.objects.active = part; bpy.ops.object.modifier_apply(modifier=md_.name)
+            md = part.modifiers.new("cut", 'BOOLEAN'); md.object = wo; md.operation = 'DIFFERENCE'; md.solver = 'EXACT'
+            bpy.context.view_layer.objects.active = part; bpy.ops.object.modifier_apply(modifier="cut")
+            bpy.data.objects.remove(wo, do_unlink=True)
+            print("CAKECUT", part.name, len(part.data.polygons))
+        if hollow is not None:   # the key-shaped hollow left in the sponge where the key was pulled out
+            kobj, Mloc = hollow
+            bpy.ops.mesh.primitive_cube_add(size=1); dup = bpy.context.active_object       # a slot where the key lay (shaft + bow)
+            dup.matrix_world = Mloc @ Matrix.Translation((0.034, -0.004, 0)); dup.scale = (0.106, 0.036, 0.012)
+            md = body.modifiers.new("hollow", 'BOOLEAN'); md.object = dup; md.operation = 'DIFFERENCE'; md.solver = 'EXACT'
+            bpy.context.view_layer.objects.active = body; bpy.ops.object.modifier_apply(modifier="hollow")
+            bpy.data.objects.remove(dup, do_unlink=True); print("HOLLOW", len(body.data.polygons))
+        for p in parts:
+            for p_ in p.data.polygons: p_.use_smooth = True
+        cake = join(parts, name)
+    if False:   # a wedge removed facing local -Y (the side the camera sees in the cell after the turn)
         bm = bmesh.new()
         pts = [Vector((0.012, 0, -0.01)), Vector((-0.20, 0.16, -0.01)), Vector((-0.20, -0.16, -0.01))]
         v_ = [bm.verts.new(q) for q in pts] + [bm.verts.new(q + Vector((0, 0, 0.14))) for q in pts]
@@ -481,8 +512,12 @@ GLEAF = join(gl, "GateLeaves")
 md = GLEAF.modifiers.new("wicket", 'BOOLEAN'); ct = box("cutter", (0.6, 0.80, 1.86), (9.62, 0.70, 0.93), iron, bevel=0)
 md.object = ct; md.operation = 'DIFFERENCE'; bpy.context.view_layer.objects.active = GLEAF; bpy.ops.object.modifier_apply(modifier="wicket")
 bpy.data.objects.remove(ct, do_unlink=True); E(GLEAF)
-wk = [box("WicketPanel", (0.10, 0.78, 1.84), (9.62, 0.70, 0.93), wood, bevel=0.01), box("WicketStrap", (0.12, 0.74, 0.06), (9.62, 0.70, 0.5), iron, bevel=0.004),
+wk = [box("WicketPanel", (0.10, 0.78, 1.84), (9.62, 0.70, 0.93), wood_dark, bevel=0.01), box("WicketStrap", (0.12, 0.74, 0.06), (9.62, 0.70, 0.5), iron, bevel=0.004),
       box("WicketStrap", (0.12, 0.74, 0.06), (9.62, 0.70, 1.4), iron, bevel=0.004)]
+for y_ in (0.40, 0.70, 1.00):
+    for z_ in (0.25, 0.75, 1.15, 1.65):
+        bpy.ops.mesh.primitive_uv_sphere_add(radius=0.016, location=(9.565, y_, z_), segments=12, ring_count=6); st_ = bpy.context.active_object
+        st_.data.materials.append(iron); wk.append(st_)
 WICKET = join(wk, "Wicket"); set_origin(WICKET, (9.62, 1.09, 0.0)); E(WICKET)
 E(box("LANE_Ground", (5.0, 14.0, 0.1), (11.6, 0.8, -0.05), cobble, bevel=0))
 E(box("LANE_Ground2", (6.0, 14.0, 0.1), (15.8, 0.8, -0.06), cobble, bevel=0))
@@ -496,7 +531,7 @@ def torch(name, loc, energy=60.0):
     return [st, bowl, f_], lo
 TORCH_A, TLA = torch("TorchA", (9.8, -0.75, 2.4)); TORCH_B, TLB = torch("TorchB", (9.8, 2.35, 2.4)); E(TORCH_A); E(TORCH_B)
 # ================================================================== WORKSHOP (x 13.5..18)
-E(wall("WS_WallW", 13.5, 13.7, -2.0, 3.5, 0, 3.4, plaster, holes=[(-1.65, 1.45, 0.0, 2.55)]))
+E(wall("WS_WallW", 13.5, 13.7, -2.0, 3.5, 0, 3.4, plaster, holes=[(-2.0, 1.45, 0.0, 2.55)]))
 E(box("WS_Beam", (0.30, 3.3, 0.18), (13.6, -0.10, 2.64), wood_dark, bevel=0.01))
 
 E(wall("WS_WallE", 17.9, 18.1, -2.0, 3.5, 0, 3.4, redbrick))
@@ -560,7 +595,7 @@ FL2 = bpy.data.lights.new("ForgeGlowUp", 'POINT'); FL2.energy = 120; FL2.color =
 FL2O = bpy.data.objects.new("ForgeGlowUp", FL2); sc.collection.objects.link(FL2O); FL2O.location = (17.1, 2.55, 1.15)
 # tilting crucible on a bench stand: pivot axis Y at (15.85, 0.05, 1.22); the lip on the -X side over the mould; lever to -X.
 crm = mat("M_Crucible", (0.08, 0.06, 0.06), rough=0.6)
-melt = mat("M_Melt", (1.0, 0.5, 0.1), emit=((1.0, 0.42, 0.05), 30.0))
+melt = mat("M_Melt", (1.0, 0.3, 0.02), emit=((1.0, 0.28, 0.0), 5.0))
 PIV = Vector((15.85, 0.05, 1.22))
 pot = cyl("CruciblePot", 0.075, 0.16, (PIV.x, PIV.y, PIV.z - 0.10), crm, bevel=0.01)
 bm = bmesh.new(); bm.from_mesh(pot.data); bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.normal.z > 0.9], context='FACES_ONLY'); bm.to_mesh(pot.data); bm.free()
@@ -604,16 +639,9 @@ CAKE_WS = make_cake("CakeWS", (15.55, 0.62, BENCH_TOP + 0.012)); E(CAKE_WS)
 SHELF_TOP = 0.95
 PLATE_C = make_plate("PlateCell", (1.33, -0.32, SHELF_TOP)); C(PLATE_C)
 CAKE_C = make_cake("CakeCell", (1.33, -0.32, SHELF_TOP + 0.012), cut=True); C(CAKE_C)
-CAKE_C2 = make_cake("CakeCell2", (1.33, -0.32, SHELF_TOP + 0.012), cut=True); C(CAKE_C2)
 # the key inside a cake (cake-local): shaft along +X from the -X side, bow normal +Y, centred at cake mid-height, bow just inside the cut face
 KEY_IN_CAKE = Matrix.Translation((-0.085, -0.055, 0.040)) @ Matrix(((1, 0, 0, 0), (0, 0, 1, 0), (0, -1, 0, 0), (0, 0, 0, 1)))
-KEY2.matrix_world = CAKE_C2.matrix_world @ KEY_IN_CAKE
-bpy.context.view_layer.update()
-dup = KEY2.copy(); dup.data = KEY2.data.copy(); sc.collection.objects.link(dup); dup.matrix_world = KEY2.matrix_world
-dup.scale = (1.04, 1.25, 1.25)
-md = CAKE_C2.modifiers.new("hollow", 'BOOLEAN'); md.object = dup; md.operation = 'DIFFERENCE'; md.solver = 'EXACT'
-bpy.context.view_layer.objects.active = CAKE_C2; bpy.ops.object.modifier_apply(modifier="hollow")
-bpy.data.objects.remove(dup, do_unlink=True)
+CAKE_C2 = make_cake("CakeCell2", (1.33, -0.32, SHELF_TOP + 0.012), cut=True, hollow=(KEY2, KEY_IN_CAKE)); C(CAKE_C2)
 sc["KEY_IN_CAKE"] = [list(r) for r in KEY_IN_CAKE]
 
 # ================================================================== STEPS island (x = 40): years later
@@ -631,7 +659,16 @@ T(box("ST_Facade", (12.0, 0.6, 7.0), (SX, 4.3, 3.5), sand2, bevel=0))
 for dx in (-2.2, -0.9, 0.9, 2.2):
     T(cyl("ST_Column", 0.22, 4.6, (SX + dx, 3.55, 0.85 + 2.3), mat("M_Column", (0.93, 0.86, 0.72), rough=0.4), verts=32, bevel=0.01))
 T(box("ST_Pediment", (6.4, 0.9, 0.5), (SX, 3.6, 5.7), mat("M_Column", (0.93, 0.86, 0.72)), bevel=0.02))
-T(box("ST_Door", (1.6, 0.1, 2.8), (SX, 3.98, 0.85 + 1.4), mat("M_GovDoor", (0.02, 0.22, 0.10), rough=0.35, coat=0.3), bevel=0.02))
+T(box("ST_Door", (1.6, 0.1, 2.8), (SX, 3.98, 0.85 + 1.4), woodmat("M_GovDoor", (0.30, 0.09, 0.03), (0.20, 0.05, 0.02)), bevel=0.02))
+T(box("ST_DoorFrame", (1.9, 0.12, 0.18), (SX, 3.95, 0.85 + 2.85), mat("M_Column", (0.93, 0.86, 0.72)), bevel=0.02))
+for dx in (-0.4, 0.4):
+    T(box("ST_DoorPanel", (0.55, 0.04, 1.0), (SX + dx, 3.92, 0.85 + 1.9), woodmat("M_GovDoorP", (0.22, 0.06, 0.02), (0.14, 0.04, 0.01)), bevel=0.01))
+    T(box("ST_DoorPanel", (0.55, 0.04, 0.9), (SX + dx, 3.92, 0.85 + 0.65), woodmat("M_GovDoorP", (0.22, 0.06, 0.02), (0.14, 0.04, 0.01)), bevel=0.01))
+glass = mat("M_GovGlass", (0.05, 0.25, 0.55), rough=0.1, coat=0.6)
+for dx in (-4.3, -3.0, 3.0, 4.3):
+    for z in (1.6, 4.2):
+        T(box("ST_Window", (0.8, 0.08, 1.4), (SX + dx, 3.98, z), glass, bevel=0.01))
+        T(box("ST_WinFrame", (0.95, 0.10, 0.10), (SX + dx, 3.97, z - 0.75), mat("M_Column", (0.93, 0.86, 0.72)), bevel=0.01))
 tri = bpy.data.materials.new("M_Tricolour"); tri.use_nodes = True; nt = tri.node_tree; p = nt.nodes["Principled BSDF"]
 tc = nt.nodes.new("ShaderNodeTexCoord"); sep = nt.nodes.new("ShaderNodeSeparateXYZ"); cr = nt.nodes.new("ShaderNodeValToRGB")
 cr.color_ramp.interpolation = 'CONSTANT'
@@ -641,7 +678,7 @@ e3 = cr.color_ramp.elements.new(0.6667); e3.color = (1.0, 0.36, 0.02, 1)
 nt.links.new(tc.outputs["UV"], sep.inputs[0]); nt.links.new(sep.outputs["X"], cr.inputs["Fac"]); nt.links.new(cr.outputs["Color"], p.inputs["Base Color"])
 p.inputs["Roughness"].default_value = 0.6; p.inputs["Sheen Weight"].default_value = 0.3
 FLAGS = []
-for i, dx in enumerate((-2.9, 2.9)):
+for i, dx in enumerate((-1.75, 1.75)):
     T(cyl("ST_FlagPole", 0.035, 4.6, (SX + dx, 2.7, 0.85 + 2.3), mat("M_Pole", (0.85, 0.70, 0.25), rough=0.2, metal=1.0)))
     bpy.ops.mesh.primitive_grid_add(x_subdivisions=30, y_subdivisions=18, size=1, location=(0, 0, 0))
     fg = bpy.context.active_object; fg.name = "ST_Flag%d" % i
