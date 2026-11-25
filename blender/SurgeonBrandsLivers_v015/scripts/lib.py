@@ -185,7 +185,7 @@ HEADB = ("head", "jaw", "neck", "eye", "orbic", "oris", "levator", "risor", "tem
 def plane_side(co, p0, n):
     return (Vector(co) - Vector(p0)).dot(Vector(n))
 
-def rest_relax(g, body, offset, iters):
+def rest_relax(g, body, offset, iters, hem_z=None):
     """cloth drape in the rest pose: push out by `offset`, relax interior vertices (hems pinned) so the cloth bridges
     hollows instead of hugging anatomy, and keep at least 0.7*offset from the skin (BVH push-out)."""
     from mathutils.bvhtree import BVHTree
@@ -195,7 +195,7 @@ def rest_relax(g, body, offset, iters):
     nbr = [[e.other_vert(v).index for e in v.link_edges] for v in vs]
     pin = [v.is_boundary for v in vs]
     # rings from the hem: the cloth closes in to ~4 mm at every hem/collar/cuff and eases out over 4 rings
-    ring = [99] * n; front = [i for i in range(n) if pin[i]]
+    ring = [99] * n; front = [i for i in range(n) if pin[i] and (hem_z is None or vs[i].co.z > hem_z)]
     for i in front: ring[i] = 0
     for r_ in range(1, 6):
         nxt = []
@@ -225,7 +225,7 @@ def rest_relax(g, body, offset, iters):
     for i, v in enumerate(vs): v.co = co[i]
     bm.to_mesh(g.data); bm.free()
 
-def garment(rig, body, name, region, cuts, offset, material, thick=0.003, folds=0.0, fold_scale=0.07, subd=True, relax=0):
+def garment(rig, body, name, region, cuts, offset, material, thick=0.003, folds=0.0, fold_scale=0.07, subd=True, relax=0, hem_z=None):
     """R1: one joined garment = duplicate of the body, bisected along clean cut planes, region-filtered,
     pushed out along the normals after the Armature, solidified, smoothed, subdivided."""
     g = body.copy(); g.data = body.data.copy(); g.name = name; g.data.name = name
@@ -264,7 +264,7 @@ def garment(rig, body, name, region, cuts, offset, material, thick=0.003, folds=
     g.data.materials.clear(); g.data.materials.append(material)
     for p in g.data.polygons: p.use_smooth = True
     if relax:
-        rest_relax(g, body, offset, relax)
+        rest_relax(g, body, offset, relax, hem_z=hem_z)
         offset_rt = 0.0
     else:
         offset_rt = offset
@@ -359,7 +359,7 @@ def wardrobe(rig, body, top_m, bot_m, sleeve, hem_drop, top_off, bot_off, top_fo
             s = "L" if co.x > 0 else "R"
             if plane_side(co, *arm_cut[s]) > 1e-5: return False
         return True
-    top, cov_t = garment(rig, body, prefix + ".top", top_region, cuts_top, top_off, top_m, folds=top_folds, fold_scale=0.12, relax=relax)
+    top, cov_t = garment(rig, body, prefix + ".top", top_region, cuts_top, top_off, top_m, folds=top_folds, fold_scale=0.12, relax=relax, hem_z=hip - 0.02)
     if top_only:
         if hide: hide_under(body, cov_t, name="hide_" + prefix)
         return top, None, cov_t
@@ -390,7 +390,7 @@ def to_head_only(g):
     for vg in list(g.vertex_groups): g.vertex_groups.remove(vg)
     vh = g.vertex_groups.new(name="head"); vh.add(list(range(len(g.data.vertices))), 1.0, 'REPLACE')
 
-def cap_and_mask(rig, body, prefix, cap_m, mask_m=None, cap_off=0.024, cap_folds=0.014, cap_front=0.034):
+def cap_and_mask(rig, body, prefix, cap_m, mask_m=None, cap_off=0.016, cap_folds=0.008, cap_front=0.034):
     """soft cloth scrub cap (band, folds, bound to the head bone) + optional face mask. Returns (cap, mask, cap plane)."""
     eye_z = bl(rig, "eye.L").z
     nose = max(body.data.vertices, key=lambda v: -v.co.y if abs(v.co.x) < 0.006 and eye_z - 0.07 < v.co.z < eye_z else -9).co.copy()
@@ -399,7 +399,7 @@ def cap_and_mask(rig, body, prefix, cap_m, mask_m=None, cap_off=0.024, cap_folds
         def mask_region(co, bn):
             return in_region(bn, ("head", "jaw", "oris", "levator", "risor", "neck03")) and abs(co.x) <= 0.07201 and co.y <= nose.y + 0.07501 and nose.z - 0.10001 <= co.z <= eye_z - 0.02199
         mask_cuts = [((0, 0, nose.z - 0.10), (0, 0, -1)), ((0, 0, eye_z - 0.022), (0, 0, 1)), ((0.072, 0, 0), (1, 0, 0)), ((-0.072, 0, 0), (-1, 0, 0)), ((0, nose.y + 0.075, 0), (0, 1, 0))]
-        MASK, _ = garment(rig, body, prefix + ".mask", mask_region, mask_cuts, 0.005, mask_m, thick=0.002, folds=0.0)
+        MASK, _ = garment(rig, body, prefix + ".mask", mask_region, mask_cuts, 0.008, mask_m, thick=0.002, folds=0.0, relax=12)
         to_head_only(MASK)
     cap_p0 = Vector((0, -0.10, eye_z + cap_front)); cap_n = Vector((0, 0.095, 0.2)).normalized()
     def cap_region(co, bn):
@@ -461,7 +461,7 @@ def suit_material(name, rig, jacket, shirt, tie):
         return n.outputs[0]
     X, Y, Z = sp.outputs[0], sp.outputs[1], sp.outputs[2]
     t = math('MULTIPLY', math('SUBTRACT', Z, z0), 1.0 / max(0.01, z1 - z0), clamp=True)
-    half = math('ADD', math('MULTIPLY', math('POWER', t, 1.1), 0.12), 0.018)
+    half = math('ADD', math('MULTIPLY', math('POWER', t, 1.2), 0.075), 0.014)
     ax = math('ABSOLUTE', X)
     front = math('LESS_THAN', Y, ycut); above = math('GREATER_THAN', Z, z0)
     shirt = math('MULTIPLY', math('MULTIPLY', math('LESS_THAN', ax, half), front), above)

@@ -118,7 +118,7 @@ def pat_lying_pose(f):
         a = PR.BN["foot." + s].head_local
         PR.key_world("IK_foot." + s, f, Matrix.Translation(Vector((sx * 0.02, 0.0, 0.0))) @ Matrix.Translation(a) @ Matrix.Rotation(R_(-35), 4, 'X') @ Matrix.Translation(-a) @ PR.rest("IK_foot." + s))
         hip = PR.BN["pelvis." + s].head_local
-        wr = Vector((sx * 0.24, 0.035, hip.z - 0.13))
+        wr = Vector((sx * 0.20, 0.035, hip.z - 0.13))
         HP.key_hand(s, f, wr, Vector((0, 0.15, -1)), Vector((-sx, 0, 0)), pole=Vector((sx * 0.5, 0.4, 1.05)))
 pat_lying_pose(1); pat_lying_pose(F_PAT_HOME - 1); pat_lying_pose(F_PAT_OR2); pat_lying_pose(END)
 fs(1)
@@ -171,10 +171,10 @@ def drape():
             x = x0 + (x1 - x0) * i / nx; y = y0 + (y1 - y0) * j / ny
             ex = min(0.0, x - (TABLE_C.x - 1.0)); ey = 0.0
             yy = y
-            if y < TABLE_C.y - 0.26: ey = (TABLE_C.y - 0.26) - y; yy = TABLE_C.y - 0.26 - 0.012
-            if y > TABLE_C.y + 0.26: ey = y - (TABLE_C.y + 0.26); yy = TABLE_C.y + 0.26 + 0.012
-            xx = max(x, TABLE_C.x - 1.0 - 0.012)
-            z, n_ = surf_z(xx, yy)
+            if y < TABLE_C.y - 0.26: ey = (TABLE_C.y - 0.26) - y; yy = TABLE_C.y - 0.26 - 0.03 - ey * 0.25
+            if y > TABLE_C.y + 0.26: ey = y - (TABLE_C.y + 0.26); yy = TABLE_C.y + 0.26 + 0.03 + ey * 0.25
+            xx = x if x >= TABLE_C.x - 1.0 else TABLE_C.x - 1.0 - 0.03 + ex * 0.25
+            z, n_ = surf_z(min(max(xx, TABLE_C.x - 1.0), 9), min(max(yy, TABLE_C.y - 0.26), TABLE_C.y + 0.26))
             top = max(tz + 0.012, (z + 0.034) if z is not None else tz + 0.012)
             zz = top - ey * 1.0 - (-ex) * 1.0
             jit = 0.004 * math.sin(x * 37 + y * 11) + 0.003 * math.sin(y * 53 - x * 7)
@@ -340,7 +340,7 @@ def place_letter(name, path2d, cx):
         x = LET_C.x + cx + u; y = LET_C.y + v
         loc, nrm = liver_surf(x, y)
         pts3.append(loc + nrm * 0.0004 if loc is not None else Vector((x, y, WORK.z - 0.03)))
-    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0024; cu.bevel_resolution = 2
+    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0034; cu.bevel_resolution = 2
     cu.use_fill_caps = True; cu.bevel_factor_mapping_end = 'SPLINE'
     sp = cu.splines.new('POLY'); sp.points.add(len(pts3) - 1)
     for p_, c_ in zip(sp.points, pts3): p_.co = (*c_, 1)
@@ -435,7 +435,7 @@ DR = RIG["Surgeon"]; HD = HU["Surgeon"]
 S1_POS = Vector((WORK.x + 0.20, TABLE_C.y + 0.26 + 0.33, 0))
 DOC.location = S1_POS; DOC.rotation_euler = (0, 0, 0)
 DOC.keyframe_insert("location", frame=1); DOC.keyframe_insert("rotation_euler", frame=1)
-M_DEF = sectM("HEAR") @ Matrix.Translation(Vector((1.05, 3.70, 0))) @ Matrix.Rotation(R_(-90), 4, 'Z')   # defendant: faces -x (toward the bench)
+M_DEF = sectM("HEAR") @ Matrix.Translation(Vector((1.05, 3.70, 0))) @ Matrix.Rotation(R_(-60), 4, 'Z')   # defendant: faces -x (toward the bench)
 key_obj_matrix(DOC, F_S1_OUT, M_DEF)
 const_interp(DOC)
 fs(1)
@@ -444,7 +444,7 @@ theatre = [O["S1Scrub.top"], O["S1Scrub.trousers"], O["S1.cap"], O["S1.mask"], O
 hearing = [O["S1Suit.top"], O["S1Suit.trousers"], part(DOC, "short02")]
 key_vis(theatre, 1, True); key_vis(hearing, 1, False); key_vis(theatre, F_S1_OUT, False); key_vis(hearing, F_S1_OUT, True)
 fs(1)
-tool_setup(DOC, PEN, "R", "tripod", 0.052)
+tool_setup(DOC, PEN, "R", "tripod", 0.0)
 log("pen set up")
 
 # body: feet planted, lean over the patient while working, breathing + small sway
@@ -471,7 +471,7 @@ def path_param(pts, t):
     return pts[-1]
 def pen_dir(f):
     # pen leans back toward the surgeon's hand (+y) and to his right (-x): a natural writing angle
-    return Vector((0.18, -0.55, -0.82)).normalized()
+    return Vector((0.12, -0.42, -0.90)).normalized()
 HOVER = 0.006
 for f in range(1, 290, 2):
     if f < S_F[0]:
@@ -574,31 +574,10 @@ log("pen put down at", F_PUT)
 gen = box("ArgonUnit", (0.40, 0.45, 0.9), (S1_POS.x - 0.75, S1_POS.y + 0.45, 0.45), mat("M_Unit", (0.92, 0.92, 0.9), rough=0.4), bevel=0.02)
 gen.parent = STAGE
 box("ArgonUnitPanel", (0.30, 0.01, 0.2), (S1_POS.x - 0.75, S1_POS.y + 0.22, 0.75), mat("M_UnitPanel", (0.05, 0.25, 0.6), rough=0.2, emit=((0.1, 0.4, 1.0), 1.0)), bevel=0).parent = STAGE
-cab_m = mat("M_Cable", (0.85, 0.88, 0.92), rough=0.4)
-cu = bpy.data.curves.new("PenCable", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0028; cu.resolution_u = 16
-sp = cu.splines.new('BEZIER'); sp.bezier_points.add(2)
-CAB = bpy.data.objects.new("PenCable", cu); sc.collection.objects.link(CAB); cu.materials.append(cab_m)
-fs(1)
-pend = PEN.matrix_world @ Vector((0, -0.08, 0))
-pts = [pend, Vector((S1_POS.x - 0.35, S1_POS.y + 0.05, 0.55)), Vector((S1_POS.x - 0.60, S1_POS.y + 0.30, 0.60))]
-for bp, p_ in zip(sp.bezier_points, pts):
-    bp.co = p_; bp.handle_left_type = bp.handle_right_type = 'AUTO'
-hk_e = bpy.data.objects.new("PenCableHook", None); sc.collection.objects.link(hk_e)
-hk_e.parent = PEN; hk_e.matrix_parent_inverse = Matrix.Identity(4); hk_e.location = (0, -0.08, 0)
-hk = CAB.modifiers.new("hook", 'HOOK'); hk.object = hk_e
-upd()
-# assign bezier point 0 (+ its handles) to the hook
-bpy.context.view_layer.objects.active = CAB
-bpy.ops.object.mode_set(mode='EDIT')
-for i, bp in enumerate(CAB.data.splines[0].bezier_points):
-    bp.select_control_point = (i == 0); bp.select_left_handle = (i == 0); bp.select_right_handle = (i == 0)
-bpy.ops.object.hook_reset(modifier="hook"); bpy.ops.object.hook_assign(modifier="hook")
-bpy.ops.object.mode_set(mode='OBJECT')
-hk.center = pend
-upd()
+CAB = None
 
 # ================================================================== SURGEON 1 acting (OR1): lean while writing, stitch (hands below frame), straighten, mask down, smirk
-HEADK1 = [(1, 16, 0), (100, 18, 4), (230, 16, 0), (300, 20, -10), (330, 22, 0), (420, 20, 4), (440, 8, 0), (470, 0, -4), (520, -4, 6), (560, 2, 10), (600, 0, 0)]
+HEADK1 = [(1, 16, 0), (100, 18, 4), (230, 16, 0), (300, 20, -10), (330, 22, 6), (370, 18, -6), (420, 20, 4), (440, 8, 0), (470, 0, -4), (500, -6, 8), (530, -2, 14), (560, 2, 10), (600, 0, 0)]
 LEANK1 = [(1, 22), (230, 22), (300, 16), (330, 26), (420, 26), (450, 6), (600, 4)]
 TURNK1 = [(1, 0), (280, 0), (318, -16), (340, 0), (600, 0)]
 hk_f = pchip([(f, p) for f, p, _ in HEADK1]); hy_f = pchip([(f, y) for f, _, y in HEADK1])
@@ -623,60 +602,20 @@ for i, f in enumerate(range(336, 421, 12)):
     fs(f)
     for s in "LR":
         sx = 1 if s == "L" else -1
-        p = WORK + Vector((sx * 0.06 - 0.01, 0.10, 0.13 + 0.025 * ((i + (0 if s == "L" else 1)) % 2)))
+        p = WORK + Vector((sx * 0.10 - 0.01, 0.10, 0.13 + 0.025 * ((i + (0 if s == "L" else 1)) % 2)))
         hand_world(DOC, s, f, p, Vector((0, -0.5, -0.8)), Vector((0, 0, -1)), pole=p + Vector((sx * 0.4, 0.3, -0.2)))
         apply_pose(DOC, s, "pinch", f)
 for s in "LR":
     for f in (440, 470):
-        sterile(DOC, s, f, lat=0.12, dz=-0.18, fwd=0.28); apply_pose(DOC, s, "relaxed", f)
-# mask down with the left hand: fingers pinch the lower edge in front of the chin, pull down to the neck
-fs(480)
-MASK1 = O["S1.mask"]
-def mask_down_key():
-    """shape key 'down': the mask slid ~7 cm down, snapped onto the chin/neck surface 4 mm out (rest pose)"""
-    from mathutils.bvhtree import BVHTree as B
-    bvh = B.FromPolygons([v.co.copy() for v in DB.data.vertices], [tuple(p.vertices) for p in DB.data.polygons])
-    MASK1.shape_key_add(name="Basis"); k = MASK1.shape_key_add(name="down"); k.value = 0.0
-    for i, v in enumerate(MASK1.data.vertices):
-        q = v.co + Vector((0, -0.012, -0.072))
-        for it in range(3):
-            loc, nrm, _, d = bvh.find_nearest(q)
-            if loc is None: break
-            if (q - loc).dot(nrm) < 0.005: q = loc + nrm * 0.005
-        k.data[i].co = q
-    # relax the slid cloth so it reads as a soft fold under the chin, then keep it off the skin
-    me = MASK1.data; nb = {i: set() for i in range(len(me.vertices))}
-    for e in me.edges: nb[e.vertices[0]].add(e.vertices[1]); nb[e.vertices[1]].add(e.vertices[0])
-    for it in range(8):
-        cur = [k.data[i].co.copy() for i in range(len(me.vertices))]
-        for i in range(len(me.vertices)):
-            if nb[i]:
-                avg = sum((cur[j] for j in nb[i]), Vector()) / len(nb[i]); k.data[i].co = cur[i].lerp(avg, 0.5)
-        for i in range(len(me.vertices)):
-            loc, nrm, _, d = bvh.find_nearest(k.data[i].co)
-            if loc is not None and (k.data[i].co - loc).dot(nrm) < 0.005: k.data[i].co = loc + nrm * 0.005
-    return k
-MK = mask_down_key()
-eye_z = DOC.data.bones["eye.L"].head_local.z
-chin_rest = Vector((0.0, S1_NOSE_Y if False else min(v.co.y for v in MASK1.data.vertices) + 0.012, eye_z - 0.115))
-def head_pt(rig, p_rest, f):
-    fs(f); return rig.matrix_world @ rig.pose.bones["head"].matrix @ rig.data.bones["head"].matrix_local.inverted() @ p_rest
-MK.value = 0.0; MK.keyframe_insert("value", frame=486)
-MK.value = 1.0; MK.keyframe_insert("value", frame=504)
-for f, dzm, pose in ((474, None, "relaxed"), (484, 0.0, "pinch"), (494, -0.035, "pinch"), (504, -0.07, "pinch"), (512, None, "relaxed")):
-    if dzm is None:
-        sterile(DOC, "L", f, lat=0.12, dz=-0.20, fwd=0.28)
-    else:
-        fs(f); hd = head_pt(DOC, chin_rest + Vector((0.012, -0.022, dzm)), f)
-        face = DOC.matrix_world.to_3x3() @ Vector((0, -1, 0))
-        # wrist below/in front of the pinch point, fingers up, palm facing his face
-        wr = hd + face * 0.02 + Vector((0, 0, -0.085)) + DOC.matrix_world.to_3x3() @ Vector((0.03, 0, 0))
-        hand_world(DOC, "L", f, wr, Vector((0, 0, 1)), -face, pole=wr + DOC.matrix_world.to_3x3() @ Vector((0.4, 0.1, -0.4)))
-    apply_pose(DOC, "L", pose, f)
-sterile(DOC, "R", 512, lat=0.12, dz=-0.20, fwd=0.28)
-for f in (540, F_S1_OUT - 1):
-    sterile(DOC, "L", f, lat=0.10, dz=-0.26, fwd=0.24); sterile(DOC, "R", f, lat=0.10, dz=-0.26, fwd=0.24)
+        sterile(DOC, s, f, lat=0.14, dz=-0.36, fwd=0.24); apply_pose(DOC, s, "relaxed", f)
+# "acted like nothing had happened": hands drop to rest, a small shrug and a casual head tilt to the side
+for f in (474, 512, 540, F_S1_OUT - 1):
+    sterile(DOC, "L", f, lat=0.13, dz=-0.42, fwd=0.20); sterile(DOC, "R", f, lat=0.13, dz=-0.42, fwd=0.20)
     apply_pose(DOC, "L", "relaxed", f); apply_pose(DOC, "R", "relaxed", f)
+for bn in ("clavicle.L", "clavicle.R"):
+    if bn in DR.PB:
+        for f, ang in ((496, 0), (508, 9), (520, 9), (534, 0)):
+            DR.key_rot(bn, f, [("X", ang)])
 # the wound closes while the camera is on his face (346-400), the sutures appear with it
 for o_, k_ in ((SKIN, "closed"), (CAV, "closed")):
     kb = o_.data.shape_keys.key_blocks[k_]
@@ -759,12 +698,12 @@ PAIN = {"risorius03.L": ((1, 0, -0.4), 12), "risorius03.R": ((-1, 0, -0.4), 12),
 fs(1)
 # surgeon 1: blinks; smug smile after the mask comes down (510-600), a slight one-sided lift
 blinks(DOC, [90, 260, 380, 455, 530, 700, 1260, 1380, 1470, 1560, 1615])
-expression(DOC, [(1, 0), (508, 0), (526, 1.0), (590, 1.0), (F_S1_OUT - 1, 0.0), (F_S1_OUT, 0.0)], SMILE)
+
 eyes(DOC, 1, 600, seed=4)
 # patient: eyes closed in theatre (anaesthesia), open at home; pain squint at home
 for s in "LR":
     n = "orbicularis03." + s; sg = lid_sign(PAT, s); pb = PAT.pose.bones[n]
-    for f, ang in ((1, 26), (F_PAT_HOME - 1, 26), (F_PAT_HOME, 0), (650, 0), (660, 14), (760, 10), (790, 12), (F_PAT_OR2 - 1, 12), (F_PAT_OR2, 26), (END, 26)):
+    for f, ang in ((1, 26), (F_PAT_HOME - 1, 26), (F_PAT_HOME, 0), (650, 0), (660, 5), (760, 3), (790, 4), (F_PAT_OR2 - 1, 4), (F_PAT_OR2, 26), (END, 26)):
         pb.rotation_quaternion = Quaternion((1, 0, 0), R_(ang * sg)); pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
 expression(PAT, [(1, 0), (648, 0), (664, 1.0), (790, 0.9), (F_PAT_OR2 - 1, 0.9), (F_PAT_OR2, 0.0)], PAIN)
 eyes(PAT, F_PAT_HOME, F_PAT_OR2, step=30, seed=5)
@@ -817,8 +756,8 @@ log("abd rest", tuple(round(x, 3) for x in ABD_REST), "thigh", tuple(round(x, 3)
 HOMEK = [  # f, flex, knee, head(pitch,yaw), right_on, left_on, sway
     (F_PAT_HOME, 2, 0.0, (-2, 0), 0, 0, 0.0), (612, 2, 0.0, (-4, -22), 0, 0, 0.004), (632, 3, 0.0, (-2, -26), 0, 0, 0.0),
     (644, 4, 0.0, (0, -8), 0, 0, -0.004), (652, 12, 0.02, (8, 0), 0.6, 0, 0.0), (662, 24, 0.045, (14, 4), 1.0, 0.6, 0.006),
-    (674, 30, 0.06, (10, 2), 1.0, 1.0, 0.0), (700, 31, 0.06, (2, -2), 1.0, 1.0, -0.006), (726, 29, 0.055, (-6, 2), 1.0, 1.0, 0.004),
-    (752, 32, 0.06, (0, -4), 1.0, 1.0, 0.0), (780, 30, 0.06, (-8, 0), 1.0, 1.0, -0.004), (810, 31, 0.06, (-4, 3), 1.0, 1.0, 0.003), (F_PAT_OR2 - 1, 31, 0.06, (-4, 3), 1.0, 1.0, 0.0)]
+    (674, 40, 0.07, (10, 2), 1.0, 1.0, 0.0), (700, 42, 0.07, (2, -2), 1.0, 1.0, -0.006), (726, 38, 0.065, (-6, 2), 1.0, 1.0, 0.004),
+    (752, 42, 0.07, (0, -4), 1.0, 1.0, 0.0), (780, 40, 0.07, (-8, 0), 1.0, 1.0, -0.004), (810, 41, 0.07, (-4, 3), 1.0, 1.0, 0.003), (F_PAT_OR2 - 1, 41, 0.07, (-4, 3), 1.0, 1.0, 0.0)]
 for k_ in HOMEK:
     pat_home_pose(*k_)
 # breathing in the pain (small extra spine flex wobble) every 12 frames between keys is carried by the keys above
@@ -842,13 +781,13 @@ parts_ = [cyl("Pr_shaft", 0.0018, 0.12, (0, 0.05, 0), probe_m, rot=(R_(90), 0, 0
 bpy.ops.object.select_all(action='DESELECT')
 for p_ in parts_: p_.select_set(True)
 bpy.context.view_layer.objects.active = parts_[1]; bpy.ops.object.join(); PROBE = bpy.context.active_object; PROBE.name = "Probe"
-tool_setup(DOC2, PROBE, "R", "tripod", 0.02)
+tool_setup(DOC2, PROBE, "R", "tripod", 0.0)
 PROBE_TIP = TOOLS["Probe"]["tip"]
 WORK2 = sectM("OR2") @ WORK
 PS2 = [sectM("OR2") @ p_ for p_ in PS]; PB2 = [sectM("OR2") @ p_ for p_ in PBB]
 def probe_frame(tip, ydir):
     M = frame_from(ydir, Vector((0, 0, 1)), Vector((0, 0, 0))); M.translation = Vector(tip) - M.to_3x3() @ PROBE_TIP; return M
-pdir2 = (sectM("OR2").to_3x3() @ Vector((0.18, -0.55, -0.82))).normalized()
+pdir2 = (sectM("OR2").to_3x3() @ Vector((0.12, -0.42, -0.90))).normalized()
 # body: approaches the table (lean grows), looks down, finds it, straightens with wide eyes
 S2HEAD = [(1, 10, 0), (870, 12, 0), (930, 26, 6), (1000, 32, 0), (1110, 34, 2), (1135, 14, -4), (1160, 4, -8), (END, 0, -6)]
 S2LEAN = [(1, 4), (870, 4), (940, 18), (1110, 22), (1140, 8), (END, 6)]
@@ -997,7 +936,7 @@ ecam_d.lens = 50; ecam_d.sensor_fit = 'HORIZONTAL'
 ctr = WORK + Vector((-0.006, -0.004, -0.03))
 ECAM.location = ctr + Vector((0.0, -0.10, 0.30)); ECAM.rotation_euler = (ctr - ECAM.location).to_track_quat('-Z', 'Y').to_euler()
 hidden = []
-for o in (PEN, BEAM, CAB, DOC):
+for o in (PEN, BEAM, DOC):
     hidden.append((o, o.hide_render)); o.hide_render = True
 for ch_ in DOC.children:
     hidden.append((ch_, ch_.hide_render)); ch_.hide_render = True
@@ -1037,42 +976,49 @@ def LH(v): return sect("HOME", v)
 def LR(v): return sect("HEAR", v)
 F2 = sectM("OR2") @ (FACE2 if False else FACE2)
 FACE2W = FACE2  # already world (her rig is placed in OR2)
+LETC = Vector((-0.006, -0.004, -0.028))
 CK = [  # frame, camera position, aim, lens, f-stop
     (1,    WORK + Vector((-0.04, -0.72, 0.27)), WORK + Vector((0, 0.16, 0.27)), 35, 11),
     (120,  WORK + Vector((0.05, -0.62, 0.25)), WORK + Vector((0, 0.15, 0.24)), 35, 11),
-    (225,  WORK + Vector((0.02, -0.50, 0.22)), WORK + Vector((0, 0.12, 0.20)), 35, 11),
-    (290,  FACE1 + Vector((-0.10, -0.95, -0.16)), FACE1 + Vector((0, 0, -0.08)), 40, 8),
-    (340,  FACE1 + Vector((0.13, -0.86, -0.20)), FACE1 + Vector((0, 0, -0.08)), 45, 8),
-    (405,  FACE1 + Vector((-0.14, -0.80, -0.20)), FACE1 + Vector((0, 0, -0.08)), 45, 8),
-    (445,  WORK + Vector((0.12, -0.50, 0.44)), WORK + Vector((0, 0.14, 0.14)), 35, 11),
-    (476,  FACE1 + Vector((0.06, -0.80, -0.10)), FACE1 + Vector((0, 0, -0.09)), 42, 8),
-    (522,  FACE1 + Vector((-0.04, -0.64, -0.06)), FACE1 + Vector((0, 0, -0.05)), 45, 8),
-    (560,  FACE1 + Vector((0.02, -0.80, -0.06)), FACE1 + Vector((0, 0, -0.06)), 42, 8),
+    (215,  WORK + Vector((0.02, -0.40, 0.24)), WORK + Vector((0, 0.10, 0.16)), 35, 11),
+    (240,  WORK + Vector((-0.01, -0.12, 0.27)), WORK + LETC, 50, 11),
+    (272,  WORK + Vector((-0.006, -0.10, 0.23)), WORK + LETC, 50, 11),
+    (305,  FACE1 + Vector((-0.10, -0.95, -0.16)), FACE1 + Vector((0, 0, -0.08)), 40, 8),
+    (340,  FACE1 + Vector((0.16, -0.84, -0.20)), FACE1 + Vector((0, 0, -0.08)), 42, 8),
+    (372,  FACE1 + Vector((0.0, -0.74, -0.26)), FACE1 + Vector((0, 0, -0.08)), 45, 8),
+    (405,  FACE1 + Vector((-0.17, -0.80, -0.20)), FACE1 + Vector((0, 0, -0.08)), 45, 8),
+    (445,  WORK + Vector((0.30, -0.55, 0.30)), WORK + Vector((0, 0.10, 0.08)), 35, 11),
+    (480,  FACE1 + Vector((0.10, -0.85, -0.12)), FACE1 + Vector((0, 0, -0.10)), 40, 8),
+    (522,  FACE1 + Vector((-0.06, -0.70, -0.08)), FACE1 + Vector((0, 0, -0.07)), 42, 8),
+    (560,  FACE1 + Vector((0.04, -0.85, -0.08)), FACE1 + Vector((0, 0, -0.08)), 40, 8),
     (590,  Vector((0.0, 0.30, 1.55)), Vector((0.0, 3.0, 1.45)), 32, 8),
-    (606,  Vector((0.0, 0.02, 1.55)), LH((0.0, 3.0, 1.5)), 32, 8),
-    (640,  LH((0.05, 2.75, 1.50)), LH((-0.12, 4.6, 1.52)), 35, 8),
-    (700,  LH((0.15, 3.30, 1.36)), LH((0.0, 4.5, 1.28)), 38, 8),
-    (782,  LH((-0.18, 3.42, 1.28)), LH((0.0, 4.5, 1.22)), 40, 8),
-    (814,  LH((0.0, 1.30, 1.5)), LH((0.0, 4.0, 1.32)), 34, 8),
-    (836,  Vector((0.02, 0.0, 1.55)), LH((0.0, 3.0, 1.42)), 32, 8),
+    (606,  Vector((0.0, 0.02, 1.55)), LH((0.0, 3.0, 1.5)), 30, 8),
+    (640,  LH((0.10, 2.40, 1.45)), LH((0.08, 4.6, 1.45)), 28, 8),
+    (690,  LH((0.10, 2.95, 1.36)), LH((0.06, 4.5, 1.30)), 30, 8),
+    (740,  LH((0.22, 3.30, 1.25)), LH((0.0, 4.5, 1.20)), 36, 8),
+    (782,  LH((-0.18, 3.38, 1.24)), LH((0.0, 4.5, 1.18)), 38, 8),
+    (814,  LH((0.0, 1.30, 1.5)), LH((0.0, 4.0, 1.32)), 30, 8),
+    (836,  Vector((0.02, 0.0, 1.55)), LH((0.0, 3.0, 1.42)), 30, 8),
     (852,  Vector((0.0, -0.02, 1.55)), L2((0.0, 3.0, 1.40)), 32, 8),
     (905,  L2((-0.45, 1.40, 1.65)), L2((-0.15, 2.9, 1.25)), 32, 8),
-    (965,  sectM("OR2") @ (WORK + Vector((-0.25, -0.90, 0.50))), sectM("OR2") @ (WORK + Vector((0, 0.25, 0.25))), 35, 8),
-    (1040, sectM("OR2") @ (WORK + Vector((-0.04, -0.62, 0.30))), sectM("OR2") @ (WORK + Vector((0, 0.14, 0.19))), 35, 11),
-    (1100, sectM("OR2") @ (WORK + Vector((0.03, -0.44, 0.23))), sectM("OR2") @ (WORK + Vector((0, 0.08, 0.13))), 35, 11),
-    (1132, FACE2W + (sectM("OR2").to_3x3() @ Vector((-0.05, -0.85, -0.05))), FACE2W + Vector((0, 0, -0.05)), 45, 8),
+    (965,  sectM("OR2") @ (WORK + Vector((-0.25, -0.90, 0.50))), sectM("OR2") @ (WORK + Vector((0, 0.25, 0.28))), 35, 8),
+    (1030, sectM("OR2") @ (WORK + Vector((-0.04, -0.72, 0.27))), sectM("OR2") @ (WORK + Vector((0, 0.16, 0.27))), 35, 11),
+    (1068, sectM("OR2") @ (WORK + Vector((-0.01, -0.12, 0.27))), sectM("OR2") @ (WORK + LETC), 50, 11),
+    (1104, sectM("OR2") @ (WORK + Vector((-0.006, -0.10, 0.23))), sectM("OR2") @ (WORK + LETC), 50, 11),
+    (1134, FACE2W + (sectM("OR2").to_3x3() @ Vector((-0.05, -0.85, -0.05))), FACE2W + Vector((0, 0, -0.05)), 45, 8),
     (1172, FACE2W + (sectM("OR2").to_3x3() @ Vector((0.06, -0.72, -0.05))), FACE2W + Vector((0, 0, -0.05)), 45, 8),
     (1198, Vector((0.0, -0.02, 1.55)), L2((0.0, 3.0, 1.45)), 32, 8),
     (1214, Vector((0.02, 0.0, 1.55)), LR((0.0, 3.0, 1.45)), 32, 8),
-    (1262, LR((0.10, 2.20, 1.60)), LR((0.9, 3.75, 1.55)), 32, 8),
-    (1322, LR((0.30, 3.05, 1.62)), LR((1.05, 3.68, 1.60)), 40, 8),
-    (1400, LR((0.38, 3.15, 1.60)), LR((1.05, 3.70, 1.60)), 45, 8),
-    (1442, LR((0.15, 3.05, 1.45)), LR((-1.05, 3.70, 1.18)), 35, 8),
+    (1262, LR((0.10, 2.30, 1.55)), LR((0.9, 3.65, 1.40)), 32, 8),
+    (1322, LR((0.20, 2.75, 1.50)), LR((1.0, 3.62, 1.40)), 32, 8),
+    (1372, LR((0.30, 2.95, 1.55)), LR((1.02, 3.66, 1.50)), 36, 8),
+    (1426, LR((0.38, 3.08, 1.58)), LR((1.04, 3.68, 1.58)), 42, 8),
+    (1440, LR((0.15, 3.05, 1.45)), LR((-1.05, 3.70, 1.18)), 35, 8),
     (1480, LR((-0.05, 3.30, 1.36)), LR((-1.10, 3.62, 1.08)), 35, 8),
-    (1506, LR((-0.10, 3.26, 1.32)), LR((-1.05, 3.55, 1.02)), 35, 8),
-    (1542, LR((0.15, 2.95, 1.50)), LR((1.05, 3.70, 1.50)), 38, 8),
-    (1600, LR((0.24, 3.02, 1.47)), LR((1.05, 3.70, 1.47)), 42, 8),
-    (END,  LR((0.29, 3.07, 1.46)), LR((1.05, 3.70, 1.46)), 44, 8),
+    (1514, LR((-0.10, 3.26, 1.32)), LR((-1.05, 3.55, 1.02)), 35, 8),
+    (1528, LR((0.18, 2.92, 1.50)), LR((1.05, 3.68, 1.50)), 36, 8),
+    (1590, LR((0.26, 3.00, 1.48)), LR((1.05, 3.68, 1.48)), 40, 8),
+    (END,  LR((0.30, 3.04, 1.47)), LR((1.05, 3.68, 1.47)), 42, 8),
 ]
 cam_d = bpy.data.cameras.new("CAM_Film"); CAM = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(CAM); sc.camera = CAM
 AIM = bpy.data.objects.new("CAM_Film_Aim", None); sc.collection.objects.link(AIM)

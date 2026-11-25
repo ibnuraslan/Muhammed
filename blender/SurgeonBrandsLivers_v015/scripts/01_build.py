@@ -29,11 +29,27 @@ DOC, DB = human("Surgeon", 1.0, 0.55, {"asian": 0.05, "caucasian": 0.90, "africa
                 "middleage_caucasian_male/middleage_caucasian_male.mhmat", "eyebrow004/eyebrow004.mhclo", height=0.55, muscle=0.55, shoes="shoes02/shoes02.mhclo")
 DOC2, DB2 = human("Surgeon2", 0.0, 0.5, {"asian": 0.05, "caucasian": 0.10, "african": 0.85}, "short04/short04.mhclo",
                   "young_african_female/young_african_female.mhmat", "eyebrow007/eyebrow007.mhclo", height=0.5, shoes="shoes01/shoes01.mhclo")
-JUD, JB = human("Judge", 1.0, 0.85, {"asian": 0.05, "caucasian": 0.15, "african": 0.80}, "short03/short03.mhclo",
+JUD, JB = human("Judge", 1.0, 0.85, {"asian": 0.05, "caucasian": 0.15, "african": 0.80}, "short01/short01.mhclo",
                 "old_african_male/old_african_male.mhmat", "eyebrow001/eyebrow001.mhclo", height=0.5, weight=0.6, shoes="shoes02/shoes02.mhclo")
 PEOPLE = ((PAT, PB), (DOC, DB), (DOC2, DB2), (JUD, JB))
 for r, b in PEOPLE:
     bake_keys(b); eye_fix(r)
+# EnhancedEye cornea: refractive transmission -> transparent mix (LESSONS 3, Connect03 a44130b), every eye group
+for g in [g for g in bpy.data.node_groups if g.name.startswith("EnhancedEye")]:
+    P = next((n for n in g.nodes if n.type == "BSDF_PRINCIPLED"), None); OUTN = next((n for n in g.nodes if n.type == "GROUP_OUTPUT"), None)
+    if P is None or OUTN is None or "CorneaTransparentMix" in g.nodes: continue
+    tl = [l for l in g.links if l.to_node == P and l.to_socket.name == "Transmission Weight"]
+    src = tl[0].from_socket if tl else None
+    for l in tl: g.links.remove(l)
+    P.inputs["Transmission Weight"].default_value = 0.0
+    ols = [l for l in g.links if l.from_node == P and l.to_node == OUTN]
+    if not ols: continue
+    out_sock = ols[0].to_socket; g.links.remove(ols[0])
+    tr = g.nodes.new("ShaderNodeBsdfTransparent"); mx = g.nodes.new("ShaderNodeMixShader"); mx.name = "CorneaTransparentMix"
+    if src: g.links.new(src, mx.inputs[0])
+    else: mx.inputs[0].default_value = 0.0
+    g.links.new(P.outputs[0], mx.inputs[1]); g.links.new(tr.outputs[0], mx.inputs[2]); g.links.new(mx.outputs[0], out_sock)
+    print("EYEFIX", g.name)
 # warm, saturated skin (STYLE colour grade) and hair tints
 for m in PB.data.materials: tint(m, (1.0, 0.92, 0.86))
 for m in DB.data.materials: tint(m, (1.0, 0.92, 0.85))
@@ -55,7 +71,7 @@ hide_under(PB, cov1 | cov2, name="hide_pat")
 scrub1 = fabric("M_Scrub1", (0.02, 0.48, 0.52)); scrub1b = fabric("M_Scrub1Trs", (0.01, 0.20, 0.26), scale=700)
 S1_TOP, S1_TRS, c1 = wardrobe(DOC, DB, scrub1, scrub1b, "long", 0.09, 0.016, 0.014, 0.007, 0.006, "S1Scrub", hide=False)
 suit_m = fabric("M_Suit", (0.07, 0.08, 0.12), scale=1200, bump=0.15, rough=0.6)
-S1_SUIT, S1_STRS, c2 = wardrobe(DOC, DB, suit_m, fabric("M_SuitTrs", (0.05, 0.055, 0.08), scale=1200, bump=0.15), "long", 0.11, 0.017, 0.014, 0.006, 0.006, "S1Suit", hide=False, neck_drop=0.015, neck_tilt=-0.6)
+S1_SUIT, S1_STRS, c2 = wardrobe(DOC, DB, suit_m, fabric("M_SuitTrs", (0.05, 0.055, 0.08), scale=1200, bump=0.15), "long", 0.11, 0.012, 0.012, 0.005, 0.005, "S1Suit", hide=False, neck_drop=0.015, neck_tilt=-0.6)
 hide_under(DB, c1 | c2, name="hide_s1")
 shirt_m = mat("M_Shirt", (0.92, 0.93, 0.95), rough=0.6); tie_m = fabric("M_Tie", (0.70, 0.04, 0.06), scale=1500, rough=0.45)
 judge_suit = fabric("M_JudgeSuit", (0.05, 0.10, 0.30), scale=1200, bump=0.15, rough=0.6)
@@ -75,7 +91,7 @@ def shirt_tie(top, rig, mats=(shirt_m, tie_m)):
         elif abs(c.x) < half: p.material_index = ishirt
 S1_SUIT.data.materials[0] = suit_material("M_SuitS1", DOC, (0.07, 0.08, 0.12), (0.92, 0.93, 0.95), (0.70, 0.04, 0.06))
 
-cap1_m = fabric("M_Cap1", (0.03, 0.52, 0.58), scale=400, bump=0.5); mask_m = fabric("M_Mask", (0.55, 0.80, 0.95), scale=500, bump=0.4)
+cap1_m = fabric("M_Cap1", (0.03, 0.52, 0.58), scale=400, bump=0.5); mask_m = fabric("M_Mask", (0.45, 0.72, 0.92), scale=90, bump=0.8)
 S1_CAP, S1_MASK, S1_CAPPL, S1_NOSE = cap_and_mask(DOC, DB, "S1", cap1_m, mask_m)
 glove_m = mat("M_Glove", (0.18, 0.30, 0.85), rough=0.38, coat=0.25)
 def glove_shell(rig, body, name):
@@ -101,7 +117,7 @@ S2_GLOVES = glove_shell(DOC2, DB2, "S2.gloves")
 h2 = part(DOC2, "short04"); trim_hair(h2, None, *S2_CAPPL)
 
 # Judge: navy suit, shirt, tie
-J_TOP, J_TRS, c4 = wardrobe(JUD, JB, judge_suit, fabric("M_JudgeTrs", (0.04, 0.07, 0.20), scale=1200, bump=0.15), "long", 0.11, 0.017, 0.014, 0.006, 0.006, "JSuit", neck_drop=0.015, neck_tilt=-0.6)
+J_TOP, J_TRS, c4 = wardrobe(JUD, JB, judge_suit, fabric("M_JudgeTrs", (0.04, 0.07, 0.20), scale=1200, bump=0.15), "long", 0.11, 0.012, 0.012, 0.005, 0.005, "JSuit", neck_drop=0.015, neck_tilt=-0.6)
 J_TOP.data.materials[0] = suit_material("M_SuitJ", JUD, (0.05, 0.10, 0.30), (0.92, 0.93, 0.95), (0.85, 0.62, 0.05))
 
 # ================================================================== SET: four sectors around the hub
@@ -244,7 +260,7 @@ cal_paper = mat("M_CalPaper", (0.97, 0.96, 0.93), rough=0.7)
 cal_head = mat("M_CalHead", (0.85, 0.12, 0.10), rough=0.5)
 cal_line = mat("M_CalLine", (0.35, 0.35, 0.38), rough=0.7)
 cal_x = mat("M_CalX", (0.90, 0.05, 0.05), rough=0.5)
-CAL_C = Vector((-0.66, D - 0.05, 1.62))
+CAL_C = Vector((-0.42, D - 0.05, 1.62))
 box("HOME_CalBoard", (0.44, 0.012, 0.56), (CAL_C.x, CAL_C.y, CAL_C.z), cal_paper, bevel=0.002, parent=HOME)
 box("HOME_CalHead", (0.44, 0.014, 0.12), (CAL_C.x, CAL_C.y - 0.001, CAL_C.z + 0.22), cal_head, bevel=0.002, parent=HOME)
 box("HOME_CalPhoto", (0.30, 0.015, 0.07), (CAL_C.x, CAL_C.y - 0.002, CAL_C.z + 0.22), mat("M_CalPhoto", (0.98, 0.85, 0.30), rough=0.5), bevel=0, parent=HOME)
@@ -264,7 +280,7 @@ for j in range(5):
 # framed poster with the DA KRAS FILMS logo (dark logo on a light print) - a natural placement, readable
 logo_m = image_mat("M_LogoPoster", LOGO, emit=0.0, rough=0.6, alpha=True)
 logo_bg = mat("M_PosterBG", (0.98, 0.86, 0.25), rough=0.6)
-POST_C = Vector((0.80, D - 0.04, 1.62))
+POST_C = Vector((0.58, D - 0.04, 1.62))
 box("HOME_PosterFrame", (0.66, 0.03, 0.46), (POST_C.x, POST_C.y, POST_C.z), mat("M_PosterFrame", (0.08, 0.08, 0.09), rough=0.4), bevel=0.006, parent=HOME)
 box("HOME_PosterBG", (0.60, 0.01, 0.40), (POST_C.x, POST_C.y - 0.016, POST_C.z), logo_bg, bevel=0, parent=HOME)
 bpy.ops.mesh.primitive_plane_add(size=1, location=(POST_C.x, POST_C.y - 0.023, POST_C.z), rotation=(R_(90), 0, 0))
@@ -346,11 +362,6 @@ pl.data.materials.append(logo_w); pl.parent = HEAR
 wpos = Vector((-1, 1, 0)).normalized() * 4.95
 pl.location = (wpos.x + 0.035, wpos.y + 0.035, 1.95); pl.rotation_euler = (R_(90), 0, R_(135))
 box("HEAR_PlaqueBoard", (0.84, 0.02, 0.42), (wpos.x + 0.025, wpos.y + 0.025, 1.95), mat("M_PlaqueBoard", (0.10, 0.05, 0.03), rough=0.35, coat=0.4), bevel=0.008, rot=(0, 0, R_(-45)), parent=HEAR)
-# a microphone stand in front of the defendant (no contact)
-MIC = Vector((0.55, 3.25))
-cyl("HEAR_MicBase", 0.12, 0.02, (MIC.x, MIC.y, 0.01), rubber, parent=HEAR)
-cyl("HEAR_MicPole", 0.010, 1.30, (MIC.x, MIC.y, 0.66), steel, parent=HEAR)
-
 # ---------------------------------------------------------------- the liver (CC-BY asset) + the open abdomen pieces are fitted in stage B
 LIV = SRCO["Liver"]; LIV.parent = None
 bb = [Vector(c) for c in LIV.bound_box]; mn = Vector([min(v[i] for v in bb) for i in range(3)]); mx_ = Vector([max(v[i] for v in bb) for i in range(3)])
