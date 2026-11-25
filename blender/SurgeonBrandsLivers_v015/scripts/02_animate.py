@@ -986,8 +986,8 @@ F2 = sectM("OR2") @ (FACE2 if False else FACE2)
 FACE2W = FACE2  # already world (her rig is placed in OR2)
 LETC = Vector((LET_C.x - WORK.x, LET_C.y - WORK.y, PS[0].z - WORK.z))
 CK = [  # frame, camera position, aim, lens, f-stop
-    (1,    WORK + Vector((-0.04, -0.82, 0.42)), WORK + Vector((0, 0.22, 0.30)), 35, 11),
-    (34,   WORK + LETC + Vector((0.04, -0.30, 0.30)), WORK + LETC + Vector((0, 0.02, 0.0)), 45, 11),
+    (1,    WORK + LETC + Vector((0.05, -0.30, 0.31)), WORK + LETC + Vector((0, 0.03, 0.0)), 45, 11),
+    (34,   WORK + LETC + Vector((0.035, -0.24, 0.26)), WORK + LETC + Vector((0, 0.02, 0.0)), 48, 11),
     (62,   WORK + LETC + Vector((0.02, -0.19, 0.22)), WORK + LETC, 50, 11),
     (150,  WORK + LETC + Vector((-0.012, -0.17, 0.20)), WORK + LETC, 50, 11),
     (240,  WORK + LETC + Vector((0.0, -0.15, 0.185)), WORK + LETC, 52, 11),
