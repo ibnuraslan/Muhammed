@@ -29,6 +29,7 @@ Reuse the VO and timing from the latest package of your film. Find it on the `cl
   - Flatten the chest and crotch shape keys before dressing.
   - NEVER use shrinkwrapped or skin-tight body copies: they read as onesies, muscle suits or nudity.
   - Arms bent 15–30° with idle motion. A lying patient's whole body is under a loose drape (no neck blocks).
+  - Bodies must be SOLID: never hollow inside clothes, gowns or drapes. Drapes and garments get solidify thickness and no open edges. No holes at trouser crotches. Check with close renders.
 
 ## Contact rules (the cause of most rejections)
 - Stage every hand and tool contact so it can be reached with 1 cm or more of clearance from every body before animating.
