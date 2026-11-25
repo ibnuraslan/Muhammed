@@ -1,5 +1,11 @@
 {
  "frames": {
+  "1155": [
+   [
+    "ARMBODY",
+    "Woman arm.R inside own torso (2 pts)"
+   ]
+  ],
   "1157": [
    [
     "ARMBODY",
@@ -296,6 +302,6 @@
   ]
  },
  "counts": {
-  "ARMBODY": 49
+  "ARMBODY": 50
  }
 }

@@ -1413,10 +1413,6 @@
    ],
    [
     "EMPTY",
-    "only MC_CutFace in view"
-   ],
-   [
-    "EMPTY",
     "no character in view"
    ]
   ],
@@ -1939,6 +1935,10 @@
    ],
    [
     "EMPTY",
+    "only MC_CutFace in view"
+   ],
+   [
+    "EMPTY",
     "no character in view"
    ]
   ],
@@ -1957,6 +1957,10 @@
    ],
    [
     "EMPTY",
+    "only MC_CutFace in view"
+   ],
+   [
+    "EMPTY",
     "no character in view"
    ]
   ],
@@ -1972,6 +1976,10 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only MC_CutFace in view"
    ],
    [
     "EMPTY",
@@ -2191,6 +2199,10 @@
    ],
    [
     "EMPTY",
+    "only MC_CutFace in view"
+   ],
+   [
+    "EMPTY",
     "no character in view"
    ]
   ],
@@ -2206,6 +2218,10 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only MC_CutFace in view"
    ],
    [
     "EMPTY",
@@ -2312,6 +2328,10 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only MC_CutFace in view"
    ],
    [
     "EMPTY",
@@ -2940,7 +2960,7 @@
   ]
  },
  "counts": {
-  "EMPTY": 368,
+  "EMPTY": 373,
   "INSIDE": 6,
   "FILL": 257,
   "CAMJUMP": 2,
