@@ -139,7 +139,14 @@ key_vis([O["PatHome.top"], O["PatHome.trousers"]], 1, False); key_vis([O["PatHom
 key_vis([O["PatHome.top"], O["PatHome.trousers"]], F_PAT_OR2, False)
 key_vis([O["PatGown.top"]], 1, True); key_vis([O["PatGown.top"]], F_PAT_HOME, False); key_vis([O["PatGown.top"]], F_PAT_OR2, True)
 key_masks(PB, ("Hide.PatHome", "Delete.toigo_fisherman"), [(1, False), (F_PAT_HOME, True), (F_PAT_OR2, False)])
-key_masks(PB, ("Hide.PatGown", "Delete.joepal"), [(1, True), (F_PAT_HOME, False), (F_PAT_OR2, True)])
+key_masks(PB, ("Hide.PatGown", "Delete.joepal"), [(1, False)])
+# in theatre her hands lie under the drape: masked there so no finger can poke through the sheet
+_idx = {vg.index: vg.name for vg in PB.vertex_groups if vg.name in bone_names(PAT)}
+_hv = [v.index for v in PB.data.vertices if in_region(dom_bone(((g.group, g.weight) for g in v.groups), _idx), ("wrist", "finger", "metacarpal"))]
+_hg = PB.vertex_groups.new(name="or_hands"); _hg.add(_hv, 1.0, 'REPLACE')
+_hm = PB.modifiers.new("or_hands", 'MASK'); _hm.vertex_group = "or_hands"; _hm.invert_vertex_group = True
+PB.modifiers.move(PB.modifiers.find("or_hands"), PB.modifiers.find("Armature") + 1)
+key_masks(PB, ("or_hands",), [(1, True), (F_PAT_HOME, False), (F_PAT_OR2, True)])
 shoes_p = part(PAT, "shoes01")
 key_vis([shoes_p], 1, False); key_vis([shoes_p], F_PAT_HOME, True); key_vis([shoes_p], F_PAT_OR2, False)
 
@@ -206,7 +213,7 @@ def drape():
     o = bpy.data.objects.new("Drape", me); sc.collection.objects.link(o)
     for p in me.polygons: p.use_smooth = True
     me.materials.append(fabric("M_Drape", (0.05, 0.30, 0.72), scale=400, bump=0.4))
-    so = o.modifiers.new("solid", 'SOLIDIFY'); so.thickness = 0.004
+    so = o.modifiers.new("solid", 'SOLIDIFY'); so.thickness = 0.012; so.use_rim = True
     sm = o.modifiers.new("smooth", 'SMOOTH'); sm.factor = 0.4; sm.iterations = 6
     o.modifiers.move(o.modifiers.find("smooth"), 0)
     sd = o.modifiers.new("subd", 'SUBSURF'); sd.levels = 0; sd.render_levels = 1

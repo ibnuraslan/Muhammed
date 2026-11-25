@@ -79,7 +79,7 @@ colorize(S2_TOP, (0.42, 0.08, 0.46)); colorize(S2_TRS, (0.34, 0.06, 0.38))
 # trousers under a top: the waistband part the top covers is masked (no waistband poking through the knit)
 def under_top(trs, top):
     zmin = min(v.co.z for v in top.data.vertices)
-    vg = trs.vertex_groups.new(name="under_top"); vg.add([v.index for v in trs.data.vertices if v.co.z > zmin + 0.06], 1.0, 'REPLACE')
+    vg = trs.vertex_groups.new(name="under_top"); vg.add([v.index for v in trs.data.vertices if v.co.z > zmin + 0.015], 1.0, 'REPLACE')
     mk = trs.modifiers.new("under_top", 'MASK'); mk.vertex_group = "under_top"; mk.invert_vertex_group = True
 under_top(P_JEANS, P_TOP); under_top(S1_TRS, S1_TOP); under_top(S2_TRS, S2_TOP)
 for body, gar in ((PB, P_TOP), (PB, P_JEANS), (PB, P_GOWN), (DB, S1_TOP), (DB, S1_TRS), (DB, S1_SUIT), (DB2, S2_TOP), (DB2, S2_TRS), (JB, part(JUD, "suit_3"))):
