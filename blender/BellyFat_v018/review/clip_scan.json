@@ -1,41 +1,5 @@
 {
- "frames": {
-  "1177": {
-   "Woman": {
-    "self": 1,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "1178": {
-   "Woman": {
-    "self": 1,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "1179": {
-   "Woman": {
-    "self": 1,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "1180": {
-   "Woman": {
-    "self": 1,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "1181": {
-   "Woman": {
-    "self": 1,
-    "clothes": 0,
-    "other": 0
-   }
-  }
- },
+ "frames": {},
  "step": 1,
  "depth_cm": 2.0,
  "bad_ranges": [],

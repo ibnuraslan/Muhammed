@@ -9,7 +9,7 @@
   "25": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 6%"
+    "wall/prop fills the frame, character only 5%"
    ],
    [
     "PROPMOVE",
@@ -38,19 +38,11 @@
   ],
   "139": [
    [
-    "INSIDE",
-    "camera inside geometry"
-   ],
-   [
     "FILL",
     "surface <12 cm"
    ]
   ],
   "145": [
-   [
-    "INSIDE",
-    "camera inside geometry"
-   ],
    [
     "FILL",
     "surface <12 cm"
@@ -304,10 +296,6 @@
   ],
   "289": [
    [
-    "FILL",
-    "surface <12 cm"
-   ],
-   [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
    ],
@@ -317,10 +305,6 @@
    ]
   ],
   "295": [
-   [
-    "FILL",
-    "surface <12 cm"
-   ],
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
@@ -459,6 +443,10 @@
   "355": [
    [
     "FILL",
+    "MC_CutFace"
+   ],
+   [
+    "FILL",
     "surface <12 cm"
    ],
    [
@@ -471,6 +459,10 @@
    ]
   ],
   "361": [
+   [
+    "FILL",
+    "MC_CutFace"
+   ],
    [
     "FILL",
     "surface <12 cm"
@@ -1443,10 +1435,6 @@
    ],
    [
     "EMPTY",
-    "only MC_CutFace in view"
-   ],
-   [
-    "EMPTY",
     "no character in view"
    ]
   ],
@@ -1462,10 +1450,6 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only MC_CutFace in view"
    ],
    [
     "EMPTY",
@@ -1487,10 +1471,6 @@
    ],
    [
     "EMPTY",
-    "only MC_CutFace in view"
-   ],
-   [
-    "EMPTY",
     "no character in view"
    ]
   ],
@@ -1509,10 +1489,6 @@
    ],
    [
     "EMPTY",
-    "only MC_CutFace in view"
-   ],
-   [
-    "EMPTY",
     "no character in view"
    ]
   ],
@@ -1528,10 +1504,6 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only MC_CutFace in view"
    ],
    [
     "EMPTY",
@@ -2003,10 +1975,6 @@
    ],
    [
     "EMPTY",
-    "only MC_CutFace in view"
-   ],
-   [
-    "EMPTY",
     "no character in view"
    ]
   ],
@@ -2022,10 +1990,6 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only MC_CutFace in view"
    ],
    [
     "EMPTY",
@@ -2047,10 +2011,6 @@
    ],
    [
     "EMPTY",
-    "only MC_CutFace in view"
-   ],
-   [
-    "EMPTY",
     "no character in view"
    ]
   ],
@@ -2069,10 +2029,6 @@
    ],
    [
     "EMPTY",
-    "only MC_CutFace in view"
-   ],
-   [
-    "EMPTY",
     "no character in view"
    ]
   ],
@@ -2088,10 +2044,6 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only MC_CutFace in view"
    ],
    [
     "EMPTY",
@@ -2221,10 +2173,6 @@
    ],
    [
     "EMPTY",
-    "only MC_CutFace in view"
-   ],
-   [
-    "EMPTY",
     "no character in view"
    ]
   ],
@@ -2243,10 +2191,6 @@
    ],
    [
     "EMPTY",
-    "only MC_CutFace in view"
-   ],
-   [
-    "EMPTY",
     "no character in view"
    ]
   ],
@@ -2262,10 +2206,6 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only MC_CutFace in view"
    ],
    [
     "EMPTY",
@@ -2331,6 +2271,10 @@
    ],
    [
     "EMPTY",
+    "only MC_CutFace in view"
+   ],
+   [
+    "EMPTY",
     "no character in view"
    ]
   ],
@@ -2346,6 +2290,10 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only MC_CutFace in view"
    ],
    [
     "EMPTY",
@@ -2607,10 +2555,6 @@
   "1015": [
    [
     "FILL",
-    "MC_CutFace"
-   ],
-   [
-    "FILL",
     "surface <12 cm"
    ],
    [
@@ -2779,19 +2723,11 @@
   "1087": [
    [
     "FILL",
-    "MC_CutFace"
-   ],
-   [
-    "FILL",
     "surface <12 cm"
    ],
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only MC_CutFace in view"
    ],
    [
     "EMPTY",
@@ -2831,10 +2767,18 @@
    ],
    [
     "EMPTY",
+    "only MC_CutFace in view"
+   ],
+   [
+    "EMPTY",
     "no character in view"
    ]
   ],
   "1105": [
+   [
+    "FILL",
+    "MC_CutFace"
+   ],
    [
     "FILL",
     "surface <12 cm"
@@ -2851,6 +2795,10 @@
   "1111": [
    [
     "FILL",
+    "MC_CutFace"
+   ],
+   [
+    "FILL",
     "surface <12 cm"
    ],
    [
@@ -2863,6 +2811,10 @@
    ]
   ],
   "1117": [
+   [
+    "FILL",
+    "MC_CutFace"
+   ],
    [
     "FILL",
     "surface <12 cm"
@@ -2878,10 +2830,6 @@
   ],
   "1123": [
    [
-    "FILL",
-    "surface <12 cm"
-   ],
-   [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
    ],
@@ -2896,10 +2844,6 @@
     "camera inside geometry"
    ],
    [
-    "FILL",
-    "surface <12 cm"
-   ],
-   [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
    ],
@@ -2909,14 +2853,6 @@
    ]
   ],
   "1135": [
-   [
-    "INSIDE",
-    "camera inside geometry"
-   ],
-   [
-    "FILL",
-    "surface <12 cm"
-   ],
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
@@ -2936,38 +2872,22 @@
     "surface <12 cm"
    ]
   ],
-  "1147": [
-   [
-    "INSIDE",
-    "camera inside geometry"
-   ],
-   [
-    "FILL",
-    "surface <12 cm"
-   ]
-  ],
   "140": [
    [
     "CAMJUMP",
-    "cut: 19.99 m, 84 deg in one frame (neighbours 0.00 m, 7 deg)"
+    "cut: 20.00 m, 84 deg in one frame (neighbours 0.00 m, 3 deg)"
    ]
   ],
   "1137": [
    [
     "CAMJUMP",
-    "cut: 19.99 m, 72 deg in one frame (neighbours 0.00 m, 1 deg)"
+    "cut: 19.98 m, 14 deg in one frame (neighbours 0.00 m, 1 deg)"
    ]
   ],
   "31": [
    [
     "PROPMOVE",
     "Bullet moves 60.8 cm with no hand on it (nearest finger 87 cm)"
-   ]
-  ],
-  "67": [
-   [
-    "PROPMOVE",
-    "Bullet moves 5.1 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "73": [
@@ -3017,19 +2937,13 @@
     "PROPMOVE",
     "Bullet moves 5.1 cm with no hand on it (nearest finger 39 cm)"
    ]
-  ],
-  "121": [
-   [
-    "PROPMOVE",
-    "Bullet moves 5.1 cm with no hand on it (nearest finger 36 cm)"
-   ]
   ]
  },
  "counts": {
-  "EMPTY": 379,
-  "INSIDE": 10,
-  "FILL": 260,
+  "EMPTY": 368,
+  "INSIDE": 6,
+  "FILL": 257,
   "CAMJUMP": 2,
-  "PROPMOVE": 12
+  "PROPMOVE": 10
  }
 }
