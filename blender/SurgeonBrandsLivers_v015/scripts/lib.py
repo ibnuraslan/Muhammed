@@ -466,7 +466,17 @@ def suit_material(name, rig, jacket, shirt, tie):
     front = math('LESS_THAN', Y, ycut); above = math('GREATER_THAN', Z, z0)
     shirt = math('MULTIPLY', math('MULTIPLY', math('LESS_THAN', ax, half), front), above)
     tie = math('MULTIPLY', math('MULTIPLY', math('LESS_THAN', ax, 0.011), shirt), math('LESS_THAN', Z, z1 - 0.025))
-    m1 = N.new("ShaderNodeMixShader"); L.new(shirt, m1.inputs[0]); L.new(pj.outputs[0], m1.inputs[1]); L.new(ps.outputs[0], m1.inputs[2])
+    # lapels: a darker satin band along the V; two buttons below it
+    lap = math('MULTIPLY', math('MULTIPLY', math('LESS_THAN', ax, math('ADD', half, 0.032)), front), math('GREATER_THAN', Z, z0 - 0.02))
+    pl = bsdf(tuple(c * 0.55 for c in jacket), 0.35, 0.4)
+    def btn(zc):
+        dx = math('POWER', X, 2.0); dz = math('POWER', math('SUBTRACT', Z, zc), 2.0)
+        return math('MULTIPLY', math('LESS_THAN', math('ADD', dx, dz), 0.009 ** 2), front)
+    bt = math('MAXIMUM', btn(z0 - 0.06), btn(z0 - 0.15))
+    pb_ = bsdf((0.02, 0.02, 0.02), 0.3)
+    m0 = N.new("ShaderNodeMixShader"); L.new(lap, m0.inputs[0]); L.new(pj.outputs[0], m0.inputs[1]); L.new(pl.outputs[0], m0.inputs[2])
+    m0b = N.new("ShaderNodeMixShader"); L.new(bt, m0b.inputs[0]); L.new(m0.outputs[0], m0b.inputs[1]); L.new(pb_.outputs[0], m0b.inputs[2])
+    m1 = N.new("ShaderNodeMixShader"); L.new(shirt, m1.inputs[0]); L.new(m0b.outputs[0], m1.inputs[1]); L.new(ps.outputs[0], m1.inputs[2])
     m2 = N.new("ShaderNodeMixShader"); L.new(tie, m2.inputs[0]); L.new(m1.outputs[0], m2.inputs[1]); L.new(pt.outputs[0], m2.inputs[2])
     L.new(m2.outputs[0], out.inputs["Surface"])
     return m

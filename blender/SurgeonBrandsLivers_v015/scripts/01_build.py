@@ -91,7 +91,7 @@ def shirt_tie(top, rig, mats=(shirt_m, tie_m)):
         elif abs(c.x) < half: p.material_index = ishirt
 S1_SUIT.data.materials[0] = suit_material("M_SuitS1", DOC, (0.07, 0.08, 0.12), (0.92, 0.93, 0.95), (0.70, 0.04, 0.06))
 
-cap1_m = fabric("M_Cap1", (0.03, 0.52, 0.58), scale=400, bump=0.5); mask_m = fabric("M_Mask", (0.45, 0.72, 0.92), scale=90, bump=0.8)
+cap1_m = fabric("M_Cap1", (0.03, 0.52, 0.58), scale=400, bump=0.5); mask_m = fabric("M_Mask", (0.45, 0.72, 0.92), scale=45, bump=0.2)
 S1_CAP, S1_MASK, S1_CAPPL, S1_NOSE = cap_and_mask(DOC, DB, "S1", cap1_m, mask_m)
 glove_m = mat("M_Glove", (0.18, 0.30, 0.85), rough=0.38, coat=0.25)
 def glove_shell(rig, body, name):

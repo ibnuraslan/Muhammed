@@ -163,7 +163,7 @@ WIN_HX, WIN_HY = 0.15, 0.11
 def drape():
     nx, ny = 130, 70
     x0, x1 = TABLE_C.x - 1.0 - 0.05, s3.x + 0.17
-    y0, y1 = TABLE_C.y - 0.55, TABLE_C.y + 0.55
+    y0, y1 = TABLE_C.y - 0.42, TABLE_C.y + 0.42
     tz = TABLE_TOP
     bm = bmesh.new(); grid = {}
     for i in range(nx + 1):
@@ -176,7 +176,7 @@ def drape():
             xx = x if x >= TABLE_C.x - 1.0 else TABLE_C.x - 1.0 - 0.03 + ex * 0.25
             z, n_ = surf_z(min(max(xx, TABLE_C.x - 1.0), 9), min(max(yy, TABLE_C.y - 0.26), TABLE_C.y + 0.26))
             top = max(tz + 0.012, (z + 0.034) if z is not None else tz + 0.012)
-            zz = top - ey * 1.0 - (-ex) * 1.0
+            zz = top - min(0.30, ey * 1.0 + (-ex) * 1.0)
             jit = 0.004 * math.sin(x * 37 + y * 11) + 0.003 * math.sin(y * 53 - x * 7)
             grid[i, j] = bm.verts.new((xx + (0.01 * ey if False else 0), yy, zz + jit))
     for i in range(nx):
@@ -339,8 +339,8 @@ def place_letter(name, path2d, cx):
     for (u, v) in path2d:
         x = LET_C.x + cx + u; y = LET_C.y + v
         loc, nrm = liver_surf(x, y)
-        pts3.append(loc + nrm * 0.0004 if loc is not None else Vector((x, y, WORK.z - 0.03)))
-    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0034; cu.bevel_resolution = 2
+        pts3.append(loc - nrm * 0.0008 if loc is not None else Vector((x, y, WORK.z - 0.03)))
+    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0028; cu.bevel_resolution = 2
     cu.use_fill_caps = True; cu.bevel_factor_mapping_end = 'SPLINE'
     sp = cu.splines.new('POLY'); sp.points.add(len(pts3) - 1)
     for p_, c_ in zip(sp.points, pts3): p_.co = (*c_, 1)
@@ -981,13 +981,13 @@ CK = [  # frame, camera position, aim, lens, f-stop
     (1,    WORK + Vector((-0.04, -0.72, 0.27)), WORK + Vector((0, 0.16, 0.27)), 35, 11),
     (120,  WORK + Vector((0.05, -0.62, 0.25)), WORK + Vector((0, 0.15, 0.24)), 35, 11),
     (215,  WORK + Vector((0.02, -0.40, 0.24)), WORK + Vector((0, 0.10, 0.16)), 35, 11),
-    (240,  WORK + Vector((-0.01, -0.12, 0.27)), WORK + LETC, 50, 11),
-    (272,  WORK + Vector((-0.006, -0.10, 0.23)), WORK + LETC, 50, 11),
+    (240,  WORK + Vector((-0.01, -0.06, 0.31)), WORK + LETC, 50, 11),
+    (272,  WORK + Vector((-0.006, -0.05, 0.27)), WORK + LETC, 50, 11),
     (305,  FACE1 + Vector((-0.10, -0.95, -0.16)), FACE1 + Vector((0, 0, -0.08)), 40, 8),
     (340,  FACE1 + Vector((0.16, -0.84, -0.20)), FACE1 + Vector((0, 0, -0.08)), 42, 8),
     (372,  FACE1 + Vector((0.0, -0.74, -0.26)), FACE1 + Vector((0, 0, -0.08)), 45, 8),
     (405,  FACE1 + Vector((-0.17, -0.80, -0.20)), FACE1 + Vector((0, 0, -0.08)), 45, 8),
-    (445,  WORK + Vector((0.30, -0.55, 0.30)), WORK + Vector((0, 0.10, 0.08)), 35, 11),
+    (445,  WORK + Vector((0.10, -0.42, 0.42)), WORK + Vector((0, 0.12, 0.10)), 35, 11),
     (480,  FACE1 + Vector((0.10, -0.85, -0.12)), FACE1 + Vector((0, 0, -0.10)), 40, 8),
     (522,  FACE1 + Vector((-0.06, -0.70, -0.08)), FACE1 + Vector((0, 0, -0.07)), 42, 8),
     (560,  FACE1 + Vector((0.04, -0.85, -0.08)), FACE1 + Vector((0, 0, -0.08)), 40, 8),
@@ -1003,8 +1003,8 @@ CK = [  # frame, camera position, aim, lens, f-stop
     (905,  L2((-0.45, 1.40, 1.65)), L2((-0.15, 2.9, 1.25)), 32, 8),
     (965,  sectM("OR2") @ (WORK + Vector((-0.25, -0.90, 0.50))), sectM("OR2") @ (WORK + Vector((0, 0.25, 0.28))), 35, 8),
     (1030, sectM("OR2") @ (WORK + Vector((-0.04, -0.72, 0.27))), sectM("OR2") @ (WORK + Vector((0, 0.16, 0.27))), 35, 11),
-    (1068, sectM("OR2") @ (WORK + Vector((-0.01, -0.12, 0.27))), sectM("OR2") @ (WORK + LETC), 50, 11),
-    (1104, sectM("OR2") @ (WORK + Vector((-0.006, -0.10, 0.23))), sectM("OR2") @ (WORK + LETC), 50, 11),
+    (1068, sectM("OR2") @ (WORK + Vector((-0.01, -0.06, 0.31))), sectM("OR2") @ (WORK + LETC), 50, 11),
+    (1104, sectM("OR2") @ (WORK + Vector((-0.006, -0.05, 0.27))), sectM("OR2") @ (WORK + LETC), 50, 11),
     (1134, FACE2W + (sectM("OR2").to_3x3() @ Vector((-0.05, -0.85, -0.05))), FACE2W + Vector((0, 0, -0.05)), 45, 8),
     (1172, FACE2W + (sectM("OR2").to_3x3() @ Vector((0.06, -0.72, -0.05))), FACE2W + Vector((0, 0, -0.05)), 45, 8),
     (1198, Vector((0.0, -0.02, 1.55)), L2((0.0, 3.0, 1.45)), 32, 8),
