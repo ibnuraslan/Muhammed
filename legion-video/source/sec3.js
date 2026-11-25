@@ -29,6 +29,7 @@ export async function build(cues) {
   const road = mesh(new THREE.PlaneGeometry(500, 6), L.groundMat('mud'), [0, .02, 4], [-Math.PI / 2, 0, 0], rf); road.userData.noToon = true;
   U.gun = fieldGun(); at(U.gun, 8, 0, 9, .5); rf.add(U.gun); const gun2 = fieldGun(); at(gun2, -14, 0, 10, 2.6); gun2.rotation.z = .2; rf.add(gun2);
   U.deserters = [...Array(12)].map((_, i) => { const m = man({ u: 'russian', seed: 1000 + i, flip: i % 2 }); rf.add(m); return m; });
+  const liftBrim = m => m.userData.rig.head.traverse(o => { const g = o.geometry && o.geometry.parameters; if (o.isMesh && g && g.thetaLength === Math.PI && Math.abs((g.radiusTop || 0) - .115) < .001) o.position.y += .022; });
   U.sitters = [...Array(4)].map((_, i) => { const m = man({ u: 'russian', seed: 1020 + i, rifle: false }); at(m, -6 + i * 3, 0, -6.6, facing([0, 1]) + (i - 1.5) * .3); rf.add(m); return m; });
   U.dropped = [...Array(8)].map((_, i) => { const r = L.lowRifle(); at(r, -10 + i * 2.6, .05, -5.5 + (i % 3) * .6, i * .8); r.rotation.x = Math.PI / 2; rf.add(r); return r; });
   U.helmet = new THREE.Group(); mesh(new THREE.SphereGeometry(.17, 14, 8, 0, Math.PI * 2, 0, Math.PI / 2), mat(0x5a6048, .6, .3), [0, 0, 0], [0, 0, 0], U.helmet); mesh(new THREE.CylinderGeometry(.21, .21, .015, 16), mat(0x5a6048, .6, .3), [0, 0, 0], [0, 0, 0], U.helmet); at(U.helmet, 1.5, .02, -5.8); U.helmet.rotation.z = .4; rf.add(U.helmet);
@@ -36,6 +37,7 @@ export async function build(cues) {
   U.officer = man({ u: 'russian', seed: 1040, kit: { coat: 0x6a6448, hat: 'peaked', hatC: 0x5a5440 }, rifle: false, hero: true }); rf.add(U.officer);
   U.epaulet = fx(mesh(new THREE.BoxGeometry(.14, .02, .06), mat(0xd8b040, .3, .9)));
   U.mob = [...Array(9)].map((_, i) => { const m = man({ u: 'russian', seed: 1050 + i, rifle: i % 3 === 0 }); rf.add(m); return m; });
+  [...U.deserters, ...U.sitters, ...U.mob].forEach(liftBrim);
   U.rsnow = fx(L.snowfall(4000, [60, 25, 60], [0, 0, 0]));
   // ---------- CROWN (void) ----------
   const cv = L.addSet('void', 0, 900); mesh(new THREE.BoxGeometry(20, .1, 20), pbr('old_wood_floor', [6, 6], { color: 0x5a3a2a }), [0, -.05, 0], [0, 0, 0], cv);
@@ -49,7 +51,7 @@ export async function build(cues) {
   const wpG = new THREE.Group(); mesh(new THREE.BoxGeometry(70, 16, 8), pbr('grey_plaster_02', [14, 3], { color: 0x6a9a84 }), [0, 8, 0], [0, 0, 0], wpG); for (let i = 0; i < 28; i++) { mesh(new THREE.CylinderGeometry(.35, .35, 13, 10), mat(0xf0ece0, .7), [-33 + i * 2.45, 6.5, 4.3], [0, 0, 0], wpG); mesh(new THREE.BoxGeometry(1.0, 2.0, .1), mat(0x1a2a30, .3, .3, { emissive: 0xffb050, emissiveIntensity: i % 3 ? .0 : 1 }), [-32 + i * 2.45, 10, 4.05], [0, 0, 0], wpG); }
   mesh(new THREE.BoxGeometry(70, 1, 9), mat(0xf0ece0, .7), [0, 16.4, 0], [0, 0, 0], wpG); at(wpG, 52, 0, 0, -Math.PI / 2); pg.add(wpG);
   U.marchers = [...Array(22)].map((_, i) => { const m = man({ u: i % 4 === 0 ? 'civil' : i % 5 === 1 ? 'woman' : 'russian', seed: 1100 + i, rifle: i % 3 === 0 }); pg.add(m); return m; });
-  U.banners = [['ДОЛОЙ ВОЙНУ', '#b81a14'], ['ВСЯ ВЛАСТЬ СОВЕТАМ', '#a01410'], ['МИРА!', '#c8241c']].map(([s, bg], i) => { const tx = L.textTex([[s, 110, 150, 'bold 110px DejaVu Sans, sans-serif']], { w: 1024, h: 256, bg, fg: '#f4ead8', border: false }); const g = new THREE.Group(); L.plate(4.2, 1.0, tx, g, [0, 2.8, 0]); for (const x of [-2.1, 2.1]) mesh(new THREE.CylinderGeometry(.03, .03, 3.4, 6), mat(0x5a3a1a, .8), [x, 1.7, 0], [0, 0, 0], g); pg.add(g); return g; });
+  U.banners = [['ДОЛОЙ ВОЙНУ', '#b81a14'], ['ВСЯ ВЛАСТЬ СОВЕТАМ', '#a01410'], ['МИРА!', '#c8241c']].map(([s, bg], i) => { const fs = s.length > 12 ? 74 : 110; const tx = L.textTex([[s, fs, 128 + fs * .36, `bold ${fs}px DejaVu Sans, sans-serif`]], { w: 1024, h: 256, bg, fg: '#f4ead8', border: false }); const g = new THREE.Group(); L.plate(4.2, 1.0, tx, g, [0, 2.8, 0]); for (const x of [-2.1, 2.1]) mesh(new THREE.CylinderGeometry(.03, .03, 3.4, 6), mat(0x5a3a1a, .8), [x, 1.7, 0], [0, 0, 0], g); pg.add(g); return g; });
   U.redFlags = [...Array(4)].map(() => { const f = L.flag(1.4, .9, ['#b81a14']); const p = L.poleWithFlag(2.6, f); pg.add(p); p.userData.f = f; return p; });
   U.acar = new THREE.Group(); mesh(new THREE.BoxGeometry(5, 1.6, 2.2), mat(0x3a4038, .6, .4), [0, 1.4, 0], [0, 0, 0], U.acar); mesh(new THREE.CylinderGeometry(.6, .7, .8, 12), mat(0x3a4038, .6, .4), [-.5, 2.6, 0], [0, 0, 0], U.acar); mesh(new THREE.CylinderGeometry(.05, .05, 1.4, 8), mat(0x1a1a1a, .5), [.3, 2.6, 0], [0, 0, Math.PI / 2], U.acar); for (const [x, z] of [[-1.6, -1.1], [1.6, -1.1], [-1.6, 1.1], [1.6, 1.1]]) mesh(new THREE.CylinderGeometry(.5, .5, .25, 14), mat(0x1a1a1a, .7), [x, .5, z], [Math.PI / 2, 0, 0], U.acar); mesh(new THREE.BoxGeometry(1, .5, .05), mat(0xb81a14, .7), [0, 1.6, 1.12], [0, 0, 0], U.acar); at(U.acar, 20, 0, 4); pg.add(U.acar);
   U.lights = [0, 1].map(() => { const g = new THREE.Group(); const cone = mesh(new THREE.ConeGeometry(4, 60, 16, 1, true), new THREE.MeshBasicMaterial({ color: 0xdde8ff, transparent: true, opacity: .22, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending }), [0, 30, 0], [0, 0, 0], g); cone.userData.noToon = true; g.position.set(40, 0, 0); pg.add(g); return g; });
@@ -96,7 +98,7 @@ export const SHOTS = {};
 const winter = (t, sky = 'grey') => { show('rfront'); look(sky, [0xd0d4dc, .009], 1.4, 1.4, 0xf0f0f4, [-40, 60, 30], [0, 0, 0], [0xdde4f0, 0x8a8a96]); U.rsnow.visible = true; U.rsnow.userData.update(t); };
 // 32 the Russian army falls apart: deserters trudge home past abandoned guns
 SHOTS[32] = (t, lt, d) => { winter(t); U.officer.position.y = -50; U.mob.forEach(m => m.position.y = -50);
-  U.deserters.forEach((m, i) => { const x = 24 - lt * 1.3 - i * 2.3 + (i % 2) * .8; at(m, x, 0, 3 + (i % 3) * 1.1, facing([-1, .05])); pose(m, t, { walk: true, speed: 4.5, nod: .25, lean: .08 }); });
+  U.deserters.forEach((m, i) => { const x = 24 - lt * 1.3 - i * 2.3 + (i % 2) * .8; at(m, x, 0, 3 + (i % 3) * 1.1, facing([-1, .05])); pose(m, t, { walk: true, speed: 4.5, nod: .02, lean: .08 }); });
   U.sitters.forEach((m, i) => { pose(m, t, { sit: true, nod: .4, armL: .4, armR: .4 }); m.position.y = -.05; });
   ct('rfront', lt, d, [-8, .7, 9, 6, 1.6, 3], [-6, .8, 8, 4, 1.5, 3], [36, 34]); overlay(c => L.caption(c, '1917', 'THE EASTERN FRONT', clamp(lt / .5) * (1 - clamp((lt - d + .5) / .5)))); };
 // 33 the tsar abdicates: the crown falls in slow motion past the toppled portrait
@@ -105,17 +107,17 @@ SHOTS[33] = (t, lt, d) => { show('void'); look('night', null, .25, 0, 0xffffff, 
   U.portrait.position.set(-1.2, lerp(2.2, .7, ease(q)), -1.6); U.portrait.rotation.set(-ease(q) * .3, 0, ease(q) * .25);
   ct('void', lt, d, [.9, 1.4, 2.6, 0, 1.0, 0], [.8, 1.2, 2.4, 0, .7, 0], [32, 30]); overlay(c => L.caption(c, 'MARCH 1917', 'NICHOLAS II ABDICATES', clamp(lt / .3))); };
 // 34 discipline collapses: soldiers surround their officer, rip off his shoulder boards
-SHOTS[34] = (t, lt, d) => { winter(t); U.deserters.forEach(m => m.position.y = -50); U.sitters.forEach(m => m.position.y = -50);
-  at(U.officer, 0, 0, 0, facing([1, 0])); pose(U.officer, t, { armR: lt < 2 ? .9 : 0, look: lt > 2.3 ? .4 : 0 });
-  U.mob.forEach((m, i) => { const a = -1.6 + i * .42, rr = 2.0 + (i % 2) * .6; at(m, Math.cos(a) * rr, 0, Math.sin(a) * rr, facing([-Math.cos(a), -Math.sin(a)])); pose(m, t, { armR: i === 4 && lt > 2.2 ? lerp(0, 1.5, clamp((lt - 2.2) / .3)) : (i % 3 === 1 ? -.3 : 0), elR: i === 4 ? .6 : 0, look: Math.sin(t + i) * .2 }); });
+SHOTS[34] = (t, lt, d) => { winter(t); U.deserters.forEach(m => m.position.y = -50); U.sitters.forEach(m => m.position.y = -50); U.dropped.forEach(r => r.position.y = -50); U.helmet.position.y = -50;
+  at(U.officer, 0, 0, 0, facing([1, 0])); pose(U.officer, t, { armR: lt < 2 ? .9 : 0, look: lt > 2.3 ? .4 : 0, nod: -.14 });
+  U.mob.forEach((m, i) => { const a = -1.6 + i * .42, rr = 2.0 + (i % 2) * .6; at(m, Math.cos(a) * rr, 0, Math.sin(a) * rr, facing([-Math.cos(a), -Math.sin(a)])); pose(m, t, { armR: i === 4 && lt > 2.2 ? lerp(0, 1.5, clamp((lt - 2.2) / .3)) : (i % 3 === 1 ? -.3 : 0), elR: i === 4 ? .6 : 0, look: Math.sin(t + i) * .2, nod: -.14 }); });
   if (lt > 2.5) { U.epaulet.visible = true; const q = lt - 2.5; U.epaulet.position.set(1.0 + q * 1.2, Math.max(.02, 1.55 + q * 1.5 - 4.9 * q * q), .2 + q * .5); U.epaulet.rotation.set(q * 8, q * 4, 0); }
   if (lt < 2.2) ct('rfront', lt, 2.2, [6, 2.2, 4, 0, 1.4, 0], [5, 2.0, 3.2, 0, 1.5, 0], [36, 34]); else ct('rfront', lt - 2.2, d - 2.2, [1.4, 1.65, 1.2, 0, 1.55, .1], [1.25, 1.6, 1.05, 0, 1.5, .15], [30, 28], lt < 2.8 ? .01 : 0); };
 // 35 Petrograd: crowds march against the war
 SHOTS[35] = (t, lt, d) => { show('petro'); look('grey', [0xb8b8b4, .008], 1.4, 1.4, 0xf0ece0, [-40, 60, 30], [900, 0, 0]); U.runners.forEach(m => m.position.y = -50); U.lights.forEach(l => l.visible = false);
   U.marchers.forEach((m, i) => { const row = Math.floor(i / 4), col = i % 4; at(m, -14 + lt * 1.4 - row * 1.4, 0, -3 + col * 1.5 + (row % 2) * .4, facing([1, 0])); pose(m, t, { walk: true, speed: 5.5, armR: i % 6 === 2 ? -2.6 : 0 }); });
-  U.banners.forEach((b, i) => { at(b, -14 + lt * 1.4 - 1 - i * 4.2, 0, -1 + i * 1.6, facing([1, 0]) + Math.PI / 2); b.position.y = Math.abs(Math.sin(t * 5.5 + i)) * .04; });
+  U.banners.forEach((b, i) => { at(b, -14 + lt * 1.4 - 1 - i * 6.5, 0, [-2.2, 3.2, -1.4][i], facing([1, 0]) + Math.PI / 2); b.scale.setScalar(1 + i * .28); b.position.y = i === 2 ? -50 : Math.abs(Math.sin(t * 5.5 + i)) * .04; });
   U.redFlags.forEach((p, i) => { at(p, -15 + lt * 1.4 - i * 3.3, 1.3, 3.5 - i * 1.6); p.userData.f.userData.update(t + i); });
-  if (lt < 3.6) ct('petro', lt, 3.6, [4, .6, 1, -10, 2.4, 0], [3, .7, 1.4, -8, 2.6, 0], [38, 36]); else ct('petro', lt - 3.6, d - 3.6, [8, 12, 0, -6, 0, 0], [7, 10, .5, -5, .5, 0], [40, 40]);
+  if (lt < 3.6) ct('petro', lt, 3.6, [6, 1.1, 1, -10, 2.4, 0], [5, 1.2, 1.4, -8, 2.5, 0], [42, 40]); else ct('petro', lt - 3.6, d - 3.6, [8, 12, 0, -6, 0, 0], [7, 10, .5, -5, .5, 0], [40, 40]);
   overlay(c => L.caption(c, 'PETROGRAD, 1917', '"DOWN WITH THE WAR"', clamp(lt / .5) * (1 - clamp((lt - 3.1) / .5)))); };
 // 36 the brigade's chance: dawn in the trench, the captain's pocket watch, the men ready
 SHOTS[36] = (t, lt, d) => { show('zborov'); look('dawn', [0xe8d2b8, .006], 1.4, 2.2, 0xffe0b8, [40, 30, -60], [-900, 0, 0]); U.prisoners.forEach(m => m.position.y = -50); U.guards.forEach(m => m.position.y = -50); U.blasts.forEach(b => b.userData.update(-1));
@@ -128,7 +130,7 @@ SHOTS[36] = (t, lt, d) => { show('zborov'); look('dawn', [0xe8d2b8, .006], 1.4, 
 SHOTS[37] = (t, lt, d) => { show('zborov'); look('summer', [0xe0d8c8, .006], 1.5, 2.4, 0xfff0d8, [40, 50, -30], [-900, 0, 0]); U.prisoners.forEach(m => m.position.y = -50); U.guards.forEach(m => m.position.y = -50); U.capt.position.y = -50; U.watch.position.y = -50; U.watchHand.position.y = -50;
   U.bsmoke.forEach((c, i) => { c.s.visible = true; c.s.userData.update(t + i, V3(c.x, 2, c.z)); });
   U.blasts.forEach((b, i) => b.userData.update(lt - .5 - i * .55));
-  U.attack.forEach((m, i) => { const k = Math.max(0, lt - .3 - (i % 4) * .12); at(m, -9 + i * 1.2 + Math.sin(i) * .5, k < .25 ? .4 * (k / .25) * (1 - k / .25) * 4 : 0, 1.2 - k * 4.6, facing([0, -1])); pose(m, t, { walk: k > 0, speed: 11, port: true, lean: .18 }); });
+  U.attack.forEach((m, i) => { const k = Math.max(0, lt - .3 - (i % 4) * .12); { const z = 1.2 - k * 4.6, jf = (.9 - z) / 1.8; at(m, -9 + i * 1.2 + Math.sin(i) * .5, jf > 0 && jf < 1 ? 1.1 * Math.sin(Math.PI * jf) : 0, z, facing([0, -1])); } pose(m, t, { walk: k > 0, speed: 11, port: true, lean: .18 }); });
   U.enemy.forEach((m, i) => { pose(m, t, { aim: lt < 3.5 }); if (lt > 4.2 + i * .1) m.position.y = -50; else m.position.y = .4; });
   if (lt < 2.0) ct('zborov', lt, 2.0, [-3, .45, 3.2, -3, 1.6, -10], [-3, .5, 2.6, -3, 1.8, -10], [38, 36], .02); else if (lt < 4.0) ct('zborov', lt - 2.0, 2.0, [14, 2.4, -6, -2, 1.4, -14], [13, 2.6, -10, -2, 1.4, -18], [38, 36], .03); else ct('zborov', lt - 4.0, d - 4.0, [-4, 1.4, -62, -2, 1.6, -40], [-3, 1.5, -61, -2, 1.7, -42], [36, 34]);
   overlay(c => L.caption(c, 'ZBOROV', '2 JULY 1917', clamp(lt / .5) * (1 - clamp((lt - 2.4) / .5)))); };
@@ -150,7 +152,7 @@ SHOTS[40] = (t, lt, d) => { show('tent'); look('summer', [0xe0d8c8, .005], 1.5, 
 // 41-42 an army corps: aerial over endless blocks, 40,000 counter
 SHOTS[41] = (t, lt, d) => { show('review'); look('dawn', [0xe8d2b8, .0025], 1.4, 2.4, 0xffe0b8, [60, 40, -30], [0, 0, -900]); U.mblock.visible = false; U.revFlags.forEach(f => f.userData.update(t)); pose(U.general, t, { salute: t > ST(43) }); U.staff.forEach(m => pose(m, t, {}));
   ct('review', lt, d, [-70, 30, 50, 0, 0, -10], [40, 45, 60, 0, 0, -10], [40, 44]);
-  if (t >= ST(42)) { const k = ease(clamp((t - ST(42)) / 3)); overlay(c => { M.label(c, `${Math.round(k * 400) * 100}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',').padStart(1, '0'), L.W / 2, L.H / 2 + 20, 140, '#fff4e0'); M.label(c, 'VOLUNTEERS · END OF 1917', L.W / 2, L.H / 2 + 90, 34, '#f2e8d2'); }); }
+  if (t >= ST(42)) { const k = ease(clamp((t - ST(42)) / 3)); overlay(c => { M.label(c, `${Math.round(k * 390) * 100}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',').padStart(1, '0'), L.W / 2, L.H / 2 + 20, 140, '#fff4e0'); M.label(c, 'VOLUNTEERS · END OF 1917', L.W / 2, L.H / 2 + 90, 34, '#f2e8d2'); }); }
   else overlay(c => L.caption(c, 'THE CZECHOSLOVAK ARMY CORPS', 'UKRAINE, 1917', clamp(lt / .4))); };
 // 43 the leaders had their army: the general salutes from the stand
 SHOTS[43] = (t, lt, d) => { show('review'); look('dawn', [0xe8d2b8, .0025], 1.4, 2.4, 0xffe0b8, [60, 40, -30], [0, 0, -900]); U.revFlags.forEach(f => f.userData.update(t)); pose(U.general, t, { salute: true }); U.staff.forEach(m => pose(m, t, { salute: true }));
@@ -159,22 +161,22 @@ SHOTS[43] = (t, lt, d) => { show('review'); look('dawn', [0xe8d2b8, .0025], 1.4,
 // 44 the front they were meant to fight on empties: abandoned trench, rifles in the snow, papers blowing
 SHOTS[44] = (t, lt, d) => { winter(t, 'snow'); U.deserters.forEach(m => m.position.y = -50); U.sitters.forEach(m => m.position.y = -50); U.officer.position.y = -50; U.mob.forEach(m => m.position.y = -50);
   U.papers.forEach((p, i) => { const q = (t * .6 + i * .37) % 1; p.position.set(-10 + i * 4 + q * 8, .1 + Math.abs(Math.sin(q * 9 + i)) * 1.2, -5 + Math.sin(q * 5 + i) * 1.5); p.rotation.set(q * 6 + i, q * 4, q * 3); });
-  ct('rfront', lt, d, [-14, .5, -4.6, 0, .2, -6], [4, .5, -4.4, 14, .3, -6], [36, 36]); };
+  ct('rfront', lt, d, [-14, .8, -2.4, 0, .2, -6], [4, .8, -2.2, 14, .3, -6], [38, 38]); };
 // 45 the Bolsheviks seize power: night, searchlights over the palace, Red Guards run
 SHOTS[45] = (t, lt, d) => { show('petro'); look('night', [0x101624, .008], 1.0, .6, 0x8aa0d0, [-30, 60, 40], [900, 0, 0], [0x6a7aaa, 0x2a2a36]); U.marchers.forEach(m => m.position.y = -50); U.banners.forEach(b => b.position.y = -50); U.redFlags.forEach(p => p.position.y = -50);
   U.lights.forEach((l, i) => { l.visible = true; l.position.set(46, 0, -20 + i * 40); l.rotation.set(0, 0, .5 + Math.sin(t * .6 + i * 2) * .35); l.rotation.x = Math.sin(t * .4 + i) * .3; });
   U.runners.forEach((m, i) => { const k = lt * 4.2; at(m, 4 + k - i * 1.3, 0, -2 + (i % 4) * 1.3, facing([1, 0])); pose(m, t, { walk: true, speed: 11, port: true }); });
   U.acar.position.x = 10 + lt * 2.4; pl2.intensity = 6; pl2.position.set(930, 6, 0);
-  ct('petro', lt, d, [0, .8, 8, 40, 9, -2], [6, 1.0, 9, 46, 10, -2], [38, 36]); overlay(c => L.caption(c, 'PETROGRAD, NOVEMBER 1917', 'THE BOLSHEVIKS TAKE POWER', clamp(lt / .5) * (1 - clamp((lt - d + .5) / .5)))); };
+  U.acar.position.y = -50; ct('petro', lt, d, [-1, 2.2, 8, 40, 9, -2], [1.5, 2.3, 8.3, 44, 10, -2], [38, 36]); overlay(c => L.caption(c, 'PETROGRAD, NOVEMBER 1917', 'THE BOLSHEVIKS TAKE POWER', clamp(lt / .5) * (1 - clamp((lt - d + .5) / .5)))); };
 // 46 peace with Germany: the pen signs Brest-Litovsk -> a legionary in a boxcar door, snow falling
 SHOTS[46] = (t, lt, d) => {
   if (lt < 2.0) { show('treaty'); look('night', null, .6, 0, 0xffffff, [0, 60, 0], [900, 0, 900], [0xc0a080, 0x3a2a1a]); S.background = new THREE.Color(0x0a0806); pl1.intensity = 8; pl1.position.set(899.6, 1.6, 900.2);
     const k = clamp(lt / 1.8), sx = -.08 + k * .16, sy = Math.sin(k * 30) * .01; U.penHand.position.set(sx + .06, 1.0, .26 + sy); U.penHand.rotation.set(-.6, .3, -.35);
     ct('treaty', lt, 2.0, [-.45, 1.5, .55, 0, .83, .1], [-.38, 1.42, .48, 0, .83, .12], [34, 30]); overlay(c => L.caption(c, 'BREST-LITOVSK', 'MARCH 1918', clamp(lt / .4))); return; }
   show('siding'); look('snow', [0xd8dce4, .01], 1.3, 1.2, 0xf0f0f4, [-40, 60, 30], [-900, 0, -900], [0xdde4f0, 0x8a8a96]); U.sSnow.visible = true; U.sSnow.userData.update(t); U.sTrain.userData.update(0);
-  pose(U.sHero, t, { look: .3 }); const hp = V3(); U.sHero.userData.rig.head.getWorldPosition(hp); pl1.intensity = 4; pl1.position.set(hp.x, hp.y + .4, hp.z - 1.4); U.sHero.userData.rig.head.getWorldPosition(hp); camTo(lt - 2.0, d - 2.0, [hp.x - .6, hp.y - .3, hp.z - 2.6, hp.x, hp.y, hp.z], [hp.x - .4, hp.y - .2, hp.z - 1.8, hp.x, hp.y, hp.z], [32, 28]); };
+  pose(U.sHero, t, { look: .3 }); U.sHero.updateMatrixWorld(true); const hp = V3(); U.sHero.userData.rig.head.getWorldPosition(hp); pl2.intensity = 5; pl2.color.set(0xffc890); pl2.distance = 6; pl2.position.set(hp.x + .2, hp.y + .3, hp.z + 1.3); pl1.intensity = 4; pl1.position.set(hp.x, hp.y + .4, hp.z - 1.4); U.sHero.userData.rig.head.getWorldPosition(hp); camTo(lt - 2.0, d - 2.0, [hp.x - 2.0, hp.y - .25, hp.z - 2.2, hp.x, hp.y, hp.z], [hp.x - 1.5, hp.y - .2, hp.z - 1.6, hp.x, hp.y, hp.z], [32, 28]); };
 // 47 Austria-Hungary still existed (map pulse) ; 48 independence uncertain (a question mark)
-SHOTS[47] = (t, lt, d) => { OV.noGL = true; const two = t >= ST(48); overlay((c, tt) => { if (!two) { M.ahMap(c, 1.5, 3, 'both', tt); M.title(c, '', '', 0); } else { M.ahMap(c, 1.5, 3, 'both', tt); c.fillStyle = 'rgba(0,0,0,.35)'; c.fillRect(0, 0, L.W, L.H); const k = ease(clamp((t - ST(48)) / .5)); M.label(c, '?', L.W / 2 - 40, L.H / 2 + 60, 340 * k + 1, '#e04030'); } }); };
+SHOTS[47] = (t, lt, d) => { OV.noGL = true; const two = t >= ST(48); overlay((c, tt) => { if (!two) { M.ahMap(c, 1.5, 3, 'both', tt); M.title(c, '', '', 0); } else { M.ahMap(c, 1.5, 3, 'both', tt); c.fillStyle = 'rgba(0,0,0,.35)'; c.fillRect(0, 0, L.W, L.H); const k = ease(clamp((t - ST(48)) / .5)); M.label(c, '?', L.W * .78, L.H * .5, 340 * k + 1, '#e04030'); } }); };
 // 49 usefulness meant fighting on with the Allies: French tricolour beside the white-red over the ranks
 SHOTS[49] = (t, lt, d) => { show('review'); look('grey', [0xd8d8d4, .003], 1.5, 1.8, 0xf0ece0, [60, 40, -30], [0, 0, -900]); U.revFlags.forEach(f => f.userData.update(t)); pose(U.general, t, {}); U.staff.forEach(m => pose(m, t, {})); U.mblock.visible = false;
   ct('review', lt, d, [-2, 1.2, 15, 0, 5, 23], [2, 1.3, 15, 0, 5.4, 23], [38, 36]); overlay(c => L.caption(c, '1918', 'PART OF THE FRENCH ARMY', clamp(lt / .5) * (1 - clamp((lt - d + .5) / .5)))); };

@@ -86,7 +86,7 @@ const GM = {};
 export function groundMat(kind) { if (GM[kind]) return GM[kind];
   const src = { dirt: ['dirt', 0xb8ab92], snow: ['snow_02', 0xf4f6fa], grass: ['dirt', 0x8a9a62], mud: ['dirt', 0x7a6a52], cobble: ['gravel', 0x9a948a], sand: ['dirt', 0xc8b48a] }[kind];
   const t = pbr(src[0], [400, 400]); return GM[kind] = new THREE.MeshToonMaterial({ map: t.map, color: src[1], gradientMap: GRAD }); }
-export function ground(set, kind = 'dirt', size = 6000) { const g = new THREE.Mesh(new THREE.PlaneGeometry(size, size), groundMat(kind)); g.rotation.x = -Math.PI / 2; g.receiveShadow = true; g.userData.noToon = true; set.add(g); return g; }
+export function ground(set, kind = 'dirt', size = 6000) { const gm = groundMat(kind).clone(); gm.polygonOffset = true; gm.polygonOffsetFactor = 4; gm.polygonOffsetUnits = 8; const g = new THREE.Mesh(new THREE.PlaneGeometry(size, size), gm); g.rotation.x = -Math.PI / 2; g.receiveShadow = true; g.userData.noToon = true; set.add(g); return g; }
 // low-poly rifle (same frame as the Poly Haven model: butt at x=-.635, muzzle at x=+.596)
 export function lowRifle(bayonet = false) { const g = new THREE.Group(), wood = mat(0x6a4024, .7), steel = mat(0x2a2a2c, .4, .7);
   const sh = new THREE.Shape(); sh.moveTo(-.635, -.105); sh.lineTo(-.6, .03); sh.lineTo(-.3, .035); sh.lineTo(-.2, .01); sh.lineTo(.38, .02); sh.lineTo(.38, -.01); sh.lineTo(-.2, -.03); sh.lineTo(-.36, -.04); sh.lineTo(-.635, -.105);
@@ -176,8 +176,8 @@ export function makeRunner(CUES, SHOTS, o = {}) {
     else if (!OV.noGL) { R.render(S, cam); cx.drawImage(R.domElement, 0, 0, W, H); } else { cx.fillStyle = '#000'; cx.fillRect(0, 0, W, H); }
     OV.list.forEach(fn => { cx.save(); fn(cx, t); cx.restore(); });
     const g = cx.createRadialGradient(W / 2, H / 2, H * .35, W / 2, H / 2, W * .66); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(10,6,4,.55)'); cx.fillStyle = g; cx.fillRect(0, 0, W, H);
-    cx.globalCompositeOperation = 'soft-light'; cx.fillStyle = 'rgba(255,200,150,.18)'; cx.fillRect(0, 0, W, H);
-    cx.globalCompositeOperation = 'overlay'; cx.globalAlpha = .06; cx.drawImage(grain, (f * 37) % 40 - 40, (f * 23) % 30 - 30, W + 80, H + 60); cx.globalAlpha = 1; cx.globalCompositeOperation = 'source-over';
+    if (!/nosoft/.test(location.search)) { cx.globalCompositeOperation = 'soft-light'; cx.fillStyle = 'rgba(255,200,150,.18)'; cx.fillRect(0, 0, W, H); }
+    if (!/nograin/.test(location.search)) { cx.globalCompositeOperation = 'overlay'; cx.globalAlpha = .06; cx.drawImage(grain, (f * 37) % 40 - 40, (f * 23) % 30 - 30, W + 80, H + 60); } cx.globalAlpha = 1; cx.globalCompositeOperation = 'source-over';
     for (const s0 of cuts) { const dd = Math.abs(t - s0); if (dd < .06 && s0 > T0 + .01) { cx.fillStyle = `rgba(0,0,0,${(1 - dd / .06) * .45})`; cx.fillRect(0, 0, W, H); } }
     if (OV.fade) { cx.fillStyle = `rgba(0,0,0,${OV.fade})`; cx.fillRect(0, 0, W, H); }
     if (o.fadeIn && t - T0 < o.fadeIn) { cx.fillStyle = `rgba(0,0,0,${1 - (t - T0) / o.fadeIn})`; cx.fillRect(0, 0, W, H); }
@@ -216,3 +216,26 @@ export function troopBlock(rows, cols, o = {}) { const g = new THREE.Group(), n 
     parts.forEach(([, , y], k) => { Pv.set(c * sp - (cols - 1) * sp / 2 + (k === 4 ? .25 : 0), y + b, r * sp - (rows - 1) * sp / 2); Pv.applyQuaternion(Q); M4.compose(Pv, Q, Sv); ims[k].setMatrixAt(i, M4); }); }
     ims.forEach(im => im.instanceMatrix.needsUpdate = true); };
   g.userData.update(0); return g; }
+// ---- draw-call reduction: merge each character's static parts per bone group (same look: per-part outlines merged too) ----
+import { mergeGeometries } from './jsm/utils/BufferGeometryUtils.js';
+export function mergeChars() {
+  const refs = new Set(); const seen = new Set();
+  const scan = (v, depth) => { if (!v || depth > 4 || seen.has(v)) return; if (v.isMesh) { refs.add(v); return; } if (v.isObject3D || v.isMaterial || v.isTexture || v.isBufferGeometry) return; if (typeof v !== 'object') return; seen.add(v); for (const k in v) scan(v[k], depth + 1); };
+  S.traverse(o => scan(o.userData, 0)); scan(U, 0);
+  const outlineMat = new THREE.MeshBasicMaterial({ color: 0x24170f, side: THREE.BackSide });
+  const prep = (geo, m4) => { let g = geo.index ? geo.toNonIndexed() : geo.clone(); for (const k of Object.keys(g.attributes)) if (!['position', 'normal', 'uv'].includes(k)) g.deleteAttribute(k); if (!g.attributes.normal) g.computeVertexNormals(); if (!g.attributes.uv) g.setAttribute('uv', new THREE.Float32BufferAttribute(new Float32Array(g.attributes.position.count * 2), 2)); g.morphAttributes = {}; g.clearGroups(); return g.applyMatrix4(m4); };
+  let before = 0, after = 0; const chars = []; S.traverse(o => { if (o.userData.rig) chars.push(o); });
+  for (const ch of chars) ch.traverse(node => {
+    if (node.isMesh) return; const elig = node.children.filter(m => m.isMesh && !m.isInstancedMesh && !refs.has(m) && m.children.length === 0 && m.material && !Array.isArray(m.material) && !m.material.isMeshBasicMaterial && !m.material.isMeshToonMaterial && !m.material.transparent && !m.userData.noToon && !m.userData.noOutline && m.visible);
+    if (elig.length < 2) return; before += elig.length * 2;
+    const byKey = new Map(), outl = [];
+    for (const m of elig) { m.updateMatrix(); const mt = m.material, key = [mt.color ? mt.color.getHexString() : '', mt.map ? mt.map.uuid : '', mt.side, mt.emissive ? mt.emissive.getHexString() : '', mt.emissiveIntensity ?? 1].join('|');
+      if (!byKey.has(key)) byKey.set(key, { mt, geos: [] }); byKey.get(key).geos.push(prep(m.geometry, m.matrix));
+      if (!m.geometry.boundingSphere) m.geometry.computeBoundingSphere(); const big = m.geometry.boundingSphere.radius;
+      if (m.geometry.attributes.position.count < 30000 && big < 30 && big > .025 && m.geometry.type !== 'PlaneGeometry') { const s = 1 + Math.min(.06, .012 / Math.max(.05, big)); outl.push(prep(m.geometry, m.matrix.clone().multiply(new THREE.Matrix4().makeScale(s, s, s)))); } }
+    for (const m of elig) node.remove(m);
+    for (const { mt, geos } of byKey.values()) { const g = mergeGeometries(geos, false); if (!g) continue; const mm = new THREE.Mesh(g, new THREE.MeshToonMaterial({ color: mt.color, map: mt.map, gradientMap: GRAD, side: mt.side, emissive: mt.emissive || new THREE.Color(0), emissiveIntensity: mt.emissiveIntensity ?? 1 })); mm.castShadow = mm.receiveShadow = true; node.add(mm); after++; }
+    if (outl.length) { const og = mergeGeometries(outl, false); if (og) { const ol = new THREE.Mesh(og, outlineMat); ol.castShadow = false; ol.userData.ol = true; node.add(ol); after++; } }
+  });
+  console.log('mergeChars', chars.length, 'chars, draw objects', before, '->', after);
+}

@@ -33,7 +33,7 @@ export async function build(cues) {
   // where the iron lands: in front of car 1's door at the moment of impact
   const hit = carX(1, T_HIT); U.VX = hit.x - 2.2;
   const r = rng(4); U.men = []; for (let i = 0; i < 26; i++) { const x = -20 + i * 4.3 + r() * 1.2; if (Math.abs(x - U.VX) < 2.2) continue; const m = man({ u: i % 4 === 3 ? 'legionCap' : 'legion', seed: i + 1 }); at(m, x, .6, -8.8 - r() * 2.4, facing([0, 1]) + (r() - .5) * .8); st.add(m); U.men.push(m); }
-  const cx3 = carX(3, 6.0).x; U.cluster = [0, 1, 2, 3].map(i => { const m = man({ u: i % 2 ? 'legionCap' : 'legion', seed: 70 + i }); at(m, cx3 - 3 + i * 1.3, .6, -9.0 - (i % 2) * .6, facing([0, 1])); st.add(m); return m; }); U.cx3 = cx3;
+  const cx3 = carX(3, 6.0).x; U.cluster = [0, 1, 2, 3].map(i => { const m = man({ u: i % 2 ? 'legionCap' : 'legion', seed: 70 + i }); at(m, cx3 - 3 + i * 1.3, .6, -10.2 - (i % 2) * .6, facing([0, 1])); st.add(m); return m; }); U.cx3 = cx3;
   U.victim = man({ u: 'legion', seed: 41 }); at(U.victim, U.VX, .6, -8.3, facing([0, 1])); st.add(U.victim);
   U.runners = [0, 1, 2, 3].map(i => { const m = man({ u: i % 2 ? 'legionCap' : 'legion', seed: 60 + i }); st.add(m); return m; });
   U.iron = fx(mesh(new THREE.BoxGeometry(.5, .07, .07), pbr('rusty_metal', [1, .2], { color: 0x8a6a5a })));
@@ -65,7 +65,7 @@ export async function build(cues) {
   war.add(L.track2(900, -450)); war.add(L.forest(160, -450, 450, -200, -50, 21, false)); war.add(L.forest(120, -450, 450, 30, 200, 22, false));
   U.arm = L.train(2, { kinds: ['armor', 'flat'], front: 'armor', color: 0x3a4038 }); war.add(U.arm);   // armored wagon pushed ahead of the loco (real practice) + flatcar behind
   const flat = U.arm.userData.cars[1]; U.onTrain = [...Array(6)].map((_, i) => { const m = man({ u: i % 3 === 1 ? 'legionCap' : 'legion', seed: i === 3 ? 7 : 170 + i, height: i === 3 ? 1.04 : undefined, hero: i === 3 }); at(m, -2.8 + i * 1.1, flat.userData.deck, (i % 2 ? .45 : -.35), facing([0, 1]) + (i % 2 ? -.3 : .3)); flat.add(m); return m; });
-  U.heroFlagCloth = L.flag(1.2, .75, ['#f2f0ea', '#c8241c']); U.heroFlag = L.poleWithFlag(2.4, U.heroFlagCloth); U.heroFlag.position.set(U.onTrain[3].position.x + .7, flat.userData.deck, -.9); flat.add(U.heroFlag);
+  U.heroFlagCloth = L.flag(1.2, .75, ['#f2f0ea', '#c8241c']); U.heroFlag = L.poleWithFlag(2.4, U.heroFlagCloth); U.heroFlag.position.set(U.onTrain[3].position.x - .2, flat.userData.deck, -1.2); flat.add(U.heroFlag);
   const bst = L.station('КУРГАН', { wallTint: 0xb8a888 }); at(bst, 40, 0, -14); war.add(bst);
   U.bfires = [[30, -10], [38, -12], [46, -10], [52, -13], [42, -16]].map(([x, z]) => { const f = L.fire(16, 4.5); f.position.set(x, 1, z); war.add(f); return f; });
   U.bsmoke = fx(L.smoke(V3(), { n: 60, color: 0x221c1c, wind: [1.5, .5], rise: 30, size: 5, grow: 4, life: 7, opacity: .95 }));
@@ -125,7 +125,7 @@ SHOTS[1] = (t, lt, d) => { stationBase(t);
   if (L.U.pow && lt < 2.8) { overlay(c => L.caption(c, 'MAY 1918', 'CHELYABINSK, RUSSIA', 1 - clamp((lt - 1.8) / .5))); U.pow.position.x = lerp(120, 0, lt / 2.8); U.pow.userData.update(lt * 30); cam.position.set(30, .52, -5.5); cam.lookAt(80, 2.2, -5.5); cam.fov = 50; cam.updateProjectionMatrix(); }
   else if (lt < 5.1) { const wp = carX(1, t); cam.position.set(wp.x + 2 - (lt - 2.8) * .4, 2.6, -11.0); cam.lookAt(wp.x, 2.9, -5.5); cam.fov = 38; cam.updateProjectionMatrix(); }
   else if (lt < 6.7) { const cxw = carX(3, t).x; U.cluster.forEach((m, i) => pose(m, t, { look: clamp((U.cx3 - cxw) * .08, -.9, .9) + (i - 1.5) * .05 })); camTo(lt - 5.1, 1.6, [U.cx3 + 1.5, 1.75, -12.4, cxw, 2.4, -5.5], [U.cx3 + 1.0, 1.7, -12.2, cxw - 2, 2.4, -5.5], [34, 32]); }
-  else { const m = U.victim, hp = V3(); pose(m, t, { look: Math.sin(t * 2) * .05 - .2 }); m.userData.rig.head.getWorldPosition(hp); camTo(lt - 6.7, d - 6.7, [hp.x + .5, hp.y + .02, hp.z - 1.5, hp.x, hp.y, hp.z], [hp.x + .38, hp.y + .03, hp.z - 1.2, hp.x, hp.y + .02, hp.z], [30, 26]); } };
+  else { U.steam.visible = false; U.powSmoke.visible = false; const m = U.victim, hp = V3(); pose(m, t, { look: Math.sin(t * 2) * .05 - .2 }); m.userData.rig.head.getWorldPosition(hp); camTo(lt - 6.7, d - 6.7, [hp.x + 1.25, hp.y + .1, hp.z - 1.1, hp.x - .6, hp.y - .05, hp.z + 1.6], [hp.x + 1.05, hp.y + .1, hp.z - .95, hp.x - .7, hp.y - .05, hp.z + 1.6], [34, 30]); } };
 // 2 the throw: a hand in the dark doorway -> the iron bar tumbling in slow motion
 const ironPath = q => { const a = doorWorld(1, T_THROW), b = V3(U.VX, 2.25, -8.25); return V3(lerp(a.x, b.x, q), lerp(a.y, b.y, q) + Math.sin(q * Math.PI) * .9, lerp(a.z, b.z, q)); };
 SHOTS[2] = (t, lt, d) => { const tm = lt < .9 ? T_THROW - .9 + lt : T_THROW + (lt - .9) * .35; stationBase(tm); const th = U.thrower;
@@ -141,19 +141,19 @@ SHOTS[3] = (t, lt, d) => { stationBase(t); const v = U.victim;
   if (hitQ < 1) { U.iron.visible = true; U.iron.position.copy(ironPath(.8 + hitQ * .2)); U.iron.rotation.set(lt * 5, lt * 3, lt * 7); }
   else { U.iron.visible = true; U.iron.position.set(U.VX - .5, .68, -7.9); U.iron.rotation.set(0, .5, 0); }
   if (lt > .33 && lt < .45) { pl3.intensity = 18; pl3.position.set(U.VX, 2.2, -8); OV.fade = 0; overlay(c => { c.fillStyle = 'rgba(255,245,230,.55)'; c.fillRect(0, 0, L.W, L.H); }); }
-  v.position.set(U.VX - f * .5, .6, -8.3); v.rotation.set(0, facing([0, 1]), f * 1.48); pose(v, t, { armL: f * 1.3, armR: f * .9 }); v.rotation.set(-f * 1.45, facing([0, 1]), 0);
+  v.position.set(U.VX - f * .5, .6, lerp(-8.3, -9.6, f)); v.rotation.set(0, facing([0, 1]), f * 1.48); pose(v, t, { armL: f * 1.3, armR: f * .9 }); v.rotation.set(-f * 1.45, facing([0, 1]), 0);
   if (lt > .35) { U.cap.visible = true; U.cap.position.set(U.VX + .2 + f * .8, 2.4 + Math.sin(f * Math.PI) * .7 - f * 1.7, -8.0 - f * .9); U.cap.rotation.set(f * 6, f * 3, f * 4); if (f >= 1) U.cap.position.y = .66; }
   if (lt < 1.7) { cam.position.set(U.VX + 2.6, 1.5, -10.6); cam.lookAt(U.VX, 1.5, -8.2); cam.fov = 34; cam.position.x += Math.sin(lt * 40) * .03 * (lt > .35 && lt < .7); }
   else { U.runners.forEach((m, i) => { const q = clamp((lt - 1.7 - i * .15) / 1.0); at(m, lerp(U.VX - 9 - i * 1.5, U.VX - 1.6 - i * .55, q), .6, -9.0 - (i % 2) * .7, 0); pose(m, t, { walk: q < 1, speed: 11 }); }); cam.position.set(U.VX + 1.4, .45, -7.4); cam.lookAt(U.VX - 4, .7, -8.9); cam.fov = 40; }
   cam.updateProjectionMatrix(); };
 // 4 brakes scream -> legionaries climb into the wagon (prisoners back away inside) -> a shot flashes in the dark doorway -> aftermath
-SHOTS[4] = (t, lt, d) => { stationBase(t); const v = U.victim; v.position.set(U.VX - .5, .6, -8.3); v.rotation.set(-1.45, facing([0, 1]), 0); U.cap.visible = true; U.cap.position.set(U.VX + 1, .66, -8.9); U.iron.visible = true; U.iron.position.set(U.VX - .5, .68, -7.9);
+SHOTS[4] = (t, lt, d) => { stationBase(t); const v = U.victim; v.position.set(U.VX - .5, .6, -9.6); v.rotation.set(-1.45, facing([0, 1]), 0); U.cap.visible = true; U.cap.position.set(U.VX + 1, .66, -8.9); U.iron.visible = true; U.iron.position.set(U.VX - .5, .68, -7.9);
   if (lt < 1.5) { U.sparks.visible = true; const wh = V3(-1.6, .45, -.9); U.pow.userData.loco.localToWorld(wh); U.sparks.position.copy(wh); U.sparks.userData.update(t, 1); pl3.intensity = 6 + Math.sin(t * 40) * 3; pl3.position.copy(wh);
-    U.men.forEach(m => { if (Math.abs(m.position.x - wh.x) < 7) m.position.y = -50; }); cam.position.set(wh.x + 3.2, .6, -.6); cam.lookAt(wh.x, .55, wh.z); cam.fov = 30; cam.updateProjectionMatrix(); return; }
+    U.men.forEach(m => { if (Math.abs(m.position.x - wh.x) < 7) m.position.y = -50; }); cam.position.set(wh.x + 3.4, .7, -2.7); cam.lookAt(wh.x, .55, wh.z); cam.fov = 34; cam.updateProjectionMatrix(); return; }
   const car = U.pow.userData.cars[2], dw = doorWorld(2, t), q = lt - 1.5;
   // prisoners inside car 2 shrink back from the doorway
   U.powMen.slice(6, 9).forEach((m, k) => { const b = clamp(q / .8); m.position.set(m.userData.home.x + (k - 1) * .5 * b, m.userData.home.y, m.userData.home.z - b * 1.2); pose(m, t, { handsUp: k === 1 && b > .5, look: 0 }); m.rotation.y = -Math.PI / 2; });
-  U.runners.forEach((m, i) => { const k = clamp((q - i * .3) / 1.0); const x = dw.x - .6 + i * .45, z0 = -8.8, z1 = -6.2; at(m, x, .6 + clamp((k - .55) / .45) * (car.userData.by0 - .6 + .02), lerp(z0, z1, k), facing([0, 1])); pose(m, t, { walk: k > 0 && k < 1, speed: 10, armR: k > .45 && k < .9 ? 2.2 : 0, armL: k > .45 && k < .9 ? 2.0 : 0 }); if (k >= 1) m.position.y = -50; });
+  U.runners.forEach((m, i) => { const k = clamp((q - i * .3) / 1.0); const x = dw.x - .6 + i * .45, z0 = -8.8, z1 = -6.2; const zz = k < .6 ? lerp(z0, -7.35, k / .6) : k < .85 ? -7.3 : lerp(-7.3, z1, (k - .85) / .15); at(m, x, .6 + clamp((k - .6) / .25) * (car.userData.by0 - .6 + .02), zz, facing([0, 1])); pose(m, t, { walk: k > 0 && k < 1, speed: 10, armR: k > .45 && k < .9 ? 2.2 : 0, armL: k > .45 && k < .9 ? 2.0 : 0 }); if (k >= 1) m.position.y = -50; });
   if (q < 2.2) { camTo(q, 2.2, [dw.x + 4.6, 1.7, -11.6, dw.x, 1.9, -6.8], [dw.x + 3.6, 1.8, -11.0, dw.x - .2, 2.0, -6.8], [34, 32], .015); return; }
   const q2 = q - 2.2; if (q2 < .5) { U.runners.forEach(m => m.position.y = -50); const fl = (q2 > .12 && q2 < .2) || (q2 > .3 && q2 < .36); if (fl) { U.flash.visible = true; U.flash.position.set(dw.x + .3, dw.y + .2, -6.5); U.flash.scale.setScalar(1.6); pl2.intensity = 40; pl2.position.set(dw.x, dw.y, -6.2); }
     camTo(q2, .5, [dw.x + 6.5, 1.5, -12.5, dw.x, 2.1, -6.5], [dw.x + 6.3, 1.5, -12.3, dw.x, 2.1, -6.5], [30, 30]); return; }
@@ -164,9 +164,9 @@ function townDay(t) { show('town'); look('grey', [0xc8c8c4, .006], 1.4, 1.8, 0xf
 SHOTS[5] = (t, lt, d) => { townDay(t); const ctr = V3(-1, 0, 503);
   U.arrested.forEach((m, i) => { at(m, -1.6 + i * 1.0, 0, 4 + (i % 2) * .4, facing([0, -1]) + (i - 1) * .3); });
   if (lt < 1.9) { const q = ease(clamp(lt / 1.3)); U.door.rotation.y = 0;
-    U.guards.forEach((m, i) => { const a = -2.6 + i * .95, r = lerp(5.5, 2.2, q); at(m, -.6 + Math.cos(a) * r, 0, 4.3 + Math.sin(a) * r * .8, Math.atan2(Math.sin(a), -Math.cos(a)) ); m.rotation.y = facing([-.6 - m.position.x, 4.3 - m.position.z]); pose(m, t, { aim: true, walk: q < 1, speed: 6 }); });
+    U.guards.forEach((m, i) => { const a = -2.6 + i * .95, r = lerp(5.0, 2.6, q); at(m, -.6 + Math.cos(a) * r, 0, 4.3 + Math.sin(a) * r * .8, Math.atan2(Math.sin(a), -Math.cos(a)) ); m.rotation.y = facing([-.6 - m.position.x, 4.3 - m.position.z]); pose(m, t, { aim: true, walk: q < 1, speed: 6 }); });
     U.arrested.forEach((m, i) => pose(m, t, { handsUp: lt > .9, look: (i - 1) * .3 }));
-    camTo(lt, 1.9, [1.4, .35, 506.2, -.6, 1.9, 504], [1.0, .3, 505.8, -.6, 2.0, 504], [40, 36]); return; }
+    camTo(lt, 1.9, [6.4, 1.2, 511.5, -.6, 1.5, 504.3], [5.6, 1.1, 510.6, -.6, 1.5, 504.3], [36, 34]); return; }
   const q = lt - 1.9; U.door.rotation.y = q < 1.0 ? -lerp(0, 1.4, clamp(q / .3)) : -lerp(1.4, 0, clamp((q - 1.0) / .25));
   const order = [...U.arrested, U.guards[0], U.guards[1]]; order.forEach((m, i) => { const k = clamp((q - i * .18) / 1.0); at(m, lerp(-1.2 + i * .5, 0, k), 0, lerp(2.5 + i * .9, -6.4, k), facing([0, -1])); pose(m, t, { walk: k < 1, speed: 6, handsUp: i < 3, aim: i >= 3 }); if (k >= 1) m.position.y = -50; });
   U.guards.slice(2).forEach((m, i) => { at(m, -4 + i * 2.6, 0, 1.4 + (i % 2), facing([0, -1])); pose(m, t, { port: true }); });
@@ -174,19 +174,27 @@ SHOTS[5] = (t, lt, d) => { townDay(t); const ctr = V3(-1, 0, 503);
 // 6 FREE BY FORCE: night, lanterns pour down the street -> rifle butts smash the door in -> they storm inside
 SHOTS[6] = (t, lt, d) => { show('town'); look('night', [0x141a28, .02], .35, .35, 0x8aa0d0, [-30, 60, 40], [0, 0, 500], [0x4a5a8a, 0x1a1a22]); U.banners.forEach(b => b.userData.update(t, .03));
   U.guards.concat(U.arrested).forEach(m => m.position.y = -50);
-  if (lt < 1.2) { U.door.rotation.y = 0; U.raid.forEach((m, i) => { at(m, -24 + lt * 5 - i * 1.3, 0, 3 + (i % 3) * 1.1, facing([1, -.15])); pose(m, t, { walk: true, speed: 10, port: true }); }); U.lanterns.forEach((l, k) => { const m = U.raid[k * 3]; l.intensity = 10 + Math.sin(t * 20 + k) * 2; l.position.set(m.position.x + .4, 1.4, m.position.z + .3 + 500); l.position.z -= 500; });
+  if (lt < 1.2) { U.door.rotation.y = 0; U.raid.forEach((m, i) => { at(m, -24 + lt * 5 - i * 1.3, 0, 3 + (i % 3) * 1.1, facing([1, -.15])); pose(m, t, { walk: true, speed: 10, port: true }); }); U.lanterns.forEach((l, k) => { const m = U.raid[k * 3]; l.intensity = 6 + Math.sin(t * 20 + k) * 1.5; l.position.set(m.position.x + .45, .85, m.position.z + .35 + 500); l.position.z -= 500; });
     camTo(lt, 1.2, [-4, 1.2, 509, -20, 1.6, 502], [-6, 1.4, 508, -14, 1.6, 501], [36, 34]); return; }
-  const q = lt - 1.2, hitT = .55; U.lanterns.forEach((l, k) => { l.intensity = 9; l.position.set(-2.5 + k * 1.8, 1.5, -3.5 + k * .3); });
+  const q = lt - 1.2, hitT = .55; U.lanterns.forEach((l, k) => { l.intensity = 5; l.position.set(-2.5 + k * 1.8, .85, -3.0 + k * .3); });
   U.raid.forEach((m, i) => { if (i < 2) { at(m, -1.2 + i * 1.9, 0, -4.4, facing([0, -1]) + (i ? .5 : -.5)); const sw = Math.sin(clamp(q / hitT) * Math.PI); pose(m, t, { port: true, lean: -.3 * sw }); m.userData.rifle.position.x += .25 * sw; return; }
     const k = clamp((q - hitT - .1 - (i - 2) * .12) / .9); at(m, -1.5 + (i % 3) * .8, 0, lerp(-1 + (i - 2) * .9, -7, k), facing([0, -1])); pose(m, t, { walk: k < 1, speed: 11, port: true }); if (k >= 1) m.position.y = -50; });
-  const br = clamp((q - hitT) / .2); U.door.rotation.y = -br * 1.7; U.door.position.z = -5.9 - br * .2; U.doorPanel.rotation.z = br * .15;
+  const br = clamp((q - hitT) / .2); U.door.rotation.y = -br * 1.35; U.door.position.z = -5.9 - br * .2; U.doorPanel.rotation.z = br * .05;
   if (q > hitT) { U.splinters.visible = true; const s = q - hitT; U.splinters.children.forEach((p, i) => { const r = rng(i + 30); p.position.set(-.2 + (r() - .5) * 1.5 + (r() - .5) * s * 3, Math.max(.05, 1.6 + (r() - .2) * 1.2 + s * (2 - 4.9 * s)), 494.1 - s * (1 + r() * 2) + (r() < .3 ? s * 3 : 0)); p.rotation.set(s * 9 * r(), s * 7, s * 5 * r()); }); }
   if (q > hitT && q < hitT + .12) { pl3.intensity = 25; pl3.position.set(0, 1.5, 495); }
   pl2.intensity = 8; pl2.position.set(.5, 2.2, 496);
   camTo(q, d - 1.2, [3.0, 1.5, 502.5, -.4, 1.8, 494], [2.6, 1.5, 501.8, -.4, 1.9, 494], [34, 34], q > hitT && q < hitT + .4 ? .04 : 0); };
+// route map with staggered labels (no overlaps)
+const LBL = { Penza: [-34, 30], Samara: [26, -22], Ufa: [0, 34], Chelyabinsk: [0, -22], Omsk: [-10, 34], Novonikolaevsk: [20, -22], Krasnoyarsk: [0, 34], Irkutsk: [0, 34], Chita: [0, -22], Vladivostok: [0, 34] };
+function routeMap2(c, lt, d, t) { const pr = L.mapProj(25, 145, 38, 70, -40, 60, L.W + 80, L.H - 120); L.drawMap(c, pr);
+  const pts = L.CITIES.map(([n, lon, lat]) => [n, ...pr(lon, lat)]), prog = clamp(lt / (d * .85)) * (pts.length - 1);
+  c.strokeStyle = 'rgba(60,40,30,.6)'; c.lineWidth = 3; c.setLineDash([10, 8]); c.beginPath(); pts.forEach(([, x, y], i) => i ? c.lineTo(x, y) : c.moveTo(x, y)); c.stroke(); c.setLineDash([]);
+  c.strokeStyle = '#c8241c'; c.lineWidth = 7; c.shadowColor = 'rgba(255,80,40,.8)'; c.shadowBlur = 14; c.beginPath(); for (let i = 0; i <= Math.floor(prog); i++) { const [, x, y] = pts[i]; i ? c.lineTo(x, y) : c.moveTo(x, y); } const fi = Math.floor(prog), fr = prog - fi; if (fi < pts.length - 1) c.lineTo(lerp(pts[fi][1], pts[fi + 1][1], fr), lerp(pts[fi][2], pts[fi + 1][2], fr)); c.stroke(); c.shadowBlur = 0;
+  pts.forEach(([n, x, y], i) => { if (i <= prog) { L.flameIcon(c, x, y, .8, t); const [dx, dy] = LBL[n] || [0, 34]; c.fillStyle = '#f2e8d2'; c.strokeStyle = 'rgba(20,14,8,.85)'; c.lineWidth = 5; c.font = '600 20px Cinzel, serif'; c.textAlign = 'center'; c.strokeText(n.toUpperCase(), x + dx, y + dy); c.fillText(n.toUpperCase(), x + dx, y + dy); } });
+  c.fillStyle = '#f2e8d2'; c.font = '700 40px Cinzel, serif'; c.textAlign = 'left'; c.globalAlpha = clamp(lt / .6); c.fillText('THE TRANS-SIBERIAN RAILWAY', 60, 90); c.font = '26px Cinzel, serif'; c.fillText('≈ 7,000 KM  ·  SUMMER 1918', 62, 130); c.globalAlpha = 1; }
 // 7 RAIL WAR: animated map -> armored train fires -> station burns
 SHOTS[7] = (t, lt, d) => {
-  if (lt < 2.0) { OV.noGL = true; overlay((c, tt) => L.routeMap(c, lt, 2.0, tt)); cam.position.set(0, -500, 0); return; }
+  if (lt < 2.0) { OV.noGL = true; overlay((c, tt) => routeMap2(c, lt, 2.0, tt)); cam.position.set(0, -500, 0); return; }
   show('war'); const warLook = x => look('dusk', [0x9a7060, .004], 1.0, 2.0, 0xffa060, [100, 30, -60], [x, 0, -600]);
   U.arm.position.x = 0; U.arm.userData.update(0); U.armSmoke.visible = true; smk(U.armSmoke, U.arm.userData.loco, U.arm.userData.loco.userData.chimney, t);
   if (lt < 3.1) { warLook(0); const q = lt - 2.0, tw = U.arm.userData.front, tur = tw.userData.turret; tur.rotation.y = .9;
@@ -208,7 +216,7 @@ SHOTS[9] = (t, lt, d) => { show('plain'); look('dawn', [0xe8d2b8, .0012], 1.3, 2
 SHOTS[10] = (t, lt, d) => { show('city'); look('dusk', [0xa07a68, .005], 1.0, 2.0, 0xffa870, [60, 30, 40], [600, 0, 0]);
   U.citySmoke.forEach((c, i) => { c.s.visible = true; c.s.userData.update(t + i * 2, V3(c.x, 4, c.z)); });
   const ax = 30 - Math.min(lt, 2.0) * 12 + Math.max(0, lt - 2.0) * 0; U.carm.position.set(ax, 0, 0); U.carm.userData.update(-ax);
-  const top = 8.6, bot = 1.0; const fd = ease(clamp((lt - 2.6) / 1.0)), fu = ease(clamp((lt - 3.5) / 1.1));
+  const top = 8.6, bot = 7.1; const fd = ease(clamp((lt - 2.6) / 1.0)), fu = ease(clamp((lt - 3.5) / 1.1));
   U.redF.position.y = lerp(top, bot, fd); U.redF.visible = lt < 3.5; U.czF.position.y = lerp(bot, top, fu); U.czF.visible = lt >= 3.5; U.redF.userData.update(t); U.czF.userData.update(t);
   at(U.hoister, 6.4, .6, -8.6, facing([-1, 0])); pose(U.hoister, t, { armR: 2.6 - Math.abs(Math.sin(t * 5)) * .8, armL: 2.4 - Math.abs(Math.cos(t * 5)) * .8 });
   U.crowd.forEach((m, i) => pose(m, t, { armR: lt > 3.9 ? -2.6 + Math.sin(t * 6 + i) * .3 : 0, look: .3 }));

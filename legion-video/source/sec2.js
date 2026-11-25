@@ -27,8 +27,9 @@ export async function build(cues) {
   for (let i = 0; i < 6; i++) { const h = L.house(9, 9 + (i % 2) * 3, 8, { color: tints[(i + 3) % 6] }); at(h, -27 + i * 10.4, 0, 17, Math.PI); sq.add(h); }
   for (const s of [-1, 1]) for (let i = 0; i < 3; i++) { const h = L.house(9, 11, 8, { color: tints[i + 1] }); at(h, s * 35, 0, -6 + i * 10, -s * Math.PI / 2); sq.add(h); }
   const tw = new THREE.Group(); mesh(new THREE.BoxGeometry(5, 22, 5), pbr('grey_plaster_02', [2, 4], { color: 0xd8ccb0 }), [0, 11, 0], [0, 0, 0], tw); mesh(new THREE.ConeGeometry(3.6, 9, 4), mat(0x3a5a4a, .6), [0, 26.5, 0], [0, Math.PI / 4, 0], tw); mesh(new THREE.CylinderGeometry(1.2, 1.2, .2, 20), mat(0xe8e0c0, .6), [0, 17, 2.55], [Math.PI / 2, 0, 0], tw); at(tw, 4, 0, -30); sq.add(tw);
-  const pt = P.poster([['K. u. K.', 40, 90], ['MOBILISIERUNG', 58, 190], ['VŠEOBECNÁ', 50, 300], ['MOBILISACE', 50, 360], ['1914', 70, 480], ['Wir haben ...', 26, 560], ['█████ ███ ████ ██', 22, 610], ['██ ████ ███████ ██', 22, 650]], { draw: x => { x.fillStyle = '#1a1a1a'; x.beginPath(); x.arc(256, 46, 0, 0, 7); x.fill(); } });
-  U.poster = L.plate(1.6, 2.25, pt, sq, [-6.2, 2.3, -10.92]); for (let i = 0; i < 4; i++) L.plate(1.1, 1.5, P.poster([['', 10, 10], ['█ ███ ██', 30, 200 + i * 30]], { bg: ['#d8c8a0', '#e0d0b0', '#c8b890', '#e4d8bc'][i] }), sq, [-8.4 + i * .95 + (i > 1 ? 3.6 : 0), 2.0 + (i % 2) * .4, -10.93], [0, 0, (i - 1.5) * .04]);
+  const pt = P.poster([['K. u. K.', 40, 90], ['MOBILISIERUNG', 46, 190], ['VŠEOBECNÁ', 50, 300], ['MOBILISACE', 50, 360], ['1914', 70, 480], ['Wir haben ...', 26, 560], ['█████ ███ ████ ██', 22, 610], ['██ ████ ███████ ██', 22, 650]], { draw: x => { x.fillStyle = '#1a1a1a'; x.beginPath(); x.arc(256, 46, 0, 0, 7); x.fill(); } });
+  U.poster = L.plate(1.6, 2.25, pt, sq, [-6.2, 2.3, -10.92]); U.smallP = [-9.7, -8.3, -4.1, -2.7].map((x, i) => L.plate(1.1, 1.5, P.poster([['', 10, 10], ['█ ███ ██', 30, 200 + i * 30]], { bg: ['#d8c8a0', '#e0d0b0', '#c8b890', '#e4d8bc'][i] }), sq, [x, 2.1, -10.92]));
+  const kp = P.poster([['ЧЕШСКАЯ', 52, 110], ['ДРУЖИНА', 52, 175], ['ČESKÁ DRUŽINA', 40, 280], ['DOBROVOLNÍCI!', 40, 350], ['VOLUNTEERS', 30, 420], ['KIEV 1914', 44, 520]], { bg: '#e8dcbc' }); U.kposters = [-6.2, -4.1].map(x => L.plate(1.5, 2.1, kp, sq, [x, 2.3, -10.91]));
   U.habs = new THREE.Group(); sq.add(U.habs); U.habsF = []; for (const x of [-22, -12, 10, 20]) { const f = L.flag(1.6, 1.0, HABS); const p = L.poleWithFlag(2.4, f); p.position.set(x, 7.2, -10.6); p.rotation.x = .7; U.habs.add(p); U.habsF.push(f); }
   U.crowd = [...Array(16)].map((_, i) => { const m = man({ u: i % 5 === 4 ? 'woman' : i % 3 ? 'civil' : 'suit', seed: 300 + i, rifle: false }); at(m, -9.5 + (i % 6) * 1.05 + (i > 5 ? .5 : 0), 0, -9.0 + Math.floor(i / 6) * 1.1, facing([0, -1]) + ((i * 37) % 10 - 5) * .04); sq.add(m); return m; });
   // Kiev recruiting table
@@ -62,7 +63,7 @@ export async function build(cues) {
   const hl = L.addSet('hall', 0, 400); const hr = P.room(16, 10, 5.5, { wall: 0xc8b898, panel: 0x3a2412, floor: 0x6a4a30 }); hl.add(hr);
   const lt2 = P.longTable(8, 1.6); hl.add(lt2); { const pp = P.papers(10, 9); pp.position.set(0, 0, 0); hl.add(pp); }
   U.chand = [-3, 3].map(x => { const c = P.chandelier(); at(c, x, 5.4, 0); hl.add(c); return c; });
-  U.hallFlags = []; [[FR, true], [null, false, ukDraw], [RU, false]].forEach(([st, v, dr], i) => { const f = P.flagStand(st || ['#1e2c6a'], { w: 1.2, h: .8 }); if (dr || v) { f.remove(f.userData.flag); const nf = L.flag(1.2, .8, st || ['#1e2c6a'], { vertical: v, draw: dr }); nf.position.set(0, 2.35, 0); f.add(nf); f.userData.flag = nf; } at(f, -7 + i * .9, 0, -3.8); hl.add(f); U.hallFlags.push(f.userData.flag); });
+  U.hallFlags = []; [[FR, true], [null, false, ukDraw], [RU, false]].forEach(([st, v, dr], i) => { const f = P.flagStand(st || ['#1e2c6a'], { w: 1.2, h: .8 }); if (dr || v) { f.remove(f.userData.flag); const nf = L.flag(1.2, .8, st || ['#1e2c6a'], { vertical: v, draw: dr }); nf.position.set(0, 2.35, 0); f.add(nf); f.userData.flag = nf; } at(f, -7.6 + i * 1.5, 0, -3.8); hl.add(f); U.hallFlags.push(f.userData.flag); });
   const emap = (() => { const cv = document.createElement('canvas'); cv.width = 1024; cv.height = 640; const x = cv.getContext('2d'); const pr = L.mapProj(-10, 45, 35, 62, 0, 0, 1024, 640); L.drawMap(x, pr, { sea: '#8aa0a8', ru: '#d8c8a0', land: '#e4d6b0', w: 1024, h: 640 }); const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; return t; })();
   L.plate(4.2, 2.6, emap, hl, [2, 2.9, -4.9]); mesh(new THREE.BoxGeometry(4.4, 2.8, .05), mat(0x3a2412, .7), [2, 2.9, -4.95], [0, 0, 0], hl);
   U.dips = []; for (let i = 0; i < 8; i++) { const side = i % 2 ? 1 : -1, x = -3 + Math.floor(i / 2) * 1.9; const m = man({ u: i === 5 ? 'french' : 'suit', seed: 520 + i, rifle: false, hairC: i % 3 === 0 ? 0x9a9a9a : undefined }); at(m, x, 0, side * 1.25, facing([0, -side])); hl.add(m); const c = P.chair(0x5a2a16); at(c, x, 0, side * 1.32, facing([0, -side]) + Math.PI); hl.add(c); U.dips.push(m); }
@@ -116,7 +117,7 @@ export async function build(cues) {
 // ---------- SHOTS ----------
 export const SHOTS = {};
 const sq = (t, kiev) => { show('square'); if (kiev) look('day', [0xd8dce0, .006], 1.6, 2.4, 0xfff0dc, [-40, 60, 30], [0, 0, 0]); else look('grey', [0xc0c0bc, .008], 1.5, 1.6, 0xf0ece0, [-40, 60, 30], [0, 0, 0]);
-  U.habs.visible = !kiev; U.kiev.visible = kiev; U.habsF.forEach(f => f.userData.update(t)); U.kievF.forEach(f => f.userData.update(t)); U.crowd.forEach((m, i) => { m.visible = !kiev; pose(m, t, { look: Math.sin(t * .4 + i) * .2 }); }); };
+  U.habs.visible = !kiev; U.kiev.visible = kiev; U.poster.visible = !kiev; U.smallP.forEach(p => p.visible = !kiev); U.kposters.forEach(p => p.visible = kiev); U.habsF.forEach(f => f.userData.update(t)); U.kievF.forEach(f => f.userData.update(t)); U.crowd.forEach((m, i) => { m.visible = !kiev; pose(m, t, { look: Math.sin(t * .4 + i) * .2 }); }); };
 // 13 mobilization poster in a Bohemian square
 SHOTS[13] = (t, lt, d) => { sq(t, false); ct('square', lt, d, [-6.5, 1.75, -2.5, -6.2, 2.2, -11], [-6.3, 2.0, -7.3, -6.2, 2.3, -11], [38, 34]); overlay(c => L.caption(c, '1914', 'BOHEMIA, AUSTRIA-HUNGARY', clamp(lt / .5) * (1 - clamp((lt - d + .5) / .5)))); };
 // 14-15 the empire map: Czech lands in the Austrian half, then Slovakia in the Hungarian half
@@ -126,10 +127,10 @@ SHOTS[16] = (t, lt, d) => { show('depot'); look('grey', [0xd0ccc4, .006], 1.5, 1
   const roll = Math.max(0, lt - 5.0); const tx = -30 - roll * roll * .6; U.dtrain.position.x = tx; U.dtrain.userData.update(-tx); U.dsmoke.visible = true; L.smk(U.dsmoke, U.dtrain.userData.loco, U.dtrain.userData.loco.userData.chimney, t);
   U.women.forEach((m, i) => pose(m, t, { armR: lt > 5 ? -2.6 + Math.sin(t * 7 + i) * .4 : -.2, look: .2 }));
   U.column.forEach((m, i) => { const row = Math.floor(i / 3), col = i % 3; const x = -14 + lt * 1.6 - row * 1.3; at(m, x, .6, -5.8 - col * .9, facing([1, 0])); pose(m, t, { walk: true, speed: 6.5 }); m.visible = lt < 5; });
-  pose(U.young, t, { look: lt > 5.6 ? -.25 : 0 }); if (lt > 5) { const hp0 = V3(); U.young.userData.rig.head.getWorldPosition(hp0); pl1.intensity = 5; pl1.position.set(hp0.x, hp0.y + .3, hp0.z - 1.2); } U.youngMates.forEach(m => pose(m, t, {}));
+  pose(U.young, t, { look: lt > 5.6 ? -.25 : 0 }); U.dtrain.updateMatrixWorld(true); if (lt > 5) { const hp0 = V3(); U.young.userData.rig.head.getWorldPosition(hp0); pl1.intensity = 5; pl1.position.set(hp0.x, hp0.y + .3, hp0.z - 1.2); } U.youngMates.forEach(m => pose(m, t, {}));
   if (lt < 2.6) { ct('depot', lt, 2.6, [-2, .9, -4.6, -14, 1.9, -7], [-3, .9, -4.8, -15, 1.9, -7], [36, 34]); overlay(c => L.caption(c, 'AUGUST 1914', 'CALLED TO FIGHT FOR THE EMPEROR', clamp(lt / .5) * (1 - clamp((lt - 2.1) / .5)))); return; }
   if (lt < 5.0) { const c3 = V3(); U.dtrain.userData.cars[1].getWorldPosition(c3); camTo(lt - 2.6, 2.4, [c3.x + 4, 2.6, -5.2, c3.x + 2.4, 2.9, 0], [c3.x + 2.5, 2.7, -4.6, c3.x + 2.4, 2.9, 0], [32, 30]); return; }
-  const hp = V3(); U.young.userData.rig.head.getWorldPosition(hp); camTo(lt - 5.0, d - 5.0, [hp.x - .5, hp.y + .05, hp.z - 1.6, hp.x, hp.y, hp.z], [hp.x - .3, hp.y + .02, hp.z - 1.1, hp.x, hp.y, hp.z], [30, 26]); };
+  const hp = V3(); U.young.userData.rig.head.getWorldPosition(hp); camTo(lt - 5.0, d - 5.0, [hp.x - 1.6, hp.y - .2, hp.z - 4.2, hp.x, hp.y - .35, hp.z], [hp.x - 1.2, hp.y - .15, hp.z - 3.4, hp.x, hp.y - .3, hp.z], [36, 32]); };
 // 17 exiles in Paris: rainy night, three men over a newspaper
 SHOTS[17] = (t, lt, d) => { show('cafe'); look('night', null, .35, 0, 0xffffff, [0, 60, 0], [-400, 0, 0], [0x8a7060, 0x2a2018]); S.background = new THREE.Color(0x080604);
   U.exiles.forEach((m, i) => pose(m, t, m.userData.p === 'sit' ? { sit: true, armL: .7, armR: .8, elL: .9, elR: 1.0, nod: -.3 } : { lean: .35, nod: -.4, armL: .6, armR: .4 }));
@@ -145,16 +146,16 @@ SHOTS[20] = (t, lt, d) => { show('field'); look('dawn', [0xe8d2b8, .004], 1.3, 2
   pose(U.hero, t, { look: -.1 }); const hp = V3(); U.hero.userData.rig.head.getWorldPosition(hp); camTo(lt, d, [hp.x + .4, hp.y - .25, hp.z + 1.3, hp.x, hp.y, hp.z], [hp.x + .25, hp.y - .2, hp.z + .95, hp.x, hp.y + .02, hp.z], [30, 26]); };
 // 21 Kiev: Czech emigrants sign up
 SHOTS[21] = (t, lt, d) => { sq(t, true); pose(U.officer, t, { sit: true, armL: .8, armR: .8, elL: 1, elR: 1 }); U.officer.position.y = 0; pose(U.signer, t, { write: true, lean: .45 }); U.queue.forEach((m, i) => pose(m, t, { look: .3 }));
-  U.handRifle.position.set(8.9, 1.15, -6.9); U.handRifle.rotation.set(0, 0, .3);
+  U.handRifle.position.set(7.5, .86, -6.75); U.handRifle.rotation.set(Math.PI / 2, 0, .15);
   ct('square', lt, d, [12.5, 1.5, -2.5, 7, 1.2, -7], [11.2, 1.45, -3.6, 7.6, 1.1, -7], [36, 32]); overlay(c => L.caption(c, 'KIEV, 1914', 'THE CZECH COMPANY', clamp(lt / .5) * (1 - clamp((lt - d + .5) / .5)))); };
 // 22 recon at night: crawling to the wire -> a flare bursts -> binoculars on the enemy line -> from above
-SHOTS[22] = (t, lt, d) => { show('front'); const fl = clamp((lt - 1.6) / .3) * (1 - clamp((lt - 6.5) / 1.5)); look('night', [0x0c1220, .012], .9 + fl * .6, .5, 0x8aa0d8, [-30, 50, -40], [800, 0, 0], [0x6a7aaa, 0x2a2a36]);
+SHOTS[22] = (t, lt, d) => { show('front'); const fl = clamp((lt - 1.6) / .3) * (1 - clamp((lt - 6.5) / 1.5)); look('night', [0x0c1220, .008], 1.5 + fl * .5, 1.1, 0x9ab0e8, [-30, 50, -40], [800, 0, 0], [0x8a9aca, 0x3a3a4a]);
   U.scouts.forEach((g, i) => { crawl(g, t * (fl > .5 ? .05 : 1), i); g.position.z = -6 - lt * .5 * (fl > .5 ? .2 : 1) - i * .3; }); crawl(U.glassG, 0, 0); U.glass.userData.rig.arms[1].sh.rotation.z = 2.1; U.glass.userData.rig.arms[1].el.rotation.z = 1.8; U.glass.userData.rig.arms[0].sh.rotation.z = 2.1; U.glass.userData.rig.arms[0].el.rotation.z = 1.8; U.glass.userData.rig.head.rotation.z = 1.2;
   U.sentries.forEach((m, i) => pose(m, t, { look: Math.sin(t * .6 + i) * .5 }));
   if (lt > 1.4) { U.flare.visible = true; const q = lt - 1.4; U.flare.position.set(803, Math.min(24, q * 22) - Math.max(0, q - 1.1) * 1.5, -22); U.flare.scale.setScalar(2.2); pl2.intensity = 90 * fl; pl2.distance = 120; pl2.color.set(0xe8f0d8); pl2.position.copy(U.flare.position); }
   if (lt < 3.2) { ct('front', lt, 3.2, [6, .5, -6.5, -.5, .3, -8.5], [5.5, .6, -8, -.5, .3, -9.5], [36, 34]); return; }
-  if (lt < 5.6) { const q = lt - 3.2; ct('front', q, 2.4, [3.3, .55, -15.2, 0, 1.2, -62], [3.3, .55, -15.2, 0, 1.4, -62], [18, 12]); overlay(c => { c.fillStyle = '#000'; c.beginPath(); c.rect(0, 0, L.W, L.H); c.arc(L.W / 2 - 230, L.H / 2, 330, 0, 7, true); c.arc(L.W / 2 + 230, L.H / 2, 330, 0, 7, true); c.fill('evenodd'); }); return; }
-  ct('front', lt - 5.6, d - 5.6, [7, 3.5, -2, 0, .3, -10], [8.5, 5.5, -1, 0, .3, -11], [38, 40]); };
+  if (lt < 5.6) { const q = lt - 3.2; ct('front', q, 2.4, [1.6, 2.0, -17.4, 0, 1.3, -62], [1.6, 2.0, -17.4, 0, 1.5, -62], [18, 12]); overlay(c => { if (!U.binoMask) { const m = document.createElement('canvas'); m.width = L.W; m.height = L.H; const x = m.getContext('2d'); x.fillStyle = '#000'; x.fillRect(0, 0, L.W, L.H); x.globalCompositeOperation = 'destination-out'; for (const dx of [-230, 230]) { x.beginPath(); x.arc(L.W / 2 + dx, L.H / 2, 330, 0, 7); x.fill(); } U.binoMask = m; } c.drawImage(U.binoMask, 0, 0); }); return; }
+  look('night', [0x0c1220, .006], 2.2, 1.4, 0x9ab0e8, [-30, 50, -40], [800, 0, 0], [0x9aaad8, 0x4a4a5a]); ct('front', lt - 5.6, d - 5.6, [6, 3.2, -3, 0, .3, -9], [7, 4.5, -2.4, 0, .3, -10], [36, 38]); };
 // 23 POW camp: aerial over the wire -> a legionary recruits from a crate
 SHOTS[23] = (t, lt, d) => { show('camp'); look('snow', [0xd8dce4, .008], 1.5, 1.6, 0xf0f0f4, [-40, 60, 30], [-800, 0, 0], [0xdde4f0, 0x8a8a96]); U.snowfall.visible = true; U.snowfall.userData.update(t);
   U.pows.forEach((m, i) => pose(m, t, { look: Math.sin(t * .4 + i) * .2 })); pose(U.recruiter, t, { point: true, pointUp: .2 + Math.sin(t * 2) * .1, look: Math.sin(t * .8) * .3 });
@@ -165,8 +166,8 @@ SHOTS[24] = (t, lt, d) => { show('camp'); look('snow', [0xd8dce4, .008], 1.5, 1.
   U.pows.forEach((m, i) => { if (m !== U.volunteer) pose(m, t, { look: .2 }); }); pose(U.recruiter, t, {});
   const v = U.volunteer, k = clamp((lt - .4) / 1.6); at(v, -7 + 3 * 1.4, 0, -.6 + k * 2.4, facing([0, 1])); pose(v, t, { walk: k > 0 && k < 1, speed: 5, armR: lt > 2.4 ? lerp(0, 2.0, clamp((lt - 2.4) / .4)) : 0, elR: lt > 2.4 ? 1.2 : 0 });
   const vp = V3(); v.getWorldPosition(vp);
-  if (lt < 2.4) { camTo(lt, 2.4, [vp.x + 2.4, 1.4, 7.5, vp.x, 1.6, vp.z], [vp.x + 1.8, 1.5, 6.4, vp.x, 1.6, vp.z], [34, 30]); return; }
-  const q = lt - 2.4, fall = clamp((q - .5) / .7); U.kepi.visible = true; U.kepi.position.set(vp.x + .35, lerp(1.45, .02, ease(fall)), vp.z + .25 + fall * .3); U.kepi.rotation.set(fall * 2.4, fall, fall * 1.4);
+  if (lt < 2.4) { camTo(lt, 2.4, [vp.x - 2.6, 1.4, 7.0, vp.x, 1.6, vp.z], [vp.x - 2.0, 1.5, 6.0, vp.x, 1.6, vp.z], [34, 30]); return; }
+  const q = lt - 2.4, fall = clamp((q - .5) / .7); U.kepi.visible = true; U.kepi.position.set(vp.x + .35 + fall * .15, lerp(1.45, .005, ease(fall)), vp.z + .3 + fall * .45); U.kepi.rotation.set(Math.sin(fall * Math.PI) * .9, fall * 1.3, Math.sin(fall * Math.PI) * .5);
   camTo(q, d - 2.4, [vp.x + 1.0, .3, vp.z + 1.2, vp.x + .35, .35, vp.z + .5], [vp.x + .9, .22, vp.z + 1.1, vp.x + .4, .15, vp.z + .6], [36, 34]); };
 // 25 the camp gate opens: volunteers march out
 SHOTS[25] = (t, lt, d) => { show('camp'); look('snow', [0xd8dce4, .008], 1.5, 1.6, 0xf0f0f4, [-40, 60, 30], [-800, 0, 0], [0xdde4f0, 0x8a8a96]); U.snowfall.visible = true; U.snowfall.userData.update(t);
@@ -189,18 +190,18 @@ SHOTS[28] = (t, lt, d) => { show('study'); look('night', null, .35, 0, 0xffffff,
   ct('study', lt, d, [1.6, 1.5, 1.4, 0, 1.0, -1.1], [.8, 1.3, .6, 0, 1.0, -1.1], [36, 30]); overlay(c => L.caption(c, 'TOMÁŠ GARRIGUE MASARYK', 'LEADER OF THE INDEPENDENCE MOVEMENT', clamp((lt - .6) / .5) * (1 - clamp((lt - d + .5) / .5)))); };
 // 29 his journeys to win the Allies -> the handshake
 SHOTS[29] = (t, lt, d) => {
-  if (lt < 3.8) { OV.noGL = true; overlay((c, tt) => { const pr = M.proj(-85, 150, 15, 68); M.paper(c); M.baseLand(c, pr, { land: '#b8a888' }); M.routeStops(c, pr, [[14.4, 50.1, 'PRAGUE'], [12.5, 41.9, 'ROME'], [6.1, 46.2, 'GENEVA'], [-0.1, 51.5, 'LONDON'], [30.3, 59.9, 'PETROGRAD'], [30.5, 50.4, 'KIEV'], [131.9, 43.1, 'VLADIVOSTOK'], [139.7, 35.7, 'TOKYO'], [-77.0, 38.9, 'WASHINGTON']], ease(clamp(lt / 3.4)), tt, { size: 20, head: true }); M.title(c, 'MASARYK ABROAD', '1914 - 1918', clamp(lt / .5)); M.vignette(c); }); return; }
+  if (lt < 3.8) { OV.noGL = true; overlay((c, tt) => { const pr = M.proj(-85, 150, 15, 68); M.paper(c); M.baseLand(c, pr, { land: '#b8a888' }); M.routeStops(c, pr, [[14.4, 50.1, 'PRAGUE'], [12.5, 41.9, 'ROME'], [6.1, 46.2, 'GENEVA'], [-0.1, 51.5, 'LONDON'], [30.3, 59.9, 'PETROGRAD'], [30.5, 50.4, 'KIEV'], [131.9, 43.1, 'VLADIVOSTOK'], [139.7, 35.7, 'TOKYO'], [-77.0, 38.9, 'WASHINGTON']], ease(clamp(lt / 3.4)), tt, { size: 20, head: true }); M.vignette(c); M.title(c, 'MASARYK ABROAD', '1914 - 1918', clamp(lt / .5)); }); return; }
   show('hall'); look('night', null, .6, 0, 0xffffff, [0, 60, 0], [0, 0, 400], [0xc0a080, 0x3a2a1a]); S.background = new THREE.Color(0x0a0806); U.hallFlags.forEach(f => f.userData.update(t, .03));
   const q = lt - 3.8, k = clamp(q / 1.0); U.dips.forEach((m, i) => pose(m, t, { sit: true, armL: .8, armR: .8, elL: .9, elR: .9 }));
-  at(U.presenter, -5.2, 0, -2.2, facing([1, 0])); at(U.ally, -3.9, 0, -2.2, facing([-1, 0])); pose(U.presenter, t, { armR: lerp(0, 1.1, k), elR: .3 }); pose(U.ally, t, { armR: lerp(0, 1.1, k), elR: .3 }); const shake = q > 1 ? Math.sin(q * 12) * .06 : 0; U.presenter.userData.rig.arms[1].sh.rotation.z += shake; U.ally.userData.rig.arms[1].sh.rotation.z -= shake;
+  at(U.presenter, -5.05, 0, -2.2, facing([1, 0])); at(U.ally, -4.05, 0, -1.76, facing([-1, 0])); pose(U.presenter, t, { armR: lerp(0, 1.1, k), elR: .3 }); pose(U.ally, t, { armR: lerp(0, 1.1, k), elR: .3 }); const shake = q > 1 ? Math.sin(q * 12) * .06 : 0; U.presenter.userData.rig.arms[1].sh.rotation.z += shake; U.ally.userData.rig.arms[1].sh.rotation.z -= shake;
   ct('hall', q, d - 3.8, [-4.55, 1.3, -.4, -4.55, 1.2, -2.2], [-4.55, 1.35, -.9, -4.55, 1.25, -2.2], [40, 34]); };
 // 30 an army on their side: legionaries march at the camera under the white-red flag
 SHOTS[30] = (t, lt, d) => { show('field'); look('dawn', [0xe8d2b8, .004], 1.3, 2.4, 0xffe0b8, [60, 30, -40], [0, 0, -400]); U.hero.position.y = -50; U.squad.forEach(m => m.position.y = -50);
   U.parade.forEach((m, i) => { const row = Math.floor(i / 3), col = i % 3; at(m, -1.1 + col * 1.1, 0, -9.5 + lt * 1.5 - row * 1.4, facing([0, 1])); pose(m, t, { walk: true, speed: 6.5 }); });
-  U.pfp.position.set(-2.2, 1.5, -7.9 + lt * 1.5); U.pflag.userData.update(t, .3);
+  { const m0 = U.parade[0]; pose(m0, t, { walk: true, speed: 6.5, flag: true }); U.pfp.position.set(m0.position.x - .32, .55, m0.position.z + .22); } U.pflag.userData.update(t, .3);
   ct('field', lt, d, [1.2, .35, 0, -.5, 2.2, -12], [1.6, .3, -1, -.5, 2.6, -12], [36, 34]); };
 // 31 every success made headlines
 SHOTS[31] = (t, lt, d) => { show('study'); look('night', null, .35, 0, 0xffffff, [0, 60, 0], [0, 0, -800], [0x8a7060, 0x2a2018]); S.background = new THREE.Color(0x060403); pose(U.mas, t, { sit: true, armL: .7, armR: .7, elL: 1, elR: 1, nod: -.2 });
   ct('study', lt, d, [0, 2.4, .2, 0, .8, -1.2], [0, 2.3, -.2, 0, .8, -1.2], [36, 36]);
-  overlay(c => { c.fillStyle = 'rgba(0,0,0,.45)'; c.fillRect(0, 0, L.W, L.H); const H3 = [[0, ['CZECH SCOUTS', 'PRAISED'], 'Volunteers serve with the Russian army', -330, -.08], [1.6, ['CZECHO-SLOVAKS', 'FIGHT FOR ALLIES'], 'A nation without a state takes up arms', 0, .05], [3.2, ['A NATION', 'IN ARMS'], 'Masaryk wins support in London', 330, -.03]];
+  overlay(c => { c.fillStyle = 'rgba(0,0,0,.45)'; c.fillRect(0, 0, L.W, L.H); const H3 = [[0, ['CZECH SCOUTS', 'PRAISED'], 'Volunteers serve with the Russian army', -330, -.08], [1.6, ['LES TCHÉCO-', 'SLOVAQUES'], 'combattent aux côtés des Alliés', 0, .05], [3.2, ['A NATION', 'IN ARMS'], 'Masaryk wins support in London', 330, -.03]];
     H3.forEach(([t0, h, s, dx, tilt]) => { if (lt > t0) M.newspaper(c, lt - t0, h, s, { dx, tilt, scale: .55, date: '1916', paper: ['THE TIMES', 'LE PETIT PARISIEN', 'DAILY CHRONICLE'][Math.round(t0 / 1.6)] }); }); }); };

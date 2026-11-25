@@ -4,7 +4,7 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   const [sec, out, nw, which] = [process.argv[2], process.argv[3], +(process.argv[4] || 4), process.argv[5] || 'all'];
   fs.mkdirSync(out, { recursive: true });
   const b = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
-  const mk = async () => { const p = await b.newPage({ viewport: { width: 1920, height: 1080 } }); p.on('pageerror', e => console.log('PAGEERR', e.message)); p.on('console', m => { if (m.type() === 'error') console.log('CONSOLE', m.text()); }); await p.goto('http://127.0.0.1:8765/film3.html?sec=' + sec); return [p, await p.evaluate(() => window.READY)]; };
+  const mk = async () => { const p = await b.newPage({ viewport: { width: 1920, height: 1080 } }); p.on('pageerror', e => console.log('PAGEERR', e.message)); p.on('console', m => { if (m.type() === 'error') console.log('CONSOLE', m.text()); }); await p.goto('http://127.0.0.1:8765/film3.html?sec=' + sec + (process.env.FQ || '')); return [p, await p.evaluate(() => window.READY)]; };
   const [p0, info] = await mk(); let frames = [];
   if (which === 'all') for (let f = info.f0; f < info.f1; f++) frames.push(f);
   else if (which.startsWith('step:')) for (let f = info.f0; f < info.f1; f += +which.slice(5)) frames.push(f);

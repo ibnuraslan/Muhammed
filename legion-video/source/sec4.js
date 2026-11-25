@@ -24,7 +24,7 @@ export async function build(cues) {
   SKY.snowdusk = L.paintSky('#4a5a86', '#e8b898', '#ffe0c8', '#d0b0b0', '#8a8aa8', 13, { sun: [1400, 800] });
   SKY.summer = L.paintSky('#5a8ad0', '#e8e0c8', '#fffaf0', '#e8e0d8', '#a8b0c4', 23, { sun: [1500, 300] });
   // flashback frames from section 1 (the iron bar)
-  U.flash = []; for (let f = 232; f < 292; f += 2) { const im = new Image(); im.src = `out/${String(f).padStart(5, '0')}.jpg`; U.flash.push(im); } await Promise.all(U.flash.map(im => im.decode().catch(() => 0)));
+  U.flash = []; for (const f of [...Array(21).keys()].map(k => 290 + k * 2).concat([...Array(17).keys()].map(k => 398 + k * 2))) { const im = new Image(); im.src = `out/${String(f).padStart(5, '0')}.jpg`; U.flash.push(im); } await Promise.all(U.flash.map(im => im.decode().catch(() => 0)));
   // ---------- TAIGA line (sunset / snow + burning village) ----------
   const tg = L.addSet('taiga', 0, 0); L.ground(tg, 'snow'); tg.add(L.track2(1400, -700)); tg.add(L.forest(500, -700, 700, -260, -18, 101, true)); tg.add(L.forest(400, -700, 700, 18, 260, 102, true));
   U.tTrain = L.train(10, {}); tg.add(U.tTrain); U.tSmoke = fx(L.smoke(V3(), { n: 80, color: 0x4a4a50, wind: [-6, .5], rise: 9, size: 1.6, grow: 5, life: 6, opacity: .9 }));
@@ -41,7 +41,7 @@ export async function build(cues) {
   // ---------- OFFICE (agreement; commissar's telegraph) ----------
   const of = L.addSet('office', -900, 0); const orm = P.room(9, 6, 3.6, { wall: 0x8a7a62 }); of.add(orm); const ot = P.longTable(2.6, 1.2); of.add(ot); { const pp = P.papers(6, 21); of.add(pp); }
   const ol = P.deskLamp(); at(ol, .9, .84, -.3); of.add(ol); U.offLamp = ol;
-  U.comm = man({ u: 'red', seed: 1500, rifle: false, hero: true }); at(U.comm, -.35, 0, -1.0, facing([0, 1])); of.add(U.comm); const c1 = P.chair(); at(c1, -.35, 0, -1.08, facing([0, 1]) + Math.PI); of.add(c1);
+  U.comm = man({ u: 'red', seed: 1500, rifle: false, hero: true }); at(U.comm, -.35, 0, -1.0, facing([0, 1])); of.add(U.comm); U.comm.userData.rig.head.traverse(o => { if (o.isMesh && o.geometry.type === 'CylinderGeometry' && o.geometry.parameters.height < .02) o.visible = false; }); const c1 = P.chair(); at(c1, -.35, 0, -1.08, facing([0, 1]) + Math.PI); of.add(c1);
   U.lofficer = man({ u: 'legionCap', seed: 1501, rifle: false, hero: true }); at(U.lofficer, .35, 0, 1.0, facing([0, -1])); of.add(U.lofficer); const c2 = P.chair(); at(c2, .35, 0, 1.08, facing([0, -1]) + Math.PI); of.add(c2);
   const wmap = (() => { const cv = document.createElement('canvas'); cv.width = 1024; cv.height = 512; const x = cv.getContext('2d'); const pr = L.mapProj(28, 140, 36, 66, 0, 0, 1024, 512); L.drawMap(x, pr, { sea: '#8aa0a8', ru: '#d8c8a0', land: '#e4d6b0', w: 1024, h: 512 }); x.strokeStyle = '#3a2a1a'; x.lineWidth = 3; x.beginPath(); RAIL.forEach(([lo, la], i) => { const [px, py] = pr(lo, la); i ? x.lineTo(px, py) : x.moveTo(px, py); }); x.stroke(); for (let i = 0; i < 40; i++) { const q = (i * 37 % 100) / 100; const pts = RAIL.map(([lo, la]) => pr(lo, la)); const k = q * (pts.length - 1), j = Math.floor(k), f = k - j; const px = lerp(pts[j][0], pts[j + 1][0], f), py = lerp(pts[j][1], pts[j + 1][1], f); x.fillStyle = '#c8241c'; x.beginPath(); x.arc(px, py, 6, 0, 7); x.fill(); } const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; return t; })();
   L.plate(4.6, 2.3, wmap, of, [0, 2.0, -2.9]); U.tape = new THREE.Group(); mesh(new THREE.BoxGeometry(.3, .18, .25), mat(0x2a2218, .5, .4), [0, .93, 0], [0, 0, 0], U.tape); mesh(new THREE.CylinderGeometry(.06, .06, .05, 12), mat(0xc9a24d, .3, .9), [0, 1.05, 0], [0, 0, 0], U.tape); at(U.tape, -.9, 0, -.2); of.add(U.tape);
@@ -62,7 +62,7 @@ export async function build(cues) {
   const bx = L.addSet('boxin', 900, 900); const pl = pbr('brown_planks_05', [3, 1], { color: 0x6a4228 });
   const Pp = (w, h, x, y, z, ry = 0, rx = 0) => mesh(new THREE.PlaneGeometry(w, h), Object.assign(pl.clone(), { side: THREE.DoubleSide }), [x, y, z], [rx, ry, 0], bx);
   Pp(7.4, 2.7, 0, 1.35, -1.37); Pp(2.6, 2.7, -2.4, 1.35, 1.37); Pp(2.6, 2.7, 2.4, 1.35, 1.37); Pp(7.4, .5, 0, 2.45, 1.37); Pp(2.75, 2.7, -3.7, 1.35, 0, Math.PI / 2); Pp(2.75, 2.7, 3.7, 1.35, 0, Math.PI / 2); Pp(7.4, 2.75, 0, 0, 0, 0, -Math.PI / 2); Pp(7.4, 2.75, 0, 2.7, 0, 0, Math.PI / 2);
-  U.slideDoor = mesh(new THREE.BoxGeometry(2.0, 2.3, .06), pl, [.25, 1.15, 1.42], [0, 0, 0], bx);
+  U.slideDoor = mesh(new THREE.BoxGeometry(2.0, 2.3, .06), pl, [.9, 1.15, 1.42], [0, 0, 0], bx);
   U.inside = [...Array(5)].map((_, i) => { const m = man({ u: i % 2 ? 'legionCap' : 'legion', seed: 1560 + i, rifle: false, hero: i === 0 }); at(m, -2.6 + i * 1.2, 0, -.5 + (i % 2) * .4, facing([0, 1]) + (i - 2) * .2); bx.add(m); return m; });
   L.ground(bx, 'dirt'); bx.children[bx.children.length - 1].position.y = -1.3;
   U.outReds = [0, 1, 2].map(i => { const m = man({ u: 'red', seed: 1570 + i, RIFLE: L.lowRifle(true) }); at(m, -3 + i * 3, -1.3 + .0, 5 + i, facing([0, -1])); bx.add(m); return m; });
@@ -73,15 +73,14 @@ export async function build(cues) {
   // ---------- WINTER SIDING (lone sentry, night) ----------
   const ws = L.addSet('wsiding', -900, 900); L.ground(ws, 'snow'); ws.add(L.track2(600, -300)); ws.add(L.forest(220, -300, 300, -200, -18, 111, true)); ws.add(L.forest(220, -300, 300, 18, 200, 112, true));
   U.wTrain = L.train(4, {}); at(U.wTrain, 20, 0, 0); ws.add(U.wTrain); U.sentry = man({ u: 'legion', seed: 1580, hero: true }); at(U.sentry, 0, 0, 3.2, facing([-1, 0])); ws.add(U.sentry);
-  U.campfire = L.fire(8, .9); U.campfire.position.set(1.5, .1, 4.5); ws.add(U.campfire); U.signal = new THREE.Group(); mesh(new THREE.CylinderGeometry(.08, .1, 5, 8), mat(0x2a2a2a, .5, .5), [0, 2.5, 0], [0, 0, 0], U.signal); const lampR = mesh(new THREE.SphereGeometry(.15, 10, 8), new THREE.MeshBasicMaterial({ color: 0xff3020 }), [0, 4.8, .1], [0, 0, 0], U.signal); lampR.userData.noToon = true; at(U.signal, -30, 0, 2.6); ws.add(U.signal);
+  U.campfire = L.fire(8, .9); U.campfire.position.set(-1.2, .15, 6.0); ws.add(U.campfire); U.fireLogs = new THREE.Group(); for (let i = 0; i < 4; i++) mesh(new THREE.CylinderGeometry(.06, .07, .8, 6), mat(0x3a2414, .9), [0, .08, 0], [Math.PI / 2, i * .8, 0], U.fireLogs); for (let i = 0; i < 9; i++) { const a = i / 9 * Math.PI * 2; mesh(new THREE.SphereGeometry(.09, 6, 5), mat(0x5a5a58, 1), [Math.cos(a) * .45, .04, Math.sin(a) * .45], [0, 0, 0], U.fireLogs); } at(U.fireLogs, -1.2, 0, 6.0); ws.add(U.fireLogs); U.signal = new THREE.Group(); mesh(new THREE.CylinderGeometry(.08, .1, 5, 8), mat(0x2a2a2a, .5, .5), [0, 2.5, 0], [0, 0, 0], U.signal); const lampR = mesh(new THREE.SphereGeometry(.15, 10, 8), new THREE.MeshBasicMaterial({ color: 0xff3020 }), [0, 4.8, .1], [0, 0, 0], U.signal); lampR.userData.noToon = true; at(U.signal, -30, 0, 2.6); ws.add(U.signal);
   U.wsnow = fx(L.snowfall(5000, [60, 25, 60], [-900, 0, 900]));
   // ---------- JUNCTION (station, approaches, bridge) ----------
-  const jn = L.addSet('junction', 0, -900); L.ground(jn, 'grass', 8000); jn.add(L.track2(1600, -800)); const br = L.track2(400, 0); br.rotation.y = -.35; br.position.set(10, 0, 0); jn.add(br); const t3 = L.track2(200, -100); t3.position.z = 6; jn.add(t3);
+  const jn = L.addSet('junction', 0, -900); L.ground(jn, 'grass', 8000); jn.add(L.track2(1600, -800)); const br = L.track2(140, 0); br.rotation.y = -.35; br.position.set(10, 0, 0); jn.add(br); const t3 = L.track2(200, -100); t3.position.z = 6; jn.add(t3);
   const js = L.station('ТАЙГА', { wallTint: 0xd8c4a0 }); at(js, 0, .6, -15.5); jn.add(js); mesh(new THREE.BoxGeometry(60, .6, 6.2), pbr('old_wood_floor', [18, 2], { color: 0x9a8a78 }), [0, .3, -7.7], [0, 0, 0], jn); const wt = waterTower(); at(wt, 22, 0, -10); jn.add(wt);
   U.jTrain = L.train(6, {}); at(U.jTrain, -6, 0, 0); jn.add(U.jTrain); U.jTrain2 = L.train(5, {}); at(U.jTrain2, 330, 0, 0, Math.PI); jn.add(U.jTrain2);
-  for (const [x, z, r2, h] of [[-80, -70, 50, 18], [60, -90, 60, 22], [-40, 80, 45, 14], [90, 75, 55, 20], [-150, 20, 40, 15]]) { const h1 = hill(r2, h, 0x7a8a52); h1.position.set(x, -2, z); jn.add(h1); }
   U.nests = [[-35, -45], [40, -50], [-25, 40], [45, 42]].map(([x, z]) => { const n = mgNest(); at(n, x, 0, z, Math.atan2(x, z)); jn.add(n); const m = man({ u: 'legionCap', seed: 1600 + x }); at(m, x * .97, 0, z * .97, facing([x, z])); jn.add(m); m.userData.home = m.position.clone(); n.userData.man = m; return n; });
-  const river = mesh(new THREE.PlaneGeometry(40, 3000), new THREE.MeshToonMaterial({ color: 0x3a6a8a, gradientMap: L.GRAD }), [170, .05, 0], [-Math.PI / 2, 0, 0], jn); river.userData.noToon = true; const bg2 = L.trussBridge(46); at(bg2, 170, .2, 0); jn.add(bg2);
+  const river = mesh(new THREE.PlaneGeometry(40, 3000), new THREE.MeshToonMaterial({ color: 0x3a6a8a, gradientMap: L.GRAD, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4 }), [170, .3, 0], [-Math.PI / 2, 0, 0], jn); river.userData.noToon = true; const bg2 = L.trussBridge(46); at(bg2, 170, .2, 0); jn.add(bg2);
   U.jFlag = L.flag(1.6, 1.0, CZ); const jfp = L.poleWithFlag(4, U.jFlag); at(jfp, -4, .6, -9.6); jn.add(jfp); U.jFlagPole = jfp;
   U.stormers = [...Array(8)].map((_, i) => { const m = man({ u: i % 3 === 1 ? 'legionCap' : 'legion', seed: 1620 + i }); jn.add(m); return m; });
   U.labels = ['TRAIN', 'STATION', 'APPROACHES', 'THE TRACK BETWEEN'];
@@ -94,7 +93,7 @@ export async function build(cues) {
   U.whites = [...Array(6)].map((_, i) => { const m = man({ u: 'russian', seed: 1650 + i, kit: { hat: 'peaked', hatC: 0x7a7454, coat: 0x8a8460 } }); at(m, -5 + i * 2, 0, -6, facing([0, 1])); ws2.add(m); return m; });
   U.wcrowd = [...Array(14)].map((_, i) => { const m = man({ u: i % 4 === 0 ? 'woman' : 'civil', seed: 1670 + i, rifle: false }); at(m, -8 + (i % 7) * 2.6, 0, 1 + Math.floor(i / 7) * 1.6, facing([0, -1])); ws2.add(m); return m; });
   const proc = L.textTex([['КОМИТЕТ ЧЛЕНОВ', 44, 110], ['УЧРЕДИТЕЛЬНОГО', 44, 170], ['СОБРАНИЯ', 54, 240], ['ПРИКАЗ № 1', 40, 330], ['████ ██████ ███████', 24, 420], ['██████ ███ ████████', 24, 460], ['███ ██████ ████', 24, 500]], { w: 512, h: 640, bg: '#ece0c0' });
-  L.plate(1.4, 1.75, proc, ws2, [13.4, 2.4, -7.94]);
+  L.plate(1.4, 1.75, proc, ws2, [8.2, 2.4, -7.85]);
 }
 // ---------- SHOTS ----------
 export const SHOTS = {};
@@ -106,7 +105,7 @@ SHOTS[52] = (t, lt, d) => { OV.noGL = true; overlay((c, tt) => { const pr = M.pr
   if (k > stop) { const [bx, by] = [lerp(ux, fx, stop), lerp(uy, fy, stop)], s = ease(clamp((lt - 1.4) / .3)); c.strokeStyle = '#e03020'; c.lineWidth = 18; c.beginPath(); c.moveTo(bx - 50 * s, by - 50 * s); c.lineTo(bx + 50 * s, by + 50 * s); c.moveTo(bx + 50 * s, by - 50 * s); c.lineTo(bx - 50 * s, by + 50 * s); c.stroke(); }
   M.label(c, 'FRANCE', fx, fy + 10, 40, '#fff4e0'); M.label(c, 'THE LEGION', ux + 20, uy + 60, 30, '#fff4e0'); M.vignette(c); }); };
 // 53 the route ran east: map arc to Vladivostok -> a train through the taiga at sunset
-SHOTS[53] = (t, lt, d) => { if (lt < 3.2) { OV.noGL = true; overlay((c, tt) => { const pr = RU_PROJ(); M.paper(c); M.baseLand(c, pr, { land: '#b8a888' }); drawRail(c, pr, 3); M.routeStops(c, pr, RAIL.filter(r => r[2]).map(r => [r[0], r[1], ['PENZA', 'CHELYABINSK', 'OMSK', 'IRKUTSK', 'VLADIVOSTOK'].includes(r[2]) ? r[2] : '']), ease(clamp(lt / 2.8)), tt, { head: true, size: 22 }); M.title(c, 'THE WAY OUT', 'EAST · 9,000 KM TO THE PACIFIC', clamp(lt / .5)); M.vignette(c); }); return; }
+SHOTS[53] = (t, lt, d) => { if (lt < 3.2) { OV.noGL = true; overlay((c, tt) => { const pr = RU_PROJ(); M.paper(c); M.baseLand(c, pr, { land: '#b8a888' }); drawRail(c, pr, 3); M.routeStops(c, pr, RAIL.map(r => [r[0], r[1], ['PENZA', 'CHELYABINSK', 'OMSK', 'IRKUTSK', 'VLADIVOSTOK'].includes(r[2]) ? r[2] : '']), ease(clamp(lt / 2.8)), tt, { head: true, size: 22 }); M.title(c, 'THE WAY OUT', 'EAST · 9,000 KM TO THE PACIFIC', clamp(lt / .5)); M.vignette(c); }); return; }
   show('taiga'); look('snowdusk', [0xd8c0b8, .004], 1.2, 2.0, 0xffc8a0, [200, 30, -60], [0, 0, 0], [0xc8d0e8, 0x8a8aa0]); U.village.visible = false; U.vfires.forEach(f => f.visible = false);
   const x = -80 + (lt - 3.2) * 12; U.tTrain.position.x = x; U.tTrain.userData.update(x); U.tSmoke.visible = true; L.smk(U.tSmoke, U.tTrain.userData.loco, U.tTrain.userData.loco.userData.chimney, t);
   ct('taiga', lt - 3.2, d - 3.2, [x + 30, 2, 22, x - 10, 3, 0], [x + 28, 3, 20, x - 6, 3, 0], [36, 34]); };
@@ -127,22 +126,22 @@ SHOTS[57] = (t, lt, d) => { show('platform'); look('grey', [0xd0ccc4, .006], 1.5
   U.handers.forEach((m, i) => { const k = clamp((lt - i * .4) / 1.2); at(m, -8 + i * 1.3, .6, -6.4 - k * 1.2, facing([0, -1])); pose(m, t, { armR: k > .5 && k < .95 ? 1.2 : 0, elR: .3 }); if (k > .9) m.userData.rifle.visible = false; else m.userData.rifle.visible = true; });
   U.reds.forEach((m, i) => { at(m, -8 + i * 1.6, .6, -9.6 - (i % 2) * .6, facing([0, 1])); pose(m, t, { port: i % 2 === 0 }); }); pose(U.clerk, t, { write: true });
   U.roofGuard.forEach(m => pose(m, t, {})); U.pile.scale.setScalar(.6 + clamp(lt / d) * .5);
-  if (lt < 3.4) ct('platform', lt, 3.4, [-12, 1.3, -3.6, -4, 1.0, -8.5], [-10, 1.4, -4.0, -3, 1.0, -8.6], [36, 34]); else { const cw = V3(); U.pTrain.userData.cars[1].getWorldPosition(cw); camTo(lt - 3.4, d - 3.4, [cw.x - 9, 1.5, 893.4, cw.x, 4.6, 900], [cw.x - 8, 1.6, 893.7, cw.x, 5.0, 900], [34, 32]); } };
+  if (lt < 3.4) ct('platform', lt, 3.4, [-12, 1.3, -3.6, -4, 1.0, -8.5], [-10, 1.4, -4.0, -3, 1.0, -8.6], [36, 34]); else { const cw = V3(); U.pTrain.userData.cars[3].getWorldPosition(cw); camTo(lt - 3.4, d - 3.4, [cw.x - 2, 1.6, 888, cw.x, 3.8, 900], [cw.x - 1.5, 1.7, 888.5, cw.x, 4.0, 900], [34, 32]); } };
 // 58 trust neither side possessed: split screen, eye to eye
 SHOTS[58] = (t, lt, d) => { show('office'); look('night', null, .6, 0, 0xffffff, [0, 60, 0], [-900, 0, 0], [0xc0a080, 0x3a2a1a]); S.background = new THREE.Color(0x0a0806); U.tapeStrip.visible = false;
-  pose(U.comm, t, { sit: true, armL: .8, armR: .9, elL: 1, elR: 1, look: 0 }); pose(U.lofficer, t, { sit: true, armL: .8, armR: .9, elL: 1, elR: 1 }); U.comm.position.y = 0; U.lofficer.position.y = 0; pl1.intensity = 4; pl1.position.set(-900, 2, 0);
-  const a = V3(), b = V3(); U.comm.userData.rig.head.getWorldPosition(a); U.lofficer.userData.rig.head.getWorldPosition(b); const z = lerp(.75, .55, lt / d);
-  OV.split = [() => { cam.position.set(a.x + .1, a.y + .02, a.z + z); cam.lookAt(a.x, a.y + .02, a.z); cam.fov = 26; cam.updateProjectionMatrix(); }, () => { cam.position.set(b.x - .1, b.y + .02, b.z - z); cam.lookAt(b.x, b.y + .02, b.z); cam.fov = 26; cam.updateProjectionMatrix(); }]; };
+  pose(U.comm, t, { sit: true, armL: .8, armR: .9, elL: 1, elR: 1, look: 0 }); pose(U.lofficer, t, { sit: true, armL: .8, armR: .9, elL: 1, elR: 1 }); U.comm.position.y = 0; U.lofficer.position.y = 0; U.comm.updateMatrixWorld(true); U.lofficer.updateMatrixWorld(true);
+  const a = V3(), b = V3(); U.comm.userData.rig.head.getWorldPosition(a); U.lofficer.userData.rig.head.getWorldPosition(b); pl1.intensity = 4; pl1.distance = 5; pl1.position.set(a.x + .2, a.y + .5, a.z + .9); pl2.intensity = 4; pl2.distance = 5; pl2.position.set(b.x - .2, b.y + .5, b.z - .9); const z = lerp(1.75, 1.5, lt / d);
+  OV.split = [() => { cam.position.set(a.x, a.y + .02, a.z + z); cam.lookAt(a.x, a.y - .1, a.z); cam.fov = 24; cam.updateProjectionMatrix(); }, () => { cam.position.set(b.x, b.y + .02, b.z - z); cam.lookAt(b.x, b.y - .1, b.z); cam.fov = 24; cam.updateProjectionMatrix(); }]; };
 // 59 Bolshevik fear: the telegraph clatters, the wall map is covered in red pins (Legion trains)
 SHOTS[59] = (t, lt, d) => { show('office'); look('night', null, .6, 0, 0xffffff, [0, 60, 0], [-900, 0, 0], [0xc0a080, 0x3a2a1a]); S.background = new THREE.Color(0x0a0806);
-  U.lofficer.position.y = -50; at(U.comm, 0, 0, -1.6, facing([0, 1])); pose(U.comm, t, { armR: .8, elR: 1.0, armL: .6, elL: 1.0, nod: .2 }); U.tapeStrip.visible = true; U.tapeStrip.position.set(-.9 + .3 + lt * .05, .95, -.2); U.tapeStrip.scale.x = 1 + lt * .3;
-  if (lt < 2.6) { pl1.intensity = 5; pl1.position.set(-900.6, 1.6, .4); ct('office', lt, 2.6, [-1.2, 1.25, .5, -.9, .95, -.2], [-1.15, 1.2, .35, -.8, .95, -.2], [34, 30]); } else ct('office', lt - 2.6, d - 2.6, [1.2, 1.7, 2.4, 0, 2.0, -2.9], [.4, 1.9, 1.4, 0, 2.0, -2.9], [36, 34]);
+  U.lofficer.position.y = -50; at(U.comm, -.6, 0, -1.4, facing([.3, 1])); pose(U.comm, t, { armR: 1.1, elR: 1.3, armL: 1.0, elL: 1.4, nod: -.25 }); U.tapeStrip.visible = true; { const hp = V3(); U.comm.updateMatrixWorld(true); U.comm.userData.rig.head.getWorldPosition(hp); U.tapeStrip.position.set(hp.x + 900 + .05, hp.y - .35, hp.z + .38); U.tapeStrip.rotation.set(-.5, .3, 0); U.tapeStrip.scale.set(1.2, 1, 3); }
+  pl1.intensity = 6; pl1.position.set(-899.2, 2.2, .8); if (lt < 2.6) ct('office', lt, 2.6, [2.2, 1.6, 2.4, -.2, 1.5, -1.6], [1.9, 1.6, 2.1, -.2, 1.5, -1.6], [38, 36]); else ct('office', lt - 2.6, d - 2.6, [1.2, 1.7, 2.4, 0, 2.0, -2.9], [.4, 1.9, 1.4, 0, 2.0, -2.9], [36, 34]);
   if (lt < 2.6) overlay(c => L.caption(c, 'MOSCOW', 'AN ARMED FOREIGN FORCE ON SOVIET RAILWAYS', clamp(lt / .5) * (1 - clamp((lt - 2.1) / .5)))); };
 // 60 the legionaries' fear: inside the boxcar at night; through the door gap, Red sentries with bayonets
 SHOTS[60] = (t, lt, d) => { show('boxin'); look('night', [0x0a0e18, .03], .35, .2, 0x8aa0d0, [0, 60, 40], [900, 0, 900], [0x4a5a8a, 0x1a1a22]); S.background = SKY.night;
   pl1.intensity = 3; pl1.position.set(899, 1.6, 900.2); pl2.intensity = 12; pl2.distance = 14; pl2.position.set(902, 2.5, 907); U.floor.position.y = 0; U.hay.forEach(h => h.visible = true);
   U.inside.forEach((m, i) => { pose(m, t, { sit: i > 0, look: .5 - i * .1 }); if (i > 0) m.position.y = -.05; else m.position.y = 0; }); at(U.inside[0], -.9, 0, .95, facing([0, 1])); U.outReds.forEach((m, i) => { pose(m, t, { port: true, walk: i === 1, speed: 4 }); if (i === 1) m.position.x = -3 + Math.sin(t * .4) * 4; });
-  if (lt < 2.6) ct('boxin', lt, 2.6, [3.2, 1.5, -1.0, -1, .9, .3], [2.8, 1.4, -.8, -1, .9, .3], [38, 36]); else { const hp = V3(); U.inside[0].userData.rig.head.getWorldPosition(hp); camTo(lt - 2.6, d - 2.6, [hp.x + .35, hp.y + .12, hp.z - .55, hp.x - .2, hp.y - .3, hp.z + 6], [hp.x + .3, hp.y + .1, hp.z - .45, hp.x - .2, hp.y - .4, hp.z + 6], [36, 32]); } };
+  if (lt < 2.6) ct('boxin', lt, 2.6, [3.3, 2.0, 1.0, -1.2, .8, -.3], [3.1, 1.95, .9, -1.2, .8, -.3], [44, 42]); else { const hp = V3(); U.inside[0].updateMatrixWorld(true); U.inside[0].userData.rig.head.getWorldPosition(hp); camTo(lt - 2.6, d - 2.6, [hp.x + .55, hp.y + .1, hp.z - 1.1, hp.x - .3, hp.y - .4, hp.z + 6], [hp.x + .5, hp.y + .08, hp.z - 1.0, hp.x - .3, hp.y - .45, hp.z + 6], [40, 38]); } };
 // 61 hidden weapons: the floorboard lifts, rifles and grenades beneath the hay
 SHOTS[61] = (t, lt, d) => { show('boxin'); look('night', null, .5, 0, 0xffffff, [0, 60, 0], [900, 0, 900], [0x8a7060, 0x2a2018]); S.background = new THREE.Color(0x050403); pl1.intensity = 6; pl1.position.set(901.2, 1.2, 901);
   U.inside.forEach(m => m.position.y = -50); const k = ease(clamp(lt / .9)); U.floor.position.set(1.6 + k * .3, .26 + k * .35, .6 + k * .2); U.floor.rotation.z = k * .6; U.hay.forEach((h, i) => h.position.x = 1.0 + i * .25 + k * (i % 2 ? .6 : -.6));
@@ -155,20 +154,20 @@ SHOTS[63] = (t, lt, d) => { OV.noGL = true; overlay((c, tt) => { const pr = RU_P
   for (let i = 0; i < n * k; i++) { const q = (i * 0.6180339 % 1); const [x, y] = railAt(pr, q * .98); c.fillStyle = '#f2f0ea'; c.strokeStyle = '#c8241c'; c.lineWidth = 3; c.beginPath(); c.arc(x, y, 7, 0, 7); c.fill(); c.stroke(); }
   M.title(c, 'SPRING 1918', 'SOME 60 LEGION TRAINS ALONG THE RAILWAY', clamp(lt / .5)); M.vignette(c); }); };
 // 64 each delay left a group vulnerable: a lone sentry at a dark siding, a red signal far down the line
-SHOTS[64] = (t, lt, d) => { show('wsiding'); look('night', [0x0c1220, .015], .7, .4, 0x8aa0d0, [-30, 50, -40], [-900, 0, 900], [0x6a7aaa, 0x2a2a36]); U.wsnow.visible = true; U.wsnow.userData.update(t); U.campfire.userData.update(t); pl1.intensity = 8 + Math.sin(t * 13) * 1.5; pl1.position.set(-898.5, 1, 904.5); U.wTrain.userData.update(0);
-  pose(U.sentry, t, { look: -.2 + Math.sin(t * .4) * .2 });
-  if (lt < 3.6) ct('wsiding', lt, 3.6, [6, 1.7, 8, 0, 1.4, 3.2], [3.5, 1.65, 6.5, 0, 1.5, 3.2], [36, 32]); else { const hp = V3(); U.sentry.userData.rig.head.getWorldPosition(hp); camTo(lt - 3.6, d - 3.6, [hp.x + 1.3, hp.y + .3, hp.z + .55, hp.x - 30, hp.y, hp.z - .6], [hp.x + 1.1, hp.y + .28, hp.z + .5, hp.x - 30, hp.y + .4, hp.z - .6], [32, 26]); } };
+SHOTS[64] = (t, lt, d) => { show('wsiding'); look('night', [0x0c1220, .015], .7, .4, 0x8aa0d0, [-30, 50, -40], [-900, 0, 900], [0x6a7aaa, 0x2a2a36]); U.wsnow.visible = true; U.wsnow.userData.update(t); U.campfire.userData.update(t); pl1.intensity = 8 + Math.sin(t * 13) * 1.5; pl1.position.set(-901.2, 1, 906.0); U.wTrain.userData.update(0);
+  pose(U.sentry, t, { look: -.2 + Math.sin(t * .4) * .2 }); U.sentry.updateMatrixWorld(true);
+  if (lt < 3.6) ct('wsiding', lt, 3.6, [6, 1.7, 8, 0, 1.4, 3.2], [3.5, 1.65, 6.5, 0, 1.5, 3.2], [36, 32]); else { const hp = V3(); U.sentry.userData.rig.head.getWorldPosition(hp); camTo(lt - 3.6, d - 3.6, [hp.x + 1.6, hp.y + .1, hp.z + .9, hp.x - 30, hp.y - 1.2, hp.z - 2.5], [hp.x + 1.4, hp.y + .08, hp.z + .8, hp.x - 30, hp.y - 1.0, hp.z - 2.5], [36, 32]); } };
 // 65 then came Chelyabinsk: sepia flashback of the iron bar
 SHOTS[65] = (t, lt, d) => { OV.noGL = true; overlay((c, tt) => { const i = Math.min(U.flash.length - 1, Math.floor(lt / d * U.flash.length)), im = U.flash[i]; c.filter = 'sepia(.9) contrast(1.15) brightness(.85)'; if (im.complete && im.naturalWidth) c.drawImage(im, -40, -22, L.W + 80, L.H + 44); c.filter = 'none';
   for (let k = 0; k < 8; k++) { c.fillStyle = `rgba(30,20,10,${.15 + (k % 3) * .05})`; c.fillRect(((tt * 977 + k * 331) % 1) * L.W, 0, 2, L.H); } L.caption(c, 'CHELYABINSK', '14 MAY 1918', clamp(lt / .3)); }); };
 // 66 the confrontation did not create the distrust: hero face, harsh lamp at night
 SHOTS[66] = (t, lt, d) => { show('boxin'); look('night', [0x0a0e18, .03], .3, .2, 0x8aa0d0, [0, 60, 40], [900, 0, 900], [0x4a5a8a, 0x1a1a22]); S.background = SKY.night; U.inside.forEach((m, i) => { if (i) m.position.y = -50; });
-  at(U.inside[0], -.9, 0, .95, facing([0, 1])); pose(U.inside[0], t, { look: 0 }); pl1.intensity = 6; pl1.position.set(899.1, 1.7, 901.8); const hp = V3(); U.inside[0].userData.rig.head.getWorldPosition(hp);
-  camTo(lt, d, [hp.x + .75, hp.y - .02, hp.z - .15, hp.x, hp.y, hp.z], [hp.x + .6, hp.y - .01, hp.z - .1, hp.x, hp.y, hp.z], [30, 26]); };
+  at(U.inside[0], -.9, 0, .95, facing([0, 1])); pose(U.inside[0], t, { look: 0 }); U.inside[0].updateMatrixWorld(true); const hp = V3(); U.inside[0].userData.rig.head.getWorldPosition(hp); pl1.intensity = 5; pl1.distance = 6; pl1.position.set(hp.x + .4, hp.y + .2, hp.z + .9);
+  camTo(lt, d, [hp.x + .35, hp.y - .02, hp.z + .8, hp.x, hp.y, hp.z], [hp.x + .3, hp.y - .01, hp.z + .68, hp.x, hp.y, hp.z], [30, 26]); };
 // 67 distrust becomes armed resistance: rifles come out, bolts work, they load
 SHOTS[67] = (t, lt, d) => { show('boxin'); look('night', null, .5, 0, 0xffffff, [0, 60, 0], [900, 0, 900], [0x8a7060, 0x2a2018]); S.background = new THREE.Color(0x050403); pl1.intensity = 6; pl1.position.set(900.5, 1.6, 901);
   U.floor.position.set(1.9, .61, .8); U.floor.rotation.z = .6; U.inside.forEach((m, i) => { at(m, -2.2 + i * 1.0, 0, .6, facing([0, 1])); pose(m, t, { aim: i % 2 === 0, port: i % 2 === 1 }); m.userData.rifle && (m.userData.rifle.visible = true); });
-  ct('boxin', lt, d, [-3.3, 1.6, 1.15, .5, 1.2, .3], [-3.0, 1.5, 1.1, .8, 1.25, .3], [38, 34]); };
+  ct('boxin', lt, d, [3.0, 1.9, -1.05, -.6, 1.1, .9], [2.8, 1.85, -1.0, -.6, 1.1, .9], [46, 44]); };
 // 68 orders to disarm collide with determination: Trotsky's telegram -> the standoff across the tracks
 SHOTS[68] = (t, lt, d) => { if (lt < 3.0) { show('office'); look('night', null, .4, 0, 0xffffff, [0, 60, 0], [-900, 0, 0], [0xc0a080, 0x3a2a1a]); S.background = new THREE.Color(0x0a0806); ct('office', 0, 1, [0, 2.2, 2.5, 0, 1.2, 0], [0, 2.2, 2.5, 0, 1.2, 0], [36, 36]);
     overlay(c => { c.fillStyle = 'rgba(0,0,0,.6)'; c.fillRect(0, 0, L.W, L.H); M.documentPage(c, lt, [['TELEGRAM · 25 MAY 1918', 28, true], [''], ['ALL SOVIETS ARE ORDERED TO DISARM', 26], ['THE CZECHOSLOVAKS IMMEDIATELY.', 26], ['EVERY ARMED CZECHOSLOVAK FOUND ON', 26], ['THE RAILWAY IS TO BE SHOT ON THE SPOT.', 26], [''], ['                    — TROTSKY', 26, true]], { w: 1000, h: 560, cps: 55, bg: '#e4dcc4' }); }); return; }
@@ -179,14 +178,14 @@ SHOTS[68] = (t, lt, d) => { if (lt < 3.0) { show('office'); look('night', null, 
 SHOTS[69] = (t, lt, d) => { show('platform'); look('grey', [0xd0ccc4, .006], 1.4, 1.6, 0xf0e8d8, [-40, 60, 30], [0, 0, 900]); U.pTrain.userData.update(0); U.clerk.position.y = -50; U.pile.visible = false;
   U.reds.forEach((m, i) => { at(m, -6 + i * 1.4, .6, -9.6 - (i % 2) * .5, facing([0, 1])); pose(m, t, { aim: true }); if (lt > 1.2 && i % 3 === 0) { m.rotation.x = -clamp((lt - 1.2 - i * .05) / .5) * 1.4; } }); U.handers.forEach((m, i) => { at(m, -6 + i * 1.6, 0, 3.4 + (i % 2) * .6, facing([0, -1])); pose(m, t, { aim: true, kneel: i % 2 === 0 }); });
   [...U.reds, ...U.handers].forEach((m, i) => { const f = U.flashes[i % 14]; const on = ((t * 7 + i * 1.7) % 1) < .18; if (on && i < 14) { f.visible = true; const p = V3(.62, .04, 0); m.userData.rifle.localToWorld(p); f.position.copy(p); f.scale.setScalar(.7); } });
-  U.gunsmoke.visible = true; U.gunsmoke.userData.update(t, V3(-1, 1.5, 897)); pl2.intensity = 10 + Math.sin(t * 50) * 5; pl2.position.set(0, 2, 897);
+  U.gunsmoke.visible = true; U.gunsmoke.userData.update(t, V3(-1, 2.4, 897)); pl2.intensity = 10 + Math.sin(t * 50) * 5; pl2.position.set(0, 2, 897);
   ct('platform', lt, d, [10, 1.6, -1.5, -4, 1.4, -4], [9, 1.7, -2, -4, 1.4, -4], [38, 36], .02); };
 // 70 scattered: each train ringed by enemies on the map
 SHOTS[70] = (t, lt, d) => { OV.noGL = true; overlay((c, tt) => { const pr = RU_PROJ(); M.paper(c); M.baseLand(c, pr, { land: '#b8a888' }); drawRail(c, pr, 4);
   for (let i = 0; i < 9; i++) { const [x, y] = railAt(pr, .04 + i * .115); const r = 30 + Math.sin(tt * 4 + i) * 4; c.strokeStyle = `rgba(200,36,28,${clamp(lt / .6)})`; c.lineWidth = 5; c.setLineDash([8, 6]); c.beginPath(); c.arc(x, y, r, 0, 7); c.stroke(); c.setLineDash([]); c.fillStyle = '#f2f0ea'; c.beginPath(); c.arc(x, y, 8, 0, 7); c.fill(); }
   M.title(c, 'SCATTERED', 'ISOLATED GROUPS, SURROUNDED', clamp(lt / .5)); M.vignette(c); }); };
 // 71 no position held the whole Legion: one train at a small station, alone in the steppe (aerial)
-SHOTS[71] = (t, lt, d) => { show('junction'); look('summer', [0xe0d8c8, .0018], 1.5, 2.4, 0xfff0d8, [40, 50, -30], [0, 0, -900]); U.jTrain.position.x = -6; U.jTrain.userData.update(0); U.armT.position.y = -50;
+SHOTS[71] = (t, lt, d) => { show('junction'); U.nests.forEach(n => { n.visible = false; n.userData.man.visible = false; }); look('summer', [0xe0d8c8, .0018], 1.5, 2.4, 0xfff0d8, [40, 50, -30], [0, 0, -900]); U.jTrain.position.x = -6; U.jTrain.userData.update(0); U.armT.position.y = -50;
   ct('junction', lt, d, [-40, 60, 60, 0, 0, -4], [-20, 90, 70, 0, 0, -4], [40, 44]); };
 // 72 attacked separately: an armored train shells a lone echelon
 SHOTS[72] = (t, lt, d) => { show('junction'); look('dusk', [0x9a7060, .004], 1.0, 1.8, 0xffa060, [100, 30, -60], [0, 0, -900]); U.armT.position.y = 0; U.armT.position.x = -120; U.jTrain.position.x = -6; U.jTrain.userData.update(0);
@@ -195,19 +194,19 @@ SHOTS[72] = (t, lt, d) => { show('junction'); look('dusk', [0x9a7060, .004], 1.0
   ct('junction', lt, d, [-60, 2.2, 14, -20, 2, 0], [-56, 2.4, 13, -16, 2, 0], [36, 34], .02); };
 // 73 junctions across an enormous network: map lights up -> aerial of the junction
 SHOTS[73] = (t, lt, d) => { if (lt < 4.2) { OV.noGL = true; overlay((c, tt) => { const pr = RU_PROJ(); M.paper(c); M.baseLand(c, pr, { land: '#b8a888' }); drawRail(c, pr, 4);
-    const br = [[[56.0, 54.7], [55.9, 58.0]], [[61.4, 55.16], [60.6, 56.8]], [[73.4, 54.99], [69.0, 57.2]], [[82.9, 55.03], [84.9, 56.5]], [[50.1, 53.2], [48.0, 55.8]], [[127.5, 50.3], [135.1, 48.5]]]; br.forEach(([a, b]) => { const [x0, y0] = pr(...a), [x1, y1] = pr(...b); c.strokeStyle = '#e8dcc0'; c.lineWidth = 3; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.stroke(); });
-    RAIL.forEach(([lo, la, n], i) => { const k = clamp((lt - .3 - i * .25) / .3); if (k <= 0) return; const [x, y] = pr(lo, la); c.fillStyle = '#c8241c'; c.beginPath(); c.arc(x, y, 14 * k, 0, 7); c.fill(); c.fillStyle = '#f2f0ea'; c.beginPath(); c.arc(x, y, 7 * k, 0, 7); c.fill(); if (n) M.label(c, n, x, y - 22, 20, '#fff4e0', k); });
+    const br = [[[56.0, 54.7], [55.9, 58.0]], [[61.4, 55.16], [60.6, 56.8]], [[73.4, 54.99], [69.0, 57.2]], [[82.9, 55.03], [84.9, 56.5]], [[50.1, 53.2], [48.0, 55.8]], [[127.5, 50.3], [135.1, 48.5]]]; 
+    RAIL.forEach(([lo, la, n], i) => { const k = clamp((lt - .3 - i * .25) / .3); if (k <= 0) return; const [x, y] = pr(lo, la); c.fillStyle = '#c8241c'; c.beginPath(); c.arc(x, y, 14 * k, 0, 7); c.fill(); c.fillStyle = '#f2f0ea'; c.beginPath(); c.arc(x, y, 7 * k, 0, 7); c.fill(); if (n) M.label(c, n, x, i % 2 ? y + 38 : y - 22, 20, '#fff4e0', k); });
     M.title(c, 'STATIONS & JUNCTIONS', 'THE KEYS TO THE RAILWAY', clamp(lt / .5)); M.vignette(c); }); return; }
-  show('junction'); look('summer', [0xe0d8c8, .0018], 1.5, 2.4, 0xfff0d8, [40, 50, -30], [0, 0, -900]); U.armT.position.y = -50; U.jTrain.position.x = -6; U.jTrain.userData.update(0);
+  show('junction'); look('summer', [0xe0d8c8, .0018], 1.5, 2.4, 0xfff0d8, [40, 50, -30], [0, 0, -900]); U.armT.position.y = -50; U.jTrain.position.x = -6; U.jTrain.userData.update(0); U.nests.forEach(n => { n.visible = false; n.userData.man.visible = false; });
   ct('junction', lt - 4.2, d - 4.2, [-30, 45, 70, 20, 0, 0], [10, 35, 60, 20, 0, 0], [40, 40]); };
 // 74 they began taking those positions: men storm the station, the white-red goes up
 SHOTS[74] = (t, lt, d) => { show('junction'); look('summer', [0xe0d8c8, .0018], 1.5, 2.4, 0xfff0d8, [40, 50, -30], [0, 0, -900]); U.armT.position.y = -50; U.jTrain.position.x = -6; U.jTrain.userData.update(0); U.jFlag.userData.update(t);
   U.stormers.forEach((m, i) => { const k = clamp((lt - i * .08) / 1.6); at(m, 8 + i * .8 - k * 6, k > .55 ? .6 : 0, 4 - k * 11, facing([-.4, -1])); pose(m, t, { walk: k < 1, speed: 11, port: true }); });
-  const up = ease(clamp((lt - .6) / 1.2)); U.jFlag.position.y = lerp(-3.2, 0, up);
+  const up = ease(clamp((lt - .6) / 1.2)); U.jFlag.position.y = lerp(.9, 4, up);
   ct('junction', lt, d, [10, .8, 8, -2, 3, -9], [8, 1.0, 7, -3, 3.4, -9], [38, 36]); };
 // 75-77 one continuous pull-back: train -> station -> approaches -> the track between
 SHOTS[75] = (t, lt, d) => { show('junction'); look('summer', [0xe0d8c8, .0015], 1.5, 2.4, 0xfff0d8, [40, 50, -30], [0, 0, -900]); U.armT.position.y = -50; U.jTrain.position.x = -6; U.jTrain.userData.update(0); U.jFlag.userData.update(t);
-  U.stormers.forEach(m => m.position.y = -50); U.nests.forEach((n, i) => pose(n.userData.man, t, { aim: true }));
+  U.stormers.forEach(m => m.position.y = -50); U.nests.forEach((n, i) => { n.visible = true; n.userData.man.visible = true; pose(n.userData.man, t, { aim: true }); });
   const T0 = ST(75), T1 = ST(76), T2 = ST(77), T3 = C[77].end; const q = t < T1 ? (t - T0) / (T1 - T0) * .25 : t < T2 ? .25 + (t - T1) / (T2 - T1) * .35 : .6 + (t - T2) / (T3 - T2) * .4;
   const P0 = [-4, 3, 10, -6, 2.5, 0], P1 = [-10, 14, 26, -2, 1, -6], P2 = [-30, 55, 75, 0, 0, -4], P3 = [60, 70, 110, 140, 0, 0];
   const seg = q < .25 ? [P0, P1, q / .25] : q < .6 ? [P1, P2, (q - .25) / .35] : [P2, P3, (q - .6) / .4]; const e = ease(seg[2]); const pv = seg[0].map((v, k) => lerp(v, seg[1][k], e)); camAt('junction', pv.slice(0, 3), pv.slice(3), 38 + q * 6);
@@ -222,10 +221,10 @@ SHOTS[79] = (t, lt, d) => { OV.noGL = true; overlay((c, tt) => { const pr = RU_P
   M.title(c, 'SUMMER 1918', 'THE RAILWAY CITIES FALL TO THE LEGION', clamp(lt / .5)); M.vignette(c); }); };
 // 80 anti-Bolshevik governments fill the vacuum: white officers raise the tricolour; a proclamation goes up
 SHOTS[80] = (t, lt, d) => { show('wsquare'); look('day', [0xd8dce0, .005], 1.6, 2.4, 0xfff0dc, [-40, 60, 30], [900, 0, -900]); U.wFlagCZ.userData.update(t); U.wFlag.userData.update(t);
-  const up = ease(clamp((lt - .8) / 2.4)); U.wFlag.position.y = lerp(-5.4, 0, up); U.whites.forEach((m, i) => pose(m, t, { salute: lt > 2 && i % 2 === 0 })); U.wcrowd.forEach((m, i) => pose(m, t, { armR: lt > 3 && i % 3 === 0 ? -2.6 : 0, look: .2 }));
-  if (lt < 4.2) ct('wsquare', lt, 4.2, [3, 1.2, 8, 0, 10, -13], [2, 1.1, 6, 0, 14, -13], [38, 40]); else ct('wsquare', lt - 4.2, d - 4.2, [16.4, 1.8, -4, 13.4, 2.4, -7.9], [14.9, 2.1, -5.6, 13.4, 2.4, -7.9], [34, 30]);
+  const up = ease(clamp((lt - .8) / 2.4)); U.wFlag.position.y = 6; U.whites.forEach((m, i) => pose(m, t, { salute: lt > 2 && i % 2 === 0 })); U.wcrowd.forEach((m, i) => pose(m, t, { armR: lt > 3 && i % 3 === 0 ? -2.6 : 0, look: .2 }));
+  if (lt < 4.2) ct('wsquare', lt, 4.2, [3, 1.2, 8, 0, 10, -13], [2, 1.1, 6, 0, 14, -13], [38, 40]); else ct('wsquare', lt - 4.2, d - 4.2, [11.2, 1.8, -4, 8.2, 2.4, -7.9], [9.7, 2.1, -5.6, 8.2, 2.4, -7.9], [34, 30]);
   overlay(c => L.caption(c, 'SAMARA, JUNE 1918', 'ANTI-BOLSHEVIK GOVERNMENTS', clamp(lt / .5) * (1 - clamp((lt - 3.7) / .5)))); };
 // 81 a struggle over who would govern Russia: red vs white on the map, the railway between
 SHOTS[81] = (t, lt, d) => { OV.noGL = true; overlay((c, tt) => { const pr = RU_PROJ(); M.paper(c); M.baseLand(c, pr, { land: '#b8a888' }); const k = ease(clamp(lt / 2.2));
-  const ru = M.byName('Russia'); if (ru) { c.save(); M.pathFeature(c, pr, ru); c.clip(); const [sx] = pr(54, 55); c.fillStyle = 'rgba(180,26,20,.55)'; c.fillRect(0, 0, sx * k + (1 - k) * 0, L.H); c.fillStyle = 'rgba(242,240,234,.55)'; c.fillRect(L.W - (L.W - sx) * k, 0, L.W, L.H); c.restore(); }
-  drawRail(c, pr, 5); const [rx, ry] = pr(40, 58), [wx, wy] = pr(95, 62); M.label(c, 'RED', rx, ry, 56, '#b81a14', k); M.label(c, 'WHITE', wx, wy, 56, '#f8f4ea', k); M.title(c, 'THE RUSSIAN CIVIL WAR', 'THE RAILWAY AT ITS HEART', clamp(lt / .5)); M.vignette(c); }); };
+  const ru = M.byName('Russia'); if (ru) { c.save(); M.pathFeature(c, pr, ru); c.clip(); const [sx] = pr(54, 55); const gR = c.createLinearGradient(0, 150, 0, 300); gR.addColorStop(0, 'rgba(180,26,20,0)'); gR.addColorStop(1, 'rgba(180,26,20,.55)'); const gW = c.createLinearGradient(0, 150, 0, 300); gW.addColorStop(0, 'rgba(242,240,234,0)'); gW.addColorStop(1, 'rgba(242,240,234,.55)'); c.fillStyle = gR; c.fillRect(0, 150, sx * k, L.H); c.fillStyle = gW; c.fillRect(L.W - (L.W - sx) * k, 150, L.W, L.H); c.restore(); }
+  drawRail(c, pr, 5); const [rx, ry] = pr(40, 58), [wx, wy] = pr(95, 57); M.label(c, 'RED', rx, ry, 56, '#b81a14', k); M.label(c, 'WHITE', wx, wy, 56, '#f8f4ea', k); M.title(c, 'THE RUSSIAN CIVIL WAR', 'THE RAILWAY AT ITS HEART', clamp(lt / .5)); M.vignette(c); }); };
