@@ -275,7 +275,7 @@ wax_m = mat("M_CandleWax", (0.95, 0.86, 0.62), rough=0.4, sss=0.3)
 CAND = cyl("Candle", 0.018, 0.14, (CANDLE_XY[0], CANDLE_XY[1], 0.79 + 0.07), wax_m, verts=24)
 set_origin(CAND, (CANDLE_XY[0], CANDLE_XY[1], 0.79)); C(CAND)
 WICK = bpy.data.objects.new("CandleWick", None); sc.collection.objects.link(WICK); WICK.location = (CANDLE_XY[0], CANDLE_XY[1], 0.79 + 0.14)
-fl_m = mat("M_Flame", (0.9, 0.22, 0.0), emit=((1.0, 0.30, 0.0), 1.3))
+fl_m = mat("M_Flame", (0.0, 0.0, 0.0), emit=((1.0, 0.16, 0.0), 3.0))
 bpy.ops.mesh.primitive_uv_sphere_add(radius=0.009, location=(0, 0, 0), segments=32, ring_count=16)
 FLAME = bpy.context.active_object; FLAME.name = "CandleFlame"
 for v in FLAME.data.vertices:
@@ -321,7 +321,7 @@ def make_key(name, material, ornate=True, L=0.072):
     except Exception: pass
     return k
 MKEY = make_key("MasterKey", brass, ornate=True)
-copy_hot = mat("M_KeyCopy1", (0.78, 0.80, 0.84), rough=0.3, metal=1.0, emit=((1.0, 0.22, 0.0), 0.0))
+copy_hot = mat("M_KeyCopy1", (0.78, 0.80, 0.84), rough=0.3, metal=1.0, emit=((1.0, 0.14, 0.0), 0.0))
 KEY1 = make_key("KeyCopy1", copy_hot, ornate=False)
 KEY2 = make_key("KeyCopy2", mat("M_KeyCopy2", (0.80, 0.82, 0.86), rough=0.25, metal=1.0), ornate=False)
 print("KEY dims", tuple(round(d, 4) for d in MKEY.dimensions))
@@ -587,7 +587,7 @@ FL2 = bpy.data.lights.new("ForgeGlowUp", 'POINT'); FL2.energy = 120; FL2.color =
 FL2O = bpy.data.objects.new("ForgeGlowUp", FL2); sc.collection.objects.link(FL2O); FL2O.location = (17.1, 2.55, 1.15)
 # tilting crucible on a bench stand: pivot axis Y at (15.85, 0.05, 1.22); the lip on the -X side over the mould; lever to -X.
 crm = mat("M_Crucible", (0.08, 0.06, 0.06), rough=0.6)
-melt = mat("M_Melt", (0.6, 0.10, 0.0), emit=((1.0, 0.30, 0.0), 1.8))
+melt = mat("M_Melt", (0.0, 0.0, 0.0), emit=((1.0, 0.14, 0.0), 3.0))
 PIV = Vector((15.85, 0.05, 1.22))
 pot = cyl("CruciblePot", 0.075, 0.16, (PIV.x, PIV.y, PIV.z - 0.10), crm, bevel=0.01)
 bm = bmesh.new(); bm.from_mesh(pot.data); bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.normal.z > 0.9], context='FACES_ONLY'); bm.to_mesh(pot.data); bm.free()
@@ -692,11 +692,9 @@ for dx in (-2.6, 2.6):
         o_ = bpy.context.active_object; o_.data.materials.append(mat("M_Shrub", (0.05, 0.42, 0.10), rough=0.6)); bpy.ops.object.shade_smooth(); T(o_)
 
 # ================================================================== look: AgX Punchy, deep saturated, fast-render settings
-sc.view_settings.view_transform = 'AgX'
-try: sc.view_settings.look = 'AgX - Punchy'
-except Exception:
-    try: sc.view_settings.look = 'Punchy'
-    except Exception: pass
+sc.view_settings.view_transform = 'Filmic'      # as the approved LegoInNose v013: keeps the molten metal and flame a true orange
+try: sc.view_settings.look = 'High Contrast'
+except Exception: pass
 sc.view_settings.exposure = 0.0
 import colorsys
 for m_ in bpy.data.materials:

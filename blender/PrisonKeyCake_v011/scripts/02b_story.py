@@ -205,8 +205,11 @@ for f in (1, 300, 469, 650, 805):
 # the hot metal: KEY1 appears in the cavity as the stream fills it, glows, then cools to steel
 vis(KEY1, 1, False); vis(KEY1, 572, True)
 em = [n for n in bpy.data.materials["M_KeyCopy1"].node_tree.nodes if n.type == 'BSDF_PRINCIPLED'][0].inputs["Emission Strength"]
-for f, v in ((1, 0.0), (571, 0.0), (572, 2.2), (612, 2.0), (660, 0.6), (690, 0.0)):
+for f, v in ((1, 0.0), (571, 0.0), (572, 3.5), (612, 3.0), (660, 0.8), (690, 0.0)):
     em.default_value = v; em.keyframe_insert("default_value", frame=f)
+bc = [n for n in bpy.data.materials["M_KeyCopy1"].node_tree.nodes if n.type == 'BSDF_PRINCIPLED'][0].inputs["Base Color"]
+for f, c in ((1, (0.78, 0.80, 0.84)), (571, (0.05, 0.02, 0.01)), (612, (0.05, 0.02, 0.01)), (690, (0.78, 0.80, 0.84))):
+    bc.default_value = (*c, 1); bc.keyframe_insert("default_value", frame=f)
 LIP_LOCAL = Vector((-0.10, 0.0, -0.025))
 SPRUE = Vector((11.43, 0.03, 0.985))
 vis(STREAM, 1, False); vis(STREAM, 566, True); vis(STREAM, 612, False)
@@ -244,14 +247,12 @@ FD, PALM = Vector((0.55, 0.15, -0.8)), Vector((0.2, 0.25, -1.0))
 for f, Kw in ((652, Matrix.Translation((0, 0, 0.05)) @ K_MOULD), (668, Matrix.Translation((0, 0, 0.004)) @ K_MOULD), (674, K_MOULD)):
     reach(SR, "R", f, bow(Kw), FD, PALM, pole=PL)
 own(KEY1, 675, SMITH, "wrist.R")
-for f, P in ((690, bow(K_LIFT)), (712, Vector((11.06, 0.47, 1.00)))):
+for f, P in ((690, bow(K_LIFT)), (704, Vector((11.06, 0.30, 1.04)))):
     reach(SR, "R", f, P, Vector((1, 0.1, -0.2)), Vector((0, -0.3, -1)), pole=PL)
-own(KEY1, 723)
+own(KEY1, 705)
+key_basis(KEY1, 718, Matrix.Translation(K_IN_WS.to_3x3() @ Vector((-0.09, 0, 0))) @ K_IN_WS)
 key_basis(KEY1, 748, K_IN_WS); set_interp(KEY1, 'BEZIER')
-for f in (723, 735, 748):
-    fs(f); P = KEY1.matrix_world @ Vector((0.011, 0, 0))
-    reach(SR, "R", f, P, Vector((1, 0.1, -0.2)), Vector((0, -0.3, -1)), pole=PL)
-for f in (768, 805):
+for f in (728, 768, 805):
     surface_hand(SR, "R", f, Vector((11.05, 0.02, 0.91)), Vector((1, -0.2, 0)), pose="relaxed", pole=PL)
 for f, sm, br in ((1, 0.0, -0.5), (560, 0.0, -0.6), (640, 0.2, 0.0), (700, 0.3, 0.2), (760, 0.6, 0.4), (805, 0.5, 0.3)):
     key_face(SMITH, f, smile=sm, brow=br)
@@ -296,15 +297,14 @@ own(KEY1, 867, PRIS, "wrist.R")
 R_K1P = actual_rel(PRIS, "R", KEY1, 867)
 for f, Kw in ((882, K1_OUT), (905, K_LOOK), (925, K_LOOK), (950, K_LOCK_PRE), (958, K_LOCK_PRE)):
     key_prop_hand(PR, "R", f, Kw, R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)))
-own(KEY1, 959)
 def jam(f):   # tries to turn it: it jams twice
     return pchip([(959, 0.0), (970, 0.0), (978, 14.0), (984, -4.0), (991, 15.0), (998, -5.0), (1004, 12.0), (1010, 0.0)])(f)
-for f in range(959, 1011, 3):
-    Kw = Matrix.Translation(K_LOCK_IN.translation) @ Matrix.Rotation(math.radians(jam(f)), 4, Vector((1, 0, 0))) @ \
-        Matrix.Translation(-K_LOCK_IN.translation) @ (K_LOCK_IN if f >= 970 else interp_mats([(959, K_LOCK_PRE), (970, K_LOCK_IN)], f))
-    key_basis(KEY1, f, Kw)
-    key_prop_hand(PR, "R", f, Kw, R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)), search=False)
-set_interp(KEY1, 'BEZIER')
+key_prop_hand(PR, "R", 966, K_LOCK_IN, R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)))
+fs(966); W0 = W(PRIS, "IK_hand.R").copy()
+def roll_hand(f, ang, W0=W0, C=K_LOCK_IN.translation):
+    M = Matrix.Translation(C) @ Matrix.Rotation(math.radians(ang), 4, Vector((1, 0, 0))) @ Matrix.Translation(-C) @ W0
+    key_ik_world(PR, "R", f, M)
+for f in range(970, 1011, 3): roll_hand(f, jam(f))
 own(KEY1, 1012, PRIS, "wrist.R")
 for f, Kw in ((1026, K_LOCK_PRE), (1045, KM((1.22, 0.22, 1.08), (0.9, -0.1, -0.3), (0.1, 1, 0)))):
     key_prop_hand(PR, "R", f, Kw, R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)))
@@ -368,11 +368,11 @@ vis(KEY2, 1, False); vis(KEY2, 1237, True)
 def turn(f): return pchip([(1237, 0.0), (1292, 0.0), (1318, 50.0), (1400, 50.0)])(f)
 def k2_lock(f, ang):
     return Matrix.Translation(K_LOCK_IN.translation) @ Matrix.Rotation(math.radians(ang), 4, Vector((1, 0, 0))) @ Matrix.Translation(-K_LOCK_IN.translation) @ K_LOCK_IN
-own(KEY2, 1237)
-for f in range(1237, 1328, 3):
-    Kw = k2_lock(f, turn(f)); key_basis(KEY2, f, Kw)
-    key_prop_hand(PR, "R", f, Kw, R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)), search=(f == 1237))
-set_interp(KEY2, 'BEZIER')
+fs(1237); KEY2.matrix_world = W(PRIS, "wrist.R") @ R_K1P if False else KEY2.matrix_world
+key_prop_hand(PR, "R", 1237, K_LOCK_IN, R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)))
+fs(1237); key_basis(KEY2, 1236, W(PRIS, "wrist.R") @ R_K1P); own(KEY2, 1237, PRIS, "wrist.R")
+fs(1237); W1 = W(PRIS, "IK_hand.R").copy()
+for f in range(1240, 1330, 3): roll_hand(f, turn(f), W0=W1)
 BOLT = O["DoorBolt"]
 for f, dy in ((1, 0.0), (1320, 0.0), (1328, 0.05)):
     BOLT.location.y = dy if False else BOLT.location.y; 
@@ -394,14 +394,13 @@ def door_pt(obj, local_rest_world, f):
     """a point fixed on a hinged object, given in world at rest (frame 1)"""
     fs(1); L = obj.matrix_world.inverted() @ Vector(local_rest_world); fs(f); return obj.matrix_world @ L
 # pull the key out, then the left hand pushes the door open
-own(KEY2, 1338, PRIS, "wrist.R")
 for f, Kw in ((1348, Matrix.Translation((-0.07, 0, 0)) @ k2_lock(1348, 50.0)),):
     key_prop_hand(PR, "R", f, Kw, R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)))
-for f, ang in ((1, 0.0), (1346, 0.0), (1392, 100.0), (END, 100.0)):
+for f, ang in ((1, 0.0), (1344, 0.0), (1366, 100.0), (END, 100.0)):
     DOOR.rotation_euler = (0, 0, math.radians(ang)); DOOR.keyframe_insert("rotation_euler", frame=f)
 for f, ang in ((1, 0.0), (1456, 0.0), (1500, 75.0), (END, 75.0)):
     GATE1.rotation_euler = (0, 0, math.radians(ang)); GATE1.keyframe_insert("rotation_euler", frame=f)
-for f, ang in ((1, 85.0), (470, 85.0), (500, 0.0), (1543, 0.0), (1585, 92.0), (END, 92.0)):
+for f, ang in ((1, 85.0), (470, 85.0), (500, 0.0), (1543, 0.0), (1562, 92.0), (END, 92.0)):
     WICKET.rotation_euler = (0, 0, math.radians(ang)); WICKET.keyframe_insert("rotation_euler", frame=f)
 def push(ctrl, s_, obj, p_rest, f0, f1, nrm=(1, 0, 0)):
     for f in range(f0, f1 + 1, 3):
@@ -421,13 +420,10 @@ for f in range(1362, 1408, 4):
 K_G_IN = KM((2.535 - 0.040, 0.02, 1.05), (1, 0, 0), (0, 1, 0)); K_G_PRE = Matrix.Translation((-0.07, 0, 0)) @ K_G_IN
 def kg(f, ang): return Matrix.Translation(K_G_IN.translation) @ Matrix.Rotation(math.radians(ang), 4, Vector((1, 0, 0))) @ Matrix.Translation(-K_G_IN.translation) @ K_G_IN
 key_prop_hand(PR, "R", 1412, K_G_PRE, R_K1P, pose="pinch", pole=Vector((1.7, -0.5, 0.7)))
-own(KEY2, 1419)
 gturn = pchip([(1419, 0.0), (1430, 0.0), (1442, 50.0), (1452, 50.0)])
-for f in range(1419, 1453, 3):
-    Kw = kg(f, gturn(f)) if f >= 1428 else interp_mats([(1419, K_G_PRE), (1428, K_G_IN)], f)
-    key_basis(KEY2, f, Kw); key_prop_hand(PR, "R", f, Kw, R_K1P, pose="pinch", pole=Vector((1.7, -0.5, 0.7)), search=(f == 1419))
-set_interp(KEY2, 'BEZIER')
-own(KEY2, 1453, PRIS, "wrist.R")
+key_prop_hand(PR, "R", 1428, K_G_IN, R_K1P, pose="pinch", pole=Vector((1.7, -0.5, 0.7)))
+fs(1428); W2 = W(PRIS, "IK_hand.R").copy()
+for f in range(1431, 1453, 3): roll_hand(f, gturn(f), W0=W2, C=K_G_IN.translation)
 key_prop_hand(PR, "R", 1460, Matrix.Translation((-0.08, 0, -0.05)) @ kg(1460, 50.0), R_K1P, pose="pinch", pole=Vector((1.7, -0.5, 0.7)))
 push(PR, "L", GATE1, (2.585, 0.36, 1.12), 1452, 1474)
 # through the corridor to the wicket
@@ -441,11 +437,10 @@ HP.walk(WP3, yaw_from_path(WP3, 1560, 1622, end_yaw=80.0), 1560, 1622, stride=0.
 walk_arms(PR, WP3, 1560, 1622, sides="L", amp=0.08)
 for f in range(1600, 1623, 4): hang_hand(PR, "R", f, bend=0.25, pose="pinch")
 # looks back at the prison over his shoulder, then smiles at the open sky
-for f, tgt in ((1340, (1.6, 0.6, 1.3)), (1366, (0.6, -0.4, 1.6)), (1398, (0.6, -0.4, 1.6)), (1408, (2.53, 0.02, 1.05)), (1412, (2.53, 0.02, 1.05)), (1450, (2.53, 0.02, 1.05)), (1470, (3.5, 0.6, 1.6)),
-               (1540, (5.27, 0.6, 1.4)), (1560, (6.5, 0.5, 1.8)), (1576, (3.5, -0.4, 1.7)), (1614, (3.0, -0.4, 1.7)), (1622, (3.0, -0.4, 1.7))):
+for f, tgt in ((1340, (1.6, 0.6, 1.3)), (1366, (2.2, 0.75, 1.6)), (1398, (2.3, 0.7, 1.6)), (1408, (2.53, 0.02, 1.05)), (1412, (2.53, 0.02, 1.05)), (1450, (2.53, 0.02, 1.05)), (1470, (3.5, 0.6, 1.6)),
+               (1540, (5.27, 0.6, 1.4)), (1560, (6.5, 0.5, 1.8)), (1590, (8.0, 0.4, 2.6)), (1610, (8.0, 0.2, 2.0)), (1622, (8.0, 0.2, 1.8))):
     fs(f); look_at(PR, f, Vector(tgt), blend=0.9, limit=(95, 45))
-for f in range(1570, 1623, 6):
-    key_spine(PR, f, flex=2.0, twist=-22.0 * smoothstep((f - 1568) / 14.0))
+pass
 for f, sm, br in ((1340, 0.7, 0.6), (1420, 0.2, -0.2), (1450, 0.6, 0.4), (1540, 0.4, 0.2), (1600, 0.8, 0.6), (1622, 0.9, 0.6)):
     key_face(PRIS, f, smile=sm, brow=br)
 saccades(PR, 1340, 1622, every=50, seed=10); blinks(PRIS, [1375, 1488, 1570])
@@ -469,11 +464,12 @@ def wave(ctrl, H, s_, f0, f1, f_down, f_end, per=34):
         d = (Vector((0, 0, 1)) * up + Vector((0, 0, -1)) * (1 - up) + lat * osc * 2).normalized()
         apply_pose(rig, s_, "flat_palm" if up > 0.5 else "relaxed", f)
         H.key_hand(s_, f, Wp, d, fwd, pole=sh + lat * 0.45 + Vector((0, 0, -0.35)) - fwd * 0.2)
-    for f in (f_down + 40, f_end):
-        hang_hand(ctrl, s_, f, bend=0.15)
-wave(PR, HP, "R", 1640, 1790, 1765, END)
-for f in (1623, 1700, END): hang_hand(PR, "L", f, bend=0.15)
-for f, tgt in ((1623, (SXX, -3.0, 1.6)), (1700, (SXX - 0.8, -2.0, 1.4)), (1760, (SXX + 0.8, -2.0, 1.4)), (1800, (SXX, -3.5, 1.5)), (1818, (SXX, -3.5, 1.2)), (1828, (SXX, -3.5, 1.6)), (END, (SXX, -3.5, 1.6))):
+    if f_down + 30 < f_end:
+        for f in (f_down + 30, f_end):
+            hang_hand(ctrl, s_, f, bend=0.45, swing=0.05)
+wave(PR, HP, "R", 1640, 1790, 1772, END)
+for f in (1623, 1700, END): hang_hand(PR, "L", f, bend=0.35)
+for f, tgt in ((1623, (SXX, -3.0, 1.6)), (1700, (SXX - 0.8, -2.0, 1.4)), (1760, (SXX + 0.8, -2.0, 1.4)), (1800, (SXX, -3.5, 1.5)), (1812, (SXX, -3.5, 1.15)), (1824, (SXX + 0.3, -3.5, 1.65)), (END, (SXX + 0.5, -3.5, 1.7))):
     fs(f); look_at(PR, f, Vector(tgt), blend=0.9)
 for f, sm, br in ((1623, 0.8, 0.6), (1700, 0.9, 0.7), (1800, 0.8, 0.5), (END, 0.9, 0.6)):
     key_face(PRIS, f, smile=sm, brow=br)
@@ -481,7 +477,7 @@ blinks(PRIS, [1660, 1745])            # no blink after 1760: the film ends on an
 saccades(PR, 1623, 1790, every=50, seed=11)
 for rig, ctrl, H, pos, yaw, s_ in ((VIS, VR, HV, Vector((SXX - 0.95, 3.05, 0.85)), -12.0, "L"), (SMITH, SR, HS, Vector((SXX + 1.00, 3.05, 0.85)), 12.0, "R")):
     idle_stand(H, ctrl, 1623, END, pos, yaw, flex=-2.0, step=10, seed=pos.x)
-    wave(ctrl, H, s_, 1650 if rig is VIS else 1665, 1800, 1790 if rig is VIS else 1770, END, per=30)
+    wave(ctrl, H, s_, 1650 if rig is VIS else 1665, END, END, END, per=30)
     other = "R" if s_ == "L" else "L"
     for f in (1623, END): hang_hand(ctrl, other, f, bend=0.15)
     for f in (1623, 1700, END): fs(f); look_at(ctrl, f, Vector((SXX, -3.0, 1.6)) if f != 1700 else P_TOPS + Vector((0, 0, 1.6)), blend=0.8)
