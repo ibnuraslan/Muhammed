@@ -227,6 +227,9 @@ C(box("CELL_Ceiling", (3.4, 3.8, 0.12), (0, -0.05, 2.96), stone_cell, bevel=0))
 WIN_SKY = C(box("CELL_WinSky", (0.9, 0.02, 0.8), (-0.6, 1.95, 1.97), sky_mat("M_CellSky", (0.05, 0.10, 0.45), (0.01, 0.02, 0.15), 1.2), bevel=0))
 for i in range(4):
     C(cyl("CELL_WinBar", 0.011, 0.47, (-0.79 + i * 0.125, 1.70, 1.975), iron))
+bpy.ops.mesh.primitive_uv_sphere_add(radius=0.05, location=(-0.48, 1.88, 2.06), segments=24, ring_count=12)
+MOON = bpy.context.active_object; MOON.name = "CELL_MoonDisc"; MOON.data.materials.append(mat("M_Moon", (1, 1, 0.9), emit=((1.0, 0.95, 0.80), 3.0)))
+MOON.visible_shadow = False; C(MOON)
 # iron door, hinged at (1.5, 1.1); the panel spans y 0.21..1.09 at rest; origin on the hinge axis
 dparts = [box("DoorPanel", (0.06, 0.88, 2.02), (1.56, 0.65, 1.02), iron_red, bevel=0.008)]
 for z in (0.35, 1.0, 1.7):
@@ -548,10 +551,10 @@ def logo_plane(name, w, loc, rot, logo=LOGO_DARK, bg=(0.97, 0.88, 0.62)):
     o = bpy.context.active_object; o.name = name; o.scale = (w, h, 1); bpy.ops.object.transform_apply(scale=True)
     o.data.materials.append(m)
     return o
-E(box("SignBracket", (0.7, 0.03, 0.03), (13.15, 1.75, 2.95), iron, bevel=0))
-E(box("SignBoard", (0.62, 0.05, 0.33), (13.12, 1.75, 2.72), wood_dark, bevel=0.01))
-E(logo_plane("LogoSignA", 0.56, (13.12, 1.72, 2.72), (R_(90), 0, 0)))
-E(logo_plane("LogoSignB", 0.56, (13.12, 1.78, 2.72), (R_(90), 0, R_(180))))
+E(box("SignBracket", (1.0, 0.03, 0.03), (13.0, 1.75, 2.80), iron, bevel=0))
+E(box("SignBoard", (0.98, 0.05, 0.50), (12.95, 1.75, 2.50), wood_dark, bevel=0.01))
+E(logo_plane("LogoSignA", 0.90, (12.95, 1.722, 2.50), (R_(90), 0, R_(0))))
+E(logo_plane("LogoSignB", 0.90, (12.95, 1.778, 2.50), (R_(90), 0, R_(180))))
 E(box("WS_LogoBoard", (0.04, 0.95, 0.47), (13.73, 2.30, 1.80), wood_dark, bevel=0.012))
 E(logo_plane("LogoBoard", 0.86, (13.755, 2.30, 1.80), (R_(90), 0, R_(90))))
 # bench along y at x 15.3..16.2
@@ -670,13 +673,13 @@ e3 = cr.color_ramp.elements.new(0.6667); e3.color = (1.0, 0.36, 0.02, 1)
 nt.links.new(tc.outputs["UV"], sep.inputs[0]); nt.links.new(sep.outputs["X"], cr.inputs["Fac"]); nt.links.new(cr.outputs["Color"], p.inputs["Base Color"])
 p.inputs["Roughness"].default_value = 0.6; p.inputs["Sheen Weight"].default_value = 0.3
 FLAGS = []
-for i, dx in enumerate((-1.75, 1.75)):
+for i, dx in enumerate((-1.45, 1.45)):
     T(cyl("ST_FlagPole", 0.035, 4.6, (SX + dx, 2.7, 0.85 + 2.3), mat("M_Pole", (0.85, 0.70, 0.25), rough=0.2, metal=1.0)))
     bpy.ops.mesh.primitive_grid_add(x_subdivisions=30, y_subdivisions=18, size=1, location=(0, 0, 0))
     fg = bpy.context.active_object; fg.name = "ST_Flag%d" % i
     for v in fg.data.vertices: v.co = Vector(((v.co.x + 0.5) * 1.5, 0.0, (v.co.y + 0.5) * 0.9))
     fg.data.uv_layers.active.data.foreach_set("uv", [c for l in fg.data.loops for c in (fg.data.vertices[l.vertex_index].co.x / 1.5, fg.data.vertices[l.vertex_index].co.z / 0.9)])
-    fg.location = (SX + dx + (0.04 if dx > 0 else -0.04), 2.7, 3.9); fg.rotation_euler = (0, 0, 0 if dx > 0 else R_(180))
+    fg.location = (SX + dx + (0.04 if dx > 0 else -0.04), 2.7, 3.3); fg.rotation_euler = (0, 0, 0 if dx > 0 else R_(180))
     wv = fg.modifiers.new("wave", 'WAVE'); wv.use_x = True; wv.use_y = False; wv.height = 0.07; wv.width = 0.45; wv.speed = 0.012
     wv.start_position_x = 0.0; wv.falloff_radius = 0.0; wv.use_normal = False
     vg = fg.vertex_groups.new(name="free"); vg.add([v.index for v in fg.data.vertices], 1.0, 'REPLACE')

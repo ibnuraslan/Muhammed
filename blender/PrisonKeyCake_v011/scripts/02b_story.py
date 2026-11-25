@@ -308,8 +308,8 @@ for f in range(970, 1011, 3): roll_hand(f, jam(f))
 own(KEY1, 1012, PRIS, "wrist.R")
 for f, Kw in ((1026, K_LOCK_PRE), (1045, KM((1.22, 0.22, 1.08), (0.9, -0.1, -0.3), (0.1, 1, 0)))):
     key_prop_hand(PR, "R", f, Kw, R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)))
-key_prop_hand(PR, "R", 1060, KM((1.20, 0.20, 1.02), (0.9, -0.1, -0.4), (0.1, 1, 0)), R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)))
-for f in (800, 900, 1000, 1060):
+key_prop_hand(PR, "R", 1050, KM((1.20, 0.20, 1.02), (0.9, -0.1, -0.4), (0.1, 1, 0)), R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)))
+for f in (800, 900, 1000, 1050):
     hang_hand(PR, "L", f, bend=0.15, swing=0.02)
 for f, tgt in ((800, (1.33, -0.32, 1.0)), (850, (1.30, -0.36, 0.98)), (890, "k"), (925, "k"), (940, (1.48, 0.34, 1.05)), (1008, (1.48, 0.34, 1.05)),
                (1020, (1.48, 0.30, 1.4)), (1040, (1.2, 0.2, 0.7)), (1060, (1.1, 0.0, 0.8))):
@@ -317,15 +317,16 @@ for f, tgt in ((800, (1.33, -0.32, 1.0)), (850, (1.30, -0.36, 0.98)), (890, "k")
 for f, sm, br in ((800, 0.5, 0.4), (860, 0.6, 0.5), (905, 0.7, 0.5), (960, 0.2, -0.3), (985, -0.2, -0.8), (1010, -0.4, -1.0), (1060, -0.3, -0.9)):
     key_face(PRIS, f, smile=sm, brow=br)
 saccades(PR, 800, 1060, every=45, seed=8); blinks(PRIS, [818, 935, 1030])
-vis(KEY1, 1062, False)
+vis(KEY1, 1053, False)
 log("S4 done")
 
 # ==================================================================================== S6  CELL (1062-1235): another impression, waiting all night
-cut(PRIS, 1061)
-pris_seated(1062, 1236, pchip([(1062, 14.0), (1100, 17.0), (1150, 15.0), (1175, 2.0), (1236, 0.0)]),
+cut(PRIS, 1052)
+pris_seated(1053, 1236, pchip([(1062, 14.0), (1100, 17.0), (1150, 15.0), (1175, 2.0), (1236, 0.0)]),
             twistf=pchip([(1062, -5.0), (1236, -2.0)]))
 own(MKEY, 1063, PRIS, "wrist.R") if False else None
 fs(1066); K_START2 = Matrix.Translation((0, 0, 0.05)) @ K_PRESS
+key_prop_hand(PR, "R", 1053, K_START2, R_PRESS_P, pose="point", pole=Vector((-0.95, 0.95, 0.85)))
 key_prop_hand(PR, "R", 1062, K_START2, R_PRESS_P, pose="point", pole=Vector((-0.95, 0.95, 0.85)))
 fs(1062); key_basis(MKEY, 1061, MK_TABLE); key_basis(MKEY, 1062, W(PRIS, "wrist.R") @ R_PRESS_P)
 for fc in iter_fcurves(MKEY.animation_data.action):
@@ -347,7 +348,7 @@ key_prop_hand(PR, "R", 1172, Matrix.Translation((0, 0, 0.001)) @ MK_TABLE, R_PRE
 own(MKEY, 1173); key_basis(MKEY, 1180, MK_TABLE); set_interp(MKEY, 'BEZIER')
 for f in (1195, 1236):
     surface_hand(PR, "R", f, Vector((-0.60, 0.48, 0.76)), Vector((0.4, -1, 0)), pole=Vector((-1.0, 1.0, 0.7)))
-for f in (1062, 1120, 1180, 1236):
+for f in (1053, 1062, 1120, 1180, 1236):
     surface_hand(PR, "L", f, Vector((-0.22, 0.32, 0.76)), Vector((0.25, -1, 0)), pole=Vector((0.15, 0.95, 0.75)))
 for f, tgt in ((1062, "tin"), (1140, "tin"), (1170, (0.0, 0.3, 0.8)), (1190, (1.4, 0.6, 1.2)), (1215, (1.4, 0.6, 1.2)), (1236, (1.3, -0.3, 1.0))):
     fs(f); look_at(PR, f, (TIN2.matrix_world.translation if tgt == "tin" else Vector(tgt)), blend=0.85)
@@ -355,7 +356,7 @@ for f, sm, br in ((1062, 0.0, -0.4), (1110, 0.3, -0.1), (1170, 0.1, 0.0), (1236,
     key_face(PRIS, f, smile=sm, brow=br)
 saccades(PR, 1062, 1236, every=40, seed=9); blinks(PRIS, [1075, 1150, 1205])
 # the candle burns down, the window turns from night to dawn
-for f, sz in ((1, 1.0), (1070, 1.0), (1225, 0.38), (END, 0.38)):
+for f, sz in ((1, 1.0), (1140, 1.0), (1215, 0.38), (END, 0.38)):
     CAND.scale = (1, 1, sz); CAND.keyframe_insert("scale", frame=f)
     WICK.location.z = 0.79 + 0.14 * sz; WICK.keyframe_insert("location", frame=f)
 vis(CAKE_C, 1, True); vis(CAKE_C, 1180, False); vis(CAKE_C2, 1, False); vis(CAKE_C2, 1180, True)
@@ -475,7 +476,7 @@ for f, sm, br in ((1623, 0.8, 0.6), (1700, 0.9, 0.7), (1800, 0.8, 0.5), (END, 0.
     key_face(PRIS, f, smile=sm, brow=br)
 blinks(PRIS, [1660, 1745])            # no blink after 1760: the film ends on an open-eyed nod
 saccades(PR, 1623, 1790, every=50, seed=11)
-for rig, ctrl, H, pos, yaw, s_ in ((VIS, VR, HV, Vector((SXX - 0.95, 3.05, 0.85)), -12.0, "L"), (SMITH, SR, HS, Vector((SXX + 1.00, 3.05, 0.85)), 12.0, "R")):
+for rig, ctrl, H, pos, yaw, s_ in ((VIS, VR, HV, Vector((SXX - 1.05, 2.72, 0.85)), -12.0, "L"), (SMITH, SR, HS, Vector((SXX + 1.08, 2.72, 0.85)), 12.0, "R")):
     idle_stand(H, ctrl, 1623, END, pos, yaw, flex=-2.0, step=10, seed=pos.x)
     wave(ctrl, H, s_, 1650 if rig is VIS else 1665, END, END, END, per=30)
     other = "R" if s_ == "L" else "L"
