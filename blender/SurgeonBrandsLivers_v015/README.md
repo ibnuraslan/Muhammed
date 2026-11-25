@@ -22,5 +22,15 @@
 - **Drape:** the edge of the abdomen window is stair-stepped.
 - **Static stretches:** 351–416 and the end hold 1590–1644.
 
+## A fresh reviewer also found (check 3)
+- **Nudity reads:**
+  - a light triangle at the crotch of her jeans, 606–835
+  - chest shaping on the male scrub top and on the suit
+  - a nipple-like dot on the suit, 1560–1644
+- **Discovery beat, 1050–1115:** the second surgeon's glove and forearm fill the frame, the probe sits in the heel of her palm, and "SB" is not legible.
+- **"SB" legibility:** it is legible only for about 0.4 s, at 250–275.
+- **Static holds and stiff poses:** 0–3.6 s, 5.3–6.75 s, 8.0–9.4 s, 22.0–23.75 s and 25.4–27.3 s, with A-poses at 10.1–10.6 s and 20.25–20.75 s.
+- **Gavel beat, 1440–1530:** this beat passed the review.
+
 ## Recommended next step
 The fault that keeps coming back is the hand grip on small tools. Either restage the burn with the pen held by a correctly keyed grip, or frame the hand out of the shot and show only the tip and beam. Then replace the suit with a jacket mesh.
