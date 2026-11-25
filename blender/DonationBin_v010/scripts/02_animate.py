@@ -122,7 +122,7 @@ W.key(410, pos=SIT + Vector((0.08, 0, 0.02)), rot=Rb((0.25, 0.08, 1), (0, -1, 0)
 W.key(451, pos=SIT, rot=Rb((0, 0.05, 1), (0, -1, 0)), spine=(12, 0, 0), head=(-28, 0, 0))
 
 # ==================================================================================== MAN: walks in, shoves her shoulders, backs off
-MY = -1.50
+MY = -1.64
 def mpath(f):
     return catmull([(1, Vector((2.3, -2.9, 0))), (50, Vector((1.2, -2.2, 0))), (100, Vector((0.05, MY - 0.05, 0))), (112, Vector((0.03, MY, 0)))])(f)
 M.walks.append((1, 112, mpath, None))

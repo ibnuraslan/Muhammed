@@ -96,7 +96,7 @@ W.key(1500, pos=SIT2, rot=Rb((0, 0.08, 1), FRONT), spine=(16, 0, 0), head=(5, 0,
       foot_L=WH((SIT2.x + 0.12, SIT2.y - 0.42, hz(SIT2.x + 0.12, SIT2.y - 0.42) + 0.07), (0, 0, 1), (0, -1, 0)),
       foot_R=WH((SIT2.x - 0.12, SIT2.y - 0.40, hz(SIT2.x - 0.12, SIT2.y - 0.40) + 0.07), (0, 0, 1), (0, -1, 0)),
       knee_L=WH((SIT2.x + 0.25, SIT2.y - 0.9, 1.0), (0, 0, 1), (0, 0, 1)), knee_R=WH((SIT2.x - 0.25, SIT2.y - 0.9, 1.0), (0, 0, 1), (0, 0, 1)))
-CURL = Vector((-0.05, 0.14, 0.0)); CURL.z = hz(CURL.x, CURL.y) + 0.135
+CURL = Vector((-0.22, 0.14, 0.0)); CURL.z = hz(CURL.x, CURL.y) + 0.135
 def curl_key(f, breath=0.0, head=(-8, 0, 0), face=None):
     kw = dict(pos=CURL + Vector((0, 0, 0.004 * breath)), rot=Q_LIE, spine=(48 + 2 * breath, 0, 0), head=head,
               hand_L=WH((CURL.x + 0.42, CURL.y - 0.22, hz(CURL.x + 0.42, CURL.y - 0.22)), (0, 0, -1), (1, -0.3, 0)),
