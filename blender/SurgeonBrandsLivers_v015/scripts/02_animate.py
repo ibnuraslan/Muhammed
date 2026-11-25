@@ -130,7 +130,7 @@ def pat_lying_pose(f):
         a = PR.BN["foot." + s].head_local
         PR.key_world("IK_foot." + s, f, Matrix.Translation(Vector((sx * 0.02, 0.0, 0.0))) @ Matrix.Translation(a) @ Matrix.Rotation(R_(-35), 4, 'X') @ Matrix.Translation(-a) @ PR.rest("IK_foot." + s))
         hip = PR.BN["pelvis." + s].head_local
-        wr = Vector((sx * 0.20, 0.035, hip.z - 0.13))
+        wr = Vector((sx * 0.15, -0.02, hip.z - 0.16))
         HP.key_hand(s, f, wr, Vector((0, 0.15, -1)), Vector((-sx, 0, 0)), pole=Vector((sx * 0.5, 0.4, 1.05)))
 pat_lying_pose(1); pat_lying_pose(F_PAT_HOME - 1); pat_lying_pose(F_PAT_OR2); pat_lying_pose(END)
 fs(1)
@@ -207,7 +207,8 @@ def drape():
     for p in me.polygons: p.use_smooth = True
     me.materials.append(fabric("M_Drape", (0.05, 0.30, 0.72), scale=400, bump=0.4))
     so = o.modifiers.new("solid", 'SOLIDIFY'); so.thickness = 0.004
-    sm = o.modifiers.new("smooth", 'CORRECTIVE_SMOOTH'); sm.iterations = 4
+    sm = o.modifiers.new("smooth", 'SMOOTH'); sm.factor = 0.6; sm.iterations = 14
+    o.modifiers.move(o.modifiers.find("smooth"), 0)
     sd = o.modifiers.new("subd", 'SUBSURF'); sd.levels = 0; sd.render_levels = 1
     o.parent = STAGE
     return o

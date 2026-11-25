@@ -557,7 +557,7 @@ def colorize(obj, rgb, gain=1.7):
                 bc.default_value = (*rgb, 1)
             p.inputs["Roughness"].default_value = max(0.6, p.inputs["Roughness"].default_value)
 
-def hide_by_proximity(body, garment, name, dist=0.03, rings=2):
+def hide_by_proximity(body, garment, name, dist=0.022, rings=3):
     """body skin under a garment that has no MakeHuman delete group: masked (rest pose, eroded so hems keep skin)"""
     from mathutils.bvhtree import BVHTree
     gv = [v.co.copy() for v in garment.data.vertices]
