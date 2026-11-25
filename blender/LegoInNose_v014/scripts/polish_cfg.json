@@ -1,0 +1,39 @@
+{
+ "decals": [
+  {
+   "image": "/home/user/Muhammed/blender/assets/brand/DaKrasFilms_logo_white.png",
+   "object": "ToyTub",
+   "sides": [
+    "-y",
+    "+y"
+   ],
+   "w": 0.25
+  },
+  {
+   "image": "/home/user/Muhammed/blender/assets/brand/DaKrasFilms_logo_white.png",
+   "object": "ToyTub",
+   "sides": [
+    "-x",
+    "+x"
+   ],
+   "w": 0.19
+  }
+ ],
+ "keep_transparent": true,
+ "no_delete": true,
+ "out_path": "//render/LegoInNose_v014_####.png",
+ "logos": [
+  {
+   "image": "/home/user/Muhammed/blender/assets/brand/DaKrasFilms_logo_dark.png",
+   "object": "Man.top",
+   "u_axis": "x",
+   "v_axis": "z",
+   "front_axis": "y",
+   "front_sign": -1,
+   "normal_min": 0.3,
+   "cu": 0.03,
+   "cv": 1.395,
+   "w": 0.14
+  }
+ ]
+}
