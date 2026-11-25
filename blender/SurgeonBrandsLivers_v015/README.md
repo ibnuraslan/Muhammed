@@ -1,3 +1,26 @@
+# SurgeonBrandsLivers_v015: from-scratch rebuild, package for the client's render
+
+**Status:**
+- This package fixes the client's last fault: the patient's body under the gown and drape is now solid.
+- The two fixes the director asked for alongside it are in: no hand through the drape, and no waistband through the tops.
+- `review/preview.mp4` is the preview of this exact package: every 5th frame, 270x480, with the VO, 27.4 s.
+- `review/close_checks/` has close renders of her shoulders, arms and legs at 9.6 s and 15 s.
+- Watch the preview before paying for the render.
+
+## Render check: PASS
+Checked on the exact delivered file, `SurgeonBrandsLivers_v015_60fps.blend` (65 MB):
+- **Opens cleanly:** it loads with `blender --factory-startup -b` with no errors, no linked libraries, no unpacked images and no unpacked sounds.
+- **Scene settings:** the scene camera is `CAM_Film`, 1080x1920 at 100 %, 60 fps, frames 1-1644, PNG output to `//render/SurgeonBrandsLivers_v015_####.png`. The VO strip is present.
+- **Test frames:** frames 1, 822 and 1644 were rendered at full 1080x1920 from the packed file. None is black, empty or pink.
+  - The check used 16 samples to save time; the farm setting is 64 adaptive.
+  - CPU time was 65-100 s per frame on 4 cores at 16 samples.
+  - Downscaled copies are in `review/render_check_*.jpg`.
+
+## Known (the last harsh review)
+- The drape over the legs has blocky folds.
+- The masks are boxy.
+- There are a few static holds, and the film ends on a held, eyes-closed beat.
+
 # SurgeonBrandsLivers_v015: from-scratch rebuild, NOT READY (ON HOLD)
 
 ## Client wardrobe round (latest): result FAIL. Current `review/preview.mp4` is this round.
