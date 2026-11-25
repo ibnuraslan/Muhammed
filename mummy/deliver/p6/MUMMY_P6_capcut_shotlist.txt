@@ -1,0 +1,63 @@
+MUMMY P6 - CapCut shot list. One render: MASTER.blend scene MASTER frames 1-3800 (24 fps, 158.33 s = VO length).
+Lay the rendered frame sequence at 00:00:00:00 and the VO (MUMMY_P6_VO.mp3) at 00:00:00:00. Cuts below are already in the render.
+
+S01  frames     1-   85  00:00:00:00 - 00:00:03:12  (3.54 s)  VO para 1
+    Daylight through the door: a lived-in roundhouse
+S02  frames    86-  169  00:00:03:13 - 00:00:07:00  (3.50 s)  VO para 1
+    Floors renewed: the section through the house floors
+S03  frames   170-  254  00:00:07:01 - 00:00:10:13  (3.54 s)  VO para 1
+    Grinding grain: the saddle quern, meal and grain
+S04  frames   255-  330  00:00:10:14 - 00:00:13:17  (3.17 s)  VO para 1
+    Sleeping and storage: sheepskins, baskets, pots
+S05  frames   331-  466  00:00:13:18 - 00:00:19:09  (5.67 s)  VO para 2
+    Working materials: a hide laced in a stretching frame
+S06  frames   467-  601  00:00:19:10 - 00:00:25:00  (5.62 s)  VO para 2
+    The excavated house floor and hearth
+S07  frames   602-  682  00:00:25:01 - 00:00:28:09  (3.38 s)  VO para 3
+    Abandonment: roofless stone rings filling with sand
+S08  frames   683-  749  00:00:28:10 - 00:00:31:04  (2.79 s)  VO para 3
+    Wind streaming sand over the dunes
+S09  frames   750-  889  00:00:31:05 - 00:00:37:00  (5.83 s)  VO para 4
+    The excavation: trowelling beside a skeleton
+S10  frames   890- 1014  00:00:37:01 - 00:00:42:05  (5.21 s)  VO para 4
+    Teeth: a jaw beside a skull it does not fit
+S11  frames  1015- 1126  00:00:42:06 - 00:00:46:21  (4.67 s)  VO para 4
+    Chemistry: the accelerator hall
+S12  frames  1127- 1237  00:00:46:22 - 00:00:51:12  (4.62 s)  VO para 4
+    DNA: the clean-room cabinet glowing in the dark lab
+S13  frames  1238- 1399  00:00:51:13 - 00:00:58:06  (6.75 s)  VO para 5
+    The knee pit outside the house, and the grave
+S14  frames  1400- 1546  00:00:58:07 - 00:01:04:09  (6.12 s)  VO para 6
+    A museum store: the long aisle of boxes
+S15  frames  1547- 1673  00:01:04:10 - 00:01:09:16  (5.29 s)  VO para 7
+    A skeleton in its archive box
+S16  frames  1674- 1788  00:01:09:17 - 00:01:14:11  (4.79 s)  VO para 7
+    Under the microscope: well-preserved bone
+S17  frames  1789- 1983  00:01:14:12 - 00:01:22:14  (8.12 s)  VO para 8
+    Thirty-six samples: a tray of thin sections
+S18  frames  1984- 2179  00:01:22:15 - 00:01:30:18  (8.17 s)  VO para 8
+    The microscope stage with a thin section
+S19  frames  2180- 2251  00:01:30:19 - 00:01:33:18  (3.00 s)  VO para 9
+    Beyond the island: the long coast from above
+S20  frames  2252- 2331  00:01:33:19 - 00:01:37:02  (3.33 s)  VO para 9
+    Drying the dead: a body on a platform over a peat fire
+S21  frames  2332- 2403  00:01:37:03 - 00:01:40:02  (3.00 s)  VO para 9
+    Wetlands: a body sinking in a bog pool
+S22  frames  2404- 2582  00:01:40:03 - 00:01:47:13  (7.46 s)  VO para 10
+    The store from the far end: rows into the dark
+S23  frames  2583- 2760  00:01:47:14 - 00:01:54:23  (7.42 s)  VO para 10
+    Cladh Hallan: the two graves under the house floor
+S24  frames  2761- 2928  00:01:55:00 - 00:02:01:23  (7.00 s)  VO para 11
+    Missing pieces: the incomplete skeleton on the bench
+S25  frames  2929- 3066  00:02:02:00 - 00:02:07:17  (5.75 s)  VO para 11
+    The empty grave at dusk
+S26  frames  3067- 3173  00:02:07:18 - 00:02:12:04  (4.46 s)  VO para 13
+    A skull was kept
+S27  frames  3174- 3280  00:02:12:05 - 00:02:16:15  (4.46 s)  VO para 13
+    A jaw was chosen
+S28  frames  3281- 3388  00:02:16:16 - 00:02:21:03  (4.50 s)  VO para 13
+    An arm was moved
+S29  frames  3389- 3530  00:02:21:04 - 00:02:27:01  (5.92 s)  VO para 14
+    The crouched skeleton in the last light
+S30  frames  3531- 3800  00:02:27:02 - 00:02:38:07  (11.25 s)  VO para 15
+    Final: rising from the graves over the island at dusk
