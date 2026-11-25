@@ -1,0 +1,6 @@
+{"logos":[
+ {"image":"/home/user/Muhammed/blender/assets/brand/DaKrasFilms_logo_dark.png","object":"Surgeon.top",
+  "u_axis":"x","v_axis":"z","front_axis":"y","front_sign":-1,"normal_min":0.3,"cu":0.07,"cv":1.34,"w":0.13},
+ {"image":"DaKrasFilms_logo_dark.png composited on a F3EEE0 cream panel (packed in the .blend)","object":"Poster.001",
+  "u_axis":"x","v_axis":"z","front_axis":"y","front_sign":-1,"normal_min":0.3,"cu":0.90,"cv":1.75,"w":0.44}],
+ "out_path":"//render/EarInArm_v016_####.png"}
