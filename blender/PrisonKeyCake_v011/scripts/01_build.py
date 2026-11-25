@@ -114,6 +114,11 @@ shoes(VIS, VB, (0.05, 0.02, 0.02), "Vis")
 SM_TOP, SM_BOT, _, _ = wardrobe(SMITH, SB, fabric("M_SmithShirt", (0.75, 0.40, 0.02)), fabric("M_SmithTrousers", (0.02, 0.17, 0.20), scale=600),
                                 0.02, 0.012, 0.008, 0.005, 0.004, "Smith")
 shoes(SMITH, SB, (0.10, 0.05, 0.02), "Smith")
+# extra smoothing on the tops: no chest or nipple shaping shows through
+for g_ in (P_TOP, S_TOP, SM_TOP, V_TOP):
+    sm_ = g_.modifiers.get("smooth"); sm_.factor = 1.0; sm_.iterations = 25
+    lap = g_.modifiers.new("lap", 'LAPLACIANSMOOTH'); lap.lambda_factor = 1.5; lap.iterations = 6; lap.use_volume_preserve = True
+    g_.modifiers.move(len(g_.modifiers) - 1, g_.modifiers.find("solid"))
 # leather apron over the shirt: the front half of a slightly larger shell (chest to knee)
 apron_m = mat("M_Apron", (0.36, 0.14, 0.04), rough=0.5, coat=0.2)
 hipS = bl(SMITH, "pelvis.L").z
@@ -291,7 +296,7 @@ wax_m = mat("M_CandleWax", (0.95, 0.86, 0.62), rough=0.4, sss=0.3)
 CAND = cyl("Candle", 0.018, 0.14, (CANDLE_XY[0], CANDLE_XY[1], 0.79 + 0.07), wax_m, verts=24)
 set_origin(CAND, (CANDLE_XY[0], CANDLE_XY[1], 0.79)); C(CAND)
 WICK = bpy.data.objects.new("CandleWick", None); sc.collection.objects.link(WICK); WICK.location = (CANDLE_XY[0], CANDLE_XY[1], 0.79 + 0.14)
-fl_m = mat("M_Flame", (1.0, 0.35, 0.03), emit=((1.0, 0.32, 0.02), 3.0))
+fl_m = mat("M_Flame", (0.9, 0.22, 0.0), emit=((1.0, 0.30, 0.0), 1.3))
 bpy.ops.mesh.primitive_uv_sphere_add(radius=0.009, location=(0, 0, 0), segments=32, ring_count=16)
 FLAME = bpy.context.active_object; FLAME.name = "CandleFlame"
 for v in FLAME.data.vertices:
@@ -530,6 +535,14 @@ def torch(name, loc, energy=60.0):
     lo = bpy.data.objects.new(name + "Light", L); sc.collection.objects.link(lo); lo.location = Vector(loc) + Vector((0.28, 0, 0.10))
     return [st, bowl, f_], lo
 TORCH_A, TLA = torch("TorchA", (9.8, -0.75, 2.4)); TORCH_B, TLB = torch("TorchB", (9.8, 2.35, 2.4)); E(TORCH_A); E(TORCH_B)
+house_cols = [(0.55, 0.12, 0.10), (0.10, 0.32, 0.45), (0.60, 0.42, 0.10), (0.25, 0.12, 0.40)]
+for i, x0 in enumerate((9.9, 10.9, 11.9, 12.9)):
+    hc = mat("M_House%d" % i, house_cols[i], rough=0.7)
+    E(box("LANE_House", (0.98, 1.2, 4.2 + 0.3 * (i % 2)), (x0 + 0.5, 5.2, 2.1 + 0.15 * (i % 2)), hc, bevel=0.01))
+    E(box("LANE_Roof", (1.04, 1.3, 0.25), (x0 + 0.5, 5.2, 4.3 + 0.3 * (i % 2)), mat("M_Roof", (0.25, 0.08, 0.05), rough=0.6), bevel=0.01))
+    for z in (1.4, 2.9):
+        E(box("LANE_HouseWin", (0.40, 0.06, 0.6), (x0 + 0.5, 4.58, z), mat("M_HouseWin", (1.0, 0.70, 0.30), emit=((1.0, 0.6, 0.25), 1.2)), bevel=0.01))
+    E(box("LANE_HouseDoor", (0.36, 0.06, 1.0), (x0 + 0.2, 4.58, 0.5), wood_dark, bevel=0.01))
 # ================================================================== WORKSHOP (x 13.5..18)
 E(wall("WS_WallW", 13.5, 13.7, -2.0, 3.5, 0, 3.4, plaster, holes=[(-2.0, 1.45, 0.0, 2.55)]))
 E(box("WS_Beam", (0.30, 3.3, 0.18), (13.6, -0.10, 2.64), wood_dark, bevel=0.01))
@@ -595,7 +608,7 @@ FL2 = bpy.data.lights.new("ForgeGlowUp", 'POINT'); FL2.energy = 120; FL2.color =
 FL2O = bpy.data.objects.new("ForgeGlowUp", FL2); sc.collection.objects.link(FL2O); FL2O.location = (17.1, 2.55, 1.15)
 # tilting crucible on a bench stand: pivot axis Y at (15.85, 0.05, 1.22); the lip on the -X side over the mould; lever to -X.
 crm = mat("M_Crucible", (0.08, 0.06, 0.06), rough=0.6)
-melt = mat("M_Melt", (1.0, 0.3, 0.02), emit=((1.0, 0.28, 0.0), 5.0))
+melt = mat("M_Melt", (0.6, 0.10, 0.0), emit=((1.0, 0.30, 0.0), 1.8))
 PIV = Vector((15.85, 0.05, 1.22))
 pot = cyl("CruciblePot", 0.075, 0.16, (PIV.x, PIV.y, PIV.z - 0.10), crm, bevel=0.01)
 bm = bmesh.new(); bm.from_mesh(pot.data); bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.normal.z > 0.9], context='FACES_ONLY'); bm.to_mesh(pot.data); bm.free()

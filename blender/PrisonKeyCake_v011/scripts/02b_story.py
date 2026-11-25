@@ -205,7 +205,7 @@ for f in (1, 300, 469, 650, 805):
 # the hot metal: KEY1 appears in the cavity as the stream fills it, glows, then cools to steel
 vis(KEY1, 1, False); vis(KEY1, 572, True)
 em = [n for n in bpy.data.materials["M_KeyCopy1"].node_tree.nodes if n.type == 'BSDF_PRINCIPLED'][0].inputs["Emission Strength"]
-for f, v in ((1, 0.0), (571, 0.0), (572, 7.0), (612, 6.0), (660, 1.5), (690, 0.0)):
+for f, v in ((1, 0.0), (571, 0.0), (572, 2.2), (612, 2.0), (660, 0.6), (690, 0.0)):
     em.default_value = v; em.keyframe_insert("default_value", frame=f)
 LIP_LOCAL = Vector((-0.10, 0.0, -0.025))
 SPRUE = Vector((11.43, 0.03, 0.985))
@@ -225,17 +225,32 @@ K_LIFT = Matrix.Translation((0, 0, 0.10)) @ K_MOULD
 PL = Vector((10.80, -0.45, 0.85))
 for f in (640,):
     surface_hand(SR, "R", f, Vector((11.05, 0.02, 0.91)), Vector((1, -0.2, 0)), pole=PL)
+def pinch_pt(rig, s_):
+    return (Wt(rig, "finger1-3." + s_) + Wt(rig, "finger2-3." + s_)) / 2
+def reach(ctrl, s_, f, P, fdir, palm, pose="pinch", pole=None, it=6):
+    rig = ctrl.o
+    apply_pose(rig, s_, pose, f)
+    place_hand(rig, s_, f, Vector(P) - Vector(fdir).normalized() * 0.07, Vector(palm), Vector(fdir), skin=0.0)
+    if pole is not None: key_pole(ctrl, s_, f, pole)
+    pb = rig.pose.bones["IK_hand." + s_]; Rr = rig.data.bones["IK_hand." + s_].matrix_local.to_3x3().inverted()
+    for _ in range(it):
+        fs(f); err = Vector(P) - pinch_pt(rig, s_)
+        if err.length < 0.0008: break
+        pb.location = pb.location + Rr @ err; pb.keyframe_insert("location", frame=f, group=pb.name)
+    fs(f); e = (Vector(P) - pinch_pt(rig, s_)).length
+    if e > 0.005: log("REACH_ERR", rig.name, s_, f, round(e * 1000, 1))
+def bow(M): return M @ Vector((0.011, 0, 0))
+FD, PALM = Vector((0.55, 0.15, -0.8)), Vector((0.2, 0.25, -1.0))
 for f, Kw in ((652, Matrix.Translation((0, 0, 0.05)) @ K_MOULD), (668, Matrix.Translation((0, 0, 0.004)) @ K_MOULD), (674, K_MOULD)):
-    key_prop_hand(SR, "R", f, Kw, R_PINCH_S, pose="pinch", pole=PL)
+    reach(SR, "R", f, bow(Kw), FD, PALM, pole=PL)
 own(KEY1, 675, SMITH, "wrist.R")
-R_K1S = actual_rel(SMITH, "R", KEY1, 675)
-for f, Kw in ((690, K_LIFT), (712, KM((11.10, 0.52, 1.02), K_IN_WS.col[0][:3], K_IN_WS.col[2][:3])), (722, K_PRE)):
-    key_prop_hand(SR, "R", f, Kw, R_K1S, pose="pinch", pole=PL)
+for f, P in ((690, bow(K_LIFT)), (712, Vector((11.06, 0.47, 1.00)))):
+    reach(SR, "R", f, P, Vector((1, 0.1, -0.2)), Vector((0, -0.3, -1)), pole=PL)
 own(KEY1, 723)
 key_basis(KEY1, 748, K_IN_WS); set_interp(KEY1, 'BEZIER')
-for f in (735, 748):
-    fs(f); Kw = interp_mats([(723, K_PRE), (748, K_IN_WS)], f)
-    key_prop_hand(SR, "R", f, Kw, R_K1S, pose="pinch", pole=PL)
+for f in (723, 735, 748):
+    fs(f); P = KEY1.matrix_world @ Vector((0.011, 0, 0))
+    reach(SR, "R", f, P, Vector((1, 0.1, -0.2)), Vector((0, -0.3, -1)), pole=PL)
 for f in (768, 805):
     surface_hand(SR, "R", f, Vector((11.05, 0.02, 0.91)), Vector((1, -0.2, 0)), pose="relaxed", pole=PL)
 for f, sm, br in ((1, 0.0, -0.5), (560, 0.0, -0.6), (640, 0.2, 0.0), (700, 0.3, 0.2), (760, 0.6, 0.4), (805, 0.5, 0.3)):
@@ -283,7 +298,7 @@ for f, Kw in ((882, K1_OUT), (905, K_LOOK), (925, K_LOOK), (950, K_LOCK_PRE), (9
     key_prop_hand(PR, "R", f, Kw, R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)))
 own(KEY1, 959)
 def jam(f):   # tries to turn it: it jams twice
-    return pchip([(959, 0.0), (970, 0.0), (978, 16.0), (984, -4.0), (991, 18.0), (998, -6.0), (1004, 14.0), (1010, 0.0)])(f)
+    return pchip([(959, 0.0), (970, 0.0), (978, 14.0), (984, -4.0), (991, 15.0), (998, -5.0), (1004, 12.0), (1010, 0.0)])(f)
 for f in range(959, 1011, 3):
     Kw = Matrix.Translation(K_LOCK_IN.translation) @ Matrix.Rotation(math.radians(jam(f)), 4, Vector((1, 0, 0))) @ \
         Matrix.Translation(-K_LOCK_IN.translation) @ (K_LOCK_IN if f >= 970 else interp_mats([(959, K_LOCK_PRE), (970, K_LOCK_IN)], f))
@@ -291,9 +306,9 @@ for f in range(959, 1011, 3):
     key_prop_hand(PR, "R", f, Kw, R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)), search=False)
 set_interp(KEY1, 'BEZIER')
 own(KEY1, 1012, PRIS, "wrist.R")
-for f, Kw in ((1026, K_LOCK_PRE), (1045, KM((1.02, 0.05, 1.05), (0.7, -0.3, -0.4), (0.3, 1, 0)))):
+for f, Kw in ((1026, K_LOCK_PRE), (1045, KM((1.22, 0.22, 1.08), (0.9, -0.1, -0.3), (0.1, 1, 0)))):
     key_prop_hand(PR, "R", f, Kw, R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)))
-key_prop_hand(PR, "R", 1060, KM((1.02, 0.12, 1.00), (0.7, -0.2, -0.5), (0.3, 1, 0)), R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)))
+key_prop_hand(PR, "R", 1060, KM((1.20, 0.20, 1.02), (0.9, -0.1, -0.4), (0.1, 1, 0)), R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)))
 for f in (800, 900, 1000, 1060):
     hang_hand(PR, "L", f, bend=0.15, swing=0.02)
 for f, tgt in ((800, (1.33, -0.32, 1.0)), (850, (1.30, -0.36, 0.98)), (890, "k"), (925, "k"), (940, (1.48, 0.34, 1.05)), (1008, (1.48, 0.34, 1.05)),
@@ -350,7 +365,7 @@ log("S6 done")
 cut(PRIS, 1236)
 idle_stand(HP, PR, 1237, 1338, P_DOOR, 90.0, flex=4.0, seed=1.3)
 vis(KEY2, 1, False); vis(KEY2, 1237, True)
-def turn(f): return pchip([(1237, 0.0), (1292, 0.0), (1320, 90.0), (1400, 90.0)])(f)
+def turn(f): return pchip([(1237, 0.0), (1292, 0.0), (1318, 50.0), (1400, 50.0)])(f)
 def k2_lock(f, ang):
     return Matrix.Translation(K_LOCK_IN.translation) @ Matrix.Rotation(math.radians(ang), 4, Vector((1, 0, 0))) @ Matrix.Translation(-K_LOCK_IN.translation) @ K_LOCK_IN
 own(KEY2, 1237)
@@ -380,7 +395,7 @@ def door_pt(obj, local_rest_world, f):
     fs(1); L = obj.matrix_world.inverted() @ Vector(local_rest_world); fs(f); return obj.matrix_world @ L
 # pull the key out, then the left hand pushes the door open
 own(KEY2, 1338, PRIS, "wrist.R")
-for f, Kw in ((1348, Matrix.Translation((-0.07, 0, 0)) @ k2_lock(1348, 90.0)),):
+for f, Kw in ((1348, Matrix.Translation((-0.07, 0, 0)) @ k2_lock(1348, 50.0)),):
     key_prop_hand(PR, "R", f, Kw, R_K1P, pose="pinch", pole=Vector((0.6, -0.3, 0.7)))
 for f, ang in ((1, 0.0), (1346, 0.0), (1392, 100.0), (END, 100.0)):
     DOOR.rotation_euler = (0, 0, math.radians(ang)); DOOR.keyframe_insert("rotation_euler", frame=f)
@@ -407,13 +422,13 @@ K_G_IN = KM((2.535 - 0.040, 0.02, 1.05), (1, 0, 0), (0, 1, 0)); K_G_PRE = Matrix
 def kg(f, ang): return Matrix.Translation(K_G_IN.translation) @ Matrix.Rotation(math.radians(ang), 4, Vector((1, 0, 0))) @ Matrix.Translation(-K_G_IN.translation) @ K_G_IN
 key_prop_hand(PR, "R", 1412, K_G_PRE, R_K1P, pose="pinch", pole=Vector((1.7, -0.5, 0.7)))
 own(KEY2, 1419)
-gturn = pchip([(1419, 0.0), (1430, 0.0), (1442, 80.0), (1452, 80.0)])
+gturn = pchip([(1419, 0.0), (1430, 0.0), (1442, 50.0), (1452, 50.0)])
 for f in range(1419, 1453, 3):
     Kw = kg(f, gturn(f)) if f >= 1428 else interp_mats([(1419, K_G_PRE), (1428, K_G_IN)], f)
     key_basis(KEY2, f, Kw); key_prop_hand(PR, "R", f, Kw, R_K1P, pose="pinch", pole=Vector((1.7, -0.5, 0.7)), search=(f == 1419))
 set_interp(KEY2, 'BEZIER')
 own(KEY2, 1453, PRIS, "wrist.R")
-key_prop_hand(PR, "R", 1460, Matrix.Translation((-0.08, 0, -0.05)) @ kg(1460, 80.0), R_K1P, pose="pinch", pole=Vector((1.7, -0.5, 0.7)))
+key_prop_hand(PR, "R", 1460, Matrix.Translation((-0.08, 0, -0.05)) @ kg(1460, 50.0), R_K1P, pose="pinch", pole=Vector((1.7, -0.5, 0.7)))
 push(PR, "L", GATE1, (2.585, 0.36, 1.12), 1452, 1474)
 # through the corridor to the wicket
 WP2 = path_fn([(1478, (2.02, 0.12)), (1500, (2.55, 0.32)), (1522, (3.35, 0.55)), (1544, (4.15, 0.64)), (1556, (4.62, 0.66)), (1560, (4.66, 0.66))])
@@ -426,7 +441,7 @@ HP.walk(WP3, yaw_from_path(WP3, 1560, 1622, end_yaw=80.0), 1560, 1622, stride=0.
 walk_arms(PR, WP3, 1560, 1622, sides="L", amp=0.08)
 for f in range(1600, 1623, 4): hang_hand(PR, "R", f, bend=0.25, pose="pinch")
 # looks back at the prison over his shoulder, then smiles at the open sky
-for f, tgt in ((1340, (1.6, 0.6, 1.3)), (1365, (2.4, 0.4, 1.5)), (1412, (2.53, 0.02, 1.05)), (1450, (2.53, 0.02, 1.05)), (1470, (3.5, 0.6, 1.6)),
+for f, tgt in ((1340, (1.6, 0.6, 1.3)), (1366, (0.6, -0.4, 1.6)), (1398, (0.6, -0.4, 1.6)), (1408, (2.53, 0.02, 1.05)), (1412, (2.53, 0.02, 1.05)), (1450, (2.53, 0.02, 1.05)), (1470, (3.5, 0.6, 1.6)),
                (1540, (5.27, 0.6, 1.4)), (1560, (6.5, 0.5, 1.8)), (1576, (3.5, -0.4, 1.7)), (1614, (3.0, -0.4, 1.7)), (1622, (3.0, -0.4, 1.7))):
     fs(f); look_at(PR, f, Vector(tgt), blend=0.9, limit=(95, 45))
 for f in range(1570, 1623, 6):
