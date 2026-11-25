@@ -382,11 +382,12 @@ def make_pen():
     c = bpy.context.active_object; c.data.materials.append(pen_body); bpy.ops.object.shade_smooth(); parts.append(c)
     parts.append(cyl("Pen_noz", 0.0016, 0.016, (0, 0.093, 0), steel if "M_Steel" not in bpy.data.materials else bpy.data.materials["M_Steel"], rot=(R_(90), 0, 0), verts=12))
     parts.append(cyl("Pen_btn", 0.0025, 0.012, (0, 0.02, 0.0062), pen_blue, rot=(R_(90), 0, 0), verts=12))
-    bpy.ops.object.select_all(action='DESELECT')
-    for p_ in parts: p_.select_set(True)
-    bpy.context.view_layer.objects.active = parts[0]; bpy.ops.object.join()
-    o = bpy.context.active_object; o.name = "ArgonPen"
-    o.data.transform(Matrix.Translation(o.location)); o.location = (0, 0, 0)   # origin back at the build origin (tip at +0.101 Y)
+    for p_ in parts:   # bake each part's transform so the join keeps every piece where it was modelled
+        p_.data.transform(p_.matrix_world); p_.matrix_world = Matrix.Identity(4)
+    with bpy.context.temp_override(active_object=parts[0], selected_editable_objects=parts, object=parts[0]):
+        bpy.ops.object.join()
+    o = parts[0]; o.name = "ArgonPen"
+    print("PEN verts", len(o.data.vertices))
     return o
 PEN = make_pen()
 PEN_TIP = Vector((0, 0.101, 0))
