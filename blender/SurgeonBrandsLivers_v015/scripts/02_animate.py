@@ -644,6 +644,17 @@ def mask_down_key():
             if loc is None: break
             if (q - loc).dot(nrm) < 0.005: q = loc + nrm * 0.005
         k.data[i].co = q
+    # relax the slid cloth so it reads as a soft fold under the chin, then keep it off the skin
+    me = MASK1.data; nb = {i: set() for i in range(len(me.vertices))}
+    for e in me.edges: nb[e.vertices[0]].add(e.vertices[1]); nb[e.vertices[1]].add(e.vertices[0])
+    for it in range(8):
+        cur = [k.data[i].co.copy() for i in range(len(me.vertices))]
+        for i in range(len(me.vertices)):
+            if nb[i]:
+                avg = sum((cur[j] for j in nb[i]), Vector()) / len(nb[i]); k.data[i].co = cur[i].lerp(avg, 0.5)
+        for i in range(len(me.vertices)):
+            loc, nrm, _, d = bvh.find_nearest(k.data[i].co)
+            if loc is not None and (k.data[i].co - loc).dot(nrm) < 0.005: k.data[i].co = loc + nrm * 0.005
     return k
 MK = mask_down_key()
 eye_z = DOC.data.bones["eye.L"].head_local.z

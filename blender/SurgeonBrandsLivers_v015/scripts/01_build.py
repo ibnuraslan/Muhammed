@@ -363,7 +363,7 @@ for n in ("Gavel_src_1", "Gavel_src_2", "Gavel_src_3", "Gavel_src_4"):
 sc.view_settings.view_transform = 'AgX'
 try: sc.view_settings.look = 'AgX - Punchy'
 except Exception: pass
-sc.view_settings.exposure = -0.2
+sc.view_settings.exposure = -0.55
 sc.render.engine = 'CYCLES'
 sc.cycles.samples = 64; sc.cycles.adaptive_threshold = 0.04; sc.cycles.use_adaptive_sampling = True; sc.cycles.use_denoising = True
 sc.cycles.denoiser = 'OPENIMAGEDENOISE'
