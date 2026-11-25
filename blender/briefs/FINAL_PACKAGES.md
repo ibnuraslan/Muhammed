@@ -103,3 +103,4 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | 02 | MonkeyHeadTransplant | blender/MonkeyHeadTransplant_v016/MonkeyHeadTransplant_v016_60fps.blend | 1–1656 |
 | 03 | LegoInNose | blender/LegoInNose_v014/LegoInNose_v014_60fps.blend | 1–2036 |
 | 04 | StanleyCup | already rendered by the client | — |
+| 05 | SurgeonBrandsLivers | claude/rebuild05-surgeon-brands-livers: blender/SurgeonBrandsLivers_v015/SurgeonBrandsLivers_v015_60fps.blend (client-approved, Render check PASS) | 1–1644 |
