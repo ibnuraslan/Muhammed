@@ -7,7 +7,8 @@ import importlib.util as _iu
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUTDIR = os.path.join(HERE, "..", "out")
 ROOTS = {"antwerp": os.environ.get("ANTWERP3D", os.path.join(HERE, "..", "..", "wt_antwerp", "antwerp_heist", "3d")),
-         "mummy": os.environ.get("MUMMY3D", os.path.join(HERE, "..", "..", "wt_mummy", "mummy", "3d"))}
+         "mummy": os.environ.get("MUMMY3D", os.path.join(HERE, "..", "..", "wt_mummy", "mummy", "3d")),
+         "mc": os.environ.get("MC3D", os.path.join(HERE, "..", "..", "wt_mary", "mary_celeste_3d"))}
 C = None
 E = os.environ.get
 
