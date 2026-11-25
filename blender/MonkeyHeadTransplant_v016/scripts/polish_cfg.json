@@ -1,0 +1,7 @@
+{"logos":[
+ {"image":"/home/user/Muhammed/blender/assets/brand/DaKrasFilms_logo_white.png","object":"Surgeon_Cap",
+  "u_axis":"x","v_axis":"z","front_axis":"y","front_sign":-1,"normal_min":0.3,"cu":0.0,"cv":1.768,"w":0.088},
+ {"image":"/home/user/Muhammed/blender/assets/brand/DaKrasFilms_logo_white.png","object":"ScopeTextCover_T",
+  "u_axis":"x","v_axis":"z","front_axis":"y","front_sign":-1,"normal_min":0.3,"cu":0.0,"cv":0.0,"w":0.30,"h":0.88}],
+ "keep_transparent":true,
+ "out_path":"//render/MonkeyHeadTransplant_v016_####.png"}
