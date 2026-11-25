@@ -76,6 +76,12 @@ S1_TOP = cl(DOC, "crude_t-shirt_male", "S1Scrub.top"); S1_TRS = cl(DOC, "wool_pa
 colorize(S1_TOP, (0.02, 0.50, 0.55)); colorize(S1_TRS, (0.02, 0.40, 0.46))
 S2_TOP = cl(DOC2, "crude_t-shirt_female", "S2Scrub.top"); S2_TRS = cl(DOC2, "cargo_pants", "S2Scrub.trousers")
 colorize(S2_TOP, (0.42, 0.08, 0.46)); colorize(S2_TRS, (0.34, 0.06, 0.38))
+# trousers under a top: the waistband part the top covers is masked (no waistband poking through the knit)
+def under_top(trs, top):
+    zmin = min(v.co.z for v in top.data.vertices)
+    vg = trs.vertex_groups.new(name="under_top"); vg.add([v.index for v in trs.data.vertices if v.co.z > zmin + 0.06], 1.0, 'REPLACE')
+    mk = trs.modifiers.new("under_top", 'MASK'); mk.vertex_group = "under_top"; mk.invert_vertex_group = True
+under_top(P_JEANS, P_TOP); under_top(S1_TRS, S1_TOP); under_top(S2_TRS, S2_TOP)
 for body, gar in ((PB, P_TOP), (PB, P_JEANS), (PB, P_GOWN), (DB, S1_TOP), (DB, S1_TRS), (DB, S1_SUIT), (DB2, S2_TOP), (DB2, S2_TRS), (JB, part(JUD, "suit_3"))):
     hide_by_proximity(body, gar, "Hide." + gar.name)
 cap1_m = fabric("M_Cap1", (0.03, 0.52, 0.58), scale=400, bump=0.5); mask_m = fabric("M_Mask", (0.45, 0.72, 0.92), scale=45, bump=0.2)

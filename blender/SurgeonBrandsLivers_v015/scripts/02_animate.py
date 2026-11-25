@@ -130,7 +130,7 @@ def pat_lying_pose(f):
         a = PR.BN["foot." + s].head_local
         PR.key_world("IK_foot." + s, f, Matrix.Translation(Vector((sx * 0.02, 0.0, 0.0))) @ Matrix.Translation(a) @ Matrix.Rotation(R_(-35), 4, 'X') @ Matrix.Translation(-a) @ PR.rest("IK_foot." + s))
         hip = PR.BN["pelvis." + s].head_local
-        wr = Vector((sx * 0.15, -0.02, hip.z - 0.16))
+        wr = Vector((sx * 0.21, 0.06, hip.z - 0.16))
         HP.key_hand(s, f, wr, Vector((0, 0.15, -1)), Vector((-sx, 0, 0)), pole=Vector((sx * 0.5, 0.4, 1.05)))
 pat_lying_pose(1); pat_lying_pose(F_PAT_HOME - 1); pat_lying_pose(F_PAT_OR2); pat_lying_pose(END)
 fs(1)
@@ -184,7 +184,7 @@ def drape():
             if y > TABLE_C.y + 0.26: ey = y - (TABLE_C.y + 0.26); yy = TABLE_C.y + 0.26 + 0.03 + ey * 0.25
             xx = x if x >= TABLE_C.x - 1.0 else TABLE_C.x - 1.0 - 0.03 + ex * 0.25
             z, n_ = surf_z(min(max(xx, TABLE_C.x - 1.0), 9), min(max(yy, TABLE_C.y - 0.26), TABLE_C.y + 0.26))
-            top = max(tz + 0.012, (z + 0.022) if z is not None else tz + 0.012)
+            top = max(tz + 0.012, (z + 0.03) if z is not None else tz + 0.012)
             zz = top - min(0.30, ey * 1.0 + (-ex) * 1.0)
             jit = 0.004 * math.sin(x * 37 + y * 11) + 0.003 * math.sin(y * 53 - x * 7)
             grid[i, j] = bm.verts.new((xx + (0.01 * ey if False else 0), yy, zz + jit))
@@ -207,7 +207,7 @@ def drape():
     for p in me.polygons: p.use_smooth = True
     me.materials.append(fabric("M_Drape", (0.05, 0.30, 0.72), scale=400, bump=0.4))
     so = o.modifiers.new("solid", 'SOLIDIFY'); so.thickness = 0.004
-    sm = o.modifiers.new("smooth", 'SMOOTH'); sm.factor = 0.6; sm.iterations = 14
+    sm = o.modifiers.new("smooth", 'SMOOTH'); sm.factor = 0.4; sm.iterations = 6
     o.modifiers.move(o.modifiers.find("smooth"), 0)
     sd = o.modifiers.new("subd", 'SUBSURF'); sd.levels = 0; sd.render_levels = 1
     o.parent = STAGE
@@ -830,7 +830,7 @@ for f in list(range(1, END, 6)) + [END]:
     HD2.key_root(f, DR2.BN["root"].head_local + Vector((0.004 * math.sin(ph * 2 * math.pi / 3.1), -0.02 * l2(f) / 20.0, -0.004 * (1 + math.sin(ph * 2 * math.pi / 4.2)) - 0.012 * l2(f) / 20.0)), flex=0)
     HD2.key_spine(f, flex=l2(f), head=(h2p(f), h2y(f)))
 for f in (1, 900, 960, 1135, 1180, END):
-    sterile(DOC2, "L", f, lat=0.13, dz=-0.26, fwd=0.28); apply_pose(DOC2, "L", "relaxed", f)
+    hang(DOC2, "L", f, out=0.08, fwd=-0.12, down=0.02)
 # probe: held up in ready position, then the tip glides 8 mm above the letters (no contact), pauses on the B, lifts
 for f in range(850, 1182, 3):
     fs(f)
