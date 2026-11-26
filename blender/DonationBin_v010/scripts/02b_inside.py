@@ -149,7 +149,7 @@ def seat(f, p, lean, feet_y, head=(0, 0, 0), hands="heap", face=None, feet_z=Non
 seat(2020, SIT3 + Vector((0, -0.12, 0.0)), 10, -0.38, head=(-8, 0, 0))
 seat(2050, Vector((0.0, -0.20, hz(0, -0.20) + 0.10)), 14, -0.62)
 seat(2080, Vector((0.0, -0.38, hz(0, -0.38) + 0.10)), 30, -0.95, feet_z=CP[2] + 0.10, head=(25, 0, 0))
-PANEL_TOP = 0.10
+PANEL_TOP = 0.115
 seat(2110, EDGE + Vector((0, 0.02, 0.0)), 30, -1.18, feet_z=PANEL_TOP + 0.064, head=(20, 0, 0))
 seat(2140, EDGE, 18, -1.20, feet_z=PANEL_TOP + 0.064, hands=None, head=(-6, -10, 0))
 for s, sx in (("L", 1), ("R", -1)):   # forearms resting on her knees

@@ -56,34 +56,34 @@ def foot_stand(sx, fwd=0.0): return LH((sx * 0.10, -0.06 - fwd, -0.713), (0, 0, 
 
 # ==================================================================================== WOMAN
 # A (1-115): ON the crate board, belly at the sill, leaning in; right hand rummages in the bin, left hand holds the flap in
-WY = -1.16
+WY = -1.03
 WP_A = Vector((0.0, WY, STAND + 0.83))
 FA = 35.0
 def flap_hold(a_deg, t=0.25, x=-0.17):
     def spec(f): return WH(flap_pt(FLAP_ANG(f), t, x) - flap_in_normal(FLAP_ANG(f)) * 0.009, -flap_in_normal(FLAP_ANG(f)) * -1, (0, -math.sin(R_(FLAP_ANG(f))), math.cos(R_(FLAP_ANG(f)))))
     return spec
 for f, dy, rh, hy in ((1, 0.0, (0.15, -0.60, 1.16), 0), (40, 0.01, (0.08, -0.57, 1.13), -12), (80, 0.0, (0.19, -0.61, 1.17), 10), (115, 0.01, (0.12, -0.58, 1.14), -4)):
-    W.key(f, pos=WP_A + Vector((0, dy, 0)), rot=Rf((0, 1, 0), lean=3), spine=(6.0, 0.0, 0.0), head=(16.0, hy, 0.0),
+    W.key(f, pos=WP_A + Vector((0, dy, 0)), rot=Rf((0, 1, 0), lean=6), spine=(8.0, 0.0, 0.0), head=(18.0, hy, 0.0),
           hand_R=WH(rh, (0, 0.15, -1), (0, 0.45, -1)), grip_R="relaxed",
-          foot_L=WH((-0.10, WY - 0.01, STAND + 0.064 + 0.05), (0, 0.35, 0.94), (0, 0.94, -0.35)),
-          foot_R=WH((0.10, WY - 0.03, STAND + 0.064 + 0.05), (0, 0.35, 0.94), (0, 0.94, -0.35)))
+          foot_L=WH((-0.10, WY - 0.01, STAND + 0.064 + 0.065), (0, 0.35, 0.94), (0, 0.94, -0.35)),
+          foot_R=WH((0.10, WY - 0.03, STAND + 0.064 + 0.065), (0, 0.35, 0.94), (0, 0.94, -0.35)))
 
 FLAP_KEYS = [(1, FA), (115, FA)]       # extended below; FLAP_ANG(f) reads them
 def FLAP_ANG(f):
     ks = sorted(dict(FLAP_KEYS).items())
     return pchip([(k[0], k[1]) for k in ks])(f)
-SILL_L = WH((-0.22, BY0 - 0.010, CH[2] + 0.018 + 0.012), (0, 0, -1), (0, 1, -0.1))
-W.key(1, hand_L=SILL_L, grip_L="relaxed"); W.key(115, hand_L=SILL_L)
+SILL_L = WH((-0.22, BY0 - 0.030, CH[2] + 0.018 + 0.014), (0, 0, -1), (0, 1, 0))
+W.key(1, hand_L=SILL_L, grip_L="flat_palm"); W.key(115, hand_L=SILL_L)
 
 # B (115-262): the shove. She pitches over the sill (pivot on her belly), the flap is pushed up by her back, she tumbles in
 S = Vector((0.0, BY0 - 0.06, CH[2] + 0.03))
 def pivot(th, slide=0.0, drop=0.0):
     rel = WP_A - S; c, s_ = math.cos(R_(th)), math.sin(R_(th))
     p = S + Vector((0, rel.y * c + rel.z * s_, -rel.y * s_ + rel.z * c)) + Vector((0, slide, -drop))
-    q = Quaternion((1, 0, 0), R_(-th)) @ Rf((0, 1, 0), lean=3)
+    q = Quaternion((1, 0, 0), R_(-th)) @ Rf((0, 1, 0), lean=6)
     return p, q
 for f, th, sl, dr, fl, hp in ((128, 8, 0.0, 0.0, 34, 10), (140, 30, 0.02, 0.0, 44, 0), (152, 58, 0.06, 0.0, 50, -10),
-                              (165, 85, 0.15, 0.0, 40, -15), (178, 105, 0.30, 0.02, 30, -10), (192, 122, 0.48, 0.06, 20, 0)):
+                              (165, 75, 0.22, 0.0, 40, -15), (178, 92, 0.40, 0.03, 30, -10), (192, 108, 0.56, 0.08, 20, 0)):
     p, q = pivot(th, sl, dr)
     W.key(f, pos=p, rot=q, spine=(fl, 0.0, 0.0), head=(hp, 0.0, 0.0))
 # hands go from the flap / bin into a brace in front of her head
