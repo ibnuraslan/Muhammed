@@ -91,8 +91,8 @@ ROOT0 = HR.BN["root"].head_local.copy()
 # body acting curves (frame, flex fwd deg, twist deg, head pitch deg (+ = down), head yaw deg, root dy (+ = back))
 BODY = [(1, 14, 0, 22, 4, 0.0), (120, 15, 3, 24, -2, 0.0), (220, 13, -3, 20, 3, 0.0), (300, 14, 2, 18, -3, 0.0), (380, 12, -2, 16, 2, 0.0),
         (440, 10, 0, 6, -2, 0.0), (480, 8, 0, -2, 0, 0.0), (519, 8, 0, -3, 0, 0.0), (530, 1, 0, -8, 0, 0.022), (552, 4, 0, 8, 2, 0.015),
-        (603, 10, 0, 22, 0, 0.0), (680, 12, 2, 26, -3, 0.0), (760, 13, -2, 26, 3, 0.0), (840, 12, 0, 24, -7, 0.0), (860, 12, 0, 24, 7, 0.0),
-        (880, 12, 0, 24, -6, 0.0), (900, 12, 0, 24, 2, 0.0), (960, 15, 3, 28, 4, 0.0), (1040, 16, 0, 28, -2, 0.0), (1100, 20, 0, 32, 0, 0.0),
+        (603, 10, 0, 18, 0, 0.0), (680, 11, 2, 18, -3, 0.0), (760, 12, -2, 18, 3, 0.0), (840, 11, 0, 16, -7, 0.0), (860, 11, 0, 16, 7, 0.0),
+        (880, 11, 0, 16, -6, 0.0), (900, 11, 0, 16, 2, 0.0), (960, 12, 3, 18, 4, 0.0), (1040, 12, 0, 18, -2, 0.0), (1100, 14, 0, 18, 0, 0.0),
         (1137, 14, 0, 14, 0, 0.0), (1165, 6, -2, -8, -10, 0.0), (1200, 8, 0, 0, -4, 0.0), (1228, 6, 0, 4, 2, 0.0), (1244, 1, 0, -9, 0, 0.0), (1268, 5, 0, 0, -4, 0.0), (END, 4, 0, -1, -6, 0.0)]
 bf = {k: pchip([(b[0], b[i]) for b in BODY]) for i, k in enumerate(("f", "flex", "tw", "hp", "hy", "dy")) if i}
 def breath(f, amp=1.0, per=3.6):
@@ -193,7 +193,7 @@ for f in list(range(1, END + 1, 2)) + [END]:
             pb.keyframe_insert("location", frame=f, group=n)
 for s in "LR":
     for f in (1, END):
-        apply_pose(HERO, s, "flat_palm", f)
+        apply_pose(HERO, s, "flat_palm", f, spread=0.0)
 log("hands keyed")
 if MODE == "blocking":
     bpy.ops.wm.save_as_mainfile(filepath=OUT); raise SystemExit
@@ -260,8 +260,8 @@ for f in (1, 60):
                pole=Wh(SHOOT, "upperarm01.L") + Mi.to_3x3() @ Vector((0.45, 0.5, -0.3)))
     apply_pose(SHOOT, "L", "relaxed", f)
 # muzzle flash (f10-13)
-for f, s_ in ((9, 0.001), (10, 0.55), (11, 0.7), (12, 0.4), (13, 0.001)):
-    FLASH.matrix_world = Matrix.Translation(MUZ + D * 0.03 * s_) @ frame_from(D, Vector((0, 0, 1)), (0, 0, 0)).to_3x3().to_4x4() @ Matrix.Diagonal((s_, s_ * 2.2, s_, 1))
+for f, s_ in ((9, 0.001), (10, 1.0), (11, 1.25), (12, 0.6), (13, 0.001)):
+    FLASH.matrix_world = Matrix.Translation(MUZ + D * 0.004) @ frame_from(D, Vector((0, 0, 1)), (0, 0, 0)).to_3x3().to_4x4() @ Matrix.Diagonal((s_, s_, s_, 1))
     FLASH.keyframe_insert("location", frame=f); FLASH.keyframe_insert("rotation_euler", frame=f); FLASH.keyframe_insert("scale", frame=f)
 # a soft fill on the shooter's face (his face is against the sun; without it his eyes glow in a dark face)
 fd = bpy.data.lights.new("Shooter_Fill", 'AREA'); fd.energy = 180; fd.size = 1.2; fd.color = (1.0, 0.93, 0.85)
@@ -380,31 +380,31 @@ for i, li in enumerate(LAY):
         o = O[cn]; sx = 1 if cn.endswith("L") else -1
         base = o.matrix_basis.copy()
         piv = Vector((sx * NW / 4, (li["y0"] + li["y1"]) / 2, ZTOP - ND / 2))
-        v = Vector((sx * rr.uniform(0.0014, 0.0022), rr.uniform(-0.0006, 0.0006), rr.uniform(0.0022, 0.0032)))
-        g = -0.00005; spin = sx * rr.uniform(0.05, 0.09)
+        v = Vector((sx * rr.uniform(0.006, 0.009), rr.uniform(-0.002, 0.002), rr.uniform(0.010, 0.014)))
+        g = -0.0004; spin = sx * rr.uniform(0.05, 0.09)
         o.keyframe_insert("location", frame=1); o.keyframe_insert("rotation_euler", frame=1)
         o.keyframe_insert("location", frame=fb); o.keyframe_insert("rotation_euler", frame=fb)
-        for k in range(2, 62, 2):
+        for k in range(2, 16, 2):
             dp = v * k + Vector((0, 0, 0.5 * g * k * k))
             Rk = Matrix.Translation(piv + dp) @ Matrix.Rotation(spin * k, 4, 'Y') @ Matrix.Translation(-piv)
             o.matrix_basis = Rk @ base
             o.keyframe_insert("location", frame=fb + k); o.keyframe_insert("rotation_euler", frame=fb + k)
         o.matrix_basis = base
-        key_vis([o], 1, True); key_vis([o], fb + 62, False)
+        key_vis([o], 1, True); key_vis([o], fb + 16, False)
     # shards / flakes from inside the chunk
     for k in range(10):
         nm = "Shard_%s_%d" % (li["name"].split("_")[1], k)
         o = O.get(nm)
         if not o: continue
         p0 = o.location.copy()
-        v = Vector((rr.uniform(-0.0016, 0.0016), rr.uniform(-0.0009, 0.0009), rr.uniform(0.0015, 0.0035)))
-        g = -0.00006; spin = Vector((rr.uniform(-0.3, 0.3), rr.uniform(-0.3, 0.3), rr.uniform(-0.3, 0.3)))
+        v = Vector((rr.uniform(-0.007, 0.007), rr.uniform(-0.004, 0.004), rr.uniform(0.007, 0.013)))
+        g = -0.0003; spin = Vector((rr.uniform(-0.3, 0.3), rr.uniform(-0.3, 0.3), rr.uniform(-0.3, 0.3)))
         o.keyframe_insert("location", frame=1); o.keyframe_insert("rotation_euler", frame=1); o.keyframe_insert("location", frame=fb)
-        for kk in range(2, 56, 3):
+        for kk in range(2, 15, 2):
             o.location = p0 + v * kk + Vector((0, 0, 0.5 * g * kk * kk))
             o.rotation_euler = Euler((spin.x * kk, spin.y * kk, spin.z * kk))
             o.keyframe_insert("location", frame=fb + kk); o.keyframe_insert("rotation_euler", frame=fb + kk)
-        key_vis([o], 1, True); key_vis([o], fb + 56, False)
+        key_vis([o], 1, True); key_vis([o], fb + 15, False)
 # shards of the layers that never break stay hidden inside their chunk (they are inside the solid chunk; never visible)
 broken = {LAY[i]["name"] for i, _ in BREAKS}
 log("broken layers", sorted(broken))
@@ -453,7 +453,7 @@ def eyes(rig, R, f0, f1, step=40, amp=(3, 5), seed=2):
 SMILE = {"risorius03.L": ((0.5, 0, 1), 16), "risorius03.R": ((-0.5, 0, 1), 16), "oris04.L": ((0.3, 0, 1), 16), "oris04.R": ((-0.3, 0, 1), 16)}
 fs(1)
 # eyes wide (lids slightly up = negative), blink on the hit, relief at the end
-blinks(HERO, [70, 190, 300, 410, 522, 640, 760, 880, 990, 1100, 1180, 1285],
+blinks(HERO, [70, 190, 300, 410, 522, 640, 760, 880, 990, 1100],
        [(1, 0), (470, 0), (500, -6), (519, -8), (700, -5), (940, -2), (1213, 2), (1222, 2), (1232, 22), (1250, 22), (1262, 0)])
 # no rig smile: on this rig it reads as a frown or bared teeth (LESSONS 8); relief = long eyes-closed exhale + head tilt
 if "jaw" in HERO.pose.bones:
@@ -468,6 +468,26 @@ blinks(SHOOT, [30], [(1, 4)])
 # brows up on the startle (levator / frontal bones if present)
 for bn in ("levator03.L", "levator03.R"):
     pass
+# SMILE: a sculpted shape key on the body (mouth corners up and back, cheeks lifted; lips stay together, no teeth)
+def smile_key(body, rig):
+    if not body.data.shape_keys: body.shape_key_add(name="Basis", from_mix=False)
+    sk = body.shape_key_add(name="Smile", from_mix=False)
+    cornerL = Vector((0.024, -0.1382, 1.5099)); scale_z = rig.data.bones["head"].head_local.z / 1.5334
+    for sx in (1, -1):
+        c = Vector((sx * cornerL.x, cornerL.y, cornerL.z * scale_z)); ch = Vector((sx * 0.036, -0.124, c.z + 0.024))
+        for v in body.data.vertices:
+            d = (v.co - c).length
+            if d < 0.026:
+                w = (1 - d / 0.026) ** 2
+                sk.data[v.index].co += Vector((sx * 0.0030 * w, 0.0022 * w, 0.0058 * w))
+            d2 = (v.co - ch).length
+            if d2 < 0.032:
+                w2 = (1 - d2 / 0.032) ** 2
+                sk.data[v.index].co += Vector((0, -0.0008 * w2, 0.0022 * w2))
+    return sk
+SK = smile_key(HB, HERO)
+for f, v in ((1, 0.25), (170, 0.45), (300, 0.55), (430, 0.4), (470, 0.0), (1250, 0.0), (1272, 0.85), (END, 0.9)):
+    SK.value = v; SK.keyframe_insert("value", frame=f)
 log("faces keyed")
 
 # ================================================================== CAMERA: ONE continuous move (pchip through framings; level horizon; no cuts)
@@ -476,6 +496,7 @@ def face_pt(f):
     fs(f); return Wh(HERO, "head") + (Wt(HERO, "head") - Wh(HERO, "head")) * 0.35
 def box_c(f): return box_M(f) @ Vector((0, 0, BH / 2))
 def box_top(f): return box_M(f) @ Vector((0, 0, BH))
+def bul_c(f): return bullet_M(f) @ Vector((0, 0, BL * 0.5))
 def notch_pt(f): return box_M(f) @ Vector((0, IMP_LOCAL.y + d_of(f) * 0.5 + 0.01, ZTOP - 0.008))
 SH_FACE = Wh(SHOOT, "head") + Vector((0, 0, 0.06)); fs(1)
 GUN_P = GUN.matrix_world.translation.copy()
@@ -497,41 +518,46 @@ ck(118, WINC + Vector((0.0, -0.62, 0.0)), WINC + Vector((-0.10, 1.0, -0.15)), 28
 ck(134, WINC + Vector((0.0, 0.05, -0.02)), WINC + Vector((-0.25, 1.0, -0.25)), 28)
 ck(142, WINC + Vector((-0.30, 0.32, -0.28)), nose_w(142), 30)
 ck(156, nose_w(156) + Vector((0.15, -0.05, 0.05)), nose_w(156), 32)
-for f, ang, dist in ((180, 20, 0.10), (205, 12, 0.11), (232, 7, 0.12)):
+# 170-470: the camera stays BEHIND-and-beside the slow-motion bullet the whole way in (the bullet never leaves the frame):
+# the bullet in the lower foreground, him and the box (logo) ahead and growing; the side offset swings for motion
+for f, ang, dist, up in ((180, 20, 0.10, 0.020), (215, 10, 0.12, 0.030), (250, -8, 0.13, 0.040), (290, -16, 0.12, 0.045),
+                         (330, -6, 0.11, 0.040), (370, 10, 0.11, 0.035), (410, 18, 0.10, 0.030), (445, 8, 0.10, 0.025)):
     u_ = (face_pt(f) - nose_w(f)).normalized(); a_ = R_(ang)
-    ck(f, nose_w(f) + (side_r * math.sin(a_) - u_ * math.cos(a_)) * dist + Vector((0, 0, 0.02)), nose_w(f) + u_ * 0.02, 28)
-ck(258, nose_w(258) - (face_pt(258) - nose_w(258)).normalized() * 0.22 + side_r * 0.05 + Vector((0, 0, 0.16)), (nose_w(258) + face_pt(258)) / 2 + Vector((0, 0, 0.05)), 30)
-# 277-470: past the bullet to a front 3/4 medium of him with the box (logo on the box front readable 300-440)
-ck(285, box_c(285) + Vector((0.45, -0.85, 0.22)), (face_pt(285) + box_c(285)) / 2, 32)
-ck(330, box_c(330) + Vector((0.05, -0.74, 0.20)), (face_pt(330) + box_c(330)) / 2 + Vector((0, 0, -0.03)), 34)
-ck(380, box_c(380) + Vector((-0.28, -0.64, 0.14)), (face_pt(380) + box_c(380)) / 2 + Vector((0, 0, -0.03)), 34)
-ck(430, box_c(430) + Vector((0.10, -0.56, 0.13)), (face_pt(430) + box_c(430)) / 2, 34)
+    aim = nose_w(f) + (face_pt(f) + box_c(f)) / 2 * 0 + u_ * 0.0
+    aim = nose_w(f).lerp((face_pt(f) + box_c(f)) / 2, 0.18)
+    ck(f, nose_w(f) + (side_r * math.sin(a_) - u_ * math.cos(a_)) * dist + Vector((0, 0, up)), aim, 28)
 # 470-600: around to his right side profile; the bullet crosses frame left -> right and hits on "slammed" (519)
-ck(478, box_c(478) + Vector((0.62, -0.45, 0.14)), (face_pt(478) + box_c(478)) / 2 + Vector((0, -0.03, 0.03)), 32)
-ck(505, box_c(505) + Vector((0.72, -0.12, 0.12)), (face_pt(505) + box_c(505)) / 2 + Vector((0, -0.04, 0.03)), 32)
-ck(540, box_c(540) + Vector((0.66, -0.05, 0.10)), (face_pt(540) + box_c(540)) / 2 + Vector((0, -0.03, 0.03)), 33)
-ck(585, box_c(585) + Vector((0.50, -0.30, 0.10)), (face_pt(585) + box_c(585)) / 2 + Vector((0, -0.04, 0)), 33)
-# 603-674 "the case cracked": in front of the box, low; the crack spreads; his face above the box
-ck(615, box_c(615) + Vector((0.12, -0.56, 0.20)), (box_top(615) + face_pt(615)) / 2 + Vector((0, 0, -0.06)), 36)
-ck(650, box_c(650) + Vector((-0.06, -0.50, 0.22)), (box_top(650) + face_pt(650)) / 2 + Vector((0, 0, -0.07)), 38)
-# 675-893: up over the open top: chunks burst, disc shards glitter, the bullet ploughs layer by layer
-ck(690, box_top(690) + Vector((0.22, -0.06, 0.20)), notch_pt(690), 40)
-ck(730, box_top(730) + Vector((0.24, 0.0, 0.18)), notch_pt(730), 42)
-ck(775, box_top(775) + Vector((0.23, 0.03, 0.18)), notch_pt(775), 42)
-ck(815, box_top(815) + Vector((0.20, -0.08, 0.20)), notch_pt(815), 42)
-ck(855, box_c(855) + Vector((0.30, -0.62, 0.30)), (face_pt(855) + box_top(855)) / 2, 34)
-ck(905, box_c(905) + Vector((0.12, -0.66, 0.28)), (face_pt(905) + box_top(905)) / 2, 34)
-# 941-1092 "stopped halfway, buried inside": close orbit on the stopped bullet in the open channel, back half intact
-ck(950, box_top(950) + Vector((0.20, 0.02, 0.16)), notch_pt(950), 44)
-ck(990, box_top(990) + Vector((0.22, 0.06, 0.15)), notch_pt(990), 46)
-ck(1030, box_top(1030) + Vector((0.18, -0.06, 0.18)), notch_pt(1030), 44)
-# 1060-1311: pull out as he lowers the box onto his lap; he looks up at the hole, exhales, smiles at us; logo poster behind him
-ck(1068, box_c(1068) + Vector((0.28, -0.70, 0.34)), (face_pt(1068) + box_c(1068)) / 2, 32)
-ck(1120, face_pt(1120) + Vector((0.50, -0.90, -0.08)), (face_pt(1120) + box_c(1120)) / 2 + Vector((0, 0, 0.04)), 30)
-ck(1160, face_pt(1160) + Vector((0.02, -1.02, -0.04)), (face_pt(1160) + box_c(1160)) / 2 + Vector((0, 0, 0.08)), 30)
+ck(478, box_c(478) + Vector((0.55, -0.40, 0.16)), (face_pt(478) + box_c(478)) / 2 + Vector((0, -0.03, 0.03)), 32)
+ck(505, box_c(505) + Vector((0.70, -0.12, 0.14)), (face_pt(505) + box_c(505)) / 2 + Vector((0, -0.04, 0.03)), 32)
+ck(540, box_c(540) + Vector((0.66, -0.05, 0.12)), (face_pt(540) + box_c(540)) / 2 + Vector((0, -0.03, 0.03)), 33)
+ck(585, box_c(585) + Vector((0.50, -0.30, 0.12)), (face_pt(585) + box_c(585)) / 2 + Vector((0, -0.04, 0)), 33)
+# 603-660 "the case cracked": in front of the box with his whole face above it; the crack spreads
+ck(615, box_c(615) + Vector((0.12, -0.60, 0.22)), (box_top(615) + face_pt(615)) / 2 + Vector((0, 0, -0.04)), 34)
+ck(655, box_c(655) + Vector((-0.06, -0.55, 0.24)), (box_top(655) + face_pt(655)) / 2 + Vector((0, 0, -0.04)), 35)
+# 675-735 "the discs shattered": a 1 s macro over the open top, bullet big in frame, disc shards burst (break f689)
+ck(682, bul_c(682) + Vector((0.035, -0.045, 0.115)), bul_c(682), 40)
+ck(722, bul_c(722) + Vector((0.04, 0.005, 0.11)), bul_c(722), 42)
+# 745-770 back to his face (front 3/4) as layer by layer begins
+ck(752, box_c(752) + Vector((0.30, -0.62, 0.30)), (face_pt(752) + box_top(752)) / 2 + Vector((0, 0, 0.02)), 32)
+# 775-830: 1 s macro: the next layers burst (breaks f774, f809) and the bullet slows
+ck(782, bul_c(782) + Vector((-0.035, -0.04, 0.11)), bul_c(782), 42)
+ck(822, bul_c(822) + Vector((-0.04, 0.01, 0.105)), bul_c(822), 44)
+# 840-935 "they ate up the bullet's energy": his face and the box, breathing hard, small head shakes
+ck(845, box_c(845) + Vector((-0.30, -0.62, 0.28)), (face_pt(845) + box_top(845)) / 2 + Vector((0, 0, 0.02)), 32)
+ck(895, box_c(895) + Vector((0.02, -0.66, 0.26)), (face_pt(895) + box_top(895)) / 2 + Vector((0, 0, 0.02)), 33)
+ck(930, box_c(930) + Vector((0.20, -0.58, 0.24)), (face_pt(930) + box_top(930)) / 2, 34)
+# 945-1005 "stopped halfway": a 1 s macro, the stopped bullet ~1/3 of the frame, the back layers intact
+ck(950, bul_c(950) + Vector((0.03, -0.035, 0.095)), bul_c(950), 46)
+ck(995, bul_c(995) + Vector((0.035, 0.02, 0.09)), bul_c(995), 48)
+# 1010-1311: pull back to his face; he lowers the box onto his lap, looks up at the wall, exhales, smiles; poster behind him
+ck(1008, bul_c(1008) + Vector((0.08, -0.10, 0.24)), bul_c(1008), 34)
+ck(1026, box_c(1026) + Vector((0.32, -0.62, 0.20)), (face_pt(1026) + box_top(1026)) / 2 + Vector((0, 0, 0.03)), 30)
+ck(1068, box_c(1068) + Vector((0.30, -0.80, 0.18)), (face_pt(1068) + box_c(1068)) / 2 + Vector((0, 0, 0.06)), 30)
+ck(1120, face_pt(1120) + Vector((0.45, -0.95, -0.20)), (face_pt(1120) + box_c(1120)) / 2 + Vector((0, 0, 0.06)), 30)
+ck(1160, face_pt(1160) + Vector((0.02, -1.02, -0.10)), (face_pt(1160) + box_c(1160)) / 2 + Vector((0, 0, 0.08)), 30)
 ck(1210, face_pt(1210) + Vector((0.30, -1.05, -0.06)), face_pt(1210) + Vector((0, 0.0, -0.24)), 30)
-ck(1260, face_pt(1260) + Vector((0.08, -0.98, -0.08)), face_pt(1260) + Vector((0, 0.0, -0.24)), 30)
-ck(END, face_pt(END) + Vector((-0.12, -0.90, -0.08)), face_pt(END) + Vector((0, 0.0, -0.22)), 30)
+ck(1260, face_pt(1260) + Vector((0.08, -0.92, -0.06)), face_pt(1260) + Vector((0, 0.0, -0.20)), 31)
+ck(END, face_pt(END) + Vector((-0.10, -0.80, -0.05)), face_pt(END) + Vector((0, 0.0, -0.17)), 32)
 CK.sort(key=lambda k: k[0])
 cam_d = bpy.data.cameras.new("CAM_Film"); CAM = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(CAM); sc.camera = CAM
 cam_d.sensor_fit = 'AUTO'; cam_d.sensor_width = 36; cam_d.clip_start = 0.004; cam_d.dof.use_dof = False

@@ -343,11 +343,22 @@ bpy.context.view_layer.objects.active = gun_parts[0]; bpy.ops.object.join()
 GUN = bpy.context.active_object; GUN.name = "Pistol"
 GUN["muzzle"] = (0.0, 0.165, 0.060)
 # muzzle flash: a bright stylised star, keyed in 02 (scale 0 -> 1 -> 0 inside 4 frames)
-fl_m = mat("M_Flash", (1.0, 0.5, 0.05), emit=((1.0, 0.45, 0.05), 5.0))
-bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=0.03, location=(0, 0, 0))
-FLASH = bpy.context.active_object; FLASH.name = "MuzzleFlash"; FLASH.data.materials.append(fl_m)
-for v in FLASH.data.vertices:
-    v.co *= (1.0 + 1.6 * random.random() ** 3)
+fl_m = mat("M_Flash", (1.0, 0.75, 0.2), emit=((1.0, 0.70, 0.15), 14.0))
+# a cone of thin emissive streaks along the barrel (+Y), not a blob
+fl_parts = []
+for k in range(7):
+    ang = 2 * math.pi * k / 7
+    bpy.ops.mesh.primitive_cone_add(vertices=6, radius1=0.004, radius2=0.0, depth=0.07 + 0.03 * (k % 2), location=(0, 0, 0))
+    c_ = bpy.context.active_object; c_.data.materials.append(fl_m)
+    c_.rotation_euler = (R_(-90) + 0.35 * math.cos(ang), 0, 0.35 * math.sin(ang)); fl_parts.append(c_)
+bpy.ops.mesh.primitive_uv_sphere_add(radius=0.012, segments=12, ring_count=8); core = bpy.context.active_object; core.data.materials.append(fl_m); fl_parts.append(core)
+for c_ in fl_parts:
+    bpy.context.view_layer.objects.active = c_; c_.select_set(True); bpy.ops.object.transform_apply(rotation=True)
+for c_ in fl_parts: c_.location.y += 0.0 if c_ is core else 0.035
+bpy.ops.object.select_all(action='DESELECT')
+for c_ in fl_parts: c_.select_set(True)
+bpy.context.view_layer.objects.active = fl_parts[0]; bpy.ops.object.transform_apply(location=True); bpy.ops.object.join()
+FLASH = bpy.context.active_object; FLASH.name = "MuzzleFlash"
 FLASH.scale = (0.001, 0.001, 0.001)
 
 # ================================================================== THE COLLECTOR'S BOX SET (one prop)
@@ -505,10 +516,11 @@ for side in (0, 1):
         o.scale = (0.001, 0.001, 0.001)
 
 # ================================================================== LOOK: deep rich colour, fast clean render
-sc.view_settings.view_transform = 'AgX'
-try: sc.view_settings.look = 'AgX - Punchy'
+# grade (quality bar: BellyFat v018): Filmic, High Contrast: deep, rich, saturated
+sc.view_settings.view_transform = 'Filmic'
+try: sc.view_settings.look = 'High Contrast'
 except Exception: pass
-sc.view_settings.exposure = -0.3
+sc.view_settings.exposure = -1.0
 sc.render.engine = 'CYCLES'
 sc.cycles.samples = 64; sc.cycles.adaptive_threshold = 0.04; sc.cycles.use_adaptive_sampling = True; sc.cycles.use_denoising = True
 sc.cycles.denoiser = 'OPENIMAGEDENOISE'
