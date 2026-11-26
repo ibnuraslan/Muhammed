@@ -104,14 +104,15 @@ def calibrate(c):
     rig, body, cl, CT, H = CH[c]
     for it in range(4):
         seat_pose(c, 1); fs(1)
-        bv = bvh_eval(body); mz = 9.0
+        bvs = [bvh_eval(body), bvh_eval(cl)]; mz = 9.0     # skin AND skirt (the body under the skirt is masked)
         for s in "LR":
             hp = Wh(rig, "upperleg01." + s); kn = Wh(rig, "lowerleg01." + s)
             for u in (0.0, 0.25, 0.5):
                 q = hp.lerp(kn, u)
                 for dy in (0.0, 0.04):
-                    h = bv.ray_cast(Vector((q.x, q.y + dy, 0.02)), Vector((0, 0, 1)), 3.0)
-                    if h[0] is not None and h[0].y > SEAT_FRONT + 0.02: mz = min(mz, h[0].z)
+                    for bv in bvs:
+                        h = bv.ray_cast(Vector((q.x, q.y + dy, 0.02)), Vector((0, 0, 1)), 3.0)
+                        if h[0] is not None and h[0].y > SEAT_FRONT + 0.02: mz = min(mz, h[0].z)
         cur = CAL.get(c, SEAT_Z + (H.root_head.z - CT.BN["upperleg01.L"].head_local.z) + 0.10)
         CAL[c] = cur + (SEAT_Z - 0.006 - mz)
         log("calibrate", c, it, "min skin z", round(mz, 4), "->", round(CAL[c], 4), "foot err", round((Wh(rig, "foot.L") - Wh(rig, "IK_foot.L")).length, 3))
