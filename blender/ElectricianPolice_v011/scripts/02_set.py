@@ -648,7 +648,7 @@ sc["EX"] = EX; sc["WX"] = WX; sc["ROOM"] = [ROOM["x0"], ROOM["x1"], ROOM["y0"], 
 sc["W_CAM"] = list(W_CAM); sc["W_CR"] = list(W_CR)
 # hide the asset templates (they stay only as mesh data users)
 for o in LIB.values():
-    if o.name in sc.collection.objects: sc.collection.objects.unlink(o)
+    if o.name.startswith("SRC_") and o.name in sc.collection.objects: sc.collection.objects.unlink(o)
 for c in list(bpy.data.collections):
     if c.name == "_lib": bpy.data.collections.remove(c)
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
