@@ -74,7 +74,7 @@ def finger_rot(s, k, x, signs):
     return {"finger%d-1.%s" % (k, s): Quaternion((1, 0, 0), signs[0] * math.radians(c)) @ Quaternion((0, 0, 1), math.radians(sp)),
             "finger%d-2.%s" % (k, s): Quaternion((1, 0, 0), signs[1] * math.radians(1.35 * c)),
             "finger%d-3.%s" % (k, s): Quaternion((1, 0, 0), signs[2] * math.radians(0.55 * c))}
-BOUNDS = {1: ((-30, 45), (-40, 40), (0, 40)), 2: ((4, 62), (-32, 32)), 3: ((4, 62), (-15, 15)), 4: ((4, 62), (-26, 26)), 5: ((4, 80), (-46, 46))}
+BOUNDS = {1: ((-30, 45), (-40, 40), (0, 40)), 2: ((4, 62), (-32, 32)), 3: ((4, 62), (-15, 15)), 4: ((4, 80), (-32, 32)), 5: ((4, 80), (-46, 46))}
 PREF = {1: (5.0, 0.0, 15.0), 2: (30.0, 0.0), 3: (30.0, 0.0), 4: (30.0, 0.0), 5: (30.0, 0.0)}
 
 def solve_finger(Hh, s, k, kobj, x0, ypref=-0.026):
@@ -84,7 +84,7 @@ def solve_finger(Hh, s, k, kobj, x0, ypref=-0.026):
     def cost(x):
         Mb = Hh.fkm(finger_rot(s, k, x, signs))[b]
         lo = pad_low(Mb, b); pc = pad_centre(Mb, b)
-        tz = key_top_z(kobj, lo.y) + 0.0003
+        tz = key_top_z(kobj, lo.y) + 0.0010
         c = (pc.x - kx) ** 2 * 1.0 + (lo.z - tz) ** 2 * 6.0 + 0.04 * (pc.y - ypref) ** 2 + 20.0 * max(0.0, (-0.051 if k == 5 else -0.046) - pc.y) ** 2 + 20.0 * max(0.0, pc.y + 0.006) ** 2
         c += 1e-6 * sum(((xi - pi) / 30.0) ** 2 for xi, pi in zip(x, pref))
         return c, lo, pc, tz
@@ -164,7 +164,8 @@ def key_moving(f):
     return False
 
 # ---------------------------------------------------------------- hand placement (IK) per frame
-PALM_H = 0.052; PALM_Y = {"L": -0.026, "R": -0.026}
+PALM_H = float(os.environ.get("BD_PH", 0.070)); PALM_Y = {"L": float(os.environ.get("BD_PY", -0.021)), "R": float(os.environ.get("BD_PY", -0.021))}
+FDZ = float(os.environ.get("BD_FDZ", -0.35))
 def palm_target(s, f):
     fp_list = POS[s]
     base = position_at(s, f)[1]
@@ -181,7 +182,7 @@ def palm_target(s, f):
     return Vector((x, PALM_Y[s] + 0.003 * math.sin(f / 47.0), 0.8057 + PALM_H - (0.006 if s == "L" else 0.002) + lift + bob)), lift
 def place(s, f):
     P, lift = palm_target(s, f)
-    fd = Vector((-0.10 if s == "L" else 0.10, -1.0, -0.18)).normalized()
+    fd = Vector((-0.10 if s == "L" else 0.10, -1.0, FDZ)).normalized()
     place_hand(COMP, s, f, P, Vector((-0.12 if s == "L" else 0.08, 0.18, -1.0)).normalized(), fd, skin=0.0)
     sh = BN["upperarm01." + s].head_local
     pole = Vector((0.62 if s == "L" else -0.62, SEAT_Y + 0.45, 0.70))
@@ -192,6 +193,40 @@ def place(s, f):
 
 # ---------------------------------------------------------------- solve
 init_signs()
+def joint_stats(s):
+    zmin_all = 9; zmin_black = 9; mcp_y = []
+    for k in range(2, 6):
+        for j in (1, 2, 3):
+            b = PB["finger%d-%d.%s" % (k, j, s)]
+            for p in (b.head,):
+                w = COMP.matrix_world @ p
+                if w.y < 0.0: zmin_all = min(zmin_all, w.z)
+                if w.y < -0.045: zmin_black = min(zmin_black, w.z)
+        mcp_y.append((COMP.matrix_world @ PB["finger%d-1.%s" % (k, s)].head).y)
+    return zmin_all, zmin_black, min(mcp_y)
+if os.environ.get("BD_GRID"):
+    import itertools
+    SOL = {(s_, k_): ([5.0, 0.0, 15.0] if k_ == 1 else [30.0, 0.0]) for s_ in "LR" for k_ in range(1, 6)}
+    hide_ = [c for c in COMP.children if c.type == 'MESH']
+    for c in hide_: c.hide_viewport = True
+    res = []
+    for py, ph, fdz in itertools.product((-0.025, -0.015, -0.005, 0.005), (0.06, 0.07, 0.08), (-0.35, -0.5, -0.65)):
+        PALM_Y["L"] = PALM_Y["R"] = py; PALM_H = ph; FDZ = fdz
+        f = 40; tot = 0.0; worst_dz = 0; info_y = []
+        for s in "LR": place(s, f)
+        sc.frame_set(f)
+        for s in "LR":
+            Hh = PHand(COMP, s); base = position_at(s, f)[1]
+            for k in range(1, 6):
+                x, info = solve_finger(Hh, s, k, wkey(finger_key(s, k, base)), SOL[(s, k)])
+                for n, q in finger_rot(s, k, x, SIGN[(s, k)]).items(): PB[n].rotation_quaternion = q
+                worst_dz = max(worst_dz, abs(info["dz"])); info_y.append(info["y"])
+        # evaluate joints with these finger rotations (temporarily unkeyed values)
+        bpy.context.view_layer.update()
+        st = [joint_stats(s) for s in "LR"]
+        res.append((round(worst_dz, 1), py, ph, fdz, [tuple(round(v, 4) for v in t) for t in st], round(min(info_y), 3), round(max(info_y), 3)))
+        log("GRID", res[-1])
+    raise SystemExit("GRID_DONE")
 hide_meshes = [c for c in COMP.children if c.type == 'MESH']
 for c in hide_meshes: c.hide_viewport = True
 SOL = {}       # (s,k) -> last x

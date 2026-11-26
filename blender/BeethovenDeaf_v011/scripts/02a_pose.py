@@ -128,3 +128,19 @@ eye_rot(1, -14, 0)
 for f, (p_, y_) in ((60, (-12, 4)), (120, (-20, -6)), (200, (-24, -3)), (270, (-12, 3)), (380, (-16, -4)), (500, (-13, 2)),
                      (640, (-18, -2)), (780, (-12, 3)), (900, (-14, 0)), (1080, (-18, 5)), (1200, (-24, -5)), (1320, (-12, 2)), (END, (-15, 0))):
     eye_rot(f, p_, y_)
+
+# ---- lips closed around the rod (director round): upper-lip bones down, lower-lip bones up toward the rod line
+MOUTH_Z_REST = (BN["head"].matrix_local @ BITE_HEAD).z if False else None
+sc.frame_set(1)
+mz = BITE_W1.z
+LIP = float(os.environ.get("BD_LIP", 0.0055)); LIP_LO = float(os.environ.get("BD_LIPLO", 0.0008))
+for b in BN:
+    if not b.name.startswith("oris"): continue
+    hz = (COMP.matrix_world @ PB[b.name].head).z
+    dz = hz - mz
+    if abs(dz) < 0.002: continue
+    move = -min(LIP, abs(dz) - 0.0025) if dz > 0 else min(LIP_LO, abs(dz) - 0.0025)
+    if move == 0 or (dz > 0 and move > 0) or (dz < 0 and move < 0): continue
+    R3 = b.matrix_local.to_3x3().inverted()
+    PB[b.name].location = R3 @ Vector((0, 0, move)); PB[b.name].keyframe_insert("location", frame=1, group=b.name)
+    log("lip", b.name, round(dz * 1000, 1), "mm ->", round(move * 1000, 1))

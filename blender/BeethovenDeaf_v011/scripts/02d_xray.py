@@ -90,9 +90,20 @@ for o in ears:
     o.data.flip_normals()
     o.matrix_world = Matrix.Identity(4); head_child(o); EARS[o.name[7:]] = o
 log("ear parts", sorted(EARS))
-for m_ in EARS["Canal"].data.materials:
-    for p_ in [n for n in m_.node_tree.nodes if n.type == 'BSDF_PRINCIPLED']:
-        if not p_.inputs["Base Color"].is_linked: p_.inputs["Base Color"].default_value = (0.80, 0.55, 0.42, 1)
+EAR_COL = {"Canal": ((0.95, 0.55, 0.35), 0.0), "Eardrum": ((0.50, 0.52, 0.60), 0.0), "Malleus": ((0.95, 0.66, 0.15), 0.4),
+           "Incus": ((0.95, 0.66, 0.15), 0.4), "Stapes": ((0.95, 0.66, 0.15), 0.4), "Labyrinth": ((0.50, 0.12, 0.85), 0.0),
+           "Nerve1": ((1.0, 0.82, 0.08), 0.0), "Nerve2": ((1.0, 0.82, 0.08), 0.0), "Nerve3": ((1.0, 0.82, 0.08), 0.0)}
+for nm_, (col_, met_) in EAR_COL.items():
+    o_ = EARS.get(nm_)
+    if o_ is None: continue
+    m_ = mat("M_XR_" + nm_, col_, rough=0.35, metal=met_, coat=0.4)
+    if nm_ == "Eardrum":
+        nt_ = m_.node_tree; p_ = nt_.nodes["Principled BSDF"]       # dull, torn: a dark ragged notch
+        tc_ = nt_.nodes.new("ShaderNodeTexCoord"); nz_ = nt_.nodes.new("ShaderNodeTexNoise"); nz_.inputs["Scale"].default_value = 900.0
+        cr_ = nt_.nodes.new("ShaderNodeValToRGB"); cr_.color_ramp.elements[0].color = (0.12, 0.10, 0.10, 1); cr_.color_ramp.elements[0].position = 0.55
+        cr_.color_ramp.elements[1].color = (*col_, 1); cr_.color_ramp.elements[1].position = 0.6
+        nt_.links.new(tc_.outputs["Object"], nz_.inputs["Vector"]); nt_.links.new(nz_.outputs["Fac"], cr_.inputs["Fac"]); nt_.links.new(cr_.outputs["Color"], p_.inputs["Base Color"])
+    o_.data.materials.clear(); o_.data.materials.append(m_)
 coch = EARS["Labyrinth"]
 cm_ = coch.data.materials[0].copy(); coch.data.materials[0] = cm_; cp_ = cm_.node_tree.nodes.get("Principled BSDF") or [n for n in cm_.node_tree.nodes if n.type == 'BSDF_PRINCIPLED'][0]
 cp_.inputs["Emission Color"].default_value = (1.0, 0.75, 0.2, 1); cp_.inputs["Emission Strength"].default_value = 0.0

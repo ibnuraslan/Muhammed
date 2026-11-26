@@ -83,7 +83,7 @@ to(box("KeyBed", (1.354, 0.17, 0.02), (0, -0.085, 0.773), felt, bevel=0.0), C_SE
 ivory = mat("M_Ivory", (0.93, 0.89, 0.78), rough=0.25, coat=0.4)
 ebony = mat("M_Ebony", (0.015, 0.012, 0.012), rough=0.22, coat=0.6)
 WP = 0.025865; WX0 = 0.659; HINGE_Y = -0.152; HINGE_Z = 0.790
-KEY_TOP_W = 0.8057; KEY_TOP_B = 0.8177; BLACK_Y0 = -0.055
+KEY_TOP_W = 0.8057; KEY_TOP_B = 0.8177; BLACK_Y0 = -0.072
 NOTES = "ABCDEFG"
 KEYS = {}      # name -> dict(obj, x, top, y0, y1, black)
 def key_obj(name, w, y0, y1, z0, z1, x, material, bev):
