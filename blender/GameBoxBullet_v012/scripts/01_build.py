@@ -50,6 +50,16 @@ for g in [g for g in bpy.data.node_groups if g.name.startswith("EnhancedEye")]:
     print("EYEFIX", g.name)
 for m in HB.data.materials: tint(m, (1.0, 0.90, 0.82))
 for m in SB.data.materials: tint(m, (1.0, 0.93, 0.88))
+# the shooter's eyes: scleras toned down so they do not glow in his darker face (round 4)
+for c in SHOOT.children:
+    if c.type == 'MESH' and ("high-poly" in c.name or "eye" in c.name.lower()) and "brow" not in c.name.lower() and "lash" not in c.name.lower():
+        for m in c.data.materials:
+            if m and m.use_nodes:
+                for p_ in [n for n in m.node_tree.nodes if n.type == 'BSDF_PRINCIPLED']:
+                    p_.inputs["Specular IOR Level"].default_value = 0.2
+                    if not p_.inputs["Base Color"].is_linked: p_.inputs["Base Color"].default_value = (0.55, 0.52, 0.50, 1)
+                tint(m, (0.62, 0.60, 0.58))
+            if m: print("SHOOTER_EYE", c.name, m.name)
 for r, t in ((HERO, (0.32, 0.18, 0.10)), (SHOOT, (0.25, 0.22, 0.20))):
     for c in r.children:
         if c.type == 'MESH' and any(k in c.name for k in ("short02", "short01", "eyebrow")):
@@ -132,7 +142,7 @@ M["tvbody"] = mat("M_TVBody", (0.02, 0.02, 0.025), rough=0.3)
 M["shelf"] = mat("M_Shelf", (0.95, 0.95, 0.95), rough=0.4)
 M["frame"] = mat("M_Frame", (0.05, 0.05, 0.06), rough=0.35)
 M["gun"] = mat("M_Gun", (0.04, 0.04, 0.045), rough=0.35, metal=0.6)
-M["bullet"] = mat("M_Bullet", (0.95, 0.52, 0.20), rough=0.22, metal=1.0)
+M["bullet"] = mat("M_Bullet", (0.95, 0.55, 0.22), rough=0.38, metal=1.0)
 M["bullet_core"] = mat("M_BulletBase", (0.80, 0.62, 0.25), rough=0.25, metal=1.0)
 
 # ================================================================== EXTERIOR: lawn, sidewalk, road, the house front
@@ -343,7 +353,7 @@ bpy.context.view_layer.objects.active = gun_parts[0]; bpy.ops.object.join()
 GUN = bpy.context.active_object; GUN.name = "Pistol"
 GUN["muzzle"] = (0.0, 0.165, 0.060)
 # muzzle flash: a bright stylised star, keyed in 02 (scale 0 -> 1 -> 0 inside 4 frames)
-fl_m = mat("M_Flash", (1.0, 0.75, 0.2), emit=((1.0, 0.70, 0.15), 14.0))
+fl_m = mat("M_Flash", (1.0, 0.55, 0.08), emit=((1.0, 0.50, 0.06), 22.0))
 # a cone of thin emissive streaks along the barrel (+Y), not a blob
 fl_parts = []
 for k in range(7):
