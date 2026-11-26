@@ -218,3 +218,10 @@ and was caught only by watching. New films start from `pipeline/CONNECT_BRIEF_v2
 - Run the hand-vs-body and finger-vs-head audits on the BLOCKING pass, before lighting and polish.
   If they fail, change the staging, not the IK.
 - Ray-test tool tips and fingers against the body mesh AND the hair cards.
+
+## Lessons from the approved batch 1 rebuilds (01–10, Nov 2026)
+- Hold key props toward the camera with the important side visible (a fuse, a brick, a key bow). Never sole-out or edge-on.
+- Small props (needles, keys, bullets) get their own macro, filling about 1/3 of the frame. Never rely on them reading in a mid-shot.
+- Faces must be readable: smiles come from sculpted mouth-corner shape keys (as in BellyFat v018). Blinks use both eyes.
+- Released objects land exactly on the surface (no drop), and arms never fold behind the back.
+- Camera passes close to people and set pieces must not block the lens. Check the frustum for near objects on every frame.
