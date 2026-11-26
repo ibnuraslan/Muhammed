@@ -562,21 +562,13 @@ for f in (F_OFF_IN, END):
     place_hand(OFF, "L", f, hand_on, Vector((0, 0, -1)), Vector((-1, 0.15, 0)), skin=0.012)
     key_pole_world(OFF, "L", f, Wh(OFF, "upperarm01.L") + Vector((0.35, -0.45, -0.2)))
     apply_pose(OFF, "L", "flat_palm", f)
-FOLDER = box("Fan_Folder", (0.22, 0.30, 0.012), (0, 0, 0), mat("M_FanFolder", (0.95, 0.70, 0.05), rough=0.55), bevel=0.003)
-def fan_hand(f, phase):
-    fs(f); R3 = OFF.matrix_world.to_3x3(); sh = Wh(OFF, "upperarm01.R")
-    wr = sh + R3 @ Vector((0.02, -0.30, -0.14))
-    a_ = R_(30) * math.sin(phase)
-    fdir = R3 @ Vector((0.15, -0.10, 1.0))
-    palm = R3 @ (Matrix.Rotation(a_, 3, 'Z') @ Vector((0.15, 1.0, 0.0)))
-    hand_world(OFF, "R", f, wr, fdir, palm, pole=sh + R3 @ Vector((-0.45, 0.25, -0.45)))
-fan_hand(F_OFF_IN, 0.0); apply_pose(OFF, "R", "hold_flat_object", F_OFF_IN)
-prop_in_hand(OFF, "R", FOLDER, F_OFF_IN, grip_y=-0.11)
-for k, f in enumerate(range(1100, END + 1, 9)):
-    fan_hand(f, k * math.pi / 2)
-apply_pose(OFF, "R", "hold_flat_object", END)
-key_vis([FOLDER], 1, False); key_vis([FOLDER], F_OFF_IN, True)
-key_vis([PAD], 1, True); key_vis([PAD] + list(PAD.children), F_OFF_IN, False); key_vis(list(PAD.children), 1, True)
+hand_on_r = Vector((DESK[0] + 0.30, DESK[1] + 0.24, DTOP + 0.004))
+for f in (F_OFF_IN, 1200, 1215, 1230, END):
+    lift = 0.03 if f in (1215,) else 0.0      # a tap of frustration on the desk
+    place_hand(OFF, "R", f, hand_on_r + Vector((0, 0, lift)), Vector((0, 0, -1)), Vector((-1, -0.15, 0)), skin=0.012)
+    key_pole_world(OFF, "R", f, Wh(OFF, "upperarm01.R") + Vector((0.35, 0.45, -0.2)))
+    apply_pose(OFF, "R", "flat_palm", f)
+key_vis([PAD], 1, True); key_vis(list(PAD.children), 1, True); key_vis([PAD] + list(PAD.children), F_OFF_IN, False)
 expression(OFF, [(F_OFF_IN, 0.0), (1150, 0.0), (1170, 1.0), (END, 1.0)], FROWN)
 
 # ================================================================== STATION power cut: windows go dark one by one, the fan winds down, candle + moon
@@ -672,11 +664,11 @@ def bh(f): return RH[f]
 CK = [
     # frame, position, aim, lens, f-stop
     (1,    Vector((5.0, -4.0, 1.65)), Vector((3.6, 1.5, 1.45)), 30, 8),                   # the officer flags the bike down (it comes in from behind us)
-    (50,   Vector((4.7, -3.0, 1.62)), Vector((3.0, 1.0, 1.40)), 30, 8),
+    (50,   Vector((4.9, -3.2, 1.62)), Vector((3.9, 1.0, 1.45)), 30, 8),
     (95,   Vector((4.2, -1.3, 1.64)), Vector((2.6, 0.3, 1.40)), 30, 8),
     (122,  Vector((3.45, 0.55, 1.70)), Vector((2.35, -0.1, 1.45)), 30, 8),               # between them as the bike stops
-    (150,  Vector((3.60, 3.30, 1.68)), Vector((3.35, 0.25, 1.45)), 26, 8),               # rider + officer pointing at his bare head
-    (205,  Vector((3.05, 2.30, 1.64)), Vector((2.45, -0.1, 1.50)), 30, 8),
+    (150,  Vector((3.50, 3.40, 1.68)), Vector((3.55, 0.35, 1.45)), 24, 8),               # rider + officer pointing at his bare head
+    (205,  Vector((3.20, 2.55, 1.64)), Vector((3.05, 0.0, 1.50)), 26, 8),
     (255,  Vector((2.65, 1.05, 1.62)), Vector((2.35, -0.2, 1.52)), 38, 8),                # close on Ravi: "Big mistake"
     (290,  Vector((2.55, 0.85, 1.58)), Vector((2.40, -0.2, 1.60)), 38, 8),
     (318,  Vector((2.75, 0.60, 1.90)), PT + Vector((-0.6, 0, 0.3)), 30, 8),              # tilt up to the pole transformer and the wires
@@ -686,15 +678,16 @@ CK = [
     (420,  Vector((-7.60, 17.70, 2.6)), Vector((-10.5, 20.5, 2.2)), 30, 8),
     (455,  Vector((-8.5, 14.5, 9.0)), Vector((-40.0, 28.0, 10.0)), 26, 8),                # crane up: pylons and lines over the town
     (488,  Vector((-5.0, 9.0, 6.5)), Vector((-60.0, 20.0, 6.0)), 26, 8),
-    (515,  Vector((-2.2, WINC.y + 0.2, 1.75)), WINC + Vector((-2.5, 0.0, -0.10)), 30, 8),  # down to the control room window: logo on the lid
-    (560,  Vector((-4.6, WINC.y + 0.1, 1.68)), WINC + Vector((-3.0, -0.05, -0.15)), 32, 8),
-    (600,  Vector((-6.45, WINC.y + 0.25, 1.62)), WINC + Vector((-2.6, 0.0, -0.10)), 32, 8),  # through the window (no glass)
-    (640,  Vector((-9.55, 2.15, 1.78)), SCR_C + Vector((0, 0.02, 0.0)), 30, 9),           # over his right shoulder: the screen
-    (700,  Vector((-9.40, 2.20, 1.76)), SCR_C, 34, 10),
+    (515,  Vector((-2.2, WINC.y + 0.2, 1.55)), Vector((RAVI_CX, RAVI_CY, 1.60)), 30, 8),     # the control room window: his face over the lid, logo on the lid
+    (560,  Vector((-4.6, WINC.y + 0.1, 1.52)), Vector((RAVI_CX, RAVI_CY, 1.60)), 34, 8),
+    (600,  Vector((-6.55, WINC.y + 0.05, 1.52)), Vector((RAVI_CX, RAVI_CY, 1.60)), 34, 8),    # through the window (no glass)
+    (625,  Vector((-7.55, 2.15, 1.80)), Vector((RAVI_CX, RAVI_CY, 1.60)), 30, 8),           # round his right side, clear of the lever
+    (652,  Vector((-8.65, 2.12, 1.86)), SCR_C, 30, 9),
+    (690,  Vector((-9.45, 2.20, 1.78)), SCR_C, 32, 10),                                       # over his right shoulder: the red police row
     (760,  Vector((-9.32, 2.22, 1.74)), SCR_C + Vector((0, 0.03, 0.0)), 40, 11),          # calendar pages, over his right shoulder
-    (805,  Vector((-8.70, 2.02, 1.80)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),          # round his right side, above the counter
-    (845,  Vector((-7.50, 2.50, 1.70)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),          # his grin over the laptop lid
-    (880,  Vector((-7.45, 2.95, 1.68)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),
+    (805,  Vector((-8.55, 2.12, 1.86)), Vector((RAVI_CX, RAVI_CY, 1.60)), 30, 8),          # round his right side, above the counter
+    (845,  Vector((-7.50, 2.50, 1.56)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),          # his grin over the laptop lid (low, under the brim)
+    (880,  Vector((-7.45, 2.95, 1.56)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),
     (895,  Vector((-8.55, 3.50, 1.82)), Vector((RAVI_CX, RAVI_CY, 1.55)), 28, 8),
     (915,  Vector((-9.70, 3.35, 1.82)), SCR_C + Vector((0, 0.0, 0.0)), 28, 8),             # behind-left: the bar grows, he leans back
     (950,  Vector((-9.85, 3.55, 1.85)), SCR_C + Vector((0, -0.05, 0.05)), 26, 8),
