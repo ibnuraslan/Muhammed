@@ -654,7 +654,7 @@ sun = O["Sun"]
 for f, e, c, rx in ((1, 4.0, (1.0, 0.95, 0.86), 42), (1080, 4.0, (1.0, 0.95, 0.86), 42), (1150, 1.2, (1.0, 0.50, 0.25), 80), (END, 1.0, (1.0, 0.45, 0.25), 82)):
     sun.data.energy = e; sun.data.color = c; sun.data.keyframe_insert("energy", frame=f); sun.data.keyframe_insert("color", frame=f)
     sun.rotation_euler.x = R_(rx); sun.keyframe_insert("rotation_euler", index=0, frame=f)
-for f, ex in ((1, 0.0), (1080, 0.0), (1140, 0.55), (1162, 0.05), (1278, 0.05), (1290, 0.55), (END, 0.55)):
+for f, ex in ((1, 0.0), (1080, 0.0), (1140, 0.55), (1162, 0.22), (1278, 0.22), (1290, 0.55), (END, 0.55)):
     sc.view_settings.exposure = ex; sc.view_settings.keyframe_insert("exposure", frame=f)
 for n in sc["STREET_LIGHTS"]:
     ld = O[n].data
@@ -715,7 +715,7 @@ CK = [
     (640,  Vector((-7.40, 2.80, 1.50)), Vector((-8.55, 2.80, 1.43)), 36, 8),               # straight on: the DA KRAS FILMS lid logo and his face, red glow on it
     (684,  Vector((-7.60, 2.83, 1.52)), Vector((-8.55, 2.80, 1.44)), 36, 8),
     (712,  Vector((-8.25, 2.08, 1.42)), Vector((RAVI_CX, RAVI_CY, 1.62)), 30, 8),           # round his right side, low: looking up at his face
-    (745,  Vector((-8.70, 2.05, 1.40)), Vector((RAVI_CX + 0.05, RAVI_CY, 1.60)), 30, 8),    # his face from below the brim, screen glow on it
+    (745,  Vector((-8.05, 2.25, 1.42)), Vector((RAVI_CX, RAVI_CY, 1.60)), 32, 8),           # his face from below the brim, screen glow on it
     (790,  Vector((-8.00, 2.10, 1.45)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),
     (830,  Vector((-7.55, 2.45, 1.58)), Vector((RAVI_CX, RAVI_CY, 1.64)), 32, 8),           # his grin over the laptop lid (under the brim)
     (880,  Vector((-7.70, 2.90, 1.58)), Vector((RAVI_CX, RAVI_CY, 1.64)), 36, 8),
