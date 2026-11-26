@@ -1,11 +1,33 @@
-# GameBoxBullet_v012: from-scratch rebuild (batch 1 film 15), ON HOLD, NOT READY
+# GameBoxBullet_v012: from-scratch rebuild (batch 1 film 15), CLIENT-APPROVED, READY TO RENDER
 
-**Latest: check 5 (round 4, director-approved) FAILED.** See `review/CHECK5.md` (and CHECK4.md for round 3). `review/preview.mp4` is now the round-4 preview. The .blend is still not pushed.
+**Status:** the client approved the round-4 build as it is (relayed by the director on Nov 26).
+- This package is exactly that build: `GameBoxBullet_v012_60fps.blend`, frames 1–1311 at 60 fps, with the VO packed.
+- `review/preview.mp4` is the preview of this exact file: every 5th frame, 270x480, with the VO, 21.9 s. Watch it before paying for the render.
+- `SETTINGS.md` is the farm sheet. `CREDITS.md` lists the assets; all are CC0.
 
+## Render check: PASS
+Checked on the exact delivered file, `GameBoxBullet_v012_60fps.blend` (64 MB):
+- **Opens cleanly:** it loads with `blender --factory-startup -b` with no errors. There are no linked libraries, no unpacked images, sounds or fonts, and no drivers or scripts.
+- **Scene settings:**
+  - Scene camera `CAM_Film` (the only camera, no markers).
+  - 1080x1920 at 100 %, 60 fps, frames 1-1311.
+  - Cycles: 64 samples, adaptive (threshold 0.04), OpenImageDenoise.
+  - Filmic, High Contrast.
+  - PNG output to `//render/GameBoxBullet_v012_####.png`.
+  - The VO strip is present (frames 1-1285).
+- **Test frames:** frames 1, 656 and 1311 were rendered at full 1080x1920 from the packed file. None is black, empty or pink.
+  - The check used 16 samples to save time; the farm setting is 64 adaptive.
+  - CPU time was 35-80 s per frame on 4 cores at 16 samples.
+  - Downscaled copies are in `review/render_check_*.jpg`.
 
-**Status: ON HOLD.** Self-QC check 3 failed (fresh harsh reviewer and my own watch). Both fix rounds allowed by the rebuild brief are used.
-**No .blend is pushed**, because no check passed. `review/preview.mp4` is the check-3 preview: every 5th frame, 270x480, with the VO, rendered from the packed local build.
-The remaining faults, with frames and the proposed fixes, are in `review/CHECK3.md`. Earlier rounds are in `review/CHECK1.md` and `review/CHECK2.md`.
+## Known items from the last harsh review (client approved the build with these)
+See `review/CHECK5.md` for the frames:
+- the bullet is small in the front-angle box macros;
+- fingertips show at the box edge at the hit;
+- a cabinet sits near the lens in the room approach;
+- some near-static mediums;
+- face crops on several push-ins;
+- the shooter's bright eyes.
 
 ## What v012 is
 - **Timing:** the client's VO, the same file as v010/v011 (`GameBoxBullet_v012_VO.mp3`). Frames 1-1311 at 60 fps, built to the word timestamps from the start, with no retime. Beats are in `beats.json`.
