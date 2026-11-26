@@ -42,11 +42,17 @@ for im in bpy.data.images:
     im.filepath_raw = fn; im.file_format = 'PNG'; im.save()
     im.unpack(method='REMOVE') if im.packed_file else None
     im.filepath = fn; im.reload(); im.pack()
+# Poly Haven LOD sets: every LOD rendered on top of the others. Keep LOD0 (and the leaf/branch sets the tree's
+# geometry nodes instance from their own collections); delete the duplicate whole-plant LOD1-3 objects.
+import re as _re
+for o in list(bpy.data.objects):
+    if _re.search(r"(shrub_01_[a-z]_LOD[123]|island_tree_02_LOD[123])(\.\d+)?$", o.name):
+        bpy.data.objects.remove(o, do_unlink=True)
 # very dense meshes (the Poly Haven tree and book set): decimated in place (they are far background)
 dg = bpy.context.evaluated_depsgraph_get()
 for o in list(bpy.data.objects):
     if o.type != 'MESH' or len(o.data.vertices) < 150000: continue
-    n0 = len(o.data.vertices); md = o.modifiers.new("dec", 'DECIMATE'); md.ratio = max(0.08, 120000 / n0)
+    n0 = len(o.data.vertices); md = o.modifiers.new("dec", 'DECIMATE'); md.ratio = max(0.05, 60000 / n0)
     dg = bpy.context.evaluated_depsgraph_get(); me = bpy.data.meshes.new_from_object(o.evaluated_get(dg))
     o.modifiers.remove(md); old = o.data; o.data = me
     print("DECIMATED", o.name, n0, "->", len(me.vertices))
