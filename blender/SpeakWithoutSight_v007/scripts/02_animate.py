@@ -367,7 +367,7 @@ def throat_hand(f, lift=0.0):
     t = Vector((0, 0, 1)).cross(N).normalized()
     if t.x > 0: t = -t                     # fingers across the front of her throat (away from the girl's wrist)
     fd = (t + Vector((0, 0, 0.15))).normalized()
-    place_hand(GR, "R", f, P + N * lift, -N, fd, skin=0.016)
+    place_hand(GR, "R", f, P + N * lift, -N, fd, skin=0.022)
     sh = Wh(GR, "upperarm01.R"); key_pole(CTG, "R", f, sh + Vector((0.10, 0.30, -0.40)))
     pose_hand(GR, "R", f, "soft_cup")
     return P, N
@@ -512,7 +512,7 @@ def own_lips(f):
     if side.x < 0: side = -side            # toward her left (+X side), where her left hand comes from
     fd = (up * 0.70 - side * 0.40 - N * 0.30).normalized()
     sh = Wh(GR, "upperarm01.L"); key_pole(CTG, "L", f, sh + Vector((0.25, 0.20, -0.40)))
-    return tip_on(GR, "L", f, P + N * 0.008, fd, -N)
+    return tip_on(GR, "L", f, P + N * 0.012, fd, -N)
 OWN = {}
 for f in list(range(1262, END + 1, 6)) + [END]:
     OWN[f] = own_lips(f)
