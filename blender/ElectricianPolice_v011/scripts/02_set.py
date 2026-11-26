@@ -90,7 +90,7 @@ for sx in (1, -1):
 plane("Ground_far", -400, 400, -400, 400, -0.02, plaster("M_Dirt", (0.55, 0.36, 0.18), scale=3))
 
 # ------------------------------------------------------------------ building kit
-def window(name, x, y, z, w, h, face, wall_m, shutter_col=None, lit=None, parent=None, glass=True):
+def window(name, x, y, z, w, h, face, wall_m, shutter_col=None, lit=None, parent=None, glass=True, mullion=True):
     """a framed window on a facade facing `face` (+1: +x, -1: -x); returns the glass/emitter object"""
     fx = x + face * 0.06
     objs = []
@@ -98,7 +98,7 @@ def window(name, x, y, z, w, h, face, wall_m, shutter_col=None, lit=None, parent
     objs.append(box(name + "_fr_b", (0.16, w + 0.20, 0.06), (fx + face * 0.03, y, z - h / 2 - 0.03), M["frame"], bevel=0.008))
     objs.append(box(name + "_fr_l", (0.10, 0.06, h), (fx, y - w / 2 - 0.03, z), M["frame"], bevel=0.008))
     objs.append(box(name + "_fr_r", (0.10, 0.06, h), (fx, y + w / 2 + 0.03, z), M["frame"], bevel=0.008))
-    objs.append(box(name + "_fr_m", (0.06, 0.04, h), (fx, y, z), M["frame"], bevel=0.005))
+    if mullion: objs.append(box(name + "_fr_m", (0.06, 0.04, h), (fx, y, z), M["frame"], bevel=0.005))
     g = None
     if glass:
         g = box(name + "_gl", (0.02, w, h), (x + face * 0.01, y, z), lit if lit is not None else M["glass"], bevel=0)
@@ -300,7 +300,7 @@ box("Station_step", (0.5, 2.2, 0.15), (EX - 0.25, (DOOR[0] + DOOR[1]) / 2, 0.225
 box("Station_canopy", (1.2, 2.4, 0.12), (EX - 0.6, (DOOR[0] + DOOR[1]) / 2, 2.75), st_blue, bevel=0.02)
 # windows: frames; W_CAM has NO glass (the camera flies through it); others glass with an interior glow card
 ST_WIN_LIT = mat("M_StWinLit", (1.0, 0.85, 0.55), emit=((1.0, 0.82, 0.5), 0.0))
-window("StW_cam", EX, (W_CAM[0] + W_CAM[1]) / 2, (W_CAM[2] + W_CAM[3]) / 2, W_CAM[1] - W_CAM[0], W_CAM[3] - W_CAM[2], -1, st_m, glass=False)
+window("StW_cam", EX, (W_CAM[0] + W_CAM[1]) / 2, (W_CAM[2] + W_CAM[3]) / 2, W_CAM[1] - W_CAM[0], W_CAM[3] - W_CAM[2], -1, st_m, glass=False, mullion=False)
 box("StW_cam_sill", (0.30, W_CAM[1] - W_CAM[0] + 0.2, 0.06), (EX - 0.05, (W_CAM[0] + W_CAM[1]) / 2, W_CAM[2] - 0.03), M["frame"], bevel=0.01)
 GLOWS = []
 for nm_, hh in (("StW_2", W_ST2),) + tuple(("StW_up%d" % i, u) for i, u in enumerate(UP)):
@@ -372,7 +372,7 @@ bpy.data.objects["Control_front"].location.x += 0.0
 CR = dict(x0=WX - 7.0, x1=WX - 0.25, y0=1.3, y1=CY1 - 0.25, h=3.0)
 box("Control_body", (7.5, CY1 - CY0, 4.2), (WX - 3.75 - 0.25, (CY0 + CY1) / 2, 2.1), cr_m, bevel=0)
 bpy.data.objects["Control_body"].hide_render = True; bpy.data.objects["Control_body"].hide_viewport = True   # placeholder volume not used
-crin = plaster("M_ControlIn", (0.95, 0.62, 0.30))
+crin = plaster("M_ControlIn", (0.85, 0.36, 0.08))
 box("Control_inBack", (0.2, CR["y1"] - CR["y0"], CR["h"]), (CR["x0"] - 0.1, (CR["y0"] + CR["y1"]) / 2, CR["h"] / 2), crin, bevel=0)
 box("Control_inS", (CR["x1"] - CR["x0"] + 0.25, 0.2, CR["h"]), ((CR["x0"] + CR["x1"]) / 2, CR["y0"] - 0.1, CR["h"] / 2), crin, bevel=0)
 box("Control_inN", (CR["x1"] - CR["x0"] + 0.25, 0.2, CR["h"]), ((CR["x0"] + CR["x1"]) / 2, CR["y1"] + 0.1, CR["h"] / 2), crin, bevel=0)
@@ -383,7 +383,7 @@ box("Control_outerN", (7.4, 0.25, 4.2), (WX - 3.7, CY1 - 0.125, 2.1), cr_m, beve
 box("Control_roof", (7.4, CY1 - CY0, 0.25), (WX - 3.7, (CY0 + CY1) / 2, 4.2), cr_m, bevel=0)
 box("Control_band", (0.14, CY1 - CY0, 0.30), (WX + 0.07, (CY0 + CY1) / 2, 3.0), cr_trim, bevel=0.01)
 box("Control_parapet", (0.3, CY1 - CY0 + 0.2, 0.4), (WX + 0.05, (CY0 + CY1) / 2, 4.35), cr_trim, bevel=0.02)
-window("CrW", WX, (W_CR[0] + W_CR[1]) / 2, (W_CR[2] + W_CR[3]) / 2, W_CR[1] - W_CR[0], W_CR[3] - W_CR[2], 1, cr_m, glass=False)
+window("CrW", WX, (W_CR[0] + W_CR[1]) / 2, (W_CR[2] + W_CR[3]) / 2, W_CR[1] - W_CR[0], W_CR[3] - W_CR[2], 1, cr_m, glass=False, mullion=False)
 box("CrW_sill", (0.30, W_CR[1] - W_CR[0] + 0.2, 0.06), (WX + 0.05, (W_CR[0] + W_CR[1]) / 2, W_CR[2] - 0.03), M["frame"], bevel=0.01)
 box("Control_door", (0.06, 1.2, 2.25), (WX - 0.1, (DOOR_CR[0] + DOOR_CR[1]) / 2, 1.27), mat("M_CrDoor", (0.85, 0.10, 0.05), rough=0.4), bevel=0.01)
 signboard("Control_sign", WX, (CY0 + CY1) / 2, 3.7, 5.5, 0.6, 1, (0.98, 0.78, 0.05))
@@ -632,6 +632,8 @@ def area(name, loc, target, power, size, col):
 area("Ctrl_Key", (WX - 1.0, 2.6, 2.85), (WX - 2.6, 2.6, 1.3), 260, 1.2, (1.0, 0.95, 0.88))
 area("Ctrl_Fill", (WX - 4.5, 3.5, 2.6), (WX - 2.0, 2.6, 1.4), 180, 1.6, (1.0, 0.90, 0.80))
 area("Ctrl_Back", (WX - 5.5, 6.0, 2.7), (WX - 6.8, 4.0, 1.4), 120, 1.6, (1.0, 0.92, 0.85))
+area("Ctrl_Deep1", (WX - 4.5, 2.5, 2.8), (WX - 6.8, 2.5, 1.0), 160, 1.6, (1.0, 0.90, 0.80))
+area("Ctrl_Deep2", (WX - 6.0, 4.5, 2.8), (WX - 7.0, 5.0, 1.0), 140, 1.6, (1.0, 0.90, 0.80))
 # station room: tube-light key (keyed OFF at the cut), moonlight through the window and the candle (keyed ON) in 03
 area("St_Key", (RX["x0"] + 2.4, desk_y - 0.4, ROOM["h"] - 0.15), (desk_x + 0.5, desk_y, 1.0), 240, 1.2, (1.0, 0.97, 0.90))
 area("St_Moon", (EX - 1.5, desk_y + 0.4, 2.4), (desk_x + 0.8, desk_y, 1.3), 0.0, 1.4, (0.45, 0.60, 1.0))

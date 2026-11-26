@@ -663,45 +663,49 @@ PT = Vector(sc["POLE_TRANS"])
 def bh(f): return RH[f]
 CK = [
     # frame, position, aim, lens, f-stop
-    (1,    Vector((5.0, -4.0, 1.65)), Vector((3.6, 1.5, 1.45)), 30, 8),                   # the officer flags the bike down (it comes in from behind us)
-    (50,   Vector((4.9, -3.2, 1.62)), Vector((3.9, 1.0, 1.45)), 30, 8),
-    (95,   Vector((4.2, -1.3, 1.64)), Vector((2.6, 0.3, 1.40)), 30, 8),
+    (1,    Vector((1.05, -13.4, 1.60)), Vector((3.9, 1.0, 1.55)), 32, 8),                  # chasing the bike: the officer ahead flags him down
+    (60,   Vector((1.15, -6.9, 1.62)), Vector((3.9, 1.0, 1.50)), 32, 8),
+    (95,   Vector((3.70, -2.70, 1.64)), Vector((2.6, 0.0, 1.42)), 30, 8),
     (122,  Vector((3.45, 0.55, 1.70)), Vector((2.35, -0.1, 1.45)), 30, 8),               # between them as the bike stops
-    (150,  Vector((3.50, 3.40, 1.68)), Vector((3.55, 0.35, 1.45)), 24, 8),               # rider + officer pointing at his bare head
-    (205,  Vector((3.20, 2.55, 1.64)), Vector((2.85, 0.0, 1.50)), 26, 8),
+    (150,  Vector((3.95, 3.70, 1.68)), Vector((3.45, 0.40, 1.45)), 22, 8),               # rider + officer pointing at his bare head
+    (205,  Vector((3.40, 2.55, 1.64)), Vector((3.00, 0.0, 1.50)), 24, 8),
     (255,  Vector((2.65, 1.05, 1.62)), Vector((2.35, -0.2, 1.52)), 38, 8),                # close on Ravi: "Big mistake"
     (290,  Vector((2.55, 0.85, 1.58)), Vector((2.40, -0.2, 1.60)), 38, 8),
-    (318,  Vector((2.75, 0.60, 1.90)), PT + Vector((-0.6, 0, 0.3)), 30, 8),              # tilt up to the pole transformer and the wires
+    (300,  Vector((2.60, 0.95, 1.62)), Vector((2.50, -0.1, 1.85)), 34, 8),
+    (322,  Vector((2.85, 0.70, 1.95)), Vector((3.6, 2.2, 4.2)), 30, 8),                   # tilt up with his gaze to the pole transformer and the wires
     (340,  Vector((1.20, 4.50, 5.6)), Vector((-6.0, 12.0, 4.0)), 28, 8),                  # follow the wires west, over the street
     (366,  Vector((-5.0, 13.0, 3.4)), Vector((-9.4, 19.4, 1.55)), 30, 8),                 # over the yard fence (3.4 m), down to Ravi
     (392,  Vector((-7.70, 18.25, 1.75)), Vector((-9.4, 19.4, 1.62)), 34, 8),              # Ravi in his hard hat, transformers behind
     (420,  Vector((-7.60, 17.70, 2.6)), Vector((-10.5, 20.5, 2.2)), 30, 8),
     (455,  Vector((-8.5, 14.5, 9.0)), Vector((-40.0, 28.0, 10.0)), 26, 8),                # crane up: pylons and lines over the town
-    (488,  Vector((-5.0, 9.0, 6.5)), Vector((-60.0, 20.0, 6.0)), 26, 8),
+    (488,  Vector((-1.5, 8.5, 6.5)), Vector((-40.0, 22.0, 6.0)), 26, 8),
     (515,  Vector((-2.2, WINC.y + 0.2, 1.55)), Vector((RAVI_CX, RAVI_CY, 1.60)), 30, 8),     # the control room window: his face over the lid, logo on the lid
     (560,  Vector((-4.6, WINC.y + 0.1, 1.52)), Vector((RAVI_CX, RAVI_CY, 1.60)), 34, 8),
     (600,  Vector((-6.55, WINC.y + 0.05, 1.52)), Vector((RAVI_CX, RAVI_CY, 1.60)), 34, 8),    # through the window (no glass)
     (625,  Vector((-7.55, 2.15, 1.80)), Vector((RAVI_CX, RAVI_CY, 1.60)), 30, 8),           # round his right side, clear of the lever
     (652,  Vector((-8.65, 2.12, 1.86)), SCR_C, 30, 9),
-    (690,  Vector((-9.45, 2.20, 1.78)), SCR_C, 32, 10),                                       # over his right shoulder: the red police row
-    (760,  Vector((-9.32, 2.22, 1.74)), SCR_C + Vector((0, 0.03, 0.0)), 40, 11),          # calendar pages, over his right shoulder
-    (800,  Vector((-7.65, 2.20, 1.74)), Vector((RAVI_CX, RAVI_CY, 1.60)), 32, 8),          # round his right side, above the counter
-    (845,  Vector((-7.50, 2.50, 1.56)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),          # his grin over the laptop lid (low, under the brim)
-    (880,  Vector((-7.45, 2.95, 1.56)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),
+    (690,  Vector((-9.30, 2.08, 1.74)), SCR_C, 32, 10),                                       # over his right shoulder, his cheek in frame: the red police row
+    (745,  Vector((-9.20, 2.05, 1.72)), SCR_C + Vector((0, 0.03, 0.0)), 38, 11),            # calendar pages
+    (790,  Vector((-8.30, 2.05, 1.78)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),           # round his right side, above the counter
+    (830,  Vector((-7.55, 2.45, 1.58)), Vector((RAVI_CX, RAVI_CY, 1.64)), 32, 8),           # his grin over the laptop lid (under the brim)
+    (880,  Vector((-7.70, 2.90, 1.58)), Vector((RAVI_CX, RAVI_CY, 1.64)), 36, 8),
     (895,  Vector((-8.55, 3.50, 1.82)), Vector((RAVI_CX, RAVI_CY, 1.55)), 28, 8),
     (915,  Vector((-9.70, 3.35, 1.82)), SCR_C + Vector((0, 0.0, 0.0)), 28, 8),             # behind-left: the bar grows, he leans back
-    (950,  Vector((-9.85, 3.55, 1.85)), SCR_C + Vector((0, -0.05, 0.05)), 26, 8),
+    (945,  Vector((-9.80, 3.55, 1.82)), SCR_C + Vector((0, -0.05, 0.05)), 26, 8),
+    (965,  Vector((-8.00, 3.70, 1.72)), Vector((RAVI_CX, RAVI_CY, 1.60)), 28, 8),
     (985,  Vector((-7.55, 2.40, 1.70)), Vector((RAVI_CX, 2.4, 1.40)), 28, 8),             # the turn to the switchgear
-    (1015, Vector((-7.70, 2.35, 1.62)), ARMC + Vector((-0.05, 0.25, 0.10)), 28, 8),       # the lever, the sparks, his face
-    (1045, Vector((-7.80, 2.55, 1.58)), ARMC + Vector((0.0, 0.40, 0.20)), 28, 8),
-    (1068, Vector((-7.20, WINC.y, 1.70)), Vector((RAVI_CX, RAVI_CY - 0.2, 1.55)), 28, 8),
+    (1015, Vector((-8.10, 1.98, 1.64)), Vector((-9.05, 2.45, 1.50)), 26, 8),             # the lever, the sparks, his face
+    (1045, Vector((-8.05, 2.02, 1.62)), Vector((-9.05, 2.40, 1.48)), 26, 8),
+    (1060, Vector((-7.75, 2.35, 1.66)), Vector((RAVI_CX - 0.1, 2.45, 1.55)), 28, 8),
+    (1072, Vector((-7.55, WINC.y, 1.75)), STWIN + Vector((0, 0, 1.2)), 26, 8),           # turn to the window INSIDE the room
     (1084, Vector((-5.6, WINC.y, 2.2)), STWIN + Vector((0, 0, 1.6)), 26, 8),              # whip out of the window to the station
     (1115, Vector((-1.0, 1.6, 3.2)), STWIN + Vector((0, -0.6, 1.6)), 26, 8),              # windows go dark one by one, dusk
     (1150, Vector((4.2, STWIN.y, 1.75)), STWIN + Vector((2.0, 0, -0.15)), 28, 8),
     (1172, Vector((6.70, STWIN.y, 1.68)), Vector((DESK[0] + 0.6, DESK[1], 1.45)), 30, 8),  # in through the window (no glass)
     (1215, Vector((7.25, DESK[1] - 0.55, 1.62)), Vector((DESK[0] + 0.75, DESK[1] - 0.05, 1.55)), 32, 8),
     (1262, Vector((7.20, DESK[1] + 0.45, 1.70)), Vector((DESK[0] + 0.8, DESK[1], 1.70)), 30, 8),  # officer + spinning clock
-    (1286, Vector((6.10, STWIN.y, 1.70)), Vector((3.35, -0.55, 1.55)), 28, 8),           # back out of the window
+    (1272, Vector((7.70, STWIN.y, 1.72)), Vector((3.35, -0.55, 1.55)), 28, 8),           # turn to the street inside the room
+    (1290, Vector((5.80, STWIN.y - 0.1, 1.70)), Vector((3.35, -0.55, 1.55)), 28, 8),     # back out of the window
     (1320, Vector((5.10, -0.20, 1.62)), Vector((3.35, -0.55, 1.60)), 30, 8),             # Ravi by his bike, dusk
     (1370, Vector((4.55, -0.40, 1.62)), Vector((3.35, -0.55, 1.62)), 34, 8),
     (1410, Vector((4.40, -0.70, 1.62)), Vector((3.35, -0.55, 1.62)), 36, 8),
@@ -709,7 +713,7 @@ CK = [
 ]
 cam_d = bpy.data.cameras.new("CAM_Film"); CAM = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(CAM); sc.camera = CAM
 AIM = bpy.data.objects.new("CAM_Film_Aim", None); sc.collection.objects.link(AIM)
-cam_d.sensor_fit = 'AUTO'; cam_d.sensor_width = 36; cam_d.clip_start = 0.02; cam_d.dof.use_dof = True; cam_d.dof.focus_object = AIM
+cam_d.sensor_fit = 'AUTO'; cam_d.sensor_width = 36; cam_d.clip_start = 0.02; cam_d.dof.use_dof = False; cam_d.dof.focus_object = AIM
 yaws = []; prev = None
 for f, p, a_, l_, fst in CK:
     d = a_ - p; yw = math.atan2(d.y, d.x)
@@ -761,7 +765,7 @@ fs(150); OFFHEAD = Wh(OFF, "head") + Vector((0, 0, 0.05))
 ravi_head_keys([(1, Vector((2.3, 6.0, 1.4))), (60, Vector((2.3, 6.0, 1.3))), (110, OFFHEAD), (150, OFFHEAD), (230, OFFHEAD), (258, campos),
                 (284, campos), (300, PT), (F_YARD - 1, PT)], flex_fn=lambda f: 18 if f < 96 else 8)
 ravi_head_keys([(F_YARD, Vector((-12.5, 16.0, 2.0))), (350, Vector((-12.5, 16.0, 2.2))), (368, campos), (400, campos), (430, Vector((-24.0, 22.5, 14.0))), (F_CTRL - 1, Vector((-24.0, 22.5, 14.0)))])
-ravi_head_keys([(F_CTRL, SCR_C), (600, SCR_C), (650, SCR_C), (860, SCR_C), (895, SCR_C + Vector((0, 0, 0.1))), (960, SCR_C + Vector((0, 0, 0.1)))],
+ravi_head_keys([(F_CTRL, SCR_C), (600, SCR_C), (650, SCR_C), (760, SCR_C), (800, SCR_C + Vector((0, 0, 0.16))), (870, SCR_C + Vector((0, 0, 0.16))), (895, SCR_C + Vector((0, 0, 0.1))), (960, SCR_C + Vector((0, 0, 0.1)))],
                flex_fn=lambda f: LEAN(f))
 ravi_head_keys([(985, ARMC + Vector((0, 0, 0.1))), (1003, ARMC + Vector((0, 0.2, 0.2))), (1035, ARMC + Vector((0, 0.1, 0.45))), (1055, campos), (1070, STWIN), (F_END - 1, STWIN)],
                base_yaw_fn=lambda f: -90 if f >= 1003 else (-35 if f >= 985 else 0))
