@@ -104,10 +104,10 @@ def calibrate(c):
     rig, body, cl, CT, H = CH[c]
     for it in range(4):
         seat_pose(c, 1); fs(1)
-        mk = body.modifiers.get("hide_skirt")
-        if mk: mk.show_viewport = False      # measure the real skin (masked under the skirt)
+        mks = [m for m in body.modifiers if m.type == 'MASK' and m.show_viewport]
+        for m in mks: m.show_viewport = False      # measure the real skin (clothes masks hide it)
         bvs = [bvh_eval(body)]; mz = 9.0
-        if mk: mk.show_viewport = True
+        for m in mks: m.show_viewport = True
         for s in "LR":
             hp = Wh(rig, "upperleg01." + s); kn = Wh(rig, "lowerleg01." + s)
             for u in (0.0, 0.25, 0.5):
