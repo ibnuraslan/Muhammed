@@ -121,7 +121,8 @@ W.key(410, pos=SIT + Vector((0.08, 0, 0.02)), rot=Rb((0.25, -0.08, 1), BACKW), s
       foot_L=WH((SIT.x - 0.12, SIT.y + 0.42, heap(SIT.x - 0.12, SIT.y + 0.42) + 0.08), (0, 0, 1), BACKW),
       foot_R=WH((SIT.x + 0.12, SIT.y + 0.40, heap(SIT.x + 0.12, SIT.y + 0.40) + 0.08), (0, 0, 1), BACKW),
       knee_L=WH((SIT.x - 0.25, SIT.y + 0.9, 1.0), (0, 0, 1), (0, 0, 1)), knee_R=WH((SIT.x + 0.25, SIT.y + 0.9, 1.0), (0, 0, 1), (0, 0, 1)))
-W.key(451, pos=SIT, rot=Rb((0, -0.05, 1), BACKW), spine=(12, 0, 0), head=(-26, 0, 0), face=(0.0, 0.05, 0.7, 0.0))
+W.key(451, pos=SIT, rot=Rb((0, -0.05, 1), BACKW), spine=(12, 0, 0), head=(-26, 0, 0), face=(0.0, 0.05, 0.7, 0.0),
+      hand_L=LH((0.13, -0.36, 0.18), (0, 0.3, -1), (0, -1, -0.3)), hand_R=LH((-0.13, -0.36, 0.18), (0, 0.3, -1), (0, -1, -0.3)), grip_L="relaxed", grip_R="relaxed")
 
 # ==================================================================================== MAN: walks in, shoves her shoulders, backs off
 MY = -1.64
@@ -148,7 +149,8 @@ def back_contact(sx, z_up):
     """palm ON her upper back (the sweater surface), found by a ray from behind at the moment being baked"""
     def spec(f):
         top = O["Woman.top"]; dg = bpy.context.evaluated_depsgraph_get(); e = top.evaluated_get(dg)
-        sp = O["Woman"].matrix_world @ O["Woman"].pose.bones["spine01"].head
+        rg = O["Woman"]; nk = rg.matrix_world @ rg.pose.bones["neck01"].head; s1 = rg.matrix_world @ rg.pose.bones["spine01"].head
+        sp = nk + (s1 - nk).normalized() * 0.09          # between the shoulder blades, never the lower back
         org = Vector((sp.x + sx * 0.09, sp.y - 0.6, sp.z + z_up)); d = Vector((0, 1, 0))
         ok, loc, nrm, idx = e.ray_cast(e.matrix_world.inverted() @ org, d)
         p = (e.matrix_world @ loc) if ok else (sp + Vector((sx * 0.09, -0.12, z_up)))

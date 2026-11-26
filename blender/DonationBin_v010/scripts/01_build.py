@@ -100,7 +100,7 @@ def dress(rig, body, top, bottom, top_col, bot_col):
     for g in [x for x in (t, b) if x]:
         g.name = rig.name + "." + ("top" if g is t else "trousers")
         # real cloth thickness with a closed rim at every hem, cuff and collar (no paper-thin edges)
-        so = g.modifiers.new("solid", 'SOLIDIFY'); so.thickness = 0.003; so.offset = 1.0; so.use_rim = True
+        so = g.modifiers.new("solid", 'SOLIDIFY'); so.thickness = 0.003; so.offset = -1.0; so.use_rim = True    # inward: no extra poke at the hems
         i = g.modifiers.find("solid"); j = g.modifiers.find("Subdivision")
         while j >= 0 and i > j:          # after the float/tuck displaces, before the subdivision
             g.modifiers.move(i, i - 1); i -= 1; j = g.modifiers.find("Subdivision")
@@ -112,10 +112,10 @@ P_TOP, P_TRS = dress(PAS, PB, "fisherman", "wool_pants", (0.98, 0.72, 0.04), (0.
 # firefighters: a separate turnout COAT and TROUSERS (real CC0 jacket + trousers), charcoal with reflective bands
 F1_COAT, F1_TRS = dress(FF1, F1B, "suit_tie_and_jacket", "wool_pants", None, None)
 F2_COAT, F2_TRS = dress(FF2, F2B, "suit_tie_and_jacket", "wool_pants", None, None)
-for c_ in (F1_COAT, F2_COAT):
-    reflective_bands(c_, (0.08, 0.08, 0.10), [(0.06, 0.12), (0.52, 0.58)])
+for c_ in (F1_COAT, F2_COAT):      # navy coat over charcoal trousers: two garments, never one onesie
+    reflective_bands(c_, (0.02, 0.06, 0.24), [(0.06, 0.12), (0.52, 0.58)])
 for t_ in (F1_TRS, F2_TRS):
-    reflective_bands(t_, (0.08, 0.08, 0.10), [(0.16, 0.22)])
+    reflective_bands(t_, (0.035, 0.035, 0.04), [(0.16, 0.22)])
 
 for r, b in PEOPLE:
     eye_fix(r)
@@ -168,7 +168,7 @@ SUN.rotation_euler = (math.radians(50), 0, math.radians(-35))   # from the front
 
 # ================================================================== materials
 paint = mat("M_BinPaint", (0.03, 0.20, 0.85), rough=0.38, coat=0.35)        # saturated royal blue enamel
-paint_in = mat("M_BinInside", (0.02, 0.36, 0.55), rough=0.45, coat=0.15)     # deep teal inside
+paint_in = mat("M_BinInside", (0.02, 0.36, 0.55), rough=0.62, coat=0.0)     # deep teal inside
 trim = mat("M_BinTrim", (1.0, 0.72, 0.02), rough=0.35, coat=0.3)             # true yellow trim
 steel = mat("M_Steel", (0.62, 0.66, 0.72), rough=0.28, metal=1.0)
 paintB = mat("M_BinPaintB", (0.05, 0.62, 0.18), rough=0.38, coat=0.35)       # green bin
