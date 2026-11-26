@@ -68,6 +68,18 @@ for c in B.children:
         i = c.modifiers.find("solid")
         while i > c.modifiers.find("Armature") + 1:
             c.modifiers.move(i, i - 1); i -= 1
+# flatten the chest under the T-shirt (no clinging contour): smooth + 4 mm lift on the breast weights, before thickness
+vg_ = SUIT.vertex_groups.new(name="chest_flat")
+gi_ = [SUIT.vertex_groups[n].index for n in ("breast.L", "breast.R")]
+for v in SUIT.data.vertices:
+    w_ = max((g.weight for g in v.groups if g.group in gi_), default=0.0)
+    if w_ > 0.01: vg_.add([v.index], min(1.0, w_ * 1.5), 'REPLACE')
+smm = SUIT.modifiers.new("chest_smooth", 'SMOOTH'); smm.factor = 1.0; smm.iterations = 14; smm.vertex_group = "chest_flat"
+dsm = SUIT.modifiers.new("chest_lift", 'DISPLACE'); dsm.strength = 0.004; dsm.mid_level = 0.0; dsm.direction = 'NORMAL'; dsm.vertex_group = "chest_flat"
+for nm_ in ("chest_lift", "chest_smooth"):
+    i = SUIT.modifiers.find(nm_)
+    while i > SUIT.modifiers.find("Armature") + 1:
+        SUIT.modifiers.move(i, i - 1); i -= 1
 for c in B.children:
     to_col(c, C_HOME)
 to_col(B, C_HOME)

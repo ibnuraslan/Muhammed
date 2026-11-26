@@ -213,7 +213,7 @@ set_interp(BUL, 'LINEAR'); quat_continuity(BUL)
 for f, L_ in ((1, 0.40), (F_GLASS, 0.40), (F_GLASS + 4, 0.06), (400, 0.04), (515, 0.015), (522, 0.001), (SWAP2, 0.001), (758, 0.08), (F_WALL - 4, 0.08), (F_WALL, 0.001)):
     w_ = 2.5 if f <= F_GLASS else 1.0
     TRAIL.scale = (w_, w_, L_); TRAIL.keyframe_insert("scale", frame=f)
-vis(TRAIL, 1, False); vis(TRAIL, F_BUL, True); vis(TRAIL, 523, False); vis(TRAIL, SWAP2 + 2, True); vis(TRAIL, F_WALL, False)
+vis(TRAIL, 1, False); vis(TRAIL, F_BUL, True); vis(TRAIL, 523, False)          # no trail after the ricochet
 vis(BUL, 1, False); vis(BUL, F_BUL, True)
 
 # ================================================================== glass: crack + 36 shards falling to the floor/sill (they settle)
@@ -331,49 +331,49 @@ for f in (845, 870):
     place_hand(BR, "R", f, Vector((-0.24, -0.40 + 0.04 * u, MOUSE_Z + 0.06 + 0.05 * u)), Vector((-0.2, 0.3, -1)), Vector((0.1, -1, 0.2)), skin=0.02)
     key_pole("R", f, Vector((-0.45, 0.10, 0.85)))
     apply_pose(BR, "L", "open_alarm", f, amount=0.6); apply_pose(BR, "R", "open_alarm", f, amount=0.6)
-F_GRIP, F_OFF, F_SIDE, F_FWD, F_DOWN = 935, 972, 995, 1015, 1035
-# the right hand takes the headset by the top of its band (a closed fist), the left hand goes back down to the keyboard
-fs(925); HSinv = HS.matrix_world.inverted()
-upd(); dgb = bpy.context.evaluated_depsgraph_get(); eb_ = O["HS_Band"].evaluated_get(dgb); meb_ = eb_.to_mesh()
-bl_ = [HSinv @ (O["HS_Band"].matrix_world @ v.co) for v in meb_.vertices]; eb_.to_mesh_clear()
-LP = max(bl_, key=lambda v: v.z)                                 # top of the band, outer surface (HS local)
-log("band top (HS local)", tuple(round(x, 3) for x in LP))
-def band_grip(f, lift=0.0, pose_amt=0.55):
-    fs(f); M = HS.matrix_world; R3 = M.to_3x3().normalized()
-    top = M @ LP; dn = -(R3 @ Vector((0, 0, 1))).normalized(); fw = (R3 @ Vector((0, -1, 0))).normalized()
-    place_hand(BR, "R", f, top - dn * lift, dn, fw, skin=0.012)
-    key_pole("R", f, Wh(BR, "upperarm01.R") + Vector((-0.45, 0.10, 0.0)))
-    if pose_amt > 0: apply_pose(BR, "R", "wrap_grip", f, amount=pose_amt)
-    else: apply_pose(BR, "R", "relaxed", f)
-band_grip(905, lift=0.09, pose_amt=0.0); band_grip(925, lift=0.025, pose_amt=0.0)
-for f in (910, 930, 1000, 1100, END):
-    kb_hand(f); apply_pose(BR, "L", "relaxed", f)
-# from F_GRIP the headset leaves the head: straight up, out to his right, forward clear of his face, then down to chest height
+F_GRIP, F_OFF, F_DOWN, F_SWAP = 935, 972, 1015, 1040
+# both palms on the outer faces of the cups (fingers back, elbows forward); lift up and forward; hold at chest height.
+# For the hold the left hand slides under the cracked left cup, so the crack faces the camera uncovered.
+def hand_on_cup(side, f, lift=0.0):
+    c, n, upv = cup_face(side, f)
+    sx = 1 if side == "L" else -1
+    fs(f); back = (HS.matrix_world.to_3x3() @ Vector((0, 1, 0))).normalized()
+    fdir = (back * 0.85 + upv * 0.35).normalized()
+    place_hand(BR, side, f, c + n * lift, -n, fdir, skin=0.014)
+    key_pole(side, f, Wh(BR, "upperarm01." + side) + Vector((sx * 0.25, -0.45, -0.30)))
+    apply_pose(BR, side, "cup_hold", f)
+def hand_under_cup(f, drop=0.0):
+    c, n, upv = cup_face("L", f)
+    fs(f); M = O["HS_ShellL"].matrix_world
+    ctr = M @ Vector((0.033, 0, 0)); bottom = ctr - upv * (0.043 * 1.18 + 0.004 + drop)
+    fdir = (n * 0.35 + Vector((0, -0.8, 0))).normalized()           # fingers forward: the forearm comes from his body, under the cup
+    place_hand(BR, "L", f, bottom, upv, fdir, skin=0.012)
+    key_pole("L", f, Wh(BR, "upperarm01.L") + Vector((0.30, -0.35, -0.35)))
+    apply_pose(BR, "L", "cup_hold", f)
+for side in "LR": hand_on_cup(side, 905, lift=0.07)
+for side in "LR": hand_on_cup(side, 925, lift=0.02)
 fs(F_GRIP); M0 = HS.matrix_world.copy(); c0 = M0.translation.copy()
 owner_switch(HS, F_GRIP + 1, None, log=log)
-OFFS = [(F_GRIP, Vector((0, 0, 0))), (F_OFF, Vector((0, 0, 0.17))), (F_SIDE, Vector((-0.30, -0.06, 0.17))),
-        (F_FWD, Vector((-0.32 - c0.x, -0.47 - c0.y, 0.10 + 1.10 - c0.z))), (F_DOWN, Vector((-0.12 - c0.x, -0.45 - c0.y, 0.965 - c0.z)))]
+OFFS = [(F_GRIP, Vector((0, 0, 0))), (F_OFF, Vector((0, -0.04, 0.14))), (F_DOWN, Vector((0.02, -0.40 - c0.y, 1.00 - c0.z))), (END, Vector((0.02, -0.40 - c0.y, 1.00 - c0.z)))]
 ox = [pchip([(f, v[i]) for f, v in OFFS]) for i in range(3)]
 def hs_world(f):
-    u = smoothstep((f - F_FWD) / (F_DOWN - F_FWD))
-    R = Matrix.Rotation(math.radians(-30 * u), 4, 'Z')             # the damaged left cup turns toward the front-left
-    T = Matrix.Translation(c0 + Vector([ox[i](f) for i in range(3)]))
+    u = smoothstep((f - F_SWAP) / 40.0)
+    R = Matrix.Rotation(math.radians(-32 * u), 4, 'Z') @ Matrix.Rotation(math.radians(2.0 * math.sin(f * 0.05) * (1 if f > F_DOWN else 0)), 4, 'X')
+    T = Matrix.Translation(c0 + Vector([ox[i](f) for i in range(3)]) + Vector((0, 0, 0.004 * math.sin(f * 0.04) * (1 if f > F_DOWN else 0))))
     return T @ R @ Matrix.Translation(-c0) @ M0
-for f in range(F_GRIP + 1, F_DOWN + 1, 2):
+for f in range(F_GRIP + 1, END + 1, 2):
     key_world_while_owned(HS, f, hs_world(f))
-fs(F_DOWN); MD = HS.matrix_world.copy(); cD = MD.translation.copy()
-def hs_hold(f):
-    R = Matrix.Rotation(math.radians(-6 * smoothstep((f - 1045) / 60.0)), 4, 'Z') @ Matrix.Rotation(math.radians(2.5 * math.sin(f * 0.05)), 4, 'X')
-    return Matrix.Translation(cD + Vector((0, 0, 0.005 * math.sin(f * 0.04)))) @ R @ Matrix.Translation(-cD) @ MD
-for f in range(F_DOWN + 2, END + 1, 3):
-    key_world_while_owned(HS, f, hs_hold(f))
 set_interp(HS, 'LINEAR')
 for piv, sx in ((PIVL, 1), (PIVR, -1)):
     piv.rotation_mode = 'XYZ'
-    for f, a_ in ((1, 0), (F_GRIP, 0), (955, 9), (F_SIDE, 9), (F_DOWN, 4), (END, 4)):
+    for f, a_ in ((1, 0), (F_GRIP, 0), (950, 9), (F_OFF, 9), (F_DOWN, 4), (END, 4)):
         piv.rotation_euler = (0, math.radians(-sx * a_), 0); piv.keyframe_insert("rotation_euler", frame=f)
 for f in range(F_GRIP, END + 1, 2):
-    band_grip(f)
+    hand_on_cup("R", f)
+for f in range(F_GRIP, F_SWAP + 1, 2):
+    hand_on_cup("L", f)
+for f in range(F_SWAP + 12, END + 1, 2):
+    hand_under_cup(f)
 
 # ================================================================== camera: ONE camera, PCHIP paths, level horizon
 cam_d = bpy.data.cameras.new("CAM_Film"); CAM = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(CAM); sc.camera = CAM
@@ -388,8 +388,8 @@ HC = head_c(300); log('seated head centre', tuple(round(x, 3) for x in HC))
 SEG_A = [
     (1,   lambda: GLASS - D * 3.9 + UP * 0.35 + RGT * 0.30, lambda: GLASS + UP * 0.40, 22),
     (24,  lambda: bpos(24) - D * 0.60 + UP * 0.14 + RGT * 0.30, lambda: bpos(24) + D * 0.9, 24),
-    (40,  lambda: P(2.30, 0.33, 1.42), lambda: GLASS + D * 0.25, 24),
-    (56,  lambda: P(1.46, 0.26, 1.36), lambda: bpos(56).lerp(head_c(56), 0.4), 26),
+    (40,  lambda: P(2.00, 0.30, 1.40), lambda: P(0.90, 0.10, 1.30), 20),
+    (56,  lambda: P(1.20, 0.28, 1.36), lambda: bpos(56).lerp(head_c(56), 0.4), 24),
     (90,  lambda: bpos(90) - D * 0.24 + RGT * 0.05 + UP * 0.03, lambda: bpos(90) + D * 0.6, 28),
     (185, lambda: bpos(185) - D * 0.15 + RGT * 0.03 + UP * 0.02, lambda: bpos(185) + D * 0.6, 30),
     (228, lambda: bpos(228) - D * 0.14 + RGT * 0.03 + UP * 0.02, lambda: bpos(228) + D * 0.6, 30),
@@ -417,11 +417,12 @@ SEG_B = [
     (F_WALL, lambda: P(0.28, -0.73, HC.z + 0.05), lambda: head_c(F_WALL).lerp(WALL, 0.12), 22),
     (880, lambda: P(0.15, -0.72, HC.z + 0.05), lambda: head_c(880) + Vector((0, 0, -0.05)), 26),
     (940, lambda: P(0.14, -0.73, HC.z + 0.10), lambda: head_c(940) + Vector((0, 0, 0.02)), 24),
-    (995, lambda: P(0.55, -0.70, HC.z + 0.04), lambda: head_c(995), 26),
-    (1040, lambda: P(0.60, -0.70, HC.z - 0.02), lambda: head_c(1040).lerp(cupc(1040), 0.45), 28),
-    (1085, lambda: P(0.62, -0.64, HC.z), lambda: head_c(1085).lerp(cupc(1085), 0.40), 30),
-    (1130, lambda: P(0.50, -0.74, HC.z + 0.04), lambda: head_c(1130) + Vector((0.05, 0, -0.03)), 26),
-    (END, lambda: P(0.58, -0.66, HC.z - 0.03), lambda: head_c(END).lerp(cupc(END), 0.45), 30),
+    (995, lambda: P(0.30, -0.74, HC.z + 0.06), lambda: head_c(995), 26),
+    (1040, lambda: P(0.42, -0.76, HC.z - 0.06), lambda: head_c(1040).lerp(cupc(1040), 0.55), 30),
+    (1090, lambda: cupc(1090) + Vector((0.20, -0.30, 0.06)), lambda: cupc(1090).lerp(head_c(1090), 0.35), 34),
+    (1130, lambda: P(0.40, -0.76, HC.z + 0.02), lambda: head_c(1130) + Vector((0.04, 0, -0.06)), 28),
+    (1165, lambda: cupc(1165) + Vector((0.20, -0.30, 0.07)), lambda: cupc(1165).lerp(head_c(1165), 0.35), 34),
+    (END, lambda: cupc(END) + Vector((0.17, -0.26, 0.06)), lambda: cupc(END).lerp(head_c(END), 0.30), 36),
 ]
 def look_q(p, a, up=Vector((0, 0, 1))):
     zc_ = (p - a).normalized(); yc = (up - zc_ * up.dot(zc_)); yc = yc.normalized() if yc.length > 1e-6 else Vector((0, 1, 0))
