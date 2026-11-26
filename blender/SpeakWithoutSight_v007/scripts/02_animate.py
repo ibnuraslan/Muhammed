@@ -25,7 +25,7 @@ def log(*a):
 O = bpy.data.objects
 GR, GB, GC = O["Girl"], O["Girl.body"], O["Girl.clothes"]
 TR, TB, TC = O["Teacher"], O["Teacher.body"], O["Teacher.clothes"]
-SEAT_Z, SEAT_FRONT = 0.44, -0.30
+SEAT_Z, SEAT_FRONT = 0.34, -0.30
 
 # ================================================================== rigs
 CTG = make_human_ctrl(GR); add_hand_limits(GR)
@@ -66,7 +66,7 @@ def key_spine(c, f, flex=0.0, twist=0.0, side=0.0):
 # ================================================================== seating (pelvis ON the seat, thighs ON the cushion, feet ON the floor / footstool)
 PELVIS = {"G": (0.27, None), "T": (-0.28, None)}
 YAW = {"G": -12.0, "T": 14.0}           # each turned a little toward the other
-FOOT_Z = {"G": None, "T": 0.0}           # girl's feet on the footstool (top set below)
+FOOT_Z = {"G": 0.0, "T": 0.0}            # both: feet flat on the floor
 CAL = {}
 def thigh_len(c):
     BN = CH[c][3].BN; return (BN["lowerleg01.L"].head_local - BN["upperleg01.L"].head_local).length
@@ -110,7 +110,7 @@ def calibrate(c):
         for m in mks: m.show_viewport = True
         for s in "LR":
             hp = Wh(rig, "upperleg01." + s); kn = Wh(rig, "lowerleg01." + s)
-            for u in (0.0, 0.25, 0.5):
+            for u in (0.0, 0.25, 0.5, 0.75):
                 q = hp.lerp(kn, u)
                 for dy in (0.0, 0.04):
                     for bv in bvs:
@@ -121,43 +121,110 @@ def calibrate(c):
         log("calibrate", c, it, "min skin z", round(mz, 4), "->", round(CAL[c], 4), "foot err", round((Wh(rig, "foot.L") - Wh(rig, "IK_foot.L")).length, 3))
         if abs(SEAT_Z + 0.002 - mz) < 0.002: break
 
-FOOTSTOOL_TOP = None
-def shoe_bottom():
-    fs(1); sh = [c for c in GR.children if "shoes" in c.name][0]
-    upd(); dg = bpy.context.evaluated_depsgraph_get(); e = sh.evaluated_get(dg); me = e.to_mesh()
-    z = min((sh.matrix_world @ v.co).z for v in me.vertices); e.to_mesh_clear(); return z
 def setup_seating():
-    global FOOTSTOOL_TOP
-    # the girl's feet: a small upholstered footstool under them (her feet do not reach the floor)
-    c = "G"; rig, body, cl, CT, H = CH[c]
-    FOOT_Z["G"] = 0.0
-    calibrate("T")
-    FOOT_Z["G"] = 0.12; calibrate("G")
-    # measure where the girl's soles want to be with a free hanging shin (knee 90 deg): knee z - shin - ankle height
-    fs(1); kz = (Wh(GR, "lowerleg01.L").z)
-    a = CTG.BN["foot.L"].head_local
-    sole = kz - shin_len("G") - a.z - 0.004          # knee - shin - ankle height = the sole
-    FOOTSTOOL_TOP = max(0.08, round(sole + 0.045, 3))
-    FOOT_Z["G"] = FOOTSTOOL_TOP
-    calibrate("G")
-    FOOTSTOOL_TOP = round(shoe_bottom() - 0.002, 4)          # the stool top meets the soles exactly
-    log("footstool top", FOOTSTOOL_TOP, "knee z", round(kz, 3))
+    """both sit ON the (low) settee with their feet flat on the floor"""
+    FOOT_Z["G"] = 0.0; FOOT_Z["T"] = 0.0
+    calibrate("T"); calibrate("G")
+    for c in "GT":
+        fs(1); r = CH[c][0]
+        log("seated", c, "knee z", round(Wh(r, "lowerleg01.L").z, 3), "hip z", round(Wh(r, "upperleg01.L").z, 3),
+            "foot reach err mm", round((Wh(r, "foot.L") - Wh(r, "IK_foot.L")).length * 1000, 1))
 setup_seating()
 
-# the footstool (made here: its top is where her soles rest)
-fs(1)
-fl = (Wh(GR, "foot.L") + Wh(GR, "foot.R")) / 2
-M_STOOL = bpy.data.materials.get("M_Velvet")
-bpy.ops.mesh.primitive_cube_add(size=1, location=(fl.x, fl.y - 0.03, FOOTSTOOL_TOP / 2 + 0.03))
-FS = bpy.context.active_object; FS.name = "PL_Footstool"; FS.scale = (0.40, 0.26, FOOTSTOOL_TOP - 0.06 - 0.0)
-bpy.ops.object.transform_apply(scale=True)
-bv = FS.modifiers.new("bev", 'BEVEL'); bv.width = 0.025; bv.segments = 4; FS.data.materials.append(bpy.data.materials["M_Velvet"])
-for p in FS.data.polygons: p.use_smooth = True
-FS.location.z = 0.06 + (FOOTSTOOL_TOP - 0.06) / 2
-for i, (sx, sy) in enumerate(((-1, -1), (1, -1), (-1, 1), (1, 1))):
-    bpy.ops.mesh.primitive_cylinder_add(radius=0.014, depth=0.06, location=(fl.x + sx * 0.17, fl.y - 0.03 + sy * 0.10, 0.03))
-    o = bpy.context.active_object; o.name = "PL_FootstoolLeg%d" % i; o.data.materials.append(bpy.data.materials["M_Mahogany"])
-log("footstool at", tuple(round(v, 3) for v in FS.location), "top", FOOTSTOOL_TOP)
+# ================================================================== the long period skirts (one per woman, draped from the seated pose)
+def long_skirt(c, col, name):
+    """A full-length gathered skirt: the voxel-remeshed hull of her seated hips, thighs and shins (so it drapes over the lap
+    and falls straight from the knees to the ankles), offset off the body, with folds and real thickness. Bone-parented to
+    her root (the legs never move while seated). The body and the short MPFB skirt under it are masked."""
+    rig, body, cl, CT, H = CH[c]
+    fs(1)
+    db = DOMB.get(body.name) or dom_bones(body, rig); DOMB[body.name] = db
+    mks = [m for m in body.modifiers if m.type in ('MASK', 'SUBSURF') and m.show_viewport]
+    for m in mks: m.show_viewport = False
+    upd(); dg = bpy.context.evaluated_depsgraph_get(); e = body.evaluated_get(dg); me = e.to_mesh()
+    waist = (Wh(rig, "spine04").z + Wh(rig, "spine05").z) / 2
+    ank = min(Wh(rig, "foot.L").z, Wh(rig, "foot.R").z)
+    hem = ank + 0.035
+    pts = []
+    for v in me.vertices:
+        bn = db.get(v.index) or ""
+        if bn.startswith(("pelvis", "upperleg", "lowerleg", "root", "spine05", "spine04")):
+            P = body.matrix_world @ v.co
+            if P.z > waist: continue
+            if P.z < hem: P = Vector((P.x, P.y, hem))
+            pts.append(P)
+    e.to_mesh_clear()
+    for m in mks: m.show_viewport = True
+    upd()
+    bm = bmesh.new()
+    for P in pts: bm.verts.new(P)
+    bmesh.ops.convex_hull(bm, input=bm.verts[:])
+    me2 = bpy.data.meshes.new(name); bm.to_mesh(me2); bm.free()
+    sk = bpy.data.objects.new(name, me2); sc.collection.objects.link(sk)
+    # smooth closed shape, pushed 1.2 cm off the body
+    rm = sk.modifiers.new("remesh", 'REMESH'); rm.mode = 'VOXEL'; rm.voxel_size = 0.012
+    dp = sk.modifiers.new("off", 'DISPLACE'); dp.strength = 0.012; dp.mid_level = 0.0
+    upd()
+    for mo in list(sk.modifiers):
+        bpy.context.view_layer.objects.active = sk; bpy.ops.object.modifier_apply(modifier=mo.name)
+    # open the waist lid and the floor side (the hem stays a clean open edge with thickness)
+    bm = bmesh.new(); bm.from_mesh(sk.data); bm.normal_update()
+    kill = [f for f in bm.faces if (f.normal.z < -0.55 and f.calc_center_median().z < hem + 0.05)
+            or (f.normal.z > 0.6 and f.calc_center_median().z > waist - 0.02)]
+    bmesh.ops.delete(bm, geom=kill, context='FACES')
+    bm.to_mesh(sk.data); bm.free()
+    for p_ in sk.data.polygons: p_.use_smooth = True
+    m = bpy.data.materials.get("M_" + name)
+    if m is None:
+        m = bpy.data.materials.new("M_" + name); m.use_nodes = True; nt = m.node_tree; pr = nt.nodes["Principled BSDF"]
+        pr.inputs["Base Color"].default_value = (*col, 1); pr.inputs["Roughness"].default_value = 0.75
+        pr.inputs["Sheen Weight"].default_value = 0.35
+        tc = nt.nodes.new("ShaderNodeTexCoord"); wv = nt.nodes.new("ShaderNodeTexWave"); wv.inputs["Scale"].default_value = 900
+        bp = nt.nodes.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.2; bp.inputs["Distance"].default_value = 0.0005
+        nt.links.new(tc.outputs["Object"], wv.inputs["Vector"]); nt.links.new(wv.outputs["Fac"], bp.inputs["Height"]); nt.links.new(bp.outputs["Normal"], pr.inputs["Normal"])
+    sk.data.materials.append(m)
+    # vertical gathered folds (stronger toward the hem), smoothing, thickness
+    tex = bpy.data.textures.new(name + "_folds", 'WOOD'); tex.wood_type = 'BANDS'; tex.noise_basis_2 = 'SIN'; tex.turbulence = 0.0
+    vg = sk.vertex_groups.new(name="folds")
+    for v in sk.data.vertices:
+        w = max(0.0, min(1.0, (Wh(rig, "lowerleg01.L").z - v.co.z) / 0.25 + 0.15))
+        vg.add([v.index], w, 'REPLACE')
+    d2 = sk.modifiers.new("folds", 'DISPLACE'); d2.texture = tex; d2.texture_coords = 'LOCAL'; d2.strength = 0.012; d2.mid_level = 0.0
+    d2.vertex_group = "folds"
+    emp = bpy.data.objects.new(name + "_foldaxis", None); sc.collection.objects.link(emp)
+    sm = sk.modifiers.new("smooth", 'CORRECTIVE_SMOOTH'); sm.factor = 0.5; sm.iterations = 4
+    so = sk.modifiers.new("solid", 'SOLIDIFY'); so.thickness = 0.004; so.offset = -1.0; so.use_rim = True
+    sd = sk.modifiers.new("subd", 'SUBSURF'); sd.levels = 0; sd.render_levels = 1
+    bpy.data.objects.remove(emp, do_unlink=True)
+    # bone-parent to her root (keeps the world pose of frame 1)
+    Mw = sk.matrix_world.copy()
+    sk.parent = rig; sk.parent_type = 'BONE'; sk.parent_bone = "root"; upd(); sk.matrix_world = Mw
+    # mask what the long skirt covers: her legs (above the hem) and the short MPFB skirt
+    covered = [v.index for v in body.data.vertices if (db.get(v.index) or "").startswith(("upperleg", "lowerleg"))]
+    upd(); dg = bpy.context.evaluated_depsgraph_get()
+    for m_ in body.modifiers:
+        if m_.type == 'MASK': m_.show_viewport = False
+    e = body.evaluated_get(dg); me = e.to_mesh()
+    hide = [i for i in covered if (body.matrix_world @ me.vertices[i].co).z > hem + 0.03] if len(me.vertices) == len(body.data.vertices) else []
+    e.to_mesh_clear()
+    for m_ in body.modifiers:
+        if m_.type == 'MASK': m_.show_viewport = True
+    vgb = body.vertex_groups.new(name="hide_longskirt"); vgb.add(hide, 1.0, 'REPLACE')
+    mk = body.modifiers.new("hide_longskirt", 'MASK'); mk.vertex_group = "hide_longskirt"; mk.invert_vertex_group = True
+    while body.modifiers.find("hide_longskirt") > body.modifiers.find("Armature") + 1:
+        i = body.modifiers.find("hide_longskirt"); body.modifiers.move(i, i - 1)
+    sv = [v.index for v in cl.data.vertices if any(cl.data.polygons[pi].material_index == 1 for pi in [])]
+    skirt_v = set()
+    for p_ in cl.data.polygons:
+        if p_.material_index == 1: skirt_v.update(p_.vertices)
+    vgc = cl.vertex_groups.new(name="hide_shortskirt"); vgc.add(list(skirt_v), 1.0, 'REPLACE')
+    mc = cl.modifiers.new("hide_shortskirt", 'MASK'); mc.vertex_group = "hide_shortskirt"; mc.invert_vertex_group = True
+    while cl.modifiers.find("hide_shortskirt") > cl.modifiers.find("Armature") + 1:
+        i = cl.modifiers.find("hide_shortskirt"); cl.modifiers.move(i, i - 1)
+    log("long skirt", name, "verts", len(sk.data.vertices), "hem z", round(hem, 3), "waist z", round(waist, 3), "masked leg verts", len(hide))
+    return sk
+GSK = long_skirt("G", (0.02, 0.05, 0.40), "Girl.longskirt")       # deep navy wool
+TSK = long_skirt("T", (0.01, 0.16, 0.16), "Teacher.longskirt")    # dark teal wool
 
 if TEST == "seat":
     for c in "GT":
@@ -285,7 +352,7 @@ def rest_on_thigh(c, s, f, fwd=0.0, side=0.0, lift=0.0):
     fs(f); hp = Wh(rig, "upperleg01." + s); kn = Wh(rig, "lowerleg01." + s)
     q = hp.lerp(kn, 0.62 + fwd); sx = 1 if s == "L" else -1
     q = q + (Matrix.Rotation(math.radians(YAW[c]), 3, 'Z') @ Vector((sx * (0.01 + side), 0, 0)))
-    h = skirt_bvh(cl).ray_cast(Vector((q.x, q.y, q.z + 0.25)), Vector((0, 0, -1)), 0.5)   # the skirt only (never an arm or the bust)
+    h = bvh_eval(GSK if c == "G" else TSK).ray_cast(Vector((q.x, q.y, q.z + 0.25)), Vector((0, 0, -1)), 0.5)   # the long skirt only
     P = h[0] if h[0] is not None else q + Vector((0, 0, 0.07))
     fd = (kn - hp).normalized(); fd = Vector((fd.x, fd.y, -0.25)).normalized()
     fd = (Matrix.Rotation(math.radians(-sx * 12), 3, 'Z') @ fd)
@@ -318,8 +385,8 @@ def body_noarms(rig, body):
     b = BVHTree.FromPolygons([Mw @ v.co for v in me.vertices], polys); e.to_mesh_clear()
     for m, sv in saved: m.show_viewport = sv
     upd(); return b
-def girl_bvh(): return [skirt_bvh(GC), body_noarms(GR, GB)]
-def teach_bvh(): return [skirt_bvh(TC), body_noarms(TR, TB)]
+def girl_bvh(): return [bvh_eval(GSK), body_noarms(GR, GB)]
+def teach_bvh(): return [bvh_eval(TSK), body_noarms(TR, TB)]
 REST_T_R = list(range(1, END + 1, 60)) + [END]
 for i, f in enumerate(REST_T_R):
     rest_on_thigh("T", "R", f, fwd=0.02 * math.sin(i), lift=0.0)
@@ -372,7 +439,7 @@ def throat_hand(f, lift=0.0):
     t = Vector((0, 0, 1)).cross(N).normalized()
     if t.x > 0: t = -t                     # fingers across the front of her throat (away from the girl's wrist)
     fd = Vector((t.x, t.y, 0.0)).normalized()          # fingers level across the throat
-    place_hand(GR, "R", f, P + N * lift, -N, fd, skin=0.022)
+    place_hand(GR, "R", f, P + N * lift, -N, fd, skin=0.015)
     sh = Wh(GR, "upperarm01.R"); key_pole(CTG, "R", f, sh + Vector((0.10, 0.30, -0.40)))
     pose_hand(GR, "R", f, "soft_cup")
     return P, N
@@ -447,7 +514,7 @@ arc_key(GR, "R", 395, F_ON, 440, lift_arm=Vector((-0.02, -0.08, 0.03)), u=0.75)
 pose_hand(GR, "R", 418, "soft_cup", spread=1)
 TH_GAP = {}
 for f in (F_ON, 520, 612, 700, 800, 905):
-    g = settle("G", "R", f, lambda: [bvh_eval(TC), body_noarms(TR, TB)], axis=bone_world(TR, "neck02", *TH_L)[1])
+    g = settle("G", "R", f, lambda: [bvh_eval(TC), body_noarms(TR, TB)], min_gap=0.004, axis=bone_world(TR, "neck02", *TH_L)[1])
     fs(f); TH_GAP[f] = (round(g * 1000, 1), WORSTB[0], round((Wh(GR, "wrist.R") - Wh(GR, "IK_hand.R")).length * 1000, 1))
 log("girl fingers on throat: min clearance mm", TH_GAP)
 
@@ -736,31 +803,20 @@ def thr(f): fs(f); return bone_world(TR, "neck02", *TH_L)[0]
 def lip(f): fs(f); return bone_world(TR, "head", *LIP_L)[0]
 def gthr(f): fs(f); return bone_world(GR, "neck02", *GTH_L)[0]
 def mid(a, b, u=0.5): return a.lerp(b, u)
-SEG = [
-    (1,    lambda: P(0.62, -2.05, 1.18),                      lambda: mid(gF(1), tF(1), 0.35) + P(0, 0, 0.05), 26),
-    (70,   lambda: P(0.58, -1.70, 1.15),                      lambda: mid(gF(70), tF(70), 0.30) + P(0, 0, 0.02), 27),
-    (131,  lambda: gF(131) + P(0.16, -0.95, 0.06),            lambda: mid(gF(131), tF(131), 0.15), 30),
-    (200,  lambda: gF(200) + P(0.14, -0.58, 0.03),            lambda: gF(200), 38),
-    (290,  lambda: gF(290) + P(0.24, -0.46, 0.02),            lambda: gF(290), 42),
-    (362,  lambda: gF(362) + P(0.30, -0.85, 0.08),            lambda: mid(gF(362), tF(362), 0.35) + P(0, 0, -0.06), 32),
-    (420,  lambda: mid(gF(420), tF(420)) + P(0.30, -0.95, 0.02), lambda: mid(mid(gF(420), tF(420)), thr(420), 0.45), 30),
-    (507,  lambda: thr(507) + P(0.40, -0.72, 0.06),           lambda: mid(thr(507), gF(507), 0.35), 32),
-    (612,  lambda: thr(612) + P(0.20, -0.36, 0.03),           lambda: mid(thr(612), tF(612), 0.20), 40),
-    (690,  lambda: thr(690) + P(0.10, -0.33, 0.02),           lambda: mid(thr(690), tF(690), 0.15), 42),
-    (747,  lambda: thr(747) + P(0.34, -0.62, 0.05),           lambda: mid(thr(747), gF(747), 0.40), 32),
-    (830,  lambda: thr(830) + P(0.40, -0.66, 0.06),           lambda: mid(thr(830), gF(830), 0.45), 31),
-    (891,  lambda: lip(891) + P(0.30, -0.62, 0.03),           lambda: mid(lip(891), gF(891), 0.35), 33),
-    (980,  lambda: lip(980) + P(0.17, -0.38, 0.02),           lambda: mid(lip(980), tF(980), 0.25), 40),
-    (1080, lambda: lip(1080) + P(0.10, -0.31, 0.01),          lambda: lip(1080), 44),
-    (1160, lambda: lip(1160) + P(0.06, -0.31, 0.02),          lambda: lip(1160), 44),
-    (1219, lambda: gF(1219) + P(0.10, -0.55, 0.02),           lambda: mid(gF(1219), tF(1219), 0.25), 36),
-    (1300, lambda: gF(1300) + P(0.00, -0.55, 0.03),           lambda: mid(gF(1300), tF(1300), 0.30), 35),
-    (1359, lambda: P(-0.05, -1.55, 1.22),                     lambda: mid(gF(1359), tF(1359), 0.5) + P(-0.25, 0, 0.12), 27),
-    (1430, lambda: P(-0.15, -1.75, 1.25),                     lambda: mid(gF(1430), tF(1430), 0.5) + P(-0.30, 0, 0.12), 26),
-    (1497, lambda: mid(gF(1497), tF(1497), 0.42) + P(0.10, -1.05, 0.00),  lambda: mid(gF(1497), tF(1497), 0.42) + P(0, 0, -0.07), 28),
-    (1545, lambda: mid(gF(1545), tF(1545), 0.40) + P(0.06, -0.80, 0.00),  lambda: mid(gF(1545), tF(1545), 0.40) + P(0, 0, -0.05), 32),
-    (END,  lambda: mid(gF(END), tF(END), 0.45) + P(-0.02, -0.62, 0.02),   lambda: mid(gF(END), tF(END), 0.45) + P(0, 0, -0.02), 34),
-]
+def MF(f): return mid(gF(f), tF(f))
+def K(f, off, aim_off, lens, toward=None, u=0.0):
+    pf = lambda: MF(f) + P(*off)
+    if toward is None: af = lambda: MF(f) + P(*aim_off)
+    else: af = lambda: mid(MF(f) + P(*aim_off), toward(f), u)
+    return (f, pf, af, lens)
+SEG = [K(1, (0.35, -1.85, 0.10), (0, 0, -0.14), 28), K(70, (0.26, -1.62, 0.08), (0, 0, -0.12), 28),
+       K(131, (0.20, -1.32, 0.06), (0.03, 0, -0.06), 29), K(250, (0.26, -1.16, 0.04), (0.05, 0, -0.04), 30),
+       K(362, (0.12, -1.26, 0.02), (0, 0, -0.10), 29), K(450, (0.05, -1.16, 0.00), (0, 0, -0.04), 30, thr, 0.35),
+       K(612, (-0.05, -1.10, 0.00), (0, 0, -0.03), 31, thr, 0.40), K(747, (0.10, -1.13, 0.02), (0, 0, -0.03), 30, thr, 0.35),
+       K(891, (0.16, -1.12, 0.03), (0, 0, -0.03), 30, lip, 0.30), K(1080, (0.04, -1.06, 0.02), (0, 0, -0.02), 31, lip, 0.30),
+       K(1219, (-0.08, -1.12, 0.02), (0.02, 0, -0.04), 30), K(1359, (-0.25, -1.62, 0.12), (-0.20, 0, 0.00), 27),
+       K(1430, (-0.35, -1.72, 0.14), (-0.22, 0, 0.02), 26), K(1497, (0.10, -1.26, 0.03), (0, 0, -0.05), 29),
+       K(1570, (0.05, -1.13, 0.02), (0, 0, -0.03), 30), K(END, (-0.06, -1.04, 0.02), (0, 0, -0.02), 31)]
 def look_q(p, a, up=Vector((0, 0, 1))):
     zc_ = (p - a).normalized(); yc = (up - zc_ * up.dot(zc_)).normalized(); xc = yc.cross(zc_)
     return Matrix((xc, yc, zc_)).transposed().to_quaternion()

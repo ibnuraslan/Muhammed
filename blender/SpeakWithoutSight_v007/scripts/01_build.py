@@ -25,7 +25,7 @@ sc.render.resolution_x, sc.render.resolution_y = 1080, 1920
 # ================================================================== the two characters (ONE model each, all film)
 G, GB = human("Girl", 0.0, 0.17, {"asian": 0.05, "caucasian": 0.85, "african": 0.10}, "ponytail01/ponytail01.mhclo",
               "young_caucasian_female/young_caucasian_female.mhmat", "eyebrow010/eyebrow010.mhclo",
-              height=0.5, weight=0.55, muscle=0.4, clothes=["male_casualsuit03/male_casualsuit03.mhclo", "shoes02/shoes02.mhclo"])
+              height=0.5, weight=0.55, muscle=0.4, clothes=["female_elegantsuit01/female_elegantsuit01.mhclo", "shoes02/shoes02.mhclo"])
 T, TB = human("Teacher", 0.0, 0.42, {"asian": 0.05, "caucasian": 0.35, "african": 0.60}, "afro01/afro01.mhclo",
               "young_african_female/young_african_female.mhmat", "eyebrow010/eyebrow010.mhclo",
               height=0.5, weight=0.55, muscle=0.45, clothes=["female_elegantsuit01/female_elegantsuit01.mhclo", "shoes01/shoes01.mhclo"])
@@ -113,7 +113,7 @@ def recolor_garment(rig, top_mult, skirt_mult, name):
         hide_under(body, covered, name="hide_skirt", rings=2)
     print("GARMENT", name, "hem z", round(hem, 3), "hidden body verts", len(covered))
     return cl
-GCL = recolor_garment(G, (1.0, 0.42, 0.0), (0.02, 0.06, 0.45), "Girl.clothes")       # saffron blouse, navy skirt
+GCL = recolor_garment(G, (1.0, 0.45, 0.02), (0.02, 0.06, 0.45), "Girl.clothes")       # saffron blouse, navy skirt
 TCL = recolor_garment(T, (0.62, 0.03, 0.10), (0.0, 0.16, 0.20), "Teacher.clothes")    # deep raspberry striped blouse, dark teal skirt
 for c in G.children:
     if c.type == 'MESH' and any(k in c.name.lower() for k in ("pony", "eyebrow")):
@@ -372,7 +372,7 @@ GARD.data.materials.append(garden_mat())
 GARD.visible_diffuse = False; GARD.visible_glossy = False; GARD.visible_shadow = False
 
 # ================================================================== the settee (procedural Victorian camel-back, exact seat surface)
-SEAT_Z = 0.44; SEAT_FRONT = -0.30; SEAT_BACK = 0.24; SW = 1.62
+SEAT_Z = 0.34; SEAT_FRONT = -0.30; SEAT_BACK = 0.24; SW = 1.62
 st_parts = []
 st_parts.append(slab("PL_SetteeSeat", (SW - 0.20, SEAT_BACK - SEAT_FRONT, 0.13), (0, (SEAT_FRONT + SEAT_BACK) / 2, SEAT_Z - 0.065), M_VELVET, bev=0.035))
 st_parts.append(slab("PL_SetteeBack", (SW - 0.10, 0.16, 0.52), (0, SEAT_BACK + 0.06, SEAT_Z + 0.24), M_VELVET, bev=0.05))
@@ -380,7 +380,7 @@ for sx in (-1, 1):
     st_parts.append(slab("PL_SetteeArm%d" % sx, (0.13, SEAT_BACK - SEAT_FRONT + 0.08, 0.24), (sx * (SW / 2 - 0.065), (SEAT_FRONT + SEAT_BACK) / 2 + 0.02, SEAT_Z + 0.07), M_VELVET, bev=0.04))
 for o in st_parts:
     pass
-SET_RAIL = slab("PL_SetteeRail", (SW, SEAT_BACK - SEAT_FRONT + 0.10, 0.12), (0, (SEAT_FRONT + SEAT_BACK) / 2 + 0.03, SEAT_Z - 0.17), M_MAHOG, bev=0.015)
+SET_RAIL = slab("PL_SetteeRail", (SW, SEAT_BACK - SEAT_FRONT + 0.02, 0.10), (0, (SEAT_FRONT + SEAT_BACK) / 2 + 0.07, SEAT_Z - 0.18), M_MAHOG, bev=0.015)   # set back under the seat (calves clear)
 SET_CREST = slab("PL_SetteeCrest", (SW - 0.05, 0.06, 0.05), (0, SEAT_BACK + 0.11, SEAT_Z + 0.52), M_MAHOG, bev=0.015)
 for i, (sx, sy) in enumerate(((-1, -1), (1, -1), (-1, 1), (1, 1))):
     x = sx * (SW / 2 - 0.07); y = (SEAT_FRONT + 0.05) if sy < 0 else (SEAT_BACK + 0.10)
