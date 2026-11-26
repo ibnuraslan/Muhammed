@@ -112,3 +112,5 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | 13 | FrozenTearsGun | claude/rebuild13-frozen-tears-gun: blender/FrozenTearsGun_v011/FrozenTearsGun_v011_60fps.blend (client-approved, Render check PASS) | 1–1655 |
 | 15 | GameBoxBullet | claude/rebuild15-game-box-bullet: blender/GameBoxBullet_v012/GameBoxBullet_v012_60fps.blend (client-approved, Render check PASS) | 1–1311 |
 | 14 | ElectricianPolice | claude/rebuild14-electrician-police: blender/ElectricianPolice_v011/ElectricianPolice_v011_60fps.blend (client-approved, Render check PASS) | 1–1446 |
+| 16 | DrunkTrain | claude/rebuild16-drunk-train: blender/DrunkTrain_v008 (client-approved; packaging) | 1–1735 |
+| 18 | NukedWell | claude/rebuild18-nuked-well: blender/NukedWell_v009/NukedWell_v009_60fps.blend (client-approved, Render check PASS) | 1–1541 |
