@@ -17,8 +17,8 @@ def feet_on_heap(A, f, x, y, dy_l=0.0, dy_r=0.0, tip=0.0, yaw=0.0):
         d["foot_" + s] = WH((p.x, p.y, hz(p.x, p.y) + 0.08 + (0.05 if tip else 0.0)), up, toe)
     A.key(f, **d)
 FRONT = Vector((0, -1, 0))
-def on_flap(x, z): return WH((x, FI + 0.026, z), (0, -1, 0), (0.0, 0, 1))
-def on_wall_front(x, z, fd=(0, 0, 1)): return WH((x, WI + 0.026, z), (0, -1, 0), fd)
+def on_flap(x, z): return WH((x, FI + 0.04, z), (0, -1, 0), (0.0, 0, 1))
+def on_wall_front(x, z, fd=(0, 0, 1)): return WH((x, WI + 0.045, z), (0, -1, 0), fd)
 
 # D (451-673): she gets up (kneel, half-kneel, stand) and pushes the flap with both palms: it will not swing out
 K1 = Vector((0.0, -0.02, 0.0)); K1.z = hz(0, -0.02) + 0.43
@@ -62,7 +62,7 @@ for f, (xl, zl), (xr, zr) in ((852, (0.26, 1.55), (-0.26, 1.50)), (868, (0.10, 1
           grip_L="flat_palm", grip_R="flat_palm", face=(0.0, 0.05, 0.4, 0.0))
 for f, z in ((915, 1.30), (935, 1.50), (955, 1.62)):
     W.key(f, pos=SP2, rot=Rf(FRONT, lean=7), spine=(5, 0, 0), head=(-16, 0, 0),
-          hand_L=WH((0.40, FI + 0.026, z), (0, -1, 0), (0, 0, 1)), hand_R=WH((-0.40, FI + 0.026, z), (0, -1, 0), (0, 0, 1)), grip_L="relaxed", grip_R="relaxed")
+          hand_L=WH((0.40, FI + 0.04, z), (0, -1, 0), (0, 0, 1)), hand_R=WH((-0.40, FI + 0.04, z), (0, -1, 0), (0, 0, 1)), grip_L="relaxed", grip_R="relaxed")
 # she moves to her RIGHT (-X) along the front wall and pats it, then the side wall near the corner
 SP3 = stand_at(-0.32, -0.27)
 feet_on_heap(W, 990, -0.32, -0.27, dy_l=-0.02, dy_r=0.02, yaw=-12)
@@ -70,9 +70,9 @@ W.key(990, pos=SP3, rot=Rf((-0.2, -1, 0), lean=6), spine=(4, -8, 0), head=(-10, 
       hand_R=on_wall_front(-0.66, 1.30), hand_L=on_wall_front(-0.38, 1.85), grip_L="flat_palm", grip_R="flat_palm")
 W.key(1030, pos=SP3, rot=Rf((-0.2, -1, 0), lean=6), spine=(4, -8, 0), head=(-25, -18, 0), hand_R=on_wall_front(-0.70, 1.62), hand_L=on_wall_front(-0.48, 1.55))
 W.key(1070, pos=SP3 + Vector((-0.04, 0, 0)), rot=Rf((-0.5, -1, 0), lean=6), spine=(4, -14, 0), head=(-15, -30, 0),
-      hand_R=WH((IX0 + 0.026, -0.52, 1.25), (-1, 0, 0), (0, 0, 1)), hand_L=WH((IX0 + 0.026, -0.60, 1.70), (-1, 0, 0), (0, 0.2, 1)))
+      hand_R=WH((IX0 + 0.045, -0.52, 1.25), (-1, 0, 0), (0, 0, 1)), hand_L=WH((IX0 + 0.045, -0.60, 1.70), (-1, 0, 0), (0, 0.2, 1)))
 W.key(1110, pos=SP3 + Vector((-0.04, 0, 0)), rot=Rf((-0.5, -1, 0), lean=6), spine=(4, -14, 0), head=(-10, -28, 0),
-      hand_R=WH((IX0 + 0.026, -0.48, 1.45), (-1, 0, 0), (0, 0, 1)), hand_L=WH((IX0 + 0.026, -0.62, 1.50), (-1, 0, 0), (0, 0.2, 1)))
+      hand_R=WH((IX0 + 0.045, -0.48, 1.45), (-1, 0, 0), (0, 0, 1)), hand_L=WH((IX0 + 0.045, -0.62, 1.50), (-1, 0, 0), (0, 0.2, 1)))
 # too high to climb: back to the centre, reaches up the front wall above the flap on tiptoe, looks up at the roof
 SP4 = stand_at(0.02, -0.33)
 W.key(1145, pos=SP4, rot=Rf(FRONT, lean=4), spine=(-4, 0, 0), head=(-35, 0, 0), hand_L=on_flap(0.20, 1.55), hand_R=on_wall_front(-0.22, 2.00))
