@@ -25,7 +25,7 @@ def log(*a):
 O = bpy.data.objects
 GR, GB, GC = O["Girl"], O["Girl.body"], O["Girl.clothes"]
 TR, TB, TC = O["Teacher"], O["Teacher.body"], O["Teacher.clothes"]
-SEAT_Z, SEAT_FRONT = 0.34, -0.30
+SEAT_Z, SEAT_FRONT = 0.44, -0.30
 
 # ================================================================== rigs
 CTG = make_human_ctrl(GR); add_hand_limits(GR)
@@ -66,7 +66,7 @@ def key_spine(c, f, flex=0.0, twist=0.0, side=0.0):
 # ================================================================== seating (pelvis ON the seat, thighs ON the cushion, feet ON the floor / footstool)
 PELVIS = {"G": (0.27, None), "T": (-0.28, None)}
 YAW = {"G": -12.0, "T": 14.0}           # each turned a little toward the other
-FOOT_Z = {"G": 0.0, "T": 0.0}            # both: feet flat on the floor
+FOOT_Z = {"G": 0.12, "T": 0.0}           # teacher: feet on the floor; girl: feet ON the footstool (built to her soles)
 CAL = {}
 def thigh_len(c):
     BN = CH[c][3].BN; return (BN["lowerleg01.L"].head_local - BN["upperleg01.L"].head_local).length
@@ -81,7 +81,7 @@ def seat_pose(c, f, root_dz=0.0, flex=0.0, foot_fwd=0.0, knee_out=0.0):
     # hip joints so that the knee joint sits 9 cm past the seat front (calves clear the cushion and rail)
     Ryaw = Matrix.Rotation(math.radians(yaw), 3, 'Z')
     fwd = Ryaw @ Vector((0, -1, 0))
-    hip_y = SEAT_FRONT - (0.12 if c == "T" else 0.03) + tl * 0.97
+    hip_y = SEAT_FRONT - 0.12 + tl * 0.97
     z0 = CAL.get(c, SEAT_Z + (rh.z - hip.z) + 0.10)
     pos = Vector((x, hip_y, z0 + root_dz)) + Vector((0, (rh.y - hip.y), 0))
     H.key_root(f, pos, yaw=yaw, flex=flex)
@@ -122,113 +122,32 @@ def calibrate(c):
         if abs(SEAT_Z + 0.002 - mz) < 0.002: break
 
 def setup_seating():
-    """both sit ON the (low) settee with their feet flat on the floor"""
-    FOOT_Z["G"] = 0.0; FOOT_Z["T"] = 0.0
-    calibrate("T"); calibrate("G")
+    FOOT_Z["T"] = 0.0; calibrate("T")
+    # the girl's soles: knee 90 deg, shin hanging -> sole height; she rests her feet ON a footstool built to that height
+    FOOT_Z["G"] = 0.12; calibrate("G")
+    fs(1); kz = Wh(GR, "lowerleg01.L").z; a = CTG.BN["foot.L"].head_local
+    FOOT_Z["G"] = max(0.06, round(kz - shin_len("G") - a.z - 0.004, 3)); calibrate("G")
     for c in "GT":
         fs(1); r = CH[c][0]
         log("seated", c, "knee z", round(Wh(r, "lowerleg01.L").z, 3), "hip z", round(Wh(r, "upperleg01.L").z, 3),
             "foot reach err mm", round((Wh(r, "foot.L") - Wh(r, "IK_foot.L")).length * 1000, 1))
 setup_seating()
 
-# ================================================================== the long period skirts (one per woman, draped from the seated pose)
-def long_skirt(c, col, name):
-    """A full-length gathered skirt: the voxel-remeshed hull of her seated hips, thighs and shins (so it drapes over the lap
-    and falls straight from the knees to the ankles), offset off the body, with folds and real thickness. Bone-parented to
-    her root (the legs never move while seated). The body and the short MPFB skirt under it are masked."""
-    rig, body, cl, CT, H = CH[c]
-    fs(1)
-    db = DOMB.get(body.name) or dom_bones(body, rig); DOMB[body.name] = db
-    mks = [m for m in body.modifiers if m.type in ('MASK', 'SUBSURF') and m.show_viewport]
-    for m in mks: m.show_viewport = False
-    upd(); dg = bpy.context.evaluated_depsgraph_get(); e = body.evaluated_get(dg); me = e.to_mesh()
-    waist = Wh(rig, "upperleg01.L").z + 0.09
-    ank = min(Wh(rig, "foot.L").z, Wh(rig, "foot.R").z)
-    hem = ank + 0.035
-    pts = []
-    for v in me.vertices:
-        bn = db.get(v.index) or ""
-        if bn.startswith(("pelvis", "upperleg", "lowerleg", "root", "spine05", "spine04")):
-            P = body.matrix_world @ v.co
-            if P.z > waist: continue
-            if P.z < hem: P = Vector((P.x, P.y, hem))
-            pts.append(P)
-    e.to_mesh_clear()
-    for m in mks: m.show_viewport = True
-    upd()
-    bm = bmesh.new()
-    for P in pts: bm.verts.new(P)
-    bmesh.ops.convex_hull(bm, input=bm.verts[:])
-    me2 = bpy.data.meshes.new(name); bm.to_mesh(me2); bm.free()
-    sk = bpy.data.objects.new(name, me2); sc.collection.objects.link(sk)
-    # smooth closed shape, pushed 1.2 cm off the body
-    rm = sk.modifiers.new("remesh", 'REMESH'); rm.mode = 'VOXEL'; rm.voxel_size = 0.012
-    dp = sk.modifiers.new("off", 'DISPLACE'); dp.strength = 0.012; dp.mid_level = 0.0
-    upd()
-    for mo in list(sk.modifiers):
-        bpy.context.view_layer.objects.active = sk; bpy.ops.object.modifier_apply(modifier=mo.name)
-    # open the waist lid and the floor side (the hem stays a clean open edge with thickness)
-    bm = bmesh.new(); bm.from_mesh(sk.data); bm.normal_update()
-    hipy = (Wh(rig, "upperleg01.L").y + Wh(rig, "upperleg01.R").y) / 2
-    fwdv = Matrix.Rotation(math.radians(YAW[c]), 3, 'Z') @ Vector((0, -1, 0))
-    def behind_hips(p_): return (p_ - Wh(rig, "upperleg01.L")).dot(fwdv) < 0.06
-    kill = [f for f in bm.faces if (f.normal.z < -0.55 and f.calc_center_median().z < hem + 0.05)
-            or (f.normal.z > 0.5 and behind_hips(f.calc_center_median()))]
-    bmesh.ops.delete(bm, geom=kill, context='FACES')
-    bm.to_mesh(sk.data); bm.free()
-    for p_ in sk.data.polygons: p_.use_smooth = True
-    m = bpy.data.materials.get("M_" + name)
-    if m is None:
-        m = bpy.data.materials.new("M_" + name); m.use_nodes = True; nt = m.node_tree; pr = nt.nodes["Principled BSDF"]
-        pr.inputs["Base Color"].default_value = (*col, 1); pr.inputs["Roughness"].default_value = 0.75
-        pr.inputs["Sheen Weight"].default_value = 0.35
-        tc = nt.nodes.new("ShaderNodeTexCoord"); wv = nt.nodes.new("ShaderNodeTexWave"); wv.inputs["Scale"].default_value = 900
-        bp = nt.nodes.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.2; bp.inputs["Distance"].default_value = 0.0005
-        nt.links.new(tc.outputs["Object"], wv.inputs["Vector"]); nt.links.new(wv.outputs["Fac"], bp.inputs["Height"]); nt.links.new(bp.outputs["Normal"], pr.inputs["Normal"])
-    sk.data.materials.append(m)
-    # vertical gathered folds (stronger toward the hem), smoothing, thickness
-    tex = bpy.data.textures.new(name + "_folds", 'WOOD'); tex.wood_type = 'BANDS'; tex.noise_basis_2 = 'SIN'; tex.turbulence = 0.0
-    vg = sk.vertex_groups.new(name="folds")
-    for v in sk.data.vertices:
-        w = max(0.0, min(1.0, (Wh(rig, "lowerleg01.L").z - v.co.z) / 0.25 + 0.15))
-        vg.add([v.index], w, 'REPLACE')
-    d2 = sk.modifiers.new("folds", 'DISPLACE'); d2.texture = tex; d2.texture_coords = 'LOCAL'; d2.strength = 0.012; d2.mid_level = 0.0
-    d2.vertex_group = "folds"
-    emp = bpy.data.objects.new(name + "_foldaxis", None); sc.collection.objects.link(emp)
-    sm = sk.modifiers.new("smooth", 'CORRECTIVE_SMOOTH'); sm.factor = 0.5; sm.iterations = 4
-    so = sk.modifiers.new("solid", 'SOLIDIFY'); so.thickness = 0.004; so.offset = -1.0; so.use_rim = True
-    sd = sk.modifiers.new("subd", 'SUBSURF'); sd.levels = 0; sd.render_levels = 1
-    bpy.data.objects.remove(emp, do_unlink=True)
-    # bone-parent to her root (keeps the world pose of frame 1)
-    Mw = sk.matrix_world.copy()
-    sk.parent = rig; sk.parent_type = 'BONE'; sk.parent_bone = "root"; upd(); sk.matrix_world = Mw
-    # mask what the long skirt covers: her legs (above the hem) and the short MPFB skirt
-    covered = [v.index for v in body.data.vertices if (db.get(v.index) or "").startswith(("upperleg", "lowerleg"))]
-    upd(); dg = bpy.context.evaluated_depsgraph_get()
-    for m_ in body.modifiers:
-        if m_.type in ('MASK', 'SUBSURF'): m_.show_viewport = False
-    upd(); dg = bpy.context.evaluated_depsgraph_get()
-    e = body.evaluated_get(dg); me = e.to_mesh()
-    hide = [i for i in covered if (body.matrix_world @ me.vertices[i].co).z > hem + 0.03] if len(me.vertices) == len(body.data.vertices) else []
-    e.to_mesh_clear()
-    for m_ in body.modifiers:
-        if m_.type in ('MASK', 'SUBSURF'): m_.show_viewport = True
-    vgb = body.vertex_groups.new(name="hide_longskirt"); vgb.add(hide, 1.0, 'REPLACE')
-    mk = body.modifiers.new("hide_longskirt", 'MASK'); mk.vertex_group = "hide_longskirt"; mk.invert_vertex_group = True
-    while body.modifiers.find("hide_longskirt") > body.modifiers.find("Armature") + 1:
-        i = body.modifiers.find("hide_longskirt"); body.modifiers.move(i, i - 1)
-    sv = [v.index for v in cl.data.vertices if any(cl.data.polygons[pi].material_index == 1 for pi in [])]
-    skirt_v = set()
-    for p_ in cl.data.polygons:
-        if p_.material_index == 1: skirt_v.update(p_.vertices)
-    vgc = cl.vertex_groups.new(name="hide_shortskirt"); vgc.add(list(skirt_v), 1.0, 'REPLACE')
-    mc = cl.modifiers.new("hide_shortskirt", 'MASK'); mc.vertex_group = "hide_shortskirt"; mc.invert_vertex_group = True
-    while cl.modifiers.find("hide_shortskirt") > cl.modifiers.find("Armature") + 1:
-        i = cl.modifiers.find("hide_shortskirt"); cl.modifiers.move(i, i - 1)
-    log("long skirt", name, "verts", len(sk.data.vertices), "hem z", round(hem, 3), "waist z", round(waist, 3), "masked leg verts", len(hide))
-    return sk
-GSK = long_skirt("G", (0.02, 0.05, 0.40), "Girl.longskirt")       # deep navy wool
-TSK = long_skirt("T", (0.01, 0.16, 0.16), "Teacher.longskirt")    # dark teal wool
+# the footstool: its top meets the real bottom of her shoes, its footprint is just under the shoes (shins clear above it)
+fs(1); shoes = [ch for ch in GR.children if "shoes" in ch.name][0]
+upd(); dg = bpy.context.evaluated_depsgraph_get(); e = shoes.evaluated_get(dg); me = e.to_mesh()
+SP = [shoes.matrix_world @ v.co for v in me.vertices]; e.to_mesh_clear()
+TOP = min(p_.z for p_ in SP) - 0.002
+x0, x1 = min(p_.x for p_ in SP) - 0.04, max(p_.x for p_ in SP) + 0.04
+y0, y1 = min(p_.y for p_ in SP) - 0.04, max(p_.y for p_ in SP) + 0.02
+bpy.ops.mesh.primitive_cube_add(size=1, location=((x0 + x1) / 2, (y0 + y1) / 2, 0.05 + (TOP - 0.05) / 2))
+FS = bpy.context.active_object; FS.name = "PL_Footstool"; FS.scale = (x1 - x0, y1 - y0, TOP - 0.05); bpy.ops.object.transform_apply(scale=True)
+bv = FS.modifiers.new("bev", 'BEVEL'); bv.width = 0.02; bv.segments = 4; FS.data.materials.append(bpy.data.materials["M_Velvet"])
+for p_ in FS.data.polygons: p_.use_smooth = True
+for i, (sx, sy) in enumerate(((-1, -1), (1, -1), (-1, 1), (1, 1))):
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.013, depth=0.05, location=((x0 + x1) / 2 + sx * ((x1 - x0) / 2 - 0.03), (y0 + y1) / 2 + sy * ((y1 - y0) / 2 - 0.03), 0.025))
+    o = bpy.context.active_object; o.name = "PL_FootstoolLeg%d" % i; o.data.materials.append(bpy.data.materials["M_Mahogany"])
+log("footstool top", round(TOP, 3), "x", round(x0, 2), round(x1, 2), "y", round(y0, 2), round(y1, 2))
 
 if TEST == "seat":
     for c in "GT":
@@ -356,7 +275,7 @@ def rest_on_thigh(c, s, f, fwd=0.0, side=0.0, lift=0.0):
     fs(f); hp = Wh(rig, "upperleg01." + s); kn = Wh(rig, "lowerleg01." + s)
     q = hp.lerp(kn, 0.62 + fwd); sx = 1 if s == "L" else -1
     q = q + (Matrix.Rotation(math.radians(YAW[c]), 3, 'Z') @ Vector((sx * (0.01 + side), 0, 0)))
-    h = bvh_eval(GSK if c == "G" else TSK).ray_cast(Vector((q.x, q.y, q.z + 0.25)), Vector((0, 0, -1)), 0.5)   # the long skirt only
+    h = skirt_bvh(cl).ray_cast(Vector((q.x, q.y, q.z + 0.25)), Vector((0, 0, -1)), 0.5)   # the trousers only (never an arm)
     P = h[0] if h[0] is not None else q + Vector((0, 0, 0.07))
     fd = (kn - hp).normalized(); fd = Vector((fd.x, fd.y, -0.25)).normalized()
     fd = (Matrix.Rotation(math.radians(-sx * 12), 3, 'Z') @ fd)
@@ -389,8 +308,8 @@ def body_noarms(rig, body):
     b = BVHTree.FromPolygons([Mw @ v.co for v in me.vertices], polys); e.to_mesh_clear()
     for m, sv in saved: m.show_viewport = sv
     upd(); return b
-def girl_bvh(): return [bvh_eval(GSK), body_noarms(GR, GB)]
-def teach_bvh(): return [bvh_eval(TSK), body_noarms(TR, TB)]
+def girl_bvh(): return [skirt_bvh(GC), body_noarms(GR, GB)]
+def teach_bvh(): return [skirt_bvh(TC), body_noarms(TR, TB)]
 REST_T_R = list(range(1, END + 1, 60)) + [END]
 for i, f in enumerate(REST_T_R):
     rest_on_thigh("T", "R", f, fwd=0.02 * math.sin(i), lift=0.0)
