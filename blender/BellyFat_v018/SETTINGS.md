@@ -2,7 +2,7 @@
 
 | Item | Value |
 |---|---|
-| File | `BellyFat_v018_60fps.blend`, about 65 MB, compressed. Everything is packed, including the VO. There are no linked libraries, no drivers and no Python. Background textures are 512–1024 px; her skin, hair and T-shirt are 2048 px. It is stored as a regular git file (no LFS). |
+| File | `BellyFat_v018_60fps.blend`, 65 MB, compressed. Everything is packed, including the VO. There are no linked libraries, no drivers and no Python. Background textures are 512–1024 px; her skin, hair and T-shirt are 2048 px. It is stored as a regular git file (no LFS). |
 | Blender | 5.2.2 |
 | Engine | Cycles. The device is saved as CPU; GPU also works, and no special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
@@ -44,3 +44,6 @@ DA KRAS FILMS is printed on her T-shirt (white on magenta). It reads in full in 
 - **960**: the bullet stopped at the muscle
 - **1060**: the bullet with the bowel loops below
 - **1240**: her face, the hand on her belly, the hole and the logo
+
+## Measured render time
+Full-resolution test frames on a 4-core CPU (no GPU): f20 187 s, f600 247 s, f1240 232 s. Expect it to be much faster on the farm's GPUs.

@@ -25,7 +25,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 07 | ShoeBomber | `claude/beautiful-ptolemy-c5vrcq` | `blender/ShoeBomber_v008/` **fixed (watched moving) + synced to your voiceover: ON HOLD (was ready) (frames 1–1469)** — replaces v007 |
 | 08 | BeethovenDeaf | `claude/beautiful-ptolemy-c5vrcq` | `blender/BeethovenDeaf_v010/` **acting fixed + synced to your voiceover: BORDERLINE KEEP (frames 1–1435)** |
 | 09 | DonationBin | `claude/beautiful-ptolemy-c5vrcq` | `blender/DonationBin_v009/` **fixed (watched moving) + synced to your voiceover: ON HOLD (was ready) (frames 1–2388)** — replaces v008 |
-| 10 | BellyFat | `claude/beautiful-ptolemy-c5vrcq` | `blender/BellyFat_v010/` **acting fixed + synced to your voiceover: ON HOLD (was ready) (frames 1–1273)** |
+| 10 | BellyFat | `claude/rebuild10-belly-fat` | `blender/BellyFat_v018/` **from-scratch rebuild, render check PASS, ON HOLD (fresh-review FAIL items in review/CHECK4.md) (frames 1–1273)** |
 | 11 | WW1Assassination | `claude/beautiful-ptolemy-c5vrcq` | `blender/WW1Assassination_v007/` **checked moving + synced to your voiceover: ON HOLD (was ready) (frames 1–1826)** |
 | 12 | NoPilotPlane | `claude/beautiful-ptolemy-c5vrcq` | `blender/NoPilotPlane_v011/` **fixed (watched moving, hands/faces zoomed) + synced to your voiceover: ON HOLD (was ready) (frames 1–3481)**, replaces rejected v010 |
 | 13 | FrozenTearsGun | `claude/beautiful-ptolemy-c5vrcq` | `blender/FrozenTearsGun_v010/` **fixed (watched moving) + synced to your voiceover: ON HOLD (was ready) (frames 1–1655)** |
