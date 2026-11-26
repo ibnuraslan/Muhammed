@@ -93,7 +93,7 @@ BODY = [(1, 14, 0, 22, 4, 0.0), (120, 15, 3, 24, -2, 0.0), (220, 13, -3, 20, 3, 
         (440, 10, 0, 6, -2, 0.0), (480, 8, 0, -2, 0, 0.0), (519, 8, 0, -3, 0, 0.0), (530, 1, 0, -8, 0, 0.022), (552, 4, 0, 8, 2, 0.015),
         (603, 10, 0, 22, 0, 0.0), (680, 12, 2, 26, -3, 0.0), (760, 13, -2, 26, 3, 0.0), (840, 12, 0, 24, -7, 0.0), (860, 12, 0, 24, 7, 0.0),
         (880, 12, 0, 24, -6, 0.0), (900, 12, 0, 24, 2, 0.0), (960, 15, 3, 28, 4, 0.0), (1040, 16, 0, 28, -2, 0.0), (1100, 20, 0, 32, 0, 0.0),
-        (1137, 14, 0, 14, 0, 0.0), (1165, 6, -2, -8, -10, 0.0), (1200, 8, 0, 0, -4, 0.0), (1228, 6, 0, 4, 2, 0.0), (1265, 4, 0, -2, 6, 0.0), (END, 4, 0, -2, 8, 0.0)]
+        (1137, 14, 0, 14, 0, 0.0), (1165, 6, -2, -8, -10, 0.0), (1200, 8, 0, 0, -4, 0.0), (1228, 6, 0, 4, 2, 0.0), (1244, 1, 0, -9, 0, 0.0), (1268, 5, 0, 0, -4, 0.0), (END, 4, 0, -1, -6, 0.0)]
 bf = {k: pchip([(b[0], b[i]) for b in BODY]) for i, k in enumerate(("f", "flex", "tw", "hp", "hy", "dy")) if i}
 def breath(f, amp=1.0, per=3.6):
     return amp * math.sin(2 * math.pi * (f / 60.0) / per)
@@ -135,8 +135,8 @@ def front_depth(f, zc):
         ev_.to_mesh_clear()
     return best
 # box acting (frame, lift m, tilt deg (+ = top toward him), turn deg, x shift, push-back m)
-BOXK = [(1, 0.0, 6, -6, 0.0, 0.0), (90, 0.01, 8, 5, 0.0, 0.0), (170, 0.005, 5, -4, 0.0, 0.0), (250, 0.012, 7, 6, 0.0, 0.0),
-        (330, 0.02, 3, 0, 0.0, 0.0), (420, 0.02, 2, 0, 0.0, 0.0), (480, 0.015, 0, 0, 0.0, 0.0), (519, 0.015, 0, 0, 0.0, 0.0),
+BOXK = [(1, 0.0, 6, -6, 0.0, 0.0), (90, 0.01, 8, 10, 0.0, 0.0), (170, 0.005, 5, -10, 0.0, 0.0), (250, 0.012, 7, 12, 0.0, 0.0),
+        (330, 0.02, 3, -8, 0.0, 0.0), (420, 0.02, 2, 6, 0.0, 0.0), (480, 0.015, 0, 0, 0.0, 0.0), (519, 0.015, 0, 0, 0.0, 0.0),
         (527, 0.02, -2, 0, 0.0, 0.016), (545, 0.015, 1, 0, 0.0, 0.01), (603, 0.0, 6, 0, 0.0, 0.0), (760, 0.0, 8, 2, 0.0, 0.0),
         (900, 0.0, 9, -2, 0.0, 0.0), (1000, 0.0, 10, 0, 0.0, 0.0), (1040, 0.0, 10, 0, 0.0, 0.0), (1105, -1.0, 12, 0, 0.0, 0.0),
         (1137, -1.0, 12, 0, 0.0, 0.0), (END, -1.0, 12, 0, 0.0, 0.0)]
@@ -414,9 +414,9 @@ def blinks(rig, frames, base_keys):
     for s in "LR":
         n = "orbicularis03." + s
         if n not in rig.pose.bones: continue
-        sg = lid_sign(rig, s); pb = rig.pose.bones[n]
+        _, lax, sg = corner_axis(rig, n, Vector((0, 0, -1))); pb = rig.pose.bones[n]
         def lid(f, ang):
-            pb.rotation_quaternion = Quaternion((1, 0, 0), R_(ang * sg)); pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
+            pb.rotation_quaternion = Quaternion(lax, R_(ang * sg)); pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
         for f, a_ in base_keys: lid(f, a_)
         for bf_ in frames:
             cur = 0.0
@@ -445,17 +445,16 @@ def eyes(rig, R, f0, f1, step=40, amp=(3, 5), seed=2):
     for f in range(f0, f1, step):
         a_, b_ = r_.uniform(-amp[0], amp[0]), r_.uniform(-amp[1], amp[1])
         for s in "LR": R.key_rot("eye." + s, f, [("X", a_), ("Z", b_)])
-SMILE = {"risorius03.L": ((1, 0, 0.6), 14), "risorius03.R": ((-1, 0, 0.6), 14), "levator05.L": ((0.3, 0, 1), 10), "levator05.R": ((-0.3, 0, 1), 10),
-         "oris04.L": ((1, 0, 0.5), 10), "oris04.R": ((-1, 0, 0.5), 10)}
+SMILE = {"risorius03.L": ((0.5, 0, 1), 16), "risorius03.R": ((-0.5, 0, 1), 16), "oris04.L": ((0.3, 0, 1), 16), "oris04.R": ((-0.3, 0, 1), 16)}
 fs(1)
 # eyes wide (lids slightly up = negative), blink on the hit, relief at the end
-blinks(HERO, [70, 190, 300, 410, 522, 640, 760, 880, 990, 1100, 1180, 1240],
-       [(1, 0), (470, 0), (500, -6), (519, -8), (700, -5), (940, -2), (1213, 3), (1260, 0)])
-expression(HERO, [(1, 0.35), (170, 0.75), (300, 0.9), (420, 0.7), (470, 0.0), (519, 0.0), (1200, 0.0), (1235, 0.5), (1275, 0.9), (END, 0.95)], SMILE)
+blinks(HERO, [70, 190, 300, 410, 522, 640, 760, 880, 990, 1100, 1180, 1285],
+       [(1, 0), (470, 0), (500, -6), (519, -8), (700, -5), (940, -2), (1213, 2), (1222, 2), (1232, 22), (1250, 22), (1262, 0)])
+# no rig smile: on this rig it reads as a frown or bared teeth (LESSONS 8); relief = long eyes-closed exhale + head tilt
 if "jaw" in HERO.pose.bones:
     _, ax, sg = corner_axis(HERO, "jaw", Vector((0, 0, -1)))
     pb = HERO.pose.bones["jaw"]
-    for f, a_ in ((1, 0), (470, 0), (500, 3), (525, 7), (560, 5), (640, 4), (760, 3), (900, 2), (1000, 1), (1213, 1), (1230, 5), (1260, 2), (1290, 0), (END, 0)):
+    for f, a_ in ((1, 0), (470, 0), (500, 3), (525, 7), (560, 5), (640, 4), (760, 3), (900, 2), (1000, 1), (1213, 1), (1228, 4), (1248, 1), (1262, 0), (END, 0)):
         pb.rotation_quaternion = Quaternion(ax, R_(a_ * sg)); pb.keyframe_insert("rotation_quaternion", frame=f, group="jaw")
 eyes(HERO, HR, 1, 440, step=45, amp=(2, 4), seed=4)
 eyes(HERO, HR, 560, 1130, step=38, amp=(2, 3), seed=5)
@@ -483,22 +482,24 @@ def ck(f, p, a_, lens=35): CK.append((f, Vector(p), Vector(a_), lens))
 sh_fwd = D.copy(); sh_fwd.z = 0; sh_fwd.normalize()
 ck(1, SH_FACE + sh_fwd * 1.15 + side_r * 0.85 + Vector((0, 0, -0.10)), (SH_FACE + GUN_P) / 2 + Vector((0, 0, -0.05)), 32)
 ck(9, SH_FACE + sh_fwd * 1.10 + side_r * 0.80 + Vector((0, 0, -0.10)), (SH_FACE + GUN_P) / 2 + Vector((0, 0, -0.04)), 32)
-ck(22, nose_w(22) + side_r * 0.55 - D * 0.35 + Vector((0, 0, 0.10)), nose_w(22) + D * 0.6, 34)
-for f in range(34, 92, 6):
+ck(15, nose_w(15) + side_r * 0.30 - D * 0.12 + Vector((0, 0, 0.06)), nose_w(15), 34)
+ck(22, nose_w(22) + side_r * 0.16 - D * 0.08 + Vector((0, 0, 0.035)), nose_w(22), 36)
+for f in range(28, 92, 6):
     ck(f, nose_w(f) + side_r * 0.075 - D * 0.05 + Vector((0, 0, 0.022)), nose_w(f) - D * 0.006, 38)
 ck(96, H + side_r * 0.22 + Vector((0, -0.40, 0.06)), H + Vector((0, 0, 0.0)), 34)
 ck(104, H + side_r * 0.30 + Vector((0, -0.75, 0.12)), H, 32)
 ck(118, WINC + Vector((0.0, -0.62, 0.0)), WINC + Vector((-0.10, 1.0, -0.15)), 28)
 ck(134, WINC + Vector((0.0, 0.05, -0.02)), WINC + Vector((-0.25, 1.0, -0.25)), 28)
-ck(152, nose_w(152) + Vector((0.28, -0.10, 0.10)), nose_w(152), 30)
-for f in (178, 205, 232, 258):
-    u_ = (face_pt(f) - nose_w(f)).normalized()
-    ck(f, nose_w(f) - u_ * 0.11 + side_r * 0.035 + Vector((0, 0, 0.012)), nose_w(f) + u_ * 0.30, 30)
+ck(142, WINC + Vector((-0.30, 0.32, -0.28)), nose_w(142), 30)
+ck(156, nose_w(156) + Vector((0.15, -0.05, 0.05)), nose_w(156), 32)
+for f, ang, dist in ((180, 55, 0.09), (205, 38, 0.10), (232, 22, 0.115), (258, 10, 0.13)):
+    u_ = (face_pt(f) - nose_w(f)).normalized(); a_ = R_(ang)
+    ck(f, nose_w(f) + (side_r * math.sin(a_) - u_ * math.cos(a_)) * dist + Vector((0, 0, 0.015)), nose_w(f) - D * 0.008, 32)
 # 277-470: past the bullet to a front 3/4 medium of him with the box (logo on the box front readable 300-440)
-ck(285, box_c(285) + Vector((0.40, -0.80, 0.22)), (face_pt(285) + box_c(285)) / 2, 32)
-ck(330, box_c(330) + Vector((0.22, -0.78, 0.18)), (face_pt(330) + box_c(330)) / 2 + Vector((0, 0, -0.03)), 34)
-ck(380, box_c(380) + Vector((0.08, -0.72, 0.16)), (face_pt(380) + box_c(380)) / 2 + Vector((0, 0, -0.03)), 34)
-ck(430, box_c(430) + Vector((0.18, -0.70, 0.15)), (face_pt(430) + box_c(430)) / 2, 34)
+ck(285, box_c(285) + Vector((0.45, -0.85, 0.22)), (face_pt(285) + box_c(285)) / 2, 32)
+ck(330, box_c(330) + Vector((0.05, -0.74, 0.20)), (face_pt(330) + box_c(330)) / 2 + Vector((0, 0, -0.03)), 34)
+ck(380, box_c(380) + Vector((-0.28, -0.64, 0.14)), (face_pt(380) + box_c(380)) / 2 + Vector((0, 0, -0.03)), 34)
+ck(430, box_c(430) + Vector((0.10, -0.56, 0.13)), (face_pt(430) + box_c(430)) / 2, 34)
 # 470-600: around to his right side profile; the bullet crosses frame left -> right and hits on "slammed" (519)
 ck(478, box_c(478) + Vector((0.62, -0.45, 0.14)), (face_pt(478) + box_c(478)) / 2 + Vector((0, -0.08, 0)), 32)
 ck(505, box_c(505) + Vector((0.72, -0.12, 0.12)), (face_pt(505) + box_c(505)) / 2 + Vector((0, -0.10, 0)), 32)
@@ -508,10 +509,10 @@ ck(585, box_c(585) + Vector((0.50, -0.30, 0.10)), (face_pt(585) + box_c(585)) / 
 ck(615, box_c(615) + Vector((0.12, -0.56, 0.20)), (box_top(615) + face_pt(615)) / 2 + Vector((0, 0, -0.06)), 36)
 ck(650, box_c(650) + Vector((-0.06, -0.50, 0.22)), (box_top(650) + face_pt(650)) / 2 + Vector((0, 0, -0.07)), 38)
 # 675-893: up over the open top: chunks burst, disc shards glitter, the bullet ploughs layer by layer
-ck(690, box_top(690) + Vector((0.05, -0.22, 0.20)), notch_pt(690), 40)
-ck(730, box_top(730) + Vector((-0.10, -0.18, 0.19)), notch_pt(730), 42)
-ck(775, box_top(775) + Vector((-0.14, -0.10, 0.17)), notch_pt(775), 42)
-ck(815, box_top(815) + Vector((0.12, -0.12, 0.18)), notch_pt(815), 42)
+ck(690, box_top(690) + Vector((0.05, -0.14, 0.27)), notch_pt(690), 40)
+ck(730, box_top(730) + Vector((-0.10, -0.12, 0.26)), notch_pt(730), 42)
+ck(775, box_top(775) + Vector((-0.12, -0.07, 0.25)), notch_pt(775), 42)
+ck(815, box_top(815) + Vector((0.12, -0.08, 0.25)), notch_pt(815), 42)
 ck(855, box_c(855) + Vector((0.30, -0.62, 0.30)), (face_pt(855) + box_top(855)) / 2, 34)
 ck(905, box_c(905) + Vector((0.12, -0.66, 0.28)), (face_pt(905) + box_top(905)) / 2, 34)
 # 941-1092 "stopped halfway, buried inside": close orbit on the stopped bullet in the open channel, back half intact
@@ -519,12 +520,12 @@ ck(950, box_top(950) + Vector((0.16, -0.10, 0.15)), notch_pt(950), 44)
 ck(990, box_top(990) + Vector((0.18, 0.02, 0.16)), notch_pt(990), 46)
 ck(1030, box_top(1030) + Vector((0.06, -0.15, 0.18)), notch_pt(1030), 44)
 # 1060-1311: pull out as he lowers the box onto his lap; he looks up at the hole, exhales, smiles at us; logo poster behind him
-ck(1075, box_c(1075) + Vector((0.28, -0.70, 0.34)), (face_pt(1075) + box_c(1075)) / 2, 32)
+ck(1068, box_c(1068) + Vector((0.28, -0.70, 0.34)), (face_pt(1068) + box_c(1068)) / 2, 32)
 ck(1120, face_pt(1120) + Vector((0.42, -0.92, -0.08)), (face_pt(1120) + box_c(1120)) / 2 + Vector((0, 0, 0.04)), 30)
 ck(1160, face_pt(1160) + Vector((0.30, -0.98, -0.02)), (face_pt(1160) + box_c(1160)) / 2 + Vector((0, 0, 0.08)), 30)
-ck(1210, face_pt(1210) + Vector((0.18, -0.95, 0.0)), face_pt(1210) + Vector((0, 0.0, -0.12)), 30)
-ck(1260, face_pt(1260) + Vector((0.10, -0.85, 0.02)), face_pt(1260) + Vector((0, 0.0, -0.10)), 32)
-ck(END, face_pt(END) + Vector((0.06, -0.80, 0.03)), face_pt(END) + Vector((0, 0.0, -0.10)), 33)
+ck(1210, face_pt(1210) + Vector((0.28, -0.95, 0.0)), face_pt(1210) + Vector((0, 0.0, -0.12)), 30)
+ck(1260, face_pt(1260) + Vector((-0.05, -0.80, 0.02)), face_pt(1260) + Vector((0, 0.0, -0.10)), 32)
+ck(END, face_pt(END) + Vector((-0.18, -0.70, 0.03)), face_pt(END) + Vector((0, 0.0, -0.10)), 33)
 CK.sort(key=lambda k: k[0])
 cam_d = bpy.data.cameras.new("CAM_Film"); CAM = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(CAM); sc.camera = CAM
 cam_d.sensor_fit = 'AUTO'; cam_d.sensor_width = 36; cam_d.clip_start = 0.004; cam_d.dof.use_dof = False
