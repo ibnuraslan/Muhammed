@@ -104,7 +104,8 @@ def calibrate(c):
     rig, body, cl, CT, H = CH[c]
     for it in range(4):
         seat_pose(c, 1); fs(1)
-        bvs = [bvh_eval(body), bvh_eval(cl)]; mz = 9.0     # skin AND skirt (the body under the skirt is masked)
+        mk = body.modifiers.get("hide_skirt"); mk.show_viewport = False      # measure the real skin (masked under the skirt)
+        bvs = [bvh_eval(body)]; mk.show_viewport = True; mz = 9.0
         for s in "LR":
             hp = Wh(rig, "upperleg01." + s); kn = Wh(rig, "lowerleg01." + s)
             for u in (0.0, 0.25, 0.5):
