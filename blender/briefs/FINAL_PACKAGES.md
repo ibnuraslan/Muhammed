@@ -32,7 +32,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 14 | ElectricianPolice | `claude/beautiful-ptolemy-c5vrcq` | `blender/ElectricianPolice_v010/` **fixed (watched moving) + synced to your voiceover: ON HOLD (was ready) (frames 1–1446)** |
 | 15 | GameBoxBullet | `claude/beautiful-ptolemy-c5vrcq` | `blender/GameBoxBullet_v010/` **fixed (watched moving) + synced to your voiceover: ON HOLD (was ready) (frames 1–1311)** |
 | 16 | DrunkTrain | `claude/beautiful-ptolemy-c5vrcq` | `blender/DrunkTrain_v007/` **fixed (watched moving) + synced to your voiceover: ON HOLD (was ready) (frames 1–1735)** |
-| 17 | ToddlerWell | `claude/rebuild17-toddler-well` | `blender/ToddlerWell_v009/` **rebuild: ON HOLD. Check 2 FAIL (visible time-skip pop at f1566–1591), see review/CHECK2.md. v008 also ON HOLD** |
+| 17 | ToddlerWell | `claude/rebuild17-toddler-well` | `blender/ToddlerWell_v009/` **rebuild READY TO RENDER (frames 1–1728)**, watched moving (check 3 PASS, director-approved third round), Render check PASS |
 | 18 | NukedWell | `claude/beautiful-ptolemy-c5vrcq` | `blender/NukedWell_v008/` **fixed (watched moving) + synced to your voiceover: ON HOLD (was ready) (frames 1–1541)** |
 | 19 | SpeakWithoutSight | `claude/beautiful-ptolemy-c5vrcq` | `blender/SpeakWithoutSight_v006/` **fixed (watched moving) + synced to your voiceover: ON HOLD (was ready) (frames 1–1645)** |
 | 20 | HeadsetBullet | `claude/beautiful-ptolemy-c5vrcq` | `blender/HeadsetBullet_v008/` **fixed (watched moving) + synced to your voiceover: ON HOLD (was ready) (frames 1–1203)** |
