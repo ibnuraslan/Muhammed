@@ -668,7 +668,7 @@ CK = [
     (95,   Vector((4.2, -1.3, 1.64)), Vector((2.6, 0.3, 1.40)), 30, 8),
     (122,  Vector((3.45, 0.55, 1.70)), Vector((2.35, -0.1, 1.45)), 30, 8),               # between them as the bike stops
     (150,  Vector((3.50, 3.40, 1.68)), Vector((3.55, 0.35, 1.45)), 24, 8),               # rider + officer pointing at his bare head
-    (205,  Vector((3.20, 2.55, 1.64)), Vector((3.05, 0.0, 1.50)), 26, 8),
+    (205,  Vector((3.20, 2.55, 1.64)), Vector((2.85, 0.0, 1.50)), 26, 8),
     (255,  Vector((2.65, 1.05, 1.62)), Vector((2.35, -0.2, 1.52)), 38, 8),                # close on Ravi: "Big mistake"
     (290,  Vector((2.55, 0.85, 1.58)), Vector((2.40, -0.2, 1.60)), 38, 8),
     (318,  Vector((2.75, 0.60, 1.90)), PT + Vector((-0.6, 0, 0.3)), 30, 8),              # tilt up to the pole transformer and the wires
@@ -685,7 +685,7 @@ CK = [
     (652,  Vector((-8.65, 2.12, 1.86)), SCR_C, 30, 9),
     (690,  Vector((-9.45, 2.20, 1.78)), SCR_C, 32, 10),                                       # over his right shoulder: the red police row
     (760,  Vector((-9.32, 2.22, 1.74)), SCR_C + Vector((0, 0.03, 0.0)), 40, 11),          # calendar pages, over his right shoulder
-    (805,  Vector((-8.55, 2.12, 1.86)), Vector((RAVI_CX, RAVI_CY, 1.60)), 30, 8),          # round his right side, above the counter
+    (800,  Vector((-7.65, 2.20, 1.74)), Vector((RAVI_CX, RAVI_CY, 1.60)), 32, 8),          # round his right side, above the counter
     (845,  Vector((-7.50, 2.50, 1.56)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),          # his grin over the laptop lid (low, under the brim)
     (880,  Vector((-7.45, 2.95, 1.56)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),
     (895,  Vector((-8.55, 3.50, 1.82)), Vector((RAVI_CX, RAVI_CY, 1.55)), 28, 8),
