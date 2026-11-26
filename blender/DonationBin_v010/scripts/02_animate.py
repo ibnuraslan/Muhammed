@@ -62,7 +62,7 @@ FA = 35.0
 def flap_hold(a_deg, t=0.25, x=-0.17):
     def spec(f): return WH(flap_pt(FLAP_ANG(f), t, x) - flap_in_normal(FLAP_ANG(f)) * 0.009, -flap_in_normal(FLAP_ANG(f)) * -1, (0, -math.sin(R_(FLAP_ANG(f))), math.cos(R_(FLAP_ANG(f)))))
     return spec
-for f, dy, rh, hy in ((1, 0.0, (0.15, -0.60, 1.16), 0), (40, 0.01, (0.08, -0.57, 1.13), -12), (80, 0.0, (0.19, -0.61, 1.17), 10), (115, 0.01, (0.12, -0.58, 1.14), -4)):
+for f, dy, rh, hy in ((1, 0.0, (0.15, -0.60, 1.16), 18), (40, 0.01, (0.08, -0.57, 1.13), 8), (80, 0.0, (0.19, -0.61, 1.17), 22), (115, 0.01, (0.12, -0.58, 1.14), 12)):
     W.key(f, pos=WP_A + Vector((0, dy, 0)), rot=Rf((0, 1, 0), lean=6), spine=(8.0, 0.0, 0.0), head=(18.0, hy, 0.0),
           hand_R=WH(rh, (0, 0.15, -1), (0, 0.45, -1)), grip_R="relaxed",
           foot_L=WH((-0.10, WY - 0.01, STAND + 0.064 + 0.065), (0, 0.35, 0.94), (0, 0.94, -0.35)),
@@ -207,7 +207,7 @@ for f in range(1, 262, 2):
         r = Vector((0, p.y - HINGE.y, p.z - HINGE.z))
         if r.length > FLAP_L + 0.03 or r.length < 0.02: continue
         ang = math.degrees(math.atan2(r.y, -r.z))         # angle of this body point around the hinge, from straight down
-        amin = max(amin, min(88.0, ang + math.degrees(0.025 / max(r.length, 0.05))))
+        amin = max(amin, min(88.0, ang + math.degrees(0.04 / max(r.length, 0.05))))
     need[f] = amin
 FLAP_KEYS[:] = []
 last = 1; prev = 0.0
