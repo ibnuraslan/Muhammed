@@ -1,0 +1,1220 @@
+{
+ "frames": {
+  "111": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bottle moves 49.2 cm with no hand on it (nearest finger 32 cm)"
+   ]
+  ],
+  "121": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Bottle moves 35.1 cm with no hand on it (nearest finger 63 cm)"
+   ]
+  ],
+  "131": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "141": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "151": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "471": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop2 moves 0.8 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop3 moves 0.7 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop4 moves 1.0 cm with no hand on it (nearest finger 74 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop5 moves 0.9 cm with no hand on it (nearest finger 85 cm)"
+   ]
+  ],
+  "531": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop0 moves 2.5 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop1 moves 0.6 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop4 moves 1.3 cm with no hand on it (nearest finger 74 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop5 moves 0.9 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop6 moves 1.1 cm with no hand on it (nearest finger 105 cm)"
+   ]
+  ],
+  "541": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop0 moves 2.8 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop3 moves 0.5 cm with no hand on it (nearest finger 900 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop5 moves 0.7 cm with no hand on it (nearest finger 900 cm)"
+   ]
+  ],
+  "551": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "561": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "571": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "581": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "591": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "601": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "611": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "621": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "631": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "641": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "651": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "661": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "671": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "681": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "691": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "701": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "711": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "721": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "731": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "741": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "751": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "761": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "771": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "781": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "791": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "BACKHEAD",
+    "Man"
+   ]
+  ],
+  "801": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "811": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "821": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "831": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "841": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "851": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "861": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "871": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "881": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "891": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "901": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "911": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "921": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "931": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "941": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "951": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "961": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "971": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "981": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "991": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1001": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1011": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "1021": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1031": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1041": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1051": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1061": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1181": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1191": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1201": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1211": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1221": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1231": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1241": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1251": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1261": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1271": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1281": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1291": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1301": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1311": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1321": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1331": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1341": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1351": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1361": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1371": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1381": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1391": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "EX_Arrow moves 92.6 cm with no hand on it (nearest finger 40258 cm)"
+   ]
+  ],
+  "1401": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "EX_Arrow moves 47.8 cm with no hand on it (nearest finger 40209 cm)"
+   ]
+  ],
+  "1411": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "EX_Arrow moves 20.0 cm with no hand on it (nearest finger 40192 cm)"
+   ]
+  ],
+  "1421": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "EX_Arrow moves 4.4 cm with no hand on it (nearest finger 40192 cm)"
+   ]
+  ],
+  "1431": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1441": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "EX_Arrow moves 1.0 cm with no hand on it (nearest finger 40201 cm)"
+   ]
+  ],
+  "1451": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "EX_Arrow moves 3.2 cm with no hand on it (nearest finger 40202 cm)"
+   ]
+  ],
+  "1461": [
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "EX_Arrow moves 7.2 cm with no hand on it (nearest finger 40204 cm)"
+   ]
+  ],
+  "1471": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "EX_Arrow moves 63.5 cm with no hand on it (nearest finger 40262 cm)"
+   ]
+  ],
+  "1481": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1491": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1501": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1511": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only EX_Dome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1186": [
+   [
+    "CAMJUMP",
+    "cut: 404.17 m, 7 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "1513": [
+   [
+    "CAMJUMP",
+    "cut: 404.35 m, 29 deg in one frame (neighbours 0.00 m, 0 deg)"
+   ]
+  ],
+  "101": [
+   [
+    "PROPMOVE",
+    "Bottle moves 9.7 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "431": [
+   [
+    "PROPMOVE",
+    "TR_Hop0 moves 0.6 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop1 moves 0.5 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop3 moves 0.7 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop4 moves 0.8 cm with no hand on it (nearest finger 74 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop5 moves 0.7 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop6 moves 0.7 cm with no hand on it (nearest finger 105 cm)"
+   ]
+  ],
+  "441": [
+   [
+    "PROPMOVE",
+    "TR_Hop1 moves 0.5 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop2 moves 0.8 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop3 moves 0.5 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop5 moves 0.6 cm with no hand on it (nearest finger 85 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop6 moves 0.6 cm with no hand on it (nearest finger 104 cm)"
+   ]
+  ],
+  "451": [
+   [
+    "PROPMOVE",
+    "TR_Hop0 moves 0.7 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop1 moves 0.7 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop2 moves 0.8 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop4 moves 0.6 cm with no hand on it (nearest finger 74 cm)"
+   ]
+  ],
+  "461": [
+   [
+    "PROPMOVE",
+    "TR_Hop0 moves 0.8 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop3 moves 0.5 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop4 moves 1.1 cm with no hand on it (nearest finger 73 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop5 moves 1.2 cm with no hand on it (nearest finger 84 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop6 moves 0.6 cm with no hand on it (nearest finger 105 cm)"
+   ]
+  ],
+  "481": [
+   [
+    "PROPMOVE",
+    "TR_Hop0 moves 0.8 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop2 moves 1.1 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop3 moves 0.7 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop4 moves 1.2 cm with no hand on it (nearest finger 73 cm)"
+   ]
+  ],
+  "491": [
+   [
+    "PROPMOVE",
+    "TR_Hop0 moves 1.2 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop2 moves 0.6 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop3 moves 1.2 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop4 moves 1.2 cm with no hand on it (nearest finger 74 cm)"
+   ]
+  ],
+  "501": [
+   [
+    "PROPMOVE",
+    "TR_Hop0 moves 1.0 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop2 moves 0.6 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop3 moves 0.6 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop4 moves 1.7 cm with no hand on it (nearest finger 74 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop5 moves 0.5 cm with no hand on it (nearest finger 85 cm)"
+   ]
+  ],
+  "511": [
+   [
+    "PROPMOVE",
+    "TR_Hop0 moves 1.9 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop2 moves 1.9 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop3 moves 1.4 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop4 moves 1.4 cm with no hand on it (nearest finger 74 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop5 moves 1.1 cm with no hand on it (nearest finger 85 cm)"
+   ]
+  ],
+  "521": [
+   [
+    "PROPMOVE",
+    "TR_Hop0 moves 1.8 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop1 moves 0.6 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop2 moves 1.8 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop3 moves 1.9 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop4 moves 0.9 cm with no hand on it (nearest finger 73 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop5 moves 0.5 cm with no hand on it (nearest finger 85 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "TR_Hop6 moves 0.8 cm with no hand on it (nearest finger 104 cm)"
+   ]
+  ],
+  "1": [
+   [
+    "FAN",
+    "Man.L fingers fanned 29 deg (index vs little)"
+   ]
+  ],
+  "11": [
+   [
+    "FAN",
+    "Man.L fingers fanned 29 deg (index vs little)"
+   ]
+  ],
+  "21": [
+   [
+    "FAN",
+    "Man.L fingers fanned 28 deg (index vs little)"
+   ]
+  ],
+  "31": [
+   [
+    "FAN",
+    "Man.L fingers fanned 28 deg (index vs little)"
+   ]
+  ],
+  "41": [
+   [
+    "FAN",
+    "Man.L fingers fanned 28 deg (index vs little)"
+   ]
+  ],
+  "51": [
+   [
+    "FAN",
+    "Man.L fingers fanned 29 deg (index vs little)"
+   ]
+  ],
+  "61": [
+   [
+    "FAN",
+    "Man.L fingers fanned 29 deg (index vs little)"
+   ]
+  ],
+  "71": [
+   [
+    "FAN",
+    "Man.L fingers fanned 29 deg (index vs little)"
+   ]
+  ],
+  "81": [
+   [
+    "FAN",
+    "Man.L fingers fanned 29 deg (index vs little)"
+   ]
+  ],
+  "91": [
+   [
+    "FAN",
+    "Man.L fingers fanned 29 deg (index vs little)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 130,
+  "BACKHEAD": 1,
+  "INSIDE": 33,
+  "CAMJUMP": 2,
+  "PROPMOVE": 68,
+  "FAN": 10
+ }
+}
