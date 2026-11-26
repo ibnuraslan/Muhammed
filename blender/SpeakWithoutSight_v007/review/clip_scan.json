@@ -1,0 +1,505 @@
+{
+ "frames": {
+  "37": {
+   "Girl": {
+    "self": 84,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "43": {
+   "Girl": {
+    "self": 331,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "49": {
+   "Girl": {
+    "self": 570,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "55": {
+   "Girl": {
+    "self": 684,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "61": {
+   "Girl": {
+    "self": 731,
+    "clothes": 0,
+    "other": 0
+   },
+   "Teacher": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "67": {
+   "Girl": {
+    "self": 739,
+    "clothes": 0,
+    "other": 0
+   },
+   "Teacher": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "73": {
+   "Girl": {
+    "self": 741,
+    "clothes": 0,
+    "other": 0
+   },
+   "Teacher": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "79": {
+   "Girl": {
+    "self": 741,
+    "clothes": 0,
+    "other": 0
+   },
+   "Teacher": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "85": {
+   "Girl": {
+    "self": 739,
+    "clothes": 0,
+    "other": 0
+   },
+   "Teacher": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "91": {
+   "Girl": {
+    "self": 739,
+    "clothes": 0,
+    "other": 0
+   },
+   "Teacher": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "97": {
+   "Girl": {
+    "self": 738,
+    "clothes": 0,
+    "other": 0
+   },
+   "Teacher": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "103": {
+   "Girl": {
+    "self": 735,
+    "clothes": 0,
+    "other": 0
+   },
+   "Teacher": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "109": {
+   "Girl": {
+    "self": 734,
+    "clothes": 0,
+    "other": 0
+   },
+   "Teacher": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "115": {
+   "Girl": {
+    "self": 734,
+    "clothes": 0,
+    "other": 0
+   },
+   "Teacher": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "121": {
+   "Girl": {
+    "self": 736,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "127": {
+   "Girl": {
+    "self": 743,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "133": {
+   "Girl": {
+    "self": 746,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "139": {
+   "Girl": {
+    "self": 759,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "145": {
+   "Girl": {
+    "self": 514,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "151": {
+   "Girl": {
+    "self": 344,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "157": {
+   "Girl": {
+    "self": 15,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "349": {
+   "Girl": {
+    "self": 266,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "355": {
+   "Girl": {
+    "self": 262,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "361": {
+   "Girl": {
+    "self": 295,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "367": {
+   "Girl": {
+    "self": 268,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "373": {
+   "Girl": {
+    "self": 139,
+    "clothes": 0,
+    "other": 0
+   },
+   "Teacher": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "379": {
+   "Girl": {
+    "self": 40,
+    "clothes": 0,
+    "other": 0
+   },
+   "Teacher": {
+    "self": 9,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "385": {
+   "Teacher": {
+    "self": 22,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "391": {
+   "Teacher": {
+    "self": 34,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "397": {
+   "Teacher": {
+    "self": 45,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "403": {
+   "Teacher": {
+    "self": 57,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "409": {
+   "Teacher": {
+    "self": 72,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "415": {
+   "Teacher": {
+    "self": 82,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "421": {
+   "Teacher": {
+    "self": 94,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "427": {
+   "Teacher": {
+    "self": 79,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "433": {
+   "Teacher": {
+    "self": 38,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1333": {
+   "Teacher": {
+    "self": 10,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1339": {
+   "Teacher": {
+    "self": 82,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1345": {
+   "Teacher": {
+    "self": 82,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1351": {
+   "Teacher": {
+    "self": 81,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1357": {
+   "Teacher": {
+    "self": 81,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1363": {
+   "Teacher": {
+    "self": 74,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1369": {
+   "Teacher": {
+    "self": 68,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1375": {
+   "Teacher": {
+    "self": 57,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1381": {
+   "Teacher": {
+    "self": 51,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1387": {
+   "Teacher": {
+    "self": 36,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1393": {
+   "Teacher": {
+    "self": 7,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1399": {
+   "Teacher": {
+    "self": 9,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1405": {
+   "Teacher": {
+    "self": 9,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1411": {
+   "Teacher": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1513": {
+   "Teacher": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1519": {
+   "Teacher": {
+    "self": 11,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1525": {
+   "Teacher": {
+    "self": 17,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1531": {
+   "Teacher": {
+    "self": 25,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1537": {
+   "Teacher": {
+    "self": 25,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1543": {
+   "Teacher": {
+    "self": 26,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1549": {
+   "Teacher": {
+    "self": 24,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1555": {
+   "Teacher": {
+    "self": 18,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1561": {
+   "Teacher": {
+    "self": 8,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1567": {
+   "Teacher": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   37,
+   151
+  ],
+  [
+   349,
+   433
+  ],
+  [
+   1339,
+   1387
+  ],
+  [
+   1531,
+   1543
+  ]
+ ],
+ "fps": 60
+}

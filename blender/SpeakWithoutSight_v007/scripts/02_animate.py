@@ -81,7 +81,7 @@ def seat_pose(c, f, root_dz=0.0, flex=0.0, foot_fwd=0.0, knee_out=0.0):
     # hip joints so that the knee joint sits 9 cm past the seat front (calves clear the cushion and rail)
     Ryaw = Matrix.Rotation(math.radians(yaw), 3, 'Z')
     fwd = Ryaw @ Vector((0, -1, 0))
-    hip_y = SEAT_FRONT - 0.09 + tl * 0.97
+    hip_y = SEAT_FRONT - 0.12 + tl * 0.97
     z0 = CAL.get(c, SEAT_Z + (rh.z - hip.z) + 0.10)
     pos = Vector((x, hip_y, z0 + root_dz)) + Vector((0, (rh.y - hip.y), 0))
     H.key_root(f, pos, yaw=yaw, flex=flex)
@@ -117,9 +117,9 @@ def calibrate(c):
                         h = bv.ray_cast(Vector((q.x, q.y + dy, 0.02)), Vector((0, 0, 1)), 3.0)
                         if h[0] is not None and h[0].y > SEAT_FRONT + 0.02: mz = min(mz, h[0].z)
         cur = CAL.get(c, SEAT_Z + (H.root_head.z - CT.BN["upperleg01.L"].head_local.z) + 0.10)
-        CAL[c] = cur + (SEAT_Z - 0.006 - mz)
+        CAL[c] = cur + (SEAT_Z + 0.002 - mz)
         log("calibrate", c, it, "min skin z", round(mz, 4), "->", round(CAL[c], 4), "foot err", round((Wh(rig, "foot.L") - Wh(rig, "IK_foot.L")).length, 3))
-        if abs(SEAT_Z - 0.006 - mz) < 0.002: break
+        if abs(SEAT_Z + 0.002 - mz) < 0.002: break
 
 FOOTSTOOL_TOP = None
 def setup_seating():
@@ -132,7 +132,7 @@ def setup_seating():
     # measure where the girl's soles want to be with a free hanging shin (knee 90 deg): knee z - shin - ankle height
     fs(1); kz = (Wh(GR, "lowerleg01.L").z)
     a = CTG.BN["foot.L"].head_local
-    sole = kz - shin_len("G") - 0.008
+    sole = kz - shin_len("G") - a.z - 0.004          # knee - shin - ankle height = the sole
     FOOTSTOOL_TOP = max(0.08, round(sole, 3))
     FOOT_Z["G"] = FOOTSTOOL_TOP
     calibrate("G")
@@ -318,19 +318,19 @@ def teach_bvh(): return [skirt_bvh(TC), body_noarms(TR, TB)]
 REST_T_R = list(range(1, END + 1, 60)) + [END]
 for i, f in enumerate(REST_T_R):
     rest_on_thigh("T", "R", f, fwd=0.02 * math.sin(i), lift=0.0)
-for f in REST_T_R[::4] + [END]:
+for f in REST_T_R:
     settle("T", "R", f, teach_bvh)
 GL_REST = [f for f in range(1, 1220, 60)] + [1219]
 for i, f in enumerate(GL_REST):
     rest_on_thigh("G", "L", f, fwd=0.015 * math.sin(i * 1.3))
-for f in GL_REST[::4] + [1219]:
+for f in GL_REST:
     settle("G", "L", f, girl_bvh)
 
 # ---- girl's right hand: on her thigh until the teacher takes it
 GR_REST = list(range(1, 395, 50)) + [395]
 for i, f in enumerate(GR_REST):
     rest_on_thigh("G", "R", f, fwd=0.01 * math.sin(i))
-for f in (1, 200, 395):
+for f in GR_REST:
     settle("G", "R", f, girl_bvh)
 
 # ---- the contact points (stored in the teacher's own bone space so they follow her head and neck)
@@ -437,8 +437,8 @@ def arc_key(rig, s, fa, fb, fm, lift_arm=Vector((0, 0, 0.05)), u=0.5):
 F_ON = F_THROAT - 14
 for f in list(range(F_ON, 905, 6)) + [905]:
     throat_hand(f)
-arc_key(GR, "R", 395, F_ON, 418, lift_arm=Vector((0.0, -0.02, 0.07)), u=0.35)
-arc_key(GR, "R", 395, F_ON, 440, lift_arm=Vector((0.0, -0.03, 0.04)), u=0.75)
+arc_key(GR, "R", 395, F_ON, 418, lift_arm=Vector((-0.02, -0.12, 0.06)), u=0.35)
+arc_key(GR, "R", 395, F_ON, 440, lift_arm=Vector((-0.02, -0.08, 0.03)), u=0.75)
 pose_hand(GR, "R", 418, "soft_cup", spread=1)
 TH_GAP = {}
 for f in (F_ON, 520, 612, 700, 800, 905):
@@ -464,18 +464,20 @@ for f, dx in ():
 log("teacher wave: wrist reach err mm", WAVE)
 rest_on_thigh("T", "L", 128); settle("T", "L", 128, teach_bvh)
 rest_on_thigh("T", "L", 362); settle("T", "L", 362, teach_bvh)
-for f in list(range(386, F_THROAT + 1, 4)):
+F_REL = 422
+for f in list(range(386, F_REL + 1, 4)):
     cover_hand(f)
 arc_key(TR, "L", 362, 386, 374, lift_arm=Vector((0, 0, 0.05)))
 pose_hand(TR, "L", 374, "relaxed")
 COV = {}
-for f in (386, 410, 440, F_THROAT):
+for f in (386, 406, F_REL):
     fs(f); pc, d, n = palm_frame(GR, "R")
     g = settle("T", "L", f, lambda: [bvh_eval(GB)], axis=-n)
     COV[f] = round(g * 1000, 1)
 log("teacher palm over the girl's hand: min clearance mm", COV)
 rest_on_thigh("T", "L", 505); settle("T", "L", 505, teach_bvh)
-arc_key(TR, "L", F_THROAT, 505, 486, lift_arm=Vector((0.0, -0.03, 0.03)))
+rest_on_thigh("T", "L", 462); settle("T", "L", 462, teach_bvh)
+arc_key(TR, "L", F_REL, 462, 442, lift_arm=Vector((0.0, -0.04, -0.02)))
 for f in range(565, END + 1, 70):
     rest_on_thigh("T", "L", f, fwd=0.015 * math.sin(f)); settle("T", "L", f, teach_bvh)
 rest_on_thigh("T", "L", END); settle("T", "L", END, teach_bvh)
@@ -580,20 +582,46 @@ def make_rings(prefix, rig, bone, Pl, Nl, windows, n=4, period=26, col=(1.0, 0.6
                 fac.default_value = 0.0; fac.keyframe_insert("default_value", frame=int(f + period) - 1)
                 f += period
         RINGS.append(r)
-fs(1)
-make_rings("TH", TR, "neck02", *TH_L, windows=[(612, 747, 0.040, 5.0), (747, 820, 0.075, 12.0), (820, 891, 0.024, 2.0)])
-make_rings("GTH", GR, "neck02", *GTH_L, windows=[(1512, END, 0.032, 5.0)], col=(1.0, 0.75, 0.25))
-for o in RINGS:
-    for fc in iter_fcurves(o.animation_data.action):
-        for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
-    m = o.data.materials[0]
-    if m.node_tree.animation_data:
-        for fc in iter_fcurves(m.node_tree.animation_data.action):
+def skin_ripples(prefix, rig, body, bone, Pl, keys_S, col=(1.0, 0.62, 0.12), K=180.0):
+    """vibration ripples drawn ON the skin (a shader ring pattern around the contact): never cut into the neck or jaw.
+    Distance is measured from an empty that follows the neck bone; the phase and strength are keyed values."""
+    e = bpy.data.objects.new(prefix + "_RippleCentre", None); sc.collection.objects.link(e); e.empty_display_size = 0.01
+    c = e.constraints.new('CHILD_OF'); c.target = rig; c.subtarget = bone
+    fs(1); M1 = rig.matrix_world @ rig.pose.bones[bone].matrix; c.inverse_matrix = M1.inverted(); e.location = M1 @ Pl
+    m = body.data.materials[0]; nt = m.node_tree
+    out = [n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL'][0]; lk = out.inputs["Surface"].links[0]; src = lk.from_socket
+    tc = nt.nodes.new("ShaderNodeTexCoord"); tc.object = e
+    ln = nt.nodes.new("ShaderNodeVectorMath"); ln.operation = 'LENGTH'; nt.links.new(tc.outputs["Object"], ln.inputs[0])
+    def mth(op, a_, b_=None):
+        n_ = nt.nodes.new("ShaderNodeMath"); n_.operation = op
+        for i_, x in enumerate((a_, b_)):
+            if x is None: continue
+            if isinstance(x, (int, float)): n_.inputs[i_].default_value = float(x)
+            else: nt.links.new(x, n_.inputs[i_])
+        return n_.outputs[0]
+    vT = nt.nodes.new("ShaderNodeValue"); vT.name = prefix + "_Phase"
+    vS = nt.nodes.new("ShaderNodeValue"); vS.name = prefix + "_Strength"
+    vR = nt.nodes.new("ShaderNodeValue"); vR.name = prefix + "_Radius"
+    d = ln.outputs["Value"]
+    ring = mth('POWER', mth('MAXIMUM', mth('SINE', mth('SUBTRACT', mth('MULTIPLY', d, K), vT.outputs[0])), 0.0), 6.0)
+    fade = mth('MAXIMUM', mth('SUBTRACT', 1.0, mth('DIVIDE', d, vR.outputs[0])), 0.0)
+    mask = mth('MULTIPLY', mth('MULTIPLY', ring, fade), vS.outputs[0])
+    em = nt.nodes.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (*col, 1); nt.links.new(mask, em.inputs["Strength"])
+    add = nt.nodes.new("ShaderNodeAddShader"); nt.links.new(src, add.inputs[0]); nt.links.new(em.outputs[0], add.inputs[1])
+    nt.links.new(add.outputs[0], out.inputs["Surface"])
+    vR.outputs[0].default_value = 0.05
+    for f, st, rr in keys_S:
+        vS.outputs[0].default_value = st; vS.outputs[0].keyframe_insert("default_value", frame=f)
+        vR.outputs[0].default_value = rr; vR.outputs[0].keyframe_insert("default_value", frame=f)
+    vT.outputs[0].default_value = 0.0; vT.outputs[0].keyframe_insert("default_value", frame=1)
+    vT.outputs[0].default_value = -(END - 1) * 0.30; vT.outputs[0].keyframe_insert("default_value", frame=END)   # rings travel outward
+    for fc in iter_fcurves(nt.animation_data.action):
+        if "_Phase" in fc.data_path:
             for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
-    vis(o, 1, False)
-for o in RINGS:
-    if o.name.startswith("TH"): vis(o, 612, True); vis(o, 893, False)
-    else: vis(o, 1512, True)
+fs(1)
+skin_ripples("TH", TR, TB, "neck02", TH_L[0], [(1, 0.0, 0.04), (610, 0.0, 0.04), (626, 4.0, 0.045), (745, 4.0, 0.045), (752, 12.0, 0.07),
+                                               (818, 12.0, 0.07), (826, 1.5, 0.028), (885, 1.5, 0.028), (893, 0.0, 0.028)])
+skin_ripples("GTH", GR, GB, "neck02", GTH_L[0], [(1, 0.0, 0.035), (1508, 0.0, 0.035), (1522, 5.0, 0.04), (END, 5.0, 0.04)], col=(1.0, 0.75, 0.25))
 
 # pulse dots: travel from the girl's fingertips up her forearm and upper arm (on the camera side of the sleeve)
 CAMPOS = {}
