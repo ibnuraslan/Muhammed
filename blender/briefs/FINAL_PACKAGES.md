@@ -36,7 +36,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 18 | NukedWell | `claude/beautiful-ptolemy-c5vrcq` | `blender/NukedWell_v008/` **fixed (watched moving) + synced to your voiceover: ON HOLD (was ready) (frames 1–1541)** |
 | 19 | SpeakWithoutSight | `claude/beautiful-ptolemy-c5vrcq` | `blender/SpeakWithoutSight_v006/` **fixed (watched moving) + synced to your voiceover: ON HOLD (was ready) (frames 1–1645)** |
 | 20 | HeadsetBullet | `claude/beautiful-ptolemy-c5vrcq` | `blender/HeadsetBullet_v008/` **fixed (watched moving) + synced to your voiceover: ON HOLD (was ready) (frames 1–1203)** |
-| 21 | RingBullet | `claude/beautiful-ptolemy-c5vrcq` | `blender/RingBullet_v008/` **fixed (watched moving) + synced to your voiceover: ON HOLD (was ready) (frames 1–1395)** |
+| 21 | RingBullet | `claude/beautiful-ptolemy-c5vrcq` | `blender/RingBullet_v008/` **fixed (watched moving) + synced to your voiceover: ON HOLD (was ready) (frames 1–1395)**; rebuild `RingBullet_v009` on `claude/rebuild21-ring-bullet`: **ON HOLD (preview FAIL, no .blend pushed)** |
 | 22 | BelugaRescue | `claude/beautiful-ptolemy-c5vrcq` | `blender/BelugaRescue_v008/` **fixed (watched moving) + synced to your voiceover: ON HOLD (was ready) (frames 1–1736)** |
 | 23 | CaveRescue | `claude/beautiful-ptolemy-c5vrcq` | `blender/CaveRescue_v010/` **fixed (watched moving) + synced to your voiceover: ON HOLD (was ready) (frames 1–2436)** |
 | 24 | RooseveltSpeech | `claude/beautiful-ptolemy-c5vrcq` | `blender/RooseveltSpeech_v011/` **fixed (watched moving) + synced to your voiceover: ON HOLD (was ready) (frames 1–1307)** |

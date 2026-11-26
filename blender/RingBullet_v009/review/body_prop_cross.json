@@ -1,0 +1,2364 @@
+{
+"visible_frames": [
+1,
+5,
+9,
+13,
+17,
+21,
+25,
+29,
+33,
+37,
+41,
+45,
+49,
+53,
+57,
+61,
+65,
+69,
+73,
+77,
+81,
+85,
+89,
+93,
+97,
+101,
+105,
+109,
+113,
+117,
+121,
+125,
+129,
+133,
+137,
+141,
+145,
+149,
+153,
+157,
+161,
+257,
+261,
+265,
+269,
+273,
+277,
+281,
+285,
+289,
+293,
+297,
+301,
+305,
+309,
+313,
+317,
+321,
+325,
+329,
+333,
+337,
+341,
+345,
+349,
+353,
+357,
+361,
+365,
+369,
+373,
+377,
+381,
+385,
+389,
+393,
+397,
+401,
+405,
+409,
+413,
+417,
+421,
+425,
+429,
+433,
+437,
+441,
+445,
+449,
+453,
+457,
+461,
+465,
+469,
+473,
+477,
+481,
+485,
+489,
+493,
+497,
+501,
+505,
+509,
+513,
+517,
+521,
+525,
+529,
+533,
+537,
+541,
+545,
+549,
+553,
+557,
+561,
+565,
+569,
+573,
+577,
+581,
+585,
+589,
+593,
+597,
+601,
+605,
+609,
+613,
+617,
+621,
+625,
+629,
+633,
+637,
+641,
+645,
+649,
+653,
+657,
+661,
+665,
+669,
+673,
+677,
+681,
+685,
+689,
+693,
+697,
+701,
+705,
+709,
+713,
+717,
+721,
+725,
+729,
+733,
+737,
+741,
+745,
+749,
+753,
+757,
+761,
+765,
+769,
+773,
+777,
+781,
+785,
+789,
+793,
+889,
+929,
+933,
+937,
+941,
+945,
+949,
+953,
+957,
+961,
+965,
+969,
+973,
+977,
+981,
+985,
+989,
+993,
+997,
+1001,
+1005,
+1009,
+1013,
+1017,
+1021,
+1025,
+1029,
+1033,
+1037,
+1041,
+1045,
+1049,
+1053,
+1057,
+1061,
+1065,
+1069,
+1073,
+1077,
+1081,
+1085,
+1089,
+1093,
+1097,
+1101,
+1105,
+1109,
+1113,
+1117,
+1121,
+1125,
+1129,
+1133,
+1137,
+1141,
+1145,
+1149,
+1153,
+1157,
+1161,
+1165,
+1169,
+1173,
+1177,
+1181,
+1185,
+1189,
+1193,
+1197,
+1201,
+1205,
+1209,
+1213,
+1217,
+1221,
+1225,
+1229,
+1233,
+1237,
+1241,
+1245,
+1249,
+1253,
+1257,
+1261,
+1265,
+1269,
+1273,
+1277,
+1281,
+1285,
+1289,
+1293,
+1297,
+1301,
+1305,
+1309,
+1313,
+1317,
+1321,
+1325,
+1329,
+1333,
+1337,
+1341,
+1345,
+1349,
+1353,
+1357,
+1361,
+1365,
+1369,
+1373,
+1377,
+1381,
+1385,
+1389,
+1393
+],
+"frames": {
+"1": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|VIS": 24,
+"finger3-1.R|service_pistol_pistol_a|VIS": 14,
+"finger4-1.R|service_pistol_pistol_a|VIS": 14,
+"metacarpal3.R|service_pistol_pistol_a|VIS": 13,
+"finger5-1.R|service_pistol_pistol_a|VIS": 1,
+"metacarpal1.R|service_pistol_pistol_a|VIS": 26,
+"finger4-3.R|service_pistol_pistol_a|VIS": 4,
+"wrist.R|service_pistol_pistol_a|VIS": 3,
+"metacarpal2.R|service_pistol_pistol_a|VIS": 16,
+"finger1-2.R|service_pistol_pistol_a|VIS": 3,
+"finger1-1.R|service_pistol_pistol_a|VIS": 1,
+"finger5-3.R|service_pistol_pistol_a|VIS": 1
+},
+"5": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|VIS": 24,
+"finger3-1.R|service_pistol_pistol_a|VIS": 14,
+"finger4-1.R|service_pistol_pistol_a|VIS": 14,
+"metacarpal3.R|service_pistol_pistol_a|VIS": 13,
+"finger5-1.R|service_pistol_pistol_a|VIS": 1,
+"metacarpal1.R|service_pistol_pistol_a|VIS": 26,
+"finger4-3.R|service_pistol_pistol_a|VIS": 4,
+"wrist.R|service_pistol_pistol_a|VIS": 3,
+"metacarpal2.R|service_pistol_pistol_a|VIS": 16,
+"finger1-2.R|service_pistol_pistol_a|VIS": 3,
+"finger1-1.R|service_pistol_pistol_a|VIS": 1,
+"finger5-3.R|service_pistol_pistol_a|VIS": 1
+},
+"9": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|VIS": 24,
+"finger3-1.R|service_pistol_pistol_a|VIS": 14,
+"finger4-1.R|service_pistol_pistol_a|VIS": 14,
+"metacarpal3.R|service_pistol_pistol_a|VIS": 13,
+"finger5-1.R|service_pistol_pistol_a|VIS": 1,
+"metacarpal1.R|service_pistol_pistol_a|VIS": 26,
+"finger4-3.R|service_pistol_pistol_a|VIS": 4,
+"wrist.R|service_pistol_pistol_a|VIS": 3,
+"metacarpal2.R|service_pistol_pistol_a|VIS": 16,
+"finger1-2.R|service_pistol_pistol_a|VIS": 3,
+"finger1-1.R|service_pistol_pistol_a|VIS": 1,
+"finger5-3.R|service_pistol_pistol_a|VIS": 1
+},
+"13": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|VIS": 24,
+"finger3-1.R|service_pistol_pistol_a|VIS": 14,
+"finger4-1.R|service_pistol_pistol_a|VIS": 14,
+"metacarpal3.R|service_pistol_pistol_a|VIS": 13,
+"finger5-1.R|service_pistol_pistol_a|VIS": 1,
+"metacarpal1.R|service_pistol_pistol_a|VIS": 26,
+"finger4-3.R|service_pistol_pistol_a|VIS": 4,
+"wrist.R|service_pistol_pistol_a|VIS": 3,
+"metacarpal2.R|service_pistol_pistol_a|VIS": 16,
+"finger1-2.R|service_pistol_pistol_a|VIS": 3,
+"finger1-1.R|service_pistol_pistol_a|VIS": 1,
+"finger5-3.R|service_pistol_pistol_a|VIS": 1
+},
+"17": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|VIS": 24,
+"finger3-1.R|service_pistol_pistol_a|VIS": 14,
+"finger4-1.R|service_pistol_pistol_a|VIS": 14,
+"metacarpal3.R|service_pistol_pistol_a|VIS": 13,
+"finger5-1.R|service_pistol_pistol_a|VIS": 1,
+"metacarpal1.R|service_pistol_pistol_a|VIS": 26,
+"finger4-3.R|service_pistol_pistol_a|VIS": 4,
+"wrist.R|service_pistol_pistol_a|VIS": 3,
+"metacarpal2.R|service_pistol_pistol_a|VIS": 16,
+"finger1-2.R|service_pistol_pistol_a|VIS": 3,
+"finger1-1.R|service_pistol_pistol_a|VIS": 1,
+"finger5-3.R|service_pistol_pistol_a|VIS": 1
+},
+"21": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|VIS": 24,
+"finger3-1.R|service_pistol_pistol_a|VIS": 14,
+"finger4-1.R|service_pistol_pistol_a|VIS": 14,
+"metacarpal3.R|service_pistol_pistol_a|VIS": 13,
+"finger5-1.R|service_pistol_pistol_a|VIS": 1,
+"metacarpal1.R|service_pistol_pistol_a|VIS": 26,
+"finger4-3.R|service_pistol_pistol_a|VIS": 4,
+"wrist.R|service_pistol_pistol_a|VIS": 3,
+"metacarpal2.R|service_pistol_pistol_a|VIS": 16,
+"finger1-2.R|service_pistol_pistol_a|VIS": 3,
+"finger1-1.R|service_pistol_pistol_a|VIS": 1,
+"finger5-3.R|service_pistol_pistol_a|VIS": 1
+},
+"25": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|VIS": 24,
+"finger3-1.R|service_pistol_pistol_a|VIS": 14,
+"finger4-1.R|service_pistol_pistol_a|VIS": 14,
+"metacarpal3.R|service_pistol_pistol_a|VIS": 13,
+"finger5-1.R|service_pistol_pistol_a|VIS": 1,
+"metacarpal1.R|service_pistol_pistol_a|VIS": 26,
+"finger4-3.R|service_pistol_pistol_a|VIS": 4,
+"wrist.R|service_pistol_pistol_a|VIS": 3,
+"metacarpal2.R|service_pistol_pistol_a|VIS": 16,
+"finger1-2.R|service_pistol_pistol_a|VIS": 3,
+"finger1-1.R|service_pistol_pistol_a|VIS": 1,
+"finger5-3.R|service_pistol_pistol_a|VIS": 1
+},
+"29": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|VIS": 24,
+"finger3-1.R|service_pistol_pistol_a|VIS": 14,
+"finger4-1.R|service_pistol_pistol_a|VIS": 14,
+"metacarpal3.R|service_pistol_pistol_a|VIS": 13,
+"finger5-1.R|service_pistol_pistol_a|VIS": 1,
+"metacarpal1.R|service_pistol_pistol_a|VIS": 26,
+"finger4-3.R|service_pistol_pistol_a|VIS": 4,
+"wrist.R|service_pistol_pistol_a|VIS": 3,
+"metacarpal2.R|service_pistol_pistol_a|VIS": 16,
+"finger1-2.R|service_pistol_pistol_a|VIS": 3,
+"finger1-1.R|service_pistol_pistol_a|VIS": 1,
+"finger5-3.R|service_pistol_pistol_a|VIS": 1
+},
+"33": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|VIS": 24,
+"finger3-1.R|service_pistol_pistol_a|VIS": 14,
+"finger4-1.R|service_pistol_pistol_a|VIS": 14,
+"metacarpal3.R|service_pistol_pistol_a|VIS": 13,
+"finger5-1.R|service_pistol_pistol_a|VIS": 1,
+"metacarpal1.R|service_pistol_pistol_a|VIS": 26,
+"finger4-3.R|service_pistol_pistol_a|VIS": 4,
+"wrist.R|service_pistol_pistol_a|VIS": 3,
+"metacarpal2.R|service_pistol_pistol_a|VIS": 16,
+"finger1-2.R|service_pistol_pistol_a|VIS": 3,
+"finger1-1.R|service_pistol_pistol_a|VIS": 1,
+"finger5-3.R|service_pistol_pistol_a|VIS": 1
+},
+"37": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|VIS": 24,
+"finger3-1.R|service_pistol_pistol_a|VIS": 14,
+"finger4-1.R|service_pistol_pistol_a|VIS": 14,
+"metacarpal3.R|service_pistol_pistol_a|VIS": 13,
+"finger5-1.R|service_pistol_pistol_a|VIS": 1,
+"metacarpal1.R|service_pistol_pistol_a|VIS": 26,
+"finger4-3.R|service_pistol_pistol_a|VIS": 4,
+"wrist.R|service_pistol_pistol_a|VIS": 3,
+"metacarpal2.R|service_pistol_pistol_a|VIS": 16,
+"finger1-2.R|service_pistol_pistol_a|VIS": 3,
+"finger1-1.R|service_pistol_pistol_a|VIS": 1,
+"finger5-3.R|service_pistol_pistol_a|VIS": 1
+},
+"41": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|VIS": 24,
+"finger3-1.R|service_pistol_pistol_a|VIS": 14,
+"finger4-1.R|service_pistol_pistol_a|VIS": 14,
+"metacarpal3.R|service_pistol_pistol_a|VIS": 13,
+"finger5-1.R|service_pistol_pistol_a|VIS": 1,
+"metacarpal1.R|service_pistol_pistol_a|VIS": 26,
+"finger4-3.R|service_pistol_pistol_a|VIS": 4,
+"wrist.R|service_pistol_pistol_a|VIS": 3,
+"metacarpal2.R|service_pistol_pistol_a|VIS": 16,
+"finger1-2.R|service_pistol_pistol_a|VIS": 3,
+"finger1-1.R|service_pistol_pistol_a|VIS": 1,
+"finger5-3.R|service_pistol_pistol_a|VIS": 1
+},
+"45": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|VIS": 24,
+"finger3-1.R|service_pistol_pistol_a|VIS": 14,
+"finger4-1.R|service_pistol_pistol_a|VIS": 14,
+"metacarpal3.R|service_pistol_pistol_a|VIS": 13,
+"finger5-1.R|service_pistol_pistol_a|VIS": 1,
+"metacarpal1.R|service_pistol_pistol_a|VIS": 26,
+"finger4-3.R|service_pistol_pistol_a|VIS": 4,
+"wrist.R|service_pistol_pistol_a|VIS": 3,
+"metacarpal2.R|service_pistol_pistol_a|VIS": 16,
+"finger1-2.R|service_pistol_pistol_a|VIS": 3,
+"finger1-1.R|service_pistol_pistol_a|VIS": 1,
+"finger5-3.R|service_pistol_pistol_a|VIS": 1
+},
+"49": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|VIS": 24,
+"finger3-1.R|service_pistol_pistol_a|VIS": 14,
+"finger4-1.R|service_pistol_pistol_a|VIS": 14,
+"metacarpal3.R|service_pistol_pistol_a|VIS": 13,
+"finger5-1.R|service_pistol_pistol_a|VIS": 1,
+"metacarpal1.R|service_pistol_pistol_a|VIS": 26,
+"finger4-3.R|service_pistol_pistol_a|VIS": 4,
+"wrist.R|service_pistol_pistol_a|VIS": 3,
+"metacarpal2.R|service_pistol_pistol_a|VIS": 16,
+"finger1-2.R|service_pistol_pistol_a|VIS": 3,
+"finger1-1.R|service_pistol_pistol_a|VIS": 1,
+"finger5-3.R|service_pistol_pistol_a|VIS": 1
+},
+"53": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|VIS": 24,
+"finger3-1.R|service_pistol_pistol_a|VIS": 14,
+"finger4-1.R|service_pistol_pistol_a|VIS": 14,
+"metacarpal3.R|service_pistol_pistol_a|VIS": 13,
+"finger5-1.R|service_pistol_pistol_a|VIS": 1,
+"metacarpal1.R|service_pistol_pistol_a|VIS": 26,
+"finger4-3.R|service_pistol_pistol_a|VIS": 4,
+"wrist.R|service_pistol_pistol_a|VIS": 3,
+"metacarpal2.R|service_pistol_pistol_a|VIS": 16,
+"finger1-2.R|service_pistol_pistol_a|VIS": 3,
+"finger1-1.R|service_pistol_pistol_a|VIS": 1,
+"finger5-3.R|service_pistol_pistol_a|VIS": 1
+},
+"57": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|VIS": 24,
+"finger3-1.R|service_pistol_pistol_a|VIS": 14,
+"finger4-1.R|service_pistol_pistol_a|VIS": 14,
+"metacarpal3.R|service_pistol_pistol_a|VIS": 13,
+"finger5-1.R|service_pistol_pistol_a|VIS": 1,
+"metacarpal1.R|service_pistol_pistol_a|VIS": 26,
+"finger4-3.R|service_pistol_pistol_a|VIS": 4,
+"wrist.R|service_pistol_pistol_a|VIS": 3,
+"metacarpal2.R|service_pistol_pistol_a|VIS": 16,
+"finger1-2.R|service_pistol_pistol_a|VIS": 3,
+"finger1-1.R|service_pistol_pistol_a|VIS": 1,
+"finger5-3.R|service_pistol_pistol_a|VIS": 1
+},
+"61": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|VIS": 24,
+"finger3-1.R|service_pistol_pistol_a|VIS": 14,
+"finger4-1.R|service_pistol_pistol_a|VIS": 14,
+"metacarpal3.R|service_pistol_pistol_a|VIS": 13,
+"finger5-1.R|service_pistol_pistol_a|VIS": 1,
+"metacarpal1.R|service_pistol_pistol_a|VIS": 26,
+"finger4-3.R|service_pistol_pistol_a|VIS": 4,
+"wrist.R|service_pistol_pistol_a|VIS": 3,
+"metacarpal2.R|service_pistol_pistol_a|VIS": 16,
+"finger1-2.R|service_pistol_pistol_a|VIS": 3,
+"finger1-1.R|service_pistol_pistol_a|VIS": 1,
+"finger5-3.R|service_pistol_pistol_a|VIS": 1
+},
+"65": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"69": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"73": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"77": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"81": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"85": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"89": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"93": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"97": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"101": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"105": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"109": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"113": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"117": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"121": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"125": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"129": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"133": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"137": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"141": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"145": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"149": {
+"finger4-1.L|Ring|off": 2,
+"finger4-1.L|Ring|VIS": 2,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"153": {
+"finger4-1.L|Ring|off": 2,
+"finger4-1.L|Ring|VIS": 2,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"157": {
+"finger4-1.L|Ring|off": 2,
+"finger4-1.L|Ring|VIS": 2,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"161": {
+"finger4-1.L|Ring|off": 2,
+"finger4-1.L|Ring|VIS": 2,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"165": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"169": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"173": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"177": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"181": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"185": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"189": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"193": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"197": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"201": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"205": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"209": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"213": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"217": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"221": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"225": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"229": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"233": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"237": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"241": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"245": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"249": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"253": {
+"finger4-1.L|Ring|off": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"257": {
+"finger4-1.L|Ring|VIS": 4,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"261": {
+"finger4-1.L|Ring|VIS": 5,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"265": {
+"finger4-1.L|Ring|VIS": 6,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"269": {
+"finger4-1.L|Ring|VIS": 6,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"273": {
+"finger4-1.L|Ring|VIS": 6,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"277": {
+"finger4-1.L|Ring|VIS": 6,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"281": {
+"finger4-1.L|Ring|VIS": 6,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"285": {
+"finger4-1.L|Ring|VIS": 6,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"289": {
+"finger4-1.L|Ring|VIS": 6,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"293": {
+"finger4-1.L|Ring|VIS": 6,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"297": {
+"finger4-1.L|Ring|VIS": 6,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"301": {
+"finger4-1.L|Ring|VIS": 6,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"305": {
+"finger4-1.L|Ring|VIS": 6,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"309": {
+"finger4-1.L|Ring|VIS": 6,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"313": {
+"finger4-1.L|Ring|VIS": 6,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"317": {
+"finger4-1.L|Ring|VIS": 6,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"321": {
+"finger4-1.L|Ring|VIS": 6,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"325": {
+"finger4-1.L|Ring|VIS": 6,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"329": {
+"finger4-1.L|Ring|VIS": 6,
+"finger2-1.R|service_pistol_pistol_a|off": 24,
+"finger3-1.R|service_pistol_pistol_a|off": 14,
+"finger4-1.R|service_pistol_pistol_a|off": 14,
+"metacarpal3.R|service_pistol_pistol_a|off": 13,
+"finger5-1.R|service_pistol_pistol_a|off": 1,
+"metacarpal1.R|service_pistol_pistol_a|off": 26,
+"finger4-3.R|service_pistol_pistol_a|off": 4,
+"wrist.R|service_pistol_pistol_a|off": 3,
+"metacarpal2.R|service_pistol_pistol_a|off": 16,
+"finger1-2.R|service_pistol_pistol_a|off": 3,
+"finger1-1.R|service_pistol_pistol_a|off": 1,
+"finger5-3.R|service_pistol_pistol_a|off": 1
+},
+"333": {
+"finger4-1.L|Ring|VIS": 6
+},
+"337": {
+"finger4-1.L|Ring|VIS": 6
+},
+"341": {
+"finger4-1.L|Ring|VIS": 6
+},
+"345": {
+"finger4-1.L|Ring|VIS": 6
+},
+"349": {
+"finger4-1.L|Ring|VIS": 6
+},
+"353": {
+"finger4-1.L|Ring|VIS": 6
+},
+"357": {
+"finger4-1.L|Ring|VIS": 6
+},
+"361": {
+"finger4-1.L|Ring|VIS": 6
+},
+"365": {
+"finger4-1.L|Ring|VIS": 6
+},
+"369": {
+"finger4-1.L|Ring|VIS": 6
+},
+"373": {
+"finger4-1.L|Ring|VIS": 6
+},
+"377": {
+"finger4-1.L|Ring|VIS": 6
+},
+"381": {
+"finger4-1.L|Ring|VIS": 6
+},
+"385": {
+"finger4-1.L|Ring|VIS": 6
+},
+"389": {
+"finger4-1.L|Ring|VIS": 6
+},
+"393": {
+"finger4-1.L|Ring|VIS": 6
+},
+"397": {
+"finger4-1.L|Ring|VIS": 6
+},
+"401": {
+"finger4-1.L|Ring|VIS": 6
+},
+"405": {
+"finger4-1.L|Ring|VIS": 6
+},
+"409": {
+"finger4-1.L|Ring|VIS": 6
+},
+"413": {
+"finger4-1.L|Ring|VIS": 6
+},
+"417": {
+"finger4-1.L|Ring|VIS": 6
+},
+"421": {
+"finger4-1.L|Ring|VIS": 6
+},
+"425": {
+"finger4-1.L|Ring|VIS": 6
+},
+"429": {
+"finger4-1.L|Ring|VIS": 6
+},
+"433": {
+"finger4-1.L|Ring|VIS": 6
+},
+"437": {
+"finger4-1.L|Ring|VIS": 6
+},
+"441": {
+"finger4-1.L|Ring|VIS": 6
+},
+"445": {
+"finger4-1.L|Ring|VIS": 6
+},
+"449": {
+"finger4-1.L|Ring|VIS": 6
+},
+"453": {
+"finger4-1.L|Ring|VIS": 6
+},
+"457": {
+"finger4-1.L|Ring|VIS": 6
+},
+"461": {
+"finger4-1.L|Ring|VIS": 6
+},
+"465": {
+"finger4-1.L|Ring|VIS": 6
+},
+"469": {
+"finger4-1.L|Ring|VIS": 6
+},
+"473": {
+"finger4-1.L|Ring|VIS": 6
+},
+"477": {
+"finger4-1.L|Ring|VIS": 6
+},
+"481": {
+"finger4-1.L|Ring|VIS": 6
+},
+"485": {
+"finger4-1.L|Ring|VIS": 6
+},
+"489": {
+"finger4-1.L|Ring|VIS": 6
+},
+"493": {
+"finger4-1.L|Ring|VIS": 6
+},
+"497": {
+"finger4-1.L|Ring|VIS": 6
+},
+"501": {
+"finger4-1.L|Ring|VIS": 6
+},
+"505": {
+"finger4-1.L|Ring|VIS": 6
+},
+"509": {
+"finger4-1.L|Ring|VIS": 6
+},
+"513": {
+"finger4-1.L|Ring|VIS": 6
+},
+"517": {
+"finger4-1.L|Ring|VIS": 6
+},
+"521": {
+"finger4-1.L|Ring|VIS": 6,
+"finger4-1.L|BulletFlat|VIS": 4,
+"finger3-1.L|BulletFlat|VIS": 2
+},
+"525": {
+"finger4-1.L|Ring|VIS": 6,
+"finger4-1.L|BulletFlat|VIS": 4
+},
+"529": {
+"finger4-1.L|Ring|VIS": 6
+},
+"533": {
+"finger4-1.L|Ring|VIS": 6
+},
+"537": {
+"finger4-1.L|Ring|VIS": 6
+},
+"541": {
+"finger4-1.L|Ring|VIS": 6
+},
+"545": {
+"finger4-1.L|Ring|VIS": 6
+},
+"549": {
+"finger4-1.L|Ring|VIS": 6
+},
+"553": {
+"finger4-1.L|Ring|VIS": 6
+},
+"557": {
+"finger4-1.L|Ring|VIS": 6,
+"finger4-1.L|BulletFlat|VIS": 2
+},
+"561": {
+"finger4-1.L|Ring|VIS": 6,
+"finger4-1.L|BulletFlat|VIS": 2
+},
+"565": {
+"finger4-1.L|Ring|VIS": 6,
+"finger4-1.L|BulletFlat|VIS": 2
+},
+"569": {
+"finger4-1.L|Ring|VIS": 6,
+"finger4-1.L|BulletFlat|VIS": 3
+},
+"573": {
+"finger4-1.L|Ring|VIS": 6,
+"finger4-1.L|BulletFlat|VIS": 3
+},
+"577": {
+"finger4-1.L|Ring|VIS": 6,
+"finger4-1.L|BulletFlat|VIS": 3
+},
+"581": {
+"finger4-1.L|Ring|VIS": 6,
+"finger4-1.L|BulletFlat|VIS": 4
+},
+"585": {
+"finger4-1.L|BulletFlat|VIS": 5,
+"finger4-1.L|Ring|VIS": 6
+},
+"589": {
+"finger4-1.L|BulletFlat|VIS": 5,
+"finger4-1.L|Ring|VIS": 6
+},
+"593": {
+"finger4-1.L|BulletFlat|VIS": 4,
+"finger4-1.L|Ring|VIS": 6
+},
+"597": {
+"finger4-1.L|BulletFlat|VIS": 4,
+"finger4-1.L|Ring|VIS": 6
+},
+"601": {
+"finger4-1.L|BulletFlat|VIS": 4,
+"finger4-1.L|Ring|VIS": 6
+},
+"605": {
+"finger4-1.L|Ring|VIS": 6
+},
+"609": {
+"finger4-1.L|Ring|VIS": 6
+},
+"613": {
+"finger4-1.L|Ring|VIS": 6
+},
+"617": {
+"finger4-1.L|Ring|VIS": 6
+},
+"621": {
+"finger4-1.L|Ring|VIS": 6
+},
+"625": {
+"finger4-1.L|Ring|VIS": 6
+},
+"629": {
+"finger4-1.L|Ring|VIS": 6
+},
+"633": {
+"finger4-1.L|Ring|VIS": 6
+},
+"637": {
+"finger4-1.L|Ring|VIS": 6
+},
+"641": {
+"finger4-1.L|Ring|VIS": 6
+},
+"645": {
+"finger4-1.L|Ring|VIS": 6
+},
+"649": {
+"finger4-1.L|Ring|VIS": 6
+},
+"653": {
+"finger4-1.L|Ring|VIS": 6
+},
+"657": {
+"finger4-1.L|Ring|VIS": 6
+},
+"661": {
+"finger4-1.L|Ring|VIS": 6
+},
+"665": {
+"finger4-1.L|Ring|VIS": 6
+},
+"669": {
+"finger4-1.L|Ring|VIS": 6
+},
+"673": {
+"finger4-1.L|Ring|VIS": 6
+},
+"677": {
+"finger4-1.L|Ring|VIS": 6
+},
+"681": {
+"finger4-1.L|Ring|VIS": 6
+},
+"685": {
+"finger4-1.L|Ring|VIS": 6
+},
+"689": {
+"finger4-1.L|Ring|VIS": 6
+},
+"693": {
+"finger4-1.L|Ring|VIS": 6
+},
+"697": {
+"finger4-1.L|Ring|VIS": 6
+},
+"701": {
+"finger4-1.L|Ring|VIS": 6
+},
+"705": {
+"finger4-1.L|Ring|VIS": 6
+},
+"709": {
+"finger4-1.L|Ring|VIS": 6
+},
+"713": {
+"finger4-1.L|Ring|VIS": 6
+},
+"717": {
+"finger4-1.L|Ring|VIS": 6
+},
+"721": {
+"finger4-1.L|Ring|VIS": 6
+},
+"725": {
+"finger4-1.L|Ring|VIS": 6
+},
+"729": {
+"finger4-1.L|Ring|VIS": 6
+},
+"733": {
+"finger4-1.L|Ring|VIS": 6
+},
+"737": {
+"finger4-1.L|Ring|VIS": 6
+},
+"741": {
+"finger4-1.L|Ring|VIS": 6
+},
+"745": {
+"finger4-1.L|Ring|VIS": 6
+},
+"749": {
+"finger4-1.L|Ring|VIS": 6
+},
+"753": {
+"finger4-1.L|Ring|VIS": 6
+},
+"757": {
+"finger4-1.L|Ring|VIS": 6
+},
+"761": {
+"finger4-1.L|Ring|VIS": 6
+},
+"765": {
+"finger4-1.L|Ring|VIS": 6
+},
+"769": {
+"finger4-1.L|Ring|VIS": 6
+},
+"773": {
+"finger4-1.L|Ring|VIS": 6
+},
+"777": {
+"finger4-1.L|Ring|VIS": 6
+},
+"781": {
+"finger4-1.L|Ring|VIS": 6
+},
+"785": {
+"finger4-1.L|Ring|VIS": 6
+},
+"789": {
+"finger4-1.L|Ring|VIS": 6
+},
+"793": {
+"finger4-1.L|Ring|off": 1,
+"finger4-1.L|Ring|VIS": 2
+},
+"797": {
+"finger4-1.L|Ring|off": 3
+},
+"801": {
+"finger4-1.L|Ring|off": 3
+},
+"805": {
+"finger4-1.L|Ring|off": 3
+},
+"809": {
+"finger4-1.L|Ring|off": 3
+},
+"813": {
+"finger4-1.L|Ring|off": 3
+},
+"817": {
+"finger4-1.L|Ring|off": 3
+},
+"821": {
+"finger4-1.L|Ring|off": 3
+},
+"825": {
+"finger4-1.L|Ring|off": 3
+},
+"829": {
+"finger4-1.L|Ring|off": 3
+},
+"833": {
+"finger4-1.L|Ring|off": 3
+},
+"837": {
+"finger4-1.L|Ring|off": 3
+},
+"841": {
+"finger4-1.L|Ring|off": 3
+},
+"845": {
+"finger4-1.L|Ring|off": 3
+},
+"849": {
+"finger4-1.L|Ring|off": 3
+},
+"853": {
+"finger4-1.L|Ring|off": 3
+},
+"857": {
+"finger4-1.L|Ring|off": 3
+},
+"861": {
+"finger4-1.L|Ring|off": 3
+},
+"865": {
+"finger4-1.L|Ring|off": 3
+},
+"869": {
+"finger4-1.L|Ring|off": 3
+},
+"873": {
+"finger4-1.L|Ring|off": 3
+},
+"877": {
+"finger4-1.L|Ring|off": 3
+},
+"881": {
+"finger4-1.L|Ring|off": 3
+},
+"885": {
+"finger4-1.L|Ring|off": 3
+},
+"889": {
+"neck02|FragB|VIS": 1,
+"finger4-1.L|Ring|off": 3
+},
+"893": {
+"finger4-1.L|Ring|off": 3
+},
+"897": {
+"finger4-1.L|Ring|off": 3
+},
+"901": {
+"finger4-1.L|Ring|off": 3
+},
+"905": {
+"finger4-1.L|Ring|off": 3
+},
+"909": {
+"finger4-1.L|Ring|off": 3
+},
+"913": {
+"finger4-1.L|Ring|off": 3
+},
+"917": {
+"finger4-1.L|Ring|off": 3
+},
+"921": {
+"finger4-1.L|Ring|off": 3
+},
+"925": {
+"finger4-1.L|Ring|off": 3
+},
+"929": {
+"finger4-1.L|Ring|VIS": 3
+},
+"933": {
+"finger4-1.L|Ring|VIS": 3
+},
+"937": {
+"finger4-1.L|Ring|VIS": 3
+},
+"941": {
+"finger4-1.L|Ring|VIS": 3
+},
+"945": {
+"finger4-1.L|Ring|VIS": 3
+},
+"949": {
+"finger4-1.L|Ring|VIS": 3
+},
+"953": {
+"finger4-1.L|Ring|VIS": 3
+},
+"957": {
+"finger4-1.L|Ring|VIS": 3
+},
+"961": {
+"finger4-1.L|Ring|VIS": 3
+},
+"965": {
+"finger4-1.L|Ring|VIS": 3
+},
+"969": {
+"finger4-1.L|Ring|VIS": 3
+},
+"973": {
+"finger4-1.L|Ring|VIS": 3
+},
+"977": {
+"finger4-1.L|Ring|VIS": 3
+},
+"981": {
+"finger4-1.L|Ring|VIS": 3
+},
+"985": {
+"finger4-1.L|Ring|VIS": 3
+},
+"989": {
+"finger4-1.L|Ring|VIS": 3
+},
+"993": {
+"finger4-1.L|Ring|VIS": 3
+},
+"997": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1001": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1005": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1009": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1013": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1017": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1021": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1025": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1029": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1033": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1037": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1041": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1045": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1049": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1053": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1057": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1061": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1065": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1069": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1073": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1077": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1081": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1085": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1089": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1093": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1097": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1101": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1105": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1109": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1113": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1117": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1121": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1125": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1129": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1133": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1137": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1141": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1145": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1149": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1153": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1157": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1161": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1165": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1169": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1173": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1177": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1181": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1185": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1189": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1193": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1197": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1201": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1205": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1209": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1213": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1217": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1221": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1225": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1229": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1233": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1237": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1241": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1245": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1249": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1253": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1257": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1261": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1265": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1269": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1273": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1277": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1281": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1285": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1289": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1293": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1297": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1301": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1305": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1309": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1313": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1317": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1321": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1325": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1329": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1333": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1337": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1341": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1345": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1349": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1353": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1357": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1361": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1365": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1369": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1373": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1377": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1381": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1385": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1389": {
+"finger4-1.L|Ring|VIS": 3
+},
+"1393": {
+"finger4-1.L|Ring|VIS": 3
+}
+}
+}
