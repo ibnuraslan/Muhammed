@@ -1,6 +1,30 @@
-# DonationBin_v010: the from-scratch rebuild (batch 1, film 09). Status: ON HOLD (FAIL after 2 fix rounds)
+# DonationBin_v010: the from-scratch rebuild (batch 1, film 09). Status: CLIENT-APPROVED
 
-**Do not render.** Three previews were checked by a fresh harsh reviewer, and the last one (`review/preview.mp4`, check 3) still fails. The `.blend` is not pushed. The exact remaining faults by frame are in `review/CHECK3.md`.
+> **CLIENT-APPROVED.** The director relayed the client's approval of the check-3 preview ("lovely") on Nov 26.
+> This package is exactly that build: the scripts at commit 6a7c899, packaged before any later change.
+> Round 3 was started and then reverted on the director's instruction.
+
+- `DonationBin_v010_60fps.blend` (78 MB): everything is packed, including the VO.
+- `review/preview.mp4`: the check-3 preview the client watched, made from this exact file (every 5th frame, 270x480, VO).
+- Render frames **1–2388** at 60 fps (39.8 s). The farm settings are in `SETTINGS.md` and the attribution is in `CREDITS.md`.
+- `review/CHECK3.md` lists the internal reviewer's open items on this build. The client approved it as it is.
+
+## Render check: PASS
+On the exact file `DonationBin_v010_60fps.blend`, opened with `blender --factory-startup -b` (Blender 5.2.2):
+- No errors or warnings in the console.
+- No linked libraries, no unpacked images, and the VO sound is packed.
+- No drivers. No scripts need auto-run.
+- Camera `Cam`, 1080×1920 at 100 %, 60 fps, frames 1–2388.
+- PNG output to `//render/DonationBin_v010_####.png`.
+- The VO strip starts at frame 1.
+- `package_for_farm`: PROBLEMS none.
+- Test frames were rendered at full resolution, 64 adaptive samples, on a 4-core CPU with no GPU. None is black, empty or pink.
+
+| Frame | Shot | Render time |
+|---|---|---|
+| 20 | the woman at the bin and the logo | 157 s |
+| 1200 | inside the bin, reaching up | 323 s |
+| 2370 | the rescue, with the bin row and the logo | 154 s |
 
 ## The film (built to the client's VO, frames 1–2388 at 60 fps)
 - **Parking lot (0–4.4 s):**
@@ -32,6 +56,7 @@
 ## Files
 | File | Contents |
 |---|---|
+| `DonationBin_v010_60fps.blend` | the render-ready package (78 MB, everything packed) |
 | `DonationBin_v010_VO.mp3` | the client's VO (same as v009) |
 | `beats.json` | beat frames (from the v009 sync anchors) |
 | `review/preview.mp4` | check-3 preview of the packaged file (every 5th frame, 270x480, VO) |
