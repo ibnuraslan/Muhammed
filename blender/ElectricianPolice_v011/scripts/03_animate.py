@@ -405,7 +405,7 @@ for m_, f, e in ((LAMP_G.data.materials[0], F_PULL1, 0.0), (LAMP_R.data.material
 spark_m = mat("M_Spark", (1, 0.8, 0.3), emit=((1.0, 0.75, 0.25), 40.0))
 rs = random.Random(5)
 for k in range(26):
-    s_ = sphere("Spark%d" % k, 0.006, (0, 0, 0), spark_m, segs=6); s_.scale = (1, 1, 2.5)
+    s_ = sphere("Spark%d" % k, 0.004, (0, 0, 0), spark_m, segs=6); s_.scale = (1, 1, 7.0)
     p0 = LEV["pivot"] + Vector((rs.uniform(-0.09, 0.09), 0.05, 0.43))
     v = Vector((rs.uniform(-0.6, 0.9), rs.uniform(0.05, 0.30), rs.uniform(0.1, 0.9)))
     f0 = F_PULL1 - 2 + rs.randint(0, 6); life = rs.randint(14, 26)
@@ -413,10 +413,24 @@ for k in range(26):
     for j in range(0, life + 1, 2):
         t = j / 60.0
         s_.location = p0 + v * t + Vector((0, 0, -4.9 * t * t)); s_.keyframe_insert("location", frame=f0 + j)
+        vel = (v + Vector((0, 0, -9.8 * t))).normalized(); s_.rotation_euler = vel.to_track_quat('Z', 'Y').to_euler(); s_.keyframe_insert("rotation_euler", frame=f0 + j)
 flash = bpy.data.lights.new("ArcFlash", 'POINT'); flash.color = (0.7, 0.85, 1.0); flash.shadow_soft_size = 0.05
 fo = bpy.data.objects.new("ArcFlash", flash); sc.collection.objects.link(fo); fo.location = LEV["pivot"] + Vector((0, 0.2, 0.45))
-for f, e in ((1, 0), (F_PULL1 - 2, 0), (F_PULL1, 120), (F_PULL1 + 4, 30), (F_PULL1 + 8, 90), (F_PULL1 + 14, 0)):
+for f, e in ((1, 0), (F_PULL1 - 2, 0), (F_PULL1, 500), (F_PULL1 + 3, 120), (F_PULL1 + 6, 380), (F_PULL1 + 10, 60), (F_PULL1 + 16, 0)):
     flash.energy = e; flash.keyframe_insert("energy", frame=f)
+arc = sphere("ArcBall", 0.06, LEV["pivot"] + Vector((0, 0.06, 0.45)), mat("M_Arc", (0.8, 0.9, 1.0), emit=((0.75, 0.88, 1.0), 60.0)), segs=16)
+for f, sc_ in ((1, 0.01), (F_PULL1 - 2, 0.01), (F_PULL1, 1.6), (F_PULL1 + 3, 0.8), (F_PULL1 + 6, 1.3), (F_PULL1 + 10, 0.4), (F_PULL1 + 14, 0.01)):
+    arc.scale = (sc_, sc_, sc_); arc.keyframe_insert("scale", frame=f)
+key_vis([arc], 1, False); key_vis([arc], F_PULL1 - 1, True); key_vis([arc], F_PULL1 + 15, False)
+# the room lights dip and flicker with the arc, then come back (only the station loses its power)
+for nm in ("Ctrl_Key", "Ctrl_Fill", "Ctrl_Back", "Ctrl_Deep1", "Ctrl_Deep2", "Ctrl_WinWall", "Ctrl_WinWall2"):
+    ld = O[nm].data; e0 = ld.energy
+    for f, k in ((1, 1.0), (F_PULL1 - 1, 1.0), (F_PULL1 + 1, 0.12), (F_PULL1 + 4, 0.7), (F_PULL1 + 7, 0.08), (F_PULL1 + 11, 0.5), (F_PULL1 + 15, 0.15), (F_PULL1 + 24, 1.0)):
+        ld.energy = e0 * k; ld.keyframe_insert("energy", frame=f)
+for m_ in [m for m in bpy.data.materials if m.name.startswith("M_CtrlTube")]:
+    pi = m_.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
+    for f, e in ((1, 6.0), (F_PULL1 - 1, 6.0), (F_PULL1 + 1, 0.3), (F_PULL1 + 4, 4.0), (F_PULL1 + 7, 0.2), (F_PULL1 + 11, 3.0), (F_PULL1 + 15, 0.5), (F_PULL1 + 24, 6.0)):
+        pi.default_value = e; pi.keyframe_insert("default_value", frame=f)
 
 # Ravi's body for the turn + pull (root yaw -90 about his centre, a 15 cm step toward the cabinet = local -x)
 fs(F_TURN)
@@ -556,7 +570,7 @@ for f in (F_OFF_IN, END): stand_feet(RO, HO, f, spread=0.03)
 for f in range(F_OFF_IN, END + 1, 10):
     ph = f / 60.0
     HO.key_root(f, ODB + Vector((0.003 * math.sin(ph * 1.9), 0, -0.012 - 0.004 * math.sin(ph * 1.6))))
-    HO.key_spine(f, flex=14 + 1.5 * math.sin(ph * 1.6), head=(-2 + 4 * math.sin(ph * 0.7), 8 * math.sin(ph * 0.5)))
+    HO.key_spine(f, flex=14 + 5.0 * math.sin(ph * 2.4), twist=6 * math.sin(ph * 0.9), head=(0, 0))
 fs(F_OFF_IN); upd()
 hand_on = Vector((DESK[0] + 0.30, DESK[1] - 0.24, DTOP + 0.004))
 for f in (F_OFF_IN, END):
@@ -665,31 +679,31 @@ def bh(f): return RH[f]
 CK = [
     # frame, position, aim, lens, f-stop
     (1,    Vector((0.45, -7.3, 1.55)), Vector((2.3, -10.0, 1.45)), 32, 8),                  # his face as he rides in (no helmet)
-    (40,   Vector((0.30, -5.4, 1.60)), Vector((3.0, 0.0, 1.50)), 30, 8),                    # alongside: the officer ahead flags him down
+    (40,   Vector((0.30, -5.4, 1.60)), Vector((2.9, -1.2, 1.50)), 24, 8),                    # alongside: the rider and the officer ahead flagging him
     (75,   Vector((0.90, -4.0, 1.62)), Vector((3.4, 0.5, 1.45)), 30, 8),
     (95,   Vector((3.70, -2.70, 1.64)), Vector((2.6, 0.0, 1.42)), 30, 8),
-    (122,  Vector((3.45, 0.55, 1.70)), Vector((2.35, -0.1, 1.45)), 30, 8),               # between them as the bike stops
+    (122,  Vector((3.75, 0.95, 1.75)), Vector((2.35, -0.1, 1.45)), 30, 8),               # beside them as the bike stops
     (150,  Vector((3.95, 3.70, 1.68)), Vector((3.45, 0.40, 1.45)), 22, 8),               # rider + officer pointing at his bare head
     (205,  Vector((3.40, 2.55, 1.64)), Vector((3.00, 0.0, 1.50)), 24, 8),
     (255,  Vector((2.65, 1.05, 1.62)), Vector((2.35, -0.2, 1.52)), 38, 8),                # close on Ravi: "Big mistake"
     (290,  Vector((2.55, 0.85, 1.58)), Vector((2.40, -0.2, 1.60)), 38, 8),
     (300,  Vector((2.60, 0.95, 1.62)), Vector((2.50, -0.1, 1.85)), 34, 8),
-    (322,  Vector((2.85, 0.70, 1.90)), Vector((3.6, 2.4, 3.4)), 30, 8),                   # tilt up with his gaze to the pole transformer and the wires
+    (322,  Vector((2.80, 0.80, 1.80)), Vector((3.0, 1.0, 2.7)), 30, 8),                   # his face low in frame, looking up at the pole transformer
     (340,  Vector((1.20, 4.50, 5.6)), Vector((-6.0, 12.0, 4.0)), 28, 8),                  # follow the wires west, over the street
-    (366,  Vector((-5.6, 13.6, 3.9)), Vector((-9.4, 19.4, 1.55)), 30, 8),                 # over the yard fence (3.4 m), down to Ravi
+    (366,  Vector((-6.0, 15.8, 3.0)), Vector((-9.4, 19.4, 1.62)), 40, 8),                 # over the yard fence, closing on Ravi
     (392,  Vector((-7.70, 18.25, 1.75)), Vector((-9.4, 19.4, 1.62)), 34, 8),              # Ravi in his hard hat, transformers behind
-    (420,  Vector((-7.60, 17.70, 2.6)), Vector((-10.5, 20.5, 2.2)), 30, 8),
+    (425,  Vector((-8.55, 18.55, 1.85)), Vector((-9.4, 19.4, 1.66)), 34, 8),             # his face, then the crane rises from it
+    (445,  Vector((-8.40, 18.20, 3.6)), Vector((-12.0, 22.0, 3.0)), 30, 8),
     (455,  Vector((-8.5, 14.5, 10.0)), Vector((-40.0, 28.0, 10.0)), 26, 8),                # crane up: pylons and lines over the town
     (480,  Vector((-1.8, 9.0, 9.8)), Vector((-40.0, 22.0, 8.0)), 26, 8),
     (500,  Vector((-1.8, 4.6, 4.2)), Vector((-9.0, 3.0, 2.0)), 34, 8),
     (515,  Vector((-2.2, WINC.y + 0.2, 1.55)), Vector((RAVI_CX, RAVI_CY, 1.45)), 44, 8),     # the control room window: his face over the lid, logo on the lid
     (560,  Vector((-4.6, WINC.y + 0.1, 1.52)), Vector((RAVI_CX, RAVI_CY, 1.45)), 40, 8),
     (600,  Vector((-6.55, WINC.y + 0.05, 1.52)), Vector((RAVI_CX, RAVI_CY, 1.45)), 34, 8),    # through the window (no glass)
-    (625,  Vector((-7.55, 2.15, 1.80)), Vector((RAVI_CX, RAVI_CY, 1.60)), 30, 8),           # round his right side, clear of the lever
-    (652,  Vector((-8.65, 2.12, 1.86)), SCR_C, 30, 9),
-    (690,  Vector((-9.30, 2.08, 1.74)), SCR_C, 32, 10),                                       # over his right shoulder, his cheek in frame: the red police row
-    (718,  Vector((-9.10, 1.98, 1.80)), SCR_C + Vector((0, 0.0, 0.02)), 34, 10),
-    (745,  Vector((-9.20, 2.08, 1.70)), SCR_C + Vector((0, 0.03, 0.0)), 38, 11),            # calendar pages
+    (640,  Vector((-7.40, 2.80, 1.50)), Vector((-8.55, 2.80, 1.43)), 36, 8),               # straight on: the DA KRAS FILMS lid logo and his face, red glow on it
+    (684,  Vector((-7.60, 2.83, 1.52)), Vector((-8.55, 2.80, 1.44)), 36, 8),
+    (712,  Vector((-8.30, 2.05, 1.80)), Vector((RAVI_CX, RAVI_CY, 1.55)), 30, 8),           # round his right side, above the counter
+    (745,  Vector((-9.02, 1.98, 1.72)), SCR_C + Vector((0, 0.03, 0.0)), 34, 10),            # his profile and the screen: calendar pages
     (790,  Vector((-8.30, 2.05, 1.78)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),           # round his right side, above the counter
     (830,  Vector((-7.55, 2.45, 1.58)), Vector((RAVI_CX, RAVI_CY, 1.64)), 32, 8),           # his grin over the laptop lid (under the brim)
     (880,  Vector((-7.70, 2.90, 1.58)), Vector((RAVI_CX, RAVI_CY, 1.64)), 36, 8),
@@ -698,8 +712,10 @@ CK = [
     (945,  Vector((-9.80, 3.55, 1.82)), SCR_C + Vector((0, -0.05, 0.05)), 26, 8),
     (965,  Vector((-8.00, 3.70, 1.72)), Vector((RAVI_CX, RAVI_CY, 1.60)), 28, 8),
     (985,  Vector((-7.55, 2.40, 1.70)), Vector((RAVI_CX, 2.4, 1.40)), 28, 8),             # the turn to the switchgear
-    (1012, Vector((-8.25, 1.96, 1.48)), Vector((-9.05, 2.10, 1.36)), 24, 8),             # the lever, the hand on it, the sparks, his face
-    (1045, Vector((-8.20, 1.98, 1.46)), Vector((-9.05, 2.15, 1.34)), 24, 8),
+    (1008, Vector((-8.25, 1.96, 1.48)), Vector((-9.05, 2.10, 1.36)), 24, 8),             # the lever, the hand on it, his face
+    (1020, Vector((-8.58, 2.00, 1.42)), lever_world(40.0), 50, 11),                       # macro: his fist on the red grip, the throw
+    (1032, Vector((-8.60, 2.02, 1.30)), lever_world(112.0), 50, 11),
+    (1046, Vector((-8.20, 1.98, 1.46)), Vector((-9.05, 2.15, 1.34)), 24, 8),             # the arc flash, sparks, his face
     (1060, Vector((-7.75, 2.35, 1.66)), Vector((RAVI_CX - 0.1, 2.45, 1.55)), 28, 8),
     (1072, Vector((-6.95, WINC.y, 1.72)), Vector((RAVI_CX, 2.45, 1.55)), 26, 8),         # backing out of the window, still on him
     (1084, Vector((-5.30, WINC.y, 1.95)), Vector((RAVI_CX, 2.45, 1.60)), 26, 8),
@@ -710,8 +726,8 @@ CK = [
     (1215, Vector((7.35, DESK[1] - 0.95, 1.55)), Vector((DESK[0] + 0.75, DESK[1] - 0.05, 1.55)), 32, 8),
     (1262, Vector((7.20, DESK[1] + 0.45, 1.70)), Vector((DESK[0] + 0.8, DESK[1], 1.70)), 30, 8),  # officer + spinning clock
     (1274, Vector((6.95, STWIN.y, 1.70)), Vector((DESK[0] + 0.8, DESK[1], 1.55)), 28, 8),  # backing out of the station window, still on him
-    (1290, Vector((5.50, STWIN.y, 1.70)), Vector((DESK[0] + 0.8, DESK[1], 1.55)), 28, 8),
-    (1308, Vector((5.05, 0.55, 1.66)), Vector((3.35, -0.55, 1.60)), 28, 8),               # swing to Ravi by his bike
+    (1290, Vector((4.70, STWIN.y, 1.70)), Vector((DESK[0] + 0.8, DESK[1], 1.55)), 28, 8),
+    (1308, Vector((4.70, 0.40, 1.66)), Vector((3.35, -0.55, 1.60)), 28, 8),               # swing to Ravi by his bike
     (1325, Vector((4.95, -0.25, 1.62)), Vector((3.35, -0.55, 1.60)), 30, 8),             # Ravi by his bike, dusk
     (1370, Vector((4.55, -0.40, 1.62)), Vector((3.35, -0.55, 1.62)), 34, 8),
     (1410, Vector((4.40, -0.70, 1.62)), Vector((3.35, -0.55, 1.62)), 36, 8),
@@ -771,13 +787,16 @@ fs(150); OFFHEAD = Wh(OFF, "head") + Vector((0, 0, 0.05))
 ravi_head_keys([(1, Vector((2.3, 6.0, 1.4))), (60, Vector((2.3, 6.0, 1.3))), (110, OFFHEAD), (150, OFFHEAD), (230, OFFHEAD), (258, campos),
                 (284, campos), (300, PT), (F_YARD - 1, PT)], flex_fn=lambda f: 18 if f < 96 else 8)
 ravi_head_keys([(F_YARD, Vector((-12.5, 16.0, 2.0))), (350, Vector((-12.5, 16.0, 2.2))), (368, campos), (400, campos), (430, Vector((-24.0, 22.5, 14.0))), (F_CTRL - 1, Vector((-24.0, 22.5, 14.0)))])
-ravi_head_keys([(F_CTRL, SCR_C), (600, SCR_C), (650, SCR_C), (760, SCR_C), (800, SCR_C + Vector((0, 0, 0.16))), (870, SCR_C + Vector((0, 0, 0.16))), (895, SCR_C + Vector((0, 0, 0.1))), (960, SCR_C + Vector((0, 0, 0.1)))],
+ravi_head_keys([(F_CTRL, SCR_C), (600, SCR_C + Vector((0, 0, 0.12))), (650, SCR_C + Vector((0, 0, 0.14))), (690, SCR_C + Vector((0, 0, 0.14))), (760, SCR_C), (800, SCR_C + Vector((0, 0, 0.16))), (870, SCR_C + Vector((0, 0, 0.16))), (895, SCR_C + Vector((0, 0, 0.1))), (960, SCR_C + Vector((0, 0, 0.1)))],
                flex_fn=lambda f: LEAN(f))
 ravi_head_keys([(985, ARMC + Vector((0, 0, 0.1))), (1003, ARMC + Vector((0, 0.2, 0.2))), (1035, ARMC + Vector((0, 0.1, 0.45))), (1055, campos), (1070, STWIN), (F_END - 1, STWIN)],
                base_yaw_fn=lambda f: -90 if f >= 1003 else (-35 if f >= 985 else 0))
 ravi_head_keys([(F_END, STWIN + Vector((0, 0, 0.5))), (1340, STWIN + Vector((0, 0, 0.5))), (1362, campos), (1392, campos), (1402, campos, 9), (1412, campos, -2), (1424, campos, 4), (END, campos)])
 ravi_head_keys([(1, RHEAD), (90, RHEAD), (200, RHEAD, -4), (260, RHEAD), (F_OFF_IN - 1, RHEAD)], rig=OFF)
-ravi_head_keys([(F_OFF_IN, STWIN), (1160, STWIN, 10), (1200, campos, 6), (1235, Vector(sc["CANDLE"]) + Vector((0, 0, 0.45)), 0), (1262, campos), (END, campos)], rig=OFF, flex_fn=lambda f: 14)
+CLK = Vector((sc["ROOM"][1], DESK[1], 2.25))
+ravi_head_keys([(F_OFF_IN, STWIN), (1160, STWIN, 10), (1185, campos, 6), (1205, CLK + Vector((0, -0.6, 0))), (1222, CLK + Vector((0, -0.6, 0))), (1240, Vector(sc["CANDLE"]) + Vector((0, 0, 0.45)), 0), (1262, campos), (END, campos)], rig=OFF, flex_fn=lambda f: 14)
+for k, f in enumerate(range(1160, END, 6)):
+    apply_pose(OFF, "R", "flat_palm" if k % 2 else "relaxed", f, amount=0.6)
 blinks(RAVI, [70, 200, 330, 470, 590, 720, 840, 990, 1120, 1320, 1385])
 
 # ================================================================== VO, output, quaternion continuity

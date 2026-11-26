@@ -383,6 +383,7 @@ box("Control_outerN", (7.4, 0.25, 4.2), (WX - 3.7, CY1 - 0.125, 2.1), cr_m, beve
 box("Control_roof", (7.4, CY1 - CY0, 0.25), (WX - 3.7, (CY0 + CY1) / 2, 4.2), cr_m, bevel=0)
 box("Control_band", (0.14, CY1 - CY0, 0.30), (WX + 0.07, (CY0 + CY1) / 2, 3.0), cr_trim, bevel=0.01)
 box("Control_parapet", (0.3, CY1 - CY0 + 0.2, 0.4), (WX + 0.05, (CY0 + CY1) / 2, 4.35), cr_trim, bevel=0.02)
+wall_with_holes("Control_frontIn", WX - 0.25, CR["y0"], CR["y1"], 0.0, CR["h"], [W_CR, DOOR_CR], crin, th=0.02, face=1)
 window("CrW", WX, (W_CR[0] + W_CR[1]) / 2, (W_CR[2] + W_CR[3]) / 2, W_CR[1] - W_CR[0], W_CR[3] - W_CR[2], 1, cr_m, glass=False, mullion=False)
 box("CrW_sill", (0.30, W_CR[1] - W_CR[0] + 0.2, 0.06), (WX + 0.05, (W_CR[0] + W_CR[1]) / 2, W_CR[2] - 0.03), M["frame"], bevel=0.01)
 box("Control_door", (0.06, 1.2, 2.25), (WX - 0.1, (DOOR_CR[0] + DOOR_CR[1]) / 2, 1.27), mat("M_CrDoor", (0.85, 0.10, 0.05), rough=0.4), bevel=0.01)
@@ -533,7 +534,7 @@ for k, (x, y, r) in enumerate(((-3.0, -18.0, 0.0), (-3.0, 16.0, 0.0), (3.2, 20.0
     o = inst("SRC_rickshaw", (x, y, 0.0), rot_z=r, newname="Rick%d" % k); soften(o)
 for k, (x, y, r) in enumerate(((-2.2, 42.0, 0.8), (-5.0, -48.0, 0.2))):
     inst("SRC_cow", (x, y, 0.0 if abs(x) < 4 else 0.15), rot_z=r, newname="Cow%d" % k)
-inst("SRC_dog", (5.8, -2.8, 0.15), rot_z=0.4, newname="Dog")
+# (no lying dog: it read as debris on the sidewalk)
 for k, (x, y) in enumerate(((5.9, -4.4), (-5.9, 9.2))):
     inst("SRC_potted_plant_01", (x, y, 0.15), newname="Pot%d" % k)
 inst("SRC_trash", (-5.9, -3.8, 0.15), rot_z=1.2, newname="Trash")
@@ -632,7 +633,8 @@ def area(name, loc, target, power, size, col):
 area("Ctrl_Key", (WX - 1.0, 2.6, 2.85), (WX - 2.6, 2.6, 1.3), 260, 1.2, (1.0, 0.95, 0.88))
 area("Ctrl_Fill", (WX - 4.5, 3.5, 2.6), (WX - 2.0, 2.6, 1.4), 180, 1.6, (1.0, 0.90, 0.80))
 area("Ctrl_Back", (WX - 5.5, 6.0, 2.7), (WX - 6.8, 4.0, 1.4), 120, 1.6, (1.0, 0.92, 0.85))
-area("Ctrl_WinWall", (WX - 3.6, 4.5, 2.5), (WX - 0.3, 3.5, 1.6), 170, 1.8, (1.0, 0.92, 0.85))
+area("Ctrl_WinWall", (WX - 3.6, 4.5, 2.5), (WX - 0.3, 3.5, 1.6), 260, 2.2, (1.0, 0.92, 0.85))
+area("Ctrl_WinWall2", (WX - 3.0, 1.9, 2.7), (WX - 0.3, 2.6, 2.2), 160, 1.6, (1.0, 0.92, 0.85))
 area("Ctrl_Deep1", (WX - 4.5, 2.5, 2.8), (WX - 6.8, 2.5, 1.0), 160, 1.6, (1.0, 0.90, 0.80))
 area("Ctrl_Deep2", (WX - 6.0, 4.5, 2.8), (WX - 7.0, 5.0, 1.0), 140, 1.6, (1.0, 0.90, 0.80))
 # station room: tube-light key (keyed OFF at the cut), moonlight through the window and the candle (keyed ON) in 03
