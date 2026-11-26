@@ -188,7 +188,7 @@ def prop_in_hand(rig, side, prop, f_setup, grip_y=-0.10, along=0.0, name="Hand")
     return c
 
 # ================================================================== RAVI on the BIKE (1-321)
-F_YARD = 322; F_CTRL = 452; F_END = 1292
+F_YARD = 322; F_CTRL = 452; F_END = 1262     # he is placed by his bike while the camera is inside the station
 def bike_y(f):
     # 10 m/s, constant deceleration to a stop at y = 0 by frame 118
     T = 117.0; t = min(max(f - 1, 0), T)
@@ -384,7 +384,7 @@ plate = box("Lever_plate", (0.26, 0.025, 0.62), LEV["pivot"] + Vector((0, -0.05,
 boss = cyl("Lever_boss", 0.035, 0.09, LEV["pivot"], M["blackm"], rot=(0, math.pi / 2, 0), verts=20)
 ARM = empty("Lever_pivot", LEV["pivot"])
 arm = box("Lever_arm", (0.025, 0.025, LARM), LEV["pivot"] + Vector((0, 0, LARM / 2)), lev_m, bevel=0.004); arm.parent = ARM; arm.matrix_parent_inverse = ARM.matrix_world.inverted()
-grip = cyl("Lever_grip", 0.019, 0.15, LEV["pivot"] + Vector((0, 0, LARM)), red_m, rot=(0, math.pi / 2, 0), verts=20); grip.parent = ARM; grip.matrix_parent_inverse = ARM.matrix_world.inverted()
+grip = cyl("Lever_grip", 0.019, 0.16, LEV["pivot"] + Vector((0, 0.08, LARM)), red_m, rot=(math.pi / 2, 0, 0), verts=20); grip.parent = ARM; grip.matrix_parent_inverse = ARM.matrix_world.inverted()
 cbox = box("Lever_contacts", (0.22, 0.10, 0.12), LEV["pivot"] + Vector((0, -0.01, 0.45)), M["blackm"], bevel=0.01)
 LAMP_G = sphere("Lever_lampGreen", 0.022, LEV["pivot"] + Vector((0.10, -0.035, -0.12)), mat("M_LampG", (0.1, 1, 0.2), emit=((0.1, 1.0, 0.2), 6.0)), segs=12)
 LAMP_R = sphere("Lever_lampRed", 0.022, LEV["pivot"] + Vector((-0.10, -0.035, -0.12)), mat("M_LampR", (1, 0.05, 0.02), emit=((1.0, 0.05, 0.02), 0.0)), segs=12)
@@ -401,6 +401,16 @@ for m_, f, e in ((LAMP_G.data.materials[0], F_PULL1, 0.0), (LAMP_R.data.material
     p = m_.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
     p.default_value = 6.0 if m_ is LAMP_G.data.materials[0] else 0.0; p.keyframe_insert("default_value", frame=F_PULL1 - 1)
     p.default_value = e; p.keyframe_insert("default_value", frame=F_PULL1)
+# emergency light: a red beacon over the door, on after the blackout
+em = bpy.data.lights.new("EmergencyRed", 'AREA'); em.size = 0.6; em.color = (1.0, 0.12, 0.05); em.energy = 0.0
+emo = bpy.data.objects.new("EmergencyRed", em); sc.collection.objects.link(emo); emo.location = (WX - 0.6, 2.4, 2.85)
+emo.rotation_euler = (Vector((RAVI_CX, RAVI_CY, 1.4)) - emo.location).to_track_quat('-Z', 'Y').to_euler()
+for f, e in ((1, 0.0), (F_PULL1 + 18, 0.0), (F_PULL1 + 22, 220.0), (F_PULL1 + 30, 140.0), (F_PULL1 + 38, 220.0), (F_PULL1 + 46, 140.0), (F_END - 1, 180.0), (F_END, 0.0)):
+    em.energy = e; em.keyframe_insert("energy", frame=f)
+bea = sphere("EmergencyBeacon", 0.07, emo.location + Vector((0.25, 0, 0.0)), mat("M_Beacon", (1, 0.1, 0.05), emit=((1.0, 0.1, 0.04), 0.0)), segs=16)
+pb_ = bea.data.materials[0].node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
+for f, e in ((1, 0.0), (F_PULL1 + 18, 0.0), (F_PULL1 + 22, 30.0), (F_PULL1 + 30, 12.0), (F_PULL1 + 38, 30.0), (F_PULL1 + 46, 12.0)):
+    pb_.default_value = e; pb_.keyframe_insert("default_value", frame=f)
 # sparks from the contact box at the cut (keyed meshes; small, bright, falling)
 spark_m = mat("M_Spark", (1, 0.8, 0.3), emit=((1.0, 0.75, 0.25), 40.0))
 rs = random.Random(5)
@@ -427,9 +437,11 @@ for nm in ("Ctrl_Key", "Ctrl_Fill", "Ctrl_Back", "Ctrl_Deep1", "Ctrl_Deep2", "Ct
     ld = O[nm].data; e0 = ld.energy
     for f, k in ((1, 1.0), (F_PULL1 - 1, 1.0), (F_PULL1 + 1, 0.12), (F_PULL1 + 4, 0.7), (F_PULL1 + 7, 0.08), (F_PULL1 + 11, 0.5), (F_PULL1 + 15, 0.15), (F_PULL1 + 24, 1.0)):
         ld.energy = e0 * k; ld.keyframe_insert("energy", frame=f)
+    for f in (F_PULL1 + 16, F_PULL1 + 24, F_END - 1):
+        ld.energy = e0 * 0.03; ld.keyframe_insert("energy", frame=f)
 for m_ in [m for m in bpy.data.materials if m.name.startswith("M_CtrlTube")]:
     pi = m_.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
-    for f, e in ((1, 6.0), (F_PULL1 - 1, 6.0), (F_PULL1 + 1, 0.3), (F_PULL1 + 4, 4.0), (F_PULL1 + 7, 0.2), (F_PULL1 + 11, 3.0), (F_PULL1 + 15, 0.5), (F_PULL1 + 24, 6.0)):
+    for f, e in ((1, 6.0), (F_PULL1 - 1, 6.0), (F_PULL1 + 1, 0.3), (F_PULL1 + 4, 4.0), (F_PULL1 + 7, 0.2), (F_PULL1 + 11, 3.0), (F_PULL1 + 15, 0.0), (F_PULL1 + 24, 0.0)):
         pi.default_value = e; pi.keyframe_insert("default_value", frame=f)
 
 # Ravi's body for the turn + pull (root yaw -90 about his centre, a 15 cm step toward the cabinet = local -x)
@@ -454,8 +466,8 @@ hang(RAVI, "L", 990); hang(RAVI, "R", 990)
 for f in (1010, 1040, F_LET, 1070, F_END - 1): hang(RAVI, "L", f)
 # right hand on the lever: wrap grip solved once on the grip (lever up), then carried along the arc frame by frame
 fs(F_GRAB); upd()
-gw = grip.matrix_world.translation.copy()
-rep = grip_object(RAVI, "R", F_GRAB, grip, gw, Vector((0, -0.55, -0.85)).normalized())
+gw = grip.matrix_world @ Vector((0, 0, 0.035))       # the outer half of the handle (away from the shaft)
+rep = grip_object(RAVI, "R", F_GRAB, grip, gw, Vector((0, 0, -1.0)))
 log("lever grip", rep)
 key_pole_world(RAVI, "R", F_GRAB, Wh(RAVI, "upperarm01.R") + Vector((-0.45, 0.3, -0.35)))
 fs(F_GRAB); upd()
@@ -569,15 +581,15 @@ ODB = HO.root_head.copy()
 for f in (F_OFF_IN, END): stand_feet(RO, HO, f, spread=0.03)
 for f in range(F_OFF_IN, END + 1, 10):
     ph = f / 60.0
-    HO.key_root(f, ODB + Vector((0.003 * math.sin(ph * 1.9), 0, -0.012 - 0.004 * math.sin(ph * 1.6))))
-    HO.key_spine(f, flex=14 + 5.0 * math.sin(ph * 2.4), twist=6 * math.sin(ph * 0.9), head=(0, 0))
+    HO.key_root(f, ODB + Vector((0.003 * math.sin(ph * 1.9), 0, -0.06 - 0.006 * math.sin(ph * 1.6))))
+    HO.key_spine(f, flex=24 + 4.0 * math.sin(ph * 2.4), twist=6 * math.sin(ph * 0.9), head=(0, 0))
 fs(F_OFF_IN); upd()
-hand_on = Vector((DESK[0] + 0.30, DESK[1] - 0.24, DTOP + 0.004))
+hand_on = Vector((DESK[0] + 0.38, DESK[1] - 0.26, DTOP + 0.004))
 for f in (F_OFF_IN, END):
     place_hand(OFF, "L", f, hand_on, Vector((0, 0, -1)), Vector((-1, 0.15, 0)), skin=0.012)
     key_pole_world(OFF, "L", f, Wh(OFF, "upperarm01.L") + Vector((0.35, -0.45, -0.2)))
     apply_pose(OFF, "L", "flat_palm", f)
-hand_on_r = Vector((DESK[0] + 0.30, DESK[1] + 0.24, DTOP + 0.004))
+hand_on_r = Vector((DESK[0] + 0.38, DESK[1] + 0.26, DTOP + 0.004))
 for f in (F_OFF_IN, 1200, 1215, 1230, END):
     lift = 0.03 if f in (1215,) else 0.0      # a tap of frustration on the desk
     place_hand(OFF, "R", f, hand_on_r + Vector((0, 0, lift)), Vector((0, 0, -1)), Vector((-1, -0.15, 0)), skin=0.012)
@@ -600,7 +612,7 @@ stk = O["St_Key"].data
 for f, e in ((1, 240.0), (CUT + 48, 240.0), (CUT + 50, 0.0)):
     stk.energy = e; stk.keyframe_insert("energy", frame=f)
 moon = O["St_Moon"].data
-for f, e in ((1, 0.0), (CUT + 48, 0.0), (CUT + 60, 70.0)):
+for f, e in ((1, 0.0), (CUT + 48, 0.0), (CUT + 60, 18.0)):
     moon.energy = e; moon.keyframe_insert("energy", frame=f)
 cl_ = O["St_CandleLight"].data
 for f in range(1, END + 1, 6):
@@ -642,7 +654,7 @@ sun = O["Sun"]
 for f, e, c, rx in ((1, 4.0, (1.0, 0.95, 0.86), 42), (1080, 4.0, (1.0, 0.95, 0.86), 42), (1150, 1.2, (1.0, 0.50, 0.25), 80), (END, 1.0, (1.0, 0.45, 0.25), 82)):
     sun.data.energy = e; sun.data.color = c; sun.data.keyframe_insert("energy", frame=f); sun.data.keyframe_insert("color", frame=f)
     sun.rotation_euler.x = R_(rx); sun.keyframe_insert("rotation_euler", index=0, frame=f)
-for f, ex in ((1, 0.0), (1080, 0.0), (1150, 0.55), (1290, 0.65), (1300, 0.55), (END, 0.55)):
+for f, ex in ((1, 0.0), (1080, 0.0), (1140, 0.55), (1162, 0.05), (1278, 0.05), (1290, 0.55), (END, 0.55)):
     sc.view_settings.exposure = ex; sc.view_settings.keyframe_insert("exposure", frame=f)
 for n in sc["STREET_LIGHTS"]:
     ld = O[n].data
@@ -652,7 +664,7 @@ for n in sc["STREET_LIGHTS"]:
 efl = bpy.data.lights.new("EndFaceFill", 'AREA'); efl.size = 1.0; efl.color = (1.0, 0.78, 0.55)
 efo = bpy.data.objects.new("EndFaceFill", efl); sc.collection.objects.link(efo); efo.location = (5.4, -1.6, 2.4)
 efo.rotation_euler = (Vector((3.35, -0.55, 1.5)) - efo.location).to_track_quat('-Z', 'Y').to_euler()
-for f, e in ((1, 0.0), (1288, 0.0), (1292, 90.0)):
+for f, e in ((1, 0.0), (F_END - 1, 0.0), (F_END, 90.0)):
     efl.energy = e; efl.keyframe_insert("energy", frame=f)
 
 # ================================================================== RAVI at the end (1292-1446): beside his bike, looks at the dark station, smirks at us, nods
@@ -688,13 +700,13 @@ CK = [
     (255,  Vector((2.65, 1.05, 1.62)), Vector((2.35, -0.2, 1.52)), 38, 8),                # close on Ravi: "Big mistake"
     (290,  Vector((2.55, 0.85, 1.58)), Vector((2.40, -0.2, 1.60)), 38, 8),
     (300,  Vector((2.60, 0.95, 1.62)), Vector((2.50, -0.1, 1.85)), 34, 8),
-    (322,  Vector((2.80, 0.80, 1.80)), Vector((2.85, 0.1, 2.25)), 30, 8),                   # his face low in frame, looking up at the pole transformer
+    (322,  Vector((2.45, 0.85, 1.45)), Vector((2.45, 0.2, 1.95)), 30, 8),                   # his upturned face low in frame, the pole transformer above
     (340,  Vector((1.20, 4.50, 5.6)), Vector((-6.0, 12.0, 4.0)), 28, 8),                  # follow the wires west, over the street
     (366,  Vector((-6.0, 15.8, 3.0)), Vector((-9.4, 19.4, 1.62)), 40, 8),                 # over the yard fence, closing on Ravi
     (392,  Vector((-7.70, 18.25, 1.75)), Vector((-9.4, 19.4, 1.62)), 34, 8),              # Ravi in his hard hat, transformers behind
     (425,  Vector((-8.55, 18.55, 1.85)), Vector((-9.4, 19.4, 1.66)), 34, 8),             # his face, then the crane rises from it
-    (445,  Vector((-8.40, 18.20, 3.6)), Vector((-12.0, 22.0, 3.0)), 30, 8),
-    (455,  Vector((-8.5, 14.5, 10.0)), Vector((-40.0, 28.0, 10.0)), 26, 8),                # crane up: pylons and lines over the town
+    (450,  Vector((-8.60, 18.60, 1.25)), Vector((-11.0, 21.6, 5.5)), 26, 8),               # low at his feet: his upturned face, the pylon above
+    (468,  Vector((-7.6, 16.6, 6.5)), Vector((-40.0, 28.0, 9.0)), 26, 8),                  # crane up: pylons and lines over the town
     (480,  Vector((-1.8, 9.0, 9.8)), Vector((-40.0, 22.0, 8.0)), 26, 8),
     (500,  Vector((-1.8, 4.6, 4.2)), Vector((-9.0, 3.0, 2.0)), 34, 8),
     (515,  Vector((-2.2, WINC.y + 0.2, 1.55)), Vector((RAVI_CX, RAVI_CY, 1.45)), 44, 8),     # the control room window: his face over the lid, logo on the lid
@@ -702,9 +714,9 @@ CK = [
     (600,  Vector((-6.55, WINC.y + 0.05, 1.52)), Vector((RAVI_CX, RAVI_CY, 1.45)), 34, 8),    # through the window (no glass)
     (640,  Vector((-7.40, 2.80, 1.50)), Vector((-8.55, 2.80, 1.43)), 36, 8),               # straight on: the DA KRAS FILMS lid logo and his face, red glow on it
     (684,  Vector((-7.60, 2.83, 1.52)), Vector((-8.55, 2.80, 1.44)), 36, 8),
-    (712,  Vector((-8.30, 2.05, 1.80)), Vector((RAVI_CX, RAVI_CY, 1.55)), 30, 8),           # round his right side, above the counter
-    (745,  Vector((-8.85, 1.98, 1.70)), SCR_C + Vector((0, 0.03, 0.0)), 34, 10),            # his profile and the screen: calendar pages
-    (790,  Vector((-8.30, 2.05, 1.78)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),           # round his right side, above the counter
+    (712,  Vector((-8.25, 2.08, 1.42)), Vector((RAVI_CX, RAVI_CY, 1.62)), 30, 8),           # round his right side, low: looking up at his face
+    (745,  Vector((-8.70, 2.05, 1.40)), Vector((RAVI_CX + 0.05, RAVI_CY, 1.60)), 30, 8),    # his face from below the brim, screen glow on it
+    (790,  Vector((-8.00, 2.10, 1.45)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),
     (830,  Vector((-7.55, 2.45, 1.58)), Vector((RAVI_CX, RAVI_CY, 1.64)), 32, 8),           # his grin over the laptop lid (under the brim)
     (880,  Vector((-7.70, 2.90, 1.58)), Vector((RAVI_CX, RAVI_CY, 1.64)), 36, 8),
     (895,  Vector((-8.55, 3.50, 1.82)), Vector((RAVI_CX, RAVI_CY, 1.55)), 28, 8),
@@ -725,9 +737,9 @@ CK = [
     (1172, Vector((6.70, STWIN.y, 1.68)), Vector((DESK[0] + 0.6, DESK[1], 1.45)), 30, 8),  # in through the window (no glass)
     (1215, Vector((7.35, DESK[1] - 0.95, 1.55)), Vector((DESK[0] + 0.75, DESK[1] - 0.05, 1.55)), 32, 8),
     (1262, Vector((7.20, DESK[1] + 0.45, 1.70)), Vector((DESK[0] + 0.8, DESK[1], 1.70)), 30, 8),  # officer + spinning clock
-    (1274, Vector((6.95, STWIN.y, 1.70)), Vector((DESK[0] + 0.8, DESK[1], 1.55)), 28, 8),  # backing out of the station window, still on him
-    (1290, Vector((4.70, STWIN.y, 1.70)), Vector((DESK[0] + 0.8, DESK[1], 1.55)), 28, 8),
-    (1308, Vector((4.70, 0.40, 1.66)), Vector((3.35, -0.55, 1.60)), 28, 8),               # swing to Ravi by his bike
+    (1272, Vector((6.95, STWIN.y, 1.70)), Vector((DESK[0] + 0.8, DESK[1], 1.55)), 28, 8),  # backing out of the station window, still on him
+    (1282, Vector((4.80, STWIN.y, 1.70)), Vector((DESK[0] + 0.8, DESK[1], 1.55)), 28, 8),
+    (1291, Vector((4.75, 0.15, 1.66)), Vector((3.35, -0.55, 1.62)), 30, 8),               # "all because...": on his face
     (1325, Vector((4.95, -0.25, 1.62)), Vector((3.35, -0.55, 1.60)), 30, 8),             # Ravi by his bike, dusk
     (1370, Vector((4.55, -0.40, 1.62)), Vector((3.35, -0.55, 1.62)), 34, 8),
     (1410, Vector((4.40, -0.70, 1.62)), Vector((3.35, -0.55, 1.62)), 36, 8),
@@ -794,7 +806,7 @@ ravi_head_keys([(985, ARMC + Vector((0, 0, 0.1))), (1003, ARMC + Vector((0, 0.2,
 ravi_head_keys([(F_END, STWIN + Vector((0, 0, 0.5))), (1340, STWIN + Vector((0, 0, 0.5))), (1362, campos), (1392, campos), (1402, campos, 9), (1412, campos, -2), (1424, campos, 4), (END, campos)])
 ravi_head_keys([(1, RHEAD), (90, RHEAD), (200, RHEAD, -4), (260, RHEAD), (F_OFF_IN - 1, RHEAD)], rig=OFF)
 CLK = Vector((sc["ROOM"][1], DESK[1], 2.25))
-ravi_head_keys([(F_OFF_IN, STWIN), (1160, STWIN, 10), (1185, campos, 6), (1205, CLK + Vector((0, -0.6, 0))), (1222, CLK + Vector((0, -0.6, 0))), (1240, Vector(sc["CANDLE"]) + Vector((0, 0, 0.45)), 0), (1262, campos), (END, campos)], rig=OFF, flex_fn=lambda f: 14)
+ravi_head_keys([(F_OFF_IN, STWIN), (1160, STWIN, 10), (1185, campos, 6), (1205, CLK + Vector((0, -0.6, 0))), (1222, CLK + Vector((0, -0.6, 0))), (1240, Vector(sc["CANDLE"]) + Vector((0, 0, 0.45)), 0), (1262, campos), (END, campos)], rig=OFF, flex_fn=lambda f: 24)
 for k, f in enumerate(range(1160, END, 6)):
     apply_pose(OFF, "R", "flat_palm" if k % 2 else "relaxed", f, amount=0.6)
 blinks(RAVI, [70, 200, 330, 470, 590, 720, 840, 990, 1120, 1320, 1385])
