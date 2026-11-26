@@ -437,7 +437,7 @@ def flame_mat(name, h, smoke=False, strength=7.0):
     fc = node(nt, "ShaderNodeMath", operation='SUBTRACT'); fc.inputs[0].default_value = 1.0; L.new(lw.outputs["Facing"], fc.inputs[1])
     fp = node(nt, "ShaderNodeMath", operation='POWER'); L.new(fc.outputs[0], fp.inputs[0]); fp.inputs[1].default_value = 1.6
     th = node(nt, "ShaderNodeMapRange"); th.inputs["From Min"].default_value = 0.0; th.inputs["From Max"].default_value = 1.0
-    th.inputs["To Min"].default_value = 0.30 if not smoke else 0.40; th.inputs["To Max"].default_value = 0.70 if not smoke else 0.62
+    th.inputs["To Min"].default_value = 0.22 if not smoke else 0.40; th.inputs["To Max"].default_value = 0.62 if not smoke else 0.62
     L.new(sp.outputs["Z"], th.inputs["Value"])
     d1 = node(nt, "ShaderNodeMath", operation='SUBTRACT'); L.new(n1.outputs["Fac"], d1.inputs[0]); L.new(th.outputs["Result"], d1.inputs[1])
     d2 = node(nt, "ShaderNodeMath", operation='MULTIPLY'); L.new(d1.outputs[0], d2.inputs[0]); d2.inputs[1].default_value = 5.0
@@ -484,7 +484,7 @@ def fire(name, loc, scale=1.0, n=5, height=24.0, smoke=True):
         o.rotation_euler.z = random.uniform(0, 6.28)
         d = o.modifiers.new("turb", 'DISPLACE'); tx = bpy.data.textures.new(name + "_turb%d" % i, 'CLOUDS'); tx.noise_scale = 1.4 + 0.3 * i
         d.texture = tx; d.texture_coords = 'OBJECT'; d.texture_coords_object = FIRE_FLOW; d.strength = 0.9 + 0.3 * t; d.direction = 'NORMAL'
-        o.data.materials.append(flame_mat("M_" + name + "_%d" % i, height, strength=2.6 - 1.0 * t))
+        o.data.materials.append(flame_mat("M_" + name + "_%d" % i, height, strength=3.0 - 1.2 * t))
         o.visible_shadow = False; o.visible_diffuse = True
         parts.append(o)
     if smoke:
