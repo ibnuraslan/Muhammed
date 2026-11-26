@@ -80,7 +80,7 @@ def key_head(f, yaw, pitch, roll=0.0):
     """yaw +: toward his own left (+X); pitch +: look down"""
     sx, sz = head_signs()
     for n, w in (("neck01", 0.25), ("neck02", 0.25), ("neck03", 0.2), ("head", 0.3)):
-        CT.key_rot(n, f, [("X", sx * pitch * w), ("Y", roll * w), ("Z", sz * yaw * w)])
+        CT.key_rot(n, f, [("X", sx * pitch * w), ("Y", roll * w), ("Z", -sz * yaw * w)])   # sign checked on the moving preview
 
 # ================================================================== seated pose (root over the seat, feet flat on the floor)
 ROOT_Z = 0.60
@@ -109,7 +109,7 @@ for f in list(range(1, END + 1, 20)) + [END]:
 # turns to the hole in the wall, back to the headset
 HEAD = [(1, 2, 8), (60, -2, 9), (130, 1, 8), (200, -3, 9), (260, 2, 8), (330, -2, 10), (400, 1, 9), (470, 0, 9), (524, 0, 9),
         (532, -7, 6, -6), (560, -5, 7, -4), (750, -5, 7, -3), (840, -4, 5, -2), (860, 4, -4, 0), (900, 0, 0, 0), (930, 0, -2, 0),
-        (1000, 0, 4, 0), (1030, 6, 18, 0), (1080, 8, 20, 0), (1100, 45, -6, 0), (1135, 55, -8, 0), (1160, 10, 12, 0),
+        (1000, 0, 4, 0), (1030, 6, 18, 0), (1080, 8, 20, 0), (1100, 40, -6, 0), (1135, 48, -8, 0), (1160, 10, 12, 0),
         (1185, 4, 16, 0), (END, 2, 14, 0)]
 hy = pchip([(k[0], k[1]) for k in HEAD]); hp_ = pchip([(k[0], k[2]) for k in HEAD]); hr = pchip([(k[0], k[3] if len(k) > 3 else 0.0) for k in HEAD])
 for f in list(range(1, END + 1, 4)) + [END]:
@@ -349,8 +349,8 @@ owner_switch(HS, F_GRIP + 1, None, log=log)
 def hs_world(f):
     """the headset path after the grip (world matrix)"""
     u1 = smoothstep((f - F_GRIP) / (F_OFF - F_GRIP)); u2 = smoothstep((f - F_OFF) / (F_DOWN - F_OFF))
-    ua = smoothstep(min(1.0, u2 * 1.6)); ub = smoothstep(max(0.0, u2 * 1.6 - 0.6))
-    up_ = 0.15 * u1; fwd = -0.30 * ua; down = -0.42 * ub            # up off the head, forward, then down to chest height
+    ua = smoothstep(min(1.0, u2 * 2.0)); ub = smoothstep(max(0.0, u2 * 2.0 - 1.0))
+    up_ = 0.15 * u1; fwd = -0.25 * ua; down = -0.42 * ub            # up off the head, forward, then down to chest height
     tilt = Matrix.Rotation(math.radians(-30 * u2), 4, 'Z')          # turns so the damaged left cup faces out (front-left)
     T = Matrix.Translation(M0.translation + Vector((0, fwd, up_ + down)))
     return T @ tilt @ Matrix.Translation(-M0.translation) @ M0
@@ -397,16 +397,16 @@ SEG_A = [
     (100, lambda: bpos(100) - D * 0.50 + UP * 0.12 + RGT * 0.38, lambda: bpos(100) + D * 0.7, 26),
     (116, lambda: P(2.40, 0.33, 1.42), lambda: GLASS + D * 0.30, 24),
     (130, lambda: P(1.46, 0.24, 1.36), lambda: bpos(130).lerp(head_c(130), 0.5), 26),
-    (150, lambda: bpos(150) - D * 0.20 + RGT * 0.12 + UP * 0.05, lambda: bpos(150).lerp(head_c(150), 0.4), 28),
-    (185, lambda: bpos(185) - D * 0.12 + RGT * 0.07 + UP * 0.03, lambda: bpos(185).lerp(head_c(185), 0.30), 30),
-    (228, lambda: bpos(228) - D * 0.10 + RGT * 0.08 + UP * 0.03, lambda: bpos(228).lerp(head_c(228), 0.35), 30),
+    (150, lambda: bpos(150) - D * 0.22 + RGT * 0.04 + UP * 0.03, lambda: bpos(150) + D * 0.6, 28),
+    (185, lambda: bpos(185) - D * 0.15 + RGT * 0.03 + UP * 0.02, lambda: bpos(185) + D * 0.6, 30),
+    (228, lambda: bpos(228) - D * 0.14 + RGT * 0.03 + UP * 0.02, lambda: bpos(228) + D * 0.6, 30),
     (275, lambda: HC + Vector((0.75, -0.25, 0.10)), lambda: HC.lerp(Vector((0.10, -0.45, 0.78)), 0.5), 28),
     (318, lambda: P(0.48, -0.72, HC.z + 0.02), lambda: P(0.05, -0.36, HC.z - 0.15), 24),
     (352, lambda: P(0.14, -0.72, HC.z + 0.06), lambda: head_c(352) + Vector((0, 0, -0.04)), 28),
     (387, lambda: P(0.32, -0.60, HC.z + 0.08), lambda: head_c(387).lerp(cupc(387), 0.5), 32),
-    (430, lambda: cupc(430) + Vector((0.08, -0.48, 0.04)), lambda: cupc(430) + Vector((0.15, 0, 0)), 30),
-    (480, lambda: cupc(480) + Vector((0.06, -0.36, 0.03)), lambda: cupc(480) + Vector((0.10, 0, 0)), 32),
-    (519, lambda: cupc(519) + Vector((0.07, -0.25, 0.03)), lambda: cupc(519) + Vector((0.04, 0, 0)), 36),
+    (430, lambda: cupc(430) + Vector((0.16, -0.55, 0.05)), lambda: head_c(430).lerp(cupc(430), 0.55), 26),
+    (480, lambda: cupc(480) + Vector((0.15, -0.46, 0.04)), lambda: head_c(480).lerp(cupc(480), 0.6), 28),
+    (519, lambda: cupc(519) + Vector((0.12, -0.34, 0.03)), lambda: head_c(519).lerp(cupc(519), 0.7), 30),
     (560, lambda: cupc(560) + Vector((0.09, -0.10, 0.02)), lambda: cupc(560), 40),
     (590, lambda: cupc(590) + Vector((0.040, -0.040, 0.010)), lambda: cupc(590), 40),
     (599, lambda: cupc(599) + Vector((0.034, -0.034, 0.008)), lambda: cupc(599), 40),
@@ -419,12 +419,12 @@ for f, ang, dist, dz, az, ln in ((607, 12, 0.045, 0.008, -0.002, 40), (640, -8, 
                                  (705, -10, 0.050, -0.004, -0.006, 44), (722, 22, 0.058, 0.004, 0.0, 42), (745, 30, 0.070, 0.012, 0.006, 40)):
     pf, af = orb(f, ang, dist, dz, az); SEG_M.append((f, pf, af, ln))
 SEG_B = [
-    (SWAP2, lambda: P(0.30, -0.75, HC.z + 0.06), lambda: head_c(SWAP2).lerp(WALL, 0.12), 24),
-    (800, lambda: P(0.32, -0.73, HC.z + 0.05), lambda: head_c(800).lerp(WALL, 0.20), 22),
-    (F_WALL, lambda: P(0.28, -0.73, HC.z + 0.05), lambda: head_c(F_WALL).lerp(WALL, 0.22), 22),
+    (SWAP2, lambda: P(0.30, -0.75, HC.z + 0.06), lambda: head_c(SWAP2).lerp(WALL, 0.05), 24),
+    (800, lambda: P(0.32, -0.73, HC.z + 0.05), lambda: head_c(800).lerp(WALL, 0.10), 22),
+    (F_WALL, lambda: P(0.28, -0.73, HC.z + 0.05), lambda: head_c(F_WALL).lerp(WALL, 0.12), 22),
     (880, lambda: P(0.15, -0.72, HC.z + 0.05), lambda: head_c(880) + Vector((0, 0, -0.05)), 26),
     (940, lambda: P(0.14, -0.73, HC.z + 0.10), lambda: head_c(940) + Vector((0, 0, 0.02)), 24),
-    (995, lambda: P(0.42, -0.73, HC.z + 0.04), lambda: head_c(995), 26),
+    (995, lambda: P(0.55, -0.70, HC.z + 0.04), lambda: head_c(995), 26),
     (1040, lambda: P(0.60, -0.70, HC.z - 0.02), lambda: head_c(1040).lerp(cupc(1040), 0.45), 28),
     (1085, lambda: P(0.62, -0.64, HC.z), lambda: head_c(1085).lerp(cupc(1085), 0.40), 30),
     (1130, lambda: P(0.56, -0.72, HC.z + 0.05), lambda: head_c(1130).lerp(WALL, 0.18), 24),
