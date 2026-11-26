@@ -260,8 +260,11 @@ for f in range(170, 330, 2):
         L = 0.001
     elif f <= 281:
         L = max(0.001, min(1.0, (f - 186) / 10.0) * (0.0 - pt(f)))
-    else:
-        L = max(0.001, (1 - (f - 281) / 12.0) * (0.0 - pt(f))) if f < 293 else 0.001
+    else:   # rewind: the stream's top end falls back down onto the draining plug (never a gap)
+        u = min(1.0, (f - 281) / 12.0); top = -u * (0.0 - pt(f)) * 0.999
+        keyv(POUR, "location", f, Vector((NBX + 0.12, 0.0, top)))
+        L = max(0.001, top - pt(f))
+    if f <= 281: keyv(POUR, "location", f, Vector((NBX + 0.12, 0.0, 0.0)))
     keyv(POUR, "scale", f, Vector((1, 1, L)))
 all_interp(POUR, 'LINEAR')
 
@@ -432,7 +435,7 @@ for m in bpy.data.materials:
 W = bpy.context.scene.world; ramp = W.node_tree.nodes["SkyRamp"].color_ramp
 SUN, MOON = O["Sun"], O["Moon"]
 SKY = {"present": ((0.55, 0.85, 1.0), (0.02, 0.30, 0.95), 4.0, 0.0),
-       "past": ((1.0, 0.78, 0.48), (0.10, 0.38, 0.92), 4.2, 0.0),
+       "past": ((1.0, 0.55, 0.28), (0.04, 0.26, 0.85), 4.2, 0.0),
        "dusk": ((1.0, 0.42, 0.22), (0.22, 0.12, 0.45), 1.2, 0.1),
        "night": ((0.20, 0.10, 0.38), (0.01, 0.015, 0.09), 0.0, 0.9)}
 for f, k in ((1, "present"), (SW_PAST - 1, "present"), (SW_PAST, "past"), (600, "past"), (632, "dusk"), (660, "night"), (700, "night"),

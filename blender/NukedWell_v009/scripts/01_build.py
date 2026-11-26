@@ -193,11 +193,11 @@ am = node(nt, "ShaderNodeMath", operation='MULTIPLY'); L.new(rr.outputs["Result"
 am2 = node(nt, "ShaderNodeMath", operation='MULTIPLY'); L.new(am.outputs[0], am2.inputs[0]); am2.inputs[1].default_value = 1.4
 L.new(am2.outputs[0], pr.inputs["Alpha"]); RES.data.materials.append(mres); to_col(RES, C_SET); RES.parent = JOLT
 # far desert beyond the slab (gentle dunes)
-bpy.ops.mesh.primitive_grid_add(x_subdivisions=120, y_subdivisions=120, size=1, location=(0, 260, -0.02))
-FAR = bpy.context.active_object; FAR.name = "Desert_Far"; FAR.scale = (900, 460, 1); bpy.ops.object.transform_apply(scale=True)
+bpy.ops.mesh.primitive_grid_add(x_subdivisions=120, y_subdivisions=120, size=1, location=(0, 1200, -0.02))
+FAR = bpy.context.active_object; FAR.name = "Desert_Far"; FAR.scale = (5000, 2400, 1); bpy.ops.object.transform_apply(scale=True)
 for v in FAR.data.vertices:
-    if v.co.y + 260 > 75:
-        v.co.z += 3.5 * (0.5 + 0.5 * math.sin(v.co.x * 0.021 + v.co.y * 0.013)) * min(1.0, (v.co.y + 260 - 75) / 120)
+    if v.co.y + 1200 > 75:
+        v.co.z += 3.5 * (0.5 + 0.5 * math.sin(v.co.x * 0.021 + v.co.y * 0.013)) * min(1.0, (v.co.y + 1200 - 75) / 120)
 FAR.data.materials.append(sand_mat("M_SandFar", (1.15, 0.55, 0.26), 0.05)); to_col(FAR, C_SET)
 for p_ in FAR.data.polygons: p_.use_smooth = True
 # left/right/back side walls of the slab are never framed (the slab is 80 m wide)
@@ -329,7 +329,7 @@ me = bpy.data.meshes.new("Concrete_Plug"); bm.to_mesh(me); bm.free()
 PLUG = bpy.data.objects.new("Concrete_Plug", me); C_SET.objects.link(PLUG); PLUG.data.materials.append(M_CONC)
 PLUG.location = (NBX, 0.0, DEV_BOT + 3.55); PLUG.scale = (1, 1, 0.001); PLUG.parent = JOLT
 # falling concrete inside the bore (a half stream), keyed in stage B
-POUR = cyl("Concrete_Pour", 0.16, 1.0, (0, 0, 0), M_CONC, verts=16)
+POUR = cyl("Concrete_Pour", 0.24, 1.0, (0, 0, 0), mat("M_WetConcrete", (0.50, 0.50, 0.52), rough=0.25, coat=0.4), verts=20)
 POUR.data.transform(Matrix.Translation((0, 0, -0.5)))       # origin at its TOP, hangs down
 POUR.location = (NBX + 0.12, 0.0, 0.0); POUR.scale = (1, 1, 0.001); to_col(POUR, C_SET); POUR.parent = JOLT
 dpo = POUR.modifiers.new("lumpy", 'DISPLACE'); dpo.texture = bpy.data.textures.new("pour_lumps", 'CLOUDS'); dpo.texture.noise_scale = 0.12; dpo.strength = 0.06
@@ -460,9 +460,9 @@ def flame_mat(name, h, smoke=False, strength=7.0):
         hc = node(nt, "ShaderNodeMath", operation='MULTIPLY_ADD'); L.new(n1.outputs["Fac"], hc.inputs[0]); hc.inputs[1].default_value = -0.5
         L.new(sp.outputs["Z"], hc.inputs[2])
         cr = node(nt, "ShaderNodeValToRGB"); el = cr.color_ramp.elements
-        el[0].position = 0.0; el[0].color = (1.0, 0.55, 0.10, 1)
-        e2 = el.new(0.15); e2.color = (1.0, 0.32, 0.01, 1)
-        e3 = el.new(0.40); e3.color = (0.85, 0.07, 0.005, 1)
+        el[0].position = 0.0; el[0].color = (1.0, 0.42, 0.05, 1)
+        e2 = el.new(0.15); e2.color = (0.95, 0.18, 0.01, 1)
+        e3 = el.new(0.40); e3.color = (0.65, 0.04, 0.005, 1)
         el[-1].position = 0.75; el[-1].color = (0.35, 0.04, 0.01, 1)
         L.new(hc.outputs[0], cr.inputs["Fac"])
         em = node(nt, "ShaderNodeEmission"); em.inputs["Strength"].default_value = strength; L.new(cr.outputs["Color"], em.inputs["Color"])
@@ -471,7 +471,7 @@ def flame_mat(name, h, smoke=False, strength=7.0):
         df = node(nt, "ShaderNodeBsdfDiffuse"); df.inputs["Color"].default_value = (0.05, 0.04, 0.04, 1)
         em = node(nt, "ShaderNodeEmission"); em.inputs["Color"].default_value = (1.0, 0.35, 0.08, 1)
         lo = node(nt, "ShaderNodeMapRange"); lo.inputs["From Min"].default_value = 0.0; lo.inputs["From Max"].default_value = 0.25
-        lo.inputs["To Min"].default_value = 0.6; lo.inputs["To Max"].default_value = 0.0; L.new(sp.outputs["Z"], lo.inputs["Value"])
+        lo.inputs["To Min"].default_value = 0.0; lo.inputs["To Max"].default_value = 0.0; L.new(sp.outputs["Z"], lo.inputs["Value"])
         L.new(lo.outputs["Result"], em.inputs["Strength"])
         ad = node(nt, "ShaderNodeAddShader"); L.new(df.outputs[0], ad.inputs[0]); L.new(em.outputs[0], ad.inputs[1])
         L.new(ad.outputs[0], mx.inputs[2])
@@ -487,7 +487,7 @@ def fire(name, loc, scale=1.0, n=5, height=24.0, smoke=True):
         o.rotation_euler.z = random.uniform(0, 6.28)
         d = o.modifiers.new("turb", 'DISPLACE'); tx = bpy.data.textures.new(name + "_turb%d" % i, 'CLOUDS'); tx.noise_scale = 1.4 + 0.3 * i
         d.texture = tx; d.texture_coords = 'OBJECT'; d.texture_coords_object = FIRE_FLOW; d.strength = 0.9 + 0.3 * t; d.direction = 'NORMAL'
-        o.data.materials.append(flame_mat("M_" + name + "_%d" % i, height, strength=1.8 - 0.7 * t))
+        o.data.materials.append(flame_mat("M_" + name + "_%d" % i, height, strength=2.2 - 0.8 * t))
         o.visible_shadow = False; o.visible_diffuse = True
         parts.append(o)
     if smoke:
@@ -523,6 +523,7 @@ FIRE_LIGHT.location = (GPX, -1.0, 6.0)
 
 # ================================================================== the steel cap (lowered on a cable from above in stage B)
 CAP = cyl("Cap_Body", 0.9, 1.1, (0, 0, 0.55), mat("M_CapSteel", (0.55, 0.58, 0.62), rough=0.3, metal=0.9), verts=48, bevel=0.03)
+CAP.data.transform(Matrix.Translation((0, 0, 0.55))); CAP.location = (0, 0, 0)   # origin at the bottom: rings and eye sit ON the body
 for z_, r_ in ((0.06, 1.05), (1.04, 0.95)):
     cyl("Cap_Ring", r_, 0.12, (0, 0, z_), M_DARKSTEEL, verts=48, bevel=0.02).parent = CAP
 bpy.ops.mesh.primitive_torus_add(major_radius=0.18, minor_radius=0.05, location=(0, 0, 1.25), rotation=(math.pi / 2, 0, 0))
@@ -657,7 +658,7 @@ md = steam_mat(); md.name = "M_Dust"
 for n_ in md.node_tree.nodes:
     if n_.type == 'BSDF_DIFFUSE': n_.inputs["Color"].default_value = (0.75, 0.45, 0.24, 1)
 DUST.data.materials.append(md); DUST.scale = (0.001,) * 3; DUST.visible_shadow = False; to_col(DUST, C_FX)
-SMOKE_WISP = fire("Smoke_Wisp", (GPX, 0.0, 0.8), 0.25, n=0, height=10, smoke=True)
+SMOKE_WISP = fire("Smoke_Wisp", (GPX + 1.0, 4.6, 0.0), 0.25, n=0, height=10, smoke=True)
 for p_ in SMOKE_WISP[1]:
     p_.location.z = 0.0
 
@@ -713,7 +714,7 @@ w = sc.world; w.use_nodes = True; nt = w.node_tree
 for n_ in list(nt.nodes):
     if n_.type != 'OUTPUT_WORLD': nt.nodes.remove(n_)
 tc = nt.nodes.new("ShaderNodeTexCoord"); sp = nt.nodes.new("ShaderNodeSeparateXYZ"); nt.links.new(tc.outputs["Generated"], sp.inputs[0])
-mr = nt.nodes.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = 0.5; mr.inputs["From Max"].default_value = 0.8; nt.links.new(sp.outputs["Z"], mr.inputs["Value"])
+mr = nt.nodes.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = 0.49; mr.inputs["From Max"].default_value = 0.66; nt.links.new(sp.outputs["Z"], mr.inputs["Value"])
 cr = nt.nodes.new("ShaderNodeValToRGB"); cr.name = "SkyRamp"
 cr.color_ramp.elements[0].color = (0.55, 0.85, 1.0, 1); cr.color_ramp.elements[1].color = (0.02, 0.30, 0.95, 1)
 nt.links.new(mr.outputs["Result"], cr.inputs["Fac"])
