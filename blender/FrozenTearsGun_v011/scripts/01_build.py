@@ -46,8 +46,20 @@ for g in [g for g in bpy.data.node_groups if g.name.startswith("EnhancedEye")]:
     else: mx.inputs[0].default_value = 0.0
     g.links.new(P.outputs[0], mx.inputs[1]); g.links.new(tr.outputs[0], mx.inputs[2]); g.links.new(mx.outputs[0], out_sock)
     print("EYEFIX", g.name)
-for m in IB.data.materials: tint(m, (1.0, 0.78, 0.64))
-for m in MB.data.materials: tint(m, (1.0, 0.80, 0.68))
+def tint_tree(nt, mult):
+    """warm the MPFB skin: the diffuse texture sits inside the skin node GROUP, so walk into groups"""
+    for nd in list(nt.nodes):
+        if nd.type == 'GROUP' and nd.node_tree: tint_tree(nd.node_tree, mult)
+        if nd.type == 'TEX_IMAGE' and nd.image and "diffuse" in nd.image.name.lower():
+            for lk in list(nd.outputs['Color'].links):
+                mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'
+                mx.inputs['Factor'].default_value = 1.0; mx.inputs['B'].default_value = (*mult, 1)
+                nt.links.new(nd.outputs['Color'], mx.inputs['A']); nt.links.new(mx.outputs['Result'], lk.to_socket)
+_done = set()
+for b_ in (IB, MB):
+    for nd in b_.data.materials[0].node_tree.nodes:
+        if nd.type == 'GROUP' and nd.node_tree and nd.node_tree.name not in _done:
+            _done.add(nd.node_tree.name); tint_tree(nd.node_tree, (1.0, 0.72, 0.56))
 for r, t, keys in ((INV, (0.42, 0.20, 0.10), ("ponytail01", "eyebrow")), (MEN, (0.85, 0.85, 0.88), ("short02", "eyebrow"))):
     for c in r.children:
         if c.type == 'MESH' and any(k in c.name for k in keys):
@@ -56,7 +68,7 @@ def cl(rig, key, newname):
     o = part(rig, key); o.name = newname; return o
 I_TOP = cl(INV, "fisherman_sweater", "Inv.sweater"); I_TRS = cl(INV, "wool_pants", "Inv.trousers")
 M_SUIT = cl(MEN, "suit_3", "Men.suit")
-colorize(I_TOP, (0.95, 0.50, 0.02), gain=1.0); colorize(I_TRS, (0.02, 0.08, 0.32), gain=1.0)   # the suit keeps its own pinstripe/shirt/tie texture
+colorize(I_TOP, (0.95, 0.42, 0.02), gain=1.0); colorize(I_TRS, (0.02, 0.08, 0.32), gain=1.0)   # the suit keeps its own pinstripe/shirt/tie texture
 # trousers under the sweater: the waistband the sweater covers is masked off the TROUSERS (never the body)
 zmin = min(v.co.z for v in I_TOP.data.vertices)
 vg = I_TRS.vertex_groups.new(name="under_top"); vg.add([v.index for v in I_TRS.data.vertices if v.co.z > zmin + 0.02], 1.0, 'REPLACE')
@@ -169,7 +181,7 @@ for nm, sz, loc in (("SkBack", (X1 - X0, 0.02, 0.10), ((X0 + X1) / 2, Y0 + 0.01,
 
 # ---- the workbench (her bench): butcher-block top, steel frame, open front for her knees
 BENCH_TOP = 0.72
-benchwood = wood("M_BenchWood", (0.55, 0.30, 0.10), (0.78, 0.50, 0.22), scale=9.0)
+benchwood = wood("M_BenchWood", (0.36, 0.15, 0.04), (0.56, 0.28, 0.09), scale=9.0)
 steel = mat("M_SteelRed", (0.70, 0.04, 0.03), rough=0.35, metal=0.6, coat=0.3)
 box("BenchTop", (1.50, 0.75, 0.05), (0.0, 0.425, BENCH_TOP - 0.025), benchwood, bevel=0.006)
 for x in (-0.70, 0.70):
@@ -268,7 +280,7 @@ def gpart(o):
     Mw = o.matrix_world.copy(); o.parent = GUN; o.matrix_parent_inverse = Matrix(); o.matrix_basis = Mw; return o
 RY = (math.pi / 2, 0, 0)      # cylinder axis along +Y
 woodgrip = wood("M_GripWood", (0.30, 0.10, 0.03), (0.52, 0.22, 0.07), scale=14.0)
-red = mat("M_ValveRed", (0.85, 0.02, 0.02), rough=0.25, coat=0.6)
+red = mat("M_ValveRed", (0.60, 0.0, 0.0), rough=0.3)
 can_m = mat("M_Canister", (0.05, 0.25, 0.95), rough=0.2, metal=0.7, coat=0.8)
 dark = mat("M_Bore", (0.01, 0.01, 0.01), rough=0.6)
 steel_s = mat("M_Spring", (0.85, 0.87, 0.9), rough=0.15, metal=1.0)
@@ -354,7 +366,7 @@ sc["GUN_POS"] = list(GUN_POS); sc["GUN_PITCH"] = GUN_PITCH; sc["BENCH_TOP"] = BE
 sc.view_settings.view_transform = 'AgX'
 try: sc.view_settings.look = 'AgX - Punchy'
 except Exception: pass
-sc.view_settings.exposure = -0.6
+sc.view_settings.exposure = 0.0
 sc.render.engine = 'CYCLES'
 sc.cycles.samples = 64; sc.cycles.adaptive_threshold = 0.04; sc.cycles.use_adaptive_sampling = True; sc.cycles.use_denoising = True
 sc.cycles.denoiser = 'OPENIMAGEDENOISE'
@@ -365,9 +377,9 @@ sc.render.use_simplify = True; sc.render.simplify_subdivision_render = 2; sc.cyc
 sc.render.use_motion_blur = False
 w = bpy.data.worlds.new("World"); sc.world = w; w.use_nodes = True
 w.node_tree.nodes["Background"].inputs["Color"].default_value = (0.6, 0.75, 0.9, 1)
-w.node_tree.nodes["Background"].inputs["Strength"].default_value = 0.35
+w.node_tree.nodes["Background"].inputs["Strength"].default_value = 0.16
 def area(name, loc, target, power, size, col):
-    ld = bpy.data.lights.new(name, 'AREA'); ld.energy = power; ld.size = size; ld.color = col; ld.shape = 'DISK'
+    ld = bpy.data.lights.new(name, 'AREA'); ld.energy = power * 0.45; ld.size = size; ld.color = col; ld.shape = 'DISK'
     o = bpy.data.objects.new(name, ld); sc.collection.objects.link(o); o.location = loc
     d = Vector(target) - Vector(loc); o.rotation_euler = d.to_track_quat('-Z', 'Y').to_euler()
     return o
