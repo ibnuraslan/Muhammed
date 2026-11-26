@@ -1,8 +1,28 @@
-# FrozenTearsGun_v011: from-scratch rebuild, NOT READY (ON HOLD)
+# FrozenTearsGun_v011: from-scratch rebuild, NOT READY (ON HOLD, last round done)
 
-**Status: ON HOLD.** The round-5 preview (check 6, director-approved) FAILED a fresh harsh review, so no .blend is pushed.
-- `review/preview.mp4` is the check-6 preview, rendered from the exact packed build (77 MB, kept locally).
-- **Render check: passed** on that build. It opens cleanly with everything packed, and the camera and VO strip are present. Frames 1, 828 and 1655 rendered at full resolution in 66-75 s each with 16 samples. Copies are in `review/render_check_*.jpg`.
+**Status: ON HOLD.** The final round the director allowed (round 6, check 7) FAILED a fresh harsh review, so no .blend is pushed.
+- `review/preview.mp4` is the check-7 preview, rendered from the exact packed build (70 MB, kept locally; it rebuilds from `scripts/`).
+- **Render check passed** on that build:
+  - It opens with `--factory-startup` with everything packed, the camera set and the VO strip present.
+  - Frames 1, 828 and 1655 rendered at full resolution in 59-64 s each at 16 samples. None is black, empty or pink.
+  - Copies of the three frames are in `review/render_check_*.jpg`.
+
+## Check 7 (round 6): what was fixed
+- The office lamp is gone.
+- The second trigger close-up reuses the left-side angle.
+- The pellet chase is replaced by a pull-back to a wide of the range.
+- The gas macro is recentred on her face and the chamber.
+- A close render of the grip shows a normal palm wrap, with no palm through the grip.
+- Fastest camera turn is 33 degrees per frame, with 0 lens blockers and 0 pop-ins.
+
+## Check 7 faults (fresh harsh review, film frames)
+1. **Three moves still read as cuts:** 731->736 (bench to range, following the pellets), 851->861 (target to office) and 1606->1611. The 1606->1611 pull-back happens inside the 14-frame pellet flight, so it is too fast.
+2. **No visible trigger pull:** the finger pull does not read at 651-700 or 1576-1601. The trigger moves 14 degrees and the hand only tightens. A real keyed index-finger pull, with the finger off the trigger before and squeezing it, is needed.
+3. **Mentor's arms:** they drop to straight arms at his sides at 1626-1651, so the film ends on an A-pose read. Keep his hands up or reacting.
+4. **Smaller items:**
+   - her face is cropped at the left edge at 166-221 and at the right edge at 1101-1116
+   - 446-495 is a near-static chamber hold
+   - a lamp shade shows at the top edge at 956-996
 
 ## Check 6 (round 5): what was fixed
 - **No whips:** every whip is now a slow move of 30 frames or more. Between the bench and the range, a high corner view behind her holds both people. The fastest camera turn is 33 degrees per frame, down from 58.
