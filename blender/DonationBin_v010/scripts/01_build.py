@@ -117,8 +117,28 @@ for c_ in (F1_COAT, F2_COAT):      # navy coat over charcoal trousers: two garme
 for t_ in (F1_TRS, F2_TRS):
     reflective_bands(t_, (0.035, 0.035, 0.04), [(0.16, 0.22)])
 
+def eye_fix_group(rig):
+    """the MPFB EnhancedEye group drives the cornea's refractive transmission from inside the group (eye_fix cannot see
+    it): replace it with transmission 0 + a Transparent mix on the same mask, so the iris and the white read (no black holes)"""
+    for c in rig.children:
+        if c.type != 'MESH' or not c.name.endswith(".high-poly"): continue
+        for m in c.data.materials:
+            for n in m.node_tree.nodes:
+                if n.type != 'GROUP' or n.node_tree.get("dkf_eyefix"): continue
+                nt = n.node_tree; nt["dkf_eyefix"] = 1
+                for p in [x for x in nt.nodes if x.type == 'BSDF_PRINCIPLED']:
+                    tw = p.inputs['Transmission Weight']
+                    if not tw.is_linked: continue
+                    src = tw.links[0].from_socket
+                    for l in list(tw.links): nt.links.remove(l)
+                    tw.default_value = 0.0
+                    outs = list(p.outputs['BSDF'].links)
+                    tr = nt.nodes.new('ShaderNodeBsdfTransparent'); mx = nt.nodes.new('ShaderNodeMixShader')
+                    nt.links.new(src, mx.inputs['Fac']); nt.links.new(p.outputs['BSDF'], mx.inputs[1]); nt.links.new(tr.outputs['BSDF'], mx.inputs[2])
+                    for l in outs: nt.links.new(mx.outputs['Shader'], l.to_socket)
+                    log("eye fix (group)", rig.name, nt.name)
 for r, b in PEOPLE:
-    eye_fix(r)
+    eye_fix(r); eye_fix_group(r)
     for m in b.data.materials: tint(m, (1.0, 0.80, 0.68) if r in (WOM, PAS) else (1.0, 0.90, 0.82))
 hair_t = {WOM: (0.45, 0.18, 0.08), MAN: (0.25, 0.17, 0.10), PAS: (0.15, 0.10, 0.08), FF1: (0.12, 0.09, 0.07), FF2: (0.55, 0.32, 0.12)}
 for r, t in hair_t.items():
@@ -461,6 +481,25 @@ for k, x in enumerate((-4.2, -5.6)):
     box("Planter%d" % k, (0.9, 0.9, 0.55), (x, 1.2, 0.275), pl_m, bevel=0.02)
     for j in range(7):
         sphere("Shrub%d_%d" % (k, j), 0.22 + 0.06 * (j % 3), (x + 0.25 * math.cos(j), 1.2 + 0.25 * math.sin(j), 0.75 + 0.1 * (j % 2)), leaf, segs=12)
+# the street across the lot (seen behind the camera's exit from the bin): a row of shop fronts, never an empty horizon
+fac_cols = [(0.95, 0.55, 0.10), (0.20, 0.55, 0.85), (0.85, 0.25, 0.35), (0.25, 0.70, 0.45), (0.95, 0.80, 0.25), (0.55, 0.30, 0.75)]
+win_m = mat("M_ShopWindow", (0.10, 0.25, 0.40), rough=0.15, coat=0.5)
+awn_m = mat("M_Awning", (0.95, 0.15, 0.10), rough=0.5)
+for k in range(9):
+    x = -8.0 + k * 2.6; h = 4.2 + 1.6 * ((k * 7) % 3)
+    fm = mat("M_Facade%d" % k, fac_cols[k % len(fac_cols)], rough=0.7)
+    box("Facade%d" % k, (2.55, 1.0, h), (x, -10.5, h / 2), fm, bevel=0.02)
+    box("ShopWin%d" % k, (1.6, 0.05, 1.5), (x - 0.2, -9.98, 1.05), win_m, bevel=0.01)
+    box("ShopDoor%d" % k, (0.6, 0.05, 2.0), (x + 0.85, -9.98, 1.0), mat("M_ShopDoor", (0.15, 0.12, 0.10), rough=0.5), bevel=0.01)
+    for j in range(int(h // 1.4) - 1):
+        box("UpWin%d_%d" % (k, j), (0.5, 0.05, 0.75), (x - 0.6, -9.98, 2.6 + j * 1.4), win_m, bevel=0.005)
+        box("UpWinB%d_%d" % (k, j), (0.5, 0.05, 0.75), (x + 0.5, -9.98, 2.6 + j * 1.4), win_m, bevel=0.005)
+    box("Awning%d" % k, (2.0, 0.6, 0.08), (x, -9.7, 2.35), awn_m, bevel=0.01, rot=(math.radians(-15), 0, 0))
+box("Sidewalk", (26, 2.2, 0.15), (2.4, -8.9, 0.075), mat("M_Sidewalk", (0.75, 0.68, 0.58), rough=0.8), bevel=0.01)
+for k, x in enumerate((-5.5, 0.5, 6.5)):
+    cyl("StreetTreeTrunk%d" % k, 0.09, 2.2, (x, -8.6, 1.1), mat("M_Trunk", (0.35, 0.20, 0.10), rough=0.8), verts=12)
+    for j in range(6):
+        sphere("StreetTree%d_%d" % (k, j), 0.55 + 0.15 * (j % 2), (x + 0.4 * math.cos(j), -8.6 + 0.4 * math.sin(j), 2.6 + 0.3 * (j % 3)), leaf, segs=12)
 # bollards in front of the lot
 for k, x in enumerate((-3.4, 3.6, 7.8)):
     cyl("Bollard%d" % k, 0.09, 0.9, (x, -2.2, 0.45), trim, verts=20)

@@ -44,11 +44,11 @@ W.key(596, hand_L=LH((0.20, -0.30, 0.40), (0, -1, 0), (0, 0, 1)), hand_R=LH((-0.
 feet_on_heap(W, 600, 0.0, -0.27, dy_l=0.02, dy_r=-0.04)
 for f, lean, zl, zr in ((600, 10, 1.46, 1.50), (618, 15, 1.44, 1.48), (632, 6, 1.46, 1.50), (648, 16, 1.43, 1.47), (662, 6, 1.46, 1.50), (673, 13, 1.45, 1.49)):
     W.key(f, pos=SP + Vector((0, -0.01 * (lean - 6) / 10, 0)), rot=Rf(FRONT, lean=lean), spine=(4 + lean * 0.3, 0, 0), head=(-12, 0, 0),
-          hand_L=on_flap(0.18, zl), hand_R=on_flap(-0.18, zr), face=(0.0, 0.25 if lean > 10 else 0.05, -0.6, 0.3))
+          elbow_L=LH((0.34, 0.20, -0.10), (0, 0, 1), (0, 0, 1)), elbow_R=LH((-0.34, 0.20, -0.10), (0, 0, 1), (0, 0, 1)), hand_L=on_flap(0.18, zl), hand_R=on_flap(-0.18, zr), face=(0.0, 0.25 if lean > 10 else 0.05, -0.6, 0.3))
 # E (673-847): the latch holds; she gives up for a moment
 for f, lean in ((700, 14), (722, 6), (740, 15)):
     W.key(f, pos=SP + Vector((0, -0.01 * (lean - 6) / 10, 0)), rot=Rf(FRONT, lean=lean), spine=(5 + lean * 0.3, 0, 0), head=(-10, 0, 0),
-          hand_L=on_flap(0.18, 1.45), hand_R=on_flap(-0.18, 1.49))
+          elbow_L=LH((0.34, 0.20, -0.10), (0, 0, 1), (0, 0, 1)), elbow_R=LH((-0.34, 0.20, -0.10), (0, 0, 1), (0, 0, 1)), hand_L=on_flap(0.18, 1.62), hand_R=on_flap(-0.18, 1.65))
 W.key(770, pos=SP + Vector((0, 0.04, -0.01)), rot=Rf(FRONT, lean=2), spine=(10, 0, 0), head=(18, 0, 0),
       hand_L=on_flap(0.16, 1.32), hand_R=on_flap(-0.16, 1.34), face=(0.0, 0.0, -0.8, 0.2))
 W.key(800, pos=SP + Vector((0, 0.07, -0.015)), rot=Rf(FRONT, lean=0), spine=(14, 0, 0), head=(22, 0, 0), hand_L=hang(1, 0.05), hand_R=hang(-1, 0.05), grip_L="relaxed", grip_R="relaxed")
@@ -69,10 +69,10 @@ feet_on_heap(W, 990, -0.32, -0.27, dy_l=-0.02, dy_r=0.02, yaw=-12)
 W.key(990, pos=SP3, rot=Rf((-0.2, -1, 0), lean=6), spine=(4, -8, 0), head=(-10, -15, 0),
       hand_R=on_wall_front(-0.66, 1.30), hand_L=on_wall_front(-0.38, 1.85), grip_L="flat_palm", grip_R="flat_palm")
 W.key(1030, pos=SP3, rot=Rf((-0.2, -1, 0), lean=6), spine=(4, -8, 0), head=(-25, -18, 0), hand_R=on_wall_front(-0.70, 1.62), hand_L=on_wall_front(-0.48, 1.55))
-W.key(1070, pos=SP3 + Vector((-0.04, 0, 0)), rot=Rf((-0.5, -1, 0), lean=6), spine=(4, -14, 0), head=(-15, -30, 0),
-      hand_R=WH((IX0 + 0.045, -0.52, 1.25), (-1, 0, 0), (0, 0, 1)), hand_L=WH((IX0 + 0.045, -0.60, 1.70), (-1, 0, 0), (0, 0.2, 1)))
-W.key(1110, pos=SP3 + Vector((-0.04, 0, 0)), rot=Rf((-0.5, -1, 0), lean=6), spine=(4, -14, 0), head=(-10, -28, 0),
-      hand_R=WH((IX0 + 0.045, -0.48, 1.45), (-1, 0, 0), (0, 0, 1)), hand_L=WH((IX0 + 0.045, -0.62, 1.50), (-1, 0, 0), (0, 0.2, 1)))
+W.key(1070, pos=SP3 + Vector((0.02, 0, 0)), rot=Rf((-0.2, -1, 0), lean=5), spine=(4, -6, 0), head=(-30, -10, 0),
+      hand_R=on_wall_front(-0.62, 1.95), hand_L=on_wall_front(-0.36, 1.75))
+W.key(1110, pos=SP3 + Vector((0.02, 0, 0)), rot=Rf((-0.15, -1, 0), lean=5), spine=(4, -4, 0), head=(-38, -6, 0),
+      hand_R=on_wall_front(-0.58, 2.05), hand_L=on_wall_front(-0.34, 1.92))
 # too high to climb: back to the centre, reaches up the front wall above the flap on tiptoe, looks up at the roof
 SP4 = stand_at(0.02, -0.33)
 W.key(1145, pos=SP4, rot=Rf(FRONT, lean=4), spine=(-4, 0, 0), head=(-35, 0, 0), hand_R=on_flap(-0.20, 1.55), hand_L=on_wall_front(0.22, 2.00))
@@ -86,10 +86,10 @@ W.key(1262, pos=SP4, rot=Rf(FRONT, lean=6), spine=(2, 0, 0), head=(-10, 0, 0), h
 feet_on_heap(W, 1262, 0.02, -0.33)
 # G (1285-1465): she screams for help and slaps the flap; then she listens: nothing
 for f, touch in ((1288, False), (1298, True), (1310, False), (1320, True), (1332, False), (1342, True), (1356, False), (1366, True)):
-    hl = on_flap(0.17, 1.50) if touch else LH((0.22, -0.16, 0.52), (0, -1, 0), (0, 0, 1))
-    hr = on_flap(-0.17, 1.53) if touch else LH((-0.22, -0.16, 0.54), (0, -1, 0), (0, 0, 1))
+    hl = on_flap(0.17, 1.50) if touch else LH((0.32, -0.22, 0.36), (0, -1, 0), (0, 0, 1))      # backswing out to the side, below the chin
+    hr = on_flap(-0.17, 1.53) if touch else LH((-0.32, -0.22, 0.38), (0, -1, 0), (0, 0, 1))
     W.key(f, pos=SP4 + Vector((0, 0.0 if touch else 0.02, 0)), rot=Rf(FRONT, lean=10 if touch else 4), spine=(6, 0, 0), head=(-22, 0, 0),
-          hand_L=hl, hand_R=hr, face=(0.0, 1.0, 1.0, 0.25))
+          hand_L=hl, hand_R=hr, elbow_L=LH((0.34, 0.20, -0.10), (0, 0, 1), (0, 0, 1)), elbow_R=LH((-0.34, 0.20, -0.10), (0, 0, 1), (0, 0, 1)), face=(0.0, 1.0, 1.0, 0.25))
 W.key(1385, pos=SP4, rot=Rf(FRONT, lean=6), spine=(4, 0, 0), head=(-12, 22, 8), hand_L=on_flap(0.17, 1.46), hand_R=on_flap(-0.17, 1.48), face=(0.0, 0.1, 0.7, 0.0))
 W.key(1425, pos=SP4, rot=Rf(FRONT, lean=6), spine=(6, 0, 0), head=(-8, 26, 10), face=(0.0, 0.05, 0.5, 0.0))
 W.key(1450, pos=SP4 + Vector((0, 0.05, -0.02)), rot=Rf(FRONT, lean=2), spine=(16, 0, 0), head=(20, 0, 0), hand_L=hang(1, 0.05), hand_R=hang(-1, 0.05), face=(0.0, 0.0, -0.6, 0.0))
@@ -159,9 +159,9 @@ seat(2110, EDGE + Vector((0, 0.02, 0.0)), 30, -1.18, feet_z=PANEL_TOP + 0.064, h
 seat(2140, EDGE, 18, -1.20, feet_z=PANEL_TOP + 0.064, hands=None, head=(-6, -10, 0))
 for s, sx in (("L", 1), ("R", -1)):   # forearms resting on her knees
     W.key(2140, **{"hand_" + s: LH((sx * 0.16, -0.52, 0.06), (0, 0.2, -1), (0, -1, -0.3)), "grip_" + s: "relaxed"})
-for f, lean, hd, face in ((2180, 20, (-10, -25, 0), (0.0, 0.05, 0.4, 0.0)), (2230, 18, (-14, -30, 0), (0.15, 0.0, 0.5, 0.0)),
-                          (2260, 19, (-4, -28, 0), (0.25, 0.0, 0.3, 0.0)), (2300, 17, (-12, -20, 0), (0.3, 0.0, 0.2, 0.0)),
-                          (2345, 18, (-16, -8, 0), (0.25, 0.0, 0.2, 0.0)), (2388, 17, (-14, -2, 0), (0.25, 0.0, 0.2, 0.0))):
+for f, lean, hd, face in ((2180, 12, (-22, -25, 0), (0.0, 0.05, 0.4, 0.0)), (2230, 10, (-26, -30, 0), (0.15, 0.0, 0.5, 0.0)),
+                          (2260, 10, (-20, -28, 0), (0.25, 0.0, 0.3, 0.0)), (2300, 9, (-26, -20, 0), (0.3, 0.0, 0.2, 0.0)),
+                          (2345, 9, (-28, -10, 0), (0.3, 0.0, 0.2, 0.0)), (2388, 9, (-26, -6, 0), (0.3, 0.0, 0.2, 0.0))):
     seat(f, EDGE + Vector((0, 0, 0.004 * math.sin(f))), lean, -1.20, head=hd, hands=None, feet_z=PANEL_TOP + 0.064, face=face)
     for s, sx in (("L", 1), ("R", -1)):
         W.key(f, **{"hand_" + s: LH((sx * 0.16, -0.52, 0.06 + 0.01 * math.sin(f / 9.0)), (0, 0.2, -1), (0, -1, -0.3))})
@@ -221,5 +221,5 @@ for f, hd in ((2170, (-6, 22, 0)), (2240, (-8, 18, 4)), (2310, (-4, 24, 0)), (23
 F2P = Vector((1.12, -1.28, 0.0)); F2F = (Vector((0.1, -1.7, 0)) - F2P).normalized(); F2F.z = 0
 F2.key(1859, pos=Vector((-18, -16, 0.95)), rot=Rb((0, 0, 1), (0, -1, 0)))
 for f, tw, hd in ((1860, 0, (8, 0, 0)), (1975, 4, (12, -5, 0)), (2060, -3, (14, 4, 0)), (2150, 2, (10, 0, 0)), (2250, -4, (6, 6, 0)), (2388, 0, (8, 2, 0))):
-    F2.key(f, pos=F2P + Vector((0, 0, 0.955)), rot=Rf(F2F, lean=3), spine=(3, tw, 0), head=hd, hand_L=hang(1, 0.02), hand_R=hang(-1, 0.02), grip_L="relaxed", grip_R="relaxed",
+    F2.key(f, pos=F2P + Vector((0, 0, 0.955)), rot=Rf(F2F, lean=3), spine=(3, tw, 0), head=hd, hand_L=hang(1, 0.02), hand_R=LH((-0.30, -0.06, -0.06), (1, 0, 0.0), (0, -0.2, -1)), grip_L="relaxed", grip_R="wrap_grip",
            foot_L=WH(F2P + Vector((-0.12 * F2F.y, 0.12 * F2F.x, 0.077)), (0, 0, 1), F2F), foot_R=WH(F2P + Vector((0.12 * F2F.y, -0.12 * F2F.x, 0.077)), (0, 0, 1), F2F))

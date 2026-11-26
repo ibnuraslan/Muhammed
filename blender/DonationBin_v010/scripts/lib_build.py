@@ -647,7 +647,7 @@ def garment_offset(g, amount=0.004):
         i = g.modifiers.find("float"); g.modifiers.move(i, i - 1)
     return d
 
-def tuck_waist(trs, top, depth=0.012, lo=-0.015, hi=0.03, cut=0.035, bins=72):
+def tuck_waist(trs, top, depth=0.02, lo=-0.02, hi=0.02, cut=0.02, bins=72):
     """trousers waistband under a top. Per angle around the body: trouser verts more than `cut` above the top's hem are
     masked (they are fully under the knit; the SOLID tucked body is behind them), and the band between is pulled in on
     a smooth ramp, so the waistband never pokes through and no skin gap can open at the back."""

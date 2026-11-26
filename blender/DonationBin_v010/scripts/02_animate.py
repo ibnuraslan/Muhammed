@@ -51,7 +51,7 @@ def Rf(front, lean=0.0, side=0.0):
 def LH(p, n, d): return ('L', p, n, d)       # body-local hand/foot spec
 def WH(p, n, d): return ('W', p, n, d)       # world spec
 # standard local specs (body frame: +X her left, -Y front, +Z up; origin = root bone head)
-def hang(sx, fwd=0.0): return LH((sx * 0.21, -0.11 - fwd, -0.04), (-sx, 0, 0.1), (0.0, -0.45, -1))
+def hang(sx, fwd=0.0): return LH((sx * 0.14, -0.15 - fwd, -0.20), (0, 0.6, -0.4), (0.0, -0.3, -1))     # palm resting on the front of the thigh, elbow bent
 def foot_stand(sx, fwd=0.0): return LH((sx * 0.10, -0.06 - fwd, -0.713), (0, 0, 1), (0, -1, 0))
 
 # ==================================================================================== WOMAN
@@ -82,17 +82,17 @@ def pivot(th, slide=0.0, drop=0.0):
     p = S + Vector((0, rel.y * c + rel.z * s_, -rel.y * s_ + rel.z * c)) + Vector((0, slide, -drop))
     q = Quaternion((1, 0, 0), R_(-th)) @ Rf((0, 1, 0), lean=6)
     return p, q
-for f, th, sl, dr, fl, hp in ((128, 8, 0.0, 0.0, 34, 10), (140, 30, 0.02, 0.0, 44, 0), (152, 58, 0.06, 0.0, 50, -10),
+for f, th, sl, dr, fl, hp in ((132, 6, 0.0, 0.0, 34, 10), (146, 30, 0.02, 0.0, 44, 0), (158, 58, 0.06, 0.0, 50, -10),
                               (165, 75, 0.22, 0.0, 40, -15), (178, 92, 0.40, 0.03, 30, -10), (192, 108, 0.56, 0.08, 20, 0)):
     p, q = pivot(th, sl, dr)
     W.key(f, pos=p, rot=q, spine=(fl, 0.0, 0.0), head=(hp, 0.0, 0.0))
 # hands go from the flap / bin into a brace in front of her head
-W.key(140, hand_L=LH((0.20, -0.45, 0.30), (0, -0.3, -1), (0, -1, -0.2)), hand_R=LH((-0.20, -0.45, 0.30), (0, -0.3, -1), (0, -1, -0.2)), grip_L="open_alarm", grip_R="open_alarm")
+W.key(146, hand_L=LH((0.20, -0.45, 0.30), (0, -0.3, -1), (0, -1, -0.2)), hand_R=LH((-0.20, -0.45, 0.30), (0, -0.3, -1), (0, -1, -0.2)), grip_L="open_alarm", grip_R="open_alarm")
 W.key(192, hand_L=LH((0.24, -0.50, 0.45), (0, -1, 0), (0, 0, 1)), hand_R=LH((-0.24, -0.50, 0.45), (0, -1, 0), (0, 0, 1)))
 # feet leave the board at ~140, knees fold
-W.key(132, foot_L=WH((-0.10, WY - 0.01, STAND + 0.064 + 0.04), (0, 0.35, 0.94), (0, 0.94, -0.35)),
+W.key(138, foot_L=WH((-0.10, WY - 0.01, STAND + 0.064 + 0.04), (0, 0.35, 0.94), (0, 0.94, -0.35)),
       foot_R=WH((0.10, WY - 0.03, STAND + 0.064 + 0.04), (0, 0.35, 0.94), (0, 0.94, -0.35)))
-W.key(146, foot_L=LH((0.10, 0.12, -0.66), (0, 0.5, 0.8), (0, -0.8, 0.5)), foot_R=LH((-0.10, 0.14, -0.64), (0, 0.5, 0.8), (0, -0.8, 0.5)),
+W.key(152, foot_L=LH((0.10, 0.12, -0.66), (0, 0.5, 0.8), (0, -0.8, 0.5)), foot_R=LH((-0.10, 0.14, -0.64), (0, 0.5, 0.8), (0, -0.8, 0.5)),
       knee_L=LH((0.18, -0.9, -0.1), (0, 0, 1), (0, 0, 1)), knee_R=LH((-0.18, -0.9, -0.1), (0, 0, 1), (0, 0, 1)))
 W.key(165, foot_L=LH((0.10, 0.10, -0.68), (0, 0.8, 0.5), (0, -0.5, 0.8)), foot_R=LH((-0.10, 0.12, -0.67), (0, 0.8, 0.5), (0, -0.5, 0.8)))
 W.key(192, foot_L=LH((0.10, 0.12, -0.66), (0, 0.8, 0.5), (0, -0.5, 0.8)), foot_R=LH((-0.11, 0.14, -0.65), (0, 0.8, 0.5), (0, -0.5, 0.8)))
@@ -158,11 +158,11 @@ def back_contact(sx, z_up):
     return spec
 M.key(121, hand_L=LH((0.18, -0.20, 0.32), (0, -1, 0), (0, -0.3, 1)), hand_R=LH((-0.18, -0.20, 0.32), (0, -1, 0), (0, -0.3, 1)), grip_L="flat_palm", grip_R="flat_palm")
 M.key(128, hand_L=LH((0.20, -0.30, 0.40), (0, -1, 0), (0, -0.3, 1)), hand_R=LH((-0.20, -0.30, 0.40), (0, -1, 0), (0, -0.3, 1)))
-M.key(134, pos=Vector((0.03, MY + 0.10, 0.93)), rot=Rf(MF, lean=14), spine=(12, 0, 0), hand_L=back_contact(-1, 0.02), hand_R=back_contact(1, 0.02),
+M.key(128, pos=Vector((0.03, MY + 0.10, 0.93)), rot=Rf(MF, lean=14), spine=(12, 0, 0), hand_L=back_contact(-1, 0.02), hand_R=back_contact(1, 0.02),
       foot_L=WH((-0.12, MY + 0.12, 0.074), (0, 0, 1), (0, 1, 0)))
-M.key(139, pos=Vector((0.03, MY + 0.12, 0.925)), rot=Rf(MF, lean=16), spine=(14, 0, 0), hand_L=back_contact(-1, 0.0), hand_R=back_contact(1, 0.0))
-M.key(143, hand_L=LH((0.22, -0.24, 0.36), (0, -1, 0), (0, 0, 1)), hand_R=LH((-0.22, -0.24, 0.36), (0, -1, 0), (0, 0, 1)), grip_L="open_alarm", grip_R="open_alarm")
-M.key(149, pos=Vector((0.40, MY - 0.25, 0.935)), rot=Rf((-0.3, 1, 0), lean=0), spine=(-2, 0, 0), head=(-8, -10, 0),
+M.key(132, pos=Vector((0.03, MY + 0.12, 0.925)), rot=Rf(MF, lean=16), spine=(14, 0, 0), hand_L=back_contact(-1, 0.0), hand_R=back_contact(1, 0.0))
+M.key(137, hand_L=LH((0.22, -0.24, 0.36), (0, -1, 0), (0, 0, 1)), hand_R=LH((-0.22, -0.24, 0.36), (0, -1, 0), (0, 0, 1)), grip_L="open_alarm", grip_R="open_alarm")
+M.key(145, pos=Vector((0.45, MY - 0.30, 0.935)), rot=Rf((-0.3, 1, 0), lean=0), spine=(-2, 0, 0), head=(-8, -10, 0),
       foot_L=WH((0.28, MY - 0.18, 0.074), (0, 0, 1), (0, 1, 0)), foot_R=WH((0.55, MY - 0.36, 0.074), (0, 0, 1), (-0.3, 1, 0)))
 M.key(160, pos=Vector((0.55, MY - 0.40, 0.94)), rot=Rf((-0.4, 1, 0), lean=-4), spine=(-4, 0, 0), head=(-12, -15, 0),
       foot_L=WH((0.45, MY - 0.32, 0.074), (0, 0, 1), (-0.4, 1, 0)), foot_R=WH((0.68, MY - 0.50, 0.074), (0, 0, 1), (-0.4, 1, 0)),
