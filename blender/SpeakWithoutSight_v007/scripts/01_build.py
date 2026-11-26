@@ -25,7 +25,7 @@ sc.render.resolution_x, sc.render.resolution_y = 1080, 1920
 # ================================================================== the two characters (ONE model each, all film)
 G, GB = human("Girl", 0.0, 0.17, {"asian": 0.05, "caucasian": 0.85, "african": 0.10}, "ponytail01/ponytail01.mhclo",
               "young_caucasian_female/young_caucasian_female.mhmat", "eyebrow010/eyebrow010.mhclo",
-              height=0.5, weight=0.55, muscle=0.4, clothes=["female_elegantsuit01/female_elegantsuit01.mhclo", "shoes02/shoes02.mhclo"])
+              height=0.5, weight=0.55, muscle=0.4, clothes=["male_casualsuit03/male_casualsuit03.mhclo", "shoes02/shoes02.mhclo"])
 T, TB = human("Teacher", 0.0, 0.42, {"asian": 0.05, "caucasian": 0.35, "african": 0.60}, "afro01/afro01.mhclo",
               "young_african_female/young_african_female.mhmat", "eyebrow010/eyebrow010.mhclo",
               height=0.5, weight=0.55, muscle=0.45, clothes=["female_elegantsuit01/female_elegantsuit01.mhclo", "shoes01/shoes01.mhclo"])
@@ -65,7 +65,7 @@ def recolor(m, target, level=0.75):
 def recolor_garment(rig, top_mult, skirt_mult, name):
     """the MPFB elegantsuit has one material for blouse + skirt: split it by the UV island (skirt = lower body verts)
     into two materials and tint each (saturated period colours)."""
-    cl = [c for c in rig.children if c.type == 'MESH' and "elegantsuit" in c.name][0]
+    cl = [c for c in rig.children if c.type == 'MESH' and "suit" in c.name][0]
     cl.name = name
     m0 = cl.data.materials[0]
     mt = m0.copy(); mt.name = name + "_top"; ms = m0.copy(); ms.name = name + "_skirt"
