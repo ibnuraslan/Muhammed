@@ -132,9 +132,9 @@ def jaw_talk(rig, f0, f1, amp=6.0, seed=1):
         pb.rotation_quaternion = Quaternion(ax, R_(a_ * 0.25 * sg)); pb.keyframe_insert("rotation_quaternion", frame=f, group="jaw")
         f += rr.randint(4, 8)
     pb.rotation_quaternion = Quaternion(); pb.keyframe_insert("rotation_quaternion", frame=f1 + 4, group="jaw")
-SMILE = {"risorius03.L": ((1, 0, 0.6), 14), "risorius03.R": ((-1, 0, 0.6), 14), "levator05.L": ((0.3, 0, 1), 10), "levator05.R": ((-0.3, 0, 1), 10),
-         "oris04.L": ((1, 0, 0.5), 10), "oris04.R": ((-1, 0, 0.5), 10)}
-SMIRK = {"risorius03.L": ((1, 0, 0.7), 16), "levator05.L": ((0.3, 0, 1), 12), "oris04.L": ((1, 0, 0.5), 10)}
+SMILE = {"risorius03.L": ((1, 0, 0.6), 22), "risorius03.R": ((-1, 0, 0.6), 22), "levator05.L": ((0.3, 0, 1), 14), "levator05.R": ((-0.3, 0, 1), 14),
+         "oris04.L": ((1, 0, 0.5), 14), "oris04.R": ((-1, 0, 0.5), 14)}
+SMIRK = {"risorius03.L": ((1, 0, 0.7), 24), "levator05.L": ((0.3, 0, 1), 16), "oris04.L": ((1, 0, 0.5), 14), "risorius03.R": ((-1, 0, 0.5), 8)}
 FROWN = {"risorius03.L": ((1, 0, -0.5), 10), "risorius03.R": ((-1, 0, -0.5), 10), "oris04.L": ((1, 0, -0.5), 7), "oris04.R": ((-1, 0, -0.5), 7)}
 
 # ------------------------------------------------------------------ body helpers
