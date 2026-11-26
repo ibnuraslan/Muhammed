@@ -293,6 +293,8 @@ for f in list(range(539, 1010, 2)):
     key_spine(CM, f, flex=0, twist=0, side=0)
     key_head(MR, CM, f, yaw=0, pitch=6, roll=0)
 eyes_closed(MR, 560, 1010, ramp=8)
+for o_ in [MR] + list(MR.children):
+    vis(o_, 1, True); vis(o_, 541, False); vis(o_, 647, True)
 for f, jw, br in ((560, 0.1, -0.5), (650, 0.25, -0.7), (760, 0.15, -0.5), (900, 0.05, -0.2), (1010, 0.05, 0.0)):
     key_face(MR, f, smile=-0.2, jaw=jw, brow=br)
 
@@ -310,6 +312,19 @@ for f in range(1010, 1057, 1):
     pos_, Rm_ = roll_out(f)
     key_rootM(CM, HM, f, pos_, Rm_); key_limbs_rel(CM, HM, f, pos_, Rm_, arms="thighs", rig=MR)
     key_head(MR, CM, f, yaw=0, pitch=4, roll=0)
+def ground_at(x):
+    if abs(abs(x) - RX) < 0.09: return RT
+    return SLEEPER_TOP if abs(x) < 1.3 else 0.0
+def settle_frames(frames, posR):
+    for f in frames:
+        pos_, Rm_ = posR(f)
+        key_rootM(CM, HM, f, pos_, Rm_); key_limbs_rel(CM, HM, f, pos_, Rm_, arms="thighs", rig=MR)
+        fs(f); pts = [p for p in body_pts([MBD, MCL])]
+        d = max(ground_at(p.x) + 0.004 - p.z for p in pts)        # deepest penetration below the local surface
+        pos_ = pos_ + V(0, 0, d)
+        key_rootM(CM, HM, f, pos_, Rm_); key_limbs_rel(CM, HM, f, pos_, Rm_, arms="thighs", rig=MR)
+settle_frames(range(1010, 1057), roll_out)
+settle_frames(range(626, 842, 2), pose2)
 PS = roll_out(1056)[0]                    # supine on the ballast, head +Y, feet -Y
 log("rolled out to", PS)
 # sit up: pelvis pivots, legs stay on the ground (feet IK on the ballast), hands plant behind the hips
@@ -352,7 +367,7 @@ def stand_man(f, pos, yaw=0.0, flex=3.0, side=0.0):
     key_rootM(CM, HM, f, pos, Rz(yaw) @ Rx(flex) @ Ry(side))
 def hang_rel(f, sw=0.0):
     for s, sx in (("L", 1), ("R", -1)):
-        hand_rel(CM, HM, MR, f, s, V(sx * (0.27 + 0.02 * sw), -0.05 + 0.05 * sx * sw, RH_M.z - 0.10), V(sx * 0.1, -0.2, -1.0), V(-sx, 0, 0),
+        hand_rel(CM, HM, MR, f, s, V(sx * (0.28 + 0.05 * sw), -0.06 + 0.14 * sx * sw, RH_M.z - 0.07 + 0.03 * sw), V(sx * 0.2, -0.3 * sx * sw, -1.0), V(-sx, 0, 0),
                  CM.BN["upperarm01." + s].head_local + V(sx * 0.35, 0.35, -0.30))
         apply_pose(MR, s, "relaxed", f)
 for f in range(1100, 1501, 6):
@@ -370,7 +385,7 @@ for f, sm, br, jw, sq in ((1048, -0.1, 0.2, 0.05, 0.0), (1080, -0.2, 0.6, 0.15, 
 # ================================================================== MAN: 5) walks away along the train (f1500-1735), looks at his palm, grins
 def path_e(f):
     u = (f - 1500) / (END - 1500)
-    return V(STAND.x - 0.55 * smoothstep(u * 1.6) + 0.06 * math.sin(u * 9.0), STAND.y - 2.6 * u, 0)
+    return V(STAND.x - 0.55 * smoothstep(u * 1.6) + 0.06 * math.sin(u * 9.0), STAND.y - 3.6 * u, 0)
 def yaw_e(f):
     d = path_e(min(f + 3, END)) - path_e(max(f - 3, 1500))
     return math.degrees(math.atan2(d.x, -d.y)) + 4 * math.sin(f / 13.0)
@@ -386,7 +401,7 @@ for f in range(1500, END + 1, 4):
     # right hand: hangs, then rises palm up in front of the chest (he looks at the cuts), then lowers
     u = smoothstep((f - PALM_UP0) / 24.0) * (1 - smoothstep((f - (PALM_UP1 - 18)) / 18.0))
     hang = V(-0.27, -0.04 - 0.05 * sw, RH_M.z - 0.10)
-    look = V(-0.10, -0.36, RH_M.z + 0.30)
+    look = V(-0.12, -0.46, RH_M.z + 0.30)
     W = hang.lerp(look, u)
     d = V(-0.1, -0.2, -1.0).lerp(V(0.35, -0.75, 0.1), u)
     nn = V(1, 0, 0).lerp(V(0.10, 0.35, 1.0), u)                 # the palm turns up toward his face (and the camera above)
@@ -487,7 +502,7 @@ for f in range(1180, 1520, 10):
     kk("swayB", f, max(0, -s_) * loose * (1 - push))
     kk("flow", f, push)
 AR = O["EX_Arrow"]
-for f, x in ((1180, 3.4), (1360, 3.4), (1392, 0.68), (1424, -0.12), (1460, -0.02), (1500, 3.4)):
+for f, x in ((1180, 3.4), (1360, 3.4), (1390, 0.85), (1424, 0.06), (1460, 0.16), (1500, 3.4)):
     AR.location = EX + V(x, 0, 0); AR.keyframe_insert("location", frame=f)
 
 # ================================================================== camera: ONE camera, PCHIP keys, level horizon
@@ -508,10 +523,11 @@ for f in range(1, 96, 8):
 # 2) the bottle drops: the camera tilts down and follows it to the ballast (he falls behind the camera)
 key(104, BOT_REST + V(0.55, -0.85, 0.85), BOT_REST + V(0, 0.0, 0.25), 32)
 key(118, BOT_REST + V(0.42, -0.55, 0.42), BOT_REST + V(-0.02, 0.05, 0.02), 36)
-key(128, BOT_REST + V(0.32, -0.45, 0.32), BOT_REST + V(-0.05, 0.02, 0.02), 38)
+key(126, BOT_REST + V(0.32, -0.45, 0.32), BOT_REST + V(-0.05, 0.02, 0.02), 38)
+key(140, BOT_REST + V(0.25, -0.70, 0.48), BOT_REST + V(-0.35, -0.45, 0.06), 32)
 # 3) glide low along the ground to his face on the rail (head at x~0.85, his left side faces +Y)
 H1 = face(MR, 200)
-key(150, V(2.05, 1.10, 0.60), H1 + V(0.3, 0.0, -0.05), 28)
+key(156, V(2.05, 1.10, 0.62), H1 + V(0.3, 0.0, -0.05), 28)
 key(199, H1 + V(0.45, 0.95, 0.20), H1 + V(-0.05, -0.25, -0.04), 30)
 key(270, H1 + V(0.22, 0.88, 0.28), H1 + V(-0.08, -0.45, -0.04), 32)
 # 4) the train comes down the rail behind his head (target pulls along the rail toward -Y; his face stays in frame)
@@ -524,12 +540,13 @@ key(496, V(-2.4, -1.6, 1.35), V(1.4, 0.0, 0.25), 36)
 key(516, V(-3.1, -2.9, 1.10), V(1.5, 0.0, 0.25), 40)
 key(534, V(-3.4, -3.1, 1.10), V(1.4, 0.0, 0.35), 40)
 # 6) the locomotive passes (hides the hit), the camera backs off, then drops low to look under the wagon
-key(556, V(-4.6, -2.8, 1.90), V(0.0, 1.5, 0.8), 20)
-key(590, V(-4.7, -0.8, 2.00), V(0.0, 2.5, 1.5), 20)
-key(624, V(-4.4, 0.6, 2.10), V(0.0, 2.0, 1.9), 22)
-key(648, V(-3.3, 1.0, 1.00), V(0.0, y_drag(648) + 0.2, 0.3), 24)
+key(556, V(-4.6, -2.8, 2.40), V(0.0, 1.5, 1.2), 20)
+key(590, V(-4.7, -0.8, 3.20), V(0.0, 2.5, 1.9), 20)
+key(626, V(-4.4, 0.6, 3.30), V(0.0, 2.0, 1.6), 22)
+key(648, V(-4.0, 1.0, 2.80), V(0.0, y_drag(648) + 0.6, 0.9), 24)
+key(662, V(-3.0, y_drag(662) + 0.5, 1.20), V(0.0, y_drag(662) + 0.2, 0.3), 23)
 # 7) dragged: the camera runs with him, low, looking under the wagon (bogies outside the frame)
-for f in range(660, 771, 10):
+for f in range(676, 771, 10):
     y = y_drag(f); key(f, V(-2.2, y + 0.45, 0.42), V(0.0, y + 0.10, 0.15), 22)
 # 8) braking: wider so the sparking rear bogie shows at the frame edge, then the stop
 for f in range(780, 861, 10):
