@@ -277,7 +277,9 @@ def hollow_glass(name, r, h, loc, rot=(0, 0, 0)):
     so = o.modifiers.new("wall", 'SOLIDIFY'); so.thickness = 0.0012; so.offset = -1.0
     bpy.ops.object.shade_smooth(); return o
 def gpart(o):
-    Mw = o.matrix_world.copy(); o.parent = GUN; o.matrix_parent_inverse = Matrix(); o.matrix_basis = Mw; return o
+    bpy.context.view_layer.update()      # empties made with .location need an update before matrix_world is valid (valve/trigger pivots)
+    Mw = o.matrix_world.copy(); o.parent = GUN; o.matrix_parent_inverse = Matrix(); o.matrix_basis = Mw
+    bpy.context.view_layer.update(); return o
 RY = (math.pi / 2, 0, 0)      # cylinder axis along +Y
 woodgrip = wood("M_GripWood", (0.30, 0.10, 0.03), (0.52, 0.22, 0.07), scale=14.0)
 red = mat("M_ValveRed", (0.60, 0.0, 0.0), rough=0.3)

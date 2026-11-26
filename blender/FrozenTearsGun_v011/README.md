@@ -1,8 +1,30 @@
 # FrozenTearsGun_v011: from-scratch rebuild, NOT READY (ON HOLD)
 
-**Status: ON HOLD.** The round-3 preview (check 4, director-approved round) FAILED a fresh harsh review. No .blend is pushed (the rebuild brief allows a .blend push only on a review PASS).
-- `review/preview.mp4` is the check-4 preview: 270x480, every 5th frame, with the VO.
-- It was rendered from the exact packed build: `FrozenTearsGun_v011_60fps.blend`, 77 MB, kept locally.
+**Status: ON HOLD.** The round-4 preview (check 5, director-approved) FAILED a fresh harsh review, so no .blend is pushed.
+- `review/preview.mp4` is the check-5 preview: 270x480, every 5th frame, with the VO.
+- It was rendered from the exact packed build (77 MB, kept locally).
+- The render check on that build PASSED: it opens cleanly, everything is packed, the camera and VO are present, and frames 1, 828 and 1655 rendered at full resolution in 60-74 s each with 16 samples. Copies are in `review/render_check_*.jpg`.
+
+## Check 5 (round 4): what was fixed
+- **Valve:** the valve and trigger pivots had been created before their transforms were valid, so they sat at the gun origin. Now she visibly grips the red rim and turns it (291-346), with her face in frame.
+- **Trigger:** a close-up of her finger on the trigger at 664-700 before the first shot, and a second one at 1576-1585.
+- **Bench shot:** it now drifts and pushes in (1345-1474). The logo is fully readable at 1351-1471, about 2.0 s.
+- **Office:** a tighter moving shot, from the lecturing mentor across the desk to her face (880-1000).
+- **Automated checks:** 0 lens blockers, 0 pop-ins, and the fastest camera turn is 58 degrees per frame.
+
+## Check 5 faults (fresh harsh review, film frames)
+1. **Fast transitions:** each produces 1-2 bare-wall or no-subject tiles and reads as a jump cut or blur in a one-camera film. They are at 656-661, 701-726, 851-861, 946-951, 1301-1306, 1476-1486 and 1556-1596.
+2. **Second trigger close-up:** 1576-1581 is only about 0.17 s, and the finger pull is not readable.
+3. **Hand at the edge:** at 361-366 her releasing hand shows as fingers at the frame edge with no arm.
+4. **Risks:**
+   - 371-446 is a nearly static canister and chamber shot, about 1.3 s.
+   - The crying close-up at 1001-1191 is long.
+   - The sweater reads fitted across the chest at 1001-1031.
+
+## Recommended fix (not started)
+- Replace every whip with a slower move of at least 30 frames that keeps a person in frame: an arc or a pull-back through the room, never a pan across walls.
+- Give the second trigger close-up at least 30 frames with a visible finger pull.
+- Keep her left hand in frame until it is back on the bench.
 
 ## Check 4 (round 3): what was fixed
 - **Grade:** deep and warm. The skin tint now reaches inside the MPFB skin node group, the light levels are 0.45x and the valve is a true red.
