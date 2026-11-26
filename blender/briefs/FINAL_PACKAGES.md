@@ -107,3 +107,4 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | 06 | PrisonKeyCake | claude/rebuild06-prison-key-cake: blender/PrisonKeyCake_v011/PrisonKeyCake_v011_60fps.blend (client-approved, Render check PASS) | 1–1836 |
 | 10 | BellyFat | claude/rebuild10-belly-fat: blender/BellyFat_v018/BellyFat_v018_60fps.blend (client-approved "one of the perfect videos", Render check PASS) | 1–1273 |
 | 08 | BeethovenDeaf | claude/rebuild08-beethoven-deaf: blender/BeethovenDeaf_v011/BeethovenDeaf_v011_60fps.blend (client-approved, Render check PASS) | 1–1435 |
+| 07 | ShoeBomber | claude/rebuild07-shoe-bomber: blender/ShoeBomber_v011/ShoeBomber_v011_60fps.blend (client-approved, Render check PASS) | 1–1469 |
