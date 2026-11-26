@@ -1,6 +1,6 @@
 # GameBoxBullet_v012: from-scratch rebuild (batch 1 film 15), ON HOLD, NOT READY
 
-**Latest: check 4 (round 3, director-approved) FAILED.** See `review/CHECK4.md`. `review/preview.mp4` is now the round-3 preview. The .blend is still not pushed.
+**Latest: check 5 (round 4, director-approved) FAILED.** See `review/CHECK5.md` (and CHECK4.md for round 3). `review/preview.mp4` is now the round-4 preview. The .blend is still not pushed.
 
 
 **Status: ON HOLD.** Self-QC check 3 failed (fresh harsh reviewer and my own watch). Both fix rounds allowed by the rebuild brief are used.
