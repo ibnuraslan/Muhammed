@@ -142,9 +142,9 @@ def sand_mat(name="M_Sand", tintc=(1.25, 0.62, 0.30), scale=0.12):
 def concrete_mat():
     m = bpy.data.materials.new("M_Concrete"); m.use_nodes = True; nt = m.node_tree; L = nt.links
     p = nt.nodes["Principled BSDF"]; p.inputs["Roughness"].default_value = 0.9
-    tc = node(nt, "ShaderNodeTexCoord"); t = node(nt, "ShaderNodeTexImage"); t.image = tex(phmap("concrete_floor_02", "diff"))
+    tc = node(nt, "ShaderNodeNewGeometry"); t = node(nt, "ShaderNodeTexImage"); t.image = tex(phmap("concrete_floor_02", "diff"))
     t.projection = 'BOX'; mp = node(nt, "ShaderNodeMapping"); mp.inputs["Scale"].default_value = (0.6, 0.6, 0.6)
-    L.new(tc.outputs["Object"], mp.inputs["Vector"]); L.new(mp.outputs[0], t.inputs["Vector"])
+    L.new(tc.outputs["Position"], mp.inputs["Vector"]); L.new(mp.outputs[0], t.inputs["Vector"])
     mx = node(nt, "ShaderNodeMix", data_type='RGBA', blend_type='MULTIPLY'); mx.inputs["Factor"].default_value = 1.0
     L.new(t.outputs["Color"], mx.inputs["A"]); mx.inputs["B"].default_value = (0.95, 0.98, 1.1, 1)
     L.new(mx.outputs["Result"], p.inputs["Base Color"])
@@ -386,9 +386,12 @@ CABLE.location = (NBX, 0.0, 4.37)
 SHEAVE_DROP = Vector((NBX, SHV_C.y - SHV_R, SHV_C.z))    # where the hanging cable leaves the sheave
 
 # crate with the DA KRAS FILMS logo (instrument crate beside the collar); logo on its front face (-Y)
-CRATE = box("Logo_Crate", (1.1, 0.75, 0.7), (NBX - 2.75, 1.65, 0.35), M_WOOD, bevel=0.02); CRATE.parent = JOLT
-for dz in (-0.25, 0.25):
-    box("Crate_Slat", (1.14, 0.79, 0.07), (NBX - 2.75, 1.65, 0.35 + dz), mat("M_CrateSlat", (0.36, 0.19, 0.07), rough=0.7), bevel=0.01).parent = JOLT
+CRATES = [(NBX + 1.3, 0.62), (GPX - 0.95, 2.9)]
+M_SLAT = mat("M_CrateSlat", (0.36, 0.19, 0.07), rough=0.7)
+for cx, cy in CRATES:
+    box("Logo_Crate", (1.0, 0.6, 0.62), (cx, cy, 0.31), M_WOOD, bevel=0.02).parent = JOLT
+    for dz in (-0.24, 0.24):
+        box("Crate_Slat", (1.04, 0.64, 0.06), (cx, cy, 0.31 + dz), M_SLAT, bevel=0.01).parent = JOLT
 LOGO_IMG = bpy.data.images.load(os.path.join(PKG, "..", "assets", "brand", "DaKrasFilms_logo_white.png"))
 def logo_plane(name, loc, rot, width, img, bg=(0.04, 0.04, 0.05)):
     ar = img.size[1] / img.size[0]
@@ -400,8 +403,8 @@ def logo_plane(name, loc, rot, width, img, bg=(0.04, 0.04, 0.05)):
     mx.inputs["A"].default_value = (*bg, 1); L.new(t.outputs["Color"], mx.inputs["B"])
     L.new(mx.outputs["Result"], p.inputs["Base Color"]); p.inputs["Roughness"].default_value = 0.6
     o.data.materials.append(m); to_col(o, C_SET); return o
-LOGO1 = logo_plane("Logo_CratePrint", (NBX - 2.75, 1.65 - 0.378, 0.35), (math.pi / 2, 0, 0), 0.92, LOGO_IMG, bg=(0.05, 0.04, 0.03))
-LOGO1.parent = JOLT
+for cx, cy in CRATES:
+    logo_plane("Logo_CratePrint", (cx, cy - 0.322, 0.31), (math.pi / 2, 0, 0), 0.9, LOGO_IMG, bg=(0.05, 0.04, 0.03)).parent = JOLT
 for o in bpy.data.objects:
     if o.name.startswith(("Crate_", "Logo_Crate", "HF_")): to_col(o, C_SET)
 
@@ -437,7 +440,7 @@ def flame_mat(name, h, smoke=False, strength=7.0):
     fc = node(nt, "ShaderNodeMath", operation='SUBTRACT'); fc.inputs[0].default_value = 1.0; L.new(lw.outputs["Facing"], fc.inputs[1])
     fp = node(nt, "ShaderNodeMath", operation='POWER'); L.new(fc.outputs[0], fp.inputs[0]); fp.inputs[1].default_value = 1.6
     th = node(nt, "ShaderNodeMapRange"); th.inputs["From Min"].default_value = 0.0; th.inputs["From Max"].default_value = 1.0
-    th.inputs["To Min"].default_value = 0.22 if not smoke else 0.40; th.inputs["To Max"].default_value = 0.62 if not smoke else 0.62
+    th.inputs["To Min"].default_value = 0.30 if not smoke else 0.40; th.inputs["To Max"].default_value = 0.62 if not smoke else 0.62
     L.new(sp.outputs["Z"], th.inputs["Value"])
     d1 = node(nt, "ShaderNodeMath", operation='SUBTRACT'); L.new(n1.outputs["Fac"], d1.inputs[0]); L.new(th.outputs["Result"], d1.inputs[1])
     d2 = node(nt, "ShaderNodeMath", operation='MULTIPLY'); L.new(d1.outputs[0], d2.inputs[0]); d2.inputs[1].default_value = 5.0
@@ -457,7 +460,7 @@ def flame_mat(name, h, smoke=False, strength=7.0):
         hc = node(nt, "ShaderNodeMath", operation='MULTIPLY_ADD'); L.new(n1.outputs["Fac"], hc.inputs[0]); hc.inputs[1].default_value = -0.5
         L.new(sp.outputs["Z"], hc.inputs[2])
         cr = node(nt, "ShaderNodeValToRGB"); el = cr.color_ramp.elements
-        el[0].position = 0.0; el[0].color = (1.0, 0.62, 0.16, 1)
+        el[0].position = 0.0; el[0].color = (1.0, 0.55, 0.10, 1)
         e2 = el.new(0.15); e2.color = (1.0, 0.32, 0.01, 1)
         e3 = el.new(0.40); e3.color = (0.85, 0.07, 0.005, 1)
         el[-1].position = 0.75; el[-1].color = (0.35, 0.04, 0.01, 1)
@@ -484,7 +487,7 @@ def fire(name, loc, scale=1.0, n=5, height=24.0, smoke=True):
         o.rotation_euler.z = random.uniform(0, 6.28)
         d = o.modifiers.new("turb", 'DISPLACE'); tx = bpy.data.textures.new(name + "_turb%d" % i, 'CLOUDS'); tx.noise_scale = 1.4 + 0.3 * i
         d.texture = tx; d.texture_coords = 'OBJECT'; d.texture_coords_object = FIRE_FLOW; d.strength = 0.9 + 0.3 * t; d.direction = 'NORMAL'
-        o.data.materials.append(flame_mat("M_" + name + "_%d" % i, height, strength=3.0 - 1.2 * t))
+        o.data.materials.append(flame_mat("M_" + name + "_%d" % i, height, strength=1.8 - 0.7 * t))
         o.visible_shadow = False; o.visible_diffuse = True
         parts.append(o)
     if smoke:
@@ -644,7 +647,7 @@ bpy.ops.mesh.primitive_circle_add(vertices=96, radius=1.0, fill_type='NOTHING', 
 RING = bpy.context.active_object; RING.name = "Pressure_Ring"
 RING.data.materials.append(mat("M_Ring", (1, 1, 1), emit=((1.0, 0.92, 0.75), 4.0)))
 sol = RING.modifiers.new("w", 'SKIN') if False else None
-bpy.ops.object.convert(target='CURVE'); RING = bpy.context.active_object; RING.data.bevel_depth = 0.12; RING.data.bevel_resolution = 2
+bpy.ops.object.convert(target='CURVE'); RING = bpy.context.active_object; RING.data.bevel_depth = 0.012; RING.data.bevel_resolution = 2
 RING.scale = (0.001,) * 3; to_col(RING, C_FX)
 # dust ring at the surface over the blast (a torus of dust shooting outward)
 bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=0.45, location=(NBX, 3.0, 0.35), major_segments=64, minor_segments=16)
