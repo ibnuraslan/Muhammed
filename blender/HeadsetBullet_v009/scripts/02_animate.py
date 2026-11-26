@@ -45,7 +45,7 @@ for s in "LR":
     # elbow: flexion brings the hand forward (-Y) from the A-pose; rest is bent ~46 deg, so allow -40 (straight) .. 140
     sg = _joint_sign("lowerarm01." + s, "wrist." + s, (0, -1, 0.3))
     lo = BR.pose.bones["lowerarm01." + s]; lo.use_ik_limit_x = True
-    lo.ik_min_x, lo.ik_max_x = (math.radians(-40), math.radians(140)) if sg > 0 else (math.radians(-140), math.radians(40))
+    lo.ik_min_x, lo.ik_max_x = (math.radians(-40), math.radians(150)) if sg > 0 else (math.radians(-150), math.radians(40))
     lo.lock_ik_z = True
     # knee: flexion swings the foot backward (+Y); 0 .. 150, never hyper-extended
     sg = _joint_sign("lowerleg01." + s, "foot." + s, (0, 1, 0))
@@ -130,7 +130,7 @@ for c in HS.constraints:
     if c.type == 'CHILD_OF': c.inverse_matrix = (BR.matrix_world @ BR.data.bones["head"].matrix_local).inverted() @ Matrix.Translation(Vector(HS["rest_loc"]))
 
 # ================================================================== hands: left on the keyboard (WASD), right on the mouse; typing
-DESK_Z = O["HM_DeskTop"].location.z + 0.015
+DESK_Z = 0.73                       # desk top (01_build)
 def surf_top(obj):
     upd(); dg = bpy.context.evaluated_depsgraph_get(); e = obj.evaluated_get(dg); me = e.to_mesh()
     z = max((obj.matrix_world @ v.co).z for v in me.vertices); e.to_mesh_clear(); return z
@@ -210,7 +210,8 @@ for f in range(SWAP2, END + 1):
 set_interp(BUL, 'LINEAR'); quat_continuity(BUL)
 # trail: long outside, short in slow motion, none in the cup/macro, short again toward the wall
 for f, L_ in ((1, 0.40), (F_GLASS, 0.40), (124, 0.06), (400, 0.04), (515, 0.015), (522, 0.001), (SWAP2, 0.001), (758, 0.08), (F_WALL - 4, 0.08), (F_WALL, 0.001)):
-    TRAIL.scale = (1, 1, L_); TRAIL.keyframe_insert("scale", frame=f)
+    w_ = 2.5 if f <= F_GLASS else 1.0
+    TRAIL.scale = (w_, w_, L_); TRAIL.keyframe_insert("scale", frame=f)
 vis(TRAIL, 1, False); vis(TRAIL, F_BUL, True); vis(TRAIL, 523, False); vis(TRAIL, SWAP2 + 2, True); vis(TRAIL, F_WALL, False)
 vis(BUL, 1, False); vis(BUL, F_BUL, True)
 
@@ -333,9 +334,11 @@ F_GRIP, F_OFF, F_DOWN = 935, 985, 1020
 def hand_on_cup(side, f, lift=0.0):
     c, n, upv = cup_face(side, f)
     sx = 1 if side == "L" else -1
-    fdir = (upv * 0.85 + Vector((0, 0.35, 0))).normalized()
+    u = smoothstep((f - F_OFF) / (F_DOWN - F_OFF))
+    # on the head: fingers down-forward over the cup face (wrist up-back, clear of the band); held in front: fingers down-back
+    fdir = (-upv * 0.6 + Vector((0, -0.8, 0))).normalized().lerp((-upv * 0.6 + Vector((0, 0.8, 0))).normalized(), u).normalized()
     place_hand(BR, side, f, c + n * lift, -n, fdir, skin=0.014)
-    key_pole(side, f, Wh(BR, "upperarm01." + side) + Vector((sx * 0.45, 0.10, -0.35)))
+    key_pole(side, f, Wh(BR, "upperarm01." + side) + Vector((sx * 0.50, 0.15, -0.15)).lerp(Vector((sx * 0.35, 0.25, -0.45)), u))
     apply_pose(BR, side, "cup_hold", f)
 for f in (905,):
     for side in "LR": hand_on_cup(side, f, lift=0.07)
@@ -346,8 +349,9 @@ owner_switch(HS, F_GRIP + 1, None, log=log)
 def hs_world(f):
     """the headset path after the grip (world matrix)"""
     u1 = smoothstep((f - F_GRIP) / (F_OFF - F_GRIP)); u2 = smoothstep((f - F_OFF) / (F_DOWN - F_OFF))
-    up_ = 0.13 * u1 - 0.05 * u2; fwd = -0.05 * u1 - 0.28 * u2; down = -0.32 * u2
-    tilt = Matrix.Rotation(math.radians(-25 * u2), 4, 'X')          # the band tips toward him as it comes down
+    ua = smoothstep(min(1.0, u2 * 1.6)); ub = smoothstep(max(0.0, u2 * 1.6 - 0.6))
+    up_ = 0.15 * u1; fwd = -0.30 * ua; down = -0.42 * ub            # up off the head, forward, then down to chest height
+    tilt = Matrix.Rotation(math.radians(-30 * u2), 4, 'Z')          # turns so the damaged left cup faces out (front-left)
     T = Matrix.Translation(M0.translation + Vector((0, fwd, up_ + down)))
     return T @ tilt @ Matrix.Translation(-M0.translation) @ M0
 for f in range(F_GRIP + 1, F_DOWN + 1, 2):
@@ -356,7 +360,7 @@ for f in range(F_GRIP + 1, F_DOWN + 1, 2):
 fs(F_DOWN); MD = HS.matrix_world.copy(); cD = MD.translation.copy()
 def hs_hold(f):
     u = smoothstep((f - 1040) / 60.0)
-    R = Matrix.Rotation(math.radians(-38 * u), 4, 'Z') @ Matrix.Rotation(math.radians(3 * math.sin(f * 0.05)), 4, 'X')
+    R = Matrix.Rotation(math.radians(-8 * u), 4, 'Z') @ Matrix.Rotation(math.radians(3 * math.sin(f * 0.05)), 4, 'X')
     return Matrix.Translation(cD + Vector((0, 0, 0.006 * math.sin(f * 0.04)))) @ R @ Matrix.Translation(-cD) @ MD
 for f in range(F_DOWN + 2, END + 1, 4):
     key_world_while_owned(HS, f, hs_hold(f))
@@ -383,7 +387,7 @@ cam_d.sensor_fit = 'AUTO'; cam_d.sensor_width = 36; cam_d.dof.use_dof = False; c
 CAM.rotation_mode = 'QUATERNION'
 def bpos(f): fs(f); return BUL.matrix_world.translation.copy()
 def head_c(f): fs(f); return (Wh(BR, "eye.L") + Wh(BR, "eye.R")) / 2
-def cupc(f): fs(f); return CK.matrix_world.translation.copy()
+def cupc(f): fs(f); return (SHL.matrix_world @ CK.matrix_parent_inverse @ CK.matrix_basis).translation.copy()   # valid while CK is hidden
 def P(*v): return Vector(v)
 HC = head_c(300); log('seated head centre', tuple(round(x, 3) for x in HC))
 SEG_A = [
@@ -392,17 +396,17 @@ SEG_A = [
     (70,  lambda: bpos(70) - D * 0.60 + UP * 0.14 + RGT * 0.26, lambda: bpos(70) + D * 1.2 + UP * 0.08, 26),
     (100, lambda: bpos(100) - D * 0.50 + UP * 0.12 + RGT * 0.38, lambda: bpos(100) + D * 0.7, 26),
     (116, lambda: P(2.40, 0.33, 1.42), lambda: GLASS + D * 0.30, 24),
-    (130, lambda: P(1.25, 0.30, 1.38), lambda: bpos(130).lerp(head_c(130), 0.5), 26),
-    (145, lambda: P(1.00, 0.24, 1.34), lambda: bpos(145).lerp(head_c(145), 0.6), 28),
-    (185, lambda: bpos(185) - D * 0.34 + RGT * 0.17 + UP * 0.06, lambda: bpos(185).lerp(head_c(185), 0.45), 30),
-    (228, lambda: bpos(228) - D * 0.28 + RGT * 0.20 + UP * 0.07, lambda: bpos(228).lerp(head_c(228), 0.55), 30),
+    (130, lambda: P(1.46, 0.24, 1.36), lambda: bpos(130).lerp(head_c(130), 0.5), 26),
+    (150, lambda: bpos(150) - D * 0.20 + RGT * 0.12 + UP * 0.05, lambda: bpos(150).lerp(head_c(150), 0.4), 28),
+    (185, lambda: bpos(185) - D * 0.12 + RGT * 0.07 + UP * 0.03, lambda: bpos(185).lerp(head_c(185), 0.30), 30),
+    (228, lambda: bpos(228) - D * 0.10 + RGT * 0.08 + UP * 0.03, lambda: bpos(228).lerp(head_c(228), 0.35), 30),
     (275, lambda: HC + Vector((0.75, -0.25, 0.10)), lambda: HC.lerp(Vector((0.10, -0.45, 0.78)), 0.5), 28),
     (318, lambda: P(0.48, -0.72, HC.z + 0.02), lambda: P(0.05, -0.36, HC.z - 0.15), 24),
     (352, lambda: P(0.14, -0.72, HC.z + 0.06), lambda: head_c(352) + Vector((0, 0, -0.04)), 28),
     (387, lambda: P(0.32, -0.60, HC.z + 0.08), lambda: head_c(387).lerp(cupc(387), 0.5), 32),
-    (430, lambda: cupc(430) + Vector((0.22, -0.32, 0.07)), lambda: cupc(430).lerp(head_c(430), 0.35), 32),
-    (480, lambda: cupc(480) + Vector((0.17, -0.24, 0.05)), lambda: cupc(480).lerp(head_c(480), 0.25), 36),
-    (519, lambda: cupc(519) + Vector((0.16, -0.17, 0.04)), lambda: cupc(519).lerp(bpos(519), 0.4), 40),
+    (430, lambda: cupc(430) + Vector((0.08, -0.48, 0.04)), lambda: cupc(430) + Vector((0.15, 0, 0)), 30),
+    (480, lambda: cupc(480) + Vector((0.06, -0.36, 0.03)), lambda: cupc(480) + Vector((0.10, 0, 0)), 32),
+    (519, lambda: cupc(519) + Vector((0.07, -0.25, 0.03)), lambda: cupc(519) + Vector((0.04, 0, 0)), 36),
     (560, lambda: cupc(560) + Vector((0.09, -0.10, 0.02)), lambda: cupc(560), 40),
     (590, lambda: cupc(590) + Vector((0.040, -0.040, 0.010)), lambda: cupc(590), 40),
     (599, lambda: cupc(599) + Vector((0.034, -0.034, 0.008)), lambda: cupc(599), 40),
@@ -415,15 +419,16 @@ for f, ang, dist, dz, az, ln in ((607, 12, 0.045, 0.008, -0.002, 40), (640, -8, 
                                  (705, -10, 0.050, -0.004, -0.006, 44), (722, 22, 0.058, 0.004, 0.0, 42), (745, 30, 0.070, 0.012, 0.006, 40)):
     pf, af = orb(f, ang, dist, dz, az); SEG_M.append((f, pf, af, ln))
 SEG_B = [
-    (SWAP2, lambda: P(0.46, -0.40, HC.z + 0.10), lambda: cupc(SWAP2).lerp(WALL, 0.12), 26),
-    (800, lambda: P(0.38, -0.55, HC.z + 0.06), lambda: head_c(800).lerp(WALL, 0.22), 22),
-    (F_WALL, lambda: P(0.30, -0.66, HC.z + 0.05), lambda: head_c(F_WALL).lerp(WALL, 0.25), 22),
-    (880, lambda: P(0.15, -0.70, HC.z + 0.05), lambda: head_c(880) + Vector((0, 0, -0.05)), 28),
-    (940, lambda: P(0.12, -0.72, HC.z + 0.08), lambda: head_c(940) + Vector((0, 0, -0.02)), 26),
-    (1010, lambda: P(0.20, -0.72, HC.z - 0.04), lambda: head_c(1010).lerp(HS.matrix_world.translation, 0.5), 28),
-    (1080, lambda: P(0.30, -0.66, HC.z - 0.02), lambda: head_c(1080).lerp(cupc(1080), 0.35), 28),
-    (1130, lambda: P(0.12, -0.70, HC.z + 0.04), lambda: head_c(1130).lerp(WALL, 0.22), 24),
-    (END, lambda: P(0.06, -0.62, HC.z - 0.04), lambda: head_c(END).lerp(cupc(END), 0.45), 28),
+    (SWAP2, lambda: P(0.30, -0.75, HC.z + 0.06), lambda: head_c(SWAP2).lerp(WALL, 0.12), 24),
+    (800, lambda: P(0.32, -0.73, HC.z + 0.05), lambda: head_c(800).lerp(WALL, 0.20), 22),
+    (F_WALL, lambda: P(0.28, -0.73, HC.z + 0.05), lambda: head_c(F_WALL).lerp(WALL, 0.22), 22),
+    (880, lambda: P(0.15, -0.72, HC.z + 0.05), lambda: head_c(880) + Vector((0, 0, -0.05)), 26),
+    (940, lambda: P(0.14, -0.73, HC.z + 0.10), lambda: head_c(940) + Vector((0, 0, 0.02)), 24),
+    (995, lambda: P(0.42, -0.73, HC.z + 0.04), lambda: head_c(995), 26),
+    (1040, lambda: P(0.60, -0.70, HC.z - 0.02), lambda: head_c(1040).lerp(cupc(1040), 0.45), 28),
+    (1085, lambda: P(0.62, -0.64, HC.z), lambda: head_c(1085).lerp(cupc(1085), 0.40), 30),
+    (1130, lambda: P(0.56, -0.72, HC.z + 0.05), lambda: head_c(1130).lerp(WALL, 0.18), 24),
+    (END, lambda: P(0.58, -0.66, HC.z - 0.03), lambda: head_c(END).lerp(cupc(END), 0.45), 30),
 ]
 def look_q(p, a, up=Vector((0, 0, 1))):
     zc_ = (p - a).normalized(); yc = (up - zc_ * up.dot(zc_)); yc = yc.normalized() if yc.length > 1e-6 else Vector((0, 1, 0))

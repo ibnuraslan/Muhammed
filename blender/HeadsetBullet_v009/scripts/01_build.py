@@ -759,7 +759,7 @@ for k in range(24):
     o.visible_shadow = False
     to_col(o, sc.collection)
 # the wall hit: a hole decal on the back wall (dark hole, cracked plaster ring) + plaster chips
-WALL_HIT = Vector((0.55, YB - 0.001, 1.46))
+WALL_HIT = Vector((0.85, YB - 0.001, 1.40))
 bpy.ops.mesh.primitive_circle_add(vertices=48, radius=0.06, fill_type='NGON', location=(0, 0, 0), rotation=(math.radians(90), 0, 0))
 WH = bpy.context.active_object; WH.name = "HM_WallHole"
 WH.data.materials.append(crack_mat("M_WallHole", hole_r=0.006, ring=60.0, white=(0.75, 0.72, 0.85), emit=0.0, metal_core=True))
