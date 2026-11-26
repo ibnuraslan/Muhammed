@@ -1,6 +1,36 @@
 # FrozenTearsGun_v011: from-scratch rebuild, NOT READY (ON HOLD)
 
-**Status: ON HOLD.** Self-QC check 3 FAILED a fresh harsh review, and the two fix rounds the rebuild brief allows are used up. No .blend is pushed. `review/preview.mp4` is the check-3 preview (270x480, every 5th frame, with the VO), rendered from the packed local build (77 MB).
+**Status: ON HOLD.** The round-3 preview (check 4, director-approved round) FAILED a fresh harsh review. No .blend is pushed (the rebuild brief allows a .blend push only on a review PASS).
+- `review/preview.mp4` is the check-4 preview: 270x480, every 5th frame, with the VO.
+- It was rendered from the exact packed build: `FrozenTearsGun_v011_60fps.blend`, 77 MB, kept locally.
+
+## Check 4 (round 3): what was fixed
+- **Grade:** deep and warm. The skin tint now reaches inside the MPFB skin node group, the light levels are 0.45x and the valve is a true red.
+- **Macros:** her face stays in frame through the chamber, gas and freezing macros.
+- **Logo:** readable at 611-701 (1.6 s) and at 1341-1471 (2.1 s).
+- **Finale:**
+  - Two bugs were fixed: the finale pellets had been hidden for the whole film, and the muzzle puffs sat at the gun origin.
+  - The shot is restaged: a whip down the range to him, back to her at the bench, then the camera chases the pellets to his chest. The hit reads.
+- **Mentor:** his talking arms are now bent, and he holds his palms out on the range.
+- **Automated checks:** 0 pop-ins, 0 lens blockers (nothing within 6 cm of the lens), and the fastest camera turn is 49 degrees per frame.
+
+## Render check on the packed build (passed, not delivered)
+- **Opens cleanly:** `blender --factory-startup -b` opens it with no unpacked images, no linked libraries and the VO packed.
+- **Scene settings:** CAM_Film, 1080x1920 at 100 %, 60 fps, frames 1-1655, PNG output to `//render/FrozenTearsGun_v011_`.
+- **Test frames:** frames 1, 828 and 1655 rendered at full resolution with 16 samples in 60-70 s each. None is black, empty or pink. Copies are in `review/render_check_*.jpg`.
+
+## Check 4 faults (fresh harsh review, film frames)
+1. **Valve turn not readable:** her hand at 326-346 reads as hovering near the chamber, not gripping the red wheel.
+2. **No trigger pull on camera before either shot:** at 711-726 her face leaves the frame and the camera cuts away from the trigger, and at 1576-1586 the trigger is again not shown.
+3. **Near-empty whip frames:**
+   - 1476-1486 (toolbox and teal wall, 3 tiles)
+   - 1561-1571 (a hand at the frame edge, then wall and toolbox)
+   - 1306-1311 (2 tiles)
+4. **Near-static bench hold:** 1346-1466, about 2 s.
+5. **Small items:**
+   - the office wide at 876-996 creeps slowly and the faces are small
+   - his face is half out of frame at 1301
+   - the frozen balls read speckled red at 711-721
 
 ## What v011 is
 - **Timing:** the client's v010 VO (27.0 s), with frames 1-1655 at 60 fps. It was built to the VO word timestamps from the start, so there is no retime. The beat frames are in `beats.json`.

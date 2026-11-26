@@ -469,7 +469,7 @@ for k, d in enumerate(BEADS):
     HITS_A.append((fhit, hitw))
 def burst(name, pw_, f, r=0.035, life=24, parent=None):
     b = puff(name, r, parent, frost_m, 0)
-    if parent is None: b.location = pw_
+    b.location = pw_
     key_loc(b, f - 1, b.location.copy(), 0.05); key_col(b, f - 1, 0.0)
     key_loc(b, f + 4, b.location.copy(), 1.0); key_col(b, f + 3, 1.0)
     key_loc(b, f + life, b.location.copy() + Vector((0, 0, 0.02)), 1.5); key_col(b, f + life, 0.0)
@@ -477,7 +477,7 @@ def burst(name, pw_, f, r=0.035, life=24, parent=None):
     return b
 for k, (fh, pw_) in enumerate(HITS_A):
     burst("HitBurst%d" % k, pw_ + Vector((0, -0.01, 0)), fh, r=0.03)
-burst("MuzzlePuffA", None, F_SPRING + 4, r=0.020, life=20, parent=GUN).location = MUZ + Vector((0, 0.02, 0))
+burst("MuzzlePuffA", MUZ + Vector((0, 0.03, 0)), F_SPRING + 4, r=0.020, life=20, parent=GUN)
 # second shot (the finale): five more pellets parked inside the breech, out at F_SHOOT2+2, onto his chest
 fs(1605); upd(); dg = bpy.context.evaluated_depsgraph_get()
 muzw = GUN.matrix_world @ MUZ
@@ -495,8 +495,8 @@ for k in range(5):
     hl = gun_local(CHEST_HIT - dvec * 0.004 + Vector(((k - 2) * 0.012, 0, 0.01 * math.sin(k * 2.0)))); fh = fx + 2 + 14
     key_loc(p, fh, hl, 1.8); key_loc(p, fh + 3, hl, 0.0)
     linear_interp(p, "location")
-    vis([p], fh + 4, False)
-burst("MuzzlePuffB", None, F_SHOOT2 + 4, r=0.020, life=20, parent=GUN).location = MUZ + Vector((0, 0.02, 0))
+    vis([p], 1, True); vis([p], fh + 4, False)
+burst("MuzzlePuffB", MUZ + Vector((0, 0.03, 0)), F_SHOOT2 + 4, r=0.022, life=20, parent=GUN)
 F_HIT2 = F_SHOOT2 + 2 + 2 + 14
 burst("ChestBurst", CHEST_HIT - dvec * 0.02, F_HIT2, r=0.045, life=26)
 # the frost patch stays on his jacket (bound to his chest bone)
@@ -712,6 +712,15 @@ for f, objs in VISCHG:
         if o.name.startswith(("Gas", "HitBurst", "Muzzle", "ChestBurst", "Splash", "Trail", "Tear", "Bead", "MemTear", "FlyTear", "FrostPatch")): continue
         if on_cam(o, f) or on_cam(o, f - 1): pops.append((f, o.name))
 log("visibility changes on camera (pop-in risk):", pops[:20], "count", len(pops))
+# lens blockers (LESSONS, Nov 2026): nothing within 6 cm of the lens across the frame, every 2nd frame
+blk = []
+for f in range(1, END + 1, 2):
+    fs(f); dg = bpy.context.evaluated_depsgraph_get(); Mc = CAM.matrix_world; org = Mc.translation
+    for u, v in ((0, 0), (-0.5, -0.8), (0.5, -0.8), (-0.5, 0.8), (0.5, 0.8)):
+        d = (Mc.to_3x3() @ Vector((u * 0.56, v * 1.0, -1.6))).normalized()
+        hit, loc, nrm, idx, ob, _ = sc.ray_cast(dg, org, d, distance=0.06)
+        if hit and not ob.name.startswith(("Gas", "HitBurst", "Muzzle", "Chest", "Splash")): blk.append((f, ob.name)); break
+log("lens blockers (<6 cm):", blk[:30], "count", len(blk))
 # teleports must happen off camera too
 for rig, frames in ((INV, (F_INV_OFFICE, F_INV_BACK)), (MEN, (F_MEN_RANGE,))):
     b = part(rig, ".body")
