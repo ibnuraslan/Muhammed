@@ -1,0 +1,116 @@
+[
+ {
+  "beat": 1,
+  "frame": 1,
+  "t": 0,
+  "first_words": "Imagine you wake up"
+ },
+ {
+  "beat": 2,
+  "frame": 245,
+  "t": 4.06,
+  "first_words": "But the plane is still flying perfectly level"
+ },
+ {
+  "beat": 3,
+  "frame": 405,
+  "t": 6.74,
+  "first_words": "So the pilots must be fine, right?"
+ },
+ {
+  "beat": 4,
+  "frame": 551,
+  "t": 9.16,
+  "first_words": "You make your way to the cockpit"
+ },
+ {
+  "beat": 5,
+  "frame": 655,
+  "t": 10.9,
+  "first_words": "One pilot has collapsed in the doorway"
+ },
+ {
+  "beat": 6,
+  "frame": 794,
+  "t": 13.22,
+  "first_words": "The other is slumped over in his seat"
+ },
+ {
+  "beat": 7,
+  "frame": 931,
+  "t": 15.5,
+  "first_words": "This could be a dream, but you grab the radio"
+ },
+ {
+  "beat": 8,
+  "frame": 1225,
+  "t": 20.4,
+  "first_words": "No one answers"
+ },
+ {
+  "beat": 9,
+  "frame": 1275,
+  "t": 21.24,
+  "first_words": "You decide to pull the pilot out of his seat"
+ },
+ {
+  "beat": 10,
+  "frame": 1550,
+  "t": 25.82,
+  "first_words": "Alarms blare"
+ },
+ {
+  "beat": 11,
+  "frame": 1721,
+  "t": 28.66,
+  "first_words": "The plane is diving fast"
+ },
+ {
+  "beat": 12,
+  "frame": 1820,
+  "t": 30.32,
+  "first_words": "You grab the controls"
+ },
+ {
+  "beat": 13,
+  "frame": 2006,
+  "t": 33.42,
+  "first_words": "But after a few terrifying minutes"
+ },
+ {
+  "beat": 14,
+  "frame": 2225,
+  "t": 37.06,
+  "first_words": "You're keeping the plane roughly level"
+ },
+ {
+  "beat": 15,
+  "frame": 2479,
+  "t": 41.3,
+  "first_words": "Now you're low enough to see"
+ },
+ {
+  "beat": 16,
+  "frame": 2653,
+  "t": 44.2,
+  "first_words": "You could try to land right now"
+ },
+ {
+  "beat": 17,
+  "frame": 2975,
+  "t": 49.56,
+  "first_words": "Or you could keep flying"
+ },
+ {
+  "beat": 18,
+  "frame": 3150,
+  "t": 52.48,
+  "first_words": "But this field might be your only chance"
+ },
+ {
+  "beat": 19,
+  "frame": 3344,
+  "t": 55.72,
+  "first_words": "What do you do?"
+ }
+]
