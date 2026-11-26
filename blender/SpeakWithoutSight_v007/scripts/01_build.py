@@ -372,7 +372,7 @@ GARD.data.materials.append(garden_mat())
 GARD.visible_diffuse = False; GARD.visible_glossy = False; GARD.visible_shadow = False
 
 # ================================================================== the settee (procedural Victorian camel-back, exact seat surface)
-SEAT_Z = 0.44; SEAT_FRONT = -0.30; SEAT_BACK = 0.24; SW = 1.62
+SEAT_Z = 0.42; SEAT_FRONT = -0.30; SEAT_BACK = 0.24; SW = 1.62
 st_parts = []
 st_parts.append(slab("PL_SetteeSeat", (SW - 0.20, SEAT_BACK - SEAT_FRONT, 0.13), (0, (SEAT_FRONT + SEAT_BACK) / 2, SEAT_Z - 0.065), M_VELVET, bev=0.035))
 st_parts.append(slab("PL_SetteeBack", (SW - 0.10, 0.16, 0.52), (0, SEAT_BACK + 0.06, SEAT_Z + 0.24), M_VELVET, bev=0.05))

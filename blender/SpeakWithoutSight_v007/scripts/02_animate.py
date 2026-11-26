@@ -25,7 +25,7 @@ def log(*a):
 O = bpy.data.objects
 GR, GB, GC = O["Girl"], O["Girl.body"], O["Girl.clothes"]
 TR, TB, TC = O["Teacher"], O["Teacher.body"], O["Teacher.clothes"]
-SEAT_Z, SEAT_FRONT = 0.44, -0.30
+SEAT_Z, SEAT_FRONT = 0.42, -0.30
 
 # ================================================================== rigs
 CTG = make_human_ctrl(GR); add_hand_limits(GR)
@@ -122,9 +122,9 @@ def calibrate(c):
                         h = bv.ray_cast(Vector((q.x, q.y + dy, 0.02)), Vector((0, 0, 1)), 3.0)
                         if h[0] is not None and h[0].y > SEAT_FRONT + 0.02: mz = min(mz, h[0].z)
         cur = CAL.get(c, SEAT_Z + (H.root_head.z - CT.BN["upperleg01.L"].head_local.z) + 0.10)
-        CAL[c] = cur + (SEAT_Z + 0.002 - mz)
+        CAL[c] = cur + (SEAT_Z + 0.008 - mz)
         log("calibrate", c, it, "min skin z", round(mz, 4), "->", round(CAL[c], 4), "foot err", round((Wh(rig, "foot.L") - Wh(rig, "IK_foot.L")).length, 3))
-        if abs(SEAT_Z + 0.002 - mz) < 0.002: break
+        if abs(SEAT_Z + 0.008 - mz) < 0.002: break
 
 def setup_seating():
     FOOT_Z["T"] = 0.0; calibrate("T")
@@ -339,7 +339,7 @@ def bone_world(rig, bone, Pl, Nl=None):
 F_THROAT = 470
 fs(F_THROAT)
 nk = (Wh(TR, "neck02") + Wh(TR, "neck03")) / 2
-nk.z = (Wh(TR, "eye.L").z + Wh(TR, "eye.R").z) / 2 - 0.126      # the larynx: below the jaw, above the collar          # the larynx: 12 cm below the eyes (not under the jaw)
+nk.z = (Wh(TR, "eye.L").z + Wh(TR, "eye.R").z) / 2 - 0.118      # the larynx: below the jaw, clear above the shirt collar          # the larynx: 12 cm below the eyes (not under the jaw)
 fdir = Matrix.Rotation(math.radians(YAW["T"] + 40), 3, 'Z') @ Vector((0, -1, 0))   # front-left of her neck (toward the girl and the camera)
 h = ray_surface([TB], nk + fdir * 0.25, -fdir)
 TH_P, TH_N = h[0].copy(), h[1].copy()
@@ -362,7 +362,7 @@ def throat_hand(f, lift=0.0):
     t = Vector((0, 0, 1)).cross(N).normalized()
     if t.x > 0: t = -t                     # fingers across the front of her throat (away from the girl's wrist)
     fd = Vector((t.x, t.y, 0.0)).normalized()          # fingers level across the throat
-    place_hand(GR, "R", f, P + N * lift, -N, fd, skin=0.015)
+    place_hand(GR, "R", f, P + N * lift, -N, fd, skin=0.024)
     sh = Wh(GR, "upperarm01.R"); key_pole(CTG, "R", f, sh + Vector((0.10, 0.30, -0.40)))
     pose_hand(GR, "R", f, "soft_cup")
     return P, N
