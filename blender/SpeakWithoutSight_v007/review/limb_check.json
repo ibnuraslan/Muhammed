@@ -72,19 +72,13 @@
     "Teacher arm.L inside own torso (2 pts)"
    ]
   ],
+  "445": [
+   [
+    "ARMBODY",
+    "Girl arm.R inside own torso (5 pts)"
+   ]
+  ],
   "449": [
-   [
-    "ARMBODY",
-    "Girl arm.R inside own torso (5 pts)"
-   ]
-  ],
-  "453": [
-   [
-    "ARMBODY",
-    "Girl arm.R inside own torso (5 pts)"
-   ]
-  ],
-  "457": [
    [
     "ARMBODY",
     "Girl arm.R inside own torso (2 pts)"
@@ -92,6 +86,6 @@
   ]
  },
  "counts": {
-  "ARMBODY": 15
+  "ARMBODY": 14
  }
 }

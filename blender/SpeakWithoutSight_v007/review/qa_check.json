@@ -24,28 +24,22 @@
     "Girl.L fingers fanned 34 deg (index vs little)"
    ]
   ],
-  "625": [
-   [
-    "PROPMOVE",
-    "PulseDot0 moves 5.4 cm with no hand on it (nearest finger 4 cm)"
-   ]
-  ],
   "631": [
    [
     "PROPMOVE",
-    "PulseDot5 moves 5.7 cm with no hand on it (nearest finger 3 cm)"
+    "PulseDot5 moves 3.5 cm with no hand on it (nearest finger 3 cm)"
    ]
   ],
   "703": [
    [
     "PROPMOVE",
-    "PulseDot2 moves 4.9 cm with no hand on it (nearest finger 5 cm)"
+    "PulseDot2 moves 4.3 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "709": [
    [
     "PROPMOVE",
-    "PulseDot1 moves 5.7 cm with no hand on it (nearest finger 4 cm)"
+    "PulseDot1 moves 3.5 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
@@ -55,7 +49,7 @@
   "715": [
    [
     "PROPMOVE",
-    "PulseDot0 moves 5.7 cm with no hand on it (nearest finger 3 cm)"
+    "PulseDot0 moves 3.5 cm with no hand on it (nearest finger 3 cm)"
    ],
    [
     "PROPMOVE",
@@ -67,7 +61,7 @@
    ],
    [
     "PROPMOVE",
-    "PulseDot5 moves 14.1 cm with no hand on it (nearest finger 15 cm)"
+    "PulseDot5 moves 13.0 cm with no hand on it (nearest finger 16 cm)"
    ]
   ],
   "721": [
@@ -109,15 +103,15 @@
    ],
    [
     "PROPMOVE",
-    "PulseDot1 moves 5.0 cm with no hand on it (nearest finger 23 cm)"
+    "PulseDot1 moves 5.1 cm with no hand on it (nearest finger 23 cm)"
    ],
    [
     "PROPMOVE",
-    "PulseDot2 moves 5.0 cm with no hand on it (nearest finger 30 cm)"
+    "PulseDot2 moves 5.1 cm with no hand on it (nearest finger 30 cm)"
    ],
    [
     "PROPMOVE",
-    "PulseDot4 moves 5.4 cm with no hand on it (nearest finger 5 cm)"
+    "PulseDot4 moves 4.3 cm with no hand on it (nearest finger 5 cm)"
    ],
    [
     "PROPMOVE",
@@ -135,11 +129,11 @@
    ],
    [
     "PROPMOVE",
-    "PulseDot2 moves 14.2 cm with no hand on it (nearest finger 16 cm)"
+    "PulseDot2 moves 13.0 cm with no hand on it (nearest finger 17 cm)"
    ],
    [
     "PROPMOVE",
-    "PulseDot3 moves 5.8 cm with no hand on it (nearest finger 4 cm)"
+    "PulseDot3 moves 3.5 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
@@ -197,7 +191,7 @@
   "757": [
    [
     "PROPMOVE",
-    "PulseDot1 moves 5.5 cm with no hand on it (nearest finger 6 cm)"
+    "PulseDot1 moves 4.4 cm with no hand on it (nearest finger 6 cm)"
    ],
    [
     "PROPMOVE",
@@ -219,7 +213,7 @@
   "763": [
    [
     "PROPMOVE",
-    "PulseDot0 moves 5.5 cm with no hand on it (nearest finger 4 cm)"
+    "PulseDot0 moves 4.3 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
@@ -257,11 +251,11 @@
    ],
    [
     "PROPMOVE",
-    "PulseDot4 moves 14.2 cm with no hand on it (nearest finger 15 cm)"
+    "PulseDot4 moves 13.0 cm with no hand on it (nearest finger 16 cm)"
    ],
    [
     "PROPMOVE",
-    "PulseDot5 moves 5.9 cm with no hand on it (nearest finger 3 cm)"
+    "PulseDot5 moves 3.5 cm with no hand on it (nearest finger 3 cm)"
    ]
   ],
   "775": [
@@ -319,7 +313,7 @@
    ],
    [
     "PROPMOVE",
-    "PulseDot3 moves 5.5 cm with no hand on it (nearest finger 5 cm)"
+    "PulseDot3 moves 4.4 cm with no hand on it (nearest finger 5 cm)"
    ],
    [
     "PROPMOVE",
@@ -337,11 +331,11 @@
    ],
    [
     "PROPMOVE",
-    "PulseDot1 moves 14.2 cm with no hand on it (nearest finger 16 cm)"
+    "PulseDot1 moves 13.0 cm with no hand on it (nearest finger 17 cm)"
    ],
    [
     "PROPMOVE",
-    "PulseDot2 moves 6.0 cm with no hand on it (nearest finger 4 cm)"
+    "PulseDot2 moves 3.6 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
@@ -359,49 +353,49 @@
   "799": [
    [
     "PROPMOVE",
-    "PulseDot0 moves 11.3 cm with no hand on it (nearest finger 17 cm)"
+    "PulseDot0 moves 12.2 cm with no hand on it (nearest finger 17 cm)"
    ],
    [
     "PROPMOVE",
-    "PulseDot1 moves 11.6 cm with no hand on it (nearest finger 4 cm)"
+    "PulseDot1 moves 13.7 cm with no hand on it (nearest finger 3 cm)"
    ],
    [
     "PROPMOVE",
-    "PulseDot2 moves 6.5 cm with no hand on it (nearest finger 10 cm)"
+    "PulseDot2 moves 5.8 cm with no hand on it (nearest finger 9 cm)"
    ],
    [
     "PROPMOVE",
-    "PulseDot3 moves 6.3 cm with no hand on it (nearest finger 16 cm)"
+    "PulseDot3 moves 5.5 cm with no hand on it (nearest finger 15 cm)"
    ],
    [
     "PROPMOVE",
-    "PulseDot4 moves 4.4 cm with no hand on it (nearest finger 20 cm)"
+    "PulseDot4 moves 4.7 cm with no hand on it (nearest finger 20 cm)"
    ],
    [
     "PROPMOVE",
-    "PulseDot5 moves 4.7 cm with no hand on it (nearest finger 26 cm)"
+    "PulseDot5 moves 5.1 cm with no hand on it (nearest finger 27 cm)"
    ]
   ],
   "805": [
    [
     "PROPMOVE",
-    "PulseDot1 moves 3.7 cm with no hand on it (nearest finger 7 cm)"
+    "PulseDot1 moves 4.8 cm with no hand on it (nearest finger 7 cm)"
    ],
    [
     "PROPMOVE",
-    "PulseDot2 moves 3.7 cm with no hand on it (nearest finger 13 cm)"
+    "PulseDot2 moves 4.7 cm with no hand on it (nearest finger 13 cm)"
    ],
    [
     "PROPMOVE",
-    "PulseDot3 moves 3.4 cm with no hand on it (nearest finger 19 cm)"
+    "PulseDot3 moves 3.6 cm with no hand on it (nearest finger 19 cm)"
    ],
    [
     "PROPMOVE",
-    "PulseDot4 moves 5.4 cm with no hand on it (nearest finger 26 cm)"
+    "PulseDot4 moves 5.0 cm with no hand on it (nearest finger 26 cm)"
    ],
    [
     "PROPMOVE",
-    "PulseDot5 moves 5.4 cm with no hand on it (nearest finger 30 cm)"
+    "PulseDot5 moves 5.0 cm with no hand on it (nearest finger 31 cm)"
    ]
   ],
   "811": [
@@ -415,7 +409,7 @@
    ],
    [
     "PROPMOVE",
-    "PulseDot2 moves 4.1 cm with no hand on it (nearest finger 18 cm)"
+    "PulseDot2 moves 4.1 cm with no hand on it (nearest finger 17 cm)"
    ],
    [
     "PROPMOVE",
@@ -445,7 +439,7 @@
    ],
    [
     "PROPMOVE",
-    "PulseDot5 moves 5.5 cm with no hand on it (nearest finger 5 cm)"
+    "PulseDot5 moves 4.3 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "823": [
@@ -463,11 +457,11 @@
    ],
    [
     "PROPMOVE",
-    "PulseDot3 moves 14.2 cm with no hand on it (nearest finger 15 cm)"
+    "PulseDot3 moves 13.0 cm with no hand on it (nearest finger 17 cm)"
    ],
    [
     "PROPMOVE",
-    "PulseDot4 moves 6.0 cm with no hand on it (nearest finger 4 cm)"
+    "PulseDot4 moves 3.6 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
@@ -503,7 +497,7 @@
    ],
    [
     "PROPMOVE",
-    "PulseDot1 moves 5.1 cm with no hand on it (nearest finger 30 cm)"
+    "PulseDot1 moves 5.1 cm with no hand on it (nearest finger 31 cm)"
    ],
    [
     "PROPMOVE",
@@ -525,7 +519,7 @@
    ],
    [
     "PROPMOVE",
-    "PulseDot2 moves 5.6 cm with no hand on it (nearest finger 5 cm)"
+    "PulseDot2 moves 4.4 cm with no hand on it (nearest finger 5 cm)"
    ],
    [
     "PROPMOVE",
@@ -543,7 +537,7 @@
   "847": [
    [
     "PROPMOVE",
-    "PulseDot1 moves 6.0 cm with no hand on it (nearest finger 4 cm)"
+    "PulseDot1 moves 3.6 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
@@ -565,7 +559,7 @@
   "853": [
    [
     "PROPMOVE",
-    "PulseDot0 moves 6.0 cm with no hand on it (nearest finger 3 cm)"
+    "PulseDot0 moves 3.5 cm with no hand on it (nearest finger 3 cm)"
    ],
    [
     "PROPMOVE",
@@ -585,13 +579,13 @@
    ],
    [
     "PROPMOVE",
-    "PulseDot5 moves 14.2 cm with no hand on it (nearest finger 15 cm)"
+    "PulseDot5 moves 13.0 cm with no hand on it (nearest finger 16 cm)"
    ]
   ],
   "859": [
    [
     "PROPMOVE",
-    "PulseDot0 moves 5.1 cm with no hand on it (nearest finger 7 cm)"
+    "PulseDot0 moves 5.1 cm with no hand on it (nearest finger 8 cm)"
    ],
    [
     "PROPMOVE",
@@ -607,7 +601,7 @@
    ],
    [
     "PROPMOVE",
-    "PulseDot4 moves 5.1 cm with no hand on it (nearest finger 30 cm)"
+    "PulseDot4 moves 5.1 cm with no hand on it (nearest finger 31 cm)"
    ]
   ],
   "865": [
@@ -647,7 +641,7 @@
    ],
    [
     "PROPMOVE",
-    "PulseDot4 moves 5.5 cm with no hand on it (nearest finger 5 cm)"
+    "PulseDot4 moves 4.3 cm with no hand on it (nearest finger 5 cm)"
    ],
    [
     "PROPMOVE",
@@ -665,11 +659,11 @@
    ],
    [
     "PROPMOVE",
-    "PulseDot2 moves 14.2 cm with no hand on it (nearest finger 16 cm)"
+    "PulseDot2 moves 13.0 cm with no hand on it (nearest finger 17 cm)"
    ],
    [
     "PROPMOVE",
-    "PulseDot3 moves 6.0 cm with no hand on it (nearest finger 4 cm)"
+    "PulseDot3 moves 3.6 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
@@ -1277,7 +1271,7 @@
  },
  "counts": {
   "CLAW": 2,
-  "PROPMOVE": 158,
+  "PROPMOVE": 157,
   "FAN": 99
  }
 }
