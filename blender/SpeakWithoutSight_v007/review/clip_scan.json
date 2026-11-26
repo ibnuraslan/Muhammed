@@ -1,38 +1,52 @@
 {
  "frames": {
-  "415": {
+  "499": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 1
+    "other": 8
+   }
+  },
+  "505": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 190
+   }
+  },
+  "511": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 182
    }
   },
   "523": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 4
+    "other": 136
    }
   },
   "529": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 5
+    "other": 104
    }
   },
   "535": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 14
+    "other": 139
    }
   },
   "541": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 41
+    "other": 113
    }
   },
   "547": {
@@ -46,392 +60,252 @@
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 192
-   }
-  },
-  "559": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 252
-   }
-  },
-  "565": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 281
-   }
-  },
-  "571": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 287
+    "other": 88
    }
   },
   "577": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 286
+    "other": 85
    }
   },
   "583": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 270
+    "other": 102
    }
   },
   "589": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 252
+    "other": 109
    }
   },
   "595": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 251
+    "other": 112
    }
   },
   "601": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 251
-   }
-  },
-  "607": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 92
+    "other": 125
    }
   },
   "619": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 284
+    "other": 120
    }
   },
   "625": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 294
+    "other": 104
    }
   },
   "631": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 287
+    "other": 100
    }
   },
   "637": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 281
+    "other": 126
    }
   },
   "643": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 261
+    "other": 146
    }
   },
   "649": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 228
+    "other": 141
    }
   },
   "655": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 200
+    "other": 134
    }
   },
   "661": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 171
+    "other": 126
    }
   },
   "667": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 145
+    "other": 129
    }
   },
   "673": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 116
+    "other": 133
    }
   },
   "679": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 84
+    "other": 134
    }
   },
   "685": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 65
+    "other": 133
    }
   },
   "691": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 65
+    "other": 122
    }
   },
   "703": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 71
+    "other": 148
    }
   },
   "709": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 81
+    "other": 110
    }
   },
   "715": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 121
+    "other": 106
    }
   },
   "721": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 161
+    "other": 131
    }
   },
   "727": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 212
+    "other": 117
    }
   },
   "733": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 266
-   }
-  },
-  "739": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 287
-   }
-  },
-  "745": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 286
-   }
-  },
-  "751": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 229
-   }
-  },
-  "757": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 189
-   }
-  },
-  "763": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 153
-   }
-  },
-  "769": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 166
-   }
-  },
-  "775": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 167
-   }
-  },
-  "781": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 167
-   }
-  },
-  "787": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 163
-   }
-  },
-  "793": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 153
-   }
-  },
-  "805": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 153
-   }
-  },
-  "811": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 154
-   }
-  },
-  "817": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 157
-   }
-  },
-  "823": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 157
-   }
-  },
-  "829": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 158
+    "other": 96
    }
   },
   "835": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 161
+    "other": 77
    }
   },
   "841": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 161
+    "other": 81
    }
   },
   "847": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 159
+    "other": 84
    }
   },
   "853": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 159
+    "other": 90
    }
   },
   "859": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 159
+    "other": 95
    }
   },
   "865": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 158
+    "other": 95
    }
   },
   "871": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 157
+    "other": 97
    }
   },
   "877": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 159
+    "other": 96
    }
   },
   "883": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 160
+    "other": 90
    }
   },
   "889": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 160
+    "other": 86
    }
   },
   "895": {
    "Girl": {
     "self": 0,
     "clothes": 0,
-    "other": 160
-   }
-  },
-  "901": {
-   "Girl": {
-    "self": 0,
-    "clothes": 0,
-    "other": 125
+    "other": 82
    }
   }
  },
@@ -439,8 +313,20 @@
  "depth_cm": 2.0,
  "bad_ranges": [
   [
-   541,
-   901
+   505,
+   553
+  ],
+  [
+   577,
+   601
+  ],
+  [
+   619,
+   733
+  ],
+  [
+   835,
+   895
   ]
  ],
  "fps": 60
