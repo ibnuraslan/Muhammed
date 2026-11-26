@@ -676,7 +676,7 @@ CK = [
     (300,  Vector((2.60, 0.95, 1.62)), Vector((2.50, -0.1, 1.85)), 34, 8),
     (322,  Vector((2.85, 0.70, 1.90)), Vector((3.6, 2.4, 3.4)), 30, 8),                   # tilt up with his gaze to the pole transformer and the wires
     (340,  Vector((1.20, 4.50, 5.6)), Vector((-6.0, 12.0, 4.0)), 28, 8),                  # follow the wires west, over the street
-    (366,  Vector((-5.0, 13.0, 3.4)), Vector((-9.4, 19.4, 1.55)), 30, 8),                 # over the yard fence (3.4 m), down to Ravi
+    (366,  Vector((-5.6, 13.6, 3.9)), Vector((-9.4, 19.4, 1.55)), 30, 8),                 # over the yard fence (3.4 m), down to Ravi
     (392,  Vector((-7.70, 18.25, 1.75)), Vector((-9.4, 19.4, 1.62)), 34, 8),              # Ravi in his hard hat, transformers behind
     (420,  Vector((-7.60, 17.70, 2.6)), Vector((-10.5, 20.5, 2.2)), 30, 8),
     (455,  Vector((-8.5, 14.5, 10.0)), Vector((-40.0, 28.0, 10.0)), 26, 8),                # crane up: pylons and lines over the town
