@@ -81,7 +81,7 @@ def seat_pose(c, f, root_dz=0.0, flex=0.0, foot_fwd=0.0, knee_out=0.0):
     # hip joints so that the knee joint sits 9 cm past the seat front (calves clear the cushion and rail)
     Ryaw = Matrix.Rotation(math.radians(yaw), 3, 'Z')
     fwd = Ryaw @ Vector((0, -1, 0))
-    hip_y = SEAT_FRONT - 0.12 + tl * 0.97
+    hip_y = SEAT_FRONT - (0.12 if c == "T" else 0.03) + tl * 0.97
     z0 = CAL.get(c, SEAT_Z + (rh.z - hip.z) + 0.10)
     pos = Vector((x, hip_y, z0 + root_dz)) + Vector((0, (rh.y - hip.y), 0))
     H.key_root(f, pos, yaw=yaw, flex=flex)
@@ -142,7 +142,7 @@ def long_skirt(c, col, name):
     mks = [m for m in body.modifiers if m.type in ('MASK', 'SUBSURF') and m.show_viewport]
     for m in mks: m.show_viewport = False
     upd(); dg = bpy.context.evaluated_depsgraph_get(); e = body.evaluated_get(dg); me = e.to_mesh()
-    waist = (Wh(rig, "spine04").z + Wh(rig, "spine05").z) / 2
+    waist = Wh(rig, "upperleg01.L").z + 0.09
     ank = min(Wh(rig, "foot.L").z, Wh(rig, "foot.R").z)
     hem = ank + 0.035
     pts = []
@@ -169,8 +169,11 @@ def long_skirt(c, col, name):
         bpy.context.view_layer.objects.active = sk; bpy.ops.object.modifier_apply(modifier=mo.name)
     # open the waist lid and the floor side (the hem stays a clean open edge with thickness)
     bm = bmesh.new(); bm.from_mesh(sk.data); bm.normal_update()
+    hipy = (Wh(rig, "upperleg01.L").y + Wh(rig, "upperleg01.R").y) / 2
+    fwdv = Matrix.Rotation(math.radians(YAW[c]), 3, 'Z') @ Vector((0, -1, 0))
+    def behind_hips(p_): return (p_ - Wh(rig, "upperleg01.L")).dot(fwdv) < 0.06
     kill = [f for f in bm.faces if (f.normal.z < -0.55 and f.calc_center_median().z < hem + 0.05)
-            or (f.normal.z > 0.6 and f.calc_center_median().z > waist - 0.02)]
+            or (f.normal.z > 0.5 and behind_hips(f.calc_center_median()))]
     bmesh.ops.delete(bm, geom=kill, context='FACES')
     bm.to_mesh(sk.data); bm.free()
     for p_ in sk.data.polygons: p_.use_smooth = True
@@ -203,12 +206,13 @@ def long_skirt(c, col, name):
     covered = [v.index for v in body.data.vertices if (db.get(v.index) or "").startswith(("upperleg", "lowerleg"))]
     upd(); dg = bpy.context.evaluated_depsgraph_get()
     for m_ in body.modifiers:
-        if m_.type == 'MASK': m_.show_viewport = False
+        if m_.type in ('MASK', 'SUBSURF'): m_.show_viewport = False
+    upd(); dg = bpy.context.evaluated_depsgraph_get()
     e = body.evaluated_get(dg); me = e.to_mesh()
     hide = [i for i in covered if (body.matrix_world @ me.vertices[i].co).z > hem + 0.03] if len(me.vertices) == len(body.data.vertices) else []
     e.to_mesh_clear()
     for m_ in body.modifiers:
-        if m_.type == 'MASK': m_.show_viewport = True
+        if m_.type in ('MASK', 'SUBSURF'): m_.show_viewport = True
     vgb = body.vertex_groups.new(name="hide_longskirt"); vgb.add(hide, 1.0, 'REPLACE')
     mk = body.modifiers.new("hide_longskirt", 'MASK'); mk.vertex_group = "hide_longskirt"; mk.invert_vertex_group = True
     while body.modifiers.find("hide_longskirt") > body.modifiers.find("Armature") + 1:
