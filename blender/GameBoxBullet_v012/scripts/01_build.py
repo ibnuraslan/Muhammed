@@ -343,7 +343,7 @@ bpy.context.view_layer.objects.active = gun_parts[0]; bpy.ops.object.join()
 GUN = bpy.context.active_object; GUN.name = "Pistol"
 GUN["muzzle"] = (0.0, 0.165, 0.060)
 # muzzle flash: a bright stylised star, keyed in 02 (scale 0 -> 1 -> 0 inside 4 frames)
-fl_m = mat("M_Flash", (1.0, 0.6, 0.1), emit=((1.0, 0.65, 0.15), 30.0))
+fl_m = mat("M_Flash", (1.0, 0.5, 0.05), emit=((1.0, 0.45, 0.05), 5.0))
 bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=0.03, location=(0, 0, 0))
 FLASH = bpy.context.active_object; FLASH.name = "MuzzleFlash"; FLASH.data.materials.append(fl_m)
 for v in FLASH.data.vertices:
