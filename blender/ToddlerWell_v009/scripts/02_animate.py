@@ -394,7 +394,7 @@ for f in list(range(INV0, 1561, 4)):
         sh = ECT.BN["upperarm01." + s].head_local; L = arm_len(ECT, s)
         if f < 1300:
             sw_ = math.sin(2 * math.pi * (f - INV0) / 56.0 + (0 if s == 'L' else 1.3))
-            w = sh + Vector((sx * (0.16 + 0.06 * sw_), -0.14 - 0.06 * sw_, (0.74 + 0.08 * sw_) * L)); pose = "relaxed"
+            w = sh + Vector((sx * (0.04 + 0.04 * sw_), -0.10 - 0.05 * sw_, (0.74 + 0.08 * sw_) * L)); pose = "relaxed"
             key_hand_local(ECT, EH, s, f, Mb, w, (sx * 0.15, -0.3, 1.0), (0, -1, 0), sh + Vector((sx * 0.45, 0.1, -0.1)), pose)
 for f in list(range(INV0, 1561, 4)):
     pass
@@ -606,7 +606,7 @@ for f in (820, 860, 900, 940):
     ck(f, mid + Vector((0.55, -2.4, 0.0)), mid + Vector((0.0, 0.0, -0.15)), 30)
 # the rescuer's nod close (waist ring appears on the teen at f972, out of frame)
 for f in (962, 980):
-    rp = face_pt(RESR, f); ck(f, rp + Vector((-0.35, -1.6, -0.05)), rp + Vector((0.0, 0, -0.06)), 50)
+    rp = face_pt(RESR, f); ck(f, rp + Vector((-0.10, -1.6, -0.05)), rp + Vector((0.0, 0, -0.06)), 50)
 # B6: the knot: chest-up on the teen, hands at his waist knot, face in frame
 for f, dx, dy in ((1000, 0.55, -1.55), (1040, 0.35, -1.30), (1080, 0.10, -1.10)):
     tp = face_pt(TEENR, f); fs(f); kn = O["ROPE_Knot"].matrix_world.translation
@@ -618,7 +618,7 @@ ck(1140, Vector((0.0, -1.9, 1.5)), Vector((0.0, 0.05, 0.2)), 28)
 for f in (1170, 1200, 1230, 1260, 1290):
     fs(f); hd = face_pt(TEENR, f); ck(f, Vector((0.15, -1.55, hd.z + 0.05)), hd + Vector((0, 0, 0.0)), 28)
 # B9: both faces (teen upside down above, toddler below), the grab
-for f, dx, dy, dz in ((1320, 0.30, -1.65, 0.0), (1352, 0.05, -1.35, -0.05), (1390, -0.30, -1.15, -0.10), (1430, -0.10, -1.30, 0.05)):
+for f, dx, dy, dz in ((1320, 0.30, -1.65, 0.0), (1352, 0.05, -1.35, -0.05), (1390, -0.40, -1.05, -0.18), (1430, 0.15, -1.50, 0.12)):
     a = face_pt(TEENR, f); b = face_pt(TODR, f); mid = (a + b) / 2
     ck(f, mid + Vector((dx, dy, dz)), mid, 28)
 # B10: rise together
@@ -626,10 +626,11 @@ for f in (1470, 1500, 1530, 1552):
     a = face_pt(TEENR, f); b = face_pt(TODR, f); mid = (a + b) / 2
     ck(f, mid + Vector((0.2, -1.8, 0.15)), mid + Vector((0, 0, 0.05)), 28)
 # B11: tilt up the hauling rope to the pulley (the switch happens there at SW), tilt down to the two of them cheering
-ck(1568, Vector((-0.1, -2.0, 1.2)), Vector((0.0, -0.05, 1.6)), 28)
-ck(1584, Vector((-0.55, -2.1, 1.8)), Vector((-0.45, 0.3, 2.1)), 26)
+# whip-tilt to the sky above the pulley: the rope, his legs and the switch at SW stay below the frame
+ck(1572, Vector((0.1, -1.7, 2.2)), Vector((0.0, -0.1, 3.6)), 35)
+ck(1596, Vector((-0.1, -1.75, 2.25)), Vector((-0.1, -0.1, 3.65)), 35)
 fs(1630); tp = face_pt(TEENR, 1630); kp = face_pt(TODR, 1630); mid = (tp + kp) / 2
-ck(1606, mid + Vector((0.55, -2.2, 0.55)), mid + Vector((0.15, 0, 0.15)), 30)
+ck(1612, mid + Vector((0.55, -2.2, 0.55)), mid + Vector((0.15, 0, 0.15)), 30)
 ck(1630, mid + Vector((0.05, -2.3, 0.10)), mid + Vector((0.1, 0, -0.15)), 30)
 ck(1680, mid + Vector((-0.35, -2.4, 0.45)), mid + Vector((0.05, 0, -0.10)), 30)
 ck(END, mid + Vector((-0.75, -2.7, 1.10)), mid + Vector((0.0, 0, -0.05)), 30)
