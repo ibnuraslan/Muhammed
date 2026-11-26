@@ -24,3 +24,11 @@ Minor: near-static girl close-up f191-311; hand floats f421-446; the extreme clo
 - Camera: re-frame the whole path so both faces sit inside the frame (a wider lens or framing on the pair midpoint) at f126-346, 501-896, 1176-1306 and 1497-1645, with a final push-in to both faces.
 - Seating: a deeper/softer seat model, or raise both pelvises about 1.5 cm and move the knees 3 cm further past the seat front; lower the stool 1 cm.
 - Wardrobe: period dresses need a real long-skirt garment (MPFB has none built in; fetch from the MakeHuman community library).
+
+## Director-approved restage round (after the FAIL above): stopped at the stills stage, no preview
+Evidence: `review/restage_stills_attempt2.jpg` (12 film-camera stills).
+- Done in the scripts: a lower settee (seat 0.34), the rail set back, both in blouses, the camera re-framed on the pair (both faces in every still), fingertips 6-7 mm off the throat (bone axis, the pads touch).
+- Not acceptable, so no preview was rendered and no .blend pushed:
+  - the generated long skirts (the convex hull of the seated legs, remeshed) read as stiff solid blobs or pillows (the earlier rejected "rigid lap blob" fault);
+  - the girl (about 1.22 m) cannot reach the floor from the seat: feet 95 mm short, so the solver perches her nearly standing (hip z 0.63).
+- What it needs: a real cloth-simulated long skirt (a tube draped from the standing pose into the seat, colliding with legs and seat), or a downloaded period dress asset; and for the girl, a child-height seat (a low chair about 0.28 m) or her feet on a footstool, which the director's note ruled out.
