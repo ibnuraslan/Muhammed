@@ -110,7 +110,7 @@ def calibrate(c):
         for m in mks: m.show_viewport = True
         for s in "LR":
             hp = Wh(rig, "upperleg01." + s); kn = Wh(rig, "lowerleg01." + s)
-            for u in (0.0, 0.25, 0.5, 0.75):
+            for u in (0.0, 0.25, 0.5):
                 q = hp.lerp(kn, u)
                 for dy in (0.0, 0.04):
                     for bv in bvs:
