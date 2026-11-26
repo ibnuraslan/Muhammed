@@ -98,6 +98,11 @@ def dress(rig, body, top, bottom, top_col, bot_col):
     if b: log("waist", rig.name, tuck_waist(b, t))
     for g in [x for x in (t, b) if x]:
         g.name = rig.name + "." + ("top" if g is t else "trousers")
+        # real cloth thickness with a closed rim at every hem, cuff and collar (no paper-thin edges)
+        so = g.modifiers.new("solid", 'SOLIDIFY'); so.thickness = 0.003; so.offset = 1.0; so.use_rim = True
+        i = g.modifiers.find("solid"); j = g.modifiers.find("Subdivision")
+        while j >= 0 and i > j:          # after the float/tuck displaces, before the subdivision
+            g.modifiers.move(i, i - 1); i -= 1; j = g.modifiers.find("Subdivision")
     return t, b
 
 W_TOP, W_TRS = dress(WOM, WB, "fisherman", "wool_pants", (0.95, 0.16, 0.07), (0.05, 0.16, 0.62))
