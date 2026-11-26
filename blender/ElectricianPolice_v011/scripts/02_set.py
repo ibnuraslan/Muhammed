@@ -379,7 +379,7 @@ box("Control_inN", (CR["x1"] - CR["x0"] + 0.25, 0.2, CR["h"]), ((CR["x0"] + CR["
 box("Control_ceil", (CR["x1"] - CR["x0"] + 0.25, CR["y1"] - CR["y0"] + 0.4, 0.2), ((CR["x0"] + CR["x1"]) / 2, (CR["y0"] + CR["y1"]) / 2, CR["h"] + 0.1), plaster("M_CtrlCeil", (0.95, 0.93, 0.88)), bevel=0)
 box("Control_floor", (CR["x1"] - CR["x0"], CR["y1"] - CR["y0"], 0.05), ((CR["x0"] + CR["x1"]) / 2, (CR["y0"] + CR["y1"]) / 2, 0.025), tiles("M_CtrlFloor", (0.10, 0.25, 0.45), (0.85, 0.85, 0.80), (0.2, 0.2, 0.2), scale=1.2, w=0.5, h=0.5), bevel=0)
 box("Control_outerS", (7.4, 0.25, 4.2), (WX - 3.7, CY0 + 0.125, 2.1), cr_m, bevel=0)
-box("Control_outerN", (7.4, 0.25, 4.2), (WX - 3.7, CY1 - 0.125, 2.1), cr_m, bevel=0)
+box("Control_outerN", (7.4, 0.25, 4.2), (WX - 3.7, CY1 - 0.125 + 0.07, 2.1), cr_m, bevel=0)   # clear of the inner wall (no z-fighting)
 box("Control_roof", (7.4, CY1 - CY0, 0.25), (WX - 3.7, (CY0 + CY1) / 2, 4.2), cr_m, bevel=0)
 box("Control_band", (0.14, CY1 - CY0, 0.30), (WX + 0.07, (CY0 + CY1) / 2, 3.0), cr_trim, bevel=0.01)
 box("Control_parapet", (0.3, CY1 - CY0 + 0.2, 0.4), (WX + 0.05, (CY0 + CY1) / 2, 4.35), cr_trim, bevel=0.02)
