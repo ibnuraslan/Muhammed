@@ -1,0 +1,11 @@
+limits L elbow [-150, 40] knee [0, 150] hip [-20, 125]
+limits R elbow [-150, 40] knee [0, 150] hip [-20, 125]
+owner HS_Root 1 Boy head jump_mm 0.0
+key top z 0.763 mouse top z 0.755
+glass (1.473, -0.22, 1.27) cup hit (0.133, -0.177, 1.199) inside flight m 1.343
+owner HS_Root 936 None None jump_mm 0.0
+seated head centre (-0.001, -0.245, 1.181)
+camera keyed 1203
+seat low z 0.498 back y 0.032
+chair at (0.0, -0.204, 0.459)
+quat flips fixed 0
