@@ -98,6 +98,11 @@ def seat_pose(c, f, root_dz=0.0, flex=0.0, foot_fwd=0.0, knee_out=0.0):
         CT.key_world("IK_foot." + s, f, M)
         key_pole(CT, s, f, knee + fwd * 0.6 + Vector((0, 0, 0.1)), kind="knee")
 
+def skirt_bvh(cl):
+    upd(); dg = bpy.context.evaluated_depsgraph_get(); e = cl.evaluated_get(dg); me = e.to_mesh(); Mw = cl.matrix_world
+    polys = [p.vertices[:] for p in me.polygons if p.material_index == 1]
+    b = BVHTree.FromPolygons([Mw @ v.co for v in me.vertices], polys); e.to_mesh_clear(); return b
+
 def calibrate(c):
     """move the pelvis so the lowest buttock / thigh-underside skin rests 6 mm INTO the velvet (it reads as sitting ON it):
     rays cast UP from the floor under each hip joint and mid-thigh hit the underside of the posed body."""
@@ -106,7 +111,7 @@ def calibrate(c):
         seat_pose(c, 1); fs(1)
         mks = [m for m in body.modifiers if m.type == 'MASK' and m.show_viewport]
         for m in mks: m.show_viewport = False      # measure the real skin (clothes masks hide it)
-        bvs = [bvh_eval(body)]; mz = 9.0
+        bvs = [bvh_eval(body), skirt_bvh(cl)]; mz = 9.0        # skin and the trousers seat
         for m in mks: m.show_viewport = True
         for s in "LR":
             hp = Wh(rig, "upperleg01." + s); kn = Wh(rig, "lowerleg01." + s)
@@ -263,11 +268,6 @@ def surf_clear(rig, s, bvhs):
                 dd = (p - loc).dot(nrm) if (p - loc).length < 0.05 else 9.0
                 if dd < worst: worst = dd; WORSTB[0] = n
     return worst
-
-def skirt_bvh(cl):
-    upd(); dg = bpy.context.evaluated_depsgraph_get(); e = cl.evaluated_get(dg); me = e.to_mesh(); Mw = cl.matrix_world
-    polys = [p.vertices[:] for p in me.polygons if p.material_index == 1]
-    b = BVHTree.FromPolygons([Mw @ v.co for v in me.vertices], polys); e.to_mesh_clear(); return b
 
 def rest_on_thigh(c, s, f, fwd=0.0, side=0.0, lift=0.0):
     """hand resting palm-down on its own thigh (skirt surface found by a ray from above)"""
@@ -437,7 +437,7 @@ arc_key(GR, "R", 395, F_ON, 440, lift_arm=Vector((-0.02, -0.08, 0.03)), u=0.75)
 pose_hand(GR, "R", 418, "soft_cup", spread=1)
 TH_GAP = {}
 for f in (F_ON, 520, 612, 700, 800, 905):
-    g = settle("G", "R", f, lambda: [bvh_eval(TC), body_noarms(TR, TB)], min_gap=0.004, axis=bone_world(TR, "neck02", *TH_L)[1])
+    g = settle("G", "R", f, lambda: [bvh_eval(TC), body_noarms(TR, TB)], min_gap=0.004, tries=10, axis=bone_world(TR, "neck02", *TH_L)[1])
     fs(f); TH_GAP[f] = (round(g * 1000, 1), WORSTB[0], round((Wh(GR, "wrist.R") - Wh(GR, "IK_hand.R")).length * 1000, 1))
 log("girl fingers on throat: min clearance mm", TH_GAP)
 
