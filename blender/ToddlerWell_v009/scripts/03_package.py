@@ -26,16 +26,27 @@ for im in list(bpy.data.images):
         im.user_remap(first[key]); bpy.data.images.remove(im)
     else:
         first.setdefault(key, im)
+# decimate the heavy background tree meshes (far from camera): evaluate a Decimate copy, swap the mesh on all users
+for me in list(bpy.data.meshes):
+    if me.name.startswith("island_trees") and len(me.vertices) > 100000:
+        tmp = bpy.data.objects.new("_dec", me); bpy.context.scene.collection.objects.link(tmp)
+        md = tmp.modifiers.new("dec", "DECIMATE"); md.ratio = 0.05
+        dg = bpy.context.evaluated_depsgraph_get()
+        nm = bpy.data.meshes.new_from_object(tmp.evaluated_get(dg)); nm.name = me.name + "_lo"
+        nv = len(me.vertices); bpy.data.objects.remove(tmp)
+        me.user_remap(nm); print("DECIMATED", me.name, nv, "->", len(nm.vertices))
 KEEP2K = ("young_african_male_diffuse", "young_caucasian_male_diffuse", "middleage_caucasian_male_diffuse", "teen_tee_diffuse", "eyebrow", "eyelash")
 for im in bpy.data.images:
     if im.size[0] == 0: continue
     big = max(im.size)
     if any(k in im.name for k in KEEP2K): tgt = min(big, 2048)
-    elif im.name.startswith(("shrub", "island_tree", "aerial_grass")): tgt = 1024
+    elif im.name.startswith(("shrub", "island_tree")): tgt = 512   # far background; repacked buffers compress well in the .blend
+    elif im.name.startswith("aerial_grass"): tgt = 1024
     else: tgt = min(big, 1024)
     if big > tgt:
         im.scale(int(im.size[0] * tgt / big), int(im.size[1] * tgt / big)); im.pack()
         print("SHRUNK", im.name, tgt)
+bpy.context.scene.cycles.adaptive_threshold = 0.03   # PRODUCTION_RULES render speed
 bpy.ops.outliner.orphans_purge(do_local_ids=True, do_linked_ids=True, do_recursive=True)
 bpy.ops.file.pack_all()
 for snd in bpy.data.sounds:

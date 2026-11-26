@@ -3,7 +3,7 @@
 | Item | Value |
 |---|---|
 | File | `ToddlerWell_v009_60fps.blend`: compressed, every image and the VO packed; opens in factory-startup Blender 5.2.2 with no add-ons |
-| Engine | Cycles, CPU or GPU, 64 adaptive samples, OpenImageDenoise |
+| Engine | Cycles, CPU or GPU, 64 adaptive samples (noise threshold 0.03), OpenImageDenoise |
 | Resolution | 1080 × 1920 at 100 % |
 | Frame rate | 60 fps |
 | Frame range | **1–1728**, step 1 (28.8 s; built to the voiceover) |
