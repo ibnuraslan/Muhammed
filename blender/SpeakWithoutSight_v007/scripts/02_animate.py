@@ -104,8 +104,10 @@ def calibrate(c):
     rig, body, cl, CT, H = CH[c]
     for it in range(4):
         seat_pose(c, 1); fs(1)
-        mk = body.modifiers.get("hide_skirt"); mk.show_viewport = False      # measure the real skin (masked under the skirt)
-        bvs = [bvh_eval(body)]; mk.show_viewport = True; mz = 9.0
+        mk = body.modifiers.get("hide_skirt")
+        if mk: mk.show_viewport = False      # measure the real skin (masked under the skirt)
+        bvs = [bvh_eval(body)]; mz = 9.0
+        if mk: mk.show_viewport = True
         for s in "LR":
             hp = Wh(rig, "upperleg01." + s); kn = Wh(rig, "lowerleg01." + s)
             for u in (0.0, 0.25, 0.5):
@@ -365,7 +367,7 @@ def throat_hand(f, lift=0.0):
     t = Vector((0, 0, 1)).cross(N).normalized()
     if t.x > 0: t = -t                     # fingers across the front of her throat (away from the girl's wrist)
     fd = (t + Vector((0, 0, 0.15))).normalized()
-    place_hand(GR, "R", f, P + N * lift, -N, fd, skin=0.012)
+    place_hand(GR, "R", f, P + N * lift, -N, fd, skin=0.016)
     sh = Wh(GR, "upperarm01.R"); key_pole(CTG, "R", f, sh + Vector((0.10, 0.30, -0.40)))
     pose_hand(GR, "R", f, "soft_cup")
     return P, N

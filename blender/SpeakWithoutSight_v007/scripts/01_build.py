@@ -109,7 +109,8 @@ def recolor_garment(rig, top_mult, skirt_mult, name):
             if nm and g.weight > best[0]: best = (g.weight, nm)
         if best[1] and best[1].startswith(("upperleg", "pelvis")) and v.co.z > hem + 0.03:
             covered.add(v.index)
-    hide_under(body, covered, name="hide_skirt", rings=2)
+    if rig.name == "Teacher":           # (the girl's skirt never shows her thighs; masking hers exposed the skirt's inside)
+        hide_under(body, covered, name="hide_skirt", rings=2)
     print("GARMENT", name, "hem z", round(hem, 3), "hidden body verts", len(covered))
     return cl
 GCL = recolor_garment(G, (1.0, 0.42, 0.0), (0.02, 0.06, 0.45), "Girl.clothes")       # saffron blouse, navy skirt
