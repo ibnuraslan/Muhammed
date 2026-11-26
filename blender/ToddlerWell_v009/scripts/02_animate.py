@@ -155,7 +155,7 @@ def tod_fall_z(f):
     t = (f - FALL0) / 60.0
     return max(Z_BOT + tod_h - 0.012, (tod_h - 0.30) - 5.15 * t * t)
 seq = [(80, Vector((0.70, 0.36)), 0.0, yaw_walk, 4), (88, Vector((0.68, 0.34)), 0.0, yaw_walk + 15, 10),
-       (96, Vector((0.48, 0.26)), 0.10, yaw_walk + 30, 6), (102, Vector((0.24, 0.16)), -0.05, yaw_walk + 35, -4),
+       (96, Vector((0.50, 0.27)), 0.07, yaw_walk + 30, 6), (102, Vector((0.24, 0.16)), -0.05, yaw_walk + 35, -4),
        (108, Vector((0.02, 0.07)), -0.30, yaw_walk + 40, -6)]
 for f, xy, dz, yw, fl in seq:
     Mb = body_M(TH, stand_pos(TH, xy.x, xy.y, dz), yw, flex=fl)
@@ -163,7 +163,7 @@ for f, xy, dz, yw, fl in seq:
     if f <= 88:
         key_feet_ground(TCT, TH, f, (xy.x, xy.y, yw), spread=0.06)
     else:
-        key_feet_rel(TCT, TH, f, Mb, lift=(0.06 if f == 96 else 0.0, 0.0))
+        key_feet_rel(TCT, TH, f, Mb, lift=(0.10 if f == 96 else 0.04, 0.04))
     for s in "LR":
         if f <= 88: hang(TCT, TH, s, f, Mb, fwd=0.05, out=0.10, bend=0.4)
         else: arms_up(TCT, TH, s, f, Mb, reach=0.80 if f < 102 else 0.95, out=0.20)
@@ -294,9 +294,9 @@ wx, wyb, wyf = ring_fit([TCL], z_w, 0.012, pel.x, pel.y, 0.26)
 log("teen waist ring", round(wx, 3), round(wyb, 3), round(wyf, 3))
 WAIST, KNOT = O["ROPE_WaistRing"], O["ROPE_Knot"]
 wyc = pel.y + (wyb - wyf) / 2
-sxw, syw = (wx + 0.018) / 0.20, ((wyb + wyf) / 2 + 0.018) / 0.20
+sxw, syw = (wx + 0.035) / 0.20, ((wyb + wyf) / 2 + 0.035) / 0.20
 parent_to_bone(WAIST, TEENR, "spine05", Matrix.Translation((pel.x, wyc, z_w)) @ Matrix.Diagonal((sxw, syw, 1.0, 1.0)))
-KNOT_REST = Vector((pel.x, wyc - (wyb + wyf) / 2 - 0.035, z_w))
+KNOT_REST = Vector((pel.x, wyc - (wyb + wyf) / 2 - 0.052, z_w))
 parent_to_bone(KNOT, TEENR, "spine05", Matrix.Translation(KNOT_REST) @ Matrix.Diagonal((1.0, 0.8, 0.8, 1.0)))
 for o in (WAIST, KNOT): vis(o, 1, False); vis(o, 972, True)
 for r in (RESR, TEENR, TODR): r.data.pose_position = 'POSE'
@@ -352,8 +352,8 @@ for f in range(990, 1101, 6):
     for s in "LR":
         sx = 1 if s == "L" else -1
         sh = ECT.BN["upperarm01." + s].head_local
-        w_knot = KN + Vector((sx * (0.075 + tug), -0.055, 0.035))
-        w_hang = sh + Vector((sx * 0.05, -0.08, -0.48))
+        w_knot = KN + Vector((sx * (0.095 + tug), -0.075, 0.035))
+        w_hang = sh + Vector((sx * 0.13, -0.12, -0.44))
         w = w_hang.lerp(w_knot, u)
         key_hand_local(ECT, EH, s, f, Mb, w, Vector((-sx * 0.55, -0.15, -0.8)), Vector((-sx, -0.2, 0.0)), sh + Vector((sx * 0.35, 0.3, -0.3)),
                        "wrap_grip", amount=u)
@@ -368,7 +368,7 @@ saccades(ECT, 880, 1100, every=40, amp=(1.5, 2.5), seed=6)
 # ---- head first down the shaft (inverted: body yaw 0 = facing the camera, rotated 180 about the view axis Y)
 # the switch happens at f1112 while the camera looks up at the pulley (he is out of frame)
 INV0 = 1112
-TEEN_Y = 0.09
+TEEN_Y = 0.15
 def hips_z(f):
     """pelvis height while lowered: legs out of the rim at f1125, head reaches the toddler at f1350, rise f1440-1560"""
     return pchip([(INV0, 0.55), (1150, 0.05), (1216, -3.2), (1300, -6.6), (1350, -7.30), (1440, -7.30), (1500, -3.6), (1560, 0.4)])(f)
@@ -381,7 +381,7 @@ for f in list(range(INV0, 1561, 4)):
     sweep = 22 * math.sin(2 * math.pi * (f - 1216) / 70) if 1216 <= f <= 1320 else 0.0
     Mb = inv_M(f)
     key_body(ECT, EH, f, Mb)
-    key_feet_rel(ECT, EH, f, Mb, lift=(0.02, 0.02), back=(0.05, 0.05), spread=-0.02)
+    key_feet_rel(ECT, EH, f, Mb, lift=(0.02, 0.02), back=(0.11, 0.11), spread=-0.02)
     key_spine(ECT, f, flex=-4)
     key_head(TEENR, ECT, f, sweep, -18 if f < 1320 else -30)
     # arms: reaching down past the head (overhead in his body frame) toward the toddler
@@ -485,7 +485,7 @@ TOD_HANDS_Z = Z_BOT + 0.86
 def loop_tip(f):
     z = pchip([(200, TOP.z - 0.05), (215, TOP.z - 0.3), (300, TOD_HANDS_Z + 0.48), (330, TOD_HANDS_Z + 0.44), (392, TOP.z - 0.25)])(f)
     sw = 0.13 * math.sin(2 * math.pi * (f - 280) / 64) * smoothstep((f - 270) / 20) * (1 - smoothstep((f - 340) / 20))
-    return Vector((sw, 0.06, z))
+    return Vector((sw, -0.24, z))
 for f in range(200, 396, 2):
     tip = loop_tip(f); key_rope(R1, f, TOP, tip)
     LOOP.location = tip + Vector((0, 0, -0.16)); LOOP.rotation_euler = (math.radians(90), math.radians(15 * math.sin(f / 9.0)), 0)
@@ -565,8 +565,8 @@ f = 100; hp = face_pt(TODR, f); ck(f, Vector((0.25, -1.75, 0.65)), Vector((0.1, 
 for f in (120, 140, 160, 175, 186):
     hp = face_pt(TODR, f); ck(f, Vector((0.05, -1.7, hp.z + 0.45)), hp + Vector((0, 0, -0.25)), 28)
 # B2: at the bottom, toddler crying, rope loop comes down; then rise with the loop to the top (f330-397)
-for f in (200, 240, 280, 320):
-    hp = face_pt(TODR, f); ck(f, hp + Vector((0.25 * math.sin(f / 50.0), -1.55, 0.35)), hp + Vector((0, 0, 0.12)), 28)
+for f, dx, dy, dz in ((200, 0.0, -1.7, 0.55), (240, 0.30, -1.45, 0.25), (280, -0.25, -1.25, 0.20), (320, 0.10, -1.55, 0.45)):
+    hp = face_pt(TODR, f); ck(f, hp + Vector((dx, dy, dz)), hp + Vector((0, 0, 0.12)), 28)
 ck(360, Vector((0.0, -1.9, -4.5)), Vector((0.0, 0.2, -3.6)), 26)
 fs(397); rp = face_pt(RESR, 397)
 ck(397, Vector((-0.45, -2.6, 1.55)), (rp + Vector((0.45, 0.0, -0.45))), 26)

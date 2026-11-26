@@ -187,6 +187,7 @@ WELLC = cutter("CUT_Well", R_SH, Z_BOT, 1.5, (0, 0))
 WELLC.data.materials[0] = M_STRATA
 # the dig pit: a cutter whose top stays above ground; PitCtl (an empty) scales it down from the top
 PITC = cutter("CUT_Pit", 0.55, -1.0, 0.0, (1.7, 0.0))
+PITC.data.materials[0] = M_STRATA
 PITC.data.transform(Matrix.Translation((0, 0, -0.5)))       # object-space z: -1 (bottom) .. 0 (top)
 PITC.location = (1.7, 0.0, 0.6)                              # top 0.6 above ground: depth below ground = scale.z - 0.6
 PITC.scale.z = 0.9                                           # 0.3 m deep at the start
@@ -220,7 +221,7 @@ def half_tube(name, r_in, r_out, z0, z1, material, loc=(0, 0, 0)):
     for p in o.data.polygons: p.use_smooth = True
     o.data.shade_smooth()
     return o
-CASING = half_tube("SET_Casing", R_SH + 0.002, R_SH + 0.05, -0.5, 0.14, M_STEEL)
+CASING = half_tube("SET_Casing", R_SH + 0.002, R_SH + 0.05, -0.5, 0.04, M_STEEL)
 bv = CASING.modifiers.new("bev", 'BEVEL'); bv.width = 0.008; bv.segments = 2; bv.limit_method = 'ANGLE'
 
 # ================================================================== tripod with a pulley over the well (rescue gear)
@@ -359,7 +360,7 @@ SUNO = bpy.data.objects.new("Sun", SUN); sc.collection.objects.link(SUNO)
 SUNO.rotation_euler = (math.radians(50), 0, math.radians(-35))
 # shaft fill: a soft warm area light low in the cut-away so the toddler reads at the bottom (no white faces: low power)
 for nm, z in (("ShaftFill_Low", Z_BOT + 1.6), ("ShaftFill_Mid", -4.5)):
-    L = bpy.data.lights.new(nm, 'AREA'); L.energy = 60; L.size = 1.5; L.color = (1.0, 0.88, 0.72)
+    L = bpy.data.lights.new(nm, 'AREA'); L.energy = 130; L.size = 1.5; L.color = (1.0, 0.88, 0.72)
     o = bpy.data.objects.new(nm, L); sc.collection.objects.link(o); o.location = (0.0, -2.2, z); o.rotation_euler = (math.radians(90), 0, 0)
 sc.render.engine = 'CYCLES'; sc.cycles.samples = 64; sc.cycles.use_adaptive_sampling = True
 sc.cycles.use_denoising = True; sc.cycles.device = 'CPU'
