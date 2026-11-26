@@ -122,6 +122,10 @@ def calibrate(c):
         if abs(SEAT_Z + 0.002 - mz) < 0.002: break
 
 FOOTSTOOL_TOP = None
+def shoe_bottom():
+    fs(1); sh = [c for c in GR.children if "shoes" in c.name][0]
+    upd(); dg = bpy.context.evaluated_depsgraph_get(); e = sh.evaluated_get(dg); me = e.to_mesh()
+    z = min((sh.matrix_world @ v.co).z for v in me.vertices); e.to_mesh_clear(); return z
 def setup_seating():
     global FOOTSTOOL_TOP
     # the girl's feet: a small upholstered footstool under them (her feet do not reach the floor)
@@ -136,6 +140,7 @@ def setup_seating():
     FOOTSTOOL_TOP = max(0.08, round(sole + 0.045, 3))
     FOOT_Z["G"] = FOOTSTOOL_TOP
     calibrate("G")
+    FOOTSTOOL_TOP = round(shoe_bottom() - 0.002, 4)          # the stool top meets the soles exactly
     log("footstool top", FOOTSTOOL_TOP, "knee z", round(kz, 3))
 setup_seating()
 
@@ -300,7 +305,7 @@ def settle(c, s, f, bvhs_fn, min_gap=0.006, axis=Vector((0, 0, 1)), tries=5):
 SETTLE = []
 
 # ---- resting hands (keys spaced; idle motion is tiny finger/position drift)
-ARMB = ("upperarm", "lowerarm", "wrist", "finger", "metacarpal", "clavicle", "shoulder")
+ARMB = ("upperarm", "lowerarm", "wrist", "finger", "metacarpal")
 def body_noarms(rig, body):
     """the character's own body WITHOUT its arms and hands (a hand is never 'inside' itself)"""
     db = DOMB.get(body.name)
@@ -344,7 +349,7 @@ def bone_world(rig, bone, Pl, Nl=None):
 F_THROAT = 470
 fs(F_THROAT)
 nk = (Wh(TR, "neck02") + Wh(TR, "neck03")) / 2
-nk.z = (Wh(TR, "eye.L").z + Wh(TR, "eye.R").z) / 2 - 0.140          # the larynx: 12 cm below the eyes (not under the jaw)
+nk.z = (Wh(TR, "eye.L").z + Wh(TR, "eye.R").z) / 2 - 0.126      # the larynx: below the jaw, above the collar          # the larynx: 12 cm below the eyes (not under the jaw)
 fdir = Matrix.Rotation(math.radians(YAW["T"] + 40), 3, 'Z') @ Vector((0, -1, 0))   # front-left of her neck (toward the girl and the camera)
 h = ray_surface([TB], nk + fdir * 0.25, -fdir)
 TH_P, TH_N = h[0].copy(), h[1].copy()
@@ -366,8 +371,8 @@ def throat_hand(f, lift=0.0):
     fs(f); P, N = bone_world(TR, "neck02", *TH_L); N = Vector((N.x, N.y, 0)).normalized()
     t = Vector((0, 0, 1)).cross(N).normalized()
     if t.x > 0: t = -t                     # fingers across the front of her throat (away from the girl's wrist)
-    fd = (t + Vector((0, 0, -0.10))).normalized()
-    place_hand(GR, "R", f, P + N * lift + Vector((0, 0, -0.012)), -N, fd, skin=0.022)
+    fd = Vector((t.x, t.y, 0.0)).normalized()          # fingers level across the throat
+    place_hand(GR, "R", f, P + N * lift, -N, fd, skin=0.022)
     sh = Wh(GR, "upperarm01.R"); key_pole(CTG, "R", f, sh + Vector((0.10, 0.30, -0.40)))
     pose_hand(GR, "R", f, "soft_cup")
     return P, N
@@ -442,7 +447,7 @@ arc_key(GR, "R", 395, F_ON, 440, lift_arm=Vector((-0.02, -0.08, 0.03)), u=0.75)
 pose_hand(GR, "R", 418, "soft_cup", spread=1)
 TH_GAP = {}
 for f in (F_ON, 520, 612, 700, 800, 905):
-    g = settle("G", "R", f, teach_bvh, axis=bone_world(TR, "neck02", *TH_L)[1])
+    g = settle("G", "R", f, lambda: [bvh_eval(TC), body_noarms(TR, TB)], axis=bone_world(TR, "neck02", *TH_L)[1])
     fs(f); TH_GAP[f] = (round(g * 1000, 1), WORSTB[0], round((Wh(GR, "wrist.R") - Wh(GR, "IK_hand.R")).length * 1000, 1))
 log("girl fingers on throat: min clearance mm", TH_GAP)
 
