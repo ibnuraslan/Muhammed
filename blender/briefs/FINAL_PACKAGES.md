@@ -109,3 +109,4 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | 08 | BeethovenDeaf | claude/rebuild08-beethoven-deaf: blender/BeethovenDeaf_v011/BeethovenDeaf_v011_60fps.blend (client-approved, Render check PASS) | 1–1435 |
 | 07 | ShoeBomber | claude/rebuild07-shoe-bomber: blender/ShoeBomber_v011/ShoeBomber_v011_60fps.blend (client-approved, Render check PASS) | 1–1469 |
 | 09 | DonationBin | claude/rebuild09-donation-bin: blender/DonationBin_v010/DonationBin_v010_60fps.blend (client-approved, Render check PASS) | 1–2388 |
+| 13 | FrozenTearsGun | claude/rebuild13-frozen-tears-gun: blender/FrozenTearsGun_v011/FrozenTearsGun_v011_60fps.blend (client-approved, Render check PASS) | 1–1655 |
