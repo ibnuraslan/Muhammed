@@ -157,10 +157,10 @@ M.key(121, hand_L=LH((0.18, -0.20, 0.32), (0, -1, 0), (0, -0.3, 1)), hand_R=LH((
 M.key(128, hand_L=LH((0.20, -0.30, 0.40), (0, -1, 0), (0, -0.3, 1)), hand_R=LH((-0.20, -0.30, 0.40), (0, -1, 0), (0, -0.3, 1)))
 M.key(134, pos=Vector((0.03, MY + 0.10, 0.93)), rot=Rf(MF, lean=14), spine=(12, 0, 0), hand_L=back_contact(-1, 0.02), hand_R=back_contact(1, 0.02),
       foot_L=WH((-0.12, MY + 0.12, 0.074), (0, 0, 1), (0, 1, 0)))
-M.key(142, pos=Vector((0.03, MY + 0.12, 0.925)), rot=Rf(MF, lean=16), spine=(14, 0, 0), hand_L=back_contact(-1, 0.0), hand_R=back_contact(1, 0.0))
-M.key(147, hand_L=LH((0.22, -0.24, 0.36), (0, -1, 0), (0, 0, 1)), hand_R=LH((-0.22, -0.24, 0.36), (0, -1, 0), (0, 0, 1)), grip_L="open_alarm", grip_R="open_alarm")
-M.key(147, pos=Vector((0.25, MY - 0.15, 0.935)), rot=Rf((-0.3, 1, 0), lean=0), spine=(-2, 0, 0), head=(-8, -10, 0),
-      foot_L=WH((0.10, MY - 0.05, 0.074), (0, 0, 1), (0, 1, 0)), foot_R=WH((0.42, MY - 0.30, 0.074), (0, 0, 1), (-0.3, 1, 0)))
+M.key(139, pos=Vector((0.03, MY + 0.12, 0.925)), rot=Rf(MF, lean=16), spine=(14, 0, 0), hand_L=back_contact(-1, 0.0), hand_R=back_contact(1, 0.0))
+M.key(143, hand_L=LH((0.22, -0.24, 0.36), (0, -1, 0), (0, 0, 1)), hand_R=LH((-0.22, -0.24, 0.36), (0, -1, 0), (0, 0, 1)), grip_L="open_alarm", grip_R="open_alarm")
+M.key(149, pos=Vector((0.40, MY - 0.25, 0.935)), rot=Rf((-0.3, 1, 0), lean=0), spine=(-2, 0, 0), head=(-8, -10, 0),
+      foot_L=WH((0.28, MY - 0.18, 0.074), (0, 0, 1), (0, 1, 0)), foot_R=WH((0.55, MY - 0.36, 0.074), (0, 0, 1), (-0.3, 1, 0)))
 M.key(160, pos=Vector((0.55, MY - 0.40, 0.94)), rot=Rf((-0.4, 1, 0), lean=-4), spine=(-4, 0, 0), head=(-12, -15, 0),
       foot_L=WH((0.45, MY - 0.32, 0.074), (0, 0, 1), (-0.4, 1, 0)), foot_R=WH((0.68, MY - 0.50, 0.074), (0, 0, 1), (-0.4, 1, 0)),
       hand_L=LH((0.26, -0.30, 0.38), (0, -1, 0), (0, 0, 1)), hand_R=LH((-0.26, -0.30, 0.38), (0, -1, 0), (0, 0, 1)))
