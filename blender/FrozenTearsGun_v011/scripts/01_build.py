@@ -215,10 +215,10 @@ SEAT_Z = 0.883 * 0.52
 import_asset("adjustable_wrench/adjustable_wrench_1k.blend", "Wrench", (0.36, 0.62, BENCH_TOP + 0.016), rot_z=R_(70))
 import_asset("chemistry_set/chemistry_set_1k.blend", "Chem", (-0.45, 0.58, BENCH_TOP + 0.009), rot_z=R_(10))
 import_asset("metal_tool_chest/metal_tool_chest_1k.blend", "ToolChest", (1.20, 1.25, 0.47), rot_z=R_(-90))
-import_asset("drill_press_01/drill_press_01_1k.blend", "Drill", (1.25, -0.55, 0.536 + 0.75), rot_z=R_(-90))
-box("DrillCabinet", (0.55, 0.60, 0.75), (1.28, -0.55, 0.375), steel, bevel=0.01)
+import_asset("drill_press_01/drill_press_01_1k.blend", "Drill", (1.25, 2.45, 0.536 + 0.75), rot_z=R_(-90))
+box("DrillCabinet", (0.55, 0.60, 0.75), (1.28, 2.45, 0.375), steel, bevel=0.01)
 # (removed after check 1: lens blocker / black material) # import_asset("painted_wooden_shelves/painted_wooden_shelves_1k.blend", "ShelfR", (X1, 0.45, 0.0), rot_z=R_(90), scale=(1.2, 1.2, 1.4))
-import_asset("hanging_industrial_lamp/hanging_industrial_lamp_1k.blend", "LampHang1", (1.05, 0.30, H - 0.01))
+import_asset("hanging_industrial_lamp/hanging_industrial_lamp_1k.blend", "LampHang1", (-2.95, 4.30, H - 0.01))
 import_asset("hanging_industrial_lamp/hanging_industrial_lamp_1k.blend", "LampHang2", (-2.90, 2.60, H - 0.01))
 # ---- office corner: the mentor's desk, her chair, shelves, plant
 DESK = import_asset("metal_office_desk/metal_office_desk_1k.blend", "Desk", (-2.10, 3.68, 0.0), rot_z=math.pi, scale=(0.72, 0.75, 0.97))

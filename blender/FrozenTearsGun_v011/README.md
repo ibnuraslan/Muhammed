@@ -1,9 +1,23 @@
 # FrozenTearsGun_v011: from-scratch rebuild, NOT READY (ON HOLD)
 
-**Status: ON HOLD.** The round-4 preview (check 5, director-approved) FAILED a fresh harsh review, so no .blend is pushed.
-- `review/preview.mp4` is the check-5 preview: 270x480, every 5th frame, with the VO.
-- It was rendered from the exact packed build (77 MB, kept locally).
-- The render check on that build PASSED: it opens cleanly, everything is packed, the camera and VO are present, and frames 1, 828 and 1655 rendered at full resolution in 60-74 s each with 16 samples. Copies are in `review/render_check_*.jpg`.
+**Status: ON HOLD.** The round-5 preview (check 6, director-approved) FAILED a fresh harsh review, so no .blend is pushed.
+- `review/preview.mp4` is the check-6 preview, rendered from the exact packed build (77 MB, kept locally).
+- **Render check: passed** on that build. It opens cleanly with everything packed, and the camera and VO strip are present. Frames 1, 828 and 1655 rendered at full resolution in 66-75 s each with 16 samples. Copies are in `review/render_check_*.jpg`.
+
+## Check 6 (round 5): what was fixed
+- **No whips:** every whip is now a slow move of 30 frames or more. Between the bench and the range, a high corner view behind her holds both people. The fastest camera turn is 33 degrees per frame, down from 58.
+- **Second trigger:** a 30-frame over-the-shoulder close-up of her trigger hand. The shot is retimed to land on "him".
+- **Left hand:** it stays in frame until it rests on the bench.
+- **Checks:** 0 lens blockers and 0 on-camera pop-ins. All teleports happen off camera.
+- **Logo:** readable at 1366-1471 (about 1.8 s).
+- **Passing:** the valve turn, the first trigger pull (666-696), the freezing, the target hits, the memory and the ice hit all read.
+
+## Check 6 faults (fresh harsh review, film frames)
+1. **861-866:** the office hanging lamp (moved there this round) hangs in front of the mentor's head. This is a regression; the lamp must be moved off his eyeline.
+2. **1601-1616:** the chase reads as two jump cuts. The camera snaps from the over-the-shoulder close-up to a wide shot, then to a chest close-up.
+3. **1574-1602:** the over-the-shoulder trigger close-up shows a fist; the index-finger pull is not visible. The left-side angle used at 666-696 works and should be reused.
+4. **401-496:** her face is cut by the right edge in the gas macro.
+5. **Risk at 651-706:** the palm may bulge behind the wooden grip; check it in a close render.
 
 ## Check 5 (round 4): what was fixed
 - **Valve:** the valve and trigger pivots had been created before their transforms were valid, so they sat at the gun origin. Now she visibly grips the red rim and turns it (291-346), with her face in frame.
