@@ -346,7 +346,7 @@ owner_switch(HS, F_GRIP + 1, None, log=log)
 def hs_world(f):
     """the headset path after the grip (world matrix)"""
     u1 = smoothstep((f - F_GRIP) / (F_OFF - F_GRIP)); u2 = smoothstep((f - F_OFF) / (F_DOWN - F_OFF))
-    up_ = 0.13 * u1 - 0.05 * u2; fwd = -0.05 * u1 - 0.22 * u2; down = -0.20 * u2
+    up_ = 0.13 * u1 - 0.05 * u2; fwd = -0.05 * u1 - 0.28 * u2; down = -0.32 * u2
     tilt = Matrix.Rotation(math.radians(-25 * u2), 4, 'X')          # the band tips toward him as it comes down
     T = Matrix.Translation(M0.translation + Vector((0, fwd, up_ + down)))
     return T @ tilt @ Matrix.Translation(-M0.translation) @ M0
@@ -391,17 +391,17 @@ SEG_A = [
     (30,  lambda: bpos(30) - D * 0.80 + UP * 0.20 + RGT * 0.22, lambda: bpos(30) + D * 2.5 + UP * 0.25, 24),
     (70,  lambda: bpos(70) - D * 0.60 + UP * 0.14 + RGT * 0.26, lambda: bpos(70) + D * 1.2 + UP * 0.08, 26),
     (100, lambda: bpos(100) - D * 0.50 + UP * 0.12 + RGT * 0.38, lambda: bpos(100) + D * 0.7, 26),
-    (118, lambda: P(1.95, 0.36, 1.42), lambda: GLASS + D * 0.05, 26),
-    (128, lambda: P(1.60, 0.36, 1.42), lambda: bpos(128) + D * 0.2, 26),
-    (140, lambda: P(1.12, 0.30, 1.38), lambda: bpos(140) + D * 0.30, 28),
+    (116, lambda: P(2.40, 0.33, 1.42), lambda: GLASS + D * 0.30, 24),
+    (130, lambda: P(1.25, 0.30, 1.38), lambda: bpos(130).lerp(head_c(130), 0.5), 26),
+    (145, lambda: P(1.00, 0.24, 1.34), lambda: bpos(145).lerp(head_c(145), 0.6), 28),
     (185, lambda: bpos(185) - D * 0.34 + RGT * 0.17 + UP * 0.06, lambda: bpos(185).lerp(head_c(185), 0.45), 30),
     (228, lambda: bpos(228) - D * 0.28 + RGT * 0.20 + UP * 0.07, lambda: bpos(228).lerp(head_c(228), 0.55), 30),
     (275, lambda: HC + Vector((0.75, -0.25, 0.10)), lambda: HC.lerp(Vector((0.10, -0.45, 0.78)), 0.5), 28),
-    (318, lambda: P(0.48, -0.72, HC.z - 0.02), lambda: P(0.05, -0.36, HC.z - 0.25), 26),
+    (318, lambda: P(0.48, -0.72, HC.z + 0.02), lambda: P(0.05, -0.36, HC.z - 0.15), 24),
     (352, lambda: P(0.14, -0.72, HC.z + 0.06), lambda: head_c(352) + Vector((0, 0, -0.04)), 28),
     (387, lambda: P(0.32, -0.60, HC.z + 0.08), lambda: head_c(387).lerp(cupc(387), 0.5), 32),
-    (430, lambda: P(0.48, -0.42, HC.z + 0.10), lambda: cupc(430).lerp(bpos(430), 0.30), 34),
-    (480, lambda: P(0.40, -0.30, HC.z + 0.06), lambda: cupc(480).lerp(bpos(480), 0.35), 38),
+    (430, lambda: cupc(430) + Vector((0.22, -0.32, 0.07)), lambda: cupc(430).lerp(head_c(430), 0.35), 32),
+    (480, lambda: cupc(480) + Vector((0.17, -0.24, 0.05)), lambda: cupc(480).lerp(head_c(480), 0.25), 36),
     (519, lambda: cupc(519) + Vector((0.16, -0.17, 0.04)), lambda: cupc(519).lerp(bpos(519), 0.4), 40),
     (560, lambda: cupc(560) + Vector((0.09, -0.10, 0.02)), lambda: cupc(560), 40),
     (590, lambda: cupc(590) + Vector((0.040, -0.040, 0.010)), lambda: cupc(590), 40),
@@ -415,15 +415,15 @@ for f, ang, dist, dz, az, ln in ((607, 12, 0.045, 0.008, -0.002, 40), (640, -8, 
                                  (705, -10, 0.050, -0.004, -0.006, 44), (722, 22, 0.058, 0.004, 0.0, 42), (745, 30, 0.070, 0.012, 0.006, 40)):
     pf, af = orb(f, ang, dist, dz, az); SEG_M.append((f, pf, af, ln))
 SEG_B = [
-    (SWAP2, lambda: P(0.46, -0.40, HC.z + 0.10), lambda: cupc(SWAP2).lerp(WALL, 0.22), 30),
-    (800, lambda: P(0.38, -0.55, HC.z + 0.06), lambda: head_c(800).lerp(WALL, 0.45), 26),
-    (F_WALL, lambda: P(0.30, -0.66, HC.z + 0.05), lambda: head_c(F_WALL).lerp(WALL, 0.5), 25),
+    (SWAP2, lambda: P(0.46, -0.40, HC.z + 0.10), lambda: cupc(SWAP2).lerp(WALL, 0.12), 26),
+    (800, lambda: P(0.38, -0.55, HC.z + 0.06), lambda: head_c(800).lerp(WALL, 0.22), 22),
+    (F_WALL, lambda: P(0.30, -0.66, HC.z + 0.05), lambda: head_c(F_WALL).lerp(WALL, 0.25), 22),
     (880, lambda: P(0.15, -0.70, HC.z + 0.05), lambda: head_c(880) + Vector((0, 0, -0.05)), 28),
     (940, lambda: P(0.12, -0.72, HC.z + 0.08), lambda: head_c(940) + Vector((0, 0, -0.02)), 26),
     (1010, lambda: P(0.20, -0.72, HC.z - 0.04), lambda: head_c(1010).lerp(HS.matrix_world.translation, 0.5), 28),
-    (1080, lambda: P(0.30, -0.66, HC.z - 0.02), lambda: head_c(1080).lerp(cupc(1080), 0.5), 30),
-    (1130, lambda: P(0.12, -0.70, HC.z + 0.04), lambda: head_c(1130).lerp(WALL, 0.45), 26),
-    (END, lambda: P(0.06, -0.62, HC.z - 0.04), lambda: head_c(END).lerp(cupc(END), 0.55), 30),
+    (1080, lambda: P(0.30, -0.66, HC.z - 0.02), lambda: head_c(1080).lerp(cupc(1080), 0.35), 28),
+    (1130, lambda: P(0.12, -0.70, HC.z + 0.04), lambda: head_c(1130).lerp(WALL, 0.22), 24),
+    (END, lambda: P(0.06, -0.62, HC.z - 0.04), lambda: head_c(END).lerp(cupc(END), 0.45), 28),
 ]
 def look_q(p, a, up=Vector((0, 0, 1))):
     zc_ = (p - a).normalized(); yc = (up - zc_ * up.dot(zc_)); yc = yc.normalized() if yc.length > 1e-6 else Vector((0, 1, 0))
