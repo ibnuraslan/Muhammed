@@ -464,20 +464,20 @@ for f, dx in ():
 log("teacher wave: wrist reach err mm", WAVE)
 rest_on_thigh("T", "L", 128); settle("T", "L", 128, teach_bvh)
 rest_on_thigh("T", "L", 362); settle("T", "L", 362, teach_bvh)
-F_REL = 422
+F_REL = 410
 for f in list(range(386, F_REL + 1, 4)):
     cover_hand(f)
 arc_key(TR, "L", 362, 386, 374, lift_arm=Vector((0, 0, 0.05)))
 pose_hand(TR, "L", 374, "relaxed")
 COV = {}
-for f in (386, 406, F_REL):
+for f in (386, 398, F_REL):
     fs(f); pc, d, n = palm_frame(GR, "R")
     g = settle("T", "L", f, lambda: [bvh_eval(GB)], axis=-n)
     COV[f] = round(g * 1000, 1)
 log("teacher palm over the girl's hand: min clearance mm", COV)
 rest_on_thigh("T", "L", 505); settle("T", "L", 505, teach_bvh)
-rest_on_thigh("T", "L", 462); settle("T", "L", 462, teach_bvh)
-arc_key(TR, "L", F_REL, 462, 442, lift_arm=Vector((0.0, -0.04, -0.02)))
+rest_on_thigh("T", "L", 446); settle("T", "L", 446, teach_bvh)
+arc_key(TR, "L", F_REL, 446, 426, lift_arm=Vector((0.0, -0.04, -0.03)))
 for f in range(565, END + 1, 70):
     rest_on_thigh("T", "L", f, fwd=0.015 * math.sin(f)); settle("T", "L", f, teach_bvh)
 rest_on_thigh("T", "L", END); settle("T", "L", END, teach_bvh)
@@ -582,7 +582,7 @@ def make_rings(prefix, rig, bone, Pl, Nl, windows, n=4, period=26, col=(1.0, 0.6
                 fac.default_value = 0.0; fac.keyframe_insert("default_value", frame=int(f + period) - 1)
                 f += period
         RINGS.append(r)
-def skin_ripples(prefix, rig, body, bone, Pl, keys_S, col=(1.0, 0.62, 0.12), K=180.0):
+def skin_ripples(prefix, rig, body, bone, Pl, keys_S, col=(1.0, 0.62, 0.12), K=320.0):
     """vibration ripples drawn ON the skin (a shader ring pattern around the contact): never cut into the neck or jaw.
     Distance is measured from an empty that follows the neck bone; the phase and strength are keyed values."""
     e = bpy.data.objects.new(prefix + "_RippleCentre", None); sc.collection.objects.link(e); e.empty_display_size = 0.01
