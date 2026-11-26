@@ -1,13 +1,33 @@
-# FrozenTearsGun_v011: from-scratch rebuild, NOT READY (ON HOLD, last round done)
+# FrozenTearsGun_v011: package for the client's render (CLIENT-APPROVED)
 
-**Status: ON HOLD.** The final round the director allowed (round 6, check 7) FAILED a fresh harsh review, so no .blend is pushed.
-- `review/preview.mp4` is the check-7 preview, rendered from the exact packed build (70 MB, kept locally; it rebuilds from `scripts/`).
-- **Render check passed** on that build:
-  - It opens with `--factory-startup` with everything packed, the camera set and the VO strip present.
-  - Frames 1, 828 and 1655 rendered at full resolution in 59-64 s each at 16 samples. None is black, empty or pink.
-  - Copies of the three frames are in `review/render_check_*.jpg`.
+**Status: READY TO RENDER.** The client approved this build as it is (relayed by the director on Nov 26, 2026).
+- `FrozenTearsGun_v011_60fps.blend` is that build, the check-7 build.
+- `review/preview.mp4` is its moving preview: 270x480, every 5th frame, with the VO. Watch it before paying for the render.
+- **One change after approval:** two invalid scripted drivers that came with the Poly Haven tool-chest asset (on the lock's mask modifier) were removed, to meet the zero-error rule. The properties keep the same values. Full-resolution frames 1, 828 and 1655 match the approved build's renders to within render noise (mean difference 0.04 of 255).
 
-## Check 7 (round 6): what was fixed
+## Render check: PASS
+Checked on the exact delivered file, `FrozenTearsGun_v011_60fps.blend` (70 MB, compressed, a plain git file):
+- **Opens cleanly:** it loads with `blender --factory-startup -b` with no errors or warnings in the console.
+  - There are no linked libraries, no unpacked images or fonts, and the VO sound is packed.
+  - There are 0 drivers and no scripts, so auto-run is not needed.
+- **Scene settings:**
+  - one camera, `CAM_Film`, with no camera markers
+  - 1080x1920 at 100 %, 60 fps (fps_base 1.0), frames **1-1655**
+  - PNG RGB output to `//render/FrozenTearsGun_v011_####.png`
+  - the VO strip is present from frame 1
+- **Test frames:** frames 1, 828 and 1655 rendered at full 1080x1920 from the packed file.
+  - None is black, empty or pink.
+  - Each took 49-57 s on 4 CPU cores at 16 samples (the farm setting is 64 adaptive).
+  - Copies are in `review/render_check_*.jpg`.
+- **Logo:** DA KRAS FILMS framed prints are on the lab wall, fully readable at 1366-1456 (about 1.6 s), and on the office wall.
+
+## Known (last harsh review, check 7), accepted by the client
+- Three fast camera moves read close to cuts: 731-736, 851-861 and 1606-1611.
+- The index-finger trigger pull is subtle: the trigger turns and the hand tightens.
+- The mentor's arms drop to his sides at 1626-1651.
+- Her face is edge-cropped at 166-221 and 1101-1116.
+
+## History: check 7 (round 6), what was fixed
 - The office lamp is gone.
 - The second trigger close-up reuses the left-side angle.
 - The pellet chase is replaced by a pull-back to a wide of the range.
