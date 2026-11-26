@@ -84,7 +84,7 @@ def key_limbs_rel(C, Hh, f, pos, R, legs_bend=0.03, arms="side", hand_z=None, ri
         if arms == "side":
             wl = V(sx * 0.36, 0.05, Hh.root_head.z - 0.06); d = V(0, 0, -1); nn = V(0, 1, 0)
         else:   # palms resting on the front of the thighs
-            wl = V(sx * 0.17, -0.17, Hh.root_head.z - 0.14); d = V(0, -0.15, -1); nn = V(0, 1, 0)
+            wl = V(sx * 0.22, -0.21, Hh.root_head.z - 0.15); d = V(0, -0.15, -1); nn = V(0, 1, 0)
         W = Mb @ wl
         if hand_z is not None: W.z = hand_z
         Hh.key_hand(s, f, W, R @ d, R @ nn, pole=Mb @ (sh + V(sx * 0.35, 0.35, -0.30)))
@@ -164,7 +164,7 @@ BOT.rotation_mode = 'QUATERNION'
 q = V(0, 0, 1).rotation_difference(axis)
 BOT.matrix_world = Matrix.Translation(cpt - axis * 0.13) @ q.to_matrix().to_4x4()
 key_basis(BOT, 1, BOT.matrix_world.copy())
-rep = grip_object(MR, "L", 1, BOT, cpt - pn * 0.0, pn, finger_dir=None)
+rep = grip_object(MR, "L", 1, BOT, cpt - pn * 0.039, pn, finger_dir=None)   # contact = the bottle SURFACE facing the palm
 log("bottle grip", rep)
 owner_switch(BOT, 2, MR, "wrist.L", log=log)
 apply_pose(MR, "L", "wrap_grip", 1, amount=0.0)   # (fingers keyed by grip_object at f1)
@@ -396,11 +396,11 @@ PALM_UP0, PALM_UP1 = 1592, 1712
 for f in range(1500, END + 1, 4):
     sw = math.sin(f / 9.0)
     # left hand hangs loose
-    hand_rel(CM, HM, MR, f, "L", V(0.27, -0.04 + 0.05 * sw, RH_M.z - 0.10), V(0.1, -0.2, -1.0), V(-1, 0, 0), SH_L + V(0.35, 0.35, -0.30))
+    hand_rel(CM, HM, MR, f, "L", V(0.31, -0.04 + 0.05 * sw, RH_M.z - 0.08), V(0.1, -0.2, -1.0), V(-1, 0, 0), SH_L + V(0.35, 0.35, -0.30))
     apply_pose(MR, "L", "relaxed", f)
     # right hand: hangs, then rises palm up in front of the chest (he looks at the cuts), then lowers
     u = smoothstep((f - PALM_UP0) / 24.0) * (1 - smoothstep((f - (PALM_UP1 - 18)) / 18.0))
-    hang = V(-0.27, -0.04 - 0.05 * sw, RH_M.z - 0.10)
+    hang = V(-0.31, -0.04 - 0.05 * sw, RH_M.z - 0.08)
     look = V(-0.12, -0.46, RH_M.z + 0.30)
     W = hang.lerp(look, u)
     d = V(-0.1, -0.2, -1.0).lerp(V(0.35, -0.75, 0.1), u)
