@@ -193,12 +193,14 @@ am = node(nt, "ShaderNodeMath", operation='MULTIPLY'); L.new(rr.outputs["Result"
 am2 = node(nt, "ShaderNodeMath", operation='MULTIPLY'); L.new(am.outputs[0], am2.inputs[0]); am2.inputs[1].default_value = 1.4
 L.new(am2.outputs[0], pr.inputs["Alpha"]); RES.data.materials.append(mres); to_col(RES, C_SET); RES.parent = JOLT
 # far desert beyond the slab (gentle dunes)
-bpy.ops.mesh.primitive_grid_add(x_subdivisions=120, y_subdivisions=120, size=1, location=(0, 1200, -0.02))
-FAR = bpy.context.active_object; FAR.name = "Desert_Far"; FAR.scale = (5000, 2400, 1); bpy.ops.object.transform_apply(scale=True)
+bpy.ops.mesh.primitive_grid_add(x_subdivisions=120, y_subdivisions=120, size=1, location=(0, 260, -0.02))
+FAR = bpy.context.active_object; FAR.name = "Desert_Far"; FAR.scale = (900, 460, 1); bpy.ops.object.transform_apply(scale=True)
 for v in FAR.data.vertices:
-    if v.co.y + 1200 > 75:
-        v.co.z += 3.5 * (0.5 + 0.5 * math.sin(v.co.x * 0.021 + v.co.y * 0.013)) * min(1.0, (v.co.y + 1200 - 75) / 120)
+    if v.co.y + 260 > 75:
+        v.co.z += 3.5 * (0.5 + 0.5 * math.sin(v.co.x * 0.021 + v.co.y * 0.013)) * min(1.0, (v.co.y + 260 - 75) / 120)
 FAR.data.materials.append(sand_mat("M_SandFar", (1.15, 0.55, 0.26), 0.05)); to_col(FAR, C_SET)
+bpy.data.materials["M_SandFar"].node_tree.nodes["Principled BSDF"].inputs["Specular IOR Level"].default_value = 0.0
+M_SAND.node_tree.nodes["Principled BSDF"].inputs["Specular IOR Level"].default_value = 0.15
 for p_ in FAR.data.polygons: p_.use_smooth = True
 # left/right/back side walls of the slab are never framed (the slab is 80 m wide)
 
@@ -445,7 +447,7 @@ def flame_mat(name, h, smoke=False, strength=7.0):
     d1 = node(nt, "ShaderNodeMath", operation='SUBTRACT'); L.new(n1.outputs["Fac"], d1.inputs[0]); L.new(th.outputs["Result"], d1.inputs[1])
     d2 = node(nt, "ShaderNodeMath", operation='MULTIPLY'); L.new(d1.outputs[0], d2.inputs[0]); d2.inputs[1].default_value = 5.0
     d2.use_clamp = True
-    base_fade = node(nt, "ShaderNodeMapRange"); base_fade.inputs["From Min"].default_value = 0.0; base_fade.inputs["From Max"].default_value = 0.05
+    base_fade = node(nt, "ShaderNodeMapRange"); base_fade.inputs["From Min"].default_value = 0.0; base_fade.inputs["From Max"].default_value = 0.22
     L.new(sp.outputs["Z"], base_fade.inputs["Value"])
     top_fade = node(nt, "ShaderNodeMapRange"); top_fade.inputs["From Min"].default_value = 1.0; top_fade.inputs["From Max"].default_value = 0.75
     L.new(sp.outputs["Z"], top_fade.inputs["Value"])
@@ -714,7 +716,7 @@ w = sc.world; w.use_nodes = True; nt = w.node_tree
 for n_ in list(nt.nodes):
     if n_.type != 'OUTPUT_WORLD': nt.nodes.remove(n_)
 tc = nt.nodes.new("ShaderNodeTexCoord"); sp = nt.nodes.new("ShaderNodeSeparateXYZ"); nt.links.new(tc.outputs["Generated"], sp.inputs[0])
-mr = nt.nodes.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = 0.49; mr.inputs["From Max"].default_value = 0.66; nt.links.new(sp.outputs["Z"], mr.inputs["Value"])
+mr = nt.nodes.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = 0.495; mr.inputs["From Max"].default_value = 0.6; nt.links.new(sp.outputs["Z"], mr.inputs["Value"])
 cr = nt.nodes.new("ShaderNodeValToRGB"); cr.name = "SkyRamp"
 cr.color_ramp.elements[0].color = (0.55, 0.85, 1.0, 1); cr.color_ramp.elements[1].color = (0.02, 0.30, 0.95, 1)
 nt.links.new(mr.outputs["Result"], cr.inputs["Fac"])

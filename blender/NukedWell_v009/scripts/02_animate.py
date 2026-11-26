@@ -361,7 +361,7 @@ for i in range(3):
         ck.scale = (3.6 * s_, 0.45 * s_, 1); ck.keyframe_insert("scale", frame=f)
     for f, s_ in ((1, 0.001), (d0, 0.001), (d0 + 6, 0.2), (d0 + 22, 0.34), (999, 0.34), (SW_PRESENT, 0.5), (1385 + 6 * i, 0.5),
                   (1393 + 6 * i, 0.32), (1398 + 6 * i, 0.40), (1406 + 6 * i, 0.18), (1412 + 6 * i, 0.22), (1422 + 6 * i, 0.05), (1430 + 6 * i, 0.001), (END, 0.001)):
-        r_.scale = (s_, s_, s_); r_.keyframe_insert("scale", frame=f)
+        r_.scale = (0.6 * s_, 0.6 * s_, 1.25 * s_); r_.keyframe_insert("scale", frame=f)
     all_interp(ck, 'LINEAR'); all_interp(r_, 'LINEAR')
 # water: both monitors open at f779, close (stream detaches and falls away) f872-890
 for i in range(2):
@@ -435,7 +435,7 @@ for m in bpy.data.materials:
 W = bpy.context.scene.world; ramp = W.node_tree.nodes["SkyRamp"].color_ramp
 SUN, MOON = O["Sun"], O["Moon"]
 SKY = {"present": ((0.55, 0.85, 1.0), (0.02, 0.30, 0.95), 4.0, 0.0),
-       "past": ((1.0, 0.55, 0.28), (0.04, 0.26, 0.85), 4.2, 0.0),
+       "past": ((0.95, 0.36, 0.10), (0.02, 0.20, 0.80), 4.2, 0.0),
        "dusk": ((1.0, 0.42, 0.22), (0.22, 0.12, 0.45), 1.2, 0.1),
        "night": ((0.20, 0.10, 0.38), (0.01, 0.015, 0.09), 0.0, 0.9)}
 for f, k in ((1, "present"), (SW_PAST - 1, "present"), (SW_PAST, "past"), (600, "past"), (632, "dusk"), (660, "night"), (700, "night"),
@@ -456,7 +456,7 @@ for f, e in ((1, -0.3), (T0, -0.3), (T0 + 4, -1.6), (T0 + 14, -0.9), (T0 + 40, -
 
 # ================================================================== the ONE camera (no cuts), level horizon, f/inf (no DOF)
 cam = bpy.data.objects.new("CAM_Film", bpy.data.cameras.new("CAM_Film")); sc.collection.objects.link(cam); sc.camera = cam
-cam.data.clip_start = 0.1; cam.data.clip_end = 2000; cam.data.sensor_fit = 'AUTO'; cam.data.dof.use_dof = False
+cam.data.clip_start = 0.1; cam.data.clip_end = 8000; cam.data.sensor_fit = 'AUTO'; cam.data.dof.use_dof = False
 CAMK = [
     # f, position, target, lens
     (1, (-3.0, -5.7, 2.35), (-3.0, 1.0, 2.05), 30),
