@@ -148,7 +148,7 @@ def hand_rel(C, Hh, Rm_, f, s, wl, d, nn, pole_rel):
 SH_L = CM.BN["upperarm01.L"].head_local; SH_R = CM.BN["upperarm01.R"].head_local
 for f in range(1, 101, 4):
     sw = math.sin(f / 8.0)
-    hand_rel(CM, HM, MR, f, "L", V(0.26, -0.16 - 0.02 * sw, RH_M.z + 0.02), V(0.05, -0.35, -1.0), V(-1, 0.1, 0), SH_L + V(0.35, 0.35, -0.30))
+    hand_rel(CM, HM, MR, f, "L", V(0.36, -0.22 - 0.02 * sw, RH_M.z + 0.08), V(0.15, -0.45, -1.0), V(-1, 0.1, 0), SH_L + V(0.40, 0.35, -0.30))
     hand_rel(CM, HM, MR, f, "R", V(-0.30 - 0.04 * sw, -0.02 + 0.10 * sw, RH_M.z - 0.02 + 0.04 * abs(sw)), V(-0.15, -0.2 * sw, -1.0), V(1, 0, 0), SH_R + V(-0.35, 0.35, -0.30))
     apply_pose(MR, "R", "relaxed", f)
 # the bottle: placed in the left palm at f1 (grip solved by the library), then owned by wrist.L (Child Of, no offset gap)
@@ -157,7 +157,7 @@ wr = Wh(MR, "wrist.L"); mid = Wh(MR, "finger3-1.L"); i1 = Wh(MR, "finger2-1.L");
 fd = (mid - wr).normalized(); ac = (i1 - p5).normalized(); pn = fd.cross(ac).normalized()
 # palm normal: toward the body midline (palm faces the thigh)
 if pn.dot(V(-1, 0, 0)) < 0: pn = -pn
-cpt = wr.lerp(mid, 0.55) + pn * 0.045
+cpt = wr.lerp(mid, 0.55) + pn * 0.058
 axis = ac                                                     # bottle axis across the palm (index -> little finger)
 if axis.z < 0: axis = -axis                                   # neck up/forward
 BOT.rotation_mode = 'QUATERNION'
