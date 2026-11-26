@@ -426,7 +426,7 @@ sc["LOGO_DARK"] = LOGO_D; sc["LOGO_WHITE"] = LOGO_W
 lg2, asp = logo_plane("Logo_CtrlWall", LOGO_D, Vector((WX - 0.27, 5.0, 1.75)), 1.0, (-1, 0, 0))
 box("Logo_CtrlWall_bg", (0.02, 1.12, 1.0 * asp + 0.12), (WX - 0.26, 5.0, 1.75), mat("M_LogoBg", (0.98, 0.97, 0.93), rough=0.4), bevel=0.005)
 # DA KRAS FILMS logo #3: on the shop sign right next to the station (seen in the opening)
-lg3, asp3 = logo_plane("Logo_ShopSign", LOGO_W, Vector((EX - 0.13, -8.1, 3.75)), 2.6, (-1, 0, 0))
+# (no logo on the shop sign: it was only ever seen cropped)
 # ceiling tube lights in the control room (stay ON: only the police station loses power)
 for k, yy in enumerate((3.0, 6.0)):
     box("Ctrl_Tube%d" % k, (0.06, 1.2, 0.05), (WX - 2.5, yy, CR["h"] - 0.06), mat("M_CtrlTube", (1, 1, 1), emit=((1, 0.98, 0.92), 6.0)), bevel=0.01)
@@ -632,6 +632,7 @@ def area(name, loc, target, power, size, col):
 area("Ctrl_Key", (WX - 1.0, 2.6, 2.85), (WX - 2.6, 2.6, 1.3), 260, 1.2, (1.0, 0.95, 0.88))
 area("Ctrl_Fill", (WX - 4.5, 3.5, 2.6), (WX - 2.0, 2.6, 1.4), 180, 1.6, (1.0, 0.90, 0.80))
 area("Ctrl_Back", (WX - 5.5, 6.0, 2.7), (WX - 6.8, 4.0, 1.4), 120, 1.6, (1.0, 0.92, 0.85))
+area("Ctrl_WinWall", (WX - 3.6, 4.5, 2.5), (WX - 0.3, 3.5, 1.6), 170, 1.8, (1.0, 0.92, 0.85))
 area("Ctrl_Deep1", (WX - 4.5, 2.5, 2.8), (WX - 6.8, 2.5, 1.0), 160, 1.6, (1.0, 0.90, 0.80))
 area("Ctrl_Deep2", (WX - 6.0, 4.5, 2.8), (WX - 7.0, 5.0, 1.0), 140, 1.6, (1.0, 0.90, 0.80))
 # station room: tube-light key (keyed OFF at the cut), moonlight through the window and the candle (keyed ON) in 03
