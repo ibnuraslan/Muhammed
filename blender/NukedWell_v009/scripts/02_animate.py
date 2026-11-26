@@ -208,9 +208,7 @@ for f in sorted(set(list(range(1, END + 1, 4)) + [END] + [b - 1 for b in BOUNDS 
     else:
         hang("CrewA", "L", f, fwd=0.05 + 0.01 * math.sin(f / 41.0))
     # CrewB: points at the fire in the past (f560-640), gives the 'go' with a raised hand (f1060-1110), fist pump at the end
-    if 560 <= f <= 640:
-        point_at("CrewB", "R", f, Vector((GPX, 0.3, 5.0)))
-    elif 1060 <= f <= 1110 or f >= 1446:
+    if 1060 <= f <= 1110 or f >= 1446:
         if f >= 1446:
             u = smooth((f - 1446) / 12)
             arm_up("CrewB", "R", f, height=0.08 + 0.38 * u, side=0.16, pose="power_fist",
@@ -287,12 +285,20 @@ for o in list(O):
     if n.startswith(("FireTruck_", "WaterArc")) or n.startswith(("Steam",)):
         for t in tree(o): vis_on(t, PAST)
     if n.startswith(("Cap_Body",)):
-        for t in tree(o): vis_on(t, [(860, 999)])
-    if n.startswith(("HF_", "Winch_", "Logo_Crate", "Crate_", "NukeBore_Collar", "Device", "Concrete_", "Logo_CratePrint")):
+        for t in tree(o): vis_on(t, [(860, END)])
+    if n == "Cap_Cable":
+        vis_on(o, [(860, 999)])
+    if n.startswith("Dust_Ring"):
+        vis_on(o, [(1100, 1320)])
+    if n == "Fire_Main" or (o.parent and o.parent.name == "Fire_Main"):
+        vis_on(o, [(SW_PAST, 999)])
+    if n == "Concrete_Plug":
+        vis_on(o, [(212, SW_PAST - 1), (SW_PRESENT, END)])
+    if n.startswith(("HF_", "Winch_", "Logo_Crate", "Crate_", "NukeBore_Collar", "Device", "Concrete_Pour", "Logo_CratePrint")):
         if o.parent is None or o.parent.name == "Jolt" or n.startswith("Device"):
             vis_on(o, PRESENT)
     if n.startswith(("Fire_Fissure", "Crack")):
-        for t in tree(o): vis_on(t, [(930, 999)])
+        for t in tree(o): vis_on(t, [(930, END)])
 # device and cable are also gone in the past part (vis via PRESENT covers it)
 
 # ================================================================== gas, fire, water, cap, cracks
@@ -321,8 +327,7 @@ for m in fire_mats:
     all_interp(m.node_tree, 'LINEAR')
 # main fire: burning in the present; in the past it erupts at f452; squeezed by the cap f905-935; dies f1385-1440
 FIRE = O["Fire_Main"]
-FK = [(1, 1.0), (SW_PAST - 1, 1.0), (SW_PAST, 0.0), (452, 0.0), (462, 0.35), (490, 1.0), (905, 1.0), (935, 0.12), (999, 0.10),
-      (SW_PRESENT, 1.0), (1385, 1.0), (1395, 0.7), (1400, 0.85), (1408, 0.45), (1414, 0.55), (1424, 0.22), (1432, 0.08), (1440, 0.0), (END, 0.0)]
+FK = [(1, 0.0), (452, 0.0), (462, 0.35), (490, 1.0), (880, 1.0), (905, 0.7), (925, 0.35), (937, 0.06), (950, 0.0), (END, 0.0)]
 fk = FK
 def fire_val(f):
     for (a, va), (b, vb) in zip(fk, fk[1:]):
@@ -341,14 +346,18 @@ for f in range(1, END + 1):
 all_interp(FIRE, 'LINEAR')
 for m in fire_mats: all_interp(m.node_tree, 'LINEAR')
 FL = O["Fire_Light"]
+def fire_val(f, _fv=fire_val):
+    fis = 0.0 if f < 940 else (0.5 if f < SW_PRESENT else (1.0 if f < 1385 else max(0.0, 1 - (f - 1385) / 55)))
+    return max(_fv(f), 0.6 * fis)
 for f in range(1, END + 1, 2):
     v = fire_val(f); FL.data.energy = 60000 * v * (0.9 + 0.1 * math.sin(f * 1.7)); FL.data.keyframe_insert("energy", frame=f)
 # fissure jets (past only, after capping)
 for i in range(3):
     r_ = O["Fire_Fissure%d" % i]; ck = O["Crack%d" % i]; d0 = 940 + 10 * i
     for f, s_ in ((1, 0.001), (d0 - 12, 0.001), (d0, 0.6), (d0 + 8, 1.0), (END, 1.0)):
-        ck.scale = (2.6 * s_, 0.35 * s_, 1); ck.keyframe_insert("scale", frame=f)
-    for f, s_ in ((1, 0.001), (d0, 0.001), (d0 + 6, 0.2), (d0 + 22, 0.34), (END, 0.34)):
+        ck.scale = (3.6 * s_, 0.45 * s_, 1); ck.keyframe_insert("scale", frame=f)
+    for f, s_ in ((1, 0.001), (d0, 0.001), (d0 + 6, 0.2), (d0 + 22, 0.34), (999, 0.34), (SW_PRESENT, 0.5), (1385 + 6 * i, 0.5),
+                  (1393 + 6 * i, 0.32), (1398 + 6 * i, 0.40), (1406 + 6 * i, 0.18), (1412 + 6 * i, 0.22), (1422 + 6 * i, 0.05), (1430 + 6 * i, 0.001), (END, 0.001)):
         r_.scale = (s_, s_, s_); r_.keyframe_insert("scale", frame=f)
     all_interp(ck, 'LINEAR'); all_interp(r_, 'LINEAR')
 # water: both monitors open at f779, close (stream detaches and falls away) f872-890
@@ -370,7 +379,7 @@ stm = bpy.data.materials["M_Steam"].node_tree.nodes["Amt"].outputs[0]
 for f, v in ((1, 1.0), (850, 1.0), (900, 0.0), (END, 0.0)): socket_key(stm, f, v)
 # cap: lowered on its cable from above (the cable runs out of the top of frame), seated at f935
 CAP = O["Cap_Body"]
-for f, z in ((1, 40.0), (860, 16.0), (880, 11.0), (925, 1.2), (935, 0.80), (END, 0.80)):
+for f, z in ((1, 40.0), (860, 14.0), (875, 11.0), (925, 1.6), (937, 0.80), (END, 0.80)):
     keyv(CAP, "location", f, Vector((GPX, 0.0, z)))
 all_interp(CAP, 'BEZIER')
 
@@ -449,29 +458,29 @@ CAMK = [
     # f, position, target, lens
     (1, (-3.0, -5.7, 2.35), (-3.0, 1.0, 2.05), 30),
     (45, (-3.0, -5.5, 1.9), (-3.0, 1.0, 1.2), 30),
-    (95, (-3.0, -6.6, -1.6), (-3.0, 0.0, -2.0), 30),
-    (155, (-3.0, -7.4, -8.6), (-3.0, 0.0, -8.8), 30),
-    (212, (-2.6, -7.6, -15.6), (-3.0, 0.0, -15.4), 30),
-    (250, (-2.4, -7.8, -13.2), (-3.0, 0.0, -12.8), 30),
-    (281, (-2.2, -8.2, -10.8), (-3.0, 0.0, -10.6), 30),
+    (95, (-3.0, -8.5, -1.6), (-3.0, 0.0, -2.2), 30),
+    (155, (-2.6, -10.5, -8.0), (-2.6, 0.0, -8.4), 30),
+    (212, (-2.4, -10.5, -14.6), (-2.6, 0.0, -14.6), 30),
+    (250, (-2.4, -10.8, -12.6), (-2.6, 0.0, -12.4), 30),
+    (281, (-2.2, -11.0, -10.8), (-2.6, 0.0, -10.6), 30),
     (300, (-1.5, -11.0, -11.0), (-2.6, 0.0, -10.0), 30),
-    (335, (1.0, -22.0, -14.5), (1.0, 0.0, -14.5), 30),
-    (387, (6.8, -8.0, -21.0), (7.0, 0.0, -20.5), 30),
-    (420, (6.8, -8.0, -13.0), (7.0, 0.0, -12.5), 30),
+    (335, (-1.5, -14.0, -14.5), (-1.5, 0.0, -14.5), 30),
+    (387, (6.0, -11.0, -20.0), (6.0, 0.0, -19.5), 30),
+    (420, (6.4, -11.0, -12.0), (6.6, 0.0, -11.5), 30),
     (452, (6.8, -8.2, -0.2), (7.0, 0.0, 0.6), 30),
     (480, (6.6, -11.5, 3.0), (7.0, 0.0, 6.0), 28),
     (506, (6.2, -15.5, 4.2), (7.0, 0.0, 9.0), 26),
     (560, (2.4, -11.0, 2.6), (5.2, 2.0, 5.5), 24),
-    (640, (1.0, -6.5, 2.2), (4.6, 2.0, 4.0), 22),
-    (700, (0.8, -6.2, 2.1), (4.8, 2.0, 4.2), 22),
+    (640, (2.6, -9.5, 2.4), (5.6, 2.0, 5.5), 24),
+    (700, (2.2, -9.0, 2.3), (5.6, 2.0, 5.3), 24),
     (776, (1.4, -9.5, 2.4), (5.2, 2.6, 3.8), 24),
     (840, (3.2, -10.5, 3.0), (6.0, 3.0, 4.2), 22),
     (875, (5.0, -10.5, 3.4), (7.0, 1.0, 4.6), 26),
     (935, (6.0, -10.0, 2.6), (7.0, 1.0, 2.2), 28),
     (975, (6.0, -12.5, 4.5), (6.8, 2.5, 1.0), 26),
-    (1000, (5.0, -9.5, -7.5), (5.0, 0.0, -8.0), 30),
-    (1023, (1.0, -9.0, -9.0), (0.5, 0.0, -9.5), 30),
-    (1060, (-3.0, -8.0, -14.5), (-3.0, 0.0, -14.8), 30),
+    (1000, (5.0, -12.0, -8.0), (5.0, 0.0, -8.5), 30),
+    (1023, (1.0, -13.0, -10.0), (0.5, 0.0, -10.5), 30),
+    (1060, (-2.5, -11.0, -14.0), (-2.5, 0.0, -14.3), 30),
     (1100, (-1.5, -16.0, -13.5), (-1.0, 0.0, -12.5), 30),
     (1131, (2.0, -29.0, -9.5), (2.0, 0.0, -9.5), 35),
     (1200, (2.2, -29.5, -9.6), (2.2, 0.0, -9.6), 35),
@@ -479,8 +488,8 @@ CAMK = [
     (1340, (5.2, -9.0, -16.2), (5.4, 0.0, -16.6), 30),
     (1370, (6.2, -9.0, -6.0), (6.6, 0.0, -5.5), 30),
     (1395, (6.4, -9.5, 1.2), (6.8, 0.0, 2.6), 28),
-    (1440, (5.4, -6.4, 1.7), (5.6, 1.5, 1.7), 30),
-    (1541, (5.0, -6.9, 2.6), (5.4, 1.5, 1.7), 30),
+    (1440, (5.0, -5.6, 1.75), (5.2, 1.5, 1.6), 30),
+    (1541, (4.8, -6.0, 2.3), (5.1, 1.5, 1.6), 30),
 ]
 fP = [pchip([(k[0], k[1][i]) for k in CAMK]) for i in range(3)]
 fT = [pchip([(k[0], k[2][i]) for k in CAMK]) for i in range(3)]

@@ -440,7 +440,7 @@ def flame_mat(name, h, smoke=False, strength=7.0):
     fc = node(nt, "ShaderNodeMath", operation='SUBTRACT'); fc.inputs[0].default_value = 1.0; L.new(lw.outputs["Facing"], fc.inputs[1])
     fp = node(nt, "ShaderNodeMath", operation='POWER'); L.new(fc.outputs[0], fp.inputs[0]); fp.inputs[1].default_value = 1.6
     th = node(nt, "ShaderNodeMapRange"); th.inputs["From Min"].default_value = 0.0; th.inputs["From Max"].default_value = 1.0
-    th.inputs["To Min"].default_value = 0.30 if not smoke else 0.40; th.inputs["To Max"].default_value = 0.62 if not smoke else 0.62
+    th.inputs["To Min"].default_value = 0.36 if not smoke else 0.40; th.inputs["To Max"].default_value = 0.62 if not smoke else 0.62
     L.new(sp.outputs["Z"], th.inputs["Value"])
     d1 = node(nt, "ShaderNodeMath", operation='SUBTRACT'); L.new(n1.outputs["Fac"], d1.inputs[0]); L.new(th.outputs["Result"], d1.inputs[1])
     d2 = node(nt, "ShaderNodeMath", operation='MULTIPLY'); L.new(d1.outputs[0], d2.inputs[0]); d2.inputs[1].default_value = 5.0
