@@ -76,7 +76,7 @@ RES, RESB = person("Rescuer", 1.0, 0.62, {"asian": 0.2, "caucasian": 0.7, "afric
                    ["male_worksuit01/male_worksuit01.mhclo", "shoes03/shoes03.mhclo"], (0.95, 0.70, 0.56), (0.25, 0.17, 0.10),
                    height=0.55, weight=0.6, muscle=0.6)
 eye_group_fix()
-recolor_clothes(RES, "worksuit", (2.2, 0.85, 0.25))
+recolor_clothes(RES, "worksuit", (1.55, 1.45, 0.10))      # hi-vis yellow shirt, olive overalls (never skin-toned)
 tee = bpy.data.images.load(os.path.join(PKG, "assets/tex/teen_tee_diffuse.png")); tee.name = "teen_tee_diffuse"
 for c in TEEN.children:
     if c.type == 'MESH' and "casualsuit" in c.name:
@@ -186,10 +186,10 @@ def cutter(name, r, z0, z1, loc_xy, verts=48):
 WELLC = cutter("CUT_Well", R_SH, Z_BOT, 1.5, (0, 0))
 WELLC.data.materials[0] = M_STRATA
 # the dig pit: a cutter whose top stays above ground; PitCtl (an empty) scales it down from the top
-PITC = cutter("CUT_Pit", 0.55, -1.0, 0.0, (1.7, 0.0))
+PITC = cutter("CUT_Pit", 0.55, -1.0, 0.0, (2.3, 0.0))
 PITC.data.materials[0] = M_STRATA
 PITC.data.transform(Matrix.Translation((0, 0, -0.5)))       # object-space z: -1 (bottom) .. 0 (top)
-PITC.location = (1.7, 0.0, 0.6)                              # top 0.6 above ground: depth below ground = scale.z - 0.6
+PITC.location = (2.3, 0.0, 0.6)                              # top 0.6 above ground: depth below ground = scale.z - 0.6
 PITC.scale.z = 0.9                                           # 0.3 m deep at the start
 for nm, c in (("well", WELLC), ("pit", PITC)):
     b = G.modifiers.new("bool_" + nm, 'BOOLEAN'); b.operation = 'DIFFERENCE'; b.object = c; b.solver = 'EXACT'
@@ -268,10 +268,6 @@ bpy.ops.mesh.primitive_torus_add(major_radius=0.20, minor_radius=0.014, major_se
 WAIST = bpy.context.active_object; WAIST.name = "ROPE_WaistRing"; WAIST.data.materials.append(M_ROPE); to_col(WAIST, C_SET)
 bpy.ops.mesh.primitive_uv_sphere_add(radius=0.035, segments=16, ring_count=8)
 KNOT = bpy.context.active_object; KNOT.name = "ROPE_Knot"; KNOT.data.materials.append(M_ROPE); KNOT.scale = (1.0, 0.8, 0.8); to_col(KNOT, C_SET)
-# a coil of spare rope on the ground by the tripod
-bpy.ops.mesh.primitive_torus_add(major_radius=0.22, minor_radius=0.05, location=(0.75, 1.55, 0.05), major_segments=40)
-COIL = bpy.context.active_object; COIL.name = "SET_RopeCoil"; COIL.data.materials.append(M_ROPE); COIL.scale.z = 0.6; to_col(COIL, C_SET)
-
 # ================================================================== the head torch (procedural): strap band + lamp, fitted in stage B
 bpy.ops.mesh.primitive_torus_add(major_radius=0.095, minor_radius=0.006, major_segments=48, minor_segments=6)
 STRAP = bpy.context.active_object; STRAP.name = "TEEN_TorchStrap"; STRAP.scale = (1.0, 1.2, 0.9)
@@ -318,7 +314,7 @@ for o in EXN:
         soften(o, rough_min=0.35)
 print('EXC root rot', tuple(EXROOT.rotation_euler), tuple(EXROOT.scale))
 EXROOT.matrix_world = Matrix.Rotation(math.radians(144), 4, 'Z') @ EXROOT.matrix_world; EXROOT.scale *= 2.5
-EXROOT.location = (3.75, 2.75, 0.0); bpy.context.view_layer.update()
+EXROOT.location = (4.35, 2.75, 0.0); bpy.context.view_layer.update()
 zmin = min((o.matrix_world @ Vector(c)).z for o in EXN if o.type == 'MESH' for c in o.bound_box)
 EXROOT.location.z -= zmin; bpy.context.view_layer.update()
 for o in EXN:
@@ -327,7 +323,7 @@ for o in EXN:
 print("EXC root", EXROOT.name, [o.name for o in EXN if o.type == 'EMPTY'])
 
 # ================================================================== spoil heap beside the pit, and the backdrop
-bpy.ops.mesh.primitive_uv_sphere_add(radius=1.0, segments=32, ring_count=16, location=(6.6, 1.3, -0.35))
+bpy.ops.mesh.primitive_uv_sphere_add(radius=1.0, segments=32, ring_count=16, location=(7.3, 1.4, -0.35))
 HEAP = bpy.context.active_object; HEAP.name = "SET_SpoilHeap"; HEAP.scale = (1.0, 0.9, 0.55)
 HEAP.data.materials.append(M_DIRT); bpy.ops.object.shade_smooth()
 tx = bpy.data.textures.new("heapnoise", 'CLOUDS'); tx.noise_scale = 0.4

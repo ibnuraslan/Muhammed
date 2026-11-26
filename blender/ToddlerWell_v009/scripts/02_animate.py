@@ -149,14 +149,14 @@ for f in range(1, 81, 10):
     tod_arms_walk(f, 2 * math.pi * f / 40.0)
 blinks(TODR, [30, 150])
 # at the rim: stop, look down into the hole (f80-92), step onto the lip (f92-100), slip in (100-108), fall (108-186)
-FALL0, LAND = 108, 186
+FALL0, LAND = 104, 186
 def tod_fall_z(f):
     if f <= FALL0: return None
     t = (f - FALL0) / 60.0
-    return max(Z_BOT + tod_h - 0.012, (tod_h - 0.30) - 5.15 * t * t)
+    return max(Z_BOT + tod_h - 0.012, (tod_h - 0.30) - 0.9 * t - 4.15 * t * t)
 seq = [(80, Vector((0.70, 0.36)), 0.0, yaw_walk, 4), (88, Vector((0.68, 0.34)), 0.0, yaw_walk + 15, 10),
        (96, Vector((0.50, 0.27)), 0.07, yaw_walk + 30, 6), (102, Vector((0.24, 0.16)), -0.05, yaw_walk + 35, -4),
-       (108, Vector((0.02, 0.07)), -0.30, yaw_walk + 40, -6)]
+       (104, Vector((0.06, 0.07)), -0.30, yaw_walk + 40, -6)]
 for f, xy, dz, yw, fl in seq:
     Mb = body_M(TH, stand_pos(TH, xy.x, xy.y, dz), yw, flex=fl)
     key_body(TCT, TH, f, Mb)
@@ -170,10 +170,12 @@ for f, xy, dz, yw, fl in seq:
     key_head(TODR, TCT, f, 0, 25 if f in (88, 96) else (-15 if f >= 102 else 5))
     key_spine(TCT, f, flex=12 if f in (88, 96) else 2)
 # free fall straight down the shaft centre, arms up, legs a touch bent
-for f in range(110, LAND + 1, 4):
-    z = tod_fall_z(f); Mb = body_M(TH, Vector((0.0, 0.06, z)), yaw_walk + 40 + (f - 108) * 0.35, flex=-4)
-    key_body(TCT, TH, f, Mb); key_feet_rel(TCT, TH, f, Mb, lift=(0.04, 0.07), back=(0.02, 0.04))
-    for s in "LR": arms_up(TCT, TH, s, f, Mb, reach=0.95, out=0.18)
+for f in range(106, LAND + 1, 3):
+    z = tod_fall_z(f); Mb = body_M(TH, Vector((0.0, 0.06, z)), yaw_walk + 40 + (f - 108) * 0.35, flex=-4 + 6 * math.sin(f / 9.0))
+    fl = math.sin(2 * math.pi * f / 22.0)
+    key_body(TCT, TH, f, Mb); key_feet_rel(TCT, TH, f, Mb, lift=(0.05 + 0.05 * fl, 0.07 - 0.05 * fl), back=(0.02 + 0.04 * fl, 0.04 - 0.04 * fl))
+    arms_up(TCT, TH, "L", f, Mb, reach=0.80 + 0.15 * fl, out=0.20 + 0.10 * fl)
+    arms_up(TCT, TH, "R", f, Mb, reach=0.80 - 0.15 * fl, out=0.20 - 0.10 * fl)
     key_head(TODR, TCT, f, 0, -20); key_spine(TCT, f, flex=-4)
 # land, crouch, stand up crying with arms up (yaw turns him to face the camera, 3/4)
 TOD_BOT = Vector((0.0, 0.06))
@@ -286,6 +288,8 @@ parent_to_bone(STRAP, TEENR, "head", Matrix.Translation((hbT.x, yc, z_fh)) @ Mat
 parent_to_bone(LAMP, TEENR, "head", Matrix.Translation((hbT.x, hbT.y - ry_front - 0.022, z_fh + 0.004)) @ Matrix.Rotation(math.radians(-8), 4, 'X'))
 for o in (STRAP, LAMP, BEAM, SPOT, O['TEEN_TorchLens']): vis(o, 1, False); vis(o, 1105, True)
 for o in (BEAM, SPOT): vis(o, 1586, False)
+for fr, sy in ((1, 1.0), (1290, 1.0), (1330, 0.35), (1586, 0.35)):
+    BEAM.scale = (sy, sy, sy); BEAM.keyframe_insert("scale", frame=fr)
 # ---- waist rope ring + knot (shown from f972, while the camera is on the rescuer's face)
 z_w = TEENR.data.bones["spine04"].head_local.z if "spine04" in TEENR.data.bones else TEENR.data.bones["spine05"].head_local.z
 pel = TEENR.data.bones["spine05"].head_local
@@ -308,18 +312,18 @@ YT = yaw_to(TEEN_AT, (0.6, -2.0))
 for o in [TEENR] + list(TEENR.children):
     pass
 def teen_path(f):
-    u = smoothstep((f - 770) / 110.0) * 0.85 + 0.15 * min(1, max(0, (f - 770) / 110.0))
+    u = smoothstep((f - 740) / 140.0) * 0.85 + 0.15 * min(1, max(0, (f - 740) / 140.0))
     return TEEN_IN.lerp(TEEN_AT, u).to_3d()
 y_in = yaw_to(TEEN_IN, TEEN_AT)
-EH.walk(teen_path, lambda f: y_in + (YT - y_in) * smoothstep((f - 850) / 30.0), 770, 880, stride=0.72, lift=0.08, bob=0.02)
-for f in range(770, 881, 10):
+EH.walk(teen_path, lambda f: y_in + (YT - y_in) * smoothstep((f - 850) / 30.0), 740, 880, stride=0.72, lift=0.08, bob=0.02)
+for f in range(740, 881, 10):
     p = teen_path(f); Mb = body_M(EH, stand_pos(EH, p.x, p.y), y_in)
-    ph = 2 * math.pi * (f - 770) / 62.0
+    ph = 2 * math.pi * (f - 740) / 62.0
     for s, sg in (("L", 1), ("R", -1)):
         hang(ECT, EH, s, f, Mb, fwd=0.04 + 0.08 * sg * math.sin(ph), out=0.05, bend=0.35)
     key_head(TEENR, ECT, f, -20 if f > 820 else 0, 4)
 # park him off-set before f770 (static far left, out of every frame)
-for f in (1, 760):
+for f in (1, 730):
     Mb = body_M(EH, stand_pos(EH, TEEN_IN.x, TEEN_IN.y), y_in)
     key_body(ECT, EH, f, Mb); key_feet_ground(ECT, EH, f, (TEEN_IN.x, TEEN_IN.y, y_in))
     for s in "LR": hang(ECT, EH, s, f, Mb)
@@ -336,7 +340,7 @@ for f in list(range(880, 1101, 10)):
         hang(ECT, EH, "L", f, Mb, fwd=0.05, out=0.06, bend=0.3)
         if 890 <= f <= 940:
             sh = ECT.BN["upperarm01.R"].head_local; L = arm_len(ECT, "R")
-            key_hand_local(ECT, EH, "R", f, Mb, sh + Vector((-0.12, -0.28, 0.12 + 0.02 * math.sin(f / 5))), (0, 0, 1), (0, -1, 0),
+            key_hand_local(ECT, EH, "R", f, Mb, sh + Vector((-0.20, -0.36, 0.06 + 0.03 * math.sin(f / 5))), (0, 0, 1), (0, -1, 0),
                            sh + Vector((-0.4, 0.2, -0.3)), "flat_palm")
         else:
             hang(ECT, EH, "R", f, Mb, fwd=0.05, out=0.06, bend=0.3)
@@ -379,7 +383,7 @@ GRAB = 1352
 TOD_RISE0 = 1440
 for f in list(range(INV0, 1561, 4)):
     sweep = 22 * math.sin(2 * math.pi * (f - 1216) / 70) if 1216 <= f <= 1320 else 0.0
-    Mb = inv_M(f)
+    Mb = inv_M(f, yaw=8 * math.sin(2 * math.pi * (f - INV0) / 90.0) * (1 - smoothstep((f - 1290) / 30.0)))
     key_body(ECT, EH, f, Mb)
     key_feet_rel(ECT, EH, f, Mb, lift=(0.02, 0.02), back=(0.11, 0.11), spread=-0.02)
     key_spine(ECT, f, flex=-4)
@@ -389,7 +393,8 @@ for f in list(range(INV0, 1561, 4)):
         sx = 1 if s == "L" else -1
         sh = ECT.BN["upperarm01." + s].head_local; L = arm_len(ECT, s)
         if f < 1300:
-            w = sh + Vector((sx * 0.14, -0.10, 0.80 * L)); pose = "relaxed"
+            sw_ = math.sin(2 * math.pi * (f - INV0) / 56.0 + (0 if s == 'L' else 1.3))
+            w = sh + Vector((sx * (0.16 + 0.06 * sw_), -0.14 - 0.06 * sw_, (0.74 + 0.08 * sw_) * L)); pose = "relaxed"
             key_hand_local(ECT, EH, s, f, Mb, w, (sx * 0.15, -0.3, 1.0), (0, -1, 0), sh + Vector((sx * 0.45, 0.1, -0.1)), pose)
 for f in list(range(INV0, 1561, 4)):
     pass
@@ -405,7 +410,8 @@ for f in list(range(1322, 1561, 4)):
     if f < TOD_RISE0:
         key_feet_ground(TCT, TH, f, (TOD_BOT.x, TOD_BOT.y, YB * 0.5), spread=0.07)
     else:
-        key_feet_rel(TCT, TH, f, Mb, lift=(0.03, 0.05), back=(0.02, 0.05))
+        k_ = math.sin(2 * math.pi * f / 26.0)
+        key_feet_rel(TCT, TH, f, Mb, lift=(0.05 + 0.05 * k_, 0.05 - 0.05 * k_), back=(0.03 + 0.05 * k_, 0.03 - 0.05 * k_))
     for s in "LR":
         arms_up(TCT, TH, s, f, Mb, reach=0.97, out=0.10, fwd=0.02, pose="wrap_grip" if f >= GRAB else "open_alarm")
     key_head(TODR, TCT, f, 0, -38)
@@ -447,13 +453,13 @@ for f in list(range(SW, END + 1, 6)) + [END]:
     Mb = body_M(EH, stand_pos(EH, TEEN_FIN.x, TEEN_FIN.y), YF_T, flex=2)
     key_body(ECT, EH, f, Mb); key_feet_ground(ECT, EH, f, (TEEN_FIN.x, TEEN_FIN.y, YF_T), spread=0.12)
     key_spine(ECT, f, flex=2 + 1.2 * math.sin(2 * math.pi * f / 110))
-    arms_up(ECT, EH, "R", f, Mb, reach=0.85 + 0.05 * math.sin(ph), out=0.35, pose="open_alarm")
+    arms_up(ECT, EH, "R", f, Mb, reach=0.80 + 0.12 * math.sin(ph), out=0.30 + 0.12 * math.sin(ph * 0.5), pose="open_alarm")
     hang(ECT, EH, "L", f, Mb, fwd=0.06, out=0.08, bend=0.3)
     key_head(TEENR, ECT, f, -14, -2)
-    Mk = body_M(TH, stand_pos(TH, TOD_FIN.x, TOD_FIN.y, 0.008 * math.sin(ph * 2)), YF_K, flex=2)
+    Mk = body_M(TH, stand_pos(TH, TOD_FIN.x, TOD_FIN.y, 0.03 * max(0.0, math.sin(ph * 1.5))), YF_K, flex=2)
     key_body(TCT, TH, f, Mk); key_feet_ground(TCT, TH, f, (TOD_FIN.x, TOD_FIN.y, YF_K), spread=0.07)
     for s, sg in (("L", 1), ("R", -1)):
-        arms_up(TCT, TH, s, f, Mk, reach=0.78 + 0.10 * math.sin(ph + sg), out=0.35, pose="open_alarm")
+        arms_up(TCT, TH, s, f, Mk, reach=0.72 + 0.18 * math.sin(ph * 1.5 + sg), out=0.35, pose="open_alarm")
     key_head(TODR, TCT, f, 10, -8); key_spine(TCT, f, flex=1)
 for f, sm, br, jaw in ((1470, 0.1, 0.6, 0.2), (SW, 0.85, 0.5, 0.35), (END, 0.9, 0.5, 0.3)):
     key_face(TODR, f, smile=sm, brow=br, jaw=jaw)
@@ -466,7 +472,7 @@ def const_at(rig, ranges):
             for a_, b_ in ranges:
                 if a_ <= kp.co.x <= b_: kp.interpolation = 'CONSTANT'
 # teen: last upright key 1100 -> first inverted key INV0 must jump; last inverted 1560 -> final SW jump; walk-in from parked
-const_at(TEENR, [(1095, 1111), (1550, 1585), (755, 769)])
+const_at(TEENR, [(1095, 1111), (1550, 1585), (725, 739)])
 const_at(TODR, [(1550, 1585)])
 for rig in (TODR, TEENR, RESR): quat_continuity(rig)
 
@@ -503,7 +509,7 @@ for o in (O["ROPE_WaistRing"], KNOT):
 for e in R1 + R2: set_interp(e, 'LINEAR')
 
 # the tripod, the coil, the rescuer and the digger appear while the camera is down the shaft (f200)
-for o in (O["SET_Tripod"], O["SET_Pulley"], O["SET_RopeCoil"]):
+for o in (O["SET_Tripod"], O["SET_Pulley"]):
     vis(o, 1, False); vis(o, 200, True)
 for o in [RESR] + list(RESR.children) + [O["RES_HardHat"]]:
     vis(o, 1, False); vis(o, 200, True)
@@ -514,7 +520,7 @@ for o in EXC:
 PROPS_ON_TEEN = {"ROPE_WaistRing", "ROPE_Knot", "TEEN_TorchStrap", "TEEN_TorchLamp", "TEEN_TorchLens", "TEEN_TorchBeam", "TEEN_TorchSpot"}
 for o in [TEENR] + list(TEENR.children):
     if (o.type == 'MESH' or o.type == 'ARMATURE') and o.name not in PROPS_ON_TEEN:
-        vis(o, 1, False); vis(o, 765, True)
+        vis(o, 1, False); vis(o, 735, True)
 
 # ================================================================== the digger: boom / stick / bucket keyed in local X
 ARM1, ARM2, CLAW, SHOV = O["arm_01_GEO1"], O["Arm_2_GEO"], O["claw_GEO"], O["shovel_GEO"]
@@ -543,10 +549,14 @@ for fr, d in ((1, 0.3), (565, 0.35), (760, 1.25), (END, 1.25)):
 # ================================================================== sun time-lapse (B4): midday -> warm late afternoon
 SUNO = O["Sun"]; SUN = SUNO.data
 for fr, el, az, en, col in ((1, 50, -35, 4.0, (1.0, 0.95, 0.86)), (565, 50, -35, 4.0, (1.0, 0.95, 0.86)),
-                            (780, 28, 55, 3.6, (1.0, 0.78, 0.55)), (END, 28, 55, 3.6, (1.0, 0.78, 0.55))):
+                            (640, 35, 40, 3.8, (1.0, 0.88, 0.70)), (720, 14, 110, 3.0, (1.0, 0.55, 0.30)),
+                            (790, 26, 60, 3.6, (1.0, 0.78, 0.55)), (END, 26, 60, 3.6, (1.0, 0.78, 0.55))):
     SUNO.rotation_euler = (math.radians(90 - el), 0, math.radians(az)); SUNO.keyframe_insert("rotation_euler", frame=fr)
     SUN.energy = en; SUN.color = col; SUN.keyframe_insert("energy", frame=fr); SUN.keyframe_insert("color", frame=fr)
 
+BG = sc.world.node_tree.nodes["Background"]
+for fr, st in ((1, 1.0), (565, 1.0), (720, 0.55), (790, 0.9), (END, 0.9)):
+    BG.inputs["Strength"].default_value = st; BG.inputs["Strength"].keyframe_insert("default_value", frame=fr)
 # ================================================================== the ONE camera
 CAM = O["CAM_Film"]
 def wpt(rig, bone):
@@ -562,20 +572,22 @@ def ck(f, pos, tgt, lens):
 for f in (1, 40, 80):
     hp = face_pt(TODR, f); ck(f, hp + Vector((0.35, -1.65, 0.05)), hp + Vector((-0.15, 0.0, -0.22)), 30)
 f = 100; hp = face_pt(TODR, f); ck(f, Vector((0.25, -1.75, 0.65)), Vector((0.1, 0.1, 0.05)), 28)
-for f in (120, 140, 160, 175, 186):
+for f in (120, 140, 160, 176):
     hp = face_pt(TODR, f); ck(f, Vector((0.05, -1.7, hp.z + 0.45)), hp + Vector((0, 0, -0.25)), 28)
+ck(190, Vector((0.0, -1.75, Z_BOT + 1.6)), Vector((0.0, 0.06, Z_BOT + 0.55)), 28)
 # B2: at the bottom, toddler crying, rope loop comes down; then rise with the loop to the top (f330-397)
-for f, dx, dy, dz in ((200, 0.0, -1.7, 0.55), (240, 0.30, -1.45, 0.25), (280, -0.25, -1.25, 0.20), (320, 0.10, -1.55, 0.45)):
+for f, dx, dy, dz in ((215, 0.0, -1.65, 0.45), (240, 0.30, -1.45, 0.25), (280, -0.25, -1.25, 0.20), (320, 0.10, -1.55, 0.45)):
     hp = face_pt(TODR, f); ck(f, hp + Vector((dx, dy, dz)), hp + Vector((0, 0, 0.12)), 28)
 ck(360, Vector((0.0, -1.9, -4.5)), Vector((0.0, 0.2, -3.6)), 26)
 fs(397); rp = face_pt(RESR, 397)
 ck(397, Vector((-0.45, -2.6, 1.55)), (rp + Vector((0.45, 0.0, -0.45))), 26)
 # B3: pull back to the digger, rescuer's face kept left in frame
-ck(450, Vector((0.2, -4.4, 2.0)), Vector((1.2, 1.0, 0.9)), 26)
-ck(520, Vector((0.8, -5.6, 2.3)), Vector((1.6, 1.2, 0.8)), 26)
+ck(450, Vector((0.0, -4.4, 2.0)), Vector((0.7, 1.0, 0.9)), 26)
+ck(520, Vector((0.5, -5.6, 2.3)), Vector((1.1, 1.2, 0.8)), 26)
 # B4: wide cut-away time-lapse: the pit is shallow, the toddler deep
-ck(600, Vector((0.6, -9.2, -0.6)), Vector((0.6, 0.0, -3.2)), 24)
-ck(690, Vector((0.4, -10.6, -2.3)), Vector((0.4, 0.0, -3.9)), 24)
+ck(600, Vector((1.4, -8.4, 0.2)), Vector((1.1, 0.0, -2.6)), 24)
+ck(650, Vector((0.9, -9.8, -1.6)), Vector((0.7, 0.0, -3.6)), 24)
+ck(700, Vector((-0.2, -8.6, -3.4)), Vector((0.2, 0.0, -4.6)), 24)
 # B5: swoop up and left to meet the teen walking in
 fs(800); tp = face_pt(TEENR, 800)
 ck(760, Vector((-1.0, -6.0, 1.0)), Vector((-1.6, 1.0, 0.9)), 26)
@@ -584,11 +596,11 @@ for f in (820, 860, 900, 940):
     ck(f, mid + Vector((0.55, -2.4, 0.0)), mid + Vector((0.0, 0.0, -0.15)), 30)
 # the rescuer's nod close (waist ring appears on the teen at f972, out of frame)
 for f in (962, 980):
-    rp = face_pt(RESR, f); ck(f, rp + Vector((1.25, -1.55, 0.05)), rp + Vector((0.0, 0, -0.08)), 34)
+    rp = face_pt(RESR, f); ck(f, rp + Vector((-0.35, -1.6, -0.05)), rp + Vector((0.0, 0, -0.06)), 50)
 # B6: the knot: chest-up on the teen, hands at his waist knot, face in frame
-for f in (1000, 1040, 1080):
+for f, dx, dy in ((1000, 0.55, -1.55), (1040, 0.35, -1.30), (1080, 0.10, -1.10)):
     tp = face_pt(TEENR, f); fs(f); kn = O["ROPE_Knot"].matrix_world.translation
-    mid = (tp + kn) / 2; ck(f, mid + Vector((0.45, -1.45, 0.0)), mid, 30)
+    mid = (tp + kn) / 2; ck(f, mid + Vector((dx, dy, 0.0)), mid, 30)
 # B7: tilt up the rope to the pulley (he leaves frame), then down the rope into the well: his legs go in
 ck(1100, Vector((-0.6, -1.9, 1.6)), Vector((-0.3, 0.2, 2.1)), 28)
 ck(1118, Vector((-0.2, -1.8, 2.0)), Vector((0.0, 0.05, 2.45)), 28)
@@ -596,21 +608,21 @@ ck(1140, Vector((0.0, -1.9, 1.5)), Vector((0.0, 0.05, 0.2)), 28)
 for f in (1170, 1200, 1230, 1260, 1290):
     fs(f); hd = face_pt(TEENR, f); ck(f, Vector((0.15, -1.55, hd.z + 0.05)), hd + Vector((0, 0, 0.0)), 28)
 # B9: both faces (teen upside down above, toddler below), the grab
-for f in (1320, 1352, 1390, 1430):
+for f, dx, dy, dz in ((1320, 0.30, -1.65, 0.0), (1352, 0.05, -1.35, -0.05), (1390, -0.30, -1.15, -0.10), (1430, -0.10, -1.30, 0.05)):
     a = face_pt(TEENR, f); b = face_pt(TODR, f); mid = (a + b) / 2
-    ck(f, mid + Vector((0.3 * math.sin(f / 40.0), -1.65, 0.0)), mid, 28)
+    ck(f, mid + Vector((dx, dy, dz)), mid, 28)
 # B10: rise together
 for f in (1470, 1500, 1530, 1552):
     a = face_pt(TEENR, f); b = face_pt(TODR, f); mid = (a + b) / 2
     ck(f, mid + Vector((0.2, -1.8, 0.15)), mid + Vector((0, 0, 0.05)), 28)
 # B11: tilt up the hauling rope to the pulley (the switch happens there at SW), tilt down to the two of them cheering
 ck(1568, Vector((-0.1, -2.0, 1.2)), Vector((0.0, -0.05, 1.6)), 28)
-ck(1584, Vector((-0.25, -1.9, 1.9)), Vector((0.0, -0.1, 2.45)), 28)
+ck(1584, Vector((-0.55, -2.1, 1.8)), Vector((-0.45, 0.3, 2.1)), 26)
 fs(1630); tp = face_pt(TEENR, 1630); kp = face_pt(TODR, 1630); mid = (tp + kp) / 2
 ck(1606, mid + Vector((0.55, -2.2, 0.55)), mid + Vector((0.15, 0, 0.15)), 30)
-ck(1630, mid + Vector((0.35, -2.3, 0.10)), mid + Vector((0.1, 0, -0.15)), 30)
-ck(1680, mid + Vector((0.15, -2.6, 0.30)), mid + Vector((0.1, 0, -0.12)), 30)
-ck(END, mid + Vector((-0.05, -3.0, 0.75)), mid + Vector((0.1, 0, -0.08)), 30)
+ck(1630, mid + Vector((0.05, -2.3, 0.10)), mid + Vector((0.1, 0, -0.15)), 30)
+ck(1680, mid + Vector((-0.35, -2.4, 0.45)), mid + Vector((0.05, 0, -0.10)), 30)
+ck(END, mid + Vector((-0.75, -2.7, 1.10)), mid + Vector((0.0, 0, -0.05)), 30)
 K.sort(key=lambda k: k[0])
 px = [pchip([(k[0], k[1][i]) for k in K]) for i in range(3)]
 tx = [pchip([(k[0], k[2][i]) for k in K]) for i in range(3)]
