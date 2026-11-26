@@ -20,9 +20,6 @@ for ch in TR1.children:
 WT.location = (0.55, 0.0, BELT_Z + 0.002)
 TR1.location = (BX0 + 0.10, 0.0, BELT_Z + 0.002 + 0.012 * 2)
 TS_L, TS_R = O["TravShoeL"], O["TravShoeR"]
-for sh, dy, yw in ((TS_L, -0.07, 4), (TS_R, 0.07, -6)):
-    sh.parent = TR0; sh.matrix_parent_inverse = Matrix.Identity(4)
-    sh.location = (dy, 0.06, 0.010); sh.rotation_euler = (0, 0, math.radians(yw))
 for k, sh in enumerate((O["WomanShoe0"], O["WomanShoe1"])):
     sh.parent = WT; sh.matrix_parent_inverse = Matrix.Identity(4); sh.location = (-0.07 + 0.14 * k, 0.0, 0.010)
 for t in (TR0, WT):
@@ -35,11 +32,47 @@ WT.location.x = 0.55; WT.keyframe_insert("location", frame=1137); WT.location.x 
 TY = -0.62
 def tray_rim(f):
     fs(f); M = TR0.matrix_world; return M @ Vector((0, -0.26, 0.10))
-for f_ in (1, 1137, 1180):
-    stand(TV, f_, -0.27, TY, 180.0, spine=14)
-    P = tray_rim(f_)
-    for s, dx in (("L", -0.13), ("R", 0.13)):
-        rest_hand(TV, s, f_, P + Vector((dx, 0.0, 0.0)), (0, 1, -0.2), (0, 0.2, -1), pose="relaxed", pole=P + Vector((dx * 3, -0.5, 0.1)), skin=0.010)
+for f_ in (1, 1137):
+    stand(TV, f_, -0.27, TY, 180.0, spine=8)
+# one shoe in each hand, held by the collar (posed wrap grip), hanging upright in front of the palm
+fs(1137)
+HOLD = {"L": (TS_L, Vector((-0.40, TY + 0.36, 1.06))), "R": (TS_R, Vector((-0.12, TY + 0.36, 1.06)))}
+def shoe_place(sh, collar_world, yaw_deg=0.0):
+    sh.parent = None; sh.rotation_mode = 'XYZ'; toe, colp, ym = shoe_frame(sh)
+    sh.rotation_euler = (0, 0, math.radians(yaw_deg + (0.0 if toe > 0 else 180.0))); upd()
+    off = sh.matrix_world.to_3x3() @ colp
+    sh.location = Vector(collar_world) - off; upd()
+OFFS = {}
+for s_, (sh, hp) in HOLD.items():
+    sx_ = 1 if s_ == "L" else -1
+    hand_free(TV, s_, 1137, hp, Vector((0, 0.35, -1)), Vector((-sx_ * 1.0, 0.2, 0)), pose="wrap_grip", pole=hp + Vector((sx_ * 0.40, -0.40, -0.30)))
+fs(1137)
+for s_, (sh, hp) in HOLD.items():
+    r_ = RIG[TV]; palm = Wh(r_, "wrist." + s_).lerp(Wh(r_, "finger3-1." + s_), 0.6)
+    shoe_place(sh, palm + Vector((0, 0.03, -0.03)))
+    sh.rotation_mode = 'QUATERNION'
+    for k_ in ("location", "rotation_quaternion", "scale"): sh.keyframe_insert(k_, frame=1136)
+    owner_switch(sh, 1137, RIG[TV], "wrist." + s_, log=log)
+# lower both into his tray (wrist targets translated so the shoes land on the tray floor at 1198)
+ikM = {s_: CTRL[TV].PB["IK_hand." + s_].matrix.copy() for s_ in "LR"}
+fs(1137)
+DROP = {}
+for s_, (sh, hp) in HOLD.items():
+    bb = [sh.matrix_world @ v.co for v in sh.data.vertices]
+    cx_ = sum(p.x for p in bb) / len(bb); cy_ = sum(p.y for p in bb) / len(bb); mz = min(p.z for p in bb)
+    tx = -0.22 + (-0.085 if s_ == "L" else 0.085)
+    DROP[s_] = Vector((tx - cx_, 0.0 - cy_, (BELT_Z + 0.004) - mz))
+for f_, u in ((1160, 0.35), (1182, 0.85), (1198, 1.0)):
+    for s_ in "LR":
+        M = ikM[s_].copy(); M.translation = M.translation + DROP[s_] * u + Vector((0, 0, 0.06 * (1 - u) * (u > 0.5)))
+        CTRL[TV].key_world("IK_hand." + s_, f_, M)
+    stand(TV, f_, -0.27, TY, 180.0, spine=8 + 16 * u)
+for s_, (sh, hp) in HOLD.items():
+    owner_switch(sh, 1200, TR0, None, log=log)
+    fs(1200); mz = min((sh.matrix_world @ v.co).z for v in sh.data.vertices)
+    log("traveller shoe", s_, "bottom vs tray floor mm", round((mz - (BELT_Z + 0.002)) * 1000, 1))
+    key_world_while_owned(sh, 1206, Matrix.Translation((0, 0, (BELT_Z + 0.003) - mz)) @ sh.matrix_world)
+for s_ in "LR": apply_pose(RIG[TV], s_, "relaxed", 1204)
 for f_, x_ in ((1215, -0.27), (1255, -0.02), (1295, 0.22), (1335, 0.42)):
     stand(TV, f_, x_, TY, 180.0, spine=14)
     P = tray_rim(f_)
@@ -54,8 +87,8 @@ for f_, a in ((1420, 0.0), (1442, 1.0), (1469, 1.0)):
     stand(TV, f_, TXE, TY - 0.05, yw, spine=3)
     for s in "LR":
         sx = 1 if s == "L" else -1
-        P = body_pt(TV, (sx * (0.24 + 0.10 * a), -0.14 * a - 0.03, 0.80 + 0.12 * a), yw, (TXE, TY - 0.05, 0))
-        hand_free(TV, s, f_, P, Ryaw(yw) @ Vector((sx * 0.6 * a, -0.4 * a, -1 + a)), Ryaw(yw) @ Vector((0, 0, 1)) if a else Ryaw(yw) @ Vector((-sx, 0, 0)),
+        P = body_pt(TV, (sx * (0.24 + 0.06 * a), -0.03 - 0.27 * a, 0.80 + 0.20 * a), yw, (TXE, TY - 0.05, 0))
+        hand_free(TV, s, f_, P, Ryaw(yw) @ Vector((sx * 0.35 * a, -0.8 * a, -1 + a)), Ryaw(yw) @ Vector((0, 0, 1)) if a else Ryaw(yw) @ Vector((-sx, 0, 0)),
                   pose="relaxed", pole=body_pt(TV, (sx * 0.55, 0.3, 0.95), yw, (TXE, TY - 0.05, 0)))
 key_head(TV, 1137, 0, -30); key_head(TV, 1300, -10, -25); key_head(TV, 1370, 0, -26); key_head(TV, 1410, 5, -28); key_head(TV, 1438, 8, 4); key_head(TV, 1469, 6, 2)
 key_face(TV, 1137, smile=0.1); key_face(TV, 1400, brow=0.4); key_face(TV, 1440, smile=0.75, brow=0.6); key_face(TV, 1469, smile=0.8, brow=0.5)
@@ -142,14 +175,16 @@ CABK = [  # frame, camera, aim, lens
  (1, V(-0.50, 1.42, 1.30), V(-0.63, 0.30, 0.90), 30), (50, V(-0.60, 1.15, 1.12), V(-0.62, 0.42, 0.82), 32),
  (105, V(-0.70, 0.92, 1.00), TLc + V(0.02, 0, -0.02), 34), (150, V(-0.62, 0.88, 0.98), TLc + V(0.02, 0, -0.01), 36), (166, V(-0.52, 0.78, 1.12), V(-0.15, 1.70, 1.30), 34),
  (182, V(-0.30, 0.74, 1.30), V(0.05, 2.6, 1.45), 30), (215, V(0.12, 0.72, 1.48), V(0.08, 1.48, 1.52), 34),
- (255, V(0.24, 0.86, 1.52), V(0.06, 1.48, 1.48), 34), (272, V(0.34, 1.20, 1.60), V(-0.40, 0.45, 1.02), 32), (292, V(0.42, 1.62, 1.66), V(-0.30, 0.55, 1.00), 30),
- (340, V(0.22, 1.66, 1.56), V(-0.60, 0.38, 0.92), 34), (372, V(0.50, 1.95, 1.80), V(-0.45, 0.70, 1.05), 26),
+ (255, V(0.24, 0.86, 1.52), V(0.06, 1.48, 1.48), 34), (272, V(0.05, 0.80, 1.48), V(0.04, 1.48, 1.46), 32),
+ (292, V(-0.24, 0.74, 1.42), V(0.06, 1.46, 1.42), 30), (340, V(-0.32, 0.66, 1.38), V(0.02, 1.40, 1.34), 30),
+ (358, V(-0.40, 0.84, 1.62), V(-0.55, 0.30, 0.98), 28), (376, V(-0.52, 1.02, 1.95), V(-0.45, 0.45, 1.00), 26),
  (405, V(0.90, 1.70, 1.88), V(-0.35, 0.85, 1.12), 24), (420, V(0.90, 1.70, 1.88), V(-0.20, 0.92, 0.95), 24), (432, V(0.88, 1.72, 1.86), V(0.0, 1.0, 0.70), 24),
- (439, V(0.86, 1.72, 1.86), V(-1.22, 1.52, 1.45), 30), (448, V(0.84, 1.72, 1.85), V(-1.20, 1.52, 1.42), 32),
- (460, V(0.70, 1.72, 1.80), V(0.62, 0.92, 0.25), 24), (500, V(0.72, 1.70, 1.72), V(0.64, 0.92, 0.28), 26),
- (535, V(0.80, 1.58, 1.22), V(0.76, 0.98, 0.36), 32), (575, V(0.84, 1.55, 1.12), V(0.80, 1.00, 0.34), 34), (615, V(0.95, 1.55, 1.08), V(0.98, 1.08, 0.24), 34),
- (650, V(-0.20, 1.45, 1.55), V(-0.60, 0.40, 0.80), 28), (700, V(0.02, 0.30, 1.32), V(-0.70, 0.45, 0.92), 28),
- (752, V(-0.45, 0.42, 0.98), TLc + V(0, 0, -0.04), 34), (780, V(-0.86, 0.52, 1.28), V(-0.88, 0.08, 0.60), 30), (812, V(-0.94, 0.34, 0.92), TRc + V(0, 0, -0.04), 34),
+ (439, V(0.86, 1.72, 1.86), V(-1.22, 1.52, 1.45), 30), (448, V(0.60, 1.55, 1.88), V(-1.20, 1.52, 1.42), 32),
+ (460, V(-0.50, 1.04, 1.85), V(0.55, 1.02, 0.25), 24), (505, V(-0.42, 1.04, 1.80), V(0.58, 1.00, 0.28), 24),
+ (538, V(0.22, 1.42, 1.28), V(0.75, 0.95, 0.48), 22), (580, V(0.30, 1.42, 1.18), V(0.78, 0.95, 0.45), 24), (615, V(0.55, 1.50, 0.92), V(1.00, 1.12, 0.25), 32),
+ (650, V(0.10, 1.20, 1.55), V(-0.60, 0.40, 0.85), 28), (700, V(0.12, 0.40, 1.28), V(-0.60, 0.25, 0.72), 28),
+ (745, V(0.12, 0.30, 1.30), V(-0.40, 0.42, 1.08), 28), (795, V(0.06, 0.24, 1.26), V(-0.36, 0.42, 1.08), 30),
+ (830, V(-0.92, 0.40, 0.92), TRc + V(0, 0, -0.04), 32),
  (860, V(-0.98, 0.25, 0.74), TRc + V(0, 0.0, -0.06), 40), (880, V(-1.02, 0.24, 0.72), TRc + V(0, 0.0, -0.07), 42),
 ]
 # whip out of the cabin: the aim swings up and to the left over ~10 frames
@@ -167,8 +202,8 @@ SK_local = [(SW2, None, None, 35), (SW2 + 8, V(LX - 1.5, fy - 15.0, fz_mid - 1.0
             (1090, V(LX + 4.5, fy - 17.0, fz_mid - 1.4), V(LX + 1.5, fy, fz_mid + 0.8), 35),
             (1125, V(LX - 12, fy - 50, fz_mid + 14), V((LXa + LXb) / 2, 0, fz_mid), 35), (SW3 - 3, V(LX - 14, fy - 58, fz_mid + 16), V((LXa + LXb) / 2, 0, fz_mid - 2), 35)]
 # airport (local to SET_Airport)
-AK_local = [(SW3, None, None, 30), (SW3 + 6, V(BX0 - 0.08, -0.46, 1.40), V(BX0 + 0.10, 0.02, BELT_Z), 30),
-            (1225, V(BX0 + 0.22, -0.36, 1.28), V(BX0 + 0.12, 0.02, BELT_Z), 32), (1245, V(-0.85, 0.30, 1.45), V(-0.40, -0.30, 1.00), 28), (1262, V(-0.60, 0.55, 1.48), V(-0.20, -0.35, 0.98), 28),
+AK_local = [(SW3, None, None, 30), (SW3 + 6, V(-0.80, -0.30, 1.42), V(-0.30, 0.02, BELT_Z + 0.05), 30),
+            (1200, V(-0.72, -0.26, 1.36), V(-0.24, 0.02, BELT_Z + 0.02), 32), (1225, V(-0.70, -0.10, 1.40), V(-0.24, 0.0, BELT_Z + 0.05), 30), (1245, V(-0.85, 0.30, 1.48), V(-0.40, -0.30, 1.00), 28), (1262, V(-0.60, 0.55, 1.48), V(-0.20, -0.35, 0.98), 28),
             (1330, V(-0.20, 0.58, 1.48), V(0.20, -0.40, 1.00), 28), (1400, V(-0.45, 0.30, 1.45), V(0.40, -0.62, 1.20), 30),
             (1469, V(-0.38, 0.22, 1.48), V(0.42, -0.62, 1.35), 34)]
 def catmull_at(keys, f):

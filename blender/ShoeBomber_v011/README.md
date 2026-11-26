@@ -1,6 +1,6 @@
 # ShoeBomber_v011: from-scratch rebuild of batch 1 film 07. NOT READY (ON HOLD)
 
-**Status:** self-QC check 3 FAILED and the two allowed fix rounds are used up. No .blend is pushed. `review/preview.mp4` is the latest preview, rendered from the packed local build. The findings are in `review/CHECK1.md` and `review/CHECK3.md`.
+**Status:** ON HOLD. The director-approved restage round (check 4) also FAILED the fresh review; see `review/CHECK4.md`. No .blend is pushed. `review/preview.mp4` is the check-4 preview, rendered from the packed local build.
 
 ## What v011 is
 - **Timing:** the same VO and timing as v008/v009 (`ShoeBomber_v011_VO.mp3`, identical file). Frames 1–1469 at 60 fps. The beat frames come from the VO word times (`scripts/vo_words.json`, `beats.json`).
