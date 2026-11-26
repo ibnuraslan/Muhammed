@@ -35,7 +35,11 @@ stand(PA, 400, 0.02, 0.72, -95.0, spine=12, stance=0.14)
 fs(405); bR = RIG[BM]
 ua = Wh(bR, "upperarm01.R").lerp(Wh(bR, "lowerarm01.R"), 0.35); el = Wh(bR, "upperarm01.R").lerp(Wh(bR, "lowerarm01.R"), 0.85)
 hand_free(PA, "R", 405, el + Vector((0.06, -0.01, 0.0)), Vector((0, 0.2, -1)), Vector((-1, 0, 0)), pose="wrap_grip", pole=el + Vector((0.45, -0.25, -0.25)))
-hand_free(PA, "L", 405, ua + Vector((0.06, 0.02, 0.03)), Vector((0, 0.3, -1)), Vector((-1, 0, 0)), pose="wrap_grip", pole=ua + Vector((0.45, 0.35, -0.2)))
+# left arm stays down at his side (one-hand hold: fewest contacts)
+fs(405); _pa = Wh(RIG[PA], "root")
+for s_ in ("L",):
+    hand_free(PA, s_, 405, body_pt(PA, (0.21, -0.05, rest_z(PA) - 0.17), -95.0, (_pa.x, _pa.y, 0)), Ryaw(-95) @ Vector((0, -0.25, -1)), Ryaw(-95) @ Vector((-1, 0, 0)),
+              pose="relaxed", pole=body_pt(PA, (0.45, 0.5, rest_z(PA)), -95.0, (_pa.x, _pa.y, 0)))
 stand(PA, 414, 0.0, 0.70, -95.0, spine=18, stance=0.15, twist=-6)
 key_head(PA, 400, 5, -15); key_face(PA, 400, brow=-0.8, jaw=0.3)
 kneel(BM, 432, 0.05, 1.05, 100.0, lean=45)
@@ -75,7 +79,14 @@ for s in "LR":
     hand_free(ST, s, 420, body_pt(ST, (sx * 0.24, -0.32, 1.36), 0.0, (-0.02, 1.60, 0)), Vector((0, -0.3, 1)), Vector((0, -1, 0)), pose="open_alarm",
               pole=body_pt(ST, (sx * 0.5, 0.2, 0.95), 0.0, (-0.02, 1.60, 0)))
 key_head(ST, 300, 0, 0); key_head(ST, 405, 0, -18); key_face(ST, 405, brow=-0.8, jaw=0.2)
-kneel(ST, 446, 0.98, 0.58, 180.0, lean=30, twist=0)
+stand(ST, 434, -0.02, 1.62, 0.0, spine=12)
+for s_ in "LR":
+    sx_ = 1 if s_ == "L" else -1
+    hand_free(ST, s_, 434, body_pt(ST, (sx_ * 0.24, -0.32, 1.30), 0.0, (-0.02, 1.62, 0)), Vector((0, -0.3, 1)), Vector((0, -1, 0)), pose="open_alarm",
+              pole=body_pt(ST, (sx_ * 0.5, 0.2, 0.95), 0.0, (-0.02, 1.62, 0)))
+# round the head end of the struggle (camera on the attendant 439-450), never through the bomber
+stand(ST, 440, 0.95, 1.62, -90.0, spine=10); stand(ST, 444, 1.50, 1.05, 180.0, spine=10)
+kneel(ST, 450, 0.98, 0.58, 180.0, lean=30, twist=0)
 blinks(ST, [330, 480, 600, 730, 850]); saccades(ST, 300, 860, seed=7)
 # syringe: in his right hand from the landing of the takedown (pinched like a dart, needle toward the arm)
 A_ = Vector((0.05, 0.50, -0.86)).normalized()
@@ -88,15 +99,15 @@ dl = Wh(bR, "upperarm01.R").lerp(Wh(bR, "lowerarm01.R"), 0.25)
 dz = max(q.z for _, q, _ in eval_points(O[BM + ".top"]) if (q.to_2d() - dl.to_2d()).length < 0.05)
 DELT = Vector((dl.x, dl.y, dz)); log("deltoid", tuple(round(v, 3) for v in DELT))
 TIP0 = DELT + Vector((0.04, -0.14, 0.20))
-needle_at(446, TIP0)
-fs(446); pp = pinch_pt(RIG[ST], "R")
+needle_at(452, TIP0)
+fs(452); pp = pinch_pt(RIG[ST], "R")
 zA = A_; xA = Vector((0, 0, 1)).cross(zA).normalized(); yA = zA.cross(xA)
 Ms = Matrix((xA, yA, zA)).transposed().to_4x4()
 Ms.translation = pp - zA * 0.100
 SYR.parent = None; SYR.matrix_world = Ms; SYR.rotation_mode = 'QUATERNION'
 for k_ in ("location", "rotation_quaternion", "scale"): SYR.keyframe_insert(k_, frame=0)
-owner_switch(SYR, 446, RIG[ST], "wrist.R", log=log)
-vis(SYR, 1, False); vis(SYR, 440, True)
+owner_switch(SYR, 452, RIG[ST], "wrist.R", log=log)
+vis(SYR, 1, False); vis(SYR, 450, True)
 colorize(SYR, (0.10, 0.55, 1.0), gain=1.6)
 needle_at(505, TIP0 + Vector((0, 0.02, 0.04)))
 needle_at(535, DELT + A_ * -0.03)
@@ -109,7 +120,7 @@ def st_left(f):
     """his free hand rests on his own left thigh (no arm across the bomber's head)"""
     fs(f); h = Wh(RIG[ST], "upperleg01.L"); k = Wh(RIG[ST], "lowerleg01.L"); p = h.lerp(k, 0.6) + Vector((0, 0, 0.075))
     rest_hand(ST, "L", f, p, (k - h).normalized(), (0, 0, -1), pose="relaxed", pole=p + Vector((0.3, -0.3, 0.35)))
-for f_ in (446, 505, 560, 620, 700, 870): kneel(ST, f_, 0.98, 0.58, 180.0, lean=30 + (6 if 530 < f_ < 600 else 0), twist=0); st_left(f_)
+for f_ in (450, 505, 560, 620, 700, 870): kneel(ST, f_, 0.98, 0.58, 180.0, lean=30 + (6 if 530 < f_ < 600 else 0), twist=0); st_left(f_)
 key_head(ST, 446, -10, -30); key_head(ST, 540, -5, -40); key_head(ST, 600, -15, -20); key_head(ST, 660, 30, 5); key_head(ST, 760, 45, 0)
 key_face(ST, 446, brow=-0.6, jaw=0.1, squint=0.2); key_face(ST, 560, brow=-0.4, squint=0.4); key_face(ST, 640, brow=0.2)
 

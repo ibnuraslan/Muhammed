@@ -253,7 +253,7 @@ def show(objs, ranges):
             vis(o, a, True); vis(o, b + 1, False)
 show(CAB_SET, [(1, SW1 - 1)]); show(VOID_SET, [(SW1, SW2 - 1)]); show(SKY_SET, [(SW2, SW3 - 1)]); show(AIR_SET, [(SW3, END)])
 # objects that were already switched inside the cabin story keep their own keys: flame (off 383), syringe (on 440), cuffs (on 440)
-for o, on in ((O["Flame"], (1, 382)), (O["FlameLight"], (1, 382)), (O["Syringe"], (440, SW1 - 1)), (O["Cuff_Strap"], (440, SW1 - 1)), (O["Cuff_L"], (440, SW1 - 1)), (O["Cuff_R"], (440, SW1 - 1))):
+for o, on in ((O["Flame"], (1, 382)), (O["FlameLight"], (1, 382)), (O["Syringe"], (450, SW1 - 1)), (O["Cuff_Strap"], (440, SW1 - 1)), (O["Cuff_L"], (440, SW1 - 1)), (O["Cuff_R"], (440, SW1 - 1))):
     for fc in (o.animation_data.action.fcurves if hasattr(o.animation_data.action, "fcurves") else []):
         pass
     o.animation_data_clear() if False else None

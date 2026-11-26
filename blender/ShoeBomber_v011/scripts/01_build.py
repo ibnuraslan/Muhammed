@@ -338,7 +338,7 @@ keep(CUT_UP, True); keep(CUT, False); CUT.name = "CutShoe_Sole"
 for o in (CUT, CUT_UP):
     sol = o.modifiers.new("cap", 'SOLIDIFY'); sol.thickness = 0.003
 # charge: a soft putty slab sunk into the sole (rounded, displaced, ochre), and the fuse running into it
-m_putty = mat("M_Putty", (0.36, 0.38, 0.30), rough=0.6, coat=0.05)
+m_putty = mat("M_Putty", (0.20, 0.22, 0.15), rough=0.6, coat=0.05)
 L_ = dims[LONG]; W_ = dims[1 - LONG]
 sz = (L_ * 0.62, W_ * 0.48, 0.016) if LONG == 0 else (W_ * 0.48, L_ * 0.62, 0.016)
 PUTTY = box("CutShoe_Charge", sz, (0, 0, zc - 0.006), m_putty, bevel=0.006, segs=4); to_coll([PUTTY], C_VOID)
