@@ -51,7 +51,7 @@ def Rf(front, lean=0.0, side=0.0):
 def LH(p, n, d): return ('L', p, n, d)       # body-local hand/foot spec
 def WH(p, n, d): return ('W', p, n, d)       # world spec
 # standard local specs (body frame: +X her left, -Y front, +Z up; origin = root bone head)
-def hang(sx, fwd=0.0): return LH((sx * 0.22, -0.05 - fwd, -0.10), (-sx, 0, 0.1), (0.0, -0.25, -1))
+def hang(sx, fwd=0.0): return LH((sx * 0.21, -0.11 - fwd, -0.04), (-sx, 0, 0.1), (0.0, -0.45, -1))
 def foot_stand(sx, fwd=0.0): return LH((sx * 0.10, -0.06 - fwd, -0.713), (0, 0, 1), (0, -1, 0))
 
 # ==================================================================================== WOMAN
@@ -96,31 +96,32 @@ W.key(146, foot_L=LH((0.10, 0.12, -0.66), (0, 0.5, 0.8), (0, -0.8, 0.5)), foot_R
       knee_L=LH((0.18, -0.9, -0.1), (0, 0, 1), (0, 0, 1)), knee_R=LH((-0.18, -0.9, -0.1), (0, 0, 1), (0, 0, 1)))
 W.key(165, foot_L=LH((0.10, 0.10, -0.68), (0, 0.8, 0.5), (0, -0.5, 0.8)), foot_R=LH((-0.10, 0.12, -0.67), (0, 0.8, 0.5), (0, -0.5, 0.8)))
 W.key(192, foot_L=LH((0.10, 0.12, -0.66), (0, 0.8, 0.5), (0, -0.5, 0.8)), foot_R=LH((-0.11, 0.14, -0.65), (0, 0.8, 0.5), (0, -0.5, 0.8)))
-# falling in: rolls onto her left side, along X, facing the front wall (-Y); lands ON the heap
-LAND = Vector((-0.10, 0.12, 0.0)); LAND.z = heap(LAND.x, LAND.y) + 0.135
-Q_LIE = Rb((1, 0, 0.12), (0, -1, 0.15))                  # head toward +X, chest toward -Y, lying on her LEFT side
-W.key(212, pos=Vector((0.0, -0.25, 1.05)), rot=Rb((0.35, 0.4, -0.85), (0, -0.2, -1)), spine=(25, 0, 0), head=(-15, 0, 0),
+# falling in: she rolls onto her side, along X, chest toward the BACK wall (+Y); lands ON the heap
+LAND = Vector((-0.10, 0.10, 0.0)); LAND.z = heap(LAND.x, LAND.y) + 0.135
+Q_LIE = Rb((1, 0, 0.12), (0, 1, 0.15))                   # head toward +X, chest toward +Y
+W.key(212, pos=Vector((0.0, -0.25, 1.05)), rot=Rb((0.35, 0.4, -0.85), (0, 0.2, -1)), spine=(25, 0, 0), head=(-15, 0, 0),
       hand_L=LH((0.22, -0.35, 0.40), (0, -1, 0), (0, 0, 1)), hand_R=LH((-0.22, -0.35, 0.40), (0, -1, 0), (0, 0, 1)),
       foot_L=LH((0.10, 0.25, -0.50), (0, 0.6, 0.7), (0, -0.7, 0.6)), foot_R=LH((-0.11, 0.25, -0.48), (0, 0.6, 0.7), (0, -0.7, 0.6)))
-W.key(232, pos=LAND + Vector((0.05, 0.0, 0.16)), rot=Rb((0.9, 0.1, -0.15), (0, -1, -0.5)), spine=(30, 0, 0), head=(-10, 0, 0))
+W.key(232, pos=LAND + Vector((0.05, 0.0, 0.16)), rot=Rb((0.9, -0.1, -0.15), (0, 1, -0.5)), spine=(30, 0, 0), head=(-10, 0, 0))
 W.key(246, pos=LAND + Vector((0, 0, 0.01)), rot=Q_LIE, spine=(38, 0, 0), head=(-8, 0, 0), grip_L="relaxed", grip_R="relaxed",
       hand_L=LH((0.16, -0.30, 0.22), (1, 0, 0), (0, -0.4, 1)), hand_R=LH((-0.10, -0.30, 0.18), (1, -0.2, 0), (0, -0.3, 1)),
       foot_L=LH((0.10, -0.35, -0.55), (0, 0.2, 1), (0, -1, 0)), foot_R=LH((-0.10, -0.30, -0.50), (0, 0.2, 1), (0, -1, 0)),
       knee_L=LH((0.20, -0.9, -0.2), (0, 0, 1), (0, 0, 1)), knee_R=LH((-0.20, -0.9, -0.2), (0, 0, 1), (0, 0, 1)))
 W.key(256, pos=LAND, rot=Q_LIE)
-# C (262-451): she lies stunned, stirs, pushes up on her hands and sits up facing the front wall
-W.key(300, pos=LAND + Vector((0, 0, 0.005)), rot=Q_LIE, spine=(40, 0, 0), head=(-4, 0, 0))
-W.key(330, pos=LAND, rot=Q_LIE, spine=(36, 0, 3), head=(-20, -10, 0))
-SIT = Vector((-0.02, 0.18, 0.0)); SIT.z = heap(SIT.x, SIT.y) + 0.10
-W.key(370, pos=LAND + Vector((-0.02, 0.02, 0.10)), rot=Rb((0.75, 0.0, 0.66), (0, -1, -0.1)), spine=(28, 0, 6), head=(-15, -5, 0),
-      hand_R=WH((LAND.x - 0.05, LAND.y - 0.28, heap(LAND.x - 0.05, LAND.y - 0.28)), (0, 0, -1), (1, -0.2, 0)), grip_R="relaxed")
-W.key(410, pos=SIT + Vector((0.08, 0, 0.02)), rot=Rb((0.25, 0.08, 1), (0, -1, 0)), spine=(18, 0, 0), head=(-25, 10, 0),
-      hand_R=WH((SIT.x - 0.24, SIT.y + 0.05, heap(SIT.x - 0.24, SIT.y + 0.05)), (0, 0, -1), (0, -1, 0)),
-      hand_L=WH((SIT.x + 0.25, SIT.y + 0.05, heap(SIT.x + 0.25, SIT.y + 0.05)), (0, 0, -1), (0, -1, 0)), grip_L="relaxed",
-      foot_L=WH((SIT.x - 0.12, SIT.y - 0.42, heap(SIT.x - 0.12, SIT.y - 0.42) + 0.07), (0, 0, 1), (0, -1, 0)),
-      foot_R=WH((SIT.x + 0.12, SIT.y - 0.40, heap(SIT.x + 0.12, SIT.y - 0.40) + 0.07), (0, 0, 1), (0, -1, 0)),
-      knee_L=WH((SIT.x - 0.25, SIT.y - 0.9, 1.0), (0, 0, 1), (0, 0, 1)), knee_R=WH((SIT.x + 0.25, SIT.y - 0.9, 1.0), (0, 0, 1), (0, 0, 1)))
-W.key(451, pos=SIT, rot=Rb((0, 0.05, 1), (0, -1, 0)), spine=(12, 0, 0), head=(-28, 0, 0))
+# C (262-451): she lies stunned, stirs, pushes up on her hand and sits up (still facing the back wall)
+W.key(300, pos=LAND + Vector((0, 0, 0.005)), rot=Q_LIE, spine=(40, 0, 0), head=(-4, 0, 0), face=(0.0, 0.15, 0.6, 0.3))
+W.key(330, pos=LAND, rot=Q_LIE, spine=(36, 0, 0), head=(-10, 0, 0))
+SIT = Vector((-0.02, 0.0, 0.0)); SIT.z = heap(SIT.x, SIT.y) + 0.10
+BACKW = Vector((0, 1, 0))
+W.key(370, pos=LAND + Vector((-0.02, -0.02, 0.10)), rot=Rb((0.75, 0.0, 0.66), (0, 1, -0.1)), spine=(26, 0, 0), head=(-10, 0, 0),
+      hand_R=WH((LAND.x + 0.02, LAND.y + 0.26, heap(LAND.x + 0.02, LAND.y + 0.26) + 0.015), (0, 0, -1), (1, 0.2, 0)), grip_R="relaxed")
+W.key(410, pos=SIT + Vector((0.08, 0, 0.02)), rot=Rb((0.25, -0.08, 1), BACKW), spine=(18, 0, 0), head=(-12, 6, 0),
+      hand_L=WH((SIT.x - 0.24, SIT.y - 0.05, heap(SIT.x - 0.24, SIT.y - 0.05) + 0.015), (0, 0, -1), (0, 1, 0)),
+      hand_R=WH((SIT.x + 0.25, SIT.y - 0.05, heap(SIT.x + 0.25, SIT.y - 0.05) + 0.015), (0, 0, -1), (0, 1, 0)), grip_L="relaxed",
+      foot_L=WH((SIT.x - 0.12, SIT.y + 0.42, heap(SIT.x - 0.12, SIT.y + 0.42) + 0.08), (0, 0, 1), BACKW),
+      foot_R=WH((SIT.x + 0.12, SIT.y + 0.40, heap(SIT.x + 0.12, SIT.y + 0.40) + 0.08), (0, 0, 1), BACKW),
+      knee_L=WH((SIT.x - 0.25, SIT.y + 0.9, 1.0), (0, 0, 1), (0, 0, 1)), knee_R=WH((SIT.x + 0.25, SIT.y + 0.9, 1.0), (0, 0, 1), (0, 0, 1)))
+W.key(451, pos=SIT, rot=Rb((0, -0.05, 1), BACKW), spine=(12, 0, 0), head=(-26, 0, 0), face=(0.0, 0.05, 0.7, 0.0))
 
 # ==================================================================================== MAN: walks in, shoves her shoulders, backs off
 MY = -1.64

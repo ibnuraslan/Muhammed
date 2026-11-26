@@ -27,21 +27,22 @@ SWEATER = "toigo_fisherman_sweater/toigo_fisherman_sweater.mhclo"
 WOOL = "toigo_wool_pants/toigo_wool_pants.mhclo"
 POLO = "namuhekam_male_polo_shirt/namuhekam_male_polo_shirt.mhclo"
 WORK = "male_worksuit01/male_worksuit01.mhclo"
+JACKET = "toigo_male_suit_tie_and_jacket/toigo_male_suit_tie_and_jacket.mhclo"
 WOM, WB = human("Woman", 0.0, 0.42, {"asian": 0.10, "caucasian": 0.65, "african": 0.25}, "ponytail01/ponytail01.mhclo",
                 "young_caucasian_female/young_caucasian_female.mhmat", "eyebrow010/eyebrow010.mhclo", height=0.45, weight=0.5,
                 shoes="shoes01/shoes01.mhclo", clothes=[SWEATER, WOOL], cup=0.25)
 MAN, MB = human("Man", 1.0, 0.5, {"asian": 0.10, "caucasian": 0.80, "african": 0.10}, "short02/short02.mhclo",
-                "young_caucasian_male/young_caucasian_male.mhmat", "eyebrow001/eyebrow001.mhclo", height=0.55, weight=0.5,
+                "middleage_caucasian_male/middleage_caucasian_male.mhmat", "eyebrow001/eyebrow001.mhclo", height=0.55, weight=0.5,
                 shoes="shoes03/shoes03.mhclo", clothes=[POLO, WOOL])
 PAS, PB = human("Passer", 0.0, 0.6, {"asian": 0.6, "caucasian": 0.3, "african": 0.1}, "braid01/braid01.mhclo",
                 "young_asian_female/young_asian_female.mhmat", "eyebrow007/eyebrow007.mhclo", height=0.45, weight=0.55,
                 shoes="shoes01/shoes01.mhclo", clothes=[SWEATER, WOOL], cup=0.25)
 FF1, F1B = human("Fire1", 1.0, 0.55, {"asian": 0.05, "caucasian": 0.15, "african": 0.80}, "short02/short02.mhclo",
                  "middleage_african_male/middleage_african_male.mhmat", "eyebrow004/eyebrow004.mhclo", height=0.55, weight=0.55,
-                 muscle=0.6, shoes="shoes03/shoes03.mhclo", clothes=[WORK])
-FF2, F2B = human("Fire2", 1.0, 0.45, {"asian": 0.05, "caucasian": 0.90, "african": 0.05}, "short01/short01.mhclo",
-                 "young_caucasian_male2/young_caucasian_male2.mhmat", "eyebrow002/eyebrow002.mhclo", height=0.6, weight=0.5,
-                 muscle=0.6, shoes="shoes03/shoes03.mhclo", clothes=[WORK])
+                 muscle=0.6, shoes="shoes03/shoes03.mhclo", clothes=[JACKET, WOOL])
+FF2, F2B = human("Fire2", 1.0, 0.45, {"asian": 0.80, "caucasian": 0.15, "african": 0.05}, "short01/short01.mhclo",
+                 "young_asian_male/young_asian_male.mhmat", "eyebrow002/eyebrow002.mhclo", height=0.6, weight=0.5,
+                 muscle=0.6, shoes="shoes03/shoes03.mhclo", clothes=[JACKET, WOOL])
 PEOPLE = [(WOM, WB), (MAN, MB), (PAS, PB), (FF1, F1B), (FF2, F2B)]
 
 def colorize2(obj, rgb, lo=0.42):
@@ -108,10 +109,13 @@ def dress(rig, body, top, bottom, top_col, bot_col):
 W_TOP, W_TRS = dress(WOM, WB, "fisherman", "wool_pants", (0.95, 0.16, 0.07), (0.05, 0.16, 0.62))
 M_TOP, M_TRS = dress(MAN, MB, "polo", "wool_pants", (0.02, 0.55, 0.42), (0.10, 0.09, 0.12))
 P_TOP, P_TRS = dress(PAS, PB, "fisherman", "wool_pants", (0.98, 0.72, 0.04), (0.38, 0.06, 0.48))
-F1_SUIT, _ = dress(FF1, F1B, "worksuit", None, None, None)
-F2_SUIT, _ = dress(FF2, F2B, "worksuit", None, None, None)
-for s in (F1_SUIT, F2_SUIT):
-    reflective_bands(s, (0.06, 0.07, 0.10), [(0.10, 0.14), (0.47, 0.51), (0.70, 0.74)])
+# firefighters: a separate turnout COAT and TROUSERS (real CC0 jacket + trousers), charcoal with reflective bands
+F1_COAT, F1_TRS = dress(FF1, F1B, "suit_tie_and_jacket", "wool_pants", None, None)
+F2_COAT, F2_TRS = dress(FF2, F2B, "suit_tie_and_jacket", "wool_pants", None, None)
+for c_ in (F1_COAT, F2_COAT):
+    reflective_bands(c_, (0.08, 0.08, 0.10), [(0.06, 0.12), (0.52, 0.58)])
+for t_ in (F1_TRS, F2_TRS):
+    reflective_bands(t_, (0.08, 0.08, 0.10), [(0.16, 0.22)])
 
 for r, b in PEOPLE:
     eye_fix(r)
@@ -390,7 +394,9 @@ sc["crate_top"] = CRATE_TOP; log("crate top", round(CRATE_TOP, 3))
 box("CrateBoard", (0.36, 0.36, 0.02), (0.0, BY0 - 0.30, CRATE_TOP + 0.01), mat("M_Board", (0.95, 0.55, 0.12), rough=0.5), bevel=0.003)
 sc["stand_top"] = CRATE_TOP + 0.02
 
-H1 = imp(DL + "/helmet2/scene.gltf", "Helmet1", 0.34, (20, 0, 0)); H2 = H1.copy(); H2.data = H1.data.copy(); H2.name = "Helmet2"; sc.collection.objects.link(H2)
+H1 = imp(DL + "/helmet2/scene.gltf", "Helmet1", 0.34, (20, 0, 0))
+H1.data.materials.clear(); H1.data.materials.append(mat("M_Helmet", (0.85, 0.04, 0.03), rough=0.25, coat=0.6))   # one glossy red shell (no gold shield)
+H2 = H1.copy(); H2.data = H1.data.copy(); H2.name = "Helmet2"; sc.collection.objects.link(H2)
 for m in H1.data.materials:
     if m and m.use_nodes:
         for pn in [n for n in m.node_tree.nodes if n.type == 'BSDF_PRINCIPLED']:
