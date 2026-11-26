@@ -27,15 +27,29 @@ for im in list(bpy.data.images):
     else:
         first.setdefault(key, im)
 KEEP2K = ("young_caucasian_male_diffuse", "short02", "boy_tee_diffuse", "eyebrow", "eyelash", "logo_poster")
+import tempfile
+TMP = tempfile.mkdtemp()
 for im in bpy.data.images:
-    if im.size[0] == 0: continue
+    if im.size[0] == 0 or im.type != 'IMAGE': continue
     big = max(im.size)
     if any(k in im.name for k in KEEP2K): tgt = min(big, 2048)
-    elif im.name.startswith(("potted_plant", "shrub", "island_tree", "decorative_book")): tgt = 512
+    elif im.name.startswith(("potted_plant", "shrub", "island_tree", "decorative_book", "book_")): tgt = 512
     else: tgt = min(big, 1024)
-    if big > tgt:
-        im.scale(int(im.size[0] * tgt / big), int(im.size[1] * tgt / big)); im.pack()
-        print("SHRUNK", im.name, tgt)
+    if big > tgt: im.scale(int(im.size[0] * tgt / big), int(im.size[1] * tgt / big))
+    # write an 8-bit PNG (alpha kept, LESSONS 3) and pack that file, not the raw float buffer
+    fn = os.path.join(TMP, "".join(c if c.isalnum() or c in "._-" else "_" for c in im.name))
+    if not fn.lower().endswith(".png"): fn += ".png"
+    im.filepath_raw = fn; im.file_format = 'PNG'; im.save()
+    im.unpack(method='REMOVE') if im.packed_file else None
+    im.filepath = fn; im.reload(); im.pack()
+# very dense meshes (the Poly Haven tree and book set): decimated in place (they are far background)
+dg = bpy.context.evaluated_depsgraph_get()
+for o in list(bpy.data.objects):
+    if o.type != 'MESH' or len(o.data.vertices) < 150000: continue
+    n0 = len(o.data.vertices); md = o.modifiers.new("dec", 'DECIMATE'); md.ratio = max(0.08, 120000 / n0)
+    dg = bpy.context.evaluated_depsgraph_get(); me = bpy.data.meshes.new_from_object(o.evaluated_get(dg))
+    o.modifiers.remove(md); old = o.data; o.data = me
+    print("DECIMATED", o.name, n0, "->", len(me.vertices))
 bpy.ops.outliner.orphans_purge(do_local_ids=True, do_linked_ids=True, do_recursive=True)
 bpy.ops.file.pack_all()
 for snd in bpy.data.sounds:
