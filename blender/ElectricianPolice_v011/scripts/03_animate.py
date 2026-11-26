@@ -205,7 +205,7 @@ def M_RIDE(f): return Matrix.Translation(Vector((BX, bike_y(f), 0.0))) @ Matrix.
 for f in range(1, 121):
     key_obj_matrix(RAVI, f, M_RIDE(f))
 # yard and control room and the end (teleports while he is off camera; ONE model)
-M_YARD = MZ((-9.4, 19.4, 0.01), 125.0)
+M_YARD = MZ((-9.4, 19.4, 0.01), 45.0)
 CON = sc["CON"]; LAP_BB = sc["LAP_BB"]; SWG = sc["SWG_BB"]
 RAVI_CX = CON[0] - CON[4] / 2 - 0.25        # 25 cm behind the counter edge (body centre)
 RAVI_CY = 2.72
@@ -688,7 +688,7 @@ CK = [
     (255,  Vector((2.65, 1.05, 1.62)), Vector((2.35, -0.2, 1.52)), 38, 8),                # close on Ravi: "Big mistake"
     (290,  Vector((2.55, 0.85, 1.58)), Vector((2.40, -0.2, 1.60)), 38, 8),
     (300,  Vector((2.60, 0.95, 1.62)), Vector((2.50, -0.1, 1.85)), 34, 8),
-    (322,  Vector((2.80, 0.80, 1.80)), Vector((3.0, 1.0, 2.7)), 30, 8),                   # his face low in frame, looking up at the pole transformer
+    (322,  Vector((2.80, 0.80, 1.80)), Vector((2.85, 0.1, 2.25)), 30, 8),                   # his face low in frame, looking up at the pole transformer
     (340,  Vector((1.20, 4.50, 5.6)), Vector((-6.0, 12.0, 4.0)), 28, 8),                  # follow the wires west, over the street
     (366,  Vector((-6.0, 15.8, 3.0)), Vector((-9.4, 19.4, 1.62)), 40, 8),                 # over the yard fence, closing on Ravi
     (392,  Vector((-7.70, 18.25, 1.75)), Vector((-9.4, 19.4, 1.62)), 34, 8),              # Ravi in his hard hat, transformers behind
@@ -703,7 +703,7 @@ CK = [
     (640,  Vector((-7.40, 2.80, 1.50)), Vector((-8.55, 2.80, 1.43)), 36, 8),               # straight on: the DA KRAS FILMS lid logo and his face, red glow on it
     (684,  Vector((-7.60, 2.83, 1.52)), Vector((-8.55, 2.80, 1.44)), 36, 8),
     (712,  Vector((-8.30, 2.05, 1.80)), Vector((RAVI_CX, RAVI_CY, 1.55)), 30, 8),           # round his right side, above the counter
-    (745,  Vector((-9.02, 1.98, 1.72)), SCR_C + Vector((0, 0.03, 0.0)), 34, 10),            # his profile and the screen: calendar pages
+    (745,  Vector((-8.85, 1.98, 1.70)), SCR_C + Vector((0, 0.03, 0.0)), 34, 10),            # his profile and the screen: calendar pages
     (790,  Vector((-8.30, 2.05, 1.78)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),           # round his right side, above the counter
     (830,  Vector((-7.55, 2.45, 1.58)), Vector((RAVI_CX, RAVI_CY, 1.64)), 32, 8),           # his grin over the laptop lid (under the brim)
     (880,  Vector((-7.70, 2.90, 1.58)), Vector((RAVI_CX, RAVI_CY, 1.64)), 36, 8),
@@ -713,8 +713,8 @@ CK = [
     (965,  Vector((-8.00, 3.70, 1.72)), Vector((RAVI_CX, RAVI_CY, 1.60)), 28, 8),
     (985,  Vector((-7.55, 2.40, 1.70)), Vector((RAVI_CX, 2.4, 1.40)), 28, 8),             # the turn to the switchgear
     (1008, Vector((-8.25, 1.96, 1.48)), Vector((-9.05, 2.10, 1.36)), 24, 8),             # the lever, the hand on it, his face
-    (1020, Vector((-8.58, 2.00, 1.42)), lever_world(40.0), 50, 11),                       # macro: his fist on the red grip, the throw
-    (1032, Vector((-8.60, 2.02, 1.30)), lever_world(112.0), 50, 11),
+    (1020, Vector((-8.40, 1.95, 1.42)), lever_world(40.0), 60, 11),                       # macro: his fist on the red grip, the throw
+    (1032, Vector((-8.42, 1.95, 1.30)), lever_world(112.0), 60, 11),
     (1046, Vector((-8.20, 1.98, 1.46)), Vector((-9.05, 2.15, 1.34)), 24, 8),             # the arc flash, sparks, his face
     (1060, Vector((-7.75, 2.35, 1.66)), Vector((RAVI_CX - 0.1, 2.45, 1.55)), 28, 8),
     (1072, Vector((-6.95, WINC.y, 1.72)), Vector((RAVI_CX, 2.45, 1.55)), 26, 8),         # backing out of the window, still on him
