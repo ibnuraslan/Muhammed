@@ -133,7 +133,7 @@ def setup_seating():
     fs(1); kz = (Wh(GR, "lowerleg01.L").z)
     a = CTG.BN["foot.L"].head_local
     sole = kz - shin_len("G") - a.z - 0.004          # knee - shin - ankle height = the sole
-    FOOTSTOOL_TOP = max(0.08, round(sole, 3))
+    FOOTSTOOL_TOP = max(0.08, round(sole + 0.045, 3))
     FOOT_Z["G"] = FOOTSTOOL_TOP
     calibrate("G")
     log("footstool top", FOOTSTOOL_TOP, "knee z", round(kz, 3))
@@ -344,7 +344,7 @@ def bone_world(rig, bone, Pl, Nl=None):
 F_THROAT = 470
 fs(F_THROAT)
 nk = (Wh(TR, "neck02") + Wh(TR, "neck03")) / 2
-nk.z = (Wh(TR, "eye.L").z + Wh(TR, "eye.R").z) / 2 - 0.118          # the larynx: 12 cm below the eyes (not under the jaw)
+nk.z = (Wh(TR, "eye.L").z + Wh(TR, "eye.R").z) / 2 - 0.140          # the larynx: 12 cm below the eyes (not under the jaw)
 fdir = Matrix.Rotation(math.radians(YAW["T"] + 40), 3, 'Z') @ Vector((0, -1, 0))   # front-left of her neck (toward the girl and the camera)
 h = ray_surface([TB], nk + fdir * 0.25, -fdir)
 TH_P, TH_N = h[0].copy(), h[1].copy()
@@ -366,8 +366,8 @@ def throat_hand(f, lift=0.0):
     fs(f); P, N = bone_world(TR, "neck02", *TH_L); N = Vector((N.x, N.y, 0)).normalized()
     t = Vector((0, 0, 1)).cross(N).normalized()
     if t.x > 0: t = -t                     # fingers across the front of her throat (away from the girl's wrist)
-    fd = (t + Vector((0, 0, 0.15))).normalized()
-    place_hand(GR, "R", f, P + N * lift, -N, fd, skin=0.022)
+    fd = (t + Vector((0, 0, -0.10))).normalized()
+    place_hand(GR, "R", f, P + N * lift + Vector((0, 0, -0.012)), -N, fd, skin=0.022)
     sh = Wh(GR, "upperarm01.R"); key_pole(CTG, "R", f, sh + Vector((0.10, 0.30, -0.40)))
     pose_hand(GR, "R", f, "soft_cup")
     return P, N
@@ -516,8 +516,12 @@ def own_lips(f):
     sh = Wh(GR, "upperarm01.L"); key_pole(CTG, "L", f, sh + Vector((0.25, 0.20, -0.40)))
     return tip_on(GR, "L", f, P + N * 0.012, fd, -N)
 OWN = {}
-for f in list(range(1262, END + 1, 6)) + [END]:
+for f in list(range(1262, 1498, 6)) + [1497]:
     OWN[f] = own_lips(f)
+for f in (1530, 1590, END):
+    rest_on_thigh("G", "L", f, fwd=0.01 * math.sin(f)); settle("G", "L", f, girl_bvh)
+arc_key(GR, "L", 1497, 1530, 1513, lift_arm=Vector((0.03, -0.06, 0.0)))
+pose_hand(GR, "L", 1513, "relaxed")
 log("girl own-lip tip err mm", round(max(OWN.values()) * 1000, 1))
 arc_key(GR, "L", 1219, 1262, 1240, lift_arm=Vector((0.03, -0.06, 0.02)))
 pose_hand(GR, "L", 1240, "relaxed")
@@ -537,7 +541,7 @@ def own_throat(f):
     tip_on(GR, "L", f, P + N * 0.006, fd, -side, back=0.07, pose="two_point")
     return tip_natural(GR, "L", f, P + N * 0.007, flex=20.0)
 OWNL = {}
-for f in (1270, 1359, 1497, 1560, END):
+for f in (1270, 1359, 1497):
     fs(f); g = surf_clear(GR, "L", [body_noarms(GR, GB)]); OWNL[f] = (round(g * 1000, 1), WORSTB[0])
 log("girl own lips: finger clearance mm", OWNL)
 
@@ -632,7 +636,7 @@ for k in range(6):
     d.name = "PulseDot%d" % k; d.data.materials.append(M_DOT); no_cast(d); DOTS.append(d)
 def arm_path(f):
     fs(f)
-    return [Wt(GR, "finger3-2.R"), Wh(GR, "wrist.R"), Wh(GR, "lowerarm01.R").lerp(Wh(GR, "wrist.R"), 0.5), Wh(GR, "lowerarm01.R"),
+    return [Wh(GR, "wrist.R").lerp(Wt(GR, "finger3-2.R"), 0.3), Wh(GR, "wrist.R"), Wh(GR, "lowerarm01.R").lerp(Wh(GR, "wrist.R"), 0.5), Wh(GR, "lowerarm01.R"),
             Wh(GR, "upperarm01.R").lerp(Wh(GR, "lowerarm01.R"), 0.5), Wh(GR, "upperarm01.R")]
 RAD = [0.016, 0.026, 0.036, 0.042, 0.050, 0.058]
 DOT_WIN = [(616, 891)]
@@ -692,10 +696,10 @@ FK.location = gface + Vector((0.25, -0.55, 0.20)); FK.rotation_mode = 'QUATERNIO
 FK.rotation_quaternion = (FK.location - gface).normalized().to_track_quat('Z', 'Y')
 for f, v in ((1, 0.0), (140, 0.0), (175, 14.0), (320, 14.0), (362, 0.0)):
     FKL.energy = v; FKL.keyframe_insert("energy", frame=f)
-for f, k in ((1, 1.0), (140, 1.0), (178, 0.12), (318, 0.12), (362, 1.0)):
-    key_light(f, k=k)
+for f, k, dl in ((1, 1.0, 1.0), (140, 1.0, 1.0), (178, 0.03, 0.15), (318, 0.03, 0.15), (362, 1.0, 1.0)):
+    key_light(f, k=k, day=dl)
 w_bg = sc.world.node_tree.nodes["Background"].inputs[1]
-for f, v in ((1, 0.35), (140, 0.35), (178, 0.04), (318, 0.04), (362, 0.35)):
+for f, v in ((1, 0.35), (140, 0.35), (178, 0.01), (318, 0.01), (362, 0.35)):
     w_bg.default_value = v; w_bg.keyframe_insert("default_value", frame=f)
 # time-lapse 1359-1497: day -> night -> day -> night -> day, the seasons turn, the lamp is lit at night
 TL = [(1359, 1.0, 0.0), (1376, 0.0, 1.0), (1394, 0.0, 1.0), (1410, 1.0, 0.0), (1428, 1.0, 0.0), (1444, 0.0, 1.0),
@@ -749,8 +753,8 @@ SEG = [
     (1359, lambda: P(-0.05, -1.55, 1.22),                     lambda: mid(gF(1359), tF(1359), 0.5) + P(-0.25, 0, 0.12), 27),
     (1430, lambda: P(-0.15, -1.75, 1.25),                     lambda: mid(gF(1430), tF(1430), 0.5) + P(-0.30, 0, 0.12), 26),
     (1497, lambda: mid(gF(1497), tF(1497), 0.42) + P(0.10, -1.05, 0.00),  lambda: mid(gF(1497), tF(1497), 0.42) + P(0, 0, -0.07), 28),
-    (1560, lambda: mid(gF(1560), tF(1560), 0.46) + P(0.04, -0.98, 0.00),  lambda: mid(gF(1560), tF(1560), 0.46) + P(0, 0, -0.06), 29),
-    (END,  lambda: mid(gF(END), tF(END), 0.48) + P(-0.02, -0.92, 0.00),   lambda: mid(gF(END), tF(END), 0.48) + P(0, 0, -0.05), 30),
+    (1545, lambda: mid(gF(1545), tF(1545), 0.40) + P(0.06, -0.80, 0.00),  lambda: mid(gF(1545), tF(1545), 0.40) + P(0, 0, -0.05), 32),
+    (END,  lambda: mid(gF(END), tF(END), 0.45) + P(-0.02, -0.62, 0.02),   lambda: mid(gF(END), tF(END), 0.45) + P(0, 0, -0.02), 34),
 ]
 def look_q(p, a, up=Vector((0, 0, 1))):
     zc_ = (p - a).normalized(); yc = (up - zc_ * up.dot(zc_)).normalized(); xc = yc.cross(zc_)
