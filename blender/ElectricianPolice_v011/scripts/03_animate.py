@@ -406,7 +406,7 @@ rs = random.Random(5)
 for k in range(26):
     s_ = sphere("Spark%d" % k, 0.006, (0, 0, 0), spark_m, segs=6); s_.scale = (1, 1, 2.5)
     p0 = LEV["pivot"] + Vector((rs.uniform(-0.09, 0.09), 0.05, 0.50))
-    v = Vector((rs.uniform(-0.8, 0.8), rs.uniform(0.6, 1.6), rs.uniform(0.2, 1.4)))
+    v = Vector((rs.uniform(-0.6, 0.9), rs.uniform(0.05, 0.30), rs.uniform(0.1, 0.9)))
     f0 = F_PULL1 - 2 + rs.randint(0, 6); life = rs.randint(14, 26)
     key_vis([s_], 1, False); key_vis([s_], f0, True); key_vis([s_], f0 + life, False)
     for j in range(0, life + 1, 2):
@@ -463,7 +463,8 @@ for f in (F_LET + 6, 1075, F_END - 1): hang(RAVI, "R", f)
 
 # ================================================================== the laptop screen UI (no text): building rows, the police row, calendar, the bill bar
 lx0, ly0, lz0, lx1, ly1, lz1 = LAP_BB
-SCR_C = Vector((lx1 - 0.045, (ly0 + ly1) / 2, lz0 + 0.30))
+SCR_C = Vector((lx1 - 0.032, (ly0 + ly1) / 2, lz0 + 0.21))
+UIS = 0.72
 scr_h, scr_w = 0.26, 0.40
 ui_bg = mat("M_UI_bg", (0.02, 0.05, 0.12), emit=((0.03, 0.08, 0.20), 2.5))
 UI = empty("UI_root", SCR_C)
@@ -490,14 +491,6 @@ for o in [x for r in ROWS for x in r]:
         o.location.z = o["z0"] + dz; o.keyframe_insert("location", index=2, frame=f)
     zf = lambda dz: o["z0"] + dz
     def inside(dz): return abs((o["z0"] + dz) - 0.0) < scr_h * 0.40 + 0.0
-for o in [x for r in ROWS for x in r]:
-    # visible only while its row is inside the screen window (constant keys)
-    vis_prev = None
-    for f in range(F_CTRL, 700, 4):
-        fs(f); zz = o.matrix_world.translation.z - SCR_C.z
-        vis = abs(zz) < scr_h * 0.42
-        if vis != vis_prev:
-            key_vis([o], f, vis); vis_prev = vis
 # the police row (row 9 lands mid-screen at 640): turns red with a badge at 643
 POL = ROWS[8]
 red = mat("M_UIred", (0.9, 0.05, 0.03), emit=((1.0, 0.06, 0.03), 0.0))
@@ -532,7 +525,17 @@ bill.parent = barp; bill.matrix_parent_inverse = barp.matrix_world.inverted()
 key_vis([bill], 1, False); key_vis([bill], 700, True)
 for f, s_ in ((700, 1.0), (882, 1.0), (930, 19.0), (945, 18.0), (960, 18.5)):
     barp.scale = (1, s_, 1); barp.keyframe_insert("scale", frame=f)
-UI.rotation_euler = (0, 0, 0)
+for o in CAL + [barp]:
+    o.parent = UI; o.matrix_parent_inverse = UI.matrix_world.inverted()
+UI.scale = (UIS, UIS, UIS); upd()
+for o in [x for r in ROWS for x in r]:
+    # visible only while its row is inside the screen window (constant keys)
+    vis_prev = None
+    for f in range(F_CTRL, 700, 4):
+        fs(f); zz = o.matrix_world.translation.z - SCR_C.z
+        vis = abs(zz) < scr_h * UIS * 0.42
+        if vis != vis_prev:
+            key_vis([o], f, vis); vis_prev = vis
 # screen glow on his face
 sg_ = bpy.data.lights.new("ScreenGlow", 'AREA'); sg_.shape = 'RECTANGLE'; sg_.size = 0.36; sg_.size_y = 0.24; sg_.color = (0.55, 0.75, 1.0); sg_.energy = 6.0
 sgo = bpy.data.objects.new("ScreenGlow", sg_); sc.collection.objects.link(sgo); sgo.location = SCR_C + Vector((-0.03, 0, 0))
@@ -540,7 +543,7 @@ sgo.rotation_euler = Vector((-1, 0, 0)).to_track_quat('-Z', 'Y').to_euler()
 for f, e, c in ((1, 6.0, (0.55, 0.75, 1.0)), (643, 6.0, (0.55, 0.75, 1.0)), (650, 9.0, (1.0, 0.25, 0.2)), (880, 9.0, (1.0, 0.25, 0.2)), (940, 14.0, (1.0, 0.2, 0.15))):
     sg_.energy = e; sg_.color = c; sg_.keyframe_insert("energy", frame=f); sg_.keyframe_insert("color", frame=f)
 # DA KRAS FILMS logo on the back of the laptop lid (faces the street window, the camera's way in)
-lg, asp = logo_plane("Logo_Laptop", sc["LOGO_DARK"], Vector((lx1 + 0.004, (ly0 + ly1) / 2, lz0 + 0.31)), 0.30, (1, 0, 0))
+lg, asp = logo_plane("Logo_Laptop", sc["LOGO_DARK"], Vector((lx1 + 0.004, (ly0 + ly1) / 2, lz0 + 0.215)), 0.22, (1, 0, 0))
 
 if STOP == "blocking_people":
     bpy.ops.wm.save_as_mainfile(filepath=OUT); raise SystemExit
@@ -562,10 +565,10 @@ for f in (F_OFF_IN, END):
 FOLDER = box("Fan_Folder", (0.22, 0.30, 0.012), (0, 0, 0), mat("M_FanFolder", (0.95, 0.70, 0.05), rough=0.55), bevel=0.003)
 def fan_hand(f, phase):
     fs(f); R3 = OFF.matrix_world.to_3x3(); sh = Wh(OFF, "upperarm01.R")
-    wr = sh + R3 @ Vector((-0.16, -0.24, -0.06))
-    a_ = R_(35) * math.sin(phase)
-    fdir = R3 @ Vector((0.25, -0.35, 1.0))
-    palm = R3 @ (Matrix.Rotation(a_, 3, 'Z') @ Vector((1.0, -0.2, 0.0)))
+    wr = sh + R3 @ Vector((0.02, -0.30, -0.14))
+    a_ = R_(30) * math.sin(phase)
+    fdir = R3 @ Vector((0.15, -0.10, 1.0))
+    palm = R3 @ (Matrix.Rotation(a_, 3, 'Z') @ Vector((0.15, 1.0, 0.0)))
     hand_world(OFF, "R", f, wr, fdir, palm, pole=sh + R3 @ Vector((-0.45, 0.25, -0.45)))
 fan_hand(F_OFF_IN, 0.0); apply_pose(OFF, "R", "hold_flat_object", F_OFF_IN)
 prop_in_hand(OFF, "R", FOLDER, F_OFF_IN, grip_y=-0.11)
@@ -668,12 +671,12 @@ PT = Vector(sc["POLE_TRANS"])
 def bh(f): return RH[f]
 CK = [
     # frame, position, aim, lens, f-stop
-    (1,    Vector((1.05, -4.2, 1.55)), Vector((2.3, -9.6, 1.35)), 30, 8),                 # ahead of the bike, rider's face, officer enters at right
-    (40,   Vector((1.10, -2.4, 1.55)), Vector((2.6, -6.6, 1.40)), 30, 8),
-    (80,   Vector((1.20, -0.4, 1.55)), Vector((3.0, -3.0, 1.45)), 30, 8),
-    (118,  Vector((1.15, 1.55, 1.55)), Vector((3.1, -0.6, 1.40)), 32, 8),                 # bike stops: rider + officer (right)
-    (160,  Vector((2.10, 2.55, 1.62)), Vector((3.0, -0.1, 1.45)), 32, 8),                 # arc right: officer points at his bare head
-    (215,  Vector((3.05, 2.30, 1.65)), Vector((2.6, -0.1, 1.50)), 34, 8),
+    (1,    Vector((5.0, -4.0, 1.65)), Vector((3.6, 1.5, 1.45)), 30, 8),                   # the officer flags the bike down (it comes in from behind us)
+    (50,   Vector((4.7, -3.0, 1.62)), Vector((3.0, 1.0, 1.40)), 30, 8),
+    (95,   Vector((4.2, -1.3, 1.64)), Vector((2.6, 0.3, 1.40)), 30, 8),
+    (122,  Vector((3.45, 0.55, 1.70)), Vector((2.35, -0.1, 1.45)), 30, 8),               # between them as the bike stops
+    (150,  Vector((3.60, 3.30, 1.68)), Vector((3.35, 0.25, 1.45)), 26, 8),               # rider + officer pointing at his bare head
+    (205,  Vector((3.05, 2.30, 1.64)), Vector((2.45, -0.1, 1.50)), 30, 8),
     (255,  Vector((2.65, 1.05, 1.62)), Vector((2.35, -0.2, 1.52)), 38, 8),                # close on Ravi: "Big mistake"
     (290,  Vector((2.55, 0.85, 1.58)), Vector((2.40, -0.2, 1.60)), 38, 8),
     (318,  Vector((2.75, 0.60, 1.90)), PT + Vector((-0.6, 0, 0.3)), 30, 8),              # tilt up to the pole transformer and the wires
@@ -687,11 +690,13 @@ CK = [
     (560,  Vector((-4.6, WINC.y + 0.1, 1.68)), WINC + Vector((-3.0, -0.05, -0.15)), 32, 8),
     (600,  Vector((-6.45, WINC.y + 0.25, 1.62)), WINC + Vector((-2.6, 0.0, -0.10)), 32, 8),  # through the window (no glass)
     (640,  Vector((-9.55, 2.15, 1.78)), SCR_C + Vector((0, 0.02, 0.0)), 30, 9),           # over his right shoulder: the screen
-    (700,  Vector((-9.35, 2.40, 1.62)), SCR_C, 34, 10),
-    (760,  Vector((-9.05, 2.55, 1.50)), SCR_C + Vector((0, 0.03, 0.0)), 36, 11),          # calendar pages
-    (830,  Vector((-7.45, 3.35, 1.62)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),         # round to his grinning face
-    (880,  Vector((-7.40, 3.05, 1.62)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),
-    (905,  Vector((-9.70, 3.30, 1.82)), SCR_C + Vector((0, 0.0, 0.0)), 28, 8),            # behind-left: the bar grows, he leans back
+    (700,  Vector((-9.40, 2.20, 1.76)), SCR_C, 34, 10),
+    (760,  Vector((-9.32, 2.22, 1.74)), SCR_C + Vector((0, 0.03, 0.0)), 40, 11),          # calendar pages, over his right shoulder
+    (805,  Vector((-8.70, 2.02, 1.80)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),          # round his right side, above the counter
+    (845,  Vector((-7.50, 2.50, 1.70)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),          # his grin over the laptop lid
+    (880,  Vector((-7.45, 2.95, 1.68)), Vector((RAVI_CX, RAVI_CY, 1.62)), 32, 8),
+    (895,  Vector((-8.55, 3.50, 1.82)), Vector((RAVI_CX, RAVI_CY, 1.55)), 28, 8),
+    (915,  Vector((-9.70, 3.35, 1.82)), SCR_C + Vector((0, 0.0, 0.0)), 28, 8),             # behind-left: the bar grows, he leans back
     (950,  Vector((-9.85, 3.55, 1.85)), SCR_C + Vector((0, -0.05, 0.05)), 26, 8),
     (985,  Vector((-7.55, 2.40, 1.70)), Vector((RAVI_CX, 2.4, 1.40)), 28, 8),             # the turn to the switchgear
     (1015, Vector((-7.70, 2.35, 1.62)), ARMC + Vector((-0.05, 0.25, 0.10)), 28, 8),       # the lever, the sparks, his face

@@ -402,7 +402,7 @@ box("Ctrl_counter_top", (CON["depth"], CON["y1"] - CON["y0"], 0.05), (CON["x"], 
 box("Ctrl_counter_body", (CON["depth"] - 0.08, CON["y1"] - CON["y0"] - 0.06, CON["top"] - 0.07), (CON["x"] + 0.04, (CON["y0"] + CON["y1"]) / 2, (CON["top"] - 0.05) / 2), cmat, bevel=0.01)
 sc["CON"] = [CON["x"], CON["y0"], CON["y1"], CON["top"], CON["depth"]]
 LAP_C = Vector((CON["x"] - 0.02, 2.80, CON["top"]))
-lap = inst("SRC_classic_laptop", LAP_C, rot_z=-math.pi / 2, newname="Ctrl_Laptop"); soften(lap)
+lap = inst("SRC_classic_laptop", LAP_C, rot_z=-math.pi / 2, scale=0.7, newname="Ctrl_Laptop"); soften(lap)
 bpy.context.view_layer.update()
 bb = [lap.matrix_world @ Vector(c) for c in lap.bound_box]
 print("LAPTOP_BB", [round(min(v[i] for v in bb), 3) for i in range(3)], [round(max(v[i] for v in bb), 3) for i in range(3)])
