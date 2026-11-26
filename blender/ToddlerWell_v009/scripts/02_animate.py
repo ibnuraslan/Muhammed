@@ -501,8 +501,18 @@ for o in (ROPE1, LOOP): vis(o, 1, False); vis(o, 200, True); vis(o, 396, False)
 KNOT = O["ROPE_Knot"]
 for f in range(972, SW + 1, 2):
     fs(f); kn = KNOT.matrix_world.translation.copy()
-    sag = 0.12 if f < 1100 else 0.0
-    key_rope(R2, f, TOP, kn + Vector((0, 0, 0.0)), sag=sag)
+    if f < 1100:
+        # upright: the rope leaves the knot forward and down, clear of his forearms, then rises to the pulley
+        front = Matrix.Rotation(R_(YT), 3, 'Z') @ Vector((0.0, -1.0, 0.0))
+        P1 = kn + front * 0.50 + Vector((0, 0, -0.30))
+        pts = []
+        for i in range(16):                       # smooth quadratic sag (no kinks), point 0 at the pulley
+            t = 1 - i / 15.0
+            pts.append(kn * (1 - t) ** 2 + P1 * (2 * (1 - t) * t) + TOP * t * t)
+        for e, p_ in zip(R2, pts):
+            e.location = p_; e.keyframe_insert("location", frame=f)
+    else:
+        key_rope(R2, f, TOP, kn)
 vis(ROPE2, 1, False); vis(ROPE2, 972, True); vis(ROPE2, SW, False)
 for o in (O["ROPE_WaistRing"], KNOT):
     pass
