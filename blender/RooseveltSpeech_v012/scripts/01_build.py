@@ -132,7 +132,7 @@ moustache(HERO, HB)
 def pince_nez(rig, body):
     el = rig.data.bones["eye.L"].head_local; er = rig.data.bones["eye.R"].head_local
     front = min(v.co.y for v in body.data.vertices if abs(v.co.x - el.x) < 0.006 and abs(v.co.z - el.z) < 0.006)
-    yy = front - 0.012
+    yy = front - 0.016
     M_RIM = mat("M_PinceRim", (0.75, 0.70, 0.62), rough=0.25, metal=1.0)
     M_LENS = bpy.data.materials.new("M_PinceLens"); M_LENS.use_nodes = True; nt = M_LENS.node_tree
     for n in list(nt.nodes):
@@ -175,7 +175,7 @@ def tint_all(o, mult):
         for nd in list(nt.nodes):
             if nd.type == 'TEX_IMAGE':
                 for lk in list(nd.outputs['Color'].links):
-                    if lk.to_node.type == 'BSDF_PRINCIPLED' and lk.to_socket.name == 'Base Color':
+                    if lk.to_node.type != 'MIX' or lk.to_node.blend_type != 'MULTIPLY':
                         mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'
                         mx.inputs['Factor'].default_value = 1.0; mx.inputs['B'].default_value = (*mult, 1)
                         nt.links.new(nd.outputs['Color'], mx.inputs['A']); nt.links.new(mx.outputs['Result'], lk.to_socket)

@@ -87,7 +87,8 @@ class Actor:
         self.H.key_hand(s, f, W, R @ Vector(d_loc), R @ Vector(n_loc), pole=sh + R @ Vector(pole_loc))
         if pose: apply_pose(self.rig, s, pose, f, amount=amount)
         return W
-    def hang(self, s, f, yaw, fwd=0.05, drop=0.52, out=0.0, ref=None):
+    def hang(self, s, f, yaw, fwd=0.05, drop=0.52, out=None, ref=None):
+        if out is None: out = 0.0 if self.rig.name == "Hero" else 0.035
         sx = 1 if s == "L" else -1
         return self.hand(s, f, (sx * (0.075 + out), -fwd, -drop), (sx * 0.08, -0.25, -1.0), (-sx, 0.0, 0.0),
                          (sx * 0.25, 0.45, -0.25), yaw, pose="relaxed", ref=ref)
@@ -252,13 +253,12 @@ Rw = Mwld @ Ml.inverted()
 gc_local = Vector((0, -0.034, -0.045))
 REV.rotation_mode = 'QUATERNION'
 best = None
-for shift in [i * 0.002 for i in range(-6, 7)]:
-    loc = C + nvec * shift - Rw @ gc_local
+for shift, sd in [(i * 0.002, j * 0.004) for i in range(-15, 16) for j in (-2, -1, 0, 1, 2)]:
+    loc = C + nvec * shift + dvec * sd - Rw @ gc_local
     REV.matrix_world = Matrix.Translation(loc) @ Rw.to_4x4(); upd()
     inside = 0; near = 0
-    for k in (1, 2, 3, 4, 5):
-        for j in (1, 2, 3):
-            b = "finger%d-%d.R" % (k, j)
+    for b in ["finger%d-%d.R" % (k, j) for k in (1, 2, 3, 4, 5) for j in (1, 2, 3)] + ["metacarpal%d.R" % k for k in (1, 2, 3, 4)]:
+        if True:
             for u in (0.5, 1.0):
                 p_ = P(b).lerp(P(b, True), u)
                 d_ = hand_dist = None
@@ -267,8 +267,8 @@ for shift in [i * 0.002 for i in range(-6, 7)]:
                 dist = (p_ - w_).length * (1 if (p_ - w_).dot(nw) >= 0 else -1)
                 if dist < 0.004: inside += 1
                 if dist < 0.02: near += 1
-    if best is None or (inside, -near) < (best[0], -best[1]): best = (inside, near, shift)
-loc = C + nvec * best[2] - Rw @ gc_local
+    if best is None or (inside, -near) < (best[0], -best[1]): best = (inside, near, shift, sd)
+loc = C + nvec * best[2] + dvec * best[3] - Rw @ gc_local
 REV.matrix_world = Matrix.Translation(loc) @ Rw.to_4x4(); upd()
 log("revolver grip: fingers inside", best[0], "near", best[1], "shift", best[2])
 c = REV.constraints.new('CHILD_OF'); c.target = GUN; c.subtarget = "wrist.R"; fs(1); upd()
@@ -311,7 +311,7 @@ for i, a in enumerate(AUD):
         a.stand(f, hb, hyaw, flex=rr.uniform(-4, 1), side=rr.uniform(-2, 2))
     for f in list(range(1028, END + 1, 30)) + [END]:
         a.key_head(f, rr.uniform(-5, 5), rr.uniform(-14, -6))
-    side_up = rr.choice("LR"); t_up = (1139 + rr.randint(4, 30)) if i < 6 else (1250 + rr.randint(0, 25)); t_dn = t_up + rr.randint(40, 90)
+    side_up = rr.choice("LR"); t_up = 1240 + rr.randint(0, 30); t_dn = t_up + rr.randint(40, 90)
     for s in "LR":
         sx = 1 if s == "L" else -1
         a.hang(s, 1028, hyaw, ref=1028); a.hang(s, 1100, hyaw, ref=1028)
@@ -400,7 +400,19 @@ up = (dvec - nrm * dvec.dot(nrm)).normalized(); xx = up.cross(nrm).normalized()
 # speech local: x width, y thickness (normal), z height. It must face the audience (-Y): flip so the hole face is seen
 Rs = Matrix((xx, nrm, up)).transposed()
 if (Rs @ Vector((0, -1, 0))).y > 0: Rs = Rs @ Matrix.Rotation(math.pi, 3, 'Z')
-SPEECH.matrix_world = Matrix.Translation(mid + up * 0.05) @ Rs.to_4x4() @ Matrix.Scale(1, 4)
+hand_pts = []
+for b in ["finger%d-%d.R" % (k, j) for k in (1, 2, 3, 4, 5) for j in (1, 2, 3)] + ["metacarpal%d.R" % k for k in (1, 2, 3, 4)] + ["wrist.R"]:
+    for u in (0.0, 0.5, 1.0): hand_pts.append(PH(b).lerp(PH(b, True), u))
+thick = 0.012
+def inside_count(o):
+    c0 = mid + up * 0.05 + nrm * o; n = 0
+    for p in hand_pts:
+        d = p - c0
+        if abs(d.dot(xx)) < 0.057 and abs(d.dot(nrm)) < thick / 2 + 0.006 and abs(d.dot(up)) < 0.087: n += 1
+    return n
+best_o = min([i * 0.002 for i in range(-20, 21)], key=lambda o: (inside_count(o), abs(o)))
+log("speech offset", best_o, "hand points inside", inside_count(best_o))
+SPEECH.matrix_world = Matrix.Translation(mid + up * 0.05 + nrm * best_o) @ Rs.to_4x4() @ Matrix.Scale(1, 4)
 SPEECH.scale = (1, thick / 0.012, 1); upd()
 log("speech grip gap", round(gap, 4), "thickness", round(thick, 4))
 owner_switch(SPEECH, 1028, HERO, "wrist.R", log=log)
