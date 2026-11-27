@@ -216,8 +216,8 @@ M_COBBLE = noise_mat("M_Cobble", (0.06, 0.05, 0.07), (0.30, 0.24, 0.22), scale=9
 M_PAVE = noise_mat("M_Pave", (0.30, 0.26, 0.24), (0.42, 0.37, 0.33), scale=25.0, rough=0.7, bump=0.2)
 M_KERB = noise_mat("M_Kerb", (0.35, 0.33, 0.32), (0.5, 0.48, 0.46), scale=30.0, rough=0.6)
 M_BRASS = mat("M_Brass", (0.95, 0.62, 0.20), rough=0.25, metal=1.0)
-M_STEEL = noise_mat("M_Steel", (0.62, 0.64, 0.68), (0.80, 0.82, 0.86), scale=300.0, rough=0.22, metal=1.0, bump=0.05)
-M_GUNMETAL = mat("M_Gunmetal", (0.05, 0.05, 0.06), rough=0.3, metal=1.0)
+M_STEEL = noise_mat("M_Steel", (0.70, 0.72, 0.76), (0.92, 0.93, 0.95), scale=300.0, rough=0.30, metal=1.0, bump=0.05)
+M_GUNMETAL = mat("M_Gunmetal", (0.80, 0.80, 0.82), rough=0.18, metal=1.0)   # nickel-plated, reads against the dark coat
 M_GRIPWOOD = noise_mat("M_GripWood", (0.20, 0.07, 0.02), (0.35, 0.13, 0.04), scale=60.0, rough=0.45)
 M_BULLET = mat("M_Bullet", (0.95, 0.50, 0.22), rough=0.22, metal=1.0)
 M_GLOW = mat("M_LampGlow", (1, 0.7, 0.35), emit=((1.0, 0.62, 0.25), 18.0))
@@ -230,7 +230,9 @@ kerb = box("Kerb", (40, 0.25, 0.17), (0, 3.15, 0.085), M_KERB, bevel=0.01); to_c
 # hotel facade (CC-BY scan), scaled to ~16 m wide behind the pavement, with warm lit windows behind it
 fac = imp(SK + "facade.dl", "HotelFacade", target_dim=16.0, axis=0)
 fac.location = (0, 7.3, -0.4); to_col(fac, C_STREET); soften(fac, rough_min=0.5)
-glow_wall = box("HotelInterior", (16, 0.1, 9), (0, 8.6, 4.0), mat("M_HotelInside", (1.0, 0.55, 0.22), emit=((1.0, 0.5, 0.18), 1.6)), bevel=0)
+for dx in (-15.6, 15.6):
+    f2 = fac.copy(); f2.location = (dx, 7.3, -0.4); C_STREET.objects.link(f2)
+glow_wall = box("HotelInterior", (16, 0.1, 9), (0, 8.6, 4.0), mat("M_HotelInside", (0.10, 0.05, 0.03), emit=((1.0, 0.5, 0.18), 0.25)), bevel=0)
 to_col(glow_wall, C_STREET)
 # hotel sign (DA KRAS FILMS) mounted over the scan's own lettering; a wall lantern and a planter cover its small plaques
 hs, hl_ = logo_board("HotelSign", 2.1, 0.55, (2.45, 3.90, 3.07), (0, 0, 0), mat("M_HotelSign", (0.03, 0.10, 0.06), rough=0.4, coat=0.5),
@@ -335,7 +337,7 @@ fl.parent = REV; to_col(fl, C_STREET)
 L = bpy.data.lights.new("FlashLight", 'POINT'); L.energy = 0.0; L.color = (1.0, 0.7, 0.35)
 flo = bpy.data.objects.new("FlashLight", L); flo.parent = REV; flo.location = (0, 0.20, 0.02); C_STREET.objects.link(flo)
 # the hole in his coat: a small dark scorched disc shrink-wrapped onto the jacket (placed in stage B)
-bpy.ops.mesh.primitive_circle_add(vertices=24, radius=0.0085, fill_type='TRIFAN', location=(0, 0, 0))
+bpy.ops.mesh.primitive_circle_add(vertices=24, radius=0.010, fill_type='TRIFAN', location=(0, 0, 0))
 hole = bpy.context.active_object; hole.name = "CoatHole"
 hm = mat("M_CoatHole", (0.01, 0.006, 0.004), rough=0.9)
 hole.data.materials.append(hm); to_col(hole, C_CHAR)
@@ -452,8 +454,8 @@ def ink_paper(name):
     nz = nt.nodes.new("ShaderNodeTexWave"); nz.wave_type = 'BANDS'; nz.bands_direction = 'X'; nz.inputs["Scale"].default_value = 700.0
     nz.inputs["Distortion"].default_value = 9.0; nz.inputs["Detail"].default_value = 4.0; nt.links.new(tc.outputs["Object"], nz.inputs["Vector"])
     wn = nt.nodes.new("ShaderNodeTexNoise"); wn.inputs["Scale"].default_value = 260.0; nt.links.new(tc.outputs["Object"], wn.inputs["Vector"])
-    gap = nt.nodes.new("ShaderNodeMapRange"); nt.links.new(wn.outputs["Fac"], gap.inputs["Value"]); gap.inputs["From Min"].default_value = 0.42; gap.inputs["From Max"].default_value = 0.47
-    st = nt.nodes.new("ShaderNodeMapRange"); nt.links.new(nz.outputs["Fac"], st.inputs["Value"]); st.inputs["From Min"].default_value = 0.70; st.inputs["From Max"].default_value = 0.85
+    gap = nt.nodes.new("ShaderNodeMapRange"); nt.links.new(wn.outputs["Fac"], gap.inputs["Value"]); gap.inputs["From Min"].default_value = 0.36; gap.inputs["From Max"].default_value = 0.42
+    st = nt.nodes.new("ShaderNodeMapRange"); nt.links.new(nz.outputs["Fac"], st.inputs["Value"]); st.inputs["From Min"].default_value = 0.45; st.inputs["From Max"].default_value = 0.60
     m1 = nt.nodes.new("ShaderNodeMath"); m1.operation = 'MULTIPLY'; nt.links.new(bmin.outputs[0], m1.inputs[0]); nt.links.new(st.outputs[0], m1.inputs[1])
     m2 = nt.nodes.new("ShaderNodeMath"); m2.operation = 'MULTIPLY'; nt.links.new(m1.outputs[0], m2.inputs[0]); nt.links.new(gap.outputs[0], m2.inputs[1])
     mix = nt.nodes.new("ShaderNodeMix"); mix.data_type = 'RGBA'; nt.links.new(m2.outputs[0], mix.inputs["Factor"])
@@ -461,7 +463,7 @@ def ink_paper(name):
     nt.links.new(mix.outputs["Result"], p.inputs["Base Color"])
     return m
 M_PAPER_TOP = ink_paper("M_PaperInk")
-M_CASE_IN = noise_mat("M_CaseVelvet", (0.20, 0.0, 0.25), (0.40, 0.02, 0.45), scale=400.0, rough=0.95, bump=0.2)
+M_CASE_IN = noise_mat("M_CaseVelvet", (0.02, 0.03, 0.12), (0.05, 0.07, 0.22), scale=400.0, rough=0.95, bump=0.2)
 M_SHIRT = noise_mat("M_ShirtCotton", (0.92, 0.93, 0.96), (1.0, 1.0, 1.0), scale=700.0, rough=0.85, bump=0.2)
 M_SKIN = noise_mat("M_SkinX", (0.95, 0.42, 0.28), (1.0, 0.55, 0.38), scale=200.0, rough=0.5)
 M_FAT = noise_mat("M_FatX", (1.0, 0.62, 0.0), (1.0, 0.80, 0.05), scale=260.0, rough=0.35, bump=0.5, vor=True)
@@ -481,10 +483,10 @@ LAYERS = {}
 LAYERS["coat"] = slab("X_Coat", -0.004, 0.0, M_COAT, cut=False); LAYERS["coat"].location.y += 0.035   # cut back: the top page shows in front
 LAYERS["paper"] = slab("X_Paper", -0.016, -0.0042, M_PAPER_EDGE, drag=0.0035, reach=0.012)
 LAYERS["papertop"] = slab("X_PaperTop", -0.0042, -0.0037, M_PAPER_TOP, drag=0.0035, reach=0.012)
-LAYERS["casetop"] = slab("X_CaseTop", -0.0195, -0.018, M_STEEL, drag=0.0045, reach=0.014)
-LAYERS["caselin"] = slab("X_CaseLining", -0.0205, -0.0195, M_CASE_IN, drag=0.0045, reach=0.014)
-LAYERS["casebot"] = slab("X_CaseBottom", -0.046, -0.0445, M_STEEL, drag=0.004, reach=0.014)
-LAYERS["caselin2"] = slab("X_CaseLining2", -0.0445, -0.0435, M_CASE_IN, drag=0.004, reach=0.014)
+LAYERS["casetop"] = slab("X_CaseTop", -0.0205, -0.018, M_STEEL, drag=0.0045, reach=0.014)
+LAYERS["caselin"] = slab("X_CaseLining", -0.0212, -0.0205, M_CASE_IN, drag=0.0045, reach=0.014)
+LAYERS["casebot"] = slab("X_CaseBottom", -0.046, -0.0435, M_STEEL, drag=0.004, reach=0.014)
+LAYERS["caselin2"] = slab("X_CaseLining2", -0.0435, -0.0428, M_CASE_IN, drag=0.004, reach=0.014)
 for nm, xs in (("X_CaseEndL", -0.0745), ("X_CaseEndR", 0.0745)):
     e = box(nm, (0.003, 0.07, 0.028), MX + Vector((xs, 0.035, -0.032)), M_STEEL, bevel=0.001); to_col(e, C_MACRO)
 e = box("X_CaseBack", (0.151, 0.003, 0.028), MX + Vector((0, 0.0715, -0.032)), M_STEEL, bevel=0.001); to_col(e, C_MACRO)

@@ -174,8 +174,8 @@ for f, flex, side in ((1028, 3.0, 0.0), (1080, 4.0, 1.5), (1139, 1.0, 0.0), (117
 for f in list(range(1028, END + 1, 15)) + [END]:
     br = 1.2 * math.sin(2 * math.pi * f / 70)
     A_H.key_spine(f, flex=pchip([(1028, 3), (1139, 2), (1165, -4), (1230, -1), (END, -2)])(f) + br,
-                  twist=pchip([(1028, -6), (1100, -3), (1139, 0), (1200, 4), (END, 2)])(f))
-HEADH = [(1028, -10, -2), (1060, -16, 4), (1100, -4, -3), (1139, 0, -6), (1170, 8, -9), (1220, -6, -5), (1270, 2, -7), (END, 0, -6)]
+                  twist=pchip([(1028, -8), (1060, 6), (1095, -7), (1139, 4), (1170, -6), (1200, 7), (1250, -4), (END, 2)])(f))
+HEADH = [(1028, -10, -2), (1060, -20, 4), (1085, 12, -4), (1110, -14, -3), (1139, 0, -6), (1170, 8, -9), (1220, -6, -5), (1270, 2, -7), (END, 0, -6)]
 hy2 = pchip([(f, y) for f, y, p in HEADH]); hp2 = pchip([(f, p) for f, y, p in HEADH])
 for f in list(range(1028, END + 1, 6)) + [END]:
     A_H.key_head(f, hy2(f), hp2(f))
@@ -190,7 +190,7 @@ while f < END:
     f += rnd.choice((12, 13, 14, 16))
 blinks(HERO, [1090, 1190, 1262])
 # right arm: speech raised beside his head toward the audience (elbow bent ~95 deg, fingers up, palm toward the audience)
-SPEECH_POSE = [(1028, (-0.16, -0.20, 0.30)), (1080, (-0.15, -0.22, 0.34)), (1139, (-0.17, -0.20, 0.32)), (1200, (-0.15, -0.21, 0.35)), (END, (-0.16, -0.20, 0.33))]
+SPEECH_POSE = [(1028, (-0.16, -0.20, 0.30)), (1055, (-0.14, -0.24, 0.36)), (1080, (-0.17, -0.20, 0.28)), (1105, (-0.13, -0.24, 0.37)), (1139, (-0.17, -0.20, 0.30)), (1170, (-0.15, -0.22, 0.36)), (1200, (-0.15, -0.21, 0.31)), (1240, (-0.14, -0.23, 0.37)), (END, (-0.16, -0.20, 0.33))]
 for f, off in SPEECH_POSE:
     A_H.hand("R", f, off, (0.05, -0.12, 1.0), (0.0, -1.0, 0.0), (-0.45, 0.10, -0.30), 0.0, pose="hold_flat_object", ref=1028)
 # left: hangs, then the fist rises (1139-1165) and pumps at 1215
@@ -271,7 +271,7 @@ REV.matrix_basis = Matrix.Translation(loc) @ Rw.to_4x4(); upd()
 fs(1); upd(); log("revolver world after child-of", tuple(round(x, 3) for x in REV.matrix_world.translation), "want", tuple(round(x, 3) for x in loc))
 
 # ================================================================== EXTRAS: street onlookers, then the hall audience
-STREET_POS = [((1.45, -1.55, 0), 150.0), ((-1.95, -0.45, 0), -115.0), ((2.25, 0.35, 0), 110.0), ((-1.75, 0.95, 0), -140.0)]
+STREET_POS = [((1.05, 0.75, 0), 18.0), ((-1.05, 0.80, 0), -15.0), ((1.9, -0.9, 0), -115.0), ((-1.7, -1.3, 0), 127.0)]
 hall_rows = []
 for i in range(12):
     row = i // 6; col_ = i % 6
@@ -345,7 +345,7 @@ for f in range(F_SHOT, F_HIT + 6):
     BUL.location = nose - BDIR * BL; BUL.rotation_quaternion = qd(BDIR) @ Quaternion((0, 0, 1), spin)
     BUL.keyframe_insert("location", frame=f); BUL.keyframe_insert("rotation_quaternion", frame=f)
 # macro: nose depth below the coat top (m) on the VO beats; monotone so it only ever slows
-ZN = pchip([(SW1, -0.0040), (736, -0.0050), (790, -0.0165), (800, -0.0186), (816, -0.0218), (832, -0.0400), (846, -0.0436), (860, -0.0470),
+ZN = pchip([(SW1, -0.0040), (615, -0.0085), (736, -0.0125), (790, -0.0168), (800, -0.0186), (816, -0.0218), (832, -0.0400), (846, -0.0436), (860, -0.0470),
             (878, -0.0508), (905, -0.0585), (950, -0.0670), (990, -0.0703), (1010, -0.0706), (SW2, -0.0706)])
 QM = Quaternion((1, 0, 0), math.pi)
 for f in range(SW1, SW2 + 1):
@@ -362,7 +362,7 @@ for f in range(F_SHOT, F_HIT + 1, 2):
     L_ = min(0.07, (nose - MUZ).length) * (1 - smoothstep((u - 0.75) / 0.25))
     TRAIL.location = nose - BDIR * BL; TRAIL.rotation_quaternion = qd(BDIR); TRAIL.scale = (1, 1, max(0.001, L_))
     for k in ("location", "rotation_quaternion", "scale"): TRAIL.keyframe_insert(k, frame=f)
-vis(TRAIL, 1, False); vis(TRAIL, F_SHOT + 2, True); vis(TRAIL, F_HIT - 2, False)
+vis(TRAIL, 1, False)   # no trail: it read as a stick
 # muzzle flash
 FL = O["MuzzleFlash"]; FLL = O["FlashLight"]
 for f, s_, e in ((1, 0.001, 0), (F_SHOT - 1, 0.001, 0), (F_SHOT, 1.0, 900), (F_SHOT + 2, 1.3, 600), (F_SHOT + 5, 0.4, 120), (F_SHOT + 8, 0.001, 0)):
@@ -370,11 +370,11 @@ for f, s_, e in ((1, 0.001, 0), (F_SHOT - 1, 0.001, 0), (F_SHOT, 1.0, 900), (F_S
 vis(FL, 1, False); vis(FL, F_SHOT, True); vis(FL, F_SHOT + 8, False)
 # coat hole: on the jacket at the hit point, facing out, Child Of the chest bone (visible from the hit on, also in the hall)
 fs(F_HIT); upd()
-HOLE.matrix_world = Matrix.Translation(B_HIT + B_N * 0.0025) @ qd(B_N).to_matrix().to_4x4()
+HOLE.matrix_world = Matrix.Translation(B_HIT + B_N * 0.0055) @ qd(B_N).to_matrix().to_4x4()
 cbone = "spine04"
 c = HOLE.constraints.new('CHILD_OF'); c.target = HERO; c.subtarget = cbone; upd()
 c.inverse_matrix = (HERO.matrix_world @ HERO.pose.bones[cbone].matrix).inverted()
-HOLE.matrix_basis = Matrix.Translation(B_HIT + B_N * 0.0025) @ qd(B_N).to_matrix().to_4x4()
+HOLE.matrix_basis = Matrix.Translation(B_HIT + B_N * 0.0055) @ qd(B_N).to_matrix().to_4x4()
 vis(HOLE, 1, False); vis(HOLE, F_HIT + 3, True)
 fs(1100); upd(); log("hole in hall", tuple(round(x, 3) for x in HOLE.matrix_world.translation))
 
@@ -422,7 +422,7 @@ ck(F_SHOT, (-0.50, -3.95, 1.74), (-0.15, 0.0, 1.45), 38)
 # chase the bullet: just behind and beside it, his face and chest ahead
 for f in range(F_SHOT + 22, F_HIT + 1, 16):
     u = (f - F_SHOT) / (F_HIT - F_SHOT); nose = MUZ.lerp(B_HIT, u)
-    back = 0.17 + 0.30 * u
+    back = 0.11 + 0.30 * u
     ck(f, nose - BDIR * back + Vector((0.07 - 0.12 * u, 0, 0.04 + 0.10 * u)), nose.lerp(Vector((B_HIT.x, B_HIT.y, fc1.z - 0.05)), 0.35 + 0.4 * u), 38)
 ck(F_HIT + 20, B_HIT + Vector((-0.45, -0.95, 0.30)), Vector((0.0, 0.0, 1.45)), 32)
 ck(173, (-0.70, -1.65, 1.55), (0.0, 0.0, 1.38), 30)
@@ -432,10 +432,11 @@ ck(320, (0.30, -1.05, 1.52), (B_HIT.x * 0.6, 0.0, (B_HIT.z + fc1.z) / 2), 32)
 ck(362, B_HIT + B_N * 0.34 + Vector((0.02, 0, 0.16)), B_HIT + Vector((0, 0, 0.15)), 32)
 ck(SW1 - 1, B_HIT + B_N * 0.06, B_HIT, 40)
 # MACRO (from SW1): above-front of the cut, the bullet frozen on the inked top page
-ck(SW1, MX + Vector((0.0, -0.065, 0.050)), MX + Vector((0.0, 0.010, -0.006)), 40)
-ck(500, MX + Vector((0.045, -0.085, 0.040)), MX + Vector((0.0, 0.012, -0.010)), 40)
-ck(600, MX + Vector((0.035, -0.125, 0.008)), MX + Vector((0.0, 0.016, -0.022)), 40)
-ck(690, MX + Vector((-0.030, -0.125, -0.012)), MX + Vector((0.0, 0.016, -0.030)), 40)
+ck(SW1, MX + Vector((-0.030, -0.055, 0.050)), MX + Vector((0.0, 0.012, -0.006)), 40)
+ck(470, MX + Vector((0.040, -0.060, 0.042)), MX + Vector((0.0, 0.014, -0.008)), 40)
+ck(560, MX + Vector((0.055, -0.095, 0.012)), MX + Vector((0.0, 0.014, -0.014)), 40)
+ck(640, MX + Vector((0.010, -0.120, -0.004)), MX + Vector((0.0, 0.016, -0.026)), 40)
+ck(700, MX + Vector((-0.045, -0.105, -0.010)), MX + Vector((0.0, 0.016, -0.028)), 40)
 for f in (737, 780, 820, 860, 900, 950, 990):
     t = MX + Vector((0, 0, ZN(f)))
     ck(f, t + Vector((-0.025 + 0.05 * (f - 737) / 253, -0.085 + 0.02 * max(0, f - 860) / 130, 0.018)), t + Vector((0, 0.015, -0.006)), 40)
