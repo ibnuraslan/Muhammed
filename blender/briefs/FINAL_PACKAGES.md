@@ -119,3 +119,6 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | 20 | HeadsetBullet | claude/rebuild20-headset-bullet: blender/HeadsetBullet_v009/HeadsetBullet_v009_60fps.blend (client-approved, Render check PASS) | 1–1203 |
 | 21 | RingBullet | claude/rebuild21-ring-bullet: blender/RingBullet_v009/RingBullet_v009_60fps.blend (client-approved after ring fix, Render check PASS) | 1–1395 |
 | 16 | DrunkTrain | claude/rebuild16-drunk-train: blender/DrunkTrain_v008/DrunkTrain_v008_60fps.blend (client-approved, Render check PASS) | 1–1735 |
+| 22 | BelugaRescue | claude/rebuild22-beluga-rescue: blender/BelugaRescue_v010/BelugaRescue_v010_60fps.blend (client-approved, Render check PASS) | 1–1736 |
+| 24 | RooseveltSpeech | claude/rebuild24-roosevelt-speech: blender/RooseveltSpeech_v012/RooseveltSpeech_v012_60fps.blend (client-approved, Render check PASS) | 1–1307 |
+| 26 | DwarfGiant | claude/rebuild26-dwarf-giant: blender/DwarfGiant_v009/DwarfGiant_v009_60fps.blend (client-approved, Render check PASS) | 1–2083 |
