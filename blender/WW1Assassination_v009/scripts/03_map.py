@@ -61,6 +61,7 @@ lc = mix(B, lc, (0.06, 0.04, 0.03))                                             
 sea = N.new("ShaderNodeTexNoise"); sea.inputs["Scale"].default_value = 60.0
 sea_col = mix(sea.outputs["Fac"], (0.0, 0.035, 0.09), (0.0, 0.06, 0.13))
 col = mix(A, sea_col, lc)
+col = mix(M_('MULTIPLY', front, A), col, (0.06, 0.012, 0.0))      # v009: a dark ember base under the fire band (blue + orange read as pink)
 L.new(col, p.inputs["Base Color"])
 fire = mix(N.new("ShaderNodeTexNoise").outputs["Fac"], (1.0, 0.16, 0.0), (1.0, 0.38, 0.0))
 L.new(fire, p.inputs["Emission Color"])

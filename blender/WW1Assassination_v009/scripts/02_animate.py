@@ -82,7 +82,7 @@ P = {}
 for nm, (car, seat, row) in SEATED.items():
     rig = O[nm]; p = Person(rig, seated=True)
     rig.parent = O[car + "_Body"]; rig.matrix_parent_inverse = Matrix.Identity(4)
-    p.seat = Vector((seat[0], seat[1], O[car]["seat_rear_z" if row == "rear" else "seat_front_z"])); p.floor = O[car]["floor_z"]
+    p.seat = Vector((seat[0], seat[1], O[car]["seat_rear_z" if row == "rear" else "seat_front_z"])); p.floor = O[car]["floor_z"] + (0.016 if nm != "Duchess" else 0.0)   # v009: soles on the car floor, not 1.7 cm into it
     P[nm] = p
 for nm in ("Gunman", "Bomber", "Nerve1", "Nerve2", "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "C1", "C2", "C3"):
     P[nm] = Person(O[nm])
@@ -236,9 +236,9 @@ for f in range(1184, END + 1, 4):
     if f < 1244: GP.arm_relaxed("R", f)
     elif f < 1272:
         u = smooth((f - 1244) / 28.0); GP.arm_aim("R", f, ar_stall + Vector((0, 0, -1.3 * (1 - u))))
-    elif f < 1336: GP.arm_aim("R", f, ar_stall + Vector((0, 0, 0.06 if f in (1292, 1320) else 0.0)))
-    elif f < 1372:
-        u = smooth((f - 1336) / 36.0); GP.arm_aim("R", f, ar_stall + Vector((0, 0, -1.3 * u)))
+    elif f < 1326: GP.arm_aim("R", f, ar_stall + Vector((0, 0, 0.06 if f in (1292, 1320) else 0.0)))
+    elif f < 1352:
+        u = smooth((f - 1326) / 26.0); GP.arm_aim("R", f, ar_stall + Vector((0, 0, -1.3 * u)))
     else: GP.arm_relaxed("R", f)      # v009: arm down before the camera rises (no lone arm at the frame edge)
     GP.arm_relaxed("L", f, swing=0.01 * b)
 apply_pose(GP.o, "R", "wrap_grip", 1); apply_pose(GP.o, "L", "relaxed", 1)
@@ -492,10 +492,10 @@ KEYS = [  # frame, camera position, look-at point, lens
     (760, Vector((-37.2, 2.25, 1.35)), P_LAND + Vector((0, 0, 0.05)), 42),
     (777, Vector((-39.5, 1.2, 4.5)), Vector((-43.5, 1.0, 1.3)), 26),
     (792, Vector((-45.0, -2.4, 3.0)), SITE + Vector((2.0, 0.8, 0.9)), 26),
-    (860, Vector((-50.0, -5.6, 5.0)), SITE + Vector((3.5, 1.5, 1.6)), 26),
-    (885, Vector((-41.0, -2.0, 7.8)), CL(885, REAR), 26),      # v009: over the lamp heads, not past a lamp
-    (910, CL(910, (-11.0, -1.0, 5.5)), CL(910, REAR), 26),
-    (960, CL(960, (-6.5, -2.0, 6.5)), CL(960, REAR), 28),
+    (860, Vector((-50.0, -5.6, 7.5)), SITE + Vector((3.5, 1.5, 1.6)), 26),
+    (885, Vector((-41.0, -2.0, 11.0)), CL(885, REAR), 26),     # v009: above the cross bunting (6-8.5 m) and the lamp heads
+    (910, CL(910, (-11.0, -1.0, 10.0)), CL(910, REAR), 26),
+    (960, CL(960, (-6.5, -2.0, 10.0)), CL(960, REAR), 28),
     (1000, Vector((-8.0, -2.0, 12.0)), CL(1000, (0, 0, 1.0)), 28),
     (1040, Vector((-3.5, 0.5, 9.0)), CL(1040, (0, 0, 1.0)), 30),
     (1080, Vector((-2.4, 6.4, 7.5)), Vector((6.3, 12.6, 3.6)), 26),
@@ -507,7 +507,8 @@ KEYS = [  # frame, camera position, look-at point, lens
     (1272, Vector((4.7, 13.4, 1.85)), Vector((3.3, 9.8, 1.75)), 28),     # v009: side-on from the north: profile, arm and the gap to the car read
     (1290, Vector((4.6, 13.3, 1.85)), Vector((3.2, 9.7, 1.8)), 28),
     (1320, Vector((4.5, 13.1, 1.9)), Vector((3.1, 9.7, 1.8)), 30),
-    (1350, Vector((4.9, 12.6, 2.6)), Vector((2.6, 9.6, 1.6)), 30),
+    (1345, Vector((4.5, 13.0, 2.0)), Vector((3.0, 9.7, 1.7)), 30),      # v009: hold the gunman in frame while the arm drops
+    (1362, Vector((4.9, 12.6, 2.6)), Vector((2.6, 9.6, 1.6)), 30),
     (1378, Vector((5.0, 10.3, 3.2)), Vector((2.0, 9.8, 1.2)), 30),
     (1405, Vector((4.6, 9.2, 6.0)), ar_stall + Vector((0, 0.3, -1.2)), 30),
     (1432, Vector((1.6, 10.5 - 0.12 * 14.0, 14.0)), Vector((1.6, 10.5, 0.0)), 30),     # v009: meets the rise formula exactly (no 2.4 m jump at f1433)

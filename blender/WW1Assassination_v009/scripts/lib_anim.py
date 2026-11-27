@@ -5,11 +5,12 @@ import bpy, math, random
 from mathutils import Vector, Matrix, Quaternion
 
 PAVE_Z = 0.15
+SOLE_LIFT = 0.013    # v009: the MakeHuman shoe sole sits 1.3 cm under the rig's rest ankle height: lift IK feet onto the real surface
 def ground_z(x, y):
-    """walkable height: pavements (north y 4..7.5 outside the side street; side-street pavements |x| 5..7.5) are 0.15 up"""
-    if 4.0 <= y <= 7.5 and not (-5.0 < x < 5.0): return PAVE_Z
-    if y > 7.5 and 5.0 <= abs(x) <= 7.5: return PAVE_Z
-    return 0.0
+    """walkable height (+ shoe sole): pavements (north y 4..7.5 outside the side street; side-street pavements |x| 5..7.5) are 0.15 up"""
+    if 4.0 <= y <= 7.5 and not (-5.0 < x < 5.0): return PAVE_Z + SOLE_LIFT
+    if y > 7.5 and 5.0 <= abs(x) <= 7.5: return PAVE_Z + SOLE_LIFT
+    return 0.0 + SOLE_LIFT
 
 def yawM(yaw): return Matrix.Rotation(math.radians(yaw), 3, 'Z')
 
