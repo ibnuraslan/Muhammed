@@ -1,30 +1,6 @@
 {
  "frames": {
-  "85": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 14%"
-   ]
-  ],
-  "103": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 14%"
-   ]
-  ],
-  "109": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 11%"
-   ]
-  ],
-  "115": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 11%"
-   ]
-  ],
-  "121": [
+  "139": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 14%"
@@ -37,91 +13,91 @@
    ],
    [
     "PROPMOVE",
-    "Hormone02 moves 3.2 cm with no hand on it (nearest finger 4 cm)"
+    "Hormone02 moves 3.1 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone04 moves 11.1 cm with no hand on it (nearest finger 23 cm)"
+    "Hormone04 moves 10.7 cm with no hand on it (nearest finger 22 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone05 moves 11.9 cm with no hand on it (nearest finger 46 cm)"
+    "Hormone05 moves 10.0 cm with no hand on it (nearest finger 45 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone08 moves 5.2 cm with no hand on it (nearest finger 52 cm)"
+    "Hormone08 moves 5.1 cm with no hand on it (nearest finger 52 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone09 moves 11.5 cm with no hand on it (nearest finger 36 cm)"
+    "Hormone09 moves 11.2 cm with no hand on it (nearest finger 36 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone10 moves 14.6 cm with no hand on it (nearest finger 16 cm)"
+    "Hormone10 moves 14.0 cm with no hand on it (nearest finger 16 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone11 moves 13.6 cm with no hand on it (nearest finger 23 cm)"
+    "Hormone11 moves 13.4 cm with no hand on it (nearest finger 22 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone15 moves 9.5 cm with no hand on it (nearest finger 7 cm)"
+    "Hormone15 moves 9.1 cm with no hand on it (nearest finger 6 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone16 moves 10.5 cm with no hand on it (nearest finger 30 cm)"
+    "Hormone16 moves 10.5 cm with no hand on it (nearest finger 29 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone17 moves 5.0 cm with no hand on it (nearest finger 40 cm)"
+    "Hormone17 moves 8.4 cm with no hand on it (nearest finger 40 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone20 moves 7.4 cm with no hand on it (nearest finger 42 cm)"
+    "Hormone20 moves 7.2 cm with no hand on it (nearest finger 42 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone21 moves 12.5 cm with no hand on it (nearest finger 21 cm)"
+    "Hormone21 moves 12.2 cm with no hand on it (nearest finger 21 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone22 moves 10.9 cm with no hand on it (nearest finger 10 cm)"
+    "Hormone22 moves 11.1 cm with no hand on it (nearest finger 9 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone23 moves 13.0 cm with no hand on it (nearest finger 27 cm)"
+    "Hormone23 moves 12.8 cm with no hand on it (nearest finger 26 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone26 moves 3.2 cm with no hand on it (nearest finger 25 cm)"
+    "Hormone26 moves 2.9 cm with no hand on it (nearest finger 25 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone27 moves 5.0 cm with no hand on it (nearest finger 30 cm)"
+    "Hormone27 moves 4.6 cm with no hand on it (nearest finger 29 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone28 moves 5.5 cm with no hand on it (nearest finger 39 cm)"
+    "Hormone28 moves 5.2 cm with no hand on it (nearest finger 38 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone29 moves 4.8 cm with no hand on it (nearest finger 49 cm)"
+    "Hormone29 moves 4.5 cm with no hand on it (nearest finger 47 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone32 moves 2.7 cm with no hand on it (nearest finger 32 cm)"
+    "Hormone32 moves 2.5 cm with no hand on it (nearest finger 32 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone33 moves 4.0 cm with no hand on it (nearest finger 38 cm)"
+    "Hormone33 moves 3.6 cm with no hand on it (nearest finger 37 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone34 moves 4.3 cm with no hand on it (nearest finger 45 cm)"
+    "Hormone34 moves 3.9 cm with no hand on it (nearest finger 43 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone35 moves 3.6 cm with no hand on it (nearest finger 53 cm)"
+    "Hormone35 moves 3.3 cm with no hand on it (nearest finger 50 cm)"
    ]
   ],
   "451": [
@@ -131,83 +107,83 @@
    ],
    [
     "PROPMOVE",
-    "Hormone03 moves 6.3 cm with no hand on it (nearest finger 4 cm)"
+    "Hormone03 moves 6.1 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone04 moves 10.3 cm with no hand on it (nearest finger 13 cm)"
+    "Hormone04 moves 9.9 cm with no hand on it (nearest finger 12 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone05 moves 9.6 cm with no hand on it (nearest finger 38 cm)"
+    "Hormone05 moves 9.8 cm with no hand on it (nearest finger 36 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone09 moves 9.2 cm with no hand on it (nearest finger 45 cm)"
+    "Hormone09 moves 9.0 cm with no hand on it (nearest finger 45 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone10 moves 13.3 cm with no hand on it (nearest finger 23 cm)"
+    "Hormone10 moves 12.9 cm with no hand on it (nearest finger 24 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone11 moves 10.6 cm with no hand on it (nearest finger 22 cm)"
+    "Hormone11 moves 10.2 cm with no hand on it (nearest finger 21 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone16 moves 10.9 cm with no hand on it (nearest finger 20 cm)"
+    "Hormone16 moves 10.5 cm with no hand on it (nearest finger 19 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone17 moves 9.7 cm with no hand on it (nearest finger 43 cm)"
+    "Hormone17 moves 8.6 cm with no hand on it (nearest finger 42 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone20 moves 4.1 cm with no hand on it (nearest finger 47 cm)"
+    "Hormone20 moves 4.0 cm with no hand on it (nearest finger 47 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone21 moves 10.8 cm with no hand on it (nearest finger 31 cm)"
+    "Hormone21 moves 10.5 cm with no hand on it (nearest finger 32 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone22 moves 14.1 cm with no hand on it (nearest finger 7 cm)"
+    "Hormone22 moves 13.8 cm with no hand on it (nearest finger 8 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone23 moves 14.0 cm with no hand on it (nearest finger 21 cm)"
+    "Hormone23 moves 12.5 cm with no hand on it (nearest finger 20 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone26 moves 2.0 cm with no hand on it (nearest finger 24 cm)"
+    "Hormone26 moves 1.8 cm with no hand on it (nearest finger 24 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone27 moves 4.4 cm with no hand on it (nearest finger 27 cm)"
+    "Hormone27 moves 4.1 cm with no hand on it (nearest finger 26 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone28 moves 5.3 cm with no hand on it (nearest finger 35 cm)"
+    "Hormone28 moves 5.0 cm with no hand on it (nearest finger 34 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone29 moves 5.3 cm with no hand on it (nearest finger 45 cm)"
+    "Hormone29 moves 4.9 cm with no hand on it (nearest finger 43 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone32 moves 1.9 cm with no hand on it (nearest finger 31 cm)"
+    "Hormone32 moves 1.7 cm with no hand on it (nearest finger 31 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone33 moves 3.6 cm with no hand on it (nearest finger 35 cm)"
+    "Hormone33 moves 3.3 cm with no hand on it (nearest finger 34 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone34 moves 4.3 cm with no hand on it (nearest finger 42 cm)"
+    "Hormone34 moves 3.9 cm with no hand on it (nearest finger 41 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone35 moves 4.0 cm with no hand on it (nearest finger 50 cm)"
+    "Hormone35 moves 3.7 cm with no hand on it (nearest finger 48 cm)"
    ]
   ],
   "457": [
@@ -217,75 +193,75 @@
    ],
    [
     "PROPMOVE",
-    "Hormone03 moves 4.1 cm with no hand on it (nearest finger 3 cm)"
+    "Hormone03 moves 3.9 cm with no hand on it (nearest finger 3 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone04 moves 9.0 cm with no hand on it (nearest finger 4 cm)"
+    "Hormone04 moves 8.7 cm with no hand on it (nearest finger 3 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone05 moves 11.3 cm with no hand on it (nearest finger 26 cm)"
+    "Hormone05 moves 10.9 cm with no hand on it (nearest finger 25 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone09 moves 6.3 cm with no hand on it (nearest finger 51 cm)"
+    "Hormone09 moves 6.2 cm with no hand on it (nearest finger 51 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone10 moves 12.1 cm with no hand on it (nearest finger 33 cm)"
+    "Hormone10 moves 11.8 cm with no hand on it (nearest finger 33 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone11 moves 13.2 cm with no hand on it (nearest finger 16 cm)"
+    "Hormone11 moves 13.8 cm with no hand on it (nearest finger 16 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone15 moves 5.7 cm with no hand on it (nearest finger 3 cm)"
+    "Hormone15 moves 5.6 cm with no hand on it (nearest finger 3 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone16 moves 9.9 cm with no hand on it (nearest finger 10 cm)"
+    "Hormone16 moves 9.6 cm with no hand on it (nearest finger 9 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone17 moves 10.1 cm with no hand on it (nearest finger 34 cm)"
+    "Hormone17 moves 10.0 cm with no hand on it (nearest finger 32 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone21 moves 8.3 cm with no hand on it (nearest finger 40 cm)"
+    "Hormone21 moves 8.1 cm with no hand on it (nearest finger 40 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone22 moves 12.7 cm with no hand on it (nearest finger 17 cm)"
+    "Hormone22 moves 12.4 cm with no hand on it (nearest finger 18 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone23 moves 10.6 cm with no hand on it (nearest finger 12 cm)"
+    "Hormone23 moves 10.6 cm with no hand on it (nearest finger 11 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone27 moves 3.5 cm with no hand on it (nearest finger 25 cm)"
+    "Hormone27 moves 3.2 cm with no hand on it (nearest finger 25 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone28 moves 5.1 cm with no hand on it (nearest finger 31 cm)"
+    "Hormone28 moves 4.8 cm with no hand on it (nearest finger 31 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone29 moves 5.5 cm with no hand on it (nearest finger 41 cm)"
+    "Hormone29 moves 5.1 cm with no hand on it (nearest finger 39 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone33 moves 3.0 cm with no hand on it (nearest finger 33 cm)"
+    "Hormone33 moves 2.7 cm with no hand on it (nearest finger 32 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone34 moves 4.1 cm with no hand on it (nearest finger 39 cm)"
+    "Hormone34 moves 3.8 cm with no hand on it (nearest finger 38 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone35 moves 4.3 cm with no hand on it (nearest finger 46 cm)"
+    "Hormone35 moves 3.9 cm with no hand on it (nearest finger 45 cm)"
    ]
   ],
   "463": [
@@ -295,1474 +271,1470 @@
    ],
    [
     "PROPMOVE",
-    "Hormone05 moves 10.6 cm with no hand on it (nearest finger 16 cm)"
+    "Hormone05 moves 10.2 cm with no hand on it (nearest finger 15 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone10 moves 10.0 cm with no hand on it (nearest finger 42 cm)"
+    "Hormone10 moves 9.8 cm with no hand on it (nearest finger 42 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone11 moves 13.9 cm with no hand on it (nearest finger 20 cm)"
+    "Hormone11 moves 13.5 cm with no hand on it (nearest finger 21 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone17 moves 11.0 cm with no hand on it (nearest finger 23 cm)"
+    "Hormone17 moves 10.7 cm with no hand on it (nearest finger 22 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone21 moves 5.2 cm with no hand on it (nearest finger 45 cm)"
+    "Hormone21 moves 5.1 cm with no hand on it (nearest finger 45 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone22 moves 11.5 cm with no hand on it (nearest finger 28 cm)"
+    "Hormone22 moves 11.2 cm with no hand on it (nearest finger 28 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone23 moves 14.6 cm with no hand on it (nearest finger 6 cm)"
+    "Hormone23 moves 14.0 cm with no hand on it (nearest finger 6 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone27 moves 2.4 cm with no hand on it (nearest finger 24 cm)"
+    "Hormone27 moves 2.2 cm with no hand on it (nearest finger 24 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone28 moves 4.6 cm with no hand on it (nearest finger 27 cm)"
+    "Hormone28 moves 4.3 cm with no hand on it (nearest finger 27 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone29 moves 5.4 cm with no hand on it (nearest finger 37 cm)"
+    "Hormone29 moves 5.0 cm with no hand on it (nearest finger 35 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone33 moves 2.2 cm with no hand on it (nearest finger 31 cm)"
+    "Hormone33 moves 2.0 cm with no hand on it (nearest finger 31 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone34 moves 3.7 cm with no hand on it (nearest finger 35 cm)"
+    "Hormone34 moves 3.4 cm with no hand on it (nearest finger 35 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone35 moves 4.3 cm with no hand on it (nearest finger 42 cm)"
+    "Hormone35 moves 4.0 cm with no hand on it (nearest finger 41 cm)"
    ]
   ],
   "349": [
    [
     "PROPMOVE",
-    "Hormone00 moves 4.1 cm with no hand on it (nearest finger 57 cm)"
+    "Hormone00 moves 3.8 cm with no hand on it (nearest finger 54 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone06 moves 4.1 cm with no hand on it (nearest finger 57 cm)"
+    "Hormone06 moves 3.9 cm with no hand on it (nearest finger 54 cm)"
    ]
   ],
   "355": [
    [
     "PROPMOVE",
-    "Hormone00 moves 6.5 cm with no hand on it (nearest finger 51 cm)"
+    "Hormone00 moves 6.3 cm with no hand on it (nearest finger 49 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone06 moves 7.3 cm with no hand on it (nearest finger 51 cm)"
+    "Hormone06 moves 7.1 cm with no hand on it (nearest finger 49 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone12 moves 4.9 cm with no hand on it (nearest finger 55 cm)"
+    "Hormone12 moves 4.7 cm with no hand on it (nearest finger 52 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone18 moves 5.2 cm with no hand on it (nearest finger 55 cm)"
+    "Hormone18 moves 5.0 cm with no hand on it (nearest finger 53 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone24 moves 1.6 cm with no hand on it (nearest finger 60 cm)"
+    "Hormone24 moves 1.5 cm with no hand on it (nearest finger 57 cm)"
    ]
   ],
   "361": [
    [
     "PROPMOVE",
-    "Hormone00 moves 8.5 cm with no hand on it (nearest finger 44 cm)"
+    "Hormone00 moves 8.1 cm with no hand on it (nearest finger 42 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone01 moves 3.2 cm with no hand on it (nearest finger 58 cm)"
+    "Hormone01 moves 3.1 cm with no hand on it (nearest finger 55 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone06 moves 10.0 cm with no hand on it (nearest finger 43 cm)"
+    "Hormone06 moves 9.8 cm with no hand on it (nearest finger 41 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone12 moves 7.2 cm with no hand on it (nearest finger 49 cm)"
+    "Hormone12 moves 7.0 cm with no hand on it (nearest finger 46 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone18 moves 8.3 cm with no hand on it (nearest finger 48 cm)"
+    "Hormone18 moves 8.1 cm with no hand on it (nearest finger 46 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone24 moves 2.8 cm with no hand on it (nearest finger 57 cm)"
+    "Hormone24 moves 2.5 cm with no hand on it (nearest finger 54 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone30 moves 1.9 cm with no hand on it (nearest finger 58 cm)"
+    "Hormone30 moves 1.7 cm with no hand on it (nearest finger 56 cm)"
    ]
   ],
   "367": [
    [
     "PROPMOVE",
-    "Hormone00 moves 8.5 cm with no hand on it (nearest finger 39 cm)"
+    "Hormone00 moves 5.5 cm with no hand on it (nearest finger 39 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone01 moves 5.7 cm with no hand on it (nearest finger 53 cm)"
+    "Hormone01 moves 5.5 cm with no hand on it (nearest finger 51 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone06 moves 11.8 cm with no hand on it (nearest finger 34 cm)"
+    "Hormone06 moves 11.4 cm with no hand on it (nearest finger 32 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone07 moves 6.3 cm with no hand on it (nearest finger 54 cm)"
+    "Hormone07 moves 6.1 cm with no hand on it (nearest finger 51 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone12 moves 8.9 cm with no hand on it (nearest finger 42 cm)"
+    "Hormone12 moves 8.7 cm with no hand on it (nearest finger 40 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone13 moves 4.1 cm with no hand on it (nearest finger 57 cm)"
+    "Hormone13 moves 3.8 cm with no hand on it (nearest finger 54 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone18 moves 10.8 cm with no hand on it (nearest finger 40 cm)"
+    "Hormone18 moves 10.5 cm with no hand on it (nearest finger 38 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone19 moves 4.1 cm with no hand on it (nearest finger 57 cm)"
+    "Hormone19 moves 3.9 cm with no hand on it (nearest finger 54 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone24 moves 3.8 cm with no hand on it (nearest finger 54 cm)"
+    "Hormone24 moves 3.5 cm with no hand on it (nearest finger 51 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone30 moves 2.7 cm with no hand on it (nearest finger 56 cm)"
+    "Hormone30 moves 2.5 cm with no hand on it (nearest finger 53 cm)"
    ]
   ],
   "373": [
    [
     "PROPMOVE",
-    "Hormone00 moves 9.4 cm with no hand on it (nearest finger 44 cm)"
+    "Hormone00 moves 11.0 cm with no hand on it (nearest finger 45 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone01 moves 7.8 cm with no hand on it (nearest finger 47 cm)"
+    "Hormone01 moves 7.6 cm with no hand on it (nearest finger 44 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone06 moves 13.5 cm with no hand on it (nearest finger 25 cm)"
+    "Hormone06 moves 13.0 cm with no hand on it (nearest finger 24 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone07 moves 9.2 cm with no hand on it (nearest finger 46 cm)"
+    "Hormone07 moves 9.0 cm with no hand on it (nearest finger 44 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone12 moves 4.8 cm with no hand on it (nearest finger 38 cm)"
+    "Hormone12 moves 3.6 cm with no hand on it (nearest finger 39 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone13 moves 6.5 cm with no hand on it (nearest finger 51 cm)"
+    "Hormone13 moves 6.3 cm with no hand on it (nearest finger 49 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone18 moves 12.3 cm with no hand on it (nearest finger 31 cm)"
+    "Hormone18 moves 12.2 cm with no hand on it (nearest finger 29 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone19 moves 7.3 cm with no hand on it (nearest finger 51 cm)"
+    "Hormone19 moves 7.1 cm with no hand on it (nearest finger 49 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone24 moves 4.6 cm with no hand on it (nearest finger 50 cm)"
+    "Hormone24 moves 4.3 cm with no hand on it (nearest finger 48 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone25 moves 2.4 cm with no hand on it (nearest finger 58 cm)"
+    "Hormone25 moves 2.2 cm with no hand on it (nearest finger 55 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone30 moves 3.4 cm with no hand on it (nearest finger 54 cm)"
+    "Hormone30 moves 3.1 cm with no hand on it (nearest finger 51 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone31 moves 1.6 cm with no hand on it (nearest finger 59 cm)"
+    "Hormone31 moves 1.4 cm with no hand on it (nearest finger 56 cm)"
    ]
   ],
   "379": [
    [
     "PROPMOVE",
-    "Hormone00 moves 8.6 cm with no hand on it (nearest finger 41 cm)"
+    "Hormone00 moves 8.4 cm with no hand on it (nearest finger 39 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone01 moves 9.8 cm with no hand on it (nearest finger 40 cm)"
+    "Hormone01 moves 8.7 cm with no hand on it (nearest finger 38 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone02 moves 4.9 cm with no hand on it (nearest finger 55 cm)"
+    "Hormone02 moves 4.7 cm with no hand on it (nearest finger 52 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone06 moves 11.3 cm with no hand on it (nearest finger 22 cm)"
+    "Hormone06 moves 10.3 cm with no hand on it (nearest finger 24 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone07 moves 11.4 cm with no hand on it (nearest finger 37 cm)"
+    "Hormone07 moves 10.9 cm with no hand on it (nearest finger 35 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone08 moves 5.2 cm with no hand on it (nearest finger 55 cm)"
+    "Hormone08 moves 5.0 cm with no hand on it (nearest finger 53 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone12 moves 11.9 cm with no hand on it (nearest finger 43 cm)"
+    "Hormone12 moves 9.9 cm with no hand on it (nearest finger 43 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone13 moves 8.5 cm with no hand on it (nearest finger 44 cm)"
+    "Hormone13 moves 8.1 cm with no hand on it (nearest finger 42 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone14 moves 3.2 cm with no hand on it (nearest finger 58 cm)"
+    "Hormone14 moves 3.1 cm with no hand on it (nearest finger 55 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone18 moves 13.6 cm with no hand on it (nearest finger 22 cm)"
+    "Hormone18 moves 13.4 cm with no hand on it (nearest finger 21 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone19 moves 10.0 cm with no hand on it (nearest finger 43 cm)"
+    "Hormone19 moves 9.8 cm with no hand on it (nearest finger 41 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone24 moves 5.1 cm with no hand on it (nearest finger 46 cm)"
+    "Hormone24 moves 4.8 cm with no hand on it (nearest finger 44 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone25 moves 3.5 cm with no hand on it (nearest finger 55 cm)"
+    "Hormone25 moves 3.3 cm with no hand on it (nearest finger 52 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone30 moves 3.9 cm with no hand on it (nearest finger 50 cm)"
+    "Hormone30 moves 3.6 cm with no hand on it (nearest finger 48 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone31 moves 2.5 cm with no hand on it (nearest finger 57 cm)"
+    "Hormone31 moves 2.2 cm with no hand on it (nearest finger 54 cm)"
    ]
   ],
   "385": [
    [
     "PROPMOVE",
-    "Hormone00 moves 11.0 cm with no hand on it (nearest finger 30 cm)"
+    "Hormone00 moves 10.7 cm with no hand on it (nearest finger 29 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone01 moves 5.0 cm with no hand on it (nearest finger 43 cm)"
+    "Hormone01 moves 8.4 cm with no hand on it (nearest finger 44 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone02 moves 7.2 cm with no hand on it (nearest finger 49 cm)"
+    "Hormone02 moves 7.0 cm with no hand on it (nearest finger 47 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone06 moves 10.9 cm with no hand on it (nearest finger 17 cm)"
+    "Hormone06 moves 11.1 cm with no hand on it (nearest finger 17 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone07 moves 13.0 cm with no hand on it (nearest finger 28 cm)"
+    "Hormone07 moves 12.8 cm with no hand on it (nearest finger 26 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone08 moves 8.3 cm with no hand on it (nearest finger 49 cm)"
+    "Hormone08 moves 8.1 cm with no hand on it (nearest finger 46 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone12 moves 9.0 cm with no hand on it (nearest finger 38 cm)"
+    "Hormone12 moves 9.0 cm with no hand on it (nearest finger 36 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone13 moves 8.5 cm with no hand on it (nearest finger 38 cm)"
+    "Hormone13 moves 5.5 cm with no hand on it (nearest finger 38 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone14 moves 5.7 cm with no hand on it (nearest finger 53 cm)"
+    "Hormone14 moves 5.5 cm with no hand on it (nearest finger 51 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone18 moves 10.6 cm with no hand on it (nearest finger 14 cm)"
+    "Hormone18 moves 10.2 cm with no hand on it (nearest finger 13 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone19 moves 11.8 cm with no hand on it (nearest finger 34 cm)"
+    "Hormone19 moves 11.4 cm with no hand on it (nearest finger 32 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone20 moves 6.3 cm with no hand on it (nearest finger 54 cm)"
+    "Hormone20 moves 6.1 cm with no hand on it (nearest finger 51 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone24 moves 5.5 cm with no hand on it (nearest finger 42 cm)"
+    "Hormone24 moves 5.1 cm with no hand on it (nearest finger 40 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone25 moves 4.4 cm with no hand on it (nearest finger 52 cm)"
+    "Hormone25 moves 4.1 cm with no hand on it (nearest finger 49 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone26 moves 2.0 cm with no hand on it (nearest finger 59 cm)"
+    "Hormone26 moves 1.8 cm with no hand on it (nearest finger 56 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone30 moves 4.2 cm with no hand on it (nearest finger 47 cm)"
+    "Hormone30 moves 3.8 cm with no hand on it (nearest finger 45 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone31 moves 3.2 cm with no hand on it (nearest finger 54 cm)"
+    "Hormone31 moves 2.9 cm with no hand on it (nearest finger 52 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone32 moves 1.2 cm with no hand on it (nearest finger 60 cm)"
+    "Hormone32 moves 1.1 cm with no hand on it (nearest finger 57 cm)"
    ]
   ],
   "391": [
    [
     "PROPMOVE",
-    "Hormone00 moves 10.9 cm with no hand on it (nearest finger 20 cm)"
+    "Hormone00 moves 10.5 cm with no hand on it (nearest finger 19 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone01 moves 9.8 cm with no hand on it (nearest finger 44 cm)"
+    "Hormone01 moves 8.6 cm with no hand on it (nearest finger 43 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone02 moves 8.9 cm with no hand on it (nearest finger 42 cm)"
+    "Hormone02 moves 8.7 cm with no hand on it (nearest finger 40 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone03 moves 4.1 cm with no hand on it (nearest finger 56 cm)"
+    "Hormone03 moves 3.8 cm with no hand on it (nearest finger 54 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone06 moves 14.1 cm with no hand on it (nearest finger 18 cm)"
+    "Hormone06 moves 13.8 cm with no hand on it (nearest finger 18 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone07 moves 14.0 cm with no hand on it (nearest finger 20 cm)"
+    "Hormone07 moves 12.5 cm with no hand on it (nearest finger 21 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone08 moves 10.8 cm with no hand on it (nearest finger 40 cm)"
+    "Hormone08 moves 10.5 cm with no hand on it (nearest finger 38 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone09 moves 4.1 cm with no hand on it (nearest finger 57 cm)"
+    "Hormone09 moves 3.9 cm with no hand on it (nearest finger 54 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone12 moves 11.4 cm with no hand on it (nearest finger 27 cm)"
+    "Hormone12 moves 10.9 cm with no hand on it (nearest finger 26 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone13 moves 9.4 cm with no hand on it (nearest finger 41 cm)"
+    "Hormone13 moves 11.0 cm with no hand on it (nearest finger 42 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone14 moves 7.8 cm with no hand on it (nearest finger 47 cm)"
+    "Hormone14 moves 7.6 cm with no hand on it (nearest finger 44 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone18 moves 13.2 cm with no hand on it (nearest finger 8 cm)"
+    "Hormone18 moves 13.8 cm with no hand on it (nearest finger 7 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone19 moves 13.5 cm with no hand on it (nearest finger 25 cm)"
+    "Hormone19 moves 13.0 cm with no hand on it (nearest finger 24 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone20 moves 9.2 cm with no hand on it (nearest finger 46 cm)"
+    "Hormone20 moves 9.0 cm with no hand on it (nearest finger 44 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone24 moves 5.6 cm with no hand on it (nearest finger 38 cm)"
+    "Hormone24 moves 5.1 cm with no hand on it (nearest finger 37 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone25 moves 5.0 cm with no hand on it (nearest finger 48 cm)"
+    "Hormone25 moves 4.6 cm with no hand on it (nearest finger 46 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone26 moves 3.2 cm with no hand on it (nearest finger 56 cm)"
+    "Hormone26 moves 2.9 cm with no hand on it (nearest finger 54 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone30 moves 4.3 cm with no hand on it (nearest finger 44 cm)"
+    "Hormone30 moves 4.0 cm with no hand on it (nearest finger 43 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone31 moves 3.8 cm with no hand on it (nearest finger 52 cm)"
+    "Hormone31 moves 3.4 cm with no hand on it (nearest finger 50 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone32 moves 2.2 cm with no hand on it (nearest finger 58 cm)"
+    "Hormone32 moves 2.0 cm with no hand on it (nearest finger 55 cm)"
    ]
   ],
   "397": [
    [
     "PROPMOVE",
-    "Hormone00 moves 9.9 cm with no hand on it (nearest finger 9 cm)"
+    "Hormone00 moves 9.6 cm with no hand on it (nearest finger 9 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone01 moves 10.9 cm with no hand on it (nearest finger 34 cm)"
+    "Hormone01 moves 10.7 cm with no hand on it (nearest finger 32 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone02 moves 4.8 cm with no hand on it (nearest finger 40 cm)"
+    "Hormone02 moves 3.6 cm with no hand on it (nearest finger 42 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone03 moves 6.5 cm with no hand on it (nearest finger 52 cm)"
+    "Hormone03 moves 6.3 cm with no hand on it (nearest finger 49 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone06 moves 12.7 cm with no hand on it (nearest finger 26 cm)"
+    "Hormone06 moves 12.4 cm with no hand on it (nearest finger 27 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone07 moves 10.6 cm with no hand on it (nearest finger 19 cm)"
+    "Hormone07 moves 10.6 cm with no hand on it (nearest finger 18 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone08 moves 12.3 cm with no hand on it (nearest finger 31 cm)"
+    "Hormone08 moves 12.2 cm with no hand on it (nearest finger 29 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone09 moves 7.3 cm with no hand on it (nearest finger 51 cm)"
+    "Hormone09 moves 7.1 cm with no hand on it (nearest finger 49 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone12 moves 10.6 cm with no hand on it (nearest finger 16 cm)"
+    "Hormone12 moves 10.2 cm with no hand on it (nearest finger 15 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone13 moves 8.8 cm with no hand on it (nearest finger 41 cm)"
+    "Hormone13 moves 8.2 cm with no hand on it (nearest finger 39 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone14 moves 9.8 cm with no hand on it (nearest finger 40 cm)"
+    "Hormone14 moves 8.7 cm with no hand on it (nearest finger 38 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone15 moves 4.9 cm with no hand on it (nearest finger 55 cm)"
+    "Hormone15 moves 4.7 cm with no hand on it (nearest finger 53 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone18 moves 13.9 cm with no hand on it (nearest finger 9 cm)"
+    "Hormone18 moves 13.5 cm with no hand on it (nearest finger 10 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone19 moves 11.3 cm with no hand on it (nearest finger 17 cm)"
+    "Hormone19 moves 10.3 cm with no hand on it (nearest finger 15 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone20 moves 11.4 cm with no hand on it (nearest finger 38 cm)"
+    "Hormone20 moves 10.9 cm with no hand on it (nearest finger 35 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone21 moves 5.2 cm with no hand on it (nearest finger 56 cm)"
+    "Hormone21 moves 5.0 cm with no hand on it (nearest finger 53 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone24 moves 5.3 cm with no hand on it (nearest finger 34 cm)"
+    "Hormone24 moves 5.0 cm with no hand on it (nearest finger 33 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone25 moves 5.4 cm with no hand on it (nearest finger 43 cm)"
+    "Hormone25 moves 5.0 cm with no hand on it (nearest finger 42 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone26 moves 4.1 cm with no hand on it (nearest finger 53 cm)"
+    "Hormone26 moves 3.8 cm with no hand on it (nearest finger 50 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone27 moves 1.6 cm with no hand on it (nearest finger 60 cm)"
+    "Hormone27 moves 1.5 cm with no hand on it (nearest finger 57 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone30 moves 4.3 cm with no hand on it (nearest finger 40 cm)"
+    "Hormone30 moves 3.9 cm with no hand on it (nearest finger 40 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone31 moves 4.1 cm with no hand on it (nearest finger 48 cm)"
+    "Hormone31 moves 3.8 cm with no hand on it (nearest finger 46 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone32 moves 3.0 cm with no hand on it (nearest finger 55 cm)"
+    "Hormone32 moves 2.7 cm with no hand on it (nearest finger 53 cm)"
    ]
   ],
   "403": [
    [
     "PROPMOVE",
-    "Hormone01 moves 11.1 cm with no hand on it (nearest finger 23 cm)"
+    "Hormone01 moves 10.7 cm with no hand on it (nearest finger 22 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone02 moves 11.9 cm with no hand on it (nearest finger 46 cm)"
+    "Hormone02 moves 10.0 cm with no hand on it (nearest finger 45 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone03 moves 8.5 cm with no hand on it (nearest finger 45 cm)"
+    "Hormone03 moves 8.1 cm with no hand on it (nearest finger 42 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone04 moves 3.2 cm with no hand on it (nearest finger 58 cm)"
+    "Hormone04 moves 3.1 cm with no hand on it (nearest finger 55 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone06 moves 11.5 cm with no hand on it (nearest finger 36 cm)"
+    "Hormone06 moves 11.2 cm with no hand on it (nearest finger 37 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone07 moves 14.6 cm with no hand on it (nearest finger 16 cm)"
+    "Hormone07 moves 14.0 cm with no hand on it (nearest finger 17 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone08 moves 13.6 cm with no hand on it (nearest finger 23 cm)"
+    "Hormone08 moves 13.4 cm with no hand on it (nearest finger 22 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone09 moves 10.0 cm with no hand on it (nearest finger 43 cm)"
+    "Hormone09 moves 9.8 cm with no hand on it (nearest finger 41 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone12 moves 9.5 cm with no hand on it (nearest finger 7 cm)"
+    "Hormone12 moves 9.1 cm with no hand on it (nearest finger 6 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone13 moves 10.5 cm with no hand on it (nearest finger 31 cm)"
+    "Hormone13 moves 10.5 cm with no hand on it (nearest finger 29 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone14 moves 5.0 cm with no hand on it (nearest finger 40 cm)"
+    "Hormone14 moves 8.4 cm with no hand on it (nearest finger 41 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone15 moves 7.2 cm with no hand on it (nearest finger 49 cm)"
+    "Hormone15 moves 7.0 cm with no hand on it (nearest finger 47 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone18 moves 12.5 cm with no hand on it (nearest finger 21 cm)"
+    "Hormone18 moves 12.2 cm with no hand on it (nearest finger 21 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone19 moves 10.9 cm with no hand on it (nearest finger 10 cm)"
+    "Hormone19 moves 11.1 cm with no hand on it (nearest finger 9 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone20 moves 13.0 cm with no hand on it (nearest finger 28 cm)"
+    "Hormone20 moves 12.8 cm with no hand on it (nearest finger 26 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone21 moves 8.3 cm with no hand on it (nearest finger 49 cm)"
+    "Hormone21 moves 8.1 cm with no hand on it (nearest finger 46 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone24 moves 5.0 cm with no hand on it (nearest finger 30 cm)"
+    "Hormone24 moves 4.6 cm with no hand on it (nearest finger 29 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone25 moves 5.5 cm with no hand on it (nearest finger 39 cm)"
+    "Hormone25 moves 5.2 cm with no hand on it (nearest finger 38 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone26 moves 4.8 cm with no hand on it (nearest finger 49 cm)"
+    "Hormone26 moves 4.5 cm with no hand on it (nearest finger 47 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone27 moves 2.8 cm with no hand on it (nearest finger 57 cm)"
+    "Hormone27 moves 2.5 cm with no hand on it (nearest finger 55 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone30 moves 4.0 cm with no hand on it (nearest finger 38 cm)"
+    "Hormone30 moves 3.6 cm with no hand on it (nearest finger 37 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone31 moves 4.3 cm with no hand on it (nearest finger 45 cm)"
+    "Hormone31 moves 3.9 cm with no hand on it (nearest finger 43 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone32 moves 3.6 cm with no hand on it (nearest finger 53 cm)"
+    "Hormone32 moves 3.3 cm with no hand on it (nearest finger 51 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone33 moves 1.9 cm with no hand on it (nearest finger 59 cm)"
+    "Hormone33 moves 1.7 cm with no hand on it (nearest finger 56 cm)"
    ]
   ],
   "409": [
    [
     "PROPMOVE",
-    "Hormone00 moves 6.3 cm with no hand on it (nearest finger 4 cm)"
+    "Hormone00 moves 6.1 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone01 moves 10.3 cm with no hand on it (nearest finger 13 cm)"
+    "Hormone01 moves 9.9 cm with no hand on it (nearest finger 12 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone02 moves 9.6 cm with no hand on it (nearest finger 38 cm)"
+    "Hormone02 moves 9.8 cm with no hand on it (nearest finger 36 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone03 moves 8.5 cm with no hand on it (nearest finger 38 cm)"
+    "Hormone03 moves 5.5 cm with no hand on it (nearest finger 39 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone04 moves 5.7 cm with no hand on it (nearest finger 53 cm)"
+    "Hormone04 moves 5.5 cm with no hand on it (nearest finger 51 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone06 moves 9.2 cm with no hand on it (nearest finger 45 cm)"
+    "Hormone06 moves 9.0 cm with no hand on it (nearest finger 45 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone07 moves 13.3 cm with no hand on it (nearest finger 23 cm)"
+    "Hormone07 moves 12.9 cm with no hand on it (nearest finger 24 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone08 moves 10.6 cm with no hand on it (nearest finger 21 cm)"
+    "Hormone08 moves 10.2 cm with no hand on it (nearest finger 21 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone09 moves 11.8 cm with no hand on it (nearest finger 34 cm)"
+    "Hormone09 moves 11.4 cm with no hand on it (nearest finger 32 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone10 moves 6.3 cm with no hand on it (nearest finger 54 cm)"
+    "Hormone10 moves 6.1 cm with no hand on it (nearest finger 51 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone13 moves 10.9 cm with no hand on it (nearest finger 20 cm)"
+    "Hormone13 moves 10.5 cm with no hand on it (nearest finger 19 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone14 moves 9.7 cm with no hand on it (nearest finger 43 cm)"
+    "Hormone14 moves 8.6 cm with no hand on it (nearest finger 42 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone15 moves 8.9 cm with no hand on it (nearest finger 42 cm)"
+    "Hormone15 moves 8.7 cm with no hand on it (nearest finger 40 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone16 moves 4.1 cm with no hand on it (nearest finger 57 cm)"
+    "Hormone16 moves 3.8 cm with no hand on it (nearest finger 54 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone18 moves 10.8 cm with no hand on it (nearest finger 32 cm)"
+    "Hormone18 moves 10.5 cm with no hand on it (nearest finger 32 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone19 moves 14.1 cm with no hand on it (nearest finger 7 cm)"
+    "Hormone19 moves 13.8 cm with no hand on it (nearest finger 7 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone20 moves 14.0 cm with no hand on it (nearest finger 20 cm)"
+    "Hormone20 moves 12.5 cm with no hand on it (nearest finger 19 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone21 moves 10.8 cm with no hand on it (nearest finger 40 cm)"
+    "Hormone21 moves 10.5 cm with no hand on it (nearest finger 38 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone22 moves 4.1 cm with no hand on it (nearest finger 57 cm)"
+    "Hormone22 moves 3.9 cm with no hand on it (nearest finger 54 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone24 moves 4.4 cm with no hand on it (nearest finger 27 cm)"
+    "Hormone24 moves 4.1 cm with no hand on it (nearest finger 27 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone25 moves 5.3 cm with no hand on it (nearest finger 36 cm)"
+    "Hormone25 moves 5.0 cm with no hand on it (nearest finger 34 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone26 moves 5.3 cm with no hand on it (nearest finger 45 cm)"
+    "Hormone26 moves 4.9 cm with no hand on it (nearest finger 43 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone27 moves 3.8 cm with no hand on it (nearest finger 54 cm)"
+    "Hormone27 moves 3.5 cm with no hand on it (nearest finger 52 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone30 moves 3.6 cm with no hand on it (nearest finger 35 cm)"
+    "Hormone30 moves 3.3 cm with no hand on it (nearest finger 34 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone31 moves 4.3 cm with no hand on it (nearest finger 42 cm)"
+    "Hormone31 moves 3.9 cm with no hand on it (nearest finger 41 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone32 moves 4.0 cm with no hand on it (nearest finger 49 cm)"
+    "Hormone32 moves 3.7 cm with no hand on it (nearest finger 48 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone33 moves 2.7 cm with no hand on it (nearest finger 56 cm)"
+    "Hormone33 moves 2.5 cm with no hand on it (nearest finger 54 cm)"
    ]
   ],
   "415": [
    [
     "PROPMOVE",
-    "Hormone00 moves 4.1 cm with no hand on it (nearest finger 4 cm)"
+    "Hormone00 moves 3.9 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone01 moves 9.0 cm with no hand on it (nearest finger 4 cm)"
+    "Hormone01 moves 8.7 cm with no hand on it (nearest finger 3 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone02 moves 11.3 cm with no hand on it (nearest finger 27 cm)"
+    "Hormone02 moves 10.9 cm with no hand on it (nearest finger 25 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone03 moves 9.4 cm with no hand on it (nearest finger 44 cm)"
+    "Hormone03 moves 11.0 cm with no hand on it (nearest finger 45 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone04 moves 7.8 cm with no hand on it (nearest finger 47 cm)"
+    "Hormone04 moves 7.6 cm with no hand on it (nearest finger 45 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone06 moves 6.3 cm with no hand on it (nearest finger 50 cm)"
+    "Hormone06 moves 6.2 cm with no hand on it (nearest finger 50 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone07 moves 12.1 cm with no hand on it (nearest finger 33 cm)"
+    "Hormone07 moves 11.8 cm with no hand on it (nearest finger 33 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone08 moves 13.2 cm with no hand on it (nearest finger 16 cm)"
+    "Hormone08 moves 13.8 cm with no hand on it (nearest finger 16 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone09 moves 13.5 cm with no hand on it (nearest finger 25 cm)"
+    "Hormone09 moves 13.0 cm with no hand on it (nearest finger 24 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone10 moves 9.2 cm with no hand on it (nearest finger 46 cm)"
+    "Hormone10 moves 9.0 cm with no hand on it (nearest finger 44 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone12 moves 5.7 cm with no hand on it (nearest finger 4 cm)"
+    "Hormone12 moves 5.6 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone13 moves 9.9 cm with no hand on it (nearest finger 10 cm)"
+    "Hormone13 moves 9.6 cm with no hand on it (nearest finger 9 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone14 moves 10.1 cm with no hand on it (nearest finger 34 cm)"
+    "Hormone14 moves 10.0 cm with no hand on it (nearest finger 33 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone15 moves 4.8 cm with no hand on it (nearest finger 38 cm)"
+    "Hormone15 moves 3.6 cm with no hand on it (nearest finger 39 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone16 moves 6.5 cm with no hand on it (nearest finger 52 cm)"
+    "Hormone16 moves 6.3 cm with no hand on it (nearest finger 49 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone18 moves 8.3 cm with no hand on it (nearest finger 40 cm)"
+    "Hormone18 moves 8.1 cm with no hand on it (nearest finger 40 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone19 moves 12.7 cm with no hand on it (nearest finger 17 cm)"
+    "Hormone19 moves 12.4 cm with no hand on it (nearest finger 18 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone20 moves 10.6 cm with no hand on it (nearest finger 12 cm)"
+    "Hormone20 moves 10.6 cm with no hand on it (nearest finger 11 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone21 moves 12.3 cm with no hand on it (nearest finger 31 cm)"
+    "Hormone21 moves 12.2 cm with no hand on it (nearest finger 29 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone22 moves 7.3 cm with no hand on it (nearest finger 52 cm)"
+    "Hormone22 moves 7.1 cm with no hand on it (nearest finger 49 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone24 moves 3.5 cm with no hand on it (nearest finger 25 cm)"
+    "Hormone24 moves 3.2 cm with no hand on it (nearest finger 25 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone25 moves 5.1 cm with no hand on it (nearest finger 31 cm)"
+    "Hormone25 moves 4.8 cm with no hand on it (nearest finger 30 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone26 moves 5.5 cm with no hand on it (nearest finger 41 cm)"
+    "Hormone26 moves 5.1 cm with no hand on it (nearest finger 39 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone27 moves 4.6 cm with no hand on it (nearest finger 50 cm)"
+    "Hormone27 moves 4.3 cm with no hand on it (nearest finger 48 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone28 moves 2.4 cm with no hand on it (nearest finger 58 cm)"
+    "Hormone28 moves 2.2 cm with no hand on it (nearest finger 55 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone30 moves 3.0 cm with no hand on it (nearest finger 32 cm)"
+    "Hormone30 moves 2.7 cm with no hand on it (nearest finger 32 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone31 moves 4.1 cm with no hand on it (nearest finger 39 cm)"
+    "Hormone31 moves 3.8 cm with no hand on it (nearest finger 38 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone32 moves 4.3 cm with no hand on it (nearest finger 46 cm)"
+    "Hormone32 moves 3.9 cm with no hand on it (nearest finger 44 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone33 moves 3.4 cm with no hand on it (nearest finger 54 cm)"
+    "Hormone33 moves 3.1 cm with no hand on it (nearest finger 51 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone34 moves 1.6 cm with no hand on it (nearest finger 60 cm)"
+    "Hormone34 moves 1.4 cm with no hand on it (nearest finger 57 cm)"
    ]
   ],
   "421": [
    [
     "PROPMOVE",
-    "Hormone02 moves 10.6 cm with no hand on it (nearest finger 16 cm)"
+    "Hormone02 moves 10.2 cm with no hand on it (nearest finger 15 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone03 moves 8.6 cm with no hand on it (nearest finger 41 cm)"
+    "Hormone03 moves 8.4 cm with no hand on it (nearest finger 40 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone04 moves 9.8 cm with no hand on it (nearest finger 40 cm)"
+    "Hormone04 moves 8.7 cm with no hand on it (nearest finger 38 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone05 moves 4.9 cm with no hand on it (nearest finger 55 cm)"
+    "Hormone05 moves 4.7 cm with no hand on it (nearest finger 52 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone07 moves 10.0 cm with no hand on it (nearest finger 42 cm)"
+    "Hormone07 moves 9.8 cm with no hand on it (nearest finger 42 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone08 moves 13.9 cm with no hand on it (nearest finger 20 cm)"
+    "Hormone08 moves 13.5 cm with no hand on it (nearest finger 21 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone09 moves 11.3 cm with no hand on it (nearest finger 23 cm)"
+    "Hormone09 moves 10.3 cm with no hand on it (nearest finger 24 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone10 moves 11.4 cm with no hand on it (nearest finger 38 cm)"
+    "Hormone10 moves 10.9 cm with no hand on it (nearest finger 35 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone11 moves 5.2 cm with no hand on it (nearest finger 55 cm)"
+    "Hormone11 moves 5.0 cm with no hand on it (nearest finger 53 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone12 moves 3.2 cm with no hand on it (nearest finger 4 cm)"
+    "Hormone12 moves 3.1 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone14 moves 11.0 cm with no hand on it (nearest finger 23 cm)"
+    "Hormone14 moves 10.7 cm with no hand on it (nearest finger 22 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone15 moves 11.9 cm with no hand on it (nearest finger 43 cm)"
+    "Hormone15 moves 9.9 cm with no hand on it (nearest finger 43 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone16 moves 8.5 cm with no hand on it (nearest finger 45 cm)"
+    "Hormone16 moves 8.1 cm with no hand on it (nearest finger 43 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone17 moves 3.2 cm with no hand on it (nearest finger 58 cm)"
+    "Hormone17 moves 3.1 cm with no hand on it (nearest finger 55 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone18 moves 5.2 cm with no hand on it (nearest finger 45 cm)"
+    "Hormone18 moves 5.1 cm with no hand on it (nearest finger 45 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone19 moves 11.5 cm with no hand on it (nearest finger 28 cm)"
+    "Hormone19 moves 11.2 cm with no hand on it (nearest finger 29 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone20 moves 14.6 cm with no hand on it (nearest finger 7 cm)"
+    "Hormone20 moves 14.0 cm with no hand on it (nearest finger 7 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone21 moves 13.6 cm with no hand on it (nearest finger 23 cm)"
+    "Hormone21 moves 13.4 cm with no hand on it (nearest finger 22 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone22 moves 10.0 cm with no hand on it (nearest finger 43 cm)"
+    "Hormone22 moves 9.8 cm with no hand on it (nearest finger 41 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone24 moves 2.4 cm with no hand on it (nearest finger 24 cm)"
+    "Hormone24 moves 2.2 cm with no hand on it (nearest finger 24 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone25 moves 4.6 cm with no hand on it (nearest finger 28 cm)"
+    "Hormone25 moves 4.3 cm with no hand on it (nearest finger 27 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone26 moves 5.4 cm with no hand on it (nearest finger 37 cm)"
+    "Hormone26 moves 5.0 cm with no hand on it (nearest finger 36 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone27 moves 5.1 cm with no hand on it (nearest finger 47 cm)"
+    "Hormone27 moves 4.8 cm with no hand on it (nearest finger 45 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone28 moves 3.5 cm with no hand on it (nearest finger 55 cm)"
+    "Hormone28 moves 3.3 cm with no hand on it (nearest finger 53 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone30 moves 2.2 cm with no hand on it (nearest finger 31 cm)"
+    "Hormone30 moves 2.0 cm with no hand on it (nearest finger 31 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone31 moves 3.7 cm with no hand on it (nearest finger 36 cm)"
+    "Hormone31 moves 3.4 cm with no hand on it (nearest finger 35 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone32 moves 4.3 cm with no hand on it (nearest finger 43 cm)"
+    "Hormone32 moves 4.0 cm with no hand on it (nearest finger 42 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone33 moves 3.9 cm with no hand on it (nearest finger 51 cm)"
+    "Hormone33 moves 3.6 cm with no hand on it (nearest finger 49 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone34 moves 2.5 cm with no hand on it (nearest finger 57 cm)"
+    "Hormone34 moves 2.2 cm with no hand on it (nearest finger 55 cm)"
    ]
   ],
   "427": [
    [
     "PROPMOVE",
-    "Hormone01 moves 5.0 cm with no hand on it (nearest finger 4 cm)"
+    "Hormone01 moves 4.8 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone02 moves 9.5 cm with no hand on it (nearest finger 6 cm)"
+    "Hormone02 moves 9.1 cm with no hand on it (nearest finger 6 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone03 moves 11.0 cm with no hand on it (nearest finger 30 cm)"
+    "Hormone03 moves 10.7 cm with no hand on it (nearest finger 29 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone04 moves 5.0 cm with no hand on it (nearest finger 43 cm)"
+    "Hormone04 moves 8.4 cm with no hand on it (nearest finger 44 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone05 moves 7.2 cm with no hand on it (nearest finger 50 cm)"
+    "Hormone05 moves 7.0 cm with no hand on it (nearest finger 47 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone07 moves 7.4 cm with no hand on it (nearest finger 49 cm)"
+    "Hormone07 moves 7.2 cm with no hand on it (nearest finger 49 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone08 moves 12.5 cm with no hand on it (nearest finger 29 cm)"
+    "Hormone08 moves 12.2 cm with no hand on it (nearest finger 30 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone09 moves 10.9 cm with no hand on it (nearest finger 17 cm)"
+    "Hormone09 moves 11.1 cm with no hand on it (nearest finger 16 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone10 moves 13.0 cm with no hand on it (nearest finger 27 cm)"
+    "Hormone10 moves 12.8 cm with no hand on it (nearest finger 26 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone11 moves 8.3 cm with no hand on it (nearest finger 49 cm)"
+    "Hormone11 moves 8.1 cm with no hand on it (nearest finger 46 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone13 moves 6.5 cm with no hand on it (nearest finger 4 cm)"
+    "Hormone13 moves 6.2 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone14 moves 10.3 cm with no hand on it (nearest finger 13 cm)"
+    "Hormone14 moves 9.9 cm with no hand on it (nearest finger 12 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone15 moves 9.0 cm with no hand on it (nearest finger 38 cm)"
+    "Hormone15 moves 9.0 cm with no hand on it (nearest finger 36 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone16 moves 8.5 cm with no hand on it (nearest finger 38 cm)"
+    "Hormone16 moves 5.5 cm with no hand on it (nearest finger 38 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone17 moves 5.7 cm with no hand on it (nearest finger 54 cm)"
+    "Hormone17 moves 5.5 cm with no hand on it (nearest finger 51 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone19 moves 9.2 cm with no hand on it (nearest finger 37 cm)"
+    "Hormone19 moves 9.0 cm with no hand on it (nearest finger 38 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone20 moves 13.3 cm with no hand on it (nearest finger 13 cm)"
+    "Hormone20 moves 12.9 cm with no hand on it (nearest finger 14 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone21 moves 10.6 cm with no hand on it (nearest finger 13 cm)"
+    "Hormone21 moves 10.2 cm with no hand on it (nearest finger 13 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone22 moves 11.8 cm with no hand on it (nearest finger 34 cm)"
+    "Hormone22 moves 11.4 cm with no hand on it (nearest finger 32 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone23 moves 6.3 cm with no hand on it (nearest finger 54 cm)"
+    "Hormone23 moves 6.1 cm with no hand on it (nearest finger 51 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone25 moves 3.8 cm with no hand on it (nearest finger 26 cm)"
+    "Hormone25 moves 3.5 cm with no hand on it (nearest finger 25 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone26 moves 5.3 cm with no hand on it (nearest finger 33 cm)"
+    "Hormone26 moves 4.9 cm with no hand on it (nearest finger 32 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone27 moves 5.5 cm with no hand on it (nearest finger 42 cm)"
+    "Hormone27 moves 5.1 cm with no hand on it (nearest finger 41 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone28 moves 4.4 cm with no hand on it (nearest finger 52 cm)"
+    "Hormone28 moves 4.1 cm with no hand on it (nearest finger 49 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone29 moves 2.0 cm with no hand on it (nearest finger 59 cm)"
+    "Hormone29 moves 1.8 cm with no hand on it (nearest finger 56 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone30 moves 1.2 cm with no hand on it (nearest finger 31 cm)"
+    "Hormone30 moves 1.1 cm with no hand on it (nearest finger 31 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone31 moves 3.2 cm with no hand on it (nearest finger 33 cm)"
+    "Hormone31 moves 2.9 cm with no hand on it (nearest finger 33 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone32 moves 4.2 cm with no hand on it (nearest finger 40 cm)"
+    "Hormone32 moves 3.8 cm with no hand on it (nearest finger 39 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone33 moves 4.2 cm with no hand on it (nearest finger 47 cm)"
+    "Hormone33 moves 3.8 cm with no hand on it (nearest finger 45 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone34 moves 3.2 cm with no hand on it (nearest finger 54 cm)"
+    "Hormone34 moves 2.9 cm with no hand on it (nearest finger 52 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone35 moves 1.2 cm with no hand on it (nearest finger 60 cm)"
+    "Hormone35 moves 1.1 cm with no hand on it (nearest finger 57 cm)"
    ]
   ],
   "433": [
    [
     "PROPMOVE",
-    "Hormone03 moves 10.9 cm with no hand on it (nearest finger 20 cm)"
+    "Hormone03 moves 10.5 cm with no hand on it (nearest finger 19 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone04 moves 9.8 cm with no hand on it (nearest finger 45 cm)"
+    "Hormone04 moves 8.6 cm with no hand on it (nearest finger 43 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone05 moves 8.9 cm with no hand on it (nearest finger 43 cm)"
+    "Hormone05 moves 8.7 cm with no hand on it (nearest finger 40 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone07 moves 4.1 cm with no hand on it (nearest finger 53 cm)"
+    "Hormone07 moves 4.0 cm with no hand on it (nearest finger 53 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone08 moves 10.8 cm with no hand on it (nearest finger 39 cm)"
+    "Hormone08 moves 10.5 cm with no hand on it (nearest finger 39 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone09 moves 14.1 cm with no hand on it (nearest finger 18 cm)"
+    "Hormone09 moves 13.8 cm with no hand on it (nearest finger 18 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone10 moves 14.0 cm with no hand on it (nearest finger 21 cm)"
+    "Hormone10 moves 12.5 cm with no hand on it (nearest finger 21 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone11 moves 10.8 cm with no hand on it (nearest finger 41 cm)"
+    "Hormone11 moves 10.5 cm with no hand on it (nearest finger 39 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone14 moves 9.0 cm with no hand on it (nearest finger 4 cm)"
+    "Hormone14 moves 8.7 cm with no hand on it (nearest finger 3 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone15 moves 11.4 cm with no hand on it (nearest finger 27 cm)"
+    "Hormone15 moves 10.9 cm with no hand on it (nearest finger 25 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone16 moves 9.4 cm with no hand on it (nearest finger 41 cm)"
+    "Hormone16 moves 11.0 cm with no hand on it (nearest finger 43 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone17 moves 7.8 cm with no hand on it (nearest finger 47 cm)"
+    "Hormone17 moves 7.6 cm with no hand on it (nearest finger 45 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone19 moves 6.3 cm with no hand on it (nearest finger 44 cm)"
+    "Hormone19 moves 6.2 cm with no hand on it (nearest finger 44 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone20 moves 12.1 cm with no hand on it (nearest finger 24 cm)"
+    "Hormone20 moves 11.8 cm with no hand on it (nearest finger 25 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone21 moves 13.2 cm with no hand on it (nearest finger 8 cm)"
+    "Hormone21 moves 13.8 cm with no hand on it (nearest finger 7 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone22 moves 13.5 cm with no hand on it (nearest finger 25 cm)"
+    "Hormone22 moves 13.0 cm with no hand on it (nearest finger 24 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone23 moves 9.2 cm with no hand on it (nearest finger 46 cm)"
+    "Hormone23 moves 9.0 cm with no hand on it (nearest finger 44 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone25 moves 2.8 cm with no hand on it (nearest finger 24 cm)"
+    "Hormone25 moves 2.6 cm with no hand on it (nearest finger 24 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone26 moves 4.8 cm with no hand on it (nearest finger 29 cm)"
+    "Hormone26 moves 4.5 cm with no hand on it (nearest finger 28 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone27 moves 5.6 cm with no hand on it (nearest finger 38 cm)"
+    "Hormone27 moves 5.1 cm with no hand on it (nearest finger 37 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone28 moves 5.0 cm with no hand on it (nearest finger 48 cm)"
+    "Hormone28 moves 4.6 cm with no hand on it (nearest finger 46 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone29 moves 3.2 cm with no hand on it (nearest finger 57 cm)"
+    "Hormone29 moves 2.9 cm with no hand on it (nearest finger 54 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone31 moves 2.5 cm with no hand on it (nearest finger 31 cm)"
+    "Hormone31 moves 2.3 cm with no hand on it (nearest finger 31 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone32 moves 3.8 cm with no hand on it (nearest finger 37 cm)"
+    "Hormone32 moves 3.4 cm with no hand on it (nearest finger 36 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone33 moves 4.3 cm with no hand on it (nearest finger 44 cm)"
+    "Hormone33 moves 4.0 cm with no hand on it (nearest finger 42 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone34 moves 3.8 cm with no hand on it (nearest finger 52 cm)"
+    "Hormone34 moves 3.4 cm with no hand on it (nearest finger 50 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone35 moves 2.2 cm with no hand on it (nearest finger 58 cm)"
+    "Hormone35 moves 2.0 cm with no hand on it (nearest finger 56 cm)"
    ]
   ],
   "439": [
    [
     "PROPMOVE",
-    "Hormone02 moves 5.7 cm with no hand on it (nearest finger 4 cm)"
+    "Hormone02 moves 5.5 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone03 moves 9.9 cm with no hand on it (nearest finger 10 cm)"
+    "Hormone03 moves 9.6 cm with no hand on it (nearest finger 9 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone04 moves 10.9 cm with no hand on it (nearest finger 34 cm)"
+    "Hormone04 moves 10.7 cm with no hand on it (nearest finger 32 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone05 moves 4.8 cm with no hand on it (nearest finger 40 cm)"
+    "Hormone05 moves 3.6 cm with no hand on it (nearest finger 42 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone08 moves 8.3 cm with no hand on it (nearest finger 47 cm)"
+    "Hormone08 moves 8.1 cm with no hand on it (nearest finger 47 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone09 moves 12.7 cm with no hand on it (nearest finger 26 cm)"
+    "Hormone09 moves 12.4 cm with no hand on it (nearest finger 27 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone10 moves 10.6 cm with no hand on it (nearest finger 19 cm)"
+    "Hormone10 moves 10.6 cm with no hand on it (nearest finger 18 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone11 moves 12.3 cm with no hand on it (nearest finger 31 cm)"
+    "Hormone11 moves 12.2 cm with no hand on it (nearest finger 29 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone15 moves 10.6 cm with no hand on it (nearest finger 16 cm)"
+    "Hormone15 moves 10.2 cm with no hand on it (nearest finger 15 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone16 moves 8.8 cm with no hand on it (nearest finger 41 cm)"
+    "Hormone16 moves 8.2 cm with no hand on it (nearest finger 40 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone17 moves 9.8 cm with no hand on it (nearest finger 40 cm)"
+    "Hormone17 moves 8.7 cm with no hand on it (nearest finger 38 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone20 moves 10.0 cm with no hand on it (nearest finger 35 cm)"
+    "Hormone20 moves 9.8 cm with no hand on it (nearest finger 35 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone21 moves 13.9 cm with no hand on it (nearest finger 10 cm)"
+    "Hormone21 moves 13.5 cm with no hand on it (nearest finger 11 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone22 moves 11.3 cm with no hand on it (nearest finger 18 cm)"
+    "Hormone22 moves 10.3 cm with no hand on it (nearest finger 16 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone23 moves 11.4 cm with no hand on it (nearest finger 38 cm)"
+    "Hormone23 moves 10.9 cm with no hand on it (nearest finger 35 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone25 moves 1.6 cm with no hand on it (nearest finger 24 cm)"
+    "Hormone25 moves 1.5 cm with no hand on it (nearest finger 24 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone26 moves 4.1 cm with no hand on it (nearest finger 26 cm)"
+    "Hormone26 moves 3.8 cm with no hand on it (nearest finger 26 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone27 moves 5.3 cm with no hand on it (nearest finger 34 cm)"
+    "Hormone27 moves 5.0 cm with no hand on it (nearest finger 33 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone28 moves 5.4 cm with no hand on it (nearest finger 44 cm)"
+    "Hormone28 moves 5.0 cm with no hand on it (nearest finger 42 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone29 moves 4.1 cm with no hand on it (nearest finger 53 cm)"
+    "Hormone29 moves 3.8 cm with no hand on it (nearest finger 51 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone31 moves 1.6 cm with no hand on it (nearest finger 31 cm)"
+    "Hormone31 moves 1.4 cm with no hand on it (nearest finger 31 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone32 moves 3.4 cm with no hand on it (nearest finger 34 cm)"
+    "Hormone32 moves 3.1 cm with no hand on it (nearest finger 34 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone33 moves 4.3 cm with no hand on it (nearest finger 41 cm)"
+    "Hormone33 moves 3.9 cm with no hand on it (nearest finger 40 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone34 moves 4.1 cm with no hand on it (nearest finger 49 cm)"
+    "Hormone34 moves 3.8 cm with no hand on it (nearest finger 47 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone35 moves 3.0 cm with no hand on it (nearest finger 56 cm)"
+    "Hormone35 moves 2.7 cm with no hand on it (nearest finger 53 cm)"
    ]
   ],
   "469": [
    [
     "PROPMOVE",
-    "Hormone04 moves 5.0 cm with no hand on it (nearest finger 3 cm)"
+    "Hormone04 moves 4.8 cm with no hand on it (nearest finger 3 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone05 moves 9.5 cm with no hand on it (nearest finger 7 cm)"
+    "Hormone05 moves 9.1 cm with no hand on it (nearest finger 6 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone10 moves 7.4 cm with no hand on it (nearest finger 49 cm)"
+    "Hormone10 moves 7.2 cm with no hand on it (nearest finger 49 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone11 moves 12.5 cm with no hand on it (nearest finger 30 cm)"
+    "Hormone11 moves 12.2 cm with no hand on it (nearest finger 30 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone16 moves 6.5 cm with no hand on it (nearest finger 4 cm)"
+    "Hormone16 moves 6.2 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone17 moves 10.3 cm with no hand on it (nearest finger 13 cm)"
+    "Hormone17 moves 9.9 cm with no hand on it (nearest finger 12 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone22 moves 9.2 cm with no hand on it (nearest finger 37 cm)"
+    "Hormone22 moves 9.0 cm with no hand on it (nearest finger 38 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone23 moves 13.3 cm with no hand on it (nearest finger 14 cm)"
+    "Hormone23 moves 12.9 cm with no hand on it (nearest finger 14 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone28 moves 3.8 cm with no hand on it (nearest finger 25 cm)"
+    "Hormone28 moves 3.5 cm with no hand on it (nearest finger 25 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone29 moves 5.3 cm with no hand on it (nearest finger 33 cm)"
+    "Hormone29 moves 4.9 cm with no hand on it (nearest finger 32 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone33 moves 1.2 cm with no hand on it (nearest finger 30 cm)"
+    "Hormone33 moves 1.1 cm with no hand on it (nearest finger 30 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone34 moves 3.2 cm with no hand on it (nearest finger 33 cm)"
+    "Hormone34 moves 2.9 cm with no hand on it (nearest finger 33 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone35 moves 4.2 cm with no hand on it (nearest finger 40 cm)"
+    "Hormone35 moves 3.8 cm with no hand on it (nearest finger 39 cm)"
    ]
   ],
   "475": [
    [
     "PROPMOVE",
-    "Hormone10 moves 4.1 cm with no hand on it (nearest finger 53 cm)"
+    "Hormone10 moves 4.0 cm with no hand on it (nearest finger 53 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone11 moves 10.8 cm with no hand on it (nearest finger 39 cm)"
+    "Hormone11 moves 10.5 cm with no hand on it (nearest finger 40 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone17 moves 9.0 cm with no hand on it (nearest finger 4 cm)"
+    "Hormone17 moves 8.7 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone22 moves 6.3 cm with no hand on it (nearest finger 44 cm)"
+    "Hormone22 moves 6.2 cm with no hand on it (nearest finger 44 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone23 moves 12.1 cm with no hand on it (nearest finger 25 cm)"
+    "Hormone23 moves 11.8 cm with no hand on it (nearest finger 25 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone28 moves 2.8 cm with no hand on it (nearest finger 24 cm)"
+    "Hormone28 moves 2.6 cm with no hand on it (nearest finger 24 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone29 moves 4.8 cm with no hand on it (nearest finger 28 cm)"
+    "Hormone29 moves 4.5 cm with no hand on it (nearest finger 28 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone34 moves 2.5 cm with no hand on it (nearest finger 31 cm)"
+    "Hormone34 moves 2.3 cm with no hand on it (nearest finger 31 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone35 moves 3.8 cm with no hand on it (nearest finger 36 cm)"
+    "Hormone35 moves 3.4 cm with no hand on it (nearest finger 36 cm)"
    ]
   ],
   "481": [
    [
     "PROPMOVE",
-    "Hormone05 moves 5.7 cm with no hand on it (nearest finger 3 cm)"
+    "Hormone11 moves 8.1 cm with no hand on it (nearest finger 47 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone11 moves 8.3 cm with no hand on it (nearest finger 47 cm)"
+    "Hormone17 moves 6.9 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone17 moves 7.2 cm with no hand on it (nearest finger 3 cm)"
+    "Hormone23 moves 9.8 cm with no hand on it (nearest finger 35 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone23 moves 10.0 cm with no hand on it (nearest finger 35 cm)"
+    "Hormone28 moves 1.5 cm with no hand on it (nearest finger 24 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone28 moves 1.6 cm with no hand on it (nearest finger 24 cm)"
+    "Hormone29 moves 3.8 cm with no hand on it (nearest finger 25 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone29 moves 4.1 cm with no hand on it (nearest finger 25 cm)"
+    "Hormone34 moves 1.4 cm with no hand on it (nearest finger 30 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone34 moves 1.6 cm with no hand on it (nearest finger 30 cm)"
-   ],
-   [
-    "PROPMOVE",
-    "Hormone35 moves 3.4 cm with no hand on it (nearest finger 33 cm)"
+    "Hormone35 moves 3.1 cm with no hand on it (nearest finger 33 cm)"
    ]
   ],
   "487": [
    [
     "PROPMOVE",
-    "Hormone05 moves 3.2 cm with no hand on it (nearest finger 4 cm)"
+    "Hormone05 moves 3.1 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone11 moves 5.2 cm with no hand on it (nearest finger 53 cm)"
+    "Hormone11 moves 5.1 cm with no hand on it (nearest finger 53 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone23 moves 7.4 cm with no hand on it (nearest finger 43 cm)"
+    "Hormone23 moves 7.2 cm with no hand on it (nearest finger 43 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone29 moves 3.2 cm with no hand on it (nearest finger 24 cm)"
+    "Hormone29 moves 2.9 cm with no hand on it (nearest finger 24 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone35 moves 2.7 cm with no hand on it (nearest finger 31 cm)"
+    "Hormone35 moves 2.5 cm with no hand on it (nearest finger 31 cm)"
    ]
   ],
   "493": [
    [
     "PROPMOVE",
-    "Hormone23 moves 4.1 cm with no hand on it (nearest finger 47 cm)"
+    "Hormone23 moves 4.0 cm with no hand on it (nearest finger 47 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone29 moves 2.0 cm with no hand on it (nearest finger 23 cm)"
+    "Hormone29 moves 1.8 cm with no hand on it (nearest finger 23 cm)"
    ],
    [
     "PROPMOVE",
-    "Hormone35 moves 1.9 cm with no hand on it (nearest finger 30 cm)"
+    "Hormone35 moves 1.7 cm with no hand on it (nearest finger 30 cm)"
    ]
   ]
  },
  "counts": {
-  "EMPTY": 9,
-  "PROPMOVE": 416
+  "EMPTY": 5,
+  "PROPMOVE": 415
  }
 }

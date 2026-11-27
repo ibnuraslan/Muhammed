@@ -247,7 +247,6 @@ PH.data.materials.append(PHM)
 # ---- red-white-red flag hanging high on the back wall (x 0.45..1.15)
 for k, (mm, z0) in enumerate(((M_RED, 2.62), (M_WHITE, 2.42), (M_RED, 2.22))):
     o = box("RM_Flag%d" % k, (0.80, 0.008, 0.20), (0.82, WALL_Y - 0.03, z0 + 0.10), mm, bevel=0.0)
-    sd = o.modifiers.new("sd", 'SUBSURF'); sd.levels = 2; sd.render_levels = 2
 cyl("RM_FlagPole", 0.012, 0.95, (0.82, WALL_Y - 0.04, 2.85), M_BRASS, rot=(0, math.radians(90), 0))
 # ---- desk at the right (well clear of the officer): top, legs, papers, a green banker's lamp
 box("RM_DeskTop", (0.95, 0.60, 0.04), (2.05, -0.70, 0.76), M_DESK, bevel=0.008)
