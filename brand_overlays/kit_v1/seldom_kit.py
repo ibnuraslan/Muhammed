@@ -505,24 +505,68 @@ def place(t, photo=None, name="ANTWERP DIAMOND CENTRE", country="BELGIUM", coord
     return fr
 
 
-@template("disclaimer", 6.0)
-def disclaimer(t, text=("This story is told from public records, court documents and news reports.",
-                        "Some scenes are recreated to show what may have happened."), dur=6.0):
-    """Disclaimer card: the shot sinks to near-black; two lines of italic serif rise in one after the other between
-    two hairlines; a small mono label above."""
+DISCRETION_TEXT = "This film contains descriptions of violence and death that some viewers may find distressing."
+RECORDS_TEXT = ("This story is told from public records, court documents and news reports.",
+                "Some scenes are recreated to show what may have happened.")
+
+
+@template("disclaimer", 8.0)
+def disclaimer(t, discretion=True, discretion_head="VIEWER DISCRETION ADVISED", discretion_text=DISCRETION_TEXT,
+               text=RECORDS_TEXT, title="THINGS TO KNOW BEFORE YOU WATCH", dur=8.0):
+    """Standalone two-part card, "THINGS TO KNOW BEFORE YOU WATCH". The shot sinks to near-black, the title tracks in
+    between two hairlines that draw out from the centre. Paragraph 1 (optional, discretion=True) is the yellow
+    "VIEWER DISCRETION ADVISED" head and its warning line; paragraph 2 is the records note. With discretion=False
+    only paragraph 2 shows and the whole block re-centres. Lines rise in one after the other."""
     fr = Frame(); L = layer()
     bgp = in_out(seg(t, 0.0, 0.8)) * (1 - in_out(seg(t, dur - 0.6, dur)))
-    fr.bg = dict(blur=10 * bgp, dim=0.88 * bgp)
-    f = font("serif_it", 46); cy = H * 0.5
-    lab = "A NOTE BEFORE WE BEGIN"
-    draw_text(L, (W / 2, cy - 120), lab, font("plex", 20), YEL + (int(255 * fade(t, 0.5, 1.0)),), tracking=8, anchor="ms")
-    lp = in_out(seg(t, 0.4, 1.4))
-    for sg, yy in ((1, cy - 92), (1, cy + 120)):
-        line(L, (W / 2, yy), (W / 2 - 330, yy), lp, WHITE + (120,), 1); line(L, (W / 2, yy), (W / 2 + 330, yy), lp, WHITE + (120,), 1)
-    for i, ln in enumerate(text):
-        a = fade(t, 1.0 + 0.9 * i, 2.0 + 0.9 * i)
-        dy = 10 * (1 - a)
-        draw_text(L, (W / 2, cy - 20 + i * 66 + dy), ln, f, WHITE + (int(255 * a),), tracking=1, anchor="ms")
+    fr.bg = dict(blur=10 * bgp, dim=0.9 * bgp)
+    fs = font("serif_it", 44); fh = font("plex", 19); ft = font("label", 34)
+    maxw = 1500; LH = 60
+    p1 = wrap(discretion_text, fs, maxw) if discretion else []
+    p2 = [w for ln in text for w in wrap(ln, fs, maxw)]
+    # vertical layout (heights in px), then centre the block
+    items = [("title", 34), ("gap", 34), ("rule", 0), ("gap", 62)]
+    if discretion:
+        items += [("head", 19), ("gap", 46)] + [("p1", LH)] * len(p1) + [("gap", 22), ("div", 0), ("gap", 66)]
+    items += [("p2", LH)] * len(p2) + [("gap", 34), ("rule2", 0)]
+    tot = sum(h for _, h in items); y = H / 2 - tot / 2
+    hp = in_out(seg(t, 0.35, 1.35)); half = 420
+    # timing: title, then paragraph 1 head and lines, then paragraph 2
+    tl = 1.05
+    seq = {}
+    if discretion:
+        seq["head"] = tl; tl += 0.45
+        for i in range(len(p1)):
+            seq[("p1", i)] = tl; tl += 0.55
+        seq["div"] = tl; tl += 0.75
+    for i in range(len(p2)):
+        seq[("p2", i)] = tl; tl += 0.7
+    n1 = n2 = 0
+    for kind, h in items:
+        if kind == "title":
+            a_ = fade(t, 0.35, 1.0); tr = 8 + 6 * (1 - out_cubic(seg(t, 0.35, 1.3)))
+            draw_text(L, (W / 2, y + h), title, ft, WHITE + (int(250 * a_),), tracking=tr, anchor="ms")
+        elif kind in ("rule", "rule2"):
+            line(L, (W / 2, y), (W / 2 - half, y), hp, WHITE + (120,), 1); line(L, (W / 2, y), (W / 2 + half, y), hp, WHITE + (120,), 1)
+            if kind == "rule":
+                d = ImageDraw.Draw(L); q = int(255 * hp)
+                d.rectangle([W / 2 - 3, y - 3, W / 2 + 3, y + 3], fill=YEL + (q,))
+        elif kind == "head":
+            a_ = fade(t, seq["head"], seq["head"] + 0.6)
+            draw_text(L, (W / 2, y + h + 6 * (1 - a_)), discretion_head, fh, YEL + (int(255 * a_),), tracking=7, anchor="ms")
+        elif kind == "div":
+            dp = in_out(seg(t, seq["div"], seq["div"] + 0.6))
+            line(L, (W / 2 - 40, y), (W / 2 + 40, y), dp, YEL + (200,), 2)
+        elif kind in ("p1", "p2"):
+            i = n1 if kind == "p1" else n2
+            t0 = seq[(kind, i)]; a_ = fade(t, t0, t0 + 0.9); dy = 10 * (1 - a_)
+            txt = (p1 if kind == "p1" else p2)[i]
+            draw_text(L, (W / 2, y + h - 14 + dy), txt, fs, WHITE + (int(255 * a_),), tracking=1, anchor="ms")
+            if kind == "p1":
+                n1 += 1
+            else:
+                n2 += 1
+        y += h
     a = 1 - in_out(seg(t, dur - 0.5, dur))
     fr.rgba = grain(with_alpha(glow(L, 12, 0.3), a), t, 0.07)
     return fr
@@ -627,35 +671,125 @@ def grid_floor(alpha=40):
     return g
 
 
-@template("linkboard", 7.0)
-def linkboard(t, people=None, links=((0, 1), (0, 2), (1, 3), (2, 3)), dur=7.0):
-    """Family-tree / link board on black with a faint grid: cards appear one by one; yellow connectors draw on from
-    card to card with small nodes; a short mono note per link."""
-    people = people or []
+def poly_point(pts, prog):
+    """The point at fraction prog along a polyline (for draw-on heads and labels)."""
+    L_ = [math.dist(pts[i], pts[i + 1]) for i in range(len(pts) - 1)]; tot = sum(L_) or 1.0
+    left = tot * clamp(prog)
+    for i, l in enumerate(L_):
+        if left <= l or i == len(L_) - 1:
+            u = left / l if l else 1.0
+            return (pts[i][0] + (pts[i + 1][0] - pts[i][0]) * u, pts[i][1] + (pts[i + 1][1] - pts[i][1]) * u)
+        left -= l
+    return pts[-1]
+
+
+def _tag(L, xy, txt, a):
+    """A small mono tag sitting on a line: near-black pill, yellow hairline, yellow caps."""
+    if a <= 0 or not txt:
+        return
+    f = font("plex", 16); w = text_w(txt, f, 3) + 26; h = 30; x, y = xy
+    d = ImageDraw.Draw(L)
+    d.rounded_rectangle([x - w / 2, y - h / 2, x + w / 2, y + h / 2], radius=4, fill=INK + (int(240 * a),), outline=YEL + (int(200 * a),), width=1)
+    draw_text(L, (x, y + 6), txt, f, YEL + (int(255 * a),), tracking=3, anchor="ms")
+
+
+LB_PW, LB_PH = 200, 188          # card photo size on the link board
+
+
+def _lb_box(c):
+    """Card c's anchor box: photo frame (with pad) and the bottom of its name/role text."""
+    x0, y0 = W * c["pos"][0] - LB_PW / 2, H * c["pos"][1]
+    return dict(l=x0 - 10, r=x0 + LB_PW + 10, t=y0 - 10, b=y0 + LB_PH + 10, tb=y0 + LB_PH + 10 + 100,
+                cx=x0 + LB_PW / 2, cy=y0 + LB_PH / 2)
+
+
+def _lb_path(ca, cb):
+    """Elbow connector from card ca to card cb: below-to-top when cb sits on another row, side-to-side on one row."""
+    A, B = _lb_box(ca), _lb_box(cb)
+    if B["t"] > A["tb"] - 4:          # cb is below
+        a, b = (A["cx"], A["tb"]), (B["cx"], B["t"] - 4); m = (a[1] + b[1]) / 2
+        return [a, (a[0], m), (b[0], m), b]
+    if A["t"] > B["tb"] - 4:          # cb is above
+        a, b = (A["cx"], A["t"] - 4), (B["cx"], B["tb"]); m = (a[1] + b[1]) / 2
+        return [a, (a[0], m), (b[0], m), b]
+    if B["l"] > A["r"]:               # same row, to the right
+        a, b = (A["r"] + 4, A["cy"]), (B["l"] - 4, B["cy"])
+    else:
+        a, b = (A["l"] - 4, A["cy"]), (B["r"] + 4, B["cy"])
+    m = (a[0] + b[0]) / 2
+    return [a, (m, a[1]), (m, b[1]), b]
+
+
+def linkboard_schedule(cards, links, line_dur=0.9):
+    """Resolve the board's timeline. cards: list of dicts {photo, name, role, pos=(fx, fy), t=appear time or None};
+    links: list of (from, to, start_time, label) or (from, to, start_time, label, duration). A card with t=None
+    appears the moment the first line drawn to it arrives. A link with start_time=None starts when its source card
+    has finished appearing (0.6 s after it appears). Returns (card_times, [(i, j, t0, t1, label)])."""
+    ct = [c.get("t") for c in cards]; out = []
+    for lk in links:
+        i, j, t0, lab = lk[:4]; du = lk[4] if len(lk) > 4 else line_dur
+        if ct[i] is None:
+            ct[i] = 0.4
+        if t0 is None:
+            t0 = ct[i] + 0.6
+        out.append((i, j, t0, t0 + du, lab))
+        if ct[j] is None or ct[j] > t0 + du:
+            ct[j] = t0 + du
+    ct = [0.4 if v is None else v for v in ct]
+    return ct, out
+
+
+LB_DEMO_CARDS = [dict(photo=None, name="PERSON A", role="ROLE", pos=(0.5, 0.05), t=0.4),
+                 dict(photo=None, name="PERSON B", role="ROLE", pos=(0.25, 0.37)),
+                 dict(photo=None, name="PERSON C", role="ROLE", pos=(0.75, 0.37)),
+                 dict(photo=None, name="PERSON D", role="ROLE", pos=(0.5, 0.69))]
+LB_DEMO_LINKS = [(0, 1, 1.4, "PARTNER"), (1, 2, 2.9, "FRIEND"), (2, 3, 4.4, "BROTHER")]
+
+
+@template("linkboard", 8.0)
+def linkboard(t, cards=None, links=None, people=None, line_dur=0.9, dur=8.0):
+    """Link board on black with a faint grid, built SEQUENTIALLY and driven by data: the first card appears; a yellow
+    line draws out of it (bright head on the tip); the moment the line reaches the next position that card appears
+    (a node pops on the arrival point); the next line draws from that card; and so on. Optional small tag on each
+    line ("BROTHER", "PARTNER") fades in as the head passes the middle. Time every link to the narration with
+    links=[(from, to, start_time, label), ...]; cards=[{photo, name, role, pos, t}] (t=None: on the line's arrival).
+    `people` (list of (photo, name, role)) is still accepted and fills the default positions."""
+    cards = [dict(c) for c in (cards or LB_DEMO_CARDS)]
+    if people:
+        for c, p in zip(cards, people):
+            c["photo"], c["name"], c["role"] = p
+    ct, sched = linkboard_schedule(cards, links if links is not None else LB_DEMO_LINKS, line_dur)
     fr = Frame()
     fr.bg = dict(blur=0, dim=0.92 * in_out(seg(t, 0.0, 0.5)) * (1 - in_out(seg(t, dur - 0.4, dur))))
     L = layer(); L.alpha_composite(with_alpha(grid_floor(36), fade(t, 0.1, 0.8)))
-    pw, ph = 200, 248
-    pos = [(W * 0.5, H * 0.08), (W * 0.30, H * 0.40), (W * 0.70, H * 0.40), (W * 0.5, H * 0.72)][:len(people)]
-    cen = []
-    for i, ((cx, cy), pr) in enumerate(zip(pos, people)):
-        cen.append((cx, cy + ph / 2))
-    # links under the cards
-    for k, (i, j) in enumerate(links):
-        if i >= len(pos) or j >= len(pos):
+    d = ImageDraw.Draw(L)
+    tags = []
+    for (i, j, t0, t1, lab) in sched:
+        p = in_out(seg(t, t0, t1))
+        if p <= 0:
             continue
-        p = in_out(seg(t, 1.6 + 0.4 * k, 2.3 + 0.4 * k))
-        a = (pos[i][0], pos[i][1] - 20 + (ph - 60) + 10 + 96)      # just below the parent's role line
-        b = (pos[j][0], pos[j][1] - 20 - 10 - 4)                  # to the top edge of the child's frame
-        midy = (a[1] + b[1]) / 2
-        pts = [a, (a[0], midy), (b[0], midy), b]
+        pts = _lb_path(cards[i], cards[j])
         poly_draw(L, pts, p, YEL + (230,), 3)
-        if p >= 1:
-            dd = ImageDraw.Draw(L)
-            for q in (pts[1], pts[2]):
-                dd.ellipse([q[0] - 6, q[1] - 6, q[0] + 6, q[1] + 6], fill=YEL + (255,))
-    for i, ((cx, cy), pr) in enumerate(zip(pos, people)):
-        photo_card(L, _img(pr[0]), cx - pw / 2, cy - 20, pw, ph - 60, seg(t, 0.3 + 0.35 * i, 1.3 + 0.35 * i), pr[1], pr[2], "m")
+        s = pts[0]; d.ellipse([s[0] - 5, s[1] - 5, s[0] + 5, s[1] + 5], fill=YEL + (255,))
+        if p < 1:
+            h = poly_point(pts, p)
+            d.ellipse([h[0] - 7, h[1] - 7, h[0] + 7, h[1] + 7], fill=WHITE + (255,))
+        else:                                     # arrival node pops and settles
+            k = out_back(seg(t, t1, t1 + 0.3)); e = pts[-1]; r = 6 * k
+            d.ellipse([e[0] - r, e[1] - r, e[0] + r, e[1] + r], fill=YEL + (255,))
+            ring = seg(t, t1, t1 + 0.6)
+            if 0 < ring < 1:
+                rr = 6 + 26 * out_cubic(ring)
+                d.ellipse([e[0] - rr, e[1] - rr, e[0] + rr, e[1] + rr], outline=YEL + (int(220 * (1 - ring)),), width=2)
+        if lab:
+            tags.append((poly_point(pts, 0.5), lab, out_cubic(clamp((p - 0.5) / 0.3))))
+    for (xy, lab, a_) in tags:
+        _tag(L, xy, lab, a_)
+    for c, t0 in zip(cards, ct):
+        x0, y0 = W * c["pos"][0] - LB_PW / 2, H * c["pos"][1]
+        p = seg(t, t0, t0 + 1.0)
+        if p > 0:
+            photo_card(L, _img(c["photo"]), x0, y0, LB_PW, LB_PH, p, c["name"], c["role"], "m")
     a = 1 - in_out(seg(t, dur - 0.35, dur))
     fr.rgba = grain(with_alpha(glow(L, 10, 0.3), a), t, 0.06)
     return fr
@@ -666,8 +800,8 @@ def _load_map():
 
 
 @template("map", 6.5)
-def map_card(t, route=((4.4025, 51.2194, "ANTWERP"), (4.52, 50.98, "E19"), (4.3517, 50.8503, "BRUSSELS")),
-             pin=0, bbox=(2.4, 49.4, 6.6, 51.9), label="ANTWERP, BELGIUM", dur=6.5):
+def map_card(t, route=((4.4025, 51.2194, "ANTWERP"), (4.52, 50.98, ""), (4.3517, 50.8503, "BRUSSELS", "l")),
+             pin=0, bbox=(2.4, 49.4, 6.6, 51.9), label="ANTWERP, BELGIUM", route_t=(1.6, 3.6), legs=None, dur=6.5):
     """Map card: a dark stylised map (country outlines in thin warm grey, the target country filled near-black with a
     yellow hairline) scales in; the pin drops and pulses; the route draws on as a dashed yellow path with a moving
     head; place labels in condensed caps, coordinates in mono."""
@@ -697,23 +831,32 @@ def map_card(t, route=((4.4025, 51.2194, "ANTWERP"), (4.52, 50.98, "E19"), (4.35
         q = P(lo, la); ca = int(170 * fade(t, 0.5, 1.2))
         dm.ellipse([q[0] - 3, q[1] - 3, q[0] + 3, q[1] + 3], fill=GREY + (ca,))
         draw_text(M, (q[0] + 10, q[1] + 6), nm, font("label_light", 20), GREY + (ca,), tracking=3)
-    # route
-    rp = in_out(seg(t, 1.6, 3.6)); pts = [P(lo, la) for lo, la, _ in route]
-    poly_draw(M, pts, rp, YEL + (255,), 4, dash=(16, 10))
-    dmm = ImageDraw.Draw(M)
-    if 0 < rp < 1:
-        Lt = sum(math.dist(pts[i], pts[i + 1]) for i in range(len(pts) - 1)) * rp; acc = 0
-        for i in range(len(pts) - 1):
-            l = math.dist(pts[i], pts[i + 1])
-            if acc + l >= Lt:
-                u = (Lt - acc) / l; hx = pts[i][0] + (pts[i + 1][0] - pts[i][0]) * u; hy = pts[i][1] + (pts[i + 1][1] - pts[i][1]) * u
-                dmm.ellipse([hx - 7, hy - 7, hx + 7, hy + 7], fill=WHITE + (255,)); break
-            acc += l
-    for i, (lo, la, nm) in enumerate(route):
-        q = P(lo, la); lpv = out_cubic(seg(t, 1.0 + (1.4 if i else 0), 1.5 + (1.4 if i else 0) + 1.2 * i / max(1, len(route) - 1)))
-        if lpv > 0 and nm and i != 1:
-            draw_text(M, (q[0] + 22, q[1] - 14), nm, font("label", 30), WHITE + (int(255 * lpv),), tracking=3)
-            draw_text(M, (q[0] + 22, q[1] + 14), f"{la:.4f}°N  {lo:.4f}°E", font("plex", 16), GREY + (int(230 * lpv),), tracking=1)
+    # route: drawn leg by leg (data-driven: legs=[(t0, t1), ...], default = route_t split by length); each stop's
+    # label and node land the moment the head reaches it; waypoints with an empty name stay unlabelled
+    pts = [P(st[0], st[1]) for st in route]
+    ll = [math.dist(pts[i], pts[i + 1]) for i in range(len(pts) - 1)]
+    if legs is None:
+        T0, T1 = route_t; acc = 0.0; legs = []
+        for l in ll:
+            legs.append((T0 + (T1 - T0) * acc / sum(ll), T0 + (T1 - T0) * (acc + l) / sum(ll))); acc += l
+    dmm = ImageDraw.Draw(M); arrive = [legs[0][0]] + [e for _, e in legs]
+    for i, (a0, a1) in enumerate(legs):
+        lp = clamp((t - a0) / max(a1 - a0, 1e-6))
+        poly_draw(M, [pts[i], pts[i + 1]], lp, YEL + (255,), 4, dash=(16, 10))
+        if 0 < lp < 1:
+            hx, hy = poly_point([pts[i], pts[i + 1]], lp)
+            dmm.ellipse([hx - 7, hy - 7, hx + 7, hy + 7], fill=WHITE + (255,))
+    for i, st in enumerate(route):
+        lo, la, nm = st[:3]; side = st[3] if len(st) > 3 else "r"
+        q = P(lo, la); ta = arrive[i] if i else 1.0
+        tx, anc = (q[0] + 22, "ls") if side == "r" else (q[0] - 22, "rs")
+        lpv = out_cubic(seg(t, ta, ta + 0.5))
+        if i and nm and lpv > 0:
+            kk = out_back(seg(t, ta, ta + 0.3)); r = 7 * kk
+            dmm.ellipse([q[0] - r, q[1] - r, q[0] + r, q[1] + r], fill=YEL + (255,))
+        if lpv > 0 and nm:
+            draw_text(M, (tx, q[1] - 14), nm, font("label", 30), WHITE + (int(255 * lpv),), tracking=3, anchor=anc)
+            draw_text(M, (tx, q[1] + 14), f"{la:.4f}°N  {lo:.4f}°E", font("plex", 16), GREY + (int(230 * lpv),), tracking=1, anchor=anc)
     # pin
     q = P(route[pin][0], route[pin][1]); pp = out_back(seg(t, 0.8, 1.2))
     if pp > 0:

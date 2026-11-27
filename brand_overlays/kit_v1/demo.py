@@ -35,11 +35,16 @@ DEMOS = [
     ("07_person_pair", "person_pair", dict(photos=(P("person_b.jpg"), P("person_c.jpg")), names=("THE GENIUS", "THE MONSTER"),
                                            roles=("ALARM SPECIALIST", "LOCKS AND KEYS"))),
     ("08_place", "place", dict(photo=P("place.jpg"), name="ANTWERP DIAMOND CENTRE", country="BELGIUM")),
-    ("09_disclaimer", "disclaimer", dict()),
+    ("09_disclaimer", "disclaimer", dict(discretion=True)),
+    ("09b_disclaimer_no_discretion", "disclaimer", dict(discretion=False, dur=6.0)),
     ("10_document", "document", dict()),
     ("11_timeline", "timeline", dict()),
-    ("12_linkboard", "linkboard", dict(people=[(P("person_a.jpg"), "LEONARDO N.", "THE TENANT"), (P("person_b.jpg"), "THE GENIUS", "ALARMS"),
-                                               (P("person_c.jpg"), "THE MONSTER", "LOCKS"), (P("person_d.jpg"), "SPEEDY", "LOOKOUT")])),
+    ("12_linkboard", "linkboard", dict(
+        cards=[dict(photo=P("person_a.jpg"), name="LEONARDO N.", role="THE TENANT", pos=(0.5, 0.05), t=0.4),
+               dict(photo=P("person_b.jpg"), name="THE GENIUS", role="ALARMS", pos=(0.25, 0.37)),
+               dict(photo=P("person_c.jpg"), name="THE MONSTER", role="LOCKS", pos=(0.75, 0.37)),
+               dict(photo=P("person_d.jpg"), name="SPEEDY", role="LOOKOUT", pos=(0.5, 0.69))],
+        links=[(0, 1, 1.4, "PARTNER"), (1, 2, 2.9, "CREW"), (2, 3, 4.4, "BROTHER")])),
     ("13_map", "map", dict()),
     ("14_lineart", "lineart", dict(source=P("lineart_src.png"), accent_box=(820, 560, 1120, 760))),
 ]
@@ -58,13 +63,13 @@ if __name__ == "__main__":
     for key, name, params in DEMOS:
         if ONLY and key not in ONLY and name not in ONLY:
             continue
-        dur = K.TEMPLATES[name].DUR; n = int(round(dur * K.FPS)); d = os.path.join(TMP, key); os.makedirs(d, exist_ok=True)
+        params = dict(params); dur = params.pop("dur", K.TEMPLATES[name].DUR); n = int(round(dur * K.FPS)); d = os.path.join(TMP, key); os.makedirs(d, exist_ok=True)
         with Pool(4) as pool:
             pool.map(frame_job, [(key, name, params, i, dur, d) for i in range(n)])
         mp4 = os.path.join(OUT, f"{key}.mp4")
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-framerate", str(K.FPS), "-i", os.path.join(d, "f_%04d.jpg"),
                         "-c:v", "libx264", "-preset", "medium", "-crf", "19", "-pix_fmt", "yuv420p", "-movflags", "+faststart", mp4], check=True)
-        st = int(n * {"title": 0.62, "phrase": 0.9, "lineart": 0.7, "document": 0.75, "linkboard": 0.85, "timeline": 0.8, "map": 0.75}.get(name, 0.6))
+        st = int(n * {"title": 0.62, "phrase": 0.9, "lineart": 0.7, "document": 0.75, "linkboard": 0.8, "disclaimer": 0.78, "timeline": 0.8, "map": 0.75}.get(name, 0.6))
         Image.open(os.path.join(d, f"f_{st + 1:04d}.jpg")).save(os.path.join(OUT, f"{key}_still.jpg"), quality=90)
         if name == "phrase":
             json.dump(dict(typing_sfx_cues_s=K.phrase_cues(params["text"])), open(os.path.join(OUT, "03_phrase_typing_cues.json"), "w"), indent=1)
