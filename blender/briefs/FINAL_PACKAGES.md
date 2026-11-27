@@ -118,3 +118,4 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | 19 | SpeakWithoutSight | claude/rebuild19-speak-without-sight: blender/SpeakWithoutSight_v007/SpeakWithoutSight_v007_60fps.blend (client-approved, Render check PASS) | 1–1645 |
 | 20 | HeadsetBullet | claude/rebuild20-headset-bullet: blender/HeadsetBullet_v009/HeadsetBullet_v009_60fps.blend (client-approved, Render check PASS) | 1–1203 |
 | 21 | RingBullet | claude/rebuild21-ring-bullet: blender/RingBullet_v009/RingBullet_v009_60fps.blend (client-approved after ring fix, Render check PASS) | 1–1395 |
+| 16 | DrunkTrain | claude/rebuild16-drunk-train: blender/DrunkTrain_v008/DrunkTrain_v008_60fps.blend (client-approved, Render check PASS) | 1–1735 |
