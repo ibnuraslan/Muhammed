@@ -246,9 +246,9 @@ for i, x in enumerate((-2.15, -1.05)):           # candy jars with coloured swee
 
 # ================================================================== the sign with the logo above the back shelves
 img = bpy.data.images.load(BRAND); img.name = "DaKrasFilms_logo_white"
-box("SH_SignBoard", (1.55, 0.04, 0.78), (0.0, YB - 0.03, 2.40), mat("M_SignBoard", (0.03, 0.02, 0.05), rough=0.4, coat=0.5), bevel=0.02)
-bpy.ops.mesh.primitive_plane_add(size=1, location=(0.0, YB - 0.052, 2.40), rotation=(math.radians(90), 0, 0))
-LOGO = bpy.context.active_object; LOGO.name = "SH_Logo"; LOGO.scale = (1.40, 1.40 * 414 / 967, 1)
+box("SH_SignBoard", (1.40, 0.04, 0.62), (0.0, YB - 0.03, 2.55), mat("M_SignBoard", (0.03, 0.02, 0.05), rough=0.95), bevel=0.02)
+bpy.ops.mesh.primitive_plane_add(size=1, location=(0.0, YB - 0.052, 2.55), rotation=(math.radians(90), 0, 0))
+LOGO = bpy.context.active_object; LOGO.name = "SH_Logo"; LOGO.scale = (1.26, 1.26 * 414 / 967, 1)
 bpy.ops.object.transform_apply(scale=True)
 lm = bpy.data.materials.new("M_Logo"); lm.use_nodes = True; nt = lm.node_tree
 for n in list(nt.nodes):
@@ -279,7 +279,7 @@ def append_ph(asset, name, loc, rot_z=0.0, scale=1.0, keep=None):
             for n in m.node_tree.nodes:
                 if n.type == 'NORMAL_MAP': n.inputs["Strength"].default_value = 0.5
     return root, objs
-LAMPS = ((-1.45, -0.55), (0.95, 0.75), (-0.9, -2.3))
+LAMPS = ((-1.45, -0.55), (1.75, 0.55), (-0.9, -2.3))
 for i, (x, y) in enumerate(LAMPS):
     append_ph("hanging_industrial_lamp", "SH_Lamp%d" % i, (x, y, H), scale=0.72)
     bpy.ops.mesh.primitive_uv_sphere_add(radius=0.05, segments=16, ring_count=8, location=(x, y, H - 1.34 * 0.72 + 0.06))
@@ -366,7 +366,7 @@ def fragment(name, size, seed):
     for v in o.data.vertices:
         v.co *= rnd.uniform(0.65, 1.25)
     o.scale = (1.5, 0.9, 0.7); bpy.ops.object.transform_apply(scale=True)
-    o.data.materials.append(mat("M_Frag", (0.70, 0.40, 0.20), rough=0.35, metal=0.9))
+    o.data.materials.append(mat("M_Frag", (0.95, 0.55, 0.25), rough=0.3, metal=0.6, emit=((1.0, 0.45, 0.10), 6.0)))   # hot metal: reads at preview size
     bpy.ops.object.shade_flat()
     return o
 FA = fragment("FragA", 0.0026, 1)
@@ -406,12 +406,12 @@ for k in range(16):
 
 # ================================================================== render settings (fast, zero-error) and the look
 sc.render.engine = 'CYCLES'; cy = sc.cycles
-cy.samples = 64; cy.use_adaptive_sampling = True; cy.adaptive_threshold = 0.05
+cy.samples = 40; cy.use_adaptive_sampling = True; cy.adaptive_threshold = 0.06
 cy.use_denoising = True; cy.denoiser = 'OPENIMAGEDENOISE'
-cy.max_bounces = 6; cy.diffuse_bounces = 3; cy.glossy_bounces = 3; cy.transmission_bounces = 6; cy.transparent_max_bounces = 16
+cy.max_bounces = 4; cy.diffuse_bounces = 2; cy.glossy_bounces = 2; cy.transmission_bounces = 4; cy.transparent_max_bounces = 10
 cy.caustics_reflective = False; cy.caustics_refractive = False
 sc.render.use_persistent_data = True
-sc.render.use_simplify = True; sc.render.simplify_subdivision_render = 2; cy.texture_limit_render = '2048'
+sc.render.use_simplify = True; sc.render.simplify_subdivision_render = 1; cy.texture_limit_render = '2048'
 sc.render.use_motion_blur = False
 sc.view_settings.view_transform = 'Filmic'; sc.view_settings.look = 'High Contrast'; sc.view_settings.exposure = 0.0
 sc.world = sc.world or bpy.data.worlds.new("World")

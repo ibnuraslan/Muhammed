@@ -1,6 +1,6 @@
 # RingBullet_v009: from-scratch rebuild (batch 1, film 21)
 
-**Status: ON HOLD (render check FAIL). The .blend is NOT pushed.** After 2 fix rounds the moving preview still fails a fresh harsh review, and my own watch agrees on the main points. Watch `review/preview.mp4` (every 5th frame, 270×480, with the VO).
+**Status: ON HOLD. The .blend is NOT pushed.** This is after the director-approved final round (round 3). The technical render check is clean, but frames take 136–160 s, over the 120 s target. A fresh harsh reviewer still grades the preview FAIL. Watch `review/preview.mp4` (every 5th frame, 270×480, with the VO).
 
 Built to the client's VO (the v008 sync), frames 1–1395 at 60 fps. Beats: 1 / 245 / 392 / 518 / 624 / 786 / 894 / 997 / 1175 (`beats.json`).
 The scripts in `scripts/` rebuild the package exactly: `01_build.py` (Poly Haven dir), `02_animate.py` (VO), `03_package.py`.
@@ -17,19 +17,25 @@ The scripts in `scripts/` rebuild the package exactly: `01_build.py` (Poly Haven
 - clip_scan: **0 bad ranges**.
 - limb_check: ARMBODY only at the 2 shoulder points (known false positive). PROPHEAD is the intended neck graze mark and the fragment entering the neck.
 - qa_check: BACKHEAD at f1 is intended (the robber is never shown from the front). PROPMOVE is the bullet, sparks and fragments in flight.
-- body_prop_cross: the ring on its finger is intended, and so is the robber's fist on the grip (f1–61). **The flattened slug grazes the ring finger's skin (2–5 edges) at f521–620.**
+- body_prop_cross: the ring touches only its own finger (intended), and the robber's fist on the grip (f1–61) is intended. The flattened slug grazes the ring finger's skin (2–5 edges) at about f521–600.
 
-## Faults still open (fresh reviewer FAIL; my own watch agrees on 1–6)
-1. f392–546: the bullet approaching the ring reads as sitting on the palm, in a near-full-frame hand macro (about 1.5 s with no face).
-2. f600–690: the split into two pieces does not read. The fragments are tiny and the hand fills the frame.
-3. Logo: the glossy sign board catches a lamp highlight that washes out "KRAS FILMS" at the end. It is fully readable only around f1146–1200. Fix: a matte board and the lamp moved.
-4. f1180–1365: the walk arms hang slightly out (near A-pose) and the stride is small.
-5. The faces are readable but flat. The reviewer calls them doll-like, with few expressions in the slow-motion middle.
-6. Near-static stretches in the slow motion (f130–240, f760–890): the camera drifts, but little else moves.
-7. Render speed: about 210 s per full-resolution frame on a 4-core CPU, well over the 60 s target.
+## Round 3 (director-approved): what changed
+- f392–700 is a wider 3/4 shot with his face, the hand and the bigger gold ring, and the bullet visibly crosses the frame. One split macro (f601–666) shows the ring and two glowing pieces separating.
+- The sign is matte and raised and the lamp moved. The logo is fully readable and unobstructed at f1146–1395 (over 4 s).
+- The walk has an 8.5 cm arm swing and a longer stride over 1.75 m.
+- Brow, mouth and eye acting, blinks and a slight head tremble were added through the slow motion.
+- Render settings: 28 adaptive samples (threshold 0.08), 4/2/2/4 bounces, simplify subdivision 1.
 
-## Technical render check (on the local, unpushed package; factory startup)
+## Technical render check (exact local package, factory startup)
 - 0 libraries, 0 unpacked images, the VO sound packed, no drivers.
 - `CAM_Film`, 1080×1920 at 100 %, 60 fps, frames 1–1395, PNG to `//render/RingBullet_v009_####.png`, VO strip at frame 1.
-- f20 took 210 s, f600 221 s and f1300 208 s (64 adaptive samples). None is black, empty or pink.
-- Overall verdict: **FAIL** on content (above), so no .blend is pushed.
+- f20 took 136 s, f600 160 s and f1300 138 s on a 4-core CPU. None is black, empty or pink.
+- **Speed target (120 s or less) is missed.** Fix: drop samples to about 20, or turn off skin subsurface.
+
+## Faults still open (fresh reviewer FAIL on round 3; I agree on 1–4)
+1. f601–666: the split macro is about 1.1 s, not 0.5 s. A rubbery near-camera thumb dominates it, and the fragments are small glowing dots.
+2. f300–480: the slow-motion bullet moves only a little per second and the owner barely moves, so the stretch reads near-static.
+3. The finger-lodge (f786) and the neck graze (f894) are small and easy to miss.
+4. Faces read flat or doll-like (MPFB face rig). The hand he examines at f997–1110 reads as a curled blob at preview size.
+5. The opening (f1–45) shows the logo cropped. That is only a supplement; the main logo window passes.
+The reviewer also claimed no arm swing and that he never covers his face. I disagree with both: the swing and the hands in front of his face are visible on pages p05–p06 and p02.

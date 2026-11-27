@@ -130,7 +130,7 @@ def hang_hand(rig, H, s, f, fwd=0.06, drop=0.50, out_extra=0.0, swing=0.0):
     # the bone's x axis may point either way: pick the one toward this side of the body
     if (sh - rm.translation).dot(side_w) * 1 < 0: side_w = -side_w
     hipc = Vector((rm.translation.x, rm.translation.y, z))
-    wrist = hipc + side_w * (0.27 + out_extra) + Vector((0, sh.y - rm.translation.y - fwd - swing, 0))
+    wrist = hipc + side_w * (0.265 + out_extra) + Vector((0, sh.y - rm.translation.y - fwd - swing, 0))
     d = Vector((sx * 0.08, -0.25 - swing * 1.5, -1.0)).normalized(); n = Vector((-sx, 0.0, 0.0))
     H.key_hand(s, f, wrist, d, n, pole=sh + Vector((sx * 0.25, 0.45, -0.25)))
     apply_pose(rig, s, "relaxed", f)
@@ -155,15 +155,17 @@ HEAD = [(1, 22, 2), (45, 22, 2), (58, 18, -6), (245, 18, -4), (300, 14, -2), (51
 hy = pchip([(f, y) for f, y, p in HEAD]); hp = pchip([(f, p) for f, y, p in HEAD])
 hr = pchip([(1, 0), (894, 0), (906, -10), (940, -6), (997, 0), (1178, 0)])
 for f in list(range(1, 1180, 6)):
-    key_head(OW, CO, f, hy(f), hp(f), hr(f))
-for f, sm, br, jaw, sq in ((1, -0.3, 0.9, 0.25, 0.0), (45, -0.3, 0.9, 0.25, 0.0), (52, -0.5, 1.0, 0.45, 0.5), (90, -0.4, 0.9, 0.40, 0.2),
+    tr_ = 1.2 if 60 < f < 900 else 0.4
+    key_head(OW, CO, f, hy(f) + tr_ * math.sin(f / 9.0), hp(f) + tr_ * 0.7 * math.sin(f / 13.0 + 1.0), hr(f) + tr_ * 0.5 * math.sin(f / 17.0))
+for f, sm, br, jaw, sq in ((1, -0.3, 0.9, 0.25, 0.0), (45, -0.3, 0.9, 0.25, 0.0), (52, -0.5, 1.0, 0.45, 0.5), (90, -0.4, 0.9, 0.40, 0.2), (140, -0.5, 0.6, 0.30, 0.3), (190, -0.3, 1.0, 0.45, 0.1), (230, -0.5, 0.7, 0.30, 0.3),
                            (245, -0.4, 0.9, 0.35, 0.1), (300, -0.5, -0.4, 0.30, 0.7), (518, -0.5, -0.4, 0.35, 0.8),
-                           (786, -0.5, -0.5, 0.35, 0.8), (800, -0.7, -0.8, 0.45, 1.0), (894, -0.6, -0.7, 0.40, 0.9),
+                           (700, -0.6, -0.2, 0.40, 0.6), (786, -0.5, -0.5, 0.35, 0.8), (800, -0.7, -0.8, 0.45, 1.0), (830, -0.5, -0.4, 0.30, 0.6), (860, -0.7, -0.7, 0.45, 0.9), (894, -0.6, -0.7, 0.40, 0.9),
                            (904, -0.8, -0.9, 0.55, 1.0), (960, -0.5, -0.3, 0.30, 0.5), (997, -0.2, 0.8, 0.35, 0.0),
                            (1080, -0.1, 0.9, 0.30, 0.0), (1120, 0.2, 0.5, 0.15, 0.0), (1160, 0.7, 0.3, 0.05, 0.1), (END, 0.75, 0.3, 0.05, 0.1)):
     key_face(OW, f, smile=sm, brow=br, jaw=jaw, squint=sq)
-blinks(OW, [20, 140, 1010, 1090, 1150, 1250, 1340])
+blinks(OW, [20, 140, 205, 330, 455, 700, 765, 840, 1010, 1090, 1150, 1250, 1340])
 saccades(CO, 1, 245, every=30, amp=(1.5, 3.0), seed=4)
+saccades(CO, 250, 955, every=26, amp=(2.0, 3.5), seed=7)
 saccades(CO, 960, END, every=34, amp=(1.5, 2.5), seed=5)
 
 # ---- arms: surrender ("hands up", palms forward at shoulder height) -> throws both hands up in front of his face (245-290)
@@ -211,12 +213,12 @@ hang_hand(OW, HO, "L", 1150, fwd=0.07, drop=0.47); hang_hand(OW, HO, "L", 1178, 
 
 # ---- the walk out (1180-1365): toward the door, arms swinging, feet planted on the floor; settles to the end
 W0, W1 = 1182, 1365
-P0, P1 = Vector((0.0, 0.0, 0.0)), Vector((0.22, -1.45, 0.0))
+P0, P1 = Vector((0.0, 0.0, 0.0)), Vector((0.24, -1.75, 0.0))
 def wpath(f):
     u = smoothstep((f - W0) / (W1 - W0)); u = 0.5 * u + 0.5 * ((f - W0) / (W1 - W0))
     return P0.lerp(P1, max(0.0, min(1.0, u)))
 WYAW = math.degrees(math.atan2(P1.x - P0.x, -(P1.y - P0.y)))     # the rest faces -Y
-HO.walk(wpath, lambda f: WYAW, W0, W1, stride=0.62, duty=0.62, lift=0.07, bob=0.018, crouch=0.02, lean=4.0, step=2)
+HO.walk(wpath, lambda f: WYAW, W0, W1, stride=0.64, duty=0.60, lift=0.10, bob=0.022, crouch=0.03, lean=5.0, step=2)
 def del_keys(rig, bones, f0, f1):
     for fc in iter_fcurves(rig.animation_data.action):
         if not any('"%s"' % b in fc.data_path for b in bones): continue
@@ -231,9 +233,9 @@ stand(OW, HO, CO, END, (P1.x, P1.y), yaw=WYAW, flex=3.0, dz=-0.003)
 dist = 0.0; prev = wpath(W0)
 for f in range(W0, W1 + 1, 3):
     p = wpath(f); dist += (p - prev).length; prev = p
-    ph = 2 * math.pi * dist / 0.62
+    ph = 2 * math.pi * dist / 0.64
     for s, sg in (("L", 1), ("R", -1)):
-        hang_hand(OW, HO, s, f, fwd=0.09, drop=0.49, swing=sg * 0.05 * math.sin(ph))
+        hang_hand(OW, HO, s, f, fwd=0.07, drop=0.48, swing=sg * 0.085 * math.sin(ph))
 for f in (W1 + 4, END):
     for s in "LR": hang_hand(OW, HO, s, f, fwd=0.06, drop=0.49)
 
@@ -259,9 +261,9 @@ rf = sum(r for r, p in near[:10]) / max(1, len(near[:10])) if near else 0.008
 rads = [r for r, p in near if r < rf * 1.6]
 RF = max(rads) if rads else 0.009
 log("finger radius at the ring mm", round(RF * 1000, 2), "points", len(rads))
-bpy.ops.mesh.primitive_torus_add(major_radius=RF + 0.0012, minor_radius=0.0013, major_segments=64, minor_segments=16)
+bpy.ops.mesh.primitive_torus_add(major_radius=RF + 0.0017, minor_radius=0.0016, major_segments=64, minor_segments=16)
 RING = bpy.context.active_object; RING.name = "Ring"
-RING.scale = (1, 1, 1.6); bpy.ops.object.transform_apply(scale=True)
+RING.scale = (1, 1, 1.75); bpy.ops.object.transform_apply(scale=True)
 for p_ in RING.data.polygons: p_.use_smooth = True
 gold = bpy.data.materials.new("M_Gold"); gold.use_nodes = True; pg = gold.node_tree.nodes["Principled BSDF"]
 pg.inputs["Base Color"].default_value = (1.0, 0.66, 0.20, 1); pg.inputs["Metallic"].default_value = 1.0; pg.inputs["Roughness"].default_value = 0.18
@@ -279,7 +281,7 @@ RC, RAX = finger_frame(B_HIT)
 RPOS = (1.25, -1.45)                                                          # the robber: at his front-left
 ROB_AIM = Vector((RPOS[0] - 0.10, RPOS[1] + 0.35, 1.55))
 NP = ROB_AIM - RC; NP = (NP - RAX * NP.dot(RAX)).normalized()                  # the ring side facing the gun
-P_IMP = RC + NP * (RF + 0.0025)                                               # front face of the ring
+P_IMP = RC + NP * (RF + 0.0035)                                               # front face of the ring
 log("ring centre", tuple(round(x, 4) for x in RC), "impact", tuple(round(x, 4) for x in P_IMP))
 BODY_HIT = [OWB, OWC]
 # fragment B: from just in front of the gap between the ring finger and the little finger, back THROUGH the gap to the
@@ -570,13 +572,13 @@ K = [
     (80,  lambda: pth(0.25) + VS * 0.75 + UPV * 0.08, lambda: pth(0.55).lerp(eyes(80), 0.45), 26),
     (170, lambda: pth(0.38) + VS * 0.62 + UPV * 0.08, lambda: pth(0.65).lerp(eyes(170), 0.40), 27),
     (B_HANDS, lambda: pth(0.50) + VS * 0.55 + UPV * 0.08, lambda: pth(0.75).lerp(eyes(B_HANDS), 0.30), 28),
-    (B_SKULL, lambda: pth(0.75) + VS * 0.40 + UPV * 0.07, lambda: pth(0.88).lerp(eyes(B_SKULL), 0.30), 30),
-    (490, lambda: P_IMP + VM * 0.17 + UPV * 0.04, lambda: P_IMP.lerp(bpos(490), 0.5), 34),
-    (B_HIT, lambda: P_IMP + VM * 0.12 + UPV * 0.03, lambda: P_IMP.copy(), 36),
-    (575, lambda: P_IMP + VS * 0.40 + UPV * 0.08, lambda: P_IMP.lerp(eyes(575), 0.45), 28),
-    (612, lambda: Q_B + VM * 0.14 + UPV * 0.03, lambda: Q_B.copy(), 34),
-    (655, lambda: Q_B + VM * 0.15 + UPV * 0.035, lambda: Q_B.lerp(S_A, 0.5), 34),
-    (710, lambda: Q_B + VS * 0.34 + UPV * 0.07, lambda: Q_B.lerp(eyes(710), 0.40), 28),
+    (B_SKULL, lambda: pth(0.75) + VS * 0.46 + UPV * 0.08, lambda: pth(0.88).lerp(eyes(B_SKULL), 0.40), 28),
+    (470, lambda: P_IMP + VS * 0.40 + UPV * 0.07, lambda: P_IMP.lerp(eyes(470), 0.38), 30),
+    (B_HIT, lambda: P_IMP + VM * 0.30 + UPV * 0.05, lambda: P_IMP.lerp(eyes(B_HIT), 0.30), 32),
+    (580, lambda: P_IMP + VS * 0.34 + UPV * 0.06, lambda: P_IMP.lerp(eyes(580), 0.35), 30),
+    (618, lambda: Q_B + VS * 0.12 + UPV * 0.03, lambda: Q_B.copy(), 36),
+    (648, lambda: Q_B + VS * 0.13 + UPV * 0.035, lambda: Q_B.lerp(fbpos(648), 0.5), 36),
+    (690, lambda: Q_B + VS * 0.38 + UPV * 0.07, lambda: Q_B.lerp(eyes(690), 0.40), 28),
     (B_FING, lambda: S_A + VS * 0.36 + UPV * 0.06, lambda: S_A.lerp(eyes(B_FING), 0.40), 28),
     (840, lambda: fbpos(840) + VS2 * 0.36 + UPV * 0.05, lambda: fbpos(840).lerp(eyes(840), 0.40), 28),
     (B_NECK, lambda: N_B + VS3 * 0.40 + UPV * 0.04, lambda: N_B.lerp(eyes(B_NECK), 0.45), 28),
@@ -584,9 +586,9 @@ K = [
     (B_DENT, lambda: P(0.40, -0.82, 1.50), lambda: eyes(B_DENT).lerp(ring_w(B_DENT), 0.5), 30),
     (1060, lambda: P(0.14, -0.92, 1.50), lambda: eyes(1060).lerp(ring_w(1060), 0.45), 30),
     (1110, lambda: P(-0.15, -1.00, 1.55), lambda: eyes(1110).lerp(ring_w(1110), 0.4), 28),
-    (B_WALK, lambda: P(0.10, -1.55, 1.50), lambda: eyes(B_WALK) + P(0, 0, -0.30), 26),
-    (1280, lambda: P(0.30, -2.30, 1.48), lambda: eyes(1280) + P(0, 0, -0.32), 26),
-    (END, lambda: P(0.42, -2.85, 1.45), lambda: eyes(END) + P(0, 0, -0.25), 26),
+    (B_WALK, lambda: P(0.10, -1.60, 1.72), lambda: eyes(B_WALK) + P(0, 0, -0.32), 26),
+    (1280, lambda: P(0.34, -2.45, 1.74), lambda: eyes(1280) + P(0, 0, -0.34), 26),
+    (END, lambda: P(0.48, -3.02, 1.75), lambda: eyes(END) + P(0, 0, -0.30), 26),
 ]
 def look_q(p, a, up=Vector((0, 0, 1))):
     zc_ = (p - a).normalized(); yc = (up - zc_ * up.dot(zc_)); yc = yc.normalized() if yc.length > 1e-6 else Vector((0, 1, 0))

@@ -15,7 +15,7 @@
   "61": [
    [
     "PROPMOVE",
-    "Bullet moves 1.1 cm with no hand on it (nearest finger 25 cm)"
+    "Bullet moves 1.1 cm with no hand on it (nearest finger 24 cm)"
    ]
   ],
   "67": [
@@ -24,64 +24,70 @@
     "Bullet moves 1.0 cm with no hand on it (nearest finger 25 cm)"
    ]
   ],
+  "295": [
+   [
+    "PROPMOVE",
+    "Bullet moves 1.0 cm with no hand on it (nearest finger 29 cm)"
+   ]
+  ],
   "301": [
    [
     "PROPMOVE",
-    "Bullet moves 1.1 cm with no hand on it (nearest finger 27 cm)"
+    "Bullet moves 1.0 cm with no hand on it (nearest finger 28 cm)"
    ]
   ],
   "307": [
    [
     "PROPMOVE",
-    "Bullet moves 1.1 cm with no hand on it (nearest finger 26 cm)"
+    "Bullet moves 1.1 cm with no hand on it (nearest finger 27 cm)"
    ]
   ],
   "313": [
    [
     "PROPMOVE",
-    "Bullet moves 1.1 cm with no hand on it (nearest finger 25 cm)"
+    "Bullet moves 1.1 cm with no hand on it (nearest finger 26 cm)"
    ]
   ],
   "319": [
    [
     "PROPMOVE",
-    "Bullet moves 1.1 cm with no hand on it (nearest finger 24 cm)"
+    "Bullet moves 1.1 cm with no hand on it (nearest finger 25 cm)"
    ]
   ],
   "325": [
    [
     "PROPMOVE",
-    "Bullet moves 1.1 cm with no hand on it (nearest finger 23 cm)"
+    "Bullet moves 1.1 cm with no hand on it (nearest finger 24 cm)"
    ]
   ],
   "331": [
    [
     "PROPMOVE",
-    "Bullet moves 1.1 cm with no hand on it (nearest finger 22 cm)"
+    "Bullet moves 1.0 cm with no hand on it (nearest finger 23 cm)"
    ]
   ],
   "337": [
    [
     "PROPMOVE",
-    "Bullet moves 1.0 cm with no hand on it (nearest finger 21 cm)"
+    "Bullet moves 1.0 cm with no hand on it (nearest finger 22 cm)"
    ]
   ],
   "343": [
    [
     "PROPMOVE",
-    "Bullet moves 1.0 cm with no hand on it (nearest finger 20 cm)"
+    "Bullet moves 1.0 cm with no hand on it (nearest finger 21 cm)"
    ]
   ],
   "349": [
    [
     "PROPMOVE",
-    "Bullet moves 1.0 cm with no hand on it (nearest finger 19 cm)"
+    "Bullet moves 1.0 cm with no hand on it (nearest finger 20 cm)"
    ]
   ],
   "355": [
    [
     "PROPMOVE",
-    "Bullet moves 1.0 cm with no hand on it (nearest finger 18 cm)"
+    "Bullet moves 1.0 cm with no hand on it (nearest finger 19 cm)"
    ]
   ],
   "361": [
@@ -105,13 +111,13 @@
   "379": [
    [
     "PROPMOVE",
-    "Bullet moves 0.9 cm with no hand on it (nearest finger 15 cm)"
+    "Bullet moves 0.9 cm with no hand on it (nearest finger 16 cm)"
    ]
   ],
   "385": [
    [
     "PROPMOVE",
-    "Bullet moves 0.9 cm with no hand on it (nearest finger 14 cm)"
+    "Bullet moves 0.9 cm with no hand on it (nearest finger 15 cm)"
    ]
   ],
   "391": [
@@ -135,19 +141,19 @@
   "409": [
    [
     "PROPMOVE",
-    "Bullet moves 1.0 cm with no hand on it (nearest finger 11 cm)"
+    "Bullet moves 1.0 cm with no hand on it (nearest finger 12 cm)"
    ]
   ],
   "415": [
    [
     "PROPMOVE",
-    "Bullet moves 1.0 cm with no hand on it (nearest finger 10 cm)"
+    "Bullet moves 1.0 cm with no hand on it (nearest finger 11 cm)"
    ]
   ],
   "421": [
    [
     "PROPMOVE",
-    "Bullet moves 1.0 cm with no hand on it (nearest finger 9 cm)"
+    "Bullet moves 1.0 cm with no hand on it (nearest finger 10 cm)"
    ]
   ],
   "427": [
@@ -165,7 +171,7 @@
   "439": [
    [
     "PROPMOVE",
-    "Bullet moves 1.0 cm with no hand on it (nearest finger 7 cm)"
+    "Bullet moves 1.0 cm with no hand on it (nearest finger 8 cm)"
    ]
   ],
   "445": [
@@ -177,7 +183,7 @@
   "451": [
    [
     "PROPMOVE",
-    "Bullet moves 1.0 cm with no hand on it (nearest finger 6 cm)"
+    "Bullet moves 1.0 cm with no hand on it (nearest finger 7 cm)"
    ]
   ],
   "457": [
@@ -189,7 +195,7 @@
   "463": [
    [
     "PROPMOVE",
-    "Bullet moves 0.9 cm with no hand on it (nearest finger 5 cm)"
+    "Bullet moves 0.9 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "469": [
@@ -207,7 +213,7 @@
   "481": [
    [
     "PROPMOVE",
-    "Bullet moves 0.7 cm with no hand on it (nearest finger 4 cm)"
+    "Bullet moves 0.7 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "487": [
@@ -219,10 +225,14 @@
   "493": [
    [
     "PROPMOVE",
-    "Bullet moves 0.6 cm with no hand on it (nearest finger 4 cm)"
+    "Bullet moves 0.5 cm with no hand on it (nearest finger 4 cm)"
    ]
   ],
   "529": [
+   [
+    "PROPMOVE",
+    "Spark00 moves 0.9 cm with no hand on it (nearest finger 3 cm)"
+   ],
    [
     "PROPMOVE",
     "Spark01 moves 0.9 cm with no hand on it (nearest finger 4 cm)"
@@ -241,7 +251,7 @@
    ],
    [
     "PROPMOVE",
-    "Spark08 moves 1.1 cm with no hand on it (nearest finger 3 cm)"
+    "Spark08 moves 1.1 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
@@ -377,7 +387,7 @@
   "757": [
    [
     "PROPMOVE",
-    "FragB moves 0.5 cm with no hand on it (nearest finger 13 cm)"
+    "FragB moves 0.5 cm with no hand on it (nearest finger 12 cm)"
    ]
   ],
   "763": [
@@ -473,7 +483,7 @@
   "853": [
    [
     "PROPMOVE",
-    "FragB moves 0.5 cm with no hand on it (nearest finger 22 cm)"
+    "FragB moves 0.5 cm with no hand on it (nearest finger 21 cm)"
    ]
   ],
   "859": [
@@ -485,7 +495,7 @@
   "865": [
    [
     "PROPMOVE",
-    "FragB moves 0.5 cm with no hand on it (nearest finger 23 cm)"
+    "FragB moves 0.5 cm with no hand on it (nearest finger 22 cm)"
    ]
   ],
   "871": [
@@ -497,7 +507,7 @@
   "877": [
    [
     "PROPMOVE",
-    "FragB moves 0.5 cm with no hand on it (nearest finger 24 cm)"
+    "FragB moves 0.5 cm with no hand on it (nearest finger 23 cm)"
    ]
   ],
   "883": [
@@ -527,13 +537,7 @@
   "913": [
    [
     "PROPMOVE",
-    "NeckGraze moves 1.1 cm with no hand on it (nearest finger 23 cm)"
-   ]
-  ],
-  "925": [
-   [
-    "PROPMOVE",
-    "CutFinger moves 14.9 cm with no hand on it (nearest finger 3 cm)"
+    "NeckGraze moves 1.1 cm with no hand on it (nearest finger 22 cm)"
    ]
   ],
   "931": [
@@ -545,7 +549,19 @@
   "937": [
    [
     "PROPMOVE",
-    "CutFinger moves 4.0 cm with no hand on it (nearest finger 3 cm)"
+    "CutFinger moves 4.1 cm with no hand on it (nearest finger 3 cm)"
+   ]
+  ],
+  "943": [
+   [
+    "PROPMOVE",
+    "CutFinger moves 2.8 cm with no hand on it (nearest finger 3 cm)"
+   ]
+  ],
+  "949": [
+   [
+    "PROPMOVE",
+    "CutFinger moves 1.4 cm with no hand on it (nearest finger 3 cm)"
    ]
   ],
   "1111": [
@@ -557,10 +573,18 @@
   "1117": [
    [
     "PROPMOVE",
+    "CutFinger moves 2.5 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
     "NeckGraze moves 1.2 cm with no hand on it (nearest finger 30 cm)"
    ]
   ],
   "1123": [
+   [
+    "PROPMOVE",
+    "CutFinger moves 21.5 cm with no hand on it (nearest finger 3 cm)"
+   ],
    [
     "PROPMOVE",
     "NeckGraze moves 1.4 cm with no hand on it (nearest finger 42 cm)"
@@ -573,6 +597,10 @@
    ]
   ],
   "1135": [
+   [
+    "PROPMOVE",
+    "CutFinger moves 20.0 cm with no hand on it (nearest finger 3 cm)"
+   ],
    [
     "PROPMOVE",
     "NeckGraze moves 1.1 cm with no hand on it (nearest finger 53 cm)"
@@ -591,204 +619,204 @@
   "1177": [
    [
     "PROPMOVE",
-    "NeckGraze moves 1.7 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 2.1 cm with no hand on it (nearest finger 63 cm)"
    ]
   ],
   "1183": [
    [
     "PROPMOVE",
-    "NeckGraze moves 4.4 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 6.0 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1189": [
    [
     "PROPMOVE",
-    "NeckGraze moves 3.0 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 3.6 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1195": [
    [
     "PROPMOVE",
-    "NeckGraze moves 3.3 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 4.0 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1201": [
    [
     "PROPMOVE",
-    "NeckGraze moves 3.7 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 4.4 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1207": [
    [
     "PROPMOVE",
-    "NeckGraze moves 4.0 cm with no hand on it (nearest finger 64 cm)"
+    "NeckGraze moves 4.8 cm with no hand on it (nearest finger 63 cm)"
    ]
   ],
   "1213": [
    [
     "PROPMOVE",
-    "NeckGraze moves 4.3 cm with no hand on it (nearest finger 64 cm)"
+    "NeckGraze moves 5.2 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1219": [
    [
     "PROPMOVE",
-    "NeckGraze moves 4.6 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 5.6 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1225": [
    [
     "PROPMOVE",
-    "NeckGraze moves 4.9 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 5.8 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1231": [
    [
     "PROPMOVE",
-    "NeckGraze moves 5.0 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 6.1 cm with no hand on it (nearest finger 63 cm)"
    ]
   ],
   "1237": [
    [
     "PROPMOVE",
-    "NeckGraze moves 5.3 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 6.4 cm with no hand on it (nearest finger 64 cm)"
    ]
   ],
   "1243": [
    [
     "PROPMOVE",
-    "NeckGraze moves 5.5 cm with no hand on it (nearest finger 64 cm)"
+    "NeckGraze moves 6.7 cm with no hand on it (nearest finger 63 cm)"
    ]
   ],
   "1249": [
    [
     "PROPMOVE",
-    "NeckGraze moves 5.7 cm with no hand on it (nearest finger 64 cm)"
+    "NeckGraze moves 7.2 cm with no hand on it (nearest finger 63 cm)"
    ]
   ],
   "1255": [
    [
     "PROPMOVE",
-    "NeckGraze moves 6.1 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 7.4 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1261": [
    [
     "PROPMOVE",
-    "NeckGraze moves 6.3 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 7.4 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1267": [
    [
     "PROPMOVE",
-    "NeckGraze moves 6.3 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 7.3 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1273": [
    [
     "PROPMOVE",
-    "NeckGraze moves 6.2 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 7.3 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1279": [
    [
     "PROPMOVE",
-    "NeckGraze moves 6.0 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 7.2 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1285": [
    [
     "PROPMOVE",
-    "NeckGraze moves 6.0 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 7.1 cm with no hand on it (nearest finger 63 cm)"
    ]
   ],
   "1291": [
    [
     "PROPMOVE",
-    "NeckGraze moves 5.9 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 7.1 cm with no hand on it (nearest finger 63 cm)"
    ]
   ],
   "1297": [
    [
     "PROPMOVE",
-    "NeckGraze moves 5.7 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 7.1 cm with no hand on it (nearest finger 63 cm)"
    ]
   ],
   "1303": [
    [
     "PROPMOVE",
-    "NeckGraze moves 5.7 cm with no hand on it (nearest finger 64 cm)"
+    "NeckGraze moves 7.3 cm with no hand on it (nearest finger 63 cm)"
    ]
   ],
   "1309": [
    [
     "PROPMOVE",
-    "NeckGraze moves 5.5 cm with no hand on it (nearest finger 64 cm)"
+    "NeckGraze moves 7.0 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1315": [
    [
     "PROPMOVE",
-    "NeckGraze moves 5.4 cm with no hand on it (nearest finger 64 cm)"
+    "NeckGraze moves 6.8 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1321": [
    [
     "PROPMOVE",
-    "NeckGraze moves 5.4 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 6.4 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1327": [
    [
     "PROPMOVE",
-    "NeckGraze moves 5.2 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 5.9 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1333": [
    [
     "PROPMOVE",
-    "NeckGraze moves 4.9 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 5.6 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1339": [
    [
     "PROPMOVE",
-    "NeckGraze moves 4.5 cm with no hand on it (nearest finger 63 cm)"
+    "NeckGraze moves 5.2 cm with no hand on it (nearest finger 62 cm)"
    ]
   ],
   "1345": [
    [
     "PROPMOVE",
-    "NeckGraze moves 4.1 cm with no hand on it (nearest finger 64 cm)"
+    "NeckGraze moves 4.7 cm with no hand on it (nearest finger 63 cm)"
    ]
   ],
   "1351": [
    [
     "PROPMOVE",
-    "NeckGraze moves 3.6 cm with no hand on it (nearest finger 64 cm)"
+    "NeckGraze moves 4.4 cm with no hand on it (nearest finger 63 cm)"
    ]
   ],
   "1357": [
    [
     "PROPMOVE",
-    "NeckGraze moves 3.2 cm with no hand on it (nearest finger 64 cm)"
+    "NeckGraze moves 3.9 cm with no hand on it (nearest finger 63 cm)"
    ]
   ],
   "1363": [
    [
     "PROPMOVE",
-    "NeckGraze moves 2.8 cm with no hand on it (nearest finger 64 cm)"
+    "NeckGraze moves 3.3 cm with no hand on it (nearest finger 64 cm)"
    ]
   ],
   "1369": [
    [
     "PROPMOVE",
-    "NeckGraze moves 3.0 cm with no hand on it (nearest finger 64 cm)"
+    "NeckGraze moves 3.6 cm with no hand on it (nearest finger 63 cm)"
    ]
   ]
  },
  "counts": {
   "BACKHEAD": 1,
-  "PROPMOVE": 133
+  "PROPMOVE": 139
  }
 }
