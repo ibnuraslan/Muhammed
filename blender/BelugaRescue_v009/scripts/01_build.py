@@ -404,14 +404,16 @@ tcw = nt.nodes.new("ShaderNodeTexCoord"); vw = nt.nodes.new("ShaderNodeTexVorono
 vw.inputs["Scale"].default_value = 0.9; vw.inputs["Randomness"].default_value = 1.0; vw.name = "Ripple"; nt.links.new(tcw.outputs["Object"], vw.inputs["Vector"])
 crw = nt.nodes.new("ShaderNodeValToRGB"); crw.color_ramp.elements[0].color = (0.85, 0.97, 1.0, 1); crw.color_ramp.elements[1].position = 0.30
 crw.color_ramp.elements[1].color = (0.20, 0.70, 0.90, 1); nt.links.new(vw.outputs["Distance"], crw.inputs["Fac"])
-emw = nt.nodes.new("ShaderNodeEmission"); emw.inputs["Strength"].default_value = 0.8; nt.links.new(crw.outputs["Color"], emw.inputs["Color"])
+emw = nt.nodes.new("ShaderNodeEmission"); emw.inputs["Strength"].default_value = 0.6; nt.links.new(crw.outputs["Color"], emw.inputs["Color"])
 glb = nt.nodes.new("ShaderNodeBsdfGlossy"); glb.inputs["Roughness"].default_value = 0.08; glb.inputs["Color"].default_value = (0.3, 0.8, 0.95, 1)
-mb = nt.nodes.new("ShaderNodeMixShader"); mb.inputs["Fac"].default_value = 0.25; nt.links.new(emw.outputs[0], mb.inputs[1]); nt.links.new(glb.outputs[0], mb.inputs[2])
+mb = nt.nodes.new("ShaderNodeMixShader"); mb.inputs["Fac"].default_value = 0.08; nt.links.new(emw.outputs[0], mb.inputs[1]); nt.links.new(glb.outputs[0], mb.inputs[2])
 # from above: clear teal water (transparent, tinted) with a glossy sheen
 tra = nt.nodes.new("ShaderNodeBsdfTransparent"); tra.inputs["Color"].default_value = (0.03, 0.20, 0.24, 1)
 gla = nt.nodes.new("ShaderNodeBsdfGlossy"); gla.inputs["Roughness"].default_value = 0.04; gla.inputs["Color"].default_value = (0.9, 0.97, 1.0, 1)
 fra = nt.nodes.new("ShaderNodeFresnel"); fra.inputs["IOR"].default_value = 1.33
-ma = nt.nodes.new("ShaderNodeMixShader"); nt.links.new(fra.outputs[0], ma.inputs["Fac"]); nt.links.new(tra.outputs[0], ma.inputs[1]); nt.links.new(gla.outputs[0], ma.inputs[2])
+deep = nt.nodes.new("ShaderNodeBsdfPrincipled"); deep.inputs["Base Color"].default_value = (0.0, 0.10, 0.14, 1); deep.inputs["Roughness"].default_value = 0.6
+murk = nt.nodes.new("ShaderNodeMixShader"); murk.inputs["Fac"].default_value = 0.72; nt.links.new(tra.outputs[0], murk.inputs[1]); nt.links.new(deep.outputs[0], murk.inputs[2])
+ma = nt.nodes.new("ShaderNodeMixShader"); nt.links.new(fra.outputs[0], ma.inputs["Fac"]); nt.links.new(murk.outputs[0], ma.inputs[1]); nt.links.new(gla.outputs[0], ma.inputs[2])
 mfin = nt.nodes.new("ShaderNodeMixShader"); nt.links.new(geo.outputs["Backfacing"], mfin.inputs["Fac"])
 nt.links.new(ma.outputs[0], mfin.inputs[1]); nt.links.new(mb.outputs[0], mfin.inputs[2])
 nt.links.new(mfin.outputs[0], nt.nodes["Material Output"].inputs["Surface"])
