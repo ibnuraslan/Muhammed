@@ -62,9 +62,9 @@ sea = N.new("ShaderNodeTexNoise"); sea.inputs["Scale"].default_value = 60.0
 sea_col = mix(sea.outputs["Fac"], (0.0, 0.035, 0.09), (0.0, 0.06, 0.13))
 col = mix(A, sea_col, lc)
 L.new(col, p.inputs["Base Color"])
-fire = mix(N.new("ShaderNodeTexNoise").outputs["Fac"], (1.0, 0.18, 0.01), (1.0, 0.45, 0.03))
+fire = mix(N.new("ShaderNodeTexNoise").outputs["Fac"], (1.0, 0.16, 0.0), (1.0, 0.38, 0.0))
 L.new(fire, p.inputs["Emission Color"])
-es = M_('MULTIPLY', M_('MULTIPLY', front, A), 1.3)
+es = M_('MULTIPLY', M_('MULTIPLY', front, A), 2.2)    # v009: a hot orange fire band (1.3 read as pale pink)
 L.new(es, p.inputs["Emission Strength"])
 T.data.materials.append(m)
 # WarTime keyed linear over the ignite window

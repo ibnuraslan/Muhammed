@@ -98,7 +98,7 @@ class Person:
     def arm_lap(self, s, f, lean=0.0):
         """seated: forearm along the thigh, hand resting just above the knee-side of the thigh"""
         sx = 1 if s == "L" else -1; S = self.sh[s]; Hh = self.hip[s]
-        W = Vector((Hh.x + sx * 0.035, S.y - 0.30 - lean, Hh.z + 0.14))
+        W = Vector((Hh.x + sx * 0.035, S.y - 0.30 - lean, Hh.z + 0.14 + getattr(self, 'lap_up', 0.0)))   # lap_up: per-character lift (v009)
         self.key_hand_local(s, f, W, (sx * 0.05, -1.0, -0.35), (0, 0, -1), elbow_local=(S.x + sx * 0.45, S.y + 0.25, S.z - 0.35))
     def arm_wave(self, s, f, phase=0.0, height=1.0):
         sx = 1 if s == "L" else -1; S = self.sh[s]

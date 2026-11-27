@@ -135,6 +135,7 @@ def arms_seated(p, plan):
             if kind == "lap": p.arm_lap(s, f)
             elif kind == "wave": p.arm_wave(s, f, phase=f / 9.0, height=0.6)
             elif kind == "chest": p.arm_chest(s, f, k=0.8)
+AR.lap_up = 0.09; DU.lap_up = 0.03   # v009: the Archduke's hands sank into his thighs (clip_scan)
 arms_seated(AR, lambda f, s: "chest" if (s == "L" and 95 <= f <= 160) else "lap")
 arms_seated(DU, lambda f, s: ("wave" if (s == "L" and 500 <= f <= 690) else ("chest" if (s == "R" and (100 <= f <= 170 or 805 <= f <= 850)) else "lap")))
 for p in (AR, DU, DR2):
@@ -235,9 +236,10 @@ for f in range(1184, END + 1, 4):
     if f < 1244: GP.arm_relaxed("R", f)
     elif f < 1272:
         u = smooth((f - 1244) / 28.0); GP.arm_aim("R", f, ar_stall + Vector((0, 0, -1.3 * (1 - u))))
-    elif f < 1400: GP.arm_aim("R", f, ar_stall + Vector((0, 0, 0.06 if f in (1292, 1320) else 0.0)))
-    else:
-        u = smooth((f - 1400) / 40.0); GP.arm_aim("R", f, ar_stall + Vector((0, 0, -0.9 * u)))
+    elif f < 1336: GP.arm_aim("R", f, ar_stall + Vector((0, 0, 0.06 if f in (1292, 1320) else 0.0)))
+    elif f < 1372:
+        u = smooth((f - 1336) / 36.0); GP.arm_aim("R", f, ar_stall + Vector((0, 0, -1.3 * u)))
+    else: GP.arm_relaxed("R", f)      # v009: arm down before the camera rises (no lone arm at the frame edge)
     GP.arm_relaxed("L", f, swing=0.01 * b)
 apply_pose(GP.o, "R", "wrap_grip", 1); apply_pose(GP.o, "L", "relaxed", 1)
 FLASH_FRAMES = [38, 1290, 1318]
@@ -275,7 +277,7 @@ stand(N2, 710, END, Vector((-43.8, 7.0, PAVE_Z)), 150, seed=14)
 
 # ---- quay crowd: watch, wave as the car passes (B4-B5), recoil from the blast (B6)
 QS = {"Q1": ((-36.4, 5.55), 8, "R"), "Q2": ((-34.5, 6.25), -10, None), "Q3": ((-30.0, 5.45), 12, "L"), "Q4": ((-28.3, 6.35), -6, None),
-      "Q5": ((-46.6, 5.0), 15, "L"), "Q6": ((-38.2, 6.65), 5, "R")}
+      "Q5": ((-46.6, 5.0), 15, "L"), "Q6": ((-38.2, 6.65), 5, None)}   # v009: Q6 no wave (hand through own head, clip_scan)
 for i, (nm, ((x, y), yw, wav)) in enumerate(QS.items()):
     p = P[nm]; pos = Vector((x, y, PAVE_Z))
     def head(f, x=x):
@@ -489,16 +491,16 @@ KEYS = [  # frame, camera position, look-at point, lens
     (777, Vector((-39.5, 1.2, 4.5)), Vector((-43.5, 1.0, 1.3)), 26),
     (792, Vector((-45.0, -2.4, 3.0)), SITE + Vector((2.0, 0.8, 0.9)), 26),
     (860, Vector((-50.0, -5.6, 3.6)), SITE + Vector((3.5, 1.5, 1.6)), 26),
-    (910, Vector((-47.0, -6.0, 6.0)), CL(910, REAR), 24),
-    (960, Vector((-31.0, -8.0, 17.0)), CL(960, REAR), 26),
+    (910, CL(910, (-11.0, -1.0, 5.5)), CL(910, REAR), 26),
+    (960, CL(960, (-6.5, -2.0, 6.5)), CL(960, REAR), 28),
     (1000, Vector((-8.0, -2.0, 12.0)), CL(1000, (0, 0, 1.0)), 28),
     (1040, Vector((-3.5, 0.5, 9.0)), CL(1040, (0, 0, 1.0)), 30),
     (1080, Vector((-2.4, 6.4, 7.5)), Vector((6.3, 12.6, 3.6)), 26),
     (1140, Vector((-1.6, 7.3, 4.6)), Vector((6.6, 12.2, 3.2)), 28),
     (1180, Vector((3.4, 6.6, 2.4)), GPH(G_KERB) + Vector((0, 0, 0.0)), 35),
     (1236, Vector((3.2, 8.25, 1.66)), GPH(G_KERB) + Vector((-0.06, -0.02, 0.0)), 45),
-    (1262, Vector((5.1, 8.3, 1.95)), GPH(G_KERB) + Vector((-0.35, 0.0, -0.1)), 32),
-    (1290, Vector((5.55, 10.85, 1.98)), Vector((2.7, 9.5, 1.75)), 30),
+    (1262, Vector((5.1, 8.3, 1.5)), GPH(G_KERB) + Vector((-0.35, 0.0, 0.0)), 32),
+    (1290, Vector((5.55, 10.85, 1.55)), Vector((2.7, 9.5, 1.9)), 30),
     (1350, Vector((5.45, 10.8, 2.0)), Vector((2.4, 9.6, 1.7)), 32),
     (1378, Vector((5.0, 10.3, 3.2)), Vector((2.0, 9.8, 1.2)), 30),
     (1405, Vector((4.6, 9.2, 6.0)), ar_stall + Vector((0, 0.3, -1.2)), 30),
