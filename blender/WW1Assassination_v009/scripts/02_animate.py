@@ -107,6 +107,10 @@ def seated_track(p, keys, f0=1, f1=END, step=10, seed=0, flex0=4.0):
         p.key_feet_seated(f, p.seat, 90, p.floor) if f == fs[0] else None
     return fs
 
+# round 3: no cross-quay bunting where the overheads of the car (f880-1000) look down through it (strings read as lines)
+for nm_ in ("BuntingCross060", "BuntingCross072", "BuntingCross084"):
+    for o_ in [o for o in O if o.name in (nm_, nm_ + "_rope")]:
+        bpy.data.objects.remove(o_, do_unlink=True)
 AR, DU, DR, DR2 = P["Archduke"], P["Duchess"], P["Driver"], P["Driver2"]
 # Archduke (right rear): B1 looks ahead/right; B2 turns right toward the shot; B4-5 nods left to the crowd; B6 looks back;
 # B7-8 looks around; B9 hit at 1290: slumps forward (no blood, no wound)
@@ -506,11 +510,11 @@ KEYS = [  # frame, camera position, look-at point, lens
     (1254, Vector((5.9, 9.7, 1.8)), GPH(G_KERB) + Vector((-0.3, 0.0, 0.0)), 32),
     (1272, Vector((4.7, 13.4, 1.85)), Vector((3.3, 9.8, 1.75)), 28),     # v009: side-on from the north: profile, arm and the gap to the car read
     (1290, Vector((4.6, 13.3, 1.85)), Vector((3.2, 9.7, 1.8)), 28),
-    (1320, Vector((4.5, 13.1, 1.9)), Vector((3.1, 9.7, 1.8)), 30),
-    (1345, Vector((4.5, 13.0, 2.0)), Vector((3.0, 9.7, 1.7)), 30),      # v009: hold the gunman in frame while the arm drops
-    (1362, Vector((4.9, 12.6, 2.6)), Vector((2.6, 9.6, 1.6)), 30),
-    (1378, Vector((5.0, 10.3, 3.2)), Vector((2.0, 9.8, 1.2)), 30),
-    (1405, Vector((4.6, 9.2, 6.0)), ar_stall + Vector((0, 0.3, -1.2)), 30),
+    (1320, Vector((4.6, 13.5, 1.9)), Vector((3.3, 9.7, 1.75)), 30),
+    (1345, Vector((4.7, 13.9, 2.0)), Vector((3.45, 9.7, 1.6)), 30),      # v009: hold the gunman in frame while the arm drops
+    (1370, Vector((4.7, 13.9, 2.2)), Vector((3.45, 9.7, 1.5)), 30),     # round 3: hold the whole gunman + car until the rise
+    (1392, Vector((3.4, 12.4, 4.6)), Vector((2.0, 9.8, 1.1)), 30),      # rise over the car: the gunman leaves frame quickly, no stub
+    (1410, Vector((2.4, 10.6, 8.0)), ar_stall + Vector((0, 0.2, -1.2)), 30),
     (1432, Vector((1.6, 10.5 - 0.12 * 14.0, 14.0)), Vector((1.6, 10.5, 0.0)), 30),     # v009: meets the rise formula exactly (no 2.4 m jump at f1433)
 ]
 def alt(f):
