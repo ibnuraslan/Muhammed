@@ -1,7 +1,7 @@
-person Dad walk (-3.16, -13.0) run end (-3.16, 55.6, 0.0)
-person Mom walk (-1.29, -12.9) run end (-1.29, 55.7, 0.0)
-person Boy walk (0.34, -14.2) run end (0.34, 54.4, 0.0)
-person Girl walk (1.75, -13.6) run end (1.75, 55.0, 0.0)
+person Dad walk (-2.94, -13.0) run end (-2.94, 55.6, 0.0)
+person Mom walk (-1.71, -12.9) run end (-1.71, 55.7, 0.0)
+person Boy walk (0.02, -14.2) run end (0.02, 54.4, 0.0)
+person Girl walk (1.58, -13.6) run end (1.58, 55.0, 0.0)
 HIDE frame 1224
 FAMVIEW 1221 ['Dad', 'Mom', 'Boy', 'Girl']
 FAMVIEW 1224 []

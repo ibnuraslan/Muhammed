@@ -257,7 +257,9 @@ SUN = O["Sun"]; SUN.rotation_mode = 'XYZ'
 for f, u in ((1, 0.0), (1650, 0.0), (1900, 0.8), (END, 0.8)):
     SM.inputs["Factor"].default_value = u; SM.inputs["Factor"].keyframe_insert("default_value", frame=f)
     CC.inputs["Factor"].default_value = u; CC.inputs["Factor"].keyframe_insert("default_value", frame=f)
-    SUN.rotation_euler = (math.radians(45 + 27 * u), 0, math.radians(110 - 148.5 * u))   # side light: no glint toward the sea, the wave face lit; SUN.keyframe_insert("rotation_euler", frame=f)
+    # sun from the side (+X) by day: faces and the wave face lit, no sun glint in views out to sea; low from the side at dusk
+    dv = Vector((-1.0, -0.15, -0.75)).normalized().lerp(Vector((0.62, 0.78, -0.30)).normalized(), u).normalized()
+    SUN.rotation_mode = 'QUATERNION'; SUN.rotation_quaternion = dv.to_track_quat('-Z', 'Y'); SUN.keyframe_insert("rotation_quaternion", frame=f)
     SUN.data.color = (1.0, 0.95 - 0.33 * u, 0.86 - 0.56 * u); SUN.data.keyframe_insert("color", frame=f)
     SUN.data.energy = 4.5 - 0.6 * u; SUN.data.keyframe_insert("energy", frame=f)
 
@@ -277,10 +279,9 @@ K = [  # frame, position, aim, lens
     (340, (1.4, -18.0, 1.1), (-0.8, -12.8, 1.05), 35),
     (395, (4.0, -18.0, 1.35), (-1.0, -13.0, 1.3), 30),
     (450, (5.6, -14.6, 1.6), (-2.5, -14.6, 1.4), 28),         # beside them: faces in three-quarter, Dad points
-    (503, (-3.0, -18.5, 2.0), (-6.0, -780.0, 2.5), 60),       # a wave, heading for the shore: push in on the white line
-    (545, (-2.6, -21.0, 2.0), (-6.0, -760.0, 3.0), 90),
-    (575, (2.0, -19.0, 1.6), (-0.6, -12.8, 1.5), 32),         # back to their faces: the shout, the turn
-    (612, (1.0, -26.0, 2.6), (-2.0, -300.0, 4.0), 30),       # out over the bare sea floor toward the wave, low
+    (503, (2.0, -21.0, 2.0), (-3.0, -700.0, 4.0), 45),        # a wave, heading for the shore: the camera sets off toward it
+    (545, (1.5, -32.0, 2.4), (-3.0, -680.0, 5.0), 40),
+    (600, (1.0, -62.0, 2.8), (-2.0, -620.0, 6.0), 34),
     (648, (0.0, -110.0, 3.2), (0.0, -500.0, 7.0), 28),        # a massive tsunami: skimming the water toward it
     (700, (-4.0, -260.0, 4.0), (0.0, -560.0, 9.0), 26),
     (745, (-8.0, -380.0, 5.0), (0.0, -545.0, 12.0), 24),      # its face fills more of the frame

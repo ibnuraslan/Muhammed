@@ -15,9 +15,9 @@
 | Audio | `Tsunami2004_v013_VO.mp3` is packed as the sound strip at frame 1. Add the mp3 at frame 1 when you encode at 60 fps. |
 
 ## Measured render time (4-core CPU, no GPU, full resolution, from the packed file)
-- f20: 97.5 s (the family at the water's edge)
-- f1062: 88.4 s (the run, with the wall behind)
-- f1840: 82.9 s (the family on the high ground at golden hour)
+- f20: 94.2 s (the family at the water's edge)
+- f1062: 85.8 s (the run, with the wall behind)
+- f1840: 79.3 s (the family on the high ground at golden hour)
 
 ## The logo
 DA KRAS FILMS is printed on the boy's yellow T-shirt. It reads in the beach close-ups (f1–60) and in the end close-ups (f1741–1860). The hotel's roof sign shows it in the wide beach and flood shots.

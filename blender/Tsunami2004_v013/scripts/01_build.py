@@ -97,7 +97,7 @@ def ground_mat():
     L(mul.outputs["Result"], p.inputs["Base Color"])
     # wet sand is glossier
     rr = nt.nodes.new("ShaderNodeMapRange"); rr.inputs[1].default_value = -1.0; rr.inputs[2].default_value = 0.5
-    rr.inputs[3].default_value = 0.35; rr.inputs[4].default_value = 0.9; L(sep.outputs["Z"], rr.inputs[0]); L(rr.outputs[0], p.inputs["Roughness"])
+    rr.inputs[3].default_value = 0.6; rr.inputs[4].default_value = 0.92; L(sep.outputs["Z"], rr.inputs[0]); L(rr.outputs[0], p.inputs["Roughness"])
     # sand ripples
     wv = nt.nodes.new("ShaderNodeTexWave"); wv.inputs["Scale"].default_value = 0.9; wv.inputs["Distortion"].default_value = 4
     wv.inputs["Detail"].default_value = 2; wv.bands_direction = 'Y'; L(geo.outputs["Position"], wv.inputs["Vector"])
