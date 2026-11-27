@@ -419,18 +419,18 @@ KEYS = [
     (1330, lambda: eyes(1330).lerp(oeyes(1330), 0.5) + P(0.12, -1.95, -0.10), lambda: eyes(1330).lerp(oeyes(1330), 0.5) + P(0, 0, -0.16), 27),
     (1400, lambda: eyes(1400).lerp(oeyes(1400), 0.5) + P(0.02, -1.80, -0.10), lambda: eyes(1400).lerp(oeyes(1400), 0.5) + P(0, 0, -0.16), 28),
     # 1415-1496: x-ray head: the tumour is taken out (shrinks away)
-    (1440, lambda: side_head(1440, -0.30, -0.50, 0.02), lambda: headc(1440) + P(0, 0.01, -0.03), 44),
-    (1490, lambda: side_head(1490, -0.32, -0.66, 0.03), lambda: headc(1490), 40),
+    (1440, lambda: side_head(1440, -0.55, -0.14, 0.02), lambda: headc(1440) + P(0, 0.0, -0.02), 44),
+    (1490, lambda: side_head(1490, -0.60, -0.32, 0.03), lambda: headc(1490), 40),
     # 1496-1829: pull back to the wide: still growing, past the door top; officer beside him; dusk
-    (1560, lambda: P(-0.35, -2.40, 1.55), lambda: P(-0.20, 0.15, 1.40), 25),
+    (1560, lambda: P(-0.40, -2.40, 1.80), lambda: P(-0.15, 0.15, 1.72), 25),
     (1640, lambda: P(-0.20, -3.25, 1.45), lambda: P(-0.05, 0.15, 1.35), 23),
     (1760, lambda: P(0.30, -3.45, 1.35), lambda: P(0.25, 0.15, 1.32), 23),
     (1829, lambda: P(0.10, -3.20, 1.40), lambda: P(0.0, 0.20, 1.30), 24),
     # 1829-2083: down to the photo of his short young self, then up beside the giant he became; settle
-    (1895, lambda: P(-0.85, -1.15, 1.48), lambda: P(-0.66, 0.42, 1.45), 30),
-    (1960, lambda: P(-0.60, -2.10, 1.65), lambda: P(-0.42, 0.40, 1.55), 27),
-    (2030, lambda: P(-0.45, -2.75, 1.75), lambda: P(-0.38, 0.30, 1.55), 26),
-    (END,  lambda: P(-0.40, -2.62, 1.80), lambda: P(-0.38, 0.30, 1.58), 27),
+    (1900, lambda: P(-0.47, -2.00, 1.78), lambda: P(-0.40, 0.40, 1.70), 30),
+    (1960, lambda: P(-0.44, -1.88, 1.82), lambda: P(-0.40, 0.40, 1.72), 31),
+    (2030, lambda: P(-0.42, -1.80, 1.84), lambda: P(-0.40, 0.40, 1.74), 32),
+    (END,  lambda: P(-0.41, -1.76, 1.85), lambda: P(-0.40, 0.40, 1.75), 32.5),
 ]
 def look_q(p, a, up=Vector((0, 0, 1))):
     zc_ = (p - a).normalized(); yc = (up - zc_ * up.dot(zc_)); yc = yc.normalized() if yc.length > 1e-6 else Vector((0, 1, 0))

@@ -1,0 +1,20 @@
+{
+ "frames": {
+  "685": {
+   "Hero": {
+    "self": 26,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   685,
+   685
+  ]
+ ],
+ "fps": 60
+}
