@@ -114,3 +114,5 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | 14 | ElectricianPolice | claude/rebuild14-electrician-police: blender/ElectricianPolice_v011/ElectricianPolice_v011_60fps.blend (client-approved, Render check PASS) | 1–1446 |
 | 16 | DrunkTrain | claude/rebuild16-drunk-train: blender/DrunkTrain_v008 (client-approved; packaging) | 1–1735 |
 | 18 | NukedWell | claude/rebuild18-nuked-well: blender/NukedWell_v009/NukedWell_v009_60fps.blend (client-approved, Render check PASS) | 1–1541 |
+| 17 | ToddlerWell | claude/rebuild17-toddler-well: blender/ToddlerWell_v010/ToddlerWell_v010_60fps.blend (client-approved, Render check PASS) | 1–1728 |
+| 19 | SpeakWithoutSight | claude/rebuild19-speak-without-sight: blender/SpeakWithoutSight_v007/SpeakWithoutSight_v007_60fps.blend (client-approved, Render check PASS) | 1–1645 |
