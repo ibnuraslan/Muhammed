@@ -23,3 +23,15 @@
 - Re-stage beats 4-6 so the wave comes much closer, for example a low skim over the water toward the wave's face (f503-746 and f891-1011).
 - Replace the cut-away with a sculpted, textured block with a water column, or cut it.
 - Widen the end close-ups, and give the family a gesture such as Mom pulling the girl close.
+
+## Script checks on the exact packed file
+- clip_scan (step 6): **0 bad ranges**.
+- limb_check (step 4): **0** ARMBODY, ARMBACK or PROPHEAD.
+- qa_check (step 6, with beats.json):
+  - EMPTY 200: the frames with no people (open sea, the cut-away, the flood). This confirms item 1-4 above.
+  - PROPMOVE 153: the debris carried by the water, as intended.
+  - FAN 46 (f43-451): the 'relaxed' finger spread on the hanging hands during the beach beats. I need to look at it in a close render.
+  - CLAW 2 (f55, f433): Dad's hands. f433 is his point.
+  - INSIDE 1 (f883): the camera passes the cut-away block's end (the same as item 3).
+  - CAMJUMP 1 (f574): the fast swing from the horizon back to the faces.
+- The render check (factory-startup open, 3 full-res test frames) was not run: the film is not PASS, so no .blend is delivered.
