@@ -17,6 +17,10 @@ sc.render.image_settings.color_mode = 'RGB'
 sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = 1080, 1920, 100
 sc.render.fps, sc.render.fps_base = 60, 1.0
 sc.frame_start, sc.frame_end = 1, 2066
+# render cost (director: <=120 s per 1080x1920 frame): adaptive sampling, fewer max samples, subdivision level 1
+sc.cycles.samples = 28; sc.cycles.use_adaptive_sampling = True; sc.cycles.adaptive_threshold = 0.06
+sc.cycles.max_bounces = 4; sc.cycles.diffuse_bounces = 2; sc.cycles.glossy_bounces = 2
+sc.render.use_simplify = True; sc.render.simplify_subdivision_render = 1
 # de-duplicate images appended twice (same file), then shrink background textures (alpha kept: Image.pack of the buffer)
 import re
 first = {}

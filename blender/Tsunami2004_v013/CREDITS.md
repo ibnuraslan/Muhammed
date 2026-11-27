@@ -27,3 +27,4 @@
 - Terrain, ocean (geometry nodes), hotel, cut-away, sky: built procedurally in `scripts/01_build.py`.
 - DA KRAS FILMS logo: the client's own (`blender/assets/brand/`).
 - Voiceover: the client's recording (Tsunami2004 v012 VO).
+- Ground textures (CC0, Poly Haven, Rob Tuytel): Coast Sand 01, Aerial Grass Rock, Asphalt 02 (`assets/tex/*_diff_1k.jpg`).

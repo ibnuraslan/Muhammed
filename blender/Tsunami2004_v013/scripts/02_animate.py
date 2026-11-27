@@ -28,10 +28,10 @@ O["Ocean"].modifiers["Ocean"].show_viewport = False        # keying speed; resto
 
 # ================================================================== the sea: WaveCtl loc=(L, Yf, A) scale=(p, curl, phase)
 Lk_ = pchip([(1, 0.0), (55, -0.12), (127, -0.9), (259, -1.8), (400, -3.5), (1150, -3.5), (1260, 0.0), (END, 0.0)])
-YF = pchip([(1, -2600), (399, -2600), (400, -900), (470, -820), (503, -780), (648, -650), (740, -580), (800, -530), (909, -400), (960, -360), (1025, -300),
+YF = pchip([(1, -2600), (399, -2600), (400, -900), (470, -820), (503, -780), (648, -640), (740, -540), (800, -500), (860, -465), (909, -420), (960, -360), (1025, -300),
             (1060, -230), (1100, -125), (1150, -62), (1200, -27), (1229, -8), (1260, 25), (1300, 60), (1375, 110), (1450, 160),
             (1509, 210), (1600, 300), (1660, 370), (1700, 430), (END, 470)])
-AF = pchip([(1, 0.0), (400, 0.0), (470, 6.0), (503, 8.0), (648, 10.0), (800, 11.5), (909, 14.0), (960, 17.0), (1025, 22.0), (1060, 28.0), (1100, 33.0),
+AF = pchip([(1, 0.0), (400, 0.0), (470, 7.0), (503, 9.0), (648, 12.0), (740, 15.0), (800, 16.5), (909, 18.0), (960, 20.0), (1025, 23.0), (1060, 28.0), (1100, 33.0),
             (1150, 35.0), (1200, 35.0), (1229, 34.0), (1260, 30.0), (1300, 22.0), (1375, 14.0), (1450, 10.0), (1509, 8.0), (1600, 6.0),
             (1660, 3.5), (1700, 0.0), (END, 0.0)])
 CURL = pchip([(1, 0.0), (900, 0.05), (1060, 0.25), (1229, 0.35), (1300, 0.1), (1400, 0.0), (END, 0.0)])
@@ -44,11 +44,12 @@ set_interp(WC, 'LINEAR')
 def surf(x, y, f): return wave_z(x, y, Lk_(f), YF(f), AF(f), PLATEAU, q=tuple(QC.location) if False else (0, 0, 0))
 
 # ---- the earthquake (cut-away at y=-600): the wedge snaps up, a flash at the focus, a shock ring, the bulge above
-QB = pchip([(1, 0.0), (800, 0.0), (812, 1.8), (850, 5.0), (900, 5.5), (960, 2.0), (1010, 0.0), (END, 0.0)])
+QB = pchip([(1, 0.0), (END, 0.0)])     # the cut-away is cut (director, round 3): no bulge
 for f in range(1, END + 1, 4):
     QC.location = (60.0, -240.0, QB(f)); QC.keyframe_insert("location", frame=f)
 set_interp(QC, 'LINEAR')
 WEDGE, FOCUS, RING = O["SEC_Wedge"], O["SEC_Focus"], O["SEC_Ring"]
+CUT_SECTION = True
 WEDGE.rotation_mode = 'XYZ'
 for f, rx, dz in ((1, 0.0, 0.0), (799, 0.0, 0.0), (803, -4.2, 0.9), (807, -3.2, 0.7), (812, -3.6, 0.8), (830, -3.5, 0.8), (END, -3.5, 0.8)):
     WEDGE.rotation_euler.x = math.radians(rx); WEDGE.keyframe_insert("rotation_euler", frame=f)
@@ -158,8 +159,8 @@ for name, (rig, ct, h) in PEOPLE.items():
             if busy and s == busy[0] and busy[1] <= f <= busy[2]: continue
             arm(ct, s, f, lower=41.0, swing=4.0 + sg * sw, elbow=18.0 + 4 * math.sin(f / 33.0))
     for s in "LR":
-        apply_pose(rig, s, "relaxed", 1)
-        apply_pose(rig, s, "relaxed", END)
+        apply_pose(rig, s, "relaxed", 1, spread=0.0)
+        apply_pose(rig, s, "relaxed", END, spread=0.0)
     # faces: calm -> puzzled -> fear (saw it) -> shout/run -> grief on the hill
     face_keys = [(1, 0.0, 0.1, 0.0), (150, 0.0, 0.4, 0.05), (300, -0.1, 0.6, 0.08), (395, 0.0, 0.5, 0.05), (450, -0.2, 0.9, 0.25),
                  (520, -0.3, 1.0, 0.45), (600, -0.3, 1.0, 0.5), (RUN1, -0.3, 1.0, 0.4),
@@ -256,7 +257,7 @@ SUN = O["Sun"]; SUN.rotation_mode = 'XYZ'
 for f, u in ((1, 0.0), (1650, 0.0), (1900, 0.8), (END, 0.8)):
     SM.inputs["Factor"].default_value = u; SM.inputs["Factor"].keyframe_insert("default_value", frame=f)
     CC.inputs["Factor"].default_value = u; CC.inputs["Factor"].keyframe_insert("default_value", frame=f)
-    SUN.rotation_euler = (math.radians(45 + 27 * u), 0, math.radians(20 - 58.5 * u)); SUN.keyframe_insert("rotation_euler", frame=f)
+    SUN.rotation_euler = (math.radians(45 + 27 * u), 0, math.radians(110 - 148.5 * u))   # side light: no glint toward the sea, the wave face lit; SUN.keyframe_insert("rotation_euler", frame=f)
     SUN.data.color = (1.0, 0.95 - 0.33 * u, 0.86 - 0.56 * u); SUN.data.keyframe_insert("color", frame=f)
     SUN.data.energy = 4.5 - 0.6 * u; SUN.data.keyframe_insert("energy", frame=f)
 
@@ -279,16 +280,14 @@ K = [  # frame, position, aim, lens
     (503, (-3.0, -18.5, 2.0), (-6.0, -780.0, 2.5), 60),       # a wave, heading for the shore: push in on the white line
     (545, (-2.6, -21.0, 2.0), (-6.0, -760.0, 3.0), 90),
     (575, (2.0, -19.0, 1.6), (-0.6, -12.8, 1.5), 32),         # back to their faces: the shout, the turn
-    (612, (2.0, -16.0, 6.0), (-0.5, -200.0, 2.0), 26),
-    (648, (0.0, -300.0, 55.0), (0.0, -650.0, 2.0), 30),       # high above the sea: the front across the whole ocean
-    (700, (-30.0, -420.0, 42.0), (-20.0, -600.0, 8.0), 26),
-    (745, (-75.0, -232.0, 12.0), (0.0, -250.0, -22.0), 24),   # dive toward the cut-away
-    (766, (-95.0, -248.0, -5.0), (0.0, -250.0, -30.0), 22),   # through the surface
-    (790, (-150.0, -258.0, -22.0), (0.0, -248.0, -40.0), 20),
-    (860, (-140.0, -236.0, -20.0), (0.0, -248.0, -36.0), 20),
-    (880, (-125.0, -244.0, -10.0), (-40.0, -262.0, 6.0), 22),  # tilt up toward the surface, the cut still in frame
-    (898, (-112.0, -248.0, 3.0), (-80.0, -390.0, 10.0), 24),  # straight up and out: the wave right there
-    (960, (-70.0, -205.0, 14.0), (-30.0, -360.0, 14.0), 24),  # as it got closer, it grew
+    (612, (1.0, -26.0, 2.6), (-2.0, -300.0, 4.0), 30),       # out over the bare sea floor toward the wave, low
+    (648, (0.0, -110.0, 3.2), (0.0, -500.0, 7.0), 28),        # a massive tsunami: skimming the water toward it
+    (700, (-4.0, -260.0, 4.0), (0.0, -560.0, 9.0), 26),
+    (745, (-8.0, -380.0, 5.0), (0.0, -545.0, 12.0), 24),      # its face fills more of the frame
+    (800, (-12.0, -440.0, 9.0), (0.0, -505.0, 14.0), 22),     # right in front of the face, rising along it
+    (860, (-14.0, -410.0, 20.0), (10.0, -475.0, 16.0), 22),   # up beside the crest: the front runs to the horizon
+    (909, (-16.0, -360.0, 18.0), (0.0, -430.0, 14.0), 22),    # as it got closer, it grew: backing off in front of it
+    (960, (-18.0, -290.0, 18.0), (-5.0, -370.0, 15.0), 22),
     (1025, (-20.0, -60.0, 22.0), (-5.0, -300.0, 16.0), 24),
     (1050, (-0.7, 22.0, 10.0), (-0.7, -60.0, 6.0), 24),       # backward over the beach (still looking at the sea), over their heads
     (1062, (-0.7, 46.0, 3.6), (-0.7, 30.0, 2.4), 20),         # their faces as they run, the wall behind them
@@ -310,8 +309,8 @@ D3 = Vector((math.sin(DIR), -math.cos(DIR), 0.0)); L3 = Vector((LAT.x, LAT.y, 0.
 def hk(f, back, lat, up, aim_fwd, aim_lat, aim_up, lens):
     return (f, tuple(HC3 - D3 * back + L3 * lat + Vector((0, 0, up))), tuple(HC3 + D3 * aim_fwd + L3 * aim_lat + Vector((0, 0, aim_up))), lens)
 K += [hk(1725, 9.0, 1.5, 4.0, 0.0, 0.0, 1.0, 26),           # down to the family on the high ground (all four in frame)
-      hk(1770, 4.6, -0.5, 1.55, 0.0, -0.5, 1.3, 30),       # faces; the ruins and the mosque behind them
-      hk(1840, 4.6, 0.7, 1.5, 0.0, 0.7, 1.25, 30),
+      hk(1770, 5.6, 0.0, 1.55, 0.0, -0.1, 1.3, 30),       # faces; the ruins and the mosque behind them (all four in frame)
+      hk(1840, 5.4, 0.3, 1.5, 0.0, 0.1, 1.25, 30),
       hk(1920, 6.0, 0.2, 2.8, 12.0, 0.0, 0.0, 26),
       hk(2000, 7.0, 0.8, 5.0, 40.0, 0.0, -1.0, 26),
       hk(END, 8.0, 1.6, 7.0, 45.0, 0.0, -4.0, 24)]
@@ -356,6 +355,8 @@ for f in (HIDE - 3, HIDE, HIDE + 1, SHOW_HILL - 1, SHOW_HILL, SHOW_HILL + 2):
 cl = bpy.data.lights.new("Catchlight", 'POINT'); cl.energy = 6.0; cl.shadow_soft_size = 0.15
 clo = bpy.data.objects.new("Catchlight", cl); sc.collection.objects.link(clo); clo.parent = CAM; clo.location = (0.0, 0.15, 0.0)
 
+if CUT_SECTION:
+    for o in list(bpy.data.collections["SECTION"].objects): bpy.data.objects.remove(o, do_unlink=True)
 # ================================================================== VO + range
 if not sc.sequence_editor: sc.sequence_editor_create()
 se = sc.sequence_editor; coll = se.strips if hasattr(se, "strips") else se.sequences

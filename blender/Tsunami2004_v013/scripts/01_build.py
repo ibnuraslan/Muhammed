@@ -72,8 +72,25 @@ def ground_mat():
     L(nz2.outputs["Fac"], ry.inputs["Fac"])
     my = nt.nodes.new("ShaderNodeMapRange"); my.inputs[1].default_value = 30.0; my.inputs[2].default_value = 40.0
     L(sep.outputs["Y"], my.inputs[0])
+    # real CC0 textures (Poly Haven): sand, grass; tinted by the height ramps above (wet/dry sand, earth/grass)
+    def T(fname, size):
+        ti = nt.nodes.new("ShaderNodeTexImage"); ti.image = bpy.data.images.load(os.path.join(PKG, "assets", "tex", fname)); ti.image.name = fname[:-4]
+        mp = nt.nodes.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (1.0 / size, 1.0 / size, 1.0 / size)
+        L(geo.outputs["Position"], mp.inputs["Vector"]); L(mp.outputs["Vector"], ti.inputs["Vector"]); return ti.outputs["Color"]
+    def MUL(a_, b_, k=1.0):
+        m_ = nt.nodes.new("ShaderNodeMix"); m_.data_type = 'RGBA'; m_.blend_type = 'MULTIPLY'; m_.inputs["Factor"].default_value = 1.0
+        L(a_, m_.inputs["A"])
+        if isinstance(b_, tuple): m_.inputs["B"].default_value = (*b_, 1)
+        else: L(b_, m_.inputs["B"])
+        vm = nt.nodes.new("ShaderNodeVectorMath"); vm.operation = 'SCALE'; vm.inputs["Scale"].default_value = k
+        L(m_.outputs["Result"], vm.inputs[0]); return vm.outputs[0]
+    sandt = T("coast_sand_01_diff_1k.jpg", 2.5); grasst = T("aerial_grass_rock_diff_1k.jpg", 5.0)
+    sandc = MUL(rz.outputs["Color"], sandt, 2.4)
+    earth = MUL(sandt, (0.62, 0.26, 0.08), 2.0); grass = MUL(grasst, (0.75, 1.0, 0.55), 1.5)
+    gm = nt.nodes.new("ShaderNodeMapRange"); gm.inputs[1].default_value = 0.47; gm.inputs[2].default_value = 0.53; L(nz2.outputs["Fac"], gm.inputs[0])
+    inl = nt.nodes.new("ShaderNodeMix"); inl.data_type = 'RGBA'; L(gm.outputs[0], inl.inputs["Factor"]); L(earth, inl.inputs["A"]); L(grass, inl.inputs["B"])
     mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L(my.outputs[0], mx.inputs["Factor"])
-    L(rz.outputs["Color"], mx.inputs["A"]); L(ry.outputs["Color"], mx.inputs["B"])
+    L(sandc, mx.inputs["A"]); L(inl.outputs["Result"], mx.inputs["B"])
     # fine grain variation
     mul = nt.nodes.new("ShaderNodeMix"); mul.data_type = 'RGBA'; mul.blend_type = 'MULTIPLY'; mul.inputs["Factor"].default_value = 0.35
     L(mx.outputs["Result"], mul.inputs["A"]); L(nz.outputs["Color"], mul.inputs["B"])
@@ -480,7 +497,11 @@ CARS = [place("car", "Car%d" % i, (x, y), rz=r_, coll=C_TOWN) for i, (x, y, r_) 
 for i, (x, y) in enumerate([(-20, 50), (24, 52), (-45, 75), (100, 78), (-95, 150), (78, 130), (-20, 240), (120, 240), (-120, 100), (10, 260)]):
     place("banana", "Banana%d" % i, (x, y), rz=random.uniform(0, 6.28), s=random.uniform(0.8, 1.1), coll=C_TOWN)
 # road: a strip of darker packed earth up the middle of the town
-M_ROAD = noise_mat("M_Road", (0.32, 0.18, 0.10), (0.42, 0.24, 0.12), scale=0.5, bump=0.1)
+M_ROAD = mat("M_Road", (0.3, 0.3, 0.3), rough=0.8)          # CC0 Poly Haven asphalt
+_nt = M_ROAD.node_tree; _ti = _nt.nodes.new("ShaderNodeTexImage"); _ti.image = bpy.data.images.load(os.path.join(PKG, "assets", "tex", "asphalt_02_diff_1k.jpg"))
+_tc = _nt.nodes.new("ShaderNodeTexCoord"); _mp = _nt.nodes.new("ShaderNodeMapping"); _mp.inputs["Scale"].default_value = (0.3, 0.3, 0.3)
+_nt.links.new(_tc.outputs["Object"], _mp.inputs["Vector"]); _nt.links.new(_mp.outputs["Vector"], _ti.inputs["Vector"])
+_nt.links.new(_ti.outputs["Color"], _nt.nodes["Principled BSDF"].inputs["Base Color"])
 road = grid_mesh("Road", axis(-5, 5, [(0, 0, 1.0)]), axis(40, 400, [(0, 0, 2.0)]), lambda x, y: G(x, y) + 0.03)
 road.data.materials.append(M_ROAD); to_col(road, C_TOWN)
 # rubble fields: under the ground until the flood hides their rise (keyed in 02); random piles where the houses stood
