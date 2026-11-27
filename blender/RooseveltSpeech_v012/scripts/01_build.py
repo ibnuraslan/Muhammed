@@ -139,7 +139,7 @@ def pince_nez(rig, body):
         if n.type != 'OUTPUT_MATERIAL': nt.nodes.remove(n)
     tr = nt.nodes.new("ShaderNodeBsdfTransparent"); gl = nt.nodes.new("ShaderNodeBsdfGlossy"); gl.inputs["Roughness"].default_value = 0.03
     fr = nt.nodes.new("ShaderNodeFresnel"); fr.inputs["IOR"].default_value = 1.5
-    fm_ = nt.nodes.new("ShaderNodeMath"); fm_.operation = 'MULTIPLY'; fm_.inputs[1].default_value = 0.25; nt.links.new(fr.outputs[0], fm_.inputs[0])
+    fm_ = nt.nodes.new("ShaderNodeMath"); fm_.operation = 'MULTIPLY'; fm_.inputs[1].default_value = 0.0; nt.links.new(fr.outputs[0], fm_.inputs[0])
     tr.inputs["Color"].default_value = (0.92, 0.95, 0.97, 1)
     mx = nt.nodes.new("ShaderNodeMixShader"); nt.links.new(fm_.outputs[0], mx.inputs[0]); nt.links.new(tr.outputs[0], mx.inputs[1]); nt.links.new(gl.outputs[0], mx.inputs[2])
     nt.links.new(mx.outputs[0], nt.nodes["Material Output"].inputs["Surface"])
@@ -168,6 +168,17 @@ def pince_nez(rig, body):
 pince_nez(HERO, HB)
 
 # ================================================================== materials
+def tint_all(o, mult):
+    for m in o.data.materials:
+        if not m or not m.use_nodes: continue
+        nt = m.node_tree
+        for nd in list(nt.nodes):
+            if nd.type == 'TEX_IMAGE':
+                for lk in list(nd.outputs['Color'].links):
+                    if lk.to_node.type == 'BSDF_PRINCIPLED' and lk.to_socket.name == 'Base Color':
+                        mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'
+                        mx.inputs['Factor'].default_value = 1.0; mx.inputs['B'].default_value = (*mult, 1)
+                        nt.links.new(nd.outputs['Color'], mx.inputs['A']); nt.links.new(mx.outputs['Result'], lk.to_socket)
 def noise_mat(name, c1, c2, scale=40.0, rough=0.8, bump=0.15, metal=0.0, coat=0.0, det=6.0, vor=False):
     m = mat(name, c1, rough=rough, metal=metal, coat=coat)
     nt = m.node_tree; p = nt.nodes["Principled BSDF"]
@@ -216,7 +227,7 @@ M_COBBLE = noise_mat("M_Cobble", (0.03, 0.03, 0.05), (0.14, 0.12, 0.14), scale=9
 M_PAVE = noise_mat("M_Pave", (0.12, 0.11, 0.13), (0.2, 0.18, 0.2), scale=25.0, rough=0.7, bump=0.2)
 M_KERB = noise_mat("M_Kerb", (0.35, 0.33, 0.32), (0.5, 0.48, 0.46), scale=30.0, rough=0.6)
 M_BRASS = mat("M_Brass", (0.95, 0.62, 0.20), rough=0.25, metal=1.0)
-M_STEEL = noise_mat("M_Steel", (0.70, 0.72, 0.76), (0.92, 0.93, 0.95), scale=300.0, rough=0.30, metal=1.0, bump=0.05)
+M_STEEL = noise_mat("M_Steel", (0.78, 0.80, 0.84), (0.95, 0.96, 0.98), scale=300.0, rough=0.16, metal=1.0, bump=0.08)
 M_GUNMETAL = mat("M_Gunmetal", (0.80, 0.80, 0.82), rough=0.18, metal=1.0)   # nickel-plated, reads against the dark coat
 M_GRIPWOOD = noise_mat("M_GripWood", (0.20, 0.07, 0.02), (0.35, 0.13, 0.04), scale=60.0, rough=0.45)
 M_BULLET = mat("M_Bullet", (0.95, 0.50, 0.22), rough=0.22, metal=1.0)
@@ -230,7 +241,7 @@ kerb = box("Kerb", (40, 0.25, 0.17), (0, 3.15, 0.085), M_KERB, bevel=0.01); to_c
 # hotel facade (CC-BY scan), scaled to ~16 m wide behind the pavement, with warm lit windows behind it
 fac = imp(SK + "facade.dl", "HotelFacade", target_dim=16.0, axis=0)
 fac.location = (0, 7.3, -0.4); to_col(fac, C_STREET); soften(fac, rough_min=0.5)
-for m in fac.data.materials: tint(m, (0.16, 0.15, 0.22))      # daylight scan -> night
+tint_all(fac, (0.22, 0.20, 0.30))      # daylight scan -> night
 for dx in (-15.6, 15.6):
     f2 = fac.copy(); f2.location = (dx, 7.3, -0.4); C_STREET.objects.link(f2)
 glow_wall = box("HotelInterior", (16, 0.1, 9), (0, 8.6, 4.0), mat("M_HotelInside", (0.02, 0.01, 0.01), emit=((1.0, 0.45, 0.15), 0.6)), bevel=0)
@@ -263,10 +274,10 @@ for side in (-1, 1):
     to_col(hl, C_STREET)
 # gas street lamps (CC-BY scan) along the kerb, with warm point lights
 lamp = imp(SK + "lamp.dl", "StreetLamp", target_dim=3.6, axis=2)
-lamp.location = (-3.2, 3.6, 0.0); to_col(lamp, C_STREET); soften(lamp)
+lamp.location = (-3.2, 3.6, 0.0); to_col(lamp, C_STREET); soften(lamp); tint_all(lamp, (0.45, 0.42, 0.5))
 for i, x in enumerate((-3.2, 4.4, -10.5, 11.5)):
     if i: l2 = lamp.copy(); l2.location = (x, 3.6, 0); C_STREET.objects.link(l2)
-    L = bpy.data.lights.new("GasLamp%d" % i, 'POINT'); L.energy = 400; L.color = (1.0, 0.55, 0.22); L.shadow_soft_size = 0.15
+    L = bpy.data.lights.new("GasLamp%d" % i, 'POINT'); L.energy = 650; L.color = (1.0, 0.52, 0.20); L.shadow_soft_size = 0.15
     lo = bpy.data.objects.new("GasLamp%d" % i, L); lo.location = (x, 3.6, 3.3); C_STREET.objects.link(lo)
 for nm, loc, en, colr, size in (("StreetKey", (2.4, -2.6, 3.2), 420, (1.0, 0.70, 0.42), 1.0),
                                 ("StreetFill", (-3.5, -2.0, 2.4), 120, (0.30, 0.42, 1.0), 2.0),
@@ -332,9 +343,11 @@ tr_m = mat("M_Trail", (1, 0.8, 0.5), emit=((1.0, 0.75, 0.4), 2.5))
 TRAIL = cyl("BulletTrail", 0.0007, 1.0, (0, 0, -0.5), tr_m, verts=12); TRAIL.data.transform(Matrix.Translation((0, 0, 0)))
 to_col(TRAIL, C_CHAR)
 # muzzle flash: a star of emissive cones at the barrel tip (keyed scale, parented to the revolver)
-bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=0.035, radius2=0.0, depth=0.16, location=(0, 0.21, 0), rotation=(-math.pi / 2, 0, 0))
+bpy.ops.mesh.primitive_cone_add(vertices=10, radius1=0.09, radius2=0.0, depth=0.36, location=(0, 0.31, 0), rotation=(-math.pi / 2, 0, 0))
 fl = bpy.context.active_object; fl.name = "MuzzleFlash"
-fl.data.materials.append(mat("M_Flash", (1, 0.8, 0.4), emit=((1.0, 0.72, 0.30), 40.0)))
+fl.data.materials.append(mat("M_Flash", (1, 0.8, 0.4), emit=((1.0, 0.72, 0.30), 60.0)))
+bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=0.06, location=(0, 0.15, 0)); fb = bpy.context.active_object
+fb.data.materials.append(fl.data.materials[0]); fb.select_set(True); fl.select_set(True); bpy.context.view_layer.objects.active = fl; bpy.ops.object.join()
 fl.parent = REV; to_col(fl, C_STREET)
 L = bpy.data.lights.new("FlashLight", 'POINT'); L.energy = 0.0; L.color = (1.0, 0.7, 0.35)
 flo = bpy.data.objects.new("FlashLight", L); flo.parent = REV; flo.location = (0, 0.20, 0.02); C_STREET.objects.link(flo)
@@ -483,14 +496,14 @@ M_PLEURA = mat("M_PleuraX", (0.75, 0.70, 0.95), rough=0.15, coat=0.6)
 
 LAYERS = {}
 LAYERS["coat"] = slab("X_Coat", -0.004, 0.0, M_COAT, cut=False); LAYERS["coat"].location.y += 0.035   # cut back: the top page shows in front
-LAYERS["paper"] = slab("X_Paper", -0.016, -0.0042, M_PAPER_EDGE, drag=0.0035, reach=0.012)
-LAYERS["papertop"] = slab("X_PaperTop", -0.0042, -0.0037, M_PAPER_TOP, drag=0.0035, reach=0.012)
-LAYERS["casetop"] = slab("X_CaseTop", -0.0205, -0.018, M_STEEL, drag=0.0045, reach=0.014)
+LAYERS["paper"] = slab("X_Paper", -0.016, -0.0042, M_PAPER_EDGE, drag=0.006, reach=0.009)
+LAYERS["papertop"] = slab("X_PaperTop", -0.0042, -0.0037, M_PAPER_TOP, drag=0.006, reach=0.009)
+LAYERS["casetop"] = slab("X_CaseTop", -0.021, -0.018, M_STEEL, drag=0.005, reach=0.010)
 LAYERS["caselin"] = slab("X_CaseLining", -0.0212, -0.0205, M_CASE_IN, drag=0.0045, reach=0.014)
-LAYERS["casebot"] = slab("X_CaseBottom", -0.046, -0.0435, M_STEEL, drag=0.004, reach=0.014)
-LAYERS["caselin2"] = slab("X_CaseLining2", -0.0435, -0.0428, M_CASE_IN, drag=0.004, reach=0.014)
-for nm, xs in (("X_CaseEndL", -0.0745), ("X_CaseEndR", 0.0745)):
-    e = box(nm, (0.003, 0.07, 0.028), MX + Vector((xs, 0.035, -0.032)), M_STEEL, bevel=0.001); to_col(e, C_MACRO)
+LAYERS["casebot"] = slab("X_CaseBottom", -0.046, -0.043, M_STEEL, drag=0.005, reach=0.010)
+LAYERS["caselin2"] = slab("X_CaseLining2", -0.043, -0.0423, M_CASE_IN, drag=0.004, reach=0.014)
+for nm, xs in (("X_CaseEndL", -0.0735), ("X_CaseEndR", 0.0735)):
+    e = box(nm, (0.005, 0.07, 0.028), MX + Vector((xs, 0.035, -0.032)), M_STEEL, bevel=0.002); to_col(e, C_MACRO)
 e = box("X_CaseBack", (0.151, 0.003, 0.028), MX + Vector((0, 0.0715, -0.032)), M_STEEL, bevel=0.001); to_col(e, C_MACRO)
 for k, x in enumerate((-0.034, 0.034)):
     bpy.ops.mesh.primitive_torus_add(major_radius=0.016, minor_radius=0.0012, location=MX + Vector((x, 0.03, -0.0405)))
@@ -701,7 +714,7 @@ for k, (x, y) in enumerate(((-3.5, -6), (3.5, -6), (0, -12))):
 
 # ================================================================== world, colour, render
 w = bpy.data.worlds.new("Night"); sc.world = w; w.use_nodes = True
-bg = w.node_tree.nodes["Background"]; bg.inputs["Color"].default_value = (0.010, 0.018, 0.075, 1); bg.inputs["Strength"].default_value = 1.0
+bg = w.node_tree.nodes["Background"]; bg.inputs["Color"].default_value = (0.004, 0.008, 0.045, 1); bg.inputs["Strength"].default_value = 1.0
 sc.render.engine = 'CYCLES'; sc.cycles.samples = 64; sc.cycles.use_adaptive_sampling = True; sc.cycles.adaptive_threshold = 0.05
 sc.cycles.use_denoising = True; sc.cycles.denoiser = 'OPENIMAGEDENOISE'
 sc.cycles.max_bounces = 6; sc.cycles.diffuse_bounces = 3; sc.cycles.glossy_bounces = 3; sc.cycles.transmission_bounces = 6

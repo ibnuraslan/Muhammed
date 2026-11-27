@@ -120,11 +120,15 @@ def copy_actor(src, name, tint_mul):
     a = Actor.__new__(Actor); a.rig = r; a.CT = Rig(r); a.H = Human(a.CT); a.hs = None; a.base = {}; a.yaw = {}
     for pb in r.pose.bones: pb.rotation_mode = 'QUATERNION'
     return a
+def bare(a):
+    for c in a.rig.children:
+        if "fedora" in c.name: c.hide_render = True; c.hide_viewport = True
 TINTS = [(0.30, 0.12, 0.08), (0.08, 0.10, 0.30), (0.25, 0.25, 0.27), (0.10, 0.22, 0.12), (0.35, 0.22, 0.10), (0.06, 0.06, 0.08),
          (0.32, 0.05, 0.08), (0.18, 0.14, 0.24)]
 AUD = [ACT[e.name] for e in EXTRAS]
 for k in range(8):
     AUD.append(copy_actor(EXTRAS[k % 4], "Aud%d" % k, TINTS[k]))
+    if k % 2 == 0: bare(AUD[-1])
 
 # ================================================================== HERO acting
 HB0 = Vector((0, 0, 0)); HB1 = HX + Vector((0, 0, STAGE_Z))
@@ -193,7 +197,7 @@ while f < END:
     f += rnd.choice((12, 13, 14, 16))
 blinks(HERO, [1090, 1190, 1262])
 # right arm: speech raised beside his head toward the audience (elbow bent ~95 deg, fingers up, palm toward the audience)
-SPEECH_POSE = [(1028, (-0.16, -0.20, 0.30)), (1055, (-0.14, -0.24, 0.36)), (1080, (-0.17, -0.20, 0.28)), (1105, (-0.13, -0.24, 0.37)), (1139, (-0.17, -0.20, 0.30)), (1170, (-0.12, -0.30, 0.04)), (1200, (-0.11, -0.31, 0.07)), (1240, (-0.12, -0.30, 0.03)), (END, (-0.11, -0.31, 0.06))]
+SPEECH_POSE = [(1028, (-0.16, -0.20, 0.30)), (1055, (-0.14, -0.24, 0.36)), (1080, (-0.17, -0.20, 0.28)), (1105, (-0.13, -0.24, 0.37)), (1139, (-0.17, -0.20, 0.30)), (1170, (-0.30, -0.16, 0.16)), (1200, (-0.31, -0.15, 0.19)), (1240, (-0.30, -0.17, 0.15)), (END, (-0.31, -0.16, 0.18))]
 for f, off in SPEECH_POSE:
     A_H.hand("R", f, off, (0.05, -0.12, 1.0), (0.0, -1.0, 0.0), (-0.45, 0.10, -0.30), 0.0, pose="hold_flat_object", ref=1028)
 # left: hangs, then the fist rises (1139-1165) and pumps at 1215
@@ -307,7 +311,7 @@ for i, a in enumerate(AUD):
         a.stand(f, hb, hyaw, flex=rr.uniform(-4, 1), side=rr.uniform(-2, 2))
     for f in list(range(1028, END + 1, 30)) + [END]:
         a.key_head(f, rr.uniform(-5, 5), rr.uniform(-14, -6))
-    side_up = rr.choice("LR"); t_up = 1139 + rr.randint(4, 40); t_dn = t_up + rr.randint(40, 90)
+    side_up = rr.choice("LR"); t_up = (1139 + rr.randint(4, 30)) if i < 6 else (1250 + rr.randint(0, 25)); t_dn = t_up + rr.randint(40, 90)
     for s in "LR":
         sx = 1 if s == "L" else -1
         a.hang(s, 1028, hyaw, ref=1028); a.hang(s, 1100, hyaw, ref=1028)
@@ -348,7 +352,7 @@ for f in range(F_SHOT, F_HIT + 6):
     BUL.location = nose - BDIR * BL; BUL.rotation_quaternion = qd(BDIR) @ Quaternion((0, 0, 1), spin)
     BUL.keyframe_insert("location", frame=f); BUL.keyframe_insert("rotation_quaternion", frame=f)
 # macro: nose depth below the coat top (m) on the VO beats; monotone so it only ever slows
-ZN = pchip([(SW1, -0.0060), (500, -0.0095), (615, -0.0135), (736, -0.0168), (770, -0.0182), (790, -0.0190), (800, -0.0186), (816, -0.0218), (832, -0.0400), (846, -0.0436), (860, -0.0470),
+ZN = pchip([(SW1, -0.0060), (470, -0.0110), (560, -0.0160), (615, -0.0179), (690, -0.0195), (736, -0.0215), (770, -0.0300), (790, -0.0360), (816, -0.0410), (846, -0.0432), (860, -0.0470),
             (878, -0.0508), (905, -0.0585), (950, -0.0670), (990, -0.0703), (1010, -0.0706), (SW2, -0.0706)])
 QM = Quaternion((1, 0, 0), math.pi)
 for f in range(SW1, SW2 + 1):
@@ -368,9 +372,9 @@ for f in range(F_SHOT, F_HIT + 1, 2):
 vis(TRAIL, 1, False)   # no trail: it read as a stick
 # muzzle flash
 FL = O["MuzzleFlash"]; FLL = O["FlashLight"]
-for f, s_, e in ((1, 0.001, 0), (F_SHOT - 1, 0.001, 0), (F_SHOT, 1.0, 900), (F_SHOT + 2, 1.3, 600), (F_SHOT + 5, 0.4, 120), (F_SHOT + 8, 0.001, 0)):
+for f, s_, e in ((1, 0.001, 0), (F_SHOT - 1, 0.001, 0), (F_SHOT, 1.0, 4000), (F_SHOT + 3, 1.4, 2500), (F_SHOT + 6, 0.6, 600), (F_SHOT + 9, 0.001, 0)):
     FL.scale = (s_,) * 3; FL.keyframe_insert("scale", frame=f); FLL.data.energy = e; FLL.data.keyframe_insert("energy", frame=f)
-vis(FL, 1, False); vis(FL, F_SHOT, True); vis(FL, F_SHOT + 8, False)
+vis(FL, 1, False); vis(FL, F_SHOT, True); vis(FL, F_SHOT + 9, False)
 # coat hole: on the jacket at the hit point, facing out, Child Of the chest bone (visible from the hit on, also in the hall)
 fs(F_HIT); upd()
 HOLE.matrix_world = Matrix.Translation(B_HIT + B_N * 0.0055) @ qd(B_N).to_matrix().to_4x4()
@@ -431,8 +435,9 @@ ck(173, (-0.70, -1.65, 1.55), (0.0, 0.0, 1.38), 30)
 ck(225, (0.35, -1.75, 1.45), (0.0, 0.0, 1.40), 32)
 ck(265, (0.65, -1.35, 1.50), (0.0, 0.0, 1.45), 32)
 ck(320, (0.30, -1.05, 1.52), (B_HIT.x * 0.6, 0.0, (B_HIT.z + fc1.z) / 2), 32)
-ck(362, B_HIT + B_N * 0.34 + Vector((0.02, 0, 0.16)), B_HIT + Vector((0, 0, 0.15)), 32)
-ck(SW1 - 1, B_HIT + B_N * 0.06, B_HIT, 40)
+ck(352, B_HIT + B_N * 0.36 + Vector((0.02, 0, 0.17)), B_HIT + Vector((0, 0, 0.16)), 32)
+ck(372, B_HIT + B_N * 0.16 + Vector((0, 0, 0.02)), B_HIT, 36)
+ck(SW1 - 1, B_HIT + B_N * 0.035, B_HIT, 40)
 # MACRO (from SW1): above-front of the cut, the bullet frozen on the inked top page
 ck(SW1, MX + Vector((-0.030, -0.055, 0.050)), MX + Vector((0.0, 0.012, -0.006)), 40)
 ck(470, MX + Vector((0.040, -0.060, 0.042)), MX + Vector((0.0, 0.014, -0.008)), 40)
@@ -482,7 +487,7 @@ mx = nt.nodes.new("ShaderNodeMixShader"); nt.links.new(tr.outputs[0], mx.inputs[
 nt.links.new(mx.outputs[0], nt.nodes["Material Output"].inputs["Surface"]); card.data.materials.append(fm)
 card.visible_shadow = False; card.visible_diffuse = False; card.visible_glossy = False
 fac_ = mx.inputs[0]
-for f, v in ((1, 0.0), (SW1 - 6, 0.0), (SW1 - 2, 1.0), (SW1 + 1, 1.0), (SW1 + 6, 0.0), (SW2 - 6, 0.0), (SW2 - 2, 1.0), (SW2 + 1, 1.0), (SW2 + 7, 0.0)):
+for f, v in ((1, 0.0), (END, 0.0)):
     fac_.default_value = v; fac_.keyframe_insert("default_value", frame=f)
 for o_ in list(bpy.data.collections["CHARS"].all_objects): pass
 bpy.data.collections["CHARS"].objects.link(card) if card.name not in bpy.data.collections["CHARS"].objects else None
